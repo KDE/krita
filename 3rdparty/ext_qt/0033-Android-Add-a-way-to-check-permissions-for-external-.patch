@@ -1,0 +1,70 @@
+From 066c35d54e98f2670411e16c79a0553f64871500 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Tue, 6 Oct 2020 17:24:15 +0000
+Subject: [PATCH 33/46] Android: Add a way to check permissions for external
+ URIs
+
+Prior to this we could only open those files which we had
+previously persisted permission to or the files that've
+been opened using SAF. With this in place we can add
+known URIs to which we received permission from other
+source like an Intent.
+---
+ .../org/qtproject/qt5/android/QtNative.java   | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index c9a2179a27..38b595bfbc 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -115,6 +115,8 @@ public class QtNative
+     private static Method m_addItemMethod = null;
+ 
+     private static HashMap<Integer, ParcelFileDescriptor> m_parcelFileDescriptors = new HashMap<Integer, ParcelFileDescriptor>();
++    private static HashMap<Uri, Integer> m_uriPermissions = new HashMap<Uri, Integer>(); // for URIs which were not accessed through SAF e.g through an Intent
++
+ 
+     private static final Runnable runPendingCppRunnablesRunnable = new Runnable() {
+         @Override
+@@ -168,6 +170,24 @@ public class QtNative
+         return joinedString.split(",");
+     }
+ 
++    public static void addToKnownUri(Uri uri, int modeFlags) {
++        m_uriPermissions.put(uri, modeFlags);
++    }
++
++    public static boolean checkKnownUriPermission(Uri uri, String openMode) {
++        if (!m_uriPermissions.containsKey(uri)) {
++            return false;
++        }
++
++        int modeFlags = Intent.FLAG_GRANT_READ_URI_PERMISSION;
++
++        if (!"r".equals(openMode)) {
++            modeFlags |= Intent.FLAG_GRANT_WRITE_URI_PERMISSION;
++        }
++
++        return (m_uriPermissions.get(uri) & modeFlags) != 0;
++    }
++
+     private static Uri getUriWithValidPermission(Context context, String uri, String openMode)
+     {
+         try {
+@@ -186,6 +206,13 @@ public class QtNative
+                 }
+             }
+ 
++            Uri uriParsed = Uri.parse(uri);
++
++            // give known URIs a try, perhaps we got it in a way we couldn't persist the permissions (say Intent)
++            if (checkKnownUriPermission(uriParsed, openMode)) {
++                return uriParsed;
++            }
++
+             return null;
+         } catch (SecurityException e) {
+             e.printStackTrace();
+-- 
+2.33.0
+

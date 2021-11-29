@@ -1,0 +1,163 @@
+From 8ac206954f3f45c156e0d380507705c07fb65bc0 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Mon, 19 Oct 2020 10:09:57 +0000
+Subject: [PATCH 25/46] Android: Move events handling to QtLayout
+
+Whenever a widget with Qt::Window flag is used a new
+QtSurface is created and this is used by Android to
+send us events. However, as soon as this Surface is
+destroyed, the events stop coming until the user
+starts the new event by touching the new Surface.
+This causes interruptions and leaves events in an
+undefined state in apps where events are supposed to
+come in continuous manner.
+
+By moving it to ViewGroup, we stop relying on Surfaces.
+
+[ChangeLog][Android] Move events handling to QtLayout
+---
+ .../org/qtproject/qt5/android/QtLayout.java   | 43 +++++++++++++++++++
+ .../org/qtproject/qt5/android/QtSurface.java  | 31 -------------
+ 2 files changed, 43 insertions(+), 31 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java b/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
+index f22b8176c8..6b067a9cfd 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
+@@ -46,24 +46,42 @@ import android.util.AttributeSet;
+ import android.util.DisplayMetrics;
+ import android.view.View;
+ import android.view.ViewGroup;
++import android.view.MotionEvent;
++import android.view.GestureDetector;
+ 
+ public class QtLayout extends ViewGroup
+ {
++    private GestureDetector m_gestureDetector;
+     private Runnable m_startApplicationRunnable;
++
+     public QtLayout(Context context, Runnable startRunnable)
+     {
+         super(context);
+         m_startApplicationRunnable = startRunnable;
++        initializeGestureDetector(context);
+     }
+ 
+     public QtLayout(Context context, AttributeSet attrs)
+     {
+         super(context, attrs);
++        initializeGestureDetector(context);
+     }
+ 
+     public QtLayout(Context context, AttributeSet attrs, int defStyle)
+     {
+         super(context, attrs, defStyle);
++        initializeGestureDetector(context);
++    }
++
++    private void initializeGestureDetector(Context context)
++    {
++        m_gestureDetector =
++            new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
++                public void onLongPress(MotionEvent event) {
++                    QtNative.longPress(getId(), (int) event.getX(), (int) event.getY());
++                }
++            });
++        m_gestureDetector.setIsLongpressEnabled(true);
+     }
+ 
+     @Override
+@@ -252,4 +270,29 @@ public class QtLayout extends ViewGroup
+             addView(childView, params);
+         }
+     }
++
++    @Override
++    public boolean onInterceptTouchEvent(MotionEvent ev) {
++        return true;
++    }
++
++    @Override
++    public boolean onTouchEvent(MotionEvent event) {
++        QtNative.sendTouchEvent(event, getId());
++        m_gestureDetector.onTouchEvent(event);
++        return true;
++    }
++
++    @Override
++    public boolean onTrackballEvent(MotionEvent event)
++    {
++        QtNative.sendTrackballEvent(event, getId());
++        return true;
++    }
++
++    @Override
++    public boolean onGenericMotionEvent(MotionEvent event)
++    {
++        return QtNative.sendGenericMotionEvent(event, getId());
++    }
+ }
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtSurface.java b/src/android/jar/src/org/qtproject/qt5/android/QtSurface.java
+index 08b5a80f7e..723a783c6b 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtSurface.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtSurface.java
+@@ -43,8 +43,6 @@ package org.qtproject.qt5.android;
+ import android.app.Activity;
+ import android.content.Context;
+ import android.graphics.PixelFormat;
+-import android.view.GestureDetector;
+-import android.view.MotionEvent;
+ import android.view.SurfaceHolder;
+ import android.view.SurfaceView;
+ 
+@@ -53,7 +51,6 @@ import java.lang.reflect.Method;
+ 
+ public class QtSurface extends SurfaceView implements SurfaceHolder.Callback
+ {
+-    private GestureDetector m_gestureDetector;
+     private Object m_accessibilityDelegate = null;
+ 
+     public QtSurface(Context context, int id, boolean onTop, int imageDepth)
+@@ -69,13 +66,6 @@ public class QtSurface extends SurfaceView implements SurfaceHolder.Callback
+             getHolder().setFormat(PixelFormat.RGBA_8888);
+ 
+         setId(id);
+-        m_gestureDetector =
+-            new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+-                public void onLongPress(MotionEvent event) {
+-                    QtNative.longPress(getId(), (int) event.getX(), (int) event.getY());
+-                }
+-            });
+-        m_gestureDetector.setIsLongpressEnabled(true);
+     }
+ 
+     @Override
+@@ -97,25 +87,4 @@ public class QtSurface extends SurfaceView implements SurfaceHolder.Callback
+     {
+         QtNative.setSurface(getId(), null, 0, 0);
+     }
+-
+-    @Override
+-    public boolean onTouchEvent(MotionEvent event)
+-    {
+-        QtNative.sendTouchEvent(event, getId());
+-        m_gestureDetector.onTouchEvent(event);
+-        return true;
+-    }
+-
+-    @Override
+-    public boolean onTrackballEvent(MotionEvent event)
+-    {
+-        QtNative.sendTrackballEvent(event, getId());
+-        return true;
+-    }
+-
+-    @Override
+-    public boolean onGenericMotionEvent(MotionEvent event)
+-    {
+-        return QtNative.sendGenericMotionEvent(event, getId());
+-    }
+ }
+-- 
+2.33.0
+

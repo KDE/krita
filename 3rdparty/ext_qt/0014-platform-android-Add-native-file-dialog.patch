@@ -1,0 +1,321 @@
+From 4fd380d5c6a7d58ca2fe19dc6c2ec42c468597cc Mon Sep 17 00:00:00 2001
+From: Nicolas Fella <nicolas.fella@kdab.com>
+Date: Wed, 30 Jan 2019 14:13:12 +0100
+Subject: [PATCH 14/46] [platform/android] Add native file dialog
+
+Add basic native file open dialog on Android. Not all features of QFileDialog can be mapped to the
+Android file dialog.
+
+Most notably there is no "Save" dialog. The dialog returns a content:// URL. Patch 251038 adds
+support for those to QFile.
+
+Change-Id: I13d02103edcd9a089afcce8193432f24b2e0fe43
+Reviewed-by: BogDan Vatra <bogdan@kdab.com>
+---
+ src/plugins/platforms/android/android.pro     |   6 +-
+ .../qandroidplatformfiledialoghelper.cpp      | 149 ++++++++++++++++++
+ .../qandroidplatformfiledialoghelper.h        |  81 ++++++++++
+ .../android/qandroidplatformtheme.cpp         |   5 +
+ 4 files changed, 239 insertions(+), 2 deletions(-)
+ create mode 100644 src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+ create mode 100644 src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+
+diff --git a/src/plugins/platforms/android/android.pro b/src/plugins/platforms/android/android.pro
+index 940bd5fc55..78632a9bea 100644
+--- a/src/plugins/platforms/android/android.pro
++++ b/src/plugins/platforms/android/android.pro
+@@ -47,7 +47,8 @@ SOURCES += $$PWD/androidplatformplugin.cpp \
+            $$PWD/qandroidplatformopenglcontext.cpp \
+            $$PWD/qandroidplatformforeignwindow.cpp \
+            $$PWD/qandroideventdispatcher.cpp \
+-           $$PWD/qandroidplatformoffscreensurface.cpp
++           $$PWD/qandroidplatformoffscreensurface.cpp \
++           $$PWD/qandroidplatformfiledialoghelper.cpp
+ 
+ HEADERS += $$PWD/qandroidplatformintegration.h \
+            $$PWD/androidcontentfileengine.h \
+@@ -77,7 +78,8 @@ HEADERS += $$PWD/qandroidplatformintegration.h \
+            $$PWD/qandroidplatformopenglcontext.h \
+            $$PWD/qandroidplatformforeignwindow.h \
+            $$PWD/qandroideventdispatcher.h \
+-           $$PWD/qandroidplatformoffscreensurface.h
++           $$PWD/qandroidplatformoffscreensurface.h \
++           $$PWD/qandroidplatformfiledialoghelper.h
+ 
+ qtConfig(android-style-assets): SOURCES += $$PWD/extract.cpp
+ else: SOURCES += $$PWD/extract-dummy.cpp
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+new file mode 100644
+index 0000000000..4fb271a75c
+--- /dev/null
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -0,0 +1,149 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 Klaralvdalens Datakonsult AB (KDAB)
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qandroidplatformfiledialoghelper.h"
++
++#include <androidjnimain.h>
++#include <private/qjni_p.h>
++#include <jni.h>
++
++QT_BEGIN_NAMESPACE
++
++namespace QtAndroidFileDialogHelper {
++
++#define RESULT_OK -1
++#define REQUEST_CODE 1305 // Arbitrary
++
++QAndroidPlatformFileDialogHelper::QAndroidPlatformFileDialogHelper()
++    : QPlatformFileDialogHelper()
++    , m_selectedFile()
++{
++}
++
++bool QAndroidPlatformFileDialogHelper::handleActivityResult(jint requestCode, jint resultCode, jobject data)
++{
++    if (requestCode != REQUEST_CODE)
++        return false;
++
++    if (resultCode == RESULT_OK) {
++        const QJNIObjectPrivate intent = QJNIObjectPrivate::fromLocalRef(data);
++        const QJNIObjectPrivate uri = intent.callObjectMethod("getData", "()Landroid/net/Uri;");
++        const QString uriStr = uri.callObjectMethod("toString", "()Ljava/lang/String;").toString();
++        m_selectedFile = QUrl(uriStr);
++        Q_EMIT fileSelected(m_selectedFile);
++        Q_EMIT accept();
++    } else {
++        Q_EMIT reject();
++    }
++
++    return true;
++}
++
++bool QAndroidPlatformFileDialogHelper::show(Qt::WindowFlags windowFlags, Qt::WindowModality windowModality, QWindow *parent)
++{
++    Q_UNUSED(windowFlags)
++    Q_UNUSED(windowModality)
++    Q_UNUSED(parent)
++
++    if (options()->fileMode() != QFileDialogOptions::FileMode::ExistingFile)
++        return false;
++
++    QtAndroidPrivate::registerActivityResultListener(this);
++
++    const QJNIObjectPrivate ACTION_OPEN_DOCUMENT = QJNIObjectPrivate::getStaticObjectField("android/content/Intent", "ACTION_OPEN_DOCUMENT", "Ljava/lang/String;");
++    QJNIObjectPrivate intent("android/content/Intent", "(Ljava/lang/String;)V", ACTION_OPEN_DOCUMENT.object());
++    const QJNIObjectPrivate CATEGORY_OPENABLE = QJNIObjectPrivate::getStaticObjectField("android/content/Intent", "CATEGORY_OPENABLE", "Ljava/lang/String;");
++    intent.callObjectMethod("addCategory", "(Ljava/lang/String;)Landroid/content/Intent;", CATEGORY_OPENABLE.object());
++    intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;", QJNIObjectPrivate::fromString(QStringLiteral("*/*")).object());
++
++    const QJNIObjectPrivate activity(QtAndroid::activity());
++    activity.callMethod<void>("startActivityForResult", "(Landroid/content/Intent;I)V", intent.object(), REQUEST_CODE);
++
++    return true;
++}
++
++void QAndroidPlatformFileDialogHelper::exec()
++{
++}
++
++void QAndroidPlatformFileDialogHelper::hide()
++{
++}
++
++QString QAndroidPlatformFileDialogHelper::selectedNameFilter() const
++{
++    return QString();
++}
++
++void QAndroidPlatformFileDialogHelper::selectNameFilter(const QString &filter)
++{
++    Q_UNUSED(filter)
++}
++
++void QAndroidPlatformFileDialogHelper::setFilter()
++{
++}
++
++QList<QUrl> QAndroidPlatformFileDialogHelper::selectedFiles() const
++{
++    return {m_selectedFile};
++}
++
++void QAndroidPlatformFileDialogHelper::selectFile(const QUrl &file)
++{
++    Q_UNUSED(file)
++}
++
++QUrl QAndroidPlatformFileDialogHelper::directory() const
++{
++    return QUrl();
++}
++
++void QAndroidPlatformFileDialogHelper::setDirectory(const QUrl &directory)
++{
++    Q_UNUSED(directory)
++}
++
++bool QAndroidPlatformFileDialogHelper::defaultNameFilterDisables() const
++{
++    return false;
++}
++}
++
++QT_END_NAMESPACE
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+new file mode 100644
+index 0000000000..e445aa2fef
+--- /dev/null
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+@@ -0,0 +1,81 @@
++/****************************************************************************
++**
++** Copyright (C) 2019 Klaralvdalens Datakonsult AB (KDAB)
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the plugins of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QANDROIDPLATFORMFILEDIALOGHELPER_H
++#define QANDROIDPLATFORMFILEDIALOGHELPER_H
++
++#include <jni.h>
++#include <qpa/qplatformdialoghelper.h>
++#include <QtCore/private/qjnihelpers_p.h>
++
++QT_BEGIN_NAMESPACE
++
++namespace QtAndroidFileDialogHelper {
++
++class QAndroidPlatformFileDialogHelper: public QPlatformFileDialogHelper, public QtAndroidPrivate::ActivityResultListener
++{
++    Q_OBJECT
++
++public:
++    QAndroidPlatformFileDialogHelper();
++    void exec() override;
++
++    bool show(Qt::WindowFlags windowFlags,
++              Qt::WindowModality windowModality,
++              QWindow *parent) override;
++    void hide() override;
++
++    QString selectedNameFilter() const override;
++    void selectNameFilter(const QString &filter) override;
++    void setFilter() override;
++    QList<QUrl> selectedFiles() const override;
++    void selectFile(const QUrl &file) override;
++    QUrl directory() const override;
++    void setDirectory(const QUrl &directory) override;
++    bool defaultNameFilterDisables() const override;
++    bool handleActivityResult(jint requestCode, jint resultCode, jobject data) override;
++
++private:
++    QUrl m_selectedFile;
++};
++
++}
++QT_END_NAMESPACE
++
++#endif // QANDROIDPLATFORMFILEDIALOGHELPER_H
+diff --git a/src/plugins/platforms/android/qandroidplatformtheme.cpp b/src/plugins/platforms/android/qandroidplatformtheme.cpp
+index 8d98d4ba8d..d3a8a53241 100644
+--- a/src/plugins/platforms/android/qandroidplatformtheme.cpp
++++ b/src/plugins/platforms/android/qandroidplatformtheme.cpp
+@@ -44,6 +44,7 @@
+ #include "qandroidplatformmenu.h"
+ #include "qandroidplatformmenuitem.h"
+ #include "qandroidplatformdialoghelpers.h"
++#include "qandroidplatformfiledialoghelper.h"
+ 
+ #include <QCoreApplication>
+ #include <QDebug>
+@@ -513,6 +514,8 @@ bool QAndroidPlatformTheme::usePlatformNativeDialog(QPlatformTheme::DialogType t
+ {
+     if (type == MessageDialog)
+         return qEnvironmentVariableIntValue("QT_USE_ANDROID_NATIVE_DIALOGS") == 1;
++    if (type == FileDialog)
++        return true;
+     return false;
+ }
+ 
+@@ -521,6 +524,8 @@ QPlatformDialogHelper *QAndroidPlatformTheme::createPlatformDialogHelper(QPlatfo
+     switch (type) {
+     case MessageDialog:
+         return new QtAndroidDialogHelpers::QAndroidPlatformMessageDialogHelper;
++    case FileDialog:
++        return new QtAndroidFileDialogHelper::QAndroidPlatformFileDialogHelper;
+     default:
+         return 0;
+     }
+-- 
+2.33.0
+

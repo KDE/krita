@@ -1,0 +1,64 @@
+From 3ad4ad30dc249620ddf5d1fc9c32f4edfa0383e4 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Fri, 12 Feb 2021 17:44:50 +0000
+Subject: [PATCH 34/46] Android: Give preference to certain WindowTypes
+
+In some cases some widgets (like QDockWidget) may get added to the
+windowStack before the parent widget. This would make the widget
+unresponsive to the events. Since there is no compositor to help us with
+this we, naturally give preferences to Qt::Dialog and Qt:Popup.
+---
+ .../platforms/android/qandroidplatformscreen.cpp       | 10 ++++++++++
+ src/plugins/platforms/android/qandroidplatformscreen.h |  1 +
+ 2 files changed, 11 insertions(+)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
+index 7dc8bb8080..191967b913 100644
+--- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
++++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
+@@ -129,6 +129,12 @@ QWindow *QAndroidPlatformScreen::topWindow() const
+ 
+ QWindow *QAndroidPlatformScreen::topLevelAt(const QPoint &p) const
+ {
++    // These are the types of widgets which are usually kept on top by the
++    // compositor. But since there is none for SurfaceView, we our best.
++    for (QAndroidPlatformWindow *w: m_popupStack) {
++        if (w->geometry().contains(p, false) && w->window()->isVisible())
++            return w->window();
++    }
+     for (QAndroidPlatformWindow *w : m_windowStack) {
+         if (w->geometry().contains(p, false) && w->window()->isVisible())
+             return w->window();
+@@ -157,6 +163,9 @@ void QAndroidPlatformScreen::addWindow(QAndroidPlatformWindow *window)
+         m_rasterSurfaces.ref();
+         setDirty(window->geometry());
+     }
++    if (window->window()->type() & (Qt::Dialog | Qt::Popup) & ~Qt::Window) {
++        m_popupStack.prepend(window);
++    }
+ 
+     QWindow *w = topWindow();
+     QWindowSystemInterface::handleWindowActivated(w);
+@@ -171,6 +180,7 @@ void QAndroidPlatformScreen::removeWindow(QAndroidPlatformWindow *window)
+ 
+     Q_ASSERT(m_windowStack.contains(window));
+     m_windowStack.removeOne(window);
++    m_popupStack.removeOne(window);
+     Q_ASSERT(!m_windowStack.contains(window));
+ 
+     if (window->isRaster()) {
+diff --git a/src/plugins/platforms/android/qandroidplatformscreen.h b/src/plugins/platforms/android/qandroidplatformscreen.h
+index f15aeae3fd..2cb2002874 100644
+--- a/src/plugins/platforms/android/qandroidplatformscreen.h
++++ b/src/plugins/platforms/android/qandroidplatformscreen.h
+@@ -93,6 +93,7 @@ protected:
+ 
+     typedef QList<QAndroidPlatformWindow *> WindowStackType;
+     WindowStackType m_windowStack;
++    WindowStackType m_popupStack;
+     QRect m_dirtyRect;
+     bool m_updatePending = false;
+ 
+-- 
+2.33.0
+

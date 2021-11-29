@@ -1,0 +1,57 @@
+From 93468d620e8e215579e73a6d7c93283519166da5 Mon Sep 17 00:00:00 2001
+From: Volker Krause <vkrause@kde.org>
+Date: Fri, 16 Aug 2019 18:59:03 +0200
+Subject: [PATCH 09/46] Also fall back to direct write for Android content:
+ URLs in QSaveFile
+
+We cannot rename into content: URLs, so that is the only option, and this
+is particularly relevant here as the native file dialog will give us
+content: URLs by default for saving to.
+
+Change-Id: Ie96fcfc404a0842d397c7d1554e3c76f06bb3074
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+---
+ src/corelib/io/qsavefile.cpp | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/src/corelib/io/qsavefile.cpp b/src/corelib/io/qsavefile.cpp
+index fac8892da2..7ee9142e14 100644
+--- a/src/corelib/io/qsavefile.cpp
++++ b/src/corelib/io/qsavefile.cpp
+@@ -244,9 +244,15 @@ bool QSaveFile::open(OpenMode mode)
+         return false;
+     };
+ 
++    bool requiresDirectWrite = false;
+ #ifdef Q_OS_WIN
+     // check if it is an Alternate Data Stream
+-    if (d->finalFileName == d->fileName && d->fileName.indexOf(QLatin1Char(':'), 2) > 1) {
++    requiresDirectWrite = d->finalFileName == d->fileName && d->fileName.indexOf(QLatin1Char(':'), 2) > 1;
++#elif defined(Q_OS_ANDROID)
++    // check if it is a content:// URL
++    requiresDirectWrite  = d->fileName.startsWith(QLatin1String("content://"));
++#endif
++    if (requiresDirectWrite) {
+         // yes, we can't rename onto it...
+         if (d->directWriteFallback) {
+             if (openDirectly())
+@@ -256,14 +262,12 @@ bool QSaveFile::open(OpenMode mode)
+             d->fileEngine = 0;
+         } else {
+             QString msg =
+-                    QSaveFile::tr("QSaveFile cannot open '%1' without direct write fallback "
+-                                  "enabled: path contains an Alternate Data Stream specifier")
+-                    .arg(QDir::toNativeSeparators(d->fileName));
++                    QSaveFile::tr("QSaveFile cannot open '%1' without direct write fallback enabled.")
++                     .arg(QDir::toNativeSeparators(d->fileName));
+             d->setError(QFileDevice::OpenError, msg);
+         }
+         return false;
+     }
+-#endif
+ 
+     d->fileEngine = new QTemporaryFileEngine(&d->finalFileName, QTemporaryFileEngine::Win32NonShared);
+     // if the target file exists, we'll copy its permissions below,
+-- 
+2.33.0
+

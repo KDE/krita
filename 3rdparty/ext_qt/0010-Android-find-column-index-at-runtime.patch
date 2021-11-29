@@ -1,0 +1,37 @@
+From 67cfcb4ef73d34c32c5b3f0de3fb409cc16bbefa Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Sun, 31 May 2020 23:51:52 +0530
+Subject: [PATCH 10/46] Android: find column index at runtime
+
+Change-Id: Iabf33e5b436968904fedbce65b22773596ce15d3
+---
+ src/android/jar/src/org/qtproject/qt5/android/QtNative.java | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index f53a038657..d443b3fbc8 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -73,6 +73,7 @@ import android.view.MotionEvent;
+ import android.view.View;
+ import android.view.InputDevice;
+ import android.database.Cursor;
++import android.provider.OpenableColumns;
+ 
+ import java.lang.reflect.Method;
+ import java.security.KeyStore;
+@@ -251,9 +252,10 @@ public class QtNative
+         try {
+             ContentResolver resolver = context.getContentResolver();
+             Cursor cur = resolver.query(uri, null, null, null, null);
++
+             if (cur != null) {
+                 if (cur.moveToFirst())
+-                    size = cur.getLong(5); // size column
++                    size = cur.getLong(cur.getColumnIndex(OpenableColumns.SIZE)); // size column
+                 cur.close();
+             }
+             return size;
+-- 
+2.33.0
+

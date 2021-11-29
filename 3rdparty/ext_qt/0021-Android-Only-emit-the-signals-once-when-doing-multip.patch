@@ -1,0 +1,32 @@
+From a2dc265573627f57fa359bc88633f3689a2471e4 Mon Sep 17 00:00:00 2001
+From: Andy Shaw <andy.shaw@qt.io>
+Date: Thu, 18 Jun 2020 09:18:46 +0200
+Subject: [PATCH 21/46] Android: Only emit the signals once when doing multiple
+ file selection
+
+Change-Id: Ie57908f5e882ef4f85f4199ecb06c09ae5d8ae2a
+Pick-to: 5.15
+Reviewed-by: BogDan Vatra <bogdan@kdab.com>
+---
+ .../platforms/android/qandroidplatformfiledialoghelper.cpp    | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 21e0c47909..6bb3372380 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -94,9 +94,9 @@ bool QAndroidPlatformFileDialogHelper::handleActivityResult(jint requestCode, ji
+             QJNIObjectPrivate itemUri = item.callObjectMethod("getUri", "()Landroid/net/Uri;");
+             takePersistableUriPermission(itemUri);
+             m_selectedFile.append(itemUri.toString());
+-            Q_EMIT filesSelected(m_selectedFile);
+-            Q_EMIT accept();
+         }
++        Q_EMIT filesSelected(m_selectedFile);
++        Q_EMIT accept();
+     }
+ 
+     return true;
+-- 
+2.33.0
+

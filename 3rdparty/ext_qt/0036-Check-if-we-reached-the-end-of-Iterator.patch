@@ -1,0 +1,30 @@
+From 46753051e0ea3c8f1972e488ea4779c5b9403766 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Tue, 6 Apr 2021 16:39:09 +0000
+Subject: [PATCH 36/46] Check if we reached the end of Iterator
+
+After the first iteration typeToRecognizerEnd can hold a value which has
+been removed from m_recognizers. So, the next iteration may be checking
+against the previously valid value and pass the check despite
+typeToRecognizerIterator pointing to end().
+---
+ src/widgets/kernel/qgesturemanager.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/widgets/kernel/qgesturemanager.cpp b/src/widgets/kernel/qgesturemanager.cpp
+index cfa1759dd7..85beca5a93 100644
+--- a/src/widgets/kernel/qgesturemanager.cpp
++++ b/src/widgets/kernel/qgesturemanager.cpp
+@@ -293,7 +293,8 @@ bool QGestureManager::filterEventThroughContexts(const QMultiMap<QObject *,
+         QMap<Qt::GestureType, QGestureRecognizer *>::const_iterator
+                 typeToRecognizerIterator = const_recognizers.lowerBound(gestureType),
+                 typeToRecognizerEnd = const_recognizers.upperBound(gestureType);
+-        for (; typeToRecognizerIterator != typeToRecognizerEnd; ++typeToRecognizerIterator) {
++        for (; typeToRecognizerIterator != typeToRecognizerEnd &&
++               typeToRecognizerIterator != const_recognizers.constEnd(); ++typeToRecognizerIterator) {
+             QGestureRecognizer *recognizer = typeToRecognizerIterator.value();
+             QObject *target = context.key();
+             QGesture *state = getState(target, recognizer, gestureType);
+-- 
+2.33.0
+

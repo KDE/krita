@@ -1,0 +1,89 @@
+From 0379cb8abaed5fafb68b07fa721800d84dd6551d Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Mon, 9 Nov 2020 08:40:57 +0000
+Subject: [PATCH 27/46] Android: use EXTRA_INITIAL_URI as the defaultDir
+
+on API Level >= 26, Storage Access Framework attempts to use the URI to
+save a new file at its parent location (i.e the parent directory).
+---
+ .../qandroidplatformfiledialoghelper.cpp      | 20 +++++++++++++++++++
+ .../qandroidplatformfiledialoghelper.h        |  4 +++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 05e4ccbbee..00b5b0887c 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -61,6 +61,11 @@ QAndroidPlatformFileDialogHelper::QAndroidPlatformFileDialogHelper()
+ {
+ }
+ 
++void QAndroidPlatformFileDialogHelper::setDirectory(const QUrl &directory)
++{
++    m_directory = directory;
++}
++
+ bool QAndroidPlatformFileDialogHelper::handleActivityResult(jint requestCode, jint resultCode, jobject data)
+ {
+     if (requestCode != REQUEST_CODE)
+@@ -125,6 +130,20 @@ void QAndroidPlatformFileDialogHelper::setIntentTitle(const QString &title)
+                               extraTitle.object(), QJNIObjectPrivate::fromString(title).object());
+ }
+ 
++void QAndroidPlatformFileDialogHelper::setInitialUri()
++{
++    if (QtAndroidPrivate::androidSdkVersion() >= 26) {
++        const QJNIObjectPrivate extraInitialUri = QJNIObjectPrivate::getStaticObjectField(
++            "android/provider/DocumentsContract",
++            "EXTRA_INITIAL_URI",
++            "Ljava/lang/String;");
++        m_intent.callObjectMethod("putExtra",
++                                "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
++                                extraInitialUri.object(),
++                                QJNIObjectPrivate::fromString(m_directory.toString()).object());
++    }
++}
++
+ void QAndroidPlatformFileDialogHelper::setOpenableCategory()
+ {
+     const QJNIObjectPrivate CATEGORY_OPENABLE = QJNIObjectPrivate::getStaticObjectField(
+@@ -229,6 +248,7 @@ bool QAndroidPlatformFileDialogHelper::show(Qt::WindowFlags windowFlags, Qt::Win
+     }
+ 
+     setIntentTitle(options()->windowTitle());
++    setInitialUri();
+ 
+     QtAndroidPrivate::registerActivityResultListener(this);
+     m_activity.callMethod<void>("startActivityForResult", "(Landroid/content/Intent;I)V",
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+index 5a7a28a8a0..9a2e037e6f 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+@@ -68,7 +68,7 @@ public:
+     QList<QUrl> selectedFiles() const override { return m_selectedFile; };
+     void selectFile(const QUrl &file) override { Q_UNUSED(file) };
+     QUrl directory() const override { return QUrl(); };
+-    void setDirectory(const QUrl &directory) override { Q_UNUSED(directory) };
++    void setDirectory(const QUrl &directory) override;
+     bool defaultNameFilterDisables() const override { return false; };
+     bool handleActivityResult(jint requestCode, jint resultCode, jobject data) override;
+ 
+@@ -76,6 +76,7 @@ private:
+     QJNIObjectPrivate getFileDialogIntent(const QString &intentType);
+     void takePersistableUriPermission(const QJNIObjectPrivate &uri);
+     void setIntentTitle(const QString &title);
++    void setInitialUri();
+     void setOpenableCategory();
+     void setAllowMultipleSelections(bool allowMultiple);
+     void setMimeTypes();
+@@ -84,6 +85,7 @@ private:
+     QList<QUrl> m_selectedFile;
+     QJNIObjectPrivate m_intent;
+     const QJNIObjectPrivate m_activity;
++    QUrl m_directory;
+ };
+ 
+ }
+-- 
+2.33.0
+

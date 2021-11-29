@@ -1,0 +1,188 @@
+From 486f169614b059ff42ce72428a7841ec5f329eaa Mon Sep 17 00:00:00 2001
+From: Andy Shaw <andy.shaw@qt.io>
+Date: Tue, 4 Feb 2020 11:39:29 +0100
+Subject: [PATCH 08/46] Android: Add support for getting information about
+ content uris
+
+This enables things like size(), exists() to work with Android content
+uris with the provided uri given from a filedialog. It is expected that
+it is always a full path due to the nature of content uris, so relative
+paths will not work.
+
+Change-Id: I9c9ea42833677eb9d937b33e9dd42ee2a7d9c7c5
+Reviewed-by: Assam Boudjelthia <assam.boudjelthia@qt.io>
+Reviewed-by: BogDan Vatra <bogdan@kdab.com>
+---
+ .../org/qtproject/qt5/android/QtNative.java   | 57 +++++++++++++++++++
+ .../android/androidcontentfileengine.cpp      | 47 ++++++++++++++-
+ .../android/androidcontentfileengine.h        |  6 ++
+ 3 files changed, 108 insertions(+), 2 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 6a4ec6687a..f53a038657 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -44,6 +44,7 @@ import java.io.File;
+ import java.io.FileNotFoundException;
+ import java.util.ArrayList;
+ import java.util.concurrent.Semaphore;
++import java.io.IOException;
+ 
+ import android.app.Activity;
+ import android.app.Service;
+@@ -71,6 +72,7 @@ import android.view.Menu;
+ import android.view.MotionEvent;
+ import android.view.View;
+ import android.view.InputDevice;
++import android.database.Cursor;
+ 
+ import java.lang.reflect.Method;
+ import java.security.KeyStore;
+@@ -236,6 +238,61 @@ public class QtNative
+         }
+     }
+ 
++    public static long getSize(Context context, String contentUrl)
++    {
++        Uri uri = getUriWithValidPermission(context, contentUrl, "r");
++        long size = -1;
++
++        if (uri == null) {
++            Log.e(QtTAG, "getSize(): No permissions to open Uri");
++            return size;
++        }
++
++        try {
++            ContentResolver resolver = context.getContentResolver();
++            Cursor cur = resolver.query(uri, null, null, null, null);
++            if (cur != null) {
++                if (cur.moveToFirst())
++                    size = cur.getLong(5); // size column
++                cur.close();
++            }
++            return size;
++        } catch (IllegalArgumentException e) {
++            Log.e(QtTAG, "getSize(): Invalid Uri");
++            return size;
++        }  catch (UnsupportedOperationException e) {
++            Log.e(QtTAG, "getSize(): Unsupported operation for given Uri");
++            return size;
++        }
++    }
++
++    public static boolean checkFileExists(Context context, String contentUrl)
++    {
++        Uri uri = getUriWithValidPermission(context, contentUrl, "r");
++        boolean exists = false;
++
++        if (uri == null) {
++            Log.e(QtTAG, "checkFileExists(): No permissions to open Uri");
++            return exists;
++        }
++
++        try {
++            ContentResolver resolver = context.getContentResolver();
++            Cursor cur = resolver.query(uri, null, null, null, null);
++            if (cur != null) {
++                exists = true;
++                cur.close();
++            }
++            return exists;
++        } catch (IllegalArgumentException e) {
++            Log.e(QtTAG, "checkFileExists(): Invalid Uri");
++            return exists;
++        } catch (UnsupportedOperationException e) {
++            Log.e(QtTAG, "checkFileExists(): Unsupported operation for given Uri");
++            return false;
++        }
++    }
++
+     // this method loads full path libs
+     public static void loadQtLibraries(final ArrayList<String> libraries)
+     {
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.cpp b/src/plugins/platforms/android/androidcontentfileengine.cpp
+index 1444407195..3e3bdc2592 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.cpp
++++ b/src/plugins/platforms/android/androidcontentfileengine.cpp
+@@ -44,9 +44,10 @@
+ 
+ #include <QDebug>
+ 
+-AndroidContentFileEngine::AndroidContentFileEngine(const QString &fileName)
+-    : QFSFileEngine(fileName)
++AndroidContentFileEngine::AndroidContentFileEngine(const QString &f)
++    : m_file(f)
+ {
++    setFileName(f);
+ }
+ 
+ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
+@@ -78,6 +79,48 @@ bool AndroidContentFileEngine::open(QIODevice::OpenMode openMode)
+     return QFSFileEngine::open(openMode, fd, QFile::AutoCloseHandle);
+ }
+ 
++qint64 AndroidContentFileEngine::size() const
++{
++    const jlong size = QJNIObjectPrivate::callStaticMethod<jlong>(
++            "org/qtproject/qt5/android/QtNative", "getSize",
++            "(Landroid/content/Context;Ljava/lang/String;)J", QtAndroidPrivate::context(),
++            QJNIObjectPrivate::fromString(fileName(DefaultName)).object());
++    return (qint64)size;
++}
++
++AndroidContentFileEngine::FileFlags AndroidContentFileEngine::fileFlags(FileFlags type) const
++{
++    FileFlags commonFlags(ReadOwnerPerm|ReadUserPerm|ReadGroupPerm|ReadOtherPerm|ExistsFlag);
++    FileFlags flags;
++    const bool exists = QJNIObjectPrivate::callStaticMethod<jboolean>(
++            "org/qtproject/qt5/android/QtNative", "checkFileExists",
++            "(Landroid/content/Context;Ljava/lang/String;)Z", QtAndroidPrivate::context(),
++            QJNIObjectPrivate::fromString(fileName(DefaultName)).object());
++    if (!exists)
++        return flags;
++    flags = FileType | commonFlags;
++    return type & flags;
++}
++
++QString AndroidContentFileEngine::fileName(FileName f) const
++{
++    switch (f) {
++        case PathName:
++        case AbsolutePathName:
++        case CanonicalPathName:
++        case DefaultName:
++        case AbsoluteName:
++        case CanonicalName:
++            return m_file;
++        case BaseName:
++        {
++            const int pos = m_file.lastIndexOf(QChar(QLatin1Char('/')));
++            return m_file.mid(pos);
++        }
++        default:
++            return QString();
++    }
++}
+ 
+ AndroidContentFileEngineHandler::AndroidContentFileEngineHandler() = default;
+ AndroidContentFileEngineHandler::~AndroidContentFileEngineHandler() = default;
+diff --git a/src/plugins/platforms/android/androidcontentfileengine.h b/src/plugins/platforms/android/androidcontentfileengine.h
+index db3def03d6..09e5d77553 100644
+--- a/src/plugins/platforms/android/androidcontentfileengine.h
++++ b/src/plugins/platforms/android/androidcontentfileengine.h
+@@ -47,6 +47,12 @@ class AndroidContentFileEngine : public QFSFileEngine
+ public:
+     AndroidContentFileEngine(const QString &fileName);
+     bool open(QIODevice::OpenMode openMode) override;
++    qint64 size() const override;
++    FileFlags fileFlags(FileFlags type = FileInfoAll) const override;
++    QString fileName(FileName file = DefaultName) const override;
++private:
++    QString m_file;
++
+ };
+ 
+ class AndroidContentFileEngineHandler : public QAbstractFileEngineHandler
+-- 
+2.33.0
+

@@ -1,0 +1,91 @@
+From 9e8f4b981cbb65224e1c1a8e4a7339aad1ec5a05 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Tue, 10 Nov 2020 17:11:02 +0000
+Subject: [PATCH 28/46] Android: Pass the button state through JNI
+
+Mapping between MotionEvent#BUTTON_* and Qt's Qt::MouseButtons is
+similar so explicity mapping seems unnecessary.
+---
+ .../jar/src/org/qtproject/qt5/android/QtNative.java  |  4 ++--
+ src/plugins/platforms/android/androidjniinput.cpp    | 12 ++++++++----
+ 2 files changed, 10 insertions(+), 6 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 4e5ff3bde6..287502a645 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -731,7 +731,7 @@ public class QtNative
+                 break;
+ 
+             case MotionEvent.ACTION_DOWN:
+-                mouseDown(id, (int) event.getX(), (int) event.getY(), event.getMetaState());
++                mouseDown(id, (int) event.getX(), (int) event.getY(), event.getMetaState(), event.getButtonState());
+                 m_oldx = (int) event.getX();
+                 m_oldy = (int) event.getY();
+                 break;
+@@ -1235,7 +1235,7 @@ public class QtNative
+     // screen methods
+ 
+     // pointer methods
+-    public static native void mouseDown(int winId, int x, int y, int modifier);
++    public static native void mouseDown(int winId, int x, int y, int modifier, int actionButton);
+     public static native void mouseUp(int winId, int x, int y, int modifiers);
+     public static native void mouseMove(int winId, int x, int y, int modifier);
+     public static native void mouseWheel(int winId, int x, int y, float hdelta, float vdelta);
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index b59be80a1b..83553deacd 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -67,6 +67,7 @@ namespace QtAndroidInput
+     static QList<QWindowSystemInterface::TouchPoint> m_touchPoints;
+ 
+     static QPointer<QWindow> m_mouseGrabber;
++    static int m_mouseActionButton;
+ 
+     void updateSelection(int selStart, int selEnd, int candidatesStart, int candidatesEnd)
+     {
+@@ -133,7 +134,8 @@ namespace QtAndroidInput
+                                                   anchor.x(), anchor.y(), rtl);
+     }
+ 
+-    static void mouseDown(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y, jint modifier)
++    static void mouseDown(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/,
++                          jint x, jint y, jint modifier, jint actionButton)
+     {
+         if (m_ignoreMouseEvents)
+             return;
+@@ -146,10 +148,12 @@ namespace QtAndroidInput
+             localPos = platformWindow ? platformWindow->mapFromGlobal(globalPos) : globalPos;
+         }
+         m_mouseGrabber = tlw;
++        // NOTE: mapping between MotionEvent's BUTTON states and Qt seem consistent
++        m_mouseActionButton = actionButton;
+         QWindowSystemInterface::handleMouseEvent(tlw,
+                                                  localPos,
+                                                  globalPos,
+-                                                 Qt::MouseButtons(Qt::LeftButton),
++                                                 Qt::MouseButton(m_mouseActionButton),
+                                                  mapAndroidModifiers(modifier));
+     }
+ 
+@@ -189,7 +193,7 @@ namespace QtAndroidInput
+         QWindowSystemInterface::handleMouseEvent(tlw,
+                                                  localPos,
+                                                  globalPos,
+-                                                 Qt::MouseButtons(m_mouseGrabber ? Qt::LeftButton : Qt::NoButton),
++                                                 Qt::MouseButtons(m_mouseGrabber ? m_mouseActionButton : Qt::NoButton),
+                                                  mapAndroidModifiers(modifier));
+     }
+ 
+@@ -883,7 +887,7 @@ namespace QtAndroidInput
+         {"touchBegin","(I)V",(void*)touchBegin},
+         {"touchAdd","(IIIZIIFFFF)V",(void*)touchAdd},
+         {"touchEnd","(II)V",(void*)touchEnd},
+-        {"mouseDown", "(IIII)V", (void *)mouseDown},
++        {"mouseDown", "(IIIII)V", (void *)mouseDown},
+         {"mouseUp", "(IIII)V", (void *)mouseUp},
+         {"mouseMove", "(IIII)V", (void *)mouseMove},
+         {"mouseWheel", "(IIIFF)V", (void *)mouseWheel},
+-- 
+2.33.0
+

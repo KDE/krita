@@ -26,6 +26,8 @@ ExternalProject_Add(
                -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
                 ${GLOBAL_PROFILE}
                 -DCMAKE_SYSTEM_PREFIX_PATH=${EXTPREFIX}
+                -DBUILD_HTML_DOCS=FALSE
+                -DBUILD_MAN_DOCS=FALSE
                 -DBUILD_TESTING=false
     UPDATE_COMMAND ""
 )

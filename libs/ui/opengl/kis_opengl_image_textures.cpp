@@ -598,6 +598,7 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
         texturesInfo.internalFormat = GL_RGBA_FLOAT16_ATI;
         dbgUI << "Using ATI half";
         texturesInfo.type = GL_HALF_FLOAT;
+        destinationColorDepthId = Float16BitsColorDepthID;
         dbgUI << "Using half (GLES or GL3)";
         texturesInfo.format = GL_RGBA;
     } else {
@@ -630,11 +631,6 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
             destinationColorDepthId = Float32BitsColorDepthID;
             dbgUI << "Pixel type float (GLES v2)";
             texturesInfo.format = GL_RGBA;
-        } else {
-            KIS_ASSERT_X(false,
-                            "initializeRGBA16FTextures",
-                            "OpenGL ES v2 support detected but GL_OES_texture_*_float or "
-                            "GL_OES_texture_*_float_linear were not found");
         }
     } else if (ctx->format().majorVersion() >= 3) {
         texturesInfo.internalFormat = GL_RGBA32F;
@@ -646,7 +642,6 @@ void initializeRGBA16FTextures(QOpenGLContext *ctx, KisGLTexturesInfo &texturesI
     } else if (ctx->hasExtension("GL_OES_texture_float") && (ctx->hasExtension("GL_EXT_texture_storage") || ctx->hasExtension("EXT_color_buffer_float"))
             && ctx->hasExtension("GL_OES_texture_float_linear")) {
         texturesInfo.internalFormat = GL_RGBA32F_EXT;
-        destinationColorDepthId = Float32BitsColorDepthID;
         dbgUI << "Using float (GLES v2)";
         texturesInfo.type = GL_FLOAT;
         destinationColorDepthId = Float32BitsColorDepthID;
@@ -708,16 +703,28 @@ void KisOpenGLImageTextures::updateTextureFormat()
 #ifndef QT_OPENGL_ES_2
                 m_texturesInfo.internalFormat = GL_RGBA32F;
                 dbgUI << "Using float (GLES or GL3)";
+                m_texturesInfo.type = GL_FLOAT;
+                m_texturesInfo.format = GL_RGBA;
+                destinationColorDepthId = Float32BitsColorDepthID;
             } else if (ctx->hasExtension("GL_ARB_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA32F_ARB;
                 dbgUI << "Using ARB float";
+                m_texturesInfo.type = GL_FLOAT;
+                m_texturesInfo.format = GL_RGBA;
+                destinationColorDepthId = Float32BitsColorDepthID;
             } else if (ctx->hasExtension("GL_ATI_texture_float")) {
                 m_texturesInfo.internalFormat = GL_RGBA_FLOAT32_ATI;
                 dbgUI << "Using ATI float";
+                m_texturesInfo.type = GL_FLOAT;
+                m_texturesInfo.format = GL_RGBA;
+                destinationColorDepthId = Float32BitsColorDepthID;
 #else
                 if (ctx->format().majorVersion() >= 3) {
                     m_texturesInfo.internalFormat = GL_RGBA32F;
                     dbgUI << "Using float (GLES 3 non-Angle)";
+                    m_texturesInfo.type = GL_FLOAT;
+                    m_texturesInfo.format = GL_RGBA;
+                    destinationColorDepthId = Float32BitsColorDepthID;
                     /* GL_EXT_texture_storage is GLES 2*/
                     /* GL_EXT_color_buffer_float is GLES 3*/
                 } else if (ctx->hasExtension("GL_OES_texture_float")
@@ -725,18 +732,12 @@ void KisOpenGLImageTextures::updateTextureFormat()
                            && ctx->hasExtension("GL_OES_texture_float_linear")) {
                     m_texturesInfo.internalFormat = GL_RGBA32F_EXT;
                     dbgUI << "Using float (GLES v2)";
-                } else {
-                    KIS_ASSERT_X(false,
-                                 "KisOpenGLImageTextures::updateTextureFormat",
-                                 "OpenGL ES v2 support detected but GL_OES_texture_float or GL_OES_texture_float_linear "
-                                 "were not found");
+                    m_texturesInfo.type = GL_FLOAT;
+                    m_texturesInfo.format = GL_RGBA;
+                    destinationColorDepthId = Float32BitsColorDepthID;
                 }
 #endif
             }
-
-            m_texturesInfo.type = GL_FLOAT;
-            m_texturesInfo.format = GL_RGBA;
-            destinationColorDepthId = Float32BitsColorDepthID;
         }
         else if (colorDepthId == Integer16BitsColorDepthID) {
             if (!KisOpenGL::hasOpenGLES()) {

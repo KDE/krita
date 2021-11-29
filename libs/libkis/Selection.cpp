@@ -170,7 +170,7 @@ void Selection::paste(Node *destination, int x, int y)
 
     KisPaintDeviceSP src = KisClipboard::instance()->clip(QRect(), false);
     KisPaintDeviceSP dst = destination->node()->paintDevice();
-    if (!dst) return;
+    if (!dst || !src) return;
     KisPainter::copyAreaOptimized(QPoint(x, y),
                                   src,
                                   dst,

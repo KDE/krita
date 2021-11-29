@@ -1,0 +1,179 @@
+From a38d869fd045bba2272757357b1d15e60a3fb119 Mon Sep 17 00:00:00 2001
+From: Assam Boudjelthia <assam.boudjelthia@qt.io>
+Date: Fri, 14 Feb 2020 14:20:13 +0200
+Subject: [PATCH 07/46] Android: handle check permissions before any file
+ operations
+
+This is required because opening a Uri with no permissions can cause
+crashes.
+Some exceptions were not handled at all.
+
+Change-Id: I2e8f9505879b9fc4c1c47bdfa1bf173b39ada3ea
+Reviewed-by: Eskil Abrahamsen Blomfeldt <eskil.abrahamsen-blomfeldt@qt.io>
+---
+ .../org/qtproject/qt5/android/QtNative.java   | 72 ++++++++++++++++---
+ .../android/qandroidplatformservices.cpp      | 15 ++--
+ 2 files changed, 71 insertions(+), 16 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index c9521e09b1..6a4ec6687a 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -47,11 +47,13 @@ import java.util.concurrent.Semaphore;
+ 
+ import android.app.Activity;
+ import android.app.Service;
++import android.content.ActivityNotFoundException;
+ import android.content.Context;
+ import android.content.ContentResolver;
+ import android.content.Intent;
+ import android.content.pm.PackageManager;
+ import android.content.pm.ActivityInfo;
++import android.content.UriPermission;
+ import android.net.Uri;
+ import android.os.Build;
+ import android.os.Handler;
+@@ -74,6 +76,7 @@ import java.lang.reflect.Method;
+ import java.security.KeyStore;
+ import java.security.cert.X509Certificate;
+ import java.util.Iterator;
++import java.util.List;
+ import javax.net.ssl.TrustManagerFactory;
+ import javax.net.ssl.TrustManager;
+ import javax.net.ssl.X509TrustManager;
+@@ -153,32 +156,83 @@ public class QtNative
+         }
+     }
+ 
+-    public static boolean openURL(String url, String mime)
++    private static Uri getUriWithValidPermission(Context context, String uri, String openMode)
+     {
+-        boolean ok = true;
++        try {
++            List<UriPermission> permissions = context.getContentResolver().getPersistedUriPermissions();
++            String uriStr = Uri.parse(uri).getPath();
++
++            for (int i = 0; i < permissions.size(); ++i) {
++                Uri iterUri = permissions.get(i).getUri();
++                boolean isRightPermission = permissions.get(i).isReadPermission();
++
++                if (!openMode.equals("r"))
++                   isRightPermission = permissions.get(i).isWritePermission();
++
++                if (iterUri.getPath().equals(uriStr) && isRightPermission)
++                    return iterUri;
++            }
++
++            return null;
++        } catch (SecurityException e) {
++            e.printStackTrace();
++            return null;
++        }
++    }
++
++    public static boolean openURL(Context context, String url, String mime)
++    {
++        Uri uri;
++        if (url.startsWith("content:")) {
++            uri = getUriWithValidPermission(context, url, "r");
++            if (uri == null) {
++                Log.e(QtTAG, "openURL(): No permissions to open Uri");
++                return false;
++            }
++        } else {
++            uri = Uri.parse(url);
++        }
+ 
+         try {
+-            Uri uri = Uri.parse(url);
+             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
++            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+             if (!mime.isEmpty())
+                 intent.setDataAndType(uri, mime);
++
+             activity().startActivity(intent);
+-        } catch (Exception e) {
++
++            return true;
++        } catch (IllegalArgumentException e) {
++            Log.e(QtTAG, "openURL(): Invalid Uri");
++            return false;
++        } catch (UnsupportedOperationException e) {
++            Log.e(QtTAG, "openURL(): Unsupported operation for given Uri");
++            return false;
++        } catch (ActivityNotFoundException e) {
+             e.printStackTrace();
+-            ok = false;
++            return false;
+         }
+-
+-        return ok;
+     }
+ 
+     public static int openFdForContentUrl(Context context, String contentUrl, String openMode)
+     {
++        Uri uri = getUriWithValidPermission(context, contentUrl, openMode);
++        int error = -1;
++
++        if (uri == null) {
++            Log.e(QtTAG, "openFdForContentUrl(): No permissions to open Uri");
++            return error;
++        }
++
+         try {
+             ContentResolver resolver = context.getContentResolver();
+-            ParcelFileDescriptor fdDesc = resolver.openFileDescriptor(Uri.parse(contentUrl), openMode);
++            ParcelFileDescriptor fdDesc = resolver.openFileDescriptor(uri, openMode);
+             return fdDesc.detachFd();
+         } catch (FileNotFoundException e) {
+-            return -1;
++            return error;
++        } catch (IllegalArgumentException e) {
++            Log.e(QtTAG, "openFdForContentUrl(): Invalid Uri");
++            return error;
+         }
+     }
+ 
+diff --git a/src/plugins/platforms/android/qandroidplatformservices.cpp b/src/plugins/platforms/android/qandroidplatformservices.cpp
+index 136637800b..c095613ce7 100644
+--- a/src/plugins/platforms/android/qandroidplatformservices.cpp
++++ b/src/plugins/platforms/android/qandroidplatformservices.cpp
+@@ -43,6 +43,7 @@
+ #include <QDebug>
+ #include <QMimeDatabase>
+ #include <QtCore/private/qjni_p.h>
++#include <private/qjnihelpers_p.h>
+ 
+ QT_BEGIN_NAMESPACE
+ 
+@@ -57,20 +58,20 @@ bool QAndroidPlatformServices::openUrl(const QUrl &theUrl)
+ 
+     // if the file is local, we need to pass the MIME type, otherwise Android
+     // does not start an Intent to view this file
+-    if ((url.scheme().isEmpty() && QFile::exists(url.path())) || url.isLocalFile()) {
++    QLatin1String fileScheme("file");
++    if ((url.scheme().isEmpty() || url.scheme() == fileScheme) && QFile::exists(url.path())) {
+         // a real URL including the scheme is needed, else the Intent can not be started
+-        url.setScheme(QLatin1String("file"));
+-
++        url.setScheme(fileScheme);
+         QMimeDatabase mimeDb;
+         mime = mimeDb.mimeTypeForUrl(url).name();
+     }
+ 
+     QJNIObjectPrivate urlString = QJNIObjectPrivate::fromString(url.toString());
+     QJNIObjectPrivate mimeString = QJNIObjectPrivate::fromString(mime);
+-    return QJNIObjectPrivate::callStaticMethod<jboolean>(QtAndroid::applicationClass(),
+-                                                         "openURL",
+-                                                         "(Ljava/lang/String;Ljava/lang/String;)Z",
+-                                                         urlString.object(), mimeString.object());
++    return QJNIObjectPrivate::callStaticMethod<jboolean>(
++            QtAndroid::applicationClass(), "openURL",
++            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z",
++            QtAndroidPrivate::context(), urlString.object(), mimeString.object());
+ }
+ 
+ bool QAndroidPlatformServices::openDocument(const QUrl &url)
+-- 
+2.33.0
+

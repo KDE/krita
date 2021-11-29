@@ -1,0 +1,38 @@
+From 9088357832bc0ccc7debec37e5d783dd4ff6a9dd Mon Sep 17 00:00:00 2001
+From: Andy Shaw <andy.shaw@qt.io>
+Date: Thu, 23 Apr 2020 18:47:17 +0300
+Subject: [PATCH 01/46] Fix QLocale::system() and uiLanguages() for the mobile
+ platforms
+
+On iOS, it was no longer using the Cocoa specific code needed to get
+the locale and uiLanguages information so this functionality is brought
+back as it was accidently lost.
+
+In addition, this has a side-effect of fixing a problem with Android
+versions below API 24 where it has no UiLanguages functionality so it
+gets the information based on the system locale as a fallback.
+
+Fixes: QTBUG-81307
+Fixes: QTBUG-81357
+Change-Id: I1709675b5bd5e9cedefb99eaec28279f20a347a4
+Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
+---
+ src/corelib/tools/qlocale.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/corelib/tools/qlocale.cpp b/src/corelib/tools/qlocale.cpp
+index 9b8ab78716..f865791971 100644
+--- a/src/corelib/tools/qlocale.cpp
++++ b/src/corelib/tools/qlocale.cpp
+@@ -4010,6 +4010,8 @@ QStringList QLocale::uiLanguages() const
+             for (const auto entry : qAsConst(uiLanguages))
+                 locales.append(QLocale(entry));
+         }
++        if (locales.isEmpty())
++            locales.append(systemLocale()->fallbackUiLocale());
+     } else
+ #endif
+     {
+-- 
+2.33.0
+

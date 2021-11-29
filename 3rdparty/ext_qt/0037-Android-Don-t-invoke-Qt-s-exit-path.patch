@@ -1,0 +1,24 @@
+From 33da64048136bebaa144afbd5599fbf8f6d6cba8 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Fri, 9 Apr 2021 13:58:56 +0000
+Subject: [PATCH 37/46] Android: Don't invoke Qt's exit path
+
+---
+ .../java/src/org/qtproject/qt5/android/bindings/QtActivity.java  | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java b/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java
+index 3348527b3c..8a61f2e9db 100644
+--- a/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java
++++ b/src/android/java/src/org/qtproject/qt5/android/bindings/QtActivity.java
+@@ -396,7 +396,6 @@ public class QtActivity extends Activity
+     protected void onDestroy()
+     {
+         super.onDestroy();
+-        QtApplication.invokeDelegate();
+     }
+     //---------------------------------------------------------------------------
+ 
+-- 
+2.33.0
+

@@ -1,0 +1,58 @@
+From 694ce1a4bd52018b36a7c95d426e0ef4e09e861a Mon Sep 17 00:00:00 2001
+From: Assam Boudjelthia <assam.boudjelthia@qt.io>
+Date: Mon, 27 Apr 2020 11:51:09 +0300
+Subject: [PATCH 19/46] Android: allow file dialog to use remote locations
+
+Allow the native file dialog to use remote locations like OneDrive,
+Google Drive, etc.
+
+Pick-to: 5.15
+Change-Id: I67027f0da8e6bd759a4936e03b6c9e95f3f90e1a
+Reviewed-by: Andy Shaw <andy.shaw@qt.io>
+---
+ .../android/qandroidplatformfiledialoghelper.cpp         | 9 ---------
+ .../platforms/android/qandroidplatformfiledialoghelper.h | 1 -
+ 2 files changed, 10 deletions(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 2e29a22cf7..689997f1eb 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -118,14 +118,6 @@ void QAndroidPlatformFileDialogHelper::takePersistableUriPermission(const QJNIOb
+                                      uri.object(), modeFlags);
+ }
+ 
+-void QAndroidPlatformFileDialogHelper::setLocalFilesOnly(bool localOnly)
+-{
+-    const QJNIObjectPrivate extraLocalOnly = QJNIObjectPrivate::getStaticObjectField(
+-            JniIntentClass, "EXTRA_LOCAL_ONLY", "Ljava/lang/String;");
+-    m_intent.callObjectMethod("putExtra", "(Ljava/lang/String;Z)Landroid/content/Intent;",
+-                              extraLocalOnly.object(), localOnly);
+-}
+-
+ void QAndroidPlatformFileDialogHelper::setIntentTitle(const QString &title)
+ {
+     const QJNIObjectPrivate extraTitle = QJNIObjectPrivate::getStaticObjectField(
+@@ -237,7 +229,6 @@ bool QAndroidPlatformFileDialogHelper::show(Qt::WindowFlags windowFlags, Qt::Win
+     }
+ 
+     setIntentTitle(options()->windowTitle());
+-    setLocalFilesOnly(true);
+ 
+     QtAndroidPrivate::registerActivityResultListener(this);
+     m_activity.callMethod<void>("startActivityForResult", "(Landroid/content/Intent;I)V",
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+index fa9c3f47b3..5a7a28a8a0 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.h
+@@ -75,7 +75,6 @@ public:
+ private:
+     QJNIObjectPrivate getFileDialogIntent(const QString &intentType);
+     void takePersistableUriPermission(const QJNIObjectPrivate &uri);
+-    void setLocalFilesOnly(bool localOnly);
+     void setIntentTitle(const QString &title);
+     void setOpenableCategory();
+     void setAllowMultipleSelections(bool allowMultiple);
+-- 
+2.33.0
+

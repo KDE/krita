@@ -1,0 +1,108 @@
+From 8c9c84aadc8ce613c537e15cd3205b6c78639575 Mon Sep 17 00:00:00 2001
+From: Assam Boudjelthia <assam.boudjelthia@qt.io>
+Date: Tue, 21 Apr 2020 16:42:44 +0300
+Subject: [PATCH 18/46] Android: fix mimeTypes handling for file dialog
+
+Since Android native file manager supports mimeTypes, I use
+QMimeDatabase to get the correct mime type for the nameFilter
+used with the file dialog.
+
+[ChangeLog][Android] Support setting mimetypes and and namefilters for
+Android native file dialog.
+
+Task-number: QTBUG-83089
+Change-Id: I46545576dc9b51aa872bb37dbf4fe12b2533bdd9
+Reviewed-by: Ville Voutilainen <ville.voutilainen@qt.io>
+---
+ .../org/qtproject/qt5/android/QtNative.java   |  5 ++
+ .../qandroidplatformfiledialoghelper.cpp      | 46 ++++++++++++++++---
+ 2 files changed, 45 insertions(+), 6 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index be089c515d..b838720213 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -159,6 +159,11 @@ public class QtNative
+         }
+     }
+ 
++    public static String[] getStringArray(String joinedString)
++    {
++        return joinedString.split(",");
++    }
++
+     private static Uri getUriWithValidPermission(Context context, String uri, String openMode)
+     {
+         try {
+diff --git a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+index 7b5f2f16f8..2e29a22cf7 100644
+--- a/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
++++ b/src/plugins/platforms/android/qandroidplatformfiledialoghelper.cpp
+@@ -42,6 +42,10 @@
+ #include <androidjnimain.h>
+ #include <jni.h>
+ 
++#include <QMimeType>
++#include <QMimeDatabase>
++#include <QRegularExpression>
++
+ QT_BEGIN_NAMESPACE
+ 
+ namespace QtAndroidFileDialogHelper {
+@@ -147,17 +151,47 @@ void QAndroidPlatformFileDialogHelper::setAllowMultipleSelections(bool allowMult
+                               allowMultipleSelections.object(), allowMultiple);
+ }
+ 
++QStringList nameFilterExtensions(const QString nameFilters)
++{
++    QStringList ret;
++#if QT_CONFIG(regularexpression)
++    QRegularExpression re("(\\*\\.?\\w*)");
++    QRegularExpressionMatchIterator i = re.globalMatch(nameFilters);
++    while (i.hasNext())
++        ret << i.next().captured(1);
++#endif // QT_CONFIG(regularexpression)
++    ret.removeAll("*");
++    return ret;
++}
++
+ void QAndroidPlatformFileDialogHelper::setMimeTypes()
+ {
++    QStringList mimeTypes = options()->mimeTypeFilters();
++    const QString nameFilter = options()->initiallySelectedNameFilter();
++
++    if (mimeTypes.isEmpty() && !nameFilter.isEmpty()) {
++        QMimeDatabase db;
++        for (const QString &filter : nameFilterExtensions(nameFilter))
++            mimeTypes.append(db.mimeTypeForFile(filter).name());
++    }
++
++    QString type = !mimeTypes.isEmpty() ? mimeTypes.at(0) : QLatin1String("*/*");
+     m_intent.callObjectMethod("setType", "(Ljava/lang/String;)Landroid/content/Intent;",
+-                              QJNIObjectPrivate::fromString("*/*").object());
++                              QJNIObjectPrivate::fromString(type).object());
++
++    if (!mimeTypes.isEmpty()) {
++        const QJNIObjectPrivate extraMimeType = QJNIObjectPrivate::getStaticObjectField(
++                JniIntentClass, "EXTRA_MIME_TYPES", "Ljava/lang/String;");
++
++        QJNIObjectPrivate mimeTypesArray = QJNIObjectPrivate::callStaticObjectMethod(
++                "org/qtproject/qt5/android/QtNative",
++                "getStringArray",
++                "(Ljava/lang/String;)[Ljava/lang/String;",
++                QJNIObjectPrivate::fromString(mimeTypes.join(",")).object());
+ 
+-    const QJNIObjectPrivate extraMimeType = QJNIObjectPrivate::getStaticObjectField(
+-            JniIntentClass, "EXTRA_MIME_TYPES", "Ljava/lang/String;");
+-    for (const QString &type : options()->mimeTypeFilters()) {
+         m_intent.callObjectMethod(
+-                "putExtra", "(Ljava/lang/String;Ljava/lang/String;)Landroid/content/Intent;",
+-                extraMimeType.object(), QJNIObjectPrivate::fromString(type).object());
++                "putExtra", "(Ljava/lang/String;[Ljava/lang/String;)Landroid/content/Intent;",
++                extraMimeType.object(), mimeTypesArray.object());
+     }
+ }
+ 
+-- 
+2.33.0
+

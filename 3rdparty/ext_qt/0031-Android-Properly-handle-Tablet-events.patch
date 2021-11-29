@@ -1,0 +1,121 @@
+From b950f0e6afd98fb7b781e4ae3f623bb5bdcda1cb Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Thu, 10 Sep 2020 10:46:57 +0000
+Subject: [PATCH 31/46] Android: Properly handle Tablet events
+
+Prior to this Hover events from stylus/tablet were treated as Mouse
+events and primary and secondary stylus buttons weren't handled either.
+This commit also passes batched tablet events to Qt.
+---
+ .../org/qtproject/qt5/android/QtNative.java   | 34 +++++++++++++++----
+ .../platforms/android/androidjniinput.cpp     | 15 +++++---
+ 2 files changed, 38 insertions(+), 11 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index d76b7c9008..c9a2179a27 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -652,7 +652,7 @@ public class QtNative
+     }
+     //@ANDROID-9
+ 
+-    static public void sendTouchEvent(MotionEvent event, int id)
++    static public boolean sendTouchEvent(MotionEvent event, int id)
+     {
+         int pointerType = 0;
+ 
+@@ -669,15 +669,29 @@ public class QtNative
+         }
+ 
+         if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
+-            sendMouseEvent(event, id);
++            return sendMouseEvent(event, id);
+         } else if (m_tabletEventSupported && pointerType != 0) {
++            final int historySize = event.getHistorySize();
++            for (int h = 0; h < historySize; h++) {
++                float tiltRot = event.getHistoricalAxisValue(MotionEvent.AXIS_TILT, h);
++                float orientation = event.getHistoricalAxisValue(MotionEvent.AXIS_ORIENTATION, h);
++
++                float tiltX = (float) Math.toDegrees(-Math.sin(orientation) * tiltRot);
++                float tiltY = (float) Math.toDegrees(Math.cos(orientation) * tiltRot);
++
++                tabletEvent(id, event.getDeviceId(), event.getHistoricalEventTime(h), event.getActionMasked(),
++                            pointerType, event.getButtonState(), event.getHistoricalX(h),
++                            event.getHistoricalY(h), event.getHistoricalPressure(h), tiltX, tiltY,
++                            (float)Math.toDegrees(orientation), event.getMetaState());
++            }
+             float tiltRot = event.getAxisValue(MotionEvent.AXIS_TILT);
+             float orientation = event.getAxisValue(MotionEvent.AXIS_ORIENTATION);
+             float tiltX = (float) Math.toDegrees(-Math.sin(orientation) * tiltRot);
+             float tiltY = (float) Math.toDegrees(Math.cos(orientation) * tiltRot);
+-            tabletEvent(id, event.getDeviceId(), event.getEventTime(), event.getAction(), pointerType,
++            tabletEvent(id, event.getDeviceId(), event.getEventTime(), event.getActionMasked(), pointerType,
+                 event.getButtonState(), event.getX(), event.getY(), event.getPressure(), tiltX, tiltY,
+                 (float) Math.toDegrees(orientation), event.getMetaState());
++            return true;
+         } else {
+             touchBegin(id);
+             for (int i = 0; i < event.getPointerCount(); ++i) {
+@@ -693,6 +707,7 @@ public class QtNative
+                              event.getPressure(i));
+             }
+             touchEnd(id, event.getAction());
++            return true;
+         }
+     }
+ 
+@@ -703,12 +718,19 @@ public class QtNative
+ 
+     static public boolean sendGenericMotionEvent(MotionEvent event, int id)
+     {
+-        if (((event.getAction() & (MotionEvent.ACTION_SCROLL | MotionEvent.ACTION_HOVER_MOVE)) == 0)
+-                || (event.getSource() & InputDevice.SOURCE_CLASS_POINTER) != InputDevice.SOURCE_CLASS_POINTER) {
++        if (!event.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
+             return false;
+         }
+ 
+-        return sendMouseEvent(event, id);
++        if (event.isFromSource(InputDevice.SOURCE_MOUSE)) {
++                return sendMouseEvent(event, id);
++        } else if ((event.getSource() & (InputDevice.SOURCE_STYLUS |
++                                         InputDevice.SOURCE_TOUCHPAD |
++                                         InputDevice.SOURCE_TOUCHSCREEN)) != 0) {
++
++            return sendTouchEvent(event, id);
++        }
++        return false;
+     }
+ 
+     static public boolean sendMouseEvent(MotionEvent event, int id)
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index 870b22e15e..fec394f95e 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -380,14 +380,19 @@ namespace QtAndroidInput
+         // when action == ACTION_UP (1) it's a release; otherwise we say which button is pressed
+         Qt::MouseButtons buttons = Qt::NoButton;
+         switch (action) {
+-        case 1:     // ACTION_UP
+-        case 212:   // stylus release while side-button held on Galaxy Note 4
++        case AMOTION_EVENT_ACTION_UP:
+             buttons = Qt::NoButton;
+             break;
+-        default:    // action is press or drag
+-            if (buttonState == 0)
++        case AMOTION_EVENT_ACTION_MOVE:
++        case AMOTION_EVENT_ACTION_DOWN:
++            if (!buttonState)
+                 buttons = Qt::LeftButton;
+-            else // 2 means RightButton
++        default:
++            if (buttonState == AMOTION_EVENT_BUTTON_STYLUS_PRIMARY)
++                buttons = Qt::MiddleButton;
++            else if (buttonState == AMOTION_EVENT_BUTTON_STYLUS_SECONDARY)
++                buttons = Qt::RightButton;
++            else if (buttonState)
+                 buttons = Qt::MouseButtons(buttonState);
+             break;
+         }
+-- 
+2.33.0
+

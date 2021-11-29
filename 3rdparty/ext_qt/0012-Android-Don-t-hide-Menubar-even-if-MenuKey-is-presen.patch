@@ -1,0 +1,26 @@
+From cb104e5391f20bfd3e9b878a2fc28d7791898fea Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Mon, 1 Jun 2020 00:34:46 +0530
+Subject: [PATCH 12/46] Android: Don't hide Menubar even if MenuKey is present
+
+Change-Id: Id00266522f548bcf09b582fb2b0d27ff6bbb9d73
+---
+ .../jar/src/org/qtproject/qt5/android/QtActivityDelegate.java   | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
+index 98d9e81ba9..74b14b6435 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
+@@ -1120,7 +1120,7 @@ public class QtActivityDelegate
+     {
+         if (m_activity.getActionBar() == null)
+             return;
+-        if (ViewConfiguration.get(m_activity).hasPermanentMenuKey() || !visible)
++        if (!visible)
+             m_activity.getActionBar().hide();
+         else
+             m_activity.getActionBar().show();
+-- 
+2.33.0
+

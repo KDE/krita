@@ -1,0 +1,48 @@
+From d2502b1cc175f07b60b9455af4cc779bbaf2fd12 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Sat, 12 Sep 2020 10:43:06 +0000
+Subject: [PATCH 13/46] Emulate Long Press as Right Click on Android
+
+---
+ src/plugins/platforms/android/androidjniinput.cpp | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index 685f40d2ae..b59be80a1b 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -224,13 +224,16 @@ namespace QtAndroidInput
+             QMetaObject::invokeMethod(inputContext, "longPress", Q_ARG(int, x), Q_ARG(int, y));
+ 
+         //### TODO: add proper API for Qt 5.2
+-        static bool rightMouseFromLongPress = qEnvironmentVariableIntValue("QT_NECESSITAS_COMPATIBILITY_LONG_PRESS");
++        static bool rightMouseFromLongPress = true;
+         if (!rightMouseFromLongPress)
+             return;
+         m_ignoreMouseEvents = true;
+         QPoint globalPos(x,y);
+         QWindow *tlw = topLevelWindowAt(globalPos);
+-        QPoint localPos = tlw ? (globalPos-tlw->position()) : globalPos;
++        QPoint localPos = globalPos;
++        if (tlw && tlw->handle()) {
++            localPos = tlw->handle()->mapFromGlobal(globalPos);
++        }
+ 
+         // Release left button
+         QWindowSystemInterface::handleMouseEvent(tlw,
+@@ -243,6 +246,12 @@ namespace QtAndroidInput
+                                                  localPos,
+                                                  globalPos,
+                                                  Qt::MouseButtons(Qt::RightButton));
++
++        // Release right button
++        QWindowSystemInterface::handleMouseEvent(tlw,
++                                                 localPos,
++                                                 globalPos,
++                                                 Qt::MouseButtons(Qt::NoButton));
+     }
+ 
+     static void touchBegin(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/)
+-- 
+2.33.0
+

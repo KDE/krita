@@ -1,0 +1,80 @@
+From 0ce217bf9ff4a2d7a95d607cdd5dc2e974d5a796 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Tue, 10 Nov 2020 18:24:32 +0000
+Subject: [PATCH 29/46] Android: Handle the ACTION_CANCEL Event from Android
+
+Prior to this actions from weren't handled explicity, this made events
+after the ACTION_CANCEL was sent to continue from previous state, rather
+than starting over.
+---
+ .../src/org/qtproject/qt5/android/QtNative.java    | 14 +-------------
+ src/plugins/platforms/android/androidjniinput.cpp  | 14 ++++++++++++--
+ 2 files changed, 13 insertions(+), 15 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 287502a645..d76b7c9008 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -692,19 +692,7 @@ public class QtNative
+                              event.getOrientation(i),
+                              event.getPressure(i));
+             }
+-
+-            switch (event.getAction()) {
+-                case MotionEvent.ACTION_DOWN:
+-                    touchEnd(id, 0);
+-                    break;
+-
+-                case MotionEvent.ACTION_UP:
+-                    touchEnd(id, 2);
+-                    break;
+-
+-                default:
+-                    touchEnd(id, 1);
+-            }
++            touchEnd(id, event.getAction());
+         }
+     }
+ 
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index 83553deacd..870b22e15e 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -38,6 +38,8 @@
+ **
+ ****************************************************************************/
+ 
++#include <android/input.h>
++
+ #include <QtGui/qtguiglobal.h>
+ 
+ #include "androidjniinput.h"
+@@ -303,7 +305,7 @@ namespace QtAndroidInput
+         }
+     }
+ 
+-    static void touchEnd(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint /*action*/)
++    static void touchEnd(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint action)
+     {
+         if (m_touchPoints.isEmpty())
+             return;
+@@ -326,7 +328,15 @@ namespace QtAndroidInput
+         }
+ 
+         QWindow *window = QtAndroid::topLevelWindowAt(m_touchPoints.at(0).area.center().toPoint());
+-        QWindowSystemInterface::handleTouchEvent(window, touchDevice, m_touchPoints);
++
++        switch (action) {
++        case AMOTION_EVENT_ACTION_CANCEL:
++            QWindowSystemInterface::handleTouchCancelEvent(window, touchDevice);
++            break;
++        default:
++            QWindowSystemInterface::handleTouchEvent(window, touchDevice, m_touchPoints);
++            break;
++        }
+     }
+ 
+     static bool isTabletEventSupported(JNIEnv */*env*/, jobject /*thiz*/)
+-- 
+2.33.0
+

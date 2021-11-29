@@ -1,0 +1,37 @@
+From c9d3ed9444341a60bb67fc11a182da3e29b13a99 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <sharafzaz121@gmail.com>
+Date: Wed, 6 Jan 2021 12:12:09 +0000
+Subject: [PATCH 30/46] Android: prevent out-of-order events
+
+QPlatformWindow::setVisible() flushes internal event queue which then
+sends events to widgets out-of-order fashion, which can make some
+widgets hidden thus freezing the entire app. We need event flushing for
+widget to be rendered properly, but we don't have to send user input
+events.
+---
+ src/plugins/platforms/android/qandroidplatformwindow.cpp | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformwindow.cpp b/src/plugins/platforms/android/qandroidplatformwindow.cpp
+index c095f51fa3..61e6f360de 100644
+--- a/src/plugins/platforms/android/qandroidplatformwindow.cpp
++++ b/src/plugins/platforms/android/qandroidplatformwindow.cpp
+@@ -93,8 +93,13 @@ void QAndroidPlatformWindow::setVisible(bool visible)
+         platformScreen()->removeWindow(this);
+ 
+     QRect availableGeometry = screen()->availableGeometry();
+-    if (geometry().width() > 0 && geometry().height() > 0 && availableGeometry.width() > 0 && availableGeometry.height() > 0)
+-        QPlatformWindow::setVisible(visible);
++    if (geometry().width() > 0 && geometry().height() > 0 && availableGeometry.width() > 0
++        && availableGeometry.height() > 0) {
++        QWindowSystemInterface::handleExposeEvent(window(),
++                                                  QRect(QPoint(), geometry().size()));
++        QWindowSystemInterface::flushWindowSystemEvents(
++            QEventLoop::ExcludeUserInputEvents);
++    }
+ }
+ 
+ void QAndroidPlatformWindow::setWindowState(Qt::WindowStates state)
+-- 
+2.33.0
+

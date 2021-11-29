@@ -449,7 +449,7 @@ bool KisPaletteEditor::isModified() const
 
 void KisPaletteEditor::updatePalette()
 {
-    qDebug() << "updating the palette model inside the palette editor object";
+    dbgResources << Q_FUNC_INFO << "updating the palette model inside the palette editor object";
     Q_ASSERT(m_d->model);
     Q_ASSERT(m_d->model->colorSet());
     if (!m_d->view) { return; }
@@ -523,7 +523,6 @@ void KisPaletteEditor::slotPaletteChanged()
 {
     Q_ASSERT(m_d->model);
     if (!m_d->model->colorSet()) { return; }
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->model->colorSet()->isDirty());
     KoColorSetSP palette = m_d->model->colorSet();
     m_d->modified.groups.clear();
     m_d->keepColorGroups.clear();

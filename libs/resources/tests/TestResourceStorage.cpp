@@ -10,6 +10,7 @@
 
 #include <QImage>
 #include <QPainter>
+#include <QUuid>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -60,6 +61,18 @@ void TestResourceStorage ::testStorage()
     {
         KisResourceStorage storage(QString(FILES_DATA_DIR) + "/bundles/test2.bundle");
         QVERIFY(storage.type() == KisResourceStorage::StorageType::Bundle);
+        QVERIFY(storage.valid());
+    }
+
+    {
+        KisResourceStorage storage(QUuid().toString());
+        QVERIFY(storage.type() == KisResourceStorage::StorageType::Memory);
+        QVERIFY(storage.valid());
+    }
+
+    {
+        KisResourceStorage storage("Just a random storage");
+        QVERIFY(storage.type() == KisResourceStorage::StorageType::Memory);
         QVERIFY(storage.valid());
     }
 

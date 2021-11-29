@@ -1,0 +1,359 @@
+From 68b7a66a6e4d673d11aab44cb87b3f005cdff8ea Mon Sep 17 00:00:00 2001
+From: Ulf Hermann <ulf.hermann@qt.io>
+Date: Fri, 29 Mar 2019 09:24:27 +0100
+Subject: [PATCH] Don't use UINT_MAX as invalid array index in PropertyKey
+
+Technically UINT_MAX is actually a valid array index, although that is
+an academic problem right now. However, we do have a method
+isArrayIndex() and should just use that to determine if a PropertyKey is
+an array index.
+
+Fixes: QTBUG-73893
+Change-Id: I302e7894331ed2ab4717f7d8d6cc7d8974dabb4e
+Reviewed-by: Erik Verbruggen <erik.verbruggen@qt.io>
+---
+ src/qml/jsruntime/qv4argumentsobject.cpp | 58 ++++++++++++++----------
+ src/qml/jsruntime/qv4engine.cpp          |  5 +-
+ src/qml/jsruntime/qv4identifiertable.cpp |  5 +-
+ src/qml/jsruntime/qv4object.cpp          | 18 +++-----
+ src/qml/jsruntime/qv4propertykey_p.h     |  4 +-
+ src/qml/jsruntime/qv4stringobject.cpp    | 15 +++---
+ src/qml/jsruntime/qv4typedarray.cpp      | 40 ++++++++--------
+ 7 files changed, 75 insertions(+), 70 deletions(-)
+
+diff --git a/src/qml/jsruntime/qv4argumentsobject.cpp b/src/qml/jsruntime/qv4argumentsobject.cpp
+index 4a21f62cf2..98e0ef9e70 100644
+--- a/src/qml/jsruntime/qv4argumentsobject.cpp
++++ b/src/qml/jsruntime/qv4argumentsobject.cpp
+@@ -116,6 +116,9 @@ bool ArgumentsObject::virtualDefineOwnProperty(Managed *m, PropertyKey id, const
+ {
+     ArgumentsObject *args = static_cast<ArgumentsObject *>(m);
+     args->fullyCreate();
++    if (!id.isArrayIndex())
++        return Object::virtualDefineOwnProperty(m, id, desc, attrs);
++
+     uint index = id.asArrayIndex();
+ 
+     if (!args->isMapped(index))
+@@ -148,36 +151,42 @@ bool ArgumentsObject::virtualDefineOwnProperty(Managed *m, PropertyKey id, const
+ 
+ ReturnedValue ArgumentsObject::virtualGet(const Managed *m, PropertyKey id, const Value *receiver, bool *hasProperty)
+ {
+-    const ArgumentsObject *args = static_cast<const ArgumentsObject *>(m);
+-    uint index = id.asArrayIndex();
+-    if (index < args->d()->argCount && !args->d()->fullyCreated) {
+-        if (hasProperty)
+-            *hasProperty = true;
+-        return args->context()->args()[index].asReturnedValue();
++    if (id.isArrayIndex()) {
++        const ArgumentsObject *args = static_cast<const ArgumentsObject *>(m);
++        uint index = id.asArrayIndex();
++        if (index < args->d()->argCount && !args->d()->fullyCreated) {
++            if (hasProperty)
++                *hasProperty = true;
++            return args->context()->args()[index].asReturnedValue();
++        }
++
++        if (args->isMapped(index)) {
++            Q_ASSERT(index < static_cast<uint>(args->context()->function->formalParameterCount()));
++            if (hasProperty)
++                *hasProperty = true;
++            return args->context()->args()[index].asReturnedValue();
++        }
+     }
+ 
+-    if (!args->isMapped(index))
+-        return Object::virtualGet(m, id, receiver, hasProperty);
+-    Q_ASSERT(index < static_cast<uint>(args->context()->function->formalParameterCount()));
+-    if (hasProperty)
+-        *hasProperty = true;
+-    return args->context()->args()[index].asReturnedValue();
++    return Object::virtualGet(m, id, receiver, hasProperty);
+ }
+ 
+ bool ArgumentsObject::virtualPut(Managed *m, PropertyKey id, const Value &value, Value *receiver)
+ {
+-    ArgumentsObject *args = static_cast<ArgumentsObject *>(m);
+-    uint index = id.asArrayIndex();
+-
+-    if (args == receiver && index < args->d()->argCount && !args->d()->fullyCreated) {
+-        args->context()->setArg(index, value);
+-        return true;
++    if (id.isArrayIndex()) {
++        ArgumentsObject *args = static_cast<ArgumentsObject *>(m);
++        uint index = id.asArrayIndex();
++
++        if (args == receiver && index < args->d()->argCount && !args->d()->fullyCreated) {
++            args->context()->setArg(index, value);
++            return true;
++        }
++
++        bool isMapped = (args == receiver && args->isMapped(index));
++        if (isMapped)
++            args->context()->setArg(index, value);
+     }
+ 
+-    bool isMapped = (args == receiver && args->isMapped(index));
+-    if (isMapped)
+-        args->context()->setArg(index, value);
+-
+     return Object::virtualPut(m, id, value, receiver);
+ }
+ 
+@@ -186,13 +195,16 @@ bool ArgumentsObject::virtualDeleteProperty(Managed *m, PropertyKey id)
+     ArgumentsObject *args = static_cast<ArgumentsObject *>(m);
+     args->fullyCreate();
+     bool result = Object::virtualDeleteProperty(m, id);
+-    if (result)
++    if (result && id.isArrayIndex())
+         args->removeMapping(id.asArrayIndex());
+     return result;
+ }
+ 
+ PropertyAttributes ArgumentsObject::virtualGetOwnProperty(const Managed *m, PropertyKey id, Property *p)
+ {
++    if (!id.isArrayIndex())
++        return Object::virtualGetOwnProperty(m, id, p);
++
+     const ArgumentsObject *args = static_cast<const ArgumentsObject *>(m);
+     uint index = id.asArrayIndex();
+     if (index < args->d()->argCount && !args->d()->fullyCreated) {
+diff --git a/src/qml/jsruntime/qv4engine.cpp b/src/qml/jsruntime/qv4engine.cpp
+index ab980e99df..5bc81de472 100644
+--- a/src/qml/jsruntime/qv4engine.cpp
++++ b/src/qml/jsruntime/qv4engine.cpp
+@@ -1659,9 +1659,8 @@ static QV4::ReturnedValue variantMapToJS(QV4::ExecutionEngine *v4, const QVarian
+         s = v4->newIdentifier(it.key());
+         key = s->propertyKey();
+         v = variantToJS(v4, it.value());
+-        uint idx = key->asArrayIndex();
+-        if (idx < UINT_MAX)
+-            o->arraySet(idx, v);
++        if (key->isArrayIndex())
++            o->arraySet(key->asArrayIndex(), v);
+         else
+             o->insertMember(s, v);
+     }
+diff --git a/src/qml/jsruntime/qv4identifiertable.cpp b/src/qml/jsruntime/qv4identifiertable.cpp
+index e476baa886..102c06d9b0 100644
+--- a/src/qml/jsruntime/qv4identifiertable.cpp
++++ b/src/qml/jsruntime/qv4identifiertable.cpp
+@@ -216,9 +216,8 @@ PropertyKey IdentifierTable::asPropertyKeyImpl(const Heap::String *str)
+ 
+ Heap::StringOrSymbol *IdentifierTable::resolveId(PropertyKey i) const
+ {
+-    uint arrayIdx = i.asArrayIndex();
+-    if (arrayIdx < UINT_MAX)
+-        return engine->newString(QString::number(arrayIdx));
++    if (i.isArrayIndex())
++        return engine->newString(QString::number(i.asArrayIndex()));
+     if (!i.isValid())
+         return nullptr;
+ 
+diff --git a/src/qml/jsruntime/qv4object.cpp b/src/qml/jsruntime/qv4object.cpp
+index efab9a6454..206b410cf4 100644
+--- a/src/qml/jsruntime/qv4object.cpp
++++ b/src/qml/jsruntime/qv4object.cpp
+@@ -406,8 +406,8 @@ ReturnedValue Object::internalGet(PropertyKey id, const Value *receiver, bool *h
+ {
+     Heap::Object *o = d();
+ 
+-    uint index = id.asArrayIndex();
+-    if (index != UINT_MAX) {
++    if (id.isArrayIndex()) {
++        const uint index = id.asArrayIndex();
+         Scope scope(this);
+         PropertyAttributes attrs;
+         ScopedProperty pd(scope);
+@@ -431,8 +431,6 @@ ReturnedValue Object::internalGet(PropertyKey id, const Value *receiver, bool *h
+                 break;
+         }
+     } else {
+-        Q_ASSERT(!id.isArrayIndex());
+-
+         while (1) {
+             auto idx = o->internalClass->findValueOrGetter(id);
+             if (idx.isValid()) {
+@@ -470,14 +468,13 @@ bool Object::internalPut(PropertyKey id, const Value &value, Value *receiver)
+         if (d()->internalClass->vtable->getOwnProperty == Object::virtualGetOwnProperty) {
+             // This object standard methods in the vtable, so we can take a shortcut
+             // and avoid the calls to getOwnProperty and defineOwnProperty
+-            uint index = id.asArrayIndex();
+ 
+             PropertyAttributes attrs;
+             PropertyIndex propertyIndex{nullptr, nullptr};
+ 
+-            if (index != UINT_MAX) {
++            if (id.isArrayIndex()) {
+                 if (arrayData())
+-                    propertyIndex = arrayData()->getValueOrSetter(index, &attrs);
++                    propertyIndex = arrayData()->getValueOrSetter(id.asArrayIndex(), &attrs);
+             } else {
+                 auto member = internalClass()->findValueOrSetter(id);
+                 if (member.isValid()) {
+@@ -546,12 +543,11 @@ bool Object::internalPut(PropertyKey id, const Value &value, Value *receiver)
+ 
+     if (r->internalClass()->vtable->defineOwnProperty == virtualDefineOwnProperty) {
+         // standard object, we can avoid some more checks
+-        uint index = id.asArrayIndex();
+-        if (index == UINT_MAX) {
++        if (id.isArrayIndex()) {
++            r->arraySet(id.asArrayIndex(), value);
++        } else {
+             ScopedStringOrSymbol s(scope, id.asStringOrSymbol());
+             r->insertMember(s, value);
+-        } else {
+-            r->arraySet(index, value);
+         }
+         return true;
+     }
+diff --git a/src/qml/jsruntime/qv4propertykey_p.h b/src/qml/jsruntime/qv4propertykey_p.h
+index 47867765db..523afd4ccf 100644
+--- a/src/qml/jsruntime/qv4propertykey_p.h
++++ b/src/qml/jsruntime/qv4propertykey_p.h
+@@ -113,8 +113,8 @@ public:
+     static PropertyKey invalid() { PropertyKey key; key.val = 0; return key; }
+     static PropertyKey fromArrayIndex(uint idx) { PropertyKey key; key.val = ArrayIndexMask | static_cast<quint64>(idx); return key; }
+     bool isStringOrSymbol() const { return isManaged() && val != 0; }
+-    uint asArrayIndex() const { return (isManaged() || val == 0) ? std::numeric_limits<uint>::max() : static_cast<uint>(val & 0xffffffff); }
+-    uint isArrayIndex() const { return !isManaged() && val != 0 && static_cast<uint>(val & 0xffffffff) != std::numeric_limits<uint>::max(); }
++    uint asArrayIndex() const { Q_ASSERT(isArrayIndex()); return static_cast<uint>(val & 0xffffffff); }
++    uint isArrayIndex() const { return !isManaged() && val != 0; }
+     bool isValid() const { return val != 0; }
+     static PropertyKey fromStringOrSymbol(Heap::StringOrSymbol *b)
+     { PropertyKey key; key.setM(b); return key; }
+diff --git a/src/qml/jsruntime/qv4stringobject.cpp b/src/qml/jsruntime/qv4stringobject.cpp
+index dee6a67792..1c6dfe0fdb 100644
+--- a/src/qml/jsruntime/qv4stringobject.cpp
++++ b/src/qml/jsruntime/qv4stringobject.cpp
+@@ -152,13 +152,14 @@ PropertyAttributes StringObject::virtualGetOwnProperty(const Managed *m, Propert
+     if (attributes != Attr_Invalid)
+         return attributes;
+ 
+-    const StringObject *s = static_cast<const StringObject *>(m);
+-    uint slen = s->d()->string->toQString().length();
+-    uint index = id.asArrayIndex();
+-    if (index < slen) {
+-        if (p)
+-            p->value = s->getIndex(index);
+-        return Attr_NotConfigurable|Attr_NotWritable;
++    if (id.isArrayIndex()) {
++        const uint index = id.asArrayIndex();
++        const auto s = static_cast<const StringObject *>(m);
++        if (index < uint(s->d()->string->toQString().length())) {
++            if (p)
++                p->value = s->getIndex(index);
++            return Attr_NotConfigurable|Attr_NotWritable;
++        }
+     }
+     return Object::virtualGetOwnProperty(m, id, p);
+ }
+diff --git a/src/qml/jsruntime/qv4typedarray.cpp b/src/qml/jsruntime/qv4typedarray.cpp
+index d83f021450..43e1dabb6d 100644
+--- a/src/qml/jsruntime/qv4typedarray.cpp
++++ b/src/qml/jsruntime/qv4typedarray.cpp
+@@ -459,24 +459,23 @@ Heap::TypedArray *TypedArray::create(ExecutionEngine *e, Heap::TypedArray::Type
+ 
+ ReturnedValue TypedArray::virtualGet(const Managed *m, PropertyKey id, const Value *receiver, bool *hasProperty)
+ {
+-    uint index = id.asArrayIndex();
+-    if (index == UINT_MAX && !id.isCanonicalNumericIndexString())
++    const bool isArrayIndex = id.isArrayIndex();
++    if (!isArrayIndex && !id.isCanonicalNumericIndexString())
+         return Object::virtualGet(m, id, receiver, hasProperty);
+-    // fall through, with index == UINT_MAX it'll do the right thing.
+ 
+     Scope scope(static_cast<const Object *>(m)->engine());
+     Scoped<TypedArray> a(scope, static_cast<const TypedArray *>(m));
+     if (a->d()->buffer->isDetachedBuffer())
+         return scope.engine->throwTypeError();
+ 
+-    if (index >= a->length()) {
++    if (!isArrayIndex || id.asArrayIndex() >= a->length()) {
+         if (hasProperty)
+             *hasProperty = false;
+         return Encode::undefined();
+     }
+ 
+     uint bytesPerElement = a->d()->type->bytesPerElement;
+-    uint byteOffset = a->d()->byteOffset + index * bytesPerElement;
++    uint byteOffset = a->d()->byteOffset + id.asArrayIndex() * bytesPerElement;
+     Q_ASSERT(byteOffset + bytesPerElement <= (uint)a->d()->buffer->byteLength());
+ 
+     if (hasProperty)
+@@ -486,27 +485,22 @@ ReturnedValue TypedArray::virtualGet(const Managed *m, PropertyKey id, const Val
+ 
+ bool TypedArray::virtualHasProperty(const Managed *m, PropertyKey id)
+ {
+-    uint index = id.asArrayIndex();
+-    if (index == UINT_MAX && !id.isCanonicalNumericIndexString())
++    const bool isArrayIndex = id.isArrayIndex();
++    if (!isArrayIndex && !id.isCanonicalNumericIndexString())
+         return Object::virtualHasProperty(m, id);
+-    // fall through, with index == UINT_MAX it'll do the right thing.
+ 
+     const TypedArray *a = static_cast<const TypedArray *>(m);
+     if (a->d()->buffer->isDetachedBuffer()) {
+         a->engine()->throwTypeError();
+         return false;
+     }
+-    if (index >= a->length())
+-        return false;
+-    return true;
++    return isArrayIndex && id.asArrayIndex() < a->length();
+ }
+ 
+ PropertyAttributes TypedArray::virtualGetOwnProperty(const Managed *m, PropertyKey id, Property *p)
+ {
+-    uint index = id.asArrayIndex();
+-    if (index == UINT_MAX && !id.isCanonicalNumericIndexString())
++    if (!id.isArrayIndex() && !id.isCanonicalNumericIndexString())
+         return Object::virtualGetOwnProperty(m, id, p);
+-    // fall through, with index == UINT_MAX it'll do the right thing.
+ 
+     bool hasProperty = false;
+     ReturnedValue v = virtualGet(m, id, m, &hasProperty);
+@@ -517,10 +511,9 @@ PropertyAttributes TypedArray::virtualGetOwnProperty(const Managed *m, PropertyK
+ 
+ bool TypedArray::virtualPut(Managed *m, PropertyKey id, const Value &value, Value *receiver)
+ {
+-    uint index = id.asArrayIndex();
+-    if (index == UINT_MAX && !id.isCanonicalNumericIndexString())
++    const bool isArrayIndex = id.isArrayIndex();
++    if (!isArrayIndex && !id.isCanonicalNumericIndexString())
+         return Object::virtualPut(m, id, value, receiver);
+-    // fall through, with index == UINT_MAX it'll do the right thing.
+ 
+     ExecutionEngine *v4 = static_cast<Object *>(m)->engine();
+     if (v4->hasException)
+@@ -531,6 +524,10 @@ bool TypedArray::virtualPut(Managed *m, PropertyKey id, const Value &value, Valu
+     if (a->d()->buffer->isDetachedBuffer())
+         return scope.engine->throwTypeError();
+ 
++    if (!isArrayIndex)
++        return false;
++
++    const uint index = id.asArrayIndex();
+     if (index >= a->length())
+         return false;
+ 
+@@ -547,11 +544,12 @@ bool TypedArray::virtualPut(Managed *m, PropertyKey id, const Value &value, Valu
+ 
+ bool TypedArray::virtualDefineOwnProperty(Managed *m, PropertyKey id, const Property *p, PropertyAttributes attrs)
+ {
+-    uint index = id.asArrayIndex();
+-    if (index == UINT_MAX && !id.isCanonicalNumericIndexString())
+-        return Object::virtualDefineOwnProperty(m, id, p, attrs);
+-    // fall through, with index == UINT_MAX it'll do the right thing.
++    if (!id.isArrayIndex()) {
++        return !id.isCanonicalNumericIndexString()
++                && Object::virtualDefineOwnProperty(m, id, p, attrs);
++    }
+ 
++    const uint index = id.asArrayIndex();
+     TypedArray *a = static_cast<TypedArray *>(m);
+     if (index >= a->length() || attrs.isAccessor())
+         return false;
+-- 
+GitLab
+

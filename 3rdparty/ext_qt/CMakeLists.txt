@@ -228,6 +228,10 @@ elseif (ANDROID)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0112-Fix-shortcuts-assigned-to-special-keys-on-non-latin-.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0113-Fix-multiple-shortcuts-match-from-different-keyboard.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Remove-chunk-size-limits.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0120-Fix-building-QtBase-with-GCC11.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtdeclarative -i ${CMAKE_CURRENT_SOURCE_DIR}/0121-Fix-compilation-of-QtDeclarative-with-GCC11.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtdeclarative -i ${CMAKE_CURRENT_SOURCE_DIR}/0122-Don-t-use-UINT_MAX-as-invalid-array-index-in-PropertyKey.patch
+
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Do-not-crash-if-the-foundry-name-is-an-empty-space.patch
 
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/frac_dpi_paint_artifacts/0001-Add-faster-path-for-scaling-QRegion-with-multiple-re.patch

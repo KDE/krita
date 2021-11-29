@@ -103,7 +103,7 @@ KoResourceLoadResult KisPredefinedBrushFactory::createBrush(const QDomElement& b
          * inside. That changed in Krita 4.4.x series, when
          * "brushApplication" replaced all the automatic heuristics
          */
-        return colorfulBrush && colorfulBrush->hasColorAndTransparency() && !forceColorToAlpha ? IMAGESTAMP : ALPHAMASK;
+        return (colorfulBrush && colorfulBrush->hasColorAndTransparency() && !forceColorToAlpha) ? IMAGESTAMP : ALPHAMASK;
     };
 
 

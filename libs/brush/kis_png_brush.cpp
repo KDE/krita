@@ -83,6 +83,32 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
 
     const bool isAllGray = image.allGray();
 
+    // BUG:445691
+    // We should try to resolve issues where user simply
+    // paints on a transparent layer with only black..
+    // Should also improve backwards-compatibility edge cases
+    // where user is expecting "lightness" setting.
+    const auto isUniformRGBValue = [&](){
+        if (isAllGray) {
+            bool firstSample = true;
+            int value = 0;
+            for (int row = 0; row < image.height(); row++) {
+                for (int column = 0; column < image.width(); column++) {
+                    if (firstSample) {
+                        value = qBlue(image.pixel(column, row));
+                        firstSample = false;
+                    } else {
+                        if (value != qBlue(image.pixel(column, row))) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+        return false;
+    };
+
     if (isAllGray && !hasAlpha) {
         // Make sure brush tips all have a white background
         // NOTE: drawing it over white background can probably be skipped now...
@@ -108,7 +134,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         }
         setBrushTipImage(image);
         setBrushType(IMAGE);
-        setBrushApplication(isAllGray ? ALPHAMASK : LIGHTNESSMAP);
+        setBrushApplication(isAllGray && !isUniformRGBValue() ? ALPHAMASK : LIGHTNESSMAP);
         setHasColorAndTransparency(!isAllGray);
     }
 

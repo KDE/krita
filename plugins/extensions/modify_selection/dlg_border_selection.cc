@@ -15,9 +15,11 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgBorderSelection::WdgBorderSelection(QWidget* parent, KisViewManager *view)
+
+WdgBorderSelection::WdgBorderSelection(QWidget* parent, KisViewManager *view, KisOperationConfigurationSP config)
     : KisOperationUIWidget(i18n("Border Selection"), parent)
-    , m_width(1)
+    , m_width(config->getInt("x-radius", 1))
+    , m_antialiasing(config->getBool("antialiasing", false))
 {
     Q_ASSERT(view);
     KisImageWSP image = view->image();
@@ -82,15 +84,15 @@ void WdgBorderSelection::slotUpdateAntialiasingAvailability()
 {
     const bool antialiasingEnabled = m_width > 1;
 
-    if (antialiasingEnabled && !chkAntialiasing->isEnabled()) {
-        chkAntialiasing->setChecked(m_savedAntialiasing);
-    } else if (!antialiasingEnabled && chkAntialiasing->isEnabled()) {
-        m_savedAntialiasing = chkAntialiasing->isChecked();
+    if (antialiasingEnabled) {
+        chkAntialiasing->setChecked(m_antialiasing);
+    } else {
+        bool tmp_antialiasing = m_antialiasing;
         chkAntialiasing->setChecked(false);
+        m_antialiasing = tmp_antialiasing;
     }
 
     chkAntialiasing->setEnabled(antialiasingEnabled);
-    slotAntialiasingChanged(chkAntialiasing->isChecked());
 }
 
 void WdgBorderSelection::updateWidthUIValue(double value)

@@ -18,7 +18,7 @@ class WdgGrowSelection : public KisOperationUIWidget, public Ui::WdgGrowSelectio
     Q_OBJECT
 
 public:
-    WdgGrowSelection(QWidget *parent, KisViewManager* view);
+    WdgGrowSelection(QWidget *parent, KisViewManager* view, KisOperationConfigurationSP config);
 
     void getConfiguration(KisOperationConfigurationSP config) override;
 

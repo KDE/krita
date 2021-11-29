@@ -15,9 +15,10 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgGrowSelection::WdgGrowSelection(QWidget* parent, KisViewManager* view)
+
+WdgGrowSelection::WdgGrowSelection(QWidget* parent, KisViewManager* view, KisOperationConfigurationSP config)
     : KisOperationUIWidget(i18n("Grow Selection"), parent)
-    , m_growValue(1)
+    , m_growValue(config->getInt("x-radius", 1))
 {
     Q_ASSERT(view);
     KisImageWSP image = view->image();

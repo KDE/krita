@@ -18,7 +18,7 @@ class WdgBorderSelection : public KisOperationUIWidget, public Ui::WdgBorderSele
     Q_OBJECT
 
 public:
-    WdgBorderSelection(QWidget *parent, KisViewManager* view);
+    WdgBorderSelection(QWidget *parent, KisViewManager* view, KisOperationConfigurationSP config);
 
     void getConfiguration(KisOperationConfigurationSP config) override;
 
@@ -35,7 +35,6 @@ private:
     double m_resolution;
     int m_width;
     bool m_antialiasing = false;
-    bool m_savedAntialiasing = false;
 };
 
 #endif // DLG_BORDER_SELECTION_H

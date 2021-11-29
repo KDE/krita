@@ -537,8 +537,8 @@ void KisFeatherSelectionFilter::process(KisPixelSelectionSP pixelSelection, cons
 
 
 KisGrowSelectionFilter::KisGrowSelectionFilter(qint32 xRadius, qint32 yRadius)
-    : m_xRadius(xRadius),
-        m_yRadius(yRadius)
+    : m_xRadius(xRadius)
+    , m_yRadius(yRadius)
 {
 }
 
@@ -665,9 +665,9 @@ void KisGrowSelectionFilter::process(KisPixelSelectionSP pixelSelection, const Q
 
 
 KisShrinkSelectionFilter::KisShrinkSelectionFilter(qint32 xRadius, qint32 yRadius, bool edgeLock)
-    : m_xRadius(xRadius),
-      m_yRadius(yRadius),
-      m_edgeLock(edgeLock)
+    : m_xRadius(xRadius)
+    , m_yRadius(yRadius)
+    , m_edgeLock(edgeLock)
 {
 }
 

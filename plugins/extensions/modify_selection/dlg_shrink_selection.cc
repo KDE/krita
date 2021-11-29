@@ -15,9 +15,10 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgShrinkSelection::WdgShrinkSelection(QWidget* parent, KisViewManager *view)
+WdgShrinkSelection::WdgShrinkSelection(QWidget* parent, KisViewManager *view, KisOperationConfigurationSP config)
     : KisOperationUIWidget(i18n("Shrink Selection"), parent)
-    , m_shrinkValue(1)
+    , m_shrinkValue(config->getInt("x-radius", 1))
+    , m_shrinkFromImageBorder(!config->getBool("edgeLock", false))
 {
     Q_ASSERT(view);
     KisImageWSP image = view->image();
@@ -33,6 +34,7 @@ WdgShrinkSelection::WdgShrinkSelection(QWidget* parent, KisViewManager *view)
 
     cmbUnit->addItems(KoUnit::listOfUnitNameForUi());
     cmbUnit->setCurrentIndex(KoUnit(KoUnit::Pixel).indexInListForUi());
+    ckbShrinkFromImageBorder->setChecked(m_shrinkFromImageBorder);
 
     // ensure that both spinboxes request the same horizontal size
     KisSizeGroup *spbGroup = new KisSizeGroup(this);
@@ -42,6 +44,7 @@ WdgShrinkSelection::WdgShrinkSelection(QWidget* parent, KisViewManager *view)
     connect(spbShrinkValue, SIGNAL(valueChanged(int)), this, SLOT(slotShrinkValueChanged(int)));
     connect(spbShrinkValueDouble, SIGNAL(valueChanged(double)), this, SLOT(slotShrinkValueChanged(double)));
     connect(cmbUnit, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUnitChanged(int)));
+    connect(ckbShrinkFromImageBorder, SIGNAL(toggled(bool)), this, SLOT(slotShrinkFromImageBorderChanged(bool)));
 }
 
 void WdgShrinkSelection::slotShrinkValueChanged(int value)
@@ -84,11 +87,15 @@ void WdgShrinkSelection::updateShrinkUIValue(double value)
         spbShrinkValue->blockSignals(false);
     }
 }
+void WdgShrinkSelection::slotShrinkFromImageBorderChanged(bool value)
+{
+    m_shrinkFromImageBorder = value;
+}
 
 void WdgShrinkSelection::getConfiguration(KisOperationConfigurationSP config)
 {
     config->setProperty("x-radius", m_shrinkValue);
     config->setProperty("y-radius", m_shrinkValue);
-    config->setProperty("edgeLock", !ckbShrinkFromImageBorder->isChecked());
+    config->setProperty("edgeLock", !m_shrinkFromImageBorder);
 }
 

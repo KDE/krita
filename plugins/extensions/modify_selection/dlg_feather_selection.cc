@@ -15,9 +15,10 @@
 #include <kis_image.h>
 #include <operations/kis_operation_configuration.h>
 
-WdgFeatherSelection::WdgFeatherSelection(QWidget* parent, KisViewManager* view)
+
+WdgFeatherSelection::WdgFeatherSelection(QWidget* parent, KisViewManager* view, KisOperationConfigurationSP config)
     : KisOperationUIWidget(i18n("Feather Selection"), parent)
-    , m_radius(5)
+    , m_radius(config->getInt("radius", 5))
 {
     Q_ASSERT(view);
     KisImageWSP image = view->image();
@@ -89,4 +90,3 @@ void WdgFeatherSelection::getConfiguration(KisOperationConfigurationSP config)
 {
     config->setProperty("radius", m_radius);
 }
-

@@ -18,7 +18,7 @@ class WdgFeatherSelection : public KisOperationUIWidget, public Ui::WdgFeatherSe
     Q_OBJECT
 
 public:
-    WdgFeatherSelection(QWidget *parent, KisViewManager *view);
+    WdgFeatherSelection(QWidget *parent, KisViewManager *view, KisOperationConfigurationSP config);
 
     void getConfiguration(KisOperationConfigurationSP config) override;
 

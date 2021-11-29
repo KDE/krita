@@ -400,6 +400,7 @@ void KisActionManager::runOperation(const QString& id)
             return;
         }
     }
+
     runOperationFromConfiguration(config);
 }
 

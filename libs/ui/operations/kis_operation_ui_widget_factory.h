@@ -16,6 +16,7 @@
 #include "operations/kis_operation_ui_widget.h"
 #include "KisViewManager.h"
 
+
 /**
  *  Factory to get operation configurations from QWidget based operation widgets
  *  T has to be a KisOperationUIWidget
@@ -24,7 +25,9 @@ template <class T> class KisOperationUIWidgetFactory : public KisOperationUIFact
 {
 
 public:
-    KisOperationUIWidgetFactory(const QString &id) : KisOperationUIFactory(id)
+    KisOperationUIWidgetFactory(const QString &id)
+        : KisOperationUIFactory(id)
+        , m_configuration(nullptr)
     {
     }
     
@@ -42,18 +45,22 @@ public:
         KoDialog * dialog = new KoDialog(view->mainWindow());
         Q_CHECK_PTR(dialog);
 
-        T* configWidget = new T(dialog, view);
+        T* configWidget = new T(dialog, view, m_configuration ? m_configuration : configuration);
         dialog->setCaption(configWidget->caption());
         dialog->setMainWidget(configWidget);
         bool success = false;
         if (dialog->exec() == QDialog::Accepted) {
             configWidget->getConfiguration(configuration);
+            m_configuration = configuration;
             success = true;
         }
         delete dialog;
 
         return success;
     }
+
+private:
+    KisOperationConfigurationSP m_configuration;
 };
 
 #endif // KIS_OPERATION_UI_WIDGET_FACTORY_H

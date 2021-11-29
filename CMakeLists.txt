@@ -782,7 +782,7 @@ if (GIF_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${GIF_LIBRARY})
 endif()
 
-find_package(HEIF "1.10.0")
+find_package(HEIF "1.11.0")
 set_package_properties(HEIF PROPERTIES
     DESCRIPTION "Library for loading and saving heif files."
     URL "https://github.com/strukturag/libheif"

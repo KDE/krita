@@ -212,11 +212,6 @@ public:
     void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     /**
-     * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
-     */
-    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
-
-    /**
      * \see KisRequiredResourcesOperators::hasLocalResourcesSnapshot
      */
     bool hasLocalResourcesSnapshot() const;

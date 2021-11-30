@@ -488,20 +488,6 @@ void KisPaintOpPreset::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP 
     d->settings->setCanvasResourcesInterface(canvasResourcesInterface);
 }
 
-void KisPaintOpPreset::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
-{
-    KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
-
-    const QList<int> canvasResources = this->requiredCanvasResources();
-    if (!canvasResources.isEmpty()) {
-        KoLocalStrokeCanvasResourcesSP storage(new KoLocalStrokeCanvasResources());
-        Q_FOREACH (int key, canvasResources) {
-            storage->storeResource(key, canvasResourcesInterface->resource(key));
-        }
-        setCanvasResourcesInterface(storage);
-    }
-}
-
 bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
 {
     return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);

@@ -88,7 +88,7 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "5.0.0-beta2")
+set(KRITA_VERSION_STRING "5.0.0-beta3")
 
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 5) 
@@ -103,7 +103,7 @@ set(KRITA_VERSION_RELEASE 0)
 # - [Pre-]Alpha: Starts from 0, increment 1 per release
 # - Beta: Starts from 50, increment 1 per release
 # - Stable: Set to 100, bump to 101 if emergency update is needed
-set(KRITA_VERSION_REVISION 51)
+set(KRITA_VERSION_REVISION 52)
 
 # Uncomment the following if this is currently in the "stable" branch.
 # Do not uncomment for master branch.

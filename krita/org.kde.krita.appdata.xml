@@ -1,4 +1,4 @@
-    <?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <component type="desktop">
   <id>org.kde.krita</id>
   <launchable type="desktop-id">org.kde.krita.desktop</launchable>
@@ -433,7 +433,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2021-10-06" version="5.0.0-beta2"/>
+    <release date="2021-11-30" version="5.0.0-beta3"/>
   </releases>
     <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

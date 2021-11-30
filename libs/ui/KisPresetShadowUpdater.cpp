@@ -117,13 +117,16 @@ void KisPresetShadowUpdater::slotCanvasResourceChanged(int key, const QVariant &
                 m_d->currentUpdateProxy, SIGNAL(sigSettingsChanged()),
                 this, SLOT(slotPresetChanged()));
             slotPresetChanged();
+        } else {
+            m_d->view->canvasResourceProvider()->resourceManager()->
+                    setResource(KoCanvasResource::CurrentPaintOpPresetCache,
+                                QVariant::fromValue(KoResourceCacheInterfaceSP()));
         }
     } else if (m_d->currentPreset) {
         /// if the current preset depends on the canvas resources,
         /// we should reset its cache and restart cache generation
 
         if (m_d->currentPreset->requiredCanvasResources().contains(key)) {
-            m_d->currentPreset->setResourceCacheInterface(nullptr);
             slotPresetChanged();
         }
     }
@@ -133,6 +136,11 @@ void KisPresetShadowUpdater::slotPresetChanged()
 {
     m_d->sequenceNumber++;
     m_d->updateStartCompressor.start();
+
+    m_d->view->canvasResourceProvider()->resourceManager()->
+            setResource(KoCanvasResource::CurrentPaintOpPresetCache,
+                        QVariant::fromValue(KoResourceCacheInterfaceSP()));
+
 }
 
 void KisPresetShadowUpdater::slotStartPresetPreparation()
@@ -143,7 +151,8 @@ void KisPresetShadowUpdater::slotStartPresetPreparation()
             KisPaintOpPresetSP preset =
                     m_d->currentPreset->cloneWithResourcesSnapshot(
                         KisGlobalResourcesInterface::instance(),
-                        m_d->view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+                        m_d->view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface(),
+                        nullptr);
 
             ShadowUpdatePresetJob *job = new ShadowUpdatePresetJob(preset, m_d->sequenceNumber);
 
@@ -167,7 +176,9 @@ void KisPresetShadowUpdater::slotStartPresetPreparation()
 void KisPresetShadowUpdater::slotCacheGenerationFinished(int sequenceNumber, KoResourceCacheInterfaceSP cacheInterface)
 {
     if (sequenceNumber == m_d->sequenceNumber) {
-        m_d->currentPreset->setResourceCacheInterface(cacheInterface);
+        m_d->view->canvasResourceProvider()->resourceManager()->
+                setResource(KoCanvasResource::CurrentPaintOpPresetCache,
+                            QVariant::fromValue(cacheInterface));
     }
 }
 

@@ -42,9 +42,19 @@
 #include <KoResourceCacheInterface.h>
 #include <KoResourceCachePrefixedStorageWrapper.h>
 
+#define SANITY_CHECK_CACHE
+
+#ifdef SANITY_CHECK_CACHE
+#include "kis_random_source.h"
+#endif
+
 struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     Private()
         : disableDirtyNotifications(false)
+#ifdef SANITY_CHECK_CACHE
+        , versionRandomSource(int(reinterpret_cast<std::intptr_t>(this)))
+        , versionCookie(versionRandomSource.generate())
+#endif
     {}
 
     Private(const Private &rhs)
@@ -54,6 +64,10 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
           canvasResourcesInterface(rhs.canvasResourcesInterface),
           resourceCacheInterface(rhs.resourceCacheInterface),
           disableDirtyNotifications(false)
+#ifdef SANITY_CHECK_CACHE
+        , versionRandomSource(int(reinterpret_cast<std::intptr_t>(this)))
+        , versionCookie(rhs.versionCookie)
+#endif
     {
         /// NOTE: we don't copy updateListener intentionally, it is
         ///       a job of the cloned preset to set the new listener
@@ -69,6 +83,11 @@ struct Q_DECL_HIDDEN KisPaintOpSettings::Private {
     KoResourceCacheInterfaceSP resourceCacheInterface;
 
     bool disableDirtyNotifications;
+
+#ifdef SANITY_CHECK_CACHE
+    KisRandomSource versionRandomSource;
+    quint64 versionCookie;
+#endif
 
     class DirtyNotificationsLocker {
     public:
@@ -243,6 +262,15 @@ void KisPaintOpSettings::regenerateResourceCache(KoResourceCacheInterfaceSP cach
     }
 }
 
+quint64 KisPaintOpSettings::sanityVersionCookie() const
+{
+#ifdef SANITY_CHECK_CACHE
+    return d->versionCookie;
+#else
+    return 0;
+#endif
+}
+
 QString KisPaintOpSettings::maskingBrushCompositeOp() const
 {
     return getString(KisPaintOpUtils::MaskingBrushCompositeOpTag, COMPOSITE_MULT);
@@ -272,6 +300,11 @@ KisPaintOpSettingsSP KisPaintOpSettings::clone() const
     }
 
     settings->setCanvasResourcesInterface(this->canvasResourcesInterface());
+
+#ifdef SANITY_CHECK_CACHE
+    settings->d->versionCookie = this->d->versionCookie;
+#endif
+
     return settings;
 }
 
@@ -532,6 +565,10 @@ void KisPaintOpSettings::onPropertyChanged()
 {
     // clear cached data for the resource
     d->resourceCacheInterface.clear();
+
+#ifdef SANITY_CHECK_CACHE
+    d->versionCookie = d->versionRandomSource.generate();
+#endif
 
     UpdateListenerSP updateListener = d->updateListener.toStrongRef();
 

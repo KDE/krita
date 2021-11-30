@@ -22,8 +22,7 @@
 
 #include "kis_debug.h"
 
-bool compareWithSpecialTags(KisTagSP tag) {
-    // TODO: RESOURCES: id < 0? For now, "All" fits
+bool isSpecialTag(KisTagSP tag) {
     return !tag.isNull() && tag->id() < 0;
 }
 
@@ -33,9 +32,6 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
                                                                      KisTagChooserWidget *tagChooser)
     : m_tagChooserWidget(tagChooser)
 {
-
-
-
     QImage image = resource->image();
     QIcon icon(QPixmap::fromImage(image));
     QAction *label = new QAction(resource->name(), this);
@@ -53,50 +49,45 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
     tagResourceModel.setResourcesFilter(QVector<KoResourceSP>() << resource);
     tagResourceModel.sort(KisAllTagResourceModel::TagName);
-    QList<KisTagSP> removables;
+
+    QList<KisTagSP> removableTags;
     for (int i = 0; i < tagResourceModel.rowCount(); ++i) {
-        removables << tagResourceModel.data(tagResourceModel.index(i, 0), Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+        KisTagSP tag = tagResourceModel.data(tagResourceModel.index(i, 0), Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+        if (!tag.isNull() && tag->valid() && !isSpecialTag(tag)) {
+            removableTags << tag;
+        }
     }
 
-
-    QList<KisTagSP> list;
+    QList<KisTagSP> assignableTags;
     for (int i = 0; i < m_tagModel->rowCount(); i++) {
         QModelIndex index = m_tagModel->index(i, 0);
         KisTagSP tag = m_tagModel->tagForIndex(index);
-         if (!tag.isNull()) {
-             list << tag;
+         if (!tag.isNull() && tag->valid() && !isSpecialTag(tag)) {
+             assignableTags << tag;
          }
      }
-
-    QList<KisTagSP> assignables2 = list;
 
     CompareWithOtherTagFunctor comparer(currentlySelectedTag);
 
     bool currentTagInRemovables = !currentlySelectedTag.isNull();
     currentTagInRemovables = currentTagInRemovables
-            && (std::find_if(removables.begin(), removables.end(), comparer) != removables.end());
-
-    // remove "All" tag from both "Remove from tag: " and "Assign to tag: " lists
-    std::remove_if(removables.begin(), removables.end(), compareWithSpecialTags);
-    std::remove_if(assignables2.begin(), assignables2.end(), compareWithSpecialTags);
-
+            && (std::find_if(removableTags.begin(), removableTags.end(), comparer) != removableTags.end());
 
     assignableTagsMenu = addMenu(koIcon("list-add"),i18n("Assign to tag"));
 
-
-    if (!removables.isEmpty()) {
+    if (!removableTags.isEmpty()) {
         addSeparator();
         KisTagSP currentTag = currentlySelectedTag;
 
         if (!currentTag.isNull() && currentTagInRemovables) {
             // remove the current tag from both "Remove from tag: " and "Assign to tag: " lists
-            QList<QSharedPointer<KisTag> >::iterator b = std::remove_if(removables.begin(), removables.end(), comparer);
-            if (b != removables.end()) {
-                removables.removeAll(*b);
+            QList<QSharedPointer<KisTag> >::iterator b = std::remove_if(removableTags.begin(), removableTags.end(), comparer);
+            if (b != removableTags.end()) {
+                removableTags.removeAll(*b);
             }
-            QList<QSharedPointer<KisTag> >::iterator b2 = std::remove_if(assignables2.begin(), assignables2.end(), comparer);
-            if (b2 != assignables2.end()) {
-                assignables2.removeAll(*b2);
+            QList<QSharedPointer<KisTag> >::iterator b2 = std::remove_if(assignableTags.begin(), assignableTags.end(), comparer);
+            if (b2 != assignableTags.end()) {
+                assignableTags.removeAll(*b2);
             }
 
             SimpleExistingTagAction *removeTagAction = new SimpleExistingTagAction(resource, currentTag, this);
@@ -108,19 +99,19 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
             addAction(removeTagAction);
         }
 
-        if (!removables.isEmpty()) {
+        if (!removableTags.isEmpty()) {
             removableTagsMenu = addMenu(koIcon("list-remove"),i18n("Remove from other tag"));
 
             KisTagSP empty;
             CompareWithOtherTagFunctor compareWithRemovable(empty);
-            foreach (const KisTagSP tag, removables) {
+            foreach (const KisTagSP tag, removableTags) {
 
                 if (tag.isNull()) {
                     continue;
                 }
 
                 compareWithRemovable.setReferenceTag(tag);
-                std::remove_if(assignables2.begin(), assignables2.end(), compareWithRemovable);
+                std::remove_if(assignableTags.begin(), assignableTags.end(), compareWithRemovable);
 
                 SimpleExistingTagAction *removeTagAction = new SimpleExistingTagAction(resource, tag, this);
 
@@ -132,7 +123,7 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
     }
 
-    foreach (const KisTagSP &tag, assignables2) {
+    foreach (const KisTagSP &tag, assignableTags) {
         if (tag.isNull()) {
             continue;
         }

@@ -96,7 +96,7 @@ QStringList KisMimeData::formats () const
 
 KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
 {
-    KisDocument *doc = KisPart::instance()->createDocument();
+    KisDocument *doc = KisPart::instance()->createTemporaryDocument();
     QRect rc;
     Q_FOREACH (KisNodeSP node, nodes) {
         if (node) {

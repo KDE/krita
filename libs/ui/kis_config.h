@@ -529,6 +529,9 @@ public:
     bool trimKra(bool defaultValue = false) const;
     void setTrimKra(bool trim);
 
+    bool trimFramesImport(bool defaultValue = false) const;
+    void setTrimFramesImport(bool trim);
+
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 

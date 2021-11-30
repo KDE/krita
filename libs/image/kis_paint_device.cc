@@ -58,7 +58,6 @@
 #include "kis_filter_strategy.h"
 #include "krita_utils.h"
 
-
 struct KisPaintDeviceSPStaticRegistrar {
     KisPaintDeviceSPStaticRegistrar() {
         qRegisterMetaType<KisPaintDeviceSP>("KisPaintDeviceSP");
@@ -1364,11 +1363,11 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
     //      and third cases, at the cost of making the code a bit more complex
 
     KisRandomConstAccessorSP accessor = device->createRandomConstAccessorNG();
-
     bool found = false;
+
     {
         for (qint32 y2 = y; y2 <= endDirS; ++y2) {
-            for (qint32 x2 = x; x2 < x + w || found; ++ x2) {
+            for (qint32 x2 = x; x2 < x + w || found; ++x2) {
                 accessor->moveTo(x2, y2);
                 if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                     boundTop = y2;
@@ -1406,7 +1405,7 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
 
     {
         for (qint32 x2 = x; x2 <= endDirE ; ++x2) {
-            for (qint32 y2 = y; y2 < y + h || found; ++y2) {
+            for (qint32 y2 = boundTop; y2 < boundBottom || found; ++y2) {
                 accessor->moveTo(x2, y2);
                 if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                     boundLeft = x2;
@@ -1420,11 +1419,10 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
 
     found = false;
 
-    // Look for right edge )
+    // Look for right edge
     {
-
         for (qint32 x2 = x + w - 1; x2 >= endDirW; --x2) {
-            for (qint32 y2 = y + h - 1; y2 >= y || found; --y2) {
+            for (qint32 y2 = boundBottom - 1; y2 >= boundTop || found; --y2) {
                 accessor->moveTo(x2, y2);
                 if (!compareOp.isPixelEmpty(accessor->rawDataConst())) {
                     boundRight = x2;
@@ -1435,7 +1433,7 @@ QRect calculateExactBoundsImpl(const KisPaintDevice *device, const QRect &startR
             if (found) break;
         }
     }
-
+    
     return QRect(boundLeft, boundTop,
                  boundRight - boundLeft + 1,
                  boundBottom - boundTop + 1);

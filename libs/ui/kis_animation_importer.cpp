@@ -98,6 +98,8 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
 
     int autoframe = 0;
 
+    KisConfig cfg(true);
+
     Q_FOREACH(QString file, files) {
         bool successfullyLoaded = importDoc->openPath(file, KisDocument::DontAddToRecent);
         if (!successfullyLoaded) {
@@ -132,6 +134,11 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
             status = ImportExportCodes::Cancelled;
             break;
         }
+
+        if (cfg.trimFramesImport()) {
+            importDoc->image()->projection()->crop(m_d->image->bounds());
+        }
+        importDoc->image()->projection()->purgeDefaultPixels();
 
         if (!autoAddHoldframes) {
             contentChannel->importFrame(frame, importDoc->image()->projection(), NULL);    // as first frame added will go to second slot i.e #1 instead of #0

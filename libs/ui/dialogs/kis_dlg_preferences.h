@@ -74,6 +74,7 @@ public:
     bool showCanvasMessages();
     bool compressKra();
     bool trimKra();
+    bool trimFramesImport();
     bool useZip64();
     bool toolOptionsInDocker();
     bool smoothZooming();

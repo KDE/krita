@@ -1876,6 +1876,15 @@ void KisConfig::setTrimKra(bool trim)
     m_cfg.writeEntry("TrimKra", trim);
 }
 
+bool KisConfig::trimFramesImport(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("TrimFramesImport", false));
+}
+void KisConfig::setTrimFramesImport(bool trim)
+{
+    m_cfg.writeEntry("TrimFramesImport", trim);
+}
+
 bool KisConfig::toolOptionsInDocker(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("ToolOptionsInDocker", true));

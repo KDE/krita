@@ -280,6 +280,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkCompressKra->setChecked(cfg.compressKra());
     chkZip64->setChecked(cfg.useZip64());
     m_chkTrimKra->setChecked(cfg.trimKra());
+    m_chkTrimFramesImport->setChecked(cfg.trimFramesImport());
 
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     cmbBackupFileLocation->setCurrentIndex(cfg.readEntry<int>("backupfilelocation", 0));
@@ -397,6 +398,7 @@ void GeneralTab::setDefault()
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
     m_chkTrimKra->setChecked(cfg.trimKra(true));
+    m_chkTrimFramesImport->setChecked(cfg.trimFramesImport(true));
     chkZip64->setChecked(cfg.useZip64(true));
     m_chkHiDPI->setChecked(false);
     m_chkHiDPI->setChecked(true);
@@ -491,6 +493,11 @@ bool GeneralTab::compressKra()
 bool GeneralTab::trimKra()
 {
     return m_chkTrimKra->isChecked();
+}
+
+bool GeneralTab::trimFramesImport()
+{
+    return m_chkTrimFramesImport->isChecked();
 }
 
 bool GeneralTab::useZip64()
@@ -1938,6 +1945,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowCanvasMessages(m_general->showCanvasMessages());
         cfg.setCompressKra(m_general->compressKra());
         cfg.setTrimKra(m_general->trimKra());
+        cfg.setTrimFramesImport(m_general->trimFramesImport());
         cfg.setUseZip64(m_general->useZip64());
 
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

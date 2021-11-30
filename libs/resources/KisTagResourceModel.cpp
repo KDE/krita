@@ -11,6 +11,7 @@
 #include <KisResourceModelProvider.h>
 #include <KisResourceQueryMapper.h>
 #include <KisStorageModel.h>
+#include <kis_assert.h>
 
 struct KisAllTagResourceModel::Private {
     QString resourceType;
@@ -164,8 +165,8 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
 
 bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    if (resourceId < 0) return false;
-    if (!tag || !tag->valid()) return false;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resourceId >= 0, false);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tag && tag->valid() && tag->id() >= 0, false);
 
     if (isResourceTagged(tag, resourceId)) return true;
 

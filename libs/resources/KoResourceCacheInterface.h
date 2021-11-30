@@ -81,6 +81,31 @@ public:
     ///          This behavior is intentional to avoid cache key
     ///          aliasing.
     virtual void put(const QString &key, const QVariant &value) = 0;
+
+    /**
+     * A special cookie the resource may (or may not) initialize
+     * while initializing the cache. The resource may use this cookie
+     * later to verify that this resource actually belongs this
+     * very resource, not some other resource.
+     */
+    using RelatedResourceCookie = std::uintptr_t;
+
+    /**
+     * Sets the related resource cookie
+     *
+     * \see RelatedResourceCookie
+     */
+    void setRelatedResourceCookie(RelatedResourceCookie cookie);
+
+    /**
+     * Returns the related resource cookie
+     *
+     * \see RelatedResourceCookie
+     */
+    RelatedResourceCookie relatedResourceCookie() const;
+
+private:
+    RelatedResourceCookie m_cookie = RelatedResourceCookie();
 };
 
 using KoResourceCacheInterfaceSP = QSharedPointer<KoResourceCacheInterface>;

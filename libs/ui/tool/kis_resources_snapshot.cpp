@@ -87,9 +87,16 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      */
     KisPaintOpPresetSP p = resourceManager->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
     if (p) {
+        KoResourceCacheInterfaceSP cacheInterface = resourceManager->resource(KoCanvasResource::CurrentPaintOpPresetCache).value<KoResourceCacheInterfaceSP>();
+
+        KIS_SAFE_ASSERT_RECOVER(!cacheInterface || p->sanityCheckResourceCacheIsValid(cacheInterface)) {
+            cacheInterface.clear();
+        }
+
         m_d->currentPaintOpPreset =
             p->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(),
-                                          m_d->globalCanvasResourcesInterface);
+                                          m_d->globalCanvasResourcesInterface,
+                                          cacheInterface);
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
@@ -445,7 +452,8 @@ void KisResourcesSnapshot::setBrush(const KisPaintOpPresetSP &brush)
     m_d->currentPaintOpPreset =
         brush->cloneWithResourcesSnapshot(
             KisGlobalResourcesInterface::instance(),
-            m_d->globalCanvasResourcesInterface);
+            m_d->globalCanvasResourcesInterface,
+            nullptr);
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
     KisPaintOpRegistry::instance()->preinitializePaintOpIfNeeded(m_d->currentPaintOpPreset);

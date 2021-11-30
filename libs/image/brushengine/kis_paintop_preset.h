@@ -224,7 +224,7 @@ public:
     /**
      * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
      */
-    KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
+    KisPaintOpPresetSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface, KoResourceCacheInterfaceSP cacheInterface) const;
 
 
     QList<KoResourceLoadResult> linkedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
@@ -259,6 +259,13 @@ public:
      * interface.
      */
     void regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface);
+
+    /**
+     * Verifies if the cache object was actually created for this preset.
+     * It actually does anything only when a corresponding define is added
+     * in kis_paintop_settings.cpp. Otherwise it just returns true;
+     */
+    bool sanityCheckResourceCacheIsValid(KoResourceCacheInterfaceSP cacheInterface) const;
 
 private:
 

@@ -31,6 +31,7 @@
 #include <KisResourceTypes.h>
 #include <KisResourceModelProvider.h>
 #include <krita_container_utils.h>
+#include <KoResourceCacheInterface.h>
 
 #include <KoStore.h>
 
@@ -506,7 +507,7 @@ bool KisPaintOpPreset::hasLocalResourcesSnapshot() const
     return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
 }
 
-KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
+KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface, KoResourceCacheInterfaceSP cacheInterface) const
 {
     KisPaintOpPresetSP result =
             KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPaintOpPresetSP>(this, globalResourcesInterface);
@@ -518,6 +519,18 @@ KisPaintOpPresetSP KisPaintOpPreset::cloneWithResourcesSnapshot(KisResourcesInte
             storage->storeResource(key, canvasResourcesInterface->resource(key));
         }
         result->setCanvasResourcesInterface(storage);
+    }
+
+    if (cacheInterface) {
+        result->setResourceCacheInterface(cacheInterface);
+    } else if (!canvasResources.isEmpty()) {
+        /**
+         * If the preset depends on any canvas resources, then we don't trust
+         * the caches that are stored inside. Instead we just reset them. If the
+         * preset is independent of the canvas resources, then its caches are,
+         * most probably valid and we can reuse them.
+         */
+        result->setResourceCacheInterface(nullptr);
     }
 
     return result;
@@ -589,6 +602,12 @@ void KisPaintOpPreset::regenerateResourceCache(KoResourceCacheInterfaceSP cacheI
     KIS_SAFE_ASSERT_RECOVER_RETURN(d->settings);
 
     d->settings->regenerateResourceCache(cacheInterface);
+    cacheInterface->setRelatedResourceCookie(d->settings->sanityVersionCookie());
+}
+
+bool KisPaintOpPreset::sanityCheckResourceCacheIsValid(KoResourceCacheInterfaceSP cacheInterface) const
+{
+    return d->settings->sanityVersionCookie() == cacheInterface->relatedResourceCookie();
 }
 
 KisPaintOpPreset::UpdatedPostponer::UpdatedPostponer(KisPaintOpPresetSP preset)

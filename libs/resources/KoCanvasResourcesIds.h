@@ -31,6 +31,7 @@ enum CanvasResourceId {
     CurrentDisplayProfile,
     CurrentKritaNode,
     CurrentPaintOpPreset,
+    CurrentPaintOpPresetCache, ///< the cache associated with the currently active preset (this cache may be different per canvas if the preset depends on the canvas resources)
     CurrentGeneratorConfiguration,
     CurrentCompositeOp,
     CurrentEffectiveCompositeOp,

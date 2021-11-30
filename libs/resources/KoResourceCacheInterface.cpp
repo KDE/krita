@@ -19,3 +19,13 @@ KoResourceCacheInterface::~KoResourceCacheInterface()
 {
 
 }
+
+void KoResourceCacheInterface::setRelatedResourceCookie(RelatedResourceCookie cookie)
+{
+    m_cookie = cookie;
+}
+
+KoResourceCacheInterface::RelatedResourceCookie KoResourceCacheInterface::relatedResourceCookie() const
+{
+    return m_cookie;
+}

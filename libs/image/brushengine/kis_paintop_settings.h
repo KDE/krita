@@ -349,6 +349,8 @@ public:
 
     virtual void regenerateResourceCache(KoResourceCacheInterfaceSP cacheInterface);
 
+    quint64 sanityVersionCookie() const;
+
 protected:
 
     /**

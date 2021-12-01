@@ -148,6 +148,9 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
             }
             
             args << "-i" << palettePath;
+
+            // We need to kill the process so we can reuse it later down the chain. BUG:446320
+            ffmpegWrapper->reset();
         }
         
         QFileInfo audioFileInfo = animation->audioChannelFileName();

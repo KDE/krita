@@ -162,7 +162,7 @@ KisImportExportErrorCode KisFFMpegWrapper::start(const KisFFMpegWrapperSettings 
             return ImportExportCodes::Failure;
         }
     } else {
-        kill(); // Ensure process isn't running before returning failure here.
+        reset(); // Ensure process isn't running before returning failure here.
         return ImportExportCodes::Failure;
     }
 }
@@ -195,13 +195,15 @@ void KisFFMpegWrapper::updateProgressDialog(int progressValue) {
     QApplication::processEvents();
 }
 
-void KisFFMpegWrapper::kill()
+void KisFFMpegWrapper::reset()
 {
     if (m_process == nullptr)
         return;
 
     m_process->disconnect(this);
-    m_process->kill();
+    if (m_process->state() != QProcess::NotRunning) {
+        m_process->kill();
+    }
     m_process.reset();
 }
 

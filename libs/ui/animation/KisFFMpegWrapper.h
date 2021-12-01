@@ -48,7 +48,7 @@ public:
     void startNonBlocking(const KisFFMpegWrapperSettings &settings);
     KisImportExportErrorCode start(const KisFFMpegWrapperSettings &settings);
     void waitForFinished(int msecs = FFMPEG_TIMEOUT);
-    void kill();
+    void reset();
 
     static QJsonObject findProcessPath(const QString &processName, const QString &customLocation, bool processInfo);
     static QJsonObject findFFMpeg(const QString &customLocation);

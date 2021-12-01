@@ -161,7 +161,7 @@ public:
 
         if (QMessageBox::question(q, q->windowTitle(), i18n("Abort encoding the timelapse video?"))
             == QMessageBox::Yes) {
-            ffmpeg->kill();
+            ffmpeg->reset();
             cleanupFFMpeg();
             return true;
         }

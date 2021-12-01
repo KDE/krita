@@ -83,10 +83,12 @@ private Q_SLOTS:
 
     void slotStoragesChanged(const QString &location);
 
+    void slotUpdatePaletteName();
+
 private:
     void setEntryByForeground(const QModelIndex &index);
     void setFGColorByPalette(const KisSwatch &entry);
-    void updatePaletteName();
+
 
 private /* member variables */:
     QScopedPointer<Ui_WdgPaletteDock> m_ui;

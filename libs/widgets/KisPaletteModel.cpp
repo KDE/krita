@@ -444,6 +444,7 @@ void KisPaletteModel::slotPaletteModified() {
     if (m_colorSet->paletteType() != KoColorSet::KPL) {
         m_colorSet->setPaletteType(KoColorSet::KPL);
         m_colorSet->setFilename(QFileInfo(m_colorSet->filename()).completeBaseName() + ".kpl");
+        m_colorSet->setDirty(true);
     }
 }
 

@@ -107,6 +107,7 @@ PaletteDockerDock::PaletteDockerDock( )
             SLOT(slotPaletteIndexClicked(QModelIndex)));
     connect(m_ui->paletteView, SIGNAL(doubleClicked(QModelIndex)),
             SLOT(slotPaletteIndexDoubleClicked(QModelIndex)));
+    connect(m_ui->paletteView, SIGNAL(sigPaletteUpdatedFromModel()), SLOT(slotUpdatePaletteName()));
     connect(m_ui->cmbNameList, SIGNAL(sigColorSelected(const KoColor&)), SLOT(slotNameListSelection(const KoColor&)));
 
     m_viewContextMenu.addAction(m_actModify.data());
@@ -288,7 +289,7 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
     } else {
         m_ui->lblPaletteName->setText("");
     }
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::slotEditPalette()
@@ -305,7 +306,7 @@ void PaletteDockerDock::slotEditPalette()
 void PaletteDockerDock::slotSavePalette()
 {
     m_paletteEditor->saveNewPaletteVersion();
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 
@@ -314,7 +315,7 @@ void PaletteDockerDock::slotAddColor()
     if (m_resourceProvider) {
         m_paletteEditor->addEntry(m_resourceProvider->fgColor());
     }
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::slotRemoveColor()
@@ -325,7 +326,7 @@ void PaletteDockerDock::slotRemoveColor()
     }
     m_paletteEditor->removeEntry(index);
     m_ui->bnRemove->setEnabled(false);
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
@@ -337,7 +338,7 @@ void PaletteDockerDock::setFGColorByPalette(const KisSwatch &entry)
     }
 }
 
-void PaletteDockerDock::updatePaletteName()
+void PaletteDockerDock::slotUpdatePaletteName()
 {
     if (m_currentColorSet) {
         m_ui->lblPaletteName->setTextElideMode(Qt::ElideLeft);
@@ -429,7 +430,7 @@ void PaletteDockerDock::slotPaletteIndexSelected(const QModelIndex &index)
         }
     }
     m_ui->bnRemove->setEnabled(occupied);
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::slotPaletteIndexClicked(const QModelIndex &index)
@@ -437,20 +438,20 @@ void PaletteDockerDock::slotPaletteIndexClicked(const QModelIndex &index)
     if (!(qvariant_cast<bool>(index.data(KisPaletteModel::CheckSlotRole)))) {
         setEntryByForeground(index);
     }
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::slotPaletteIndexDoubleClicked(const QModelIndex &index)
 {
     m_paletteEditor->modifyEntry(index);
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::setEntryByForeground(const QModelIndex &index)
 {
     m_paletteEditor->setEntry(m_resourceProvider->fgColor(), index);
     m_ui->bnRemove->setEnabled(true);
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::slotEditEntry()
@@ -460,7 +461,7 @@ void PaletteDockerDock::slotEditEntry()
         return;
     }
     m_paletteEditor->modifyEntry(index);
-    updatePaletteName();
+    slotUpdatePaletteName();
 }
 
 void PaletteDockerDock::slotNameListSelection(const KoColor &color)

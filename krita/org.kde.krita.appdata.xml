@@ -17,7 +17,7 @@
   <developer_name xml:lang="fr">La fondation Krita</developer_name>
   <developer_name xml:lang="gl">Fundación Krita</developer_name>
   <developer_name xml:lang="hi">क्रिता संस्थान</developer_name>
-  <developer_name xml:lang="ia">Krita Foundation (Fundatiomn de Krita)</developer_name>
+  <developer_name xml:lang="ia">Krita Foundation (Fundation de Krita)</developer_name>
   <developer_name xml:lang="id">Asas Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
   <developer_name xml:lang="ko">Krita Foundation</developer_name>
@@ -26,6 +26,7 @@
   <developer_name xml:lang="pl">Fundacja Krity</developer_name>
   <developer_name xml:lang="pt">Fundação do Krita</developer_name>
   <developer_name xml:lang="pt-BR">Krita Foundation</developer_name>
+  <developer_name xml:lang="ru">Krita Foundation</developer_name>
   <developer_name xml:lang="sk">Nadácia Krita</developer_name>
   <developer_name xml:lang="sl">Fundacija Krita</developer_name>
   <developer_name xml:lang="sv">Krita-stiftelsen</developer_name>
@@ -110,6 +111,7 @@
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
     <p xml:lang="ca">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="ca-valencia">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
+    <p xml:lang="cs">Krita je plnohodnotné studio digitálního umění.</p>
     <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreichen Funktionen.</p>
     <p xml:lang="el">Το Krita είναι ένα πλήρες χαρακτηριστικών ψηφιακό ατελιέ.</p>
     <p xml:lang="en-GB">Krita is the full-featured digital art studio.</p>
@@ -231,7 +233,7 @@
     <p xml:lang="pl">Baw się przy malowaniu przy użyciu zaawansowanych silników pędzli, zadziwiających filtrów i wielu innych przydatnych cech, które czynią z Krity bardzo produktywną.</p>
     <p xml:lang="pt">Divirta-se a pintar com os motores de pincéis avançados, os filtros espantosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
     <p xml:lang="pt-BR">Divirta-se pintando com os mecanismos de pincéis avançados, filtros maravilhosos e muitas outras funcionalidades úteis que tornam o Krita altamente produtivo.</p>
-    <p xml:lang="ru">Получайте удовольствие от использования особых кистевых движков, впечатляющих фильтров и множества других функций, делающих Krita сверхпродуктивной.</p>
+    <p xml:lang="ru">Получайте удовольствие от использования особых кистевых движков, впечатляющих фильтров и множества других функций, делающих Krita невероятно полезным приложением.</p>
     <p xml:lang="sk">Užívajte si maľovanie s pokročilými kresliacimi enginmi, úžasnými filtrami a mnohými užitočnými funkciami, ktoré robia Kritu veľmi produktívnu.</p>
     <p xml:lang="sl">Zabavajte se s slikanjem z naprednimi čopiči, neverjetnimi filtri in številnimi priročnimi funkcijami, zaradi katerih je Krita izjemno produktivna.</p>
     <p xml:lang="sv">Ha det så kul vid målning med de avancerade penselfunktionerna, fantastiska filtren och många praktiska funktioner som gör Krita så enormt produktiv.</p>
@@ -268,6 +270,7 @@
       <caption xml:lang="pl">Krita jest pełnowartościowym, cyfrowym studiem artystycznym</caption>
       <caption xml:lang="pt">O Krita é um estúdio de arte digital completo</caption>
       <caption xml:lang="pt-BR">O Krita é um estúdio de pintura digital completo</caption>
+      <caption xml:lang="ru">Krita — полнофункциональный инструмент для создания цифровой графики.</caption>
       <caption xml:lang="sk">Krita je plnohodnotné digitálne maliarske štúdio</caption>
       <caption xml:lang="sl">Krita je celovit digitalni umetniški studio.</caption>
       <caption xml:lang="sv">Krita är en fullfjädrad digital konststudio</caption>
@@ -289,6 +292,7 @@
       <caption xml:lang="fi">Aloitusikkunassa näytetään nyt myös Kritan tuoreimmat uutiset</caption>
       <caption xml:lang="fr">Maintenant, la fenêtre de démarrage vous donne aussi les dernières informations concernant Krita</caption>
       <caption xml:lang="hi">स्टार्टअप विंडो अब आपको क्रिता के बारे में ताज़ा समाचार भी देती है।</caption>
+      <caption xml:lang="ia">Le fenestra de initio nunc anque te da le ultime novas re Krita</caption>
       <caption xml:lang="id">Window pemulaian kini juga memberikan kamu kabar terkini tentang Krita</caption>
       <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità su Krita</caption>
       <caption xml:lang="ko">시작 창에서 Krita의 최신 소식을 볼 수 있습니다</caption>
@@ -297,6 +301,7 @@
       <caption xml:lang="pl">Okno początkowe pokazuje teraz najnowsze wieści o Kricie</caption>
       <caption xml:lang="pt">A janela inicial agora também lhe dá as últimas notícias sobre o Krita</caption>
       <caption xml:lang="pt-BR">A janela de inicialização agora também mostra as últimas notícias sobre o Krita</caption>
+      <caption xml:lang="ru">Теперь окно запуска также отображает последние новости о Krita</caption>
       <caption xml:lang="sk">V úvodnom okne sa tiež nachádzajú najnovšie správy o Krita</caption>
       <caption xml:lang="sl">Začetno okno vam zdaj ponuja tudi najnovejše novice o Kriti</caption>
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita</caption>
@@ -318,6 +323,7 @@
       <caption xml:lang="fi">Tehokkaita sivellinmoottoreita on toistakymmentä</caption>
       <caption xml:lang="fr">Il y a plus de 10 moteurs de brosse, tous extrêmement puissants</caption>
       <caption xml:lang="hi">इसमें दस से अधिक शक्तिशाली ब्रश इंजन हैं</caption>
+      <caption xml:lang="ia">Il ha dece plus que immensemente potente motores de brossar</caption>
       <caption xml:lang="id">Ada lebih dari sepuluh perkakas kuas yang sangat hebat</caption>
       <caption xml:lang="it">Ci sono oltre dieci motori di pennelli incredibilmente potenti</caption>
       <caption xml:lang="ko">10가지 종류의 강력한 브러시 엔진을 사용할 수 있습니다</caption>
@@ -326,6 +332,7 @@
       <caption xml:lang="pl">Istnieje ponad dziesięć zaawansowanych silników pędzli</caption>
       <caption xml:lang="pt">Existem mais de dez motores de pincéis extremamente poderosos</caption>
       <caption xml:lang="pt-BR">Mais de dez engines de pincéis incrivelmente poderosos disponíveis</caption>
+      <caption xml:lang="ru">В Krita представлено более десяти чрезвычайно мощных кистевых движков</caption>
       <caption xml:lang="sk">Existuje viac ako desať nesmierne výkonných štetcových enginov</caption>
       <caption xml:lang="sl">Obstaja več kot deset izjemno močnih načinov podpor čopičev</caption>
       <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt</caption>
@@ -346,6 +353,7 @@
       <caption xml:lang="eu">Sortu eta erabili gama-maskarak zure irudiei izaera koherentea emateko</caption>
       <caption xml:lang="fr">Créer et utiliser les masques de Gamut pour donner à vos images une apparence cohérente</caption>
       <caption xml:lang="hi">अपने चित्रों को एक सुसंगत रूप देने के लिए गेमट मास्क बनाएं और उपयोग करें</caption>
+      <caption xml:lang="ia">Crea e usa mascaras de gamma per dar a tu images impression coherente</caption>
       <caption xml:lang="id">Ciptakan dan gunakan masker gamut untuk memberikan citramu sebuah suasana yang koheren</caption>
       <caption xml:lang="it">Crea e utilizza maschere gamut per dare alle tue immagini un aspetto coerente</caption>
       <caption xml:lang="ko">색역 마스크를 만들고 사용할 수 있습니다</caption>
@@ -354,6 +362,7 @@
       <caption xml:lang="pl">Twórz i używaj masek gamut, aby nadać swoim obrazom spójny wygląd</caption>
       <caption xml:lang="pt">Crie e use máscaras de gamute para dar às suas imagens uma aparência coerente</caption>
       <caption xml:lang="pt-BR">Crie e use máscaras de gama para dar um senso de coerência às suas imagens</caption>
+      <caption xml:lang="ru">Создавайте и используйте маски цветового охвата и используйте их для придания своим изображениям целостности.</caption>
       <caption xml:lang="sk">Vytvorte a používajte gamutové masky, aby vašim obrázkom poskytli ucelený pocit</caption>
       <caption xml:lang="sl">Ustvarite in uporabite maske gamut, da boste svojim slikam dali usklajeni občutek</caption>
       <caption xml:lang="sv">Att skapa och använda färgomfångsmasker ger bilder en sammanhängande känsla</caption>
@@ -374,6 +383,7 @@
       <caption xml:lang="eu">Animaziorako? Krita-k ohiko eskuz-marraztutako animazioetarako behar duzun guztia dakar</caption>
       <caption xml:lang="fr">Vous réalisez des animations ? Krita vous fournit tout ce dont vous avez besoin pour l'animation traditionnelle et dessinée à la main</caption>
       <caption xml:lang="hi">आपको एनीमेशन में आसक्ती है? क्रिता आपको पारंपरिक, हाथ से तैयार एनीमेशन बनाने के लिए आवश्यक सब कुछ प्रदान करता है</caption>
+      <caption xml:lang="ia">In animation? Krita forni toto lo que tu necessita per animation traditional, a mano libere</caption>
       <caption xml:lang="id">Soal animasi? Krita menyediakan apa pun yang kamu perlukan untuk animasi gambar-tangan, tradisional</caption>
       <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti server per l'animazione tradizionale, disegnata a mano</caption>
       <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다</caption>
@@ -382,6 +392,7 @@
       <caption xml:lang="pl">Zajmujesz się animacjami? Krita zapewnia wszystko czego potrzebujesz do tworzenia tradycyjnych, ręcznie rysowanych animacji</caption>
       <caption xml:lang="pt">Gosta de animação? O Krita oferece tudo o que precisa para o desenho animado tradicional e desenhado à mão</caption>
       <caption xml:lang="pt-BR">Curte animação? O Krita fornece tudo necessário para você poder trabalhar com animação tradicional ou feita à mão</caption>
+      <caption xml:lang="ru">Занимаетесь анимацией? Krita предоставляет все необходимые инструменты для традиционной анимации, нарисованной от руки</caption>
       <caption xml:lang="sk">Ste do animácie? Krita poskytuje všetko, čo potrebujete pre tradičné ručne kreslené animácie</caption>
       <caption xml:lang="sl">Za animacijo? Krita ponuja vse, kar potrebujete za tradicionalno, ročno narisano animacijo</caption>
       <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar</caption>
@@ -403,6 +414,7 @@
       <caption xml:lang="fi">Jos digitaide on sinulle uutta, käsikirja on kattava ja ajan tasalla</caption>
       <caption xml:lang="fr">Si vous êtes nouveau en art graphique, il y a un manuel à jour et très fourni</caption>
       <caption xml:lang="hi">यदि आप डिजिटल पेंटिंग में नए हैं, तो एक व्यापक, अद्यतन पु्स्तिका है</caption>
+      <caption xml:lang="ia">Si tu es nove al pictura digiral, il ha un extensive manual actualisate (in anglese)</caption>
       <caption xml:lang="id">Jika kamu baru dalam pelukisan digital, di situ ada buku manual panjang-lebar yang ter-update</caption>
       <caption xml:lang="it">Se sei nuovo del disegno digitale è disponibile un manuale completo e aggiornato</caption>
       <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오</caption>
@@ -411,6 +423,7 @@
       <caption xml:lang="pl">Jeśli malowanie cyfrowe to dla ciebie nowość, to dostępny jest podręcznik</caption>
       <caption xml:lang="pt">Se é novo na pintura digital, ou deseja saber mais sobre as possibilidades do Krita, existe um manual extenso e actualizado</caption>
       <caption xml:lang="pt-BR">Se você for iniciante em pintura digital, há um extenso e atualizado manual</caption>
+      <caption xml:lang="ru">Для новичков в цифровой живописи предусмотрено подробное актуальное руководство</caption>
       <caption xml:lang="sk">Ak ste v oblasti digitálnej maľby nováčikom alebo sa chcete dozvedieť viac o možnostiach programu Krita, existuje o tom rozsiahla a aktuálna príručka</caption>
       <caption xml:lang="sl">Če ste novi v digitalnem slikanju, obstaja obsežen, posodobljen priročnik</caption>
       <caption xml:lang="sv">Om digital målning är nytt för dig, finns en omfattande, aktuell handbok</caption>
@@ -435,7 +448,7 @@
   <releases>
     <release date="2021-11-30" version="5.0.0-beta3"/>
   </releases>
-    <custom>
+  <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>
     <value key="KDE::google_play">https://play.google.com/store/apps/details?id=org.krita</value>
   </custom>

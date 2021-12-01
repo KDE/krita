@@ -94,7 +94,7 @@ void KisPresetSaveWidget::showDialog()
 
     brushPresetThumbnailWidget->paintPresetImage();
 
-    show();
+    open();
 }
 
 void KisPresetSaveWidget::loadImageFromFile()

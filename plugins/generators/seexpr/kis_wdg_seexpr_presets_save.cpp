@@ -92,7 +92,7 @@ void KisWdgSeExprPresetsSave::showDialog()
         presetThumbnailWidget->setPixmap(QPixmap::fromImage(preset->image()));
     }
 
-    show();
+    open();
 }
 
 void KisWdgSeExprPresetsSave::loadImageFromFile()

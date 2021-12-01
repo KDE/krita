@@ -449,7 +449,7 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
             const qreal clickAngle = m_d->clickArgs.aZ();
             const qreal targetAngle = m_d->clickArgs.aZ() + theta;
             qreal shortestDistance = shortestAngularDistance(clickAngle, targetAngle);
-            const bool clockwise = (clickAngle + shortestDistance) == targetAngle;
+            const bool clockwise =  (theta <= M_PI && theta >= 0) || (theta < -M_PI);
             shortestDistance = clockwise ? shortestDistance : shortestDistance * -1;
 
             m_d->currentArgs.setAZ(m_d->clickArgs.aZ() + shortestDistance);

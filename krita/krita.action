@@ -1077,18 +1077,6 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="krita_filter_brightnesscontrast">
-      <icon/>
-      <text>&amp;Brightness/Contrast curve...</text>
-      <whatsThis/>
-      <toolTip>Brightness/Contrast curve</toolTip>
-      <iconText>Brightness/Contrast curve</iconText>
-      <activationFlags>10000</activationFlags>
-      <activationConditions>0</activationConditions>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
     <Action name="krita_filter_colorbalance">
       <icon/>
       <text>Colo&amp;r Balance...</text>

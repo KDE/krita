@@ -178,7 +178,6 @@ KritaFill/KisToolGradient=none
 krita_filter_autocontrast=none
 krita_filter_blur=none
 krita_filter_bottom edge detections=none
-krita_filter_brightnesscontrast=none
 krita_filter_burn=none
 krita_filter_colorbalance=Ctrl+B
 krita_filter_colortoalpha=none

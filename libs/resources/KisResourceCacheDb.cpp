@@ -556,12 +556,12 @@ bool KisResourceCacheDb::updateResourceTableForResourceIfNeeded(int resourceId, 
         }
     }
 
-    int currentVersion = -1;
+    QString currentFilename;
     {
         QSqlQuery q;
-        r = q.prepare("SELECT MAX(versioned_resources.version)\n"
-                      "FROM   versioned_resources\n"
-                      "WHERE  versioned_resources.id = :resource_id;");
+        r = q.prepare("SELECT filename\n"
+                      "FROM   resources\n"
+                      "WHERE  id = :resource_id;");
         if (!r) {
             qWarning() << "Could not prepare findMaxVersion statement" << q.lastError();
             return r;
@@ -578,10 +578,10 @@ bool KisResourceCacheDb::updateResourceTableForResourceIfNeeded(int resourceId, 
         r = q.first();
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(r, false);
 
-        currentVersion = q.value(0).toInt();
+        currentFilename = q.value(0).toString();
     }
 
-    if (currentVersion != maxVersion) {
+    if (currentFilename != maxVersionFilename) {
         const QString url = resourceType + "/" + maxVersionFilename;
         KoResourceSP resource = storage->resource(url);
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resource, false);

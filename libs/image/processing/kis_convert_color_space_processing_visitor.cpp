@@ -103,20 +103,26 @@ void KisConvertColorSpaceProcessingVisitor::visit(KisGroupLayer *layer, KisUndoA
 
     bool alphaDisabled = layer->alphaChannelDisabled();
 
-    // the swap of FINALIZING/INITIALIZING is intentional here, see the comment above
-    undoAdapter->addCommand(new KisResetGroupLayerCacheCommand(layer, m_dstColorSpace, KisResetGroupLayerCacheCommand::FINALIZING));
+    /// Group layers are supposed to always be in the image colorspace,
+    /// having groups in any other color space is not yet supported by
+    /// .kra file format
+    const KoColorSpace *srcColorSpace = layer->colorSpace();
+    const KoColorSpace *dstColorSpace = layer->image() ? layer->image()->colorSpace() : m_dstColorSpace;
 
-    if (m_srcColorSpace->colorModelId() != m_dstColorSpace->colorModelId()) {
+    // the swap of FINALIZING/INITIALIZING is intentional here, see the comment above
+    undoAdapter->addCommand(new KisResetGroupLayerCacheCommand(layer, dstColorSpace, KisResetGroupLayerCacheCommand::FINALIZING));
+
+    if (srcColorSpace->colorModelId() != dstColorSpace->colorModelId()) {
         QBitArray channelFlags;
 
         if (alphaDisabled) {
-            channelFlags = m_dstColorSpace->channelFlags(true, false);
+            channelFlags = dstColorSpace->channelFlags(true, false);
         }
 
         undoAdapter->addCommand(new KisChangeChannelFlagsCommand(channelFlags, layer));
     }
 
-    undoAdapter->addCommand(new KisResetGroupLayerCacheCommand(layer, m_srcColorSpace, KisResetGroupLayerCacheCommand::INITIALIZING));
+    undoAdapter->addCommand(new KisResetGroupLayerCacheCommand(layer, srcColorSpace, KisResetGroupLayerCacheCommand::INITIALIZING));
 }
 
 void KisConvertColorSpaceProcessingVisitor::visit(KisTransformMask *node, KisUndoAdapter *undoAdapter)

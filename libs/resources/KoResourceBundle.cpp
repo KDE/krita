@@ -530,8 +530,9 @@ bool KoResourceBundle::loadResource(KoResourceSP resource)
         img.load(resourceStore->device(), QFileInfo(resource->thumbnailPath()).completeSuffix().toLatin1());
         resource->setImage(img);
         resource->updateThumbnail();
+
+        resourceStore->close();
     }
-    resourceStore->close();
 
     return true;
 }

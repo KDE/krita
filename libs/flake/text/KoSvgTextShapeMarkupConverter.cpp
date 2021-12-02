@@ -459,6 +459,14 @@ QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
     return mostCommonFormat;
 }
 
+Q_GUI_EXPORT int qt_defaultDpi();
+
+qreal fixQtDpi(qreal value)
+{
+    // HACK ALERT: see a comment in convertDocumentToSvg!
+    return value * 72.0 / qt_defaultDpi();
+}
+
 qreal calcLineWidth(const QTextBlock &block)
 {
     const QString blockText = block.text();
@@ -476,7 +484,7 @@ qreal calcLineWidth(const QTextBlock &block)
     }
     lineLayout.endLayout();
 
-    return lineLayout.boundingRect().width();
+    return fixQtDpi(lineLayout.boundingRect().width());
 }
 
 bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *doc, QString *svgText)
@@ -504,6 +512,21 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         int numSkippedLines = 0;
     };
 
+    /**
+     * DIRTY-DIRTY-DIRTY HACK ALERT!!!
+     *
+     * All the internals of QTextDocument work with the primary screen's DPI.
+     * That is, when we ask Qt about font metrics, it returns values scaled
+     * to the pixels in the current screen, that is,
+     * ptValue * qt_defaultDpi() / 72.0. We need to convert this value back
+     * into points before writing as SVG. Therefore, all the metrics returned
+     * by the document are scaled with `fixQtDpi()`.
+     *
+     * Official Qt's way to workaround this problem is to set logicalDpiX/Y()
+     * values on the paint device's associated with the document. But it seems
+     * like in our version of Qt (5.12.12, which is rather old) it doesn't work
+     * properly.
+     */
 
     QVector<LineInfo> lineInfoList;
 
@@ -633,8 +656,8 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         }
 
         if (block.blockNumber() > 0) {
-            const qreal lineHeightPt =
-                    line.ascent() - prevBlockAscent +
+            qreal lineHeightPt =
+                    fixQtDpi(line.ascent()) - prevBlockAscent +
                     (prevBlockAscent + prevBlockDescent) * qreal(prevBlockRelativeLineSpacing) / 100.0;
 
             const qreal currentLineSpacing = (info.numSkippedLines + 1) * lineHeightPt;
@@ -656,8 +679,8 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
             prevBlockRelativeLineSpacing = 100;
         }
 
-        prevBlockAscent = line.ascent();
-        prevBlockDescent = line.descent();
+        prevBlockAscent = fixQtDpi(line.ascent());
+        prevBlockDescent = fixQtDpi(line.descent());
 
 
         if (formats.size()>1) {

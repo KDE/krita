@@ -516,7 +516,9 @@ void KisPaletteEditor::saveNewPaletteVersion()
             dbgResources << Q_FUNC_INFO << "-- Updating resource without user input: " << m_d->model->colorSet()->name() << "Result:" << res;
         }
     }
-    m_d->model->colorSet()->setDirty(!res);;
+
+    // let's not change it to true if it wasn't modified at all
+    m_d->model->colorSet()->setDirty(m_d->model->colorSet()->isDirty() && !res);
 }
 
 void KisPaletteEditor::slotPaletteChanged()

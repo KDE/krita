@@ -262,6 +262,8 @@ void PaletteDockerDock::slotSetColorSet(KoColorSetSP colorSet)
     if (m_paletteEditor->isModified() && m_currentColorSet != colorSet) {
         m_paletteEditor->saveNewPaletteVersion();
     }
+    // if it was modified, it should've been saved and now it shouldn't be modified anyway
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_paletteEditor->isModified());
 
     if (colorSet) {
         m_ui->bnAdd->setEnabled(true);

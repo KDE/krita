@@ -32,6 +32,7 @@ private Q_SLOTS:
     void testResourceForMD5();
     void testRenameResource();
     void testUpdateResource();
+    void testTwoExistingResourceModels();
     void cleanupTestCase();
 
 private:

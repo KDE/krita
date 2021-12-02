@@ -53,6 +53,10 @@
 #define GL_BGRA8_EXT 0x93A1
 #endif
 
+#ifndef GL_RGBA16_EXT
+#define GL_RGBA16_EXT 0x805B
+#endif
+
 
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 

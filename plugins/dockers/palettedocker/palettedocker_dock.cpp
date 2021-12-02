@@ -307,8 +307,10 @@ void PaletteDockerDock::slotEditPalette()
 
 void PaletteDockerDock::slotSavePalette()
 {
-    m_paletteEditor->saveNewPaletteVersion();
-    slotUpdatePaletteName();
+    if (m_paletteEditor->isModified()) {
+        m_paletteEditor->saveNewPaletteVersion();
+        slotUpdatePaletteName();
+    }
 }
 
 

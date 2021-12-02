@@ -301,7 +301,7 @@ public:
     }
     
     ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr, int x, int y) {
-        return this->calculateDifference(pixelPtr) < m_threshold && this->calculateSelectedness(x, y) > 0 ? MAX_SELECTED : MIN_SELECTED;
+        return this->calculateDifference(pixelPtr) <= m_threshold && this->calculateSelectedness(x, y) > 0 ? MAX_SELECTED : MIN_SELECTED;
     }
 
 protected:

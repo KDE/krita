@@ -313,6 +313,33 @@ void TestResourceModel::testUpdateResource()
     }
 }
 
+void TestResourceModel::testTwoExistingResourceModels()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
+    KisResourceModel resourceModelCopy(m_resourceType);
+    resourceModelCopy.setResourceFilter(KisResourceModel::ShowAllResources);
+
+
+    int resourceCount = resourceModel.rowCount();
+    KoResourceSP resource(new DummyResource("dummy_1.kpp"));
+    resource->setValid(true);
+
+
+    bool r = resourceModel.addResource(resource);
+    QVERIFY(r);
+
+
+    // it only works if you uncomment this line
+    // but it should work without it
+    // resourceModelCopy.invalidate();
+
+    QCOMPARE(resourceModel.rowCount(), resourceModelCopy.rowCount());
+    QCOMPARE(resourceCount + 1, resourceModel.rowCount());
+    QCOMPARE(resourceCount + 1, resourceModelCopy.rowCount());
+}
+
 
 void TestResourceModel::cleanupTestCase()
 {

@@ -88,7 +88,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
     // paints on a transparent layer with only black..
     // Should also improve backwards-compatibility edge cases
     // where user is expecting "lightness" setting.
-    const auto isUniformRGBValue = [&](){
+    const bool isUniformRGBValue = [&](){
         if (isAllGray) {
             bool firstSample = true;
             int value = 0;
@@ -107,7 +107,7 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
             return true;
         }
         return false;
-    };
+    }();
 
     if (isAllGray && !hasAlpha) {
         // Make sure brush tips all have a white background
@@ -132,9 +132,19 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
         if ((int)image.format() < (int)QImage::Format_RGB32) {
             image = image.convertToFormat(QImage::Format_ARGB32);
         }
+
+        //Workaround for transparent uniform RGB images -- should be converted to proper mask.
+        if (isAllGray && isUniformRGBValue) {
+            QImage backdrop(image.size(), image.format());
+            backdrop.fill(QColor(Qt::white).rgb());
+            QPainter painter(&backdrop);
+            painter.drawImage(0,0,image);
+            image = backdrop;
+        }
+
         setBrushTipImage(image);
         setBrushType(IMAGE);
-        setBrushApplication(isAllGray && !isUniformRGBValue() ? ALPHAMASK : LIGHTNESSMAP);
+        setBrushApplication(isAllGray ? ALPHAMASK : LIGHTNESSMAP);
         setHasColorAndTransparency(!isAllGray);
     }
 

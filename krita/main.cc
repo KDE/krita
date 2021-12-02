@@ -386,7 +386,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
 #else
-    qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share"));
+    qputenv("XDG_DATA_DIRS", QFile::encodeName(QDir(root + "share").absolutePath()));
 #endif
 
     dbgKrita << "Setting XDG_DATA_DIRS" << qgetenv("XDG_DATA_DIRS");
@@ -532,6 +532,9 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     // TODO: remove "share" - sh_zam
     // points to /data/data/org.krita/files/share/locale
     KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");
+#else
+    // Enable debugging translations from undeployed apps
+    KLocalizedString::addDomainLocaleDir("krita", QDir(root + "share/locale").absolutePath());
 #endif
 
     KLocalizedString::setApplicationDomain("krita");
@@ -822,21 +825,27 @@ void installEcmTranslations(KisApplication &app)
             QString subPath = QStringLiteral("locale/") % localeDirName % QStringLiteral("/LC_MESSAGES/") % catalog % QStringLiteral(".qm");
 #if defined(Q_OS_ANDROID)
             const QString fullPath = QStringLiteral("assets:/share/") + subPath;
-            if (!QFile::exists(fullPath)) {
-                continue;
-            }
 #else
+            const QString root = QLibraryInfo::location(QLibraryInfo::PrefixPath);
+
             // Our patched k18n uses AppDataLocation (for AppImage).
             QString fullPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, subPath);
+
             if (fullPath.isEmpty()) {
                 // ... but distro builds probably still use GenericDataLocation,
                 // so check that too.
                 fullPath = QStandardPaths::locate(QStandardPaths::GenericDataLocation, subPath);
-                if (fullPath.isEmpty()) {
-                    continue;
-                }
+            }
+
+            if (fullPath.isEmpty()) {
+                // And, failing all, use the deps install folder
+                fullPath = root + "/share/" + subPath;
             }
 #endif
+            if (!QFile::exists(fullPath)) {
+                continue;
+            }
+
             QTranslator *translator = new QTranslator(&app);
             if (translator->load(fullPath)) {
                 dbgLocale << "Loaded ECM translations for" << localeDirName << catalog;

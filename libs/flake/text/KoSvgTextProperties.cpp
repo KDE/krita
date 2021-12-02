@@ -464,12 +464,18 @@ QFont KoSvgTextProperties::generateFont() const
     const QFont::Style style =
         QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
 
+    // for rounding see a comment below!
     QFont font(fontFamily
-               , propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal()
+               , qRound(propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal())
                , propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt()
                , style != QFont::StyleNormal);
     font.setStyle(style);
 
+    /**
+     * The constructor of QFont cannot accept fractional font size, so we pass
+     * a rounded one to it and set the correct one later on
+     */
+    font.setPointSizeF(propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
     font.setCapitalization(
         propertyOrDefault(KoSvgTextProperties::FontIsSmallCapsId).toBool() ?
             QFont::SmallCaps : QFont::MixedCase);

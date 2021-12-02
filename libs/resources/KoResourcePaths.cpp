@@ -20,7 +20,6 @@
 #include "kconfiggroup.h"
 #include "KisResourceLocator.h"
 
-
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance)
 
 
@@ -102,28 +101,12 @@ QString getInstallationPrefix() {
     }
 
     return bundlePath;
-#else
-#ifdef Q_OS_QWIN
-    QDir appdir(qApp->applicationDirPath());
-
-    // Corrects for mismatched case errors in path (qtdeclarative fails to load)
-    wchar_t buffer[1024];
-    QString absolute = appdir.absolutePath();
-    DWORD rv = ::GetShortPathName((wchar_t*)absolute.utf16(), buffer, 1024);
-    rv = ::GetLongPathName(buffer, buffer, 1024);
-    QString correctedPath((QChar *)buffer);
-    appdir.setPath(correctedPath);
-    appdir.cdUp();
-    return appdir.canonicalPath();
-#else
-#ifdef Q_OS_ANDROID
+#elif defined(Q_OS_ANDROID)
     // qApp->applicationDirPath() isn't writable and android system won't allow
     // any files other than libraries
     return QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/";
 #else
     return qApp->applicationDirPath() + "/../";
-#endif
-#endif
 #endif
 }
 

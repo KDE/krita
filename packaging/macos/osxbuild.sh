@@ -35,6 +35,7 @@ fi
 BUILDROOT="${BUILDROOT%/}"
 echo "BUILDROOT set to ${BUILDROOT}"
 
+# global options
 set -o pipefail
 
 # Check cmake in path.
@@ -130,11 +131,15 @@ log () {
 
 # if previous command gives error
 # print msg
+# if a 2nd arg is given it stops execution
 print_if_error() {
     if [ "${osxbuild_error}" -ne 0 ]; then
         printf "\e[31m%s %s\e[0m\n" "Error:" "Printing last lines of log output"
         tail ${OUPUT_LOG}
         printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
+        if [ -n "${2}" ]; then
+            exit 1
+        fi
     fi
 }
 
@@ -238,7 +243,7 @@ cmake_3rdparty_plugins () {
             print_msg "Build Success! ${package}"
         else
             log "${pkg} build fail, stopping..."
-            error="true"
+            exit 1
         fi
     done
 }
@@ -463,13 +468,16 @@ build_krita () {
 
     # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
     if [[ ${OSXBUILD_UNIVERSAL} ]]; then
-        env /usr/bin/arch -arm64 /bin/zsh -c "${CMAKE_CMD}"
+        log_cmd env /usr/bin/arch -arm64 /bin/zsh -c "${CMAKE_CMD}"
     else
-        ${CMAKE_CMD}
+        log_cmd ${CMAKE_CMD}
     fi
 
+    print_if_error "Configuration error! ${filename}" "exit"
+
     # copiling phase
-    make -j${MAKE_THREADS}
+    log_cmd make -j${MAKE_THREADS}
+    print_if_error "Krita compilation failed! ${filename}" "exit"
 
     # compile integrations
     if test ${OSTYPE} == "darwin*"; then
@@ -493,10 +501,7 @@ build_krita_tarball () {
     mkdir "src" "build" 2> /dev/null
     log_cmd tar -xzf "${file_abspath}" --strip-components=1 --directory "src"
 
-    print_if_error "Failed untar of ${filename}"
-    if [[ ${osxbuild_error} -ne 0 ]]; then
-        exit 1
-    fi
+    print_if_error "Failed untar of ${filename}" "exit"
 
     KIS_BUILD_DIR="${KIS_CUSTOM_BUILD}/build"
     KIS_SRC_DIR="${KIS_CUSTOM_BUILD}/src"
@@ -523,11 +528,8 @@ install_krita () {
     log_cmd check_dir_path ${KIS_BUILD_DIR}
 
     cd "${KIS_BUILD_DIR}"
-    osxbuild_error=$?
-    print_if_error "could not cd to ${KIS_BUILD_DIR}"
-    if [[ ${osxbuild_error} -ne 0 ]]; then
-        exit 1
-    fi
+    osxbuild_error="${?}"
+    print_if_error "could not cd to ${KIS_BUILD_DIR}" "exit"
 
     make install
 
@@ -557,6 +559,7 @@ build_plugins () {
         -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \
         -DEXTERNALS_DOWNLOAD_DIR=${KIS_DOWN_DIR} \
         -DINSTALL_ROOT=${KIS_INSTALL_DIR}
+
 
     print_msg "finished plugins build setup"
 

@@ -146,8 +146,10 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
     }
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
-    m_oldOpacity = provider->opacity();
-    provider->setOpacity(m_localOpacity);
+    if ( provider->currentPreset() == m_localPreset ) {
+        m_oldOpacity = provider->opacity();
+        provider->setOpacity(m_localOpacity);
+    }
 }
 
 void KisToolPaint::deactivate()
@@ -159,6 +161,7 @@ void KisToolPaint::deactivate()
 
     KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
     m_localOpacity = provider->opacity();
+    m_localPreset = provider->currentPreset();
     provider->setOpacity(m_oldOpacity);
 
     KisTool::deactivate();

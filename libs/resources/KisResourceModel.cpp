@@ -614,8 +614,15 @@ int KisAllResourcesModel::rowCount(const QModelIndex &parent) const
     }
 
     if (d->cachedRowCount < 0) {
+        /**
+         * SQLite doesn't support COUNT(DISTINCT ...) over multiple columns, so
+         * we need to concatenate them manually on the fly. But SQLite doesn't
+         * support CONCAT function either, therefore we should use
+         * concatenation operator it provides.
+         */
+
         QSqlQuery q;
-        q.prepare("SELECT count(*)\n"
+        q.prepare("SELECT COUNT(DISTINCT resources.name || resources.filename || resources.md5sum)\n"
                   "FROM   resources\n"
                   ",      resource_types\n"
                   "WHERE  resources.resource_type_id = resource_types.id\n"

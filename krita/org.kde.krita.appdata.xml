@@ -446,7 +446,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <release date="2021-12-03" version="5.0.0-beta4"/>
+    <release date="2021-12-03" version="5.0.0-beta5"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

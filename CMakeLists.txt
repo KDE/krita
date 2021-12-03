@@ -88,7 +88,7 @@ endif()
 
 # define common versions of Krita applications, used to generate kritaversion.h
 # update these version for every release:
-set(KRITA_VERSION_STRING "5.0.0-beta4")
+set(KRITA_VERSION_STRING "5.0.0-beta5")
 
 # Major version: 3 for 3.x, 4 for 4.x, etc.
 set(KRITA_STABLE_VERSION_MAJOR 5) 

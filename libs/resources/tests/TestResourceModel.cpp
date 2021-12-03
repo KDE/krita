@@ -189,13 +189,30 @@ void TestResourceModel::testAddTemporaryResource()
     bool r = resourceModel.addResource(resource, "memory");
     QVERIFY(r);
     QCOMPARE(startResourceCount + 1, resourceModel.rowCount());
+}
 
-    // Matching MD5 resources should be hidden -- BUG:445367
-    resource.reset(new DummyResource("dummy.kpp"));
+void TestResourceModel::testAddDuplicatedResource()
+{
+    KisResourceModel resourceModel(m_resourceType);
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
+
+    const int startResourceCount = resourceModel.rowCount();
+
+    KoResourceSP resource(new DummyResource("duplicated_resource.kpp"));
     resource->setValid(true);
-    r = resourceModel.addResource(resource, "memory");
+    bool r = resourceModel.addResource(resource); // first add to the folder storage
+
     QVERIFY(r);
-    QCOMPARE(startResourceCount + 1, resourceModel.rowCount());
+    QCOMPARE(resourceModel.rowCount(), startResourceCount + 1);
+
+    // Matching MD5, name and filename resources should be hidden -- BUG:445367
+    // the copy of this resource has been added in testAddResource()
+    resource.reset(new DummyResource("duplicated_resource.kpp"));
+    resource->setValid(true);
+    r = resourceModel.addResource(resource, "memory"); // then add to the temporary storage
+
+    QVERIFY(r);
+    QCOMPARE(resourceModel.rowCount(), startResourceCount + 1);
 }
 
 void TestResourceModel::testResourceForId()

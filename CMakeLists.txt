@@ -763,7 +763,7 @@ endif()
 
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES
-    DESCRIPTION "Free library for JPEG image compression. Note: libjpeg8 is NOT supported."
+    DESCRIPTION "Free library for JPEG image compression. Note that libjpeg8 is NOT supported."
     URL "https://www.libjpeg-turbo.org"
     TYPE OPTIONAL
     PURPOSE "Required by the Krita JPEG filter")

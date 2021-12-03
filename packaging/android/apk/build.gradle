@@ -129,7 +129,7 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 2
+    def versionRelease  = 3
 
     defaultConfig {
         targetSdkVersion 30

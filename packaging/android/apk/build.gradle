@@ -135,7 +135,7 @@ android {
         targetSdkVersion 30
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.0.0-beta3"
+        versionName "5.0.0-beta5"
         archivesBaseName = "krita-$abi-$versionName"
     }
 

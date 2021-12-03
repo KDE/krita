@@ -183,6 +183,7 @@ private:
     QScopedPointer<SamplingCompressor> m_colorSamplingCompressor;
 
     qreal m_localOpacity {1.0};
+    KisPaintOpPresetSP m_localPreset;
     qreal m_oldOpacity {1.0};
 
 Q_SIGNALS:

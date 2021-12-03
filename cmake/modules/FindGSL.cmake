@@ -73,7 +73,7 @@ endif ()
 #
 if (GSL_FOUND)
      if (NOT GSL_FIND_QUIETLY)
-	MESSAGE (STATUS "Found GNU Scientific Library ${GSL_VERSION}: ${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES}")
+        MESSAGE (STATUS "Found GNU Scientific Library: ${GSL_VERSION} (${GSL_INCLUDE_DIR} ${GSL_LIBRARIES};${GSL_CBLAS_LIBRARIES})")
      endif()
 else ()
      if (GSL_FIND_REQUIRED)

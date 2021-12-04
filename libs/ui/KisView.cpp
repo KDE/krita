@@ -442,7 +442,10 @@ KisCoordinatesConverter *KisView::viewConverter() const
 
 void KisView::dragEnterEvent(QDragEnterEvent *event)
 {
-    //qDebug() << "KisView::dragEnterEvent formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
+    dbgUI << Q_FUNC_INFO
+          << "Formats: " << event->mimeData()->formats()
+          << "Urls: " << event->mimeData()->urls()
+          << "Has images: " << event->mimeData()->hasImage();
     if (event->mimeData()->hasImage()
             || event->mimeData()->hasUrls()
             || event->mimeData()->hasFormat("application/x-krita-node")
@@ -475,8 +478,10 @@ void KisView::dropEvent(QDropEvent *event)
         forceRecenter = false;
     }
 
-    //qDebug() << "KisView::dropEvent() formats" << event->mimeData()->formats() << "urls" << event->mimeData()->urls() << "has images" << event->mimeData()->hasImage();
-
+    dbgUI << Q_FUNC_INFO
+          << "Formats: " << event->mimeData()->formats()
+          << "Urls: " << event->mimeData()->urls()
+          << "Has images: " << event->mimeData()->hasImage();
     if (event->mimeData()->hasFormat("application/x-krita-node") ||
             event->mimeData()->hasImage())
     {
@@ -615,10 +620,15 @@ void KisView::dropEvent(QDropEvent *event)
 
 void KisView::dragMoveEvent(QDragMoveEvent *event)
 {
-    //qDebug() << "KisView::dragMoveEvent";
-    if (event->mimeData()->hasUrls() ||
-        event->mimeData()->hasFormat("application/x-krita-node") ||
-        event->mimeData()->hasFormat("application/x-qt-image")) {
+    dbgUI << Q_FUNC_INFO
+          << "Formats: " << event->mimeData()->formats()
+          << "Urls: " << event->mimeData()->urls()
+          << "Has images: " << event->mimeData()->hasImage();
+    if (event->mimeData()->hasImage()
+            || event->mimeData()->hasUrls()
+            || event->mimeData()->hasFormat("application/x-krita-node")
+            || event->mimeData()->hasFormat("krita/x-colorsetentry")
+            || event->mimeData()->hasColor()) {
         return event->accept();
     }
 

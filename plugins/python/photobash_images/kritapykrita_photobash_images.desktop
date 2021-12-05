@@ -3,6 +3,7 @@ Type=Service
 ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=photobash_images
 X-Python-2-Compatible=false
+X-Krita-Manual=photobash_images_manual.html
 Name=Krita Photobash Images
 Name[ca]=Imatges Photobash del Krita
 Name[ca@valencia]=Imatges Photobash del Krita

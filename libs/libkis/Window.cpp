@@ -73,7 +73,7 @@ QList<View*> Window::views() const
 
 View *Window::addView(Document *document)
 {
-    if (d->window) {
+    if (d->window && document) {
         // Once the document is shown in the ui, it's owned by Krita
         // If the Document instance goes out of scope, it shouldn't
         // delete the owned image.

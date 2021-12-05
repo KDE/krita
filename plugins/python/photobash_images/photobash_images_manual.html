@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>Photobash Plugin Manual</title>
+</head>
+<body>
+    <h1>Krita Photobash Plugin</h1>
+
+    <p>Want to see this in action? Check out the <a href="https://youtu.be/QX9jwhfpB_8)">video</a>!</p>
+    <p>An advanced Krita Plugin, laser-focused on improving productivity for photo-bashing and references! </p>
+        
+    <h2>Features and How-to-use:</h2>
+    <p>
+        After setting the references folder, you now have a list of 9 images in the docker, sorted alphabetically. If your folder has more than 9 images in total, there are now multiple pages. There are different ways to scroll the list, such as:
+    </p>
+    <ul>
+        <li>Clicking on the "next" and "previous" buttons on the bottom row of the docker;</li>
+        <li>Scrolling the slider next to the pages indicator;</li>
+        <li>Mouse Wheel Up and Down;</li>
+        <li>Alt + Drag Left or Right, in case you're using a stylus.</li>
+    </ul> 
+    <p>
+        If the images in the folders are of large size, there may be some slowdown when scrolling quickly. However, the plugin is caching the previews, and stores up to 90 images, so you can scroll through them back more easily later. 
+    </p>
+    <p>
+        To add an image to the document, all you'll have to do is click on the image. That's it! You can also drag the image to a specific position using Shift + Drag. After adding, you'll notice that the image might be scaled. To reduce needing to always transform to the correct size, there are two elements to assist you:
+    </p>
+    <ul>
+        <li>The "Scale To Canvas" checkbox. This does exactly what you expect, and scales the image to fit the canvas. If the image is larger than the canvas, it scales it down, and if it's smaller, it scales it up! This can work in tandem with the next assistant;</li>
+        <li>The "Image Scale" slider controls how large the image will be when it's placed. If the scale is 50%, with "Scale To Canvas" enabled, it will add the image with the maximum size of half the canvas. If "Scale To Canvas" is disabled, the image scale will be respect the original resolutions of the image. If it's 100%, it will add the image in full resolution, if it's 50% it will add the image at half the original resolution. </li>
+    </ul>
+    <p>
+        Dragging the image presents the same behaviour as clicking, with the only difference being that the image will be added in the position you specify! It will always preserve aspect ratio, so there's no need to worry with distortion.
+    </p>
+    <p>
+        If you want to filter the images, you can add words to the text prompt on top of the widget. This filter will work on the full path of the image, so if you have images with random names, but are inside a folder called "rocks", if you input "rocks", those images will still appear. There's also an extra feature, in which mulitple word search adds to the selection. For example, if you input "rocks marble", the images that contain either "rocks" or "marble" will appear!
+    </p>
+
+    <h2>Context menu</h2>
+    <p>You can also have some extra features by right-clicking on an image. This will open up a small menu, with several options: </p>
+    <ul>
+        <li><b>Preview in Docker</b>: This will maximize the selected image on the docker, to do a quick preview. You can close the preview by left-clicking the preview;</li>
+        <li><b>Pin to Beginning / Unpin</b>: You can add "favourites" to an image, by pinning them to the beginning. This is useful if you have a select few images that you like to re-use, but are on different pages. This way you can have an easy way to access them, which will persist across restarts. It will only forget the favourite images if you decide to change the references folder. You can also unpin the images to send them to their original placement. A favourite will have a triangle in the top-left corner;</li>
+        <li><b>Open as New Document</b>: Opens the image as a new document, but keep in mind that this is the original image. If you save it, it will override the one you have on your references folder;</li>
+        <li><b>Place as Reference</b>: You can add an image as reference, and place it wherever you want! If you want to remove a reference, you need to press the "Pushpin Icon" on your toolbox, and remove it using that tool.</li>
+    </ul>
+
+    <h3>Hope you enjoy this plugin, and feel free to post your artworks over on <a href="https://krita-artists.org/">Krita Artists</a>!</h3>
+
+</body>
+</html>
+
+

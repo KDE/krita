@@ -111,6 +111,7 @@ private:
     QCheckBox *m_chkAssistant {0};
     KisSliderSpinBox *m_sliderMagnetism {0};
     QCheckBox *m_chkOnlyOneAssistant {0};
+    QCheckBox *m_chkSnapEraser {0};
     KisDoubleSliderSpinBox *m_sliderSmoothnessDistance {0};
     QLabel *m_lblSmoothnessDistance {0};
     KisDoubleSliderSpinBox *m_sliderTailAggressiveness {0};

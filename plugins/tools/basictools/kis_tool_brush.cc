@@ -462,25 +462,36 @@ QWidget * KisToolBrush::createOptionWidget()
     QLabel* magnetismLabel = new QLabel(i18n("Magnetism:"));
     addOptionWidgetOption(m_sliderMagnetism, magnetismLabel);
 
-    QLabel* snapSingleLabel = new QLabel(i18n("Snap Single:"));
+    QLabel* snapSingleLabel = new QLabel(i18n("Snap to Single Line"));
 
     m_chkOnlyOneAssistant = new QCheckBox(optionsWidget);
-    m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant, prevents snapping mess while using the infinite assistants."));
-    m_chkOnlyOneAssistant->setCheckState(Qt::Checked);//turn on by default.
+    m_chkOnlyOneAssistant->setToolTip(i18nc("@info:tooltip","Make it only snap to a single assistant line, prevents snapping mess while using the infinite assistants."));
+    m_chkOnlyOneAssistant->setCheckState(Qt::Checked); // turn on by default.
     connect(m_chkOnlyOneAssistant, SIGNAL(toggled(bool)), this, SLOT(setOnlyOneAssistantSnap(bool)));
     addOptionWidgetOption(m_chkOnlyOneAssistant, snapSingleLabel);
+
+    QLabel* snapEraserLabel = new QLabel(i18n("Snap Eraser"));
+
+    m_chkSnapEraser = new QCheckBox(optionsWidget);
+    m_chkSnapEraser->setToolTip(i18nc("@info:tooltip","Enable snapping when using eraser mode"));
+    m_chkSnapEraser->setCheckState(Qt::Unchecked); // turn off by default.
+    connect(m_chkSnapEraser, SIGNAL(toggled(bool)), this, SLOT(setSnapEraser(bool)));
+    addOptionWidgetOption(m_chkSnapEraser, snapEraserLabel);
 
     // set the assistant snapping options to hidden by default and toggle their visibility based based off snapping checkbox
     m_sliderMagnetism->setVisible(false);
     m_chkOnlyOneAssistant->setVisible(false);
-    snapSingleLabel->setVisible(false);
+    m_chkSnapEraser->setVisible(false);
     magnetismLabel->setVisible(false);
+    snapSingleLabel->setVisible(false);
+    snapEraserLabel->setVisible(false);
 
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_sliderMagnetism, SLOT(setVisible(bool)));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), m_chkOnlyOneAssistant, SLOT(setVisible(bool)));
-    connect(m_chkAssistant, SIGNAL(toggled(bool)), snapSingleLabel, SLOT(setVisible(bool)));
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), m_chkSnapEraser, SLOT(setVisible(bool)));
     connect(m_chkAssistant, SIGNAL(toggled(bool)), magnetismLabel, SLOT(setVisible(bool)));
-
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), snapSingleLabel, SLOT(setVisible(bool)));
+    connect(m_chkAssistant, SIGNAL(toggled(bool)), snapEraserLabel, SLOT(setVisible(bool)));
 
     KisConfig cfg(true);
 

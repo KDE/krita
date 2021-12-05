@@ -76,6 +76,7 @@ protected Q_SLOTS:
     void resetCursorStyle() override;
     void setAssistant(bool assistant);
     void setOnlyOneAssistantSnap(bool assistant);
+    void setSnapEraser(bool assistant);
     void slotDoResizeBrush(qreal newSize);
 
 private:
@@ -100,6 +101,7 @@ protected:
     bool m_assistant;
     double m_magnetism;
     bool m_only_one_assistant;
+    bool m_eraser_snapping;
 
 private:
     KisPaintingInformationBuilder *m_infoBuilder;

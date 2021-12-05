@@ -59,6 +59,7 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_assistant = false;
     m_magnetism = 1.0;
     m_only_one_assistant = true;
+    m_eraser_snapping = false;
 
     setSupportOutline(true);
     setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled
@@ -407,6 +408,12 @@ void KisToolFreehand::setOnlyOneAssistantSnap(bool assistant)
     m_only_one_assistant = assistant;
 }
 
+void KisToolFreehand::setSnapEraser(bool assistant)
+{
+    m_eraser_snapping = assistant;
+}
+
+
 void KisToolFreehand::slotDoResizeBrush(qreal newSize)
 {
     KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();
@@ -421,6 +428,7 @@ QPointF KisToolFreehand::adjustPosition(const QPointF& point, const QPointF& str
     if (m_assistant && static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()) {
         KisCanvas2* c = static_cast<KisCanvas2*>(canvas());
         c->paintingAssistantsDecoration()->setOnlyOneAssistantSnap(m_only_one_assistant);
+        c->paintingAssistantsDecoration()->setEraserSnap(m_eraser_snapping);
         QPointF ap = c->paintingAssistantsDecoration()->adjustPosition(point, strokeBegin);
         QPointF fp = (1.0 - m_magnetism) * point + m_magnetism * ap;
         // Report the final position back to the assistant so the guides

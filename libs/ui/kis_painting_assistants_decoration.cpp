@@ -17,6 +17,7 @@
 #include "kis_debug.h"
 #include "KisDocument.h"
 #include "kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_icon_utils.h"
 #include "KisViewManager.h"
 
@@ -29,6 +30,7 @@ struct KisPaintingAssistantsDecoration::Private {
         : assistantVisible(false)
         , outlineVisible(false)
         , snapOnlyOneAssistant(true)
+        , snapEraser(false)
         , firstAssistant(0)
         , aFirstStroke(false)
         , m_handleSize(14)
@@ -37,6 +39,7 @@ struct KisPaintingAssistantsDecoration::Private {
     bool assistantVisible;
     bool outlineVisible;
     bool snapOnlyOneAssistant;
+    bool snapEraser;
     KisPaintingAssistantSP firstAssistant;
     KisPaintingAssistantSP selectedAssistant;
     bool aFirstStroke;
@@ -67,6 +70,7 @@ KisPaintingAssistantsDecoration::KisPaintingAssistantsDecoration(QPointer<KisVie
     setOutlineVisible(true);
     setPriority(95);
     d->snapOnlyOneAssistant = true; //turn on by default.
+    d->snapEraser = false;
 }
 
 KisPaintingAssistantsDecoration::~KisPaintingAssistantsDecoration()
@@ -144,6 +148,11 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 
     if (assistants().empty()) {
         // No assisants, so no adjustment
+        return point;
+    }
+
+    if  (!d->snapEraser && d->m_canvas->resourceManager()->resource(KoCanvasResource::EraserMode).toBool()) {
+        // No snapping if eraser snapping is disabled and brush is an eraser
         return point;
     }
 
@@ -395,6 +404,11 @@ void KisPaintingAssistantsDecoration::setOutlineVisible(bool set)
 void KisPaintingAssistantsDecoration::setOnlyOneAssistantSnap(bool assistant)
 {
     d->snapOnlyOneAssistant = assistant;
+}
+
+void KisPaintingAssistantsDecoration::setEraserSnap(bool assistant)
+{
+    d->snapEraser = assistant;
 }
 
 bool KisPaintingAssistantsDecoration::assistantVisibility()

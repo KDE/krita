@@ -93,6 +93,9 @@ public:
     /// sets whether we snap to only one assistant
     void setOnlyOneAssistantSnap(bool assistant);
 
+    /// sets whether eraser brushes snap
+    void setEraserSnap(bool assistant);
+
     /// returns assistant visibility
     bool assistantVisibility();
 

@@ -20,6 +20,7 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_icon_utils.h"
 #include "KisViewManager.h"
+#include <KoCompositeOpRegistry.h>
 
 #include <QPainter>
 #include <QPainterPath>
@@ -152,7 +153,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     }
 
     if  (!d->snapEraser
-        && (d->m_canvas->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == "erase")) {
+        && (d->m_canvas->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE)) {
         // No snapping if eraser snapping is disabled and brush is an eraser
         return point;
     }

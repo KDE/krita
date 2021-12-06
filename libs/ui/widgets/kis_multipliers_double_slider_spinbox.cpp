@@ -29,7 +29,7 @@ KisMultipliersDoubleSliderSpinBox::KisMultipliersDoubleSliderSpinBox(QWidget* _p
     l->setContentsMargins(0, 0, 0, 0);
 
     d->slider = new KisDoubleSliderSpinBox(this);
-    d->slider->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Preferred);
+    d->slider->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
     l->addWidget(d->slider);
 
     d->cmbMultiplier = new QComboBox(this);

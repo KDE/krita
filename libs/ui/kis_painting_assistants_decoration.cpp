@@ -151,7 +151,8 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         return point;
     }
 
-    if  (!d->snapEraser && d->m_canvas->resourceManager()->resource(KoCanvasResource::EraserMode).toBool()) {
+    if  (!d->snapEraser
+        && (d->m_canvas->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == "erase")) {
         // No snapping if eraser snapping is disabled and brush is an eraser
         return point;
     }

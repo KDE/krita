@@ -413,7 +413,6 @@ void KisToolFreehand::setSnapEraser(bool assistant)
     m_eraser_snapping = assistant;
 }
 
-
 void KisToolFreehand::slotDoResizeBrush(qreal newSize)
 {
     KisPaintOpSettingsSP settings = currentPaintOpPreset()->settings();

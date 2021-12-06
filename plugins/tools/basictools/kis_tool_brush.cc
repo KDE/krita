@@ -473,7 +473,7 @@ QWidget * KisToolBrush::createOptionWidget()
     QLabel* snapEraserLabel = new QLabel(i18n("Snap Eraser"));
 
     m_chkSnapEraser = new QCheckBox(optionsWidget);
-    m_chkSnapEraser->setToolTip(i18nc("@info:tooltip","Enable snapping when using eraser mode"));
+    m_chkSnapEraser->setToolTip(i18nc("@info:tooltip","Enable snapping when using erasers"));
     m_chkSnapEraser->setCheckState(Qt::Unchecked); // turn off by default.
     connect(m_chkSnapEraser, SIGNAL(toggled(bool)), this, SLOT(setSnapEraser(bool)));
     addOptionWidgetOption(m_chkSnapEraser, snapEraserLabel);

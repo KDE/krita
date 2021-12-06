@@ -41,6 +41,9 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
     connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
 
+    connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceImport(QString)), this, SLOT(beginExternalResourceImport(QString)));
+    connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceImport(QString)), this, SLOT(endExternalResourceImport(QString)));
+
     d->resourceType = resourceType;
 
     bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
@@ -652,6 +655,21 @@ void KisAllResourcesModel::removeStorage(const QString &location)
     beginResetModel();
     resetQuery();
     endResetModel();
+}
+
+void KisAllResourcesModel::beginExternalResourceImport(const QString &resourceType)
+{
+    if (resourceType != d->resourceType) return;
+
+    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+}
+
+void KisAllResourcesModel::endExternalResourceImport(const QString &resourceType)
+{
+    if (resourceType != d->resourceType) return;
+
+    resetQuery();
+    endInsertRows();
 }
 
 struct KisResourceModel::Private

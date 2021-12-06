@@ -118,6 +118,12 @@ Q_SIGNALS:
     /// Emitted whenever a storage is removed
     void storageRemoved(const QString &location);
 
+    /// Emitted when the locator needs to add an embedded resource
+    void beginExternalResourceImport(const QString &resourceType);
+
+    /// Emitted when the locator finished importing the embedded resource
+    void endExternalResourceImport(const QString &resourceType);
+
 private:
 
     friend class KisTagResourceModel;

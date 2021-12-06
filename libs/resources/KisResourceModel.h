@@ -221,6 +221,23 @@ private Q_SLOTS:
     void addStorage(const QString &location);
     void removeStorage(const QString &location);
 
+    /**
+     * A special connection for KisResourceLocator, which can import
+     * a resource on its own (all other places are supposed to do that
+     * via KisResourceModel). This call is needed to make sure the
+     * internal query in the model is reset.
+     *
+     * WARNING: the resource is expected to be added to the **end**
+     * of the model, that is, its resourceId is expected to be greater
+     * than any existing resource.
+     */
+    void beginExternalResourceImport(const QString &resourceType);
+
+    /**
+     * \see beginExternalResourceImport
+     */
+    void endExternalResourceImport(const QString &resourceType);
+
 public:
 
     KoResourceSP resourceForId(int id) const;

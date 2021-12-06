@@ -190,7 +190,10 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
             QByteArray data = res.embeddedResource().data();
             QBuffer buffer(&data);
             buffer.open(QBuffer::ReadOnly);
+
+            emit beginExternalResourceImport(sig.type);
             importResource(sig.type, sig.filename, &buffer, false, "memory");
+            emit endExternalResourceImport(sig.type);
             break;
         }
         case KoResourceLoadResult::FailedLink:

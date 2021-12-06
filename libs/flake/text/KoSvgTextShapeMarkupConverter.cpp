@@ -461,10 +461,16 @@ QTextFormat findMostCommonFormat(const QList<QTextFormat> &allFormats)
 
 Q_GUI_EXPORT int qt_defaultDpi();
 
-qreal fixQtDpi(qreal value)
+qreal fixFromQtDpi(qreal value)
 {
     // HACK ALERT: see a comment in convertDocumentToSvg!
     return value * 72.0 / qt_defaultDpi();
+}
+
+qreal fixToQtDpi(qreal value)
+{
+    // HACK ALERT: see a comment in convertDocumentToSvg!
+    return value * qt_defaultDpi() / 72.0;
 }
 
 qreal calcLineWidth(const QTextBlock &block)
@@ -484,7 +490,7 @@ qreal calcLineWidth(const QTextBlock &block)
     }
     lineLayout.endLayout();
 
-    return fixQtDpi(lineLayout.boundingRect().width());
+    return fixFromQtDpi(lineLayout.boundingRect().width());
 }
 
 bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *doc, QString *svgText)
@@ -657,7 +663,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
         if (block.blockNumber() > 0) {
             qreal lineHeightPt =
-                    fixQtDpi(line.ascent()) - prevBlockAscent +
+                    fixFromQtDpi(line.ascent()) - prevBlockAscent +
                     (prevBlockAscent + prevBlockDescent) * qreal(prevBlockRelativeLineSpacing) / 100.0;
 
             const qreal currentLineSpacing = (info.numSkippedLines + 1) * lineHeightPt;
@@ -679,8 +685,8 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
             prevBlockRelativeLineSpacing = 100;
         }
 
-        prevBlockAscent = fixQtDpi(line.ascent());
-        prevBlockDescent = fixQtDpi(line.descent());
+        prevBlockAscent = fixFromQtDpi(line.ascent());
+        prevBlockDescent = fixFromQtDpi(line.descent());
 
 
         if (formats.size()>1) {
@@ -823,7 +829,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
                     if (xString.contains("pt")) {
                         xString = xString.remove("pt").trimmed();
                     }
-                    blockAbsoluteXOffset = KisDomUtils::toDouble(xString);
+                    blockAbsoluteXOffset = fixToQtDpi(KisDomUtils::toDouble(xString));
                 }
 
 
@@ -840,7 +846,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
                     KIS_SAFE_ASSERT_RECOVER_NOOP(formatStack.isEmpty() == (svgReader.name() == "text"));
 
-                    absoluteLineOffset = KisDomUtils::toDouble(dyString);
+                    absoluteLineOffset = fixToQtDpi(KisDomUtils::toDouble(dyString));
                     newBlock = absoluteLineOffset > 0;
                 }
 

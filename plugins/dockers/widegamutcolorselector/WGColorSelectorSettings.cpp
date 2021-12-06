@@ -94,6 +94,9 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.set(WGConfig::popupSize, m_ui->sbPopupSize->value());
     cfg.set(WGConfig::popupPatches.orientation, m_ui->rbPopupHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
     cfg.set(WGConfig::popupPatches.patchSize, QSize(m_ui->sbPatchWidth->value(), m_ui->sbPatchHeight->value()));
+    cfg.set(WGConfig::popupPatches.maxCount, m_ui->sbPopupMaxPatches->value());
+    cfg.set(WGConfig::popupPatches.rows, m_ui->sbPopupPatchesRows->value());
+    cfg.set(WGConfig::popupPatches.scrolling, static_cast<WGConfig::Scrolling>(m_ui->cbPopupScrolling->currentIndex()));
     // Shade Selector
     cfg.set(WGConfig::shadeSelectorUpdateOnExternalChanges, m_ui->chkShadeSelUpdateExternal->isChecked());
     cfg.set(WGConfig::shadeSelectorUpdateOnInteractionEnd, m_ui->chkShadeSelUpdateInteraction->isChecked());
@@ -103,6 +106,13 @@ void WGColorSelectorSettings::savePreferences() const
     lineConfig.resize(m_ui->sbShadeLineCount->value());
     cfg.setShadeSelectorLines(lineConfig);
     cfg.set(WGConfig::shadeSelectorLineHeight, m_ui->sbShadeLineHeight->value());
+    // Color History
+    cfg.set(WGConfig::colorHistoryEnabled, m_ui->historyGroupBox->isChecked());
+    cfg.set(WGConfig::colorHistory.orientation, m_ui->rbHistoryHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
+    cfg.set(WGConfig::colorHistory.patchSize, { m_ui->sbHistoryPatchWidth->value(), m_ui->sbHistoryPatchHeight->value() });
+    cfg.set(WGConfig::colorHistory.maxCount, m_ui->sbHistoryMaxPatches->value());
+    cfg.set(WGConfig::colorHistory.rows, m_ui->sbHistoryRows->value());
+    cfg.set(WGConfig::colorHistory.scrolling, static_cast<WGConfig::Scrolling>(m_ui->cbScrolling->currentIndex()));
 
     WGConfig::notifier()->notifyConfigChanged();
     WGConfig::notifier()->notifySelectorConfigChanged();
@@ -132,6 +142,9 @@ void WGColorSelectorSettings::loadPreferences()
     QSize colorPatchSize = cfg.get(WGConfig::popupPatches.patchSize);
     m_ui->sbPatchWidth->setValue(colorPatchSize.width());
     m_ui->sbPatchHeight->setValue(colorPatchSize.height());
+    m_ui->sbPopupMaxPatches->setValue(cfg.get(WGConfig::popupPatches.maxCount));
+    m_ui->sbPopupPatchesRows->setValue(cfg.get(WGConfig::popupPatches.rows));
+    m_ui->cbPopupScrolling->setCurrentIndex(static_cast<int>(cfg.get(WGConfig::popupPatches.scrolling)));
     // Shade Selector
     m_ui->chkShadeSelUpdateExternal->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnExternalChanges));
     m_ui->chkShadeSelUpdateInteraction->setChecked(cfg.get(WGConfig::shadeSelectorUpdateOnInteractionEnd));
@@ -139,6 +152,20 @@ void WGColorSelectorSettings::loadPreferences()
     m_shadeLineConfig = cfg.shadeSelectorLines();
     m_ui->sbShadeLineCount->setValue(m_shadeLineConfig.size());
     m_ui->sbShadeLineHeight->setValue(cfg.get(WGConfig::shadeSelectorLineHeight));
+    // Color History
+    m_ui->historyGroupBox->setChecked(cfg.get(WGConfig::colorHistoryEnabled));
+    patchOrientation = cfg.get(WGConfig::colorHistory.orientation);
+    if (patchOrientation == Qt::Horizontal) {
+        m_ui->rbHistoryHorizontal->setChecked(true);
+    } else {
+        m_ui->rbHistoryVertical->setChecked(true);
+    }
+    colorPatchSize = cfg.get(WGConfig::colorHistory.patchSize);
+    m_ui->sbHistoryPatchWidth->setValue(colorPatchSize.width());
+    m_ui->sbHistoryPatchHeight->setValue(colorPatchSize.height());
+    m_ui->sbHistoryMaxPatches->setValue(cfg.get(WGConfig::colorHistory.maxCount));
+    m_ui->sbHistoryRows->setValue(cfg.get(WGConfig::colorHistory.rows));
+    m_ui->cbScrolling->setCurrentIndex(static_cast<int>(cfg.get(WGConfig::colorHistory.scrolling)));
 }
 
 void WGColorSelectorSettings::loadDefaultPreferences()

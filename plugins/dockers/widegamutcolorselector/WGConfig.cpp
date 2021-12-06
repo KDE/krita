@@ -186,6 +186,8 @@ const ColorPatches popupPatches {
     { "popupPatches.scrolling", ScrollLongitudinal, ScrollNone, ScrollLaterally, true }
 };
 
+const GenericSetting<bool> colorHistoryEnabled {"colorHistoryEnabled", true};
+
 const GenericSetting<bool> quickSettingsEnabled { "quickSettingsMenuEnabled", true };
 const NumericSetting<int> popupSize { "popupSize", 300, 100, 500, true };
 

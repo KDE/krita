@@ -46,7 +46,9 @@ WGColorSelectorDock::WGColorSelectorDock()
     setWindowTitle(i18n("Wide Gamut Color Selector"));
 
     QWidget *mainWidget = new QWidget();
-    mainWidget->setLayout(new QVBoxLayout());
+    m_mainWidgetLayout = new QVBoxLayout(mainWidget);
+    m_verticalElementsLayout = new QHBoxLayout();
+    m_selectorAreaLayout = new QBoxLayout(QBoxLayout::TopToBottom);
 
     m_selector = new KisVisualColorSelector(mainWidget);
     m_selector->setMinimumSliderWidth(12);
@@ -71,18 +73,22 @@ WGColorSelectorDock::WGColorSelectorDock()
     m_configButton->setPopupMode(QToolButton::InstantPopup);
     headerLayout->addWidget(m_configButton);
 
-    mainWidget->layout()->addWidget(headerWidget);
-    mainWidget->layout()->addWidget(m_selector);
+    m_mainWidgetLayout->addWidget(headerWidget);
+    m_mainWidgetLayout->addLayout(m_verticalElementsLayout);
+    m_verticalElementsLayout->addLayout(m_selectorAreaLayout);
+
+    m_selectorAreaLayout->addWidget(m_selector);
 
     KisVisualColorModelSP model = m_selector->selectorModel();
     m_shadeSelector = new WGShadeSelector(model, this);
-    mainWidget->layout()->addWidget(m_shadeSelector);
+    m_selectorAreaLayout->addWidget(m_shadeSelector);
     connect(m_shadeSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
     // eventually it should made be a global history, not specific to any plugin
     m_colorHistory = new KisUniqueColorSet(this);
 
     m_history = new WGColorPatches(m_colorHistory, mainWidget);
+    m_history->setConfigSource(&WGConfig::colorHistory);
     mainWidget->layout()->addWidget(m_history);
     connect(m_history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_history, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
@@ -204,6 +210,30 @@ void WGColorSelectorDock::disconnectFromCanvas()
     m_canvas = 0;
 }
 
+void WGColorSelectorDock::updateLayout()
+{
+    WGConfig::Accessor cfg;
+
+    bool historyEnabled = cfg.get(WGConfig::colorHistoryEnabled);
+    Qt::Orientation historyOrientation = cfg.get(WGConfig::colorHistory.orientation);
+
+    m_verticalElementsLayout->removeWidget(m_history);
+    m_mainWidgetLayout->removeWidget(m_history);
+
+    if (historyEnabled) {
+        if (historyOrientation == Qt::Vertical) {
+            m_verticalElementsLayout->addWidget(m_history);
+        }
+        else {
+            m_mainWidgetLayout->addWidget(m_history);
+        }
+        m_history->show();
+    }
+    else {
+        m_history->hide();
+    }
+}
+
 void WGColorSelectorDock::slotConfigurationChanged()
 {
     WGConfig::Accessor cfg;
@@ -214,6 +244,7 @@ void WGColorSelectorDock::slotConfigurationChanged()
     KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selector->setConfiguration(&selectorCfg);
     m_shadeSelector->updateSettings();
+    m_history->updateSettings();
     // Quick settings menu
     if (cfg.get(WGConfig::quickSettingsEnabled)) {
         if (!m_configButton->menu()) {
@@ -246,6 +277,8 @@ void WGColorSelectorDock::slotConfigurationChanged()
         }
         connect(m_configButton, SIGNAL(clicked(bool)), SLOT(slotOpenSettings()), Qt::UniqueConnection);
     }
+
+    updateLayout();
 }
 
 void WGColorSelectorDock::slotDisplayConfigurationChanged()

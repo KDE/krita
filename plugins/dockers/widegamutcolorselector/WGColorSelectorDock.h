@@ -25,6 +25,7 @@ class WGColorPatches;
 class WGColorPreviewToolTip;
 class WGQuickSettingsWidget;
 class WGShadeSelector;
+class QBoxLayout;
 class QToolButton;
 class QVariant;
 class QWidgetAction;
@@ -54,6 +55,7 @@ protected:
     void setViewManager(KisViewManager* viewManager) override;
 
     void disconnectFromCanvas();
+    void updateLayout();
 
 private Q_SLOTS:
     void slotConfigurationChanged();
@@ -67,6 +69,11 @@ private Q_SLOTS:
     void slotOpenSettings();
 private:
     QPointer<KisCanvas2> m_canvas;
+    // Layouts
+    QBoxLayout *m_mainWidgetLayout {0};
+    QBoxLayout *m_selectorAreaLayout {0};
+    QBoxLayout *m_verticalElementsLayout {0};
+    // Selector Elements
     KisVisualColorSelector *m_selector {0};
     KisColorSourceToggle *m_toggle {0};
     KisSignalCompressor *m_colorChangeCompressor;

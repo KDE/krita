@@ -42,10 +42,10 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
     QSize sizeHint() const override;
 
-    bool colorAt(const QPoint &pos, KoColor &result) const;
     int indexAt(const QPoint &widgetPos) const;
-    int maxScroll() const;
     QRect patchRect(int gridIndex) const;
+    QPoint scrollOffset() const;
+    void updateMetrics();
 
 private:
     QPointer<KisUniqueColorSet> m_colors;
@@ -53,12 +53,16 @@ private:
     Qt::Orientation m_orientation {Qt::Horizontal};
     const WGConfig::ColorPatches *m_configSource {0};
     int m_numLines {1};
+    int m_patchesPerLine {30};
+    int m_totalLines {1};
     int m_patchWidth {16};
     int m_patchHeight {16};
     int m_patchCount {30};
     int m_scrollValue {0};
+    int m_maxScroll {0};
     int m_mouseIndex {-1};
     bool m_allowScrolling {true};
+    bool m_scrollInline {true};
 
 Q_SIGNALS:
     void sigColorChanged(const KoColor &color);

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -18,12 +18,12 @@
    <item>
     <widget class="QListView" name="sensorsList">
      <property name="spacing">
-      <number>2</number>
+      <number>0</number>
      </property>
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="widgetConfiguration"/>
+    <widget class="QWidget" name="widgetConfiguration" native="true"/>
    </item>
   </layout>
  </widget>

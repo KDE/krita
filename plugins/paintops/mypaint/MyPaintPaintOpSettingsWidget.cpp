@@ -38,6 +38,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("elliptical_dab_ratio", KisPaintOpOption::GENERAL, false, 1, 1, 10), "0", "100"), i18n("Elliptical Dab Ratio"), i18nc("Option Category", "Basic"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("direction_filter", KisPaintOpOption::GENERAL, false, 2, 0, 10), "0", "100"), i18n("Direction Filter"), i18nc("Option Category", "Basic"));
 
+    addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("change_color_h", KisPaintOpOption::GENERAL, false, 0.0, -2, 2), "0", "100"), i18n("Change Color H"), i18nc("Option Category", "Color"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("change_color_l", KisPaintOpOption::GENERAL, false, 0.0, -2, 2), "0", "100"), i18n("Change Color L"), i18nc("Option Category", "Color"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("change_color_v", KisPaintOpOption::GENERAL, false, 0.0, -2, 2), "0", "100"), i18n("Change Color V"), i18nc("Option Category", "Color"));
@@ -68,7 +69,6 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("stroke_threshold", KisPaintOpOption::GENERAL, false, 0, 0, 0.50), "0", "100"), i18n("Stroke Threshold"), i18nc("Option Category", "Stroke"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("custom_input", KisPaintOpOption::GENERAL, false, 0, -5, 5), "0", "100"), i18n("Custom Input"), i18nc("Option Category", "Custom"));
     addPaintOpOption(new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption("custom_input_slowness", KisPaintOpOption::GENERAL, false, 0, 0, 10), "0", "100"), i18n("Custom Input Slowness"), i18nc("Option Category", "Custom"));
-    addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
 
     connect(radiusOption->slider(), SIGNAL(valueChanged(qreal)), SLOT(updateBaseOptionRadius(qreal)));
     connect(hardnessOption->slider(), SIGNAL(valueChanged(qreal)), SLOT(updateBaseOptionHardness(qreal)));

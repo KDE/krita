@@ -338,7 +338,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 
                 stylesModel.addResource(layerStyle, storageLocation);
 
-                layer->setLayerStyle(layerStyle->cloneWithResourcesSnapshot());
+                layer->setLayerStyle(layerStyle->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(), 0));
             } else {
                 warnKrita << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
             }

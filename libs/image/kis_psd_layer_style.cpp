@@ -13,7 +13,10 @@
 #include <kis_assert.h>
 #include <kis_global.h>
 #include <psd_utils.h>
+#include "krita_container_utils.h"
 
+#include <KoCanvasResourcesInterface.h>
+#include <KoAbstractGradient.h>
 #include <KisRequiredResourcesOperators.h>
 #include <KoMD5Generator.h>
 
@@ -322,25 +325,92 @@ void KisPSDLayerStyle::setResourcesInterface(KisResourcesInterfaceSP resourcesIn
     d->resourcesInterface = resourcesInterface;
 }
 
-
-
-void KisPSDLayerStyle::createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface)
-{
-    KisRequiredResourcesOperators::createLocalResourcesSnapshot(this, globalResourcesInterface);
-}
-
 bool KisPSDLayerStyle::hasLocalResourcesSnapshot() const
 {
     return KisRequiredResourcesOperators::hasLocalResourcesSnapshot(this);
 }
 
-KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface) const
+KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const
 {
-    return KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPSDLayerStyleSP>(this, globalResourcesInterface);
+    KisPSDLayerStyleSP style = KisRequiredResourcesOperators::cloneWithResourcesSnapshot<KisPSDLayerStyleSP>(this, globalResourcesInterface);
+
+    /**
+     * Passing null into cloneWithResourcesSnapshot() means that we expect all the
+     * canvas resources to be backed into the style. That is exactly what we expect
+     * when loading the styles saved in the layers.
+     */
+
+    if (!requiredCanvasResources().isEmpty() && !canvasResourcesInterface) {
+        qWarning() << "KisPSDLayerStyle::cloneWithResourcesSnapshot: layer style"
+                   << name() << "is expected to have all the canvas resources"
+                   << "backed, but still depends on something";
+        qWarning() << ppVar(requiredCanvasResources());
+    }
+
+    if (canvasResourcesInterface) {
+
+        auto bakeGradient = [canvasResourcesInterface] (KoAbstractGradientSP gradient) {
+            if (gradient && !gradient->requiredCanvasResources().isEmpty()) {
+                gradient->bakeVariableColors(canvasResourcesInterface);
+            }
+        };
+
+        /// we are now operating on the cloned gradients, not on the original ones!
+        /// (therefore it is safe)
+
+        if (style->gradientOverlay()->effectEnabled()) {
+            bakeGradient(style->gradientOverlay()->gradient(style->resourcesInterface()));
+        }
+
+        if (style->innerGlow()->effectEnabled() && style->innerGlow()->fillType() == psd_fill_gradient) {
+            bakeGradient(style->innerGlow()->gradient(style->resourcesInterface()));
+        }
+
+        if (style->outerGlow()->effectEnabled() && style->outerGlow()->fillType() == psd_fill_gradient) {
+            bakeGradient(style->outerGlow()->gradient(style->resourcesInterface()));
+        }
+
+        if (style->stroke()->effectEnabled() && style->stroke()->fillType() == psd_fill_gradient) {
+            bakeGradient(style->stroke()->gradient(style->resourcesInterface()));
+        }
+    }
+
+    return style;
 }
 
 QList<KoResourceLoadResult> KisPSDLayerStyle::embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const
 {
     Q_UNUSED(globalResourcesInterface);
     return implicitCastList<KoResourceLoadResult>(QList<KoResourceSP>::fromVector(KisAslLayerStyleSerializer::fetchEmbeddedResources(this)));
+}
+
+QList<int> KisPSDLayerStyle::requiredCanvasResources() const
+{
+    QList<int> result;
+
+    auto addCanvasResources = [&result] (KoAbstractGradientSP gradient) {
+        if (gradient) {
+            result << gradient->requiredCanvasResources();
+        }
+    };
+
+    if (gradientOverlay()->effectEnabled()) {
+        addCanvasResources(gradientOverlay()->gradient(resourcesInterface()));
+    }
+
+    if (innerGlow()->effectEnabled() && innerGlow()->fillType() == psd_fill_gradient) {
+        addCanvasResources(innerGlow()->gradient(resourcesInterface()));
+    }
+
+    if (outerGlow()->effectEnabled() && outerGlow()->fillType() == psd_fill_gradient) {
+        addCanvasResources(outerGlow()->gradient(resourcesInterface()));
+    }
+
+    if (stroke()->effectEnabled() && stroke()->fillType() == psd_fill_gradient) {
+        addCanvasResources(stroke()->gradient(resourcesInterface()));
+    }
+
+    KritaUtils::makeContainerUnique(result);
+
+    return result;
 }

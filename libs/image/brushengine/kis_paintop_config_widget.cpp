@@ -54,19 +54,15 @@ void KisPaintOpConfigWidget::setResourcesInterface(KisResourcesInterfaceSP resou
     m_resourcesInterface = resourcesInterface;
 }
 
-void KisPaintOpConfigWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
-{
-    m_canvasResourcesInterface = canvasResourcesInterface;
-}
-
 KisResourcesInterfaceSP KisPaintOpConfigWidget::resourcesInterface() const
 {
     return m_resourcesInterface;
 }
 
-KoCanvasResourcesInterfaceSP KisPaintOpConfigWidget::canvasResourcesInterface() const
+void KisPaintOpConfigWidget::setView(KisViewManager *view)
 {
-    return m_canvasResourcesInterface;
+    Q_UNUSED(view);
+    KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "setView() is not expected to be used in PaintOp widgets, please use setCanvasResourcesInterface() instead!");
 }
 
 bool KisPaintOpConfigWidget::supportScratchBox() {

@@ -156,7 +156,13 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
         KisConfigWidget *generatorWidget = generator->createConfigurationWidget(this, m_paintDevice, false);
         if (generatorWidget) {
             ui()->widgetGeneratorContainer->layout()->addWidget(generatorWidget);
-            generatorWidget->setView(m_view);
+
+            if (m_view) {
+                generatorWidget->setView(m_view);
+            } else {
+                generatorWidget->setCanvasResourcesInterface(m_canvasResourcesInterface);
+            }
+
             if (config) {
                 generatorWidget->setConfiguration(config);
             } else {
@@ -173,8 +179,18 @@ void KisHalftoneConfigPageWidget::setGenerator(const QString & generatorId, KisF
 void KisHalftoneConfigPageWidget::setView(KisViewManager *view)
 {
     m_view = view;
+
     if (m_generatorWidget) {
         m_generatorWidget->setView(m_view);
+    }
+}
+
+void KisHalftoneConfigPageWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_canvasResourcesInterface = canvasResourcesInterface;
+
+    if (m_generatorWidget) {
+        m_generatorWidget->setCanvasResourcesInterface(canvasResourcesInterface);
     }
 }
 

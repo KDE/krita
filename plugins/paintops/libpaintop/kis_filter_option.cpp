@@ -149,6 +149,7 @@ void KisFilterOption::updateFilterConfigWidget()
             m_currentFilter->createConfigurationWidget(m_filterOptionWidget->grpFilterOptions, m_paintDevice, true);
 
         if (m_currentFilterConfigWidget) {
+            m_currentFilterConfigWidget->setCanvasResourcesInterface(canvasResourcesInterface());
             m_currentFilterConfigWidget->setConfiguration(m_currentFilter->defaultConfiguration(resourcesInterface()));
             m_layout->addWidget(m_currentFilterConfigWidget);
             m_filterOptionWidget->grpFilterOptions->updateGeometry();
@@ -197,6 +198,15 @@ void KisFilterOption::lodLimitations(KisPaintopLodLimitations *l) const
 
             l->blockers << KoID("filter-nonlinear", i18nc("PaintOp instant preview limitation", "\"%1\" does not support scaled preview (non-linear filter)", config->name()));
         }
+    }
+}
+
+void KisFilterOption::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    KisPaintOpOption::setCanvasResourcesInterface(canvasResourcesInterface);
+
+    if (m_currentFilterConfigWidget) {
+        m_currentFilterConfigWidget->setCanvasResourcesInterface(canvasResourcesInterface);
     }
 }
 

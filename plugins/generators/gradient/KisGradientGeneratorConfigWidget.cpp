@@ -202,12 +202,15 @@ KisPropertiesConfigurationSP KisGradientGeneratorConfigWidget::configuration() c
 void KisGradientGeneratorConfigWidget::setView(KisViewManager *view)
 {
     m_view = view;
-    if (view) {
-        KoCanvasResourcesInterfaceSP canvasResourcesInterface = m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-        m_ui.widgetGradientEditor->setCanvasResourcesInterface(canvasResourcesInterface);
-    } else {
-        m_ui.widgetGradientEditor->setCanvasResourcesInterface(nullptr);
-    }
+
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface = view ? view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface() : nullptr;
+    setCanvasResourcesInterface(canvasResourcesInterface);
+}
+
+void KisGradientGeneratorConfigWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_ui.widgetGradientEditor->setCanvasResourcesInterface(canvasResourcesInterface);
+    KisConfigWidget::setCanvasResourcesInterface(canvasResourcesInterface);
 }
 
 void KisGradientGeneratorConfigWidget::slot_radioButtonEndPositionCartesianCoordinates_toggled(bool enabled)

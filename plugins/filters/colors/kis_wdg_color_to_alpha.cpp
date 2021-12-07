@@ -15,6 +15,7 @@
 #include <KoToolManager.h>
 
 #include <KisViewManager.h>
+#include <kis_canvas2.h>
 #include <kis_canvas_resource_provider.h>
 #include <filter/kis_filter.h>
 #include <filter/kis_filter_configuration.h>
@@ -53,6 +54,9 @@ KisWdgColorToAlpha::~KisWdgColorToAlpha()
 void KisWdgColorToAlpha::setView(KisViewManager *view)
 {
     m_view = view;
+
+    KoCanvasResourcesInterfaceSP canvasResources = view ? view->canvasBase()->resourceManager()->canvasResourcesInterface() : nullptr;
+    setCanvasResourcesInterface(canvasResources);
 }
 
 void KisWdgColorToAlpha::slotFgColorChanged(const KoColor &color)

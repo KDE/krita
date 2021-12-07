@@ -27,9 +27,22 @@ void KisConfigWidget::slotConfigChanged()
     }
 }
 
+/// TODO: remove this method from KisConfigWidget, since
+/// KisViewManager is from kritaui, but we are in
+/// kritaimage
 void KisConfigWidget::setView(KisViewManager *view)
 {
     if (!view) {
         warnKrita << "KisConfigWidget::setView has got view == 0. That's a bug! Please report it!";
     }
+}
+
+void KisConfigWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_canvasResourcesInterface = canvasResourcesInterface;
+}
+
+KoCanvasResourcesInterfaceSP KisConfigWidget::canvasResourcesInterface() const
+{
+    return m_canvasResourcesInterface;
 }

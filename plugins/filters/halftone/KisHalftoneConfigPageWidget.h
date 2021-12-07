@@ -20,6 +20,9 @@ class KisViewManager;
 
 class KisHalftoneFilterConfiguration;
 
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
 class KisHalftoneConfigPageWidget : public QWidget
 {
     Q_OBJECT
@@ -35,6 +38,7 @@ public:
     void configuration(KisHalftoneFilterConfigurationSP config, const QString & prefix) const;
 
     void setView(KisViewManager *view);
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
     Ui_HalftoneConfigPageWidget m_ui;
@@ -42,6 +46,7 @@ private:
     QStringList m_generatorIds;
     KisConfigWidget *m_generatorWidget;
     KisViewManager *m_view;
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 
     const Ui_HalftoneConfigPageWidget* ui() const;
     Ui_HalftoneConfigPageWidget* ui();

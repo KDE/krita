@@ -300,7 +300,17 @@ void KisPropertiesConfiguration::dump() const
 {
     QMap<QString, QVariant>::ConstIterator it;
     for (it = d->properties.constBegin(); it != d->properties.constEnd(); ++it) {
-        qDebug() << it.key() << " = " << it.value() << it.value().typeName();
+        if (it->type() == QVariant::ByteArray) {
+            QByteArray ba = it->toByteArray();
+
+            if (ba.size() > 32) {
+                qDebug() << it.key() << " = " << QString("...skipped total %1 bytes...").arg(ba.size()) << it.value().typeName();
+            } else {
+                qDebug() << it.key() << " = " << it.value() << it.value().typeName();
+            }
+        } else {
+            qDebug() << it.key() << " = " << it.value() << it.value().typeName();
+        }
     }
 
 }

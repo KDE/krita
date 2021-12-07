@@ -437,7 +437,6 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
                 }
             }
         }
-        KisApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
 #endif
         if (locale.name() != QStringLiteral("en")) {
             QStringList uiLanguages = locale.uiLanguages();
@@ -528,6 +527,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
 #ifdef Q_OS_ANDROID
+    KisApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+
     // TODO: remove "share" - sh_zam
     // points to /data/data/org.krita/files/share/locale
     KLocalizedString::addDomainLocaleDir("krita", QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/share/locale");

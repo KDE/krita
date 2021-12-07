@@ -216,7 +216,9 @@ KisTextureProperties::KisTextureProperties(int levelOfDetail, KisBrushTextureFla
 
 void KisTextureProperties::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
-    if (setting->getString("Texture/Pattern/PatternMD5").isEmpty()) {
+    if (!setting->hasProperty("Texture/Pattern/PatternMD5") &&
+        !setting->hasProperty("Texture/Pattern/PatternFileName")) {
+
         m_enabled = false;
         return;
     }

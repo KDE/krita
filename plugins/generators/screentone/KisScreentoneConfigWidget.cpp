@@ -14,6 +14,7 @@
 #include <kis_signals_blocker.h>
 #include <kis_generator_registry.h>
 #include <KisViewManager.h>
+#include <kis_canvas_resource_provider.h>
 #include <KoUnit.h>
 
 #include "KisScreentoneConfigWidget.h"
@@ -269,6 +270,9 @@ void KisScreentoneConfigWidget::setView(KisViewManager *view)
 {
     m_view = view;
     m_ui.buttonResolutionFromImage->setEnabled(true);
+
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface = view ? view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface() : nullptr;
+    setCanvasResourcesInterface(canvasResourcesInterface);
 }
 
 void KisScreentoneConfigWidget::setupPatternComboBox()

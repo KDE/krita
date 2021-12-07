@@ -65,6 +65,8 @@ public:
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
+
 private Q_SLOTS:
 
     void setCurrentFilter(const KoID&);

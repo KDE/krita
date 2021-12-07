@@ -13,6 +13,9 @@
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
 #include <kis_signals_blocker.h>
+#include <KisViewManager.h>
+#include <kis_canvas_resource_provider.h>
+
 
 #include "KisHalftoneConfigWidget.h"
 #include "KisHalftoneConfigPageWidget.h"
@@ -180,6 +183,21 @@ void KisHalftoneConfigWidget::setView(KisViewManager *view)
     for (KisHalftoneConfigPageWidget *configPageWidget : m_channelWidgets) {
         if (configPageWidget) {
             configPageWidget->setView(view);
+        }
+    }
+
+    KoCanvasResourcesInterfaceSP canvasResourcesInterface = view ? view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface() : nullptr;
+    setCanvasResourcesInterface(canvasResourcesInterface);
+}
+
+void KisHalftoneConfigWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    if (m_intensityWidget) {
+        m_intensityWidget->setCanvasResourcesInterface(canvasResourcesInterface);
+    }
+    for (KisHalftoneConfigPageWidget *configPageWidget : m_channelWidgets) {
+        if (configPageWidget) {
+            configPageWidget->setCanvasResourcesInterface(canvasResourcesInterface);
         }
     }
 }

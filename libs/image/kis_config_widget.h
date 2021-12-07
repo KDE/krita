@@ -13,6 +13,10 @@
 #include "kis_signal_compressor.h"
 #include <kis_properties_configuration.h>
 
+class KoCanvasResourcesInterface;
+using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
+
+
 class KisViewManager;
 
 /**
@@ -51,6 +55,9 @@ public:
      */
     virtual void setView(KisViewManager *view);
 
+    virtual void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    virtual KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
+
 Q_SIGNALS:
 
     /**
@@ -74,6 +81,7 @@ private Q_SLOTS:
 
 private:
     KisSignalCompressor m_compressor;
+    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 };
 
 

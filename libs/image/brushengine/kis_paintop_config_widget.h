@@ -17,9 +17,6 @@
 class KisResourcesInterface;
 using KisResourcesInterfaceSP = QSharedPointer<KisResourcesInterface>;
 
-class KoCanvasResourcesInterface;
-using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
-
 class KisPaintopLodLimitations;
 
 /**
@@ -51,10 +48,10 @@ public:
     virtual void setImage(KisImageWSP image);
     virtual void setNode(KisNodeWSP node);
     virtual void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
-    virtual void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     KisResourcesInterfaceSP resourcesInterface() const;
-    KoCanvasResourcesInterfaceSP canvasResourcesInterface() const;
+
+    void setView(KisViewManager *view) override;
 
     /**
      * Some paintops are more complicated and require full canvas with layers, projections and KisImage etc.
@@ -68,7 +65,6 @@ protected:
     KisNodeWSP m_node;
 
     KisResourcesInterfaceSP m_resourcesInterface;
-    KoCanvasResourcesInterfaceSP m_canvasResourcesInterface;
 
     mutable int m_isInsideUpdateCall;
 };

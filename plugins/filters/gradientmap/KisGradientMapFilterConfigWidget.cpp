@@ -10,7 +10,7 @@
 #include <filter/kis_filter_configuration.h>
 #include <KisGlobalResourcesInterface.h>
 #include <KisViewManager.h>
-#include <kis_canvas_resource_provider.h>
+#include "kis_canvas_resource_provider.h"
 #include <kis_signals_blocker.h>
 
 #include "KisGradientMapFilterConfigWidget.h"
@@ -19,7 +19,6 @@
 
 KisGradientMapFilterConfigWidget::KisGradientMapFilterConfigWidget(QWidget *parent, Qt::WindowFlags f)
     : KisConfigWidget(parent, f)
-    , m_view(nullptr)
 {
     m_ui.setupUi(this);
 
@@ -44,10 +43,10 @@ KisPropertiesConfigurationSP KisGradientMapFilterConfigWidget::configuration() c
     KisGradientMapFilterConfiguration *config = new KisGradientMapFilterConfiguration(KisGlobalResourcesInterface::instance());
     
     KoAbstractGradientSP gradient = m_ui.widgetGradientEditor->gradient();
-    if (gradient && m_view && m_view->canvasResourceProvider() && m_view->canvasResourceProvider()->resourceManager()) {
-        KoCanvasResourcesInterfaceSP canvasResourcesInterface =
-            m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-        gradient->bakeVariableColors(canvasResourcesInterface);
+
+    KIS_SAFE_ASSERT_RECOVER_NOOP(canvasResourcesInterface());
+    if (gradient && canvasResourcesInterface()) {
+        gradient->bakeVariableColors(canvasResourcesInterface());
     }
     config->setGradient(gradient);
 
@@ -67,15 +66,13 @@ void KisGradientMapFilterConfigWidget::setConfiguration(const KisPropertiesConfi
         KisSignalsBlocker signalsBlocker(this);
 
         KoAbstractGradientSP fallbackGradient = nullptr;
-        if (m_view) {
-            KoCanvasResourcesInterfaceSP canvasResourcesInterface =
-                m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-            if (canvasResourcesInterface) {
-                KoAbstractGradientSP currentGradient =
-                    canvasResourcesInterface->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
-                if (currentGradient) {
-                    fallbackGradient = currentGradient->clone().dynamicCast<KoAbstractGradient>();
-                }
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(canvasResourcesInterface());
+        if (canvasResourcesInterface()) {
+            KoAbstractGradientSP currentGradient =
+                    canvasResourcesInterface()->resource(KoCanvasResource::CurrentGradient).value<KoAbstractGradientSP>();
+            if (currentGradient) {
+                fallbackGradient = currentGradient->clone().dynamicCast<KoAbstractGradient>();
             }
         }
         m_ui.widgetGradientEditor->setGradient(filterConfig->gradient(fallbackGradient));
@@ -88,11 +85,12 @@ void KisGradientMapFilterConfigWidget::setConfiguration(const KisPropertiesConfi
 
 void KisGradientMapFilterConfigWidget::setView(KisViewManager *view)
 {
-    m_view = view;
-    if (view) {
-        KoCanvasResourcesInterfaceSP canvasResourcesInterface = m_view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface();
-        m_ui.widgetGradientEditor->setCanvasResourcesInterface(canvasResourcesInterface);
-    } else {
-        m_ui.widgetGradientEditor->setCanvasResourcesInterface(nullptr);
-    }
+    KoCanvasResourcesInterfaceSP canvasResources = view ? view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface() : nullptr;
+    setCanvasResourcesInterface(canvasResources);
+}
+
+void KisGradientMapFilterConfigWidget::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+{
+    m_ui.widgetGradientEditor->setCanvasResourcesInterface(canvasResourcesInterface);
+    KisConfigWidget::setCanvasResourcesInterface(canvasResourcesInterface);
 }

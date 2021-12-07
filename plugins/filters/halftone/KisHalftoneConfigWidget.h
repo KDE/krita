@@ -32,6 +32,7 @@ public:
     void setConfiguration(const KisPropertiesConfigurationSP config) override;
 
     void setView(KisViewManager *view) override;
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
     Ui_HalftoneConfigWidget m_ui;

@@ -104,11 +104,6 @@ public:
     void setResourcesInterface(KisResourcesInterfaceSP resourcesInterface);
 
     /**
-     * \see KisRequiredResourcesOperators::createLocalResourcesSnapshot
-     */
-    void createLocalResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr);
-
-    /**
      * \see KisRequiredResourcesOperators::hasLocalResourcesSnapshot
      */
     bool hasLocalResourcesSnapshot() const;
@@ -116,9 +111,11 @@ public:
     /**
      * \see KisRequiredResourcesOperators::cloneWithResourcesSnapshot
      */
-    KisPSDLayerStyleSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface = nullptr) const;
+    KisPSDLayerStyleSP cloneWithResourcesSnapshot(KisResourcesInterfaceSP globalResourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) const;
 
     QList<KoResourceLoadResult> embeddedResources(KisResourcesInterfaceSP globalResourcesInterface) const override;
+
+    QList<int> requiredCanvasResources() const override;
 
 private:
     struct Private;

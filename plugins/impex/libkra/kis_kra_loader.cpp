@@ -912,7 +912,7 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
             if (!uuid.isNull()) {
                 KisPSDLayerStyleSP dumbLayerStyle(new KisPSDLayerStyle());
                 dumbLayerStyle->setUuid(uuid);
-                layer->setLayerStyle(dumbLayerStyle->cloneWithResourcesSnapshot());
+                layer->setLayerStyle(dumbLayerStyle->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(), 0));
             } else {
                 warnKrita << "WARNING: Layer style for layer" << layer->name() << "contains invalid UUID" << uuidString;
             }

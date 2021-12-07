@@ -1323,7 +1323,7 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
 
             Q_FOREACH (KisPSDLayerStyleSP style, styles) {
                 if (style->uuid() == uuid) {
-                    layer->setLayerStyle(style->cloneWithResourcesSnapshot());
+                    layer->setLayerStyle(style->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(), 0));
                     found = true;
                     break;
                 }

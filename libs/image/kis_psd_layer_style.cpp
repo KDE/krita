@@ -349,14 +349,26 @@ KisPSDLayerStyleSP KisPSDLayerStyle::cloneWithResourcesSnapshot(KisResourcesInte
 
     if (canvasResourcesInterface) {
 
-        auto bakeGradient = [canvasResourcesInterface] (KoAbstractGradientSP gradient) {
+        QSharedPointer<KisLocalStrokeResources> localResourcesSnapshot =
+             style->resourcesInterface().dynamicCast<KisLocalStrokeResources>();
+        KIS_ASSERT_RECOVER_RETURN_VALUE(localResourcesSnapshot, style);
+
+        auto bakeGradient = [canvasResourcesInterface, localResourcesSnapshot] (KoAbstractGradientSP gradient) {
             if (gradient && !gradient->requiredCanvasResources().isEmpty()) {
-                gradient->bakeVariableColors(canvasResourcesInterface);
+
+                /**
+                 * Since we haven't cloned the required resources when putting them
+                 * into the local storage (which is rather questionable), we need to
+                 * clone the gradients explicitly before modification.
+                 */
+
+                KoAbstractGradientSP clonedGradient =
+                    gradient->cloneAndBakeVariableColors(canvasResourcesInterface);
+
+                localResourcesSnapshot->removeResource(gradient);
+                localResourcesSnapshot->addResource(clonedGradient);
             }
         };
-
-        /// we are now operating on the cloned gradients, not on the original ones!
-        /// (therefore it is safe)
 
         if (style->gradientOverlay()->effectEnabled()) {
             bakeGradient(style->gradientOverlay()->gradient(style->resourcesInterface()));

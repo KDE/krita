@@ -114,8 +114,11 @@ private Q_SLOTS:
     void slotColorLabelChanged(int index);
     void slotUpdateIcons();
     void toggleActiveLayerSolo();
+    void updateLayerOpMenu(const QModelIndex &index, QMenu &menu);
 
     void slotAddLayerBnClicked();
+    void slotLayerOpMenuOpened();
+    void slotLayerOpMenuClosed();
 
     void updateThumbnail();
     void updateAvailableLabels();
@@ -141,6 +144,7 @@ private:
     QPointer<KisCanvas2> m_canvas;
     QScopedPointer<KisSelectionActionsAdapter> m_selectionActionsAdapter;
     QMenu *m_newLayerMenu;
+    QMenu *m_opLayerMenu;
     KisImageWSP m_image;
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeFilterProxyModel> m_filteringModel;
@@ -191,6 +195,7 @@ public:
     DockPosition defaultDockPosition() const override {
         return DockRight;
     }
+
 };
 
 #endif // KIS_LAYERBOX_H

@@ -746,6 +746,9 @@ if NOT "%KRITA_NINJA_DIR%" == "" (
 if NOT "%SVN_DIR%" == "" (
     set PATH=%PATH%;%SVN_DIR%
 )
+if NOT "%PERL_DIR%" == "" (
+    set PATH=%PATH%;%PERL_DIR%
+)
 
 echo Creating dirs...
 if NOT "%ARG_SKIP_DEPS%" == "1" (

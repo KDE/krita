@@ -1348,8 +1348,6 @@ void KisPaintopBox::slotReloadPreset()
 }
 void KisPaintopBox::slotGuiChangedCurrentPreset() // Called only when UI is changed and not when preset is changed
 {
-    ENTER_FUNCTION();
-
     KisPaintOpPresetSP preset = m_resourceProvider->currentPreset();
 
     {

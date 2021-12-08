@@ -48,10 +48,10 @@ public:
     void setName(const QString &value);
 
     QUuid uuid() const;
-    void setUuid(const QUuid &value) const;
+    void setUuid(const QUuid &value);
 
     QString psdUuid() const;
-    void setPsdUuid(const QString &value) const;
+    void setPsdUuid(const QString &value);
 
     QPair<QString, QString> resourceType() const override
     {

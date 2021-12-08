@@ -189,10 +189,10 @@ QUuid KisPSDLayerStyle::uuid() const
     return d->uuid;
 }
 
-void KisPSDLayerStyle::setUuid(const QUuid &value) const
+void KisPSDLayerStyle::setUuid(const QUuid &value)
 {
     d->uuid = value;
-    const_cast<KisPSDLayerStyle*>(this)->setMD5Sum(KoMD5Generator::generateHash(value.toByteArray()));
+    this->setMD5Sum(KoMD5Generator::generateHash(value.toByteArray()));
 }
 
 QString KisPSDLayerStyle::psdUuid() const
@@ -200,7 +200,7 @@ QString KisPSDLayerStyle::psdUuid() const
     return uuid().toString().mid(1, 36);
 }
 
-void KisPSDLayerStyle::setPsdUuid(const QString &value) const
+void KisPSDLayerStyle::setPsdUuid(const QString &value)
 {
     setUuid(QUuid(QString("{%1}").arg(value)));
 }

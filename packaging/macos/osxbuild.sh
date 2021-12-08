@@ -632,6 +632,8 @@ build_x86_64 () {
     else
         env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps"
     fi
+    osxbuild_error="${?}"
+    print_if_error "Error while building x86_64 deps" "exit"
 
     rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
 }
@@ -648,6 +650,8 @@ build_arm64 () {
     else
         env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh builddeps"
     fi
+    osxbuild_error="${?}"
+    print_if_error "Error while building arm64 deps" "exit"
 
     rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
 }
@@ -701,11 +705,15 @@ universal_plugin_build() {
 
     log "building plugins_x86"
     env /usr/bin/arch -x86_64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    osxbuild_error="${?}"
+    print_if_error "Error while building x86_64 plugins" "exit"
     rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_X86_64_DIR}"
 
     log "building plugins_arm64"
     # force arm64 build even in x86_64 envs
     env /usr/bin/arch -arm64 /bin/zsh -c "${BUILDROOT}/krita/packaging/macos/osxbuild.sh buildplugins"
+    osxbuild_error="${?}"
+    print_if_error "Error while building arm64 plugins" "exit"
     rsync -aq "${KIS_INSTALL_DIR}/" "${DEPBUILD_ARM64_DIR}"
 
     # sync files to universal install dir.

@@ -280,9 +280,7 @@ void KisDlgLayerStyle::slotNewStyle()
     if (!success)
         return;
 
-    KisPSDLayerStyleSP style = this->style();
-    KisPSDLayerStyleSP clone = style->clone().dynamicCast<KisPSDLayerStyle>();
-    style->setName(styleName);
+    KisPSDLayerStyleSP clone = this->style()->clone().dynamicCast<KisPSDLayerStyle>();
     clone->setName(styleName);
     clone->setUuid(QUuid::createUuid());
     clone->setFilename(clone->uuid().toString());

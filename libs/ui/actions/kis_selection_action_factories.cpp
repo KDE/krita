@@ -222,21 +222,15 @@ void KisFillActionFactory::run(const QString &fillSource, KisViewManager *view)
         resources->setOpacity(1.0);
     }
 
-    KisProcessingVisitorSP visitor =
+    FillProcessingVisitor *visitor =
         new FillProcessingVisitor(resources->image()->projection(),
-                                  QPoint(0, 0), // start position
                                   selection,
-                                  resources,
-                                  false, // fast mode
-                                  usePattern,
-                                  true, // fill only selection,
-                                  false,
-                                  0, // feathering radius
-                                  0, // sizemod
-                                  80, // threshold,
-                                  100, // softness
-                                  false, // use unmerged
-                                  useBgColor);
+                                  resources);
+
+    visitor->setSeedPoint(QPoint(0, 0));
+    visitor->setUsePattern(usePattern);
+    visitor->setSelectionOnly(true);
+    visitor->setUseBgColor(useBgColor);
 
     applicator.applyVisitor(visitor,
                             KisStrokeJobData::SEQUENTIAL,

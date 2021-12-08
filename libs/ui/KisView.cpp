@@ -708,22 +708,17 @@ void KisView::dropEvent(QDropEvent *event)
         }
         KIS_ASSERT(referencePaintDevice);
         
-        KisProcessingVisitorSP visitor = new FillProcessingVisitor(
-                                             referencePaintDevice,
-                                             imgCursorPos, // start position
-                                             selection(),
-                                             resources,
-                                             useFastMode, // fast mode
-                                             false,
-                                             fillSelectionOnly, // fill only selection,
-                                             useSelectionAsBoundary,
-                                             featherAmount, // feathering radius
-                                             growSelection, // sizemod
-                                             thresholdAmount, // threshold,
-                                             softness, // softness
-                                             false, // use unmerged
-                                             false // use bg
-                                         );
+        FillProcessingVisitor *visitor = new FillProcessingVisitor(referencePaintDevice,
+                                                                   selection(),
+                                                                   resources);
+        visitor->setSeedPoint(imgCursorPos);
+        visitor->setUseFastMode(useFastMode);
+        visitor->setSelectionOnly(fillSelectionOnly);
+        visitor->setUseSelectionAsBoundary(useSelectionAsBoundary);
+        visitor->setFeather(featherAmount);
+        visitor->setSizeMod(growSelection);
+        visitor->setFillThreshold(thresholdAmount);
+        visitor->setSoftness(softness);
         
         applicator.applyVisitor(visitor,
                                 KisStrokeJobData::SEQUENTIAL,

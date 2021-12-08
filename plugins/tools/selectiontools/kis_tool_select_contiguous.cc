@@ -153,6 +153,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setSoftness(softness);
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(sizemod);
+                    fillpainter.setUseCompositioning(true);
 
                     useSelectionAsBoundary &=
                         existingSelection &&

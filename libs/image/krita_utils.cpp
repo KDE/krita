@@ -575,4 +575,39 @@ namespace KritaUtils
         }
     }
 
+    QVector<QPoint> rasterizeHLine(const QPoint &startPoint, const QPoint &endPoint)
+    {
+        QVector<QPoint> points;
+        rasterizeHLine(startPoint, endPoint, [&points](const QPoint &point) { points.append(point); });
+        return points;
+    }
+
+    QVector<QPoint> rasterizeVLine(const QPoint &startPoint, const QPoint &endPoint)
+    {
+        QVector<QPoint> points;
+        rasterizeVLine(startPoint, endPoint, [&points](const QPoint &point) { points.append(point); });
+        return points;
+    }
+
+    QVector<QPoint> rasterizeLineDDA(const QPoint &startPoint, const QPoint &endPoint)
+    {
+        QVector<QPoint> points;
+        rasterizeLineDDA(startPoint, endPoint, [&points](const QPoint &point) { points.append(point); });
+        return points;
+    }
+
+    QVector<QPoint> rasterizePolylineDDA(const QVector<QPoint> &polylinePoints)
+    {
+        QVector<QPoint> points;
+        rasterizePolylineDDA(polylinePoints, [&points](const QPoint &point) { points.append(point); });
+        return points;
+    }
+
+    QVector<QPoint> rasterizePolygonDDA(const QVector<QPoint> &polygonPoints)
+    {
+        QVector<QPoint> points;
+        rasterizePolygonDDA(polygonPoints, [&points](const QPoint &point) { points.append(point); });
+        return points;
+    }
+
 }

@@ -347,24 +347,26 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
-    gc.setSoftness(m_softness);
+    gc.setSoftness(m_useCompositioning ? m_softness : 0);
     if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
         gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
     } else {
         gc.fillSelection(pixelSelection);
     }
 
-    if (m_sizemod > 0) {
-        KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
-        biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
-    }
-    else if (m_sizemod < 0) {
-        KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
-        tiny.process(pixelSelection, pixelSelection->selectedRect());
-    }
-    if (m_feather > 0) {
-        KisFeatherSelectionFilter feathery(m_feather);
-        feathery.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+    if (m_useCompositioning) {
+        if (m_sizemod > 0) {
+            KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
+            biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+        }
+        else if (m_sizemod < 0) {
+            KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
+            tiny.process(pixelSelection, pixelSelection->selectedRect());
+        }
+        if (m_feather > 0) {
+            KisFeatherSelectionFilter feathery(m_feather);
+            feathery.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+        }
     }
 
     return pixelSelection;

@@ -130,23 +130,29 @@ else()
     if (NOT RUSTC_BINARY_PATH)
         message(WARNING "Rust compiler was not found, see https://www.rust-lang.org/")
     endif()
-    message(WARNING "Building alternative AVIF support using libaom.")
 
-    ExternalProject_Add(
-        ext_libaom
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    find_package(Perl)
+    if(PERL_FOUND)
+        message(WARNING "Building alternative AVIF support using libaom.")
 
-        URL https://storage.googleapis.com/aom-releases/libaom-3.2.0.tar.gz
-        URL_HASH SHA256=8fa7418bf4ea12ef6dcf0eeb21cba932b71c6079ffdf7b9d13cf907fa46c0568
+        ExternalProject_Add(
+            ext_libaom
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
+            URL https://storage.googleapis.com/aom-releases/libaom-3.2.0.tar.gz
+            URL_HASH SHA256=8fa7418bf4ea12ef6dcf0eeb21cba932b71c6079ffdf7b9d13cf907fa46c0568
 
-        UPDATE_COMMAND ""
+            CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
 
-        DEPENDS ext_nasm
-    )
+            UPDATE_COMMAND ""
 
-    set(EXTRA_AVIF_DEPS ext_libaom)
+            DEPENDS ext_nasm
+        )
+
+        set(EXTRA_AVIF_DEPS ext_libaom)
+    else(PERL_FOUND)
+        message(WARNING "Perl not available, disabling AVIF support.")
+    endif(PERL_FOUND)
 endif()
 
 # Incorporate Handbrake's extensions for building x265

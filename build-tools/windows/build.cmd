@@ -470,7 +470,7 @@ if "%KRITA_NINJA_DIR%" == "" (
         call :get_dir_path KRITA_NINJA_DIR "!KRITA_NINJA_EXE_DIR!"
         echo Found Ninja on PATH: !KRITA_NINJA_DIR!
     )
-) else echo Git found on %KRITA_NINJA_DIR%
+) else echo Ninja found on %KRITA_NINJA_DIR%
 
 if "%SVN_DIR%" == "" (
     call :find_on_path SVN_EXE_DIR svn.exe
@@ -479,6 +479,14 @@ if "%SVN_DIR%" == "" (
         echo Found SVN on PATH: !SVN_DIR!
     )
 ) else echo SVN found on %SVN_DIR%
+
+if "%PERL_DIR%" == "" (
+    call :find_on_path PERL_EXE_DIR perl.exe
+    if NOT "!PERL_EXE_DIR!" == "" (
+        call :get_dir_path PERL_DIR "!PERL_EXE_DIR!"
+        echo Found Perl on PATH: !PERL_DIR!
+    )
+) else echo Perl found on %PERL_DIR%
 
 if "%ARG_SKIP_DEPS%" == "1" goto skip_windows_sdk_dir_check
 

@@ -13,6 +13,7 @@
 
 #include <KoCompositeOp.h>
 #include <KoID.h>
+#include "kis_signals_blocker.h"
 
 #include <filter/kis_filter_registry.h>
 #include <filter/kis_filter.h>
@@ -60,6 +61,7 @@ KisFilterOption::KisFilterOption()
     m_filterOptionWidget->filtersList->setIDList(l2);
     connect(m_filterOptionWidget->filtersList, SIGNAL(activated(KoID)), SLOT(setCurrentFilter(KoID)));
     if (!l2.empty()) {
+        KisSignalsBlocker b(this);
         setCurrentFilter(l2.first());
     }
 
@@ -104,8 +106,12 @@ void KisFilterOption::setNode(KisNodeWSP node)
                 if (m_currentFilterConfigWidget) {
                     configuration = m_currentFilterConfigWidget->configuration();
                 }
+
+                KisSignalsBlocker b(this);
                 setCurrentFilter(KoID(m_currentFilter->id()));
+
                 if (configuration) {
+                    KisSignalsBlocker b(m_currentFilterConfigWidget);
                     m_currentFilterConfigWidget->setConfiguration(configuration);
                 }
             }
@@ -149,6 +155,7 @@ void KisFilterOption::updateFilterConfigWidget()
             m_currentFilter->createConfigurationWidget(m_filterOptionWidget->grpFilterOptions, m_paintDevice, true);
 
         if (m_currentFilterConfigWidget) {
+            KisSignalsBlocker b(m_currentFilterConfigWidget);
             m_currentFilterConfigWidget->setCanvasResourcesInterface(canvasResourcesInterface());
             m_currentFilterConfigWidget->setConfiguration(m_currentFilter->defaultConfiguration(resourcesInterface()));
             m_layout->addWidget(m_currentFilterConfigWidget);
@@ -180,10 +187,9 @@ void KisFilterOption::readOptionSetting(const KisPropertiesConfigurationSP setti
     m_filterOptionWidget->checkBoxSmudgeMode->setChecked(setting->getBool(FILTER_SMUDGE_MODE));
     KisFilterConfigurationSP configuration = filterConfig();
     if (configuration && m_currentFilterConfigWidget) {
+        KisSignalsBlocker b(m_currentFilterConfigWidget);
         configuration->fromXML(setting->getString(FILTER_CONFIGURATION));
-        m_currentFilterConfigWidget->blockSignals(true);
         m_currentFilterConfigWidget->setConfiguration(configuration);
-        m_currentFilterConfigWidget->blockSignals(false);
     }
 }
 

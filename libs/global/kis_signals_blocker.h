@@ -56,31 +56,31 @@ public:
 
     ~KisSignalsBlocker()
     {
-        QVector<QObject*>::iterator it = m_objects.end();
-        QVector<QObject*>::iterator begin = m_objects.begin();
+        auto it = m_objects.end();
+        auto begin = m_objects.begin();
 
         while (it != begin) {
             --it;
-            (*it)->blockSignals(false);
+            it->first->blockSignals(it->second);
         }
     }
 
 private:
     void blockObjects() {
-        Q_FOREACH (QObject *object, m_objects) {
-            object->blockSignals(true);
+        for (auto it = m_objects.begin(); it != m_objects.end(); ++it) {
+            it->first->blockSignals(true);
         }
     }
 
     inline void addObject(QObject *object) {
-        m_objects.append(object);
+        m_objects.append(qMakePair(object, object->signalsBlocked()));
     }
 
 private:
     Q_DISABLE_COPY(KisSignalsBlocker)
 
 private:
-    QVector<QObject*> m_objects;
+    QVector<QPair<QObject*,bool>> m_objects;
 };
 
 #endif /* __KIS_SIGNALS_BLOCKER_H */

@@ -127,7 +127,7 @@ void KisWdgPattern::slotWidthChanged(double w)
         m_widget->spbScaleHeight->setValue(w);
         m_widget->spbScaleHeight->blockSignals(false);
     }
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisWdgPattern::slotHeightChanged(double h)
@@ -137,6 +137,6 @@ void KisWdgPattern::slotHeightChanged(double h)
         m_widget->spbScaleWidth->setValue(h);
         m_widget->spbScaleWidth->blockSignals(false);
     }
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 

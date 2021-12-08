@@ -203,28 +203,28 @@ void KisLevelsConfigWidget::setConfiguration(const KisPropertiesConfigurationSP 
         }
     }
 
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::resetAll()
 {
     m_activeLevelsCurve->resetAll();
     updateWidgets();
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::resetInputLevels()
 {
     m_activeLevelsCurve->resetInputLevels();
     updateWidgets();
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::resetOutputLevels()
 {
     m_activeLevelsCurve->resetOutputLevels();
     updateWidgets();
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::resetAllChannels()
@@ -233,7 +233,7 @@ void KisLevelsConfigWidget::resetAllChannels()
         levelsCurve.resetAll();
     }
     updateWidgets();
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::setActiveChannel(int ch)
@@ -465,7 +465,7 @@ void KisLevelsConfigWidget::slot_buttonGroupMode_buttonToggled(QAbstractButton *
     }
     updateWidgets();
     updateHistogramViewChannels();
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_comboBoxChannel_activated(int index)
@@ -493,7 +493,7 @@ void KisLevelsConfigWidget::slot_spinBoxInputBlackPoint_valueChanged(int value)
     const qreal normalizedValue = normalizeValue(value, m_activeChannelMin, m_activeChannelMax);
     m_activeLevelsCurve->setInputBlackPoint(normalizedValue);
     m_page.sliderInputLevels->setBlackPoint(normalizedValue);
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_spinBoxInputWhitePoint_valueChanged(int value)
@@ -506,7 +506,7 @@ void KisLevelsConfigWidget::slot_spinBoxInputWhitePoint_valueChanged(int value)
     const qreal normalizedValue = normalizeValue(value, m_activeChannelMin, m_activeChannelMax);
     m_activeLevelsCurve->setInputWhitePoint(normalizedValue);
     m_page.sliderInputLevels->setWhitePoint(normalizedValue);
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_spinBoxInputGamma_valueChanged(qreal value)
@@ -514,7 +514,7 @@ void KisLevelsConfigWidget::slot_spinBoxInputGamma_valueChanged(qreal value)
     KisSignalsBlocker blocker(m_page.sliderInputLevels);
     m_activeLevelsCurve->setInputGamma(value);
     m_page.sliderInputLevels->setGamma(value);
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_spinBoxOutputBlackPoint_valueChanged(int value)
@@ -523,7 +523,7 @@ void KisLevelsConfigWidget::slot_spinBoxOutputBlackPoint_valueChanged(int value)
     const qreal normalizedValue = normalizeValue(value, m_activeChannelMin, m_activeChannelMax);
     m_activeLevelsCurve->setOutputBlackPoint(normalizedValue);
     m_page.sliderOutputLevels->setBlackPoint(normalizedValue);
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_spinBoxOutputWhitePoint_valueChanged(int value)
@@ -532,7 +532,7 @@ void KisLevelsConfigWidget::slot_spinBoxOutputWhitePoint_valueChanged(int value)
     const qreal normalizedValue = normalizeValue(value, m_activeChannelMin, m_activeChannelMax);
     m_activeLevelsCurve->setOutputWhitePoint(normalizedValue);
     m_page.sliderOutputLevels->setWhitePoint(normalizedValue);
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_sliderInputLevels_blackPointChanged(qreal value)
@@ -540,7 +540,7 @@ void KisLevelsConfigWidget::slot_sliderInputLevels_blackPointChanged(qreal value
     KisSignalsBlocker blocker(m_page.spinBoxInputBlackPoint);
     m_activeLevelsCurve->setInputBlackPoint(value);
     m_page.spinBoxInputBlackPoint->setValue(deNormalizeValue(value, m_activeChannelMin, m_activeChannelMax));
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_sliderInputLevels_whitePointChanged(qreal value)
@@ -548,7 +548,7 @@ void KisLevelsConfigWidget::slot_sliderInputLevels_whitePointChanged(qreal value
     KisSignalsBlocker blocker(m_page.spinBoxInputWhitePoint);
     m_activeLevelsCurve->setInputWhitePoint(value);
     m_page.spinBoxInputWhitePoint->setValue(deNormalizeValue(value, m_activeChannelMin, m_activeChannelMax));
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_sliderInputLevels_gammaChanged(qreal value)
@@ -556,7 +556,7 @@ void KisLevelsConfigWidget::slot_sliderInputLevels_gammaChanged(qreal value)
     KisSignalsBlocker blocker(m_page.spinBoxInputGamma);
     m_activeLevelsCurve->setInputGamma(value);
     m_page.spinBoxInputGamma->setValue(value);
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_sliderOutputLevels_blackPointChanged(qreal value)
@@ -564,7 +564,7 @@ void KisLevelsConfigWidget::slot_sliderOutputLevels_blackPointChanged(qreal valu
     KisSignalsBlocker blocker(m_page.spinBoxOutputBlackPoint);
     m_activeLevelsCurve->setOutputBlackPoint(value);
     m_page.spinBoxOutputBlackPoint->setValue(deNormalizeValue(value, m_activeChannelMin, m_activeChannelMax));
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_sliderOutputLevels_whitePointChanged(qreal value)
@@ -572,7 +572,7 @@ void KisLevelsConfigWidget::slot_sliderOutputLevels_whitePointChanged(qreal valu
     KisSignalsBlocker blocker(m_page.spinBoxOutputWhitePoint);
     m_activeLevelsCurve->setOutputWhitePoint(value);
     m_page.spinBoxOutputWhitePoint->setValue(deNormalizeValue(value, m_activeChannelMin, m_activeChannelMax));
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_buttonAutoLevels_clicked()
@@ -626,7 +626,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevels_clicked()
         {
             *m_activeLevelsCurve = previousLevelsCurve;
             updateWidgets();
-            emit sigConfigurationUpdated();
+            emit sigConfigurationItemChanged();
         }
     );
     connect(autolevelsDialog, &QDialog::finished, [this](){ setEnabled(true); });
@@ -682,7 +682,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevelsAllChannels_clicked()
                 m_levelsCurves[i] = previousLevelsCurves[i];
             }
             updateWidgets();
-            emit sigConfigurationUpdated();
+            emit sigConfigurationItemChanged();
         }
     );
     connect(autolevelsDialog, &QDialog::finished, [this](){ setEnabled(true); });
@@ -766,7 +766,7 @@ void KisLevelsConfigWidget::slot_autoLevelsWidget_parametersChanged()
         )[0];
         
     updateWidgets();
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 void KisLevelsConfigWidget::slot_autoLevelsWidgetAllChannels_parametersChanged()
@@ -845,5 +845,5 @@ void KisLevelsConfigWidget::slot_autoLevelsWidgetAllChannels_parametersChanged()
         }
     }
     updateWidgets();
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }

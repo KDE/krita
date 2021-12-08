@@ -75,12 +75,13 @@ void KisGradientMapFilterConfigWidget::setConfiguration(const KisPropertiesConfi
                 fallbackGradient = currentGradient->clone().dynamicCast<KoAbstractGradient>();
             }
         }
+        KisSignalsBlocker b(m_ui.widgetGradientEditor);
         m_ui.widgetGradientEditor->setGradient(filterConfig->gradient(fallbackGradient));
         m_ui.comboBoxColorMode->setCurrentIndex(filterConfig->colorMode());
         m_ui.widgetDither->setConfiguration(*filterConfig, "dither/");
     }
 
-    emit sigConfigurationUpdated(); 
+    emit sigConfigurationItemChanged();
 }
 
 void KisGradientMapFilterConfigWidget::setView(KisViewManager *view)

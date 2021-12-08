@@ -51,7 +51,7 @@ KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent,  const KisPain
         m_ui.comboBoxMode->addItem(alphaString);
         m_intensityWidget = new KisHalftoneConfigPageWidget(this, m_paintDevice);
         m_intensityWidget->hide();
-        connect(m_intensityWidget, SIGNAL(signal_configurationUpdated()), this, SIGNAL(sigConfigurationUpdated()));
+        connect(m_intensityWidget, SIGNAL(signal_configurationUpdated()), this, SIGNAL(sigConfigurationItemChanged()));
     }
 
     int alphaPos = static_cast<int>(m_paintDevice->colorSpace()->alphaPos());
@@ -70,7 +70,7 @@ KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent,  const KisPain
         }
         w->hide();
         m_channelWidgets.append(w);
-        connect(w, SIGNAL(signal_configurationUpdated()), this, SIGNAL(sigConfigurationUpdated()));
+        connect(w, SIGNAL(signal_configurationUpdated()), this, SIGNAL(sigConfigurationItemChanged()));
     }
 
     connect(m_ui.comboBoxMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_comboBoxMode_currentIndexChanged(int)));
@@ -127,7 +127,7 @@ void KisHalftoneConfigWidget::setConfiguration(const KisPropertiesConfigurationS
 
         slot_comboBoxMode_currentIndexChanged(m_ui.comboBoxMode->currentIndex());
     }
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 KisPropertiesConfigurationSP KisHalftoneConfigWidget::configuration() const
@@ -231,5 +231,5 @@ void KisHalftoneConfigWidget::slot_comboBoxMode_currentIndexChanged(int index)
         }
     }
 
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }

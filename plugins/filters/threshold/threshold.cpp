@@ -210,7 +210,7 @@ void KisThresholdConfigWidget::setConfiguration(const KisPropertiesConfiguration
         m_page.intThreshold->setValue(value.toUInt());
         m_page.thresholdGradient->setThreshold(static_cast<qreal>(value.toUInt()) / 255.0);
     }
-    emit sigConfigurationUpdated();
+    emit sigConfigurationItemChanged();
 }
 
 

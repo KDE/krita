@@ -362,7 +362,7 @@ void KisWdgSeExpr::isValid()
         m_widget->saveNewBrushPresetButton->setEnabled(false);
     } else {
         m_widget->txtEditor->clearErrors();
-        emit sigConfigurationUpdated();
+        emit sigConfigurationItemChanged();
 
         if (m_currentPreset->script() != m_widget->txtEditor->getExpr()) {
             m_currentPreset->setScript(m_widget->txtEditor->getExpr());

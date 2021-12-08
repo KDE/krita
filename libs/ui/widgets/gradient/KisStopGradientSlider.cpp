@@ -77,6 +77,7 @@ void KisStopGradientSlider::setGradientResource(KoStopGradientSP gradient)
         m_selectedStop = -1;
     }
     emit sigSelectedStop(m_selectedStop);
+    emit updateRequested();
 }
 
 void KisStopGradientSlider::paintEvent(QPaintEvent*)

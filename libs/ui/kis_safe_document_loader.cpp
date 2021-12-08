@@ -254,7 +254,8 @@ void KisSafeDocumentLoader::delayedLoadStart()
             originalInfo.lastModified() == m_d->initialFileTimeStamp &&
             tempInfo.size() == m_d->initialFileSize) {
 
-        m_d->doc.reset(KisPart::instance()->createDocument());
+        m_d->doc.reset(KisPart::instance()->createTemporaryDocument());
+        m_d->doc->setFileBatchMode(true);
 
         if (m_d->path.toLower().endsWith("ora") || m_d->path.toLower().endsWith("kra")) {
             QScopedPointer<KoStore> store(KoStore::createStore(m_d->temporaryPath, KoStore::Read));

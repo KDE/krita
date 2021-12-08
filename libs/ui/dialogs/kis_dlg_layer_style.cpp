@@ -6,18 +6,19 @@
  */
 #include "kis_dlg_layer_style.h"
 
-#include <QWidget>
-#include <QStackedWidget>
-#include <QTreeWidget>
-#include <QListWidget>
-#include <QListWidgetItem>
+#include <QBuffer>
+#include <QCheckBox>
 #include <QComboBox>
 #include <QDial>
-#include <QCheckBox>
-#include <QSpinBox>
-#include <QUuid>
 #include <QInputDialog>
-#include <QBuffer>
+#include <QItemSelectionModel>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QSpinBox>
+#include <QStackedWidget>
+#include <QTreeWidget>
+#include <QUuid>
+#include <QWidget>
 
 #include <KoColorPopupButton.h>
 #include <KoColorSpaceRegistry.h>
@@ -728,7 +729,8 @@ void StylesSelector::addNewStyle(const QString &location, KisPSDLayerStyleSP sty
     ui.cmbStyleCollections->setCurrentText(location);
     loadStyles(ui.cmbStyleCollections->currentText());
     KIS_ASSERT(m_resourceModel->resourceForId(style->resourceId()));
-    ui.listStyles->setCurrentIndex(m_resourceModel->indexForResource(style));
+    ui.listStyles->setCurrentIndex(m_locationsProxyModel->mapFromSource(
+        m_resourceModel->indexForResource(style).siblingAtColumn(ui.listStyles->modelColumn())));
 
     notifyExternalStyleChanged(style->name(), style->uuid());
 }

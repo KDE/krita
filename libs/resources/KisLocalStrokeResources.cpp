@@ -102,6 +102,12 @@ void KisLocalStrokeResources::addResource(KoResourceSP resource)
     d->localResources.append(resource);
 }
 
+void KisLocalStrokeResources::removeResource(KoResourceSP resource)
+{
+    Q_D(KisLocalStrokeResources);
+    d->localResources.removeAll(resource);
+}
+
 KisResourcesInterface::ResourceSourceAdapter *KisLocalStrokeResources::createSourceImpl(const QString &type) const
 {
     Q_D(const KisLocalStrokeResources);

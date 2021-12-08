@@ -183,27 +183,31 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
     qint32 oldY = y();
     const QRect oldLayerExtent = m_paintDevice->extent();
 
+
     m_paintDevice->makeCloneFrom(projection, projection->extent());
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image()));
 
-    if (m_scalingMethod == ToImagePPI &&
-            (!qFuzzyCompare(image()->xRes(), xRes) ||
-             !qFuzzyCompare(image()->yRes(), yRes))) {
+    KisImageSP image = this->image();
+    if (image) {
+        if (m_scalingMethod == ToImagePPI &&
+                (!qFuzzyCompare(image->xRes(), xRes) ||
+                 !qFuzzyCompare(image->yRes(), yRes))) {
 
-        qreal xscale = image()->xRes() / xRes;
-        qreal yscale = image()->yRes() / yRes;
+            qreal xscale = image->xRes() / xRes;
+            qreal yscale = image->yRes() / yRes;
 
-        KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
-        worker.run();
-    }
-    else if (m_scalingMethod == ToImageSize) {
-        QSize sz = size;
-        sz.scale(image()->size(), Qt::KeepAspectRatio);
-        qreal xscale =  (qreal)sz.width() / (qreal)size.width();
-        qreal yscale = (qreal)sz.height() / (qreal)size.height();
+            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+            worker.run();
+        }
+        else if (m_scalingMethod == ToImageSize) {
+            QSize sz = size;
+            sz.scale(image->size(), Qt::KeepAspectRatio);
+            qreal xscale =  (qreal)sz.width() / (qreal)size.width();
+            qreal yscale = (qreal)sz.height() / (qreal)size.height();
 
-        KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
-        worker.run();
+            KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
+            worker.run();
+        }
     }
 
     m_paintDevice->setX(oldX);
@@ -248,7 +252,13 @@ KUndo2Command* KisFileLayer::transform(const QTransform &/*transform*/)
 
 void KisFileLayer::setImage(KisImageWSP image)
 {
+    KisImageWSP oldImage = this->image();
+
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
     KisExternalLayer::setImage(image);
+
+    if (m_scalingMethod != None && image && oldImage != image) {
+        m_loader.reloadImage();
+    }
 }
 

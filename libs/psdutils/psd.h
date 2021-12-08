@@ -358,10 +358,14 @@ public:
         return m_jitter;
     }
 
+    KoResourceSignature gradientLink() const {
+        return m_gradientLink;
+    }
+
     KoAbstractGradientSP gradient(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoAbstractGradient>(m_gradientLink.type);
-        return source.bestMatch(m_gradientLink.md5, m_gradientLink.filename, m_gradientLink.name);
+        return source.bestMatch(m_gradientLink.md5sum, m_gradientLink.filename, m_gradientLink.name);
     }
 
 public:
@@ -463,7 +467,7 @@ public:
     void setGradient(KoAbstractGradientSP value)
     {
         m_gradientLink.type = value->resourceType().first;
-        m_gradientLink.md5 = value->md5Sum();
+        m_gradientLink.md5sum = value->md5Sum();
         m_gradientLink.filename = value->filename();
         m_gradientLink.name = value->name();
     }
@@ -498,7 +502,7 @@ private:
     psd_technique_type m_technique;
     qint32 m_range;
     qint32 m_jitter;
-    PsdResource m_gradientLink;
+    KoResourceSignature m_gradientLink;
 };
 
 class KRITAPSDUTILS_EXPORT psd_layer_effects_shadow_common : public psd_layer_effects_shadow_base
@@ -874,16 +878,20 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base {
         m_textureEnabled = value;
     }
 
+    KoResourceSignature texturePatternLink() const {
+        return m_texturePatternLink;
+    }
+
     KoPatternSP texturePattern(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoPattern>(m_texturePatternLink.type);
-        return source.bestMatch(m_texturePatternLink.md5, m_texturePatternLink.filename, m_texturePatternLink.name);
+        return source.bestMatch(m_texturePatternLink.md5sum, m_texturePatternLink.filename, m_texturePatternLink.name);
     }
 
     void setTexturePattern(KoPatternSP value)
     {
         m_texturePatternLink.type = value->resourceType().first;
-        m_texturePatternLink.md5 = value->md5Sum();
+        m_texturePatternLink.md5sum = value->md5Sum();
         m_texturePatternLink.filename = value->filename();
         m_texturePatternLink.name = value->name();
 
@@ -985,7 +993,7 @@ private:
     int m_contourRange;
 
     bool m_textureEnabled;
-    PsdResource m_texturePatternLink;
+    KoResourceSignature m_texturePatternLink;
     int m_textureScale;
     int m_textureDepth;
     bool m_textureInvert;
@@ -1052,10 +1060,14 @@ struct psd_layer_effects_overlay_base : public psd_layer_effects_shadow_base {
         return m_gradientYOffset;
     }
 
+    KoResourceSignature patternLink() const {
+        return m_patternLink;
+    }
+
     KoPatternSP pattern(KisResourcesInterfaceSP resourcesInterface) const
     {
         auto source = resourcesInterface->source<KoPattern>(m_patternLink.type);
-        return source.bestMatch(m_patternLink.md5, m_patternLink.filename, m_patternLink.name);
+        return source.bestMatch(m_patternLink.md5sum, m_patternLink.filename, m_patternLink.name);
     }
 
     int horizontalPhase() const
@@ -1109,7 +1121,7 @@ public:
     void setPattern(KoPatternSP value)
     {
         m_patternLink.type = value->resourceType().first;
-        m_patternLink.md5 = value->md5Sum();
+        m_patternLink.md5sum = value->md5Sum();
         m_patternLink.filename = value->filename();
         m_patternLink.name = value->name();
     }
@@ -1144,7 +1156,7 @@ private:
     int m_gradientYOffset; // 0..100%
 
     // Pattern
-    PsdResource m_patternLink;
+    KoResourceSignature m_patternLink;
     int m_horizontalPhase; // 0..100%
     int m_verticalPhase; // 0..100%
 

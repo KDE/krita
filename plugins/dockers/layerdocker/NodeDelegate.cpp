@@ -236,10 +236,8 @@ void NodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, co
 
     const QRect visibilityRect = visibilityClickRect(option, index);
     const QRect thumbnailRect  = thumbnailClickRect(option, index);
-    const QRect decorationRect = decorationClickRect(option, index);
     const QRect iconsRectR     = iconsRect(option, index);
 
-    const float topY = thumbnailRect.topLeft().y();
     const float bottomY = thumbnailRect.bottomLeft().y();
 
     QPoint bottomLeftPoint;
@@ -255,30 +253,6 @@ void NodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, co
     // bottom running horizontal line
     p->drawLine(bottomLeftPoint.x(), bottomY,
                 bottomRightPoint.x(), bottomY);
-
-    // visibility icon vertical line - left
-    p->drawLine(visibilityRect.topLeft().x()-1, topY,
-                visibilityRect.bottomLeft().x()-1, bottomY);
-
-    // visibility icon vertical line - right
-    p->drawLine(visibilityRect.topRight().x()+1, topY,
-                visibilityRect.bottomRight().x()+1, bottomY);
-
-    // thumbnail vertical line - left
-    p->drawLine(thumbnailRect.topLeft().x(), topY,
-                thumbnailRect.bottomLeft().x(), bottomY);
-
-    // thumbnail vertical line - right
-    p->drawLine(thumbnailRect.topRight().x(), topY,
-                thumbnailRect.bottomRight().x(), bottomY);
-
-    // decoration vertical line - left
-    p->drawLine(decorationRect.topLeft().x(), topY,
-                decorationRect.bottomLeft().x(), bottomY);
-
-    // decoration vertical line - right
-    p->drawLine(decorationRect.topRight().x(), topY,
-                decorationRect.bottomRight().x(), bottomY);
 
     // icons' lines are drawn by drawIcons
 
@@ -725,9 +699,6 @@ void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, co
     }
 
     Q_FOREACH (OptionalProperty prop, realProps) {
-        if (option.direction == Qt::LeftToRight)
-            p->drawLine(x, 0, x, scm.rowHeight() - scm.border());
-
         x += scm.iconMargin();
         if (prop) {
             QIcon icon = prop->state.toBool() ? prop->onIcon : prop->offIcon;
@@ -746,8 +717,6 @@ void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, co
         }
         x += scm.iconSize() + scm.iconMargin();
 
-        if (!(option.direction == Qt::LeftToRight))
-            p->drawLine(x, 0, x, scm.rowHeight() - scm.border());
         x += scm.border();
     }
 

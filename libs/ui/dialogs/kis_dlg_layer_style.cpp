@@ -293,7 +293,7 @@ void KisDlgLayerStyle::slotNewStyle()
                                             QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
     QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
-    bool resourceAdded;
+    bool resourceAdded = false;
 
     if (KisResourceLocator::instance()->hasStorage(storagePath)) {
         // storage is named by the folder + filename, NOT the full filepath
@@ -304,6 +304,11 @@ void KisDlgLayerStyle::slotNewStyle()
         serializer.saveToFile(storagePath);
         QSharedPointer<KisResourceStorage> storage = QSharedPointer<KisResourceStorage>(new KisResourceStorage(storagePath));
         resourceAdded = KisResourceLocator::instance()->addStorage(storagePath, storage);
+
+        KisResourcesInterfaceSP interface = KisGlobalResourcesInterface::instance();
+        auto adapter = interface->source<KisPSDLayerStyle>(ResourceType::LayerStyles);
+        clone = adapter.bestMatch(clone->md5Sum(false), clone->filename(), clone->name());
+        resourceAdded = bool(clone);
     }
 
     if (resourceAdded) {

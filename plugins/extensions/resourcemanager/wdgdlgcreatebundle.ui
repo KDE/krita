@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -6,14 +6,6 @@
   </author>
  <class>WdgDlgCreateBundle</class>
  <widget class="QWidget" name="WdgDlgCreateBundle">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>895</width>
-    <height>491</height>
-   </rect>
-  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
     <horstretch>0</horstretch>
@@ -23,62 +15,11 @@
   <property name="windowTitle">
    <string>New Bundle...</string>
   </property>
-  <property name="windowOpacity">
-   <double>1.000000000000000</double>
-  </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <property name="leftMargin">
-    <number>15</number>
-   </property>
-   <property name="topMargin">
-    <number>15</number>
-   </property>
-   <property name="rightMargin">
-    <number>15</number>
-   </property>
-   <property name="bottomMargin">
-    <number>15</number>
-   </property>
-   <property name="horizontalSpacing">
-    <number>20</number>
-   </property>
-   <item column="1" row="0">
+   <item row="0" column="1">
     <layout class="QGridLayout" name="gridLayout_4">
-     <property name="verticalSpacing">
-      <number>12</number>
-     </property>
-     <item column="0" row="0">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <property name="spacing">
-        <number>12</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Type:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="cmbResourceTypes">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="insertPolicy">
-          <enum>QComboBox::InsertAlphabetically</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item column="0" row="1">
+     <item row="1" column="0">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <property name="spacing">
-        <number>12</number>
-       </property>
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <property name="leftMargin">
@@ -87,7 +28,14 @@
          <property name="spacing">
           <number>12</number>
          </property>
-         <item column="1" row="1">
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>Available</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
           <widget class="QListWidget" name="tableAvailable">
            <property name="minimumSize">
             <size>
@@ -99,26 +47,6 @@
             <number>2</number>
            </property>
           </widget>
-         </item>
-         <item column="1" row="0">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Available</string>
-           </property>
-          </widget>
-         </item>
-         <item column="1" row="2">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>
@@ -174,7 +102,14 @@
          <property name="spacing">
           <number>12</number>
          </property>
-         <item column="0" row="1">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Selected</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
           <widget class="QListWidget" name="tableSelected">
            <property name="minimumSize">
             <size>
@@ -187,64 +122,59 @@
            </property>
           </widget>
          </item>
-         <item column="0" row="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>Selected</string>
-           </property>
-          </widget>
-         </item>
-         <item column="0" row="2">
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
         </layout>
+       </item>
+      </layout>
+     </item>
+     <item row="0" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Type:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="cmbResourceTypes">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="insertPolicy">
+          <enum>QComboBox::InsertAlphabetically</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
     </layout>
    </item>
-   <item column="0" row="0">
+   <item row="0" column="0">
     <layout class="QFormLayout" name="formLayout">
-     <property name="fieldGrowthPolicy">
-      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-     </property>
      <property name="labelAlignment">
       <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
      </property>
-     <property name="horizontalSpacing">
-      <number>8</number>
-     </property>
-     <property name="verticalSpacing">
-      <number>8</number>
-     </property>
-     <item column="0" row="0">
+     <item row="0" column="0">
       <widget class="QLabel" name="bundleName">
        <property name="text">
         <string>Bundle Name:</string>
        </property>
       </widget>
      </item>
-     <item column="1" row="0">
+     <item row="0" column="1">
       <widget class="QLineEdit" name="editBundleName"/>
      </item>
-     <item column="0" row="1">
+     <item row="1" column="0">
       <widget class="QLabel" name="description">
        <property name="text">
         <string>Description:</string>
        </property>
       </widget>
      </item>
-     <item column="1" row="1">
+     <item row="1" column="1">
       <widget class="QPlainTextEdit" name="editDescription">
        <property name="maximumSize">
         <size>
@@ -254,7 +184,7 @@
        </property>
       </widget>
      </item>
-     <item column="0" row="3">
+     <item row="3" column="0">
       <widget class="QLabel" name="author">
        <property name="text">
         <string>Author:</string>
@@ -267,52 +197,52 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="3">
+     <item row="3" column="1">
       <widget class="QLineEdit" name="editAuthor">
        <property name="text">
         <string/>
        </property>
       </widget>
      </item>
-     <item column="0" row="4">
+     <item row="4" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>Email:</string>
        </property>
       </widget>
      </item>
-     <item column="1" row="4">
+     <item row="4" column="1">
       <widget class="QLineEdit" name="editEmail"/>
      </item>
-     <item column="0" row="5">
+     <item row="5" column="0">
       <widget class="QLabel" name="website">
        <property name="text">
         <string>Website:</string>
        </property>
       </widget>
      </item>
-     <item column="1" row="5">
+     <item row="5" column="1">
       <widget class="QLineEdit" name="editWebsite">
        <property name="text">
         <string>http://</string>
        </property>
       </widget>
      </item>
-     <item column="0" row="6">
+     <item row="6" column="0">
       <widget class="QLabel" name="license">
        <property name="text">
         <string>License:</string>
        </property>
       </widget>
      </item>
-     <item column="1" row="6">
+     <item row="6" column="1">
       <widget class="QLineEdit" name="editLicense">
        <property name="text">
         <string/>
        </property>
       </widget>
      </item>
-     <item column="0" row="7">
+     <item row="7" column="0">
       <widget class="QLabel" name="label_5">
        <property name="minimumSize">
         <size>
@@ -328,17 +258,8 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="7">
+     <item row="7" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <property name="spacing">
-        <number>2</number>
-       </property>
-       <property name="topMargin">
-        <number>0</number>
-       </property>
-       <property name="bottomMargin">
-        <number>0</number>
-       </property>
        <item>
         <widget class="QLabel" name="lblPreview">
          <property name="sizePolicy">
@@ -414,21 +335,15 @@
        </item>
       </layout>
      </item>
-     <item column="0" row="9">
+     <item row="9" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>Save to:</string>
        </property>
       </widget>
      </item>
-     <item column="1" row="9">
+     <item row="9" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
-       <property name="spacing">
-        <number>8</number>
-       </property>
-       <property name="topMargin">
-        <number>3</number>
-       </property>
        <item>
         <widget class="QLabel" name="lblSaveLocation">
          <property name="sizePolicy">
@@ -475,7 +390,7 @@
        </item>
       </layout>
      </item>
-     <item column="1" row="10">
+     <item row="10" column="1">
       <widget class="QPushButton" name="bnEmbedTags">
        <property name="text">
         <string>Embed tags...</string>

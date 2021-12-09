@@ -122,6 +122,8 @@ void KisTagChooserWidget::tagChanged(int tagIndex)
         group.writeEntry(d->resourceType, currentlySelectedTag()->url());
         d->model->sort(KisAllTagsModel::Name);
         emit sigTagChosen(tag);
+    } else {
+        setCurrentIndex(0);
     }
 }
 

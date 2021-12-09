@@ -362,7 +362,7 @@ void KisDlgLayerStyle::slotLoadStyle()
         const QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
                                                 QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
         const QString newName = oldFileInfo.fileName();
-        const QString newLocation = QStringLiteral("%1/asl/%2").arg(newDir, newName);
+        const QString newLocation = QStringLiteral("%1/%2").arg(newDir, newName);
 
         const QFileInfo newFileInfo(newLocation);
 

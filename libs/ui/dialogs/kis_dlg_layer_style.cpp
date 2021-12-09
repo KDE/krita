@@ -345,9 +345,10 @@ void KisDlgLayerStyle::slotLoadStyle()
 
         // 0. Validate layer style
         {
-            KisAslLayerStyleSerializer test;
+            KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+            KIS_ASSERT(!storage.isNull());
 
-            if (!test.readFromFile(oldFileInfo.absoluteFilePath())) {
+            if (!storage->valid()) {
                 qWarning() << "Attempted to import an invalid layer style library!" << filename;
                 QMessageBox::warning(this,
                                      i18nc("@title:window", "Krita"),

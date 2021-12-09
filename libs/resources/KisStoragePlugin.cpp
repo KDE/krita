@@ -98,3 +98,9 @@ void KisStoragePlugin::sanitizeResourceFileNameCase(KoResourceSP resource, const
         }
     }
 }
+
+bool KisStoragePlugin::isValid() const
+{
+    qWarning() << "Storage plugins should implement their own checks!";
+    return true;
+}

@@ -100,7 +100,7 @@ KisResourceStorage::KisResourceStorage(const QString &location)
     } else if (d->location.endsWith(".asl")) {
             d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::AdobeStyleLibrary]->create(location));
             d->storageType = StorageType::AdobeStyleLibrary;
-            d->valid = fi.isReadable();
+            d->valid = d->storagePlugin->isValid();
     } else if (d->location == "memory" || !QUuid::fromString(d->location).isNull() || (!d->location.isEmpty() && !fi.exists())) {
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
         d->name = location;

@@ -52,6 +52,8 @@ public:
 
     QDateTime timestamp();
 
+    virtual bool isValid() const;
+
 protected:
     friend class TestBundleStorage;
     QString location() const;

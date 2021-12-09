@@ -49,7 +49,8 @@ DlgCreateBundle::DlgCreateBundle(KoResourceBundleSP bundle, QWidget *parent)
     m_page = new QWidget();
     m_ui->setupUi(m_page);
     setMainWidget(m_page);
-    setFixedSize(m_page->sizeHint());
+    adjustSize();
+    setFixedSize(size());
     setButtons(Ok | Cancel);
     setDefaultButton(Ok);
     setButtonGuiItem(Ok, KStandardGuiItem::save());

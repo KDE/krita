@@ -14,6 +14,7 @@
 #include <QDomDocument>
 #include <QIODevice>
 #include <QBuffer>
+#include <QFileInfo>
 
 #include <QColor>
 #include <QHash>
@@ -470,7 +471,17 @@ bool tryParseDescriptor(const QDomElement &el,
             transpMiddleOffsets.append(0.5);
         }
 
-        QString fileName = gradientName + ".ggr";
+        /**
+         * Filenames in Krita cannot have slashes inside, but some of the
+         * styles saved in 4.x days could have that. Here we just forcefully
+         * crop the directory part of the gradient to make sure that it fits
+         * the new policy.
+         *
+         * Since ASL doesn't use this name as any linkage (actually, gradients
+         * are always embedded into the style) so we don't really care about
+         * the contents of the filename field. It should just be somewhat unique.
+         */
+        const QString fileName = QFileInfo(gradientName).fileName() + ".ggr";
         QSharedPointer<KoSegmentGradient> gradient(new KoSegmentGradient(fileName));
         Q_UNUSED(gradientSmoothness);
         gradient->setName(gradientName);

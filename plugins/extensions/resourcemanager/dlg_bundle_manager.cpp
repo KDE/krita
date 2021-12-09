@@ -228,10 +228,14 @@ void DlgBundleManager::addBundle()
 
         QFileInfo newFileInfo(newLocation);
         if (newFileInfo.exists()) {
-            if (QMessageBox::warning(this, i18nc("@title:window", "Warning"), i18n("There is already a bundle with this name installed. Do you want to overwrite it?"), QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) {
+            if (QMessageBox::warning(
+                    this,
+                    i18nc("@title:window", "Warning"),
+                    i18n("There is already a bundle with this name installed. Do you want to overwrite it?"),
+                    QMessageBox::Ok | QMessageBox::Cancel)
+                == QMessageBox::Cancel) {
                 return;
-            }
-            else {
+            } else {
                 QFile::remove(newLocation);
             }
         }

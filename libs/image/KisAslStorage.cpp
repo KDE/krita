@@ -255,3 +255,11 @@ bool KisAslStorage::addResource(const QString &/*resourceType*/, KoResourceSP re
     m_aslSerializer->setStyles(styles);
     return m_aslSerializer->saveToFile(location());
 }
+
+bool KisAslStorage::isValid() const
+{
+    if (!m_aslSerializer->isInitialized()) {
+        m_aslSerializer->readFromFile(location());
+    }
+    return m_aslSerializer->isValid();
+}

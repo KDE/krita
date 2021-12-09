@@ -28,6 +28,8 @@ public:
     bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
     bool addResource(const QString &resourceType, KoResourceSP resource) override;
 
+    bool isValid() const override;
+
     QSharedPointer<KisAslLayerStyleSerializer> m_aslSerializer;
 };
 

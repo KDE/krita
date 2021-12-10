@@ -354,60 +354,80 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
     }
 
     const QString md5 = KoMD5Generator::generateHash(resourceData);
-
     const QString resourceUrl = resourceType + "/" + resource->filename();
 
     const KoResourceSP existingResource = storage->resource(resourceUrl);
+
     if (existingResource) {
         const QString existingResourceMd5Sum = storage->resourceMd5(resourceUrl);
-        if (existingResourceMd5Sum == md5) {
-            return existingResource;
-        } else {
-            qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;
-            if (allowOverwrite && storageLocation == "") {
-                qWarning() << "Proceeding with overwriting the existing resource...";
-                // remove all versions of the resource from the resource folder
-                QStringList versionsLocations;
 
-                // this resource has id -1, we need correct id
-                int existingResourceId = -1;
-                bool r = KisResourceCacheDb::getResourceIdFromVersionedFilename(existingResource->filename(), resourceType, storageLocation, existingResourceId);
+        if (!allowOverwrite) {
+            return nullptr;
+        }
 
-                if (r && existingResourceId >= 0) {
-                    if (KisResourceCacheDb::getAllVersionsLocations(existingResourceId, versionsLocations)) {
-                        for (int i = 0; i < versionsLocations.size(); i++) {
-                            QFileInfo fi(this->resourceLocationBase() + "/" + resourceType + "/" + versionsLocations[i]);
-                            if (fi.exists()) {
-                                r = QFile::remove(fi.filePath());
-                                if (!r) {
-                                    qWarning() << "KisResourceLocator::importResourceFromFile: Removal of " << fi.filePath()
-                                               << "was requested, but it wasn't possible, something went wrong.";
-                                }
-                            } else {
+        if (existingResourceMd5Sum == md5 &&
+            existingResource->filename() == resource->filename()) {
+
+            /**
+             * Make sure that this resource is the latest version of the
+             * resource. Also, we cannot just return existingResource, because
+             * it has uninitialized fields. It should go through the initialization
+             * by the locator's caching system.
+             */
+
+            int existingResourceId = -1;
+            bool r = KisResourceCacheDb::getResourceIdFromFilename(existingResource->filename(), resourceType, storageLocation, existingResourceId);
+
+            if (r && existingResourceId > 0) {
+                return resourceForId(existingResourceId);
+            }
+        }
+
+        qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;
+        if (storageLocation == "") {
+            qWarning() << "Proceeding with overwriting the existing resource...";
+            // remove all versions of the resource from the resource folder
+            QStringList versionsLocations;
+
+            // this resource has id -1, we need correct id
+            int existingResourceId = -1;
+            bool r = KisResourceCacheDb::getResourceIdFromVersionedFilename(existingResource->filename(), resourceType, storageLocation, existingResourceId);
+
+            if (r && existingResourceId >= 0) {
+                if (KisResourceCacheDb::getAllVersionsLocations(existingResourceId, versionsLocations)) {
+
+                    for (int i = 0; i < versionsLocations.size(); i++) {
+                        QFileInfo fi(this->resourceLocationBase() + "/" + resourceType + "/" + versionsLocations[i]);
+                        if (fi.exists()) {
+                            r = QFile::remove(fi.filePath());
+                            if (!r) {
                                 qWarning() << "KisResourceLocator::importResourceFromFile: Removal of " << fi.filePath()
-                                           << "was requested, but it doesn't exist.";
+                                           << "was requested, but it wasn't possible, something went wrong.";
                             }
+                        } else {
+                            qWarning() << "KisResourceLocator::importResourceFromFile: Removal of " << fi.filePath()
+                                       << "was requested, but it doesn't exist.";
                         }
-                    } else {
-                        qWarning() << "KisResourceLocator::importResourceFromFile: Finding all locations for " << existingResourceId << "was requested, but it failed.";
-                        return nullptr;
                     }
                 } else {
-                    qWarning() << "KisResourceLocator::importResourceFromFile: there is no resource file found in the location of " << storageLocation << resource->filename() << resourceType;
+                    qWarning() << "KisResourceLocator::importResourceFromFile: Finding all locations for " << existingResourceId << "was requested, but it failed.";
                     return nullptr;
                 }
-
-                // remove everything related to this resource from the database (remember about tags and versions!!!)
-                r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
-                if (!r) {
-                    qWarning() << "KisResourceLocator::importResourceFromFile: Removing resource with id " << existingResourceId << "completely from the database failed.";
-                    return nullptr;
-                }
-
             } else {
-                qWarning() << "KisResourceLocator::importResourceFromFile: Overwriting of the resource was denied, aborting import.";
+                qWarning() << "KisResourceLocator::importResourceFromFile: there is no resource file found in the location of " << storageLocation << resource->filename() << resourceType;
                 return nullptr;
             }
+
+            // remove everything related to this resource from the database (remember about tags and versions!!!)
+            r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
+            if (!r) {
+                qWarning() << "KisResourceLocator::importResourceFromFile: Removing resource with id " << existingResourceId << "completely from the database failed.";
+                return nullptr;
+            }
+
+        } else {
+            qWarning() << "KisResourceLocator::importResourceFromFile: Overwriting of the resource was denied, aborting import.";
+            return nullptr;
         }
     }
 

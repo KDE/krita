@@ -19,6 +19,7 @@ private Q_SLOTS:
     void testStorage();
     void testTagIterator();
     void testAddResource();
+    void testResourceCaseSensitivity();
     void cleanupTestCase();
 private:
     QString m_srcLocation;

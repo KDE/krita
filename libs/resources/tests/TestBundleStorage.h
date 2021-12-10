@@ -21,6 +21,7 @@ private Q_SLOTS:
     void testResourceItem();
     void testResource();
     void testAddResource();
+    void testResourceCaseSensitivity();
     void cleanupTestCase();
 };
 

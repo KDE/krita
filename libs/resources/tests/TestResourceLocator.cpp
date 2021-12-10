@@ -372,6 +372,99 @@ void TestResourceLocator::testImportExportResource()
 
 }
 
+void TestResourceLocator::testImportDuplicatedResource()
+{
+    QTemporaryFile f(QDir::tempPath() + "/testresourcelocator-testimportduplicated-XXXXXX.kpp");
+    f.open();
+    f.write("mysimpletestresource_version1");
+    f.close();
+
+    const QString dataMd5 = KoMD5Generator::generateHash(f.fileName());
+    const QString fileName = QFileInfo(f.fileName()).fileName();
+
+    KoResourceSP resource = KisResourceLocator::instance()->importResourceFromFile(ResourceType::PaintOpPresets, f.fileName(), false);
+    QVERIFY(resource);
+
+    QCOMPARE(resource->md5Sum(false), dataMd5);
+    QCOMPARE(resource->version(), 0);
+
+    /**
+     * Without override importing should fail, even though it is exactly the
+     * same resource
+     */
+    KoResourceSP res0 = KisResourceLocator::instance()->importResourceFromFile(ResourceType::PaintOpPresets, f.fileName(), false);
+    QVERIFY(!res0);
+
+    /**
+     * Since MD5 of the resource fully coincides with the existing resource, it
+     * should return existing object while overriding
+     */
+    KoResourceSP res1 = KisResourceLocator::instance()->importResourceFromFile(ResourceType::PaintOpPresets, f.fileName(), true);
+
+    /**
+     * The returned resource must be exactly the same object from the cache
+     */
+    QCOMPARE(res1, resource);
+
+    /**
+     * Update the resource to make sure it is now different from the imported one
+     */
+    bool result = KisResourceLocator::instance()->updateResource(ResourceType::PaintOpPresets, resource);
+    QVERIFY(result);
+    QCOMPARE(resource->version(), 1);
+
+    /**
+     * Since the resource is updated now, then the shortcut for the existing
+     * resource cannot work anymore, the resource will be wiped out and
+     * created anew
+     */
+    KoResourceSP res3 = KisResourceLocator::instance()->importResourceFromFile(ResourceType::PaintOpPresets, f.fileName(), true);
+    QVERIFY(res3);
+    QVERIFY(res3 != resource);
+    QCOMPARE(res3->md5Sum(false), dataMd5);
+    QCOMPARE(res3->version(), 0);
+
+    /**
+     * The previous resource is not available anymore
+     */
+    int resourceId = -1;
+    result = KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first, resource->storageLocation(), resourceId);
+    QVERIFY(!result);
+    QVERIFY(resourceId < 0);
+
+#if defined Q_OS_WIN || defined Q_OS_MACOS
+    /**
+     * Try importing this resource with a different case on a case-insensitive
+     * filesystem
+     */
+
+    f.open();
+    KoResourceSP res4 = KisResourceLocator::instance()->importResource(ResourceType::PaintOpPresets, fileName.toUpper(), &f, false);
+    f.close();
+
+    /**
+     * Without override flag it should fail
+     */
+    QVERIFY(!res4);
+
+    f.open();
+    KoResourceSP res5 = KisResourceLocator::instance()->importResource(ResourceType::PaintOpPresets, fileName.toUpper(), &f, true);
+    f.close();
+
+    /**
+     * With override flag the resource should be overwritten even when its
+     * md5 already present in the database
+     */
+
+    QVERIFY(res5);
+    QVERIFY(res5 != res3);
+    QCOMPARE(res5->md5Sum(false), dataMd5);
+    QCOMPARE(res5->version(), 0);
+    QCOMPARE(res5->filename(), fileName.toUpper());
+
+#endif
+}
+
 void TestResourceLocator::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();

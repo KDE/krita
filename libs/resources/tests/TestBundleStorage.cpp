@@ -114,6 +114,36 @@ void TestBundleStorage::testAddResource()
     ResourceTestHelper::testVersionedStorageIterator(storage, resourceType, resourceUrl);
 }
 
+void TestBundleStorage::testResourceCaseSensitivity()
+{
+    KisBundleStorage storage(FILES_DEST_DIR + QString("/bundles/Krita_4_Default_Resources.bundle"));
+
+    const QString resourceUrl = "paintoppresets/g)_Dry_Brushing.kpp";
+    const QString resourceType = ResourceType::PaintOpPresets;
+
+    KoResourceSP resource = storage.resource(resourceUrl);
+    QVERIFY(resource);
+
+    resource->setVersion(1);
+
+    bool result = storage.saveAsNewVersion(resourceType, resource);
+    QVERIFY(result);
+
+    /**
+     * In the bundle storage we expect the new versioned resources to have
+     * filesystem-dependent name resolution. That is, if we request a resource
+     * with wrong casing, it should still fetch the resource. But the filename
+     * field of the resource must contain the correct casing
+     */
+
+#if defined Q_OS_WIN || defined Q_OS_MACOS
+    KoResourceSP res2 = storage.resource("paintoppresets/" + resource->filename().toUpper());
+    QVERIFY(res2);
+    QCOMPARE(res2->filename(), resource->filename());
+#endif
+
+}
+
 void TestBundleStorage::cleanupTestCase()
 {
     ResourceTestHelper::cleanDstLocation(FILES_DEST_DIR);

@@ -96,6 +96,8 @@ private:
     static bool makeResourceTheCurrentVersion(int resourceId, KoResourceSP resource);
     static bool removeResourceCompletely(int resourceId);
 
+    /// The function will find the resource only if it is the latest version
+    static bool getResourceIdFromFilename(QString filename, QString resourceType, QString storageLocation, int &outResourceId);
     /// Note that here you can put even the original filename - any filename from the versioned_resources - and it will still find it
     static bool getResourceIdFromVersionedFilename(QString filename, QString resourceType, QString storageLocation, int& outResourceId);
     static bool getAllVersionsLocations(int resourceId, QStringList &outVersionsLocationsList);

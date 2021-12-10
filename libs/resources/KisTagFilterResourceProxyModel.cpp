@@ -124,6 +124,12 @@ KoResourceSP KisTagFilterResourceProxyModel::importResource(const QString &filen
     return res;
 }
 
+bool KisTagFilterResourceProxyModel::importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    return source && source->importWillOverwriteResource(fileName, storageLocation);
+}
+
 bool KisTagFilterResourceProxyModel::exportResource(KoResourceSP resource, QIODevice *device)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());

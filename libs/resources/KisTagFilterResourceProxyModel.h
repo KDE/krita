@@ -42,6 +42,7 @@ public:
     bool setResourceInactive(const QModelIndex &index) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
     KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) override;
+    bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString()) override;
     bool updateResource(KoResourceSP resource) override;

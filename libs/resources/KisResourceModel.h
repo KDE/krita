@@ -106,6 +106,20 @@ public:
     virtual KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) = 0;
 
     /**
+     * @brief importWillOverwriteResource checks is importing a resource with this filename will overwrite anything
+     *
+     * If this funciton returns true, then importResource() is guaranteed to
+     * fail with 'allowOverwrite' set to false.
+     *
+     * @param filename file name of the resource if preset. File name may be used
+     *                 for addressing the resource, so it is usually preferred to
+     *                 preserve it.
+     *
+     * @return true if the some existing will be overwritten while importing
+     */
+    virtual bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation = QString()) const = 0;
+
+    /**
      * @brief exportResource exports a resource into a QIODevice
      *
      * Exporting a resource as a binary blob is the only way to guarantee that its
@@ -209,6 +223,7 @@ public:
     bool setResourceInactive(const QModelIndex &index) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString("")) override;
     KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) override;
+    bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation = QString()) const override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString("")) override;
     bool updateResource(KoResourceSP resource) override;
@@ -322,6 +337,7 @@ public:
     bool setResourceInactive(const QModelIndex &index) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString("")) override;
     KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) override;
+    bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation = QString()) const override;
     bool exportResource(KoResourceSP resource, QIODevice *device) override;
     bool addResource(KoResourceSP resource, const QString &storageId = QString("")) override;
     bool updateResource(KoResourceSP resource) override;

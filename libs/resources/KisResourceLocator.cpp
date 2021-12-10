@@ -470,6 +470,17 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
     return nullptr;
 }
 
+bool KisResourceLocator::importWillOverwriteResource(const QString &resourceType, const QString &fileName, const QString &storageLocation) const
+{
+    KisResourceStorageSP storage = d->storages[makeStorageLocationAbsolute(storageLocation)];
+
+    const QString resourceUrl = resourceType + "/" + QFileInfo(fileName).fileName();
+
+    const KoResourceSP existingResource = storage->resource(resourceUrl);
+
+    return existingResource;
+}
+
 bool KisResourceLocator::exportResource(KoResourceSP resource, QIODevice *device)
 {
     if (!resource || !resource->valid() || resource->resourceId() < 0) return false;

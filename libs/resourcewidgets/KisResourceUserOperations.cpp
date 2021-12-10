@@ -28,14 +28,6 @@ bool KisResourceUserOperations::userAllowsOverwrite(QWidget* widgetParent, QStri
                                  QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel;
 }
 
-bool KisResourceUserOperations::resourceExistsInResourceFolder(QString resourceType, QString filepath)
-{
-    QString resourceLocationBase = KisResourceLocator::instance()->resourceLocationBase();
-    QString newFilepath = resourceLocationBase + "/" + resourceType + "/" + QFileInfo(filepath).fileName();
-    QFileInfo fi(newFilepath);
-    return fi.exists();
-}
-
 bool KisResourceUserOperations::resourceNameIsAlreadyUsed(KisResourceModel *resourceModel, QString resourceName, int resourceIdToIgnore)
 {
     auto sizeFilteredById = [resourceIdToIgnore] (QVector<KoResourceSP> list) {
@@ -71,7 +63,7 @@ KoResourceSP KisResourceUserOperations::importResourceFileWithUserInput(QWidget 
     resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources); // inactive don't count here
 
     KoResourceSP resource = resourceModel.importResourceFile(resourceFilepath, false, storageLocation);
-    if (resource.isNull() && storageLocation == "" && KisResourceUserOperations::resourceExistsInResourceFolder(resourceType, resourceFilepath)) {
+    if (resource.isNull() && storageLocation == "" && resourceModel.importWillOverwriteResource(resourceFilepath, storageLocation)) {
         if (KisResourceUserOperations::userAllowsOverwrite(widgetParent, resourceFilepath)) {
             resource = resourceModel.importResourceFile(resourceFilepath, true, storageLocation);
         } else {

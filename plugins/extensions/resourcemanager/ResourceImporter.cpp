@@ -246,9 +246,11 @@ void ResourceImporter::importResources(QString startPath)
         if (m_resourceModelsForResourceType.contains(resourceType)) {
             if (debug) qCritical() << "We do have a resource model for that!";
             KisResourceModel* model = m_resourceModelsForResourceType[resourceType];
-            // check if the file already exists there
+
             bool allowOverwrite = false;
-            if (KisResourceUserOperations::resourceExistsInResourceFolder(resourceType, resourceFiles[i])) {
+
+            // first check if we are going to overwrite anything
+            if (model->importWillOverwriteResource(resourceFiles[i])) {
                 if(!KisResourceUserOperations::userAllowsOverwrite(m_widgetParent, resourceFiles[i])) {
                     continue;
                 } else {

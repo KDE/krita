@@ -468,6 +468,11 @@ KoResourceSP KisAllResourcesModel::importResource(const QString &filename, QIODe
     return res;
 }
 
+bool KisAllResourcesModel::importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const
+{
+    return KisResourceLocator::instance()->importWillOverwriteResource(d->resourceType, fileName, storageLocation);
+}
+
 bool KisAllResourcesModel::exportResource(KoResourceSP resource, QIODevice *device)
 {
     bool res = KisResourceLocator::instance()->exportResource(resource, device);
@@ -772,6 +777,12 @@ KoResourceSP KisResourceModel::importResource(const QString &filename, QIODevice
     }
     invalidate();
     return res;
+}
+
+bool KisResourceModel::importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const
+{
+    KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
+    return source && source->importWillOverwriteResource(fileName, storageLocation);
 }
 
 bool KisResourceModel::exportResource(KoResourceSP resource, QIODevice *device)

@@ -191,16 +191,13 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
     const QPointF cursorPosWidget = canvasWidget->mapFromGlobal(pos);
     
     if (!canvasWidget->rect().contains(cursorPosWidget.toPoint())) {
-        m_d->view->viewManager()->
-        showFloatingMessage(
-            i18n("\"Mirror View Around Cursor\" only works while hovering over the viewport."),
-            QIcon(), 1500, KisFloatingMessage::Low);
-        return;
+        mirrorCanvas(enable);
+    } else {
+        QPoint newOffset = m_d->coordinatesConverter->mirror(cursorPosWidget, enable, false);
+        m_d->updateDocumentSizeAfterTransform();
+        setScrollBarValue(newOffset);
+        m_d->showMirrorStateOnCanvas();
     }
-    QPoint newOffset = m_d->coordinatesConverter->mirror(cursorPosWidget, enable, false);
-    m_d->updateDocumentSizeAfterTransform();
-    setScrollBarValue(newOffset);
-    m_d->showMirrorStateOnCanvas();
 }
 
 void KisCanvasController::Private::showRotationValueOnCanvas()

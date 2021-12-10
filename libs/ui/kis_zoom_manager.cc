@@ -262,13 +262,13 @@ qreal KisZoomManager::zoom() const
 qreal KisZoomManager::resolutionX() const
 {
     KisImageSP image = m_view->image();
-    return m_aspectMode ? image->xRes() / m_devicePixelRatio : POINT_TO_INCH(m_physicalDpiX);
+    return m_aspectMode ? POINT_TO_INCH(m_physicalDpiX) : image->xRes() / m_devicePixelRatio;
 }
 
 qreal KisZoomManager::resolutionY() const
 {
     KisImageSP image = m_view->image();
-    return m_aspectMode ? image->yRes() / m_devicePixelRatio : POINT_TO_INCH(m_physicalDpiY);
+    return m_aspectMode ? POINT_TO_INCH(m_physicalDpiY) : image->yRes() / m_devicePixelRatio;
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)

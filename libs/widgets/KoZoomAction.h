@@ -80,7 +80,7 @@ public Q_SLOTS:
     void setSelectedZoomMode( KoZoomMode::Mode mode );
 
   /**
-   * Change status of "Use same aspect as pixels" button
+   * Change status of "Use print size" button
    * (emits aspectModeChanged(bool) after the change, ALWAYS)
    */
     void setAspectMode(bool status);

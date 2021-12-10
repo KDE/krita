@@ -65,7 +65,7 @@ public Q_SLOTS:
     void setSliderValue(int value);
 
    /**
-    * Change status of "Use same aspect as pixels" button
+    * Change status of "Use print size" button
     */
     void setAspectMode(bool status);
 private:

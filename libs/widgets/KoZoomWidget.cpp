@@ -62,9 +62,9 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
     d->aspectButton = new QToolButton(this);
     d->aspectButton->setIcon(kisIcon("zoom-pixels"));
     d->aspectButton->setCheckable(true);
-    d->aspectButton->setChecked(true);
+    d->aspectButton->setChecked(false);
     d->aspectButton->setAutoRaise(true);
-    d->aspectButton->setToolTip(i18n("Use same aspect as pixels"));
+    d->aspectButton->setToolTip(i18n("Use print size"));
     connect(d->aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
     layout->addWidget(d->aspectButton);
 

@@ -359,7 +359,8 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
 
     const KoResourceSP existingResource = storage->resource(resourceUrl);
     if (existingResource) {
-        if (existingResource->md5Sum() == md5) {
+        const QString existingResourceMd5Sum = storage->resourceMd5(resourceUrl);
+        if (existingResourceMd5Sum == md5) {
             return existingResource;
         } else {
             qWarning() << "A resource with the same filename but a different MD5 already exists in the storage" << resourceType << fileName << storageLocation;

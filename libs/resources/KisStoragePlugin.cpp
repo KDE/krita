@@ -6,7 +6,9 @@
 
 #include "KisStoragePlugin.h"
 #include <QFileInfo>
+#include <QDir>
 
+#include <KoResource.h>
 #include <KisMimeDatabase.h>
 #include "KisResourceLoaderRegistry.h"
 
@@ -82,4 +84,17 @@ QDateTime KisStoragePlugin::timestamp()
 QString KisStoragePlugin::location() const
 {
     return d->location;
+}
+
+void KisStoragePlugin::sanitizeResourceFileNameCase(KoResourceSP resource, const QDir &parentDir)
+{
+    const QStringList result = parentDir.entryList({resource->filename()});
+    KIS_SAFE_ASSERT_RECOVER_NOOP(result.size() == 1);
+
+    if (result.size() == 1) {
+        const QString realName = result.first();
+        if (realName != resource->filename()) {
+            resource->setFilename(result.first());
+        }
+    }
 }

@@ -121,7 +121,8 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
 
     if (QDir(bundleSaveLocation).exists()) {
         const QString fn = bundleSaveLocation  + "/" + resource->filename();
-        if (QFileInfo(fn).exists()) {
+        const QFileInfo fi(fn);
+        if (fi.exists()) {
             foundVersionedFile = true;
 
             QFile f(fn);
@@ -133,6 +134,8 @@ bool KisBundleStorage::loadVersionedResource(KoResourceSP resource)
                 qWarning() << "Could not reload resource file" << fn;
                 return false;
             }
+
+            sanitizeResourceFileNameCase(resource, fi.dir());
 
             // Check for the thumbnail
             if ((resource->image().isNull() || resource->thumbnail().isNull()) && !resource->thumbnailPath().isNull()) {

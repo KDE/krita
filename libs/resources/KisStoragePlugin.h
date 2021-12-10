@@ -13,6 +13,8 @@
 #include <KisResourceStorage.h>
 #include "kritaresources_export.h"
 
+class QDir;
+
 /**
  * The KisStoragePlugin class is the base class
  * for storage plugins. A storage plugin is used by
@@ -53,6 +55,16 @@ public:
 protected:
     friend class TestBundleStorage;
     QString location() const;
+
+    /**
+     * On some systems, e.g. Windows, the file names are case-insensitive,
+     * therefore URLs will fetch the resource even when the casing is not
+     * the same. The storage, when returning such a resource should make
+     * sure that its filename is set to the **real** filename, not the one
+     * with incorrect casing.
+     */
+    void sanitizeResourceFileNameCase(KoResourceSP resource, const QDir &parentDir);
+
 private:
     class Private;
     QScopedPointer<Private> d;

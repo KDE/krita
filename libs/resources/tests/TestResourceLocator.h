@@ -31,6 +31,7 @@ private Q_SLOTS:
     void testSyncVersions();
 
     void testImportExportResource();
+    void testImportDuplicatedResource();
 
 private:
 

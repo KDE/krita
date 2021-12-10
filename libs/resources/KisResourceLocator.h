@@ -124,6 +124,12 @@ Q_SIGNALS:
     /// Emitted when the locator finished importing the embedded resource
     void endExternalResourceImport(const QString &resourceType);
 
+    /// Emitted when the locator needs to add an embedded resource
+    void beginExternalResourceOverride(const QString &resourceType, int resourceId);
+
+    /// Emitted when the locator finished importing the embedded resource
+    void endExternalResourceOverride(const QString &resourceType, int resourceId);
+
 private:
 
     friend class KisTagResourceModel;

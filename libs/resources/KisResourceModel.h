@@ -253,6 +253,18 @@ private Q_SLOTS:
      */
     void endExternalResourceImport(const QString &resourceType);
 
+    /**
+     * A special connection for KisResourceLocator, which can remove the resource
+     * while importing something with overwrite. In such a case the locator will
+     * emit both, remove and insert signals for both the resources.
+     */
+    void beginExternalResourceOverride(const QString &resourceType, int resourceId);
+
+    /**
+     * \see beginExternalResourceOverride
+     */
+    void endExternalResourceOverride(const QString &resourceType, int resourceId);
+
 public:
 
     KoResourceSP resourceForId(int id) const;

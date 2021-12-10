@@ -229,7 +229,22 @@ void KisResourceItemChooser::slotButtonClicked(int button)
         dialog.setCaption(i18nc("@title:window", "Choose File to Add"));
         Q_FOREACH(const QString &filename, dialog.filenames()) {
             if (QFileInfo(filename).exists() && QFileInfo(filename).isReadable()) {
-                KisResourceUserOperations::importResourceFileWithUserInput(this, "", d->resourceType, filename);
+
+                KoResourceSP previousResource = this->currentResource();
+                KoResourceSP newResource = KisResourceUserOperations::importResourceFileWithUserInput(this, "", d->resourceType, filename);
+
+                if (previousResource && newResource && !currentResource()) {
+                    /// We have overridden the currently selected resource and
+                    /// nothing is selected now
+                    setCurrentResource(newResource);
+                } else if (currentResource() == newResource) {
+                    /// We have overridden the currently selected resource and
+                    /// the model has managed to track the selection under it
+                    /// (that is not possible right now, but can theoretically
+                    /// happen under some circumstances)
+                    const QModelIndex index = d->tagFilterProxyModel->indexForResource(newResource);
+                    updatePreview(index);
+                }
             }
         }
         tagFilterModel()->sort(Qt::DisplayRole);

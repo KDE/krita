@@ -44,6 +44,9 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
     connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceImport(QString)), this, SLOT(beginExternalResourceImport(QString)));
     connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceImport(QString)), this, SLOT(endExternalResourceImport(QString)));
 
+    connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceOverride(QString, int)), this, SLOT(beginExternalResourceOverride(QString, int)));
+    connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceOverride(QString, int)), this, SLOT(endExternalResourceOverride(QString, int)));
+
     d->resourceType = resourceType;
 
     bool r = d->resourcesQuery.prepare("SELECT resources.id\n"
@@ -418,54 +421,26 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
 
 KoResourceSP KisAllResourcesModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)
 {
-    int outExistingResourceId = -1;
-    const QString strippedFilename = QFileInfo(filename).fileName();
-    const bool result = KisResourceCacheDb::getResourceIdFromVersionedFilename(strippedFilename, d->resourceType, storageId, outExistingResourceId);
-    const bool willOverwrite = (result && (outExistingResourceId >= 0));
+    KoResourceSP importedResource = KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename, allowOverwrite, storageId);
 
-    if (willOverwrite && !allowOverwrite) {
-        return nullptr;
-    }
-
-    if (!willOverwrite) {
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    } else {
-        QModelIndex RemovedIndex = indexForResourceId(outExistingResourceId);
-        beginRemoveRows(QModelIndex(), RemovedIndex.row(), RemovedIndex.row());
-    }
-
-    KoResourceSP res = KisResourceLocator::instance()->importResourceFromFile(d->resourceType, filename, allowOverwrite, storageId);
-
-    if (!res) {
+    if (!importedResource) {
         qWarning() << "Failed to import resource" << filename;
     }
-
     resetQuery();
 
-    if (willOverwrite) {
-        endRemoveRows();
-        QModelIndex idx = indexForResourceId(res->resourceId());
-        beginInsertRows(QModelIndex(), idx.row(), idx.row());
-        endInsertRows();
-    } else {
-        endInsertRows();
-    }
-
-    return res;
-
+    return importedResource;
 }
 
 KoResourceSP KisAllResourcesModel::importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId)
 {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
-    KoResourceSP res = KisResourceLocator::instance()->importResource(d->resourceType, filename, device, allowOverwrite, storageId);
-    if (!res) {
+    KoResourceSP importedResource = KisResourceLocator::instance()->importResource(d->resourceType, filename, device, allowOverwrite, storageId);
+
+    if (!importedResource) {
         qWarning() << "Failed to import resource" << filename;
     }
     resetQuery();
-    endInsertRows();
 
-    return res;
+    return importedResource;
 }
 
 bool KisAllResourcesModel::importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const
@@ -675,6 +650,24 @@ void KisAllResourcesModel::endExternalResourceImport(const QString &resourceType
 
     resetQuery();
     endInsertRows();
+}
+
+void KisAllResourcesModel::beginExternalResourceOverride(const QString &resourceType, int resourceId)
+{
+    if (resourceType != d->resourceType) return;
+
+    const QModelIndex index = indexForResourceId(resourceId);
+
+    beginRemoveRows(QModelIndex(), index.row(), index.row());
+}
+
+void KisAllResourcesModel::endExternalResourceOverride(const QString &resourceType, int resourceId)
+{
+    if (resourceType != d->resourceType) return;
+
+
+    resetQuery();
+    endRemoveRows();
 }
 
 struct KisResourceModel::Private

@@ -127,6 +127,8 @@ bool KisFolderStorage::loadVersionedResource(KoResourceSP resource)
 
     // Check for the thumbnail
     if (r) {
+        sanitizeResourceFileNameCase(resource, fi.dir());
+
         if ((resource->image().isNull() || resource->thumbnail().isNull()) && !resource->thumbnailPath().isNull()) {
             QImage img(location() + '/' + resource->resourceType().first + '/' + resource->thumbnailPath());
             resource->setImage(img);

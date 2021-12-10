@@ -371,7 +371,8 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
 
                 // this resource has id -1, we need correct id
                 int existingResourceId = -1;
-                bool r = KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resourceType, storageLocation, existingResourceId);
+                bool r = KisResourceCacheDb::getResourceIdFromVersionedFilename(existingResource->filename(), resourceType, storageLocation, existingResourceId);
+
                 if (r && existingResourceId >= 0) {
                     if (KisResourceCacheDb::getAllVersionsLocations(existingResourceId, versionsLocations)) {
                         for (int i = 0; i < versionsLocations.size(); i++) {

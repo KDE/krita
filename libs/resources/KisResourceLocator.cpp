@@ -191,9 +191,7 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
             QBuffer buffer(&data);
             buffer.open(QBuffer::ReadOnly);
 
-            emit beginExternalResourceImport(sig.type);
             importResource(sig.type, sig.filename, &buffer, false, "memory");
-            emit endExternalResourceImport(sig.type);
             break;
         }
         case KoResourceLoadResult::FailedLink:
@@ -418,8 +416,13 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
                 return nullptr;
             }
 
+            Q_EMIT beginExternalResourceOverride(resourceType, existingResourceId);
+
             // remove everything related to this resource from the database (remember about tags and versions!!!)
             r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
+
+            Q_EMIT endExternalResourceOverride(resourceType, existingResourceId);
+
             if (!r) {
                 qWarning() << "KisResourceLocator::importResourceFromFile: Removing resource with id " << existingResourceId << "completely from the database failed.";
                 return nullptr;
@@ -448,11 +451,16 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         resource->setDirty(false);
         resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
+        Q_EMIT beginExternalResourceImport(resourceType);
+
         // Insert into the database
         const bool result = KisResourceCacheDb::addResource(storage,
                                                 storage->timeStampForResource(resourceType, resource->filename()),
                                                 resource,
                                                 resourceType);
+
+        Q_EMIT endExternalResourceImport(resourceType);
+
         if (!result) {
             return nullptr;
         }

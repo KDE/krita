@@ -189,12 +189,20 @@ private:
     /**
      * @brief importResource
      * @param resourceType
-     * @param fileName: filename that shoudl be assigned to the resource
+     * @param fileName: filename that should be assigned to the resource
      * @param device: QIODevice where the resource should be loaded from
      * @param storageLocation: optional, the storage where the resource will be stored. Empty means in the default Folder storage.
      * @return the imported resource, which has been added to the database and the cache
      */
     KoResourceSP importResource(const QString &resourceType, const QString &fileName, QIODevice *device, const bool allowOverwrite, const QString &storageLocation = QString());
+
+    /**
+     * @brief return whether importing will overwrite some existing resource
+     * @param resourceType
+     * @param fileName: filename that should be assigned to the resource
+     * @param storageLocation: optional, the storage where the resource will be stored. Empty means in the default Folder storage.
+     */
+    bool importWillOverwriteResource(const QString &resourceType, const QString &fileName, const QString &storageLocation = QString()) const;
 
     /**
      * @brief exportResource

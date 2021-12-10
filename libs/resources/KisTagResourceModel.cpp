@@ -548,6 +548,12 @@ KoResourceSP KisTagResourceModel::importResource(const QString &filename, QIODev
     return resourceModel.importResource(filename, device, allowOverwrite, storageId);
 }
 
+bool KisTagResourceModel::importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const
+{
+    KisResourceModel resourceModel(d->resourceType);
+    return resourceModel.importWillOverwriteResource(fileName, storageLocation);
+}
+
 bool KisTagResourceModel::exportResource(KoResourceSP resource, QIODevice *device)
 {
     KisResourceModel resourceModel(d->resourceType);

@@ -36,6 +36,9 @@ protected Q_SLOTS:
     void updateFloating(bool);
 
 private:
+    void setToolBoxOrientation(Qt::Orientation orientation);
+
+private:
     KoToolBox *m_toolBox;
     KoToolBoxScrollArea *m_scrollArea;
 };

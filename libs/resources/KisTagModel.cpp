@@ -176,15 +176,55 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
         if (pos) {
             switch(role) {
             case Qt::DisplayRole:
-                return d->query.value("name");
+            case Qt::UserRole + Name:
+            {
+
+                QSqlQuery q;
+
+                if (!q.prepare("SELECT name FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
+                    qWarning() << "Could not prepare name translation query" << q.lastError();
+                }
+                q.bindValue(":id", d->query.value("id"));
+                q.bindValue(":locale", KisTag::currentLocale());
+
+                if (!q.exec()) {
+                    qWarning() << "Could not execute name translation query" << q.lastError();
+                }
+                QVariant name;
+                if (q.first()) {
+                    name = q.value("name");
+                }
+                else {
+                    name = d->query.value("name");
+                }
+
+                return name;
+            }
             case Qt::ToolTipRole:   // fallthrough
             case Qt::StatusTipRole: // fallthrough
             case Qt::WhatsThisRole:
-                return d->query.value("comment");
+            {
+                QSqlQuery q;
+                if (!q.prepare("SELECT comment FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
+                    qWarning() << "Could not prepare comment translation query" << q.lastError();
+                }
+                q.bindValue(":id", d->query.value("id"));
+                q.bindValue(":locale", KisTag::currentLocale());
+
+                if (!q.exec()) {
+                    qWarning() << "Could not execute comment translation query" << q.lastError();
+                }
+                QVariant comment;
+                if (q.first()) {
+                    comment = q.value("comment");
+                }
+                else {
+                    comment = d->query.value("comment");
+                }
+                return comment;
+            }
             case Qt::UserRole + Id:
                 return d->query.value("id");
-            case Qt::UserRole + Name:
-                return d->query.value("name");
             case Qt::UserRole + Url:
                 return d->query.value("url");
             case Qt::UserRole + ResourceType:
@@ -306,14 +346,7 @@ KisTagSP KisAllTagsModel::tagForIndex(QModelIndex index) const
     else {
         bool pos = const_cast<KisAllTagsModel*>(this)->d->query.seek(index.row() - s_fakeRowsCount);
         if (pos) {
-            tag.reset(new KisTag());
-            tag->setUrl(d->query.value("url").toString());
-            tag->setName(d->query.value("name").toString());
-            tag->setComment(d->query.value("comment").toString());
-            tag->setResourceType(d->resourceType);
-            tag->setId(d->query.value("id").toInt());
-            tag->setActive(d->query.value("active").toBool());
-            tag->setValid(true);
+            tag = KisResourceLocator::instance()->tagForUrl(d->query.value("url").toString(), d->resourceType);
         }
     }
 
@@ -347,20 +380,22 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
 
     if (!KisResourceCacheDb::hasTag(tag->url(), d->resourceType)) {
         beginInsertRows(QModelIndex(), rowCount(), rowCount());
-        if (!KisResourceCacheDb::addTag(d->resourceType, "", tag->url(), tag->name(), tag->comment(), tag->filename())) {
+        if (!KisResourceCacheDb::addTag(d->resourceType, "", tag)) {
             qWarning() << "Could not add tag" << tag;
             return false;
         }
         resetQuery();
         endInsertRows();
 
-    } else if (allowOverwrite) {
+    }
+    else if (allowOverwrite) {
         KisTagSP trueTag = tagForUrl(tag->url());
         r = setData(indexForTag(trueTag), QVariant::fromValue(true), Qt::CheckStateRole);
         untagAllResources(trueTag);
         tag->setComment(trueTag->comment()); // id will be set later, comment and filename are the only thing left
         tag->setFilename(trueTag->filename());
-    } else {
+    }
+    else {
         return false;
     }
 
@@ -369,7 +404,6 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
     tag->setActive(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Active).toInt());
 
     if (!taggedResouces.isEmpty()) {
-        KisTagSP tagFromDb = tagForUrl(tag->url());
         Q_FOREACH(const KoResourceSP resource, taggedResouces) {
 
             if (!resource) continue;
@@ -432,11 +466,11 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
 
             QSqlQuery qRemove;
             if (!qRemove.prepare("DELETE FROM tags\n"
-                           "WHERE  id = :id\n"
-                           "AND    url = :url\n"
-                           "AND    resource_type_id = (SELECT id\n"
-                           "                           FROM   resource_types\n"
-                           "                           WHERE  name = :resource_type\n)")) {
+                                 "WHERE  id = :id\n"
+                                 "AND    url = :url\n"
+                                 "AND    resource_type_id = (SELECT id\n"
+                                 "                           FROM   resource_types\n"
+                                 "                           WHERE  name = :resource_type\n)")) {
                 qWarning() << "Couild not prepare make query to remove a different tag with the same url" << tag << qRemove.lastError();
                 endRemoveRows();
                 return false;
@@ -503,8 +537,6 @@ bool KisAllTagsModel::changeTagActive(const KisTagSP tag, bool active)
 
 }
 
-
-
 KisTagSP KisAllTagsModel::tagForUrl(const QString& tagUrl) const
 {
     if (tagUrl.isEmpty()) {
@@ -517,57 +549,11 @@ KisTagSP KisAllTagsModel::tagForUrl(const QString& tagUrl) const
         return tagForIndex(index(Ids::AllUntagged + s_fakeRowsCount, 0));
     }
 
-    QSqlQuery query;
-    bool r = query.prepare("SELECT tags.id\n"
-                           ",      tags.url\n"
-                           ",      tags.name\n"
-                           ",      tags.comment\n"
-                           ",      tags.active\n"
-                           ",      resource_types.name as resource_type\n"
-                           "FROM   tags\n"
-                           ",      resource_types\n"
-                           "WHERE  tags.resource_type_id = resource_types.id\n"
-                           "AND    resource_types.name = :resource_type\n"
-                           "AND    tags.url = :tag_url\n");
-
-    if (!r) {
-        qWarning() << "Could not prepare KisAllTagsModel::tagForUrl query" << query.lastError();
-        return KisTagSP();
-    }
-
-    query.bindValue(":resource_type", d->resourceType);
-    QString tagUrlForSql = tagUrl;
-    query.bindValue(":tag_url", tagUrlForSql);
-
-    r = query.exec();
-    if (!r) {
-        qWarning() << "Could not execute KisAllTagsModel::tagForUrl query" << query.lastError();
-        return KisTagSP();
-    }
-    KisTagSP tag(new KisTag());
-    r = query.first();
-    if (!r) {
-        return KisTagSP();
-    }
-
-    tag->setUrl(query.value("url").toString());
-    tag->setName(query.value("name").toString());
-    tag->setResourceType(d->resourceType);
-    tag->setComment(query.value("comment").toString());
-    tag->setId(query.value("id").toInt());
-    tag->setActive(query.value("active").toBool());
-    tag->setValid(true);
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tagUrl.toLower() == tag->url().toLower(), KisTagSP());
-
-    return tag;
-
+    return KisResourceLocator::instance()->tagForUrl(tagUrl, d->resourceType);
 }
 
 bool KisAllTagsModel::resetQuery()
 {
-//    QElapsedTimer t;
-//    t.start();
     bool r = d->query.prepare("SELECT tags.id\n"
                               ",      tags.url\n"
                               ",      tags.name\n"
@@ -584,6 +570,7 @@ bool KisAllTagsModel::resetQuery()
     }
 
     d->query.bindValue(":resource_type", d->resourceType);
+    d->query.bindValue(":locale", KisTag::currentLocale());
 
     r = d->query.exec();
 
@@ -603,8 +590,6 @@ void KisAllTagsModel::addStorage(const QString &location)
     endResetModel();
 }
 
-
-
 void KisAllTagsModel::removeStorage(const QString &location)
 {
     Q_UNUSED(location)
@@ -612,7 +597,6 @@ void KisAllTagsModel::removeStorage(const QString &location)
     resetQuery();
     endResetModel();
 }
-
 
 struct KisTagModel::Private {
     TagFilter tagFilter{KisTagModel::ShowActiveTags};

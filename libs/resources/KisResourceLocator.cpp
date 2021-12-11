@@ -201,6 +201,114 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
     }
 }
 
+KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString resourceType)
+{
+    QSqlQuery query;
+    bool r = query.prepare("SELECT tags.id\n"
+                           ",      tags.url\n"
+                           ",      tags.active\n"
+                           ",      tags.name\n"
+                           ",      tags.comment\n"
+                           ",      tags.filename\n"
+                           ",      resource_types.name as resource_type\n"
+                           ",      resource_types.id\n"
+                           "FROM   tags\n"
+                           ",      resource_types\n"
+                           "WHERE  tags.resource_type_id = resource_types.id\n"
+                           "AND    resource_types.name = :resource_type\n"
+                           "AND    tags.url = :tag_url\n");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceLocator::tagForUrl query" << query.lastError();
+        return KisTagSP();
+    }
+
+    query.bindValue(":resource_type", resourceType);
+    query.bindValue(":tag_url", tagUrl);
+
+    r = query.exec();
+    if (!r) {
+        qWarning() << "Could not execute KisResourceLocator::tagForUrl query" << query.lastError() << query.boundValues();
+        return KisTagSP();
+    }
+
+    KisTagSP tag(new KisTag());
+
+    r = query.first();
+    if (!r) {
+        return tag;
+    }
+
+    int tagId = query.value("tags.id").toInt();
+    int resourceTypeId = query.value("resource_types.id").toInt();
+
+    tag->setUrl(query.value("url").toString());
+    tag->setResourceType(resourceType);
+    tag->setId(query.value("id").toInt());
+    tag->setActive(query.value("active").toBool());
+    tag->setName(query.value("name").toString());
+    tag->setComment(query.value("comment").toString());
+    tag->setFilename(query.value("filename").toString());
+    tag->setValid(true);
+
+
+    QMap<QString, QString> names;
+    QMap<QString, QString> comments;
+
+    r = query.prepare("SELECT language\n"
+                      ",      name\n"
+                      ",      comment\n"
+                      "FROM   tag_translations\n"
+                      "WHERE  tag_id = :id");
+
+    if (!r) {
+        qWarning() << "Could not prepare KisResourceLocator::tagForUrl translation query" << query.lastError();
+    }
+
+    query.bindValue(":id", tag->id());
+
+    if (!query.exec()) {
+        qWarning() << "Could not execute KisResourceLocator::tagForUrl translation query" << query.lastError();
+    }
+
+    while (query.next()) {
+        names[query.value(0).toString()] = query.value(1).toString();
+        comments[query.value(0).toString()] = query.value(2).toString();
+    }
+
+    tag->setNames(names);
+    tag->setComments(comments);
+
+    QSqlQuery defaultResourcesQuery;
+
+    if (!defaultResourcesQuery.prepare("SELECT resources.filename\n"
+                                       "FROM   resources\n"
+                                       ",      resource_tags\n"
+                                       "WHERE  resource_tags.tag_id = :tag_id\n"
+                                       "AND    resources.resource_type_id = :type_id\n"
+                                       "AND    resource_tags.resource_id = resources.id\n")) {
+        qWarning() << "Could not prepare resource/tag query" << defaultResourcesQuery.lastError();
+    }
+
+    defaultResourcesQuery.bindValue(":tag_id", tagId);
+    defaultResourcesQuery.bindValue(":type_id", resourceTypeId);
+
+    if (!defaultResourcesQuery.exec()) {
+        qWarning() << "Could not execute resource/tag query" << defaultResourcesQuery.lastError();
+    }
+
+    QStringList resourceFileNames;
+
+    while (defaultResourcesQuery.next()) {
+        resourceFileNames << defaultResourcesQuery.value("resources.filename").toString();
+    }
+
+    tag->setDefaultResources(resourceFileNames);
+
+    return tag;
+}
+
+
 KoResourceSP KisResourceLocator::resource(QString storageLocation, const QString &resourceType, const QString &filename)
 {
     storageLocation = makeStorageLocationAbsolute(storageLocation);
@@ -713,14 +821,8 @@ void KisResourceLocator::saveTags()
 {
     QSqlQuery query;
 
-    if (!query.prepare("SELECT tags.id\n"
-                       ",      tags.url \n"
-                       ",      tags.name \n"
-                       ",      tags.comment \n"
-                       ",      tags.active \n"
-                       ",      tags.filename \n"
+    if (!query.prepare("SELECT tags.url \n"
                        ",      resource_types.name \n"
-                       ",      resource_types.id "
                        "FROM   tags\n"
                        ",      resource_types\n"
                        "WHERE  tags.resource_type_id = resource_types.id\n"))
@@ -734,66 +836,19 @@ void KisResourceLocator::saveTags()
         return;
     }
 
-    query.first();
-
-    do {
+    while (query.next()) {
         // Save tag...
-        KisTag tag;
-        tag.setUrl(query.value("tags.url").toString());
-        tag.setName(query.value("tags.name").toString());
-        tag.setComment(query.value("tags.comment").toString());
-        tag.setActive(query.value("tags.active").toBool());
-        tag.setResourceType(query.value("resource_types.name").toString());
-        tag.setFilename(query.value("tags.filename").toString());
+        KisTagSP tag = tagForUrl(query.value("tags.url").toString(),
+                                 query.value("resource_types.name").toString());
 
-        int tagId = query.value("tags.id").toInt();
-
-        int resourceTypeId = query.value("resource_types.id").toInt();
-
-        QSqlQuery r;
-
-        if (!r.prepare("SELECT resources.filename\n"
-                       "FROM   resources\n"
-                       ",      resource_tags\n"
-                       "WHERE  resource_tags.tag_id = :tag_id\n"
-                       "AND    resources.resource_type_id = :type_id\n"
-                       "AND    resource_tags.resource_id = resources.id\n")) {
-            qWarning() << "Could not prepare resource/tag query" << r.lastError();
-        }
-
-        r.bindValue(":tag_id", tagId);
-        r.bindValue(":type_id", resourceTypeId);
-
-        if (!r.exec()) {
-            qWarning() << "Could not execute resource/tag query" << r.lastError();
-            return;
-        }
-
-        QStringList resourceFileNames;
-
-        while (r.next()) {
-            resourceFileNames << r.value("resources.filename").toString();
-        }
-
-        tag.setDefaultResources(resourceFileNames);
-
-        QString filename = tag.filename();
+        QString filename = tag->filename();
         if (filename.isEmpty()) {
-            filename = tag.url() + ".tag";
+            filename = tag->url() + ".tag";
         }
 
         filename = makeStorageLocationRelative(filename);
 
-        QFile f(d->resourceLocation + tag.resourceType() + '/' + filename);
-
-        if (QFileInfo(d->resourceLocation + tag.resourceType() + '/' + filename).exists()) {
-            if (!f.open(QFile::ReadOnly)) {
-                qWarning () << "Could not open existing tag file for reading";
-            }
-            tag.load(f);
-            f.close();
-            tag.setDefaultResources(resourceFileNames);
-        }
+        QFile f(d->resourceLocation + tag->resourceType() + '/' + filename);
 
         if (!f.open(QFile::WriteOnly)) {
             qWarning () << "Couild not open tag file for writing" << f.fileName();
@@ -803,7 +858,7 @@ void KisResourceLocator::saveTags()
         QBuffer buf;
         buf.open(QIODevice::WriteOnly);;
 
-        if (!tag.save(buf)) {
+        if (!tag->save(buf)) {
             qWarning() << "Could not save tag to" << f.fileName();
             buf.close();
             f.close();
@@ -814,8 +869,7 @@ void KisResourceLocator::saveTags()
         f.flush();
 
         f.close();
-
-    } while (query.next());
+    }
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)

@@ -27,15 +27,10 @@ public:
         , m_resourceType(resourceType)
     {}
 
-    bool hasNext() const override {return false; }
+    bool hasNext() const override {return false;}
     void next() override {}
 
-    QString url() const override { return QString(); }
-    QString name() const override { return QString(); }
-    QString resourceType() const override { return QString(); }
-    QString comment() const override {return QString(); }
-    QString filename() const override {return QString(); }
-    KisTagSP tag() const override { return 0; }
+    KisTagSP tag() const override { return nullptr; }
 
 private:
 

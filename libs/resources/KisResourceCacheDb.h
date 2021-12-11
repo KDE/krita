@@ -112,7 +112,7 @@ private:
     static bool tagResource(const QString &resourceFileName, KisTagSP tag, const QString &resourceType);
     static bool hasTag(const QString &url, const QString &resourceType);
     static bool linkTagToStorage(const QString &url, const QString &resourceType, const QString &storageLocation);
-    static bool addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment, const QString &filename);
+    static bool addTag(const QString &resourceType, const QString storageLocation, KisTagSP tag);
     static bool addTags(KisResourceStorageSP storage, QString resourceType);
 
     static bool addStorage(KisResourceStorageSP storage, bool preinstalled);

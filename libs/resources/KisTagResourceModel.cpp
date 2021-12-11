@@ -95,7 +95,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
     if (!pos) {return v;}
 
-
+    KisTagSP tag = KisResourceLocator::instance()->tagForUrl(d->query.value("tag_url").toString(), d->resourceType);
 
     if (role < Qt::UserRole + TagId && index.column() < TagId) {
         int id = d-> query.value("resource_id").toInt();
@@ -121,15 +121,6 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + Tag:
     {
-        KisTagSP tag(new KisTag());
-        tag->setUrl(d->query.value("tag_url").toString());
-        tag->setName(d->query.value("tag_name").toString());
-        tag->setComment(d->query.value("tag_comment").toString());
-        tag->setId(d->query.value("tag_id").toInt());
-        tag->setActive(d->query.value("tag_active").toBool());
-        tag->setResourceType(d->resourceType);
-        tag->setValid(true);
-
         v = QVariant::fromValue(tag);
         break;
     }
@@ -145,7 +136,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + TagActive:
     {
-        v = d->query.value("tag_active");
+        v = tag->active();
         break;
     }
     case Qt::UserRole + ResourceStorageActive:
@@ -160,7 +151,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + TagName:
     {
-        v = d->query.value("tag_name").toString();
+        tag->name();
         break;
     }
 
@@ -332,8 +323,6 @@ bool KisAllTagResourceModel::resetQuery()
 {
     bool r = d->query.prepare("SELECT tags.id                as tag_id\n"
                               ",      tags.url               as tag_url\n"
-                              ",      tags.name              as tag_name\n"
-                              ",      tags.comment           as tag_comment\n"
                               ",      tags.active            as tag_active\n"
                               ",      resources.id           as resource_id\n"
                               ",      resources.status       as resource_active\n"
@@ -346,6 +335,7 @@ bool KisAllTagResourceModel::resetQuery()
                               ",      storages\n"
                               ",      tags\n"
                               ",      resource_tags\n"
+                              ",      tag_translations\n"
                               "WHERE  tags.id                    = resource_tags.tag_id\n"
                               "AND    tags.resource_type_id      = resource_types.id\n"
                               "AND    resources.id               = resource_tags.resource_id\n"

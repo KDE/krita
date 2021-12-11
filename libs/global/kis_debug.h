@@ -79,7 +79,6 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
 #define infoOpenGL qCDebug(_41015)
 #define infoMetaData qCDebug(_41016)
 
-
 #define warnResources qCWarning(_30009)
 #define warnKrita qCWarning(_41000)
 #define warnImage qCWarning(_41001)
@@ -142,8 +141,6 @@ extern const KRITAGLOBAL_EXPORT QLoggingCategory &_41018();
  * Show a nicely formatted backtrace.
  */
 KRITAGLOBAL_EXPORT QString kisBacktrace();
-
-KRITAGLOBAL_EXPORT void printBacktrace();
 
 /**
  * Please pretty print my variable

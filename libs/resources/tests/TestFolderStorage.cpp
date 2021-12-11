@@ -76,7 +76,7 @@ void TestFolderStorage::testTagIterator()
     int count = 0;
     while (iter->hasNext()) {
         iter->next();
-        qDebug() << iter->url() << iter->name() << iter->tag();
+        qDebug() << iter->tag();
         count++;
     }
     QVERIFY(count == 1);

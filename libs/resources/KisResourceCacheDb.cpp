@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.13" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.14" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -98,7 +98,8 @@ QSqlError createDatabase(const QString &location)
                                        << "versioned_resources"
                                        << "resource_tags"
                                        << "metadata"
-                                       << "tags_storages";
+                                       << "tags_storages"
+                                       << "tag_translations";
 
     QStringList dbTables;
     // Verify whether we should recreate the database
@@ -143,7 +144,9 @@ QSqlError createDatabase(const QString &location)
                 // XXX: Implement migration
                 schemaIsOutDated = true;
                 QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database."));
-                KisResourceLocator::instance()->saveTags();
+                if (QVersionNumber::compare(schemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0) {
+                    KisResourceLocator::instance()->saveTags();
+                }
                 db.close();
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
                 QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
@@ -820,12 +823,12 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     r = q.prepare("INSERT INTO resources \n"
                   "(storage_id, resource_type_id, name, filename, tooltip, thumbnail, status, temporary, md5sum) \n"
                   "VALUES \n"
-                  "((SELECT id "
-                  "  FROM storages "
-                  "  WHERE location = :storage_location)\n"
+                  "((SELECT  id "
+                  "  FROM    storages "
+                  "  WHERE   location = :storage_location)\n"
                   ", (SELECT id\n"
-                  "   FROM resource_types\n"
-                  "   WHERE name = :resource_type)\n"
+                  "   FROM   resource_types\n"
+                  "   WHERE  name = :resource_type)\n"
                   ", :name\n"
                   ", :filename\n"
                   ", :tooltip\n"
@@ -1137,10 +1140,10 @@ bool KisResourceCacheDb::linkTagToStorage(const QString &url, const QString &res
 }
 
 
-bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, const QString url, const QString name, const QString comment, const QString &filename)
+bool KisResourceCacheDb::addTag(const QString &resourceType, const QString storageLocation, KisTagSP tag)
 {
 
-    if (hasTag(url, resourceType)) {
+    if (hasTag(tag->url(), resourceType)) {
         // Check whether this storage is already registered for this tag
         QSqlQuery q;
         if (!q.prepare("SELECT storages.location\n"
@@ -1157,7 +1160,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
             qWarning() << "Could not prepare select tags from tags_storages query" << q.lastError();
         }
 
-        q.bindValue(":url", url);
+        q.bindValue(":url", tag->url());
         q.bindValue(":resource_type", resourceType);
 
         if (!q.exec()) {
@@ -1166,11 +1169,13 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
 
         // If this tag is not yet linked to the storage, link it
         if (!q.first()) {
-            return linkTagToStorage(url, resourceType, storageLocation);
+            return linkTagToStorage(tag->url(), resourceType, storageLocation);
         }
 
         return true;
     }
+
+    int tagId;
 
     // Insert the tag
     {
@@ -1185,27 +1190,64 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
                        "   FROM   resource_types\n"
                        "   WHERE  name = :resource_type)\n"
                        ", 1\n"
-                       ", :filename"
+                       ", :filename\n"
                        ");")) {
             qWarning() << "Could not prepare insert tag statement" << q.lastError();
             return false;
         }
 
-
-
-        q.bindValue(":url", url);
-        q.bindValue(":name", name);
-        q.bindValue(":comment", comment);
+        q.bindValue(":url", tag->url());
+        q.bindValue(":name", tag->name(false));
+        q.bindValue(":comment", tag->comment(false));
         q.bindValue(":resource_type", resourceType);
-        q.bindValue(":filename", filename);
-
+        q.bindValue(":filename", tag->filename());
 
         if (!q.exec()) {
             qWarning() << "Could not insert tag" << q.boundValues() << q.lastError();
         }
+
+        tagId = q.lastInsertId().toInt();
     }
 
-    linkTagToStorage(url, resourceType, storageLocation);
+    {
+        Q_FOREACH(const QString language, tag->names().keys()) {
+
+            QString name = tag->names()[language];
+            QString comment = name;
+            if (tag->comments().contains(language)) {
+                comment = tag->comments()[language];
+            }
+
+            QSqlQuery q;
+            if (!q.prepare("INSERT INTO tag_translations\n"
+                           "( tag_id\n"
+                           ", language\n"
+                           ", name\n"
+                           ", comment\n"
+                           ")\n"
+                           "VALUES\n"
+                           "( :id\n"
+                           ", :language\n"
+                           ", :name\n"
+                           ", :comment\n"
+                           ");")) {
+                qWarning() << "Could not prepare insert tag_translation query" << q.lastError();
+            }
+
+            q.bindValue(":id", tagId);
+            q.bindValue(":language", language);
+            q.bindValue(":name", name);
+            q.bindValue(":comment", comment);
+
+            if (!q.exec()) {
+                qWarning() << "Could not execute insert tag_transaltion query" << q.lastError() << q.boundValues();
+            }
+        }
+
+    }
+
+
+    linkTagToStorage(tag->url(), resourceType, storageLocation);
 
     return true;
 }
@@ -1216,15 +1258,14 @@ bool KisResourceCacheDb::addTags(KisResourceStorageSP storage, QString resourceT
     QSharedPointer<KisResourceStorage::TagIterator> iter = storage->tags(resourceType);
     while(iter->hasNext()) {
         iter->next();
-
-        if (!addTag(resourceType, storage->location(), iter->url(), iter->name(), iter->comment(), iter->filename())) {
-            qWarning() << "Could not add tag" << iter->url() << "to the database";
+        if (!addTag(resourceType, storage->location(), iter->tag())) {
+            qWarning() << "Could not add tag" << iter->tag() << "to the database";
             continue;
         }
         if (!iter->tag()->defaultResources().isEmpty()) {
             Q_FOREACH(const QString &resourceFileName, iter->tag()->defaultResources()) {
                 if (!tagResource(resourceFileName, iter->tag(), resourceType)) {
-                    qWarning() << "Could not tag resource" << QFileInfo(resourceFileName).baseName() << "from" << storage->name() << "filename" << resourceFileName << "with tag" << iter->url();
+                    qWarning() << "Could not tag resource" << QFileInfo(resourceFileName).baseName() << "from" << storage->name() << "filename" << resourceFileName << "with tag" << iter->tag();
                 }
             }
         }

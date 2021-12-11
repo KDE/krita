@@ -39,6 +39,8 @@ public:
     KisTag &operator=(const KisTag &rhs);
     KisTagSP clone() const;
 
+    static QString currentLocale();
+
     bool valid() const;
 
     int id() const;
@@ -51,13 +53,17 @@ public:
     QString url() const;
     void setUrl(const QString &url);
 
-    /// The translated name of the tag
-    QString name() const;
+    /// The translated names of the tag
+    QString name(bool translated = true) const;
     void setName(const QString &name);
+    QMap<QString, QString> names() const;
+    void setNames(const QMap<QString, QString> &names);
 
-    /// a translated tooltip for the tag
-    QString comment() const;
-    void setComment(const QString &comment);
+    /// The translated tooltips for the tag
+    QString comment(bool translated = true) const;
+    void setComment(const QString comment);
+    QMap<QString, QString> comments() const;
+    void setComments(const QMap<QString, QString> &comments);
 
     QString resourceType() const;
     void setResourceType(const QString &resourceType);
@@ -83,14 +89,15 @@ private:
     void setActive(bool active);
     void setValid(bool valid);
 
-    static const QByteArray s_group;
-    static const QByteArray s_type;
-    static const QByteArray s_tag;
-    static const QByteArray s_name;
-    static const QByteArray s_resourceType;
-    static const QByteArray s_url;
-    static const QByteArray s_comment;
-    static const QByteArray s_defaultResources;
+    static const QString s_group;
+    static const QString s_type;
+    static const QString s_tag;
+    static const QString s_name;
+    static const QString s_resourceType;
+    static const QString s_url;
+    static const QString s_comment;
+    static const QString s_defaultResources;
+    static const QString s_desktop;
 
     class Private;
     QScopedPointer<Private> d;

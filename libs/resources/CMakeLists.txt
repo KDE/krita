@@ -40,10 +40,6 @@ set(kritaresources_LIB_SRCS
 
     ResourceDebug.cpp
 
-    kconfigini.cpp
-    kconfigdata.cpp
-    kconfigbackend.cpp
-
     KisRequiredResourcesOperators.cpp
     KisResourcesInterface.cpp
     KisLocalStrokeResources.cpp

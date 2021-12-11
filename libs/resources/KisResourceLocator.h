@@ -132,6 +132,7 @@ Q_SIGNALS:
 
 private:
 
+    friend class KisAllTagsModel;
     friend class KisTagResourceModel;
     friend class KisAllResourcesModel;
     friend class KisAllTagResourceModel;
@@ -280,6 +281,13 @@ private:
      * into the database.
      */
     void loadRequiredResources(KoResourceSP resource);
+
+    /**
+     * @brief tagForUrl create a tag from the database
+     * @param tagUrl the url
+     * @return a complete tag with all translated names and comments.
+     */
+    KisTagSP tagForUrl(const QString &tagUrl, const QString resourceType);
 
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);

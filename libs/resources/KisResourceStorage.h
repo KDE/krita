@@ -70,18 +70,6 @@ public:
         /// The iterator is only valid if next() has been called at least once.
         virtual void next() = 0;
 
-        /// The untranslated name of the tag, to be used for making connections to resources
-        virtual QString url() const = 0;
-        /// The translated name of the tag, to be shown in the GUI
-        virtual QString name() const = 0;
-        /// An extra, optional comment for the tag
-        virtual QString comment() const = 0;
-        /// The resource type as defined in the tag file
-        virtual QString resourceType() const = 0;
-        /// The filename of the tag
-        virtual QString filename() const = 0;
-
-
         /// A tag object on which we can set properties and which we can save
         virtual KisTagSP tag() const = 0;
     };

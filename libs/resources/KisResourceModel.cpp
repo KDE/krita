@@ -552,11 +552,7 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
 
     QSqlQuery q;
 
-    r = q.prepare("SELECT tags.id\n"
-                  ",      tags.url\n"
-                  ",      tags.name\n"
-                  ",      tags.comment\n"
-                  ",      resource_types.name as resource_type\n"
+    r = q.prepare("SELECT tags.url\n"
                   "FROM   tags\n"
                   ",      resource_tags\n"
                   ",      resource_types\n"
@@ -576,14 +572,7 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
 
     QVector<KisTagSP> tags;
     while (q.next()) {
-        KisTagSP tag(new KisTag());
-        tag->setId(q.value("id").toInt());
-        tag->setUrl(q.value("url").toString());
-        tag->setName(q.value("name").toString());
-        tag->setComment(q.value("comment").toString());
-        tag->setResourceType(q.value("resource_type").toString());
-        tag->setValid(true);
-        tag->setActive(true);
+        KisTagSP tag = KisResourceLocator::instance()->tagForUrl(q.value(0).toString(), d->resourceType);
         tags << tag;
     }
     return tags;

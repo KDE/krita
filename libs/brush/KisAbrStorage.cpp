@@ -28,24 +28,20 @@ public:
     {}
 
     bool hasNext() const override {
-        if (resourceType() != ResourceType::Brushes) return false;
+        if (m_resourceType != ResourceType::Brushes) return false;
         return !m_taggingDone;
     }
+
     void next() override { m_taggingDone = true; }
 
-    QString url() const override { return QFileInfo(m_location).fileName(); }
-    QString name() const override { return QFileInfo(m_location).fileName(); }
-    QString resourceType() const override { return m_resourceType; }
-    QString comment() const override {return QString(); }
-    QString filename() const override {return QString(); }
     KisTagSP tag() const override
     {
         KisTagSP abrTag(new KisTag());
-        abrTag->setUrl(url());
-        abrTag->setComment(comment());
-        abrTag->setName(name());
-        abrTag->setFilename(filename());
-        abrTag->setResourceType(resourceType());
+        abrTag->setUrl(QFileInfo(m_location).fileName());
+        abrTag->setName(QFileInfo(m_location).fileName());
+        abrTag->setComment(QFileInfo(m_location).fileName());
+        abrTag->setFilename(QFileInfo(m_location).fileName());
+        abrTag->setResourceType(m_resourceType);
         QStringList brushes;
         Q_FOREACH(const KisAbrBrushSP brush, m_brushCollection->brushes()) {
             brushes << brush->filename();

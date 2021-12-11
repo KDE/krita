@@ -67,13 +67,7 @@ public:
     {
         const_cast<BundleTagIterator*>(this)->m_tag = m_tagIterator->next();
     }
-
-    QString url() const override { return m_tag ? m_tag->url() : QString(); }
-    QString name() const override { return m_tag ? m_tag->name() : QString(); }
-    QString comment() const override {return m_tag ? m_tag->comment() : QString(); }
     KisTagSP tag() const override { return m_tag; }
-    QString filename() const override {return QString(); }
-    QString resourceType() const override { return m_resourceType; } // Tags in bundles are still lists, not KisTag files.
 
 private:
     QHash<QString, KisTagSP> m_tags;

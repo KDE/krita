@@ -27,10 +27,10 @@ KoToolBoxDocker::KoToolBoxDocker(KoToolBox *toolBox)
     w->setFrameShape(QFrame::StyledPanel);
     w->setFrameShadow(QFrame::Raised);
     w->setFrameStyle(QFrame::Panel | QFrame::Raised);
-    w->setMinimumWidth(16);
     QFont font = qApp->font();
     font.setPointSizeF(font.pointSizeF() * 0.9);
-    w->setFixedHeight(QFontMetrics(font).height());
+    int titleSize = QFontMetrics(font).height();
+    w->setMinimumSize(titleSize, titleSize);
     setTitleBarWidget(w);
 
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
@@ -52,10 +52,10 @@ void KoToolBoxDocker::resizeEvent(QResizeEvent *event)
 {
     QDockWidget::resizeEvent(event);
     if (isFloating()) {
-        if (m_scrollArea->width() > m_scrollArea->height()) {
-            m_scrollArea->setOrientation(Qt::Horizontal);
+        if (width() > height()) {
+            setToolBoxOrientation(Qt::Horizontal);
         } else {
-            m_scrollArea->setOrientation(Qt::Vertical);
+            setToolBoxOrientation(Qt::Vertical);
         }
     }
 }
@@ -63,8 +63,19 @@ void KoToolBoxDocker::resizeEvent(QResizeEvent *event)
 void KoToolBoxDocker::updateToolBoxOrientation(Qt::DockWidgetArea area)
 {
     if (area == Qt::TopDockWidgetArea || area == Qt::BottomDockWidgetArea) {
+        setToolBoxOrientation(Qt::Horizontal);
+    } else {
+        setToolBoxOrientation(Qt::Vertical);
+    }
+}
+
+void KoToolBoxDocker::setToolBoxOrientation(Qt::Orientation orientation)
+{
+    if (orientation == Qt::Horizontal) {
+        setFeatures(features() | QDockWidget::DockWidgetVerticalTitleBar);
         m_scrollArea->setOrientation(Qt::Horizontal);
     } else {
+        setFeatures(features() & ~QDockWidget::DockWidgetVerticalTitleBar);
         m_scrollArea->setOrientation(Qt::Vertical);
     }
 }

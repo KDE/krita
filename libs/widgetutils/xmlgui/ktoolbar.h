@@ -187,6 +187,7 @@ private:
     Q_PRIVATE_SLOT(d, void slotContextTextUnder())
     Q_PRIVATE_SLOT(d, void slotContextIconSize())
     Q_PRIVATE_SLOT(d, void slotLockToolBars(bool))
+    Q_PRIVATE_SLOT(d, void slotToolButtonToggled(bool))
 };
 
 #endif

@@ -122,6 +122,8 @@ public:
     void slotContextTextUnder();
     void slotContextIconSize();
     void slotLockToolBars(bool lock);
+    void slotToolButtonToggled(bool checked);
+
 
     void init(bool readConfig = true, bool isMainToolBar = false);
     QString getPositionAsString() const;
@@ -130,6 +132,7 @@ public:
     void adjustSeparatorVisibility();
     void loadKDESettings();
     void applyCurrentSettings();
+    void customizeButtonPalette(QToolButton *button, bool checked);
 
     QAction *findAction(const QString &actionName, KXMLGUIClient **client = 0) const;
 
@@ -530,6 +533,15 @@ void KToolBar::Private::applyCurrentSettings()
     }
 }
 
+// Krita widget style "hack" setting button palette depending on check state
+void KToolBar::Private::customizeButtonPalette(QToolButton *button, bool checked)
+{
+    QPalette p = button->palette();
+    QColor color = q->palette().color(checked ? QPalette::Highlight : QPalette::Button);
+    p.setColor(QPalette::Button, color);
+    button->setPalette(p);
+}
+
 QAction *KToolBar::Private::findAction(const QString &actionName, KXMLGUIClient **clientOut) const
 {
     Q_FOREACH (KXMLGUIClient *client, xmlguiClients) {
@@ -750,6 +762,15 @@ void KToolBar::Private::slotContextIconSize()
 void KToolBar::Private::slotLockToolBars(bool lock)
 {
     q->setToolBarsLocked(lock);
+}
+
+// Krita widget style "hack" reacting to QToolButton toggles
+void KToolBar::Private::slotToolButtonToggled(bool checked)
+{
+    QToolButton *tb = qobject_cast<QToolButton *>(q->sender());
+    if (tb) {
+        customizeButtonPalette(tb, checked);
+    }
 }
 
 KToolBar::KToolBar(const QString &objectName, QWidget *parent, bool readConfig)
@@ -1241,11 +1262,6 @@ bool KToolBar::eventFilter(QObject *watched, QEvent *event)
                         }
                     }
                 }
-                // Set highlight color on checked buttons, same as in KisHighlightedButton
-                QPalette p = tb->palette();
-                QColor color = p.color(tb->isChecked() ? QPalette::Highlight : QPalette::Button);
-                p.setColor(QPalette::Button, color);
-                tb->setPalette(p);
             }
 
             // CJK languages use more verbose accelerator marker: they add a Latin
@@ -1309,6 +1325,11 @@ void KToolBar::actionEvent(QActionEvent *event)
             Q_FOREACH (QWidget *child, widget->findChildren<QWidget *>()) {
                 child->removeEventFilter(this);
             }
+            // Remove Krita's palette manipulation
+            QToolButton *tb = qobject_cast<QToolButton *>(widget);
+            if (tb) {
+                tb->disconnect(this, SLOT(slotToolButtonToggled(bool)));
+            }
         }
     }
 
@@ -1332,7 +1353,11 @@ void KToolBar::actionEvent(QActionEvent *event)
                 }
             }
             // NOTE: set a fixed button size, same size as the buttonsize used in kis_paintop_box
-            if (widget->inherits("QToolButton") && event->action()->icon().isNull() == false) {
+            // and toggle highlight color on checked buttons, same as in KisHighlightedButton
+            QToolButton *tb = qobject_cast<QToolButton *>(widget);
+            if (tb && event->action()->icon().isNull() == false) {
+                d->customizeButtonPalette(tb, tb->isChecked());
+                connect(tb, SIGNAL(toggled(bool)), this, SLOT(slotToolButtonToggled(bool)));
                 widget->setFixedSize(32, 32);
             }
         }

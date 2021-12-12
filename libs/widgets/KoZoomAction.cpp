@@ -143,15 +143,14 @@ void KoZoomAction::triggered(const QString& text)
     zoomString = zoomString.remove( '&' );
 
     KoZoomMode::Mode mode = KoZoomMode::toMode(zoomString);
-    int zoom = 0;
+    double zoom = 0;
 
     if( mode == KoZoomMode::ZOOM_CONSTANT ) {
         bool ok;
-        QRegExp regexp( ".*(\\d+).*" ); // "Captured" non-empty sequence of digits
+        QRegExp regexp( ".*(\\d+(\\.\\d+)?).*" ); // "Captured" non-empty sequence of digits
         int pos = regexp.indexIn( zoomString );
-
         if( pos > -1 ) {
-            zoom = regexp.cap( 1 ).toInt( &ok );
+            zoom = regexp.cap( 1 ).toDouble( &ok );
 
             if( !ok ) {
                 zoom = 0;

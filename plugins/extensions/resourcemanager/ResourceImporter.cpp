@@ -103,7 +103,7 @@ ResourceImporter::ResourceImporter(QWidget *parent)
 
 ResourceImporter::~ResourceImporter()
 {
-
+    qDeleteAll(m_resourceModelsForResourceType);
 }
 
 void ResourceImporter::importResources(QString startPath)

@@ -43,6 +43,9 @@ public:
         m_scrollNext->setAutoFillBackground(true);
         m_scrollNext->setFocusPolicy(Qt::NoFocus);
         connect(m_scrollNext, &QToolButton::clicked, this, &KoToolBoxScrollArea::doScrollNext);
+        // These are for filtering the mouse wheel events:
+        m_scrollPrev->installEventFilter(this);
+        m_scrollNext->installEventFilter(this);
 
         QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(this);
         if (!scroller) {
@@ -99,6 +102,16 @@ protected:
             updateGeometry();
         }
         return QScrollArea::event(event);
+    }
+
+    bool eventFilter(QObject *watched, QEvent *event) override
+    {
+        // The toolbuttons eat the wheel events, so we filter them for our use.
+        if ((watched == m_scrollPrev || watched == m_scrollNext) && event->type() == QEvent::Wheel) {
+            wheelEvent(static_cast<QWheelEvent *>(event));
+            return true;
+        }
+        return QScrollArea::eventFilter(watched, event);
     }
 
     void resizeEvent(QResizeEvent *event) override

@@ -325,10 +325,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
          || type == QEvent::TouchBegin
          || type == QEvent::NativeGesture) {
             bool wasVisible = d->popupWidget->onScreen();
-
             deregisterPopupWidget();
 
             if (wasVisible) {
+                event->setAccepted(true);
                 return true; // Event consumed.
             }
         }

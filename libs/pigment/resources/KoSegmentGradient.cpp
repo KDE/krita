@@ -112,6 +112,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP r
     if (!ok || numSegments < 1) {
         return false;
     }
+    m_segments.clear();
 
     dbgPigment << "Number of segments = " << numSegments;
 

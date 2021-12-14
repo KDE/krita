@@ -31,6 +31,22 @@ public:
     KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
 
+    enum ResourceFilter {
+        ShowInactiveResources = 0,
+        ShowActiveResources,
+        ShowAllResources
+    };
+
+    void setResourceFilter(ResourceFilter filter);
+
+    enum StorageFilter {
+        ShowInactiveStorages = 0,
+        ShowActiveStorages,
+        ShowAllStorages
+    };
+
+    void setStorageFilter(StorageFilter filter);
+
     // To be used if we need an extra proxy model, like for
     void setResourceModel(KisResourceModel *resourceModel);
 

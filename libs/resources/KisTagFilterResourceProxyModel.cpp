@@ -57,6 +57,24 @@ KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
     delete d;
 }
 
+void KisTagFilterResourceProxyModel::setResourceFilter(ResourceFilter filter)
+{
+    emit beforeFilterChanges();
+    d->resourceModel->setResourceFilter(KisResourceModel::ResourceFilter((int)filter));
+    d->tagResourceModel->setResourceFilter(KisTagResourceModel::ResourceFilter((int)filter));
+    invalidateFilter();
+    emit afterFilterChanged();
+}
+
+void KisTagFilterResourceProxyModel::setStorageFilter(StorageFilter filter)
+{
+    emit beforeFilterChanges();
+    d->resourceModel->setStorageFilter(KisResourceModel::StorageFilter((int)filter));
+    d->tagResourceModel->setStorageFilter(KisTagResourceModel::StorageFilter((int)filter));
+    invalidateFilter();
+    emit afterFilterChanged();
+}
+
 void KisTagFilterResourceProxyModel::setResourceModel(KisResourceModel *resourceModel)
 {
     d->resourceModel = resourceModel;

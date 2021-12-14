@@ -98,10 +98,14 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
     QString location = index.data(Qt::UserRole + KisAbstractResourceModel::Location).toString();
 
     if (location.isEmpty()) {
-        location = i18nc("a placeholder name for the default storage of resources", "resource folder");
+        // HACK for Krita 5.0: this is a sticky string from KisPaintOpRegistry::defaultPreset()
+        location = i18n("default");
     }
 
-    const QString locationRow = QString("<tr><td>%1:</td><td style=\"text-align: right;\">%2</td></tr>").arg(i18n("Location"), location);
+    const QString hackTranslatedLocationString =
+        index.model()->headerData(KisAbstractResourceModel::Location, Qt::Horizontal, Qt::DisplayRole).toString();
+
+    const QString locationRow = QString("<tr><td>%1:</td><td style=\"text-align: right;\">%2</td></tr>").arg(hackTranslatedLocationString, location);
 
     const QString footerTable = QString("<p><table>%1%2</table></p>").arg(tagsRow).arg(locationRow);
 

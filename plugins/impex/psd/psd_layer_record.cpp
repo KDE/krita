@@ -352,7 +352,7 @@ bool PSDLayerRecord::read(QIODevice* io)
                     !psdread(io, &layerMask.top)  ||
                     !psdread(io, &layerMask.left) ||
                     !psdread(io, &layerMask.bottom) ||
-                    !psdread(io, &layerMask.top)) {
+                    !psdread(io, &layerMask.right)) {
 
                 error = "could not read 'real' mask record";
                 return false;

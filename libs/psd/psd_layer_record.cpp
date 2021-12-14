@@ -337,7 +337,7 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
         // If it's 36, that is, bit four of the flags is set, we also need to read the 'real' flags, background and rectangle
         if (layerMaskLength == 36) {
             if (!psdread<byteOrder>(io, flags) || !psdread<byteOrder>(io, layerMask.defaultColor) || !psdread<byteOrder>(io, layerMask.top)
-                || !psdread<byteOrder>(io, layerMask.left) || !psdread<byteOrder>(io, layerMask.bottom) || !psdread<byteOrder>(io, layerMask.top)) {
+                || !psdread<byteOrder>(io, layerMask.left) || !psdread<byteOrder>(io, layerMask.bottom) || !psdread<byteOrder>(io, layerMask.right)) {
                 error = "could not read 'real' mask record";
                 return false;
             }

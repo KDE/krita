@@ -343,6 +343,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->workspacemodel = new KisResourceModel(ResourceType::Workspaces, this);
     connect(d->workspacemodel, SIGNAL(modelReset()), this, SLOT(updateWindowMenu()));
+    connect(d->workspacemodel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(updateWindowMenu()));
+    connect(d->workspacemodel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(updateWindowMenu()));
 
     d->viewManager = new KisViewManager(this, actionCollection());
     KConfigGroup group( KSharedConfig::openConfig(), "theme");

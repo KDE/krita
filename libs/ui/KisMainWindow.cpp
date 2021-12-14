@@ -1257,7 +1257,7 @@ QImage KisMainWindow::layoutThumbnail()
         if (children().at(childW)->isWidgetType()) {
             QWidget *w = dynamic_cast<QWidget*>(children().at(childW));
 
-            if (w->isVisible()) {
+            if (w->isVisible() && !w->property("_kis_excludeFromLayoutThumbnail").toBool()) {
                 QRect wRect = QRectF(w->geometry().x()*scale
                                      , w->geometry().y()*scale
                                      , w->geometry().width()*scale

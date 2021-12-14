@@ -219,8 +219,8 @@ bool KisTag::load(QIODevice &io)
             continue;
         }
         int isPos = line.indexOf("=");
-        QString key = line.left(isPos);
-        QString value = line.right(line.size() - (isPos + 1));
+        QString key = line.left(isPos).trimmed();
+        QString value = line.right(line.size() - (isPos + 1)).trimmed();
 
         if (key == s_url) {
             d->url = value;

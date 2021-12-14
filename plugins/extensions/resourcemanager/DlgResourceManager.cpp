@@ -304,8 +304,8 @@ void DlgResourceManager::slotDeleteResources()
             QModelIndex index = allModel->indexForResourceId(resourceId);
             allModel->setData(index, true, Qt::CheckStateRole);
         } else {
-            QModelIndex index = model->indexForResourceId(resourceId);
-            model->setResourceInactive(index);
+            QModelIndex index = allModel->indexForResourceId(resourceId);
+            allModel->setResourceInactive(index);
         }
     }
 

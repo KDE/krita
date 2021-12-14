@@ -27,6 +27,7 @@
 #include <KritaVersionWrapper.h>
 #include <KisMimeDatabase.h>
 #include <kis_assert.h>
+#include <kis_debug.h>
 
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
@@ -49,6 +50,7 @@ public:
     QMap<QString, KisResourceStorageSP> storages;
     QHash<QPair<QString, QString>, KoResourceSP> resourceCache;
     QMap<QPair<QString, QString>, QImage> thumbnailCache;
+    QMap<QPair<QString, QString>, KisTagSP> tagCache;
     QStringList errorMessages;
 };
 
@@ -203,6 +205,14 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 
 KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString resourceType)
 {
+    qDebug() << "TagForUrl" << tagUrl << resourceType;
+
+    if (d->tagCache.contains(QPair<QString, QString>(resourceType, tagUrl))) {
+        qDebug() << ">>>>>>>>>> hit!";
+        return d->tagCache[QPair<QString, QString>(resourceType, tagUrl)];
+    }
+    qDebug().noquote() << kisBacktrace();
+
     QSqlQuery query;
     bool r = query.prepare("SELECT tags.id\n"
                            ",      tags.url\n"
@@ -304,6 +314,8 @@ KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString reso
     }
 
     tag->setDefaultResources(resourceFileNames);
+
+    d->tagCache[QPair<QString, QString>(resourceType, tagUrl)] = tag;
 
     return tag;
 }
@@ -866,6 +878,11 @@ void KisResourceLocator::saveTags()
 
         f.close();
     }
+}
+
+void KisResourceLocator::purgeTag(const QString tagUrl, const QString resourceType)
+{
+    d->tagCache.remove(QPair<QString, QString>(resourceType, tagUrl));
 }
 
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)

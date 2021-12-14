@@ -108,6 +108,12 @@ public:
      */
     void saveTags();
 
+    /**
+     * Remove the given tag from the cache
+     */
+    void purgeTag(const QString tagUrl, const QString resourceType);
+
+
 Q_SIGNALS:
 
     void progressMessage(const QString&);

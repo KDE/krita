@@ -205,13 +205,9 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
 
 KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString resourceType)
 {
-    qDebug() << "TagForUrl" << tagUrl << resourceType;
-
     if (d->tagCache.contains(QPair<QString, QString>(resourceType, tagUrl))) {
-        qDebug() << ">>>>>>>>>> hit!";
         return d->tagCache[QPair<QString, QString>(resourceType, tagUrl)];
     }
-    qDebug().noquote() << kisBacktrace();
 
     QSqlQuery query;
     bool r = query.prepare("SELECT tags.id\n"

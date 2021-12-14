@@ -116,7 +116,6 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     bnErrorDetails->setVisible(false);
 
     // Recent docs...
-    labelNoRecentDocs->setVisible(false);
     recentDocumentsListView->setDragEnabled(false);
     recentDocumentsListView->viewport()->setAutoFillBackground(false);
     recentDocumentsListView->setSpacing(2);

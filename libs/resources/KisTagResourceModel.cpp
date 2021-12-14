@@ -145,7 +145,6 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     case Qt::UserRole + TagName:
     {
         v = d->query.value("translated_name");
-        qDebug() << ">>>>>>>>" << v;
         if (v.isNull()) {
             v = d->query.value("tag_name");
         }

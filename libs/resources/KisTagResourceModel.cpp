@@ -88,8 +88,6 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllTagResourceModel*>(this)->d->query.seek(index.row());
     if (!pos) {return v;}
 
-    KisTagSP tag = KisResourceLocator::instance()->tagForUrl(d->query.value("tag_url").toString(), d->resourceType);
-
     if (role < Qt::UserRole + TagId && index.column() < TagId) {
         int id = d-> query.value("resource_id").toInt();
         v = KisResourceQueryMapper::variantFromResourceQueryById(id, index.column(), role);
@@ -100,6 +98,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
         // this is used for example in case of sorting
         role = Qt::UserRole + index.column();
     }
+
     // These are not shown, but needed for the filter
     switch(role) {
     case Qt::UserRole + TagId:
@@ -114,6 +113,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + Tag:
     {
+        KisTagSP tag = KisResourceLocator::instance()->tagForUrl(d->query.value("tag_url").toString(), d->resourceType);
         v = QVariant::fromValue(tag);
         break;
     }
@@ -129,7 +129,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + TagActive:
     {
-        v = tag->active();
+        v = d->query.value("tag_active");
         break;
     }
     case Qt::UserRole + ResourceStorageActive:
@@ -139,12 +139,27 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + ResourceName:
     {
-        v = d->query.value("resource_name").toString();
+        v = d->query.value("resource_name");
         break;
     }
     case Qt::UserRole + TagName:
     {
-        tag->name();
+        QSqlQuery translatedNameQuery;
+        if (!translatedNameQuery.prepare("SELECT name FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
+            qWarning() << "Could not prepare name translation query 2" << translatedNameQuery.lastError();
+        }
+        translatedNameQuery.bindValue(":id", d->query.value("tag_id"));
+        translatedNameQuery.bindValue(":locale", KisTag::currentLocale());
+
+        if (!translatedNameQuery.exec()) {
+            qWarning() << "Could not execute name translation query 2" << translatedNameQuery.lastError();
+        }
+        if (translatedNameQuery.first()) {
+            v = translatedNameQuery.value("name");
+        }
+        else {
+            v = d->query.value("tag_name");
+        }
         break;
     }
 
@@ -292,6 +307,7 @@ bool KisAllTagResourceModel::resetQuery()
     bool r = d->query.prepare("SELECT tags.id                as tag_id\n"
                               ",      tags.url               as tag_url\n"
                               ",      tags.active            as tag_active\n"
+                              ",      tags.name              as tag_name\n"
                               ",      resources.id           as resource_id\n"
                               ",      resources.status       as resource_active\n"
                               ",      storages.active        as resource_storage_active\n"

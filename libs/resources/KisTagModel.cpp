@@ -93,7 +93,6 @@ int KisAllTagsModel::rowCount(const QModelIndex &parent) const
 
         const_cast<KisAllTagsModel*>(this)->d->cachedRowCount = q.value(0).toInt() + s_fakeRowsCount;
     }
-
     return d->cachedRowCount;
 }
 

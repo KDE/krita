@@ -27,7 +27,8 @@ static int s_fakeRowsCount {2};
 
 struct KisAllTagsModel::Private {
     QSqlQuery query;
-
+    QSqlQuery translatedNameQuery;
+    QSqlQuery translatedCommentQuery;
     QString resourceType;
     int columnCount {5};
     int cachedRowCount {-1};
@@ -47,6 +48,15 @@ KisAllTagsModel::KisAllTagsModel(const QString &resourceType, QObject *parent)
     connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
+
+    if (!d->translatedNameQuery.prepare("SELECT name FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
+        qWarning() << "Could not prepare name translation query" << d->translatedNameQuery.lastError();
+    }
+
+    if (!d->translatedCommentQuery.prepare("SELECT comment FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
+        qWarning() << "Could not prepare comment translation query" << d->translatedCommentQuery.lastError();
+    }
+
 
 }
 
@@ -178,21 +188,15 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::DisplayRole:
             case Qt::UserRole + Name:
             {
-                QSqlQuery q;
+                d->translatedNameQuery.bindValue(":id", d->query.value("id"));
+                d->translatedNameQuery.bindValue(":locale", KisTag::currentLocale());
 
-
-                if (!q.prepare("SELECT name FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
-                    qWarning() << "Could not prepare name translation query" << q.lastError();
-                }
-                q.bindValue(":id", d->query.value("id"));
-                q.bindValue(":locale", KisTag::currentLocale());
-
-                if (!q.exec()) {
-                    qWarning() << "Could not execute name translation query" << q.lastError();
+                if (!d->translatedNameQuery.exec()) {
+                    qWarning() << "Could not execute name translation query" << d->translatedNameQuery.lastError();
                 }
                 QVariant name;
-                if (q.first()) {
-                    name = q.value("name");
+                if (d->translatedNameQuery.first()) {
+                    name = d->translatedNameQuery.value("name");
                 }
                 else {
                     name = d->query.value("name");
@@ -204,19 +208,15 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::StatusTipRole: // fallthrough
             case Qt::WhatsThisRole:
             {
-                QSqlQuery q;
-                if (!q.prepare("SELECT comment FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
-                    qWarning() << "Could not prepare comment translation query" << q.lastError();
-                }
-                q.bindValue(":id", d->query.value("id"));
-                q.bindValue(":locale", KisTag::currentLocale());
+                d->translatedCommentQuery.bindValue(":id", d->query.value("id"));
+                d->translatedCommentQuery.bindValue(":locale", KisTag::currentLocale());
 
-                if (!q.exec()) {
-                    qWarning() << "Could not execute comment translation query" << q.lastError();
+                if (!d->translatedCommentQuery.exec()) {
+                    qWarning() << "Could not execute comment translation query" << d->translatedCommentQuery.lastError();
                 }
                 QVariant comment;
-                if (q.first()) {
-                    comment = q.value("comment");
+                if (d->translatedCommentQuery.first()) {
+                    comment = d->translatedCommentQuery.value("comment");
                 }
                 else {
                     comment = d->query.value("comment");
@@ -486,6 +486,7 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
                 return false;
             }
 
+            KisResourceLocator::instance()->purgeTag(tagWithTheSameUrl->url(), d->resourceType);
 
             resetQuery();
             endRemoveRows();

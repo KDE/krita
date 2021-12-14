@@ -232,12 +232,12 @@ KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString reso
         return KisTagSP();
     }
 
-    KisTagSP tag(new KisTag());
-
     r = query.first();
     if (!r) {
-        return tag;
+        return KisTagSP();
     }
+
+    KisTagSP tag(new KisTag());
 
     int tagId = query.value("tags.id").toInt();
     int resourceTypeId = query.value("resource_types.id").toInt();

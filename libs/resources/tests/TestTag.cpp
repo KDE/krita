@@ -36,18 +36,14 @@ void TestTag::testLoadTag()
     QVERIFY(tagLoader.comment() == "Your favorite brush presets");
     QVERIFY(tagLoader.url() == "* Favorites");
 
-    KLocalizedString::setLanguages(QStringList() << QStringLiteral("nl"));
+    QLocale::setDefault(QLocale("nl"));
 
-    f.open(QFile::ReadOnly);
-    QVERIFY(f.isOpen());
-    r = tagLoader.load(f);
-    f.close();
-
-    QVERIFY(r);
     QVERIFY(tagLoader.name() == "* Favorieten");
     QVERIFY(tagLoader.comment() == "Uw favorite voorinstellingen van penselen");
     QVERIFY(tagLoader.url() == "* Favorites");
 
+
+    QLocale::setDefault(QLocale("C"));
 }
 
 void TestTag::testSaveTag()
@@ -72,6 +68,7 @@ void TestTag::testSaveTag()
 
     buf.close();
     buf.open(QBuffer::ReadOnly);
+
     KisTag tag2;
     tag2.load(buf);
     QVERIFY(tag2.url() == tag1.url());

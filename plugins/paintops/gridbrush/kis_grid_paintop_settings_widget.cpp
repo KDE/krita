@@ -19,15 +19,11 @@
 KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    m_gridOption =  new KisGridOpOption();
-    m_gridShapeOption = new KisGridShapeOption();
-    m_ColorOption = new KisColorOption();
-
-    addPaintOpOption(m_gridOption, i18n("Brush size"));
-    addPaintOpOption(m_gridShapeOption, i18n("Particle type"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(m_ColorOption, i18n("Color options"));
-    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+    addPaintOpOption(new KisGridOpOption());
+    addPaintOpOption(new KisGridShapeOption());
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisColorOption());
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisGridPaintOpSettingsWidget::~ KisGridPaintOpSettingsWidget()

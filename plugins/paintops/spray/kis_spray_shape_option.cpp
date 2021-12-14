@@ -27,8 +27,8 @@ public:
 };
 
 KisSprayShapeOption::KisSprayShapeOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, true),
-      m_sizeRatioLocker(new KisAspectRatioLocker(this))
+    : KisPaintOpOption(i18n("Spray shape"), KisPaintOpOption::GENERAL, true)
+    , m_sizeRatioLocker(new KisAspectRatioLocker(this))
 {
 
     setObjectName("KisSprayShapeOption");

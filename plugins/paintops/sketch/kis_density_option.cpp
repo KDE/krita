@@ -8,7 +8,7 @@
 #include <klocalizedstring.h>
 
 KisDensityOption::KisDensityOption()
-    : KisCurveOption("Density", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Density", i18n("Density")), KisPaintOpOption::GENERAL, false)
 {
 }
 

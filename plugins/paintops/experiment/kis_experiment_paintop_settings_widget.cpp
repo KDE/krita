@@ -20,8 +20,8 @@
 KisExperimentPaintOpSettingsWidget:: KisExperimentPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    addPaintOpOption(new KisExperimentOpOption(), i18n("Experiment option"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisExperimentOpOption());
+    addPaintOpOption(new KisCompositeOpOption(true));
     //addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
 }
 

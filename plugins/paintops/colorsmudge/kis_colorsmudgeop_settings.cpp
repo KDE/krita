@@ -38,11 +38,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
 
     if (props.isEmpty()) {
         {
-            KisComboBasedPaintOpPropertyCallback *prop =
-                new KisComboBasedPaintOpPropertyCallback(
-                    "smudge_mode",
-                    i18n("Smudge Mode"),
-                    settings, 0);
+            KisComboBasedPaintOpPropertyCallback *prop = new KisComboBasedPaintOpPropertyCallback(KoID("smudge_mode", i18n("Smudge Mode")), settings, 0);
 
             QList<QString> modes;
             modes << i18n("Smearing");
@@ -95,10 +91,10 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
 
         {
             KisCurveOptionUniformProperty *prop =
-                new KisCurveOptionUniformProperty(
-                    "smudge_color_rate",
-                    new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false),
-                    settings, 0);
+                new KisCurveOptionUniformProperty("smudge_color_rate",
+                                                  new KisRateOption(KoID("ColorRate", i18n("Color Rate")), KisPaintOpOption::GENERAL, false),
+                                                  settings,
+                                                  0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();
@@ -107,11 +103,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
 
         {
             KisUniformPaintOpPropertyCallback *prop =
-                new KisUniformPaintOpPropertyCallback(
-                    KisUniformPaintOpPropertyCallback::Bool,
-                    "smudge_smear_alpha",
-                    i18n("Smear Alpha"),
-                    settings, 0);
+                new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool, KoID("smudge_smear_alpha", i18n("Smear Alpha")), settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -147,10 +139,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
 
         {
             KisComboBasedPaintOpPropertyCallback *prop =
-                new KisComboBasedPaintOpPropertyCallback(
-                    "smudge_paint_thickness_mode",
-                    i18n("Paint Thickness Mode"),
-                    settings, 0);
+                new KisComboBasedPaintOpPropertyCallback(KoID("smudge_paint_thickness_mode", i18n("Paint Thickness Mode")), settings, 0);
 
             QList<QString> modes;
             modes << i18n("Overwrite");

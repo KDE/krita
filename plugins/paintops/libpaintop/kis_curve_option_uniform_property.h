@@ -17,10 +17,14 @@ class KisPaintOpPresetUpdateProxy;
 class PAINTOP_EXPORT KisCurveOptionUniformProperty : public KisDoubleSliderBasedPaintOpProperty
 {
 public:
-    KisCurveOptionUniformProperty(const QString &name,
-                                  KisCurveOption *option,
-                                  KisPaintOpSettingsRestrictedSP settings,
-                                  QObject *parent);
+    [[deprecated("This constructor overrides the curve option's ID, please don't use it!")]] KisCurveOptionUniformProperty(
+        const QString &name,
+        KisCurveOption *option,
+        KisPaintOpSettingsRestrictedSP settings,
+        QObject *parent);
+
+    KisCurveOptionUniformProperty(KisCurveOption *option, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
+
     ~KisCurveOptionUniformProperty() override;
 
     void readValueImpl() override;

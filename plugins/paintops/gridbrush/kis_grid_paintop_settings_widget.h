@@ -22,11 +22,6 @@ public:
     ~KisGridPaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-
-public:
-    KisGridOpOption *m_gridOption;
-    KisGridShapeOption *m_gridShapeOption;
-    KisColorOption *m_ColorOption;
 };
 
 #endif

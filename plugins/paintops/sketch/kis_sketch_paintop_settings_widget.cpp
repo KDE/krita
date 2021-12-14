@@ -28,25 +28,23 @@
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(parent)
 {
-    m_sketchOption =  new KisSketchOpOption();
+    addPaintOpOption(new KisSketchOpOption());
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisAirbrushOptionWidget(false, false));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
-    addPaintOpOption(m_sketchOption, i18n("Brush size"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption()  , i18n("0%"), i18n("100%")), i18n("Line width"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption(), i18n("0%"), i18n("100%")), i18n("Offset scale"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption(), i18n("0%"), i18n("100%")), i18n("Density"));
-    addPaintOpOption(new KisAirbrushOptionWidget(false, false), i18n("Airbrush"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
-
-    m_paintActionType = new KisPaintActionTypeOption();
+    KisPaintActionTypeOption *m_paintActionType = new KisPaintActionTypeOption();
     KisPropertiesConfigurationSP defaultSetting = new KisPropertiesConfiguration();
     defaultSetting->setProperty("PaintOpAction", BUILDUP);
     m_paintActionType->readOptionSetting(defaultSetting);
 
-    addPaintOpOption(m_paintActionType, i18n("Painting Mode"));
+    addPaintOpOption(m_paintActionType);
 
     KisPropertiesConfigurationSP reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer;

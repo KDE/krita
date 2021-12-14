@@ -19,7 +19,7 @@ public:
 };
 
 KisHatchingPreferences::KisHatchingPreferences()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Hatching preferences"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisHatchingPreferences");
 

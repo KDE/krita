@@ -25,10 +25,10 @@ KisRoundMarkerOpSettingsWidget::KisRoundMarkerOpSettingsWidget(QWidget* parent)
     setObjectName("roundmarker option widget");
     //setPrecisionEnabled(true);
 
-    addPaintOpOption(new KisRoundMarkerOption(), i18n("Brush"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
+    addPaintOpOption(new KisRoundMarkerOption());
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisPressureSpacingOptionWidget());
 
     //addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
     //addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));

@@ -56,12 +56,10 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
 
     if (props.isEmpty()) {
         {
-            KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "curve_linewidth",
-                    i18n("Line Width"),
-                    settings, 0);
+            KisIntSliderBasedPaintOpPropertyCallback *prop = new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                                                                          KoID("curve_linewidth", i18n("Line Width")),
+                                                                                                          settings,
+                                                                                                          0);
 
             prop->setRange(1, 100);
             prop->setSingleStep(1);
@@ -87,12 +85,10 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
             props << toQShared(prop);
         }
         {
-            KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "curve_historysize",
-                    i18n("History Size"),
-                    settings, 0);
+            KisIntSliderBasedPaintOpPropertyCallback *prop = new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                                                                          KoID("curve_historysize", i18n("History Size")),
+                                                                                                          settings,
+                                                                                                          0);
 
             prop->setRange(2, 300);
             prop->setSingleStep(1);
@@ -118,11 +114,10 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
 
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "curve_lineopacity",
-                    i18n("Line Opacity"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("curve_lineopacity", i18n("Line Opacity")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(0, 100.0);
             prop->setSingleStep(0.01);
@@ -149,12 +144,10 @@ QList<KisUniformPaintOpPropertySP> KisCurvePaintOpSettings::uniformProperties(Ki
         }
 
         {
-            KisUniformPaintOpPropertyCallback *prop =
-                new KisUniformPaintOpPropertyCallback(
-                    KisUniformPaintOpPropertyCallback::Bool,
-                    "curve_connectionline",
-                    i18n("Connection Line"),
-                    settings, 0);
+            KisUniformPaintOpPropertyCallback *prop = new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool,
+                                                                                            KoID("curve_connectionline", i18n("Connection Line")),
+                                                                                            settings,
+                                                                                            0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {

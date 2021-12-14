@@ -19,24 +19,12 @@ class QIcon;
 class KRITAIMAGE_EXPORT KisComboBasedPaintOpProperty : public KisUniformPaintOpProperty
 {
 public:
-    KisComboBasedPaintOpProperty(const QString &id,
-                                 const QString &name,
-                                 KisPaintOpSettingsRestrictedSP settings,
-                                 QObject *parent);
+    KisComboBasedPaintOpProperty(const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
     ~KisComboBasedPaintOpProperty() override;
 
     // callback-compatible c-tor
-    KisComboBasedPaintOpProperty(Type type,
-                                 SubType subType,
-                                 const QString &id,
-                                 const QString &name,
-                                 KisPaintOpSettingsRestrictedSP settings,
-                                 QObject *parent);
-    KisComboBasedPaintOpProperty(Type type,
-                                 const QString &id,
-                                 const QString &name,
-                                 KisPaintOpSettingsRestrictedSP settings,
-                                 QObject *parent);
+    KisComboBasedPaintOpProperty(Type type, SubType subType, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
+    KisComboBasedPaintOpProperty(Type type, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
 
     QList<QString> items() const;
     void setItems(const QList<QString> &list);

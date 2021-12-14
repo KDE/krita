@@ -9,7 +9,7 @@
 #include <klocalizedstring.h>
 
 KisPressureTextureStrengthOption::KisPressureTextureStrengthOption()
-    : KisCurveOption("Texture/Strength/", KisPaintOpOption::TEXTURE, false)
+    : KisCurveOption(KoID("Texture/Strength/", i18n("Strength")), KisPaintOpOption::TEXTURE, false)
 {
 }
 

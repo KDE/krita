@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -34,21 +35,9 @@ public:
     };
 
 public:
-    KisUniformPaintOpProperty(Type type,
-                              SubType subType,
-                              const QString &id,
-                              const QString &name,
-                              KisPaintOpSettingsRestrictedSP settings,
-                              QObject *parent);
-    KisUniformPaintOpProperty(Type type,
-                              const QString &id,
-                              const QString &name,
-                              KisPaintOpSettingsRestrictedSP settings,
-                              QObject *parent);
-    KisUniformPaintOpProperty(const QString &id,
-                              const QString &name,
-                              KisPaintOpSettingsRestrictedSP settings,
-                              QObject *parent);
+    KisUniformPaintOpProperty(Type type, SubType subType, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
+    KisUniformPaintOpProperty(Type type, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
+    KisUniformPaintOpProperty(const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
     ~KisUniformPaintOpProperty() override;
 
     QString id() const;

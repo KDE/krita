@@ -25,22 +25,21 @@
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
-    , m_sprayArea(new KisSprayOpOption())
 {
-    addPaintOpOption(m_sprayArea, i18n("Spray Area"));
-    addPaintOpOption(new KisSprayShapeOption(), i18n("Spray shape"));
-    addPaintOpOption(new KisBrushOptionWidget(), i18n("Brush Tip"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
+    addPaintOpOption(new KisSprayOpOption());
+    addPaintOpOption(new KisSprayShapeOption());
+    addPaintOpOption(new KisBrushOptionWidget());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCompositeOpOption(true));
 
-    addPaintOpOption(new KisSprayShapeDynamicsOption(), i18n("Shape dynamics"));
-    addPaintOpOption(new KisColorOption(), i18n("Color options"));
+    addPaintOpOption(new KisSprayShapeDynamicsOption());
+    addPaintOpOption(new KisColorOption());
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
-    addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
-    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
+    addPaintOpOption(new KisAirbrushOptionWidget(false));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisPaintActionTypeOption());
 }
 
 KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()

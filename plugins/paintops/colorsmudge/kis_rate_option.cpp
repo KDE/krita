@@ -16,8 +16,8 @@
 
 #include <iostream>
 
-KisRateOption::KisRateOption(const QString& name, KisPaintOpOption::PaintopCategory category, bool checked):
-    KisCurveOption(name, category, checked)
+KisRateOption::KisRateOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked)
+    : KisCurveOption(id, category, checked)
 {
 }
 

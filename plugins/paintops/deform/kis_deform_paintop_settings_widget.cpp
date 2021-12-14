@@ -21,18 +21,17 @@
 KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    m_deformOption = new KisDeformOption();
-    m_brushSizeOption = new KisBrushSizeOption();
+    KisBrushSizeOption *m_brushSizeOption = new KisBrushSizeOption();
     m_brushSizeOption->setDiameter(200);
 
-    addPaintOpOption(m_brushSizeOption, i18n("Brush size"));
-    addPaintOpOption(m_deformOption, i18n("Deform Options"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
-    addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
+    addPaintOpOption(m_brushSizeOption);
+    addPaintOpOption(new KisDeformOption());
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
+    addPaintOpOption(new KisAirbrushOptionWidget(false));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 }
 
 KisDeformPaintOpSettingsWidget::~ KisDeformPaintOpSettingsWidget()

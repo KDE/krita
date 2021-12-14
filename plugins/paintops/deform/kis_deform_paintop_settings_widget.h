@@ -20,10 +20,6 @@ public:
     ~KisDeformPaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-
-private:
-    KisDeformOption * m_deformOption;
-    KisBrushSizeOption * m_brushSizeOption;
 };
 
 #endif

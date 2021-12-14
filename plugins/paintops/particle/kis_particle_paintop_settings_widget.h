@@ -24,11 +24,6 @@ public:
     ~KisParticlePaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-
-public:
-    KisPaintActionTypeOption* m_paintActionTypeOption;
-    KisParticleOpOption* m_particleOption;
-
 };
 
 #endif

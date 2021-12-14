@@ -11,7 +11,7 @@
 #include <resources/KoAbstractGradient.h>
 
 KisPressureGradientOption::KisPressureGradientOption()
-    : KisCurveOption("Gradient", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Gradient", i18n("Gradient")), KisPaintOpOption::GENERAL, false)
 {
 }
 

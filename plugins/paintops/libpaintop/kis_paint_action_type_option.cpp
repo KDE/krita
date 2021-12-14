@@ -21,9 +21,8 @@ public:
     }
 };
 
-
 KisPaintActionTypeOption::KisPaintActionTypeOption()
-    : KisPaintOpOption(KisPaintOpOption::COLOR, false)
+    : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::COLOR, false)
 {
     setObjectName("KisPaintActionTypeOption");
 

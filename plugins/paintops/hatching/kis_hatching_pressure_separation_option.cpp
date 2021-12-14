@@ -12,9 +12,8 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisHatchingPressureSeparationOption::KisHatchingPressureSeparationOption()
-    : KisCurveOption("Separation", KisPaintOpOption::GENERAL, true)
+    : KisCurveOption(KoID("Separation", i18n("Separation")), KisPaintOpOption::GENERAL, true)
 {
 }
 

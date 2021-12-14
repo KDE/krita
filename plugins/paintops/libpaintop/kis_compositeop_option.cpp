@@ -16,10 +16,10 @@
 #include <kis_composite_ops_model.h>
 #include "kis_signals_blocker.h"
 
-KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget):
-    KisPaintOpOption(KisPaintOpOption::GENERAL, true),
-    m_createConfigWidget(createConfigWidget),
-    m_eraserMode(false)
+KisCompositeOpOption::KisCompositeOpOption(bool createConfigWidget)
+    : KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::GENERAL, true)
+    , m_createConfigWidget(createConfigWidget)
+    , m_eraserMode(false)
 {
     m_checkable         = false;
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();

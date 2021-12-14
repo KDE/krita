@@ -26,8 +26,8 @@ inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
     }
 }
 
-KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption* curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider)
-    : KisPaintOpOption(curveOption->category(), curveOption->isChecked())
+KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption *curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider)
+    : KisPaintOpOption(curveOption->id().name(), curveOption->category(), curveOption->isChecked())
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption())
     , m_curveOption(curveOption)

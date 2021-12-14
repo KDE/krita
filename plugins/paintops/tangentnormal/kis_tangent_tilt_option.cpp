@@ -25,7 +25,7 @@ public:
 };
 
 KisTangentTiltOption::KisTangentTiltOption()
-: KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Tangent Tilt"), KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
     m_options = new KisTangentTiltOptionWidget();

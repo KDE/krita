@@ -42,37 +42,43 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
     setPrecisionEnabled(true);
     setHSLBrushTipEnabled(true);
 
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")), i18n("Ratio"));
-    addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
-    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisPressureSpacingOptionWidget());
+    addPaintOpOption(new KisPressureMirrorOptionWidget());
 
     m_smudgeOptionWidget = new KisSmudgeOptionWidget();
-
-    addPaintOpOption(m_smudgeOptionWidget, i18n("Smudge Length"));
+    addPaintOpOption(m_smudgeOptionWidget);
 
     m_radiusStrengthOptionWidget = new KisCurveOptionWidget(new KisSmudgeRadiusOption(), i18n("0.0"), i18n("1.0"));
-    addPaintOpOption(m_radiusStrengthOptionWidget, i18n("Smudge Radius"));
+    addPaintOpOption(m_radiusStrengthOptionWidget);
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisRateOption("ColorRate", KisPaintOpOption::GENERAL, false), i18n("0.0"), i18n("1.0")), i18nc("Color rate of active Foreground color", "Color Rate"));
+    addPaintOpOption(new KisCurveOptionWidget(
+        new KisRateOption(KoID("ColorRate", i18nc("Color rate of active Foreground color", "Color Rate")), KisPaintOpOption::GENERAL, false),
+        i18n("0.0"),
+        i18n("1.0")));
     m_paintThicknessOptionWidget = new KisPressurePaintThicknessOptionWidget();
-    addPaintOpOption(m_paintThicknessOptionWidget, i18n("Paint Thickness"));
+    addPaintOpOption(m_paintThicknessOptionWidget);
 
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
-    addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
+    addPaintOpOption(new KisPressureScatterOptionWidget());
     m_overlayOptionWidget = new KisOverlayModeOptionWidget();
-    addPaintOpOption(m_overlayOptionWidget, i18n("Overlay Mode"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")), i18n("Gradient"));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()), i18n("Hue"));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18nc("Label of Brightness value in Color Smudge brush engine options", "Value"));
-    addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
+    addPaintOpOption(m_overlayOptionWidget);
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(
+        new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()));
+    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(),
+                                              KisPressureHSVOption::saturationMinLabel(),
+                                              KisPressureHSVOption::saturationmaxLabel()));
+    addPaintOpOption(
+        new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()));
+    addPaintOpOption(new KisAirbrushOptionWidget(false));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
-    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
+    addPaintOpOption(new KisTextureOption());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
 
     const KisBrushOptionWidget* brushOption = brushOptionWidget();
     connect(brushOption, SIGNAL(sigSettingChanged()), SLOT(slotBrushOptionChanged()));

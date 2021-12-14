@@ -14,7 +14,7 @@
 #include <KoColor.h>
 
 KisPressureMirrorOption::KisPressureMirrorOption()
-    : KisCurveOption("Mirror", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Mirror", i18n("Mirror")), KisPaintOpOption::GENERAL, false)
 {
     m_enableHorizontalMirror = false;
     m_enableVerticalMirror = false;

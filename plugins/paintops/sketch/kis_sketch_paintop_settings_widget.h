@@ -24,10 +24,6 @@ public:
     ~KisSketchPaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-
-public:
-    KisSketchOpOption* m_sketchOption;
-    KisPaintActionTypeOption* m_paintActionType;
 };
 
 #endif

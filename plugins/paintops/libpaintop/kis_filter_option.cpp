@@ -36,7 +36,7 @@ public:
 };
 
 KisFilterOption::KisFilterOption()
-    : KisPaintOpOption(KisPaintOpOption::FILTER, true)
+    : KisPaintOpOption(i18nc("option name", "Filter"), KisPaintOpOption::FILTER, true)
 {
     setObjectName("KisFilterOption");
 

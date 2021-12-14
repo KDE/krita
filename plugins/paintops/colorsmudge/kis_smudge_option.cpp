@@ -14,9 +14,9 @@
 
 #include <KoColor.h>
 
-KisSmudgeOption::KisSmudgeOption():
-    KisRateOption("SmudgeRate", KisPaintOpOption::GENERAL, true),
-    m_mode(SMEARING_MODE)
+KisSmudgeOption::KisSmudgeOption()
+    : KisRateOption(KoID("SmudgeRate", i18n("Smudge Length")), KisPaintOpOption::GENERAL, true)
+    , m_mode(SMEARING_MODE)
 {
     setValueRange(0.01, 1.0);
 }
@@ -39,18 +39,18 @@ void KisSmudgeOption::apply(KisPainter& painter, const KisPaintInformation& info
 void KisSmudgeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisRateOption::writeOptionSetting(setting);
-    setting->setProperty(name() + "Mode", m_mode);
-    setting->setProperty(name() + "SmearAlpha", m_smearAlpha);
-    setting->setProperty(name() + "UseNewEngine", m_useNewEngine);
+    setting->setProperty(m_id.id() + "Mode", m_mode);
+    setting->setProperty(m_id.id() + "SmearAlpha", m_smearAlpha);
+    setting->setProperty(m_id.id() + "UseNewEngine", m_useNewEngine);
 }
 
 void KisSmudgeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisRateOption::readOptionSetting(setting);
 
-    m_mode = (Mode)setting->getInt(name() + "Mode", SMEARING_MODE);
-    m_smearAlpha = setting->getBool(name() + "SmearAlpha", true);
-    m_useNewEngine = setting->getBool(name() + "UseNewEngine", false);
+    m_mode = (Mode)setting->getInt(m_id.id() + "Mode", SMEARING_MODE);
+    m_smearAlpha = setting->getBool(m_id.id() + "SmearAlpha", true);
+    m_useNewEngine = setting->getBool(m_id.id() + "UseNewEngine", false);
 }
 
 bool KisSmudgeOption::getSmearAlpha() const

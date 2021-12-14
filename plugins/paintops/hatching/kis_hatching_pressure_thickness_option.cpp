@@ -12,9 +12,8 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisHatchingPressureThicknessOption::KisHatchingPressureThicknessOption()
-    : KisCurveOption("Thickness", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Thickness", i18n("Thickness")), KisPaintOpOption::GENERAL, false)
 {
 }
 

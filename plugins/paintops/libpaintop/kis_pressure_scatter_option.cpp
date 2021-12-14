@@ -16,9 +16,8 @@
 
 #include <QtGlobal>
 
-
 KisPressureScatterOption::KisPressureScatterOption()
-    : KisCurveOption("Scatter", KisPaintOpOption::GENERAL, false, 1.0, 0.0, 5.0)
+    : KisCurveOption(KoID("Scatter", i18n("Scatter")), KisPaintOpOption::GENERAL, false, 1.0, 0.0, 5.0)
 {
     m_axisX = true;
     m_axisY = true;

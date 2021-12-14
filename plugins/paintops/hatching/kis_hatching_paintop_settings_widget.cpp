@@ -37,21 +37,21 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
 
     //-------Adding widgets to the screen------------
 
-    addPaintOpOption(new KisHatchingOptions(), i18n("Hatching options"));
-    addPaintOpOption(new KisHatchingPreferences(), i18n("Hatching preferences"));
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption(), i18n("0.0"), i18n("1.0")), i18n("Separation"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption(), i18n("0.0"), i18n("1.0")), i18n("Thickness"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureAngleOption(), i18n("0.0"), i18n("1.0")), i18n("Angle"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption(), i18n("0.0"), i18n("1.0")), i18n("Crosshatching"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
+    addPaintOpOption(new KisHatchingOptions());
+    addPaintOpOption(new KisHatchingPreferences());
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption(), i18n("0.0"), i18n("1.0")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption(), i18n("0.0"), i18n("1.0")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureAngleOption(), i18n("0.0"), i18n("1.0")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureCrosshatchingOption(), i18n("0.0"), i18n("1.0")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisPressureMirrorOptionWidget());
 
-    addPaintOpOption(new KisPaintActionTypeOption(), i18n("Painting Mode"));
+    addPaintOpOption(new KisPaintActionTypeOption());
 
-    addPaintOpOption(new KisTextureOption(), i18n("Pattern"));
-        addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
+    addPaintOpOption(new KisTextureOption());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
 
     //-----Useful to read first:------
     /*

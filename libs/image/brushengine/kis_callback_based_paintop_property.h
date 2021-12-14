@@ -15,21 +15,13 @@ class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty : public ParentClass
 public:
     KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
                                     typename ParentClass::SubType subType,
-                                    const QString &id,
-                                    const QString &name,
+                                    const KoID &id,
                                     KisPaintOpSettingsRestrictedSP settings,
                                     QObject *parent);
 
-    KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
-                                    const QString &id,
-                                    const QString &name,
-                                    KisPaintOpSettingsRestrictedSP settings,
-                                    QObject *parent);
+    KisCallbackBasedPaintopProperty(typename ParentClass::Type type, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
 
-    KisCallbackBasedPaintopProperty(const QString &id,
-                                const QString &name,
-                                KisPaintOpSettingsRestrictedSP settings,
-                                QObject *parent);
+    KisCallbackBasedPaintopProperty(const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
 
     typedef std::function<void (KisUniformPaintOpProperty*)> Callback;
     typedef std::function<bool (const KisUniformPaintOpProperty*)> VisibleCallback;

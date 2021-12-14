@@ -50,12 +50,10 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
 
     if (props.isEmpty()) {
         {
-            KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "particle_particles",
-                    i18n("Particles"),
-                    settings, 0);
+            KisIntSliderBasedPaintOpPropertyCallback *prop = new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                                                                          KoID("particle_particles", i18n("Particles")),
+                                                                                                          settings,
+                                                                                                          0);
 
             prop->setRange(1, 500);
             prop->setSingleStep(1);
@@ -81,11 +79,10 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
         }
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "particle_opecityweight",
-                    i18n("Opacity Weight"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("particle_opecityweight", i18n("Opacity Weight")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(0.01, 1.0);
             prop->setSingleStep(0.01);
@@ -111,11 +108,10 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
         }
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "particle_dx_scale",
-                    i18n("dx scale"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("particle_dx_scale", i18n("dx scale")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(-2, 2);
             prop->setSingleStep(0.01);
@@ -141,11 +137,10 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
         }
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "particle_dy_scale",
-                    i18n("dy scale"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("particle_dy_scale", i18n("dy scale")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(-2, 2);
             prop->setSingleStep(0.01);
@@ -171,11 +166,10 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
         }
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "particle_gravity",
-                    i18n("Gravity"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("particle_gravity", i18n("Gravity")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(0.01, 1.0);
             prop->setSingleStep(0.01);
@@ -200,12 +194,10 @@ QList<KisUniformPaintOpPropertySP> KisParticlePaintOpSettings::uniformProperties
             props << toQShared(prop);
         }
         {
-            KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "particle_iterations",
-                    i18n("Iterations"),
-                    settings, 0);
+            KisIntSliderBasedPaintOpPropertyCallback *prop = new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                                                                          KoID("particle_iterations", i18n("Iterations")),
+                                                                                                          settings,
+                                                                                                          0);
 
             prop->setRange(1, 300);
             prop->setSingleStep(1);

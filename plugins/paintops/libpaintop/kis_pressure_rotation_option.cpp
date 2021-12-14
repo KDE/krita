@@ -13,7 +13,7 @@
 #include <KoColor.h>
 
 KisPressureRotationOption::KisPressureRotationOption()
-        : KisCurveOption("Rotation", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Rotation", i18n("Rotation")), KisPaintOpOption::GENERAL, false)
 {
 }
 

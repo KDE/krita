@@ -7,7 +7,7 @@
 #include <klocalizedstring.h>
 
 KisPressureSoftnessOption::KisPressureSoftnessOption()
-    : KisCurveOption("Softness", KisPaintOpOption::GENERAL, false, 1.0, 0.1, 1.0)
+    : KisCurveOption(KoID("Softness", i18n("Softness")), KisPaintOpOption::GENERAL, false, 1.0, 0.1, 1.0)
 {
 }
 

@@ -61,10 +61,10 @@ void KisMyPaintCurveOptionWidget::writeOptionSetting(KisPropertiesConfigurationS
     KisMyPaintBrushOption* currentSensor = dynamic_cast<KisMyPaintBrushOption*>(m_curveOptionWidget->sensorSelector->currentHighlighted().data());
     KIS_SAFE_ASSERT_RECOVER(dynamicSensor && currentSensor) { }
     if (dynamicSensor) {
-        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "XMIN", m_curveOptionWidget->xMinBox->value());
-        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "XMAX", m_curveOptionWidget->xMaxBox->value());
-        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "YMIN", m_curveOptionWidget->yMinBox->value());
-        setting->setProperty(m_curveOption->name() + dynamicSensor->identifier() + "YMAX", m_curveOptionWidget->yMaxBox->value());
+        setting->setProperty(m_curveOption->id().id() + dynamicSensor->identifier() + "XMIN", m_curveOptionWidget->xMinBox->value());
+        setting->setProperty(m_curveOption->id().id() + dynamicSensor->identifier() + "XMAX", m_curveOptionWidget->xMaxBox->value());
+        setting->setProperty(m_curveOption->id().id() + dynamicSensor->identifier() + "YMIN", m_curveOptionWidget->yMinBox->value());
+        setting->setProperty(m_curveOption->id().id() + dynamicSensor->identifier() + "YMAX", m_curveOptionWidget->yMaxBox->value());
     }
     if (currentSensor) {
 
@@ -155,12 +155,12 @@ void KisMyPaintCurveOptionWidget::setBaseValue(KisPropertiesConfigurationSP sett
     QJsonObject brush_json = doc.object();
     QVariantMap map = brush_json.toVariantMap();
     QVariantMap settings_map = map["settings"].toMap();
-    QVariantMap name_map = settings_map[m_curveOption->name()].toMap();
+    QVariantMap name_map = settings_map[m_curveOption->id().id()].toMap();
     double base_val = name_map["base_value"].toDouble();
     Q_UNUSED(base_val);
 
     name_map["base_value"] = val;
-    settings_map[m_curveOption->name()] = name_map;
+    settings_map[m_curveOption->id().id()] = name_map;
     map["settings"] = settings_map;
 
     QJsonObject json_obj = QJsonObject::fromVariantMap(map);

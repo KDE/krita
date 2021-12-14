@@ -9,7 +9,7 @@
 #include <KoColor.h>
 
 KisPressureFlowOption::KisPressureFlowOption()
-    : KisCurveOption("Flow", KisPaintOpOption::GENERAL, true)
+    : KisCurveOption(KoID("Flow", i18n("Flow")), KisPaintOpOption::GENERAL, true)
 {
     m_checkable = false;
 

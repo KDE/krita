@@ -16,7 +16,7 @@
 #include <brushengine/kis_paintop.h>
 
 KisPressureSharpnessOption::KisPressureSharpnessOption()
-    : KisCurveOption("Sharpness", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Sharpness", i18n("Sharpness")), KisPaintOpOption::GENERAL, false)
     , m_softness(0)
 {
 }

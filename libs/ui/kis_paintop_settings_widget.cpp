@@ -85,24 +85,24 @@ KisPaintOpSettingsWidget::~KisPaintOpSettingsWidget()
     delete m_d;
 }
 
-void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, const QString &label)
+void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option)
 {
-    addPaintOpOption(option, label, option->category());
+    addPaintOpOption(option, option->category());
 }
 
-void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, const QString &label, KisPaintOpOption::PaintopCategory category)
+void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, KisPaintOpOption::PaintopCategory category)
 {
     if (!option->configurationPage()) return;
-    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), label, category);
+    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), option->label(), category);
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;
 }
 
-void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, const QString &label, QString category)
+void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QString category)
 {
     if (!option->configurationPage()) return;
-    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), label, category);
+    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), option->label(), category);
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;

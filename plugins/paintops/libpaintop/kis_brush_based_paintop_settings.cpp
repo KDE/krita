@@ -212,12 +212,11 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
     if (props.isEmpty()) {
         {
             KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    KisIntSliderBasedPaintOpPropertyCallback::SubType_Angle,
-                    "angle",
-                    i18n("Angle"),
-                    settings, 0);
+                new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                             KisIntSliderBasedPaintOpPropertyCallback::SubType_Angle,
+                                                             KoID("angle", i18n("Angle")),
+                                                             settings,
+                                                             0);
 
             prop->setRange(0, 360);
 
@@ -243,11 +242,7 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
         }
         {
             KisUniformPaintOpPropertyCallback *prop =
-                new KisUniformPaintOpPropertyCallback(
-                    KisUniformPaintOpPropertyCallback::Bool,
-                    "auto_spacing",
-                    i18n("Auto Spacing"),
-                    settings, 0);
+                new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool, KoID("auto_spacing", i18n("Auto Spacing")), settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -271,11 +266,10 @@ QList<KisUniformPaintOpPropertySP> KisBrushBasedPaintOpSettings::uniformProperti
 
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "spacing",
-                    i18n("Spacing"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("spacing", i18n("Spacing")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(0.01, 10);
             prop->setSingleStep(0.01);

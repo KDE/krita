@@ -18,7 +18,7 @@ public:
 };
 
 KisGridShapeOption::KisGridShapeOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Particle type"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisGridShapeOption");
 

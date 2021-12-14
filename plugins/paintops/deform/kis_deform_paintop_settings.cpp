@@ -94,11 +94,10 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
     if (props.isEmpty()) {
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "deform_amount",
-                    i18n("Amount"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("deform_amount", i18n("Amount")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(0.01, 1.0);
             prop->setSingleStep(0.01);
@@ -124,11 +123,7 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
         }
 
         {
-            KisComboBasedPaintOpPropertyCallback *prop =
-                new KisComboBasedPaintOpPropertyCallback(
-                    "deform_mode",
-                    i18n("Deform Mode"),
-                    settings, 0);
+            KisComboBasedPaintOpPropertyCallback *prop = new KisComboBasedPaintOpPropertyCallback(KoID("deform_mode", i18n("Deform Mode")), settings, 0);
 
             QList<QString> modes;
             modes << i18nc("Grow as in deform brush engine", "Grow");
@@ -164,12 +159,11 @@ QList<KisUniformPaintOpPropertySP> KisDeformPaintOpSettings::uniformProperties(K
 
         {
             KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    KisIntSliderBasedPaintOpPropertyCallback::SubType_Angle,
-                    "deform_angle",
-                    i18n("Angle"),
-                    settings, 0);
+                new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                             KisIntSliderBasedPaintOpPropertyCallback::SubType_Angle,
+                                                             KoID("deform_angle", i18n("Angle")),
+                                                             settings,
+                                                             0);
 
             const QString degree = QChar(Qt::Key_degree);
             prop->setRange(0, 360);

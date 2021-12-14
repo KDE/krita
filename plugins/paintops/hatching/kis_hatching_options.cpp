@@ -47,7 +47,7 @@ public:
 };
 
 KisHatchingOptions::KisHatchingOptions()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Hatching options"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisHatchingOptions");
 

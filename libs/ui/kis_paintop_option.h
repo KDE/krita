@@ -44,7 +44,7 @@ public:
         MASKING_BRUSH
     };
 
-    KisPaintOpOption(KisPaintOpOption::PaintopCategory category, bool checked);
+    KisPaintOpOption(QString label, KisPaintOpOption::PaintopCategory category, bool checked);
     ~KisPaintOpOption() override;
 
     KisPaintOpOption::PaintopCategory category() const;
@@ -55,6 +55,8 @@ public:
 
     void setLocked(bool value);
     bool isLocked() const;
+
+    QString label() const;
 
     /**
      * Reimplement this to use the image in the option widget

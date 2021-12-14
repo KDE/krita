@@ -6,6 +6,7 @@
 #ifndef _KIS_OVERLAYMODE_OPTION_H_
 #define _KIS_OVERLAYMODE_OPTION_H_
 
+#include <KLocalizedString>
 #include <QLabel>
 
 #include <kis_paintop_option.h>
@@ -16,8 +17,8 @@
 class KisOverlayModeOption : public KisPaintOpOption
 {
 public:
-    KisOverlayModeOption():
-        KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    KisOverlayModeOption()
+        : KisPaintOpOption(i18n("Overlay Mode"), KisPaintOpOption::GENERAL, false)
     {
         setObjectName("KisOverlayModeOption");
     }

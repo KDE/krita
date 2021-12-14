@@ -7,7 +7,7 @@
 #include "kis_pressure_ratio_option.h"
 
 KisPressureRatioOption::KisPressureRatioOption()
-    : KisCurveOption("Ratio", KisPaintOpOption::GENERAL, true)
+    : KisCurveOption(KoID("Ratio", i18n("Ratio")), KisPaintOpOption::GENERAL, true)
 {
 }
 

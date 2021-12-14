@@ -20,9 +20,6 @@ public:
     ~KisSprayPaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-
-public:
-    KisSprayOpOption* m_sprayArea;
 };
 
 #endif

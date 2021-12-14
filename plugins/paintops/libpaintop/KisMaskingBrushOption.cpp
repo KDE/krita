@@ -66,8 +66,8 @@ struct KisMaskingBrushOption::Private
 };
 
 KisMaskingBrushOption::KisMaskingBrushOption(MasterBrushSizeAdapter masterBrushSizeAdapter)
-    : KisPaintOpOption(KisPaintOpOption::MASKING_BRUSH, false),
-      m_d(new Private())
+    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::MASKING_BRUSH, false)
+    , m_d(new Private())
 {
     m_d->masterBrushSizeAdapter = masterBrushSizeAdapter;
 

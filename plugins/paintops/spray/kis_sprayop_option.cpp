@@ -18,7 +18,7 @@ public:
 };
 
 KisSprayOpOption::KisSprayOpOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Spray Area"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisSprayOpOption");
 

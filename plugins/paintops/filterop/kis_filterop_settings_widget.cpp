@@ -33,14 +33,13 @@ KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
     setObjectName("filter option widget");
     setPrecisionEnabled(true);
 
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")), i18n("Opacity"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
-    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
+    addPaintOpOption(new KisPressureMirrorOptionWidget());
 
-    m_filterOption = new KisFilterOption();
-    addPaintOpOption(m_filterOption, i18nc("option name", "Filter"));
+    addPaintOpOption(new KisFilterOption());
 }
 
 KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()

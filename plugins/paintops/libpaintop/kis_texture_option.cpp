@@ -51,7 +51,7 @@
 #include <KoResourceLoadResult.h>
 
 KisTextureOption::KisTextureOption(KisBrushTextureFlags flags)
-    : KisPaintOpOption(KisPaintOpOption::TEXTURE, true)
+    : KisPaintOpOption(i18n("Pattern"), KisPaintOpOption::TEXTURE, true)
     , m_textureOptions(new KisTextureChooser(flags))
 {
     setObjectName("KisTextureOption");

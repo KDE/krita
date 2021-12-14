@@ -28,9 +28,8 @@ protected:
     }
 };
 
-
 KisDuplicateOpOption::KisDuplicateOpOption()
-    : KisPaintOpOption(KisPaintOpOption::COLOR, false)
+    : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::COLOR, false)
 {
     setObjectName("KisDuplicateOpOption");
 

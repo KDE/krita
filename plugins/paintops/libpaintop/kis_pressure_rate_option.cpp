@@ -5,7 +5,7 @@
 #include "kis_pressure_rate_option.h"
 
 KisPressureRateOption::KisPressureRateOption()
-    : KisCurveOption("Rate", KisPaintOpOption::COLOR, false)
+    : KisCurveOption(KoID("Rate", i18n("Rate")), KisPaintOpOption::COLOR, false)
 {
 }
 

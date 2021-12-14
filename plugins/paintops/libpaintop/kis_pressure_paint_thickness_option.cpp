@@ -6,7 +6,7 @@
 #include "kis_pressure_paint_thickness_option.h"
 
 KisPressurePaintThicknessOption::KisPressurePaintThicknessOption()
-    : KisCurveOption("PaintThickness", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("PaintThickness", i18n("Paint Thickness")), KisPaintOpOption::GENERAL, false)
 {
     m_mode = OVERLAY;
 }
@@ -24,13 +24,13 @@ KisPressurePaintThicknessOption::ThicknessMode KisPressurePaintThicknessOption::
 void KisPressurePaintThicknessOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty(name() + "ThicknessMode", m_mode);
+    setting->setProperty(m_id.id() + "ThicknessMode", m_mode);
 }
 
 void KisPressurePaintThicknessOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
-    m_mode = (ThicknessMode)setting->getInt(name() + "ThicknessMode", OVERLAY);
+    m_mode = (ThicknessMode)setting->getInt(m_id.id() + "ThicknessMode", OVERLAY);
 
     if (m_mode == RESERVED) {
         m_mode = OVERLAY;

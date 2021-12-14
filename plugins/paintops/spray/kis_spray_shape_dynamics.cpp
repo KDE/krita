@@ -18,7 +18,7 @@ public:
 };
 
 KisSprayShapeDynamicsOption::KisSprayShapeDynamicsOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
+    : KisPaintOpOption(i18n("Shape dynamics"), KisPaintOpOption::GENERAL, true)
 {
     setObjectName("KisSprayShapeDynamicsOption");
 

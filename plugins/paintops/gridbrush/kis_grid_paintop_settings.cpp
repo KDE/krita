@@ -191,12 +191,10 @@ QList<KisUniformPaintOpPropertySP> KisGridPaintOpSettings::uniformProperties(Kis
 
     if (props.isEmpty()) {
         {
-            KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "grid_divisionlevel",
-                    i18n("Division Level"),
-                    settings, 0);
+            KisIntSliderBasedPaintOpPropertyCallback *prop = new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                                                                          KoID("grid_divisionlevel", i18n("Division Level")),
+                                                                                                          settings,
+                                                                                                          0);
 
             prop->setRange(1, 25);
             prop->setSingleStep(1);

@@ -47,44 +47,46 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     setHSLBrushTipEnabled(true);
 
     // Brush tip options
-    addPaintOpOption(new KisCompositeOpOption(true), i18n("Blending Mode"));
-    addPaintOpOption(new KisFlowOpacityOptionWidget(), i18n("Opacity"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")), i18n("Flow"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")), i18n("Size"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")), i18n("Ratio"));
-    addPaintOpOption(new KisPressureSpacingOptionWidget(), i18n("Spacing"));
-    addPaintOpOption(new KisPressureMirrorOptionWidget(), i18n("Mirror"));
+    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisFlowOpacityOptionWidget());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")));
+    addPaintOpOption(new KisPressureSpacingOptionWidget());
+    addPaintOpOption(new KisPressureMirrorOptionWidget());
 
-
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")), i18n("Softness"));
-    addPaintOpOption(new KisPressureSharpnessOptionWidget(), i18n("Sharpness"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")), i18n("Rotation"));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureSoftnessOption(), i18n("Soft"), i18n("Hard")));
+    addPaintOpOption(new KisPressureSharpnessOptionWidget());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
     m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
-    addPaintOpOption(m_lightnessStrengthOptionWidget, i18n("Lightness Strength"));
-    addPaintOpOption(new KisPressureScatterOptionWidget(), i18n("Scatter"));
+    addPaintOpOption(m_lightnessStrengthOptionWidget);
+    addPaintOpOption(new KisPressureScatterOptionWidget());
 
     // Colors options
-    addPaintOpOption(new KisColorSourceOptionWidget(), i18nc("Color source", "Source"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption(), i18n("0.0"), i18n("1.0")), i18n("Darken"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18n("Background"), i18n("Foreground")), i18nc("Mixing of colors", "Mix"));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()), i18n("Hue"));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(), KisPressureHSVOption::saturationMinLabel(), KisPressureHSVOption::saturationmaxLabel()), i18n("Saturation"));
-    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()), i18nc("Label of Brightness value in brush settings", "Value"));
-    addPaintOpOption(new KisAirbrushOptionWidget(false), i18n("Airbrush"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")), i18n("Rate"));
-
+    addPaintOpOption(new KisColorSourceOptionWidget());
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption(), i18n("0.0"), i18n("1.0")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18n("Background"), i18n("Foreground")));
+    addPaintOpOption(
+        new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()));
+    addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(),
+                                              KisPressureHSVOption::saturationMinLabel(),
+                                              KisPressureHSVOption::saturationmaxLabel()));
+    addPaintOpOption(
+        new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()));
+    addPaintOpOption(new KisAirbrushOptionWidget(false));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
     KisPaintActionTypeOption *actionTypeOption = new KisPaintActionTypeOption();
-    addPaintOpOption(actionTypeOption, i18n("Painting Mode"));
+    addPaintOpOption(actionTypeOption);
 
-    addPaintOpOption(new KisTextureOption(SupportsLightnessMode | SupportsGradientMode), i18n("Pattern"));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")), i18n("Strength"));
+    addPaintOpOption(new KisTextureOption(SupportsLightnessMode | SupportsGradientMode));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
 
     KisMaskingBrushOption::MasterBrushSizeAdapter sizeAdapter =
         [this] () { return this->brush()->userEffectiveSize(); };
 
     KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(sizeAdapter);
-    addPaintOpOption(maskingOption, i18n("Brush Tip"));
+    addPaintOpOption(maskingOption);
 
     connect(maskingOption, SIGNAL(sigCheckedChanged(bool)),
             actionTypeOption, SLOT(slotForceWashMode(bool)));
@@ -94,17 +96,12 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
         maskingSizeOption->setChecked(false);
 
         addPaintOpOption(
-                    new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
-                        KisPaintOpUtils::MaskingBrushPresetPrefix,
-                        maskingSizeOption,
-                        i18n("0%"), i18n("100%")),
-                    i18n("Size"), KisPaintOpOption::MASKING_BRUSH);
+            new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingSizeOption, i18n("0%"), i18n("100%")),
+            KisPaintOpOption::MASKING_BRUSH);
     }
 
-    addPaintOpOption(
-        new KisPrefixedPaintOpOptionWrapper<KisFlowOpacityOptionWidget>(
-            KisPaintOpUtils::MaskingBrushPresetPrefix),
-        i18n("Opacity"), KisPaintOpOption::MASKING_BRUSH);
+    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisFlowOpacityOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix),
+                     KisPaintOpOption::MASKING_BRUSH);
 
     KisCurveOption *maskingFlowOption = new KisPressureFlowOption();
     maskingFlowOption->setChecked(false);
@@ -112,34 +109,24 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     maskingRatioOption->setChecked(false);
 
     addPaintOpOption(
-                new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
-                    KisPaintOpUtils::MaskingBrushPresetPrefix,
-                    maskingFlowOption,
-                    i18n("0%"), i18n("100%")),
-                i18n("Flow"), KisPaintOpOption::MASKING_BRUSH);
+        new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingFlowOption, i18n("0%"), i18n("100%")),
+        KisPaintOpOption::MASKING_BRUSH);
 
     addPaintOpOption(
-                new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
-                    KisPaintOpUtils::MaskingBrushPresetPrefix,
-                    maskingRatioOption,
-                    i18n("0%"), i18n("100%")),
-                i18n("Ratio"), KisPaintOpOption::MASKING_BRUSH);
+        new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix, maskingRatioOption, i18n("0%"), i18n("100%")),
+        KisPaintOpOption::MASKING_BRUSH);
 
-    addPaintOpOption(
-        new KisPrefixedPaintOpOptionWrapper<KisPressureMirrorOptionWidget>(
-            KisPaintOpUtils::MaskingBrushPresetPrefix),
-        i18n("Mirror"), KisPaintOpOption::MASKING_BRUSH);
+    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisPressureMirrorOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix),
+                     KisPaintOpOption::MASKING_BRUSH);
 
-    addPaintOpOption(
-        new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(
-            KisPaintOpUtils::MaskingBrushPresetPrefix,
-            new KisPressureRotationOption(), i18n("-180°"), i18n("180°")),
-        i18n("Rotation"), KisPaintOpOption::MASKING_BRUSH);
+    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisCurveOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix,
+                                                                               new KisPressureRotationOption(),
+                                                                               i18n("-180°"),
+                                                                               i18n("180°")),
+                     KisPaintOpOption::MASKING_BRUSH);
 
-    addPaintOpOption(
-        new KisPrefixedPaintOpOptionWrapper<KisPressureScatterOptionWidget>(
-            KisPaintOpUtils::MaskingBrushPresetPrefix),
-        i18n("Scatter"), KisPaintOpOption::MASKING_BRUSH);
+    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisPressureScatterOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix),
+                     KisPaintOpOption::MASKING_BRUSH);
 }
 
 KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()

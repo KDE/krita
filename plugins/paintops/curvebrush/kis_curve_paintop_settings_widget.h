@@ -21,9 +21,6 @@ public:
     ~KisCurvePaintOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-
-private:
-    KisCurveOpOption *m_curveOption;
 };
 
 

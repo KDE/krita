@@ -11,9 +11,8 @@
 #include "kis_dynamic_sensor.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 
-
 KisPressureSizeOption::KisPressureSizeOption()
-    : KisCurveOption("Size", KisPaintOpOption::GENERAL, true)
+    : KisCurveOption(KoID("Size", i18n("Size")), KisPaintOpOption::GENERAL, true)
 {
 
 }

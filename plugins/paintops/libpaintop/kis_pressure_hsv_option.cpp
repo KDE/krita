@@ -8,7 +8,7 @@
 #include <kis_debug.h>
 
 KisPressureHSVOption* KisPressureHSVOption::createHueOption() {
-    return new KisPressureHSVOption("h");
+    return new KisPressureHSVOption(KoID("h", i18n("Hue")));
 }
 
 QString KisPressureHSVOption::hueMinLabel()
@@ -34,7 +34,7 @@ QString KisPressureHSVOption::huemaxLabel()
 }
 
 KisPressureHSVOption* KisPressureHSVOption::createSaturationOption() {
-    return new KisPressureHSVOption("s");
+    return new KisPressureHSVOption(KoID("s", i18n("Saturation")));
 }
 
 QString KisPressureHSVOption::saturationMinLabel()
@@ -61,7 +61,7 @@ QString KisPressureHSVOption::saturationmaxLabel()
 }
 
 KisPressureHSVOption* KisPressureHSVOption::createValueOption() {
-    return new KisPressureHSVOption("v");
+    return new KisPressureHSVOption(KoID("v", i18nc("Label of Brightness value in Color Smudge brush engine options", "Value")));
 }
 
 QString KisPressureHSVOption::valueMinLabel()
@@ -91,15 +91,13 @@ QString KisPressureHSVOption::valuemaxLabel()
 
 struct KisPressureHSVOption::Private
 {
-    QString parameterName;
     int paramId;
 };
 
-KisPressureHSVOption::KisPressureHSVOption(const QString& parameterName)
-    : KisCurveOption(parameterName, KisPaintOpOption::COLOR, false)
+KisPressureHSVOption::KisPressureHSVOption(const KoID &id)
+    : KisCurveOption(id, KisPaintOpOption::COLOR, false)
     , d(new Private())
 {
-    d->parameterName = parameterName;
     d->paramId = -1;
 }
 
@@ -115,11 +113,11 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
     }
 
     if (d->paramId == -1) {
-        d->paramId = transfo->parameterId(d->parameterName);
+        d->paramId = transfo->parameterId(m_id.id());
     }
 
     qreal v = 0;
-    if (d->parameterName == "h") {
+    if (m_id.id() == "h") {
         const qreal scalingPartCoeff = 1.0;
         v = computeRotationLikeValue(info, 0, false, scalingPartCoeff, info.isHoveringMode());
     } else {
@@ -136,7 +134,7 @@ void KisPressureHSVOption::apply(KoColorTransformation* transfo, const KisPaintI
 
 int KisPressureHSVOption::intMinValue() const
 {
-    if (name() == "h") {
+    if (m_id.id() == "h") {
         return -180;
     } else {
         return -100;
@@ -145,7 +143,7 @@ int KisPressureHSVOption::intMinValue() const
 
 int KisPressureHSVOption::intMaxValue() const
 {
-    if (name() == "h") {
+    if (m_id.id() == "h") {
         return 180;
     } else {
         return 100;
@@ -154,7 +152,7 @@ int KisPressureHSVOption::intMaxValue() const
 
 QString KisPressureHSVOption::valueSuffix() const
 {
-    if (name() == "h") {
+    if (m_id.id() == "h") {
         return i18n("°");
     } else {
         return i18n("%");

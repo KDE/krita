@@ -8,9 +8,8 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisPressureOpacityOption::KisPressureOpacityOption()
-    : KisCurveOption("Opacity", KisPaintOpOption::GENERAL, true)
+    : KisCurveOption(KoID("Opacity", i18n("Opacity")), KisPaintOpOption::GENERAL, true)
 {
     m_checkable = false;
 }

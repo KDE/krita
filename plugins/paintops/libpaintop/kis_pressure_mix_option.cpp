@@ -9,7 +9,7 @@
 #include <KoColor.h>
 
 KisPressureMixOption::KisPressureMixOption()
-    : KisCurveOption("Mix", KisPaintOpOption::COLOR, false)
+    : KisCurveOption(KoID("Mix", i18nc("Mixing of colors", "Mix")), KisPaintOpOption::COLOR, false)
 {
 }
 

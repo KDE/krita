@@ -24,12 +24,7 @@ class KisMyPaintCurveOption: public KisCurveOption
 {
     Q_OBJECT
 public:
-    KisMyPaintCurveOption(const QString& name,
-                   KisPaintOpOption::PaintopCategory category,
-                   bool checked,
-                   qreal value = 1.0,
-                   qreal min = 0.0,
-                   qreal max = 1.0);
+    KisMyPaintCurveOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked, qreal value = 1.0, qreal min = 0.0, qreal max = 1.0);
 
     virtual ~KisMyPaintCurveOption();
 

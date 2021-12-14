@@ -12,7 +12,7 @@
 #include <kis_paint_device.h>
 
 KisPressureDarkenOption::KisPressureDarkenOption()
-    : KisCurveOption("Darken", KisPaintOpOption::COLOR, false)
+    : KisCurveOption(KoID("Darken", i18n("Darken")), KisPaintOpOption::COLOR, false)
 {
 }
 

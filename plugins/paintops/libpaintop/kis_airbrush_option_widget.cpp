@@ -46,7 +46,7 @@ public:
 };
 
 KisAirbrushOptionWidget::KisAirbrushOptionWidget(bool enabled, bool canIgnoreSpacing)
-    : KisPaintOpOption(KisPaintOpOption::COLOR, enabled)
+    : KisPaintOpOption(i18n("Airbrush"), KisPaintOpOption::COLOR, enabled)
     , m_d(new Private())
 {
     setObjectName("KisAirbrushOption");

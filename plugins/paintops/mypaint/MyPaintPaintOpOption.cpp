@@ -21,7 +21,7 @@ public:
 };
 
 KisMyPaintOpOption::KisMyPaintOpOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18nc("Option Category", "Basic"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisMyPaintOpOption");
 

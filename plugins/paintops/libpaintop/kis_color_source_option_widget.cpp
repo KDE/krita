@@ -24,7 +24,7 @@ struct KisColorSourceOptionWidget::Private {
 };
 
 KisColorSourceOptionWidget::KisColorSourceOptionWidget()
-    : KisPaintOpOption(KisPaintOpOption::COLOR, true)
+    : KisPaintOpOption(i18nc("Color source", "Source"), KisPaintOpOption::COLOR, true)
     , d(new Private)
 {
     m_checkable = false;

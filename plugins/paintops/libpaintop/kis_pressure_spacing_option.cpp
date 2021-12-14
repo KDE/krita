@@ -12,9 +12,9 @@
 const QString ISOTROPIC_SPACING = "Spacing/Isotropic";
 
 KisPressureSpacingOption::KisPressureSpacingOption()
-    : KisCurveOption("Spacing", KisPaintOpOption::GENERAL, false),
-      m_isotropicSpacing(false),
-      m_useSpacingUpdates(false)
+    : KisCurveOption(KoID("Spacing", i18n("Spacing")), KisPaintOpOption::GENERAL, false)
+    , m_isotropicSpacing(false)
+    , m_useSpacingUpdates(false)
 {
 }
 

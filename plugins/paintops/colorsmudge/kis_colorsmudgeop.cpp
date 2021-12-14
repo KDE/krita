@@ -45,11 +45,11 @@ struct ColorSmudgeInterstrokeDataFactory : public KisInterstrokeDataFactory
     }
 };
 
-KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image)
+KisColorSmudgeOp::KisColorSmudgeOp(const KisPaintOpSettingsSP settings, KisPainter *painter, KisNodeSP node, KisImageSP image)
     : KisBrushBasedPaintOp(settings, painter)
     , m_firstRun(true)
     , m_smudgeRateOption()
-    , m_colorRateOption("ColorRate", KisPaintOpOption::GENERAL, false)
+    , m_colorRateOption(KoID("ColorRate", i18nc("Color rate of active Foreground color", "Color Rate")), KisPaintOpOption::GENERAL, false)
     , m_smudgeRadiusOption()
 {
     Q_UNUSED(node);

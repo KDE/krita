@@ -9,33 +9,28 @@
 
 #include <functional>
 
-template <class ParentClass>
+template<class ParentClass>
 KisCallbackBasedPaintopProperty<ParentClass>::KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
                                                                               typename ParentClass::SubType subType,
-                                                                              const QString &id,
-                                                                              const QString &name,
+                                                                              const KoID &id,
                                                                               KisPaintOpSettingsRestrictedSP settings,
                                                                               QObject *parent)
-    : ParentClass(type, subType, id, name, settings, parent)
+    : ParentClass(type, subType, id, settings, parent)
 {
 }
 
-template <class ParentClass>
+template<class ParentClass>
 KisCallbackBasedPaintopProperty<ParentClass>::KisCallbackBasedPaintopProperty(typename ParentClass::Type type,
-                                                                              const QString &id,
-                                                                              const QString &name,
+                                                                              const KoID &id,
                                                                               KisPaintOpSettingsRestrictedSP settings,
                                                                               QObject *parent)
-    : ParentClass(type, id, name, settings, parent)
+    : ParentClass(type, id, settings, parent)
 {
 }
 
-template <class ParentClass>
-KisCallbackBasedPaintopProperty<ParentClass>::KisCallbackBasedPaintopProperty(const QString &id,
-                                                                              const QString &name,
-                                                                              KisPaintOpSettingsRestrictedSP settings,
-                                                                              QObject *parent)
-    : ParentClass(id, name, settings, parent)
+template<class ParentClass>
+KisCallbackBasedPaintopProperty<ParentClass>::KisCallbackBasedPaintopProperty(const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent)
+    : ParentClass(id, settings, parent)
 {
 }
 

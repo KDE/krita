@@ -26,11 +26,12 @@ public:
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 };
 
-KisPaintOpOption::KisPaintOpOption(PaintopCategory category, bool checked)
+KisPaintOpOption::KisPaintOpOption(const QString label, PaintopCategory category, bool checked)
     : m_checkable(true)
     , m_d(new Private())
 
 {
+    m_d->label = label;
     m_d->checked = checked;
     m_d->category = category;
     m_d->updatesBlocked = false;
@@ -151,5 +152,7 @@ bool KisPaintOpOption::isLocked ()const
     return m_locked;
 }
 
-
-
+QString KisPaintOpOption::label() const
+{
+    return m_d->label;
+}

@@ -33,8 +33,7 @@ public:
     static QString valueMinLabel();
     static QString valuemaxLabel();
 public:
-
-    KisPressureHSVOption(const QString& parameterName);
+    KisPressureHSVOption(const KoID &id);
     ~KisPressureHSVOption() override;
 
     void apply(KoColorTransformation* hsvTransfo, const KisPaintInformation& info) const;

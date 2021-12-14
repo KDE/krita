@@ -8,7 +8,7 @@
 #include "kis_paintop_option.h"
 
 KisLineWidthOption::KisLineWidthOption()
-    : KisCurveOption("Line width", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Line width", i18n("Line width")), KisPaintOpOption::GENERAL, false)
 {
 }
 

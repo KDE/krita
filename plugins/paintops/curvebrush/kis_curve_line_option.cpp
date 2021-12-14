@@ -27,7 +27,7 @@ public:
 };
 
 KisCurveOpOption::KisCurveOpOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18nc("Brush settings curve value", "Value"), KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
     m_options = new KisCurveOpOptionsWidget();

@@ -16,7 +16,7 @@
 #include <widgets/kis_curve_widget.h>
 
 KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
-    : KisCurveOption("Opacity", KisPaintOpOption::GENERAL, true, 1.0, 0.0, 1.0)
+    : KisCurveOption(KoID("Opacity", i18n("Opacity")), KisPaintOpOption::GENERAL, true, 1.0, 0.0, 1.0)
     , m_flow(1.0)
 {
     setCurveUsed(true);

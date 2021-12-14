@@ -21,9 +21,8 @@ public:
 
 };
 
-
 KisBrushSizeOption::KisBrushSizeOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Brush size"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisBrushSizeOption");
 

@@ -29,9 +29,9 @@ public:
 
     ~KisPaintOpSettingsWidget() override;
 
-    void addPaintOpOption(KisPaintOpOption * option, const QString &label);
-    void addPaintOpOption(KisPaintOpOption * option, const QString &label, KisPaintOpOption::PaintopCategory category);
-    void addPaintOpOption(KisPaintOpOption *option, const QString &label, QString category);
+    void addPaintOpOption(KisPaintOpOption *option);
+    void addPaintOpOption(KisPaintOpOption *option, KisPaintOpOption::PaintopCategory category);
+    [[deprecated("Use the PaintopCategory enum")]] void addPaintOpOption(KisPaintOpOption *option, QString category);
 
     /// Reimplemented
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;

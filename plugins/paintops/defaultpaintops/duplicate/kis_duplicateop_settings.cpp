@@ -191,11 +191,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
     if (props.isEmpty()) {
         {
             KisUniformPaintOpPropertyCallback *prop =
-                    new KisUniformPaintOpPropertyCallback(
-                        KisUniformPaintOpPropertyCallback::Bool,
-                        "clone_healing",
-                        i18n("Healing"),
-                        settings, 0);
+                new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool, KoID("clone_healing", i18n("Healing")), settings, 0);
 
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {
@@ -218,11 +214,7 @@ QList<KisUniformPaintOpPropertySP> KisDuplicateOpSettings::uniformProperties(Kis
         }
         {
             KisUniformPaintOpPropertyCallback *prop =
-                    new KisUniformPaintOpPropertyCallback(
-                        KisUniformPaintOpPropertyCallback::Bool,
-                        "clone_movesource",
-                        i18n("Move Source"),
-                        settings, 0);
+                new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool, KoID("clone_movesource", i18n("Move Source")), settings, 0);
 
             prop->setReadCallback(
                         [](KisUniformPaintOpProperty *prop) {

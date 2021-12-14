@@ -28,9 +28,6 @@ public:
     ~KisFilterOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;
-
-public:
-    KisFilterOption* m_filterOption;
 };
 
 #endif // KIS_FILTEROP_SETTINGS_WIDGET_H_

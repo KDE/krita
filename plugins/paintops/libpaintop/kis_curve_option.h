@@ -35,12 +35,7 @@ class PAINTOP_EXPORT KisCurveOption: public QObject
 {
     Q_OBJECT
 public:
-    KisCurveOption(const QString& name,
-                   KisPaintOpOption::PaintopCategory category,
-                   bool checked,
-                   qreal value = 1.0,
-                   qreal min = 0.0,
-                   qreal max = 1.0);
+    KisCurveOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked, qreal value = 1.0, qreal min = 0.0, qreal max = 1.0);
 
     virtual ~KisCurveOption();
 
@@ -55,7 +50,10 @@ public:
 
     void updateRange(qreal minValue, qreal maxValue);
 
-    const QString& name() const;
+    const KoID &id() const
+    {
+        return m_id;
+    }
     KisPaintOpOption::PaintopCategory category() const;
     qreal minValue() const;
     qreal maxValue() const;
@@ -172,7 +170,7 @@ protected:
      */
     virtual void readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting);
 
-    QString m_name;
+    const KoID m_id;
     KisPaintOpOption::PaintopCategory m_category;
 
     bool m_checkable;

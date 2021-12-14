@@ -13,7 +13,7 @@ KisBrushBasedPaintopOptionWidget::KisBrushBasedPaintopOptionWidget(QWidget* pare
     : KisPaintOpSettingsWidget(parent)
 {
     m_brushOption = new KisBrushOptionWidget();
-    addPaintOpOption(m_brushOption, i18n("Brush Tip"));
+    addPaintOpOption(m_brushOption);
 }
 
 KisBrushBasedPaintopOptionWidget::~KisBrushBasedPaintopOptionWidget()

@@ -11,17 +11,21 @@
 #include "kis_paintop_preset.h"
 #include "KisPaintOpPresetUpdateProxy.h"
 
-
 KisCurveOptionUniformProperty::KisCurveOptionUniformProperty(const QString &name,
                                                              KisCurveOption *option,
                                                              KisPaintOpSettingsRestrictedSP settings,
                                                              QObject *parent)
-    : KisDoubleSliderBasedPaintOpProperty(Double,
-                                          name,
-                                          option->name(),
-                                          settings,
-                                          parent),
-      m_option(option)
+    : KisDoubleSliderBasedPaintOpProperty(Double, KoID(name, option->id().name()), settings, parent)
+    , m_option(option)
+{
+    setRange(option->minValue(), option->maxValue());
+    setSingleStep(0.01);
+    requestReadValue();
+}
+
+KisCurveOptionUniformProperty::KisCurveOptionUniformProperty(KisCurveOption *option, KisPaintOpSettingsRestrictedSP settings, QObject *parent)
+    : KisDoubleSliderBasedPaintOpProperty(Double, option->id(), settings, parent)
+    , m_option(option)
 {
     setRange(option->minValue(), option->maxValue());
     setSingleStep(0.01);

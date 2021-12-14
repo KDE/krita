@@ -24,24 +24,11 @@ template <typename T>
 class KRITAIMAGE_EXPORT KisSliderBasedPaintOpProperty : public KisUniformPaintOpProperty
 {
 public:
-    KisSliderBasedPaintOpProperty(Type type,
-                                  SubType subType,
-                                  const QString &id,
-                                  const QString &name,
-                                  KisPaintOpSettingsRestrictedSP settings,
-                                  QObject *parent);
-                                  
-    KisSliderBasedPaintOpProperty(Type type,
-                                  const QString &id,
-                                  const QString &name,
-                                  KisPaintOpSettingsRestrictedSP settings,
-                                  QObject *parent);
+    KisSliderBasedPaintOpProperty(Type type, SubType subType, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
 
-    KisSliderBasedPaintOpProperty(const QString &id,
-                                  const QString &name,
-                                  KisPaintOpSettingsRestrictedSP settings,
-                                  QObject *parent);
+    KisSliderBasedPaintOpProperty(Type type, const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
 
+    KisSliderBasedPaintOpProperty(const KoID &id, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
 
     T min() const;
     T max() const;

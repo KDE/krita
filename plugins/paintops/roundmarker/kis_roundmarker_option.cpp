@@ -26,7 +26,7 @@ public:
 };
 
 KisRoundMarkerOption::KisRoundMarkerOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Brush"), KisPaintOpOption::GENERAL, false)
 {
     m_checkable = false;
     m_options = new KisRoundMarkerOptionWidget();

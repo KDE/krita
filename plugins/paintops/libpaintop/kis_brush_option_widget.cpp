@@ -13,7 +13,7 @@
 #include "kis_brush.h"
 
 KisBrushOptionWidget::KisBrushOptionWidget()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, true)
+    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::GENERAL, true)
 {
     m_checkable = false;
     m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize());

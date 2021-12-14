@@ -110,12 +110,11 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
     if (props.isEmpty()) {
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    KisDoubleSliderBasedPaintOpPropertyCallback::SubType_Angle,
-                    "hatching_angle",
-                    i18n("Hatching Angle"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KisDoubleSliderBasedPaintOpPropertyCallback::SubType_Angle,
+                                                                KoID("hatching_angle", i18n("Hatching Angle")),
+                                                                settings,
+                                                                0);
 
             const QString degree = QChar(Qt::Key_degree);
             prop->setRange(-90, 90);
@@ -143,11 +142,10 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
         }
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "hatching_separation",
-                    i18n("Separation"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("hatching_separation", i18n("Separation")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(1.0, 30);
             prop->setSingleStep(0.01);
@@ -174,11 +172,10 @@ QList<KisUniformPaintOpPropertySP> KisHatchingPaintOpSettings::uniformProperties
         }
         {
             KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "hatching_thickness",
-                    i18n("Thickness"),
-                    settings, 0);
+                new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double,
+                                                                KoID("hatching_thickness", i18n("Thickness")),
+                                                                settings,
+                                                                0);
 
             prop->setRange(1.0, 30);
             prop->setSingleStep(0.01);

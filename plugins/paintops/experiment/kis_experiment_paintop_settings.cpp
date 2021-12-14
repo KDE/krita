@@ -73,11 +73,7 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
     if (props.isEmpty()) {
         {
             KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "shape_speed",
-                    i18n("Speed"),
-                    settings, 0);
+                new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int, KoID("shape_speed", i18n("Speed")), settings, 0);
 
             prop->setRange(0, 100);
             prop->setSingleStep(1);
@@ -110,11 +106,7 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
         }
         {
             KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "shape_smooth",
-                    i18n("Smooth"),
-                    settings, 0);
+                new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int, KoID("shape_smooth", i18n("Smooth")), settings, 0);
 
             prop->setRange(0, 100);
             prop->setSingleStep(1);
@@ -147,12 +139,10 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
         }
 
         {
-            KisIntSliderBasedPaintOpPropertyCallback *prop =
-                new KisIntSliderBasedPaintOpPropertyCallback(
-                    KisIntSliderBasedPaintOpPropertyCallback::Int,
-                    "shape_displace",
-                    i18n("Displace"),
-                    settings, 0);
+            KisIntSliderBasedPaintOpPropertyCallback *prop = new KisIntSliderBasedPaintOpPropertyCallback(KisIntSliderBasedPaintOpPropertyCallback::Int,
+                                                                                                          KoID("shape_displace", i18n("Displace")),
+                                                                                                          settings,
+                                                                                                          0);
 
             prop->setRange(0, 100);
             prop->setSingleStep(1);
@@ -186,11 +176,7 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
 
         {
             KisUniformPaintOpPropertyCallback *prop =
-                new KisUniformPaintOpPropertyCallback(
-                    KisUniformPaintOpPropertyCallback::Bool,
-                    "shape_windingfill",
-                    i18n("Winding Fill"),
-                    settings, 0);
+                new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool, KoID("shape_windingfill", i18n("Winding Fill")), settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {
@@ -214,11 +200,7 @@ QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperti
 
         {
             KisUniformPaintOpPropertyCallback *prop =
-                new KisUniformPaintOpPropertyCallback(
-                    KisUniformPaintOpPropertyCallback::Bool,
-                    "shape_hardedge",
-                    i18n("Hard Edge"),
-                    settings, 0);
+                new KisUniformPaintOpPropertyCallback(KisUniformPaintOpPropertyCallback::Bool, KoID("shape_hardedge", i18n("Hard Edge")), settings, 0);
 
             prop->setReadCallback(
                 [](KisUniformPaintOpProperty *prop) {

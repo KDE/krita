@@ -31,13 +31,7 @@ KisUniformPaintOpPropertySP createProperty(const QString &id,
 
     if (id == size.id()) {
         KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    "size",
-                    i18n("Size"),
-                    settings, 0);
-
-
+            new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double, KoID("size", i18n("Size")), settings, 0);
 
         prop->setRange(0, KisImageConfig(true).maxBrushSize());
         prop->setDecimals(2);
@@ -59,11 +53,7 @@ KisUniformPaintOpPropertySP createProperty(const QString &id,
         result = toQShared(prop);
     } else if (id == opacity.id()) {
         KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    opacity.id(),
-                    opacity.name(),
-                    settings, 0);
+            new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double, opacity, settings, 0);
 
         prop->setRange(0.0, 1.0);
         prop->setSingleStep(0.01);
@@ -82,11 +72,7 @@ KisUniformPaintOpPropertySP createProperty(const QString &id,
         result = toQShared(prop);
     } else if (id == flow.id()) {
         KisDoubleSliderBasedPaintOpPropertyCallback *prop =
-                new KisDoubleSliderBasedPaintOpPropertyCallback(
-                    KisDoubleSliderBasedPaintOpPropertyCallback::Double,
-                    flow.id(),
-                    flow.name(),
-                    settings, 0);
+            new KisDoubleSliderBasedPaintOpPropertyCallback(KisDoubleSliderBasedPaintOpPropertyCallback::Double, flow, settings, 0);
 
         prop->setRange(0.0, 1.0);
         prop->setSingleStep(0.01);

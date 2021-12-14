@@ -19,7 +19,7 @@ public:
 };
 
 KisHairyInkOption::KisHairyInkOption()
-    : KisPaintOpOption(KisPaintOpOption::COLOR, false)
+    : KisPaintOpOption(i18n("Ink depletion"), KisPaintOpOption::COLOR, false)
 {
     setObjectName("KisHairyInkOption");
 

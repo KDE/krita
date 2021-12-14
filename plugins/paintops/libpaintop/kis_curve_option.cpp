@@ -47,9 +47,8 @@ qreal KisCurveOption::ValueComponents::sizeLikeValue() const {
                   maxSizeLikeValue);
 }
 
-KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCategory category,
-                               bool checked, qreal value, qreal min, qreal max)
-    : m_name(name)
+KisCurveOption::KisCurveOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked, qreal value, qreal min, qreal max)
+    : m_id(id)
     , m_category(category)
     , m_checkable(true)
     , m_checked(checked)
@@ -59,7 +58,7 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
     , m_curveMode(0)
 {
     Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
-        KisDynamicSensorSP sensor = this->type2Sensor(sensorType, m_name);
+        KisDynamicSensorSP sensor = this->type2Sensor(sensorType, m_id.id());
         sensor->setActive(false);
         replaceSensor(sensor);
     }
@@ -74,11 +73,6 @@ KisCurveOption::KisCurveOption(const QString& name, KisPaintOpOption::PaintopCat
 
 KisCurveOption::~KisCurveOption()
 {
-}
-
-const QString& KisCurveOption::name() const
-{
-    return m_name;
 }
 
 KisPaintOpOption::PaintopCategory KisCurveOption::category() const
@@ -113,11 +107,11 @@ void KisCurveOption::resetAllSensors()
 void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     if (m_checkable) {
-        setting->setProperty("Pressure" + m_name, isChecked());
+        setting->setProperty("Pressure" + m_id.id(), isChecked());
     }
 
     if (activeSensors().size() == 1) {
-        setting->setProperty(m_name + "Sensor", activeSensors().first()->toXML());
+        setting->setProperty(m_id.id() + "Sensor", activeSensors().first()->toXML());
     }
     else {
         QDomDocument doc = QDomDocument("params");
@@ -130,19 +124,18 @@ void KisCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) co
             sensor->toXML(doc, childelt);
             root.appendChild(childelt);
         }
-        setting->setProperty(m_name + "Sensor", doc.toString());
+        setting->setProperty(m_id.id() + "Sensor", doc.toString());
     }
-    setting->setProperty(m_name + "UseCurve", m_useCurve);
-    setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
-    setting->setProperty(m_name + "Value", m_value);
-    setting->setProperty(m_name + "curveMode", m_curveMode);
-    setting->setProperty(m_name + "commonCurve", QVariant::fromValue(m_commonCurve));
-
+    setting->setProperty(m_id.id() + "UseCurve", m_useCurve);
+    setting->setProperty(m_id.id() + "UseSameCurve", m_useSameCurve);
+    setting->setProperty(m_id.id() + "Value", m_value);
+    setting->setProperty(m_id.id() + "curveMode", m_curveMode);
+    setting->setProperty(m_id.id() + "commonCurve", QVariant::fromValue(m_commonCurve));
 }
 
 void KisCurveOption::readOptionSetting(KisPropertiesConfigurationSP setting)
 {
-    readNamedOptionSetting(m_name, setting);
+    readNamedOptionSetting(m_id.id(), setting);
 }
 
 void KisCurveOption::lodLimitations(KisPaintopLodLimitations *l) const
@@ -190,12 +183,12 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
 
     // Replace all sensors with the inactive defaults
     Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
-        replaceSensor(type2Sensor(sensorType, m_name));
+        replaceSensor(type2Sensor(sensorType, m_id.id()));
     }
 
     QString sensorDefinition = setting->getString(prefix + "Sensor");
     if (!sensorDefinition.contains("sensorslist")) {
-        KisDynamicSensorSP s = KisDynamicSensor::createFromXML(sensorDefinition, m_name);
+        KisDynamicSensorSP s = KisDynamicSensor::createFromXML(sensorDefinition, m_id.id());
         if (s) {
             replaceSensor(s);
             s->setActive(true);
@@ -212,7 +205,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
             if (node.isElement())  {
                 QDomElement childelt = node.toElement();
                 if (childelt.tagName() == "ChildSensor") {
-                    KisDynamicSensorSP s = KisDynamicSensor::createFromXML(childelt, m_name);
+                    KisDynamicSensorSP s = KisDynamicSensor::createFromXML(childelt, m_id.id());
                     if (s) {
                         replaceSensor(s);
                         s->setActive(true);
@@ -225,8 +218,7 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         }
     }
 
-
-    m_useSameCurve = setting->getBool(m_name + "UseSameCurve", true);
+    m_useSameCurve = setting->getBool(m_id.id() + "UseSameCurve", true);
 
     // Only load the old curve format if the curve wasn't saved by the sensor
     // This will give every sensor the same curve.
@@ -252,16 +244,16 @@ void KisCurveOption::readNamedOptionSetting(const QString& prefix, const KisProp
         m_sensorMap[PRESSURE]->setActive(true);
     }
 
-    m_value = setting->getDouble(m_name + "Value", m_maxValue);
+    m_value = setting->getDouble(m_id.id() + "Value", m_maxValue);
     //dbgKrita << "\t" + m_name + "Value" << m_value;
 
-    m_useCurve = setting->getBool(m_name + "UseCurve", true);
+    m_useCurve = setting->getBool(m_id.id() + "UseCurve", true);
     //dbgKrita << "\t" + m_name + "UseCurve" << m_useSameCurve;
 
 
     //dbgKrita << "\t" + m_name + "UseSameCurve" << m_useSameCurve;
 
-    m_curveMode = setting->getInt(m_name + "curveMode");
+    m_curveMode = setting->getInt(m_id.id() + "curveMode");
     //dbgKrita << "-----------------";
 }
 
@@ -375,7 +367,7 @@ void KisCurveOption::setCurve(DynamicSensorType sensorType, bool useSameCurve, c
             KisDynamicSensorSP s = 0;
             // And set the current sensor to the current curve
             if (!m_sensorMap.contains(sensorType)) {
-                s = type2Sensor(sensorType, m_name);
+                s = type2Sensor(sensorType, m_id.id());
             } else {
                 KisDynamicSensorSP s = sensor(sensorType, false);
             }

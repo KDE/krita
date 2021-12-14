@@ -8,7 +8,7 @@
 #include <klocalizedstring.h>
 
 KisCurvesOpacityOption::KisCurvesOpacityOption()
-    : KisCurveOption("Curves opacity", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Curves opacity", i18n("Curves opacity")), KisPaintOpOption::GENERAL, false)
 {
 }
 

@@ -11,9 +11,8 @@
 #include <kis_painter.h>
 #include <KoColor.h>
 
-
 KisHatchingPressureAngleOption::KisHatchingPressureAngleOption()
-    : KisCurveOption("Angle", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Angle", i18n("Angle")), KisPaintOpOption::GENERAL, false)
 {
 }
 

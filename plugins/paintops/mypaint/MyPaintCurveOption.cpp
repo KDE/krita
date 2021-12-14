@@ -21,9 +21,8 @@
 
 
 struct MyPaintBrush;
-KisMyPaintCurveOption::KisMyPaintCurveOption(const QString& name, KisPaintOpOption::PaintopCategory category,
-                               bool checked, qreal value, qreal min, qreal max)
-    : KisCurveOption (name, category, true, value, min, max)
+KisMyPaintCurveOption::KisMyPaintCurveOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked, qreal value, qreal min, qreal max)
+    : KisCurveOption(id, category, true, value, min, max)
 {            
     Q_UNUSED(checked);
     m_checkable = false;
@@ -33,7 +32,7 @@ KisMyPaintCurveOption::KisMyPaintCurveOption(const QString& name, KisPaintOpOpti
     m_sensorMap.clear();
 
     Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
-        KisDynamicSensorSP sensor = type2Sensor(sensorType, m_name);
+        KisDynamicSensorSP sensor = type2Sensor(sensorType, m_id.id());
         sensor->setActive(false);
         replaceSensor(sensor);
     }
@@ -52,14 +51,14 @@ KisMyPaintCurveOption::~KisMyPaintCurveOption()
 void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {    
     if (m_checkable) {
-        setting->setProperty("Pressure" + m_name, isChecked());
+        setting->setProperty("Pressure" + m_id.id(), isChecked());
     }
 
     QJsonDocument doc = QJsonDocument::fromJson(setting->getProperty(MYPAINT_JSON).toByteArray());
     QJsonObject brush_json = doc.object();
     QVariantMap map = brush_json.toVariantMap();
     QVariantMap settings_map = map["settings"].toMap();
-    QVariantMap name_map = settings_map[m_name].toMap();
+    QVariantMap name_map = settings_map[m_id.id()].toMap();
     QVariantMap inputs_map = name_map["inputs"].toMap();
 
     Q_FOREACH(KisDynamicSensorSP val, m_sensorMap.values()) {
@@ -85,8 +84,8 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     if(!m_useCurve || activeSensors().size()==0)
         inputs_map.clear();
 
-    name_map["inputs"] = inputs_map;    
-    settings_map[m_name] = name_map;
+    name_map["inputs"] = inputs_map;
+    settings_map[m_id.id()] = name_map;
     map["settings"] = settings_map;
 
     QJsonObject resultant_json = QJsonObject::fromVariantMap(map);
@@ -94,16 +93,16 @@ void KisMyPaintCurveOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
     setting->setProperty(MYPAINT_JSON, doc2.toJson());
 
-    setting->setProperty(m_name + "UseCurve", m_useCurve);
-    setting->setProperty(m_name + "UseSameCurve", m_useSameCurve);
-    setting->setProperty(m_name + "Value", m_value);
-    setting->setProperty(m_name + "curveMode", m_curveMode);
-    setting->setProperty(m_name + "commonCurve", QVariant::fromValue(m_commonCurve));
+    setting->setProperty(m_id.id() + "UseCurve", m_useCurve);
+    setting->setProperty(m_id.id() + "UseSameCurve", m_useSameCurve);
+    setting->setProperty(m_id.id() + "Value", m_value);
+    setting->setProperty(m_id.id() + "curveMode", m_curveMode);
+    setting->setProperty(m_id.id() + "commonCurve", QVariant::fromValue(m_commonCurve));
 }
 
 void KisMyPaintCurveOption::readOptionSetting(KisPropertiesConfigurationSP setting)
 {
-    readNamedOptionSetting(m_name, setting);
+    readNamedOptionSetting(m_id.id(), setting);
 }
 
 void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const KisPropertiesConfigurationSP setting)
@@ -119,7 +118,7 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     m_sensorMap.clear();    
 
     Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
-        replaceSensor(type2Sensor(sensorType, m_name));
+        replaceSensor(type2Sensor(sensorType, m_id.id()));
     }
 
     MyPaintBrush *brush = mypaint_brush_new();
@@ -141,29 +140,29 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
             option->setCurveFromPoints(points);
         }
 
-        if(!setting->getProperty(name() + option->identifier() + "XMIN").isNull())
-            option->setXRangeMin(setting->getProperty(name() + option->identifier() + "XMIN").toReal());
+        if (!setting->getProperty(m_id.id() + option->identifier() + "XMIN").isNull())
+            option->setXRangeMin(setting->getProperty(m_id.id() + option->identifier() + "XMIN").toReal());
 
-        if(!setting->getProperty(name() + option->identifier() + "XMAX").isNull())
-            option->setXRangeMax(setting->getProperty(name() + option->identifier() + "XMAX").toReal());
+        if (!setting->getProperty(m_id.id() + option->identifier() + "XMAX").isNull())
+            option->setXRangeMax(setting->getProperty(m_id.id() + option->identifier() + "XMAX").toReal());
 
-        if(!setting->getProperty(name() + option->identifier() + "YMIN").isNull())
-            option->setYRangeMin(setting->getProperty(name() + option->identifier() + "YMIN").toReal());
+        if (!setting->getProperty(m_id.id() + option->identifier() + "YMIN").isNull())
+            option->setYRangeMin(setting->getProperty(m_id.id() + option->identifier() + "YMIN").toReal());
 
-        if(!setting->getProperty(name() + option->identifier() + "YMAX").isNull())
-            option->setYRangeMax(setting->getProperty(name() + option->identifier() + "YMAX").toReal());
+        if (!setting->getProperty(m_id.id() + option->identifier() + "YMAX").isNull())
+            option->setYRangeMax(setting->getProperty(m_id.id() + option->identifier() + "YMAX").toReal());
 
         replaceSensor(option);
         option->setActive(points.size()>0);
-    }    
+    }
 
-    m_useSameCurve = setting->getBool(m_name + "UseSameCurve", false);
+    m_useSameCurve = setting->getBool(m_id.id() + "UseSameCurve", false);
 
     Q_FOREACH(KisDynamicSensorSP sensor, m_sensorMap.values()) {
         commonCurve = sensor->curve();
     }
 
-    m_useCurve = setting->getBool(m_name + "UseCurve", true);    
+    m_useCurve = setting->getBool(m_id.id() + "UseCurve", true);
     if (m_useSameCurve) {
         m_commonCurve = setting->getCubicCurve(prefix + "commonCurve", commonCurve);
     }
@@ -177,8 +176,8 @@ void KisMyPaintCurveOption::readNamedOptionSetting(const QString& prefix, const 
     }
 
     firstRead = false;
-    m_value = setting->getDouble(m_name + "Value", m_maxValue);        
-    m_curveMode = setting->getInt(m_name + "curveMode");
+    m_value = setting->getDouble(m_id.id() + "Value", m_maxValue);
+    m_curveMode = setting->getInt(m_id.id() + "curveMode");
     mypaint_brush_unref(brush);
 }
 
@@ -188,104 +187,103 @@ void KisMyPaintCurveOption::lodLimitations(KisPaintopLodLimitations *l) const {
         l->blockers << KoID("Random Sensor Active", i18nc("PaintOp instant preview limitation", "Random Sensor Active, consider disabling Instant Preview"));
     }
 
-    if(m_name == "offset_by_random" && (m_value > 0.05 || m_value < -0.05)) {
+    if (m_id.id() == "offset_by_random" && (m_value > 0.05 || m_value < -0.05)) {
         l->blockers << KoID("Offset by Random", i18nc("PaintOp instant preview limitation", "Offset by Random, consider disabling Instant Preview"));
     }
 
-    if(m_name == "radius_by_random" && qRound(m_value) >= 0.05) {
+    if (m_id.id() == "radius_by_random" && qRound(m_value) >= 0.05) {
         l->blockers << KoID("Radius by Random", i18nc("PaintOp instant preview limitation", "Radius by Random, consider disabling Instant Preview"));
     }
 }
 
 MyPaintBrushSetting KisMyPaintCurveOption::currentSetting() {
-
-    if(m_name == "eraser")
+    if (m_id.id() == "eraser")
         return MYPAINT_BRUSH_SETTING_ERASER;
-    else if(m_name == "opaque")
+    else if (m_id.id() == "opaque")
         return MYPAINT_BRUSH_SETTING_OPAQUE;
-    else if(m_name == "smudge")
+    else if (m_id.id() == "smudge")
         return MYPAINT_BRUSH_SETTING_SMUDGE;
-    else if(m_name == "color_h")
+    else if (m_id.id() == "color_h")
         return MYPAINT_BRUSH_SETTING_COLOR_H;
-    else if(m_name == "color_s")
+    else if (m_id.id() == "color_s")
         return MYPAINT_BRUSH_SETTING_COLOR_S;
-    else if(m_name == "color_v")
+    else if (m_id.id() == "color_v")
         return MYPAINT_BRUSH_SETTING_COLOR_V;
-    else if(m_name == "colorize")
+    else if (m_id.id() == "colorize")
         return MYPAINT_BRUSH_SETTING_COLORIZE;
-    else if(m_name == "hardness")
+    else if (m_id.id() == "hardness")
         return MYPAINT_BRUSH_SETTING_HARDNESS;
-    else if(m_name == "speed1_gamma")
+    else if (m_id.id() == "speed1_gamma")
         return MYPAINT_BRUSH_SETTING_SPEED1_GAMMA;
-    else if(m_name == "speed2_gamma")
+    else if (m_id.id() == "speed2_gamma")
         return MYPAINT_BRUSH_SETTING_SPEED2_GAMMA;
-    else if(m_name == "anti_aliasing")
+    else if (m_id.id() == "anti_aliasing")
         return MYPAINT_BRUSH_SETTING_ANTI_ALIASING;
-    else if(m_name == "restore_color")
+    else if (m_id.id() == "restore_color")
         return MYPAINT_BRUSH_SETTING_RESTORE_COLOR;
-    else if(m_name == "slow_tracking")
+    else if (m_id.id() == "slow_tracking")
         return MYPAINT_BRUSH_SETTING_SLOW_TRACKING;
-    else if(m_name == "smudge_length")
+    else if (m_id.id() == "smudge_length")
         return MYPAINT_BRUSH_SETTING_SMUDGE_LENGTH;
-    else if(m_name == "snap_to_pixel")
+    else if (m_id.id() == "snap_to_pixel")
         return MYPAINT_BRUSH_SETTING_SNAP_TO_PIXEL;
-    else if(m_name == "change_color_h")
+    else if (m_id.id() == "change_color_h")
         return MYPAINT_BRUSH_SETTING_CHANGE_COLOR_H;
-    else if(m_name == "change_color_l")
+    else if (m_id.id() == "change_color_l")
         return MYPAINT_BRUSH_SETTING_CHANGE_COLOR_L;
-    else if(m_name == "change_color_v")
+    else if (m_id.id() == "change_color_v")
         return MYPAINT_BRUSH_SETTING_CHANGE_COLOR_V;
-    else if(m_name == "tracking_noise")
+    else if (m_id.id() == "tracking_noise")
         return MYPAINT_BRUSH_SETTING_TRACKING_NOISE;
-    else if(m_name == "dabs_per_second")
+    else if (m_id.id() == "dabs_per_second")
         return MYPAINT_BRUSH_SETTING_DABS_PER_SECOND;
-    else if(m_name == "offset_by_speed")
+    else if (m_id.id() == "offset_by_speed")
         return MYPAINT_BRUSH_SETTING_OFFSET_BY_SPEED;
-    else if(m_name == "opaque_multiply")
+    else if (m_id.id() == "opaque_multiply")
         return MYPAINT_BRUSH_SETTING_OPAQUE_MULTIPLY;
-    else if(m_name == "speed1_slowness")
+    else if (m_id.id() == "speed1_slowness")
         return MYPAINT_BRUSH_SETTING_SPEED1_SLOWNESS;
-    else if(m_name == "speed2_slowness")
+    else if (m_id.id() == "speed2_slowness")
         return MYPAINT_BRUSH_SETTING_SPEED2_SLOWNESS;
-    else if(m_name == "stroke_holdtime")
+    else if (m_id.id() == "stroke_holdtime")
         return MYPAINT_BRUSH_SETTING_STROKE_HOLDTIME;
-    else if(m_name == "direction_filter")
+    else if (m_id.id() == "direction_filter")
         return MYPAINT_BRUSH_SETTING_DIRECTION_FILTER;
-    else if(m_name == "offset_by_random")
+    else if (m_id.id() == "offset_by_random")
         return MYPAINT_BRUSH_SETTING_OFFSET_BY_RANDOM;
-    else if(m_name == "opaque_linearize")
+    else if (m_id.id() == "opaque_linearize")
         return MYPAINT_BRUSH_SETTING_OPAQUE_LINEARIZE;
-    else if(m_name == "radius_by_random")
+    else if (m_id.id() == "radius_by_random")
         return MYPAINT_BRUSH_SETTING_RADIUS_BY_RANDOM;
-    else if(m_name == "stroke_threshold")
+    else if (m_id.id() == "stroke_threshold")
         return MYPAINT_BRUSH_SETTING_STROKE_THRESHOLD;
-    else if(m_name == "pressure_gain_log")
+    else if (m_id.id() == "pressure_gain_log")
         return MYPAINT_BRUSH_SETTING_PRESSURE_GAIN_LOG;
-    else if(m_name == "smudge_radius_log")
+    else if (m_id.id() == "smudge_radius_log")
         return MYPAINT_BRUSH_SETTING_SMUDGE_RADIUS_LOG;
-    else if(m_name == "change_color_hsl_s")
+    else if (m_id.id() == "change_color_hsl_s")
         return MYPAINT_BRUSH_SETTING_CHANGE_COLOR_HSL_S;
-    else if(m_name == "change_color_hsv_s")
+    else if (m_id.id() == "change_color_hsv_s")
         return MYPAINT_BRUSH_SETTING_CHANGE_COLOR_HSV_S;
-    else if(m_name == "radius_logarithmic")
+    else if (m_id.id() == "radius_logarithmic")
         return MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC;
-    else if(m_name == "elliptical_dab_angle")
+    else if (m_id.id() == "elliptical_dab_angle")
         return MYPAINT_BRUSH_SETTING_ELLIPTICAL_DAB_ANGLE;
-    else if(m_name == "elliptical_dab_ratio")
+    else if (m_id.id() == "elliptical_dab_ratio")
         return MYPAINT_BRUSH_SETTING_ELLIPTICAL_DAB_RATIO;
-    else if(m_name == "custom_input_slowness")
+    else if (m_id.id() == "custom_input_slowness")
         return MYPAINT_BRUSH_SETTING_CUSTOM_INPUT_SLOWNESS;
-    else if(m_name == "custom_input")
+    else if (m_id.id() == "custom_input")
         return MYPAINT_BRUSH_SETTING_CUSTOM_INPUT;
-    else if(m_name == "dabs_per_basic_radius")
+    else if (m_id.id() == "dabs_per_basic_radius")
         return MYPAINT_BRUSH_SETTING_DABS_PER_BASIC_RADIUS;
-    else if(m_name == "slow_tracking_per_dab")
+    else if (m_id.id() == "slow_tracking_per_dab")
         return MYPAINT_BRUSH_SETTING_SLOW_TRACKING_PER_DAB;
-    else if(m_name == "dabs_per_actual_radius")
+    else if (m_id.id() == "dabs_per_actual_radius")
         return MYPAINT_BRUSH_SETTING_DABS_PER_ACTUAL_RADIUS;
-    else if(m_name == "offset_by_speed_slowness")
+    else if (m_id.id() == "offset_by_speed_slowness")
         return MYPAINT_BRUSH_SETTING_OFFSET_BY_SPEED_SLOWNESS;
-    else if(m_name == "stroke_duration_logarithmic")
+    else if (m_id.id() == "stroke_duration_logarithmic")
         return MYPAINT_BRUSH_SETTING_STROKE_DURATION_LOGARITHMIC;
 
     return MYPAINT_BRUSH_SETTING_ERASER;

@@ -36,7 +36,7 @@ public:
 };
 
 KisHairyBristleOption::KisHairyBristleOption()
-    : KisPaintOpOption(KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Bristle options"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisHairyBristleOption");
 

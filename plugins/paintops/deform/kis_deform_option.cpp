@@ -23,7 +23,7 @@ public:
 };
 
 KisDeformOption::KisDeformOption()
-    : KisPaintOpOption(KisPaintOpOption::COLOR, false)
+    : KisPaintOpOption(i18n("Deform Options"), KisPaintOpOption::COLOR, false)
 {
     setObjectName("KisDeformOption");
 

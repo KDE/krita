@@ -28,8 +28,8 @@
 
 class KisRandomConstAccessorNG;
 
-KisSmudgeRadiusOption::KisSmudgeRadiusOption():
-    KisRateOption("SmudgeRadius", KisPaintOpOption::GENERAL, true)
+KisSmudgeRadiusOption::KisSmudgeRadiusOption()
+    : KisRateOption(KoID("SmudgeRadius", i18n("Smudge Radius")), KisPaintOpOption::GENERAL, true)
 {
     setValueRange(0.0,1.0);
 }
@@ -37,14 +37,14 @@ KisSmudgeRadiusOption::KisSmudgeRadiusOption():
 void KisSmudgeRadiusOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
-    setting->setProperty(name() + "Version", 2);
+    setting->setProperty(m_id.id() + "Version", 2);
 }
 
 void KisSmudgeRadiusOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
 
-    const int smudgeRadiusVersion = setting->getInt(name() + "Version", 1);
+    const int smudgeRadiusVersion = setting->getInt(m_id.id() + "Version", 1);
     if (smudgeRadiusVersion < 2) {
         setValue(value() / 100.0);
     }

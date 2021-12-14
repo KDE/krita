@@ -8,7 +8,7 @@
 #include <klocalizedstring.h>
 
 KisOffsetScaleOption::KisOffsetScaleOption()
-    : KisCurveOption("Offset scale", KisPaintOpOption::GENERAL, false)
+    : KisCurveOption(KoID("Offset scale", i18n("Offset scale")), KisPaintOpOption::GENERAL, false)
 {
 }
 

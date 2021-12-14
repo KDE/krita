@@ -542,7 +542,7 @@ bool Node::setPixelData(QByteArray value, int x, int y, int w, int h)
     if (!d->node) return false;
     KisPaintDeviceSP dev = d->node->paintDevice();
     if (!dev) return false;
-    if (!value.length() >= w * h * dev->colorSpace()->pixelSize()) {
+    if (value.length() < w * h * dev->colorSpace()->pixelSize()) {
         qWarning() << "Node::setPixelData: not enough data to write to the paint device";
         return false;
     }

@@ -429,8 +429,9 @@ public Q_SLOTS:
      * @param y the y position to start writing from
      * @param w the width of each row
      * @param h the number of rows to write
+     * @return true if writing the pixeldata worked
      */
-    void setPixelData(QByteArray value, int x, int y, int w, int h);
+    bool setPixelData(QByteArray value, int x, int y, int w, int h);
 
     /**
      * @brief bounds return the exact bounds of the node's paint device

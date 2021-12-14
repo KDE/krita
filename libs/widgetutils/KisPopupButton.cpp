@@ -123,6 +123,7 @@ void KisPopupButton::setPopupWidget(QWidget* widget)
     if (widget) {
         delete m_d->frame;
         m_d->frame = new KisPopupButtonFrame(this->window(), m_d->isPopupDetached);
+        m_d->frame->setProperty("_kis_excludeFromLayoutThumbnail", true);
         m_d->frame->setObjectName("popup frame");
         m_d->frame->setWindowTitle(widget->windowTitle());
         m_d->frameLayout = new QHBoxLayout(m_d->frame.data());

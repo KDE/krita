@@ -110,7 +110,7 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
 
 DlgResourceManager::~DlgResourceManager()
 {
-
+    // TODO: we are leaking models and proxies!!!
 }
 
 void DlgResourceManager::slotResourceTypeSelected(int)
@@ -270,9 +270,10 @@ void DlgResourceManager::slotFilterTextChanged(const QString &filterText)
 void DlgResourceManager::slotShowDeletedChanged(int newState)
 {
     Q_UNUSED(newState);
-    if (m_resourceModelsForResourceType.contains(getCurrentResourceType())) {
-        m_resourceModelsForResourceType[getCurrentResourceType()]->setResourceFilter(
-                    m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
+
+    if (m_resourceProxyModelsForResourceType.contains(getCurrentResourceType())) {
+        m_resourceProxyModelsForResourceType[getCurrentResourceType()]->setResourceFilter(
+                    m_ui->chkShowDeleted->isChecked() ? KisTagFilterResourceProxyModel::ShowAllResources : KisTagFilterResourceProxyModel::ShowActiveResources);
     }
 }
 

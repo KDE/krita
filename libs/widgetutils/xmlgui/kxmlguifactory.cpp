@@ -366,7 +366,6 @@ void KXMLGUIFactoryPrivate::saveDefaultActionProperties(const QList<QAction *> &
         // Check if we have an empty default shortcut and an non empty
         // custom shortcut. Print out a warning and correct the mistake.
         if ((!activeShortcut.isEmpty()) && defaultShortcut.isEmpty()) {
-            qCritical() << "Shortcut for action " << action->objectName() << action->text() << "set with QAction::setShortcut()! Use KActionCollection::setDefaultShortcut(s) instead.";
             action->setProperty("_k_DefaultShortcut", QVariant::fromValue(activeShortcut));
         } else {
             action->setProperty("_k_DefaultShortcut", QVariant::fromValue(defaultShortcut));

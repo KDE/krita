@@ -83,7 +83,7 @@ KisTagSP KisTag::clone() const
 
 QString KisTag::currentLocale()
 {
-    return QLocale().bcp47Name().split('-').first();
+    return QLocale().bcp47Name().replace('-', '_');
 }
 
 bool KisTag::valid() const

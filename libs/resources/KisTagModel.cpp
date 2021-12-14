@@ -178,8 +178,8 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::DisplayRole:
             case Qt::UserRole + Name:
             {
-
                 QSqlQuery q;
+
 
                 if (!q.prepare("SELECT name FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
                     qWarning() << "Could not prepare name translation query" << q.lastError();

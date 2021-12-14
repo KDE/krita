@@ -81,9 +81,11 @@ int KisAllTagsModel::rowCount(const QModelIndex &parent) const
         q.prepare("SELECT count(*)\n"
                   "FROM   tags\n"
                   ",      resource_types\n"
+                  "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
                   "WHERE  tags.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n");
         q.bindValue(":resource_type", d->resourceType);
+        q.bindValue(":language", KisTag::currentLocale());
         if (!q.exec()) {
             qWarning() << "Could not execute tags rowcount query" << q.lastError();
         }

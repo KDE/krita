@@ -144,20 +144,9 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     }
     case Qt::UserRole + TagName:
     {
-        QSqlQuery translatedNameQuery;
-        if (!translatedNameQuery.prepare("SELECT name FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
-            qWarning() << "Could not prepare name translation query 2" << translatedNameQuery.lastError();
-        }
-        translatedNameQuery.bindValue(":id", d->query.value("tag_id"));
-        translatedNameQuery.bindValue(":locale", KisTag::currentLocale());
-
-        if (!translatedNameQuery.exec()) {
-            qWarning() << "Could not execute name translation query 2" << translatedNameQuery.lastError();
-        }
-        if (translatedNameQuery.first()) {
-            v = translatedNameQuery.value("name");
-        }
-        else {
+        v = d->query.value("translated_name");
+        qDebug() << ">>>>>>>>" << v;
+        if (v.isNull()) {
             v = d->query.value("tag_name");
         }
         break;
@@ -304,22 +293,25 @@ void KisAllTagResourceModel::removeStorage(const QString &location)
 
 bool KisAllTagResourceModel::resetQuery()
 {
-    bool r = d->query.prepare("SELECT tags.id                as tag_id\n"
-                              ",      tags.url               as tag_url\n"
-                              ",      tags.active            as tag_active\n"
-                              ",      tags.name              as tag_name\n"
-                              ",      resources.id           as resource_id\n"
-                              ",      resources.status       as resource_active\n"
-                              ",      storages.active        as resource_storage_active\n"
-                              ",      resources.name         as resource_name\n"
-                              ",      resources.storage_id   as storage_id\n"
-                              ",      storages.active        as storage_active\n"
+    bool r = d->query.prepare("SELECT tags.id                  as tag_id\n"
+                              ",      tags.url                 as tag_url\n"
+                              ",      tags.active              as tag_active\n"
+                              ",      tags.name                as tag_name\n"
+                              ",      tags.comment             as tag_comment\n"
+                              ",      resources.id             as resource_id\n"
+                              ",      resources.status         as resource_active\n"
+                              ",      storages.active          as resource_storage_active\n"
+                              ",      resources.name           as resource_name\n"
+                              ",      resources.storage_id     as storage_id\n"
+                              ",      storages.active          as storage_active\n"
+                              ",      tag_translations.name    as translated_name\n"
+                              ",      tag_translations.comment as translated_comment\n"
                               "FROM   resources\n"
                               ",      resource_types\n"
                               ",      storages\n"
                               ",      tags\n"
                               ",      resource_tags\n"
-                              ",      tag_translations\n"
+                              "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
                               "WHERE  tags.id                    = resource_tags.tag_id\n"
                               "AND    tags.resource_type_id      = resource_types.id\n"
                               "AND    resources.id               = resource_tags.resource_id\n"
@@ -337,6 +329,7 @@ bool KisAllTagResourceModel::resetQuery()
     }
 
     d->query.bindValue(":resource_type", d->resourceType);
+    d->query.bindValue(":language", KisTag::currentLocale());
 
     r = d->query.exec();
 

@@ -27,8 +27,6 @@ static int s_fakeRowsCount {2};
 
 struct KisAllTagsModel::Private {
     QSqlQuery query;
-    QSqlQuery translatedNameQuery;
-    QSqlQuery translatedCommentQuery;
     QString resourceType;
     int columnCount {5};
     int cachedRowCount {-1};
@@ -48,16 +46,6 @@ KisAllTagsModel::KisAllTagsModel(const QString &resourceType, QObject *parent)
     connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
-
-    if (!d->translatedNameQuery.prepare("SELECT name FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
-        qWarning() << "Could not prepare name translation query" << d->translatedNameQuery.lastError();
-    }
-
-    if (!d->translatedCommentQuery.prepare("SELECT comment FROM tag_translations WHERE tag_id = :id AND language = :locale")) {
-        qWarning() << "Could not prepare comment translation query" << d->translatedCommentQuery.lastError();
-    }
-
-
 }
 
 void KisAllTagsModel::untagAllResources(KisTagSP tag)
@@ -188,37 +176,18 @@ QVariant KisAllTagsModel::data(const QModelIndex &index, int role) const
             case Qt::DisplayRole:
             case Qt::UserRole + Name:
             {
-                d->translatedNameQuery.bindValue(":id", d->query.value("id"));
-                d->translatedNameQuery.bindValue(":locale", KisTag::currentLocale());
-
-                if (!d->translatedNameQuery.exec()) {
-                    qWarning() << "Could not execute name translation query" << d->translatedNameQuery.lastError();
-                }
-                QVariant name;
-                if (d->translatedNameQuery.first()) {
-                    name = d->translatedNameQuery.value("name");
-                }
-                else {
+                QVariant name = d->query.value("translated_name");
+                if (name.isNull()) {
                     name = d->query.value("name");
                 }
-
                 return name;
             }
             case Qt::ToolTipRole:   // fallthrough
             case Qt::StatusTipRole: // fallthrough
             case Qt::WhatsThisRole:
             {
-                d->translatedCommentQuery.bindValue(":id", d->query.value("id"));
-                d->translatedCommentQuery.bindValue(":locale", KisTag::currentLocale());
-
-                if (!d->translatedCommentQuery.exec()) {
-                    qWarning() << "Could not execute comment translation query" << d->translatedCommentQuery.lastError();
-                }
-                QVariant comment;
-                if (d->translatedCommentQuery.first()) {
-                    comment = d->translatedCommentQuery.value("comment");
-                }
-                else {
+                QVariant comment = d->query.value("translated_comment");
+                if (comment.isNull()) {
                     comment = d->query.value("comment");
                 }
                 return comment;
@@ -560,9 +529,13 @@ bool KisAllTagsModel::resetQuery()
                               ",      tags.name\n"
                               ",      tags.comment\n"
                               ",      tags.active\n"
+                              ",      tags.filename\n"
                               ",      resource_types.name as resource_type\n"
+                              ",      tag_translations.name as translated_name\n"
+                              ",      tag_translations.comment as translated_comment\n"
                               "FROM   tags\n"
                               ",      resource_types\n"
+                              "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
                               "WHERE  tags.resource_type_id = resource_types.id\n"
                               "AND    resource_types.name = :resource_type\n");
 
@@ -571,7 +544,7 @@ bool KisAllTagsModel::resetQuery()
     }
 
     d->query.bindValue(":resource_type", d->resourceType);
-    d->query.bindValue(":locale", KisTag::currentLocale());
+    d->query.bindValue(":language", KisTag::currentLocale());
 
     r = d->query.exec();
 

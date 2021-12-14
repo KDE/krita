@@ -537,12 +537,17 @@ QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
     return ba;
 }
 
-void Node::setPixelData(QByteArray value, int x, int y, int w, int h)
+bool Node::setPixelData(QByteArray value, int x, int y, int w, int h)
 {
-    if (!d->node) return;
+    if (!d->node) return false;
     KisPaintDeviceSP dev = d->node->paintDevice();
-    if (!dev) return;
+    if (!dev) return false;
+    if (!value.length() >= w * h * dev->colorSpace()->pixelSize()) {
+        qWarning() << "Node::setPixelData: not enough data to write to the paint device";
+        return false;
+    }
     dev->writeBytes((const quint8*)value.constData(), x, y, w, h);
+    return true;
 }
 
 QRect Node::bounds() const

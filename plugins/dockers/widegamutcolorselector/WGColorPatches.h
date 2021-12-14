@@ -34,11 +34,13 @@ public:
     void setAdditionalButtons(QList<QWidget*> buttonList);
     void setColorHistory(KisUniqueColorSet *history);
 protected:
+    bool event(QEvent *event) override;
+    bool eventFilter(QObject *watched, QEvent *e) override;
     void mouseMoveEvent(QMouseEvent *event) override;
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
-    void paintEvent(QPaintEvent *event) override;
+    void contentPaintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event) override;
     QSize sizeHint() const override;
 
@@ -52,6 +54,8 @@ private:
     QList<QWidget*> m_buttonList;
     Qt::Orientation m_orientation {Qt::Horizontal};
     const WGConfig::ColorPatches *m_configSource {0};
+    QWidget *m_viewport {0};
+    QWidget *m_contentWidget {0};
     int m_numLines {1};
     int m_patchesPerLine {30};
     int m_totalLines {1};

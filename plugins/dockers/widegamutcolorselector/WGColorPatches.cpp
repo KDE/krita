@@ -12,6 +12,8 @@
 
 #include <QMouseEvent>
 #include <QPainter>
+#include <QScroller>
+#include <QScrollEvent>
 
 namespace {
     inline QPoint transposed(QPoint point) {
@@ -26,6 +28,14 @@ WGColorPatches::WGColorPatches(KisUniqueColorSet *history, QWidget *parent)
     : WGSelectorWidgetBase(parent)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+    m_viewport = new QWidget(this);
+    m_viewport->installEventFilter(this);
+    m_viewport->setFocusProxy(this);
+    m_contentWidget = new QWidget(m_viewport);
+    m_contentWidget->installEventFilter(this);
+    m_contentWidget->setAttribute(Qt::WA_StaticContents);
+    // this prevents repainting the entire content widget when scrolling:
+    m_contentWidget->setAutoFillBackground(true);
     setColorHistory(history);
 }
 
@@ -52,16 +62,29 @@ void WGColorPatches::updateSettings()
     m_allowScrolling = scrolling != WGConfig::ScrollNone;
     m_scrollInline = scrolling == WGConfig::ScrollLongitudinal;
 
-    updateMetrics();
-
     if (m_orientation == Qt::Vertical) {
         setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
     } else {
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
 
-    updateGeometry();
-    update();
+    // recalc metrics and resize content widget
+    m_patchesPerLine = -1; // ensure resizeEvent() sets new content dimensions
+    QResizeEvent dummyEvent(size(), size());
+    resizeEvent(&dummyEvent);
+
+    if (QScroller::hasScroller(m_viewport)) {
+        QScroller *scroller = QScroller::scroller(m_viewport);
+        if (m_orientation == Qt::Horizontal) {
+            scroller->setSnapPositionsX(0.0, m_patchWidth);
+            scroller->setSnapPositionsY(0.0, m_patchHeight);
+        } else {
+            scroller->setSnapPositionsX(0.0, m_patchHeight);
+            scroller->setSnapPositionsY(0.0, m_patchWidth);
+        }
+    }
+
+    m_contentWidget->update();
 }
 
 void WGColorPatches::setConfigSource(const WGConfig::ColorPatches *source)
@@ -79,6 +102,7 @@ void WGColorPatches::setAdditionalButtons(QList<QWidget *> buttonList)
     for (int i = 0; i < buttonList.size(); i++) {
         buttonList[i]->setParent(this);
         buttonList[i]->setGeometry(patchRect(i));
+        buttonList[i]->raise();
     }
     m_buttonList = buttonList;
 }
@@ -86,16 +110,113 @@ void WGColorPatches::setAdditionalButtons(QList<QWidget *> buttonList)
 void WGColorPatches::setColorHistory(KisUniqueColorSet *history)
 {
     if (m_colors) {
-        m_colors->disconnect(this);
+        m_colors->disconnect(m_contentWidget);
     }
     if (history) {
-        connect(history, SIGNAL(sigColorAdded(int)), SLOT(update()));
-        connect(history, SIGNAL(sigColorMoved(int,int)), SLOT(update()));
-        connect(history, SIGNAL(sigColorRemoved(int)), SLOT(update()));
-        connect(history, SIGNAL(sigReset()), SLOT(update()));
+        connect(history, SIGNAL(sigColorAdded(int)), m_contentWidget, SLOT(update()));
+        connect(history, SIGNAL(sigColorMoved(int,int)), m_contentWidget, SLOT(update()));
+        connect(history, SIGNAL(sigColorRemoved(int)), m_contentWidget, SLOT(update()));
+        connect(history, SIGNAL(sigReset()), m_contentWidget, SLOT(update()));
         m_scrollValue = 0;
     }
     m_colors = history;
+}
+
+bool WGColorPatches::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::Paint:
+        // TODO: remove?
+        // this widget doesn't paint anything on itself, instead the viewport's paint event
+        // is redirected to this paintEvent() handler
+        return true;
+    case QEvent::ScrollPrepare:
+    {
+        QScrollPrepareEvent *se = static_cast<QScrollPrepareEvent *>(event);
+        if (m_allowScrolling && m_maxScroll > 0) {
+
+            se->setViewportSize(size());
+            if ((m_orientation == Qt::Horizontal && m_scrollInline) ||
+                (m_orientation == Qt::Vertical && !m_scrollInline)) {
+                se->setContentPosRange(QRectF(0, 0, m_maxScroll, 0));
+                se->setContentPos(QPointF(m_scrollValue, 0));
+            }
+            else {
+                se->setContentPosRange(QRectF(0, 0, 0, m_maxScroll));
+                se->setContentPos(QPointF(0, m_scrollValue));
+            }
+            se->accept();
+            return true;
+        }
+        return false;
+    }
+    case QEvent::Scroll:
+    {
+        QScrollEvent *se = static_cast<QScrollEvent *>(event);
+
+        if ((m_orientation == Qt::Horizontal && m_scrollInline) ||
+            (m_orientation == Qt::Vertical && !m_scrollInline)) {
+            m_scrollValue = qRound(se->contentPos().x() + se->overshootDistance().x());
+        }
+        else {
+            m_scrollValue = qRound(se->contentPos().y() + se->overshootDistance().y());
+        }
+
+        // TODO: keep overshoot seperately
+
+        m_contentWidget->move(-scrollOffset());
+        return true;
+    }
+    default:
+        return WGSelectorWidgetBase::event(event);
+    }
+}
+
+bool WGColorPatches::eventFilter(QObject *watched, QEvent *e)
+{
+    if (watched == m_viewport) {
+        // this is basically a stripped down version of QAbstractScrollArea::viewportEvent()
+        switch (e->type()) {
+        // redirect to base class, as this event() implementation does not care
+        case QEvent::ContextMenu:
+        case QEvent::Wheel:
+        case QEvent::Drop:
+        case QEvent::DragEnter:
+        case QEvent::DragMove:
+        case QEvent::DragLeave:
+            return WGSelectorWidgetBase::event(e);
+
+        // these are handled in WGColorPatches::event()
+        case QEvent::ScrollPrepare:
+        case QEvent::Scroll:
+            return event(e);
+
+        default: break;
+        }
+    }
+    else if (watched == m_contentWidget) {
+        switch (e->type()) {
+        // redirect to base class and handle them in the specialized handlers
+        case QEvent::MouseButtonPress:
+        case QEvent::MouseButtonRelease:
+        case QEvent::MouseButtonDblClick:
+        case QEvent::TouchBegin:
+        case QEvent::TouchUpdate:
+        case QEvent::TouchEnd:
+        case QEvent::MouseMove:
+            return WGSelectorWidgetBase::event(e);
+
+        case QEvent::Paint:
+        {
+            QPaintEvent *pe = static_cast<QPaintEvent*>(e);
+            this->contentPaintEvent(pe);
+            return true;
+        }
+        default:
+            break;
+        }
+    }
+    return false;
 }
 
 void WGColorPatches::mouseMoveEvent(QMouseEvent *event)
@@ -148,40 +269,52 @@ void WGColorPatches::wheelEvent(QWheelEvent *event)
     }
 
     if (oldScroll != m_scrollValue) {
-        update();
+        m_contentWidget->move(-scrollOffset());
     }
+    event->accept();
 }
 
-void WGColorPatches::paintEvent(QPaintEvent *event)
+void WGColorPatches::contentPaintEvent(QPaintEvent *event)
 {
-    Q_UNUSED(event)
+    QRect updateRect = event->rect();
+    //qDebug() << "WGColorPatches::conentPaintEvent region:" << event->region();
     int numColors = m_colors ? m_colors->size() : 0;
     if (numColors <= 0) {
         return;
     }
 
-    QPainter painter(this);
-    painter.translate(-scrollOffset());
-
-    int scrollCount = 0; // m_scrollValue / m_patchWidth; TODO: determine proper ranges
-
+    QPainter painter(m_contentWidget);
     const KisDisplayColorConverter *converter = displayConverter();
-    for (int i = scrollCount * m_numLines; i < qMin(m_patchCount, m_colors->size()); i++) {
-        QColor qcolor = converter->toQColor(m_colors->color(i));
 
-        painter.fillRect(patchRect(i + m_buttonList.size()), qcolor);
+    // this could be optimized a bit more...
+    for (int i = 0; i < qMin(m_patchCount, m_colors->size()); i++) {
+        QRect patch = patchRect(i);
+        if (patch.intersects(updateRect)) {
+            QColor qcolor = converter->toQColor(m_colors->color(i));
+
+            painter.fillRect(patch, qcolor);
+        }
     }
 }
 
 void WGColorPatches::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event)
-    int oldLineCount = m_numLines;
+    int oldLineLength = m_patchesPerLine;
     updateMetrics();
+    m_viewport->resize(size());
     m_scrollValue = qBound(0, m_scrollValue, m_maxScroll);
-    if (oldLineCount != m_numLines) {
+    if (oldLineLength != m_patchesPerLine) {
+        QSize conentSize(m_patchesPerLine * m_patchWidth, m_totalLines * m_patchHeight);
+        m_contentWidget->resize(m_orientation == Qt::Horizontal ? conentSize : conentSize.transposed());
         // notify the layout system that sizeHint() in the fixed policy dimension changed
         updateGeometry();
+    }
+    for (int i = 0; i < m_buttonList.size(); i++) {
+        QRect buttonRect = patchRect(i);
+        // mirror the rect around the center
+        buttonRect.moveBottomRight(rect().bottomRight() - buttonRect.topLeft());
+        m_buttonList[i]->setGeometry(buttonRect);
     }
 }
 
@@ -196,27 +329,20 @@ QSize WGColorPatches::sizeHint() const
 
 int WGColorPatches::indexAt(const QPoint &widgetPos) const
 {
-    if(!m_colors || !rect().contains(widgetPos))
+    if(!m_colors || !m_contentWidget->rect().contains(widgetPos))
         return -1;
 
     QPoint pos = (m_orientation == Qt::Horizontal) ? widgetPos : transposed(widgetPos);
-    int row, col, patchNr;
-    if (m_scrollInline) {
-        col = (pos.x() + m_scrollValue) / m_patchWidth;
-        row = pos.y() / m_patchHeight;
-        patchNr = row * m_numLines + col;
-    }
-    else {
-        col = pos.x() / m_patchWidth;
-        row = (pos.y() + m_scrollValue) / m_patchHeight;
-        patchNr = row * m_patchesPerLine + col;
-    }
+
+    int col = pos.x() / m_patchWidth;
+    int row = pos.y() / m_patchHeight;
+    int patchNr = row * m_patchesPerLine + col;
 
     if (col > m_patchesPerLine || row > m_totalLines) {
         return -1;
     }
 
-    patchNr -= m_buttonList.size();
+    //patchNr -= m_buttonList.size();
 
     if (patchNr >= 0 && patchNr < qMin(m_patchCount, m_colors->size())) {
         return patchNr;
@@ -275,12 +401,20 @@ void WGColorPatches::updateMetrics()
         // in this mode, the line length and count depends on widget size
         int availableLength = (m_orientation == Qt::Horizontal) ? width() : height();
         m_patchesPerLine = qMax(1, availableLength / m_patchWidth);
-        m_totalLines = (m_patchCount + m_buttonList.size() + m_patchesPerLine - 1) / m_patchesPerLine;
-        if (!m_allowScrolling) {
+
+        if (m_allowScrolling) {
+            // with only one line, we need to subtract the buttons because we can't scroll past them
+            if (m_numLines == 1) {
+                m_patchesPerLine = qMax(1, m_patchesPerLine - m_buttonList.size());
+                m_totalLines = (m_patchCount + m_patchesPerLine - 1) / m_patchesPerLine;
+            } else {
+                m_totalLines = (m_patchCount + m_buttonList.size() + m_patchesPerLine - 1) / m_patchesPerLine;
+            }
+        } else {
+            m_totalLines = (m_patchCount + m_buttonList.size() + m_patchesPerLine - 1) / m_patchesPerLine;
             m_numLines = m_totalLines;
             m_maxScroll = 0;
         }
-        qDebug() << "patchesPerLine/numLines:" << m_patchesPerLine << m_numLines;
     }
     // scroll limit
     if (m_allowScrolling) {

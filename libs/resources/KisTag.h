@@ -106,10 +106,15 @@ private:
 
 inline QDebug operator<<(QDebug dbg, const KisTagSP tag)
 {
-    dbg.space() << "[TAG] Name" << tag->name()
-                << "Url" << tag->url()
-                << "Comment" << tag->comment()
-                << "Default resources" << tag->defaultResources().join(", ");
+    if (tag) {
+        dbg.space() << "[TAG] Name" << tag->name()
+                    << "Url" << tag->url()
+                    << "Comment" << tag->comment()
+                    << "Default resources" << tag->defaultResources().join(", ");
+    } else {
+        dbg.space() << "[TAG] NULL";
+    }
+
     return dbg.space();
 }
 

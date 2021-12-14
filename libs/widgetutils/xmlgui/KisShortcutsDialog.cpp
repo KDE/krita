@@ -24,6 +24,7 @@
 #include <QDialogButtonBox>
 #include <QDomDocument>
 #include <QVBoxLayout>
+#include <QDebug>
 
 #include <klocalizedstring.h>
 #include <kconfiggroup.h>
@@ -45,22 +46,18 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
     /*  Construct & Connect UI  */
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(d->m_shortcutsEditor);
-
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     d->m_schemeEditor = new KShortcutSchemesEditor(this);
     connect(d->m_schemeEditor, SIGNAL(shortcutsSchemeChanged(QString)),
             this, SLOT(changeShortcutScheme(QString)));
     bottomLayout->addLayout(d->m_schemeEditor);
-
     QPushButton *printButton = new QPushButton;
     KGuiItem::assign(printButton, KStandardGuiItem::print());
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(this);
     buttonBox->addButton(printButton, QDialogButtonBox::ActionRole);
     bottomLayout->addWidget(buttonBox);
-
     mainLayout->addLayout(bottomLayout);
-
     connect(printButton, SIGNAL(clicked()), d->m_shortcutsEditor, SLOT(printShortcuts()));
 
     KConfigGroup group(KSharedConfig::openConfig(), "KisShortcutsDialog Settings");

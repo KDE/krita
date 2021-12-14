@@ -32,8 +32,7 @@
 
 
 KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
-    : QHBoxLayout(parent)
-    , m_dialog(parent)
+    : m_dialog(parent)
 {
     KConfigGroup group(KSharedConfig::openConfig(), "Shortcut Schemes");
 

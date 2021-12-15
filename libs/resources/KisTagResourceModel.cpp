@@ -96,8 +96,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     if (!pos) {return v;}
 
     if (role < Qt::UserRole + TagId && index.column() < TagId) {
-        int id = d-> query.value("resource_id").toInt();
-        v = KisResourceQueryMapper::variantFromResourceQueryById(id, index.column(), role);
+        v = KisResourceQueryMapper::variantFromResourceQuery(d->query, index.column(), role, true);
     }
 
     if (index.column() >= TagId) {
@@ -333,8 +332,15 @@ bool KisAllTagResourceModel::resetQuery()
                               ",      resources.status         as resource_active\n"
                               ",      storages.active          as resource_storage_active\n"
                               ",      resources.name           as resource_name\n"
+                              ",      resources.filename       as resource_filename\n"
+                              ",      resources.tooltip        as resource_tooltip\n"
+                              ",      resources.thumbnail      as resource_thumbnail\n"
+                              ",      resources.status         as resource_status\n"
+                              ",      resources.md5sum         as resource_md5sum\n"
                               ",      resources.storage_id     as storage_id\n"
                               ",      storages.active          as storage_active\n"
+                              ",      storages.location        as location\n"
+                              ",      resource_types.name      as resource_type\n"
                               ",      tag_translations.name    as translated_name\n"
                               ",      tag_translations.comment as translated_comment\n"
                               "FROM   resources\n"

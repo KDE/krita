@@ -127,7 +127,7 @@ void KoResource::updateThumbnail()
 {
 }
 
-void KoResource::updateLinkedResourcesMetaData(KisResourcesInterfaceSP resourcesInterface)
+void KoResource::updateLinkedResourcesMetaData(KisResourcesInterfaceSP /*resourcesInterface*/)
 {
 }
 

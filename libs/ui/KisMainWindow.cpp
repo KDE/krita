@@ -1253,9 +1253,9 @@ QImage KisMainWindow::layoutThumbnail()
     QPainter gc(&layoutThumbnail);
     gc.fillRect(0, 0, layoutThumbnail.width(), layoutThumbnail.height(), this->palette().dark());
 
-    for (int childW = 0; childW< children().size(); childW++) {
-        if (children().at(childW)->isWidgetType()) {
-            QWidget *w = dynamic_cast<QWidget*>(children().at(childW));
+    Q_FOREACH(const QObject *child, children()) {
+        if (child->isWidgetType()) {
+            const QWidget *w = static_cast<const QWidget *>(child);
 
             if (w->isVisible() && !w->property("_kis_excludeFromLayoutThumbnail").toBool()) {
                 QRect wRect = QRectF(w->geometry().x()*scale

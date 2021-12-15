@@ -12,7 +12,6 @@
 #include <QTableView>
 #include <QHeaderView>
 #include <QWheelEvent>
-#include <QColorDialog>
 #include <QCompleter>
 #include <QComboBox>
 #include <QAction>

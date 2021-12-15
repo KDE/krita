@@ -10,7 +10,6 @@
 
 #include <QScopedPointer>
 #include <QTableView>
-#include <QColorDialog>
 #include <QPushButton>
 #include <QPixmap>
 #include <QIcon>

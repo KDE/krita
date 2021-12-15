@@ -33,6 +33,12 @@ KisAllTagResourceModel::KisAllTagResourceModel(const QString &resourceType, QObj
     connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
     connect(KisResourceLocator::instance(), SIGNAL(resourceActiveStateChanged(const QString&, int)), this, SLOT(slotResourceActiveStateChanged(const QString&, int)));
+
+    /**
+     * TODO: connect to beginExternalResourceImport() and beginExternalResourceOverride
+     *       as well. It seems to work without them somehow, but I guess it is just a
+     *       coincidence or UB
+     */
 }
 
 KisAllTagResourceModel::~KisAllTagResourceModel()

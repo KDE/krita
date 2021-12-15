@@ -205,6 +205,7 @@ bool KisTag::load(QIODevice &io)
     KIS_ASSERT(io.isOpen());
 
     QTextStream stream(&io);
+    stream.setCodec("UTF-8");
     QStringList lines;
     QString line;
 
@@ -271,6 +272,7 @@ bool KisTag::load(QIODevice &io)
 bool KisTag::save(QIODevice &io)
 {
     QTextStream stream(&io);
+    stream.setCodec("UTF-8");
     stream << s_desktop << '\n';
     stream << s_type << '=' << s_tag << '\n';
     stream << s_url << '=' << d->url << '\n';

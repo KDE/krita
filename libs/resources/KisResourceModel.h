@@ -190,8 +190,35 @@ public:
      * @return
      */
     virtual bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) = 0;
+};
 
+class KRITARESOURCES_EXPORT KisAbstractResourceFilterInterface
+{
+public:
+    virtual ~KisAbstractResourceFilterInterface() {}
 
+    enum ResourceFilter {
+        ShowInactiveResources = 0,
+        ShowActiveResources,
+        ShowAllResources
+    };
+
+    enum StorageFilter {
+        ShowInactiveStorages = 0,
+        ShowActiveStorages,
+        ShowAllStorages
+    };
+public:
+
+    /**
+     * Select status of the resources that should be shown
+     */
+    virtual void setResourceFilter(ResourceFilter filter) = 0;
+
+    /**
+     * Select status of the storages that should be shown
+     */
+    virtual void setStorageFilter(StorageFilter filter) = 0;
 };
 
 /**
@@ -328,7 +355,7 @@ private:
  * to filter the resources returned by the active status flag of the resources and the
  * storages
  */
-class KRITARESOURCES_EXPORT KisResourceModel : public QSortFilterProxyModel, public KisAbstractResourceModel
+class KRITARESOURCES_EXPORT KisResourceModel : public QSortFilterProxyModel, public KisAbstractResourceModel, public KisAbstractResourceFilterInterface
 {
     Q_OBJECT
 
@@ -337,21 +364,9 @@ public:
     KisResourceModel(const QString &type, QObject *parent = 0);
     ~KisResourceModel() override;
 
-    enum ResourceFilter {
-        ShowInactiveResources = 0,
-        ShowActiveResources,
-        ShowAllResources
-    };
 
-    void setResourceFilter(ResourceFilter filter);
-
-    enum StorageFilter {
-        ShowInactiveStorages = 0,
-        ShowActiveStorages,
-        ShowAllStorages
-    };
-
-    void setStorageFilter(StorageFilter filter);
+    void setResourceFilter(ResourceFilter filter) override;
+    void setStorageFilter(StorageFilter filter) override;
 
     void showOnlyUntaggedResources(bool showOnlyUntagged);
 

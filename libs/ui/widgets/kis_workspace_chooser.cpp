@@ -88,6 +88,8 @@ KisWorkspaceChooser::KisWorkspaceChooser(KisViewManager * view, QWidget* parent)
             this, SLOT(windowLayoutSelected(KoResourceSP )));
     connect(m_windowLayoutWidgets.saveButton, SIGNAL(clicked(bool)), this, SLOT(slotSaveWindowLayout()));
     connect(m_windowLayoutWidgets.nameEdit, SIGNAL(textEdited(const QString&)), this, SLOT(slotUpdateWindowLayoutSaveButton()));
+    slotUpdateWorkspaceSaveButton();
+    slotUpdateWindowLayoutSaveButton();
 }
 
 KisWorkspaceChooser::ChooserWidgets KisWorkspaceChooser::createChooserWidgets(const QString &resourceType, const QString &title)
@@ -134,6 +136,9 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 
     KisWorkspaceResourceSP workspace;
     QString name = m_workspaceWidgets.nameEdit->text();
+    if (name.isEmpty()) {
+        return;
+    }
 
     KisAllResourcesModel *resourceModel = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
     QVector<KoResourceSP> resources = resourceModel->resourcesForName(name);
@@ -164,6 +169,12 @@ void KisWorkspaceChooser::slotSaveWorkspace()
 
 void KisWorkspaceChooser::slotUpdateWorkspaceSaveButton()
 {
+    if (m_workspaceWidgets.nameEdit->text().isEmpty()) {
+        m_workspaceWidgets.saveButton->setEnabled(false);
+        return;
+    }
+    m_workspaceWidgets.saveButton->setEnabled(true);
+
     KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::Workspaces);
     QVector<KoResourceSP> resources = model->resourcesForName(m_workspaceWidgets.nameEdit->text());
     KoResourceSP res = resources.count() > 0 ? resources.first() : nullptr;
@@ -196,6 +207,10 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
     KisMainWindow *thisWindow = qobject_cast<KisMainWindow*>(m_view->qtMainWindow());
     if (!thisWindow) return;
 
+    if (m_windowLayoutWidgets.nameEdit->text().isEmpty()) {
+        return;
+    }
+
     KisNewWindowLayoutDialog dlg;
     dlg.setName(m_windowLayoutWidgets.nameEdit->text());
     dlg.exec();
@@ -225,6 +240,12 @@ void KisWorkspaceChooser::slotSaveWindowLayout()
 
 void KisWorkspaceChooser::slotUpdateWindowLayoutSaveButton()
 {
+    if (m_windowLayoutWidgets.nameEdit->text().isEmpty()) {
+        m_windowLayoutWidgets.saveButton->setEnabled(false);
+        return;
+    }
+    m_windowLayoutWidgets.saveButton->setEnabled(true);
+
     KisAllResourcesModel *model = KisResourceModelProvider::resourceModel(ResourceType::WindowLayouts);
     QVector<KoResourceSP> resources = model->resourcesForName(m_windowLayoutWidgets.nameEdit->text());
     if (resources.isEmpty()) return;

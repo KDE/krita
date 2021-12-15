@@ -2563,6 +2563,9 @@ void KisMainWindow::updateWindowMenu()
         QString name;
         name = QInputDialog::getText(this, i18nc("@title:window", "New Workspace..."),
                                                                 i18nc("@label:textbox", "Name:"));
+        if (name.isEmpty()) {
+            return;
+        }
 
         auto rserver = KisResourceServerProvider::instance()->workspaceServer();
 

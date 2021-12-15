@@ -136,6 +136,9 @@ Q_SIGNALS:
     /// Emitted when the locator finished importing the embedded resource
     void endExternalResourceOverride(const QString &resourceType, int resourceId);
 
+    /// Emitted when a resource changes its active state
+    void resourceActiveStateChanged(const QString &resourceType, int resourceId);
+
 private:
 
     friend class KisAllTagsModel;
@@ -183,12 +186,12 @@ private:
     KoResourceSP resourceForId(int resourceId);
 
     /**
-     * @brief removeResource
+     * @brief setResourceActive
      * @param resourceId
-     * @param optional: the storage that contains the given resource
+     * @param active shows if the resource should be set as active or not
      * @return
      */
-    bool setResourceActive(int resourceId, bool active = false);
+    bool setResourceActive(int resourceId, bool active);
 
     /**
      * @brief importResourceFromFile

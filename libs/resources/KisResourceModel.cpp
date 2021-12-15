@@ -46,6 +46,7 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
 
     connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceOverride(QString, int)), this, SLOT(beginExternalResourceOverride(QString, int)));
     connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceOverride(QString, int)), this, SLOT(endExternalResourceOverride(QString, int)));
+    connect(KisResourceLocator::instance(), SIGNAL(resourceActiveStateChanged(QString, int)), this, SLOT(slotResourceActiveStateChanged(QString, int)));
 
     d->resourceType = resourceType;
 
@@ -409,12 +410,11 @@ bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
     if (index.column() > d->columnCount) return false;
 
     int resourceId = index.data(Qt::UserRole + Id).toInt();
-    if (!KisResourceLocator::instance()->setResourceActive(resourceId)) {
+    if (!KisResourceLocator::instance()->setResourceActive(resourceId, false)) {
         qWarning() << "Failed to remove resource" << resourceId;
         return false;
     }
-    resetQuery();
-    emit dataChanged(index, index, {Qt::EditRole, Qt::CheckStateRole});
+
     return true;
 }
 //static int s_i6 {0};
@@ -660,6 +660,20 @@ void KisAllResourcesModel::endExternalResourceOverride(const QString &resourceTy
     endRemoveRows();
 }
 
+void KisAllResourcesModel::slotResourceActiveStateChanged(const QString &resourceType, int resourceId)
+{
+    if (resourceType != d->resourceType) return;
+    if (resourceId < 0) return;
+
+    resetQuery();
+
+    QModelIndex index = indexForResourceId(resourceId);
+
+    if (index.isValid()) {
+        Q_EMIT dataChanged(index, index, {Qt::CheckStateRole, Qt::UserRole + KisAbstractResourceModel::ResourceActive});
+    }
+}
+
 struct KisResourceModel::Private
 {
     ResourceFilter resourceFilter {ShowActiveResources};
@@ -733,9 +747,6 @@ bool KisResourceModel::setResourceInactive(const QModelIndex &index)
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
         return source->setResourceInactive(mapToSource(index));
-    }
-    if (d->resourceFilter != KisResourceModel::ResourceFilter::ShowAllResources) {
-        invalidate();
     }
     return false;
 }

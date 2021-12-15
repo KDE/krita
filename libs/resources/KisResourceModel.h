@@ -265,6 +265,12 @@ private Q_SLOTS:
      */
     void endExternalResourceOverride(const QString &resourceType, int resourceId);
 
+    /**
+     * A special connection for KisResourceLocator, which is triggered when the
+     * resource changes its 'active' state
+     */
+    void slotResourceActiveStateChanged(const QString &resourceType, int resourceId);
+
 public:
 
     KoResourceSP resourceForId(int id) const;

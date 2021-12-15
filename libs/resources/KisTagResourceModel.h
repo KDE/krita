@@ -73,6 +73,8 @@ private Q_SLOTS:
     void addStorage(const QString &location);
     void removeStorage(const QString &location);
 
+    void slotResourceActiveStateChanged(const QString &resourceType, int resourceId);
+
 private:
 
     bool resetQuery();

@@ -153,15 +153,12 @@ QVariant KisAllResourcesModel::headerData(int section, Qt::Orientation orientati
 
 bool KisAllResourcesModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    if (index.isValid() && role == Qt::CheckStateRole) {
-        if (value.toBool()) {
-            if (!KisResourceLocator::instance()->setResourceActive(index.data(Qt::UserRole + KisAbstractResourceModel::Id).toInt(), value.toBool())) {
-                return false;
-            }
-        }
-        resetQuery();
-        emit dataChanged(index, index, {role});
+    if (index.isValid() && role == Qt::CheckStateRole &&
+            value.canConvert<bool>()) {
+
+        return setResourceActive(index, value.toBool());
     }
+
     return true;
 }
 
@@ -404,14 +401,14 @@ QModelIndex KisAllResourcesModel::indexForResourceId(int resourceId) const
     return QModelIndex();
 }
 
-bool KisAllResourcesModel::setResourceInactive(const QModelIndex &index)
+bool KisAllResourcesModel::setResourceActive(const QModelIndex &index, bool value)
 {
     if (index.row() > rowCount()) return false;
     if (index.column() > d->columnCount) return false;
 
     int resourceId = index.data(Qt::UserRole + Id).toInt();
-    if (!KisResourceLocator::instance()->setResourceActive(resourceId, false)) {
-        qWarning() << "Failed to remove resource" << resourceId;
+    if (!KisResourceLocator::instance()->setResourceActive(resourceId, value)) {
+        qWarning() << "Failed to change active state of the resource" << resourceId;
         return false;
     }
 
@@ -752,11 +749,11 @@ QModelIndex KisResourceModel::indexForResourceId(int resourceId) const
     return QModelIndex();
 }
 
-bool KisResourceModel::setResourceInactive(const QModelIndex &index)
+bool KisResourceModel::setResourceActive(const QModelIndex &index, bool value)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->setResourceInactive(mapToSource(index));
+        return source->setResourceActive(mapToSource(index), value);
     }
     return false;
 }

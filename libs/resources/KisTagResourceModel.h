@@ -141,7 +141,7 @@ public:
     KoResourceSP resourceForIndex(QModelIndex index) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
-    bool setResourceInactive(const QModelIndex &index) override;
+    bool setResourceActive(const QModelIndex &index, bool value) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString()) override;
     KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString()) override;
     bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation) const override;

@@ -551,11 +551,11 @@ QModelIndex KisTagResourceModel::indexForResourceId(int resourceId) const
     return QModelIndex();
 }
 
-bool KisTagResourceModel::setResourceInactive(const QModelIndex &index)
+bool KisTagResourceModel::setResourceActive(const QModelIndex &index, bool value)
 {
     KisResourceModel resourceModel(d->resourceType);
     QModelIndex idx = resourceModel.indexForResource(resourceForIndex(index));
-    return resourceModel.setResourceInactive(idx);
+    return resourceModel.setResourceActive(idx, value);
 }
 
 KoResourceSP KisTagResourceModel::importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId)

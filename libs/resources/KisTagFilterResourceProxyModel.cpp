@@ -113,11 +113,11 @@ QModelIndex KisTagFilterResourceProxyModel::indexForResourceId(int resourceId) c
     return QModelIndex();
 }
 
-bool KisTagFilterResourceProxyModel::setResourceInactive(const QModelIndex &index)
+bool KisTagFilterResourceProxyModel::setResourceActive(const QModelIndex &index, bool value)
 {
     KisAbstractResourceModel *source = dynamic_cast<KisAbstractResourceModel*>(sourceModel());
     if (source) {
-        return source->setResourceInactive(mapToSource(index));
+        return source->setResourceActive(mapToSource(index), value);
     }
     return false;
 }

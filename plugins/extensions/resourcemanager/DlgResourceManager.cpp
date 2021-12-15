@@ -221,6 +221,8 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         QString multipleSelectedText = i18nc("In Resource manager, this is text shown instead of filename, name or location, "
                                              "when multiple resources are shown so there is no one specific filename", "(Multiple selected)");
 
+        m_ui->lblId->setText(multipleSelectedText);
+        m_ui->lblMetadata->setText("");
         m_ui->lblFilename->setText(multipleSelectedText);
         m_ui->lblLocation->setText(commonLocationFound ? commonLocation : multipleSelectedText);
         m_ui->lneName->setText(multipleSelectedText);
@@ -232,11 +234,13 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lblLocation->setDisabled(!commonLocationFound);
         m_ui->lblThumbnail->setDisabled(true);
         m_ui->lneName->setDisabled(true);
-        m_ui->lblId->setDisabled(false);
+        m_ui->lblId->setDisabled(true);
     } else {
         QString noneSelectedText = i18nc("In Resource manager, this is text shown instead of filename, name or location, "
                                              "when no resource is shown so there is no specific filename", "(None selected)");
 
+        m_ui->lblId->setText(noneSelectedText);
+        m_ui->lblMetadata->setText("");
         m_ui->lblFilename->setText(noneSelectedText);
         m_ui->lblLocation->setText(noneSelectedText);
         m_ui->lneName->setText(noneSelectedText);
@@ -248,7 +252,7 @@ void DlgResourceManager::slotResourcesSelectionChanged(QModelIndex index)
         m_ui->lblLocation->setDisabled(true);
         m_ui->lblThumbnail->setDisabled(true);
         m_ui->lneName->setDisabled(true);
-        m_ui->lblId->setDisabled(false);
+        m_ui->lblId->setDisabled(true);
     }
 
     QList<int> resourceIds;

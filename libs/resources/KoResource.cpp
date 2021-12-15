@@ -41,10 +41,6 @@ struct Q_DECL_HIDDEN KoResource::Private {
     QString md5sum;
     QImage image;
     QMap<QString, QVariant> metadata;
-
-    void sanityCheckResourceFileName() {
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!filename.contains('/'));
-    }
 };
 
 KoResource::KoResource()
@@ -57,7 +53,6 @@ KoResource::KoResource(const QString& filename)
 {
     d->filename = filename;
     d->name = QFileInfo(filename).fileName();
-    d->sanityCheckResourceFileName();
 }
 
 KoResource::~KoResource()
@@ -189,7 +184,6 @@ QString KoResource::filename() const
 void KoResource::setFilename(const QString& filename)
 {
     d->filename = filename;
-    d->sanityCheckResourceFileName();
 }
 
 QString KoResource::name() const

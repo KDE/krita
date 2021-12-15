@@ -101,3 +101,14 @@ int KisUniqueColorSet::size() const
 {
     return static_cast<int>(d->history.size());
 }
+
+void KisUniqueColorSet::clear()
+{
+    for (ColorEntry *entry: d->history) {
+        delete entry;
+    }
+    d->history.clear();
+    d->colorHash.clear();
+    d->key = 0;
+    emit sigReset();
+}

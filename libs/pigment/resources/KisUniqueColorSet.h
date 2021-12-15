@@ -26,6 +26,8 @@ public:
     KoColor color(int index) const;
     int size() const;
 
+public Q_SLOTS:
+    void clear();
 Q_SIGNALS:
     void sigReset();
     void sigColorAdded(int position);

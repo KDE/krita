@@ -300,14 +300,9 @@ void DlgResourceManager::slotDeleteResources()
     }
 
     Q_FOREACH (int resourceId, resourceIds) {
-        if (m_undeleteMode) {
-            // FIXME: There is currently no nicer way to set an inactive resource active again...
-            QModelIndex index = allModel->indexForResourceId(resourceId);
-            allModel->setData(index, true, Qt::CheckStateRole);
-        } else {
-            QModelIndex index = allModel->indexForResourceId(resourceId);
-            allModel->setResourceInactive(index);
-        }
+
+        QModelIndex index = allModel->indexForResourceId(resourceId);
+        allModel->setResourceActive(index, m_undeleteMode);
     }
 
     updateDeleteButtonState(list);

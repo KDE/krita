@@ -75,11 +75,19 @@ public:
     virtual QModelIndex indexForResourceId(int resourceId) const = 0;
 
     /**
-     * @brief setResourceInactive deactivates the specified resource
-     * @param index
-     * @return
+     * @brief setResourceActive changes 'active' state of the resource
+     * @param index the index of the resource
+     * @param value new 'active' state of the resource
+     * @return true if the new state has been assigned successfully
      */
-    virtual bool setResourceInactive(const QModelIndex &index) = 0;
+    virtual bool setResourceActive(const QModelIndex &index, bool value) = 0;
+
+    /**
+     * A convenience function to put a resource into inactive state
+     */
+    inline bool setResourceInactive(const QModelIndex &index) {
+        return setResourceActive(index, false);
+    }
 
     /**
      * @brief importResourceFile
@@ -220,7 +228,7 @@ public:
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
-    bool setResourceInactive(const QModelIndex &index) override;
+    bool setResourceActive(const QModelIndex &index, bool value) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString("")) override;
     KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) override;
     bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation = QString()) const override;
@@ -352,7 +360,7 @@ public:
     KoResourceSP resourceForIndex(QModelIndex index = QModelIndex()) const override;
     QModelIndex indexForResource(KoResourceSP resource) const override;
     QModelIndex indexForResourceId(int resourceId) const override;
-    bool setResourceInactive(const QModelIndex &index) override;
+    bool setResourceActive(const QModelIndex &index, bool value) override;
     KoResourceSP importResourceFile(const QString &filename, const bool allowOverwrite, const QString &storageId = QString("")) override;
     KoResourceSP importResource(const QString &filename, QIODevice *device, const bool allowOverwrite, const QString &storageId = QString("")) override;
     bool importWillOverwriteResource(const QString &fileName, const QString &storageLocation = QString()) const override;

@@ -59,6 +59,7 @@ void KisWdgTagSelectionControllerOneResource::setResourceIds(QString resourceTyp
 
     if (resourceType != "" && (oldResourceType != resourceType || !m_tagResourceModel || !m_tagModel)) {
         m_tagResourceModel.reset(new KisTagResourceModel(resourceType));
+        m_tagResourceModel->setResourceFilter(KisTagResourceModel::ShowAllResources);
         m_tagModel.reset(new KisTagModel(resourceType));
         m_tagModel->sort(KisAllTagsModel::Name);
     }

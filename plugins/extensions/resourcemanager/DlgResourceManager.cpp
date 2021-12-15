@@ -73,10 +73,10 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
     m_ui->cmbTag->setModelColumn(KisAllTagsModel::Name);
     connect(m_ui->cmbTag, SIGNAL(activated(int)), SLOT(slotTagSelected(int)));
 
+    // the model will be owned by `proxyModel`
     KisResourceModel* resourceModel = new KisResourceModel(selectedResourceType);
     resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
     resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
-    m_resourceModelsForResourceType.insert(selectedResourceType, resourceModel);
 
     KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
     proxyModel->setResourceModel(resourceModel);
@@ -110,7 +110,10 @@ DlgResourceManager::DlgResourceManager(KisActionManager *actionMgr, QWidget *par
 
 DlgResourceManager::~DlgResourceManager()
 {
-    // TODO: we are leaking models and proxies!!!
+    qDeleteAll(m_tagModelsForResourceType);
+    qDeleteAll(m_resourceProxyModelsForResourceType);
+    delete m_storageModel;
+    delete m_resourceTypeModel;
 }
 
 void DlgResourceManager::slotResourceTypeSelected(int)
@@ -124,17 +127,11 @@ void DlgResourceManager::slotResourceTypeSelected(int)
     m_ui->cmbTag->setModel(m_tagModelsForResourceType[selectedResourceType]);
 
     if (!m_resourceProxyModelsForResourceType.contains(selectedResourceType)) {
-        KisResourceModel* resourceModel;
-        if (!m_resourceModelsForResourceType.contains(selectedResourceType)) {
-            resourceModel = new KisResourceModel(selectedResourceType);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(resourceModel);
-            resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
-            resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
-
-            m_resourceModelsForResourceType.insert(selectedResourceType, resourceModel);
-        } else {
-            resourceModel = m_resourceModelsForResourceType[selectedResourceType];
-        }
+        // the model will be owned by `proxyModel`
+        KisResourceModel* resourceModel = new KisResourceModel(selectedResourceType);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(resourceModel);
+        resourceModel->setStorageFilter(KisResourceModel::ShowAllStorages);
+        resourceModel->setResourceFilter(m_ui->chkShowDeleted->isChecked() ? KisResourceModel::ShowAllResources : KisResourceModel::ShowActiveResources);
 
         KisTagFilterResourceProxyModel* proxyModel = new KisTagFilterResourceProxyModel(selectedResourceType);
         KIS_SAFE_ASSERT_RECOVER_RETURN(proxyModel);

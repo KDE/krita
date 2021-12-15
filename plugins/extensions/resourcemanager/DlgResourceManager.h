@@ -69,7 +69,6 @@ private:
     QMap<QString, KisTagModel*> m_tagModelsForResourceType;
 
     KisResourceModel *m_resourceModel;
-    QMap<QString, KisResourceModel*> m_resourceModelsForResourceType;
     QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
 
     QScopedPointer<KisWdgTagSelectionControllerOneResource> m_tagsController;

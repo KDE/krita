@@ -204,7 +204,14 @@ bool KisTag::load(QIODevice &io)
     }
     KIS_ASSERT(io.isOpen());
 
-    const QList<QByteArray> lines = io.readAll().split('\n');
+    QTextStream stream(&io);
+    QStringList lines;
+    QString line;
+
+    while (stream.readLineInto(&line)) {
+        lines << line;
+    }
+
     if (lines.length() < 6 ) {
         qWarning()  << d->filename << ": Incomplete tag file" << lines.length();
         return false;
@@ -214,10 +221,9 @@ bool KisTag::load(QIODevice &io)
         return false;
     }
 
-    for (int i = 1; i < lines.length(); ++i) {
+    lines.removeFirst();
 
-        QString line = QString::fromUtf8(lines[i]);
-
+    Q_FOREACH(const QString line, lines) {
         if (line.isEmpty()) {
             continue;
         }

@@ -13,6 +13,7 @@
 #include <KisKineticScroller.h>
 
 #include <KoCanvasObserverBase.h>
+#include <KisResourceModel.h>
 
 #include <kis_canvas2.h>
 #include <kis_types.h>
@@ -33,7 +34,7 @@ class PresetHistoryDock : public QDockWidget, public KoCanvasObserverBase {
     Q_OBJECT
 public:
     enum HistoryDataRole {
-        BrushPresetRole = Qt::UserRole,
+        ResourceID = Qt::UserRole,
         BubbleMarkerRole = Qt::UserRole + 1
     };
 
@@ -54,10 +55,11 @@ private Q_SLOTS:
     void canvasResourceChanged(int key, const QVariant& v);
     void slotSortingModeChanged(QAction *action);
     void slotContextMenuRequest(const QPoint &pos);
+    void updatePresets();
 private:
     void updatePresetState(int position);
     int bubblePreset(int position);
-    void addPreset(KisPaintOpPresetSP preset);
+    void addPreset(QString name, QIcon icon, int resourceId);
 private:
     QPointer<KisCanvas2> m_canvas;
     PresetHistoryList *m_presetHistory;
@@ -66,6 +68,7 @@ private:
     QAction *m_actionSortBubble;
     QActionGroup *m_sortingModes;
     DisplayOrder m_sorting {Static};
+    KisResourceModel* m_resourceModel {0};
     bool m_block {false};
     bool m_initialized {false};
 };

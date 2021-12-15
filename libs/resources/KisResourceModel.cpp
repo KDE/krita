@@ -663,8 +663,9 @@ void KisAllResourcesModel::beginExternalResourceOverride(const QString &resource
 
 void KisAllResourcesModel::endExternalResourceOverride(const QString &resourceType, int resourceId)
 {
-    if (resourceType != d->resourceType) return;
+    Q_UNUSED(resourceId)
 
+    if (resourceType != d->resourceType) return;
 
     resetQuery();
     endRemoveRows();

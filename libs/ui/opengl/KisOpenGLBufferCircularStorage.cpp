@@ -87,7 +87,7 @@ void KisOpenGLBufferCircularStorage::reset()
     m_d->bufferSize = 0;
 }
 
-void KisOpenGLBufferCircularStorage::allocateMoreBuffers(int numBuffers)
+void KisOpenGLBufferCircularStorage::allocateMoreBuffers(uint numBuffers)
 {
     if (numBuffers <= (int)m_d->buffers.size()) return;
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->buffers.empty());

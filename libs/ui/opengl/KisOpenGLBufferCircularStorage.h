@@ -51,7 +51,7 @@ public:
 
     void reset();
 
-    void allocateMoreBuffers(int numBuffers);
+    void allocateMoreBuffers(uint numBuffers);
 
 private:
     void addBuffersImpl(int buffersToAdd, int bufferSize);

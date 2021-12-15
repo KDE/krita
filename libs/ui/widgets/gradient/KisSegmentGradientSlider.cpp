@@ -24,6 +24,8 @@
 #include <KisGradientWidgetsUtils.h>
 #include <KisDlgInternalColorSelector.h>
 #include <krita_utils.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include "KisSegmentGradientSlider.h"
 
@@ -1054,69 +1056,77 @@ void KisSegmentGradientSlider::chooseSelectedStopColor()
         }
     }
 
-#ifndef Q_OS_MACOS
-    KisDlgInternalColorSelector::Config cfg;
-    KisDlgInternalColorSelector *dialog = new KisDlgInternalColorSelector(this, color1, cfg, i18n("Choose a color"));
-    dialog->setPreviousColor(color1);
-    auto setColorFn = [dialog, segments, this]() mutable
-                      {
-                          if (m_selectedHandle.index == 0) {
-                              segments[0]->setStartType(COLOR_ENDPOINT);
-                              segments[0]->setStartColor(dialog->getCurrentColor());
-                          } else {
-                              segments[m_selectedHandle.index - 1]->setEndType(COLOR_ENDPOINT);
-                              segments[m_selectedHandle.index - 1]->setEndColor(dialog->getCurrentColor());
-                              if (m_selectedHandle.index < segments.size()) {
-                                  segments[m_selectedHandle.index]->setStartType(COLOR_ENDPOINT);
-                                  segments[m_selectedHandle.index]->setStartColor(dialog->getCurrentColor());
-                              }
-                          }
-                          emit selectedHandleChanged();
-                          emit updateRequested();
-                      };
-    connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
-#else
-    QColorDialog *dialog = new QColorDialog(this);
-    dialog->setCurrentColor(color1.toQColor());
-    auto setColorFn = [dialog, segments, this]() mutable
-                      {
-                          KoColor color;
-                          color.fromQColor(dialog->currentColor());
-                          if (m_selectedHandle.index == 0) {
-                              segments[0]->setStartType(COLOR_ENDPOINT);
-                              segments[0]->setStartColor(color);
-                          } else {
-                              segments[m_selectedHandle.index - 1]->setEndType(COLOR_ENDPOINT);
-                              segments[m_selectedHandle.index - 1]->setEndColor(color);
-                              if (m_selectedHandle.index < segments.size()) {
-                                  segments[m_selectedHandle.index]->setStartType(COLOR_ENDPOINT);
-                                  segments[m_selectedHandle.index]->setStartColor(color);
-                              }
-                          }
-                          emit selectedHandleChanged();
-                          emit updateRequested();
-                      };
-    connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
-#endif
-    connect(dialog, &QDialog::accepted, setColorFn);
-    connect(dialog, &QDialog::rejected, [endType1, endType2, color1, color2, segments, this]()
-                                        {
-                                            if (m_selectedHandle.index == 0) {
-                                                segments[0]->setStartType(endType1);
-                                                segments[0]->setStartColor(color1);
-                                            } else {
-                                                segments[m_selectedHandle.index - 1]->setEndType(endType1);
-                                                segments[m_selectedHandle.index - 1]->setEndColor(color1);
-                                                if (m_selectedHandle.index < segments.size()) {
-                                                    segments[m_selectedHandle.index]->setStartType(endType2);
-                                                    segments[m_selectedHandle.index]->setStartColor(color2);
-                                                }
-                                            }
-                                            emit selectedHandleChanged();
-                                            emit updateRequested();
-                                        });
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->show();
-    dialog->raise();
-    dialog->activateWindow();
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("colorselector");
+    bool usePlatformDialog = cfg.readEntry("UsePlatformColorDialog", false);
+    QDialog *colorDialog = nullptr;
+
+    if (!usePlatformDialog) {
+        KisDlgInternalColorSelector::Config cfg;
+        KisDlgInternalColorSelector *dialog = new KisDlgInternalColorSelector(this, color1, cfg, i18n("Choose a color"));
+        dialog->setPreviousColor(color1);
+        auto setColorFn = [dialog, segments, this]() mutable
+                        {
+                            if (m_selectedHandle.index == 0) {
+                                segments[0]->setStartType(COLOR_ENDPOINT);
+                                segments[0]->setStartColor(dialog->getCurrentColor());
+                            } else {
+                                segments[m_selectedHandle.index - 1]->setEndType(COLOR_ENDPOINT);
+                                segments[m_selectedHandle.index - 1]->setEndColor(dialog->getCurrentColor());
+                                if (m_selectedHandle.index < segments.size()) {
+                                    segments[m_selectedHandle.index]->setStartType(COLOR_ENDPOINT);
+                                    segments[m_selectedHandle.index]->setStartColor(dialog->getCurrentColor());
+                                }
+                            }
+                            emit selectedHandleChanged();
+                            emit updateRequested();
+                        };
+        connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
+        connect(dialog, &QDialog::accepted, setColorFn);
+        colorDialog = dialog;
+    } else {
+        QColorDialog *dialog = new QColorDialog(this);
+        dialog->setCurrentColor(color1.toQColor());
+        auto setColorFn = [dialog, segments, this]() mutable
+                        {
+                            KoColor color;
+                            color.fromQColor(dialog->currentColor());
+                            if (m_selectedHandle.index == 0) {
+                                segments[0]->setStartType(COLOR_ENDPOINT);
+                                segments[0]->setStartColor(color);
+                            } else {
+                                segments[m_selectedHandle.index - 1]->setEndType(COLOR_ENDPOINT);
+                                segments[m_selectedHandle.index - 1]->setEndColor(color);
+                                if (m_selectedHandle.index < segments.size()) {
+                                    segments[m_selectedHandle.index]->setStartType(COLOR_ENDPOINT);
+                                    segments[m_selectedHandle.index]->setStartColor(color);
+                                }
+                            }
+                            emit selectedHandleChanged();
+                            emit updateRequested();
+                        };
+        connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
+        connect(dialog, &QDialog::accepted, setColorFn);
+        colorDialog = dialog;
+    }
+    // common functionality
+    connect(colorDialog, &QDialog::rejected, [endType1, endType2, color1, color2, segments, this]()
+                                             {
+                                                 if (m_selectedHandle.index == 0) {
+                                                     segments[0]->setStartType(endType1);
+                                                     segments[0]->setStartColor(color1);
+                                                 } else {
+                                                     segments[m_selectedHandle.index - 1]->setEndType(endType1);
+                                                     segments[m_selectedHandle.index - 1]->setEndColor(color1);
+                                                     if (m_selectedHandle.index < segments.size()) {
+                                                         segments[m_selectedHandle.index]->setStartType(endType2);
+                                                         segments[m_selectedHandle.index]->setStartColor(color2);
+                                                     }
+                                                 }
+                                                 emit selectedHandleChanged();
+                                                 emit updateRequested();
+                                             });
+    colorDialog->setAttribute(Qt::WA_DeleteOnClose);
+    colorDialog->show();
+    colorDialog->raise();
+    colorDialog->activateWindow();
 }

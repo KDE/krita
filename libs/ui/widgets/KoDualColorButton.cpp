@@ -378,18 +378,18 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
                 if (usePlatformDialog) {
-                    KoColor c = d->backgroundColor;
-                    c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
-                    d->backgroundColor = c;
-                    emit backgroundColorChanged(d->backgroundColor);
-                }
-                else {
                     QColor c = d->backgroundColor.toQColor();
                     c = QColorDialog::getColor(c, this);
                     if (c.isValid()) {
                         d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
                         emit backgroundColorChanged(d->backgroundColor);
                     }
+                }
+                else {
+                    KoColor c = d->backgroundColor;
+                    c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
+                    d->backgroundColor = c;
+                    emit backgroundColorChanged(d->backgroundColor);
                 }
             }
         } else {

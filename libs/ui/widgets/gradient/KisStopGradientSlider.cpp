@@ -26,6 +26,8 @@
 #include "krita_utils.h"
 #include <KoColor.h>
 #include <KisDlgInternalColorSelector.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include "KisStopGradientSlider.h"
 
@@ -496,41 +498,49 @@ void KisStopGradientSlider::chooseSelectedStopColor()
         return;
     }
 
-#ifndef Q_OS_MACOS
-    KisDlgInternalColorSelector::Config cfg;
-    KisDlgInternalColorSelector *dialog = new KisDlgInternalColorSelector(this, stops[m_selectedStop].color, cfg, i18n("Choose a color"));
-    dialog->setPreviousColor(stops[m_selectedStop].color);
-    auto setColorFn = [dialog, stops, this]() mutable
-                      {
-                          stops[m_selectedStop].type = COLORSTOP;
-                          stops[m_selectedStop].color = dialog->getCurrentColor();
-                          m_gradient->setStops(stops);
-                          emit sigSelectedStop(m_selectedStop);
-                          emit updateRequested();
-                      };
-    connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
-#else
-    QColorDialog *dialog = new QColorDialog(this);
-    dialog->setCurrentColor(stops[m_selectedStop].color.toQColor());
-    auto setColorFn = [dialog, stops, this]() mutable
-                      {
-                          stops[m_selectedStop].type = COLORSTOP;
-                          stops[m_selectedStop].color.fromQColor(dialog->currentColor());
-                          m_gradient->setStops(stops);
-                          emit sigSelectedStop(m_selectedStop);
-                          emit updateRequested();
-                      };
-    connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
-#endif
-    connect(dialog, &QDialog::accepted, setColorFn);
-    connect(dialog, &QDialog::rejected, [stops, this]()
-                                        {
-                                            m_gradient->setStops(stops);
-                                            emit sigSelectedStop(m_selectedStop);
-                                            emit updateRequested();
-                                        });
-    dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->show();
-    dialog->raise();
-    dialog->activateWindow();
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("colorselector");
+    bool usePlatformDialog = cfg.readEntry("UsePlatformColorDialog", false);
+    QDialog *colorDialog = nullptr;
+
+    if (!usePlatformDialog) {
+        KisDlgInternalColorSelector::Config cfg;
+        KisDlgInternalColorSelector *dialog = new KisDlgInternalColorSelector(this, stops[m_selectedStop].color, cfg, i18n("Choose a color"));
+        dialog->setPreviousColor(stops[m_selectedStop].color);
+        auto setColorFn = [dialog, stops, this]() mutable
+                          {
+                              stops[m_selectedStop].type = COLORSTOP;
+                              stops[m_selectedStop].color = dialog->getCurrentColor();
+                              m_gradient->setStops(stops);
+                              emit sigSelectedStop(m_selectedStop);
+                              emit updateRequested();
+                          };
+        connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
+        connect(dialog, &QDialog::accepted, setColorFn);
+        colorDialog = dialog;
+    } else {
+        QColorDialog *dialog = new QColorDialog(this);
+        dialog->setCurrentColor(stops[m_selectedStop].color.toQColor());
+        auto setColorFn = [dialog, stops, this]() mutable
+                          {
+                              stops[m_selectedStop].type = COLORSTOP;
+                              stops[m_selectedStop].color.fromQColor(dialog->currentColor());
+                              m_gradient->setStops(stops);
+                              emit sigSelectedStop(m_selectedStop);
+                              emit updateRequested();
+                          };
+        connect(dialog, &QColorDialog::currentColorChanged, setColorFn);
+        connect(dialog, &QDialog::accepted, setColorFn);
+        colorDialog = dialog;
+    }
+    // common functionality
+    connect(colorDialog, &QDialog::rejected, [stops, this]()
+                                             {
+                                                 m_gradient->setStops(stops);
+                                                 emit sigSelectedStop(m_selectedStop);
+                                                 emit updateRequested();
+                                             });
+    colorDialog->setAttribute(Qt::WA_DeleteOnClose);
+    colorDialog->show();
+    colorDialog->raise();
+    colorDialog->activateWindow();
 }

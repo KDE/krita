@@ -24,6 +24,7 @@
 class KRITARESOURCES_EXPORT KisTagFilterResourceProxyModel
     : public QSortFilterProxyModel
     , public KisAbstractResourceModel
+    , public KisAbstractResourceFilterInterface
 {
     Q_OBJECT
 public:
@@ -31,21 +32,8 @@ public:
     KisTagFilterResourceProxyModel(const QString &resourceType, QObject *parent = 0);
     ~KisTagFilterResourceProxyModel() override;
 
-    enum ResourceFilter {
-        ShowInactiveResources = 0,
-        ShowActiveResources,
-        ShowAllResources
-    };
-
-    void setResourceFilter(ResourceFilter filter);
-
-    enum StorageFilter {
-        ShowInactiveStorages = 0,
-        ShowActiveStorages,
-        ShowAllStorages
-    };
-
-    void setStorageFilter(StorageFilter filter);
+    void setResourceFilter(ResourceFilter filter) override;
+    void setStorageFilter(StorageFilter filter) override;
 
     // To be used if we need an extra proxy model, like for
     void setResourceModel(KisResourceModel *resourceModel);

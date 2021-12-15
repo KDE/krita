@@ -60,8 +60,8 @@ KisTagFilterResourceProxyModel::~KisTagFilterResourceProxyModel()
 void KisTagFilterResourceProxyModel::setResourceFilter(ResourceFilter filter)
 {
     emit beforeFilterChanges();
-    d->resourceModel->setResourceFilter(KisResourceModel::ResourceFilter((int)filter));
-    d->tagResourceModel->setResourceFilter(KisTagResourceModel::ResourceFilter((int)filter));
+    d->resourceModel->setResourceFilter(filter);
+    d->tagResourceModel->setResourceFilter(filter);
     invalidateFilter();
     emit afterFilterChanged();
 }
@@ -69,8 +69,8 @@ void KisTagFilterResourceProxyModel::setResourceFilter(ResourceFilter filter)
 void KisTagFilterResourceProxyModel::setStorageFilter(StorageFilter filter)
 {
     emit beforeFilterChanges();
-    d->resourceModel->setStorageFilter(KisResourceModel::StorageFilter((int)filter));
-    d->tagResourceModel->setStorageFilter(KisTagResourceModel::StorageFilter((int)filter));
+    d->resourceModel->setStorageFilter(filter);
+    d->tagResourceModel->setStorageFilter(filter);
     invalidateFilter();
     emit afterFilterChanged();
 }

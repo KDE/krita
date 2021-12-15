@@ -91,6 +91,7 @@ private:
 class KRITARESOURCES_EXPORT KisTagResourceModel : public QSortFilterProxyModel
     , public KisAbstractTagResourceModel
     , public KisAbstractResourceModel
+    , public KisAbstractResourceFilterInterface
 {
     Q_OBJECT
 
@@ -109,20 +110,8 @@ public:
 
     void setTagFilter(TagFilter filter);
 
-    enum ResourceFilter {
-        ShowInactiveResources = 0,
-        ShowActiveResources,
-        ShowAllResources
-    };
-    void setResourceFilter(ResourceFilter filter);
-
-    enum StorageFilter {
-        ShowInactiveStorages = 0,
-        ShowActiveStorages,
-        ShowAllStorages
-    };
-
-    void setStorageFilter(StorageFilter filter);
+    void setResourceFilter(ResourceFilter filter) override;
+    void setStorageFilter(StorageFilter filter) override;
 
     void setTagsFilter(const QVector<int> tagIds);
     void setResourcesFilter(const QVector<int> resourceIds);

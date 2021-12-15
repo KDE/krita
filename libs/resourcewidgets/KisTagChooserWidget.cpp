@@ -228,6 +228,8 @@ void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
         return;
     }
 
+    if (tagName.isEmpty()) return;
+
     KisTagSP tagForUrl = d->model->tagForUrl(tagName);
     if (!tagForUrl.isNull()) {
         int response = overwriteTagDialog(this, tagForUrl->active());

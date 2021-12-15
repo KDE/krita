@@ -311,7 +311,11 @@ bool KisResourceLocator::setResourceActive(int resourceId, bool active)
         d->thumbnailCache.remove(key);
     }
 
-    return KisResourceCacheDb::setResourceActive(resourceId, active);
+    bool result = KisResourceCacheDb::setResourceActive(resourceId, active);
+
+    Q_EMIT resourceActiveStateChanged(rs.resourceType, resourceId);
+
+    return result;
 }
 
 KoResourceSP KisResourceLocator::importResourceFromFile(const QString &resourceType, const QString &fileName, const bool allowOverwrite, const QString &storageLocation)

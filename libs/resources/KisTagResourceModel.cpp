@@ -32,6 +32,7 @@ KisAllTagResourceModel::KisAllTagResourceModel(const QString &resourceType, QObj
     connect(KisResourceLocator::instance(), SIGNAL(storageRemoved(const QString&)), this, SLOT(removeStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
     connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisResourceLocator::instance(), SIGNAL(resourceActiveStateChanged(const QString&, int)), this, SLOT(slotResourceActiveStateChanged(const QString&, int)));
 }
 
 KisAllTagResourceModel::~KisAllTagResourceModel()
@@ -294,6 +295,31 @@ void KisAllTagResourceModel::removeStorage(const QString &location)
     beginRemoveRows(QModelIndex(), rowCount(), rowCount());
     resetQuery();
     endRemoveRows();
+}
+
+void KisAllTagResourceModel::slotResourceActiveStateChanged(const QString &resourceType, int resourceId)
+{
+    if (resourceType != d->resourceType) return;
+    if (resourceId < 0) return;
+
+    resetQuery();
+
+    /// The model has multiple rows for every resource, one row per tag,
+    /// so we need to notify about the changes in all the tags
+    QVector<QModelIndex> indexes;
+
+    for (int i = 0; i < rowCount(); ++i)  {
+        const QModelIndex idx = this->index(i, 0);
+        KIS_ASSERT_RECOVER(idx.isValid()) { continue; }
+
+        if (idx.data(Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt() == resourceId) {
+            indexes << idx;
+        }
+    }
+
+    Q_FOREACH(const QModelIndex &index, indexes) {
+        Q_EMIT dataChanged(index, index, {Qt::CheckStateRole, Qt::UserRole + KisAllTagResourceModel::ResourceActive});
+    }
 }
 
 bool KisAllTagResourceModel::resetQuery()

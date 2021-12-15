@@ -8,6 +8,8 @@
 #include "KoColor.h"
 #include "KoColorDisplayRendererInterface.h"
 #include <kcolormimedata.h>
+#include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 #include "dcolorarrow.xbm"
 #include "dcolorreset.xpm"
@@ -347,21 +349,24 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
     QRect backgroundRect;
     metrics( foregroundRect, backgroundRect );
 
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("colorselector");
+    bool usePlatformDialog = cfg.readEntry("UsePlatformColorDialog", false);
+
     if (foregroundRect.contains( event->pos())) {
         if (d->tmpSelection == Foreground) {
             if (d->popDialog) {
-#ifndef Q_OS_MACOS
-                d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
-                // this should toggle, but I don't know how to implement that...
-                d->colorSelectorDialog->show();
-#else
-                QColor c = d->foregroundColor.toQColor();
-                c = QColorDialog::getColor(c, this);
-                if (c.isValid()) {
-                    d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
-                    emit foregroundColorChanged(d->foregroundColor);
+                if (usePlatformDialog) {
+                    QColor c = d->foregroundColor.toQColor();
+                    c = QColorDialog::getColor(c, this);
+                    if (c.isValid()) {
+                        d->foregroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
+                        emit foregroundColorChanged(d->foregroundColor);
+                    }
                 }
-#endif
+                else {
+                    d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
+                    d->colorSelectorDialog->show();
+                }
             }
         }
         else {
@@ -369,22 +374,23 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
             emit foregroundColorChanged( d->foregroundColor );
         }
     }
-    else if ( backgroundRect.contains( event->pos() )) {
+    else if (backgroundRect.contains( event->pos())) {
         if(d->tmpSelection == Background ) {
             if( d->popDialog) {
-#ifndef Q_OS_MACOS
-                KoColor c = d->backgroundColor;
-                c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
-                d->backgroundColor = c;
-                emit backgroundColorChanged(d->backgroundColor);
-#else
-                QColor c = d->backgroundColor.toQColor();
-                c = QColorDialog::getColor(c, this);
-                if (c.isValid()) {
-                    d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
+                if (usePlatformDialog) {
+                    KoColor c = d->backgroundColor;
+                    c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
+                    d->backgroundColor = c;
                     emit backgroundColorChanged(d->backgroundColor);
                 }
-#endif
+                else {
+                    QColor c = d->backgroundColor.toQColor();
+                    c = QColorDialog::getColor(c, this);
+                    if (c.isValid()) {
+                        d->backgroundColor = d->displayRenderer->approximateFromRenderedQColor(c);
+                        emit backgroundColorChanged(d->backgroundColor);
+                    }
+                }
             }
         } else {
             d->backgroundColor = d->foregroundColor;
@@ -419,7 +425,7 @@ bool KoDualColorButton::event(QEvent *event)
             if (this->mapFromGlobal(QCursor::pos()).y() < backgroundRect.y()){
                 this->setToolTip(i18n("Foreground color selector"));
             }
-            else{ 
+            else{
                 this->setToolTip(i18n("Set foreground and background colors to black and white"));
             }
         }
@@ -427,7 +433,7 @@ bool KoDualColorButton::event(QEvent *event)
             if (this->mapFromGlobal(QCursor::pos()).y() < backgroundRect.y() ) {
                 this->setToolTip(i18n("Swap foreground and background colors"));
             }
-            else{ 
+            else{
                 this->setToolTip(i18n("Background color selector"));
             }
         }

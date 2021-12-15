@@ -98,8 +98,8 @@ QList<QString> KisLockedPropertiesProxy::getPropertiesKeys() const
     if (m_lockedProperties->lockedProperties() && !m_lockedProperties->lockedProperties()->getPropertiesKeys().isEmpty()) {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
         QSet<QString> properties(result.begin(), result.end());
-        auto lockedProperties = m_lockedProperties->lockedProperties()->getPropertiesKeys();
-        QSet<QString> lockedProperties(lockedProperties.begin(), lockedProperties.end());
+        auto lockedPropertiesKeys = m_lockedProperties->lockedProperties()->getPropertiesKeys();
+        QSet<QString> lockedProperties(lockedPropertiesKeys.begin(), lockedPropertiesKeys.end());
 #else
         QSet<QString> properties = QSet<QString>::fromList(result);
         QSet<QString> lockedProperties = QSet<QString>::fromList(m_lockedProperties->lockedProperties()->getPropertiesKeys());

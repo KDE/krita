@@ -19,17 +19,17 @@
 
 
 
-QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query)
+QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query, bool useResourcePrefix)
 {
     QString storageLocation = query.value("location").toString();
     QString resourceType = query.value("resource_type").toString();
-    QString filename = query.value("filename").toString();
+    QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
 
     QImage img = KisResourceLocator::instance()->thumbnailCached(storageLocation, resourceType, filename);
     if (!img.isNull()) {
         return img;
     } else {
-        QByteArray ba = query.value("thumbnail").toByteArray();
+        QByteArray ba = query.value(useResourcePrefix ? "resource_thumbnail" : "thumbnail").toByteArray();
         QBuffer buf(&ba);
         buf.open(QBuffer::ReadOnly);
         img.load(&buf, "PNG");
@@ -38,7 +38,7 @@ QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query)
     }
 }
 
-QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query, int column, int role)
+QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query, int column, int role, bool useResourcePrefix)
 {
     const QString resourceType = query.value("resource_type").toString();
 
@@ -47,21 +47,21 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     {
         switch(column) {
         case KisAbstractResourceModel::Id:
-            return query.value("id");
+            return query.value(useResourcePrefix ? "resource_id" : "id");
         case KisAbstractResourceModel::StorageId:
             return query.value("storage_id");
         case KisAbstractResourceModel::Name:
-            return query.value("name");
+            return query.value(useResourcePrefix ? "resource_name" : "name");
         case KisAbstractResourceModel::Filename:
-            return query.value("filename");
+            return query.value(useResourcePrefix ? "resource_filename" : "filename");
         case KisAbstractResourceModel::Tooltip:
-            return query.value("tooltip");
+            return query.value(useResourcePrefix ? "resource_tooltip" : "tooltip");
         case KisAbstractResourceModel::Thumbnail:
         {
-            return QVariant::fromValue<QImage>(getThumbnailFromQuery(query));
+            return QVariant::fromValue<QImage>(getThumbnailFromQuery(query, useResourcePrefix));
         }
         case KisAbstractResourceModel::Status:
-            return query.value("status");
+            return query.value(useResourcePrefix ? "resource_status" : "status");
         case KisAbstractResourceModel::Location:
             return query.value("location");
         case KisAbstractResourceModel::ResourceType:
@@ -69,7 +69,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         case KisAbstractResourceModel::Dirty:
         {
             QString storageLocation = query.value("location").toString();
-            QString filename = query.value("filename").toString();
+            QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
 
             // An uncached resource has not been loaded, so it cannot be dirty
             if (!KisResourceLocator::instance()->resourceCached(storageLocation, resourceType, filename)) {
@@ -77,7 +77,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
             }
             else {
                 // Now we have to check the resource, but that's cheap since it's been loaded in any case
-                KoResourceSP resource = KisResourceLocator::instance()->resourceForId(query.value("id").toInt());
+                KoResourceSP resource = KisResourceLocator::instance()->resourceForId(query.value(useResourcePrefix ? "resource_id" : "id").toInt());
                 return resource->isDirty();
             }
         }
@@ -93,7 +93,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     case Qt::DecorationRole:
     {
         if (column == KisAbstractResourceModel::Thumbnail) {
-            return QVariant::fromValue<QImage>(getThumbnailFromQuery(query));
+            return QVariant::fromValue<QImage>(getThumbnailFromQuery(query, useResourcePrefix));
         }
         return QVariant();
     }
@@ -104,23 +104,23 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     case Qt::WhatsThisRole:
         return query.value("tooltip");
     case Qt::UserRole + KisAbstractResourceModel::Id:
-        return query.value("id");
+        return query.value(useResourcePrefix ? "resource_id" : "id");
     case Qt::UserRole + KisAbstractResourceModel::StorageId:
         return query.value("storage_id");
     case Qt::UserRole + KisAbstractResourceModel::Name:
-        return query.value("name");
+        return query.value(useResourcePrefix ? "resource_name" : "name");
     case Qt::UserRole + KisAbstractResourceModel::Filename:
-        return query.value("filename");
+        return query.value(useResourcePrefix ? "resource_filename" : "filename");
     case Qt::UserRole + KisAbstractResourceModel::Tooltip:
-        return query.value("tooltip");
+        return query.value(useResourcePrefix ? "resource_tooltip" : "tooltip");
     case Qt::UserRole + KisAbstractResourceModel::MD5:
-        return query.value("md5sum");
+        return query.value(useResourcePrefix ? "resource_md5sum" : "md5sum");
     case Qt::UserRole + KisAbstractResourceModel::Thumbnail:
     {
-        return QVariant::fromValue<QImage>(getThumbnailFromQuery(query));
+        return QVariant::fromValue<QImage>(getThumbnailFromQuery(query, useResourcePrefix));
     }
     case Qt::UserRole + KisAbstractResourceModel::Status:
-        return query.value("status");
+        return query.value(useResourcePrefix ? "resource_status" : "status");
     case Qt::UserRole + KisAbstractResourceModel::Location:
         return query.value("location");
     case Qt::UserRole + KisAbstractResourceModel::ResourceType:
@@ -129,7 +129,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     {
         KisAllResourcesModel *resourceModel = KisResourceModelProvider::resourceModel(resourceType);
         QStringList tagNames;
-        Q_FOREACH(const KisTagSP tag, resourceModel->tagsForResource(query.value("id").toInt())) {
+        Q_FOREACH(const KisTagSP tag, resourceModel->tagsForResource(query.value(useResourcePrefix ? "resource_id" : "id").toInt())) {
             tagNames << tag->name();
         }
         return tagNames;
@@ -137,7 +137,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     case Qt::UserRole + KisAbstractResourceModel::Dirty:
     {
         QString storageLocation = query.value("location").toString();
-        QString filename = query.value("filename").toString();
+        QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
 
         // An uncached resource has not been loaded, so it cannot be dirty
         if (!KisResourceLocator::instance()->resourceCached(storageLocation, resourceType, filename)) {
@@ -145,13 +145,13 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         }
         else {
             // Now we have to check the resource, but that's cheap since it's been loaded in any case
-            KoResourceSP resource = KisResourceLocator::instance()->resourceForId(query.value("id").toInt());
+            KoResourceSP resource = KisResourceLocator::instance()->resourceForId(query.value(useResourcePrefix ? "resource_id" : "id").toInt());
             return resource->isDirty();
         }
     }
     case Qt::UserRole + KisAbstractResourceModel::MetaData:
     {
-        QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForResource(query.value("id").toInt());
+        QMap<QString, QVariant> r = KisResourceLocator::instance()->metaDataForResource(query.value(useResourcePrefix ? "resource_id" : "id").toInt());
         return r;
     }
     case Qt::UserRole + KisAbstractResourceModel::ResourceActive:
@@ -169,49 +169,3 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     return QVariant();
 }
 
-QVariant KisResourceQueryMapper::variantFromResourceQueryById(int resourceId, int column, int role)
-{
-    QVariant v;
-
-    QSqlQuery q;
-    if (!q.prepare("SELECT resources.id\n"
-                   ",      resources.storage_id\n"
-                   ",      resources.name\n"
-                   ",      resources.filename\n"
-                   ",      resources.tooltip\n"
-                   ",      resources.thumbnail\n"
-                   ",      resources.status\n"
-                   ",      storages.location\n"
-                   ",      versioned_resources.version\n"
-                   ",      resource_types.name as resource_type\n"
-                   ",      resources.status as resource_active\n"
-                   ",      storages.active as storage_active\n"
-                   "FROM   resources\n"
-                   ",      resource_types\n"
-                   ",      storages\n"
-                   ",      versioned_resources\n"
-                   "WHERE  resources.id = :resource_id\n"
-                   "AND    storages.id = resources.storage_id\n"
-                   "AND    versioned_resources.resource_id = resources.id\n"
-                   "AND    versioned_resources.version = (SELECT MAX(version) FROM versioned_resources WHERE versioned_resources.resource_id = resources.id)"
-                   "AND    resource_types.id = resources.resource_type_id"))
-    {
-        qWarning() << "Could not prepare variantFromResourceQueryById query" << q.lastError();
-        return v;
-    }
-
-    q.bindValue(":resource_id", resourceId);
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute variantFromResourceQueryById query" << q.lastError() << q.boundValues();
-        return v;
-    }
-
-    if (!q.first()) {
-        qWarning() << "Could not find resource with id" << resourceId;
-    }
-
-    v = variantFromResourceQuery(q, column, role);
-
-    return v;
-}

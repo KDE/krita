@@ -106,7 +106,7 @@ QVariant KisAllResourcesModel::data(const QModelIndex &index, int role) const
     bool pos = const_cast<KisAllResourcesModel*>(this)->d->resourcesQuery.seek(index.row());
 
     if (pos) {
-        v = KisResourceQueryMapper::variantFromResourceQuery(d->resourcesQuery, index.column(), role);
+        v = KisResourceQueryMapper::variantFromResourceQuery(d->resourcesQuery, index.column(), role, false);
     }
 
     return v;

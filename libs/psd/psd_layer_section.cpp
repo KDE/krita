@@ -768,8 +768,6 @@ void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer, psd_
                 PSDLayerRecord *layerRecord = new PSDLayerRecord(m_header);
                 layers.append(layerRecord);
 
-                const QRect maskRect;
-
                 const bool nodeVisible = node->visible();
                 const KoColorSpace *colorSpace = node->colorSpace();
                 const quint8 nodeOpacity = node->opacity();

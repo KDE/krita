@@ -57,24 +57,6 @@ void TestMemoryStorage ::testStorageRetrieval()
     QCOMPARE(resource->filename(), "test1.0000.gbr");
 }
 
-void TestMemoryStorage::testTagIterator()
-{
-    KisMemoryStorage memoryStorage;
-    KisTagSP tag(new KisTag());
-    tag->setComment("comment");
-    tag->setUrl("url");
-    tag->setName("name");
-    tag->setResourceType(ResourceType::PaintOpPresets);
-    memoryStorage.addTag(ResourceType::PaintOpPresets, tag);
-    QSharedPointer<KisResourceStorage::TagIterator> iter = memoryStorage.tags(ResourceType::PaintOpPresets);
-    QVERIFY(iter->hasNext());
-    int count = 0;
-    while (iter->hasNext()) {
-        iter->next();
-        count++;
-    }
-    QVERIFY(count == 1);
-}
 
 void TestMemoryStorage::testAddResource()
 {

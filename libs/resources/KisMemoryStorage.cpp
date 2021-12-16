@@ -32,32 +32,25 @@ class MemoryTagIterator : public KisResourceStorage::TagIterator
 public:
 
     MemoryTagIterator(QVector<KisTagSP> tags, const QString &resourceType)
-        : m_tags(tags)
-        , m_resourceType(resourceType)
+        : m_resourceType(resourceType)
     {
     }
 
     bool hasNext() const override
     {
-        return m_currentPosition < m_tags.size();
+        return false;
     }
 
     void next() override
     {
-        const_cast<MemoryTagIterator*>(this)->m_currentPosition += 1;
     }
 
     KisTagSP tag() const override
     {
-        if (m_currentPosition >= m_tags.size()) return 0;
-        return m_tags.at(m_currentPosition);
-
+        return nullptr;
     }
 
 private:
-
-    int m_currentPosition {0};
-    QVector<KisTagSP> m_tags;
     QString m_resourceType;
 };
 
@@ -112,17 +105,6 @@ KisMemoryStorage &KisMemoryStorage::operator=(const KisMemoryStorage &rhs)
         }
     }
     return *this;
-}
-
-bool KisMemoryStorage::addTag(const QString &resourceType, KisTagSP tag)
-{
-    if (!d->tags.contains(resourceType)) {
-        d->tags[resourceType] = QVector<KisTagSP>();
-    }
-    if (!d->tags[resourceType].contains(tag)) {
-        d->tags[resourceType].append(tag);
-    }
-    return true;
 }
 
 bool KisMemoryStorage::saveAsNewVersion(const QString &resourceType, KoResourceSP resource)

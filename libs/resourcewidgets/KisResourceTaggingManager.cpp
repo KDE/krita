@@ -116,8 +116,18 @@ void KisResourceTaggingManager::contextMenuRequested(KoResourceSP resource, QPoi
         return;
 
     KisResourceItemChooserContextMenu menu(resource, d->tagChooser->currentlySelectedTag(), d->tagChooser);
-    menu.exec(pos);
 
+    // TEMP workaround for BUG:446647
+    // For some reason, internal invalidations aren't working when poxy tries to invalidate itself,
+    // so we will just invalidate when we have requested a tag be removed..
+    // TODO: Find a proper fix for this that will update all views when a tag is removed...
+    connect(&menu, &KisResourceItemChooserContextMenu::resourceTagRemovalRequested, this, [this](KoResourceSP resource, KisTagSP tag){
+        Q_UNUSED(resource);
+        Q_UNUSED(tag);
+        d->model->invalidate();
+    });
+
+    menu.exec(pos);
 }
 
 KisTagChooserWidget *KisResourceTaggingManager::tagChooserWidget()

@@ -154,10 +154,12 @@ void KisResourceItemChooserContextMenu::removeResourceExistingTag(const KisTagSP
 {
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
     tagResourceModel.untagResource(tag, resource->resourceId());
+    emit resourceTagRemovalRequested(resource, tag);
 }
 
 void KisResourceItemChooserContextMenu::addResourceExistingTag(const KisTagSP tag, KoResourceSP resource)
 {
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
     tagResourceModel.tagResource(tag, resource->resourceId());
+    emit resourceTagAdditionRequested(tag, resource);
 }

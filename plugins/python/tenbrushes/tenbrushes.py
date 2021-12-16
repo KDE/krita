@@ -68,11 +68,19 @@ class TenBrushesExtension(krita.Extension):
                 str(i18n("Activate Brush Preset {num}")).format(num=item), "")
             action.triggered.connect(self.activatePreset)
 
-            if (index < len(self.selectedPresets)
-                    and self.selectedPresets[index] in allPresets):
-                action.preset = self.selectedPresets[index]
-            else:
-                action.preset = None
+            action.preset = None
+
+            # in Krita 4.x we used to replace spaces in preset names with
+            # underscores, which has changed in Krita 5.x. Here we just
+            # try hard to load the legacy preset
+
+            if index < len(self.selectedPresets):
+                presetName = self.selectedPresets[index]
+
+                for name in [presetName, presetName.replace('_', ' ')]:
+                    if name in allPresets:
+                        action.preset = name
+                        break
 
             self.actions.append(action)
 

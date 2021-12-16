@@ -27,7 +27,7 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 
     void setView(KisViewManager *view) override;
-    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
+    void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface) override;
 
 private:
     Ui_GradientGeneratorConfigWidget m_ui;

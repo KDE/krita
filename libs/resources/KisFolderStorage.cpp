@@ -40,7 +40,9 @@ public:
     {
         m_dirIterator->next();
         const_cast<FolderTagIterator*>(this)->m_tag.reset(new KisTag);
-        load(m_tag);
+        if (!load(m_tag)) {
+            qWarning() << "Could not load tag" << m_dirIterator->filePath();
+        }
     }
 
     KisTagSP tag() const override

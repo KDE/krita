@@ -204,6 +204,8 @@ bool KisTag::load(QIODevice &io)
     }
     KIS_ASSERT(io.isOpen());
 
+    setValid(false);
+
     QTextStream stream(&io);
     stream.setCodec("UTF-8");
     QStringList lines;
@@ -266,11 +268,17 @@ bool KisTag::load(QIODevice &io)
         }
     }
 
+    setValid(true);
+
     return true;
 }
 
 bool KisTag::save(QIODevice &io)
 {
+    if (!io.isOpen()) {
+        io.open(QIODevice::WriteOnly | QIODevice::Text);
+    }
+
     QTextStream stream(&io);
     stream.setCodec("UTF-8");
     stream << s_desktop << '\n';

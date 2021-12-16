@@ -22,7 +22,7 @@ class QString;
 class KisPaintopBox;
 class KisPaintOpPreset;
 
-class KisFavoriteResourceManager : public QObject, public KoResourceServerObserver<KisPaintOpPreset>
+class KisFavoriteResourceManager : public QObject
 {
     Q_OBJECT
 
@@ -30,8 +30,6 @@ public:
 
     KisFavoriteResourceManager(KisPaintopBox *paintopBox);
     ~KisFavoriteResourceManager() override;
-
-    void unsetResourceServer() override;
 
     QList<QImage> favoritePresetImages();
     QVector<QString> favoritePresetNamesList();
@@ -44,11 +42,6 @@ public:
 
     int recentColorsTotal();
     const KoColor& recentColorAt(int pos);
-
-    // Reimplemented from KoResourceServerObserver
-    void removingResource(QSharedPointer<KisPaintOpPreset> resource) override;
-    void resourceAdded(QSharedPointer<KisPaintOpPreset> resource) override;
-    void resourceChanged(QSharedPointer<KisPaintOpPreset> resource) override;
 
     //BgColor;
     KoColor bgColor() const;

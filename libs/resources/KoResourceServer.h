@@ -40,35 +40,6 @@
 
 class KoResource;
 
-template <class T>
-class KoResourceServerObserver
-{
-public:
-    virtual ~KoResourceServerObserver() {}
-
-    virtual void unsetResourceServer() = 0;
-
-    /**
-     * Will be called by the resource server after a resource is added
-     * @param resource the added resource
-     */
-    virtual void resourceAdded(QSharedPointer<T> resource) = 0;
-
-    /**
-     * Will be called by the resource server before a resource will be removed
-     * @param resource the resource which is going to be removed
-     */
-    virtual void removingResource(QSharedPointer<T> resource) = 0;
-
-    /**
-     * Will be called by the resource server when a resource is changed
-     * @param resource the resource which is going to be removed
-     */
-    virtual void resourceChanged(QSharedPointer<T> resource) = 0;
-
-
-};
-
 /**
  * KoResourceServer is a shim around KisResourceModel. It knows
  * nothing by its own, and does nothing on its own. It can only
@@ -78,8 +49,6 @@ template <class T>
 class KoResourceServer
 {
 public:
-
-    typedef KoResourceServerObserver<T> ObserverType;
 
     KoResourceServer(const QString& type)
         : m_resourceModel(new KisResourceModel(type))
@@ -98,9 +67,6 @@ public:
     {
         delete m_resourceModel;
         delete m_tagModel;
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->unsetResourceServer();
-        }
     }
 
     /// @return the active resource model
@@ -146,7 +112,6 @@ public:
         }
 
         if (m_resourceModel->addResource(resource, save ? QString() : "memory")) {
-            notifyResourceAdded(resource);
             return true;
         }
 
@@ -162,7 +127,6 @@ public:
         }
 
         if (m_resourceModel->setResourceInactive(m_resourceModel->indexForResource(resource))) {
-            notifyRemovingResource(resource);
             return true;
         }
         return false;
@@ -201,31 +165,6 @@ public:
             return;
         }
         removeResourceFromServer(resource);
-    }
-
-    /**
-     * Adds an observer to the server
-     * @param observer the observer to be added
-     * @param notifyLoadedResources determines if the observer should be notified about the already loaded resources
-     */
-    void addObserver(ObserverType* observer)
-    {
-        if (observer && !m_observers.contains(observer)) {
-            m_observers.append(observer);
-        }
-    }
-
-    /**
-     * Removes an observer from the server
-     * @param observer the observer to be removed
-     */
-    void removeObserver(ObserverType* observer)
-    {
-        int index = m_observers.indexOf(observer);
-        if (index < 0) {
-            return;
-        }
-        m_observers.removeAt( index );
     }
 
 private:
@@ -317,7 +256,6 @@ public:
             qDebug().noquote() << kisBacktrace();
         }
         bool result = m_resourceModel->updateResource(resource);
-        notifyResourceChanged(resource);
         return result;
     }
 
@@ -330,10 +268,7 @@ public:
         if (QThread::currentThread() != qApp->thread()) {
             qDebug().noquote() << kisBacktrace();
         }
-        bool result = m_resourceModel->reloadResource(resource);
-        notifyResourceChanged(resource);
-
-        return result;
+        return m_resourceModel->reloadResource(resource);
     }
 
     QVector<KisTagSP> assignedTagsList(KoResourceSP resource) const
@@ -344,32 +279,8 @@ public:
         return m_resourceModel->tagsForResource(resource->resourceId());
     }
 
-protected:
-
-    void notifyResourceAdded(QSharedPointer<T> resource)
-    {
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->resourceAdded(resource);
-        }
-    }
-
-    void notifyRemovingResource(QSharedPointer<T> resource)
-    {
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->removingResource(resource);
-        }
-    }
-
-    void notifyResourceChanged(QSharedPointer<T> resource)
-    {
-        Q_FOREACH (ObserverType* observer, m_observers) {
-            observer->resourceChanged(resource);
-        }
-    }
-
 private:
 
-    QList<ObserverType*> m_observers;
     KisResourceModel *m_resourceModel {0};
     KisTagModel *m_tagModel {0};
     QString m_type;

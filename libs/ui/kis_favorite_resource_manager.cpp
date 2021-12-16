@@ -166,21 +166,13 @@ KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox
     m_maxPresets = cfg.favoritePresets();
     m_colorList = new ColorDataList();
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(configChanged()));
-    KisPaintOpPresetResourceServer * rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    rServer->addObserver(this);
 }
 
 KisFavoriteResourceManager::~KisFavoriteResourceManager()
 {
-    KisPaintOpPresetResourceServer *rServer = KisResourceServerProvider::instance()->paintOpPresetServer();
-    rServer->removeObserver(this);
     delete m_colorList;
 }
 
-void KisFavoriteResourceManager::unsetResourceServer()
-{
-    // ...
-}
 QVector<QString> KisFavoriteResourceManager::favoritePresetNamesList()
 {
     init();
@@ -265,21 +257,6 @@ void KisFavoriteResourceManager::slotAddRecentColor(const KoColor& color)
 void KisFavoriteResourceManager::slotChangeFGColorSelector(KoColor c)
 {
     emit sigChangeFGColorSelector(c);
-}
-
-void KisFavoriteResourceManager::removingResource(QSharedPointer<KisPaintOpPreset> /*resource*/)
-{
-    updateFavoritePresets();
-}
-
-void KisFavoriteResourceManager::resourceAdded(QSharedPointer<KisPaintOpPreset>  /*resource*/)
-{
-    updateFavoritePresets();
-}
-
-void KisFavoriteResourceManager::resourceChanged(QSharedPointer<KisPaintOpPreset>  /*resource*/)
-{
-    updateFavoritePresets();
 }
 
 int KisFavoriteResourceManager::recentColorsTotal()

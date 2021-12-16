@@ -29,7 +29,7 @@ class QMenu;
 
 struct GamutMaskChooserUI;
 
-class GamutMaskDock: public QDockWidget, public KisMainwindowObserver, public KoResourceServerObserver<KoGamutMask>
+class GamutMaskDock: public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 
@@ -40,12 +40,6 @@ public:
     void setViewManager(KisViewManager* kisview) override;
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
-
-public: // KoResourceServerObserver
-    void unsetResourceServer() override;
-    void resourceAdded(KoGamutMaskSP /*resource*/) override {}
-    void removingResource(KoGamutMaskSP resource) override;
-    void resourceChanged(KoGamutMaskSP resource) override;
 
 Q_SIGNALS:
     void sigGamutMaskSet(KoGamutMaskSP mask);

@@ -72,9 +72,6 @@ GamutMaskDock::GamutMaskDock()
     QRegularExpressionValidator* m_maskTitleValidator = new QRegularExpressionValidator(maskTitleRegex, this);
     m_dockerUI->maskTitleEdit->setValidator(m_maskTitleValidator);
 
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->addObserver(this);
-
     // gamut mask connections
     connect(m_dockerUI->bnSaveMask        , SIGNAL(clicked())                        , SLOT(slotGamutMaskSave()));
     connect(m_dockerUI->bnCancelMaskEdit        , SIGNAL(clicked())                        , SLOT(slotGamutMaskCancelEdit()));
@@ -91,8 +88,6 @@ GamutMaskDock::GamutMaskDock()
 
 GamutMaskDock::~GamutMaskDock()
 {
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->removeObserver(this);
 }
 
 void GamutMaskDock::setViewManager(KisViewManager* kisview)
@@ -504,30 +499,6 @@ void GamutMaskDock::setCanvas(KoCanvasBase *canvas)
 void GamutMaskDock::unsetCanvas()
 {
     setEnabled(false);
-}
-
-
-void GamutMaskDock::unsetResourceServer()
-{
-    KoResourceServer<KoGamutMask>* rServer = KoResourceServerProvider::instance()->gamutMaskServer();
-    rServer->removeObserver(this);
-}
-
-void GamutMaskDock::removingResource(KoGamutMaskSP resource)
-{
-    // if deleting previously set mask, notify selectors to unset their mask
-    if (resource == m_resourceProvider->currentGamutMask()) {
-        emit sigGamutMaskUnset();
-        m_selectedMask = nullptr;
-    }
-}
-
-void GamutMaskDock::resourceChanged(KoGamutMaskSP resource)
-{
-    // if currently set mask has been changed, notify selectors
-    if (resource == m_resourceProvider->currentGamutMask()) {
-        selectMask(resource);
-    }
 }
 
 void GamutMaskDock::slotGamutMaskCreateNew()

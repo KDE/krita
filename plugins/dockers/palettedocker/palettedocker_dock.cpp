@@ -138,8 +138,6 @@ PaletteDockerDock::PaletteDockerDock( )
         m_ui->paletteView->setAllowModification(false);
     }
 
-    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
-    srv->addObserver(this);
 }
 
 PaletteDockerDock::~PaletteDockerDock()
@@ -147,8 +145,6 @@ PaletteDockerDock::~PaletteDockerDock()
     if (m_paletteEditor->isModified()) {
         m_paletteEditor->saveNewPaletteVersion();
     }
-    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
-    srv->removeObserver(this);
 }
 
 void PaletteDockerDock::setViewManager(KisViewManager* kisview)
@@ -158,27 +154,6 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
             this, SLOT(slotFGColorResourceChanged(KoColor)));
     kisview->nodeManager()->disconnect(m_model);
-}
-
-void PaletteDockerDock::unsetResourceServer()
-{
-    KoResourceServer<KoColorSet> *srv = KoResourceServerProvider::instance()->paletteServer();
-    srv->removeObserver(this);
-}
-
-void PaletteDockerDock::resourceAdded(QSharedPointer<KoColorSet> resource)
-{
-    Q_UNUSED(resource);
-}
-
-void PaletteDockerDock::removingResource(QSharedPointer<KoColorSet> resource)
-{
-    Q_UNUSED(resource);
-}
-
-void PaletteDockerDock::resourceChanged(QSharedPointer<KoColorSet> resource)
-{
-    m_model->slotExternalPaletteModified(resource);
 }
 
 void PaletteDockerDock::slotContextMenu(const QModelIndex &)

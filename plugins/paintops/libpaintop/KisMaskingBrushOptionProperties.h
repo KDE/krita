@@ -19,8 +19,9 @@ class KoCanvasResourcesInterface;
 using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 
 
-struct PAINTOP_EXPORT KisMaskingBrushOptionProperties
+class PAINTOP_EXPORT KisMaskingBrushOptionProperties
 {
+public:
     KisMaskingBrushOptionProperties();
 
     bool isEnabled = false;

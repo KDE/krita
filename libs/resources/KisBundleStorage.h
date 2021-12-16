@@ -32,10 +32,6 @@ public:
     QStringList metaDataKeys() const override;
     QVariant metaData(const QString &key) const override;
 
-    /// Add a tag to this bundle: note, the bundle itself should NOT be rewritten, but we need to
-    /// put these tags in a place in the file system
-    bool addTag(const QString &resourceType, KisTagSP tag) override {Q_UNUSED(resourceType); Q_UNUSED(tag); return false;}
-
     /// Add a resource to this bundle: note, the bundle itself should NOT be rewritten, but we need to
     /// put these tags in a place in the file system
     bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;

@@ -24,9 +24,6 @@ public:
     KisFolderStorage(const QString &location);
     virtual ~KisFolderStorage();
 
-    /// Adds or updates this tag to the storage
-    bool addTag(const QString &resourceType, KisTagSP tag) override;
-
     /// Adds or updates this resource to the storage
     bool saveAsNewVersion(const QString &resourceType, KoResourceSP resource) override;
 

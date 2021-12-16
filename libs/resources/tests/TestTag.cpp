@@ -36,13 +36,15 @@ void TestTag::testLoadTag()
     QVERIFY(tagLoader.comment() == "Your favorite brush presets");
     QVERIFY(tagLoader.url() == "* Favorites");
 
+    m_languages = KLocalizedString::languages();
+    KLocalizedString::setLanguages(QStringList() << "nl");
     QLocale::setDefault(QLocale("nl"));
 
     QVERIFY(tagLoader.name() == "* Favorieten");
     QVERIFY(tagLoader.comment() == "Uw favorite voorinstellingen van penselen");
     QVERIFY(tagLoader.url() == "* Favorites");
 
-
+    KLocalizedString::setLanguages(m_languages);
     QLocale::setDefault(QLocale("C"));
 }
 

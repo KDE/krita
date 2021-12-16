@@ -91,8 +91,12 @@ public:
      * \param device source device
      * \param numOverlays the number of overlays to create
      * \param mode mode to use
+     * \param forcedOverlayColorSpace forced color space to use for overlay. Passing non-
+     *        null as forcedOverlayColorSpace will override precise color space decision
+     *        process. This argument is useful for cases when two overlay devices need to
+     *        have exactly the same color space (e.g. in colorsmudge overlay mode).
      */
-    KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays = 1, OverlayMode mode = NormalMode);
+    KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays = 1, OverlayMode mode = NormalMode, const KoColorSpace *forcedOverlayColorSpace = nullptr);
 
     ~KisOverlayPaintDeviceWrapper();
 

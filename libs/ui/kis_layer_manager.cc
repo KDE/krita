@@ -68,6 +68,7 @@
 #include "kis_paint_layer.h"
 #include "commands/kis_image_commands.h"
 #include "commands/kis_node_commands.h"
+#include <commands/KisNodeRenameCommand.h>
 #include "kis_change_file_layer_command.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_selection_manager.h"
@@ -618,7 +619,7 @@ KisNodeSP KisLayerManager::addAdjustmentLayer(KisNodeSP activeNode)
         // XXX: add messagebox warning if there's no filter set!
         applicator.cancel();
     } else {
-        adjl->setName(dlg.layerName());
+        applicator.applyCommand(new KisNodeRenameCommand(adjl, adjl->name(), dlg.layerName()));
         applicator.end();
     }
 
@@ -662,7 +663,7 @@ KisNodeSP KisLayerManager::addGeneratorLayer(KisNodeSP activeNode)
     dlg.setConfiguration(defaultConfig);
 
     if (dlg.exec() == QDialog::Accepted) {
-        node->setName(dlg.layerName());
+        applicator.applyCommand(new KisNodeRenameCommand(node, node->name(), dlg.layerName()));
         applicator.end();
         return node;
     }

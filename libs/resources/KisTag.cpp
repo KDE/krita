@@ -297,7 +297,7 @@ bool KisTag::save(QIODevice &io)
         stream << s_comment << '[' << language << "]=" << d->comments[language] << '\n';
     }
 
-    return false;
+    return true;
 }
 
 void KisTag::setId(int id)

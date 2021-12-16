@@ -66,7 +66,7 @@ void TestTag::testSaveTag()
     QBuffer buf;
     buf.open(QBuffer::WriteOnly);
 
-    tag1.save(buf);
+    QVERIFY(tag1.save(buf));
 
     buf.close();
     buf.open(QBuffer::ReadOnly);

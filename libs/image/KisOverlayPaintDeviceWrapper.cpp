@@ -19,6 +19,7 @@
 #include <memory>
 #include <kis_transaction.h>
 #include "kis_command_utils.h"
+#include "KoColorProfile.h"
 
 struct KisChangeOverlayWrapperCommand;
 
@@ -62,30 +63,38 @@ struct KisChangeOverlayWrapperCommand : public KUndo2Command
     KisOverlayPaintDeviceWrapper::Private *m_d;
 };
 
-
-KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays, OverlayMode mode)
+KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP source, int numOverlays, KisOverlayPaintDeviceWrapper::OverlayMode mode, const KoColorSpace *forcedOverlayColorSpace)
     : m_d(new Private())
 {
     m_d->source = source;
 
     const KoColorSpace *overlayColorSpace = source->compositionSourceColorSpace();
 
-    const bool usePreciseMode = mode == PreciseMode || mode == LazyPreciseMode;
+    if (forcedOverlayColorSpace) {
+        overlayColorSpace = forcedOverlayColorSpace;
+    } else {
+        const bool usePreciseMode = mode == PreciseMode || mode == LazyPreciseMode;
 
-    if (usePreciseMode &&
-        overlayColorSpace->colorDepthId() == Integer8BitsColorDepthID) {
+        if (usePreciseMode &&
+            overlayColorSpace->colorDepthId() == Integer8BitsColorDepthID) {
 
-        overlayColorSpace =
-            KoColorSpaceRegistry::instance()->colorSpace(
-                    overlayColorSpace->colorModelId().id(),
-                    Integer16BitsColorDepthID.id(),
-                    overlayColorSpace->profile());
-
-        if (overlayColorSpace->colorModelId() == RGBAColorModelID) {
-            m_d->scaler.reset(KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
+            overlayColorSpace =
+                    KoColorSpaceRegistry::instance()->colorSpace(
+                        overlayColorSpace->colorModelId().id(),
+                        Integer16BitsColorDepthID.id(),
+                        overlayColorSpace->profile());
         }
+    }
 
-        m_d->usePreciseMode = true;
+    m_d->usePreciseMode = *source->colorSpace() != *overlayColorSpace;
+
+    if (source->colorSpace()->colorModelId() == RGBAColorModelID &&
+        source->colorSpace()->colorDepthId() == Integer8BitsColorDepthID &&
+        overlayColorSpace->colorModelId() == RGBAColorModelID &&
+        overlayColorSpace->colorDepthId() == Integer16BitsColorDepthID &&
+        *source->colorSpace()->profile() == *overlayColorSpace->profile()) {
+
+        m_d->scaler.reset(KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
     }
 
     if (!m_d->usePreciseMode && mode == LazyPreciseMode && numOverlays == 1) {
@@ -249,6 +258,11 @@ const KoColorSpace *KisOverlayPaintDeviceWrapper::overlayColorSpace() const
 
 KisPaintDeviceSP KisOverlayPaintDeviceWrapper::createPreciseCompositionSourceDevice()
 {
+    /**
+     * TODO: this funciton has rather vague meaning when forcedOverlayColorSpace
+     *       feature is used
+     */
+
     KisPaintDeviceSP result;
 
     if (!m_d->usePreciseMode) {

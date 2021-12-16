@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.14" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.15" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -616,7 +616,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
 
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", resource->filename());
-    q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
+    q.bindValue(":tooltip", resource->name());
     q.bindValue(":md5sum", resource->md5Sum());
 
     QBuffer buf;

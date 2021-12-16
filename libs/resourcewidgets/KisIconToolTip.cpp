@@ -86,7 +86,9 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
         name = presetDisplayName;
     }
 
-    QString translatedName = index.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString().replace("_", " ");
+    QString tooltip = index.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString();
+    QString translatedTooltip = i18nc("Tooltip", tooltip.toUtf8());
+    QString trimmedTooltip = translatedTooltip.replace("_", " ");
 
     QString tagsRow;
     QString tagsData = index.data(Qt::UserRole + KisAbstractResourceModel::Tags).toStringList().join(", ");
@@ -107,8 +109,8 @@ QTextDocument *KisIconToolTip::createDocument(const QModelIndex &index)
 
     const QString image = QString("<center><img src=\"data:thumbnail\"></center>");
     QString body = QString("<h3 align=\"center\">%1</h3>%2%3").arg(name, image, footerTable);
-    if (translatedName != name) {
-        body = QString("<h3 align=\"center\">%1</h3><h4 align=\"center\">%2</h4>%3%4").arg(name, translatedName, image, footerTable);
+    if (trimmedTooltip != name) {
+        body = QString("<h3 align=\"center\">%1</h3><h4 align=\"center\">%2</h4>%3%4").arg(name, trimmedTooltip, image, footerTable);
     }
     const QString html = QString("<html><body>%1</body></html>").arg(body);
 

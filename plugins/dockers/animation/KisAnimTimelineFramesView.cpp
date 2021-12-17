@@ -43,7 +43,7 @@
 #include "kis_slider_spin_box.h"
 #include "kis_signals_blocker.h"
 #include "kis_image_config.h"
-#include "kis_zoom_scrollbar.h"
+#include "widgets/kis_zoom_scrollbar.h"
 #include "KisImportExportManager.h"
 #include "KoFileDialog.h"
 #include "KisIconToolTip.h"

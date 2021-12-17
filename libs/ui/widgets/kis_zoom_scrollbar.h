@@ -18,15 +18,6 @@ class KRITAWIDGETUTILS_EXPORT KisZoomableScrollBar : public QScrollBar
 {
     Q_OBJECT
 
-private:
-    QPoint initialPositionRelativeToBar;
-    QPoint lastKnownPosition;
-    QVector2D accelerationAccumulator;
-    qreal scrollSubPixelAccumulator;
-    qreal zoomThreshold;
-    qreal wheelOverscrollSensitivity;
-    bool catchTeleportCorrection = false;
-
 public:
     KisZoomableScrollBar(QWidget* parent = 0);
     KisZoomableScrollBar(Qt::Orientation orientation, QWidget * parent = 0);
@@ -57,6 +48,16 @@ public:
 Q_SIGNALS:
     void zoom(qreal delta);
     void overscroll(qreal delta);
+
+private:
+    QPoint initialPositionRelativeToBar;
+    QPoint lastKnownPosition;
+    QVector2D accelerationAccumulator;
+    qreal scrollSubPixelAccumulator;
+    qreal zoomThreshold;
+    qreal wheelOverscrollSensitivity;
+    bool catchTeleportCorrection = false;
+    bool zoomEnabled = true;
 };
 
 #endif // KIS_ZOOM_SCROLLBAR_H

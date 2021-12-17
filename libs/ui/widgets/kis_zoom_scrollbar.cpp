@@ -6,6 +6,7 @@
  */
 #include "kis_zoom_scrollbar.h"
 
+#include "kis_config.h"
 #include "kis_global.h"
 #include "kis_debug.h"
 #include <QMouseEvent>
@@ -20,6 +21,8 @@ KisZoomableScrollBar::KisZoomableScrollBar(QWidget *parent)
     , wheelOverscrollSensitivity(1.0f)
     , catchTeleportCorrection(false)
 {
+    KisConfig config(true);
+    zoomEnabled = config.scrollbarZoomEnabled();
 }
 
 KisZoomableScrollBar::KisZoomableScrollBar(Qt::Orientation orientation, QWidget *parent)
@@ -30,12 +33,10 @@ KisZoomableScrollBar::KisZoomableScrollBar(Qt::Orientation orientation, QWidget 
 
 KisZoomableScrollBar::~KisZoomableScrollBar()
 {
-
 }
 
 QPoint KisZoomableScrollBar::barPosition()
 {
-
     float barPositionNormalized = (float)(value() - minimum()) / (float)(maximum() + pageStep() - minimum());
     QPoint barPosition = orientation() == Qt::Horizontal ?
                 QPoint(barPositionNormalized * width() * devicePixelRatio(), 0) :
@@ -101,7 +102,7 @@ void KisZoomableScrollBar::handleScroll(const QPoint &accel)
     const QVector2D perpendicularDirection = (orientation() == Qt::Horizontal) ? QVector2D(0, 1) : QVector2D(1, 0);
     const float perpendicularity = QVector2D::dotProduct(perpendicularDirection.normalized(), accelerationAccumulator.normalized());
 
-    if (qAbs(perpendicularity) > zoomThreshold && zoomMovementPix != 0) {
+    if (zoomEnabled && qAbs(perpendicularity) > zoomThreshold && zoomMovementPix != 0) {
         zoom(qreal(zoomMovementPix) / qreal(widgetThickness * 2));
     } else if (sliderMovementPix != 0) {
         const int currentPosition = sliderPosition();

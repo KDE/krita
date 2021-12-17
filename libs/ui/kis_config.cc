@@ -968,6 +968,15 @@ void KisConfig::setHideScrollbars(bool value) const
     m_cfg.writeEntry("hideScrollbars", value);
 }
 
+bool KisConfig::scrollbarZoomEnabled(bool defaultValue) const
+{
+    return (defaultValue ? true : m_cfg.readEntry("scrollbarZoomEnabled", true));
+}
+
+void KisConfig::setScrollbarZoomEnabled(bool enabled) const
+{
+    m_cfg.writeEntry("scrollbarZoomEnabled", enabled);
+}
 
 QColor KisConfig::checkersColor1(bool defaultValue) const
 {

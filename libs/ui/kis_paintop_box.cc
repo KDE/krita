@@ -76,7 +76,6 @@
 #include <KisGlobalResourcesInterface.h>
 #include "KisResourceLoader.h"
 #include "KisResourceLoaderRegistry.h"
-#include "kis_statusbar.h"
 #include "kis_acyclic_signal_connector.h"
 
 
@@ -623,9 +622,6 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
         }
     }
     Q_ASSERT(preset);
-
-    m_viewManager->statusBar()->setStatusBarStatusLabelText(preset->name());
-
     const KoID& paintop = preset->paintOp();
     m_presetConnections.clear();
 

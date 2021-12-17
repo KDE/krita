@@ -141,6 +141,7 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
     if (key == KoCanvasResource::CurrentPaintOpPreset) {
          formattedBrushName = v.value<KisPaintOpPresetSP>()->name().replace("_", " ");
     }
+
     switch (key) {
     case(KoCanvasResource::ForegroundColor):
         d->currentFgColor = v.value<KoColor>();
@@ -159,6 +160,9 @@ void KisTool::canvasResourceChanged(int key, const QVariant & v)
         break;
     case(KoCanvasResource::CurrentGeneratorConfiguration):
         d->currentGenerator = static_cast<KisFilterConfiguration*>(v.value<void *>());
+        break;
+    case(KoCanvasResource::CurrentPaintOpPreset):
+        emit statusTextChanged(formattedBrushName);
         break;
     case(KoCanvasResource::CurrentKritaNode):
         resetCursorStyle();

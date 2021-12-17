@@ -136,6 +136,11 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
 void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 {
+    if (currentPaintOpPreset()) {
+        QString formattedBrushName = currentPaintOpPreset()->name().replace("_", " ");
+        emit statusTextChanged(formattedBrushName);
+    }
+
     KisTool::activate(shapes);
     if (flags() & KisTool::FLAG_USES_CUSTOM_SIZE) {
         connect(action("increase_brush_size"), SIGNAL(triggered()), SLOT(increaseBrushSize()), Qt::UniqueConnection);

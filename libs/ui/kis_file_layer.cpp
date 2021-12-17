@@ -212,7 +212,7 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
             KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
             worker.run();
         }
-        else if (m_scalingMethod == ToImageSize) {
+        else if (m_scalingMethod == ToImageSize && size != image->size()) {
             QSize sz = size;
             sz.scale(image->size(), Qt::KeepAspectRatio);
             qreal xscale =  (qreal)sz.width() / (qreal)size.width();

@@ -184,8 +184,17 @@ public:
          * First delete the nodes, while strokes
          * and undo are still alive
          */
-        rootLayer->setGraphListener(0);
-        rootLayer->setImage(0);
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(rootLayer->graphListener() == q);
+        KIS_SAFE_ASSERT_RECOVER_NOOP(rootLayer->image() == q);
+
+        if (rootLayer->graphListener() == q) {
+            rootLayer->setGraphListener(0);
+        }
+        if (rootLayer->image() == q) {
+            rootLayer->setImage(0);
+        }
+
         rootLayer.clear();
     }
 

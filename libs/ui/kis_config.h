@@ -248,6 +248,9 @@ public:
     bool hideScrollbars(bool defaultValue = false) const;
     void setHideScrollbars(bool value) const;
 
+    bool scrollbarZoomEnabled(bool defaultValue = false) const;
+    void setScrollbarZoomEnabled(bool enabled) const;
+
     bool antialiasCurves(bool defaultValue = false) const;
     void setAntialiasCurves(bool v) const;
 

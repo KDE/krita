@@ -285,6 +285,7 @@ set(kritaui_LIB_SRCS
     widgets/KisMemoryReportButton.cpp
     widgets/KisDitherWidget.cpp
     widgets/KisWarningWidget.cpp
+    widgets/kis_zoom_scrollbar.cpp
 
     # Gradient related widgets
     widgets/gradient/KisStopGradientEditor.cpp

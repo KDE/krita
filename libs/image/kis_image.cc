@@ -191,9 +191,12 @@ public:
         if (rootLayer->graphListener() == q) {
             rootLayer->setGraphListener(0);
         }
-        if (rootLayer->image() == q) {
-            rootLayer->setImage(0);
-        }
+
+        /// resetting of the image link is disabled in Krita 5.0, because it
+        /// may lead to unexpected bugs like bug 447126
+//        if (rootLayer->image() == q) {
+//            rootLayer->setImage(0);
+//        }
 
         rootLayer.clear();
     }

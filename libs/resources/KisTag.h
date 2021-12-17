@@ -84,6 +84,8 @@ private:
     friend class KisTagChooserWidget;
     friend class TestTagModel;
     friend class KisResourceLocator;
+    friend class BundleTagIterator;
+    friend class AbrTagIterator;
 
     void setId(int id);
     void setActive(bool active);

@@ -48,6 +48,7 @@ public:
                     tag->setComment(tagname);
                     tag->setUrl(tagname);
                     tag->setResourceType(resourceType);
+                    tag->setValid(true);
                     m_tags[tagname] = tag;
                 }
 

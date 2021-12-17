@@ -42,6 +42,7 @@ public:
         abrTag->setComment(QFileInfo(m_location).fileName());
         abrTag->setFilename(QFileInfo(m_location).fileName());
         abrTag->setResourceType(m_resourceType);
+        abrTag->setValid(true);
         QStringList brushes;
         Q_FOREACH(const KisAbrBrushSP brush, m_brushCollection->brushes()) {
             brushes << brush->filename();

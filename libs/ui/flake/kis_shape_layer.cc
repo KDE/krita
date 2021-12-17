@@ -313,7 +313,9 @@ void KisShapeLayer::setImage(KisImageWSP _image)
 {
     KisLayer::setImage(_image);
     m_d->canvas->setImage(_image);
-    m_d->paintDevice->convertTo(_image->colorSpace());
+    if (_image) {
+        m_d->paintDevice->convertTo(_image->colorSpace());
+    }
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
 }
 

@@ -187,7 +187,17 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
     m_paintDevice->makeCloneFrom(projection, projection->extent());
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image()));
 
-    KisImageSP image = this->image();
+    /**
+     * This method can be transitively called from KisFileLayer::setImage(),
+     * which, in turn, can be called from the KisImage's copy-ctor. The shared
+     * pointer is, obviously, not initialized during construction, therefore
+     * upgrading our constructor to a strong pointer will cause a crash.
+     *
+     * Therefore, we use a weak pointer here. It is extremely dangerous, but
+     * since this method is usually called from the GUI thread synchronously
+     * it should be "somewhat safe".
+     */
+    KisImageWSP image = this->image();
     if (image) {
         if (m_scalingMethod == ToImagePPI &&
                 (!qFuzzyCompare(image->xRes(), xRes) ||
@@ -258,7 +268,22 @@ void KisFileLayer::setImage(KisImageWSP image)
     KisExternalLayer::setImage(image);
 
     if (m_scalingMethod != None && image && oldImage != image) {
-        m_loader.reloadImage();
+        bool canSkipReloading = false;
+
+        if (m_scalingMethod == ToImageSize && oldImage && image && oldImage->size() == image->size()) {
+            canSkipReloading = true;
+        }
+
+        if (m_scalingMethod == ToImagePPI && oldImage && image &&
+                qFuzzyCompare(oldImage->xRes(), image->xRes()) &&
+                qFuzzyCompare(oldImage->yRes(), image->yRes())) {
+
+            canSkipReloading = true;
+        }
+
+        if (!canSkipReloading) {
+            m_loader.reloadImage();
+        }
     }
 }
 

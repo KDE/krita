@@ -308,12 +308,16 @@ void KisTagFilterResourceProxyModel::setFilterInCurrentTag(bool filterInCurrentT
 
 bool KisTagFilterResourceProxyModel::tagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->tagResourceModel->tagResource(tag, resourceId);
+    bool result = d->tagResourceModel->tagResource(tag, resourceId);
+    updateTagFilter();
+    return result;
 }
 
 bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const int resourceId)
 {
-    return d->tagResourceModel->untagResource(tag, resourceId);
+    bool result = d->tagResourceModel->untagResource(tag, resourceId);
+    updateTagFilter();
+    return result;
 }
 
 bool KisTagFilterResourceProxyModel::isResourceTagged(const KisTagSP tag, const int resourceId)
@@ -362,11 +366,10 @@ bool KisTagFilterResourceProxyModel::filterAcceptsRow(int source_row, const QMod
 
     QString resourceName = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Name).toString();
     if (sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::ResourceType).toString() == ResourceType::PaintOpPresets) {
-        resourceName == resourceName.replace("_", " ");
+        resourceName = resourceName.replace("_", " ");
     }
     QStringList resourceTags = sourceModel()->data(idx, Qt::UserRole + KisAbstractResourceModel::Tags).toStringList();
     bool resourceNameMatches = d->filter->matchesResource(resourceName, resourceTags);
-
 
     return (resourceNameMatches && metaDataMatches);
 }

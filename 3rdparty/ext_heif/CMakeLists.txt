@@ -132,7 +132,27 @@ else()
     endif()
 
     find_package(Perl)
-    if(PERL_FOUND)
+    if(NOT PERL_FOUND AND WIN32)
+        ExternalProject_Add(
+            ext_strawberryperl
+            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+            # From https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-32bit-portable.zip
+            URL https://files.kde.org/krita/build/dependencies/strawberry-perl-5.32.1.1-32bit-portable.zip
+            URL_HASH SHA1=28bca91cadd6651c2b2463db8587c170bf17f2fa
+
+            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Strawberry Perl portable
+            CONFIGURE_COMMAND ""
+            INSTALL_COMMAND ""
+            UPDATE_COMMAND ""
+
+            SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/Strawberry"
+        )
+        set(USE_STRAWBERRYPERL 1)
+        set(LIBAOM_EXTRA_CMAKE_ARGS -DPERL_EXECUTABLE=${CMAKE_CURRENT_BINARY_DIR}/Strawberry/perl/bin/perl.exe)
+        set(LIBAOM_STRAWBERRYPERL_DEP ext_strawberryperl)
+    endif(NOT PERL_FOUND AND WIN32)
+
+    if(PERL_FOUND OR USE_STRAWBERRYPERL)
         message(WARNING "Building alternative AVIF support using libaom.")
 
         ExternalProject_Add(
@@ -142,17 +162,17 @@ else()
             URL https://storage.googleapis.com/aom-releases/libaom-3.2.0.tar.gz
             URL_HASH SHA256=8fa7418bf4ea12ef6dcf0eeb21cba932b71c6079ffdf7b9d13cf907fa46c0568
 
-            CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
+            CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
 
             UPDATE_COMMAND ""
 
-            DEPENDS ext_nasm
+            DEPENDS ext_nasm ${LIBAOM_STRAWBERRYPERL_DEP}
         )
 
         set(EXTRA_AVIF_DEPS ext_libaom)
-    else(PERL_FOUND)
+    else(PERL_FOUND OR USE_STRAWBERRYPERL)
         message(WARNING "Perl not available, disabling AVIF support.")
-    endif(PERL_FOUND)
+    endif(PERL_FOUND OR USE_STRAWBERRYPERL)
 endif()
 
 # Incorporate Handbrake's extensions for building x265

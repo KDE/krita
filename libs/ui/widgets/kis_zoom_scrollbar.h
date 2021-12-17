@@ -12,9 +12,9 @@
 #include <QScrollBar>
 #include <QVector2D>
 
-#include <kritawidgets_export.h>
+#include <kritaui_export.h>
 
-class KRITAWIDGETS_EXPORT KisZoomableScrollBar : public QScrollBar
+class KRITAUI_EXPORT KisZoomableScrollBar : public QScrollBar
 {
     Q_OBJECT
 

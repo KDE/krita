@@ -17,7 +17,7 @@
 
 namespace UpdaterStatus {
 
-    enum class KRITAUI_EXPORT StatusID {
+    enum class StatusID {
         UPTODATE,
         UPDATE_AVAILABLE,
         CHECK_ERROR,
@@ -29,7 +29,7 @@ namespace UpdaterStatus {
 
 }
 
-Q_DECLARE_METATYPE(UpdaterStatus::StatusID);
+Q_DECLARE_METATYPE(UpdaterStatus::StatusID)
 
 
 class KRITAUI_EXPORT KisUpdaterStatus : public QObject

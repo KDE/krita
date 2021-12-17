@@ -437,8 +437,3 @@ void KisStatusBar::removeExtraWidget(QWidget *widget)
     m_extraWidgetsLayout->removeWidget(widget);
 }
 
-void KisStatusBar::setStatusBarStatusLabelText(const QString &text)
-{
-    m_statusBarStatusLabel->setText(text);
-}
-

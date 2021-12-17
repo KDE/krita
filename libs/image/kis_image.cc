@@ -184,6 +184,8 @@ public:
          * First delete the nodes, while strokes
          * and undo are still alive
          */
+        rootLayer->setGraphListener(0);
+        rootLayer->setImage(0);
         rootLayer.clear();
     }
 
@@ -1677,6 +1679,7 @@ void KisImage::setRootLayer(KisGroupLayerSP rootLayer)
 
     if (m_d->rootLayer) {
         m_d->rootLayer->setGraphListener(0);
+        m_d->rootLayer->setImage(0);
         m_d->rootLayer->disconnect();
 
         KisPaintDeviceSP original = m_d->rootLayer->original();

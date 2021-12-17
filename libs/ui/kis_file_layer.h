@@ -58,7 +58,7 @@ public:
     void setFileName(const QString &basePath, const QString &filename);
     QString fileName() const;
     QString path() const;
-    void openFile() const;
+
 
     ScalingMethod scalingMethod() const;
     void setScalingMethod(ScalingMethod method);
@@ -74,8 +74,12 @@ public:
 
     void setImage(KisImageWSP image) override;
 
-public Q_SLOTS:
+private Q_SLOTS:
     void slotLoadingFinished(KisPaintDeviceSP projection, qreal xRes, qreal yRes, const QSize &size);
+    void openFile() const;
+
+Q_SIGNALS:
+    void sigRequestOpenFile();
 
 private:
     QString m_basePath;

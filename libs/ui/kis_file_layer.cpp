@@ -34,6 +34,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacit
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
+    connect(this, SIGNAL(sigRequestOpenFile()), SLOT(openFile()));
 }
 
 KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
@@ -51,6 +52,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
+    connect(this, SIGNAL(sigRequestOpenFile()), SLOT(openFile()));
 
     QFileInfo fi(path());
     if (fi.exists()) {
@@ -74,6 +76,7 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
     m_paintDevice = new KisPaintDevice(*rhs.m_paintDevice);
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
+    connect(this, SIGNAL(sigRequestOpenFile()), SLOT(openFile()));
     m_loader.setPath(path());
 }
 
@@ -108,7 +111,7 @@ void KisFileLayer::setSectionModelProperties(const KisBaseNode::PropertyList &pr
     Q_FOREACH (const KisBaseNode::Property &property, properties) {
         if (property.id== KisLayerPropertiesIcons::openFileLayerFile.id()) {
             if (property.state.toBool() == false) {
-                openFile();
+                Q_EMIT sigRequestOpenFile();
             }
         }
     }

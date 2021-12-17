@@ -91,7 +91,9 @@ void KisImportCatcher::slotLoadingFinished()
 
     if (importedImage && importedImage->bounds().isValid()) {
         if (m_d->layerType == "KisPaintLayer") {
-            KisPaintDeviceSP dev = importedImage->projection();
+            // we need to pass a copied device to make sure it is not reset
+            // on image's destruction
+            KisPaintDeviceSP dev = new KisPaintDevice(*importedImage->projection());
             adaptClipToImageColorSpace(dev, m_d->view->image());
             m_d->importAsPaintLayer(dev);
         }
@@ -108,7 +110,8 @@ void KisImportCatcher::slotLoadingFinished()
             }
         }
         else {
-            m_d->view->nodeManager()->createNode(m_d->layerType, false, importedImage->projection());
+            KisPaintDeviceSP dev = new KisPaintDevice(*importedImage->projection());
+            m_d->view->nodeManager()->createNode(m_d->layerType, false, dev);
         }
     }
 

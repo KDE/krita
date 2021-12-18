@@ -77,8 +77,8 @@ void TestTagResourceModel::testRowCount()
 {
     QSqlQuery q;
     QVERIFY(q.prepare("SELECT count(*)\n"
-                      "FROM   resource_tags"
-                     "WHERE  resource_tags.active = 1\n"));
+                      "FROM   resource_tags\n"
+                      "WHERE  resource_tags.active = 1\n"));
     QVERIFY(q.exec());
     q.first();
     int rowCount = q.value(0).toInt();

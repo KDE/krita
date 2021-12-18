@@ -292,7 +292,8 @@ KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString reso
                                        ",      resource_tags\n"
                                        "WHERE  resource_tags.tag_id = :tag_id\n"
                                        "AND    resources.resource_type_id = :type_id\n"
-                                       "AND    resource_tags.resource_id = resources.id\n")) {
+                                       "AND    resource_tags.resource_id = resources.id\n"
+                                       "AND    resource_tags.active = 1\n")) {
         qWarning() << "Could not prepare resource/tag query" << defaultResourcesQuery.lastError();
     }
 

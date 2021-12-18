@@ -556,7 +556,8 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
                   "WHERE  tags.active > 0\n"                               // make sure the tag is active
                   "AND    tags.id = resource_tags.tag_id\n"                // join tags + resource_tags by tag_id
                   "AND    resource_tags.resource_id = :resource_id\n"
-                  "AND    resource_types.id = tags.resource_type_id\n");    // make sure we're looking for tags for a specific resource
+                  "AND    resource_types.id = tags.resource_type_id\n"     // make sure we're looking for tags for a specific resource
+                  "AND    resource_tags.active = 1\n");                    // and the tag must be active
     if (!r)  {
         qWarning() << "Could not prepare TagsForResource query" << q.lastError();
     }
@@ -919,12 +920,11 @@ bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
         if (d->showOnlyUntaggedResources) {
 
             QString queryString = ("SELECT COUNT(*)\n"
-                                   "FROM   resource_tags\n"
-                                   ",      resources\n"
+                                   "FROM   resources\n"
                                    ",      storages\n"
-                                   "WHERE  resource_tags.resource_id = resources.id\n"
-                                   "AND    storages.id               = resources.storage_id\n"
-                                   "AND    resources.id              = :resource_id\n");
+                                   "WHERE  resources.id NOT IN (select resource_id FROM resource_tags WHERE active = 1)\n"
+                                   "AND    storages.id  = resources.storage_id\n"
+                                   "AND    resources.id = :resource_id\n");
 
             if (d->resourceFilter == ShowActiveResources) {
                 queryString.append("AND    resources.status > 0\n");

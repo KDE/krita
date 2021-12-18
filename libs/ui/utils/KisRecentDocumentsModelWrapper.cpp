@@ -149,20 +149,29 @@ void KisRecentDocumentsModelWrapper::setFiles(const URLs &urls, qreal devicePixe
 }
 void KisRecentDocumentsModelWrapper::slotIconReady(int row){
     IconFetchResult iconFetched = m_iconWorkerWatcher.resultAt(row);
+    const QString localFile = iconFetched.m_documentUrl.toLocalFile();
     // if we have a valid icon, we want to keep it in cache… regardless of whether it ends up being useful
-    if(iconFetched.m_iconWasFetchedOk && !m_filePathToIconCache.contains(iconFetched.m_documentUrl.toLocalFile()))
-        m_filePathToIconCache[iconFetched.m_documentUrl.toLocalFile()] = iconFetched.m_icon;
+    if(iconFetched.m_iconWasFetchedOk && !m_filePathToIconCache.contains(localFile))
+        m_filePathToIconCache[localFile] = iconFetched.m_icon;
 
     if(m_currentWorkerId != iconFetched.m_workerId)
         return; // the icon arrived too late: we've changed the model since
     QStandardItem *updatingItem = m_filesAndThumbnailsModel.item(iconFetched.m_row);
-    updatingItem->setEnabled(iconFetched.m_iconWasFetchedOk);
     if(!iconFetched.m_iconWasFetchedOk)
     {
-        emit sigInvalidDocumentForIcon(iconFetched.m_documentUrl);
+        if (!QFileInfo::exists(localFile)) {
+            // Only remove the entry if the file doesn't exist, because there
+            // are some supported file formats that we don't yet have the code
+            // to generate thumbnails.
+            updatingItem->setEnabled(false);
+            emit sigInvalidDocumentForIcon(iconFetched.m_documentUrl);
+        } else {
+            updatingItem->setEnabled(true);
+        }
         return; // nothing to do with the icon
 
     }
+    updatingItem->setEnabled(true);
 
     // set icon
     updatingItem->setIcon(iconFetched.m_icon);

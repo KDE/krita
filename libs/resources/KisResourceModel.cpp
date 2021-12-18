@@ -922,7 +922,7 @@ bool KisResourceModel::filterAcceptsRow(int source_row, const QModelIndex &sourc
             QString queryString = ("SELECT COUNT(*)\n"
                                    "FROM   resources\n"
                                    ",      storages\n"
-                                   "WHERE  resources.id NOT IN (select resource_id FROM resource_tags WHERE active = 1)\n"
+                                   "WHERE  resources.id IN (select resource_id FROM resource_tags WHERE active = 1)\n"
                                    "AND    storages.id  = resources.storage_id\n"
                                    "AND    resources.id = :resource_id\n");
 

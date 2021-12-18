@@ -111,9 +111,10 @@ message(STATUS "Downloading NSIS script package...")
 if(EXISTS "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis")
     file(REMOVE_RECURSE "${CMAKE_CURRENT_BINARY_DIR}/krita-nsis")
 endif()
-file(DOWNLOAD "https://github.com/alvinhochun/KritaShellExtension/releases/download/v1.2.4b/krita-nsis-v1.2.4b.zip"
+# From https://github.com/alvinhochun/KritaShellExtension/releases/tag/v1.2.4c
+file(DOWNLOAD "https://files.kde.org/krita/build/dependencies/krita-nsis-v1.2.4c.zip"
     "${DOWNLOAD_DIR}/krita-nsis.zip"
-    EXPECTED_HASH SHA1=43c5bade13fb885e8546dac4486b8e2df62dc692
+    EXPECTED_HASH SHA1=d2abc55062c2a04763f497f62ff4e951ba088dab
 )
 execute_process(COMMAND ${CMAKE_COMMAND} -E tar xfz "${DOWNLOAD_DIR}/krita-nsis.zip"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"

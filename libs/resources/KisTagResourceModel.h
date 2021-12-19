@@ -23,7 +23,15 @@ public:
 
     virtual bool tagResource(const KisTagSP tag, const int resourceId) = 0;
     virtual bool untagResource(const KisTagSP tag, const int resourceId) = 0;
-    virtual bool isResourceTagged(const KisTagSP tag, const int resourceId) = 0;
+
+    /**
+     * @brief isResourceTagged
+     * @param tag the tag to check
+     * @param resourceId the id of the resource to check
+     * @return  -1 if the resource was never tagged before, 0 if the resource
+     * was tagged, but then untagged, 1 if the resource is already tagged
+     */
+    virtual int isResourceTagged(const KisTagSP tag, const int resourceId) = 0;
 };
 
 class KRITARESOURCES_EXPORT KisAllTagResourceModel
@@ -67,7 +75,7 @@ public:
     // Abstract Tag API
     bool tagResource(const KisTagSP tag, const int resourceId) override;
     bool untagResource(const KisTagSP tag, const int resourceId) override;
-    bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
+    int isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
 private Q_SLOTS:
     void addStorage(const QString &location);
@@ -123,7 +131,7 @@ public:
 
     bool tagResource(const KisTagSP tag, const int resourceId) override;
     bool untagResource(const KisTagSP tag, const int resourceId) override;
-    bool isResourceTagged(const KisTagSP tag, const int resourceId) override;
+    int isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
     // KisAbstractResourceModel interface
 

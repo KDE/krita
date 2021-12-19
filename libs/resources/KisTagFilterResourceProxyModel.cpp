@@ -320,7 +320,7 @@ bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const int
     return result;
 }
 
-bool KisTagFilterResourceProxyModel::isResourceTagged(const KisTagSP tag, const int resourceId)
+int KisTagFilterResourceProxyModel::isResourceTagged(const KisTagSP tag, const int resourceId)
 {
     return d->tagResourceModel->isResourceTagged(tag, resourceId);
 }

@@ -67,7 +67,6 @@ private:
     explicit KisResourceCacheDb(); // Deleted
     ~KisResourceCacheDb(); // Deleted
     KisResourceCacheDb operator=(const KisResourceCacheDb&); // Deleted
-
     /**
      * @brief registerResourceType registers this resource type in the database
      * @param resourceType the string that represents the type

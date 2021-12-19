@@ -59,7 +59,6 @@ int KisAllTagResourceModel::rowCount(const QModelIndex &parent) const
                   ",      resources\n"
                   ",      resource_types\n"
                   "WHERE  resource_tags.resource_id = resources.id\n"
-                  "AND    resource_tags.active = 1\n"
                   "AND    resources.resource_type_id = resource_types.id\n"
                   "AND    resource_types.name = :resource_type\n"
                   "AND    resource_tags.active = 1\n");

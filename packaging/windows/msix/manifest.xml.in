@@ -63,6 +63,21 @@
           </uap3:FileTypeAssociation>
         </uap3:Extension>
         <uap3:Extension Category="windows.fileTypeAssociation">
+          <uap3:FileTypeAssociation Name="krz" Parameters="&quot;%1&quot;" desktop5:ThumbnailTypeOverlay="Assets\Square44x44Logo.png">
+            <uap:DisplayName>Krita Archive Image Document</uap:DisplayName>
+            <uap:Logo>Assets\fileicon.png</uap:Logo>
+            <uap:SupportedFileTypes>
+              <uap:FileType ContentType="application/x-krita-archive">.krz</uap:FileType>
+            </uap:SupportedFileTypes>
+            <desktop2:ThumbnailHandler Clsid="c6806289-d605-4afe-a778-bc584303db9a" />
+            <!-- <desktop2:DesktopPropertyHandler Clsid="c8e5509d-6f68-480c-8a41-db64aece94c6" />
+            <desktop3:PropertyLists>
+              <desktop3:PropertyList Property="previewDetails" Value="prop:System.DateModified;System.Size;System.DateCreated;*System.Image.Dimensions;*System.OfflineAvailability;*System.OfflineStatus;*System.SharedWith" />
+              <desktop3:PropertyList Property="fullDetails" Value="prop:System.Image.Dimensions;System.Image.HorizontalSize;System.Image.VerticalSize;System.Image.HorizontalResolution;System.Image.VerticalResolution;System.PropGroup.FileSystem;System.ItemNameDisplay;System.ItemTypeText;System.ItemFolderPathDisplay;System.Size;System.DateCreated;System.DateModified;System.FileAttributes;*System.OfflineAvailability;*System.OfflineStatus;*System.SharedWith;*System.FileOwner;*System.ComputerName" />
+            </desktop3:PropertyLists> -->
+          </uap3:FileTypeAssociation>
+        </uap3:Extension>
+        <uap3:Extension Category="windows.fileTypeAssociation">
           <uap3:FileTypeAssociation Name="ora" Parameters="&quot;%1&quot;" desktop5:ThumbnailTypeOverlay="Assets\Square44x44Logo.png">
             <uap:DisplayName>OpenRaster Image Document</uap:DisplayName>
             <uap:Logo>Assets\fileicon.png</uap:Logo>
@@ -93,15 +108,19 @@
             <uap:DisplayName>Image File</uap:DisplayName>
             <uap:Logo>Assets\fileicon.png</uap:Logo>
             <uap:SupportedFileTypes>
+              <uap:FileType>.avif</uap:FileType>
               <uap:FileType>.bmp</uap:FileType>
               <uap:FileType>.exr</uap:FileType>
               <uap:FileType>.gif</uap:FileType>
+              <uap:FileType>.heic</uap:FileType>
+              <uap:FileType>.heif</uap:FileType>
               <uap:FileType>.jpeg</uap:FileType>
               <uap:FileType>.jpg</uap:FileType>
               <uap:FileType>.png</uap:FileType>
               <uap:FileType>.psd</uap:FileType>
               <uap:FileType>.tif</uap:FileType>
               <uap:FileType>.tiff</uap:FileType>
+              <uap:FileType>.webp</uap:FileType>
               <uap:FileType>.xcf</uap:FileType>
             </uap:SupportedFileTypes>
           </uap3:FileTypeAssociation>

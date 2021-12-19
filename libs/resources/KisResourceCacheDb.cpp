@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.14" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.15" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -58,6 +58,27 @@ QString changeToEmptyIfNull(QString s)
 {
     return s.isNull() ? QString("") : s;
 }
+
+bool updateSchemaVersion()
+{
+    QFile f(":/fill_version_information.sql");
+    if (f.open(QFile::ReadOnly)) {
+        QString sql = f.readAll();
+        QSqlQuery q;
+        q.prepare(sql);
+        q.addBindValue(KisResourceCacheDb::databaseVersion);
+        q.addBindValue(KritaVersionWrapper::versionString());
+        q.addBindValue(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());
+        if (!q.exec()) {
+            qWarning() << "Could not insert the current version" << q.lastError() << q.boundValues();
+            return false;
+        }
+        infoResources << "Filled version table";
+    }
+    return true;
+}
+
+
 
 QSqlError createDatabase(const QString &location)
 {
@@ -109,6 +130,7 @@ QSqlError createDatabase(const QString &location)
         Q_FOREACH(const QString &table, tables) {
             if (!dbTables.contains(table)) {
                 allTablesPresent = false;
+                break;
             }
         }
 
@@ -137,20 +159,44 @@ QSqlError createDatabase(const QString &location)
             kritaVersion = q.value(1).toString();
             creationDate = q.value(2).toInt();
 
-            QVersionNumber schemaVersionNumber = QVersionNumber::fromString(schemaVersion);
-            QVersionNumber currentSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
+            QVersionNumber oldSchemaVersionNumber = QVersionNumber::fromString(schemaVersion);
+            QVersionNumber newSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
 
-            if (QVersionNumber::compare(schemaVersionNumber, currentSchemaVersionNumber) != 0) {
-                // XXX: Implement migration
+            if (QVersionNumber::compare(oldSchemaVersionNumber, newSchemaVersionNumber) != 0) {
+
+                qWarning() << "Old schema:" << schemaVersion << "New schema:" << newSchemaVersionNumber;
+
                 schemaIsOutDated = true;
-                QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database."));
-                if (QVersionNumber::compare(schemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0) {
-                    KisResourceLocator::instance()->saveTags();
-                }
-                db.close();
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
-                QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
-                db.open();
+
+                if (   oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
+                    && newSchemaVersionNumber == QVersionNumber::fromString("0.0.15")) {
+
+                    qWarning() << "Going to update resource_tags table";
+
+                    QSqlQuery q;
+                    q.prepare("ALTER TABLE  resource_tags\n"
+                              "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1");
+                    if (!q.exec()) {
+                        qWarning() << "Could not update the resource_tags table.";
+                    }
+                    else {
+                        qWarning() << "Updated table resource_tags: success.";
+                        if (!updateSchemaVersion()) {
+                            return QSqlError("Error executing SQL", QString("Could not update schema version."), QSqlError::StatementError);
+                        }
+                        schemaIsOutDated = false;
+                    }
+                }
+                if (schemaIsOutDated) {
+                    QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database."));
+                    if (QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0) {
+                        KisResourceLocator::instance()->saveTags();
+                    }
+                    db.close();
+                    QFile::remove(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
+                    db.open();
+                }
             }
 
         }
@@ -202,7 +248,7 @@ QSqlError createDatabase(const QString &location)
     {
         if (dbTables.contains("storage_types")) {
             QSqlQuery q;
-            if (!q.exec("DELETE * FROM storage_types;")) {
+            if (!q.exec("DELETE FROM storage_types;")) {
                 qWarning() << "Could not clear table storage_types" << db.lastError();
             }
         }
@@ -228,7 +274,7 @@ QSqlError createDatabase(const QString &location)
     {
         if (dbTables.contains("resource_types")) {
             QSqlQuery q;
-            if (!q.exec("DELETE * FROM resource_types;")) {
+            if (!q.exec("DELETE FROM resource_types;")) {
                 qWarning() << "Could not clear table resource_types" << db.lastError();
             }
         }
@@ -250,24 +296,8 @@ QSqlError createDatabase(const QString &location)
         }
     }
 
-    {
-        QFile f(":/fill_version_information.sql");
-        if (f.open(QFile::ReadOnly)) {
-            QString sql = f.readAll();
-            QSqlQuery q;
-            q.prepare(sql);
-            q.addBindValue(KisResourceCacheDb::databaseVersion);
-            q.addBindValue(KritaVersionWrapper::versionString());
-            q.addBindValue(QDateTime::currentDateTimeUtc().toSecsSinceEpoch());
-            if (!q.exec()) {
-                qWarning() << "Could not insert the current version" << db.lastError() << q.executedQuery() << q.boundValues();
-                return db.lastError();
-            }
-            infoResources << "Filled version table";
-        }
-        else {
-            return QSqlError("Error executing SQL", QString("Could not find SQL fill_version_information.sql."), QSqlError::StatementError);
-        }
+    if (!updateSchemaVersion()) {
+       return QSqlError("Error executing SQL", QString("Could not update schema version."), QSqlError::StatementError);
     }
 
     return QSqlError();

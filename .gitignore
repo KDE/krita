@@ -35,3 +35,10 @@ build_dir
 .cache
 
 cmake-build-debug/
+cmake-build-debug-mingw/
+cmake-build-debug-mingw64/
+
+cmake-build-release/
+cmake-build-release-mingw/
+cmake-build-release-mingw64/
+

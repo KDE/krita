@@ -95,6 +95,14 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
         *source->colorSpace()->profile() == *overlayColorSpace->profile()) {
 
         m_d->scaler.reset(KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
+
+    } else if (source->colorSpace()->colorModelId() == CMYKAColorModelID &&
+        source->colorSpace()->colorDepthId() == Integer8BitsColorDepthID &&
+        overlayColorSpace->colorModelId() == CMYKAColorModelID &&
+        overlayColorSpace->colorDepthId() == Integer16BitsColorDepthID &&
+        *source->colorSpace()->profile() == *overlayColorSpace->profile()) {
+
+        m_d->scaler.reset(KoOptimizedCmykPixelDataScalerU8ToU16Factory::create());
     }
 
     if (!m_d->usePreciseMode && mode == LazyPreciseMode && numOverlays == 1) {

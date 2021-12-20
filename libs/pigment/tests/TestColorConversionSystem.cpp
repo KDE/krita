@@ -380,5 +380,42 @@ void TestColorConversionSystem::benchmarkRgbToAlphaConversion()
     }
 }
 
+void TestColorConversionSystem::testCmykBitnessConversion()
+{
+    const KoColorSpace *cmyk8 =
+        KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(),
+                                                     Integer8BitsColorDepthID.id(),
+                                                     "Chemical proof");
+
+    const KoColorSpace *cmyk16 =
+        KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(),
+                                                     Integer16BitsColorDepthID.id(),
+                                                     "Chemical proof");
+
+//    ENTER_FUNCTION() << ppVar(cmyk8);
+//    ENTER_FUNCTION() << ppVar(cmyk8->profile()->name());
+//    ENTER_FUNCTION() << ppVar(cmyk8->profile()->fileName());
+
+//    ENTER_FUNCTION() << ppVar(cmyk16);
+//    ENTER_FUNCTION() << ppVar(cmyk16->profile()->name());
+//    ENTER_FUNCTION() << ppVar(cmyk16->profile()->fileName());
+
+
+    KoColor color(QColor(177, 180, 42, 255), cmyk8);
+//    qDebug() << ppVar(color);
+    color.convertTo(cmyk16);
+//    qDebug() << ppVar(color);
+    KoColor color2 = color.convertedTo(cmyk8);
+//    qDebug() << ppVar(color2);
+
+    /**
+     * For some reason out CMYK color spaces don't support rount-tripping
+     * to-from 16-bit representation. So the code that relies on that should
+     * use KoOptimizedCmykPixelDataScalerU8ToU16Factory::create().
+     */
+    QVERIFY(color != color2);
+
+}
+
 
 KISTEST_MAIN(TestColorConversionSystem)

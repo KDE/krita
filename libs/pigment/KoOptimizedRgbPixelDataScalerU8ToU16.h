@@ -20,11 +20,17 @@
 template<Vc::Implementation _impl>
 class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScalerU8ToU16Base
 {
+public:
+    KoOptimizedRgbPixelDataScalerU8ToU16(int channelsPerPixel)
+        : KoOptimizedRgbPixelDataScalerU8ToU16Base(channelsPerPixel)
+    {
+    }
+
     void convertU8ToU16(const quint8 *src, int srcRowStride,
                         quint8 *dst, int dstRowStride,
                         int numRows, int numColumns) const override
     {
-        const int numColorChannels = 4 * numColumns;
+        const int numColorChannels = m_channelsPerPixel * numColumns;
 
 #if defined __AVX2__
         const int channelsPerAvx2Block = 16;
@@ -104,7 +110,7 @@ class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScale
                         quint8 *dst, int dstRowStride,
                         int numRows, int numColumns) const override
     {
-        const int numColorChannels = 4 * numColumns;
+        const int numColorChannels = m_channelsPerPixel * numColumns;
 
 #if defined __AVX2__
         const int channelsPerAvx2Block = 32;

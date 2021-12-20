@@ -49,6 +49,8 @@
 class KRITAPIGMENT_EXPORT KoOptimizedRgbPixelDataScalerU8ToU16Base
 {
 public:
+    KoOptimizedRgbPixelDataScalerU8ToU16Base(int channelsPerPixel);
+
     virtual ~KoOptimizedRgbPixelDataScalerU8ToU16Base();
 
     virtual void convertU8ToU16(const quint8 *src, int srcRowStride,
@@ -58,6 +60,11 @@ public:
     virtual void convertU16ToU8(const quint8 *src, int srcRowStride,
                                 quint8 *dst, int dstRowStride,
                                 int numRows, int numColumns) const = 0;
+
+    int channelsPerPixel() const;
+
+protected:
+    int m_channelsPerPixel;
 };
 
 #endif // KoOptimizedRgbPixelDataScalerU8ToU16BASE_H

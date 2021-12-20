@@ -31,7 +31,7 @@ if (WIN32)
         ext_gettext_lib
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://files.kde.org/krita/build/dependencies/gettext-0.21.tar.xz
-        URL_MD5=40996bbaf7d1356d3c22e33a8b255b31
+        URL_MD5 40996bbaf7d1356d3c22e33a8b255b31
 
         PATCH_COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-macro-definitions.patch
             COMMAND ${PATCH_COMMAND} --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-uwp-build.patch
@@ -48,7 +48,7 @@ else (WIN32)
 ExternalProject_Add( ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://files.kde.org/krita/build/dependencies/gettext-0.21.tar.xz
-    URL_MD5=40996bbaf7d1356d3c22e33a8b255b31
+    URL_MD5 40996bbaf7d1356d3c22e33a8b255b31
     PATCH_COMMAND ${PATCH_COMMAND} -Z -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-libgettextpo-linking-on-macOS.patch
 
     INSTALL_DIR ${PREFIX_ext_gettext}

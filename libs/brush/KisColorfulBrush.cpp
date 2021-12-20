@@ -21,6 +21,8 @@ qreal estimateImageAverage(const QImage &image) {
     qint64 lightnessSum = 0;
     qint64 alphaSum = 0;
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(image.format() == QImage::Format_ARGB32, 0.5);
+
     for (int y = 0; y < image.height(); ++y) {
         const QRgb *pixel = reinterpret_cast<const QRgb*>(image.scanLine(y));
 
@@ -60,6 +62,8 @@ QImage KisColorfulBrush::brushTipImage() const
 {
     QImage image = KisBrush::brushTipImage();
     if (isImageType() && brushApplication() != IMAGESTAMP) {
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(image.format() == QImage::Format_ARGB32, image);
 
         const qreal adjustmentMidPoint =
                 m_autoAdjustMidPoint ?

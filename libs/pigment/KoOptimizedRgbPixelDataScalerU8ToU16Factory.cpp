@@ -12,5 +12,11 @@
 KoOptimizedRgbPixelDataScalerU8ToU16Base *KoOptimizedRgbPixelDataScalerU8ToU16Factory::create()
 {
     return createOptimizedClass<
-            KoOptimizedRgbPixelDataScalerU8ToU16FactoryImpl>(0);
+            KoOptimizedRgbPixelDataScalerU8ToU16FactoryImpl>(4);
+}
+
+KoOptimizedRgbPixelDataScalerU8ToU16Base *KoOptimizedCmykPixelDataScalerU8ToU16Factory::create()
+{
+    return createOptimizedClass<
+            KoOptimizedRgbPixelDataScalerU8ToU16FactoryImpl>(5);
 }

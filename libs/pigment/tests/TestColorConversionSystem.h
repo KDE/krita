@@ -33,6 +33,8 @@ private Q_SLOTS:
     void testAlphaU16Conversions();
     void benchmarkAlphaToRgbConversion();
     void benchmarkRgbToAlphaConversion();
+
+    void testCmykBitnessConversion();
 private:
     QList< ModelDepthProfile > listModels;
 };

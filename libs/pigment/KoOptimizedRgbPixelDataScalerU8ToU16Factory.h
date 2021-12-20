@@ -19,4 +19,12 @@ public:
 
 };
 
+class KRITAPIGMENT_EXPORT KoOptimizedCmykPixelDataScalerU8ToU16Factory
+{
+public:
+    static KoOptimizedRgbPixelDataScalerU8ToU16Base* create();
+
+};
+
+
 #endif // KOOPTIMIZEDRGBPIXELDATASCALERU8TOU16FACTORY_H

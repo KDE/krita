@@ -6,6 +6,17 @@
 
 #include "KoOptimizedRgbPixelDataScalerU8ToU16Base.h"
 
+KoOptimizedRgbPixelDataScalerU8ToU16Base::KoOptimizedRgbPixelDataScalerU8ToU16Base(int channelsPerPixel)
+    : m_channelsPerPixel(channelsPerPixel)
+{
+
+}
+
 KoOptimizedRgbPixelDataScalerU8ToU16Base::~KoOptimizedRgbPixelDataScalerU8ToU16Base()
 {
+}
+
+int KoOptimizedRgbPixelDataScalerU8ToU16Base::channelsPerPixel() const
+{
+    return m_channelsPerPixel;
 }

@@ -228,7 +228,7 @@ void KisFavoriteResourceManager::setCurrentTag(const KisTagSP tag)
 
 void KisFavoriteResourceManager::slotChangeActivePaintop(int pos)
 {
-    ENTER_FUNCTION() << ppVar(pos) << ppVar(numFavoritePresets());
+    //ENTER_FUNCTION() << ppVar(pos) << ppVar(numFavoritePresets());
     if (pos < 0 || pos >= numFavoritePresets()) return;
 
     QModelIndex index = m_resourcesProxyModel->index(pos, 0);

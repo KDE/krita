@@ -765,6 +765,11 @@ KoSelection *KoShapeManager::selection() const
     return d->selection;
 }
 
+void KoShapeManager::explicitlyIssueShapeChangedSignals()
+{
+    d->updateTree();
+}
+
 KoCanvasBase *KoShapeManager::canvas()
 {
     return d->canvas;

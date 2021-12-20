@@ -137,6 +137,14 @@ public:
         }
     };
 
+    /**
+     * The update signals are usually emitted when the owned of the manager
+     * calls to preparePaintJobs() in the beginning of the rendering cycle.
+     * This way we avoid too many signals to be emitted. But some of the
+     * canvases (e.g. KisShapeSelectionCanvas) doesn't do any rendering (yet?),
+     * so the signals should be emitted explicitly.
+     */
+    void explicitlyIssueShapeChangedSignals();
 
     /**
      * Prepare a shallow copy of all the shapes and the jobs to be rendered

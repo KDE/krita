@@ -14,7 +14,7 @@
 #include "KisFastDeviceProcessingUtils.h"
 #include "KisRegion.h"
 #include "kis_wrapped_rect.h"
-#include <KoOptimizedRgbPixelDataScalerU8ToU16Factory.h>
+#include <KoOptimizedPixelDataScalerU8ToU16Factory.h>
 #include <kundo2command.h>
 #include <memory>
 #include <kis_transaction.h>
@@ -29,7 +29,7 @@ struct KisOverlayPaintDeviceWrapper::Private
     QVector<KisPaintDeviceSP> overlays;
     KisRectsGrid grid;
     bool usePreciseMode = false;
-    QScopedPointer<KoOptimizedRgbPixelDataScalerU8ToU16Base> scaler;
+    QScopedPointer<KoOptimizedPixelDataScalerU8ToU16Base> scaler;
     KisPaintDeviceSP externalDestination;
 
     QScopedPointer<KUndo2Command> rootTransactionData;
@@ -94,7 +94,7 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
         overlayColorSpace->colorDepthId() == Integer16BitsColorDepthID &&
         *source->colorSpace()->profile() == *overlayColorSpace->profile()) {
 
-        m_d->scaler.reset(KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
+        m_d->scaler.reset(KoOptimizedPixelDataScalerU8ToU16Factory::createRgbaScaler());
 
     } else if (source->colorSpace()->colorModelId() == CMYKAColorModelID &&
         source->colorSpace()->colorDepthId() == Integer8BitsColorDepthID &&
@@ -102,7 +102,7 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
         overlayColorSpace->colorDepthId() == Integer16BitsColorDepthID &&
         *source->colorSpace()->profile() == *overlayColorSpace->profile()) {
 
-        m_d->scaler.reset(KoOptimizedCmykPixelDataScalerU8ToU16Factory::create());
+        m_d->scaler.reset(KoOptimizedPixelDataScalerU8ToU16Factory::createCmykaScaler());
     }
 
     if (!m_d->usePreciseMode && mode == LazyPreciseMode && numOverlays == 1) {

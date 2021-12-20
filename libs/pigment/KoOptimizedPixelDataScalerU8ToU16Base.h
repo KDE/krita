@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KoOptimizedRgbPixelDataScalerU8ToU16BASE_H
-#define KoOptimizedRgbPixelDataScalerU8ToU16BASE_H
+#ifndef KoOptimizedPixelDataScalerU8ToU16Base_H
+#define KoOptimizedPixelDataScalerU8ToU16Base_H
 
 #include <QtGlobal>
 #include "kritapigment_export.h"
@@ -21,14 +21,14 @@
  * when the user is painting on the canvas.
  *
  * The actual implementation is placed in class
- * `KoOptimizedRgbPixelDataScalerU8ToU16`.
+ * `KoOptimizedPixelDataScalerU8ToU16`.
  *
  * To create a scaler, just call a factory. It will create a version
  * of the scaler optimized for your CPU architecture.
  *
  * \code{.cpp}
- * QScopedPointer<KoOptimizedRgbPixelDataScalerU8ToU16Base> scaler(
- *     KoOptimizedRgbPixelDataScalerU8ToU16Factory::create());
+ * QScopedPointer<KoOptimizedPixelDataScalerU8ToU16Base> scaler(
+ *     KoOptimizedPixelDataScalerU8ToU16Factory::createRgbaScaler());
  *
  * // ...
  *
@@ -46,12 +46,12 @@
  *
  * \endcode
  */
-class KRITAPIGMENT_EXPORT KoOptimizedRgbPixelDataScalerU8ToU16Base
+class KRITAPIGMENT_EXPORT KoOptimizedPixelDataScalerU8ToU16Base
 {
 public:
-    KoOptimizedRgbPixelDataScalerU8ToU16Base(int channelsPerPixel);
+    KoOptimizedPixelDataScalerU8ToU16Base(int channelsPerPixel);
 
-    virtual ~KoOptimizedRgbPixelDataScalerU8ToU16Base();
+    virtual ~KoOptimizedPixelDataScalerU8ToU16Base();
 
     virtual void convertU8ToU16(const quint8 *src, int srcRowStride,
                                 quint8 *dst, int dstRowStride,
@@ -67,4 +67,4 @@ protected:
     int m_channelsPerPixel;
 };
 
-#endif // KoOptimizedRgbPixelDataScalerU8ToU16BASE_H
+#endif // KoOptimizedPixelDataScalerU8ToU16Base_H

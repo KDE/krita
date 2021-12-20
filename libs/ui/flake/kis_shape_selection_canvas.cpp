@@ -57,6 +57,7 @@ KoSelectedShapesProxy *KisShapeSelectionCanvas::selectedShapesProxy() const
 void KisShapeSelectionCanvas::updateCanvas(const QRectF& rc)
 {
     Q_UNUSED(rc);
+    m_shapeManager->explicitlyIssueShapeChangedSignals();
 }
 
 KoToolProxy * KisShapeSelectionCanvas::toolProxy() const

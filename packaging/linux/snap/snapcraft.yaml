@@ -49,7 +49,7 @@ parts:
   krita:
     after:
       - libheif
-    source: https://download.kde.org/unstable/krita/5.0.0-beta5/krita-5.0.0-beta5.tar.xz
+    source: https://download.kde.org/stable/krita/5.0.0/krita-5.0.0.tar.xz
     # # Use these instead to build from the git source
     # source: https://anongit.kde.org/krita.git
     # source-type: git

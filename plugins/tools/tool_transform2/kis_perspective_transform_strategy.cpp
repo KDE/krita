@@ -397,40 +397,41 @@ void KisPerspectiveTransformStrategy::Private::transformIntoArgs(const Eigen::Ma
 
     m = T.inverse() * m;
 
-    // TODO: implement matrix decomposition as described here
+    /**
+     * We disabled decomposed transformation due to bug
+     * https://bugs.kde.org/show_bug.cgi?id=447255
+     *
+     * In some cases decomposed preliminary transformation
+     * shrinks the image into a very small size, which is later
+     * inflated by the perspective transform. It creates a really
+     * bad and blurry result.
+     *
+     * Even though the usage of preliminary rotation makes the bug
+     * much less obvious, but the image is still really blurred.
+     */
+
+#if 0
+    // Decomposition according to:
     // https://www.w3.org/TR/css-transforms-1/#decomposing-a-3d-matrix
+    KisAlgebra2D::DecomposedMatix dm(toQTransform(m));
 
-    // For now use an extremely hackish approximation
-    if (m(0,1) != 0.0 && m(0,0) != 0.0 && m(2,2) != 0.0) {
+    currentArgs.setScaleX(dm.scaleX);
+    currentArgs.setScaleY(dm.scaleY);
 
-        const qreal factor = (m(1,1) / m(0,1) - m(1,0) / m(0,0));
+    currentArgs.setShearX(dm.shearXY);
+    currentArgs.setShearY(0.0);
 
-        qreal scaleX = m(0,0) / m(2,2);
-        qreal scaleY = m(0,1) / m(2,2) * factor;
+    currentArgs.setAZ(kisDegreesToRadians(dm.angle));
 
-        Eigen::Matrix3f SC = fromScale(scaleX, scaleY);
-
-        qreal shearX = 1.0 / factor;
-        qreal shearY = m(1,0) / m(0,0);
-
-        Eigen::Matrix3f S = fromShear(shearX, shearY);
-
-        currentArgs.setScaleX(scaleX);
-        currentArgs.setScaleY(scaleY);
-
-        currentArgs.setShearX(shearX);
-        currentArgs.setShearY(shearY);
-
-        m = m * SC.inverse();
-        m = m * S.inverse();
-        m /= m(2,2);
-    } else {
-        currentArgs.setScaleX(1.0);
-        currentArgs.setScaleY(1.0);
-
-        currentArgs.setShearX(0.0);
-        currentArgs.setShearY(0.0);
-    }
+    QTransform pre = dm.scaleTransform() * dm.shearTransform() * dm.rotateTransform();
+    m = m * fromQTransform(pre.inverted());
+#else
+    currentArgs.setScaleX(1.0);
+    currentArgs.setScaleY(1.0);
+    currentArgs.setShearX(0.0);
+    currentArgs.setShearY(0.0);
+    currentArgs.setAZ(0.0);
+#endif
 
     currentArgs.setTransformedCenter(QPointF(tX, tY));
     currentArgs.setFlattenedPerspectiveTransform(toQTransform(m));

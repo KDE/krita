@@ -187,7 +187,13 @@ KisTransformUtils::MatricesPack::MatricesPack(const ToolTransformArgs &args)
         P.rotate(180. * normalizeAngle(args.aZ()) / M_PI, QVector3D(0, 0, 1));
         projectedP = P.toTransform(args.cameraPos().z());
     } else if (args.mode() == ToolTransformArgs::PERSPECTIVE_4POINT) {
+        // see a comment in KisPerspectiveTransformStrategy::Private::transformIntoArgs()
+#if 0
+        projectedP.rotate(kisRadiansToDegrees(args.aZ()));
+        projectedP *= args.flattenedPerspectiveTransform();
+#else
         projectedP = args.flattenedPerspectiveTransform();
+#endif
         P = QMatrix4x4(projectedP);
     }
 

@@ -4,10 +4,10 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#ifndef KoOptimizedRgbPixelDataScalerU8ToU16_H
-#define KoOptimizedRgbPixelDataScalerU8ToU16_H
+#ifndef KoOptimizedPixelDataScalerU8ToU16_H
+#define KoOptimizedPixelDataScalerU8ToU16_H
 
-#include "KoOptimizedRgbPixelDataScalerU8ToU16Base.h"
+#include "KoOptimizedPixelDataScalerU8ToU16Base.h"
 
 #include "KoVcMultiArchBuildSupport.h"
 #include "kis_debug.h"
@@ -18,11 +18,11 @@
 
 
 template<Vc::Implementation _impl>
-class KoOptimizedRgbPixelDataScalerU8ToU16 : public KoOptimizedRgbPixelDataScalerU8ToU16Base
+class KoOptimizedPixelDataScalerU8ToU16 : public KoOptimizedPixelDataScalerU8ToU16Base
 {
 public:
-    KoOptimizedRgbPixelDataScalerU8ToU16(int channelsPerPixel)
-        : KoOptimizedRgbPixelDataScalerU8ToU16Base(channelsPerPixel)
+    KoOptimizedPixelDataScalerU8ToU16(int channelsPerPixel)
+        : KoOptimizedPixelDataScalerU8ToU16Base(channelsPerPixel)
     {
     }
 
@@ -219,4 +219,4 @@ public:
     }
 };
 
-#endif // KoOptimizedRgbPixelDataScalerU8ToU16_H
+#endif // KoOptimizedPixelDataScalerU8ToU16_H

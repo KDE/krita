@@ -537,12 +537,12 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
                 return nullptr;
             }
 
-            Q_EMIT beginExternalResourceOverride(resourceType, existingResourceId);
+            Q_EMIT beginExternalResourceRemove(resourceType, {existingResourceId});
 
             // remove everything related to this resource from the database (remember about tags and versions!!!)
             r = KisResourceCacheDb::removeResourceCompletely(existingResourceId);
 
-            Q_EMIT endExternalResourceOverride(resourceType, existingResourceId);
+            Q_EMIT endExternalResourceRemove(resourceType);
 
             if (!r) {
                 qWarning() << "KisResourceLocator::importResourceFromFile: Removing resource with id " << existingResourceId << "completely from the database failed.";
@@ -572,7 +572,7 @@ KoResourceSP KisResourceLocator::importResource(const QString &resourceType, con
         resource->setDirty(false);
         resource->updateLinkedResourcesMetaData(KisGlobalResourcesInterface::instance());
 
-        Q_EMIT beginExternalResourceImport(resourceType);
+        Q_EMIT beginExternalResourceImport(resourceType, 1);
 
         // Insert into the database
         const bool result = KisResourceCacheDb::addResource(storage,
@@ -788,6 +788,25 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
         }
     }
 
+    QVector<std::pair<QString, int>> addedResources;
+    Q_FOREACH(const QString &type, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+        int numAddedResources = 0;
+
+        QSharedPointer<KisResourceStorage::ResourceIterator> it = storage->resources(type);
+        while (it->hasNext()) {
+            it->next();
+            numAddedResources++;
+        }
+
+        if (numAddedResources > 0) {
+            addedResources << std::make_pair(type, numAddedResources);
+        }
+    }
+
+    Q_FOREACH (const auto &typedResources, addedResources) {
+        Q_EMIT beginExternalResourceImport(typedResources.first, typedResources.second);
+    }
+
     d->storages[storageLocation] = storage;
     if (!KisResourceCacheDb::addStorage(storage, false)) {
         d->errorMessages.append(i18n("Could not add %1 to the database", storage->location()));
@@ -801,7 +820,11 @@ bool KisResourceLocator::addStorage(const QString &storageLocation, KisResourceS
         return false;
     }
 
-    emit storageAdded(makeStorageLocationRelative(storage->location()));
+    Q_FOREACH (const auto &typedResources, addedResources) {
+        Q_EMIT endExternalResourceImport(typedResources.first);
+    }
+
+    Q_EMIT storageAdded(makeStorageLocationRelative(storage->location()));
     return true;
 }
 
@@ -810,6 +833,19 @@ bool KisResourceLocator::removeStorage(const QString &storageLocation)
     // Cloned documents have a document storage, but that isn't in the locator.
     if (!d->storages.contains(storageLocation)) {
         return true;
+    }
+
+    QVector<std::pair<QString, QVector<int>>> removedResources;
+
+    Q_FOREACH(const QString &type, KisResourceLoaderRegistry::instance()->resourceTypes()) {
+        const QVector<int> resources = KisResourceCacheDb::resourcesForStorage(type, storageLocation);
+        if (!resources.isEmpty()) {
+            removedResources << std::make_pair(type, resources);
+        }
+    }
+
+    Q_FOREACH (const auto &typedResources, removedResources) {
+        Q_EMIT beginExternalResourceRemove(typedResources.first, typedResources.second);
     }
 
     purge(storageLocation);
@@ -821,7 +857,12 @@ bool KisResourceLocator::removeStorage(const QString &storageLocation)
         qWarning() << d->errorMessages;
         return false;
     }
-    emit storageRemoved(storage->location());
+
+    Q_FOREACH (const auto &typedResources, removedResources) {
+        Q_EMIT endExternalResourceRemove(typedResources.first);
+    }
+
+    Q_EMIT storageRemoved(makeStorageLocationRelative(storage->location()));
 
     return true;
 }

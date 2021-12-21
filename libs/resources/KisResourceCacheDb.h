@@ -74,6 +74,7 @@ private:
      */
     static bool registerResourceType(const QString &resourceType);
 
+    static QVector<int> resourcesForStorage(const QString &resourceType, const QString &storageLocation);
     static int resourceIdForResource(const QString &resourceFileName, const QString &resourceType, const QString &storageLocation);
     static bool resourceNeedsUpdating(int resourceId, QDateTime timestamp);
 

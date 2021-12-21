@@ -332,6 +332,40 @@ bool KisResourceCacheDb::initialize(const QString &location)
     return s_valid;
 }
 
+QVector<int> KisResourceCacheDb::resourcesForStorage(const QString &resourceType, const QString &storageLocation)
+{
+    QVector<int> result;
+
+    QSqlQuery q;
+
+    if (!q.prepare("SELECT resources.id\n"
+                   "FROM   resources\n"
+                   ",      resource_types\n"
+                   ",      storages\n"
+                   "WHERE  resources.resource_type_id = resource_types.id\n"
+                   "AND    storages.id = resources.storage_id\n"
+                   "AND    storages.location = :storage_location\n"
+                   "AND    resource_types.name = :resource_type\n")) {
+
+        qWarning() << "Could not read and prepare resourcesForStorage" << q.lastError();
+        return result;
+    }
+
+    q.bindValue(":resource_type", resourceType);
+    q.bindValue(":storage_location", changeToEmptyIfNull(storageLocation));
+
+    if (!q.exec()) {
+        qWarning() << "Could not query resourceIdForResource" << q.boundValues() << q.lastError();
+        return result;
+    }
+
+    while (q.next()) {
+        result << q.value(0).toInt();
+    }
+
+    return result;
+}
+
 int KisResourceCacheDb::resourceIdForResource(const QString &resourceFileName, const QString &resourceType, const QString &storageLocation)
 {
     //qDebug() << "resourceIdForResource" << resourceName << resourceFileName << resourceType << storageLocation;

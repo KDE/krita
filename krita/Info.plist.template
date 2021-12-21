@@ -36,10 +36,14 @@
     <true/>
     <key>LSRequiresCarbon</key>
     <true/>
+    <key>LSMinimumSystemVersion</key>
+    <string>10.13</string>
     <key>NSSupportsAutomaticGraphicsSwitching</key>
     <true/>
     <key>NSHumanReadableCopyright</key>
     <string>${MACOSX_BUNDLE_COPYRIGHT}</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.graphics-design</string>
     <key>CFBundleDocumentTypes</key>
     <array>
       <dict>
@@ -61,6 +65,8 @@
         <string>Krita File</string>
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
+        <key>LSHandlerRank</key>
+        <string>Owner</string>
       </dict>
       <dict>
         <key>CFBundleTypeExtensions</key>
@@ -76,6 +82,8 @@
         <string>OpenRaster File</string>
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
+        <key>LSHandlerRank</key>
+        <string>Alternate</string>
       </dict>
       <dict>
         <key>LSItemContentTypes</key>
@@ -89,6 +97,8 @@
         <string>common/formats</string>
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
+        <key>LSHandlerRank</key>
+        <string>Alternate</string>
     </dict>
     <dict>
           <key>CFBundleTypeExtensions</key>
@@ -108,6 +118,8 @@
           <string>Editor</string>
           <key>LSTypeIsPackage</key>
           <integer>0</integer>
+          <key>LSHandlerRank</key>
+        <string>Alternate</string>
       </dict>
         <dict>
             <key>CFBundleTypeExtensions</key>
@@ -127,6 +139,8 @@
             <string>Photoshop Document</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+        <string>Alternate</string>
         </dict>
         <dict>
             <key>CFBundleTypeExtensions</key>
@@ -142,6 +156,8 @@
             <string>GIMP Image</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
         <dict>
           <key>CFBundleTypeExtensions</key>
@@ -157,6 +173,8 @@
           <string>Targa Image</string>
           <key>CFBundleTypeRole</key>
           <string>Editor</string>
+          <key>LSHandlerRank</key>
+          <string>Alternate</string>
         </dict>
         <dict>
             <key>CFBundleTypeExtensions</key>
@@ -172,6 +190,8 @@
             <string>Gimp brush</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
         <dict>
             <key>CFBundleTypeMIMETypes</key>
@@ -199,6 +219,8 @@
             <string>Camera RAW</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
         <dict>
             <key>CFBundleTypeExtensions</key>
@@ -216,6 +238,8 @@
             <string>High Efficiency Image File Format</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
         <dict>
             <key>CFBundleTypeExtensions</key>
@@ -231,6 +255,8 @@
             <string>WebP Image</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
         <dict>
             <key>CFBundleTypeMIMETypes</key>
@@ -241,6 +267,8 @@
             <string>Heightmap</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
         <dict>
             <key>CFBundleTypeExtensions</key>
@@ -256,6 +284,8 @@
             <string>Portable Document Format</string>
             <key>CFBundleTypeRole</key>
             <string>Editor</string>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
         </dict>
     </array>
   </dict>

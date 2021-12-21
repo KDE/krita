@@ -210,22 +210,26 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifySizeSlider->setExponentRatio(3);
     liquifySizeSlider->setValue(60.0);
     connect(liquifySizeSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifySizeChanged(qreal)));
+    connect(liquifySizeSlider, SIGNAL(editingFinished()), SLOT(notifyEditingFinished()));
     liquifySizeSlider->setToolTip(i18nc("@info:tooltip", "Size of the deformation brush"));
 
     liquifyAmountSlider->setRange(0.0, 1.0, 2);
     liquifyAmountSlider->setSingleStep(0.01);
     liquifyAmountSlider->setValue(0.05);
     connect(liquifyAmountSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyAmountChanged(qreal)));
+    connect(liquifyAmountSlider, SIGNAL(editingFinished()), SLOT(notifyEditingFinished()));
     liquifyAmountSlider->setToolTip(i18nc("@info:tooltip", "Amount of the deformation you get"));
 
     liquifyFlowSlider->setRange(0.0, 1.0, 2);
     liquifyFlowSlider->setSingleStep(0.01);
     liquifyFlowSlider->setValue(1.0);
     connect(liquifyFlowSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifyFlowChanged(qreal)));
+    connect(liquifyFlowSlider, SIGNAL(editingFinished()), SLOT(notifyEditingFinished()));
     liquifyFlowSlider->setToolTip(i18nc("@info:tooltip", "When in non-buildup mode, shows how fast the deformation limit is reached."));
 
     buidupModeComboBox->setCurrentIndex(0); // set to build-up mode by default
     connect(buidupModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(liquifyBuildUpChanged(int)));
+    connect(buidupModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(notifyEditingFinished()));
     buidupModeComboBox->setToolTip("<p>" + i18nc("@info:tooltip", "Switch between Build Up and Wash mode of painting. Build Up mode adds deformations one on top of the other without any limits. Wash mode gradually deforms the piece to the selected deformation level.") + "</p>");
 
     liquifySpacingSlider->setRange(0.0, 3.0, 2);
@@ -233,18 +237,22 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifySpacingSlider->setSingleStep(0.01);
     liquifySpacingSlider->setValue(0.2);
     connect(liquifySpacingSlider, SIGNAL(valueChanged(qreal)), this, SLOT(liquifySpacingChanged(qreal)));
+    connect(liquifySpacingSlider, SIGNAL(editingFinished()), SLOT(notifyEditingFinished()));
     liquifySpacingSlider->setToolTip(i18nc("@info:tooltip", "Space between two sequential applications of the deformation"));
 
     liquifySizePressureBox->setChecked(true);
     connect(liquifySizePressureBox, SIGNAL(toggled(bool)), this, SLOT(liquifySizePressureChanged(bool)));
+    connect(liquifySizePressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
     liquifySizePressureBox->setToolTip(i18nc("@info:tooltip", "Scale <b>Size</b> value according to current stylus pressure"));
 
     liquifyAmountPressureBox->setChecked(true);
     connect(liquifyAmountPressureBox, SIGNAL(toggled(bool)), this, SLOT(liquifyAmountPressureChanged(bool)));
+    connect(liquifyAmountPressureBox, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
     liquifyAmountPressureBox->setToolTip(i18nc("@info:tooltip", "Scale <b>Amount</b> value according to current stylus pressure"));
 
     liquifyReverseDirectionChk->setChecked(false);
     connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(liquifyReverseDirectionChanged(bool)));
+    connect(liquifyReverseDirectionChk, SIGNAL(toggled(bool)), this, SLOT(notifyEditingFinished()));
     liquifyReverseDirectionChk->setToolTip(i18nc("@info:tooltip", "Reverse direction of the current deformation tool"));
 
     KisSignalMapper *liquifyModeMapper = new KisSignalMapper(this);
@@ -259,6 +267,7 @@ KisToolTransformConfigWidget::KisToolTransformConfigWidget(TransformTransactionP
     liquifyModeMapper->setMapping(liquifyOffset, (int)KisLiquifyProperties::OFFSET);
     liquifyModeMapper->setMapping(liquifyUndo, (int)KisLiquifyProperties::UNDO);
     connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(slotLiquifyModeChanged(int)));
+    connect(liquifyModeMapper, SIGNAL(mapped(int)), SLOT(notifyEditingFinished()));
 
     liquifyMove->setToolTip(i18nc("@info:tooltip", "Move: drag the image along the brush stroke"));
     liquifyScale->setToolTip(i18nc("@info:tooltip", "Scale: grow/shrink image under cursor"));

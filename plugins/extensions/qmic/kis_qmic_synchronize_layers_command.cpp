@@ -66,6 +66,8 @@ void KisQmicSynchronizeLayersCommand::redo()
                                    << parent->name() << "above" << aboveThis;
                     }
 
+                    KisImportQmicProcessingVisitor::applyLayerNameChanges(*m_images[i], paintLayer.data(), device);
+
                     addLayerCmd = new KisImageLayerAddCommand(m_image, paintLayer, parent, aboveThis, false, true);
 
                     addLayerCmd->redo();

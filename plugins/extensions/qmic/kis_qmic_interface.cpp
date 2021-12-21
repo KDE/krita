@@ -104,7 +104,7 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
 
             QString name = QString("mode(%1),opacity(%2),pos(%3,%4),name(%5)").arg(translatedMode).arg(node->percentOpacity()).arg(cropRect.x()).arg(cropRect.y()).arg(noParenthesisName);
 
-            auto m = KisQMicImageSP::create(node->name(), resultRect.width(), resultRect.height(), 4);
+            auto m = KisQMicImageSP::create(name, resultRect.width(), resultRect.height(), 4);
             p->m_sharedMemorySegments << m;
 
             {

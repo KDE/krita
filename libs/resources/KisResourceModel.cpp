@@ -39,10 +39,8 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
     /// we don't handle KisResourceLocator::storage{Added,Removed} signals
     /// here, we use per-resource notifications from KisResourceLocator instead
 
-    // TODO: make sure that storage{Enabled,Disabled} don't trigger full model reset,
-    //       instead they should just emit dataChanged() for the corresponding resources
-    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(addStorage(const QString&)));
-    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(removeStorage(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageEnabled(const QString&)), this, SLOT(storageActiveStateChanged(const QString&)));
+    connect(KisStorageModel::instance(), SIGNAL(storageDisabled(const QString&)), this, SLOT(storageActiveStateChanged(const QString&)));
 
     connect(KisResourceLocator::instance(), SIGNAL(beginExternalResourceImport(QString, int)), this, SLOT(beginExternalResourceImport(QString, int)));
     connect(KisResourceLocator::instance(), SIGNAL(endExternalResourceImport(QString)), this, SLOT(endExternalResourceImport(QString)));
@@ -610,21 +608,20 @@ int KisAllResourcesModel::rowCount(const QModelIndex &parent) const
     return d->cachedRowCount;
 }
 
-
-void KisAllResourcesModel::addStorage(const QString &location)
+void KisAllResourcesModel::storageActiveStateChanged(const QString &location)
 {
-    Q_UNUSED(location)
-    beginResetModel();
-    resetQuery();
-    endResetModel();
-}
+    const QVector<int> resourceIds = KisResourceCacheDb::resourcesForStorage(d->resourceType, location);
+    if (resourceIds.isEmpty()) return;
 
-void KisAllResourcesModel::removeStorage(const QString &location)
-{
-    Q_UNUSED(location)
-    beginResetModel();
     resetQuery();
-    endResetModel();
+
+    Q_FOREACH (int resourceId, resourceIds) {
+        QModelIndex index = indexForResourceId(resourceId);
+
+        if (index.isValid()) {
+            Q_EMIT dataChanged(index, index, {Qt::UserRole + KisAbstractResourceModel::StorageActive});
+        }
+    }
 }
 
 void KisAllResourcesModel::beginExternalResourceImport(const QString &resourceType, int numResources)

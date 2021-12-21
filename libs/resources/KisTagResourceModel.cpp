@@ -35,7 +35,7 @@ KisAllTagResourceModel::KisAllTagResourceModel(const QString &resourceType, QObj
     connect(KisResourceLocator::instance(), SIGNAL(resourceActiveStateChanged(const QString&, int)), this, SLOT(slotResourceActiveStateChanged(const QString&, int)));
 
     /**
-     * TODO: connect to beginExternalResourceImport() and beginExternalResourceOverride
+     * TODO: connect to beginExternalResourceImport() and beginExternalResourceRemove
      *       as well. It seems to work without them somehow, but I guess it is just a
      *       coincidence or UB
      */

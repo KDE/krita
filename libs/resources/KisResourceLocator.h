@@ -125,16 +125,16 @@ Q_SIGNALS:
     void storageRemoved(const QString &location);
 
     /// Emitted when the locator needs to add an embedded resource
-    void beginExternalResourceImport(const QString &resourceType);
+    void beginExternalResourceImport(const QString &resourceType, int numResources);
 
     /// Emitted when the locator finished importing the embedded resource
     void endExternalResourceImport(const QString &resourceType);
 
     /// Emitted when the locator needs to add an embedded resource
-    void beginExternalResourceOverride(const QString &resourceType, int resourceId);
+    void beginExternalResourceRemove(const QString &resourceType, const QVector<int> resourceIds);
 
     /// Emitted when the locator finished importing the embedded resource
-    void endExternalResourceOverride(const QString &resourceType, int resourceId);
+    void endExternalResourceRemove(const QString &resourceType);
 
     /// Emitted when a resource changes its active state
     void resourceActiveStateChanged(const QString &resourceType, int resourceId);

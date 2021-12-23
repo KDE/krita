@@ -32,6 +32,7 @@ KisAboutApplication::KisAboutApplication(QWidget *parent)
 
     QVBoxLayout *vlayout = new QVBoxLayout(this);
     vlayout->setMargin(0);
+    vlayout->setSizeConstraint(QLayout::SetFixedSize);
     QTabWidget *wdgTab = new QTabWidget;
     vlayout->addWidget(wdgTab);
     KisSplashScreen *splash = new KisSplashScreen(true);

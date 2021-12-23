@@ -114,7 +114,7 @@ void KisPresetShadowUpdater::slotCanvasResourceChanged(int key, const QVariant &
         if (m_d->currentPreset) {
             m_d->currentUpdateProxy = m_d->currentPreset->updateProxy();
             m_d->proxyConnections.addConnection(
-                m_d->currentUpdateProxy, SIGNAL(sigSettingsChanged()),
+                m_d->currentUpdateProxy, SIGNAL(sigSettingsChangedUncompressedEarlyWarning()),
                 this, SLOT(slotPresetChanged()));
             slotPresetChanged();
         } else {

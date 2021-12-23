@@ -41,6 +41,17 @@ public:
 
 Q_SIGNALS:
     void sigSettingsChanged();
+
+    /**
+     * Uncompressed signals are delivered in two stages. Firstly,
+     * the early warning version is emitted, then the normal. The
+     * early warning version is needed to let critical code, like
+     * KisPresetShadowUpdater, to perform necessary actions before
+     * other receivers got the notification. Don't use it unless
+     * you know what you are doing. Use normal
+     * sigSettingsChangedUncompressed() instead.
+     */
+    void sigSettingsChangedUncompressedEarlyWarning();
     void sigSettingsChangedUncompressed();
     void sigUniformPropertiesChanged();
 

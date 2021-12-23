@@ -30,7 +30,7 @@ class KisInterstrokeDataFactory;
 class KRITAUI_EXPORT KisResourcesSnapshot : public KisShared
 {
 public:
-    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds = 0, KisNodeList selectedNodes = KisNodeList());
+    KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds = 0, KisNodeList selectedNodes = KisNodeList(), KisPaintOpPresetSP presetOverride = 0);
     KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KisDefaultBoundsBaseSP bounds = 0);
     ~KisResourcesSnapshot();
 

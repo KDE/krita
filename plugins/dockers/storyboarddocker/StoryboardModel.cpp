@@ -982,7 +982,7 @@ bool StoryboardModel::removeItem(QModelIndex index, KUndo2Command *command)
     if (command) {
         if (node) {
             KisLayerUtils::recursiveApplyNodes (node, [firstFrameOfScene, timeOfNextScene, command] (KisNodeSP node){
-                if (node->isAnimated()) {
+                if (node->isAnimated() && node->isEditable(true)) {
                     Q_FOREACH(KisKeyframeChannel* keyframeChannel, node->keyframeChannels()) {
                         int timeIter = keyframeChannel->keyframeAt(firstFrameOfScene)
                                                                     ? firstFrameOfScene
@@ -1266,6 +1266,8 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
     QString sceneName = i18nc("default name for storyboard item", "scene ") + QString::number(m_lastScene);
     setData(index(StoryboardItem::ItemName, 0, parentIndex), sceneName);
 
+    const bool firstEntry = rowCount() == 1;
+
     if (position == 0) {
         setData(index(StoryboardItem::FrameNumber, 0, index(position, 0)), 0);
         setData(index(StoryboardItem::DurationFrame, 0, index(position, 0)), lastKeyframeGlobal() - 0 + 1);
@@ -1278,7 +1280,11 @@ void StoryboardModel::insertChildRows(int position, KUndo2Command *cmd)
         setData(index(StoryboardItem::DurationSecond, 0, parentIndex), 0);
     }
 
-    createBlankKeyframes(index(position, 0), cmd);
+    if (firstEntry) {
+        createDuplicateKeyframes(index(position, 0), cmd);
+    } else {
+        createBlankKeyframes(index(position, 0), cmd);
+    }
 
     const int frameToSwitch = index(StoryboardItem::FrameNumber, 0, index(position, 0)).data().toInt();
     if (m_image) {
@@ -1306,7 +1312,9 @@ void StoryboardModel::createDuplicateKeyframes(const QModelIndex &pIndex, KUndo2
         const int targetFrame = index(StoryboardItem::FrameNumber, 0, pIndex).data().toInt();
 
         KisLayerUtils::recursiveApplyNodes(m_image->root(), [targetFrame, cmd](KisNodeSP node){
-            if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+            if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())
+             && node->isEditable(true)) {
+
                 KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
                 const int activeFrameTime = chan->activeKeyframeTime(targetFrame);
                 chan->copyKeyframe(activeFrameTime, targetFrame, cmd);
@@ -1321,7 +1329,9 @@ void StoryboardModel::createBlankKeyframes(const QModelIndex &pIndex, KUndo2Comm
         const int targetFrame = index(StoryboardItem::FrameNumber, 0, pIndex).data().toInt();
 
         KisLayerUtils::recursiveApplyNodes(m_image->root(), [targetFrame, cmd](KisNodeSP node){
-            if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())) {
+            if (node->supportsKeyframeChannel(KisKeyframeChannel::Raster.id())
+             && node->isEditable(true)) {
+
                 KisKeyframeChannel* chan = node->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
                 chan->addKeyframe(targetFrame, cmd);
             }

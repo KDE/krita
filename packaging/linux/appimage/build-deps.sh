@@ -110,7 +110,6 @@ cmake --build . --config RelWithDebInfo --target ext_python
 cmake --build . --config RelWithDebInfo --target ext_qt
 cmake --build . --config RelWithDebInfo --target ext_poppler
 cmake --build . --config RelWithDebInfo --target ext_kcrash
-cmake --build . --config RelWithDebInfo --target ext_gmic
 cmake --build . --config RelWithDebInfo --target ext_sip
 cmake --build . --config RelWithDebInfo --target ext_pyqt
 cmake --build . --config RelWithDebInfo --target ext_quazip

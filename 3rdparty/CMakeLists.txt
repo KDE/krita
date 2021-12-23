@@ -359,10 +359,6 @@ if (WIN32)
 #    add_subdirectory( ext_ffmpeg )
 endif ()
 
-if (NOT APPLE)
-	add_subdirectory( ext_gmic )
-endif ()
-
 if(UNIX)
     add_subdirectory( ext_pkgconfig )
 endif()

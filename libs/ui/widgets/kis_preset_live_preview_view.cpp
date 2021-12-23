@@ -276,13 +276,13 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
 
     proxy_preset->setSettings(settings);
 
-
     KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(m_image,
-                                     m_layer, m_resourceManager);
+                                     m_layer, m_resourceManager,
+                                     0,
+                                     proxy_preset);
     resources->setOpacity(settings->paintOpOpacity());
 
-    resources->setBrush(proxy_preset);
     resources->setFGColorOverride(m_paintColor);
     KisFreehandStrokeInfo *strokeInfo = new KisFreehandStrokeInfo();
 

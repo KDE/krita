@@ -61,7 +61,7 @@ struct KisResourcesSnapshot::Private {
     KoCanvasResourcesInterfaceSP globalCanvasResourcesInterface;
 };
 
-KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds)
+KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNode, KoCanvasResourceProvider *resourceManager, KisDefaultBoundsBaseSP bounds, KisPaintOpPresetSP presetOverride)
     : m_d(new Private())
 {
     m_d->image = image;
@@ -84,18 +84,28 @@ KisResourcesSnapshot::KisResourcesSnapshot(KisImageSP image, KisNodeSP currentNo
      * can be expensive, but according to measurements, it takes
      * something like 0.1 ms for an average preset.
      */
-    KisPaintOpPresetSP p = resourceManager->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
-    if (p) {
-        KoResourceCacheInterfaceSP cacheInterface = resourceManager->resource(KoCanvasResource::CurrentPaintOpPresetCache).value<KoResourceCacheInterfaceSP>();
-
-        KIS_SAFE_ASSERT_RECOVER(!cacheInterface || p->sanityCheckResourceCacheIsValid(cacheInterface)) {
-            cacheInterface.clear();
-        }
-
+    if (presetOverride) {
+        /// we don't use global resource cache object in this case,
+        /// because the passet preset might be not the global one
         m_d->currentPaintOpPreset =
-            p->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(),
-                                          m_d->globalCanvasResourcesInterface,
-                                          cacheInterface);
+            presetOverride->cloneWithResourcesSnapshot(
+                KisGlobalResourcesInterface::instance(),
+                m_d->globalCanvasResourcesInterface,
+                nullptr);
+    } else {
+        KisPaintOpPresetSP p = resourceManager->resource(KoCanvasResource::CurrentPaintOpPreset).value<KisPaintOpPresetSP>();
+        if (p) {
+            KoResourceCacheInterfaceSP cacheInterface = resourceManager->resource(KoCanvasResource::CurrentPaintOpPresetCache).value<KoResourceCacheInterfaceSP>();
+
+            KIS_SAFE_ASSERT_RECOVER(!cacheInterface || p->sanityCheckResourceCacheIsValid(cacheInterface)) {
+                cacheInterface.clear();
+            }
+
+            m_d->currentPaintOpPreset =
+                    p->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(),
+                                                  m_d->globalCanvasResourcesInterface,
+                                                  cacheInterface);
+        }
     }
 
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND

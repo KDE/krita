@@ -203,11 +203,6 @@ THIS IS ALSO NEEDED IF YOU USE THE build.cmd script.
     metadata generation will be started before actual libraries
     are installed.
 
-    On Windows and Linux (if you want to include gmic-qt)
-    ```
-    cmake --build . --config RelWithDebInfo --target ext_gmic
-    ```
-
     Linux Note: poppler should be buildable on Linux as well with a home-built freetype
     and fontconfig, but I don't know how to make fontconfig find freetype, and on
     Linux, fontconfig is needed for poppler. Poppler is needed for PDF import.

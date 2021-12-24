@@ -112,6 +112,16 @@ KRecentFilesAction::~KRecentFilesAction()
     delete d_ptr;
 }
 
+void KRecentFilesActionPrivate::hideExcessRecentItems()
+{
+    Q_Q(KRecentFilesAction);
+    QList<QAction *> actions = q->selectableActionGroup()->actions();
+    // The first items are the oldest entries.
+    for (int i = 0; i < actions.size() - m_visibleItemsCount; i++) {
+        actions.at(i)->setVisible(false);
+    }
+}
+
 void KRecentFilesActionPrivate::_k_urlSelected(QAction *action)
 {
     Q_Q(KRecentFilesAction);
@@ -227,6 +237,8 @@ void KRecentFilesAction::addUrl(const QUrl &_url, const QString &name)
 
     // This is needed to load thumbnail for the recents menu.
     d_urls.append(QUrl(url));
+
+    d->hideExcessRecentItems();
 }
 
 void KRecentFilesAction::addAction(QAction *action, const QUrl &url, const QString &name)
@@ -367,6 +379,8 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
         d->clearAction->setVisible(true);
         setEnabled(true);
     }
+
+    d->hideExcessRecentItems();
 }
 
 void KRecentFilesAction::saveEntries(const KConfigGroup &_cg)

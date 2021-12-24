@@ -637,7 +637,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     return true;
                 }
                 else if (d->mainWindow) {
-                    if (fileName.endsWith(".bundle")) {
+                    if (fileName.endsWith(".bundle", Qt::CaseInsensitive)) {
                         d->mainWindow->installBundle(fileName);
                     }
                     else {

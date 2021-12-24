@@ -884,7 +884,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     } else if (storage->location() == "memory") {
         translationContext = "memory/" + resourceType + "/" + resource->filename();
     }
-    else if (resource->filename().endsWith(".myb")) {
+    else if (resource->filename().endsWith(".myb", Qt::CaseInsensitive)) {
         translationContext = "./plugins/paintops/mypaint/brushes/" + resource->filename();
     } else {
         translationContext = "./krita/data/" + resourceType + "/" + resource->filename();

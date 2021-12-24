@@ -254,7 +254,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
             qreal diameterToBrushRatio = 1.0;
             qreal diameter = settings->getInt("Spray/diameter");
             //hack, 1000 being the maximum possible brushsize.
-            if (brush->filename().endsWith(".svg")) {
+            if (brush->filename().endsWith(".svg", Qt::CaseInsensitive)) {
                 diameterToBrushRatio = diameter/(1000.0*scale);
                 scale = 25.0 / 1000.0;
             } else {

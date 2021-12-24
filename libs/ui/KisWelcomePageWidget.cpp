@@ -441,7 +441,7 @@ void KisWelcomePageWidget::dropEvent(QDropEvent *event)
 
     if (event->mimeData()->hasUrls() && !event->mimeData()->urls().empty()) {
         Q_FOREACH (const QUrl &url, event->mimeData()->urls()) {
-            if (url.toLocalFile().endsWith(".bundle")) {
+            if (url.toLocalFile().endsWith(".bundle", Qt::CaseInsensitive)) {
                 bool r = m_mainWindow->installBundle(url.toLocalFile());
                 if (!r) {
                     qWarning() << "Could not install bundle" << url.toLocalFile();

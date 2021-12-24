@@ -32,7 +32,7 @@ QImage RecentImageImageProvider::requestImage(const QString &id, QSize *size, co
     QImage thumbnail;
 
     if (f.exists()) {
-        if (f.fileName().endsWith(".kra")) {
+        if (f.fileName().endsWith(".kra", Qt::CaseInsensitive)) {
             // try to use any embedded thumbnail
             KoStore *store = KoStore::createStore(id, KoStore::Read);
 

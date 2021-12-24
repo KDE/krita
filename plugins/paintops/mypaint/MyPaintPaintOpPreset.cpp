@@ -137,7 +137,7 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
             apply(settings());
             // correct filename
             const QString f = filename();
-            if (f.endsWith(".myb")) {
+            if (f.endsWith(".myb", Qt::CaseInsensitive)) {
                 setFilename(QFileInfo(f).completeBaseName().append(KisPaintOpPreset::defaultFileExtension()));
             }
             return true;

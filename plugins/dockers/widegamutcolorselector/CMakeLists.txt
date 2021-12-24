@@ -5,6 +5,8 @@ set(KRITA_WGCOLORSELECTOR_SOURCES
     WGColorSelectorDock.cpp
     WGColorSelectorPlugin.cpp
     WGColorSelectorSettings.cpp
+    WGCommonColorsCalculationRunner.cpp
+    WGCommonColorSet.cpp
     WGConfig.cpp
     WGMyPaintShadeSelector.cpp
     WGQuickSettingsWidget.cpp

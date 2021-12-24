@@ -314,6 +314,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
         dontUseNative = false;
     }
 #endif
+#ifdef Q_OS_MACOS
+    dontUseNative = false;
+#endif
 #ifdef Q_OS_WIN
     dontUseNative = false;
 #endif
@@ -362,7 +365,7 @@ void GeneralTab::setDefault()
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
 
-#ifdef Q_OS_ANDROID
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS
     m_chkNativeFileDialog->setChecked(true);
 #else
     m_chkNativeFileDialog->setChecked(false);

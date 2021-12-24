@@ -365,7 +365,7 @@ void GeneralTab::setDefault()
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
 
-#if defined Q_OS_ANDROID || defined Q_OS_MACOS
+#if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
     m_chkNativeFileDialog->setChecked(true);
 #else
     m_chkNativeFileDialog->setChecked(false);

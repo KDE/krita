@@ -989,6 +989,10 @@ void KisResourceLocator::findStorages()
     while (iter.hasNext()) {
         iter.next();
         KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(iter.filePath());
+        if (!storage->valid()) {
+            // we still add the storage to the list and try to read whatever possible
+            qWarning() << "KisResourceLocator::findStorages: the storage is invalid" << storage->location();
+        }
         d->storages[storage->location()] = storage;
     }
 }

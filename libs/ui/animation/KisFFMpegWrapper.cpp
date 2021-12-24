@@ -371,7 +371,7 @@ QJsonObject KisFFMpegWrapper::findProcessPath(const QString &processName, const 
         if (proposedPaths[i].endsWith('/')) {
             continue;
         }
-        if (!proposedPaths[i].endsWith(".exe")) {
+        if (!proposedPaths[i].endsWith(".exe", Qt::CaseInsensitive)) {
             if (!QFile::exists(proposedPaths[i])) {
                 proposedPaths[i] += ".exe";
                 if (!QFile::exists(proposedPaths[i])) {

@@ -1076,9 +1076,9 @@ QString KisResourceLocator::makeStorageLocationAbsolute(QString storageLocation)
         return resourceLocationBase();
     }
 
-    if (QFileInfo(storageLocation).isRelative() && (storageLocation.endsWith("bundle")
-                                             || storageLocation.endsWith("asl")
-                                             || storageLocation.endsWith("abr"))) {
+    if (QFileInfo(storageLocation).isRelative() && (storageLocation.endsWith(".bundle", Qt::CaseInsensitive)
+                                             || storageLocation.endsWith(".asl", Qt::CaseInsensitive)
+                                             || storageLocation.endsWith(".abr", Qt::CaseInsensitive))) {
         if (resourceLocationBase().endsWith('/') || resourceLocationBase().endsWith("\\")) {
             storageLocation = resourceLocationBase() + storageLocation;
         }

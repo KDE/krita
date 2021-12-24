@@ -372,6 +372,8 @@ strip_python_dmginstall() {
     find "${PythonFrameworkBase}/Versions/${PY_VERSION}/bin" -not -name "python*" \( -type f -or -type l \) | xargs rm -f
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}"
     rm -rf distutils tkinter ensurepip venv lib2to3 idlelib turtledemo
+    # remove tkinter module
+    rm "./lib-dynload/_tkinter.cpython-${local_PY_MAYOR_VERSION}${local_PY_MINOR_VERSION}-darwin.so"
 
     cd "${PythonFrameworkBase}/Versions/${PY_VERSION}/lib/python${PY_VERSION}/site-packages"
     rm -rf pip* PyQt_builder* setuptools* sip* easy-install.pth

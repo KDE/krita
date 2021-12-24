@@ -154,6 +154,9 @@ void KoFileDialog::createFileDialog()
         dontUseNative = false;
     }
 #endif
+#ifdef Q_OS_MACOS
+    dontUseNative = false;
+#endif
 #ifdef Q_OS_WIN
     dontUseNative = false;
 #endif

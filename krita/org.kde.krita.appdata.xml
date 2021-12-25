@@ -396,6 +396,7 @@
     <screenshot>
       <caption>Krita offers powerful filters</caption>
       <caption xml:lang="ca">El Krita ofereix filtres potents</caption>
+      <caption xml:lang="ca-valencia">El Krita ofereix filtres potents</caption>
       <caption xml:lang="es">Krita ofrece potentes filtros</caption>
       <caption xml:lang="fr">Krita propose des filtres puissants</caption>
       <caption xml:lang="nl">Krita biedt krachtige filters</caption>
@@ -404,11 +405,13 @@
       <caption xml:lang="uk">У Krita передбачено потужні фільтри</caption>
       <caption xml:lang="x-test">xxKrita offers powerful filtersxx</caption>
       <caption xml:lang="zh-CN">Krita 自带了多款功能强大的滤镜</caption>
+      <caption xml:lang="zh-TW">Krita 提供強大的濾鏡</caption>
       <image>https://cdn.kde.org/screenshots/krita/filters.png</image>
     </screenshot>
     <screenshot>
       <caption>And, there is integration with G'Mic, too, which adds hundreds of filters more</caption>
       <caption xml:lang="ca">I també hi ha integració amb el G'Mic, el qual afegeix més centenars de filtres</caption>
+      <caption xml:lang="ca-valencia">I també hi ha integració amb el G'Mic, el qual afig més centenars de filtres</caption>
       <caption xml:lang="es">Y también está la integración con G'Mic, que añade cientos de filtros</caption>
       <caption xml:lang="fr">Et, il existe également une intégration avec « G-Mic », ajoutant des centaines de filtres, de plus.</caption>
       <caption xml:lang="nl">En er is ook integratie met G'Mic, die honderden filters meer toevoegt</caption>
@@ -417,11 +420,13 @@
       <caption xml:lang="uk">І, крім того, маємо інтеграцію із G'Mic, що додає ще сотні фільтрів</caption>
       <caption xml:lang="x-test">xxAnd, there is integration with G'Mic, too, which adds hundreds of filters morexx</caption>
       <caption xml:lang="zh-CN">它还整合了 G'Mic，可以使用它的数百款滤镜</caption>
+      <caption xml:lang="zh-TW">而且也整合了 G'Mic，額外提供了過百款濾鏡</caption>
       <image>https://cdn.kde.org/screenshots/krita/gmic.png</image>
     </screenshot>
     <screenshot>
       <caption>Join our Youtube channel!</caption>
       <caption xml:lang="ca">Uniu-vos al nostre canal de YouTube!</caption>
+      <caption xml:lang="ca-valencia">Uniu-vos al nostre canal de YouTube!</caption>
       <caption xml:lang="es">Únase a nuestro canal de Youtube.</caption>
       <caption xml:lang="fr">Rejoignez notre canal sur Youtube !</caption>
       <caption xml:lang="nl">Doe mee in ons Youtube kanaal!</caption>
@@ -430,11 +435,13 @@
       <caption xml:lang="uk">Долучайтеся до нашого каналу на Youtube!</caption>
       <caption xml:lang="x-test">xxJoin our Youtube channel!xx</caption>
       <caption xml:lang="zh-CN">加入我们的 Youtube 频道！</caption>
+      <caption xml:lang="zh-TW">來關注我們的 Youtube 頻道吧！</caption>
       <image>https://cdn.kde.org/screenshots/krita/youtube.png</image>
     </screenshot>
     <screenshot>
       <caption>Or the active <a href="https://krita-artists.org">Krita Artists community</a></caption>
       <caption xml:lang="ca">O l'actiu <a href="https://krita-artists.org">La comunitat d'artistes del Krita</a></caption>
+      <caption xml:lang="ca-valencia">O l'actiu <a href="https://krita-artists.org">La comunitat d'artistes del Krita</a></caption>
       <caption xml:lang="es">O al activo <a href="https://krita-artists.org">La comunidad de artistas de Krita</a></caption>
       <caption xml:lang="fr">Ou l'active <a href="https://krita-artists.org">La communauté d'artistes de Krita</a></caption>
       <caption xml:lang="nl">Of het actieve <a href="https://krita-artists.org">Krita-artiestengemeenschap</a></caption>
@@ -443,6 +450,7 @@
       <caption xml:lang="uk">Або активний <a href="https://krita-artists.org">Спільнота Krita Artists</a></caption>
       <caption xml:lang="x-test">xxOr the active <a href="https://krita-artists.org">xxKrita Artists communityxx</a>xx</caption>
       <caption xml:lang="zh-CN">或者活动的 <a href="https://krita-artists.org">Krita 国际画师社区</a></caption>
+      <caption xml:lang="zh-TW">或者生氣勃勃的<a href="https://krita-artists.org">Krita Artists 社群討論區</a></caption>
       <image>https://cdn.kde.org/screenshots/krita/community.png</image>
     </screenshot>
   </screenshots>

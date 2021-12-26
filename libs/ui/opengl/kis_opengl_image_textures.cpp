@@ -748,7 +748,16 @@ void KisOpenGLImageTextures::updateTextureFormat()
 #ifndef QT_OPENGL_ES_2
                 m_texturesInfo.internalFormat = GL_RGBA16;
                 m_texturesInfo.type = GL_UNSIGNED_SHORT;
+
+                // On arm M1, GL_BGRA format is not aligned properly at the driver
+                // changing the pixel format fixes the rendering problem when using
+                // texture buffers
+                // BUG: 445561
+#ifdef Q_OS_MACOS
+                m_texturesInfo.format = GL_RGBA;
+#else
                 m_texturesInfo.format = GL_BGRA;
+#endif
                 destinationColorDepthId = Integer16BitsColorDepthID;
                 dbgUI << "Using 16 bits rgba";
 #else

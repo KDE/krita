@@ -21,6 +21,15 @@ public:
     KisSynchronizedConnection<KisNodeSP> nodeChangedConnection;
     KisSynchronizedConnection<KisNodeSP,KisNodeSP,KisNodeSP> addNodeConnection;
     KisSynchronizedConnection<KisNodeSP> removeNodeConnection;
+
+    /**
+     * pendingNodeSet contains the set of nodes that will be present in the
+     * dummies graph after all the synchronized events are processed by the GUI
+     * thread. This set is used to reset the graph when the image changes its root
+     * during the 'flatten' operation.
+     */
+    QList<KisNodeSP> pendingNodeSet;
+    QMutex pendingNodeSetLock;
 };
 
 
@@ -48,15 +57,13 @@ void KisDummiesFacadeBase::setImage(KisImageWSP image)
         m_d->image->disconnect(&m_d->activateNodeConnection);
 
         if (rootDummy()) {
-            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->addNodeConnection.hasPendingSignals());
-            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->removeNodeConnection.hasPendingSignals());
-
             KisNodeList nodesToRemove;
 
-            KisLayerUtils::recursiveApplyNodes(rootDummy(),
-                [&nodesToRemove] (KisNodeDummy *dummy) {
-                    nodesToRemove << dummy->node();
-                });
+            {
+                QMutexLocker l(&m_d->pendingNodeSetLock);
+                std::swap(nodesToRemove, m_d->pendingNodeSet);
+                m_d->pendingNodeSet.clear();
+            }
 
             for (auto it = std::make_reverse_iterator(nodesToRemove.end());
                  it != std::make_reverse_iterator(nodesToRemove.begin());
@@ -134,6 +141,11 @@ void KisDummiesFacadeBase::slotNodeActivationRequested(KisNodeSP node)
 
 void KisDummiesFacadeBase::slotNodeAdded(KisNodeSP node)
 {
+    {
+        QMutexLocker l(&m_d->pendingNodeSetLock);
+        m_d->pendingNodeSet.append(node);
+    }
+
     m_d->addNodeConnection.start(node, node->parent(), node->prevSibling());
 
     KisNodeSP childNode = node->firstChild();
@@ -145,12 +157,21 @@ void KisDummiesFacadeBase::slotNodeAdded(KisNodeSP node)
 
 void KisDummiesFacadeBase::slotRemoveNode(KisNodeSP node)
 {
+    {
+        QMutexLocker l(&m_d->pendingNodeSetLock);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->pendingNodeSet.contains(node));
+    }
+
     KisNodeSP childNode = node->lastChild();
     while (childNode) {
         slotRemoveNode(childNode);
         childNode = childNode->prevSibling();
     }
 
+    {
+        QMutexLocker l(&m_d->pendingNodeSetLock);
+        m_d->pendingNodeSet.removeOne(node);
+    }
     m_d->removeNodeConnection.start(node);
 }
 

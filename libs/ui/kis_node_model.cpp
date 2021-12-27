@@ -507,7 +507,20 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         return node->isAnimated();
     }
     default:
-        if (role >= int(KisNodeModel::BeginThumbnailRole) && belongsToIsolatedGroup(node)) {
+
+        /**
+         * The dummies are removed from the model asynchronously to the image operations,
+         * therefore we should make sure that `node->graphListener()` is still valid and
+         * this node is still present in the node graph.
+         */
+        if (role >= int(KisNodeModel::BeginThumbnailRole) &&
+            belongsToIsolatedGroup(node) &&
+            node->graphListener()) {
+
+            /**
+             * WARNING: there is still a possible theoretical race condition if the node is
+             * removed from the image right here. We consider that as "improbaple" atm.
+             */
 
             const int maxSize = role - int(KisNodeModel::BeginThumbnailRole);
             return node->createThumbnail(maxSize, maxSize, Qt::KeepAspectRatio);

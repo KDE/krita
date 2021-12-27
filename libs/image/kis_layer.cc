@@ -760,7 +760,7 @@ void KisLayer::buildProjectionUpToNode(KisPaintDeviceSP projection, KisNodeSP la
 
     KisPaintDeviceSP originalDevice = original();
 
-    KIS_ASSERT_RECOVER_RETURN(needProjection() || hasEffectMasks());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(needProjection() || hasEffectMasks());
 
     if (!changeRect.isEmpty()) {
         applyMasks(originalDevice, projection,

@@ -233,6 +233,7 @@ KisApplication::KisApplication(const QString &key, int &argc, char **argv)
 
     // store the style name
     qApp->setProperty(currentUnderlyingStyleNameProperty, style()->objectName());
+    KisSynchronizedConnectionBase::registerSynchronizedEventBarrier(std::bind(&KisApplication::processPostponedSynchronizationEvents, this));
 }
 
 #if defined(Q_OS_WIN) && defined(ENV32BIT)
@@ -769,22 +770,8 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
         }
 
         if (!info.eventRecursionCount) {
-            while (!info.postponedSynchronizationEvents.empty()) {
-                // QApplication::notify() can throw, so use RAII for counters
-                AppRecursionGuard guard(&info);
+            processPostponedSynchronizationEvents();
 
-                /// We must pop event from the queue **before** we call
-                /// QApplication::notify(), because it can throw!
-                KisSynchronizedConnectionEvent typedEvent = info.postponedSynchronizationEvents.front();
-                info.postponedSynchronizationEvents.pop();
-
-                if (!typedEvent.destination) {
-                    qWarning() << "WARNING: the destination object of KisSynchronizedConnection has been destroyed during postponed delivery";
-                    continue;
-                }
-
-                QApplication::notify(typedEvent.destination, &typedEvent);
-            }
         }
 
         return result;
@@ -799,6 +786,27 @@ bool KisApplication::notify(QObject *receiver, QEvent *event)
     return false;
 }
 
+void KisApplication::processPostponedSynchronizationEvents()
+{
+    AppRecursionInfo &info = s_recursionInfo->localData();
+
+    while (!info.postponedSynchronizationEvents.empty()) {
+        // QApplication::notify() can throw, so use RAII for counters
+        AppRecursionGuard guard(&info);
+
+        /// We must pop event from the queue **before** we call
+        /// QApplication::notify(), because it can throw!
+        KisSynchronizedConnectionEvent typedEvent = info.postponedSynchronizationEvents.front();
+        info.postponedSynchronizationEvents.pop();
+
+        if (!typedEvent.destination) {
+            qWarning() << "WARNING: the destination object of KisSynchronizedConnection has been destroyed during postponed delivery";
+            continue;
+        }
+
+        QApplication::notify(typedEvent.destination, &typedEvent);
+    }
+}
 
 void KisApplication::executeRemoteArguments(QByteArray message, KisMainWindow *mainWindow)
 {

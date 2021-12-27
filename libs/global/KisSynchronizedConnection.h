@@ -49,6 +49,7 @@ class KRITAGLOBAL_EXPORT KisSynchronizedConnectionBase : public QObject
 {
 public:
     static int eventType();
+    static void registerSynchronizedEventBarrier(std::function<void()> callback);
 
 protected:
     bool event(QEvent *event);
@@ -132,9 +133,10 @@ public:
      * Triggers the delivery of the signal to the destination slot manualy
      */
     void start(const Args &...argsTuple) {
-        QMutexLocker l(&m_inputConnectionMutex);
-
-        m_queue.emplace(std::make_tuple(argsTuple...));
+        {
+            QMutexLocker l(&m_inputConnectionMutex);
+            m_queue.emplace(std::make_tuple(argsTuple...));
+        }
         this->postEvent();
     }
 
@@ -192,6 +194,7 @@ public:
     }
 
     bool hasPendingSignals() const {
+        QMutexLocker l(&m_inputConnectionMutex);
         return !m_queue.empty();
     }
 
@@ -208,14 +211,21 @@ private:
 
 protected:
     void deliverEventToReceiver() override {
-        kismpl::apply(m_callback, m_queue.front());
-        m_queue.pop();
+        ArgsTuple args;
+
+        {
+            QMutexLocker l(&m_inputConnectionMutex);
+            args = m_queue.front();
+            m_queue.pop();
+        }
+
+        kismpl::apply(m_callback, args);
     }
 
 private:
     CallbackFunction m_callback;
     std::queue<ArgsTuple> m_queue;
-    QMutex m_inputConnectionMutex;
+    mutable QMutex m_inputConnectionMutex;
 };
 
 #endif // KISSYNCHRONIZEDCONNECTION_H

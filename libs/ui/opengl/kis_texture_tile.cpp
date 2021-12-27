@@ -30,8 +30,9 @@ void KisTextureTile::setTextureParameters()
     f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, m_numMipmapLevels);
 
     if ((m_texturesInfo->internalFormat == GL_RGBA8 && m_texturesInfo->format == GL_RGBA)
+#ifdef Q_OS_MACOS
         || (m_texturesInfo->internalFormat == GL_RGBA16 && m_texturesInfo->format == GL_RGBA)
-#ifdef QT_OPENGL_ES_3
+#elif defined(QT_OPENGL_ES_3)
         || (m_texturesInfo->internalFormat == GL_RGBA16_EXT && m_texturesInfo->format == GL_RGBA)
 #endif
     ) {

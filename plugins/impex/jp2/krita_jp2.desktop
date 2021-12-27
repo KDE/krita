@@ -120,4 +120,3 @@ Icon=krita
 StartupNotify=true
 NoDisplay=true
 Terminal=false
-Type=Application

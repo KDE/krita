@@ -1,7 +1,7 @@
-From 33fbefe9913fa0910e0e4776df36a4de4db2ca13 Mon Sep 17 00:00:00 2001
+From 025399a1925e1690302a464f07ef4c0f06c3089a Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Fri, 26 Nov 2021 15:56:43 +0000
-Subject: [PATCH 44/46] Android: Rework Storage Access Framework
+Subject: [PATCH] Android: Rework Storage Access Framework
 
 With this commit we introduce creation of directories, files, and files
 inside directories. We also changed the permission model of accessing
@@ -18,8 +18,8 @@ the files.
  .../android/androidcontentfileengine.cpp      | 268 ++++--
  .../android/androidcontentfileengine.h        |  39 +-
  .../qandroidplatformfiledialoghelper.cpp      |   6 +
- .../android/qandroidplatformservices.cpp      |   6 +-
- 12 files changed, 1345 insertions(+), 299 deletions(-)
+ .../android/qandroidplatformservices.cpp      |  11 +-
+ 12 files changed, 1349 insertions(+), 300 deletions(-)
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
@@ -1900,22 +1900,27 @@ index 00b5b0887c..e7068d369a 100644
  
  void QAndroidPlatformFileDialogHelper::setIntentTitle(const QString &title)
 diff --git a/src/plugins/platforms/android/qandroidplatformservices.cpp b/src/plugins/platforms/android/qandroidplatformservices.cpp
-index c095613ce7..d9e4ab99e2 100644
+index c095613ce7..5abfc7bbb5 100644
 --- a/src/plugins/platforms/android/qandroidplatformservices.cpp
 +++ b/src/plugins/platforms/android/qandroidplatformservices.cpp
-@@ -69,9 +69,9 @@ bool QAndroidPlatformServices::openUrl(const QUrl &theUrl)
+@@ -68,10 +68,13 @@ bool QAndroidPlatformServices::openUrl(const QUrl &theUrl)
+ 
      QJNIObjectPrivate urlString = QJNIObjectPrivate::fromString(url.toString());
      QJNIObjectPrivate mimeString = QJNIObjectPrivate::fromString(mime);
-     return QJNIObjectPrivate::callStaticMethod<jboolean>(
+-    return QJNIObjectPrivate::callStaticMethod<jboolean>(
 -            QtAndroid::applicationClass(), "openURL",
 -            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)Z",
 -            QtAndroidPrivate::context(), urlString.object(), mimeString.object());
-+        "org/qtproject/qt5/android/SAFFileManager", "launchUri",
-+        "(Ljava/lang/String;Ljava/lang/String;)Z", urlString.object(),
-+        mimeString.object());
++    QJNIObjectPrivate safFileManager = QJNIObjectPrivate::callStaticObjectMethod(
++        "org/qtproject/qt5/android/SAFFileManager", "instance",
++        "()Lorg/qtproject/qt5/android/SAFFileManager;");
++
++    return safFileManager.callMethod<jboolean>("launchUri",
++                                               "(Ljava/lang/String;Ljava/lang/String;)Z",
++                                               urlString.object(), mimeString.object());
  }
  
  bool QAndroidPlatformServices::openDocument(const QUrl &url)
 -- 
-2.33.0
+2.34.1
 

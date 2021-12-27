@@ -86,6 +86,8 @@ public:
     bool registerResources();
     void loadPlugins();
     void initializeGlobals(const KisApplicationArguments &args);
+    void processPostponedSynchronizationEvents();
+
 
 public Q_SLOTS:
 

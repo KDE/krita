@@ -1,0 +1,44 @@
+From 71941e29acdf87fdfd91354b03535a536d05f934 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Wed, 22 Dec 2021 23:12:36 +0000
+Subject: [PATCH] Disable QAccessibility by not traversing nodes
+
+The problem is more complex than anticipated. We get to this function
+from the Android UI thread and we're supposed to return the node.
+However accessing QWidgets from non qtMainLoopThread is dangerous.
+
+A solution that comes to mind is to invokeMethod while blocking, but
+that results in deadlocks (because qtMainLoopThread also has to wait for
+Android Ui thread).
+
+NOTE: Async solution has its own complications:
+1. We'd have to manage lifetime of jobject local refs
+2. The node behind the scene may be long gone.
+---
+ src/plugins/platforms/android/androidjniaccessibility.cpp | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/plugins/platforms/android/androidjniaccessibility.cpp b/src/plugins/platforms/android/androidjniaccessibility.cpp
+index 6f1178e041..0a6eabd138 100644
+--- a/src/plugins/platforms/android/androidjniaccessibility.cpp
++++ b/src/plugins/platforms/android/androidjniaccessibility.cpp
+@@ -243,6 +243,8 @@ if (!clazz) { \
+ 
+     static bool populateNode(JNIEnv *env, jobject /*thiz*/, jint objectId, jobject node)
+     {
++        return false;
++#if 0
+         QAccessibleInterface *iface = interfaceFromId(objectId);
+         if (!iface || !iface->isValid()) {
+             __android_log_print(ANDROID_LOG_WARN, m_qtTag, "Accessibility: populateNode for Invalid ID");
+@@ -293,6 +295,7 @@ if (!clazz) { \
+         env->CallVoidMethod(node, m_setContentDescriptionMethodID, jdesc);
+ 
+         return true;
++#endif
+     }
+ 
+     static JNINativeMethod methods[] = {
+-- 
+2.34.1
+

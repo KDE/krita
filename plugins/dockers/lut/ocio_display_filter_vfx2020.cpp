@@ -28,6 +28,12 @@
 #define GL_RGB16F_ARB GL_RGB16F_EXT
 #endif
 
+#if defined(QT_OPENGL_ES_2) && !defined(QT_OPENGL_ES_3)
+#define GL_R32F GL_R32F_EXT
+#define GL_RED GL_RED_EXT
+#define GL_TEXTURE_WRAP_R GL_TEXTURE_WRAP_R_OES
+#endif
+
 #include "kis_context_thread_locale.h"
 
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
@@ -270,19 +276,21 @@ bool OcioDisplayFilter::updateShader()
         QOpenGLContext *ctx = QOpenGLContext::currentContext();
 
         KIS_ASSERT_RECOVER_RETURN_VALUE(ctx, false);
-        if (ctx->hasExtension("GL_EXT_texture_storage")) {
-            if (ctx->hasExtension("GL_OES_texture_half_float") && ctx->hasExtension("GL_OES_texture_half_float_linear")) {
+        if (ctx->format().majorVersion() >= 3) {
+            QOpenGLExtraFunctions *f = ctx->extraFunctions();
+            if (f) {
+                return updateShaderImpl(f);
+            }
+        } else if (ctx->hasExtension("GL_OES_texture_half_float") && ctx->hasExtension("GL_EXT_color_buffer_half_float")
+                && ctx->hasExtension("GL_OES_texture_half_float_linear")) {
                 QOpenGLExtraFunctions *f = ctx->extraFunctions();
                 if (f) {
                     return updateShaderImpl(f);
                 }
-            } else {
-                dbgKrita << "OcioDisplayFilter::updateShader (2020)" << "OpenGL ES v2+ support detected but no OES_texture_float"
-                             " or GL_EXT_color_buffer_float were found";
-                return false;
-            }
         } else {
-            dbgKrita << "OcioDisplayFilter::updateShader (2020)" << "OpenGL ES v2 support detected but GL_EXT_texture_storage was not found";
+            dbgKrita << "OcioDisplayFilter::updateShader (2020)"
+                     << "OpenGL ES v2+ support detected but no OES_texture_half_float,"
+                        "GL_EXT_color_buffer_half_float or GL_OES_texture_half_float_linear were found";
             return false;
         }
 #if defined(QT_OPENGL_3)

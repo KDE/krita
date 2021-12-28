@@ -103,12 +103,14 @@ KisApplicationArguments::KisApplicationArguments(const QApplication &app)
             // List according to https://dev.epicgames.com/docs/services/en-US/Interfaces/Auth/index.html#epicgameslauncher
             static const QStringList epicIgnoreArgsStart = {
                 QStringLiteral("AUTH_PASSWORD="),
+                QStringLiteral("AUTH_LOGIN="),
                 QStringLiteral("AUTH_TYPE="),
                 QStringLiteral("epicapp="),
                 QStringLiteral("epicenv="),
                 QStringLiteral("epicusername="),
                 QStringLiteral("epicuserid="),
                 QStringLiteral("epiclocale="),
+                QStringLiteral("epicsandboxid="),
             };
             static const QStringList epicIgnoreArgsExact = {
                 QStringLiteral("EpicPortal"),

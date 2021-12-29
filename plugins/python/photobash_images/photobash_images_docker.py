@@ -70,7 +70,7 @@ class PhotobashDocker(DockWidget):
 
     def setupInterface(self):
         # Window
-        self.setWindowTitle("Photobash Images")
+        self.setWindowTitle(i18nc("@title:window", "Photobash Images"))
 
         # Path Name
         self.directoryPlugin = str(os.path.dirname(os.path.realpath(__file__)))
@@ -138,13 +138,13 @@ class PhotobashDocker(DockWidget):
     def initialize(self):
         # initialize based on what was setup
         if self.directoryPath != "":
-            self.layout.changePathButton.setText("Change References Folder")
+            self.layout.changePathButton.setText(i18n("Change References Folder"))
             self.getImagesFromDirectory()
             self.layout.fitCanvasCheckBox.setChecked(self.fitCanvasChecked)
 
         # initial organization of images with favourites
         self.reorganizeImages()
-        self.layout.scaleSliderLabel.setText(f"Image Scale : 100%")
+        self.layout.scaleSliderLabel.setText(i18n("Image Scale: {0}%").format(100))
 
         self.updateImages()
 
@@ -216,7 +216,7 @@ class PhotobashDocker(DockWidget):
 
     def updateScale(self, value):
         self.currImageScale = value
-        self.layout.scaleSliderLabel.setText(f"Image Scale : {self.currImageScale}%")
+        self.layout.scaleSliderLabel.setText(i18n("Image Scale: {0}%").format(self.currImageScale))
 
         # update layout buttons, needed when dragging
         self.imageWidget.setImageScale(self.currImageScale)
@@ -318,7 +318,7 @@ class PhotobashDocker(DockWidget):
 
         # currPage is the index, but we want to present it in a user friendly way,
         # so it starts at 1
-        self.layout.paginationLabel.setText(f"Page: {currPage}/{str(maxNumPage)}")
+        self.layout.paginationLabel.setText(i18n("Page: {0}/{1}").format(currPage, maxNumPage))
         # correction since array begins at 0
         self.layout.paginationSlider.setRange(0, maxNumPage - 1)
         self.layout.paginationSlider.setSliderPosition(self.currPage)
@@ -454,11 +454,11 @@ class PhotobashDocker(DockWidget):
         fileDialog.setFileMode(QFileDialog.DirectoryOnly);
 
         if self.directoryPath == "":
-            self.directoryPath = fileDialog.getExistingDirectory(self.mainWidget, "Change Directory for Images", QStandardPaths.writableLocation(QStandardPaths.PicturesLocation))
-            Application.writeSetting(self.applicationName, self.referencesSetting, self.directoryPath)
+            dialogDirectory = QStandardPaths.writableLocation(QStandardPaths.PicturesLocation)
         else:
-            self.directoryPath = fileDialog.getExistingDirectory(self.mainWidget, "Change Directory for Images", self.directoryPath)
-            Application.writeSetting(self.applicationName, self.referencesSetting, self.directoryPath)
+            dialogDirectory = self.directoryPath
+        self.directoryPath = fileDialog.getExistingDirectory(self.mainWidget, i18n("Change Directory for Images"), dialogDirectory)
+        Application.writeSetting(self.applicationName, self.referencesSetting, self.directoryPath)
 
         self.favouriteImages = []
         self.foundImages = []
@@ -466,7 +466,7 @@ class PhotobashDocker(DockWidget):
         Application.writeSetting(self.applicationName, self.foundFavouritesSetting, "")
 
         if self.directoryPath == "":
-            self.layout.changePathButton.setText("Set References Folder")
+            self.layout.changePathButton.setText(i18n("Set References Folder"))
         else:
-            self.layout.changePathButton.setText("Change References Folder")
+            self.layout.changePathButton.setText(i18n("Change References Folder"))
         self.getImagesFromDirectory()

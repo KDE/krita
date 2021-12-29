@@ -23,14 +23,6 @@ public:
     explicit KoDockWidgetTitleBar(QDockWidget *dockWidget);
     ~KoDockWidgetTitleBar() override;
 
-    QSize minimumSizeHint() const override; ///< reimplemented from QWidget
-    QSize sizeHint() const override;  ///< reimplemented from QWidget
-
-    enum TextVisibilityMode {TextCanBeInvisible, FullTextAlwaysVisible};
-    /// Define whether the minimal width should ensure that the full text is visible.
-    /// textVisibilityMode is FullTextAlwaysVisible by default
-    void setTextVisibilityMode(TextVisibilityMode textVisibilityMode);
-
     void updateIcons();
 
 public Q_SLOTS:
@@ -43,6 +35,7 @@ private:
     Q_PRIVATE_SLOT(d, void toggleFloating())
     Q_PRIVATE_SLOT(d, void topLevelChanged(bool topLevel))
     Q_PRIVATE_SLOT(d, void featuresChanged(QDockWidget::DockWidgetFeatures))
+    Q_PRIVATE_SLOT(d, void dockWidgetTitleChanged(const QString &title))
 
     class Private;
     Private * const d;

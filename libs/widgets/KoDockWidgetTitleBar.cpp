@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    SPDX-FileCopyrightText: 2007 Marijn Kruisselbrink <mkruisselbrink@kde.org>
    SPDX-FileCopyrightText: 2007 Thomas Zander <zander@kde.org>
+   SPDX-FileCopyrightText: 2021 Alvin Wong <alvin@alvinhc.com>
 
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -17,16 +18,20 @@
 
 #include <QAbstractButton>
 #include <QAction>
+#include <QHBoxLayout>
 #include <QLabel>
-#include <QLayout>
 #include <QStyle>
 #include <QStylePainter>
 #include <QStyleOptionFrame>
+
+#include <KSqueezedTextLabel>
 
 static inline bool hasFeature(const QDockWidget *dockwidget, QDockWidget::DockWidgetFeature feature)
 {
     return (dockwidget->features() & feature) == feature;
 }
+
+constexpr int SPACING = 6;
 
 KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
         : QWidget(dockWidget), d(new Private(this))
@@ -53,12 +58,26 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
     d->lockButton->setIcon(d->lockIcon);
     connect(d->lockButton, SIGNAL(toggled(bool)), SLOT(setLocked(bool)));
     d->lockButton->setVisible(true);
-    d->lockable = true;
     d->lockButton->setToolTip(i18nc("@info:tooltip", "Lock Docker"));
     d->lockButton->setStyleSheet("border: 0");
 
+    d->updateButtonSizes();
+
+    d->titleLabel = new KSqueezedTextLabel(this);
+    d->titleLabel->setTextElideMode(Qt::ElideRight);
+    d->titleLabel->setText(dockWidget->windowTitle());
+
+    QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(2, 0, 2, 0);
+    layout->setSpacing(SPACING);
+    layout->addWidget(d->lockButton);
+    layout->addWidget(d->titleLabel, 1);
+    layout->addWidget(d->floatButton);
+    layout->addWidget(d->closeButton);
+
     connect(dockWidget, SIGNAL(featuresChanged(QDockWidget::DockWidgetFeatures)), SLOT(featuresChanged(QDockWidget::DockWidgetFeatures)));
     connect(dockWidget, SIGNAL(topLevelChanged(bool)), SLOT(topLevelChanged(bool)));
+    connect(dockWidget, SIGNAL(windowTitleChanged(const QString &)), SLOT(dockWidgetTitleChanged(const QString &)));
 
     d->featuresChanged(QDockWidget::NoDockWidgetFeatures);
 }
@@ -66,68 +85,6 @@ KoDockWidgetTitleBar::KoDockWidgetTitleBar(QDockWidget* dockWidget)
 KoDockWidgetTitleBar::~KoDockWidgetTitleBar()
 {
     delete d;
-}
-
-QSize KoDockWidgetTitleBar::minimumSizeHint() const
-{
-    return sizeHint();
-}
-
-QSize KoDockWidgetTitleBar::sizeHint() const
-{
-    if (isHidden()) {
-        return QSize(0, 0);
-    }
-
-    QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
-
-    int mw = q->style()->pixelMetric(QStyle::PM_DockWidgetTitleMargin, 0, q);
-    int fw = q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q);
-
-    // get size of buttons...
-    QSize closeSize(0, 0);
-    if (d->closeButton && hasFeature(q, QDockWidget::DockWidgetClosable)) {
-        closeSize = d->closeButton->size();
-    }
-
-    QSize floatSize(0, 0);
-    if (d->floatButton && hasFeature(q, QDockWidget::DockWidgetFloatable)) {
-        floatSize = d->floatButton->size();
-    }
-
-    QSize lockSize(0, 0);
-    if (d->lockButton && d->lockable) {
-        lockSize = d->lockButton->size();
-    }
-
-    int buttonHeight = qMax(qMax(closeSize.height(), floatSize.height()), lockSize.height()) + 2;
-    int buttonWidth = closeSize.width() + lockSize.width() + floatSize.width();
-
-    int height = buttonHeight;
-    if (d->textVisibilityMode == FullTextAlwaysVisible) {
-        // get font size
-        QFontMetrics titleFontMetrics = q->fontMetrics();
-        int fontHeight = titleFontMetrics.lineSpacing() + 2 * mw;
-
-        height = qMax(height, fontHeight);
-    }
-
-    if (d->textVisibilityMode == FullTextAlwaysVisible) {
-        int titleWidth = 0;
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
-        titleWidth = q->fontMetrics().horizontalAdvance(q->windowTitle()) + 2 * mw;
-#else
-        titleWidth = q->fontMetrics().width(q->windowTitle()) + 2 * mw;
-#endif
-
-
-
-        return QSize(buttonWidth /*+ height*/ + 2*mw + 2*fw + titleWidth, height);
-    } else if (q->widget()) {
-        return QSize(qMin(q->widget()->minimumSizeHint().width(), buttonWidth), height);
-    } else {
-        return QSize(buttonWidth, height);
-    }
 }
 
 void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
@@ -143,7 +100,7 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
     titleOpt.initFrom(q);
 
     QSize lockButtonSize(0,0);
-    if (d->lockable && d->lockButton->isVisible()) {
+    if (d->lockButton->isVisible()) {
         lockButtonSize = d->lockButton->size();
     }
 
@@ -156,7 +113,10 @@ void KoDockWidgetTitleBar::paintEvent(QPaintEvent*)
 
     titleOpt.rect = QRect(QPoint(fw + mw + lockButtonSize.width() + fusionTextOffset, 0),
                           QSize(geometry().width() - (fw * 2) -  mw - lockButtonSize.width(), geometry().height()));
-    titleOpt.title = q->windowTitle();
+    // We don't print the title text here. Instead, we have a QLabel.
+    //   titleOpt.title = q->windowTitle();
+    // FIXME: Maybe we just shouldn't use a QStylePainter at all?
+    titleOpt.title = QString();
     titleOpt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
     titleOpt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);
     p.drawControl(QStyle::CE_DockWidgetTitle, titleOpt);
@@ -166,66 +126,11 @@ void KoDockWidgetTitleBar::resizeEvent(QResizeEvent*)
 {
     QDockWidget *q = qobject_cast<QDockWidget*>(parentWidget());
 
-    int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
-
-    QStyleOptionDockWidget opt;
-    opt.initFrom(q);
-    opt.rect = QRect(QPoint(fw, fw), QSize(geometry().width() - (fw * 2), geometry().height() - (fw * 2)));
-    opt.title = q->windowTitle();
-    opt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
-    opt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);
-
-    QRect floatRect = q->style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, q);
-    // To improve the look with Fusion which has weird 13x15 button sizes
-    bool styleIsFusion = false;
-    QSize overrideSize = QSize(16, 16);
-    if (floatRect.width() < 16) {
-        styleIsFusion = true;
-        floatRect.setSize(overrideSize);
-        floatRect.moveLeft(floatRect.x() - 15);
-    }
-
-    if (!floatRect.isNull())
-        d->floatButton->setGeometry(floatRect);
-
-    QRect closeRect = q->style()->subElementRect(QStyle::SE_DockWidgetCloseButton, &opt, q);
-    // To improve the look with Fusion which has weird 13x15 button sizes
-    if (styleIsFusion) {
-        closeRect.setSize(overrideSize);
-        closeRect.moveLeft(closeRect.x() - 6);
-    }
-
-    if (!closeRect.isNull())
-        d->closeButton->setGeometry(closeRect);
-
-    QSize lockRectSize = d->lockButton->size();
-    if (!closeRect.isNull()) {
-        lockRectSize = d->closeButton->size();
-    } else if (!floatRect.isNull()) {
-        lockRectSize = d->floatButton->size();
-    }
-
-    if (q->isFloating() || (width() < (closeRect.width() + lockRectSize.width()) + 50)) {
+    if (q->isFloating() || (width() < (d->closeButton->width() + d->floatButton->width() + d->lockButton->width()) + 32)) {
         d->lockButton->setVisible(false);
-        d->lockable = false;
     } else {
         d->lockButton->setVisible(true);
-        d->lockable = true;
     }
-
-    int offset = 0;
-    // To improve the look with Fusion which has weird 13x15 button sizes
-    if (styleIsFusion) {
-        offset = 3;
-    }
-
-    // Just centre the button vertically to prevent the button from shifting
-    // up and down when toggling due to the close and float buttons changing
-    // visibility.
-    int top = (height() - lockRectSize.height()) * 0.5;
-
-    QRect lockRect = QRect(QPoint(fw + 2 + offset, top), lockRectSize);
-    d->lockButton->setGeometry(lockRect);
 }
 
 void KoDockWidgetTitleBar::setLocked(bool locked)
@@ -254,12 +159,6 @@ void KoDockWidgetTitleBar::setLocked(bool locked)
     q->setProperty("Locked", locked);
 }
 
-
-void KoDockWidgetTitleBar::setTextVisibilityMode(TextVisibilityMode textVisibilityMode)
-{
-    d->textVisibilityMode = textVisibilityMode;
-}
-
 void KoDockWidgetTitleBar::updateIcons()
 {
     d->updateIcons();
@@ -286,7 +185,13 @@ void KoDockWidgetTitleBar::Private::featuresChanged(QDockWidget::DockWidgetFeatu
     closeButton->setVisible(hasFeature(q, QDockWidget::DockWidgetClosable));
     floatButton->setVisible(hasFeature(q, QDockWidget::DockWidgetFloatable));
 
+    updateButtonSizes();
     thePublic->resizeEvent(0);
+}
+
+void KoDockWidgetTitleBar::Private::dockWidgetTitleChanged(const QString &title)
+{
+    titleLabel->setText(title);
 }
 
 
@@ -300,6 +205,41 @@ void KoDockWidgetTitleBar::Private::updateIcons()
     closeButton->setIcon(kisIcon("docker_close"));
 
     thePublic->resizeEvent(0);
+}
+
+void KoDockWidgetTitleBar::Private::updateButtonSizes()
+{
+    const QDockWidget *q = qobject_cast<QDockWidget*>(thePublic->parentWidget());
+
+    const int fw = q->isFloating() ? q->style()->pixelMetric(QStyle::PM_DockWidgetFrameWidth, 0, q) : 0;
+
+    QStyleOptionDockWidget opt;
+    opt.initFrom(q);
+    opt.rect = QRect(QPoint(fw, fw), QSize(thePublic->geometry().width() - (fw * 2), thePublic->geometry().height() - (fw * 2)));
+    opt.title = q->windowTitle();
+    // Originally it was:
+    //   opt.closable = hasFeature(q, QDockWidget::DockWidgetClosable);
+    // but I think we better just always pretend the close button is visible to
+    // get the button size.
+    opt.closable = true;
+    opt.floatable = hasFeature(q, QDockWidget::DockWidgetFloatable);
+
+    // Again, we just always use the size of the close button, so we don't
+    // need to get the size of the float button...
+    //   QRect floatRect = q->style()->subElementRect(QStyle::SE_DockWidgetFloatButton, &opt, q);
+    const QRect closeRect = q->style()->subElementRect(QStyle::SE_DockWidgetCloseButton, &opt, q);
+    QSize buttonSize = closeRect.size();
+    if (buttonSize.width() < 16) {
+        // To improve the look with Fusion which has weird 13x15 button sizes
+        buttonSize = QSize(16, 16);
+    } else if (buttonSize.width() != buttonSize.height()) {
+        // Just make sure the button is square...
+        buttonSize.setHeight(buttonSize.width());
+    }
+
+    floatButton->setFixedSize(buttonSize);
+    closeButton->setFixedSize(buttonSize);
+    lockButton->setFixedSize(buttonSize);
 }
 
 //have to include this because of Q_PRIVATE_SLOT

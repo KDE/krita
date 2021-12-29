@@ -1,0 +1,32 @@
+From 8ddbea35dce657ce58df76b499b55f71c1266265 Mon Sep 17 00:00:00 2001
+From: Kai Koehne <kai.koehne@qt.io>
+Date: Tue, 28 Apr 2020 09:33:30 +0200
+Subject: [PATCH] Android: Rename rs locale to se
+
+rs is the country code for Republic of Serbia, but se is the Serbian
+Language.
+
+According to the  IANA  subtag registry that is referenced in the error
+message, the language subtag for Serbian is se.
+
+  https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry
+
+This fixes an error when uploading some apps to the Google Play Store.
+
+Fixes: QTBUG-83780
+Pick-to: 5.15
+Change-Id: I532a3082ca954a78343c873246b09a14d7a80a0e
+Reviewed-by: BogDan Vatra <bogdan@kdab.com>
+(cherry picked from commit 0303d8ddfa968e0c5a9ac08a12836ea3f34d4088)
+---
+ src/android/java/res/{values-rs => values-se}/strings.xml | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ rename src/android/java/res/{values-rs => values-se}/strings.xml (100%)
+
+diff --git a/src/android/java/res/values-rs/strings.xml b/src/android/java/res/values-se/strings.xml
+similarity index 100%
+rename from src/android/java/res/values-rs/strings.xml
+rename to src/android/java/res/values-se/strings.xml
+-- 
+2.34.1
+

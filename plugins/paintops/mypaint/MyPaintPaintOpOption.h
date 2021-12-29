@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2020 Ashwin Dhakaita <ashwingpdhakaita@gmail.com>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -25,6 +26,8 @@ class KisMyPaintOpOptionsWidget;
 class KisMyPaintOpOption : public KisPaintOpOption
 {
 public:
+    enum PaintopCategory { BASIC, AIRBRUSH, COLOR, SPEED, DABS, OPACITY, TRACKING, STROKE, SMUDGE, CUSTOM };
+
     KisMyPaintOpOption();
     ~KisMyPaintOpOption() override;
 

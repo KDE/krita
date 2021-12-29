@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2008 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -7,8 +8,10 @@
 #define KIS_PAINTOP_SETTINGS_WIDGET_H
 
 #include <kritaui_export.h>
-#include "kis_paintop_option.h"
+
 #include <brushengine/kis_paintop_config_widget.h>
+
+#include "kis_paintop_option.h"
 
 class KisPropertiesConfiguration;
 class KisPaintOpConfigWidget;
@@ -31,7 +34,6 @@ public:
 
     void addPaintOpOption(KisPaintOpOption *option);
     void addPaintOpOption(KisPaintOpOption *option, KisPaintOpOption::PaintopCategory category);
-    [[deprecated("Use the PaintopCategory enum")]] void addPaintOpOption(KisPaintOpOption *option, QString category);
 
     /// Reimplemented
     void setConfiguration(const KisPropertiesConfigurationSP  config) override;
@@ -59,6 +61,7 @@ private Q_SLOTS:
     void slotEntryChecked(const QModelIndex &index);
 
 protected:
+    void addPaintOpOption(KisPaintOpOption *option, QString category);
     virtual void notifyPageChanged();
 
 private:

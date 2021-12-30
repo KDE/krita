@@ -39,6 +39,7 @@
 #include <kis_debug.h>
 #include <KisPreExportChecker.h>
 #include <KisPart.h>
+#include "kis_assert.h"
 #include "kis_config.h"
 #include "KisImportExportFilter.h"
 #include "KisDocument.h"
@@ -226,7 +227,10 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
                 continue;
             }
 
+            KIS_ASSERT_RECOVER_NOOP(json.value("X-KDE-Weight").isDouble());
+
             int w = json.value("X-KDE-Weight").toInt();
+
             if (w > weight) {
                 delete filter;
                 filter = f;

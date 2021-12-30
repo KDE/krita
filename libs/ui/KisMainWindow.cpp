@@ -2259,7 +2259,7 @@ QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 
     if (!d->dockWidgetsMap.contains(factory->id())) {
         dockWidget = factory->createDockWidget();
-        KAcceleratorManager::setNoAccel(dockWidget->titleBarWidget());
+        KAcceleratorManager::setNoAccel(dockWidget);
 
         // It is quite possible that a dock factory cannot create the dock; don't
         // do anything in that case.

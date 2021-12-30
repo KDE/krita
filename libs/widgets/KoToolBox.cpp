@@ -239,8 +239,14 @@ void KoToolBox::paintEvent(QPaintEvent *)
             style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &styleoption, &painter);
         }
 
-        if (section->separators() & Section::SeparatorLeft) {
+        if (section->separators() & Section::SeparatorLeft && section->isLeftToRight()) {
             int x = section->x() - halfSpacing;
+            styleoption.state = QStyle::State_Horizontal;
+            styleoption.rect = QRect(x-1, section->y(), 2, section->height());
+
+            style()->drawPrimitive(QStyle::PE_IndicatorToolBarSeparator, &styleoption, &painter);
+        } else if (section->separators() & Section::SeparatorLeft && section->isRightToLeft()) {
+            int x = section->x() + section->width() + halfSpacing;
             styleoption.state = QStyle::State_Horizontal;
             styleoption.rect = QRect(x-1, section->y(), 2, section->height());
 

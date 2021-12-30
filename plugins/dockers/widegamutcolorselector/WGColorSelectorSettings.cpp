@@ -113,6 +113,16 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.set(WGConfig::colorHistory.maxCount, m_ui->sbHistoryMaxPatches->value());
     cfg.set(WGConfig::colorHistory.rows, m_ui->sbHistoryRows->value());
     cfg.set(WGConfig::colorHistory.scrolling, static_cast<WGConfig::Scrolling>(m_ui->cbScrolling->currentIndex()));
+    cfg.set(WGConfig::colorHistoryShowClearButton, m_ui->ckHistoryClearButton->isChecked());
+    // Common Colors (Colors from Image)
+    cfg.set(WGConfig::commonColorsEnabled, m_ui->commonColorsGroupBox->isChecked());
+    cfg.set(WGConfig::commonColors.orientation, m_ui->rbCommonColorsHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
+    cfg.set(WGConfig::commonColors.patchSize, { m_ui->sbCommonColorsPatchWidth->value(),
+                                                m_ui->sbCommonColorsPatchHeight->value() });
+    cfg.set(WGConfig::commonColors.maxCount, m_ui->sbCommonColorsPatches->value());
+    cfg.set(WGConfig::commonColors.rows, m_ui->sbCommonColorsRows->value());
+    cfg.set(WGConfig::commonColors.scrolling, static_cast<WGConfig::Scrolling>(m_ui->cbCommonColorsScrolling->currentIndex()));
+    cfg.set(WGConfig::commonColorsAutoUpdate, m_ui->ckCCAutoUpdate->isChecked());
 
     WGConfig::notifier()->notifyConfigChanged();
     WGConfig::notifier()->notifySelectorConfigChanged();
@@ -166,6 +176,22 @@ void WGColorSelectorSettings::loadPreferences()
     m_ui->sbHistoryMaxPatches->setValue(cfg.get(WGConfig::colorHistory.maxCount));
     m_ui->sbHistoryRows->setValue(cfg.get(WGConfig::colorHistory.rows));
     m_ui->cbScrolling->setCurrentIndex(static_cast<int>(cfg.get(WGConfig::colorHistory.scrolling)));
+    m_ui->ckHistoryClearButton->setChecked(cfg.get(WGConfig::colorHistoryShowClearButton));
+    // Common Colors (Colors from Image)
+    m_ui->commonColorsGroupBox->setChecked(cfg.get(WGConfig::commonColorsEnabled));
+    patchOrientation = cfg.get(WGConfig::commonColors.orientation);
+    if (patchOrientation == Qt::Horizontal) {
+        m_ui->rbCommonColorsHorizontal->setChecked(true);
+    } else {
+        m_ui->rbCommonColorsVertical->setChecked(true);
+    }
+    colorPatchSize = cfg.get(WGConfig::commonColors.patchSize);
+    m_ui->sbCommonColorsPatchWidth->setValue(colorPatchSize.width());
+    m_ui->sbCommonColorsPatchHeight->setValue(colorPatchSize.height());
+    m_ui->sbCommonColorsPatches->setValue(cfg.get(WGConfig::commonColors.maxCount));
+    m_ui->sbCommonColorsRows->setValue(cfg.get(WGConfig::commonColors.rows));
+    m_ui->cbCommonColorsScrolling->setCurrentIndex(static_cast<int>(cfg.get(WGConfig::commonColors.scrolling)));
+    m_ui->ckCCAutoUpdate->setChecked(cfg.get(WGConfig::commonColorsAutoUpdate));
 }
 
 void WGColorSelectorSettings::loadDefaultPreferences()

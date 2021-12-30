@@ -13,6 +13,7 @@
 
 class KisUniqueColorSet;
 class KoColorDisplayRendererInterface;
+class QToolButton;
 
 namespace WGConfig {
 struct ColorPatches;
@@ -22,17 +23,25 @@ class WGColorPatches : public WGSelectorWidgetBase
 {
     Q_OBJECT
 public:
+    enum Preset {
+        None,
+        History,
+        CommonColors
+    };
+
     explicit WGColorPatches(KisUniqueColorSet *history, QWidget *parent = nullptr);
 
     KisUniqueColorSet* colorHistory() const;
     void updateSettings() override;
-    void setConfigSource(const WGConfig::ColorPatches *source);
+    void setPreset(Preset preset);
     QPoint popupOffset() const override;
     /*! set buttons, that should be drawn additionally to the patches
      * this class takes ownership of them and will delete them
      * they will be resized to the patchsize */
-    void setAdditionalButtons(QList<QWidget*> buttonList);
+    void setAdditionalButtons(QList<QToolButton*> buttonList);
     void setColorHistory(KisUniqueColorSet *history);
+public Q_SLOTS:
+    void updateIcons();
 protected:
     bool event(QEvent *event) override;
     bool eventFilter(QObject *watched, QEvent *e) override;
@@ -48,10 +57,12 @@ protected:
     QRect patchRect(int gridIndex) const;
     QPoint scrollOffset() const;
     void updateMetrics();
+    QToolButton* fetchButton(QList<QToolButton*> &recycleList);
+    void reconnectButtons(KisUniqueColorSet *oldSet, KisUniqueColorSet *newSet);
 
 private:
     QPointer<KisUniqueColorSet> m_colors;
-    QList<QWidget*> m_buttonList;
+    QList<QToolButton*> m_buttonList;
     Qt::Orientation m_orientation {Qt::Horizontal};
     const WGConfig::ColorPatches *m_configSource {0};
     QWidget *m_viewport {0};
@@ -67,6 +78,7 @@ private:
     int m_mouseIndex {-1};
     bool m_allowScrolling {true};
     bool m_scrollInline {true};
+    Preset m_preset {None};
 
 Q_SIGNALS:
     void sigColorChanged(const KoColor &color);

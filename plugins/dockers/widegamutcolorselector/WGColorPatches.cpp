@@ -5,15 +5,18 @@
  */
 
 #include "WGColorPatches.h"
+#include "WGCommonColorSet.h"
 #include "WGConfig.h"
 
 #include <kis_display_color_converter.h>
+#include <kis_icon_utils.h>
 #include <KisUniqueColorSet.h>
 
 #include <QMouseEvent>
 #include <QPainter>
 #include <QScroller>
 #include <QScrollEvent>
+#include <QToolButton>
 
 namespace {
     inline QPoint transposed(QPoint point) {
@@ -57,6 +60,7 @@ void WGColorPatches::updateSettings()
     m_patchHeight = patchSize.height();
     m_orientation = cfg.get(m_configSource->orientation);
     m_numLines = cfg.get(m_configSource->rows);
+    m_patchCount = cfg.get(m_configSource->maxCount);
 
     WGConfig::Scrolling scrolling = cfg.get(m_configSource->scrolling);
     m_allowScrolling = scrolling != WGConfig::ScrollNone;
@@ -67,6 +71,30 @@ void WGColorPatches::updateSettings()
     } else {
         setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     }
+
+    // redo buttons
+    QList<QToolButton*> buttons;
+    if (m_preset == History) {
+        bool showClearButton = cfg.get(WGConfig::colorHistoryShowClearButton);
+        if (showClearButton) {
+            buttons.append(fetchButton(m_buttonList));
+        }
+    }
+    else if (m_preset == CommonColors) {
+        if (uiMode() == PopupMode) {
+            // Small workaround: override patch limit because it's basically a
+            // property of WGCommonColorSet.
+            m_patchCount = cfg.get(WGConfig::commonColors.maxCount);
+        }
+        buttons.append(fetchButton(m_buttonList));
+    }
+    // clear leftover buttons (if any) and set new list
+    while (m_buttonList.size() > 0) {
+        delete m_buttonList.takeLast();
+    }
+    m_buttonList = buttons;
+    reconnectButtons(m_colors, m_colors);
+    updateIcons();
 
     // recalc metrics and resize content widget
     m_patchesPerLine = -1; // ensure resizeEvent() sets new content dimensions
@@ -87,9 +115,32 @@ void WGColorPatches::updateSettings()
     m_contentWidget->update();
 }
 
-void WGColorPatches::setConfigSource(const WGConfig::ColorPatches *source)
+void WGColorPatches::setPreset(WGColorPatches::Preset preset)
 {
-    m_configSource = source;
+    if (preset == m_preset) {
+        return;
+    }
+
+    m_preset = preset;
+
+    if (uiMode() == PopupMode) {
+        m_configSource = &WGConfig::popupPatches;
+    }
+    else {
+        switch (preset) {
+        case History:
+            m_configSource = &WGConfig::colorHistory;
+            break;
+        case CommonColors:
+            m_configSource = &WGConfig::commonColors;
+            break;
+        case None:
+        default:
+            m_configSource = nullptr;
+        }
+    }
+
+    updateSettings();
 }
 
 QPoint WGColorPatches::popupOffset() const
@@ -97,14 +148,18 @@ QPoint WGColorPatches::popupOffset() const
     return patchRect(m_buttonList.size()).center();
 }
 
-void WGColorPatches::setAdditionalButtons(QList<QWidget *> buttonList)
+void WGColorPatches::setAdditionalButtons(QList<QToolButton *> buttonList)
 {
     for (int i = 0; i < buttonList.size(); i++) {
         buttonList[i]->setParent(this);
-        buttonList[i]->setGeometry(patchRect(i));
+        //buttonList[i]->setAutoFillBackground(true);
         buttonList[i]->raise();
     }
     m_buttonList = buttonList;
+    // recalc metrics and resize content widget
+    m_patchesPerLine = -1; // ensure resizeEvent() sets new content dimensions
+    QResizeEvent dummyEvent(size(), size());
+    resizeEvent(&dummyEvent);
 }
 
 void WGColorPatches::setColorHistory(KisUniqueColorSet *history)
@@ -119,7 +174,21 @@ void WGColorPatches::setColorHistory(KisUniqueColorSet *history)
         connect(history, SIGNAL(sigReset()), m_contentWidget, SLOT(update()));
         m_scrollValue = 0;
     }
+    reconnectButtons(m_colors, history);
     m_colors = history;
+}
+
+void WGColorPatches::updateIcons()
+{
+    if (m_buttonList.isEmpty() || m_preset == None) {
+        return;
+    }
+    if (m_preset == History) {
+        m_buttonList.first()->setIcon(KisIconUtils::loadIcon("edit-clear-16"));
+    }
+    else if (m_preset == CommonColors) {
+        m_buttonList.first()->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
+    }
 }
 
 bool WGColorPatches::event(QEvent *event)
@@ -427,6 +496,38 @@ void WGColorPatches::updateMetrics()
             int available = (m_orientation == Qt::Horizontal) ? height() : width();
             int required = m_totalLines * m_patchHeight;
             m_maxScroll = qMax(0, required - available);
+        }
+    }
+}
+
+QToolButton *WGColorPatches::fetchButton(QList<QToolButton *> &recycleList)
+{
+    if (recycleList.size() > 0) {
+        return recycleList.takeLast();
+    }
+    QToolButton *button = new QToolButton(this);
+    button->setAutoRaise(true);
+    button->show();
+    return button;
+}
+
+void WGColorPatches::reconnectButtons(KisUniqueColorSet *oldSet, KisUniqueColorSet *newSet)
+{
+    if (m_preset == History && !m_buttonList.isEmpty()) {
+        QToolButton *clearButton = m_buttonList.first();
+        if (oldSet) {
+            clearButton->disconnect(oldSet);
+        }
+        connect(clearButton, SIGNAL(clicked(bool)), newSet, SLOT(clear()));
+    }
+    else if (m_preset == CommonColors && !m_buttonList.isEmpty()) {
+        QToolButton *reloadButton = m_buttonList.first();
+        if (oldSet) {
+            reloadButton->disconnect(oldSet);
+        }
+        WGCommonColorSet *ccSet = qobject_cast<WGCommonColorSet *>(newSet);
+        if (ccSet) {
+            connect(reloadButton, SIGNAL(clicked(bool)), ccSet, SLOT(slotUpdateColors()));
         }
     }
 }

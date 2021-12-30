@@ -258,7 +258,7 @@ void WGActionManager::slotShowColorHistoryPopup()
         m_colorHistoryPopup = new WGSelectorPopup;
         WGColorPatches *history = new WGColorPatches(m_docker->colorHistory());
         history->setUiMode(WGSelectorWidgetBase::PopupMode);
-        history->setConfigSource(&WGConfig::popupPatches);
+        history->setPreset(WGColorPatches::History);
         history->updateSettings();
         updateWidgetSize(history, WGConfig::Accessor().get(WGConfig::popupSize));
         history->setDisplayConverter(m_docker->displayColorConverter());

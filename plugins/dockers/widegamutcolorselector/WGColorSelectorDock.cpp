@@ -10,6 +10,7 @@
 #include "WGColorSelectorSettings.h"
 #include "WGColorPatches.h"
 #include "WGColorPreviewToolTip.h"
+#include "WGCommonColorSet.h"
 #include "WGConfig.h"
 #include "WGQuickSettingsWidget.h"
 #include "WGShadeSelector.h"
@@ -88,10 +89,17 @@ WGColorSelectorDock::WGColorSelectorDock()
     m_colorHistory = new KisUniqueColorSet(this);
 
     m_history = new WGColorPatches(m_colorHistory, mainWidget);
-    m_history->setConfigSource(&WGConfig::colorHistory);
-    mainWidget->layout()->addWidget(m_history);
+    m_history->setPreset(WGColorPatches::History);
     connect(m_history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_history, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
+
+    // Common Colors (Colors from Image)
+    m_commonColorSet = new WGCommonColorSet(this);
+
+    m_commonColors = new WGColorPatches(m_commonColorSet, mainWidget);
+    m_commonColors->setPreset(WGColorPatches::CommonColors);
+    connect(m_commonColors, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
+    connect(m_commonColors, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
     connect(WGConfig::notifier(), SIGNAL(configChanged()), SLOT(slotConfigurationChanged()));
 
@@ -165,6 +173,8 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
         m_colorModelFG->setDisplayRenderer(dri);
         m_colorModelBG->setDisplayRenderer(dri);
         m_history->setDisplayConverter(m_canvas->displayColorConverter());
+        m_commonColors->setDisplayConverter(m_canvas->displayColorConverter());
+        m_commonColorSet->setImage(m_canvas->image());
         //m_toggle->setBackgroundColor(dri->toQColor(color));
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
         connect(m_canvas->resourceManager(), SIGNAL(canvasResourceChanged(int,QVariant)),
@@ -194,6 +204,8 @@ void WGColorSelectorDock::unsetCanvas()
     m_actionManager->setCanvas(0, 0);
     m_selector->setDisplayRenderer(0);
     m_history->setDisplayConverter(0);
+    m_commonColors->setDisplayConverter(0);
+    m_commonColorSet->setImage(KisImageSP());
     m_canvas = 0;
 }
 
@@ -218,7 +230,9 @@ void WGColorSelectorDock::updateLayout()
     Qt::Orientation historyOrientation = cfg.get(WGConfig::colorHistory.orientation);
 
     m_verticalElementsLayout->removeWidget(m_history);
+    m_verticalElementsLayout->removeWidget(m_commonColors);
     m_mainWidgetLayout->removeWidget(m_history);
+    m_mainWidgetLayout->removeWidget(m_commonColors);
 
     if (historyEnabled) {
         if (historyOrientation == Qt::Vertical) {
@@ -232,6 +246,23 @@ void WGColorSelectorDock::updateLayout()
     else {
         m_history->hide();
     }
+
+    bool commonColorsEnabled = cfg.get(WGConfig::commonColorsEnabled);
+    Qt::Orientation commonColorsOrientation = cfg.get(WGConfig::commonColors.orientation);
+
+    if (commonColorsEnabled) {
+        if (commonColorsOrientation == Qt::Vertical) {
+            m_verticalElementsLayout->addWidget(m_commonColors);
+        }
+        else {
+            m_mainWidgetLayout->addWidget(m_commonColors);
+        }
+        m_commonColors->show();
+    }
+    else {
+        m_commonColors->hide();
+    }
+
 }
 
 void WGColorSelectorDock::slotConfigurationChanged()
@@ -245,6 +276,8 @@ void WGColorSelectorDock::slotConfigurationChanged()
     m_selector->setConfiguration(&selectorCfg);
     m_shadeSelector->updateSettings();
     m_history->updateSettings();
+    m_commonColors->updateSettings();
+    m_commonColorSet->setAutoUpdate(cfg.get(WGConfig::commonColorsAutoUpdate));
     // Quick settings menu
     if (cfg.get(WGConfig::quickSettingsEnabled)) {
         if (!m_configButton->menu()) {

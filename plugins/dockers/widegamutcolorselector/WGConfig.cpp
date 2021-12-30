@@ -178,6 +178,14 @@ const ColorPatches colorHistory {
     { "colorHistory.scrolling", ScrollLongitudinal, ScrollNone, ScrollLaterally, true }
 };
 
+const ColorPatches commonColors {
+    { "commonColors.orientation", Qt::Horizontal, Qt::Horizontal, Qt::Vertical, true },
+    { "commonColors.patchSize", QSize(16,16), QSize(10,10), QSize(99,99), true },
+    { "commonColors.maxCount", 20, 2, 200, true },
+    { "commonColors.rows", 1, 1, 20, true },
+    { "commonColors.scrolling", ScrollLongitudinal, ScrollNone, ScrollLaterally, true }
+};
+
 const ColorPatches popupPatches {
     { "popupColorPatchOrientation", Qt::Horizontal, Qt::Horizontal, Qt::Vertical, true },
     { "popupColorPatchSize", QSize(32,32), QSize(10,10), QSize(99,99), true },
@@ -187,6 +195,9 @@ const ColorPatches popupPatches {
 };
 
 const GenericSetting<bool> colorHistoryEnabled {"colorHistoryEnabled", true};
+const GenericSetting<bool> commonColorsEnabled {"commonColorsEnabled", true};
+const GenericSetting<bool> colorHistoryShowClearButton { "colorHistoryShowClearButton", false };
+const GenericSetting<bool> commonColorsAutoUpdate { "commonColorsAutoUpdate", false };
 
 const GenericSetting<bool> quickSettingsEnabled { "quickSettingsMenuEnabled", true };
 const NumericSetting<int> popupSize { "popupSize", 300, 100, 500, true };

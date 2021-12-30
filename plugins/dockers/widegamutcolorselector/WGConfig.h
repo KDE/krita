@@ -190,9 +190,13 @@ struct ColorPatches
 };
 
 extern const ColorPatches colorHistory;
+extern const ColorPatches commonColors;
 extern const ColorPatches popupPatches;
 
 extern const GenericSetting<bool> colorHistoryEnabled;
+extern const GenericSetting<bool> commonColorsEnabled;
+extern const GenericSetting<bool> colorHistoryShowClearButton;
+extern const GenericSetting<bool> commonColorsAutoUpdate;
 
 extern const GenericSetting<bool> quickSettingsEnabled;
 extern const NumericSetting<int> popupSize;

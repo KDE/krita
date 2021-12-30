@@ -50,8 +50,13 @@ public:
 
     QSize sizeHint() const override
     {
-        Q_ASSERT(0);
-        return QSize();
+        // This is implemented just to not freak out GammaRay, in practice
+        // this doesn't have any effect on the layout.
+        if (m_orientation == Qt::Vertical) {
+            return QSize(m_buttonSize.width(), m_buttonSize.height() * count());
+        } else {
+            return QSize(m_buttonSize.width() * count(), m_buttonSize.height());
+        }
     }
 
     void addItem(QLayoutItem*) override { Q_ASSERT(0); }

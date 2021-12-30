@@ -6,6 +6,6 @@
     "NoDisplay": "true",
     "X-KDE-Export": "image/x-gimp-brush,image/x-gimp-brush-animated",
     
-    "X-KDE-Weight": "1",
+    "X-KDE-Weight": 1,
     "X-KDE-Extensions" : "gih,gbr"
 }

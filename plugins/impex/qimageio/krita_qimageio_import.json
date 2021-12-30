@@ -7,6 +7,5 @@
     "X-KDE-ServiceTypes": [
         "Krita/FileFilter"
     ],
-    "X-KDE-Weight": "1",
-    "X-KDE-Extensions" : "bmp,xbm,ico,ppm"
+    "X-KDE-Weight": 1,
 }

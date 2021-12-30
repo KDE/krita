@@ -394,3 +394,4 @@ endif()
 
 add_subdirectory(ext_webp)
 add_subdirectory(ext_jpegxl)
+add_subdirectory(ext_xsimd)

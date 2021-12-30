@@ -400,6 +400,7 @@ build_3rdparty () {
     cmake_3rdparty ext_mypaint
     cmake_3rdparty ext_webp
     cmake_3rdparty ext_jpegxl
+    cmake_3rdparty ext_xsimd
 
 
     ## All builds done, creating a new install onlydeps install dir

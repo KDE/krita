@@ -123,3 +123,4 @@ cmake --build . --config RelWithDebInfo --target ext_mypaint
 cmake --build . --config RelWithDebInfo --target ext_fcitx-qt5
 cmake --build . --config RelWithDebInfo --target ext_webp
 cmake --build . --config RelWithDebInfo --target ext_jpegxl
+cmake --build . --config RelWithDebInfo --target ext_xsimd

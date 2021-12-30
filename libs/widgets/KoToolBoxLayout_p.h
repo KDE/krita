@@ -80,7 +80,13 @@ public:
             foreach (QWidgetItem* w, m_items) {
                 if (w->isEmpty())
                     continue;
-                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
+                int realX;
+                if (parentWidget()->isLeftToRight()) {
+                    realX = x;
+                } else {
+                    realX = rect.width() - x - size.width();
+                }
+                w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
                 x += size.width();
                 if (x + size.width() > rect.width()) {
                     x = 0;
@@ -91,7 +97,13 @@ public:
             foreach (QWidgetItem* w, m_items) {
                 if (w->isEmpty())
                     continue;
-                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
+                int realX;
+                if (parentWidget()->isLeftToRight()) {
+                    realX = x;
+                } else {
+                    realX = rect.width() - x - size.width();
+                }
+                w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
                 y += size.height();
                 if (y + size.height() > rect.height()) {
                     x += size.width();
@@ -405,12 +417,26 @@ private:
 
             if (notDryRun) {
                 const int usedColumns = qMin(buttonCount, maxColumns);
+                int narrowSide = usedColumns * iconWidth;
+                int longSide = neededRowCount * iconHeight;
                 if (isVertical) {
-                    section->setGeometry(x, y,
-                                         usedColumns * iconWidth, neededRowCount * iconHeight);
+                    int realX;
+                    if (parentWidget()->isLeftToRight()) {
+                        realX = x;
+                    } else {
+                        realX = rect.width() - x - narrowSide;
+                    }
+                    section->setGeometry(realX, y,
+                                         narrowSide, longSide);
                 } else {
-                    section->setGeometry(y, x,
-                                         neededRowCount * iconHeight, usedColumns * iconWidth);
+                    int realX;
+                    if (parentWidget()->isLeftToRight()) {
+                        realX = y;
+                    } else {
+                        realX = rect.width() - y - longSide;
+                    }
+                    section->setGeometry(realX, x,
+                                         longSide, narrowSide);
                 }
             }
 

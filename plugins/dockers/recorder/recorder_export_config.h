@@ -32,6 +32,9 @@ public:
     int fps() const;
     void setFps(int value);
 
+    void setFirstFrameSec(int value);
+    int firstFrameSec() const;
+
     void setLastFrameSec(int value);
     int lastFrameSec() const;
 

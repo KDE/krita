@@ -89,6 +89,7 @@
 &lt;a href=&quot;$WIDTH&quot;&gt;$WIDTH&lt;/a&gt;
 &lt;a href=&quot;$HEIGHT&quot;&gt;$HEIGHT&lt;/a&gt;
 &lt;a href=&quot;$FRAMES&quot;&gt;$FRAMES&lt;/a&gt;
+&lt;a href=&quot;$FIRST_FRAME_SEC&quot;&gt;$FIRST_FRAME_SEC&lt;/a&gt;
 &lt;a href=&quot;$LAST_FRAME_SEC&quot;&gt;$LAST_FRAME_SEC&lt;/a&gt;
 &lt;a href=&quot;$INPUT_DIR&quot;&gt;$INPUT_DIR&lt;/a&gt;
 &lt;a href=&quot;$EXT&quot;&gt;$EXT&lt;/a&gt;

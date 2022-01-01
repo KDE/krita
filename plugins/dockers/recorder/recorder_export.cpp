@@ -62,6 +62,7 @@ public:
     QString videoFileName;
     QString videoFilePath;
     int framesCount = 0;
+    int firstFrameSec = 5;
     int lastFrameSec = 5;
 
     QScopedPointer<KisFFMpegWrapper> ffmpeg;
@@ -251,13 +252,14 @@ public:
                .replace("$HEIGHT", QString::number(outSize.height()))
                .replace("$FRAMES", QString::number(framesCount))
                .replace("$INPUT_DIR", settings.inputDirectory)
+               .replace("$FIRST_FRAME_SEC", QString::number(firstFrameSec))
                .replace("$LAST_FRAME_SEC", QString::number(lastFrameSec))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings.format));
     }
 
     void updateVideoDuration()
     {
-        long ms = (framesCount * 1000L / (inputFps ? inputFps : 30)) + (lastFrameSec * 1000L);
+        long ms = (framesCount * 1000L / (inputFps ? inputFps : 30)) + (firstFrameSec * 1000L)  + (lastFrameSec * 1000L)  ;
         ui->labelVideoDuration->setText(formatDuration(ms));
     }
 
@@ -305,6 +307,7 @@ RecorderExport::RecorderExport(QWidget *parent)
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
     connect(d->ui->spinInputFps, SIGNAL(valueChanged(int)), SLOT(onSpinInputFpsValueChanged(int)));
     connect(d->ui->spinFps, SIGNAL(valueChanged(int)), SLOT(onSpinFpsValueChanged(int)));
+    connect(d->ui->spinFirstFrameSec, SIGNAL(valueChanged(int)), SLOT(onFirstFrameSecValueChanged(int)));
     connect(d->ui->spinLastFrameSec, SIGNAL(valueChanged(int)), SLOT(onLastFrameSecValueChanged(int)));
     connect(d->ui->checkResize, SIGNAL(toggled(bool)), SLOT(onCheckResizeToggled(bool)));
     connect(d->ui->spinScaleWidth, SIGNAL(valueChanged(int)), SLOT(onSpinScaleWidthValueChanged(int)));
@@ -357,6 +360,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     
     d->inputFps = config.inputFps();
     d->fps = config.fps();
+    d->lastFrameSec = config.firstFrameSec();
     d->lastFrameSec = config.lastFrameSec();
     d->resize = config.resize();
     d->size = config.size();
@@ -369,6 +373,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
 
     d->ui->spinInputFps->setValue(d->inputFps);
     d->ui->spinFps->setValue(d->fps);
+    d->ui->spinFirstFrameSec->setValue(d->lastFrameSec);
     d->ui->spinLastFrameSec->setValue(d->lastFrameSec);
     d->ui->checkResize->setChecked(d->resize);
     d->ui->spinScaleWidth->setValue(d->size.width());
@@ -414,6 +419,13 @@ void RecorderExport::onSpinFpsValueChanged(int value)
 {
     d->fps = value;
     RecorderExportConfig(false).setFps(value);
+}
+
+void RecorderExport::onFirstFrameSecValueChanged(int value)
+{
+    d->firstFrameSec = value;
+    RecorderExportConfig(false).setFirstFrameSec(value);
+    d->updateVideoDuration();
 }
 
 void RecorderExport::onLastFrameSecValueChanged(int value)

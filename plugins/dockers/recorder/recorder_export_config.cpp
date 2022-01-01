@@ -18,6 +18,7 @@ const QString keyFfmpegPath = "ffmpeg_path";
 const QString keyVideoDirectory = "recorder_export/videodirectory";
 const QString keyInputFps = "recorder_export/inputfps";
 const QString keyFps = "recorder_export/fps";
+const QString keyFirstFrameSec = "recorder_export/firstframesec";
 const QString keyLastFrameSec = "recorder_export/lastframesec";
 const QString keyResize = "recorder_export/resize";
 const QString keySize = "recorder_export/size";
@@ -29,7 +30,20 @@ const QString keyEditedProfiles = "recorder_export/editedprofiles";
 const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.$EXT\"\n";
 
 const QList<RecorderProfile> defaultProfiles = {
-    { "MP4 x264",   "mp4",  profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+    { "MP4 x264",   "mp4",  profilePrefix % "-filter_complex \"\n"
+                                            " [0]scale=$WIDTH:$HEIGHT[q1];\n"
+                                            " [q1]tpad=stop_mode=clone:stop_duration=1[v1];\n"
+                                            " [0]trim=start_frame=$FRAMES-1[p1];\n"
+                                            " [p1]setpts=PTS-STARTPTS[p2];\n"
+                                            " [p2]fps=$OUT_FPS[p3];\n"
+                                            " [p3]trim=start_frame=0:end_frame=1[p4];\n"
+                                            " [p4]scale=$WIDTH:$HEIGHT[p5];\n"
+                                            " [p5]split [p6][p7];\n"
+                                            " [p6]tpad=stop_mode=clone:stop_duration=$FIRST_FRAME_SEC[v2];\n"
+                                            " [p7]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[v3];\n"
+                                            " [v2][v1][v3]concat=n=3:v=1[v4];\n"
+                                            " [v4]trim=start_frame=1:end_frame=$FRAMES+$OUT_FPS*$FIRST_FRAME_SEC+$OUT_FPS*$LAST_FRAME_SEC+1\n"
+                                            "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
     { "GIF",        "gif",  profilePrefix % "-filter_complex \"fps=$OUT_FPS,loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\"\n-loop -1" },
     { "Matroska",   "mkv",  profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "WebM",       "webm", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
@@ -82,6 +96,16 @@ int RecorderExportConfig::fps() const
 void RecorderExportConfig::setFps(int value)
 {
     config->writeEntry(keyFps, value);
+}
+
+int RecorderExportConfig::firstFrameSec() const
+{
+    return config->readEntry(keyFirstFrameSec, 5);
+}
+
+void RecorderExportConfig::setFirstFrameSec(int value)
+{
+    config->writeEntry(keyFirstFrameSec, value);
 }
 
 int RecorderExportConfig::lastFrameSec() const

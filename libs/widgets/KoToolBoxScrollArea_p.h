@@ -186,36 +186,21 @@ private:
         // moving the viewport widget, but the viewport position is reset during
         // a relayout.)
         const int scrollButtonWidth = this->scrollButtonWidth();
+        const QScrollBar *scrollbar = m_orientation == Qt::Vertical ? verticalScrollBar() : horizontalScrollBar();
+        const bool canPrev = scrollbar->value() != scrollbar->minimum();
+        const bool canNext = scrollbar->value() != scrollbar->maximum();
+        m_scrollPrev->setEnabled(canPrev);
+        m_scrollNext->setEnabled(canNext);
         if (m_orientation == Qt::Vertical) {
             m_scrollPrev->setArrowType(Qt::UpArrow);
-            m_scrollPrev->setEnabled(verticalScrollBar()->value() != verticalScrollBar()->minimum());
-            if (m_scrollPrev->isEnabled()) {
-                m_scrollPrev->setGeometry(0, 0, width(), scrollButtonWidth);
-            } else {
-                m_scrollPrev->setGeometry(-width(), 0, width(), scrollButtonWidth);
-            }
+            m_scrollPrev->setGeometry(canPrev ? 0 : -width(), 0, width(), scrollButtonWidth);
             m_scrollNext->setArrowType(Qt::DownArrow);
-            m_scrollNext->setEnabled(verticalScrollBar()->value() != verticalScrollBar()->maximum());
-            if (m_scrollNext->isEnabled()) {
-                m_scrollNext->setGeometry(0, height() - scrollButtonWidth, width(), scrollButtonWidth);
-            } else {
-                m_scrollNext->setGeometry(-width(), height() - scrollButtonWidth, width(), scrollButtonWidth);
-            }
+            m_scrollNext->setGeometry(canNext? 0 : -width(), height() - scrollButtonWidth, width(), scrollButtonWidth);
         } else {
             m_scrollPrev->setArrowType(Qt::LeftArrow);
-            m_scrollPrev->setEnabled(horizontalScrollBar()->value() != horizontalScrollBar()->minimum());
-            if (m_scrollPrev->isEnabled()) {
-                m_scrollPrev->setGeometry(0, 0, scrollButtonWidth, height());
-            } else {
-                m_scrollPrev->setGeometry(0, -height(), scrollButtonWidth, height());
-            }
+            m_scrollPrev->setGeometry(0, canPrev ? 0 : -height(), scrollButtonWidth, height());
             m_scrollNext->setArrowType(Qt::RightArrow);
-            m_scrollNext->setEnabled(horizontalScrollBar()->value() != horizontalScrollBar()->maximum());
-            if (m_scrollNext->isEnabled()) {
-                m_scrollNext->setGeometry(width() - scrollButtonWidth, 0, scrollButtonWidth, height());
-            } else {
-                m_scrollNext->setGeometry(width() - scrollButtonWidth, -height(), scrollButtonWidth, height());
-            }
+            m_scrollNext->setGeometry(width() - scrollButtonWidth, canNext ? 0 : -height(), scrollButtonWidth, height());
         }
     }
 

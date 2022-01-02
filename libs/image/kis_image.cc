@@ -1530,7 +1530,7 @@ qint32 KisImage::nChildLayers() const
 
     KoProperties koProperties;
     KisCountVisitor visitor(list, koProperties);
-    for (KisNodeSP childNode : m_d->rootLayer->childNodes(list, koProperties)) {
+    for (auto childNode : m_d->rootLayer->childNodes(list, koProperties)) {
         childNode->accept(visitor);
     }
     return visitor.count();

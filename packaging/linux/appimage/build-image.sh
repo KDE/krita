@@ -38,7 +38,7 @@ export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
-if [ -n "${CHANNEL}" ]; then
+if [[ $ARCH == "amd64" ]]; then
     # download
     # XXX: bundle this inside the Docker image *and* make it portable to ARM
     mkdir -p $DOWNLOADS_DIR

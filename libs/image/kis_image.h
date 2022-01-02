@@ -558,6 +558,12 @@ public:
      */
     qint32 nHiddenLayers() const;
 
+    /*
+     * Return the number of layers (not other node tyoes) that are
+     * descendants of the rootLayer in this image.
+     */
+    qint32 nChildLayers() const;
+
     /**
      * Merge all visible layers and discard hidden ones.
      */

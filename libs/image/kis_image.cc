@@ -1523,6 +1523,19 @@ qint32 KisImage::nHiddenLayers() const
     return visitor.count();
 }
 
+qint32 KisImage::nChildLayers() const
+{
+    QStringList list;
+    list << "KisLayer";
+
+    KoProperties koProperties;
+    KisCountVisitor visitor(list, koProperties);
+    for (KisNodeSP childNode : m_d->rootLayer->childNodes(list, koProperties)) {
+        childNode->accept(visitor);
+    }
+    return visitor.count();
+}
+
 void KisImage::flatten(KisNodeSP activeNode)
 {
     KisLayerUtils::flattenImage(this, activeNode);

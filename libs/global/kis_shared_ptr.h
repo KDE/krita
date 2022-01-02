@@ -130,7 +130,7 @@ public:
     /**
     * @return the contained pointer. If you delete the contained
     * pointer, you will make KisSharedPtr very unhappy. It is
-    * perfectly save to put the contained pointer in another
+    * perfectly safe to put the contained pointer in another
     * KisSharedPtr, though.
     */
     inline T* data() {

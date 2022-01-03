@@ -13,6 +13,7 @@
 #include <QHBoxLayout>
 #include <QToolButton>
 #include <QStatusBar>
+#include <QApplication>
 
 #include <KisAngleSelector.h>
 #include <klocalizedstring.h>
@@ -41,6 +42,8 @@ OverviewDockerDock::OverviewDockerDock()
     , m_pinControlsButton(nullptr)
     , m_canvas(nullptr)
     , m_cursorIsHover(false)
+    , m_isTouching(false)
+    , m_isDraggingWithTouch(false)
     , m_lastOverviewMousePos(0.0, 0.0)
     , m_cumulatedMouseDistanceSquared(0.0)
 {
@@ -51,8 +54,9 @@ OverviewDockerDock::OverviewDockerDock()
     m_overviewWidget->setBackgroundRole(QPalette::Base);
     // paints background role before paint()
     m_overviewWidget->setAutoFillBackground(true);
+    m_overviewWidget->setAttribute(Qt::WA_AcceptTouchEvents, true);
     m_overviewWidget->installEventFilter(this);
-    connect(m_overviewWidget, SIGNAL(signalDraggingStarted()), &m_showControlsTimer, SLOT(stop()));
+    connect(m_overviewWidget, SIGNAL(signalDraggingStarted()), SLOT(on_overviewWidget_signalDraggingStarted()));
     connect(m_overviewWidget, SIGNAL(signalDraggingFinished()), SLOT(on_overviewWidget_signalDraggingFinished()));
 
     m_controlsContainer = new QWidget(m_page);
@@ -66,7 +70,7 @@ OverviewDockerDock::OverviewDockerDock()
 
     setWidget(m_page);
 
-    connect(&m_showControlsTimer, SIGNAL(timeout()), SLOT(showControls()));
+    m_showControlsTimer.setSingleShot(true);
 
     m_showControlsAnimation.setEasingCurve(QEasingCurve(QEasingCurve::InOutCubic));
     connect(&m_showControlsAnimation, &QVariantAnimation::valueChanged, this, &OverviewDockerDock::layoutMainWidgets);
@@ -172,25 +176,16 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_zoomSlider->setVisible(true);
         m_rotateAngleSelector->setVisible(true);
 
+        // Show/hide the controls
         if (m_pinControls) {
-            m_showControlsAnimation.stop();
-            m_showControlsAnimation.setStartValue(1.0);
-            m_showControlsAnimation.setEndValue(0.0);
+            showControls(0);
         } else {
-            if (m_showControlsAnimation.state() != QVariantAnimation::Running) {
-                m_showControlsAnimation.stop();
-                if (m_cursorIsHover) {
-                    m_showControlsAnimation.setStartValue(1.0);
-                    m_showControlsAnimation.setEndValue(0.0);
-                } else {
-                    m_showControlsAnimation.setStartValue(0.0);
-                    m_showControlsAnimation.setEndValue(1.0);
-                }
+            if (m_cursorIsHover) {
+                showControls(0);
+            } else {
+                hideControls(0);
             }
         }
-        m_showControlsAnimation.setCurrentTime(0);
-
-        layoutMainWidgets();
     }
 }
 
@@ -228,7 +223,6 @@ void OverviewDockerDock::updateSlider()
 void OverviewDockerDock::setPinControls(bool pin)
 {
     m_pinControls = pin;
-    layoutMainWidgets();
 }
 
 void OverviewDockerDock::resizeEvent(QResizeEvent*)
@@ -240,8 +234,7 @@ void OverviewDockerDock::leaveEvent(QEvent*)
 {
     m_cursorIsHover = false;
     if (isEnabled() && !m_pinControls) {
-        m_showControlsTimer.stop();
-        hideControls();
+        hideControls(0);
         m_cumulatedMouseDistanceSquared = 0.0;
     }
 }
@@ -250,11 +243,7 @@ void OverviewDockerDock::enterEvent(QEvent*)
 {
     m_cursorIsHover = true;
     if (isEnabled() && !m_pinControls) {
-        if (m_showControlsAnimation.state() == QVariantAnimation::Running) {
-            showControls();
-        } else {
-            m_showControlsTimer.start(showControlsTimerDuration);
-        }
+        showControls(showControlsTimerDuration);
     }
 }
 
@@ -272,21 +261,138 @@ bool OverviewDockerDock::event(QEvent *e)
 
 bool OverviewDockerDock::eventFilter(QObject *o, QEvent *e)
 {
-    if (o == m_overviewWidget && e->type() == QEvent::MouseMove) {
-        if (isEnabled() && !m_overviewWidget->isDragging() && !m_pinControls && m_areControlsHidden) {
-            QMouseEvent *me = static_cast<QMouseEvent*>(e);
-            constexpr double showControlsAreaRadiusSquared = showControlsAreaRadius * showControlsAreaRadius;
-            const QPointF d = me->localPos() - m_lastOverviewMousePos;
-            const double distanceSquared = d.x() * d.x() + d.y() * d.y();
-            if (distanceSquared > m_cumulatedMouseDistanceSquared) {
-                if (distanceSquared >= showControlsAreaRadiusSquared) {
-                    m_showControlsTimer.start(showControlsTimerDuration);
-                    m_lastOverviewMousePos = me->localPos();
-                    m_cumulatedMouseDistanceSquared = 0.0;
-                } else {
-                    m_cumulatedMouseDistanceSquared = distanceSquared;
+    if (!isEnabled()) {
+        return false;
+    }
+
+    if (o == m_overviewWidget) {
+        // Filter out the mouse events if we are touching the overview widget
+        // and the event was not synthesized in this function  from the touch events
+        if (e->type() == QEvent::MouseButtonPress) {
+            if (m_isTouching) {
+                return static_cast<QMouseEvent*>(e)->source() != Qt::MouseEventSynthesizedByApplication;
+            }
+
+        } else if (e->type() == QEvent::MouseButtonRelease) {
+            if (m_isTouching) {
+                return static_cast<QMouseEvent*>(e)->source() != Qt::MouseEventSynthesizedByApplication;
+            }
+
+        } else if (e->type() == QEvent::MouseMove) {
+            if (m_isTouching) {
+                return static_cast<QMouseEvent*>(e)->source() != Qt::MouseEventSynthesizedByApplication;
+            }
+            if (!m_overviewWidget->isDragging() && m_areControlsHidden && !m_pinControls) {
+                QMouseEvent *me = static_cast<QMouseEvent*>(e);
+                constexpr double showControlsAreaRadiusSquared = showControlsAreaRadius * showControlsAreaRadius;
+                const QPointF d = me->localPos() - m_lastOverviewMousePos;
+                const double distanceSquared = d.x() * d.x() + d.y() * d.y();
+                if (distanceSquared > m_cumulatedMouseDistanceSquared) {
+                    if (distanceSquared >= showControlsAreaRadiusSquared) {
+                        showControls(showControlsTimerDuration);
+                        m_lastOverviewMousePos = me->localPos();
+                        m_cumulatedMouseDistanceSquared = 0.0;
+                    } else {
+                        m_cumulatedMouseDistanceSquared = distanceSquared;
+                    }
                 }
             }
+
+        } else if (e->type() == QEvent::TouchBegin) {
+            if (!m_isTouching) {
+                QTouchEvent *te = static_cast<QTouchEvent*>(e);
+                m_isTouching = true;
+                // Store the first touch point. We will only track this one
+                m_touchPointId = te->touchPoints().first().id();
+                m_lastTouchPos = te->touchPoints().first().pos();
+            }
+            // Accept the event so that other touch events keep comming
+            e->accept();
+            return true;
+
+        } else if (e->type() == QEvent::TouchUpdate) {
+            if (!m_isTouching) {
+                return true;
+            }
+            QTouchEvent *te = static_cast<QTouchEvent*>(e);
+            // Get the touch point position
+            QPointF currentPosition;
+            for (const QTouchEvent::TouchPoint &touchPoint : te->touchPoints()) {
+                if (touchPoint.id() == m_touchPointId) {
+                    // If the touch point wasn't moved, this event wasn't
+                    // generated from our touch point
+                    if (touchPoint.state() == Qt::TouchPointStationary) {
+                        return true;
+                    }
+                    currentPosition = touchPoint.pos();
+                    break;
+                }
+            }
+            if (!m_isDraggingWithTouch) {
+                // Compute distance
+                const QPointF delta = currentPosition - m_lastTouchPos;
+                const qreal distanceSquared = delta.x() * delta.x() + delta.y() * delta.y();
+                if (distanceSquared >= touchDragDistanceSquared) {
+                    m_isDraggingWithTouch = true;
+                    // synthesize mouse press event
+                    QMouseEvent *se = new QMouseEvent(QEvent::MouseButtonPress,
+                                                      m_lastTouchPos, QPointF(), QPointF(),
+                                                      Qt::LeftButton, Qt::LeftButton, Qt::NoModifier,
+                                                      Qt::MouseEventSynthesizedByApplication);
+                    qApp->sendEvent(m_overviewWidget, se);
+                }
+            }
+            if (m_isDraggingWithTouch) {
+                // Synthesize mouse move event
+                QMouseEvent *se = new QMouseEvent(QEvent::MouseMove,
+                                                  currentPosition, QPointF(), QPointF(),
+                                                  Qt::LeftButton, Qt::LeftButton, Qt::NoModifier,
+                                                  Qt::MouseEventSynthesizedByApplication);
+                qApp->sendEvent(m_overviewWidget, se);
+                // Update
+                m_lastTouchPos = currentPosition;
+            }
+            return true;
+
+        } else if (e->type() == QEvent::TouchEnd || e->type() == QEvent::TouchCancel) {
+            if (!m_isTouching) {
+                return true;
+            }
+            QTouchEvent *te = static_cast<QTouchEvent*>(e);
+            if (e->type() == QEvent::TouchEnd) {
+                // If the touch point is not in the released state
+                // then this event wasn't generated from our touch point
+                for (const QTouchEvent::TouchPoint &touchPoint : te->touchPoints()) {
+                    if (touchPoint.id() == m_touchPointId) {
+                        if (touchPoint.state() != Qt::TouchPointReleased) {
+                            return true;
+                        }
+                        break;
+                    }
+                }
+            }
+            // If we are dragging then synthesize mouse release event.
+            // Show/hide the controls otherwise
+            if (m_isDraggingWithTouch) {
+                QMouseEvent *se = new QMouseEvent(QEvent::MouseButtonRelease,
+                                                  m_lastTouchPos, QPointF(), QPointF(),
+                                                  Qt::LeftButton, Qt::LeftButton, Qt::NoModifier,
+                                                  Qt::MouseEventSynthesizedByApplication);
+                qApp->sendEvent(m_overviewWidget, se);
+            } else if (e->type() == QEvent::TouchEnd) {
+                m_pinControls = m_areControlsHidden;
+                KisSignalsBlocker blocker(m_pinControlsButton);
+                m_pinControlsButton->setChecked(m_pinControls);
+                if (m_areControlsHidden) {
+                    showControls(0);
+                } else {
+                    hideControls(0);
+                }
+            }
+            // Reset
+            m_isTouching = false;
+            m_isDraggingWithTouch = false;
+            return true;
         }
     }
     return false;
@@ -297,7 +403,7 @@ void OverviewDockerDock::layoutMainWidgets()
     m_page->setMinimumHeight(m_overviewWidget->minimumHeight() +
                              m_controlsContainer->minimumSizeHint().height());
 
-    if (!m_pinControls) {
+    if (m_showControlsAnimation.state() == QVariantAnimation::Running) {
         const qreal pageHeight = static_cast<qreal>(m_page->height());
         const qreal controlsContainerHeight = static_cast<qreal>(m_controlsContainer->sizeHint().height());
         const qreal animationProgress = m_showControlsAnimation.currentValue().toReal();
@@ -306,41 +412,101 @@ void OverviewDockerDock::layoutMainWidgets()
         m_controlsContainer->setGeometry(0, widgetLimitPosition, m_page->width(), static_cast<int>(controlsContainerHeight));
     } else {
         const int controlsContainerHeight = m_controlsContainer->sizeHint().height();
-        const int widgetLimitPosition = m_page->height() - controlsContainerHeight;
-        m_overviewWidget->setGeometry(0, 0, m_page->width(), widgetLimitPosition);
-        m_controlsContainer->setGeometry(0, widgetLimitPosition, m_page->width(), controlsContainerHeight);
+        if (m_pinControls || !m_areControlsHidden) {
+            const int widgetLimitPosition = m_page->height() - controlsContainerHeight;
+            m_overviewWidget->setGeometry(0, 0, m_page->width(), widgetLimitPosition);
+            m_controlsContainer->setGeometry(0, widgetLimitPosition, m_page->width(), controlsContainerHeight);
+        } else {
+            m_overviewWidget->setGeometry(0, 0, m_page->width(), m_page->height());
+            m_controlsContainer->setGeometry(0, m_page->height(), m_page->width(), controlsContainerHeight);
+        }
     }
 }
 
-void OverviewDockerDock::showControls() const
+void OverviewDockerDock::showControls(int delay) const
 {
-    m_showControlsAnimation.stop();
-    // scale the animation duration in case the animation is in the middle
-    const int animationDuration =
-        static_cast<int>(std::round((1.0 - m_showControlsAnimation.currentValue().toReal()) * showControlsAnimationDuration));
-    m_showControlsAnimation.setStartValue(m_showControlsAnimation.currentValue());
-    m_showControlsAnimation.setEndValue(1.0);
-    m_showControlsAnimation.setDuration(animationDuration);
-    m_showControlsAnimation.start();
-    m_areControlsHidden = false;
+    auto animFunction =
+        [this]() -> void
+        {
+            int animationDuration;
+            qreal animationStartValue;
+
+            if (m_areControlsHidden) {
+                if (m_showControlsAnimation.state() == QVariantAnimation::Running) {
+                    m_showControlsAnimation.stop();
+                    animationDuration =
+                        static_cast<int>(std::round((1.0 - m_showControlsAnimation.currentValue().toReal()) * showControlsAnimationDuration));
+                    animationStartValue = m_showControlsAnimation.currentValue().toReal();
+                } else {
+                    animationDuration = showControlsAnimationDuration;
+                    animationStartValue = 0.0;
+                }
+            } else {
+                animationDuration = 1;
+                animationStartValue = 1.0;
+            }
+
+            m_areControlsHidden = false;
+            m_showControlsAnimation.setStartValue(animationStartValue);
+            m_showControlsAnimation.setEndValue(1.0);
+            m_showControlsAnimation.setDuration(animationDuration);
+            m_showControlsAnimation.start();
+        };
+
+    delay = qMax(delay, 0);
+
+    m_showControlsTimer.disconnect();
+    connect(&m_showControlsTimer, &QTimer::timeout, animFunction);
+    m_showControlsTimer.start(delay);
 }
 
-void OverviewDockerDock::hideControls() const
+void OverviewDockerDock::hideControls(int delay) const
 {
-    m_showControlsAnimation.stop();
-    // scale the animation duration in case the animation is in the middle
-    const int animationDuration =
-        static_cast<int>(std::round(m_showControlsAnimation.currentValue().toReal() * showControlsAnimationDuration));
-    m_showControlsAnimation.setStartValue(m_showControlsAnimation.currentValue());
-    m_showControlsAnimation.setEndValue(0.0);
-    m_showControlsAnimation.setDuration(animationDuration);
-    m_showControlsAnimation.start();
-    m_areControlsHidden = true;
+    auto animFunction =
+        [this]() -> void
+        {
+            int animationDuration;
+            qreal animationStartValue;
+
+            if (!m_areControlsHidden) {
+                if (m_showControlsAnimation.state() == QVariantAnimation::Running) {
+                    m_showControlsAnimation.stop();
+                    animationDuration =
+                        static_cast<int>(std::round(m_showControlsAnimation.currentValue().toReal() * showControlsAnimationDuration));
+                    animationStartValue = m_showControlsAnimation.currentValue().toReal();
+                } else {
+                    animationDuration = showControlsAnimationDuration;
+                    animationStartValue = 1.0;
+                }
+            } else {
+                animationDuration = 1;
+                animationStartValue = 0.0;
+            }
+
+            m_areControlsHidden = true;
+            m_showControlsAnimation.setStartValue(animationStartValue);
+            m_showControlsAnimation.setEndValue(0.0);
+            m_showControlsAnimation.setDuration(animationDuration);
+            m_showControlsAnimation.start();
+        };
+
+    delay = qMax(delay, 0);
+
+    m_showControlsTimer.disconnect();
+    connect(&m_showControlsTimer, &QTimer::timeout, animFunction);
+    m_showControlsTimer.start(delay);
+}
+
+void OverviewDockerDock::on_overviewWidget_signalDraggingStarted()
+{
+    if (!m_pinControls && m_areControlsHidden && m_showControlsTimer.isActive()) {
+        m_showControlsTimer.stop();
+    }
 }
 
 void OverviewDockerDock::on_overviewWidget_signalDraggingFinished()
 {
-    if (!m_pinControls && m_areControlsHidden) {
-        m_showControlsTimer.start(showControlsTimerDuration);
+    if (!m_pinControls && m_areControlsHidden && !m_isTouching) {
+        showControls(showControlsTimerDuration);
     }
 }

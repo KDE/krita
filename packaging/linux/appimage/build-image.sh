@@ -38,15 +38,6 @@ export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
-if [[ $ARCH == "amd64" ]]; then
-    # download
-    # XXX: bundle this inside the Docker image *and* make it portable to ARM
-    mkdir -p $DOWNLOADS_DIR
-    cd $DOWNLOADS_DIR
-    wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
-    echo -n "414f10d9ab2dc72dc6874dbdb99454227124473a7ae691db2288d60f14f810fe AppImageUpdate" | sha256sum -c -
-fi
-
 # Switch over to our build prefix
 cd $BUILD_PREFIX
 
@@ -107,15 +98,7 @@ if [ -f $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so ] ; then
 patchelf --set-rpath '$ORIGIN/../..' $APPDIR/usr/lib/python3.8/site-packages/PyQt5/sip.so
 fi
 
-
-# Step 4: Install AppImageUpdate
-if [ -f $DOWNLOADS_DIR/AppImageUpdate ]; then
-       cp $DOWNLOADS_DIR/AppImageUpdate $APPDIR/usr/bin/
-       chmod +x $APPDIR/usr/bin/AppImageUpdate
-fi
-
-
-# Step 5: Find out what version of Krita we built and give the Appimage a proper name
+# Step 4: Find out what version of Krita we built and give the Appimage a proper name
 cd $BUILD_PREFIX/krita-build
 
 KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h | cut -d '"' -f 2)
@@ -166,7 +149,7 @@ fi
 
 DATE=$(git log -1 --format="%ct" | xargs -I{} date -d @{} +%Y-%m-%d)
 if [ "$DATE" = "" ] ; then
-	DATE=$(date +%Y-%m-%d)
+        DATE=$(date +%Y-%m-%d)
 fi
 
 sed -e "s|<release version=\"\" date=\"\" />|<release version=\"$VERSION\" date=\"$DATE\" type=\"$VERSION_TYPE\"/>|" -i $APPDIR/usr/share/metainfo/org.kde.krita.appdata.xml
@@ -186,6 +169,29 @@ fi
 
 # Return to our build root
 cd $BUILD_PREFIX
+
+# Step 5: Install AppImageUpdate
+
+if [[ $ARCH == "amd64" ]]; then
+    # download
+    # XXX: bundle this inside the Docker image *and* make it portable to ARM
+    mkdir -p $DOWNLOADS_DIR
+    cd $DOWNLOADS_DIR
+
+    UPDATER_SHA256=414f10d9ab2dc72dc6874dbdb99454227124473a7ae691db2288d60f14f810fe
+
+    if ! test -f "AppImageUpdate" || ! echo -n "$UPDATER_SHA256 AppImageUpdate" | sha256sum -c -; then
+        wget "https://files.kde.org/krita/build/AppImageUpdate-x86_64.AppImage" -O AppImageUpdate
+        echo -n "$UPDATER_SHA256 AppImageUpdate" | sha256sum -c -
+    fi
+
+    cd $BUILD_PREFIX
+fi
+
+if [ -f $DOWNLOADS_DIR/AppImageUpdate ]; then
+       cp $DOWNLOADS_DIR/AppImageUpdate $APPDIR/usr/bin/
+       chmod +x $APPDIR/usr/bin/AppImageUpdate
+fi
 
 # place the icon where linuxdeployqt seems to expect it
 find $APPDIR -name krita.png

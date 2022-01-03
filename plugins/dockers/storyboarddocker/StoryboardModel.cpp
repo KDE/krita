@@ -9,7 +9,6 @@
 #include "StoryboardUtils.h"
 #include <kis_image_animation_interface.h>
 
-#include <QDebug>
 #include <QMimeData>
 
 
@@ -909,7 +908,6 @@ void StoryboardModel::shiftKeyframes(KisTimeSpan affected, int offset, KUndo2Com
                                 }
 
                             } else {
-                                ENTER_FUNCTION() << ppVar(startFrame);
                                 int timeIter = keyframeChannel->keyframeAt(startFrame) ? startFrame : keyframeChannel->nextKeyframeTime(startFrame);
 
                                 KisKeyframeSP iterEnd = affected.isInfinite() ?
@@ -1203,7 +1201,7 @@ void StoryboardModel::slotFrameRenderCompleted(int frame, KisPaintDeviceSP dev)
 
 void StoryboardModel::slotFrameRenderCancelled(int frame)
 {
-    qDebug()<<"frame render for "<<frame<<" cancelled";
+    Q_UNUSED(frame);
 }
 
 void StoryboardModel::slotCommentDataChanged()

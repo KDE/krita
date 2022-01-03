@@ -103,7 +103,7 @@ Scope prefixes
 Shared pointers
 
 	Use shared pointers wherever possible. Prefer Qt's shared pointer classes
-    to our home-grown shared ppointer classes.
+    to our home-grown shared pointer classes.
 
 Getter/setter
 

@@ -44,7 +44,7 @@ public:
 
     KisFilterMask(const KisFilterMask& rhs);
 
-    void setFilter(KisFilterConfigurationSP filterConfig) override;
+    void setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig = true) override;
 
     QRect decorateRect(KisPaintDeviceSP &src,
                        KisPaintDeviceSP &dst,

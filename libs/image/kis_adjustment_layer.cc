@@ -51,10 +51,10 @@ KisAdjustmentLayer::~KisAdjustmentLayer()
 {
 }
 
-void KisAdjustmentLayer::setFilter(KisFilterConfigurationSP filterConfig)
+void KisAdjustmentLayer::setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig)
 {
     filterConfig->setChannelFlags(channelFlags());
-    KisSelectionBasedLayer::setFilter(filterConfig);
+    KisSelectionBasedLayer::setFilter(filterConfig, checkCompareConfig);
 }
 
 QRect KisAdjustmentLayer::incomingChangeRect(const QRect &rect) const

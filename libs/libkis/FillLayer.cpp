@@ -54,17 +54,16 @@ bool FillLayer::setGenerator(const QString &generatorName, InfoObject *config)
 
     //getting the default configuration here avoids trouble with versioning.
     KisGeneratorSP generator = KisGeneratorRegistry::instance()->value(generatorName);
+
     if (generator) {
         KisFilterConfigurationSP cfg = generator->factoryConfiguration(KisGlobalResourcesInterface::instance());
         Q_FOREACH(const QString property, config->properties().keys()) {
             cfg->setProperty(property, config->property(property));
         }
-        layer->setFilter(cfg->cloneWithResourcesSnapshot());
-
+        layer->setFilter(cfg->cloneWithResourcesSnapshot(), false);
         if (layer->hasPendingTimedUpdates()) {
             layer->forceUpdateTimedNode();
         }
-
         image()->waitForDone();
         return true;
     }

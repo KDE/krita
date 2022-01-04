@@ -74,7 +74,7 @@ public:
     /**
      * \see KisNodeFilterInterface::setFilter()
      */
-    void setFilter(KisFilterConfigurationSP filterConfig) override;
+    void setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig = true) override;
 
     void setChannelFlags(const QBitArray & channelFlags) override;
 

@@ -44,9 +44,9 @@ QIcon KisFilterMask::icon() const
     return KisIconUtils::loadIcon("filterMask");
 }
 
-void KisFilterMask::setFilter(KisFilterConfigurationSP  filterConfig)
+void KisFilterMask::setFilter(KisFilterConfigurationSP  filterConfig, bool checkCompareConfig)
 {
-    KisNodeFilterInterface::setFilter(filterConfig);
+    KisNodeFilterInterface::setFilter(filterConfig, checkCompareConfig);
 }
 
 QRect KisFilterMask::decorateRect(KisPaintDeviceSP &src,

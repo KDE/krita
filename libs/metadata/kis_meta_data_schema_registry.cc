@@ -6,8 +6,8 @@
 
 #include "kis_meta_data_schema_registry.h"
 
+#include <QGlobalStatic>
 #include <QString>
-
 
 #include <KoResourcePaths.h>
 
@@ -19,19 +19,15 @@ using namespace KisMetaData;
 // ---- Schema Registry ---- //
 
 struct Q_DECL_HIDDEN SchemaRegistry::Private {
-    static SchemaRegistry *singleton;
     QHash<QString, Schema*> uri2Schema;
     QHash<QString, Schema*> prefix2Schema;
 };
 
-SchemaRegistry *SchemaRegistry::Private::singleton = 0;
+Q_GLOBAL_STATIC(SchemaRegistry, s_instance)
 
 SchemaRegistry* SchemaRegistry::instance()
 {
-    if (SchemaRegistry::Private::singleton == 0) {
-        SchemaRegistry::Private::singleton = new SchemaRegistry();
-    }
-    return SchemaRegistry::Private::singleton;
+    return s_instance;
 }
 
 SchemaRegistry::SchemaRegistry()

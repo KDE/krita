@@ -35,7 +35,7 @@ ResourceManager::ResourceManager(QObject *parent, const QVariantList &)
     : KisActionPlugin(parent)
     , d(new Private())
 {
-    KisAction *action = new KisAction(i18n("Manage Resources Libraries..."), this);
+    KisAction *action = new KisAction(i18n("Manage Resource Libraries..."), this);
     addAction("manage_bundles", action);
     connect(action, SIGNAL(triggered()), this, SLOT(slotManageBundles()));
 

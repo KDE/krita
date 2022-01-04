@@ -325,6 +325,13 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 #endif
     m_chkNativeFileDialog->setChecked(!group.readEntry("DontUseNativeFileDialog", dontUseNative));
 
+    if (!qEnvironmentVariable("APPIMAGE").isEmpty()) {
+        // AppImages don't have access to platform plugins. BUG: 447805
+        // Setting the checkbox to false is 
+        m_chkNativeFileDialog->setChecked(false);
+        m_chkNativeFileDialog->setEnabled(false);
+    }
+
     intMaxBrushSize->setValue(KisImageConfig(true).maxBrushSize());
 
     //

@@ -66,15 +66,15 @@ KisGeneratorLayer::~KisGeneratorLayer()
 {
 }
 
-void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig)
+void KisGeneratorLayer::setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig)
 {
-    setFilterWithoutUpdate(filterConfig);
+    setFilterWithoutUpdate(filterConfig, checkCompareConfig);
     m_d->updateSignalCompressor.start();
 }
 
-void KisGeneratorLayer::setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig)
+void KisGeneratorLayer::setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig, bool checkCompareConfig)
 {
-    if (filter().isNull() || !filter()->compareTo(filterConfig.constData())) {
+    if (filter().isNull() || (!checkCompareConfig || !filter()->compareTo(filterConfig.constData()))) {
         KisSelectionBasedLayer::setFilter(filterConfig);
         {
             QMutexLocker locker(&m_d->mutex);
@@ -94,6 +94,7 @@ void KisGeneratorLayer::slotDelayedStaticUpdate()
     if (!parentLayer) return;
 
     KisImageSP image = parentLayer->image();
+
     if (image) {
         if (!m_d->updateCookie) {
             this->update();

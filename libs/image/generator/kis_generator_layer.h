@@ -44,11 +44,11 @@ public:
         return KisNodeSP(new KisGeneratorLayer(*this));
     }
 
-    void setFilter(KisFilterConfigurationSP filterConfig) override;
+    void setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig = true) override;
     /**
      * Changes the filter configuration without triggering an update.
      */
-    void setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig);
+    void setFilterWithoutUpdate(KisFilterConfigurationSP filterConfig, bool checkCompareConfig = true);
 
     bool accept(KisNodeVisitor &) override;
     void accept(KisProcessingVisitor &visitor, KisUndoAdapter *undoAdapter) override;

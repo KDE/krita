@@ -346,11 +346,23 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
             continue;
         }
         url = QUrl::fromUserInput(value);
-        d_urls.append(QUrl(url)); // will be used to retrieve on the welcome screen
 
-        // Don't restore if file doesn't exist anymore
-        if (url.isLocalFile() && !QFile::exists(url.toLocalFile())) {
-            continue;
+        if (url.isLocalFile()) {
+            QString localFilePath = url.toLocalFile();
+            QFileInfo fileInfo = QFileInfo(localFilePath);
+
+            // Don't restore if file doesn't exist anymore
+            if (!fileInfo.exists()) {
+                continue;
+            }
+
+            // When KConfigGroup substitutes $HOME, it may produce a path
+            // with two consecutive forward slashes. This may cause duplicated
+            // entries of the same file when opened using the file selector,
+            // in which the path does not include this double slash.
+            // `absoluteFilePath` replaces the double slash to a single slash.
+            value = fileInfo.absoluteFilePath();
+            url = QUrl::fromLocalFile(value);
         }
 
         // Don't restore where the url is already known (eg. broken config)
@@ -372,6 +384,7 @@ void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
             thereAreEntries = true;
             addAction(new QAction(title, selectableActionGroup()), url, nameValue);
         }
+        d_urls.append(QUrl(url)); // will be used to retrieve on the welcome screen
     }
     if (thereAreEntries) {
         d->m_noEntriesAction->setVisible(false);

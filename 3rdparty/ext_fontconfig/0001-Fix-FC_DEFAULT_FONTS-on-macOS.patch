@@ -1,5 +1,20 @@
+From 889097353ecd7b061ae7cf677e3db56db77a135f Mon Sep 17 00:00:00 2001
+From: Ryan Schmidt <git@ryandesign.com>
+Date: Thu, 8 Jul 2021 15:45:18 -0500
+Subject: [PATCH] Fix FC_DEFAULT_FONTS on macOS and with BSD sed
+
+Fix processing of FC_DEFAULT_FONTS when it contains multiple comma-
+separated values (i.e. on macOS/Darwin) and fix inserting it into
+fonts.conf when using BSD sed.
+
+Fixes https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/287
+---
+ Makefile.am  | 2 +-
+ configure.ac | 7 +++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
 diff --git a/Makefile.am b/Makefile.am
-index 1ef366971cdc7367cf97cf56b87a381de5b9f8b7..2f75fc937f4a0735a27f8fc4c7d0095c189bfd22 100644
+index 1ef36697..2f75fc93 100644
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -114,7 +114,7 @@ FC_CONFIGDIR = $(subst $(BASECONFIGDIR)/,,$(CONFIGDIR))
@@ -12,7 +27,7 @@ index 1ef366971cdc7367cf97cf56b87a381de5b9f8b7..2f75fc937f4a0735a27f8fc4c7d0095c
  		-e 's,@CONFIGDIR\@,$(FC_CONFIGDIR),g' \
  		-e 's,@PACKAGE\@,$(PACKAGE),g' \
 diff --git a/configure.ac b/configure.ac
-index 3bbd96958bd030479e46b57dd8952df1d0c7f7d7..af2fd44762dbb8755788003928ea2f5e2e2d7cdf 100644
+index 3bbd9695..af2fd447 100644
 --- a/configure.ac
 +++ b/configure.ac
 @@ -499,8 +499,11 @@ FC_DEFAULT_FONTS=""
@@ -29,3 +44,6 @@ index 3bbd96958bd030479e46b57dd8952df1d0c7f7d7..af2fd44762dbb8755788003928ea2f5e
  	done
  	IFS=$fc_IFS
  fi
+-- 
+GitLab
+

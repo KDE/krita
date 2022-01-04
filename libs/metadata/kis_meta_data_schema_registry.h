@@ -20,6 +20,12 @@ class Schema;
 class KRITAMETADATA_EXPORT SchemaRegistry
 {
     struct Private;
+public:
+    /**
+     * DO NOT USE! Use instance() instead.
+     * This constructor is public only to allow it to be used by
+     * Q_GLOBAL_STATIC. Same for the destructor.
+     */
     SchemaRegistry();
     ~SchemaRegistry();
 public:

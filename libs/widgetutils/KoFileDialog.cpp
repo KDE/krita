@@ -161,7 +161,14 @@ void KoFileDialog::createFileDialog()
     dontUseNative = false;
 #endif
 
-    bool optionDontUseNative = group.readEntry("DontUseNativeFileDialog", dontUseNative);
+    bool optionDontUseNative;
+    if (!qEnvironmentVariable("APPIMAGE").isEmpty()) {
+        // AppImages don't have access to platform plugins. BUG: 447805
+        optionDontUseNative = false;
+    } else {
+        optionDontUseNative = group.readEntry("DontUseNativeFileDialog", dontUseNative);
+    }
+
     d->fileDialog->setOption(QFileDialog::DontUseNativeDialog, optionDontUseNative);
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, dontUseNative ? true : false);

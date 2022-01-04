@@ -404,6 +404,7 @@ public:
 
     bool batchMode { false };
     bool decorationsSyncingDisabled = false;
+    bool wasStorageAdded = false;
 
 
     // Resources saved in the .kra document
@@ -595,6 +596,8 @@ KisDocument::KisDocument(bool addStorage)
 
         d->embeddedResourceStorage.reset(new KisResourceStorage(d->embeddedResourcesStorageID));
         KisResourceLocator::instance()->addStorage(d->embeddedResourcesStorageID, d->embeddedResourceStorage);
+
+        d->wasStorageAdded = true;
     }
 
     // preload the krita resources
@@ -616,6 +619,7 @@ KisDocument::KisDocument(const KisDocument &rhs, bool addStorage)
     if (addStorage) {
         KisResourceLocator::instance()->addStorage(d->linkedResourcesStorageID, d->linkedResourceStorage);
         KisResourceLocator::instance()->addStorage(d->embeddedResourcesStorageID, d->embeddedResourceStorage);
+        d->wasStorageAdded = true;
     }
 }
 
@@ -672,11 +676,13 @@ KisDocument::~KisDocument()
         // check if the image has actually been deleted
         KIS_SAFE_ASSERT_RECOVER_NOOP(!sanityCheckPointer.isValid());
     }
-    if (KisResourceLocator::instance()->hasStorage(d->linkedResourcesStorageID)) {
-        KisResourceLocator::instance()->removeStorage(d->linkedResourcesStorageID);
-    }
-    if (KisResourceLocator::instance()->hasStorage(d->embeddedResourcesStorageID)) {
-        KisResourceLocator::instance()->removeStorage(d->embeddedResourcesStorageID);
+    if (d->wasStorageAdded) {
+        if (KisResourceLocator::instance()->hasStorage(d->linkedResourcesStorageID)) {
+            KisResourceLocator::instance()->removeStorage(d->linkedResourcesStorageID);
+        }
+        if (KisResourceLocator::instance()->hasStorage(d->embeddedResourcesStorageID)) {
+            KisResourceLocator::instance()->removeStorage(d->embeddedResourcesStorageID);
+        }
     }
 
     delete d;

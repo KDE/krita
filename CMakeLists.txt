@@ -103,7 +103,7 @@ set(KRITA_VERSION_RELEASE 2)
 # - [Pre-]Alpha: Starts from 0, increment 1 per release
 # - Beta: Starts from 50, increment 1 per release
 # - Stable: Set to 100, bump to 101 if emergency update is needed
-set(KRITA_VERSION_REVISION 100)
+set(KRITA_VERSION_REVISION 102)
 
 # Uncomment the following if this is currently in the "stable" branch.
 # Do not uncomment for master branch.

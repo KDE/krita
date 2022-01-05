@@ -64,10 +64,10 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
     m_page->sldBackgroundColor->setSingleStep(0.05);
     m_page->sldBackgroundColor->setValue(m_image->defaultProjectionColor().opacityF());
 
-    KisSignalCompressor *compressor = new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE, this);
-    connect(m_page->bnBackgroundColor, SIGNAL(changed(KoColor)), compressor, SLOT(start()));
-    connect(m_page->sldBackgroundColor, SIGNAL(valueChanged(qreal)), compressor, SLOT(start()));
-    connect(compressor, SIGNAL(timeout()), this, SLOT(setCurrentColor()));
+    m_compressor = new KisSignalCompressor(500 /* ms */, KisSignalCompressor::POSTPONE, this);
+    connect(m_page->bnBackgroundColor, SIGNAL(changed(KoColor)), m_compressor, SLOT(start()));
+    connect(m_page->sldBackgroundColor, SIGNAL(valueChanged(qreal)), m_compressor, SLOT(start()));
+    connect(m_compressor, SIGNAL(timeout()), this, SLOT(setCurrentColor()));
 
     //Set the color space
     m_page->colorSpaceSelector->setCurrentColorSpace(image->colorSpace());
@@ -133,6 +133,11 @@ KisDlgImageProperties::KisDlgImageProperties(KisImageWSP image, QWidget *parent,
 
 KisDlgImageProperties::~KisDlgImageProperties()
 {
+    if (m_compressor->isActive()) {
+        m_compressor->stop();
+        setCurrentColor();
+    }
+
     delete m_page;
 }
 

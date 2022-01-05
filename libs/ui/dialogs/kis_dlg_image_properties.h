@@ -11,6 +11,8 @@
 #include <kis_types.h>
 #include "ui_wdgimageproperties.h"
 
+class KisSignalCompressor;
+
 class KoColorSpace;
 class WdgImageProperties : public QWidget, public Ui::WdgImageProperties
 {
@@ -52,6 +54,7 @@ private:
     KisProofingConfigurationSP m_proofingConfig;
     bool m_firstProofingConfigChange {true};
     QLabel *m_colorWarningLabel {0};
+    KisSignalCompressor *m_compressor {0};
 };
 
 

@@ -9,13 +9,14 @@
 
 #include "kritaimage_export.h"
 #include "kis_types.h"
+#include "commands_new/KisAsynchronouslyMergeableCommandInterface.h"
 
 #include <KoColor.h>
 
 #include <kundo2command.h>
 
 
-class KRITAIMAGE_EXPORT KisChangeProjectionColorCommand : public KUndo2Command
+class KRITAIMAGE_EXPORT KisChangeProjectionColorCommand : public KUndo2Command, public KisAsynchronouslyMergeableCommandInterface
 {
 public:
     KisChangeProjectionColorCommand(KisImageSP image, const KoColor &newColor, KUndo2Command *parent = 0);
@@ -26,6 +27,7 @@ public:
 
     int id() const override;
     bool mergeWith(const KUndo2Command* command) override;
+    bool canMergeWith(const KUndo2Command *command) const override;
 
 private:
     KisImageWSP m_image;

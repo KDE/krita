@@ -143,15 +143,22 @@ void KisCategorizedListView::mousePressEvent(QMouseEvent* event)
 
 
 
-    if(event->button() == Qt::RightButton){
+    if (event->button() == Qt::RightButton){
+
         QMenu menu(this);
+
         if(index.data(__CategorizedListModelBase::isLockableRole).toBool() && index.isValid()) {
 
             bool locked = index.data(__CategorizedListModelBase::isLockedRole).toBool();
 
             QIcon icon = locked ? KisIconUtils::loadIcon("unlocked") : KisIconUtils::loadIcon("locked");
 
-            QAction* action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)") : i18n("Lock"));
+            // Add an empty section so there's a bit more space before users accidentally press lock
+            // See https://bugs.kde.org/show_bug.cgi?id=447367
+            menu.addSection("     ");
+
+            QAction* action1 = menu.addAction(icon, locked ? i18n("Unlock (restore settings from preset)")
+                                                           : i18n("Lock"));
 
             connect(action1, SIGNAL(triggered()), this, SIGNAL(rightClickedMenuDropSettingsTriggered()));
 

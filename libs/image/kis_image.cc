@@ -368,7 +368,30 @@ void KisImage::copyFromImage(const KisImage &rhs)
 void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
 {
     // make sure we choose exactly one from REPLACE and CONSTRUCT
-    KIS_ASSERT_RECOVER_RETURN((policy & REPLACE) != (policy & CONSTRUCT));
+    KIS_ASSERT_RECOVER_RETURN(bool(policy & REPLACE) != bool(policy & CONSTRUCT));
+
+    /**
+     * We should replace the root before amitting any signals, because some of the layers
+     * may be subscribed to sigSizeChanged() signal (e.g. KisSelectionBasedLayer). So the
+     * old layers should be fully detached before we actually emit this signal.
+     *
+     * See bug 447599 for more details.
+     */
+
+    KisNodeSP oldRoot = this->root();
+    KisNodeSP newRoot = rhs.root()->clone();
+    newRoot->setGraphListener(this);
+    newRoot->setImage(this);
+
+    m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
+    setRoot(newRoot);
+
+    if (oldRoot) {
+        oldRoot->setImage(0);
+        oldRoot->setGraphListener(0);
+        oldRoot->disconnect();
+    }
+
 
     // only when replacing do we need to emit signals
 #define EMIT_IF_NEEDED if (!(policy & REPLACE)) {} else emit
@@ -404,12 +427,6 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
             m_d->proofingConfig = proofingConfig;
         }
     }
-
-    KisNodeSP newRoot = rhs.root()->clone();
-    newRoot->setGraphListener(this);
-    newRoot->setImage(this);
-    m_d->rootLayer = dynamic_cast<KisGroupLayer*>(newRoot.data());
-    setRoot(newRoot);
 
     bool exactCopy = policy & EXACT_COPY;
 

@@ -22,6 +22,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "filter/kis_filter.h"
+#include "kis_signal_auto_connection.h"
 
 #include "kis_raster_keyframe_channel.h"
 
@@ -35,6 +36,7 @@ public:
     KisSelectionSP selection;
     KisPaintDeviceSP paintDevice;
     bool useSelectionInProjection;
+    KisSignalAutoConnectionsStore imageConnections;
 };
 
 
@@ -57,7 +59,7 @@ KisSelectionBasedLayer::KisSelectionBasedLayer(KisImageWSP image,
         return;
     }
     m_d->paintDevice = KisPaintDeviceSP(new KisPaintDevice(this, imageSP->colorSpace(), KisDefaultBoundsSP(new KisDefaultBounds(image))));
-    connect(imageSP.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
+    m_d->imageConnections.addConnection(imageSP.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged()));
 }
 
 KisSelectionBasedLayer::KisSelectionBasedLayer(const KisSelectionBasedLayer& rhs)
@@ -99,11 +101,14 @@ void KisSelectionBasedLayer::slotImageSizeChanged()
 
 void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
+    m_d->imageConnections.clear();
     m_d->paintDevice->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
     m_d->selection->pixelSelection()->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
     KisLayer::setImage(image);
 
-    connect(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
+    if (image) {
+        m_d->imageConnections.addConnection(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged()));
+    }
 }
 
 bool KisSelectionBasedLayer::allowAsChild(KisNodeSP node) const

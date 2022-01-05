@@ -195,8 +195,8 @@ void KisImageManager::slotImageColor()
     QColorDialog dlg;
     dlg.setOption(QColorDialog::ShowAlphaChannel, true);
     dlg.setWindowTitle(i18n("Select a Color"));
-    KoColor bg = image->defaultProjectionColor();
-    dlg.setCurrentColor(bg.toQColor());
+    KoColor oldBgColor = image->defaultProjectionColor();
+    dlg.setCurrentColor(oldBgColor.toQColor());
 
     KisSignalCompressor compressor(200, KisSignalCompressor::FIRST_INACTIVE);
 
@@ -206,7 +206,14 @@ void KisImageManager::slotImageColor()
     connect(&dlg, SIGNAL(currentColorChanged(QColor)), &compressor, SLOT(start()));
     connect(&compressor, SIGNAL(timeout()), &proxy, SLOT(start()));
 
-    dlg.exec();
+    if (dlg.exec() == QDialog::Accepted) {
+        if (compressor.isActive()) {
+            compressor.stop();
+            updateCall();
+        }
+    } else {
+        KisLayerUtils::changeImageDefaultProjectionColor(image, oldBgColor);
+    }
 }
 
 

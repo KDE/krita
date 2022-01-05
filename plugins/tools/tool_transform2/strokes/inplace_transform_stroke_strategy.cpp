@@ -292,6 +292,15 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
     m_d->rootNode = KisTransformUtils::tryOverrideRootToTransformMask(m_d->rootNode);
 
+    if (m_d->rootNode->inherits("KisTransformMask") && m_d->rootNode->projectionLeaf()->isDroppedNode()) {
+        m_d->rootNode.clear();
+        m_d->processedNodes.clear();
+
+        TransformTransactionProperties transaction(QRect(), &m_d->initialTransformArgs, m_d->rootNode, m_d->processedNodes);
+        Q_EMIT sigTransactionGenerated(transaction, m_d->initialTransformArgs, this);
+        return;
+    }
+
     // When placing an external source image, we never work recursively on any layer masks
     m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->externalSource);
 

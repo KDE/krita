@@ -403,6 +403,15 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     m_rootNode = KisTransformUtils::tryOverrideRootToTransformMask(m_rootNode);
 
+    if (m_rootNode->inherits("KisTransformMask") && m_rootNode->projectionLeaf()->isDroppedNode()) {
+        m_rootNode.clear();
+        m_processedNodes.clear();
+
+        TransformTransactionProperties transaction(QRect(), &m_initialTransformArgs, m_rootNode, m_processedNodes);
+        Q_EMIT sigTransactionGenerated(transaction, m_initialTransformArgs, this);
+        return;
+    }
+
     ToolTransformArgs initialTransformArgs;
     bool isExternalSourcePresent = false;
     m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, isExternalSourcePresent);

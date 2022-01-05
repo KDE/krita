@@ -1,0 +1,76 @@
+From 414f21c5041c99d77f321ce0c33502fd9373180b Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Wed, 5 Jan 2022 09:59:38 +0000
+Subject: [PATCH] Hack: Workaround the absence of FLAG_SUPPORTS_WRITE on
+ ChromeOS
+
+---
+ .../qt5/android/CachedDocumentFile.java       |  7 +------
+ .../qtproject/qt5/android/SAFFileManager.java | 21 ++++++++++++++-----
+ 2 files changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java b/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
+index 15dc727125..f3f0aa9e53 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
+@@ -108,7 +108,7 @@ public class CachedDocumentFile {
+             return true;
+         } catch (Exception e) {
+             // HACK: see https://crbug.com/1246925.
+-            if (isArc()) {
++            if (SAFFileManager.isArc()) {
+                 String oldUriStr = uri.toString();
+                 this.uri = Uri.parse(oldUriStr.replaceFirst(this.name + "$", displayName));
+                 this.exists = null;
+@@ -216,10 +216,5 @@ public class CachedDocumentFile {
+         }
+         return false;
+     }
+-
+-    // we need some workarounds on ChromeOS
+-    public static boolean isArc() {
+-        return (Build.DEVICE != null) && Build.DEVICE.matches(".+_cheets|cheets_.+");
+-    }
+ }
+ 
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
+index df5868d67a..bb199d1f3c 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
+@@ -344,12 +344,18 @@ public class SAFFileManager {
+         final CachedDocumentFile file =
+                 getDocumentFileWithValidPermissions(contentUrl, "w", true);
+ 
+-        if (file != null && file.canWrite()) {
+-            mError.unsetError();
+-            return true;
+-        } else {
+-            return false;
++        if (file != null) {
++            if (file.canWrite()) {
++                mError.unsetError();
++                return true;
++            } else if (isArc()) {
++                // HACK: some files on ChromeOS don't have file flags! So, if
++                // we have write permissions on the Uri, it seems we can assume
++                // FLAG_SUPPORTS_WRITE
++                return true;
++            }
+         }
++        return false;
+     }
+ 
+     // Native usage
+@@ -792,4 +798,9 @@ public class SAFFileManager {
+     private CachedDocumentFile createDirectory(Uri parent, String displayName) {
+         return createFile(parent, displayName, DocumentsContract.Document.MIME_TYPE_DIR);
+     }
++
++    // we need some workarounds on ChromeOS
++    public static boolean isArc() {
++        return (Build.DEVICE != null) && Build.DEVICE.matches(".+_cheets|cheets_.+");
++    }
+ }
+-- 
+2.34.1
+

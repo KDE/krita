@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>640</height>
+    <height>657</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -27,7 +27,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
@@ -190,7 +190,6 @@ p, li { white-space: pre-wrap; }
               <widget class="QLabel" name="label">
                <property name="font">
                 <font>
-                 <weight>75</weight>
                  <bold>true</bold>
                 </font>
                </property>
@@ -350,39 +349,6 @@ p, li { white-space: pre-wrap; }
                 <property name="sizeConstraint">
                  <enum>QLayout::SetMinimumSize</enum>
                 </property>
-                <item row="0" column="0">
-                 <widget class="QLabel" name="fpsLabel">
-                  <property name="text">
-                   <string>FPS:</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="1">
-                 <widget class="QSpinBox" name="fpsSpinbox"/>
-                </item>
-                <item row="0" column="2">
-                 <widget class="QLabel" name="fpsDocumentLabel">
-                  <property name="text">
-                   <string/>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="3">
-                 <widget class="QLabel" name="startExportingAtLabel">
-                  <property name="text">
-                   <string>Start at: </string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="4">
                  <widget class="QDoubleSpinBox" name="startExportingAtSpinbox">
                   <property name="sizePolicy">
@@ -409,8 +375,25 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="frameSkipSpinbox"/>
+                <item row="0" column="2">
+                 <widget class="QLabel" name="fpsDocumentLabel">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="3">
+                 <widget class="QLabel" name="startExportingAtLabel">
+                  <property name="text">
+                   <string>Start at: </string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
                 </item>
                 <item row="1" column="3">
                  <widget class="QLabel" name="exportDurationLabel">
@@ -421,6 +404,22 @@ p, li { white-space: pre-wrap; }
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                   </property>
                  </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="fpsLabel">
+                  <property name="text">
+                   <string>FPS:</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QSpinBox" name="fpsSpinbox"/>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="frameSkipSpinbox"/>
                 </item>
                 <item row="1" column="4">
                  <widget class="QDoubleSpinBox" name="exportDurationSpinbox">
@@ -438,7 +437,11 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="0">
+               </layout>
+              </item>
+              <item row="2" column="0">
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
                  <widget class="QLabel" name="importDocumentLabel">
                   <property name="text">
                    <string>Import into:</string>
@@ -448,10 +451,64 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1" colspan="2">
-                 <widget class="QComboBox" name="cmbDocumentHandler"/>
+                <item>
+                 <widget class="QComboBox" name="cmbDocumentHandler">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                 </widget>
                 </item>
                </layout>
+              </item>
+              <item row="1" column="0">
+               <widget class="QGroupBox" name="optionFilterDuplicates">
+                <property name="title">
+                 <string>Filter duplicate frames</string>
+                </property>
+                <property name="flat">
+                 <bool>true</bool>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+                <layout class="QFormLayout" name="formLayout">
+                 <property name="fieldGrowthPolicy">
+                  <enum>QFormLayout::ExpandingFieldsGrow</enum>
+                 </property>
+                 <item row="0" column="0">
+                  <widget class="QLabel" name="sensitivityLabel">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Sensitivity</string>
+                   </property>
+                   <property name="indent">
+                    <number>-1</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="1">
+                  <widget class="KisDoubleSliderSpinBox" name="sensitivitySpinbox" native="true">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
               </item>
              </layout>
             </widget>
@@ -635,6 +692,14 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header>kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

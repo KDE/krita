@@ -191,9 +191,10 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
 
     args << "-ss" << QString::number(m_ui.startExportingAtSpinbox->value())
          << "-i" << m_videoInfo.file
+         << "-filter:v" << "select=gt(scene\\,0.05)+eq(n\\,0)"
+         << "-vsync" << "0"
          << "-t" << QString::number(exportDuration)
          << "-r" << QString::number(fps);
-
 
     if ( m_videoInfo.width != m_ui.videoWidthSpinbox->value() || m_videoInfo.height != m_ui.videoHeightSpinbox->value() ) {
         args << "-vf" <<  QString("scale=w=")
@@ -201,7 +202,7 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
                                     .append(":h=")
                                     .append(QString::number(m_ui.videoHeightSpinbox->value()))
                                     .append(":flags=")
-                                    .append(m_ui.cmbVideoScaleFilter->currentData().toString());  
+                                    .append(m_ui.cmbVideoScaleFilter->currentData().toString());
     }
 
     QJsonObject ffmpegInfo = m_ui.cmbFFMpegLocation->currentData().toJsonObject();

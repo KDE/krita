@@ -30,7 +30,11 @@ get_script_dir() {
 }
 
 findEntitlementsFile() {
-    local fileName="entitlements.plist"
+    if [[ -e ${KIS_ENTITLEMENTS} ]]; then
+        return
+    fi
+
+    local fileName="macStore-entitlements.plist"
     if [[ -f "${DIR_CURRENT}/${fileName}" ]]; then
         KIS_ENTITLEMENTS="${DIR_CURRENT}/${fileName}"
     elif [[ -f "${SCRIPT_SOURCE_DIR}/${fileName}" ]]; then
@@ -56,6 +60,9 @@ print_usage () {
   changeSignature.sh -f=<file.dmg>[-s=<identity>] [-notarize-ac=<apple-account>] [-style=<style.txt>] [-bg=<background-image>]
 
     -f \t\t\t Krita source dmg to covert prepare for Pkg
+
+    -e \t\t\t Optional entitlements file, by default it will resign using macStore-entitlements.plist
+\t\t\† from packaging/macos.
 
     -s \t\t\t Code sign identity for codesign
 
@@ -183,20 +190,17 @@ cd "${DIR_CURRENT}"
 
 KIS_APPLOC="${DIR_CURRENT}/pkgWorkdir"
 
-findEntitlementsFile
-
-if [[ -z ${KIS_ENTITLEMENTS} ]]; then
-    echo "Could not find entitlements file use for codesign"
-    exit
-else
-    echo "using ${KIS_ENTITLEMENTS}"
-fi
 
 # -- Parse input args
 for arg in "${@}"; do
 
     if [[ ${arg} = -f=* ]]; then
         DMG_INPUT_FILE="${arg#*=}"
+        continue
+    fi
+
+    if [[ ${arg} = -e=* ]]; then
+        KIS_ENTITLEMENTS="${arg#*=}"
         continue
     fi
     # If string starts with -sign
@@ -231,6 +235,15 @@ for arg in "${@}"; do
         exit 1
     fi
 done
+
+findEntitlementsFile
+
+if [[ -z ${KIS_ENTITLEMENTS} ]]; then
+    echo "Could not find entitlements file use for codesign"
+    exit
+else
+    echo "using ${KIS_ENTITLEMENTS}"
+fi
 
 # -- Checks and messages
 

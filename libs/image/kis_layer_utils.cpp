@@ -50,6 +50,7 @@
 #include "kis_sequential_iterator.h"
 #include "kis_transparency_mask.h"
 #include "kis_paint_device_frames_interface.h"
+#include "kis_command_ids.h"
 
 
 namespace KisLayerUtils {
@@ -1671,7 +1672,7 @@ namespace KisLayerUtils {
                                            emitSignals,
                                            kundo2_i18n("Change projection color"),
                                            0,
-                                           142857 + 1);
+                                           KisCommandUtils::ChangeProjectionColorCommand);
         applicator.applyCommand(new KisChangeProjectionColorCommand(image, color), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE);
         applicator.end();
     }

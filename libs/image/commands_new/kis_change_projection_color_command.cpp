@@ -8,7 +8,7 @@
 
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
-
+#include "kis_command_ids.h"
 
 
 KisChangeProjectionColorCommand::KisChangeProjectionColorCommand(KisImageSP image, const KoColor &newColor, KUndo2Command *parent)
@@ -25,11 +25,7 @@ KisChangeProjectionColorCommand::~KisChangeProjectionColorCommand()
 
 int KisChangeProjectionColorCommand::id() const
 {
-    // we don't have a common commands id source in Krita yet, so
-    // just use a random one ;)
-
-    // https://www.scientificamerican.com/article/most-popular-numbers-grapes-of-math/
-    return 142857;
+    return KisCommandUtils::ChangeProjectionColorCommand;
 }
 
 bool KisChangeProjectionColorCommand::mergeWith(const KUndo2Command* command)
@@ -37,12 +33,20 @@ bool KisChangeProjectionColorCommand::mergeWith(const KUndo2Command* command)
     const KisChangeProjectionColorCommand *other =
         dynamic_cast<const KisChangeProjectionColorCommand*>(command);
 
-    if (!other || other->id() != id()) {
+    if (!other) {
         return false;
     }
 
     m_newColor = other->m_newColor;
     return true;
+}
+
+bool KisChangeProjectionColorCommand::canMergeWith(const KUndo2Command *command) const
+{
+    const KisChangeProjectionColorCommand *other =
+        dynamic_cast<const KisChangeProjectionColorCommand*>(command);
+
+    return other;
 }
 
 void KisChangeProjectionColorCommand::redo()

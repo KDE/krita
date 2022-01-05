@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 #
 #  SPDX-License-Identifier: GPL-3.0-or-later
 #
@@ -40,7 +40,11 @@
 #     Compress resulting dmg into krita_nightly-<gitsha>.dmg
 #     deletes temporary files.
 
-if test -z ${BUILDROOT}; then
+if [[ -n "$ZSH_VERSION" ]]; then
+    emulate -L ksh;
+fi
+
+if [[ -z $BUILDROOT ]]; then
     echo "ERROR: BUILDROOT env not set!"
     echo "\t Must point to the root of the buildfiles as stated in 3rdparty Readme"
     echo "exiting..."
@@ -179,7 +183,7 @@ for arg in "${@}"; do
     fi
 
     if [[ ${arg} = -asc-provider=* ]]; then
-        ASC_PROVIDER="${arg#*=}"
+        APPLE_TEAMID="${arg#*=}"
     fi
 
     if [[ ${arg} = "-h" || ${arg} = "--help" ]]; then
@@ -204,25 +208,45 @@ if [[ -z "${CODE_SIGNATURE}" ]]; then
 else
     print_msg "Code will be signed with %s" "${CODE_SIGNATURE}"
     ### NOTARIZATION
+    # check if we can perform notarization using notarytool
+    xcrun notarytool history --keychain-profile KritaNotarizeAccount 1> /dev/null
+    if [[ ${?} -eq 0 ]]; then
+        NOTARYTOOL="short"
+        NOTARIZE="true"
+    fi
 
-    if [[ -n "${NOTARIZE_ACC}" ]]; then
-
+    if [[ ${NOTARIZE} = "false" && -n "${NOTARIZE_ACC}" ]]; then
+        NOTARIZE="true"
         ASC_PROVIDER_OP=""
-        if [[ -n "${ASC_PROVIDER}" ]]; then
-            ASC_PROVIDER_OP="--asc-provider ${ASC_PROVIDER}"
+
+        if [[ -z ${APPLE_TEAMID} ]]; then
+            echo "No team id provided, extracting from signature"
+            APPLE_TEAMID=${CODE_SIGNATURE[-11,-2]}
+        fi
+
+        if [[ -n "${APPLE_TEAMID}" ]]; then
+            ASC_PROVIDER_OP="--asc-provider ${APPLE_TEAMID}"
         fi
 
         if [[ -z "${NOTARIZE_PASS}" ]]; then
             NOTARIZE_PASS="@keychain:AC_PASSWORD"
+            KEYCHAIN_PASS="true"
         fi
 
         # check if we can perform notarization
-        xcrun altool --notarization-history 0 --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 1> /dev/null
+        
+        xcrun notarytool history --apple-id "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" --team-id "${APPLE_TEAMID}" 1> /dev/null
+        if [[ ${?} -ne 0 ]]; then
+            echo "Unable to use notarytool: not setup/missing password, trying altool"
+            ALTOOL="true"
+            xcrun altool --notarization-history 0 --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 1> /dev/null
 
-        if [[ ${?} -eq 0 ]]; then
-            NOTARIZE="true"
+            if [[ ${?} -ne 0 ]]; then
+                NOTARIZE="false"
+                echo "No password given for notarization or AC_PASSWORD missig in keychain"
+            fi
         else
-            echo "No password given for notarization or AC_PASSWORD missig in keychain"
+            NOTARYTOOL="long"
         fi
     fi
 fi
@@ -232,6 +256,7 @@ if [[ ${NOTARIZE} = "true" ]]; then
 else
     echo "WARNING: Account information missing, Notarization will not be performed"
 fi
+
 
 ### STYLE for DMG
 if [[ ! ${DMG_STYLE} ]]; then
@@ -273,7 +298,7 @@ waiting_fixed() {
 
 add_lib_to_list() {
     local llist=${2}
-    if test -z "$(grep ${1##*/} <<< ${llist})" ; then
+    if [[ -z "$(grep ${1##*/} <<< ${llist})" ]]; then
         local llist="${llist} ${1##*/} "
     fi
     echo "${llist}"
@@ -287,7 +312,7 @@ find_needed_libs () {
     local libs_used="" # input lib_lists founded
 
     for libFile in ${@}; do
-        if test -z "$(file ${libFile} | grep 'Mach-O')" ; then
+        if [[ -z "$(file ${libFile} | grep 'Mach-O')" ]]; then
             # echo "skipping ${libFile}" >&2
             continue
         fi
@@ -296,7 +321,7 @@ find_needed_libs () {
         resultArray=(${oToolResult}) # convert to array
 
         for lib in ${resultArray[@]:1}; do
-            if test "${lib:0:1}" = "@"; then
+            if [[ "${lib:0:1}" = "@" ]]; then
                 local libs_used=$(add_lib_to_list "${lib}" "${libs_used}")
             fi
             if [[ "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}" ]]; then
@@ -317,7 +342,7 @@ find_missing_libs (){
     # echo "Searching for missing libs on deployment folders…" >&2
     local libs_missing=""
     for lib in ${@}; do
-        if test -z "$(find ${KRITA_DMG}/krita.app/Contents/ -name ${lib})"; then
+        if [[ -z "$(find ${KRITA_DMG}/krita.app/Contents/ -name ${lib})" ]]; then
             # echo "Adding ${lib} to missing libraries." >&2
             libs_missing="${libs_missing} ${lib}"
         fi
@@ -329,7 +354,7 @@ copy_missing_libs () {
     for lib in ${@}; do
         result=$(find -L "${BUILDROOT}/i" -name "${lib}")
 
-        if test $(countArgs ${result}) -eq 1; then
+        if [[ $(countArgs ${result}) -eq 1 ]]; then
             if [ "$(stringContains "${result}" "plugin")" ]; then
                 cp -pv ${result} ${KRITA_DMG}/krita.app/Contents/PlugIns/
                 krita_findmissinglibs "${KRITA_DMG}/krita.app/Contents/PlugIns/${result##*/}"
@@ -355,7 +380,7 @@ krita_findmissinglibs() {
     neededLibs=$(find_needed_libs "${@}")
     missingLibs=$(find_missing_libs ${neededLibs})
 
-    if test $(countArgs ${missingLibs}) -gt 0; then
+    if [[ $(countArgs ${missingLibs}) -gt 0 ]]; then
         printf "Found missing libs: %s\n" "${missingLibs}"
         copy_missing_libs ${missingLibs}
     fi
@@ -679,41 +704,49 @@ notarize_build() {
 
         ditto -c -k --sequesterRsrc --keepParent "${NOT_SRC_FILE}" "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip"
 
-        # echo "xcrun altool --notarize-app --primary-bundle-id \"org.krita\" --username \"${NOTARIZE_ACC}\" --password \"${NOTARIZE_PASS}\" --file \"${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip\""
-        local altoolResponse="$(xcrun altool --notarize-app --primary-bundle-id "org.krita" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} --file "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" 2>&1)"
+        if [[ ${NOTARYTOOL} = "short" ]]; then
+            xcrun notarytool submit "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" --wait --keychain-profile KritaNotarizeAccount
 
-        if [[ -n "$(grep 'Error' <<< ${altoolResponse})" ]]; then
-            printf "ERROR: xcrun altool exited with the following error! \n\n%s\n\n" "${altoolResponse}"
-            printf "This could mean there is an error in AppleID authentication!\n"
-            printf "aborting notarization\n"
-            NOTARIZE="false"
-            return
+        elif [[ ${NOTARYTOOL} = "long" ]]; then
+            xcrun notarytool submit "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" --wait --apple-id "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" --team-id "${APPLE_TEAMID}"
+
         else
-            printf "Response:\n\n%s\n\n" "${altoolResponse}"
-        fi
+            # echo "xcrun altool --notarize-app --primary-bundle-id \"org.krita\" --username \"${NOTARIZE_ACC}\" --password \"${NOTARIZE_PASS}\" --file \"${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip\""
+            local altoolResponse="$(xcrun altool --notarize-app --primary-bundle-id "org.krita" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} --file "${BUILDROOT}/tmp_notarize/${NOT_SRC_FILE}.zip" 2>&1)"
 
-        local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $NF }')"
-        echo "RequestUUID = ${uuid}" # Display identifier string
-
-        waiting_fixed "Waiting to retrieve notarize status" 120
-
-        while true ; do
-            fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 2>&1)  # get the status
-            notarize_status=`echo "${fullstatus}" | grep 'Status\:' | awk '{ print $2 }'`
-            echo "${fullstatus}"
-            if [[ "${notarize_status}" = "success" ]]; then
-                xcrun stapler staple "${NOT_SRC_FILE}"   #staple the ticket
-                xcrun stapler validate -v "${NOT_SRC_FILE}"
-                print_msg "Notarization success!"
-                break
-            elif [[ "${notarize_status}" = "in" ]]; then
-                waiting_fixed "Notarization still in progress, wait before checking again" 60
+            if [[ -n "$(grep 'Error' <<< ${altoolResponse})" ]]; then
+                printf "ERROR: xcrun altool exited with the following error! \n\n%s\n\n" "${altoolResponse}"
+                printf "This could mean there is an error in AppleID authentication!\n"
+                printf "aborting notarization\n"
+                NOTARIZE="false"
+                return
             else
-                echo "Notarization failed! full status below"
-                echo "${fullstatus}"
-                exit 1
+                printf "Response:\n\n%s\n\n" "${altoolResponse}"
             fi
-        done
+
+            local uuid="$(grep 'RequestUUID' <<< ${altoolResponse} | awk '{ print $NF }')"
+            echo "RequestUUID = ${uuid}" # Display identifier string
+
+            waiting_fixed "Waiting to retrieve notarize status" 120
+
+            while true ; do
+                fullstatus=$(xcrun altool --notarization-info "${uuid}" --username "${NOTARIZE_ACC}" --password "${NOTARIZE_PASS}" ${ASC_PROVIDER_OP} 2>&1)  # get the status
+                notarize_status=`echo "${fullstatus}" | grep 'Status\:' | awk '{ print $2 }'`
+                echo "${fullstatus}"
+                if [[ "${notarize_status}" = "success" ]]; then
+                    xcrun stapler staple "${NOT_SRC_FILE}"   #staple the ticket
+                    xcrun stapler validate -v "${NOT_SRC_FILE}"
+                    print_msg "Notarization success!"
+                    break
+                elif [[ "${notarize_status}" = "in" ]]; then
+                    waiting_fixed "Notarization still in progress, wait before checking again" 60
+                else
+                    echo "Notarization failed! full status below"
+                    echo "${fullstatus}"
+                    exit 1
+                fi
+            done
+        fi
     fi
 }
 

@@ -163,15 +163,13 @@ void KisDlgImportVideoAnimation::saveLastUsedConfiguration(QString configuration
 
 QStringList KisDlgImportVideoAnimation::renderFrames()
 {
-    QStringList frameList;
-
+    QStringList frameFileList;
+    QList<int> frameTimeList;
 
     if ( !m_videoWorkDir.mkpath(".") ) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Failed to create a work directory, make sure you have write permission"));
-        return frameList;
+        return frameFileList;
     }
-
-    QScopedPointer<KisFFMpegWrapper> ffmpeg(new KisFFMpegWrapper(this));
 
     QStringList args;
     float exportDuration = m_ui.exportDurationSpinbox->value();
@@ -184,16 +182,20 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
                                   "If you want to edit a clip larger than 100 frames, consider using a real video editor, like Kdenlive (https://kdenlive.org)."),
                                  QMessageBox::Ok | QMessageBox::Cancel,
                                  QMessageBox::Cancel) == QMessageBox::Cancel) {
-            return frameList;
+            return frameFileList;
         }
     }
 
 
     args << "-ss" << QString::number(m_ui.startExportingAtSpinbox->value())
-         << "-i" << m_videoInfo.file
-         << "-filter:v" << "select=gt(scene\\,0.05)+eq(n\\,0)"
-         << "-vsync" << "0"
-         << "-t" << QString::number(exportDuration)
+         << "-i" << m_videoInfo.file;
+
+    if (m_ui.optionFilterDuplicates->isChecked()) {
+         args << "-filter:v" << "select=gt(scene\\,0.03)+eq(n\\,0)"
+              << "-vsync" << "0";
+    }
+
+    args << "-t" << QString::number(exportDuration)
          << "-r" << QString::number(fps);
 
     if ( m_videoInfo.width != m_ui.videoWidthSpinbox->value() || m_videoInfo.height != m_ui.videoHeightSpinbox->value() ) {
@@ -215,29 +217,70 @@ QStringList KisDlgImportVideoAnimation::renderFrames()
 
     saveLastUsedConfiguration("ANIMATION_EXPORT", config);
 
-    KisFFMpegWrapperSettings ffmpegSettings;
 
-    ffmpegSettings.processPath = ffmpegInfo["path"].toString();
-    ffmpegSettings.args = args;
-    ffmpegSettings.outputFile = m_videoWorkDir.filePath("output_%04d.png");
-    ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
-    ffmpegSettings.totalFrames = qCeil(exportDuration * fps);
-    ffmpegSettings.progressMessage = i18nc("FFMPEG animated video import message. arg1: frame progress number. arg2: file suffix."
-                                           , "Extracted %1 frames from %2 video.", "[progress]", "[suffix]");
+    {
+        KisFFMpegWrapperSettings ffmpegSettings;
 
-    ffmpeg->startNonBlocking(ffmpegSettings);
-    ffmpeg->waitForFinished();
+        ffmpegSettings.processPath = ffmpegInfo["path"].toString();
+        ffmpegSettings.args = args;
+        ffmpegSettings.outputFile = m_videoWorkDir.filePath("output_%04d.png");
+        ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
+        ffmpegSettings.totalFrames = qCeil(exportDuration * fps);
+        ffmpegSettings.progressMessage = i18nc("FFMPEG animated video import message. arg1: frame progress number. arg2: file suffix."
+                                               , "Extracted %1 frames from %2 video.", "[progress]", "[suffix]");
 
-    frameList = m_videoWorkDir.entryList(QStringList() << "output_*.png",QDir::Files);
-    frameList.replaceInStrings("output_", m_videoWorkDir.absolutePath() + QDir::separator() + "output_");
+        QScopedPointer<KisFFMpegWrapper> ffmpeg(new KisFFMpegWrapper(this));
+        ffmpeg->startNonBlocking(ffmpegSettings);
+        ffmpeg->waitForFinished();
 
-    dbgFile << "Import frames list:" << frameList;
+        frameFileList = m_videoWorkDir.entryList(QStringList() << "output_*.png",QDir::Files);
+        frameFileList.replaceInStrings("output_", m_videoWorkDir.absolutePath() + QDir::separator() + "output_");
 
-    if ( frameList.isEmpty() ) {
+        dbgFile << "Import frames list:" << frameFileList;
+    }
+
+    if (m_ui.optionFilterDuplicates->isChecked()){
+        KisFFMpegWrapperSettings ffmpegSettings;
+        ffmpegSettings.defaultPrependArgs.clear();
+        ffmpegSettings.processPath = ffprobeInfo["path"].toString();
+
+        QString filter = "movie=" + m_videoInfo.file + ",setpts=N+1,select=gt(scene\\,0.03)";
+        ffmpegSettings.args = QStringList() << "-select_streams" << "v"
+                                            << "-show_entries" << "frame=pkt_pts"
+                                            << "-of" << "compact=p=0:nk=1"
+                                            << "-f" << "lavfi" << filter;
+
+
+        QScopedPointer<KisFFMpegWrapper> ffmpeg(new KisFFMpegWrapper(this));
+        frameTimeList = {0}; // We always have a frame 0 here...
+        connect(ffmpeg.data(), &KisFFMpegWrapper::sigReadSTDOUT, [&](QByteArray arr) {
+            QString out = QString(arr);
+            QStringList integerOuts = out.split("\n", Qt::SkipEmptyParts);
+            Q_FOREACH(const QString& str, integerOuts){
+                bool ok = false;
+                const int value = str.toUInt(&ok);
+                if (ok) {
+                    frameTimeList.push_back(value);
+                }
+            }
+        });
+        ffmpeg->startNonBlocking(ffmpegSettings);
+        ffmpeg->waitForFinished();
+
+        dbgFile << "Assign to frames:" << ppVar(frameTimeList);
+        ENTER_FUNCTION() << ppVar(frameTimeList);
+    }
+
+
+    // ffprobe -select_streams v -show_entries frame=pkt_pts -of compact=p=0:nk=1 -f lavfi "movie=abc.mov,setpts=N+1,select=gt(scene\,.02)"
+
+    if ( frameFileList.isEmpty() ) {
          QMessageBox::critical(this, i18nc("@title:window", "Krita"), i18n("Failed to export frames from video"));
     }
 
-    return frameList;
+
+
+    return frameFileList;
 }
 
 

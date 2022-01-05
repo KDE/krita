@@ -323,6 +323,9 @@ add_document_to_window()
     static QString krita_i18n(const QString &text);
     static QString krita_i18nc(const QString &context, const QString &text);
 
+
+    static QString getAppDataLocation();
+
 private Q_SLOTS:
 
     /// This is called from the constructor of the window, before the xmlgui file is loaded

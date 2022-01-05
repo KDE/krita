@@ -358,11 +358,7 @@ bool KisApplication::registerResources()
                                                      i18nc("Resource type name", "Layer styles"),
                                                      QStringList() << "application/x-photoshop-style"));
 
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString databaseLocation = cfg.readEntry(KisResourceCacheDb::dbLocationKey, "");
-    if (databaseLocation.isEmpty()) {
-        databaseLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    }
+    QString databaseLocation = KoResourcePaths::getAppDataLocation();
 
     if (!KisResourceCacheDb::initialize(databaseLocation)) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));

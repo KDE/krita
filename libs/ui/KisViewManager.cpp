@@ -1403,7 +1403,7 @@ void KisViewManager::slotUpdateAuthorProfileActions()
 
     KConfigGroup authorGroup(KSharedConfig::openConfig(), "Author");
     QStringList profiles = authorGroup.readEntry("profile-names", QStringList());
-    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QString authorInfo = KoResourcePaths::getAppDataLocation() + "/authorinfo/";
     QStringList filters = QStringList() << "*.authorinfo";
     QDir dir(authorInfo);
     Q_FOREACH(QString entry, dir.entryList(filters)) {

@@ -343,7 +343,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     m_urlResourceFolder->setMode(KoFileDialog::OpenDirectory);
     m_urlResourceFolder->setConfigurationName("resource_directory");
-    m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlResourceFolder->setFileName(KoResourcePaths::getAppDataLocation());
 
 
     const int forcedFontDPI = cfg.readEntry("forcedDpiForQtFontBugWorkaround", -1);
@@ -425,7 +425,7 @@ void GeneralTab::setDefault()
     m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange(false));
 
     m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
-    m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlResourceFolder->setFileName(KoResourcePaths::getAppDataLocation());
 
     chkForcedFontDPI->setChecked(false);
     intForcedFontDPI->setValue(qt_defaultDpi());

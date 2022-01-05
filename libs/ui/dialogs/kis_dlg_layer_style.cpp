@@ -287,9 +287,7 @@ void KisDlgLayerStyle::slotNewStyle()
     clone->setValid(true);
 
     const QString customStylesStorageLocation = "asl/CustomStyles.asl";
-    KisConfig cfg(true);
-    QString resourceDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    QString resourceDir = KoResourcePaths::getAppDataLocation();
     QString storagePath = resourceDir + "/" + customStylesStorageLocation;
 
     bool resourceAdded = false;
@@ -358,9 +356,7 @@ void KisDlgLayerStyle::slotLoadStyle()
         }
 
         // 1. Copy the layer style to the resource folder
-        KisConfig cfg(true);
-        const QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                                QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+        const QString newDir = KoResourcePaths::getAppDataLocation();
         const QString newName = oldFileInfo.fileName();
         const QString newLocation = QStringLiteral("%1/%2").arg(newDir, newName);
 

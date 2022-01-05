@@ -176,6 +176,26 @@ QString KoResourcePaths::getApplicationRoot()
     return getInstallationPrefix();
 }
 
+QString KoResourcePaths::getAppDataLocation()
+{
+    QString path;
+
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    path = cfg.readEntry(KisResourceLocator::resourceLocationKey, path
+                         = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+
+#ifndef Q_OS_ANDROID
+    // on Android almost all config locations we save to are app specific,
+    // and don't end with "krita".
+    if (!path.endsWith("krita")) {
+        path += "/krita";
+    }
+#endif
+
+    return path;
+
+}
+
 void KoResourcePaths::addResourceType(const QString &type, const char *basetype,
                                       const QString &relativeName, bool priority)
 {
@@ -373,6 +393,9 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
     dbgResources << type << aliases << d->mapTypeToQStandardPaths(type);
 
     QStringList dirs;
+
+    dirs << getAppDataLocation();
+
     QStringList standardDirs =
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), "", QStandardPaths::LocateDirectory);
     appendResources(&dirs, standardDirs, true);
@@ -522,8 +545,7 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
     const QStandardPaths::StandardLocation location = d->mapTypeToQStandardPaths(type);
 
     if (location == QStandardPaths::AppDataLocation) {
-        KConfigGroup cfg(KSharedConfig::openConfig(), "");
-        path = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
+        path = KoResourcePaths::getAppDataLocation();
     }
 
     if (path.isEmpty()) {

@@ -9,6 +9,7 @@
 
 #include "KisDocument.h"
 #include "KoXmlNS.h"
+#include <KoResourcePaths.h>
 
 #include <QDateTime>
 #include <KoStoreDevice.h>
@@ -367,7 +368,7 @@ void KoDocumentInfo::updateParameters()
     KConfigGroup appAuthorGroup(&config, "Author");
     QString profile = appAuthorGroup.readEntry("active-profile", "");
 
-    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QString authorInfo = KoResourcePaths::getAppDataLocation() + "/authorinfo/";
     QDir dir(authorInfo);
     QStringList filters = QStringList() << "*.authorinfo";
 

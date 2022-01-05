@@ -196,8 +196,7 @@ class KritaScriptStarter(EXTENSION):
         self.ui.cancel_button.clicked.connect(self.cancel)
         self.ui.create_button.clicked.connect(self.create)
 
-        app_data_location = QStandardPaths.AppDataLocation
-        target_directory = QStandardPaths.writableLocation(app_data_location)
+        target_directory = Krita.instance().getAppDataLocation()
         if not CONTEXT_KRITA:
             target_directory = os.path.join(target_directory, "krita")
         target_directory = os.path.join(target_directory, "pykrita")

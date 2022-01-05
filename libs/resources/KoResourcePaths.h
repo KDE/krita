@@ -46,6 +46,15 @@ public:
     static QString getApplicationRoot();
 
     /**
+     * @brief getAppDataLocation Use this instead of QStandardPaths::AppDataLocation! The
+     * user can configure the location where resources and other user writable items are stored
+     * now.
+     *
+     * @return the configured location for the appdata folder
+     */
+    static QString getAppDataLocation();
+
+    /**
      * Adds suffixes for types.
      *
      * You may add as many as you need, but it is advised that there

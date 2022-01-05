@@ -106,13 +106,18 @@ KRITA_VERSION=$(grep "#define KRITA_VERSION_STRING" libs/version/kritaversion.h 
 # Then use that to generate a combined name we'll distribute
 cd $KRITA_SOURCES
 if git rev-parse --is-inside-work-tree; then
-	GIT_REVISION=$(git rev-parse --short HEAD)
-	export VERSION=$KRITA_VERSION-$GIT_REVISION
-	VERSION_TYPE="development"
+    GIT_REVISION=$(git rev-parse --short HEAD)
+    export VERSION=$KRITA_VERSION-$GIT_REVISION
+    VERSION_TYPE="development"
 
-	if [ -z "${CHANNEL}" ]; then
+    if [ -z "${CHANNEL}" ]; then
         BRANCH="$(git rev-parse --abbrev-ref HEAD)"
-        if [ "$BRANCH" = "master" ]; then
+
+        if [ "${JOB_NAME}" == "Krita_Nightly_Appimage_Build" ]; then
+            CHANNEL="Next"
+        elif [ "${JOB_NAME}" == "Krita_Stable_Appimage_Build" ]; then
+            CHANNEL="Plus"
+        elif [ "$BRANCH" = "master" ]; then
             CHANNEL="Next"
         elif [[ "${BRANCH}" =~ krita/.* ]]; then
             CHANNEL="Plus"

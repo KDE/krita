@@ -274,9 +274,14 @@ void KisToolSelectOutline::updateContinuedMode()
 
 void KisToolSelectOutline::deactivate()
 {
-    KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-    KIS_ASSERT_RECOVER_RETURN(kisCanvas);
-    kisCanvas->updateCanvas();
+    if (!m_points.isEmpty()) {
+        finishSelectionAction();
+        m_points.clear(); // ensure points are always cleared
+    } else {
+        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
+        KIS_ASSERT_RECOVER_RETURN(kisCanvas);
+        kisCanvas->updateCanvas();
+    }
 
     m_continuedMode = false;
 

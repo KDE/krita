@@ -223,6 +223,7 @@ elseif (ANDROID)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0046-Android-Update-clang-mkspecs.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Disable-QAccessibility-by-not-traversing-nodes.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Android-Rename-rs-locale-to-se.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Hack-Workaround-the-absence-of-FLAG_SUPPORTS_WRITE-o.patch
 
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0111-Fix-unbalanced-KeyPress-Release-events-in-children-o.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0112-Fix-shortcuts-assigned-to-special-keys-on-non-latin-.patch

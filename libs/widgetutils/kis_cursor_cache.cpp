@@ -137,7 +137,7 @@ namespace {
         if (cursorImage.isNull()) {
             qWarning() << "Could not load cursor from qrc, trying filesystem" << cursorName;
 
-            cursorImage = QImage(KoResourcePaths::findResource("kis_pics", cursorName));
+            cursorImage = QImage(KoResourcePaths::findAsset("kis_pics", cursorName));
             if (cursorImage.isNull()) {
                 qWarning() << "Could not load cursor from filesystem" << cursorName;
                 return Qt::ArrowCursor;

@@ -35,7 +35,7 @@ QHash<QString, QString> KShortcutSchemesHelper::schemeFileLocations()
     QStringList schemes;
     schemes << QString("Default");  // Forbid "Default.shortcuts"
     QHash<QString, QString> schemeFileLocations;
-    const QStringList shortcutFiles = KoResourcePaths::findAllResources("kis_shortcuts", "*.shortcuts");
+    const QStringList shortcutFiles = KoResourcePaths::findAllAssets("kis_shortcuts", "*.shortcuts");
     Q_FOREACH (const QString &file, shortcutFiles) {
         QFileInfo fileInfo(file);
         QString schemeName = fileInfo.completeBaseName();

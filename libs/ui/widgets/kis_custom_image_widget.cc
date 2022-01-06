@@ -380,7 +380,7 @@ void KisCustomImageWidget::fillPredefined()
 
     cmbPredefined->addItem("");
 
-    QStringList definitions = KoResourcePaths::findAllResources("data", "predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive);
+    QStringList definitions = KoResourcePaths::findAllAssets("data", "predefined_image_sizes/*.predefinedimage", KoResourcePaths::Recursive);
     definitions.sort();
 
     if (!definitions.empty()) {

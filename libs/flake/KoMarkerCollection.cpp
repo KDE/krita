@@ -95,7 +95,7 @@ void KoMarkerCollection::loadMarkersFromFile(const QString &svgFile)
 
 void KoMarkerCollection::loadDefaultMarkers()
 {
-    QString filePath = KoResourcePaths::findResource("markers", "markers.svg");
+    QString filePath = KoResourcePaths::findAsset("markers", "markers.svg");
     loadMarkersFromFile(filePath);
 }
 

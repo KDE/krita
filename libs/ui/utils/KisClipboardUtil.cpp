@@ -135,7 +135,11 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, const QPoin
 
                             KisFileLayer *fileLayer = new KisFileLayer(kisview->image(), "", url.toLocalFile(),
                                                                        KisFileLayer::None, fileInfo.fileName(), OPACITY_OPAQUE_U8);
-                            adapter.addNode(fileLayer, kisview->mainWindow()->viewManager()->activeNode()->parent(), kisview->mainWindow()->viewManager()->activeNode());
+
+                            KisLayerSP above = kisview->mainWindow()->viewManager()->activeLayer();
+                            KisNodeSP parent = above ? above->parent() : kisview->mainWindow()->viewManager()->image()->root();
+
+                            adapter.addNode(fileLayer, parent, above);
                         }
                         else if (action == openInNewDocument || action == openManyDocuments) {
                             if (kisview->mainWindow()) {

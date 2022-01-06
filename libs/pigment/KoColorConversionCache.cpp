@@ -54,11 +54,11 @@ struct KoColorConversionCache::CachedTransformation {
     }
 
     bool isNotInUse() {
-        return use == 0;
+        return !use;
     }
 
     KoColorConversionTransformation* transfo;
-    int use;
+    QAtomicInt use;
 };
 
 typedef QPair<KoColorConversionCacheKey, KoCachedColorConversionTransformation> FastPathCacheItem;
@@ -152,18 +152,18 @@ KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(KoC
 {
     d->cache = cache;
     d->transfo = transfo;
-    d->transfo->use++;
+    d->transfo->use.ref();
 }
 
 KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation& rhs) : d(new Private(*rhs.d))
 {
-    d->transfo->use++;
+    d->transfo->use.ref();
 }
 
 KoCachedColorConversionTransformation::~KoCachedColorConversionTransformation()
 {
-    d->transfo->use--;
-    Q_ASSERT(d->transfo->use >= 0);
+    Q_ASSERT(d->transfo->use > 0);
+    d->transfo->use.deref();
     delete d;
 }
 

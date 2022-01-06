@@ -1226,7 +1226,7 @@ void KEditToolBarWidgetPrivate::loadActions(const QDomElement &elem)
             if (it.attribute(attrName) == action->objectName()) {
                 // we have a match!
                 ToolBarItem *act = new ToolBarItem(m_activeList, it.tagName(), action->objectName(), action->toolTip());
-                act->setText(nameFilter.subs(KLocalizedString::removeAcceleratorMarker(action->iconText())).toString());
+                act->setText(nameFilter.subs(KLocalizedString::removeAcceleratorMarker(action->text())).toString());
                 act->setIcon(!action->icon().isNull() ? action->icon() : m_emptyIcon);
                 act->setTextAlongsideIconHidden(action->priority() < QAction::NormalPriority);
 

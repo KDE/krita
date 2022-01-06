@@ -471,9 +471,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // the welcome screen needs to grab actions...so make sure this line goes after the createAction() so they exist
     d->welcomePage->setMainWindow(this);
 
-    connect(&d->recentFilesModel, &KisRecentDocumentsModelWrapper::sigInvalidDocumentForIcon, [this](QUrl url) {
-        this->removeRecentUrl(url);
-    });
     connect(&d->recentFilesModel.model(), &QStandardItemModel::itemChanged, [this](QStandardItem *item) {
         QUrl url = item->data().toUrl();
         QIcon icon = item->icon();

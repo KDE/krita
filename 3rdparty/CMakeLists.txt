@@ -198,7 +198,7 @@ if (ANDROID)
   set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
   set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -Wl,-z,stack-size=4194304")
 
-  # stl must be consistent: 
+  # stl must be consistent: https://github.com/android/ndk/issues/1441
   set (GLOBAL_PROFILE ${GLOBAL_PROFILE}
                      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}

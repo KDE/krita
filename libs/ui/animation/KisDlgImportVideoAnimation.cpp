@@ -160,6 +160,9 @@ void KisDlgImportVideoAnimation::saveLastUsedConfiguration(QString configuration
     globalConfig.setExportConfiguration(configurationID, config);
 }
 
+float rerange(float value, float oldMin, float oldMax, float newMin, float newMax) {
+    return ((value - oldMin) / (oldMax - oldMin)) * (newMax - newMin) + newMin;
+}
 
 RenderedFrames KisDlgImportVideoAnimation::renderFrames()
 {
@@ -173,8 +176,9 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames()
     }
 
     QStringList args;
-    float exportDuration = m_ui.exportDurationSpinbox->value();
-    float fps = m_ui.fpsSpinbox->value(); 
+    const float exportDuration = m_ui.exportDurationSpinbox->value();
+    const float fps = m_ui.fpsSpinbox->value();
+    const float nDuplicateSensitivity = m_ui.sensitivitySpinbox->value() / m_ui.sensitivitySpinbox->maximum();
 
     if (exportDuration / fps > 100.0) {
         if (QMessageBox::warning(this, i18nc("Title for a messagebox", "Krita"),
@@ -191,8 +195,10 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames()
     args << "-ss" << QString::number(m_ui.startExportingAtSpinbox->value())
          << "-i" << m_videoInfo.file;
 
+    const float sceneFiltrationFilterThreshold = rerange( 1 - nDuplicateSensitivity, 0.0f, 1.0f, 0.0005f, 0.2f);
+
     if (m_ui.optionFilterDuplicates->isChecked()) {
-         args << "-filter:v" << "select=gt(scene\\,0.03)+eq(n\\,0)"
+         args << "-filter:v" << QString("select=gt(scene\\,%1)+eq(n\\,0)").arg(sceneFiltrationFilterThreshold)
               << "-vsync" << "0";
     }
 
@@ -245,7 +251,7 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames()
         ffmpegSettings.defaultPrependArgs.clear();
         ffmpegSettings.processPath = ffprobeInfo["path"].toString();
 
-        QString filter = "movie=" + m_videoInfo.file + ",setpts=N+1,select=gt(scene\\,0.03)";
+        QString filter = "movie=" + m_videoInfo.file + QString(",setpts=N+1,select=gt(scene\\,%1)").arg(sceneFiltrationFilterThreshold);
         ffmpegSettings.args = QStringList() << "-select_streams" << "v"
                                             << "-show_entries" << "frame=pkt_pts"
                                             << "-of" << "compact=p=0:nk=1"

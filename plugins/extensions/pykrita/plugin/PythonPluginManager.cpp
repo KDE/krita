@@ -109,7 +109,7 @@ bool PythonPluginManager::verifyModuleExists(PythonPlugin &plugin)
     rel_path = rel_path + "/" + "__init__.py";
     dbgScript << "Finding Python module with rel_path:" << rel_path;
 
-    QString module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
+    QString module_path = KoResourcePaths::findAsset("pythonscripts", rel_path);
 
     dbgScript << "module_path:" << module_path;
 
@@ -117,7 +117,7 @@ bool PythonPluginManager::verifyModuleExists(PythonPlugin &plugin)
         // 1) Nothing found, then try file based plugin
         rel_path = plugin.moduleFilePathPart() + ".py";
         dbgScript << "Finding Python module with rel_path:" << rel_path;
-        module_path = KoResourcePaths::findResource("pythonscripts", rel_path);
+        module_path = KoResourcePaths::findAsset("pythonscripts", rel_path);
         dbgScript << "module_path:" << module_path;
     }
 

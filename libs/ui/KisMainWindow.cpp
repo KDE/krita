@@ -2066,17 +2066,17 @@ void KisMainWindow::importVideoAnimation()
     KisDlgImportVideoAnimation dlg(this, activeView());
 
     if (dlg.exec() == QDialog::Accepted) {
-        QStringList files = dlg.renderFrames();
+        RenderedFrames renderedFrames = dlg.renderFrames();
         QStringList documentInfoList = dlg.documentInfo();
 
-        if (files.isEmpty()) return;
+        if (renderedFrames.isEmpty()) return;
         
         dbgFile << "Animation Import options:" << documentInfoList;
 
         int firstFrame = 0;
         const int step = documentInfoList[0].toInt();
         const int fps = documentInfoList[1].toInt();
-        const int totalFrames = files.size() * step;
+        const int totalFrames = renderedFrames.framesNeedRelocation() ? (renderedFrames.renderedFrameTargetTimes.last() + 1) : renderedFrames.size() * step;
         const QString name = QFileInfo(documentInfoList[3]).fileName();
         const bool useCurrentDocument = documentInfoList[4].toInt();
         bool useDocumentColorSpace = false;
@@ -2130,7 +2130,7 @@ void KisMainWindow::importVideoAnimation()
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportErrorCode status = importer.import(files, firstFrame, step, false, false, 0, useDocumentColorSpace);
+        KisImportExportErrorCode status = importer.import(renderedFrames.renderedFrameFiles, firstFrame, step, false, false, 0, useDocumentColorSpace, renderedFrames.renderedFrameTargetTimes);
 
         dlg.cleanupWorkDir();
 

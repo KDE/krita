@@ -11,6 +11,7 @@
 #include "KoColorSpace.h"
 #include <KoUpdater.h>
 #include <QApplication>
+#include <QQueue>
 #include "KisPart.h"
 #include "KisDocument.h"
 #include "kis_image.h"
@@ -50,8 +51,14 @@ KisAnimationImporter::KisAnimationImporter(KisDocument* document)
 KisAnimationImporter::~KisAnimationImporter()
 {}
 
-KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int firstFrame, int step, bool autoAddHoldframes, bool startfrom0, int isAscending, bool assignDocumentProfile)
+KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int firstFrame, int step, bool autoAddHoldframes, bool startfrom0, int isAscending, bool assignDocumentProfile, QList<int> optionalKeyframeTimeList)
 {
+    //TODO: We should clean up this code --
+    // There are a lot of actions here that we should break into individual methods
+    // so that we can better control code flow, and I'd prefer to use multiple import
+    // calls to better handle all of these different options!
+    // Additionally, we might prefer to use flags for multiple booleans to improve
+    // legibility of calls.
     Q_ASSERT(step > 0);
 
     KisUndoAdapter *undo = m_d->image->undoAdapter();
@@ -60,16 +67,23 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
     QScopedPointer<KisDocument> importDoc(KisPart::instance()->createDocument());
     importDoc->setFileBatchMode(true);
 
+    const bool usingPredefinedTimes = !optionalKeyframeTimeList.isEmpty() && !autoAddHoldframes;
+    QQueue<int> predefinedFrameQueue;
+    predefinedFrameQueue.append(optionalKeyframeTimeList);
+
     KisImportExportErrorCode status = ImportExportCodes::OK;
-    int frame = firstFrame;
+    int frame = usingPredefinedTimes ? predefinedFrameQueue.dequeue() : firstFrame;
     int filesProcessed = 0;
+
+    if (usingPredefinedTimes) {
+        KIS_ASSERT(files.count() == optionalKeyframeTimeList.count());
+    }
 
     if (m_d->updater) {
         m_d->updater->setRange(0, files.size());
     }
 
-    KisPaintLayerSP paintLayer = 0;
-    KisRasterKeyframeChannel *contentChannel = 0;
+    QPair<KisPaintLayerSP, KisRasterKeyframeChannel*> layerRasterChannelPair;
 
     const QRegExp rx(QLatin1String("(\\d+)"));    //regex for extracting numbers
     QStringList fileNumberRxList;
@@ -86,6 +100,7 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
 
     if (!fileNumberRxList.isEmpty()) {
         fileNumberRxList.last().toInt(&ok);    // selects the last number of file name of the first frame (useful for descending order)
+        // Note to self -- ^^ uh.... This isn't doing anything?? Shouldn't this assign `firstFrameNumber`?
     }
 
     if (firstFrameNumber == 0){
@@ -93,29 +108,18 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
     }
 
     fileNumberRxList.clear();
-
-    int offset = (startfrom0 ? 1 : 0);    //offset added to consider file numbering starts from 1 instead of 0
-
+    const int offset = (startfrom0 ? 1 : 0);    //offset added to consider file numbering starts from 1 instead of 0
     int autoframe = 0;
 
     KisConfig cfg(true);
 
     Q_FOREACH(QString file, files) {
         bool successfullyLoaded = importDoc->openPath(file, KisDocument::DontAddToRecent);
-        if (!successfullyLoaded) {
-            status = ImportExportCodes::InternalError;
-            break;
-        }
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(successfullyLoaded, ImportExportCodes::InternalError);
 
-
-
-        if (frame == firstFrame) {
-            const KoColorSpace *cs = importDoc->image()->colorSpace();
-            paintLayer = new KisPaintLayer(m_d->image, m_d->image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
-            undo->addCommand(new KisImageLayerAddCommand(m_d->image, paintLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount()));
-
-            paintLayer->enableAnimation();
-            contentChannel = qobject_cast<KisRasterKeyframeChannel*>(paintLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
+        if ( (!usingPredefinedTimes && frame == firstFrame)
+          || (usingPredefinedTimes && frame == optionalKeyframeTimeList.first()) ) {
+             layerRasterChannelPair = initializePaintLayer(importDoc, undo);
         }
 
         if (m_d->updater) {
@@ -141,7 +145,7 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
         importDoc->image()->projection()->purgeDefaultPixels();
 
         if (!autoAddHoldframes) {
-            contentChannel->importFrame(frame, importDoc->image()->projection(), NULL);    // as first frame added will go to second slot i.e #1 instead of #0
+            layerRasterChannelPair.second->importFrame(frame, importDoc->image()->projection(), NULL);    // as first frame added will go to second slot i.e #1 instead of #0
         } else {
             pos = 0;
 
@@ -159,36 +163,52 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
             }
 
             if (ok) {
-                contentChannel->importFrame(autoframe , importDoc->image()->projection(), NULL);
+                layerRasterChannelPair.second->importFrame(autoframe , importDoc->image()->projection(), NULL);
             } else {
                 // if it fails to extract a number, the next frame will simply be added to next slot
-                contentChannel->importFrame(autoframe + 1, importDoc->image()->projection(), NULL);
+                layerRasterChannelPair.second->importFrame(autoframe + 1, importDoc->image()->projection(), NULL);
             }
             fileNumberRxList.clear();
         }
 
-        frame += step;
+        if (usingPredefinedTimes && predefinedFrameQueue.count()) {
+            frame = predefinedFrameQueue.dequeue();
+        } else {
+            frame += step;
+        }
+
         filesProcessed++;
     }
 
-    if (paintLayer && assignDocumentProfile) {
+    if (layerRasterChannelPair.first && assignDocumentProfile) {
 
-        if (paintLayer->colorSpace()->colorModelId() == m_d->image->colorSpace()->colorModelId()) {
+        if (layerRasterChannelPair.first->colorSpace()->colorModelId() == m_d->image->colorSpace()->colorModelId()) {
 
-            const KoColorSpace *srcColorSpace = paintLayer->colorSpace();
+            const KoColorSpace *srcColorSpace = layerRasterChannelPair.first->colorSpace();
             const KoColorSpace *dstColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
                         srcColorSpace->colorModelId().id()
                         , srcColorSpace->colorDepthId().id()
                         , m_d->image->colorSpace()->profile());
 
             KisAssignProfileProcessingVisitor *visitor = new KisAssignProfileProcessingVisitor(srcColorSpace, dstColorSpace);
-            visitor->visit(paintLayer.data(), undo);
+            visitor->visit(layerRasterChannelPair.first.data(), undo);
         }
     }
 
     undo->endMacro();
 
     return status;
+}
+
+QPair<KisPaintLayerSP, KisRasterKeyframeChannel*> KisAnimationImporter::initializePaintLayer(QScopedPointer<KisDocument>& doc, KisUndoAdapter *undoAdapter)
+{
+    const KoColorSpace *cs = doc->image()->colorSpace();
+    KisPaintLayerSP paintLayer = new KisPaintLayer(m_d->image, m_d->image->nextLayerName(), OPACITY_OPAQUE_U8, cs);
+    undoAdapter->addCommand(new KisImageLayerAddCommand(m_d->image, paintLayer, m_d->image->rootLayer(), m_d->image->rootLayer()->childCount()));
+
+    paintLayer->enableAnimation();
+    KisRasterKeyframeChannel* contentChannel = qobject_cast<KisRasterKeyframeChannel*>(paintLayer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true));
+    return QPair<KisPaintLayerSP, KisRasterKeyframeChannel*>(paintLayer, contentChannel);
 }
 
 void KisAnimationImporter::cancel()

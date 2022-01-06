@@ -516,9 +516,8 @@ void LutDockerDock::resetOcioConfiguration()
         if (m_ocioConfig) {
             OCIO::SetCurrentConfig(m_ocioConfig);
         }
-    }
-    catch (OCIO::Exception &exception) {
-        dbgKrita << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
+    } catch (OCIO::Exception &exception) {
+        errKrita << "OpenColorIO Error:" << exception.what() << "Cannot create the LUT docker";
     }
 
 

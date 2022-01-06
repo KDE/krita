@@ -64,6 +64,7 @@ configure_ext() {
         -DCMAKE_INSTALL_PREFIX=$THIRDPARTY_INSTALL                                      \
         -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
         -DANDROID_ABI=$ANDROID_ABI                                                      \
+        -DANDROID_STL=c++_shared                                                           \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
@@ -78,6 +79,7 @@ configure_plugins() {
         -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX                                          \
         -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
         -DANDROID_ABI=$ANDROID_ABI                                                      \
+        -DANDROID_STL=c++_shared                                                           \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i;$INSTALL_PREFIX"
@@ -123,6 +125,7 @@ build_ext() {
     cmake --build . --config $BUILD_TYPE --target ext_mypaint -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_webp -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_vc -- -j$PROC_COUNT
+    # cmake --build . --config $BUILD_TYPE --target ext_ocio -- -j$PROC_COUNT
 
     cd $BUILD_ROOT
 }

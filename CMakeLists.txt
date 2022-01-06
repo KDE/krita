@@ -832,6 +832,9 @@ if (OPENCOLORIO_VERSION VERSION_GREATER_EQUAL "2.0.0")
     set(HAVE_OCIO_V2 TRUE)
 endif()
 configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h)
+if (OpenColorIO_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${OPENCOLORIO_LIBRARIES})
+endif()
 
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"

@@ -57,6 +57,8 @@
 #define GL_RGBA16_EXT 0x805B
 #endif
 
+//#define DEBUG_BUFFER_REALLOCATION
+
 
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 
@@ -342,11 +344,16 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
         if (m_bufferStorage.isValid() && numProcessedTiles > m_bufferStorage.size() &&
             sync && !sync->isSignaled()) {
 
+#ifdef DEBUG_BUFFER_REALLOCATION
             qDebug() << "Still unsignalled after processed" << numProcessedTiles << "tiles";
+#endif
 
             const int nextSize = qNextPowerOfTwo(m_bufferStorage.size());
             m_bufferStorage.allocateMoreBuffers(nextSize);
+
+#ifdef DEBUG_BUFFER_REALLOCATION
             qDebug() << "    increased number of buffers to" << nextSize;
+#endif
         }
 
 

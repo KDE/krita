@@ -13,6 +13,7 @@
 #include <QPixmap>
 #include <QImage>
 #include <QMessageBox>
+#include <QTemporaryFile>
 
 #include "KisRemoteFileFetcher.h"
 #include "kactioncollection.h"

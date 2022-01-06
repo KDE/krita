@@ -31,7 +31,6 @@
 #include <QMenuBar>
 #include <QStatusBar>
 #include <QDebug>
-#include <QStandardPaths>
 #include <QAction>
 #include <QMessageBox>
 

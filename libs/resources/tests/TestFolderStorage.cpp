@@ -55,7 +55,6 @@ void TestFolderStorage::initTestCase()
 
 void TestFolderStorage ::testStorage()
 {
-
     KisFolderStorage folderStorage(m_dstLocation);
     QSharedPointer<KisResourceStorage::ResourceIterator> iter = folderStorage.resources(ResourceType::Brushes);
     QVERIFY(iter->hasNext());

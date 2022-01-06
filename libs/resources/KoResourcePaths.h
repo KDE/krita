@@ -14,18 +14,26 @@
 
 
 /**
- * DEBUGGING KoResourcePaths:
- *
- * The usual place to look for resources is Qt's AppDataLocation.
+ * The usual place to look for assets is Qt's AppDataLocation.
  * This corresponds to XDG_DATA_DIRS on Linux. To ensure your installation and
  * path are configured correctly, ensure your files are located in the directories
  * contained in this variable:
  *
  * QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
  *
+ * This can be overridden in Krita's configuration.
+ *
+ * Unfortunately, we are mixing up two things in the appdatalocation:
+ *
+ *  * resources: brushes, presets and so on
+ *  * assets: color themes, icc profiles and other weird stuff, as
+ *
  * There are many debug lines that can be uncommented for more specific installation
  * checks. In the future these should be converted to qloggingcategory to enable
  * convenient enable/disable functionality.
+ *
+ * T
+ *
  *
  * Note: DO NOT USE THIS CLASS WHEN LOCATING RESOURCES LIKE BRUSHES OR GRADIENTS. Use
  * KisResourceLocator instead.
@@ -55,7 +63,7 @@ public:
     static QString getAppDataLocation();
 
     /**
-     * Adds suffixes for types.
+     * Adds suffixes for asset types.
      *
      * You may add as many as you need, but it is advised that there
      * is exactly one to make writing definite.

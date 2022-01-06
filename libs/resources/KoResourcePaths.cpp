@@ -22,6 +22,7 @@
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance)
 
+namespace {
 
 static QString cleanup(const QString &path)
 {
@@ -32,23 +33,32 @@ static QString cleanup(const QString &path)
 static QStringList cleanup(const QStringList &pathList)
 {
     QStringList cleanedPathList;
-    Q_FOREACH(const QString &path, pathList) {
-        cleanedPathList << cleanup(path);
+
+    bool getRidOfAppDataLocation = KoResourcePaths::getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString writableLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
+     Q_FOREACH(const QString &path, pathList) {
+        QString cleanPath = cleanup(path);
+        if (getRidOfAppDataLocation && cleanPath.startsWith(writableLocation)) {
+            continue;
+        }
+        cleanedPathList << cleanPath;
     }
     return cleanedPathList;
-}
-
-
-static QString cleanupDirs(const QString &path)
-{
-    return QDir::cleanPath(path) + '/';
 }
 
 static QStringList cleanupDirs(const QStringList &pathList)
 {
     QStringList cleanedPathList;
+
+    bool getRidOfAppDataLocation = KoResourcePaths::getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    const QString writableLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+
     Q_FOREACH(const QString &path, pathList) {
-        cleanedPathList << cleanupDirs(path);
+        QString cleanPath = QDir::cleanPath(path) + '/';
+        if (getRidOfAppDataLocation && cleanPath.startsWith(writableLocation)) {
+            continue;
+        }
     }
     return cleanedPathList;
 }
@@ -110,6 +120,8 @@ QString getInstallationPrefix() {
 #endif
 }
 
+}
+
 class Q_DECL_HIDDEN KoResourcePaths::Private {
 public:
     QMap<QString, QStringList> absolutes; // For each resource type, the list of absolute paths, from most local (most priority) to most global
@@ -138,10 +150,7 @@ public:
 
     QStandardPaths::StandardLocation mapTypeToQStandardPaths(const QString &type)
     {
-        if (type == "tmp") {
-            return QStandardPaths::TempLocation;
-        }
-        else if (type == "appdata") {
+        if (type == "appdata") {
             return QStandardPaths::AppDataLocation;
         }
         else if (type == "data") {
@@ -184,14 +193,6 @@ QString KoResourcePaths::getAppDataLocation()
     path = cfg.readEntry(KisResourceLocator::resourceLocationKey, path
                          = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 
-#ifndef Q_OS_ANDROID
-    // on Android almost all config locations we save to are app specific,
-    // and don't end with "krita".
-    if (!path.endsWith("krita")) {
-        path += "/krita";
-    }
-#endif
-
     return path;
 
 }
@@ -231,7 +232,7 @@ QStringList KoResourcePaths::resourceDirs(const QString &type)
 
 QString KoResourcePaths::saveLocation(const QString &type, const QString &suffix, bool create)
 {
-    return cleanupDirs(s_instance->saveLocationInternal(type, suffix, create));
+    return QDir::cleanPath(s_instance->saveLocationInternal(type, suffix, create)) + '/';
 }
 
 QString KoResourcePaths::locate(const QString &type, const QString &filename)
@@ -393,11 +394,9 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
     dbgResources << type << aliases << d->mapTypeToQStandardPaths(type);
 
     QStringList dirs;
-
-    dirs << getAppDataLocation();
-
     QStringList standardDirs =
             QStandardPaths::locateAll(d->mapTypeToQStandardPaths(type), "", QStandardPaths::LocateDirectory);
+
     appendResources(&dirs, standardDirs, true);
 
     Q_FOREACH (const QString &alias, aliases) {
@@ -457,9 +456,13 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
         dbgResources << "1" << resources;
     }
 
-
     QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
     dbgResources << "extraResourceDirs" << extraResourceDirs;
+
+    if (getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)) {
+        extraResourceDirs = extraResourceDirs + ":" + getAppDataLocation();
+    }
+
     if (!extraResourceDirs.isEmpty()) {
         Q_FOREACH(const QString &extraResourceDir, extraResourceDirs.split(':', QString::SkipEmptyParts)) {
             if (aliases.isEmpty()) {
@@ -545,7 +548,8 @@ QString KoResourcePaths::saveLocationInternal(const QString &type, const QString
     const QStandardPaths::StandardLocation location = d->mapTypeToQStandardPaths(type);
 
     if (location == QStandardPaths::AppDataLocation) {
-        path = KoResourcePaths::getAppDataLocation();
+        KConfigGroup cfg(KSharedConfig::openConfig(), "");
+        path = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
     }
 
     if (path.isEmpty()) {

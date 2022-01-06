@@ -138,6 +138,7 @@ KisTemplateGroup *KisTemplateTree::find(const QString &name) const
 void KisTemplateTree::readGroups()
 {
     QStringList dirs = KoResourcePaths::findDirs("templates");
+    qDebug() << "dirs" << dirs;
 
     Q_FOREACH (const QString & dirName, dirs) {
         if (!dirName.contains("templates")) continue; // Hack around broken KoResourcePaths
@@ -146,6 +147,8 @@ void KisTemplateTree::readGroups()
         if (!dir.exists())
             continue;
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+
         Q_FOREACH (const QString & templateDirName, templateDirs) {
             QDir templateDir(dirName + "/" + templateDirName);
             QString name = templateDirName;

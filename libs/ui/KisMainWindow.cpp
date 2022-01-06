@@ -942,7 +942,8 @@ void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
         bool ok = true;
         if (url.isLocalFile()) {
             QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
-            const QStringList tmpDirs = KoResourcePaths::resourceDirs("tmp");
+            const QStringList tmpDirs = QStandardPaths::locateAll(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
+
             for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
                 if (path.contains(*it)) {
                     ok = false; // it's in the tmp resource

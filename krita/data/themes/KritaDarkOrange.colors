@@ -103,8 +103,8 @@ ForegroundPositive=39,174,96
 ForegroundVisited=127,140,141
 
 [General]
-ColorScheme=Krita Dark Orange
-Name=Krita Dark Orange
+ColorScheme=Krita dark orange
+Name=Krita dark orange
 shadeSortColumn=true
 
 [KDE]

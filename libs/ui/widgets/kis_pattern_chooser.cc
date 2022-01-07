@@ -57,16 +57,19 @@ KisPatternChooser::~KisPatternChooser()
 {
 }
 
-KoResourceSP  KisPatternChooser::currentResource()
+KoResourceSP  KisPatternChooser::currentResource(bool includeHidden)
 {
-    if (!m_itemChooser->currentResource()) {
+    KoResourceSP result = m_itemChooser->currentResource(includeHidden);
+
+    if (!result && includeHidden) {
         KoResourceServer<KoPattern> * rserver = KoResourceServerProvider::instance()->patternServer();
         if (rserver->resourceCount() > 0) {
             KisSignalsBlocker blocker(m_itemChooser);
             m_itemChooser->setCurrentResource(rserver->firstResource());
+            result = rserver->firstResource();
         }
     }
-    return m_itemChooser->currentResource();
+    return result;
 }
 
 void KisPatternChooser::setCurrentPattern(KoResourceSP resource)

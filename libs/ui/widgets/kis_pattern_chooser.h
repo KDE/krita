@@ -27,7 +27,7 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResourceSP currentResource();
+    KoResourceSP currentResource(bool includeHidden = false);
     void setGrayscalePreview(bool grayscale);
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);

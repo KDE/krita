@@ -158,20 +158,19 @@ static QString titleWithSensibleWidth(const QString &nameValue, const QString &v
     }
     const QFontMetrics fontMetrics = QFontMetrics(QFont());
 
-    QString dirPath = QFileInfo(value).dir().path() + QDir::separator();
-    QString title = nameValue + " [" + dirPath + ']';
+    QString title = nameValue + " [" + value + ']';
     if (fontMetrics.boundingRect(title).width() > maxWidthForTitles) {
-        // If it does not fit, try to cut only the dir path, though if the
+        // If it does not fit, try to cut only the whole path, though if the
         // name is too long (more than 3/4 of the whole text) we cut it a bit too
         const int nameValueMaxWidth = maxWidthForTitles * 3 / 4;
         const int nameWidth = fontMetrics.boundingRect(nameValue).width();
         QString cutNameValue, cutValue;
         if (nameWidth > nameValueMaxWidth) {
             cutNameValue = fontMetrics.elidedText(nameValue, Qt::ElideMiddle, nameValueMaxWidth);
-            cutValue = fontMetrics.elidedText(dirPath, Qt::ElideMiddle, maxWidthForTitles - nameValueMaxWidth);
+            cutValue = fontMetrics.elidedText(value, Qt::ElideMiddle, maxWidthForTitles - nameValueMaxWidth);
         } else {
             cutNameValue = nameValue;
-            cutValue = fontMetrics.elidedText(dirPath, Qt::ElideMiddle, maxWidthForTitles - nameWidth);
+            cutValue = fontMetrics.elidedText(value, Qt::ElideMiddle, maxWidthForTitles - nameWidth);
         }
         title = cutNameValue + " [" + cutValue + ']';
     }

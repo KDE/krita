@@ -82,11 +82,15 @@ void KisControlFrame::setup(QWidget *parent)
     action->setText(i18n("&Patterns"));
     m_viewManager->actionCollection()->addAction(ResourceType::Patterns, action);
     action->setDefaultWidget(m_patternWidget);
+    connect(action, SIGNAL(triggered()), m_patternWidget, SLOT(showPopupWidget()));
+    m_patternChooserPopup->addAction(action);
 
     action = new QWidgetAction(this);
     action->setText(i18n("&Gradients"));
     m_viewManager->actionCollection()->addAction(ResourceType::Gradients, action);
     action->setDefaultWidget(m_gradientWidget);
+    connect(action, SIGNAL(triggered()), m_gradientWidget, SLOT(showPopupWidget()));
+    m_gradientChooserPopup->addAction(action);
 
 
     // XXX: KOMVC we don't have a canvas here yet, needs a setImageView

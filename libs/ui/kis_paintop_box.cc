@@ -308,14 +308,20 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_cmbCompositeOp->setFixedHeight(buttonsize);
     m_cmbCompositeOp->connectBlendmodeActions(m_viewManager->actionManager());
 
+    KisWorkspaceChooser *workspacePopup = new KisWorkspaceChooser(viewManager);
     m_workspaceWidget = new KisPopupButton(this);
     m_workspaceWidget->setIcon(KisIconUtils::loadIcon("workspace-chooser"));
     m_workspaceWidget->setToolTip(i18n("Choose workspace"));
     m_workspaceWidget->setFixedSize(buttonsize, buttonsize);
     m_workspaceWidget->setIconSize(QSize(iconsize, iconsize));
-    m_workspaceWidget->setPopupWidget(new KisWorkspaceChooser(viewManager));
+    m_workspaceWidget->setPopupWidget(workspacePopup);
     m_workspaceWidget->setAutoRaise(true);
     m_workspaceWidget->setArrowVisible(false);
+
+    m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
+    m_presetsChooserPopup->setMinimumHeight(550);
+    m_presetsChooserPopup->setMinimumWidth(450);
+    m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
 
     QHBoxLayout* baseLayout = new QHBoxLayout(this);
     m_paintopWidget = new QWidget(this);
@@ -405,6 +411,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     KisActionRegistry::instance()->propertizeAction("show_brush_presets", action);
     viewManager->actionCollection()->addAction("show_brush_presets", action);
     connect(action, SIGNAL(triggered()), m_presetSelectorPopupButton, SLOT(showPopupWidget()));
+    m_presetsChooserPopup->addAction(action);
 
     QWidget* mirrorActions = new QWidget(this);
     QHBoxLayout* mirrorLayout = new QHBoxLayout(mirrorActions);
@@ -424,6 +431,8 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     KisActionRegistry::instance()->propertizeAction(ResourceType::Workspaces, action);
     viewManager->actionCollection()->addAction(ResourceType::Workspaces, action);
     action->setDefaultWidget(m_workspaceWidget);
+    connect(action, SIGNAL(triggered()), m_workspaceWidget, SLOT(showPopupWidget()));
+    workspacePopup->addAction(action);
 
     if (!cfg.toolOptionsInDocker()) {
         m_toolOptionsPopup = new KisToolOptionsPopup();
@@ -446,12 +455,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     KisActionRegistry::instance()->propertizeAction("show_brush_editor", action);
     viewManager->actionCollection()->addAction("show_brush_editor", action);
     connect(action, SIGNAL(toggled(bool)), this, SLOT(togglePresetEditor()));
-
-
-    m_presetsChooserPopup = new KisPaintOpPresetsChooserPopup();
-    m_presetsChooserPopup->setMinimumHeight(550);
-    m_presetsChooserPopup->setMinimumWidth(450);
-    m_presetSelectorPopupButton->setPopupWidget(m_presetsChooserPopup);
+    m_presetsEditor->addAction(action);
 
     m_currCompositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
 

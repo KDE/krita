@@ -1748,7 +1748,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             KoResourceSP res = storage->resource(itA->url);
 
             if (!res) {
-                KisUsageLogger::log("Could not load resource" + itA->url);
+                KisUsageLogger::log("Could not load resource " + itA->url);
                 ++itA;
                 continue;
             }
@@ -1756,21 +1756,21 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             res->setVersion(itA->version);
             res->setMD5Sum(storage->resourceMd5(itA->url));
             if (!res->valid()) {
-                KisUsageLogger::log("Could not retrieve md5 for resource" + itA->url);
+                KisUsageLogger::log("Could not retrieve md5 for resource " + itA->url);
                 ++itA;
                 continue;
             }
 
             const bool retval = addResource(storage, itA->timestamp, res, resourceType);
             if (!retval) {
-                KisUsageLogger::log("Could not add resource" + itA->url);
+                KisUsageLogger::log("Could not add resource " + itA->url);
                 ++itA;
                 continue;
             }
 
             const int resourceId = res->resourceId();
             KIS_SAFE_ASSERT_RECOVER(resourceId >= 0) {
-                KisUsageLogger::log("Could not get id for resource" + itA->url);
+                KisUsageLogger::log("Could not get id for resource " + itA->url);
                 ++itA;
                 continue;
             }
@@ -1786,7 +1786,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
                 const bool retval = addResourceVersion(resourceId, it->timestamp, storage, res);
                 KIS_SAFE_ASSERT_RECOVER(retval) {
-                    KisUsageLogger::log("Could not add version for resource" + itA->url);
+                    KisUsageLogger::log("Could not add version for resource " + itA->url);
                     continue;
                 }
             }

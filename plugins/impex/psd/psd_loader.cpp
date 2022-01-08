@@ -322,11 +322,21 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 KisLayerSP layer = mapping.second;
 
                 Q_FOREACH (KoPatternSP pattern, serializer.patterns()) {
-                    patternsModel.addResource(pattern, storageLocation);
+                    if (pattern && pattern->valid()) {
+                        patternsModel.addResource(pattern, storageLocation);
+                    }
+                    else {
+                        qWarning() << "Invalid or empty pattern" << pattern;
+                    }
                 }
 
                 Q_FOREACH (KoAbstractGradientSP gradient, serializer.gradients()) {
-                    gradientsModel.addResource(gradient, storageLocation);
+                    if (gradient && gradient->valid()) {
+                        gradientsModel.addResource(gradient, storageLocation);
+                    }
+                    else {
+                        qWarning() << "Invalid or empty gradient" << gradient;
+                    }
                 }
 
                 layerStyle->setName(layer->name());

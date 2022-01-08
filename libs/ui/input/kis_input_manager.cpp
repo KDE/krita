@@ -837,6 +837,8 @@ void KisInputManager::slotToolChanged()
             d->forwardAllEventsToTool = false;
             d->matcher.suppressAllActions(false);
         }
+
+        d->matcher.toolHasBeenActivated();
     }
 }
 

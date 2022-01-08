@@ -228,6 +228,12 @@ public:
     void lostFocusEvent(const QPointF &localPos);
 
     /**
+     * Is called when a new tool has been activated. The method activates
+     * any tool's action if possible with the currently active modifiers.
+     */
+    void toolHasBeenActivated();
+
+    /**
      * Disables the start of any actions.
      *
      * WARNING: the actions that has been started before this call

@@ -510,11 +510,27 @@ void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
 {
     Private::RecursionNotifier notifier(this);
 
+    DEBUG_ACTION("lostFocusEvent");
+
     if (m_d->runningShortcut) {
         forceEndRunningShortcut(localPos);
     }
 
     forceDeactivateAllActions();
+}
+
+void KisShortcutMatcher::toolHasBeenActivated()
+{
+    Private::RecursionNotifier notifier(this);
+
+    DEBUG_ACTION("toolHasBeenActivated");
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
 }
 
 void KisShortcutMatcher::reset()

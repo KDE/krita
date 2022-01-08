@@ -97,13 +97,13 @@ set(KRITA_STABLE_VERSION_MAJOR 5)
 set(KRITA_STABLE_VERSION_MINOR 0) 
 
 # Bugfix release version, or 0 for before the first stable release
-set(KRITA_VERSION_RELEASE 2)
+set(KRITA_VERSION_RELEASE 3)
 
 # the 4th digit, really only used for the Windows installer:
 # - [Pre-]Alpha: Starts from 0, increment 1 per release
 # - Beta: Starts from 50, increment 1 per release
 # - Stable: Set to 100, bump to 101 if emergency update is needed
-set(KRITA_VERSION_REVISION 52)
+set(KRITA_VERSION_REVISION 0)
 
 # Uncomment the following if this is currently in the "stable" branch.
 # Do not uncomment for master branch.

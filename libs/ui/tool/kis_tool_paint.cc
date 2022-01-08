@@ -125,6 +125,9 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
     case(KoCanvasResource::Opacity):
         setOpacity(v.toDouble());
         break;
+    case(KoCanvasResource::CurrentPaintOpPreset):
+        requestUpdateOutline(m_outlineDocPoint, 0);
+        break;
     default: //nothing
         break;
     }

@@ -361,9 +361,12 @@ bool tryParseDescriptor(const QDomElement &el,
             QBuffer buffer(&patternData);
             buffer.open(QIODevice::ReadOnly);
 
-            pattern->loadPatFromDevice(&buffer);
-
-            catcher.addPattern(path, pattern, patternUuid);
+            if (pattern->loadPatFromDevice(&buffer) && pattern->valid()) {
+                catcher.addPattern(path, pattern, patternUuid);
+            }
+            else {
+                warnKrita << "WARNING: failed to create pattern:" << ppVar(patternUuid) << ppVar(pattern);
+            }
         } else {
             warnKrita << "WARNING: failed to load KisPattern XML section!" << ppVar(patternUuid);
         }

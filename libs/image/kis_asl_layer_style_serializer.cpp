@@ -924,6 +924,11 @@ inline QString _prepaddr(const QString &pref, const QString &addr) {
 
 void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern, const QString& patternUuid) {
 
+    if (!pattern) {
+        warnKrita << "WARNING: got an empty pattern:" < patternUuid;
+        return;
+    }
+
     if (m_patternsStore.contains(patternUuid)) {
         warnKrita << "WARNING: ASL style contains a duplicated pattern!" << ppVar(pattern->name()) << ppVar(m_patternsStore[patternUuid]->name());
     } else {
@@ -951,6 +956,8 @@ void KisAslLayerStyleSerializer::assignPatternObject(const QString &patternUuid,
         registerPatternObject(dumbPattern, patternUuid + QString("_invalid"));
         pattern = dumbPattern;
         m_isValid = false;
+
+        m_patternsStore.remove(patternUuid);
     }
 
     setPattern(pattern);
@@ -1407,7 +1414,7 @@ void KisAslLayerStyleSerializer::registerPSDPattern(const QDomDocument &doc)
 
 void KisAslLayerStyleSerializer::readFromPSDXML(const QDomDocument &doc)
 {
-    // The caller prepares the document using th efollowing code
+    // The caller prepares the document using the following code
     //
     // KisAslReader reader;
     // QDomDocument doc = reader.readLfx2PsdSection(device);

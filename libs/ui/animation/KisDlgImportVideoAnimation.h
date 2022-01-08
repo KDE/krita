@@ -44,9 +44,9 @@ struct RenderedFrames {
 public:
     QStringList renderedFrameFiles = {};
     QList<int> renderedFrameTargetTimes = {};
-    const inline bool framesNeedRelocation() { return !renderedFrameTargetTimes.empty(); }
-    const inline bool isEmpty() { return renderedFrameFiles.isEmpty(); }
-    const inline size_t size() { return renderedFrameFiles.size(); }
+    inline bool framesNeedRelocation() const { return !renderedFrameTargetTimes.empty(); }
+    inline bool isEmpty() const { return renderedFrameFiles.isEmpty(); }
+    inline size_t size() const { return renderedFrameFiles.size(); }
 };
 
 class KisDlgImportVideoAnimation : public KoDialog

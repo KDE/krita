@@ -200,6 +200,13 @@ bool KisFolderStorage::importResource(const QString &url, QIODevice *device)
         qWarning() << "Cannot open" << resourcesLocation << "for writing";
     }
 
+    KoResourceSP resourceAfterLoading = resource(url);
+
+    if (resourceAfterLoading.isNull()) {
+        f.remove();
+        return false;
+    }
+
     return result;
 }
 

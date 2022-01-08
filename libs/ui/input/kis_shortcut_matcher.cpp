@@ -228,8 +228,10 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
 {
     Private::RecursionNotifier notifier(this);
 
-    if (!m_d->keys.contains(key)) reset("Peculiar, key released but can't remember it was pressed");
+    if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, key released but can't remember it was pressed"); }
     else m_d->keys.remove(key);
+
+    DEBUG_KEY("Released");
 
     if (notifier.isInRecursion()) {
         forceDeactivateAllActions();
@@ -461,9 +463,6 @@ void KisShortcutMatcher::reinitialize()
 
 void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
 {
-    Private::RecursionNotifier notifier(this);
-
-
     Q_FOREACH (Qt::Key key, m_d->keys) {
         if (!keys.contains(key)) {
             keyReleased(key);
@@ -475,6 +474,8 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
             keyPressed(key);
         }
     }
+
+    Private::RecursionNotifier notifier(this);
 
     if (notifier.isInRecursion()) {
         forceDeactivateAllActions();

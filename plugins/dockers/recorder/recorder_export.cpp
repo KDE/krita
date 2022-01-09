@@ -360,7 +360,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     
     d->inputFps = config.inputFps();
     d->fps = config.fps();
-    d->lastFrameSec = config.firstFrameSec();
+    d->firstFrameSec = config.firstFrameSec();
     d->lastFrameSec = config.lastFrameSec();
     d->resize = config.resize();
     d->size = config.size();
@@ -373,7 +373,7 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
 
     d->ui->spinInputFps->setValue(d->inputFps);
     d->ui->spinFps->setValue(d->fps);
-    d->ui->spinFirstFrameSec->setValue(d->lastFrameSec);
+    d->ui->spinFirstFrameSec->setValue(d->firstFrameSec);
     d->ui->spinLastFrameSec->setValue(d->lastFrameSec);
     d->ui->checkResize->setChecked(d->resize);
     d->ui->spinScaleWidth->setValue(d->size.width());

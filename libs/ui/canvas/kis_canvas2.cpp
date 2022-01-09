@@ -64,6 +64,7 @@
 #include "KisView.h"
 #include "kis_canvas_controller.h"
 #include "kis_grid_config.h"
+#include "KisMainWindow.h"
 
 #include "kis_animation_player.h"
 #include "kis_animation_frame_cache.h"

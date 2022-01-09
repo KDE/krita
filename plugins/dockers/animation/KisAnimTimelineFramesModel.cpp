@@ -47,6 +47,7 @@
 #include "kis_processing_applicator.h"
 #include <KisImageBarrierLockerWithFeedback.h>
 #include "kis_node_uuid_info.h"
+#include "KisMainWindow.h"
 
 
 struct KisAnimTimelineFramesModel::Private

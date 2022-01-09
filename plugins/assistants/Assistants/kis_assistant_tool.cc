@@ -931,7 +931,7 @@ void KisAssistantTool::removeAllAssistants()
 
 void KisAssistantTool::loadAssistants()
 {
-    KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenAssistant");
+    KoFileDialog dialog(m_canvas->viewManager()->mainWindowAsQWidget(), KoFileDialog::OpenFile, "OpenAssistant");
     dialog.setCaption(i18n("Select an Assistant"));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-assistant", "application/x-krita-assistant");
@@ -1164,7 +1164,7 @@ void KisAssistantTool::saveAssistants()
     xml.writeEndElement();
     xml.writeEndDocument();
 
-    KoFileDialog dialog(m_canvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "OpenAssistant");
+    KoFileDialog dialog(m_canvas->viewManager()->mainWindowAsQWidget(), KoFileDialog::SaveFile, "OpenAssistant");
     dialog.setCaption(i18n("Save Assistant"));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-assistant", "application/x-krita-assistant");

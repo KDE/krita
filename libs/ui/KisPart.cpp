@@ -472,6 +472,11 @@ KisMainWindow *KisPart::currentMainwindow() const
 
 }
 
+QWidget *KisPart::currentMainwindowAsQWidget() const
+{
+    return currentMainwindow();
+}
+
 KisMainWindow * KisPart::windowById(QUuid id) const
 {
     Q_FOREACH(QPointer<KisMainWindow> mainWindow, d->mainWindows) {
@@ -644,3 +649,5 @@ void KisPart::setCurrentSession(KisSessionResourceSP session)
 {
     d->currentSession = session;
 }
+
+#include "moc_KisPart.cpp"

@@ -102,7 +102,7 @@ qint32 KisImageManager::importImage(const QUrl &urlArg, const QString &layerType
     qint32 rc = 0;
 
     if (urlArg.isEmpty()) {
-        KoFileDialog dialog(m_view->mainWindow(), KoFileDialog::OpenFiles, "OpenDocument");
+        KoFileDialog dialog(m_view->mainWindowAsQWidget(), KoFileDialog::OpenFiles, "OpenDocument");
         dialog.setCaption(i18n("Import Image"));
         dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
         dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import));
@@ -164,7 +164,7 @@ void KisImageManager::slotImageProperties()
     KisImageWSP image = m_view->image();
     if (!image) return;
 
-    QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view->mainWindow());
+    QPointer<KisDlgImageProperties> dlg = new KisDlgImageProperties(image, m_view->mainWindowAsQWidget());
     if (dlg->exec() == QDialog::Accepted) {
         if (dlg->convertLayerPixels()) {
             image->convertImageColorSpace(dlg->colorSpace(),

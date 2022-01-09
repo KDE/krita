@@ -45,6 +45,7 @@
 #include "kis_int_parse_spin_box.h"
 #include "kis_slider_spin_box.h"
 #include "kis_signals_blocker.h"
+#include "KisMainWindow.h"
 
 KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
     KisUtilityTitleBar(new QLabel(i18n("Animation Timeline"), parent), parent)

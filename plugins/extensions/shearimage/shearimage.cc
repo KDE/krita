@@ -46,7 +46,7 @@ void ShearImage::slotShearImage()
 
     if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindow(), "ShearImage");
+    DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindowAsQWidget(), "ShearImage");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Image"));
@@ -66,7 +66,7 @@ void ShearImage::shearLayerImpl(KisNodeSP rootNode)
 
     if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindow(), "ShearLayer");
+    DlgShearImage * dlgShearImage = new DlgShearImage(viewManager()->mainWindowAsQWidget(), "ShearLayer");
     Q_CHECK_PTR(dlgShearImage);
 
     dlgShearImage->setCaption(i18n("Shear Layer"));

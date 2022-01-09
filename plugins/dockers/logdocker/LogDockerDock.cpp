@@ -26,6 +26,7 @@
 
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
+#include "KisMainWindow.h"
 #include "kis_config.h"
 
 MessageSender *LogDockerDock::s_messageSender {new MessageSender()};
@@ -70,7 +71,7 @@ void LogDockerDock::setCanvas(KoCanvasBase *)
 
 void LogDockerDock::setViewManager(KisViewManager *kisview)
 {
-    connect(static_cast<KisMainWindow*>(kisview->mainWindow()), SIGNAL(themeChanged()), SLOT(changeTheme()));
+    connect(kisview->mainWindow(), SIGNAL(themeChanged()), SLOT(changeTheme()));
 }
 
 void LogDockerDock::toggleLogging(bool toggle)

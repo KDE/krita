@@ -75,6 +75,7 @@
 #include "kis_cursor.h"
 #include "kis_image_config.h"
 #include "kis_preference_set_registry.h"
+#include "KisMainWindow.h"
 
 #include "kis_file_name_requester.h"
 

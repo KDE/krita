@@ -18,6 +18,7 @@
 #include <kis_image.h>
 #include <KisMimeDatabase.h>
 #include <QCoreApplication>
+#include <QTimer>
 
 class DocumentManager::Private
 {

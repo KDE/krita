@@ -19,6 +19,7 @@
 #include "kis_paintop_presets_chooser_popup.h"
 #include "kis_canvas_resource_provider.h"
 #include <brushengine/kis_paintop_preset.h>
+#include "KisMainWindow.h"
 
 
 PresetDockerDock::PresetDockerDock( )

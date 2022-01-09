@@ -48,6 +48,7 @@
 #include "kis_signals_blocker.h"
 #include "kis_time_span.h"
 #include "kis_processing_applicator.h"
+#include "KisMainWindow.h"
 #include <QItemSelection>
 
 KisAnimCurvesDockerTitlebar::KisAnimCurvesDockerTitlebar(QWidget* parent) :

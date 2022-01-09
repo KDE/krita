@@ -46,6 +46,7 @@
 #include <KoShapeBackground.h>
 #include <KoShapeStroke.h>
 #include <KisClipboardUtil.h>
+#include <KisMainWindow.h>
 #include <QApplication>
 #include <QClipboard>
 

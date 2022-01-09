@@ -8,8 +8,8 @@
 #define KISWINDOWLAYOUTRESOURCE_H
 
 #include <KoResource.h>
-#include <KisMainWindow.h>
 
+class KisMainWindow;
 class KisWindowLayoutResource;
 typedef QSharedPointer<KisWindowLayoutResource> KisWindowLayoutResourceSP;
 

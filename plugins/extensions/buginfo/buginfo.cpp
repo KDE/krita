@@ -39,13 +39,13 @@ BugInfo::~BugInfo()
 
 void BugInfo::slotKritaLog()
 {
-    DlgKritaLog dlgKritaLog(viewManager()->mainWindow());
+    DlgKritaLog dlgKritaLog(viewManager()->mainWindowAsQWidget());
     dlgKritaLog.exec();
 }
 
 void BugInfo::slotSysInfo()
 {
-    DlgSysInfo dlgSysInfo(viewManager()->mainWindow());
+    DlgSysInfo dlgSysInfo(viewManager()->mainWindowAsQWidget());
     dlgSysInfo.exec();
 }
 

@@ -54,6 +54,8 @@
 #include "KisReferenceImagesLayer.h"
 #include "imagesize/dlg_imagesize.h"
 #include "kis_layer_utils.h"
+#include <KoColorProfile.h>
+#include "KisMainWindow.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;

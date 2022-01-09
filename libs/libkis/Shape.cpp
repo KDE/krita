@@ -15,6 +15,7 @@
 #include <KisView.h>
 #include <KisDocument.h>
 #include <kis_canvas2.h>
+#include <KisMainWindow.h>
 #include <KoShapeController.h>
 #include <KoSelection.h>
 

@@ -527,7 +527,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     QPointF iconDeletePosition(actionsPosition + toolData.deleteIconPosition);
 
     // Background container for helpers
-    QBrush backgroundColor = d->m_canvas->viewManager()->mainWindow()->palette().window();
+    QBrush backgroundColor = d->m_canvas->viewManager()->mainWindowAsQWidget()->palette().window();
     QPointF actionsBGRectangle(actionsPosition + QPointF(10, 10));
 
     gc.setRenderHint(QPainter::Antialiasing);

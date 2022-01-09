@@ -18,7 +18,7 @@
 #include "KisMimeDatabase.h"
 #include "dialogs/KisAsyncAnimationFramesSaveDialog.h"
 #include "kis_time_span.h"
-#include <QMessageBox>
+#include "KisMainWindow.h"
 
 #include "krita_container_utils.h"
 

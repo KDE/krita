@@ -13,7 +13,7 @@
 #include "kritalibkis_export.h"
 #include "libkis.h"
 
-#include <KisMainWindow.h>
+class KisMainWindow;
 
 /**
  * Window represents one Krita mainwindow. A window can have any number

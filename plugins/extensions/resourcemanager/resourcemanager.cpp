@@ -50,7 +50,7 @@ ResourceManager::~ResourceManager()
 
 void ResourceManager::slotManageBundles()
 {
-    QPointer<DlgBundleManager> dlg = new DlgBundleManager(KisPart::instance()->currentMainwindow());
+    QPointer<DlgBundleManager> dlg = new DlgBundleManager(KisPart::instance()->currentMainwindowAsQWidget());
     dlg->exec();
 }
 

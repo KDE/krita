@@ -18,6 +18,7 @@
 #include <KisPart.h>
 #include <KisDocument.h>
 #include <kis_dom_utils.h>
+#include <KisMainWindow.h>
 
 static const int WINDOW_LAYOUT_VERSION = 1;
 

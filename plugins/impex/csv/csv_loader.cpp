@@ -17,6 +17,7 @@
 
 #include <KisPart.h>
 #include <KisView.h>
+#include <KisMainWindow.h>
 #include <KisDocument.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>

@@ -128,3 +128,5 @@ void Canvas::setLevelOfDetailMode(bool enable)
     if (!d->canvas) return;
     return d->canvas->imageView()->canvasController()->slotToggleLevelOfDetailMode(enable);
 }
+
+#include "moc_Canvas.cpp"

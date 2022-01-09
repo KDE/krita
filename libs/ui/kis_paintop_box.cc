@@ -77,6 +77,7 @@
 #include "KisResourceLoader.h"
 #include "KisResourceLoaderRegistry.h"
 #include "kis_acyclic_signal_connector.h"
+#include "KisMainWindow.h"
 
 
 KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const char *name)

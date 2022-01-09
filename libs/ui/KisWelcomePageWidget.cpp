@@ -38,6 +38,7 @@
 #include <kis_paint_device.h>
 #include <KisPart.h>
 #include <KisKineticScroller.h>
+#include "KisMainWindow.h"
 
 #include <utils/KisUpdaterBase.h>
 

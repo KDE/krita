@@ -32,7 +32,7 @@ DbExplorer::~DbExplorer()
 
 void DbExplorer::slotDbExplorer()
 {
-    DlgDbExplorer dlgDbExplorer(viewManager()->mainWindow());
+    DlgDbExplorer dlgDbExplorer(viewManager()->mainWindowAsQWidget());
     dlgDbExplorer.exec();
 }
 

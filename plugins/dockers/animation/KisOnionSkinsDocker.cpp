@@ -21,6 +21,7 @@
 #include "kis_action_manager.h"
 #include "kis_action.h"
 #include <KoColorSpaceRegistry.h>
+#include "KisMainWindow.h"
 
 #include "kis_equalizer_widget.h"
 #include "kis_color_label_button.h"

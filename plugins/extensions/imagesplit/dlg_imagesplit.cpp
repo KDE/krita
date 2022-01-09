@@ -23,7 +23,7 @@ DlgImagesplit::DlgImagesplit(KisViewManager* view
                              , int defaultMimeIndex, QImage thumbnail
                              , QList<qreal> hGuides
                              , QList<qreal> vGuides, qreal thumbnailRatio)
-    : KoDialog(view->mainWindow())
+    : KoDialog(view->mainWindowAsQWidget())
 {
     m_page = new WdgImagesplit(this);
     m_thumbnail = thumbnail;

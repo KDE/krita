@@ -29,6 +29,7 @@ class KisCanvasResourceProvider;
 class KisVisualColorSelector;
 class KisAcyclicSignalConnector;
 class KisMouseClickEater;
+class KisCoordinatesConverter;
 
 
 struct CachedPresetLayout {

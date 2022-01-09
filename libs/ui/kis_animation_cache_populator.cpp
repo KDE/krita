@@ -27,6 +27,7 @@
 #include "KisViewManager.h"
 #include "kis_node_manager.h"
 #include "kis_keyframe_channel.h"
+#include "KisMainWindow.h"
 
 #include "KisAsyncAnimationCacheRenderer.h"
 #include "dialogs/KisAsyncAnimationCacheRenderDialog.h"

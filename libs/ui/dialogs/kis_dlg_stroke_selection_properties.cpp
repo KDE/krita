@@ -37,11 +37,12 @@
 #include "kis_canvas_resource_provider.h"
 #include "KoUnit.h"
 #include "kis_display_color_converter.h"
+#include "KisMainWindow.h"
 
 #include <kis_signals_blocker.h>
 
 KisDlgStrokeSelection::KisDlgStrokeSelection(KisImageWSP image, KisViewManager *view, bool isVectorLayer)
-    : KoDialog(view->mainWindow())
+    : KoDialog(view->mainWindowAsQWidget())
 {
     m_resourceManager = view->mainWindow()->resourceManager();
     KisPropertiesConfigurationSP cfg = KisConfig(true).exportConfiguration("StrokeSelection");

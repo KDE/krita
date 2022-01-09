@@ -38,12 +38,11 @@
 #include <kis_canvas_resource_provider.h>
 #include <KoColorBackground.h>
 #include <KoShapeStroke.h>
+#include "KisMainWindow.h"
 
 #include <ctime>
 
 #include "ui_wdgGamutMaskChooser.h"
-
-class KisMainWindow;
 
 struct GamutMaskChooserUI: public QWidget, public Ui_wdgGamutMaskChooser
 {

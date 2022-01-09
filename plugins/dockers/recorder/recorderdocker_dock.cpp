@@ -23,6 +23,7 @@
 #include <kactioncollection.h>
 #include <KisPart.h>
 #include <KisKineticScroller.h>
+#include "KisMainWindow.h"
 
 #include <QFileInfo>
 #include <QPointer>

@@ -1343,6 +1343,11 @@ KisMainWindow *KisViewManager::mainWindow() const
     return qobject_cast<KisMainWindow*>(d->mainWindow);
 }
 
+QWidget *KisViewManager::mainWindowAsQWidget() const
+{
+    return mainWindow();
+}
+
 
 void KisViewManager::showHideScrollbars()
 {

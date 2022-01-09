@@ -9,7 +9,6 @@
 
 #include "kritaui_export.h"
 #include "KisViewManager.h"
-#include "KisMainWindow.h"
 #include <KisUpdaterBase.h>
 #include <KisKineticScroller.h>
 
@@ -22,6 +21,7 @@
 
 #include "config-updaters.h"
 class RecentItemDelegate;
+class KisMainWindow;
 
 // Custom QAction to bridge a QLabel::linkActivated signal to a QAction::setChecked signal
 class ShowNewsAction : public QAction

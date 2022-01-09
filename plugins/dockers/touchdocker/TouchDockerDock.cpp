@@ -142,6 +142,12 @@ TouchDockerDock::TouchDockerDock()
 
 TouchDockerDock::~TouchDockerDock()
 {
+    // Prevent double free
+    m_quickWidget->setParent(nullptr);
+
+    // Work around child widget being refreshed *after* its parent is gone
+    // https://bugreports.qt.io/browse/QTBUG-81247
+    delete m_quickWidget;
 }
 
 bool TouchDockerDock::allowClose() const

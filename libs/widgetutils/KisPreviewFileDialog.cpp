@@ -88,7 +88,9 @@ void KisPreviewFileDialog::onCurrentChanged(const QString &path)
     if ((testOption(QFileDialog::DontUseNativeDialog) || layout()) && m_preview) {
         QIcon icon;
         if (s_iconCreator && s_iconCreator->createFileIcon(path, icon, devicePixelRatioF(), QSize(512, 512), true)) {
-            m_preview->setPixmap(icon.pixmap(m_preview->width(), m_preview->height()));
+            auto pixmap = icon.pixmap(m_preview->width(), m_preview->height());
+            pixmap.setDevicePixelRatio(devicePixelRatioF());
+            m_preview->setPixmap(pixmap);
         }
         else {
             m_preview->setText(i18n("No Preview"));

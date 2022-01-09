@@ -55,11 +55,16 @@ QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = 
         // them with smooth transformation to make sure the whole icon is filled in
         result = result.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     } else {
-        result = source.scaled(iconSizeSquare, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        result = source.scaled(iconSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     }
 
+    // The cropping here centers the image with the difference
+    // between the result and the expected width/height.
+    // The final size must be compared with iconSize, and not with maxIconSize,
+    // because otherwise parts of the image may be chopped off if
+    // result > iconSize.
     result = result.convertToFormat(QImage::Format_ARGB32) // add transparency
-        .copy((result.width() - maxIconSize) / 2, (result.height() - maxIconSize) / 2, maxIconSize, maxIconSize);
+        .copy((result.width() - iconSize.width()) / 2, (result.height() - iconSize.height()) / 2, iconSize.width(), iconSize.height());
 
     // draw faint outline
     QPainter painter(&result);
@@ -114,17 +119,17 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             }
         } else if (mimeType == "image/tiff" || mimeType == "image/x-tiff") {
             // Workaround for a bug in Qt tiff QImageIO plugin
-            QScopedPointer<KisDocument> doc;
-            doc.reset(KisPart::instance()->createTemporaryDocument());
+            QScopedPointer<KisDocument> doc(KisPart::instance()->createTemporaryDocument());
             doc->setFileBatchMode(true);
             bool r = doc->openPath(path, KisDocument::DontAddToRecent);
             if (r) {
                 KisPaintDeviceSP projection = doc->image()->projection();
                 const QRect bounds = projection->exactBounds();
-                const float ratio = static_cast<float>(bounds.width()) / bounds.height();
-                const int maxWidth = qMax(iconSize.width(), iconSize.height());
-                const int maxHeight = static_cast<int>(maxWidth * ratio);
-                const QImage &thumbnail = projection->createThumbnail(maxWidth, maxHeight, bounds);
+                QSize imageSize = bounds.size();
+                if (imageSize.width() > iconSize.width() || imageSize.height() > iconSize.height()) {
+                    imageSize.scale(iconSize, Qt::KeepAspectRatio);
+                }
+                const QImage &thumbnail = projection->createThumbnail(imageSize.width(), imageSize.height(), bounds);
                 icon = createIcon(thumbnail, iconSize, dontUpsize);
                 return true;
             } else {

@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>408</width>
+    <width>458</width>
     <height>376</height>
    </rect>
   </property>
@@ -179,7 +179,7 @@
             <string>The added duration for showing the last frame.</string>
            </property>
            <property name="text">
-            <string>Hold Last Frame for:</string>
+            <string>Hold last frame for:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -331,7 +331,7 @@
          <item row="3" column="0">
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Show result on first frame for</string>
+            <string>Show result on first frame for:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

@@ -62,7 +62,7 @@ public:
     QString videoFileName;
     QString videoFilePath;
     int framesCount = 0;
-    int firstFrameSec = 5;
+    int firstFrameSec = 2;
     int lastFrameSec = 5;
 
     QScopedPointer<KisFFMpegWrapper> ffmpeg;

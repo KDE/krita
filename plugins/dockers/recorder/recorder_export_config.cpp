@@ -128,7 +128,7 @@ void RecorderExportConfig::setFps(int value)
 
 int RecorderExportConfig::firstFrameSec() const
 {
-    return config->readEntry(keyFirstFrameSec, 5);
+    return config->readEntry(keyFirstFrameSec, 2);
 }
 
 void RecorderExportConfig::setFirstFrameSec(int value)

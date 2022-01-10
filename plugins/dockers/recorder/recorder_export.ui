@@ -10,7 +10,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
+    <width>462</width>
     <height>376</height>
    </rect>
   </property>
@@ -640,7 +640,7 @@ For example, to make your timelapse twice faster, the Input FPS should be twice 
               <number>120</number>
              </property>
              <property name="value">
-              <number>5</number>
+              <number>2</number>
              </property>
             </widget>
            </item>

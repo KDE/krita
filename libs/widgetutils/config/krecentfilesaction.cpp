@@ -190,18 +190,6 @@ void KRecentFilesAction::removeUrl(const QUrl &url)
     KisRecentFilesManager::instance()->remove(url);
 }
 
-QList<QUrl> KRecentFilesAction::urls() const
-{
-    // switch order so last opened file is first
-    QList<QUrl> sortedList;
-    auto files = KisRecentFilesManager::instance()->recentFiles();
-    for (int i = files.length() - 1; i >= 0; i--) {
-        sortedList.append(files[i].m_url);
-    }
-
-    return sortedList;
-}
-
 void KRecentFilesAction::setUrlIcon(const QUrl &url, const QIcon &icon)
 {
     Q_D(KRecentFilesAction);

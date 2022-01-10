@@ -961,7 +961,6 @@ void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
             d->recentFiles->addUrl(url);
         }
         saveRecentFiles();
-        d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
     }
 }
 
@@ -981,15 +980,9 @@ void KisMainWindow::saveRecentFiles()
     }
 }
 
-QList<QUrl> KisMainWindow::recentFilesUrls()
-{
-    return d->recentFiles->urls();
-}
-
 void KisMainWindow::clearRecentFiles()
 {
     d->recentFiles->clear();
-    d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
 }
 
 void KisMainWindow::removeRecentUrl(const QUrl &url)
@@ -1003,7 +996,7 @@ void KisMainWindow::removeRecentUrl(const QUrl &url)
 void KisMainWindow::reloadRecentFileList()
 {
     d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
-    d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
+    // d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
 }
 
 void KisMainWindow::updateCaption()

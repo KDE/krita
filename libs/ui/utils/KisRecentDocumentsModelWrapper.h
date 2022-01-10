@@ -28,11 +28,13 @@ public:
     KisRecentDocumentsModelWrapper();
     ~KisRecentDocumentsModelWrapper();
 
+private:
     /**
      * Update m_filesAndThumbnailsModel and launch worker thread to fetch icons in background
      */
     void setFiles(const QList<QUrl> &urls, qreal devicePixelRatioF);
 
+public:
     /**
      * Get underlying model
      *
@@ -45,6 +47,9 @@ private:
 
 private Q_SLOTS:
     void slotFileIconChanged(const QUrl &url, const QIcon &icon);
+    void fileAdded(const QUrl &url);
+    void fileRemoved(const QUrl &url);
+    void listRenewed();
 
 Q_SIGNALS:
     /**

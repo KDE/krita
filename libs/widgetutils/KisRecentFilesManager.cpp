@@ -84,6 +84,17 @@ QVector<KisRecentFilesEntry> KisRecentFilesManager::recentFiles() const
     return m_d->m_entries;
 }
 
+QList<QUrl> KisRecentFilesManager::recentUrlsLatestFirst() const
+{
+    // switch order so last opened file is first
+    QList<QUrl> sortedList;
+    for (int i = m_d->m_entries.length() - 1; i >= 0; i--) {
+        sortedList.append(m_d->m_entries[i].m_url);
+    }
+
+    return sortedList;
+}
+
 // The following file contains code copied and modified from LGPL-2.0-only
 // source:
 #include "KisRecentFilesManager_p.h"

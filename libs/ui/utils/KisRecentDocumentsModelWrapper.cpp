@@ -7,10 +7,12 @@
 
 #include "KisRecentDocumentsModelWrapper.h"
 
+#include <QTimer>
 #include <QUrl>
 
 #include "kis_icon_utils.h"
 #include "KisRecentFileIconCache.h"
+#include "KisRecentFilesManager.h"
 
 
 KisRecentDocumentsModelWrapper::KisRecentDocumentsModelWrapper()
@@ -18,6 +20,15 @@ KisRecentDocumentsModelWrapper::KisRecentDocumentsModelWrapper()
     connect(KisRecentFileIconCache::instance(),
             SIGNAL(fileIconChanged(const QUrl &, const QIcon &)),
             SLOT(slotFileIconChanged(const QUrl &, const QIcon &)));
+    connect(KisRecentFilesManager::instance(),
+            SIGNAL(fileAdded(const QUrl &)),
+            SLOT(fileAdded(const QUrl &)));
+    connect(KisRecentFilesManager::instance(),
+            SIGNAL(fileRemoved(const QUrl &)),
+            SLOT(fileRemoved(const QUrl &)));
+    connect(KisRecentFilesManager::instance(),
+            SIGNAL(listRenewed()),
+            SLOT(listRenewed()));
 }
 
 KisRecentDocumentsModelWrapper::~KisRecentDocumentsModelWrapper() {}
@@ -65,6 +76,33 @@ void KisRecentDocumentsModelWrapper::slotFileIconChanged(const QUrl &url, const 
             return;
         }
     }
+}
+
+void KisRecentDocumentsModelWrapper::fileAdded(const QUrl &url)
+{
+    // TODO: Only insert one row into the model
+    listRenewed();
+}
+
+void KisRecentDocumentsModelWrapper::fileRemoved(const QUrl &url)
+{
+    // TODO: Only remove one row from the model
+    listRenewed();
+}
+
+void KisRecentDocumentsModelWrapper::listRenewed()
+{
+    // HACK: We need to delay this to the next tick. KRecentFilesAction now
+    //       relies on KisRecentFilesManager to be notified about changes
+    //       using the same signals that would call this slot, but it also
+    //       relies on KisRecentDocumentsModelWrapper::model() change events
+    //       (connected by KisMainWindow) to update the file icons. Because
+    //       of this, we need to call setFiles *after* KRecentFilesAction has
+    //       updated the menu actions in order for the file icons to be
+    //       applied.
+    QTimer::singleShot(0, this, [this]() {
+        setFiles(KisRecentFilesManager::instance()->recentUrlsLatestFirst(), 1.0);
+    });
 }
 
 QStandardItemModel &KisRecentDocumentsModelWrapper::model()

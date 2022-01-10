@@ -133,11 +133,6 @@ public:
      */
     void removeUrl(const QUrl &url);
 
-    /**
-     *  Retrieve a list of all URLs in the recent files list.
-     */
-    QList<QUrl> urls() const;
-
     void setUrlIcon(const QUrl &url, const QIcon &icon);
 
 Q_SIGNALS:

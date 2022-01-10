@@ -94,10 +94,6 @@ public:
     void addRecentURL(const QUrl &url, const QUrl &oldUrl = QUrl());
 
     /**
-     * get list of URL strings for recent files
-     */
-    QList<QUrl> recentFilesUrls();
-    /**
      * removes the given url from the list of recent files
      */
     void removeRecentUrl(const QUrl &url);

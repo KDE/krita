@@ -46,6 +46,7 @@ public:
     void remove(const QUrl &url);
 
     QVector<KisRecentFilesEntry> recentFiles() const;
+    QList<QUrl> recentUrlsLatestFirst() const;
 
 Q_SIGNALS:
     void fileAdded(const QUrl &url);

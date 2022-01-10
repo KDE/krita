@@ -249,10 +249,9 @@
   <url type="donation">https://krita.org/support-us/donations/</url>
   <url type="help">https://docs.krita.org/</url>
   <url type="bugtracker">https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html</url>
-    <screenshots>
+  <screenshots>
     <screenshot type="default">
       <caption>Krita is a full-featured digital painting studio</caption>
-      <caption xml:lang="ar">كريتا هو استديو فنون رقميّة بمزايا شاملة.</caption>
       <caption xml:lang="ca">El Krita és un estudi de pintura digital ple de funcionalitats</caption>
       <caption xml:lang="ca-valencia">El Krita és un estudi de pintura digital ple de funcionalitats</caption>
       <caption xml:lang="de">Krita ist ein digitales Zeichenstudio mit umfangreichen Funktionen</caption>
@@ -272,6 +271,7 @@
       <caption xml:lang="pl">Krita jest pełnowartościowym, cyfrowym studiem artystycznym</caption>
       <caption xml:lang="pt">O Krita é um estúdio de arte digital completo</caption>
       <caption xml:lang="pt-BR">O Krita é um estúdio de pintura digital completo</caption>
+      <caption xml:lang="ru">Krita — полнофункциональный инструмент для создания цифровой графики.</caption>
       <caption xml:lang="sk">Krita je plnohodnotné digitálne maliarske štúdio</caption>
       <caption xml:lang="sl">Krita je celovit digitalni umetniški studio.</caption>
       <caption xml:lang="sv">Krita är en fullfjädrad digital konststudio</caption>
@@ -283,7 +283,6 @@
     </screenshot>
     <screenshot>
       <caption>The startup window now also gives you the latest news about Krita</caption>
-      <caption xml:lang="ar">توفر لك نافذة بدء التشغيل الآن آخر الأخبار حول كريتا</caption>
       <caption xml:lang="ca">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
       <caption xml:lang="ca-valencia">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
       <caption xml:lang="de">Das Startfenster bietet jetzt auch die aktuellsten Neuigkeiten über Krita</caption>
@@ -294,6 +293,7 @@
       <caption xml:lang="fi">Aloitusikkunassa näytetään nyt myös Kritan tuoreimmat uutiset</caption>
       <caption xml:lang="fr">Maintenant, la fenêtre de démarrage vous donne aussi les dernières informations concernant Krita</caption>
       <caption xml:lang="hi">स्टार्टअप विंडो अब आपको क्रिता के बारे में ताज़ा समाचार भी देती है।</caption>
+      <caption xml:lang="ia">Le fenestra de initio nunc anque te da le ultime novas re Krita</caption>
       <caption xml:lang="id">Window pemulaian kini juga memberikan kamu kabar terkini tentang Krita</caption>
       <caption xml:lang="it">La finestra di avvio ora fornisce anche le ultime novità su Krita</caption>
       <caption xml:lang="ko">시작 창에서 Krita의 최신 소식을 볼 수 있습니다</caption>
@@ -302,6 +302,7 @@
       <caption xml:lang="pl">Okno początkowe pokazuje teraz najnowsze wieści o Kricie</caption>
       <caption xml:lang="pt">A janela inicial agora também lhe dá as últimas notícias sobre o Krita</caption>
       <caption xml:lang="pt-BR">A janela de inicialização agora também mostra as últimas notícias sobre o Krita</caption>
+      <caption xml:lang="ru">Теперь окно запуска также отображает последние новости о Krita</caption>
       <caption xml:lang="sk">V úvodnom okne sa tiež nachádzajú najnovšie správy o Krita</caption>
       <caption xml:lang="sl">Začetno okno vam zdaj ponuja tudi najnovejše novice o Kriti</caption>
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita</caption>
@@ -313,7 +314,6 @@
     </screenshot>
     <screenshot type="default">
       <caption>There are over ten immensely powerful brush engines</caption>
-      <caption xml:lang="ar">هناك أكثر من عشرة محركات فرشاة قوية للغاية</caption>
       <caption xml:lang="ca">Hi ha més de deu motors de pinzell immensament potents</caption>
       <caption xml:lang="ca-valencia">Hi ha més de deu motors de pinzell immensament potents</caption>
       <caption xml:lang="de">Es sind mehr als zehn überaus leistungsfähige Pinsel-Engines enthalten</caption>
@@ -324,6 +324,7 @@
       <caption xml:lang="fi">Tehokkaita sivellinmoottoreita on toistakymmentä</caption>
       <caption xml:lang="fr">Il y a plus de 10 moteurs de brosse, tous extrêmement puissants</caption>
       <caption xml:lang="hi">इसमें दस से अधिक शक्तिशाली ब्रश इंजन हैं</caption>
+      <caption xml:lang="ia">Il ha dece plus que immensemente potente motores de brossar</caption>
       <caption xml:lang="id">Ada lebih dari sepuluh perkakas kuas yang sangat hebat</caption>
       <caption xml:lang="it">Ci sono oltre dieci motori di pennelli incredibilmente potenti</caption>
       <caption xml:lang="ko">10가지 종류의 강력한 브러시 엔진을 사용할 수 있습니다</caption>
@@ -332,6 +333,7 @@
       <caption xml:lang="pl">Istnieje ponad dziesięć zaawansowanych silników pędzli</caption>
       <caption xml:lang="pt">Existem mais de dez motores de pincéis extremamente poderosos</caption>
       <caption xml:lang="pt-BR">Mais de dez engines de pincéis incrivelmente poderosos disponíveis</caption>
+      <caption xml:lang="ru">В Krita представлено более десяти чрезвычайно мощных кистевых движков</caption>
       <caption xml:lang="sk">Existuje viac ako desať nesmierne výkonných štetcových enginov</caption>
       <caption xml:lang="sl">Obstaja več kot deset izjemno močnih načinov podpor čopičev</caption>
       <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt</caption>
@@ -343,7 +345,6 @@
     </screenshot>
     <screenshot type="default">
       <caption>Into animation? Krita provides everything you need for traditional, hand-drawn animation</caption>
-      <caption xml:lang="ar">هل مهتم  بالرسوم المتحركة؟ يوفر كريتا كل ما تحتاج للرسوم المتحركة التقليدية المرسومة باليد</caption>
       <caption xml:lang="ca">Esteu amb les animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
       <caption xml:lang="ca-valencia">Esteu amb les animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
       <caption xml:lang="de">Sie interessieren sich für Animation? Krita bietet alles was für traditionelle, handgezeichnete Animation benötigt wird</caption>
@@ -353,6 +354,7 @@
       <caption xml:lang="eu">Animaziorako? Krita-k ohiko eskuz-marraztutako animazioetarako behar duzun guztia dakar</caption>
       <caption xml:lang="fr">Vous réalisez des animations ? Krita vous fournit tout ce dont vous avez besoin pour l'animation traditionnelle et dessinée à la main</caption>
       <caption xml:lang="hi">आपको एनीमेशन में आसक्ती है? क्रिता आपको पारंपरिक, हाथ से तैयार एनीमेशन बनाने के लिए आवश्यक सब कुछ प्रदान करता है</caption>
+      <caption xml:lang="ia">In animation? Krita forni toto lo que tu necessita per animation traditional, a mano libere</caption>
       <caption xml:lang="id">Soal animasi? Krita menyediakan apa pun yang kamu perlukan untuk animasi gambar-tangan, tradisional</caption>
       <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti server per l'animazione tradizionale, disegnata a mano</caption>
       <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다</caption>
@@ -361,6 +363,7 @@
       <caption xml:lang="pl">Zajmujesz się animacjami? Krita zapewnia wszystko czego potrzebujesz do tworzenia tradycyjnych, ręcznie rysowanych animacji</caption>
       <caption xml:lang="pt">Gosta de animação? O Krita oferece tudo o que precisa para o desenho animado tradicional e desenhado à mão</caption>
       <caption xml:lang="pt-BR">Curte animação? O Krita fornece tudo necessário para você poder trabalhar com animação tradicional ou feita à mão</caption>
+      <caption xml:lang="ru">Занимаетесь анимацией? Krita предоставляет все необходимые инструменты для традиционной анимации, нарисованной от руки</caption>
       <caption xml:lang="sk">Ste do animácie? Krita poskytuje všetko, čo potrebujete pre tradičné ručne kreslené animácie</caption>
       <caption xml:lang="sl">Za animacijo? Krita ponuja vse, kar potrebujete za tradicionalno, ročno narisano animacijo</caption>
       <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar</caption>
@@ -372,7 +375,6 @@
     </screenshot>
     <screenshot>
       <caption>If you're new to digital painting, there's an extensive, up-to-date manual</caption>
-      <caption xml:lang="ar">إذا كنت جديدًا في مجال الرسم الرقمي ، فهناك دليل شامل ومُحدَّث</caption>
       <caption xml:lang="ca">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
       <caption xml:lang="ca-valencia">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
       <caption xml:lang="de">Für Einsteiger in das digitale Malen gibt es ein umfassendes, ständig aktualisiertes Handbuch</caption>
@@ -383,6 +385,7 @@
       <caption xml:lang="fi">Jos digitaide on sinulle uutta, käsikirja on kattava ja ajan tasalla</caption>
       <caption xml:lang="fr">Si vous êtes nouveau en art graphique, il y a un manuel à jour et très fourni</caption>
       <caption xml:lang="hi">यदि आप डिजिटल पेंटिंग में नए हैं, तो एक व्यापक, अद्यतन पु्स्तिका है</caption>
+      <caption xml:lang="ia">Si tu es nove al pictura digiral, il ha un extensive manual actualisate (in anglese)</caption>
       <caption xml:lang="id">Jika kamu baru dalam pelukisan digital, di situ ada buku manual panjang-lebar yang ter-update</caption>
       <caption xml:lang="it">Se sei nuovo del disegno digitale è disponibile un manuale completo e aggiornato</caption>
       <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오</caption>
@@ -391,6 +394,7 @@
       <caption xml:lang="pl">Jeśli malowanie cyfrowe to dla ciebie nowość, to dostępny jest podręcznik</caption>
       <caption xml:lang="pt">Se é novo na pintura digital, ou deseja saber mais sobre as possibilidades do Krita, existe um manual extenso e actualizado</caption>
       <caption xml:lang="pt-BR">Se você for iniciante em pintura digital, há um extenso e atualizado manual</caption>
+      <caption xml:lang="ru">Для новичков в цифровой живописи предусмотрено подробное актуальное руководство</caption>
       <caption xml:lang="sk">Ak ste v oblasti digitálnej maľby nováčikom alebo sa chcete dozvedieť viac o možnostiach programu Krita, existuje o tom rozsiahla a aktuálna príručka</caption>
       <caption xml:lang="sl">Če ste novi v digitalnem slikanju, obstaja obsežen, posodobljen priročnik</caption>
       <caption xml:lang="sv">Om digital målning är nytt för dig, finns en omfattande, aktuell handbok</caption>
@@ -402,82 +406,21 @@
     </screenshot>
     <screenshot>
       <caption>Krita offers powerful filters</caption>
-      <caption xml:lang="ar">يوفر كرتيا مرشحات قوية</caption>
-      <caption xml:lang="ca">El Krita ofereix filtres potents</caption>
-      <caption xml:lang="ca-valencia">El Krita ofereix filtres potents</caption>
-      <caption xml:lang="en-GB">Krita offers powerful filters</caption>
-      <caption xml:lang="es">Krita ofrece potentes filtros</caption>
-      <caption xml:lang="fr">Krita propose des filtres puissants</caption>
-      <caption xml:lang="it">Krita offre filtri molto avanzati</caption>
-      <caption xml:lang="nl">Krita biedt krachtige filters</caption>
-      <caption xml:lang="pt-BR">O Krita oferece filtros poderosos</caption>
-      <caption xml:lang="sl">Krita ponuja zmogljive filtre</caption>
-      <caption xml:lang="sv">Krita erbjuder kraftfulla filter</caption>
-      <caption xml:lang="uk">У Krita передбачено потужні фільтри</caption>
-      <caption xml:lang="x-test">xxKrita offers powerful filtersxx</caption>
-      <caption xml:lang="zh-CN">Krita 自带了多款功能强大的滤镜</caption>
-      <caption xml:lang="zh-TW">Krita 提供強大的濾鏡效果</caption>
       <image>https://cdn.kde.org/screenshots/krita/filters.png</image>
     </screenshot>
     <screenshot>
       <caption>And, there is integration with G'Mic, too, which adds hundreds of filters more</caption>
-      <caption xml:lang="ar">هناك أيضًا تكامل مع G'Mic ، والذي يضيف مئات من المرشحات</caption>
-      <caption xml:lang="ca">I també hi ha integració amb el G'Mic, el qual afegeix més centenars de filtres</caption>
-      <caption xml:lang="ca-valencia">I també hi ha integració amb el G'Mic, el qual afig més centenars de filtres</caption>
-      <caption xml:lang="en-GB">And, there is integration with G'Mic, too, which adds hundreds of filters more</caption>
-      <caption xml:lang="es">Y también está la integración con G'Mic, que añade cientos de filtros</caption>
-      <caption xml:lang="fr">Et, il existe également une intégration avec « G-Mic », ajoutant des centaines de filtres, de plus.</caption>
-      <caption xml:lang="it">Ed è presente anche un'integrazione con G'Mic, che aggiunge centinaia di filtri</caption>
-      <caption xml:lang="nl">En er is ook integratie met G'Mic, die honderden filters meer toevoegt</caption>
-      <caption xml:lang="pt-BR">E também há integração com o G'Mic, que adiciona centenas de filtros a mais</caption>
-      <caption xml:lang="sl">In tu je še integracija z G'Mic, ki prinaša na stotine dodatnih filtrov</caption>
-      <caption xml:lang="sv">Och det finns även en integrering med G'Mic, som lägger till ytterligare hundratals filter.</caption>
-      <caption xml:lang="uk">І, крім того, маємо інтеграцію із G'Mic, що додає ще сотні фільтрів</caption>
-      <caption xml:lang="x-test">xxAnd, there is integration with G'Mic, too, which adds hundreds of filters morexx</caption>
-      <caption xml:lang="zh-CN">它还整合了 G'Mic，可以使用它的数百款滤镜</caption>
-      <caption xml:lang="zh-TW">而且也整合了 G'Mic，額外提供了過百款濾鏡</caption>
       <image>https://cdn.kde.org/screenshots/krita/gmic.png</image>
     </screenshot>
     <screenshot>
       <caption>Join our Youtube channel!</caption>
-      <caption xml:lang="ar">تابع قناتنا على اليوتيوب</caption>
-      <caption xml:lang="ca">Uniu-vos al nostre canal de YouTube!</caption>
-      <caption xml:lang="ca-valencia">Uniu-vos al nostre canal de YouTube!</caption>
-      <caption xml:lang="en-GB">Join our YouTube channel!</caption>
-      <caption xml:lang="es">Únase a nuestro canal de Youtube.</caption>
-      <caption xml:lang="fr">Rejoignez notre canal sur Youtube !</caption>
-      <caption xml:lang="it">Unisciti al nostro canale Youtube!</caption>
-      <caption xml:lang="nl">Doe mee in ons Youtube kanaal!</caption>
-      <caption xml:lang="pt-BR">Junte-se ao nosso canal no Youtube!</caption>
-      <caption xml:lang="sl">Pridružite se našemu kanalu Youtube!</caption>
-      <caption xml:lang="sv">Gå med i vår YouTube-kanal!</caption>
-      <caption xml:lang="uk">Долучайтеся до нашого каналу на Youtube!</caption>
-      <caption xml:lang="x-test">xxJoin our Youtube channel!xx</caption>
-      <caption xml:lang="zh-CN">加入我们的 Youtube 频道！</caption>
-      <caption xml:lang="zh-TW">來關注我們的 Youtube 頻道吧！</caption>
       <image>https://cdn.kde.org/screenshots/krita/youtube.png</image>
     </screenshot>
     <screenshot>
       <caption>Or the active <a href="https://krita-artists.org">Krita Artists community</a></caption>
-      <caption xml:lang="ar">أو نشط <a href="https://krita-artists.org">مجتمع فناني كريتا</a></caption>
-      <caption xml:lang="ca">O l'actiu <a href="https://krita-artists.org">La comunitat d'artistes del Krita</a></caption>
-      <caption xml:lang="ca-valencia">O l'actiu <a href="https://krita-artists.org">La comunitat d'artistes del Krita</a></caption>
-      <caption xml:lang="en-GB">Or the active <a href="https://krita-artists.org">Krita Artists community</a></caption>
-      <caption xml:lang="es">O al activo <a href="https://krita-artists.org">La comunidad de artistas de Krita</a></caption>
-      <caption xml:lang="fr">Ou l'active <a href="https://krita-artists.org">La communauté d'artistes de Krita</a></caption>
-      <caption xml:lang="it">O l'attiva <a href="https://krita-artists.org">Comunità degli Artisti di Krita</a></caption>
-      <caption xml:lang="nl">Of het actieve <a href="https://krita-artists.org">Krita-artiestengemeenschap</a></caption>
-      <caption xml:lang="pt-BR">Ou o ativo <a href="https://krita-artists.org">Comunidade de artistas do Krita</a></caption>
-      <caption xml:lang="sl">Ali aktivni <a href="https://krita-artists.org">Skupnost ustvarjalce Krita Artists</a></caption>
-      <caption xml:lang="sv">Eller den aktiva <a href="https://krita-artists.org">Kritas konstnärsgemenskap</a></caption>
-      <caption xml:lang="uk">Або активний <a href="https://krita-artists.org">Спільнота Krita Artists</a></caption>
-      <caption xml:lang="x-test">xxOr the active <a href="https://krita-artists.org">xxKrita Artists communityxx</a>xx</caption>
-      <caption xml:lang="zh-CN">或者活动的 <a href="https://krita-artists.org">Krita 国际画师社区</a></caption>
-      <caption xml:lang="zh-TW">或者生氣勃勃的 <a href="https://krita-artists.org">Krita Artists 社群討論區</a></caption>
       <image>https://cdn.kde.org/screenshots/krita/community.png</image>
     </screenshot>
   </screenshots>
-
   <categories>
     <category>Graphics</category>
     <category>2DGraphics</category>

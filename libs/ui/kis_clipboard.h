@@ -10,20 +10,17 @@
 
 #include <QObject>
 #include <QSize>
-#include "kis_types.h"
-#include <kritaui_export.h>
+
 #include <KoColorProfile.h>
+#include <kis_types.h>
+
+#include <kritaui_export.h>
 
 class QRect;
 class QMimeData;
 class KisTimeSpan;
 class KisBlockUntilOperationsFinishedMediator;
 
-enum enumPasteBehaviour {
-    PASTE_ASSUME_WEB,
-    PASTE_ASSUME_MONITOR,
-    PASTE_ASK
-};
 
 /**
  * The Krita clipboard is a clipboard that can store paint devices
@@ -36,6 +33,8 @@ class KRITAUI_EXPORT KisClipboard : public QObject
     Q_PROPERTY(bool clip READ hasClip NOTIFY clipChanged)
 
 public:
+    enum PasteBehaviour { PASTE_ASSUME_WEB = 0, PASTE_ASSUME_MONITOR, PASTE_ASK };
+
     KisClipboard();
     ~KisClipboard() override;
 

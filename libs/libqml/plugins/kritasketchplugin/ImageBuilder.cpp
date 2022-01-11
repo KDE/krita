@@ -62,7 +62,7 @@ void ImageBuilder::createImageFromClipboardDelayed()
 {
     DocumentManager::instance()->disconnect(this, SLOT(createImageFromClipboardDelayed()));
     KisConfig cfg(false);
-    cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
+    cfg.setPasteBehaviour(KisClipboard::PASTE_ASSUME_MONITOR);
 
     QSize sz = KisClipboard::instance()->clipSize();
     KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()), false);

@@ -727,9 +727,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
 
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteAsk, PASTE_ASK);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, KisClipboard::PASTE_ASSUME_WEB);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, KisClipboard::PASTE_ASSUME_MONITOR);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteAsk, KisClipboard::PASTE_ASK);
 
     QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour());
     Q_ASSERT(button);

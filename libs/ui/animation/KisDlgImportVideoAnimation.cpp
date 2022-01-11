@@ -527,7 +527,7 @@ void KisDlgImportVideoAnimation::slotImportDurationChanged(qreal time)
     if (maxFrames < frames) {
         text_memory = i18nc("part of warning in video importer."
                             , "You do not have enough memory to load this many frames, the computer will be overloaded.");
-        warnings.insert(0, "<span style=\"color:#ff1500;\">");
+        warnings.insert(0, "<span style=\"color:#ff692e;\">");
         warnings.append(text_memory);
         warnings.append(text_video_editor);
         m_ui.lblWarning->setVisible(true);

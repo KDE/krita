@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>657</height>
+    <height>675</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -465,6 +465,9 @@ p, li { white-space: pre-wrap; }
               </item>
               <item row="1" column="0">
                <widget class="QGroupBox" name="optionFilterDuplicates">
+                <property name="toolTip">
+                 <string>Use ffmpeg to detect similar frames and reduce the total number of frames imported.</string>
+                </property>
                 <property name="title">
                  <string>Filter duplicate frames</string>
                 </property>
@@ -504,6 +507,11 @@ p, li { white-space: pre-wrap; }
                      <horstretch>0</horstretch>
                      <verstretch>0</verstretch>
                     </sizepolicy>
+                   </property>
+                   <property name="toolTip">
+                    <string>How sensitive should the duplicate frame filter be when determining
+which frames are added to Krita.
+The higher the sensitivity, the more frames are added to Krita.</string>
                    </property>
                   </widget>
                  </item>
@@ -696,7 +704,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

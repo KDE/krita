@@ -88,11 +88,6 @@ public:
     KisView *activeView() const;
 
     /**
-     * Sets the maximum number of recent documents entries.
-     */
-    void setMaxRecentItems(uint _number);
-
-    /**
      * The document opened a URL -> store into recent documents list.
      * @param oldUrl if not empty, @p url will replace @p oldUrl if present
      */

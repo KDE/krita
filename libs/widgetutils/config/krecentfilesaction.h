@@ -8,6 +8,7 @@
     SPDX-FileCopyrightText: 2002 Ellis Whitehead <ellis@kde.org>
     SPDX-FileCopyrightText: 2003 Andras Mantia <amantia@kde.org>
     SPDX-FileCopyrightText: 2005-2006 Hamish Rodda <rodda@kde.org>
+    SPDX-FileCopyrightText: 2022 Alvin Wong <alvin@alvinhc.com>
 
     SPDX-License-Identifier: LGPL-2.0-only
 */
@@ -37,7 +38,6 @@ class QIcon;
 class KRITAWIDGETUTILS_EXPORT KRecentFilesAction : public KSelectAction
 {
     Q_OBJECT
-    Q_PROPERTY(int maxItems READ maxItems WRITE setMaxItems)
     Q_DECLARE_PRIVATE(KRecentFilesAction)
 
 public:
@@ -102,21 +102,6 @@ public Q_SLOTS:
 
 public:
     /**
-     *  Returns the maximum of items in the recent files list.
-     */
-    int maxItems() const;
-
-    /**
-     *  Sets the maximum of items in the recent files list.
-     *  The default for this value is 10 set in the constructor.
-     *
-     *  If this value is lesser than the number of items currently
-     *  in the recent files list the last items are deleted until
-     *  the number of items are equal to the new maximum.
-     */
-    void setMaxItems(int maxItems);
-
-    /**
      *  Loads the recent files entries from a given KConfigGroup object.
      *  You can provide the name of the group used to load the entries.
      *  If the groupname is empty, entries are loaded from a group called 'RecentFiles'.
@@ -178,9 +163,15 @@ private:
     using KSelectAction::addAction;
 
     KRecentFilesActionPrivate *d_ptr;
-    QList<QUrl> d_urls;
 
     Q_PRIVATE_SLOT(d_func(), void _k_urlSelected(QAction *))
+
+    void rebuildEntries();
+
+private Q_SLOTS:
+    void fileAdded(const QUrl &url);
+    void fileRemoved(const QUrl &url);
+    void listRenewed();
 };
 
 #endif

@@ -2243,11 +2243,6 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
     d->fullScreenMode->setChecked(isFullScreen());
 }
 
-void KisMainWindow::setMaxRecentItems(uint _number)
-{
-    d->recentFiles->setMaxItems(_number);
-}
-
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
 {
     QDockWidget* dockWidget = 0;

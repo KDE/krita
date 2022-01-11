@@ -168,13 +168,13 @@ float rerange(float value, float oldMin, float oldMax, float newMin, float newMa
     return ((value - oldMin) / (oldMax - oldMin)) * (newMax - newMin) + newMin;
 }
 
-RenderedFrames KisDlgImportVideoAnimation::renderFrames()
+RenderedFrames KisDlgImportVideoAnimation::renderFrames(const QDir& directory)
 {
     RenderedFrames info;
     QStringList &frameFileList = info.renderedFrameFiles;
     QList<int> &frameTimeList = info.renderedFrameTargetTimes;
 
-    if ( !m_videoWorkDir.mkpath(".") ) {
+    if ( !directory.mkpath(".") ) {
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Failed to create a work directory, make sure you have write permission"));
         return info;
     }
@@ -234,7 +234,7 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames()
 
         ffmpegSettings.processPath = ffmpegInfo["path"].toString();
         ffmpegSettings.args = args;
-        ffmpegSettings.outputFile = m_videoWorkDir.filePath("output_%04d.png");
+        ffmpegSettings.outputFile = directory.filePath("output_%04d.png");
         ffmpegSettings.logPath = QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "ffmpeg.log";
         ffmpegSettings.totalFrames = qCeil(exportDuration * fps);
         ffmpegSettings.progressMessage = i18nc("FFMPEG animated video import message. arg1: frame progress number. arg2: file suffix."
@@ -244,8 +244,8 @@ RenderedFrames KisDlgImportVideoAnimation::renderFrames()
         ffmpeg->startNonBlocking(ffmpegSettings);
         ffmpeg->waitForFinished();
 
-        frameFileList = m_videoWorkDir.entryList(QStringList() << "output_*.png",QDir::Files);
-        frameFileList.replaceInStrings("output_", m_videoWorkDir.absolutePath() + QDir::separator() + "output_");
+        frameFileList = directory.entryList(QStringList() << "output_*.png",QDir::Files);
+        frameFileList.replaceInStrings("output_", directory.absolutePath() + QDir::separator() + "output_");
 
         dbgFile << "Import frames list:" << frameFileList;
     }
@@ -359,12 +359,6 @@ QStringList KisDlgImportVideoAnimation::showOpenFileDialog()
     return dialog.filenames();
 }
 
-void KisDlgImportVideoAnimation::cleanupWorkDir() 
-{
-    dbgFile << "Cleanup Animation import work directory";
-    m_videoWorkDir.removeRecursively();
-}
-
 
 void KisDlgImportVideoAnimation::toggleInputControls(bool toggleBool) 
 {
@@ -379,10 +373,6 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
 {
     const QFileInfo resultFileInfo(filename);
     const QDir videoDir(resultFileInfo.absolutePath());
-
-    m_videoWorkDir.setPath(videoDir.filePath("Krita_Animation_Import_Temp"));
-
-    if (m_videoWorkDir.exists()) cleanupWorkDir();
 
     QFontMetrics metrics(m_ui.fileLocationLabel->font());
     const int fileLabelWidth = m_ui.fileLocationLabel->width() > 400 ? m_ui.fileLocationLabel->width():400;

@@ -46,6 +46,7 @@
 #include <QScreen>
 #include <QAction>
 #include <QWindow>
+#include <QTemporaryDir>
 #include <QScrollArea>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -2063,12 +2064,14 @@ void KisMainWindow::importVideoAnimation()
     KisDlgImportVideoAnimation dlg(this, activeView());
 
     if (dlg.exec() == QDialog::Accepted) {
-        RenderedFrames renderedFrames = dlg.renderFrames();
+        const QTemporaryDir outputLocation(QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "import_files");
+        RenderedFrames renderedFrames = dlg.renderFrames(QDir(outputLocation.path()));
+        dbgFile << "Frames rendered to directory: " << outputLocation.path();
         QStringList documentInfoList = dlg.documentInfo();
 
         if (renderedFrames.isEmpty()) return;
         
-        dbgFile << "Animation Import options:" << documentInfoList;
+        dbgFile << "Animation Import options: " << documentInfoList;
 
         int firstFrame = 0;
         const int step = documentInfoList[0].toInt();
@@ -2111,7 +2114,6 @@ void KisMainWindow::importVideoAnimation()
 
             if (!document->newImage(name, width, height, cs, bgColor, KisConfig::RASTER_LAYER, 1, "", double(resolution / 72) )) {
                 QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Failed to create new document. Animation import aborted."));
-                dlg.cleanupWorkDir();
                 return;
             }
 
@@ -2128,8 +2130,6 @@ void KisMainWindow::importVideoAnimation()
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
         KisImportExportErrorCode status = importer.import(renderedFrames.renderedFrameFiles, firstFrame, step, false, false, 0, useDocumentColorSpace, renderedFrames.renderedFrameTargetTimes);
-
-        dlg.cleanupWorkDir();
 
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();

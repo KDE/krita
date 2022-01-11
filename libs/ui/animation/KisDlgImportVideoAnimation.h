@@ -56,10 +56,8 @@ class KisDlgImportVideoAnimation : public KoDialog
 public:
     KisDlgImportVideoAnimation(KisMainWindow *m_mainWindow, KisView *m_activeView);
     QStringList showOpenFileDialog();
-    RenderedFrames renderFrames();
+    RenderedFrames renderFrames(const QDir& directory);
     QStringList documentInfo();
-    void cleanupWorkDir();
-
 
 protected Q_SLOTS:
     void slotAddFile();
@@ -94,7 +92,6 @@ private:
     KisView *m_activeView;
 
     QTimer *m_videoSliderTimer;
-    QDir m_videoWorkDir;
     KisBasicVideoInfo m_videoInfo;
     int m_currentFrame;
 

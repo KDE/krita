@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2014 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -47,41 +48,44 @@
 #include <kis_mask.h>
 #include <kis_selection.h>
 
+#include "KisDocument.h"
+#include "KisImageSignals.h"
+#include "KisImportExportManager.h"
+#include "KisMainWindow.h"
+#include "KisMimeDatabase.h"
+#include "KisPart.h"
+#include "KisReferenceImagesDecoration.h"
+#include "KisRemoteFileFetcher.h"
+#include "KisSynchronizedConnection.h"
+#include "KisViewManager.h"
+#include "input/kis_input_manager.h"
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_resource_provider.h"
+#include "kis_clipboard.h"
 #include "kis_config.h"
-#include "KisDocument.h"
+#include "kis_file_layer.h"
+#include "kis_fill_painter.h"
+#include "kis_filter_manager.h"
 #include "kis_image_manager.h"
-#include "KisMainWindow.h"
+#include "kis_import_catcher.h"
 #include "kis_mimedata.h"
 #include "kis_mirror_axis.h"
 #include "kis_node_commands_adapter.h"
 #include "kis_node_manager.h"
-#include "KisPart.h"
-#include "kis_shape_controller.h"
-#include "kis_tool_freehand.h"
-#include "KisViewManager.h"
-#include "kis_zoom_manager.h"
-#include "kis_statusbar.h"
+#include "kis_paint_layer.h"
 #include "kis_painting_assistants_decoration.h"
-#include "KisReferenceImagesDecoration.h"
-#include "kis_progress_widget.h"
-#include "kis_signal_compressor.h"
-#include "kis_filter_manager.h"
-#include "kis_file_layer.h"
-#include "krita_utils.h"
-#include "input/kis_input_manager.h"
-#include "KisRemoteFileFetcher.h"
-#include "kis_selection_manager.h"
-#include "kis_fill_painter.h"
-#include "KisImageSignals.h"
-#include "kis_resources_snapshot.h"
 #include "kis_processing_applicator.h"
+#include "kis_progress_widget.h"
+#include "kis_resources_snapshot.h"
+#include "kis_selection_manager.h"
+#include "kis_shape_controller.h"
+#include "kis_signal_compressor.h"
+#include "kis_statusbar.h"
+#include "kis_tool_freehand.h"
+#include "kis_zoom_manager.h"
+#include "krita_utils.h"
 #include "processing/fill_processing_visitor.h"
-#include "utils/KisClipboardUtil.h"
-#include "KisSynchronizedConnection.h"
-
 
 //static
 QString KisView::newObjectName()
@@ -507,7 +511,146 @@ void KisView::dropEvent(QDropEvent *event)
         }
     }
     else if (event->mimeData()->hasUrls()) {
-        KisClipboardUtil::clipboardHasUrlsAction(this, event->mimeData(), event->pos());
+        const auto *const data = event->mimeData();
+
+        QList<QUrl> urls = data->urls();
+        if (urls.length() > 0) {
+            QMenu popup;
+            popup.setObjectName("drop_popup");
+
+            QAction *insertAsNewLayer = new QAction(i18n("Insert as New Layer"), &popup);
+            QAction *insertManyLayers = new QAction(i18n("Insert Many Layers"), &popup);
+
+            QAction *insertAsNewFileLayer = new QAction(i18n("Insert as New File Layer"), &popup);
+            QAction *insertManyFileLayers = new QAction(i18n("Insert Many File Layers"), &popup);
+
+            QAction *openInNewDocument = new QAction(i18n("Open in New Document"), &popup);
+            QAction *openManyDocuments = new QAction(i18n("Open Many Documents"), &popup);
+
+            QAction *insertAsReferenceImage = new QAction(i18n("Insert as Reference Image"), &popup);
+            QAction *insertAsReferenceImages = new QAction(i18n("Insert as Reference Images"), &popup);
+
+            QAction *cancel = new QAction(i18n("Cancel"), &popup);
+
+            popup.addAction(insertAsNewLayer);
+            popup.addAction(insertAsNewFileLayer);
+            popup.addAction(openInNewDocument);
+            popup.addAction(insertAsReferenceImage);
+
+            popup.addAction(insertManyLayers);
+            popup.addAction(insertManyFileLayers);
+            popup.addAction(openManyDocuments);
+            popup.addAction(insertAsReferenceImages);
+
+            insertAsNewLayer->setEnabled(this->image() && (data->hasImage() || urls.count() == 1));
+            insertAsNewFileLayer->setEnabled(this->image() && urls.count() == 1);
+            openInNewDocument->setEnabled(urls.count() == 1);
+            insertAsReferenceImage->setEnabled(this->image() && (data->hasImage() || urls.count() == 1));
+
+            insertManyLayers->setEnabled(this->image() && urls.count() > 1);
+            insertManyFileLayers->setEnabled(this->image() && urls.count() > 1);
+            openManyDocuments->setEnabled(urls.count() > 1);
+            insertAsReferenceImages->setEnabled(this->image() && urls.count() > 1);
+
+            popup.addSeparator();
+            popup.addAction(cancel);
+
+            const QAction *action = popup.exec(QCursor::pos());
+
+            if (data->hasImage() && (action == insertAsNewLayer || action == insertAsReferenceImage)) {
+                KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
+                if (clip) {
+                    KisImportCatcher::adaptClipToImageColorSpace(clip, this->image());
+
+                    if (action == insertAsNewLayer) {
+                        KisPaintLayerSP layer = new KisPaintLayer(this->image(), "", OPACITY_OPAQUE_U8, clip);
+                        KisNodeCommandsAdapter adapter(this->mainWindow()->viewManager());
+                        adapter.addNode(layer,
+                                        this->mainWindow()->viewManager()->activeNode()->parent(),
+                                        this->mainWindow()->viewManager()->activeNode());
+                        this->activateWindow();
+                        return;
+                    } else if (action == insertAsReferenceImage) {
+                        KisReferenceImage *reference =
+                            KisReferenceImage::fromClipboard(*this->canvasBase()->coordinatesConverter());
+                        reference->setPosition((*this->viewConverter()).imageToDocument(QCursor::pos()));
+                        this->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
+
+                        KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                        return;
+                    }
+                }
+            } else if (action != nullptr && action != cancel) {
+                for (QUrl url : urls) { // do copy it
+                    QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
+                    tmp->setAutoRemove(true);
+
+                    if (!url.isLocalFile()) {
+                        // download the file and substitute the url
+                        KisRemoteFileFetcher fetcher;
+
+                        if (!fetcher.fetchFile(url, tmp.data())) {
+                            qWarning() << "Fetching" << url << "failed";
+                            continue;
+                        }
+                        url = QUrl::fromLocalFile(tmp->fileName());
+                    }
+
+                    if (url.isLocalFile()) {
+                        if (action == insertAsNewLayer || action == insertManyLayers) {
+                            this->mainWindow()->viewManager()->imageManager()->importImage(url);
+                            this->activateWindow();
+                        } else if (action == insertAsNewFileLayer || action == insertManyFileLayers) {
+                            KisNodeCommandsAdapter adapter(this->mainWindow()->viewManager());
+                            QFileInfo fileInfo(url.toLocalFile());
+
+                            QString type = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                            QStringList mimes =
+                                KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
+
+                            if (!mimes.contains(type)) {
+                                QString msg =
+                                    KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported).errorMessage();
+                                QMessageBox::warning(
+                                    this,
+                                    i18nc("@title:window", "Krita"),
+                                    i18n("Could not open %2.\nReason: %1.", msg, url.toDisplayString()));
+                                continue;
+                            }
+
+                            KisFileLayer *fileLayer = new KisFileLayer(this->image(),
+                                                                       "",
+                                                                       url.toLocalFile(),
+                                                                       KisFileLayer::None,
+                                                                       fileInfo.fileName(),
+                                                                       OPACITY_OPAQUE_U8);
+
+                            KisLayerSP above = this->mainWindow()->viewManager()->activeLayer();
+                            KisNodeSP parent =
+                                above ? above->parent() : this->mainWindow()->viewManager()->image()->root();
+
+                            adapter.addNode(fileLayer, parent, above);
+                        } else if (action == openInNewDocument || action == openManyDocuments) {
+                            if (this->mainWindow()) {
+                                this->mainWindow()->openDocument(url.toLocalFile(), KisMainWindow::None);
+                            }
+                        } else if (action == insertAsReferenceImage || action == insertAsReferenceImages) {
+                            auto *reference =
+                                KisReferenceImage::fromFile(url.toLocalFile(), *this->viewConverter(), this);
+
+                            if (reference) {
+                                const auto pos =
+                                    this->canvasBase()->coordinatesConverter()->widgetToImage(event->pos());
+                                reference->setPosition((*this->viewConverter()).imageToDocument(pos));
+                                this->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
+
+                                KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     else if (event->mimeData()->hasColor() || event->mimeData()->hasFormat("krita/x-colorsetentry")) {
 

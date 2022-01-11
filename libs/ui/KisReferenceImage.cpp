@@ -30,7 +30,6 @@
 #include <SvgUtil.h>
 #include <libs/flake/svg/parsers/SvgTransformParser.h>
 #include <libs/brush/kis_qimage_pyramid.h>
-#include <utils/KisClipboardUtil.h>
 
 #include <KisDocument.h>
 #include <KisPart.h>

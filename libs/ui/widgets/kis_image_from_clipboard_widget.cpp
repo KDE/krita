@@ -38,7 +38,6 @@
 
 #include "kis_import_catcher.h"
 #include "kis_clipboard.h"
-#include <utils/KisClipboardUtil.h>
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>

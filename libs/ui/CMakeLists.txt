@@ -304,7 +304,6 @@ set(kritaui_LIB_SRCS
 
     utils/kis_document_aware_spin_box_unit_manager.cpp
     utils/KisSpinBoxSplineUnitConverter.cpp
-    utils/KisClipboardUtil.cpp
     utils/KisDitherUtil.cpp
     utils/KisFileIconCreator.cpp
     utils/KisRecentDocumentsModelWrapper.cpp

@@ -49,22 +49,35 @@ struct ClipboardImageFormat {
     QString format;
 };
 
+class Q_DECL_HIDDEN KisClipboardPrivate
+{
+public:
+    KisClipboardPrivate()
+        : clipboard(QApplication::clipboard())
+    {
+    }
+
+    bool hasClip{};
+    bool pushedClipboard{};
+    QClipboard *clipboard;
+};
+
 KisClipboard::KisClipboard()
-    : m_hasClip(false)
-    , m_pushedClipboard(false)
+    : d(new KisClipboardPrivate)
 {
     // Check that we don't already have a clip ready
     clipboardDataChanged();
 
     // Make sure we are notified when clipboard changes
-    connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &KisClipboard::clipboardDataChanged);
-    connect(QApplication::clipboard(), &QClipboard::selectionChanged, this, &KisClipboard::clipboardDataChanged);
-    connect(QApplication::clipboard(), &QClipboard::changed, this, &KisClipboard::clipboardDataChanged);
+    connect(d->clipboard, &QClipboard::dataChanged, this, &KisClipboard::clipboardDataChanged);
+    connect(d->clipboard, &QClipboard::selectionChanged, this, &KisClipboard::clipboardDataChanged);
+    connect(d->clipboard, &QClipboard::changed, this, &KisClipboard::clipboardDataChanged);
 }
 
 KisClipboard::~KisClipboard()
 {
     dbgRegistry << "deleting KisClipBoard";
+    delete d;
 }
 
 KisClipboard* KisClipboard::instance()
@@ -77,7 +90,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
     if (!dev)
         return;
 
-    m_hasClip = true;
+    d->hasClip = true;
 
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
@@ -157,9 +170,8 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
     }
 
     if (mimeData) {
-        m_pushedClipboard = true;
-        QClipboard *cb = QApplication::clipboard();
-        cb->setMimeData(mimeData);
+        d->pushedClipboard = true;
+        d->clipboard->setMimeData(mimeData);
     }
 
 }
@@ -177,8 +189,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
         *clipRange = KisTimeSpan();
     }
 
-    QClipboard *cb = QApplication::clipboard();
-    const QMimeData *cbData = cb->mimeData();
+    const QMimeData *cbData = d->clipboard->mimeData();
 
     KisPaintDeviceSP clip;
 
@@ -344,40 +355,37 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
 void KisClipboard::clipboardDataChanged()
 {
-    if (!m_pushedClipboard) {
-        m_hasClip = false;
-        QClipboard *cb = QApplication::clipboard();
+    if (!d->pushedClipboard) {
+        d->hasClip = false;
 
-        if (cb->mimeData()->hasImage()) {
-
-            QImage qimage = cb->image();
+        if (d->clipboard->mimeData()->hasImage()) {
+            QImage qimage = d->clipboard->image();
             if (!qimage.isNull())
-                m_hasClip = true;
+                d->hasClip = true;
 
-            const QMimeData *cbData = cb->mimeData();
+            const QMimeData *cbData = d->clipboard->mimeData();
             QByteArray mimeType("application/x-krita-selection");
             if (cbData && cbData->hasFormat(mimeType))
-                m_hasClip = true;
+                d->hasClip = true;
         }
     }
-    if (m_hasClip) {
+    if (d->hasClip) {
         emit clipCreated();
     }
-    m_pushedClipboard = false;
+    d->pushedClipboard = false;
     emit clipChanged();
 }
 
 
 bool KisClipboard::hasClip() const
 {
-    return m_hasClip;
+    return d->hasClip;
 }
 
 QSize KisClipboard::clipSize() const
 {
-    QClipboard *cb = QApplication::clipboard();
     QByteArray mimeType("application/x-krita-selection");
-    const QMimeData *cbData = cb->mimeData();
+    const QMimeData *cbData = d->clipboard->mimeData();
 
     KisPaintDeviceSP clip;
 
@@ -425,8 +433,8 @@ QSize KisClipboard::clipSize() const
 
         return clip->exactBounds().size();
     } else {
-        if (cb->mimeData()->hasImage()) {
-            QImage qimage = cb->image();
+        if (d->clipboard->mimeData()->hasImage()) {
+            QImage qimage = d->clipboard->image();
             return qimage.size();
         }
     }
@@ -441,15 +449,12 @@ void KisClipboard::setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy
     QMimeData *data = KisMimeData::mimeForLayersDeepCopy(nodes, image, forceCopy);
     if (!data) return;
 
-    QClipboard *cb = QApplication::clipboard();
-    cb->setMimeData(data);
+    d->clipboard->setMimeData(data);
 }
 
 bool KisClipboard::hasLayers() const
 {
-    QClipboard *cb = QApplication::clipboard();
-    const QMimeData *cbData = cb->mimeData();
-    return cbData->hasFormat("application/x-krita-node");
+    return d->clipboard->mimeData()->hasFormat("application/x-krita-node");
 }
 
 bool KisClipboard::hasLayerStyles() const
@@ -458,22 +463,18 @@ bool KisClipboard::hasLayerStyles() const
     //       result of this function, because we allow pasting
     //       of the layer styles as 'text/plain'
 
-    QClipboard *cb = QApplication::clipboard();
-    const QMimeData *cbData = cb->mimeData();
-    return cbData->hasFormat("application/x-krita-layer-style");
+    return d->clipboard->mimeData()->hasFormat("application/x-krita-layer-style");
 }
 
 const QMimeData* KisClipboard::layersMimeData() const
 {
-    QClipboard *cb = QApplication::clipboard();
-    const QMimeData *cbData = cb->mimeData();
+    const QMimeData *cbData = d->clipboard->mimeData();
     return cbData->hasFormat("application/x-krita-node") ? cbData : 0;
 }
 
 QImage KisClipboard::getPreview() const
 {
-    QClipboard *cb = QApplication::clipboard();
-    const QMimeData *cbData = cb->mimeData();
+    const QMimeData *cbData = d->clipboard->mimeData();
 
     QImage img;
 
@@ -487,7 +488,7 @@ QImage KisClipboard::getPreview() const
     }
 
     if (img.isNull() && cbData->hasImage()) {
-        img = cb->image();
+        img = d->clipboard->image();
     }
 
     return img;
@@ -495,7 +496,7 @@ QImage KisClipboard::getPreview() const
 
 bool KisClipboard::hasUrls() const
 {
-    return QApplication::clipboard()->mimeData()->hasUrls();
+    return d->clipboard->mimeData()->hasUrls();
 }
 
 QImage KisClipboard::getImageFromClipboard() const
@@ -505,12 +506,10 @@ QImage KisClipboard::getImageFromClipboard() const
         {{"image/tiff"}, "TIFF"},
         {{"image/bmp", "image/x-bmp", "image/x-MS-bmp", "image/x-win-bitmap"}, "BMP"}};
 
-    QClipboard *clipboard = QApplication::clipboard();
-
     QImage image;
     QSet<QString> clipboardMimeTypes;
 
-    Q_FOREACH (const QString &format, clipboard->mimeData()->formats()) {
+    Q_FOREACH (const QString &format, d->clipboard->mimeData()->formats()) {
         clipboardMimeTypes << format;
     }
 
@@ -521,7 +520,7 @@ QImage KisClipboard::getImageFromClipboard() const
         }
 
         const QString &format = *intersection.constBegin();
-        const QByteArray &imageData = clipboard->mimeData()->data(format);
+        const QByteArray &imageData = d->clipboard->mimeData()->data(format);
         if (imageData.isEmpty()) {
             continue;
         }
@@ -532,7 +531,7 @@ QImage KisClipboard::getImageFromClipboard() const
     }
 
     if (image.isNull()) {
-        image = clipboard->image();
+        image = d->clipboard->image();
     }
 
     return image;

@@ -22,6 +22,7 @@ class QRect;
 class QMimeData;
 class KisTimeSpan;
 
+class KisClipboardPrivate;
 
 /**
  * The Krita clipboard is a clipboard that can store paint devices
@@ -59,7 +60,7 @@ public:
     KisPaintDeviceSP clip(const QRect &imageBounds,
                           bool showPopup,
                           KisTimeSpan *clipRange = nullptr,
-                          const KoColorProfile *destProfile = nullptr);
+                          const KoColorProfile *destProfile = nullptr) const;
 
     bool hasClip() const;
 
@@ -81,18 +82,19 @@ public:
      */
     QImage getImageFromClipboard() const;
 
-    KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
-
 Q_SIGNALS:
     void clipCreated();
     void clipChanged();
 
-private:
-    bool m_hasClip;
-    bool m_pushedClipboard;
-
 private Q_SLOTS:
     void clipboardDataChanged();
+
+private:
+    Q_DISABLE_COPY(KisClipboard);
+
+    KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
+
+    KisClipboardPrivate *const d;
 };
 
 #endif // __KIS_CLIPBOARD_H_

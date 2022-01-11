@@ -78,12 +78,6 @@ void ImageBuilder::createImageFromClipboardDelayed()
     }
 }
 
-QString ImageBuilder::createImageFromWebcam(int width, int height, int resolution)
-{
-    Q_UNUSED(width); Q_UNUSED(height); Q_UNUSED(resolution);
-    return QString();
-}
-
 QString ImageBuilder::createImageFromTemplate(const QVariantMap& options)
 {
     DocumentManager::instance()->newDocument(options);

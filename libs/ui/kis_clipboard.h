@@ -70,25 +70,18 @@ public:
 
     const QMimeData* layersMimeData() const;
 
+    QImage getPreview() const;
+
 Q_SIGNALS:
-
     void clipCreated();
-
-private Q_SLOTS:
-
-    void clipboardDataChanged();
+    void clipChanged();
 
 private:
-
-    KisClipboard(const KisClipboard &);
-    KisClipboard operator=(const KisClipboard &);
-
     bool m_hasClip;
-
     bool m_pushedClipboard;
 
-Q_SIGNALS:
-    void clipChanged();
+private Q_SLOTS:
+    void clipboardDataChanged();
 };
 
 #endif // __KIS_CLIPBOARD_H_

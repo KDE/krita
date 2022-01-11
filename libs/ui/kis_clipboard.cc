@@ -47,18 +47,16 @@
 Q_GLOBAL_STATIC(KisClipboard, s_instance)
 
 KisClipboard::KisClipboard()
+    : m_hasClip(false)
+    , m_pushedClipboard(false)
 {
-    m_pushedClipboard = false;
-    m_hasClip = false;
-
     // Check that we don't already have a clip ready
     clipboardDataChanged();
 
     // Make sure we are notified when clipboard changes
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()),
-            this, SLOT(clipboardDataChanged()));
-
-
+    connect(QApplication::clipboard(), &QClipboard::dataChanged, this, &KisClipboard::clipboardDataChanged);
+    connect(QApplication::clipboard(), &QClipboard::selectionChanged, this, &KisClipboard::clipboardDataChanged);
+    connect(QApplication::clipboard(), &QClipboard::changed, this, &KisClipboard::clipboardDataChanged);
 }
 
 KisClipboard::~KisClipboard()
@@ -346,6 +344,7 @@ void KisClipboard::clipboardDataChanged()
     if (!m_pushedClipboard) {
         m_hasClip = false;
         QClipboard *cb = QApplication::clipboard();
+
         if (cb->mimeData()->hasImage()) {
 
             QImage qimage = cb->image();
@@ -468,3 +467,25 @@ const QMimeData* KisClipboard::layersMimeData() const
     return cbData->hasFormat("application/x-krita-node") ? cbData : 0;
 }
 
+QImage KisClipboard::getPreview() const
+{
+    QClipboard *cb = QApplication::clipboard();
+    const QMimeData *cbData = cb->mimeData();
+
+    QImage img;
+
+    for (QUrl &url : cbData->urls()) {
+        if (url.isLocalFile()) {
+            img.load(url.path());
+
+            if (!img.isNull())
+                break;
+        }
+    }
+
+    if (img.isNull() && cbData->hasImage()) {
+        img = cb->image();
+    }
+
+    return img;
+}

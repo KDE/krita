@@ -98,39 +98,22 @@ void KisImageFromClipboard::clipboardDataChanged()
 
 void KisImageFromClipboard::createClipboardPreview()
 {
-    QImage qimage;
-    QClipboard *cb = QApplication::clipboard();
-    const QMimeData *cbData = cb->mimeData();
-
-    if (cbData->hasUrls()) {
-        qimage = QImage(cb->mimeData()->urls().at(0).path());
-    }
-
-    if (qimage.isNull() && cbData->hasImage()) {
-        qimage = cb->image();
-    }
+    QImage qimage = KisClipboard::instance()->getPreview();
 
     if (!qimage.isNull()) {
-        QByteArray mimeType("application/x-krita-selection");
+        QSize previewSize = QSize(75, 75) * devicePixelRatioF();
+        QPixmap preview = QPixmap::fromImage(qimage.scaled(previewSize, Qt::KeepAspectRatio));
+        preview.setDevicePixelRatio(devicePixelRatioF());
+        lblPreview->setPixmap(preview);
+        lblPreview->show();
+        newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 
-        if ((cbData && cbData->hasFormat(mimeType)) || !qimage.isNull()) {
-            QSize previewSize = QSize(75, 75)*devicePixelRatioF();
-            QPixmap preview = QPixmap::fromImage(qimage.scaled(previewSize, Qt::KeepAspectRatio));
-            preview.setDevicePixelRatio(devicePixelRatioF());
-            lblPreview->setPixmap(preview);
-            lblPreview->show();
-            newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
-
-            doubleWidth->setValue(qimage.width());
-            doubleHeight->setValue(qimage.height());
-        }
-    }
-    else {
+        doubleWidth->setValue(qimage.width());
+        doubleHeight->setValue(qimage.height());
+    } else {
         newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         lblPreview->hide();
     }
-    
-    
 }
 
 

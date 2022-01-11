@@ -35,6 +35,8 @@
 #include <KisDocument.h>
 #include <KisPart.h>
 
+#include "kis_clipboard.h"
+
 struct KisReferenceImage::Private : public QSharedData
 {
     // Filename within .kra (for embedding)
@@ -90,7 +92,7 @@ struct KisReferenceImage::Private : public QSharedData
     }
 
     bool loadFromClipboard() {
-        image = KisClipboardUtil::getImageFromClipboard();
+        image = KisClipboard::instance()->getImageFromClipboard();
         return !image.isNull();
     }
 

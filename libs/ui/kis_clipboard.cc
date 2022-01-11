@@ -8,43 +8,46 @@
 #include "kis_clipboard.h"
 
 #include <QApplication>
+#include <QBuffer>
+#include <QCheckBox>
 #include <QClipboard>
 #include <QDesktopWidget>
-#include <QMimeData>
-#include <QObject>
-#include <QImage>
+#include <QFileInfo>
 #include <QMessageBox>
-#include <QCheckBox>
-#include <QBuffer>
-#include <QGlobalStatic>
+#include <QMimeData>
 #include <QPushButton>
+#include <QScopedPointer>
+#include <QTemporaryFile>
 
-#include <klocalizedstring.h>
-
-#include "KoColorSpace.h"
-#include "KoStore.h"
-#include <KoColorSpaceRegistry.h>
-
-#include <KisMimeDatabase.h>
-
-#include <KisPart.h>
+// kritaglobal
 #include <kis_assert.h>
-// kritaimage
-#include <kis_types.h>
-#include <kis_paint_device.h>
 #include <kis_debug.h>
+
+// kritastore
+#include <KoStore.h>
+
+// kritaimage
 #include <kis_annotation.h>
-#include <kis_node.h>
-#include <kis_image.h>
+#include <kis_layer_utils.h>
+#include <kis_paint_device.h>
 #include <kis_time_span.h>
-#include <utils/KisClipboardUtil.h>
 
 // local
-#include "kis_config.h"
-#include "kis_store_paintdevice_writer.h"
+#include "KisDocument.h"
+#include "KisImportExportManager.h"
+#include "KisMainWindow.h"
+#include "KisMimeDatabase.h"
+#include "KisPart.h"
+#include "KisRemoteFileFetcher.h"
 #include "kis_mimedata.h"
+#include "kis_store_paintdevice_writer.h"
 
 Q_GLOBAL_STATIC(KisClipboard, s_instance)
+
+struct ClipboardImageFormat {
+    QSet<QString> mimeTypes;
+    QString format;
+};
 
 KisClipboard::KisClipboard()
     : m_hasClip(false)
@@ -266,7 +269,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
 
     if (!clip) {
         if (cbData->hasImage()) {
-            const QImage qimage = KisClipboardUtil::getImageFromClipboard();
+            const QImage qimage = getImageFromClipboard();
 
             KIS_ASSERT(!qimage.isNull());
 
@@ -325,7 +328,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
         }
 
         if (!clip && cbData->hasUrls()) {
-            clip = KisClipboardUtil::fetchImageByURL(cbData->urls().first());
+            clip = fetchImageByURL(cbData->urls().first());
         }
 
         if (clip && !imageBounds.isEmpty()) {
@@ -488,4 +491,98 @@ QImage KisClipboard::getPreview() const
     }
 
     return img;
+}
+
+bool KisClipboard::hasUrls() const
+{
+    return QApplication::clipboard()->mimeData()->hasUrls();
+}
+
+QImage KisClipboard::getImageFromClipboard() const
+{
+    static const QList<ClipboardImageFormat> supportedFormats = {
+        {{"image/png"}, "PNG"},
+        {{"image/tiff"}, "TIFF"},
+        {{"image/bmp", "image/x-bmp", "image/x-MS-bmp", "image/x-win-bitmap"}, "BMP"}};
+
+    QClipboard *clipboard = QApplication::clipboard();
+
+    QImage image;
+    QSet<QString> clipboardMimeTypes;
+
+    Q_FOREACH (const QString &format, clipboard->mimeData()->formats()) {
+        clipboardMimeTypes << format;
+    }
+
+    Q_FOREACH (const ClipboardImageFormat &item, supportedFormats) {
+        const QSet<QString> &intersection = item.mimeTypes & clipboardMimeTypes;
+        if (intersection.isEmpty()) {
+            continue;
+        }
+
+        const QString &format = *intersection.constBegin();
+        const QByteArray &imageData = clipboard->mimeData()->data(format);
+        if (imageData.isEmpty()) {
+            continue;
+        }
+
+        if (image.loadFromData(imageData, item.format.toLatin1())) {
+            break;
+        }
+    }
+
+    if (image.isNull()) {
+        image = clipboard->image();
+    }
+
+    return image;
+}
+
+KisPaintDeviceSP KisClipboard::fetchImageByURL(const QUrl &originalUrl) const
+{
+    KisPaintDeviceSP result;
+    QUrl url(originalUrl);
+    QScopedPointer<QTemporaryFile> tmp;
+
+    if (!originalUrl.isLocalFile()) {
+        tmp.reset(new QTemporaryFile());
+        tmp->setAutoRemove(true);
+
+        // download the file and substitute the url
+        KisRemoteFileFetcher fetcher;
+
+        if (!fetcher.fetchFile(originalUrl, tmp.data())) {
+            qWarning() << "Fetching" << originalUrl << "failed";
+            return result;
+        }
+        url = QUrl::fromLocalFile(tmp->fileName());
+    }
+
+    if (url.isLocalFile()) {
+        QFileInfo fileInfo(url.toLocalFile());
+
+        QString type = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+        QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
+
+        if (!mimes.contains(type)) {
+            QString msg = KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported).errorMessage();
+            QMessageBox::warning(KisPart::instance()->currentMainwindow(),
+                                 i18nc("@title:window", "Krita"),
+                                 i18n("Could not open %2.\nReason: %1.", msg, url.toDisplayString()));
+            return result;
+        }
+
+        QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
+
+        if (doc->importDocument(url.toLocalFile())) {
+            // Wait for required updates, if any. BUG: 448256
+            KisLayerUtils::forceAllDelayedNodesUpdate(doc->image()->root());
+            doc->image()->waitForDone();
+            result = new KisPaintDevice(*doc->image()->projection());
+        } else {
+            qWarning() << "Failed to import file" << url.toLocalFile();
+        }
+    }
+
+    return result;
 }

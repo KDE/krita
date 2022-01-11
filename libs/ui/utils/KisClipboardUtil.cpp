@@ -9,49 +9,29 @@
 
 #include <QApplication>
 #include <QClipboard>
-#include <QMimeData>
-#include <QMessageBox>
-#include <QImage>
-#include <QUrl>
-#include <QTemporaryFile>
-#include <QList>
-#include <QSet>
-#include <QPair>
-#include <QDebug>
-#include <QMenu>
 #include <QFileInfo>
+#include <QMenu>
+#include <QMessageBox>
+#include <QMimeData>
+#include <QTemporaryFile>
 
-#include <KisPart.h>
-#include <KisImportExportManager.h>
-#include <KisMainWindow.h>
-#include <KisMimeDatabase.h>
-#include <kis_canvas2.h>
-#include <KisViewManager.h>
-#include <kis_image_manager.h>
+#include "KisDocument.h"
+#include "KisImportExportManager.h"
+#include "KisMainWindow.h"
+#include "KisMimeDatabase.h"
 #include "KisRemoteFileFetcher.h"
-#include "kis_node_commands_adapter.h"
+#include "KisViewManager.h"
+#include "kis_canvas2.h"
+#include "kis_clipboard.h"
 #include "kis_file_layer.h"
-#include "KisReferenceImage.h"
-#include "kis_coordinates_converter.h"
-#include <KisDocument.h>
-
-#include <kis_layer_utils.h>
-#include <kis_clipboard.h>
-#include <kis_import_catcher.h>
-#include <kis_paint_layer.h>
+#include "kis_image_manager.h"
+#include "kis_import_catcher.h"
+#include "kis_node_commands_adapter.h"
+#include "kis_paint_layer.h"
 
 namespace KisClipboardUtil {
 
-struct ClipboardImageFormat
-{
-    QSet<QString> mimeTypes;
-    QString format;
-};
 
-bool clipboardHasUrls()
-{
-    return QApplication::clipboard()->mimeData()->hasUrls();
-}
 
 void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, const QPoint eventPos)
 {
@@ -192,98 +172,5 @@ void clipboardHasUrlsAction(KisView *kisview, const QMimeData *data, const QPoin
             }
         }
     }
-}
-
-QImage getImageFromClipboard()
-{
-    static const QList<ClipboardImageFormat> supportedFormats = {
-            {{"image/png"}, "PNG"},
-            {{"image/tiff"}, "TIFF"},
-            {{"image/bmp", "image/x-bmp", "image/x-MS-bmp", "image/x-win-bitmap"}, "BMP"}
-    };
-
-    QClipboard *clipboard = QApplication::clipboard();
-
-    QImage image;
-    QSet<QString> clipboardMimeTypes;
-
-    Q_FOREACH(const QString &format, clipboard->mimeData()->formats()) {
-        clipboardMimeTypes << format;
-    }
-
-    Q_FOREACH (const ClipboardImageFormat &item, supportedFormats) {
-        const QSet<QString> &intersection = item.mimeTypes & clipboardMimeTypes;
-        if (intersection.isEmpty()) {
-            continue;
-        }
-
-        const QString &format = *intersection.constBegin();
-        const QByteArray &imageData = clipboard->mimeData()->data(format);
-        if (imageData.isEmpty()) {
-            continue;
-        }
-
-        if (image.loadFromData(imageData, item.format.toLatin1())) {
-            break;
-        }
-    }
-
-    if (image.isNull()) {
-        image = clipboard->image();
-    }
-
-    return image;
-}
-
-KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl)
-{
-    KisPaintDeviceSP result;
-    QUrl url = originalUrl;
-    QScopedPointer<QTemporaryFile> tmp;
-
-    if (!url.isLocalFile()) {
-        tmp.reset(new QTemporaryFile());
-        tmp->setAutoRemove(true);
-
-        // download the file and substitute the url
-        KisRemoteFileFetcher fetcher;
-
-        if (!fetcher.fetchFile(url, tmp.data())) {
-            qWarning() << "Fetching" << url << "failed";
-            return result;
-        }
-        url = url.fromLocalFile(tmp->fileName());
-    }
-
-    if (url.isLocalFile()) {
-
-        QFileInfo fileInfo(url.toLocalFile());
-
-        QString type = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
-        QStringList mimes =
-            KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
-
-        if (!mimes.contains(type)) {
-            QString msg =
-                KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported).errorMessage();
-            QMessageBox::warning(
-                KisPart::instance()->currentMainwindow(), i18nc("@title:window", "Krita"),
-                i18n("Could not open %2.\nReason: %1.", msg, url.toDisplayString()));
-            return result;
-        }
-
-        QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
-
-        if (doc->importDocument(url.toLocalFile())) {
-            // Wait for required updates, if any. BUG: 448256
-            KisLayerUtils::forceAllDelayedNodesUpdate(doc->image()->root());
-            doc->image()->waitForDone();
-            result = new KisPaintDevice(*doc->image()->projection());
-        } else {
-            qWarning() << "Failed to import file" << url.toLocalFile();
-        }
-    }
-
-    return result;
 }
 }

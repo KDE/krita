@@ -2,6 +2,8 @@
  *  kis_clipboard.h - part of Krayon
  *
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2019 Dmitrii Utkin <loentar@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -19,7 +21,6 @@
 class QRect;
 class QMimeData;
 class KisTimeSpan;
-class KisBlockUntilOperationsFinishedMediator;
 
 
 /**
@@ -71,6 +72,16 @@ public:
     const QMimeData* layersMimeData() const;
 
     QImage getPreview() const;
+
+    bool hasUrls() const;
+
+    /**
+     * load an image from clipboard handling different supported formats
+     * @return image
+     */
+    QImage getImageFromClipboard() const;
+
+    KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
 
 Q_SIGNALS:
     void clipCreated();

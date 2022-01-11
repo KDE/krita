@@ -55,7 +55,10 @@ public:
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange = 0, const KoColorProfile *destProfile = 0);
+    KisPaintDeviceSP clip(const QRect &imageBounds,
+                          bool showPopup,
+                          KisTimeSpan *clipRange = nullptr,
+                          const KoColorProfile *destProfile = nullptr);
 
     bool hasClip() const;
 

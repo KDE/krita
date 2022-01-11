@@ -95,8 +95,8 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
     QByteArray mimeType("application/x-krita-selection");
-    KoStore* store = KoStore::createStore(&buffer, KoStore::Write, mimeType);
-    KisStorePaintDeviceWriter writer(store);
+    QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Write, mimeType));
+    KisStorePaintDeviceWriter writer(store.data());
     Q_ASSERT(store);
     Q_ASSERT(!store->bad());
 
@@ -105,7 +105,6 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
         if (!dev->write(writer)) {
             dev->disconnect();
             store->close();
-            delete store;
             return;
         }
         store->close();
@@ -151,8 +150,6 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
         }
     }
 
-    delete store;
-
     QMimeData *mimeData = new QMimeData;
     Q_CHECK_PTR(mimeData);
 
@@ -181,7 +178,10 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
     setClip(dev, topLeft, KisTimeSpan());
 }
 
-KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange, const KoColorProfile *destProfile)
+KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds,
+                                    bool showPopup,
+                                    KisTimeSpan *clipRange,
+                                    const KoColorProfile *destProfile) const
 {
     QByteArray mimeType("application/x-krita-selection");
 
@@ -196,7 +196,7 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
     if (cbData && cbData->hasFormat(mimeType)) {
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
-        KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+        QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Read, mimeType));
 
         const KoColorProfile *profile = 0;
 
@@ -274,8 +274,6 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds, bool showPopup, Ki
                 }
             }
         }
-
-        delete store;
     }
 
     if (!clip) {
@@ -392,7 +390,7 @@ QSize KisClipboard::clipSize() const
     if (cbData && cbData->hasFormat(mimeType)) {
         QByteArray encodedData = cbData->data(mimeType);
         QBuffer buffer(&encodedData);
-        KoStore* store = KoStore::createStore(&buffer, KoStore::Read, mimeType);
+        QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Read, mimeType));
         const KoColorProfile *profile = 0;
         QString csDepth, csModel;
 
@@ -429,7 +427,6 @@ QSize KisClipboard::clipSize() const
             clip->read(store->device());
             store->close();
         }
-        delete store;
 
         return clip->exactBounds().size();
     } else {

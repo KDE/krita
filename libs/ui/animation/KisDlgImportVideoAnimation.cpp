@@ -116,6 +116,8 @@ KisDlgImportVideoAnimation::KisDlgImportVideoAnimation(KisMainWindow *mainWindow
     m_ui.videoHeightSpinbox->setValue(0);
     m_ui.videoWidthSpinbox->setRange(1,100000);
     m_ui.videoHeightSpinbox->setRange(1,100000);
+
+    m_ui.sensitivitySpinbox->setValue(50.0f);
     
     m_ui.cmbVideoScaleFilter->addItem(i18n("Bicubic"), "bicubic");
     m_ui.cmbVideoScaleFilter->addItem(i18n("Bilinear"), "bilinear");

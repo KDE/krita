@@ -74,14 +74,18 @@ void KisImageFromClipboard::createImage()
         KisLayer * layer = qobject_cast<KisLayer*>(image->root()->firstChild().data());
 
         KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
-        if (clip) {
-            KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 
-            QRect r = clip->exactBounds();
-            KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
-
-            layer->setDirty();
+        if (!clip) {
+            delete doc;
+            return;
         }
+
+        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+
+        QRect r = clip->exactBounds();
+        KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
+
+        layer->setDirty();
     }
     doc->setModified(true);
     emit m_openPane->documentSelected(doc);

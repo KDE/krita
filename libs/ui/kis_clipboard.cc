@@ -39,6 +39,7 @@
 #include "KisMimeDatabase.h"
 #include "KisPart.h"
 #include "KisRemoteFileFetcher.h"
+#include "dialogs/kis_dlg_missing_color_profile.h"
 #include "kis_mimedata.h"
 #include "kis_store_paintdevice_writer.h"
 
@@ -289,30 +290,15 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds,
 
             if (behaviour == PASTE_ASK && showPopup) {
                 // Ask user each time.
-                QMessageBox mb(qApp->activeWindow());
-                QCheckBox dontPrompt(i18n("Remember"), &mb);
+                KisDlgMissingColorProfile dlg(qApp->activeWindow());
 
-                dontPrompt.blockSignals(true);
-
-                mb.setWindowTitle(i18nc("@title:window", "Missing Color Profile"));
-                mb.setText(i18n("The image data you are trying to paste has no color profile information. How do you want to interpret these data? \n\n As Web (sRGB) -  Use standard colors that are displayed from computer monitors.  This is the most common way that images are stored. \n\nAs on Monitor - If you know a bit about color management and want to use your monitor to determine the color profile.\n\n"));
-
-                const QAbstractButton *btnAsWeb = mb.addButton(i18n("As &Web"), QMessageBox::AcceptRole);
-                const QAbstractButton *btnAsMonitor = mb.addButton(i18n("As on &Monitor"), QMessageBox::AcceptRole);
-                mb.addButton(QMessageBox::Cancel);
-                mb.addButton(&dontPrompt, QMessageBox::ActionRole);
-
-                mb.exec();
-
-                if (mb.clickedButton() == btnAsWeb) {
-                    behaviour = PASTE_ASSUME_WEB;
-                } else if (mb.clickedButton() == btnAsMonitor) {
-                    behaviour = PASTE_ASSUME_MONITOR;
-                } else {
+                if (dlg.exec() != QDialog::Accepted) {
                     return nullptr;
                 }
 
-                saveColorSetting = dontPrompt.isChecked(); // should we save this option to the config for next time?
+                behaviour = dlg.source();
+
+                saveColorSetting = dlg.remember(); // should we save this option to the config for next time?
             }
 
             const KoColorSpace *cs = nullptr;

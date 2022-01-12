@@ -74,6 +74,7 @@ set(kritaui_LIB_SRCS
     dialogs/KisDlgChangeCloneSource.cpp
     dialogs/KisRecoverNamedAutosaveDialog.cpp
     dialogs/KisDlgSavePreset.cpp
+    dialogs/kis_dlg_missing_color_profile.cpp
 
     flake/kis_node_dummies_graph.cpp
     flake/kis_dummies_facade_base.cpp
@@ -587,6 +588,7 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/koDocumentInfoAboutWidget.ui
     forms/koDocumentInfoAuthorWidget.ui
     forms/WdgPopupPaletteSettings.ui
+    forms/wdgMissingColorProfile.ui
 
 
     brushhud/kis_dlg_brush_hud_config.ui

@@ -688,6 +688,15 @@ void KisConfig::setPasteBehaviour(qint32 renderIntent) const
     m_cfg.writeEntry("pasteBehaviour", renderIntent);
 }
 
+qint32 KisConfig::pasteFormat(bool defaultValue) const
+{
+    return defaultValue ? 0 : m_cfg.readEntry("pasteFormat", 0);
+}
+
+void KisConfig::setPasteFormat(qint32 format)
+{
+    m_cfg.writeEntry("pasteFormat", format);
+}
 
 qint32 KisConfig::monitorRenderIntent(bool defaultValue) const
 {

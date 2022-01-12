@@ -37,6 +37,8 @@ class KRITAUI_EXPORT KisClipboard : public QObject
 public:
     enum PasteBehaviour { PASTE_ASSUME_WEB = 0, PASTE_ASSUME_MONITOR, PASTE_ASK };
 
+    enum PasteFormatBehaviour { PASTE_FORMAT_ASK = 0, PASTE_FORMAT_DOWNLOAD, PASTE_FORMAT_LOCAL, PASTE_FORMAT_CLIP };
+
     KisClipboard();
     ~KisClipboard() override;
 

@@ -152,6 +152,7 @@
 #include "KisNodeActivationActionCreatorVisitor.h"
 #include "KisUiFont.h"
 #include <KisResourceUserOperations.h>
+#include "KisRecentFilesManager.h"
 
 
 #include <mutex>
@@ -642,7 +643,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         // load customized tab style
         customizeTabBar();
     }
-
 }
 
 KisMainWindow::~KisMainWindow()
@@ -960,43 +960,12 @@ void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
             }
             d->recentFiles->addUrl(url);
         }
-        saveRecentFiles();
-    }
-}
-
-void KisMainWindow::saveRecentFiles()
-{
-    // Save list of recent files
-    KSharedConfigPtr config =  KSharedConfig::openConfig();
-    d->recentFiles->saveEntries(config->group("RecentFiles"));
-    config->sync();
-
-    // Tell all windows to reload their list, after saving
-    // Doesn't work multi-process, but it's a start
-    Q_FOREACH (KisMainWindow *mw, KisPart::instance()->mainWindows()) {
-        if (mw != this) {
-            mw->reloadRecentFileList();
-        }
     }
 }
 
 void KisMainWindow::clearRecentFiles()
 {
     d->recentFiles->clear();
-}
-
-void KisMainWindow::removeRecentUrl(const QUrl &url)
-{
-    d->recentFiles->removeUrl(url);
-    KSharedConfigPtr config =  KSharedConfig::openConfig();
-    d->recentFiles->saveEntries(config->group("RecentFiles"));
-    config->sync();
-}
-
-void KisMainWindow::reloadRecentFileList()
-{
-    d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
-    // d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
 }
 
 void KisMainWindow::updateCaption()
@@ -1074,7 +1043,6 @@ bool KisMainWindow::openDocument(const QString &path, OpenFlags flags)
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", path));
         }
         d->recentFiles->removeUrl(QUrl::fromLocalFile(path)); //remove the file from the recent-opened-file-list
-        saveRecentFiles();
         return false;
     }
     return openDocumentInternal(path, flags);
@@ -2610,8 +2578,6 @@ void KisMainWindow::updateWindowMenu()
     bool showMdiArea = windows.count( ) > 0;
     if (!showMdiArea) {
         showWelcomeScreen(true); // see workaround in function in header
-        // keep the recent file list updated when going back to welcome screen
-        reloadRecentFileList();
     }
 
     // enable/disable the toolbox docker if there are no documents open
@@ -2834,9 +2800,6 @@ void KisMainWindow::createActions()
     d->fullScreenMode = actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
-    connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
-    KSharedConfigPtr configPtr =  KSharedConfig::openConfig();
-    d->recentFiles->loadEntries(configPtr->group("RecentFiles"));
 
     d->saveAction = actionManager->createStandardAction(KStandardAction::Save, this, SLOT(slotFileSave()));
     d->saveAction->setActivationFlags(KisAction::ACTIVE_IMAGE);

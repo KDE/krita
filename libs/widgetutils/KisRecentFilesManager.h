@@ -37,9 +37,6 @@ class KRITAWIDGETUTILS_EXPORT KisRecentFilesManager : public QObject
 public:
     static KisRecentFilesManager *instance();
 
-    void loadEntries(const KConfigGroup &config);
-    void saveEntries(const KConfigGroup &config);
-
     void clear();
 
     void add(const QUrl &url);
@@ -47,6 +44,10 @@ public:
 
     QVector<KisRecentFilesEntry> recentFiles() const;
     QList<QUrl> recentUrlsLatestFirst() const;
+
+private:
+    void loadEntries(const KConfigGroup &config);
+    void saveEntries(const KConfigGroup &config);
 
 Q_SIGNALS:
     void fileAdded(const QUrl &url);

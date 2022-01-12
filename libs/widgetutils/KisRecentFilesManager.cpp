@@ -10,21 +10,42 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QThread>
+#include <QTimer>
 #include <QDebug>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <ksharedconfig.h>
 
 class KisRecentFilesManager::Private
 {
+public:
+    KisRecentFilesManager *m_q;
     int m_maxItems {10};
     QVector<KisRecentFilesEntry> m_entries;
 
-    friend class KisRecentFilesManager;
+private:
+    QTimer m_saveOnIdleTimer;
+
+public:
+    Private(KisRecentFilesManager *q);
 
     bool containsUrl(const QUrl &url) const;
     int indexOfUrl(const QUrl &url) const;
+
+    void requestSaveOnNextTick();
 }; /* class KisRecentFilesEntry::Private */
+
+KisRecentFilesManager::Private::Private(KisRecentFilesManager *q)
+    : m_q(q)
+    , m_saveOnIdleTimer(q)
+{
+    m_saveOnIdleTimer.setSingleShot(true);
+    m_saveOnIdleTimer.setInterval(0);
+    m_q->connect(&m_saveOnIdleTimer, &QTimer::timeout, [this]() {
+        m_q->saveEntries(KSharedConfig::openConfig()->group("RecentFiles"));
+    });
+}
 
 bool KisRecentFilesManager::Private::containsUrl(const QUrl &url) const
 {
@@ -43,10 +64,18 @@ int KisRecentFilesManager::Private::indexOfUrl(const QUrl &url) const
     }
 }
 
+void KisRecentFilesManager::Private::requestSaveOnNextTick()
+{
+    // If multiple saves are requested within the same tick, they will be
+    // consolidated by the timer.
+    m_saveOnIdleTimer.start();
+}
+
 
 KisRecentFilesManager::KisRecentFilesManager()
-    : m_d(new Private)
+    : m_d(new Private(this))
 {
+    loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
 }
 
 KisRecentFilesManager::~KisRecentFilesManager()
@@ -68,6 +97,7 @@ void KisRecentFilesManager::clear()
 {
     m_d->m_entries.clear();
     emit listRenewed();
+    m_d->requestSaveOnNextTick();
 }
 
 void KisRecentFilesManager::remove(const QUrl &url)
@@ -76,6 +106,7 @@ void KisRecentFilesManager::remove(const QUrl &url)
     if (removeIndex >= 0) {
         m_d->m_entries.removeAt(removeIndex);
         emit fileRemoved(url);
+        m_d->requestSaveOnNextTick();
     }
 }
 

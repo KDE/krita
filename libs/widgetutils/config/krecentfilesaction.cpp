@@ -118,6 +118,10 @@ void KRecentFilesActionPrivate::init()
     q->connect(KisRecentFilesManager::instance(),
             SIGNAL(listRenewed()),
             SLOT(listRenewed()));
+
+    // We have to manually trigger the initial load because
+    // KisRecentFilesManager is initialized earlier than this.
+    q->rebuildEntries();
 }
 
 KRecentFilesAction::~KRecentFilesAction()
@@ -216,16 +220,6 @@ void KRecentFilesAction::clearEntries()
     d->clearSeparator->setVisible(false);
     d->clearAction->setVisible(false);
     setEnabled(false);
-}
-
-void KRecentFilesAction::loadEntries(const KConfigGroup &_config)
-{
-    KisRecentFilesManager::instance()->loadEntries(_config);
-}
-
-void KRecentFilesAction::saveEntries(const KConfigGroup &_cg)
-{
-    KisRecentFilesManager::instance()->saveEntries(_cg);
 }
 
 void KRecentFilesAction::rebuildEntries()

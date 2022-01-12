@@ -94,12 +94,6 @@ public:
     void addRecentURL(const QUrl &url, const QUrl &oldUrl = QUrl());
 
     /**
-     * removes the given url from the list of recent files
-     */
-    void removeRecentUrl(const QUrl &url);
-
-
-    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *
@@ -295,11 +289,6 @@ public Q_SLOTS:
     void windowFocused();
 
     /**
-     * Reloads the recent documents list.
-     */
-    void reloadRecentFileList();
-
-    /**
      * Detach canvas onto a separate window, or restore it back to to main window.
      */
     void setCanvasDetached(bool detached);
@@ -318,11 +307,6 @@ public Q_SLOTS:
 
 
 private Q_SLOTS:
-    /**
-     * Save the list of recent files.
-     */
-    void saveRecentFiles();
-
     void slotLoadCompleted();
     void slotLoadCanceled(const QString &);
     void slotSaveCompleted();

@@ -102,23 +102,6 @@ public Q_SLOTS:
 
 public:
     /**
-     *  Loads the recent files entries from a given KConfigGroup object.
-     *  You can provide the name of the group used to load the entries.
-     *  If the groupname is empty, entries are loaded from a group called 'RecentFiles'.
-     *  Local file entries that do not exist anymore are not restored.
-     *
-     */
-    void loadEntries(const KConfigGroup &config);
-
-    /**
-     *  Saves the current recent files entries to a given KConfigGroup object.
-     *  You can provide the name of the group used to load the entries.
-     *  If the groupname is empty, entries are saved to a group called 'RecentFiles'
-     *
-     */
-    void saveEntries(const KConfigGroup &config);
-
-    /**
      *  Add URL to recent files list.
      *
      *  @param url The URL of the file
@@ -142,13 +125,6 @@ Q_SIGNALS:
      *  @param url The URL that the user selected.
      */
     void urlSelected(const QUrl &url);
-
-    /**
-     *  This signal gets emitted when the user clear list.
-     *  So when user stores url in specific config file it can saveEntry.
-     *  @since 4.3
-     */
-    void recentListCleared();
 
 private:
     //Internal

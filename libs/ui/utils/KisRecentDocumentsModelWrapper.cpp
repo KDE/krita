@@ -29,6 +29,11 @@ KisRecentDocumentsModelWrapper::KisRecentDocumentsModelWrapper()
     connect(KisRecentFilesManager::instance(),
             SIGNAL(listRenewed()),
             SLOT(listRenewed()));
+
+    // XXX: Trigger initial refresh of recent files model because
+    //      KisRecentFilesManager is now initialized earlier than
+    //      KisMainWindow.
+    listRenewed();
 }
 
 KisRecentDocumentsModelWrapper::~KisRecentDocumentsModelWrapper() {}

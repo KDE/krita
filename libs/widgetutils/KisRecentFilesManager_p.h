@@ -158,4 +158,5 @@ void KisRecentFilesManager::add(const QUrl &url)
         tmpName, // m_displayName
     });
     emit fileAdded(url);
+    m_d->requestSaveOnNextTick();
 }

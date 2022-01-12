@@ -260,6 +260,16 @@ void KRecentFilesAction::fileAdded(const QUrl &url)
     Q_D(KRecentFilesAction);
     const QString name; // Dummy
 
+    if (d->m_visibleItemsCount <= 0) {
+        return;
+    }
+
+    // remove oldest item if already maxitems in list
+    if (selectableActionGroup()->actions().count() >= d->m_visibleItemsCount) {
+        // remove oldest added item
+        delete removeAction(selectableActionGroup()->actions().first());
+    }
+
     const QString tmpName = name.isEmpty() ? url.fileName() : name;
     const QString pathOrUrl(url.toDisplayString(QUrl::PreferLocalFile));
 

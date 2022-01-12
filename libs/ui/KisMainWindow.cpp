@@ -931,41 +931,9 @@ void KisMainWindow::setReadWrite(bool readwrite)
     updateCaption();
 }
 
-void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
-{
-    // Add entry to recent documents list
-    // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
-    if (!url.isEmpty()) {
-        bool ok = true;
-        if (url.isLocalFile()) {
-            QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
-            const QStringList tmpDirs = KoResourcePaths::resourceDirs("tmp");
-            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
-                if (path.contains(*it)) {
-                    ok = false; // it's in the tmp resource
-                }
-            }
-
-            const QStringList templateDirs = KoResourcePaths::findDirs("templates");
-            for (QStringList::ConstIterator it = templateDirs.begin() ; ok && it != templateDirs.end() ; ++it) {
-                if (path.contains(*it)) {
-                    ok = false; // it's in the templates directory.
-                    break;
-                }
-            }
-        }
-        if (ok) {
-            if (!oldUrl.isEmpty()) {
-                d->recentFiles->removeUrl(oldUrl);
-            }
-            d->recentFiles->addUrl(url);
-        }
-    }
-}
-
 void KisMainWindow::clearRecentFiles()
 {
-    d->recentFiles->clear();
+    KisRecentFilesManager::instance()->clear();
 }
 
 void KisMainWindow::updateCaption()
@@ -1042,7 +1010,7 @@ bool KisMainWindow::openDocument(const QString &path, OpenFlags flags)
         if (!(flags & BatchMode)) {
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", path));
         }
-        d->recentFiles->removeUrl(QUrl::fromLocalFile(path)); //remove the file from the recent-opened-file-list
+        KisRecentFilesManager::instance()->remove(QUrl::fromLocalFile(path)); //remove the file from the recent-opened-file-list
         return false;
     }
     return openDocumentInternal(path, flags);

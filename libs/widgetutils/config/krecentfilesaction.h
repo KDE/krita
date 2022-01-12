@@ -93,29 +93,14 @@ public:
      */
     QAction *removeAction(QAction *action) override;
 
-public Q_SLOTS:
+private Q_SLOTS:
     /**
      * Clears the recent files list.
      * Note that there is also an action shown to the user for clearing the list.
      */
-    virtual void clear();
+    virtual void clearActionTriggered();
 
 public:
-    /**
-     *  Add URL to recent files list.
-     *
-     *  @param url The URL of the file
-     *  @param name The user visible pretty name that appears before the URL
-     */
-    void addUrl(const QUrl &url, const QString &name = QString());
-
-    /**
-     *  Remove an URL from the recent files list.
-     *
-     *  @param url The URL of the file
-     */
-    void removeUrl(const QUrl &url);
-
     void setUrlIcon(const QUrl &url, const QIcon &icon);
 
 Q_SIGNALS:

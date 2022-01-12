@@ -88,12 +88,6 @@ public:
     KisView *activeView() const;
 
     /**
-     * The document opened a URL -> store into recent documents list.
-     * @param oldUrl if not empty, @p url will replace @p oldUrl if present
-     */
-    void addRecentURL(const QUrl &url, const QUrl &oldUrl = QUrl());
-
-    /**
      * Load the desired document and show it.
      * @param url the URL to open
      *

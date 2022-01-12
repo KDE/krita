@@ -92,7 +92,7 @@ void KRecentFilesActionPrivate::init()
     clearSeparator = q->menu()->addSeparator();
     clearSeparator->setVisible(false);
     clearSeparator->setObjectName(QLatin1String("separator"));
-    clearAction = q->menu()->addAction(i18n("Clear List"), q, SLOT(clear()));
+    clearAction = q->menu()->addAction(i18n("Clear List"), q, SLOT(clearActionTriggered()));
     clearAction->setObjectName(QLatin1String("clear_action"));
     clearAction->setVisible(false);
     q->setEnabled(false);
@@ -166,11 +166,6 @@ static QString titleWithSensibleWidth(const QString &nameValue, const QString &v
     return title;
 }
 
-void KRecentFilesAction::addUrl(const QUrl &_url, const QString &name)
-{
-    KisRecentFilesManager::instance()->add(_url);
-}
-
 void KRecentFilesAction::addAction(QAction *action, const QUrl &url, const QString &name)
 {
     Q_D(KRecentFilesAction);
@@ -189,11 +184,6 @@ QAction *KRecentFilesAction::removeAction(QAction *action)
     return action;
 }
 
-void KRecentFilesAction::removeUrl(const QUrl &url)
-{
-    KisRecentFilesManager::instance()->remove(url);
-}
-
 void KRecentFilesAction::setUrlIcon(const QUrl &url, const QIcon &icon)
 {
     Q_D(KRecentFilesAction);
@@ -206,7 +196,7 @@ void KRecentFilesAction::setUrlIcon(const QUrl &url, const QIcon &icon)
     }
 }
 
-void KRecentFilesAction::clear()
+void KRecentFilesAction::clearActionTriggered()
 {
     KisRecentFilesManager::instance()->clear();
 }

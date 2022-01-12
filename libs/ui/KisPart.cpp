@@ -68,6 +68,7 @@
 #include "KisBusyWaitBroker.h"
 #include "dialogs/kis_delayed_save_dialog.h"
 #include "kis_memory_statistics_server.h"
+#include "KisRecentFilesManager.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -583,9 +584,33 @@ void KisPart::openTemplate(const QUrl &url)
 
 void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
 {
-    // Add to recent actions list in our mainWindows
-    Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
-        mainWindow->addRecentURL(url, oldUrl);
+    // Add entry to recent documents list
+    // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
+    if (!url.isEmpty()) {
+        bool ok = true;
+        if (url.isLocalFile()) {
+            QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
+            const QStringList tmpDirs = KoResourcePaths::resourceDirs("tmp");
+            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
+                if (path.contains(*it)) {
+                    ok = false; // it's in the tmp resource
+                }
+            }
+
+            const QStringList templateDirs = KoResourcePaths::findDirs("templates");
+            for (QStringList::ConstIterator it = templateDirs.begin() ; ok && it != templateDirs.end() ; ++it) {
+                if (path.contains(*it)) {
+                    ok = false; // it's in the templates directory.
+                    break;
+                }
+            }
+        }
+        if (ok) {
+            if (!oldUrl.isEmpty()) {
+                KisRecentFilesManager::instance()->remove(oldUrl);
+            }
+            KisRecentFilesManager::instance()->add(url);
+        }
     }
 }
 

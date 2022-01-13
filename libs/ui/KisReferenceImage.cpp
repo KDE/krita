@@ -5,6 +5,7 @@
  */
 
 #include "KisReferenceImage.h"
+#include "KoColorSpaceRegistry.h"
 
 #include <QImage>
 #include <QMessageBox>
@@ -198,6 +199,23 @@ KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverte
         delete reference;
         reference = nullptr;
     }
+
+    return reference;
+}
+
+KisReferenceImage *
+KisReferenceImage::fromPaintDevice(KisPaintDeviceSP src, const KisCoordinatesConverter &converter, QWidget *)
+{
+    if (!src) {
+        return nullptr;
+    }
+
+    auto *reference = new KisReferenceImage();
+    reference->d->image = src->convertToQImage(KoColorSpaceRegistry::instance()->p709SRGBProfile());
+
+    QRect r = QRect(QPoint(), reference->d->image.size());
+    QSizeF size = converter.imageToDocument(r).size();
+    reference->setSize(size);
 
     return reference;
 }

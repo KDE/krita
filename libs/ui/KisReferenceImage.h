@@ -9,10 +9,11 @@
 
 #include <QSharedDataPointer>
 
-#include <kundo2command.h>
-#include <kritaui_export.h>
-#include <KoTosContainer.h>
 #include <KoColor.h>
+#include <KoTosContainer.h>
+#include <kis_types.h>
+#include <kritaui_export.h>
+#include <kundo2command.h>
 
 class QImage;
 class QPointF;
@@ -51,6 +52,13 @@ public:
      */
     static KisReferenceImage * fromFile(const QString &filename, const KisCoordinatesConverter &converter, QWidget *parent /*= nullptr*/);
     static KisReferenceImage * fromClipboard(const KisCoordinatesConverter &converter);
+
+    /**
+     * Load a reference image from specified paint device.
+     * @return reference image or null if one could not be loaded
+     */
+    static KisReferenceImage *
+    fromPaintDevice(KisPaintDeviceSP src, const KisCoordinatesConverter &converter, QWidget *parent);
 
     void setSaturation(qreal saturation);
     qreal saturation() const;

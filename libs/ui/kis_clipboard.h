@@ -64,6 +64,16 @@ public:
                           KisTimeSpan *clipRange = nullptr,
                           const KoColorProfile *destProfile = nullptr) const;
 
+    /**
+     * Get the contents of the specified mimedata buffer in the form of a paint device.
+     */
+    KisPaintDeviceSP clipFromMimeData(const QMimeData *data,
+                                      const QRect &imageBounds,
+                                      bool showPopup,
+                                      KisTimeSpan *clipRange = nullptr,
+                                      const KoColorProfile *destProfile = nullptr,
+                                      bool useClipboardFallback = false) const;
+
     bool hasClip() const;
 
     QSize clipSize() const;
@@ -83,6 +93,7 @@ public:
      * @return image
      */
     QImage getImageFromClipboard() const;
+    QImage getImageFromMimeData(const QMimeData *cbData) const;
 
 Q_SIGNALS:
     void clipCreated();
@@ -93,6 +104,15 @@ private Q_SLOTS:
 
 private:
     Q_DISABLE_COPY(KisClipboard);
+
+    KisPaintDeviceSP
+    clipFromKritaSelection(const QMimeData *data, const QRect &imageBounds, KisTimeSpan *clipRange) const;
+
+    KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
+                                           const QRect &imageBounds,
+                                           bool showPopup,
+                                           const KoColorProfile *destProfile = nullptr,
+                                           bool useClipboardFallback = false) const;
 
     KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
 

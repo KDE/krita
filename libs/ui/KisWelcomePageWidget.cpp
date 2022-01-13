@@ -453,7 +453,7 @@ void KisWelcomePageWidget::dropEvent(QDropEvent *event)
                 }
             } else if (!url.isLocalFile()) {
                 QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
-                tmp->setAutoRemove(true);
+                tmp->setFileName(url.fileName());
 
                 KisRemoteFileFetcher fetcher;
 

@@ -588,6 +588,7 @@ void KisView::dropEvent(QDropEvent *event)
                     if (!url.isLocalFile()) {
                         // download the file and substitute the url
                         KisRemoteFileFetcher fetcher;
+                        tmp->setFileName(url.fileName());
 
                         if (!fetcher.fetchFile(url, tmp.data())) {
                             qWarning() << "Fetching" << url << "failed";

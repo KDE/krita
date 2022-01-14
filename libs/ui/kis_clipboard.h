@@ -61,6 +61,7 @@ public:
      */
     KisPaintDeviceSP clip(const QRect &imageBounds,
                           bool showPopup,
+                          int overridePasteBehaviour = -1,
                           KisTimeSpan *clipRange = nullptr,
                           const KoColorProfile *destProfile = nullptr) const;
 
@@ -70,6 +71,7 @@ public:
     KisPaintDeviceSP clipFromMimeData(const QMimeData *data,
                                       const QRect &imageBounds,
                                       bool showPopup,
+                                      int overridePasteBehaviour = -1,
                                       KisTimeSpan *clipRange = nullptr,
                                       const KoColorProfile *destProfile = nullptr,
                                       bool useClipboardFallback = false) const;
@@ -93,7 +95,6 @@ public:
      * @return image
      */
     QImage getImageFromClipboard() const;
-    QImage getImageFromMimeData(const QMimeData *cbData) const;
 
 Q_SIGNALS:
     void clipCreated();
@@ -111,10 +112,13 @@ private:
     KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
                                            const QRect &imageBounds,
                                            bool showPopup,
+                                           int overridePasteBehaviour = -1,
                                            const KoColorProfile *destProfile = nullptr,
                                            bool useClipboardFallback = false) const;
 
     KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
+
+    QImage getImageFromMimeData(const QMimeData *cbData) const;
 
     KisClipboardPrivate *const d;
 };

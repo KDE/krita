@@ -61,11 +61,11 @@ QString ImageBuilder::createImageFromClipboard()
 void ImageBuilder::createImageFromClipboardDelayed()
 {
     DocumentManager::instance()->disconnect(this, SLOT(createImageFromClipboardDelayed()));
-    KisConfig cfg(false);
-    cfg.setPasteBehaviour(KisClipboard::PASTE_ASSUME_MONITOR);
 
     QSize sz = KisClipboard::instance()->clipSize();
-    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()), false);
+    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()),
+                                                                 false,
+                                                                 (int)KisClipboard::PASTE_ASSUME_MONITOR);
     KisImageWSP image = DocumentManager::instance()->document()->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());

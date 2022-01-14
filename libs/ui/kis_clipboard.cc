@@ -183,6 +183,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
 
 KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds,
                                     bool showPopup,
+                                    int overridePasteBehaviour,
                                     KisTimeSpan *clipRange,
                                     const KoColorProfile *destProfile) const
 {
@@ -192,12 +193,13 @@ KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds,
         return nullptr;
     }
 
-    return clipFromMimeData(cbData, imageBounds, showPopup, clipRange, destProfile, true);
+    return clipFromMimeData(cbData, imageBounds, showPopup, overridePasteBehaviour, clipRange, destProfile, true);
 }
 
 KisPaintDeviceSP KisClipboard::clipFromMimeData(const QMimeData *cbData,
                                                 const QRect &imageBounds,
                                                 bool showPopup,
+                                                int overridePasteBehaviour,
                                                 KisTimeSpan *clipRange,
                                                 const KoColorProfile *destProfile,
                                                 bool useClipboardFallback) const
@@ -209,7 +211,12 @@ KisPaintDeviceSP KisClipboard::clipFromMimeData(const QMimeData *cbData,
     KisPaintDeviceSP clip = clipFromKritaSelection(cbData, imageBounds, clipRange);
 
     if (!clip) {
-        clip = clipFromBoardContents(cbData, imageBounds, showPopup, destProfile, useClipboardFallback);
+        clip = clipFromBoardContents(cbData,
+                                     imageBounds,
+                                     showPopup,
+                                     overridePasteBehaviour,
+                                     destProfile,
+                                     useClipboardFallback);
     }
 
     return clip;
@@ -315,6 +322,7 @@ KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &image
 KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
                                                      const QRect &imageBounds,
                                                      bool showPopup,
+                                                     int pasteBehaviourOverride,
                                                      const KoColorProfile *destProfile,
                                                      bool useClipboardFallback) const
 {
@@ -379,8 +387,12 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
 
         KIS_ASSERT(!qimage.isNull());
 
-        int behaviour = cfg.pasteBehaviour();
+        int behaviour = pasteBehaviourOverride;
         bool saveColorSetting = false;
+
+        if (pasteBehaviourOverride == -1) {
+            behaviour = cfg.pasteBehaviour();
+        }
 
         if (behaviour == PASTE_ASK && showPopup) {
             // Ask user each time.

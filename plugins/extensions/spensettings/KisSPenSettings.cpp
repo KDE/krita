@@ -13,6 +13,7 @@
 #include <QMap>
 #include <QModelIndex>
 
+#include <KisMainWindow.h>
 #include <kactioncollection.h>
 #include <KisPart.h>
 #include <kactioncategory.h>

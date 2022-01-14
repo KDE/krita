@@ -51,6 +51,7 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 #include "KisUiFont.h"
+#include <KisMainWindow.h>
 
 #include <KLocalizedTranslator>
 

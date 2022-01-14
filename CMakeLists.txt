@@ -661,6 +661,8 @@ if (ANDROID)
     set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_71)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
     set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
+
+    find_package(unwindstack REQUIRED)
 endif()
 
 find_package(PNG REQUIRED "1.2.6")

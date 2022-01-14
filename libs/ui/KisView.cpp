@@ -522,6 +522,10 @@ void KisView::dropEvent(QDropEvent *event)
         if (action == KisCanvasDrop::INSERT_AS_NEW_LAYER) {
             KisPaintDeviceSP clip = KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
             if (clip) {
+                const auto pos = this->viewConverter()->imageToDocument(imgCursorPos).toPoint();
+
+                clip->moveTo(pos.x(), pos.y());
+
                 KisImportCatcher::adaptClipToImageColorSpace(clip, this->image());
 
                 KisPaintLayerSP layer = new KisPaintLayer(this->image(), "", OPACITY_OPAQUE_U8, clip);
@@ -608,7 +612,7 @@ void KisView::dropEvent(QDropEvent *event)
                         auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), *this->viewConverter(), this);
 
                         if (reference) {
-                            const auto pos = this->canvasBase()->coordinatesConverter()->widgetToImage(event->pos());
+                            const auto pos = this->canvasBase()->coordinatesConverter()->widgetToImage(imgCursorPos);
                             reference->setPosition((*this->viewConverter()).imageToDocument(pos));
                             this->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
 

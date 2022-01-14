@@ -12,6 +12,7 @@ Name[eu]=Ehundurak
 Name[fi]=Pintakuviot
 Name[fr]=Textures
 Name[hi]=टेक्श्चर
+Name[ia]=Textures
 Name[it]=Trame
 Name[ko]=텍스처
 Name[nl]=Texturen

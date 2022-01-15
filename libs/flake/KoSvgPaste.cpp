@@ -17,12 +17,28 @@
 #include <QRectF>
 #include <KoMarker.h>
 
+class KoSvgPaste::Private
+{
+public:
+    Private()
+        : mimeData(QApplication::clipboard()->mimeData())
+        {
+
+        }
+
+    const QMimeData *mimeData;
+};
+
+KoSvgPaste::KoSvgPaste()
+    : d(new Private)
+{
+}
+
 bool KoSvgPaste::hasShapes()
 {
-    const QMimeData *mimeData = QApplication::clipboard()->mimeData();
     bool hasSvg = false;
-    if (mimeData) {
-        Q_FOREACH(const QString &format, mimeData->formats()) {
+    if (d->mimeData) {
+        Q_FOREACH(const QString &format, d->mimeData->formats()) {
             if (format.toLower().contains("svg")) {
                 hasSvg = true;
                 break;
@@ -37,14 +53,13 @@ QList<KoShape*> KoSvgPaste::fetchShapes(const QRectF viewportInPx, qreal resolut
 {
     QList<KoShape*> shapes;
 
-    const QMimeData *mimeData = QApplication::clipboard()->mimeData();
-    if (!mimeData) return shapes;
+    if (!d->mimeData) return shapes;
 
     QByteArray data;
 
-    Q_FOREACH(const QString &format, mimeData->formats()) {
+    Q_FOREACH(const QString &format, d->mimeData->formats()) {
         if (format.toLower().contains("svg")) {
-            data = mimeData->data(format);
+            data = d->mimeData->data(format);
             break;
         }
     }

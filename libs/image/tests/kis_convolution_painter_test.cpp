@@ -4,7 +4,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "kis_convolution_painter_test.h"
 
 #include <simpletest.h>

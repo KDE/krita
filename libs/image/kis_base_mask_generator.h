@@ -10,7 +10,6 @@
 
 #include <QScopedPointer>
 
-#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <KoID.h>
 #include <klocalizedstring.h>
 

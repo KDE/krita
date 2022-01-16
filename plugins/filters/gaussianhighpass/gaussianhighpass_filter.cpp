@@ -6,7 +6,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include "gaussianhighpass_filter.h"
 #include <QBitArray>
 

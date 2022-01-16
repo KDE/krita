@@ -267,7 +267,6 @@ public:
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
-    KisRecentDocumentsModelWrapper recentFilesModel;
     KisResourceModel *workspacemodel {0};
 
     QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
@@ -473,23 +472,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // the welcome screen needs to grab actions...so make sure this line goes after the createAction() so they exist
     d->welcomePage->setMainWindow(this);
 
-    connect(&d->recentFilesModel.model(), &QStandardItemModel::itemChanged, [this](QStandardItem *item) {
-        QUrl url = item->data().toUrl();
-        QIcon icon = item->icon();
-        if (url.isValid() && !icon.isNull()) {
-            d->recentFiles->setUrlIcon(url, icon);
-        }
-    });
-    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &/*parent*/, int first, int last) {
-        for (int i = first; i <= last; i++) {
-            QStandardItem *item = d->recentFilesModel.model().item(i);
-            QUrl url = item->data().toUrl();
-            QIcon icon = item->icon();
-            if (url.isValid() && !icon.isNull()) {
-                d->recentFiles->setUrlIcon(url, icon);
-            }
-        }
-    });
+    d->recentFiles->setRecentFilesModel(&KisRecentDocumentsModelWrapper::instance()->model());
 
     setAutoSaveSettings(d->windowStateConfig, false);
 
@@ -1528,11 +1511,6 @@ void KisMainWindow::setActiveView(KisView* view)
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 
     emit activeViewChanged();
-}
-
-KisRecentDocumentsModelWrapper *KisMainWindow::recentFilesModel()
-{
-    return &d->recentFilesModel;
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)

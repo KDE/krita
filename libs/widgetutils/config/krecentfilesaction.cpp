@@ -24,6 +24,7 @@
 #include <QComboBox>
 #include <QScreen>
 #include <QProxyStyle>
+#include <QStandardItemModel>
 #include <QStyleFactory>
 
 #include <kconfig.h>
@@ -109,6 +110,10 @@ void KRecentFilesActionPrivate::init()
     newStyle->setParent(q->menu());
     q->menu()->setStyle(newStyle);
 
+    q->connect(q->menu(),
+            SIGNAL(aboutToShow()),
+            SLOT(menuAboutToShow()));
+
     q->connect(KisRecentFilesManager::instance(),
             SIGNAL(fileAdded(const QUrl &)),
             SLOT(fileAdded(const QUrl &)));
@@ -133,6 +138,28 @@ void KRecentFilesActionPrivate::_k_urlSelected(QAction *action)
 {
     Q_Q(KRecentFilesAction);
     emit q->urlSelected(m_urls[action]);
+}
+
+void KRecentFilesActionPrivate::updateIcon(const QStandardItem *item)
+{
+    Q_Q(KRecentFilesAction);
+    if (!item) {
+        return;
+    }
+    const QUrl url = item->data().toUrl();
+    if (!url.isValid()) {
+        return;
+    }
+    QAction *action = m_urls.key(url);
+    if (!action) {
+        return;
+    }
+    const QIcon icon = item->icon();
+    if (icon.isNull()) {
+        return;
+    }
+    action->setIcon(icon);
+    action->setIconVisibleInMenu(true);
 }
 
 static QString titleWithSensibleWidth(const QString &nameValue, const QString &value)
@@ -184,14 +211,48 @@ QAction *KRecentFilesAction::removeAction(QAction *action)
     return action;
 }
 
-void KRecentFilesAction::setUrlIcon(const QUrl &url, const QIcon &icon)
+void KRecentFilesAction::setRecentFilesModel(const QStandardItemModel *model)
 {
     Q_D(KRecentFilesAction);
-    for (QMap<QAction *, QUrl>::ConstIterator it = d->m_urls.constBegin(); it != d->m_urls.constEnd(); ++it) {
-        if (it.value() == url) {
-            it.key()->setIcon(icon);
-            it.key()->setIconVisibleInMenu(true);
-            return;
+
+    if (d->m_recentFilesModel) {
+        disconnect(d->m_recentFilesModel, nullptr, this, nullptr);
+    }
+
+    d->m_recentFilesModel = model;
+    // Do not connect the signals or populate the icons now, because we want
+    // them to be lazy-loaded only when the menu is opened for the first time.
+    d->m_fileIconsPopulated = false;
+}
+
+void KRecentFilesAction::modelItemChanged(QStandardItem *item)
+{
+    Q_D(KRecentFilesAction);
+    d->updateIcon(item);
+}
+
+void KRecentFilesAction::modelRowsInserted(const QModelIndex &/*parent*/, int first, int last)
+{
+    Q_D(KRecentFilesAction);
+    for (int i = first; i <= last; i++) {
+        d->updateIcon(d->m_recentFilesModel->item(i));
+    }
+}
+
+void KRecentFilesAction::menuAboutToShow()
+{
+    Q_D(KRecentFilesAction);
+    if (!d->m_fileIconsPopulated) {
+        d->m_fileIconsPopulated = true;
+        connect(d->m_recentFilesModel, SIGNAL(itemChanged(QStandardItem *)),
+                SLOT(modelItemChanged(QStandardItem *)));
+        connect(d->m_recentFilesModel, SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+                SLOT(modelRowsInserted(const QModelIndex &, int, int)));
+        // Populate the file icons only on first showing the menu, so lazy
+        // loading actually works.
+        const int count = d->m_recentFilesModel->rowCount();
+        for (int i = 0; i < count; i++) {
+            d->updateIcon(d->m_recentFilesModel->item(i));
         }
     }
 }

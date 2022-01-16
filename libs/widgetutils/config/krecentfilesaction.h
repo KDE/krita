@@ -24,6 +24,8 @@ class KConfigGroup;
 class KRecentFilesActionPrivate;
 
 class QIcon;
+class QStandardItemModel;
+class QStandardItem;
 
 /**
  *  @short Recent files action
@@ -101,7 +103,7 @@ private Q_SLOTS:
     virtual void clearActionTriggered();
 
 public:
-    void setUrlIcon(const QUrl &url, const QIcon &icon);
+    void setRecentFilesModel(const QStandardItemModel *model);
 
 Q_SIGNALS:
     /**
@@ -128,6 +130,11 @@ private Q_SLOTS:
     void fileAdded(const QUrl &url);
     void fileRemoved(const QUrl &url);
     void listRenewed();
+
+    void modelItemChanged(QStandardItem *item);
+    void modelRowsInserted(const QModelIndex &parent, int first, int last);
+
+    void menuAboutToShow();
 };
 
 #endif

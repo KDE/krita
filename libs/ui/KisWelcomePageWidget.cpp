@@ -287,10 +287,11 @@ void KisWelcomePageWidget::setMainWindow(KisMainWindow* mainWin)
         // allows RSS news items to apply analytics tracking.
         newsWidget->setAnalyticsTracking("?" + analyticsString);
 
-        KisRecentDocumentsModelWrapper *recentFilesModel = mainWin->recentFilesModel();
+        KisRecentDocumentsModelWrapper *recentFilesModel = KisRecentDocumentsModelWrapper::instance();
         connect(recentFilesModel, SIGNAL(sigModelIsUpToDate()),
                 this, SLOT(slotRecentFilesModelIsUpToDate()));
         recentDocumentsListView->setModel(&recentFilesModel->model());
+        slotRecentFilesModelIsUpToDate();
     }
 }
 
@@ -660,7 +661,7 @@ void KisWelcomePageWidget::slotOpenFileClicked()
 
 void KisWelcomePageWidget::slotRecentFilesModelIsUpToDate()
 {
-    KisRecentDocumentsModelWrapper *recentFilesModel = m_mainWindow->recentFilesModel();
+    KisRecentDocumentsModelWrapper *recentFilesModel = KisRecentDocumentsModelWrapper::instance();
     const bool modelIsEmpty = recentFilesModel->model().rowCount() == 0;
 
     if (modelIsEmpty) {

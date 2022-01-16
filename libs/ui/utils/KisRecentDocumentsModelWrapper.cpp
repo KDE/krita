@@ -7,12 +7,93 @@
 
 #include "KisRecentDocumentsModelWrapper.h"
 
-#include <QTimer>
+#include <QApplication>
 #include <QUrl>
 
 #include "kis_icon_utils.h"
 #include "KisRecentFileIconCache.h"
 #include "KisRecentFilesManager.h"
+
+
+/**
+ * This class implements lazy-loading of file icons when used by, for example,
+ * a `QListView` via a `QStandardItemModel`. It can be used by the welcome
+ * screen to load the thumbnail icons of recent files on demand as the user
+ * scrolls through the list, thus avoiding the need to preload all icons
+ * when the user may not even look at the list.
+ */
+class KisRecentDocumentsModelItem : public QStandardItem
+{
+    QUrl m_url;
+    mutable bool m_iconFetched {false};
+    mutable QIcon m_fileIcon;
+    QString m_tooltip;
+
+public:
+    explicit KisRecentDocumentsModelItem(const QUrl &url);
+    ~KisRecentDocumentsModelItem() override;
+
+    QVariant data(int role = Qt::UserRole + 1) const override;
+    void setData(const QVariant &value, int role = Qt::UserRole + 1) override;
+};
+
+KisRecentDocumentsModelItem::KisRecentDocumentsModelItem(const QUrl &url)
+    : QStandardItem(url.fileName())
+    , m_url(url)
+    , m_tooltip(url.toDisplayString(QUrl::PreferLocalFile))
+{
+}
+
+KisRecentDocumentsModelItem::~KisRecentDocumentsModelItem() {}
+
+QVariant KisRecentDocumentsModelItem::data(int role) const
+{
+    switch (role) {
+    case Qt::DecorationRole:
+        if (!m_iconFetched) {
+            m_iconFetched = true;
+            // This lazy-loads the icon if not already cached. Once the real
+            // icon has been loaded, `KisRecentDocumentsModelItem` will be
+            // notified of the icon change and sets it to this item.
+            const QIcon icon = KisRecentFileIconCache::instance()->getOrQueueFileIcon(m_url);
+            if (!icon.isNull()) {
+                m_fileIcon = icon;
+            }
+        }
+        if (m_fileIcon.isNull()) {
+            return KisIconUtils::loadIcon("media-floppy");
+        } else {
+            return m_fileIcon;
+        }
+    case Qt::ToolTipRole:
+        return m_tooltip;
+    case Qt::UserRole + 1:
+        return m_url;
+    }
+    return QStandardItem::data(role);
+}
+
+void KisRecentDocumentsModelItem::setData(const QVariant &value, int role)
+{
+    switch (role) {
+    case Qt::DecorationRole:
+        if (value.type() == QMetaType::QIcon) {
+            // `KisRecentDocumentsModelItem` calls `setIcon` to update the
+            // file icon once it has been lazy-loaded or changed.
+            m_iconFetched = true;
+            m_fileIcon = value.value<QIcon>();
+            emitDataChanged();
+        }
+        return;
+    case Qt::ToolTipRole:
+        qWarning() << "KisRecentDocumentsModelItem::setTooltip ignored";
+        return;
+    case Qt::UserRole + 1:
+        qWarning() << "KisRecentDocumentsModelItem::setData ignored";
+        return;
+    }
+    QStandardItem::setData(value, role);
+}
 
 
 KisRecentDocumentsModelWrapper::KisRecentDocumentsModelWrapper()
@@ -30,42 +111,30 @@ KisRecentDocumentsModelWrapper::KisRecentDocumentsModelWrapper()
             SIGNAL(listRenewed()),
             SLOT(listRenewed()));
 
-    // XXX: Trigger initial refresh of recent files model because
-    //      KisRecentFilesManager is now initialized earlier than
-    //      KisMainWindow.
+    // Load the initial recent files list
     listRenewed();
 }
 
 KisRecentDocumentsModelWrapper::~KisRecentDocumentsModelWrapper() {}
 
-void KisRecentDocumentsModelWrapper::setFiles(const QList<QUrl> &urls, qreal devicePixelRatioF)
+KisRecentDocumentsModelWrapper *KisRecentDocumentsModelWrapper::instance()
 {
-    // TODO: Use devicePixelRatioF arg?
-
-    // update model
-    QList<QStandardItem *> items;
-    const QIcon stubIcon = KisIconUtils::loadIcon("media-floppy");
-    {
-        Q_FOREACH(const QUrl &recentFileUrl, urls){
-            const QString recentFileUrlPath = recentFileUrl.toLocalFile();
-            QStandardItem *recentItem = new QStandardItem(stubIcon, recentFileUrl.fileName());
-            recentItem->setData(recentFileUrl);
-            recentItem->setToolTip(recentFileUrlPath);
-            items.append(recentItem);
-        }
+    if (QThread::currentThread() != qApp->thread()) {
+        qWarning() << "KisRecentDocumentsModelWrapper::instance() called from non-GUI thread!";
+        return nullptr;
     }
-    m_filesAndThumbnailsModel.clear(); // clear existing data before it gets re-populated
-    Q_FOREACH(QStandardItem *item, items) {
-        m_filesAndThumbnailsModel.appendRow(item);
-    }
+    static KisRecentDocumentsModelWrapper s_instance;
+    return &s_instance;
+}
 
-    int row=0;
-    Q_FOREACH(const QUrl &recentFileUrl, urls){
-        const QIcon icon = KisRecentFileIconCache::instance()->getOrQueueFileIcon(recentFileUrl);
-        if (!icon.isNull()) {
-            m_filesAndThumbnailsModel.item(row)->setIcon(icon);
-        }
-        row++;
+void KisRecentDocumentsModelWrapper::setFiles(const QList<QUrl> &urls)
+{
+    // Replace all items in the model. The existing items are deleted by
+    // `QStandardItemModel`.
+    m_filesAndThumbnailsModel.setRowCount(urls.count());
+    for (int i = 0; i < urls.count(); i++) {
+        QStandardItem *item = new KisRecentDocumentsModelItem(urls[i]);
+        m_filesAndThumbnailsModel.setItem(i, item);
     }
 
     emit sigModelIsUpToDate();
@@ -76,7 +145,7 @@ void KisRecentDocumentsModelWrapper::slotFileIconChanged(const QUrl &url, const 
     const int count = m_filesAndThumbnailsModel.rowCount();
     for (int i = 0; i < count; i++) {
         QStandardItem *item = m_filesAndThumbnailsModel.item(i);
-        if (item->data() == url) {
+        if (item && item->data() == url) {
             item->setIcon(icon);
             return;
         }
@@ -85,29 +154,26 @@ void KisRecentDocumentsModelWrapper::slotFileIconChanged(const QUrl &url, const 
 
 void KisRecentDocumentsModelWrapper::fileAdded(const QUrl &url)
 {
-    // TODO: Only insert one row into the model
-    listRenewed();
+    m_filesAndThumbnailsModel.insertRow(0, new KisRecentDocumentsModelItem(url));
+    emit sigModelIsUpToDate();
 }
 
 void KisRecentDocumentsModelWrapper::fileRemoved(const QUrl &url)
 {
-    // TODO: Only remove one row from the model
-    listRenewed();
+    const int count = m_filesAndThumbnailsModel.rowCount();
+    for (int i = 0; i < count; i++) {
+        QStandardItem *item = m_filesAndThumbnailsModel.item(i);
+        if (item && item->data() == url) {
+            m_filesAndThumbnailsModel.removeRow(i);
+            emit sigModelIsUpToDate();
+            return;
+        }
+    }
 }
 
 void KisRecentDocumentsModelWrapper::listRenewed()
 {
-    // HACK: We need to delay this to the next tick. KRecentFilesAction now
-    //       relies on KisRecentFilesManager to be notified about changes
-    //       using the same signals that would call this slot, but it also
-    //       relies on KisRecentDocumentsModelWrapper::model() change events
-    //       (connected by KisMainWindow) to update the file icons. Because
-    //       of this, we need to call setFiles *after* KRecentFilesAction has
-    //       updated the menu actions in order for the file icons to be
-    //       applied.
-    QTimer::singleShot(0, this, [this]() {
-        setFiles(KisRecentFilesManager::instance()->recentUrlsLatestFirst(), 1.0);
-    });
+    setFiles(KisRecentFilesManager::instance()->recentUrlsLatestFirst());
 }
 
 QStandardItemModel &KisRecentDocumentsModelWrapper::model()

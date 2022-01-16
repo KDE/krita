@@ -14,10 +14,14 @@ class QString;
 class QIcon;
 
 /**
- * Fills model with files, launches thumbnail in background
- * While icons are being fetched in the background, items without such an icon will be
- * marked as "not enabled". When all background fetching is done, non-enabled items will
- * be removed from the model
+ * This singleton class provides a `QStandardItemModel` representing the
+ * recent files list and also supports lazy-loading of the file thumbnail
+ * icons. Each recent file entry is represented as a QStandardItem. When
+ * `QStandardItem::icon()` is called for the first time, it fetches the icon
+ * via `KisRecentFileIconCache`, which triggers loading the file icon in
+ * background if it hasn't already been loaded and cached.
+ *
+ * See also `KisRecentFilesManager`.
  */
 class KisRecentDocumentsModelWrapper : public QObject
 {
@@ -25,14 +29,16 @@ class KisRecentDocumentsModelWrapper : public QObject
 public:
     static constexpr const int ICON_SIZE_LENGTH = 48;
 
+    static KisRecentDocumentsModelWrapper *instance();
+
+private:
     KisRecentDocumentsModelWrapper();
     ~KisRecentDocumentsModelWrapper();
 
-private:
     /**
      * Update m_filesAndThumbnailsModel and launch worker thread to fetch icons in background
      */
-    void setFiles(const QList<QUrl> &urls, qreal devicePixelRatioF);
+    void setFiles(const QList<QUrl> &urls);
 
 public:
     /**

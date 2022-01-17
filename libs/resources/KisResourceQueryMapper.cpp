@@ -84,7 +84,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         case KisAbstractResourceModel::ResourceActive:
             return query.value("resource_active");
         case KisAbstractResourceModel::StorageActive:
-            return query.value("storage_active");
+            return query.value(useResourcePrefix ? "resource_storage_active" : "storage_active");
         default:
             ;
         };
@@ -160,7 +160,7 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     }
     case Qt::UserRole + KisAbstractResourceModel::StorageActive:
     {
-        return query.value("storage_active");
+        return query.value(useResourcePrefix ? "resource_storage_active" : "storage_active");
     }
     default:
         ;

@@ -380,7 +380,7 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
             if (!resource->valid()) continue;
             if (resource->resourceId() < 0) continue;
 
-            KisTagResourceModel(d->resourceType).tagResource(tag, resource->resourceId());
+            KisTagResourceModel(d->resourceType).tagResources(tag, QVector<int>() << resource->resourceId());
         }
     }
 

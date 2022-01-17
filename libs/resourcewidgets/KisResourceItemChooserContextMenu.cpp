@@ -159,5 +159,5 @@ void KisResourceItemChooserContextMenu::removeResourceExistingTag(const KisTagSP
 void KisResourceItemChooserContextMenu::addResourceExistingTag(const KisTagSP tag, KoResourceSP resource)
 {
     KisTagResourceModel tagResourceModel(resource->resourceType().first);
-    tagResourceModel.tagResource(tag, resource->resourceId());
+    tagResourceModel.tagResources(tag, QVector<int>() << resource->resourceId());
 }

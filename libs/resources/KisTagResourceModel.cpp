@@ -164,67 +164,191 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     return v;
 }
 
-bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
+bool KisAllTagResourceModel::tagResources(const KisTagSP tag, const QVector<int>& resourceIds)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resourceId >= 0, false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tag && tag->valid() && tag->id() >= 0, false);
 
-    int taggedState = isResourceTagged(tag, resourceId);
+    // notes for performance:
+    // the only two costly parts are:
+    // - executing the query constructed by createQuery()
+    // - running endInsertRows() (because it updates all the views and filter proxies etc...)
 
-    if (taggedState == 1) {
+    QVector<int> resourceIdsToAdd;
+    QVector<int> resourceIdsToUpdate;
+
+    // looks expensive but actually isn't
+    for (int i = 0; i < resourceIds.count(); i++) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resourceIds[i] >= 0, false);
+        int taggedState = isResourceTagged(tag, resourceIds[i]);
+        switch (taggedState) {
+        case -1:
+            // never tagged
+            resourceIdsToAdd.append(resourceIds[i]);
+            break;
+        case 0:
+            // tagged but then untagged
+            resourceIdsToUpdate.append(resourceIds[i]);
+            break;
+        case 1:
+            // it means the resource is already tagged; do nothing
+            break;
+        }
+    }
+
+    if (resourceIdsToAdd.isEmpty() && resourceIdsToUpdate.isEmpty()) {
         // Is already tagged, let's do nothing
         return true;
     }
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    int howManyTimesBeginInsertedCalled = 0;
 
-    if (taggedState == 0) {
+    if (resourceIdsToUpdate.count() > 0) {
+
+        QSqlQuery allIndices;
+        if (!allIndices.prepare(createQuery(false, true))) {
+            qWarning() << "Could not prepare tagResource-allIndices query" << allIndices.lastError();
+        }
+
+        allIndices.bindValue(":resource_type", d->resourceType);
+        allIndices.bindValue(":language", KisTag::currentLocale());
+
+        if (!allIndices.exec()) {
+            qWarning() << "Could not execute tagResource-allIndices query" << allIndices.lastError();
+        }
+
+        int activesRowId = -1;
+        int lastActiveRowId = -1;
+
+        // needed for beginInsertRows calculations
+        QMap<int, int> resourcesCountForLastActiveRowId;
+
+        int idd = 0;
+
+        while (allIndices.next()) {
+            idd++;
+            bool isActive = allIndices.value("resource_tags_pair_active").toBool();
+            if (isActive) {
+                activesRowId++;
+                lastActiveRowId = activesRowId;
+            } else {
+                bool variantSuccess = true;
+                int rowTagId = allIndices.value("tag_id").toInt(&variantSuccess);
+                KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowTagId = -1; }
+                int rowResourceId = allIndices.value("resource_id").toInt(&variantSuccess);
+                KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowResourceId = -1; }
+                if (rowTagId == tag->id() && resourceIdsToUpdate.contains(rowResourceId)) {
+                    if (!resourcesCountForLastActiveRowId.contains(lastActiveRowId)) {
+                        resourcesCountForLastActiveRowId[lastActiveRowId] = 1;
+                    } else {
+                        resourcesCountForLastActiveRowId[lastActiveRowId] = resourcesCountForLastActiveRowId[lastActiveRowId] + 1;
+                    }
+                }
+            }
+         }
+
+        Q_FOREACH(const int key, resourcesCountForLastActiveRowId.keys()) {
+            // when having multiple beginInsertRows:
+            // let's say you have this model:
+            // 0  A
+            // 1  A
+            // 2  A
+            //  <- put 2 Bs here
+            // 3  A
+            //  <- put one B here
+            // 4  A
+            // and you want to add the two Bs and then add another B
+            // then the signals should be:
+            // beginRemoveRows(3, 4) <- new indices of the two Bs
+            // beginRemoveRows(4, 4) <- new index of the one B ignoring the action before
+
+
+            beginInsertRows(QModelIndex(), key + 1, key + resourcesCountForLastActiveRowId[key]);
+            howManyTimesBeginInsertedCalled++;
+        }
+
         // Resource was tagged, then untagged. Tag again;
         QSqlQuery q;
+
         if (!q.prepare("UPDATE resource_tags\n"
                        "SET    active = 1\n"
                        "WHERE  resource_id = :resource_id\n"
                        "AND    tag_id      = :tag_id")) {
+
+
             qWarning() << "Could not prepare update resource_tags to active statement" << q.lastError();
-            endInsertRows();
+
             return false;
         }
 
-        q.bindValue(":resource_id", resourceId);
-        q.bindValue(":tag_id", tag->id());
+        QVariantList resourceIdsVariants;
+        QVariantList tagIdVariants;
+
+        for (int i = 0; i < resourceIdsToUpdate.count(); i++) {
+            resourceIdsVariants << QVariant(resourceIdsToUpdate[i]);
+            tagIdVariants << QVariant(tag->id());
+        }
+
+        q.bindValue(":resource_id", resourceIdsVariants);
+        q.bindValue(":tag_id", tagIdVariants);
+
+        if (!q.execBatch()) {
+            qWarning() << "Could not execute update resource_tags to active statement" << q.lastError();
+            for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+                endInsertRows();
+            }
+            return false;
+        }
+
+    }
+
+    if (resourceIdsToAdd.count() > 0) {
+
+        beginInsertRows(QModelIndex(), rowCount(), rowCount() + resourceIdsToAdd.count() - 1);
+        howManyTimesBeginInsertedCalled++;
+
+        // Resource was never tagged before, insert it. The active column is DEFAULT 1
+        QSqlQuery q;
+
+
+        QString values;
+        for (int i = 0; i < resourceIdsToAdd.count(); i++) {
+            if (i > 0) {
+                values.append(", ");
+            }
+            values.append("(?, ?, ?)");
+        }
+
+        if (!q.prepare(QString("INSERT INTO resource_tags\n"
+                       "(resource_id, tag_id, active)\n"
+                       "VALUES ") + values + QString(";\n"))) {
+            qWarning() << "Could not prepare insert into resource tags statement" << q.lastError();
+            for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+                endInsertRows();
+            }
+            return false;
+        }
+
+        for (int i = 0; i < resourceIdsToAdd.count(); i++) {
+            q.addBindValue(resourceIdsToAdd[i]);
+            q.addBindValue(tag->id());
+            q.addBindValue(true);
+
+        }
 
         if (!q.exec()) {
-            qWarning() << "Could not execute update resource_tags to active statement" << q.lastError() << q.boundValues();
-            endInsertRows();
+            qWarning() << "Could not execute insert into resource tags statement" << q.boundValues() << q.lastError();
+            for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+                endInsertRows();
+            }
             return false;
         }
-
-        endInsertRows();
-        return true;
-    }
-
-    // Resource was never tagged before, insert it. The active column is DEFAULT 1
-    QSqlQuery q;
-
-    if (!q.prepare("INSERT INTO resource_tags\n"
-                   "(resource_id, tag_id)\n"
-                   "VALUES (:resource_id,:tag_id);\n")) {
-        qWarning() << "Could not prepare insert into resource tags statement" << q.lastError();
-        endInsertRows();
-        return false;
-    }
-
-    q.bindValue(":resource_id", resourceId);
-    q.bindValue(":tag_id", tag->id());
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute insert into resource tags statement" << q.boundValues() << q.lastError();
-        endInsertRows();
-        return false;
     }
 
     resetQuery();
-    endInsertRows();
+
+    for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+        endInsertRows();
+    }
 
     return true;
 }
@@ -337,82 +461,95 @@ void KisAllTagResourceModel::slotResourceActiveStateChanged(const QString &resou
     }
 }
 
+QString KisAllTagResourceModel::createQuery(bool onlyActive, bool returnADbIndexToo)
+{
+    QString query = QString("-- Work on a first query (WITH statement), on which we apply the GROUP BY to be sure to retrieve unique rows only\n"
+                            "-- We only work with the 3 expected tables to reduces number of join and table/access\n"
+                            "-- Also as GROUP BY id an aggregate function, we retrieve the greatest **resource_id**\n"
+                            "-- /!\\ This is an arbitrary choice, a min() could also be applied\n"
+                            "--     By using a min() or max() method, we ensure that query always use the same method to return data from database\n"
+                            "--    But I consider this as something not normal... if more than resource can be returned, why use one more than another one?\n"
+                            "-- may be selection criteria must be reviewed?\n"
+                            "WITH initial_selection AS (\n"
+                            "           -- initial \"GROUP BY\" columns\n"
+                            "    SELECT   tags.id\n"
+                            "    ,        resources.name\n"
+                            "    ,        resources.filename\n"
+                            "    ,        resources.md5sum\n"
+                            "           -- we need resource type later, as already retrieved here, just return it to avoid an\n"
+                            "           -- additional join in secondary select statement\n"
+                            "    ,        resource_types.id            as    resource_type_id\n"
+                            "    ,        resource_types.name          as    resource_type_name\n"
+                            "           -- select on of resource, and return id as it will be mandatory in second SELECT statement to return resource\n"
+                            "    ,        min(resources.id)            as    resource_id\n"
+                            ) + (returnADbIndexToo ? QString(", resource_tags.id   as   resource_tags_row_id\n") : QString("")) + QString( // include r_t row id
+                            ) + (onlyActive ? QString("") : QString(", resource_tags.active   as   resource_tags_pair_active\n")) + QString( // include r_t row active info
+                            "    FROM     resource_types\n"
+                            "    JOIN     resource_tags\n   ON       resource_tags.resource_id    = resources.id\n"
+                            ) + (onlyActive ? QString("    AND       resource_tags.active         = 1\n") : QString("")) + QString( // make sure only active tags are used
+                            "    JOIN     resources         ON       resources.resource_type_id   = resource_types.id\n"
+                            "    JOIN     tags              ON       tags.id                      = resource_tags.tag_id\n"
+                            "                              AND       tags.resource_type_id        = resource_types.id\n"
+                            "    WHERE    resource_types.name          = :resource_type\n"
+                            "    GROUP BY tags.id\n"
+                            "    ,        resources.name\n"
+                            "    ,        resources.filename\n"
+                            "    ,        resources.md5sum\n"
+                            "           -- need to add resource_types.id in group by\n"
+                            "    ,        resource_types.id\n"
+                            "    ORDER BY resource_tags.id\n"
+                            "    -- HACK ALERT\n"
+                            "    -- the interal SELECT query apparently needs two bound values, otherwise complains \"parameter count mismatch\" \n"
+                            "    -- the next line can be in a comment and can be either language or resource_type, it doesn't matter \n"
+                            "    -- :language\n"
+                            ")\n"
+                            "SELECT 	-- use returned values from first SELECT statement\n"
+                            "       initial_selection.id           as tag_id\n"
+                            ",      initial_selection.name         as resource_name\n"
+                            ",      initial_selection.filename     as resource_filename\n"
+                            ",      initial_selection.md5sum       as resource_md5sum\n"
+                            ",      initial_selection.resource_id  as resource_id\n"
+                            "     -- And then other columns (from initial query)\n"
+                            "     -- \n"
+                            ",      tags.url                       as tag_url"
+                            ",      tags.active                    as tag_active"
+                            ",      tags.name                      as tag_name"
+                            ",      tags.comment                   as tag_comment"
+                            "     --"
+                            ",      resources.status               as resource_active\n"
+                            ",      resources.tooltip              as resource_tooltip\n"
+                            ",      resources.thumbnail            as resource_thumbnail\n"
+                            "     -- resource_status == resource_active; the infirmation is returned twice\n"
+                            "     -- with different name, is it normal.\n"
+                            ",      resources.status               as resource_active\n"
+                            ",      resources.storage_id           as storage_id\n"
+                            "     --\n"
+                            ",      storages.active                as resource_storage_active\n"
+                            ",      storages.location              as location\n"
+                            "     --\n"
+                            ",      tag_translations.name          as translated_name\n"
+                            ",      tag_translations.comment       as translated_comment\n"
+                            "     -- I keep it because it was in original query, but for me it's not needed...\n"
+                            ",      initial_selection.resource_type_name as resource_type\n"
+                            ) + (returnADbIndexToo ? QString(", initial_selection.resource_tags_row_id   as   resource_tags_row_id\n") : QString("")) + QString(
+                            ) + (onlyActive ? QString("") : QString(", initial_selection.resource_tags_pair_active   as   resource_tags_pair_active\n")) + QString(
+                            "     -- Second statement just complete data with other tables\n"
+                            "FROM      initial_selection\n"
+                            "JOIN      tags               ON   tags.id                     = initial_selection.id\n"
+                            "                            AND   tags.resource_type_id       = initial_selection.resource_type_id\n"
+                            "JOIN      resources          ON   resources.id                = resource_id\n"
+                            "JOIN      storages           ON   storages.id                 = resources.storage_id\n"
+                            "LEFT JOIN tag_translations   ON   tag_translations.tag_id     = initial_selection.id\n"
+                            "                            AND   tag_translations.language   = :language\n");
+
+    return query;
+
+
+}
+
 bool KisAllTagResourceModel::resetQuery()
 {
-    bool r = d->query.prepare("-- Work on a first query (WITH statement), on which we apply the GROUP BY to be sure to retrieve unique rows only\n"
-                              "-- We only work with the 3 expected tables to reduces number of join and table/access\n"
-                              "-- Also as GROUP BY id an aggregate function, we retrieve the greatest **resource_id**\n"
-                              "-- /!\\ This is an arbitrary choice, a min() could also be applied\n"
-                              "--     By using a min() or max() method, we ensure that query always use the same method to return data from database\n"
-                              "--    But I consider this as something not normal... if more than resource can be returned, why use one more than another one?\n"
-                              "-- may be selection criteria must be reviewed?\n"
-                              "WITH initial_selection AS (\n"
-                              "           -- initial \"GROUP BY\" columns\n"
-                              "    SELECT   tags.id\n"
-                              "    ,        resources.name\n"
-                              "    ,        resources.filename\n"
-                              "    ,        resources.md5sum\n"
-                              "           -- we need resource type later, as already retrieved here, just return it to avoid an\n"
-                              "           -- additional join in secondary select statement\n"
-                              "    ,        resource_types.id            as    resource_type_id\n"
-                              "    ,        resource_types.name          as    resource_type_name\n"
-                              "           -- select on of resource, and return id as it will be mandatory in second SELECT statement to return resource\n"
-                              "    ,        min(resources.id)            as    resource_id\n"
-                              "    FROM     resource_types\n"
-                              "    JOIN     resource_tags\n   ON       resource_tags.resource_id    = resources.id\n"
-                              "                              AND       resource_tags.active         = 1\n"
-                              "    JOIN     resources         ON       resources.resource_type_id   = resource_types.id\n"
-                              "    JOIN     tags              ON       tags.id                      = resource_tags.tag_id\n"
-                              "                              AND       tags.resource_type_id        = resource_types.id\n"
-                              "    WHERE    resource_types.name          = :resource_type\n"
-                              "    GROUP BY tags.id\n"
-                              "    ,        resources.name\n"
-                              "    ,        resources.filename\n"
-                              "    ,        resources.md5sum\n"
-                              "           -- need to add resource_types.id in group by\n"
-                              "    ,        resource_types.id\n"
-                              "    ORDER BY resource_tags.id\n"
-                              "    -- HACK ALERT\n"
-                              "    -- the interal SELECT query apparently needs two bound values, otherwise complains \"parameter count mismatch\" \n"
-                              "    -- the next line can be in a comment and can be either language or resource_type, it doesn't matter \n"
-                              "    -- :language\n"
-                              ")\n"
-                              "SELECT 	-- use returned values from first SELECT statement\n"
-                              "       initial_selection.id           as tag_id\n"
-                              ",      initial_selection.name         as resource_name\n"
-                              ",      initial_selection.filename     as resource_filename\n"
-                              ",      initial_selection.md5sum       as resource_md5sum\n"
-                              ",      initial_selection.resource_id  as resource_id\n"
-                              "     -- And then other columns (from initial query)\n"
-                              "     -- \n"
-                              ",      tags.url                       as tag_url"
-                              ",      tags.active                    as tag_active"
-                              ",      tags.name                      as tag_name"
-                              ",      tags.comment                   as tag_comment"
-                              "     --"
-                              ",      resources.status               as resource_active\n"
-                              ",      resources.tooltip              as resource_tooltip\n"
-                              ",      resources.thumbnail            as resource_thumbnail\n"
-                              "     -- resource_status == resource_active; the infirmation is returned twice\n"
-                              "     -- with different name, is it normal.\n"
-                              ",      resources.status               as resource_active\n"
-                              ",      resources.storage_id           as storage_id\n"
-                              "     --\n"
-                              ",      storages.active                as resource_storage_active\n"
-                              ",      storages.location              as location\n"
-                              "     --\n"
-                              ",      tag_translations.name          as translated_name\n"
-                              ",      tag_translations.comment       as translated_comment\n"
-                              "     -- I keep it because it was in original query, but for me it's not needed...\n"
-                              ",      initial_selection.resource_type_name as resource_type\n"
-                              "     -- Second statement just complete data with other tables\n"
-                              "FROM      initial_selection\n"
-                              "JOIN      tags               ON   tags.id                     = initial_selection.id\n"
-                              "                            AND   tags.resource_type_id       = initial_selection.resource_type_id\n"
-                              "JOIN      resources          ON   resources.id                = resource_id\n"
-                              "JOIN      storages           ON   storages.id                 = resources.storage_id\n"
-                              "LEFT JOIN tag_translations   ON   tag_translations.tag_id     = initial_selection.id\n"
-                              "                            AND   tag_translations.language   = :language\n");
+    bool r = d->query.prepare(createQuery(true));
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagResourcesModel query" << d->query.lastError();
@@ -481,9 +618,9 @@ void KisTagResourceModel::setStorageFilter(KisTagResourceModel::StorageFilter fi
     invalidateFilter();
 }
 
-bool KisTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
+bool KisTagResourceModel::tagResources(const KisTagSP tag, const QVector<int> &resourceIds)
 {
-    bool r = d->sourceModel->tagResource(tag, resourceId);
+    bool r = d->sourceModel->tagResources(tag, resourceIds);
     return r;
 }
 

@@ -236,7 +236,7 @@ void KisTagChooserWidget::addTag(const QString &tagName, KoResourceSP resource)
         if (response == Undelete) { // Undelete
             d->model->setTagActive(tagForUrl);
             if (!resource.isNull()) {
-                KisTagResourceModel(d->resourceType).tagResource(tagForUrl, resource->resourceId());
+                KisTagResourceModel(d->resourceType).tagResources(tagForUrl, QVector<int>() << resource->resourceId());
             }
             d->model->sort(KisAllTagsModel::Name);
             return;
@@ -262,7 +262,7 @@ void KisTagChooserWidget::addTag(KisTagSP tag, KoResourceSP resource)
         if (response == Undelete) { // Undelete
             d->model->setTagActive(tagForUrl);
             if (!resource.isNull()) {
-                KisTagResourceModel(d->resourceType).tagResource(tagForUrl, resource->resourceId());
+                KisTagResourceModel(d->resourceType).tagResources(tagForUrl, QVector<int>() << resource->resourceId());
             }
             d->model->sort(KisAllTagsModel::Name);
             return;

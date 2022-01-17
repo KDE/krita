@@ -18,5 +18,9 @@
         <file alias="create_metadata.sql">sql/create_metadata.sql</file>
         <file alias="create_tags_storages.sql">sql/create_tags_storages.sql</file>
         <file alias="create_tag_translations.sql">sql/create_tag_translations.sql</file>
+        <file alias="create_index_tags.sql">sql/create_index_tags.sql</file>
+        <file alias="create_index_tag_translations.sql">sql/create_index_tag_translations.sql</file>
+        <file alias="create_index_resource_tags.sql">sql/create_index_resource_tags.sql</file>
+        <file alias="create_index_resources.sql">sql/create_index_resources.sql</file>
     </qresource>
 </RCC>

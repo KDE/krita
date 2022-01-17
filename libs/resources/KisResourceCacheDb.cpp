@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.15" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.16" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -169,25 +169,57 @@ QSqlError createDatabase(const QString &location)
                 schemaIsOutDated = true;
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
-                if (   oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
-                    && newSchemaVersionNumber == QVersionNumber::fromString("0.0.15")) {
+                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.16")  && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0) {
+                    bool from14to15 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14");
+                    bool from15to16 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
+                            || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15");
 
-                    qWarning() << "Going to update resource_tags table";
+                    bool success = true;
+                    if (from14to15) {
+                        qWarning() << "Going to update resource_tags table";
 
-                    QSqlQuery q;
-                    q.prepare("ALTER TABLE  resource_tags\n"
-                              "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1");
-                    if (!q.exec()) {
-                        qWarning() << "Could not update the resource_tags table.";
+                        QSqlQuery q;
+                        q.prepare("ALTER TABLE  resource_tags\n"
+                                  "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1");
+                        if (!q.exec()) {
+                            qWarning() << "Could not update the resource_tags table." << q.lastError();
+                            success = false;
+                        }
+                        else {
+                            qWarning() << "Updated table resource_tags: success.";
+                        }
                     }
-                    else {
-                        qWarning() << "Updated table resource_tags: success.";
+                    if (from15to16) {
+                        qWarning() << "Going to update indices";
+
+                        QStringList indexes = QStringList() << "tags" << "resources" << "tag_translations" << "resource_tags";
+
+                        Q_FOREACH(const QString &index, indexes) {
+                            QFile f(":/create_index_" + index + ".sql");
+                            if (f.open(QFile::ReadOnly)) {
+                                QSqlQuery q;
+                                if (!q.exec(f.readAll())) {
+                                    qWarning() << "Could not create index" << index << q.lastError();
+                                    return db.lastError();
+                                }
+                                infoResources << "Created index" << index;
+                            }
+                            else {
+                                return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(index), QSqlError::StatementError);
+                            }
+                        }
+                    }
+
+                    if (success) {
                         if (!updateSchemaVersion()) {
                             return QSqlError("Error executing SQL", QString("Could not update schema version."), QSqlError::StatementError);
                         }
-                        schemaIsOutDated = false;
                     }
+
+                    schemaIsOutDated = !success;
+
                 }
+
                 if (schemaIsOutDated) {
                     QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database."));
                     if (QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0) {
@@ -227,7 +259,7 @@ QSqlError createDatabase(const QString &location)
     }
 
     // Create indexes
-    QStringList indexes = QStringList() << "storages" << "versioned_resources";
+    QStringList indexes = QStringList() << "storages" << "versioned_resources" << "tags" << "resources" << "tag_translations" << "resource_tags";
 
     Q_FOREACH(const QString &index, indexes) {
         QFile f(":/create_index_" + index + ".sql");

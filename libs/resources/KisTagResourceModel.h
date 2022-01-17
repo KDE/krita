@@ -21,7 +21,7 @@ class KRITARESOURCES_EXPORT KisAbstractTagResourceModel
 public:
     virtual ~KisAbstractTagResourceModel() {}
 
-    virtual bool tagResource(const KisTagSP tag, const int resourceId) = 0;
+    virtual bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds) = 0;
     virtual bool untagResource(const KisTagSP tag, const int resourceId) = 0;
 
     /**
@@ -73,7 +73,7 @@ public:
     QVariant data(const QModelIndex &index, int role) const override;
 
     // Abstract Tag API
-    bool tagResource(const KisTagSP tag, const int resourceId) override;
+    bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds) override;
     bool untagResource(const KisTagSP tag, const int resourceId) override;
     int isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
@@ -85,7 +85,9 @@ private Q_SLOTS:
 
 private:
 
+    QString createQuery(bool onlyAcive = true, bool returnADbIndexToo = false);
     bool resetQuery();
+
 
     struct Private;
     Private* const d;
@@ -129,7 +131,7 @@ public:
 
     // KisAbstractTagResourceModel API
 
-    bool tagResource(const KisTagSP tag, const int resourceId) override;
+    bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds) override;
     bool untagResource(const KisTagSP tag, const int resourceId) override;
     int isResourceTagged(const KisTagSP tag, const int resourceId) override;
 

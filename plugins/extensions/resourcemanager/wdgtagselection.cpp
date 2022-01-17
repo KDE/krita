@@ -94,9 +94,7 @@ void KisWdgTagSelectionControllerOneResource::slotAddTag(KoID tag)
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
 
-    Q_FOREACH(int resourceId, m_resourceIds) {
-        m_tagResourceModel->tagResource(tagsp, resourceId);
-    }
+    m_tagResourceModel->tagResources(tagsp, m_resourceIds.toVector());
     updateView();
 }
 
@@ -127,9 +125,7 @@ void KisWdgTagSelectionControllerOneResource::slotCreateNewTag(QString tag)
     }
 
     KIS_ASSERT_RECOVER_RETURN(tagsp);
-    Q_FOREACH(int resourceId, m_resourceIds) {
-        m_tagResourceModel->tagResource(tagsp, resourceId);
-    }
+    m_tagResourceModel->tagResources(tagsp, m_resourceIds.toVector());
     updateView();
 }
 

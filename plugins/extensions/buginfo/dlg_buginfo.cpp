@@ -24,12 +24,12 @@
 
 #include <QScreen>
 
-DlgBugInfo::DlgBugInfo(QWidget *parent)
+DlgBugInfo::DlgBugInfo(QWidget *parent, KoDialog::ButtonCodes customButtons)
     : KoDialog(parent)
 {
     setCaption(i18n("Please paste this information in your bug report"));
 
-    setButtons(User1 | User2 | Ok);
+    setButtons(User1 | User2 | Ok | customButtons);
     setButtonText(User1, i18n("Copy to clipboard"));
     setButtonText(User2, i18n("Save to file"));
     setDefaultButton(Ok);

@@ -17,6 +17,10 @@
 #include "DlgKritaLog.h"
 #include "DlgSysInfo.h"
 
+#ifdef Q_OS_ANDROID
+#include "DlgAndroidLogcatDumper.h"
+#endif
+
 
 K_PLUGIN_FACTORY_WITH_JSON(BugInfoFactory, "kritabuginfo.json", registerPlugin<BugInfo>();)
 
@@ -29,6 +33,11 @@ BugInfo::BugInfo(QObject *parent, const QVariantList &)
     KisAction *actionSys  = createAction("sysinfo");
     connect(actionBug, SIGNAL(triggered()), this, SLOT(slotKritaLog()));
     connect(actionSys, SIGNAL(triggered()), this, SLOT(slotSysInfo()));
+
+#ifdef Q_OS_ANDROID
+    KisAction *actionLogcatdump = createAction("logcatdump");
+    connect(actionLogcatdump, SIGNAL(triggered()), this, SLOT(slotDumpLogcat()));
+#endif
 
 }
 
@@ -49,5 +58,12 @@ void BugInfo::slotSysInfo()
     dlgSysInfo.exec();
 }
 
+#ifdef Q_OS_ANDROID
+void BugInfo::slotDumpLogcat()
+{
+    DlgAndroidLogcatDumper dlgLogcatDumper(viewManager()->mainWindowAsQWidget());
+    dlgLogcatDumper.exec();
+}
+#endif
 
 #include "buginfo.moc"

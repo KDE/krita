@@ -17,7 +17,7 @@
 #include <kis_dom_utils.h>
 
 YCbCrU16ColorSpace::YCbCrU16ColorSpace(const QString &name, KoColorProfile *p)
-    : LcmsColorSpace<KoYCbCrU16Traits>(colorSpaceId(), name, TYPE_YCbCrA_16, cmsSigXYZData, p)
+    : LcmsColorSpace<KoYCbCrU16Traits>(colorSpaceId(), name, TYPE_YCbCrA_16, cmsSigYCbCrData, p)
 {
     addChannel(new KoChannelInfo(i18n("Y"),     KoYCbCrU16Traits::Y_pos     * sizeof(quint16), KoYCbCrU16Traits::Y_pos,     KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::cyan));
     addChannel(new KoChannelInfo(i18n("Cb"),    KoYCbCrU16Traits::Cb_pos    * sizeof(quint16), KoYCbCrU16Traits::Cb_pos,    KoChannelInfo::COLOR, KoChannelInfo::UINT16, sizeof(quint16), Qt::magenta));

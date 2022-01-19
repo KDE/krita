@@ -372,6 +372,9 @@ QString KoColorSpaceRegistry::Private::defaultProfileForCsIdImpl(const QString &
     KoColorSpaceFactory *csf = colorSpaceFactoryRegistry.value(csID);
     if (csf) {
         defaultProfileName = csf->defaultProfile();
+        if (defaultProfileName.isEmpty()) {
+            defaultProfileName = q->profilesFor(csID).first()->name();
+        }
     } else {
         dbgPigmentCSRegistry << "Unknown color space type : " << csID;
     }

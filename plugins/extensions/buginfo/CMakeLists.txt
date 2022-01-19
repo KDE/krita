@@ -9,6 +9,9 @@ if (ANDROID)
     set(kritabuginfo_SOURCES ${kritabuginfo_SOURCES} DlgAndroidLogcatDumper.cpp)
 endif()
 
+if (WIN32 OR ANDROID)
+    set(kritabuginfo_SOURCES ${kritabuginfo_SOURCES} DlgCrashLog.cpp)
+endif()
 
 ki18n_wrap_ui(kritabuginfo_SOURCES wdg_buginfo.ui )
 

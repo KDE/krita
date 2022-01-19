@@ -31,6 +31,7 @@ public:
     void svgClosePath();
 
     const char *getCoord(const char *, qreal &);
+    const char *getFlag(const char *ptr, bool &flag);
     void calculateArc(bool relative, qreal &curx, qreal &cury, qreal angle, qreal x, qreal y, qreal r1, qreal r2, bool largeArcFlag, bool sweepFlag);
 
     KoPathShape * path; ///< the path shape to work on
@@ -268,15 +269,14 @@ void KoPathShapeLoaderPrivate::parseSvg(const QString &s, bool process)
                 relative = true;
                 Q_FALLTHROUGH();
             case 'A': {
-                bool largeArc, sweep;
+                bool largeArc = false;
+                bool sweep = false;
                 qreal angle, rx, ry;
                 ptr = getCoord(ptr, rx);
                 ptr = getCoord(ptr, ry);
                 ptr = getCoord(ptr, angle);
-                ptr = getCoord(ptr, tox);
-                largeArc = tox == 1;
-                ptr = getCoord(ptr, tox);
-                sweep = tox == 1;
+                ptr = getFlag(ptr, largeArc);
+                ptr = getFlag(ptr, sweep);
                 ptr = getCoord(ptr, tox);
                 ptr = getCoord(ptr, toy);
 
@@ -376,6 +376,21 @@ const char * KoPathShapeLoaderPrivate::getCoord(const char *ptr, qreal &number)
     if (*ptr == ' ')
         ++ptr;
 
+    return ptr;
+}
+
+const char *KoPathShapeLoaderPrivate::getFlag(const char *ptr, bool &flag)
+{
+    // check for '0' or '1'
+    if (*ptr != '0' && *ptr != '1') {
+        return ptr;
+    }
+    flag = (*ptr == '1');
+    ++ptr;
+
+    if (*ptr == ' ') {
+        ++ptr;
+    }
     return ptr;
 }
 

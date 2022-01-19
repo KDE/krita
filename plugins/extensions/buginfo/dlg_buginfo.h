@@ -27,7 +27,7 @@ class DlgBugInfo: public KoDialog
 {
     Q_OBJECT
 public:
-    DlgBugInfo(QWidget * parent = 0, ButtonCodes customButtons = None);
+    DlgBugInfo(QWidget * parent = 0);
     ~DlgBugInfo() override;
 
     void initialize();
@@ -42,7 +42,7 @@ public:
 
     QString basicSystemInformationReplacementText();
 
-protected:
+private:
     WdgBugInfo *m_page;
 };
 

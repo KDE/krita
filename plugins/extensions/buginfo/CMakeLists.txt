@@ -5,11 +5,6 @@ set(kritabuginfo_SOURCES
     DlgKritaLog.cpp
 )
 
-if (ANDROID)
-    set(kritabuginfo_SOURCES ${kritabuginfo_SOURCES} DlgAndroidLogcatDumper.cpp)
-endif()
-
-
 ki18n_wrap_ui(kritabuginfo_SOURCES wdg_buginfo.ui )
 
 add_library(kritabuginfo MODULE ${kritabuginfo_SOURCES})

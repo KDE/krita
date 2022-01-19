@@ -125,7 +125,6 @@ build_ext() {
     cmake --build . --config $BUILD_TYPE --target ext_mypaint -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_webp -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_vc -- -j$PROC_COUNT
-    cmake --build . --config $BUILD_TYPE --target ext_libunwindstack-ndk -- -j$PROC_COUNT
     # cmake --build . --config $BUILD_TYPE --target ext_ocio -- -j$PROC_COUNT
 
     cd $BUILD_ROOT

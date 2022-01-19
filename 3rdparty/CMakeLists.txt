@@ -345,7 +345,6 @@ add_subdirectory( ext_libraw )
 if (ANDROID)
   # gettext replacement
   add_subdirectory(ext_libintl-lite)
-  add_subdirectory(ext_libunwindstack-ndk)
 endif()
 add_subdirectory( ext_frameworks )
 if (ENABLE_PYTHON_DEPS OR NOT MINGW)

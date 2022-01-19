@@ -172,16 +172,6 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
-    <Action name="logcatdump">
-      <icon/>
-      <text>Show Android log for bug reports.</text>
-      <whatsThis/>
-      <toolTip>Show Android log for bug reports.</toolTip>
-      <iconText>Show Android log for bug reports.</iconText>
-      <shortcut/>
-      <isCheckable>false</isCheckable>
-      <statusTip/>
-    </Action>
     <Action name="command_bar_open">
       <icon/>
       <text>Search Actions</text>

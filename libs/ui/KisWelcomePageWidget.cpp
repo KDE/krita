@@ -74,6 +74,10 @@ QPushButton* KisWelcomePageWidget::donationLink;
 QLabel* KisWelcomePageWidget::donationBannerImage;
 #endif
 
+#ifdef Q_OS_WIN
+#include <KisWindowsPackageUtils.h>
+#endif
+
 // Used for triggering a QAction::setChecked signal from a QLabel::linkActivated signal
 void ShowNewsAction::enableFromLink(QString unused_url)
 {
@@ -213,7 +217,8 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     // as those stores have their own updating mechanism.
     // * STEAMAPPID(Windows)/SteamAppId(Linux) environment variable is set when Krita is run from Steam.
     // The environment variables are not public API.
-    // * AppxManifest.xml file in the installation directory indicates MS Store version
+    // * MS Store version runs as a package (though we cannot know if it was
+    // installed from the Store or manually with the .msix package)
 #if defined Q_OS_LINUX
     if (!qEnvironmentVariableIsSet("SteamAppId")) { // do not create updater for linux/steam
         if (qEnvironmentVariableIsSet("APPIMAGE")) {
@@ -223,10 +228,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
         }
     }
 #elif defined Q_OS_WIN
-    QString appxManifestFilePath = QString("%1/../AppxManifest.xml").arg(QCoreApplication::applicationDirPath());
-	QFileInfo appxManifestFileInfo(appxManifestFilePath);
-
-    if (!appxManifestFileInfo.exists() && !qEnvironmentVariableIsSet("STEAMAPPID")) {
+    if (!KisWindowsPackageUtils::isRunningInPackage() && !qEnvironmentVariableIsSet("STEAMAPPID")) {
  		m_versionUpdater.reset(new KisManualUpdater());
         KisUsageLogger::log("Non-store package - creating updater");
     } else {

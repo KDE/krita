@@ -45,6 +45,13 @@ set(kritaglobal_LIB_SRCS
     KisSynchronizedConnection.cpp
 )
 
+if(WIN32)
+    set(kritaglobal_LIB_SRCS
+        ${kritaglobal_LIB_SRCS}
+        KisWindowsPackageUtils.cpp
+    )
+endif(WIN32)
+
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
 generate_export_header(kritaglobal BASE_NAME kritaglobal)
 

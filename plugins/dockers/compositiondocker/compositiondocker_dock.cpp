@@ -350,9 +350,9 @@ void CompositionDockerDock::exportAnimationClicked()
             exportOptions.lastFrame = range.end();
             exportOptions.width = image->width();
             exportOptions.height = image->height();
-            exportOptions.videoFileName = QString("%1/%2/video.%3").arg(path).arg(composition->name()).arg(videoExtension);
-            exportOptions.directory = QString("%1/%2").arg(path).arg(composition->name());
             exportOptions.basename = QString("frame");
+            exportOptions.videoFileName = QString("%1/%2/video.%3").arg(path, composition->name(), videoExtension);
+            exportOptions.directory = QString("%1/%2").arg(path, composition->name());
             exportOptions.wantsOnlyUniqueFrameSequence = true;
 
             KisAnimationRender::render(m_canvas->viewManager()->document(), m_canvas->viewManager(), exportOptions);

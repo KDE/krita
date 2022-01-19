@@ -28,9 +28,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
     const QString frameMimeType = encoderOptions.frameMimeType;
     const QString framesDirectory = encoderOptions.resolveAbsoluteFramesDirectory();
     const QString extension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
-    const QString baseFileName = QString("%1/%2.%3").arg(framesDirectory)
-                                                    .arg(encoderOptions.basename)
-                                                    .arg(extension);
+    const QString baseFileName = QString("%1/%2.%3").arg(framesDirectory, encoderOptions.basename, extension);
 
     if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
         if (hasEvenDimensions(encoderOptions.width, encoderOptions.height) != true) {

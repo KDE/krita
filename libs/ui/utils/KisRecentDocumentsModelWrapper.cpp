@@ -45,6 +45,8 @@ static QString urlToTooltip(const QUrl &url)
     if (url.isLocalFile()) {
         return QDir::toNativeSeparators(url.toLocalFile());
     }
+#elif defined(Q_OS_ANDROID)
+    return url.toLocalFile();
 #endif
     return url.toDisplayString(QUrl::PreferLocalFile);
 }

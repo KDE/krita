@@ -925,7 +925,7 @@ inline QString _prepaddr(const QString &pref, const QString &addr) {
 void KisAslLayerStyleSerializer::registerPatternObject(const KoPatternSP pattern, const QString& patternUuid) {
 
     if (!pattern) {
-        warnKrita << "WARNING: got an empty pattern:" < patternUuid;
+        warnKrita << "WARNING: got an empty pattern:" << patternUuid;
         return;
     }
 

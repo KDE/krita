@@ -55,6 +55,7 @@ endif(WIN32)
 if (ANDROID)
     set (kritaglobal_LIB_SRCS ${kritaglobal_LIB_SRCS} KisAndroidCrashHandler.cpp)
     include_directories(${unwindstack_INCLUDE_DIR})
+    include_directories(${Qt5AndroidExtras_INCLUDE_DIRS})
 endif()
 
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
@@ -73,7 +74,7 @@ target_link_libraries(kritaglobal
 )
 
 if (ANDROID)
-    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} log)
+    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)
 endif()
 
 set_target_properties(kritaglobal PROPERTIES

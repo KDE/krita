@@ -8,6 +8,7 @@
 #include "KisRecentDocumentsModelWrapper.h"
 
 #include <QApplication>
+#include <QDir>
 #include <QUrl>
 
 #include "kis_icon_utils.h"

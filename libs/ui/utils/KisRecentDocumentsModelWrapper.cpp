@@ -37,10 +37,21 @@ public:
     void setData(const QVariant &value, int role = Qt::UserRole + 1) override;
 };
 
+static QString urlToTooltip(const QUrl &url)
+{
+#ifdef Q_OS_WIN
+    // Convert forward slashes to backslashes
+    if (url.isLocalFile()) {
+        return QDir::toNativeSeparators(url.toLocalFile());
+    }
+#endif
+    return url.toDisplayString(QUrl::PreferLocalFile);
+}
+
 KisRecentDocumentsModelItem::KisRecentDocumentsModelItem(const QUrl &url)
     : QStandardItem(url.fileName())
     , m_url(url)
-    , m_tooltip(url.toDisplayString(QUrl::PreferLocalFile))
+    , m_tooltip(urlToTooltip(url))
 {
 }
 

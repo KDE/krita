@@ -288,6 +288,10 @@ void KRecentFilesAction::rebuildEntries()
         QString value;
         if (item.m_url.isLocalFile()) {
             value = item.m_url.toLocalFile();
+#ifdef Q_OS_WIN
+            // Convert forward slashes to backslashes
+            value = QDir::toNativeSeparators(value);
+#endif
         } else {
             value = item.m_url.toDisplayString();
         }

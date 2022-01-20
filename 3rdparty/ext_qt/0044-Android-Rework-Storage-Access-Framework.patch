@@ -1,7 +1,7 @@
-From 025399a1925e1690302a464f07ef4c0f06c3089a Mon Sep 17 00:00:00 2001
+From 4843173fe19d32942a6badf3ba08265ac6ff15a1 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Fri, 26 Nov 2021 15:56:43 +0000
-Subject: [PATCH] Android: Rework Storage Access Framework
+Subject: Android: Rework Storage Access Framework
 
 With this commit we introduce creation of directories, files, and files
 inside directories. We also changed the permission model of accessing
@@ -13,13 +13,13 @@ the files.
  .../qt5/android/CachedDocumentFile.java       | 225 +++++
  .../org/qtproject/qt5/android/QtNative.java   | 253 +-----
  .../org/qtproject/qt5/android/SAFFile.java    |  23 +
- .../qtproject/qt5/android/SAFFileManager.java | 795 ++++++++++++++++++
+ .../qtproject/qt5/android/SAFFileManager.java | 800 ++++++++++++++++++
  .../org/qtproject/qt5/android/SAFUtils.java   |  23 +
  .../android/androidcontentfileengine.cpp      | 268 ++++--
  .../android/androidcontentfileengine.h        |  39 +-
  .../qandroidplatformfiledialoghelper.cpp      |   6 +
  .../android/qandroidplatformservices.cpp      |  11 +-
- 12 files changed, 1349 insertions(+), 300 deletions(-)
+ 12 files changed, 1354 insertions(+), 300 deletions(-)
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/CachedDocumentFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFile.java
  create mode 100644 src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
@@ -628,10 +628,10 @@ index 0000000000..fd371bebc2
 +}
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
 new file mode 100644
-index 0000000000..f4f097efcf
+index 0000000000..5191bfb0d4
 --- /dev/null
 +++ b/src/android/jar/src/org/qtproject/qt5/android/SAFFileManager.java
-@@ -0,0 +1,795 @@
+@@ -0,0 +1,800 @@
 +package org.qtproject.qt5.android;
 +
 +import android.annotation.SuppressLint;
@@ -659,6 +659,7 @@ index 0000000000..f4f097efcf
 +
 +@SuppressWarnings("unused")
 +class FileError {
++    public static final String TAG = "SAFFileManager.FileError";
 +    public static final int NO_ERROR = 0;
 +    public static final int READ_ERROR = 1;
 +    public static final int WRITE_ERROR = 2;
@@ -684,6 +685,9 @@ index 0000000000..f4f097efcf
 +
 +    public void setErrorString(String errorString) {
 +        this.errorString = errorString;
++        if (error != FileError.NO_ERROR) {
++            Log.w(TAG, errorString);
++        }
 +    }
 +
 +    public int getError() {
@@ -892,7 +896,7 @@ index 0000000000..f4f097efcf
 +
 +    // Native usage
 +    @SuppressWarnings("UnusedDeclaration")
-+    public int openFileDescriptor(String contentUrl, String openMode) {
++    synchronized public int openFileDescriptor(String contentUrl, String openMode) {
 +        int retry = 0;
 +        while (retry < 2) {
 +            CachedDocumentFile file =
@@ -1067,7 +1071,7 @@ index 0000000000..f4f097efcf
 +
 +    // Native usage
 +    @SuppressWarnings("UnusedDeclaration")
-+    public boolean delete(String contentUrl) {
++    synchronized public boolean delete(String contentUrl) {
 +        final CachedDocumentFile file =
 +                getDocumentFileWithValidPermissions(contentUrl, "rw", true);
 +        if (file == null) {
@@ -1155,7 +1159,7 @@ index 0000000000..f4f097efcf
 +        return isTreeUri(Uri.parse(contentUrl));
 +    }
 +
-+    public boolean rename(String contentUrl, String displayName) {
++    synchronized public boolean rename(String contentUrl, String displayName) {
 +        final CachedDocumentFile file =
 +                getDocumentFileWithValidPermissions(contentUrl, "rw", true);
 +        if (file == null) {
@@ -1176,7 +1180,7 @@ index 0000000000..f4f097efcf
 +
 +    // Native usage
 +    @SuppressWarnings("UnusedDeclaration")
-+    public boolean mkdir(String contentUrl, boolean createParentDirectories) {
++    synchronized public boolean mkdir(String contentUrl, boolean createParentDirectories) {
 +        if (isDir(contentUrl)) {
 +            return true;
 +        }
@@ -1214,10 +1218,11 @@ index 0000000000..f4f097efcf
 +            final CachedDocumentFile existingFile = findFile(parent, segment);
 +
 +            if (existingFile != null) {
-+                Log.d(TAG, "File exists: " + existingFile.getUri().toString());
++                Log.d(TAG, "Exists: " + existingFile.getUri().toString());
 +                if (existingFile.isFile()) {
 +                    mError.setError(FileError.UNSPECIFIED_ERROR);
-+                    mError.setErrorString("Couldn't create a directory at the specified path");
++                    mError.setErrorString(
++                            "Couldn't create a directory at the specified path, because a file with same name exists");
 +                    return null;
 +                }
 +
@@ -1237,7 +1242,7 @@ index 0000000000..f4f097efcf
 +        return parent;
 +    }
 +
-+    private CachedDocumentFile createFile(SAFFile file, boolean force) {
++    synchronized private CachedDocumentFile createFile(SAFFile file, boolean force) {
 +
 +        List<String> pathSegments = file.getSegments();
 +
@@ -1259,7 +1264,7 @@ index 0000000000..f4f097efcf
 +            return foundFile;
 +        }
 +
-+        final CachedDocumentFile newFile = createFile(parent, filename, mimeType);
++        final CachedDocumentFile newFile = createDocumentImpl(parent, filename, mimeType);
 +        if (newFile == null) {
 +            return null;
 +        }
@@ -1396,7 +1401,7 @@ index 0000000000..f4f097efcf
 +        return null;
 +    }
 +
-+    private CachedDocumentFile createFile(Uri parent, String displayName, String mimeType) {
++    private CachedDocumentFile createDocumentImpl(Uri parent, String displayName, String mimeType) {
 +        try {
 +            final Uri fileUri = DocumentsContract.createDocument(mCtx.getContentResolver(),
 +                    parent, mimeType, displayName);
@@ -1424,7 +1429,7 @@ index 0000000000..f4f097efcf
 +    }
 +
 +    private CachedDocumentFile createDirectory(Uri parent, String displayName) {
-+        return createFile(parent, displayName, DocumentsContract.Document.MIME_TYPE_DIR);
++        return createDocumentImpl(parent, displayName, DocumentsContract.Document.MIME_TYPE_DIR);
 +    }
 +}
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/SAFUtils.java b/src/android/jar/src/org/qtproject/qt5/android/SAFUtils.java

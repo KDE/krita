@@ -57,6 +57,7 @@
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
+#include <KisAndroidCrashHandler.h>
 #endif
 
 #if defined Q_OS_WIN
@@ -282,6 +283,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     else {
         dbgKrita << "Permission granted";
     }
+
+    KisAndroidCrashHandler::handler_init();
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);

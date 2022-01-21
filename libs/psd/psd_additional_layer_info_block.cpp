@@ -153,11 +153,11 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "luni") {
             // get the unicode layer name
             unicodeLayerName = readUnicodeString<byteOrder>(io);
-            dbgFile << "unicodeLayerName" << unicodeLayerName;
+            dbgFile << "\t" << "unicodeLayerName" << unicodeLayerName;
         } else if (key == "lyid") {
             quint32 id;
             psdread<byteOrder>(io, id);
-            dbgFile << "layer ID:" << id;
+            dbgFile << "\t" << "layer ID:" << id;
         } else if (key == "lfx2" || key == "lfxs") {
             // lfxs is a special variant of layer styles for group layers
             layerStyleXml = KisAslReader::readLfx2PsdSection(io, byteOrder);
@@ -170,6 +170,17 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "knko") {
         } else if (key == "spf") {
         } else if (key == "lclr") {
+            // layer label color.
+            quint8 col1 = 0;
+            quint8 col2 = 0;
+            quint8 col3 = 0;
+            quint8 col4 = 0;
+            psdread<byteOrder>(io, col1);
+            psdread<byteOrder>(io, col2);
+            psdread<byteOrder>(io, col3);
+            psdread<byteOrder>(io, col4);
+            dbgFile << "\t" << "layer color:" << col1 << col2 << col3 << col4;
+            labelColor = col2;
         } else if (key == "fxrp") {
         } else if (key == "grdm") {
         } else if (key == "lsct") {
@@ -341,6 +352,18 @@ void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice &io, const QDomDocu
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeLclrBlockEx(QIODevice &io, const quint8 &labelColor)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeLclrBlockExImpl<psd_byte_order::psdLittleEndian>(io, labelColor);
+        break;
+    default:
+        writeLclrBlockExImpl(io, labelColor);
+        break;
+    }
+}
+
 template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
@@ -359,4 +382,15 @@ void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDom
         // TODO: make this error recoverable!
         throw e;
     }
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeLclrBlockExImpl(QIODevice &io, const quint8 &lclr)
+{
+    /** do nothing for now...
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    KisAslWriterUtils::writeFixedString<byteOrder>("lclr", io);
+    // 4x2, of which the second is lclr...
+    */
+
 }

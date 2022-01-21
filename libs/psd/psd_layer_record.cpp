@@ -416,6 +416,8 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
         if (infoBlocks.keys.contains("luni") && !infoBlocks.unicodeLayerName.isEmpty()) {
             layerName = infoBlocks.unicodeLayerName;
         }
+
+        labelColor = kritaColorLabelIndex(infoBlocks.labelColor);
     }
 
     return valid();
@@ -570,6 +572,8 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
             // write 'luni' data block
             additionalInfoBlock.writeLuniBlockEx(io, layerName);
 
+            additionalInfoBlock.writeLclrBlockEx(io, psdLabelColor(labelColor));
+
             // write 'lsct' data block
             if (sectionType != psd_other) {
                 additionalInfoBlock.writeLsctBlockEx(io, sectionType, isPassThrough, blendModeKey);
@@ -597,6 +601,77 @@ KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
         result->convertTo(KoColorSpaceRegistry::instance()->alpha32f());
     }
     return result;
+}
+
+quint8 PSDLayerRecord::psdLabelColor(int colorLabelIndex)
+{
+    quint8 color = 0;
+    switch (colorLabelIndex) {
+    case 0: // none
+        color = 0;
+        break;
+    case 1: // Blue
+        color = 5;
+        break;
+    case 2: // Green
+        color = 4;
+        break;
+    case 3: // Yellow
+        color = 3;
+        break;
+    case 4: // Orange
+        color = 2;
+        break;
+    case 5: // Brown, don't save.
+        color = 0;
+        break;
+    case 6: // Red
+        color = 1;
+        break;
+    case 7: // Purple
+        color = 6;
+        break;
+    case 8: // Grey
+        color = 7;
+        break;
+    default:
+        color = 0;
+    }
+    return color;
+}
+
+int PSDLayerRecord::kritaColorLabelIndex(quint8 labelColor)
+{
+    int color = 0;
+    switch (labelColor) {
+    case 0:
+        color = 0;
+        break;
+    case 1: // red
+        color = 6;
+        break;
+    case 2: // Orange
+        color = 4;
+        break;
+    case 3: // Yellow
+        color = 3;
+        break;
+    case 4: // Green
+        color = 2;
+        break;
+    case 5: // Blue
+        color = 1;
+        break;
+    case 6: // Purple
+        color = 7;
+        break;
+    case 7: // Grey
+        color = 8;
+        break;
+    default:
+        color = 0;
+    }
+    return color;
 }
 
 template<psd_byte_order byteOrder>

@@ -242,6 +242,7 @@ public:
     void writeLsctBlockEx(QIODevice &io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey);
     void writeLfx2BlockEx(QIODevice &io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat);
     void writePattBlockEx(QIODevice &io, const QDomDocument &patternsXmlDoc);
+    void writeLclrBlockEx(QIODevice &io, const quint8 &labelColor);
 
     bool valid();
 
@@ -252,6 +253,7 @@ public:
     QString unicodeLayerName;
     QDomDocument layerStyleXml;
     QVector<QDomDocument> embeddedPatterns;
+    quint8 labelColor{0}; // layer color.
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;
@@ -271,6 +273,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeLclrBlockExImpl(QIODevice &io, const quint8 &lclr);
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;

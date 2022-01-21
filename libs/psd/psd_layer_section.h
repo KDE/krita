@@ -62,7 +62,6 @@ private:
     void writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType);
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeTiffImpl(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType);
-
 private:
     const PSDHeader m_header;
 };

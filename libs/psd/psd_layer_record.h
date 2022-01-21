@@ -112,6 +112,8 @@ public:
     bool visible;
     bool irrelevant;
 
+    int labelColor;
+
     struct LayerMaskData {
         qint32 top;
         qint32 left;
@@ -167,6 +169,9 @@ private:
     void writePixelDataImpl(QIODevice &io, psd_compression_type compressionType);
 
     KisPaintDeviceSP convertMaskDeviceIfNeeded(KisPaintDeviceSP dev);
+
+    quint8 psdLabelColor(int colorLabelIndex);
+    int kritaColorLabelIndex(quint8 labelColor);
 
 private:
     KisPaintDeviceSP m_layerContentDevice;

@@ -262,6 +262,8 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
             KisPaintLayerSP layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
             layer->setCompositeOpId(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
 
+            layer->setColorLabelIndex(layerRecord->labelColor);
+
             const QDomDocument &styleXml = layerRecord->infoBlocks.layerStyleXml;
 
             if (!styleXml.isNull()) {

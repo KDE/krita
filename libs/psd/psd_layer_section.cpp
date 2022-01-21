@@ -550,6 +550,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 const KoColorSpace *colorSpace = node->colorSpace();
                 const quint8 nodeOpacity = node->opacity();
                 const quint8 nodeClipping = 0;
+                const int nodeLabelColor = node->colorLabelIndex();
                 const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer *>(node.data());
                 const bool alphaLocked = (paintLayer && paintLayer->alphaLocked());
                 const QString nodeCompositeOp = node->compositeOpId();
@@ -626,6 +627,8 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 layerRecord->opacity = nodeOpacity;
                 layerRecord->clipping = nodeClipping;
 
+                layerRecord->labelColor = nodeLabelColor;
+
                 layerRecord->transparencyProtected = alphaLocked;
                 layerRecord->visible = nodeVisible;
                 layerRecord->irrelevant = nodeIrrelevant;
@@ -694,6 +697,7 @@ void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer, psd_
                 const KoColorSpace *colorSpace = node->colorSpace();
                 const quint8 nodeOpacity = node->opacity();
                 const quint8 nodeClipping = 0;
+                const int nodeLabelColor = node->colorLabelIndex();
                 const KisPaintLayer *paintLayer = qobject_cast<KisPaintLayer *>(node.data());
                 const bool alphaLocked = (paintLayer && paintLayer->alphaLocked());
                 const QString nodeCompositeOp = node->compositeOpId();
@@ -774,6 +778,7 @@ void PSDLayerMaskSection::writeTiffImpl(QIODevice &io, KisNodeSP rootLayer, psd_
                 layerRecord->transparencyProtected = alphaLocked;
                 layerRecord->visible = nodeVisible;
                 layerRecord->irrelevant = nodeIrrelevant;
+                layerRecord->labelColor = nodeLabelColor;
 
                 layerRecord->layerName = nodeName.isEmpty() ? i18n("Unnamed Layer") : nodeName;
 

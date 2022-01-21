@@ -7,7 +7,7 @@
 import re
 import sys
 import os
-from distutils.sysconfig import get_python_lib
+import sysconfig
 
 try:
     # On Windows and Python 3.8+ python doesn't load module DLL's
@@ -47,10 +47,10 @@ except ValueError:
 # If we use a system install with a custom PYTHONPATH, PyQt5
 # may not be within the system tree.
 pyqt5_dir = os.path.dirname(PyQt5.__file__)
-lib_site_packages = get_python_lib(plat_specific=1)
+lib_site_packages = sysconfig.get_path('platlib')
 # Check this first.
 if pyqt5_dir.startswith(lib_site_packages):
-    pyqt_sip_dir = os.path.join(get_python_lib(plat_specific=1), "PyQt5", "bindings")
+    pyqt_sip_dir = os.path.join(sysconfig.get_path('platlib'), "PyQt5", "bindings")
 else:
     # If so, change it.
     pyqt_sip_dir = os.path.join(pyqt5_dir, "bindings")

@@ -33,6 +33,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QPrintDialog>
+#include <QPushButton>
 #include <QRect>
 #include <QScrollBar>
 #include <QStatusBar>
@@ -124,6 +125,10 @@
 #include "imagesize/imagesize.h"
 
 #include "kis_filter_configuration.h"
+
+#ifdef Q_OS_WIN
+#include "KisWindowsPackageUtils.h"
+#endif
 
 class BlockingUserInputEventFilter : public QObject
 {
@@ -1289,7 +1294,65 @@ void KisViewManager::toggleTabletLogger()
 
 void KisViewManager::openResourcesDirectory()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(KisResourceLocator::instance()->resourceLocationBase()));
+    QString resourcePath = KisResourceLocator::instance()->resourceLocationBase();
+#ifdef Q_OS_WIN
+    if (KisWindowsPackageUtils::isRunningInPackage()) {
+        const QDir resourceDir(resourcePath);
+        const QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        // FIXME: Actually check if the resource dir is inside roaming appdata?
+        if (resourceDir.absolutePath().compare(appData, Qt::CaseInsensitive) == 0) {
+            const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
+            if (!privateAppData.isEmpty()) {
+                // FIXME: Actually build the path based on the configured path relative to user RoamingAppData?
+                const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + qApp->applicationName());
+                if (privateResourceDir.exists()) {
+                    const auto pathToDisplay = [](const QString &path) {
+                        // Due to how Unicode word wrapping works, the string does not
+                        // wrap after backslashes in Qt 5.12. We don't want the path to
+                        // become too long, so we add a U+200B ZERO WIDTH SPACE to allow
+                        // wrapping. The downside is that we cannot let the user select
+                        // and copy the path because it now contains invisible unicode
+                        // code points.
+                        // See: https://bugreports.qt.io/browse/QTBUG-80892
+                        return QDir::toNativeSeparators(path).replace(QChar('\\'), QStringLiteral(u"\\\u200B"));
+                    };
+                    QMessageBox mbox(mainWindowAsQWidget());
+                    mbox.setIcon(QMessageBox::Information);
+                    mbox.setWindowTitle(i18nc("@title:window resource folder", "Open Resource Folder"));
+                    // Similar text is also used in kis_dlg_preferences.cc
+                    mbox.setText(i18nc("@info resource folder",
+                        "<p>You are using the Microsoft Store package version of Krita. "
+                        "Even though Krita can be configured to place resources under the "
+                        "user AppData location, Windows may actually store the files "
+                        "inside a private app location.</p>\n"
+                        "<p>You should check both locations to determine where "
+                        "the files are located.</p>\n"
+                        "<p><b>User AppData</b>:<br/>\n"
+                        "%1</p>\n"
+                        "<p><b>Private app location</b>:<br/>\n"
+                        "%2</p>",
+                        pathToDisplay(resourceDir.absolutePath()),
+                        pathToDisplay(privateResourceDir.absolutePath())
+                    ));
+                    mbox.setTextInteractionFlags(Qt::NoTextInteraction);
+                    const auto *btnOpenUserAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &user AppData"), QMessageBox::AcceptRole);
+                    const auto *btnOpenPrivateAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &private app location"), QMessageBox::AcceptRole);
+                    mbox.addButton(QMessageBox::Close);
+                    mbox.setDefaultButton(QMessageBox::Close);
+                    mbox.exec();
+                    if (mbox.clickedButton() == btnOpenPrivateAppData) {
+                        resourcePath = privateResourceDir.absolutePath();
+                    } else if (mbox.clickedButton() == btnOpenUserAppData) {
+                        // no-op: resourcePath = resourceDir.absolutePath();
+                    } else {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+#endif
+    QDesktopServices::openUrl(QUrl::fromLocalFile(resourcePath));
 }
 
 void KisViewManager::updateIcons()

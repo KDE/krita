@@ -4,9 +4,24 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+// Get Windows Vista API
+#if defined(WINVER) && WINVER < 0x0600
+#  undef WINVER
+#endif
+#if defined(_WIN32_WINNT) && _WIN32_WINNT < 0x0600
+#  undef _WIN32_WINNT
+#endif
+#ifndef WINVER
+#  define WINVER 0x0600
+#endif
+#ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0600
+#endif
+
 #include "KisWindowsPackageUtils.h"
 
 #include <windows.h>
+#include <Shlobj.h>
 
 #include <QDebug>
 #include <QString>
@@ -33,6 +48,30 @@ typedef LONG (WINAPI *pGetCurrentPackageFullName_t)(
     UINT32 *packageFullNameLength,
     PWSTR packageFullName
 );
+
+// Flag for `KNOWN_FOLDER_FLAG`, introduced in Win 10 ver 1709, which when
+// used with `FOLDERID_LocalAppData` or `FOLDERID_RoamingAppData` when calling
+// `SHGetKnownFolderPath`, will return the private app location of the
+// packaged app if the current process is a packaged app.
+//
+// It should return the same values as the `LocalFolder` or `RoamingFolder`
+// property of the `Windows.Storage.ApplicationData.Current` UWP API.
+//
+// ---
+// KF_FLAG_FORCE_APP_DATA_REDIRECTION
+// shlobj_core.h / Windows 10 v1709
+// ---
+constexpr int shlobj_KF_FLAG_FORCE_APP_DATA_REDIRECTION = 0x00080000;
+
+// Flag for `KNOWN_FOLDER_FLAG`, introduced in Win 10 ver 1703, which when
+// used within a Desktop Bridge process, will cause the API to return the
+// redirected target of the locations.
+//
+// ---
+// KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET
+// shlobj_core.h / Windows 10 v1703
+// ---
+constexpr int shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET = 0x00040000;
 
 struct AppmodelFunctions {
     pGetCurrentPackageFamilyName_t pGetCurrentPackageFamilyName;
@@ -143,6 +182,23 @@ bool tryGetCurrentPackageFullName(QString *outName)
         *outName = QString::fromWCharArray(name, nameLength);
     }
     return true;
+}
+
+QString getPackageRoamingAppDataLocation()
+{
+    PWSTR path = nullptr;
+    HRESULT result = SHGetKnownFolderPath(FOLDERID_RoamingAppData, shlobj_KF_FLAG_RETURN_FILTER_REDIRECTION_TARGET, NULL, &path);
+    if (result != S_OK) {
+        qWarning() << "SHGetKnownFolderPath returned error HRESULT:" << result;
+        return QString();
+    }
+    if (!path) {
+        qWarning() << "SHGetKnownFolderPath did not return a path";
+        return QString();
+    }
+    QString appData = QString::fromWCharArray(path);
+    CoTaskMemFree(path);
+    return appData;
 }
 
 } /* namespace KisWindowsPackageUtils */

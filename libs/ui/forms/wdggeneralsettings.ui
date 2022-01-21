@@ -1070,6 +1070,12 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
         <layout class="QFormLayout" name="formLayout_7">
          <item row="0" column="0">
           <widget class="QLabel" name="label_14">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Cache Location:</string>
            </property>
@@ -1080,6 +1086,12 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_15">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Resource Folder:</string>
            </property>
@@ -1087,6 +1099,28 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
          </item>
          <item row="1" column="1">
           <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="lblWindowsAppDataNote">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string notr="true">TextLabel</string>
+           </property>
+           <property name="textFormat">
+            <enum>Qt::RichText</enum>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+           <property name="textInteractionFlags">
+            <set>Qt::LinksAccessibleByKeyboard|Qt::LinksAccessibleByMouse</set>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -1098,7 +1132,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>418</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>

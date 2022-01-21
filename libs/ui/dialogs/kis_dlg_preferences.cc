@@ -15,6 +15,7 @@
 #include <QBitmap>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QClipboard>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -94,6 +95,7 @@
 #       include <kis_tablet_support_win8.h>
 #   endif
 #include "config-high-dpi-scale-factor-rounding-policy.h"
+#include "KisWindowsPackageUtils.h"
 #endif
 
 /**
@@ -346,6 +348,54 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_urlResourceFolder->setMode(KoFileDialog::OpenDirectory);
     m_urlResourceFolder->setConfigurationName("resource_directory");
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+
+    lblWindowsAppDataNote->setVisible(false);
+#ifdef Q_OS_WIN
+    if (KisWindowsPackageUtils::isRunningInPackage()) {
+        const auto pathToDisplay = [](const QString &path) {
+            // Due to how Unicode word wrapping works, the string does not
+            // wrap after backslashes in Qt 5.12. We don't want the path to
+            // become too long, so we add a U+200B ZERO WIDTH SPACE to allow
+            // wrapping. The downside is that we cannot let the user select
+            // and copy the path because it now contains invisible unicode
+            // code points.
+            // See: https://bugreports.qt.io/browse/QTBUG-80892
+            return QDir::toNativeSeparators(path).replace(QChar('\\'), QStringLiteral(u"\\\u200B"));
+        };
+        const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
+        if (!privateAppData.isEmpty()) {
+            const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + qApp->applicationName());
+            const QDir appDataDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+            // Similar text is also used in KisViewManager.cpp
+            lblWindowsAppDataNote->setText(i18nc("@info resource folder",
+                "<p>You are using the Microsoft Store package version of Krita. "
+                "Even though Krita can be configured to place resources under the "
+                "user AppData location, Windows may actually store the files "
+                "inside a private app location.</p>\n"
+                "<p>You should check both locations to determine where "
+                "the files are located.</p>\n"
+                "<p><b>User AppData</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
+                "%1</p>\n"
+                "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
+                "%2</p>",
+                pathToDisplay(appDataDir.absolutePath()),
+                pathToDisplay(privateResourceDir.absolutePath())
+            ));
+            lblWindowsAppDataNote->setVisible(true);
+            connect(lblWindowsAppDataNote, &QLabel::linkActivated,
+                [userPath = appDataDir.absolutePath(), privatePath = privateResourceDir.absolutePath()]
+                (const QString &link) {
+                    if (link == QStringLiteral("copyuser")) {
+                        qApp->clipboard()->setText(QDir::toNativeSeparators(userPath));
+                    } else if (link == QStringLiteral("copyprivate")) {
+                        qApp->clipboard()->setText(QDir::toNativeSeparators(privatePath));
+                    } else {
+                        qWarning() << "Unexpected link activated in lblWindowsAppDataNote:" << link;
+                    }
+                });
+        }
+    }
+#endif
 
 
     const int forcedFontDPI = cfg.readEntry("forcedDpiForQtFontBugWorkaround", -1);

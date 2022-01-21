@@ -19,29 +19,28 @@
 #include <QDesktopWidget>
 #include <QFile>
 
-#include <kis_debug.h>
-
-#include <kis_icon.h>
-#include <KoCompositeOpRegistry.h>
-#include <KoColorProfile.h>
-#include <KoID.h>
+#include <KisPart.h>
 #include <KoColor.h>
 #include <KoColorModelStandardIds.h>
-
-#include <kis_fill_painter.h>
-#include <kis_image.h>
-#include <kis_layer.h>
-#include <kis_group_layer.h>
-#include <kis_paint_layer.h>
-#include <kis_paint_device.h>
-#include <kis_painter.h>
-
-#include "kis_import_catcher.h"
-#include "kis_clipboard.h"
-#include "KisDocument.h"
-#include "widgets/kis_cmb_idlist.h"
+#include <KoColorProfile.h>
+#include <KoCompositeOpRegistry.h>
+#include <KoID.h>
 #include <KisSqueezedComboBox.h>
 
+#include <kis_debug.h>
+#include <kis_fill_painter.h>
+#include <kis_group_layer.h>
+#include <kis_icon.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_painter.h>
+
+#include "KisDocument.h"
+#include "kis_clipboard.h"
+#include "kis_import_catcher.h"
+#include "widgets/kis_cmb_idlist.h"
 
 KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
@@ -76,7 +75,7 @@ void KisImageFromClipboard::createImage()
         KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
 
         if (!clip) {
-            delete doc;
+            KisPart::instance()->removeDocument(doc);
             return;
         }
 

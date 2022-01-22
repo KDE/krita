@@ -201,6 +201,7 @@ set(kritaui_LIB_SRCS
     tool/kis_tool_ellipse_base.cpp
     tool/kis_tool_rectangle_base.cpp
     tool/kis_tool_polyline_base.cpp
+    tool/KisToolOutlineBase.cpp
     tool/kis_tool_utils.cpp
     tool/kis_resources_snapshot.cpp
     tool/kis_smoothing_options.cpp

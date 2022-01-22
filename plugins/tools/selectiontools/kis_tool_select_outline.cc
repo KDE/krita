@@ -12,13 +12,6 @@
 
 #include "kis_tool_select_outline.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QWidget>
-#include <QPainterPath>
-#include <QLayout>
-#include <QVBoxLayout>
-
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
@@ -42,124 +35,20 @@
 
 #include "kis_algebra_2d.h"
 
-
-#define FEEDBACK_LINE_WIDTH 2
-
-
-KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
-    : KisToolSelect(canvas,
-                    KisCursor::load("tool_outline_selection_cursor.png", 5, 5),
-                    i18n("Freehand Selection")),
-      m_continuedMode(false)
+__KisToolSelectOutlineLocal::__KisToolSelectOutlineLocal(KoCanvasBase * canvas)
+    : KisToolOutlineBase(canvas, KisToolOutlineBase::SELECT,
+                         KisCursor::load("tool_outline_selection_cursor.png", 5, 5))
 {
+    setObjectName("tool_select_outline");
 }
 
-KisToolSelectOutline::~KisToolSelectOutline()
-{
-}
-
-void KisToolSelectOutline::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Control) {
-        m_continuedMode = true;
-    }
-    KisToolSelect::keyPressEvent(event);
-}
-
-void KisToolSelectOutline::keyReleaseEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Control ||
-        !(event->modifiers() & Qt::ControlModifier)) {
-
-        m_continuedMode = false;
-        if (mode() != PAINT_MODE) {
-            // Prevent finishing the selection if there is only one point, since
-            // finishSelectionAction will deselect the current selection. That
-            // is fine if the user just clicks, but not if we are in continued
-            // mode
-            if (m_points.count() > 1) {
-                finishSelectionAction();
-            }
-            m_points.clear(); // ensure points are always cleared
-        }
-    }
-
-    KisToolSelect::keyReleaseEvent(event);
-}
-
-void KisToolSelectOutline::mouseMoveEvent(KoPointerEvent *event)
-{
-    if (selectionDragInProgress()) return;
-
-    if (m_continuedMode && mode() != PAINT_MODE) {
-        updateContinuedMode();
-    }
-
-    m_lastCursorPos = convertToPixelCoord(event);
-    KisToolSelect::mouseMoveEvent(event);
-}
-
-void KisToolSelectOutline::beginPrimaryAction(KoPointerEvent *event)
-{
-    KisToolSelectBase::beginPrimaryAction(event);
-    if (selectionDragInProgress()) {
-        return;
-    }
-
-    if (!selectionEditable()) {
-        event->ignore();
-        return;
-    }
-
-    setMode(KisTool::PAINT_MODE);
-
-    if (m_continuedMode && !m_points.isEmpty()) {
-        m_paintPath.lineTo(pixelToView(convertToPixelCoord(event)));
-    } else {
-        m_paintPath.moveTo(pixelToView(convertToPixelCoord(event)));
-    }
-
-    m_points.append(convertToPixelCoord(event));
-}
-
-void KisToolSelectOutline::continuePrimaryAction(KoPointerEvent *event)
-{    
-    if (selectionDragInProgress()) {
-        KisToolSelectBase::continuePrimaryAction(event);
-        return;
-    }
-
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
-
-    QPointF point = convertToPixelCoord(event);
-    m_paintPath.lineTo(pixelToView(point));
-    m_points.append(point);
-    updateFeedback();
-}
-
-void KisToolSelectOutline::endPrimaryAction(KoPointerEvent *event)
-{
-    if (selectionDragInProgress()) {
-        KisToolSelectBase::endPrimaryAction(event);
-        return;
-    }
-
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
-    setMode(KisTool::HOVER_MODE);
-
-    if (!m_continuedMode) {
-        finishSelectionAction();
-        m_points.clear(); // ensure points are always cleared
-    }
-}
-
-void KisToolSelectOutline::finishSelectionAction()
+void __KisToolSelectOutlineLocal::finishOutline(const QVector<QPointF>& points)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
     kisCanvas->updateCanvas();
 
-    const QRectF boundingRect = KisAlgebra2D::accumulateBounds(m_points);
+    const QRectF boundingRect = KisAlgebra2D::accumulateBounds(points);
     const QRectF boundingViewRect = pixelToView(boundingRect);
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Freehand Selection"));
@@ -168,7 +57,7 @@ void KisToolSelectOutline::finishSelectionAction()
         return;
     }
 
-    if (m_points.count() > 2) {
+    if (points.count() > 2) {
         QApplication::setOverrideCursor(KisCursor::waitCursor());
 
         const SelectionMode mode =
@@ -186,10 +75,10 @@ void KisToolSelectOutline::finishSelectionAction()
             painter.setFillStyle(KisPainter::FillStyleForegroundColor);
             painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
-            painter.paintPolygon(m_points);
+            painter.paintPolygon(points);
 
             QPainterPath cache;
-            cache.addPolygon(m_points);
+            cache.addPolygon(points);
             cache.closeSubpath();
             tmpSel->setOutlineCache(cache);
 
@@ -201,9 +90,9 @@ void KisToolSelectOutline::finishSelectionAction()
 
             QTransform resolutionMatrix;
             resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-            path->moveTo(resolutionMatrix.map(m_points[0]));
-            for (int i = 1; i < m_points.count(); i++)
-                path->lineTo(resolutionMatrix.map(m_points[i]));
+            path->moveTo(resolutionMatrix.map(points[0]));
+            for (int i = 1; i < points.count(); i++)
+                path->lineTo(resolutionMatrix.map(points[i]));
             path->close();
             path->normalize();
 
@@ -211,25 +100,11 @@ void KisToolSelectOutline::finishSelectionAction()
         }
         QApplication::restoreOverrideCursor();
     }
-
-    m_points.clear();
-    m_paintPath = QPainterPath();
 }
 
-void KisToolSelectOutline::paint(QPainter& gc, const KoViewConverter &converter)
-{
-    Q_UNUSED(converter);
-
-    if ((mode() == KisTool::PAINT_MODE || m_continuedMode) &&
-        !m_points.isEmpty()) {
-
-        QPainterPath outline = m_paintPath;
-        if (m_continuedMode && mode() != KisTool::PAINT_MODE) {
-            outline.lineTo(pixelToView(m_lastCursorPos));
-        }
-        paintToolOutline(&gc, outline);
-    }
-}
+KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
+    : KisToolSelectBase<__KisToolSelectOutlineLocal>(canvas, i18n("Freehand Selection"))
+{}
 
 bool KisToolSelectOutline::primaryActionSupportsHiResEvents() const
 {
@@ -248,46 +123,6 @@ bool KisToolSelectOutline::alternateActionSupportsHiResEvents(AlternateAction ac
     return !selectionDragInProgress();
 }
 
-void KisToolSelectOutline::updateFeedback()
-{
-    if (m_points.count() > 1) {
-        qint32 lastPointIndex = m_points.count() - 1;
-
-        QRectF updateRect = QRectF(m_points[lastPointIndex - 1], m_points[lastPointIndex]).normalized();
-        updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
-
-        updateCanvasPixelRect(updateRect);
-    }
-}
-
-void KisToolSelectOutline::updateContinuedMode()
-{
-    if (!m_points.isEmpty()) {
-        qint32 lastPointIndex = m_points.count() - 1;
-
-        QRectF updateRect = QRectF(m_points[lastPointIndex], m_lastCursorPos).normalized();
-        updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
-
-        updateCanvasPixelRect(updateRect);
-    }
-}
-
-void KisToolSelectOutline::deactivate()
-{
-    if (!m_points.isEmpty()) {
-        finishSelectionAction();
-        m_points.clear(); // ensure points are always cleared
-    } else {
-        KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        KIS_ASSERT_RECOVER_RETURN(kisCanvas);
-        kisCanvas->updateCanvas();
-    }
-
-    m_continuedMode = false;
-
-    KisTool::deactivate();
-}
-
 void KisToolSelectOutline::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {
@@ -295,7 +130,7 @@ void KisToolSelectOutline::resetCursorStyle()
     } else if (selectionAction() == SELECTION_SUBTRACT) {
         useCursor(KisCursor::load("tool_outline_selection_cursor_sub.png", 6, 6));
     } else {
-        KisToolSelect::resetCursorStyle();
+        KisToolSelectBase<__KisToolSelectOutlineLocal>::resetCursorStyle();
     }
 }
 

@@ -35,6 +35,10 @@ public:
     void enableFixedLength(bool enabled);
     qreal fixedLength() const;
     void setFixedLength(qreal length);
+    QString fixedLengthUnit() const;
+    void setFixedLengthUnit(QString unit);
+    
+    void ensureLength();
 
 protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
@@ -45,11 +49,13 @@ protected:
   private:
     QPointF project(const QPointF& pt) const;
     void drawSubdivisions(QPainter& gc, const KisCoordinatesConverter *converter);
+    void drawHandleAnnotations(QPainter& gc, const KisCoordinatesConverter *converter);
     
     int m_subdivisions {0};
     int m_minorSubdivisions {0};
     bool m_hasFixedLength {false};
     qreal m_fixedLength {0.0};
+    QString m_fixedLengthUnit {"px"};
 };
 
 class RulerAssistantFactory : public KisPaintingAssistantFactory

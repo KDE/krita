@@ -42,6 +42,7 @@ RulerAssistant::RulerAssistant(const RulerAssistant &rhs, QMap<KisPaintingAssist
     , m_minorSubdivisions(rhs.m_minorSubdivisions)
     , m_hasFixedLength(rhs.m_hasFixedLength)
     , m_fixedLength(rhs.m_fixedLength)
+    , m_fixedLengthUnit(rhs.m_fixedLengthUnit)
 {
 }
 
@@ -84,7 +85,7 @@ void RulerAssistant::drawSubdivisions(QPainter& gc, const KisCoordinatesConverte
     QPointF p1 = document2widget.map(*handles()[0]);
     QPointF p2 = document2widget.map(*handles()[1]);
   
-    const qreal scale = 32.0 / 2;
+    const qreal scale = 16.0 / 2;
     const qreal minorScale = scale / 2;
     const QRectF clipping = QRectF(gc.viewport()).adjusted(-scale, -scale, scale, scale);
     // If the lines would end up closer to each other than this threshold (in
@@ -135,9 +136,41 @@ void RulerAssistant::drawSubdivisions(QPainter& gc, const KisCoordinatesConverte
   
         gc.save();
         gc.resetTransform();
-        drawPath(gc, path);
+        drawPath(gc, path, isSnappingActive());
         gc.restore();
     }
+}
+
+void RulerAssistant::drawHandleAnnotations(QPainter& gc, const KisCoordinatesConverter* converter) {
+    gc.save();
+    gc.resetTransform();
+    
+    QTransform doc2widget = converter->documentToWidgetTransform();
+    QPointF center = doc2widget.map(*handles()[0]);
+    QPointF handle = doc2widget.map(*handles()[1]);
+  
+    QPainterPath path;
+  
+    // Center / Movement handle
+    for (int i = 0; i < 4; ++i) {
+        QTransform rot = QTransform().rotate(i * 90);
+      
+        path.moveTo(center + rot.map(QPointF(12, -3)));
+        path.lineTo(center + rot.map(QPointF(9, 0)));
+        path.lineTo(center + rot.map(QPointF(12, 3)));
+    }
+    
+    // Rotation handle
+    QRectF bounds = QRectF(handle, QSizeF(0, 0)).adjusted(-11, -11, 11, 11);
+    for (int i = 0; i < 2; ++i) {
+        int dir = i == 0 ? 1 : -1;
+        
+        path.moveTo(handle + QPointF(dir * 11, 0));
+        path.arcTo(bounds, i * 180, -90);
+    }
+    
+    drawPath(gc, path);
+    gc.restore();
 }
 
 void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
@@ -147,6 +180,11 @@ void RulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const
     // 0, the respective feature is turned off and won't be rendered.
     if (assistantVisible && isAssistantComplete() && subdivisions() > 0) {
         drawSubdivisions(gc, converter);
+    }
+    
+    // Indicate handle type on fixed-length handles
+    if (canvas && canvas->paintingAssistantsDecoration()->isEditingAssistants() && hasFixedLength()) {
+        drawHandleAnnotations(gc, converter);
     }
     
     // Draw the ruler itself via drawCache
@@ -187,8 +225,11 @@ int RulerAssistant::subdivisions() const {
 }
 
 void RulerAssistant::setSubdivisions(int subdivisions) {
-    if (subdivisions < 0) subdivisions = 0;
-    m_subdivisions = subdivisions;
+    if (subdivisions < 0) {
+        m_subdivisions = 0;
+    } else {
+        m_subdivisions = subdivisions;
+    }
 }
 
 int RulerAssistant::minorSubdivisions() const {
@@ -196,8 +237,11 @@ int RulerAssistant::minorSubdivisions() const {
 }
 
 void RulerAssistant::setMinorSubdivisions(int subdivisions) {
-    if (subdivisions < 0) subdivisions = 0;
-    m_minorSubdivisions = subdivisions;
+    if (subdivisions < 0) {
+        m_minorSubdivisions = 0;
+    } else {
+        m_minorSubdivisions = subdivisions;
+    }
 }
 
 bool RulerAssistant::hasFixedLength() const {
@@ -213,8 +257,37 @@ qreal RulerAssistant::fixedLength() const {
 }
 
 void RulerAssistant::setFixedLength(qreal length) {
-    if (length < 0.0) length = 0.0;
-    m_fixedLength = length;
+    if (length < 0.0) {
+        m_fixedLength = 0.0;
+    } else {
+        m_fixedLength = length;
+    }
+}
+
+QString RulerAssistant::fixedLengthUnit() const {
+    return m_fixedLengthUnit;
+}
+
+void RulerAssistant::setFixedLengthUnit(QString unit) {
+    if (unit.isEmpty()) {
+        m_fixedLengthUnit = "px";
+    } else {
+        m_fixedLengthUnit = unit;
+    }
+}
+
+void RulerAssistant::ensureLength() {
+    if (!hasFixedLength() || fixedLength() < 1e-3) {
+        return;
+    }
+    
+    QPointF center = *handles()[0];
+    QPointF handle = *handles()[1];
+    QPointF direction = handle - center;
+    qreal distance = sqrt(KisPaintingAssistant::norm2(direction));
+    QPointF delta = direction / distance * fixedLength();
+    *handles()[1] = center + delta;
+    uncache();
 }
 
 void RulerAssistant::saveCustomXml(QXmlStreamWriter *xml) {
@@ -227,9 +300,8 @@ void RulerAssistant::saveCustomXml(QXmlStreamWriter *xml) {
         xml->writeEndElement();
         xml->writeStartElement("fixedLength");
         xml->writeAttribute("value", KisDomUtils::toString(fixedLength()));
-        xml->writeEndElement();
-        xml->writeStartElement("fixedLengthEnabled");
-        xml->writeAttribute("value", KisDomUtils::toString((int)hasFixedLength()));
+        xml->writeAttribute("enabled", KisDomUtils::toString((int)hasFixedLength()));
+        xml->writeAttribute("unit", fixedLengthUnit());
         xml->writeEndElement();
     }
 }
@@ -244,9 +316,8 @@ bool RulerAssistant::loadCustomXml(QXmlStreamReader *xml) {
         }
         else if (xml->name() == "fixedLength") {
             setFixedLength(KisDomUtils::toDouble(xml->attributes().value("value").toString()));
-        }
-        else if (xml->name() == "fixedLengthEnabled") {
-            enableFixedLength(0 != KisDomUtils::toInt(xml->attributes().value("value").toString()));
+            enableFixedLength(0 != KisDomUtils::toInt(xml->attributes().value("enabled").toString()));
+            setFixedLengthUnit(xml->attributes().value("unit").toString());
         }
     }
     return true;

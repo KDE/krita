@@ -82,7 +82,7 @@ void InfiniteRulerAssistant::drawSubdivisions(QPainter& gc, const KisCoordinates
     QPointF p1 = document2widget.map(*handles()[0]);
     QPointF p2 = document2widget.map(*handles()[1]);
     
-    const qreal scale = 32.0 / 2;
+    const qreal scale = 16.0 / 2;
     const qreal minorScale = scale / 2;
     const QRectF clipping = QRectF(gc.viewport()).adjusted(-scale, -scale, scale, scale);
     // If the lines would end up closer to each other than this threshold (in

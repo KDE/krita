@@ -117,6 +117,7 @@ private Q_SLOTS:
     void slotLocalAssistantCheckboxChanged();
 
     void slotSelectedAssistantTypeChanged();
+    void slotChangeFixedLengthUnit(int index);
 
 protected:
     /// Draws the editor widget controls with move, activate, and delete
@@ -144,6 +145,7 @@ protected:
 
     QPointF m_cursorStart;
     QPointF m_currentAdjustment;
+    QPointF m_previousHandlePos;
     Ui::AssistantsToolOptions m_options;
     QWidget* m_optionsWidget {0};
     QPointF m_dragStart;
@@ -160,6 +162,7 @@ private:
     KisPaintingAssistantHandleSP m_selectedNode1, m_selectedNode2, m_higlightedNode;
     int m_assistantHelperYOffset {10}; // used by the assistant editor icons for placement on the canvas.
     QList<KisPaintingAssistantSP> m_origAssistantList;
+    KisSpinBoxUnitManager* m_unitManager {0};
 };
 
 

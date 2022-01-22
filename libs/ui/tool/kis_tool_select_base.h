@@ -293,7 +293,7 @@ public:
             setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
             this->resetCursorStyle();
         }
-        BaseClass::keyPressEvent(event);
+        BaseClass::keyReleaseEvent(event);
     }
 
     void mouseMoveEvent(KoPointerEvent *event) {

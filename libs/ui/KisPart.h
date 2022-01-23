@@ -295,7 +295,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotDocumentSaved();
+    void slotDocumentSaved(const QString &filePath);
 
 private:
 

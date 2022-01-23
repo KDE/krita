@@ -229,7 +229,7 @@ KisView::KisView(KisDocument *document, KisViewManager *viewManager, QWidget *pa
     setAcceptDrops(true);
 
     connect(d->document, SIGNAL(sigLoadingFinished()), this, SLOT(slotLoadingFinished()));
-    connect(d->document, SIGNAL(sigSavingFinished()), this, SLOT(slotSavingFinished()));
+    connect(d->document, SIGNAL(sigSavingFinished(QString)), this, SLOT(slotSavingFinished()));
 
     d->referenceImagesDecoration = new KisReferenceImagesDecoration(this, document, /* viewReady = */ false);
     d->canvas.addDecoration(d->referenceImagesDecoration);

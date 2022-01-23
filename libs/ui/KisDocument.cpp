@@ -957,7 +957,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
         }
 
         emit completed();
-        emit sigSavingFinished();
+        emit sigSavingFinished(job.filePath);
 
         emit statusBarMessage(i18n("Finished saving %1", fileName), successMessageTimeout);
     }

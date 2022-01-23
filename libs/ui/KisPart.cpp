@@ -202,7 +202,7 @@ void KisPart::addDocument(KisDocument *document, bool notify)
             emit documentOpened('/'+ objectName());
             emit sigDocumentAdded(document);
         }
-        connect(document, SIGNAL(sigSavingFinished()), SLOT(slotDocumentSaved()));
+        connect(document, SIGNAL(sigSavingFinished(QString)), SLOT(slotDocumentSaved(QString)));
     }
 }
 
@@ -426,18 +426,21 @@ bool KisPart::closeSession(bool keepWindows)
     return true;
 }
 
-void KisPart::slotDocumentSaved()
+void KisPart::slotDocumentSaved(const QString &filePath)
 {
-    KisDocument *doc = qobject_cast<KisDocument*>(sender());
-    emit sigDocumentSaved(doc->path());
+    // We used to use doc->path(), but it does not contain the correct output
+    // file path when doing an export, therefore we now pass it directly from
+    // the sigSavingFinished signal.
+    // KisDocument *doc = qobject_cast<KisDocument*>(sender());
+    emit sigDocumentSaved(filePath);
 
-    QUrl url = QUrl::fromLocalFile(doc->path());
+    QUrl url = QUrl::fromLocalFile(filePath);
     KisRecentFileIconCache::instance()->reloadFileIcon(url);
     if (!d->pendingAddRecentUrlMap.contains(url)) {
         return;
     }
     QUrl oldUrl = d->pendingAddRecentUrlMap.take(url);
-    addRecentURLToAllMainWindows(QUrl::fromLocalFile(doc->path()), oldUrl);
+    addRecentURLToAllMainWindows(url, oldUrl);
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)

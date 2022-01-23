@@ -650,6 +650,48 @@ QDomDocument readLfx2PsdSectionImpl(QIODevice &device)
 }
 
 template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+QDomDocument readFillLayerImpl(QIODevice &device);
+
+QDomDocument KisAslReader::readFillLayer(QIODevice &device, psd_byte_order byteOrder)
+{
+    switch (byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        return readFillLayerImpl<psd_byte_order::psdLittleEndian>(device);
+    default:
+        return readFillLayerImpl(device);
+    }
+}
+
+template<psd_byte_order byteOrder>
+QDomDocument readFillLayerImpl(QIODevice &device)
+{
+    QDomDocument doc;
+
+    if (device.isSequential()) {
+        warnKrita << "WARNING: *** KisAslReader::readLfx2PsdSection: the supplied"
+                  << "IO device is sequential. Chances are that"
+                  << "the layer style will *not* be loaded correctly!";
+    }
+    try {
+
+        {
+            quint32 descriptorVersion = GARBAGE_VALUE_MARK;
+            SAFE_READ_SIGNATURE_EX(byteOrder, device, descriptorVersion, 16);
+        }
+
+        QDomElement root = doc.createElement("asl");
+        doc.appendChild(root);
+
+        Private::readDescriptor<byteOrder>(device, "", &root, &doc);
+
+    } catch (KisAslReaderUtils::ASLParseException &e) {
+        warnKrita << "WARNING: PSD: soco section:" << e.what();
+    }
+
+    return doc;
+}
+
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
 QDomDocument readPsdSectionPatternImpl(QIODevice &device, qint64 bytesLeft);
 
 QDomDocument KisAslReader::readPsdSectionPattern(QIODevice &device, qint64 bytesLeft, psd_byte_order byteOrder)

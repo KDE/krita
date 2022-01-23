@@ -661,12 +661,6 @@ private:
     bool m_invert;
 };
 
-struct psd_pattern_info {
-    qint32 name_length;
-    quint16 *name;
-    quint8 identifier[256];
-};
-
 // bevl: https://www.adobe.com/devnet-apps/photoshop/fileformatashtml/PhotoshopFileFormats.htm#50577409_31889
 struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base {
     psd_layer_effects_bevel_emboss()

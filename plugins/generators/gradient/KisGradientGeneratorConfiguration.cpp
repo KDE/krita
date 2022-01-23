@@ -79,7 +79,10 @@ KisGradientGeneratorConfiguration::SpatialUnits KisGradientGeneratorConfiguratio
 
 KisGradientGeneratorConfiguration::CoordinateSystem KisGradientGeneratorConfiguration::endPositionCoordinateSystem() const
 {
-    return stringToCoordinateSystem(getString("end_positiom_coordinate_system"), defaultEndPositionCoordinateSystem());
+    if (hasProperty("end_positiom_coordinate_system")) {
+        return stringToCoordinateSystem(getString("end_positiom_coordinate_system"), defaultEndPositionCoordinateSystem());
+    }
+    return stringToCoordinateSystem(getString("end_position_coordinate_system"), defaultEndPositionCoordinateSystem());
 }
 
 qreal KisGradientGeneratorConfiguration::endPositionX() const
@@ -222,7 +225,7 @@ void KisGradientGeneratorConfiguration::setStartPositionYUnits(SpatialUnits newS
 
 void KisGradientGeneratorConfiguration::setEndPositionCoordinateSystem(CoordinateSystem newEndPositionCoordinateSystem)
 {
-    setProperty("end_positiom_coordinate_system", coordinateSystemToString(newEndPositionCoordinateSystem));
+    setProperty("end_position_coordinate_system", coordinateSystemToString(newEndPositionCoordinateSystem));
 }
 
 void KisGradientGeneratorConfiguration::setEndPositionX(qreal newEndPositionX)

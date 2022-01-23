@@ -21,6 +21,10 @@
 
 #include <kis_node.h>
 #include <kis_paint_device.h>
+#include <kis_generator_registry.h>
+#include <KisGlobalResourcesInterface.h>
+#include <KoStopGradient.h>
+#include <KoSegmentGradient.h>
 #include <psd.h>
 
 #include "psd_header.h"
@@ -148,25 +152,180 @@ struct KRITAPSD_EXPORT psd_layer_photo_filter {
 #include <kis_psd_layer_style.h>
 
 struct KRITAPSD_EXPORT psd_layer_solid_color {
-    quint32 id;
     QColor fill_color;
+
+    // Used by ASL callback;
+    void setColor(const QColor &color) {
+        fill_color = color;
+    }
+    QDomDocument getFillLayerConfig() {
+        KisFilterConfigurationSP cfg;
+        cfg = KisGeneratorRegistry::instance()->value("color")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+        QVariant v;
+        KoColor c;
+        c.fromQColor(fill_color);
+        v.setValue(c);
+        cfg->setProperty("color", v);
+        QDomDocument doc;
+        doc.setContent(cfg->toXML());
+        return doc;
+    }
 };
 
 struct KRITAPSD_EXPORT psd_layer_gradient_fill {
-    quint32 id;
     double angle;
-    psd_gradient_style style;
-    qint32 scale;
+    QString style;
+    QString repeat;
+    double scale;
     bool reverse; // Is gradient reverse
     bool dithered; // Is gradient dithered
     bool align_with_layer;
-    psd_gradient_color gradient_color;
+    QPointF offset;
+    QDomDocument gradient;
+
+    // Used by ASL callback;
+    void setGradient(const KoAbstractGradientSP &newGradient) {
+        QDomDocument document;
+        QDomElement gradientElement = document.createElement("gradient");
+        gradientElement.setAttribute("name", newGradient->name());
+
+        if (dynamic_cast<KoStopGradient*>(newGradient.data())) {
+            KoStopGradient *gradient = dynamic_cast<KoStopGradient*>(newGradient.data());
+            gradient->toXML(document, gradientElement);
+        } else if (dynamic_cast<KoSegmentGradient*>(newGradient.data())) {
+            KoSegmentGradient *gradient = dynamic_cast<KoSegmentGradient*>(newGradient.data());
+            gradient->toXML(document, gradientElement);
+        }
+
+        document.appendChild(gradientElement);
+        gradient = document;
+    }
+
+    void setDither(bool Dthr) {
+        dithered = Dthr;
+    }
+
+    void setReverse(bool Rvrs) {
+        reverse = Rvrs;
+    }
+
+    void setAngle(float Angl) {
+        angle = Angl;
+    }
+
+    void setType(const QString type) {
+        repeat = "none";
+        if (type == "Lnr "){
+            style = "linear";
+        } else if (type == "Rdl "){
+            style = "radial";
+        } else if (type == "Angl"){
+            style = "conical";
+        } else if (type == "Rflc"){
+            style = "bilinear";
+            repeat ="alternate";
+        } else {
+            style = "square"; // diamond???
+        }
+    }
+
+    void setAlignWithLayer(bool align) {
+        align_with_layer = align;
+    }
+
+    void setScale(float Scl) {
+        scale = Scl;
+    }
+
+    void setOffset(QPointF Ofst) {
+        offset = Ofst;
+    }
+
+    QDomDocument getFillLayerConfig() {
+        KisFilterConfigurationSP cfg;
+        cfg = KisGeneratorRegistry::instance()->value("gradient")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+        cfg->setProperty("gradient", gradient.toString());
+        cfg->setProperty("dither", dithered);
+        cfg->setProperty("reverse", reverse);
+
+        cfg->setProperty("shape", style);
+        cfg->setProperty("repeat", repeat);
+
+        cfg->setProperty("end_position_coordinate_system", "polar");
+
+        cfg->setProperty("end_position_distance_units", "percent_of_width");
+        cfg->setProperty("start_position_x_units", "percent_of_width");
+        cfg->setProperty("start_position_y_units", "percent_of_height");
+
+        double fixedAngle = angle;
+
+        if (style == "square") {
+            fixedAngle = fmod(360.0 - (45.0 + angle), 360.0);
+        }
+
+        if (style == "linear") {
+            // need to double check how angle is handled in these gradient fills and how offset works for linear.
+            cfg->setProperty("end_position_distance", scale);
+            cfg->setProperty("start_position_x", offset.x());
+            cfg->setProperty("start_position_y", offset.y());
+            cfg->setProperty("end_position_angle", fixedAngle);
+
+        } else {
+            cfg->setProperty("end_position_distance", scale*0.5);
+            cfg->setProperty("start_position_x", (50.0)+offset.x());
+            cfg->setProperty("start_position_y", (50.0)+offset.y());
+            cfg->setProperty("end_position_angle", fixedAngle);
+        }
+
+        QDomDocument doc;
+        doc.setContent(cfg->toXML());
+        return doc;
+    }
 };
 
 struct KRITAPSD_EXPORT psd_layer_pattern_fill {
-    quint32 id;
-    psd_pattern_info pattern_info;
-    qint32 scale;
+    double angle;
+    double scale;
+    QPointF offset;
+    QString patternName;
+    QString patternID;
+    bool align_with_layer;
+    
+    void setAngle(float Angl) {
+        angle = Angl;
+    }
+    void setScale(float Scl) {
+        scale = Scl;
+    }
+    void setOffset(QPointF phase) {
+        offset = phase;
+    }
+
+    void setPatternRef(const QString Idnt, const QString name) {
+        patternName = name;
+        patternID = Idnt;
+    }
+
+    void setAlignWithLayer(bool align) {
+        align_with_layer = align;
+    }
+    
+    QDomDocument getFillLayerConfig() {
+        KisFilterConfigurationSP cfg;
+        cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+
+        cfg->setProperty("pattern", patternName);
+        cfg->setProperty("pattern/fileName", QString(patternID + ".pat"));
+
+        cfg->setProperty("transform_scale_x", scale / 100);
+        cfg->setProperty("transform_scale_y", scale / 100);
+        cfg->setProperty("transform_rotation_z", angle);
+        cfg->setProperty("transform_offset_x", offset.x());
+        cfg->setProperty("transform_offset_y", offset.y());
+        QDomDocument doc;
+        doc.setContent(cfg->toXML());
+        return doc;
+    }
 };
 
 struct KRITAPSD_EXPORT psd_layer_type_face {
@@ -254,6 +413,9 @@ public:
     QDomDocument layerStyleXml;
     QVector<QDomDocument> embeddedPatterns;
     quint8 labelColor{0}; // layer color.
+
+    QDomDocument fillConfig;
+    psd_fill_type fillType {psd_fill_solid_color};
 
     psd_section_type sectionDividerType;
     QString sectionDividerBlendMode;

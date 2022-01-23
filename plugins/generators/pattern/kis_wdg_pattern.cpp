@@ -101,6 +101,7 @@ KisPropertiesConfigurationSP KisWdgPattern::configuration() const
     if (pattern) {
         config->setProperty("pattern", pattern->name());
         config->setProperty("md5sum", pattern->md5Sum());
+        config->setProperty("fileName", widget()->patternChooser->currentResource()->filename());
     }
 
     config->setProperty("transform_offset_x", m_widget->spbOffsetX->value());

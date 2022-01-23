@@ -42,6 +42,17 @@ public:
      */
     QIcon getOrQueueFileIcon(const QUrl &url);
 
+    /**
+     * Invalidate (remove) a cached file icon. If the file icon is still in
+     * the process of being loaded, its result will be discarded.
+     */
+    void invalidateFileIcon(const QUrl &url);
+
+    /**
+     * Invalidate a cached file icon and trigger a reload of it.
+     */
+    void reloadFileIcon(const QUrl &url);
+
 private Q_SLOTS:
     void cleanupOnQuit();
     void iconFetched();

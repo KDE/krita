@@ -69,6 +69,7 @@
 #include "dialogs/kis_delayed_save_dialog.h"
 #include "kis_memory_statistics_server.h"
 #include "KisRecentFilesManager.h"
+#include "KisRecentFileIconCache.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -431,6 +432,7 @@ void KisPart::slotDocumentSaved()
     emit sigDocumentSaved(doc->path());
 
     QUrl url = QUrl::fromLocalFile(doc->path());
+    KisRecentFileIconCache::instance()->reloadFileIcon(url);
     if (!d->pendingAddRecentUrlMap.contains(url)) {
         return;
     }

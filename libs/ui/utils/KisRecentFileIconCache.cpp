@@ -116,6 +116,26 @@ QIcon KisRecentFileIconCache::getOrQueueFileIcon(const QUrl &url)
     }
 }
 
+void KisRecentFileIconCache::invalidateFileIcon(const QUrl &url)
+{
+    QMap<QUrl, CacheItem>::iterator findItem = m_iconCacheMap.find(url);
+    if (findItem == m_iconCacheMap.end()) {
+        return;
+    }
+    // Note: Futures returned by `QtConcurrent::run` does not support
+    // cancellation, but we try anyway.
+    if (!findItem.value().fetchingFuture.isCanceled()) {
+        findItem.value().fetchingFuture.cancel();
+    }
+    m_iconCacheMap.erase(findItem);
+}
+
+void KisRecentFileIconCache::reloadFileIcon(const QUrl &url)
+{
+    invalidateFileIcon(url);
+    getOrQueueFileIcon(url);
+}
+
 void KisRecentFileIconCache::cleanupOnQuit()
 {
     // We need to wait for the icon fetching to finish before letting qApp
@@ -137,6 +157,10 @@ void KisRecentFileIconCache::iconFetched()
     auto findItem = m_iconCacheMap.find(result.m_documentUrl);
     if (findItem == m_iconCacheMap.end()) {
         qWarning() << "KisRecentFileIconCache item not found!";
+        return;
+    }
+    if (findItem.value().fetchingFuture != future) {
+        qWarning() << "KisRecentFileIconCache item has a different QFuture";
         return;
     }
     findItem.value().fetchingFuture = QFuture<IconFetchResult>();

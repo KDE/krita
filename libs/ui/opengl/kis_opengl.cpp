@@ -311,8 +311,6 @@ bool KisOpenGL::supportsLoD()
 
 bool KisOpenGL::hasOpenGL3()
 {
-    return true;
-
     initialize();
     return openGLCheckResult && openGLCheckResult->hasOpenGL3();
 }

@@ -1,14 +1,12 @@
 SET(PREFIX_ext_lcms2 "${EXTPREFIX}" )
 ExternalProject_Add( ext_lcms2
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/mm2/Little-CMS/archive/67d6968f8ff00e9134a574ae919b7360f1d8ec94.zip
-    URL_HASH SHA256=a76bf163044d80a7800087356f94815a29dcad1056cd4d74bcbb8f84c993b01e
+    URL https://github.com/mm2/Little-CMS/archive/5ed033f2d0b5c5ef5dcff2c66c65abb7f3039490.zip
+    URL_HASH SHA256=cae05a1c9b2ba9d32afadf6bda6c269e67a9ffe08ff35310c1dc8865d77e27d9
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Add-cmake-build-system.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Quick-check-for-SSE-support.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Separate-fast-float-plugin.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-Use-correct-input-channel-index.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-Fix-copy-alpha-for-float-CMYK-and-L-a-b.patch
 
     INSTALL_DIR ${PREFIX_ext_lcms2}
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_lcms2} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE} -DBUILD_TESTS=FALSE -DBUILD_UTILS=FALSE -DBUILD_STATIC=FALSE -DBUILD_PLUGINS=TRUE

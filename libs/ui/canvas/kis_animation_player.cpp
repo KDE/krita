@@ -12,8 +12,6 @@
 #include <QTimer>
 #include <QtMath>
 
-//#define PLAYER_DEBUG_FRAMERATE
-
 #include "kis_global.h"
 #include "kis_algebra_2d.h"
 
@@ -71,29 +69,38 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
     return msecToFrames(time, fps) * playbackSpeed;
 }
 
-const int AUDIO_BUFFER_SAMPLES = 512;
-const int AUDIO_SAMPLE_RATE = 44100; // TODO: Querry audio device.
-
-struct PlaybackData {
+struct PlaybackEnvironment {
 public:
-    PlaybackData(int playhead) {
-        setPlayheadFrame(playhead);
+    PlaybackEnvironment(int playhead) {
+        Mlt::Factory::init();
+        m_mltProfile.reset(new Mlt::Profile());
+        m_mltProducer.reset(new Mlt::Producer(*m_mltProfile, "count"));
+        m_mltConsumer.reset(new Mlt::Consumer(*m_mltProfile, "sdl2_audio"));
+        m_mltProfile->set_frame_rate(1, 24);
+        m_mltProducer->set_speed(0);
+        m_mltConsumer->connect(*m_mltProducer);
+        m_mltConsumer->start();
+        seek(playhead);
     }
 
-    ~PlaybackData() = default;
+    ~PlaybackEnvironment() {
+        if (!m_mltConsumer->is_stopped())
+            m_mltConsumer->stop();
+
+        m_mltConsumer.reset();
+        m_mltProducer.reset();
+        m_mltProfile.reset();
+        Mlt::Factory::close();
+    }
 
     int playheadFrame() const {
-        return m_playheadFrame;
+        return m_mltProducer->position();
     }
 
-    void setPlayheadFrame(int frame) {
-        m_playheadFrame = frame;
-    }
-
-    void advancePlayhead(int increment = 1) { //TODO check if necessary here or should only be in worker thread?
-        setPlayheadFrame( (playheadFrame() - playbackRange().start() + increment)
-                          % (playbackRange().end() + 1 - playbackRange().start())
-                          + playbackRange().start() );
+    void seek(int frame) {
+        if (m_mltProducer->property_exists("_position")) {
+            m_mltProducer->seek(frame);
+        }
     }
 
     qreal playbackSpeed() const {
@@ -104,6 +111,55 @@ public:
         m_playbackSpeed = p_playbackSpeed;
     }
 
+    int frameRate() const {
+        return m_mltProfile->frame_rate_den();
+    }
+
+    void setFrameRate(int p_frameRate) {
+        m_mltProfile->set_frame_rate(1, p_frameRate);
+    }
+
+    KisAnimationPlayer::PlaybackState getState() {
+        return m_state;
+    }
+
+    void setState(KisAnimationPlayer::PlaybackState p_state) {
+        m_state = p_state;
+    }
+
+
+private:
+    KisAnimationPlayer::PlaybackState m_state;
+    qreal m_playbackSpeed;
+
+    QScopedPointer<Mlt::Profile> m_mltProfile;
+    QScopedPointer<Mlt::Consumer> m_mltConsumer;
+    QScopedPointer<Mlt::Producer> m_mltProducer;
+};
+
+class PlaybackHandle : public QObject {
+    Q_OBJECT
+public:
+    PlaybackHandle(int originFrame, QSharedPointer<PlaybackEnvironment> data, KisAnimationPlayer* parent = nullptr)
+        : QObject(parent)
+        , m_originFrame(originFrame)
+        , m_sharedEnvironment(data)
+        , m_animPlayer(parent)
+    {
+        m_sharedEnvironment->seek(m_originFrame);
+        connect(&m_cancelTrigger, SIGNAL(output()), parent, SLOT(stop()));
+    }
+
+    ~PlaybackHandle() {
+        restore();
+    }
+
+    PlaybackHandle() = delete;
+    PlaybackHandle(const PlaybackHandle&) = delete;
+    PlaybackHandle& operator= (const PlaybackHandle&) = delete;
+
+    int originFrame() { return m_originFrame; }
+
     KisTimeSpan playbackRange() const {
         return m_playbackRange;
     }
@@ -112,137 +168,13 @@ public:
         m_playbackRange = p_playbackRange;
     }
 
-    bool dropFrames() const {
-        return m_dropFrames;
-    }
-
-    void setDropFrames(bool value) {
-        m_dropFrames = value;
-    }
-
-    std::atomic<int> m_frameRate;
-
-private:
-    std::atomic<int> m_playheadFrame; //!< The **current** playback frame. May or may not be the same as the visible frame (Frame dropping, audio, etc...)
-    std::atomic<qreal> m_playbackSpeed;
-    std::atomic<KisTimeSpan> m_playbackRange;
-    std::atomic<bool> m_dropFrames; //!< Whether we should be dropping frames to preserve playback timing.
-};
-
-class PlaybackWorker : public QObject {
-    Q_OBJECT
-public:
-    PlaybackWorker(QSharedPointer<PlaybackData> shared)
-        : QObject(nullptr)
-        , m_sharedData(shared) {
-        Mlt::Factory::init();
-    }
-
-    ~PlaybackWorker() {
-        if (!m_mltconsumer->is_stopped())
-            m_mltconsumer->stop();
-
-        m_mltconsumer.reset();
-        m_mltproducer.reset();
-        Mlt::Factory::close();
-    }
-
-    //Where the thread "enters"...
-    void run() {
-        m_mltprofile.reset( new Mlt::Profile() );
-        m_mltprofile->set_frame_rate(24, 1);
-        m_mltconsumer.reset(new Mlt::Consumer(*m_mltprofile, "sdl_audio"));
-//        m_mltproducer.reset(new Mlt::Producer(*m_mltprofile, QString("/home/eoin/Sync/krita/test_sequence_2hz_32sec.wav").toUtf8().constData()));
-        m_mltproducer.reset(new Mlt::Producer(*m_mltprofile, QString("/home/eoin/Music/Keep/Artists/The Pillows/[1999.10.27] Rush (Single)/03 - Sleepy Head.mp3").toUtf8().constData()));
-        m_mltconsumer->connect(*m_mltproducer);
-        m_mltconsumer->listen("consumer-frame-show", this, (mlt_listener)PlaybackWorker::on_consumer_show_frame);
-
-        m_mltconsumer->start();
-        m_timeSinceLastPlayheadChange.start();
-        m_readyToPostFrame = true;
-    }
-
-    static void on_consumer_show_frame(mlt_consumer, void* p_self, mlt_frame frame) {
-        Mlt::Frame f = Mlt::Frame(frame);
-        PlaybackWorker* self = static_cast<PlaybackWorker*>(p_self);
-
-        self->process(f.get_position());
-    }
-
-    //Where the loop happens...
-    void process(const int frame) {
-        if (frame == m_sharedData->playbackRange().end()) {
-            m_mltproducer->seek(0);
-            m_mltconsumer->purge();
-            m_mltconsumer->set("refresh", 1);
-        }
-
-        ENTER_FUNCTION() << ppVar(frame);
-        // VISUAL
-        // Every tick
-        //     - Check time since last frame. If larger than seconds per frame:
-        //              - Advance playhead by one(?) frame
-        //              - Try to display the frame (Drop frames???)
-        if ( m_readyToPostFrame ) {
-            //m_sharedData->advancePlayhead(1);
-            const int duration = m_sharedData->playbackRange().end() + 1 - m_sharedData->playbackRange().start();
-            m_sharedData->setPlayheadFrame(m_sharedData->playbackRange().start() + ( frame % duration ));
-            emit playheadChanged();
-            m_readyToPostFrame = m_sharedData->dropFrames() ? false : true;
-        }
-
-    }
-
-    void frameReady() {
-        m_readyToPostFrame = true;
-    }
-
-Q_SIGNALS:
-    void playheadChanged();
-
-private:
-    bool m_readyToPostFrame;
-    QSharedPointer<PlaybackData> m_sharedData;
-    KisElapsedTimer m_timeSinceLastPlayheadChange;
-    QScopedPointer<Mlt::Profile> m_mltprofile;
-    QScopedPointer<Mlt::Consumer> m_mltconsumer;
-    QScopedPointer<Mlt::Producer> m_mltproducer;
-};
-
-//Setup environment for playback.
-class PlaybackEnvironment : public QObject {
-    Q_OBJECT
-public:
-    PlaybackEnvironment(int originFrame, QSharedPointer<PlaybackData> data, KisAnimationPlayer* parent = nullptr)
-        : QObject(parent)
-        , m_originFrame(originFrame)
-        , m_sharedData(data)
-        , m_animPlayer(parent)
-    {
-        m_sharedData->setPlayheadFrame(m_originFrame);
-        connect(&m_cancelTrigger, SIGNAL(output()), parent, SLOT(stop()));
-    }
-
-    ~PlaybackEnvironment() {
-        restore();
-    }
-
-    PlaybackEnvironment() = delete;
-    PlaybackEnvironment(const PlaybackEnvironment&) = delete;
-    PlaybackEnvironment& operator= (const PlaybackEnvironment&) = delete;
-
-    int originFrame() { return m_originFrame; }
-
-    int playheadFrame() { return m_sharedData->playheadFrame(); }
-    void setPlayheadFrame(int value) { m_sharedData->setPlayheadFrame(value);}
-
     void prepare(KisCanvas2* canvas)
     {
         KIS_ASSERT(canvas); // Sanity check...
         m_canvas = canvas;
 
         const KisTimeSpan range = canvas->image()->animationInterface()->playbackRange();
-        m_sharedData->setPlaybackRange(range);
+        setPlaybackRange(range);
 
         // Initialize and optimize playback environment...
         if (canvas->frameCache()) {
@@ -295,27 +227,9 @@ public:
                     canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                     &m_cancelTrigger, SLOT(tryFire()));
         }
-
-        // Setup playback thread and connections...
-        m_playbackThread.reset(new QThread(this));
-        PlaybackWorker* worker = new PlaybackWorker(m_sharedData);
-        worker->moveToThread(m_playbackThread.data());
-        connect(m_playbackThread.data(), &QThread::finished, worker, &QObject::deleteLater);
-        connect(m_playbackThread.data(), &QThread::started, worker, &PlaybackWorker::run );
-        connect(this, &PlaybackEnvironment::finishedSeeking, worker, &PlaybackWorker::frameReady, Qt::QueuedConnection);
-        connect(worker, &PlaybackWorker::playheadChanged, this, [this](){
-            if (m_animPlayer) {
-                m_animPlayer->seek(m_sharedData->playheadFrame());
-                emit finishedSeeking();
-            }
-        }, Qt::QueuedConnection);
-
-        m_playbackThread->start();
     }
 
     void restore() {
-        m_playbackThread->quit();
-        m_playbackThread->wait();
         m_cancelStrokeConnections.clear();
 
         if (m_canvas) {
@@ -336,6 +250,13 @@ public:
         }
     }
 
+    void advancePlayhead(int increment = 1) { //TODO check if necessary here or should only be in worker thread?
+        m_sharedEnvironment->seek( (m_sharedEnvironment->playheadFrame() - m_playbackRange.start() + increment)
+                          % (m_playbackRange.end() + 1 - m_playbackRange.start())
+                          + m_playbackRange.start() );
+    }
+
+
 Q_SIGNALS:
     void finishedSeeking();
 
@@ -345,10 +266,12 @@ private:
     SingleShotSignal m_cancelTrigger;
     QVector<KisNodeWSP> m_disabledDecoratedNodes;
 
-    QScopedPointer<QThread> m_playbackThread;
-    QSharedPointer<PlaybackData> m_sharedData;
     KisCanvas2* m_canvas;
+    QSharedPointer<PlaybackEnvironment> m_sharedEnvironment;
     KisAnimationPlayer* m_animPlayer;
+
+    KisTimeSpan m_playbackRange;
+    bool m_dropFrames; //!< Whether we should be dropping frames to preserve playback timing.
 };
 
 #include "kis_animation_player.moc"
@@ -357,16 +280,14 @@ struct KisAnimationPlayer::Private
 {
 public:
     Private()
-        : data(new PlaybackData(-1))
+        : playbackEnvironment(new PlaybackEnvironment(0))
         , visibleFrame(-1)
         , playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
           {}
 
-    QScopedPointer<PlaybackEnvironment> playback;
-    QSharedPointer<PlaybackData> data;
-
+    QScopedPointer<PlaybackHandle> playback;
+    QSharedPointer<PlaybackEnvironment> playbackEnvironment;
     KisCanvas2 *canvas;
-    KisAnimationPlayer::PlaybackState playbackState;
     int visibleFrame; //!< This the frame that is currently being displayed on the canvas. Can be different from the current playhead.
 
     KisSignalCompressor playbackStatisticsCompressor;
@@ -376,8 +297,8 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     : QObject(canvas)
     , m_d(new Private())
 {
-    m_d->playbackState = STOPPED;
-    m_d->data->setPlaybackSpeed(1.0f);
+    m_d->playbackEnvironment->setState(STOPPED);
+    m_d->playbackEnvironment->setPlaybackSpeed(1.0f);
     m_d->canvas = canvas;
 
     connect(KisConfigNotifier::instance(),
@@ -409,9 +330,9 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     });
 
     connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
-       m_d->data->m_frameRate = m_d->canvas->image()->animationInterface()->framerate();
+       m_d->playbackEnvironment->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
     });
-    m_d->data->m_frameRate = m_d->canvas->image()->animationInterface()->framerate();
+    m_d->playbackEnvironment->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
 
 }
 
@@ -420,13 +341,12 @@ KisAnimationPlayer::~KisAnimationPlayer()
 
 KisAnimationPlayer::PlaybackState KisAnimationPlayer::playbackState()
 {
-    return m_d->playbackState;
+    return m_d->playbackEnvironment->getState();
 }
 
 void KisAnimationPlayer::updateDropFramesMode()
 {
     KisConfig cfg(true);
-    m_d->data->setDropFrames(cfg.animationDropFrames());
 }
 
 void KisAnimationPlayer::play()
@@ -434,7 +354,7 @@ void KisAnimationPlayer::play()
     KIS_ASSERT(m_d->canvas);
 
     if (!m_d->playback) {
-        m_d->playback.reset(new PlaybackEnvironment(visibleFrame(), m_d->data, this));
+        m_d->playback.reset(new PlaybackHandle(visibleFrame(), m_d->playbackEnvironment, this));
     }
 
     m_d->playback->prepare(m_d->canvas);
@@ -448,14 +368,14 @@ void KisAnimationPlayer::pause()
         m_d->playback->restore();
         setPlaybackState(PAUSED);
         if (m_d->playback) {
-            seek(m_d->playback->playheadFrame());
+            seek(m_d->playbackEnvironment->playheadFrame());
         }
     }
 }
 
 void KisAnimationPlayer::playPause()
 {
-    if (m_d->playbackState == PLAYING) {
+    if (m_d->playbackEnvironment->getState() == PLAYING) {
         pause();
     } else {
         play();
@@ -465,11 +385,11 @@ void KisAnimationPlayer::playPause()
 void KisAnimationPlayer::stop()
 {
     KisImageAnimationInterface* animation = m_d->canvas->image()->animationInterface();
-    if(m_d->playbackState == STOPPED) {
+    if(m_d->playbackEnvironment->getState() == STOPPED) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(animation);
         const int startFrame = animation->fullClipRange().start();
         seek(startFrame);
-    } else {
+    } else if (m_d->playback) {
         const int origin = m_d->playback->originFrame();
         m_d->playback->restore();
         m_d->playback.reset();
@@ -487,12 +407,12 @@ void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
-    if (m_d->playbackState == PLAYING || preferCachedFrames) {
+    if (m_d->playbackEnvironment->getState() == PLAYING || preferCachedFrames) {
         if (m_d->playback) {
-            if (m_d->playback->playheadFrame() != frameIndex) {
-                m_d->playback->setPlayheadFrame( frameIndex >= 0 ? frameIndex : m_d->playback->playheadFrame() );
+            if (m_d->playbackEnvironment->playheadFrame() != frameIndex) {
+                m_d->playbackEnvironment->seek( frameIndex >= 0 ? frameIndex : m_d->playbackEnvironment->playheadFrame() );
             }
-            displayFrame(m_d->playback->playheadFrame());
+            displayFrame(m_d->playbackEnvironment->playheadFrame());
         } else {
             displayFrame(frameIndex);
         }
@@ -503,7 +423,7 @@ void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
             return;
         } else {
             if (m_d->playback) {
-                m_d->playback->setPlayheadFrame(frameIndex > 0 ? frameIndex : m_d->playback->playheadFrame());
+                m_d->playbackEnvironment->seek(frameIndex > 0 ? frameIndex : m_d->playbackEnvironment->playheadFrame());
             }
 
             animInterface->requestTimeSwitchWithUndo(frameIndex);
@@ -526,7 +446,7 @@ void KisAnimationPlayer::previousFrame()
     }
 
     if (frame >= 0) {
-        if (m_d->playbackState != STOPPED) {
+        if (m_d->playbackEnvironment->getState() != STOPPED) {
             stop();
         }
 
@@ -549,7 +469,7 @@ void KisAnimationPlayer::nextFrame()
     }
 
     if (frame >= 0) {
-        if (m_d->playbackState != STOPPED) {
+        if (m_d->playbackEnvironment->getState() != STOPPED) {
             stop();
         }
 
@@ -578,7 +498,7 @@ void KisAnimationPlayer::previousKeyframe()
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->playbackState != STOPPED) {
+        if (m_d->playbackEnvironment->getState() != STOPPED) {
             stop();
         }
 
@@ -605,7 +525,7 @@ void KisAnimationPlayer::nextKeyframe()
 
     if (keyframes->keyframeAt(destinationTime)) {
         // Jump to next key...
-        if (m_d->playbackState != STOPPED) {
+        if (m_d->playbackEnvironment->getState() != STOPPED) {
             stop();
         }
 
@@ -616,7 +536,7 @@ void KisAnimationPlayer::nextKeyframe()
         const int previousKeyTime = keyframes->previousKeyframeTime(activeKeyTime);
 
         if (previousKeyTime != -1) {
-            if (m_d->playbackState != STOPPED) {
+            if (m_d->playbackEnvironment->getState() != STOPPED) {
                 stop();
             }
 
@@ -730,7 +650,7 @@ void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->playbackState != STOPPED) {
+        if (m_d->playbackEnvironment->getState() != STOPPED) {
             stop();
         }
 
@@ -767,7 +687,7 @@ void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
     }
 
     if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->playbackState != STOPPED) {
+        if (m_d->playbackEnvironment->getState() != STOPPED) {
             stop();
         }
 
@@ -787,12 +707,12 @@ KisTimeSpan KisAnimationPlayer::activePlaybackRange()
 
 qreal KisAnimationPlayer::playbackSpeed()
 {
-    return m_d->data->playbackSpeed();
+    return m_d->playbackEnvironment->playbackSpeed();
 }
 
 int KisAnimationPlayer::visibleFrame()
 {
-    if (m_d->playbackState != PLAYING) {
+    if (m_d->playbackEnvironment->getState() != PLAYING) {
         if (m_d->canvas && m_d->canvas->image()) {
             return m_d->canvas->image()->animationInterface()->currentUITime();
         } else {
@@ -811,16 +731,16 @@ void KisAnimationPlayer::setPlaybackSpeedPercent(int value)
 
 void KisAnimationPlayer::setPlaybackSpeedNormalized(double value)
 {
-    if (m_d->data->playbackSpeed() != value) {
-        m_d->data->setPlaybackSpeed( value );
-        emit sigPlaybackSpeedChanged(m_d->data->playbackSpeed());
+    if (m_d->playbackEnvironment->playbackSpeed() != value) {
+        m_d->playbackEnvironment->setPlaybackSpeed( value );
+        emit sigPlaybackSpeedChanged(m_d->playbackEnvironment->playbackSpeed());
     }
 }
 
 void KisAnimationPlayer::setPlaybackState(PlaybackState state)
 {
-    if (m_d->playbackState != state) {
-        m_d->playbackState = state;
-        emit sigPlaybackStateChanged(m_d->playbackState);
+    if (m_d->playbackEnvironment->getState() != state) {
+        m_d->playbackEnvironment->setState(state);
+        emit sigPlaybackStateChanged(m_d->playbackEnvironment->getState());
     }
 }

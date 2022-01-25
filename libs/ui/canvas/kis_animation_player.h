@@ -49,7 +49,7 @@ public Q_SLOTS:
     void playPause();
     void stop();
 
-    void seek(int frameIndex, bool preferCachedFrames = false);
+    void scrub(int frameIndex, bool preferCachedFrames = false);
     void previousFrame();
     void nextFrame();
     void previousKeyframe();
@@ -97,6 +97,7 @@ private:
 
 private:
     struct Private;
+    friend class PlaybackEnvironment;
     QScopedPointer<Private> m_d;
 
 };

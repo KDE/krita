@@ -69,17 +69,25 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
     return msecToFrames(time, fps) * playbackSpeed;
 }
 
-struct PlaybackEnvironment {
+class PlaybackEnvironment : public QObject {
+    Q_OBJECT
+
 public:
-    PlaybackEnvironment(int playhead) {
+    PlaybackEnvironment(int playhead, QObject* parent = nullptr) : QObject(parent) {
         Mlt::Factory::init();
         m_mltProfile.reset(new Mlt::Profile());
-        m_mltProducer.reset(new Mlt::Producer(*m_mltProfile, "count"));
-        m_mltConsumer.reset(new Mlt::Consumer(*m_mltProfile, "sdl2_audio"));
-        m_mltProfile->set_frame_rate(1, 24);
+        m_mltProfile->set_frame_rate(24, 1);
+
+        m_mltProducer.reset(new Mlt::Producer(*m_mltProfile, "/home/eoin/Music/Keep/Artists/The Pillows/[1999.10.27] Rush (Single)/03 - Sleepy Head.mp3"));
         m_mltProducer->set_speed(0);
+
+        m_mltConsumer.reset(new Mlt::Consumer(*m_mltProfile, "sdl2_audio"));
         m_mltConsumer->connect(*m_mltProducer);
+        m_mltConsumer->listen("consumer-frame-show", this, (mlt_listener)PlaybackEnvironment::onConsumerFrameShow);
+        m_mltConsumer->set("scrub_audio", true);
+        m_mltConsumer->set("audio_buffer", 1024);
         m_mltConsumer->start();
+
         seek(playhead);
     }
 
@@ -93,14 +101,22 @@ public:
         Mlt::Factory::close();
     }
 
+    static void onConsumerFrameShow(mlt_consumer, void* p_environment, mlt_frame p_frame) {
+        PlaybackEnvironment* environment = static_cast<PlaybackEnvironment*>(p_environment);
+        Mlt::Frame frame = Mlt::Frame(p_frame);
+        if (environment->getState() == KisAnimationPlayer::PLAYING) {
+            environment->sigRequestDisplayFrame(frame.get_position());
+        }
+    }
+
     int playheadFrame() const {
         return m_mltProducer->position();
     }
 
     void seek(int frame) {
-        if (m_mltProducer->property_exists("_position")) {
-            m_mltProducer->seek(frame);
-        }
+        ENTER_FUNCTION() << ppVar(frame);
+        m_mltProducer->seek(frame);
+        m_mltConsumer->set("refresh", 1);
     }
 
     qreal playbackSpeed() const {
@@ -116,7 +132,7 @@ public:
     }
 
     void setFrameRate(int p_frameRate) {
-        m_mltProfile->set_frame_rate(1, p_frameRate);
+        m_mltProfile->set_frame_rate(p_frameRate, 1);
     }
 
     KisAnimationPlayer::PlaybackState getState() {
@@ -127,6 +143,24 @@ public:
         m_state = p_state;
     }
 
+    void begin() {
+        const int pos = m_mltProducer->position();
+        m_mltConsumer->purge();
+        m_mltProducer->set_speed(1);
+        m_mltConsumer->set("refresh", 1);
+        m_mltProducer->set("position", pos);
+    }
+
+    void end() {
+        const int pos = m_mltProducer->position();
+        m_mltProducer->set_speed(0);
+        m_mltProducer->set("position", pos);
+        m_mltConsumer->set("refresh", 1);
+        m_mltConsumer->purge();
+    }
+
+Q_SIGNALS:
+    void sigRequestDisplayFrame(const int frame);
 
 private:
     KisAnimationPlayer::PlaybackState m_state;
@@ -143,10 +177,9 @@ public:
     PlaybackHandle(int originFrame, QSharedPointer<PlaybackEnvironment> data, KisAnimationPlayer* parent = nullptr)
         : QObject(parent)
         , m_originFrame(originFrame)
-        , m_sharedEnvironment(data)
-        , m_animPlayer(parent)
+        , m_playbackEnvironment(data)
     {
-        m_sharedEnvironment->seek(m_originFrame);
+        m_playbackEnvironment->seek(m_originFrame);
         connect(&m_cancelTrigger, SIGNAL(output()), parent, SLOT(stop()));
     }
 
@@ -227,9 +260,13 @@ public:
                     canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                     &m_cancelTrigger, SLOT(tryFire()));
         }
+
+        m_playbackEnvironment->begin();
     }
 
     void restore() {
+        m_playbackEnvironment->end();
+
         m_cancelStrokeConnections.clear();
 
         if (m_canvas) {
@@ -251,7 +288,7 @@ public:
     }
 
     void advancePlayhead(int increment = 1) { //TODO check if necessary here or should only be in worker thread?
-        m_sharedEnvironment->seek( (m_sharedEnvironment->playheadFrame() - m_playbackRange.start() + increment)
+        m_playbackEnvironment->seek( (m_playbackEnvironment->playheadFrame() - m_playbackRange.start() + increment)
                           % (m_playbackRange.end() + 1 - m_playbackRange.start())
                           + m_playbackRange.start() );
     }
@@ -267,11 +304,9 @@ private:
     QVector<KisNodeWSP> m_disabledDecoratedNodes;
 
     KisCanvas2* m_canvas;
-    QSharedPointer<PlaybackEnvironment> m_sharedEnvironment;
-    KisAnimationPlayer* m_animPlayer;
+    QSharedPointer<PlaybackEnvironment> m_playbackEnvironment;
 
     KisTimeSpan m_playbackRange;
-    bool m_dropFrames; //!< Whether we should be dropping frames to preserve playback timing.
 };
 
 #include "kis_animation_player.moc"
@@ -283,9 +318,10 @@ public:
         : playbackEnvironment(new PlaybackEnvironment(0))
         , visibleFrame(-1)
         , playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
-          {}
+          {
+    }
 
-    QScopedPointer<PlaybackHandle> playback;
+    QScopedPointer<PlaybackHandle> playbackHandle;
     QSharedPointer<PlaybackEnvironment> playbackEnvironment;
     KisCanvas2 *canvas;
     int visibleFrame; //!< This the frame that is currently being displayed on the canvas. Can be different from the current playhead.
@@ -309,6 +345,10 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
 
     connect(&m_d->playbackStatisticsCompressor, SIGNAL(timeout()),
             this, SIGNAL(sigPlaybackStatisticsUpdated()));
+
+    connect(m_d->playbackEnvironment.data(), &PlaybackEnvironment::sigRequestDisplayFrame, this, [this](int p_frame){
+        displayFrame(p_frame);
+    });
 
     // Grow to new playback range when new frames added (configurable)...
     connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigKeyframeAdded, this, [this](const KisKeyframeChannel*, int time){
@@ -353,22 +393,22 @@ void KisAnimationPlayer::play()
 {
     KIS_ASSERT(m_d->canvas);
 
-    if (!m_d->playback) {
-        m_d->playback.reset(new PlaybackHandle(visibleFrame(), m_d->playbackEnvironment, this));
+    if (!m_d->playbackHandle) {
+        m_d->playbackHandle.reset(new PlaybackHandle(visibleFrame(), m_d->playbackEnvironment, this));
     }
 
-    m_d->playback->prepare(m_d->canvas);
+    m_d->playbackHandle->prepare(m_d->canvas);
     setPlaybackState(PLAYING);
 }
 
 void KisAnimationPlayer::pause()
 {
     if (playbackState() == PLAYING) {
-        KIS_ASSERT(m_d->playback);
-        m_d->playback->restore();
+        KIS_ASSERT(m_d->playbackHandle);
+        m_d->playbackHandle->restore();
         setPlaybackState(PAUSED);
-        if (m_d->playback) {
-            seek(m_d->playbackEnvironment->playheadFrame());
+        if (m_d->playbackHandle) {
+            scrub(m_d->playbackEnvironment->playheadFrame());
         }
     }
 }
@@ -388,47 +428,52 @@ void KisAnimationPlayer::stop()
     if(m_d->playbackEnvironment->getState() == STOPPED) {
         KIS_SAFE_ASSERT_RECOVER_RETURN(animation);
         const int startFrame = animation->fullClipRange().start();
-        seek(startFrame);
-    } else if (m_d->playback) {
-        const int origin = m_d->playback->originFrame();
-        m_d->playback->restore();
-        m_d->playback.reset();
+        scrub(startFrame);
+    } else if (m_d->playbackHandle) {
+        const int origin = m_d->playbackHandle->originFrame();
+        m_d->playbackHandle->restore();
+        m_d->playbackHandle.reset();
         setPlaybackState(STOPPED);
 
         if (m_d->visibleFrame == origin) {
             m_d->canvas->refetchDataFromImage();
         } else {
-            seek(origin);
+            scrub(origin);
         }
     }
 }
 
-void KisAnimationPlayer::seek(int frameIndex, bool preferCachedFrames)
+void KisAnimationPlayer::scrub(int frameIndex, bool preferCachedFrames)
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
-    if (m_d->playbackEnvironment->getState() == PLAYING || preferCachedFrames) {
-        if (m_d->playback) {
-            if (m_d->playbackEnvironment->playheadFrame() != frameIndex) {
-                m_d->playbackEnvironment->seek( frameIndex >= 0 ? frameIndex : m_d->playbackEnvironment->playheadFrame() );
-            }
-            displayFrame(m_d->playbackEnvironment->playheadFrame());
-        } else {
-            displayFrame(frameIndex);
-        }
-    } else {
+    m_d->playbackEnvironment->seek(frameIndex);
+
+    if (m_d->playbackEnvironment->getState() != PLAYING) {
         KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
         if (frameIndex == m_d->visibleFrame) {
             return;
         } else {
-            if (m_d->playback) {
-                m_d->playbackEnvironment->seek(frameIndex > 0 ? frameIndex : m_d->playbackEnvironment->playheadFrame());
-            }
-
             animInterface->requestTimeSwitchWithUndo(frameIndex);
         }
     }
+
+//    if (m_d->playbackEnvironment->getState() == PLAYING || preferCachedFrames) {
+//        if (m_d->playbackHandle) {
+//            displayFrame(m_d->playbackEnvironment->playheadFrame());
+//        } else {
+//            displayFrame(frameIndex);
+//        }
+//    } else {
+//        KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+
+//        if (frameIndex == m_d->visibleFrame) {
+//            return;
+//        } else {
+//            animInterface->requestTimeSwitchWithUndo(frameIndex);
+//        }
+//    }
 }
 
 void KisAnimationPlayer::previousFrame()
@@ -450,7 +495,7 @@ void KisAnimationPlayer::previousFrame()
             stop();
         }
 
-        seek(frame);
+        scrub(frame);
     }
 }
 
@@ -473,7 +518,7 @@ void KisAnimationPlayer::nextFrame()
             stop();
         }
 
-        seek(frame);
+        scrub(frame);
     }
 }
 
@@ -502,7 +547,7 @@ void KisAnimationPlayer::previousKeyframe()
             stop();
         }
 
-        seek(destinationTime);
+        scrub(destinationTime);
     }
 }
 
@@ -529,7 +574,7 @@ void KisAnimationPlayer::nextKeyframe()
             stop();
         }
 
-        seek(destinationTime);
+        scrub(destinationTime);
     } else {
         // Jump ahead by estimated timing...
         const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
@@ -541,7 +586,7 @@ void KisAnimationPlayer::nextKeyframe()
             }
 
             const int timing = activeKeyTime - previousKeyTime;
-            seek(currentTime + timing);
+            scrub(currentTime + timing);
         }
     }
 }
@@ -599,6 +644,7 @@ void KisAnimationPlayer::nextUnfilteredKeyframe()
 void KisAnimationPlayer::displayFrame(int frameToDisplay)
 {
     KisAnimationFrameCacheSP frameCache = m_d->canvas->frameCache();
+    ENTER_FUNCTION() << ppVar(frameToDisplay);
 
     if (frameCache
         && frameCache->shouldUploadNewFrame(frameToDisplay, m_d->visibleFrame)
@@ -654,7 +700,7 @@ void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
             stop();
         }
 
-        seek(destinationTime);
+        scrub(destinationTime);
     }
 }
 
@@ -691,7 +737,7 @@ void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
             stop();
         }
 
-        seek(destinationTime);
+        scrub(destinationTime);
     }
 }
 

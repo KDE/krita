@@ -8,7 +8,7 @@
 
 #include "PerspectiveAssistant.h"
 
-#include "kis_debug.h"
+#include <kis_debug.h>
 #include <klocalizedstring.h>
 
 #include <QPainter>
@@ -16,9 +16,10 @@
 #include <QLinearGradient>
 #include <QTransform>
 
+#include <kis_algebra_2d.h>
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
-#include <kis_algebra_2d.h>
+#include <kis_dom_utils.h>
 
 #include <math.h>
 #include <limits>
@@ -34,6 +35,7 @@ PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
 PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisAbstractPerspectiveGrid(rhs.parent())
     , KisPaintingAssistant(rhs, handleMap)
+    , m_subdivisions(rhs.m_subdivisions)
     , m_snapLine(rhs.m_snapLine)
     , m_cachedTransform(rhs.m_cachedTransform)
     , m_cachedPolygon(rhs.m_cachedPolygon)
@@ -279,11 +281,10 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
                     snapLine = QLineF(intersectTransformed, mousePos);
                     KisAlgebra2D::intersectLineRect(snapLine, viewport, true);
                     bounds= QRect(snapLine.p1().toPoint(), snapLine.p2().toPoint());
-                    QPainterPath path;
 
                     if (bounds.contains(intersectTransformed.toPoint())){
                         path2.moveTo(intersectTransformed);
-                        path2.lineTo(snapLine.p1());
+                        path2.lineTo(snapLine.p2());
                     }
                     else {
                         path2.moveTo(snapLine.p1());
@@ -301,7 +302,7 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
 
                     if (bounds.contains(intersectTransformed.toPoint())){
                         path2.moveTo(intersectTransformed);
-                        path2.lineTo(snapLine.p1());
+                        path2.lineTo(snapLine.p2());
                     }
                     else {
                         path2.moveTo(snapLine.p1());
@@ -334,16 +335,18 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             gc.setPen(QColor(0, 0, 0, 125));
             gc.setTransform(transform, true);
             QPainterPath path;
-            for (int y = 0; y <= 8; ++y)
+            qreal step = 1.0 / subdivisions();
+            
+            for (int y = 0; y <= subdivisions(); ++y)
             {
-                QLineF line = QLineF(QPointF(0.0, y * 0.125), QPointF(1.0, y * 0.125));
+                QLineF line = QLineF(QPointF(0.0, y * step), QPointF(1.0, y * step));
                 KisAlgebra2D::cropLineToRect(line, gc.window(), false, false);
                 path.moveTo(line.p1());
                 path.lineTo(line.p2());
             }
-            for (int x = 0; x <= 8; ++x)
+            for (int x = 0; x <= subdivisions(); ++x)
             {
-                QLineF line = QLineF(QPointF(x * 0.125, 0.0), QPointF(x * 0.125, 1.0));
+                QLineF line = QLineF(QPointF(x * step, 0.0), QPointF(x * step, 1.0));
                 KisAlgebra2D::cropLineToRect(line, gc.window(), false, false);
                 path.moveTo(line.p1());
                 path.lineTo(line.p2());
@@ -477,6 +480,30 @@ bool PerspectiveAssistant::getTransform(QPolygonF& poly, QTransform& transform) 
 bool PerspectiveAssistant::isAssistantComplete() const
 {
     return handles().size() >= 4; // specify 4 corners to make assistant complete
+}
+
+int PerspectiveAssistant::subdivisions() const {
+    return m_subdivisions;
+}
+
+void PerspectiveAssistant::setSubdivisions(int subdivisions) {
+    if (subdivisions < 1) m_subdivisions = 1;
+    else m_subdivisions = subdivisions;
+}
+
+void PerspectiveAssistant::saveCustomXml(QXmlStreamWriter *xml) {
+    if (xml) {
+        xml->writeStartElement("subdivisions");
+        xml->writeAttribute("value", KisDomUtils::toString(subdivisions()));
+        xml->writeEndElement();
+    }
+}
+
+bool PerspectiveAssistant::loadCustomXml(QXmlStreamReader *xml) {
+    if (xml && xml->name() == "subdivisions") {
+        setSubdivisions(KisDomUtils::toInt(xml->attributes().value("value").toString()));
+    }
+    return true;
 }
 
 

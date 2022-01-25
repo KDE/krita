@@ -40,6 +40,7 @@
 #include <KisViewManager.h>
 
 #include "EditAssistantsCommand.h"
+#include "PerspectiveAssistant.h"
 #include "RulerAssistant.h"
 #include "TwoPointAssistant.h"
 #include "VanishingPointAssistant.h"
@@ -747,11 +748,12 @@ void KisAssistantTool::updateToolOptionsUI()
          bool isTwoPointAssistant = m_selectedAssistant->id() == "two point";
          bool isRulerAssistant = m_selectedAssistant->id() == "ruler"
                               || m_selectedAssistant->id() == "infinite ruler";
+         bool isPerspectiveAssistant = m_selectedAssistant->id() == "perspective";
 
          m_options.vanishingPointAngleSpinbox->setVisible(isVanishingPointAssistant);
          m_options.twoPointDensitySpinbox->setVisible(isTwoPointAssistant);
          m_options.twoPointUseVerticalCheckbox->setVisible(isTwoPointAssistant);
-         m_options.subdivisionsSpinbox->setVisible(isRulerAssistant);
+         m_options.subdivisionsSpinbox->setVisible(isRulerAssistant || isPerspectiveAssistant);
          m_options.minorSubdivisionsSpinbox->setVisible(isRulerAssistant);
          m_options.fixedLengthCheckbox->setVisible(isRulerAssistant);
 
@@ -785,6 +787,11 @@ void KisAssistantTool::updateToolOptionsUI()
          } else {
              m_options.fixedLengthSpinbox->setVisible(false);
              m_options.fixedLengthUnit->setVisible(false);
+         }
+         
+         if (isPerspectiveAssistant) {
+             QSharedPointer <PerspectiveAssistant> assis = qSharedPointerCast<PerspectiveAssistant>(m_selectedAssistant);
+             m_options.subdivisionsSpinbox->setValue(assis->subdivisions());
          }
          
          // load custom color settings from assistant (this happens when changing assistant
@@ -898,12 +905,18 @@ void KisAssistantTool::slotChangeSubdivisions(int value) {
     if (m_selectedAssistant) {
         bool isRulerAssistant = m_selectedAssistant->id() == "ruler"
                              || m_selectedAssistant->id() == "infinite ruler";
+        bool isPerspectiveAssistant = m_selectedAssistant->id() == "perspective";
         
         if (isRulerAssistant) {
             QSharedPointer <RulerAssistant> assis = qSharedPointerCast<RulerAssistant>(m_selectedAssistant);
             assis->setSubdivisions(value);
             
             m_options.minorSubdivisionsSpinbox->setEnabled(value > 0);
+        }
+        
+        else if (isPerspectiveAssistant) {
+            QSharedPointer <PerspectiveAssistant> assis = qSharedPointerCast<PerspectiveAssistant>(m_selectedAssistant);
+            assis->setSubdivisions(value);
         }
     }
     

@@ -752,6 +752,17 @@ void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {
          Setting the middle handles as needed
          */
         if(!d->bottomMiddle && !d->topMiddle && !d->leftMiddle && !d->rightMiddle) {
+  
+            // Before re-adding the handles, clear old ones that have been
+            // potentially loaded from disk and not re-associated with the
+            // xxxMiddle pointers in d; otherwise those would stay in place.
+            if(!d->sideHandles.isEmpty()) {
+                Q_FOREACH (KisPaintingAssistantHandleSP handle, d->sideHandles) {
+                    handle->unregisterAssistant(this);
+                }
+                d->sideHandles.clear();
+            }
+          
             d->bottomMiddle = new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->bottomRight.data()->x())*0.5,
                                                              (d->bottomLeft.data()->y() + d->bottomRight.data()->y())*0.5);
             d->topMiddle = new KisPaintingAssistantHandle((d->topLeft.data()->x() + d->topRight.data()->x())*0.5,
@@ -760,10 +771,11 @@ void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {
                                                            (d->topRight.data()->y() + d->bottomRight.data()->y())*0.5);
             d->leftMiddle= new KisPaintingAssistantHandle((d->bottomLeft.data()->x() + d->topLeft.data()->x())*0.5,
                                                           (d->bottomLeft.data()->y() + d->topLeft.data()->y())*0.5);
-            addHandle(d->rightMiddle.data(), HandleType::SIDE);
-            addHandle(d->leftMiddle.data(), HandleType::SIDE);
-            addHandle(d->bottomMiddle.data(), HandleType::SIDE);
-            addHandle(d->topMiddle.data(), HandleType::SIDE);
+            
+            addHandle(d->rightMiddle, HandleType::SIDE);
+            addHandle(d->leftMiddle, HandleType::SIDE);
+            addHandle(d->bottomMiddle, HandleType::SIDE);
+            addHandle(d->topMiddle, HandleType::SIDE);
         }
         else
         {

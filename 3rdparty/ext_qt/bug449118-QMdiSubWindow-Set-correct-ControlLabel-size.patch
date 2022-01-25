@@ -1,0 +1,44 @@
+From 5969788d6f2ef0a7b18377040c61515389be34da Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Morten=20Johan=20S=C3=B8rvig?= <morten.sorvig@qt.io>
+Date: Wed, 17 Feb 2021 12:04:44 +0100
+Subject: [PATCH] QMdiSubWindow: Set correct ControlLabel size
+
+The label pixmap may be a high-dpi pixmap. Set the ControlLabel
+fixed size to be the pixmap device independent size.
+
+Fixes: QTBUG-87871
+Pick-to: 5.15
+Pick-to: 6.0
+Pick-to: 6.1
+Change-Id: Ib836e322d25599cb5e79011ea597e32ee1f8d093
+Reviewed-by: Friedemann Kleint <Friedemann.Kleint@qt.io>
+(cherry picked from commit 33ddacdd24523acbdafcda0f520dd2d73c879cfb)
+---
+ src/widgets/widgets/qmdisubwindow.cpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/widgets/widgets/qmdisubwindow.cpp b/src/widgets/widgets/qmdisubwindow.cpp
+index e9511f944f..29a29ff5df 100644
+--- a/src/widgets/widgets/qmdisubwindow.cpp
++++ b/src/widgets/widgets/qmdisubwindow.cpp
+@@ -399,7 +399,7 @@ ControlLabel::ControlLabel(QMdiSubWindow *subWindow, QWidget *parent)
+     Q_UNUSED(subWindow);
+     setFocusPolicy(Qt::NoFocus);
+     updateWindowIcon();
+-    setFixedSize(label.size());
++    setFixedSize(label.size() / label.devicePixelRatio());
+ }
+ 
+ /*
+@@ -407,7 +407,7 @@ ControlLabel::ControlLabel(QMdiSubWindow *subWindow, QWidget *parent)
+ */
+ QSize ControlLabel::sizeHint() const
+ {
+-    return label.size();
++    return label.size() / label.devicePixelRatio();
+ }
+ 
+ /*
+-- 
+2.24.1.windows.2
+

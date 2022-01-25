@@ -687,6 +687,10 @@ target_link_libraries(kritaui
         kritawidgets
         kritawidgetutils
         kritaresources
+
+        SDL2
+        mlt-7
+        mlt++-7
 )
 
 if (ANDROID)

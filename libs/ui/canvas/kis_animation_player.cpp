@@ -37,6 +37,10 @@
 #include "KisDecoratedNodeInterface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_algebra_2d.h"
+#include <mlt++/MltProducer.h>
+#include <mlt++/MltConsumer.h>
+#include <mlt++/MltFactory.h>
+#include <mlt++/MltProfile.h>
 
 #include "kis_image_config.h"
 #include <limits>
@@ -131,53 +135,67 @@ public:
     PlaybackWorker(QSharedPointer<PlaybackData> shared)
         : QObject(nullptr)
         , m_sharedData(shared) {
+        Mlt::Factory::init();
+    }
 
+    ~PlaybackWorker() {
+        if (!m_mltconsumer->is_stopped())
+            m_mltconsumer->stop();
+
+        m_mltconsumer.reset();
+        m_mltproducer.reset();
+        Mlt::Factory::close();
     }
 
     //Where the thread "enters"...
     void run() {
-        QTimer* timer = new QTimer(this);
-        timer->setTimerType(Qt::PreciseTimer);
-        connect(timer, &QTimer::timeout, this, &PlaybackWorker::process);
-        timer->start(((qreal)AUDIO_BUFFER_SAMPLES / (qreal)AUDIO_SAMPLE_RATE) * 1000);
+        m_mltprofile.reset( new Mlt::Profile() );
+        m_mltprofile->set_frame_rate(24, 1);
+        m_mltconsumer.reset(new Mlt::Consumer(*m_mltprofile, "sdl_audio"));
+//        m_mltproducer.reset(new Mlt::Producer(*m_mltprofile, QString("/home/eoin/Sync/krita/test_sequence_2hz_32sec.wav").toUtf8().constData()));
+        m_mltproducer.reset(new Mlt::Producer(*m_mltprofile, QString("/home/eoin/Music/Keep/Artists/The Pillows/[1999.10.27] Rush (Single)/03 - Sleepy Head.mp3").toUtf8().constData()));
+        m_mltconsumer->connect(*m_mltproducer);
+        m_mltconsumer->listen("consumer-frame-show", this, (mlt_listener)PlaybackWorker::on_consumer_show_frame);
+
+        m_mltconsumer->start();
         m_timeSinceLastPlayheadChange.start();
         m_readyToPostFrame = true;
+    }
 
-        //if audio needed
-        m_audioDecoder.reset(new QAudioDecoder(this));
-        m_audioDecoder->setSourceFilename("/home/eoin/Sync/krita/test_sequence_2hz_32sec.wav");
+    static void on_consumer_show_frame(mlt_consumer, void* p_self, mlt_frame frame) {
+        Mlt::Frame f = Mlt::Frame(frame);
+        PlaybackWorker* self = static_cast<PlaybackWorker*>(p_self);
+
+        self->process(f.get_position());
     }
 
     //Where the loop happens...
-    void process() {
-        // AUDIO
-        // Every tick
-        //     - Pull and resample audio from via via decoder.
-        //     - Push buffer size audio to audio device.
-        qDebug() << "Decode & resample source audio";
-        qDebug() << "Push 512 samples to audio device";
+    void process(const int frame) {
+        if (frame == m_sharedData->playbackRange().end()) {
+            m_mltproducer->seek(0);
+            m_mltconsumer->purge();
+            m_mltconsumer->set("refresh", 1);
+        }
 
+        ENTER_FUNCTION() << ppVar(frame);
         // VISUAL
         // Every tick
         //     - Check time since last frame. If larger than seconds per frame:
         //              - Advance playhead by one(?) frame
         //              - Try to display the frame (Drop frames???)
-        const int msecPerFrame = framesToScaledTimeMS(1, m_sharedData->m_frameRate, m_sharedData->playbackSpeed());
-        if ( m_readyToPostFrame && m_timeSinceLastPlayheadChange.elapsed() > msecPerFrame) {
-            const int numFramesToAdvance = m_timeSinceLastPlayheadChange.elapsed() / msecPerFrame;
-            m_sharedData->advancePlayhead(numFramesToAdvance);
+        if ( m_readyToPostFrame ) {
+            //m_sharedData->advancePlayhead(1);
+            const int duration = m_sharedData->playbackRange().end() + 1 - m_sharedData->playbackRange().start();
+            m_sharedData->setPlayheadFrame(m_sharedData->playbackRange().start() + ( frame % duration ));
             emit playheadChanged();
-            const int remainderMS = m_timeSinceLastPlayheadChange.elapsed() - (msecPerFrame * numFramesToAdvance);
-            m_timeSinceLastPlayheadChange.restart(remainderMS);
             m_readyToPostFrame = m_sharedData->dropFrames() ? false : true;
         }
+
     }
 
     void frameReady() {
         m_readyToPostFrame = true;
     }
-
-    ~PlaybackWorker() = default;
 
 Q_SIGNALS:
     void playheadChanged();
@@ -185,8 +203,10 @@ Q_SIGNALS:
 private:
     bool m_readyToPostFrame;
     QSharedPointer<PlaybackData> m_sharedData;
-    QScopedPointer<QAudioDecoder> m_audioDecoder;
     KisElapsedTimer m_timeSinceLastPlayheadChange;
+    QScopedPointer<Mlt::Profile> m_mltprofile;
+    QScopedPointer<Mlt::Consumer> m_mltconsumer;
+    QScopedPointer<Mlt::Producer> m_mltproducer;
 };
 
 //Setup environment for playback.

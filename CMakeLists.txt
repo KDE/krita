@@ -417,6 +417,15 @@ find_package(Qt5 ${MIN_QT_VERSION}
         Sql
 )
 
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIRS})
+find_package(MLT REQUIRED)
+include_directories(${MLT_INCLUDE_DIR})
+include_directories(${MLTPP_INCLUDE_DIR})
+set_package_properties(MLT PROPERTIES DESCRIPTION "Multimedia framework"
+                URL "https://mltframework.org"
+                PURPOSE "Required to do video processing")
+
 if (ANDROID)
     find_package(Qt5 ${MIN_QT_VERSION}
         REQUIRED COMPONENTS

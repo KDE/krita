@@ -97,10 +97,12 @@ QColor parseRGBColorObject(QDomElement parent)
 QColor parseCMYKColorObject(QDomElement parent)
 {
     QColor color(Qt::black);
-    int c = 0;
-    int m = 0;
-    int y = 0;
-    int k = 0;
+    QDomDocument labXML;
+    QDomElement root = labXML.createElement("CMYK");
+    // TODO: Use the document color profile if possible.
+    QString spotBook;
+    QString spotName;
+    int spotValue = 0;
 
     QDomNode child = parent.firstChild();
     while (!child.isNull()) {
@@ -109,29 +111,46 @@ QColor parseCMYKColorObject(QDomElement parent)
         QString type = childEl.attribute("type", "<unknown>");
         QString key = childEl.attribute("key", "");
 
-        if (type != "Double") {
-            warnKrita << "Unknown color component type:" << ppVar(type) << ppVar(key);
-            return Qt::red;
-        }
-
-        double value = KisDomUtils::toDouble(childEl.attribute("value", "0"));
-
-        if (key == "Mgnt") {
-            c = int(value);
-        } else if (key == "Mgnt") {
-            m = int(value);
-        } else if (key == "Ylw ") {
-            y = int(value);
-        } else if (key == "Blck") {
-            k = int(value);
+        if (type == "Double") {
+            double value = KisDomUtils::toDouble(childEl.attribute("value", "0")) * 0.01;
+            // CMYK is stored in percentages...
+            if (key == "Cyn ") {
+                root.setAttribute("c", value);
+            } else if (key == "Mgnt") {
+                root.setAttribute("m", value);
+            } else if (key == "Ylw ") {
+                root.setAttribute("y", value);
+            } else if (key == "Blck") {
+                root.setAttribute("k", value);
+            } else {
+                warnKrita << "Unknown color key value double:" << ppVar(key);
+                return Qt::red;
+            }
+        } else if (type == "Text") {
+            if (key== "Bk  ") {
+                spotBook = childEl.attribute("value", "");
+            } else if (key== "Nm  ") {
+                spotName = childEl.attribute("value", "");
+            } else {
+                warnKrita << "Unknown color key value string:" << ppVar(key);
+            }
+        } else if (type == "Integer") {
+            if (key== "bookID") {
+                spotValue = KisDomUtils::toInt(childEl.attribute("value", "0"));
+            } else {
+                warnKrita << "Unknown color key value integer:" << ppVar(key);
+            }
         } else {
-            warnKrita << "Unknown color key value:" << ppVar(key);
+            warnKrita << "Unknown color component type:" << ppVar(type) << ppVar(key);
             return Qt::red;
         }
 
         child = child.nextSibling();
     }
-    color.setCmyk(c, m, y, k);
+    color = KoColor::fromXML(root, "U8").toQColor();
+    if (!spotName.isEmpty()) {
+        qDebug() << "Spot color found! Book: " << spotBook << " Name: " << spotName << " Book value: " << spotValue;
+    }
 
     return color;
 }
@@ -177,6 +196,43 @@ QColor parseHSBColorObject(QDomElement parent)
     return color;
 }
 
+QColor parseLabColorObject(QDomElement parent)
+{
+    QColor color(Qt::black);
+    QDomDocument labXML;
+    QDomElement root = labXML.createElement("Lab");
+
+    QDomNode child = parent.firstChild();
+    while (!child.isNull()) {
+        QDomElement childEl = child.toElement();
+
+        QString type = childEl.attribute("type", "<unknown>");
+        QString key = childEl.attribute("key", "");
+
+        if (type != "Double") {
+            warnKrita << "Unknown color component type:" << ppVar(type) << ppVar(key);
+            return Qt::red;
+        }
+
+        if (key == "Lmnc") {
+            root.setAttribute("L", childEl.attribute("value", "0"));
+        } else if (key == "A   ") {
+            root.setAttribute("a", childEl.attribute("value", "0"));
+        } else if (key == "B   ") {
+            root.setAttribute("b", childEl.attribute("value", "0"));
+        } else {
+            warnKrita << "Unknown color key value:" << ppVar(key);
+            return Qt::red;
+        }
+
+        child = child.nextSibling();
+    }
+    KoColor labCol = KoColor::fromXML(root, "U16");
+    color = labCol.toQColor();
+
+    return color;
+}
+
 void parseColorStopsList(QDomElement parent,
                          QVector<qreal> &startLocations,
                          QVector<qreal> &middleOffsets,
@@ -218,6 +274,9 @@ void parseColorStopsList(QDomElement parent,
 
                     } else if (classId == "HSBC") {
                         colors.append(parseHSBColorObject(childEl));
+
+                    } else if (classId == "LbCl") {
+                        colors.append(parseLabColorObject(childEl));
 
                     } else {
                         warnKrita << "WARNING: unknown gradient stop color" << type << key << classId;
@@ -319,6 +378,9 @@ bool tryParseDescriptor(const QDomElement &el, const QString &path, const QStrin
 
     } else if (classId == "HSBC") {
         catcher.addColor(path, parseHSBColorObject(el));
+
+    } else if (classId == "LbCl") {
+        catcher.addColor(path, parseLabColorObject(el));
 
     } else if (classId == "ShpC") {
         CurveObjectCatcher curveCatcher;

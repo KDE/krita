@@ -173,13 +173,13 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
 };
 
 struct KRITAPSD_EXPORT psd_layer_gradient_fill {
-    double angle;
-    QString style;
-    QString repeat;
-    double scale;
-    bool reverse; // Is gradient reverse
-    bool dithered; // Is gradient dithered
-    bool align_with_layer;
+    double angle = 0.0;
+    QString style = QString("linear");
+    QString repeat = QString("none");
+    double scale = 100.0;
+    bool reverse = false; // Is gradient reverse
+    bool dithered = false; // Is gradient dithered
+    bool align_with_layer = false;
     QPointF offset;
     QDomDocument gradient;
 
@@ -260,21 +260,21 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
         double fixedAngle = angle;
 
         if (style == "square") {
-            fixedAngle = fmod(360.0 - (45.0 + angle), 360.0);
+            fixedAngle = fmod((45.0 + angle), 360.0);
         }
 
+        cfg->setProperty("end_position_angle", fixedAngle);
+
         if (style == "linear") {
-            // need to double check how angle is handled in these gradient fills and how offset works for linear.
+            // TODO: linear has the problem that in Krita it rotates around the top-left,
+            // while in psd it rotates around the middle.
             cfg->setProperty("end_position_distance", scale);
             cfg->setProperty("start_position_x", offset.x());
             cfg->setProperty("start_position_y", offset.y());
-            cfg->setProperty("end_position_angle", fixedAngle);
-
         } else {
             cfg->setProperty("end_position_distance", scale*0.5);
             cfg->setProperty("start_position_x", (50.0)+offset.x());
             cfg->setProperty("start_position_y", (50.0)+offset.y());
-            cfg->setProperty("end_position_angle", fixedAngle);
         }
 
         QDomDocument doc;

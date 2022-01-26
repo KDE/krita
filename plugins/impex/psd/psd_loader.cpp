@@ -171,6 +171,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
         Q_FOREACH (KoPatternSP pattern, serializer.patterns()) {
             if (pattern && pattern->valid()) {
                 patternsModel.addResource(pattern, storageLocation);
+                dbgFile << "Loaded embedded pattern: " << pattern->name();
             }
             else {
                 qWarning() << "Invalid or empty pattern" << pattern;
@@ -296,12 +297,16 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 }
                 cfg->fromXML(layerRecord->infoBlocks.fillConfig.firstChildElement());
                 cfg->createLocalResourcesSnapshot();
-                KisGeneratorLayerSP genlayer = new KisGeneratorLayer(m_image, layerRecord->layerName, cfg, KisSelectionSP());
+                KisGeneratorLayerSP genlayer = new KisGeneratorLayer(m_image, layerRecord->layerName, cfg, m_image->globalSelection());
                 genlayer->setFilter(cfg);
                 layer = genlayer;
 
             } else {
                 layer = new KisPaintLayer(m_image, layerRecord->layerName, layerRecord->opacity);
+                if (!layerRecord->readPixelData(io, layer->paintDevice())) {
+                    dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
+                    return ImportExportCodes::FileFormatIncorrect;
+                }
             }
             layer->setCompositeOpId(psd_blendmode_to_composite_op(layerRecord->blendModeKey));
 
@@ -313,10 +318,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 allStylesXml << LayerStyleMapping(styleXml, layer);
             }
 
-            if (!layerRecord->readPixelData(io, layer->paintDevice())) {
-                dbgFile << "failed reading channels for layer: " << layerRecord->layerName << layerRecord->error;
-                return ImportExportCodes::FileFormatIncorrect;
-            }
             if (!groupStack.isEmpty()) {
                 m_image->addNode(layer, groupStack.top());
             }

@@ -8,6 +8,7 @@
 #define FREEHANDSTROKEBENCHMARK_H
 
 #include <simpletest.h>
+#include "config-limit-long-tests.h"
 
 class FreehandStrokeBenchmark : public QObject
 {
@@ -30,6 +31,9 @@ private Q_SLOTS:
     void testColorsmudgeDefaultTip_dull_old_nsa();
     void testColorsmudgeDefaultTip_dull_new_sa();
     void testColorsmudgeDefaultTip_dull_new_nsa();
+#ifndef LIMIT_LONG_TESTS
+    void testColorsmudgeDefaultTip_dull_new_sa_800px();
+#endif
     void testColorsmudgeDefaultTip_smear_old_sa();
     void testColorsmudgeDefaultTip_smear_old_nsa();
     void testColorsmudgeDefaultTip_smear_new_sa();

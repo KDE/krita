@@ -186,6 +186,15 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_sa()
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_new_sa.kpp");
 }
 
+#ifndef LIMIT_LONG_TESTS
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_sa_800px()
+{
+    benchmarkBrushUnthreaded("testing_800px_colorsmudge_defaut_dulling_new_sa.kpp");
+}
+
+#endif
+
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_nsa()
 {
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_new_nsa.kpp");

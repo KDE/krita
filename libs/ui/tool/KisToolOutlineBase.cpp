@@ -133,7 +133,7 @@ void KisToolOutlineBase::finishOutlineAction()
     }
     finishOutline(m_points);
     m_points.clear();
-    m_paintPath.clear();
+    m_paintPath = QPainterPath();
 }
 
 void KisToolOutlineBase::paint(QPainter& gc, const KoViewConverter &converter)

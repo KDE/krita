@@ -522,16 +522,6 @@ void KisBrush::prepareForSeqNo(const KisPaintInformation &info, int seqNo)
     Q_UNUSED(seqNo);
 }
 
-void KisBrush::setThreadingAllowed(bool value)
-{
-    d->threadingAllowed = value;
-}
-
-bool KisBrush::threadingAllowed() const
-{
-    return d->threadingAllowed;
-}
-
 void KisBrush::clearBrushPyramid()
 {
     d->brushPyramid.reset();

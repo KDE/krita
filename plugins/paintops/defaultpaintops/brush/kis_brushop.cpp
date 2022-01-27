@@ -57,12 +57,6 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     Q_UNUSED(image);
     Q_ASSERT(settings);
 
-    /**
-     * We do our own threading here, so we need to forbid the brushes
-     * to do threading internally
-     */
-    m_brush->setThreadingAllowed(false);
-
     m_airbrushOption.readOptionSetting(settings);
 
     m_opacityOption.readOptionSetting(settings);

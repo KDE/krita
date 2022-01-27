@@ -303,24 +303,10 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
                             centerX, centerY,
                             angle);
 
+    const QRect rect(0, 0, dstWidth, dstHeight);
     KisBrushMaskApplicatorBase *applicator = d->shape->applicator();
     applicator->initializeData(&data);
-
-    int jobs = d->idealThreadCountCached;
-    if (threadingAllowed() && dstHeight > 100 && jobs >= 4) {
-        int splitter = dstHeight / jobs;
-        QVector<QRect> rects;
-        for (int i = 0; i < jobs - 1; i++) {
-            rects << QRect(0, i * splitter, dstWidth, splitter);
-        }
-        rects << QRect(0, (jobs - 1)*splitter, dstWidth, dstHeight - (jobs - 1)*splitter);
-        OperatorWrapper wrapper(applicator);
-        QtConcurrent::blockingMap(rects, wrapper);
-    }
-    else {
-        QRect rect(0, 0, dstWidth, dstHeight);
-        applicator->process(rect);
-    }
+    applicator->process(rect);
 }
 
 void KisAutoBrush::notifyBrushIsGoingToBeClonedForStroke()

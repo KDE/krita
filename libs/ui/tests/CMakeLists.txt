@@ -370,6 +370,7 @@ if (${INSTALL_BENCHMARKS})
     install(FILES data/testing_200px_colorsmudge_default_dulling_old_sa.kpp
         data/testing_200px_colorsmudge_defaut_dulling_new_nsa.kpp
         data/testing_200px_colorsmudge_defaut_dulling_new_sa.kpp
+        data/testing_800px_colorsmudge_defaut_dulling_new_sa.kpp
         data/testing_200px_colorsmudge_defaut_dulling_old_nsa.kpp
         data/testing_200px_colorsmudge_defaut_smearing_new_nsa.kpp
         data/testing_200px_colorsmudge_defaut_smearing_new_sa.kpp

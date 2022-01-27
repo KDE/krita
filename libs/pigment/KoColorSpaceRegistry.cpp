@@ -460,12 +460,13 @@ const KoColorSpace * KoColorSpaceRegistry::Private::colorSpace1(const QString &c
         typename LockPolicy::ReadLocker l(&registrylock);
 
         if (profileName.isEmpty()) {
-            profileName = profileForCsIdWithFallbackImpl(csID, pName)->name();
-            if (profileName.isEmpty()) return 0;
+            profileName = defaultProfileForCsIdImpl(csID);
         }
 
-        // quick attempt to fetch a cached color space
-        cs = getCachedColorSpaceImpl(csID, profileName);
+        if (!profileName.isEmpty()) {
+            // quick attempt to fetch a cached color space
+            cs = getCachedColorSpaceImpl(csID, profileName);
+        }
     }
 
     if (!cs) {

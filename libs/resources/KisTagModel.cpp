@@ -52,16 +52,13 @@ void KisAllTagsModel::untagAllResources(KisTagSP tag)
 {
     KisTagResourceModel model(d->resourceType);
     model.setTagsFilter(QVector<int>() << tag->id());
-    QList<int> taggedResources;
+    QVector<int> taggedResources;
     for (int i = 0; i < model.rowCount(); i++) {
         QModelIndex idx = model.index(i, 0);
         taggedResources.append(model.data(idx, Qt::UserRole + KisTagResourceModel::Id).toInt());
     }
 
-    for (int i = 0; i < taggedResources.size(); i++) {
-        model.untagResource(tag, taggedResources[i]);
-    }
-
+    model.untagResources(tag, taggedResources);
 
 }
 

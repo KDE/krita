@@ -311,9 +311,9 @@ bool KisTagFilterResourceProxyModel::tagResources(const KisTagSP tag, const QVec
     return d->tagResourceModel->tagResources(tag, resourceIds);
 }
 
-bool KisTagFilterResourceProxyModel::untagResource(const KisTagSP tag, const int resourceId)
+bool KisTagFilterResourceProxyModel::untagResources(const KisTagSP tag, const QVector<int> &resourceIds)
 {
-    return d->tagResourceModel->untagResource(tag, resourceId);
+    return d->tagResourceModel->untagResources(tag, resourceIds);
 }
 
 int KisTagFilterResourceProxyModel::isResourceTagged(const KisTagSP tag, const int resourceId)

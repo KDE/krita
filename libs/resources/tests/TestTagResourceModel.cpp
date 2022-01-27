@@ -196,7 +196,7 @@ void TestTagResourceModel::testTagResource()
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
     if (tagResourceModel.isResourceTagged(tag, resource->resourceId())) {
-        tagResourceModel.untagResource(tag, resource->resourceId());
+        tagResourceModel.untagResources(tag, QVector<int>() << resource->resourceId());
     }
 
     int rowCount = tagResourceModel.rowCount();
@@ -223,7 +223,7 @@ void TestTagResourceModel::testUntagResource()
     }
 
     int rowCount = tagResourceModel.rowCount();
-    tagResourceModel.untagResource(tag, resource->resourceId());
+    tagResourceModel.untagResources(tag, QVector<int>() << resource->resourceId());
 
     QCOMPARE(tagResourceModel.rowCount(), rowCount - 1);
 }
@@ -249,7 +249,7 @@ void TestTagResourceModel::testIsResourceTagged()
     tag = tagModel.tagForIndex(tagModel.index(2, 0));
     QVERIFY(tag);
 
-    tagResourceModel.untagResource(tag, resource->resourceId());
+    tagResourceModel.untagResources(tag, QVector<int>() << resource->resourceId());
     QCOMPARE(tagResourceModel.isResourceTagged(tag, resource->resourceId()), false);
 }
 

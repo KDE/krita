@@ -131,7 +131,7 @@ void TestTagFilterResourceProxyModel::testFilterByTag()
     proxyModel.tagResources(tag, QVector<int>() << resource->resourceId());
     QCOMPARE(proxyModel.rowCount(), rowCount + 1);
 
-    proxyModel.untagResource(tag, resource->resourceId());
+    proxyModel.untagResources(tag, QVector<int>() << resource->resourceId());
     QCOMPARE(proxyModel.rowCount(), rowCount);
 }
 
@@ -241,7 +241,7 @@ void TestTagFilterResourceProxyModel::testResourceForIndex()
     tagResourceModel.setResourcesFilter(QVector<KoResourceSP>() << resource);
     for (int i = 0; i < tagResourceModel.rowCount(); ++i) {
         KisTagSP tag = tagResourceModel.index(i, 0).data(Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
-        tagResourceModel.untagResource(tag, resource->resourceId());
+        tagResourceModel.untagResources(tag, QVector<int>() << resource->resourceId());
     }
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));

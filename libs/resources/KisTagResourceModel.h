@@ -22,7 +22,7 @@ public:
     virtual ~KisAbstractTagResourceModel() {}
 
     virtual bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds) = 0;
-    virtual bool untagResource(const KisTagSP tag, const int resourceId) = 0;
+    virtual bool untagResources(const KisTagSP tag, const QVector<int> &resourceIds) = 0;
 
     /**
      * @brief isResourceTagged
@@ -74,7 +74,7 @@ public:
 
     // Abstract Tag API
     bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds) override;
-    bool untagResource(const KisTagSP tag, const int resourceId) override;
+    bool untagResources(const KisTagSP tag, const QVector<int> &resourceId) override;
     int isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
 private Q_SLOTS:
@@ -132,7 +132,7 @@ public:
     // KisAbstractTagResourceModel API
 
     bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds) override;
-    bool untagResource(const KisTagSP tag, const int resourceId) override;
+    bool untagResources(const KisTagSP tag, const QVector<int> &resourceIds) override;
     int isResourceTagged(const KisTagSP tag, const int resourceId) override;
 
     // KisAbstractResourceModel interface

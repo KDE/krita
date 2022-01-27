@@ -6,6 +6,8 @@
 #include "KisTagResourceModel.h"
 
 #include <QtSql>
+#include <QMap>
+
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
@@ -353,40 +355,118 @@ bool KisAllTagResourceModel::tagResources(const KisTagSP tag, const QVector<int>
     return true;
 }
 
-bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
+bool KisAllTagResourceModel::untagResources(const KisTagSP tag, const QVector<int> &resourceIds)
 {
-    if (resourceId < 0) return false;
     if (!tag || !tag->valid()) return false;
     if (!d->query.isSelect()) return false;
     if (rowCount() < 1) return false;
 
-    if (isResourceTagged(tag, resourceId) < 1) return true;
+    int beginRemoveRowsCount = 0;
 
-    beginRemoveRows(QModelIndex(), d->query.at(), d->query.at());
+    QSqlQuery q;
 
-    {
-        QSqlQuery q;
+    if (!q.prepare("UPDATE resource_tags\n"
+                   "SET    active      = 0\n"
+                   "WHERE  tag_id      = :tag_id\n"
+                   "AND    resource_id = :resource_id")) {
+        qWarning() << "Could not prepare untagResource-update query" << q.lastError();
+        return false;
+    }
 
-        if (!q.prepare("UPDATE resource_tags\n"
-                       "SET    active      = 0\n"
-                       "WHERE  tag_id      = :tag_id\n"
-                       "AND    resource_id = :resource_id")) {
-            qWarning() << "Could not prepare untagResource query" << q.lastError();
-            endRemoveRows();
-            return false;
+    QSqlQuery allIndices;
+    if (!allIndices.prepare(createQuery(true, true))) {
+        qWarning() << "Coult not prepare untagResource-allIndices query " << allIndices.lastError();
+    }
+
+    allIndices.bindValue(":resource_type", d->resourceType);
+    allIndices.bindValue(":language", KisTag::currentLocale());
+
+    if (!allIndices.exec()) {
+        qCritical() << "Could not exec untagResource-allIndices query " << allIndices.lastError();
+    }
+
+    int activesRowId = -1;
+    int lastActiveRowId = -1;
+
+    // needed for beginInsertRows indices calculations
+    QMap<int, int> resourcesCountForLastActiveRowId;
+
+    int idd = 0;
+
+    while (allIndices.next()) {
+        idd++;
+        bool variantSuccess = true;
+
+        bool isActive = true; // all of them are active!
+        KIS_SAFE_ASSERT_RECOVER(variantSuccess) { isActive = false; }
+
+        int rowTagId = allIndices.value("tag_id").toInt(&variantSuccess);
+        KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowTagId = -1; }
+        int rowResourceId = allIndices.value("resource_id").toInt(&variantSuccess);
+        KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowResourceId = -1; }
+
+        bool willStayActive = isActive && (rowTagId != tag->id() || !resourceIds.contains(rowResourceId));
+        activesRowId++;
+        if (willStayActive) {
+            lastActiveRowId = activesRowId;
+        } else if (isActive) {
+            // means we're removing it
+            if (!resourcesCountForLastActiveRowId.contains(lastActiveRowId)) {
+                resourcesCountForLastActiveRowId[lastActiveRowId] = 0;
+            }
+            resourcesCountForLastActiveRowId[lastActiveRowId]++;
         }
+    }
+
+    Q_FOREACH(const int key, resourcesCountForLastActiveRowId.keys()) {
+        // when having multiple beginRemoveRows:
+        // let's say you have this model:
+        // 0  A
+        // 1  A
+        // 2  A
+        // 3  *B*
+        // 4  *B*
+        // 5  A
+        // 6  *B*
+        // 7  A
+        // and you want to remove all Bs
+        // then the signals should be:
+        // beginRemoveRows(3, 4) <- first two indices in the obvious way
+        // beginRemoveRows(4, 4) <- next index as if the first action was already done
+        //  (so `5  A` already became `3  A`, so the *B* is `4  B`, not `6  B`)
+
+        beginRemoveRows(QModelIndex(), key + 1, key + resourcesCountForLastActiveRowId[key]);
+        beginRemoveRowsCount++;
+    }
+
+    QSqlDatabase::database().transaction();
+    for (int i = 0; i < resourceIds.count(); i++) {
+        int resourceId = resourceIds[i];
+
+        if (resourceId < 0) continue;
+        if (isResourceTagged(tag, resourceId) < 1) continue;
 
         q.bindValue(":tag_id", tag->id());
         q.bindValue(":resource_id", resourceId);
 
         if (!q.exec()) {
-            qWarning() << "Could not execute untagResource query" << q.lastError() << q.boundValues();
-            endRemoveRows();
+            qWarning() << "Could not execute untagResource-update query" << q.lastError() << q.boundValues();
+            for (int i = 0; i < beginRemoveRowsCount; i++) {
+                endRemoveRows();
+            }
+            QSqlDatabase::database().rollback();
             return false;
         }
     }
-    resetQuery();
-    endRemoveRows();
+    QSqlDatabase::database().commit();
+
+    if (beginRemoveRowsCount > 0) {
+        resetQuery();
+        for (int i = 0; i < beginRemoveRowsCount; i++) {
+            endRemoveRows();
+        }
+    }
+
     return true;
 }
 
@@ -624,9 +704,9 @@ bool KisTagResourceModel::tagResources(const KisTagSP tag, const QVector<int> &r
     return r;
 }
 
-bool KisTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
+bool KisTagResourceModel::untagResources(const KisTagSP tag, const QVector<int> &resourceIds)
 {
-    return d->sourceModel->untagResource(tag, resourceId);
+    return d->sourceModel->untagResources(tag, resourceIds);
 }
 
 int KisTagResourceModel::isResourceTagged(const KisTagSP tag, const int resourceId)

@@ -82,9 +82,8 @@ void KisWdgTagSelectionControllerOneResource::slotRemoveTag(KoID tag)
     if (m_resourceIds.count() == 0) return;
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
-    Q_FOREACH(int resourceId, m_resourceIds) {
-        m_tagResourceModel->untagResource(tagsp, resourceId);
-    }
+
+    m_tagResourceModel->untagResources(tagsp, m_resourceIds.toVector());
     updateView();
 }
 

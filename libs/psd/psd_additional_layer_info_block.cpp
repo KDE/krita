@@ -438,12 +438,13 @@ void PsdAdditionalLayerInfoBlock::writeLclrBlockExImpl(QIODevice &io, const quin
     KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
     KisAslWriterUtils::writeFixedString<byteOrder>("lclr", io);
     // 4x2 quint16
-    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> labelColorSizeTag(io, 8);
+    const quint32 len = 8;
+    SAFE_WRITE_EX(byteOrder, io, len);
     quint16 zero = 0;
-    psdwrite<byteOrder>(io, lclr);
-    psdwrite<byteOrder>(io, zero);
-    psdwrite<byteOrder>(io, zero);
-    psdwrite<byteOrder>(io, zero);
+    SAFE_WRITE_EX(byteOrder, io, lclr);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
+    SAFE_WRITE_EX(byteOrder, io, zero);
 
 
 }

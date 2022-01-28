@@ -23,6 +23,8 @@
 #include "KisPart.h"
 #include "KisUsageLogger.h"
 
+#include <kis_layer_utils.h>
+
 class FileSystemWatcherWrapper : public QObject
 {
     Q_OBJECT
@@ -285,6 +287,9 @@ void KisSafeDocumentLoader::delayedLoadStart()
         else {
             successfullyLoaded = m_d->doc->openPath(m_d->temporaryPath,
                                                    KisDocument::DontAddToRecent);
+            // Wait for required updates, if any. BUG: 448256
+            KisLayerUtils::forceAllDelayedNodesUpdate(m_d->doc->image()->root());
+            m_d->doc->image()->waitForDone();
         }
     } else {
         dbgKrita << "File was modified externally. Restarting.";

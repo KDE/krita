@@ -399,7 +399,7 @@ public:
     void writeLsctBlockEx(QIODevice &io, psd_section_type sectionType, bool isPassThrough, const QString &blendModeKey);
     void writeLfx2BlockEx(QIODevice &io, const QDomDocument &stylesXmlDoc, bool useLfxsLayerStyleFormat);
     void writePattBlockEx(QIODevice &io, const QDomDocument &patternsXmlDoc);
-    void writeLclrBlockEx(QIODevice &io, const quint8 &labelColor);
+    void writeLclrBlockEx(QIODevice &io, const quint16 &labelColor);
 
     bool valid();
 
@@ -410,7 +410,7 @@ public:
     QString unicodeLayerName;
     QDomDocument layerStyleXml;
     QVector<QDomDocument> embeddedPatterns;
-    quint8 labelColor{0}; // layer color.
+    quint16 labelColor{0}; // layer color.
 
     QDomDocument fillConfig;
     psd_fill_type fillType {psd_fill_solid_color};
@@ -435,7 +435,7 @@ private:
     void writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc);
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
-    void writeLclrBlockExImpl(QIODevice &io, const quint8 &lclr);
+    void writeLclrBlockExImpl(QIODevice &io, const quint16 &lclr);
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;

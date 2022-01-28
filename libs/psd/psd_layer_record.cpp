@@ -603,9 +603,9 @@ KisPaintDeviceSP PSDLayerRecord::convertMaskDeviceIfNeeded(KisPaintDeviceSP dev)
     return result;
 }
 
-quint8 PSDLayerRecord::psdLabelColor(int colorLabelIndex)
+quint16 PSDLayerRecord::psdLabelColor(int colorLabelIndex)
 {
-    quint8 color = 0;
+    quint16 color = 0;
     switch (colorLabelIndex) {
     case 0: // none
         color = 0;
@@ -640,7 +640,7 @@ quint8 PSDLayerRecord::psdLabelColor(int colorLabelIndex)
     return color;
 }
 
-int PSDLayerRecord::kritaColorLabelIndex(quint8 labelColor)
+int PSDLayerRecord::kritaColorLabelIndex(quint16 labelColor)
 {
     int color = 0;
     switch (labelColor) {

@@ -170,8 +170,8 @@ private:
 
     KisPaintDeviceSP convertMaskDeviceIfNeeded(KisPaintDeviceSP dev);
 
-    quint8 psdLabelColor(int colorLabelIndex);
-    int kritaColorLabelIndex(quint8 labelColor);
+    quint16 psdLabelColor(int colorLabelIndex);
+    int kritaColorLabelIndex(quint16 labelColor);
 
 private:
     KisPaintDeviceSP m_layerContentDevice;

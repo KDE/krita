@@ -219,16 +219,16 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "spf") {
         } else if (key == "lclr") {
             // layer label color.
-            quint8 col1 = 0;
-            quint8 col2 = 0;
-            quint8 col3 = 0;
-            quint8 col4 = 0;
+            quint16 col1 = 0;
+            quint16 col2 = 0;
+            quint16 col3 = 0;
+            quint16 col4 = 0;
             psdread<byteOrder>(io, col1);
             psdread<byteOrder>(io, col2);
             psdread<byteOrder>(io, col3);
             psdread<byteOrder>(io, col4);
             dbgFile << "\t" << "layer color:" << col1 << col2 << col3 << col4;
-            labelColor = col2;
+            labelColor = col1;
         } else if (key == "fxrp") {
         } else if (key == "grdm") {
         } else if (key == "lsct") {
@@ -400,7 +400,7 @@ void PsdAdditionalLayerInfoBlock::writePattBlockEx(QIODevice &io, const QDomDocu
     }
 }
 
-void PsdAdditionalLayerInfoBlock::writeLclrBlockEx(QIODevice &io, const quint8 &labelColor)
+void PsdAdditionalLayerInfoBlock::writeLclrBlockEx(QIODevice &io, const quint16 &labelColor)
 {
     switch (m_header.byteOrder) {
     case psd_byte_order::psdLittleEndian:
@@ -433,12 +433,17 @@ void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDom
 }
 
 template<psd_byte_order byteOrder>
-void PsdAdditionalLayerInfoBlock::writeLclrBlockExImpl(QIODevice &io, const quint8 &lclr)
+void PsdAdditionalLayerInfoBlock::writeLclrBlockExImpl(QIODevice &io, const quint16 &lclr)
 {
-    /** do nothing for now...
     KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
     KisAslWriterUtils::writeFixedString<byteOrder>("lclr", io);
-    // 4x2, of which the second is lclr...
-    */
+    // 4x2 quint16
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> labelColorSizeTag(io, 8);
+    quint16 zero = 0;
+    psdwrite<byteOrder>(io, lclr);
+    psdwrite<byteOrder>(io, zero);
+    psdwrite<byteOrder>(io, zero);
+    psdwrite<byteOrder>(io, zero);
+
 
 }

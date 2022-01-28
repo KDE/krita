@@ -34,6 +34,8 @@
 #include "kis_coordinates_converter.h"
 #include <KisDocument.h>
 
+#include <kis_layer_utils.h>
+
 namespace KisClipboardUtil {
 
 struct ClipboardImageFormat
@@ -242,6 +244,9 @@ KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl)
         QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
         if (doc->importDocument(url.toLocalFile())) {
+            // Wait for required updates, if any. BUG: 448256
+            KisLayerUtils::forceAllDelayedNodesUpdate(doc->image()->root());
+            doc->image()->waitForDone();
             result = new KisPaintDevice(*doc->image()->projection());
         } else {
             qWarning() << "Failed to import file" << url.toLocalFile();

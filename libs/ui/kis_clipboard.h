@@ -62,8 +62,7 @@ public:
     KisPaintDeviceSP clip(const QRect &imageBounds,
                           bool showPopup,
                           int overridePasteBehaviour = -1,
-                          KisTimeSpan *clipRange = nullptr,
-                          const KoColorProfile *destProfile = nullptr) const;
+                          KisTimeSpan *clipRange = nullptr) const;
 
     /**
      * Get the contents of the specified mimedata buffer in the form of a paint device.
@@ -73,7 +72,6 @@ public:
                                       bool showPopup,
                                       int overridePasteBehaviour = -1,
                                       KisTimeSpan *clipRange = nullptr,
-                                      const KoColorProfile *destProfile = nullptr,
                                       bool useClipboardFallback = false) const;
 
     bool hasClip() const;
@@ -113,7 +111,6 @@ private:
                                            const QRect &imageBounds,
                                            bool showPopup,
                                            int overridePasteBehaviour = -1,
-                                           const KoColorProfile *destProfile = nullptr,
                                            bool useClipboardFallback = false) const;
 
     KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;

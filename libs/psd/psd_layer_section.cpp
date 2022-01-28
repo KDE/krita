@@ -255,6 +255,14 @@ bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
             error = "Could not read global mask info visualization type";
             return false;
         }
+
+        // Global mask must measure at least 13 bytes
+        // (excluding the 1 byte compiler enforced padding)
+        if (globalMaskBlockLength >= 13) {
+            dbgFile << "Padding for global mask block:"
+                    << globalMaskBlockLength - 13 << "(" << io.pos() << ")";
+            io.skip(static_cast<size_t>(globalMaskBlockLength) - 13);
+        }
     }
 
     // global additional sections
@@ -269,6 +277,8 @@ bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
      */
     globalInfoSection.setExtraLayerInfoBlockHandler(
         std::bind(&PSDLayerMaskSection::readLayerInfoImpl<psd_byte_order::psdBigEndian>, this, std::placeholders::_1));
+
+    dbgFile << "Position before starting global info section:" << io.pos();
 
     globalInfoSection.read(io);
 
@@ -320,6 +330,10 @@ bool PSDLayerMaskSection::readGlobalMask(QIODevice &io)
                 << globalLayerMaskInfo.colorComponents[3]; // 0
         dbgFile << "\tOpacity:" << globalLayerMaskInfo.opacity; // 50
         dbgFile << "\tKind:" << globalLayerMaskInfo.kind; // 128
+
+        if (globalMaskBlockLength >= 15) {
+            io.skip(qMax(globalMaskBlockLength - 15, 0x0U));
+        }
     }
 
     return true;

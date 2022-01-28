@@ -12,7 +12,7 @@
 #include <KoPattern.h>
 
 class QString;
-class QColor;
+class KoColor;
 class QPointF;
 class KoAbstractGradient;
 
@@ -34,7 +34,7 @@ public:
     virtual void addUnitFloat(const QString &path, const QString &unit, double value);
     virtual void addText(const QString &path, const QString &value);
     virtual void addBoolean(const QString &path, bool value);
-    virtual void addColor(const QString &path, const QColor &value);
+    virtual void addColor(const QString &path, const KoColor &value);
     virtual void addPoint(const QString &path, const QPointF &value);
     virtual void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points);
     virtual void addPattern(const QString &path, const KoPatternSP pattern, const QString &patternUuid);

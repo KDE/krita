@@ -242,6 +242,11 @@ void KoStopGradient::setStops(QList< KoGradientStop > stops)
             m_hasVariableStops = true;
         }
     }
+    if (m_stops.count() >= 2) {
+        setValid(true);
+    } else {
+        setValid(false);
+    }
     updatePreview();
 }
 
@@ -535,6 +540,11 @@ void KoStopGradient::parseSvgGradient(const QDomElement& element, QHash<QString,
             }
             m_stops.append(KoGradientStop(off, color, stopType));
         }
+    }
+    if (m_stops.count() >= 2) {
+        setValid(true);
+    } else {
+        setValid(false);
     }
 }
 

@@ -142,7 +142,7 @@ void KisAslCallbackObjectCatcher::addBoolean(const QString &path, bool value)
     passToCallback(path, m_d->mapBoolean, value);
 }
 
-void KisAslCallbackObjectCatcher::addColor(const QString &path, const QColor &value)
+void KisAslCallbackObjectCatcher::addColor(const QString &path, const KoColor &value)
 {
     passToCallback(path, m_d->mapColor, value);
 }

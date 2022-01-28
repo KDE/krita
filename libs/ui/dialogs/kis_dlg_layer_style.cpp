@@ -823,13 +823,10 @@ void BevelAndEmboss::setBevelAndEmboss(const psd_layer_effects_bevel_emboss *bev
     // ui.cmbContour;
     ui.chkAntiAliased->setChecked(bevelAndEmboss->glossAntiAliased());
     ui.cmbHighlightMode->selectCompositeOp(KoID(bevelAndEmboss->highlightBlendMode()));
-    KoColor highlightshadow(KoColorSpaceRegistry::instance()->rgb8());
-    highlightshadow.fromQColor(bevelAndEmboss->highlightColor());
-    ui.bnHighlightColor->setColor(highlightshadow);
+    ui.bnHighlightColor->setColor(bevelAndEmboss->highlightColor());
     ui.intOpacity->setValue(bevelAndEmboss->highlightOpacity());
     ui.cmbShadowMode->selectCompositeOp(KoID(bevelAndEmboss->shadowBlendMode()));
-    highlightshadow.fromQColor(bevelAndEmboss->shadowColor());
-    ui.bnShadowColor->setColor(highlightshadow);
+    ui.bnShadowColor->setColor(bevelAndEmboss->shadowColor());
     ui.intOpacity2->setValue(bevelAndEmboss->shadowOpacity());
 
     // FIXME: curve editing
@@ -858,10 +855,10 @@ void BevelAndEmboss::fetchBevelAndEmboss(psd_layer_effects_bevel_emboss *bevelAn
     bevelAndEmboss->setAltitude(ui.intAltitude->value());
     bevelAndEmboss->setGlossAntiAliased(ui.chkAntiAliased->isChecked());
     bevelAndEmboss->setHighlightBlendMode(ui.cmbHighlightMode->selectedCompositeOp().id());
-    bevelAndEmboss->setHighlightColor(ui.bnHighlightColor->color().toQColor());
+    bevelAndEmboss->setHighlightColor(ui.bnHighlightColor->color());
     bevelAndEmboss->setHighlightOpacity(ui.intOpacity->value());
     bevelAndEmboss->setShadowBlendMode(ui.cmbShadowMode->selectedCompositeOp().id());
-    bevelAndEmboss->setShadowColor(ui.bnShadowColor->color().toQColor());
+    bevelAndEmboss->setShadowColor(ui.bnShadowColor->color());
     bevelAndEmboss->setShadowOpacity(ui.intOpacity2->value());
 
     // FIXME: curve editing
@@ -935,16 +932,14 @@ void ColorOverlay::setColorOverlay(const psd_layer_effects_color_overlay *colorO
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(colorOverlay->blendMode()));
     ui.intOpacity->setValue(colorOverlay->opacity());
-    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-    color.fromQColor(colorOverlay->color());
-    ui.bnColor->setColor(color);
+    ui.bnColor->setColor(colorOverlay->color());
 }
 
 void ColorOverlay::fetchColorOverlay(psd_layer_effects_color_overlay *colorOverlay) const
 {
     colorOverlay->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     colorOverlay->setOpacity(ui.intOpacity->value());
-    colorOverlay->setColor(ui.bnColor->color().toQColor());
+    colorOverlay->setColor(ui.bnColor->color());
 }
 
 
@@ -1005,9 +1000,7 @@ void DropShadow::setShadow(const psd_layer_effects_shadow_common *shadow)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(shadow->blendMode()));
     ui.intOpacity->setValue(shadow->opacity());
-    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-    color.fromQColor(shadow->color());
-    ui.bnColor->setColor(color);
+    ui.bnColor->setColor(shadow->color());
 
     ui.angleSelector->setValue(shadow->angle());
     ui.angleSelector->setUseGlobalLight(shadow->useGlobalLight());
@@ -1034,7 +1027,7 @@ void DropShadow::fetchShadow(psd_layer_effects_shadow_common *shadow) const
 {
     shadow->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     shadow->setOpacity(ui.intOpacity->value());
-    shadow->setColor(ui.bnColor->color().toQColor());
+    shadow->setColor(ui.bnColor->color());
 
     shadow->setAngle(ui.angleSelector->value());
     shadow->setUseGlobalLight(ui.angleSelector->useGlobalLight());
@@ -1227,9 +1220,7 @@ void InnerGlow::setConfig(const psd_layer_effects_glow_common *config)
     ui.intNoise->setValue(config->noise());
 
     ui.radioColor->setChecked(config->fillType() == psd_fill_solid_color);
-    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-    color.fromQColor(config->color());
-    ui.bnColor->setColor(color);
+    ui.bnColor->setColor(config->color());
     ui.radioGradient->setChecked(config->fillType() == psd_fill_gradient);
 
     KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(config->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
@@ -1271,7 +1262,7 @@ void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
         config->setFillType(psd_fill_gradient);
     }
 
-    config->setColor(ui.bnColor->color().toQColor());
+    config->setColor(ui.bnColor->color());
     KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
     if (gradient) {
         config->setGradient(GradientPointerConverter::resourceToStyle(gradient));
@@ -1376,9 +1367,7 @@ Satin::Satin(QWidget *parent)
 void Satin::setSatin(const psd_layer_effects_satin *satin)
 {
     ui.cmbCompositeOp->selectCompositeOp(KoID(satin->blendMode()));
-    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-    color.fromQColor(satin->color());
-    ui.bnColor->setColor(color);
+    ui.bnColor->setColor(satin->color());
     ui.intOpacity->setValue(satin->opacity());
 
     ui.angleSelector->setValue(satin->angle());
@@ -1398,7 +1387,7 @@ void Satin::fetchSatin(psd_layer_effects_satin *satin) const
 {
     satin->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     satin->setOpacity(ui.intOpacity->value());
-    satin->setColor(ui.bnColor->color().toQColor());
+    satin->setColor(ui.bnColor->color());
 
     satin->setAngle(ui.angleSelector->value());
 
@@ -1471,9 +1460,7 @@ void Stroke::setStroke(const psd_layer_effects_stroke *stroke)
     ui.intOpacity->setValue(stroke->opacity());
 
     ui.cmbFillType->setCurrentIndex((int)stroke->fillType());
-    KoColor color(KoColorSpaceRegistry::instance()->rgb8());
-    color.fromQColor(stroke->color());
-    ui.bnColor->setColor(color);
+    ui.bnColor->setColor(stroke->color());
 
     KoAbstractGradientSP gradient = fetchGradientLazy(GradientPointerConverter::styleToResource(stroke->gradient(KisGlobalResourcesInterface::instance())), m_resourceProvider);
 
@@ -1501,7 +1488,7 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setFillType((psd_fill_type)ui.cmbFillType->currentIndex());
 
-    stroke->setColor(ui.bnColor->color().toQColor());
+    stroke->setColor(ui.bnColor->color());
 
     KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
     if (gradient) {

@@ -307,6 +307,9 @@ KoSegmentGradient KoSegmentGradient::fromXML(const QDomElement &elt)
         gradient.createSegment(interpolation, colorInterpolation, startOffset, endOffset, middleOffset, left, right, leftType, rightType);
         segmentElt = segmentElt.nextSiblingElement("segment");
     }
+    if (!gradient.segments().isEmpty()) {
+        gradient.setValid(true);
+    }
     return gradient;
 }
 
@@ -859,10 +862,23 @@ qreal KoGradientSegment::SphereDecreasingInterpolationStrategy::valueAt(qreal t,
 void KoSegmentGradient::createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const QColor & leftColor, const QColor & rightColor,
                                       KoGradientSegmentEndpointType leftType, KoGradientSegmentEndpointType rightType)
 {
+    createSegment(interpolation
+                  , colorInterpolation
+                  , startOffset
+                  , endOffset
+                  , middleOffset
+                  , KoColor(leftColor, colorSpace())
+                  , KoColor(rightColor, colorSpace())
+                  , leftType
+                  , rightType);
+
+}
+
+void KoSegmentGradient::createSegment(int interpolation, int colorInterpolation, double startOffset, double endOffset, double middleOffset, const KoColor &leftColor, const KoColor &rightColor, KoGradientSegmentEndpointType leftType, KoGradientSegmentEndpointType rightType)
+{
     KoGradientSegmentEndpoint left(startOffset, KoColor(leftColor, colorSpace()), leftType);
     KoGradientSegmentEndpoint right(endOffset, KoColor(rightColor, colorSpace()), rightType);
     pushSegment(new KoGradientSegment(interpolation, colorInterpolation, left, right, middleOffset));
-
 }
 
 const QList<double> KoSegmentGradient::getHandlePositions() const
@@ -1092,6 +1108,11 @@ void KoSegmentGradient::setSegments(const QList<KoGradientSegment*> &segments)
                 segment->middleOffset()
             );
         m_segments.append(newSegment);
+    }
+    if (!m_segments.isEmpty()) {
+        setValid(true);
+    } else {
+        setValid(false);
     }
     updatePreview();
 }

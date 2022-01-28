@@ -6,7 +6,7 @@
 
 #include "kis_asl_object_catcher.h"
 
-#include <QColor>
+#include <KoColor.h>
 #include <QPointF>
 #include <QString>
 
@@ -53,7 +53,7 @@ void KisAslObjectCatcher::addBoolean(const QString &path, bool value)
     dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "bool" << value;
 }
 
-void KisAslObjectCatcher::addColor(const QString &path, const QColor &value)
+void KisAslObjectCatcher::addColor(const QString &path, const KoColor &value)
 {
     dbgKrita << "Unhandled:" << (m_arrayMode ? "[A]" : "[ ]") << path << "color" << value;
 }

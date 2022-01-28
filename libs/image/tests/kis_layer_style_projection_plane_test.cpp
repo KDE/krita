@@ -219,7 +219,7 @@ void KisLayerStyleProjectionPlaneTest::testGlow()
     style->outerGlow()->setOpacity(70);
     style->outerGlow()->setNoise(30);
     style->outerGlow()->setEffectEnabled(true);
-    style->outerGlow()->setColor(Qt::green);
+    style->outerGlow()->setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='1.0' b='0.0'/></color>"));
 
     test(style, "glow_outer");
 }
@@ -234,7 +234,7 @@ void KisLayerStyleProjectionPlaneTest::testGlowGradient()
     style->outerGlow()->setOpacity(70);
     style->outerGlow()->setNoise(10);
     style->outerGlow()->setEffectEnabled(true);
-    style->outerGlow()->setColor(Qt::green);
+    style->outerGlow()->setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='1.0' b='0.0'/></color>"));
 
     QLinearGradient testGradient;
     testGradient.setColorAt(0.0, Qt::white);
@@ -258,7 +258,7 @@ void KisLayerStyleProjectionPlaneTest::testGlowGradientJitter()
     style->outerGlow()->setOpacity(70);
     style->outerGlow()->setNoise(0);
     style->outerGlow()->setEffectEnabled(true);
-    style->outerGlow()->setColor(Qt::green);
+    style->outerGlow()->setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='1.0' b='0.0'/></color>"));
 
     QLinearGradient testGradient;
     testGradient.setColorAt(0.0, Qt::white);
@@ -285,7 +285,7 @@ void KisLayerStyleProjectionPlaneTest::testGlowInnerGradient()
     style->innerGlow()->setOpacity(80);
     style->innerGlow()->setNoise(10);
     style->innerGlow()->setEffectEnabled(true);
-    style->innerGlow()->setColor(Qt::white);
+    style->innerGlow()->setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>"));
 
     QLinearGradient testGradient;
     testGradient.setColorAt(0.0, Qt::white);
@@ -315,7 +315,7 @@ void KisLayerStyleProjectionPlaneTest::testSatin()
     style->satin()->setOpacity(80);
     style->satin()->setAngle(180);
     style->satin()->setEffectEnabled(true);
-    style->satin()->setColor(Qt::white);
+    style->satin()->setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>"));
     style->satin()->setBlendMode(COMPOSITE_LINEAR_DODGE);
 
     test(style, "satin");
@@ -326,7 +326,7 @@ void KisLayerStyleProjectionPlaneTest::testColorOverlay()
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
     style->colorOverlay()->setOpacity(80);
     style->colorOverlay()->setEffectEnabled(true);
-    style->colorOverlay()->setColor(Qt::white);
+    style->colorOverlay()->setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>"));
     style->colorOverlay()->setBlendMode(COMPOSITE_LINEAR_DODGE);
 
     test(style, "color_overlay");
@@ -385,7 +385,7 @@ void KisLayerStyleProjectionPlaneTest::testPatternOverlay()
 void KisLayerStyleProjectionPlaneTest::testStroke()
 {
     KisPSDLayerStyleSP style(new KisPSDLayerStyle());
-    style->stroke()->setColor(Qt::blue);
+    style->stroke()->setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='0.0' b='1.0'/></color>"));
     style->stroke()->setOpacity(80);
     style->stroke()->setEffectEnabled(true);
     style->stroke()->setBlendMode(COMPOSITE_OVER);
@@ -482,11 +482,11 @@ void KisLayerStyleProjectionPlaneTest::testBevel()
     style->bevelAndEmboss()->setAltitude(45);
     style->bevelAndEmboss()->setDepth(100);
 
-    style->bevelAndEmboss()->setHighlightColor(Qt::white);
+    style->bevelAndEmboss()->setHighlightColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>"));
     style->bevelAndEmboss()->setHighlightBlendMode(COMPOSITE_OVER);
     style->bevelAndEmboss()->setHighlightOpacity(100);
 
-    style->bevelAndEmboss()->setShadowColor(Qt::black);
+    style->bevelAndEmboss()->setShadowColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='0.0' b='0.0'/></color>"));
     style->bevelAndEmboss()->setShadowBlendMode(COMPOSITE_OVER);
     style->bevelAndEmboss()->setShadowOpacity(100);
 

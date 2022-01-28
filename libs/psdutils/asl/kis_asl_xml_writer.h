@@ -43,7 +43,7 @@ public:
     void writeUnitFloat(const QString &key, const QString &unit, double value);
     void writeText(const QString &key, const QString &value);
     void writeBoolean(const QString &key, bool value);
-    void writeColor(const QString &key, const QColor &value);
+    void writeColor(const QString &key, const KoColor &value);
     void writePoint(const QString &key, const QPointF &value);
     void writePhasePoint(const QString &key, const QPointF &value);
     void writeOffsetPoint(const QString &key, const QPointF &value);
@@ -57,7 +57,7 @@ private:
     QString getSegmentEndpointTypeString(KoGradientSegmentEndpointType segtype);
     void writeGradientImpl(const QString &key,
                            const QString &name,
-                           QVector<QColor> colors,
+                           QVector<KoColor> colors,
                            QVector<qreal> transparencies,
                            QVector<qreal> positions,
                            QVector<QString> types,

@@ -22,7 +22,7 @@ using ASLCallbackDouble = std::function<void(double)>;
 using ASLCallbackInteger = std::function<void(int)>;
 using ASLCallbackString = std::function<void(const QString &)>;
 using ASLCallbackBoolean = std::function<void(bool)>;
-using ASLCallbackColor = std::function<void(const QColor &)>;
+using ASLCallbackColor = std::function<void(const KoColor &)>;
 using ASLCallbackPoint = std::function<void(const QPointF &)>;
 using ASLCallbackCurve = std::function<void(const QString &, const QVector<QPointF> &)>;
 using ASLCallbackPattern = std::function<void(const KoPatternSP, const QString &)>;
@@ -42,7 +42,7 @@ public:
     void addUnitFloat(const QString &path, const QString &unit, double value) override;
     void addText(const QString &path, const QString &value) override;
     void addBoolean(const QString &path, bool value) override;
-    void addColor(const QString &path, const QColor &value) override;
+    void addColor(const QString &path, const KoColor &value) override;
     void addPoint(const QString &path, const QPointF &value) override;
     void addCurve(const QString &path, const QString &name, const QVector<QPointF> &points) override;
     void addPattern(const QString &path, const KoPatternSP pattern, const QString &patternUuid) override;

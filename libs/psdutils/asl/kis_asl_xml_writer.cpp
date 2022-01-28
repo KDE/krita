@@ -181,13 +181,13 @@ void KisAslXmlWriter::writeBoolean(const QString &key, bool value)
     m_d->currentElement.appendChild(el);
 }
 
-void KisAslXmlWriter::writeColor(const QString &key, const QColor &value)
+void KisAslXmlWriter::writeColor(const QString &key, const KoColor &value)
 {
     enterDescriptor(key, "", "RGBC");
 
-    writeDouble("Rd  ", value.red());
-    writeDouble("Grn ", value.green());
-    writeDouble("Bl  ", value.blue());
+    writeDouble("Rd  ", value.toQColor().red());
+    writeDouble("Grn ", value.toQColor().green());
+    writeDouble("Bl  ", value.toQColor().blue());
 
     leaveDescriptor();
 }
@@ -279,7 +279,7 @@ void KisAslXmlWriter::writePatternRef(const QString &key, const KoPatternSP patt
 
 void KisAslXmlWriter::writeGradientImpl(const QString &key,
                                         const QString &name,
-                                        QVector<QColor> colors,
+                                        QVector<KoColor> colors,
                                         QVector<qreal> transparencies,
                                         QVector<qreal> positions,
                                         QVector<QString> types,
@@ -345,7 +345,7 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
     const QList<KoGradientSegment *> &segments = gradient->segments();
     KIS_SAFE_ASSERT_RECOVER_RETURN(!segments.isEmpty());
 
-    QVector<QColor> colors;
+    QVector<KoColor> colors;
     QVector<qreal> transparencies;
     QVector<qreal> positions;
     QVector<QString> types;
@@ -356,9 +356,9 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
         const qreal end = seg->endOffset();
         const qreal mid = (end - start) > DBL_EPSILON ? (seg->middleOffset() - start) / (end - start) : 0.5;
 
-        QColor color = seg->startColor().toQColor();
-        qreal transparency = color.alphaF();
-        color.setAlphaF(1.0);
+        KoColor color = seg->startColor();
+        qreal transparency = color.opacityF();
+        color.setOpacity(1.0);
 
         QString type = getSegmentEndpointTypeString(seg->startType());
 
@@ -374,9 +374,9 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
     if (!segments.isEmpty()) {
         const KoGradientSegment *lastSeg = segments.last();
 
-        QColor color = lastSeg->endColor().toQColor();
-        qreal transparency = color.alphaF();
-        color.setAlphaF(1.0);
+        KoColor color = lastSeg->endColor();
+        qreal transparency = color.opacityF();
+        color.setOpacity(1.0);
         QString type = getSegmentEndpointTypeString(lastSeg->endType());
 
         colors << color;
@@ -391,16 +391,16 @@ void KisAslXmlWriter::writeSegmentGradient(const QString &key, const KoSegmentGr
 
 void KisAslXmlWriter::writeStopGradient(const QString &key, const KoStopGradient *gradient)
 {
-    QVector<QColor> colors;
+    QVector<KoColor> colors;
     QVector<qreal> transparencies;
     QVector<qreal> positions;
     QVector<QString> types;
     QVector<qreal> middleOffsets;
 
     Q_FOREACH (const KoGradientStop &stop, gradient->stops()) {
-        QColor color = stop.color.toQColor();
-        qreal transparency = color.alphaF();
-        color.setAlphaF(1.0);
+        KoColor color = stop.color;
+        qreal transparency = color.opacityF();
+        color.setOpacity(1.0);
 
         QString type;
         switch (stop.type) {

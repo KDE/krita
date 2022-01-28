@@ -12,12 +12,12 @@
 
 #include "kritapsdutils_export.h"
 
-#include <QColor>
 #include <QPair>
 #include <QString>
 #include <QVector>
 #include <cstdint>
 
+#include <KoColor.h>
 #include <KoColorModelStandardIds.h>
 #include <KoCompositeOpRegistry.h>
 #include <KoPattern.h>
@@ -148,7 +148,7 @@ enum psd_section_type { psd_other = 0, psd_open_folder, psd_closed_folder, psd_b
 struct psd_gradient_color_stop {
     qint32 location; // Location of color stop
     qint32 midpoint; // Midpoint of color stop
-    QColor actual_color;
+    KoColor actual_color;
     psd_color_stop_type color_stop_type;
 };
 
@@ -228,8 +228,8 @@ public:
         , m_edgeHidden(true)
         , m_effectEnabled(false)
         , m_blendMode(COMPOSITE_MULT)
-        , m_color(Qt::black)
-        , m_nativeColor(Qt::black)
+        , m_color(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='0.0' b='0.0'/></color>"))
+        , m_nativeColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='0.0' b='0.0'/></color>"))
         , m_opacity(75)
         , m_angle(120)
         , m_useGlobalLight(true)
@@ -268,12 +268,12 @@ public:
         return m_blendMode;
     }
 
-    QColor color() const
+    KoColor color() const
     {
         return m_color;
     }
 
-    QColor nativeColor() const
+    KoColor nativeColor() const
     {
         return m_nativeColor;
     }
@@ -374,12 +374,12 @@ public:
         m_blendMode = value;
     }
 
-    void setColor(QColor value)
+    void setColor(KoColor value)
     {
         m_color = value;
     }
 
-    void setNativeColor(QColor value)
+    void setNativeColor(KoColor value)
     {
         m_nativeColor = value;
     }
@@ -483,8 +483,8 @@ private:
     bool m_effectEnabled; // Effect enabled
 
     QString m_blendMode; // already in Krita format!
-    QColor m_color;
-    QColor m_nativeColor;
+    KoColor m_color;
+    KoColor m_nativeColor;
     qint32 m_opacity; // Opacity as a percent (0...100)
     qint32 m_angle; // Angle in degrees
     bool m_useGlobalLight; // Use this angle in all of the layer effects
@@ -560,7 +560,7 @@ public:
         setKnocksOut(true);
         setDistance(0);
         setBlendMode(COMPOSITE_LINEAR_DODGE);
-        setColor(Qt::white);
+        setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>"));
     }
     ~psd_layer_effects_glow_common() override;
     /// FIXME: 'using' is not supported by MSVC, so please refactor in
@@ -678,12 +678,12 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base {
         ,
 
         m_highlightBlendMode(COMPOSITE_SCREEN)
-        , m_highlightColor(Qt::white)
+        , m_highlightColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>"))
         , m_highlightOpacity(75)
         ,
 
         m_shadowBlendMode(COMPOSITE_MULT)
-        , m_shadowColor(Qt::black)
+        , m_shadowColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='0.0' b='0.0'/></color>"))
         , m_shadowOpacity(75)
         ,
 
@@ -800,11 +800,11 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base {
         m_highlightBlendMode = value;
     }
 
-    QColor highlightColor() const
+    KoColor highlightColor() const
     {
         return m_highlightColor;
     }
-    void setHighlightColor(QColor value)
+    void setHighlightColor(KoColor value)
     {
         m_highlightColor = value;
     }
@@ -827,11 +827,11 @@ struct psd_layer_effects_bevel_emboss : public psd_layer_effects_shadow_base {
         m_shadowBlendMode = value;
     }
 
-    QColor shadowColor() const
+    KoColor shadowColor() const
     {
         return m_shadowColor;
     }
-    void setShadowColor(QColor value)
+    void setShadowColor(KoColor value)
     {
         m_shadowColor = value;
     }
@@ -976,11 +976,11 @@ private:
     bool m_glossAntiAliased;
 
     QString m_highlightBlendMode; // already in Krita format
-    QColor m_highlightColor;
+    KoColor m_highlightColor;
     qint32 m_highlightOpacity; // Highlight opacity as a percent
 
     QString m_shadowBlendMode; // already in Krita format
-    QColor m_shadowColor;
+    KoColor m_shadowColor;
     qint32 m_shadowOpacity; // Shadow opacity as a percent
 
     bool m_contourEnabled;
@@ -1168,7 +1168,7 @@ struct psd_layer_effects_color_overlay : public psd_layer_effects_overlay_base {
     psd_layer_effects_color_overlay()
     {
         setFillType(psd_fill_solid_color);
-        setColor(Qt::white);
+        setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>"));
     }
 
     /// FIXME: 'using' is not supported by MSVC, so please refactor in
@@ -1241,7 +1241,7 @@ struct psd_layer_effects_stroke : public psd_layer_effects_overlay_base {
         : m_position(psd_stroke_outside)
     {
         setFillType(psd_fill_solid_color);
-        setColor(Qt::black);
+        setColor(KoColor::fromXML("<color channeldepth='U8'><sRGB r='0.0' g='0.0' b='0.0'/></color>"));
 
         setAngle(90);
         setReverse(false);

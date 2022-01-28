@@ -41,8 +41,9 @@ void KisAslParserTest::test()
 struct CallbackVerifier {
     CallbackVerifier() : m_numCallsHappened(0) {}
 
-    void setColor(const QColor &color) {
-        QVERIFY(color == QColor(Qt::white));
+    void setColor(const KoColor &color) {
+        KoColor c = KoColor::fromXML("<color channeldepth='U8'><sRGB r='1.0' g='1.0' b='1.0'/></color>");
+        QVERIFY(color == c);
         m_numCallsHappened++;
     }
 
@@ -146,7 +147,9 @@ void KisAslParserTest::testASLXMLWriter()
 
     w.writeBoolean("enab", true);
     w.writeEnum("Md  ", "BlnM", "Mltp");
-    w.writeColor("Clr ", Qt::green);
+    KoColor c;
+    c.fromQColor(Qt::green);
+    w.writeColor("Clr ", c);
 
 
     w.writeUnitFloat("Opct", "#Prc", 16);

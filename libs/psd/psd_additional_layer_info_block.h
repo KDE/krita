@@ -27,6 +27,8 @@
 #include <KoSegmentGradient.h>
 #include <psd.h>
 
+#include <asl/kis_asl_xml_writer.h>
+
 #include "psd_header.h"
 
 // additional layer information
@@ -172,6 +174,25 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
         doc.setContent(cfg->toXML());
         return doc;
     }
+    
+    bool loadFromConfig(KisFilterConfigurationSP cfg) {
+        if (cfg->name() != "color") {
+            return false;
+        }
+        fill_color = cfg->getColor("color");
+        return true;
+    }
+    
+    QDomDocument getASLXML() {
+        KisAslXmlWriter w;
+        w.enterDescriptor("", "", "null");
+        if (cs) {
+            w.writeColor("Clr ", fill_color.convertedTo(cs));
+        } else {
+             w.writeColor("Clr ", fill_color);
+        }
+        return w.document();
+    }
 };
 
 struct KRITAPSD_EXPORT psd_layer_gradient_fill {
@@ -294,6 +315,112 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
         QDomDocument doc;
         doc.setContent(cfg->toXML());
         return doc;
+    }
+
+    bool loadFromConfig(KisFilterConfigurationSP cfg) {
+        if (cfg->name() != "gradient") {
+            return false;
+        }
+
+        bool res = false;
+
+        res = gradient.setContent(cfg->getString("gradient", ""));
+
+        dithered = cfg->getBool("dither");
+        reverse = cfg->getBool("reverse");
+        align_with_layer = false; // not supported.
+
+        style = cfg->getString("shape", "linear");
+        repeat = cfg->getString("repeat", "none");
+
+        bool polar = (cfg->getString("end_position_coordinate_system") == "polar");
+
+        QPointF start(cfg->getDouble("start_position_x", 0.0), cfg->getDouble("start_position_y", 0.0));
+        if (polar) {
+            angle = cfg->getDouble("end_position_angle", 0.0);
+            scale = cfg->getDouble("end_position_distance", 100.0);
+        } else {
+            // assume carthesian
+           QPointF end(cfg->getDouble("end_position_x", 1.0), cfg->getDouble("end_position_y", 1.0));
+           // calculate angle and scale.
+        }
+
+
+        if (style == "linear") {
+            QPointF center(imageWidth*0.5, imageHeight*0.5);
+
+            QTransform rotate;
+            rotate.rotate(angle);
+            QTransform tf = QTransform::fromTranslate(-center.x(), -center.y())
+                    * rotate * QTransform::fromTranslate(center.x(), center.y());
+            QPointF topleft = tf.inverted().map(QPointF(0.0, 0.0));
+            double xPercentage = (topleft.x()/double(imageWidth)) * 100.0;
+            double yPercentage = (topleft.y()/double(imageHeight)) * 100.0;
+            offset = QPointF((start.x() - xPercentage), (start.y() - yPercentage));
+        } else {
+            scale = scale*2;
+            offset = QPointF((start.x() - 50.0), (start.y() - 50.0));
+        }
+
+        if (style == "square") {
+            angle = angle - 45.0;
+            if (angle < 0) {
+                angle = 360.0 - angle;
+            }
+        }
+
+        if (angle > 180) {
+            angle = (180.0 - angle);
+        }
+
+
+        return res;
+    }
+
+    QDomDocument getASLXML() {
+        KisAslXmlWriter w;
+        w.enterDescriptor("", "", "null");
+
+        if (!gradient.isNull()) {
+            const QDomElement gradientElement = gradient.firstChildElement();
+            if (!gradientElement.isNull()) {
+                const QString gradientType = gradientElement.attribute("type");
+                if (gradientType == "stop") {
+                    const KoStopGradient *grad = KoStopGradient::fromXML(gradientElement).clone().dynamicCast<KoStopGradient>().data();
+                    if (grad && grad->valid()) {
+                        w.writeStopGradient("Grad", grad);
+                    }
+                } else if (gradientType == "segment") {
+                    const KoSegmentGradient *grad = KoSegmentGradient::fromXML(gradientElement).clone().dynamicCast<KoSegmentGradient>().data();
+                    if (grad && grad->valid()) {
+                        w.writeSegmentGradient("Grad", grad);
+                    }
+                }
+            }
+        }
+        w.writeBoolean("Dthr", dithered);
+        w.writeBoolean("Rvrs", reverse);
+        w.writeUnitFloat("Angl", "#Ang", angle);
+
+        QString type = "Lnr ";
+        if (style == "linear"){
+            type = "Lnr ";
+        } else if (style == "radial") {
+            type = "Rdl ";
+        } else if (style == "conical"){
+            type = "Angl";
+        } else if (style == "bilinear"){
+            type = "Rflc";
+        } else if (style == "square") {
+            type = "Dmnd";
+        }
+
+        w.writeEnum("Type", "GrdT", type);
+        w.writeBoolean("Algn", align_with_layer);
+        w.writeUnitFloat("Scl ", "#Prc", scale);
+        w.writePoint("Ofst", offset);
+
+        return w.document();
     }
 };
 

@@ -335,6 +335,8 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
                     throw ASLParseException("VAList: failed to read compressed data!");
                 }
 
+                dbgFile << "Going to decompress the pattern";
+
                 QByteArray uncompressedData = Compression::uncompress(planeRect.width() * channelSize, compressedData, psd_compression_type::RLE);
 
                 if (uncompressedData.size() != planeRect.width()) {
@@ -356,7 +358,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
 
     QImage::Format format{};
     
-    if (pixelDepth1 == 1) {
+    if (pixelDepth1 == 1 || !palette.isEmpty()) {
         if (palette.isEmpty()) {
             format = QImage::Format_Grayscale8;
         } else {
@@ -377,6 +379,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
     if (format == QImage::Format_Indexed8) {
         image.setColorTable(palette);
     }
+    dbgFile << "Loading the data into an image of format" << format;
 
     const int dataLength = arrayRect.width() * arrayRect.height();
 
@@ -395,7 +398,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
 
         Q_ASSERT(dataLength == dataPlanes[0].length());
 
-        std::memcpy(dstPtr, dataPlanes[0].constData(), dataLength);
+        memcpy(dstPtr, dataPlanes[0].constData(), dataLength);
     } else {
         quint16 *dstPtr = reinterpret_cast<quint16 *>(image.bits());
 

@@ -305,7 +305,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_gradient_fill::setScale, &fill, _1));
                     catcher.subscribePoint("/null/Ofst", std::bind(&psd_layer_gradient_fill::setOffset, &fill, _1));
                     KisAslXmlParser parser;
-                    parser.parseXML(fillConfig, catcher);
+                    parser.parseXML(layerRecord->infoBlocks.fillConfig, catcher);
                     fillConfig = fill.getFillLayerConfig();
 
                 } else if (layerRecord->infoBlocks.fillType == psd_fill_pattern) {
@@ -320,7 +320,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     catcher.subscribePatternRef("/null/Ptrn", std::bind(&psd_layer_pattern_fill::setPatternRef, &fill, _1, _2));
 
                     KisAslXmlParser parser;
-                    parser.parseXML(fillConfig, catcher);
+                    parser.parseXML(layerRecord->infoBlocks.fillConfig, catcher);
                     fillConfig = fill.getFillLayerConfig();
 
                 } else {

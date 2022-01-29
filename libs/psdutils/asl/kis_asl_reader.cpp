@@ -312,9 +312,9 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
         const int dataLength = planeRect.width() * planeRect.height() * channelSize;
 
         if (useCompression == 0) { // Uncompressed, undocumented
-            dataPlanes[i] = device.read(dataLength);
+            dataPlanes[i] = device.read(arrayPlaneLength - 23);
         } else if (useCompression == 1) { // Unlike in image planes, 1 == ZIP
-            QByteArray compressedBytes = device.read(arrayPlaneLength);
+            QByteArray compressedBytes = device.read(arrayPlaneLength - 23);
             dataPlanes[i] = Compression::uncompress(dataLength,
                                                     compressedBytes,
                                                     psd_compression_type::ZIP);
@@ -372,11 +372,15 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
             *dstPtr++ = 0xFF;
         }
     } else if (format == QImage::Format_Indexed8 || format == QImage::Format_Grayscale8) {
-        quint8 *dstPtr = image.bits();
+        const auto *dataPlane = reinterpret_cast<const quint8 *>(dataPlanes[0].constData());
 
-        Q_ASSERT(dataLength == dataPlanes[0].length());
+        for (int x = 0; x < arrayRect.height(); x++) {
+            quint8 *dstPtr = image.scanLine(x);
 
-        memcpy(dstPtr, dataPlanes[0].constData(), dataLength);
+            for (int y = 0; y < arrayRect.width(); y++) {
+                *dstPtr++ = dataPlane[x * arrayRect.width() + y];
+            }
+        }
     } else {
         quint16 *dstPtr = reinterpret_cast<quint16 *>(image.bits());
 

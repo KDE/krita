@@ -35,7 +35,6 @@ void KisWdgColor::setConfiguration(const KisPropertiesConfigurationSP config)
 {
     QVariant value;
     KoColor c =config->getColor("color");
-    c.convertTo(m_cs);
     widget()->bnColor->setColor(c);
 }
 

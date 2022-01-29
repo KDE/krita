@@ -311,46 +311,24 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
 
         const int dataLength = planeRect.width() * planeRect.height() * channelSize;
 
-        if (useCompression == psd_compression_type::Uncompressed) {
+        if (useCompression == 0) { // Uncompressed, undocumented
             dataPlanes[i] = device.read(dataLength);
+        } else if (useCompression == 1) { // Unlike in image planes, 1 == ZIP
+            QByteArray compressedBytes = device.read(arrayPlaneLength);
+            dataPlanes[i] = Compression::uncompress(dataLength,
+                                                    compressedBytes,
+                                                    psd_compression_type::ZIP);
 
-        } else if (useCompression == psd_compression_type::RLE) {
-            const int numRows = planeRect.height();
-
-            QVector<quint16> rowSizes;
-            rowSizes.resize(numRows);
-
-            for (int row = 0; row < numRows; row++) {
-                quint16 rowSize = GARBAGE_VALUE_MARK;
-                SAFE_READ_EX(byteOrder, device, rowSize);
-                rowSizes[row] = rowSize;
-            }
-
-            for (int row = 0; row < numRows; row++) {
-                const quint16 rowSize = rowSizes[row];
-
-                QByteArray compressedData = device.read(rowSize);
-
-                if (compressedData.size() != rowSize) {
-                    throw ASLParseException("VAList: failed to read compressed data!");
-                }
-
-                dbgFile << "Going to decompress the pattern";
-
-                QByteArray uncompressedData = Compression::uncompress(planeRect.width() * channelSize, compressedData, psd_compression_type::RLE);
-
-                if (uncompressedData.size() != planeRect.width()) {
-                    throw ASLParseException("VAList: failed to decompress data!");
-                }
-
-                dataPlanes[i].append(uncompressedData);
-            }
         } else {
-            throw ASLParseException("VAList: ZIP compression is not implemented yet!");
+            throw ASLParseException("VAList: Undocumented compression!");
         }
 
         if (dataPlanes[i].size() != dataLength) {
             throw ASLParseException("VAList: failed to read/uncompress data plane!");
+        }
+
+        if (device.pos() != nextPos) {
+            warnFile << "VAList: Data is left out from reading" << "(" << device.pos() <<")";
         }
 
         device.seek(nextPos);
@@ -379,7 +357,7 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
     if (format == QImage::Format_Indexed8) {
         image.setColorTable(palette);
     }
-    dbgFile << "Loading the data into an image of format" << format;
+    dbgFile << "Loading the data into an image of format" << format << arrayRect << "(" << device.pos() << ")";
 
     const int dataLength = arrayRect.width() * arrayRect.height();
 

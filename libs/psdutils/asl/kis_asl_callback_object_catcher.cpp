@@ -12,6 +12,8 @@
 #include <QPointF>
 #include <QString>
 
+#include <KoColor.h>
+
 #include "kis_debug.h"
 
 typedef QHash<QString, ASLCallbackDouble> MapHashDouble;
@@ -84,6 +86,8 @@ inline void passToCallback(const QString &path, const HashType &hash, const T &v
     typename HashType::const_iterator it = hash.constFind(path);
     if (it != hash.constEnd()) {
         (*it)(value);
+    } else {
+        warnKrita << "Unhandled:" << path << typeid(hash).name() << value;
     }
 }
 
@@ -94,7 +98,7 @@ inline void passToCallback(const QString &path, const HashType &hash, const T1 &
     if (it != hash.constEnd()) {
         (*it)(value1, value2);
     } else {
-        warnKrita << "Couldn't find a callback, even though the non-empty catcher is used";
+        warnKrita << "Unhandled:" << path << typeid(hash).name() << value1 << value2;
     }
 }
 

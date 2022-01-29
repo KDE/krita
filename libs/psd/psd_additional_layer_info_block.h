@@ -308,12 +308,13 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
         align_with_layer = align;
     }
     
-    QDomDocument getFillLayerConfig() {
+    QDomDocument getFillLayerConfig() const {
         KisFilterConfigurationSP cfg;
         cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
         cfg->setProperty("pattern", patternName);
         cfg->setProperty("pattern/fileName", QString(patternID + ".pat"));
+        cfg->setProperty("pattern/md5", ""); // Zero out MD5, PSD patterns are looked up by UUID in filename
 
         cfg->setProperty("transform_scale_x", scale / 100);
         cfg->setProperty("transform_scale_y", scale / 100);

@@ -153,10 +153,14 @@ struct KRITAPSD_EXPORT psd_layer_photo_filter {
 
 struct KRITAPSD_EXPORT psd_layer_solid_color {
     KoColor fill_color;
+    const KoColorSpace *cs;
 
     // Used by ASL callback;
     void setColor(const KoColor &color) {
         fill_color = color;
+        if (fill_color.colorSpace()->colorModelId() == cs->colorModelId()) {
+            fill_color.setProfile(cs->profile());
+        }
     }
     QDomDocument getFillLayerConfig() {
         KisFilterConfigurationSP cfg;

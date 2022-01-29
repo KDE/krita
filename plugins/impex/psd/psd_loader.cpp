@@ -31,6 +31,7 @@
 #include <kis_generator_registry.h>
 
 #include <kis_asl_layer_style_serializer.h>
+#include <asl/kis_asl_xml_parser.h>
 #include "KisResourceServerProvider.h"
 
 #include "psd.h"
@@ -212,6 +213,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 
     typedef QPair<QDomDocument, KisLayerSP> LayerStyleMapping;
     QVector<LayerStyleMapping> allStylesXml;
+    using namespace std::placeholders;
 
     // read the channels for the various layers
     for(int i = 0; i < layerSection.nLayers; ++i) {
@@ -288,14 +290,52 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
             KisLayerSP layer;
             if (!layerRecord->infoBlocks.fillConfig.isNull()) {
                 KisFilterConfigurationSP cfg;
+                QDomDocument fillConfig;
+                KisAslCallbackObjectCatcher catcher;
                 if (layerRecord->infoBlocks.fillType == psd_fill_gradient) {
                     cfg = KisGeneratorRegistry::instance()->value("gradient")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+
+                    psd_layer_gradient_fill fill;
+                    catcher.subscribeGradient("/null/Grad", std::bind(&psd_layer_gradient_fill::setGradient, &fill, _1));
+                    catcher.subscribeBoolean("/null/Dthr", std::bind(&psd_layer_gradient_fill::setDither, &fill, _1));
+                    catcher.subscribeBoolean("/null/Rvrs", std::bind(&psd_layer_gradient_fill::setReverse, &fill, _1));
+                    catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_gradient_fill::setAngle, &fill, _1));
+                    catcher.subscribeEnum("/null/Type", "GrdT", std::bind(&psd_layer_gradient_fill::setType, &fill, _1));
+                    catcher.subscribeBoolean("/null/Algn", std::bind(&psd_layer_gradient_fill::setAlignWithLayer, &fill, _1));
+                    catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_gradient_fill::setScale, &fill, _1));
+                    catcher.subscribePoint("/null/Ofst", std::bind(&psd_layer_gradient_fill::setOffset, &fill, _1));
+                    KisAslXmlParser parser;
+                    parser.parseXML(fillConfig, catcher);
+                    fillConfig = fill.getFillLayerConfig();
+
                 } else if (layerRecord->infoBlocks.fillType == psd_fill_pattern) {
                     cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+
+                    psd_layer_pattern_fill fill;
+
+                    catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_pattern_fill::setAngle, &fill, _1));
+                    catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_pattern_fill::setScale, &fill, _1));
+                    catcher.subscribeBoolean("/null/Algn", std::bind(&psd_layer_pattern_fill::setAlignWithLayer, &fill, _1));
+                    catcher.subscribePoint("/null/phase", std::bind(&psd_layer_pattern_fill::setOffset, &fill, _1));
+                    catcher.subscribePatternRef("/null/Ptrn", std::bind(&psd_layer_pattern_fill::setPatternRef, &fill, _1, _2));
+
+                    KisAslXmlParser parser;
+                    parser.parseXML(fillConfig, catcher);
+                    fillConfig = fill.getFillLayerConfig();
+
                 } else {
                     cfg = KisGeneratorRegistry::instance()->value("color")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+
+                    psd_layer_solid_color fill;
+                    fill.cs = m_image->colorSpace();
+                    catcher.subscribeColor("/null/Clr ", std::bind(&psd_layer_solid_color::setColor, &fill, _1));
+                    KisAslXmlParser parser;
+                    parser.parseXML(layerRecord->infoBlocks.fillConfig, catcher);
+
+                    fillConfig = fill.getFillLayerConfig();
                 }
-                cfg->fromXML(layerRecord->infoBlocks.fillConfig.firstChildElement());
+                qDebug() << "fill layer found: " << fillConfig.toString();
+                cfg->fromXML(fillConfig.firstChildElement());
                 cfg->createLocalResourcesSnapshot();
                 KisGeneratorLayerSP genlayer = new KisGeneratorLayer(m_image, layerRecord->layerName, cfg, m_image->globalSelection());
                 genlayer->setFilter(cfg);

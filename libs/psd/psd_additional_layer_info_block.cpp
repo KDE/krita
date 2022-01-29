@@ -17,8 +17,7 @@
 #include <asl/kis_asl_reader_utils.h>
 #include <asl/kis_asl_writer.h>
 #include <asl/kis_asl_writer_utils.h>
-#include <asl/kis_asl_xml_parser.h>
-#include <asl/kis_asl_callback_object_catcher.h>
+
 
 PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader &header)
     : m_header(header)
@@ -60,7 +59,6 @@ template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
 {
     using namespace KisAslReaderUtils;
-    using namespace std::placeholders;
 
     QStringList longBlocks;
     if (m_header.version > 1) {
@@ -134,50 +132,14 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
         } else if (key == "SoCo") {
             // Solid Color
             fillConfig = KisAslReader::readFillLayer(io, byteOrder);
-            KisAslCallbackObjectCatcher catcher;
-            psd_layer_solid_color solidColor;
-            catcher.subscribeColor("/null/Clr ", std::bind(&psd_layer_solid_color::setColor, &solidColor, _1));
-            KisAslXmlParser parser;
-            parser.parseXML(fillConfig, catcher);
-            fillConfig = solidColor.getFillLayerConfig();
             fillType = psd_fill_solid_color;
         } else if (key == "GdFl") {
             // Gradient Fill
             fillConfig = KisAslReader::readFillLayer(io, byteOrder);
-
-            KisAslCallbackObjectCatcher catcher;
-            psd_layer_gradient_fill fill;
-            catcher.subscribeGradient("/null/Grad", std::bind(&psd_layer_gradient_fill::setGradient, &fill, _1));
-            catcher.subscribeBoolean("/null/Dthr", std::bind(&psd_layer_gradient_fill::setDither, &fill, _1));
-            catcher.subscribeBoolean("/null/Rvrs", std::bind(&psd_layer_gradient_fill::setReverse, &fill, _1));
-            catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_gradient_fill::setAngle, &fill, _1));
-            catcher.subscribeEnum("/null/Type", "GrdT", std::bind(&psd_layer_gradient_fill::setType, &fill, _1));
-            catcher.subscribeBoolean("/null/Algn", std::bind(&psd_layer_gradient_fill::setAlignWithLayer, &fill, _1));
-            catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_gradient_fill::setScale, &fill, _1));
-            catcher.subscribePoint("/null/Ofst", std::bind(&psd_layer_gradient_fill::setOffset, &fill, _1));
-            KisAslXmlParser parser;
-            parser.parseXML(fillConfig, catcher);
-            fillConfig = fill.getFillLayerConfig();
-
             fillType = psd_fill_gradient;
         } else if (key == "PtFl") {
             // Pattern Fill
             fillConfig = KisAslReader::readFillLayer(io, byteOrder);
-
-            KisAslCallbackObjectCatcher catcher;
-            psd_layer_pattern_fill fill;
-
-            catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_pattern_fill::setAngle, &fill, _1));
-            catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_pattern_fill::setScale, &fill, _1));
-            catcher.subscribeBoolean("/null/Algn", std::bind(&psd_layer_pattern_fill::setAlignWithLayer, &fill, _1));
-            catcher.subscribePoint("/null/phase", std::bind(&psd_layer_pattern_fill::setOffset, &fill, _1));
-            catcher.subscribePatternRef("/null/Ptrn", std::bind(&psd_layer_pattern_fill::setPatternRef, &fill, _1, _2));
-
-            KisAslXmlParser parser;
-            parser.parseXML(fillConfig, catcher);
-            fillConfig = fill.getFillLayerConfig();
-            dbgFile << "pattern fill" << fillConfig.toString();
-
             fillType = psd_fill_pattern;
         } else if (key == "brit") {
         } else if (key == "levl") {

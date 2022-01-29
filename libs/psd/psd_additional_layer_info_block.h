@@ -184,6 +184,8 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
     bool align_with_layer = false;
     QPointF offset;
     QDomDocument gradient;
+    int imageWidth = 1; // Set when loading.
+    int imageHeight = 1;
 
     // Used by ASL callback;
     void setGradient(const KoAbstractGradientSP &newGradient) {
@@ -259,8 +261,8 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
         cfg->setProperty("start_position_x_units", "percent_of_width");
         cfg->setProperty("start_position_y_units", "percent_of_height");
 
-        double fixedAngle = angle;
-
+        // angle seems to go from -180 to +180;
+        double fixedAngle = fmod(360.0 + angle, 360.0);
         if (style == "square") {
             fixedAngle = fmod((45.0 + angle), 360.0);
         }
@@ -268,11 +270,21 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
         cfg->setProperty("end_position_angle", fixedAngle);
 
         if (style == "linear") {
-            // TODO: linear has the problem that in Krita it rotates around the top-left,
+            // linear has the problem that in Krita it rotates around the top-left,
             // while in psd it rotates around the middle.
+            QPointF center(imageWidth*0.5, imageHeight*0.5);
+
+            QTransform rotate;
+            rotate.rotate(fixedAngle);
+            QTransform tf = QTransform::fromTranslate(-center.x(), -center.y())
+                    * rotate * QTransform::fromTranslate(center.x(), center.y());
+            QPointF topleft = tf.inverted().map(QPointF(0.0, 0.0));
+            double xPercentage = (topleft.x()/double(imageWidth)) * 100.0;
+            double yPercentage = (topleft.y()/double(imageHeight)) * 100.0;
+
             cfg->setProperty("end_position_distance", scale);
-            cfg->setProperty("start_position_x", offset.x());
-            cfg->setProperty("start_position_y", offset.y());
+            cfg->setProperty("start_position_x", xPercentage + offset.x());
+            cfg->setProperty("start_position_y", yPercentage + offset.y());
         } else {
             cfg->setProperty("end_position_distance", scale*0.5);
             cfg->setProperty("start_position_x", (50.0)+offset.x());

@@ -296,6 +296,8 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     cfg = KisGeneratorRegistry::instance()->value("gradient")->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
                     psd_layer_gradient_fill fill;
+                    fill.imageWidth = m_image->width();
+                    fill.imageHeight = m_image->height();
                     catcher.subscribeGradient("/null/Grad", std::bind(&psd_layer_gradient_fill::setGradient, &fill, _1));
                     catcher.subscribeBoolean("/null/Dthr", std::bind(&psd_layer_gradient_fill::setDither, &fill, _1));
                     catcher.subscribeBoolean("/null/Rvrs", std::bind(&psd_layer_gradient_fill::setReverse, &fill, _1));

@@ -344,9 +344,11 @@ public:
         m_widgetRangeToggle->setToolTip(
             i18nc(
                 "@info:tooltip toggle between soft and hard range in the slider spin box",
-                QString("Toggle between full range and subrange.\nFull range: [%1, %2]\nSubrange: [%3, %4]")
-                .arg(QString::number(m_q->minimum())).arg(QString::number(m_q->maximum()))
-                .arg(QString::number(m_softMinimum)).arg(QString::number(m_softMaximum)).toUtf8()
+                "Toggle between full range and subrange.\nFull range: [%1, %2]\nSubrange: [%3, %4]",
+                QString::number(m_q->minimum()),
+                QString::number(m_q->maximum()),
+                QString::number(m_softMinimum),
+                QString::number(m_softMaximum)
             )
         );
     }

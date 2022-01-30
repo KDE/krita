@@ -75,9 +75,7 @@ public:
         const QString patternName = getString("pattern", "Grid01.pat");
         const QString patternFileName = getString("pattern/fileName", "");
         auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
-        qDebug() << patternMD5 << patternFileName << patternName;
         KoResourceLoadResult res = source.bestMatchLoadResult(patternMD5, patternFileName, patternName);
-        qDebug() << res.resource()->name();
         return res;
     }
 

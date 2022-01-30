@@ -431,6 +431,8 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
     QString patternName;
     QString patternID;
     bool align_with_layer;
+    int imageWidth = 1;
+    int imageHeight = 1;
     
     void setAngle(float Angl) {
         angle = Angl;
@@ -459,11 +461,15 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
         cfg->setProperty("pattern/fileName", QString(patternID + ".pat"));
         cfg->setProperty("pattern/md5", ""); // Zero out MD5, PSD patterns are looked up by UUID in filename
 
+        //angle is flipped for patterns in Krita.
+        double fixedAngle = 360.0 - fmod(360.0 + angle, 360.0);
+
         cfg->setProperty("transform_scale_x", scale / 100);
         cfg->setProperty("transform_scale_y", scale / 100);
-        cfg->setProperty("transform_rotation_z", angle);
-        cfg->setProperty("transform_offset_x", offset.x());
-        cfg->setProperty("transform_offset_y", offset.y());
+        cfg->setProperty("transform_rotation_z", fixedAngle);
+
+        cfg->setProperty("transform_offset_x", int(offset.x() * imageWidth * 0.01));
+        cfg->setProperty("transform_offset_y", int(offset.y() * imageHeight * 0.01));
         QDomDocument doc;
         doc.setContent(cfg->toXML());
         return doc;

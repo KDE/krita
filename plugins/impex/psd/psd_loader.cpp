@@ -314,7 +314,8 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
                     psd_layer_pattern_fill fill;
-
+                    fill.imageWidth = m_image->width();
+                    fill.imageHeight = m_image->height();
                     catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_pattern_fill::setAngle, &fill, _1));
                     catcher.subscribeUnitFloat("/null/Scl ", "#Prc", std::bind(&psd_layer_pattern_fill::setScale, &fill, _1));
                     catcher.subscribeBoolean("/null/Algn", std::bind(&psd_layer_pattern_fill::setAlignWithLayer, &fill, _1));

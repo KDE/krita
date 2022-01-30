@@ -20,6 +20,7 @@ public:
     KisAslWriter(psd_byte_order byteOrder = psd_byte_order::psdBigEndian);
 
     void writeFile(QIODevice &device, const QDomDocument &doc);
+    void writeFillLayerSectionEx(QIODevice &device, const QDomDocument &doc);
     void writePsdLfx2SectionEx(QIODevice &device, const QDomDocument &doc);
 
 private:

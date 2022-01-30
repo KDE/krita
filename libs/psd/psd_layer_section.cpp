@@ -15,6 +15,7 @@
 #include <kis_debug.h>
 #include <kis_effect_mask.h>
 #include <kis_group_layer.h>
+#include <kis_generator_layer.h>
 #include <kis_image.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>
@@ -572,6 +573,43 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 const KisGroupLayer *groupLayer = qobject_cast<KisGroupLayer *>(node.data());
                 const bool nodeIsPassThrough = groupLayer && groupLayer->passThroughMode();
 
+                const KisGeneratorLayer *fillLayer = qobject_cast<KisGeneratorLayer *>(node.data());
+                QDomDocument fillConfig;
+                psd_fill_type fillType = psd_fill_solid_color;
+                if (fillLayer) {
+                    QString generatorName = fillLayer->filter()->name();
+                    if (generatorName == "color") {
+                        psd_layer_solid_color fill;
+                        if (fill.loadFromConfig(fillLayer->filter())) {
+                            if (node->image()) {
+                                fill.cs = node->image()->colorSpace();
+                            } else {
+                                fill.cs = node->colorSpace();
+                            }
+                            fillConfig = fill.getASLXML();
+                            fillType = psd_fill_solid_color;
+                        }
+                    } else if (generatorName == "gradient") {
+                        psd_layer_gradient_fill fill;
+                        if (fill.loadFromConfig(fillLayer->filter())) {
+                            fillConfig = fill.getASLXML();
+                            fillType = psd_fill_gradient;
+                        }
+                    } else if (generatorName == "pattern") {
+
+                        psd_layer_pattern_fill fill;
+                        if (fill.loadFromConfig(fillLayer->filter())) {
+                            /* Incomplete, needs pattern UUID.
+                            fillConfig = fill.getASLXML();
+                            fillType = psd_fill_pattern;
+                            */
+                            qDebug() << "Not saving pattern fill right now.";
+                        }
+
+                    }
+                    // And if anything else, it cannot be stored as a PSD fill layer.
+                }
+
                 QDomDocument stylesXmlDoc = fetchLayerStyleXmlData(node);
 
                 if (mergedPatternsXmlDoc.isNull() && !stylesXmlDoc.isNull()) {
@@ -648,6 +686,9 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 layerRecord->irrelevant = nodeIrrelevant;
 
                 layerRecord->layerName = nodeName.isEmpty() ? i18n("Unnamed Layer") : nodeName;
+
+                layerRecord->fillType = fillType;
+                layerRecord->fillConfig = fillConfig;
 
                 layerRecord->write(io, layerContentDevice, onlyTransparencyMask, maskRect, sectionType, stylesXmlDoc, node->inherits("KisGroupLayer"));
             }

@@ -114,6 +114,9 @@ public:
 
     int labelColor;
 
+    psd_fill_type fillType {psd_fill_solid_color};
+    QDomDocument fillConfig;
+
     struct LayerMaskData {
         qint32 top;
         qint32 left;

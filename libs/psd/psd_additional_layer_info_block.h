@@ -191,6 +191,9 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
         } else {
              w.writeColor("Clr ", fill_color);
         }
+
+        w.leaveDescriptor();
+
         return w.document();
     }
 };
@@ -386,12 +389,12 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             if (!gradientElement.isNull()) {
                 const QString gradientType = gradientElement.attribute("type");
                 if (gradientType == "stop") {
-                    const KoStopGradient *grad = KoStopGradient::fromXML(gradientElement).clone().dynamicCast<KoStopGradient>().data();
+                    const KoStopGradient *grad = new KoStopGradient(KoStopGradient::fromXML(gradientElement));
                     if (grad && grad->valid()) {
                         w.writeStopGradient("Grad", grad);
                     }
                 } else if (gradientType == "segment") {
-                    const KoSegmentGradient *grad = KoSegmentGradient::fromXML(gradientElement).clone().dynamicCast<KoSegmentGradient>().data();
+                    const KoSegmentGradient *grad = new KoSegmentGradient(KoSegmentGradient::fromXML(gradientElement));
                     if (grad && grad->valid()) {
                         w.writeSegmentGradient("Grad", grad);
                     }
@@ -419,6 +422,8 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
         w.writeBoolean("Algn", align_with_layer);
         w.writeUnitFloat("Scl ", "#Prc", scale);
         w.writePoint("Ofst", offset);
+
+        w.leaveDescriptor();
 
         return w.document();
     }
@@ -473,6 +478,58 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
         QDomDocument doc;
         doc.setContent(cfg->toXML());
         return doc;
+    }
+
+    bool loadFromConfig(KisFilterConfigurationSP cfg) {
+        if (cfg->name() != "pattern") {
+            return false;
+        }
+
+        patternName = cfg->getString("pattern", "");
+
+        // No idea how to get the UUID, as that requires the pattern itself...
+        // patternID = cfg->getString("pattern/fileName", ".pat").remove(".pat");
+
+        align_with_layer = false;
+
+        scale = cfg->getDouble("transform_scale_x", 1.0) * 100;
+
+        angle = 360.0 - cfg->getDouble("transform_rotation_z", 0.0);
+        if (angle > 180) {
+            angle = (180.0 - angle);
+        }
+
+        //TODO: figure out what the unit of the offset actually is...
+        offset  = QPointF(cfg->getInt("transform_offset_x", 0), cfg->getInt("transform_offset_y", 0));
+
+        return true;
+    }
+
+    QDomDocument getASLXML() {
+        KisAslXmlWriter w;
+        w.enterDescriptor("", "", "null");
+
+        // pattern ref
+        w.enterDescriptor("Ptrn", "", "Ptrn");
+
+        w.writeText("Nm  ", patternName);
+        if (patternID.isEmpty()) {
+            qWarning() << "This pattern cannot be saved: No pattern UUID available.";
+            return QDomDocument();
+        }
+        w.writeText("Idnt", patternID);
+        w.leaveDescriptor();
+
+        // end
+
+        w.writeBoolean("Algn", align_with_layer);
+        w.writeUnitFloat("Scl ", "#Prc", scale);
+        w.writeUnitFloat("Angl", "#Ang", angle);
+        w.writePoint("phase", offset);
+
+        w.leaveDescriptor();
+
+        return w.document();
     }
 };
 
@@ -551,6 +608,8 @@ public:
     void writePattBlockEx(QIODevice &io, const QDomDocument &patternsXmlDoc);
     void writeLclrBlockEx(QIODevice &io, const quint16 &labelColor);
 
+    void writeFillLayerBlockEx(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);
+
     bool valid();
 
     const PSDHeader &m_header;
@@ -586,6 +645,9 @@ private:
 
     template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
     void writeLclrBlockExImpl(QIODevice &io, const quint16 &lclr);
+
+    template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+    void writeFillLayerBlockExImpl(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type);
 
 private:
     ExtraLayerInfoBlockHandler m_layerInfoBlockHandler;

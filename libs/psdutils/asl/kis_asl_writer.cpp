@@ -254,6 +254,40 @@ void writePsdLfx2SectionImpl(QIODevice &device, const QDomDocument &doc)
     }
 }
 
+template<psd_byte_order byteOrder = psd_byte_order::psdBigEndian>
+void writeFillLayerSectionImpl(QIODevice &device, const QDomDocument &doc)
+{
+    QDomElement root = doc.documentElement();
+    KIS_ASSERT_RECOVER_RETURN(root.tagName() == "asl");
+
+    {
+        quint32 descriptorVersion = 16;
+        SAFE_WRITE_EX(byteOrder, device, descriptorVersion);
+    }
+
+    QDomNode child = root.firstChild();
+
+    while (!child.isNull()) {
+        QDomElement el = child.toElement();
+        QString key = el.attribute("key", "");
+
+        if (key != ResourceType::Patterns)
+            break;
+
+        child = child.nextSibling();
+    }
+
+    parseElement<byteOrder>(child.toElement(), device);
+    child = child.nextSibling();
+
+    // ASL files' size should be 4-bytes aligned
+    const qint64 paddingSize = 4 - (device.pos() & 0x3);
+    if (paddingSize != 4) {
+        QByteArray padding(static_cast<int>(paddingSize), '\0');
+        device.write(padding);
+    }
+}
+
 } // namespace
 
 KisAslWriter::KisAslWriter(psd_byte_order byteOrder)
@@ -267,6 +301,18 @@ void KisAslWriter::writeFile(QIODevice &device, const QDomDocument &doc)
         Private::writeFileImpl(device, doc);
     } catch (Private::ASLWriteException &e) {
         warnKrita << "WARNING: ASL:" << e.what();
+    }
+}
+
+void KisAslWriter::writeFillLayerSectionEx(QIODevice &device, const QDomDocument &doc)
+{
+    switch (m_byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        Private::writeFillLayerSectionImpl<psd_byte_order::psdLittleEndian>(device, doc);
+        break;
+    default:
+        Private::writeFillLayerSectionImpl(device, doc);
+        break;
     }
 }
 

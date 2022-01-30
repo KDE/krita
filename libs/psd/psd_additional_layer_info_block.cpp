@@ -374,6 +374,18 @@ void PsdAdditionalLayerInfoBlock::writeLclrBlockEx(QIODevice &io, const quint16 
     }
 }
 
+void PsdAdditionalLayerInfoBlock::writeFillLayerBlockEx(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type)
+{
+    switch (m_header.byteOrder) {
+    case psd_byte_order::psdLittleEndian:
+        writeFillLayerBlockExImpl<psd_byte_order::psdLittleEndian>(io, fillConfig, type);
+        break;
+    default:
+        writeFillLayerBlockExImpl(io, fillConfig, type);
+        break;
+    }
+}
+
 template<psd_byte_order byteOrder>
 void PsdAdditionalLayerInfoBlock::writePattBlockExImpl(QIODevice &io, const QDomDocument &patternsXmlDoc)
 {
@@ -409,4 +421,30 @@ void PsdAdditionalLayerInfoBlock::writeLclrBlockExImpl(QIODevice &io, const quin
     SAFE_WRITE_EX(byteOrder, io, zero);
 
 
+}
+
+template<psd_byte_order byteOrder>
+void PsdAdditionalLayerInfoBlock::writeFillLayerBlockExImpl(QIODevice &io, const QDomDocument &fillConfig, psd_fill_type type)
+{
+    KisAslWriterUtils::writeFixedString<byteOrder>("8BIM", io);
+    if (type == psd_fill_solid_color) {
+        KisAslWriterUtils::writeFixedString<byteOrder>("SoCo", io);
+    } else if (type == psd_fill_gradient) {
+        KisAslWriterUtils::writeFixedString<byteOrder>("GdFl", io);
+    } else {
+        KisAslWriterUtils::writeFixedString<byteOrder>("PtFl", io);
+    }
+    KisAslWriterUtils::OffsetStreamPusher<quint32, byteOrder> fillSizeTag(io, 2);
+
+    try {
+        KisAslWriter writer(byteOrder);
+
+        writer.writeFillLayerSectionEx(io, fillConfig);
+
+    } catch (KisAslWriterUtils::ASLWriteException &e) {
+        warnKrita << "WARNING: Couldn't save fill layer block:" << PREPEND_METHOD(e.what());
+
+        // TODO: make this error recoverable!
+        throw e;
+    }
 }

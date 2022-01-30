@@ -713,9 +713,9 @@ QDomDocument readFillLayerImpl(QIODevice &device)
     QDomDocument doc;
 
     if (device.isSequential()) {
-        warnKrita << "WARNING: *** KisAslReader::readLfx2PsdSection: the supplied"
+        warnKrita << "WARNING: *** KisAslReader::readFillLayerPsdSection: the supplied"
                   << "IO device is sequential. Chances are that"
-                  << "the layer style will *not* be loaded correctly!";
+                  << "the fill config will *not* be loaded correctly!";
     }
     try {
 
@@ -730,7 +730,7 @@ QDomDocument readFillLayerImpl(QIODevice &device)
         Private::readDescriptor<byteOrder>(device, "", &root, &doc);
 
     } catch (KisAslReaderUtils::ASLParseException &e) {
-        warnKrita << "WARNING: PSD: soco section:" << e.what();
+        warnKrita << "WARNING: PSD: SoCo section:" << e.what();
     }
 
     return doc;

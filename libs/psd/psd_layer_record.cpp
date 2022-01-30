@@ -583,6 +583,12 @@ void PSDLayerRecord::writeImpl(QIODevice &io,
             if (!stylesXmlDoc.isNull()) {
                 additionalInfoBlock.writeLfx2BlockEx(io, stylesXmlDoc, useLfxsLayerStyleFormat);
             }
+
+            // write SoCo, GdFl, PtFl data blocks.
+            if (!fillConfig.isNull()) {
+                additionalInfoBlock.writeFillLayerBlockEx(io, fillConfig, fillType);
+            }
+
         }
     } catch (KisAslWriterUtils::ASLWriteException &e) {
         throw KisAslWriterUtils::ASLWriteException(PREPEND_METHOD(e.what()));

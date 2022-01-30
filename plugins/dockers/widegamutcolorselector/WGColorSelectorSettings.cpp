@@ -9,9 +9,8 @@
 
 #include "WGConfig.h"
 #include "WGSelectorConfigGrid.h"
+#include "WGColorSelectorDock.h"
 #include "WGShadeLineEditor.h"
-
-#include "kis_config.h"
 
 #include <QApplication>
 #include <QButtonGroup>
@@ -88,8 +87,11 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.writeEntry("renderMode", m_ui->cmbSelectorRenderingMode->currentIndex());
     cfg.writeEntry("rgbColorModel", m_ui->cmbColorModel->currentIndex() +  KisVisualColorModel::HSV);
     cfg.setColorSelectorConfiguration(m_selectorConfigGrid->currentConfiguration());
+    // General
     cfg.set(WGConfig::quickSettingsEnabled, m_ui->grpQuickSettingsMenu->isChecked());
     cfg.setFavoriteConfigurations(m_favoriteConfigGrid->selectedConfigurations());
+    cfg.set(WGConfig::colorSpaceSource,
+            static_cast<WGColorSelectorDock::ColorSpaceSource>(m_ui->cmbSelectionColorSpace->currentIndex()));
     // Pop-ups
     cfg.set(WGConfig::popupSize, m_ui->sbPopupSize->value());
     cfg.set(WGConfig::popupPatches.orientation, m_ui->rbPopupHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
@@ -136,11 +138,13 @@ void WGColorSelectorSettings::loadPreferences()
     KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selectorConfigGrid->setChecked(selectorCfg);
     m_ui->btnSelectorShape->setIcon(m_selectorConfigGrid->generateIcon(selectorCfg, devicePixelRatioF()));
+    // General
     m_ui->grpQuickSettingsMenu->setChecked(cfg.get(WGConfig::quickSettingsEnabled));
     QVector<KisColorSelectorConfiguration> favoriteConfigs = cfg.favoriteConfigurations();
     for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
         m_favoriteConfigGrid->setChecked(fav);
     }
+    m_ui->cmbSelectionColorSpace->setCurrentIndex(cfg.get(WGConfig::colorSpaceSource));
     // Pop-ups
     m_ui->sbPopupSize->setValue(cfg.get(WGConfig::popupSize));
     Qt::Orientation patchOrientation = cfg.get(WGConfig::popupPatches.orientation);

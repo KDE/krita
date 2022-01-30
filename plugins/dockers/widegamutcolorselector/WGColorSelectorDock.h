@@ -7,6 +7,8 @@
 #ifndef WG_COLOR_SELECTOR_DOCKER_H
 #define WG_COLOR_SELECTOR_DOCKER_H
 
+#include "WGConfig.h"
+
 #include <QPointer>
 #include <QDockWidget>
 #include <kis_mainwindow_observer.h>
@@ -35,6 +37,12 @@ class WGColorSelectorDock : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:
+    enum ColorSpaceSource {
+        LayerColorSpace,
+        ImageColorSpace,
+        FixedColorSpace
+    };
+
     WGColorSelectorDock();
     const KisVisualColorModel& colorModel() const;
     KisDisplayColorConverter* displayColorConverter(bool rawPointer = false) const;
@@ -90,8 +98,13 @@ private:
     QToolButton *m_configButton {0};
     KisVisualColorModelSP m_colorModelFG;
     KisVisualColorModelSP m_colorModelBG;
+    ColorSpaceSource m_CSSource {LayerColorSpace};
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};
 };
+
+namespace WGConfig {
+    extern const NumericSetting<WGColorSelectorDock::ColorSpaceSource> colorSpaceSource;
+}
 
 #endif // WG_COLOR_SELECTOR_DOCKER_H

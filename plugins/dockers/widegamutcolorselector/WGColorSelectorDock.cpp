@@ -194,6 +194,10 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
 
         connect(resourceProvider, SIGNAL(sigGamutMaskDeactivated()),
                 m_selector, SLOT(slotGamutMaskUnset()), Qt::UniqueConnection);
+
+        // quirk note: displayConfigurationChanged signal gets sent *before* the new canvas gets
+        // passed, through the display converter of the now inactive canvas! So we need to repeat...
+        slotDisplayConfigurationChanged();
     }
     setEnabled(canvas != 0);
 }
@@ -274,6 +278,7 @@ void WGColorSelectorDock::slotConfigurationChanged()
     m_selector->selectorModel()->setRGBColorModel(static_cast<KisVisualColorModel::ColorModel>(cfg.readEntry("rgbColorModel", 0)));
     KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selector->setConfiguration(&selectorCfg);
+    m_CSSource = cfg.get(WGConfig::colorSpaceSource);
     m_shadeSelector->updateSettings();
     m_history->updateSettings();
     m_commonColors->updateSettings();
@@ -312,21 +317,43 @@ void WGColorSelectorDock::slotConfigurationChanged()
     }
 
     updateLayout();
+
+    if (m_canvas) {
+        slotDisplayConfigurationChanged();
+    }
 }
 
 void WGColorSelectorDock::slotDisplayConfigurationChanged()
 {
-    m_colorModelFG->slotSetColorSpace(m_canvas->displayColorConverter()->paintingColorSpace());
-    m_colorModelBG->slotSetColorSpace(m_canvas->displayColorConverter()->paintingColorSpace());
+    if (!m_canvas) {
+        return;
+    }
+
+    const KoColorSpace *selectionCS = nullptr;
+
+    // Note: displayConfigurationChanged is also emitted on image color space changes,
+    // so there's no need to handle extra signals, although it's a bit convoluted
+    if (m_CSSource == ImageColorSpace) {
+        selectionCS  = m_canvas->image()->colorSpace();
+    }
+    else {
+        // TODO: The custom selection color space in Advanced Color Selector config
+        // overrides the "painting" color space, so no independent configuration right now
+        selectionCS = m_canvas->displayColorConverter()->paintingColorSpace();
+    }
+
     // TODO: use m_viewManager->canvasResourceProvider()->fgColor();
     KoColor fgColor = m_canvas->resourceManager()->foregroundColor();
     KoColor bgColor = m_canvas->resourceManager()->backgroundColor();
     // TODO: use painting color space?
     m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(fgColor));
     m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(bgColor));
-    // TODO: don't overwrite color when colorspace didn't change
-    m_colorModelFG->slotSetColor(fgColor);
-    m_colorModelBG->slotSetColor(bgColor);
+    KisVisualColorModelSP activeModel = m_selector->selectorModel();
+
+    if (selectionCS && selectionCS != activeModel->colorSpace()) {
+        activeModel->slotSetColorSpace(selectionCS);
+        activeModel->slotSetColor(activeModel == m_colorModelFG ? fgColor : bgColor);
+    }
 }
 
 void WGColorSelectorDock::slotColorSelected(const KoColor &color)
@@ -363,6 +390,10 @@ void WGColorSelectorDock::slotColorSourceToggled(bool selectingBg)
         }
         m_selector->setSelectorModel(m_colorModelFG);
         m_shadeSelector->setModel(m_colorModelFG);
+    }
+    // currently, only the color space of the active model is updated, so it may be outdated
+    if (m_canvas) {
+        slotDisplayConfigurationChanged();
     }
 }
 
@@ -430,4 +461,12 @@ void WGColorSelectorDock::slotOpenSettings()
     if (settings.exec() == QDialog::Accepted) {
         //WGConfig::notifier()->notifyConfigChanged();
     }
+}
+
+namespace WGConfig {
+const NumericSetting<WGColorSelectorDock::ColorSpaceSource> colorSpaceSource
+{
+    "colorSpaceSource", WGColorSelectorDock::LayerColorSpace,
+    WGColorSelectorDock::LayerColorSpace, WGColorSelectorDock::FixedColorSpace, true
+};
 }

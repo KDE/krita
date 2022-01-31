@@ -183,11 +183,52 @@ void KisAslXmlWriter::writeBoolean(const QString &key, bool value)
 
 void KisAslXmlWriter::writeColor(const QString &key, const KoColor &value)
 {
-    enterDescriptor(key, "", "RGBC");
+    QDomDocument doc;
+    QDomElement el = doc.createElement("color");
+    value.toXML(doc, el);
+    QDomElement colorEl = el.firstChildElement();
+    if (value.colorSpace()->colorModelId() == RGBAColorModelID) {
+        enterDescriptor(key, "", "RGBC");
 
-    writeDouble("Rd  ", value.toQColor().red());
-    writeDouble("Grn ", value.toQColor().green());
-    writeDouble("Bl  ", value.toQColor().blue());
+        double v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("r", "0.0")) * 255.0, 255.0);
+        writeDouble("Rd  ", v);
+        v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("g", "0.0")) * 255.0, 255.0);
+        writeDouble("Grn ", v);
+        v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("b", "0.0")) * 255.0, 255.0);
+        writeDouble("Bl  ", v);
+    } else if (value.colorSpace()->colorModelId() == CMYKAColorModelID) {
+        enterDescriptor(key, "", "CMYC");
+
+        double v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("c", "0.0")) * 100.0, 100.0);
+        writeDouble("Cyn ", v);
+        v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("m", "0.0")) * 100.0, 100.0);
+        writeDouble("Mgnt", v);
+        v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("y", "0.0")) * 100.0, 100.0);
+        writeDouble("Ylw ", v);
+        v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("k", "0.0")) * 100.0, 100.0);
+        writeDouble("Blck", v);
+    } else if (value.colorSpace()->colorModelId() == LABAColorModelID) {
+        enterDescriptor(key, "", "LbCl");
+
+        double v = KisDomUtils::toDouble(colorEl.attribute("L", "0.0"));
+        writeDouble("Lmnc", v);
+        v = KisDomUtils::toDouble(colorEl.attribute("a", "0.0"));
+        writeDouble("A   ", v);
+        v = KisDomUtils::toDouble(colorEl.attribute("b", "0.0"));
+        writeDouble("B   ", v);
+    } else if (value.colorSpace()->colorModelId() == GrayAColorModelID) {
+        enterDescriptor(key, "", "Grsc");
+
+        double v = qBound(0.0, KisDomUtils::toDouble(colorEl.attribute("g", "0.0")) * 100.0, 100.0);
+        writeDouble("Gry ", v);
+    } else { // default to sRGB
+        enterDescriptor(key, "", "RGBC");
+
+        writeDouble("Rd  ", value.toQColor().red());
+        writeDouble("Grn ", value.toQColor().green());
+        writeDouble("Bl  ", value.toQColor().blue());
+    }
+    //TODO: write down spot metadata once we have a way to funnel it.
 
     leaveDescriptor();
 }

@@ -73,8 +73,6 @@ KoColor parseColorObject(QDomElement parent, QString classID)
     double s = 0;
     double v= 0;
 
-    qDebug() << "Parsing color: " << classID;
-
     if (classID == "RGBC" || classID == "HSBC") {
         root = doc.createElement("sRGB");
     } else if (classID == "CMYC") {

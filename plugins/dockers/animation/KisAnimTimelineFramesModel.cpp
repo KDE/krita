@@ -1077,35 +1077,33 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
 
 QString KisAnimTimelineFramesModel::audioChannelFileName() const
 {
-    return m_d->image ? m_d->image->animationInterface()->audioChannelFileName() : QString();
+    return QString();
 }
 
 void KisAnimTimelineFramesModel::setAudioChannelFileName(const QString &fileName)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
-    m_d->image->animationInterface()->setAudioChannelFileName(fileName);
 }
 
 bool KisAnimTimelineFramesModel::isAudioMuted() const
 {
-    return m_d->image ? m_d->image->animationInterface()->isAudioMuted() : false;
+    return false;
 }
 
 void KisAnimTimelineFramesModel::setAudioMuted(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
-    m_d->image->animationInterface()->setAudioMuted(value);
 }
 
 qreal KisAnimTimelineFramesModel::audioVolume() const
 {
-    return m_d->image ? m_d->image->animationInterface()->audioVolume() : 0.5;
+    return 0.5;
 }
 
 void KisAnimTimelineFramesModel::setAudioVolume(qreal value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
-    m_d->image->animationInterface()->setAudioVolume(value);
+//    m_d->image->animationInterface()->setAudioVolume(value);
 }
 
 void KisAnimTimelineFramesModel::setFullClipRangeStart(int column)

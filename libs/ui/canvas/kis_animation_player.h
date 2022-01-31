@@ -97,7 +97,6 @@ private:
 
 private:
     struct Private;
-    friend class PlaybackEnvironment;
     QScopedPointer<Private> m_d;
 
 };

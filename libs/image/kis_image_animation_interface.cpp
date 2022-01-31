@@ -25,16 +25,13 @@
 struct KisImageAnimationInterface::Private
 {
     Private()
-        : image(0)
-        , externalFrameActive(false)
-        , frameInvalidationBlocked(false)
-        , framerate(24)
-        , cachedLastFrameValue(-1)
-        , audioChannelMuted(false)
-        , audioChannelVolume(0.5)
-        , exportInitialFrameNumber(-1)
-        , m_currentTime(0)
-        , m_currentUITime(0)
+        : image(0),
+          externalFrameActive(false),
+          frameInvalidationBlocked(false),
+          cachedLastFrameValue(-1),
+          exportInitialFrameNumber(-1),
+          m_currentTime(0),
+          m_currentUITime(0)
     {
     }
 
@@ -46,9 +43,6 @@ struct KisImageAnimationInterface::Private
           playbackRange(rhs.playbackRange),
           framerate(rhs.framerate),
           cachedLastFrameValue(-1),
-          audioChannelFileName(rhs.audioChannelFileName),
-          audioChannelMuted(rhs.audioChannelMuted),
-          audioChannelVolume(rhs.audioChannelVolume),
           exportSequenceFilePath(rhs.exportSequenceFilePath),
           exportSequenceBaseName(rhs.exportSequenceBaseName),
           exportInitialFrameNumber(rhs.exportInitialFrameNumber),
@@ -65,10 +59,6 @@ struct KisImageAnimationInterface::Private
     KisTimeSpan playbackRange;
     int framerate;
     int cachedLastFrameValue;
-
-    QString audioChannelFileName;
-    bool audioChannelMuted;
-    qreal audioChannelVolume;
 
     QSet<int> activeLayerSelectedTimes;
 
@@ -185,21 +175,6 @@ int KisImageAnimationInterface::framerate() const
     return m_d->framerate;
 }
 
-QString KisImageAnimationInterface::audioChannelFileName() const
-{
-    return m_d->audioChannelFileName;
-}
-
-void KisImageAnimationInterface::setAudioChannelFileName(const QString &fileName)
-{
-    QFileInfo info(fileName);
-
-    KIS_SAFE_ASSERT_RECOVER_NOOP(fileName.isEmpty() || info.isAbsolute());
-    m_d->audioChannelFileName = fileName.isEmpty() ? fileName : info.absoluteFilePath();
-
-    emit sigAudioChannelChanged();
-}
-
 QString KisImageAnimationInterface::exportSequenceFilePath()
 {
     return m_d->exportSequenceFilePath;
@@ -228,28 +203,6 @@ int KisImageAnimationInterface::exportInitialFrameNumber()
 void KisImageAnimationInterface::setExportInitialFrameNumber(const int frameNum)
 {
     m_d->exportInitialFrameNumber = frameNum;
-}
-
-bool KisImageAnimationInterface::isAudioMuted() const
-{
-    return m_d->audioChannelMuted;
-}
-
-void KisImageAnimationInterface::setAudioMuted(bool value)
-{
-    m_d->audioChannelMuted = value;
-    emit sigAudioChannelChanged();
-}
-
-qreal KisImageAnimationInterface::audioVolume() const
-{
-    return m_d->audioChannelVolume;
-}
-
-void KisImageAnimationInterface::setAudioVolume(qreal value)
-{
-    m_d->audioChannelVolume = value;
-    emit sigAudioVolumeChanged();
 }
 
 QSet<int> KisImageAnimationInterface::activeLayerSelectedTimes()

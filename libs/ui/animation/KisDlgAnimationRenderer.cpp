@@ -255,7 +255,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         m_page->sequenceStart->setValue(doc.image()->animationInterface()->exportInitialFrameNumber());
     }
 
-    m_page->chkIncludeAudio->setChecked(!doc.image()->animationInterface()->isAudioMuted());
+//    m_page->chkIncludeAudio->setChecked(!doc.image()->animationInterface()->isAudioMuted());
 }
 
 void KisDlgAnimationRenderer::getDefaultVideoEncoderOptions(const QString &mimeType,

@@ -101,21 +101,9 @@ public:
     const KisTimeSpan& fullClipRange() const;
     void setFullClipRange(const KisTimeSpan range);
 
-
     const KisTimeSpan &playbackRange() const;
     void setPlaybackRange(const KisTimeSpan range);
     int framerate() const;
-
-    /**
-     * @return **absolute** file name of the audio channel file
-     */
-    QString audioChannelFileName() const;
-
-    /**
-     * Sets **absolute** file name of the audio channel file. Don't try to pass
-     * a relative path, it'll assert!
-     */
-    void setAudioChannelFileName(const QString &fileName);
 
     QString exportSequenceFilePath();
     void setExportSequenceFilePath(const QString &filePath);
@@ -125,26 +113,6 @@ public:
 
     int exportInitialFrameNumber();
     void setExportInitialFrameNumber(const int frameNum);
-
-    /**
-     * @return is the audio channel is currently muted
-     */
-    bool isAudioMuted() const;
-
-    /**
-     * Mutes the audio channel
-     */
-    void setAudioMuted(bool value);
-
-    /**
-     * Returns the preferred audio value in rangle [0, 1]
-     */
-    qreal audioVolume() const;
-
-    /**
-     * Set the preferred volume for the audio channel in range [0, 1]
-     */
-    void setAudioVolume(qreal value);
 
     QSet<int> activeLayerSelectedTimes();
     void setActiveLayerSelectedTimes(const QSet<int> &times);

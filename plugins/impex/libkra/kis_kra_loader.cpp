@@ -1387,51 +1387,7 @@ void KisKraLoader::loadMirrorAxis(const QDomElement &elem)
 
 void KisKraLoader::loadAudio(const QDomElement& elem, KisImageSP image)
 {
-    QDomDocument dom;
-    dom.appendChild(dom.importNode(elem, true));
-    QDomElement qElement = dom.firstChildElement();
-
-    QString fileName;
-    if (KisDomUtils::loadValue(qElement, "masterChannelPath", &fileName)) {
-        fileName = QDir::toNativeSeparators(fileName);
-
-        QDir baseDirectory = QFileInfo(m_d->document->localFilePath()).absoluteDir();
-        fileName = QDir::cleanPath( baseDirectory.filePath(fileName) );
-
-        QFileInfo info(fileName);
-
-        if (!info.exists()) {
-            qApp->setOverrideCursor(Qt::ArrowCursor);
-            QString msg = i18nc(
-                        "@info",
-                        "Audio channel file \"%1\" doesn't exist!\n\n"
-                        "Expected path:\n"
-                        "%2\n\n"
-                        "Do you want to locate it manually?", info.fileName(), info.absoluteFilePath());
-
-            int result = QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "File not found"), msg, QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-            if (result == QMessageBox::Yes) {
-                info.setFile(KisImportExportManager::askForAudioFileName(info.absolutePath(), 0));
-            }
-
-            qApp->restoreOverrideCursor();
-        }
-
-        if (info.exists()) {
-            image->animationInterface()->setAudioChannelFileName(info.absoluteFilePath());
-        }
-    }
-
-    bool audioMuted = false;
-    if (KisDomUtils::loadValue(qElement, "audioMuted", &audioMuted)) {
-        image->animationInterface()->setAudioMuted(audioMuted);
-    }
-
-    qreal audioVolume = 0.5;
-    if (KisDomUtils::loadValue(qElement, "audioVolume", &audioVolume)) {
-        image->animationInterface()->setAudioVolume(audioVolume);
-    }
+    Q_UNIMPLEMENTED();
 }
 
 void KisKraLoader::loadStoryboardItemList(const QDomElement& elem)

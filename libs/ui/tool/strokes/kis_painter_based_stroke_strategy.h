@@ -12,6 +12,7 @@
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "kis_resources_snapshot.h"
 #include "kis_selection.h"
+#include "kis_indirect_painting_support.h"
 
 class KisPainter;
 class KisDistanceInformation;
@@ -130,6 +131,8 @@ private:
     bool m_supportsMaskingBrush;
     bool m_supportsIndirectPainting;
     bool m_supportsContinuedInterstrokeData;
+
+    KisIndirectPaintingSupport::FinalMergeSuspenderSP m_finalMergeSuspender;
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

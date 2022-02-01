@@ -27,6 +27,8 @@
 
 #include "KisInterstrokeDataFactory.h"
 #include "KisInterstrokeDataTransactionWrapperFactory.h"
+#include "KisRunnableStrokeJobsInterface.h"
+#include "KisRunnableStrokeJobUtils.h"
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
@@ -124,11 +126,11 @@ QVector<KisRunnableStrokeJobData *> KisPainterBasedStrokeStrategy::doMaskingBrus
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_maskingBrushRenderer, jobs);
 
     Q_FOREACH (const QRect &rc, rects) {
-        jobs.append(new KisRunnableStrokeJobData(
+        KritaUtils::addJobConcurrent(jobs,
             [this, rc] () {
                 this->m_maskingBrushRenderer->updateProjection(rc);
-            },
-            KisStrokeJobData::CONCURRENT));
+            }
+        );
     }
 
     return jobs;
@@ -350,26 +352,41 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
         m_transaction->end();
-        if(m_useMergeID){
-            indirect->mergeToLayer(node,
-                                   undoAdapter,
-                                   transactionText,timedID(this->id()));
+        delete m_transaction;
+        m_transaction = 0;
+        deletePainters();
+
+        QVector<KisRunnableStrokeJobData*> jobs;
+
+        indirect->mergeToLayerThreaded(node,
+                               undoAdapter,
+                               transactionText,
+                               m_useMergeID ? timedID(this->id()) : -1,
+                               &jobs);
+
+        /// When the transaction is reset to zero, cancel job does nothing.
+        /// Therefore, we should ensure that the merging jobs are never
+        /// cancelled.
+
+        Q_FOREACH (KisRunnableStrokeJobData *job, jobs) {
+            job->setCancellable(false);
         }
-        else{
-            indirect->mergeToLayer(node,
-                                   undoAdapter,
-                                   transactionText);
-        }
+
+        runnableJobsInterface()->addRunnableJobs(jobs);
     }
     else {
         m_transaction->commit(undoAdapter);
+        delete m_transaction;
+        m_transaction = 0;
+        deletePainters();
     }
-    delete m_transaction;
-    deletePainters();
+
 }
 
 void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
+    if (!m_transaction) return;
+
     KisNodeSP node = m_resources->currentNode();
     KisIndirectPaintingSupport *indirect =
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
@@ -379,6 +396,7 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
         KisPaintDeviceSP t = indirect->temporaryTarget();
         if (t) {
             delete m_transaction;
+            m_transaction = 0;
             deletePainters();
 
             KisRegion region = t->region();
@@ -391,6 +409,7 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
     if (revert) {
         m_transaction->revert();
         delete m_transaction;
+        m_transaction = 0;
         deletePainters();
     }
 }
@@ -402,6 +421,7 @@ void KisPainterBasedStrokeStrategy::suspendStrokeCallback()
         dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
     if(indirect && indirect->hasTemporaryTarget()) {
+        m_finalMergeSuspender = indirect->trySuspendFinalMerge();
         indirect->setTemporaryTarget(0);
     }
 }
@@ -425,6 +445,8 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
             indirect->setTemporaryChannelFlags(channelLockFlags);
         }
     }
+
+    m_finalMergeSuspender.clear();
 }
 
 KisNodeSP KisPainterBasedStrokeStrategy::targetNode() const

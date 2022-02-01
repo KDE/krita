@@ -70,8 +70,8 @@ public:
                        PositionToFilthy maskPos) const override;
 
     void setCurrentColor(const KoColor &color) override;
-    void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID) override;
-    void writeMergeData(KisPainter *painter, KisPaintDeviceSP src) override;
+    void mergeToLayerThreaded(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID, QVector<KisRunnableStrokeJobData *> *jobs) override;
+    void writeMergeData(KisPainter *painter, KisPaintDeviceSP src, const QRect &rc) override;
     bool supportsNonIndirectPainting() const override;
 
     QRect exactBounds() const override;
@@ -148,6 +148,8 @@ private:
 
     bool showKeyStrokes() const;
     void setShowKeyStrokes(bool value);
+
+    void mergeToLayerUnthreaded(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID);
 
 private:
     void rerenderFakePaintDevice();

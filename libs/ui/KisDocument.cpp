@@ -114,6 +114,7 @@
 #include "kis_image_barrier_lock_adapter.h"
 #include "KisReferenceImagesLayer.h"
 #include "dialogs/KisRecoverNamedAutosaveDialog.h"
+#include "mlt++/MltProducer.h"
 
 
 #include <mutex>
@@ -384,6 +385,8 @@ public:
 
     StoryboardItemList m_storyboardItemList;
     QVector<StoryboardComment> m_storyboardCommentList;
+
+    QVector<QFileInfo> audioTracks;
 
     QColor globalAssistantsColor;
 
@@ -2330,6 +2333,18 @@ void KisDocument::setStoryboardCommentList(const QVector<StoryboardComment> &sto
         emit sigStoryboardCommentListChanged();
     }
 }
+
+QVector<QFileInfo> KisDocument::getAudioTracks() {
+    return d->audioTracks;
+}
+
+void KisDocument::setAudioTracks(QVector<QFileInfo> f)
+{
+    d->audioTracks = f;
+    emit sigAudioTracksChanged();
+}
+
+
 
 const KisGuidesConfig& KisDocument::guidesConfig() const
 {

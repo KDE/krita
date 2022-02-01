@@ -29,6 +29,7 @@ struct KisTimeBasedItemModel::Private
 {
     Private()
         : animationPlayer(0)
+        , document(nullptr)
         , numFramesOverride(0)
         , activeFrameIndex(0)
         , scrubInProgress(false)
@@ -40,6 +41,7 @@ struct KisTimeBasedItemModel::Private
     KisImageWSP image;
     KisAnimationFrameCacheWSP framesCache;
     QPointer<KisAnimationPlayer> animationPlayer;
+    KisDocument* document;
 
     QVector<bool> cachedFrames;
 
@@ -172,6 +174,18 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
         const int frame = player ? player->visibleFrame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
     }
+}
+
+void KisTimeBasedItemModel::setDocument(KisDocument *document)
+{
+    if (m_d->document == document) return;
+
+    m_d->document = document;
+}
+
+KisDocument *KisTimeBasedItemModel::document() const
+{
+    return m_d->document;
 }
 
 void KisTimeBasedItemModel::setLastVisibleFrame(int time)

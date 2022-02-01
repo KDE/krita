@@ -33,7 +33,7 @@ struct Private {
 
         std::function<void (int)> callback(std::bind(&Private::pushAudio, this, std::placeholders::_1));
         sigPushAudioCompressor.reset(
-                    new KisSignalCompressorWithParam<int>(50 * SCRUB_AUDIO_WINDOW, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
+                    new KisSignalCompressorWithParam<int>(35 * SCRUB_AUDIO_WINDOW, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
                     );
     }
 
@@ -122,13 +122,14 @@ void KisMediaConsumer::setMode(Mode setting)
         m_d->mode = setting;
         if (m_d->mode == Mode::PUSH) {
             if (!m_d->pullConsumer->is_stopped()) {
+                m_d->pullConsumer->purge();
                 m_d->pullConsumer->stop();
             }
 
             m_d->pushConsumer->start();
         } else {
             if (!m_d->pushConsumer->is_stopped()) {
-                m_d->pushConsumer->drain();
+                m_d->pushConsumer->purge();
                 m_d->pushConsumer->stop();
             }
 

@@ -11,6 +11,7 @@
 #include <QDateTime>
 #include <QTransform>
 #include <QList>
+#include <QFileInfo>
 
 #include <klocalizedstring.h>
 
@@ -397,6 +398,9 @@ public:
      */
     void setStoryboardCommentList(const QVector<StoryboardComment> &storyboardCommentList, bool emitSignal = false);
 
+    QVector<QFileInfo> getAudioTracks();
+    void setAudioTracks(QVector<QFileInfo> f);
+
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
@@ -496,6 +500,8 @@ Q_SIGNALS:
     void sigStoryboardItemListChanged();
 
     void sigStoryboardCommentListChanged();
+
+    void sigAudioTracksChanged();
 
 private Q_SLOTS:
     void finishExportInBackground();

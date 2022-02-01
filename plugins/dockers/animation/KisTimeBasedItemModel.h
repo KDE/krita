@@ -31,6 +31,8 @@ public:
     void setFrameCache(KisAnimationFrameCacheSP cache);
     bool isFrameCached(const int frame);
     void setAnimationPlayer(KisAnimationPlayer *player);
+    void setDocument(class KisDocument* document);
+    KisDocument* document() const;
 
     void setLastVisibleFrame(int time);
 

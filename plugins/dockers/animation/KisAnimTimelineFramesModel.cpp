@@ -289,10 +289,6 @@ void KisAnimTimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesF
                 SLOT(slotDummyChanged(KisNodeDummy*)));
         connect(m_d->image->animationInterface(),
                 SIGNAL(sigFullClipRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
-        connect(m_d->image->animationInterface(),
-                SIGNAL(sigAudioChannelChanged()), SIGNAL(sigAudioChannelChanged()));
-        connect(m_d->image->animationInterface(),
-                SIGNAL(sigAudioVolumeChanged()), SIGNAL(sigAudioChannelChanged()));
         connect(m_d->image, SIGNAL(sigImageModified()), SLOT(slotImageContentChanged()));
         connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotImageContentChanged()));
     }
@@ -304,7 +300,6 @@ void KisAnimTimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesF
 
     if (m_d->dummiesFacade) {
         emit sigInfiniteTimelineUpdateNeeded();
-        emit sigAudioChannelChanged();
         slotCurrentTimeChanged(m_d->image->animationInterface()->currentUITime());
     }
 }
@@ -1077,12 +1072,23 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
 
 QString KisAnimTimelineFramesModel::audioChannelFileName() const
 {
-    return QString();
+    if (document()) {
+        QVector<QFileInfo> files = document()->getAudioTracks();
+        if (files.count() > 0) {
+            return files.first().baseName();
+        }
+    }
+    return QString("");
 }
 
-void KisAnimTimelineFramesModel::setAudioChannelFileName(const QString &fileName)
+void KisAnimTimelineFramesModel::setAudioChannelFileName(const QFileInfo &fileName)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(document());
+    QVector<QFileInfo> tracks;
+    if (fileName.exists()) {
+        tracks << fileName;
+    }
+    document()->setAudioTracks(tracks);
 }
 
 bool KisAnimTimelineFramesModel::isAudioMuted() const

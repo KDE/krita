@@ -293,6 +293,7 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->framesModel->setDummiesFacade(0, 0, 0);
         m_d->framesModel->setFrameCache(0);
         m_d->framesModel->setAnimationPlayer(0);
+        m_d->framesModel->setDocument(0);
         m_d->framesModel->setNodeManipulationInterface(0);
     }
 
@@ -321,6 +322,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->framesModel->setDummiesFacade(kritaShapeController,
                                      m_d->canvas->image(),
                                      m_d->canvas->viewManager()->nodeManager()->nodeDisplayModeAdapter());
+
+        m_d->framesModel->setDocument(doc);
 
         updateFrameCache();
 

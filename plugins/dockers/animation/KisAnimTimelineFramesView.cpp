@@ -356,9 +356,6 @@ void KisAnimTimelineFramesView::setModel(QAbstractItemModel *model)
 
     connect(m_d->model, SIGNAL(sigInfiniteTimelineUpdateNeeded()),
             this, SLOT(slotUpdateInfiniteFramesCount()));
-
-    connect(m_d->model, SIGNAL(sigAudioChannelChanged()),
-            this, SLOT(slotUpdateAudioActions()));
     
     connect(m_d->model, SIGNAL(requestTransferSelectionBetweenRows(int,int)),
             this, SLOT(slotTryTransferSelectionBetweenRows(int,int)));
@@ -799,7 +796,7 @@ void KisAnimTimelineFramesView::slotSelectAudioChannelFile()
     const QFileInfo info(result);
 
     if (info.exists()) {
-        m_d->model->setAudioChannelFileName(info.absoluteFilePath());
+        m_d->model->setAudioChannelFileName(info);
     }
 }
 
@@ -815,7 +812,7 @@ void KisAnimTimelineFramesView::slotAudioChannelMute(bool value)
 void KisAnimTimelineFramesView::slotAudioChannelRemove()
 {
     if (!m_d->model) return;
-    m_d->model->setAudioChannelFileName(QString());
+    m_d->model->setAudioChannelFileName(QFileInfo());
 }
 
 void KisAnimTimelineFramesView::slotUpdateAudioActions()

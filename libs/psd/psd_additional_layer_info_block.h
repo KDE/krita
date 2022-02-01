@@ -435,9 +435,8 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
     QPointF offset;
     QString patternName;
     QString patternID;
+    KoPatternSP pattern;
     bool align_with_layer;
-    int imageWidth = 1;
-    int imageHeight = 1;
     
     void setAngle(float Angl) {
         angle = Angl;
@@ -473,8 +472,8 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
         cfg->setProperty("transform_scale_y", scale / 100);
         cfg->setProperty("transform_rotation_z", fixedAngle);
 
-        cfg->setProperty("transform_offset_x", int(offset.x() * imageWidth * 0.01));
-        cfg->setProperty("transform_offset_y", int(offset.y() * imageHeight * 0.01));
+        cfg->setProperty("transform_offset_x", offset.x());
+        cfg->setProperty("transform_offset_y", offset.y());
         QDomDocument doc;
         doc.setContent(cfg->toXML());
         return doc;
@@ -485,10 +484,16 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
             return false;
         }
 
+        const QString patternMD5 = cfg->getString("pattern/md5", "");
+        const QString patternNameTemp = cfg->getString("pattern", "Grid01.pat");
+        const QString patternFileName = cfg->getString("pattern/fileName", "");
+
+        KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
+        pattern = res.resource<KoPattern>();
+
         patternName = cfg->getString("pattern", "");
 
-        // No idea how to get the UUID, as that requires the pattern itself...
-        // patternID = cfg->getString("pattern/fileName", ".pat").remove(".pat");
+        // Pattern ID needs the pattern to be saved first.
 
         align_with_layer = false;
 
@@ -499,7 +504,6 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
             angle = (180.0 - angle);
         }
 
-        //TODO: figure out what the unit of the offset actually is...
         offset  = QPointF(cfg->getInt("transform_offset_x", 0), cfg->getInt("transform_offset_y", 0));
 
         return true;

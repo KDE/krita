@@ -599,11 +599,16 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
 
                         psd_layer_pattern_fill fill;
                         if (fill.loadFromConfig(fillLayer->filter())) {
-                            /* Incomplete, needs pattern UUID.
-                            fillConfig = fill.getASLXML();
-                            fillType = psd_fill_pattern;
-                            */
-                            qDebug() << "Not saving pattern fill right now.";
+                            if (fill.pattern) {
+                                KisAslXmlWriter w;
+                                w.enterList(ResourceType::Patterns);
+                                QString uuid = w.writePattern("", fill.pattern);
+                                w.leaveList();
+                                mergedPatternsXmlDoc = w.document();
+                                fill.patternID = uuid;
+                                fillConfig = fill.getASLXML();
+                                fillType = psd_fill_pattern;
+                            }
                         }
 
                     }

@@ -134,6 +134,14 @@ void FreehandStrokeBenchmark::initTestCase()
         KisResourceModel model(ResourceType::Brushes);
         model.importResourceFile(fullFileName, false);
     }
+
+    // warm-up memory pools
+    {
+        FreehandStrokeBenchmarkTester tester("testing_1000px_auto_deafult.kpp");
+        tester.setCpuCoresLimit(QThread::idealThreadCount());
+        tester.benchmark();
+        QTest::qSleep(500);
+    }
 }
 
 void FreehandStrokeBenchmark::testDefaultTip()

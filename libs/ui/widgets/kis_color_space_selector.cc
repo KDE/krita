@@ -2,6 +2,7 @@
  *  SPDX-FileCopyrightText: 2007 Cyrille Berger <cberger@cberger.net>
  *  SPDX-FileCopyrightText: 2011 Boudewijn Rempt <boud@valdyas.org>
  *  SPDX-FileCopyrightText: 2011 Srikanth Tiyyagura <srikanth.tulasiram@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -40,7 +41,9 @@ struct KisColorSpaceSelector::Private {
     KoID previousModel;
 };
 
-KisColorSpaceSelector::KisColorSpaceSelector(QWidget* parent) : QWidget(parent), m_advancedSelector(0), d(new Private)
+KisColorSpaceSelector::KisColorSpaceSelector(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
 {
     setObjectName("KisColorSpaceSelector");
     d->colorSpaceSelector = new Ui_WdgColorSpaceSelector;
@@ -211,20 +214,21 @@ void KisColorSpaceSelector::installProfile()
 
 void KisColorSpaceSelector::slotOpenAdvancedSelector()
 {
-    if (!m_advancedSelector) {
-        m_advancedSelector = new KisAdvancedColorSpaceSelector(this, i18n("Select a Colorspace"));
-        m_advancedSelector->setModal(true);
-        if (currentColorSpace()) {
-            m_advancedSelector->setCurrentColorSpace(currentColorSpace());
-        }
-        connect(m_advancedSelector, SIGNAL(selectionChanged(bool)), this, SLOT(slotProfileValid(bool)) );
+    KisAdvancedColorSpaceSelector advancedSelector(this, i18n("Select a Colorspace"));
+
+    advancedSelector.setModal(true);
+
+    if (currentColorSpace()) {
+        advancedSelector.setCurrentColorSpace(currentColorSpace());
     }
 
-    QDialog::DialogCode result = (QDialog::DialogCode)m_advancedSelector->exec();
+    connect(&advancedSelector, &KisAdvancedColorSpaceSelector::selectionChanged, this, &KisColorSpaceSelector::slotProfileValid);
 
-    if (result) {
-        if (d->profileValid==true) {
-            setCurrentColorSpace(m_advancedSelector->currentColorSpace());
+    const auto result = (QDialog::DialogCode)advancedSelector.exec();
+
+    if (result == QDialog::Accepted) {
+        if (d->profileValid) {
+            setCurrentColorSpace(advancedSelector.currentColorSpace());
             d->profileSetManually = true;
         }
     }

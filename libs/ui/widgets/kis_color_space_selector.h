@@ -48,7 +48,6 @@ private Q_SLOTS:
     void slotProfilesComboBoxActivated();
 private:
     struct Private;
-    KisAdvancedColorSpaceSelector *m_advancedSelector;
     Private * const d;
 
 };

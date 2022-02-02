@@ -1,3 +1,9 @@
+/*
+ * SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
 #include "kis_canvas_drop.h"
 
 #include <KLocalizedString>

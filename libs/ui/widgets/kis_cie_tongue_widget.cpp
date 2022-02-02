@@ -35,7 +35,6 @@ wavelength, and thus define the outline of the CIE "tongue" diagram.
 #include <cmath>
 
 #include <klocalizedstring.h>
-#include <kpixmapsequence.h>
 
 #include <kis_icon.h>
 #include <KoColorSpaceRegistry.h>
@@ -140,16 +139,13 @@ public:
         yBias(0),
         pxcols(0),
         pxrows(0),
-        progressCount(0),
         gridside(0),
-        progressTimer(0),
         Primaries(9),
         whitePoint(3)
-        
+
     {
-        progressPix = KPixmapSequence("process-working", KisIconUtils::SizeSmallMedium);
     }
-    
+
     bool            profileDataAvailable;
     bool            needUpdatePixmap;
     bool            cieTongueNeedsUpdate;
@@ -159,18 +155,14 @@ public:
     int             yBias;
     int             pxcols;
     int             pxrows;
-    int             progressCount;           // Position of animation during loading/calculation.
  
     double          gridside;
  
     QPainter        painter;
  
-    QTimer*         progressTimer;
- 
     QPixmap         pixmap;
     QPixmap         cietongue;
     QPixmap         gamutMap;
-    KPixmapSequence progressPix;
  
     QVector <double> Primaries;
     QVector <double> whitePoint;
@@ -181,17 +173,11 @@ public:
 KisCIETongueWidget::KisCIETongueWidget(QWidget *parent) :
     QWidget(parent), d(new Private)
 {
-    d->progressTimer = new QTimer(this);
-    setAttribute(Qt::WA_DeleteOnClose);
-    
     d->Primaries.resize(9);
     d->Primaries.fill(0.0);
     d->whitePoint.resize(3);
     d->whitePoint<<0.34773<<0.35952<<1.0;
     d->gamut = QPolygonF();
-
-    connect(d->progressTimer, SIGNAL(timeout()),
-            this, SLOT(slotProgressTimerDone()));
 }
 
 KisCIETongueWidget::~KisCIETongueWidget()
@@ -712,10 +698,4 @@ void KisCIETongueWidget::resizeEvent(QResizeEvent* event)
     QWidget::resizeEvent(event);
     d->needUpdatePixmap = true;
     d->cieTongueNeedsUpdate = true;
-}
- 
-void KisCIETongueWidget::slotProgressTimerDone()
-{
-    update();
-    d->progressTimer->start(200);
 }

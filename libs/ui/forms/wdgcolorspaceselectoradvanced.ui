@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -14,164 +14,202 @@
     <height>710</height>
    </rect>
   </property>
-  <property name="minimumSize">
-   <size>
-    <width>728</width>
-    <height>710</height>
-   </size>
-  </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <item column="0" row="0">
-    <widget class="QGroupBox" name="groupBox">
-     <property name="maximumSize">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="QLabel" name="lbl_descriptionwidget">
+     <property name="minimumSize">
       <size>
-       <width>242</width>
-       <height>670</height>
+       <width>200</width>
+       <height>60</height>
       </size>
      </property>
-     <property name="title">
-      <string>Profile Picker</string>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Color_space&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#006e28;&quot;&gt;Color Spaces&lt;/span&gt;&lt;/a&gt;  determine how colors are encoded in your files. Different color spaces have different properties and are used for different purposes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <layout class="QFormLayout" name="formLayout_2">
-        <item column="0" row="1">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string comment="Color depth">Depth</string>
-          </property>
-         </widget>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>3</number>
+     </property>
+     <property name="indent">
+      <number>0</number>
+     </property>
+     <property name="openExternalLinks">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,2">
+     <item row="0" column="0" rowspan="2">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Profile Picker</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QFormLayout" name="formLayout_2">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string comment="Color model">Model</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="KisCmbIDList" name="cmbColorModels">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string comment="Color depth">Depth</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="KisCmbIDList" name="cmbColorDepth">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </item>
-        <item column="0" row="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string comment="Color model">Model</string>
-          </property>
-         </widget>
-        </item>
-        <item column="0" row="2">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
+        <item>
+         <widget class="QGroupBox" name="groupBox_3">
+          <property name="title">
            <string comment="ICC color profile">Profile</string>
           </property>
-         </widget>
-        </item>
-        <item column="1" row="1">
-         <widget class="KisCmbIDList" name="cmbColorDepth">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+          <property name="flat">
+           <bool>true</bool>
           </property>
-         </widget>
-        </item>
-        <item column="1" row="0">
-         <widget class="KisCmbIDList" name="cmbColorModels">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QListWidget" name="lstProfile">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="showDropIndicator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="bnInstallProfile">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
        </layout>
-      </item>
-      <item>
-       <widget class="QListWidget" name="lstProfile">
-        <property name="minimumSize">
-         <size>
-          <width>100</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="showDropIndicator" stdset="0">
-         <bool>false</bool>
-        </property>
-        <property name="wordWrap">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <property name="bottomMargin">
-         <number>3</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="bnInstallProfile">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item colspan="2" column="0" row="1" rowspan="2">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>243</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item column="2" row="2">
-    <widget class="QDialogButtonBox" name="bnOK">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item colspan="2" column="1" row="0">
-    <layout class="QGridLayout" name="gridLayout">
-     <item colspan="2" column="0" row="0">
-      <widget class="QLabel" name="lbl_descriptionwidget">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>60</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Color_space&quot;&gt;&lt;span style=&quot; font-weight:600; text-decoration: underline; color:#006e28;&quot;&gt;Color Spaces&lt;/span&gt;&lt;/a&gt; determine how colors are encoded in your files. Different color spaces have different properties and are used for different purposes.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="textFormat">
-        <enum>Qt::RichText</enum>
-       </property>
-       <property name="wordWrap">
-        <bool>true</bool>
-       </property>
-       <property name="margin">
-        <number>3</number>
-       </property>
-       <property name="indent">
-        <number>0</number>
-       </property>
-       <property name="openExternalLinks">
-        <bool>true</bool>
-       </property>
       </widget>
      </item>
-     <item colspan="2" column="0" row="3">
-      <widget class="QTextBrowser" name="textProfileDescription">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>200</height>
-        </size>
+     <item row="0" column="1">
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
+       <property name="title">
+        <string>Profile Properties</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="1">
+           <widget class="KisToneCurveWidget" name="TRCwidget" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="KisCIETongueWidget" name="TongueWidget" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>200</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblWhitepoint">
+            <property name="text">
+             <string>White Point:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="lblXYZ_W">
+            <property name="text">
+             <string notr="true">xyz</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QTextBrowser" name="textProfileDescription">
        <property name="verticalScrollBarPolicy">
         <enum>Qt::ScrollBarAlwaysOn</enum>
        </property>
@@ -183,77 +221,14 @@
        </property>
       </widget>
      </item>
-     <item column="1" row="2">
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Profile Properties</string>
-       </property>
-       <layout class="QFormLayout" name="formLayout">
-        <property name="fieldGrowthPolicy">
-         <enum>QFormLayout::ExpandingFieldsGrow</enum>
-        </property>
-        <item colspan="2" column="0" row="0">
-         <widget class="KisToneCurveWidget" name="TRCwidget" native="true">
-          <property name="minimumSize">
-           <size>
-            <width>150</width>
-            <height>150</height>
-           </size>
-          </property>
-         </widget>
-        </item>
-        <item column="0" row="1">
-         <widget class="QLabel" name="lblWhitepoint">
-          <property name="text">
-           <string>White Point:</string>
-          </property>
-         </widget>
-        </item>
-        <item column="1" row="1">
-         <widget class="QLabel" name="lblXYZ_W">
-          <property name="text">
-           <string notr="true">xyz</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item column="0" row="2">
-      <widget class="KisCIETongueWidget" name="TongueWidget">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>200</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="bnOK">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

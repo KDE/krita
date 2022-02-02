@@ -341,11 +341,9 @@ void KisToneCurveWidget::paintEvent(QPaintEvent*)
     // draw prerendered tongue
     p.drawPixmap(0, 0, d->pixmap);
 }
- 
+
 void KisToneCurveWidget::resizeEvent(QResizeEvent* event)
 {
-    Q_UNUSED(event);
-    setMinimumWidth(height());
-    setMaximumWidth(height());
+    QWidget::resizeEvent(event);
     d->needUpdatePixmap = true;
 }

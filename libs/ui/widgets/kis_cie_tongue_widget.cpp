@@ -706,9 +706,7 @@ void KisCIETongueWidget::paintEvent(QPaintEvent*)
  
 void KisCIETongueWidget::resizeEvent(QResizeEvent* event)
 {
-    Q_UNUSED(event);
-    setMinimumHeight(width());
-    setMaximumHeight(width());
+    QWidget::resizeEvent(event);
     d->needUpdatePixmap = true;
     d->cieTongueNeedsUpdate = true;
 }

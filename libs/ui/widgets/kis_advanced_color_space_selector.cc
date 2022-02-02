@@ -48,6 +48,18 @@ KisAdvancedColorSpaceSelector::KisAdvancedColorSpaceSelector(QWidget* parent, co
     d->colorSpaceSelector = new Ui_WdgColorSpaceSelectorAdvanced;
     d->colorSpaceSelector->setupUi(this);
 
+    {
+        QSizePolicy policy = d->colorSpaceSelector->TongueWidget->sizePolicy();
+        policy.setHeightForWidth(true);
+        d->colorSpaceSelector->TongueWidget->setSizePolicy(policy);
+    }
+
+    {
+        QSizePolicy policy = d->colorSpaceSelector->TRCwidget->sizePolicy();
+        policy.setHeightForWidth(true);
+        d->colorSpaceSelector->TRCwidget->setSizePolicy(policy);
+    }
+
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 

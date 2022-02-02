@@ -591,6 +591,8 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                         }
                     } else if (generatorName == "gradient") {
                         psd_layer_gradient_fill fill;
+                        fill.imageWidth = node->image()->width();
+                        fill.imageHeight = node->image()->height();
                         if (fill.loadFromConfig(fillLayer->filter())) {
                             fillConfig = fill.getASLXML();
                             fillType = psd_fill_gradient;

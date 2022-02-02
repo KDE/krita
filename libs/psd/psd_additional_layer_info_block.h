@@ -18,6 +18,7 @@
 #include <functional>
 
 #include <kis_types.h>
+#include <kis_global.h>
 
 #include <kis_node.h>
 #include <kis_paint_device.h>
@@ -287,8 +288,26 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 
         // angle seems to go from -180 to +180;
         double fixedAngle = fmod(360.0 + angle, 360.0);
+
+        double scaleModifier = 1.0;
+
         if (style == "square") {
-            fixedAngle = fmod((45.0 + angle), 360.0);
+            fixedAngle = fmod((45.0 + fixedAngle), 360.0);
+
+            scaleModifier = cos(kisDegreesToRadians(45.0));
+            double halfAngle = fmod(fabs(fixedAngle), 180.0);
+            scaleModifier *= 1/cos(kisDegreesToRadians(45.0 - fmod(halfAngle, 45.0) ));
+            if (halfAngle >= 45.0 && halfAngle < 135.0) {
+                scaleModifier = (scaleModifier) * (imageHeight / imageWidth);
+            }
+
+        } else {
+            double halfAngle = fmod(fabs(fixedAngle), 180.0);
+            scaleModifier *= 1/cos(kisDegreesToRadians(halfAngle));
+            if (halfAngle >= 45.0 && halfAngle < 135.0) {
+                scaleModifier = (scaleModifier) * (imageHeight / imageWidth);
+            }
+
         }
 
         cfg->setProperty("end_position_angle", fixedAngle);
@@ -306,11 +325,11 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             double xPercentage = (topleft.x()/double(imageWidth)) * 100.0;
             double yPercentage = (topleft.y()/double(imageHeight)) * 100.0;
 
-            cfg->setProperty("end_position_distance", scale);
+            cfg->setProperty("end_position_distance", scale * scaleModifier);
             cfg->setProperty("start_position_x", xPercentage + offset.x());
             cfg->setProperty("start_position_y", yPercentage + offset.y());
         } else {
-            cfg->setProperty("end_position_distance", scale*0.5);
+            cfg->setProperty("end_position_distance", scale * 0.5 * fabs(scaleModifier));
             cfg->setProperty("start_position_x", (50.0)+offset.x());
             cfg->setProperty("start_position_y", (50.0)+offset.y());
         }
@@ -344,8 +363,15 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             scale = cfg->getDouble("end_position_distance", 100.0);
         } else {
             // assume carthesian
-           QPointF end(cfg->getDouble("end_position_x", 1.0), cfg->getDouble("end_position_y", 1.0));
-           // calculate angle and scale.
+            QPointF end(cfg->getDouble("end_position_x", 1.0), cfg->getDouble("end_position_y", 1.0));
+            // calculate angle and scale.
+            double width = qMax(start.x(), end.x()) - qMin(start.x(), end.x());
+            double height = qMax(start.y(), end.y()) - qMin(start.y(), end.y());
+            angle = fabs(kisRadiansToDegrees(atan(width/height)));
+            angle = 180.0 - angle;
+            scale = sqrt((width*width) + (height*height));
+            scale /= imageWidth;
+            scale *= 100.0;
         }
 
 
@@ -365,16 +391,34 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             offset = QPointF((start.x() - 50.0), (start.y() - 50.0));
         }
 
+        double scaleModifier = 1.0;
         if (style == "square") {
+            scaleModifier = cos(kisDegreesToRadians(45.0));
+            double halfAngle = fmod(fabs(angle), 180.0);
+            scaleModifier *= 1/cos(kisDegreesToRadians(45.0 - fmod(halfAngle, 45.0) ));
+            if (halfAngle >= 45.0 && halfAngle < 135.0) {
+                scaleModifier = (scaleModifier) * (imageHeight / imageWidth);
+            }
+
             angle = angle - 45.0;
             if (angle < 0) {
                 angle = 360.0 - angle;
             }
+
+        } else {
+            double halfAngle = fmod(fabs(angle), 180.0);
+            scaleModifier *= 1/cos(kisDegreesToRadians(halfAngle));
+            if (halfAngle >= 45.0 && halfAngle < 135.0) {
+                scaleModifier = (scaleModifier) * (imageHeight / imageWidth);
+            }
+
         }
 
         if (angle > 180) {
             angle = (180.0 - angle);
         }
+
+        scale /= fabs(scaleModifier);
 
 
         return res;

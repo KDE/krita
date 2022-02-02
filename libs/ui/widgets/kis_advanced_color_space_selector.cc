@@ -359,9 +359,9 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             QString("<h3>%1</h3>").arg(i18nc("About <Profilename>", "About %1/%2", currentColorSpace()->name().toHtmlEscaped(), profileName.toHtmlEscaped())));
         d->colorSpaceSelector->textProfileDescription->append(
             QString("<p>%1</p>").arg(i18nc("ICC profile version", "ICC Version: %1", QString::number(currentColorSpace()->profile()->version()))));
-        // d->colorSpaceSelector->textProfileDescription->append(QString("<p>%1</p>").arg(i18nc("Who made the
-        // profile?","Manufacturer: %1", currentColorSpace()->profile()->manufacturer()))); //This would work if
-        // people actually wrote the manufacturer into the manufacturer fiedl...
+        if (currentColorSpace()->profile()->manufacturer() != profileName)
+            d->colorSpaceSelector->textProfileDescription->append(
+                QString("<p>%1</p>").arg(i18nc("Who made the profile?", "Manufacturer: %1", currentColorSpace()->profile()->manufacturer())));
         d->colorSpaceSelector->textProfileDescription->append(
             QString("<p>%1</p>")
                 .arg(i18nc("What is the copyright? These are from embedded strings from the icc profile, so they "

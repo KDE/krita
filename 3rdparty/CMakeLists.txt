@@ -168,7 +168,9 @@ if (ANDROID)
                      -DANDROID_PLATFORM=${ANDROID_PLATFORM}
                      -DANDROID_ABI=${ANDROID_ABI}
                      -DCMAKE_FIND_ROOT_PATH=${CMAKE_FIND_ROOT_PATH}
-                     -DCMAKE_CXX_LINK_EXECUTABLE=${CMAKE_CXX_LINK_EXECUTABLE})
+                     -DCMAKE_CXX_LINK_EXECUTABLE=${CMAKE_CXX_LINK_EXECUTABLE}
+                     -DLOCALE_INSTALL_DIR=${LOCALE_INSTALL_DIR}
+                     )
 
   # see: https://github.com/android/ndk/issues/929
   unset (CMAKE_SYSROOT)

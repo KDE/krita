@@ -58,7 +58,8 @@ configure_ext() {
         -DANDROID_ABI=$ANDROID_ABI                                                      \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
-        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
+        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"                              \
+        -DLOCALE_INSTALL_DIR="$INSTALL_PREFIX/share/locale/"
     cd $BUILD_ROOT
 }
 

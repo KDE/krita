@@ -120,7 +120,7 @@ private:
     QVector<KisFreehandStrokeInfo*> m_maskStrokeInfos;
     QVector<KisMaskedFreehandStrokePainter*> m_maskedPainters;
 
-    KisTransaction *m_transaction;
+    QScopedPointer<KisTransaction> m_transaction;
 
     QScopedPointer<KisMaskingBrushRenderer> m_maskingBrushRenderer;
 

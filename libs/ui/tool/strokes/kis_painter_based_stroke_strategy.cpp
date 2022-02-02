@@ -77,7 +77,6 @@ void KisPainterBasedStrokeStrategy::init()
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail)
     : KisRunnableBasedStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
-      m_transaction(rhs.m_transaction),
       m_useMergeID(rhs.m_useMergeID),
       m_supportsMaskingBrush(rhs.m_supportsMaskingBrush),
       m_supportsIndirectPainting(rhs.m_supportsIndirectPainting),
@@ -287,12 +286,9 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                           supportsContinuedInterstrokeData()));
     }
 
-    if (m_useMergeID) {
-        m_transaction = new KisTransaction(name(), targetDevice, 0, timedID(this->id()), wrapper.take());
-    }
-    else {
-        m_transaction = new KisTransaction(name(), targetDevice, 0, -1, wrapper.take());
-    }
+    m_transaction.reset(new KisTransaction(name(), targetDevice, 0,
+                                           m_useMergeID ? timedID(this->id()) : -1,
+                                           wrapper.take()));
 
     // WARNING: masked brush cannot work without indirect painting mode!
     KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
@@ -352,8 +348,7 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
         m_transaction->end();
-        delete m_transaction;
-        m_transaction = 0;
+        m_transaction.reset();
         deletePainters();
 
         QVector<KisRunnableStrokeJobData*> jobs;
@@ -376,8 +371,7 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     }
     else {
         m_transaction->commit(undoAdapter);
-        delete m_transaction;
-        m_transaction = 0;
+        m_transaction.reset();
         deletePainters();
     }
 
@@ -395,8 +389,7 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
     if (indirect) {
         KisPaintDeviceSP t = indirect->temporaryTarget();
         if (t) {
-            delete m_transaction;
-            m_transaction = 0;
+            m_transaction.reset();
             deletePainters();
 
             KisRegion region = t->region();
@@ -408,8 +401,7 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 
     if (revert) {
         m_transaction->revert();
-        delete m_transaction;
-        m_transaction = 0;
+        m_transaction.reset();
         deletePainters();
     }
 }

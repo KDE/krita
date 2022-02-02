@@ -365,13 +365,10 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             // assume carthesian
             QPointF end(cfg->getDouble("end_position_x", 1.0), cfg->getDouble("end_position_y", 1.0));
             // calculate angle and scale.
-            double width = qMax(start.x(), end.x()) - qMin(start.x(), end.x());
-            double height = qMax(start.y(), end.y()) - qMin(start.y(), end.y());
-            angle = fabs(kisRadiansToDegrees(atan(width/height)));
-            angle = 180.0 - angle;
+            double width  = start.x() - end.x();
+            double height = start.y() - end.y();
+            angle = fmod(360.0 + kisRadiansToDegrees(atan2(width, height)), 360.0);
             scale = sqrt((width*width) + (height*height));
-            scale /= imageWidth;
-            scale *= 100.0;
         }
 
 
@@ -415,7 +412,7 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
         }
 
         if (angle > 180) {
-            angle = (180.0 - angle);
+            angle = (0.0 - fmod(angle, 180.0));
         }
 
         scale /= fabs(scaleModifier);

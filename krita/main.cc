@@ -825,7 +825,7 @@ void installEcmTranslations(KisApplication &app)
         Q_FOREACH(const auto &catalog, ecmCatalogs) {
             QString subPath = QStringLiteral("locale/") % localeDirName % QStringLiteral("/LC_MESSAGES/") % catalog % QStringLiteral(".qm");
 #if defined(Q_OS_ANDROID)
-            const QString fullPath = QStringLiteral("assets:/share/") + subPath;
+            const QString fullPath = QStringLiteral("assets:/") + subPath;
 #else
             const QString root = QLibraryInfo::location(QLibraryInfo::PrefixPath);
 

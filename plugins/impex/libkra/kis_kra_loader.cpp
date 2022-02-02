@@ -356,8 +356,6 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
             loadMirrorAxis(e);
         } else if (e.tagName() == "assistants") {
             loadAssistantsList(e);
-        } else if (e.tagName() == "audio") {
-            loadAudio(e, image);
         }
     }
 
@@ -630,6 +628,22 @@ void KisKraLoader::loadAnimationMetadata(KoStore *store, KisImageSP image)
         QDomElement root = document.documentElement();
         loadAnimationMetadataFromXML(root, image);
     }
+}
+
+void KisKraLoader::loadAudio(KoStore *store, KisDocument *kisDoc)
+{
+    if (!store->hasFile(m_d->imageName + AUDIO_PATH + "index.xml")) return;
+
+    if (store->open(m_d->imageName + AUDIO_PATH + "index.xml")) {
+        QByteArray byteData = store->read(store->size());
+        QDomDocument xmlDocument;
+        xmlDocument.setContent(byteData);
+        store->close();
+
+        QDomElement root = xmlDocument.documentElement();
+        loadAudioXML(xmlDocument, root, kisDoc);
+    }
+
 }
 
 vKisNodeSP KisKraLoader::selectedNodes() const
@@ -1385,11 +1399,6 @@ void KisKraLoader::loadMirrorAxis(const QDomElement &elem)
     m_d->document->setMirrorAxisConfig(mirrorAxis);
 }
 
-void KisKraLoader::loadAudio(const QDomElement& elem, KisImageSP image)
-{
-    Q_UNIMPLEMENTED();
-}
-
 void KisKraLoader::loadStoryboardItemList(const QDomElement& elem)
 {
     QDomNode child;
@@ -1422,6 +1431,28 @@ void KisKraLoader::loadStoryboardCommentList(const QDomElement& elem)
             count++;
             m_d->storyboardCommentList.append(comment);
         }
+    }
+}
+
+void KisKraLoader::loadAudioXML(QDomDocument &xmlDoc, QDomElement &xmlElement, KisDocument *kisDoc)
+{
+    Q_UNUSED(xmlDoc);
+    QDomNode audioClip = xmlElement.firstChild();
+    if (audioClip.nodeName() == "audioClips") {
+        QDomElement audioClipElement = audioClip.toElement();
+        QVector<QFileInfo> clipFiles;
+        QDomNode clip;
+        for (clip = audioClipElement.firstChild(); !clip.isNull(); clip = clip.nextSibling()) {
+            QDomElement clipElem = clip.toElement();
+            QFileInfo f(clipElem.attribute("filePath"));
+            ENTER_FUNCTION() << ppVar(clipElem.attribute("filePath"));
+            if (f.exists()) {
+                clipFiles << f;
+            }
+        }
+
+        kisDoc->setAudioTracks(clipFiles);
+        ENTER_FUNCTION();
     }
 }
 

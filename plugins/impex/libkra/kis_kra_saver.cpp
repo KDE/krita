@@ -142,7 +142,6 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveGrid(doc, imageElement);
     saveGuides(doc, imageElement);
     saveMirrorAxis(doc, imageElement);
-    saveAudio(doc, imageElement);
     saveResourcesToXML(doc, imageElement);
 
     // Redundancy -- Save animation metadata in XML to prevent data loss for the time being...
@@ -302,6 +301,42 @@ bool KisKraSaver::saveAnimationMetadata(KoStore *store, KisImageSP image, const 
 
     if (!success) {
         m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save animation meta data.");
+        return false;
+    }
+
+    return true;
+}
+
+bool KisKraSaver::saveAudio(KoStore *store)
+{
+    if (m_d->doc->getAudioTracks().isEmpty())
+        return true;
+
+    if (!store->open(m_d->imageName + AUDIO_PATH + "index.xml")) {
+        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save audio meta data.");
+        return false;
+    }
+
+    QDomDocument audioDocument = m_d->doc->createDomDocument("audio-info", "1.1");
+    QDomElement root = audioDocument.documentElement();
+    saveAudioXML(audioDocument, root);
+
+    bool success = true;
+    QByteArray byteArray = audioDocument.toByteArray();
+    qint64 bytesWriteCount = 0;
+    if (!byteArray.isEmpty()) {
+        bytesWriteCount = store->write(byteArray);
+    } else {
+        qWarning() << "Could not save audio data to a byte array!";
+        success = false;
+    }
+
+    bool closeOK = store->close();
+
+    success = success && closeOK && (bytesWriteCount == byteArray.size());
+
+    if (!success) {
+        m_d->errorMessages << i18nc("Error message when saving a .kra file", "Could not save audio meta data.");
         return false;
     }
 
@@ -798,10 +833,21 @@ bool KisKraSaver::saveMirrorAxis(QDomDocument &doc, QDomElement &element)
     return true;
 }
 
-bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
+bool KisKraSaver::saveAudioXML(QDomDocument& doc, QDomElement& element)
 {
-    Q_UNIMPLEMENTED();
-    const KisImageAnimationInterface *interface = m_d->doc->image()->animationInterface();
+    QVector<QFileInfo> clips = m_d->doc->getAudioTracks();
+
+    if (!clips.isEmpty()) {
+        QDomElement audioClips = doc.createElement("audioClips");
+        const int i = 0;
+        Q_FOREACH(const QFileInfo& file, clips) {
+            QDomElement clip = doc.createElement(QString("Clip"));
+            clip.setAttribute("filePath", file.absoluteFilePath());
+            audioClips.appendChild(clip);
+        }
+        element.appendChild(audioClips);
+    }
+
     return true;
 }
 

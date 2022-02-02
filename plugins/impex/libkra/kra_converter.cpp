@@ -193,6 +193,12 @@ KisImportExportErrorCode KraConverter::buildFile(QIODevice *io, const QString &f
         qWarning() << "Saving animation metadata failed";
     }
 
+    result = m_kraSaver->saveAudio(m_store);
+    if (!result) {
+        success = false;
+        qWarning() << "Saving audio data failed";
+    }
+
     setProgress(80);
 
     if (!m_store->finalize()) {
@@ -436,6 +442,7 @@ bool KraConverter::completeLoading(KoStore* store)
     m_kraLoader->loadBinaryData(store, m_image, m_doc->localFilePath(), true);
     m_kraLoader->loadStoryboards(store, m_doc);
     m_kraLoader->loadAnimationMetadata(store, m_image);
+    m_kraLoader->loadAudio(store, m_doc);
 
     if (!m_kraLoader->errorMessages().isEmpty()) {
         m_doc->setErrorMessage(m_kraLoader->errorMessages().join("\n"));

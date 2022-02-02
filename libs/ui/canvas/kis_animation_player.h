@@ -95,6 +95,8 @@ private:
     void updateDropFramesMode();
     KisTimeSpan activePlaybackRange();
 
+    void setupAudioTracks();
+
 private:
     struct Private;
     QScopedPointer<Private> m_d;

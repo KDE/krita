@@ -45,6 +45,7 @@ public:
     void loadResources(KoStore *store, KisDocument *doc);
     void loadStoryboards(KoStore *store, KisDocument *doc);
     void loadAnimationMetadata(KoStore *store, KisImageSP image);
+    void loadAudio(KoStore *store, KisDocument *kisDoc);
 
     vKisNodeSP selectedNodes() const;
 
@@ -112,9 +113,9 @@ private:
     void loadGrid(const QDomElement& elem);
     void loadGuides(const QDomElement& elem);
     void loadMirrorAxis(const QDomElement& elem);
-    void loadAudio(const QDomElement& elem, KisImageSP image);
     void loadStoryboardItemList(const QDomElement& elem);
     void loadStoryboardCommentList(const QDomElement& elem);
+    void loadAudioXML(QDomDocument& xmlDoc, QDomElement &xmlElement, KisDocument* kisDoc);
 private:
 
     struct Private;

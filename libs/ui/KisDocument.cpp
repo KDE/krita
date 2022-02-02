@@ -502,6 +502,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         q->setAssistants(KisPaintingAssistant::cloneAssistantList(rhs.assistants));
         q->setStoryboardItemList(StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList));
         q->setStoryboardCommentList(rhs.m_storyboardCommentList);
+        q->setAudioTracks(rhs.audioTracks);
         q->setGridConfig(rhs.gridConfig);
     } else {
         // in CONSTRUCT mode, we cannot use the functions of KisDocument
@@ -512,6 +513,7 @@ void KisDocument::Private::copyFromImpl(const Private &rhs, KisDocument *q, KisD
         assistants = KisPaintingAssistant::cloneAssistantList(rhs.assistants);
         m_storyboardItemList = StoryboardItem::cloneStoryboardItemList(rhs.m_storyboardItemList);
         m_storyboardCommentList = rhs.m_storyboardCommentList;
+        audioTracks = rhs.audioTracks;
         gridConfig = rhs.gridConfig;
     }
     imageModifiedWithoutUndo = rhs.imageModifiedWithoutUndo;

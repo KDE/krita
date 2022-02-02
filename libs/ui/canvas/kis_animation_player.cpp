@@ -258,25 +258,8 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     });
     m_d->mediaConsumer->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
 
-    connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, [this](){
-        if (!m_d->canvas || !m_d->canvas->imageView())
-            return;
-
-        KisDocument* doc = m_d->canvas->imageView()->document();
-        if (doc) {
-            QVector<QFileInfo> files = doc->getAudioTracks();
-            //Only get first file for now and make that a producer...
-            QFileInfo toLoad = files.first();
-            if (toLoad.exists()) {
-                QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->mediaConsumer->getProfile(), toLoad.absoluteFilePath().toUtf8().data()));
-                m_d->mediaConsumer->setProducer(producer);
-            }
-        }
-    });
-
-    /*QSharedPointer<Mlt::Producer> sleepyHead(new Mlt::Producer(*m_d->mediaConsumer->getProfile(), "/home/eoin/Music/Keep/Artists/The Pillows/[1999.10.27] Rush (Single)/03 - Sleepy Head.mp3"));
-    QSharedPointer<Mlt::Producer> funnyBunny(new Mlt::Producer(*m_d->mediaConsumer->getProfile(), "/home/eoin/Music/Keep/Artists/The Pillows/[1999.12.02] Happy Bivouac/09 - Funny Bunny.mp3"));*/
-    //m_d->mediaConsumer->setProducer(funnyBunny);
+    connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisAnimationPlayer::setupAudioTracks);
+    setupAudioTracks();
 }
 
 KisAnimationPlayer::~KisAnimationPlayer()
@@ -648,6 +631,29 @@ KisTimeSpan KisAnimationPlayer::activePlaybackRange()
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
     return animation->playbackRange();
+}
+
+void KisAnimationPlayer::setupAudioTracks()
+{
+    ENTER_FUNCTION();
+    if (!m_d->canvas || !m_d->canvas->imageView()) {
+        return;
+    }
+
+    KisDocument* doc = m_d->canvas->imageView()->document();
+    if (doc) {
+        QVector<QFileInfo> files = doc->getAudioTracks();
+        if (doc->getAudioTracks().isEmpty()) {
+            return;
+        }
+
+        //Only get first file for now and make that a producer...
+        QFileInfo toLoad = files.first();
+        if (toLoad.exists()) {
+            QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->mediaConsumer->getProfile(), toLoad.absoluteFilePath().toUtf8().data()));
+            m_d->mediaConsumer->setProducer(producer);
+        }
+    }
 }
 
 qreal KisAnimationPlayer::playbackSpeed()

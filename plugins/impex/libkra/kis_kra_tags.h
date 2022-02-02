@@ -31,6 +31,7 @@ const QString LAYER_PATH = "/layers/";
 const QString PALETTE_PATH = "/palettes/";
 const QString RESOURCE_PATH = "resources/"; // Note: intentionally not slash in front.
 const QString STORYBOARD_PATH = "/storyboard/";
+const QString AUDIO_PATH = "/audio/";
 const QString ANIMATION_METADATA_PATH = "/animation/";
 
 const QString ADJUSTMENT_LAYER = "adjustmentlayer";

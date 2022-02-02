@@ -977,7 +977,76 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
          </item>
         </layout>
        </item>
-       <item row="17" column="1">
+       <item row="17" column="0" colspan="2">
+        <widget class="QGroupBox" name="grpPasteFrom">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>When Pasting Into Krita From Other Applications</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_8">
+          <item row="1" column="0" colspan="2">
+           <widget class="QRadioButton" name="btnDownload">
+            <property name="text">
+             <string>Prefer downloading the original source (this requires Internet access)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblPasteContext">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Some applications, like Google Chrome, provide multiple formats when pasting or dropping an image.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="btnLocal">
+            <property name="text">
+             <string>Prefer a local copy (if available; metadata may be lost)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QRadioButton" name="btnBitmap">
+            <property name="text">
+             <string>Paste the attached sRGB bitmap (no filesystem or Internet access required, but metadata will be lost)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QRadioButton" name="btnAsk">
+            <property name="text">
+             <string>Ask each time</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0" colspan="2">
+           <widget class="QLabel" name="lblPasteNote">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Note: This applies to drops in the Info window, the canvas, and paste actions.</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="18" column="0" colspan="2">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

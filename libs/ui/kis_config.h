@@ -174,6 +174,9 @@ public:
     qint32 pasteBehaviour(bool defaultValue = false) const;
     void setPasteBehaviour(qint32 behaviour) const;
 
+    qint32 pasteFormat(bool defaultValue) const;
+    void setPasteFormat(qint32 format);
+
     qint32 monitorRenderIntent(bool defaultValue = false) const;
     void setRenderIntent(qint32 monitorRenderIntent) const;
 

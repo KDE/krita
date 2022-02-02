@@ -45,7 +45,6 @@
 #include <KoShapeStrokeCommand.h>
 #include <KoShapeBackground.h>
 #include <KoShapeStroke.h>
-#include <KisClipboardUtil.h>
 #include <KisMainWindow.h>
 #include <QApplication>
 #include <QClipboard>
@@ -214,7 +213,7 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     }
     KisTimeSpan range;
     const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, false, &range, image->profile());
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, -1, &range);
 
     if (clip) {
         if (pasteAtCursorPosition) {
@@ -279,7 +278,7 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), false, 0, image->profile());
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true, -1, nullptr);
     if (!clip) return;
 
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);

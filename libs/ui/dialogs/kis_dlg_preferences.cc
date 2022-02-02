@@ -353,6 +353,19 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     intForcedFontDPI->setValue(forcedFontDPI > 0 ? forcedFontDPI : qt_defaultDpi());
     intForcedFontDPI->setEnabled(forcedFontDPI > 0);
     connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
+
+    m_pasteFormatGroup.addButton(btnDownload, KisClipboard::PASTE_FORMAT_DOWNLOAD);
+    m_pasteFormatGroup.addButton(btnLocal, KisClipboard::PASTE_FORMAT_LOCAL);
+    m_pasteFormatGroup.addButton(btnBitmap, KisClipboard::PASTE_FORMAT_CLIP);
+    m_pasteFormatGroup.addButton(btnAsk, KisClipboard::PASTE_FORMAT_ASK);
+
+    QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
+
+    Q_ASSERT(button);
+
+    if (button) {
+        button->setChecked(true);
+    }
 }
 
 void GeneralTab::setDefault()
@@ -433,6 +446,13 @@ void GeneralTab::setDefault()
     chkForcedFontDPI->setChecked(false);
     intForcedFontDPI->setValue(qt_defaultDpi());
     intForcedFontDPI->setEnabled(false);
+
+    QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
+    Q_ASSERT(button);
+
+    if (button) {
+        button->setChecked(true);
+    }
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -727,9 +747,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
 
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteAsk, PASTE_ASK);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, KisClipboard::PASTE_ASSUME_WEB);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, KisClipboard::PASTE_ASSUME_MONITOR);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteAsk, KisClipboard::PASTE_ASK);
 
     QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour());
     Q_ASSERT(button);
@@ -1948,6 +1968,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setTrimKra(m_general->trimKra());
         cfg.setTrimFramesImport(m_general->trimFramesImport());
         cfg.setUseZip64(m_general->useZip64());
+        cfg.setPasteFormat(m_general->m_pasteFormatGroup.checkedId());
 
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);

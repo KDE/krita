@@ -587,7 +587,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
             KisConfig cfg(true);
             quint32 behaviour = cfg.pasteBehaviour();
-            if (behaviour == PASTE_ASK) {
+            if (behaviour == KisClipboard::PASTE_ASK) {
                 KisDlgPngImport dlg(m_path, csName.first, csName.second);
                 KisCursorOverrideHijacker hijacker;
                 Q_UNUSED(hijacker);
@@ -595,7 +595,6 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
                 if (!dlg.profile().isEmpty()) {
                     profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
                 }
-
             }
         }
         dbgFile << "no embedded profile, will use the default profile";

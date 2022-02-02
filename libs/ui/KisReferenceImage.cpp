@@ -5,6 +5,7 @@
  */
 
 #include "KisReferenceImage.h"
+#include "KoColorSpaceRegistry.h"
 
 #include <QImage>
 #include <QMessageBox>
@@ -30,10 +31,11 @@
 #include <SvgUtil.h>
 #include <libs/flake/svg/parsers/SvgTransformParser.h>
 #include <libs/brush/kis_qimage_pyramid.h>
-#include <utils/KisClipboardUtil.h>
 
 #include <KisDocument.h>
 #include <KisPart.h>
+
+#include "kis_clipboard.h"
 
 struct KisReferenceImage::Private : public QSharedData
 {
@@ -90,7 +92,7 @@ struct KisReferenceImage::Private : public QSharedData
     }
 
     bool loadFromClipboard() {
-        image = KisClipboardUtil::getImageFromClipboard();
+        image = KisClipboard::instance()->getImageFromClipboard();
         return !image.isNull();
     }
 
@@ -197,6 +199,23 @@ KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverte
         delete reference;
         reference = nullptr;
     }
+
+    return reference;
+}
+
+KisReferenceImage *
+KisReferenceImage::fromPaintDevice(KisPaintDeviceSP src, const KisCoordinatesConverter &converter, QWidget *)
+{
+    if (!src) {
+        return nullptr;
+    }
+
+    auto *reference = new KisReferenceImage();
+    reference->d->image = src->convertToQImage(KoColorSpaceRegistry::instance()->p709SRGBProfile());
+
+    QRect r = QRect(QPoint(), reference->d->image.size());
+    QSizeF size = converter.imageToDocument(r).size();
+    reference->setSize(size);
 
     return reference;
 }

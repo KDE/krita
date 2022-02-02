@@ -354,13 +354,22 @@ void KisAdvancedColorSpaceSelector::fillDescription()
     }
 
     d->colorSpaceSelector->textProfileDescription->clear();
-    if (profileList.isEmpty()==false) {
-        d->colorSpaceSelector->textProfileDescription->append("<h3>"+i18nc("About <Profilename>","About ")  +  currentColorSpace()->name()  +  "/"  +  profileName  +  "</h3>");
-        d->colorSpaceSelector->textProfileDescription->append("<p>"+ i18nc("ICC profile version","ICC Version: ")  + QString::number(currentColorSpace()->profile()->version())  +  "</p>");
-        //d->colorSpaceSelector->textProfileDescription->append("<p>"+ i18nc("Who made the profile?","Manufacturer: ")  + currentColorSpace()->profile()->manufacturer()  +  "</p>"); //This would work if people actually wrote the manufacturer into the manufacturer fiedl...
-        d->colorSpaceSelector->textProfileDescription->append("<p>"+ i18nc("What is the copyright? These are from embedded strings from the icc profile, so they default to english.","Copyright: ")  + currentColorSpace()->profile()->copyright()  +  "</p>");
+    if (!profileList.isEmpty()) {
+        d->colorSpaceSelector->textProfileDescription->append(
+            QString("<h3>%1</h3>").arg(i18nc("About <Profilename>", "About %1/%2", currentColorSpace()->name().toHtmlEscaped(), profileName.toHtmlEscaped())));
+        d->colorSpaceSelector->textProfileDescription->append(
+            QString("<p>%1</p>").arg(i18nc("ICC profile version", "ICC Version: %1", QString::number(currentColorSpace()->profile()->version()))));
+        // d->colorSpaceSelector->textProfileDescription->append(QString("<p>%1</p>").arg(i18nc("Who made the
+        // profile?","Manufacturer: %1", currentColorSpace()->profile()->manufacturer()))); //This would work if
+        // people actually wrote the manufacturer into the manufacturer fiedl...
+        d->colorSpaceSelector->textProfileDescription->append(
+            QString("<p>%1</p>")
+                .arg(i18nc("What is the copyright? These are from embedded strings from the icc profile, so they "
+                           "default to english.",
+                           "Copyright: %1",
+                           currentColorSpace()->profile()->copyright().toHtmlEscaped())));
     } else {
-        d->colorSpaceSelector->textProfileDescription->append("<h3>" + profileName  +  "</h3>");
+        d->colorSpaceSelector->textProfileDescription->append(QString("<h3>%1</h3>").arg(profileName.toHtmlEscaped()));
     }
 
     if (currentModelStr == "RGBA") {

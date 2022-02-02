@@ -70,6 +70,11 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     m_page->intWidth->setMinimum(1);
     m_page->intWidth->setMaximum(100000);
 
+    // Setup audio...
+    QVector<QFileInfo> audioFiles = doc->getAudioTracks();
+    const bool hasAudio = audioFiles.count() > 0;
+    m_page->chkIncludeAudio->setEnabled(hasAudio);
+
     // Setup image mimeTypes...
     QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export);
     mimes.sort();

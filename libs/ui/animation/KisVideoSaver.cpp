@@ -157,10 +157,11 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
             ffmpegWrapper->reset();
         }
         
-        /*QFileInfo audioFileInfo = animation->audioChannelFileName();
-        if (options.includeAudio && audioFileInfo.exists()) {
-            const int msecStart = clipRange.start() * 1000 / animation->framerate();
-            const int msecDuration = clipRange.duration() * 1000 / animation->framerate();
+        QVector<QFileInfo> audioFiles = m_doc->getAudioTracks();
+        if (options.includeAudio && audioFiles.count() > 0 && audioFiles.first().exists()) {
+            QFileInfo audioFileInfo = audioFiles.first();
+            const int msecStart = (clipRange.start() * 1000) / animation->framerate();
+            const int msecDuration = (clipRange.duration() * 1000) / animation->framerate();
 
             const QTime startTime = QTime::fromMSecsSinceStartOfDay(msecStart);
             const QTime durationTime = QTime::fromMSecsSinceStartOfDay(msecDuration);
@@ -169,7 +170,7 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
             args << "-ss" << QLocale::c().toString(startTime, ffmpegTimeFormat);
             args << "-t" << QLocale::c().toString(durationTime, ffmpegTimeFormat);
             args << "-i" << audioFileInfo.absoluteFilePath();
-        }*/
+        }
       
         // if we are exporting out at a different image size, we apply scaling filter
         // export options HAVE to go after input options, so make sure this is after the audio import

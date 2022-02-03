@@ -349,7 +349,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_urlResourceFolder->setConfigurationName("resource_directory");
     m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
 
-    lblWindowsAppDataNote->setVisible(false);
+    grpWindowsAppData->setVisible(false);
 #ifdef Q_OS_WIN
     if (KisWindowsPackageUtils::isRunningInPackage()) {
         const auto pathToDisplay = [](const QString &path) {
@@ -366,6 +366,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
         if (!privateAppData.isEmpty()) {
             const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + qApp->applicationName());
             const QDir appDataDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+            lblWindowsAppDataIcon->setPixmap(lblWindowsAppDataIcon->style()->standardIcon(QStyle::SP_MessageBoxInformation).pixmap(QSize(32, 32)));
             // Similar text is also used in KisViewManager.cpp
             lblWindowsAppDataNote->setText(i18nc("@info resource folder",
                 "<p>You are using the Microsoft Store package version of Krita. "
@@ -381,7 +382,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
                 pathToDisplay(appDataDir.absolutePath()),
                 pathToDisplay(privateResourceDir.absolutePath())
             ));
-            lblWindowsAppDataNote->setVisible(true);
+            grpWindowsAppData->setVisible(true);
             connect(lblWindowsAppDataNote, &QLabel::linkActivated,
                 [userPath = appDataDir.absolutePath(), privatePath = privateResourceDir.absolutePath()]
                 (const QString &link) {

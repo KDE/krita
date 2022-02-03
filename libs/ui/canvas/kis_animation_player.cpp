@@ -271,29 +271,21 @@ void KisAnimationPlayer::updateDropFramesMode()
 
 void KisAnimationPlayer::play()
 {
-    ENTER_FUNCTION() << "START" << ppVar(m_d->displayProxy->visibleFrame()) << m_d->mediaConsumer->debugInfo();
-
     if (!m_d->playbackHandle) {
         m_d->playbackHandle.reset(new PlaybackHandle(m_d->displayProxy->visibleFrame(), this));
     }
 
     m_d->playbackHandle->prepare(m_d->canvas);
     setPlaybackState(PLAYING);
-
-    ENTER_FUNCTION() << "END" << ppVar(m_d->displayProxy->visibleFrame()) << m_d->mediaConsumer->debugInfo();
 }
 
 void KisAnimationPlayer::pause()
 {
-    ENTER_FUNCTION() << "START" << ppVar(m_d->displayProxy->visibleFrame()) << m_d->mediaConsumer->debugInfo();
-
     KIS_ASSERT(m_d->playbackHandle);
     KIS_ASSERT(playbackState() == PLAYING);
     m_d->playbackHandle->restore();
     setPlaybackState(PAUSED);
     m_d->mediaConsumer->resync(*m_d->displayProxy);
-
-    ENTER_FUNCTION() << "END" << ppVar(m_d->displayProxy->visibleFrame()) << m_d->mediaConsumer->debugInfo();
 }
 
 void KisAnimationPlayer::playPause()
@@ -307,8 +299,6 @@ void KisAnimationPlayer::playPause()
 
 void KisAnimationPlayer::stop()
 {
-    ENTER_FUNCTION() << "START" << ppVar(m_d->displayProxy->visibleFrame()) << m_d->mediaConsumer->debugInfo();
-
     if (playbackState() != STOPPED) {
         KIS_ASSERT(m_d->playbackHandle);
         if (playbackState() != PAUSED)
@@ -321,19 +311,19 @@ void KisAnimationPlayer::stop()
         m_d->displayProxy->displayFrame(origin);
         m_d->mediaConsumer->resync(*m_d->displayProxy);
     } else if (m_d->displayProxy->visibleFrame() != 0) {
-        scrub(0);
+        seek(0);
     }
-
-    ENTER_FUNCTION() << "END" << ppVar(m_d->displayProxy->visibleFrame()) << m_d->mediaConsumer->debugInfo();
 }
 
-void KisAnimationPlayer::scrub(int frameIndex, bool preferCachedFrames)
+void KisAnimationPlayer::seek(int frameIndex, SeekFlags flags)
 {
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
-
     if (m_d->state != PLAYING) {
         m_d->mediaConsumer->seek(frameIndex);
+        if (flags & PUSH_AUDIO) {
+            m_d->mediaConsumer->pushAudio();
+        }
         m_d->displayProxy->displayFrame(frameIndex);
     }
 }
@@ -357,7 +347,7 @@ void KisAnimationPlayer::previousFrame()
             stop();
         }
 
-        scrub(frame);
+        seek(frame);
     }
 }
 
@@ -380,7 +370,7 @@ void KisAnimationPlayer::nextFrame()
             stop();
         }
 
-        scrub(frame);
+        seek(frame);
     }
 }
 
@@ -409,7 +399,7 @@ void KisAnimationPlayer::previousKeyframe()
             stop();
         }
 
-        scrub(destinationTime);
+        seek(destinationTime);
     }
 }
 
@@ -436,7 +426,7 @@ void KisAnimationPlayer::nextKeyframe()
             stop();
         }
 
-        scrub(destinationTime);
+        seek(destinationTime);
     } else {
         // Jump ahead by estimated timing...
         const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
@@ -448,7 +438,7 @@ void KisAnimationPlayer::nextKeyframe()
             }
 
             const int timing = activeKeyTime - previousKeyTime;
-            scrub(currentTime + timing);
+            seek(currentTime + timing);
         }
     }
 }
@@ -545,7 +535,7 @@ void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
             stop();
         }
 
-        scrub(destinationTime);
+        seek(destinationTime);
     }
 }
 
@@ -582,7 +572,7 @@ void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
             stop();
         }
 
-        scrub(destinationTime);
+        seek(destinationTime);
     }
 }
 

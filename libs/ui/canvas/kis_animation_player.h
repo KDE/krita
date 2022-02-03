@@ -39,6 +39,12 @@ public:
         PLAYING
     };
 
+    enum SeekFlags {
+        NONE = 0,
+        PUSH_AUDIO = 1,
+        FORCE_RECACHE = 1 << 1
+    };
+
     PlaybackState playbackState();
     qreal playbackSpeed();
 
@@ -48,7 +54,7 @@ public Q_SLOTS:
     void playPause();
     void stop();
 
-    void scrub(int frameIndex, bool preferCachedFrames = false);
+    void seek(int frameIndex, SeekFlags flags = PUSH_AUDIO);
     void previousFrame();
     void nextFrame();
     void previousKeyframe();

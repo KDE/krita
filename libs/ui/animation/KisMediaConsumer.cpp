@@ -1,3 +1,10 @@
+/*
+ *  SPDX-FileCopyrightText: 2022 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #include "animation/KisMediaConsumer.h"
 
 #include <mlt++/MltFactory.h>
@@ -98,7 +105,14 @@ void KisMediaConsumer::seek(int p_frame)
 {
     if (m_d->producer) {
         m_d->producer->seek(p_frame);
-        m_d->sigPushAudioCompressor->start(p_frame);
+    }
+}
+
+void KisMediaConsumer::pushAudio()
+{
+    if (m_d->producer && m_d->mode == PUSH) {
+        const int pos = m_d->producer->position();
+        m_d->sigPushAudioCompressor->start(pos);
     }
 }
 

@@ -516,7 +516,7 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
 void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 {
     if (m_d->animationPlayer && m_d->animationPlayer->playbackState() != KisAnimationPlayer::PLAYING ) {
-        m_d->animationPlayer->scrub(time, true);
+        m_d->animationPlayer->seek(time);
     }
 }
 

@@ -1,3 +1,10 @@
+/*
+ *  SPDX-FileCopyrightText: 2022 Eoin O'Neill <eoinoneill1991@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KISMLTPLAYER_H
 #define KISMLTPLAYER_H
 
@@ -20,6 +27,7 @@ public:
     ~KisMediaConsumer();
 
     void seek(int p_frame);
+    void pushAudio();
     int playhead();
 
     void setFrameRate(int fps);

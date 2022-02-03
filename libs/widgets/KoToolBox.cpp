@@ -65,8 +65,10 @@ public:
     QButtonGroup *buttonGroup {0};
     QHash<QToolButton*, QString> visibilityCodes;
     bool floating {false};
+    int iconSize {0};
     QMap<QAction*,int> contextIconSizes;
     QMenu *contextSize {0};
+    QAction *defaultIconSizeAction {0};
     Qt::Orientation orientation {Qt::Vertical};
 };
 
@@ -87,9 +89,19 @@ KoToolBox::KoToolBox()
 
     d->buttonGroup = new QButtonGroup(this);
 
+    // Get screen the widget exists in, but fall back to primary screen if invalid.
+    const int widgetsScreen = qApp->desktop()->screenNumber(this);
+    const int primaryScreen = 0; //In QT, primary screen should always be the first index of QGuiApplication::screens()
+    const int screen = (widgetsScreen >= 0 && widgetsScreen < QGuiApplication::screens().size()) ? widgetsScreen : primaryScreen;
+    const int toolbuttonSize = buttonSize(screen);
+    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
+    d->iconSize = cfg.readEntry("iconSize", toolbuttonSize);
+
     Q_FOREACH (KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
         addButton(toolAction);
     }
+
+    applyIconSize();
 
     // Update visibility of buttons
     setButtonsVisible(QList<QString>());
@@ -110,25 +122,22 @@ KoToolBox::~KoToolBox()
     delete d;
 }
 
+void KoToolBox::applyIconSize()
+{
+    Q_FOREACH (QToolButton *button, d->buttons) {
+        button->setIconSize(QSize(d->iconSize, d->iconSize));
+    }
+
+    Q_FOREACH (Section *section, d->sections.values())  {
+        section->setButtonSize(QSize(d->iconSize + BUTTON_MARGIN,  d->iconSize + BUTTON_MARGIN));
+    }
+}
+
 void KoToolBox::addButton(KoToolAction *toolAction)
 {
     KoToolBoxButton *button = new KoToolBoxButton(toolAction, this);
 
     d->buttons << button;
-
-    // Get screen the widget exists in, but fall back to primary screen if invalid.
-    const int widgetsScreen = qApp->desktop()->screenNumber(this);
-    const int primaryScreen = 0; //In QT, primary screen should always be the first index of QGuiApplication::screens()
-    const int screen = (widgetsScreen >= 0 && widgetsScreen < QGuiApplication::screens().size()) ? widgetsScreen : primaryScreen;
-    const int toolbuttonSize = buttonSize(screen);
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
-    const int iconSize = cfg.readEntry("iconSize", toolbuttonSize);
-
-
-   button->setIconSize(QSize(iconSize, iconSize));
-    foreach (Section *section, d->sections.values())  {
-        section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
-    }
 
     QString sectionToBeAddedTo;
     const QString section = toolAction->section();
@@ -270,61 +279,51 @@ void KoToolBox::toolAdded(KoToolAction *toolAction, KoCanvasController *canvas)
 void KoToolBox::slotContextIconSize()
 {
     QAction* action = qobject_cast<QAction*>(sender());
-    if (action && d->contextIconSizes.contains(action)) {
-        const int iconSize = d->contextIconSizes.value(action);
+    if (action) {
+        int iconSize;
+        if (action == d->defaultIconSizeAction) {
+            iconSize = buttonSize(qApp->desktop()->screenNumber(this));
+            QAction *action = d->contextIconSizes.key(iconSize);
+            if (action) {
+                action->setChecked(true);
+            }
+        } else if (d->contextIconSizes.contains(action)) {
+            iconSize = d->contextIconSizes.value(action);
+        }
 
         KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
         cfg.writeEntry("iconSize", iconSize);
+        d->iconSize = iconSize;
 
-        Q_FOREACH (QToolButton *button, d->buttons) {
-            button->setIconSize(QSize(iconSize, iconSize));
-        }
-
-        Q_FOREACH (Section *section, d->sections.values())  {
-            section->setButtonSize(QSize(iconSize + BUTTON_MARGIN, iconSize + BUTTON_MARGIN));
-        }
-
+        applyIconSize();
     }
 }
 
 void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
 {
-
-    int toolbuttonSize = buttonSize(qApp->desktop()->screenNumber(this));
-
     if (!d->contextSize) {
 
         d->contextSize = new QMenu(i18n("Icon Size"), this);
-        d->contextIconSizes.insert(d->contextSize->addAction(i18nc("@item:inmenu Icon size", "Default"),
-                                                          this, SLOT(slotContextIconSize())),
-                                   toolbuttonSize);
+        d->defaultIconSizeAction = d->contextSize->addAction(i18nc("@item:inmenu Icon size", "Default"),
+                                                             this, SLOT(slotContextIconSize()));
 
+        QActionGroup *sizeGroup = new QActionGroup(d->contextSize);
         QList<int> sizes;
         sizes << 12 << 14 << 16 << 22 << 32 << 48 << 64; //<< 96 << 128 << 192 << 256;
         Q_FOREACH (int i, sizes) {
-            d->contextIconSizes.insert(d->contextSize->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize())), i);
-        }
-
-        QActionGroup *sizeGroup = new QActionGroup(d->contextSize);
-        foreach (QAction *action, d->contextSize->actions()) {
+            QAction *action = d->contextSize->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize()));
+            d->contextIconSizes.insert(action, i);
             action->setActionGroup(sizeGroup);
             action->setCheckable(true);
-        }
-    }
-    KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
-    toolbuttonSize = cfg.readEntry("iconSize", toolbuttonSize);
-
-    QMapIterator< QAction*, int > it = d->contextIconSizes;
-    while (it.hasNext()) {
-        it.next();
-        if (it.value() == toolbuttonSize) {
-            it.key()->setChecked(true);
-            break;
+            if (d->iconSize == i) {
+                action->setChecked(true);
+            }
         }
     }
 
     d->contextSize->exec(event->globalPos());
 }
+
 KoToolBoxLayout *KoToolBox::toolBoxLayout() const
 {
     return d->layout;

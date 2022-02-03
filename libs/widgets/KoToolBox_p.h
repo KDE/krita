@@ -41,6 +41,8 @@ public:
     explicit KoToolBox();
     ~KoToolBox() override;
 
+    void applyIconSize();
+
 public Q_SLOTS:
     /**
      * Set the new active button based on the currently active tool.

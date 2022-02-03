@@ -19,7 +19,7 @@ public:
     ~KisMediaConsumer();
 
     void seek(int p_frame);
-    int playheadPosition();
+    int playhead();
 
     void setFrameRate(int fps);
     int getFrameRate();

@@ -41,7 +41,6 @@ public:
 
     PlaybackState playbackState();
     qreal playbackSpeed();
-    int visibleFrame();
 
 public Q_SLOTS:
     void play();
@@ -54,6 +53,8 @@ public Q_SLOTS:
     void nextFrame();
     void previousKeyframe();
     void nextKeyframe();
+
+    int visibleFrame();
 
     /**
      * @brief previousMatchingKeyframe && nextMatchingKeyframe
@@ -85,7 +86,6 @@ Q_SIGNALS:
 
 private:
     void setPlaybackState(PlaybackState state);
-    void displayFrame(int time);
 
     void nextKeyframeWithColor(int color);
     void nextKeyframeWithColor(const QSet<int> &validColors);

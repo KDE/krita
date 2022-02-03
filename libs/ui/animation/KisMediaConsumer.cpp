@@ -52,6 +52,9 @@ struct Private {
     }
 
     void pushAudio(int frame) {
+        if (pushConsumer->is_stopped())
+            return;
+
         if (mode == KisMediaConsumer::PUSH && producer) {
             for (int i = 0; i < SCRUB_AUDIO_WINDOW; i++ ) {
                 Mlt::Frame* f = producer->get_frame(frame + i );
@@ -97,7 +100,7 @@ void KisMediaConsumer::seek(int p_frame)
     }
 }
 
-int KisMediaConsumer::playheadPosition()
+int KisMediaConsumer::playhead()
 {
     if (m_d->producer) {
         return m_d->producer->position();
@@ -122,15 +125,15 @@ void KisMediaConsumer::setMode(Mode setting)
         m_d->mode = setting;
         if (m_d->mode == Mode::PUSH) {
             if (!m_d->pullConsumer->is_stopped()) {
-                m_d->pullConsumer->purge();
                 m_d->pullConsumer->stop();
+                m_d->pullConsumer->purge();
             }
 
             m_d->pushConsumer->start();
         } else {
             if (!m_d->pushConsumer->is_stopped()) {
-                m_d->pushConsumer->purge();
                 m_d->pushConsumer->stop();
+                m_d->pushConsumer->purge();
             }
 
             m_d->pullConsumer->start();

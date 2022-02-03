@@ -12,7 +12,7 @@ public:
     ~KisFrameDisplayProxy();
 
     bool displayFrame(int frame);
-    int visibleFrame();
+    int visibleFrame() const;
 
 Q_SIGNALS:
     void sigDisplayFrameChanged();

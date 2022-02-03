@@ -49,7 +49,6 @@ public Q_SLOTS:
     void stop();
 
     void scrub(int frameIndex, bool preferCachedFrames = false);
-    void resync();
     void previousFrame();
     void nextFrame();
     void previousKeyframe();
@@ -79,15 +78,11 @@ public Q_SLOTS:
     void setPlaybackSpeedPercent(int value);
     void setPlaybackSpeedNormalized(double value);
 
-    void TESTdisplayFrame(int frame);
-
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);
     void sigFrameChanged();
     void sigPlaybackSpeedChanged(double normalizedSpeed);
     void sigPlaybackStatisticsUpdated();
-
-    void sigTESTdisplayFrameAsync(int frame);
 
 private:
     void setPlaybackState(PlaybackState state);

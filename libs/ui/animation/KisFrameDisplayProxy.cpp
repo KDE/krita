@@ -48,7 +48,7 @@ bool KisFrameDisplayProxy::displayFrame(int frame)
     return false;
 }
 
-int KisFrameDisplayProxy::visibleFrame()
+int KisFrameDisplayProxy::visibleFrame() const
 {
     return m_d->displayedFrame;
 }

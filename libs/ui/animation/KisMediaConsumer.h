@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <mlt++/MltProducer.h>
+#include "animation/KisFrameDisplayProxy.h"
 
 class KisMediaConsumer : public QObject
 {
@@ -27,6 +28,9 @@ public:
     void setMode(Mode setting);
     Mode getMode();
 
+    void resync(const KisFrameDisplayProxy& displayProxy);
+    QString debugInfo();
+
     Mlt::Profile* getProfile();
 
     void setProducer(QSharedPointer<Mlt::Producer> p_producer);
@@ -36,6 +40,7 @@ Q_SIGNALS:
 
 private:
     QScopedPointer<struct Private> m_d;
+
 };
 
 #endif // KISMLTPLAYER_H

@@ -8,6 +8,8 @@
 #include <functional>
 
 #include "kis_signal_compressor_with_param.h"
+#include "kis_debug.h"
+
 
 const int SCRUB_AUDIO_WINDOW = 5;
 
@@ -145,6 +147,17 @@ KisMediaConsumer::Mode KisMediaConsumer::getMode()
 {
     return m_d->mode;
 }
+
+void KisMediaConsumer::resync(const KisFrameDisplayProxy& displayProxy)
+{
+    m_d->producer->seek(displayProxy.visibleFrame());
+}
+
+QString KisMediaConsumer::debugInfo() {
+    return QString("producer_position = ") + QString::number(m_d->producer->position()) + QString(", consumer_position = ") + QString::number(m_d->pullConsumer->position());
+}
+
+
 
 Mlt::Profile* KisMediaConsumer::getProfile()
 {

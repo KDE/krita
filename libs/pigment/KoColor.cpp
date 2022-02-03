@@ -401,13 +401,13 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, 
             if (type == "QString") {
                 v = KisDomUtils::toString(e.attribute("value"));
                 c.addMetadata(name , v);
-            } else if (type == "Int") {
+            } else if (type == "int") {
                 v = KisDomUtils::toInt(e.attribute("value"));
                 c.addMetadata(name , v);
-            } else if (type == "Double") {
+            } else if (type == "double") {
                 v = KisDomUtils::toDouble(e.attribute("value"));
                 c.addMetadata(name , v);
-            }  else if (type == "Bool") {
+            }  else if (type == "bool") {
                 v = KisDomUtils::toInt(e.attribute("value"));
                 c.addMetadata(name , v);
             }

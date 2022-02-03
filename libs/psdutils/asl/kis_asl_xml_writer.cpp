@@ -239,7 +239,7 @@ void KisAslXmlWriter::writeColor(const QString &key, const KoColor &value)
             writeText("Bk  ", v.toString());
         }
         bool ok;
-        v = value.metadata().value("psdSpotValue");
+        v = value.metadata().value("psdSpotBookId");
         int bookid = v.toInt(&ok);
         if (ok) {
             writeInteger("bookID", bookid);

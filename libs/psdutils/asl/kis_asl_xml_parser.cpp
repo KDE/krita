@@ -190,7 +190,7 @@ KoColor parseColorObject(QDomElement parent, QString classID)
     if (!spotName.isEmpty()) {
         color.addMetadata("spotName", spotName);
         color.addMetadata("psdSpotBook", spotBook);
-        color.addMetadata("psdSpotValue", spotValue);
+        color.addMetadata("psdSpotBookId", spotValue);
     }
 
     return color;

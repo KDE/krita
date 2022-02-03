@@ -19,6 +19,7 @@
 #include <kis_image.h>
 #include <kis_node.h>
 #include <kis_paint_layer.h>
+#include <kis_painter.h>
 
 #include "kis_dom_utils.h"
 
@@ -559,7 +560,7 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 layers.append(layerRecord);
 
                 KisNodeSP onlyTransparencyMask = findOnlyTransparencyMask(node, item.type);
-                const QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
+                QRect maskRect = onlyTransparencyMask ? onlyTransparencyMask->paintDevice()->exactBounds() : QRect();
 
                 const bool nodeVisible = node->visible();
                 const KoColorSpace *colorSpace = node->colorSpace();
@@ -633,7 +634,15 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 if (item.type == FlattenedNode::RASTER_LAYER) {
                     nodeIrrelevant = false;
                     nodeName = node->name();
-                    layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+                    bool transparency = KisPainter::checkDeviceHasTransparency(node->paintDevice());
+                    bool semiOpacity = node->paintDevice()->defaultPixel().opacityU8() < OPACITY_OPAQUE_U8;
+                    if (fillLayer && (transparency || semiOpacity)) {
+                        layerContentDevice = node->original();
+                        onlyTransparencyMask = node;
+                        maskRect = onlyTransparencyMask->paintDevice()->exactBounds();
+                    } else {
+                        layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+                    }
                     sectionType = psd_other;
                 } else {
                     nodeIrrelevant = true;

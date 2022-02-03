@@ -51,6 +51,7 @@ public:
     KoColor(const KoColor &rhs)
         : m_colorSpace(rhs.m_colorSpace)
         , m_size(rhs.m_size)
+        , m_metadata(rhs.m_metadata)
     {
         memcpy(m_data, rhs.m_data, m_size);
     }
@@ -66,6 +67,7 @@ public:
         }
 
         m_colorSpace = rhs.m_colorSpace;
+        m_metadata = rhs.m_metadata;
         m_size = rhs.m_size;
         memcpy(m_data, rhs.m_data, m_size);
 
@@ -275,6 +277,24 @@ public:
      */
     static QString toQString(const KoColor &color);
 
+    /**
+     * store the given key, value pair in a KoColor.
+     */
+    void addMetadata(QString key, QVariant value);
+
+    /**
+     * Get a map with all the metadata
+     * The metadata is used by parsing functions to store extra data,
+     * like for example spot color names, or the original parsing model.
+     */
+    QMap<QString, QVariant> metadata() const;
+
+    /**
+     * @brief clearMetadata
+     * clear th metadata map inside the KoColor.
+     */
+    void clearMetadata();
+
 #ifndef NODEBUG
     /// use qDebug calls to print internal info
     void dump() const;
@@ -292,6 +312,7 @@ private:
     const KoColorSpace *m_colorSpace;
     quint8 m_data[MAX_PIXEL_SIZE];
     quint8 m_size;
+    QMap<QString, QVariant> m_metadata;
 };
 
 Q_DECLARE_METATYPE(KoColor)

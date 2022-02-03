@@ -165,6 +165,9 @@ void KisSwatchGroup::addEntry(const KisSwatch &e)
             ++y;
         }
     }
+    // clear color metadata for now.
+    e.color().clearMetadata();
+
     setEntry(e, x, y);
 }
 

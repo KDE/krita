@@ -21,6 +21,7 @@
 #include "KoColorSpaceRegistry.h"
 #include "KoChannelInfo.h"
 #include "kis_assert.h"
+#include "kis_dom_utils.h"
 
 #include <QGlobalStatic>
 
@@ -301,6 +302,29 @@ const KoColorProfile *KoColor::profile() const
 void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
 {
     m_colorSpace->colorToXML(m_data, doc, colorElt);
+
+    for (QString key : m_metadata.keys()) {
+
+        QDomElement e = doc.createElement("metadata");
+        e.setAttribute("name", QString(key.toLatin1()));
+        QVariant v = m_metadata.value(key);
+        e.setAttribute("type", v.typeName());
+
+        QString attrName = "value";
+        if(v.type() == QVariant::String ) {
+            e.setAttribute(attrName, v.toString());
+        } else if(v.type() == QVariant::Int ) {
+            e.setAttribute(attrName, v.toInt());
+        } else if(v.type() == QVariant::Double ) {
+            e.setAttribute(attrName, v.toDouble());
+        } else  if(v.type() == QVariant::Bool ) {
+            e.setAttribute(attrName, v.toBool());
+        } else {
+            qWarning() << "no KoColor serialization for QVariant type:" << v.type();
+        }
+        colorElt.appendChild(e);
+    }
+
 }
 
 void KoColor::setOpacity(quint8 alpha)
@@ -365,6 +389,30 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, 
         KoColor c(cs);
         // TODO: Provide a way for colorFromXML() to notify the caller if parsing failed. Currently it returns default values on failure.
         cs->colorFromXML(c.data(), elt);
+
+        QDomElement e = elt;
+        while (!e.nextSiblingElement("metadata").isNull()) {
+            e = e.nextSiblingElement("metadata");
+
+            const QString name = e.attribute("name");
+            const QString type = e.attribute("type");
+            const QString value = e.text();
+            QVariant v;
+            if (type == "QString") {
+                v = KisDomUtils::toString(e.attribute("value"));
+                c.addMetadata(name , v);
+            } else if (type == "Int") {
+                v = KisDomUtils::toInt(e.attribute("value"));
+                c.addMetadata(name , v);
+            } else if (type == "Double") {
+                v = KisDomUtils::toDouble(e.attribute("value"));
+                c.addMetadata(name , v);
+            }  else if (type == "Bool") {
+                v = KisDomUtils::toInt(e.attribute("value"));
+                c.addMetadata(name , v);
+            }
+
+        }
         return c;
     } else {
         *ok = false;
@@ -585,6 +633,21 @@ QString KoColor::toQString(const KoColor &color)
         ls << color.colorSpace()->channelValueText(color.data(), realIndex);
     }
     return ls.join(" ");
+}
+
+void KoColor::addMetadata(QString key, QVariant value)
+{
+    m_metadata.insert(key, value);
+}
+
+QMap<QString, QVariant> KoColor::metadata() const
+{
+    return m_metadata;
+}
+
+void KoColor::clearMetadata()
+{
+    m_metadata.clear();
 }
 
 QDebug operator<<(QDebug dbg, const KoColor &color)

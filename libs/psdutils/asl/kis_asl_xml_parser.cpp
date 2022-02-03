@@ -188,7 +188,9 @@ KoColor parseColorObject(QDomElement parent, QString classID)
     }
     color = KoColor::fromXML(root, "U8");
     if (!spotName.isEmpty()) {
-        qDebug() << "Spot color found! Book: " << spotBook << " Name: " << spotName << " Book value: " << spotValue;
+        color.addMetadata("spotName", spotName);
+        color.addMetadata("psdSpotBook", spotBook);
+        color.addMetadata("psdSpotValue", spotValue);
     }
 
     return color;

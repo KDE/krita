@@ -228,7 +228,23 @@ void KisAslXmlWriter::writeColor(const QString &key, const KoColor &value)
         writeDouble("Grn ", value.toQColor().green());
         writeDouble("Bl  ", value.toQColor().blue());
     }
-    //TODO: write down spot metadata once we have a way to funnel it.
+    if (value.metadata().keys().contains("psdSpotBook")) {
+        QVariant v;
+        v = value.metadata().value("spotName");
+        if (v.isValid()) {
+            writeText("Nm  ", v.toString());
+        }
+        v = value.metadata().value("psdSpotBook");
+        if (v.isValid()) {
+            writeText("Bk  ", v.toString());
+        }
+        bool ok;
+        v = value.metadata().value("psdSpotValue");
+        int bookid = v.toInt(&ok);
+        if (ok) {
+            writeInteger("bookID", bookid);
+        }
+    }
 
     leaveDescriptor();
 }

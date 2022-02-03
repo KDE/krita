@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2005-2009 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2009 Peter Simonsson <peter.simonsson@gmail.com>
  * SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2022 Alvin Wong <alvin@alvinhc.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -67,7 +68,6 @@ public:
     bool floating {false};
     int iconSize {0};
     QMap<QAction*,int> contextIconSizes;
-    QMenu *contextSize {0};
     QAction *defaultIconSizeAction {0};
     Qt::Orientation orientation {Qt::Vertical};
 };
@@ -305,19 +305,17 @@ void KoToolBox::slotContextIconSize()
     }
 }
 
-void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
+void KoToolBox::setupIconSizeMenu(QMenu *menu)
 {
-    if (!d->contextSize) {
+    if (d->contextIconSizes.isEmpty()) {
+        d->defaultIconSizeAction = menu->addAction(i18nc("@item:inmenu Icon size", "Default"),
+                                                   this, SLOT(slotContextIconSize()));
 
-        d->contextSize = new QMenu(i18n("Icon Size"), this);
-        d->defaultIconSizeAction = d->contextSize->addAction(i18nc("@item:inmenu Icon size", "Default"),
-                                                             this, SLOT(slotContextIconSize()));
-
-        QActionGroup *sizeGroup = new QActionGroup(d->contextSize);
+        QActionGroup *sizeGroup = new QActionGroup(menu);
         QList<int> sizes;
         sizes << 12 << 14 << 16 << 22 << 32 << 48 << 64; //<< 96 << 128 << 192 << 256;
         Q_FOREACH (int i, sizes) {
-            QAction *action = d->contextSize->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize()));
+            QAction *action = menu->addAction(i18n("%1x%2", i, i), this, SLOT(slotContextIconSize()));
             d->contextIconSizes.insert(action, i);
             action->setActionGroup(sizeGroup);
             action->setCheckable(true);
@@ -326,8 +324,6 @@ void KoToolBox::contextMenuEvent(QContextMenuEvent *event)
             }
         }
     }
-
-    d->contextSize->exec(event->globalPos());
 }
 
 KoToolBoxLayout *KoToolBox::toolBoxLayout() const

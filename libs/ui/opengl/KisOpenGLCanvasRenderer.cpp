@@ -7,7 +7,7 @@
 
 #define GL_GLEXT_PROTOTYPES
 
-#include "opengl/kis_opengl_canvas2.h"
+#include "opengl/KisOpenGLCanvasRenderer.h"
 #include "opengl/kis_opengl_canvas2_p.h"
 #include "opengl/KisOpenGLSync.h"
 
@@ -62,7 +62,7 @@ static bool OPENGL_SUCCESS = false;
 // so we can keep the number really low
 static constexpr int NumberOfBuffers = 2;
 
-struct KisOpenGLCanvas2::Private
+struct KisOpenGLCanvasRenderer::Private
 {
 public:
     ~Private() {
@@ -147,11 +147,11 @@ public:
 
 };
 
-KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
-                                   KisCoordinatesConverter *coordinatesConverter,
-                                   QWidget *parent,
-                                   KisImageWSP image,
-                                   KisDisplayColorConverter *colorConverter)
+KisOpenGLCanvasRenderer::KisOpenGLCanvasRenderer(KisCanvas2 *canvas,
+                                                 KisCoordinatesConverter *coordinatesConverter,
+                                                 QWidget *parent,
+                                                 KisImageWSP image,
+                                                 KisDisplayColorConverter *colorConverter)
     : QOpenGLWidget(parent)
     , KisCanvasWidgetBase(canvas, coordinatesConverter)
     , d(new Private())
@@ -213,7 +213,7 @@ KisOpenGLCanvas2::KisOpenGLCanvas2(KisCanvas2 *canvas,
     cfg.writeEntry("canvasState", "OPENGL_SUCCESS");
 }
 
-KisOpenGLCanvas2::~KisOpenGLCanvas2()
+KisOpenGLCanvasRenderer::~KisOpenGLCanvasRenderer()
 {
     /**
      * Since we delete openGL resources, we should make sure the
@@ -233,12 +233,12 @@ KisOpenGLCanvas2::~KisOpenGLCanvas2()
     doneCurrent();
 }
 
-void KisOpenGLCanvas2::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
+void KisOpenGLCanvasRenderer::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     setDisplayFilterImpl(displayFilter, false);
 }
 
-void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing)
+void KisOpenGLCanvasRenderer::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing)
 {
     bool needsInternalColorManagement =
             !displayFilter || displayFilter->useInternalColorManagement();
@@ -255,7 +255,7 @@ void KisOpenGLCanvas2::setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> dis
     }
 }
 
-void KisOpenGLCanvas2::notifyImageColorSpaceChanged(const KoColorSpace *cs)
+void KisOpenGLCanvasRenderer::notifyImageColorSpaceChanged(const KoColorSpace *cs)
 {
     // FIXME: on color space change the data is refetched multiple
     //        times by different actors!
@@ -265,18 +265,18 @@ void KisOpenGLCanvas2::notifyImageColorSpaceChanged(const KoColorSpace *cs)
     }
 }
 
-void KisOpenGLCanvas2::setWrapAroundViewingMode(bool value)
+void KisOpenGLCanvasRenderer::setWrapAroundViewingMode(bool value)
 {
     d->wrapAroundMode = value;
     update();
 }
 
-bool KisOpenGLCanvas2::wrapAroundViewingMode() const
+bool KisOpenGLCanvasRenderer::wrapAroundViewingMode() const
 {
     return d->wrapAroundMode;
 }
 
-void KisOpenGLCanvas2::initializeGL()
+void KisOpenGLCanvasRenderer::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
@@ -337,7 +337,7 @@ void KisOpenGLCanvas2::initializeGL()
 /**
  * Loads all shaders and reports compilation problems
  */
-void KisOpenGLCanvas2::initializeShaders()
+void KisOpenGLCanvasRenderer::initializeShaders()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->canvasInitialized);
 
@@ -359,7 +359,7 @@ void KisOpenGLCanvas2::initializeShaders()
     initializeDisplayShader();
 }
 
-void KisOpenGLCanvas2::initializeDisplayShader()
+void KisOpenGLCanvasRenderer::initializeDisplayShader()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->canvasInitialized);
 
@@ -380,7 +380,7 @@ void KisOpenGLCanvas2::initializeDisplayShader()
  * Displays a message box telling the user that
  * shader compilation failed and turns off OpenGL.
  */
-void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
+void KisOpenGLCanvasRenderer::reportFailedShaderCompilation(const QString &context)
 {
     KisConfig cfg(false);
 
@@ -393,7 +393,7 @@ void KisOpenGLCanvas2::reportFailedShaderCompilation(const QString &context)
     cfg.setCanvasState("OPENGL_FAILED");
 }
 
-void KisOpenGLCanvas2::resizeGL(int width, int height)
+void KisOpenGLCanvasRenderer::resizeGL(int width, int height)
 {
     // The given size is the widget size but here we actually want to give
     // KisCoordinatesConverter the viewport size aligned to device pixels.
@@ -404,7 +404,7 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     paintGL();
 }
 
-void KisOpenGLCanvas2::paintGL()
+void KisOpenGLCanvasRenderer::paintGL()
 {
     const QRect updateRect = d->updateRect ? *d->updateRect : QRect();
 
@@ -442,7 +442,7 @@ void KisOpenGLCanvas2::paintGL()
     }
 }
 
-void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
+void KisOpenGLCanvasRenderer::paintEvent(QPaintEvent *e)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->updateRect);
 
@@ -451,7 +451,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
     d->updateRect = boost::none;
 }
 
-void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
+void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
 {
     if (!d->overlayInvertedShader->bind()) {
         return;
@@ -504,7 +504,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
         shouldRestoreLogicOp = true;
 
         #else   // QT_OPENGL_ES_2
-        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+        KIS_ASSERT_X(false, "KisOpenGLCanvasRenderer::paintToolOutline",
                         "Unexpected KisOpenGL::hasOpenGLES returned false");
         #endif  // QT_OPENGL_ES_2
     }
@@ -566,7 +566,7 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
 #ifndef QT_OPENGL_ES_2
         glDisable(GL_COLOR_LOGIC_OP);
 #else
-        KIS_ASSERT_X(false, "KisOpenGLCanvas2::paintToolOutline",
+        KIS_ASSERT_X(false, "KisOpenGLCanvasRenderer::paintToolOutline",
                 "Unexpected KisOpenGL::hasOpenGLES returned false");
 #endif
     }
@@ -574,19 +574,19 @@ void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
     d->overlayInvertedShader->release();
 }
 
-bool KisOpenGLCanvas2::isBusy() const
+bool KisOpenGLCanvasRenderer::isBusy() const
 {
     const bool isBusyStatus = d->glSyncObject && !d->glSyncObject->isSignaled();
     KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
     return isBusyStatus;
 }
 
-void KisOpenGLCanvas2::setLodResetInProgress(bool value)
+void KisOpenGLCanvasRenderer::setLodResetInProgress(bool value)
 {
     d->lodSwitchInProgress = value;
 }
 
-void KisOpenGLCanvas2::drawBackground(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::drawBackground(const QRect &updateRect)
 {
     Q_UNUSED(updateRect);
 
@@ -610,7 +610,7 @@ void KisOpenGLCanvas2::drawBackground(const QRect &updateRect)
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void KisOpenGLCanvas2::drawCheckers(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::drawCheckers(const QRect &updateRect)
 {
     Q_UNUSED(updateRect);
 
@@ -699,7 +699,7 @@ void KisOpenGLCanvas2::drawCheckers(const QRect &updateRect)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void KisOpenGLCanvas2::drawGrid(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::drawGrid(const QRect &updateRect)
 {
     if (!d->solidColorShader->bind()) {
         return;
@@ -773,7 +773,7 @@ void KisOpenGLCanvas2::drawGrid(const QRect &updateRect)
     glDisable(GL_BLEND);
 }
 
-void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::drawImage(const QRect &updateRect)
 {
     if (!d->displayShader) {
         return;
@@ -863,7 +863,7 @@ void KisOpenGLCanvas2::drawImage(const QRect &updateRect)
     glDisable(GL_BLEND);
 }
 
-void KisOpenGLCanvas2::drawImageTiles(int firstCol, int lastCol, int firstRow, int lastRow, qreal scaleX, qreal scaleY, const QPoint &wrapAroundOffset)
+void KisOpenGLCanvasRenderer::drawImageTiles(int firstCol, int lastCol, int firstRow, int lastRow, qreal scaleX, qreal scaleY, const QPoint &wrapAroundOffset)
 {
     KisCoordinatesConverter *converter = coordinatesConverter();
     const QSizeF widgetSize = widgetSizeAlignedToDevicePixel();
@@ -978,7 +978,7 @@ void KisOpenGLCanvas2::drawImageTiles(int firstCol, int lastCol, int firstRow, i
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-QSize KisOpenGLCanvas2::viewportDevicePixelSize() const
+QSize KisOpenGLCanvasRenderer::viewportDevicePixelSize() const
 {
     // This is how QOpenGLCanvas sets the FBO and the viewport size. If
     // devicePixelRatioF() is non-integral, the result is truncated.
@@ -987,7 +987,7 @@ QSize KisOpenGLCanvas2::viewportDevicePixelSize() const
     return QSize(viewportWidth, viewportHeight);
 }
 
-QSizeF KisOpenGLCanvas2::widgetSizeAlignedToDevicePixel() const
+QSizeF KisOpenGLCanvasRenderer::widgetSizeAlignedToDevicePixel() const
 {
     QSize viewportSize = viewportDevicePixelSize();
     qreal scaledWidth = viewportSize.width() / devicePixelRatioF();
@@ -995,7 +995,7 @@ QSizeF KisOpenGLCanvas2::widgetSizeAlignedToDevicePixel() const
     return QSizeF(scaledWidth, scaledHeight);
 }
 
-void KisOpenGLCanvas2::slotConfigChanged()
+void KisOpenGLCanvasRenderer::slotConfigChanged()
 {
     KisConfig cfg(true);
     d->checkSizeScale = KisOpenGLImageTextures::BACKGROUND_TEXTURE_CHECK_SIZE / static_cast<GLfloat>(cfg.checkSize());
@@ -1010,7 +1010,7 @@ void KisOpenGLCanvas2::slotConfigChanged()
     notifyConfigChanged();
 }
 
-void KisOpenGLCanvas2::slotPixelGridModeChanged()
+void KisOpenGLCanvasRenderer::slotPixelGridModeChanged()
 {
     KisConfig cfg(true);
 
@@ -1021,22 +1021,22 @@ void KisOpenGLCanvas2::slotPixelGridModeChanged()
     update();
 }
 
-void KisOpenGLCanvas2::slotShowFloatingMessage(const QString &message, int timeout, bool priority)
+void KisOpenGLCanvasRenderer::slotShowFloatingMessage(const QString &message, int timeout, bool priority)
 {
     canvas()->imageView()->showFloatingMessage(message, QIcon(), timeout, priority ? KisFloatingMessage::High : KisFloatingMessage::Medium);
 }
 
-QVariant KisOpenGLCanvas2::inputMethodQuery(Qt::InputMethodQuery query) const
+QVariant KisOpenGLCanvasRenderer::inputMethodQuery(Qt::InputMethodQuery query) const
 {
     return processInputMethodQuery(query);
 }
 
-void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
+void KisOpenGLCanvasRenderer::inputMethodEvent(QInputMethodEvent *event)
 {
     processInputMethodEvent(event);
 }
 
-QRectF KisOpenGLCanvas2::widgetToSurface(const QRectF &rc)
+QRectF KisOpenGLCanvasRenderer::widgetToSurface(const QRectF &rc)
 {
     const qreal ratio = devicePixelRatioF();
 
@@ -1046,7 +1046,7 @@ QRectF KisOpenGLCanvas2::widgetToSurface(const QRectF &rc)
                   rc.height() * ratio);
 }
 
-QRectF KisOpenGLCanvas2::surfaceToWidget(const QRectF &rc)
+QRectF KisOpenGLCanvasRenderer::surfaceToWidget(const QRectF &rc)
 {
     const qreal ratio = devicePixelRatioF();
 
@@ -1057,7 +1057,7 @@ QRectF KisOpenGLCanvas2::surfaceToWidget(const QRectF &rc)
 }
 
 
-void KisOpenGLCanvas2::renderCanvasGL(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::renderCanvasGL(const QRect &updateRect)
 {
     if ((d->displayFilter && d->displayFilter->updateShader()) ||
         (bool(d->displayFilter) != d->displayShaderCompiledWithDisplayFilterSupport)) {
@@ -1100,7 +1100,7 @@ void KisOpenGLCanvas2::renderCanvasGL(const QRect &updateRect)
     }
 }
 
-void KisOpenGLCanvas2::renderDecorations(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::renderDecorations(const QRect &updateRect)
 {
     QPainter gc(this);
     gc.setClipRect(updateRect);
@@ -1117,27 +1117,27 @@ void KisOpenGLCanvas2::renderDecorations(const QRect &updateRect)
 }
 
 
-void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
+void KisOpenGLCanvasRenderer::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
     d->openGLImageTextures->setMonitorProfile(colorConverter->openGLCanvasSurfaceProfile(),
                                               colorConverter->renderingIntent(),
                                               colorConverter->conversionFlags());
 }
 
-void KisOpenGLCanvas2::channelSelectionChanged(const QBitArray &channelFlags)
+void KisOpenGLCanvasRenderer::channelSelectionChanged(const QBitArray &channelFlags)
 {
     d->openGLImageTextures->setChannelFlags(channelFlags);
 }
 
 
-void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
+void KisOpenGLCanvasRenderer::finishResizingImage(qint32 w, qint32 h)
 {
     if (d->canvasInitialized) {
         d->openGLImageTextures->slotImageSizeChanged(w, h);
     }
 }
 
-KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
+KisUpdateInfoSP KisOpenGLCanvasRenderer::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
 {
     d->openGLImageTextures->setChannelFlags(channelFlags);
     if (canvas()->proofingConfigUpdated()) {
@@ -1148,7 +1148,7 @@ KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, 
 }
 
 
-QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
+QRect KisOpenGLCanvasRenderer::updateCanvasProjection(KisUpdateInfoSP info)
 {
     // See KisQPainterCanvas::updateCanvasProjection for more info
     bool isOpenGLUpdateInfo = dynamic_cast<KisOpenGLUpdateInfo*>(info.data());
@@ -1162,7 +1162,7 @@ QRect KisOpenGLCanvas2::updateCanvasProjection(KisUpdateInfoSP info)
     return QRect(); // FIXME: Implement dirty rect for OpenGL
 }
 
-QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
+QVector<QRect> KisOpenGLCanvasRenderer::updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects)
 {
 #if defined(Q_OS_MACOS) || defined(Q_OS_ANDROID)
     /**
@@ -1191,12 +1191,12 @@ QVector<QRect> KisOpenGLCanvas2::updateCanvasProjection(const QVector<KisUpdateI
     return result;
 }
 
-bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
+bool KisOpenGLCanvasRenderer::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);
 }
 
-KisOpenGLImageTexturesSP KisOpenGLCanvas2::openGLImageTextures() const
+KisOpenGLImageTexturesSP KisOpenGLCanvasRenderer::openGLImageTextures() const
 {
     return d->openGLImageTextures;
 }

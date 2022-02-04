@@ -61,7 +61,24 @@ cp -r $DEPS_INSTALL_PREFIX/lib/python3.8 $APPDIR/usr/lib
 if [ -d $DEPS_INSTALL_PREFIX/share/sip ] ; then
 cp -r $DEPS_INSTALL_PREFIX/share/sip $APPDIR/usr/share
 fi
+
 cp -r $DEPS_INSTALL_PREFIX/translations $APPDIR/usr/
+
+if [ ! -d $APPDIR/usr/libstdcpp-fallback/ ] ; then
+    mkdir -p $APPDIR/usr/libstdcpp-fallback/
+    cd $APPDIR/usr/libstdcpp-fallback/
+    cp  /usr/lib/x86_64-linux-gnu/libstdc++.so.6.* ./
+    ln -s `find ./ -name 'libstdc++.so.6.*' -maxdepth 1 -type f | head -n1 | xargs basename` libstdc++.so.6
+fi
+
+mkdir $BUILD_PREFIX/krita-apprun-build
+(
+    cd $BUILD_PREFIX/krita-apprun-build
+    cmake -DCMAKE_BUILD_TYPE=Release $KRITA_SOURCES/packaging/linux/appimage/krita-apprun/
+    cmake --build .
+    cp AppRun $APPDIR
+)
+rm -rf $BUILD_PREFIX/krita-apprun-build
 
 if [ -d $APPDIR/usr/lib/python3.8/site-packages ]; then
     rm -rf $APPDIR/usr/lib/python3.8/site-packages/packaging*

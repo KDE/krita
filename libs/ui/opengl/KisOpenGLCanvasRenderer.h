@@ -8,20 +8,20 @@
 #ifndef KIS_OPENGL_CANVAS_RENDERER_H
 #define KIS_OPENGL_CANVAS_RENDERER_H
 
-#include <QOpenGLWidget>
 #ifndef Q_OS_MACOS
 #include <QOpenGLFunctions>
 #else
 #include <QOpenGLFunctions_3_2_Core>
 #endif
-#include "canvas/kis_canvas_widget_base.h"
 #include "opengl/kis_opengl_image_textures.h"
 
 #include "kritaui_export.h"
 #include "kis_ui_types.h"
 
 class KisCanvas2;
+class KisCoordinatesConverter;
 class KisDisplayColorConverter;
+class KisDisplayFilter;
 class QOpenGLShaderProgram;
 class QPainterPath;
 
@@ -34,77 +34,56 @@ class QPainterPath;
 
 #endif
 /**
- * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
- *
- * NOTE: if you change something in the event handling here, also change it
- * in the qpainter canvas.
+ * KisOpenGLCanvasRenderer is the class that shows the actual image using OpenGL
  *
  */
-class KRITAUI_EXPORT KisOpenGLCanvasRenderer
-        : public QOpenGLWidget
-#ifndef Q_MOC_RUN
-        , protected GLFunctions
-#endif
-        , public KisCanvasWidgetBase
+class KisOpenGLCanvasRenderer
+        : private GLFunctions
 {
-    Q_OBJECT
+public:
+    class CanvasBridge;
+
+    KisOpenGLCanvasRenderer(CanvasBridge *canvasBridge, KisImageWSP image, KisDisplayColorConverter *colorConverter);
+
+    ~KisOpenGLCanvasRenderer();
+
+    Q_DISABLE_COPY(KisOpenGLCanvasRenderer)
 
 public:
+    void resizeGL(int width, int height);
+    void initializeGL();
+    void paintGL(const QRect &updateRect = QRect());
 
-    KisOpenGLCanvasRenderer(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget *parent, KisImageWSP image, KisDisplayColorConverter *colorConverter);
-
-    ~KisOpenGLCanvasRenderer() override;
-
-public: // QOpenGLWidget
-
-    void resizeGL(int width, int height) override;
-    void initializeGL() override;
-    void paintGL() override;
-    void paintEvent(QPaintEvent *e) override;
-
-    QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
-    void inputMethodEvent(QInputMethodEvent *event) override;
-
-public:
+private:
     void renderCanvasGL(const QRect &updateRect);
     void renderDecorations(const QRect &updateRect);
+
+public:
     void paintToolOutline(const QPainterPath &path);
 
+    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
+    void notifyImageColorSpaceChanged(const KoColorSpace *cs);
 
-public: // Implement kis_abstract_canvas_widget interface
-    void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;
-    void notifyImageColorSpaceChanged(const KoColorSpace *cs) override;
+    void setWrapAroundViewingMode(bool value);
+    bool wrapAroundViewingMode() const;
 
-    void setWrapAroundViewingMode(bool value) override;
-    bool wrapAroundViewingMode() const override;
+    void channelSelectionChanged(const QBitArray &channelFlags);
+    void setDisplayColorConverter(KisDisplayColorConverter *colorConverter);
+    void finishResizingImage(qint32 w, qint32 h);
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags);
+    QRect updateCanvasProjection(KisUpdateInfoSP info);
 
-    void channelSelectionChanged(const QBitArray &channelFlags) override;
-    void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;
-    void finishResizingImage(qint32 w, qint32 h) override;
-    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
-    QRect updateCanvasProjection(KisUpdateInfoSP info) override;
-    QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) override;
+    bool isBusy() const;
+    void setLodResetInProgress(bool value);
 
-    QWidget *widget() override {
-        return this;
-    }
-
-    bool isBusy() const override;
-    void setLodResetInProgress(bool value) override;
-
+private:
     void setDisplayFilterImpl(QSharedPointer<KisDisplayFilter> displayFilter, bool initializing);
 
+public:
     KisOpenGLImageTexturesSP openGLImageTextures() const;
 
-public Q_SLOTS:
-    void slotConfigChanged();
-    void slotPixelGridModeChanged();
-
-private Q_SLOTS:
-    void slotShowFloatingMessage(const QString &message, int timeout, bool priority);
-
-protected: // KisCanvasWidgetBase
-    bool callFocusNextPrevChild(bool next) override;
+    void updateConfig();
+    void updatePixelGridMode();
 
 private:
     void initializeShaders();
@@ -116,7 +95,6 @@ private:
     void drawImageTiles(int firstCol, int lastCol, int firstRow, int lastRow, qreal scaleX, qreal scaleY, const QPoint &wrapAroundOffset);
     void drawCheckers(const QRect &updateRect);
     void drawGrid(const QRect &updateRect);
-    QSize viewportDevicePixelSize() const;
     QSizeF widgetSizeAlignedToDevicePixel() const;
 
     QRectF widgetToSurface(const QRectF &rc);
@@ -125,6 +103,39 @@ private:
 private:
     struct Private;
     Private * const d;
+
+    KisCanvas2 *canvas() const;
+    QOpenGLContext *context() const;
+    qreal devicePixelRatioF() const;
+    KisCoordinatesConverter *coordinatesConverter() const;
+    QColor borderColor() const;
+
+    void drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const;
+};
+
+class KisOpenGLCanvasRenderer::CanvasBridge
+{
+    friend class KisOpenGLCanvasRenderer;
+
+public:
+    CanvasBridge() = default;
+    virtual ~CanvasBridge() = default;
+
+    Q_DISABLE_COPY(CanvasBridge)
+
+protected:
+    virtual KisCanvas2 *canvas() const = 0;
+    virtual QOpenGLContext *openglContext() const = 0;
+    virtual qreal devicePixelRatioF() const = 0;
+    virtual KisCoordinatesConverter *coordinatesConverter() const = 0;
+    virtual QColor borderColor() const = 0;
+
+    // Widget parent for KisOpenGLCanvasRenderer::reportFailedShaderCompilation
+    // to show a QMessageBox. (Return `nullptr` if not using widgets?)
+    virtual QWidget *widget() const = 0;
+
+    // drawDecorations is a member of KisCanvasWidgetBase.
+    virtual void drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const = 0;
 };
 
 #endif // KIS_OPENGL_CANVAS_RENDERER_H

@@ -180,6 +180,7 @@ set(kritaui_LIB_SRCS
     opengl/KisOpenGLBufferCircularStorage.cpp
     opengl/KisOpenGLSync.cpp
     opengl/KisOpenGLBufferCreationGuard.cpp
+    opengl/KisOpenGLCanvasRenderer.cpp
     kis_fps_decoration.cpp
 
     tool/KisToolChangesTracker.cpp

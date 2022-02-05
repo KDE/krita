@@ -106,8 +106,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro'
         }
+        nightly {
+            initWith release
+            applicationIdSuffix ".next"
+        }
+        debug {
+            applicationIdSuffix ".debug"
+        }
     }
-
 
     // This is needed because, gradle by default ignores hidden assets.
     aaptOptions {

@@ -97,7 +97,13 @@ android {
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs', 'lib']
-       }
+        }
+        nightly {
+            manifest.srcFile 'flavors/next/AndroidManifest.xml'
+        }
+        debug {
+            manifest.srcFile 'flavors/debug/AndroidManifest.xml'
+        }
     }
 
     buildTypes {

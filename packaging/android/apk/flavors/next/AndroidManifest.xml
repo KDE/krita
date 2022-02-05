@@ -1,0 +1,12 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+    <application
+            tools:replace="android:icon"
+            android:icon="@mipmap/ic_launcher_next">
+        <activity
+            android:name="org.krita.android.MainActivity"
+            tools:replace="android:label"
+            android:label="Krita Next" />
+
+    </application>
+</manifest>

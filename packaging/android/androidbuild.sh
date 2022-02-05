@@ -203,7 +203,17 @@ build_krita() {
 
 build_apk() {
     cd $BUILD_ROOT
-    if [[ $BUILD_TYPE == "Release" ]]; then
+
+    if [[ $NIGHTLY_BUILD == 1 ]]; then
+        # to copy files, --aux-mode doesn't seem to work
+        make create-apk ARGS="--no-gdbserver"
+
+        cd $BUILD_ROOT/krita_build_apk
+        ./gradlew clean  # so binary factory doesn't use the debug files
+        ./gradlew assembleNightly
+
+        cd $BUILD_ROOT
+    elif [[ $BUILD_TYPE == "Release" ]]; then
         make create-apk ARGS="--release"
     else
         make create-apk ARGS="--no-gdbserver"

@@ -8,6 +8,8 @@
 #ifndef KIS_OPENGL_CANVAS_RENDERER_H
 #define KIS_OPENGL_CANVAS_RENDERER_H
 
+#include <QtGlobal>
+
 #ifndef Q_OS_MACOS
 #include <QOpenGLFunctions>
 #else

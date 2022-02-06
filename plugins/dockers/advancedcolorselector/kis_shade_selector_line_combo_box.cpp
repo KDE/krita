@@ -94,7 +94,7 @@ void KisShadeSelectorLineComboBox::setLineNumber(int n)
     m_currentLine->setLineNumber(n);
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->setLineNumber(n);
         }
     }
@@ -113,7 +113,7 @@ void KisShadeSelectorLineComboBox::updateSettings()
     m_currentLine->updateSettings();
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->updateSettings();
             item->m_lineHeight=30;
             item->setMaximumHeight(30);
@@ -130,7 +130,7 @@ void KisShadeSelectorLineComboBox::setGradient(bool b)
     m_currentLine->m_gradient=b;
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->m_gradient=b;
         }
     }
@@ -143,7 +143,7 @@ void KisShadeSelectorLineComboBox::setPatches(bool b)
     m_currentLine->m_gradient=!b;
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->m_gradient=!b;
         }
     }
@@ -156,7 +156,7 @@ void KisShadeSelectorLineComboBox::setPatchCount(int count)
     m_currentLine->m_patchCount=count;
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->m_patchCount=count;
         }
     }

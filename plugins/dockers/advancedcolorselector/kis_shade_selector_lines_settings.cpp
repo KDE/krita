@@ -25,8 +25,8 @@ KisShadeSelectorLinesSettings::KisShadeSelectorLinesSettings(QWidget *parent) :
 QString KisShadeSelectorLinesSettings::toString() const
 {
     QString result;
-    for(int i=0; i<m_lineList.size(); i++) {
-        result.append(m_lineList.at(i)->configuration());
+    for(auto *i : m_lineList) {
+        result.append(i->configuration());
         result.append(';');
     }
 
@@ -47,14 +47,14 @@ void KisShadeSelectorLinesSettings::updateSettings()
     KConfigGroup cfg =  KSharedConfig::openConfig()->group("advancedColorSelector");
     fromString(cfg.readEntry("minimalShadeSelectorLineConfig", "0|0.2|0|0"));
 
-    for(int i=0; i<m_lineList.size(); i++) {
-        m_lineList.at(i)->updateSettings();
+    for(auto *i : m_lineList) {
+        i->updateSettings();
     }
 }
 
 void KisShadeSelectorLinesSettings::setLineCount(int count)
 {
-    bool emitSignal = (m_lineList.size()!=count)?true:false;
+    bool emitSignal = m_lineList.size()!=count;
     while(count-m_lineList.size() > 0) {
         m_lineList.append(new KisShadeSelectorLineComboBox(this));
         m_lineList.last()->setLineNumber(m_lineList.size()-1);
@@ -65,11 +65,11 @@ void KisShadeSelectorLinesSettings::setLineCount(int count)
         delete m_lineList.takeLast();
     }
 
-    for(int i=0; i<m_lineList.size(); i++) {
-        connect(this, SIGNAL(setGradient(bool)),  m_lineList.at(i), SLOT(setGradient(bool)),  Qt::UniqueConnection);
-        connect(this, SIGNAL(setPatches(bool)),   m_lineList.at(i), SLOT(setPatches(bool)),   Qt::UniqueConnection);
-        connect(this, SIGNAL(setLineHeight(int)), m_lineList.at(i), SLOT(setLineHeight(int)), Qt::UniqueConnection);
-        connect(this, SIGNAL(setPatchCount(int)), m_lineList.at(i), SLOT(setPatchCount(int)), Qt::UniqueConnection);
+    for(auto *i : m_lineList) {
+        connect(this, SIGNAL(setGradient(bool)),  i, SLOT(setGradient(bool)),  Qt::UniqueConnection);
+        connect(this, SIGNAL(setPatches(bool)),   i, SLOT(setPatches(bool)),   Qt::UniqueConnection);
+        connect(this, SIGNAL(setLineHeight(int)), i, SLOT(setLineHeight(int)), Qt::UniqueConnection);
+        connect(this, SIGNAL(setPatchCount(int)), i, SLOT(setPatchCount(int)), Qt::UniqueConnection);
     }
 
     if(emitSignal)

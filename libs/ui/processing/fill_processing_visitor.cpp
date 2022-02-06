@@ -26,7 +26,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_feather(0)
     , m_sizemod(0)
     , m_fillThreshold(8)
-    , m_softness(100)
+    , m_opacitySpread(0)
     , m_continuousFillMode(ContinuousFillMode_DoNotUse)
     , m_continuousFillMask(nullptr)
     , m_unmerged(false)
@@ -133,7 +133,7 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.setSizemod(m_sizemod);
     fillPainter.setFeather(m_feather);
     fillPainter.setFillThreshold(m_fillThreshold);
-    fillPainter.setSoftness(m_softness);
+    fillPainter.setOpacitySpread(m_opacitySpread);
     fillPainter.setCareForSelection(true);
     fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     fillPainter.setWidth(fillRect.width());
@@ -193,7 +193,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
         painter.setSizemod(m_sizemod);
         painter.setFeather(m_feather);
         painter.setFillThreshold(m_fillThreshold);
-        painter.setSoftness(m_softness);
+        painter.setOpacitySpread(m_opacitySpread);
         painter.setCareForSelection(true);
         painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
         painter.setWidth(fillRect.width());
@@ -270,9 +270,9 @@ void FillProcessingVisitor::setFillThreshold(int fillThreshold)
     m_fillThreshold = fillThreshold;
 }
 
-void FillProcessingVisitor::setSoftness(int softness)
+void FillProcessingVisitor::setOpacitySpread(int opacitySpread)
 {
-    m_softness = softness;
+    m_opacitySpread = opacitySpread;
 }
 
 void FillProcessingVisitor::setContinuousFillMode(ContinuousFillMode continuousFillMode)

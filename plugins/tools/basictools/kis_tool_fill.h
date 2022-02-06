@@ -58,7 +58,7 @@ public Q_SLOTS:
     void deactivate() override;
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
-    void slotSetSoftness(int);
+    void slotSetOpacitySpread(int);
     void slotSetUsePattern(bool);
     void slotSetFillSelection(bool);
     void slotSetUseSelectionAsBoundary(bool);
@@ -101,7 +101,7 @@ private:
     int m_feather;
     int m_sizemod;
     int m_threshold;
-    int m_softness;
+    int m_opacitySpread;
     bool m_usePattern;
     bool m_fillOnlySelection;
     bool m_useSelectionAsBoundary;
@@ -119,7 +119,7 @@ private:
 
     QCheckBox *m_checkUseFastMode;
     KisSliderSpinBox *m_slThreshold;
-    KisSliderSpinBox *m_slSoftness;
+    KisSliderSpinBox *m_slOpacitySpread;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
     KisAngleSelector *m_angleSelectorPatternRotate;

@@ -37,7 +37,7 @@ public:
     void setFeather(int feather);
     void setSizeMod(int sizemod);
     void setFillThreshold(int fillThreshold);
-    void setSoftness(int softness);
+    void setOpacitySpread(int opacitySpread);
     void setContinuousFillMode(ContinuousFillMode continuousFillMode);
     void setContinuousFillMask(KisSelectionSP continuousFillMask);
     void setContinuousFillReferenceColor(const KoColor &continuousFillReferenceColor);
@@ -69,7 +69,7 @@ private:
     int m_feather;
     int m_sizemod;
     int m_fillThreshold;
-    int m_softness;
+    int m_opacitySpread;
 
     ContinuousFillMode m_continuousFillMode;
     KisSelectionSP m_continuousFillMask;

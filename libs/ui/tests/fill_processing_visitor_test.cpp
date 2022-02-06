@@ -56,26 +56,24 @@ public:
             new KisResourcesSnapshot(image,
                                      fillNode,
                                      manager);
-
-        KisProcessingVisitorSP visitor =
-            new FillProcessingVisitor(0,
-                                      QPoint(100,100),
-                                      image->globalSelection(),
-                                      resources,
-                                      false, // useFastMode
-                                      usePattern,
-                                      selectionOnly,
-                                      false,
-                                      10, 10, 10, 100,
-                                      true /* use the current device (unmerged) */,
-                                      false);
-
-
+        
+        FillProcessingVisitor *visitor = new FillProcessingVisitor(0,
+                                                                   image->globalSelection(),
+                                                                   resources);
+        visitor->setSeedPoint(QPoint(100,100));
+        visitor->setUsePattern(usePattern);
+        visitor->setSelectionOnly(selectionOnly);
+        visitor->setFeather(10);
+        visitor->setSizeMod(10);
+        visitor->setFillThreshold(10);
+        visitor->setOpacitySpread(0);
+        visitor->setUnmerged(true);
+        
         KisProcessingApplicator applicator(image, fillNode,
                                            KisProcessingApplicator::NONE);
-
         applicator.applyVisitor(visitor);
         applicator.end();
+        
         image->waitForDone();
 
         QVERIFY(checkOneLayer(image, fillNode, testname, 500));

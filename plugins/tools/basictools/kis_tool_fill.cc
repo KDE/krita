@@ -66,7 +66,7 @@ KisToolFill::KisToolFill(KoCanvasBase * canvas)
     m_feather = 0;
     m_sizemod = 0;
     m_threshold = 8;
-    m_softness = 100;
+    m_opacitySpread = 100;
     m_usePattern = false;
     m_fillOnlySelection = false;
     m_continuousFillMode = FillAnyRegion;
@@ -252,7 +252,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
     visitor->setFeather(m_feather);
     visitor->setSizeMod(m_sizemod);
     visitor->setFillThreshold(m_threshold);
-    visitor->setSoftness(m_softness);
+    visitor->setOpacitySpread(m_opacitySpread);
     if (m_isDragging) {
         visitor->setContinuousFillMode(
             m_continuousFillMode == FillAnyRegion
@@ -328,12 +328,12 @@ QWidget* KisToolFill::createOptionWidget()
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
 
-    QLabel *lbl_softness = new QLabel(i18nc("The Softness label in Fill tool options", "Softness:"), widget);
-    m_slSoftness = new KisSliderSpinBox(widget);
-    m_slSoftness->setObjectName("softness");
-    m_slSoftness->setSuffix(i18n("%"));
-    m_slSoftness->setRange(0, 100);
-    m_slSoftness->setPageStep(3);
+    QLabel *lbl_opacitySpread = new QLabel(i18nc("The Opacity Spread label in Fill tool options", "Opacity Spread:"), widget);
+    m_slOpacitySpread = new KisSliderSpinBox(widget);
+    m_slOpacitySpread->setObjectName("opacitySpread");
+    m_slOpacitySpread->setSuffix(i18n("%"));
+    m_slOpacitySpread->setRange(0, 100);
+    m_slOpacitySpread->setPageStep(3);
 
     QLabel *lbl_sizemod = new QLabel(i18n("Grow selection:"), widget);
     m_sizemodWidget = new KisSliderSpinBox(widget);
@@ -400,7 +400,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     connect (m_checkUseFastMode  , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
     connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
-    connect (m_slSoftness        , SIGNAL(valueChanged(int)), this, SLOT(slotSetSoftness(int)));
+    connect (m_slOpacitySpread        , SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
     connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
     connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
@@ -417,7 +417,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
-    addOptionWidgetOption(m_slSoftness, lbl_softness);
+    addOptionWidgetOption(m_slOpacitySpread, lbl_opacitySpread);
     addOptionWidgetOption(m_sizemodWidget, lbl_sizemod);
     addOptionWidgetOption(m_featherWidget, lbl_feather);
     addOptionWidgetOption(m_cmbContinuousFillMode, lbl_continuousFillMode);
@@ -440,7 +440,7 @@ QWidget* KisToolFill::createOptionWidget()
     // load configuration options
     m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
     m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 8));
-    m_slSoftness->setValue(m_configGroup.readEntry("softness", 100));
+    m_slOpacitySpread->setValue(m_configGroup.readEntry("opacitySpread", 100));
     m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
 
     m_cmbContinuousFillMode->setCurrentIndex(m_configGroup.readEntry("continuousFillMode", "fillAnyRegion") == "fillSimilarRegions" ? 1 : 0);
@@ -465,7 +465,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_feather = m_featherWidget->value();
     m_sizemod = m_sizemodWidget->value();
     m_threshold = m_slThreshold->value();
-    m_softness = m_slSoftness->value();
+    m_opacitySpread = m_slOpacitySpread->value();
     m_useFastMode = m_checkUseFastMode->isChecked();
     m_fillOnlySelection = m_checkFillSelection->isChecked();
     m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
@@ -489,7 +489,7 @@ void KisToolFill::updateGUI()
 
     m_checkUseFastMode->setEnabled(!selectionOnly);
     m_slThreshold->setEnabled(!selectionOnly);
-    m_slSoftness->setEnabled(!selectionOnly && useAdvancedMode);
+    m_slOpacitySpread->setEnabled(!selectionOnly && useAdvancedMode);
 
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
@@ -573,10 +573,10 @@ void KisToolFill::slotSetThreshold(int threshold)
     m_configGroup.writeEntry("thresholdAmount", threshold);
 }
 
-void KisToolFill::slotSetSoftness(int softness)
+void KisToolFill::slotSetOpacitySpread(int opacitySpread)
 {
-    m_softness = softness;
-    m_configGroup.writeEntry("softness", softness);
+    m_opacitySpread = opacitySpread;
+    m_configGroup.writeEntry("opacitySpread", opacitySpread);
 }
 
 void KisToolFill::slotSetUsePattern(bool state)

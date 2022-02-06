@@ -675,7 +675,7 @@ void KisView::dropEvent(QDropEvent *event)
         KConfigGroup configGroup = KSharedConfig::openConfig()->group("KritaFill/KisToolFill");
         const bool useFastMode = configGroup.readEntry("useFastMode", false);
         const int thresholdAmount = configGroup.readEntry("thresholdAmount", 8);
-        const int softness = configGroup.readEntry("softness", 100);
+        const int opacitySpread = configGroup.readEntry("opacitySpread", 100);
         const int growSelection = configGroup.readEntry("growSelection", 0);
         const int featherAmount = configGroup.readEntry("featherAmount", 0);
         const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false)
@@ -718,7 +718,7 @@ void KisView::dropEvent(QDropEvent *event)
         visitor->setFeather(featherAmount);
         visitor->setSizeMod(growSelection);
         visitor->setFillThreshold(thresholdAmount);
-        visitor->setSoftness(softness);
+        visitor->setOpacitySpread(opacitySpread);
         
         applicator.applyVisitor(visitor,
                                 KisStrokeJobData::SEQUENTIAL,

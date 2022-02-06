@@ -47,7 +47,7 @@ protected:
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     virtual void slotSetFuzziness(int);
-    virtual void slotSetSoftness(int);
+    virtual void slotSetOpacitySpread(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
     virtual void slotSetUseSelectionAsBoundary(bool);
@@ -58,7 +58,7 @@ protected:
 
 private:
     int  m_fuzziness;
-    int  m_softness;
+    int  m_opacitySpread;
     int  m_sizemod;
     int  m_feather;
     bool m_useSelectionAsBoundary;

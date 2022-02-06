@@ -69,11 +69,17 @@ public:
     void setThreshold(int threshold);
 
     /**
-     * Set the softness of the filling operation
-     *
-     * Used in all functions except clearNonZeroComponent()
+     * Set the opacity spread for floodfill. The range is 0-100: 0% means that
+     * the fully opaque area only encompasses the pixels exactly equal to the
+     * seed point with the other pixels of the selected region being
+     * semi-transparent (depending on how similar they are to the seed pixel)
+     * up to the region boundary (given by the threshold value). 100 means that
+     * the fully opaque area will emcompass all the pixels of the selected
+     * region up to the contour. Any value inbetween will make the fully opaque
+     * portion of the region vary in size, with semi-transparent pixels
+     * inbetween it and  the region boundary
      */
-    void setSoftness(int softness);
+    void setOpacitySpread(int opacitySpread);
 
 private:
     friend class KisScanlineFillTest;

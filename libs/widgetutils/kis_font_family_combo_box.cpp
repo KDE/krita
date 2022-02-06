@@ -193,6 +193,7 @@ KisFontComboBoxes::KisFontComboBoxes(QWidget *parent)
     : QWidget(parent)
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
+    layout->setContentsMargins(0, 0, 0, 0);
 
     m_family = new KisFontFamilyComboBox();
     m_family->setMinimumWidth(100);

@@ -51,8 +51,8 @@ KisColorSpaceSelector::KisColorSpaceSelector(QWidget *parent)
     d->colorSpaceSelector->cmbColorModels->setIDList(KoColorSpaceRegistry::instance()->colorModelsList(KoColorSpaceRegistry::OnlyUserVisible));
     fillCmbDepths(d->colorSpaceSelector->cmbColorModels->currentItem());
 
-    d->colorSpaceSelector->bnInstallProfile->setIcon(KisIconUtils::loadIcon("document-open"));
-    d->colorSpaceSelector->bnInstallProfile->setToolTip( i18n("Open Color Profile") );
+    d->colorSpaceSelector->bnInstallProfile->setIcon(koIcon("document-import-16"));
+    d->colorSpaceSelector->bnInstallProfile->setToolTip(i18n("Import profile"));
 
     connect(d->colorSpaceSelector->cmbColorModels, SIGNAL(activated(KoID)),
             this, SLOT(slotModelsComboBoxActivated(KoID)));

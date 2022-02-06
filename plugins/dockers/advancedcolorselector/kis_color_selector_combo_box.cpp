@@ -168,7 +168,9 @@ KisColorSelectorComboBox::KisColorSelectorComboBox(QWidget* parent) :
 
     // 30 pixels for the arrow of the combobox
     setMinimumSize(m_private->selectorSize+m_private->spacing+30,m_private->selectorSize+m_private->spacing);
-    m_currentSelector.setMaximumSize(m_private->selectorSize, m_private->selectorSize);
+    auto sizePolicy = this->sizePolicy();
+    sizePolicy.setWidthForHeight(true);
+    setSizePolicy(sizePolicy);
 }
 
 KisColorSelectorComboBox::~KisColorSelectorComboBox()

@@ -746,6 +746,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
+    monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
     for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
         QScreen* screen = QGuiApplication::screens()[i];
         QLabel *lbl = new QLabel(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(screen)));
@@ -1481,7 +1482,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
-    lblHDRWarning->setText("");
+    grpHDRWarning->setVisible(false);
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::sRGBColorSpace, 8));
 #ifdef HAVE_HDR
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::bt2020PQColorSpace, 10));
@@ -1543,8 +1544,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
 #ifndef HAVE_HDR
-    grpHDRSettings->setVisible(false);
-    tabWidget->removeTab(tabWidget->indexOf(tabHDR));
+    tabHDR->setEnabled(false);
 #endif
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
@@ -1685,9 +1685,13 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
             if (info.isValid()) {
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
                     info.colorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
+                    grpHDRWarning->setVisible(true);
+                    lblHDRWarningIcon->setPixmap(lblHDRWarningIcon->style()
+                                                     ->standardIcon(QStyle::SP_MessageBoxWarning)
+                                                     .pixmap(QSize(32, 32)));
                     lblHDRWarning->setText(i18n("WARNING: current display doesn't support HDR rendering"));
                 } else {
-                    lblHDRWarning->setText("");
+                    grpHDRWarning->setVisible(false);
                 }
             }
         }

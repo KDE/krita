@@ -1,0 +1,32 @@
+SET(EXTPREFIX_lager "${EXTPREFIX}" )
+
+ExternalProject_Add( ext_zug
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    GIT_REPOSITORY https://github.com/arximboldi/zug.git
+    GIT_TAG deb266f4c7c35d325de7eb3d033f06e0809495f2
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_lager} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
+    UPDATE_COMMAND ""
+)
+
+ExternalProject_Add( ext_immer
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    GIT_REPOSITORY https://github.com/arximboldi/immer.git
+    GIT_TAG 42e6beafed53f2ecd971360270f421f9c2e36642
+
+    CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_lager} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
+    UPDATE_COMMAND ""
+)
+
+ExternalProject_Add( ext_lager
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    GIT_REPOSITORY https://github.com/arximboldi/lager.git
+    GIT_TAG 190be6cabcfe2cd36f6c5283011876841caefd26
+
+    CMAKE_ARGS -Dlager_BUILD_DEBUGGER_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_quazip} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
+
+    UPDATE_COMMAND ""
+    DEPENDS ext_zug ext_immer
+)

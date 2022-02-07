@@ -415,6 +415,7 @@ if(UNIX)
     add_subdirectory( ext_pkgconfig )
 endif()
 
+add_subdirectory( ext_lager )
 add_subdirectory( ext_heif )
 add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)

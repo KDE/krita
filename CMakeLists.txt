@@ -767,6 +767,11 @@ if (MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
 endif()
 find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
+
+find_package(immer REQUIRED)
+find_package(zug REQUIRED)
+find_package(lager REQUIRED)
+
 ##
 ## Test for GNU Scientific Library
 ##

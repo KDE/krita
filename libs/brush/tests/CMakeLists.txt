@@ -20,7 +20,7 @@ kis_add_tests(
     kis_boundary_test.cpp
     kis_imagepipe_brush_test.cpp
     TestAbrStorage.cpp
+    KisBrushModelTest.cpp
     NAME_PREFIX "libs-brush-"
     LINK_LIBRARIES kritaimage kritalibbrush Qt5::Test
     )
-

@@ -64,3 +64,30 @@ KoResourceLoadResult KisBrushRegistry::createBrush(const QDomElement& element, K
     return factory->createBrush(element, resourcesInterface);
 }
 
+std::optional<KisBrushModel::BrushData> KisBrushRegistry::createBrushModel(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
+{
+    QString brushType = element.attribute("type");
+
+    if (brushType.isEmpty()) {
+        return std::nullopt;
+    }
+
+    KisBrushFactory *factory = get(brushType);
+
+    if (!factory) {
+        return std::nullopt;
+    }
+
+    return factory->createBrushModel(element, resourcesInterface);
+}
+
+void KisBrushRegistry::toXML(QDomDocument &doc, QDomElement &element, const KisBrushModel::BrushData &model)
+{
+    QString brushType = model.subtype;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!brushType.isEmpty());
+
+    KisBrushFactory *factory = get(brushType);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(factory);
+
+    factory->toXML(doc, element, model);
+}

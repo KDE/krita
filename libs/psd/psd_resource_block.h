@@ -200,7 +200,7 @@ struct KRITAPSD_EXPORT BORDER_INFO_1009 : public PSDInterpretedResource {
     }
 };
 
-/* 0x03f2 - Background colour */
+/* 0x03f2 - Background color */
 struct KRITAPSD_EXPORT BACKGROUND_COL_1010 : public PSDInterpretedResource {
     bool interpretBlock(QByteArray /*data*/) override
     {
@@ -227,7 +227,7 @@ struct KRITAPSD_EXPORT GREY_HALFTONE_1012 : public PSDInterpretedResource {
     }
 };
 
-/* 0x03f5 - Colour halftoning info */
+/* 0x03f5 - Color halftoning info */
 struct KRITAPSD_EXPORT COLOR_HALFTONE_1013 : public PSDInterpretedResource {
     bool interpretBlock(QByteArray /*data*/) override
     {
@@ -254,7 +254,7 @@ struct KRITAPSD_EXPORT GREY_XFER_1015 : public PSDInterpretedResource {
     }
 };
 
-/* 0x03f8 - Colour transfer functions */
+/* 0x03f8 - Color transfer functions */
 struct KRITAPSD_EXPORT COLOR_XFER_1016 : public PSDInterpretedResource {
     bool interpretBlock(QByteArray /*data*/) override
     {
@@ -447,7 +447,7 @@ struct KRITAPSD_EXPORT GLOBAL_ANGLE_1037 : public PSDInterpretedResource {
     qint32 angle;
 };
 
-/* 0x040e - Colour samplers resource */
+/* 0x040e - Color samplers resource */
 struct KRITAPSD_EXPORT COLOR_SAMPLER_1038 : public PSDInterpretedResource {
     bool interpretBlock(QByteArray /*data*/) override
     {
@@ -518,7 +518,7 @@ struct KRITAPSD_EXPORT ALPHA_NAMES_UNI_1045 : public PSDInterpretedResource {
     }
 };
 
-/* 0x0416 - Indexed colour table count */
+/* 0x0416 - Indexed color table count */
 struct KRITAPSD_EXPORT IDX_COL_TAB_CNT_1046 : public PSDInterpretedResource {
     bool interpretBlock(QByteArray /*data*/) override
     {
@@ -527,7 +527,7 @@ struct KRITAPSD_EXPORT IDX_COL_TAB_CNT_1046 : public PSDInterpretedResource {
     }
 };
 
-/* 0x0417 - Index of transparent colour (if any) */
+/* 0x0417 - Index of transparent color (if any) */
 struct KRITAPSD_EXPORT IDX_TRANSPARENT_1047 : public PSDInterpretedResource {
     bool interpretBlock(QByteArray /*data*/) override
     {

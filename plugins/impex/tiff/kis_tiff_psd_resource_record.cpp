@@ -89,7 +89,7 @@ QString KisTiffPsdResourceRecord::idToString(KisTiffPsdResourceRecord::PSDResour
     case MAC_PRINT_INFO:
         return "0x03e9 - Optional - Mac print manager print info record";
     case PS2_COLOR_TAB:
-        return "0x03eb - Obsolete - ps 2.0 indexed colour table";
+        return "0x03eb - Obsolete - ps 2.0 indexed color table";
     case RESN_INFO:
         return "0x03ed - ResolutionInfo structure";
     case ALPHA_NAMES:
@@ -102,19 +102,19 @@ QString KisTiffPsdResourceRecord::idToString(KisTiffPsdResourceRecord::PSDResour
         return "0x03f1 - Border info";
 
     case BACKGROUND_COL:
-        return "0x03f2 - Background colour";
+        return "0x03f2 - Background color";
     case PRINT_FLAGS:
         return "0x03f3 - Print flags";
     case GREY_HALFTONE:
         return "0x03f4 - Greyscale and multichannel halftoning info";
     case COLOR_HALFTONE:
-        return "0x03f5 - Colour halftoning info";
+        return "0x03f5 - Color halftoning info";
     case DUOTONE_HALFTONE:
         return "0x03f6 - Duotone halftoning info";
     case GREY_XFER:
         return "0x03f7 - Greyscale and multichannel transfer functions";
     case COLOR_XFER:
-        return "0x03f8 - Colour transfer functions";
+        return "0x03f8 - Color transfer functions";
     case DUOTONE_XFER:
         return "0x03f9 - Duotone transfer functions";
     case DUOTONE_INFO:
@@ -158,7 +158,7 @@ QString KisTiffPsdResourceRecord::idToString(KisTiffPsdResourceRecord::PSDResour
     case GLOBAL_ANGLE:
         return "0x040d - Global angle";
     case COLOR_SAMPLER:
-        return "0x040e - Colour samplers resource";
+        return "0x040e - Color samplers resource";
     case ICC_PROFILE:
         return "0x040f - ICC Profile";
 
@@ -175,9 +175,9 @@ QString KisTiffPsdResourceRecord::idToString(KisTiffPsdResourceRecord::PSDResour
     case ALPHA_NAMES_UNI:
         return "0x0415 - Unicode alpha names";
     case IDX_COL_TAB_CNT:
-        return "0x0416 - Indexed colour table count";
+        return "0x0416 - Indexed color table count";
     case IDX_TRANSPARENT:
-        return "0x0417 - Index of transparent colour (if any)";
+        return "0x0417 - Index of transparent color (if any)";
     case GLOBAL_ALT:
         return "0x0419 - Global altitude";
 

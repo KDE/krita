@@ -635,7 +635,7 @@ public:
 
     /**
      * Serialize this color following Create's swatch color specification available
-     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_color_file_format/Draft
      *
      * This function doesn't create the \<color /\> element but rather the \<CMYK /\>,
      * \<sRGB /\>, \<RGB /\> ... elements. It is assumed that colorElt is the \<color /\>
@@ -650,7 +650,7 @@ public:
 
     /**
      * Unserialize a color following Create's swatch color specification available
-     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_color_file_format/Draft
      *
      * @param pixel buffer where the color will be unserialized
      * @param elt the element to unserialize (\<CMYK /\>, \<sRGB /\>, \<RGB /\>)

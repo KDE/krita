@@ -335,9 +335,9 @@ public:
     static KoSegmentGradient fromXML(const QDomElement& elt);
 
         /**
-     * a gradient color picker can consist of one or more segments.
-     * A segment has two end points - each color in the gradient
-     * color picker represents a segment end point.
+     * a gradient colour picker can consist of one or more segments.
+     * A segment has two end points - each colour in the gradient
+     * colour picker represents a segment end point.
      * @param interpolation
      * @param colorInterpolation
      * @param startOffset
@@ -355,8 +355,8 @@ public:
 
     /**
      * gets a list of end points of the segments in the gradient
-     * color picker. If two colors, one segment then two end
-     * points, and if three colors, then two segments with four
+     * colour picker. If two colours, one segment then two end
+     * points, and if three colours, then two segments with four
      * endpoints.
      * @return a list of double values
      */
@@ -364,7 +364,7 @@ public:
 
     /**
      * gets a list of middle points of the segments in the gradient
-     * color picker.
+     * colour picker.
      * @return a list of double values
      */
     const QList<double> getMiddleHandlePositions() const;
@@ -379,7 +379,7 @@ public:
      * to set the half the segment to the right and half the segment
      * to the left of the handler.
      * @param segment the segment for which to move the relative
-     * offset within the gradient color picker.
+     * offset within the gradient colour picker.
      * @param t the new startoff position for the segment
      * @return void
      */
@@ -391,11 +391,11 @@ public:
      * If the segment is the last segment the endoffset will be set
      * to 1.0 . The offset will maximally be moved till the middle
      * of the current or the following segment. This is useful if
-     * someone moves the segment handler in the gradient color
+     * someone moves the segment handler in the gradient colour
      * picker, and needs the segment to move with it. Sets the end
      * position of the segment to the correct new position.
      * @param segment the segment for which to move the relative
-     * end position within the gradient color picker.
+     * end position within the gradient colour picker.
      * @param t the new end position for the segment
      * @return void
      */
@@ -406,9 +406,9 @@ public:
      * value. The offset will maximally be moved till the endoffset
      * or startoffset of the segment. This sets the middle of the
      * segment to the same position as the handler of the gradient
-     * color picker.
+     * colour picker.
      * @param segment the segment for which to move the relative
-     * middle position within the gradient color picker.
+     * middle position within the gradient colour picker.
      * @param t the new middle position for the segment
      * @return void
      */
@@ -436,7 +436,7 @@ public:
     void mirrorSegment(KoGradientSegment* segment);
 
     /**
-     * removes the specific segment from the gradient color picker.
+     * removes the specific segment from the gradient colour picker.
      * @param segment the segment to remove
      * @return the segment which will be at the place of the old
      * segment. 0 if the segment is not in the gradient or it is
@@ -445,7 +445,7 @@ public:
     KoGradientSegment* removeSegment(KoGradientSegment* segment);
 
     /**
-     * removes the specific segment from the gradient color picker and
+     * removes the specific segment from the gradient colour picker and
      * modifies the previous and next segments so that they end and start
      * where the middle of the passed segment was respectively.
      * @param segment the segment to remove

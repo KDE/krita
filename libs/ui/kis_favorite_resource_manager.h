@@ -71,10 +71,10 @@ public Q_SLOTS:
 
     void slotChangeActivePaintop(int);
 
-    /*update the priority of a color in m_colorList, used only by m_popupPalette*/
+    /*update the priority of a colour in m_colorList, used only by m_popupPalette*/
     void slotUpdateRecentColor(int);
 
-    /*add a color to m_colorList, used by KisCanvasResourceProvider*/
+    /*add a colour to m_colorList, used by KisCanvasResourceProvider*/
     void slotAddRecentColor(const KoColor&);
 
     void slotChangeFGColorSelector(KoColor c);

@@ -1108,7 +1108,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
      * but it doesn't:
      *
      * "When the iCCP chunk is present, PNG decoders that recognize it and are capable
-     *  of color management [ICC] shall ignore the gAMA and cHRM chunks and use
+     *  of colour management [ICC] shall ignore the gAMA and cHRM chunks and use
      *  the iCCP chunk instead and interpret it according to [ICC-1] and [ICC-1A]"
      */
 

@@ -170,7 +170,7 @@ private:
      * Used as a switch for sampleColor
      */
 
-    // used to skip some of the tablet events and don't update the color that often
+    // used to skip some of the tablet events and don't update the colour that often
     QTimer m_colorSamplerDelayTimer;
     AlternateAction delayedAction {AlternateAction::NONE};
 

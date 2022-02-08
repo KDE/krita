@@ -356,7 +356,7 @@
              <string> %</string>
             </property>
             <property name="prefix">
-             <string>Color planes: </string>
+             <string>Colour planes: </string>
             </property>
             <property name="maximum">
              <number>100</number>

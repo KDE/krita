@@ -445,30 +445,9 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
 
     d->overlayInvertedShader->setUniformValue(d->overlayInvertedShader->location(Uniform::TextureMatrix), textureMatrix);
 
-    bool shouldRestoreLogicOp = false;
-
-    // For the legacy shader, we should use old fixed function
-    // blending operations if available.
-    if (!d->canvasFBO && !KisOpenGL::supportsLoD() && !KisOpenGL::hasOpenGLES()) {
-        #ifndef QT_OPENGL_ES_2
-        glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
-        glEnable(GL_COLOR_LOGIC_OP);
-
-        #ifndef Q_OS_MACOS
-        if (d->glFn201) {
-            d->glFn201->glLogicOp(GL_XOR);
-        }
-        #else   // Q_OS_MACOS
-        glLogicOp(GL_XOR);
-        #endif  // Q_OS_MACOS
-
-        shouldRestoreLogicOp = true;
-
-        #else   // QT_OPENGL_ES_2
-        KIS_ASSERT_X(false, "KisOpenGLCanvasRenderer::paintToolOutline",
-                        "Unexpected KisOpenGL::hasOpenGLES returned false");
-        #endif  // QT_OPENGL_ES_2
-    }
+    glEnable(GL_BLEND);
+    glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE);
+    glBlendEquationSeparate(GL_FUNC_SUBTRACT, GL_FUNC_ADD);
 
     // Paint the tool outline
     if (KisOpenGL::supportsVAO()) {
@@ -506,16 +485,7 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
             d->overlayInvertedShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
         }
 
-        if (d->canvasFBO){
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, d->canvasFBO->texture());
-
-            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-
-            glBindTexture(GL_TEXTURE_2D, 0);
-        } else {
-            glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
-        }
+        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
     }
 
     if (KisOpenGL::supportsVAO()) {
@@ -523,14 +493,9 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
         d->outlineVAO.release();
     }
 
-    if (shouldRestoreLogicOp) {
-#ifndef QT_OPENGL_ES_2
-        glDisable(GL_COLOR_LOGIC_OP);
-#else
-        KIS_ASSERT_X(false, "KisOpenGLCanvasRenderer::paintToolOutline",
-                "Unexpected KisOpenGL::hasOpenGLES returned false");
-#endif
-    }
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_ONE, GL_ZERO);
+    glDisable(GL_BLEND);
 
     d->overlayInvertedShader->release();
 }

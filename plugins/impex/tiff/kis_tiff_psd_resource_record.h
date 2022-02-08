@@ -31,20 +31,20 @@ public:
 
         PS2_IMAGE_INFO = 1000, /* 0x03e8 - Obsolete - ps 2.0 image info */
         MAC_PRINT_INFO = 1001, /* 0x03e9 - Optional - Mac print manager print info record */
-        PS2_COLOR_TAB = 1003, /* 0x03eb - Obsolete - ps 2.0 indexed colour table */
+        PS2_COLOR_TAB = 1003, /* 0x03eb - Obsolete - ps 2.0 indexed color table */
         RESN_INFO = 1005, /* 0x03ed - ResolutionInfo structure */
         ALPHA_NAMES = 1006, /* 0x03ee - Alpha channel names */
         DISPLAY_INFO = 1007, /* 0x03ef - DisplayInfo structure */
         CAPTION = 1008, /* 0x03f0 - Optional - Caption string */
         BORDER_INFO = 1009, /* 0x03f1 - Border info */
 
-        BACKGROUND_COL = 1010, /* 0x03f2 - Background colour */
+        BACKGROUND_COL = 1010, /* 0x03f2 - Background color */
         PRINT_FLAGS = 1011, /* 0x03f3 - Print flags */
         GREY_HALFTONE = 1012, /* 0x03f4 - Greyscale and multichannel halftoning info */
-        COLOR_HALFTONE = 1013, /* 0x03f5 - Colour halftoning info */
+        COLOR_HALFTONE = 1013, /* 0x03f5 - Color halftoning info */
         DUOTONE_HALFTONE = 1014, /* 0x03f6 - Duotone halftoning info */
         GREY_XFER = 1015, /* 0x03f7 - Greyscale and multichannel transfer functions */
-        COLOR_XFER = 1016, /* 0x03f8 - Colour transfer functions */
+        COLOR_XFER = 1016, /* 0x03f8 - Color transfer functions */
         DUOTONE_XFER = 1017, /* 0x03f9 - Duotone transfer functions */
         DUOTONE_INFO = 1018, /* 0x03fa - Duotone image information */
         EFFECTIVE_BW = 1019, /* 0x03fb - Effective black & white values for dot range */
@@ -67,7 +67,7 @@ public:
         URL = 1035, /* 0x040b - URL string */
         THUMB_RES2 = 1036, /* 0x040c - Thumbnail resource */
         GLOBAL_ANGLE = 1037, /* 0x040d - Global angle */
-        COLOR_SAMPLER = 1038, /* 0x040e - Colour samplers resource */
+        COLOR_SAMPLER = 1038, /* 0x040e - Color samplers resource */
         ICC_PROFILE = 1039, /* 0x040f - ICC Profile */
 
         WATERMARK = 1040, /* 0x0410 - Watermark */
@@ -76,8 +76,8 @@ public:
         SPOT_HALFTONE = 1043, /* 0x0413 - Spot halftone */
         DOC_IDS = 1044, /* 0x0414 - Document specific IDs */
         ALPHA_NAMES_UNI = 1045, /* 0x0415 - Unicode alpha names */
-        IDX_COL_TAB_CNT = 1046, /* 0x0416 - Indexed colour table count */
-        IDX_TRANSPARENT = 1047, /* 0x0417 - Index of transparent colour (if any) */
+        IDX_COL_TAB_CNT = 1046, /* 0x0416 - Indexed color table count */
+        IDX_TRANSPARENT = 1047, /* 0x0417 - Index of transparent color (if any) */
         GLOBAL_ALT = 1049, /* 0x0419 - Global altitude */
 
         SLICES = 1050, /* 0x041a - Slices */

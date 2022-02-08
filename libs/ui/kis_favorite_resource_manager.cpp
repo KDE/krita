@@ -248,8 +248,8 @@ int KisFavoriteResourceManager::numFavoritePresets()
 //Recent Colors
 void KisFavoriteResourceManager::slotUpdateRecentColor(int pos)
 {
-    // Do not update the key, the colour might be selected but it is not used yet. So we are not supposed
-    // to update the colour priority when we select it.
+    // Do not update the key, the color might be selected but it is not used yet. So we are not supposed
+    // to update the color priority when we select it.
     m_colorList->updateKey(pos);
 
     emit setSelectedColor(pos);

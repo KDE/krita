@@ -35,7 +35,7 @@ KRITAPIGMENT_EXPORT void rgb_to_hls(quint8 r, quint8 g, quint8 b, int * h, int *
 KRITAPIGMENT_EXPORT void hls_to_rgb(int h, int l, int s, quint8 * r, quint8 * g, quint8 * b);
 
 //HSI and HSY' functions.
-//These are modified to calculate a cylinder, this is good for colour selectors sliders.
+//These are modified to calculate a cylinder, this is good for color selectors sliders.
 //All eight expect 0.0-1.0 for all parameters.
 //HSI measures the Tone, Intensity, by adding the r, g and b components and then normalising that.
 KRITAPIGMENT_EXPORT void HSIToRGB(const qreal h, const qreal s, const qreal i, qreal *red, qreal *green, qreal *blue);

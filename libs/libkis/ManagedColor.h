@@ -169,13 +169,13 @@ public:
 
     /**
      * Serialize this color following Create's swatch color specification available
-     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_color_file_format/Draft
      */
     QString toXML() const;
 
     /**
      * Unserialize a color following Create's swatch color specification available
-     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_colour_file_format/Draft
+     * at https://web.archive.org/web/20110826002520/http://create.freedesktop.org/wiki/Swatches_-_color_file_format/Draft
      *
      * @param xml an XML color
      *

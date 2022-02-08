@@ -41,10 +41,6 @@
 #include "KisOpenGLBufferCircularStorage.h"
 #include "kis_painting_tweaks.h"
 
-#if !defined(Q_OS_MACOS) && !defined(QT_OPENGL_ES_2)
-#include <QOpenGLFunctions_2_1>
-#endif
-
 #include <config-ocio.h>
 
 #define NEAR_VAL -1000.0
@@ -109,10 +105,6 @@ public:
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
-
-#if !defined(Q_OS_MACOS) && !defined(QT_OPENGL_ES_2)
-    QOpenGLFunctions_2_1 *glFn201;
-#endif
 
     qreal pixelGridDrawingThreshold;
     bool pixelGridEnabled;
@@ -242,16 +234,6 @@ void KisOpenGLCanvasRenderer::initializeGL()
 {
     KisOpenGL::initializeContext(context());
     initializeOpenGLFunctions();
-#if !defined(Q_OS_MACOS) && !defined(QT_OPENGL_ES_2)
-    if (!KisOpenGL::hasOpenGLES()) {
-        d->glFn201 = context()->versionFunctions<QOpenGLFunctions_2_1>();
-        if (!d->glFn201) {
-            warnUI << "Cannot obtain QOpenGLFunctions_2_1, glLogicOp cannot be used";
-        }
-    } else {
-        d->glFn201 = nullptr;
-    }
-#endif
 
     KisConfig cfg(true);
     d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());

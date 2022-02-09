@@ -1057,7 +1057,7 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
         get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
         string(MD5 pathmd5 ${absolute_podir})
 
-        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED CMAKE_FIND_ROOT_PATH_BOTH)
         if (NOT TARGET fetch-${pathmd5})
             file(MAKE_DIRECTORY ${TRANSLATIONS})
 

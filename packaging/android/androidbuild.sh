@@ -196,7 +196,7 @@ build_krita() {
          -DANDROID_STL=c++_shared                                                           \
          -DANDROID_ABI=$ANDROID_ABI                                                         \
          -DNDK_VERSION=21                                                                   \
-         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
+         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i" $EXTRA_ARGS
 
     make -j$PROC_COUNT install
 }
@@ -293,6 +293,12 @@ if [[ -z $BUILD_ROOT ]]; then
     print_usage
 elif [[ ! -d $BUILD_ROOT ]]; then
     mkdir $BUILD_ROOT -p
+fi
+
+if [[ $NIGHTLY_BUILD == 1 ]]; then
+    EXTRA_ARGS="-DFETCH_TRANSLATIONS=ON"
+else
+    EXTRA_ARGS="-DFETCH_TRANSLATIONS=OFF"
 fi
 
 check_exists CMAKE_ANDROID_NDK

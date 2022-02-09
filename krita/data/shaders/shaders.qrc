@@ -19,6 +19,5 @@
         <file>solid_color_legacy.frag</file>
         <file>solid_color.vert</file>
         <file>solid_color_legacy.vert</file>
-        <file>overlay_inverted.frag</file>
     </qresource>
 </RCC>

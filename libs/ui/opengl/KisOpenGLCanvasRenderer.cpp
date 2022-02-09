@@ -64,7 +64,6 @@ public:
         delete displayShader;
         delete checkerShader;
         delete solidColorShader;
-        delete overlayInvertedShader;
 
         delete canvasBridge;
     }
@@ -77,7 +76,6 @@ public:
     KisShaderProgram *displayShader{0};
     KisShaderProgram *checkerShader{0};
     KisShaderProgram *solidColorShader{0};
-    KisShaderProgram *overlayInvertedShader{0};
 
     QScopedPointer<QOpenGLFramebufferObject> canvasFBO;
 
@@ -101,7 +99,6 @@ public:
     // Stores data for drawing tool outlines
     QOpenGLVertexArrayObject outlineVAO;
     QOpenGLBuffer lineVertexBuffer;
-    QOpenGLBuffer lineTexCoordBuffer;
 
     QVector3D vertices[6];
     QVector2D texCoords[6];
@@ -266,11 +263,6 @@ void KisOpenGLCanvasRenderer::initializeGL()
         d->lineVertexBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
         d->lineVertexBuffer.bind();
         glVertexAttribPointer(PROGRAM_VERTEX_ATTRIBUTE, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-        d->lineTexCoordBuffer.create();
-        d->lineTexCoordBuffer.setUsagePattern(QOpenGLBuffer::StreamDraw);
-        d->lineTexCoordBuffer.bind();
-        glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0 ,0);
     }
 
     d->canvasInitialized = true;
@@ -285,15 +277,12 @@ void KisOpenGLCanvasRenderer::initializeShaders()
 
     delete d->checkerShader;
     delete d->solidColorShader;
-    delete d->overlayInvertedShader;
     d->checkerShader = 0;
     d->solidColorShader = 0;
-    d->overlayInvertedShader = 0;
 
     try {
         d->checkerShader = d->shaderLoader.loadCheckerShader();
         d->solidColorShader = d->shaderLoader.loadSolidColorShader();
-        d->overlayInvertedShader = d->shaderLoader.loadOverlayInvertedShader();
     } catch (const ShaderLoaderException &e) {
         reportFailedShaderCompilation(e.what());
     }
@@ -395,7 +384,7 @@ void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &canvasImageDirtyRect,
 
 void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
 {
-    if (!d->overlayInvertedShader->bind()) {
+    if (!d->solidColorShader->bind()) {
         return;
     }
 
@@ -408,24 +397,15 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
     //       this requires introducing a new coordinate system.
     projectionMatrix.ortho(0, widgetSize.width(), widgetSize.height(), 0, NEAR_VAL, FAR_VAL);
 
-    // Set view/projection & texture matrices
+    // Set view/projection matrices
     QMatrix4x4 modelMatrix(coordinatesConverter()->flakeToWidgetTransform());
     modelMatrix.optimize();
     modelMatrix = projectionMatrix * modelMatrix;
-    d->overlayInvertedShader->setUniformValue(d->overlayInvertedShader->location(Uniform::ModelViewProjection), modelMatrix);
+    d->solidColorShader->setUniformValue(d->solidColorShader->location(Uniform::ModelViewProjection), modelMatrix);
 
-    d->overlayInvertedShader->setUniformValue(
-                d->overlayInvertedShader->location(Uniform::FragmentColor),
+    d->solidColorShader->setUniformValue(
+                d->solidColorShader->location(Uniform::FragmentColor),
                 QVector4D(d->cursorColor.redF(), d->cursorColor.greenF(), d->cursorColor.blueF(), 1.0f));
-
-    // NOTE: Texture matrix transforms flake space -> widget space -> OpenGL UV texcoord space..
-    const QMatrix4x4 widgetToFBOTexCoordTransform =
-            KisAlgebra2D::mapToRectInverse(QRectF(QPointF(0, widgetSize.height()),
-                                                 QSizeF(widgetSize.width(), -1 * widgetSize.height())));
-    const QMatrix4x4 textureMatrix = widgetToFBOTexCoordTransform *
-        QMatrix4x4(coordinatesConverter()->flakeToWidgetTransform());
-
-    d->overlayInvertedShader->setUniformValue(d->overlayInvertedShader->location(Uniform::TextureMatrix), textureMatrix);
 
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_ONE, GL_SRC_COLOR, GL_ONE, GL_ONE);
@@ -443,28 +423,20 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
         const QPolygonF& polygon = subPathPolygons.at(polyIndex);
 
         QVector<QVector3D> vertices;
-        QVector<QVector2D> texCoords;
         vertices.resize(polygon.count());
-        texCoords.resize(polygon.count());
 
         for (int vertIndex = 0; vertIndex < polygon.count(); vertIndex++) {
             QPointF point = polygon.at(vertIndex);
             vertices[vertIndex].setX(point.x());
             vertices[vertIndex].setY(point.y());
-            texCoords[vertIndex].setX(point.x());
-            texCoords[vertIndex].setY(point.y());
         }
         if (KisOpenGL::supportsVAO()) {
             d->lineVertexBuffer.bind();
             d->lineVertexBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
-            d->lineTexCoordBuffer.bind();
-            d->lineTexCoordBuffer.allocate(texCoords.constData(), 2 * texCoords.size() * sizeof(float));
         }
         else {
-            d->overlayInvertedShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            d->overlayInvertedShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
-            d->overlayInvertedShader->enableAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE);
-            d->overlayInvertedShader->setAttributeArray(PROGRAM_TEXCOORD_ATTRIBUTE, texCoords.constData());
+            d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
+            d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
         }
 
         glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
@@ -479,7 +451,7 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
     glBlendFunc(GL_ONE, GL_ZERO);
     glDisable(GL_BLEND);
 
-    d->overlayInvertedShader->release();
+    d->solidColorShader->release();
 }
 
 void KisOpenGLCanvasRenderer::setLodResetInProgress(bool value)

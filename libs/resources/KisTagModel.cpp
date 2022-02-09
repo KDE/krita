@@ -374,14 +374,16 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
     tag->setActive(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Active).toInt());
 
     if (!taggedResouces.isEmpty()) {
+        QVector<int> resourceIds;
         Q_FOREACH(const KoResourceSP resource, taggedResouces) {
 
             if (!resource) continue;
             if (!resource->valid()) continue;
             if (resource->resourceId() < 0) continue;
 
-            KisTagResourceModel(d->resourceType).tagResources(tag, QVector<int>() << resource->resourceId());
+            resourceIds << resource->resourceId();
         }
+        KisTagResourceModel(d->resourceType).tagResources(tag, resourceIds);
     }
 
     return r;

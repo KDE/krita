@@ -1,4 +1,4 @@
-From 27fc5824fb044b10c8ce5c5b755bbadf53696422 Mon Sep 17 00:00:00 2001
+From e3b1f15dc24faa44c4ba1312397f14cc1e4d7da5 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Fri, 4 Feb 2022 08:17:10 +0000
 Subject: [PATCH] Android: Make longpress for right click less sensitive
@@ -45,7 +45,7 @@ index 8e32a83f9f..3fb09d2733 100644
  
      // tablet methods
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 692b18df92..e9cbb8e402 100644
+index 692b18df92..3319154eb8 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -240,43 +240,6 @@ namespace QtAndroidInput
@@ -138,7 +138,7 @@ index 692b18df92..e9cbb8e402 100644
 +            break;
 +        case AMOTION_EVENT_TOOL_TYPE_STYLUS:
 +            tabletEvent(nullptr, nullptr, 0, deviceId, time, AMOTION_EVENT_ACTION_UP,
-+                        QTabletEvent::Pen, Qt::NoButton, 0, 0, 0, 0, 0, 0, 0);
++                        QTabletEvent::Pen, Qt::NoButton, x, y, 0, 0, 0, 0, 0);
 +            break;
 +        }
 +
@@ -149,7 +149,7 @@ index 692b18df92..e9cbb8e402 100644
 +
 +        // Release right button
 +        QWindowSystemInterface::handleMouseEvent(tlw, localPos, globalPos,
-+                                                 Qt::MouseButtons(Qt::NoButton), Qt::NoButton,
++                                                 Qt::MouseButtons(Qt::NoButton), Qt::RightButton,
 +                                                 QEvent::MouseButtonRelease);
 +    }
 +

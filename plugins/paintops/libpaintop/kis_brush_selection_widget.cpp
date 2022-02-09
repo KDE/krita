@@ -30,9 +30,10 @@
 #include "kis_clipboard_brush_widget.h"
 #include "kis_text_brush_chooser.h"
 
-KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize, QWidget *parent)
+KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize, lager::cursor<KisBrushModel::BrushData> brushData, QWidget *parent)
     : QWidget(parent)
     , m_currentBrushWidget(0)
+    , m_brushData(brushData)
 {
     uiWdgBrushChooser.setupUi(this);
 
@@ -40,7 +41,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize, QWidget *pare
     m_buttonGroup->setExclusive(true);
 
     m_layout = new QGridLayout(uiWdgBrushChooser.settingsFrame);
-    m_autoBrushWidget = new KisAutoBrushWidget(maxBrushSize, this, "autobrush");
+    m_autoBrushWidget = new KisAutoBrushWidget(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::autoBrush], this, "autobrush");
     connect(m_autoBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
     addChooser(i18nc("Autobrush Brush tip mode", "Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
 

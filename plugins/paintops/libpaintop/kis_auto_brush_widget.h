@@ -13,6 +13,9 @@
 #include "ui_wdgautobrush.h"
 #include <kis_auto_brush.h>
 
+#include <lager/cursor.hpp>
+#include <KisBrushModel.h>
+
 class KisSignalCompressor;
 class KisAspectRatioLocker;
 
@@ -22,8 +25,11 @@ class PAINTOP_EXPORT KisWdgAutoBrush : public QWidget, public Ui::KisWdgAutoBrus
     Q_OBJECT
 
 public:
-    KisWdgAutoBrush(QWidget *parent, const char *name) : QWidget(parent) {
-        setObjectName(name); setupUi(this);
+    KisWdgAutoBrush(QWidget *parent, const char *name)
+        : QWidget(parent)
+    {
+        setObjectName(name);
+        setupUi(this);
     }
 
 };
@@ -34,25 +40,25 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutoBrush
 
 public:
 
-    KisAutoBrushWidget(int maxBrushSize, QWidget *parent, const char* name);
+    KisAutoBrushWidget(int maxBrushSize,
+                       lager::cursor<KisBrushModel::CommonData> commonBrushData,
+                       lager::cursor<KisBrushModel::AutoBrushData> autoBrushData,
+                       QWidget *parent, const char* name);
     ~KisAutoBrushWidget() override;
-
-    void activate();
 
     KisBrushSP brush();
 
     void setBrush(KisBrushSP brush);
 
-    void setBrushSize(qreal dxPixels, qreal dyPixels);
-    QSizeF brushSize() const;
-
-    void drawBrushPreviewArea();
-
     void reset();
 
 private Q_SLOTS:
-    void paramChanged();
     void setStackedWidget(int);
+
+    void slotCurveWidgetChanged();
+    void slotCurvePropertyChanged(const QString &value);
+
+    void slotUpdateBrushPreview();
 
 Q_SIGNALS:
 
@@ -62,10 +68,10 @@ protected:
     void resizeEvent(QResizeEvent *) override;
 
 private:
-    QImage m_brush;
-    KisBrushSP m_autoBrush;
-    QScopedPointer<KisSignalCompressor> m_updateCompressor;
     QScopedPointer<KisAspectRatioLocker> m_fadeAspectLocker;
+
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 

@@ -17,6 +17,9 @@
 #include "kis_precision_option.h"
 #include "ui_wdgbrushchooser.h"
 
+#include <lager/cursor.hpp>
+#include <KisBrushModel.h>
+
 class KisAutoBrushWidget;
 class KisPredefinedBrushChooser;
 class KisTextBrushChooser;
@@ -33,7 +36,7 @@ class PAINTOP_EXPORT KisBrushSelectionWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisBrushSelectionWidget(int maxBrushSize, QWidget *parent = 0);
+    KisBrushSelectionWidget(int maxBrushSize, lager::cursor<KisBrushModel::BrushData> brushData, QWidget *parent = 0);
 
     ~KisBrushSelectionWidget() override;
 
@@ -88,6 +91,7 @@ private:
     KisTextBrushChooser *m_textBrushWidget {0};
 
     KisPrecisionOption m_precisionOption;
+    lager::cursor<KisBrushModel::BrushData> m_brushData;
 };
 
 #endif

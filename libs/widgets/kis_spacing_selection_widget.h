@@ -10,9 +10,9 @@
 #include <QWidget>
 #include <QScopedPointer>
 
-#include <kritapaintop_export.h>
+#include <kritawidgets_export.h>
 
-class PAINTOP_EXPORT KisSpacingSelectionWidget : public QWidget
+class KRITAWIDGETS_EXPORT KisSpacingSelectionWidget : public QWidget
 {
     Q_OBJECT
 public:

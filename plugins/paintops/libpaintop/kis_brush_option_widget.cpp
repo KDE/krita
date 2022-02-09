@@ -12,11 +12,26 @@
 #include "kis_brush_selection_widget.h"
 #include "kis_brush.h"
 
+#include <lager/state.hpp>
+#include "KisBrushModel.h"
+
+struct KisBrushOptionWidget::Private
+{
+    Private()
+        : model(brushData)
+    {
+    }
+
+    lager::state<KisBrushModel::BrushData, lager::automatic_tag> brushData;
+    KisBrushModel::BrushModel model;
+};
+
 KisBrushOptionWidget::KisBrushOptionWidget()
-    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::GENERAL, true)
+    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::GENERAL, true),
+      m_d(new Private())
 {
     m_checkable = false;
-    m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize());
+    m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize(), m_d->brushData);
     connect(m_brushSelectionWidget, SIGNAL(sigPrecisionChanged()), SLOT(emitSettingChanged()));
     connect(m_brushSelectionWidget, SIGNAL(sigBrushChanged()), SLOT(brushChanged()));
     m_brushSelectionWidget->hide();
@@ -49,8 +64,9 @@ void KisBrushOptionWidget::setHSLBrushTipEnabled(bool value)
 
 void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
-    m_brushSelectionWidget->writeOptionSetting(settings);
-    m_brushOption.writeOptionSetting(settings);
+    //m_brushSelectionWidget->writeOptionSetting(settings);
+    //m_brushOption.writeOptionSetting(settings);
+    m_d->brushData->write(settings.data());
 }
 
 void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
@@ -58,6 +74,11 @@ void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     m_brushSelectionWidget->readOptionSetting(setting);
     m_brushOption.readOptionSetting(setting, resourcesInterface(), canvasResourcesInterface());
     m_brushSelectionWidget->setCurrentBrush(m_brushOption.brush());
+
+
+    std::optional<KisBrushModel::BrushData> data = KisBrushModel::BrushData::read(setting.data(), resourcesInterface());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(data);
+    m_d->brushData = *data;
 }
 
 void KisBrushOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const

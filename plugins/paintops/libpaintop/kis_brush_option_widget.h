@@ -50,6 +50,8 @@ private:
     KisBrushSelectionWidget * m_brushSelectionWidget;
     KisBrushOptionProperties m_brushOption;
 
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

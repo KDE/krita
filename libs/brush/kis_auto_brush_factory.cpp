@@ -13,6 +13,7 @@
 #include "kis_mask_generator.h"
 #include <kis_dom_utils.h>
 #include <KoResourceLoadResult.h>
+#include "kis_mask_generator.h"
 
 
 KoResourceLoadResult KisAutoBrushFactory::createBrush(const QDomElement &brushDefinition, KisResourcesInterfaceSP resourcesInterface)
@@ -124,4 +125,86 @@ void KisAutoBrushFactory::toXML(QDomDocument &doc, QDomElement &e, const KisBrus
 
         e.appendChild(shapeElt);
     }
+}
+
+KoResourceLoadResult KisAutoBrushFactory::createBrush(const KisBrushModel::CommonData &commonData, const KisBrushModel::AutoBrushData &autoBrushData, KisResourcesInterfaceSP resourcesInterface)
+{
+    Q_UNUSED(resourcesInterface);
+
+    KisMaskGenerator *generator = 0;
+
+    if (autoBrushData.generator.type == KisBrushModel::Default &&
+            autoBrushData.generator.shape == KisBrushModel::Circle) {
+
+        generator = new KisCircleMaskGenerator(autoBrushData.generator.diameter,
+                                               autoBrushData.generator.ratio,
+                                               autoBrushData.generator.horizontalFade,
+                                               autoBrushData.generator.verticalFade,
+                                               autoBrushData.generator.spikes,
+                                               autoBrushData.generator.antialiasEdges);
+
+    } else if (autoBrushData.generator.type == KisBrushModel::Default &&
+               autoBrushData.generator.shape == KisBrushModel::Rectangle) {
+
+        generator = new KisRectangleMaskGenerator(autoBrushData.generator.diameter,
+                                                  autoBrushData.generator.ratio,
+                                                  autoBrushData.generator.horizontalFade,
+                                                  autoBrushData.generator.verticalFade,
+                                                  autoBrushData.generator.spikes,
+                                                  autoBrushData.generator.antialiasEdges);
+
+
+    } else  if (autoBrushData.generator.type == KisBrushModel::Soft) {
+
+        KisCubicCurve curve;
+        QString curveString = autoBrushData.generator.curveString;
+        if (curveString.isEmpty()) {
+            curveString = "0,0;1,1";
+        }
+        curve.fromString(curveString);
+
+        if (autoBrushData.generator.shape == KisBrushModel::Circle) {
+            generator = new KisCurveCircleMaskGenerator(autoBrushData.generator.diameter,
+                                                        autoBrushData.generator.ratio,
+                                                        autoBrushData.generator.horizontalFade,
+                                                        autoBrushData.generator.verticalFade,
+                                                        autoBrushData.generator.spikes,
+                                                        curve,
+                                                        autoBrushData.generator.antialiasEdges);
+        } else {
+            generator = new KisCurveRectangleMaskGenerator(autoBrushData.generator.diameter,
+                                                           autoBrushData.generator.ratio,
+                                                           autoBrushData.generator.horizontalFade,
+                                                           autoBrushData.generator.verticalFade,
+                                                           autoBrushData.generator.spikes,
+                                                           curve,
+                                                           autoBrushData.generator.antialiasEdges);
+        }
+
+    } else  if (autoBrushData.generator.type == KisBrushModel::Gaussian &&
+                autoBrushData.generator.shape == KisBrushModel::Circle) {
+
+        generator = new KisGaussCircleMaskGenerator(autoBrushData.generator.diameter,
+                                                    autoBrushData.generator.ratio,
+                                                    autoBrushData.generator.horizontalFade,
+                                                    autoBrushData.generator.verticalFade,
+                                                    autoBrushData.generator.spikes,
+                                                    autoBrushData.generator.antialiasEdges);
+
+    } else if (autoBrushData.generator.type == KisBrushModel::Gaussian &&
+               autoBrushData.generator.shape == KisBrushModel::Rectangle) {
+
+        generator = new KisGaussRectangleMaskGenerator(autoBrushData.generator.diameter,
+                                                       autoBrushData.generator.ratio,
+                                                       autoBrushData.generator.horizontalFade,
+                                                       autoBrushData.generator.verticalFade,
+                                                       autoBrushData.generator.spikes,
+                                                       autoBrushData.generator.antialiasEdges);
+    }
+
+    KisBrushSP brush = KisBrushSP(new KisAutoBrush(generator, commonData.angle, autoBrushData.randomness, autoBrushData.density));
+    brush->setSpacing(commonData.spacing);
+    brush->setAutoSpacing(commonData.useAutoSpacing, commonData.autoSpacingCoeff);
+
+    return {brush};
 }

@@ -41,6 +41,7 @@ public:
     KoResourceLoadResult createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface) override;
     std::optional<KisBrushModel::BrushData> createBrushModel(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface) override;
     void toXML(QDomDocument &doc, QDomElement &element, const KisBrushModel::BrushData &model) override;
+    KoResourceLoadResult createBrush(const KisBrushModel::CommonData &commonData, const KisBrushModel::AutoBrushData &autoBrushData, KisResourcesInterfaceSP resourcesInterface);
 };
 
 #endif

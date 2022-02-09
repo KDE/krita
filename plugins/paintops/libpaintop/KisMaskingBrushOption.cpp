@@ -24,6 +24,7 @@
 #include <strokes/KisMaskingBrushCompositeOpFactory.h>
 #include <KoCompositeOpRegistry.h>
 #include <brushengine/KisPaintopSettingsIds.h>
+#include <lager/state.hpp>
 
 struct KisMaskingBrushOption::Private
 {
@@ -48,7 +49,7 @@ struct KisMaskingBrushOption::Private
         brushSizeWarningLabel->setVisible(false);
         brushSizeWarningLabel->setWordWrap(true);
 
-        brushChooser = new KisBrushSelectionWidget(KisImageConfig(true).maxMaskingBrushSize(), ui.data());
+        brushChooser = new KisBrushSelectionWidget(KisImageConfig(true).maxMaskingBrushSize(), brushData, ui.data());
 
         QVBoxLayout *layout  = new QVBoxLayout(ui.data());
         layout->addLayout(compositeOpLayout, 0);
@@ -63,6 +64,7 @@ struct KisMaskingBrushOption::Private
     MasterBrushSizeAdapter masterBrushSizeAdapter;
 
     boost::optional<qreal> theoreticalMaskingBrushSize;
+    lager::state<KisBrushModel::BrushData> brushData;
 };
 
 KisMaskingBrushOption::KisMaskingBrushOption(MasterBrushSizeAdapter masterBrushSizeAdapter)
@@ -93,6 +95,9 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     props.theoreticalMaskingBrushSize = m_d->theoreticalMaskingBrushSize;
 
     props.write(setting.data(), m_d->masterBrushSizeAdapter());
+
+    // TODO:
+    //m_d->brushData->write(settings.data());
 }
 
 void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
@@ -111,6 +116,11 @@ void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP
     if (props.brush) {
         m_d->brushChooser->setCurrentBrush(props.brush);
     }
+
+    std::optional<KisBrushModel::BrushData> data = KisBrushModel::BrushData::read(setting.data(), resourcesInterface());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(data);
+
+    m_d->brushData = *data;
 }
 
 void KisMaskingBrushOption::setImage(KisImageWSP image)

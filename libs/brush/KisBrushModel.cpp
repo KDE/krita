@@ -20,7 +20,7 @@ qreal effectiveSizeForBrush(BrushType type,
 
     switch (type) {
     case Auto:
-        result = autoBrush.generator.diameter * 2;
+        result = autoBrush.generator.diameter;
         break;
     case Predefined:
         result = predefinedBrush.baseSize.width() * predefinedBrush.scale;

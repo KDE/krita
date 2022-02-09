@@ -84,7 +84,7 @@ struct BRUSH_EXPORT AutoBrushData : public boost::equality_comparable<AutoBrushD
     }
 
     qreal randomness = 0.0;
-    qreal density = 0.0;
+    qreal density = 1.0;
     AutoBrushGeneratorData generator;
 };
 

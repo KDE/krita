@@ -6,24 +6,22 @@
   </author>
  <class>KisColorSelectorSettings</class>
  <widget class="QWidget" name="KisColorSelectorSettings">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>723</width>
-    <height>1108</height>
-   </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
-  </property>
   <property name="windowTitle">
    <string>Color Selector Settings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_16">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QFormLayout" name="dockerSelectForm">
      <property name="labelAlignment">

@@ -45,6 +45,7 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
 
     /*  Construct & Connect UI  */
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->addWidget(d->m_shortcutsEditor);
     QHBoxLayout *bottomLayout = new QHBoxLayout;
     d->m_schemeEditor = new KShortcutSchemesEditor(this);

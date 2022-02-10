@@ -72,6 +72,10 @@ struct Private {
                 Mlt::Frame* f = producer->get_frame(frame + i );
                 pushConsumer->push(f);
             }
+            // It turns out that get_frame actually seeks to the frame too,
+            // Not having this last seek will cause unexpected "jumps" at
+            // the beginning of playback...
+            producer->seek(frame);
         }
     }
 
@@ -83,12 +87,39 @@ struct Private {
     QScopedPointer<Mlt::PushConsumer> pushConsumer;
 
     //Filters...
-    //QSharedPointer<Mlt::Filter> loopFilter
-    //QSharedPointer<Mlt::Filter> timeWarpFilter
+    //QSharedPointer<Mlt::Filter> loopFilter;
 
     QSharedPointer<Mlt::Producer> producer;
 
     QScopedPointer<KisSignalCompressorWithParam<int>> sigPushAudioCompressor;
+};
+
+
+/**
+ * @brief The StopAndResumeConsumer struct is used to encapsulate optional
+ * stop-and-then-resume behavior of a consumer. Using RAII, we can stop
+ * a consumer at construction and simply resume it when it exits scope.
+ */
+struct StopAndResumeConsumer {
+public:
+    StopAndResumeConsumer(Mlt::Consumer* p_consumer)
+        : consumer(p_consumer) {
+        KIS_ASSERT(consumer);
+        wasRunning = !consumer->is_stopped();
+        if (wasRunning) {
+            consumer->stop();
+        }
+    }
+
+    ~StopAndResumeConsumer() {
+        if (wasRunning) {
+            consumer->start();
+        }
+    }
+
+private:
+    Mlt::Consumer* consumer;
+    bool wasRunning = false;
 };
 
 
@@ -130,17 +161,11 @@ int KisMediaConsumer::playhead()
 
 void KisMediaConsumer::setFrameRate(int fps)
 {
-    bool stopped = false;
-    if (!m_d->pushConsumer->is_stopped()) {
-        m_d->pushConsumer->stop();
-        stopped = true;
-    }
+    StopAndResumeConsumer srPullConsumer(m_d->pullConsumer.data());
+    StopAndResumeConsumer srPushConsumer(m_d->pushConsumer.data());
 
     m_d->profile->set_frame_rate(fps, 1);
 
-    if (stopped) {
-        m_d->pushConsumer->start();
-    }
 }
 
 int KisMediaConsumer::getFrameRate()
@@ -184,8 +209,6 @@ QString KisMediaConsumer::debugInfo() {
     return QString("producer_position = ") + QString::number(m_d->producer->position()) + QString(", consumer_position = ") + QString::number(m_d->pullConsumer->position());
 }
 
-
-
 Mlt::Profile* KisMediaConsumer::getProfile()
 {
     return m_d->profile.data();
@@ -193,21 +216,10 @@ Mlt::Profile* KisMediaConsumer::getProfile()
 
 void KisMediaConsumer::setProducer(QSharedPointer<Mlt::Producer> p_producer)
 {
-    bool restartPullConsumer = false;
-    if (m_d->mode == KisMediaConsumer::PULL && !m_d->pullConsumer->is_stopped()) {
-        m_d->pullConsumer->stop();
-        restartPullConsumer = true;
-    }
-
+    StopAndResumeConsumer c1(m_d->pushConsumer.data());
+    StopAndResumeConsumer c2(m_d->pullConsumer.data());
     m_d->pullConsumer->disconnect_all_producers();
     m_d->producer = p_producer;
     m_d->producer->set_profile(*m_d->profile);
     m_d->pullConsumer->connect_producer(*m_d->producer);
-
-    if (restartPullConsumer) {
-        m_d->pullConsumer->start();
-    } else {
-        m_d->pushConsumer->stop();
-        m_d->pushConsumer->start();
-    }
 }

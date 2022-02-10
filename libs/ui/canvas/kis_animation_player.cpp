@@ -246,10 +246,10 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
         }
     });
 
-    /*connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
+    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
        m_d->mediaConsumer->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
     });
-    m_d->mediaConsumer->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());*/
+    m_d->mediaConsumer->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
 
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisAnimationPlayer::setupAudioTracks);
     setupAudioTracks();

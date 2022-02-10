@@ -18,7 +18,7 @@
 #include "kis_debug.h"
 
 
-const int SCRUB_AUDIO_WINDOW = 5;
+const float SCRUB_AUDIO_SECONDS = 0.25f;
 
 static void onConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_frame) {
     const KisMediaConsumer* self = static_cast<KisMediaConsumer*>(p_self);
@@ -42,7 +42,7 @@ struct Private {
 
         std::function<void (int)> callback(std::bind(&Private::pushAudio, this, std::placeholders::_1));
         sigPushAudioCompressor.reset(
-                    new KisSignalCompressorWithParam<int>(35 * SCRUB_AUDIO_WINDOW, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
+                    new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
                     );
     }
 
@@ -64,7 +64,10 @@ struct Private {
         if (pushConsumer->is_stopped())
             return;
 
+        KIS_ASSERT(pullConsumer->is_stopped());
+
         if (mode == KisMediaConsumer::PUSH && producer) {
+            const int SCRUB_AUDIO_WINDOW = profile->frame_rate_num() * SCRUB_AUDIO_SECONDS;
             for (int i = 0; i < SCRUB_AUDIO_WINDOW; i++ ) {
                 Mlt::Frame* f = producer->get_frame(frame + i );
                 pushConsumer->push(f);
@@ -127,7 +130,17 @@ int KisMediaConsumer::playhead()
 
 void KisMediaConsumer::setFrameRate(int fps)
 {
+    bool stopped = false;
+    if (!m_d->pushConsumer->is_stopped()) {
+        m_d->pushConsumer->stop();
+        stopped = true;
+    }
+
     m_d->profile->set_frame_rate(fps, 1);
+
+    if (stopped) {
+        m_d->pushConsumer->start();
+    }
 }
 
 int KisMediaConsumer::getFrameRate()

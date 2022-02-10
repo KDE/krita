@@ -839,7 +839,6 @@ bool KisKraSaver::saveAudioXML(QDomDocument& doc, QDomElement& element)
 
     if (!clips.isEmpty()) {
         QDomElement audioClips = doc.createElement("audioClips");
-        const int i = 0;
         Q_FOREACH(const QFileInfo& file, clips) {
             QDomElement clip = doc.createElement(QString("Clip"));
             clip.setAttribute("filePath", file.absoluteFilePath());

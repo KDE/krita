@@ -523,7 +523,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
         TIFFClose(image);
         return ImportExportCodes::FormatColorSpaceUnsupported;
     }
-    dbgFile << "Colorspace is :" << basicInfo.colorSpaceIdTag.first << basicInfo.colorSpaceIdTag.second << " with a depth of" << basicInfo.depth
+    dbgFile << "Color space is :" << basicInfo.colorSpaceIdTag.first << basicInfo.colorSpaceIdTag.second << " with a depth of" << basicInfo.depth
             << " and with a nb of channels of" << basicInfo.nbchannels;
 
     // Read image profile
@@ -574,7 +574,7 @@ KisImportExportErrorCode KisTIFFConverter::readTIFFDirectory(TIFF *image)
     }
 
     if (basicInfo.cs == 0) {
-        dbgFile << "Colorspace" << basicInfo.colorSpaceIdTag.first << basicInfo.colorSpaceIdTag.second << " is not available, please check your installation.";
+        dbgFile << "Color space" << basicInfo.colorSpaceIdTag.first << basicInfo.colorSpaceIdTag.second << " is not available, please check your installation.";
         TIFFClose(image);
         return ImportExportCodes::FormatColorSpaceUnsupported;
     }

@@ -1153,8 +1153,9 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     swapSizeConnector->connectBackwardInt(intSwapSize, SIGNAL(valueChanged(int)),
                                           sliderSwapSize, SLOT(setValue(int)));
 
-    lblSwapFileLocation->setText(cfg.swapDir());
-    connect(bnSwapFile, SIGNAL(clicked()), SLOT(selectSwapDir()));
+    swapFileLocation->setMode(KoFileDialog::OpenDirectory);
+    swapFileLocation->setConfigurationName("swapfile_location");
+    swapFileLocation->setFileName(cfg.swapDir());
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
@@ -1209,7 +1210,7 @@ void PerformanceTab::load(bool requestDefault)
     chkProgressReporting->setChecked(cfg.enableProgressReporting(requestDefault));
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
-    lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
+    swapFileLocation->setFileName(cfg.swapDir(requestDefault));
 
     m_lastUsedThreadsLimit = cfg.maxNumberOfThreads(requestDefault);
     m_lastUsedClonesLimit = cfg.frameRenderingClones(requestDefault);
@@ -1275,7 +1276,7 @@ void PerformanceTab::save()
 
     cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
 
-    cfg.setSwapDir(lblSwapFileLocation->text());
+    cfg.setSwapDir(swapFileLocation->fileName());
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
@@ -1317,17 +1318,6 @@ void PerformanceTab::save()
         group.writeEntry("forceLodMode", chkFiltersForceLodMode->isChecked());
     }
 
-}
-
-void PerformanceTab::selectSwapDir()
-{
-    KisImageConfig cfg(true);
-    QString swapDir = cfg.swapDir();
-    swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
-    if (swapDir.isEmpty()) {
-        return;
-    }
-    lblSwapFileLocation->setText(swapDir);
 }
 
 void PerformanceTab::slotThreadsLimitChanged(int value)

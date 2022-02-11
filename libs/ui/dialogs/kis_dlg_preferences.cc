@@ -52,11 +52,13 @@
 #include "KoID.h"
 #include <KoVBox.h>
 
-#include <klocalizedstring.h>
-#include <kformat.h>
-#include <kundo2stack.h>
-#include <kstandardguiitem.h>
+#include <KTitleWidget>
 #include <KoResourcePaths.h>
+#include <kformat.h>
+#include <klocalizedstring.h>
+#include <kstandardguiitem.h>
+#include <kundo2stack.h>
+
 
 #include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
@@ -1900,6 +1902,18 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         if (page->objectName() == currentPageName) {
             setCurrentPage(page);
             break;
+        }
+    }
+
+    {
+        // HACK ALERT! Remove title widget background, thus making
+        // it consistent across all systems
+        const auto *titleWidget = findChild<KTitleWidget*>();
+        if (titleWidget) {
+            QLayoutItem *titleFrame = titleWidget->layout()->itemAt(0); // vboxLayout -> titleFrame
+            if (titleFrame) {
+                titleFrame->widget()->setBackgroundRole(QPalette::Window);
+            }
         }
     }
 }

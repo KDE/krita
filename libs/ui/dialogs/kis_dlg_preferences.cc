@@ -741,8 +741,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
     m_page->cmbWorkingColorSpace->setEnabled(cfg.useDefaultColorSpace());
 
-    m_page->bnAddColorProfile->setIcon(KisIconUtils::loadIcon("document-open"));
-    m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
+    m_page->bnAddColorProfile->setIcon(koIcon("document-import-16"));
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);

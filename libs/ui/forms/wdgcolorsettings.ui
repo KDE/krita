@@ -219,7 +219,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Add new color profile</string>
+          <string>Import profile</string>
          </property>
         </widget>
        </item>

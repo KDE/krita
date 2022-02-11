@@ -181,7 +181,7 @@ public:
      * right here i.e without a valid TouchEnd, so we should immediately stop
      * all running actions.
      */
-    void touchCancelEvent(const QPointF &localPos);
+    void touchCancelEvent(QTouchEvent *event, const QPointF &localPos);
 
 
     bool nativeGestureBeginEvent(QNativeGestureEvent *event);

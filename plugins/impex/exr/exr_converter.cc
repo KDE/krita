@@ -774,7 +774,7 @@ KisImportExportErrorCode EXRConverter::decode(const QString &filename)
         const KoColorSpace* colorSpace = kisTypeToColorSpace(RGBAColorModelID.id(), imageType);
 
         if (!colorSpace) return ImportExportCodes::FormatColorSpaceUnsupported;
-        dbgFile << "Colorspace: " << colorSpace->name();
+        dbgFile << "Color space: " << colorSpace->name();
 
         // Set the colorspace on all groups
         for (int i = 0; i < groups.size(); ++i) {

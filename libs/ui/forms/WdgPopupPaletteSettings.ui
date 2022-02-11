@@ -2,18 +2,22 @@
 <ui version="4.0">
  <class>WdgPopupPaletteSettings</class>
  <widget class="QWidget" name="WdgPopupPaletteSettings">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>400</width>
-    <height>300</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item row="0" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -37,7 +41,7 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="1">
     <widget class="QCheckBox" name="chkUseDynamicSlotCount">
      <property name="text">
       <string>Dynamically Adjust Slot Count</string>
@@ -55,17 +59,17 @@
     </widget>
    </item>
    <item row="2" column="1">
-    <widget class="KisSliderSpinBox" name="sbPaletteSize">
-     <property name="suffix">
+    <widget class="KisSliderSpinBox" name="sbPaletteSize" native="true">
+     <property name="suffix" stdset="0">
       <string>px</string>
      </property>
-     <property name="minimum">
+     <property name="minimum" stdset="0">
       <number>380</number>
      </property>
-     <property name="maximum">
+     <property name="maximum" stdset="0">
       <number>550</number>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <number>385</number>
      </property>
     </widget>
@@ -99,22 +103,22 @@
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="KisSliderSpinBox" name="sbSelectorSize">
-     <property name="suffix">
+    <widget class="KisSliderSpinBox" name="sbSelectorSize" native="true">
+     <property name="suffix" stdset="0">
       <string>px</string>
      </property>
-     <property name="minimum">
+     <property name="minimum" stdset="0">
       <number>100</number>
      </property>
-     <property name="maximum">
+     <property name="maximum" stdset="0">
       <number>240</number>
      </property>
-     <property name="value">
+     <property name="value" stdset="0">
       <number>144</number>
      </property>
     </widget>
    </item>
-   <item row="5" column="0" colspan="2">
+   <item row="5" column="1">
     <widget class="QCheckBox" name="chkShowColorHistory">
      <property name="text">
       <string>Show Color History Ring</string>
@@ -124,7 +128,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0" colspan="2">
+   <item row="6" column="1">
     <widget class="QCheckBox" name="chkShowRotationTrack">
      <property name="text">
       <string>Show Rotation Ring</string>
@@ -134,13 +138,26 @@
      </property>
     </widget>
    </item>
+   <item row="7" column="0" colspan="2">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>0</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
    <class>KisSliderSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_slider_spin_box.h</header>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

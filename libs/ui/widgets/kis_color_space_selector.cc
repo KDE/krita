@@ -214,7 +214,7 @@ void KisColorSpaceSelector::installProfile()
 
 void KisColorSpaceSelector::slotOpenAdvancedSelector()
 {
-    KisAdvancedColorSpaceSelector advancedSelector(this, i18n("Select a Colorspace"));
+    KisAdvancedColorSpaceSelector advancedSelector(this, i18n("Select a Color Space"));
 
     advancedSelector.setModal(true);
 

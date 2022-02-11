@@ -235,9 +235,6 @@ public:
     void save();
 
 private Q_SLOTS:
-
-    void selectSwapDir();
-
     void slotThreadsLimitChanged(int value);
     void slotFrameClonesLimitChanged(int value);
 

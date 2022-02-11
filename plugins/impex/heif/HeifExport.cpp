@@ -567,7 +567,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     
     conversionSettings->setVisible(cfg->getBool(KisImportExportFilter::HDRTag, false));
 
-    QStringList conversionOptionsList = { i18nc("Colorspace name", "Rec 2100 PQ"), i18nc("Colorspace name", "Rec 2100 HLG")};
+    QStringList conversionOptionsList = { i18nc("Color space name", "Rec 2100 PQ"), i18nc("Color space name", "Rec 2100 HLG")};
     QStringList toolTipList = {i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a perceptual quantizer curve"
                                " (also known as SMPTE 2048 curve). Recommended for HDR images where the absolute brightness is important."),
                               i18nc("@tooltip", "The image will be converted to Rec 2020 linear first, and then encoded with a Hybrid Log Gamma curve."
@@ -576,23 +576,23 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
         if (CicpPrimaries != PRIMARIES_UNSPECIFIED) {
-            conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode PQ");
+            conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode PQ");
             toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
                                             " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");
             conversionOptionName << "ApplyPQ";
             
-            conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode HLG");
+            conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode HLG");
             toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a Hybrid Log Gamma curve."
                                             " Recommended for images intended for screens which cannot understand PQ");
             conversionOptionName << "ApplyHLG";
             
-            conversionOptionsList << i18nc("Colorspace option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
+            conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode SMPTE ST 428");
             toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with SMPTE ST 428."
                                             " Krita always opens images like these as linear floating point, this option is there to reverse that");
             conversionOptionName << "ApplySMPTE428";
         }
         
-        conversionOptionsList << i18nc("Colorspace option", "No changes, clip");
+        conversionOptionsList << i18nc("Color space option", "No changes, clip");
         toolTipList << i18nc("@tooltip", "The image will be converted plainly to 12bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
         conversionOptionName << "KeepSame";
     }

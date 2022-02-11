@@ -15,6 +15,18 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QLabel" name="label_10">
      <property name="font">
@@ -172,9 +184,6 @@
           <string>Swap File Size</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
-          <property name="bottomMargin">
-           <number>6</number>
-          </property>
           <item row="0" column="0">
            <widget class="QLabel" name="label_6">
             <property name="toolTip">
@@ -217,34 +226,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_5">
-            <item>
-             <widget class="QLabel" name="lblSwapFileLocation">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="frameShape">
-               <enum>QFrame::Box</enum>
-              </property>
-              <property name="text">
-               <string>TextLabel</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QToolButton" name="bnSwapFile">
-              <property name="toolTip">
-               <string>Select the location where Krita writes its swap files.</string>
-              </property>
-              <property name="text">
-               <string>...</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="KisFileNameRequester" name="swapFileLocation" native="true"/>
           </item>
          </layout>
         </widget>
@@ -268,8 +250,8 @@
       <attribute name="title">
        <string>Advanced</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
+      <layout class="QFormLayout" name="formLayout_5">
+       <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_4">
          <property name="title">
           <string>Multithreading</string>
@@ -338,86 +320,85 @@
          </layout>
         </widget>
        </item>
-       <item>
-        <layout class="QFormLayout" name="formLayout_limitFps">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_fps">
-           <property name="text">
-            <string>Limit frames per second while painting:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="KisSliderSpinBox" name="sliderFpsLimit" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita will try to limit the number of screen updates per second to the given number. A lower number will decrease visual responsiveness but increase stylus precision on some systems like macOS.&lt;p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_fps">
+         <property name="text">
+          <string>Limit frames per second while painting:</string>
+         </property>
+        </widget>
        </item>
-       <item>
+       <item row="1" column="1">
+        <widget class="KisSliderSpinBox" name="sliderFpsLimit" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Krita will try to limit the number of screen updates per second to the given number. A lower number will decrease visual responsiveness but increase stylus precision on some systems like macOS.&lt;p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
         <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
          <property name="text">
           <string>Debug logging of OpenGL framerate</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="3" column="1">
         <widget class="QCheckBox" name="chkBrushSpeedLogging">
          <property name="text">
           <string>Debug logging for brush rendering speed</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="4" column="1">
         <widget class="QCheckBox" name="chkDisableAVXOptimizations">
          <property name="text">
           <string>Disable AVX vector optimizations</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="5" column="1">
         <widget class="QCheckBox" name="chkDisableVectorOptimizations">
          <property name="text">
           <string>Disable all vector optimizations</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="6" column="1">
         <widget class="QCheckBox" name="chkProgressReporting">
          <property name="text">
           <string>Progress reporting (might affect performance)</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="7" column="1">
         <widget class="QCheckBox" name="chkPerformanceLogging">
          <property name="text">
           <string>Performance logging</string>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="8" column="0" colspan="2">
         <widget class="QLabel" name="label_7">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
          <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When performance logging is enabled Krita saves timing information into the '&amp;lt;working_dir&amp;gt;/log' folder. If you experience performance problems and want to help us, enable this option and add the contents of the directory to a bug report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;When performance logging is enabled Krita saves timing information into the &lt;tt&gt;&amp;lt;working_dir&amp;gt;/log&lt;/tt&gt; folder. If you experience performance problems and want to help us, enable this option and add the contents of the directory to a bug report.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignJustify|Qt::AlignVCenter</set>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item>
+       <item row="9" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -436,14 +417,14 @@
       <attribute name="title">
        <string>Animation Cache</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,1">
-       <item>
+      <layout class="QFormLayout" name="formLayout_8">
+       <item row="0" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_3">
          <property name="title">
           <string>Cache Storage Backend</string>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
+         <layout class="QFormLayout" name="formLayout_6">
+          <item row="0" column="1">
            <widget class="QRadioButton" name="optInMemory">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Animation frame cache will be stored in RAM completely without any limitations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;WARNING:&lt;/span&gt; please make sure your computer has enough RAM &lt;span style=&quot; text-decoration: underline;&quot;&gt;above&lt;/span&gt; the amount you requested in General tab. Otherwise you might face system freezes.&lt;/p&gt;&lt;p&gt;* for 1 second of FullHD@25fps video you need extra 200 MiB of memory&lt;/p&gt;&lt;p&gt;* for 1 second of 4K UltraHD@25fps video you need extra 800 MiB of memory&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -453,7 +434,7 @@
             </property>
            </widget>
           </item>
-          <item>
+          <item row="1" column="1">
            <widget class="QRadioButton" name="optOnDisk">
             <property name="toolTip">
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Animation frames are stored on hard disk in the same folder as swap file. The cache is stored in a compressed way. Little amount of extra RAM is needed.&lt;/p&gt;&lt;p&gt;Since data transfer speed of the hard drive is low, you might want to limit cached frame size to be able to play your video at 25 fps. The limit of 2500 px is usually a good choice.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -466,7 +447,7 @@
          </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0" colspan="2">
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
           <string>Cache Generation Options</string>
@@ -531,6 +512,19 @@
          </layout>
         </widget>
        </item>
+       <item row="2" column="0" colspan="2">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_4">
@@ -539,44 +533,33 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QCheckBox" name="chkTransformToolUseInStackPreview">
-         <property name="toolTip">
-          <string/>
+        <widget class="QGroupBox" name="groupBox_6">
+         <property name="title">
+          <string>Transform Tool</string>
          </property>
-         <property name="text">
-          <string>Use in-stack preview in Transform Tool</string>
-         </property>
+         <layout class="QFormLayout" name="formLayout_7">
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="chkTransformToolUseInStackPreview">
+            <property name="toolTip">
+             <string/>
+            </property>
+            <property name="text">
+             <string>Use in-stack preview in Transform Tool</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QCheckBox" name="chkTransformToolForceLodMode">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The transform tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>Force Instant Preview in Transform Tool</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Fixed</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="chkTransformToolForceLodMode">
-           <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The transform tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-           </property>
-           <property name="text">
-            <string>Force Instant Preview in Transform Tool</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <widget class="QCheckBox" name="chkMoveToolForceLodMode">
@@ -615,28 +598,9 @@
      </widget>
     </widget>
    </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>5</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KisDoubleSliderSpinBox</class>
-   <extends>QWidget</extends>
-   <header>kis_slider_spin_box.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
@@ -647,6 +611,18 @@
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisDoubleSliderSpinBox</class>
+   <extends>QWidget</extends>
+   <header location="global">kis_slider_spin_box.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisFileNameRequester</class>
+   <extends>QWidget</extends>
+   <header>kis_file_name_requester.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -6,14 +6,6 @@
   </author>
  <class>WdgDisplaySettings</class>
  <widget class="QWidget" name="WdgDisplaySettings">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>651</width>
-    <height>422</height>
-   </rect>
-  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
@@ -24,8 +16,17 @@
    <string>Display</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>15</number>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
    </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
@@ -37,7 +38,7 @@
        <string>Canvas Acceleration</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout">
-       <item column="0" row="0">
+       <item row="0" column="0">
         <widget class="QGroupBox" name="grpOpenGL">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -52,7 +53,7 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout">
-          <item column="1" row="2">
+          <item row="2" column="1">
            <widget class="QComboBox" name="cmbFilterMode">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -85,14 +86,14 @@
             </item>
            </widget>
           </item>
-          <item column="0" row="0">
+          <item row="0" column="0">
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Current Renderer:</string>
             </property>
            </widget>
           </item>
-          <item column="1" row="4">
+          <item row="4" column="1">
            <widget class="QCheckBox" name="chkDisableVsync">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -111,7 +112,7 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="3">
+          <item row="3" column="1">
            <widget class="QCheckBox" name="chkUseTextureBuffer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -127,7 +128,7 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="1">
+          <item row="1" column="1">
            <widget class="QComboBox" name="cmbPreferredRenderer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
@@ -137,7 +138,7 @@
             </property>
            </widget>
           </item>
-          <item colspan="2" column="0" row="5">
+          <item row="5" column="0" colspan="2">
            <widget class="QLabel" name="lblOpenGLWarnings">
             <property name="text">
              <string notr="true">OpenGL Warnings</string>
@@ -150,7 +151,7 @@
             </property>
            </widget>
           </item>
-          <item column="0" row="1">
+          <item row="1" column="0">
            <widget class="QLabel" name="lblPreferredRenderer">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
@@ -166,14 +167,14 @@
             </property>
            </widget>
           </item>
-          <item column="1" row="0">
+          <item row="0" column="1">
            <widget class="QLabel" name="lblCurrentRenderer">
             <property name="text">
              <string>Unknown</string>
             </property>
            </widget>
           </item>
-          <item column="0" row="2">
+          <item row="2" column="0">
            <widget class="QLabel" name="label">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -189,7 +190,7 @@
             </property>
            </widget>
           </item>
-          <item colspan="2" column="0" row="6">
+          <item row="6" column="0" colspan="2">
            <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -208,79 +209,95 @@
       </layout>
      </widget>
      <widget class="QWidget" name="tabHDR">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <attribute name="title">
        <string>HDR Settings</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_3">
-       <item column="0" row="0">
-        <widget class="QGroupBox" name="grpHDRSettings">
+      <layout class="QFormLayout" name="formLayout">
+       <item row="0" column="1">
+        <widget class="QLabel" name="lblCurrentDisplayFormat">
+         <property name="text">
+          <string>Current Display Format</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_7">
+         <property name="text">
+          <string>Display Format:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="lblCurrentRootSurfaceFormat">
+         <property name="text">
+          <string>Current Surface Value</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Current Output Format:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="cmbPreferedRootSurfaceFormat"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_9">
+         <property name="text">
+          <string>Preferred Output Format:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QGroupBox" name="grpHDRWarning">
          <property name="title">
           <string/>
          </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item column="0" row="1">
-           <widget class="QLabel" name="label_5">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="lblHDRWarningIcon">
             <property name="text">
-             <string>Current Output Format:</string>
+             <string>TextLabel</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
             </property>
            </widget>
           </item>
-          <item column="1" row="1">
-           <widget class="QLabel" name="lblCurrentRootSurfaceFormat">
-            <property name="text">
-             <string>Current Surface Value</string>
-            </property>
-           </widget>
-          </item>
-          <item column="1" row="0">
-           <widget class="QLabel" name="lblCurrentDisplayFormat">
-            <property name="text">
-             <string>Current Display Format</string>
-            </property>
-           </widget>
-          </item>
-          <item column="0" row="2">
-           <widget class="QLabel" name="label_9">
-            <property name="text">
-             <string>Preferred Output Format:</string>
-            </property>
-           </widget>
-          </item>
-          <item colspan="2" column="0" row="3">
+          <item>
            <widget class="QLabel" name="lblHDRWarning">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>HDR Warning..................................</string>
             </property>
            </widget>
           </item>
-          <item column="0" row="0">
-           <widget class="QLabel" name="label_7">
-            <property name="text">
-             <string>Display Format:</string>
-            </property>
-           </widget>
-          </item>
-          <item column="1" row="2">
-           <widget class="QComboBox" name="cmbPreferedRootSurfaceFormat"/>
-          </item>
-          <item column="0" row="4">
-           <spacer name="verticalSpacer_2">
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>40</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
          </layout>
         </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -288,217 +305,297 @@
       <attribute name="title">
        <string>Grid Settings</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item column="0" row="0">
-        <layout class="QGridLayout" name="options2GridLayout">
-         <property name="topMargin">
-          <number>15</number>
+      <layout class="QFormLayout" name="formLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
          </property>
-         <property name="verticalSpacing">
-          <number>7</number>
+         <property name="text">
+          <string>Transparency Checkerboard:</string>
          </property>
-         <item column="2" row="0">
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QLabel" name="lblCheckSize">
-             <property name="text">
-              <string>Si&amp;ze:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="buddy">
-              <cstring>intCheckSize</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="KisIntParseSpinBox" name="intCheckSize">
-             <property name="suffix">
-              <string> px</string>
-             </property>
-             <property name="maximum">
-              <number>256</number>
-             </property>
-             <property name="value">
-              <number>32</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item column="2" row="4">
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QLabel" name="gridThresholdLabel">
-             <property name="text">
-              <string>Start showing at:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QDoubleSpinBox" name="pixelGridDrawingThresholdBox">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="suffix">
-              <string>%</string>
-             </property>
-             <property name="maximum">
-              <double>9999.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item column="2" row="2">
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string>Opacity:</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="KisDoubleSliderSpinBox" name="sldSelectionOverlayOpacity" native="true">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>50</width>
-               <height>20</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item column="1" row="2">
-          <widget class="KisColorButton" name="btnSelectionOverlayColor">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item column="0" row="4">
-          <widget class="QLabel" name="lblCanvasBorderColor_2">
-           <property name="text">
-            <string>Pixel Grid:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item column="0" row="2">
-          <widget class="QLabel" name="label_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Selection Overlay:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item column="0" row="0">
-          <widget class="QLabel" name="label_4">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Transparency Checkerboard:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item column="1" row="4">
-          <widget class="KisColorButton" name="pixelGridColorButton">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item column="1" row="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="KisColorButton" name="colorChecks2"/>
-           </item>
-           <item>
-            <widget class="KisColorButton" name="colorChecks1"/>
-           </item>
-          </layout>
-         </item>
-         <item column="0" row="1">
-          <widget class="QLabel" name="lblCanvasBorderColor">
-           <property name="text">
-            <string>Canvas Border Color:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item column="1" row="1">
-          <widget class="KisColorButton" name="canvasBorder">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-        </layout>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
        </item>
-       <item column="0" row="1">
+       <item row="0" column="1">
+        <widget class="QFrame" name="frame_4">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KisColorButton" name="colorChecks2"/>
+          </item>
+          <item>
+           <widget class="KisColorButton" name="colorChecks1"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblCheckSize">
+            <property name="text">
+             <string>Size:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="KisIntParseSpinBox" name="intCheckSize">
+            <property name="suffix">
+             <string> px</string>
+            </property>
+            <property name="maximum">
+             <number>256</number>
+            </property>
+            <property name="value">
+             <number>32</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="lblCanvasBorderColor">
+         <property name="text">
+          <string>Canvas Border Color:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QFrame" name="frame_3">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KisColorButton" name="canvasBorder">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>422</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Selection Overlay:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QFrame" name="frame_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KisColorButton" name="btnSelectionOverlayColor">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_5">
+            <layout class="QFormLayout" name="formLayout_4">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Opacity:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="KisDoubleSliderSpinBox" name="sldSelectionOverlayOpacity" native="true">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>50</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="lblCanvasBorderColor_2">
+         <property name="text">
+          <string>Pixel Grid:</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QFrame" name="frame">
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="KisColorButton" name="pixelGridColorButton">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_6">
+            <layout class="QFormLayout" name="formLayout_3">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="gridThresholdLabel">
+               <property name="text">
+                <string>Start showing at:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="pixelGridDrawingThresholdBox">
+               <property name="suffix">
+                <string>%</string>
+               </property>
+               <property name="maximum">
+                <double>9999.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -517,120 +614,88 @@
       <attribute name="title">
        <string>Miscellaneous</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_5">
-       <item column="0" row="0">
-        <layout class="QGridLayout" name="checkboxesLayout">
-         <property name="topMargin">
-          <number>20</number>
-         </property>
-         <property name="horizontalSpacing">
-          <number>0</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>10</number>
-         </property>
-         <item column="0" row="0">
-          <widget class="QCheckBox" name="hideScrollbars">
-           <property name="text">
-            <string>Hide Canvas Scrollbars</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item column="0" row="2">
-          <widget class="QCheckBox" name="chkHidePopups">
-           <property name="text">
-            <string>Hide layer thumbnail popup</string>
-           </property>
-          </widget>
-         </item>
-         <item column="0" row="1">
-          <widget class="QCheckBox" name="chkCurveAntialiasing">
-           <property name="text">
-            <string>Enable curve anti-aliasing</string>
-           </property>
-          </widget>
-         </item>
-         <item column="1" row="0">
-          <widget class="QCheckBox" name="chkChannelsAsColor">
-           <property name="text">
-            <string>Color channels in color</string>
-           </property>
-           <property name="checked">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item column="1" row="1">
-          <widget class="QCheckBox" name="chkSelectionOutlineAntialiasing">
-           <property name="text">
-            <string>Enable selection outline anti-aliasing</string>
-           </property>
-          </widget>
-         </item>
-         <item column="1" row="2">
-          <widget class="QCheckBox" name="chkMoving">
-           <property name="toolTip">
-            <string>If checked, the checkers will move when scrolling the canvas.</string>
-           </property>
-           <property name="whatsThis">
-            <string>Determines whether the checks will stay put or whether they will scroll together with the canvas</string>
-           </property>
-           <property name="text">
-            <string>&amp;Move checkers when scrolling</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item column="0" row="1">
+      <layout class="QFormLayout" name="formLayout_5">
+       <item row="6" column="0" colspan="2">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>341</height>
-          </size>
-         </property>
         </spacer>
+       </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="hideScrollbars">
+         <property name="text">
+          <string>Hide Canvas Scrollbars</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="chkCurveAntialiasing">
+         <property name="text">
+          <string>Enable curve anti-aliasing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="chkHidePopups">
+         <property name="text">
+          <string>Hide layer thumbnail popup</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1">
+        <widget class="QCheckBox" name="chkChannelsAsColor">
+         <property name="text">
+          <string>Color channels in color</string>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QCheckBox" name="chkSelectionOutlineAntialiasing">
+         <property name="text">
+          <string>Enable selection outline anti-aliasing</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QCheckBox" name="chkMoving">
+         <property name="toolTip">
+          <string>If checked, the checkers will move when scrolling the canvas.</string>
+         </property>
+         <property name="whatsThis">
+          <string>Determines whether the checks will stay put or whether they will scroll together with the canvas</string>
+         </property>
+         <property name="text">
+          <string>&amp;Move checkers when scrolling</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisIntParseSpinBox</class>
+   <extends>QSpinBox</extends>
+   <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
   <customwidget>
    <class>KisDoubleSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
    <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>KisIntParseSpinBox</class>
-   <extends>QSpinBox</extends>
-   <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
    <class>KisColorButton</class>

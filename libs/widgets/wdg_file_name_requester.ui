@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>194</width>
-    <height>46</height>
+    <width>164</width>
+    <height>20</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -20,40 +20,35 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLineEdit" name="txtFileName">
-       <property name="toolTip">
-        <string>Selected file name</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolButton" name="btnSelectFile">
-       <property name="toolTip">
-        <string>Select file name...</string>
-       </property>
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QLineEdit" name="txtFileName">
+     <property name="toolTip">
+      <string>Selected file name</string>
+     </property>
+    </widget>
    </item>
    <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
+    <widget class="QToolButton" name="btnSelectFile">
+     <property name="toolTip">
+      <string>Select file name...</string>
      </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>2</height>
-      </size>
+     <property name="text">
+      <string>...</string>
      </property>
-    </spacer>
+    </widget>
    </item>
   </layout>
  </widget>

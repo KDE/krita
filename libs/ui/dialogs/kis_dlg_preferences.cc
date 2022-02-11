@@ -52,11 +52,13 @@
 #include "KoID.h"
 #include <KoVBox.h>
 
-#include <klocalizedstring.h>
-#include <kformat.h>
-#include <kundo2stack.h>
-#include <kstandardguiitem.h>
+#include <KTitleWidget>
 #include <KoResourcePaths.h>
+#include <kformat.h>
+#include <klocalizedstring.h>
+#include <kstandardguiitem.h>
+#include <kundo2stack.h>
+
 
 #include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
@@ -200,9 +202,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     // Window Tab
     //
     chkUseCustomFont->setChecked(cfg.readEntry<bool>("use_custom_system_font", false));
-    cmbCustomFont->setEnabled(cfg.readEntry<bool>("use_custom_system_font", false));
     cmbCustomFont->findChild <QComboBox*>("stylesComboBox")->setVisible(false);
-    intFontSize->setEnabled(cmbCustomFont->isEnabled());
 
     QString fontName = cfg.readEntry<QString>("custom_system_font", "");
     if (fontName.isEmpty()) {
@@ -743,11 +743,11 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
     m_page->cmbWorkingColorSpace->setEnabled(cfg.useDefaultColorSpace());
 
-    m_page->bnAddColorProfile->setIcon(KisIconUtils::loadIcon("document-open"));
-    m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
+    m_page->bnAddColorProfile->setIcon(koIcon("document-import-16"));
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
+    monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
     for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
         QScreen* screen = QGuiApplication::screens()[i];
         QLabel *lbl = new QLabel(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(screen)));
@@ -1154,8 +1154,9 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     swapSizeConnector->connectBackwardInt(intSwapSize, SIGNAL(valueChanged(int)),
                                           sliderSwapSize, SLOT(setValue(int)));
 
-    lblSwapFileLocation->setText(cfg.swapDir());
-    connect(bnSwapFile, SIGNAL(clicked()), SLOT(selectSwapDir()));
+    swapFileLocation->setMode(KoFileDialog::OpenDirectory);
+    swapFileLocation->setConfigurationName("swapfile_location");
+    swapFileLocation->setFileName(cfg.swapDir());
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
@@ -1210,7 +1211,7 @@ void PerformanceTab::load(bool requestDefault)
     chkProgressReporting->setChecked(cfg.enableProgressReporting(requestDefault));
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
-    lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
+    swapFileLocation->setFileName(cfg.swapDir(requestDefault));
 
     m_lastUsedThreadsLimit = cfg.maxNumberOfThreads(requestDefault);
     m_lastUsedClonesLimit = cfg.frameRenderingClones(requestDefault);
@@ -1276,7 +1277,7 @@ void PerformanceTab::save()
 
     cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
 
-    cfg.setSwapDir(lblSwapFileLocation->text());
+    cfg.setSwapDir(swapFileLocation->fileName());
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
@@ -1318,17 +1319,6 @@ void PerformanceTab::save()
         group.writeEntry("forceLodMode", chkFiltersForceLodMode->isChecked());
     }
 
-}
-
-void PerformanceTab::selectSwapDir()
-{
-    KisImageConfig cfg(true);
-    QString swapDir = cfg.swapDir();
-    swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
-    if (swapDir.isEmpty()) {
-        return;
-    }
-    lblSwapFileLocation->setText(swapDir);
 }
 
 void PerformanceTab::slotThreadsLimitChanged(int value)
@@ -1483,7 +1473,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
-    lblHDRWarning->setText("");
+    grpHDRWarning->setVisible(false);
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::sRGBColorSpace, 8));
 #ifdef HAVE_HDR
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::bt2020PQColorSpace, 10));
@@ -1545,8 +1535,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
 #ifndef HAVE_HDR
-    grpHDRSettings->setVisible(false);
-    tabWidget->removeTab(tabWidget->indexOf(tabHDR));
+    tabHDR->setEnabled(false);
 #endif
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
@@ -1687,9 +1676,13 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
             if (info.isValid()) {
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
                     info.colorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
+                    grpHDRWarning->setVisible(true);
+                    lblHDRWarningIcon->setPixmap(lblHDRWarningIcon->style()
+                                                     ->standardIcon(QStyle::SP_MessageBoxWarning)
+                                                     .pixmap(QSize(32, 32)));
                     lblHDRWarning->setText(i18n("WARNING: current display doesn't support HDR rendering"));
                 } else {
-                    lblHDRWarning->setText("");
+                    grpHDRWarning->setVisible(false);
                 }
             }
         }
@@ -1909,6 +1902,18 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
         if (page->objectName() == currentPageName) {
             setCurrentPage(page);
             break;
+        }
+    }
+
+    {
+        // HACK ALERT! Remove title widget background, thus making
+        // it consistent across all systems
+        const auto *titleWidget = findChild<KTitleWidget*>();
+        if (titleWidget) {
+            QLayoutItem *titleFrame = titleWidget->layout()->itemAt(0); // vboxLayout -> titleFrame
+            if (titleFrame) {
+                titleFrame->widget()->setBackgroundRole(QPalette::Window);
+            }
         }
     }
 }

@@ -9,11 +9,12 @@
 #include <QApplication>
 #include <QScreen>
 #include <QDesktopWidget>
-
+#include <QResizeEvent>
 #include <QGridLayout>
 #include <QPainter>
 
 #include <klocalizedstring.h>
+#include <qnamespace.h>
 
 #include "kis_shade_selector_line.h"
 #include "kis_shade_selector_line_combo_box_popup.h"
@@ -29,6 +30,12 @@ KisShadeSelectorLineComboBox::KisShadeSelectorLineComboBox(QWidget *parent) :
     m_currentLine(new KisShadeSelectorLine(0,0,0, m_parentProxy.data(), this))
 {
     QGridLayout* l = new QGridLayout(this);
+    {
+        int left;
+        l->getContentsMargins(&left, nullptr, nullptr, nullptr);
+        l->setContentsMargins(left, 0, 30, 0);
+
+    }
     l->addWidget(m_currentLine);
 
     m_currentLine->setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -94,7 +101,7 @@ void KisShadeSelectorLineComboBox::setLineNumber(int n)
     m_currentLine->setLineNumber(n);
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->setLineNumber(n);
         }
     }
@@ -102,8 +109,8 @@ void KisShadeSelectorLineComboBox::setLineNumber(int n)
 
 void KisShadeSelectorLineComboBox::resizeEvent(QResizeEvent *e)
 {
-    Q_UNUSED(e);
-    m_currentLine->setMaximumWidth(width()-30-m_popup->spacing);
+    e->accept();
+
     m_popup->setMinimumWidth(qMax(280, width()));
     m_popup->setMaximumWidth(qMax(280, width()));
 }
@@ -113,9 +120,9 @@ void KisShadeSelectorLineComboBox::updateSettings()
     m_currentLine->updateSettings();
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->updateSettings();
-            item->m_lineHeight=30;
+            item->m_lineHeight = 30;
             item->setMaximumHeight(30);
             item->setMinimumHeight(30);
         }
@@ -130,7 +137,7 @@ void KisShadeSelectorLineComboBox::setGradient(bool b)
     m_currentLine->m_gradient=b;
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->m_gradient=b;
         }
     }
@@ -143,7 +150,7 @@ void KisShadeSelectorLineComboBox::setPatches(bool b)
     m_currentLine->m_gradient=!b;
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->m_gradient=!b;
         }
     }
@@ -156,7 +163,7 @@ void KisShadeSelectorLineComboBox::setPatchCount(int count)
     m_currentLine->m_patchCount=count;
     for(int i=0; i<m_popup->layout()->count(); i++) {
         KisShadeSelectorLine* item = dynamic_cast<KisShadeSelectorLine*>(m_popup->layout()->itemAt(i)->widget());
-        if(item!=0) {
+        if(item!=nullptr) {
             item->m_patchCount=count;
         }
     }
@@ -168,9 +175,7 @@ void KisShadeSelectorLineComboBox::setLineHeight(int height)
 {
     m_currentLine->m_lineHeight=height;
     m_currentLine->setMinimumHeight(height);
-    m_currentLine->setMaximumHeight(height);
     setMinimumHeight(height+m_popup->spacing);
-    setMaximumHeight(height+m_popup->spacing);
 
     update();
 }

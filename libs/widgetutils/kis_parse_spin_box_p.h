@@ -43,7 +43,6 @@ public:
         : m_q(q)
         , m_lineEdit(m_q->lineEdit())
     {
-        m_q->setAlignment(Qt::AlignRight);
         m_q->installEventFilter(this);
 
         m_lineEdit->setAutoFillBackground(false);

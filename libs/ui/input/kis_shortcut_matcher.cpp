@@ -414,7 +414,7 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &loc
         KisTouchShortcut *touchShortcut = m_d->touchShortcut;
         m_d->touchShortcut = 0;
         touchShortcut->action()->end(event);
-        touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
+        touchShortcut->action()->deactivate(touchShortcut->shortcutIndex());
     }
 }
 

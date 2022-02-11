@@ -398,11 +398,23 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     return false;
 }
 
-void KisShortcutMatcher::touchCancelEvent(const QPointF &localPos)
+void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &localPos)
 {
     m_d->usingTouch = false;
+
+    // TODO(sh_zam): maybe try to combine KisStrokeShortcut with KisTouchShortcut?
+
+    // this should end the stroke based actions
     if (m_d->runningShortcut) {
         forceEndRunningShortcut(localPos);
+    }
+
+    // end the stroke types
+    if (m_d->touchShortcut) {
+        KisTouchShortcut *touchShortcut = m_d->touchShortcut;
+        m_d->touchShortcut = 0;
+        touchShortcut->action()->end(event);
+        touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
     }
 }
 

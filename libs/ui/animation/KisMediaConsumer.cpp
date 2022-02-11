@@ -21,9 +21,14 @@
 const float SCRUB_AUDIO_SECONDS = 0.25f;
 
 static void onConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_frame) {
-    const KisMediaConsumer* self = static_cast<KisMediaConsumer*>(p_self);
+    KisMediaConsumer* self = static_cast<KisMediaConsumer*>(p_self);
     Mlt::Frame frame(p_frame);
-    self->sigFrameShow(frame.get_position());
+    Mlt::Consumer consumer(c);
+    //const float speed = consumer.producer()->get_double("warp_speed");
+    //const int actualPosition = consumerPosition * speed;
+    const int consumerPosition = frame.get_position();
+    ENTER_FUNCTION() << ppVar(consumer.producer()->profile()->frame_rate_num()) << ppVar(consumer.profile()->frame_rate_num()) << ppVar(self->temp_stopWatch());
+    self->sigFrameShow(consumerPosition);
 }
 
 struct Private {
@@ -44,6 +49,8 @@ struct Private {
         sigPushAudioCompressor.reset(
                     new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
                     );
+
+        temp = QElapsedTimer();
     }
 
     ~Private() {
@@ -92,6 +99,8 @@ struct Private {
     QSharedPointer<Mlt::Producer> producer;
 
     QScopedPointer<KisSignalCompressorWithParam<int>> sigPushAudioCompressor;
+
+    QElapsedTimer temp;
 };
 
 
@@ -127,7 +136,7 @@ KisMediaConsumer::KisMediaConsumer(QObject* parent)
     : QObject(parent)
     , m_d(new Private(this))
 {
-    QSharedPointer<Mlt::Producer> p( new Mlt::Producer(*m_d->profile, "count"));
+    QSharedPointer<Mlt::Producer> p( new Mlt::Producer(*m_d->profile, "timewarp", "1.0:count"));
     setProducer(p);
 }
 
@@ -165,12 +174,26 @@ void KisMediaConsumer::setFrameRate(int fps)
     StopAndResumeConsumer srPushConsumer(m_d->pushConsumer.data());
 
     m_d->profile->set_frame_rate(fps, 1);
-
 }
 
 int KisMediaConsumer::getFrameRate()
 {
     return m_d->profile->frame_rate_num();
+}
+
+void KisMediaConsumer::setPlaybackSpeed(float p_nSpeed)
+{
+    StopAndResumeConsumer srPullConsumer(m_d->pullConsumer.data());
+    StopAndResumeConsumer srPushConsumer(m_d->pushConsumer.data());
+
+    /*QString file(m_d->producer->get("warp_resource"));
+    QString resource = (QString::number(p_nSpeed) + ":" + file);
+    m_d->producer->set("resource", resource.toUtf8().data());*/
+}
+
+float KisMediaConsumer::playbackSpeed()
+{
+    return m_d->producer->get_double("warp_speed");
 }
 
 void KisMediaConsumer::setMode(Mode setting)
@@ -222,4 +245,11 @@ void KisMediaConsumer::setProducer(QSharedPointer<Mlt::Producer> p_producer)
     m_d->producer = p_producer;
     m_d->producer->set_profile(*m_d->profile);
     m_d->pullConsumer->connect_producer(*m_d->producer);
+}
+
+float KisMediaConsumer::temp_stopWatch()
+{
+    qint64 elapsed = m_d->temp.elapsed();
+    m_d->temp.restart();
+    return elapsed;
 }

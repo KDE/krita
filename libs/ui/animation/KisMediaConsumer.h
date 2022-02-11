@@ -33,6 +33,9 @@ public:
     void setFrameRate(int fps);
     int getFrameRate();
 
+    void setPlaybackSpeed(float p_nSpeed);
+    float playbackSpeed();
+
     void setMode(Mode setting);
     Mode getMode();
 
@@ -43,12 +46,13 @@ public:
 
     void setProducer(QSharedPointer<Mlt::Producer> p_producer);
 
+    float temp_stopWatch();
+
 Q_SIGNALS:
     void sigFrameShow(int frameIndex) const;
 
 private:
     QScopedPointer<struct Private> m_d;
-
 };
 
 #endif // KISMLTPLAYER_H

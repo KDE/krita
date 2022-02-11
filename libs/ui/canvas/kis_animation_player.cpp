@@ -602,7 +602,8 @@ void KisAnimationPlayer::setupAudioTracks()
         //Only get first file for now and make that a producer...
         QFileInfo toLoad = files.first();
         if (toLoad.exists()) {
-            QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->mediaConsumer->getProfile(), toLoad.absoluteFilePath().toUtf8().data()));
+            QString timewarpArgs = "0.5:" + toLoad.absoluteFilePath();
+            QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->mediaConsumer->getProfile(), "timewarp", timewarpArgs.toUtf8().data()));
             m_d->mediaConsumer->setProducer(producer);
         }
     }
@@ -622,13 +623,10 @@ void KisAnimationPlayer::setPlaybackSpeedPercent(int value)
 
 void KisAnimationPlayer::setPlaybackSpeedNormalized(double value)
 {
-    Q_UNIMPLEMENTED();
-    Q_UNUSED(value);
-    /*
-    if (m_d->playbackEnvironment->playbackSpeed() != value) {
-        m_d->playbackEnvironment->setPlaybackSpeed( value );
-        emit sigPlaybackSpeedChanged(m_d->playbackEnvironment->playbackSpeed());
-    }*/
+    if (m_d->mediaConsumer->playbackSpeed() != value) {
+        m_d->mediaConsumer->setPlaybackSpeed( value );
+        emit sigPlaybackSpeedChanged(m_d->mediaConsumer->playbackSpeed());
+    }
 }
 
 void KisAnimationPlayer::setPlaybackState(PlaybackState p_state)

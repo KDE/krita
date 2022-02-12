@@ -217,7 +217,7 @@ QString IccColorProfile::colorModelID() const
         model = "XYZA";
         break;
     case cmsSigYCbCrData:
-        model = "YCrCbA";
+        model = "YCbCrA";
         break;
     default:
         // In theory we should be able to interpret the colorspace signature as a 4 char array...

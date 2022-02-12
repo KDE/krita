@@ -21,7 +21,7 @@ private Q_SLOTS:
     void testSaveTiffGreyAColorSpace();
     void testSaveTiffCmykColorSpace();
     void testSaveTiffLabColorSpace();
-    void testSaveTiffYCrCbAColorSpace();
+    void testSaveTiffYCbCrAColorSpace();
 
     void testImportFromWriteonly();
     void testExportToReadonly();

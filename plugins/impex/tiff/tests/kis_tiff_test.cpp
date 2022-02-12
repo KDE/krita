@@ -152,10 +152,10 @@ void KisTiffTest::testSaveTiffLabColorSpace()
 }
 
 
-void KisTiffTest::testSaveTiffYCrCbAColorSpace()
+void KisTiffTest::testSaveTiffYCbCrAColorSpace()
 {
     /*
-     * There is no public/open profile for YCrCbA, so no way to test it...
+     * There is no public/open profile for YCbCrA, so no way to test it...
      *
     const QString profile = "";
     testSaveTiffColorSpace(YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);

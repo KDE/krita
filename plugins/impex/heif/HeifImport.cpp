@@ -115,7 +115,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         if (luma > 8) {
             colorDepth = Integer16BitsColorDepthID;
         }
-        // First, get the profile, because sometimes the image may be encoded in YCrCb and the embedded icc profile is graya.
+        // First, get the profile, because sometimes the image may be encoded in YCbCr and the embedded icc profile is graya.
 
         if (profileType == heif_color_profile_type_prof || profileType == heif_color_profile_type_rICC) {
             dbgFile << "profile type is icc profile";

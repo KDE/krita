@@ -362,7 +362,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
             d->colorSpaceSelector->TRCwidget->setProfileDataAvailable(false);
         }
         d->colorSpaceSelector->TongueWidget->setGamut(currentColorSpace()->gamutXYY());
-        d->colorSpaceSelector->TRCwidget->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for YCrCb."));
+        d->colorSpaceSelector->TRCwidget->setToolTip(i18nc("@info:tooltip","Estimated Gamma cannot be retrieved for YCbCr."));
     }
 
     d->colorSpaceSelector->textProfileDescription->clear();

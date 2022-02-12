@@ -430,9 +430,7 @@ void KisAdvancedColorSpaceSelector::fillDescription()
                                                                     "model designed for video encoding. It is based on human perception, meaning that it tries to "
                                                                     "encode the difference in lightness, red-green balance and yellow-blue balance. Chroma in "
                                                                     "this case is then a word indicating a special type of saturation, in these cases the saturation "
-                                                                    "of Red and Blue, of which the desaturated equivalents are Green and Yellow respectively. It "
-                                                                    "is available to open up certain images correctly, but Krita does not currently ship a profile for "
-                                                                    "this due to lack of open source ICC profiles for YCrCb.")+"</p>");
+                                                                    "of Red and Blue, of which the desaturated equivalents are Green and Yellow respectively.")+"</p>");
     }
 
     QString currentDepthStr = d->colorSpaceSelector->cmbColorDepth->currentItem().id();

@@ -503,8 +503,8 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
         cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
         cfg->setProperty("pattern", patternName);
-        cfg->setProperty("pattern/fileName", QString(patternID + ".pat"));
-        cfg->setProperty("pattern/md5", ""); // Zero out MD5, PSD patterns are looked up by UUID in filename
+        cfg->setProperty("fileName", QString(patternID + ".pat"));
+        cfg->setProperty("md5", ""); // Zero out MD5, PSD patterns are looked up by UUID in filename
 
         //angle is flipped for patterns in Krita.
         double fixedAngle = 360.0 - fmod(360.0 + angle, 360.0);
@@ -525,9 +525,9 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
             return false;
         }
 
-        const QString patternMD5 = cfg->getString("pattern/md5", "");
+        const QString patternMD5 = cfg->getString("md5", "");
         const QString patternNameTemp = cfg->getString("pattern", "Grid01.pat");
-        const QString patternFileName = cfg->getString("pattern/fileName", "");
+        const QString patternFileName = cfg->getString("fileName", "");
 
         KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
         pattern = res.resource<KoPattern>();

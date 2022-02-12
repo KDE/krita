@@ -71,9 +71,9 @@ public:
 
     KoResourceLoadResult pattern(KisResourcesInterfaceSP resourcesInterface) const
     {
-        const QString patternMD5 = getString("pattern/md5", "");
+        const QString patternMD5 = getString("md5", "");
         const QString patternName = getString("pattern", "Grid01.pat");
-        const QString patternFileName = getString("pattern/fileName", "");
+        const QString patternFileName = getString("fileName", "");
         auto source = resourcesInterface->source<KoPattern>(ResourceType::Patterns);
         KoResourceLoadResult res = source.bestMatchLoadResult(patternMD5, patternFileName, patternName);
         return res;
@@ -131,8 +131,8 @@ KisFilterConfigurationSP PatternGenerator::defaultConfiguration(KisResourcesInte
         return config;
     }
 
-    config->setProperty("pattern/md5", QVariant::fromValue(source.fallbackResource()->md5Sum()));
-    config->setProperty("pattern/fileName", QVariant::fromValue(source.fallbackResource()->filename()));
+    config->setProperty("md5", QVariant::fromValue(source.fallbackResource()->md5Sum()));
+    config->setProperty("fileName", QVariant::fromValue(source.fallbackResource()->filename()));
     config->setProperty("pattern", QVariant::fromValue(source.fallbackResource()->name()));
 
     config->setProperty("transform_shear_x", QVariant::fromValue(0.0));

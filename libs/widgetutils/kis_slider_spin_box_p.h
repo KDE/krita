@@ -759,9 +759,17 @@ public:
             // dragging then we set the value here and emit a signal
             } else if (e->button() == Qt::LeftButton) {
                 m_timerStartEditing.stop();
-                if (!m_isDragging) {
-                    setValue(valueForPoint(e->pos(), e->modifiers()), false, true);
+
+                if (m_blockUpdateSignalOnDrag) {
+                    const QPoint p(m_useRelativeDragging ? e->pos().x() + m_relativeDraggingOffset : e->pos().x(),
+                                   e->pos().y());
+                    setValue(valueForPoint(p, e->modifiers()), false, true);
+                } else {
+                    if (!m_isDragging) {
+                        setValue(valueForPoint(e->pos(), e->modifiers()), false, true);
+                    }
                 }
+
                 m_isDragging = false;
             }
             return true;

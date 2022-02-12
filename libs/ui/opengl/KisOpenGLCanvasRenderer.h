@@ -75,7 +75,6 @@ public:
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags);
     QRect updateCanvasProjection(KisUpdateInfoSP info);
 
-    bool isBusy() const;
     void setLodResetInProgress(bool value);
 
 private:

@@ -8,7 +8,6 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include "opengl/KisOpenGLCanvasRenderer.h"
-#include "opengl/KisOpenGLSync.h"
 
 #include "kis_algebra_2d.h"
 #include "opengl/kis_opengl_shader_loader.h"
@@ -93,8 +92,6 @@ public:
     QSharedPointer<KisDisplayFilter> displayFilter;
     KisOpenGL::FilterMode filterMode;
     bool proofingConfigIsUpdated=false;
-
-    QScopedPointer<KisOpenGLSync> glSyncObject;
 
     bool wrapAroundMode{false};
 
@@ -298,8 +295,6 @@ void KisOpenGLCanvasRenderer::initializeGL()
         glVertexAttribPointer(PROGRAM_TEXCOORD_ATTRIBUTE, 2, GL_FLOAT, GL_FALSE, 0 ,0);
     }
 
-    KisOpenGLSync::init(context());
-
     d->canvasInitialized = true;
 }
 
@@ -408,8 +403,6 @@ void KisOpenGLCanvasRenderer::paintGL(const QRect &updateRect)
     }
 
     renderDecorations(updateRect);
-
-    d->glSyncObject.reset(new KisOpenGLSync());
 }
 
 void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
@@ -534,13 +527,6 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
     }
 
     d->overlayInvertedShader->release();
-}
-
-bool KisOpenGLCanvasRenderer::isBusy() const
-{
-    const bool isBusyStatus = d->glSyncObject && !d->glSyncObject->isSignaled();
-    KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
-    return isBusyStatus;
 }
 
 void KisOpenGLCanvasRenderer::setLodResetInProgress(bool value)

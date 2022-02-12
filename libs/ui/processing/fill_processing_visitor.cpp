@@ -153,7 +153,7 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
 
 void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter, ProgressHelper &helper)
 {
-    // In continuous filling we use a selection  mask thatrepresents the
+    // In continuous filling we use a selection mask that represents the
     // cumulated regions already filled. Being able to discard filling
     // operations based on if they were already filled the area under
     // the cursor speeds up greatly the continuous fill operation
@@ -161,6 +161,19 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
     Q_ASSERT(m_continuousFillMask);
 
     // The following checks are useful in the continuous fill.
+    if (m_useSelectionAsBoundary && m_selection) {
+        // If we must use the current selection as boundary we must discard
+        // the continuous fill points that lie outside of it.
+        // This avoids unnecessary and expensive flood fill operations
+        // when the user drags the mouse outside the selection.
+        if (!m_selection->selectedRect().contains(seedPoint)) {
+            return;
+        }
+        const quint8 opacity = m_selection->projection()->pixel(seedPoint).opacityU8();
+        if (opacity == OPACITY_TRANSPARENT_U8) {
+            return;
+        }
+    }
     // Filling a pixel is likely to fill nearby pixels with the same color,
     // so this check should reduce the number of flood fill operations
     // considerably
@@ -207,18 +220,28 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
 
         newFillSelection = new KisSelection(pixelSelection->defaultBounds());
         newFillSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
-        if (m_selection) {
-            newFillSelection->pixelSelection()->applySelection(m_selection->projection(), SELECTION_INTERSECT);
-        }
     }
     // Now we actually fill the destination device
+    // If there is an active selection, we use a trimmed version of the mask to
+    // fill. We cannot trim the obtained mask since that would delete the not
+    // selected areas from it and those are need to be part of the continuous
+    // fill mask. This avoids unnecessary and expensive flood fill operations
+    // when the user drags the mouse outside the selection.
     {
+        KisSelectionSP trimmedFillSelection;
+        if (m_selection) {
+            trimmedFillSelection = new KisSelection(newFillSelection->pixelSelection()->defaultBounds());
+            trimmedFillSelection->pixelSelection()->applySelection(newFillSelection->pixelSelection(), SELECTION_REPLACE);
+            trimmedFillSelection->pixelSelection()->applySelection(m_selection->projection(), SELECTION_INTERSECT);
+        } else {
+            trimmedFillSelection = newFillSelection;
+        }
         KisSelectionSP tmpSelection = m_selection;
-        m_selection = newFillSelection;
+        m_selection = trimmedFillSelection;
         selectionFill(device, fillRect, undoAdapter, helper);
         m_selection = tmpSelection;
     }
-    // Now we update the continuous fill mask
+    // Now we update the continuous fill mask with the new mask
     {
         m_continuousFillMask->pixelSelection()->applySelection(newFillSelection->pixelSelection(), SELECTION_ADD);
     }

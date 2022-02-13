@@ -169,6 +169,14 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg(true);
 
+    // HACK ALERT!
+    // QScrollArea contents are opaque at multiple levels
+    // The contents themselves AND the viewport widget
+    {
+        scrollAreaWidgetContents->setAutoFillBackground(false);
+        scrollAreaWidgetContents->parentWidget()->setAutoFillBackground(false);
+    }
+
     //
     // Cursor Tab
     //

@@ -181,7 +181,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Swap File Size</string>
+          <string>Swap File</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
@@ -190,7 +190,7 @@
              <string>The swap file will not be bigger than this limit.</string>
             </property>
             <property name="text">
-             <string>File Size Limit:</string>
+             <string>Size Limit:</string>
             </property>
            </widget>
           </item>
@@ -221,7 +221,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Swap File Location:</string>
+             <string>Location:</string>
             </property>
            </widget>
           </item>

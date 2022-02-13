@@ -340,49 +340,58 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
-         <property name="text">
-          <string>Debug logging of OpenGL framerate</string>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string>Debug options</string>
          </property>
+         <layout class="QFormLayout" name="formLayout_9">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
+            <property name="text">
+             <string>Debug logging of OpenGL framerate</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="chkBrushSpeedLogging">
+            <property name="text">
+             <string>Debug logging for brush rendering speed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="chkDisableAVXOptimizations">
+            <property name="text">
+             <string>Disable AVX vector optimizations</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="chkDisableVectorOptimizations">
+            <property name="text">
+             <string>Disable all vector optimizations</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="chkProgressReporting">
+            <property name="text">
+             <string>Progress reporting (might affect performance)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QCheckBox" name="chkPerformanceLogging">
+            <property name="text">
+             <string>Performance logging</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="chkBrushSpeedLogging">
-         <property name="text">
-          <string>Debug logging for brush rendering speed</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="chkDisableAVXOptimizations">
-         <property name="text">
-          <string>Disable AVX vector optimizations</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="chkDisableVectorOptimizations">
-         <property name="text">
-          <string>Disable all vector optimizations</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QCheckBox" name="chkProgressReporting">
-         <property name="text">
-          <string>Progress reporting (might affect performance)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QCheckBox" name="chkPerformanceLogging">
-         <property name="text">
-          <string>Performance logging</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="2">
+       <item row="3" column="0" colspan="2">
         <widget class="QLabel" name="label_7">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
@@ -398,7 +407,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0" colspan="2">
+       <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

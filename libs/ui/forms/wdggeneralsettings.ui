@@ -1078,29 +1078,13 @@
              </layout>
             </widget>
            </item>
-           <item row="8" column="0">
-            <widget class="QLabel" name="label_16">
-             <property name="text">
-              <string>Animation:</string>
+           <item row="8" column="0" colspan="2">
+            <widget class="QGroupBox" name="groupBox_5">
+             <property name="title">
+              <string>Animation</string>
              </property>
-            </widget>
-           </item>
-           <item row="8" column="1">
-            <widget class="QWidget" name="widget_5" native="true">
-             <layout class="QVBoxLayout" name="verticalLayout_5">
-              <property name="leftMargin">
-               <number>0</number>
-              </property>
-              <property name="topMargin">
-               <number>0</number>
-              </property>
-              <property name="rightMargin">
-               <number>0</number>
-              </property>
-              <property name="bottomMargin">
-               <number>0</number>
-              </property>
-              <item>
+             <layout class="QFormLayout" name="formLayout_15">
+              <item row="0" column="0">
                <widget class="QCheckBox" name="m_chkAutoPin">
                 <property name="enabled">
                  <bool>true</bool>
@@ -1113,7 +1097,7 @@
                 </property>
                </widget>
               </item>
-              <item>
+              <item row="1" column="0">
                <widget class="QCheckBox" name="m_chkAdaptivePlaybackRange">
                 <property name="text">
                  <string>Adapt playback range to keyframes</string>

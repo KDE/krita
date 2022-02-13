@@ -533,32 +533,23 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <widget class="QGroupBox" name="groupBox_6">
-         <property name="title">
-          <string>Transform Tool</string>
+        <widget class="QCheckBox" name="chkTransformToolUseInStackPreview">
+         <property name="toolTip">
+          <string/>
          </property>
-         <layout class="QFormLayout" name="formLayout_7">
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="chkTransformToolUseInStackPreview">
-            <property name="toolTip">
-             <string/>
-            </property>
-            <property name="text">
-             <string>Use in-stack preview in Transform Tool</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QCheckBox" name="chkTransformToolForceLodMode">
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The transform tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Force Instant Preview in Transform Tool</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <property name="text">
+          <string>Use in-stack preview in Transform Tool</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkTransformToolForceLodMode">
+         <property name="toolTip">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The transform tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="text">
+          <string>Force Instant Preview in Transform Tool</string>
+         </property>
         </widget>
        </item>
        <item>

@@ -243,6 +243,13 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>&lt;b&gt;Note: Krita will need to be restarted for changes to take effect&lt;/b&gt;</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -1311,15 +1318,15 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
    <header>kis_int_parse_spin_box.h</header>
   </customwidget>
   <customwidget>
-   <class>KisColorButton</class>
-   <extends>QPushButton</extends>
-   <header>kis_color_button.h</header>
-  </customwidget>
-  <customwidget>
    <class>KisFileNameRequester</class>
    <extends>QWidget</extends>
    <header>kis_file_name_requester.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kis_color_button.h</header>
   </customwidget>
   <customwidget>
    <class>KisFontComboBoxes</class>

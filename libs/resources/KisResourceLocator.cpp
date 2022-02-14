@@ -897,8 +897,16 @@ void KisResourceLocator::saveTags()
                                  query.value("resource_types.name").toString());
 
         QString filename = tag->filename();
-        if (filename.isEmpty()) {
+        if (filename.isEmpty() || QFileInfo(filename).suffix().isEmpty()) {
             filename = tag->url() + ".tag";
+        }
+
+
+        if (QFileInfo(filename).suffix() != "tag" && QFileInfo(filename).suffix() != "TAG") {
+            // it's either .abr file, or maybe a .bundle
+            // or something else, but not a tag file
+            dbgResources << "Skipping saving tag " << tag->name(false) << filename << tag->resourceType();
+            continue;
         }
 
         filename = makeStorageLocationRelative(filename);

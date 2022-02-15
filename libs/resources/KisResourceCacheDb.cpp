@@ -174,7 +174,9 @@ QSqlError createDatabase(const QString &location)
                 schemaIsOutDated = true;
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
-                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.16")  && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0) {
+                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.16")
+                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0
+                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.16")) < 0) {
                     bool from14to15 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14");
                     bool from15to16 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15");

@@ -537,7 +537,8 @@ bool KisAllTagsModel::resetQuery()
                               ",      resource_types\n"
                               "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
                               "WHERE  tags.resource_type_id = resource_types.id\n"
-                              "AND    resource_types.name = :resource_type\n");
+                              "AND    resource_types.name = :resource_type\n"
+                              "ORDER BY tags.id\n");
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagsModel query" << d->query.lastError();

@@ -18,6 +18,7 @@
 #include "kis_mouse_input_editor.h"
 #include "kis_wheel_input_editor.h"
 #include "kis_key_input_editor.h"
+#include "KisGestureSelector.h"
 
 class KisInputEditorDelegate::Private
 {
@@ -38,7 +39,7 @@ KisInputEditorDelegate::~KisInputEditorDelegate()
 
 QWidget *KisInputEditorDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &index) const
 {
-    QPushButton *editor = 0;
+    QWidget *editor = 0;
     KisShortcutConfiguration *s = index.data(Qt::EditRole).value<KisShortcutConfiguration *>();
 
     switch (s->type()) {
@@ -52,6 +53,10 @@ QWidget *KisInputEditorDelegate::createEditor(QWidget *parent, const QStyleOptio
 
     case KisShortcutConfiguration::MouseWheelType:
         editor = new KisWheelInputEditor(parent);
+        break;
+
+    case KisShortcutConfiguration::GestureType:
+        editor = new KisGestureSelector(parent);
         break;
 
     default:
@@ -85,6 +90,11 @@ void KisInputEditorDelegate::setEditorData(QWidget *editor, const QModelIndex &i
         e->setWheel(s->wheel());
         break;
     }
+    case KisShortcutConfiguration::GestureType: {
+        KisGestureSelector *e = qobject_cast<KisGestureSelector *>(editor);
+        e->setGesture(s->gesture());
+        break;
+    }
 
     default:
         break;
@@ -113,6 +123,11 @@ void KisInputEditorDelegate::setModelData(QWidget *editor, QAbstractItemModel *m
         KisWheelInputEditor *e = qobject_cast<KisWheelInputEditor *>(editor);
         s->setKeys(e->keys());
         s->setWheel(e->wheel());
+        break;
+    }
+    case KisShortcutConfiguration::GestureType: {
+        KisGestureSelector *e = qobject_cast<KisGestureSelector *>(editor);
+        s->setGesture(e->gesture());
         break;
     }
     break;

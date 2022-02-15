@@ -393,3 +393,29 @@ QString KisShortcutConfiguration::wheelInputToText(const QList<Qt::Key> &keys, K
         return wheelText;
     }
 }
+
+QString KisShortcutConfiguration::gestureToText(GestureAction action)
+{
+    switch (action) {
+    case NoGesture:
+        return "NoGesture";
+    case PinchGesture:
+        return "Pinch Gesture";
+    case PanGesture:
+        return "Pan Gesture";
+    case RotateGesture:
+        return "Rotate Gesture";
+    case SmartZoomGesture:
+        return "Smart Zoom Gesture";
+    case ZoomAndRotateGesture:
+        return "Zoom And Rotate Gesture";
+    case TwoFingerTouch:
+        return "Two Finger Touch";
+    case ThreeFingerTouch:
+        return "Three Finger Touch";
+    case FourFingerTouch:
+        return "Four Finger Touch";
+    default:
+        return QString();
+    }
+}

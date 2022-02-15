@@ -100,6 +100,10 @@ QVariant KisActionShortcutsModel::data(const QModelIndex &index, int role) const
                     s->keys(), s->wheel());
                 break;
 
+            case KisShortcutConfiguration::GestureType:
+                output = KisShortcutConfiguration::gestureToText(s->gesture());
+                break;
+
             default:
                 break;
             }

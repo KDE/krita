@@ -282,6 +282,8 @@ public:
      */
     static QString wheelInputToText(const QList<Qt::Key> &keys, MouseWheelMovement wheel);
 
+    static QString gestureToText(GestureAction action);
+
 private:
     class Private;
     Private *const d;

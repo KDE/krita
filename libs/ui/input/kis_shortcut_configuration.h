@@ -60,7 +60,9 @@ public:
         RotateGesture, ///<Rotate gesture, two fingers rotating around a pivot point.
         SmartZoomGesture, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
         ZoomAndRotateGesture, ///< Zoom and rotate gesture, canvas being both zoomed and rotated using two fingers.
-        ToggleCanvasOnlyGesture, ///< Toggle Canvas Only mode on and off, with four finger tap
+        TwoFingerTouch,
+        ThreeFingerTouch,
+        FourFingerTouch,
     };
 
     /**

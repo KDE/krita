@@ -565,7 +565,15 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
             shortcut->setMaximumTouchPoints(3);
         }
         break;
-    case KisShortcutConfiguration::ToggleCanvasOnlyGesture:
+    case KisShortcutConfiguration::TwoFingerTouch:
+        shortcut->setMinimumTouchPoints(2);
+        shortcut->setMaximumTouchPoints(2);
+        break;
+    case KisShortcutConfiguration::ThreeFingerTouch:
+        shortcut->setMinimumTouchPoints(3);
+        shortcut->setMaximumTouchPoints(3);
+        break;
+    case KisShortcutConfiguration::FourFingerTouch:
         shortcut->setMinimumTouchPoints(4);
         shortcut->setMaximumTouchPoints(4);
         break;

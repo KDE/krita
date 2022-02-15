@@ -266,6 +266,9 @@ private:
     void forceEndRunningShortcut(const QPointF &localPos);
     void forceDeactivateAllActions();
 
+    void setMaxTouchPointEvent(QTouchEvent *event);
+    void fireReadyTouchShortcut();
+    KisTouchShortcut *matchTouchShortcut(QTouchEvent *event);
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);
 

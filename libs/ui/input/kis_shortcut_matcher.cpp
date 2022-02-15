@@ -27,12 +27,18 @@
 #define DEBUG_KEY(text) qDebug() << __FUNCTION__ << "-" << text << "keys:" << m_d->keys;
 #define DEBUG_BUTTON_ACTION(text, button) qDebug() << __FUNCTION__ << "-" << text << "button:" << button << "btns:" << m_d->buttons << "keys:" << m_d->keys;
 #define DEBUG_EVENT_ACTION(text, event) if (event) {qDebug() << __FUNCTION__ << "-" << text << "type:" << event->type();}
+#define DEBUG_TOUCH_ACTION(text, event)                                                                                \
+    if (event) {                                                                                                       \
+        qDebug() << __FUNCTION__ << "-" << text << "type:" << event->type() << "tps:" << event->touchPoints().size()   \
+                 << "maxTps:" << m_d->maxTouchPoints;                                                                  \
+    }
 #else
 #define DEBUG_ACTION(text)
 #define DEBUG_KEY(text)
 #define DEBUG_SHORTCUT(text, shortcut)
 #define DEBUG_BUTTON_ACTION(text, button)
 #define DEBUG_EVENT_ACTION(text, event)
+#define DEBUG_TOUCH_ACTION(text, event)
 #endif
 
 
@@ -73,6 +79,10 @@ public:
     KisTouchShortcut *touchShortcut;
     KisNativeGestureShortcut *nativeGestureShortcut;
     QList<QTouchEvent::TouchPoint> lastTouchPoints;
+
+    int maxTouchPoints{0};
+    int matchingIteration{0};
+    QScopedPointer<QEvent> bestCandidateTouchEvent;
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
@@ -362,28 +372,62 @@ void KisShortcutMatcher::leaveEvent()
 
 bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 {
-    Q_UNUSED(event);
+    DEBUG_TOUCH_ACTION("entered", event)
 
     Private::RecursionNotifier notifier(this);
 
     m_d->lastTouchPoints = event->touchPoints();
+
+    // reset state
+    m_d->maxTouchPoints = event->touchPoints().size();;
+    m_d->matchingIteration = 1;
+    KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
+
     return !notifier.isInRecursion();
 }
 
-bool KisShortcutMatcher::touchUpdateEvent( QTouchEvent* event )
+bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
 {
+    DEBUG_TOUCH_ACTION("entered", event)
+
     bool retval = false;
 
-    if (m_d->touchShortcut && !m_d->touchShortcut->match( event ) ) {
-        retval = tryEndTouchShortcut( event );
+    const int touchPointCount = event->touchPoints().size();
+    const int numIterations = 5;
+
+    // for a first few events we don't process the events right away. But analyze and keep track of the event with most
+    // touchpoints. This is done to prevent conditions where in three-finger-tap, two-finger-tap be preceded due to
+    // latency
+    if (m_d->matchingIteration <= numIterations) {
+        m_d->matchingIteration++;
+        setMaxTouchPointEvent(event);
+        DEBUG_TOUCH_ACTION("return best", event)
+        return true;
     }
 
-    if (!m_d->touchShortcut ) {
-        retval = tryRunTouchShortcut( event );
+    // triggerred if a new finger was added, which might result in shortcut not matching the action
+    if (m_d->touchShortcut && !m_d->touchShortcut->match(event)) {
+        DEBUG_TOUCH_ACTION("ending", event)
+        // we should end the event as an event with more touchpoints was received
+        retval = tryEndTouchShortcut(event);
+        if (m_d->maxTouchPoints < touchPointCount) {
+            m_d->maxTouchPoints = touchPointCount;
+        }
     }
-    else {
-        m_d->touchShortcut->action()->inputEvent( event );
-        retval = true;
+
+    // don't start a new event if touch points are less than max. Which means the touch event with more touch points has
+    // already ended and we should start another event
+    if (m_d->maxTouchPoints <= touchPointCount) {
+        m_d->maxTouchPoints = touchPointCount;
+        if (!m_d->touchShortcut) {
+            DEBUG_TOUCH_ACTION("starting", event)
+            retval = tryRunTouchShortcut(event);
+            // we reset the bestCandidate because action is selected and now we don't need to rely on it
+            m_d->bestCandidateTouchEvent.reset();
+        } else {
+            m_d->touchShortcut->action()->inputEvent(event);
+            retval = true;
+        }
     }
 
     return retval;
@@ -392,7 +436,13 @@ bool KisShortcutMatcher::touchUpdateEvent( QTouchEvent* event )
 bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 {
     m_d->usingTouch = false; // we need to say we are done because qt will not send further event
+    m_d->maxTouchPoints = 0;
 
+    if (m_d->bestCandidateTouchEvent) {
+        fireReadyTouchShortcut();
+    }
+
+    DEBUG_TOUCH_ACTION("ending", event)
     // we should try and end the shortcut too (it might be that there is none? (sketch))
     if (tryEndTouchShortcut(event)) {
         return true;
@@ -404,6 +454,7 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
 void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &localPos)
 {
     m_d->usingTouch = false;
+    m_d->maxTouchPoints = 0;
 
     // TODO(sh_zam): maybe try to combine KisStrokeShortcut with KisTouchShortcut?
 
@@ -776,21 +827,49 @@ void KisShortcutMatcher::forceDeactivateAllActions()
     }
 }
 
-bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
+void KisShortcutMatcher::setMaxTouchPointEvent(QTouchEvent *event)
 {
-    KisTouchShortcut *goodCandidate = 0;
+    int touchPointCount = event->touchPoints().size();
+    if (touchPointCount > m_d->maxTouchPoints) {
+        m_d->maxTouchPoints = touchPointCount;
+        KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
+    }
+}
 
-    if (m_d->actionsSuppressed())
-        return false;
+void KisShortcutMatcher::fireReadyTouchShortcut()
+{
+    QTouchEvent *event = dynamic_cast<QTouchEvent *>(m_d->bestCandidateTouchEvent.data());
+    KisTouchShortcut *goodCandidate = matchTouchShortcut(event);
 
-    Q_FOREACH (KisTouchShortcut* shortcut, m_d->touchShortcuts) {
-        if (shortcut->isAvailable(m_d->actionGroupMask()) &&
-            shortcut->match( event ) &&
-            (!goodCandidate || shortcut->priority() > goodCandidate->priority()) ) {
+    if (goodCandidate) {
+        DEBUG_TOUCH_ACTION("starting", event)
+        goodCandidate->action()->activate(goodCandidate->shortcutIndex());
+        goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
+
+        goodCandidate->action()->end(event);
+        goodCandidate->action()->deactivate(goodCandidate->shortcutIndex());
+    }
+}
+
+KisTouchShortcut *KisShortcutMatcher::matchTouchShortcut(QTouchEvent *event)
+{
+    KisTouchShortcut *goodCandidate = nullptr;
+    Q_FOREACH (KisTouchShortcut *shortcut, m_d->touchShortcuts) {
+        if (shortcut->isAvailable(m_d->actionGroupMask()) && shortcut->match(event)
+            && (!goodCandidate || shortcut->priority() > goodCandidate->priority())) {
 
             goodCandidate = shortcut;
         }
     }
+    return goodCandidate;
+}
+
+bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
+{
+    KisTouchShortcut *goodCandidate = matchTouchShortcut(event);
+
+    if (m_d->actionsSuppressed())
+        return false;
 
     if( goodCandidate ) {
         if( m_d->runningShortcut ) {
@@ -806,6 +885,7 @@ bool KisShortcutMatcher::tryRunTouchShortcut( QTouchEvent* event )
         m_d->usingTouch = true;
 
         Private::RecursionGuard guard(this);
+        DEBUG_SHORTCUT("Running a touch shortcut", goodCandidate)
         goodCandidate->action()->activate(goodCandidate->shortcutIndex());
         goodCandidate->action()->begin(goodCandidate->shortcutIndex(), event);
 
@@ -827,6 +907,7 @@ bool KisShortcutMatcher::tryEndTouchShortcut( QTouchEvent* event )
         // first reset running shortcut to avoid infinite recursion via end()
         KisTouchShortcut *touchShortcut = m_d->touchShortcut;
 
+        DEBUG_SHORTCUT("ending", touchShortcut)
         touchShortcut->action()->end(event);
         touchShortcut->action()->deactivate(m_d->touchShortcut->shortcutIndex());
 

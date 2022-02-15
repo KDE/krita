@@ -83,7 +83,16 @@ std::optional<KisBrushModel::BrushData> KisBrushRegistry::createBrushModel(const
 
 void KisBrushRegistry::toXML(QDomDocument &doc, QDomElement &element, const KisBrushModel::BrushData &model)
 {
-    QString brushType = model.subtype;
+    QString brushType;
+
+    if (model.type == KisBrushModel::Auto) {
+        brushType = "auto_brush";
+    } else if (model.type == KisBrushModel::Text) {
+        brushType = "kis_text_brush";
+    } else {
+        brushType = model.predefinedBrush.subtype;
+    }
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(!brushType.isEmpty());
 
     KisBrushFactory *factory = get(brushType);

@@ -13,8 +13,9 @@
 #include "kis_brush_factory.h"
 #include "kis_brush.h"
 
+#include "kritabrush_export.h"
 
-class KisPredefinedBrushFactory : public KisBrushFactory
+class BRUSH_EXPORT KisPredefinedBrushFactory : public KisBrushFactory
 {
 public:
     KisPredefinedBrushFactory(const QString &brushType);
@@ -22,6 +23,7 @@ public:
     QString id() const override;
     KoResourceLoadResult createBrush(const QDomElement& brushDefinition, KisResourcesInterfaceSP resourcesInterface) override;
     std::optional<KisBrushModel::BrushData> createBrushModel(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface) override;
+    static void loadFromBrushResource(KisBrushModel::CommonData &commonData, KisBrushModel::PredefinedBrushData &predefinedBrushData, KisBrushSP brushResource);
     void toXML(QDomDocument &doc, QDomElement &element, const KisBrushModel::BrushData &model) override;
 private:
     const QString m_id;

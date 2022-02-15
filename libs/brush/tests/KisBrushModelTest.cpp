@@ -39,7 +39,6 @@ void KisBrushModelTest::testAutoBrush()
     KisBrushModel::BrushData data;
 
     data.type = KisBrushModel::Auto;
-    data.subtype = "auto_brush";
     data.common.angle = 3;
     data.common.spacing = 0.5;
     data.common.autoSpacingCoeff = 1.1;
@@ -81,13 +80,14 @@ void KisBrushModelTest::testPredefinedBrush()
     KisBrushModel::BrushData data;
 
     data.type = KisBrushModel::Predefined;
-    data.subtype = "png_brush";
     data.common.angle = 3;
     data.common.spacing = 0.5;
     data.common.autoSpacingCoeff = 1.1;
     data.common.useAutoSpacing = true;
 
     data.predefinedBrush.resourceSignature = fallbackBrush->signature();
+    data.predefinedBrush.subtype = "png_brush";
+    data.predefinedBrush.brushType = fallbackBrush->brushType();
     data.predefinedBrush.baseSize = { fallbackBrush->width(), fallbackBrush->height()};
     data.predefinedBrush.scale = 0.7;
     data.predefinedBrush.application = LIGHTNESSMAP;
@@ -115,7 +115,6 @@ void KisBrushModelTest::testTextBrush()
     KisBrushModel::BrushData data;
 
     data.type = KisBrushModel::Text;
-    data.subtype = "kis_text_brush";
     data.common.spacing = 0.5;
 
     // FIXME: angle and auto-spacing are not saved yet!

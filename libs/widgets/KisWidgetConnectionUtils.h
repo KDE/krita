@@ -42,6 +42,7 @@ struct ComboBoxState {
     QStringList items;
     int currentIndex = -1;
     bool enabled = true;
+    QStringList toolTips;
 };
 
 struct SpacingState {

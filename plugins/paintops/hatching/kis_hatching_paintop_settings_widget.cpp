@@ -31,10 +31,8 @@
 #include <QDomElement>
 
 KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
-    : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision, parent)
 {
-    setPrecisionEnabled(true);
-
     //-------Adding widgets to the screen------------
 
     addPaintOpOption(new KisHatchingOptions());

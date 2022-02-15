@@ -11,20 +11,18 @@
 
 void KisPrecisionOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
-    settings->setProperty(PRECISION_LEVEL, m_precisionLevel);
-    settings->setProperty(AUTO_PRECISION_ENABLED,m_autoPrecisionEnabled);
+    m_precisionData.write(settings.data());
 }
 
 void KisPrecisionOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
 {
-    m_precisionLevel = settings->getInt(PRECISION_LEVEL, 5);
-    m_autoPrecisionEnabled = settings->getBool(AUTO_PRECISION_ENABLED,false);
+    m_precisionData = KisBrushModel::PrecisionData::read(settings.data());
 }
 
 int KisPrecisionOption::effectivePrecisionLevel(qreal effectiveDabSize) const
 {
-    if (!m_autoPrecisionEnabled) {
-        return m_precisionLevel;
+    if (!m_precisionData.useAutoPrecision) {
+        return m_precisionData.precisionLevel;
     } else {
         return effectiveDabSize < 30.0 || !m_hasImprecisePositionOptions ? 5 : 3;
     }
@@ -42,20 +40,43 @@ bool KisPrecisionOption::hasImprecisePositionOptions() const
 
 int KisPrecisionOption::precisionLevel() const
 {
-    return m_precisionLevel;
+    return m_precisionData.precisionLevel;
 }
 
 void KisPrecisionOption::setPrecisionLevel(int precisionLevel)
 {
-    m_precisionLevel = precisionLevel;
+    m_precisionData.precisionLevel = precisionLevel;
 }
 
 void KisPrecisionOption::setAutoPrecisionEnabled(int value)
 {
-    m_autoPrecisionEnabled = value;
+    m_precisionData.useAutoPrecision = value;
 }
 
 bool KisPrecisionOption::autoPrecisionEnabled()
 {
-    return m_autoPrecisionEnabled;
+    return m_precisionData.useAutoPrecision;
+}
+
+namespace KisBrushModel {
+bool operator==(const PrecisionData &lhs, const PrecisionData &rhs)
+{
+    return lhs.precisionLevel == rhs.precisionLevel &&
+            lhs.useAutoPrecision == rhs.useAutoPrecision;
+}
+
+PrecisionData KisBrushModel::PrecisionData::read(const KisPropertiesConfiguration *config)
+{
+
+    PrecisionData data;
+    data.precisionLevel = config->getInt(PRECISION_LEVEL, 5);
+    data.useAutoPrecision = config->getBool(AUTO_PRECISION_ENABLED,false);
+    return data;
+}
+
+void PrecisionData::write(KisPropertiesConfiguration *config) const
+{
+    config->setProperty(PRECISION_LEVEL, precisionLevel);
+    config->setProperty(AUTO_PRECISION_ENABLED, useAutoPrecision);
+}
 }

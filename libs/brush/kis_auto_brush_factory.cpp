@@ -40,7 +40,6 @@ KisAutoBrushFactory::createBrushModel(const QDomElement &element, KisResourcesIn
     KisBrushModel::BrushData brush;
 
     brush.type = KisBrushModel::Auto;
-    brush.subtype = id();
     brush.common.angle = KisDomUtils::toDouble(element.attribute("angle", "0.0"));
     brush.common.spacing = KisDomUtils::toDouble(element.attribute("spacing", "1.0"));
     brush.common.useAutoSpacing = KisDomUtils::toInt(element.attribute("useAutoSpacing", "0"));

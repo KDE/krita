@@ -35,12 +35,12 @@
 #include "kis_signals_blocker.h"
 
 
-KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent):
-    KisBrushBasedPaintopOptionWidget(parent)
+KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent)
+    : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
+                                       KisBrushOptionWidgetFlag::SupportsHSLBrushMode,
+                                       parent)
 {
     setObjectName("brush option widget");
-    setPrecisionEnabled(true);
-    setHSLBrushTipEnabled(true);
 
     addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));

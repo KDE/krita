@@ -30,11 +30,10 @@
 
 
 KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent):
-    KisBrushBasedPaintopOptionWidget(parent)
+    KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
+                                     KisBrushOptionWidgetFlag::SupportsHSLBrushMode, parent)
 {
     setObjectName("brush option widget");
-    setPrecisionEnabled(true);
-    setHSLBrushTipEnabled(true);
 
     addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));

@@ -12,8 +12,11 @@
 #include <QFileInfo>
 #include "kis_gbr_brush.h"
 #include "kis_png_brush.h"
+#include "kis_abr_brush.h"
+#include "kis_svg_brush.h"
 #include <kis_dom_utils.h>
 #include <KisResourcesInterface.h>
+#include "kis_imagepipe_brush.h"
 
 KisPredefinedBrushFactory::KisPredefinedBrushFactory(const QString &brushType)
     : m_id(brushType)
@@ -147,15 +150,16 @@ std::optional<KisBrushModel::BrushData> KisPredefinedBrushFactory::createBrushMo
     }
 
     brush.type = KisBrushModel::Predefined;
-    brush.subtype = id();
+
+    /// we should first initialize data from the brush, because it may
+    /// change the spacing properties embedded into some brushes
+    loadFromBrushResource(brush.common, brush.predefinedBrush, brushResource);
 
     brush.common.angle = KisDomUtils::toDouble(element.attribute("angle", "0.0"));
     brush.common.spacing = KisDomUtils::toDouble(element.attribute("spacing", "0.25"));
     brush.common.useAutoSpacing = KisDomUtils::toInt(element.attribute("useAutoSpacing", "0"));
     brush.common.autoSpacingCoeff = KisDomUtils::toDouble(element.attribute("autoSpacingCoeff", "1.0"));
 
-    brush.predefinedBrush.resourceSignature = brushResource->signature();
-    brush.predefinedBrush.baseSize = { brushResource->width(), brushResource->height() };
     brush.predefinedBrush.scale = KisDomUtils::toDouble(element.attribute("scale", "1.0"));
 
     // legacy support...
@@ -245,6 +249,33 @@ std::optional<KisBrushModel::BrushData> KisPredefinedBrushFactory::createBrushMo
     }
 
     return {brush};
+}
+
+void KisPredefinedBrushFactory::loadFromBrushResource(KisBrushModel::CommonData &commonData, KisBrushModel::PredefinedBrushData &predefinedBrushData, KisBrushSP brushResource)
+{
+    commonData.spacing = brushResource->spacing();
+    commonData.useAutoSpacing = brushResource->autoSpacingActive();
+    commonData.autoSpacingCoeff = brushResource->autoSpacingCoeff();
+    predefinedBrushData.resourceSignature = brushResource->signature();
+    predefinedBrushData.brushType = brushResource->brushType();
+    predefinedBrushData.baseSize = { brushResource->width(), brushResource->height() };
+
+    if (brushResource.dynamicCast<KisGbrBrush>()) {
+        predefinedBrushData.subtype = "gbr_brush";
+    } else if (brushResource.dynamicCast<KisAbrBrush>()) {
+        predefinedBrushData.subtype = "abr_brush";
+    } else if (brushResource.dynamicCast<KisPngBrush>()) {
+        predefinedBrushData.subtype = "png_brush";
+    } else if (brushResource.dynamicCast<KisSvgBrush>()) {
+        predefinedBrushData.subtype = "svg_brush";
+    } else {
+        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "unknown brush type");
+    }
+
+    KisImagePipeBrushSP imagepipeBrush = brushResource.dynamicCast<KisImagePipeBrush>();
+    if (imagepipeBrush) {
+        predefinedBrushData.parasiteSelection = imagepipeBrush->parasiteSelection();
+    }
 }
 
 void KisPredefinedBrushFactory::toXML(QDomDocument &doc, QDomElement &e, const KisBrushModel::BrushData &model)

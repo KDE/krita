@@ -38,13 +38,15 @@
 
 #include <KisPrefixedPaintOpOptionWrapper.h>
 #include <KisPaintopSettingsIds.h>
+#include "kis_brush_option_widget.h"
+
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
-    : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
+                                       KisBrushOptionWidgetFlag::SupportsHSLBrushMode,
+                                       parent)
 {
     setObjectName("brush option widget");
-    setPrecisionEnabled(true);
-    setHSLBrushTipEnabled(true);
 
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true));
@@ -82,10 +84,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisTextureOption(SupportsLightnessMode | SupportsGradientMode));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
 
-    KisMaskingBrushOption::MasterBrushSizeAdapter sizeAdapter =
-        [this] () { return this->brush()->userEffectiveSize(); };
-
-    KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(sizeAdapter);
+    KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(brushOptionWidget()->effectiveBrushSize());
     addPaintOpOption(maskingOption);
 
     connect(maskingOption, SIGNAL(sigCheckedChanged(bool)),
@@ -143,6 +142,5 @@ KisPropertiesConfigurationSP KisBrushOpSettingsWidget::configuration() const
 
 void KisBrushOpSettingsWidget::notifyPageChanged()
 {
-    KisBrushSP brush = this->brush();
-    m_lightnessStrengthOptionWidget->setEnabled(brush->preserveLightness());
+    m_lightnessStrengthOptionWidget->setEnabled(this->brushOptionWidget()->preserveLightness());
 }

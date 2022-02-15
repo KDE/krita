@@ -26,7 +26,7 @@
 #include "kis_offset_scale_option.h"
 
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
-    : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::None, parent)
 {
     addPaintOpOption(new KisSketchOpOption());
     addPaintOpOption(new KisCompositeOpOption(true));

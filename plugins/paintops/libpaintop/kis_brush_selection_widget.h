@@ -19,6 +19,7 @@
 
 #include <lager/cursor.hpp>
 #include <KisBrushModel.h>
+#include <KisBrushOptionWidgetFlags.h>
 
 class KisAutoBrushWidget;
 class KisPredefinedBrushChooser;
@@ -26,6 +27,7 @@ class KisTextBrushChooser;
 class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
 class KisBrush;
+class QStackedWidget;
 
 
 /**
@@ -36,7 +38,11 @@ class PAINTOP_EXPORT KisBrushSelectionWidget : public QWidget
     Q_OBJECT
 
 public:
-    KisBrushSelectionWidget(int maxBrushSize, lager::cursor<KisBrushModel::BrushData> brushData, QWidget *parent = 0);
+    KisBrushSelectionWidget(int maxBrushSize,
+                            lager::cursor<KisBrushModel::BrushData> brushData,
+                            lager::cursor<KisBrushModel::PrecisionData> precisionData,
+                            KisBrushOptionWidgetFlags flags,
+                            QWidget *parent = 0);
 
     ~KisBrushSelectionWidget() override;
 
@@ -46,27 +52,12 @@ public:
 
     void setCurrentBrush(KisBrushSP brush);
 
-    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
-
-    void setPrecisionEnabled(bool value);
-    bool autoPrecisionEnabled();
-
     void hideOptions(const QStringList &options);
-
-    void setHSLBrushTipEnabled(bool value);
-    bool hslBrushTipEnabled() const;
-
 
 Q_SIGNALS:
 
     void sigBrushChanged();
     void sigPrecisionChanged();
-
-private Q_SLOTS:
-    void buttonClicked(int id);
-    void precisionChanged(int value);
-    void setAutoPrecisionEnabled(int value);
 
 private:
     void setCurrentWidget(QWidget *widget);
@@ -85,6 +76,7 @@ private:
     QHash<int, QWidget*> m_chooserMap;
     QButtonGroup *m_buttonGroup {0};
     QSize m_mininmumSize;
+    QStackedWidget *m_stackedWidget{0};
 
     KisAutoBrushWidget *m_autoBrushWidget {0};
     KisPredefinedBrushChooser *m_predefinedBrushWidget {0};
@@ -92,6 +84,9 @@ private:
 
     KisPrecisionOption m_precisionOption;
     lager::cursor<KisBrushModel::BrushData> m_brushData;
+
+    struct Private;
+    const QScopedPointer<Private> m_d;
 };
 
 #endif

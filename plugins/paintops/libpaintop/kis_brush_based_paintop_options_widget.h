@@ -11,17 +11,15 @@
 #include "kis_types.h"
 #include "kis_brush.h"
 #include <kritapaintop_export.h>
+#include "KisBrushOptionWidgetFlags.h"
 
 class KisBrushOptionWidget;
 
 class PAINTOP_EXPORT KisBrushBasedPaintopOptionWidget : public KisPaintOpSettingsWidget
 {
 public:
-    KisBrushBasedPaintopOptionWidget(QWidget* parent = 0);
+    KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlags flags, QWidget* parent = 0);
     ~KisBrushBasedPaintopOptionWidget() override;
-
-    void setPrecisionEnabled(bool value);
-    void setHSLBrushTipEnabled(bool value);
 
     KisBrushSP brush();
 

@@ -28,10 +28,9 @@
 #include "kis_pressure_texture_strength_option.h"
 
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
-    : KisBrushBasedPaintopOptionWidget(parent)
+    : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision, parent)
 {
     setObjectName("filter option widget");
-    setPrecisionEnabled(true);
 
     addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));

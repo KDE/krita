@@ -28,7 +28,7 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
 {
     addPaintOpOption(new KisSprayOpOption());
     addPaintOpOption(new KisSprayShapeOption());
-    addPaintOpOption(new KisBrushOptionWidget());
+    addPaintOpOption(new KisBrushOptionWidget(KisBrushOptionWidgetFlag::None));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCompositeOpOption(true));

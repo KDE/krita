@@ -33,15 +33,6 @@
 using namespace KisBrushModel;
 using namespace KisWidgetConnectionUtils;
 
-namespace kiszug {
-
-template <typename T>
-auto map_static_cast = zug::map([](auto&& x) { return static_cast<T>(x); });
-
-template <typename T>
-auto map_mupliply = [] (T coeff) { return zug::map([coeff](auto&& x) { return x * coeff; }); };
-
-}
 
 class AutoBrushModel : public QObject
 {
@@ -56,8 +47,12 @@ public:
           LAGER_QT(verticalFade) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::verticalFade]},
           LAGER_QT(spikes) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::spikes]},
           LAGER_QT(antialiasEdges) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::antialiasEdges]},
-          LAGER_QT(shape) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::shape].xform(kiszug::map_static_cast<int>, kiszug::map_static_cast<AutoBrushGeneratorShape>)},
-          LAGER_QT(type) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::type].xform(kiszug::map_static_cast<int>, kiszug::map_static_cast<AutoBrushGeneratorType>)},
+          LAGER_QT(shape) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::shape]
+                      .xform(kiszug::map_static_cast<int>,
+                             kiszug::map_static_cast<AutoBrushGeneratorShape>)},
+          LAGER_QT(type) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::type]
+                      .xform(kiszug::map_static_cast<int>,
+                             kiszug::map_static_cast<AutoBrushGeneratorType>)},
           LAGER_QT(curveString) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::curveString]},
           LAGER_QT(randomness) {m_autoBrushData[&AutoBrushData::randomness]
                       .xform(kiszug::map_mupliply<qreal>(100.0),

@@ -39,7 +39,6 @@ std::optional<KisBrushModel::BrushData> KisTextBrushFactory::createBrushModel(co
     KisBrushModel::BrushData brush;
 
     brush.type = KisBrushModel::Text;
-    brush.subtype = id();
 
     brush.common.spacing = KisDomUtils::toDouble(element.attribute("spacing", "1.0"));
 

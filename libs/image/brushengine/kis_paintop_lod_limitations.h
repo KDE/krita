@@ -10,16 +10,23 @@
 #include <KoID.h>
 #include <QVector>
 #include <QMetaType>
+#include <boost/operators.hpp>
 
 inline uint qHash(const KoID &id) {
     return qHash(id.id());
 }
 
-class KisPaintopLodLimitations
+class KisPaintopLodLimitations : public boost::orable<KisPaintopLodLimitations>
 {
 public:
     KisPaintopLodLimitations()
     {
+    }
+
+    KisPaintopLodLimitations& operator|=(const KisPaintopLodLimitations &rhs) {
+        limitations |= rhs.limitations;
+        blockers |= rhs.blockers;
+        return *this;
     }
 
     QSet<KoID> limitations;

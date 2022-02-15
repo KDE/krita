@@ -92,26 +92,37 @@ struct BRUSH_EXPORT PredefinedBrushData : public boost::equality_comparable<Pred
 {
     inline friend bool operator==(const PredefinedBrushData &lhs, const PredefinedBrushData &rhs) {
         return lhs.resourceSignature == rhs.resourceSignature &&
+                lhs.subtype == rhs.subtype &&
                 lhs.baseSize == rhs.baseSize &&
                 qFuzzyCompare(lhs.scale, rhs.scale) &&
                 lhs.application == rhs.application &&
+                lhs.brushType == rhs.brushType &&
                 lhs.hasColorAndTransparency == rhs.hasColorAndTransparency &&
                 lhs.autoAdjustMidPoint == rhs.autoAdjustMidPoint &&
                 lhs.adjustmentMidPoint == rhs.adjustmentMidPoint &&
                 qFuzzyCompare(lhs.brightnessAdjustment, rhs.brightnessAdjustment) &&
-                qFuzzyCompare(lhs.contrastAdjustment, rhs.contrastAdjustment);
+                qFuzzyCompare(lhs.contrastAdjustment, rhs.contrastAdjustment) &&
+                lhs.parasiteSelection == rhs.parasiteSelection;
     }
+
+    PredefinedBrushData();
+    PredefinedBrushData(const PredefinedBrushData &rhs) = default;
+    PredefinedBrushData(PredefinedBrushData &&rhs) = default;
+    PredefinedBrushData& operator=(const PredefinedBrushData &rhs) = default;
 
     KoResourceSignature resourceSignature;
 
+    QString subtype;
     QSize baseSize = QSize(42, 42);
     qreal scale = 1.0;
     enumBrushApplication application = ALPHAMASK;
+    enumBrushType brushType = MASK;
     bool hasColorAndTransparency = false;
-    bool autoAdjustMidPoint = false;
+    bool autoAdjustMidPoint = true;
     quint8 adjustmentMidPoint = 127;
     qreal brightnessAdjustment = 0.0;
     qreal contrastAdjustment = 0.0;
+    QString parasiteSelection;
 };
 
 struct BRUSH_EXPORT TextBrushData : boost::equality_comparable<TextBrushData>
@@ -141,7 +152,6 @@ struct BRUSH_EXPORT BrushData : public boost::equality_comparable<BrushData> {
     inline friend bool operator==(const BrushData &lhs, const BrushData &rhs) {
         return lhs.common == rhs.common &&
                 lhs.type == rhs.type &&
-                lhs.subtype == rhs.subtype &&
                 lhs.autoBrush == rhs.autoBrush &&
                 lhs.predefinedBrush == rhs.predefinedBrush &&
                 lhs.textBrush == rhs.textBrush;
@@ -149,7 +159,6 @@ struct BRUSH_EXPORT BrushData : public boost::equality_comparable<BrushData> {
 
     CommonData common;
     BrushType type = Auto;
-    QString subtype; // must be consistent with the type of the predefined brush
     AutoBrushData autoBrush;
     PredefinedBrushData predefinedBrush;
     TextBrushData textBrush;
@@ -158,22 +167,59 @@ struct BRUSH_EXPORT BrushData : public boost::equality_comparable<BrushData> {
     static std::optional<BrushData> read(const KisPropertiesConfiguration *settings, KisResourcesInterfaceSP resourcesInterface);
 };
 
-class BRUSH_EXPORT BrushModel : public QObject
-{
-    Q_OBJECT
-public:
-    BrushModel(lager::cursor<BrushData> source);
 
-    // the state must be declared **before** any cursors or readers
-    lager::cursor<BrushData> m_source;
+KisPaintopLodLimitations BRUSH_EXPORT brushLodLimitations(const BrushData &data);
+qreal BRUSH_EXPORT effectiveSizeForBrush(BrushType type,
+                                         const AutoBrushData &autoBrush,
+                                         const PredefinedBrushData &predefinedBrush,
+                                         const TextBrushData &textBrush);
+qreal BRUSH_EXPORT effectiveSizeForBrush(const BrushData &brush);
 
-    LAGER_QT_CURSOR(CommonData, commonData);
-    LAGER_QT_CURSOR(BrushType, brushType);
-    LAGER_QT_CURSOR(AutoBrushData, autoBrush);
-    LAGER_QT_CURSOR(PredefinedBrushData, predefinedBrush);
-    LAGER_QT_CURSOR(TextBrushData, textBrush);
-    LAGER_QT_READER(qreal, userEffectiveSize);
-};
+
+void BRUSH_EXPORT setEffectiveSizeForBrush(const BrushType type,
+                                           AutoBrushData &autoBrush,
+                                           PredefinedBrushData &predefinedBrush,
+                                           TextBrushData &textBrush,
+                                           qreal value);
+
+qreal BRUSH_EXPORT lightnessModeActivated(BrushType type,
+                                          const PredefinedBrushData &predefinedBrush);
+
+
+}
+
+namespace kiszug {
+
+template <typename T>
+auto map_static_cast = zug::map([](auto&& x) { return static_cast<T>(x); });
+
+template <typename T>
+auto map_mupliply = [] (T coeff) { return zug::map([coeff](auto&& x) { return x * coeff; }); };
+
+template <typename T>
+auto map_equal = [] (T value) { return zug::map([value](auto&& x) { return x == value; }); };
+
+template <typename T>
+auto map_greater = [] (T value) { return zug::map([value](auto&& x) { return x > value; }); };
+template <typename T>
+auto map_greater_equal = [] (T value) { return zug::map([value](auto&& x) { return x >= value; }); };
+
+template <typename T>
+auto map_less = [] (T value) { return zug::map([value](auto&& x) { return x < value; }); };
+
+template <typename T>
+auto map_less_equal = [] (T value) { return zug::map([value](auto&& x) { return x <= value; }); };
+
+template <>
+auto map_equal<qreal> =  [] (qreal value) { return zug::map([value](auto&& x) { return qFuzzyCompare(x, value); }); };
+
+template <>
+auto map_greater_equal<qreal> = [] (qreal value) { return zug::map([value](auto&& x) { return x >= value || qFuzzyCompare(x, value); }); };
+
+template <>
+auto map_less_equal<qreal> = [] (qreal value) { return zug::map([value](auto&& x) { return x <= value || qFuzzyCompare(x, value); }); };
+
+auto map_round = zug::map([](qreal x) -> int { return qRound(x); });
 
 
 }

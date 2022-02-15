@@ -23,7 +23,7 @@ ExternalProject_Add( ext_immer
 ExternalProject_Add( ext_lager
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     GIT_REPOSITORY https://github.com/arximboldi/lager.git
-    GIT_TAG 190be6cabcfe2cd36f6c5283011876841caefd26
+    GIT_TAG 5df6dabc56285c5d78e8e1684f584c5d7953a65b
 
     CMAKE_ARGS -Dlager_BUILD_DEBUGGER_EXAMPLES=OFF -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_quazip} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 

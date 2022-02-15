@@ -13,6 +13,7 @@
 #include <QUrl>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QQuickWindow>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -85,6 +86,7 @@ TouchDockerDock::TouchDockerDock()
     : QDockWidget(i18n("Touch Docker"))
     , d(new Private())
 {
+    KisConfig cfg(true);
 
     QStringList defaultMapping = QStringList() << "decrease_opacity"
                                                << "increase_opacity"
@@ -95,7 +97,7 @@ TouchDockerDock::TouchDockerDock()
                                                << "previous_preset"
                                                << "clear";
 
-    QStringList mapping = KisConfig(true).readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
+    QStringList mapping = cfg.readEntry<QString>("touchdockermapping", defaultMapping.join(',')).split(',');
     for (int i = 0; i < 8; ++i) {
         if (i < mapping.size()) {
             d->buttonMapping[QString("%1").arg(i + 1)] = mapping[i];
@@ -103,6 +105,10 @@ TouchDockerDock::TouchDockerDock()
         else if (i < defaultMapping.size()) {
             d->buttonMapping[QString("%1").arg(i + 1)] = defaultMapping[i];
         }
+    }
+
+    if (!cfg.useOpenGL()) {
+        QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
     }
 
 #ifdef Q_OS_WIN

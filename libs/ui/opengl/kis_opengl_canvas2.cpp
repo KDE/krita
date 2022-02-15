@@ -18,6 +18,7 @@
 #include "canvas/kis_coordinates_converter.h"
 #include "canvas/kis_display_filter.h"
 #include "canvas/kis_display_color_converter.h"
+#include "KisOpenGLModeProber.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
 #include "kis_debug.h"
@@ -34,6 +35,7 @@
 #include <QOpenGLVertexArrayObject>
 #include <QOpenGLBuffer>
 #include <QOpenGLFramebufferObject>
+#include <QOpenGLFramebufferObjectFormat>
 #include <QMessageBox>
 #include "KisOpenGLModeProber.h"
 #include <KoColorModelStandardIds.h>
@@ -398,7 +400,11 @@ void KisOpenGLCanvas2::resizeGL(int width, int height)
     // The given size is the widget size but here we actually want to give
     // KisCoordinatesConverter the viewport size aligned to device pixels.
     if (KisOpenGL::useFBOForToolOutlineRendering()) {
-        d->canvasFBO.reset(new QOpenGLFramebufferObject(QSize(width * devicePixelRatioF(), height * devicePixelRatioF())));
+        QOpenGLFramebufferObjectFormat format;
+        if (KisOpenGLModeProber::instance()->useHDRMode()) {
+            format.setInternalTextureFormat(GL_RGBA16F);
+        }
+        d->canvasFBO.reset(new QOpenGLFramebufferObject(QSize(width * devicePixelRatioF(), height * devicePixelRatioF()), format));
     }
     coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
     paintGL();

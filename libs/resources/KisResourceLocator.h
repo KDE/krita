@@ -106,7 +106,7 @@ public:
     /**
      * @brief saveTags saves all tags to .tag files in the resource folder
      */
-    void saveTags();
+    static void saveTags();
 
     /**
      * Remove the given tag from the cache
@@ -298,6 +298,14 @@ private:
      */
     KisTagSP tagForUrl(const QString &tagUrl, const QString resourceType);
 
+    /**
+     * @brief tagForUrlNoCache create a tag from the database, don't use cache
+     * @param tagUrl url of the tag
+     * @param resourceType resource type of the tag
+     * @return
+     */
+    static KisTagSP tagForUrlNoCache(const QString &tagUrl, const QString resourceType);
+
     KisResourceLocator(QObject *parent);
     KisResourceLocator(const KisResourceLocator&);
     KisResourceLocator operator=(const KisResourceLocator&);
@@ -337,6 +345,11 @@ private:
     QString makeStorageLocationAbsolute(QString storageLocation) const;
     QString makeStorageLocationRelative(QString location) const;
 
+    /**
+     * @brief resourceLocationBaseFromConfig - the same as resourceLocationBase but straight from config, not cached in a variable
+     * @return resource location base (ex. /home/user/.local/share/krita/ default on Ubuntu-based systems)
+     */
+    static QString resourceLocationBaseFromConfig();
 
     class Private;
     QScopedPointer<Private> d;

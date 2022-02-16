@@ -191,35 +191,35 @@ qreal BRUSH_EXPORT lightnessModeActivated(BrushType type,
 namespace kiszug {
 
 template <typename T>
-auto map_static_cast = zug::map([](auto&& x) { return static_cast<T>(x); });
+constexpr auto map_static_cast = zug::map([](auto&& x) { return static_cast<T>(x); });
 
 template <typename T>
-auto map_mupliply = [] (T coeff) { return zug::map([coeff](auto&& x) { return x * coeff; }); };
+constexpr auto map_mupliply = [] (T coeff) { return zug::map([coeff](auto&& x) { return x * coeff; }); };
 
 template <typename T>
-auto map_equal = [] (T value) { return zug::map([value](auto&& x) { return x == value; }); };
+constexpr auto map_equal = [] (T value) { return zug::map([value](auto&& x) { return x == value; }); };
 
 template <typename T>
-auto map_greater = [] (T value) { return zug::map([value](auto&& x) { return x > value; }); };
+constexpr auto map_greater = [] (T value) { return zug::map([value](auto&& x) { return x > value; }); };
 template <typename T>
-auto map_greater_equal = [] (T value) { return zug::map([value](auto&& x) { return x >= value; }); };
+constexpr auto map_greater_equal = [] (T value) { return zug::map([value](auto&& x) { return x >= value; }); };
 
 template <typename T>
-auto map_less = [] (T value) { return zug::map([value](auto&& x) { return x < value; }); };
+constexpr auto map_less = [] (T value) { return zug::map([value](auto&& x) { return x < value; }); };
 
 template <typename T>
-auto map_less_equal = [] (T value) { return zug::map([value](auto&& x) { return x <= value; }); };
+constexpr auto map_less_equal = [] (T value) { return zug::map([value](auto&& x) { return x <= value; }); };
 
 template <>
-auto map_equal<qreal> =  [] (qreal value) { return zug::map([value](auto&& x) { return qFuzzyCompare(x, value); }); };
+constexpr auto map_equal<qreal> =  [] (qreal value) { return zug::map([value](auto&& x) { return qFuzzyCompare(x, value); }); };
 
 template <>
-auto map_greater_equal<qreal> = [] (qreal value) { return zug::map([value](auto&& x) { return x >= value || qFuzzyCompare(x, value); }); };
+constexpr auto map_greater_equal<qreal> = [] (qreal value) { return zug::map([value](auto&& x) { return x >= value || qFuzzyCompare(x, value); }); };
 
 template <>
-auto map_less_equal<qreal> = [] (qreal value) { return zug::map([value](auto&& x) { return x <= value || qFuzzyCompare(x, value); }); };
+constexpr auto map_less_equal<qreal> = [] (qreal value) { return zug::map([value](auto&& x) { return x <= value || qFuzzyCompare(x, value); }); };
 
-auto map_round = zug::map([](qreal x) -> int { return qRound(x); });
+constexpr auto map_round = zug::map([](qreal x) -> int { return qRound(x); });
 
 
 }

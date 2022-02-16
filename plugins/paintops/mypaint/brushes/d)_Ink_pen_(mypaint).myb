@@ -185,7 +185,7 @@
             "inputs": {}
         }, 
         "slow_tracking": {
-            "base_value": 0.65, 
+            "base_value": 0.0, 
             "inputs": {}
         }, 
         "slow_tracking_per_dab": {

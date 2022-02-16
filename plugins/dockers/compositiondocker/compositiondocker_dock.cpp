@@ -334,8 +334,6 @@ void CompositionDockerDock::exportAnimationClicked()
         KisLayerCompositionSP currentComposition = toQShared(new KisLayerComposition(image, "temp"));
         currentComposition->store();
 
-        const QString frameMimeType = settings->getPropertyLazy("frame_mimetype", frameMimeType);
-        const QString imageExtension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
         const QString videoExtension = KisMimeDatabase::suffixesForMimeType(exportOptions.videoMimeType).first();
 
         Q_FOREACH (KisLayerCompositionSP composition, image->compositions()) {

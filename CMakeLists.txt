@@ -768,9 +768,9 @@ endif()
 find_package(Boost 1.55 REQUIRED COMPONENTS system)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
-find_package(immer REQUIRED)
-find_package(zug REQUIRED)
-find_package(lager REQUIRED)
+find_package(Immer REQUIRED)
+find_package(Zug REQUIRED)
+find_package(Lager REQUIRED)
 
 ##
 ## Test for GNU Scientific Library

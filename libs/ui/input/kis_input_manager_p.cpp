@@ -547,22 +547,12 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
     KisTouchShortcut *shortcut = new KisTouchShortcut(action, index, gesture);
     dbgKrita << "TouchAction:" << action->name();
     switch(gesture) {
-    case KisShortcutConfiguration::RotateGesture:
-    case KisShortcutConfiguration::PinchGesture:
 #ifndef Q_OS_MACOS
-    case KisShortcutConfiguration::ZoomAndRotateGesture:
-#endif
-        shortcut->setMinimumTouchPoints(2);
-        shortcut->setMaximumTouchPoints(2);
-        break;
-    case KisShortcutConfiguration::PanGesture:
+    case KisShortcutConfiguration::OneFingerTouch:
         // Allow single finger panning if touch drawing is disabled
         if (KisConfig(true).disableTouchOnCanvas()) { 
             shortcut->setMinimumTouchPoints(1);
             shortcut->setMaximumTouchPoints(1);
-        } else {
-            shortcut->setMinimumTouchPoints(3);
-            shortcut->setMaximumTouchPoints(3);
         }
         break;
     case KisShortcutConfiguration::TwoFingerTouch:
@@ -577,6 +567,10 @@ void KisInputManager::Private::addTouchShortcut(KisAbstractInputAction* action, 
         shortcut->setMinimumTouchPoints(4);
         shortcut->setMaximumTouchPoints(4);
         break;
+    case KisShortcutConfiguration::FiveFingerTouch:
+        shortcut->setMinimumTouchPoints(5);
+        shortcut->setMaximumTouchPoints(5);
+#endif
     default:
         break;
     }

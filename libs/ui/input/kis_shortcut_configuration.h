@@ -36,6 +36,7 @@ public:
         MouseButtonType, ///< A mouse button, possibly with key modifiers.
         MouseWheelType, ///< Mouse wheel movement, possibly with key modifiers.
         GestureType, ///< A touch gesture.
+        MacOSGestureType, ///< A macOS gesture.
     };
 
     /**
@@ -55,14 +56,18 @@ public:
      */
     enum GestureAction {
         NoGesture, ///< No gesture.
+#ifdef Q_OS_MACOS
         PinchGesture, ///< Pinch gesture, fingers moving towards or away from each other.
         PanGesture, ///< Pan gesture, fingers staying together but moving across the screen.
         RotateGesture, ///<Rotate gesture, two fingers rotating around a pivot point.
         SmartZoomGesture, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
-        ZoomAndRotateGesture, ///< Zoom and rotate gesture, canvas being both zoomed and rotated using two fingers.
+#else
+        OneFingerTouch,
         TwoFingerTouch,
         ThreeFingerTouch,
         FourFingerTouch,
+        FiveFingerTouch,
+#endif
     };
 
     /**

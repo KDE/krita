@@ -225,8 +225,9 @@ ls $APPDIR
 if [ -n "$STRIP_APPIMAGE" ]; then
     # strip debugging information
     function find-elf-files {
-        # python libraries are not strippable (strip fails with error)
-        find $1 -type f -name "*" -not -name "*.o" -not -path "*/python3.8/*" -exec sh -c '
+        # * python libraries are not strippable (strip fails with error)
+        # * AppImage packages should not be stripped, because it breaks them
+        find $1 -type f -name "*" -not -name "*.o" -not -path "*/python3.8/*" -not -name "AppImageUpdate" -exec sh -c '
             case "$(head -n 1 "$1")" in
             ?ELF*) exit 0;;
             esac

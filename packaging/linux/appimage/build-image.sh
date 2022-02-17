@@ -258,7 +258,7 @@ install -Dm 755 /usr/lib/$TRIPLET/libgstreamer-1.0.so $APPDIR/usr/lib/
 
 GSTREAMER_BINARIES="-executable=${GSTREAMER_TARGET}/gst-plugin-scanner -executable=${APPDIR}/usr/lib/libgstreamer-1.0.so"
 for plugin in alsa app audioconvert audioparsers audioresample autodetect \
-              coreelements id3demux jack mpg123 mulaw playback pulse \
+              coreelements id3demux jack mpg123 mulaw playback pulseaudio \
               typefindfunctions wavparse; do
 	GSTREAMER_BINARIES="${GSTREAMER_BINARIES} -executable=${GSTREAMER_TARGET}/libgst${plugin}.so"
 done

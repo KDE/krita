@@ -60,14 +60,8 @@ public:
      */
     void paintCanvasOnly(const QRect &updateRect = QRect());
 
-    /**
-     * Paint only the decorations and tool outline on top of the canvas image.
-     */
-    void paintDecorations(const QRect &updateRect = QRect());
-
 private:
     void renderCanvasGL(const QRect &updateRect);
-    void renderDecorations(const QRect &updateRect);
 
 public:
     void paintToolOutline(const QPainterPath &path);
@@ -119,8 +113,6 @@ private:
     qreal devicePixelRatioF() const;
     KisCoordinatesConverter *coordinatesConverter() const;
     QColor borderColor() const;
-
-    void drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const;
 };
 
 class KisOpenGLCanvasRenderer::CanvasBridge
@@ -143,9 +135,6 @@ protected:
     // Widget parent for KisOpenGLCanvasRenderer::reportFailedShaderCompilation
     // to show a QMessageBox. (Return `nullptr` if not using widgets?)
     virtual QWidget *widget() const = 0;
-
-    // drawDecorations is a member of KisCanvasWidgetBase.
-    virtual void drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const = 0;
 };
 
 #endif // KIS_OPENGL_CANVAS_RENDERER_H

@@ -194,11 +194,6 @@ QColor KisOpenGLCanvasRenderer::borderColor() const
     return d->canvasBridge->borderColor();
 }
 
-void KisOpenGLCanvasRenderer::drawDecorations(QPainter &gc, const QRect &updateWidgetRect) const
-{
-    return d->canvasBridge->drawDecorations(gc, updateWidgetRect);
-}
-
 void KisOpenGLCanvasRenderer::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
 {
     setDisplayFilterImpl(displayFilter, false);
@@ -398,11 +393,6 @@ void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &updateRect)
         QOpenGLFramebufferObject::blitFramebuffer(nullptr, blitRect, d->canvasFBO.data(), blitRect, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         QOpenGLFramebufferObject::bindDefault();
     }
-}
-
-void KisOpenGLCanvasRenderer::paintDecorations(const QRect &updateRect)
-{
-    renderDecorations(updateRect);
 }
 
 void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
@@ -1019,29 +1009,6 @@ void KisOpenGLCanvasRenderer::renderCanvasGL(const QRect &updateRect)
         d->quadVAO.release();
     }
 }
-
-void KisOpenGLCanvasRenderer::renderDecorations(const QRect &updateRect)
-{
-    // Creates an OpenGL paint device with the current OpenGL context
-    QOpenGLPaintDevice paintDevice(d->viewportDevicePixelSize);
-    paintDevice.setDevicePixelRatio(devicePixelRatioF());
-
-    QPainter gc(&paintDevice);
-    if (!updateRect.isEmpty()) {
-        gc.setClipRect(updateRect);
-    }
-
-    QRect decorationsBoundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
-
-    if (!updateRect.isEmpty()) {
-        decorationsBoundingRect &= updateRect;
-    }
-
-    drawDecorations(gc, decorationsBoundingRect);
-
-    gc.end();
-}
-
 
 void KisOpenGLCanvasRenderer::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {

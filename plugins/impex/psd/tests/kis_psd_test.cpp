@@ -31,7 +31,7 @@ const QString PSDMimetype = "image/vnd.adobe.photoshop";
 
 void KisPSDTest::testFiles()
 {
-    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", QStringList());
+    TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", {"100x100indexed.psd"});
 }
 
 void KisPSDTest::testOpening()

@@ -158,7 +158,7 @@ KoResourceLoadResult KisAutoBrushFactory::createBrush(const KisBrushModel::Commo
         KisCubicCurve curve;
         QString curveString = autoBrushData.generator.curveString;
         if (curveString.isEmpty()) {
-            curveString = "0,0;1,1";
+            curveString = "0,1;1,0";
         }
         curve.fromString(curveString);
 

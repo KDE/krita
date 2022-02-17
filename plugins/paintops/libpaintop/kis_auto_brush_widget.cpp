@@ -183,16 +183,9 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize, lager::cursor<CommonDat
     density->setBlockUpdateSignalOnDrag(true);
     connectControl(density, &m_d->model, "density");
 
-    KisCubicCurve topLeftBottomRightLinearCurve;
-    topLeftBottomRightLinearCurve.setPoint(0, QPointF(0.0, 1.0));
-    topLeftBottomRightLinearCurve.setPoint(1, QPointF(1.0, 0.0));
-
-    bool blockedBefore = softnessCurve->blockSignals(true);
-    softnessCurve->setCurve(topLeftBottomRightLinearCurve);
-    softnessCurve->blockSignals(blockedBefore);
-
     connect(softnessCurve, &KisCurveWidget::modified, this, &KisAutoBrushWidget::slotCurveWidgetChanged);
     connect(&m_d->model, &AutoBrushModel::curveStringChanged, this, &KisAutoBrushWidget::slotCurvePropertyChanged);
+    m_d->model.LAGER_QT(curveString).nudge();
 
     QList<KoID> ids = KisMaskGenerator::maskGeneratorIds();
     for (int i = 0; i < ids.size(); i++) {

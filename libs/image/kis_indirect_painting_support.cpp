@@ -158,11 +158,16 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
     QSharedPointer<SharedState> sharedState(new SharedState());
 
     KritaUtils::addJobSequential(*jobs,
-        [sharedState, sharedWriteLock, dst, transactionText, timedID] () {
+        [sharedState, sharedWriteLock, dst, undoAdapter, transactionText, timedID] () {
             Q_UNUSED(sharedWriteLock); // just a RAII holder object for the lock
 
-            sharedState->transaction.reset(
-                new KisTransaction(transactionText, dst, nullptr, timedID));
+            /**
+             * Move tool may not have an undo adapter
+             */
+             if (undoAdapter) {
+                 sharedState->transaction.reset(
+                     new KisTransaction(transactionText, dst, nullptr, timedID));
+             }
         }
     );
 
@@ -192,7 +197,9 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
                 releaseResources();
             }
 
-            sharedState->transaction->commit(undoAdapter);
+            if (sharedState->transaction) {
+                sharedState->transaction->commit(undoAdapter);
+            }
         }
     );
 }

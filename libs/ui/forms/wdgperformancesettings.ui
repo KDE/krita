@@ -90,8 +90,8 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
+           <layout class="QGridLayout" name="gridLayout" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -104,7 +104,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intMemoryLimit">
               <property name="suffix">
                <string> MiB</string>
@@ -121,18 +121,18 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_2" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit" native="true">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intPoolLimit">
               <property name="suffix">
                <string> MiB</string>
@@ -152,8 +152,8 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_3" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -166,7 +166,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intUndoLimit">
               <property name="suffix">
                <string> MiB</string>
@@ -195,8 +195,8 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_4" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisSliderSpinBox" name="sliderSwapSize" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -209,7 +209,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intSwapSize">
               <property name="suffix">
                <string> GiB</string>

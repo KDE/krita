@@ -34,6 +34,7 @@
 #include <KoDialog.h>
 #include <QMessageBox>
 #include <QMenu>
+#include <QScopedPointer>
 #include <QMap>
 
 #include <QMenuBar>
@@ -71,6 +72,7 @@
 #include "kis_memory_statistics_server.h"
 #include "KisRecentFilesManager.h"
 #include "KisRecentFileIconCache.h"
+#include "KisPlaybackEngine.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -82,6 +84,7 @@ public:
         : part(_part)
         , idleWatcher(2500)
         , animationCachePopulator(_part)
+        , playbackEngine( new KisPlaybackEngine )
     {
     }
 
@@ -96,6 +99,7 @@ public:
     QList<QPointer<KisDocument> > documents;
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
+    QScopedPointer<KisPlaybackEngine> playbackEngine; //TEMP
 
     KisSessionResourceSP currentSession;
     bool closingSession{false};
@@ -502,6 +506,11 @@ KisIdleWatcher* KisPart::idleWatcher() const
 KisAnimationCachePopulator* KisPart::cachePopulator() const
 {
     return &d->animationCachePopulator;
+}
+
+KisPlaybackEngine *KisPart::playbackEngine() const
+{
+    return d->playbackEngine.data();
 }
 
 void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {

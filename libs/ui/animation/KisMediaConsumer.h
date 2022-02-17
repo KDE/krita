@@ -13,7 +13,7 @@
 #include <mlt++/MltProducer.h>
 #include "animation/KisFrameDisplayProxy.h"
 
-class KisMediaConsumer : public QObject
+class KisPlaybackHandle : public QObject
 {
     Q_OBJECT
 
@@ -23,36 +23,31 @@ public:
         PULL
     };
 
-    KisMediaConsumer(QObject* parent = nullptr);
-    ~KisMediaConsumer();
+    KisPlaybackHandle(QObject* parent = nullptr);
+    ~KisPlaybackHandle();
 
     void seek(int p_frame);
+
     void pushAudio();
-    int playhead();
 
-    void setFrameRate(int fps);
-    int getFrameRate();
-
-    void setPlaybackSpeed(float p_nSpeed);
-    float playbackSpeed();
+    void setFrameRate(int p_frameRate);
+    void frameRate();
 
     void setMode(Mode setting);
     Mode getMode();
 
     void resync(const KisFrameDisplayProxy& displayProxy);
-    QString debugInfo();
-
-    Mlt::Profile* getProfile();
-
-    void setProducer(QSharedPointer<Mlt::Producer> p_producer);
-
-    float temp_stopWatch();
 
 Q_SIGNALS:
-    void sigFrameShow(int frameIndex) const;
+    void sigFrameShow(int p_frame);
+    void sigDesiredFrameChanged(int p_frame);
+    void sigRequestPushAudio();
+    void sigFrameRateChanged(int p_frameRate);
+    void sigModeChange(Mode p_mode) const;
 
 private:
-    QScopedPointer<struct Private> m_d;
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif // KISMLTPLAYER_H

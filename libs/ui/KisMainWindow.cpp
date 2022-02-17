@@ -96,6 +96,7 @@
 #include <KisResourceCacheDb.h>
 #include <KisStorageModel.h>
 #include <KisStorageFilterProxyModel.h>
+#include <KisPlaybackEngine.h>
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -111,6 +112,7 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_resource_provider.h"
+#include <mlt++/MltFactory.h>
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"
@@ -653,10 +655,15 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         tabBar->setAcceptDrops(true);
         tabBar->setChangeCurrentOnDrag(true);
     }
+
+    // Initialize Audio Libraries
+    Mlt::Factory::init();
 }
 
 KisMainWindow::~KisMainWindow()
 {
+    Mlt::Factory::close();
+
     //    Q_FOREACH (QAction *ac, actionCollection()->actions()) {
     //        QAction *action = qobject_cast<QAction*>(ac);
     //        if (action) {
@@ -2401,6 +2408,9 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
             warnKrita << docker << "is not a canvas observer";
         }
     }
+
+    observers.append(static_cast<KoCanvasObserverBase*>(KisPart::instance()->playbackEngine()));
+
     return observers;
 }
 

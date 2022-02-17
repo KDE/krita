@@ -38,6 +38,7 @@
 #include "kis_algebra_2d.h"
 #include <mlt++/MltProducer.h>
 #include "animation/KisMediaConsumer.h"
+#include "KisPlaybackEngine.h"
 
 #include "kis_image_config.h"
 #include <limits>
@@ -198,18 +199,18 @@ private:
 struct KisAnimationPlayer::Private
 {
 public:
-    Private(KisAnimationPlayer* p_self, KisCanvas2* p_canvas)
+    Private(KisCanvas2* p_canvas)
         : canvas(p_canvas)
-        , mediaConsumer( new KisMediaConsumer(p_self) )
-        , displayProxy( new KisFrameDisplayProxy(p_canvas, p_self) )
+        , playbackHandle( KisPart::instance()->playbackEngine()->leaseHandle(p_canvas) )
+        , displayProxy( new KisFrameDisplayProxy(p_canvas) )
         , playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
     {
     }
 
     KisCanvas2 *canvas;
     PlaybackState state;
-    QScopedPointer<PlaybackHandle> playbackHandle;
-    QScopedPointer<KisMediaConsumer> mediaConsumer;
+    QSharedPointer<KisPlaybackHandle> playbackHandle; //Abstraction of playback controls / play-position.
+    QScopedPointer<PlaybackHandle> playbackEnvironment; //Sets up canvas / environment for playback
     QScopedPointer<KisFrameDisplayProxy> displayProxy;
 
     KisSignalCompressor playbackStatisticsCompressor;
@@ -218,13 +219,13 @@ public:
 
 KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     : QObject(canvas)
-    , m_d(new Private(this, canvas))
+    , m_d(new Private(canvas))
 {
     setPlaybackState(STOPPED);
     setPlaybackSpeedNormalized(1.0f);
 
 
-    connect(m_d->mediaConsumer.data(), &KisMediaConsumer::sigFrameShow, this, [this](int p_frame){
+    connect(m_d->playbackHandle.data(), &KisPlaybackHandle::sigFrameShow, this, [this](int p_frame){
         KIS_ASSERT(m_d->displayProxy);
         if (m_d->state == PLAYING) {
             m_d->displayProxy->displayFrame(p_frame);
@@ -247,9 +248,9 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     });
 
     connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
-       m_d->mediaConsumer->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
+       m_d->playbackHandle->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
     });
-    m_d->mediaConsumer->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
+    m_d->playbackHandle->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
 
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisAnimationPlayer::setupAudioTracks);
     setupAudioTracks();
@@ -271,21 +272,21 @@ void KisAnimationPlayer::updateDropFramesMode()
 
 void KisAnimationPlayer::play()
 {
-    if (!m_d->playbackHandle) {
-        m_d->playbackHandle.reset(new PlaybackHandle(m_d->displayProxy->visibleFrame(), this));
+    if (!m_d->playbackEnvironment) {
+        m_d->playbackEnvironment.reset(new PlaybackHandle(m_d->displayProxy->visibleFrame(), this));
     }
 
-    m_d->playbackHandle->prepare(m_d->canvas);
+    m_d->playbackEnvironment->prepare(m_d->canvas);
     setPlaybackState(PLAYING);
 }
 
 void KisAnimationPlayer::pause()
 {
-    KIS_ASSERT(m_d->playbackHandle);
+    KIS_ASSERT(m_d->playbackEnvironment);
     KIS_ASSERT(playbackState() == PLAYING);
-    m_d->playbackHandle->restore();
+    m_d->playbackEnvironment->restore();
     setPlaybackState(PAUSED);
-    m_d->mediaConsumer->resync(*m_d->displayProxy);
+    m_d->playbackHandle->resync(*m_d->displayProxy);
 }
 
 void KisAnimationPlayer::playPause()
@@ -300,16 +301,16 @@ void KisAnimationPlayer::playPause()
 void KisAnimationPlayer::stop()
 {
     if (playbackState() != STOPPED) {
-        KIS_ASSERT(m_d->playbackHandle);
+        KIS_ASSERT(m_d->playbackEnvironment);
         if (playbackState() != PAUSED)
-            m_d->playbackHandle->restore();
+            m_d->playbackEnvironment->restore();
 
-        const int origin = m_d->playbackHandle->originFrame();
-        m_d->playbackHandle.reset();
+        const int origin = m_d->playbackEnvironment->originFrame();
+        m_d->playbackEnvironment.reset();
 
         setPlaybackState(STOPPED);
         m_d->displayProxy->displayFrame(origin);
-        m_d->mediaConsumer->resync(*m_d->displayProxy);
+        m_d->playbackHandle->resync(*m_d->displayProxy);
     } else if (m_d->displayProxy->visibleFrame() != 0) {
         seek(0);
     }
@@ -320,9 +321,9 @@ void KisAnimationPlayer::seek(int frameIndex, SeekFlags flags)
     if (!m_d->canvas || !m_d->canvas->image()) return;
 
     if (m_d->state != PLAYING) {
-        m_d->mediaConsumer->seek(frameIndex);
+        m_d->playbackHandle->seek(frameIndex);
         if (flags & PUSH_AUDIO) {
-            m_d->mediaConsumer->pushAudio();
+            m_d->playbackHandle->pushAudio();
         }
         m_d->displayProxy->displayFrame(frameIndex);
     }
@@ -602,9 +603,8 @@ void KisAnimationPlayer::setupAudioTracks()
         //Only get first file for now and make that a producer...
         QFileInfo toLoad = files.first();
         if (toLoad.exists()) {
-            QString timewarpArgs = "0.5:" + toLoad.absoluteFilePath();
-            QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->mediaConsumer->getProfile(), "timewarp", timewarpArgs.toUtf8().data()));
-            m_d->mediaConsumer->setProducer(producer);
+            //QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->mediaConsumer->getProfile(), toLoad.absoluteFilePath().toUtf8().data()));
+            //m_d->mediaConsumer->setProducer(producer);
         }
     }
 }
@@ -623,10 +623,10 @@ void KisAnimationPlayer::setPlaybackSpeedPercent(int value)
 
 void KisAnimationPlayer::setPlaybackSpeedNormalized(double value)
 {
-    if (m_d->mediaConsumer->playbackSpeed() != value) {
+    /*if (m_d->mediaConsumer->playbackSpeed() != value) {
         m_d->mediaConsumer->setPlaybackSpeed( value );
         emit sigPlaybackSpeedChanged(m_d->mediaConsumer->playbackSpeed());
-    }
+    }*/
 }
 
 void KisAnimationPlayer::setPlaybackState(PlaybackState p_state)
@@ -634,9 +634,9 @@ void KisAnimationPlayer::setPlaybackState(PlaybackState p_state)
     if (m_d->state != p_state) {
         m_d->state = p_state;
         if (m_d->state == PLAYING) {
-            m_d->mediaConsumer->setMode(KisMediaConsumer::PULL);
+            m_d->playbackHandle->setMode(KisPlaybackHandle::PULL);
         } else {
-            m_d->mediaConsumer->setMode(KisMediaConsumer::PUSH);
+            m_d->playbackHandle->setMode(KisPlaybackHandle::PUSH);
         }
         emit sigPlaybackStateChanged(m_d->state);
     }

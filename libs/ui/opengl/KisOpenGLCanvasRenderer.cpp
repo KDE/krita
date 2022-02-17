@@ -11,7 +11,6 @@
 
 #include "kis_algebra_2d.h"
 #include "opengl/kis_opengl_shader_loader.h"
-#include "opengl/kis_opengl_canvas_debugger.h"
 #include "canvas/kis_canvas2.h"
 #include "canvas/kis_coordinates_converter.h"
 #include "canvas/kis_display_filter.h"
@@ -379,10 +378,8 @@ void KisOpenGLCanvasRenderer::resizeGL(int width, int height)
     coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
 }
 
-void KisOpenGLCanvasRenderer::paintGL(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &updateRect)
 {
-    KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
-
     if (d->canvasFBO) {
         d->canvasFBO->bind();
     }
@@ -401,7 +398,10 @@ void KisOpenGLCanvasRenderer::paintGL(const QRect &updateRect)
         QOpenGLFramebufferObject::blitFramebuffer(nullptr, blitRect, d->canvasFBO.data(), blitRect, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         QOpenGLFramebufferObject::bindDefault();
     }
+}
 
+void KisOpenGLCanvasRenderer::paintDecorations(const QRect &updateRect)
+{
     renderDecorations(updateRect);
 }
 

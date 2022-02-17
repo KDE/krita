@@ -189,7 +189,9 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
-    d->renderer->paintGL(updateRect);
+    KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
+    d->renderer->paintCanvasOnly(updateRect);
+    d->renderer->paintDecorations(updateRect);
 
     // We create the glFenceSync object here instead of in KisOpenGLRenderer,
     // because the glFenceSync object should be created after all render

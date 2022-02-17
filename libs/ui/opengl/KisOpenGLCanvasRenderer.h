@@ -54,7 +54,16 @@ public:
 public:
     void resizeGL(int width, int height);
     void initializeGL();
-    void paintGL(const QRect &updateRect = QRect());
+
+    /**
+     * Paint only the canvas background and image tiles.
+     */
+    void paintCanvasOnly(const QRect &updateRect = QRect());
+
+    /**
+     * Paint only the decorations and tool outline on top of the canvas image.
+     */
+    void paintDecorations(const QRect &updateRect = QRect());
 
 private:
     void renderCanvasGL(const QRect &updateRect);

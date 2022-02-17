@@ -334,16 +334,10 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     KisPostExecutionUndoAdapter *undoAdapter =
         m_resources->postExecutionUndoAdapter();
 
-    QScopedPointer<KisPostExecutionUndoAdapter> dumbUndoAdapter;
-    QScopedPointer<KisUndoStore> dumbUndoStore;
-
     if (!undoAdapter) {
-        dumbUndoStore.reset(new KisDumbUndoStore());
-        dumbUndoAdapter.reset(new KisPostExecutionUndoAdapter(dumbUndoStore.data(), 0));
-
-        undoAdapter = dumbUndoAdapter.data();
+        m_fakeUndoData.reset(new FakeUndoData());
+        undoAdapter = m_fakeUndoData->undoAdapter.data();
     }
-
 
     if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
@@ -444,4 +438,14 @@ void KisPainterBasedStrokeStrategy::resumeStrokeCallback()
 KisNodeSP KisPainterBasedStrokeStrategy::targetNode() const
 {
     return m_resources->currentNode();
+}
+
+KisPainterBasedStrokeStrategy::FakeUndoData::FakeUndoData()
+{
+    undoStore.reset(new KisDumbUndoStore());
+    undoAdapter.reset(new KisPostExecutionUndoAdapter(undoStore.data(), 0));
+}
+
+KisPainterBasedStrokeStrategy::FakeUndoData::~FakeUndoData()
+{
 }

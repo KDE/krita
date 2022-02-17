@@ -133,6 +133,15 @@ private:
     bool m_supportsContinuedInterstrokeData;
 
     KisIndirectPaintingSupport::FinalMergeSuspenderSP m_finalMergeSuspender;
+
+    struct FakeUndoData {
+        FakeUndoData();
+        ~FakeUndoData();
+        QScopedPointer<KisUndoStore> undoStore;
+        QScopedPointer<KisPostExecutionUndoAdapter> undoAdapter;
+    };
+    QScopedPointer<FakeUndoData> m_fakeUndoData;
+
 };
 
 #endif /* __KIS_PAINTER_BASED_STROKE_STRATEGY_H */

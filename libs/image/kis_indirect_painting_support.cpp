@@ -158,16 +158,11 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
     QSharedPointer<SharedState> sharedState(new SharedState());
 
     KritaUtils::addJobSequential(*jobs,
-        [sharedState, sharedWriteLock, dst, undoAdapter, transactionText, timedID] () {
+        [sharedState, sharedWriteLock, dst, transactionText, timedID] () {
             Q_UNUSED(sharedWriteLock); // just a RAII holder object for the lock
 
-            /**
-             * Scratchpad may not have an undo adapter
-             */
-             if (undoAdapter) {
-                 sharedState->transaction.reset(
-                     new KisTransaction(transactionText, dst, nullptr, timedID));
-             }
+            sharedState->transaction.reset(
+                new KisTransaction(transactionText, dst, nullptr, timedID));
         }
     );
 
@@ -197,9 +192,7 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
                 releaseResources();
             }
 
-            if (sharedState->transaction) {
-                sharedState->transaction->commit(undoAdapter);
-            }
+            sharedState->transaction->commit(undoAdapter);
         }
     );
 }

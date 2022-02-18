@@ -29,7 +29,7 @@ ecm_add_test(psd_colormode_block_test.cpp ../psd_colormode_block.cpp
     LINK_LIBRARIES kritaglobal KF5::I18n Qt5::Gui ${PSD_TEST_LIBS}
     NAME_PREFIX "plugins-impex-psd-")
 
-krita_add_broken_unit_test(kis_psd_test.cpp
+ecm_add_test(kis_psd_test.cpp
     TEST_NAME kis_psd_test
     LINK_LIBRARIES ${PSD_TEST_LIBS} kritaui
     NAME_PREFIX "plugins-impex-psd-")

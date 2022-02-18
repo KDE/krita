@@ -74,9 +74,6 @@ public Q_SLOTS:
 protected:
     virtual void drawDecoration(QPainter& gc, const QRectF& updateArea, const KisCoordinatesConverter *converter,KisCanvas2* canvas) = 0;
 
-    /// XXX: unify view and imageview!
-    QPointer<KisView>imageView();
-
     /**
      * @return the parent KisView
      */

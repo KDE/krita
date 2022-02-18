@@ -86,13 +86,6 @@ bool KisCanvasDecoration::comparePriority(KisCanvasDecorationSP decoration1, Kis
     return decoration1->priority() < decoration2->priority();
 }
 
-
-QPointer<KisView>KisCanvasDecoration::imageView()
-{
-    return d->view;
-}
-
-
 QPointer<KisView>KisCanvasDecoration::view() const
 {
     return d->view;

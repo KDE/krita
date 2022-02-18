@@ -90,8 +90,8 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
+           <layout class="QGridLayout" name="gridLayout" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisDoubleSliderSpinBox" name="sliderMemoryLimit" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -104,7 +104,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intMemoryLimit">
               <property name="suffix">
                <string> MiB</string>
@@ -121,18 +121,18 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_2" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisDoubleSliderSpinBox" name="sliderPoolLimit" native="true">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intPoolLimit">
               <property name="suffix">
                <string> MiB</string>
@@ -152,8 +152,8 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_2">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_3" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisDoubleSliderSpinBox" name="sliderUndoLimit" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -166,7 +166,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intUndoLimit">
               <property name="suffix">
                <string> MiB</string>
@@ -181,7 +181,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox_2">
          <property name="title">
-          <string>Swap File Size</string>
+          <string>Swap File</string>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
           <item row="0" column="0">
@@ -190,13 +190,13 @@
              <string>The swap file will not be bigger than this limit.</string>
             </property>
             <property name="text">
-             <string>File Size Limit:</string>
+             <string>Size Limit:</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
+           <layout class="QGridLayout" name="gridLayout_4" columnstretch="4,1">
+            <item row="0" column="0">
              <widget class="KisSliderSpinBox" name="sliderSwapSize" native="true">
               <property name="sizePolicy">
                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
@@ -209,7 +209,7 @@
               </property>
              </widget>
             </item>
-            <item>
+            <item row="0" column="1">
              <widget class="KisIntParseSpinBox" name="intSwapSize">
               <property name="suffix">
                <string> GiB</string>
@@ -221,7 +221,7 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_3">
             <property name="text">
-             <string>Swap File Location:</string>
+             <string>Location:</string>
             </property>
            </widget>
           </item>
@@ -340,49 +340,58 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
-         <property name="text">
-          <string>Debug logging of OpenGL framerate</string>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_7">
+         <property name="title">
+          <string>Debug options</string>
          </property>
+         <layout class="QFormLayout" name="formLayout_9">
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="chkOpenGLFramerateLogging">
+            <property name="text">
+             <string>Debug logging of OpenGL framerate</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QCheckBox" name="chkBrushSpeedLogging">
+            <property name="text">
+             <string>Debug logging for brush rendering speed</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QCheckBox" name="chkDisableAVXOptimizations">
+            <property name="text">
+             <string>Disable AVX vector optimizations</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QCheckBox" name="chkDisableVectorOptimizations">
+            <property name="text">
+             <string>Disable all vector optimizations</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QCheckBox" name="chkProgressReporting">
+            <property name="text">
+             <string>Progress reporting (might affect performance)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QCheckBox" name="chkPerformanceLogging">
+            <property name="text">
+             <string>Performance logging</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="3" column="1">
-        <widget class="QCheckBox" name="chkBrushSpeedLogging">
-         <property name="text">
-          <string>Debug logging for brush rendering speed</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="chkDisableAVXOptimizations">
-         <property name="text">
-          <string>Disable AVX vector optimizations</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QCheckBox" name="chkDisableVectorOptimizations">
-         <property name="text">
-          <string>Disable all vector optimizations</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QCheckBox" name="chkProgressReporting">
-         <property name="text">
-          <string>Progress reporting (might affect performance)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="1">
-        <widget class="QCheckBox" name="chkPerformanceLogging">
-         <property name="text">
-          <string>Performance logging</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="2">
+       <item row="3" column="0" colspan="2">
         <widget class="QLabel" name="label_7">
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
@@ -398,7 +407,7 @@
          </property>
         </widget>
        </item>
-       <item row="9" column="0" colspan="2">
+       <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -533,18 +542,28 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
+        <widget class="QCheckBox" name="chkTransformToolUseInStackPreview">
+         <property name="toolTip">
+          <string/>
+         </property>
+         <property name="text">
+          <string>Use in-stack preview in Transform Tool</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QGroupBox" name="groupBox_6">
          <property name="title">
-          <string>Transform Tool</string>
+          <string>Force Instant Preview</string>
          </property>
          <layout class="QFormLayout" name="formLayout_7">
-          <item row="0" column="1">
-           <widget class="QCheckBox" name="chkTransformToolUseInStackPreview">
+          <item row="2" column="1">
+           <widget class="QCheckBox" name="chkFiltersForceLodMode">
             <property name="toolTip">
-             <string/>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The filter dialog will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
-             <string>Use in-stack preview in Transform Tool</string>
+             <string>in Filters</string>
             </property>
            </widget>
           </item>
@@ -554,31 +573,21 @@
              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The transform tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
             <property name="text">
-             <string>Force Instant Preview in Transform Tool</string>
+             <string>in Transform Tool</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QCheckBox" name="chkMoveToolForceLodMode">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The move tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="text">
+             <string>in Move Tool</string>
             </property>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chkMoveToolForceLodMode">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The move tool preview will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string>Force Instant Preview in Move Tool</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="chkFiltersForceLodMode">
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The filter dialog will always use instant preview, even if instant preview is disabled in the &amp;quot;View&amp;quot; menu&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="text">
-          <string>Force Instant Preview in Filters</string>
-         </property>
         </widget>
        </item>
        <item>
@@ -589,7 +598,7 @@
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>233</height>
+           <height>0</height>
           </size>
          </property>
         </spacer>

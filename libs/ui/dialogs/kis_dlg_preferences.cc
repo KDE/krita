@@ -169,6 +169,14 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg(true);
 
+    // HACK ALERT!
+    // QScrollArea contents are opaque at multiple levels
+    // The contents themselves AND the viewport widget
+    {
+        scrollAreaWidgetContents->setAutoFillBackground(false);
+        scrollAreaWidgetContents->parentWidget()->setAutoFillBackground(false);
+    }
+
     //
     // Cursor Tab
     //
@@ -1105,10 +1113,12 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     intPoolLimit->setMinimumWidth(80);
     intUndoLimit->setMinimumWidth(80);
 
-    label_5->setVisible(false);
-    sliderPoolLimit->setVisible(false);
-    intPoolLimit->setVisible(false);
-
+    {
+        formLayout->takeRow(2);
+        label_5->setVisible(false);
+        intPoolLimit->setVisible(false);
+        sliderPoolLimit->setVisible(false);
+    }
 
     SliderAndSpinBoxSync *sync1 =
         new SliderAndSpinBoxSync(sliderMemoryLimit,

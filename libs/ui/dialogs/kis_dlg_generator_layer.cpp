@@ -127,8 +127,12 @@ void KisDlgGeneratorLayer::slotNameChanged(const QString & text)
 void KisDlgGeneratorLayer::slotDelayedPreviewGenerator()
 {
     if (!m_stroke.isNull()) {
-        layer->setFilterWithoutUpdate(configuration()->cloneWithResourcesSnapshot());
-        layer->previewWithStroke(m_stroke);
+        if (m_updateCookie) {
+            m_compressor.start();
+        } else {
+            layer->setFilterWithoutUpdate(configuration()->cloneWithResourcesSnapshot());
+            m_updateCookie = layer->previewWithStroke(m_stroke);
+        }
     } else {
         KIS_ASSERT_RECOVER_RETURN(layer);
         layer->setFilter(configuration()->cloneWithResourcesSnapshot());

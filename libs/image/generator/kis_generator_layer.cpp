@@ -146,12 +146,13 @@ void KisGeneratorLayer::requestUpdateJobsWithStroke(KisStrokeId strokeId, KisFil
     m_d->preparedForFilter = filterConfig;
 }
 
-void KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId)
+QWeakPointer<bool> KisGeneratorLayer::previewWithStroke(const KisStrokeId strokeId)
 {
     KisFilterConfigurationSP filterConfig = filter();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(filterConfig);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(filterConfig, QWeakPointer<bool>());
 
     requestUpdateJobsWithStroke(strokeId, filterConfig);
+    return m_d->updateCookie;
 }
 
 void KisGeneratorLayer::update()

@@ -65,7 +65,7 @@ public:
      * re-runs the generator with the specified configuration.
      * Used for previewing the layer inside the stroke.
      */
-    void previewWithStroke(const KisStrokeId stroke);
+    QWeakPointer<bool> previewWithStroke(const KisStrokeId stroke);
 
     using KisSelectionBasedLayer::setDirty;
     void setDirty(const QVector<QRect> &rects) override;

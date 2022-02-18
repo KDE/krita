@@ -298,6 +298,7 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->canvas->disconnectCanvasObserver(this);
         m_d->canvas->animationPlayer()->disconnect(this);
         m_d->titlebar->transport->disconnect(m_d->canvas->animationPlayer());
+        m_d->titlebar->transport->setPlaying(false);
         m_d->titlebar->frameRegister->disconnect(m_d->canvas->animationPlayer());
         m_d->titlebar->sbSpeed->disconnect(m_d->canvas->animationPlayer());
 
@@ -359,6 +360,7 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                     m_d->canvas, SIGNAL(sigCanvasEngineChanged()),
                     this, SLOT(updateFrameCache()));
 
+        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->isPlaying());
         connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));

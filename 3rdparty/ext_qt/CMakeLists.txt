@@ -406,7 +406,6 @@ else( APPLE )
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/frac_dpi_paint_artifacts/0002-Fix-QPainter-off-by-one-clipping-for-some-non-intege.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/frac_dpi_paint_artifacts/0003-Fix-under-non-integer-scaling-incorrect-update-area.patch
 
-                #COMMAND ${PATCH_COMMAND} -p1 -b -d <SOURCE_DIR>/qtbase/mkspecs/features/mac -i ${CMAKE_CURRENT_SOURCE_DIR}/mac-default.patch
             )
         message(STATUS "${EXTPREFIX_qt}:Additional patches injected.")
       else()

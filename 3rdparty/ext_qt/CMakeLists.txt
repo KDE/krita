@@ -151,7 +151,10 @@ if (WIN32)
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/misc_hidpi_backport/0003-qwindowswindow-Fix-screen-changes-between-different-.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/misc_hidpi_backport/0004-Windows-QPA-Fix-geometry-when-firing-a-full-expose.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/misc_hidpi_backport/0005-Windows-QPA-Fix-restoring-from-fullscreen-in-High-DP.patch
+
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Return-0-for-Window-if-there-is-no-widget.patch
     )
+
 
   ExternalProject_Add(
       ext_qt

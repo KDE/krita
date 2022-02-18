@@ -59,6 +59,7 @@
 
 #include "kis_figure_painting_tool_helper.h"
 #include "kis_update_outline_job.h"
+#include "kis_command_utils.h"
 
 namespace ActionHelper {
 
@@ -132,11 +133,13 @@ void KisSelectAllActionFactory::run(KisViewManager *view)
 
     KisProcessingApplicator *ap = beginAction(view, kundo2_i18n("Select All"));
 
-    if (!image->globalSelection()) {
-        ap->applyCommand(new KisSetEmptyGlobalSelectionCommand(image),
-                         KisStrokeJobData::SEQUENTIAL,
-                         KisStrokeJobData::EXCLUSIVE);
-    }
+    ap->applyCommand(new KisCommandUtils::LambdaCommand(
+        [image] () {
+            return !image->globalSelection() ?
+                new KisSetEmptyGlobalSelectionCommand(image) : 0;
+        }),
+        KisStrokeJobData::SEQUENTIAL,
+        KisStrokeJobData::EXCLUSIVE);
 
     struct SelectAll : public KisTransactionBasedCommand {
         SelectAll(KisImageSP image) : m_image(image) {}

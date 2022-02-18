@@ -108,24 +108,31 @@ KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
 KisTimeBasedItemModel::~KisTimeBasedItemModel()
 {}
 
-void KisTimeBasedItemModel::setImage(KisImageWSP image)
+void KisTimeBasedItemModel::setImage(KisImageWSP p_image)
 {
-    KisImageWSP oldImage = m_d->image;
+    if (m_d->image == p_image ) {
+        return;
+    }
 
-    m_d->image = image;
+    beginResetModel();
 
-    if (image) {
-        KisImageAnimationInterface *ai = image->animationInterface();
+    if (m_d->image) {
+        //Disconnect old image..
+        const KisImageAnimationInterface *ai = m_d->image->animationInterface();
+        ai->disconnect(this);
+    }
+
+    m_d->image = p_image;
+
+    if (m_d->image) {
+        KisImageAnimationInterface *ai = m_d->image->animationInterface();
 
         connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
         connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
         connect(ai, SIGNAL(sigFullClipRangeChanged()), SLOT(slotClipRangeChanged()));
     }
 
-    if (image != oldImage) {
-        beginResetModel();
-        endResetModel();
-    }
+    endResetModel();
 }
 
 void KisTimeBasedItemModel::setFrameCache(KisAnimationFrameCacheSP cache)

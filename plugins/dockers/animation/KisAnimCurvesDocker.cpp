@@ -345,6 +345,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         m_d->channelTreeModel->selectedNodesChanged(KisNodeList());
         m_d->canvas->animationPlayer()->disconnect(this);
         m_d->titlebar->transport->disconnect(m_d->canvas->animationPlayer());
+        m_d->titlebar->transport->setPlaying(false);
         m_d->titlebar->sbFrameRegister->disconnect(m_d->canvas->animationPlayer());
         m_d->titlebar->sbSpeed->disconnect(m_d->canvas->animationPlayer());
 
@@ -354,6 +355,8 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
             m_d->titlebar->sbEndFrame->disconnect(m_d->canvas->image()->animationInterface());
             m_d->titlebar->sbFrameRate->disconnect(m_d->canvas->image()->animationInterface());
         }
+
+        m_d->curvesModel->setImage(0);
     }
 
     m_d->canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -402,6 +405,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
                                                       activeIndex.data(KisAnimCurvesModel::ScalarValueRole).toReal() : 0.0f);
         }
 
+        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->isPlaying());
         connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));

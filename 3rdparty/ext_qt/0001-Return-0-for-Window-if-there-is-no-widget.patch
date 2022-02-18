@@ -9,13 +9,13 @@ before dereferencing the pointer.
 
 CCBUG:449122
 ---
- qtbase/src/widgets/accessible/qaccessiblewidget.cpp | 4 +++-
+ src/widgets/accessible/qaccessiblewidget.cpp | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/qtbase/src/widgets/accessible/qaccessiblewidget.cpp b/qtbase/src/widgets/accessible/qaccessiblewidget.cpp
+diff --git a/src/widgets/accessible/qaccessiblewidget.cpp b/src/widgets/accessible/qaccessiblewidget.cpp
 index c96d213e7b..900a62743b 100644
---- a/qtbase/src/widgets/accessible/qaccessiblewidget.cpp
-+++ b/qtbase/src/widgets/accessible/qaccessiblewidget.cpp
+--- a/src/widgets/accessible/qaccessiblewidget.cpp
++++ b/src/widgets/accessible/qaccessiblewidget.cpp
 @@ -225,7 +225,9 @@ bool QAccessibleWidget::isValid() const
  QWindow *QAccessibleWidget::window() const
  {

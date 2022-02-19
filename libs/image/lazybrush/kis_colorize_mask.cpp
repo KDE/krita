@@ -1095,12 +1095,12 @@ void KisColorizeMask::rerenderFakePaintDevice()
     }
 }
 
-void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent)
+void KisColorizeMask::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent)
 {
     m_d->keyStrokes << KeyStroke(dev, color, isTransparent);
 }
 
-void KisColorizeMask::testingRegenerateMask()
+void KisColorizeMask::forceRegenerateMask()
 {
     slotUpdateRegenerateFilling();
     m_d->updateIsRunning = false;

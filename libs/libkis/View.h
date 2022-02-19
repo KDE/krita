@@ -147,6 +147,27 @@ print(selected_nodes)
      */
     QList<Node *> selectedNodes() const;
 
+    /**
+     * @brief flakeToDocumentTransform
+     * The tranformation of the document relative to the view without rotation and mirroring
+     * @return QTransform
+     */
+    QTransform flakeToDocumentTransform() const;
+
+    /**
+     * @brief flakeToCanvasTransform
+     * The tranformation of the canvas relative to the view without rotation and mirroring
+     * @return QTransform
+     */
+    QTransform flakeToCanvasTransform() const;
+
+    /**
+     * @brief flakeToImageTransform
+     * The tranformation of the image relative to the view without rotation and mirroring
+     * @return QTransform
+     */
+    QTransform flakeToImageTransform() const;
+
 private:
 
     friend class Window;

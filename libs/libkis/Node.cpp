@@ -60,9 +60,12 @@
 #include "VectorLayer.h"
 #include "FilterMask.h"
 #include "SelectionMask.h"
+#include "TransparencyMask.h"
 #include "TransformMask.h"
+#include "ColorizeMask.h"
 
 #include "LibKisUtils.h"
+#include <kis_layer_utils.h>
 
 struct Node::Private {
     Private() {}
@@ -107,8 +110,14 @@ Node *Node::createNode(KisImageSP image, KisNodeSP node, QObject *parent)
     else if (node->inherits("KisSelectionMask")) {
         return new SelectionMask(image, dynamic_cast<KisSelectionMask*>(node.data()));
     }
+    else if (node->inherits("KisTransparencyMask")) {
+        return new TransparencyMask(image, dynamic_cast<KisTransparencyMask*>(node.data()));
+    }
     else if (node->inherits("KisTransformMask")) {
         return new TransformMask(image, dynamic_cast<KisTransformMask*>(node.data()));
+    }
+    else if (node->inherits("KisColorizeMask")) {
+        return new ColorizeMask(image, dynamic_cast<KisColorizeMask*>(node.data()));
     }
     else {
         return new Node(image, node, parent);
@@ -205,6 +214,45 @@ QList<Node*> Node::childNodes() const
         nodes = LibKisUtils::createNodeList(nodeList, d->image);
     }
     return nodes;
+}
+
+QList<Node*> Node::findChildNodes(const QString &name, bool recursive, bool partialMatch, const QString &type, int colorLabelIndex) const
+{
+    if (!d->node) return {};
+
+    QList<Node*> nodes;
+    KisNodeList nodeList = KisLayerUtils::findNodesByName(d->node, name, recursive, partialMatch);
+
+    if (!type.isEmpty()) {
+        for (int i = nodeList.size() - 1; i >= 0; i--) {
+            if ((type == "paintlayer" && !qobject_cast<const KisPaintLayer*>(nodeList.at(i))) ||
+                (type == "vectorlayer" && !qobject_cast<const KisShapeLayer*>(nodeList.at(i))) ||
+                (type == "grouplayer" && !qobject_cast<const KisGroupLayer*>(nodeList.at(i))) ||
+                (type == "filelayer" && !qobject_cast<const KisFileLayer*>(nodeList.at(i))) ||
+                (type == "filterlayer" && !qobject_cast<const KisAdjustmentLayer*>(nodeList.at(i))) ||
+                (type == "filllayer" && !qobject_cast<const KisGeneratorLayer*>(nodeList.at(i))) ||
+                (type == "clonelayer" && !qobject_cast<const KisCloneLayer*>(nodeList.at(i))) ||
+                (type == "transformmask" && !qobject_cast<const KisTransformMask*>(nodeList.at(i))) ||
+                (type == "referenceimageslayer" && !qobject_cast<const KisReferenceImagesLayer*>(nodeList.at(i))) ||
+                (type == "transparencymask" && !qobject_cast<const KisTransformMask*>(nodeList.at(i))) ||
+                (type == "filtermask" && !qobject_cast<const KisFilterMask*>(nodeList.at(i))) ||
+                (type == "selectionmask" && !qobject_cast<const KisSelectionMask*>(nodeList.at(i))) ||
+                (type == "colorizemask" && !qobject_cast<const KisColorizeMask*>(nodeList.at(i)))
+            ) {
+                nodeList.removeAt(i);
+            }
+        }
+    }
+
+    if (colorLabelIndex > 0) {
+        for (int i = nodeList.size() - 1; i >= 0; i--) {
+            if (nodeList.at(i)->colorLabelIndex() != colorLabelIndex) {
+                nodeList.removeAt(i);
+            }
+        }
+    }
+
+    return LibKisUtils::createNodeList(nodeList, d->image);
 }
 
 bool Node::addChildNode(Node *child, Node *above)
@@ -529,7 +577,13 @@ QByteArray Node::projectionPixelData(int x, int y, int w, int h) const
 
     if (!d->node) return ba;
 
-    KisPaintDeviceSP dev = d->node->projection();
+    KisPaintDeviceSP dev;
+    if (const KisColorizeMask *mask = qobject_cast<const KisColorizeMask*>(d->node)) {
+
+        dev = mask->coloringProjection();
+    } else {
+        dev = d->node->projection();
+    }
     if (!dev) return ba;
 
     ba.resize(w * h * dev->pixelSize());

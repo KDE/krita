@@ -1671,7 +1671,7 @@ void KisNodeManager::slotUiActivateNode()
 {
     if (!sender()->property("node").isNull()) {
         QString name = sender()->property("node").toString();
-        KisNodeSP node = m_d->imageView->image()->rootLayer()->findChildByName(name);
+        KisNodeSP node = KisLayerUtils::findNodeByName(m_d->imageView->image()->rootLayer(),name);
         if (node) {
             slotUiActivatedNode(node);
         }

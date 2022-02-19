@@ -36,12 +36,15 @@
 %Include VectorLayer.sip
 %Include FilterMask.sip
 %Include SelectionMask.sip
+%Include TransparencyMask.sip
 %Include TransformMask.sip
+%Include ColorizeMask.sip
 
 %Include Notifier.sip
 %Include Resource.sip
 %Include Selection.sip
 %Include Extension.sip
+%Include Preset.sip
 %Include PresetChooser.sip
 %Include Scratchpad.sip
 %Include Palette.sip

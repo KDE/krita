@@ -71,10 +71,22 @@ public Q_SLOTS:
     QList<Channel*> channels() const;
 
     /**
-     * Return a list of child nodes of the current node. The nodes are ordered from the bottommost up.
+     * @brief childNodes
+     * @return returns a list of child nodes of the current node. The nodes are ordered from the bottommost up.
      * The function is not recursive.
      */
     QList<Node*> childNodes() const;
+
+    /**
+     * @brief findChildNodes
+     * @param name name of the child node to search for. Leaving this blank will return all nodes.
+     * @param recursive whether or not to search recursively. Defaults to false.
+     * @param partialMatch return if the name partially contains the string (case insensative). Defaults to false.
+     * @param type filter returned nodes based on type
+     * @param colorLabelIndex filter returned nodes based on color label index
+     * @return returns a list of child nodes and grand child nodes of the current node that match the search criteria.
+     */
+    QList<Node*> findChildNodes(const QString &name = QString(), bool recursive = false, bool partialMatch = false, const QString &type = QString(), int colorLabelIndex = 0) const;
 
     /**
      * @brief addChildNode adds the given node in the list of children.
@@ -571,7 +583,9 @@ private:
     friend class VectorLayer;
     friend class FilterMask;
     friend class SelectionMask;
+    friend class TransparencyMask;
     friend class TransformMask;
+    friend class ColorizeMask;
     friend class CloneLayer;
 
     explicit Node(KisImageSP image, KisNodeSP node, QObject *parent = 0);

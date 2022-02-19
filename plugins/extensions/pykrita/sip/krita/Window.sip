@@ -10,6 +10,7 @@ public:
 
 public Q_SLOTS:
     QMainWindow *qwindow() const;
+    QList<QDockWidget *> dockers() const;
     QList<View *> views() const /Factory/;
     View *addView(Document *document)  /Factory/;
     void showView(View *view);

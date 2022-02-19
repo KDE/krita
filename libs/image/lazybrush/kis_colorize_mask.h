@@ -109,9 +109,10 @@ public:
     void setLimitToDeviceBounds(bool value);
     bool limitToDeviceBounds() const;
 
-    void testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
-    void testingRegenerateMask();
+    void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
     KisPaintDeviceSP testingFilteredSource() const;
+
+    void forceRegenerateMask();
 
     QList<KisLazyFillTools::KeyStroke> fetchKeyStrokesDirect() const;
     void setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStroke> &strokes);

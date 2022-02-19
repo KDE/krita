@@ -17,6 +17,7 @@ public Q_SLOTS:
     void setBlendingMode(QString value);
     QList<Channel *> channels() const /Factory/;
     QList<Node *> childNodes() const /Factory/;
+    QList<Node *> findChildNodes(const QString &name = QString(), bool recursive = false, bool partialMatch = false, const QString &type = QString(), int colorLabelIndex = 0) const /Factory/;
     bool addChildNode(Node *child, Node *above);
     bool removeChildNode(Node *child);
     void setChildNodes(QList<Node *> nodes);
@@ -37,6 +38,7 @@ public Q_SLOTS:
     void setInheritAlpha(bool value);
     bool locked() const;
     void setLocked(bool value);
+    bool hasExtents();
     QString name() const;
     void setName(QString value);
     int opacity() const;
@@ -65,6 +67,7 @@ public Q_SLOTS:
     QImage thumbnail(int w, int h);
     QString layerStyleToAsl();
     void setLayerStyleFromAsl(const QString &asl);
+    int index() const;
     QUuid uniqueId() const;
 Q_SIGNALS:
 private:

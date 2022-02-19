@@ -225,6 +225,10 @@ namespace KisLayerUtils
      */
     KRITAIMAGE_EXPORT KisNodeSP findNodeByUuid(KisNodeSP root, const QUuid &uuid);
 
+    KRITAIMAGE_EXPORT QList<KisNodeSP> findNodesByName(KisNodeSP root, const QString &name, bool recursive, bool partialMatch);
+
+    KRITAIMAGE_EXPORT KisNodeSP findNodeByName(KisNodeSP root, const QString &name);
+
     KRITAIMAGE_EXPORT KisImageSP findImageByHierarchy(KisNodeSP node);
 
     template <class T>

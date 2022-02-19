@@ -20,6 +20,8 @@ public:
     virtual ~TransformMask();
     virtual QString type() const;
     QTransform finalAffineTransform() const;
+    QString toXML() const;
+    bool fromXML(const QString &xml);
 Q_SIGNALS:
 private:
 };

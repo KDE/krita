@@ -53,5 +53,9 @@ public Q_SLOTS:
     void showFloatingMessage(const QString &message, const QIcon& icon, int timeout, int priority);
 
     QList<Node *> selectedNodes() const /Factory/;
+
+    QTransform flakeToDocumentTransform() const;
+    QTransform flakeToCanvasTransform() const;
+    QTransform flakeToImageTransform() const;
 private:
 };

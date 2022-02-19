@@ -308,6 +308,8 @@ QMap<QString, Resource*> Krita::resources(QString &type) const
 QList<QDockWidget*> Krita::dockers() const
 {
     KisMainWindow *mainWindow = KisPart::instance()->currentMainwindow();
+
+    if (!mainWindow) return {};
     return mainWindow->dockWidgets();
 }
 

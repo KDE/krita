@@ -18,6 +18,7 @@ private Q_SLOTS:
     void testProjectionPixelData();
     void testThumbnail();
     void testMergeDown();
+    void testFindChildNodes();
 };
 
 #endif

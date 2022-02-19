@@ -283,3 +283,25 @@ void View::showFloatingMessage(const QString &message, const QIcon& icon, int ti
 
     d->view->showFloatingMessage(message, icon, timeout, p);
 }
+
+QTransform View::flakeToDocumentTransform() const
+{
+    if (!d->view->document()) return QTransform();
+    return d->view->canvasBase()->coordinatesConverter()->documentToFlakeTransform().inverted();
+}
+
+QTransform View::flakeToCanvasTransform() const
+{
+    if (!d->view->document()) return QTransform();
+    return d->view->canvasBase()->coordinatesConverter()->flakeToWidgetTransform();
+}
+
+QTransform View::flakeToImageTransform() const
+{
+    if (!d->view->document()) return QTransform();
+
+    const KisCoordinatesConverter* coordinatesConverter(d->view->canvasBase()->coordinatesConverter());
+    QTransform imageToFlakeTransform = coordinatesConverter->imageToDocumentTransform() * coordinatesConverter->documentToFlakeTransform();
+
+    return imageToFlakeTransform.inverted();
+}

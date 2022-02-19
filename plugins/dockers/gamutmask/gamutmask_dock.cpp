@@ -43,6 +43,7 @@
 #include <ctime>
 
 #include "ui_wdgGamutMaskChooser.h"
+#include <kis_layer_utils.h>
 
 struct GamutMaskChooserUI: public QWidget, public Ui_wdgGamutMaskChooser
 {
@@ -434,7 +435,7 @@ QList<KoShape*> GamutMaskDock::getShapesFromLayer()
 
 KisShapeLayerSP GamutMaskDock::getShapeLayer()
 {
-    KisNodeSP node = m_maskDocument->image()->rootLayer()->findChildByName("maskShapesLayer");
+    KisNodeSP node = KisLayerUtils::findNodeByName(m_maskDocument->image()->rootLayer(),"maskShapesLayer");
     return KisShapeLayerSP(dynamic_cast<KisShapeLayer*>(node.data()));
 }
 

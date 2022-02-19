@@ -27,6 +27,9 @@
 #include <KisPart.h>
 
 #include <sdk/tests/testui.h>
+#include <kis_undo_stores.h>
+#include <kis_transform_mask_params_factory_registry.h>
+
 
 void TestDocument::testSetColorSpace()
 {
@@ -172,6 +175,180 @@ void TestDocument::testCreateFillLayer()
     KisPart::instance()->removeDocument(kisdoc.data(), false);
 }
 
+void TestDocument::testCreateCloneLayer()
+{
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
+    KisImageSP image = new KisImage(0, 50, 50, KoColorSpaceRegistry::instance()->rgb16(), "test");
+    kisdoc->setCurrentImage(image);
+    Document d(kisdoc.data(), false);
+
+    const QString layerType = "clonelayer";
+    const QString node1Name = "node1";
+    const QString node2Name = "node2";
+
+    Node *node1 = d.createNode(node1Name,"paintlayer");
+    Node *node2 = d.createNode(node2Name,"paintlayer");
+    CloneLayer *layer = d.createCloneLayer("test1", node1);
+    Node* rootNode = d.rootNode();
+
+    rootNode->addChildNode(node1,0);
+    rootNode->addChildNode(node2,0);
+    rootNode->addChildNode(layer,0);
+
+    QVERIFY(layer->type() == layerType);
+
+    Node *sourceNode1 = layer->sourceNode();
+
+    QVERIFY(sourceNode1->name() == node1Name);
+
+    layer->setSourceNode(node2);
+
+    Node *sourceNode2 = layer->sourceNode();
+
+    QVERIFY(sourceNode2->name() == node2Name);
+
+    delete layer;
+    delete node1;
+    delete node2;
+    delete sourceNode1;
+    delete sourceNode2;
+    delete rootNode;
+
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
+}
+
+void TestDocument::testCreateTransparencyMask()
+{
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
+    KisImageSP image = new KisImage(0, 50, 50, KoColorSpaceRegistry::instance()->rgb16(), "test");
+    kisdoc->setCurrentImage(image);
+    Document d(kisdoc.data(), false);
+
+    const QString layerType = "transparencymask";
+
+    Selection sel(image->globalSelection());
+
+    sel.select(10,10,10,10,255);
+
+    Node *node = d.createNode("node1","paintlayer");
+    TransparencyMask *mask = d.createTransparencyMask("test1");
+    Node* rootNode = d.rootNode();
+
+    rootNode->addChildNode(node,0);
+    node->addChildNode(mask,0);
+
+    Selection* selResult = mask->selection();
+
+    QVERIFY(mask->type() == layerType);
+    QVERIFY(selResult->width() == sel.width() && selResult->height() == sel.height());
+
+    delete selResult;
+    delete mask;
+    delete node;
+    delete rootNode;
+
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
+}
+
+void TestDocument::testCreateColorizeMask()
+{
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
+    KisImageSP image = new KisImage(new KisSurrogateUndoStore(),  10, 3, KoColorSpaceRegistry::instance()->rgb8(), "test");
+
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc.data(), false);
+    const QString layerType = "colorizemask";
+
+    Node *node = d.createNode("node1","paintlayer");
+
+    ColorizeMask *mask = d.createColorizeMask("test1");
+    Node* rootNode = d.rootNode();
+
+    QByteArray nodeData = QByteArray::fromBase64("AAAAAAAAAAAAAAAAEQYMBhEGDP8RBgz/EQYMAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAARBgz5EQYM/xEGDAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEQYMAhEGDAkRBgwCAAAAAAAAAAAAAAAA");
+
+    node->setPixelData(nodeData,0,0,10,3);
+    rootNode->addChildNode(node,0);
+
+    d.waitForDone();
+    d.refreshProjection();
+
+    node->addChildNode(mask,0);
+
+    qApp->processEvents();
+
+    ManagedColor col1("RGBA","U8","");
+    ManagedColor col2("RGBA","U8","");
+
+    col1.setComponents({1.0, 0.0, 0.0, 1.0});
+    col2.setComponents({0.0, 0.0, 1.0, 1.0});
+
+    QVERIFY(mask->type() == layerType);
+
+    mask->setEditKeyStrokes(true);
+    QVERIFY(mask->editKeyStrokes() == true);
+
+    mask->setUseEdgeDetection(true);
+    QVERIFY(mask->useEdgeDetection() == true);
+
+    mask->setEdgeDetectionSize(4.0);
+    QVERIFY(mask->edgeDetectionSize() == 4.0);
+
+    mask->setCleanUpAmount(70.0);
+    QVERIFY(mask->cleanUpAmount() == 70.0);
+
+    mask->setLimitToDeviceBounds(true);
+    QVERIFY(mask->limitToDeviceBounds() == true);
+
+    mask->setKeyStrokeColors({&col1, &col2});
+
+    QByteArray pdata1 = QByteArray::fromBase64("//8AAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAA");
+    QByteArray pdata2 = QByteArray::fromBase64("AAAAAAAAAAD//wAAAAAAAAAAAP8AAAAAAAAAAAAA");
+
+    mask->setKeyStrokePixelData(pdata1,&col1,0,0,10,3);
+    mask->setKeyStrokePixelData(pdata2,&col2,0,0,10,3);
+
+    QList<ManagedColor *> checkColors(mask->keyStrokesColors());
+
+    QVERIFY(checkColors.size() == 2);
+    QVERIFY(col1.toQString() == checkColors[0]->toQString());
+    QVERIFY(col2.toQString() == checkColors[1]->toQString());
+
+    QVERIFY(mask->keyStrokePixelData(&col1,0,0,10,3) == pdata1);
+    QVERIFY(mask->keyStrokePixelData(&col2,0,0,10,3) == pdata2);
+
+    delete checkColors[0];
+    delete checkColors[1];
+
+    mask->updateMask(true);
+    mask->setEditKeyStrokes(false);
+    mask->setShowOutput(true);
+
+    d.waitForDone();
+    d.refreshProjection();
+
+    QByteArray pdata = d.pixelData(0,0,10,3);
+
+    QVERIFY(d.pixelData(3,2,1,1).toBase64() == "/wAA/w==");
+    QVERIFY(d.pixelData(6,2,1,1).toBase64() == "AAD9/w==");
+
+    mask->removeKeyStroke(&col2);
+    qApp->processEvents();
+    checkColors = mask->keyStrokesColors();
+
+    QVERIFY(checkColors.size() == 1);
+    QVERIFY(col1.toQString() == checkColors[0]->toQString());
+
+    delete checkColors[0];
+    delete mask;
+    delete node;
+    delete rootNode;
+
+    KisPart::instance()->removeDocument(kisdoc.data(), false);
+}
+
+
+
 void TestDocument::testAnnotations()
 {
     QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
@@ -216,6 +393,41 @@ void TestDocument::testAnnotations()
     d2->close();
 }
 
+void TestDocument::testNodeByName()
+{
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc.data(), false);
+
+    QVERIFY(d.nodeByName("test1")->name() == layer->name());
+    QVERIFY(d.nodeByName("test2") == 0);
+}
+
+void TestDocument::testNodeByUniqueId()
+{
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP layer = new KisPaintLayer(image, "test1", 255);
+    image->addNode(layer);
+    kisdoc->setCurrentImage(image);
+
+    Document d(kisdoc.data(), false);
+
+    QVERIFY(d.nodeByUniqueID(layer->uuid())->name() == layer->name());
+
+    QUuid test(QUuid::createUuid());
+
+    while (test == layer->uuid()) {
+        test = QUuid::createUuid();
+    }
+    QVERIFY(d.nodeByUniqueID(test) == 0);
+}
+
+class KisTransformMaskAdapter;
 
 KISTEST_MAIN(TestDocument)
 

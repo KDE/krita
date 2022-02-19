@@ -166,7 +166,7 @@ void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirt
     d->updateBufferByImageCoordinates(dirtyRect);
 
     QRectF documentRect = view()->viewConverter()->imageToDocument(dirtyRect);
-    view()->canvasBase()->updateCanvas(documentRect);
+    view()->canvasBase()->updateCanvasDecorations(documentRect);
 }
 
 void KisReferenceImagesDecoration::setReferenceImageLayer(KisSharedPtr<KisReferenceImagesLayer> layer, bool updateCanvas)

@@ -852,7 +852,7 @@ void KisAssistantTool::slotChangeVanishingPointAngle(double value)
         }
     }
 
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotChangeTwoPointDensity(double value)
@@ -872,7 +872,7 @@ void KisAssistantTool::slotChangeTwoPointDensity(double value)
         }
     }
 
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotChangeTwoPointUseVertical(int value)
@@ -892,7 +892,7 @@ void KisAssistantTool::slotChangeTwoPointUseVertical(int value)
         }
     }
 
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotChangeSubdivisions(int value) {
@@ -920,7 +920,7 @@ void KisAssistantTool::slotChangeSubdivisions(int value) {
         }
     }
     
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotChangeMinorSubdivisions(int value) {
@@ -940,7 +940,7 @@ void KisAssistantTool::slotChangeMinorSubdivisions(int value) {
         }
     }
     
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotEnableFixedLength(int enabled) {
@@ -973,7 +973,7 @@ void KisAssistantTool::slotEnableFixedLength(int enabled) {
         }
     }
     
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotChangeFixedLength(double) {
@@ -1001,7 +1001,7 @@ void KisAssistantTool::slotChangeFixedLength(double) {
         }
     }
     
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotChangeFixedLengthUnit(int index) {
@@ -1067,7 +1067,7 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
     }
 
-     m_canvas->updateCanvas();
+    m_canvas->updateCanvasDecorations();
 }
 
 
@@ -1529,7 +1529,7 @@ void KisAssistantTool::slotGlobalAssistantsColorChanged(const QColor& setColor)
     m_canvas->paintingAssistantsDecoration()->setGlobalAssistantsColor(newColor);
 
     m_canvas->paintingAssistantsDecoration()->uncache();
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotGlobalAssistantOpacityChanged()
@@ -1540,7 +1540,7 @@ void KisAssistantTool::slotGlobalAssistantOpacityChanged()
     m_canvas->paintingAssistantsDecoration()->setGlobalAssistantsColor(newColor);
 
     m_canvas->paintingAssistantsDecoration()->uncache();
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotUpdateCustomColor()
@@ -1559,7 +1559,7 @@ void KisAssistantTool::slotUpdateCustomColor()
     }
 
     updateToolOptionsUI();
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotCustomOpacityChanged()
@@ -1575,7 +1575,7 @@ void KisAssistantTool::slotCustomOpacityChanged()
 
     // this forces the canvas to refresh to see the changes immediately
     m_canvas->paintingAssistantsDecoration()->uncache();
-    m_canvas->canvasWidget()->update();
+    m_canvas->updateCanvasDecorations();
 }
 
 void KisAssistantTool::slotLocalAssistantCheckboxChanged()

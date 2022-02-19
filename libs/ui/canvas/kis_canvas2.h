@@ -235,6 +235,13 @@ public Q_SLOTS:
     /// Update the entire canvas area
     void updateCanvas();
 
+    void updateCanvasProjection(const QRectF &docRect);
+    void updateCanvasDecorations();
+    void updateCanvasDecorations(const QRectF &docRect);
+    void updateCanvasToolOutlineDoc(const QRectF &docRect);
+    void updateCanvasToolOutlineWdg(const QRect &widgetRect);
+    void updateCanvasScene();
+
     void startResizingImage();
     void finishResizingImage(qint32 w, qint32 h);
 

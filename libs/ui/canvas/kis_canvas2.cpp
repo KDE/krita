@@ -991,6 +991,36 @@ void KisCanvas2::updateCanvas(const QRectF& documentRect)
     }
 }
 
+void KisCanvas2::updateCanvasProjection(const QRectF &docRect)
+{
+    updateCanvas(docRect);
+}
+
+void KisCanvas2::updateCanvasDecorations()
+{
+    updateCanvas();
+}
+
+void KisCanvas2::updateCanvasDecorations(const QRectF &docRect)
+{
+    updateCanvas(docRect);
+}
+
+void KisCanvas2::updateCanvasToolOutlineDoc(const QRectF &docRect)
+{
+    updateCanvas(docRect);
+}
+
+void KisCanvas2::updateCanvasToolOutlineWdg(const QRect &widgetRect)
+{
+    updateCanvasWidgetImpl(widgetRect);
+}
+
+void KisCanvas2::updateCanvasScene()
+{
+    updateCanvas();
+}
+
 void KisCanvas2::disconnectCanvasObserver(QObject *object)
 {
     KoCanvasBase::disconnectCanvasObserver(object);

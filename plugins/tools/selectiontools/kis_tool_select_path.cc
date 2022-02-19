@@ -99,10 +99,10 @@ void KisDelegatedSelectPathWrapper::mouseMoveEvent(KoPointerEvent *event)
     DelegatedSelectPathTool::mouseMoveEvent(event);
 
     // WARNING: the code is duplicated from KisToolPaint::requestUpdateOutline
-    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kiscanvas = qobject_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();
     if (decoration && decoration->visible() && decoration->hasPaintableAssistants()) {
-        kiscanvas->updateCanvas();
+        kiscanvas->updateCanvasDecorations();
     }
 }
 

@@ -759,27 +759,26 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
 
     // WARNING: assistants code is also duplicated in KisDelegatedSelectPathWrapper::mouseMoveEvent
 
-    KisCanvas2 * kiscanvas = dynamic_cast<KisCanvas2*>(canvas());
+    KisCanvas2 *kiscanvas = qobject_cast<KisCanvas2*>(canvas());
     KisPaintingAssistantsDecorationSP decoration = kiscanvas->paintingAssistantsDecoration();
     if (decoration && decoration->visible() && decoration->hasPaintableAssistants()) {
-        kiscanvas->updateCanvas();
-    } else {
-        // TODO: only this branch should be present!
-        if (!m_oldColorPreviewUpdateRect.isEmpty()) {
-            canvas()->updateCanvas(m_oldColorPreviewUpdateRect);
-        }
+        kiscanvas->updateCanvasDecorations();
+    }
 
-        if (!m_oldOutlineRect.isEmpty()) {
-            canvas()->updateCanvas(m_oldOutlineRect);
-        }
+    if (!m_oldColorPreviewUpdateRect.isEmpty()) {
+        kiscanvas->updateCanvasToolOutlineDoc(m_oldColorPreviewUpdateRect);
+    }
 
-        if (!outlineDocRect.isEmpty()) {
-            canvas()->updateCanvas(outlineDocRect);
-        }
+    if (!m_oldOutlineRect.isEmpty()) {
+        kiscanvas->updateCanvasToolOutlineDoc(m_oldOutlineRect);
+    }
 
-        if (!colorPreviewDocUpdateRect.isEmpty()) {
-            canvas()->updateCanvas(colorPreviewDocUpdateRect);
-        }
+    if (!outlineDocRect.isEmpty()) {
+        kiscanvas->updateCanvasToolOutlineDoc(outlineDocRect);
+    }
+
+    if (!colorPreviewDocUpdateRect.isEmpty()) {
+        kiscanvas->updateCanvasToolOutlineDoc(colorPreviewDocUpdateRect);
     }
 
     m_oldOutlineRect = outlineDocRect;

@@ -218,7 +218,8 @@ void KisInputProfileManager::loadProfiles()
             profileEntries[entry.name] = QList<ProfileEntry>();
         }
 
-        if (p.contains(".kde") || p.contains(".krita")) {
+        QString fileName = QFileInfo(p).fileName();
+        if (fileName.contains(".kde") || fileName.contains(".krita")) {
             // It's the user defined one, drop the others
             profileEntries[entry.name].clear();
             profileEntries[entry.name].append(entry);

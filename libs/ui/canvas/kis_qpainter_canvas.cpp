@@ -45,8 +45,8 @@
 #include "kis_group_layer.h"
 #include "canvas/kis_display_color_converter.h"
 
-//#define DEBUG_REPAINT
 #include <KoCanvasController.h>
+#include <KisRepaintDebugger.h>
 
 class KisQPainterCanvas::Private
 {
@@ -54,6 +54,7 @@ public:
     KisPrescaledProjectionSP prescaledProjection;
     QBrush checkBrush;
     bool scrollCheckers;
+    KisRepaintDebugger repaintDbg;
 };
 
 KisQPainterCanvas::KisQPainterCanvas(KisCanvas2 *canvas, KisCoordinatesConverter *coordinatesConverter, QWidget * parent)
@@ -118,12 +119,10 @@ void KisQPainterCanvas::paintEvent(QPaintEvent * ev)
 
     gc.restore();
 
-#ifdef DEBUG_REPAINT
-    QColor color = QColor(random() % 255, random() % 255, random() % 255, 150);
-    gc.fillRect(ev->rect(), color);
-#endif
-
     drawDecorations(gc, ev->rect());
+
+    gc.end();
+    m_d->repaintDbg.paint(this, ev);
 }
 
 void KisQPainterCanvas::drawImage(QPainter & gc, const QRect &updateWidgetRect) const

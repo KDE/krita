@@ -131,7 +131,9 @@ void KisAlternateInvocationAction::end(QEvent *event)
 
 void KisAlternateInvocationAction::inputEvent(QEvent* event)
 {
-    if (event && ((event->type() == QEvent::MouseMove) || (event->type() == QEvent::TabletMove))) {
+    if (event
+        && ((event->type() == QEvent::MouseMove) || (event->type() == QEvent::TabletMove)
+            || (event->type() == QEvent::TouchUpdate))) {
         Qt::KeyboardModifiers modifiers;
         switch (m_d->savedAction) {
         case KisTool::AlternateSampleFgNode:

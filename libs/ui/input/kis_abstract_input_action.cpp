@@ -177,6 +177,11 @@ QPoint KisAbstractInputAction::eventPos(const QEvent *event)
     case QEvent::TabletRelease:
         return static_cast<const QTabletEvent*>(event)->pos();
 
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+        return static_cast<const QTouchEvent *>(event)->touchPoints().at(0).pos().toPoint();
+
     case QEvent::Wheel:
         return static_cast<const QWheelEvent*>(event)->pos();
 
@@ -202,6 +207,11 @@ QPointF KisAbstractInputAction::eventPosF(const QEvent *event) {
     case QEvent::TabletPress:
     case QEvent::TabletRelease:
         return static_cast<const QTabletEvent*>(event)->posF();
+
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+        return static_cast<const QTouchEvent *>(event)->touchPoints().at(0).pos();
 
     case QEvent::Wheel:
         return static_cast<const QWheelEvent*>(event)->posF();

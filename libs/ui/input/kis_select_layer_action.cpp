@@ -79,9 +79,10 @@ void KisSelectLayerAction::begin(int shortcut, QEvent *event)
 
 void KisSelectLayerAction::inputEvent(QEvent *event)
 {
-    if (event &&
-        (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove ||
-         event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress)) {
+    if (event
+        && (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove
+            || event->type() == QTouchEvent::TouchUpdate || event->type() == QEvent::MouseButtonPress
+            || event->type() == QEvent::TabletPress || event->type() == QTouchEvent::TouchBegin)) {
 
         QPoint pos =
             inputManager()->canvas()->

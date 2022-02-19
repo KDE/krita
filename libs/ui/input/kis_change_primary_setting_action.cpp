@@ -84,7 +84,9 @@ void KisChangePrimarySettingAction::end(QEvent *event)
 
 void KisChangePrimarySettingAction::inputEvent(QEvent* event)
 {
-    if (event && (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove)) {
+    if (event
+        && (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove
+            || event->type() == QTouchEvent::TouchUpdate)) {
         QMouseEvent targetEvent(QEvent::MouseMove, eventPosF(event), Qt::NoButton, Qt::LeftButton, Qt::ShiftModifier);
         inputManager()->toolProxy()->forwardEvent(KisToolProxy::CONTINUE, savedAction, &targetEvent, event);
     }

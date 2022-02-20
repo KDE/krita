@@ -665,6 +665,12 @@ void KisPaintingAssistant::saveXmlList(QDomDocument& doc, QDomElement& assistant
         assistantElement.setAttribute("filename", QString("two point%1.assistant").arg(count));
         assistantsElement.appendChild(assistantElement);
     }
+    else if (d->s->id == "perspective ellipse"){
+        QDomElement assistantElement = doc.createElement("assistant");
+        assistantElement.setAttribute("type", "perspective ellipse");
+        assistantElement.setAttribute("filename", QString("perspective ellipse%1.assistant").arg(count));
+        assistantsElement.appendChild(assistantElement);
+    }
 }
 
 void KisPaintingAssistant::findPerspectiveAssistantHandleLocation() {

@@ -14,6 +14,7 @@ set(kritaassistanttool_SOURCES
     VanishingPointAssistant.cc
     EditAssistantsCommand.cpp
     TwoPointAssistant.cc
+    PerspectiveEllipseAssistant.cc
 )
 
 ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )

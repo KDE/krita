@@ -72,6 +72,14 @@ public: // Implement kis_abstract_canvas_widget interface
         Q_UNUSED(value);
     }
 
+    void updateCanvasImage(const QRect &imageUpdateRect) override {
+        update(imageUpdateRect);
+    }
+
+    void updateCanvasDecorations(const QRect &decoUpdateRect) override {
+        update(decoUpdateRect);
+    }
+
 protected: // KisCanvasWidgetBase
 
     bool callFocusNextPrevChild(bool next) override;

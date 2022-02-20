@@ -373,25 +373,29 @@ void KisOpenGLCanvasRenderer::resizeGL(int width, int height)
     coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
 }
 
-void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &updateRect)
+void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &canvasImageDirtyRect, const QRect &viewportUpdateRect)
 {
     if (d->canvasFBO) {
-        d->canvasFBO->bind();
-    }
-
-    renderCanvasGL(updateRect);
-
-    if (d->canvasFBO) {
-        d->canvasFBO->release();
+        if (!canvasImageDirtyRect.isEmpty()) {
+            d->canvasFBO->bind();
+            renderCanvasGL(canvasImageDirtyRect);
+            d->canvasFBO->release();
+        }
         QRect blitRect;
-        if (updateRect.isEmpty()) {
+        if (viewportUpdateRect.isEmpty()) {
             blitRect = QRect(QPoint(), d->viewportDevicePixelSize);
         } else {
             const QTransform scale = QTransform::fromScale(1.0, -1.0) * QTransform::fromTranslate(0, d->viewportWidgetSize.height()) * QTransform::fromScale(devicePixelRatioF(), devicePixelRatioF());
-            blitRect = scale.mapRect(QRectF(updateRect)).toAlignedRect();
+            blitRect = scale.mapRect(QRectF(viewportUpdateRect)).toAlignedRect();
         }
         QOpenGLFramebufferObject::blitFramebuffer(nullptr, blitRect, d->canvasFBO.data(), blitRect, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         QOpenGLFramebufferObject::bindDefault();
+    } else {
+        QRect fullUpdateRect = canvasImageDirtyRect | viewportUpdateRect;
+        if (fullUpdateRect.isEmpty()) {
+            fullUpdateRect = QRect(QPoint(), d->viewportDevicePixelSize);
+        }
+        renderCanvasGL(fullUpdateRect);
     }
 }
 

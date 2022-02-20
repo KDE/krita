@@ -66,6 +66,8 @@ public: // Implement kis_abstract_canvas_widget interface
     KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) override;
     QRect updateCanvasProjection(KisUpdateInfoSP info) override;
     QVector<QRect> updateCanvasProjection(const QVector<KisUpdateInfoSP> &infoObjects) override;
+    void updateCanvasImage(const QRect &imageUpdateRect) override;
+    void updateCanvasDecorations(const QRect &decoUpdateRect) override;
 
     QWidget *widget() override {
         return this;

@@ -34,6 +34,7 @@ public:
     void paint(QPainter &painter, const KoViewConverter &converter) override;
 
     void beginPrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
 
     void resetCursorStyle() override;
 

@@ -24,8 +24,7 @@ KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
                                                        KisCursor::load("tool_polygonal_selection_cursor.png", 6, 6),
                                                        i18n("Select path"),
                                                        new __KisToolSelectPathLocalTool(canvas, this))
-{
-}
+{}
 
 void KisToolSelectPath::requestStrokeEnd()
 {
@@ -45,13 +44,13 @@ bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
-        if (mouseEvent->button() == Qt::RightButton && hasUserInteractionRunning()) {
+        if (mouseEvent->button() == Qt::RightButton && isSelecting()) {
             localTool()->removeLastPoint();
             return true;
         }
     } else if (event->type() == QEvent::TabletPress) {
         QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
-        if (tabletEvent->button() == Qt::RightButton && hasUserInteractionRunning()) {
+        if (tabletEvent->button() == Qt::RightButton && isSelecting()) {
             localTool()->removeLastPoint();
             return true;
         }
@@ -119,12 +118,6 @@ void KisDelegatedSelectPathWrapper::mouseDoubleClickEvent(KoPointerEvent *event)
     Q_UNUSED(event);
 }
 
-bool KisDelegatedSelectPathWrapper::hasUserInteractionRunning() const
-{
-    return localTool()->pathStarted();
-}
-
-
 __KisToolSelectPathLocalTool::__KisToolSelectPathLocalTool(KoCanvasBase * canvas, KisToolSelectPath* parentTool)
     : KoCreatePathTool(canvas), m_selectionTool(parentTool)
 {
@@ -186,6 +179,16 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
     } else {
         helper.addSelectionShape(pathShape, m_selectionTool->selectionAction());
     }
+}
+
+void __KisToolSelectPathLocalTool::beginShape()
+{
+    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->beginSelectInteraction();
+}
+
+void __KisToolSelectPathLocalTool::endShape()
+{
+    dynamic_cast<KisToolSelectPath*>(m_selectionTool)->endSelectInteraction();
 }
 
 void KisToolSelectPath::resetCursorStyle()

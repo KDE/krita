@@ -21,36 +21,24 @@
 #include <kis_icon.h>
 #include <QMenu>
 
-
-
 class __KisToolSelectEllipticalLocal : public KisToolEllipseBase
 {
     Q_OBJECT
 
 public:
     __KisToolSelectEllipticalLocal(KoCanvasBase *canvas);
-    bool hasUserInteractionRunning() const;
-protected:
-    virtual SelectionMode selectionMode() const = 0;
-    virtual SelectionAction selectionAction() const = 0;
-    virtual bool antiAliasSelection() const = 0;
-private:
-    void finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY) override;
-
-
-
 };
 
-
-
-typedef KisToolSelectBase<__KisToolSelectEllipticalLocal> KisToolSelectEllipticalTemplate;
-
-class KisToolSelectElliptical : public KisToolSelectEllipticalTemplate
+class KisToolSelectElliptical : public KisToolSelectBase<__KisToolSelectEllipticalLocal>
 {
     Q_OBJECT
 public:
     KisToolSelectElliptical(KoCanvasBase* canvas);
     void resetCursorStyle() override;
+private:
+    void finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY) override;
+    void beginShape() override;
+    void endShape() override;
 };
 
 class KisToolSelectEllipticalFactory : public KisSelectionToolFactoryBase

@@ -24,14 +24,6 @@ class __KisToolSelectOutlineLocal : public KisToolOutlineBase
 
 public:
     __KisToolSelectOutlineLocal(KoCanvasBase * canvas);
-
-protected:
-    virtual SelectionMode selectionMode() const = 0;
-    virtual SelectionAction selectionAction() const = 0;
-    virtual bool antiAliasSelection() const = 0;
-
-private:
-    void finishOutline(const QVector<QPointF>& points) override;
 };
 
 class KisToolSelectOutline : public KisToolSelectBase<__KisToolSelectOutlineLocal>
@@ -44,6 +36,11 @@ public:
     bool primaryActionSupportsHiResEvents() const override;
     bool alternateActionSupportsHiResEvents(KisTool::AlternateAction action) const override;
     void resetCursorStyle() override;
+
+private:
+    void finishOutline(const QVector<QPointF>& points) override;
+    void beginShape() override;
+    void endShape() override;
 };
 
 class KisToolSelectOutlineFactory : public KisSelectionToolFactoryBase

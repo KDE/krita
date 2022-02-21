@@ -77,6 +77,13 @@ protected:
 
     void addPathShape(KoPathShape* pathShape, const KUndo2MagicString& name);
 
+    /**
+     * Use these methods in subclassed to notify when the user starts and
+     * finishes making a shape, and override to be notified
+     */
+    virtual void beginShape() {}
+    virtual void endShape() {}
+
     KConfigGroup m_configGroup;
 };
 

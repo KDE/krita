@@ -27,15 +27,15 @@ __KisToolSelectRectangularLocal::__KisToolSelectRectangularLocal(KoCanvasBase * 
     : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
                            KisCursor::load("tool_rectangular_selection_cursor.png", 6, 6))
 {
-        setObjectName("tool_select_rectangular");
+    setObjectName("tool_select_rectangular");
 }
 
-bool __KisToolSelectRectangularLocal::hasUserInteractionRunning() const
-{
-    return false;
-}
 
-void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY)
+KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase *canvas):
+    KisToolSelectBase<__KisToolSelectRectangularLocal>(canvas, i18n("Rectangular Selection"))
+{}
+
+void KisToolSelectRectangular::finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     if (!kisCanvas)
@@ -98,9 +98,14 @@ void __KisToolSelectRectangularLocal::finishRect(const QRectF& rect, qreal round
     }
 }
 
-KisToolSelectRectangular::KisToolSelectRectangular(KoCanvasBase *canvas):
-    KisToolSelectBase<__KisToolSelectRectangularLocal>(canvas, i18n("Rectangular Selection"))
+void KisToolSelectRectangular::beginShape()
 {
+    beginSelectInteraction();
+}
+
+void KisToolSelectRectangular::endShape()
+{
+    endSelectInteraction();
 }
 
 void KisToolSelectRectangular::resetCursorStyle()

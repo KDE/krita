@@ -45,7 +45,7 @@
 
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
-                    KisCursor::load("tool_magnetic_selection_cursor.png", 5, 5),
+                    KisCursor::load("tool_magnetic_selection_cursor.png", 6, 6),
                     i18n("Magnetic Selection")),
     m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false),
     m_worker(nullptr), m_threshold(70), m_searchRadius(30), m_anchorGap(30),
@@ -55,10 +55,11 @@ KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Control) {
-        m_continuedMode = true;
+    if (isSelecting()) {
+        if (event->key() == Qt::Key_Control) {
+            m_continuedMode = true;
+        }
     }
-
     KisToolSelect::keyPressEvent(event);
 }
 
@@ -161,12 +162,21 @@ void KisToolSelectMagnetic::calculateCheckPoints(vQPointF points)
 
 void KisToolSelectMagnetic::keyReleaseEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_Control ||
-        !(event->modifiers() & Qt::ControlModifier))
-    {
-        m_continuedMode = false;
-        if (mode() != PAINT_MODE && !m_points.isEmpty()) {
-            finishSelectionAction();
+    if (isSelecting()) {
+        if (event->key() == Qt::Key_Control ||
+            !(event->modifiers() & Qt::ControlModifier)) {
+
+            m_continuedMode = false;
+            if (mode() != PAINT_MODE) {
+                // Prevent finishing the selection if there is only one point, since
+                // finishSelectionAction will deselect the current selection. That
+                // is fine if the user just clicks, but not if we are in continued
+                // mode
+                if (m_points.count() > 1) {
+                    finishSelectionAction();
+                }
+                m_points.clear(); // ensure points are always cleared
+            }
         }
     }
 
@@ -181,19 +191,25 @@ vQPointF KisToolSelectMagnetic::computeEdgeWrapper(QPoint a, QPoint b)
 // the cursor is still tracked even when no mousebutton is pressed
 void KisToolSelectMagnetic::mouseMoveEvent(KoPointerEvent *event)
 {
+    if (isMovingSelection()) {
+        KisToolSelect::mouseMoveEvent(event);
+        return;
+    }
+
     m_lastCursorPos = convertToPixelCoord(event);
+    if (isSelecting()) {
+        updatePaintPath();
+    }
     KisToolSelect::mouseMoveEvent(event);
-    updatePaintPath();
 } // KisToolSelectMagnetic::mouseMoveEvent
 
 // press primary mouse button
 void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::beginPrimaryAction(event);
-    if (selectionDragInProgress()) {
+    if (isMovingSelection()) {
         return;
     }
-
 
     setMode(KisTool::PAINT_MODE);
     QPointF temp(convertToPixelCoord(event));
@@ -215,6 +231,7 @@ void KisToolSelectMagnetic::beginPrimaryAction(KoPointerEvent *event)
         m_points.append(edge);
         m_pointCollection.push_back(edge);
     } else {
+        beginSelectInteraction();
         updateInitialAnchorBounds(temp.toPoint());
         emit setButtonsEnabled(true);
     }
@@ -292,7 +309,7 @@ void KisToolSelectMagnetic::beginPrimaryDoubleClickAction(KoPointerEvent *event)
 // drag while primary mouse button is pressed
 void KisToolSelectMagnetic::continuePrimaryAction(KoPointerEvent *event)
 {
-    if (selectionDragInProgress()) {
+    if (isMovingSelection()) {
         KisToolSelectBase::continuePrimaryAction(event);
         return;
     }
@@ -322,7 +339,7 @@ void KisToolSelectMagnetic::slotCalculateEdge()
 // release primary mouse button
 void KisToolSelectMagnetic::endPrimaryAction(KoPointerEvent *event)
 {
-    if (selectionDragInProgress()) {
+    if (isMovingSelection()) {
         KisToolSelectBase::endPrimaryAction(event);
         return;
     }
@@ -513,6 +530,8 @@ void KisToolSelectMagnetic::finishSelectionAction()
     }
 
     resetVariables();
+
+    endSelectInteraction();
 } // KisToolSelectMagnetic::finishSelectionAction
 
 void KisToolSelectMagnetic::resetVariables()

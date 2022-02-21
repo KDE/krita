@@ -201,6 +201,8 @@ void KoCreatePathTool::mousePressEvent(KoPointerEvent *event)
             }
         }
     } else {
+        beginShape();
+
         KoPathShape *pathShape = new KoPathShape();
         d->shape = pathShape;
         pathShape->setShapeId(KoPathShapeId);
@@ -386,6 +388,7 @@ void KoCreatePathTool::endPath()
 
     d->addPathShape();
     repaintDecorations();
+    endShape();
 }
 
 void KoCreatePathTool::endPathWithoutLastPoint()
@@ -398,6 +401,7 @@ void KoCreatePathTool::endPathWithoutLastPoint()
 
         repaintDecorations();
     }
+    endShape();
 }
 
 void KoCreatePathTool::cancelPath()
@@ -410,6 +414,7 @@ void KoCreatePathTool::cancelPath()
     }
     d->cleanUp();
     repaintDecorations();
+    endShape();
 }
 
 void KoCreatePathTool::removeLastPoint()

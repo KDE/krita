@@ -29,6 +29,8 @@ public:
 
     explicit KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectangleBase::ToolType type, const QCursor & cursor=KisCursor::load("tool_rectangle_cursor.png", 6, 6));
 
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
     void beginPrimaryAction(KoPointerEvent *event) override;
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
@@ -36,8 +38,6 @@ public:
     void paint(QPainter& gc, const KoViewConverter &converter) override;
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-    void listenToModifiers(bool listen) override;
-    bool listeningToModifiers() override;
 
     QList<QPointer<QWidget> > createOptionWidgets() override;
     void showSize();
@@ -54,7 +54,6 @@ protected:
     bool m_isWidthForced;
     bool m_isHeightForced;
     bool m_rotateActive;
-    bool m_listenToModifiers;
     float m_forcedRatio;
     float m_forcedWidth;
     float m_forcedHeight;
@@ -63,6 +62,7 @@ protected:
     qreal m_referenceAngle;
     qreal m_angle;
     qreal m_angleBuffer;
+    Qt::KeyboardModifiers m_currentModifiers;
 
     bool isFixedSize();
     qreal getRotationAngle();

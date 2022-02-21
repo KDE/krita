@@ -97,6 +97,10 @@ void KisToolSelectSimilar::activate(const QSet<KoShape*> &shapes)
 void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::beginPrimaryAction(event);
+    if (isMovingSelection()) {
+        return;
+    }
+
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
@@ -108,10 +112,6 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
-    if (KisToolSelect::selectionDidMove()) {
-        return;
-    }
-
     QPointF pos = convertToPixelCoord(event);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -119,6 +119,9 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         QApplication::restoreOverrideCursor();
         return;
     };
+
+    
+    beginSelectInteraction();
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
@@ -310,6 +313,16 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     applicator.end();
     QApplication::restoreOverrideCursor();
 
+}
+
+void KisToolSelectSimilar::endPrimaryAction(KoPointerEvent *event)
+{
+    if (isMovingSelection()) {
+        KisToolSelectBase::endPrimaryAction(event);
+        return;
+    }
+
+    endSelectInteraction();
 }
 
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)

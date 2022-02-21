@@ -32,12 +32,8 @@ public:
 
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-    void listenToModifiers(bool listen) override;
-    bool listeningToModifiers() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
-
-    bool hasUserInteractionRunning() const;
 
 protected:
     virtual void finishPolyline(const QVector<QPointF>& points) = 0;
@@ -56,7 +52,6 @@ private:
     QPointF m_dragStart;
     QPointF m_dragEnd;
     bool m_dragging;
-    bool m_listenToModifiers;
     vQPointF m_points;
     ToolType m_type;
     bool m_closeSnappingActivated;

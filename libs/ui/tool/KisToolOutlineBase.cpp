@@ -98,6 +98,7 @@ void KisToolOutlineBase::beginPrimaryAction(KoPointerEvent *event)
     if (m_continuedMode && !m_points.isEmpty()) {
         m_paintPath.lineTo(pixelToView(convertToPixelCoord(event)));
     } else {
+        beginShape();
         m_paintPath.moveTo(pixelToView(convertToPixelCoord(event)));
     }
 
@@ -134,6 +135,7 @@ void KisToolOutlineBase::finishOutlineAction()
     finishOutline(m_points);
     m_points.clear();
     m_paintPath = QPainterPath();
+    endShape();
 }
 
 void KisToolOutlineBase::paint(QPainter& gc, const KoViewConverter &converter)

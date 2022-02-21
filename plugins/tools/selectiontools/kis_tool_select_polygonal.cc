@@ -34,7 +34,12 @@ __KisToolSelectPolygonalLocal::__KisToolSelectPolygonalLocal(KoCanvasBase *canva
 }
 
 
-void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &points)
+KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
+    KisToolSelectBase<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
+{
+}
+
+void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
@@ -87,10 +92,14 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
     }
 }
 
-
-KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
-    KisToolSelectBase<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
+void KisToolSelectPolygonal::beginShape()
 {
+    beginSelectInteraction();
+}
+
+void KisToolSelectPolygonal::endShape()
+{
+    endSelectInteraction();
 }
 
 void KisToolSelectPolygonal::resetCursorStyle()

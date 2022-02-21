@@ -78,6 +78,13 @@ protected:
      */
     virtual void addPathShape(KoPathShape* pathShape);
 
+    /**
+     * Use these methods in subclassed to notify when the user starts and
+     * finishes making a shape, and override to be notified
+     */
+    virtual void beginShape() {}
+    virtual void endShape() {}
+
 protected:
     /**
       * This method is called to paint the path. Decorations are drawn by KoCreatePathTool afterwards.

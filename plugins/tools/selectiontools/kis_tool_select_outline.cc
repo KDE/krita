@@ -42,7 +42,12 @@ __KisToolSelectOutlineLocal::__KisToolSelectOutlineLocal(KoCanvasBase * canvas)
     setObjectName("tool_select_outline");
 }
 
-void __KisToolSelectOutlineLocal::finishOutline(const QVector<QPointF>& points)
+
+KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
+    : KisToolSelectBase<__KisToolSelectOutlineLocal>(canvas, i18n("Freehand Selection"))
+{}
+
+void KisToolSelectOutline::finishOutline(const QVector<QPointF>& points)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
@@ -54,6 +59,7 @@ void __KisToolSelectOutlineLocal::finishOutline(const QVector<QPointF>& points)
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Freehand Selection"));
 
     if (helper.tryDeselectCurrentSelection(boundingViewRect, selectionAction())) {
+        endSelectInteraction();
         return;
     }
 
@@ -102,13 +108,19 @@ void __KisToolSelectOutlineLocal::finishOutline(const QVector<QPointF>& points)
     }
 }
 
-KisToolSelectOutline::KisToolSelectOutline(KoCanvasBase * canvas)
-    : KisToolSelectBase<__KisToolSelectOutlineLocal>(canvas, i18n("Freehand Selection"))
-{}
+void KisToolSelectOutline::beginShape()
+{
+    beginSelectInteraction();
+}
+
+void KisToolSelectOutline::endShape()
+{
+    endSelectInteraction();
+}
 
 bool KisToolSelectOutline::primaryActionSupportsHiResEvents() const
 {
-    return !selectionDragInProgress();
+    return !isMovingSelection();
 }
 
 bool KisToolSelectOutline::alternateActionSupportsHiResEvents(AlternateAction action) const
@@ -120,15 +132,15 @@ bool KisToolSelectOutline::alternateActionSupportsHiResEvents(AlternateAction ac
      */
 
     Q_UNUSED(action);
-    return !selectionDragInProgress();
+    return !isMovingSelection();
 }
 
 void KisToolSelectOutline::resetCursorStyle()
 {
     if (selectionAction() == SELECTION_ADD) {
-        useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 6, 6));
+        useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 5, 5));
     } else if (selectionAction() == SELECTION_SUBTRACT) {
-        useCursor(KisCursor::load("tool_outline_selection_cursor_sub.png", 6, 6));
+        useCursor(KisCursor::load("tool_outline_selection_cursor_sub.png", 5, 5));
     } else {
         KisToolSelectBase<__KisToolSelectOutlineLocal>::resetCursorStyle();
     }

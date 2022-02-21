@@ -553,6 +553,9 @@ public:
     bool smoothZooming(bool defaultValue = false) const;
     void setSmoothZooming(bool scale);
 
+    int zoomMarginSize(int defaultValue = 0) const;
+    void setZoomMarginSize(int zoomMarginSize);
+
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;
 

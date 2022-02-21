@@ -83,6 +83,7 @@ public:
     int kineticScrollingGesture();
     int kineticScrollingSensitivity();
     bool kineticScrollingHiddenScrollbars();
+    int zoomMarginSize();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
     bool autopinLayersToTimeline();

@@ -578,6 +578,36 @@
          </layout>
         </widget>
        </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout_8">
+         <item row="0" column="0">
+          <widget class="QLabel" name="lblZoomMarginSize">
+           <property name="text">
+            <string>Zoom Margin Size:</string>
+           </property>
+           <property name="buddy">
+            <cstring>intZoomMarginSize</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="KisIntParseSpinBox" name="intZoomMarginSize">
+           <property name="suffix">
+            <string> px</string>
+           </property>
+           <property name="maximum">
+            <number>1024</number>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="toolTip">
+            <string>Spacing between the image and the page when zoomed to fit, in pixels</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item row="8" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">

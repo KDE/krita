@@ -1960,6 +1960,16 @@ void KisConfig::setSmoothZooming(bool scale)
     m_cfg.writeEntry("SmoothZooming", scale);
 }
 
+int KisConfig::zoomMarginSize(int defaultValue) const
+{
+    return (defaultValue ? 0 : m_cfg.readEntry("ZoomMarginSize", 0));
+}
+
+void KisConfig::setZoomMarginSize(int zoomMarginSize)
+{
+    m_cfg.writeEntry("ZoomMarginSize", zoomMarginSize);
+}
+
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const
 {
     const KoColorSpace *cs = 0;

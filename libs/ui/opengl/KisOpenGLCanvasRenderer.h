@@ -61,6 +61,7 @@ public:
     void paintCanvasOnly(const QRect &canvasImageDirtyRect, const QRect &viewportUpdateRect = QRect());
 
 private:
+    void updateSize(const QSize &viewportSize);
     void renderCanvasGL(const QRect &updateRect);
 
 public:
@@ -99,7 +100,6 @@ private:
     void drawImageTiles(int firstCol, int lastCol, int firstRow, int lastRow, qreal scaleX, qreal scaleY, const QPoint &wrapAroundOffset);
     void drawCheckers(const QRect &updateRect);
     void drawGrid(const QRect &updateRect);
-    QSizeF widgetSizeAlignedToDevicePixel() const;
 
     QRectF widgetToSurface(const QRectF &rc);
     QRectF surfaceToWidget(const QRectF &rc);

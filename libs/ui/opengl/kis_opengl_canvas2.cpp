@@ -49,9 +49,6 @@ protected:
     QColor borderColor() const override {
         return m_canvas->borderColor();
     }
-    QWidget *widget() const override {
-        return m_canvas;
-    }
 };
 
 struct KisOpenGLCanvas2::Private

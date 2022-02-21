@@ -131,10 +131,6 @@ protected:
     virtual qreal devicePixelRatioF() const = 0;
     virtual KisCoordinatesConverter *coordinatesConverter() const = 0;
     virtual QColor borderColor() const = 0;
-
-    // Widget parent for KisOpenGLCanvasRenderer::reportFailedShaderCompilation
-    // to show a QMessageBox. (Return `nullptr` if not using widgets?)
-    virtual QWidget *widget() const = 0;
 };
 
 #endif // KIS_OPENGL_CANVAS_RENDERER_H

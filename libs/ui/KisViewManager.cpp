@@ -208,6 +208,7 @@ public:
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
+    KisAction *toggleZoomToFit;
     KisAction *softProof;
     KisAction *gamutCheck;
     KisAction *toggleFgBg;
@@ -490,6 +491,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+        d->viewConnections.addUniqueConnection(d->toggleZoomToFit, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotToggleZoomToFit()));
 
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
@@ -746,6 +748,8 @@ void KisViewManager::createActions()
 
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
+
+    d->toggleZoomToFit = actionManager()->createAction("toggle_zoom_to_fit");
 
     d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));

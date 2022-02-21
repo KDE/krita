@@ -72,6 +72,9 @@ KisZoomManager::KisZoomManager(QPointer<KisView> view, KoZoomHandler * zoomHandl
         , m_physicalDpiY(72.0)
         , m_devicePixelRatio(1.0)
         , m_guiUpdateCompressor(80, KisSignalCompressor::FIRST_ACTIVE)
+        , m_previousZoomLevel(1.0)
+        , m_previousZoomMode(KoZoomMode::ZOOM_PAGE)
+        , m_previousZoomPoint(QPointF(0.0, 0.0))
 {
 }
 
@@ -401,5 +404,21 @@ void KisZoomManager::pageOffsetChanged()
 void KisZoomManager::zoomTo100()
 {
     m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
+    m_view->canvasBase()->notifyZoomChanged();
+}
+
+void KisZoomManager::slotToggleZoomToFit()
+{
+    KoZoomMode::Mode currentZoomMode = m_zoomController->zoomMode();
+    if (currentZoomMode == KoZoomMode::ZOOM_CONSTANT) {
+        m_previousZoomLevel = m_zoomController->zoomAction()->effectiveZoom();
+        m_previousZoomPoint = m_canvasController->preferredCenter();
+        m_zoomController->setZoom(m_previousZoomMode, 0);
+    }
+    else {
+        m_previousZoomMode = currentZoomMode;
+        m_zoomController->setZoom(KoZoomMode::ZOOM_CONSTANT, m_previousZoomLevel);
+        m_canvasController->setPreferredCenter(m_previousZoomPoint);
+    }
     m_view->canvasBase()->notifyZoomChanged();
 }

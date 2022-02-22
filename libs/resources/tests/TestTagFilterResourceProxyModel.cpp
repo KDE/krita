@@ -236,17 +236,16 @@ void TestTagFilterResourceProxyModel::testResourceForIndex()
     resource = proxyModel.resourceForIndex(idx);
     QVERIFY(resource);
 
+
     KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
     tagResourceModel.setResourcesFilter(QVector<KoResourceSP>() << resource);
     for (int i = 0; i < tagResourceModel.rowCount(); ++i) {
         KisTagSP tag = tagResourceModel.index(i, 0).data(Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
-        QVERIFY(tagResourceModel.untagResource(tag, resource->resourceId()));
-        QVERIFY(!tagResourceModel.isResourceTagged(tag, resource->resourceId()));
+        tagResourceModel.untagResource(tag, resource->resourceId());
     }
 
     KisTagSP tag = tagModel.tagForIndex(tagModel.index(3, 0));
     QVERIFY(tag);
-    QVERIFY(!proxyModel.isResourceTagged(tag, resource->resourceId()));
 
     proxyModel.setTagFilter(tag);
     int rowCount = proxyModel.rowCount();

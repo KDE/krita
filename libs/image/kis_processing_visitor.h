@@ -68,7 +68,6 @@ public:
         KoUpdater* updater() const;
     private:
         KoProgressUpdater *m_progressUpdater;
-        mutable QMutex m_progressMutex;
     };
 };
 

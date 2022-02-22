@@ -36,7 +36,6 @@ KisProcessingVisitor::ProgressHelper::~ProgressHelper()
 
 KoUpdater* KisProcessingVisitor::ProgressHelper::updater() const
 {
-    QMutexLocker l(&m_progressMutex);
     return m_progressUpdater ? m_progressUpdater->startSubtask() : 0;
 }
 

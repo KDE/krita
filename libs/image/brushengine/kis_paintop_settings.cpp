@@ -374,6 +374,7 @@ void KisPaintOpSettings::setPaintOpScatter(qreal value)
                 KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
     proxy->setProperty("ScatterValue", value);
+    proxy->setProperty("PressureScatter", !qFuzzyIsNull(value));
 }
 
 void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
@@ -423,7 +424,7 @@ qreal KisPaintOpSettings::paintOpScatter()
     KisLockedPropertiesProxySP proxy(
         KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
-    return proxy->getDouble("ScatterValue", 0.5);
+    return proxy->getDouble("ScatterValue", 0.0);
 }
 
 

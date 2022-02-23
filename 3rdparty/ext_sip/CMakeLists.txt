@@ -70,24 +70,36 @@ elseif (WIN32)
         URL https://pypi.python.org/packages/source/s/sip/sip-6.1.0.tar.gz
         URL_HASH SHA256=f069d550dd819609e019e5dc58fc5193e081c7f3fb4f7dc8f9be734e34d4e56e
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MinGW-Distutils-support-hack.patch
-
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
+            PYTHONPATH=${_krita_pythonpath}
+            SETUPTOOLS_USE_DISTUTILS=local
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build -j ${SUBMAKE_JOBS} ${_compiler}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_sip_prefix}\\lib\\site-packages
             COMMAND ${CMAKE_COMMAND} -E env 
-                "PYTHONPATH=${_krita_pythonpath}"
-                ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix ${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
+                PYTHONPATH=${_krita_pythonpath}
+                SETUPTOOLS_USE_DISTUTILS=local
+                ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_sip_prefix} --optimize=1 --install-scripts=${_sip_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 
         UPDATE_COMMAND ""
     )
+
+    if (MINGW)
+        ExternalProject_Add_Step(ext_sip
+            wheel_update_setuptools
+            COMMAND ${CMAKE_COMMAND} -E env 
+            PYTHONPATH=${_krita_pythonpath}
+            ${Python_EXECUTABLE} -m pip install -U pip setuptools===59.8.0
+                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/sitecustomize.py ${KRITA_PYTHONPATH}
+
+            DEPENDERS build
+        )
+    endif()
 endif()
 

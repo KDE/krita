@@ -137,15 +137,17 @@ elseif(WIN32)
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+            PYTHONPATH=${_krita_pythonpath}
+            SETUPTOOLS_USE_DISTUTILS=local
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # HACK: Create lib\site-packages before installing
         # See e.g. https://access.redhat.com/errata/RHBA-2020:4437
         INSTALL_COMMAND ${CMAKE_COMMAND} -E make_directory ${_pyqt_prefix}\\lib\\site-packages
             COMMAND ${CMAKE_COMMAND} -E env 
-                "PYTHONPATH=${_krita_pythonpath}"
-                ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
+                PYTHONPATH=${_krita_pythonpath}
+                SETUPTOOLS_USE_DISTUTILS=local
+                ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 
@@ -190,16 +192,18 @@ elseif(WIN32)
         CONFIGURE_COMMAND ""
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
+            PYTHONPATH=${_krita_pythonpath}
+            SETUPTOOLS_USE_DISTUTILS=local
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
 
         # Here we need a flat-egg installation, otherwise the egg is deployed
         # inside its own directory in site-packages.
         # So we set as root our 3rdparty layout, and a sufficiently dud prefix.
         # See https://github.com/msys2/MINGW-packages/blob/8a4066591cf1e023971526c55bf2d5fe0c7aa84a/mingw-w64-pyqt5-sip/PKGBUILD
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
-            "PYTHONPATH=${_krita_pythonpath}"
-            ${PYTHON_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix "." --root=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
+            PYTHONPATH=${_krita_pythonpath}
+            SETUPTOOLS_USE_DISTUTILS=local
+            ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py install --skip-build --prefix "." --root=${_pyqt_prefix} --optimize=1 --install-scripts=${_pyqt_prefix}\\bin
 
         BUILD_IN_SOURCE 1
 

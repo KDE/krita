@@ -25,6 +25,26 @@ if(WIN32)
        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-1_61.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
+   if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    message(STATUS "Applying Clang override to Boost...")
+    set(_user_config "using gcc : : ${CMAKE_CXX_COMPILER} ;")
+    file(WRITE 
+      ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam
+      "${_user_config}"
+    )
+    ExternalProject_Add_Step(
+        ext_boost
+        configure_clang_mingw
+        COMMAND ${CMAKE_COMMAND} -E rm <SOURCE_DIR>/project-config.jam
+        DEPENDEES configure
+    )
+    ExternalProject_Add_Step(
+        ext_boost
+        patch_clang_mingw
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam <SOURCE_DIR>/tools/build/src/user-config.jam
+        DEPENDEES patch
+    )
+   endif()
    else()
       # Boost.Build cannot append arbitrary flags to MSVC from the command line.
       # It becomes unable to detect the target architecture or defaults to x86 only.

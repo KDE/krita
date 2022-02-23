@@ -301,14 +301,18 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
      * Apply the real selection to a filled one
      */
     KisSelectionSP realSelection = selection();
+    QRect rc;
 
     if (realSelection) {
+        rc = m_fillSelection->selectedExactRect().intersected(realSelection->projection()->selectedExactRect());
         m_fillSelection->pixelSelection()->applySelection(
             realSelection->projection(), SELECTION_INTERSECT);
+    } else {
+        rc = m_fillSelection->selectedExactRect();
     }
 
     setSelection(m_fillSelection);
-    bitBlt(0, 0, filled, 0, 0, m_width, m_height);
+    bitBlt(rc.topLeft(), filled, rc);
     setSelection(realSelection);
 
     if (progressUpdater()) progressUpdater()->setProgress(100);

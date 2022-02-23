@@ -324,22 +324,14 @@ void KisCanvasControlsManager::increaseFlow()
 {
     qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
 
-    if (qRound(flow * 100) >= 40) {
-        stepFlow(0.1f);
-    } else {
-        stepFlow(0.05f);
-    }
+    stepFlow(0.1f);
 }
 
 void KisCanvasControlsManager::decreaseFlow()
 {
     qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
 
-    if (qRound(flow * 100) > 40) {
-        stepFlow(-0.1f);
-    } else {
-        stepFlow(-0.05f);
-    }
+    stepFlow(-0.1f);
 }
 
 void KisCanvasControlsManager::stepFade(float step)
@@ -362,12 +354,12 @@ void KisCanvasControlsManager::stepFade(float step)
 
 void KisCanvasControlsManager::increaseFade()
 {
-    stepFade(0.25f);
+    stepFade(0.1f);
 }
 
 void KisCanvasControlsManager::decreaseFade()
 {
-    stepFade(-0.25f);
+    stepFade(-0.1f);
 }
 
 void KisCanvasControlsManager::stepScatter(float step)
@@ -390,10 +382,10 @@ void KisCanvasControlsManager::stepScatter(float step)
 
 void KisCanvasControlsManager::increaseScatter()
 {
-    stepScatter(0.2f);
+    stepScatter(0.1f);
 }
 
 void KisCanvasControlsManager::decreaseScatter()
 {
-    stepScatter(-0.2f);
+    stepScatter(-0.1f);
 }

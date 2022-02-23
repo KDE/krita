@@ -197,6 +197,10 @@ void KisToolSelectPath::resetCursorStyle()
         useCursor(KisCursor::load("tool_polygonal_selection_cursor_add.png", 6, 6));
     } else if (selectionAction() == SELECTION_SUBTRACT) {
         useCursor(KisCursor::load("tool_polygonal_selection_cursor_sub.png", 6, 6));
+    } else if (selectionAction() == SELECTION_INTERSECT) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_inter.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SYMMETRICDIFFERENCE) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_symdiff.png", 6, 6));
     } else {
         KisToolSelectBase<KisDelegatedSelectPathWrapper>::resetCursorStyle();
     }

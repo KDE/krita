@@ -141,6 +141,10 @@ void KisToolSelectOutline::resetCursorStyle()
         useCursor(KisCursor::load("tool_outline_selection_cursor_add.png", 5, 5));
     } else if (selectionAction() == SELECTION_SUBTRACT) {
         useCursor(KisCursor::load("tool_outline_selection_cursor_sub.png", 5, 5));
+    } else if (selectionAction() == SELECTION_INTERSECT) {
+        useCursor(KisCursor::load("tool_outline_selection_cursor_inter.png", 5, 5));
+    } else if (selectionAction() == SELECTION_SYMMETRICDIFFERENCE) {
+        useCursor(KisCursor::load("tool_outline_selection_cursor_symdiff.png", 5, 5));
     } else {
         KisToolSelectBase<__KisToolSelectOutlineLocal>::resetCursorStyle();
     }

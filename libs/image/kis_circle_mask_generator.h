@@ -28,8 +28,6 @@ public:
 
     quint8 valueAt(qreal x, qreal y) const override;
 
-    bool shouldSupersample() const override;
-
     bool shouldVectorize() const override;
 
     KisBrushMaskApplicatorBase* applicator() override;

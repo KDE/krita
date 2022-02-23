@@ -355,6 +355,8 @@ void KisPaintOpSettings::setPaintOpFade(qreal value)
     KisLockedPropertiesProxySP proxy(
                 KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
 
+    if (!proxy->hasProperty("brush_definition")) return;
+
     // Setting the Fade value is a bit more complex.
     QDomDocument doc;
     doc.setContent(proxy->getString("brush_definition"));
@@ -372,6 +374,8 @@ void KisPaintOpSettings::setPaintOpScatter(qreal value)
 {
     KisLockedPropertiesProxySP proxy(
                 KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    if (!proxy->hasProperty("PressureScatter")) return;
 
     proxy->setProperty("ScatterValue", value);
     proxy->setProperty("PressureScatter", !qFuzzyIsNull(value));
@@ -404,6 +408,8 @@ qreal KisPaintOpSettings::paintOpFade()
 {
     KisLockedPropertiesProxySP proxy(
         KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    if (!proxy->hasProperty("brush_definition")) return 1.0;
 
     QDomDocument doc;
     doc.setContent(proxy->getString("brush_definition"));

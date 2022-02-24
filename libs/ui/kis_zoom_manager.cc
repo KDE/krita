@@ -351,6 +351,8 @@ void KisZoomManager::updateGuiAfterDocumentSize()
     m_verticalRuler->setRulerLength(documentSize.height());
 
     applyRulersUnit(m_horizontalRuler->unit());
+
+    updateZoomMarginSize();
 }
 
 QWidget *KisZoomManager::zoomActionWidget() const
@@ -421,4 +423,10 @@ void KisZoomManager::slotToggleZoomToFit()
         m_canvasController->setPreferredCenter(m_previousZoomPoint);
     }
     m_view->canvasBase()->notifyZoomChanged();
+}
+
+void KisZoomManager::updateZoomMarginSize()
+{
+    KisConfig cfg(true);
+    m_zoomController->setZoomMarginSize(cfg.zoomMarginSize());
 }

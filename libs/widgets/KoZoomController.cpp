@@ -20,9 +20,6 @@
 
 #include <QtMath>
 
-#include <ksharedconfig.h>
-#include <kconfiggroup.h>
-
 void KoZoomController::Private::init(KoCanvasController *co,
                                      KoZoomHandler *zh,
                                      KActionCollection *actionCollection)
@@ -138,8 +135,7 @@ void KoZoomController::setZoom(KoZoomMode::Mode mode, qreal zoom, qreal resoluti
         d->zoomHandler->setResolution(resolutionX, resolutionY);
     }
 
-    KConfigGroup config = KSharedConfig::openConfig()->group("");
-    int cfgMargin = config.readEntry("ZoomMarginSize", 0);
+    int cfgMargin = d->zoomHandler->zoomMarginSize();
     if(mode == KoZoomMode::ZOOM_CONSTANT) {
         if(zoom == 0.0) return;
         d->action->setZoom(zoom);
@@ -220,5 +216,11 @@ void KoZoomController::setAspectMode(bool status)
         d->action->setAspectMode(status);
     }
 }
+
+void KoZoomController::setZoomMarginSize(int size)
+{
+    d->zoomHandler->setZoomMarginSize(size);
+}
+
 //have to include this because of Q_PRIVATE_SLOT
 #include <moc_KoZoomController.cpp>

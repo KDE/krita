@@ -65,6 +65,8 @@ public:
     qreal resolutionX() const;
     qreal resolutionY() const;
 
+    void updateZoomMarginSize();
+
 public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);

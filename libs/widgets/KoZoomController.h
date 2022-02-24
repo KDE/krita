@@ -119,6 +119,8 @@ public:
    */
     void setAspectMode(bool status);
 
+    void setZoomMarginSize(int size);
+
 public Q_SLOTS:
     /**
     * Set the size of the current page in document coordinates which allows zoom modes that use the pageSize

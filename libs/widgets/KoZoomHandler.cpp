@@ -19,6 +19,7 @@ KoZoomHandler::KoZoomHandler()
     , m_resolutionY(0)
     , m_zoomedResolutionX(0)
     , m_zoomedResolutionY(0)
+    , m_zoomMarginSize(0)
 {
     setZoom(1.0);
     setZoomMode( KoZoomMode::ZOOM_CONSTANT );
@@ -76,6 +77,16 @@ void KoZoomHandler::setZoom( qreal zoom )
         m_zoomedResolutionX = zoom * m_resolutionX;
         m_zoomedResolutionY = zoom * m_resolutionY;
     }
+}
+
+void KoZoomHandler::setZoomMarginSize( int size )
+{
+    m_zoomMarginSize = size;
+}
+
+int KoZoomHandler::zoomMarginSize() const
+{
+    return m_zoomMarginSize;
 }
 
 QPointF KoZoomHandler::documentToView( const QPointF &documentPoint )  const

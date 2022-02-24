@@ -1,0 +1,27 @@
+From 2fc40f8a4a56221de09315ea79d627ef02f3b787 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 24 Feb 2022 18:56:37 -0300
+Subject: [PATCH] Fix MinGW build by dropping export on defaulted dtor
+
+Cherry-picked from #1106
+
+Signed-off-by: L. E. Segovia <amy@amyspark.me>
+---
+ OpenEXR/IlmImf/ImfKeyCode.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/OpenEXR/IlmImf/ImfKeyCode.h b/OpenEXR/IlmImf/ImfKeyCode.h
+index 58986a4a..231c7848 100644
+--- a/OpenEXR/IlmImf/ImfKeyCode.h
++++ b/OpenEXR/IlmImf/ImfKeyCode.h
+@@ -120,7 +120,6 @@ class KeyCode
+ 
+     IMF_EXPORT
+     KeyCode (const KeyCode &other);
+-    IMF_EXPORT
+     ~KeyCode() = default;
+     IMF_EXPORT
+     KeyCode & operator = (const KeyCode &other);
+-- 
+2.32.0.windows.2
+

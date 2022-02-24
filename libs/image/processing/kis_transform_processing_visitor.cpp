@@ -147,7 +147,7 @@ void KisTransformProcessingVisitor::visit(KisTransformMask *mask, KisUndoAdapter
                           m_angle, m_tx, m_ty, 0,
                           m_filter);
 
-    KisTransformMaskParamsInterfaceSP params = mask->transformParams()->clone();
+    KisTransformMaskParamsInterfaceSP params = mask->transformParams();
     params->transformSrcAndDst(tw.transform());
 
     undoAdapter->addCommand(new KisSimpleModifyTransformMaskCommand(mask, mask->transformParams(), params));

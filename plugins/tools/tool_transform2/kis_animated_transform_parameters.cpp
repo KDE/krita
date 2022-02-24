@@ -34,6 +34,18 @@ struct KisAnimatedTransformMaskParameters::Private
         transformChannels.insert(KisKeyframeChannel::RotationZ.id(), nullptr);
     }
 
+    Private(Private& rhs)
+        : hidden(false)
+        , hash() {
+
+        Q_FOREACH(QString otherKey, rhs.transformChannels.keys()) {
+            if (rhs.transformChannels[otherKey]){
+                transformChannels.insert(otherKey, toQShared(new KisScalarKeyframeChannel(*rhs.transformChannels[otherKey])));
+            }
+        }
+
+    }
+
     TransformChannels transformChannels;
 
     bool hidden;

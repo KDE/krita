@@ -284,7 +284,7 @@ void KisCanvasControlsManager::stepAlpha(float step)
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Opacity, alpha);
 
-    m_view->showFloatingMessage(i18n("%1 %2\%", QString("Brush Opacity:"), alpha * 100), QIcon(), 1000, KisFloatingMessage::High,
+    m_view->showFloatingMessage(i18n("Brush Opacity: %1%", alpha * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 
     // FIXME: DK: should we uncomment it back?
@@ -316,7 +316,7 @@ void KisCanvasControlsManager::stepFlow(float step)
     // verify if the brush does actually support this change
     flow = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Flow).toReal();
 
-    m_view->showFloatingMessage(i18nc("Brush Option Flow", "%1 %2\%", QString("Flow:"), flow * 100), QIcon(), 1000, KisFloatingMessage::High,
+    m_view->showFloatingMessage(i18nc("Brush Option Flow", "Flow: %1%", flow * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
@@ -348,7 +348,7 @@ void KisCanvasControlsManager::stepFade(float step)
     // verify if the brush does actually support this change
     fade = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Fade).toReal();
 
-    m_view->showFloatingMessage(i18nc("Edge softness, Brush Option Fade", "%1 %2", QString("Fade:"), fade),
+    m_view->showFloatingMessage(i18nc("Edge softness, Brush Option Fade", "Fade: %1", fade),
                                 QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
@@ -376,7 +376,7 @@ void KisCanvasControlsManager::stepScatter(float step)
     // verify if the brush does actually support this change
     scatter = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Scatter).toReal();
 
-    m_view->showFloatingMessage(i18nc("Brush Option Scatter", "%1 %2\%", QString("Scatter:"), scatter * 100), QIcon(), 1000, KisFloatingMessage::High,
+    m_view->showFloatingMessage(i18nc("Brush Option Scatter", "Scatter: %1%", scatter * 100), QIcon(), 1000, KisFloatingMessage::High,
                                 Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 

@@ -672,7 +672,7 @@ void KisToolPaint::decreaseBrushSize()
 void KisToolPaint::showBrushSize()
 {
      KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
-     kisCanvas->viewManager()->showFloatingMessage(i18n("%1 %2 px", QString("Brush Size:"), currentPaintOpPreset()->settings()->paintOpSize())
+     kisCanvas->viewManager()->showFloatingMessage(i18n("Brush Size: %1 px", currentPaintOpPreset()->settings()->paintOpSize())
                                                    , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 

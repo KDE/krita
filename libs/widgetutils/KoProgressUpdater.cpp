@@ -240,8 +240,6 @@ void KoProgressUpdater::updateUi()
 
     }
 
-    ENTER_FUNCTION() << ppVar(d->currentProgress) << ppVar(d->taskMax);
-
     if (d->progressProxy()) {
         if (!d->isUndefinedState) {
             d->progressProxy()->setRange(0, d->taskMax);

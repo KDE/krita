@@ -251,6 +251,16 @@ public:
         m_careForSelection = set;
     }
 
+    /** Sets if antiAlias should be applied to the selection */
+    void setAntiAlias(bool antiAlias) {
+        m_antiAlias = antiAlias;
+    }
+    
+    /** Get if antiAlias should be applied to the selection */
+    bool antiAlias() {
+        return m_antiAlias;
+    }
+
     /** Sets the auto growth/shrinking radius */
     void setSizemod(int sizemod) {
         m_sizemod = sizemod;
@@ -292,6 +302,7 @@ private:
 
     int m_feather;
     int m_sizemod;
+    bool m_antiAlias;
     int m_threshold;
     int m_opacitySpread;
     int m_width, m_height;

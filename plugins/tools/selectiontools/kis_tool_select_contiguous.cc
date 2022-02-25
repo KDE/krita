@@ -66,10 +66,6 @@ KisToolSelectContiguous::~KisToolSelectContiguous()
 void KisToolSelectContiguous::activate(const QSet<KoShape*> &shapes)
 {
     KisToolSelect::activate(shapes);
-    if (selectionOptionWidget()) {
-        // the antialias option is replaced with the opacity spread
-        selectionOptionWidget()->disableAntiAliasSelectionOption();
-    }
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -130,6 +126,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     int feather = m_feather;
     int sizemod = m_sizemod;
     bool useSelectionAsBoundary = m_useSelectionAsBoundary;
+    bool antiAlias = antiAliasSelection();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
@@ -145,7 +142,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     }
 
     KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [dev, rc, fuzziness, opacitySpread, feather, sizemod, useSelectionAsBoundary,
+                [dev, rc, fuzziness, opacitySpread, antiAlias, feather, sizemod, useSelectionAsBoundary,
                 selection, pos, sourceDevice, existingSelection] () mutable -> KUndo2Command* {
 
                     KisFillPainter fillpainter(dev);
@@ -153,6 +150,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setWidth(rc.width());
                     fillpainter.setFillThreshold(fuzziness);
                     fillpainter.setOpacitySpread(opacitySpread);
+                    fillpainter.setAntiAlias(antiAlias);
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(sizemod);
                     fillpainter.setUseCompositioning(true);
@@ -232,8 +230,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
-
-    selectionWidget->disableAntiAliasSelectionOption();
 
     QVBoxLayout * l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
     Q_ASSERT(l);

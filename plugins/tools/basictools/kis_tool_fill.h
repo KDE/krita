@@ -62,6 +62,7 @@ public Q_SLOTS:
     void slotSetUsePattern(bool);
     void slotSetFillSelection(bool);
     void slotSetUseSelectionAsBoundary(bool);
+    void slotSetAntiAlias(bool antialias);
     void slotSetSizemod(int);
     void slotSetFeather(int);
     void slotSetSampleLayers(int index);
@@ -98,6 +99,7 @@ private:
     static constexpr int minimumDragDistance{4};
     static constexpr int minimumDragDistanceSquared{minimumDragDistance * minimumDragDistance};
 
+    bool m_antiAlias;
     int m_feather;
     int m_sizemod;
     int m_threshold;
@@ -120,6 +122,7 @@ private:
     QCheckBox *m_checkUseFastMode;
     KisSliderSpinBox *m_slThreshold;
     KisSliderSpinBox *m_slOpacitySpread;
+    QCheckBox *m_checkAntiAlias;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
     KisAngleSelector *m_angleSelectorPatternRotate;

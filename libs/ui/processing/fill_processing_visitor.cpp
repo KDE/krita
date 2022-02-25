@@ -23,6 +23,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_selectionOnly(false)
     , m_useSelectionAsBoundary(false)
     , m_usePattern(false)
+    , m_antiAlias(false)
     , m_feather(0)
     , m_sizemod(0)
     , m_fillThreshold(8)
@@ -130,6 +131,7 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     m_resources->setupPainter(&fillPainter);
 
     fillPainter.setProgress(helper.updater());
+    fillPainter.setAntiAlias(m_antiAlias);
     fillPainter.setSizemod(m_sizemod);
     fillPainter.setFeather(m_feather);
     fillPainter.setFillThreshold(m_fillThreshold);
@@ -204,6 +206,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
 
         painter.setProgress(helper.updater());
         painter.setSizemod(m_sizemod);
+        painter.setAntiAlias(m_antiAlias);
         painter.setFeather(m_feather);
         painter.setFillThreshold(m_fillThreshold);
         painter.setOpacitySpread(m_opacitySpread);
@@ -276,6 +279,11 @@ void FillProcessingVisitor::setSelectionOnly(bool selectionOnly)
 void FillProcessingVisitor::setUseSelectionAsBoundary(bool useSelectionAsBoundary)
 {
     m_useSelectionAsBoundary = useSelectionAsBoundary;
+}
+
+void FillProcessingVisitor::setAntiAlias(bool antiAlias)
+{
+    m_antiAlias = antiAlias;
 }
 
 void FillProcessingVisitor::setFeather(int feather)

@@ -142,4 +142,70 @@ public:
     void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
 };
 
+/**
+ * @brief AntiAlias filter for selections inspired by FXAA 
+ */
+class KRITAIMAGE_EXPORT KisAntiAliasSelectionFilter : public KisSelectionFilter
+{
+public:
+    KUndo2MagicString name() override;
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
+
+private:
+    /**
+     * @brief Edges with gradient less than this value will not be antiAliasied
+     */
+    static constexpr qint32 edgeThreshold{4};
+    /**
+     * @brief Number of steps to jump when searching for one of the ends of the
+     *        antiAliased span.
+     */
+    static constexpr qint32 numSteps{30};
+    /**
+     * @brief This array of @ref numSteps size holds the number of pixels to
+     *        jump in each step.
+     */
+    static constexpr qint32 offsets[numSteps]{
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2
+    };
+    /**
+     * @brief The size of the border added internally to the left and right of
+     *        the scanline buffer so that we can read outside the selection rect
+     *        without problems. It must be equal to the largest value in @ref offsets. 
+     */
+    static constexpr qint32 horizontalBorderSize{2};
+    /**
+     * @brief The size of the border added internally to the top and bottom of
+     *        the scanline buffer so that we can read outside the selection rect
+     *        without problems. It must be equal to the sum of all values in @ref offsets. 
+     */
+    static constexpr qint32 verticalBorderSize{40};
+    /**
+     * @brief Number of scanlines in the internal buffer.
+     */
+    static constexpr qint32 numberOfScanlines{2 * verticalBorderSize + 1};
+    /**
+     * @brief Offset of the current scanline in the buffer (The middle scanline).
+     */
+    static constexpr qint32 currentScanlineIndex{verticalBorderSize};
+    /**
+     * @brief Get a interpolation value to linearly interpolate the current
+     *        pixel with its edge neighbor.
+     * @return true if we must apply the interpolation. false otherwise.
+     */
+    bool getInterpolationValue(qint32 negativeSpanEndDistance, qint32 positiveSpanEndDistance,
+                               qint32 negativePixelDiff, qint32 positivePixelDiff,
+                               qint32 currentPixelDiff, qint32 *interpolationValue) const;
+    /**
+     * @brief Get the extreme points of the span for the current pixel
+     */
+    void findSpanExtremes(quint8 **scanlines, qint32 x, qint32 pixelOffset,
+                          qint32 rowMultiplier, qint32 colMultiplier,
+                          qint32 pixelAvg, qint32 scaledGradient,
+                          qint32 *negativeSpanEndDistance, qint32 *positiveSpanEndDistance,
+                          qint32 *negativePixelDiff, qint32 *positivePixelDiff) const;
+};
+
 #endif // KIS_SELECTION_FILTERS_H

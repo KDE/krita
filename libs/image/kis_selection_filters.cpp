@@ -7,6 +7,8 @@
 
 #include "kis_selection_filters.h"
 
+#include <algorithm>
+
 #include <klocalizedstring.h>
 
 #include <KoColorSpace.h>
@@ -892,4 +894,242 @@ void KisInvertSelectionFilter::process(KisPixelSelectionSP pixelSelection, const
 {
     Q_UNUSED(rect);
     pixelSelection->invert();
+}
+
+constexpr qint32 KisAntiAliasSelectionFilter::offsets[numSteps];
+
+KUndo2MagicString KisAntiAliasSelectionFilter::name()
+{
+    return kundo2_i18n("Anti-Alias Selection");
+}
+
+bool KisAntiAliasSelectionFilter::getInterpolationValue(qint32 negativeSpanEndDistance,
+                                                        qint32 positiveSpanEndDistance,
+                                                        qint32 negativePixelDiff,
+                                                        qint32 positivePixelDiff,
+                                                        qint32 currentPixelDiff,
+                                                        qint32 *interpolationValue) const
+{
+    // Since we search a limited number of steps in each direction of the
+    // current pixel, the end pixel of the span may still belong to the edge.
+    // So we check for that, and if that's the case we must not smooth the
+    // current pixel 
+    const bool pixelDiffLessThanZero = currentPixelDiff < 0;
+    bool spanEndPixelDiffLessThanZero;
+    quint32 distance;
+    if (negativeSpanEndDistance < positiveSpanEndDistance) {
+        // The pixel is closer to the negative end
+        spanEndPixelDiffLessThanZero = negativePixelDiff < 0;
+        if (pixelDiffLessThanZero == spanEndPixelDiffLessThanZero) {
+            return false;
+        }
+        distance = negativeSpanEndDistance;
+    } else {
+        // The pixel is closer to the positive end
+        spanEndPixelDiffLessThanZero = positivePixelDiff < 0;
+        if (pixelDiffLessThanZero == spanEndPixelDiffLessThanZero) {
+            return false;
+        }
+        distance = positiveSpanEndDistance;
+    }
+    const qint32 spanLength = positiveSpanEndDistance + negativeSpanEndDistance;
+    *interpolationValue = ((distance << 8) / spanLength) + 128;
+    return *interpolationValue >= 0;
+}
+
+void KisAntiAliasSelectionFilter::findSpanExtremes(quint8 **scanlines, qint32 x, qint32 pixelOffset,
+                                                   qint32 rowMultiplier, qint32 colMultiplier,
+                                                   qint32 pixelAvg, qint32 scaledGradient,
+                                                   qint32 *negativeSpanEndDistance, qint32 *positiveSpanEndDistance,
+                                                   qint32 *negativePixelDiff, qint32 *positivePixelDiff) const
+{
+    const quint8 *negativePixel1, *positivePixel1, *negativePixel2, *positivePixel2;
+    *negativeSpanEndDistance = *positiveSpanEndDistance = 0;
+    // Search in the negative direction
+    for (qint32 i = 0; i < numSteps; ++i) {
+        *negativeSpanEndDistance += offsets[i];
+        const qint32 row1 = currentScanlineIndex - *negativeSpanEndDistance * rowMultiplier;
+        const qint32 col1 = x + horizontalBorderSize - *negativeSpanEndDistance * colMultiplier;
+        const qint32 row2 = row1 + pixelOffset * colMultiplier;
+        const qint32 col2 = col1 + pixelOffset * rowMultiplier;
+        negativePixel1 = scanlines[row1] + col1;
+        negativePixel2 = scanlines[row2] + col2;
+        // Get how different are these edge pixels from the current pixels and
+        // stop searching if they are too different
+        *negativePixelDiff = ((*negativePixel1 + *negativePixel2) >> 1) - pixelAvg;
+        if (qAbs(*negativePixelDiff) > scaledGradient) {
+            break;
+        }
+    }
+    // Search in the positive direction
+    for (qint32 i = 0; i < numSteps; ++i) {
+        *positiveSpanEndDistance += offsets[i];
+        const qint32 row1 = currentScanlineIndex + *positiveSpanEndDistance * rowMultiplier;
+        const qint32 col1 = x + horizontalBorderSize + *positiveSpanEndDistance * colMultiplier;
+        const qint32 row2 = row1 + pixelOffset * colMultiplier;
+        const qint32 col2 = col1 + pixelOffset * rowMultiplier;
+        positivePixel1 = scanlines[row1] + col1;
+        positivePixel2 = scanlines[row2] + col2;
+        *positivePixelDiff = ((*positivePixel1 + *positivePixel2) >> 1) - pixelAvg;
+        if (qAbs(*positivePixelDiff) > scaledGradient) {
+            break;
+        }
+    }
+}
+
+void KisAntiAliasSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
+{
+    const quint8 defaultPixel = *pixelSelection->defaultPixel().data();
+    // Size of a scanline
+    const quint32 bytesPerScanline = rect.width() + 2 * horizontalBorderSize;
+    // Size of a scanline padded to a multiple of 8
+    const quint32 bytesPerPaddedScanline = ((bytesPerScanline + 7) / 8) * 8;
+
+    // This buffer contains the number of consecutive scanlines needed to
+    // process the current scanline
+    QVector<quint8> buffer(bytesPerPaddedScanline * numberOfScanlines);
+
+    // These pointers point to the individual scanlines in the buffer
+    quint8 *scanlines[numberOfScanlines];
+    for (quint32 i = 0; i < numberOfScanlines; ++i) {
+        scanlines[i] = buffer.data() + i * bytesPerPaddedScanline;
+    }
+
+    // Initialize the scanlines
+    // Set the border scanlines on the top
+    for (qint32 i = 0; i < verticalBorderSize; ++i) {
+        memset(scanlines[i], defaultPixel, bytesPerScanline);
+    }
+    // Copy the first scanlines of the image
+    const quint32 numberOfFirstRows = qMin(rect.height(), numberOfScanlines - verticalBorderSize);
+    for (quint32 i = verticalBorderSize; i < verticalBorderSize + numberOfFirstRows; ++i) {
+        // Set the border pixels on the left
+        memset(scanlines[i], defaultPixel, horizontalBorderSize);
+        // Copy the pixel data
+        pixelSelection->readBytes(scanlines[i] + horizontalBorderSize, rect.x(), rect.y() + i - verticalBorderSize, rect.width(), 1);
+        // Set the border pixels on the right
+        memset(scanlines[i] + horizontalBorderSize + rect.width(), defaultPixel, horizontalBorderSize);
+    }
+    // Set the border scanlines on the bottom
+    if (verticalBorderSize + numberOfFirstRows < numberOfScanlines) {
+        for (quint32 i = verticalBorderSize + numberOfFirstRows; i < numberOfScanlines; ++i) {
+            memset(scanlines[i], defaultPixel, bytesPerScanline);
+        }
+    }
+    // Bufffer that contains the current output scanline
+    QVector<quint8> antialiasedScanline(rect.width());
+    // Main loop
+    for (int y = 0; y < rect.height(); ++y)
+    {
+        // Move to the next scanline
+        if (y > 0) {
+            // Update scanline pointers
+            std::rotate(std::begin(scanlines), std::begin(scanlines) + 1, std::end(scanlines));
+            // Copy the next scanline
+            if (y < rect.height() - verticalBorderSize) {
+                // Set the border pixels on the left
+                memset(scanlines[numberOfScanlines - 1], defaultPixel, horizontalBorderSize);
+                // Copy the pixel data
+                pixelSelection->readBytes(scanlines[numberOfScanlines - 1] + horizontalBorderSize, rect.x(), rect.y() + y + verticalBorderSize, rect.width(), 1);
+                // Set the border pixels on the right
+                memset(scanlines[numberOfScanlines - 1] + horizontalBorderSize + rect.width(), defaultPixel, horizontalBorderSize);
+            } else {
+                memset(scanlines[numberOfScanlines - 1], defaultPixel, bytesPerScanline);
+            }
+        }
+        // Process the pixels in the current scanline
+        for (int x = 0; x < rect.width(); ++x)
+        {
+            // Get the current pixel and neighbors
+            quint8 *pixelPtrM = scanlines[currentScanlineIndex    ] + x + horizontalBorderSize;
+            quint8 *pixelPtrN = scanlines[currentScanlineIndex - 1] + x + horizontalBorderSize;
+            quint8 *pixelPtrS = scanlines[currentScanlineIndex + 1] + x + horizontalBorderSize;
+            const qint32 pixelNW = *(pixelPtrN - 1);
+            const qint32 pixelN  = *(pixelPtrN    );
+            const qint32 pixelNE = *(pixelPtrN + 1);
+            const qint32 pixelW  = *(pixelPtrM - 1);
+            const qint32 pixelM  = *(pixelPtrM    );
+            const qint32 pixelE  = *(pixelPtrM + 1);
+            const qint32 pixelSW = *(pixelPtrS - 1);
+            const qint32 pixelS  = *(pixelPtrS    );
+            const qint32 pixelSE = *(pixelPtrS + 1);
+            // Get the gradients
+            const qint32 rowNSum = (pixelNW >> 2) + (pixelN >> 1) + (pixelNE >> 2);
+            const qint32 rowMSum = (pixelW  >> 2) + (pixelM >> 1) + (pixelE  >> 2);
+            const qint32 rowSSum = (pixelSW >> 2) + (pixelS >> 1) + (pixelSE >> 2);
+            const qint32 colWSum = (pixelNW >> 2) + (pixelW >> 1) + (pixelSW >> 2);
+            const qint32 colMSum = (pixelN  >> 2) + (pixelM >> 1) + (pixelS  >> 2);
+            const qint32 colESum = (pixelNE >> 2) + (pixelE >> 1) + (pixelSE >> 2);
+            const qint32 gradientN = qAbs(rowMSum - rowNSum);
+            const qint32 gradientS = qAbs(rowSSum - rowMSum);
+            const qint32 gradientW = qAbs(colMSum - colWSum);
+            const qint32 gradientE = qAbs(colESum - colMSum);
+            // Get the maximum gradient
+            const qint32 maxGradientNS = qMax(gradientN, gradientS);
+            const qint32 maxGradientWE = qMax(gradientW, gradientE);
+            const qint32 maxGradient = qMax(maxGradientNS, maxGradientWE);
+            // Return early if the gradient is bellow some threshold (given by
+            // the value bellow which the jagged edge is not noticeable)
+            if (maxGradient < edgeThreshold) {
+                antialiasedScanline[x] = pixelM;
+                continue;
+            }
+            // Collect some info about the pixel and neighborhood
+            qint32 neighborPixel, gradient;
+            qint32 pixelOffset, rowMultiplier, colMultiplier;
+            if (maxGradientNS > maxGradientWE) {
+                // Horizontal span
+                if (gradientN > gradientS) {
+                    // The edge is formed with the top pixel
+                    neighborPixel = pixelN;
+                    gradient = gradientN;
+                    pixelOffset = -1;
+                } else {
+                    // The edge is formed with the bottom pixel
+                    neighborPixel = pixelS;
+                    gradient = gradientS;
+                    pixelOffset = 1;
+                }
+                rowMultiplier = 0;
+                colMultiplier = 1;
+            } else {
+                // Vertical span
+                if (gradientW > gradientE) {
+                    // The edge is formed with the left pixel
+                    neighborPixel = pixelW;
+                    gradient = gradientW;
+                    pixelOffset = -1;
+                } else {
+                    // The edge is formed with the right pixel
+                    neighborPixel = pixelE;
+                    gradient = gradientE;
+                    pixelOffset = 1;
+                }
+                rowMultiplier = 1;
+                colMultiplier = 0;
+            }
+            // Find the span extremes
+            const qint32 pixelAvg = (neighborPixel + pixelM) >> 1;
+            qint32 negativePixelDiff, positivePixelDiff;
+            qint32 negativeSpanEndDistance, positiveSpanEndDistance;
+            findSpanExtremes(scanlines, x, pixelOffset,
+                             rowMultiplier, colMultiplier,
+                             pixelAvg, gradient >> 2,
+                             &negativeSpanEndDistance, &positiveSpanEndDistance,
+                             &negativePixelDiff, &positivePixelDiff);
+            // Get the interpolation value for this pixel given the span extent
+            // and perform linear interpolation between the current pixel and
+            // the edge neighbor
+            qint32 interpolationValue;
+            if (!getInterpolationValue(negativeSpanEndDistance, positiveSpanEndDistance,
+                                       negativePixelDiff, positivePixelDiff,
+                                       pixelM - pixelAvg, &interpolationValue)) {
+                antialiasedScanline[x] = pixelM;
+            } else {
+                antialiasedScanline[x] = neighborPixel + ((pixelM - neighborPixel) * interpolationValue >> 8);
+            }
+        }
+        // Copy the scanline data to the mask
+        pixelSelection->writeBytes(antialiasedScanline.data(), rect.x(), rect.y() + y, rect.width(), 1);
+    }
 }

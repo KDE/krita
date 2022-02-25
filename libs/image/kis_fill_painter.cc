@@ -367,9 +367,14 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
             KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
             tiny.process(pixelSelection, pixelSelection->selectedRect());
         }
+        // Since the feathering already smooths the selection, the antiAlias
+        // is not applied if we must feather
         if (m_feather > 0) {
             KisFeatherSelectionFilter feathery(m_feather);
             feathery.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+        } else if (m_antiAlias) {
+            KisAntiAliasSelectionFilter antiAliasFilter;
+            antiAliasFilter.process(pixelSelection, pixelSelection->selectedRect());
         }
     }
 

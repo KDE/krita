@@ -34,6 +34,7 @@ public:
     void setUsePattern(bool usePattern);
     void setSelectionOnly(bool selectionOnly);
     void setUseSelectionAsBoundary(bool useSelectionAsBoundary);
+    void setAntiAlias(bool antiAlias);
     void setFeather(int feather);
     void setSizeMod(int sizemod);
     void setFillThreshold(int fillThreshold);
@@ -65,7 +66,7 @@ private:
     bool m_selectionOnly;
     bool m_useSelectionAsBoundary;
     bool m_usePattern;
-
+    bool m_antiAlias;
     int m_feather;
     int m_sizemod;
     int m_fillThreshold;

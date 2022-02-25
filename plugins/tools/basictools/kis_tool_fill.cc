@@ -249,6 +249,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
     visitor->setUsePattern(m_usePattern);
     visitor->setSelectionOnly(m_fillOnlySelection);
     visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
+    visitor->setAntiAlias(m_antiAlias);
     visitor->setFeather(m_feather);
     visitor->setSizeMod(m_sizemod);
     visitor->setFillThreshold(m_threshold);
@@ -335,6 +336,11 @@ QWidget* KisToolFill::createOptionWidget()
     m_slOpacitySpread->setRange(0, 100);
     m_slOpacitySpread->setPageStep(3);
 
+    QLabel *lbl_antiAlias = new QLabel(i18n("Anti-aliasing"), widget);
+    m_checkAntiAlias = new QCheckBox(QString(), widget);
+    m_checkAntiAlias->setToolTip(
+        i18n("Smooths the jagged edges."));
+
     QLabel *lbl_sizemod = new QLabel(i18n("Grow selection:"), widget);
     m_sizemodWidget = new KisSliderSpinBox(widget);
     m_sizemodWidget->setObjectName("sizemod");
@@ -401,6 +407,7 @@ QWidget* KisToolFill::createOptionWidget()
     connect (m_checkUseFastMode  , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
     connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
     connect (m_slOpacitySpread        , SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
+    connect (m_checkAntiAlias    , SIGNAL(toggled(bool)), this, SLOT(slotSetAntiAlias(bool)));
     connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
     connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
@@ -418,6 +425,7 @@ QWidget* KisToolFill::createOptionWidget()
     addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
     addOptionWidgetOption(m_slOpacitySpread, lbl_opacitySpread);
+    addOptionWidgetOption(m_checkAntiAlias, lbl_antiAlias);
     addOptionWidgetOption(m_sizemodWidget, lbl_sizemod);
     addOptionWidgetOption(m_featherWidget, lbl_feather);
     addOptionWidgetOption(m_cmbContinuousFillMode, lbl_continuousFillMode);
@@ -441,6 +449,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
     m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 8));
     m_slOpacitySpread->setValue(m_configGroup.readEntry("opacitySpread", 100));
+    m_checkAntiAlias->setChecked(m_configGroup.readEntry("antiAlias", false));
     m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
 
     m_cmbContinuousFillMode->setCurrentIndex(m_configGroup.readEntry("continuousFillMode", "fillAnyRegion") == "fillSimilarRegions" ? 1 : 0);
@@ -462,6 +471,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_sldPatternScale->setValue(m_configGroup.readEntry("patternScale", 100.0));
 
     // manually set up all variables in case there were no signals when setting value
+    m_antiAlias = m_checkAntiAlias->isChecked();
     m_feather = m_featherWidget->value();
     m_sizemod = m_sizemodWidget->value();
     m_threshold = m_slThreshold->value();
@@ -491,6 +501,7 @@ void KisToolFill::updateGUI()
     m_slThreshold->setEnabled(!selectionOnly);
     m_slOpacitySpread->setEnabled(!selectionOnly && useAdvancedMode);
 
+    m_checkAntiAlias->setEnabled(!selectionOnly && useAdvancedMode);
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_checkUsePattern->setEnabled(useAdvancedMode);
@@ -624,6 +635,12 @@ void KisToolFill::slotSetUseSelectionAsBoundary(bool state)
     m_useSelectionAsBoundary = state;
     m_configGroup.writeEntry("useSelectionAsBoundary", state);
     updateGUI();
+}
+
+void KisToolFill::slotSetAntiAlias(bool antiAlias)
+{
+    m_antiAlias = antiAlias;
+    m_configGroup.writeEntry("antiAlias", antiAlias);
 }
 
 void KisToolFill::slotSetSizemod(int sizemod)

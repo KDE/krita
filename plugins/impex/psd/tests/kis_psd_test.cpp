@@ -38,6 +38,7 @@ void KisPSDTest::testFiles()
     exclusions << "100x100cmyk8.psd";
     exclusions << "gray.psd";
     exclusions << "vector.psd";
+    exclusions << "masks.psd";
 
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", exclusions, QString(), 2);

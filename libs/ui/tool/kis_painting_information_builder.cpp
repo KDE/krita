@@ -200,7 +200,7 @@ QPointF KisConverterPaintingInformationBuilder::documentToImage(const QPointF &p
 
 QPointF KisConverterPaintingInformationBuilder::imageToView(const QPointF &point)
 {
-    return m_converter->documentToWidget(point);
+    return m_converter->imageToWidget(point);
 }
 
 qreal KisConverterPaintingInformationBuilder::canvasRotation() const

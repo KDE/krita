@@ -11,6 +11,7 @@
 #include <KoColorSpace.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
+#include <kis_generator_registry.h>
 
 #include <AnimationCheck.h>
 #include <ColorModelCheck.h>
@@ -24,6 +25,7 @@
 #include <NodeTypeCheck.h>
 #include <ImageSizeCheck.h>
 #include <ColorModelHomogenousCheck.h>
+#include <FillLayerTypeCheck.h>
 
 #include <QGlobalStatic>
 
@@ -118,7 +120,11 @@ KisExportCheckRegistry::KisExportCheckRegistry ()
     chkFactory = new NodeTypeCheckFactory("KisSelectionMask", i18n("Selection Mask"));
     add(chkFactory->id(), chkFactory);
 
-
+    // Fill layer/generator types.
+    for (QString generatorId : KisGeneratorRegistry::instance()->keys()) {
+        chkFactory = new FillLayerTypeCheckFactory(generatorId);
+        add(chkFactory->id(), chkFactory);
+    }
 }
 
 KisExportCheckRegistry::~KisExportCheckRegistry ()

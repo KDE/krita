@@ -48,6 +48,7 @@ void psdExport::initializeCapabilities()
 {
     addCapability(KisExportCheckRegistry::instance()->get("PSDLayerStyleCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGroupLayer")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("NodeTypeCheck/KisGeneratorLayer")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::SUPPORTED));
@@ -73,6 +74,9 @@ void psdExport::initializeCapabilities()
             << QPair<KoID, KoID>(LABAColorModelID, Integer16BitsColorDepthID);
     addSupportedColorModels(supportedColorModels, "PSD");
 
+    addCapability(KisExportCheckRegistry::instance()->get("FillLayerTypeCheck/color")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("FillLayerTypeCheck/pattern")->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()->get("FillLayerTypeCheck/gradient")->create(KisExportCheckBase::SUPPORTED));
 }
 
 #include <psd_export.moc>

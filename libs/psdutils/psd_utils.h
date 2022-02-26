@@ -446,6 +446,9 @@ inline bool psdread_pascalstring(QIODevice &io, QString &s, qint64 padding)
     }
 
     s.append(QString::fromLatin1(chars));
+    if (s.endsWith(QChar::Space)) {
+        s.chop(1);
+    }
 
     return true;
 }
@@ -470,6 +473,9 @@ inline bool psdread_unicodestring(QIODevice &io, QString &s)
         if (ch != 0) {
             s[i] = QChar(ch);
         }
+    }
+    if (s.endsWith(QChar::Space)) {
+        s.chop(1);
     }
 
     return true;

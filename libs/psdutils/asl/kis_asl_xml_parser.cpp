@@ -414,7 +414,7 @@ bool tryParseDescriptor(const QDomElement &el, const QString &path, const QStrin
             QString key = childEl.attribute("key", "");
 
             if (type == "Text" && key == "Idnt") {
-                patternUuid = childEl.attribute("value", "");
+                patternUuid = childEl.attribute("value", "").trimmed();
             }
 
             if (type == "KisPatternData" && key == "Data") {

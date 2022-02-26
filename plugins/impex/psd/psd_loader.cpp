@@ -164,8 +164,8 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
     KisResourceModel patternsModel(ResourceType::Patterns);
     KisResourceModel gradientsModel(ResourceType::Gradients);
 
+    KisAslLayerStyleSerializer serializer;
     if (!embeddedPatterns.isEmpty()) {
-        KisAslLayerStyleSerializer serializer;
         Q_FOREACH (const QDomDocument &doc, embeddedPatterns) {
             serializer.registerPSDPattern(doc);
         }
@@ -393,7 +393,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 
     if (!allStylesXml.isEmpty()) {
         Q_FOREACH (const LayerStyleMapping &mapping, allStylesXml) {
-            KisAslLayerStyleSerializer serializer;
 
             serializer.readFromPSDXML(mapping.first);
 

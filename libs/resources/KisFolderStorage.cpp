@@ -193,9 +193,9 @@ bool KisFolderStorage::importResource(const QString &url, QIODevice *device)
     if (f.exists()) return result;
 
     if (f.open(QFile::WriteOnly)) {
-        quint64 writtenBytes = f.write(device->readAll());
+        qint64 writtenBytes = f.write(device->readAll());
         f.close();
-        result = writtenBytes == device->size();
+        result = (writtenBytes == device->size());
     } else {
         qWarning() << "Cannot open" << resourcesLocation << "for writing";
     }

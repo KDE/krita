@@ -201,7 +201,6 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     if (!image) return;
 
     const QPointF docPos = view->canvasBase()->canvasController()->currentCursorPosition();
-    const QPointF cursorPos = view->canvasBase()->coordinatesConverter()->documentToWidget(docPos);
 
     if (tryPasteShapes(pasteAtCursorPosition, view)) {
         return;

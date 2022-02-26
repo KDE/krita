@@ -33,16 +33,9 @@ struct KisFileIconRegistrar {
 static KisFileIconRegistrar s_registrar;
 
 
-QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = false)
+QIcon createIcon(const QImage &source, const QSize &iconSize)
 {
     QImage result;
-    int maxIconSize = qMax(iconSize.width(), iconSize.height());
-    if (dontUpsize) {
-        if (source.width() < iconSize.width() || source.height() < iconSize.height()) {
-            maxIconSize = qMax(source.width(), source.height());
-        }
-    }
-    QSize iconSizeSquare = QSize(maxIconSize, maxIconSize);
 
     QSize scaled = source.size().scaled(iconSize, Qt::KeepAspectRatio);
     qreal scale = scaled.width()/(qreal)(source.width());
@@ -60,7 +53,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = 
 
     // The cropping here centers the image with the difference
     // between the result and the expected width/height.
-    // The final size must be compared with iconSize, and not with maxIconSize,
+    // The final size must be compared with iconSize
     // because otherwise parts of the image may be chopped off if
     // result > iconSize.
     result = result.convertToFormat(QImage::Format_ARGB32) // add transparency
@@ -80,7 +73,7 @@ QIcon createIcon(const QImage &source, const QSize &iconSize, bool dontUpsize = 
 }
 
 
-bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize, bool dontUpsize)
+bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal devicePixelRatioF, QSize iconSize)
 {
     iconSize *= devicePixelRatioF;
     QFileInfo fi(path);
@@ -108,7 +101,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
                     QImage img;
                     img.loadFromData(bytes);
 
-                    icon = createIcon(img, iconSize, dontUpsize);
+                    icon = createIcon(img, iconSize);
                     return true;
 
                 } else {
@@ -130,7 +123,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
                     imageSize.scale(iconSize, Qt::KeepAspectRatio);
                 }
                 const QImage &thumbnail = projection->createThumbnail(imageSize.width(), imageSize.height(), bounds);
-                icon = createIcon(thumbnail, iconSize, dontUpsize);
+                icon = createIcon(thumbnail, iconSize);
                 return true;
             } else {
                 return false;
@@ -139,7 +132,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             QImage img;
             img.load(path);
             if (!img.isNull()) {
-                icon = createIcon(img, iconSize, dontUpsize);
+                icon = createIcon(img, iconSize);
                 return true;
             } else {
                 return false;

@@ -68,6 +68,7 @@ namespace ActionHelper {
                         bool makeSharpClip = false,
                         const KisTimeSpan &range = KisTimeSpan())
     {
+        Q_UNUSED(range)
         KisImageWSP image = view->image();
         if (!image) return;
 

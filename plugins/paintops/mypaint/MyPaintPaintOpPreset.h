@@ -7,7 +7,6 @@
 #ifndef KIS_MYPAINT_BRUSH_H
 #define KIS_MYPAINT_BRUSH_H
 
-#include <QObject>
 #include <libmypaint/mypaint-brush.h>
 #include <KoColor.h>
 #include <kis_paintop_settings.h>
@@ -16,10 +15,8 @@
 #include <KisResourceTypes.h>
 #include <kis_paintop_preset.h>
 
-class KisMyPaintPaintOpPreset : public QObject, public KisPaintOpPreset
+class KisMyPaintPaintOpPreset : public KisPaintOpPreset
 {
-    Q_OBJECT
-
 public:
 
     KisMyPaintPaintOpPreset(const QString &fileName="");

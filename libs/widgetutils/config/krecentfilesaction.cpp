@@ -193,7 +193,7 @@ static QString titleWithSensibleWidth(const QString &nameValue, const QString &v
     return title;
 }
 
-void KRecentFilesAction::addAction(QAction *action, const QUrl &url, const QString &name)
+void KRecentFilesAction::addAction(QAction *action, const QUrl &url, const QString &/*name*/)
 {
     Q_D(KRecentFilesAction);
 

@@ -265,6 +265,7 @@ BOOL isWow64()
 
 void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 {
+    Q_UNUSED(args)
     // There are no globals to initialize from the arguments now. There used
     // to be the `dpi` argument, but it doesn't do anything anymore.
 }

@@ -91,7 +91,7 @@ void KisRecentDocumentsModelItem::setData(const QVariant &value, int role)
 {
     switch (role) {
     case Qt::DecorationRole:
-        if (value.type() == QMetaType::QIcon) {
+        if (value.type() == (QVariant::Type)QMetaType::QIcon) {
             // `KisRecentDocumentsModelItem` calls `setIcon` to update the
             // file icon once it has been lazy-loaded or changed.
             m_iconFetched = true;

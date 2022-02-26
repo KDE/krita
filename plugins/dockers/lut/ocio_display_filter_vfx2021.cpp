@@ -600,9 +600,9 @@ void OcioDisplayFilter::setupTextures(GLFunctions *f, QOpenGLShaderProgram *prog
 
         // Update value.
         if (m_data.m_getDouble) {
-            program->setUniformValue(m_handle, static_cast<const GLfloat>(m_data.m_getDouble()));
+            program->setUniformValue(m_handle, static_cast<GLfloat>(m_data.m_getDouble()));
         } else if (m_data.m_getBool) {
-            program->setUniformValue(m_handle, static_cast<const GLfloat>(m_data.m_getBool() ? 1.0f : 0.0f));
+            program->setUniformValue(m_handle, static_cast<GLfloat>(m_data.m_getBool() ? 1.0f : 0.0f));
         } else if (m_data.m_getFloat3) {
             program->setUniformValue(m_handle,
                                      m_data.m_getFloat3()[0],

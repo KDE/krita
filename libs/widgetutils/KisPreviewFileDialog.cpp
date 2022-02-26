@@ -87,7 +87,7 @@ void KisPreviewFileDialog::onCurrentChanged(const QString &path)
     // so we check the existance of a widget layout instead.
     if ((testOption(QFileDialog::DontUseNativeDialog) || layout()) && m_preview) {
         QIcon icon;
-        if (s_iconCreator && s_iconCreator->createFileIcon(path, icon, devicePixelRatioF(), QSize(512, 512), true)) {
+        if (s_iconCreator && s_iconCreator->createFileIcon(path, icon, devicePixelRatioF(), QSize(512, 512))) {
             auto pixmap = icon.pixmap(m_preview->width(), m_preview->height());
             pixmap.setDevicePixelRatio(devicePixelRatioF());
             m_preview->setPixmap(pixmap);

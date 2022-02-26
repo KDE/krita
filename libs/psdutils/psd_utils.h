@@ -458,7 +458,7 @@ inline bool psdread_unicodestring(QIODevice &io, QString &s)
         return false;
     }
 
-    s.reserve(static_cast<int>(stringlen));
+    s.fill(QChar::Space, static_cast<int>(stringlen));
 
     for (quint32 i = 0; i < stringlen; ++i) {
         quint16 ch(0);

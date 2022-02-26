@@ -74,6 +74,7 @@ KoColor parseColorObject(QDomElement parent, QString classID)
     double v= 0;
 
     if (classID == "RGBC" || classID == "HSBC") {
+        color = KoColor(KoColorSpaceRegistry::instance()->rgb8());
         root = doc.createElement("sRGB");
     } else if (classID == "CMYC") {
         root = doc.createElement("CMYK");
@@ -96,14 +97,16 @@ KoColor parseColorObject(QDomElement parent, QString classID)
 
         if (type == "Double" || type == "UnitFloat") {
             if (classID == "RGBC") {
-                double value = KisDomUtils::toDouble(childEl.attribute("value", "0")) * (1/255.0);
+                // For RGBC we'll just directly write to the KoColor data, to have as
+                // few rounding errors possible.
+                double value = KisDomUtils::toDouble(childEl.attribute("value", "0"));
 
                 if (key == "Rd  ") {
-                    root.setAttribute("r", value);
+                    color.data()[2] = value;
                 } else if (key == "Grn ") {
-                    root.setAttribute("g", value);
+                    color.data()[1] = value;
                 } else if (key == "Bl  ") {
-                    root.setAttribute("b", value);
+                    color.data()[0] = value;
                 } else {
                     warnKrita << "Unknown color key value double:" << ppVar(key);
                     return error;
@@ -186,7 +189,10 @@ KoColor parseColorObject(QDomElement parent, QString classID)
         root.setAttribute("g", g);
         root.setAttribute("b", b);
     }
-    color = KoColor::fromXML(root, "U8");
+    if (classID != "RGBC") {
+        color = KoColor::fromXML(root, "U8");
+    }
+    color.setOpacity(OPACITY_OPAQUE_U8);
     if (!spotName.isEmpty()) {
         color.addMetadata("spotName", spotName);
         color.addMetadata("psdSpotBook", spotBook);

@@ -313,6 +313,7 @@ void KoColor::toXML(QDomDocument& doc, QDomElement& colorElt) const
         QString attrName = "value";
         if(v.type() == QVariant::String ) {
             e.setAttribute(attrName, v.toString());
+            e.setAttribute("type", "string");
         } else if(v.type() == QVariant::Int ) {
             e.setAttribute(attrName, v.toInt());
         } else if(v.type() == QVariant::Double ) {
@@ -398,7 +399,7 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, 
             const QString type = e.attribute("type");
             const QString value = e.text();
             QVariant v;
-            if (type == "QString") {
+            if (type == "string") {
                 v = KisDomUtils::toString(e.attribute("value"));
                 c.addMetadata(name , v);
             } else if (type == "int") {

@@ -32,8 +32,14 @@ public:
     int fps() const;
     void setFps(int value);
 
+    bool resultPreview() const;
+    void setResultPreview(bool value);
+
     void setFirstFrameSec(int value);
     int firstFrameSec() const;
+
+    bool extendResult() const;
+    void setExtendResult(bool value);
 
     void setLastFrameSec(int value);
     int lastFrameSec() const;

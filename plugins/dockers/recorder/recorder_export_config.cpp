@@ -18,7 +18,9 @@ const QString keyFfmpegPath = "ffmpeg_path";
 const QString keyVideoDirectory = "recorder_export/videodirectory";
 const QString keyInputFps = "recorder_export/inputfps";
 const QString keyFps = "recorder_export/fps";
+const QString keyResultPreview="recorder_export/resultpreview";
 const QString keyFirstFrameSec = "recorder_export/firstframesec";
+const QString keyExtendResult = "recorder_export/extendresult";
 const QString keyLastFrameSec = "recorder_export/lastframesec";
 const QString keyResize = "recorder_export/resize";
 const QString keySize = "recorder_export/size";
@@ -126,6 +128,16 @@ void RecorderExportConfig::setFps(int value)
     config->writeEntry(keyFps, value);
 }
 
+bool RecorderExportConfig::resultPreview() const
+{
+    return config->readEntry(keyResultPreview, true);
+}
+
+void RecorderExportConfig::setResultPreview(bool value)
+{
+    config->writeEntry(keyResultPreview, value);
+}
+
 int RecorderExportConfig::firstFrameSec() const
 {
     return config->readEntry(keyFirstFrameSec, 2);
@@ -134,6 +146,17 @@ int RecorderExportConfig::firstFrameSec() const
 void RecorderExportConfig::setFirstFrameSec(int value)
 {
     config->writeEntry(keyFirstFrameSec, value);
+}
+
+
+bool RecorderExportConfig::extendResult() const
+{
+    return config->readEntry(keyExtendResult, true);
+}
+
+void RecorderExportConfig::setExtendResult(bool value)
+{
+    config->writeEntry(keyExtendResult, value);
 }
 
 int RecorderExportConfig::lastFrameSec() const

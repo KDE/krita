@@ -62,7 +62,10 @@ public:
     QString videoFileName;
     QString videoFilePath;
     int framesCount = 0;
+
+    bool resultPreview = true;
     int firstFrameSec = 2;
+    bool extendResult = true;
     int lastFrameSec = 5;
 
     QScopedPointer<KisFFMpegWrapper> ffmpeg;
@@ -245,6 +248,8 @@ public:
     QString applyVariables(const QString &templateArguments)
     {
         const QSize &outSize = resize ? size : imageSize;
+        const int previewLength = resultPreview ? firstFrameSec : 0;
+        const int resultLength = extendResult ? lastFrameSec : 0;
         return QString(templateArguments)
                .replace("$IN_FPS", QString::number(inputFps))
                .replace("$OUT_FPS", QString::number(fps))
@@ -252,14 +257,23 @@ public:
                .replace("$HEIGHT", QString::number(outSize.height()))
                .replace("$FRAMES", QString::number(framesCount))
                .replace("$INPUT_DIR", settings.inputDirectory)
-               .replace("$FIRST_FRAME_SEC", QString::number(firstFrameSec))
-               .replace("$LAST_FRAME_SEC", QString::number(lastFrameSec))
+               .replace("$FIRST_FRAME_SEC", QString::number(previewLength))
+               .replace("$LAST_FRAME_SEC", QString::number(resultLength))
                .replace("$EXT", RecorderFormatInfo::fileExtension(settings.format));
     }
 
     void updateVideoDuration()
     {
-        long ms = (framesCount * 1000L / (inputFps ? inputFps : 30)) + (firstFrameSec * 1000L)  + (lastFrameSec * 1000L)  ;
+        long ms = (framesCount * 1000L / (inputFps ? inputFps : 30));
+
+        if (resultPreview) {
+            ms += (firstFrameSec * 1000L);
+        }
+
+        if (extendResult) {
+            ms += (lastFrameSec * 1000L);
+        }
+
         ui->labelVideoDuration->setText(formatDuration(ms));
     }
 
@@ -303,11 +317,17 @@ RecorderExport::RecorderExport(QWidget *parent)
     d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("edit-delete"));
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
+    d->ui->labelHoldLastFrameSec->setVisible(d->ui->extendResultCheckBox->isVisible());
+    d->ui->spinLastFrameSec->setVisible(d->ui->extendResultCheckBox->isVisible());
+    d->ui->labelHoldFirstFrameSec->setVisible(d->ui->resultPreviewCheckBox->isVisible());
+    d->ui->spinFirstFrameSec->setVisible(d->ui->resultPreviewCheckBox->isVisible());
 
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
     connect(d->ui->spinInputFps, SIGNAL(valueChanged(int)), SLOT(onSpinInputFpsValueChanged(int)));
     connect(d->ui->spinFps, SIGNAL(valueChanged(int)), SLOT(onSpinFpsValueChanged(int)));
+    connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), SLOT(onCheckResultPreviewToggled(bool)));
     connect(d->ui->spinFirstFrameSec, SIGNAL(valueChanged(int)), SLOT(onFirstFrameSecValueChanged(int)));
+    connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), SLOT(onCheckExtendResultToggled(bool)));
     connect(d->ui->spinLastFrameSec, SIGNAL(valueChanged(int)), SLOT(onLastFrameSecValueChanged(int)));
     connect(d->ui->checkResize, SIGNAL(toggled(bool)), SLOT(onCheckResizeToggled(bool)));
     connect(d->ui->spinScaleWidth, SIGNAL(valueChanged(int)), SLOT(onSpinScaleWidthValueChanged(int)));
@@ -326,6 +346,11 @@ RecorderExport::RecorderExport(QWidget *parent)
     connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
     connect(d->ui->buttonRemoveSnapshots, SIGNAL(clicked()), SLOT(onButtonRemoveSnapshotsClicked()));
     connect(d->ui->buttonRestart, SIGNAL(clicked()), SLOT(onButtonRestartClicked()));
+    connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), d->ui->spinFirstFrameSec, SLOT(setVisible(bool)));
+    connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), d->ui->labelHoldFirstFrameSec, SLOT(setVisible(bool)));
+    connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), d->ui->spinLastFrameSec, SLOT(setVisible(bool)));
+    connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), d->ui->labelHoldLastFrameSec, SLOT(setVisible(bool)));
+
 
     d->ui->editVideoFilePath->installEventFilter(this);
 }
@@ -359,7 +384,9 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
     
     d->inputFps = config.inputFps();
     d->fps = config.fps();
+    d->resultPreview = config.resultPreview();
     d->firstFrameSec = config.firstFrameSec();
+    d->extendResult = config.extendResult();
     d->lastFrameSec = config.lastFrameSec();
     d->resize = config.resize();
     d->size = config.size();
@@ -372,7 +399,9 @@ void RecorderExport::setup(const RecorderExportSettings &settings)
 
     d->ui->spinInputFps->setValue(d->inputFps);
     d->ui->spinFps->setValue(d->fps);
+    d->ui->resultPreviewCheckBox->setChecked(d->resultPreview);
     d->ui->spinFirstFrameSec->setValue(d->firstFrameSec);
+    d->ui->extendResultCheckBox->setChecked(d->extendResult);
     d->ui->spinLastFrameSec->setValue(d->lastFrameSec);
     d->ui->checkResize->setChecked(d->resize);
     d->ui->spinScaleWidth->setValue(d->size.width());
@@ -420,10 +449,24 @@ void RecorderExport::onSpinFpsValueChanged(int value)
     RecorderExportConfig(false).setFps(value);
 }
 
+void RecorderExport::onCheckResultPreviewToggled(bool checked)
+{
+    d->resultPreview = checked;
+    RecorderExportConfig(false).setResultPreview(checked);
+    d->updateVideoDuration();
+}
+
 void RecorderExport::onFirstFrameSecValueChanged(int value)
 {
     d->firstFrameSec = value;
     RecorderExportConfig(false).setFirstFrameSec(value);
+    d->updateVideoDuration();
+}
+
+void RecorderExport::onCheckExtendResultToggled(bool checked)
+{
+    d->extendResult = checked;
+    RecorderExportConfig(false).setExtendResult(checked);
     d->updateVideoDuration();
 }
 

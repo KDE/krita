@@ -23,6 +23,9 @@
 #include "kis_psd_layer_style.h"
 #include "kis_paint_device_debug_utils.h"
 #include <KisImportExportErrorCode.h>
+#include <kis_generator_layer.h>
+#include <kis_filter_configuration.h>
+#include <KisGlobalResourcesInterface.h>
 
 
 
@@ -39,6 +42,12 @@ void KisPSDTest::testFiles()
     exclusions << "gray.psd";
     exclusions << "vector.psd";
     exclusions << "masks.psd";
+    exclusions << "angle2.psd";
+    exclusions << "diamond2.psd";
+    exclusions << "linear3.psd";
+    exclusions << "cmyk8-pantone_solid_coated_688c-L51_a33_b-8.psd";
+    exclusions << "pattern2_uncompressed.psd";
+    exclusions << "pattern4_rle.psd";
 
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", exclusions, QString(), 2);
@@ -145,6 +154,103 @@ void KisPSDTest::testOpenLayerStyles()
     QVERIFY(layer->layerStyle());
     QVERIFY(layer->layerStyle()->dropShadow());
     QVERIFY(layer->layerStyle()->dropShadow()->effectEnabled());
+}
+
+void KisPSDTest::testOpenFillLayers()
+{
+    QFileInfo sourceFileInfo(QString(FILES_DATA_DIR) + '/' + "sources/angle2.psd");
+
+        Q_ASSERT(sourceFileInfo.exists());
+
+        QSharedPointer<KisDocument> doc = openPsdDocument(sourceFileInfo);
+        QVERIFY(doc->image());
+        KisGeneratorLayerSP layer = qobject_cast<KisGeneratorLayer*>(doc->image()->root()->lastChild().data());
+        QVERIFY(layer);
+        QVERIFY(layer->filter()->name() == "gradient");
+        QVERIFY(layer->filter()->getDouble("end_position_angle") == 180);
+        QVERIFY(layer->filter()->getDouble("end_position_distance") == 50);
+        QVERIFY(layer->filter()->getString("shape") == "conical");
+
+        QFileInfo sourceFileInfo2(QString(FILES_DATA_DIR) + '/' + "sources/diamond2.psd");
+
+        Q_ASSERT(sourceFileInfo2.exists());
+
+        doc = openPsdDocument(sourceFileInfo2);
+        QVERIFY(doc->image());
+        layer = qobject_cast<KisGeneratorLayer*>(doc->image()->root()->lastChild().data());
+        QVERIFY(layer);
+        QVERIFY(layer->filter()->name() == "gradient");
+        QVERIFY(layer->filter()->getDouble("end_position_angle") == 16.5);
+        QVERIFY(layer->filter()->getDouble("end_position_distance") - double(40.2306) < 0.001);
+        QVERIFY(layer->filter()->getString("shape") == "square");
+
+        QFileInfo sourceFileInfo3(QString(FILES_DATA_DIR) + '/' + "sources/linear3.psd");
+
+        Q_ASSERT(sourceFileInfo3.exists());
+
+        doc = openPsdDocument(sourceFileInfo3);
+        QVERIFY(doc->image());
+        layer = qobject_cast<KisGeneratorLayer*>(doc->image()->root()->lastChild().data());
+        QVERIFY(layer);
+        QVERIFY(layer->filter()->name() == "gradient");
+        QVERIFY(layer->filter()->getDouble("end_position_angle") == 270);
+        QVERIFY(layer->filter()->getString("shape") == "linear");
+
+        QFileInfo sourceFileInfo4(QString(FILES_DATA_DIR) + '/' + "sources/cmyk8-pantone_solid_coated_688c-L51_a33_b-8.psd");
+
+        Q_ASSERT(sourceFileInfo4.exists());
+
+        doc = openPsdDocument(sourceFileInfo4);
+        QVERIFY(doc->image());
+        layer = qobject_cast<KisGeneratorLayer*>(doc->image()->root()->lastChild().data());
+        QVERIFY(layer);
+        QVERIFY(layer->filter()->name() == "color");
+        KoColor c = layer->filter()->getColor("color");
+        KoColor l = KoColor::fromXML("<color channeldepth='U16'><Lab space='"+KoColorSpaceRegistry::instance()->lab16()->name()+"' L='51.0' a='33.0' b='-8.0' /></color>");
+        c.convertTo(l.colorSpace());
+        QVERIFY(doc->image()->colorSpace()->difference(c.data(), l.data()) < 3);
+        QVERIFY(c.metadata().value("spotName", QVariant()).toString() == "PANTONE 688 C");
+        QVERIFY(c.metadata().value("psdSpotBook", QVariant()).toString().contains("Solid Coated"));
+        QVERIFY(c.metadata().value("psdSpotBookId", QVariant()).toInt() == 3060);
+
+        QFileInfo sourceFileInfo5(QString(FILES_DATA_DIR) + '/' + "sources/pattern2_uncompressed.psd");
+
+        Q_ASSERT(sourceFileInfo5.exists());
+
+        doc = openPsdDocument(sourceFileInfo5);
+        QVERIFY(doc->image());
+        layer = qobject_cast<KisGeneratorLayer*>(doc->image()->root()->lastChild().data());
+        QVERIFY(layer);
+        QVERIFY(layer->filter()->name() == "pattern");
+        if (layer) {
+            const QString patternMD5 = layer->filter()->getString("md5", "");
+            const QString patternNameTemp = layer->filter()->getString("pattern", "Grid01.pat");
+            const QString patternFileName = layer->filter()->getString("fileName", "");
+
+            KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
+            QVERIFY(res.resource<KoPattern>());
+        }
+        QVERIFY(layer->filter()->getDouble("transform_rotation_z") - 30.85 < 0.001);
+        QVERIFY(layer->filter()->getDouble("transform_scale_x") - 3.63 < 0.001);
+        QVERIFY(layer->filter()->getDouble("transform_scale_y") - 3.63 < 0.001);
+
+        QFileInfo sourceFileInfo6(QString(FILES_DATA_DIR) + '/' + "sources/pattern4_rle.psd");
+
+        Q_ASSERT(sourceFileInfo6.exists());
+
+        doc = openPsdDocument(sourceFileInfo6);
+        QVERIFY(doc->image());
+        layer = qobject_cast<KisGeneratorLayer*>(doc->image()->root()->lastChild().data());
+        QVERIFY(layer);
+        QVERIFY(layer->filter()->name() == "pattern");
+        if (layer) {
+            const QString patternMD5 = layer->filter()->getString("md5", "");
+            const QString patternNameTemp = layer->filter()->getString("pattern", "Grid01.pat");
+            const QString patternFileName = layer->filter()->getString("fileName", "");
+
+            KoResourceLoadResult res = KisGlobalResourcesInterface::instance()->source(ResourceType::Patterns).bestMatchLoadResult(patternMD5, patternFileName, patternNameTemp);
+            QVERIFY(res.resource<KoPattern>());
+        }
 }
 
 void KisPSDTest::testOpenLayerStylesWithPattern()

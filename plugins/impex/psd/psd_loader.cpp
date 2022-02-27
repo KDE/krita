@@ -335,7 +335,6 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 
                     fillConfig = fill.getFillLayerConfig();
                 }
-                qDebug() << "fill layer found: " << fillConfig.toString();
                 cfg->fromXML(fillConfig.firstChildElement());
                 cfg->createLocalResourcesSnapshot();
                 KisGeneratorLayerSP genlayer = new KisGeneratorLayer(m_image, layerRecord->layerName, cfg, m_image->globalSelection());

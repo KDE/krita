@@ -34,6 +34,11 @@ KoSvgPaste::KoSvgPaste()
 {
 }
 
+KoSvgPaste::~KoSvgPaste()
+{
+    delete(d);
+}
+
 bool KoSvgPaste::hasShapes()
 {
     bool hasSvg = false;

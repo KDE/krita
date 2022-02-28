@@ -19,6 +19,8 @@ class KRITAFLAKE_EXPORT KoSvgPaste
 {
 public:
     KoSvgPaste();
+    virtual ~KoSvgPaste();
+
 
     bool hasShapes();
     QList<KoShape*> fetchShapes(QRectF viewportInPx, qreal resolutionPPI, QSizeF *fragmentSize = nullptr);

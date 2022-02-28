@@ -33,7 +33,6 @@ class QDockWidget;
 class KisView;
 class KisViewManager;
 class KoCanvasController;
-class KisRecentDocumentsModelWrapper;
 
 
 /**
@@ -86,27 +85,6 @@ public:
      * @returns the currently active view
      */
     KisView *activeView() const;
-
-    /**
-     * Sets the maximum number of recent documents entries.
-     */
-    void setMaxRecentItems(uint _number);
-
-    /**
-     * The document opened a URL -> store into recent documents list.
-     * @param oldUrl if not empty, @p url will replace @p oldUrl if present
-     */
-    void addRecentURL(const QUrl &url, const QUrl &oldUrl = QUrl());
-
-    /**
-     * get list of URL strings for recent files
-     */
-    QList<QUrl> recentFilesUrls();
-    /**
-     * removes the given url from the list of recent files
-     */
-    void removeRecentUrl(const QUrl &url);
-
 
     /**
      * Load the desired document and show it.
@@ -304,11 +282,6 @@ public Q_SLOTS:
     void windowFocused();
 
     /**
-     * Reloads the recent documents list.
-     */
-    void reloadRecentFileList();
-
-    /**
      * Detach canvas onto a separate window, or restore it back to to main window.
      */
     void setCanvasDetached(bool detached);
@@ -327,11 +300,6 @@ public Q_SLOTS:
 
 
 private Q_SLOTS:
-    /**
-     * Save the list of recent files.
-     */
-    void saveRecentFiles();
-
     void slotLoadCompleted();
     void slotLoadCanceled(const QString &);
     void slotSaveCompleted();
@@ -470,7 +438,6 @@ protected:
 private:
 
     friend class KisWelcomePageWidget;
-    KisRecentDocumentsModelWrapper *recentFilesModel();
     void dragMove(QDragMoveEvent *event);
     void dragLeave();
 

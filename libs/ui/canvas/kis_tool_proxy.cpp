@@ -64,6 +64,7 @@ KoPointerEvent KisToolProxy::convertEventToPointerEvent(QEvent *event, const QPo
     case QEvent::TouchBegin:
     case QEvent::TouchUpdate:
     case QEvent::TouchEnd:
+    case QEvent::TouchCancel:
     {
         *result = true;
         QTouchEvent *touchEvent = static_cast<QTouchEvent *> (event);

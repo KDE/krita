@@ -587,7 +587,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
         if (color_nb_bits == 16 && !fromBlender && !qAppName().toLower().contains("test") && !m_batchMode) {
             KisConfig cfg(true);
             quint32 behaviour = cfg.pasteBehaviour();
-            if (behaviour == PASTE_ASK) {
+            if (behaviour == KisClipboard::PASTE_ASK) {
                 KisDlgPngImport dlg(m_path, csName.first, csName.second);
                 KisCursorOverrideHijacker hijacker;
                 Q_UNUSED(hijacker);
@@ -595,7 +595,6 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
                 if (!dlg.profile().isEmpty()) {
                     profile = KoColorSpaceRegistry::instance()->profileByName(dlg.profile());
                 }
-
             }
         }
         dbgFile << "no embedded profile, will use the default profile";
@@ -1109,7 +1108,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
      * but it doesn't:
      *
      * "When the iCCP chunk is present, PNG decoders that recognize it and are capable
-     *  of colour management [ICC] shall ignore the gAMA and cHRM chunks and use
+     *  of color management [ICC] shall ignore the gAMA and cHRM chunks and use
      *  the iCCP chunk instead and interpret it according to [ICC-1] and [ICC-1A]"
      */
 

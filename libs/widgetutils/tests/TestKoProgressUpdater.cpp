@@ -20,6 +20,7 @@ void TestKoProgressUpdater::test()
 
     KoProgressUpdater progress(&testProxy);
     progress.setUpdateInterval(1);
+    QTest::qWait(15);
 
     QCOMPARE(testProxy.min(), 0);
     QCOMPARE(testProxy.max(), 0);
@@ -27,6 +28,7 @@ void TestKoProgressUpdater::test()
     QCOMPARE(testProxy.format(), QString(""));
 
     progress.start(100, "Test Action: %p%");
+    QTest::qWait(15);
 
     QCOMPARE(testProxy.min(), 0);
     QCOMPARE(testProxy.max(), 99);
@@ -34,6 +36,7 @@ void TestKoProgressUpdater::test()
     QCOMPARE(testProxy.format(), QString("Test Action: %p%"));
 
     QPointer<KoUpdater> updater1 = progress.startSubtask(1, "");
+    QTest::qWait(15);
 
     QCOMPARE(testProxy.min(), 0);
     QCOMPARE(testProxy.max(), 99);

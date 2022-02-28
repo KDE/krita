@@ -168,7 +168,7 @@ void Imagesplit::slotImagesplit()
         QString suffix;
 
         if (dlgImagesplit->autoSave()) {
-            KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::OpenDirectory, "OpenDocument");
+            KoFileDialog dialog(viewManager()->mainWindowAsQWidget(), KoFileDialog::OpenDirectory, "OpenDocument");
             dialog.setCaption(i18n("Save Image on Split"));
             dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
             QStringList mimeFilter = viewManager()->document()->importExportManager()->supportedMimeTypes(KisImportExportManager::Export);
@@ -243,7 +243,7 @@ void Imagesplit::slotImagesplit()
 		            mimeType = listMimeFilter.at(dlgImagesplit->cmbIndex);
 	            }
                 else {
-                    KoFileDialog dialog(viewManager()->mainWindow(), KoFileDialog::SaveFile, "OpenDocument");
+                    KoFileDialog dialog(viewManager()->mainWindowAsQWidget(), KoFileDialog::SaveFile, "OpenDocument");
                     dialog.setCaption(i18n("Save Image on Split"));
                     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
                     dialog.setMimeTypeFilters(listMimeFilter, defaultMime);

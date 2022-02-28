@@ -37,7 +37,7 @@ void ClonesArray::slotCreateClonesArray()
     KisImageWSP image = viewManager()->image();
     Q_ASSERT(image); Q_UNUSED(image);
 
-    DlgClonesArray *dialog = new DlgClonesArray(viewManager(), viewManager()->mainWindow());
+    DlgClonesArray *dialog = new DlgClonesArray(viewManager(), viewManager()->mainWindowAsQWidget());
     Q_CHECK_PTR(dialog);
 
     if (dialog->exec() == QDialog::Accepted) {

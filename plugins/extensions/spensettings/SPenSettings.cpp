@@ -7,6 +7,7 @@
 #include "SPenSettings.h"
 #include <KisSPenSettings.h>
 
+#include <KisMainWindow.h>
 #include <kpluginfactory.h>
 #include <kis_action.h>
 #include <KisViewManager.h>

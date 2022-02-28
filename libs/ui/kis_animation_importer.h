@@ -11,13 +11,14 @@
 #include "kritaui_export.h"
 #include <KisImportExportFilter.h>
 #include <KisImportExportErrorCode.h>
+#include <QPair>
 
 class KisDocument;
 class KisMainWindow;
 
 class KRITAUI_EXPORT KisAnimationImporter : public QObject
 {
-    Q_OBJECT
+    Q_OBJECT    
 
 public:
     KisAnimationImporter(KisImageSP image, KoUpdaterPtr updater = 0);
@@ -30,7 +31,11 @@ public:
                                     , bool autoAddHoldframes = false
                                     , bool startfrom0 = false
                                     , int isAscending = 0
-                                    , bool assignDocumentProfile = false);
+                                    , bool assignDocumentProfile = false
+                                    , QList<int> optionalKeyframeTimeList = {});
+
+private:
+    QPair<KisPaintLayerSP, class KisRasterKeyframeChannel*> initializePaintLayer(QScopedPointer<KisDocument>& doc, class KisUndoAdapter* undoAdapter);
 
 private Q_SLOTS:
     void cancel();

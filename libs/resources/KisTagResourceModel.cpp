@@ -6,6 +6,8 @@
 #include "KisTagResourceModel.h"
 
 #include <QtSql>
+#include <QMap>
+
 #include <KisResourceLocator.h>
 #include <KisResourceModel.h>
 #include <KisResourceModelProvider.h>
@@ -164,105 +166,307 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     return v;
 }
 
-bool KisAllTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
+bool KisAllTagResourceModel::tagResources(const KisTagSP tag, const QVector<int>& resourceIds)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resourceId >= 0, false);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(tag && tag->valid() && tag->id() >= 0, false);
 
-    int taggedState = isResourceTagged(tag, resourceId);
+    // notes for performance:
+    // the only two costly parts are:
+    // - executing the query constructed by createQuery()
+    // - running endInsertRows() (because it updates all the views and filter proxies etc...)
 
-    if (taggedState == 1) {
+    QVector<int> resourceIdsToAdd;
+    QVector<int> resourceIdsToUpdate;
+
+    // looks expensive but actually isn't
+    for (int i = 0; i < resourceIds.count(); i++) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resourceIds[i] >= 0, false);
+        int taggedState = isResourceTagged(tag, resourceIds[i]);
+        switch (taggedState) {
+        case -1:
+            // never tagged
+            resourceIdsToAdd.append(resourceIds[i]);
+            break;
+        case 0:
+            // tagged but then untagged
+            resourceIdsToUpdate.append(resourceIds[i]);
+            break;
+        case 1:
+            // it means the resource is already tagged; do nothing
+            break;
+        }
+    }
+
+    if (resourceIdsToAdd.isEmpty() && resourceIdsToUpdate.isEmpty()) {
         // Is already tagged, let's do nothing
         return true;
     }
 
-    beginInsertRows(QModelIndex(), rowCount(), rowCount());
+    int howManyTimesBeginInsertedCalled = 0;
 
-    if (taggedState == 0) {
+    if (resourceIdsToUpdate.count() > 0) {
+
+        QSqlQuery allIndices;
+        if (!allIndices.prepare(createQuery(false, true))) {
+            qWarning() << "Could not prepare tagResource-allIndices query" << allIndices.lastError();
+        }
+
+        allIndices.bindValue(":resource_type", d->resourceType);
+        allIndices.bindValue(":language", KisTag::currentLocale());
+
+        if (!allIndices.exec()) {
+            qWarning() << "Could not execute tagResource-allIndices query" << allIndices.lastError();
+        }
+
+        int activesRowId = -1;
+        int lastActiveRowId = -1;
+
+        // needed for beginInsertRows calculations
+        QMap<int, int> resourcesCountForLastActiveRowId;
+
+        int idd = 0;
+
+        while (allIndices.next()) {
+            idd++;
+            bool isActive = allIndices.value("resource_tags_pair_active").toBool();
+            if (isActive) {
+                activesRowId++;
+                lastActiveRowId = activesRowId;
+            } else {
+                bool variantSuccess = true;
+                int rowTagId = allIndices.value("tag_id").toInt(&variantSuccess);
+                KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowTagId = -1; }
+                int rowResourceId = allIndices.value("resource_id").toInt(&variantSuccess);
+                KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowResourceId = -1; }
+                if (rowTagId == tag->id() && resourceIdsToUpdate.contains(rowResourceId)) {
+                    if (!resourcesCountForLastActiveRowId.contains(lastActiveRowId)) {
+                        resourcesCountForLastActiveRowId[lastActiveRowId] = 1;
+                    } else {
+                        resourcesCountForLastActiveRowId[lastActiveRowId] = resourcesCountForLastActiveRowId[lastActiveRowId] + 1;
+                    }
+                }
+            }
+         }
+
+        Q_FOREACH(const int key, resourcesCountForLastActiveRowId.keys()) {
+            // when having multiple beginInsertRows:
+            // let's say you have this model:
+            // 0  A
+            // 1  A
+            // 2  A
+            //  <- put 2 Bs here
+            // 3  A
+            //  <- put one B here
+            // 4  A
+            // and you want to add the two Bs and then add another B
+            // then the signals should be:
+            // beginRemoveRows(3, 4) <- new indices of the two Bs
+            // beginRemoveRows(4, 4) <- new index of the one B ignoring the action before
+
+
+            beginInsertRows(QModelIndex(), key + 1, key + resourcesCountForLastActiveRowId[key]);
+            howManyTimesBeginInsertedCalled++;
+        }
+
         // Resource was tagged, then untagged. Tag again;
         QSqlQuery q;
+
         if (!q.prepare("UPDATE resource_tags\n"
                        "SET    active = 1\n"
                        "WHERE  resource_id = :resource_id\n"
                        "AND    tag_id      = :tag_id")) {
+
+
             qWarning() << "Could not prepare update resource_tags to active statement" << q.lastError();
-            endInsertRows();
+
             return false;
         }
 
-        q.bindValue(":resource_id", resourceId);
-        q.bindValue(":tag_id", tag->id());
+        QVariantList resourceIdsVariants;
+        QVariantList tagIdVariants;
+
+        for (int i = 0; i < resourceIdsToUpdate.count(); i++) {
+            resourceIdsVariants << QVariant(resourceIdsToUpdate[i]);
+            tagIdVariants << QVariant(tag->id());
+        }
+
+        q.bindValue(":resource_id", resourceIdsVariants);
+        q.bindValue(":tag_id", tagIdVariants);
+
+        if (!q.execBatch()) {
+            qWarning() << "Could not execute update resource_tags to active statement" << q.lastError();
+            for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+                endInsertRows();
+            }
+            return false;
+        }
+
+    }
+
+    if (resourceIdsToAdd.count() > 0) {
+
+        beginInsertRows(QModelIndex(), rowCount(), rowCount() + resourceIdsToAdd.count() - 1);
+        howManyTimesBeginInsertedCalled++;
+
+        // Resource was never tagged before, insert it. The active column is DEFAULT 1
+        QSqlQuery q;
+
+
+        QString values;
+        for (int i = 0; i < resourceIdsToAdd.count(); i++) {
+            if (i > 0) {
+                values.append(", ");
+            }
+            values.append("(?, ?, ?)");
+        }
+
+        if (!q.prepare(QString("INSERT INTO resource_tags\n"
+                       "(resource_id, tag_id, active)\n"
+                       "VALUES ") + values + QString(";\n"))) {
+            qWarning() << "Could not prepare insert into resource tags statement" << q.lastError();
+            for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+                endInsertRows();
+            }
+            return false;
+        }
+
+        for (int i = 0; i < resourceIdsToAdd.count(); i++) {
+            q.addBindValue(resourceIdsToAdd[i]);
+            q.addBindValue(tag->id());
+            q.addBindValue(true);
+
+        }
 
         if (!q.exec()) {
-            qWarning() << "Could not execute update resource_tags to active statement" << q.lastError() << q.boundValues();
-            endInsertRows();
+            qWarning() << "Could not execute insert into resource tags statement" << q.boundValues() << q.lastError();
+            for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+                endInsertRows();
+            }
             return false;
         }
-
-        endInsertRows();
-        return true;
-    }
-
-    // Resource was never tagged before, insert it. The active column is DEFAULT 1
-    QSqlQuery q;
-
-    if (!q.prepare("INSERT INTO resource_tags\n"
-                   "(resource_id, tag_id)\n"
-                   "VALUES (:resource_id,:tag_id);\n")) {
-        qWarning() << "Could not prepare insert into resource tags statement" << q.lastError();
-        endInsertRows();
-        return false;
-    }
-
-    q.bindValue(":resource_id", resourceId);
-    q.bindValue(":tag_id", tag->id());
-
-    if (!q.exec()) {
-        qWarning() << "Could not execute insert into resource tags statement" << q.boundValues() << q.lastError();
-        endInsertRows();
-        return false;
     }
 
     resetQuery();
-    endInsertRows();
+
+    for (int i = 0; i < howManyTimesBeginInsertedCalled; i++) {
+        endInsertRows();
+    }
 
     return true;
 }
 
-bool KisAllTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
+bool KisAllTagResourceModel::untagResources(const KisTagSP tag, const QVector<int> &resourceIds)
 {
-    if (resourceId < 0) return false;
     if (!tag || !tag->valid()) return false;
     if (!d->query.isSelect()) return false;
     if (rowCount() < 1) return false;
 
-    if (isResourceTagged(tag, resourceId) < 1) return true;
+    int beginRemoveRowsCount = 0;
 
-    beginRemoveRows(QModelIndex(), d->query.at(), d->query.at());
+    QSqlQuery q;
 
-    {
-        QSqlQuery q;
+    if (!q.prepare("UPDATE resource_tags\n"
+                   "SET    active      = 0\n"
+                   "WHERE  tag_id      = :tag_id\n"
+                   "AND    resource_id = :resource_id")) {
+        qWarning() << "Could not prepare untagResource-update query" << q.lastError();
+        return false;
+    }
 
-        if (!q.prepare("UPDATE resource_tags\n"
-                       "SET    active      = 0\n"
-                       "WHERE  tag_id      = :tag_id\n"
-                       "AND    resource_id = :resource_id")) {
-            qWarning() << "Could not prepare untagResource query" << q.lastError();
-            endRemoveRows();
-            return false;
+    QSqlQuery allIndices;
+    if (!allIndices.prepare(createQuery(true, true))) {
+        qWarning() << "Coult not prepare untagResource-allIndices query " << allIndices.lastError();
+    }
+
+    allIndices.bindValue(":resource_type", d->resourceType);
+    allIndices.bindValue(":language", KisTag::currentLocale());
+
+    if (!allIndices.exec()) {
+        qCritical() << "Could not exec untagResource-allIndices query " << allIndices.lastError();
+    }
+
+    int activesRowId = -1;
+    int lastActiveRowId = -1;
+
+    // needed for beginInsertRows indices calculations
+    QMap<int, int> resourcesCountForLastActiveRowId;
+
+    int idd = 0;
+
+    while (allIndices.next()) {
+        idd++;
+        bool variantSuccess = true;
+
+        bool isActive = true; // all of them are active!
+        KIS_SAFE_ASSERT_RECOVER(variantSuccess) { isActive = false; }
+
+        int rowTagId = allIndices.value("tag_id").toInt(&variantSuccess);
+        KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowTagId = -1; }
+        int rowResourceId = allIndices.value("resource_id").toInt(&variantSuccess);
+        KIS_SAFE_ASSERT_RECOVER(variantSuccess) { rowResourceId = -1; }
+
+        bool willStayActive = isActive && (rowTagId != tag->id() || !resourceIds.contains(rowResourceId));
+        activesRowId++;
+        if (willStayActive) {
+            lastActiveRowId = activesRowId;
+        } else if (isActive) {
+            // means we're removing it
+            if (!resourcesCountForLastActiveRowId.contains(lastActiveRowId)) {
+                resourcesCountForLastActiveRowId[lastActiveRowId] = 0;
+            }
+            resourcesCountForLastActiveRowId[lastActiveRowId]++;
         }
+    }
+
+    Q_FOREACH(const int key, resourcesCountForLastActiveRowId.keys()) {
+        // when having multiple beginRemoveRows:
+        // let's say you have this model:
+        // 0  A
+        // 1  A
+        // 2  A
+        // 3  *B*
+        // 4  *B*
+        // 5  A
+        // 6  *B*
+        // 7  A
+        // and you want to remove all Bs
+        // then the signals should be:
+        // beginRemoveRows(3, 4) <- first two indices in the obvious way
+        // beginRemoveRows(4, 4) <- next index as if the first action was already done
+        //  (so `5  A` already became `3  A`, so the *B* is `4  B`, not `6  B`)
+
+        beginRemoveRows(QModelIndex(), key + 1, key + resourcesCountForLastActiveRowId[key]);
+        beginRemoveRowsCount++;
+    }
+
+    QSqlDatabase::database().transaction();
+    for (int i = 0; i < resourceIds.count(); i++) {
+        int resourceId = resourceIds[i];
+
+        if (resourceId < 0) continue;
+        if (isResourceTagged(tag, resourceId) < 1) continue;
 
         q.bindValue(":tag_id", tag->id());
         q.bindValue(":resource_id", resourceId);
 
         if (!q.exec()) {
-            qWarning() << "Could not execute untagResource query" << q.lastError() << q.boundValues();
-            endRemoveRows();
+            qWarning() << "Could not execute untagResource-update query" << q.lastError() << q.boundValues();
+            for (int i = 0; i < beginRemoveRowsCount; i++) {
+                endRemoveRows();
+            }
+            QSqlDatabase::database().rollback();
             return false;
         }
     }
-    resetQuery();
-    endRemoveRows();
+    QSqlDatabase::database().commit();
+
+    if (beginRemoveRowsCount > 0) {
+        resetQuery();
+        for (int i = 0; i < beginRemoveRowsCount; i++) {
+            endRemoveRows();
+        }
+    }
+
     return true;
 }
 
@@ -337,46 +541,70 @@ void KisAllTagResourceModel::slotResourceActiveStateChanged(const QString &resou
     }
 }
 
+QString KisAllTagResourceModel::createQuery(bool onlyActive, bool returnADbIndexToo)
+{
+    QString query = QString("WITH initial_selection AS (\n"
+                            "    SELECT   tags.id\n"
+                            "    ,        resources.name\n"
+                            "    ,        resources.filename\n"
+                            "    ,        resources.md5sum\n"
+                            "    ,        resource_types.id            as    resource_type_id\n"
+                            "    ,        resource_types.name          as    resource_type_name\n"
+                            "    ,        min(resources.id)            as    resource_id\n"
+                            ) + (returnADbIndexToo ? QString(", resource_tags.id   as   resource_tags_row_id\n") : QString("")) + QString( // include r_t row id
+                            ) + (onlyActive ? QString("") : QString(", resource_tags.active   as   resource_tags_pair_active\n")) + QString( // include r_t row active info
+                            "    FROM     resource_types\n"
+                            "    JOIN     resource_tags\n   ON       resource_tags.resource_id    = resources.id\n"
+                            ) + (onlyActive ? QString("    AND       resource_tags.active         = 1\n") : QString("")) + QString( // make sure only active tags are used
+                            "    JOIN     resources         ON       resources.resource_type_id   = resource_types.id\n"
+                            "    JOIN     tags              ON       tags.id                      = resource_tags.tag_id\n"
+                            "                              AND       tags.resource_type_id        = resource_types.id\n"
+                            "    WHERE    resource_types.name          = :resource_type\n"
+                            "    GROUP BY tags.id\n"
+                            "    ,        resources.name\n"
+                            "    ,        resources.filename\n"
+                            "    ,        resources.md5sum\n"
+                            "    ,        resource_types.id\n"
+                            "    ORDER BY resource_tags.id\n"
+                            ")\n"
+                            "SELECT \n"
+                            "       initial_selection.id           as tag_id\n"
+                            ",      initial_selection.name         as resource_name\n"
+                            ",      initial_selection.filename     as resource_filename\n"
+                            ",      initial_selection.md5sum       as resource_md5sum\n"
+                            ",      initial_selection.resource_id  as resource_id\n"
+                            ",      tags.url                       as tag_url"
+                            ",      tags.active                    as tag_active"
+                            ",      tags.name                      as tag_name"
+                            ",      tags.comment                   as tag_comment"
+                            ",      resources.status               as resource_active\n"
+                            ",      resources.tooltip              as resource_tooltip\n"
+                            ",      resources.thumbnail            as resource_thumbnail\n"
+                            ",      resources.status               as resource_active\n"
+                            ",      resources.storage_id           as storage_id\n"
+                            ",      storages.active                as resource_storage_active\n"
+                            ",      storages.location              as location\n"
+                            ",      tag_translations.name          as translated_name\n"
+                            ",      tag_translations.comment       as translated_comment\n"
+                            ",      initial_selection.resource_type_name as resource_type\n"
+                            ) + (returnADbIndexToo ? QString(", initial_selection.resource_tags_row_id   as   resource_tags_row_id\n") : QString("")) + QString(
+                            ) + (onlyActive ? QString("") : QString(", initial_selection.resource_tags_pair_active   as   resource_tags_pair_active\n")) + QString(
+                            "FROM      initial_selection\n"
+                            "JOIN      tags               ON   tags.id                     = initial_selection.id\n"
+                            "                            AND   tags.resource_type_id       = initial_selection.resource_type_id\n"
+                            "JOIN      resources          ON   resources.id                = resource_id\n"
+                            "JOIN      storages           ON   storages.id                 = resources.storage_id\n"
+                            "LEFT JOIN tag_translations   ON   tag_translations.tag_id     = initial_selection.id\n"
+                            "                            AND   tag_translations.language   = :language\n");
+
+    return query;
+
+
+}
+
 bool KisAllTagResourceModel::resetQuery()
 {
-    bool r = d->query.prepare("SELECT tags.id                  as tag_id\n"
-                              ",      tags.url                 as tag_url\n"
-                              ",      tags.active              as tag_active\n"
-                              ",      tags.name                as tag_name\n"
-                              ",      tags.comment             as tag_comment\n"
-                              ",      resources.id             as resource_id\n"
-                              ",      resources.status         as resource_active\n"
-                              ",      storages.active          as resource_storage_active\n"
-                              ",      resources.name           as resource_name\n"
-                              ",      resources.filename       as resource_filename\n"
-                              ",      resources.tooltip        as resource_tooltip\n"
-                              ",      resources.thumbnail      as resource_thumbnail\n"
-                              ",      resources.status         as resource_status\n"
-                              ",      resources.md5sum         as resource_md5sum\n"
-                              ",      resources.storage_id     as storage_id\n"
-                              ",      storages.active          as storage_active\n"
-                              ",      storages.location        as location\n"
-                              ",      resource_types.name      as resource_type\n"
-                              ",      tag_translations.name    as translated_name\n"
-                              ",      tag_translations.comment as translated_comment\n"
-                              "FROM   resources\n"
-                              ",      resource_types\n"
-                              ",      storages\n"
-                              ",      tags\n"
-                              ",      resource_tags\n"
-                              "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
-                              "WHERE  tags.id                    = resource_tags.tag_id\n"
-                              "AND    tags.resource_type_id      = resource_types.id\n"
-                              "AND    resources.id               = resource_tags.resource_id\n"
-                              "AND    resources.resource_type_id = resource_types.id\n"
-                              "AND    resources.storage_id       = storages.id\n"
-                              "AND    resource_types.id          = resources.resource_type_id\n"
-                              "AND    resource_types.name        = :resource_type\n"
-                              "AND    resource_tags.active       = 1\n"
-                              "GROUP BY tags.id\n"
-                              ",        resources.name\n"
-                              ",        resources.filename\n"
-                              ",        resources.md5sum\n");
+    bool r = d->query.prepare(createQuery(true));
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagResourcesModel query" << d->query.lastError();
@@ -445,15 +673,15 @@ void KisTagResourceModel::setStorageFilter(KisTagResourceModel::StorageFilter fi
     invalidateFilter();
 }
 
-bool KisTagResourceModel::tagResource(const KisTagSP tag, const int resourceId)
+bool KisTagResourceModel::tagResources(const KisTagSP tag, const QVector<int> &resourceIds)
 {
-    bool r = d->sourceModel->tagResource(tag, resourceId);
+    bool r = d->sourceModel->tagResources(tag, resourceIds);
     return r;
 }
 
-bool KisTagResourceModel::untagResource(const KisTagSP tag, const int resourceId)
+bool KisTagResourceModel::untagResources(const KisTagSP tag, const QVector<int> &resourceIds)
 {
-    return d->sourceModel->untagResource(tag, resourceId);
+    return d->sourceModel->untagResources(tag, resourceIds);
 }
 
 int KisTagResourceModel::isResourceTagged(const KisTagSP tag, const int resourceId)

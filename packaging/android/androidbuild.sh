@@ -64,9 +64,11 @@ configure_ext() {
         -DCMAKE_INSTALL_PREFIX=$THIRDPARTY_INSTALL                                      \
         -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
         -DANDROID_ABI=$ANDROID_ABI                                                      \
+        -DANDROID_STL=c++_shared                                                           \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
-        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
+        -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"                              \
+        -DLOCALE_INSTALL_DIR="$INSTALL_PREFIX/share/locale/"
     cd $BUILD_ROOT
 }
 
@@ -78,6 +80,7 @@ configure_plugins() {
         -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX                                          \
         -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake   \
         -DANDROID_ABI=$ANDROID_ABI                                                      \
+        -DANDROID_STL=c++_shared                                                           \
         -DANDROID_PLATFORM=$ANDROID_NATIVE_API_LEVEL                                    \
         -DANDROID_SDK_ROOT=$ANDROID_SDK_ROOT                                            \
         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i;$INSTALL_PREFIX"
@@ -123,6 +126,8 @@ build_ext() {
     cmake --build . --config $BUILD_TYPE --target ext_mypaint -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_webp -- -j$PROC_COUNT
     cmake --build . --config $BUILD_TYPE --target ext_vc -- -j$PROC_COUNT
+    cmake --build . --config $BUILD_TYPE --target ext_libunwindstack-ndk -- -j$PROC_COUNT
+    # cmake --build . --config $BUILD_TYPE --target ext_ocio -- -j$PROC_COUNT
 
     cd $BUILD_ROOT
 }
@@ -192,14 +197,24 @@ build_krita() {
          -DANDROID_STL=c++_shared                                                           \
          -DANDROID_ABI=$ANDROID_ABI                                                         \
          -DNDK_VERSION=21                                                                   \
-         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i"
+         -DCMAKE_FIND_ROOT_PATH="$QT_ANDROID;$BUILD_ROOT/i" $EXTRA_ARGS
 
     make -j$PROC_COUNT install
 }
 
 build_apk() {
     cd $BUILD_ROOT
-    if [[ $BUILD_TYPE == "Release" ]]; then
+
+    if [[ $NIGHTLY_BUILD == 1 ]]; then
+        # to copy files, --aux-mode doesn't seem to work
+        make create-apk ARGS="--no-gdbserver"
+
+        cd $BUILD_ROOT/krita_build_apk
+        ./gradlew clean  # so binary factory doesn't use the debug files
+        ./gradlew assembleNightly
+
+        cd $BUILD_ROOT
+    elif [[ $BUILD_TYPE == "Release" ]]; then
         make create-apk ARGS="--release"
     else
         make create-apk ARGS="--no-gdbserver"
@@ -279,6 +294,12 @@ if [[ -z $BUILD_ROOT ]]; then
     print_usage
 elif [[ ! -d $BUILD_ROOT ]]; then
     mkdir $BUILD_ROOT -p
+fi
+
+if [[ $NIGHTLY_BUILD == 1 ]]; then
+    EXTRA_ARGS="-DFETCH_TRANSLATIONS=ON"
+else
+    EXTRA_ARGS="-DFETCH_TRANSLATIONS=OFF"
 fi
 
 check_exists CMAKE_ANDROID_NDK

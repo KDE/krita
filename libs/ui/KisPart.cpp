@@ -68,6 +68,8 @@
 #include "KisBusyWaitBroker.h"
 #include "dialogs/kis_delayed_save_dialog.h"
 #include "kis_memory_statistics_server.h"
+#include "KisRecentFilesManager.h"
+#include "KisRecentFileIconCache.h"
 
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
@@ -200,7 +202,7 @@ void KisPart::addDocument(KisDocument *document, bool notify)
             emit documentOpened('/'+ objectName());
             emit sigDocumentAdded(document);
         }
-        connect(document, SIGNAL(sigSavingFinished()), SLOT(slotDocumentSaved()));
+        connect(document, SIGNAL(sigSavingFinished(QString)), SLOT(slotDocumentSaved(QString)));
     }
 }
 
@@ -424,17 +426,21 @@ bool KisPart::closeSession(bool keepWindows)
     return true;
 }
 
-void KisPart::slotDocumentSaved()
+void KisPart::slotDocumentSaved(const QString &filePath)
 {
-    KisDocument *doc = qobject_cast<KisDocument*>(sender());
-    emit sigDocumentSaved(doc->path());
+    // We used to use doc->path(), but it does not contain the correct output
+    // file path when doing an export, therefore we now pass it directly from
+    // the sigSavingFinished signal.
+    // KisDocument *doc = qobject_cast<KisDocument*>(sender());
+    emit sigDocumentSaved(filePath);
 
-    QUrl url = QUrl::fromLocalFile(doc->path());
+    QUrl url = QUrl::fromLocalFile(filePath);
+    KisRecentFileIconCache::instance()->reloadFileIcon(url);
     if (!d->pendingAddRecentUrlMap.contains(url)) {
         return;
     }
     QUrl oldUrl = d->pendingAddRecentUrlMap.take(url);
-    addRecentURLToAllMainWindows(QUrl::fromLocalFile(doc->path()), oldUrl);
+    addRecentURLToAllMainWindows(url, oldUrl);
 }
 
 void KisPart::removeMainWindow(KisMainWindow *mainWindow)
@@ -470,6 +476,11 @@ KisMainWindow *KisPart::currentMainwindow() const
     }
     return mainWindow;
 
+}
+
+QWidget *KisPart::currentMainwindowAsQWidget() const
+{
+    return currentMainwindow();
 }
 
 KisMainWindow * KisPart::windowById(QUuid id) const
@@ -578,9 +589,33 @@ void KisPart::openTemplate(const QUrl &url)
 
 void KisPart::addRecentURLToAllMainWindows(QUrl url, QUrl oldUrl)
 {
-    // Add to recent actions list in our mainWindows
-    Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
-        mainWindow->addRecentURL(url, oldUrl);
+    // Add entry to recent documents list
+    // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
+    if (!url.isEmpty()) {
+        bool ok = true;
+        if (url.isLocalFile()) {
+            QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
+            const QStringList tmpDirs = QStandardPaths::locateAll(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
+            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
+                if (path.contains(*it)) {
+                    ok = false; // it's in the tmp resource
+                }
+            }
+
+            const QStringList templateDirs = KoResourcePaths::findDirs("templates");
+            for (QStringList::ConstIterator it = templateDirs.begin() ; ok && it != templateDirs.end() ; ++it) {
+                if (path.contains(*it)) {
+                    ok = false; // it's in the templates directory.
+                    break;
+                }
+            }
+        }
+        if (ok) {
+            if (!oldUrl.isEmpty()) {
+                KisRecentFilesManager::instance()->remove(oldUrl);
+            }
+            KisRecentFilesManager::instance()->add(url);
+        }
     }
 }
 
@@ -644,3 +679,5 @@ void KisPart::setCurrentSession(KisSessionResourceSP session)
 {
     d->currentSession = session;
 }
+
+#include "moc_KisPart.cpp"

@@ -36,7 +36,7 @@ void KisTextureTile::setTextureParameters()
         || (m_texturesInfo->internalFormat == GL_RGBA16_EXT && m_texturesInfo->format == GL_RGBA)
 #endif
     ) {
-        // If image format is RGBA8, swap the red and blue channels for the proper colour
+        // If image format is RGBA8, swap the red and blue channels for the proper color
         // This is for OpenGL ES support and only used if lacking GL_EXT_texture_format_BGRA8888
         f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, GL_BLUE);
         f->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, GL_RED);

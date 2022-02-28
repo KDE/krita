@@ -15,6 +15,7 @@
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
 #include <kis_icon.h>
+#include <input/kis_extended_modifiers_mapper.h>
 
 #include "kis_rectangle_constraint_widget.h"
 
@@ -27,7 +28,6 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
     , m_isWidthForced(false)
     , m_isHeightForced(false)
     , m_rotateActive(false)
-    , m_listenToModifiers(true)
     , m_forcedRatio(1.0)
     , m_forcedWidth(0)
     , m_forcedHeight(0)
@@ -36,6 +36,7 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
     , m_referenceAngle(0)
     , m_angle(0)
     , m_angleBuffer(0)
+    , m_currentModifiers(Qt::NoModifier)
 {
 }
 
@@ -98,15 +99,35 @@ void KisToolRectangleBase::deactivate()
 {
     updateArea();
     KisToolShape::deactivate();
+    endShape();
 }
 
-void KisToolRectangleBase::listenToModifiers(bool listen)
-{
-    m_listenToModifiers = listen;
+void KisToolRectangleBase::keyPressEvent(QKeyEvent *event) {
+    const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
+
+    if (key == Qt::Key_Control) {
+        m_currentModifiers |= Qt::ControlModifier;
+    } else if (key == Qt::Key_Shift) {
+        m_currentModifiers |= Qt::ShiftModifier;
+    } else if (key == Qt::Key_Alt) {
+        m_currentModifiers |= Qt::AltModifier;
+    }
+
+    KisToolShape::keyPressEvent(event);
 }
-bool KisToolRectangleBase::listeningToModifiers()
-{
-    return m_listenToModifiers;
+
+void KisToolRectangleBase::keyReleaseEvent(QKeyEvent *event) {
+    const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
+
+    if (key == Qt::Key_Control) {
+        m_currentModifiers &= ~Qt::ControlModifier;
+    } else if (key == Qt::Key_Shift) {
+        m_currentModifiers &= ~Qt::ShiftModifier;
+    } else if (key == Qt::Key_Alt) {
+        m_currentModifiers &= ~Qt::AltModifier;
+    }
+
+    KisToolShape::keyReleaseEvent(event);
 }
 
 void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
@@ -130,6 +151,9 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
     setMode(KisTool::PAINT_MODE);
+    beginShape();
+
+    m_currentModifiers = Qt::NoModifier;
 
     QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
     m_dragStart = m_dragCenter = pos;
@@ -181,9 +205,9 @@ void KisToolRectangleBase::continuePrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    bool constraintToggle = (event->modifiers() & Qt::ShiftModifier) && m_listenToModifiers;
-    bool translateMode = (event->modifiers() & Qt::AltModifier) && m_listenToModifiers;
-    bool expandFromCenter = (event->modifiers() & Qt::ControlModifier) && m_listenToModifiers;
+    bool constraintToggle = m_currentModifiers & Qt::ShiftModifier;
+    bool translateMode = m_currentModifiers & Qt::AltModifier;
+    bool expandFromCenter = m_currentModifiers & Qt::ControlModifier;
 
     bool rotateMode = expandFromCenter && translateMode;
     bool fixedSize = isFixedSize() && !constraintToggle;
@@ -268,6 +292,7 @@ void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
     updateArea();
 
     finishRect(createRect(m_dragStart, m_dragEnd), m_roundCornersX, m_roundCornersY);
+    endShape();
     event->accept();
 }
 

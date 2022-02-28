@@ -581,7 +581,7 @@ void KisNodeManager::handleExternalIsolationChange()
 {
     // It might be that we have multiple Krita windows open. In such a case
     // only the currently active one should restart isolated mode
-    if (!m_d->view->mainWindow()->isActiveWindow()) return;
+    if (!m_d->view->mainWindowAsQWidget()->isActiveWindow()) return;
 
     KisImageWSP image = m_d->view->image();
     KisNodeSP activeNode = this->activeNode();
@@ -1185,7 +1185,7 @@ void KisNodeManager::Private::saveDeviceAsImage(KisPaintDeviceSP device,
                                                 qreal yRes,
                                                 quint8 opacity)
 {
-    KoFileDialog dialog(view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
+    KoFileDialog dialog(view->mainWindowAsQWidget(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18n("Export \"%1\"", defaultName));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(KisImportExportManager::supportedMimeTypes(KisImportExportManager::Export));
@@ -1257,7 +1257,7 @@ void KisNodeManager::saveVectorLayerAsImage()
         return;
     }
 
-    KoFileDialog dialog(m_d->view->mainWindow(), KoFileDialog::SaveFile, "savenodeasimage");
+    KoFileDialog dialog(m_d->view->mainWindowAsQWidget(), KoFileDialog::SaveFile, "savenodeasimage");
     dialog.setCaption(i18nc("@title:window", "Export to SVG"));
     dialog.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
     dialog.setMimeTypeFilters(QStringList() << "image/svg+xml", "image/svg+xml");
@@ -1303,7 +1303,7 @@ void KisNodeManager::Private::mergeTransparencyMaskAsAlpha(bool writeToLayers)
     KIS_ASSERT_RECOVER_RETURN(node->inherits("KisTransparencyMask"));
 
     if (writeToLayers && (!parentNode->hasEditablePaintDevice() || !node->isEditable(false))) {
-        QMessageBox::information(view->mainWindow(),
+        QMessageBox::information(view->mainWindowAsQWidget(),
                                  i18nc("@title:window", "Layer %1 is not editable", parentNode->name()),
                                  i18n("Cannot write alpha channel of "
                                       "the parent layer \"%1\".\n"

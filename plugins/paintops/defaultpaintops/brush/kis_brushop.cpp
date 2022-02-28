@@ -36,6 +36,7 @@
 #include "KisBrushOpResources.h"
 
 #include <KisRunnableStrokeJobData.h>
+#include <KisRunnableStrokeJobUtils.h>
 #include <KisRunnableStrokeJobsInterface.h>
 
 #include <QSharedPointer>
@@ -56,12 +57,6 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
 {
     Q_UNUSED(image);
     Q_ASSERT(settings);
-
-    /**
-     * We do our own threading here, so we need to forbid the brushes
-     * to do threading internally
-     */
-    m_brush->setThreadingAllowed(false);
 
     m_airbrushOption.readOptionSetting(settings);
 
@@ -193,8 +188,7 @@ void KisBrushOp::addMirroringJobs(Qt::Orientation direction,
                                   UpdateSharedStateSP state,
                                   QVector<KisRunnableStrokeJobData*> &jobs)
 {
-    jobs.append(new KisRunnableStrokeJobData(0, KisStrokeJobData::SEQUENTIAL));
-
+    KritaUtils::addJobSequential(jobs, nullptr);
 
     /**
      * Some KisRenderedDab may share their devices, so we should mirror them
@@ -206,27 +200,25 @@ void KisBrushOp::addMirroringJobs(Qt::Orientation direction,
     for (KisRenderedDab &dab : state->dabsQueue) {
         const bool skipMirrorPixels = prevDabDevice && prevDabDevice == dab.device;
 
-        jobs.append(
-            new KisRunnableStrokeJobData(
-                [state, &dab, direction, skipMirrorPixels] () {
-                    state->painter->mirrorDab(direction, &dab, skipMirrorPixels);
-                },
-                KisStrokeJobData::CONCURRENT));
+        KritaUtils::addJobConcurrent(jobs,
+            [state, &dab, direction, skipMirrorPixels] () {
+                state->painter->mirrorDab(direction, &dab, skipMirrorPixels);
+            }
+        );
 
         prevDabDevice = dab.device;
     }
 
-    jobs.append(new KisRunnableStrokeJobData(0, KisStrokeJobData::SEQUENTIAL));
+    KritaUtils::addJobSequential(jobs, nullptr);
 
     for (QRect &rc : rects) {
         state->painter->mirrorRect(direction, &rc);
 
-        jobs.append(
-            new KisRunnableStrokeJobData(
-                [rc, state] () {
-                    state->painter->bltFixed(rc, state->dabsQueue);
-                },
-                KisStrokeJobData::CONCURRENT));
+        KritaUtils::addJobConcurrent(jobs,
+            [rc, state] () {
+                state->painter->bltFixed(rc, state->dabsQueue);
+            }
+        );
     }
 
     state->allDirtyRects.append(rects);
@@ -323,12 +315,11 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
         state->dabRenderingTimer.start();
 
         Q_FOREACH (const QRect &rc, rects) {
-            jobs.append(
-                new KisRunnableStrokeJobData(
-                    [rc, state] () {
-                        state->painter->bltFixed(rc, state->dabsQueue);
-                    },
-                    KisStrokeJobData::CONCURRENT));
+            KritaUtils::addJobConcurrent(jobs,
+                [rc, state] () {
+                    state->painter->bltFixed(rc, state->dabsQueue);
+                }
+            );
         }
 
         /**
@@ -349,8 +340,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
             addMirroringJobs(Qt::Horizontal, rects, state, jobs);
         }
 
-        jobs.append(
-            new KisRunnableStrokeJobData(
+        KritaUtils::addJobSequential(jobs,
                 [state, this, someDabsAreStillInQueue] () {
                     Q_FOREACH(const QRect &rc, state->allDirtyRects) {
                         state->painter->addDirtyRect(rc);
@@ -390,8 +380,8 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
                     state->dabsQueue.clear();
 
                     m_updateSharedState.clear();
-                },
-                KisStrokeJobData::SEQUENTIAL));
+                }
+        );
     } else if (m_updateSharedState && hasPreparedDabsAtStart) {
         someDabsAreStillInQueue = true;
     }

@@ -215,6 +215,16 @@ public:
     void setPaintOpFlow(qreal value);
 
     /**
+     * Set paintop fade directly in the properties
+     */
+    void setPaintOpFade(qreal value);
+
+    /**
+     * Set paintop scatter directly in the properties
+     */
+    void setPaintOpScatter(qreal value);
+
+    /**
      * Set paintop composite mode directly in the properties
      */
     void setPaintOpCompositeOp(const QString &value);
@@ -228,6 +238,16 @@ public:
      * @return flow saved in the properties
      */
     qreal paintOpFlow();
+
+    /**
+     * @return fade saved in the properties
+     */
+    qreal paintOpFade();
+
+    /**
+     * @return scatter saved in the properties
+     */
+    qreal paintOpScatter();
 
     /**
      * @return composite mode saved in the properties

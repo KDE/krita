@@ -40,6 +40,15 @@ struct KisBasicVideoInfo
 
 };
 
+struct RenderedFrames {
+public:
+    QStringList renderedFrameFiles = {};
+    QList<int> renderedFrameTargetTimes = {};
+    inline bool framesNeedRelocation() const { return !renderedFrameTargetTimes.empty(); }
+    inline bool isEmpty() const { return renderedFrameFiles.isEmpty(); }
+    inline size_t size() const { return renderedFrameFiles.size(); }
+};
+
 class KisDlgImportVideoAnimation : public KoDialog
 {
     Q_OBJECT
@@ -47,10 +56,8 @@ class KisDlgImportVideoAnimation : public KoDialog
 public:
     KisDlgImportVideoAnimation(KisMainWindow *m_mainWindow, KisView *m_activeView);
     QStringList showOpenFileDialog();
-    QStringList renderFrames();
+    RenderedFrames renderFrames(const QDir& directory);
     QStringList documentInfo();
-    void cleanupWorkDir();
-
 
 protected Q_SLOTS:
     void slotAddFile();
@@ -85,7 +92,6 @@ private:
     KisView *m_activeView;
 
     QTimer *m_videoSliderTimer;
-    QDir m_videoWorkDir;
     KisBasicVideoInfo m_videoInfo;
     int m_currentFrame;
 

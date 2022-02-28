@@ -11,7 +11,6 @@
 #include <QQueue>
 #include <QPointer>
 
-#include <KisMainWindow.h>
 #include <KoToolManager.h>
 
 #include <kritaui_export.h>
@@ -41,6 +40,9 @@ class KisActionManager;
 class KisInputManager;
 class KoUpdater;
 class KoProgressUpdater;
+class KisMainWindow;
+class KoZoomController;
+class KoCanvasResourceProvider;
 
 /**
  * KisViewManager manages the collection of views shown in a single mainwindow.
@@ -171,8 +173,15 @@ public:
                              KisFloatingMessage::Priority priority = KisFloatingMessage::Medium,
                              int alignment = Qt::AlignCenter | Qt::TextWordWrap);
 
-    /// @return the KoMaindow this view is in, or 0
+    /// @return the KisMainWindow this view is in, or 0
     KisMainWindow *mainWindow() const;
+
+    /**
+     * Gets the KisMainWindow as a QWidget, useful when you just need it to
+     * be used as a parent to a dialog or window without needing to include
+     * `KisMainWindow.h`.
+     */
+    QWidget *mainWindowAsQWidget() const;
 
     /// The QMainWindow associated with this view. This is most likely going to be shell(), but
     /// when running as Gemini or Sketch, this will be set to the applications' own QMainWindow.

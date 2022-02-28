@@ -46,6 +46,7 @@ public:
     WdgGeneralSettings(QWidget *parent, const char *name) : QWidget(parent) {
         setObjectName(name);
         setupUi(this);
+        formLayout_13->takeRow(chkShowRootLayer);
         chkShowRootLayer->setVisible(false);
     }
 };
@@ -74,6 +75,7 @@ public:
     bool showCanvasMessages();
     bool compressKra();
     bool trimKra();
+    bool trimFramesImport();
     bool useZip64();
     bool toolOptionsInDocker();
     bool smoothZooming();
@@ -81,6 +83,7 @@ public:
     int kineticScrollingGesture();
     int kineticScrollingSensitivity();
     bool kineticScrollingHiddenScrollbars();
+    int zoomMarginSize();
     bool switchSelectionCtrlAlt();
     bool convertToImageColorspaceOnImport();
     bool autopinLayersToTimeline();
@@ -91,6 +94,9 @@ public:
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();
+
+public:
+    QButtonGroup m_pasteFormatGroup;
 };
 
 
@@ -231,9 +237,6 @@ public:
     void save();
 
 private Q_SLOTS:
-
-    void selectSwapDir();
-
     void slotThreadsLimitChanged(int value);
     void slotFrameClonesLimitChanged(int value);
 

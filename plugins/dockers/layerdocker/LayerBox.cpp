@@ -132,7 +132,7 @@ inline void LayerBox::connectActionToButton(KisViewManager* viewManager, QAbstra
 
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
     connect(action, SIGNAL(sigEnableSlaves(bool)), button, SLOT(setEnabled(bool)));
-    connect(viewManager->mainWindow(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
+    connect(viewManager->mainWindowAsQWidget(), SIGNAL(themeChanged()), this, SLOT(slotUpdateIcons()));
 }
 
 inline void LayerBox::addActionToMenu(QMenu *menu, const QString &id)

@@ -40,6 +40,7 @@ set(kritawidgetutils_LIB_SRCS
     kis_font_family_combo_box.cpp
     KisWrappableHBoxLayout.cpp
     KisPopupSelfActivatingLineEdit.cpp
+    KisRecentFilesManager.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp

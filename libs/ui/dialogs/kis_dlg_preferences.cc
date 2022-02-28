@@ -15,6 +15,7 @@
 #include <QBitmap>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QClipboard>
 #include <QCursor>
 #include <QDesktopWidget>
 #include <QFileDialog>
@@ -51,11 +52,13 @@
 #include "KoID.h"
 #include <KoVBox.h>
 
-#include <klocalizedstring.h>
-#include <kformat.h>
-#include <kundo2stack.h>
-#include <kstandardguiitem.h>
+#include <KTitleWidget>
 #include <KoResourcePaths.h>
+#include <kformat.h>
+#include <klocalizedstring.h>
+#include <kstandardguiitem.h>
+#include <kundo2stack.h>
+
 
 #include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
@@ -75,6 +78,7 @@
 #include "kis_cursor.h"
 #include "kis_image_config.h"
 #include "kis_preference_set_registry.h"
+#include "KisMainWindow.h"
 
 #include "kis_file_name_requester.h"
 
@@ -93,6 +97,7 @@
 #       include <kis_tablet_support_win8.h>
 #   endif
 #include "config-high-dpi-scale-factor-rounding-policy.h"
+#include "KisWindowsPackageUtils.h"
 #endif
 
 /**
@@ -164,6 +169,14 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 {
     KisConfig cfg(true);
 
+    // HACK ALERT!
+    // QScrollArea contents are opaque at multiple levels
+    // The contents themselves AND the viewport widget
+    {
+        scrollAreaWidgetContents->setAutoFillBackground(false);
+        scrollAreaWidgetContents->parentWidget()->setAutoFillBackground(false);
+    }
+
     //
     // Cursor Tab
     //
@@ -197,9 +210,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     // Window Tab
     //
     chkUseCustomFont->setChecked(cfg.readEntry<bool>("use_custom_system_font", false));
-    cmbCustomFont->setEnabled(cfg.readEntry<bool>("use_custom_system_font", false));
     cmbCustomFont->findChild <QComboBox*>("stylesComboBox")->setVisible(false);
-    intFontSize->setEnabled(cmbCustomFont->isEnabled());
 
     QString fontName = cfg.readEntry<QString>("custom_system_font", "");
     if (fontName.isEmpty()) {
@@ -268,6 +279,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity());
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars());
 
+    intZoomMarginSize->setValue(cfg.zoomMarginSize());
+
     //
     // File handling
     //
@@ -280,6 +293,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkCompressKra->setChecked(cfg.compressKra());
     chkZip64->setChecked(cfg.useZip64());
     m_chkTrimKra->setChecked(cfg.trimKra());
+    m_chkTrimFramesImport->setChecked(cfg.trimFramesImport());
 
     m_backupFileCheckBox->setChecked(cfg.backupFile());
     cmbBackupFileLocation->setCurrentIndex(cfg.readEntry<int>("backupfilelocation", 0));
@@ -345,12 +359,74 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_urlResourceFolder->setConfigurationName("resource_directory");
     m_urlResourceFolder->setFileName(KoResourcePaths::getAppDataLocation());
 
+    grpWindowsAppData->setVisible(false);
+#ifdef Q_OS_WIN
+    if (KisWindowsPackageUtils::isRunningInPackage()) {
+        const auto pathToDisplay = [](const QString &path) {
+            // Due to how Unicode word wrapping works, the string does not
+            // wrap after backslashes in Qt 5.12. We don't want the path to
+            // become too long, so we add a U+200B ZERO WIDTH SPACE to allow
+            // wrapping. The downside is that we cannot let the user select
+            // and copy the path because it now contains invisible unicode
+            // code points.
+            // See: https://bugreports.qt.io/browse/QTBUG-80892
+            return QDir::toNativeSeparators(path).replace(QChar('\\'), QStringLiteral(u"\\\u200B"));
+        };
+        const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
+        if (!privateAppData.isEmpty()) {
+            const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + qApp->applicationName());
+            const QDir appDataDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+            lblWindowsAppDataIcon->setPixmap(lblWindowsAppDataIcon->style()->standardIcon(QStyle::SP_MessageBoxInformation).pixmap(QSize(32, 32)));
+            // Similar text is also used in KisViewManager.cpp
+            lblWindowsAppDataNote->setText(i18nc("@info resource folder",
+                "<p>You are using the Microsoft Store package version of Krita. "
+                "Even though Krita can be configured to place resources under the "
+                "user AppData location, Windows may actually store the files "
+                "inside a private app location.</p>\n"
+                "<p>You should check both locations to determine where "
+                "the files are located.</p>\n"
+                "<p><b>User AppData</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
+                "%1</p>\n"
+                "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
+                "%2</p>",
+                pathToDisplay(appDataDir.absolutePath()),
+                pathToDisplay(privateResourceDir.absolutePath())
+            ));
+            grpWindowsAppData->setVisible(true);
+            connect(lblWindowsAppDataNote, &QLabel::linkActivated,
+                [userPath = appDataDir.absolutePath(), privatePath = privateResourceDir.absolutePath()]
+                (const QString &link) {
+                    if (link == QStringLiteral("copyuser")) {
+                        qApp->clipboard()->setText(QDir::toNativeSeparators(userPath));
+                    } else if (link == QStringLiteral("copyprivate")) {
+                        qApp->clipboard()->setText(QDir::toNativeSeparators(privatePath));
+                    } else {
+                        qWarning() << "Unexpected link activated in lblWindowsAppDataNote:" << link;
+                    }
+                });
+        }
+    }
+#endif
+
 
     const int forcedFontDPI = cfg.readEntry("forcedDpiForQtFontBugWorkaround", -1);
     chkForcedFontDPI->setChecked(forcedFontDPI > 0);
     intForcedFontDPI->setValue(forcedFontDPI > 0 ? forcedFontDPI : qt_defaultDpi());
     intForcedFontDPI->setEnabled(forcedFontDPI > 0);
     connect(chkForcedFontDPI, SIGNAL(toggled(bool)), intForcedFontDPI, SLOT(setEnabled(bool)));
+
+    m_pasteFormatGroup.addButton(btnDownload, KisClipboard::PASTE_FORMAT_DOWNLOAD);
+    m_pasteFormatGroup.addButton(btnLocal, KisClipboard::PASTE_FORMAT_LOCAL);
+    m_pasteFormatGroup.addButton(btnBitmap, KisClipboard::PASTE_FORMAT_CLIP);
+    m_pasteFormatGroup.addButton(btnAsk, KisClipboard::PASTE_FORMAT_ASK);
+
+    QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
+
+    Q_ASSERT(button);
+
+    if (button) {
+        button->setChecked(true);
+    }
 }
 
 void GeneralTab::setDefault()
@@ -397,6 +473,7 @@ void GeneralTab::setDefault()
     m_chkCanvasMessages->setChecked(cfg.showCanvasMessages(true));
     m_chkCompressKra->setChecked(cfg.compressKra(true));
     m_chkTrimKra->setChecked(cfg.trimKra(true));
+    m_chkTrimFramesImport->setChecked(cfg.trimFramesImport(true));
     chkZip64->setChecked(cfg.useZip64(true));
     m_chkHiDPI->setChecked(false);
     m_chkHiDPI->setChecked(true);
@@ -411,6 +488,7 @@ void GeneralTab::setDefault()
     chkEnableSmoothZooming->setChecked(cfg.smoothZooming(true));
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity(true));
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
+    intZoomMarginSize->setValue(cfg.zoomMarginSize(0));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
     chkEnableTouchRotation->setChecked(!cfg.disableTouchRotation(true));
@@ -430,6 +508,13 @@ void GeneralTab::setDefault()
     chkForcedFontDPI->setChecked(false);
     intForcedFontDPI->setValue(qt_defaultDpi());
     intForcedFontDPI->setEnabled(false);
+
+    QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
+    Q_ASSERT(button);
+
+    if (button) {
+        button->setChecked(true);
+    }
 }
 
 CursorStyle GeneralTab::cursorStyle()
@@ -493,6 +578,11 @@ bool GeneralTab::trimKra()
     return m_chkTrimKra->isChecked();
 }
 
+bool GeneralTab::trimFramesImport()
+{
+    return m_chkTrimFramesImport->isChecked();
+}
+
 bool GeneralTab::useZip64()
 {
     return chkZip64->isChecked();
@@ -526,6 +616,11 @@ int GeneralTab::kineticScrollingSensitivity()
 bool GeneralTab::kineticScrollingHiddenScrollbars()
 {
     return m_chkKineticScrollingHideScrollbars->isChecked();
+}
+
+int GeneralTab::zoomMarginSize()
+{
+    return intZoomMarginSize->value();
 }
 
 bool GeneralTab::switchSelectionCtrlAlt()
@@ -664,11 +759,11 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbWorkingColorSpace->setCurrent(cfg.workingColorSpace());
     m_page->cmbWorkingColorSpace->setEnabled(cfg.useDefaultColorSpace());
 
-    m_page->bnAddColorProfile->setIcon(KisIconUtils::loadIcon("document-open"));
-    m_page->bnAddColorProfile->setToolTip( i18n("Open Color Profile") );
+    m_page->bnAddColorProfile->setIcon(koIcon("document-import-16"));
     connect(m_page->bnAddColorProfile, SIGNAL(clicked()), SLOT(installProfile()));
 
     QFormLayout *monitorProfileGrid = new QFormLayout(m_page->monitorprofileholder);
+    monitorProfileGrid->setContentsMargins(0, 0, 0, 0);
     for(int i = 0; i < QGuiApplication::screens().count(); ++i) {
         QScreen* screen = QGuiApplication::screens()[i];
         QLabel *lbl = new QLabel(i18nc("The number of the screen (ordinal) and shortened 'name' of the screen (model + resolution)", "Screen %1 (%2):", i + 1, shortNameOfDisplay(screen)));
@@ -719,9 +814,9 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->cmbProofingIntent->setCurrentIndex((int)proofingConfig->intent);
     m_page->ckbProofBlackPoint->setChecked(proofingConfig->conversionFlags.testFlag(KoColorConversionTransformation::BlackpointCompensation));
 
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, PASTE_ASSUME_WEB);
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, PASTE_ASSUME_MONITOR);
-    m_pasteBehaviourGroup.addButton(m_page->radioPasteAsk, PASTE_ASK);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteWeb, KisClipboard::PASTE_ASSUME_WEB);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteMonitor, KisClipboard::PASTE_ASSUME_MONITOR);
+    m_pasteBehaviourGroup.addButton(m_page->radioPasteAsk, KisClipboard::PASTE_ASK);
 
     QAbstractButton *button = m_pasteBehaviourGroup.button(cfg.pasteBehaviour());
     Q_ASSERT(button);
@@ -1026,10 +1121,12 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     intPoolLimit->setMinimumWidth(80);
     intUndoLimit->setMinimumWidth(80);
 
-    label_5->setVisible(false);
-    sliderPoolLimit->setVisible(false);
-    intPoolLimit->setVisible(false);
-
+    {
+        formLayout->takeRow(2);
+        label_5->setVisible(false);
+        intPoolLimit->setVisible(false);
+        sliderPoolLimit->setVisible(false);
+    }
 
     SliderAndSpinBoxSync *sync1 =
         new SliderAndSpinBoxSync(sliderMemoryLimit,
@@ -1075,8 +1172,9 @@ PerformanceTab::PerformanceTab(QWidget *parent, const char *name)
     swapSizeConnector->connectBackwardInt(intSwapSize, SIGNAL(valueChanged(int)),
                                           sliderSwapSize, SLOT(setValue(int)));
 
-    lblSwapFileLocation->setText(cfg.swapDir());
-    connect(bnSwapFile, SIGNAL(clicked()), SLOT(selectSwapDir()));
+    swapFileLocation->setMode(KoFileDialog::OpenDirectory);
+    swapFileLocation->setConfigurationName("swapfile_location");
+    swapFileLocation->setFileName(cfg.swapDir());
 
     sliderThreadsLimit->setRange(1, QThread::idealThreadCount());
     sliderFrameClonesLimit->setRange(1, QThread::idealThreadCount());
@@ -1131,7 +1229,7 @@ void PerformanceTab::load(bool requestDefault)
     chkProgressReporting->setChecked(cfg.enableProgressReporting(requestDefault));
 
     sliderSwapSize->setValue(cfg.maxSwapSize(requestDefault) / 1024);
-    lblSwapFileLocation->setText(cfg.swapDir(requestDefault));
+    swapFileLocation->setFileName(cfg.swapDir(requestDefault));
 
     m_lastUsedThreadsLimit = cfg.maxNumberOfThreads(requestDefault);
     m_lastUsedClonesLimit = cfg.frameRenderingClones(requestDefault);
@@ -1197,7 +1295,7 @@ void PerformanceTab::save()
 
     cfg.setMaxSwapSize(sliderSwapSize->value() * 1024);
 
-    cfg.setSwapDir(lblSwapFileLocation->text());
+    cfg.setSwapDir(swapFileLocation->fileName());
 
     cfg.setMaxNumberOfThreads(sliderThreadsLimit->value());
     cfg.setFrameRenderingClones(sliderFrameClonesLimit->value());
@@ -1239,17 +1337,6 @@ void PerformanceTab::save()
         group.writeEntry("forceLodMode", chkFiltersForceLodMode->isChecked());
     }
 
-}
-
-void PerformanceTab::selectSwapDir()
-{
-    KisImageConfig cfg(true);
-    QString swapDir = cfg.swapDir();
-    swapDir = QFileDialog::getExistingDirectory(0, i18nc("@title:window", "Select a swap directory"), swapDir);
-    if (swapDir.isEmpty()) {
-        return;
-    }
-    lblSwapFileLocation->setText(swapDir);
 }
 
 void PerformanceTab::slotThreadsLimitChanged(int value)
@@ -1404,7 +1491,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     lblCurrentDisplayFormat->setText("");
     lblCurrentRootSurfaceFormat->setText("");
-    lblHDRWarning->setText("");
+    grpHDRWarning->setVisible(false);
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::sRGBColorSpace, 8));
 #ifdef HAVE_HDR
     cmbPreferedRootSurfaceFormat->addItem(colorSpaceString(KisSurfaceColorSpace::bt2020PQColorSpace, 10));
@@ -1466,8 +1553,7 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
     }
 
 #ifndef HAVE_HDR
-    grpHDRSettings->setVisible(false);
-    tabWidget->removeTab(tabWidget->indexOf(tabHDR));
+    tabHDR->setEnabled(false);
 #endif
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
@@ -1608,9 +1694,13 @@ void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
             if (info.isValid()) {
                 if (cmbPreferedRootSurfaceFormat->currentIndex() != formatToIndex(KisConfig::BT709_G22) &&
                     info.colorSpace == KisSurfaceColorSpace::sRGBColorSpace) {
+                    grpHDRWarning->setVisible(true);
+                    lblHDRWarningIcon->setPixmap(lblHDRWarningIcon->style()
+                                                     ->standardIcon(QStyle::SP_MessageBoxWarning)
+                                                     .pixmap(QSize(32, 32)));
                     lblHDRWarning->setText(i18n("WARNING: current display doesn't support HDR rendering"));
                 } else {
-                    lblHDRWarning->setText("");
+                    grpHDRWarning->setVisible(false);
                 }
             }
         }
@@ -1832,6 +1922,18 @@ KisDlgPreferences::KisDlgPreferences(QWidget* parent, const char* name)
             break;
         }
     }
+
+    {
+        // HACK ALERT! Remove title widget background, thus making
+        // it consistent across all systems
+        const auto *titleWidget = findChild<KTitleWidget*>();
+        if (titleWidget) {
+            QLayoutItem *titleFrame = titleWidget->layout()->itemAt(0); // vboxLayout -> titleFrame
+            if (titleFrame) {
+                titleFrame->widget()->setBackgroundRole(QPalette::Window);
+            }
+        }
+    }
 }
 
 KisDlgPreferences::~KisDlgPreferences()
@@ -1938,7 +2040,9 @@ bool KisDlgPreferences::editPreferences()
         cfg.setShowCanvasMessages(m_general->showCanvasMessages());
         cfg.setCompressKra(m_general->compressKra());
         cfg.setTrimKra(m_general->trimKra());
+        cfg.setTrimFramesImport(m_general->trimFramesImport());
         cfg.setUseZip64(m_general->useZip64());
+        cfg.setPasteFormat(m_general->m_pasteFormatGroup.checkedId());
 
         const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
         QSettings kritarc(configPath + QStringLiteral("/kritadisplayrc"), QSettings::IniFormat);
@@ -1957,6 +2061,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setKineticScrollingGesture(m_general->kineticScrollingGesture());
         cfg.setKineticScrollingSensitivity(m_general->kineticScrollingSensitivity());
         cfg.setKineticScrollingHideScrollbars(m_general->kineticScrollingHiddenScrollbars());
+
+        cfg.setZoomMarginSize(m_general->zoomMarginSize());
 
         cfg.setSwitchSelectionCtrlAlt(m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!m_general->chkEnableTouch->isChecked());

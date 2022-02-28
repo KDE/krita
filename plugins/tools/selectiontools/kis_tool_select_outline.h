@@ -13,50 +13,34 @@
 #define KIS_TOOL_SELECT_OUTLINE_H_
 
 #include <QPoint>
-#include "KisSelectionToolFactoryBase.h"
+#include <KisSelectionToolFactoryBase.h>
+#include <KisToolOutlineBase.h>
 #include <kis_tool_select_base.h>
 #include <kis_icon.h>
 
-class QPainterPath;
+class __KisToolSelectOutlineLocal : public KisToolOutlineBase
+{
+    Q_OBJECT
 
-class KisToolSelectOutline : public KisToolSelect
+public:
+    __KisToolSelectOutlineLocal(KoCanvasBase * canvas);
+};
+
+class KisToolSelectOutline : public KisToolSelectBase<__KisToolSelectOutlineLocal>
 {
     Q_OBJECT
 
 public:
     KisToolSelectOutline(KoCanvasBase *canvas);
-    ~KisToolSelectOutline() override;
-    void beginPrimaryAction(KoPointerEvent *event) override;
-    void continuePrimaryAction(KoPointerEvent *event) override;
-    void endPrimaryAction(KoPointerEvent *event) override;
-    void paint(QPainter& gc, const KoViewConverter &converter) override;
 
     bool primaryActionSupportsHiResEvents() const override;
     bool alternateActionSupportsHiResEvents(KisTool::AlternateAction action) const override;
-
-    void keyPressEvent(QKeyEvent *event) override;
-    void keyReleaseEvent(QKeyEvent *event) override;
-
-    void mouseMoveEvent(KoPointerEvent *event) override;
-
     void resetCursorStyle() override;
 
-public Q_SLOTS:
-    void deactivate() override;
-
-protected:
-    using KisToolSelectBase::m_widgetHelper;
-
 private:
-    void finishSelectionAction();
-    void updateFeedback();
-    void updateContinuedMode();
-    void updateCanvas();
-
-    QPainterPath m_paintPath;
-    vQPointF m_points;
-    bool m_continuedMode;
-    QPointF m_lastCursorPos;
+    void finishOutline(const QVector<QPointF>& points) override;
+    void beginShape() override;
+    void endShape() override;
 };
 
 class KisToolSelectOutlineFactory : public KisSelectionToolFactoryBase

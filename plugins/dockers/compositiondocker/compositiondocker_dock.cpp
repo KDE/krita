@@ -334,8 +334,6 @@ void CompositionDockerDock::exportAnimationClicked()
         KisLayerCompositionSP currentComposition = toQShared(new KisLayerComposition(image, "temp"));
         currentComposition->store();
 
-        const QString frameMimeType = settings->getPropertyLazy("frame_mimetype", frameMimeType);
-        const QString imageExtension = KisMimeDatabase::suffixesForMimeType(frameMimeType).first();
         const QString videoExtension = KisMimeDatabase::suffixesForMimeType(exportOptions.videoMimeType).first();
 
         Q_FOREACH (KisLayerCompositionSP composition, image->compositions()) {
@@ -352,9 +350,9 @@ void CompositionDockerDock::exportAnimationClicked()
             exportOptions.lastFrame = range.end();
             exportOptions.width = image->width();
             exportOptions.height = image->height();
-            exportOptions.videoFileName = QString("%1/%2/video.%3").arg(path).arg(composition->name()).arg(videoExtension);
-            exportOptions.directory = QString("%1/%2").arg(path).arg(composition->name());
             exportOptions.basename = QString("frame");
+            exportOptions.videoFileName = QString("%1/%2/video.%3").arg(path, composition->name(), videoExtension);
+            exportOptions.directory = QString("%1/%2").arg(path, composition->name());
             exportOptions.wantsOnlyUniqueFrameSequence = true;
 
             KisAnimationRender::render(m_canvas->viewManager()->document(), m_canvas->viewManager(), exportOptions);

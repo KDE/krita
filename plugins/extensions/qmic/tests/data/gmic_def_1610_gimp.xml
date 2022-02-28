@@ -1969,8 +1969,8 @@
 	<gmicCommand><![CDATA[-_none_]]></gmicCommand>
 </filter>
 
-<filter name="Jpr colourillusion">
-	<gmicCommand><![CDATA[-jpr_colourillusion 2,25]]></gmicCommand>
+<filter name="Jpr colorillusion">
+	<gmicCommand><![CDATA[-jpr_colorillusion 2,25]]></gmicCommand>
 </filter>
 
 <filter name="Jpr coltexindex">

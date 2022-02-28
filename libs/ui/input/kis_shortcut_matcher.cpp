@@ -16,6 +16,7 @@
 #include "kis_touch_shortcut.h"
 #include "kis_native_gesture_shortcut.h"
 #include "kis_config.h"
+#include <KoPointerEvent.h>
 
 //#define DEBUG_MATCHER
 
@@ -71,6 +72,7 @@ public:
 
     KisTouchShortcut *touchShortcut;
     KisNativeGestureShortcut *nativeGestureShortcut;
+    QList<QTouchEvent::TouchPoint> lastTouchPoints;
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
     bool suppressAllActions;
@@ -228,8 +230,10 @@ bool KisShortcutMatcher::keyReleased(Qt::Key key)
 {
     Private::RecursionNotifier notifier(this);
 
-    if (!m_d->keys.contains(key)) reset("Peculiar, key released but can't remember it was pressed");
+    if (!m_d->keys.contains(key)) { DEBUG_ACTION("Peculiar, key released but can't remember it was pressed"); }
     else m_d->keys.remove(key);
+
+    DEBUG_KEY("Released");
 
     if (notifier.isInRecursion()) {
         forceDeactivateAllActions();
@@ -362,6 +366,7 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
 
     Private::RecursionNotifier notifier(this);
 
+    m_d->lastTouchPoints = event->touchPoints();
     return !notifier.isInRecursion();
 }
 
@@ -396,11 +401,27 @@ bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
     return false;
 }
 
-void KisShortcutMatcher::touchCancelEvent(const QPointF &localPos)
+void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &localPos)
 {
     m_d->usingTouch = false;
+
+    // TODO(sh_zam): maybe try to combine KisStrokeShortcut with KisTouchShortcut?
+
+    // this should end the stroke based actions
     if (m_d->runningShortcut) {
         forceEndRunningShortcut(localPos);
+    }
+
+    // end the stroke types
+    if (m_d->touchShortcut) {
+        KisTouchShortcut *touchShortcut = m_d->touchShortcut;
+        m_d->touchShortcut = 0;
+        QScopedPointer<QEvent> dstEvent;
+        KoPointerEvent::copyQtPointerEvent(event, dstEvent);
+        // HACK: Because TouchEvents in KoPointerEvent need to contain at least one touchpoint
+        dynamic_cast<QTouchEvent *>(dstEvent.data())->setTouchPoints(m_d->lastTouchPoints);
+        touchShortcut->action()->end(dstEvent.data());
+        touchShortcut->action()->deactivate(touchShortcut->shortcutIndex());
     }
 }
 
@@ -461,9 +482,6 @@ void KisShortcutMatcher::reinitialize()
 
 void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
 {
-    Private::RecursionNotifier notifier(this);
-
-
     Q_FOREACH (Qt::Key key, m_d->keys) {
         if (!keys.contains(key)) {
             keyReleased(key);
@@ -475,6 +493,8 @@ void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &k
             keyPressed(key);
         }
     }
+
+    Private::RecursionNotifier notifier(this);
 
     if (notifier.isInRecursion()) {
         forceDeactivateAllActions();
@@ -510,11 +530,27 @@ void KisShortcutMatcher::lostFocusEvent(const QPointF &localPos)
 {
     Private::RecursionNotifier notifier(this);
 
+    DEBUG_ACTION("lostFocusEvent");
+
     if (m_d->runningShortcut) {
         forceEndRunningShortcut(localPos);
     }
 
     forceDeactivateAllActions();
+}
+
+void KisShortcutMatcher::toolHasBeenActivated()
+{
+    Private::RecursionNotifier notifier(this);
+
+    DEBUG_ACTION("toolHasBeenActivated");
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
 }
 
 void KisShortcutMatcher::reset()

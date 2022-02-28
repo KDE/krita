@@ -82,11 +82,15 @@ void KisControlFrame::setup(QWidget *parent)
     action->setText(i18n("&Patterns"));
     m_viewManager->actionCollection()->addAction(ResourceType::Patterns, action);
     action->setDefaultWidget(m_patternWidget);
+    connect(action, SIGNAL(triggered()), m_patternWidget, SLOT(showPopupWidget()));
+    m_patternChooserPopup->addAction(action);
 
     action = new QWidgetAction(this);
     action->setText(i18n("&Gradients"));
     m_viewManager->actionCollection()->addAction(ResourceType::Gradients, action);
     action->setDefaultWidget(m_gradientWidget);
+    connect(action, SIGNAL(triggered()), m_gradientWidget, SLOT(showPopupWidget()));
+    m_gradientChooserPopup->addAction(action);
 
 
     // XXX: KOMVC we don't have a canvas here yet, needs a setImageView
@@ -94,7 +98,7 @@ void KisControlFrame::setup(QWidget *parent)
         KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
     m_dual = new KoDualColorButton(m_viewManager->canvasResourceProvider()->fgColor(),
                                                      m_viewManager->canvasResourceProvider()->bgColor(), displayRenderer,
-                                                     m_viewManager->mainWindow(), m_viewManager->mainWindow());
+                                                     m_viewManager->mainWindowAsQWidget(), m_viewManager->mainWindowAsQWidget());
     m_dual->setPopDialog(true);
     action = new QWidgetAction(this);
     action->setText(i18n("&Choose foreground and background colors"));
@@ -237,7 +241,7 @@ void KisControlFrame::createGradientsChooser(KisViewManager * view)
 
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP)),
             view->canvasResourceProvider(), SLOT(slotGradientActivated(KoResourceSP)));
-    connect (view->mainWindow(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
+    connect (view->mainWindowAsQWidget(), SIGNAL(themeChanged()), m_gradientChooser, SLOT(slotUpdateIcons()));
     connect(view->canvasResourceProvider(), SIGNAL(sigGradientChanged(KoAbstractGradientSP)),
             this, SLOT(slotSetGradient(KoAbstractGradientSP)));
     connect(m_gradientChooser, SIGNAL(gradientEdited(KoAbstractGradientSP)),

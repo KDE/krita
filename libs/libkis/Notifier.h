@@ -12,8 +12,8 @@
 #include <kis_types.h>
 #include "libkis.h"
 #include <KisView.h>
-#include <KisMainWindow.h>
 
+class KisMainWindow;
 class KisDocument;
 
 /**

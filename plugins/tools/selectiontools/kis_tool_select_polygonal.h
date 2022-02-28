@@ -23,13 +23,6 @@ class __KisToolSelectPolygonalLocal : public KisToolPolylineBase
     Q_OBJECT
 public:
     __KisToolSelectPolygonalLocal(KoCanvasBase *canvas);
-protected:
-    virtual SelectionMode selectionMode() const = 0;
-    virtual SelectionAction selectionAction() const = 0;
-    virtual bool antiAliasSelection() const = 0;
-private:
-    void finishPolyline(const QVector<QPointF> &points) override;
-private:
 };
 
 class KisToolSelectPolygonal : public KisToolSelectBase<__KisToolSelectPolygonalLocal>
@@ -38,6 +31,10 @@ class KisToolSelectPolygonal : public KisToolSelectBase<__KisToolSelectPolygonal
 public:
     KisToolSelectPolygonal(KoCanvasBase* canvas);
     void resetCursorStyle() override;
+private:
+    void finishPolyline(const QVector<QPointF> &points) override;
+    void beginShape() override;
+    void endShape() override;
 };
 
 

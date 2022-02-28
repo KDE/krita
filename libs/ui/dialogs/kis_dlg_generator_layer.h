@@ -65,6 +65,7 @@ private:
     bool m_freezeName;
     KisStrokeId m_stroke;
     KisThreadSafeSignalCompressor m_compressor;
+    QWeakPointer<bool> m_updateCookie;
 };
 
 #endif

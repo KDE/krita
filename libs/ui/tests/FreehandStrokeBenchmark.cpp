@@ -123,7 +123,7 @@ void FreehandStrokeBenchmark::initTestCase()
         KIS_ASSERT(QFileInfo(fullFileName).exists());
 
         KisResourceModel model(ResourceType::Brushes);
-        model.importResourceFile(fullFileName, false);
+        model.importResourceFile(fullFileName, true);
     }
 
     {
@@ -132,7 +132,15 @@ void FreehandStrokeBenchmark::initTestCase()
         KIS_ASSERT(QFileInfo(fullFileName).exists());
 
         KisResourceModel model(ResourceType::Brushes);
-        model.importResourceFile(fullFileName, false);
+        model.importResourceFile(fullFileName, true);
+    }
+
+    // warm-up memory pools
+    {
+        FreehandStrokeBenchmarkTester tester("testing_1000px_auto_deafult.kpp");
+        tester.setCpuCoresLimit(QThread::idealThreadCount());
+        tester.benchmark();
+        QTest::qSleep(500);
     }
 }
 
@@ -185,6 +193,15 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_sa()
 {
     benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_new_sa.kpp");
 }
+
+#ifndef LIMIT_LONG_TESTS
+
+void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_sa_800px()
+{
+    benchmarkBrushUnthreaded("testing_800px_colorsmudge_defaut_dulling_new_sa.kpp");
+}
+
+#endif
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_nsa()
 {

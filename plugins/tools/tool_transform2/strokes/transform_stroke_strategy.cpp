@@ -23,6 +23,7 @@
 #include "kis_transform_utils.h"
 #include "kis_abstract_projection_plane.h"
 #include "kis_recalculate_transform_mask_job.h"
+#include "kis_lod_transform.h"
 
 #include "kis_projection_leaf.h"
 #include "kis_modify_transform_mask_command.h"
@@ -296,6 +297,19 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             } else if (KisTransformMask *transformMask =
                        dynamic_cast<KisTransformMask*>(td->node.data())) {
 
+                { // Set Keyframe Data.
+                    ToolTransformArgs unscaled = ToolTransformArgs(td->config);
+
+                    if (td->levelOfDetailOverride() > 0) {
+                        unscaled.scale3dSrcAndDst(KisLodTransform::lodToInvScale(td->levelOfDetailOverride()));
+                    }
+
+                    KUndo2CommandSP cmd( new KisSetTransformMaskKeyframesCommand(transformMask,
+                                                                  KisTransformMaskParamsInterfaceSP(
+                                                                        new KisTransformMaskAdapter(unscaled))) );
+                    runAndSaveCommand(cmd, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                }
+
                 runAndSaveCommand(KUndo2CommandSP(
                                       new KisModifyTransformMaskCommand(transformMask,
                                                                      KisTransformMaskParamsInterfaceSP(
@@ -436,6 +450,16 @@ void TransformStrokeStrategy::initStrokeCallback()
     extraInitJobs << new Data(new KisHoldUIUpdatesCommand(m_updatesFacade, KisCommandUtils::FlipFlopCommand::INITIALIZING), false, KisStrokeJobData::BARRIER);
 
     extraInitJobs << lastCommandUndoJobs;
+
+    KritaUtils::addJobSequential(extraInitJobs, [this]() {
+        // When dealing with animated transform mask layers, create keyframe and save the command for undo.
+        Q_FOREACH (KisNodeSP node, m_processedNodes) {
+            if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
+                QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask, transformMask->transformParams()));
+                runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+            }
+        }
+    });
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         /**

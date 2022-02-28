@@ -76,6 +76,24 @@ void KisCanvasControlsManager::setup(KisActionManager *actionManager)
 
     KisAction *decreaseOpacity = actionManager->createAction("decrease_opacity");
     connect(decreaseOpacity, SIGNAL(triggered()), SLOT(decreaseOpacity()));
+
+    KisAction *increaseFlow = actionManager->createAction("increase_flow");
+    connect(increaseFlow, SIGNAL(triggered()), SLOT(increaseFlow()));
+
+    KisAction *decreaseFlow = actionManager->createAction("decrease_flow");
+    connect(decreaseFlow, SIGNAL(triggered()), SLOT(decreaseFlow()));
+
+    KisAction *increaseFade = actionManager->createAction("increase_fade");
+    connect(increaseFade, SIGNAL(triggered()), SLOT(increaseFade()));
+
+    KisAction *decreaseFade = actionManager->createAction("decrease_fade");
+    connect(decreaseFade, SIGNAL(triggered()), SLOT(decreaseFade()));
+
+    KisAction *increaseScatter = actionManager->createAction("increase_scatter");
+    connect(increaseScatter, SIGNAL(triggered()), SLOT(increaseScatter()));
+
+    KisAction *decreaseScatter = actionManager->createAction("decrease_scatter");
+    connect(decreaseScatter, SIGNAL(triggered()), SLOT(decreaseScatter()));
 }
 
 void KisCanvasControlsManager::setView(QPointer<KisView>imageView)
@@ -266,6 +284,9 @@ void KisCanvasControlsManager::stepAlpha(float step)
     alpha = qBound<qreal>(0.0, alpha, 1.0);
     m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Opacity, alpha);
 
+    m_view->showFloatingMessage(i18n("Brush Opacity: %1%", alpha * 100), QIcon(), 1000, KisFloatingMessage::High,
+                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+
     // FIXME: DK: should we uncomment it back?
     //KisLockedPropertiesProxySP p = KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(m_view->resourceProvider()->currentPreset()->settings());
     //p->setProperty("OpacityValue", alpha);
@@ -279,4 +300,92 @@ void KisCanvasControlsManager::increaseOpacity()
 void KisCanvasControlsManager::decreaseOpacity()
 {
     stepAlpha(-0.1f);
+}
+
+void KisCanvasControlsManager::stepFlow(float step)
+{
+    if (!m_view) return;
+    if (!m_view->canvasBase()) return;
+    if (!m_view->canvasResourceProvider()->resourceManager()) return;
+
+    qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
+    flow += step;
+    flow = qBound<qreal>(0.0, flow, 1.0);
+    m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Flow, flow);
+
+    // verify if the brush does actually support this change
+    flow = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Flow).toReal();
+
+    m_view->showFloatingMessage(i18nc("Brush Option Flow", "Flow: %1%", flow * 100), QIcon(), 1000, KisFloatingMessage::High,
+                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+}
+
+void KisCanvasControlsManager::increaseFlow()
+{
+    qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
+
+    stepFlow(0.1f);
+}
+
+void KisCanvasControlsManager::decreaseFlow()
+{
+    qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
+
+    stepFlow(-0.1f);
+}
+
+void KisCanvasControlsManager::stepFade(float step)
+{
+    if (!m_view) return;
+    if (!m_view->canvasBase()) return;
+    if (!m_view->canvasResourceProvider()->resourceManager()) return;
+
+    qreal fade = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Fade).toDouble();
+    fade += step;
+    fade = qBound<qreal>(0.0, fade, 1.0);
+    m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Fade, fade);
+
+    // verify if the brush does actually support this change
+    fade = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Fade).toReal();
+
+    m_view->showFloatingMessage(i18nc("Edge softness, Brush Option Fade", "Fade: %1", fade),
+                                QIcon(), 1000, KisFloatingMessage::High, Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+}
+
+void KisCanvasControlsManager::increaseFade()
+{
+    stepFade(0.1f);
+}
+
+void KisCanvasControlsManager::decreaseFade()
+{
+    stepFade(-0.1f);
+}
+
+void KisCanvasControlsManager::stepScatter(float step)
+{
+    if (!m_view) return;
+    if (!m_view->canvasBase()) return;
+    if (!m_view->canvasResourceProvider()->resourceManager()) return;
+
+    qreal scatter = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Scatter).toDouble();
+    scatter += step;
+    scatter = qBound<qreal>(0.0, scatter, 5.0);
+    m_view->canvasBase()->resourceManager ()->setResource(KoCanvasResource::Scatter, scatter);
+
+    // verify if the brush does actually support this change
+    scatter = m_view->canvasBase()->resourceManager ()->resource(KoCanvasResource::Scatter).toReal();
+
+    m_view->showFloatingMessage(i18nc("Brush Option Scatter", "Scatter: %1%", scatter * 100), QIcon(), 1000, KisFloatingMessage::High,
+                                Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+}
+
+void KisCanvasControlsManager::increaseScatter()
+{
+    stepScatter(0.1f);
+}
+
+void KisCanvasControlsManager::decreaseScatter()
+{
+    stepScatter(-0.1f);
 }

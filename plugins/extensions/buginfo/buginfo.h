@@ -24,6 +24,13 @@ public Q_SLOTS:
     void slotKritaLog();
     void slotSysInfo();
 
+#ifdef Q_OS_ANDROID
+    void slotDumpLogcat();
+#endif
+
+#if defined(Q_OS_WIN) || defined(Q_OS_ANDROID)
+    void slotCrashLog();
+#endif
 };
 
 #endif // BUGINFO_H

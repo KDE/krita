@@ -130,7 +130,12 @@ public:
     ValueType valueForPoint(const QPoint &p, Qt::KeyboardModifiers modifiers) const
     {
         const QRectF rect(m_lineEdit->rect());
-        const QPointF center(static_cast<double>(m_lastMousePressPosition.x()), rect.height() / 2.0);
+        const QPointF center(
+            static_cast<double>(
+                m_lastMousePressPosition.x() + (m_useRelativeDragging ? m_relativeDraggingOffset : 0)
+             ),
+            rect.height() / 2.0
+        );
         const bool useSoftRange = isSoftRangeValid() && (m_softRangeViewMode == SoftRangeViewMode_AlwaysShowSoftRange || m_isSoftRangeActive);
         const double minimum = static_cast<double>(useSoftRange ? m_softMinimum : m_q->minimum());
         const double maximum = static_cast<double>(useSoftRange ? m_softMaximum : m_q->maximum());
@@ -178,6 +183,29 @@ public:
         } else {
             return static_cast<ValueType>(std::round(value));
         }
+    }
+
+    QPoint pointForValue(ValueType value) const
+    {
+        ValueType min, max;
+        if (isSoftRangeValid()) {
+            if (m_softRangeViewMode == SoftRangeViewMode_ShowBothRanges) {
+                if (m_isSoftRangeActive) {
+                    min = softMinimum();
+                    max = softMaximum();
+                } else {
+                    min = m_q->minimum();
+                    max = m_q->maximum();
+                }
+            } else {
+                min = softMinimum();
+                max = softMaximum();
+            }
+        } else {
+            min = m_q->minimum();
+            max = m_q->maximum();
+        }
+        return QPoint(static_cast<int>(qRound(computeSliderWidth(min, max, value))), 0);
     }
 
     // Custom setValue that allows disabling signal emission
@@ -344,9 +372,11 @@ public:
         m_widgetRangeToggle->setToolTip(
             i18nc(
                 "@info:tooltip toggle between soft and hard range in the slider spin box",
-                QString("Toggle between full range and subrange.\nFull range: [%1, %2]\nSubrange: [%3, %4]")
-                .arg(QString::number(m_q->minimum())).arg(QString::number(m_q->maximum()))
-                .arg(QString::number(m_softMinimum)).arg(QString::number(m_softMaximum)).toUtf8()
+                "Toggle between full range and subrange.\nFull range: [%1, %2]\nSubrange: [%3, %4]",
+                QString::number(m_q->minimum()),
+                QString::number(m_q->maximum()),
+                QString::number(m_softMinimum),
+                QString::number(m_softMaximum)
             )
         );
     }
@@ -699,6 +729,10 @@ public:
             // edition mode if it is completed
             if (e->button() == Qt::LeftButton) {
                 m_lastMousePressPosition = e->pos();
+                const QPoint currentValuePosition = pointForValue(m_q->value());
+                m_relativeDraggingOffset = currentValuePosition.x() - e->x();
+                m_useRelativeDragging = (e->modifiers() & Qt::ShiftModifier)
+                                        || qAbs(m_relativeDraggingOffset) <= relativeDraggingMargin;
                 m_timerStartEditing.start(qApp->styleHints()->mousePressAndHoldInterval());
             }
             return true;
@@ -725,8 +759,18 @@ public:
             // dragging then we set the value here and emit a signal
             } else if (e->button() == Qt::LeftButton) {
                 m_timerStartEditing.stop();
+
+                if (m_blockUpdateSignalOnDrag) {
+                    const QPoint p(m_useRelativeDragging ? e->pos().x() + m_relativeDraggingOffset : e->pos().x(),
+                                   e->pos().y());
+                    setValue(valueForPoint(p, e->modifiers()), false, true);
+                } else {
+                    if (!m_isDragging) {
+                        setValue(valueForPoint(e->pos(), e->modifiers()), false, true);
+                    }
+                }
+
                 m_isDragging = false;
-                setValue(valueForPoint(e->pos(), e->modifiers()), false, true);
             }
             return true;
         }
@@ -759,8 +803,9 @@ public:
                 }
                 // At this point we are dragging so record the position and set
                 // the value
-                m_lastMousePosition = e->pos();
-                setValue(valueForPoint(e->pos(), e->modifiers()), m_blockUpdateSignalOnDrag);
+                const QPoint p(m_useRelativeDragging ? e->pos().x() + m_relativeDraggingOffset : e->pos().x(),
+                               e->pos().y());
+                setValue(valueForPoint(p, e->modifiers()), m_blockUpdateSignalOnDrag);
                 return true;
             }
         }
@@ -881,6 +926,9 @@ private:
     // Margin around the spinbox for which the dragging gives same results,
     // regardless of the vertical distance
     static constexpr double constantDraggingMargin{32.0};
+    // Margin around the current value that marks if the dragging should be
+    // relative to the current value (inside the margin) or absolute (outside)
+    static constexpr int relativeDraggingMargin{15};
     // Height of the collapsed slider bar
     static constexpr double heightOfCollapsedSlider{3.0};
     // Height of the space between the soft and hard range sliders
@@ -901,8 +949,9 @@ private:
     ValueType m_fastSliderStep{static_cast<ValueType>(5)};
     mutable ValueType m_valueBeforeEditing;
     bool m_isDragging{false};
+    bool m_useRelativeDragging;
+    int m_relativeDraggingOffset;
     QPoint m_lastMousePressPosition;
-    QPoint m_lastMousePosition;
     int m_rightClickCounter{0};
     bool m_focusLostDueToMenu{false};
     bool m_isSoftRangeActive{true};

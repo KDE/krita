@@ -1,0 +1,32 @@
+From 689127dc81c6298f861335d5b8e237df7cec4822 Mon Sep 17 00:00:00 2001
+From: Halla Rempt <halla@valdyas.org>
+Date: Fri, 18 Feb 2022 12:58:16 +0100
+Subject: [PATCH] Return 0 for Window if there is no widget
+
+This should be safe: I've checked all calls to window() in the
+ui automation module, and they all check whether 0 is returned
+before dereferencing the pointer.
+
+CCBUG:449122
+---
+ src/widgets/accessible/qaccessiblewidget.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/widgets/accessible/qaccessiblewidget.cpp b/src/widgets/accessible/qaccessiblewidget.cpp
+index c96d213e7b..900a62743b 100644
+--- a/src/widgets/accessible/qaccessiblewidget.cpp
++++ b/src/widgets/accessible/qaccessiblewidget.cpp
+@@ -225,7 +225,9 @@ bool QAccessibleWidget::isValid() const
+ QWindow *QAccessibleWidget::window() const
+ {
+     const QWidget *w = widget();
+-    Q_ASSERT(w);
++
++    if (!w) return 0;
++
+     QWindow *result = w->windowHandle();
+     if (!result) {
+         if (const QWidget *nativeParent = w->nativeParentWidget())
+-- 
+2.25.1
+

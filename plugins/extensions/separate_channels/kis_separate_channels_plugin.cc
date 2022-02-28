@@ -56,7 +56,7 @@ void KisSeparateChannelsPlugin::slotSeparate()
     if (!dev) return;
 
     DlgSeparate * dlgSeparate = new DlgSeparate(dev->colorSpace()->name(),
-                                                image->colorSpace()->name(), viewManager()->mainWindow(), "Separate");
+                                                image->colorSpace()->name(), viewManager()->mainWindowAsQWidget(), "Separate");
     Q_CHECK_PTR(dlgSeparate);
 
     dlgSeparate->setCaption(i18n("Separate Image"));

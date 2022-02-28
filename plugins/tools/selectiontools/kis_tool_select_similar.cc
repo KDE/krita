@@ -97,6 +97,10 @@ void KisToolSelectSimilar::activate(const QSet<KoShape*> &shapes)
 void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::beginPrimaryAction(event);
+    if (isMovingSelection()) {
+        return;
+    }
+
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
@@ -108,10 +112,6 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
-    if (KisToolSelect::selectionDidMove()) {
-        return;
-    }
-
     QPointF pos = convertToPixelCoord(event);
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -119,6 +119,9 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         QApplication::restoreOverrideCursor();
         return;
     };
+
+    
+    beginSelectInteraction();
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
@@ -312,6 +315,16 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 
 }
 
+void KisToolSelectSimilar::endPrimaryAction(KoPointerEvent *event)
+{
+    if (isMovingSelection()) {
+        KisToolSelectBase::endPrimaryAction(event);
+        return;
+    }
+
+    endSelectInteraction();
+}
+
 void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
 {
     m_fuzziness = fuzziness;
@@ -356,6 +369,10 @@ void KisToolSelectSimilar::resetCursorStyle()
         useCursor(KisCursor::load("tool_similar_selection_cursor_add.png", 6, 6));
     } else if (selectionAction() == SELECTION_SUBTRACT) {
         useCursor(KisCursor::load("tool_similar_selection_cursor_sub.png", 6, 6));
+    } else if (selectionAction() == SELECTION_INTERSECT) {
+        useCursor(KisCursor::load("tool_similar_selection_cursor_inter.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SYMMETRICDIFFERENCE) {
+        useCursor(KisCursor::load("tool_similar_selection_cursor_symdiff.png", 6, 6));
     } else {
         KisToolSelect::resetCursorStyle();
     }

@@ -1857,6 +1857,12 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
     m_d->isolateGroup = isolateGroup;
     if ((isolateLayer || isolateGroup) == false) return false;
 
+    /**
+     * Isolation of trnsform masks is not possible, so we should
+     * not allow that
+     */
+    if (!node->projection()) return false;
+
     struct StartIsolatedModeStroke : public KisRunnableBasedStrokeStrategy {
         StartIsolatedModeStroke(KisNodeSP node, KisImageSP image, bool isolateLayer, bool isolateGroup)
             : KisRunnableBasedStrokeStrategy(QLatin1String("start-isolated-mode"),

@@ -53,12 +53,12 @@ struct KoColorConversionCache::CachedTransformation {
         delete transfo;
     }
 
-    bool available() {
-        return use == 0;
+    bool isNotInUse() {
+        return !use;
     }
 
     KoColorConversionTransformation* transfo;
-    int use;
+    QAtomicInt use;
 };
 
 typedef QPair<KoColorConversionCacheKey, KoCachedColorConversionTransformation> FastPathCacheItem;
@@ -105,13 +105,11 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
     QList< CachedTransformation* > cachedTransfos = d->cache.values(key);
     if (cachedTransfos.size() != 0) {
         Q_FOREACH (CachedTransformation* ct, cachedTransfos) {
-            if (ct->available()) {
-                ct->transfo->setSrcColorSpace(src);
-                ct->transfo->setDstColorSpace(dst);
+            ct->transfo->setSrcColorSpace(src);
+            ct->transfo->setDstColorSpace(dst);
 
-                cacheItem = new FastPathCacheItem(key, KoCachedColorConversionTransformation(this, ct));
-                break;
-            }
+            cacheItem = new FastPathCacheItem(key, KoCachedColorConversionTransformation(this, ct));
+            break;
         }
     }
     if (!cacheItem) {
@@ -133,7 +131,7 @@ void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator endIt = d->cache.end();
     for (QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator it = d->cache.begin(); it != endIt;) {
         if (it.key().src == cs || it.key().dst == cs) {
-            Q_ASSERT(it.value()->available()); // That's terribely evil, if that assert fails, that means that someone is using a color transformation with a color space which is currently being deleted
+            Q_ASSERT(it.value()->isNotInUse()); // That's terribely evil, if that assert fails, that means that someone is using a color transformation with a color space which is currently being deleted
             delete it.value();
             it = d->cache.erase(it);
         } else {
@@ -152,21 +150,20 @@ struct KoCachedColorConversionTransformation::Private {
 
 KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(KoColorConversionCache* cache, KoColorConversionCache::CachedTransformation* transfo) : d(new Private)
 {
-    Q_ASSERT(transfo->available());
     d->cache = cache;
     d->transfo = transfo;
-    d->transfo->use++;
+    d->transfo->use.ref();
 }
 
 KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation& rhs) : d(new Private(*rhs.d))
 {
-    d->transfo->use++;
+    d->transfo->use.ref();
 }
 
 KoCachedColorConversionTransformation::~KoCachedColorConversionTransformation()
 {
-    d->transfo->use--;
-    Q_ASSERT(d->transfo->use >= 0);
+    Q_ASSERT(d->transfo->use > 0);
+    d->transfo->use.deref();
     delete d;
 }
 

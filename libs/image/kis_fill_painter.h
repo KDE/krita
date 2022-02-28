@@ -203,17 +203,24 @@ public:
     }
 
     /**
-     * Set the softness for floodfill. The range is 0-100: 0 means the fill will
-     * have aliased edges, 100 means it will have soft edges.
+     * Set the opacity spread for floodfill. The range is 0-100: 0% means that
+     * the fully opaque area only encompasses the pixels exactly equal to the
+     * seed point with the other pixels of the selected region being
+     * semi-transparent (depending on how similar they are to the seed pixel)
+     * up to the region boundary (given by the threshold value). 100 means that
+     * the fully opaque area will encompass all the pixels of the selected
+     * region up to the contour. Any value inbetween will make the fully opaque
+     * portion of the region vary in size, with semi-transparent pixels
+     * inbetween it and  the region boundary
      */
-    void setSoftness(int softness)
+    void setOpacitySpread(int opacitySpread)
     {
-        m_softness = softness;
+        m_opacitySpread = opacitySpread;
     }
 
-    /** Returns the fill softness, see setSoftness for details */
-    int softness() const {
-        return m_softness;
+    /** Returns the fill opacity spread, see setOpacitySpread for details */
+    int opacitySpread() const {
+        return m_opacitySpread;
     }
 
     bool useCompositioning() const {
@@ -286,7 +293,7 @@ private:
     int m_feather;
     int m_sizemod;
     int m_threshold;
-    int m_softness;
+    int m_opacitySpread;
     int m_width, m_height;
     QRect m_rect;
     bool m_careForSelection;

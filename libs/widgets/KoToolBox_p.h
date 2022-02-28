@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: 2005-2008 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2009 Peter Simonsson <peter.simonsson@gmail.com>
  * SPDX-FileCopyrightText: 2010 Cyrille Berger <cberger@cberger.net>
+ * SPDX-FileCopyrightText: 2022 Alvin Wong <alvin@alvinhc.com>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -40,6 +41,8 @@ public:
     /// constructor
     explicit KoToolBox();
     ~KoToolBox() override;
+
+    void applyIconSize();
 
 public Q_SLOTS:
     /**
@@ -87,7 +90,11 @@ private Q_SLOTS:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
-    void contextMenuEvent(QContextMenuEvent *event) override;
+
+private:
+    void setupIconSizeMenu(QMenu *menu);
+
+    friend class KoToolBoxDocker;
 
 private:
     class Private;

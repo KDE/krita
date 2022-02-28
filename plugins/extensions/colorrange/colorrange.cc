@@ -65,7 +65,7 @@ ColorRange::~ColorRange()
 
 void ColorRange::slotActivated()
 {
-    DlgColorRange *dlgColorRange = new DlgColorRange(viewManager(), viewManager()->mainWindow());
+    DlgColorRange *dlgColorRange = new DlgColorRange(viewManager(), viewManager()->mainWindowAsQWidget());
     Q_CHECK_PTR(dlgColorRange);
 
     dlgColorRange->exec();

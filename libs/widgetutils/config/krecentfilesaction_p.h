@@ -26,11 +26,12 @@ public:
     KRecentFilesActionPrivate(KRecentFilesAction *parent)
         : q_ptr(parent)
     {
-        m_maxItems = 10;
         m_visibleItemsCount = 10;
         m_noEntriesAction = 0;
         clearSeparator = 0;
         clearAction = 0;
+        m_recentFilesModel = 0;
+        m_fileIconsPopulated = false;
     }
 
     virtual ~KRecentFilesActionPrivate()
@@ -39,17 +40,17 @@ public:
 
     void init();
 
-    void hideExcessRecentItems();
-
     void _k_urlSelected(QAction *);
 
-    int m_maxItems;
+    void updateIcon(const QStandardItem *item);
+
     int m_visibleItemsCount;
-    QMap<QAction *, QString> m_shortNames;
     QMap<QAction *, QUrl> m_urls;
     QAction *m_noEntriesAction;
     QAction *clearSeparator;
     QAction *clearAction;
+    const QStandardItemModel *m_recentFilesModel;
+    bool m_fileIconsPopulated;
 
     KRecentFilesAction *q_ptr;
 };

@@ -77,11 +77,6 @@ KisCircleMaskGenerator::~KisCircleMaskGenerator()
 {
 }
 
-bool KisCircleMaskGenerator::shouldSupersample() const
-{
-    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
-}
-
 bool KisCircleMaskGenerator::shouldVectorize() const
 {
     return !shouldSupersample() && spikes() == 2;

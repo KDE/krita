@@ -661,6 +661,8 @@ if (ANDROID)
     set (Boost_INCLUDE_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/include/boost-1_71)
     set (Boost_LIBRARY_DIR          ${CMAKE_CURRENT_BINARY_DIR}/i/${ANDROID_ABI}/lib)
     set (KF5_LIBRARIES              ${CMAKE_CURRENT_BINARY_DIR}/i/lib)
+
+    find_package(unwindstack REQUIRED)
 endif()
 
 find_package(PNG REQUIRED "1.2.6")
@@ -832,6 +834,9 @@ if (OPENCOLORIO_VERSION VERSION_GREATER_EQUAL "2.0.0")
     set(HAVE_OCIO_V2 TRUE)
 endif()
 configure_file(config-ocio.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-ocio.h)
+if (OpenColorIO_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${OPENCOLORIO_LIBRARIES})
+endif()
 
 set_package_properties(PythonLibrary PROPERTIES
     DESCRIPTION "Python Library"
@@ -1054,7 +1059,7 @@ if(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po AND FETCH_TRANSLATIONS)
         get_filename_component(absolute_podir ${TRANSLATIONS} ABSOLUTE)
         string(MD5 pathmd5 ${absolute_podir})
 
-        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED)
+        find_file (KRITA_PO_SCRIPT copy_po.py PATHS ${CMAKE_CURRENT_SOURCE_DIR}/build-tools REQUIRED CMAKE_FIND_ROOT_PATH_BOTH)
         if (NOT TARGET fetch-${pathmd5})
             file(MAKE_DIRECTORY ${TRANSLATIONS})
 

@@ -65,13 +65,11 @@ void KisWdgTagSelectionControllerOneResource::setResourceIds(QString resourceTyp
     }
 
     if (resourceIds.count() == 0) {
-        QList<KoID> list;
-        m_tagSelectionWidget->setTagList(m_editable, list, list);
+        QList<KoID> emptyList;
+        m_tagSelectionWidget->setTagList(m_editable, emptyList, emptyList);
         m_tagSelectionWidget->setEnabled(false);
     } else {
-        if (m_tagResourceModel) {
-            m_tagResourceModel->setResourcesFilter(resourceIds.toVector());
-        }
+        m_tagResourceModel->setResourcesFilter(m_resourceIds.toVector());
         m_tagSelectionWidget->setEnabled(true);
         updateView();
     }
@@ -82,9 +80,8 @@ void KisWdgTagSelectionControllerOneResource::slotRemoveTag(KoID tag)
     if (m_resourceIds.count() == 0) return;
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
-    Q_FOREACH(int resourceId, m_resourceIds) {
-        m_tagResourceModel->untagResource(tagsp, resourceId);
-    }
+
+    m_tagResourceModel->untagResources(tagsp, m_resourceIds.toVector());
     updateView();
 }
 
@@ -94,9 +91,7 @@ void KisWdgTagSelectionControllerOneResource::slotAddTag(KoID tag)
 
     KisTagSP tagsp = m_tagModel->tagForUrl(tag.id());
 
-    Q_FOREACH(int resourceId, m_resourceIds) {
-        m_tagResourceModel->tagResource(tagsp, resourceId);
-    }
+    m_tagResourceModel->tagResources(tagsp, m_resourceIds.toVector());
     updateView();
 }
 
@@ -127,14 +122,18 @@ void KisWdgTagSelectionControllerOneResource::slotCreateNewTag(QString tag)
     }
 
     KIS_ASSERT_RECOVER_RETURN(tagsp);
-    Q_FOREACH(int resourceId, m_resourceIds) {
-        m_tagResourceModel->tagResource(tagsp, resourceId);
-    }
+    m_tagResourceModel->tagResources(tagsp, m_resourceIds.toVector());
     updateView();
 }
 
 void KisWdgTagSelectionControllerOneResource::updateView()
 {
+    if (m_resourceIds.count() == 0) {
+        QList<KoID> emptyList;
+        m_tagSelectionWidget->setTagList(m_editable, emptyList, emptyList);
+        return;
+    }
+
     QMap<QString, int> tagsCounts;
     for (int i = 0; i < m_tagModel->rowCount(); i++) {
         QModelIndex idx = m_tagModel->index(i, 0);
@@ -148,13 +147,14 @@ void KisWdgTagSelectionControllerOneResource::updateView()
         }
     }
 
-    Q_FOREACH(int resourceId, m_resourceIds) {
-        m_tagResourceModel->setResourcesFilter(QVector<int>() << resourceId);
-        for (int i = 0; i < m_tagResourceModel->rowCount(); i++) {
-            QModelIndex idx = m_tagResourceModel->index(i, 0);
-            KisTagSP tag = m_tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
-            tagsCounts[tag->url()] += 1;
-        }
+    // IMPORTANT: this only works correctly because there was setResourcesFilter() called in setResourceIds() function
+    // if at any moment there is situation this needs to work without setResourceIds(),
+    // call m_tagResourceModel->setResourcesFilter(m_resourceIds.toVector()); before this loop
+    // (it will make it slightly slower since it invalides filter in the proxy model)
+    for (int i = 0; i < m_tagResourceModel->rowCount(); i++) {
+        QModelIndex idx = m_tagResourceModel->index(i, 0);
+        KisTagSP tag = m_tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();
+        tagsCounts[tag->url()] += 1;
     }
     QList<KoID> semiSelected;
     QList<KoID> selected;

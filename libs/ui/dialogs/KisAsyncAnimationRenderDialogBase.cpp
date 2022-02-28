@@ -150,7 +150,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
     m_d->dirtyFramesCount = m_d->stillDirtyFrames.size();
 
     if (!m_d->isBatchMode) {
-        QWidget *parentWidget = viewManager ? viewManager->mainWindow() : 0;
+        QWidget *parentWidget = viewManager ? viewManager->mainWindowAsQWidget() : 0;
         m_d->progressDialog.reset(new QProgressDialog(m_d->actionTitle, i18n("Cancel"), 0, 0, parentWidget));
         m_d->progressDialog->setWindowModality(Qt::ApplicationModal);
         m_d->progressDialog->setMinimum(0);

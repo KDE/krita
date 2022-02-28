@@ -1,6 +1,7 @@
 [Desktop Entry]
 Type=Tag
 Name=Digital
+Name[ar]=رقمية
 Name[bs]=Digitalni
 Name[ca]=Digital
 Name[ca@valencia]=Digital
@@ -16,6 +17,8 @@ Name[fi]=Digitaalinen
 Name[fr]=Numérique
 Name[gl]=Dixital
 Name[hi]=डिजिटल
+Name[hu]=Digitális
+Name[ia]=Digital
 Name[it]=Digitale
 Name[kk]=Цифрлық
 Name[ko]=디지털
@@ -46,6 +49,7 @@ Comment[eu]=Pintzelen aurrezarpenak itxura eta izaera digital batekin.
 Comment[fi]=Digitaalisen oloiset sivellinesiasetukset
 Comment[fr]=Préréglages des brosses avec une apparence et une ergonomie numérique.
 Comment[hi]=एक डिजिटल रंगरूप के साथ ब्रश नमूने
+Comment[hu]=Ecsetsablonok digitális kinézettel.
 Comment[it]=Preimpostazioni del pennello dall'aspetto digitale.
 Comment[ko]=디지털 모습과 느낌의 브러시 사전 설정입니다.
 Comment[nl]=Voorinstellingen van penselen met een digitaal uiterlijk en gedrag.

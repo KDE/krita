@@ -1,21 +1,21 @@
-From 03d5f8ca7c98d70d5df7a79b4cebb611a291837a Mon Sep 17 00:00:00 2001
+From 322a87d0da30456f7141de5d801561e9a30b3770 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Mon, 21 Sep 2020 12:05:19 +0000
-Subject: [PATCH 23/46] Android: Workarounds to explicitly handle content URIs
+Subject: [PATCH] Android: Workarounds to explicitly handle content URIs
 
 On Android we can't reliably get fileName, suffix etc
 from the Uri of the path, so we need to use ContentResolver
 to handle them explicitly for such Uris
 ---
- src/corelib/io/qfileinfo.cpp                  | 25 ++++++++++++++++---
- src/corelib/io/qurl.cpp                       | 22 ++++++++++++++++
- .../android/androidcontentfileengine.cpp      | 10 ++++++++
+ src/corelib/io/qfileinfo.cpp                  | 31 +++++++++++++++++--
+ src/corelib/io/qurl.cpp                       | 22 +++++++++++++
+ .../android/androidcontentfileengine.cpp      | 10 ++++++
  .../android/androidcontentfileengine.h        |  1 +
- .../qandroidplatformfiledialoghelper.cpp      |  6 ++---
- 5 files changed, 57 insertions(+), 7 deletions(-)
+ .../qandroidplatformfiledialoghelper.cpp      |  6 ++--
+ 5 files changed, 63 insertions(+), 7 deletions(-)
 
 diff --git a/src/corelib/io/qfileinfo.cpp b/src/corelib/io/qfileinfo.cpp
-index 189b704b51..2c427b5d0d 100644
+index 189b704b51..cda09d7d36 100644
 --- a/src/corelib/io/qfileinfo.cpp
 +++ b/src/corelib/io/qfileinfo.cpp
 @@ -592,6 +592,11 @@ QString QFileInfo::absolutePath() const
@@ -52,7 +52,20 @@ index 189b704b51..2c427b5d0d 100644
      return d->fileEntry.baseName();
  }
  
-@@ -845,6 +856,12 @@ QString QFileInfo::completeSuffix() const
+@@ -826,6 +837,12 @@ QString QFileInfo::completeBaseName() const
+     Q_D(const QFileInfo);
+     if (d->isDefaultConstructed)
+         return QLatin1String("");
++#ifdef Q_OS_ANDROID
++    if (d->fileEntry.filePath().startsWith(QLatin1String("content://")) && d->fileEngine) {
++        QString fname = d->fileEngine->fileName();
++        return QFileInfo(fname).completeBaseName();
++    }
++#endif
+     return d->fileEntry.completeBaseName();
+ }
+ 
+@@ -845,6 +862,12 @@ QString QFileInfo::completeSuffix() const
      Q_D(const QFileInfo);
      if (d->isDefaultConstructed)
          return QLatin1String("");
@@ -65,7 +78,7 @@ index 189b704b51..2c427b5d0d 100644
      return d->fileEntry.completeSuffix();
  }
  
-@@ -870,8 +887,10 @@ QString QFileInfo::suffix() const
+@@ -870,8 +893,10 @@ QString QFileInfo::suffix() const
          return QLatin1String("");
  
  #ifdef Q_OS_ANDROID
@@ -190,5 +203,5 @@ index 6bb3372380..05e4ccbbee 100644
      QJNIObjectPrivate contentResolver = m_activity.callObjectMethod(
              "getContentResolver", "()Landroid/content/ContentResolver;");
 -- 
-2.33.0
+2.34.1
 

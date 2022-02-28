@@ -1,0 +1,154 @@
+From 926888f9ef7a1dc41e64f94aa9bdc3bac5d4e526 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <13498015+amyspark@users.noreply.github.com>
+Date: Wed, 5 Jan 2022 23:25:14 +0000
+Subject: [PATCH] Propagate Android CMake configuration to external projects
+
+Signed-off-by: L. E. Segovia <13498015+amyspark@users.noreply.github.com>
+---
+ share/cmake/modules/FindHalf.cmake     | 8 ++++++++
+ share/cmake/modules/FindImath.cmake    | 8 ++++++++
+ share/cmake/modules/Findexpat.cmake    | 8 ++++++++
+ share/cmake/modules/Findlcms2.cmake    | 8 ++++++++
+ share/cmake/modules/Findpybind11.cmake | 8 ++++++++
+ share/cmake/modules/Findpystring.cmake | 9 +++++++++
+ share/cmake/modules/Findyaml-cpp.cmake | 9 +++++++++
+ 7 files changed, 58 insertions(+)
+
+diff --git a/share/cmake/modules/FindHalf.cmake b/share/cmake/modules/FindHalf.cmake
+index 9b1e2ddd..774f75c4 100644
+--- a/share/cmake/modules/FindHalf.cmake
++++ b/share/cmake/modules/FindHalf.cmake
+@@ -190,6 +190,14 @@ if(NOT Half_FOUND AND NOT OCIO_INSTALL_EXT_PACKAGES STREQUAL NONE)
+                 ${Half_CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+         endif()
+ 
++        if (ANDROID)
++            set(Half_CMAKE_ARGS
++                ${Half_CMAKE_ARGS}
++                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
++                -DANDROID_ABI=${ANDROID_ABI}
++                -DANDROID_STL=${ANDROID_STL})
++        endif()
++
+         # Hack to let imported target be built from ExternalProject_Add
+         file(MAKE_DIRECTORY ${Half_INCLUDE_DIR})
+ 
+diff --git a/share/cmake/modules/FindImath.cmake b/share/cmake/modules/FindImath.cmake
+index f7cb7412..394bdf53 100644
+--- a/share/cmake/modules/FindImath.cmake
++++ b/share/cmake/modules/FindImath.cmake
+@@ -188,6 +188,14 @@ if(NOT Imath_FOUND AND NOT OCIO_INSTALL_EXT_PACKAGES STREQUAL NONE)
+                 ${Imath_CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+         endif()
+ 
++        if (ANDROID)
++            set(Imath_CMAKE_ARGS
++                ${Imath_CMAKE_ARGS}
++                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
++                -DANDROID_ABI=${ANDROID_ABI}
++                -DANDROID_STL=${ANDROID_STL})
++        endif()
++
+         # Hack to let imported target be built from ExternalProject_Add
+         file(MAKE_DIRECTORY ${Imath_INCLUDE_DIR})
+ 
+diff --git a/share/cmake/modules/Findexpat.cmake b/share/cmake/modules/Findexpat.cmake
+index 768d22d3..f8cd55d2 100644
+--- a/share/cmake/modules/Findexpat.cmake
++++ b/share/cmake/modules/Findexpat.cmake
+@@ -231,6 +231,14 @@ if(NOT expat_FOUND AND NOT OCIO_INSTALL_EXT_PACKAGES STREQUAL NONE)
+                 ${EXPAT_CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+         endif()
+ 
++        if (ANDROID)
++            set(EXPAT_CMAKE_ARGS
++                ${EXPAT_CMAKE_ARGS}
++                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
++                -DANDROID_ABI=${ANDROID_ABI}
++                -DANDROID_STL=${ANDROID_STL})
++        endif()
++
+         # Hack to let imported target be built from ExternalProject_Add
+         file(MAKE_DIRECTORY ${expat_INCLUDE_DIR})
+ 
+diff --git a/share/cmake/modules/Findlcms2.cmake b/share/cmake/modules/Findlcms2.cmake
+index ae08c65f..d4364c48 100644
+--- a/share/cmake/modules/Findlcms2.cmake
++++ b/share/cmake/modules/Findlcms2.cmake
+@@ -150,6 +150,14 @@ if(NOT lcms2_FOUND AND NOT OCIO_INSTALL_EXT_PACKAGES STREQUAL NONE)
+                 ${lcms2_CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+         endif()
+ 
++        if (ANDROID)
++            set(lcms2_CMAKE_ARGS
++                ${lcms2_CMAKE_ARGS}
++                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
++                -DANDROID_ABI=${ANDROID_ABI}
++                -DANDROID_STL=${ANDROID_STL})
++        endif()
++
+         # Hack to let imported target be built from ExternalProject_Add
+         file(MAKE_DIRECTORY ${lcms2_INCLUDE_DIR})
+ 
+diff --git a/share/cmake/modules/Findpybind11.cmake b/share/cmake/modules/Findpybind11.cmake
+index ba991bd4..1e56b40a 100644
+--- a/share/cmake/modules/Findpybind11.cmake
++++ b/share/cmake/modules/Findpybind11.cmake
+@@ -171,6 +171,14 @@ if(NOT pybind11_FOUND AND NOT OCIO_INSTALL_EXT_PACKAGES STREQUAL NONE)
+                 ${pybind11_CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+         endif()
+ 
++        if (ANDROID)
++            set(pybind11_CMAKE_ARGS
++                ${pybind11_CMAKE_ARGS}
++                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
++                -DANDROID_ABI=${ANDROID_ABI}
++                -DANDROID_STL=${ANDROID_STL})
++        endif()
++
+         ExternalProject_Add(pybind11_install
+             GIT_REPOSITORY "https://github.com/pybind/pybind11.git"
+             GIT_TAG "v${pybind11_FIND_VERSION}"
+diff --git a/share/cmake/modules/Findpystring.cmake b/share/cmake/modules/Findpystring.cmake
+index 87e93057..6f8530e6 100644
+--- a/share/cmake/modules/Findpystring.cmake
++++ b/share/cmake/modules/Findpystring.cmake
+@@ -109,6 +109,15 @@ if(NOT pystring_FOUND AND NOT OCIO_INSTALL_EXT_PACKAGES STREQUAL NONE)
+                 ${pystring_CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+         endif()
+ 
++
++        if (ANDROID)
++            set(pystring_CMAKE_ARGS
++                ${pystring_CMAKE_ARGS}
++                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
++                -DANDROID_ABI=${ANDROID_ABI}
++                -DANDROID_STL=${ANDROID_STL})
++        endif()
++
+         if(NOT BUILD_SHARED_LIBS)
+             #TODO: Find a way to merge in the static libs when built with internal pystring
+             message(WARNING
+diff --git a/share/cmake/modules/Findyaml-cpp.cmake b/share/cmake/modules/Findyaml-cpp.cmake
+index 773fbe16..cf259a59 100644
+--- a/share/cmake/modules/Findyaml-cpp.cmake
++++ b/share/cmake/modules/Findyaml-cpp.cmake
+@@ -195,6 +195,15 @@ if(NOT yaml-cpp_FOUND AND NOT OCIO_INSTALL_EXT_PACKAGES STREQUAL NONE)
+                 ${yaml-cpp_CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=${CMAKE_OSX_DEPLOYMENT_TARGET})
+         endif()
+ 
++
++        if (ANDROID)
++            set(yaml-cpp_CMAKE_ARGS
++                ${yaml-cpp_CMAKE_ARGS}
++                -DANDROID_PLATFORM=${ANDROID_PLATFORM}
++                -DANDROID_ABI=${ANDROID_ABI}
++                -DANDROID_STL=${ANDROID_STL})
++        endif()
++
+         if(NOT BUILD_SHARED_LIBS)
+             #TODO: Find a way to merge in the static libs when built with internal yamlcpp
+             message(WARNING
+-- 
+2.34.1
+

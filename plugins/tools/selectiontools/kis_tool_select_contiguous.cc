@@ -52,7 +52,7 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
                     KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
                     i18n("Contiguous Area Selection")),
     m_fuzziness(20),
-    m_softness(100),
+    m_opacitySpread(100),
     m_sizemod(0),
     m_feather(0)
 {
@@ -67,7 +67,7 @@ void KisToolSelectContiguous::activate(const QSet<KoShape*> &shapes)
 {
     KisToolSelect::activate(shapes);
     if (selectionOptionWidget()) {
-        // the antialias option is replaced with the softness
+        // the antialias option is replaced with the opacity spread
         selectionOptionWidget()->disableAntiAliasSelectionOption();
     }
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
@@ -76,6 +76,10 @@ void KisToolSelectContiguous::activate(const QSet<KoShape*> &shapes)
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::beginPrimaryAction(event);
+    if (isMovingSelection()) {
+        return;
+    }
+
     KisPaintDeviceSP dev;
 
     if (!currentNode() ||
@@ -86,9 +90,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
-    if (KisToolSelect::selectionDidMove()) {
-        return;
-    }
+    beginSelectInteraction();
 
     QApplication::setOverrideCursor(KisCursor::waitCursor());
 
@@ -124,7 +126,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(new KisSelectionDefaultBounds(dev)));
 
     int fuzziness = m_fuzziness;
-    int softness = m_softness;
+    int opacitySpread = m_opacitySpread;
     int feather = m_feather;
     int sizemod = m_sizemod;
     bool useSelectionAsBoundary = m_useSelectionAsBoundary;
@@ -143,16 +145,17 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     }
 
     KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [dev, rc, fuzziness, softness, feather, sizemod, useSelectionAsBoundary,
+                [dev, rc, fuzziness, opacitySpread, feather, sizemod, useSelectionAsBoundary,
                 selection, pos, sourceDevice, existingSelection] () mutable -> KUndo2Command* {
 
                     KisFillPainter fillpainter(dev);
                     fillpainter.setHeight(rc.height());
                     fillpainter.setWidth(rc.width());
                     fillpainter.setFillThreshold(fuzziness);
-                    fillpainter.setSoftness(softness);
+                    fillpainter.setOpacitySpread(opacitySpread);
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(sizemod);
+                    fillpainter.setUseCompositioning(true);
 
                     useSelectionAsBoundary &=
                         existingSelection &&
@@ -179,6 +182,16 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
 }
 
+void KisToolSelectContiguous::endPrimaryAction(KoPointerEvent *event)
+{
+    if (isMovingSelection()) {
+        KisToolSelectBase::endPrimaryAction(event);
+        return;
+    }
+
+    endSelectInteraction();
+}
+
 void KisToolSelectContiguous::paint(QPainter &painter, const KoViewConverter &converter)
 {
     Q_UNUSED(painter);
@@ -191,10 +204,10 @@ void KisToolSelectContiguous::slotSetFuzziness(int fuzziness)
     m_configGroup.writeEntry("fuzziness", fuzziness);
 }
 
-void KisToolSelectContiguous::slotSetSoftness(int softness)
+void KisToolSelectContiguous::slotSetOpacitySpread(int opacitySpread)
 {
-    m_softness = softness;
-    m_configGroup.writeEntry("softness", softness);
+    m_opacitySpread = opacitySpread;
+    m_configGroup.writeEntry("opacitySpread", opacitySpread);
 }
 
 void KisToolSelectContiguous::slotSetSizemod(int sizemod)
@@ -240,16 +253,16 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         input->setExponentRatio(2);
         gridLayout->addWidget(input, 0, 1, 1, 1);
 
-        lbl = new QLabel(i18n("Softness: "), selectionWidget);
+        lbl = new QLabel(i18n("Opacity Spread: "), selectionWidget);
         gridLayout->addWidget(lbl, 1, 0, 1, 1);
 
-        KisSliderSpinBox *sliderSoftness = new KisSliderSpinBox(selectionWidget);
-        Q_CHECK_PTR(sliderSoftness);
-        sliderSoftness->setObjectName("softness");
-        sliderSoftness->setRange(0, 100);
-        sliderSoftness->setSingleStep(1);
-        sliderSoftness->setSuffix(i18n("%"));
-        gridLayout->addWidget(sliderSoftness, 1, 1, 1, 1);
+        KisSliderSpinBox *sliderOpacitySpread = new KisSliderSpinBox(selectionWidget);
+        Q_CHECK_PTR(sliderOpacitySpread);
+        sliderOpacitySpread->setObjectName("opacitySpread");
+        sliderOpacitySpread->setRange(0, 100);
+        sliderOpacitySpread->setSingleStep(1);
+        sliderOpacitySpread->setSuffix(i18n("%"));
+        gridLayout->addWidget(sliderOpacitySpread, 1, 1, 1, 1);
 
         lbl = new QLabel(i18n("Grow/shrink selection: "), selectionWidget);
         gridLayout->addWidget(lbl, 2, 0, 1, 1);
@@ -279,7 +292,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         gridLayout->addWidget(useSelectionAsBoundary, 4, 1, 1, 1);
 
         connect (input  , SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
-        connect (sliderSoftness, SIGNAL(valueChanged(int)), this, SLOT(slotSetSoftness(int)));
+        connect (sliderOpacitySpread, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
         connect (sizemod, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
         connect (feather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
         connect (useSelectionAsBoundary, SIGNAL(toggled(bool)), this, SLOT(slotSetUseSelectionAsBoundary(bool)));
@@ -290,7 +303,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
         // load configuration settings into tool options
         input->setValue(m_configGroup.readEntry("fuzziness", 8)); // fuzziness
-        sliderSoftness->setValue(m_configGroup.readEntry("softness", 100)); // fuzziness
+        sliderOpacitySpread->setValue(m_configGroup.readEntry("opacitySpread", 100)); // opacity spread
         sizemod->setValue( m_configGroup.readEntry("sizemod", 0)); //grow/shrink
         sizemod->setSuffix(i18n(" px"));
 
@@ -301,7 +314,7 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
         // manually set up all variables in case there were no signals when setting value
         m_fuzziness = input->value();
-        m_softness = sliderSoftness->value();
+        m_opacitySpread = sliderOpacitySpread->value();
         m_sizemod = sizemod->value();
         m_feather = feather->value();
         m_useSelectionAsBoundary = useSelectionAsBoundary->isChecked();
@@ -315,6 +328,10 @@ void KisToolSelectContiguous::resetCursorStyle()
         useCursor(KisCursor::load("tool_contiguous_selection_cursor_add.png", 6, 6));
     } else if (selectionAction() == SELECTION_SUBTRACT) {
         useCursor(KisCursor::load("tool_contiguous_selection_cursor_sub.png", 6, 6));
+    } else if (selectionAction() == SELECTION_INTERSECT) {
+        useCursor(KisCursor::load("tool_contiguous_selection_cursor_inter.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SYMMETRICDIFFERENCE) {
+        useCursor(KisCursor::load("tool_contiguous_selection_cursor_symdiff.png", 6, 6));
     } else {
         KisToolSelect::resetCursorStyle();
     }

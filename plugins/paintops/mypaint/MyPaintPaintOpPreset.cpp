@@ -44,8 +44,8 @@ KisMyPaintPaintOpPreset::KisMyPaintPaintOpPreset(const QString &fileName)
 }
 
 KisMyPaintPaintOpPreset::KisMyPaintPaintOpPreset(const KisMyPaintPaintOpPreset &rhs)
-    : KisPaintOpPreset(rhs),
-      d(new Private(*rhs.d))
+    : KisPaintOpPreset(rhs)
+    , d(new Private(*rhs.d))
 {
     d->brush = mypaint_brush_new();
 

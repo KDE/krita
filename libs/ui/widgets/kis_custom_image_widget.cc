@@ -14,7 +14,6 @@
 #include <QComboBox>
 #include <QRect>
 #include <QApplication>
-#include <QClipboard>
 #include <QDesktopWidget>
 #include <QDialogButtonBox>
 #include <QFile>
@@ -139,11 +138,6 @@ KisCustomImageWidget::KisCustomImageWidget(QWidget* parent, qint32 defWidth, qin
     colorSpaceSelector->setCurrentColorDepth(KoID(defColorDepth));
     colorSpaceSelector->setCurrentProfile(defColorProfile);
     connect(colorSpaceSelector, SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(changeDocumentInfoLabel()));
-
-    //connect(chkFromClipboard,SIGNAL(stateChanged(int)),this,SLOT(clipboardDataChanged()));
-    connect(QApplication::clipboard(), SIGNAL(dataChanged()), this, SLOT(clipboardDataChanged()));
-    connect(QApplication::clipboard(), SIGNAL(selectionChanged()), this, SLOT(clipboardDataChanged()));
-    connect(QApplication::clipboard(), SIGNAL(changed(QClipboard::Mode)), this, SLOT(clipboardDataChanged()));
 
     connect(colorSpaceSelector, SIGNAL(selectionChanged(bool)), newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SLOT(setEnabled(bool)));
 
@@ -367,10 +361,6 @@ quint8 KisCustomImageWidget::backgroundOpacity() const
 
 void KisCustomImageWidget::setBackgroundOpacity(quint8 value) {
   sliderOpacity->setValue((value * 100) / 255);
-}
-
-void KisCustomImageWidget::clipboardDataChanged()
-{
 }
 
 void KisCustomImageWidget::fillPredefined()

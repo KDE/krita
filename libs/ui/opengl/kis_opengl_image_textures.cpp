@@ -57,6 +57,8 @@
 #define GL_RGBA16_EXT 0x805B
 #endif
 
+//#define DEBUG_BUFFER_REALLOCATION
+
 
 KisOpenGLImageTextures::ImageTexturesMap KisOpenGLImageTextures::imageTexturesMap;
 
@@ -342,11 +344,16 @@ void KisOpenGLImageTextures::recalculateCache(KisUpdateInfoSP info, bool blockMi
         if (m_bufferStorage.isValid() && numProcessedTiles > m_bufferStorage.size() &&
             sync && !sync->isSignaled()) {
 
+#ifdef DEBUG_BUFFER_REALLOCATION
             qDebug() << "Still unsignalled after processed" << numProcessedTiles << "tiles";
+#endif
 
             const int nextSize = qNextPowerOfTwo(m_bufferStorage.size());
             m_bufferStorage.allocateMoreBuffers(nextSize);
+
+#ifdef DEBUG_BUFFER_REALLOCATION
             qDebug() << "    increased number of buffers to" << nextSize;
+#endif
         }
 
 
@@ -789,7 +796,15 @@ void KisOpenGLImageTextures::updateTextureFormat()
 #ifndef QT_OPENGL_ES_2
                 m_texturesInfo.internalFormat = GL_RGBA16;
                 m_texturesInfo.type = GL_UNSIGNED_SHORT;
+                // On arm M1, GL_BGRA format is not aligned properly at the driver
+                // changing the pixel format fixes the rendering problem when using
+                // texture buffers
+                // BUG: 445561
+#ifdef Q_OS_MACOS
+                m_texturesInfo.format = GL_RGBA;
+#else
                 m_texturesInfo.format = GL_BGRA;
+#endif
                 destinationColorDepthId = Integer16BitsColorDepthID;
                 dbgUI << "Using conversion to 16 bits rgba";
 #else

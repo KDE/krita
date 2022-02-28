@@ -3,7 +3,7 @@ SET(PREFIX_ext_exiv2  "${EXTPREFIX}" )
 if (ANDROID)
     ExternalProject_Add( ext_exiv2
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://exiv2.org/builds/exiv2-0.27.3-Source.tar.gz
+        URL https://github.com/Exiv2/exiv2/releases/download/v0.27.3/exiv2-0.27.3-Source.tar.gz
         URL_HASH SHA256=a79f5613812aa21755d578a297874fb59a85101e793edc64ec2c6bd994e3e778
 
         INSTALL_DIR ${PREFIX_ext_exiv2}
@@ -28,7 +28,7 @@ elseif(WIN32)
 
     ExternalProject_Add( ext_exiv2
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://exiv2.org/builds/exiv2-0.27.3-Source.tar.gz
+        URL https://github.com/Exiv2/exiv2/releases/download/v0.27.3/exiv2-0.27.3-Source.tar.gz
         URL_HASH SHA256=a79f5613812aa21755d578a297874fb59a85101e793edc64ec2c6bd994e3e778
 
         PATCH_COMMAND ${WINDOWS_PATCH_COMMAND}

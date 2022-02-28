@@ -727,7 +727,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     {
         d->debugEvent<QTouchEvent, false>(event);
         endTouch();
-        d->matcher.touchCancelEvent(d->previousPos);
+        QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
+        d->matcher.touchCancelEvent(touchEvent, d->previousPos);
         // reset state
         d->previousPos = {0, 0};
         d->touchStrokeStarted = false;
@@ -837,6 +838,8 @@ void KisInputManager::slotToolChanged()
             d->forwardAllEventsToTool = false;
             d->matcher.suppressAllActions(false);
         }
+
+        d->matcher.toolHasBeenActivated();
     }
 }
 

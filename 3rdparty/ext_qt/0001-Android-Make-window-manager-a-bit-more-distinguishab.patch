@@ -1,0 +1,38 @@
+From 6ddffc3c815a4fbeb669127a9affa01e289947cb Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Tue, 8 Feb 2022 10:39:29 +0000
+Subject: [PATCH] Android: Make window manager a bit more distinguishable..
+
+.. on white background by drawing a black border around.
+---
+ .../platforms/android/qandroidplatformwindowmanager.cpp    | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
+index a352017731..4e896eab3c 100644
+--- a/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
++++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
+@@ -9,7 +9,7 @@
+ 
+ // In HighDPI
+ static const int paddingTop = 25;
+-static const int paddingLBR = 3; // left, bottom and right
++static const int paddingLBR = 6; // left, bottom and right
+ 
+ QAndroidPlatformWindowManager::QAndroidPlatformWindowManager(QAndroidPlatformWindow *window)
+     : QWindow(window->window()->parent())
+@@ -147,6 +147,11 @@ void QAndroidPlatformWindowManager::repaint()
+ 
+     QPainter painter(m_backingStore->paintDevice());
+     painter.fillRect(0, 0, childGeometry.width(), childGeometry.height(), Qt::white);
++    QPen pen(Qt::black);
++    pen.setWidth(6);
++    painter.setPen(pen);
++    painter.drawRect(0, 0, childGeometry.width(), childGeometry.height());
++
+     m_backingStore->endPaint();
+ 
+     // m_backingStore->toImage().save(QString("/data/data/org.krita/files/%1.png").arg(this->objectName()));
+-- 
+2.34.1
+

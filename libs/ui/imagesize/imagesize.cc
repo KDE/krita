@@ -62,7 +62,7 @@ void ImageSize::slotImageSize()
 
     if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    DlgImageSize * dlgImageSize = new DlgImageSize(viewManager()->mainWindow(), image->width(), image->height(), image->yRes());
+    DlgImageSize * dlgImageSize = new DlgImageSize(viewManager()->mainWindowAsQWidget(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgImageSize);
     dlgImageSize->setObjectName("ImageSize");
 
@@ -82,7 +82,7 @@ void ImageSize::slotCanvasSize()
 
     if(!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(viewManager()->mainWindow(), image->width(), image->height(), image->yRes());
+    DlgCanvasSize * dlgCanvasSize = new DlgCanvasSize(viewManager()->mainWindowAsQWidget(), image->width(), image->height(), image->yRes());
     Q_CHECK_PTR(dlgCanvasSize);
 
     if (dlgCanvasSize->exec() == QDialog::Accepted) {
@@ -114,7 +114,7 @@ void ImageSize::scaleLayerImpl(KisNodeSP rootNode)
         bounds = dev->exactBounds();
     }
 
-    DlgLayerSize * dlgLayerSize = new DlgLayerSize(viewManager()->mainWindow(), "LayerSize", bounds.width(), bounds.height(), image->yRes());
+    DlgLayerSize * dlgLayerSize = new DlgLayerSize(viewManager()->mainWindowAsQWidget(), "LayerSize", bounds.width(), bounds.height(), image->yRes());
     Q_CHECK_PTR(dlgLayerSize);
     dlgLayerSize->setCaption(i18n("Resize Layer"));
 
@@ -163,7 +163,7 @@ void ImageSize::slotSelectionScale()
     KIS_ASSERT_RECOVER_RETURN(selectionMask);
 
     QRect rc = selectionMask->selection()->selectedExactRect();
-    DlgLayerSize * dlgSize = new DlgLayerSize(viewManager()->mainWindow(), "SelectionScale", rc.width(), rc.height(), image->yRes());
+    DlgLayerSize * dlgSize = new DlgLayerSize(viewManager()->mainWindowAsQWidget(), "SelectionScale", rc.width(), rc.height(), image->yRes());
     dlgSize->setCaption(i18n("Scale Selection"));
 
     if (dlgSize->exec() == QDialog::Accepted) {

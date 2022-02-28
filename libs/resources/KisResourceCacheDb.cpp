@@ -33,7 +33,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.15" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.16" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -110,6 +110,11 @@ QSqlError createDatabase(const QString &location)
         return db.lastError();
     }
 
+    // will be filled correctly later
+    QVersionNumber oldSchemaVersionNumber;
+    QVersionNumber newSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
+
+
     QStringList tables = QStringList() << "version_information"
                                        << "storage_types"
                                        << "resource_types"
@@ -159,8 +164,8 @@ QSqlError createDatabase(const QString &location)
             kritaVersion = q.value(1).toString();
             creationDate = q.value(2).toInt();
 
-            QVersionNumber oldSchemaVersionNumber = QVersionNumber::fromString(schemaVersion);
-            QVersionNumber newSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
+            oldSchemaVersionNumber = QVersionNumber::fromString(schemaVersion);
+            newSchemaVersionNumber = QVersionNumber::fromString(KisResourceCacheDb::databaseVersion);
 
             if (QVersionNumber::compare(oldSchemaVersionNumber, newSchemaVersionNumber) != 0) {
 
@@ -169,25 +174,59 @@ QSqlError createDatabase(const QString &location)
                 schemaIsOutDated = true;
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
-                if (   oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
-                    && newSchemaVersionNumber == QVersionNumber::fromString("0.0.15")) {
+                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.16")
+                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0
+                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.16")) < 0) {
+                    bool from14to15 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14");
+                    bool from15to16 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
+                            || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15");
 
-                    qWarning() << "Going to update resource_tags table";
+                    bool success = true;
+                    if (from14to15) {
+                        qWarning() << "Going to update resource_tags table";
 
-                    QSqlQuery q;
-                    q.prepare("ALTER TABLE  resource_tags\n"
-                              "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1");
-                    if (!q.exec()) {
-                        qWarning() << "Could not update the resource_tags table.";
+                        QSqlQuery q;
+                        q.prepare("ALTER TABLE  resource_tags\n"
+                                  "ADD   COLUMN active INTEGER NOT NULL DEFAULT 1");
+                        if (!q.exec()) {
+                            qWarning() << "Could not update the resource_tags table." << q.lastError();
+                            success = false;
+                        }
+                        else {
+                            qWarning() << "Updated table resource_tags: success.";
+                        }
                     }
-                    else {
-                        qWarning() << "Updated table resource_tags: success.";
+                    if (from15to16) {
+                        qWarning() << "Going to update indices";
+
+                        QStringList indexes = QStringList() << "tags" << "resources" << "tag_translations" << "resource_tags";
+
+                        Q_FOREACH(const QString &index, indexes) {
+                            QFile f(":/create_index_" + index + ".sql");
+                            if (f.open(QFile::ReadOnly)) {
+                                QSqlQuery q;
+                                if (!q.exec(f.readAll())) {
+                                    qWarning() << "Could not create index" << index << q.lastError();
+                                    return db.lastError();
+                                }
+                                infoResources << "Created index" << index;
+                            }
+                            else {
+                                return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(index), QSqlError::StatementError);
+                            }
+                        }
+                    }
+
+                    if (success) {
                         if (!updateSchemaVersion()) {
                             return QSqlError("Error executing SQL", QString("Could not update schema version."), QSqlError::StatementError);
                         }
-                        schemaIsOutDated = false;
                     }
+
+                    schemaIsOutDated = !success;
+
                 }
+
                 if (schemaIsOutDated) {
                     QMessageBox::critical(0, i18nc("@title:window", "Krita"), i18n("The resource database scheme has changed. Krita will backup your database and create a new database."));
                     if (QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0) {
@@ -210,6 +249,10 @@ QSqlError createDatabase(const QString &location)
         }
     }
 
+    KisUsageLogger::log(QString("Creating database from scratch (%1, %2).")
+                        .arg(oldSchemaVersionNumber.toString().isEmpty() ? QString("database didn't exist") : ("old schema version: " + oldSchemaVersionNumber.toString()))
+                        .arg("new schema version: " + newSchemaVersionNumber.toString()));
+
     // Create tables
     Q_FOREACH(const QString &table, tables) {
         QFile f(":/create_" + table + ".sql");
@@ -227,7 +270,7 @@ QSqlError createDatabase(const QString &location)
     }
 
     // Create indexes
-    QStringList indexes = QStringList() << "storages" << "versioned_resources";
+    QStringList indexes = QStringList() << "storages" << "versioned_resources" << "tags" << "resources" << "tag_translations" << "resource_tags";
 
     Q_FOREACH(const QString &index, indexes) {
         QFile f(":/create_index_" + index + ".sql");
@@ -1748,7 +1791,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             KoResourceSP res = storage->resource(itA->url);
 
             if (!res) {
-                KisUsageLogger::log("Could not load resource" + itA->url);
+                KisUsageLogger::log("Could not load resource " + itA->url);
                 ++itA;
                 continue;
             }
@@ -1756,21 +1799,21 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
             res->setVersion(itA->version);
             res->setMD5Sum(storage->resourceMd5(itA->url));
             if (!res->valid()) {
-                KisUsageLogger::log("Could not retrieve md5 for resource" + itA->url);
+                KisUsageLogger::log("Could not retrieve md5 for resource " + itA->url);
                 ++itA;
                 continue;
             }
 
             const bool retval = addResource(storage, itA->timestamp, res, resourceType);
             if (!retval) {
-                KisUsageLogger::log("Could not add resource" + itA->url);
+                KisUsageLogger::log("Could not add resource " + itA->url);
                 ++itA;
                 continue;
             }
 
             const int resourceId = res->resourceId();
             KIS_SAFE_ASSERT_RECOVER(resourceId >= 0) {
-                KisUsageLogger::log("Could not get id for resource" + itA->url);
+                KisUsageLogger::log("Could not get id for resource " + itA->url);
                 ++itA;
                 continue;
             }
@@ -1786,7 +1829,7 @@ bool KisResourceCacheDb::synchronizeStorage(KisResourceStorageSP storage)
 
                 const bool retval = addResourceVersion(resourceId, it->timestamp, storage, res);
                 KIS_SAFE_ASSERT_RECOVER(retval) {
-                    KisUsageLogger::log("Could not add version for resource" + itA->url);
+                    KisUsageLogger::log("Could not add version for resource " + itA->url);
                     continue;
                 }
             }

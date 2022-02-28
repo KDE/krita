@@ -37,7 +37,7 @@ when using the pressure-size curve option for tablets.
 There are several kinds of brush types:
 
 <ul>
- <li> gbr: Gimp one-image brushes, either a grayscale mask or a coloured image.
+ <li> gbr: Gimp one-image brushes, either a grayscale mask or a colored image.
         There are also 16-bit .gbr brushes, created and used by CinePaint.
         Krita is compatible with those, too.
  <li> gih: Gimp image hose brushes. Image hoses contain a set of images and

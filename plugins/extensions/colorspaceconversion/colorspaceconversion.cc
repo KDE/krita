@@ -58,7 +58,7 @@ void ColorSpaceConversion::slotImageColorSpaceConversion()
     KisImageSP image = viewManager()->image().toStrongRef();
     if (!image) return;
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(viewManager()->mainWindow(), "ColorSpaceConversion");
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(viewManager()->mainWindowAsQWidget(), "ColorSpaceConversion");
     bool allowLCMSOptimization = KisConfig(true).allowLCMSOptimization();
     dlgColorSpaceConversion->m_page->chkAllowLCMSOptimization->setChecked(allowLCMSOptimization);
     Q_CHECK_PTR(dlgColorSpaceConversion);
@@ -89,7 +89,7 @@ void ColorSpaceConversion::slotLayerColorSpaceConversion()
     KisLayerSP layer = viewManager()->activeLayer();
     if (!layer) return;
 
-    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(viewManager()->mainWindow(), "ColorSpaceConversion");
+    DlgColorSpaceConversion * dlgColorSpaceConversion = new DlgColorSpaceConversion(viewManager()->mainWindowAsQWidget(), "ColorSpaceConversion");
     Q_CHECK_PTR(dlgColorSpaceConversion);
 
     dlgColorSpaceConversion->setCaption(i18n("Convert Current Layer From %1", layer->colorSpace()->name()));

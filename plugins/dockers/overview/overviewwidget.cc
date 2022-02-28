@@ -24,6 +24,7 @@
 #include <QApplication>
 #include "OverviewThumbnailStrokeStrategy.h"
 #include <kis_display_color_converter.h>
+#include <KisMainWindow.h>
 
 OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)

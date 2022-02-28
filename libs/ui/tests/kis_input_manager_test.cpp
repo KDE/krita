@@ -75,7 +75,7 @@ struct TestingAction : public KisAbstractInputAction
         m_endNonNull = false;
     }
 
-    bool supportsHiResInputEvents() const {
+    bool supportsHiResInputEvents(int /*shortcut*/) const override {
         return m_isHighResolution;
     }
 

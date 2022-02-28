@@ -212,6 +212,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
         // In this mode we compute the best assistant during the initial
         // movement and then keep using that assistant. (Called the first
         // assistant).
+        bool foundAGoodAssistant = false;
         Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
             if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
                 QPointF pt = assistant->adjustPosition(point, strokeBegin, true);
@@ -221,9 +222,16 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
                     best = pt;
                     distance = dist;
                     d->firstAssistant = assistant;
+                    foundAGoodAssistant = true;
                 }
                 assistant->setFollowBrushPosition(true);
             }
+        }
+        if (!foundAGoodAssistant) {
+            // reset the first assistant if none of them are available
+            // that helps in case all of the assistants are disabled
+            // BUG:448187
+            d->firstAssistant = 0;
         }
     } else if (d->firstAssistant) {
         //make sure there's a first assistant to begin with.//
@@ -527,7 +535,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     QPointF iconDeletePosition(actionsPosition + toolData.deleteIconPosition);
 
     // Background container for helpers
-    QBrush backgroundColor = d->m_canvas->viewManager()->mainWindow()->palette().window();
+    QBrush backgroundColor = d->m_canvas->viewManager()->mainWindowAsQWidget()->palette().window();
     QPointF actionsBGRectangle(actionsPosition + QPointF(10, 10));
 
     gc.setRenderHint(QPainter::Antialiasing);

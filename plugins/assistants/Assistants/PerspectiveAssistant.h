@@ -35,8 +35,13 @@ public:
     bool contains(const QPointF& point) const override;
     qreal distance(const QPointF& point) const override;
 
+    int subdivisions() const;
+    void setSubdivisions(int subdivisions);
 
     bool isAssistantComplete() const override;
+
+    void saveCustomXml(QXmlStreamWriter *xml) override;
+    bool loadCustomXml(QXmlStreamReader *xml) override;
 
 protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
@@ -48,6 +53,8 @@ private:
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
     explicit PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
+    // The number of subdivisions to draw
+    int m_subdivisions {8};
     // which direction to snap to (in transformed coordinates)
     QLineF m_snapLine;
     // cached information

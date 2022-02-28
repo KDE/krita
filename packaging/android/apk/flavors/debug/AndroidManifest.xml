@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+    <application>
+        <activity
+            android:name="org.krita.android.MainActivity"
+            tools:replace="android:label"
+            android:label="Krita Debug" />
+    </application>
+
+</manifest>

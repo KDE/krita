@@ -1,18 +1,21 @@
-From b950f0e6afd98fb7b781e4ae3f623bb5bdcda1cb Mon Sep 17 00:00:00 2001
+From 13460c6461f39e49a8abe020a034aaae8d4d657d Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <sharafzaz121@gmail.com>
 Date: Thu, 10 Sep 2020 10:46:57 +0000
-Subject: [PATCH 31/46] Android: Properly handle Tablet events
+Subject: [PATCH] Android: Properly handle Tablet events
 
 Prior to this Hover events from stylus/tablet were treated as Mouse
 events and primary and secondary stylus buttons weren't handled either.
 This commit also passes batched tablet events to Qt.
+
+This commit also extracts the batched events from MotionEvent and passes
+them down for Qt to handle.
 ---
- .../org/qtproject/qt5/android/QtNative.java   | 34 +++++++++++++++----
- .../platforms/android/androidjniinput.cpp     | 15 +++++---
- 2 files changed, 38 insertions(+), 11 deletions(-)
+ .../org/qtproject/qt5/android/QtNative.java   | 67 +++++++++++++++----
+ .../platforms/android/androidjniinput.cpp     | 15 +++--
+ 2 files changed, 64 insertions(+), 18 deletions(-)
 
 diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
-index d76b7c9008..c9a2179a27 100644
+index d76b7c9008..baa75479eb 100644
 --- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 +++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
 @@ -652,7 +652,7 @@ public class QtNative
@@ -24,7 +27,7 @@ index d76b7c9008..c9a2179a27 100644
      {
          int pointerType = 0;
  
-@@ -669,15 +669,29 @@ public class QtNative
+@@ -669,30 +669,64 @@ public class QtNative
          }
  
          if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
@@ -54,17 +57,51 @@ index d76b7c9008..c9a2179a27 100644
                  (float) Math.toDegrees(orientation), event.getMetaState());
 +            return true;
          } else {
++            final int historySize = event.getHistorySize();
              touchBegin(id);
-             for (int i = 0; i < event.getPointerCount(); ++i) {
-@@ -693,6 +707,7 @@ public class QtNative
-                              event.getPressure(i));
+-            for (int i = 0; i < event.getPointerCount(); ++i) {
++            // batched ones
++            for (int h = 0; h < historySize; h++) {
++                touchBegin(id);
++                for (int i = 0; i < event.getPointerCount(); ++i) {
+                     touchAdd(id,
+                              event.getPointerId(i),
+                              getAction(i, event),
+                              i == 0,
+-                             (int)event.getX(i),
+-                             (int)event.getY(i),
+-                             event.getTouchMajor(i),
+-                             event.getTouchMinor(i),
+-                             event.getOrientation(i),
+-                             event.getPressure(i));
++                             (int)event.getHistoricalX(i, h),
++                             (int)event.getHistoricalY(i, h),
++                             event.getHistoricalTouchMajor(i, h),
++                             event.getHistoricalTouchMinor(i, h),
++                             event.getHistoricalOrientation(i, h),
++                             event.getHistoricalPressure(i, h));
++                }
++                touchEnd(id, event.getAction());
++            }
++            touchBegin(id);
++            for (int i = 0; i < event.getPointerCount(); ++i) {
++                touchAdd(id,
++                        event.getPointerId(i),
++                        getAction(i, event),
++                        i == 0,
++                        (int)event.getX(i),
++                        (int)event.getY(i),
++                        event.getTouchMajor(i),
++                        event.getTouchMinor(i),
++                        event.getOrientation(i),
++                        event.getPressure(i));
              }
              touchEnd(id, event.getAction());
 +            return true;
          }
      }
  
-@@ -703,12 +718,19 @@ public class QtNative
+@@ -703,12 +737,19 @@ public class QtNative
  
      static public boolean sendGenericMotionEvent(MotionEvent event, int id)
      {
@@ -117,5 +154,5 @@ index 870b22e15e..fec394f95e 100644
              break;
          }
 -- 
-2.33.0
+2.34.1
 

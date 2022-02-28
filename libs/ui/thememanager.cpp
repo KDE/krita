@@ -106,7 +106,7 @@ QString ThemeManager::currentThemeName() const
         //qDebug() << "\tcurrent themename" << d->currentThemeName;
         themeName = d->currentThemeName;
     }
-    else {
+    if (themeName.isEmpty()) {
         //qDebug() << "\tfallback";
         themeName = "Krita dark";
     }

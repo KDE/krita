@@ -120,6 +120,10 @@ public:
             return  y / m_zoomedResolutionY;
         }
 
+    void setZoomMarginSize( int size );
+
+    int zoomMarginSize() const;
+
     // KoViewConverter-interface methods
 
     /**
@@ -205,6 +209,8 @@ protected:
     qreal m_resolutionY;
     qreal m_zoomedResolutionX;
     qreal m_zoomedResolutionY;
+
+    int m_zoomMarginSize;
 };
 
 #endif

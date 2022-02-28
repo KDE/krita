@@ -85,7 +85,7 @@ void RotateImage::slotRotateImage()
 
     if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindow(), "RotateImage");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindowAsQWidget(), "RotateImage");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Image"));
@@ -138,7 +138,7 @@ void RotateImage::rotateLayerCustomImpl(KisNodeSP rootNode)
 
     if (!viewManager()->blockUntilOperationsFinished(image)) return;
 
-    DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindow(), "RotateLayer");
+    DlgRotateImage * dlgRotateImage = new DlgRotateImage(viewManager()->mainWindowAsQWidget(), "RotateLayer");
     Q_CHECK_PTR(dlgRotateImage);
 
     dlgRotateImage->setCaption(i18n("Rotate Layer"));

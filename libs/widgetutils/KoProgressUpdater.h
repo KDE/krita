@@ -129,6 +129,9 @@ private Q_SLOTS:
     void update();
     void updateUi();
 
+Q_SIGNALS:
+    void triggerUpdateAsynchronously();
+
 private:
 
     class Private;

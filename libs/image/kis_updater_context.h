@@ -10,6 +10,7 @@
 #include <QMutex>
 #include <QReadWriteLock>
 #include <QThreadPool>
+#include <QWaitCondition>
 
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
@@ -129,6 +130,7 @@ public:
     void continueUpdate(const QRect& rc);
     void doSomeUsefulWork();
     void jobFinished();
+    void jobThreadExited();
 
     void setTestingMode(bool value);
 
@@ -147,6 +149,9 @@ protected:
     QReadWriteLock m_exclusiveJobLock;
 
     QMutex m_lock;
+    QMutex m_runningThreadsMutex;
+    int m_numRunningThreads = 0;
+    QWaitCondition m_waitForDoneCondition;
     QVector<KisUpdateJobItem*> m_jobs;
     QThreadPool m_threadPool;
     KisLockFreeLodCounter m_lodCounter;
@@ -163,6 +168,8 @@ private:
 
     const QVector<KisUpdateJobItem*> getJobs();
     void clear();
+
+    void startThread(int index);
 
 };
 

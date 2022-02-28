@@ -75,6 +75,12 @@ void KisRainDropsFilter::processImpl(KisPaintDeviceSP device,
                                      const KisFilterConfigurationSP config,
                                      KoUpdater* progressUpdater ) const
 {
+    /**
+     * This case should be filtered out at the higher level, in
+     * KisFilter::process() or in KisFilterStrokeStrategy
+     */
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!applyRect.isEmpty());
+
     QPoint srcTopLeft = applyRect.topLeft();
     Q_ASSERT(device);
 

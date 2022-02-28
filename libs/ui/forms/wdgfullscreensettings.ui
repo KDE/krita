@@ -6,16 +6,20 @@
   </author>
  <class>WdgFullscreenSettings</class>
  <widget class="QWidget" name="WdgFullscreenSettings">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>400</width>
-    <height>300</height>
-   </rect>
-  </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QFormLayout" name="formLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0" colspan="2">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>Select which parts of Krita will be hidden in canvas-only mode.</string>
@@ -25,49 +29,49 @@
      </property>
     </widget>
    </item>
-   <item>
+   <item row="1" column="1">
     <widget class="QCheckBox" name="chkMenu">
      <property name="text">
       <string>Menu</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="2" column="1">
     <widget class="QCheckBox" name="chkToolbar">
      <property name="text">
       <string>Toolbars</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="3" column="1">
     <widget class="QCheckBox" name="chkDockers">
      <property name="text">
       <string>Toolbox and dockers</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="4" column="1">
     <widget class="QCheckBox" name="chkScrollbars">
      <property name="text">
       <string>Scrollbars</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="5" column="1">
     <widget class="QCheckBox" name="chkTitlebar">
      <property name="text">
       <string>Titlebar (hiding the titlebar will make Krita go full-screen)</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="6" column="1">
     <widget class="QCheckBox" name="chkStatusbar">
      <property name="text">
       <string>Statusbar</string>
      </property>
     </widget>
    </item>
-   <item>
+   <item row="7" column="0" colspan="2">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -75,7 +79,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>85</height>
+       <height>0</height>
       </size>
      </property>
     </spacer>

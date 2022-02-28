@@ -17,7 +17,7 @@
 #include <kis_dom_utils.h>
 
 YCbCrF32ColorSpace::YCbCrF32ColorSpace(const QString &name, KoColorProfile *p)
-    : LcmsColorSpace<KoYCbCrF32Traits>(colorSpaceId(), name, TYPE_YCbCrA_FLT, cmsSigXYZData, p)
+    : LcmsColorSpace<KoYCbCrF32Traits>(colorSpaceId(), name, TYPE_YCbCrA_FLT, cmsSigYCbCrData, p)
 {
     const IccColorProfile *icc_p = dynamic_cast<const IccColorProfile *>(p);
     Q_ASSERT(icc_p);

@@ -65,6 +65,8 @@ void KisDerivedResourcesTest::test()
     expectedSignals[KoCanvasResource::Opacity] = 1.0;
     expectedSignals[KoCanvasResource::Size] = 300.0;
     expectedSignals[KoCanvasResource::Flow] = 1.0;
+    expectedSignals[KoCanvasResource::Fade] = 0.25;
+    expectedSignals[KoCanvasResource::Scatter] = 0.0;
     expectedSignals[KoCanvasResource::CurrentEffectiveCompositeOp] = COMPOSITE_OVER;
     expectedSignals[KoCanvasResource::CurrentCompositeOp] = COMPOSITE_OVER;
     expectedSignals[KoCanvasResource::PatternSize] = 0.5;

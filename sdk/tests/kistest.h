@@ -114,6 +114,23 @@ void addResourceTypes()
 {
 #if defined(TESTRESOURCES) || defined(TESTPIGMENT) || defined (TESTFLAKE) || defined(TESTIMAGE) || defined(TESTBRUSH) || defined(TESTUI)
     // All Krita's resource types
+    KoResourcePaths::addAssetType("markers", "data", "/styles/");
+    KoResourcePaths::addAssetType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addAssetType("kis_images", "data", "/images/");
+    KoResourcePaths::addAssetType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addAssetType("gmic_definitions", "data", "/gmic/");
+    KoResourcePaths::addAssetType("kis_defaultpresets", "data", "/defaultpresets/");
+    KoResourcePaths::addAssetType("psd_layer_style_collections", "data", "/asl");
+    KoResourcePaths::addAssetType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/actions");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/pykrita");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addAssetType("tags", "data", "/tags/");
+    KoResourcePaths::addAssetType("templates", "data", "/templates");
+    KoResourcePaths::addAssetType("pythonscripts", "data", "/pykrita");
+    KoResourcePaths::addAssetType("preset_icons", "data", "/preset_icons");
+
     // Make directories for all resources we can save, and tags
     QDir d;
     d.mkpath(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/tags/");

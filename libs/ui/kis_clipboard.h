@@ -2,6 +2,8 @@
  *  kis_clipboard.h - part of Krayon
  *
  *  SPDX-FileCopyrightText: 2004 Boudewijn Rempt <boud@valdyas.org>
+ *  SPDX-FileCopyrightText: 2019 Dmitrii Utkin <loentar@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,20 +12,17 @@
 
 #include <QObject>
 #include <QSize>
-#include "kis_types.h"
-#include <kritaui_export.h>
+
 #include <KoColorProfile.h>
+#include <kis_types.h>
+
+#include <kritaui_export.h>
 
 class QRect;
 class QMimeData;
 class KisTimeSpan;
-class KisBlockUntilOperationsFinishedMediator;
 
-enum enumPasteBehaviour {
-    PASTE_ASSUME_WEB,
-    PASTE_ASSUME_MONITOR,
-    PASTE_ASK
-};
+class KisClipboardPrivate;
 
 /**
  * The Krita clipboard is a clipboard that can store paint devices
@@ -36,6 +35,10 @@ class KRITAUI_EXPORT KisClipboard : public QObject
     Q_PROPERTY(bool clip READ hasClip NOTIFY clipChanged)
 
 public:
+    enum PasteBehaviour { PASTE_ASSUME_WEB = 0, PASTE_ASSUME_MONITOR, PASTE_ASK };
+
+    enum PasteFormatBehaviour { PASTE_FORMAT_ASK = 0, PASTE_FORMAT_DOWNLOAD, PASTE_FORMAT_LOCAL, PASTE_FORMAT_CLIP };
+
     KisClipboard();
     ~KisClipboard() override;
 
@@ -56,7 +59,20 @@ public:
     /**
      * Get the contents of the clipboard in the form of a paint device.
      */
-    KisPaintDeviceSP clip(const QRect &imageBounds, bool showPopup, KisTimeSpan *clipRange = 0, const KoColorProfile *destProfile = 0);
+    KisPaintDeviceSP clip(const QRect &imageBounds,
+                          bool showPopup,
+                          int overridePasteBehaviour = -1,
+                          KisTimeSpan *clipRange = nullptr) const;
+
+    /**
+     * Get the contents of the specified mimedata buffer in the form of a paint device.
+     */
+    KisPaintDeviceSP clipFromMimeData(const QMimeData *data,
+                                      const QRect &imageBounds,
+                                      bool showPopup,
+                                      int overridePasteBehaviour = -1,
+                                      KisTimeSpan *clipRange = nullptr,
+                                      bool useClipboardFallback = false) const;
 
     bool hasClip() const;
 
@@ -68,25 +84,40 @@ public:
 
     const QMimeData* layersMimeData() const;
 
-Q_SIGNALS:
+    QImage getPreview() const;
 
+    bool hasUrls() const;
+
+    /**
+     * load an image from clipboard handling different supported formats
+     * @return image
+     */
+    QImage getImageFromClipboard() const;
+
+Q_SIGNALS:
     void clipCreated();
+    void clipChanged();
 
 private Q_SLOTS:
-
     void clipboardDataChanged();
 
 private:
+    Q_DISABLE_COPY(KisClipboard);
 
-    KisClipboard(const KisClipboard &);
-    KisClipboard operator=(const KisClipboard &);
+    KisPaintDeviceSP
+    clipFromKritaSelection(const QMimeData *data, const QRect &imageBounds, KisTimeSpan *clipRange) const;
 
-    bool m_hasClip;
+    KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
+                                           const QRect &imageBounds,
+                                           bool showPopup,
+                                           int overridePasteBehaviour = -1,
+                                           bool useClipboardFallback = false) const;
 
-    bool m_pushedClipboard;
+    KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
 
-Q_SIGNALS:
-    void clipChanged();
+    QImage getImageFromMimeData(const QMimeData *cbData) const;
+
+    KisClipboardPrivate *const d;
 };
 
 #endif // __KIS_CLIPBOARD_H_

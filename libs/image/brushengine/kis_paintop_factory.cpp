@@ -38,7 +38,7 @@ QString KisPaintOpFactory::categoryStable()
     return i18nc("Category of brush engines", "Brush engines");
 }
 
-KisInterstrokeDataFactory *KisPaintOpFactory::createInterstrokeDataFactory(const KisPaintOpSettingsSP settings, KisResourcesInterfaceSP resourcesInterface) const
+KisInterstrokeDataFactory *KisPaintOpFactory::createInterstrokeDataFactory(const KisPaintOpSettingsSP /*settings*/, KisResourcesInterfaceSP /*resourcesInterface*/) const
 {
     return 0;
 }

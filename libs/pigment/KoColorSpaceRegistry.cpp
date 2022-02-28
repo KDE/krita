@@ -461,11 +461,12 @@ const KoColorSpace * KoColorSpaceRegistry::Private::colorSpace1(const QString &c
 
         if (profileName.isEmpty()) {
             profileName = defaultProfileForCsIdImpl(csID);
-            if (profileName.isEmpty()) return 0;
         }
 
-        // quick attempt to fetch a cached color space
-        cs = getCachedColorSpaceImpl(csID, profileName);
+        if (!profileName.isEmpty()) {
+            // quick attempt to fetch a cached color space
+            cs = getCachedColorSpaceImpl(csID, profileName);
+        }
     }
 
     if (!cs) {

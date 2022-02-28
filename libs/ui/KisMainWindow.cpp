@@ -46,6 +46,7 @@
 #include <QScreen>
 #include <QAction>
 #include <QWindow>
+#include <QTemporaryDir>
 #include <QScrollArea>
 #include <kactioncollection.h>
 #include <kactionmenu.h>
@@ -96,7 +97,6 @@
 #include <KisResourceCacheDb.h>
 #include <KisStorageModel.h>
 #include <KisStorageFilterProxyModel.h>
-#include <KoResourcePaths.h>
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
@@ -152,6 +152,7 @@
 #include "KisNodeActivationActionCreatorVisitor.h"
 #include "KisUiFont.h"
 #include <KisResourceUserOperations.h>
+#include "KisRecentFilesManager.h"
 
 
 #include <mutex>
@@ -266,7 +267,6 @@ public:
     KHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
-    KisRecentDocumentsModelWrapper recentFilesModel;
     KisResourceModel *workspacemodel {0};
 
     QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
@@ -472,26 +472,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // the welcome screen needs to grab actions...so make sure this line goes after the createAction() so they exist
     d->welcomePage->setMainWindow(this);
 
-    connect(&d->recentFilesModel, &KisRecentDocumentsModelWrapper::sigInvalidDocumentForIcon, [this](QUrl url) {
-        this->removeRecentUrl(url);
-    });
-    connect(&d->recentFilesModel.model(), &QStandardItemModel::itemChanged, [this](QStandardItem *item) {
-        QUrl url = item->data().toUrl();
-        QIcon icon = item->icon();
-        if (url.isValid() && !icon.isNull()) {
-            d->recentFiles->setUrlIcon(url, icon);
-        }
-    });
-    connect(&d->recentFilesModel.model(), &QAbstractItemModel::rowsInserted, [this](const QModelIndex &/*parent*/, int first, int last) {
-        for (int i = first; i <= last; i++) {
-            QStandardItem *item = d->recentFilesModel.model().item(i);
-            QUrl url = item->data().toUrl();
-            QIcon icon = item->icon();
-            if (url.isValid() && !icon.isNull()) {
-                d->recentFiles->setUrlIcon(url, icon);
-            }
-        }
-    });
+    d->recentFiles->setRecentFilesModel(&KisRecentDocumentsModelWrapper::instance()->model());
 
     setAutoSaveSettings(d->windowStateConfig, false);
 
@@ -645,7 +626,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         // load customized tab style
         customizeTabBar();
     }
-
 }
 
 KisMainWindow::~KisMainWindow()
@@ -934,80 +914,9 @@ void KisMainWindow::setReadWrite(bool readwrite)
     updateCaption();
 }
 
-void KisMainWindow::addRecentURL(const QUrl &url, const QUrl &oldUrl)
-{
-    // Add entry to recent documents list
-    // (call coming from KisDocument because it must work with cmd line, template dlg, file/open, etc.)
-    if (!url.isEmpty()) {
-        bool ok = true;
-        if (url.isLocalFile()) {
-            QString path = url.adjusted(QUrl::StripTrailingSlash).toLocalFile();
-            const QStringList tmpDirs = QStandardPaths::locateAll(QStandardPaths::TempLocation, "", QStandardPaths::LocateDirectory);
-
-            for (QStringList::ConstIterator it = tmpDirs.begin() ; ok && it != tmpDirs.end() ; ++it) {
-                if (path.contains(*it)) {
-                    ok = false; // it's in the tmp resource
-                }
-            }
-
-            const QStringList templateDirs = KoResourcePaths::findDirs("templates");
-            for (QStringList::ConstIterator it = templateDirs.begin() ; ok && it != templateDirs.end() ; ++it) {
-                if (path.contains(*it)) {
-                    ok = false; // it's in the templates directory.
-                    break;
-                }
-            }
-        }
-        if (ok) {
-            if (!oldUrl.isEmpty()) {
-                d->recentFiles->removeUrl(oldUrl);
-            }
-            d->recentFiles->addUrl(url);
-        }
-        saveRecentFiles();
-        d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
-    }
-}
-
-void KisMainWindow::saveRecentFiles()
-{
-    // Save list of recent files
-    KSharedConfigPtr config =  KSharedConfig::openConfig();
-    d->recentFiles->saveEntries(config->group("RecentFiles"));
-    config->sync();
-
-    // Tell all windows to reload their list, after saving
-    // Doesn't work multi-process, but it's a start
-    Q_FOREACH (KisMainWindow *mw, KisPart::instance()->mainWindows()) {
-        if (mw != this) {
-            mw->reloadRecentFileList();
-        }
-    }
-}
-
-QList<QUrl> KisMainWindow::recentFilesUrls()
-{
-    return d->recentFiles->urls();
-}
-
 void KisMainWindow::clearRecentFiles()
 {
-    d->recentFiles->clear();
-    d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
-}
-
-void KisMainWindow::removeRecentUrl(const QUrl &url)
-{
-    d->recentFiles->removeUrl(url);
-    KSharedConfigPtr config =  KSharedConfig::openConfig();
-    d->recentFiles->saveEntries(config->group("RecentFiles"));
-    config->sync();
-}
-
-void KisMainWindow::reloadRecentFileList()
-{
-    d->recentFiles->loadEntries(KSharedConfig::openConfig()->group("RecentFiles"));
-    d->recentFilesModel.setFiles(recentFilesUrls(), devicePixelRatioF());
+    KisRecentFilesManager::instance()->clear();
 }
 
 void KisMainWindow::updateCaption()
@@ -1084,8 +993,7 @@ bool KisMainWindow::openDocument(const QString &path, OpenFlags flags)
         if (!(flags & BatchMode)) {
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The file %1 does not exist.", path));
         }
-        d->recentFiles->removeUrl(QUrl::fromLocalFile(path)); //remove the file from the recent-opened-file-list
-        saveRecentFiles();
+        KisRecentFilesManager::instance()->remove(QUrl::fromLocalFile(path)); //remove the file from the recent-opened-file-list
         return false;
     }
     return openDocumentInternal(path, flags);
@@ -1240,7 +1148,7 @@ bool KisMainWindow::hackIsSaving() const
 bool KisMainWindow::installBundle(const QString &fileName) const
 {
     QFileInfo from(fileName);
-    QFileInfo to(QStringLiteral("%1/%2").arg(KoResourcePaths::getAppDataLocation(), from.fileName()));
+    QFileInfo to(QStringLiteral("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation), from.fileName()));
     if (to.exists()) {
         QFile::remove(to.canonicalFilePath());
     }
@@ -1603,11 +1511,6 @@ void KisMainWindow::setActiveView(KisView* view)
     KisWindowLayoutManager::instance()->activeDocumentChanged(view->document());
 
     emit activeViewChanged();
-}
-
-KisRecentDocumentsModelWrapper *KisMainWindow::recentFilesModel()
-{
-    return &d->recentFilesModel;
 }
 
 void KisMainWindow::dragMove(QDragMoveEvent * event)
@@ -2068,17 +1971,19 @@ void KisMainWindow::importVideoAnimation()
     KisDlgImportVideoAnimation dlg(this, activeView());
 
     if (dlg.exec() == QDialog::Accepted) {
-        QStringList files = dlg.renderFrames();
+        const QTemporaryDir outputLocation(QDir::tempPath() + QDir::separator() + "krita" + QDir::separator() + "import_files");
+        RenderedFrames renderedFrames = dlg.renderFrames(QDir(outputLocation.path()));
+        dbgFile << "Frames rendered to directory: " << outputLocation.path();
         QStringList documentInfoList = dlg.documentInfo();
 
-        if (files.isEmpty()) return;
+        if (renderedFrames.isEmpty()) return;
         
-        dbgFile << "Animation Import options:" << documentInfoList;
+        dbgFile << "Animation Import options: " << documentInfoList;
 
         int firstFrame = 0;
         const int step = documentInfoList[0].toInt();
         const int fps = documentInfoList[1].toInt();
-        const int totalFrames = files.size() * step;
+        const int totalFrames = renderedFrames.framesNeedRelocation() ? (renderedFrames.renderedFrameTargetTimes.last() + 1) : renderedFrames.size() * step;
         const QString name = QFileInfo(documentInfoList[3]).fileName();
         const bool useCurrentDocument = documentInfoList[4].toInt();
         bool useDocumentColorSpace = false;
@@ -2116,7 +2021,6 @@ void KisMainWindow::importVideoAnimation()
 
             if (!document->newImage(name, width, height, cs, bgColor, KisConfig::RASTER_LAYER, 1, "", double(resolution / 72) )) {
                 QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Failed to create new document. Animation import aborted."));
-                dlg.cleanupWorkDir();
                 return;
             }
 
@@ -2132,9 +2036,7 @@ void KisMainWindow::importVideoAnimation()
         KoUpdaterPtr updater =
                 !document->fileBatchMode() ? viewManager()->createUnthreadedUpdater(i18n("Import frames")) : 0;
         KisAnimationImporter importer(document->image(), updater);
-        KisImportExportErrorCode status = importer.import(files, firstFrame, step, false, false, 0, useDocumentColorSpace);
-
-        dlg.cleanupWorkDir();
+        KisImportExportErrorCode status = importer.import(renderedFrames.renderedFrameFiles, firstFrame, step, false, false, 0, useDocumentColorSpace, renderedFrames.renderedFrameTargetTimes);
 
         if (!status.isOk() && !status.isInternalError()) {
             QString msg = status.errorMessage();
@@ -2246,11 +2148,6 @@ void KisMainWindow::viewFullscreen(bool fullScreen)
         setWindowState(windowState() & ~Qt::WindowFullScreen);   // reset
     }
     d->fullScreenMode->setChecked(isFullScreen());
-}
-
-void KisMainWindow::setMaxRecentItems(uint _number)
-{
-    d->recentFiles->setMaxItems(_number);
 }
 
 QDockWidget* KisMainWindow::createDockWidget(KoDockFactoryBase* factory)
@@ -2627,8 +2524,6 @@ void KisMainWindow::updateWindowMenu()
     bool showMdiArea = windows.count( ) > 0;
     if (!showMdiArea) {
         showWelcomeScreen(true); // see workaround in function in header
-        // keep the recent file list updated when going back to welcome screen
-        reloadRecentFileList();
     }
 
     // enable/disable the toolbox docker if there are no documents open
@@ -2851,9 +2746,6 @@ void KisMainWindow::createActions()
     d->fullScreenMode = actionManager->createStandardAction(KStandardAction::FullScreen, this, SLOT(viewFullscreen(bool)));
 
     d->recentFiles = KStandardAction::openRecent(this, SLOT(slotFileOpenRecent(QUrl)), actionCollection());
-    connect(d->recentFiles, SIGNAL(recentListCleared()), this, SLOT(saveRecentFiles()));
-    KSharedConfigPtr configPtr =  KSharedConfig::openConfig();
-    d->recentFiles->loadEntries(configPtr->group("RecentFiles"));
 
     d->saveAction = actionManager->createStandardAction(KStandardAction::Save, this, SLOT(slotFileSave()));
     d->saveAction->setActivationFlags(KisAction::ACTIVE_IMAGE);

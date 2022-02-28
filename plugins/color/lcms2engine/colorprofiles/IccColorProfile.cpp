@@ -442,6 +442,19 @@ void IccColorProfile::calculateFloatUIMinMax(void)
     Q_ASSERT(num_channels >= 1 && num_channels <= 4); // num_channels==1 is for grayscale, we need to handle it
     Q_ASSERT(color_space_mask);
 
+    if (color_space_sig == cmsSigYCbCrData) {
+        // tricky, because the fundamental problem is that YCbCr profiles
+        // are LUT based, but this seems to be the case with the profiles
+        // that can be tested. Given this space is a reinterpretation of
+        // RGB spaces, this might be the appropriate value, though.
+        ret.resize(num_channels);
+        for (unsigned int i = 0; i < num_channels; ++i) {
+            ret[i].minVal = 0;
+            ret[i].maxVal = 1;
+        }
+        return;
+    }
+
     // to try to find the max range of float/doubles for this profile,
     // pass in min/max int and make the profile convert that
     // this is far from perfect, we need a better way, if possible to get the "bounds" of a profile

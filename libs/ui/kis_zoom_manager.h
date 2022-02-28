@@ -65,6 +65,8 @@ public:
     qreal resolutionX() const;
     qreal resolutionY() const;
 
+    void updateZoomMarginSize();
+
 public Q_SLOTS:
 
     void slotZoomChanged(KoZoomMode::Mode mode, qreal zoom);
@@ -76,6 +78,7 @@ public Q_SLOTS:
     void changeAspectMode(bool aspectMode);
     void pageOffsetChanged();
     void zoomTo100();
+    void slotToggleZoomToFit();
     void applyRulersUnit(const KoUnit &baseUnit);
     void setMinMaxZoom();
     void setRulersPixelMultiple2(bool enabled);
@@ -104,6 +107,9 @@ private:
     qreal m_devicePixelRatio;
     bool m_aspectMode {false};
     KisSignalCompressor m_guiUpdateCompressor;
+    qreal m_previousZoomLevel;
+    KoZoomMode::Mode m_previousZoomMode;
+    QPointF m_previousZoomPoint;
 };
 
 

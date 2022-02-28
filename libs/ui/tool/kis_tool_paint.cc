@@ -125,6 +125,9 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
     case(KoCanvasResource::Opacity):
         setOpacity(v.toDouble());
         break;
+    case(KoCanvasResource::CurrentPaintOpPreset):
+        requestUpdateOutline(m_outlineDocPoint, 0);
+        break;
     default: //nothing
         break;
     }
@@ -669,8 +672,8 @@ void KisToolPaint::decreaseBrushSize()
 void KisToolPaint::showBrushSize()
 {
      KisCanvas2 *kisCanvas =dynamic_cast<KisCanvas2*>(canvas());
-     kisCanvas->viewManager()->showFloatingMessage(i18n("%1 %2 px", QString("Brush Size:"), currentPaintOpPreset()->settings()->paintOpSize())
-                                                                   , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
+     kisCanvas->viewManager()->showFloatingMessage(i18n("Brush Size: %1 px", currentPaintOpPreset()->settings()->paintOpSize())
+                                                   , QIcon(), 1000, KisFloatingMessage::High,  Qt::AlignLeft | Qt::TextWordWrap | Qt::AlignVCenter);
 }
 
 std::pair<QRectF,QRectF> KisToolPaint::colorPreviewDocRect(const QPointF &outlineDocPoint)

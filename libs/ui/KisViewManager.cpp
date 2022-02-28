@@ -33,6 +33,7 @@
 #include <QObject>
 #include <QPoint>
 #include <QPrintDialog>
+#include <QPushButton>
 #include <QRect>
 #include <QScrollBar>
 #include <QStatusBar>
@@ -125,6 +126,10 @@
 
 #include "kis_filter_configuration.h"
 
+#ifdef Q_OS_WIN
+#include "KisWindowsPackageUtils.h"
+#endif
+
 class BlockingUserInputEventFilter : public QObject
 {
     bool eventFilter(QObject *watched, QEvent *event) override
@@ -203,6 +208,7 @@ public:
     KisAction *zoomTo100pct;
     KisAction *zoomIn;
     KisAction *zoomOut;
+    KisAction *toggleZoomToFit;
     KisAction *softProof;
     KisAction *gamutCheck;
     KisAction *toggleFgBg;
@@ -339,6 +345,8 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisEffectiveCompositeOpResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisOpacityResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisFlowResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisFadeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisScatterResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisSizeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodAvailabilityResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdResourceConverter));
@@ -483,6 +491,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+        d->viewConnections.addUniqueConnection(d->toggleZoomToFit, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotToggleZoomToFit()));
 
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
@@ -739,6 +748,8 @@ void KisViewManager::createActions()
 
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
+
+    d->toggleZoomToFit = actionManager()->createAction("toggle_zoom_to_fit");
 
     d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);
     connect(d->actionAuthor, SIGNAL(triggered(QString)), this, SLOT(changeAuthorProfile(QString)));
@@ -1289,7 +1300,65 @@ void KisViewManager::toggleTabletLogger()
 
 void KisViewManager::openResourcesDirectory()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(KisResourceLocator::instance()->resourceLocationBase()));
+    QString resourcePath = KisResourceLocator::instance()->resourceLocationBase();
+#ifdef Q_OS_WIN
+    if (KisWindowsPackageUtils::isRunningInPackage()) {
+        const QDir resourceDir(resourcePath);
+        const QString appData = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        // FIXME: Actually check if the resource dir is inside roaming appdata?
+        if (resourceDir.absolutePath().compare(appData, Qt::CaseInsensitive) == 0) {
+            const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
+            if (!privateAppData.isEmpty()) {
+                // FIXME: Actually build the path based on the configured path relative to user RoamingAppData?
+                const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + qApp->applicationName());
+                if (privateResourceDir.exists()) {
+                    const auto pathToDisplay = [](const QString &path) {
+                        // Due to how Unicode word wrapping works, the string does not
+                        // wrap after backslashes in Qt 5.12. We don't want the path to
+                        // become too long, so we add a U+200B ZERO WIDTH SPACE to allow
+                        // wrapping. The downside is that we cannot let the user select
+                        // and copy the path because it now contains invisible unicode
+                        // code points.
+                        // See: https://bugreports.qt.io/browse/QTBUG-80892
+                        return QDir::toNativeSeparators(path).replace(QChar('\\'), QStringLiteral(u"\\\u200B"));
+                    };
+                    QMessageBox mbox(mainWindowAsQWidget());
+                    mbox.setIcon(QMessageBox::Information);
+                    mbox.setWindowTitle(i18nc("@title:window resource folder", "Open Resource Folder"));
+                    // Similar text is also used in kis_dlg_preferences.cc
+                    mbox.setText(i18nc("@info resource folder",
+                        "<p>You are using the Microsoft Store package version of Krita. "
+                        "Even though Krita can be configured to place resources under the "
+                        "user AppData location, Windows may actually store the files "
+                        "inside a private app location.</p>\n"
+                        "<p>You should check both locations to determine where "
+                        "the files are located.</p>\n"
+                        "<p><b>User AppData</b>:<br/>\n"
+                        "%1</p>\n"
+                        "<p><b>Private app location</b>:<br/>\n"
+                        "%2</p>",
+                        pathToDisplay(resourceDir.absolutePath()),
+                        pathToDisplay(privateResourceDir.absolutePath())
+                    ));
+                    mbox.setTextInteractionFlags(Qt::NoTextInteraction);
+                    const auto *btnOpenUserAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &user AppData"), QMessageBox::AcceptRole);
+                    const auto *btnOpenPrivateAppData = mbox.addButton(i18nc("@action:button resource folder", "Open in &private app location"), QMessageBox::AcceptRole);
+                    mbox.addButton(QMessageBox::Close);
+                    mbox.setDefaultButton(QMessageBox::Close);
+                    mbox.exec();
+                    if (mbox.clickedButton() == btnOpenPrivateAppData) {
+                        resourcePath = privateResourceDir.absolutePath();
+                    } else if (mbox.clickedButton() == btnOpenUserAppData) {
+                        // no-op: resourcePath = resourceDir.absolutePath();
+                    } else {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+#endif
+    QDesktopServices::openUrl(QUrl::fromLocalFile(resourcePath));
 }
 
 void KisViewManager::updateIcons()
@@ -1341,6 +1410,11 @@ void KisViewManager::showFloatingMessage(const QString &message, const QIcon& ic
 KisMainWindow *KisViewManager::mainWindow() const
 {
     return qobject_cast<KisMainWindow*>(d->mainWindow);
+}
+
+QWidget *KisViewManager::mainWindowAsQWidget() const
+{
+    return mainWindow();
 }
 
 

@@ -23,6 +23,7 @@ class KisToolSelectSimilar: public KisToolSelect
 public:
     KisToolSelectSimilar(KoCanvasBase * canvas);
     void beginPrimaryAction(KoPointerEvent *event) override;
+    void endPrimaryAction(KoPointerEvent *event) override;
     void paint(QPainter&, const KoViewConverter &) override {}
     QWidget* createOptionWidget() override;
     void resetCursorStyle() override;

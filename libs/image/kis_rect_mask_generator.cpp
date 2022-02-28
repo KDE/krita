@@ -87,11 +87,6 @@ void KisRectangleMaskGenerator::setSoftness(qreal softness)
     d->transformedFadeY = d->yfadecoeff * safeSoftnessCoeff;
 }
 
-bool KisRectangleMaskGenerator::shouldSupersample() const
-{
-    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
-}
-
 bool KisRectangleMaskGenerator::shouldVectorize() const
 {
     return !shouldSupersample() && spikes() == 2;

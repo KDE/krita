@@ -241,18 +241,22 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 QVector<QRect> patches = KritaUtils::splitRectIntoPatches(shared->processRect, size);
 
                 Q_FOREACH (const QRect &patch, patches) {
-                    addJobConcurrent(processJobs, [patch, shared, progress](){
-                        shared->filter()->processImpl(shared->filterDevice, patch,
+                    if (!patch.isEmpty()) {
+                        addJobConcurrent(processJobs, [patch, shared, progress](){
+                            shared->filter()->processImpl(shared->filterDevice, patch,
+                                                          shared->filterConfig().data(),
+                                                          progress->updater());
+                        });
+                    }
+                }
+            } else {
+                if (!shared->processRect.isEmpty()) {
+                    addJobSequential(processJobs, [shared, progress](){
+                        shared->filter()->processImpl(shared->filterDevice, shared->processRect,
                                                       shared->filterConfig().data(),
                                                       progress->updater());
                     });
                 }
-            } else {
-                addJobSequential(processJobs, [shared, progress](){
-                    shared->filter()->processImpl(shared->filterDevice, shared->processRect,
-                                             shared->filterConfig().data(),
-                                             progress->updater());
-                });
             }
 
             runnableJobsInterface()->addRunnableJobs(processJobs);

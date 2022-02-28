@@ -50,8 +50,13 @@ public:
 
     QSize sizeHint() const override
     {
-        Q_ASSERT(0);
-        return QSize();
+        // This is implemented just to not freak out GammaRay, in practice
+        // this doesn't have any effect on the layout.
+        if (m_orientation == Qt::Vertical) {
+            return QSize(m_buttonSize.width(), m_buttonSize.height() * count());
+        } else {
+            return QSize(m_buttonSize.width() * count(), m_buttonSize.height());
+        }
     }
 
     void addItem(QLayoutItem*) override { Q_ASSERT(0); }
@@ -75,7 +80,13 @@ public:
             foreach (QWidgetItem* w, m_items) {
                 if (w->isEmpty())
                     continue;
-                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
+                int realX;
+                if (parentWidget()->isLeftToRight()) {
+                    realX = x;
+                } else {
+                    realX = rect.width() - x - size.width();
+                }
+                w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
                 x += size.width();
                 if (x + size.width() > rect.width()) {
                     x = 0;
@@ -86,7 +97,13 @@ public:
             foreach (QWidgetItem* w, m_items) {
                 if (w->isEmpty())
                     continue;
-                w->widget()->setGeometry(QRect(x, y, size.width(), size.height()));
+                int realX;
+                if (parentWidget()->isLeftToRight()) {
+                    realX = x;
+                } else {
+                    realX = rect.width() - x - size.width();
+                }
+                w->widget()->setGeometry(QRect(realX, y, size.width(), size.height()));
                 y += size.height();
                 if (y + size.height() > rect.height()) {
                     x += size.width();
@@ -400,12 +417,26 @@ private:
 
             if (notDryRun) {
                 const int usedColumns = qMin(buttonCount, maxColumns);
+                int narrowSide = usedColumns * iconWidth;
+                int longSide = neededRowCount * iconHeight;
                 if (isVertical) {
-                    section->setGeometry(x, y,
-                                         usedColumns * iconWidth, neededRowCount * iconHeight);
+                    int realX;
+                    if (parentWidget()->isLeftToRight()) {
+                        realX = x;
+                    } else {
+                        realX = rect.width() - x - narrowSide;
+                    }
+                    section->setGeometry(realX, y,
+                                         narrowSide, longSide);
                 } else {
-                    section->setGeometry(y, x,
-                                         neededRowCount * iconHeight, usedColumns * iconWidth);
+                    int realX;
+                    if (parentWidget()->isLeftToRight()) {
+                        realX = y;
+                    } else {
+                        realX = rect.width() - y - longSide;
+                    }
+                    section->setGeometry(realX, x,
+                                         longSide, narrowSide);
                 }
             }
 

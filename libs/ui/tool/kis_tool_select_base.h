@@ -25,6 +25,7 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_selection_tool_helper.h"
 #include "kis_assert.h"
+#include <input/kis_extended_modifiers_mapper.h>
 
 /**
  * This is a basic template to create selection tools from basic path based drawing tools.
@@ -34,6 +35,7 @@
  * Shift: add to selection
  * Alt: subtract from selection
  * Shift+Alt: intersect current selection
+ * Ctrl+Alt: symmetric difference
  * Ctrl: replace selection
  *
  * The mapping itself is done in KisSelectionModifierMapper.
@@ -41,19 +43,18 @@
  * Certain tools also use modifier keys to alter their behavior, e.g. forcing square proportions with the rectangle tool.
  * The template enables the following rules for forwarding keys:
 
- * 1) Any modifier keys held *when the tool is first activated* will determine
- * the new selection method. This is recorded in m_selectionActionAlternate. A
- * value of m_selectionActionAlternate = SELECTION_DEFAULT means no modifier was
- * being pressed when the tool was activated.
- *
- * 2) If the underlying tool *does not take modifier keys*, pressing modifier
- * keys in the middle of a stroke will change the selection method. This is
- * recorded in m_selectionAction. A value of SELECTION_DEFAULT means no modifier
- * is being pressed. Applies to the lasso tool and polygon tool.
- *
- * 3) If the underlying tool *takes modifier keys,* they will always be
- * forwarded to the underlying tool, and it is not possible to change the
- * selection method in the middle of a stroke.
+ * 1) If the user is not selecting, then changing the modifier combination
+ *    changes the selection method.
+ * 
+ * 2) If the user is selecting then the modifier keys are forwarded to the
+ *    specific tool, so that it can do with them whatever it wants. The selection
+ *    method is not changed in this stage and it will be the same as just before
+ *    the user started selecting.
+ * 
+ * 3) Once the user finishes selecting, the selection method is updated to reflect
+ *    the current modifier combination
+ * 
+ * 4) If the user is moving the selection, then changing the modifiers 
  */
 
 template <class BaseClass>
@@ -281,48 +282,101 @@ public:
     }
 
     void keyPressEvent(QKeyEvent *event) {
-        if (this->mode() != KisTool::PAINT_MODE) {
-            setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
-            this->resetCursorStyle();
+        m_currentModifiers = event->modifiers();
+        const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
+
+        if (key == Qt::Key_Control) {
+            m_currentModifiers |= Qt::ControlModifier;
+        } else if (key == Qt::Key_Shift) {
+            m_currentModifiers |= Qt::ShiftModifier;
+        } else if (key == Qt::Key_Alt) {
+            m_currentModifiers |= Qt::AltModifier;
         }
-        BaseClass::keyPressEvent(event);
+        
+        // Avoid changing the selection mode and cursor if the user is interactiong
+        if (isSelecting()) {
+            BaseClass::keyPressEvent(event);
+            return;
+        }
+        if (isMovingSelection()) {
+            return;
+        }
+
+        setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
+        this->resetCursorStyle();
     }
 
     void keyReleaseEvent(QKeyEvent *event) {
-        if (this->mode() != KisTool::PAINT_MODE) {
-            setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
-            this->resetCursorStyle();
+        m_currentModifiers = event->modifiers();
+        const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
+
+        if (key == Qt::Key_Control) {
+            m_currentModifiers &= ~Qt::ControlModifier;
+        } else if (key == Qt::Key_Shift) {
+            m_currentModifiers &= ~Qt::ShiftModifier;
+        } else if (key == Qt::Key_Alt) {
+            m_currentModifiers &= ~Qt::AltModifier;
         }
-        BaseClass::keyPressEvent(event);
-    }
 
-    void mouseMoveEvent(KoPointerEvent *event) {
-        if (!this->hasUserInteractionRunning() &&
-           (m_moveStrokeId || this->mode() != KisTool::PAINT_MODE)) {
+        // Avoid changing the selection mode and cursor if the user is interacting
+        if (isSelecting()) {
+            BaseClass::keyReleaseEvent(event);
+            return;
+        }
+        if (isMovingSelection()) {
+            return;
+        }
 
-            const QPointF pos = this->convertToPixelCoord(event->point);
-            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
+        setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
+        if (m_currentModifiers == Qt::NoModifier) {
+            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, m_currentModifiers);
             if (selectionMask) {
                 this->useCursor(KisCursor::moveSelectionCursor());
             } else {
-                setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
                 this->resetCursorStyle();
             }
+        } else {
+            this->resetCursorStyle();
         }
-
-        BaseClass::mouseMoveEvent(event);
     }
 
+    void mouseMoveEvent(KoPointerEvent *event) {
+        m_currentPos = this->convertToPixelCoord(event->point);
+
+        if (isSelecting()) {
+            BaseClass::mouseMoveEvent(event);
+            return;
+        }
+        if (isMovingSelection()) {
+            return;
+        }
+
+        KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, event->modifiers());
+        if (selectionMask) {
+            this->useCursor(KisCursor::moveSelectionCursor());
+        } else {
+            setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
+            this->resetCursorStyle();
+        }
+    }
 
     virtual void beginPrimaryAction(KoPointerEvent *event)
     {
-        if (!this->hasUserInteractionRunning()) {
-            const QPointF pos = this->convertToPixelCoord(event->point);
-            KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
-            KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+        if (isSelecting()) {
+            BaseClass::beginPrimaryAction(event);
+            return;
+        }
+        if (isMovingSelection()) {
+            return;
+        }
 
-            KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
-            if (selectionMask) {
+        const QPointF pos = this->convertToPixelCoord(event->point);
+        KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+        KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
+
+        KisNodeSP selectionMask = locateSelectionMaskUnderCursor(pos, event->modifiers());
+        if (selectionMask) {
+            if (this->beginMoveSelectionInteraction()) {
                 KisStrokeStrategy *strategy = new MoveStrokeStrategy({selectionMask}, this->image().data(), this->image().data());
                 m_moveStrokeId = this->image()->startStroke(strategy);
                 m_dragStartPos = pos;
@@ -330,19 +384,14 @@ public:
                 return;
             }
         }
-        m_didMove = false;
-        keysAtStart = event->modifiers();
 
-        setAlternateSelectionAction(KisSelectionModifierMapper::map(keysAtStart));
-        if (alternateSelectionAction() != SELECTION_DEFAULT) {
-            BaseClass::listenToModifiers(false);
-        }
+        m_didMove = false;
         BaseClass::beginPrimaryAction(event);
     }
 
     virtual void continuePrimaryAction(KoPointerEvent *event)
     {
-        if (m_moveStrokeId) {
+        if (isMovingSelection()) {
             const QPointF pos = this->convertToPixelCoord(event->point);
             const QPoint offset((pos - m_dragStartPos).toPoint());
 
@@ -350,36 +399,19 @@ public:
             return;
         }
 
-
-        //If modifier keys have changed, tell the base tool it can start capturing modifiers
-        if ((keysAtStart != event->modifiers()) && !BaseClass::listeningToModifiers()) {
-            BaseClass::listenToModifiers(true);
-        }
-
-        //Always defer to the base class if it signals it is capturing modifier keys
-        if (!BaseClass::listeningToModifiers()) {
-            setAlternateSelectionAction(KisSelectionModifierMapper::map(event->modifiers()));
-        }
-
         BaseClass::continuePrimaryAction(event);
     }
 
     void endPrimaryAction(KoPointerEvent *event)
     {
-        if (m_moveStrokeId) {
+        if (isMovingSelection()) {
             this->image()->endStroke(m_moveStrokeId);
-
             m_moveStrokeId.clear();
+            this->endMoveSelectionInteraction();
             return;
         }
 
-
-        keysAtStart = Qt::NoModifier; //reset this with each action
         BaseClass::endPrimaryAction(event);
-    }
-
-    bool selectionDragInProgress() const {
-        return m_moveStrokeId;
     }
 
     bool selectionDidMove() const {
@@ -393,6 +425,62 @@ public:
         return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
     }
 
+    bool beginMoveSelectionInteraction() {
+        if (m_currentInteraction != Interaction_None) {
+            return false;
+        }
+        m_currentInteraction = Interaction_MoveSelection;
+        return true;
+    }
+
+    bool endMoveSelectionInteraction() {
+        if (!isMovingSelection()) {
+            return false;
+        }
+        m_currentInteraction = Interaction_None;
+        updateCursorDelayed();
+        return true;
+    }
+
+    bool beginSelectInteraction() {
+        if (m_currentInteraction != Interaction_None) {
+            return false;
+        }
+        m_currentInteraction = Interaction_Select;
+        return true;
+    }
+
+    bool endSelectInteraction() {
+        if (!isSelecting()) {
+            return false;
+        }
+        m_currentInteraction = Interaction_None;
+        updateCursorDelayed();
+        return true;
+    }
+
+    bool isMovingSelection() const {
+        return m_currentInteraction == Interaction_MoveSelection;
+    }
+
+    bool isSelecting() const {
+        return m_currentInteraction == Interaction_Select;
+    }
+
+    void updateCursorDelayed() {
+        setAlternateSelectionAction(KisSelectionModifierMapper::map(m_currentModifiers));
+        QTimer::singleShot(100,
+            [this]()
+            {
+                KisNodeSP selectionMask = locateSelectionMaskUnderCursor(m_currentPos, m_currentModifiers);
+                if (selectionMask) {
+                    this->useCursor(KisCursor::moveSelectionCursor());
+                } else {
+                    this->resetCursorStyle();
+                }
+            }
+        );
+    }
 
 protected:
     using BaseClass::canvas;
@@ -408,9 +496,19 @@ protected:
     }
 
 private:
-    Qt::KeyboardModifiers keysAtStart;
+    enum Interaction
+    {
+        Interaction_None,
+        Interaction_Select,
+        Interaction_MoveSelection
+    };
+
+    Interaction m_currentInteraction{Interaction_None};
+
+    Qt::KeyboardModifiers m_currentModifiers;
 
     QPointF m_dragStartPos;
+    QPointF m_currentPos;
     KisStrokeId m_moveStrokeId;
     bool m_didMove = false;
 
@@ -434,11 +532,6 @@ struct FakeBaseTool : KisTool
         : KisTool(canvas, cursor)
     {
     }
-
-    bool hasUserInteractionRunning() const {
-        return false;
-    }
-
 };
 
 

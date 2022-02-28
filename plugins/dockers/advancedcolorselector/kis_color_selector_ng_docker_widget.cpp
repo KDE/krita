@@ -28,6 +28,7 @@
 #include "kis_preference_set_registry.h"
 #include "kis_node.h"
 #include "kis_paint_device.h"
+#include "KisMainWindow.h"
 
 #include "kis_color_history.h"
 #include "kis_common_colors.h"

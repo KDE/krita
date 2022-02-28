@@ -93,7 +93,6 @@ void TestColorConversionSystem::testAlphaConnectionPaths()
 
     using Path = KoColorConversionSystem::Path;
     using Vertex = KoColorConversionSystem::Vertex;
-    using Node = KoColorConversionSystem::Node;
     using NodeKey = KoColorConversionSystem::NodeKey;
 
     std::vector<NodeKey> expectedPath;

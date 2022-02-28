@@ -9,17 +9,20 @@
 #ifndef KIS_TOOL_FILL_H_
 #define KIS_TOOL_FILL_H_
 
+#include <QPoint>
+#include <QList>
+#include <QVector>
+#include <QScopedPointer>
+
 #include "kis_tool_paint.h"
 #include <flake/kis_node_shape.h>
 #include <KoIcon.h>
 #include <kis_icon.h>
-#include <QPoint>
-#include <QList>
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <kis_signal_compressor.h>
 #include <kis_signal_auto_connection.h>
-
+#include <kis_resources_snapshot.h>
 
 class QWidget;
 class QCheckBox;
@@ -32,15 +35,20 @@ class KisAngleSelector;
 
 class KisToolFill : public KisToolPaint
 {
-
     Q_OBJECT
 
 public:
+    enum ContinuousFillMode
+    {
+        FillAnyRegion,
+        FillSimilarRegions
+    };
 
     KisToolFill(KoCanvasBase * canvas);
     ~KisToolFill() override;
 
     void beginPrimaryAction(KoPointerEvent *event) override;
+    void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
 
     QWidget * createOptionWidget() override;
@@ -50,7 +58,7 @@ public Q_SLOTS:
     void deactivate() override;
     void slotSetUseFastMode(bool);
     void slotSetThreshold(int);
-    void slotSetSoftness(int);
+    void slotSetOpacitySpread(int);
     void slotSetUsePattern(bool);
     void slotSetFillSelection(bool);
     void slotSetUseSelectionAsBoundary(bool);
@@ -60,10 +68,12 @@ public Q_SLOTS:
     void slotSetSelectedColorLabels();
     void slotSetPatternScale(qreal scale);
     void slotSetPatternRotation(qreal rotate);
+    void slotSetContinuousFillMode(ContinuousFillMode continuousFillMode);
 
 protected Q_SLOTS:
     void resetCursorStyle() override;
     void slotUpdateAvailableColorLabels();
+    void slotUpdateContinuousFill();
 
 protected:
     bool wantsAutoScroll() const override { return false; }
@@ -75,21 +85,23 @@ private:
     void activateConnectionsToImage();
     void deactivateConnectionsToImage();
 
+    void beginFilling(const QPoint &seedPoint);
+    void addFillingOperation(const QPoint &seedPoint);
+    void addFillingOperation(const QVector<QPoint> &seedPoints);
+    void addUpdateOperation();
+    void endFilling();
 
 private:
-
     QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
     QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
     QString SAMPLE_LAYERS_MODE_COLOR_LABELED = {"colorLabeledLayers"};
+    static constexpr int minimumDragDistance{4};
+    static constexpr int minimumDragDistanceSquared{minimumDragDistance * minimumDragDistance};
 
-
-private:
-    Qt::KeyboardModifiers keysAtStart;
     int m_feather;
     int m_sizemod;
-    QPoint m_startPos;
     int m_threshold;
-    int m_softness;
+    int m_opacitySpread;
     bool m_usePattern;
     bool m_fillOnlySelection;
     bool m_useSelectionAsBoundary;
@@ -98,16 +110,21 @@ private:
     QList<int> m_selectedColors;
     qreal m_patternRotation;
     qreal m_patternScale;
-
-    bool m_widgetsInitialized {false};
+    ContinuousFillMode m_continuousFillMode;
+    KisSelectionSP m_continuousFillMask;
+    KoColor m_continuousFillReferenceColor;
+    KisPaintDeviceSP m_referencePaintDevice;
+    KisResourcesSnapshotSP m_resourcesSnapshot;
+    QTransform m_transform;
 
     QCheckBox *m_checkUseFastMode;
     KisSliderSpinBox *m_slThreshold;
-    KisSliderSpinBox *m_slSoftness;
+    KisSliderSpinBox *m_slOpacitySpread;
     KisSliderSpinBox *m_sizemodWidget;
     KisSliderSpinBox *m_featherWidget;
     KisAngleSelector *m_angleSelectorPatternRotate;
     KisDoubleSliderSpinBox *m_sldPatternScale;
+    QComboBox *m_cmbContinuousFillMode;
     QCheckBox *m_checkUsePattern;
     QCheckBox *m_checkFillSelection;
     QCheckBox *m_checkUseSelectionAsBoundary;
@@ -116,6 +133,14 @@ private:
     KisSignalCompressor m_colorLabelCompressor;
     KisDummiesFacadeBase* m_dummiesFacade;
     KisSignalAutoConnectionsStore m_imageConnections;
+
+    bool m_widgetsInitialized{false};
+    bool m_isFilling{false};
+    bool m_isDragging{false};
+    QPoint m_fillStartWidgetPosition;
+    KisSignalCompressor m_compressorContinuousFillUpdate;
+    QVector<QPoint> m_seedPoints;
+    KisStrokeId m_fillStrokeId;
 
     KConfigGroup m_configGroup;
 };

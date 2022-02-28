@@ -51,11 +51,13 @@
 #include <KisUsageLogger.h>
 #include <kis_image_config.h>
 #include "KisUiFont.h"
+#include <KisMainWindow.h>
 
 #include <KLocalizedTranslator>
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
+#include <KisAndroidCrashHandler.h>
 #endif
 
 #if defined Q_OS_WIN
@@ -281,6 +283,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     else {
         dbgKrita << "Permission granted";
     }
+
+    KisAndroidCrashHandler::handler_init();
 #endif
 
     const QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
@@ -824,7 +828,7 @@ void installEcmTranslations(KisApplication &app)
         Q_FOREACH(const auto &catalog, ecmCatalogs) {
             QString subPath = QStringLiteral("locale/") % localeDirName % QStringLiteral("/LC_MESSAGES/") % catalog % QStringLiteral(".qm");
 #if defined(Q_OS_ANDROID)
-            const QString fullPath = QStringLiteral("assets:/share/") + subPath;
+            const QString fullPath = QStringLiteral("assets:/") + subPath;
 #else
             const QString root = QLibraryInfo::location(QLibraryInfo::PrefixPath);
 

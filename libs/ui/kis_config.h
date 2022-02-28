@@ -174,6 +174,9 @@ public:
     qint32 pasteBehaviour(bool defaultValue = false) const;
     void setPasteBehaviour(qint32 behaviour) const;
 
+    qint32 pasteFormat(bool defaultValue) const;
+    void setPasteFormat(qint32 format);
+
     qint32 monitorRenderIntent(bool defaultValue = false) const;
     void setRenderIntent(qint32 monitorRenderIntent) const;
 
@@ -529,6 +532,9 @@ public:
     bool trimKra(bool defaultValue = false) const;
     void setTrimKra(bool trim);
 
+    bool trimFramesImport(bool defaultValue = false) const;
+    void setTrimFramesImport(bool trim);
+
     bool toolOptionsInDocker(bool defaultValue = false) const;
     void setToolOptionsInDocker(bool inDocker);
 
@@ -546,6 +552,9 @@ public:
 
     bool smoothZooming(bool defaultValue = false) const;
     void setSmoothZooming(bool scale);
+
+    int zoomMarginSize(int defaultValue = 0) const;
+    void setZoomMarginSize(int zoomMarginSize);
 
     void setEnableOpenGLFramerateLogging(bool value) const;
     bool enableOpenGLFramerateLogging(bool defaultValue = false) const;

@@ -17,6 +17,7 @@
 #include "kis_base_rects_walker.h"
 #include "kis_async_merger.h"
 #include "kis_updater_context.h"
+#include <KoAlwaysInline.h>
 
 //#define DEBUG_JOBS_SEQUENCE
 
@@ -46,6 +47,16 @@ public:
     }
 
     void run() override {
+        runImpl();
+
+        // notify that the job is exiting and wake everybody
+        // waiting on wakeForDone()
+        m_updaterContext->jobThreadExited();
+    }
+
+private:
+
+    ALWAYS_INLINE void runImpl() {
         if (!isRunning()) return;
 
         /**
@@ -108,6 +119,8 @@ public:
             }
         }
     }
+
+public:
 
     inline void runMergeJob() {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_atomicType == Type::MERGE);

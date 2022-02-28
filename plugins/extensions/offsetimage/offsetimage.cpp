@@ -50,7 +50,7 @@ void OffsetImage::slotOffsetImage()
     KisImageSP image = viewManager()->image().toStrongRef();
     if (image) {
 
-        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindow(), "OffsetImage", offsetWrapRect().size());
+        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindowAsQWidget(), "OffsetImage", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
         KUndo2MagicString actionName = kundo2_i18n("Offset Image");
@@ -74,7 +74,7 @@ void OffsetImage::slotOffsetLayer()
     KisImageSP image = viewManager()->image().toStrongRef();
     if (image) {
 
-        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindow(), "OffsetLayer", offsetWrapRect().size());
+        DlgOffsetImage * dlgOffsetImage = new DlgOffsetImage(viewManager()->mainWindowAsQWidget(), "OffsetLayer", offsetWrapRect().size());
         Q_CHECK_PTR(dlgOffsetImage);
 
         KUndo2MagicString actionName = kundo2_i18n("Offset Layer");

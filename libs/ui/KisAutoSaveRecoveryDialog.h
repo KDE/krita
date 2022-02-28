@@ -22,6 +22,7 @@ public:
     explicit KisAutoSaveRecoveryDialog(const QStringList &filenames, QWidget *parent = 0);
     ~KisAutoSaveRecoveryDialog() override;
     QStringList recoverableFiles();
+    static QString autoSaveLocation();
 
 public Q_SLOTS:
 

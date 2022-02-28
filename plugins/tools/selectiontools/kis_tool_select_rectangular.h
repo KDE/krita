@@ -25,16 +25,6 @@ class __KisToolSelectRectangularLocal : public KisToolRectangleBase
 
 public:
     __KisToolSelectRectangularLocal(KoCanvasBase * canvas);
-
-    bool hasUserInteractionRunning() const;
-
-protected:
-    virtual SelectionMode selectionMode() const = 0;
-    virtual SelectionAction selectionAction() const = 0;
-    virtual bool antiAliasSelection() const = 0;
-
-private:
-    void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
 };
 
 
@@ -43,8 +33,11 @@ class KisToolSelectRectangular : public KisToolSelectBase<__KisToolSelectRectang
     Q_OBJECT
 public:
     KisToolSelectRectangular(KoCanvasBase* canvas);
-
     void resetCursorStyle() override;
+private:
+    void finishRect(const QRectF& rect, qreal roundCornersX, qreal roundCornersY) override;
+    void beginShape() override;
+    void endShape() override;
 };
 
 class KisToolSelectRectangularFactory : public KisSelectionToolFactoryBase

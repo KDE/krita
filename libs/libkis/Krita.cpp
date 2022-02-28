@@ -452,3 +452,5 @@ void Krita::mainWindowIsBeingCreated(KisMainWindow *kisWindow)
         extension->createActions(&window);
     }
 }
+
+#include "moc_Krita.cpp"

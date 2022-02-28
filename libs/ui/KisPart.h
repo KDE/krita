@@ -21,7 +21,7 @@
 #include "kritaui_export.h"
 #include <KConfigCore/kconfiggroup.h>
 #include <KoConfig.h>
-#include <KisMainWindow.h>
+#include <kis_types.h>
 
 namespace KIO {
 }
@@ -32,6 +32,9 @@ class KisView;
 class KisDocument;
 class KisIdleWatcher;
 class KisAnimationCachePopulator;
+class KisMainWindow;
+class KisInputManager;
+class KisViewManager;
 
 
 /**
@@ -142,6 +145,13 @@ public:
      * @return the currently active main window.
      */
     KisMainWindow *currentMainwindow() const;
+
+    /**
+     * Gets the currently active KisMainWindow as a QWidget, useful when you
+     * just need it to be used as a parent to a dialog or window without
+     * needing to include `KisMainWindow.h`.
+     */
+    QWidget *currentMainwindowAsQWidget() const;
 
     KisMainWindow *windowById(QUuid id) const;
 
@@ -285,7 +295,7 @@ public:
 
 private Q_SLOTS:
 
-    void slotDocumentSaved();
+    void slotDocumentSaved(const QString &filePath);
 
 private:
 

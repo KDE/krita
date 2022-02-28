@@ -116,7 +116,7 @@ void KisMaskGenerator::init()
 
 bool KisMaskGenerator::shouldSupersample() const
 {
-    return false;
+    return effectiveSrcWidth() < 10 || effectiveSrcHeight() < 10;
 }
 
 bool KisMaskGenerator::shouldVectorize() const

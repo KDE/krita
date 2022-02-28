@@ -13,7 +13,7 @@
 
 #include <ksharedconfig.h>
 #include <KisViewManager.h>
-
+#include <KisMainWindow.h>
 
 
 struct KisSessionResource::Private

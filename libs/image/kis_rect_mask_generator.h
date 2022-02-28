@@ -28,7 +28,6 @@ public:
 
     KisMaskGenerator* clone() const override;
 
-    bool shouldSupersample() const override;
     quint8 valueAt(qreal x, qreal y) const override;
     void setScale(qreal scaleX, qreal scaleY) override;
     void setSoftness(qreal softness) override;

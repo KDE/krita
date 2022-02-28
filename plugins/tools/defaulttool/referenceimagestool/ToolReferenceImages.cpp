@@ -86,7 +86,7 @@ void ToolReferenceImages::addReferenceImage()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
-            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImage");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindowAsQWidget(), KoFileDialog::OpenFile, "OpenReferenceImage");
     dialog.setCaption(i18n("Select a Reference Image"));
 
     QStringList locations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
@@ -142,7 +142,7 @@ void ToolReferenceImages::loadReferenceImages()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
-            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindowAsQWidget(), KoFileDialog::OpenFile, "OpenReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
     dialog.setCaption(i18n("Load Reference Images"));
 
@@ -192,7 +192,7 @@ void ToolReferenceImages::saveReferenceImages()
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_ASSERT_RECOVER_RETURN(kisCanvas);
 
-            KoFileDialog dialog(kisCanvas->viewManager()->mainWindow(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
+            KoFileDialog dialog(kisCanvas->viewManager()->mainWindowAsQWidget(), KoFileDialog::SaveFile, "SaveReferenceImageCollection");
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-reference-images");
     dialog.setCaption(i18n("Save Reference Images"));
 

@@ -1,0 +1,170 @@
+From e3b1f15dc24faa44c4ba1312397f14cc1e4d7da5 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Fri, 4 Feb 2022 08:17:10 +0000
+Subject: [PATCH] Android: Make longpress for right click less sensitive
+
+When context menu would show up for the long press (with stylus/finger),
+as soon as user would raise the device, the option underneath the tool
+would be selected and the context menu would close.
+
+With this commit, we prevent it. By finishing the previous events which
+led to longpress. So for touch down, we send a corresponding touch up
+first.
+---
+ .../org/qtproject/qt5/android/QtLayout.java   |  4 +-
+ .../org/qtproject/qt5/android/QtNative.java   |  2 +-
+ .../platforms/android/androidjniinput.cpp     | 89 +++++++++++--------
+ 3 files changed, 54 insertions(+), 41 deletions(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java b/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
+index 6b067a9cfd..469ff29779 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
+@@ -78,7 +78,9 @@ public class QtLayout extends ViewGroup
+         m_gestureDetector =
+             new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                 public void onLongPress(MotionEvent event) {
+-                    QtNative.longPress(getId(), (int) event.getX(), (int) event.getY());
++                    QtNative.longPress(getId(), (int)event.getX(), (int)event.getY(),
++                                       event.getToolType(0), event.getDeviceId(),
++                                       event.getEventTime());
+                 }
+             });
+         m_gestureDetector.setIsLongpressEnabled(true);
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 8e32a83f9f..3fb09d2733 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -1082,7 +1082,7 @@ public class QtNative
+     public static native void touchBegin(int winId);
+     public static native void touchAdd(int winId, int pointerId, int action, boolean primary, int x, int y, float major, float minor, float rotation, float pressure);
+     public static native void touchEnd(int winId, int action);
+-    public static native void longPress(int winId, int x, int y);
++    public static native void longPress(int winId, int x, int y, int source, int deviceId, long time);
+     // pointer methods
+ 
+     // tablet methods
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index 692b18df92..3319154eb8 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -240,43 +240,6 @@ namespace QtAndroidInput
+                                                  angleDelta);
+     }
+ 
+-    static void longPress(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y)
+-    {
+-        QAndroidInputContext *inputContext = QAndroidInputContext::androidInputContext();
+-        if (inputContext && qGuiApp)
+-            QMetaObject::invokeMethod(inputContext, "longPress", Q_ARG(int, x), Q_ARG(int, y));
+-
+-        //### TODO: add proper API for Qt 5.2
+-        static bool rightMouseFromLongPress = true;
+-        if (!rightMouseFromLongPress)
+-            return;
+-        m_ignoreMouseEvents = true;
+-        QPoint globalPos(x,y);
+-        QWindow *tlw = topLevelWindowAt(globalPos);
+-        QPoint localPos = globalPos;
+-        if (tlw && tlw->handle()) {
+-            localPos = tlw->handle()->mapFromGlobal(globalPos);
+-        }
+-
+-        // Release left button
+-        QWindowSystemInterface::handleMouseEvent(tlw,
+-                                                 localPos,
+-                                                 globalPos,
+-                                                 Qt::MouseButtons(Qt::NoButton));
+-
+-        // Press right button
+-        QWindowSystemInterface::handleMouseEvent(tlw,
+-                                                 localPos,
+-                                                 globalPos,
+-                                                 Qt::MouseButtons(Qt::RightButton));
+-
+-        // Release right button
+-        QWindowSystemInterface::handleMouseEvent(tlw,
+-                                                 localPos,
+-                                                 globalPos,
+-                                                 Qt::MouseButtons(Qt::NoButton));
+-    }
+-
+     static void touchBegin(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/)
+     {
+         m_touchPoints.clear();
+@@ -416,7 +379,7 @@ namespace QtAndroidInput
+             checkAndSetTopLevelWindow(m_mouseGrabber);
+             // fall through
+         case AMOTION_EVENT_ACTION_MOVE:
+-            if (!buttonState)
++            if (!buttonState && m_mouseGrabber)
+                 buttons = Qt::LeftButton;
+         default:
+             if (buttonState == AMOTION_EVENT_BUTTON_STYLUS_PRIMARY)
+@@ -438,6 +401,54 @@ namespace QtAndroidInput
+ #endif // QT_CONFIG(tabletevent)
+     }
+ 
++    static void longPress(JNIEnv * /*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y,
++                          jint toolType, jint deviceId, long time)
++    {
++        QAndroidInputContext *inputContext = QAndroidInputContext::androidInputContext();
++        if (inputContext && qGuiApp)
++            QMetaObject::invokeMethod(inputContext, "longPress", Q_ARG(int, x), Q_ARG(int, y));
++
++        //### TODO: add proper API for Qt 5.2
++        static bool rightMouseFromLongPress = true;
++        if (!rightMouseFromLongPress)
++            return;
++        m_ignoreMouseEvents = true;
++        QPoint globalPos(x,y);
++        QWindow *tlw = topLevelWindowAt(globalPos);
++        QPoint localPos = globalPos;
++        if (tlw && tlw->handle()) {
++            localPos = tlw->handle()->mapFromGlobal(globalPos);
++        }
++
++        // release the action that set this longpress, so we don't accidentally "perform" the action
++        switch (toolType) {
++        case AMOTION_EVENT_TOOL_TYPE_FINGER:
++            touchEnd(nullptr, nullptr, 0, AMOTION_EVENT_ACTION_CANCEL);
++            break;
++        case AMOTION_EVENT_TOOL_TYPE_MOUSE:
++            // Release left button
++            QWindowSystemInterface::handleMouseEvent(tlw, localPos, globalPos,
++                                                     Qt::MouseButtons(Qt::NoButton), Qt::NoButton,
++                                                     QEvent::MouseButtonRelease);
++
++            break;
++        case AMOTION_EVENT_TOOL_TYPE_STYLUS:
++            tabletEvent(nullptr, nullptr, 0, deviceId, time, AMOTION_EVENT_ACTION_UP,
++                        QTabletEvent::Pen, Qt::NoButton, x, y, 0, 0, 0, 0, 0);
++            break;
++        }
++
++        // Press right button
++        QWindowSystemInterface::handleMouseEvent(tlw, localPos, globalPos,
++                                                 Qt::MouseButtons(Qt::RightButton), Qt::RightButton,
++                                                 QEvent::MouseButtonPress);
++
++        // Release right button
++        QWindowSystemInterface::handleMouseEvent(tlw, localPos, globalPos,
++                                                 Qt::MouseButtons(Qt::NoButton), Qt::RightButton,
++                                                 QEvent::MouseButtonRelease);
++    }
++
+     static int mapAndroidKey(int key)
+     {
+         // 0--9        0x00000007 -- 0x00000010
+@@ -937,7 +948,7 @@ namespace QtAndroidInput
+         {"mouseUp", "(IIII)V", (void *)mouseUp},
+         {"mouseMove", "(IIII)V", (void *)mouseMove},
+         {"mouseWheel", "(IIIFF)V", (void *)mouseWheel},
+-        {"longPress", "(III)V", (void *)longPress},
++        {"longPress", "(IIIIIJ)V", (void *)longPress},
+         {"isTabletEventSupported", "()Z", (void *)isTabletEventSupported},
+         {"tabletEvent", "(IIJIIIFFFFFFI)V", (void *)tabletEvent},
+         {"keyDown", "(IIIZ)V", (void *)keyDown},
+-- 
+2.34.1
+

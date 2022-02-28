@@ -29,12 +29,12 @@ __KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *can
     setObjectName("tool_select_elliptical");
 }
 
-bool __KisToolSelectEllipticalLocal::hasUserInteractionRunning() const
-{
-    return false;
-}
 
-void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY)
+KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
+    KisToolSelectBase<__KisToolSelectEllipticalLocal>(canvas, i18n("Elliptical Selection"))
+{}
+
+void KisToolSelectElliptical::finishRect(const QRectF &rect, qreal roundCornersX, qreal roundCornersY)
 {
     Q_UNUSED(roundCornersX);
     Q_UNUSED(roundCornersY);
@@ -79,10 +79,14 @@ void __KisToolSelectEllipticalLocal::finishRect(const QRectF &rect, qreal roundC
     }
 }
 
-
-KisToolSelectElliptical::KisToolSelectElliptical(KoCanvasBase *canvas):
-    KisToolSelectEllipticalTemplate(canvas, i18n("Elliptical Selection"))
+void KisToolSelectElliptical::beginShape()
 {
+    beginSelectInteraction();
+}
+
+void KisToolSelectElliptical::endShape()
+{
+    endSelectInteraction();
 }
 
 void KisToolSelectElliptical::resetCursorStyle()
@@ -91,6 +95,10 @@ void KisToolSelectElliptical::resetCursorStyle()
         useCursor(KisCursor::load("tool_elliptical_selection_cursor_add.png", 6, 6));
     } else if (selectionAction() == SELECTION_SUBTRACT) {
         useCursor(KisCursor::load("tool_elliptical_selection_cursor_sub.png", 6, 6));
+    } else if (selectionAction() == SELECTION_INTERSECT) {
+        useCursor(KisCursor::load("tool_elliptical_selection_cursor_inter.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SYMMETRICDIFFERENCE) {
+        useCursor(KisCursor::load("tool_elliptical_selection_cursor_symdiff.png", 6, 6));
     } else {
         KisToolSelectBase<__KisToolSelectEllipticalLocal>::resetCursorStyle();
     }

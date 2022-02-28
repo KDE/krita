@@ -45,6 +45,19 @@ set(kritaglobal_LIB_SRCS
     KisSynchronizedConnection.cpp
 )
 
+if(WIN32)
+    set(kritaglobal_LIB_SRCS
+        ${kritaglobal_LIB_SRCS}
+        KisWindowsPackageUtils.cpp
+    )
+endif(WIN32)
+
+if (ANDROID)
+    set (kritaglobal_LIB_SRCS ${kritaglobal_LIB_SRCS} KisAndroidCrashHandler.cpp)
+    include_directories(${unwindstack_INCLUDE_DIR})
+    include_directories(${Qt5AndroidExtras_INCLUDE_DIRS})
+endif()
+
 add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS} )
 generate_export_header(kritaglobal BASE_NAME kritaglobal)
 
@@ -59,6 +72,10 @@ target_link_libraries(kritaglobal
         KF5::I18n
         ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES}
 )
+
+if (ANDROID)
+    target_link_libraries(kritaglobal PRIVATE ${unwindstack_LIBRARIES} Qt5::AndroidExtras log)
+endif()
 
 set_target_properties(kritaglobal PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

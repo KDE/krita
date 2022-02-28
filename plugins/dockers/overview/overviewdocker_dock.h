@@ -44,10 +44,12 @@ protected:
     bool eventFilter(QObject *o, QEvent *e) override;
 
 private:
-    static constexpr int showControlsTimerDuration{200};
+    static constexpr int showControlsTimerDuration{500};
     // Hou much the cursor has to move to prevent the showing animation
     static constexpr double showControlsAreaRadius{4.0};
     static constexpr double showControlsAnimationDuration{150.0};
+    static constexpr double touchDragDistance{8.0};
+    static constexpr double touchDragDistanceSquared{touchDragDistance * touchDragDistance};
 
     QVBoxLayout *m_controlsLayout;
     QHBoxLayout *m_controlsSecondRowLayout;
@@ -61,8 +63,12 @@ private:
     QPointer<KisCanvas2> m_canvas;
     bool m_pinControls;
     bool m_cursorIsHover;
+    bool m_isTouching;
+    bool m_isDraggingWithTouch;
+    int m_touchPointId;
+    QPointF m_lastTouchPos;
     mutable QVariantAnimation m_showControlsAnimation;
-    QTimer m_showControlsTimer;
+    mutable QTimer m_showControlsTimer;
     mutable bool m_areControlsHidden;
     QPointF m_lastOverviewMousePos;
     double m_cumulatedMouseDistanceSquared;
@@ -70,9 +76,10 @@ private:
     void layoutMainWidgets();
 
 private Q_SLOTS:
-    void showControls() const;
-    void hideControls() const;
+    void showControls(int delay) const;
+    void hideControls(int delay) const;
 
+    void on_overviewWidget_signalDraggingStarted();
     void on_overviewWidget_signalDraggingFinished();
 };
 

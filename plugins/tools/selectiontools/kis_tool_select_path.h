@@ -33,6 +33,9 @@ public:
 
 private:
     KisToolSelectPath* const m_selectionTool;
+
+    void beginShape() override;
+    void endShape() override;
 };
 
 typedef KisDelegatedTool<KisTool, __KisToolSelectPathLocalTool,
@@ -59,8 +62,6 @@ struct KisDelegatedSelectPathWrapper : public DelegatedSelectPathTool {
     void mouseMoveEvent(KoPointerEvent *event) override;
     void mouseReleaseEvent(KoPointerEvent *event) override;
     void mouseDoubleClickEvent(KoPointerEvent *event) override;
-
-    bool hasUserInteractionRunning() const;
 };
 
 

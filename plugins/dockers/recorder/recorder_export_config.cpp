@@ -18,6 +18,7 @@ const QString keyFfmpegPath = "ffmpeg_path";
 const QString keyVideoDirectory = "recorder_export/videodirectory";
 const QString keyInputFps = "recorder_export/inputfps";
 const QString keyFps = "recorder_export/fps";
+const QString keyFirstFrameSec = "recorder_export/firstframesec";
 const QString keyLastFrameSec = "recorder_export/lastframesec";
 const QString keyResize = "recorder_export/resize";
 const QString keySize = "recorder_export/size";
@@ -26,24 +27,65 @@ const QString keyProfileIndex = "recorder_export/profileIndex";
 const QString keyProfiles = "recorder_export/profiles";
 const QString keyEditedProfiles = "recorder_export/editedprofiles";
 
-const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.$EXT\"\n";
+const QString profilePrefix = "-framerate $IN_FPS\n-i \"$INPUT_DIR%07d.$EXT\"\n-framerate $IN_FPS\n-start_number $FRAMES-1\n-i \"$INPUT_DIR%07d.$EXT\"\n";
 
 const QList<RecorderProfile> defaultProfiles = {
-    { "MP4 x264",   "mp4",  profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
-    { "GIF",        "gif",  profilePrefix % "-filter_complex \"fps=$OUT_FPS,loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT:flags=lanczos,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse\"\n-loop -1" },
-    { "Matroska",   "mkv",  profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
-    { "WebM",       "webm", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
+    { "MP4 x264",   "mp4",  profilePrefix % "-filter_complex \"\n"
+      /* Filter documentation https://trac.ffmpeg.org/wiki/FilteringGuide
+       * Inside the complex filter command each line is a different filter that is applied to an input stream.
+       * The input stream to transform is specified at the start of each line in the format '[$STREAM_NAME]' (ex. [p1], [v1], [v2]).
+       * Immediatly following the input stream name will be the filter to apply (ex: trim, scale, loop)
+       * Depending on the filter it may or may have various options set
+       * After all options for the filter a name can be specified that will correspond to the output stream of the filter. If no name is specified it will be used as the final result for the output file.
+       */
+                                            "  [0]loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES[p1];\n"
+                                            "  [p1]scale=$WIDTH:$HEIGHT[p2];\n"
+                                            "  [1]loop=$FIRST_FRAME_SEC*$OUT_FPS:size=1:start=1[q1];\n"
+                                            "  [q1]scale=$WIDTH:$HEIGHT[q2];\n"
+                                            "  [q2][p2]concat=n=2:v=1[v1];\n"
+                                            "  [v1]trim=start_frame=1\n"
+                                            "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+    { "GIF",        "gif",  profilePrefix % "-filter_complex \"\n"
+                                            "  [1]loop=$FIRST_FRAME_SEC*$OUT_FPS:size=1:start=1[q1];\n"
+                                            "  [q1]scale=$WIDTH:$HEIGHT:flags=lanczos[q2];\n"
+                                            "  [0]fps=$OUT_FPS[p1];\n"
+                                            "  [p1]loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES[p2];\n"
+                                            "  [p2]scale=$WIDTH:$HEIGHT:flags=lanczos[p3];\n"
+                                            "  [q2][p3]concat[p4];\n"
+                                            "  [p4]trim=start_frame=1[p5];\n"
+                                            "  [p5]split[s0][s1];\n"
+                                            "  [s0]palettegen[p];\n"
+                                            "  [s1][p]paletteuse\"\n-loop -1" },
+    { "Matroska",   "mkv",  profilePrefix % "-filter_complex \"\n"
+                                            "  [0]loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES[p1];\n"
+                                            "  [p1]scale=$WIDTH:$HEIGHT[p2];\n"
+                                            "  [1]loop=$FIRST_FRAME_SEC*$OUT_FPS:size=1:start=1[q1];\n"
+                                            "  [q1]scale=$WIDTH:$HEIGHT[q2];\n"
+                                            "  [q2][p2]concat=n=2:v=1[v1];\n"
+                                            "  [v1]trim=start_frame=1\n"
+                                            "\"\n-r $OUT_FPS" },
+    { "WebM",       "webm", profilePrefix % "-filter_complex \"\n"
+                                            "  [0]loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES[p1];\n"
+                                            "  [p1]scale=$WIDTH:$HEIGHT[p2];\n"
+                                            "  [1]loop=$FIRST_FRAME_SEC*$OUT_FPS:size=1:start=1[q1];\n"
+                                            "  [q1]scale=$WIDTH:$HEIGHT[q2];\n"
+                                            "  [q2][p2]concat=n=2:v=1[v1];\n"
+                                            "  [v1]trim=start_frame=1\n"
+                                            "\"\n-r $OUT_FPS" },
     { "MP4 x264 (Flash Effect)",  "mp4", profilePrefix % "-filter_complex \"\n"
-                                            " [0]scale=$WIDTH:$HEIGHT[q1];\n"
-                                            " [q1]tpad=stop_mode=clone:stop_duration=1[v1];\n"
-                                            " [0]trim=start_frame=$FRAMES-1[p1];\n"
-                                            " [p1]setpts=PTS-STARTPTS[p2];\n"
-                                            " [p2]fps=$OUT_FPS[p3];\n"
-                                            " [p3]trim=start_frame=0:end_frame=1[p4];\n"
-                                            " [p4]scale=$WIDTH:$HEIGHT[p5];\n"
-                                            " [p5]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[p6];\n"
-                                            " [p6]fade=type=in:color=white:start_time=0.7:duration=0.7[v2];\n"
-                                            " [v1][v2]concat=n=2:v=1\n"
+                                            "  [0]scale=$WIDTH:$HEIGHT[q1];\n"
+                                            "  [q1]tpad=stop_mode=clone:stop_duration=1[v1];\n"
+                                            "  [1]loop=$FIRST_FRAME_SEC*$OUT_FPS:size=1:start=1[f1];\n"
+                                            "  [f1]scale=$WIDTH:$HEIGHT[f2];\n"
+                                            "  [0]trim=start_frame=$FRAMES-1[p1];\n"
+                                            "  [p1]setpts=PTS-STARTPTS[p2];\n"
+                                            "  [p2]fps=$OUT_FPS[p3];\n"
+                                            "  [p3]trim=start_frame=0:end_frame=1[p4];\n"
+                                            "  [p4]scale=$WIDTH:$HEIGHT[p5];\n"
+                                            "  [p5]tpad=stop_mode=clone:stop_duration=$LAST_FRAME_SEC[p6];\n"
+                                            "  [p6]fade=type=in:color=white:start_time=0.7:duration=0.7[v2];\n"
+                                            "  [f2][v1][v2]concat=n=3:v=1[v3];\n"
+                                            "  [v3]trim=start_frame=1\n"
                                             "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
     { "Custom1",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
     { "Custom2",  "editme", profilePrefix % "-filter_complex \"loop=$LAST_FRAME_SEC:size=1:start=$FRAMES,scale=$WIDTH:$HEIGHT\"\n-r $OUT_FPS" },
@@ -82,6 +124,16 @@ int RecorderExportConfig::fps() const
 void RecorderExportConfig::setFps(int value)
 {
     config->writeEntry(keyFps, value);
+}
+
+int RecorderExportConfig::firstFrameSec() const
+{
+    return config->readEntry(keyFirstFrameSec, 2);
+}
+
+void RecorderExportConfig::setFirstFrameSec(int value)
+{
+    config->writeEntry(keyFirstFrameSec, value);
 }
 
 int RecorderExportConfig::lastFrameSec() const

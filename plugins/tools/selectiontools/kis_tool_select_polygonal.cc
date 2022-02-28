@@ -34,7 +34,12 @@ __KisToolSelectPolygonalLocal::__KisToolSelectPolygonalLocal(KoCanvasBase *canva
 }
 
 
-void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &points)
+KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
+    KisToolSelectBase<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
+{
+}
+
+void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 {
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     Q_ASSERT(kisCanvas);
@@ -87,10 +92,14 @@ void __KisToolSelectPolygonalLocal::finishPolyline(const QVector<QPointF> &point
     }
 }
 
-
-KisToolSelectPolygonal::KisToolSelectPolygonal(KoCanvasBase *canvas):
-    KisToolSelectBase<__KisToolSelectPolygonalLocal>(canvas, i18n("Polygonal Selection"))
+void KisToolSelectPolygonal::beginShape()
 {
+    beginSelectInteraction();
+}
+
+void KisToolSelectPolygonal::endShape()
+{
+    endSelectInteraction();
 }
 
 void KisToolSelectPolygonal::resetCursorStyle()
@@ -99,6 +108,10 @@ void KisToolSelectPolygonal::resetCursorStyle()
         useCursor(KisCursor::load("tool_polygonal_selection_cursor_add.png", 6, 6));
     } else if (selectionAction() == SELECTION_SUBTRACT) {
         useCursor(KisCursor::load("tool_polygonal_selection_cursor_sub.png", 6, 6));
+    } else if (selectionAction() == SELECTION_INTERSECT) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_inter.png", 6, 6));
+    } else if (selectionAction() == SELECTION_SYMMETRICDIFFERENCE) {
+        useCursor(KisCursor::load("tool_polygonal_selection_cursor_symdiff.png", 6, 6));
     } else {
         KisToolSelectBase<__KisToolSelectPolygonalLocal>::resetCursorStyle();
     }

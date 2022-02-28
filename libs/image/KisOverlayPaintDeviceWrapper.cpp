@@ -103,6 +103,15 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
         *source->colorSpace()->profile() == *overlayColorSpace->profile()) {
 
         m_d->scaler.reset(KoOptimizedPixelDataScalerU8ToU16Factory::createCmykaScaler());
+
+    } else if (source->colorSpace()->colorModelId() == YCbCrAColorModelID &&
+               source->colorSpace()->colorDepthId() == Integer8BitsColorDepthID &&
+               overlayColorSpace->colorModelId() == YCbCrAColorModelID &&
+               overlayColorSpace->colorDepthId() == Integer16BitsColorDepthID &&
+               *source->colorSpace()->profile() == *overlayColorSpace->profile()) {
+
+        m_d->scaler.reset(KoOptimizedPixelDataScalerU8ToU16Factory::createRgbaScaler());
+
     }
 
     if (!m_d->usePreciseMode && mode == LazyPreciseMode && numOverlays == 1) {

@@ -17,6 +17,7 @@
 
 #include <KisPart.h>
 #include <KisView.h>
+#include <KisMainWindow.h>
 #include <KisDocument.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -432,7 +433,7 @@ KisImportExportErrorCode CSVLoader::setLayer(CSVLayerRecord* layer, KisDocument 
         result = importDoc->openPath(filename,
                                     KisDocument::DontAddToRecent);
         if (result)
-            layer->channel->importFrame(layer->frame, importDoc->image()->projection(), 0);
+            layer->channel->importFrame(layer->frame, importDoc->image()->projection(), nullptr);
 
     } else {
         //blank

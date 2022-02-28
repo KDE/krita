@@ -9,6 +9,8 @@
 
 #include <QImage>
 #include <QColor>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QPainterPath>
 #include <QPointer>
 
@@ -17,6 +19,7 @@
 #include <KoCompositeOpRegistry.h>
 #include <KoViewConverter.h>
 
+#include "kis_dom_utils.h"
 #include "kis_paintop_preset.h"
 #include "kis_paint_layer.h"
 #include "kis_image.h"
@@ -347,6 +350,37 @@ void KisPaintOpSettings::setPaintOpFlow(qreal value)
     proxy->setProperty("FlowValue", value);
 }
 
+void KisPaintOpSettings::setPaintOpFade(qreal value)
+{
+    KisLockedPropertiesProxySP proxy(
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    if (!proxy->hasProperty("brush_definition")) return;
+
+    // Setting the Fade value is a bit more complex.
+    QDomDocument doc;
+    doc.setContent(proxy->getString("brush_definition"));
+
+    QDomElement element = doc.documentElement();
+    QDomElement elementChild = element.elementsByTagName("MaskGenerator").item(0).toElement();
+
+    elementChild.attributeNode("hfade").setValue(KisDomUtils::toString(value));
+    elementChild.attributeNode("vfade").setValue(KisDomUtils::toString(value));
+
+    proxy->setProperty("brush_definition", doc.toString());
+}
+
+void KisPaintOpSettings::setPaintOpScatter(qreal value)
+{
+    KisLockedPropertiesProxySP proxy(
+                KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    if (!proxy->hasProperty("PressureScatter")) return;
+
+    proxy->setProperty("ScatterValue", value);
+    proxy->setProperty("PressureScatter", !qFuzzyIsNull(value));
+}
+
 void KisPaintOpSettings::setPaintOpCompositeOp(const QString &value)
 {
     KisLockedPropertiesProxySP proxy(
@@ -369,6 +403,36 @@ qreal KisPaintOpSettings::paintOpFlow()
 
     return proxy->getDouble("FlowValue", 1.0);
 }
+
+qreal KisPaintOpSettings::paintOpFade()
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    if (!proxy->hasProperty("brush_definition")) return 1.0;
+
+    QDomDocument doc;
+    doc.setContent(proxy->getString("brush_definition"));
+
+    QDomElement element = doc.documentElement();
+    QDomElement elementChild = element.elementsByTagName("MaskGenerator").item(0).toElement();
+
+    if (elementChild.attributeNode("hfade").value().toDouble() >= elementChild.attributeNode("vfade").value().toDouble()) {
+        return elementChild.attributeNode("hfade").value().toDouble();
+    } else {
+        return elementChild.attributeNode("vfade").value().toDouble();
+    }
+
+}
+
+qreal KisPaintOpSettings::paintOpScatter()
+{
+    KisLockedPropertiesProxySP proxy(
+        KisLockedPropertiesServer::instance()->createLockedPropertiesProxy(this));
+
+    return proxy->getDouble("ScatterValue", 0.0);
+}
+
 
 qreal KisPaintOpSettings::paintOpPatternSize()
 {

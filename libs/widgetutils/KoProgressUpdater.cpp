@@ -10,10 +10,15 @@
 #include <QString>
 #include <QTextStream>
 #include <QTimer>
+#include <QThread>
+#include <QMutex>
+#include <QMutexLocker>
 
 #include "KoUpdaterPrivate_p.h"
 #include "KoUpdater.h"
 #include "KoProgressProxy.h"
+
+#include "kis_signal_compressor.h"
 
 #include <kis_debug.h>
 
@@ -27,8 +32,7 @@ public:
         , parentUpdater(parentUpdater)
         , mode(_mode)
         , currentProgress(0)
-        , updated(false)
-        , updateGuiTimer(_q)
+        , updateCompressor(new KisSignalCompressor(250, KisSignalCompressor::FIRST_ACTIVE, q))
         , canceled(false)
     {
     }
@@ -43,15 +47,16 @@ public:
     Mode mode;
     int currentProgress = 0;
     bool isUndefinedState = false;
-    bool updated;          // is true whenever the progress needs to be recomputed
-    QTimer updateGuiTimer; // fires regularly to update the progress bar widget
+    KisSignalCompressor *updateCompressor;
     QList<QPointer<KoUpdaterPrivate> > subtasks;
     bool canceled;
     int updateInterval = 250; // ms, 4 updates per second should be enough
     bool autoNestNames = false;
     QString taskName;
-    int taskMax = -1;
+    int taskMax = 0;
     bool isStarted = false;
+
+    QMutex mutex;
 
     void updateParentText();
     void clearState();
@@ -69,14 +74,18 @@ KoProgressUpdater::KoProgressUpdater(KoProgressProxy *progressProxy, Mode mode)
     : d (new Private(this, progressProxy, 0, mode))
 {
     KIS_ASSERT_RECOVER_RETURN(progressProxy);
-    connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
+    connect(d->updateCompressor, SIGNAL(timeout()), SLOT(updateUi()));
+    connect(this, SIGNAL(triggerUpdateAsynchronously()), d->updateCompressor, SLOT(start()));
+    Q_EMIT triggerUpdateAsynchronously();
 }
 
 KoProgressUpdater::KoProgressUpdater(QPointer<KoUpdater> updater)
     : d (new Private(this, 0, updater, Unthreaded))
 {
     KIS_ASSERT_RECOVER_RETURN(updater);
-    connect(&d->updateGuiTimer, SIGNAL(timeout()), SLOT(updateUi()));
+    connect(d->updateCompressor, SIGNAL(timeout()), SLOT(updateUi()));
+    connect(this, SIGNAL(triggerUpdateAsynchronously()), d->updateCompressor, SLOT(start()));
+    Q_EMIT triggerUpdateAsynchronously();
 }
 
 KoProgressUpdater::~KoProgressUpdater()
@@ -88,7 +97,7 @@ KoProgressUpdater::~KoProgressUpdater()
 
     // make sure to stop the timer to avoid accessing
     // the data we are going to delete right now
-    d->updateGuiTimer.stop();
+    d->updateCompressor->stop();
 
     qDeleteAll(d->subtasks);
     d->subtasks.clear();
@@ -98,18 +107,15 @@ KoProgressUpdater::~KoProgressUpdater()
 
 void KoProgressUpdater::start(int range, const QString &text)
 {
-    d->clearState();
-    d->taskName = text;
-    d->taskMax = range - 1;
-    d->isStarted = true;
-
-    if (d->progressProxy()) {
-        d->progressProxy()->setRange(0, d->taskMax);
-        d->progressProxy()->setValue(0);
-        d->updateParentText();
+    {
+        QMutexLocker l(&d->mutex);
+        d->clearState();
+        d->taskName = text;
+        d->taskMax = range - 1;
+        d->isStarted = true;
     }
 
-    d->updateGuiTimer.start(d->updateInterval);
+    Q_EMIT triggerUpdateAsynchronously();
 }
 
 QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
@@ -122,62 +128,71 @@ QPointer<KoUpdater> KoProgressUpdater::startSubtask(int weight,
     }
 
     KoUpdaterPrivate *p = new KoUpdaterPrivate(this, weight, name, isPersistent);
-    d->subtasks.append(p);
+
+    {
+        QMutexLocker l(&d->mutex);
+        d->subtasks.append(p);
+    }
     connect(p, SIGNAL(sigUpdated()), SLOT(update()));
 
     QPointer<KoUpdater> updater = p->connectedUpdater();
 
-    if (!d->updateGuiTimer.isActive()) {
-        // we maybe need to restart the timer if it was stopped in updateUi() cause
-        // other sub-tasks created before this one finished already.
-        d->updateGuiTimer.start(d->updateInterval);
-    }
-
-    d->updated = true;
+    Q_EMIT triggerUpdateAsynchronously();
     return updater;
 }
 
 void KoProgressUpdater::removePersistentSubtask(QPointer<KoUpdater> updater)
 {
-    for (auto it = d->subtasks.begin(); it != d->subtasks.end();) {
-        if ((*it)->connectedUpdater() != updater) {
-            ++it;
-        } else {
-            KIS_SAFE_ASSERT_RECOVER_NOOP((*it)->isPersistent());
-            (*it)->deleteLater();
-            it = d->subtasks.erase(it);
-            break;
+    {
+        QMutexLocker l(&d->mutex);
+
+        for (auto it = d->subtasks.begin(); it != d->subtasks.end();) {
+            if ((*it)->connectedUpdater() != updater) {
+                ++it;
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_NOOP((*it)->isPersistent());
+                (*it)->deleteLater();
+                it = d->subtasks.erase(it);
+                break;
+            }
         }
     }
 
-    updateUi();
+    Q_EMIT triggerUpdateAsynchronously();
 }
 
 void KoProgressUpdater::cancel()
 {
-    Q_FOREACH (KoUpdaterPrivate *updater, d->subtasks) {
-        updater->setProgress(100);
-        updater->setInterrupted(true);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == this->thread());
+
+    {
+        QMutexLocker l(&d->mutex);
+
+        Q_FOREACH (KoUpdaterPrivate *updater, d->subtasks) {
+            updater->setProgress(100);
+            updater->setInterrupted(true);
+        }
+        d->canceled = true;
     }
-    d->canceled = true;
-    d->updateGuiTimer.stop();
-    updateUi();
+
+    Q_EMIT triggerUpdateAsynchronously();
 }
 
 void KoProgressUpdater::update()
 {
-    d->updated = true;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == this->thread());
+
     if (d->mode == Unthreaded) {
         qApp->processEvents();
     }
 
-    if (!d->updateGuiTimer.isActive()) {
-        d->updateGuiTimer.start(d->updateInterval);
-    }
+    d->updateCompressor->start();
 }
 
 void KoProgressUpdater::updateUi()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == this->thread());
+
     // This function runs in the app main thread. All the progress
     // updates arrive at the KoUpdaterPrivate instances through
     // queued connections, so until we relinquish control to the
@@ -185,47 +200,44 @@ void KoProgressUpdater::updateUi()
     // won't happen until we return from this function (which is
     // triggered by a timer)
 
-    /**
-     * We shouldn't let progress updater to interfere the progress
-     * reporting when it is not initialized.
-     */
-    if (d->subtasks.isEmpty()) return;
+    {
+        QMutexLocker l(&d->mutex);
 
-    if (d->updated) {
-        int totalProgress = 0;
-        int totalWeight = 0;
-        d->isUndefinedState = false;
+        if (!d->subtasks.isEmpty()) {
+            int totalProgress = 0;
+            int totalWeight = 0;
+            d->isUndefinedState = false;
 
-        Q_FOREACH (QPointer<KoUpdaterPrivate> updater, d->subtasks) {
-            if (updater->interrupted()) {
-                d->currentProgress = -1;
-                break;
+            Q_FOREACH (QPointer<KoUpdaterPrivate> updater, d->subtasks) {
+                if (updater->interrupted()) {
+                    d->currentProgress = -1;
+                    break;
+                }
+
+                if (!updater->hasValidRange()) {
+                    totalWeight = 0;
+                    totalProgress = 0;
+                    d->isUndefinedState = true;
+                    break;
+                }
+
+                if (updater->isPersistent() && updater->isCompleted()) {
+                    continue;
+                }
+
+                const int progress = qBound(0, updater->progress(), 100);
+                totalProgress += progress * updater->weight();
+                totalWeight += updater->weight();
             }
 
-            if (!updater->hasValidRange()) {
-                totalWeight = 0;
-                totalProgress = 0;
-                d->isUndefinedState = true;
-                break;
-            }
+            const int progressPercent = totalWeight > 0 ? totalProgress / totalWeight : -1;
 
-            if (updater->isPersistent() && updater->isCompleted()) {
-                continue;
-            }
-
-            const int progress = qBound(0, updater->progress(), 100);
-            totalProgress += progress * updater->weight();
-            totalWeight += updater->weight();
+            d->currentProgress =
+                    d->taskMax == 99 ?
+                        progressPercent :
+                        qRound(qreal(progressPercent) * d->taskMax / 99.0);
         }
 
-        const int progressPercent = totalWeight > 0 ? totalProgress / totalWeight : -1;
-
-        d->currentProgress =
-            d->taskMax == 99 ?
-            progressPercent :
-            qRound(qreal(progressPercent) * d->taskMax / 99.0);
-
-        d->updated = false;
     }
 
     if (d->progressProxy()) {
@@ -237,9 +249,12 @@ void KoProgressUpdater::updateUi()
             }
 
             if (d->currentProgress >= d->progressProxy()->maximum()) {
-                // we're done
-                d->updateGuiTimer.stop();
-                d->clearState();
+                {
+                    QMutexLocker l(&d->mutex);
+                    d->clearState();
+                }
+                d->progressProxy()->setRange(0, d->taskMax);
+                d->progressProxy()->setValue(d->progressProxy()->maximum());
             } else {
                 d->progressProxy()->setValue(d->currentProgress);
             }
@@ -299,8 +314,6 @@ void KoProgressUpdater::Private::clearState()
         }
     }
 
-    progressProxy()->setRange(0, taskMax);
-    progressProxy()->setValue(progressProxy()->maximum());
     canceled = false;
 }
 
@@ -311,16 +324,12 @@ bool KoProgressUpdater::interrupted() const
 
 void KoProgressUpdater::setUpdateInterval(int ms)
 {
-    d->updateInterval = ms;
-
-    if (d->updateGuiTimer.isActive()) {
-        d->updateGuiTimer.start(d->updateInterval);
-    }
+    d->updateCompressor->setDelay(ms);
 }
 
 int KoProgressUpdater::updateInterval() const
 {
-    return d->updateInterval;
+    return d->updateCompressor->delay();
 }
 
 void KoProgressUpdater::setAutoNestNames(bool value)

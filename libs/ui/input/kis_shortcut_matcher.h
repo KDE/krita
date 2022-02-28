@@ -181,7 +181,7 @@ public:
      * right here i.e without a valid TouchEnd, so we should immediately stop
      * all running actions.
      */
-    void touchCancelEvent(const QPointF &localPos);
+    void touchCancelEvent(QTouchEvent *event, const QPointF &localPos);
 
 
     bool nativeGestureBeginEvent(QNativeGestureEvent *event);
@@ -226,6 +226,12 @@ public:
      * forcefully.
      */
     void lostFocusEvent(const QPointF &localPos);
+
+    /**
+     * Is called when a new tool has been activated. The method activates
+     * any tool's action if possible with the currently active modifiers.
+     */
+    void toolHasBeenActivated();
 
     /**
      * Disables the start of any actions.

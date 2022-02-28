@@ -64,7 +64,7 @@ KisFilterConfigurationSP KisNodeFilterInterface::filter() const
     return m_filterConfiguration;
 }
 
-void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig)
+void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig, bool /*checkCompareConfig*/)
 {
     SANITY_RELEASE_FILTER(m_filterConfiguration);
 

@@ -72,7 +72,7 @@ KisTextureOption::KisTextureOption(KisBrushTextureFlags flags)
     connect(m_textureOptions->cutoffSlider, SIGNAL(blackPointChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->cutoffSlider, SIGNAL(whitePointChanged(qreal)), SLOT(emitSettingChanged()));
     connect(m_textureOptions->chkInvert, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
-    resetGUI(m_textureOptions->textureSelectorWidget->currentResource());
+    resetGUI(m_textureOptions->textureSelectorWidget->currentResource(true));
 
 }
 
@@ -87,7 +87,7 @@ void KisTextureOption::writeOptionSetting(KisPropertiesConfigurationSP setting) 
 
     {
         KisSignalsBlocker b(m_textureOptions->textureSelectorWidget);
-        KoResourceSP resource = m_textureOptions->textureSelectorWidget->currentResource();
+        KoResourceSP resource = m_textureOptions->textureSelectorWidget->currentResource(true);
         if (!resource) return;
 
         pattern = resource.staticCast<KoPattern>();
@@ -167,7 +167,7 @@ void KisTextureOption::readOptionSetting(const KisPropertiesConfigurationSP sett
 
     if (!pattern ){
         qWarning() << "Could not get linked pattern";
-        pattern = m_textureOptions->textureSelectorWidget->currentResource().staticCast<KoPattern>();
+        pattern = m_textureOptions->textureSelectorWidget->currentResource(true).staticCast<KoPattern>();
     }
     m_textureOptions->textureSelectorWidget->setCurrentPattern(pattern);
 

@@ -154,6 +154,13 @@ void restorePermissionsToReadAndWrite(QFileInfo sourceFileInfo)
 
 void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
 {
+#ifdef Q_OS_WIN
+    /// on Windows one cannot create a write-only file, so just skip this test
+    /// (but keep it compiled to avoid compilation issues)
+
+    return;
+#endif
+
     QString writeonlyFilename = _dirname + "writeonlyFile.txt";
     QFileInfo sourceFileInfo(writeonlyFilename);
 

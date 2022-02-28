@@ -48,6 +48,7 @@
 #include <kis_debug.h>
 #include <kis_generator_layer.h>
 #include <kis_generator_registry.h>
+#include <KisAutoSaveRecoveryDialog.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
 #include <kbackup.h>
@@ -729,7 +730,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
         default:
 #ifdef Q_OS_ANDROID
             // We deal with URIs, there may or may not be a "directory"
-            backupDir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation).append("/krita-backup");
+            backupDir = KisAutoSaveRecoveryDialog::autoSaveLocation();
             QDir().mkpath(backupDir);
 #endif
 
@@ -957,7 +958,7 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
         }
 
         emit completed();
-        emit sigSavingFinished();
+        emit sigSavingFinished(job.filePath);
 
         emit statusBarMessage(i18n("Finished saving %1", fileName), successMessageTimeout);
     }
@@ -1657,7 +1658,7 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
 #ifdef Q_OS_ANDROID
     // URIs may or may not have a directory backing them, so we save to our default autosave location
     if (path.startsWith("content://")) {
-        dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation).append("/krita-backup");
+        dir = KisAutoSaveRecoveryDialog::autoSaveLocation();
         QDir().mkpath(dir);
     }
 #endif
@@ -1666,13 +1667,14 @@ QString KisDocument::generateAutoSaveFileName(const QString & path) const
 
     if (path.isEmpty() || autosavePattern1.match(filename).hasMatch() || autosavePattern2.match(filename).hasMatch() || !fi.isWritable()) {
         // Never saved?
-#ifdef Q_OS_WIN
-        // On Windows, use the temp location (https://bugs.kde.org/show_bug.cgi?id=314921)
-        retval = QString("%1%2%3%4-%5-%6-autosave%7").arg(QDir::tempPath()).arg('/').arg(prefix).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
-#else
-        // On Linux, use a temp file in $HOME then. Mark it with the pid so two instances don't overwrite each other's autosave file
-        retval = QString("%1%2%3%4-%5-%6-autosave%7").arg(QDir::homePath()).arg('/').arg(prefix).arg("krita").arg(qApp->applicationPid()).arg(objectName()).arg(extension);
-#endif
+        retval = QString("%1%2%3%4-%5-%6-autosave%7")
+                     .arg(KisAutoSaveRecoveryDialog::autoSaveLocation())
+                     .arg('/')
+                     .arg(prefix)
+                     .arg("krita")
+                     .arg(qApp->applicationPid())
+                     .arg(objectName())
+                     .arg(extension);
     } else {
         // Beware: don't reorder arguments
         //   otherwise in case of filename = '1-file.kra' it will become '.-file.kra-autosave.kra' instead of '.1-file.kra-autosave.kra'

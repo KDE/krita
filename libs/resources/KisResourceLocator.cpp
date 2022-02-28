@@ -206,6 +206,17 @@ KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString reso
         return d->tagCache[QPair<QString, QString>(resourceType, tagUrl)];
     }
 
+    KisTagSP tag = tagForUrlNoCache(tagUrl, resourceType);
+
+    if (tag && tag->valid()) {
+        d->tagCache[QPair<QString, QString>(resourceType, tagUrl)] = tag;
+    }
+
+    return tag;
+}
+
+KisTagSP KisResourceLocator::tagForUrlNoCache(const QString &tagUrl, const QString resourceType)
+{
     QSqlQuery query;
     bool r = query.prepare("SELECT tags.id\n"
                            ",      tags.url\n"
@@ -308,8 +319,6 @@ KisTagSP KisResourceLocator::tagForUrl(const QString &tagUrl, const QString reso
     }
 
     tag->setDefaultResources(resourceFileNames);
-
-    d->tagCache[QPair<QString, QString>(resourceType, tagUrl)] = tag;
 
     return tag;
 }
@@ -888,19 +897,29 @@ void KisResourceLocator::saveTags()
         return;
     }
 
+    QString resourceLocation = resourceLocationBaseFromConfig();
+
     while (query.next()) {
         // Save tag...
-        KisTagSP tag = tagForUrl(query.value("tags.url").toString(),
+        KisTagSP tag = tagForUrlNoCache(query.value("tags.url").toString(),
                                  query.value("resource_types.name").toString());
 
         QString filename = tag->filename();
-        if (filename.isEmpty()) {
+        if (filename.isEmpty() || QFileInfo(filename).suffix().isEmpty()) {
             filename = tag->url() + ".tag";
         }
 
-        filename = makeStorageLocationRelative(filename);
 
-        QFile f(d->resourceLocation + tag->resourceType() + '/' + filename);
+        if (QFileInfo(filename).suffix() != "tag" && QFileInfo(filename).suffix() != "TAG") {
+            // it's either .abr file, or maybe a .bundle
+            // or something else, but not a tag file
+            dbgResources << "Skipping saving tag " << tag->name(false) << filename << tag->resourceType();
+            continue;
+        }
+
+        filename.remove(resourceLocation);
+
+        QFile f(resourceLocation + "/" + tag->resourceType() + '/' + filename);
 
         if (!f.open(QFile::WriteOnly)) {
             qWarning () << "Couild not open tag file for writing" << f.fileName();
@@ -1184,4 +1203,15 @@ QString KisResourceLocator::makeStorageLocationRelative(QString location) const
 {
 //    debugResource << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
     return location.remove(resourceLocationBase());
+}
+
+QString KisResourceLocator::resourceLocationBaseFromConfig()
+{
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    QString resourceLocation = cfg.readEntry(resourceLocationKey, "");
+    if (resourceLocation.isEmpty()) {
+        resourceLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
+    if (!resourceLocation.endsWith('/')) resourceLocation += '/';
+    return resourceLocation;
 }

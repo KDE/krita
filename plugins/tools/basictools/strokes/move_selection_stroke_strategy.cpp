@@ -96,7 +96,7 @@ void MoveSelectionStrokeStrategy::finishStrokeCallback()
         static_cast<KisIndirectPaintingSupport*>(m_paintLayer.data());
 
     KisTransaction transaction(name(), m_paintLayer->paintDevice());
-    indirect->mergeToLayer(m_paintLayer, (KisPostExecutionUndoAdapter*)0, KUndo2MagicString());
+    indirect->mergeToLayer(m_paintLayer, (KisPostExecutionUndoAdapter*)0, KUndo2MagicString(), -1);
 
     runAndSaveCommand(KUndo2CommandSP(transaction.endAndTake()),
                       KisStrokeJobData::SEQUENTIAL,

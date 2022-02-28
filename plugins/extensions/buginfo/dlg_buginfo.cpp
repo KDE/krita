@@ -24,12 +24,17 @@
 
 #include <QScreen>
 
-DlgBugInfo::DlgBugInfo(QWidget *parent)
+#ifdef Q_OS_ANDROID
+#include <QtAndroid>
+#endif
+
+
+DlgBugInfo::DlgBugInfo(QWidget *parent, KoDialog::ButtonCodes customButtons)
     : KoDialog(parent)
 {
     setCaption(i18n("Please paste this information in your bug report"));
 
-    setButtons(User1 | User2 | Ok);
+    setButtons(User1 | User2 | Ok | customButtons);
     setButtonText(User1, i18n("Copy to clipboard"));
     setButtonText(User2, i18n("Save to file"));
     setDefaultButton(Ok);
@@ -129,6 +134,14 @@ QString DlgBugInfo::basicSystemInformationReplacementText()
     info.append("\n  Pretty Productname: ").append(QSysInfo::prettyProductName());
     info.append("\n  Product Type: ").append(QSysInfo::productType());
     info.append("\n  Product Version: ").append(QSysInfo::productVersion());
+#ifdef Q_OS_ANDROID
+    QString manufacturer =
+        QAndroidJniObject::getStaticObjectField("android/os/Build", "MANUFACTURER", "Ljava/lang/String;").toString();
+    const QString model =
+        QAndroidJniObject::getStaticObjectField("android/os/Build", "MODEL", "Ljava/lang/String;").toString();
+    manufacturer[0] = manufacturer[0].toUpper();
+    info.append("\n  Product Model: ").append(manufacturer + " " + model);
+#endif
     info.append("\n\n");
 
     // OpenGL information

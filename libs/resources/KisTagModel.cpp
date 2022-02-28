@@ -52,16 +52,13 @@ void KisAllTagsModel::untagAllResources(KisTagSP tag)
 {
     KisTagResourceModel model(d->resourceType);
     model.setTagsFilter(QVector<int>() << tag->id());
-    QList<int> taggedResources;
+    QVector<int> taggedResources;
     for (int i = 0; i < model.rowCount(); i++) {
         QModelIndex idx = model.index(i, 0);
         taggedResources.append(model.data(idx, Qt::UserRole + KisTagResourceModel::Id).toInt());
     }
 
-    for (int i = 0; i < taggedResources.size(); i++) {
-        model.untagResource(tag, taggedResources[i]);
-    }
-
+    model.untagResources(tag, taggedResources);
 
 }
 
@@ -374,14 +371,16 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
     tag->setActive(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Active).toInt());
 
     if (!taggedResouces.isEmpty()) {
+        QVector<int> resourceIds;
         Q_FOREACH(const KoResourceSP resource, taggedResouces) {
 
             if (!resource) continue;
             if (!resource->valid()) continue;
             if (resource->resourceId() < 0) continue;
 
-            KisTagResourceModel(d->resourceType).tagResource(tag, resource->resourceId());
+            resourceIds << resource->resourceId();
         }
+        KisTagResourceModel(d->resourceType).tagResources(tag, resourceIds);
     }
 
     return r;
@@ -538,7 +537,8 @@ bool KisAllTagsModel::resetQuery()
                               ",      resource_types\n"
                               "LEFT JOIN tag_translations ON tag_translations.tag_id = tags.id AND tag_translations.language = :language\n"
                               "WHERE  tags.resource_type_id = resource_types.id\n"
-                              "AND    resource_types.name = :resource_type\n");
+                              "AND    resource_types.name = :resource_type\n"
+                              "ORDER BY tags.id\n");
 
     if (!r) {
         qWarning() << "Could not prepare KisAllTagsModel query" << d->query.lastError();

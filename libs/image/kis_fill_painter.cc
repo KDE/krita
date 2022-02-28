@@ -70,7 +70,7 @@ void KisFillPainter::initFillPainter()
     m_feather = 0;
     m_useCompositioning = false;
     m_threshold = 0;
-    m_softness = 100;
+    m_opacitySpread = 0;
     m_useSelectionAsBoundary = false;
 }
 
@@ -301,14 +301,18 @@ void KisFillPainter::genericFillEnd(KisPaintDeviceSP filled)
      * Apply the real selection to a filled one
      */
     KisSelectionSP realSelection = selection();
+    QRect rc;
 
     if (realSelection) {
+        rc = m_fillSelection->selectedExactRect().intersected(realSelection->projection()->selectedExactRect());
         m_fillSelection->pixelSelection()->applySelection(
             realSelection->projection(), SELECTION_INTERSECT);
+    } else {
+        rc = m_fillSelection->selectedExactRect();
     }
 
     setSelection(m_fillSelection);
-    bitBlt(0, 0, filled, 0, 0, m_width, m_height);
+    bitBlt(rc.topLeft(), filled, rc);
     setSelection(realSelection);
 
     if (progressUpdater()) progressUpdater()->setProgress(100);
@@ -347,24 +351,26 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
-    gc.setSoftness(m_softness);
+    gc.setOpacitySpread(m_useCompositioning ? m_opacitySpread : 100);
     if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
         gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
     } else {
         gc.fillSelection(pixelSelection);
     }
 
-    if (m_sizemod > 0) {
-        KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
-        biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
-    }
-    else if (m_sizemod < 0) {
-        KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
-        tiny.process(pixelSelection, pixelSelection->selectedRect());
-    }
-    if (m_feather > 0) {
-        KisFeatherSelectionFilter feathery(m_feather);
-        feathery.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+    if (m_useCompositioning) {
+        if (m_sizemod > 0) {
+            KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
+            biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+        }
+        else if (m_sizemod < 0) {
+            KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);
+            tiny.process(pixelSelection, pixelSelection->selectedRect());
+        }
+        if (m_feather > 0) {
+            KisFeatherSelectionFilter feathery(m_feather);
+            feathery.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_feather, -m_feather, m_feather, m_feather));
+        }
     }
 
     return pixelSelection;

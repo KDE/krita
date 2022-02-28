@@ -14,6 +14,7 @@
 
 #include "smallcolorselector_dock.h"
 #include "opengl/kis_opengl.h"
+#include "kis_config.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(SmallColorSelectorPluginFactory, "krita_smallcolorselector.json", registerPlugin<SmallColorSelectorPlugin>();)
 
@@ -46,7 +47,8 @@ public:
 SmallColorSelectorPlugin::SmallColorSelectorPlugin(QObject *parent, const QVariantList &)
         : QObject(parent)
 {
-    if (KisOpenGL::hasOpenGL3() || KisOpenGL::hasOpenGLES()) {
+    KisConfig cfg(true);
+    if (cfg.useOpenGL() && (KisOpenGL::hasOpenGL3() || KisOpenGL::hasOpenGLES())) {
         KoDockRegistry::instance()->add(new SmallColorSelectorDockFactory());
     }
 }

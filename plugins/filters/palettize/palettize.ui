@@ -53,7 +53,7 @@
    <item column="0" row="1">
     <widget class="QLabel" name="colorspaceLabel">
      <property name="text">
-      <string>Colorspace</string>
+      <string>Color Space</string>
      </property>
      <property name="buddy">
       <cstring>colorspaceComboBox</cstring>

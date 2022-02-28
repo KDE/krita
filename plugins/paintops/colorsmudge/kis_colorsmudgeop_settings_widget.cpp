@@ -129,6 +129,8 @@ void KisColorSmudgeOpSettingsWidget::setConfiguration(const KisPropertiesConfigu
 {
     KisBrushBasedPaintopOptionWidget::setConfiguration(config);
     fixNewEngineOption();
+    // make sure the options sanity (including the smudge radius range) is updated after brush reset
+    notifyPageChanged();
 }
 
 void KisColorSmudgeOpSettingsWidget::writeConfiguration(KisPropertiesConfigurationSP config) const

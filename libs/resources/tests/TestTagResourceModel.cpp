@@ -196,12 +196,12 @@ void TestTagResourceModel::testTagResource()
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
     if (tagResourceModel.isResourceTagged(tag, resource->resourceId())) {
-        tagResourceModel.untagResource(tag, resource->resourceId());
+        tagResourceModel.untagResources(tag, { resource->resourceId() });
     }
 
     int rowCount = tagResourceModel.rowCount();
 
-    QVERIFY(tagResourceModel.tagResource(tag, resource->resourceId()));
+    QVERIFY(tagResourceModel.tagResources(tag, { resource->resourceId() }));
 
     QCOMPARE(tagResourceModel.rowCount(), rowCount + 1);
 }
@@ -219,11 +219,11 @@ void TestTagResourceModel::testUntagResource()
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
 
     if (!tagResourceModel.isResourceTagged(tag, resource->resourceId())) {
-        tagResourceModel.tagResource(tag, resource->resourceId());
+        tagResourceModel.tagResources(tag, { resource->resourceId() });
     }
 
     int rowCount = tagResourceModel.rowCount();
-    tagResourceModel.untagResource(tag, resource->resourceId());
+    tagResourceModel.untagResources(tag, { resource->resourceId() });
 
     QCOMPARE(tagResourceModel.rowCount(), rowCount - 1);
 }
@@ -240,7 +240,7 @@ void TestTagResourceModel::testIsResourceTagged()
 
     KisAllTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
 
-    QVERIFY(tagResourceModel.tagResource(tag, resource->resourceId()));
+    QVERIFY(tagResourceModel.tagResources(tag, { resource->resourceId() }));
     QCOMPARE(tagResourceModel.isResourceTagged(tag, resource->resourceId()), true);
 
     resource = resourceModel.resourcesForName("test1.kpp").first();
@@ -249,7 +249,7 @@ void TestTagResourceModel::testIsResourceTagged()
     tag = tagModel.tagForIndex(tagModel.index(2, 0));
     QVERIFY(tag);
 
-    tagResourceModel.untagResource(tag, resource->resourceId());
+    tagResourceModel.untagResources(tag, { resource->resourceId() });
     QCOMPARE(tagResourceModel.isResourceTagged(tag, resource->resourceId()), false);
 }
 
@@ -277,6 +277,237 @@ void TestTagResourceModel::testFilterTagResource()
     QCOMPARE(tagResourceModel.rowCount(), 1);
 }
 
+
+void printOutModel(QAbstractItemModel* model)
+{
+    if (model->inherits("KisTagResourceModel")) {
+        KisTagResourceModel* tagResourceModel = dynamic_cast<KisTagResourceModel*>(model);
+        if (!tagResourceModel) {
+            return;
+        }
+        for (int i = 0; i < tagResourceModel->rowCount(); i++) {
+            QModelIndex idx = tagResourceModel->index(i, 0);
+            qCritical() << "Tag Resource | i: " << i << "| resource id: " << tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::ResourceId).toInt()
+                        << "| tag id: " << tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::TagId).toInt()
+                        << "(" << tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::TagName).toString() << ")";
+        }
+        return;
+    }
+
+    if (model->inherits("KisTagModel")) {
+        KisTagModel* tagModel = dynamic_cast<KisTagModel*>(model);
+        if (!tagModel) {
+            return;
+        }
+        for (int i = 0; i < tagModel->rowCount(); i++) {
+            QModelIndex idx = tagModel->index(i, 0);
+            qCritical() << "Tag | i: " << i << "| real id: " << tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt()
+                        << "| name: " << tagModel->data(idx, Qt::UserRole + KisAllTagsModel::Name).toString();
+        }
+        return;
+    }
+
+    if (model->inherits("KisResourceModel")) {
+        KisResourceModel* resourceModel = dynamic_cast<KisResourceModel*>(model);
+        if (!resourceModel) {
+            return;
+        }
+        for (int i = 0; i < resourceModel->rowCount(); i++) {
+            QModelIndex idx = resourceModel->index(i, 0);
+            qCritical() << "Resource | i: " << i << "| real id: " << resourceModel->data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt()
+                        << "| name: " << resourceModel->data(idx, Qt::UserRole + KisAllResourcesModel::Name).toString();
+        }
+        return;
+    }
+
+}
+
+
+void TestTagResourceModel::testBeginEndInsert()
+{
+    KisTagResourceModel tagResourceModel(ResourceType::PaintOpPresets);
+    KisResourceModel resourceModel(ResourceType::PaintOpPresets);
+    KisTagModel tagModel(ResourceType::PaintOpPresets);
+
+    QList<KoResourceSP> resources;
+    QList<int> resourceIds;
+
+    // prepare signal checker
+    typedef ModelSignalChecker SC;
+    ModelSignalChecker checker({5, 5, 4, 4}, {5, 5, 5, 5}, {SC::AboutInsert, SC::Insert, SC::AboutInsert, SC::Insert});
+
+    // debug tips:
+    // to see the content of the signal checker, use:
+    //checker.printOut();
+    // to see the content of the tagResourceModel, use:
+    //printOutModel(&tagResourceModel);
+
+    connect(&tagResourceModel, SIGNAL(rowsAboutToBeInserted(const QModelIndex, int, int)), &checker, SLOT(rowsAboutToBeInserted(const QModelIndex, int, int)));
+    connect(&tagResourceModel, SIGNAL(rowsAboutToBeRemoved(const QModelIndex, int, int)), &checker, SLOT(rowsAboutToBeRemoved(const QModelIndex, int, int)));
+    connect(&tagResourceModel, SIGNAL(rowsInserted(const QModelIndex, int, int)), &checker, SLOT(rowsInserted(const QModelIndex, int, int)));
+    connect(&tagResourceModel, SIGNAL(rowsRemoved(const QModelIndex, int, int)), &checker, SLOT(rowsRemoved(const QModelIndex, int, int)));
+
+    // this builds a list of resources
+    for (int i = 0; i < resourceModel.rowCount(); i++) {
+        QModelIndex idx = resourceModel.index(i, 0);
+        if (resources.length() < 4) { // sanity check
+            resources << resourceModel.resourceForIndex(idx);
+            resourceIds << resourceModel.data(idx, Qt::UserRole + KisAllResourcesModel::Id).toInt();
+        }
+    }
+
+    // ////
+    tagModel.addTag("Tag1", true, {});
+    tagModel.addTag("Tag2", true, {});
+    tagModel.addTag("TagSpecial", true, {});
+
+
+    QList<KisTagSP> tags;
+    // this builds a list of tags
+
+    for (int i = 0; i < tagModel.rowCount(); i++) {
+        QModelIndex idx = tagModel.index(i, 0);
+        int realId = tagModel.data(idx, Qt::UserRole + KisAllTagsModel::Id).toInt();
+        if (tags.length() < 5 && realId >= 0) { // sanity check
+            tags << tagModel.tagForIndex(idx);
+        }
+    }
+
+    QCOMPARE(tags.count(), 4);
+    QCOMPARE(resources.count(), 3);
+
+
+    // tag assignment to resources:
+    // other1 - res1
+    // other2 - res2
+    // special - res2
+    // special - res3
+    // other2 - res3
+    // special - res1
+    // other1 - res2
+    //
+    // this is done in order for tagging and untagging having to process
+    // multiple batches of rows
+    // and not just one consequent group of rows
+    KisTagSP other1 = tags[1];
+    KisTagSP other2 = tags[2];
+    KisTagSP special = tags[3];
+
+    // --- tagging
+    tagResourceModel.tagResources(other1, { resources[0]->resourceId() });
+    tagResourceModel.tagResources(other2, { resources[1]->resourceId() });
+
+    tagResourceModel.tagResources(special, { resources[2]->resourceId() }); // <- special
+    tagResourceModel.tagResources(special, { resources[1]->resourceId() }); // <- special
+
+    tagResourceModel.tagResources(other2, { resources[2]->resourceId() });
+
+    tagResourceModel.tagResources(special, { resources[0]->resourceId() }); // <- special
+
+    tagResourceModel.tagResources(other1, { resources[1]->resourceId() });
+
+    // --- untagging
+
+    checker.reset();
+    checker.setInfo({4, 4, 5, 5}, {5, 5, 5, 5}, {SC::AboutRemove, SC::Remove, SC::AboutRemove, SC::Remove});
+
+    tagResourceModel.untagResources(special, QVector<int>() << resourceIds[2] << resourceIds[1] << resourceIds[0]);
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+
+
+    // *** *** //
+    checker.reset();
+    checker.setInfo({5, 5, 4, 4}, {5, 5, 5, 5}, {SC::AboutInsert, SC::Insert, SC::AboutInsert, SC::Insert});
+
+    tagResourceModel.tagResources(special, { resourceIds[2], resourceIds[1], resourceIds[0] });
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // *** *** //
+
+    checker.reset();
+    checker.setInfo({4, 4, 5, 5}, {5, 5, 5, 5}, {SC::AboutRemove, SC::Remove, SC::AboutRemove, SC::Remove});
+
+    tagResourceModel.untagResources(special, QVector<int>() << resourceIds[2] << resourceIds[1] << resourceIds[0]);
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // *** *** //
+
+    checker.reset();
+    checker.setInfo({5, 5, 4, 4}, {5, 5, 5, 5}, {SC::AboutInsert, SC::Insert, SC::AboutInsert, SC::Insert});
+
+    tagResourceModel.tagResources(special, { resourceIds[0], resourceIds[1], resourceIds[2] });
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // *** *** //
+
+    checker.reset();
+    checker.setInfo({4, 4, 5, 5}, {5, 5, 5, 5}, {SC::AboutRemove, SC::Remove, SC::AboutRemove, SC::Remove});
+
+    tagResourceModel.untagResources(special, { resourceIds[2], resourceIds[1], resourceIds[0] });
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // *** *** //
+
+    checker.reset();
+    checker.setInfo({}, {}, {}); // no signals expected, because all of them are untagged now
+
+    tagResourceModel.untagResources(special, { resourceIds[2], resourceIds[1], resourceIds[0] });
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // *** *** //
+
+    checker.reset();
+    checker.setInfo({5, 5, 4, 4}, {5, 5, 4, 4}, {SC::AboutInsert, SC::Insert, SC::AboutInsert, SC::Insert});
+
+    tagResourceModel.tagResources(special, { resourceIds[2], resourceIds[0] });
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // just to clean up space (to have all resources tagged)
+    checker.reset();
+
+    tagResourceModel.tagResources(special, { resourceIds[2], resourceIds[1], resourceIds[0] });
+
+    // *** *** //
+
+    checker.reset();
+    checker.setInfo({4, 4, 6, 6}, {4, 4, 6, 6}, {SC::AboutRemove, SC::Remove, SC::AboutRemove, SC::Remove});
+
+    tagResourceModel.untagResources(special, { resourceIds[2], resourceIds[0] });
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // *** *** //
+
+    checker.reset();
+    checker.setInfo({4, 4}, {4, 4}, {SC::AboutRemove, SC::Remove});
+
+    tagResourceModel.untagResources(special, { resourceIds[1], resourceIds[0]});
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+
+    // *** *** //
+    // check adding multiple new tag-resource assignments at once
+
+    checker.reset();
+    checker.setInfo({6, 6, 9, 9}, {8, 8, 11, 11}, {SC::AboutInsert, SC::Insert, SC::AboutInsert, SC::Insert});
+
+    tagModel.addTag("tagExtra1", true, { resources[2], resources[1], resources[0]});
+    tagModel.addTag("tagExtra2", true, {});
+    KisTagSP tagExtra1 = tagModel.tagForUrl("tagExtra2");
+    tagResourceModel.tagResources(tagExtra1, { resourceIds[2], resourceIds[1], resourceIds[0]});
+
+
+    QVERIFY2(checker.isCorrect(), "Detected incorrect/unexpected signals sent to views");
+}
+
 void TestTagResourceModel::cleanupTestCase()
 {
     ResourceTestHelper::rmTestDb();
@@ -284,5 +515,120 @@ void TestTagResourceModel::cleanupTestCase()
 }
 
 #include <sdk/tests/kistest.h>
+
+
+// ***** MODEL SIGNAL CHECKER Function definitions *****
+
+
+ModelSignalChecker::ModelSignalChecker(QList<int> _expectedFirsts, QList<int> _expectedLasts, QList<ModelSignalChecker::TYPE> _expectedTypes)
+{
+    setInfo(_expectedFirsts, _expectedLasts, _expectedTypes);
+}
+
+void ModelSignalChecker::setInfo(QList<int> _expectedFirsts, QList<int> _expectedLasts, QList<ModelSignalChecker::TYPE> _expectedTypes)
+{
+    KIS_ASSERT(_expectedFirsts.count() == _expectedLasts.count() && _expectedFirsts.count() == _expectedTypes.count() && "Incorrect data supplied to SignalChecker");
+    expectedAmount = _expectedFirsts.count();
+
+    expectedFirsts = _expectedFirsts;
+    expectedLasts = _expectedLasts;
+    expectedTypes = _expectedTypes;
+    reset();
+}
+
+void ModelSignalChecker::reset()
+{
+    firsts = QList<int>();
+    lasts = QList<int>();
+    types = QList<TYPE>();
+    amount = 0;
+}
+
+bool ModelSignalChecker::isCorrect() {
+    if (expectedFirsts.count() != firsts.count()) return false;
+    if (expectedLasts.count() != lasts.count()) return false;
+    if (expectedTypes.count() != types.count()) return false;
+    if (expectedAmount != amount) return false;
+
+    for (int i = 0; i < firsts.count(); i++) {
+        if (expectedFirsts[i] != firsts[i]) return false;
+    }
+
+    for (int i = 0; i < lasts.count(); i++) {
+        if (expectedLasts[i] != lasts[i]) return false;
+    }
+
+    for (int i = 0; i < types.count(); i++) {
+        if (expectedTypes[i] != types[i]) return false;
+    }
+
+    return true;
+}
+
+void ModelSignalChecker::printOut()
+{
+
+    qCritical() << "*** SignalChecker write out ***";
+
+    int n = qMin(qMin(amount, firsts.count()), qMin(lasts.count(), types.count()));
+    int nmax = qMax(qMax(amount, firsts.count()), qMax(lasts.count(), types.count()));
+    if (n != nmax) {
+        qCritical() << "The amounts differ!" << amount << firsts.count() << lasts.count() << types.count();
+    }
+
+    for (int i = 0; i < n; i++) {
+        QString type = "[type]";
+        switch(types[i]) {
+        case AboutInsert:
+            type = "About Insert";
+            break;
+        case AboutRemove:
+            type = "About Remove";
+            break;
+        case Insert:
+            type = "Insert";
+            break;
+        case Remove:
+            type = "Remove";
+            break;
+        }
+        qCritical() << i << type << firsts[i] << lasts[i];
+    }
+
+    qCritical() << "*** SignalChecker write out END ***";
+}
+
+void ModelSignalChecker::rowsAboutToBeInserted(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(parent);
+    addSignalInfo(first, last, AboutInsert);
+}
+
+void ModelSignalChecker::rowsInserted(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(parent);
+    addSignalInfo(first, last, Insert);
+}
+
+void ModelSignalChecker::rowsAboutToBeRemoved(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(parent);
+    addSignalInfo(first, last, AboutRemove);
+}
+
+void ModelSignalChecker::rowsRemoved(const QModelIndex &parent, int first, int last)
+{
+    Q_UNUSED(parent);
+    addSignalInfo(first, last, Remove);
+}
+
+void ModelSignalChecker::addSignalInfo(int first, int last, ModelSignalChecker::TYPE type)
+{
+    amount++;
+    firsts << first;
+    lasts << last;
+    types << type;
+}
+
 KISTEST_MAIN(TestTagResourceModel)
 

@@ -1,0 +1,42 @@
+From db58b8518e157b765bf2e01e6382a9eed4751f27 Mon Sep 17 00:00:00 2001
+From: Dmitry Shachnev <mitya57@gmail.com>
+Date: Wed, 18 Aug 2021 22:50:29 +0300
+Subject: Include <limits> in Yarr.h to fix build with GCC 11
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- <limits.h> (aka <climits>) is needed for UINT_MAX macro constant.
+- <limits> is needed for std::numeric_limits.
+
+Without this fix, qtdeclarative failed to build on some platforms:
+
+ In file included from jsruntime/qv4regexp_p.h:62,
+                  from jsruntime/qv4regexp.cpp:40:
+ ../3rdparty/masm/yarr/Yarr.h:46:44: error: ‘numeric_limits’ is not a member of ‘std’
+    46 | static const unsigned offsetNoMatch = std::numeric_limits<unsigned>::max();
+       |                                            ^~~~~~~~~~~~~~
+
+Pick-to: 5.15 6.2
+Change-Id: I7cc9f7bc6624a52c8659f09034ab16064da5fd2f
+Reviewed-by: Albert Astals Cid <albert.astals.cid@kdab.com>
+Reviewed-by: Ulf Hermann <ulf.hermann@qt.io>
+---
+ src/3rdparty/masm/yarr/Yarr.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/3rdparty/masm/yarr/Yarr.h b/src/3rdparty/masm/yarr/Yarr.h
+index ccf78f9880..2955ea7e72 100644
+--- a/src/3rdparty/masm/yarr/Yarr.h
++++ b/src/3rdparty/masm/yarr/Yarr.h
+@@ -28,6 +28,7 @@
+ #pragma once
+ 
+ #include <limits.h>
++#include <limits>
+ #include "YarrErrorCode.h"
+ 
+ namespace JSC { namespace Yarr {
+-- 
+cgit v1.2.1
+

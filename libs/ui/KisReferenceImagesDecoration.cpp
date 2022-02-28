@@ -21,7 +21,7 @@ struct KisReferenceImagesDecoration::Private {
 
         QRectF bounds() const
         {
-            return QRectF(position, image.size());
+            return QRectF(position, image.size() / image.devicePixelRatio());
         }
     };
 

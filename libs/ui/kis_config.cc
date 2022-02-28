@@ -688,6 +688,15 @@ void KisConfig::setPasteBehaviour(qint32 renderIntent) const
     m_cfg.writeEntry("pasteBehaviour", renderIntent);
 }
 
+qint32 KisConfig::pasteFormat(bool defaultValue) const
+{
+    return defaultValue ? 0 : m_cfg.readEntry("pasteFormat", 0);
+}
+
+void KisConfig::setPasteFormat(qint32 format)
+{
+    m_cfg.writeEntry("pasteFormat", format);
+}
 
 qint32 KisConfig::monitorRenderIntent(bool defaultValue) const
 {
@@ -1876,6 +1885,15 @@ void KisConfig::setTrimKra(bool trim)
     m_cfg.writeEntry("TrimKra", trim);
 }
 
+bool KisConfig::trimFramesImport(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("TrimFramesImport", false));
+}
+void KisConfig::setTrimFramesImport(bool trim)
+{
+    m_cfg.writeEntry("TrimFramesImport", trim);
+}
+
 bool KisConfig::toolOptionsInDocker(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("ToolOptionsInDocker", true));
@@ -1940,6 +1958,16 @@ bool KisConfig::smoothZooming(bool defaultValue) const
 void KisConfig::setSmoothZooming(bool scale)
 {
     m_cfg.writeEntry("SmoothZooming", scale);
+}
+
+int KisConfig::zoomMarginSize(int defaultValue) const
+{
+    return (defaultValue ? 0 : m_cfg.readEntry("zoomMarginSize", 0));
+}
+
+void KisConfig::setZoomMarginSize(int zoomMarginSize)
+{
+    m_cfg.writeEntry("zoomMarginSize", zoomMarginSize);
 }
 
 const KoColorSpace* KisConfig::customColorSelectorColorSpace(bool defaultValue) const

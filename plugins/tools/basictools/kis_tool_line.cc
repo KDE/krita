@@ -271,6 +271,12 @@ void KisToolLine::endPrimaryAction(KoPointerEvent *event)
     endStroke();
 }
 
+bool KisToolLine::primaryActionSupportsHiResEvents() const
+{
+    return true;
+}
+
+
 void KisToolLine::endStroke()
 {
     NodePaintAbility nodeAbility = nodePaintAbility();

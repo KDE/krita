@@ -39,7 +39,7 @@ public:
     QObject *sketchKisView() const;
     void setSketchKisView(QObject *newView);
 
-    virtual void closeEvent(QCloseEvent *event);
+    void closeEvent(QCloseEvent *event) override;
 
 Q_SIGNALS:
     void closeRequested();

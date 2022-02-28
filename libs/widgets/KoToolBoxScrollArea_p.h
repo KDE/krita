@@ -196,11 +196,17 @@ private:
             m_scrollPrev->setGeometry(canPrev ? 0 : -width(), 0, width(), scrollButtonWidth);
             m_scrollNext->setArrowType(Qt::DownArrow);
             m_scrollNext->setGeometry(canNext? 0 : -width(), height() - scrollButtonWidth, width(), scrollButtonWidth);
-        } else {
+        } else if (isLeftToRight()) {
             m_scrollPrev->setArrowType(Qt::LeftArrow);
             m_scrollPrev->setGeometry(0, canPrev ? 0 : -height(), scrollButtonWidth, height());
             m_scrollNext->setArrowType(Qt::RightArrow);
             m_scrollNext->setGeometry(width() - scrollButtonWidth, canNext ? 0 : -height(), scrollButtonWidth, height());
+        } else {
+            // Right-to-left is mirrored.
+            m_scrollPrev->setArrowType(Qt::RightArrow);
+            m_scrollPrev->setGeometry(width() - scrollButtonWidth, canPrev ? 0 : -height(), scrollButtonWidth, height());
+            m_scrollNext->setArrowType(Qt::LeftArrow);
+            m_scrollNext->setGeometry(0, canNext ? 0 : -height(), scrollButtonWidth, height());
         }
     }
 

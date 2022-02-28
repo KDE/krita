@@ -59,7 +59,7 @@ if (Python_Interpreter_FOUND)
     endif(Python_Development_FOUND)
 
     # Auto detect Python site-packages directory
-    execute_process(COMMAND ${Python_EXECUTABLE} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(True))"
+    execute_process(COMMAND ${Python_EXECUTABLE} -c "import sysconfig; print(sysconfig.get_path('platlib'))"
                     OUTPUT_VARIABLE PYTHON_SITE_PACKAGES_DIR
                     OUTPUT_STRIP_TRAILING_WHITESPACE
                    )

@@ -131,6 +131,7 @@ void KisFloodFillBenchmark::benchmarkFloodWithoutSelectionAsBoundary()
         fillPainter.setWidth(GMP_IMAGE_WIDTH);
         fillPainter.setHeight(GMP_IMAGE_HEIGHT);
         fillPainter.setUseSelectionAsBoundary(false);
+        fillPainter.setUseCompositioning(true);
 
         fillPainter.createFloodSelection(1, 1, m_deviceWithoutSelectionAsBoundary, m_existingSelection);
 
@@ -161,6 +162,7 @@ void KisFloodFillBenchmark::benchmarkFloodWithSelectionAsBoundary()
         fillPainter.setWidth(GMP_IMAGE_WIDTH);
         fillPainter.setHeight(GMP_IMAGE_HEIGHT);
         fillPainter.setUseSelectionAsBoundary(true);
+        fillPainter.setUseCompositioning(true);
 
         fillPainter.createFloodSelection(1, 1, m_deviceWithSelectionAsBoundary, m_existingSelection);
 

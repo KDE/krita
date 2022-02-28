@@ -42,7 +42,7 @@ public:
     *  @returns true if the configuration could be constructed (not canceled)
     */
     bool fetchConfiguration(KisViewManager* view, KisOperationConfigurationSP configuration) override {
-        KoDialog * dialog = new KoDialog(view->mainWindow());
+        KoDialog * dialog = new KoDialog(view->mainWindowAsQWidget());
         Q_CHECK_PTR(dialog);
 
         T* configWidget = new T(dialog, view, m_configuration ? m_configuration : configuration);

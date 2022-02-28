@@ -63,6 +63,24 @@ public:
     QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
+class KisFadeResourceConverter : public KoDerivedResourceConverter, public QObject
+{
+public:
+    KisFadeResourceConverter();
+
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
+};
+
+class KisScatterResourceConverter : public KoDerivedResourceConverter, public QObject
+{
+public:
+    KisScatterResourceConverter();
+
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
+};
+
 class KisSizeResourceConverter : public KoDerivedResourceConverter, public QObject
 {
 public:

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -11,11 +11,183 @@
     <x>0</x>
     <y>0</y>
     <width>695</width>
-    <height>342</height>
+    <height>330</height>
    </rect>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item column="0" row="2">
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="2" column="3">
+    <widget class="QLineEdit" name="leInitials">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QLineEdit" name="leCompany"/>
+   </item>
+   <item row="2" column="2">
+    <widget class="QLabel" name="lblInitialsDesc">
+     <property name="text">
+      <string>Initials:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>leInitials</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2">
+    <widget class="QLabel" name="lblPositionDesc">
+     <property name="text">
+      <string comment="Job Position">Position:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>lePosition</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLineEdit" name="leLastName"/>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="leFirstName"/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="lblFirst">
+     <property name="text">
+      <string>Given Name:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3">
+    <widget class="QLineEdit" name="lePosition"/>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <widget class="QLineEdit" name="leNickName">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>1</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="lblTitleDesc">
+     <property name="text">
+      <string comment="Contact title">Title:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>leTitle</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="leTitle"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="fullNameLabel">
+     <property name="text">
+      <string>Nickname:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="lblCompanyDesc">
+     <property name="text">
+      <string>Co&amp;mpany:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buddy">
+      <cstring>leCompany</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="LabelFamily">
+     <property name="text">
+      <string>Family Name:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QPushButton" name="btnAdd">
+     <property name="text">
+      <string>Add contact info</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2">
+    <widget class="QPushButton" name="btnRemove">
+     <property name="text">
+      <string>Remove contact info</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Contact:</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="3">
+    <widget class="QTableView" name="tblContactInfo">
+     <property name="dragDropOverwriteMode">
+      <bool>false</bool>
+     </property>
+     <property name="cornerButtonEnabled">
+      <bool>false</bool>
+     </property>
+     <attribute name="horizontalHeaderStretchLastSection">
+      <bool>true</bool>
+     </attribute>
+     <attribute name="verticalHeaderVisible">
+      <bool>false</bool>
+     </attribute>
+     <attribute name="verticalHeaderStretchLastSection">
+      <bool>false</bool>
+     </attribute>
+    </widget>
+   </item>
+   <item row="6" column="0" colspan="4">
     <spacer>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -27,173 +199,6 @@
       </size>
      </property>
     </spacer>
-   </item>
-   <item column="0" row="0">
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="spacing">
-      <number>12</number>
-     </property>
-     <item column="3" row="2">
-      <widget class="QLineEdit" name="leInitials">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="3">
-      <widget class="QLineEdit" name="leCompany"/>
-     </item>
-     <item column="2" row="2">
-      <widget class="QLabel" name="lblInitialsDesc">
-       <property name="text">
-        <string>Initials:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>leInitials</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="3">
-      <widget class="QLabel" name="lblPositionDesc">
-       <property name="text">
-        <string comment="Job Position">Position:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>lePosition</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="3" row="1">
-      <widget class="QLineEdit" name="leLastName"/>
-     </item>
-     <item column="1" row="1">
-      <widget class="QLineEdit" name="leFirstName"/>
-     </item>
-     <item column="0" row="1">
-      <widget class="QLabel" name="lblFirst">
-       <property name="text">
-        <string>Given Name:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item column="3" row="3">
-      <widget class="QLineEdit" name="lePosition"/>
-     </item>
-     <item colspan="3" column="1" row="0">
-      <widget class="QLineEdit" name="leNickName">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-         <horstretch>1</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item column="0" row="2">
-      <widget class="QLabel" name="lblTitleDesc">
-       <property name="text">
-        <string comment="Contact title">Title:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>leTitle</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="2">
-      <widget class="QLineEdit" name="leTitle"/>
-     </item>
-     <item column="0" row="0">
-      <widget class="QLabel" name="fullNameLabel">
-       <property name="text">
-        <string>Nickname:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item column="0" row="3">
-      <widget class="QLabel" name="lblCompanyDesc">
-       <property name="text">
-        <string>Co&amp;mpany:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-       <property name="buddy">
-        <cstring>leCompany</cstring>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="1">
-      <widget class="QLabel" name="LabelFamily">
-       <property name="text">
-        <string>Family Name:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item column="1" row="5">
-      <widget class="QPushButton" name="btnAdd">
-       <property name="text">
-        <string>Add contact info</string>
-       </property>
-      </widget>
-     </item>
-     <item column="2" row="5">
-      <widget class="QPushButton" name="btnRemove">
-       <property name="text">
-        <string>Remove contact info</string>
-       </property>
-      </widget>
-     </item>
-     <item column="0" row="4">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Contact:</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
-       </property>
-      </widget>
-     </item>
-     <item colspan="3" column="1" row="4">
-      <widget class="QTableView" name="tblContactInfo">
-       <property name="dragDropOverwriteMode">
-        <bool>false</bool>
-       </property>
-       <property name="cornerButtonEnabled">
-        <bool>false</bool>
-       </property>
-       <attribute name="horizontalHeaderStretchLastSection">
-        <bool>true</bool>
-       </attribute>
-       <attribute name="verticalHeaderVisible">
-        <bool>false</bool>
-       </attribute>
-       <attribute name="verticalHeaderStretchLastSection">
-        <bool>false</bool>
-       </attribute>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

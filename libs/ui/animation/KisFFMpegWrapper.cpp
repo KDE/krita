@@ -94,7 +94,7 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
     
         progressText.replace("[progress]", "0");
     
-        m_progress = toQShared(new QProgressDialog(progressText, "", 0, 0, KisPart::instance()->currentMainwindow()));
+        m_progress = toQShared(new QProgressDialog(progressText, "", 0, 0, KisPart::instance()->currentMainwindowAsQWidget()));
 
         m_progress->setWindowModality(Qt::ApplicationModal);
         m_progress->setCancelButton(0);

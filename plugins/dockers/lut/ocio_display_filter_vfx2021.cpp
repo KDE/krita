@@ -7,6 +7,7 @@
 
 #include "ocio_display_filter_vfx2021.h"
 
+#include <QMessageBox>
 #include <QOpenGLContext>
 #include <QOpenGLExtraFunctions>
 #include <QOpenGLFunctions_2_0>
@@ -23,6 +24,12 @@
 #if defined(QT_OPENGL_ES_2)
 #define GL_RGBA32F_ARB GL_RGBA32F_EXT
 #define GL_RGB32F_ARB GL_RGB32F_EXT
+#endif
+
+#if defined(QT_OPENGL_ES_2) && !defined(QT_OPENGL_ES_3)
+#define GL_R32F GL_R32F_EXT
+#define GL_RED GL_RED_EXT
+#define GL_TEXTURE_WRAP_R GL_TEXTURE_WRAP_R_OES
 #endif
 
 #include "kis_context_thread_locale.h"
@@ -273,21 +280,23 @@ bool OcioDisplayFilter::updateShader()
         QOpenGLContext *ctx = QOpenGLContext::currentContext();
 
         KIS_ASSERT_RECOVER_RETURN_VALUE(ctx, false);
-        if (ctx->hasExtension("GL_EXT_texture_storage")) {
-            if (ctx->hasExtension("GL_OES_texture_float") && ctx->hasExtension("GL_OES_texture_float_linear")) {
-                QOpenGLExtraFunctions *f = ctx->extraFunctions();
-                if (f) {
-                    return updateShaderImpl(f);
-                }
-            } else {
-                dbgKrita << "OcioDisplayFilter::updateShader"
-                         << "OpenGL ES v2+ support detected but no OES_texture_float"
-                            " or GL_EXT_color_buffer_float were found";
-                return false;
+
+        if (ctx->format().majorVersion() >= 3) {
+            QOpenGLExtraFunctions *f = ctx->extraFunctions();
+            if (f) {
+                return updateShaderImpl(f);
+            }
+        } else if (ctx->hasExtension("GL_OES_texture_float")
+                   && (ctx->hasExtension("GL_EXT_texture_storage") || ctx->hasExtension("EXT_color_buffer_float"))
+                   && ctx->hasExtension("GL_OES_texture_float_linear")) {
+            QOpenGLExtraFunctions *f = ctx->extraFunctions();
+            if (f) {
+                return updateShaderImpl(f);
             }
         } else {
             dbgKrita << "OcioDisplayFilter::updateShader"
-                     << "OpenGL ES v2 support detected but GL_EXT_texture_storage was not found";
+                        << "OpenGL ES v2+ support detected but no OES_texture_float,"
+                        "GL_EXT_color_buffer_float or GL_EXT_texture_storage, or GL_OES_texture_float_linear were found";
             return false;
         }
 #if defined(QT_OPENGL_3)
@@ -591,9 +600,9 @@ void OcioDisplayFilter::setupTextures(GLFunctions *f, QOpenGLShaderProgram *prog
 
         // Update value.
         if (m_data.m_getDouble) {
-            program->setUniformValue(m_handle, static_cast<const GLfloat>(m_data.m_getDouble()));
+            program->setUniformValue(m_handle, static_cast<GLfloat>(m_data.m_getDouble()));
         } else if (m_data.m_getBool) {
-            program->setUniformValue(m_handle, static_cast<const GLfloat>(m_data.m_getBool() ? 1.0f : 0.0f));
+            program->setUniformValue(m_handle, static_cast<GLfloat>(m_data.m_getBool() ? 1.0f : 0.0f));
         } else if (m_data.m_getFloat3) {
             program->setUniformValue(m_handle,
                                      m_data.m_getFloat3()[0],

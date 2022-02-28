@@ -29,9 +29,7 @@
 #include <KoPointerEvent.h>
 
 #include <kis_layer.h>
-#include <kis_painter.h>
 #include <resources/KoPattern.h>
-#include <kis_fill_painter.h>
 #include <kis_selection.h>
 
 #include <KisViewManager.h>
@@ -39,17 +37,17 @@
 #include <widgets/kis_cmb_composite.h>
 #include <kis_slider_spin_box.h>
 #include <kis_cursor.h>
-#include "kis_resources_snapshot.h"
-#include "commands_new/KisMergeLabeledLayersCommand.h"
 #include <kis_color_filter_combo.h>
 #include <KisAngleSelector.h>
 
 #include <processing/fill_processing_visitor.h>
-#include <kis_processing_applicator.h>
 #include <kis_command_utils.h>
-#include <functional>
-#include <kis_group_layer.h>
 #include <kis_layer_utils.h>
+#include <krita_utils.h>
+#include <kis_stroke_strategy_undo_command_based.h>
+#include <commands_new/KisMergeLabeledLayersCommand.h>
+#include <commands_new/kis_processing_command.h>
+#include <commands_new/kis_update_command.h>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -57,21 +55,24 @@
 #include <KoShapeControllerBase.h>
 #include <kis_shape_controller.h>
 
-#include "KoCompositeOpRegistry.h"
-
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
         , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
+        , m_compressorContinuousFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
+        , m_fillStrokeId(nullptr)
 {
     setObjectName("tool_fill");
     m_feather = 0;
     m_sizemod = 0;
     m_threshold = 8;
-    m_softness = 100;
+    m_opacitySpread = 100;
     m_usePattern = false;
     m_fillOnlySelection = false;
+    m_continuousFillMode = FillAnyRegion;
+    m_continuousFillMask = nullptr;
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(slotUpdateAvailableColorLabels()));
+    connect(&m_compressorContinuousFillUpdate, SIGNAL(timeout()), SLOT(slotUpdateContinuousFill()));
 }
 
 KisToolFill::~KisToolFill()
@@ -112,7 +113,7 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 {
     // cannot use fill tool on non-painting layers.
     // this logic triggers with multiple layer types like vector layer, clone layer, file layer, group layer
-    if ( currentNode().isNull() || currentNode()->inherits("KisShapeLayer") || nodePaintAbility()!=NodePaintAbility::PAINT ) {
+    if (currentNode().isNull() || currentNode()->inherits("KisShapeLayer") || nodePaintAbility()!=NodePaintAbility::PAINT ) {
         KisCanvas2 * kiscanvas = static_cast<KisCanvas2*>(canvas());
         kiscanvas->viewManager()->
                 showFloatingMessage(
@@ -122,97 +123,190 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
 
-
     if (!nodeEditable()) {
         event->ignore();
         return;
     }
 
-    setMode(KisTool::PAINT_MODE);
-
-    m_startPos = convertToImagePixelCoordFloored(event);
-    keysAtStart = event->modifiers();
-}
-
-void KisToolFill::endPrimaryAction(KoPointerEvent *event)
-{
-    Q_UNUSED(event);
-    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
-
-    setMode(KisTool::HOVER_MODE);
+    m_fillStartWidgetPosition = event->pos();
+    const QPoint lastImagePosition = convertToImagePixelCoordFloored(event);
 
     if (!currentNode() ||
         (!image()->wrapAroundModePermitted() &&
-         !image()->bounds().contains(m_startPos))) {
-
+         !image()->bounds().contains(lastImagePosition))) {
         return;
     }
-
-
-
-    Qt::KeyboardModifiers fillOnlySelectionModifier = Qt::AltModifier; // Not sure where to keep it
-    if (keysAtStart == fillOnlySelectionModifier) {
-      m_fillOnlySelection = true;
+    
+    if (event->modifiers() == Qt::AltModifier) {
+        m_fillOnlySelection = true;
     }
-    keysAtStart = Qt::NoModifier; // libs/ui/tool/kis_tool_select_base.h cleans it up in endPrimaryAction so i do it too
 
-    KisProcessingApplicator applicator(currentImage(), currentNode(),
-                                       KisProcessingApplicator::SUPPORTS_WRAPAROUND_MODE,
-                                       KisImageSignalVector(),
-                                       kundo2_i18n("Flood Fill"));
+    m_seedPoints.append(lastImagePosition);
+    beginFilling(lastImagePosition);
+    m_isFilling = true;
+}
 
-    KisResourcesSnapshotSP resources =
-        new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
+void KisToolFill::continuePrimaryAction(KoPointerEvent *event)
+{
+    if (!m_isFilling) {
+        return;
+    }
+    
+    if (!m_isDragging) {
+        const int dragDistanceSquared =
+            pow2(event->pos().x() - m_fillStartWidgetPosition.x()) +
+            pow2(event->pos().y() - m_fillStartWidgetPosition.y());
 
-    KisPaintDeviceSP refPaintDevice = 0;
+        if (dragDistanceSquared < minimumDragDistanceSquared) {
+            return;
+        }
 
-    KisImageWSP currentImageWSP = currentImage();
+        m_isDragging = true;
+    }
+
+    const QPoint newImagePosition = convertToImagePixelCoordFloored(event);
+    m_seedPoints.append(newImagePosition);
+
+    m_compressorContinuousFillUpdate.start();
+}
+
+void KisToolFill::endPrimaryAction(KoPointerEvent *)
+{
+    if (m_isFilling) {
+        m_compressorContinuousFillUpdate.stop();
+        slotUpdateContinuousFill();
+        endFilling();
+    }
+
+    m_fillOnlySelection = m_checkFillSelection->isChecked();
+    m_isFilling = false;
+    m_isDragging = false;
+    m_seedPoints.clear();
+}
+
+void KisToolFill::beginFilling(const QPoint &seedPoint)
+{
+    setMode(KisTool::PAINT_MODE);
+
+    KisStrokeStrategyUndoCommandBased *strategy =
+            new KisStrokeStrategyUndoCommandBased(kundo2_i18n("Flood Fill"), false, image().data());
+    strategy->setSupportsWrapAroundMode(true);
+    m_fillStrokeId = image()->startStroke(strategy);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
+
+    m_resourcesSnapshot = new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
+
+    m_referencePaintDevice = nullptr;
+
+    KisImageWSP currentImageWSP = image();
     KisNodeSP currentRoot = currentImageWSP->root();
 
     KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
 
     if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_ALL) {
-        refPaintDevice = currentImage()->projection();
+        m_referencePaintDevice = currentImage()->projection();
     } else if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT) {
-        refPaintDevice = currentNode()->paintDevice();
+        m_referencePaintDevice = currentNode()->paintDevice();
     } else if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
-
-        refPaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
-
-        applicator.applyCommand(new KisMergeLabeledLayersCommand(refImage, refPaintDevice, currentRoot, m_selectedColors),
-                                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+        image()->addJob(
+            m_fillStrokeId,
+            new KisStrokeStrategyUndoCommandBased::Data(
+                KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage, m_referencePaintDevice, currentRoot, m_selectedColors)),
+                false,
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE
+            )
+        );
     }
 
-    KIS_ASSERT(refPaintDevice);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_referencePaintDevice);
 
-    QTransform transform;
+    m_continuousFillMask = new KisSelection;
+    m_continuousFillReferenceColor = m_referencePaintDevice->pixel(seedPoint);
 
-    transform.rotate(m_patternRotation);
-    transform.scale(m_patternScale, m_patternScale);
-    resources->setFillTransform(transform);
+    m_transform.reset();
+    m_transform.rotate(m_patternRotation);
+    m_transform.scale(m_patternScale, m_patternScale);
+    m_resourcesSnapshot->setFillTransform(m_transform);
+}
 
-    KisProcessingVisitorSP visitor =
-        new FillProcessingVisitor(refPaintDevice,
-                                  m_startPos,
-                                  resources->activeSelection(),
-                                  resources,
-                                  m_useFastMode,
-                                  m_usePattern,
-                                  m_fillOnlySelection,
-                                  m_useSelectionAsBoundary,
-                                  m_feather,
-                                  m_sizemod,
-                                  m_threshold,
-                                  m_softness,
-                                  false, /* use the current device (unmerged) */
-                                  false);
+void KisToolFill::addFillingOperation(const QPoint &seedPoint)
+{
+    const QVector<QPoint> seedPoints({seedPoint});
+    addFillingOperation(seedPoints);
+}
 
-    applicator.applyVisitor(visitor,
-                            KisStrokeJobData::SEQUENTIAL,
-                            KisStrokeJobData::EXCLUSIVE);
+void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
 
-    applicator.end();
-    m_fillOnlySelection = m_checkFillSelection->isChecked();
+    FillProcessingVisitor *visitor =  new FillProcessingVisitor(m_referencePaintDevice,
+                                                                m_resourcesSnapshot->activeSelection(),
+                                                                m_resourcesSnapshot);
+    visitor->setSeedPoints(seedPoints);
+    visitor->setUseFastMode(m_useFastMode);
+    visitor->setUsePattern(m_usePattern);
+    visitor->setSelectionOnly(m_fillOnlySelection);
+    visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
+    visitor->setFeather(m_feather);
+    visitor->setSizeMod(m_sizemod);
+    visitor->setFillThreshold(m_threshold);
+    visitor->setOpacitySpread(m_opacitySpread);
+    if (m_isDragging) {
+        visitor->setContinuousFillMode(
+            m_continuousFillMode == FillAnyRegion
+            ? FillProcessingVisitor::ContinuousFillMode_FillAnyRegion
+            : FillProcessingVisitor::ContinuousFillMode_FillSimilarRegions
+        );
+        visitor->setContinuousFillMask(m_continuousFillMask);
+        visitor->setContinuousFillReferenceColor(m_continuousFillReferenceColor);
+    }
+
+    image()->addJob(
+        m_fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisProcessingCommand(visitor, currentNode())),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
+}
+
+void KisToolFill::addUpdateOperation()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
+
+    image()->addJob(
+        m_fillStrokeId,
+        new KisStrokeStrategyUndoCommandBased::Data(
+            KUndo2CommandSP(new KisUpdateCommand(currentNode(), image()->bounds(), image().data())),
+            false,
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        )
+    );
+}
+
+void KisToolFill::endFilling()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
+    CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
+
+    setMode(KisTool::HOVER_MODE);
+    image()->endStroke(m_fillStrokeId);
+    m_fillStrokeId = nullptr;
+}
+
+void KisToolFill::slotUpdateContinuousFill()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
+
+    addFillingOperation(KritaUtils::rasterizePolylineDDA(m_seedPoints));
+    addUpdateOperation();
+    // clear to not re-add the segments, but retain the last point to mantain continuity
+    m_seedPoints = {m_seedPoints.last()};
 }
 
 QWidget* KisToolFill::createOptionWidget()
@@ -234,12 +328,12 @@ QWidget* KisToolFill::createOptionWidget()
     m_slThreshold->setRange(1, 100);
     m_slThreshold->setPageStep(3);
 
-    QLabel *lbl_softness = new QLabel(i18nc("The Softness label in Fill tool options", "Softness:"), widget);
-    m_slSoftness = new KisSliderSpinBox(widget);
-    m_slSoftness->setObjectName("softness");
-    m_slSoftness->setSuffix(i18n("%"));
-    m_slSoftness->setRange(0, 100);
-    m_slSoftness->setPageStep(3);
+    QLabel *lbl_opacitySpread = new QLabel(i18nc("The Opacity Spread label in Fill tool options", "Opacity Spread:"), widget);
+    m_slOpacitySpread = new KisSliderSpinBox(widget);
+    m_slOpacitySpread->setObjectName("opacitySpread");
+    m_slOpacitySpread->setSuffix(i18n("%"));
+    m_slOpacitySpread->setRange(0, 100);
+    m_slOpacitySpread->setPageStep(3);
 
     QLabel *lbl_sizemod = new QLabel(i18n("Grow selection:"), widget);
     m_sizemodWidget = new KisSliderSpinBox(widget);
@@ -296,16 +390,25 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkUseSelectionAsBoundary = new QCheckBox(QString(), widget);
     m_checkUseSelectionAsBoundary->setToolTip(i18nc("Tooltip for 'Use selection as boundary' checkbox", "When checked, use selection borders as boundary when filling"));
 
-
+    QLabel *lbl_continuousFillMode = new QLabel(i18nc("The 'continuous fill' label in Fill tool options", "Continuous Fill:"), widget);
+    m_cmbContinuousFillMode = new QComboBox(widget);
+    m_cmbContinuousFillMode->addItem(i18nc("Continuous fill mode in fill tool options", "Any region"));
+    m_cmbContinuousFillMode->addItem(i18nc("Continuous fill mode in fill tool options", "Similar regions"));
+    m_cmbContinuousFillMode->setEditable(false);
+    m_cmbContinuousFillMode->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+    m_cmbContinuousFillMode->view()->setMinimumWidth(m_cmbContinuousFillMode->view()->sizeHintForColumn(0));
 
     connect (m_checkUseFastMode  , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
     connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
-    connect (m_slSoftness        , SIGNAL(valueChanged(int)), this, SLOT(slotSetSoftness(int)));
+    connect (m_slOpacitySpread        , SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
     connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
     connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
     connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
     connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
     connect (m_checkUseSelectionAsBoundary, SIGNAL(toggled(bool))    , this, SLOT(slotSetUseSelectionAsBoundary(bool)));
+    connect (m_cmbContinuousFillMode,
+             QOverload<int>::of(&QComboBox::currentIndexChanged),
+             [this](int i){ slotSetContinuousFillMode(static_cast<ContinuousFillMode>(i)); });
 
     connect (m_cmbSampleLayersMode   , SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
     connect (m_cmbSelectedLabels          , SIGNAL(selectedColorsChanged()), this, SLOT(slotSetSelectedColorLabels()));
@@ -314,9 +417,10 @@ QWidget* KisToolFill::createOptionWidget()
 
     addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
     addOptionWidgetOption(m_slThreshold, lbl_threshold);
-    addOptionWidgetOption(m_slSoftness, lbl_softness);
-    addOptionWidgetOption(m_sizemodWidget      , lbl_sizemod);
-    addOptionWidgetOption(m_featherWidget      , lbl_feather);
+    addOptionWidgetOption(m_slOpacitySpread, lbl_opacitySpread);
+    addOptionWidgetOption(m_sizemodWidget, lbl_sizemod);
+    addOptionWidgetOption(m_featherWidget, lbl_feather);
+    addOptionWidgetOption(m_cmbContinuousFillMode, lbl_continuousFillMode);
 
     addOptionWidgetOption(m_checkFillSelection, lbl_fillSelection);
     addOptionWidgetOption(m_checkUseSelectionAsBoundary, lbl_useSelectionAsBoundary);
@@ -336,8 +440,10 @@ QWidget* KisToolFill::createOptionWidget()
     // load configuration options
     m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
     m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 8));
-    m_slSoftness->setValue(m_configGroup.readEntry("softness", 100));
+    m_slOpacitySpread->setValue(m_configGroup.readEntry("opacitySpread", 100));
     m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
+
+    m_cmbContinuousFillMode->setCurrentIndex(m_configGroup.readEntry("continuousFillMode", "fillAnyRegion") == "fillSimilarRegions" ? 1 : 0);
 
     m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));
     m_checkUsePattern->setChecked(m_configGroup.readEntry("usePattern", false));
@@ -359,7 +465,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_feather = m_featherWidget->value();
     m_sizemod = m_sizemodWidget->value();
     m_threshold = m_slThreshold->value();
-    m_softness = m_slSoftness->value();
+    m_opacitySpread = m_slOpacitySpread->value();
     m_useFastMode = m_checkUseFastMode->isChecked();
     m_fillOnlySelection = m_checkFillSelection->isChecked();
     m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
@@ -383,13 +489,15 @@ void KisToolFill::updateGUI()
 
     m_checkUseFastMode->setEnabled(!selectionOnly);
     m_slThreshold->setEnabled(!selectionOnly);
-    m_slSoftness->setEnabled(!selectionOnly);
+    m_slOpacitySpread->setEnabled(!selectionOnly && useAdvancedMode);
 
     m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
     m_checkUsePattern->setEnabled(useAdvancedMode);
     m_angleSelectorPatternRotate->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
     m_sldPatternScale->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
+
+    m_cmbContinuousFillMode->setEnabled(!selectionOnly);
 
     m_cmbSampleLayersMode->setEnabled(!selectionOnly && useAdvancedMode);
 
@@ -465,10 +573,10 @@ void KisToolFill::slotSetThreshold(int threshold)
     m_configGroup.writeEntry("thresholdAmount", threshold);
 }
 
-void KisToolFill::slotSetSoftness(int softness)
+void KisToolFill::slotSetOpacitySpread(int opacitySpread)
 {
-    m_softness = softness;
-    m_configGroup.writeEntry("softness", softness);
+    m_opacitySpread = opacitySpread;
+    m_configGroup.writeEntry("opacitySpread", opacitySpread);
 }
 
 void KisToolFill::slotSetUsePattern(bool state)
@@ -528,4 +636,10 @@ void KisToolFill::slotSetFeather(int feather)
 {
     m_feather = feather;
     m_configGroup.writeEntry("featherAmount", feather);
+}
+
+void KisToolFill::slotSetContinuousFillMode(ContinuousFillMode continuousFillMode)
+{
+    m_continuousFillMode = continuousFillMode;
+    m_configGroup.writeEntry("continuousFillMode", continuousFillMode == FillAnyRegion ? "fillAnyRegion" : "fillSimilarRegions");
 }

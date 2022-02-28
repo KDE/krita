@@ -492,7 +492,7 @@ Q_SIGNALS:
 
     void sigLoadingFinished();
 
-    void sigSavingFinished();
+    void sigSavingFinished(const QString &filePath);
 
     void sigGuidesConfigChanged(const KisGuidesConfig &config);
 

@@ -61,11 +61,11 @@ QString ImageBuilder::createImageFromClipboard()
 void ImageBuilder::createImageFromClipboardDelayed()
 {
     DocumentManager::instance()->disconnect(this, SLOT(createImageFromClipboardDelayed()));
-    KisConfig cfg(false);
-    cfg.setPasteBehaviour(PASTE_ASSUME_MONITOR);
 
     QSize sz = KisClipboard::instance()->clipSize();
-    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()), false);
+    KisPaintDeviceSP clipDevice = KisClipboard::instance()->clip(QRect(0, 0, sz.width(), sz.height()),
+                                                                 false,
+                                                                 (int)KisClipboard::PASTE_ASSUME_MONITOR);
     KisImageWSP image = DocumentManager::instance()->document()->image();
     if (image && image->root() && image->root()->firstChild()) {
         KisLayer * layer = dynamic_cast<KisLayer*>(image->root()->firstChild().data());
@@ -76,12 +76,6 @@ void ImageBuilder::createImageFromClipboardDelayed()
         KisPainter::copyAreaOptimized(QPoint(), clipDevice, layer->paintDevice(), r);
         layer->setDirty(QRect(0, 0, sz.width(), sz.height()));
     }
-}
-
-QString ImageBuilder::createImageFromWebcam(int width, int height, int resolution)
-{
-    Q_UNUSED(width); Q_UNUSED(height); Q_UNUSED(resolution);
-    return QString();
 }
 
 QString ImageBuilder::createImageFromTemplate(const QVariantMap& options)

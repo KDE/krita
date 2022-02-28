@@ -81,8 +81,8 @@ public:
 
     void setFilterInCurrentTag(bool filterInCurrentTag);
 
-    bool tagResource(const KisTagSP tag, const int resourceId);
-    bool untagResource(const KisTagSP tag, const int resourceId);
+    bool tagResources(const KisTagSP tag, const QVector<int> &resourceIds);
+    bool untagResources(const KisTagSP tag, const QVector<int> &resourceIds);
     int isResourceTagged(const KisTagSP tag, const int resourceId);
 
 Q_SIGNALS:

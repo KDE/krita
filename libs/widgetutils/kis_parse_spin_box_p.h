@@ -43,7 +43,6 @@ public:
         : m_q(q)
         , m_lineEdit(m_q->lineEdit())
     {
-        m_q->setAlignment(Qt::AlignRight);
         m_q->installEventFilter(this);
 
         m_lineEdit->setAutoFillBackground(false);
@@ -399,7 +398,12 @@ public:
             constexpr qreal warningIconMargin = 4.0;
             const qreal warningIconSize = widthOfWarningIconArea - 2.0 * warningIconMargin;
             if (m_warningAnimation.state() == QVariantAnimation::Running) {
-                qreal warningIconPos = KisAlgebra2D::lerp(-warningIconMargin, warningIconMargin, warningAnimationPos);
+                qreal warningIconPos =
+                    KisAlgebra2D::lerp(
+                        m_lineEdit->alignment() & Qt::AlignRight ? -warningIconMargin : rect.width() - warningIconSize + warningIconMargin,
+                        m_lineEdit->alignment() & Qt::AlignRight ? warningIconMargin : rect.width() - warningIconSize - warningIconMargin,
+                        warningAnimationPos
+                    );
                 painter.setOpacity(warningAnimationPos);
                 painter.drawPixmap(
                     warningIconPos, (static_cast<qreal>(rect.height()) - warningIconSize) / 2.0,
@@ -407,7 +411,8 @@ public:
                 );
             } else if (m_isWarningActive) {
                 painter.drawPixmap(
-                    warningIconMargin, (static_cast<qreal>(rect.height()) - warningIconSize) / 2.0,
+                    m_lineEdit->alignment() & Qt::AlignRight ? warningIconMargin : rect.width() - warningIconSize - warningIconMargin,
+                    (static_cast<qreal>(rect.height()) - warningIconSize) / 2.0,
                     m_warningIcon.pixmap(warningIconSize, warningIconSize)
                 );
             }

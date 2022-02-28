@@ -265,6 +265,7 @@ BOOL isWow64()
 
 void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 {
+    Q_UNUSED(args)
     // There are no globals to initialize from the arguments now. There used
     // to be the `dpi` argument, but it doesn't do anything anymore.
 }
@@ -888,11 +889,7 @@ void KisApplication::checkAutosaveFiles()
 {
     if (d->batchRun) return;
 
-#ifdef Q_OS_WIN
-    QDir dir = QDir::temp();
-#else
-    QDir dir = QDir::home();
-#endif
+    QDir dir = KisAutoSaveRecoveryDialog::autoSaveLocation();
 
     // Check for autosave files from a previous run. There can be several, and
     // we want to offer a restore for every one. Including a nice thumbnail!

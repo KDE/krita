@@ -47,6 +47,7 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
+    bool primaryActionSupportsHiResEvents() const override;
 
     void paint(QPainter& gc, const KoViewConverter &converter) override;
 

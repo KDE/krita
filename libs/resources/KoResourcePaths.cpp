@@ -334,6 +334,12 @@ QString KoResourcePaths::findResourceInternal(const QString &type, const QString
 
     if (resource.isEmpty() || !QFile::exists(resource)) {
         QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
+        KConfigGroup cfg(KSharedConfig::openConfig(), "");
+        QString customPath = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
+        if (!customPath.isEmpty()) {
+            extraResourceDirs = extraResourceDirs + ":" + customPath;
+        }
+
         if (!extraResourceDirs.isEmpty()) {
             Q_FOREACH(const QString &extraResourceDir, extraResourceDirs.split(':', QString::SkipEmptyParts)) {
                 if (aliases.isEmpty()) {
@@ -457,6 +463,12 @@ QStringList KoResourcePaths::findAllResourcesInternal(const QString &type,
     }
 
     QString extraResourceDirs = qgetenv("EXTRA_RESOURCE_DIRS");
+    KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    QString customPath = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
+    if (!customPath.isEmpty()) {
+        extraResourceDirs = extraResourceDirs + ":" + customPath;
+    }
+
     dbgResources << "extraResourceDirs" << extraResourceDirs;
 
     if (getAppDataLocation() != QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)) {

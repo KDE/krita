@@ -55,7 +55,7 @@ WaveletDecompose::~WaveletDecompose()
 
 void WaveletDecompose::slotWaveletDecompose()
 {
-    DlgWaveletDecompose dlg(viewManager()->mainWindow(), "WaveletDecompose");
+    DlgWaveletDecompose dlg(viewManager()->mainWindowAsQWidget(), "WaveletDecompose");
         
     if (dlg.exec() == QDialog::Accepted) {
 

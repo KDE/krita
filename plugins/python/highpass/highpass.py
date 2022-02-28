@@ -133,7 +133,7 @@ class HighpassExtension(Extension):
                 working_layer = image.mergeDown(working_layer)
 
             # if preserve DC, change set the mode to overlay and merge
-            # down with the average colour of the layer we kept
+            # down with the average color of the layer we kept
             # earlier.
             if self.cmbMode.currentIndex() == 1:
                 # get the average color of the entire image
@@ -143,6 +143,6 @@ class HighpassExtension(Extension):
         else:  # Mode == 4, RedRobes
             image.setActiveNode(blur_layer)
             # Get the average color of the input layer
-            # copy the solid colour layer
+            # copy the solid color layer
             # copy the blurred layer
         # XXX: End undo macro

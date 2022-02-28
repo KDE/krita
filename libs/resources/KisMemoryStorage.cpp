@@ -31,7 +31,7 @@ class MemoryTagIterator : public KisResourceStorage::TagIterator
 {
 public:
 
-    MemoryTagIterator(QVector<KisTagSP> tags, const QString &resourceType)
+    MemoryTagIterator(QVector<KisTagSP> /*tags*/, const QString &resourceType)
         : m_resourceType(resourceType)
     {
     }

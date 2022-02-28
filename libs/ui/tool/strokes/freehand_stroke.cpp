@@ -20,6 +20,7 @@
 
 #include <brushengine/kis_stroke_random_source.h>
 #include <KisRunnableStrokeJobsInterface.h>
+#include <KisRunnableStrokeJobUtils.h>
 #include "FreehandStrokeRunnableJobDataWithUpdate.h"
 #include <mutex>
 
@@ -248,18 +249,18 @@ void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
                     maskedPainter->hasDirtyRegion() ||
                     (forceEnd && needsMoreUpdates)) {
 
-                    jobs.append(new KisRunnableStrokeJobData(
-                                    [this] () {
-                                        this->issueSetDirtySignals();
-                                    },
-                                    KisStrokeJobData::SEQUENTIAL));
+                    KritaUtils::addJobSequential(jobs,
+                        [this] () {
+                            this->issueSetDirtySignals();
+                        }
+                    );
 
                     if (forceEnd && needsMoreUpdates) {
-                        jobs.append(new KisRunnableStrokeJobData(
-                                        [this] () {
-                                            this->tryDoUpdate(true);
-                                        },
-                                        KisStrokeJobData::SEQUENTIAL));
+                        KritaUtils::addJobSequential(jobs,
+                            [this] () {
+                                this->tryDoUpdate(true);
+                            }
+                        );
                     }
 
 
@@ -311,11 +312,11 @@ void FreehandStrokeStrategy::issueSetDirtySignals()
 
         QVector<KisRunnableStrokeJobData*> jobs = doMaskingBrushUpdates(dirtyRects);
 
-        jobs.append(new KisRunnableStrokeJobData(
+        KritaUtils::addJobSequential(jobs,
             [this, dirtyRects] () {
                 this->targetNode()->setDirty(dirtyRects);
-            },
-            KisStrokeJobData::SEQUENTIAL));
+            }
+        );
 
         runnableJobsInterface()->addRunnableJobs(jobs);
 

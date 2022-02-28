@@ -223,6 +223,9 @@ qreal KoPointerEvent::pressure() const
         qreal operator() (const QTabletEvent *event) {
             return event->pressure();
         }
+        qreal operator() (const QTouchEvent *event) {
+            return event->touchPoints().at(0).pressure();
+        }
         qreal operator() (...) {
             return 1.0;
         }
@@ -236,6 +239,9 @@ qreal KoPointerEvent::rotation() const
     struct Visitor {
         qreal operator() (const QTabletEvent *event) {
             return event->rotation();
+        }
+        qreal operator() (const QTouchEvent *event) {
+            return event->touchPoints().at(0).rotation();
         }
         qreal operator() (...) {
             return 0.0;

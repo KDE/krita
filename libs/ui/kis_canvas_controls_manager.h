@@ -42,6 +42,12 @@ private Q_SLOTS:
 
     void increaseOpacity();
     void decreaseOpacity();
+    void increaseFlow();
+    void decreaseFlow();
+    void increaseFade();
+    void decreaseFade();
+    void increaseScatter();
+    void decreaseScatter();
 private:
     void transformColor(int step);
     void transformSaturation(int step);
@@ -49,6 +55,9 @@ private:
     void transformRed(int step);
     void transformBlue(int step);
     void stepAlpha(float step);
+    void stepFlow(float step);
+    void stepFade(float step);
+    void stepScatter(float step);
 
 private:
     KisViewManager * m_view;

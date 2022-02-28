@@ -31,7 +31,6 @@ public:
         , parentProgressProxy(proxy)
         , parentUpdater(parentUpdater)
         , mode(_mode)
-        , currentProgress(0)
         , updateCompressor(new KisSignalCompressor(250, KisSignalCompressor::FIRST_ACTIVE, q))
         , canceled(false)
     {
@@ -45,7 +44,7 @@ private:
 
 public:
     Mode mode;
-    int currentProgress = 0;
+    int currentProgress = 99;
     bool isUndefinedState = false;
     KisSignalCompressor *updateCompressor;
     QList<QPointer<KoUpdaterPrivate> > subtasks;
@@ -53,7 +52,7 @@ public:
     int updateInterval = 250; // ms, 4 updates per second should be enough
     bool autoNestNames = false;
     QString taskName;
-    int taskMax = 0;
+    int taskMax = 99;
     bool isStarted = false;
 
     QMutex mutex;

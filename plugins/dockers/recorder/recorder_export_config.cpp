@@ -40,13 +40,28 @@ const QList<RecorderProfile> defaultProfiles = {
        * Depending on the filter it may or may have various options set
        * After all options for the filter a name can be specified that will correspond to the output stream of the filter. If no name is specified it will be used as the final result for the output file.
        */
-                                            "  [0]loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES[p1];\n"
-                                            "  [p1]scale=$WIDTH:$HEIGHT[p2];\n"
-                                            "  [1]loop=$FIRST_FRAME_SEC*$OUT_FPS:size=1:start=1[q1];\n"
-                                            "  [q1]scale=$WIDTH:$HEIGHT[q2];\n"
-                                            "  [q2][p2]concat=n=2:v=1[v1];\n"
-                                            "  [v1]trim=start_frame=1\n"
-                                            "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
+                                             " [0]loop=$LAST_FRAME_SEC*$OUT_FPS:size=1:start=$FRAMES[main1];\n"
+                                             " [main1]scale=$WIDTH:$HEIGHT[main2];\n"
+                                             " [main2]loop=1:size=1:start=0[main3];\n"
+                                             " [main3]setpts=PTS-STARTPTS[main4];\n"
+
+                                             " [1]split [first1][transition1];\n"
+                                             " [transition1]scale=$WIDTH:$HEIGHT [transition2];\n"
+                                             " [transition2]loop='if(gte($FIRST_FRAME_SEC, 1), 1*$OUT_FPS, 0)':size=1:start=1[transition3];\n"
+                                             " [transition3]setpts=PTS-STARTPTS[transition4];\n"
+
+                                             " [transition4][main4]xfade=transition=smoothright:duration=0.5:offset=0[v1];\n"
+                                             " [v1]setpts=PTS-STARTPTS[v2];\n"
+                                             " [v2]trim=start_frame=1[v3];\n"
+
+                                             " [first1]loop='if(gte($FIRST_FRAME_SEC, 1), ($FIRST_FRAME_SEC*$OUT_FPS) - 0.5, $FIRST_FRAME_SEC*$OUT_FPS)':size=1:start=1[preview1];\n"
+                                             " [preview1]scale=$WIDTH:$HEIGHT[preview2];\n"
+                                             " [preview2]setpts=PTS-STARTPTS[preview3];\n"
+                                             " [preview3][v3] concat [final1];\n"
+                                             " [final1] setpts=PTS-STARTPTS[final2];\n"
+                                             " [final2] trim=start_frame=1\n"
+
+                                             "\"\n-c:v libx264\n-r $OUT_FPS\n-pix_fmt yuv420p" },
     { "GIF",        "gif",  profilePrefix % "-filter_complex \"\n"
                                             "  [1]loop=$FIRST_FRAME_SEC*$OUT_FPS:size=1:start=1[q1];\n"
                                             "  [q1]scale=$WIDTH:$HEIGHT:flags=lanczos[q2];\n"

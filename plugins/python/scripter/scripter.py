@@ -21,7 +21,7 @@ class ScripterExtension(Extension):
         action.triggered.connect(self.initialize)
 
     def initialize(self):
-        configPath = Krita.instance().getAppDataLocation();
+        configPath = QStandardPaths.writableLocation(QStandardPaths.GenericConfigLocation)
         self.settings = QSettings(configPath + '/krita-scripterrc', QSettings.IniFormat)
         self.uicontroller = uicontroller.UIController()
         self.documentcontroller = documentcontroller.DocumentController()

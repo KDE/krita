@@ -94,6 +94,7 @@ public:
 
         if (!copied->read(buffer)) {
             qWarning() << "Could not copy PSDResourceBlock" << copied->error;
+            delete(copied);
             return 0;
         }
 

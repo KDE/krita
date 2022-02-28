@@ -30,9 +30,9 @@ void KisCmbGradient::setGradient(KoAbstractGradientSP gradient)
     m_gradientChooser->setCurrentResource(gradient);
 }
 
-KoAbstractGradientSP KisCmbGradient::gradient() const
+KoAbstractGradientSP KisCmbGradient::gradient(bool includeHidden) const
 {
-    return m_gradientChooser->currentResource().dynamicCast<KoAbstractGradient>();
+    return m_gradientChooser->currentResource(includeHidden).dynamicCast<KoAbstractGradient>();
 }
 
 void KisCmbGradient::setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface)

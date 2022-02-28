@@ -24,7 +24,7 @@ public:
     explicit KisCmbGradient(QWidget *parent = 0);
 
     void setGradient(KoAbstractGradientSP gradient);
-    KoAbstractGradientSP gradient() const;
+    KoAbstractGradientSP gradient(bool includeHidden = false) const;
 
     void setCanvasResourcesInterface(KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 

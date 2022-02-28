@@ -324,9 +324,9 @@ KoCanvasResourcesInterfaceSP KisGradientChooser::canvasResourcesInterface() cons
     return m_d->canvasResourcesInterface;
 }
 
-KoResourceSP KisGradientChooser::currentResource()
+KoResourceSP KisGradientChooser::currentResource(bool includeHidden)
 {
-    return m_d->itemChooser->currentResource();
+    return m_d->itemChooser->currentResource(includeHidden);
 }
 
 void KisGradientChooser::setCurrentResource(KoResourceSP resource)

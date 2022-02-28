@@ -1148,8 +1148,9 @@ void GradientOverlay::fetchGradientOverlay(psd_layer_effects_gradient_overlay *c
 {
     config->setBlendMode(ui.cmbCompositeOp->selectedCompositeOp().id());
     config->setOpacity(ui.intOpacity->value());
-    if (ui.cmbGradient->gradient()) {
-        config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
+    KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
+    if (gradient) {
+        config->setGradient(GradientPointerConverter::resourceToStyle(gradient));
     }
     config->setReverse(ui.chkReverse->isChecked());
     config->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
@@ -1271,7 +1272,10 @@ void InnerGlow::fetchConfig(psd_layer_effects_glow_common *config) const
     }
 
     config->setColor(ui.bnColor->color().toQColor());
-    config->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
+    KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
+    if (gradient) {
+        config->setGradient(GradientPointerConverter::resourceToStyle(gradient));
+    }
     config->setTechnique((psd_technique_type)ui.cmbTechnique->currentIndex());
     config->setSpread(ui.intChoke->value());
     config->setSize(ui.intSize->value());
@@ -1499,7 +1503,11 @@ void Stroke::fetchStroke(psd_layer_effects_stroke *stroke) const
 
     stroke->setColor(ui.bnColor->color().toQColor());
 
-    stroke->setGradient(GradientPointerConverter::resourceToStyle(ui.cmbGradient->gradient()));
+    KoAbstractGradientSP gradient = ui.cmbGradient->gradient(true);
+    if (gradient) {
+        stroke->setGradient(GradientPointerConverter::resourceToStyle(gradient));
+    }
+
     stroke->setReverse(ui.chkReverse->isChecked());
     stroke->setStyle((psd_gradient_style)ui.cmbStyle->currentIndex());
     stroke->setAlignWithLayer(ui.chkAlignWithLayer->isChecked());

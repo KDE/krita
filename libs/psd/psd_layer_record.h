@@ -188,7 +188,7 @@ private:
 KRITAPSD_EXPORT QDebug operator<<(QDebug dbg, const PSDLayerRecord &layer);
 KRITAPSD_EXPORT QDebug operator<<(QDebug dbg, const ChannelInfo &layer);
 
-inline QDebug &operator<<(QDebug dbg, const PSDLayerRecord::LayerBlendingRanges::LayerBlendingRange &data)
+inline QDebug operator<<(QDebug dbg, const PSDLayerRecord::LayerBlendingRanges::LayerBlendingRange &data)
 {
     return dbg << data.blackValues[0] << data.blackValues[1] << data.whiteValues[0] << data.whiteValues[1];
 }

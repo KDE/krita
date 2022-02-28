@@ -71,7 +71,7 @@ public:
 
     /// Gets the currently selected resource
     /// @returns the selected resource, 0 is no resource is selected
-    KoResourceSP currentResource();
+    KoResourceSP currentResource(bool includeHidden = false);
     void setCurrentResource(KoResourceSP resource);
 
     void setCurrentItem(int row);

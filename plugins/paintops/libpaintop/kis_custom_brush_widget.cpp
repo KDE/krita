@@ -160,15 +160,17 @@ void KisCustomBrushWidget::slotAddPredefined()
             KisGbrBrushSP resource = m_brush->clone().dynamicCast<KisGbrBrush>();
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-            KisResourceUserOperations::addResourceWithUserInput(this, resource);
-            emit sigNewPredefinedBrush(resource);
+            if (KisResourceUserOperations::addResourceWithUserInput(this, resource)) {
+                emit sigNewPredefinedBrush(resource);
+            }
         }
         else {
             KisImagePipeBrushSP resource = m_brush->clone().dynamicCast<KisImagePipeBrush>();
             resource->setName(name);
             resource->setFilename(resource->name().split(" ").join("_") + resource->defaultFileExtension());
-            KisResourceUserOperations::addResourceWithUserInput(this, resource);
-            emit sigNewPredefinedBrush(resource);
+            if (KisResourceUserOperations::addResourceWithUserInput(this, resource)) {
+                emit sigNewPredefinedBrush(resource);
+            }
         }
     }
 

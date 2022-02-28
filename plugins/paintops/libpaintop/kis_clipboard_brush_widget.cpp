@@ -147,9 +147,9 @@ void KisClipboardBrushWidget::slotAddPredefined()
 
         resource->setFilename(resource->name().split(" ").join("_") + extension);
 
-        KisResourceUserOperations::addResourceWithUserInput(this, resource);
-
-        emit sigNewPredefinedBrush(resource);
+        if (KisResourceUserOperations::addResourceWithUserInput(this, resource)) {
+            emit sigNewPredefinedBrush(resource);
+        }
     }
 
     close();

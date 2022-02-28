@@ -429,7 +429,7 @@ void KisPredefinedBrushChooser::slotUpdateBrushModeButtonsState()
         intContrastAdjustment->setToolTip(i18nc("@info:tooltip", "Contrast correction for the brush"));
         grpBrushMode->setToolTip("");
     } else {
-        cmbBrushMode->setCurrentIndex(int(m_brush->brushApplication()));
+        cmbBrushMode->setCurrentIndex(m_brush ? m_brush->brushApplication() : 0);
 
         {
             // sliders emit update signals when modified from the code

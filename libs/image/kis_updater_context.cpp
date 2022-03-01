@@ -117,16 +117,6 @@ bool KisUpdaterContext::isJobAllowed(KisBaseRectsWalkerSP walker)
     return !intersects;
 }
 
-void KisUpdaterContext::startThread(int index)
-{
-    {
-        QMutexLocker l(&m_runningThreadsMutex);
-        m_numRunningThreads++;
-    }
-
-    m_threadPool.start(m_jobs[index]);
-}
-
 /**
  * NOTE: In theory, isJobAllowed() and addMergeJob() should be merged into
  * one atomic method like `bool push()`, because this implementation
@@ -146,7 +136,7 @@ void KisUpdaterContext::addMergeJob(KisBaseRectsWalkerSP walker)
     // it might happen that we call this function from within
     // the thread itself, right when it finished its work
     if (shouldStartThread && !m_testingMode) {
-        startThread(jobIndex);
+        m_threadPool.start(m_jobs[jobIndex]);
     }
 }
 
@@ -161,7 +151,7 @@ void KisUpdaterContext::addStrokeJob(KisStrokeJob *strokeJob)
     // it might happen that we call this function from within
     // the thread itself, right when it finished its work
     if (shouldStartThread && !m_testingMode) {
-        startThread(jobIndex);
+        m_threadPool.start(m_jobs[jobIndex]);
     }
 }
 
@@ -176,17 +166,13 @@ void KisUpdaterContext::addSpontaneousJob(KisSpontaneousJob *spontaneousJob)
     // it might happen that we call this function from within
     // the thread itself, right when it finished its work
     if (shouldStartThread && !m_testingMode) {
-        startThread(jobIndex);
+        m_threadPool.start(m_jobs[jobIndex]);
     }
 }
 
 void KisUpdaterContext::waitForDone()
 {
-    QMutexLocker l(&m_runningThreadsMutex);
-
-    while(m_numRunningThreads > 0) {
-        m_waitForDoneCondition.wait(l.mutex());
-    }
+    m_threadPool.waitForDone();
 }
 
 bool KisUpdaterContext::walkerIntersectsJob(KisBaseRectsWalkerSP walker,
@@ -255,17 +241,6 @@ void KisUpdaterContext::jobFinished()
 {
     m_lodCounter.removeLod();
     if (m_scheduler) m_scheduler->spareThreadAppeared();
-}
-
-void KisUpdaterContext::jobThreadExited()
-{
-    QMutexLocker l(&m_runningThreadsMutex);
-    m_numRunningThreads--;
-    KIS_SAFE_ASSERT_RECOVER_NOOP(m_numRunningThreads >= 0);
-
-    if (m_numRunningThreads <= 0) {
-        m_waitForDoneCondition.wakeAll();
-    }
 }
 
 void KisUpdaterContext::setTestingMode(bool value)

@@ -44,7 +44,7 @@ private:
 
 public:
     Mode mode;
-    int currentProgress = 99;
+    int currentProgress = 0;
     bool isUndefinedState = false;
     KisSignalCompressor *updateCompressor;
     QList<QPointer<KoUpdaterPrivate> > subtasks;
@@ -112,6 +112,7 @@ void KoProgressUpdater::start(int range, const QString &text)
         d->taskName = text;
         d->taskMax = range - 1;
         d->isStarted = true;
+        d->currentProgress = 0;
     }
 
     Q_EMIT triggerUpdateAsynchronously();

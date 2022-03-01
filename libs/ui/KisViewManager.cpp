@@ -282,6 +282,11 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
                 new KoProgressUpdater(d->persistentUnthreadedProgressUpdater,
                                       KoProgressUpdater::Unthreaded));
     d->persistentUnthreadedProgressUpdaterRouter->setAutoNestNames(true);
+    d->persistentUnthreadedProgressUpdaterRouter->start();
+
+    // just a clumsy way to mark the updater as completed, the subtask will
+    // be automatically deleted on completion...
+    d->persistentUnthreadedProgressUpdaterRouter->startSubtask()->setProgress(100);
 
     d->controlFrame.setup(parent);
 

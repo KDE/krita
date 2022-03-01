@@ -56,7 +56,7 @@ public:
                             KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
 private:
-    QWidget * m_page;
+    QWidget * m_page {0};
 };
 
 KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient,
@@ -83,6 +83,9 @@ KisCustomGradientDialog::KisCustomGradientDialog(KoAbstractGradientSP gradient,
             m_page = new KisSegmentGradientEditor(segmentedGradient, this, "autogradient", i18n("Custom Segmented Gradient"), canvasResourcesInterface);
         }
     }
+
+    KIS_ASSERT(m_page);
+
     setCaption(m_page->windowTitle());
     setMainWidget(m_page);
 }

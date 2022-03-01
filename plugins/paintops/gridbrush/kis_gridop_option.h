@@ -65,18 +65,19 @@ private:
 
 struct KisGridOpProperties : public KisPaintopPropertiesBase
 {
-    int diameter;
-    int grid_width;
-    int grid_height;
-    qreal horizontal_offset;
-    qreal vertical_offset;
-    int grid_division_level;
-    bool grid_pressure_division;
-    qreal grid_scale;
-    qreal grid_vertical_border;
-    qreal grid_horizontal_border;
-    bool grid_random_border;
-    int grid_shape;
+    // sane defaults (for Coverity)
+    int diameter {25};
+    int grid_width {25};
+    int grid_height {25};
+    qreal horizontal_offset {0.0};
+    qreal vertical_offset {0.0};
+    int grid_division_level {2};
+    bool grid_pressure_division {false};
+    qreal grid_scale {1.0};
+    qreal grid_vertical_border {0.0};
+    qreal grid_horizontal_border {0.0};
+    bool grid_random_border {false};
+    int grid_shape {0};
 
     void readOptionSettingImpl(const KisPropertiesConfiguration *setting) override {
 

@@ -187,10 +187,9 @@ void KisUpdateScheduler::fullRefresh(KisNodeSP root, const QRect& rc, const QRec
 
     Q_ASSERT(m_d->updaterContext.isJobAllowed(walker));
     m_d->updaterContext.addMergeJob(walker);
-    m_d->updaterContext.unlock();
-
     m_d->updaterContext.waitForDone();
 
+    m_d->updaterContext.unlock();
     if(needLock) unlock(true);
 }
 

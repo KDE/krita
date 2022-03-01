@@ -137,7 +137,15 @@ void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionU
 {
     QVector<KisRunnableStrokeJobData*> jobs;
     mergeToLayerThreaded(layer, undoAdapter, transactionText, timedID, &jobs);
-    KisFakeRunnableStrokeJobsExecutor executor;
+
+    /**
+     * When merging, we use barrier jobs only for ensuring that the merge jobs
+     * are not split by the update jobs. Merge jobs hold the shared lock, so
+     * forcinf them out of CPU will basically cause a deadlock. When running in
+     * the fake executor, the jobs cannot be split anyway, so there is no danger
+     * in that.
+     */
+    KisFakeRunnableStrokeJobsExecutor executor(KisFakeRunnableStrokeJobsExecutor::AllowBarrierJobs);
     executor.addRunnableJobs(implicitCastList<KisRunnableStrokeJobDataBase*>(jobs));
 }
 

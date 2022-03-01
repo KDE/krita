@@ -73,8 +73,14 @@ bool PSDLayerMaskSection::read(QIODevice &io)
 template<psd_byte_order byteOrder>
 bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
 {
-    quint32 layerInfoSectionSize = 0;
-    SAFE_READ_EX(byteOrder, io, layerInfoSectionSize);
+    quint64 layerInfoSectionSize = 0;
+    if (m_header.version == 1) {
+        quint32 _layerInfoSectionSize = 0;
+        SAFE_READ_EX(byteOrder, io, _layerInfoSectionSize);
+        layerInfoSectionSize = _layerInfoSectionSize;
+    } else if (m_header.version == 2) {
+        SAFE_READ_EX(byteOrder, io, layerInfoSectionSize);
+    }
 
     if (layerInfoSectionSize & 0x1) {
         warnKrita << "WARNING: layerInfoSectionSize is NOT even! Fixing...";

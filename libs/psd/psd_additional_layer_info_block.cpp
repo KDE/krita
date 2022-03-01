@@ -64,10 +64,17 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice &io)
     if (m_header.version > 1) {
         longBlocks << "LMsk"
                    << "Lr16"
+                   << "Lr32"
                    << "Layr"
                    << "Mt16"
+                   << "Mt32"
                    << "Mtrn"
-                   << "Alph";
+                   << "Alph"
+                   << "FMsk"
+                   << "lnk2"
+                   << "FEid"
+                   << "FXid"
+                   << "PxSD";
     }
 
     while (!io.atEnd()) {

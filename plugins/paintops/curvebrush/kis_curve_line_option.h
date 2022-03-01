@@ -34,11 +34,12 @@ private:
 class KisCurveOptionProperties : public KisPaintopPropertiesBase
 {
 public:
-    bool curve_paint_connection_line;
-    bool curve_smoothing;
-    int curve_stroke_history_size;
-    int curve_line_width;
-    qreal curve_curves_opacity;
+    // sane defaults (for Coverity)
+    bool curve_paint_connection_line {false};
+    bool curve_smoothing {false};
+    int curve_stroke_history_size {30};
+    int curve_line_width {1};
+    qreal curve_curves_opacity {1.0};
 
     void readOptionSettingImpl(const KisPropertiesConfiguration *config) override {
         curve_paint_connection_line = config->getBool(CURVE_PAINT_CONNECTION_LINE);

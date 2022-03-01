@@ -143,8 +143,24 @@ void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionU
 
 void KisIndirectPaintingSupport::mergeToLayerThreaded(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID, QVector<KisRunnableStrokeJobData*> *jobs)
 {
+    /**
+     * We create the lock in an unlocked state to avoid a deadlock, when
+     * layer-stack updating jobs push out the stroke jobs from the CPU and
+     * start sleeping on lockTemporaryTarget().
+     */
+
+    WriteLockerSP sharedWriteLock(new WriteLocker(this, std::defer_lock));
+
+    /**
+     * Now wait for all update jobs to finish and lock the indirect target
+     */
+    KritaUtils::addJobBarrier(*jobs,
+        [sharedWriteLock] () {
+            sharedWriteLock->relock();
+        });
+
     mergeToLayerImpl(layer->paintDevice(), undoAdapter, transactionText,
-                     timedID, true, toQShared(new WriteLocker(this)),
+                     timedID, true, sharedWriteLock,
                      jobs);
 }
 

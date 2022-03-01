@@ -11,6 +11,8 @@
 #include "kritaimage_export.h"
 #include "kis_types.h"
 
+#include <mutex>
+
 class QBitArray;
 class KisUndoAdapter;
 class KisPostExecutionUndoAdapter;
@@ -104,15 +106,44 @@ protected:
      * A guard object to lock the temporary target for write
      */
     struct WriteLocker {
-        WriteLocker(KisIndirectPaintingSupport *lock) : m_lock(lock) {
+        WriteLocker(KisIndirectPaintingSupport *lock)
+            : m_lock(lock),
+              m_locked(true)
+        {
             m_lock->lockTemporaryTargetForWrite();
         }
+
+        WriteLocker(KisIndirectPaintingSupport *lock, std::defer_lock_t)
+            : m_lock(lock),
+              m_locked(false)
+        {
+        }
+
         ~WriteLocker() {
+            if (m_locked) {
+                m_lock->unlockTemporaryTarget();
+            }
+        }
+
+        void unlock() {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(m_locked);
             m_lock->unlockTemporaryTarget();
+            m_locked = false;
+        }
+
+        void relock() {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(!m_locked);
+            m_lock->lockTemporaryTargetForWrite();
+            m_locked = true;
+        }
+
+        bool isLocked() {
+            return m_locked;
         }
 
     private:
         KisIndirectPaintingSupport *m_lock;
+        bool m_locked = false;
     };
 
     using WriteLockerSP = QSharedPointer<WriteLocker>;

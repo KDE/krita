@@ -44,17 +44,18 @@ private:
 class KisSprayOptionProperties : public KisPaintopPropertiesBase
 {
 public:
-    quint16 diameter;
-    quint16 particleCount;
-    qreal aspect;
-    qreal coverage;
-    qreal amount;
-    qreal spacing;
-    qreal scale;
-    qreal brushRotation;
-    bool jitterMovement;
-    bool useDensity;
-    bool gaussian;
+    // sane defaults (for Coverity)
+    quint16 diameter {100};
+    quint16 particleCount {12};
+    qreal aspect {1.0};
+    qreal coverage {0.003};
+    qreal amount {1.0};
+    qreal spacing {0.5};
+    qreal scale {1.0};
+    qreal brushRotation {0.0};
+    bool jitterMovement {false};
+    bool useDensity {false};
+    bool gaussian {false};
 
     int radius() const {
         return diameter / 2;

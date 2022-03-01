@@ -133,18 +133,24 @@ QPoint KoPointerEvent::pos() const
 
 qreal KoPointerEvent::pressure() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->pressure();
-    else
+    } else if (d->touchEvent) {
+        return d->touchEvent->touchPoints().at(0).pressure();
+    } else {
         return 1.0;
+    }
 }
 
 qreal KoPointerEvent::rotation() const
 {
-    if (d->tabletEvent)
+    if (d->tabletEvent) {
         return d->tabletEvent->rotation();
-    else
+    } else if (d->touchEvent) {
+        return d->touchEvent->touchPoints().at(0).rotation();
+    } else {
         return 0.0;
+    }
 }
 
 qreal KoPointerEvent::tangentialPressure() const

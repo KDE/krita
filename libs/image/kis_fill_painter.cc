@@ -72,6 +72,7 @@ void KisFillPainter::initFillPainter()
     m_threshold = 0;
     m_opacitySpread = 0;
     m_useSelectionAsBoundary = false;
+    m_antiAlias = false;
 }
 
 void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)

@@ -12,6 +12,7 @@
 #include "kis_single_action_shortcut.h"
 #include "KisInputActionGroup.h"
 #include <functional>
+#include "kis_shortcut_configuration.h"
 
 class QEvent;
 class QWheelEvent;
@@ -267,7 +268,7 @@ private:
     void forceDeactivateAllActions();
 
     void setMaxTouchPointEvent(QTouchEvent *event);
-    void fireReadyTouchShortcut();
+    void fireReadyTouchShortcut(QTouchEvent *event);
     KisTouchShortcut *matchTouchShortcut(QTouchEvent *event);
     bool tryRunTouchShortcut(QTouchEvent *event);
     bool tryEndTouchShortcut(QTouchEvent *event);

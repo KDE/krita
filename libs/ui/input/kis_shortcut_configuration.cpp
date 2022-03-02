@@ -406,6 +406,8 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
     switch (action) {
     case NoGesture:
         return i18n("No Gesture");
+    case MaxGesture:
+        return i18n("Max Gesture");
 #ifdef Q_OS_MACOS
     case PinchGesture:
         return i18n("Pinch Gesture");

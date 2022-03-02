@@ -62,12 +62,18 @@ public:
         RotateGesture, ///<Rotate gesture, two fingers rotating around a pivot point.
         SmartZoomGesture, ///< Smart zoom gesture, typically a double tap that is a boolean zoom/unzoom.
 #else
-        OneFingerTouch,
-        TwoFingerTouch,
-        ThreeFingerTouch,
-        FourFingerTouch,
-        FiveFingerTouch,
+        OneFingerTap,
+        TwoFingerTap,
+        ThreeFingerTap,
+        FourFingerTap,
+        FiveFingerTap,
+        OneFingerDrag,
+        TwoFingerDrag,
+        ThreeFingerDrag,
+        FourFingerDrag,
+        FiveFingerDrag,
 #endif
+        MaxGesture,
     };
 
     /**

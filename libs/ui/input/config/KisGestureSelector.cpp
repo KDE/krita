@@ -10,7 +10,7 @@ KisGestureSelector::KisGestureSelector(QWidget *parent)
     : KComboBox(parent)
 {
     QStringList gestures;
-    for (int i = 0; i <= KisShortcutConfiguration::FiveFingerTouch; i++) {
+    for (int i = 1; i < KisShortcutConfiguration::MaxGesture; i++) {
         gestures << KisShortcutConfiguration::gestureToText(static_cast<KisShortcutConfiguration::GestureAction>(i));
     }
     addItems(gestures);
@@ -18,10 +18,10 @@ KisGestureSelector::KisGestureSelector(QWidget *parent)
 
 void KisGestureSelector::setGesture(KisShortcutConfiguration::GestureAction gestureAction)
 {
-    setCurrentIndex(gestureAction);
+    setCurrentIndex(gestureAction - 1);
 }
 
 KisShortcutConfiguration::GestureAction KisGestureSelector::gesture()
 {
-    return static_cast<KisShortcutConfiguration::GestureAction>(currentIndex());
+    return static_cast<KisShortcutConfiguration::GestureAction>(currentIndex() + 1);
 }

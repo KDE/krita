@@ -52,7 +52,25 @@ void KisTouchShortcut::setMaximumTouchPoints(int max)
     d->maxTouchPoints = max;
 }
 
-bool KisTouchShortcut::match( QTouchEvent* event )
+bool KisTouchShortcut::matchTapType(QTouchEvent *event)
+{
+    return matchTouchPoint(event)
+#ifndef Q_OS_MACOS
+        && (d->type >= KisShortcutConfiguration::OneFingerTap && d->type <= KisShortcutConfiguration::FiveFingerTap)
+#endif
+        ;
+}
+
+bool KisTouchShortcut::matchDragType(QTouchEvent *event)
+{
+    return matchTouchPoint(event)
+#ifndef Q_OS_MACOS
+        && (d->type >= KisShortcutConfiguration::OneFingerDrag && d->type <= KisShortcutConfiguration::FiveFingerDrag)
+#endif
+        ;
+}
+
+bool KisTouchShortcut::matchTouchPoint(QTouchEvent *event)
 {
     return event->touchPoints().count() >= d->minTouchPoints && event->touchPoints().count() <= d->maxTouchPoints;
 }

@@ -30,7 +30,7 @@
 #define DEBUG_TOUCH_ACTION(text, event)                                                                                \
     if (event) {                                                                                                       \
         qDebug() << __FUNCTION__ << "-" << text << "type:" << event->type() << "tps:" << event->touchPoints().size()   \
-                 << "maxTps:" << m_d->maxTouchPoints;                                                                  \
+                 << "maxTps:" << m_d->maxTouchPoints << "drag:" << m_d->isTouchDragDetected;                              \
     }
 #else
 #define DEBUG_ACTION(text)
@@ -82,6 +82,7 @@ public:
 
     int maxTouchPoints{0};
     int matchingIteration{0};
+    bool isTouchDragDetected {false};
     QScopedPointer<QEvent> bestCandidateTouchEvent;
 
     std::function<KisInputActionGroupsMask()> actionGroupMask;
@@ -379,8 +380,9 @@ bool KisShortcutMatcher::touchBeginEvent( QTouchEvent* event )
     m_d->lastTouchPoints = event->touchPoints();
 
     // reset state
-    m_d->maxTouchPoints = event->touchPoints().size();;
+    m_d->maxTouchPoints = event->touchPoints().size();
     m_d->matchingIteration = 1;
+    m_d->isTouchDragDetected = false;
     KoPointerEvent::copyQtPointerEvent(event, m_d->bestCandidateTouchEvent);
 
     return !notifier.isInRecursion();
@@ -393,11 +395,11 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
     bool retval = false;
 
     const int touchPointCount = event->touchPoints().size();
-    const int numIterations = 5;
 
     // for a first few events we don't process the events right away. But analyze and keep track of the event with most
     // touchpoints. This is done to prevent conditions where in three-finger-tap, two-finger-tap be preceded due to
     // latency
+    const int numIterations = 10;
     if (m_d->matchingIteration <= numIterations) {
         m_d->matchingIteration++;
         setMaxTouchPointEvent(event);
@@ -405,41 +407,54 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
         return true;
     }
 
-    // triggerred if a new finger was added, which might result in shortcut not matching the action
-    if (m_d->touchShortcut && !m_d->touchShortcut->match(event)) {
-        DEBUG_TOUCH_ACTION("ending", event)
-        // we should end the event as an event with more touchpoints was received
-        retval = tryEndTouchShortcut(event);
-        if (m_d->maxTouchPoints < touchPointCount) {
-            m_d->maxTouchPoints = touchPointCount;
-        }
+    const int touchSlop = 10;
+    // check whether the touchpoints are relatively stationary or have been moved for dragging.
+    for (int i = 0; i < event->touchPoints().size() && !m_d->isTouchDragDetected; ++i) {
+        const QTouchEvent::TouchPoint &touchPoint = event->touchPoints().at(i);
+        const QPointF delta = touchPoint.startPos() - touchPoint.pos();
+
+        // if the drag is detected, until the next TouchBegin even, we'll be assuming the gesture to be of dragging
+        // type.
+        m_d->isTouchDragDetected = abs(delta.x()) > touchSlop || abs(delta.y()) > touchSlop;
     }
 
-    // don't start a new event if touch points are less than max. Which means the touch event with more touch points has
-    // already ended and we should start another event
-    if (m_d->maxTouchPoints <= touchPointCount) {
-        m_d->maxTouchPoints = touchPointCount;
-        if (!m_d->touchShortcut) {
-            DEBUG_TOUCH_ACTION("starting", event)
+    if (m_d->isTouchDragDetected) {
+        if (m_d->touchShortcut && !m_d->touchShortcut->matchDragType(event)) {
+            DEBUG_TOUCH_ACTION("ending", event)
+            // we should end the event as an event with more touchpoints was received
+            retval = tryEndTouchShortcut(event);
+        }
+        if (!m_d->touchShortcut && touchPointCount >= m_d->maxTouchPoints) {
+            m_d->maxTouchPoints = touchPointCount;
+            DEBUG_TOUCH_ACTION("starting", event);
             retval = tryRunTouchShortcut(event);
-            // we reset the bestCandidate because action is selected and now we don't need to rely on it
-            m_d->bestCandidateTouchEvent.reset();
-        } else {
+        } else if (m_d->touchShortcut) {
             m_d->touchShortcut->action()->inputEvent(event);
             retval = true;
+        }
+    } else {
+        // triggerred if a new finger was added, which might result in shortcut not matching the action
+        if ((event->touchPointStates() & Qt::TouchPointReleased) == Qt::TouchPointReleased) {
+            // we should end the event as an event with more touchpoints was received
+            if (m_d->maxTouchPoints <= touchPointCount) {
+                m_d->maxTouchPoints = touchPointCount;
+                DEBUG_TOUCH_ACTION("firing", event);
+                fireReadyTouchShortcut(event);
+                m_d->bestCandidateTouchEvent.reset();
+            }
         }
     }
 
     return retval;
 }
 
-bool KisShortcutMatcher::touchEndEvent( QTouchEvent* event )
+bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
 {
     m_d->usingTouch = false; // we need to say we are done because qt will not send further event
     m_d->maxTouchPoints = 0;
 
-    if (m_d->bestCandidateTouchEvent) {
-        fireReadyTouchShortcut();
+    if (!m_d->isTouchDragDetected && m_d->bestCandidateTouchEvent) {
+        fireReadyTouchShortcut(static_cast<QTouchEvent *>(m_d->bestCandidateTouchEvent.data()));
     }
 
     DEBUG_TOUCH_ACTION("ending", event)
@@ -836,11 +851,9 @@ void KisShortcutMatcher::setMaxTouchPointEvent(QTouchEvent *event)
     }
 }
 
-void KisShortcutMatcher::fireReadyTouchShortcut()
+void KisShortcutMatcher::fireReadyTouchShortcut(QTouchEvent *event)
 {
-    QTouchEvent *event = dynamic_cast<QTouchEvent *>(m_d->bestCandidateTouchEvent.data());
     KisTouchShortcut *goodCandidate = matchTouchShortcut(event);
-
     if (goodCandidate) {
         DEBUG_TOUCH_ACTION("starting", event)
         goodCandidate->action()->activate(goodCandidate->shortcutIndex());
@@ -855,7 +868,11 @@ KisTouchShortcut *KisShortcutMatcher::matchTouchShortcut(QTouchEvent *event)
 {
     KisTouchShortcut *goodCandidate = nullptr;
     Q_FOREACH (KisTouchShortcut *shortcut, m_d->touchShortcuts) {
-        if (shortcut->isAvailable(m_d->actionGroupMask()) && shortcut->match(event)
+        // if the type of the action is drag, check if we match with drag type and if the type is tap, check if we match
+        // with tap type.
+        if (shortcut->isAvailable(m_d->actionGroupMask())
+            && ((shortcut->matchDragType(event) && m_d->isTouchDragDetected)
+                || (shortcut->matchTapType(event) && !m_d->isTouchDragDetected))
             && (!goodCandidate || shortcut->priority() > goodCandidate->priority())) {
 
             goodCandidate = shortcut;

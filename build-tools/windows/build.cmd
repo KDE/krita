@@ -967,7 +967,7 @@ set EXT_TARGETS=%EXT_TARGETS% giflib qt libraw kwindowsystem drmingw
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp jpegxl xsimd
-set EXT_TARGETS=%EXT_TARGETS% freetype poppler fribidi
+set EXT_TARGETS=%EXT_TARGETS% freetype poppler fribidi raqm
 
 for %%a in (%EXT_TARGETS%) do (
     set TEST_HAS_TARGET=

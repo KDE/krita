@@ -382,7 +382,6 @@ void KisOpenGLCanvasRenderer::resizeGL(int width, int height)
     // The given size is the widget size but here we actually want to give
     // KisCoordinatesConverter the viewport size aligned to device pixels.
     coordinatesConverter()->setCanvasWidgetSize(widgetSizeAlignedToDevicePixel());
-    paintGL();
 }
 
 void KisOpenGLCanvasRenderer::paintGL(const QRect &updateRect)
@@ -396,11 +395,14 @@ void KisOpenGLCanvasRenderer::paintGL(const QRect &updateRect)
     renderCanvasGL(updateRect);
 
     if (d->canvasFBO) {
-        const QTransform scale = QTransform::fromScale(1.0, -1.0) * QTransform::fromTranslate(0, d->viewportWidgetSize.height()) * QTransform::fromScale(devicePixelRatioF(), devicePixelRatioF());
-
-        const QRect blitRect = scale.mapRect(QRectF(updateRect)).toAlignedRect();
-
         d->canvasFBO->release();
+        QRect blitRect;
+        if (updateRect.isEmpty()) {
+            blitRect = QRect(QPoint(), d->viewportDevicePixelSize);
+        } else {
+            const QTransform scale = QTransform::fromScale(1.0, -1.0) * QTransform::fromTranslate(0, d->viewportWidgetSize.height()) * QTransform::fromScale(devicePixelRatioF(), devicePixelRatioF());
+            blitRect = scale.mapRect(QRectF(updateRect)).toAlignedRect();
+        }
         QOpenGLFramebufferObject::blitFramebuffer(nullptr, blitRect, d->canvasFBO.data(), blitRect, GL_COLOR_BUFFER_BIT, GL_NEAREST);
         QOpenGLFramebufferObject::bindDefault();
     }
@@ -1039,7 +1041,9 @@ void KisOpenGLCanvasRenderer::renderDecorations(const QRect &updateRect)
     paintDevice.setDevicePixelRatio(devicePixelRatioF());
 
     QPainter gc(&paintDevice);
-    gc.setClipRect(updateRect);
+    if (!updateRect.isEmpty()) {
+        gc.setClipRect(updateRect);
+    }
 
     QRect decorationsBoundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();
 

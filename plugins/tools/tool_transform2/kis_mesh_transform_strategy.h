@@ -33,7 +33,7 @@ public:
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive) override;
     QPointF handleSnapPoint(const QPointF &imagePos);
-    bool shiftModifierIsUsed() const;
+    bool shiftModifierIsUsed() const override;
 
     void paint(QPainter &gc) override;
     QCursor getCurrentCursor() const override;

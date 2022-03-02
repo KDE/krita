@@ -1,12 +1,9 @@
 SET(EXTPREFIX_harfbuzz "${EXTPREFIX}" ) 
 
-find_program(MESON_BINARY_PATH meson)
-find_program(NINJA_BINARY_PATH ninja)
-
 if(MESON_BINARY_PATH AND NINJA_BINARY_PATH)
 
     ExternalProject_Add(
-        ext_raqm
+        ext_harfbuzz
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://github.com/harfbuzz/harfbuzz/releases/download/4.0.0/harfbuzz-4.0.0.tar.xz
         URL_HASH SHA256=ab61d4e3fc0c30072e98b46aa7727fc3eed36a85d2b6b9274cec7eaadea97cb7

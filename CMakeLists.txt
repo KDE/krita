@@ -1025,6 +1025,30 @@ set_package_properties(QUAZIP PROPERTIES
     PURPOSE "Needed for reading and writing KRA and ORA files"
 )
 
+##
+## Check for freetype
+##
+find_package(Freetype 2.10.0 REQUIRED)
+set_package_properties(Freetype PROPERTIES
+    DESCRIPTION "A library for rendering glyphs"
+    URL "https://download.savannah.gnu.org/releases/freetype"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes"
+)
+include_directories(SYSTEM ${Freetype_INCLUDE_DIRS})
+
+##
+## Check for libraqm
+##
+find_package(RAQM 0.9.0)
+set_package_properties(RAQM PROPERTIES
+    DESCRIPTION "Raqm is a small library that encapsulates the logic for complex text layout and provides a convenient API."
+    URL "https://github.com/HOST-Oman/libraqm"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes"
+)
+include_directories(SYSTEM ${RAQM_INCLUDE_DIRS})
+
 # FIXME: better way to do this?
 list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${EXPAT_LIBRARY}

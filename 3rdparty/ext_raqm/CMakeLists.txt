@@ -1,8 +1,5 @@
 SET(EXTPREFIX_raqm "${EXTPREFIX}" ) 
 
-find_program(MESON_BINARY_PATH meson)
-find_program(NINJA_BINARY_PATH ninja)
-
 if(MESON_BINARY_PATH AND NINJA_BINARY_PATH)
 
     ExternalProject_Add(

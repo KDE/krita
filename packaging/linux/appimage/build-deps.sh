@@ -129,11 +129,9 @@ cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_openexr
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_giflib
 #cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_gsl
-cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_python
-#cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_freetype
 #cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fontconfig
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_qt
-cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_poppler
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_python
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_libraw
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_kcrash
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_sip
@@ -150,3 +148,5 @@ cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_webp
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_jpegxl
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_xsimd
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_freetype
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_poppler

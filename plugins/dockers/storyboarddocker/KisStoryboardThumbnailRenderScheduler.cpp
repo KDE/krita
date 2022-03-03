@@ -57,8 +57,8 @@ void KisStoryboardThumbnailRenderScheduler::scheduleFrameForRegeneration(int fra
 
 void KisStoryboardThumbnailRenderScheduler::cancelAllFrameRendering()
 {
-    m_affectedFramesQueue.empty();
-    m_changedFramesQueue.empty();
+    m_affectedFramesQueue.clear();
+    m_changedFramesQueue.clear();
     if (m_renderer->isActive()) {
         m_renderer->cancelCurrentFrameRendering(KisAsyncAnimationRendererBase::UserCancelled);
     }

@@ -72,21 +72,19 @@ inline bool TRY_READ_SIGNATURE_2OPS_EX(QIODevice &device, const std::array<T, S>
         return false;
     }
 
-    bool result = std::equal(bytes.constBegin(), bytes.constEnd(), expected1.begin()) || std::equal(bytes.constBegin(), bytes.constEnd(), expected2.begin());
-
     // If read successfully, adjust current position of the io device
 
-    if (result) {
+    if (std::equal(bytes.constBegin(), bytes.constEnd(), expected1.begin()) 
+        || std::equal(bytes.constBegin(), bytes.constEnd(), expected2.begin())) {
         // read, not seek, to support sequential devices
         auto bytesRead = psdreadBytes(device, S);
-        if (bytesRead.size() != S) {
-            return false;
+        if (bytesRead.size() == S) {
+            return true;
         }
-    } else {
-        dbgFile << "Photoshop signature verification failed! Got: " << bytes.toHex() << "(" << QString(bytes) << ")";
     }
 
-    return result;
+    dbgFile << "Photoshop signature verification failed! Got: " << bytes.toHex() << "(" << QString(bytes) << ")";
+    return false;
 }
 
 template<typename T, size_t S>

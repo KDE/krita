@@ -10,15 +10,17 @@
 #include "kis_lod_transform_base.h"
 #include "kis_global.h"
 #include "kis_algebra_2d.h"
+#include <KisUsageLogger.h>
 
 #include "kis_debug.h"
 
 
 KisRectsGrid::KisRectsGrid(int gridSize)
-    : m_gridSize(gridSize),
-      m_logGridSize(qFloor(std::log2(gridSize)))
+    : m_gridSize(gridSize)
+    , m_logGridSize(qFloor(std::log2(gridSize)))
 {
-    KIS_ASSERT_RECOVER(qFuzzyCompare(std::log2(gridSize), qreal(m_logGridSize))) {
+    if (!qFuzzyCompare(std::log2(gridSize), qreal(m_logGridSize))) {
+        KisUsageLogger::log(QString("Invalid grid configuration. Grid size: %1, log grid size: %2. Resetting to 64 and 6").arg(gridSize, m_logGridSize));
         m_gridSize = 64;
         m_logGridSize = 6;
     }

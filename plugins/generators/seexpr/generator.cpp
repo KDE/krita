@@ -143,6 +143,7 @@ void KisSeExprGenerator::generate(KisProcessingInformation dstInfo, const QSize 
 
                 conv->transform(c.data(), it.rawData(), 1);
             }
+            delete conv;
         }
     }
 }

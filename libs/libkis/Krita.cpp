@@ -219,6 +219,7 @@ QStringList Krita::profiles(const QString &colorModel, const QString &colorDepth
 bool Krita::addProfile(const QString &profilePath)
 {
     KoColorSpaceEngine *iccEngine = KoColorSpaceEngineRegistry::instance()->get("icc");
+    KIS_ASSERT(iccEngine);
     return iccEngine->addProfile(profilePath);
 }
 

@@ -204,7 +204,7 @@ void KoColorProfile::colorantsForType(ColorPrimaries primaries, QVector<double> 
         colorants.append({0.130997824007, 0.045996550894});
         break;
     case PRIMARIES_SMPTE_ST_428_1:
-        colorants = {1/3, 1/3};
+        colorants = {1.0/3, 1.0/3};
         colorants.append({1.0, 0});
         colorants.append({0, 1.0});
         colorants.append({0, 0});

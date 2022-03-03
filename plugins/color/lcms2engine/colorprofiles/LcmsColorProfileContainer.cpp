@@ -580,7 +580,7 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
     { 1.0 / 0.45, 1.0 / 1.1115,  0.1115 / 1.1115,  1.0 / 4.0, 0.0913 };
 
     cmsFloat64Number prophoto_parameters[5] =
-    { 1.8, 1.0,  0, 1.0 / 16, (16/512) };
+    { 1.8, 1.0,  0, 1.0 / 16, (16.0/512) };
 
     cmsFloat64Number log_100[5] = {1.0, 10, 2.0, -2.0, 0.0};
     cmsFloat64Number log_100_sqrt[5] = {1.0, 10, 2.5, -2.5, 0.0};
@@ -620,7 +620,7 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
         break;
     case TRC_A98:
         //gamma 256/563
-        mainCurve = cmsBuildGamma(NULL, 256/563);
+        mainCurve = cmsBuildGamma(NULL, 256.0/563);
         break;
     case TRC_PROPHOTO:
         mainCurve = cmsBuildParametricToneCurve(NULL, 4, prophoto_parameters);

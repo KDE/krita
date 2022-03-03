@@ -286,7 +286,7 @@ void KoToolBox::slotContextIconSize()
 {
     QAction* action = qobject_cast<QAction*>(sender());
     if (action) {
-        int iconSize;
+        int iconSize = -1;
         if (action == d->defaultIconSizeAction) {
             iconSize = buttonSize(qApp->desktop()->screenNumber(this));
             QAction *action = d->contextIconSizes.key(iconSize);
@@ -296,6 +296,7 @@ void KoToolBox::slotContextIconSize()
         } else if (d->contextIconSizes.contains(action)) {
             iconSize = d->contextIconSizes.value(action);
         }
+        KIS_SAFE_ASSERT_RECOVER(iconSize >= 0) { iconSize = 16; }
 
         KConfigGroup cfg =  KSharedConfig::openConfig()->group("KoToolBox");
         cfg.writeEntry("iconSize", iconSize);

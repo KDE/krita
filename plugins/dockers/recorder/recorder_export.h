@@ -70,7 +70,7 @@ private:
 private:
     Q_DISABLE_COPY(RecorderExport)
     class Private;
-    Private *const d;
+    QScopedPointer<Private> d;
 };
 
 #endif // RECORDER_EXPORT_H

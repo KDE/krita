@@ -45,7 +45,7 @@ class RecorderExport::Private
 {
 public:
     RecorderExport *q;
-    Ui::RecorderExport *ui;
+    QScopedPointer<Ui::RecorderExport> ui;
     RecorderExportSettings settings;
     QSize imageSize;
 
@@ -332,7 +332,6 @@ RecorderExport::RecorderExport(QWidget *parent)
 
 RecorderExport::~RecorderExport()
 {
-    delete d->ui;
 }
 
 void RecorderExport::setup(const RecorderExportSettings &settings)

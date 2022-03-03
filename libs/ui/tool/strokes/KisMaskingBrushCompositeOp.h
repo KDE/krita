@@ -498,7 +498,7 @@ struct CompositeFunction<channels_type, KIS_MASKING_BRUSH_COMPOSITE_LINEAR_HEIGH
 
     CompositeFunction(qreal strength)
         : StrengthCompositeFunctionBase<channels_type>(strength)
-        , weight(10 * StrengthCompositeFunctionBase<channels_type>::strength)
+        , weight(composite_type(10) * StrengthCompositeFunctionBase<channels_type>::strength)
     {}
     
     channels_type apply(channels_type src, channels_type dst)

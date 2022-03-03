@@ -1,0 +1,60 @@
+From 97e5ed4ecec4ef612f6c8070823dbcb57fb58869 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Thu, 3 Mar 2022 00:43:35 +0800
+Subject: [PATCH] Make QQuickWindow renderer follow real logical size
+ accurately
+
+Use QSizeF(pixelSize) / devicePixelRatio instead of incorrectly rounded
+versions. Also simplified the size manipulation by following some of
+what has been done in 17a280995ab546074fa7e9a009642fec5f23c64e:
+https://codereview.qt-project.org/c/qt/qtdeclarative/+/394497
+
+This patch is necessary to have the projection matrix be set up
+correctly in a way that would allow easy pixel-perfect item placement
+and rendering in a QtQUick2 scene, when the high-DPI scaling
+(devicePixelRatio) is non-integer.
+---
+ src/quick/items/qquickwindow.cpp | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
+
+diff --git a/src/quick/items/qquickwindow.cpp b/src/quick/items/qquickwindow.cpp
+index 3c97475e86..5d3e771fcd 100644
+--- a/src/quick/items/qquickwindow.cpp
++++ b/src/quick/items/qquickwindow.cpp
+@@ -540,25 +540,17 @@ void QQuickWindowPrivate::renderSceneGraph(const QSize &size)
+     if (!customRenderStage || !customRenderStage->render()) {
+         int fboId = 0;
+         const qreal devicePixelRatio = q->effectiveDevicePixelRatio();
++        QSize pixelSize;
+         if (renderTargetId) {
+-            QRect rect(QPoint(0, 0), renderTargetSize);
+-            fboId = renderTargetId;
+-            renderer->setDeviceRect(rect);
+-            renderer->setViewportRect(rect);
+-            if (QQuickRenderControl::renderWindowFor(q)) {
+-                renderer->setProjectionMatrixToRect(QRect(QPoint(0, 0), size));
+-                renderer->setDevicePixelRatio(devicePixelRatio);
+-            } else {
+-                renderer->setProjectionMatrixToRect(QRect(QPoint(0, 0), rect.size()));
+-                renderer->setDevicePixelRatio(1);
+-            }
++            pixelSize = renderTargetSize;
+         } else {
+-            QRect rect(QPoint(0, 0), devicePixelRatio * size);
+-            renderer->setDeviceRect(rect);
+-            renderer->setViewportRect(rect);
+-            renderer->setProjectionMatrixToRect(QRect(QPoint(0, 0), size));
+-            renderer->setDevicePixelRatio(devicePixelRatio);
++            pixelSize = size * devicePixelRatio;
+         }
++        QSizeF logicalSize = QSizeF(pixelSize) / devicePixelRatio;
++        renderer->setDevicePixelRatio(devicePixelRatio);
++        renderer->setDeviceRect(QRect(QPoint(0, 0), pixelSize));
++        renderer->setViewportRect(QRect(QPoint(0, 0), pixelSize));
++        renderer->setProjectionMatrixToRect(QRectF(QPointF(0, 0), logicalSize));
+ 
+         context->renderNextFrame(renderer, fboId);
+     }
+-- 
+2.24.1.windows.2
+

@@ -69,10 +69,10 @@ bool PSDImageData::read(QIODevice &io, KisPaintDeviceSP dev)
 
         // The start of the actual channel data is _after_ the RLE rowlengths block
         if (m_header->version == 1) {
-            start += m_header->nChannels * m_header->height * 2;
+            start += quint64(m_header->nChannels) * m_header->height * 2;
         }
         else if (m_header->version == 2) {
-            start += m_header->nChannels * m_header->height * 4;
+            start += quint64(m_header->nChannels) * m_header->height * 4;
         }
 
         for (int channel = 0; channel < m_header->nChannels; channel++) {

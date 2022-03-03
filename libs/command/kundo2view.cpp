@@ -86,8 +86,8 @@ public:
 #ifndef QT_NO_UNDOGROUP
     QPointer<KUndo2Group> group;
 #endif
-    KUndo2Model *model;
-    KUndo2View* q;
+    KUndo2Model *model {0};
+    KUndo2View* q {0};
 
     void init(KUndo2View* view);
 };

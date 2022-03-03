@@ -28,8 +28,20 @@ class QDomElement;
 class StoryboardComment
 {
 public:
+    StoryboardComment()
+        : name(QString(""))
+        , visibility(true)
+    {}
+
+    StoryboardComment(const StoryboardComment& rhs)
+        : name(rhs.name)
+        , visibility(rhs.visibility)
+    {}
+
+public:
     QString name;
     bool visibility;
+
 };
 
 /**

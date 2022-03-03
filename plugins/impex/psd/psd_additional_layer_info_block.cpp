@@ -72,6 +72,9 @@ void PsdAdditionalLayerInfoBlock::readImpl(QIODevice* io)
             blockSize = size32;
         }
 
+        if (blockSize == 0)
+            return;
+
         // offset verifier will correct the position on the exit from
         // current namespace, including 'continue', 'return' and
         // exceptions.

@@ -48,14 +48,15 @@ class KisBrushSizeOptionProperties : public KisPaintopPropertiesBase
 {
 
 public:
-    qreal brush_diameter;
-    qreal brush_aspect;
-    qreal brush_rotation;
-    qreal brush_scale;
-    qreal brush_spacing;
-    qreal brush_density;
-    qreal brush_jitter_movement;
-    bool brush_jitter_movement_enabled;
+    // sane defaults (for Coverity)
+    qreal brush_diameter {20};
+    qreal brush_aspect {1.0};
+    qreal brush_rotation {0.0};
+    qreal brush_scale {1.0};
+    qreal brush_spacing {0.3};
+    qreal brush_density {100};
+    qreal brush_jitter_movement {0};
+    bool brush_jitter_movement_enabled {false};
 
 public:
 

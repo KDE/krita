@@ -42,11 +42,13 @@ private:
 };
 
 struct DeformOption {
-    qreal deform_amount;
-    bool deform_use_bilinear;
-    bool deform_use_counter;
-    bool deform_use_old_data;
-    int deform_action;
+
+    // sane defaults (for Coverity)
+    qreal deform_amount {0.2};
+    bool deform_use_bilinear {false};
+    bool deform_use_counter {false};
+    bool deform_use_old_data {false};
+    int deform_action {1};
 
     void readOptionSetting(const KisPropertiesConfigurationSP config) {
         deform_amount = config->getDouble(DEFORM_AMOUNT);

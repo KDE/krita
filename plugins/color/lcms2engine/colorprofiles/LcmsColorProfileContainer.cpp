@@ -591,6 +591,7 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
     case TRC_ITU_R_BT_1361:
         // This is not possible in ICC due to lack of a*pow(bX+c,y) construct.
         qWarning() << "Neither IEC 61966 2-4 nor Bt. 1361 are supported, returning a rec 709 curve.";
+        Q_FALLTHROUGH();
     case TRC_ITU_R_BT_709_5:
     case TRC_ITU_R_BT_601_6:
     case TRC_ITU_R_BT_2020_2_10bit:
@@ -637,6 +638,7 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
     case TRC_ITU_R_BT_2100_0_HLG:
         // Hybrid log gamma.
         qWarning() << "Cannot generate an icc profile with this transfer function, will generate a linear profile";
+        Q_FALLTHROUGH();
     case TRC_LINEAR:
     default:
         mainCurve = cmsBuildGamma(NULL, 1.0);

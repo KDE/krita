@@ -41,7 +41,7 @@ class RecorderDockerDock::Private
 {
 public:
     RecorderDockerDock *const q;
-    Ui::RecorderDocker *const ui;
+    QScopedPointer<Ui::RecorderDocker> ui;
     QPointer<KisCanvas2> canvas;
     RecorderWriter writer;
 

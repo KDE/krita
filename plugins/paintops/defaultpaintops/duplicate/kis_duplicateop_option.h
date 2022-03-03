@@ -52,11 +52,12 @@ private:
 
 struct KisDuplicateOptionProperties : public KisPaintopPropertiesBase
 {
-    bool duplicate_healing;
-    bool duplicate_correct_perspective;
-    bool duplicate_move_source_point;
-    bool duplicate_reset_source_point;
-    bool duplicate_clone_from_projection;
+    // sane defaults (for Coverity)
+    bool duplicate_healing {false};
+    bool duplicate_correct_perspective {false};
+    bool duplicate_move_source_point {true};
+    bool duplicate_reset_source_point {false};
+    bool duplicate_clone_from_projection {false};
 
     void readOptionSettingImpl(const KisPropertiesConfiguration* setting) override {
         duplicate_healing = setting->getBool(DUPLICATE_HEALING, false);

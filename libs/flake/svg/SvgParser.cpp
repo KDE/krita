@@ -549,7 +549,7 @@ QList<QPair<QString, QColor>> SvgParser::parseMeshPatch(const QDomNode& meshpatc
 
     QDomElement stop;
     forEachElement(stop, e) {
-        qreal X;    // don't care..
+        qreal X = 0;    // dummy value, don't care, just to ensure the function won't blow up (also to avoid a Coverity issue)
         QColor color = m_context.styleParser().parseColorStop(stop, gc, X).second;
 
         QString pathStr = stop.attribute("path");

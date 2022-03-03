@@ -28,7 +28,9 @@ class Q_DECL_HIDDEN SvgLoadingContext::Private
 {
 public:
     Private()
-        : zIndex(0), styleParser(0)
+        : zIndex(0)
+        , documentResourceManager(0)
+        , styleParser(0)
     {
 
     }

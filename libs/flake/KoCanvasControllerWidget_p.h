@@ -29,6 +29,7 @@ public:
         : q(qq)
         , observerProvider(observerProvider)
         , canvas(0)
+        , viewportWidget(0)
         , ignoreScrollSignals(false)
         , zoomWithWheel(false)
         , vastScrollingFactor(0)

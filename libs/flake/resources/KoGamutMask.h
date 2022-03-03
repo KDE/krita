@@ -34,7 +34,7 @@ public:
     KoShape* koShape();
 
 private:
-    KoShape* m_maskShape;
+    KoShape* m_maskShape {nullptr};
     KoShapePaintingContext m_shapePaintingContext;
 };
 

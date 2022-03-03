@@ -19,8 +19,9 @@
 #include <FlakeDebug.h>
 
 KoZoomTool::KoZoomTool(KoCanvasBase *canvas)
-        : KoInteractionTool(canvas),
-        m_zoomInMode(true)
+        : KoInteractionTool(canvas)
+        , m_controller(nullptr)
+        , m_zoomInMode(true)
 {
     QPixmap inPixmap, outPixmap;
     inPixmap.load(":/zoom_in_cursor.png");

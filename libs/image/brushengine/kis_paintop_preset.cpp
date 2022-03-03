@@ -171,7 +171,7 @@ bool KisPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP re
     QString preset = reader.text("preset");
     int resourceCount = reader.text("embedded_resources").toInt();
 
-    if (!(d->version == "2.2" || "5.0")) {
+    if (!(d->version == "2.2" || d->version == "5.0")) {
         return false;
     }
 

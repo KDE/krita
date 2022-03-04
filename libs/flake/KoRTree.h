@@ -462,6 +462,7 @@ void KoRTree<T>::remove(const T&data)
     for (int i = 0; i < reinsert.size(); ++i) {
         if (reinsert[i]->isLeaf()) {
             LeafNode * leaf = dynamic_cast<LeafNode *>(reinsert[i]);
+            KIS_SAFE_ASSERT_RECOVER(leaf) { reinsert[i]->clear(); delete reinsert[i]; continue; } // mostly for the sake of Coverity
             for (int j = 0; j < leaf->childCount(); ++j) {
                 insertHelper(leaf->childBoundingBox(j), leaf->getData(j), leaf->getDataId(j));
             }
@@ -470,6 +471,7 @@ void KoRTree<T>::remove(const T&data)
             delete leaf;
         } else {
             NonLeafNode * node = dynamic_cast<NonLeafNode *>(reinsert[i]);
+            KIS_SAFE_ASSERT_RECOVER(node) { reinsert[i]->clear(); delete reinsert[i]; continue; } // mostly for the sake of Coverity
             for (int j = 0; j < node->childCount(); ++j) {
                 insert(node->getNode(j));
             }

@@ -89,12 +89,16 @@ public:
                 src += srcInc;
                 dst += channels_nb;
 //                 ctr  = (ctr + 1) % 256;
-                ++mask;
+                if (mask) {
+                    ++mask;
+                }
             }
 
             srcRowStart  += srcRowStride;
             dstRowStart  += dstRowStride;
-            maskRowStart += maskRowStride;
+            if (maskRowStart) {
+                maskRowStart += maskRowStride;
+            }
         }
     }
 };

@@ -39,7 +39,7 @@ public:
 
     void scratchPadSetup(KisCanvasResourceProvider* resourceProvider);
     void saveScratchPadThumbnailArea(const QImage image);
-    KisCanvasResourceProvider* m_resourceProvider;
+    KisCanvasResourceProvider* m_resourceProvider {0};
 
     void setFavoriteResourceManager(KisFavoriteResourceManager * favManager);
 
@@ -57,8 +57,8 @@ public Q_SLOTS:
 
 
 private:
-    bool m_useNewBrushDialog;
-    KisFavoriteResourceManager * m_favoriteResourceManager;
+    bool m_useNewBrushDialog {false};
+    KisFavoriteResourceManager * m_favoriteResourceManager {0};
     QImage scratchPadThumbnailArea;
 };
 

@@ -62,7 +62,7 @@ public:
     WdgStrokeSelection(QWidget *parent) ;
     StrokeSelectionOptions  m_options;
 
-    bool m_isVectorLayer;
+    bool m_isVectorLayer {false};
     KisPropertiesConfigurationSP m_cfg;
 
     void enableControls();

@@ -38,9 +38,9 @@ struct KisDlgLayerProperties::Private
     Private() : updatesCompressor(500, KisSignalCompressor::POSTPONE) {}
 
     KisNodeList nodes;
-    const KoColorSpace *colorSpace;
-    KisViewManager *view;
-    WdgLayerProperties *page;
+    const KoColorSpace *colorSpace {0};
+    KisViewManager *view {0};
+    WdgLayerProperties *page {0};
 
     QSharedPointer<KisMultinodeCompositeOpProperty> compositeOpProperty;
     QSharedPointer<KisMultinodeOpacityProperty> opacityProperty;

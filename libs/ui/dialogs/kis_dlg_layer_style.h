@@ -215,7 +215,7 @@ protected:
 
     private:
         QString m_locationToFilter;
-        bool m_enableFiltering;
+        bool m_enableFiltering {false};
 
 
         // QSortFilterProxyModel interface

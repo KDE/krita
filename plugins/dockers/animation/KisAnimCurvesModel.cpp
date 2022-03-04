@@ -124,6 +124,7 @@ QVariant KisAnimCurvesModel::data(const QModelIndex &index, int role) const
 
     if (curve) {
         KisScalarKeyframeChannel *channel = curve->channel();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(channel, QVariant());
 
         const int time = index.column();
         KisScalarKeyframeSP keyframe = channel->keyframeAt(time).dynamicCast<KisScalarKeyframe>();
@@ -195,15 +196,9 @@ QVariant KisAnimCurvesModel::data(const QModelIndex &index, int role) const
             return nextKeyframeIndex;
         }
         case ChannelIdentifier:
-            if (!channel)
-                return QVariant();
-
             return channel->id();
         case ChannelLimits:
         {
-            if (!channel)
-                return QVariant();
-
             QSharedPointer<ScalarKeyframeLimits> limits = channel->limits();
 
             if (!limits)

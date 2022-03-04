@@ -647,20 +647,20 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     m_optionWidget = m_paintopOptionWidgets[paintop];
 
+    Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
+
     KisSignalsBlocker b(m_optionWidget);
 
     m_optionWidget->setImage(m_viewManager->image());
     m_optionWidget->setNode(m_viewManager->activeNode());
 
-    if (m_optionWidget) {
-        m_optionWidget->setConfigurationSafe(preset->settings());
-    }
+    m_optionWidget->setConfigurationSafe(preset->settings());
 
     m_presetsEditor->setPaintOpSettingsWidget(m_optionWidget);
 
     m_resourceProvider->setPaintOpPreset(preset);
 
-    Q_ASSERT(m_optionWidget && m_presetSelectorPopupButton);
+
 
     /// We must connect to the **uncompressed** version of the preset
     /// update signal. That is the only way we can guarantee that

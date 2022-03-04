@@ -44,8 +44,8 @@ struct KisCanvasController::Private {
     }
 
     QPointer<KisView> view;
-    KisCoordinatesConverter *coordinatesConverter;
-    KisCanvasController *q;
+    KisCoordinatesConverter *coordinatesConverter {0};
+    KisCanvasController *q {0};
     QScopedPointer<KisSignalCompressorWithParam<QPoint> > mousePositionCompressor;
 
     void emitPointerPositionChangedSignals(QPoint pointerPos);

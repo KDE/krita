@@ -72,8 +72,8 @@ private:
     /**
      * The scale of the image stored in the patch
      */
-    qreal m_scaleX;
-    qreal m_scaleY;
+    qreal m_scaleX {0.0};
+    qreal m_scaleY {0.0};
 
     /**
      * The rect of KisImage covered by the image
@@ -93,7 +93,7 @@ private:
     QRectF m_interestRect;
 
     QImage m_image;
-    bool m_isScaled;
+    bool m_isScaled {false};
 };
 
 #endif /* KIS_IMAGE_PATCH_H_ */

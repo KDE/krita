@@ -141,16 +141,16 @@ public:
     }
 
 
-    KisCoordinatesConverter *coordinatesConverter;
+    KisCoordinatesConverter *coordinatesConverter = 0;
     QPointer<KisView>view;
     KisAbstractCanvasWidget *canvasWidget = 0;
     KoShapeManager shapeManager;
     KisSelectedShapesProxy selectedShapesProxy;
-    bool currentCanvasIsOpenGL;
-    int openGLFilterMode;
+    bool currentCanvasIsOpenGL = true;
+    int openGLFilterMode = 0;
     KisToolProxy toolProxy;
     KisPrescaledProjectionSP prescaledProjection;
-    bool vastScrolling;
+    bool vastScrolling = false;
 
     KisSignalCompressor canvasUpdateCompressor;
     QRect savedUpdateRect;
@@ -163,10 +163,10 @@ public:
     KisDisplayColorConverter displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
-    KisAnimationPlayer *animationPlayer;
+    KisAnimationPlayer *animationPlayer = 0;
     KisAnimationFrameCacheSP frameCache;
     bool lodPreferredInImage = false;
-    bool bootstrapLodBlocked;
+    bool bootstrapLodBlocked = false;
     QPointer<KoShapeManager> currentlyActiveShapeManager;
     KisInputActionGroupsMask inputActionGroupsMask = AllActionGroup;
 

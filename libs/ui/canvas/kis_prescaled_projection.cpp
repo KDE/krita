@@ -73,8 +73,8 @@ struct KisPrescaledProjection::Private {
     QSize canvasSize;
     QSize viewportSize;
     KisImageWSP image;
-    KisCoordinatesConverter *coordinatesConverter;
-    KisProjectionBackend* projectionBackend;
+    KisCoordinatesConverter *coordinatesConverter {0};
+    KisProjectionBackend *projectionBackend {0};
 };
 
 KisPrescaledProjection::KisPrescaledProjection()

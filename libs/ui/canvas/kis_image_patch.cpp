@@ -42,7 +42,6 @@ inline void scaleRect(QRect &rc, qreal scaleX, qreal scaleY)
 /*********** KisImagePatch ************/
 
 KisImagePatch::KisImagePatch()
-    : m_scaleX(0), m_scaleY(0)
 {
 }
 

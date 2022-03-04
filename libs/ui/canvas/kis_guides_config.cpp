@@ -29,13 +29,6 @@ static KisGuidesConfigStaticRegistrar __registrar;
 class Q_DECL_HIDDEN KisGuidesConfig::Private
 {
 public:
-    Private()
-        : showGuides(false)
-        , snapToGuides(false)
-        , lockGuides(false)
-        , rulersMultiple2(false)
-        , unitType(KoUnit::Pixel)
-    {}
 
     bool operator==(const Private &rhs) {
         return horzGuideLines == rhs.horzGuideLines &&
@@ -52,15 +45,15 @@ public:
     QList<qreal> horzGuideLines;
     QList<qreal> vertGuideLines;
 
-    bool showGuides;
-    bool snapToGuides;
-    bool lockGuides;
-    bool rulersMultiple2;
+    bool showGuides {false};
+    bool snapToGuides {false};
+    bool lockGuides {false};
+    bool rulersMultiple2 {false};
 
-    KoUnit::Type unitType;
+    KoUnit::Type unitType {KoUnit::Pixel};
 
     QColor guidesColor;
-    LineTypeInternal guidesLineType;
+    LineTypeInternal guidesLineType {LINE_SOLID};
 
     Qt::PenStyle toPenStyle(LineTypeInternal type);
 };

@@ -44,8 +44,8 @@ struct ConversionOptions {
     }
 
 
-    bool m_needsConversion;
-    const KoColorSpace *m_destinationColorSpace = 0;
+    bool m_needsConversion {false};
+    const KoColorSpace *m_destinationColorSpace {0};
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 };

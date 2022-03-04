@@ -49,54 +49,44 @@ struct KisAnimationPlayer::Private
 public:
     Private(KisAnimationPlayer *_q)
         : q(_q),
-          realFpsAccumulator(24),
-          droppedFpsAccumulator(24),
-          droppedFramesPortion(24),
-          dropFramesMode(true),
-          nextFrameExpectedTime(0),
-          expectedInterval(0),
-          currentFrame(0),
-          lastTimerInterval(0),
-          lastPaintedFrame(0),
           playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE),
-          stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE),
-          audioOffsetTolerance(-1)
+          stopAudioOnScrubbingCompressor(100, KisSignalCompressor::POSTPONE)
           {}
 
-    KisAnimationPlayer *q;
+    KisAnimationPlayer *q {0};
 
     KisAnimationPlayer::PlaybackState playbackState;
-    QTimer *timer;
+    QTimer *timer {0};
 
     /// The frame user started playback from
-    int playbackOriginFrame;
-    int firstFrame;
-    int lastFrame;
-    qreal playbackSpeed;
+    int playbackOriginFrame {0};
+    int firstFrame {0};
+    int lastFrame {0};
+    qreal playbackSpeed {0.0};
 
-    KisCanvas2 *canvas;
+    KisCanvas2 *canvas {0};
 
     KisSignalAutoConnectionsStore cancelStrokeConnections;
 
     QElapsedTimer realFpsTimer;
-    KisRollingMeanAccumulatorWrapper realFpsAccumulator;
-    KisRollingMeanAccumulatorWrapper droppedFpsAccumulator;
-    KisRollingMeanAccumulatorWrapper droppedFramesPortion;
+    KisRollingMeanAccumulatorWrapper realFpsAccumulator {24};
+    KisRollingMeanAccumulatorWrapper droppedFpsAccumulator {24};
+    KisRollingMeanAccumulatorWrapper droppedFramesPortion {24};
 
-    bool dropFramesMode;
+    bool dropFramesMode {true};
 
-    bool useFastFrameUpload;
+    bool useFastFrameUpload {false};
 
     /// Measures time since playback (re)started
     QElapsedTimer playbackTime;
-    int nextFrameExpectedTime;
-    int expectedInterval;
+    int nextFrameExpectedTime {0};
+    int expectedInterval {0};
     /// The frame the current playback (re)started on
-    int initialFrame;
+    int initialFrame {0};
     /// The frame currently displayed
-    int currentFrame;
-    int lastTimerInterval;
-    int lastPaintedFrame;
+    int currentFrame {0};
+    int lastTimerInterval {0};
+    int lastPaintedFrame {0};
 
     KisSignalCompressor playbackStatisticsCompressor;
 
@@ -104,7 +94,7 @@ public:
     QScopedPointer<KisSignalCompressorWithParam<int> > audioSyncScrubbingCompressor;
     KisSignalCompressor stopAudioOnScrubbingCompressor;
 
-    int audioOffsetTolerance;
+    int audioOffsetTolerance {-1};
     QVector<KisNodeWSP> disabledDecoratedNodes;
 
     void haltImpl();

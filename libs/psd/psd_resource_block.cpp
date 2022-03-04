@@ -18,6 +18,7 @@
 PSDResourceBlock::PSDResourceBlock()
     : KisAnnotation("PSD Resource Block", "", QByteArray())
     , identifier(PSDImageResourceSection::UNKNOWN)
+    , dataSize(0)
     , resource(0)
 {
 }

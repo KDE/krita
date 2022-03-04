@@ -118,18 +118,18 @@ public:
     QDomDocument fillConfig;
 
     struct LayerMaskData {
-        qint32 top;
-        qint32 left;
-        qint32 bottom;
-        qint32 right;
-        quint8 defaultColor; // 0 or 255
-        bool positionedRelativeToLayer;
-        bool disabled;
-        bool invertLayerMaskWhenBlending;
-        quint8 userMaskDensity;
-        double userMaskFeather;
-        quint8 vectorMaskDensity;
-        double vectorMaskFeather;
+        qint32 top {0};
+        qint32 left {0};
+        qint32 bottom {0};
+        qint32 right {0};
+        quint8 defaultColor {255}; // 0 or 255
+        bool positionedRelativeToLayer {false};
+        bool disabled {false};
+        bool invertLayerMaskWhenBlending {false};
+        quint8 userMaskDensity {0};
+        double userMaskFeather {0.0};
+        quint8 vectorMaskDensity {0};
+        double vectorMaskFeather {0.0};
     };
 
     LayerMaskData layerMask;

@@ -21,6 +21,7 @@
 
 PsdAdditionalLayerInfoBlock::PsdAdditionalLayerInfoBlock(const PSDHeader &header)
     : m_header(header)
+    , sectionDividerType(psd_other)
 {
 }
 

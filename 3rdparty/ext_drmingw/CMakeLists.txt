@@ -16,8 +16,8 @@ if (MINGW)
     if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add(ext_drmingw_deps
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/jrfonseca/drmingw/releases/download/0.9.3/drmingw-0.9.3-win64.7z
-            URL_HASH SHA256=abf891115a63c089e1767ca8ea93bbec676485ff37918a6a8fd57b7b05561087
+            URL https://github.com/jrfonseca/drmingw/releases/download/0.9.2/drmingw-0.9.2-win64.7z
+            URL_HASH SHA256=ca78c5df3354d3962f36e955513745710743b77294d44dc07ab76df861a12a62
 
             INSTALL_DIR ${PREFIX_ext_drmingw}
             CONFIGURE_COMMAND ""
@@ -32,8 +32,8 @@ if (MINGW)
     else ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
         ExternalProject_Add(ext_drmingw_deps
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/jrfonseca/drmingw/releases/download/0.9.3/drmingw-0.9.3-win32.7z
-            URL_HASH SHA256=66626b88737e926912bc23ff44227399945ffbdc0aaa76b7de57b87e2a00ed7f
+            URL https://github.com/jrfonseca/drmingw/releases/download/0.9.2/drmingw-0.9.2-win32.7z
+            URL_HASH SHA256=451c8b6de2cbad9cf6099a1992b3c28f2e94c5519ab34ab0fc55fcd7b0c8c676
 
             INSTALL_DIR ${PREFIX_ext_drmingw}
             CONFIGURE_COMMAND ""

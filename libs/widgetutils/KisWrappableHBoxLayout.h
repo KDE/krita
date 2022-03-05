@@ -18,7 +18,7 @@ class KRITAWIDGETUTILS_EXPORT KisWrappableHBoxLayout : public QLayout
     Q_OBJECT
 
 public:
-    explicit KisWrappableHBoxLayout(QWidget* parent);
+    explicit KisWrappableHBoxLayout(QWidget* parent = nullptr);
     ~KisWrappableHBoxLayout() override;
 
     void addItem(QLayoutItem *item) override;

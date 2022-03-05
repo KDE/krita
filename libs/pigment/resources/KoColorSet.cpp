@@ -1604,7 +1604,7 @@ bool KoColorSet::Private::loadAcb()
         }
         if (metadataString.startsWith("$$$/")) {
             if (metadataString.contains("=")) {
-                metadataString = metadataString.split("=", Qt::KeepEmptyParts).last();
+                metadataString = metadataString.split("=").last();
             } else {
                 metadataString = QString();
             }

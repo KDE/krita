@@ -222,6 +222,31 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_referencePaintDevice);
 
+    if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+        // We need to obtain the reference color from the reference paint
+        // device, but it is produced in a stroke, so we must get the color
+        // after the device is ready. So we get it in the stroke
+        image()->addJob(
+            m_fillStrokeId,
+            new KisStrokeStrategyUndoCommandBased::Data(
+                KUndo2CommandSP(new KisCommandUtils::LambdaCommand(
+                    [this, seedPoint]() -> KUndo2Command*
+                    {
+                        m_continuousFillReferenceColor = m_referencePaintDevice->pixel(seedPoint);
+                        return 0;
+                    }
+                )),
+                false,
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE
+            )
+        );
+    } else {
+        // Here the reference device is already ready, so we obtain the
+        // reference color directly
+        m_continuousFillReferenceColor = m_referencePaintDevice->pixel(seedPoint);
+    }
+
     m_continuousFillMask = new KisSelection;
     m_continuousFillReferenceColor = m_referencePaintDevice->pixel(seedPoint);
 

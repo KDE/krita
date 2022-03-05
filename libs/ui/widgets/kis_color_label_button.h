@@ -29,7 +29,9 @@ public:
     void enterEvent(QEvent *event) override;
     void leaveEvent(QEvent *event) override;
     QSize sizeHint() const override;
+    SelectionIndicationType selectionVisType() const;
     void setSelectionVisType( SelectionIndicationType type );
+    void setSize(uint size);
 
     virtual void nextCheckState() override;
 

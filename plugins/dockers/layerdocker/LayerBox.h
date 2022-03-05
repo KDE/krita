@@ -44,7 +44,7 @@ class KisNodeModel;
 class KisNodeFilterProxyModel;
 class Ui_WdgLayerBox;
 class KisNodeJugglerCompressed;
-class KisColorLabelSelectorWidget;
+class KisColorLabelSelectorWidgetMenuWrapper;
 class QWidgetAction;
 class KisKeyframeChannel;
 class KisSelectionActionsAdapter;
@@ -149,7 +149,7 @@ private:
     QPointer<KisNodeModel> m_nodeModel;
     QPointer<KisNodeFilterProxyModel> m_filteringModel;
     QPointer<KisNodeManager> m_nodeManager;
-    QPointer<KisColorLabelSelectorWidget> m_colorSelector;
+    QPointer<KisColorLabelSelectorWidgetMenuWrapper> m_colorSelector;
     QPointer<QWidgetAction> m_colorSelectorAction;
     Ui_WdgLayerBox* m_wdgLayerBox;
     QTimer m_opacityDelayTimer;

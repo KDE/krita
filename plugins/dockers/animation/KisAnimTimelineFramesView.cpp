@@ -83,9 +83,9 @@ struct KisAnimTimelineFramesView::Private
 
     QToolButton *audioOptionsButton;
 
-    KisColorLabelSelectorWidget *colorSelector;
+    KisColorLabelSelectorWidgetMenuWrapper *colorSelector;
     QWidgetAction *colorSelectorAction;
-    KisColorLabelSelectorWidget *multiframeColorSelector;
+    KisColorLabelSelectorWidgetMenuWrapper *multiframeColorSelector;
     QWidgetAction *multiframeColorSelectorAction;
 
     QMenu *audioOptionsMenu;
@@ -243,18 +243,18 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
 
     /********** Frame Editing Context Menu ***********************************************/
 
-    m_d->colorSelector = new KisColorLabelSelectorWidget(this);
+    m_d->colorSelector = new KisColorLabelSelectorWidgetMenuWrapper(this);
     MouseClickIgnore* clickIgnore = new MouseClickIgnore(this);
     m_d->colorSelector->installEventFilter(clickIgnore);
     m_d->colorSelectorAction = new QWidgetAction(this);
     m_d->colorSelectorAction->setDefaultWidget(m_d->colorSelector);
-    connect(m_d->colorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &KisAnimTimelineFramesView::slotColorLabelChanged);
+    connect(m_d->colorSelector->colorLabelSelector(), &KisColorLabelSelectorWidget::currentIndexChanged, this, &KisAnimTimelineFramesView::slotColorLabelChanged);
 
-    m_d->multiframeColorSelector = new KisColorLabelSelectorWidget(this);
+    m_d->multiframeColorSelector = new KisColorLabelSelectorWidgetMenuWrapper(this);
     m_d->multiframeColorSelector->installEventFilter(clickIgnore);
     m_d->multiframeColorSelectorAction = new QWidgetAction(this);
     m_d->multiframeColorSelectorAction->setDefaultWidget(m_d->multiframeColorSelector);
-    connect(m_d->multiframeColorSelector, &KisColorLabelSelectorWidget::currentIndexChanged, this, &KisAnimTimelineFramesView::slotColorLabelChanged);
+    connect(m_d->multiframeColorSelector->colorLabelSelector(), &KisColorLabelSelectorWidget::currentIndexChanged, this, &KisAnimTimelineFramesView::slotColorLabelChanged);
 
     /********** Insert Keyframes Dialog **************************************************/
 
@@ -975,10 +975,10 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
                     model()->data(index, KisAnimTimelineFramesModel::SpecialKeyframeExists).toBool()) {
 
                 {
-                    KisSignalsBlocker b(m_d->colorSelector);
+                    KisSignalsBlocker b(m_d->colorSelector->colorLabelSelector());
                     QVariant colorLabel = index.data(KisAnimTimelineFramesModel::FrameColorLabelIndexRole);
                     int labelIndex = colorLabel.isValid() ? colorLabel.toInt() : 0;
-                    m_d->colorSelector->setCurrentIndex(labelIndex);
+                    m_d->colorSelector->colorLabelSelector()->setCurrentIndex(labelIndex);
                 }
 
                 const bool hasClones = model()->data(index, KisAnimTimelineFramesModel::CloneCount).toInt() > 0;
@@ -991,9 +991,9 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
 
             } else {
                 {
-                    KisSignalsBlocker b(m_d->colorSelector);
+                    KisSignalsBlocker b(m_d->colorSelector->colorLabelSelector());
                     const int labelIndex = KisImageConfig(true).defaultFrameColorLabel();
-                    m_d->colorSelector->setCurrentIndex(labelIndex);
+                    m_d->colorSelector->colorLabelSelector()->setCurrentIndex(labelIndex);
                 }
 
                 QMenu menu;
@@ -1032,8 +1032,8 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
             }
 
             if (hasKeyframes) {
-                KisSignalsBlocker b(m_d->multiframeColorSelector);
-                m_d->multiframeColorSelector->setCurrentIndex(labelIndex);
+                KisSignalsBlocker b(m_d->multiframeColorSelector->colorLabelSelector());
+                m_d->multiframeColorSelector->colorLabelSelector()->setCurrentIndex(labelIndex);
             }
 
             QMenu menu;

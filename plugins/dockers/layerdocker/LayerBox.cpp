@@ -246,10 +246,10 @@ LayerBox::LayerBox()
 
     m_showGlobalSelectionMask->setChecked(cfg.showGlobalSelection());
 
-    m_colorSelector = new KisColorLabelSelectorWidget(this);
+    m_colorSelector = new KisColorLabelSelectorWidgetMenuWrapper(this);
     MouseClickIgnore* mouseEater = new MouseClickIgnore(this);
     m_colorSelector->installEventFilter(mouseEater);
-    connect(m_colorSelector, SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelChanged(int)));
+    connect(m_colorSelector->colorLabelSelector(), SIGNAL(currentIndexChanged(int)), SLOT(slotColorLabelChanged(int)));
     m_colorSelectorAction = new QWidgetAction(this);
     m_colorSelectorAction->setDefaultWidget(m_colorSelector);
 
@@ -1088,8 +1088,8 @@ void LayerBox::updateLayerOpMenu(const QModelIndex &index, QMenu &menu) {
         }
 
         {
-            KisSignalsBlocker b(m_colorSelector);
-            m_colorSelector->setCurrentIndex(singleNode ? activeNode->colorLabelIndex() : -1);
+            KisSignalsBlocker b(m_colorSelector->colorLabelSelector());
+            m_colorSelector->colorLabelSelector()->setCurrentIndex(singleNode ? activeNode->colorLabelIndex() : -1);
         }
 
         menu.addAction(m_colorSelectorAction);

@@ -110,7 +110,9 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
                     image, "Contiguous Selection Tool Reference Result Paint Device");
 
-        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice, image->root(), colorLabelsSelected());
+        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice,
+                                                                                 image->root(), colorLabelsSelected(),
+                                                                                 KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled);
         applicator.applyCommand(command,
                                 KisStrokeJobData::SEQUENTIAL,
                                 KisStrokeJobData::EXCLUSIVE);

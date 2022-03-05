@@ -142,7 +142,9 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
                     imageSP, "Similar Colors Selection Tool Reference Result Paint Device");
 
-        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice, imageSP->root(), colorLabelsSelected());
+        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice,
+                                                                                 imageSP->root(), colorLabelsSelected(),
+                                                                                 KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled);
         applicator.applyCommand(command,
                                 KisStrokeJobData::SEQUENTIAL,
                                 KisStrokeJobData::EXCLUSIVE);

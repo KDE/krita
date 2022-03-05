@@ -23,7 +23,18 @@ class KisUpdatesFacade;
 class KRITAIMAGE_EXPORT KisMergeLabeledLayersCommand : public KUndo2Command
 {
 public:
-    KisMergeLabeledLayersCommand(KisImageSP refImage, KisPaintDeviceSP refPaintDevice, KisNodeSP currentRoot, QList<int> selectedLabels);
+    enum GroupSelectionPolicy
+    {
+        GroupSelectionPolicy_SelectAlways,
+        GroupSelectionPolicy_SelectIfColorLabeled,
+        GroupSelectionPolicy_NeverSelect
+    };
+
+    KisMergeLabeledLayersCommand(KisImageSP refImage,
+                                 KisPaintDeviceSP refPaintDevice,
+                                 KisNodeSP currentRoot,
+                                 QList<int> selectedLabels,
+                                 GroupSelectionPolicy groupSelectionPolicy = GroupSelectionPolicy_SelectAlways);
     ~KisMergeLabeledLayersCommand() override;
 
     void undo() override;
@@ -41,6 +52,7 @@ private:
     KisPaintDeviceSP m_refPaintDevice;
     KisNodeSP m_currentRoot;
     QList<int> m_selectedLabels;
+    GroupSelectionPolicy m_groupSelectionPolicy;
 };
 
 #endif /* __KIS_MERGE_LABELED_LAYERS_H */

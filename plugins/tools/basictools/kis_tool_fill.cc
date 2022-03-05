@@ -212,7 +212,9 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
         image()->addJob(
             m_fillStrokeId,
             new KisStrokeStrategyUndoCommandBased::Data(
-                KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage, m_referencePaintDevice, currentRoot, m_selectedColors)),
+                KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage, m_referencePaintDevice,
+                                                                 currentRoot, m_selectedColors,
+                                                                 KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
                 false,
                 KisStrokeJobData::SEQUENTIAL,
                 KisStrokeJobData::EXCLUSIVE

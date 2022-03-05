@@ -18,12 +18,14 @@
 
 
 KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP refImage, KisPaintDeviceSP refPaintDevice,
-                                                           KisNodeSP currentRoot, QList<int> selectedLabels)
+                                                           KisNodeSP currentRoot, QList<int> selectedLabels,
+                                                           GroupSelectionPolicy groupSelectionPolicy)
     : KUndo2Command(kundo2_noi18n("MERGE_LABELED_LAYERS"))
     , m_refImage(refImage)
     , m_refPaintDevice(refPaintDevice)
     , m_currentRoot(currentRoot)
     , m_selectedLabels(selectedLabels)
+    , m_groupSelectionPolicy(groupSelectionPolicy)
 {
 }
 
@@ -114,5 +116,11 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
 
 bool KisMergeLabeledLayersCommand::acceptNode(KisNodeSP node)
 {
+    if (node->inherits("KisGroupLayer") &&
+        (m_groupSelectionPolicy == GroupSelectionPolicy_NeverSelect ||
+          (m_groupSelectionPolicy == GroupSelectionPolicy_SelectIfColorLabeled &&
+           node->colorLabelIndex() == 0))) {
+        return false;
+    }
     return m_selectedLabels.contains(node->colorLabelIndex());
 }

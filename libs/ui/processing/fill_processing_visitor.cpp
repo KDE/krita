@@ -130,6 +130,9 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
 
     m_resources->setupPainter(&fillPainter);
 
+    if (m_useBgColor) {
+        fillPainter.setPaintColor(fillPainter.backgroundColor());
+    }
     fillPainter.setProgress(helper.updater());
     fillPainter.setAntiAlias(m_antiAlias);
     fillPainter.setSizemod(m_sizemod);

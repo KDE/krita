@@ -461,7 +461,7 @@ KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileNam
     else if (ba.startsWith("JASC-PAL")) {
         return KoColorSet::PSP_PAL;
     }
-    else if (ba.contains("krita/x-colorset")) {
+    else if (ba.contains("krita/x-colorset") || ba.contains("application/x-krita-palette")) {
         return KoColorSet::KPL;
     }
     else if (fi.suffix().toLower() == "aco") {
@@ -861,7 +861,7 @@ bool KoColorSet::Private::loadKpl()
     QBuffer buf(&data);
     buf.open(QBuffer::ReadOnly);
 
-    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "krita/x-colorset", KoStore::Zip));
+    QScopedPointer<KoStore> store(KoStore::createStore(&buf, KoStore::Read, "application/x-krita-palette", KoStore::Zip));
     if (!store || store->bad()) { return false; }
 
     if (store->hasFile("profiles.xml")) {
@@ -1452,7 +1452,7 @@ bool KoColorSet::Private::loadXml() {
 
 bool KoColorSet::Private::saveKpl(QIODevice *dev) const
 {
-    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "krita/x-colorset", KoStore::Zip));
+    QScopedPointer<KoStore> store(KoStore::createStore(dev, KoStore::Write, "application/x-krita-palette", KoStore::Zip));
     if (!store || store->bad()) {
         qWarning() << "saveKpl could not create store";
         return false;

@@ -160,4 +160,40 @@ void TestKoColorSet::testLoadSBZ()
     QCOMPARE(set2.paletteType(), KoColorSet::KPL);
 }
 
+void TestKoColorSet::testLoadASE()
+{
+    KoColorSet set(QString(FILES_DATA_DIR) + "/photoshop.ase");
+    QVERIFY(set.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set.paletteType(), KoColorSet::ASE);
+
+    QCOMPARE(set.colorCount(), 249);
+
+    set.setFilename("test.ase");
+    QVERIFY(set.save());
+    QVERIFY(set.filename() == "test.ase");
+    QCOMPARE(set.paletteType(), KoColorSet::ASE);
+
+    KoColorSet set2("test.ase");
+    QVERIFY(set2.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set2.paletteType(), KoColorSet::KPL);
+}
+
+void TestKoColorSet::testLoadACB()
+{
+    KoColorSet set(QString(FILES_DATA_DIR) + "/photoshop.acb");
+    QVERIFY(set.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set.paletteType(), KoColorSet::ACB);
+
+    QCOMPARE(set.colorCount(), 17);
+
+    set.setFilename("test.acb");
+    QVERIFY(set.save());
+    QVERIFY(set.filename() == "test.acb");
+    QCOMPARE(set.paletteType(), KoColorSet::ACB);
+
+    KoColorSet set2("test.acb");
+    QVERIFY(set2.load(KisGlobalResourcesInterface::instance()));
+    QCOMPARE(set2.paletteType(), KoColorSet::KPL);
+}
+
 QTEST_GUILESS_MAIN(TestKoColorSet)

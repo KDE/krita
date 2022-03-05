@@ -476,6 +476,12 @@ KoColorSet::PaletteType KoColorSet::Private::detectFormat(const QString &fileNam
     else if (fi.suffix().toLower() == "sbz") {
         return KoColorSet::SBZ;
     }
+    else if (fi.suffix().toLower() == "ase" || ba.startsWith("ASEF")) {
+        return KoColorSet::ASE;
+    }
+    else if (fi.suffix().toLower() == "acb" || ba.startsWith("8BCB")) {
+        return KoColorSet::ACB;
+    }
     return KoColorSet::UNKNOWN;
 }
 
@@ -601,11 +607,59 @@ bool KoColorSet::Private::loadScribusXmlPalette(KoColorSet *set, QXmlStreamReade
     return true;
 }
 
+quint8 KoColorSet::Private::readByte(QIODevice *io)
+{
+    quint8 val;
+    quint64 read = io->read((char*)&val, 1);
+    if (read != 1) return false;
+    return val;
+}
+
 quint16 KoColorSet::Private::readShort(QIODevice *io) {
     quint16 val;
     quint64 read = io->read((char*)&val, 2);
     if (read != 2) return false;
     return qFromBigEndian(val);
+}
+
+qint32 KoColorSet::Private::readInt(QIODevice *io)
+{
+    qint32 val;
+    quint64 read = io->read((char*)&val, 4);
+    if (read != 4) return false;
+    return qFromBigEndian(val);
+}
+
+float KoColorSet::Private::readFloat(QIODevice *io)
+{
+    float val;
+    quint64 read = io->read((char*)&val, 4);
+    if (read != 4) return false;
+    return qFromBigEndian(val);
+}
+
+QString KoColorSet::Private::readUnicodeString(QIODevice *io, bool sizeIsInt)
+{
+    QString unicode;
+    qint32 size = 0;
+    if (sizeIsInt) {
+        size = readInt(io);
+    } else {
+        size = readShort(io)-1;
+    }
+    if (size>0) {
+        QByteArray ba = io->read(size*2);
+        if (ba.size() == int(size)*2) {
+            QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
+            unicode = Utf16Codec->toUnicode(ba);
+        } else {
+            warnPigment << "Unicode name block is the wrong size" << colorSet->filename();
+        }
+    }
+    if (!sizeIsInt) {
+        readShort(io); // when the size is quint16, the string is 00 terminated;
+    }
+    return unicode.trimmed();
 }
 
 bool KoColorSet::Private::init()
@@ -658,8 +712,21 @@ bool KoColorSet::Private::init()
     case SBZ:
         res = loadSbz();
         break;
+    case ASE:
+        res = loadAse();
+        break;
+    case ACB:
+        res = loadAcb();
+        break;
     default:
         res = false;
+    }
+    if (paletteType != KPL) {
+        int rowCount = global().colorCount()/ global().columnCount();
+        if (global().colorCount() % global().columnCount()>0) {
+            rowCount ++;
+        }
+        global().setRowCount(rowCount);
     }
     colorSet->setValid(res);
     colorSet->updateThumbnail();
@@ -772,11 +839,6 @@ bool KoColorSet::Private::loadGpl()
             global().addEntry(e);
         }
     }
-    int rowCount = global().colorCount()/ global().columnCount();
-    if (global().colorCount() % global().columnCount()>0) {
-        rowCount ++;
-    }
-    global().setRowCount(rowCount);
     return true;
 }
 
@@ -1010,20 +1072,7 @@ bool KoColorSet::Private::loadAco()
             skip = true;
         }
         if (version == 2) {
-            quint16 v2 = readShort(&buf); //this isn't a version, it's a marker and needs to be skipped.
-            Q_UNUSED(v2);
-            quint16 size = readShort(&buf) -1; //then comes the length
-            if (size>0) {
-                QByteArray ba = buf.read(size*2);
-                if (ba.size() == size*2) {
-                    QTextCodec *Utf16Codec = QTextCodec::codecForName("UTF-16BE");
-                    e.setName(Utf16Codec->toUnicode(ba));
-                } else {
-                    warnPigment << "Version 2 name block is the wrong size" << colorSet->filename();
-                }
-            }
-            v2 = readShort(&buf); //end marker also needs to be skipped.
-            Q_UNUSED(v2);
+            readUnicodeString(&buf, true);
         }
         if (!skip) {
             groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(e);
@@ -1418,6 +1467,206 @@ bool KoColorSet::Private::loadSbz() {
     }
 
     buf.close();
+    return true;
+}
+
+bool KoColorSet::Private::loadAse()
+{
+    QFileInfo info(colorSet->filename());
+    colorSet->setName(info.completeBaseName());
+
+    QBuffer buf(&data);
+    buf.open(QBuffer::ReadOnly);
+
+    QByteArray signature; // should be "ASEF";
+    signature = buf.read(4);
+    quint16 version = readShort(&buf);
+    quint16 version2 = readShort(&buf);
+
+    if (signature != "ASEF" && version!= 1 && version2 != 0) {
+        qWarning() << "incorrect header:" << signature << version << version2;
+        return false;
+    }
+    qint32 numBlocks = readInt(&buf);
+
+    QByteArray groupStart("\xC0\x01");
+    QByteArray groupEnd("\xC0\x02");
+    QByteArray swatchSig("\x00\x01");
+
+    bool inGroup = false;
+    QString groupName;
+    for (qint32 i = 0; i < numBlocks; i++) {
+        QByteArray blockType;
+        blockType = buf.read(2);
+        qint32 blockSize = readInt(&buf);
+        qint64 pos = buf.pos();
+
+        if (blockType == groupStart) {
+            groupName = readUnicodeString(&buf);
+            colorSet->addGroup(groupName);
+            inGroup = true;
+        } else if (blockType == groupEnd) {
+            int colorCount = colorSet->getGroup(groupName)->colorCount();
+            int columns = colorSet->columnCount();
+            int rows = colorCount/columns;
+            if (colorCount % columns > 0) {
+                rows += 1;
+            }
+            colorSet->getGroup(groupName)->setRowCount(rows);
+            inGroup = false;
+        } else /* if (blockType == swatchSig)*/ {
+            KisSwatch e;
+            e.setName(readUnicodeString(&buf).trimmed());
+            QByteArray colorModel;
+            QDomDocument doc;
+            colorModel = buf.read(4);
+            if (colorModel == "RGB ") {
+                QDomElement elt = doc.createElement("sRGB");
+
+                elt.setAttribute("r", readFloat(&buf));
+                elt.setAttribute("g", readFloat(&buf));
+                elt.setAttribute("b", readFloat(&buf));
+
+                KoColor color = KoColor::fromXML(elt, "U8");
+                e.setColor(color);
+            } else if (colorModel == "CMYK") {
+                QDomElement elt = doc.createElement("CMYK");
+
+                elt.setAttribute("c", readFloat(&buf));
+                elt.setAttribute("m", readFloat(&buf));
+                elt.setAttribute("y", readFloat(&buf));
+                elt.setAttribute("k", readFloat(&buf));
+                //try to select the default PS icc profile if possible.
+                elt.setAttribute("space", "U.S. Web Coated (SWOP) v2");
+
+                KoColor color = KoColor::fromXML(elt, "U8");
+                e.setColor(color);
+            } else if (colorModel == "LAB ") {
+                QDomElement elt = doc.createElement("Lab");
+
+                elt.setAttribute("L", readFloat(&buf)*100.0);
+                elt.setAttribute("a", readFloat(&buf));
+                elt.setAttribute("b", readFloat(&buf));
+
+                KoColor color = KoColor::fromXML(elt, "U16");
+                e.setColor(color);
+            } else if (colorModel == "GRAY") {
+                QDomElement elt = doc.createElement("Gray");
+
+                elt.setAttribute("g", readFloat(&buf));
+
+                KoColor color = KoColor::fromXML(elt, "U8");
+                e.setColor(color);
+            }
+            qint16 type = readShort(&buf);
+            if (type == 1) { //0 is global, 2 is regular;
+                e.setSpotColor(true);
+            }
+            if (inGroup) {
+                colorSet->add(e, groupName);
+            } else {
+                colorSet->add(e);
+            }
+        }
+        buf.seek(pos + qint64(blockSize));
+    }
+    return true;
+}
+
+bool KoColorSet::Private::loadAcb()
+{
+
+    QFileInfo info(colorSet->filename());
+    colorSet->setName(info.completeBaseName());
+
+    QBuffer buf(&data);
+    buf.open(QBuffer::ReadOnly);
+
+    QByteArray signature; // should be "8BCB";
+    signature = buf.read(4);
+    quint16 version = readShort(&buf);
+    quint16 bookID = readShort(&buf);
+    Q_UNUSED(bookID);
+
+    if (signature != "8BCB" && version!= 1) {
+        return false;
+    }
+
+    QStringList metadata;
+    for (int i = 0; i< 4; i++) {
+
+        QString metadataString = readUnicodeString(&buf, true);
+        if (metadataString.startsWith("\"")) {
+            metadataString = metadataString.remove(0, 1);
+        }
+        if (metadataString.endsWith("\"")) {
+            metadataString.chop(1);
+        }
+        if (metadataString.startsWith("$$$/")) {
+            if (metadataString.contains("=")) {
+                metadataString = metadataString.split("=", Qt::KeepEmptyParts).last();
+            } else {
+                metadataString = QString();
+            }
+        }
+        metadata.append(metadataString);
+    }
+    QString title = metadata.at(0);
+    QString prefix = metadata.at(1);
+    QString postfix = metadata.at(2);
+    QString description = metadata.at(3);
+    colorSet->setComment(description);
+
+    quint16 numColors = readShort(&buf);
+    quint16 numColumns = readShort(&buf);
+    colorSet->setColumnCount(numColumns);
+    quint16 numKeyColorPage = readShort(&buf);
+    Q_UNUSED(numKeyColorPage);
+    quint16 colorType = readShort(&buf);
+
+    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+    if (colorType == 2) {
+        QString profileName = "U.S. Web Coated (SWOP) v2";
+        cs = KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer8BitsColorDepthID.id(), profileName);
+    } else if (colorType == 7) {
+        cs = KoColorSpaceRegistry::instance()->colorSpace(LABAColorModelID.id(), Integer8BitsColorDepthID.id(), QString());
+    }
+
+    for (quint16 i = 0; i < numColors; i++) {
+        KisSwatch e;
+        QStringList name;
+        name << prefix;
+        name << readUnicodeString(&buf, true);
+        name << postfix;
+        e.setName(name.join(" ").trimmed());
+        QByteArray key; // should be "8BCB";
+        key = buf.read(6);
+        e.setId(QString::fromLatin1(key));
+        e.setSpotColor(true);
+        quint8 c1 = readByte(&buf);
+        quint8 c2 = readByte(&buf);
+        quint8 c3 = readByte(&buf);
+        KoColor c(cs);
+        if (colorType == 0) {
+            c.data()[0] = c3;
+            c.data()[1] = c2;
+            c.data()[2] = c1;
+        } else if (colorType == 2) {
+            quint8 c4 = readByte(&buf);
+            c.data()[0] = c1;
+            c.data()[1] = c2;
+            c.data()[2] = c3;
+            c.data()[3] = c4;
+        } else if (colorType == 7) {
+            c.data()[0] = c1;
+            c.data()[1] = c2;
+            c.data()[2] = c3;
+        }
+        c.setOpacity(1.0);
+        e.setColor(c);
+        colorSet->add(e);
+    }
+
     return true;
 }
 

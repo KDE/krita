@@ -377,7 +377,10 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, 
             profileName.clear();
         }
     } else {
-        profileName = KoColorSpaceRegistry::instance()->p709SRGBProfile()->name();
+        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
+        if (profile) {
+            profileName = profile->name();
+        }
     }
     const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(modelId, channelDepthId, profileName);
     if (cs == 0) {

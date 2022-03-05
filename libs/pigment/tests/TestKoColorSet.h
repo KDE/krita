@@ -19,6 +19,8 @@ private Q_SLOTS:
     void testLoadXML();
     void testLoadKPL();
     void testLoadSBZ();
+    void testLoadASE();
+    void testLoadACB();
 
 private:
 };

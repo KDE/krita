@@ -60,7 +60,9 @@ public:
         ACO,                // Photoshop Swatches
         XML,                // XML palette (Scribus)
         KPL,                // KoColor-based XML palette
-        SBZ                 // SwatchBooker
+        SBZ,                // SwatchBooker
+        ASE,                // Adobe swatch exchange
+        ACB                 // Adobe Color Book.
     };
 
 

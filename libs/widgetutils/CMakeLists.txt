@@ -41,6 +41,7 @@ set(kritawidgetutils_LIB_SRCS
     KisWrappableHBoxLayout.cpp
     KisPopupSelfActivatingLineEdit.cpp
     KisRecentFilesManager.cpp
+    KisOptionCollectionWidget.cpp
 
     config/kcolorscheme.cpp
     config/kcolorschememanager.cpp

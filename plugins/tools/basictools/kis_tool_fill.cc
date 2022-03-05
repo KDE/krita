@@ -14,14 +14,14 @@
 #include <klocalizedstring.h>
 
 #include <QLabel>
-#include <QLayout>
+#include <QSlider>
+#include <QSpinBox>
 #include <QCheckBox>
-#include <QComboBox>
-#include <QGroupBox>
-#include <QVector>
-#include <QRect>
-#include <QColor>
-#include <QSharedPointer>
+#include <QToolButton>
+#include <QPushButton>
+#include <QButtonGroup>
+
+#include <KisOptionCollectionWidget.h>
 
 #include <ksharedconfig.h>
 
@@ -39,6 +39,7 @@
 #include <kis_cursor.h>
 #include <kis_color_filter_combo.h>
 #include <KisAngleSelector.h>
+#include <kis_color_label_selector_widget.h>
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_command_utils.h>
@@ -55,23 +56,27 @@
 #include <KoShapeControllerBase.h>
 #include <kis_shape_controller.h>
 
+#include "kis_icon_utils.h"
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
-        , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
+        , m_fillMode(FillContiguousRegion)
+        , m_fillType(FillWithForegroundColor)
+        , m_patternScale(100.0)
+        , m_patternRotation(0.0)
+        , m_threshold(8)
+        , m_opacitySpread(100)
+        , m_useSelectionAsBoundary(true)
+        , m_antiAlias(true)
+        , m_sizemod(0)
+        , m_feather(0)
+        , m_reference(CurrentLayer)
+        , m_continuousFillMode(FillAnyRegion)
+        , m_continuousFillMask(nullptr)
         , m_compressorContinuousFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
         , m_fillStrokeId(nullptr)
 {
     setObjectName("tool_fill");
-    m_feather = 0;
-    m_sizemod = 0;
-    m_threshold = 8;
-    m_opacitySpread = 100;
-    m_usePattern = false;
-    m_fillOnlySelection = false;
-    m_continuousFillMode = FillAnyRegion;
-    m_continuousFillMask = nullptr;
-    connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(slotUpdateAvailableColorLabels()));
     connect(&m_compressorContinuousFillUpdate, SIGNAL(timeout()), SLOT(slotUpdateContinuousFill()));
 }
 
@@ -86,26 +91,15 @@ void KisToolFill::resetCursorStyle()
     overrideCursorIfNotEditable();
 }
 
-void KisToolFill::slotUpdateAvailableColorLabels()
-{
-    if (m_widgetsInitialized && m_cmbSelectedLabels) {
-        m_cmbSelectedLabels->updateAvailableLabels(currentImage()->root());
-    }
-}
-
 void KisToolFill::activate(const QSet<KoShape*> &shapes)
 {
     KisToolPaint::activate(shapes);
-    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
-    if (m_widgetsInitialized && m_imageConnections.isEmpty()) {
-        activateConnectionsToImage();
-    }
+    m_configGroup = KSharedConfig::openConfig()->group(toolId());
 }
 
 void KisToolFill::deactivate()
 {
     KisToolPaint::deactivate();
-    m_imageConnections.clear();
 }
 
 
@@ -137,9 +131,11 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
     
-    if (event->modifiers() == Qt::AltModifier) {
-        m_fillOnlySelection = true;
-    }
+    // Switch the fill mode if alt modifier is pressed
+    m_effectiveFillMode =
+        event->modifiers() == Qt::AltModifier
+        ? (m_fillMode == FillSelection ? FillContiguousRegion : FillSelection)
+        : m_fillMode;
 
     m_seedPoints.append(lastImagePosition);
     beginFilling(lastImagePosition);
@@ -178,7 +174,6 @@ void KisToolFill::endPrimaryAction(KoPointerEvent *)
         endFilling();
     }
 
-    m_fillOnlySelection = m_checkFillSelection->isChecked();
     m_isFilling = false;
     m_isDragging = false;
     m_seedPoints.clear();
@@ -203,17 +198,17 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
 
     KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
 
-    if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_ALL) {
+    if (m_reference == AllLayers) {
         m_referencePaintDevice = currentImage()->projection();
-    } else if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT) {
+    } else if (m_reference == CurrentLayer) {
         m_referencePaintDevice = currentNode()->paintDevice();
-    } else if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+    } else if (m_reference == ColorLabeledLayers) {
         m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
         image()->addJob(
             m_fillStrokeId,
             new KisStrokeStrategyUndoCommandBased::Data(
                 KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage, m_referencePaintDevice,
-                                                                 currentRoot, m_selectedColors,
+                                                                 currentRoot, m_selectedColorLabels,
                                                                  KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
                 false,
                 KisStrokeJobData::SEQUENTIAL,
@@ -224,7 +219,7 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_referencePaintDevice);
 
-    if (m_sampleLayersMode == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+    if (m_reference == ColorLabeledLayers) {
         // We need to obtain the reference color from the reference paint
         // device, but it is produced in a stroke, so we must get the color
         // after the device is ready. So we get it in the stroke
@@ -250,11 +245,11 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
     }
 
     m_continuousFillMask = new KisSelection;
-    m_continuousFillReferenceColor = m_referencePaintDevice->pixel(seedPoint);
 
     m_transform.reset();
     m_transform.rotate(m_patternRotation);
-    m_transform.scale(m_patternScale, m_patternScale);
+    const qreal normalizedScale = m_patternScale * 0.01;
+    m_transform.scale(normalizedScale, normalizedScale);
     m_resourcesSnapshot->setFillTransform(m_transform);
 }
 
@@ -271,16 +266,25 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
     FillProcessingVisitor *visitor =  new FillProcessingVisitor(m_referencePaintDevice,
                                                                 m_resourcesSnapshot->activeSelection(),
                                                                 m_resourcesSnapshot);
+
+    const bool useFastMode = !m_resourcesSnapshot->activeSelection() &&
+                             m_fillType != FillWithPattern &&
+                             m_opacitySpread == 100 &&
+                             m_useSelectionAsBoundary == false &&
+                             !m_antiAlias && m_sizemod == 0 && m_feather == 0 &&
+                             m_reference == CurrentLayer;
+
     visitor->setSeedPoints(seedPoints);
-    visitor->setUseFastMode(m_useFastMode);
-    visitor->setUsePattern(m_usePattern);
-    visitor->setSelectionOnly(m_fillOnlySelection);
-    visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
-    visitor->setAntiAlias(m_antiAlias);
-    visitor->setFeather(m_feather);
-    visitor->setSizeMod(m_sizemod);
+    visitor->setUseFastMode(useFastMode);
+    visitor->setSelectionOnly(m_effectiveFillMode == FillSelection);
+    visitor->setUseBgColor(m_fillType == FillWithBackgroundColor);
+    visitor->setUsePattern(m_fillType == FillWithPattern);
     visitor->setFillThreshold(m_threshold);
     visitor->setOpacitySpread(m_opacitySpread);
+    visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
+    visitor->setAntiAlias(m_antiAlias);
+    visitor->setSizeMod(m_sizemod);
+    visitor->setFeather(m_feather);
     if (m_isDragging) {
         visitor->setContinuousFillMode(
             m_continuousFillMode == FillAnyRegion
@@ -337,353 +341,460 @@ void KisToolFill::slotUpdateContinuousFill()
     m_seedPoints = {m_seedPoints.last()};
 }
 
+QToolButton* makeToolButton(const QString &iconFile, bool checked = false)
+{
+    QToolButton *button = new QToolButton;
+    button->setCheckable(true);
+    button->setChecked(checked);
+    button->setAutoRaise(true);
+    button->setAutoExclusive(true);
+    button->setIcon(KisIconUtils::loadIcon(iconFile));
+    return button;
+}
+
+QWidget* makeToolButtonContainer(const QVector<QToolButton*> &buttons)
+{
+    QWidget *buttonContainer = new QWidget;
+    QButtonGroup *buttonGroup = new QButtonGroup(buttonContainer);
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setSpacing(0);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setAlignment(Qt::AlignLeft);
+    int id = 0;
+    for (QToolButton *button : buttons) {
+        button->setParent(buttonContainer);
+        buttonGroup->addButton(button, id++);
+        layout->addWidget(button);
+    }
+    buttonContainer->setLayout(layout);
+    return buttonContainer;
+}
+
 QWidget* KisToolFill::createOptionWidget()
 {
-    QWidget *widget = KisToolPaint::createOptionWidget();
-    widget->setObjectName(toolId() + " option widget");
+    loadConfiguration();
 
-    QLabel *lbl_fastMode = new QLabel(i18n("Fast mode:"), widget);
-    m_checkUseFastMode = new QCheckBox(QString(), widget);
-    m_checkUseFastMode->setToolTip(
-        i18n("Fills area faster, but does not take composition "
-             "mode into account. Selections and other extended "
-             "features will also be disabled."));
+    // Create widgets
+    m_buttonWhatToFillSelection = makeToolButton("tool_outline_selection");
+    m_buttonWhatToFillContiguous = makeToolButton("contiguous-selection", true);
+    QWidget *containerWhatToFillButtons = makeToolButtonContainer({m_buttonWhatToFillSelection, m_buttonWhatToFillContiguous});
 
+    m_buttonFillWithFG = makeToolButton("object-order-lower-calligra", true);
+    m_buttonFillWithBG = makeToolButton("object-order-raise-calligra");
+    m_buttonFillWithPattern = makeToolButton("pattern");
+    QWidget *containerFillWithButtons = makeToolButtonContainer({m_buttonFillWithFG, m_buttonFillWithBG, m_buttonFillWithPattern});
+    m_sliderPatternScale = new KisDoubleSliderSpinBox;
+    m_sliderPatternScale->setRange(0, 500, 2);
+    m_sliderPatternScale->setPrefix(i18nc("The pattern 'scale' spinbox prefix in fill tool options", "Scale: "));
+    m_sliderPatternScale->setSuffix(i18n("%"));
+    m_angleSelectorPatternRotation = new KisAngleSelector;
+    m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
+    m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
-    QLabel *lbl_threshold = new QLabel(i18nc("The Threshold label in Fill tool options", "Threshold:"), widget);
-    m_slThreshold = new KisSliderSpinBox(widget);
-    m_slThreshold->setObjectName("int_widget");
-    m_slThreshold->setRange(1, 100);
-    m_slThreshold->setPageStep(3);
+    m_sliderThreshold = new KisSliderSpinBox;
+    m_sliderThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in fill tool options", "Threshold: "));
+    m_sliderThreshold->setRange(1, 100);
+    m_sliderSpread = new KisSliderSpinBox;
+    m_sliderSpread->setPrefix(i18nc("The 'spread' spinbox prefix in fill tool options", "Spread: "));
+    m_sliderSpread->setSuffix(i18n("%"));
+    m_sliderSpread->setRange(0, 100);
+    m_checkBoxSelectionAsBoundary =
+        new QCheckBox(
+            i18nc("The 'use selection as boundary' checkbox in fill tool to use selection borders as boundary when filling",
+                  "Use selection as boundary")
+        );
+    m_checkBoxSelectionAsBoundary->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
-    QLabel *lbl_opacitySpread = new QLabel(i18nc("The Opacity Spread label in Fill tool options", "Opacity Spread:"), widget);
-    m_slOpacitySpread = new KisSliderSpinBox(widget);
-    m_slOpacitySpread->setObjectName("opacitySpread");
-    m_slOpacitySpread->setSuffix(i18n("%"));
-    m_slOpacitySpread->setRange(0, 100);
-    m_slOpacitySpread->setPageStep(3);
+    m_checkBoxAntiAlias = new QCheckBox(i18nc("The anti-alias checkbox in fill tool options", "Anti-aliasing"));
+    m_sliderGrow = new KisSliderSpinBox;
+    m_sliderGrow->setPrefix(i18nc("The 'grow/shrink' spinbox prefix in fill tool options", "Grow: "));
+    m_sliderGrow->setRange(-40, 40);
+    m_sliderGrow->setSuffix(i18n(" px"));
+    m_sliderFeather = new KisSliderSpinBox;
+    m_sliderFeather->setPrefix(i18nc("The 'feather' spinbox prefix in fill tool options", "Feather: "));
+    m_sliderFeather->setRange(0, 40);
+    m_sliderFeather->setSuffix(i18n(" px"));
 
-    QLabel *lbl_antiAlias = new QLabel(i18n("Anti-aliasing"), widget);
-    m_checkAntiAlias = new QCheckBox(QString(), widget);
-    m_checkAntiAlias->setToolTip(
-        i18n("Smooths the jagged edges."));
+    m_buttonReferenceCurrent = makeToolButton("current-layer", true);
+    m_buttonReferenceAll = makeToolButton("all-layers");
+    m_buttonReferenceLabeled = makeToolButton("tag");
+    QWidget *containerReferenceButtons = makeToolButtonContainer({m_buttonReferenceCurrent, m_buttonReferenceAll, m_buttonReferenceLabeled});
+    m_widgetLabels = new KisColorLabelSelectorWidget;
+    m_widgetLabels->setExclusive(false);
+    m_widgetLabels->setButtonSize(20);
+    m_widgetLabels->setButtonWrapEnabled(true);
+    m_widgetLabels->setMouseDragEnabled(true);
 
-    QLabel *lbl_sizemod = new QLabel(i18n("Grow selection:"), widget);
-    m_sizemodWidget = new KisSliderSpinBox(widget);
-    m_sizemodWidget->setObjectName("sizemod");
-    m_sizemodWidget->setRange(-40, 40);
-    m_sizemodWidget->setSingleStep(1);
-    m_sizemodWidget->setSuffix(i18n(" px"));
+    m_buttonMultipleFillAny = makeToolButton("different-regions", true);
+    m_buttonMultipleFillSimilar = makeToolButton("similar-regions");
+    QWidget *containerMultipleFillButtons = makeToolButtonContainer({m_buttonMultipleFillAny, m_buttonMultipleFillSimilar});
 
-    QLabel *lbl_feather = new QLabel(i18n("Feathering radius:"), widget);
-    m_featherWidget = new KisSliderSpinBox(widget);
-    m_featherWidget->setObjectName("feather");
-    m_featherWidget->setRange(0, 40);
-    m_featherWidget->setSingleStep(1);
-    m_featherWidget->setSuffix(i18n(" px"));
+    QPushButton *buttonReset = new QPushButton(i18nc("The 'reset' button in fill tool options", "Reset"));
 
-    QLabel *lbl_usePattern = new QLabel(i18n("Use pattern:"), widget);
-    m_checkUsePattern = new QCheckBox(QString(), widget);
-    m_checkUsePattern->setToolTip(i18n("When checked do not use the foreground color, but the pattern selected to fill with"));
+    // Set the tooltips
+    m_buttonWhatToFillSelection->setToolTip(i18n("Current selection"));
+    m_buttonWhatToFillContiguous->setToolTip(i18n("Contiguous region obtained from the layers"));
 
-    QLabel *lbl_patternRotation = new QLabel(i18n("Rotate:"), widget);
-    m_angleSelectorPatternRotate = new KisAngleSelector(widget);
-    m_angleSelectorPatternRotate->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
-    m_angleSelectorPatternRotate->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
-    m_angleSelectorPatternRotate->setObjectName("patternrotate");
+    m_buttonFillWithFG->setToolTip(i18n("Foreground color"));
+    m_buttonFillWithBG->setToolTip(i18n("Background color"));
+    m_buttonFillWithPattern->setToolTip(i18n("Pattern"));
+    m_sliderPatternScale->setToolTip(i18n("Set the scale of the pattern"));
+    m_angleSelectorPatternRotation->setToolTip(i18n("Set the rotation of the pattern"));
 
-    QLabel *lbl_patternScale = new QLabel(i18n("Scale:"), widget);
-    m_sldPatternScale = new KisDoubleSliderSpinBox(widget);
-    m_sldPatternScale->setObjectName("patternscale");
-    m_sldPatternScale->setRange(0, 500, 2);
-    m_sldPatternScale->setSingleStep(1.0);
-    m_sldPatternScale->setSuffix(QChar(Qt::Key_Percent));
+    m_sliderThreshold->setToolTip(i18n("Set how far the region should extend from the selected pixel in terms of color similarity"));
+    m_sliderSpread->setToolTip(i18n("Set how far the fully opaque portion of the region should extend."
+                                    "\n0% will make opaque only the pixels that are exactly equal to the selected pixel."
+                                    "\n100% will make opaque all the pixels in the region up to its boundary."));
+    m_checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the current selection should be treated as a boundary when obtaining the region"));
 
-    QLabel *lbl_sampleLayers = new QLabel(i18nc("This is a label before a combobox with different choices regarding which layers "
-                                                "to take into considerationg when calculating the area to fill. "
-                                                "Options together with the label are: /Sample current layer/ /Sample all layers/ "
-                                                "/Sample color labeled layers/. Sample is a verb here and means something akin to 'take into account'.", "Sample:"), widget);
-    m_cmbSampleLayersMode = new QComboBox(widget);
-    m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_CURRENT), SAMPLE_LAYERS_MODE_CURRENT);
-    m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_ALL), SAMPLE_LAYERS_MODE_ALL);
-    m_cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_COLOR_LABELED), SAMPLE_LAYERS_MODE_COLOR_LABELED);
-    m_cmbSampleLayersMode->setEditable(false);
+    m_checkBoxAntiAlias->setToolTip(i18n("Smooth the jagged edges"));
+    m_sliderGrow->setToolTip(i18n("Grow (positive values) or shrink (negative values) the region by the set amount"));
+    m_sliderFeather->setToolTip(i18n("Blur the region by the set amount"));
 
-    QLabel *lbl_cmbLabel = new QLabel(i18nc("This is a string in tool options for Fill Tool to describe a combobox about "
-                                            "a choice of color labels that a layer can be marked with. Those color labels "
-                                            "will be used for calculating the area to fill.", "Labels used:"), widget);
-    m_cmbSelectedLabels = new KisColorFilterCombo(widget, false, false);
-    m_cmbSelectedLabels->updateAvailableLabels(currentImage().isNull() ? KisNodeSP() : currentImage()->root());
+    m_buttonReferenceCurrent->setToolTip(i18n("Obtain the region using the active layer"));
+    m_buttonReferenceAll->setToolTip(i18n("Obtain the region using a merged copy of all layers"));
+    m_buttonReferenceLabeled->setToolTip(i18n("Obtain the region using a merged copy of the selected color-labeled layers"));
 
-    QLabel *lbl_fillSelection = new QLabel(i18n("Fill entire selection:"), widget);
-    m_checkFillSelection = new QCheckBox(QString(), widget);
-    m_checkFillSelection->setToolTip(i18n("When checked do not look at the current layer colors, but just fill all of the selected area"));
+    m_buttonMultipleFillAny->setToolTip(i18n("Fill regions of any color"));
+    m_buttonMultipleFillSimilar->setToolTip(i18n("Fill only regions similar in color to the initial region"));
 
-    QLabel *lbl_useSelectionAsBoundary = new QLabel(i18nc("Description for a checkbox in a Fill Tool to use selection borders as boundary when filling", "Use selection as boundary:"), widget);
-    m_checkUseSelectionAsBoundary = new QCheckBox(QString(), widget);
-    m_checkUseSelectionAsBoundary->setToolTip(i18nc("Tooltip for 'Use selection as boundary' checkbox", "When checked, use selection borders as boundary when filling"));
+    buttonReset->setToolTip(i18n("Reset the options to their default values"));
 
-    QLabel *lbl_continuousFillMode = new QLabel(i18nc("The 'continuous fill' label in Fill tool options", "Continuous Fill:"), widget);
-    m_cmbContinuousFillMode = new QComboBox(widget);
-    m_cmbContinuousFillMode->addItem(i18nc("Continuous fill mode in fill tool options", "Any region"));
-    m_cmbContinuousFillMode->addItem(i18nc("Continuous fill mode in fill tool options", "Similar regions"));
-    m_cmbContinuousFillMode->setEditable(false);
-    m_cmbContinuousFillMode->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-    m_cmbContinuousFillMode->view()->setMinimumWidth(m_cmbContinuousFillMode->view()->sizeHintForColumn(0));
+    // Construct the option widget
+    m_optionWidget = new KisOptionCollectionWidget;
+    m_optionWidget->setContentsMargins(0, 10, 0, 10);
+    m_optionWidget->setSeparatorsVisible(true);
 
-    connect (m_checkUseFastMode  , SIGNAL(toggled(bool))    , this, SLOT(slotSetUseFastMode(bool)));
-    connect (m_slThreshold       , SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
-    connect (m_slOpacitySpread        , SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
-    connect (m_checkAntiAlias    , SIGNAL(toggled(bool)), this, SLOT(slotSetAntiAlias(bool)));
-    connect (m_sizemodWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
-    connect (m_featherWidget     , SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
-    connect (m_checkUsePattern   , SIGNAL(toggled(bool))    , this, SLOT(slotSetUsePattern(bool)));
-    connect (m_checkFillSelection, SIGNAL(toggled(bool))    , this, SLOT(slotSetFillSelection(bool)));
-    connect (m_checkUseSelectionAsBoundary, SIGNAL(toggled(bool))    , this, SLOT(slotSetUseSelectionAsBoundary(bool)));
-    connect (m_cmbContinuousFillMode,
-             QOverload<int>::of(&QComboBox::currentIndexChanged),
-             [this](int i){ slotSetContinuousFillMode(static_cast<ContinuousFillMode>(i)); });
+    KisOptionCollectionWidgetWithHeader *sectionWhatToFill =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'what to fill' section label in fill tool options", "What to fill")
+        );
+    sectionWhatToFill->setPrimaryWidget(containerWhatToFillButtons);
+    m_optionWidget->appendWidget("sectionWhatToFill", sectionWhatToFill);
 
-    connect (m_cmbSampleLayersMode   , SIGNAL(currentIndexChanged(int)), this, SLOT(slotSetSampleLayers(int)));
-    connect (m_cmbSelectedLabels          , SIGNAL(selectedColorsChanged()), this, SLOT(slotSetSelectedColorLabels()));
-    connect (m_angleSelectorPatternRotate  , SIGNAL(angleChanged(qreal)), this, SLOT(slotSetPatternRotation(qreal)));
-    connect (m_sldPatternScale   , SIGNAL(valueChanged(qreal)), this, SLOT(slotSetPatternScale(qreal)));
+    KisOptionCollectionWidgetWithHeader *sectionFillWith =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'fill with' section label in fill tool options", "Fill with")
+        );
+    sectionFillWith->setPrimaryWidget(containerFillWithButtons);
+    sectionFillWith->appendWidget("sliderPatternScale", m_sliderPatternScale);
+    sectionFillWith->appendWidget("angleSelectorPatternRotation", m_angleSelectorPatternRotation);
+    sectionFillWith->setWidgetVisible("sliderPatternScale", false);
+    sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", false);
+    m_optionWidget->appendWidget("sectionFillWith", sectionFillWith);
 
-    addOptionWidgetOption(m_checkUseFastMode, lbl_fastMode);
-    addOptionWidgetOption(m_slThreshold, lbl_threshold);
-    addOptionWidgetOption(m_slOpacitySpread, lbl_opacitySpread);
-    addOptionWidgetOption(m_checkAntiAlias, lbl_antiAlias);
-    addOptionWidgetOption(m_sizemodWidget, lbl_sizemod);
-    addOptionWidgetOption(m_featherWidget, lbl_feather);
-    addOptionWidgetOption(m_cmbContinuousFillMode, lbl_continuousFillMode);
+    KisOptionCollectionWidgetWithHeader *sectionRegionExtent =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'region extent' section label in fill tool options", "Region extent")
+        );
+    sectionRegionExtent->appendWidget("sliderThreshold", m_sliderThreshold);
+    sectionRegionExtent->appendWidget("sliderSpread", m_sliderSpread);
+    sectionRegionExtent->appendWidget("checkBoxSelectionAsBoundary", m_checkBoxSelectionAsBoundary);
+    m_optionWidget->appendWidget("sectionRegionExtent", sectionRegionExtent);
 
-    addOptionWidgetOption(m_checkFillSelection, lbl_fillSelection);
-    addOptionWidgetOption(m_checkUseSelectionAsBoundary, lbl_useSelectionAsBoundary);
-    addOptionWidgetOption(m_cmbSampleLayersMode, lbl_sampleLayers);
-    addOptionWidgetOption(m_cmbSelectedLabels, lbl_cmbLabel);
-    addOptionWidgetOption(m_checkUsePattern, lbl_usePattern);
+    KisOptionCollectionWidgetWithHeader *sectionAdjustments =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'adjustments' section label in fill tool options", "Adjustments")
+        );
+    sectionAdjustments->appendWidget("checkBoxAntiAlias", m_checkBoxAntiAlias);
+    sectionAdjustments->appendWidget("sliderGrow", m_sliderGrow);
+    sectionAdjustments->appendWidget("sliderFeather", m_sliderFeather);
+    m_optionWidget->appendWidget("sectionAdjustments", sectionAdjustments);
+    
+    KisOptionCollectionWidgetWithHeader *sectionReference =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'reference' section label in fill tool options", "Reference")
+        );
+    sectionReference->setPrimaryWidget(containerReferenceButtons);
+    sectionReference->appendWidget("widgetLabels", m_widgetLabels);
+    sectionReference->setWidgetVisible("widgetLabels", false);
+    m_optionWidget->appendWidget("sectionReference", sectionReference);
 
-    addOptionWidgetOption(m_angleSelectorPatternRotate, lbl_patternRotation);
-    addOptionWidgetOption(m_sldPatternScale, lbl_patternScale);
+    KisOptionCollectionWidgetWithHeader *sectionMultipleFill =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'multiple fill' section label in fill tool options", "Multiple fill")
+        );
+    sectionMultipleFill->setPrimaryWidget(containerMultipleFillButtons);
+    m_optionWidget->appendWidget("sectionMultipleFill", sectionMultipleFill);
 
-    updateGUI();
+    m_optionWidget->appendWidget("buttonReset", buttonReset);
 
-    widget->setFixedHeight(widget->sizeHint().height());
-
-
-
-    // load configuration options
-    m_checkUseFastMode->setChecked(m_configGroup.readEntry("useFastMode", false));
-    m_slThreshold->setValue(m_configGroup.readEntry("thresholdAmount", 8));
-    m_slOpacitySpread->setValue(m_configGroup.readEntry("opacitySpread", 100));
-    m_checkAntiAlias->setChecked(m_configGroup.readEntry("antiAlias", false));
-    m_sizemodWidget->setValue(m_configGroup.readEntry("growSelection", 0));
-
-    m_cmbContinuousFillMode->setCurrentIndex(m_configGroup.readEntry("continuousFillMode", "fillAnyRegion") == "fillSimilarRegions" ? 1 : 0);
-
-    m_featherWidget->setValue(m_configGroup.readEntry("featherAmount", 0));
-    m_checkUsePattern->setChecked(m_configGroup.readEntry("usePattern", false));
-    if (m_configGroup.hasKey("sampleLayersMode")) {
-        m_sampleLayersMode = m_configGroup.readEntry("sampleLayersMode", SAMPLE_LAYERS_MODE_CURRENT);
-        setCmbSampleLayersMode(m_sampleLayersMode);
-    } else { // if neither option is present in the configuration, it will fall back to CURRENT
-        bool sampleMerged = m_configGroup.readEntry("sampleMerged", false);
-        m_sampleLayersMode = sampleMerged ? SAMPLE_LAYERS_MODE_ALL : SAMPLE_LAYERS_MODE_CURRENT;
-        setCmbSampleLayersMode(m_sampleLayersMode);
+    // Initialize widgets
+    if (m_fillMode == FillSelection) {
+        m_buttonWhatToFillSelection->setChecked(true);
+        m_optionWidget->setWidgetVisible("sectionRegionExtent", false);
+        m_optionWidget->setWidgetVisible("sectionAdjustments", false);
+        m_optionWidget->setWidgetVisible("sectionReference", false);
+        m_optionWidget->setWidgetVisible("sectionMultipleFill", false);
     }
-    m_checkFillSelection->setChecked(m_configGroup.readEntry("fillSelection", false));
-    m_checkUseSelectionAsBoundary->setChecked(m_configGroup.readEntry("useSelectionAsBoundary", false));
-
-    m_angleSelectorPatternRotate->setAngle(m_configGroup.readEntry("patternRotate", 0.0));
-    m_sldPatternScale->setValue(m_configGroup.readEntry("patternScale", 100.0));
-
-    // manually set up all variables in case there were no signals when setting value
-    m_antiAlias = m_checkAntiAlias->isChecked();
-    m_feather = m_featherWidget->value();
-    m_sizemod = m_sizemodWidget->value();
-    m_threshold = m_slThreshold->value();
-    m_opacitySpread = m_slOpacitySpread->value();
-    m_useFastMode = m_checkUseFastMode->isChecked();
-    m_fillOnlySelection = m_checkFillSelection->isChecked();
-    m_useSelectionAsBoundary = m_checkUseSelectionAsBoundary->isChecked();
-    m_patternRotation = m_angleSelectorPatternRotate->angle();
-    m_patternScale = m_sldPatternScale->value() * 0.01;
-    m_usePattern = m_checkUsePattern->isChecked();
-    // m_sampleLayersMode is set manually above
-    // selectedColors are also set manually
-
-
-    activateConnectionsToImage();
-
-    m_widgetsInitialized = true;
-    return widget;
-}
-
-void KisToolFill::updateGUI()
-{
-    bool useAdvancedMode = !m_checkUseFastMode->isChecked();
-    bool selectionOnly = m_checkFillSelection->isChecked();
-
-    m_checkUseFastMode->setEnabled(!selectionOnly);
-    m_slThreshold->setEnabled(!selectionOnly);
-    m_slOpacitySpread->setEnabled(!selectionOnly && useAdvancedMode);
-
-    m_checkAntiAlias->setEnabled(!selectionOnly && useAdvancedMode);
-    m_sizemodWidget->setEnabled(!selectionOnly && useAdvancedMode);
-    m_featherWidget->setEnabled(!selectionOnly && useAdvancedMode);
-    m_checkUsePattern->setEnabled(useAdvancedMode);
-    m_angleSelectorPatternRotate->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
-    m_sldPatternScale->setEnabled((m_checkUsePattern->isChecked() && useAdvancedMode));
-
-    m_cmbContinuousFillMode->setEnabled(!selectionOnly);
-
-    m_cmbSampleLayersMode->setEnabled(!selectionOnly && useAdvancedMode);
-
-    m_checkUseSelectionAsBoundary->setEnabled(!selectionOnly && useAdvancedMode);
-
-    bool sampleLayersModeIsColorLabeledLayers = m_cmbSampleLayersMode->currentData().toString() == SAMPLE_LAYERS_MODE_COLOR_LABELED;
-    m_cmbSelectedLabels->setEnabled(!selectionOnly && useAdvancedMode && sampleLayersModeIsColorLabeledLayers);
-}
-
-QString KisToolFill::sampleLayerModeToUserString(QString sampleLayersModeId)
-{
-    QString currentLayer = i18nc("Option in fill tool: take only the current layer into account when calculating the area to fill", "Current Layer");
-    if (sampleLayersModeId == SAMPLE_LAYERS_MODE_CURRENT) {
-        return currentLayer;
-    } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_ALL) {
-        return i18nc("Option in fill tool: take all layers (merged) into account when calculating the area to fill", "All Layers");
-    } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
-        return i18nc("Option in fill tool: take all layers that were labeled with a color label (more precisely: all those layers merged)"
-                     " into account when calculating the area to fill", "Color Labeled Layers");
+    if (m_fillType == FillWithBackgroundColor) {
+        m_buttonFillWithBG->setChecked(true);
+    } else if (m_fillType == FillWithPattern) {
+        m_buttonFillWithPattern->setChecked(true);
+        sectionFillWith->setWidgetVisible("sliderPatternScale", true);
+        sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", true);
+    }
+    m_sliderPatternScale->setValue(m_patternScale);
+    m_angleSelectorPatternRotation->setAngle(m_patternRotation);
+    m_sliderThreshold->setValue(m_threshold);
+    m_sliderSpread->setValue(m_opacitySpread);
+    m_checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
+    m_checkBoxAntiAlias->setChecked(m_antiAlias);
+    m_sliderGrow->setValue(m_sizemod);
+    m_sliderFeather->setValue(m_feather);
+    if (m_reference == AllLayers) {
+        m_buttonReferenceAll->setChecked(true);
+    } else if (m_reference == ColorLabeledLayers) {
+        m_buttonReferenceLabeled->setChecked(true);
+        sectionReference->setWidgetVisible("widgetLabels", true);
+    }
+    if (m_continuousFillMode == FillSimilarRegions) {
+        m_buttonMultipleFillSimilar->setChecked(true);
     }
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, currentLayer);
-    return currentLayer;
+    // Make connections
+    connect(m_buttonWhatToFillSelection->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupWhatToFill_idToggled(int, bool)));
+    connect(m_buttonFillWithFG->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupFillWith_idToggled(int, bool)));
+    connect(m_sliderPatternScale, SIGNAL(valueChanged(double)), SLOT(slot_sliderPatternScale_valueChanged(double)));
+    connect(m_angleSelectorPatternRotation, SIGNAL(angleChanged(double)), SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
+    connect(m_sliderThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderThreshold_valueChanged(int)));
+    connect(m_sliderSpread, SIGNAL(valueChanged(int)), SLOT(slot_sliderSpread_valueChanged(int)));
+    connect(m_checkBoxSelectionAsBoundary, SIGNAL(toggled(bool)), SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
+    connect(m_checkBoxAntiAlias, SIGNAL(toggled(bool)), SLOT(slot_checkBoxAntiAlias_toggled(bool)));
+    connect(m_sliderGrow, SIGNAL(valueChanged(int)), SLOT(slot_sliderGrow_valueChanged(int)));
+    connect(m_sliderFeather, SIGNAL(valueChanged(int)), SLOT(slot_sliderFeather_valueChanged(int)));
+    connect(m_buttonReferenceCurrent->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupReference_idToggled(int, bool)));
+    connect(m_widgetLabels, SIGNAL(selectionChanged()), SLOT(slot_widgetLabels_selectionChanged()));
+    connect(m_buttonMultipleFillAny->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupMultipleFill_idToggled(int, bool)));
+    connect(buttonReset, SIGNAL(clicked()), SLOT(slot_buttonReset_clicked()));
+    
+    return m_optionWidget;
 }
 
-void KisToolFill::setCmbSampleLayersMode(QString sampleLayersModeId)
+void KisToolFill::loadConfiguration()
 {
-    for (int i = 0; i < m_cmbSampleLayersMode->count(); i++) {
-        if (m_cmbSampleLayersMode->itemData(i).toString() == sampleLayersModeId)
-        {
-            m_cmbSampleLayersMode->setCurrentIndex(i);
-            break;
+    {
+        const bool fillSelection = m_configGroup.readEntry<bool>("fillSelection", false);
+        m_fillMode = fillSelection ? FillSelection : FillContiguousRegion;
+    }
+    {
+        const QString fillTypeStr = m_configGroup.readEntry<QString>("fillWith", "");
+        if (fillTypeStr == "foregroundColor") {
+            m_fillType = FillWithForegroundColor;
+        } else if (fillTypeStr == "backgroundColor") {
+            m_fillType = FillWithBackgroundColor;
+        } else if (fillTypeStr == "pattern") {
+            m_fillType = FillWithPattern;
+        } else {
+            if (m_configGroup.readEntry<bool>("usePattern", false)) {
+                m_fillType = FillWithPattern;
+            } else {
+                m_fillType = FillWithForegroundColor;
+            }
         }
     }
-    m_sampleLayersMode = sampleLayersModeId;
-    updateGUI();
-}
-
-void KisToolFill::activateConnectionsToImage()
-{
-    auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-    KIS_SAFE_ASSERT_RECOVER_RETURN(kisCanvas);
-    KisDocument *doc = kisCanvas->imageView()->document();
-
-    KisShapeController *kritaShapeController =
-            dynamic_cast<KisShapeController*>(doc->shapeController());
-    m_dummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
-    if (m_dummiesFacade) {
-        m_imageConnections.addConnection(m_dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
-                                                     &m_colorLabelCompressor, SLOT(start()));
-        m_imageConnections.addConnection(m_dummiesFacade, SIGNAL(sigEndRemoveDummy()),
-                                                     &m_colorLabelCompressor, SLOT(start()));
-        m_imageConnections.addConnection(m_dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
-                                                     &m_colorLabelCompressor, SLOT(start()));
+    m_patternScale = m_configGroup.readEntry<qreal>("patternScale", 100.0);
+    m_patternRotation = m_configGroup.readEntry<qreal>("patternRotate", 0.0);
+    m_threshold = m_configGroup.readEntry<int>("thresholdAmount", 8);
+    m_opacitySpread = m_configGroup.readEntry<int>("opacitySpread", 100);
+    m_useSelectionAsBoundary = m_configGroup.readEntry<bool>("useSelectionAsBoundary", true);
+    m_antiAlias = m_configGroup.readEntry<bool>("antiAlias", true);
+    m_sizemod = m_configGroup.readEntry<int>("growSelection", 0);
+    m_feather = m_configGroup.readEntry<int>("featherAmount", 0);
+    {
+        const QString sampleLayersModeStr = m_configGroup.readEntry<QString>("sampleLayersMode", "currentLayer");
+        if (sampleLayersModeStr == "allLayers") {
+            m_reference = AllLayers;
+        } else if (sampleLayersModeStr == "colorLabeledLayers") {
+            m_reference = ColorLabeledLayers;
+        } else {
+            m_reference = CurrentLayer;
+        }
+    }
+    {
+        const QStringList colorLabelsStr = m_configGroup.readEntry<QString>("colorLabels", "").split(',', Qt::SkipEmptyParts);
+        m_selectedColorLabels.clear();
+        for (const QString &colorLabelStr : colorLabelsStr) {
+            bool ok;
+            const int colorLabel = colorLabelStr.toInt(&ok);
+            if (ok) {
+                m_selectedColorLabels << colorLabel;
+            }
+        }
+    }
+    {
+        const QString continuousFillModeStr = m_configGroup.readEntry<QString>("continuousFillMode", "fillAnyRegion");
+        if (continuousFillModeStr == "fillSimilarRegions") {
+            m_continuousFillMode = FillSimilarRegions;
+        } else {
+            m_continuousFillMode = FillAnyRegion;
+        }
     }
 }
 
-void KisToolFill::deactivateConnectionsToImage()
+void KisToolFill::slot_buttonGroupWhatToFill_idToggled(int id, bool checked)
 {
-    m_imageConnections.clear();
+    if (!checked) {
+        return;
+    }
+    const bool visible = id == 1;
+    m_optionWidget->setWidgetVisible("sectionRegionExtent", visible);
+    m_optionWidget->setWidgetVisible("sectionAdjustments", visible);
+    m_optionWidget->setWidgetVisible("sectionReference", visible);
+    m_optionWidget->setWidgetVisible("sectionMultipleFill", visible);
+
+    m_fillMode = id == 0 ? FillSelection : FillContiguousRegion;
+
+    m_configGroup.writeEntry("fillSelection", id == 0);
 }
 
-void KisToolFill::slotSetUseFastMode(bool value)
+void KisToolFill::slot_buttonGroupFillWith_idToggled(int id, bool checked)
 {
-    m_useFastMode = value;
-    updateGUI();
-    m_configGroup.writeEntry("useFastMode", value);
+    if (!checked) {
+        return;
+    }
+    const bool visible = id == 2;
+    KisOptionCollectionWidgetWithHeader *sectionFillWith =
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionFillWith");
+    sectionFillWith->setWidgetVisible("sliderPatternScale", visible);
+    sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", visible);
+    
+    m_fillType = id == 0 ? FillWithForegroundColor : (id == 1 ? FillWithBackgroundColor : FillWithPattern);
+
+    m_configGroup.writeEntry(
+        "fillWith",
+        id == 0 ? "foregroundColor" : (id == 1 ? "backgroundColor" : "pattern")
+    );
 }
 
-void KisToolFill::slotSetThreshold(int threshold)
+void KisToolFill::slot_sliderPatternScale_valueChanged(double value)
 {
-    m_threshold = threshold;
-    m_configGroup.writeEntry("thresholdAmount", threshold);
+    if (value == m_patternScale) {
+        return;
+    }
+    m_patternScale = value;
+    m_configGroup.writeEntry("patternScale", value);
 }
 
-void KisToolFill::slotSetOpacitySpread(int opacitySpread)
+void KisToolFill::slot_angleSelectorPatternRotation_angleChanged(double value)
 {
-    m_opacitySpread = opacitySpread;
-    m_configGroup.writeEntry("opacitySpread", opacitySpread);
+    if (value == m_patternRotation) {
+        return;
+    }
+    m_patternRotation = value;
+    m_configGroup.writeEntry("patternRotate", value);
 }
 
-void KisToolFill::slotSetUsePattern(bool state)
+void KisToolFill::slot_sliderThreshold_valueChanged(int value)
 {
-    m_usePattern = state;
-    m_sldPatternScale->setEnabled(state);
-    m_angleSelectorPatternRotate->setEnabled(state);
-    m_configGroup.writeEntry("usePattern", state);
+    if (value == m_threshold) {
+        return;
+    }
+    m_threshold = value;
+    m_configGroup.writeEntry("thresholdAmount", value);
 }
 
-void KisToolFill::slotSetSampleLayers(int index)
+void KisToolFill::slot_sliderSpread_valueChanged(int value)
 {
-    Q_UNUSED(index);
-    m_sampleLayersMode = m_cmbSampleLayersMode->currentData(Qt::UserRole).toString();
-    updateGUI();
-    m_configGroup.writeEntry("sampleLayersMode", m_sampleLayersMode);
+    if (value == m_opacitySpread) {
+        return;
+    }
+    m_opacitySpread = value;
+    m_configGroup.writeEntry("opacitySpread", value);
 }
 
-void KisToolFill::slotSetSelectedColorLabels()
+void KisToolFill::slot_checkBoxSelectionAsBoundary_toggled(bool checked)
 {
-    m_selectedColors = m_cmbSelectedLabels->selectedColors();
+    if (checked == m_useSelectionAsBoundary) {
+        return;
+    }
+    m_useSelectionAsBoundary = checked;
+    m_configGroup.writeEntry("useSelectionAsBoundary", checked);
 }
 
-void KisToolFill::slotSetPatternScale(qreal scale)
+void KisToolFill::slot_checkBoxAntiAlias_toggled(bool checked)
 {
-    m_patternScale = scale*0.01;
-    m_configGroup.writeEntry("patternScale", scale);
+    if (checked == m_antiAlias) {
+        return;
+    }
+    m_antiAlias = checked;
+    m_configGroup.writeEntry("antiAlias", checked);
 }
 
-void KisToolFill::slotSetPatternRotation(qreal rotate)
+void KisToolFill::slot_sliderGrow_valueChanged(int value)
 {
-    m_patternRotation = rotate;
-    m_configGroup.writeEntry("patternRotate", rotate);
+    if (value == m_sizemod) {
+        return;
+    }
+    m_sizemod = value;
+    m_configGroup.writeEntry("growSelection", value);
 }
 
-void KisToolFill::slotSetFillSelection(bool state)
+void KisToolFill::slot_sliderFeather_valueChanged(int value)
 {
-    m_fillOnlySelection = state;
-    m_configGroup.writeEntry("fillSelection", state);
-    updateGUI();
+    if (value == m_feather) {
+        return;
+    }
+    m_feather = value;
+    m_configGroup.writeEntry("featherAmount", value);
 }
 
-void KisToolFill::slotSetUseSelectionAsBoundary(bool state)
+void KisToolFill::slot_buttonGroupReference_idToggled(int id, bool checked)
 {
-    m_useSelectionAsBoundary = state;
-    m_configGroup.writeEntry("useSelectionAsBoundary", state);
-    updateGUI();
+    if (!checked) {
+        return;
+    }
+    KisOptionCollectionWidgetWithHeader *sectionReference =
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionReference");
+    sectionReference->setWidgetVisible("widgetLabels", id == 2);
+    
+    m_reference = id == 0 ? CurrentLayer : (id == 1 ? AllLayers : ColorLabeledLayers);
+
+    m_configGroup.writeEntry(
+        "sampleLayersMode",
+        id == 0 ? "currentLayer" : (id == 1 ? "allLayers" : "colorLabeledLayers")
+    );
 }
 
-void KisToolFill::slotSetAntiAlias(bool antiAlias)
+void KisToolFill::slot_widgetLabels_selectionChanged()
 {
-    m_antiAlias = antiAlias;
-    m_configGroup.writeEntry("antiAlias", antiAlias);
+    QList<int> labels = m_widgetLabels->selection();
+    if (labels == m_selectedColorLabels) {
+        return;
+    }
+    m_selectedColorLabels = labels;
+    if (labels.isEmpty()) {
+        return;
+    }
+    QString colorLabels = QString::number(labels.first());
+    for (int i = 1; i < labels.size(); ++i) {
+        colorLabels += "," + labels[i];
+    }
+    m_configGroup.writeEntry("colorLabels", colorLabels);
 }
 
-void KisToolFill::slotSetSizemod(int sizemod)
+void KisToolFill::slot_buttonGroupMultipleFill_idToggled(int id, bool checked)
 {
-    m_sizemod = sizemod;
-    m_configGroup.writeEntry("growSelection", sizemod);
+    if (!checked) {
+        return;
+    }
+    m_continuousFillMode = id == 0 ? FillAnyRegion : FillSimilarRegions;
+    m_configGroup.writeEntry("continuousFillMode", id == 0 ? "fillAnyRegion" : "fillSimilarRegions");
 }
 
-void KisToolFill::slotSetFeather(int feather)
+void KisToolFill::slot_buttonReset_clicked()
 {
-    m_feather = feather;
-    m_configGroup.writeEntry("featherAmount", feather);
-}
-
-void KisToolFill::slotSetContinuousFillMode(ContinuousFillMode continuousFillMode)
-{
-    m_continuousFillMode = continuousFillMode;
-    m_configGroup.writeEntry("continuousFillMode", continuousFillMode == FillAnyRegion ? "fillAnyRegion" : "fillSimilarRegions");
+    m_buttonWhatToFillContiguous->setChecked(true);
+    m_buttonFillWithFG->setChecked(true);
+    m_sliderPatternScale->setValue(100.0);
+    m_angleSelectorPatternRotation->setAngle(0.0);
+    m_sliderThreshold->setValue(8);
+    m_sliderSpread->setValue(100);
+    m_checkBoxSelectionAsBoundary->setChecked(true);
+    m_checkBoxAntiAlias->setChecked(true);
+    m_sliderGrow->setValue(0);
+    m_sliderFeather->setValue(0);
+    m_buttonReferenceCurrent->setChecked(true);
+    m_widgetLabels->setSelection({});
+    m_buttonMultipleFillAny->setChecked(true);
 }

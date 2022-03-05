@@ -24,20 +24,40 @@
 #include <kis_signal_auto_connection.h>
 #include <kis_resources_snapshot.h>
 
-class QWidget;
-class QCheckBox;
-class KisSliderSpinBox;
+class KisOptionCollectionWidget;
+class QToolButton;
 class KisDoubleSliderSpinBox;
-class KoCanvasBase;
-class KisColorFilterCombo;
-class KisDummiesFacadeBase;
 class KisAngleSelector;
+class KisSliderSpinBox;
+class QCheckBox;
+class KisColorLabelSelectorWidget;
+class QPushButton;
 
 class KisToolFill : public KisToolPaint
 {
     Q_OBJECT
 
 public:
+    enum FillMode
+    {
+        FillSelection,
+        FillContiguousRegion
+    };
+
+    enum FillType
+    {
+        FillWithForegroundColor,
+        FillWithBackgroundColor,
+        FillWithPattern
+    };
+
+    enum Reference
+    {
+        CurrentLayer,
+        AllLayers,
+        ColorLabeledLayers
+    };
+
     enum ContinuousFillMode
     {
         FillAnyRegion,
@@ -51,93 +71,49 @@ public:
     void continuePrimaryAction(KoPointerEvent *event) override;
     void endPrimaryAction(KoPointerEvent *event) override;
 
-    QWidget * createOptionWidget() override;
+    QWidget* createOptionWidget() override;
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-    void slotSetUseFastMode(bool);
-    void slotSetThreshold(int);
-    void slotSetOpacitySpread(int);
-    void slotSetUsePattern(bool);
-    void slotSetFillSelection(bool);
-    void slotSetUseSelectionAsBoundary(bool);
-    void slotSetAntiAlias(bool antialias);
-    void slotSetSizemod(int);
-    void slotSetFeather(int);
-    void slotSetSampleLayers(int index);
-    void slotSetSelectedColorLabels();
-    void slotSetPatternScale(qreal scale);
-    void slotSetPatternRotation(qreal rotate);
-    void slotSetContinuousFillMode(ContinuousFillMode continuousFillMode);
-
-protected Q_SLOTS:
-    void resetCursorStyle() override;
-    void slotUpdateAvailableColorLabels();
-    void slotUpdateContinuousFill();
 
 protected:
     bool wantsAutoScroll() const override { return false; }
-private:
-    void updateGUI();
-    QString sampleLayerModeToUserString(QString sampleLayersModeId);
-    void setCmbSampleLayersMode(QString sampleLayersModeId);
 
-    void activateConnectionsToImage();
-    void deactivateConnectionsToImage();
-
-    void beginFilling(const QPoint &seedPoint);
-    void addFillingOperation(const QPoint &seedPoint);
-    void addFillingOperation(const QVector<QPoint> &seedPoints);
-    void addUpdateOperation();
-    void endFilling();
+protected Q_SLOTS:
+    void resetCursorStyle() override;
+    void slotUpdateContinuousFill();
 
 private:
-    QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
-    QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
-    QString SAMPLE_LAYERS_MODE_COLOR_LABELED = {"colorLabeledLayers"};
     static constexpr int minimumDragDistance{4};
     static constexpr int minimumDragDistanceSquared{minimumDragDistance * minimumDragDistance};
 
-    bool m_antiAlias;
-    int m_feather;
-    int m_sizemod;
+    FillMode m_fillMode;
+
+    FillType m_fillType;
+    qreal m_patternScale;
+    qreal m_patternRotation;
+
     int m_threshold;
     int m_opacitySpread;
-    bool m_usePattern;
-    bool m_fillOnlySelection;
     bool m_useSelectionAsBoundary;
-    bool m_useFastMode;
-    QString m_sampleLayersMode;
-    QList<int> m_selectedColors;
-    qreal m_patternRotation;
-    qreal m_patternScale;
+
+    bool m_antiAlias;
+    int m_sizemod;
+    int m_feather;
+
+    Reference m_reference;
+    QList<int> m_selectedColorLabels;
+
     ContinuousFillMode m_continuousFillMode;
+    
     KisSelectionSP m_continuousFillMask;
     KoColor m_continuousFillReferenceColor;
     KisPaintDeviceSP m_referencePaintDevice;
     KisResourcesSnapshotSP m_resourcesSnapshot;
     QTransform m_transform;
 
-    QCheckBox *m_checkUseFastMode;
-    KisSliderSpinBox *m_slThreshold;
-    KisSliderSpinBox *m_slOpacitySpread;
-    QCheckBox *m_checkAntiAlias;
-    KisSliderSpinBox *m_sizemodWidget;
-    KisSliderSpinBox *m_featherWidget;
-    KisAngleSelector *m_angleSelectorPatternRotate;
-    KisDoubleSliderSpinBox *m_sldPatternScale;
-    QComboBox *m_cmbContinuousFillMode;
-    QCheckBox *m_checkUsePattern;
-    QCheckBox *m_checkFillSelection;
-    QCheckBox *m_checkUseSelectionAsBoundary;
-    QComboBox *m_cmbSampleLayersMode;
-    KisColorFilterCombo *m_cmbSelectedLabels;
-    KisSignalCompressor m_colorLabelCompressor;
-    KisDummiesFacadeBase* m_dummiesFacade;
-    KisSignalAutoConnectionsStore m_imageConnections;
-
-    bool m_widgetsInitialized{false};
+    FillMode m_effectiveFillMode;
     bool m_isFilling{false};
     bool m_isDragging{false};
     QPoint m_fillStartWidgetPosition;
@@ -146,6 +122,57 @@ private:
     KisStrokeId m_fillStrokeId;
 
     KConfigGroup m_configGroup;
+
+    KisOptionCollectionWidget *m_optionWidget;
+
+    QToolButton *m_buttonWhatToFillSelection;
+    QToolButton *m_buttonWhatToFillContiguous;
+
+    QToolButton *m_buttonFillWithFG;
+    QToolButton *m_buttonFillWithBG;
+    QToolButton *m_buttonFillWithPattern;
+    KisDoubleSliderSpinBox *m_sliderPatternScale;
+    KisAngleSelector *m_angleSelectorPatternRotation;
+
+    KisSliderSpinBox *m_sliderThreshold;
+    KisSliderSpinBox *m_sliderSpread;
+    QCheckBox *m_checkBoxSelectionAsBoundary;
+
+    QCheckBox *m_checkBoxAntiAlias;
+    KisSliderSpinBox *m_sliderGrow;
+    KisSliderSpinBox *m_sliderFeather;
+
+    QToolButton *m_buttonReferenceCurrent;
+    QToolButton *m_buttonReferenceAll;
+    QToolButton *m_buttonReferenceLabeled;
+    KisColorLabelSelectorWidget *m_widgetLabels;
+
+    QToolButton *m_buttonMultipleFillAny;
+    QToolButton *m_buttonMultipleFillSimilar;
+
+    void beginFilling(const QPoint &seedPoint);
+    void addFillingOperation(const QPoint &seedPoint);
+    void addFillingOperation(const QVector<QPoint> &seedPoints);
+    void addUpdateOperation();
+    void endFilling();
+
+    void loadConfiguration();
+
+private Q_SLOTS:
+    void slot_buttonGroupWhatToFill_idToggled(int id, bool checked);
+    void slot_buttonGroupFillWith_idToggled(int id, bool checked);
+    void slot_sliderPatternScale_valueChanged(double value);
+    void slot_angleSelectorPatternRotation_angleChanged(double value);
+    void slot_sliderThreshold_valueChanged(int value);
+    void slot_sliderSpread_valueChanged(int value);
+    void slot_checkBoxSelectionAsBoundary_toggled(bool checked);
+    void slot_checkBoxAntiAlias_toggled(bool checked);
+    void slot_sliderGrow_valueChanged(int value);
+    void slot_sliderFeather_valueChanged(int value);
+    void slot_buttonGroupReference_idToggled(int id, bool checked);
+    void slot_widgetLabels_selectionChanged();
+    void slot_buttonGroupMultipleFill_idToggled(int id, bool checked);
+    void slot_buttonReset_clicked();
 };
 
 

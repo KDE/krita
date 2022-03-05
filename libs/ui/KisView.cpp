@@ -673,14 +673,14 @@ void KisView::dropEvent(QDropEvent *event)
 
         // Use same options as the fill tool
         KConfigGroup configGroup = KSharedConfig::openConfig()->group("KritaFill/KisToolFill");
-        const bool useFastMode = configGroup.readEntry("useFastMode", false);
+        const bool isAltPressed = event->keyboardModifiers() & Qt::AltModifier;
+        const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false) != isAltPressed;
         const int thresholdAmount = configGroup.readEntry("thresholdAmount", 8);
         const int opacitySpread = configGroup.readEntry("opacitySpread", 100);
+        const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
+        const bool antiAlias = configGroup.readEntry("antiAlias", true);
         const int growSelection = configGroup.readEntry("growSelection", 0);
         const int featherAmount = configGroup.readEntry("featherAmount", 0);
-        const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false)
-                                       || (event->keyboardModifiers() & Qt::AltModifier);
-        const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
         const QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
         const QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
         const QString SAMPLE_LAYERS_MODE_COLOR_LABELED = {"colorLabeledLayers"};
@@ -691,6 +691,11 @@ void KisView::dropEvent(QDropEvent *event)
             bool sampleMerged = configGroup.readEntry("sampleMerged", false);
             sampleLayersMode = sampleMerged ? SAMPLE_LAYERS_MODE_ALL : SAMPLE_LAYERS_MODE_CURRENT;
         }
+        const bool useFastMode = !resources->activeSelection() &&
+                                 opacitySpread == 100 &&
+                                 useSelectionAsBoundary == false &&
+                                 !antiAlias && growSelection == 0 && featherAmount == 0 &&
+                                 sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT;
         // If the sample layer mode is other than SAMPLE_LAYERS_MODE_ALL just
         // default to SAMPLE_LAYERS_MODE_CURRENT. This means that
         // SAMPLE_LAYERS_MODE_COLOR_LABELED is not supported yet since the color
@@ -719,6 +724,7 @@ void KisView::dropEvent(QDropEvent *event)
         visitor->setSizeMod(growSelection);
         visitor->setFillThreshold(thresholdAmount);
         visitor->setOpacitySpread(opacitySpread);
+        visitor->setAntiAlias(antiAlias);
         
         applicator.applyVisitor(visitor,
                                 KisStrokeJobData::SEQUENTIAL,

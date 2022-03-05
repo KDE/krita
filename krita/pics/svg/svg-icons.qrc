@@ -399,5 +399,15 @@
         <file>light_histogram-show-all.svg</file>
         <file>dark_histogram-show-best.svg</file>
         <file>light_histogram-show-best.svg</file>
+        <file>dark_current-layer.svg</file>
+        <file>light_current-layer.svg</file>
+        <file>dark_all-layers.svg</file>
+        <file>light_all-layers.svg</file>
+        <file>dark_contiguous-selection.svg</file>
+        <file>light_contiguous-selection.svg</file>
+        <file>dark_different-regions.svg</file>
+        <file>light_different-regions.svg</file>
+        <file>dark_similar-regions.svg</file>
+        <file>light_similar-regions.svg</file>
     </qresource>
 </RCC>

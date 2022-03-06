@@ -31,7 +31,7 @@
   <developer_name xml:lang="sk">Nadácia Krita</developer_name>
   <developer_name xml:lang="sl">Fundacija Krita</developer_name>
   <developer_name xml:lang="sv">Krita-stiftelsen</developer_name>
-  <developer_name xml:lang="tok">kulupu mani Krita</developer_name>
+  <developer_name xml:lang="tok">kulupu Krita</developer_name>
   <developer_name xml:lang="tr">Krita Vakfı</developer_name>
   <developer_name xml:lang="uk">Фундація Krita</developer_name>
   <developer_name xml:lang="x-test">xxKrita Foundationxx</developer_name>
@@ -416,6 +416,7 @@
       <caption xml:lang="sk">Ak ste v oblasti digitálnej maľby nováčikom alebo sa chcete dozvedieť viac o možnostiach programu Krita, existuje o tom rozsiahla a aktuálna príručka</caption>
       <caption xml:lang="sl">Če ste novi v digitalnem slikanju, obstaja obsežen, posodobljen priročnik</caption>
       <caption xml:lang="sv">Om digital målning är nytt för dig, finns en omfattande, aktuell handbok</caption>
+      <caption xml:lang="tok">sina sona ala sitelen kepeken ilo nanpa la, mi jo e lipu sona suli</caption>
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
       <caption xml:lang="zh-CN">如果您是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>

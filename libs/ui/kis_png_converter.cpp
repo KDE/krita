@@ -1252,7 +1252,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         }
         // Save IPTC
         if (options.iptc) {
-            dbgFile << "Trying to save exif information";
+            dbgFile << "Trying to save iptc information";
             KisMetaData::IOBackend *iptcIO = KisMetadataBackendRegistry::instance()->value("iptc");
             Q_ASSERT(iptcIO);
 

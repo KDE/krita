@@ -17,6 +17,14 @@ KisDlgWebPExport::KisDlgWebPExport(QWidget *parent)
 {
     setupUi(this);
 
+    // HACK ALERT!
+    // QScrollArea contents are opaque at multiple levels
+    // The contents themselves AND the viewport widget
+    {
+        scrollAreaWidgetContents->setAutoFillBackground(false);
+        scrollAreaWidgetContents->parentWidget()->setAutoFillBackground(false);
+    }
+
 #if WEBP_ENCODER_ABI_VERSION < 0x020f
     qMin->setEnabled(false);
     qMax->setEnabled(false);

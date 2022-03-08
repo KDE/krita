@@ -698,6 +698,7 @@ void KisAnimCurvesView::mouseReleaseEvent(QMouseEvent *e)
             const qreal valueOffset = m_d->verticalHeader->pixelsToValueOffset(offset.y());
 
             KisAnimCurvesModel *curvesModel = dynamic_cast<KisAnimCurvesModel*>(model());
+            KIS_SAFE_ASSERT_RECOVER_RETURN(curvesModel);
             curvesModel->adjustKeyframes(indices, timeOffset, valueOffset);
 
             //Adjust selection to match new keyframe adjustment.

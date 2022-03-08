@@ -114,23 +114,21 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
     iccProfileDirs.append(QDir::homePath() + "./share/color/icc");
 #endif
 
+    QStringList blackList = QStringList() << "panhexro.icm"
+                                          << "ctpctdmed.icc";
+
+
     Q_FOREACH(const QString &iccProfiledir, iccProfileDirs) {
         QDir profileDir(iccProfiledir);
-        Q_FOREACH(const QString &entry, profileDir.entryList(QStringList() << "*.icm" << "*.icc", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {
+        Q_FOREACH(const QString &entry, profileDir.entryList(QStringList() << "*.icm" << "*.icc" << "*.ICM" << "*.ICC", QDir::NoDotAndDotDot | QDir::Files | QDir::Readable)) {
+            if (blackList.contains(entry.toLower())) continue;
             profileFilenames << iccProfiledir + "/" + entry;
         }
     }
 
-    QStringList blackList = QStringList() << "panhexro.icm"
-                                          << "ctpctdmed.icc";
-
     // Load the profiles
     if (!profileFilenames.empty()) {
         for (QStringList::Iterator it = profileFilenames.begin(); it != profileFilenames.end(); ++it) {
-
-            if (blackList.contains((*it).toLower())) {
-                continue;
-            }
 
             KoColorProfile *profile = new IccColorProfile(*it);
             Q_CHECK_PTR(profile);
@@ -140,7 +138,7 @@ LcmsEnginePlugin::LcmsEnginePlugin(QObject *parent, const QVariantList &)
                 //qDebug() << "Valid profile : " << profile->fileName() << profile->name();
                 registry->addProfileToMap(profile);
             } else {
-                qDebug() << "Invalid profile : " << profile->fileName() << profile->name();
+                qDebug() << "Invalid profile : " << *it;
                 delete profile;
             }
         }

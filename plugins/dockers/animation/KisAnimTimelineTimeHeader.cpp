@@ -28,7 +28,9 @@
 struct KisAnimTimelineTimeHeader::Private
 {
     Private()
-        : fps(12)
+        : model(nullptr)
+        , actionMan(nullptr)
+        , fps(12)
         , lastPressSectionIndex(-1)
     {
         // Compressed configuration writing..
@@ -43,23 +45,21 @@ struct KisAnimTimelineTimeHeader::Private
                 );
     }
 
-    int fps;
-
-    KisTimeBasedItemModel *model;
-    int lastPressSectionIndex;
-
-    int calcSpanWidth(const int sectionWidth);
-    QModelIndexList prepareFramesSlab(int startCol, int endCol);
-
-    KisActionManager* actionMan = 0;
-
+    KisTimeBasedItemModel* model;
+    KisActionManager* actionMan;
     QScopedPointer<KisSignalCompressorWithParam<qreal>> zoomSaveCompressor;
+
+    int fps;
+    int lastPressSectionIndex;
 
     qreal offset = 0.0f;
     const int minSectionSize = 4;
     const int maxSectionSize = 72;
     const int unitSectionSize = 18;
     qreal remainder = 0.0f;
+
+    int calcSpanWidth(const int sectionWidth);
+    QModelIndexList prepareFramesSlab(int startCol, int endCol);
 };
 
 KisAnimTimelineTimeHeader::KisAnimTimelineTimeHeader(QWidget *parent)

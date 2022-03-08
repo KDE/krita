@@ -225,9 +225,13 @@ struct KisAnimCurvesDocker::Private
     Private(QWidget *parent)
         : titlebar(new KisAnimCurvesDockerTitlebar(parent))
         , curvesModel(new KisAnimCurvesModel(parent))
+        , curvesView(new KisAnimCurvesView(parent))
+        , channelTreeModel(new KisAnimCurvesChannelsModel(curvesModel, parent))
+        , channelTreeView(new QTreeView(parent))
+        , channelTreeMenuChannels(new QMenu(parent))
+        , channelTreeMenuLayers(new QMenu(parent))
         , mainWindow(nullptr)
     {
-        channelTreeModel = new KisAnimCurvesChannelsModel(curvesModel, parent);
     }
 
     KisAnimCurvesDockerTitlebar *titlebar;
@@ -258,7 +262,6 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
     mainWidget->layout()->addWidget(mainSplitter);
 
     {   // Channel Tree..
-        m_d->channelTreeView = new QTreeView(this);
         m_d->channelTreeView->setModel(m_d->channelTreeModel);
         m_d->channelTreeView->setHeaderHidden(true);
         KisAnimCurvesChannelDelegate *listDelegate = new KisAnimCurvesChannelDelegate(this);
@@ -268,9 +271,7 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
         m_d->channelTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(m_d->channelTreeView, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(requestChannelMenuAt(QPoint)));
 
-        m_d->channelTreeMenuChannels = new QMenu(this);
         m_d->channelTreeMenuChannels->addSection(i18n("Channel Operations"));
-        m_d->channelTreeMenuLayers = new QMenu(this);
         m_d->channelTreeMenuLayers->addSection(i18n("Layer Operations"));
 
         { //Channels Menu
@@ -287,7 +288,6 @@ KisAnimCurvesDocker::KisAnimCurvesDocker()
     }
 
     {   // Curves View..
-        m_d->curvesView = new KisAnimCurvesView(this);
         m_d->curvesView->setModel(m_d->curvesModel);
     }
 

@@ -185,10 +185,10 @@ void KisShortcutMatcher::addShortcut(KisNativeGestureShortcut *shortcut) {
 
 bool KisShortcutMatcher::supportsHiResInputEvents()
 {
-    return
-        m_d->runningShortcut &&
-        m_d->runningShortcut->action() &&
-        m_d->runningShortcut->action()->supportsHiResInputEvents(m_d->runningShortcut->shortcutIndex());
+    return (m_d->runningShortcut && m_d->runningShortcut->action()
+            && m_d->runningShortcut->action()->supportsHiResInputEvents(m_d->runningShortcut->shortcutIndex()))
+        || (m_d->touchShortcut && m_d->touchShortcut->action()
+            && m_d->touchShortcut->action()->supportsHiResInputEvents(m_d->touchShortcut->shortcutIndex()));
 }
 
 bool KisShortcutMatcher::keyPressed(Qt::Key key)
@@ -404,7 +404,7 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
         m_d->matchingIteration++;
         setMaxTouchPointEvent(event);
         DEBUG_TOUCH_ACTION("return best", event)
-        return true;
+        return matchTouchShortcut((QTouchEvent *)m_d->bestCandidateTouchEvent.data());
     }
 
     const int touchSlop = 10;

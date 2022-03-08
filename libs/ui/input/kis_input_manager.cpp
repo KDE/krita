@@ -687,9 +687,12 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             }
             else if (!d->touchStrokeStarted){
                 KisAbstractInputAction::setInputManager(this);
-
-                retval = d->matcher.touchUpdateEvent(touchEvent);
-                d->touchHasBlockedPressEvents = retval;
+                if (d->touchHasBlockedPressEvents) {
+                    retval = compressMoveEventCommon(touchEvent);
+                } else {
+                    retval = d->matcher.touchUpdateEvent(touchEvent);
+                    d->touchHasBlockedPressEvents = retval;
+                }
             }
 #ifdef Q_OS_MACOS
         }

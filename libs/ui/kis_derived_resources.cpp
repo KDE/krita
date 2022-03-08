@@ -12,6 +12,7 @@
 #include "kis_paintop_settings.h"
 #include "KisPaintOpPresetUpdateProxy.h"
 
+
 struct KisPresetUpdateMediator::Private
 {
     KisSignalAutoConnectionsStore connections;

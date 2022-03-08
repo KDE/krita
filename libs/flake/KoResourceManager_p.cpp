@@ -15,6 +15,7 @@
 #include "kis_assert.h"
 #include "kis_debug.h"
 
+
 void KoResourceManager::slotResourceInternalsChanged(int key)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_resources.contains(key));

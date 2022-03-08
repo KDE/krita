@@ -144,6 +144,8 @@ KisImportExportErrorCode KisAnimationImporter::import(QStringList files, int fir
         }
         importDoc->image()->projection()->purgeDefaultPixels();
 
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(layerRasterChannelPair.second, ImportExportCodes::InternalError);
+
         if (!autoAddHoldframes) {
             layerRasterChannelPair.second->importFrame(frame, importDoc->image()->projection(), NULL);    // as first frame added will go to second slot i.e #1 instead of #0
         } else {

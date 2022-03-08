@@ -392,3 +392,4 @@ if (UNIX AND NOT APPLE)
 endif()
 
 add_subdirectory(ext_webp)
+add_subdirectory(ext_jpegxl)

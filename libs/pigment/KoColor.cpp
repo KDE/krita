@@ -410,7 +410,12 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) co
     channelValues.fill(0.0);
     colorSpace()->normalisedChannelsValue(data(), channelValues);
 
-    bool sRGB = (colorSpace()->profile()->uniqueId() == KoColorSpaceRegistry::instance()->p709SRGBProfile()->uniqueId());
+    bool sRGB = false;
+    if (colorSpace() && colorSpace()->profile()
+            && colorSpace()->profile()->getColorPrimaries() == ColorPrimaries::PRIMARIES_ITU_R_BT_709_5
+            && colorSpace()->profile()->getTransferCharacteristics() != TransferCharacteristics::TRC_LINEAR) {
+        sRGB = true;
+    }
 
     // We don't write a icc-color definition for XYZ and 8bit sRGB.
     if (!(sRGB && colorSpace()->colorDepthId() == Integer8BitsColorDepthID) &&
@@ -438,7 +443,8 @@ QString KoColor::toSVG11(QHash<QString, const KoColorProfile *> *profileList) co
             iccColor.append(lab.attribute("L", "0.0"));
             iccColor.append(lab.attribute("a", "0.0"));
             iccColor.append(lab.attribute("b", "0.0"));
-        } else {
+        }
+        else {
             for (int i = 0; i < channelValues.size(); i++) {
                 int location = KoChannelInfo::displayPositionToChannelIndex(i, colorSpace()->channels());
                 if (i != int(colorSpace()->alphaPos())) {

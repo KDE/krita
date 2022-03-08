@@ -160,7 +160,7 @@ void KisToolFreehandHelper::slotEraserSmoothingTypeChanged(int key, const QVaria
 void KisToolFreehandHelper::setEraserSmoothing()
 {
     bool use_eraser_stabilizer = m_d->resourceManager->resource(KoCanvasResource::EraserMode).value<bool>() && m_d->eraserSmoothingOptions->active();
-    auto oldSmoothing = m_d->smoothingOptions;
+    KisSmoothingOptionsSP oldSmoothing = m_d->smoothingOptions;
 
     if(!use_eraser_stabilizer) {
         m_d->smoothingOptions = m_d->normalSmoothingOptions;

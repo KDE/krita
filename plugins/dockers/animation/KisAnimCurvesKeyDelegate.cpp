@@ -22,7 +22,9 @@ struct KisAnimCurvesKeyDelegate::Private
     Private(const KisAnimTimelineTimeHeader *horizontalRuler, const KisAnimCurvesValuesHeader *verticalRuler)
         : horizontalRuler(horizontalRuler)
         , verticalRuler(verticalRuler)
+        , adjustedHandle(-1)
     {}
+
     const KisAnimTimelineTimeHeader *horizontalRuler;
     const KisAnimCurvesValuesHeader *verticalRuler;
     QPointF selectionOffset;

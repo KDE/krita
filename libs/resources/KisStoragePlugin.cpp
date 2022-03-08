@@ -89,7 +89,6 @@ QString KisStoragePlugin::location() const
 void KisStoragePlugin::sanitizeResourceFileNameCase(KoResourceSP resource, const QDir &parentDir)
 {
     const QStringList result = parentDir.entryList({resource->filename()});
-    KIS_SAFE_ASSERT_RECOVER_NOOP(result.size() == 1);
 
     if (result.size() == 1) {
         const QString realName = result.first();

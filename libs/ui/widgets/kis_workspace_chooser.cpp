@@ -154,15 +154,15 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         workspace->setImage(m_view->mainWindow()->layoutThumbnail());
         workspace->setValid(true);
         workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
+        m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
         KisResourceUserOperations::addResourceWithUserInput(this, workspace);
     }
     else {
         workspace->setDockerState(m_view->qtMainWindow()->saveState());
         workspace->setImage(m_view->mainWindow()->layoutThumbnail());
+        m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
         KisResourceUserOperations::updateResourceWithUserInput(this, workspace);
     }
-
-    m_view->canvasResourceProvider()->notifySavingWorkspace(workspace);
 
     slotUpdateWorkspaceSaveButton();
 }

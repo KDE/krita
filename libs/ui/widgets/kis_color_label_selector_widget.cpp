@@ -62,10 +62,14 @@ KisColorLabelSelectorWidget::KisColorLabelSelectorWidget(QWidget *parent)
 
         m_d->colorButtonGroup->setViableLabels(viableColors);
 
-        connect(m_d->colorButtonGroup, &QButtonGroup::idToggled,
-            [this](int index, bool state)
+        connect(m_d->colorButtonGroup, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
+            [this](QAbstractButton *button, bool state)
             {
+                const int index = m_d->colorButtonGroup->id(button);
                 emit buttonToggled(index, state);
+                if (!state) {
+                    return;
+                }
                 if (m_d->colorButtonGroup->exclusive()) {
                     emit currentIndexChanged(index);
                 } else {

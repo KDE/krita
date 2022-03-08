@@ -25,15 +25,16 @@
 struct KisImageAnimationInterface::Private
 {
     Private()
-        : image(0),
-          externalFrameActive(false),
-          frameInvalidationBlocked(false),
-          cachedLastFrameValue(-1),
-          audioChannelMuted(false),
-          audioChannelVolume(0.5),
-          exportInitialFrameNumber(-1),
-          m_currentTime(0),
-          m_currentUITime(0)
+        : image(0)
+        , externalFrameActive(false)
+        , frameInvalidationBlocked(false)
+        , framerate(24)
+        , cachedLastFrameValue(-1)
+        , audioChannelMuted(false)
+        , audioChannelVolume(0.5)
+        , exportInitialFrameNumber(-1)
+        , m_currentTime(0)
+        , m_currentUITime(0)
     {
     }
 

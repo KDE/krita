@@ -58,6 +58,24 @@ struct KisAnimTimelineFramesView::Private
 {
     Private(KisAnimTimelineFramesView *_q)
         : q(_q)
+        , model(nullptr)
+        , horizontalRuler(nullptr)
+        , layersHeader(nullptr)
+        , addLayersButton(nullptr)
+        , pinLayerToTimelineAction(nullptr)
+        , audioOptionsButton(nullptr)
+        , colorSelector(nullptr)
+        , colorSelectorAction(nullptr)
+        , multiframeColorSelector(nullptr)
+        , multiframeColorSelectorAction(nullptr)
+        , audioOptionsMenu(nullptr)
+        , openAudioAction(nullptr)
+        , audioMuteAction(nullptr)
+        , volumeSlider(nullptr)
+        , layerEditingMenu(nullptr)
+        , existingLayersMenu(nullptr)
+        , insertKeyframeDialog(nullptr)
+        , zoomDragButton(nullptr)
         , fps(1)
         , dragInProgress(false)
         , dragWasSuccessful(false)
@@ -74,31 +92,29 @@ struct KisAnimTimelineFramesView::Private
     KisAnimTimelineTimeHeader *horizontalRuler;
     KisAnimTimelineLayersHeader *layersHeader;
 
+    QToolButton* addLayersButton;
+    KisAction* pinLayerToTimelineAction;
+
+    QToolButton* audioOptionsButton;
+
+    KisColorLabelSelectorWidgetMenuWrapper* colorSelector;
+    QWidgetAction* colorSelectorAction;
+    KisColorLabelSelectorWidgetMenuWrapper* multiframeColorSelector;
+    QWidgetAction* multiframeColorSelectorAction;
+
+    QMenu* audioOptionsMenu;
+    QAction* openAudioAction;
+    QAction* audioMuteAction;
+    KisSliderSpinBox* volumeSlider;
+
+    QMenu* layerEditingMenu;
+    QMenu* existingLayersMenu;
+    TimelineInsertKeyframeDialog* insertKeyframeDialog;
+    KisZoomButton* zoomDragButton;
+
     int fps;
     QPoint initialDragPanValue;
     QPoint initialDragPanPos;
-
-    QToolButton *addLayersButton;
-    KisAction *pinLayerToTimelineAction;
-
-    QToolButton *audioOptionsButton;
-
-    KisColorLabelSelectorWidgetMenuWrapper *colorSelector;
-    QWidgetAction *colorSelectorAction;
-    KisColorLabelSelectorWidgetMenuWrapper *multiframeColorSelector;
-    QWidgetAction *multiframeColorSelectorAction;
-
-    QMenu *audioOptionsMenu;
-    QAction *openAudioAction;
-    QAction *audioMuteAction;
-    KisSliderSpinBox *volumeSlider;
-
-    QMenu *layerEditingMenu;
-    QMenu *existingLayersMenu;
-
-    TimelineInsertKeyframeDialog *insertKeyframeDialog;
-
-    KisZoomButton *zoomDragButton;
 
     bool dragInProgress;
     bool dragWasSuccessful;
@@ -212,7 +228,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
 #endif
 
-    m_d->openAudioAction= new QAction("XXX", this);
+    m_d->openAudioAction = new QAction("XXX", this);
     connect(m_d->openAudioAction, SIGNAL(triggered()), this, SLOT(slotSelectAudioChannelFile()));
     m_d->audioOptionsMenu->addAction(m_d->openAudioAction);
 
@@ -244,7 +260,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     /********** Frame Editing Context Menu ***********************************************/
 
     m_d->colorSelector = new KisColorLabelSelectorWidgetMenuWrapper(this);
-    MouseClickIgnore* clickIgnore = new MouseClickIgnore(this);
+    MouseClickIgnore* clickIgnore = new MouseClickIgnore(m_d->colorSelector);
     m_d->colorSelector->installEventFilter(clickIgnore);
     m_d->colorSelectorAction = new QWidgetAction(this);
     m_d->colorSelectorAction->setDefaultWidget(m_d->colorSelector);
@@ -319,7 +335,8 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
 }
 
 KisAnimTimelineFramesView::~KisAnimTimelineFramesView()
-{}
+{
+}
 
 void KisAnimTimelineFramesView::setModel(QAbstractItemModel *model)
 {

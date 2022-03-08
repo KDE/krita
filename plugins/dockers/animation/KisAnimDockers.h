@@ -18,8 +18,6 @@ class AnimationDockersPlugin : public QObject
     public:
         AnimationDockersPlugin(QObject *parent, const QVariantList &);
         ~AnimationDockersPlugin() override;
-    private:
-        KisViewManager* m_view;
 };
 
 #endif

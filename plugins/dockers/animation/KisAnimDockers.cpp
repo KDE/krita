@@ -121,7 +121,6 @@ AnimationDockersPlugin::AnimationDockersPlugin(QObject *parent, const QVariantLi
 
 AnimationDockersPlugin::~AnimationDockersPlugin()
 {
-    m_view = 0;
 }
 
 #include "KisAnimDockers.moc"

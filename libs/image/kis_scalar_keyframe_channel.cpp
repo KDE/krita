@@ -255,7 +255,12 @@ qreal KisScalarKeyframeChannel::valueAt(int time) const
                     const int nextKeyTime = nextKeyframeTime(time);
                     const qreal activeKeyValue = activeKey->value();
                     const qreal nextKeyValue = keyframeAt<KisScalarKeyframe>(nextKeyTime)->value();
-                    result = activeKeyValue + (nextKeyValue - activeKeyValue) * (time - activeKeyTime) / (nextKeyTime - activeKeyTime);
+                    const int interpolationLength = (nextKeyTime - activeKeyTime);
+                    if (interpolationLength > 0) {
+                        result = activeKeyValue + (nextKeyValue - activeKeyValue) * (time - activeKeyTime) / (interpolationLength);
+                    } else {
+                        result = activeKeyValue;
+                    }
                     break;
                 }
             case KisScalarKeyframe::Bezier: {

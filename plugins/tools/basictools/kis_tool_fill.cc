@@ -613,7 +613,7 @@ void KisToolFill::loadConfiguration()
         }
     }
     {
-        const QStringList colorLabelsStr = m_configGroup.readEntry<QString>("colorLabels", "").split(',', Qt::SkipEmptyParts);
+        const QStringList colorLabelsStr = m_configGroup.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
         m_selectedColorLabels.clear();
         for (const QString &colorLabelStr : colorLabelsStr) {
             bool ok;

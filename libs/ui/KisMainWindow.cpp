@@ -2465,20 +2465,17 @@ void KisMainWindow::updateWindowMenu()
             return;
         }
 
-        auto rserver = KisResourceServerProvider::instance()->workspaceServer();
-
         KisWorkspaceResourceSP workspace(new KisWorkspaceResource(""));
         workspace->setDockerState(m_this->saveState());
+        workspace->setImage(layoutThumbnail());
+        workspace->setValid(true);
 
         // this line must happen before we save the workspace to resource folder or other places
         // because it mostly just triggers palettes to be saved into the workspace
         d->viewManager->canvasResourceProvider()->notifySavingWorkspace(workspace);
         workspace->setValid(true);
-        QString saveLocation = rserver->saveLocation();
 
-        QFileInfo fileInfo(saveLocation + "/" + name + workspace->defaultFileExtension());
-
-        workspace->setFilename(fileInfo.fileName());
+        workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
         workspace->setName(name);
 
         KisResourceUserOperations::addResourceWithUserInput(this, workspace);

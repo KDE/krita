@@ -137,7 +137,9 @@ void KisAnimCurvesChannelDelegate::paintNodeBackground(const QStyleOptionViewIte
     QPalette::ColorGroup cg = hasValidStyle ? QPalette::Normal : QPalette::Disabled;
 
     QRect viewArea = styleOption.rect;
-    viewArea.setLeft(styleOption.widget->rect().left());
+    const QWidget* const widget = styleOption.widget;
+    KIS_ASSERT(widget);
+    viewArea.setLeft(widget->rect().left());
 
     { // Highlight, Shadow and Selection Color
         const QColor highlight = nodeColor.lighter(115);
@@ -146,7 +148,7 @@ void KisAnimCurvesChannelDelegate::paintNodeBackground(const QStyleOptionViewIte
         painter->fillRect(viewArea.adjusted(0,6,0,0), shadow);
 
         if ( (styleOption.state & QStyle::State_Selected)
-              && styleOption.widget->style()->proxy()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, &styleOption, styleOption.widget)) {
+              && widget->style()->proxy()->styleHint(QStyle::SH_ItemView_ShowDecorationSelected, &styleOption, widget)) {
             painter->fillRect(viewArea, styleOption.palette.brush(cg, QPalette::Highlight));
         }
     }

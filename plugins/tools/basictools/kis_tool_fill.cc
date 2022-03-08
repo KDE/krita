@@ -551,6 +551,7 @@ QWidget* KisToolFill::createOptionWidget()
     if (m_continuousFillMode == FillSimilarRegions) {
         m_buttonMultipleFillSimilar->setChecked(true);
     }
+    m_widgetLabels->setSelection(m_selectedColorLabels);
 
     // Make connections
     connect(m_buttonWhatToFillSelection->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupWhatToFill_idToggled(int, bool)));
@@ -768,7 +769,7 @@ void KisToolFill::slot_widgetLabels_selectionChanged()
     }
     QString colorLabels = QString::number(labels.first());
     for (int i = 1; i < labels.size(); ++i) {
-        colorLabels += "," + labels[i];
+        colorLabels += "," + QString::number(labels[i]);
     }
     m_configGroup.writeEntry("colorLabels", colorLabels);
 }

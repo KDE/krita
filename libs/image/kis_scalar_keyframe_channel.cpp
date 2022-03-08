@@ -186,12 +186,13 @@ KisScalarKeyframeChannel::KisScalarKeyframeChannel(const KisScalarKeyframeChanne
         KisKeyframeChannel::copyKeyframe(&rhs, time, this, time);
     }
 
-    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, [](const KisKeyframeChannel *channel, int time) {
-        const KisScalarKeyframeChannel* chan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
-        chan->sigChannelUpdated(
-                    chan->affectedFrames(time),
-                    chan->affectedRect(time)
-                    );
+    connect(this, &KisScalarKeyframeChannel::sigKeyframeChanged, this, [](const KisKeyframeChannel *channel, int time) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(channel);
+        const KisScalarKeyframeChannel* scalarChan = dynamic_cast<const KisScalarKeyframeChannel*>(channel);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(scalarChan);
+        scalarChan->sigChannelUpdated(
+                    scalarChan->affectedFrames(time),
+                    scalarChan->affectedRect(time) );
     });
 }
 

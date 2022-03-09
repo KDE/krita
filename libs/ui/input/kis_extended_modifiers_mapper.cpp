@@ -71,8 +71,8 @@ QVector<Qt::Key> queryPressedKeysWin()
 struct KeyMapping {
     KeyMapping() {}
     KeyMapping(KeySym sym, Qt::Key key) : x11KeySym(sym), qtKey(key) {}
-    KeySym x11KeySym;
-    Qt::Key qtKey;
+    KeySym x11KeySym {0};
+    Qt::Key qtKey {Qt::Key_unknown};
 };
 
 #endif /* HAVE_X11 */

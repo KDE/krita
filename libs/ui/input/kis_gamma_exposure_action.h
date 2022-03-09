@@ -37,14 +37,14 @@ public:
     void activate(int shortcut) override;
     void deactivate(int shortcut) override;
 
-    void begin(int shortcut, QEvent *event = 0) override;
+    void begin(int shortcut, QEvent *event = nullptr) override;
     void cursorMovedAbsolute(const QPointF &lastPos, const QPointF &pos) override;
 
     bool isShortcutRequired(int shortcut) const override;
 
 private:
     class Private;
-    Private * const d;
+    Private * const d {nullptr};
 };
 
 #endif /* __KIS_GAMMA_EXPOSURE_ACTION_H */

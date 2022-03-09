@@ -44,14 +44,15 @@ public:
 
     QPointF centerPoint(QTouchEvent* event);
 
-    KisZoomAction *q;
-    Shortcuts mode;
+    KisZoomAction *q {nullptr};
+    // Coverity requires sane defaults for all variables (CID 36380)
+    Shortcuts mode {ZoomModeShortcut};
 
     QPointF lastPosition;
-    float lastDistance;
+    float lastDistance {0.0};
 
-    qreal startZoom = 1.0;
-    qreal lastDescreteZoomDistance = 0.0;
+    qreal startZoom {1.0};
+    qreal lastDescreteZoomDistance {0.0};
 
     void zoomTo(bool zoomIn, const QPoint &pos);
 };

@@ -51,7 +51,7 @@ public:
 
 private:
     class Private;
-    Private * const d;
+    Private * const d {nullptr};
 };
 
 #endif // KIS_ZOOM_ACTION_H

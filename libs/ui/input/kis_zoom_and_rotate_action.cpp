@@ -22,8 +22,8 @@ public:
     Private() {}
 
     QPointF lastPosition;
-    float lastDistance;
-    qreal previousAngle;
+    float lastDistance {0.0};
+    qreal previousAngle {0.0};
 };
 
 KisZoomAndRotateAction::KisZoomAndRotateAction()

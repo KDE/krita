@@ -14,7 +14,8 @@ class KisNativeGestureShortcut::Private
 public:
 	Private() { }
 
-	Qt::NativeGestureType type;
+    // Coverity requires sane defaults for every variable (CID 248365)
+    Qt::NativeGestureType type {Qt::PanNativeGesture};
 };
 
 KisNativeGestureShortcut::KisNativeGestureShortcut(KisAbstractInputAction* action, int index, Qt::NativeGestureType type)

@@ -22,12 +22,13 @@ class KisRotateCanvasAction::Private
 public:
     Private() : previousAngle(0) {}
 
-    Shortcut mode;
+    // Coverity requires sane defaults for all variables (CID 36429)
+    Shortcut mode {RotateModeShortcut};
 
-    qreal previousAngle;
-    qreal startRotation;
-    qreal previousRotation;
-    bool updatedRotation;
+    qreal previousAngle {0.0};
+    qreal startRotation {0.0};
+    qreal previousRotation {0.0};
+    bool updatedRotation {false};
 };
 
 

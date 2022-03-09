@@ -21,13 +21,15 @@
 class KisGammaExposureAction::Private
 {
 public:
-    Private(KisGammaExposureAction *qq) : q(qq), baseExposure(0.0), baseGamma(0.0) {}
+    Private(KisGammaExposureAction *qq) : q(qq) {}
 
-    KisGammaExposureAction *q;
-    Shortcuts mode;
+    // Coverity requires sane defaults for all variables (CID 248819)
+    KisGammaExposureAction *q {nullptr};
 
-    qreal baseExposure;
-    qreal baseGamma;
+    Shortcuts mode {ExposureShortcut};
+
+    qreal baseExposure {0.0};
+    qreal baseGamma {0.0};
 
     void addExposure(qreal diff);
     void addGamma(qreal diff);

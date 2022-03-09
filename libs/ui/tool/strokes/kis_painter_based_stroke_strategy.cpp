@@ -184,7 +184,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
     Q_FOREACH (KisFreehandStrokeInfo *info, m_strokeInfos) {
         KisPainter *painter = info->painter;
 
-        painter->begin(targetDevice, !hasIndirectPainting ? selection : 0);
+        painter->begin(targetDevice, !hasIndirectPainting ? selection : nullptr);
         painter->setRunnableStrokeJobsInterface(runnableJobsInterface());
         m_resources->setupPainter(painter);
 
@@ -202,7 +202,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
 
             KisPainter *painter = maskingInfo->painter;
 
-            painter->begin(maskingDevice, 0);
+            painter->begin(maskingDevice, nullptr);
             m_resources->setupMaskingBrushPainter(painter);
 
             KIS_SAFE_ASSERT_RECOVER_NOOP(hasIndirectPainting);
@@ -214,7 +214,7 @@ void KisPainterBasedStrokeStrategy::initPainters(KisPaintDeviceSP targetDevice,
         m_maskedPainters.append(
             new KisMaskedFreehandStrokePainter(m_strokeInfos[i],
                                                !m_maskStrokeInfos.isEmpty() ?
-                                                   m_maskStrokeInfos[i] : 0));
+                                                   m_maskStrokeInfos[i] : nullptr));
     }
 }
 
@@ -286,7 +286,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                           supportsContinuedInterstrokeData()));
     }
 
-    m_transaction.reset(new KisTransaction(name(), targetDevice, 0,
+    m_transaction.reset(new KisTransaction(name(), targetDevice, nullptr,
                                            m_useMergeID ? timedID(this->id()) : -1,
                                            wrapper.take()));
 
@@ -310,7 +310,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                      indirectCompositeOp);
 
     } else {
-        initPainters(targetDevice, 0, selection, hasIndirectPainting, indirectCompositeOp);
+        initPainters(targetDevice, nullptr, selection, hasIndirectPainting, indirectCompositeOp);
     }
 
     m_targetDevice = targetDevice;
@@ -387,7 +387,7 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
             deletePainters();
 
             KisRegion region = t->region();
-            indirect->setTemporaryTarget(0);
+            indirect->setTemporaryTarget(nullptr);
             node->setDirty(region);
             revert = false;
         }
@@ -408,7 +408,7 @@ void KisPainterBasedStrokeStrategy::suspendStrokeCallback()
 
     if(indirect && indirect->hasTemporaryTarget()) {
         m_finalMergeSuspender = indirect->trySuspendFinalMerge();
-        indirect->setTemporaryTarget(0);
+        indirect->setTemporaryTarget(nullptr);
     }
 }
 
@@ -443,7 +443,7 @@ KisNodeSP KisPainterBasedStrokeStrategy::targetNode() const
 KisPainterBasedStrokeStrategy::FakeUndoData::FakeUndoData()
 {
     undoStore.reset(new KisDumbUndoStore());
-    undoAdapter.reset(new KisPostExecutionUndoAdapter(undoStore.data(), 0));
+    undoAdapter.reset(new KisPostExecutionUndoAdapter(undoStore.data(), nullptr));
 }
 
 KisPainterBasedStrokeStrategy::FakeUndoData::~FakeUndoData()

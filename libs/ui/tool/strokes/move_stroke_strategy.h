@@ -98,11 +98,11 @@ private:
     KisNodeList m_nodes;
     QSharedPointer<KisNodeList> m_sharedNodes;
     QSet<KisNodeSP> m_blacklistedNodes;
-    KisUpdatesFacade *m_updatesFacade;
+    KisUpdatesFacade *m_updatesFacade {nullptr};
     QPoint m_finalOffset;
     QRect m_dirtyRect;
     QHash<KisNodeSP, QRect> m_dirtyRects;
-    bool m_updatesEnabled;
+    bool m_updatesEnabled {true};
     QHash<KisNodeSP, QPoint> m_initialNodeOffsets;
 
     struct TransformMaskData {
@@ -111,11 +111,11 @@ private:
     };
 
     std::unordered_map<KisNodeSP, TransformMaskData> m_transformMaskData;
-    KUndo2Command* keyframeCommand;
+    KUndo2Command* keyframeCommand {nullptr};
 
     QElapsedTimer m_updateTimer;
-    bool m_hasPostponedJob = false;
-    const int m_updateInterval = 30;
+    bool m_hasPostponedJob {false};
+    const int m_updateInterval {30};
 };
 
 #endif /* __MOVE_STROKE_STRATEGY_H */

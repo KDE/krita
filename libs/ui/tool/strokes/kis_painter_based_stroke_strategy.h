@@ -126,11 +126,11 @@ private:
 
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
-    bool m_useMergeID;
+    bool m_useMergeID {false};
 
-    bool m_supportsMaskingBrush;
-    bool m_supportsIndirectPainting;
-    bool m_supportsContinuedInterstrokeData;
+    bool m_supportsMaskingBrush {false};
+    bool m_supportsIndirectPainting {false};
+    bool m_supportsContinuedInterstrokeData {false};
 
     KisIndirectPaintingSupport::FinalMergeSuspenderSP m_finalMergeSuspender;
 

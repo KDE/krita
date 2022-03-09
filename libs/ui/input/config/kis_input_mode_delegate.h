@@ -18,7 +18,7 @@ class KisInputModeDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit KisInputModeDelegate(QObject *parent = 0);
+    explicit KisInputModeDelegate(QObject *parent = nullptr);
     ~KisInputModeDelegate() override;
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &, const QModelIndex &) const override;
@@ -30,7 +30,7 @@ public:
 
 private:
     class Private;
-    Private *const d;
+    Private *const d {nullptr};
 };
 
 #endif // KISINPUTMODEDELEGATE_H

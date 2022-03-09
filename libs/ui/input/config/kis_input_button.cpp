@@ -19,19 +19,19 @@
 class KisInputButton::Private
 {
 public:
-    Private(KisInputButton *qq) : q(qq), type(KeyType), newInput(false), resetTimer(0) { }
+    Private(KisInputButton *qq) : q(qq), type(KeyType), newInput(false), resetTimer(nullptr) { }
     void updateLabel();
 
-    KisInputButton *q;
+    KisInputButton *q {nullptr};
 
     ButtonType type;
 
     QList<Qt::Key> keys;
     Qt::MouseButtons buttons;
     KisShortcutConfiguration::MouseWheelMovement wheel;
-    bool newInput;
+    bool newInput {false};
 
-    QTimer *resetTimer;
+    QTimer *resetTimer {nullptr};
 };
 
 KisInputButton::KisInputButton(QWidget *parent)

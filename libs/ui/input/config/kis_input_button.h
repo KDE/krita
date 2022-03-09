@@ -36,7 +36,7 @@ public:
     /**
      * Constructor.
      */
-    explicit KisInputButton(QWidget *parent = 0);
+    explicit KisInputButton(QWidget *parent = nullptr);
     /**
      * Destructor.
      */
@@ -125,7 +125,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private *const d;
+    Private *const d {nullptr};
 };
 
 #endif // KISINPUTBUTTON_H

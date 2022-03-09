@@ -16,7 +16,7 @@ class KisInputModeDelegate::Private
 public:
     Private() { }
 
-    KisAbstractInputAction *action;
+    KisAbstractInputAction *action {nullptr};
 };
 
 KisInputModeDelegate::KisInputModeDelegate(QObject *parent)

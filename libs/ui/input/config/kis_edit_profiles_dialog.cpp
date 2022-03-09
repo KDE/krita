@@ -23,8 +23,8 @@ class KisEditProfilesDialog::Private
 public:
     Private() { }
 
-    Ui::KisEditProfilesDialog *ui;
-    KisInputProfileModel *profileModel;
+    Ui::KisEditProfilesDialog *ui {nullptr};
+    KisInputProfileModel *profileModel {nullptr};
 };
 
 KisEditProfilesDialog::KisEditProfilesDialog(QWidget *parent, Qt::WindowFlags flags)

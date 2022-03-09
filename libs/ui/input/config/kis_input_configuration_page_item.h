@@ -27,7 +27,7 @@ class KisInputConfigurationPageItem : public QWidget
 {
     Q_OBJECT
 public:
-    KisInputConfigurationPageItem(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    KisInputConfigurationPageItem(QWidget *parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
     ~KisInputConfigurationPageItem() override;
 
     void setAction(KisAbstractInputAction *action);
@@ -39,9 +39,9 @@ private Q_SLOTS:
     void deleteShortcut();
 
 private:
-    Ui::KisInputConfigurationPageItem *ui;
-    KisAbstractInputAction *m_action;
-    KisActionShortcutsModel *m_shortcutsModel;
+    Ui::KisInputConfigurationPageItem *ui {nullptr};
+    KisAbstractInputAction *m_action {nullptr};
+    KisActionShortcutsModel *m_shortcutsModel {nullptr};
 };
 
 #endif // KISINPUTCONFIGURATIONPAGEITEM_H

@@ -22,7 +22,7 @@ class KisKeyInputEditor : public QPushButton
 {
     Q_OBJECT
 public:
-    KisKeyInputEditor(QWidget *parent = 0);
+    KisKeyInputEditor(QWidget *parent = nullptr);
     ~KisKeyInputEditor() override;
 
     QList<Qt::Key> keys() const;
@@ -36,7 +36,7 @@ private Q_SLOTS:
 
 private:
     class Private;
-    Private *const d;
+    Private *const d {nullptr};
 };
 
 #endif // KISKEYINPUTEDITOR_H

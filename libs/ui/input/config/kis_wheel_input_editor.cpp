@@ -19,7 +19,7 @@ class KisWheelInputEditor::Private
 public:
     Private() { }
 
-    Ui::KisWheelInputEditor *ui;
+    Ui::KisWheelInputEditor *ui {nullptr};
 };
 
 KisWheelInputEditor::KisWheelInputEditor(QWidget *parent)

@@ -20,7 +20,7 @@ class KisKeyInputEditor::Private
 public:
     Private() { }
 
-    Ui::KisKeyInputEditor *ui;
+    Ui::KisKeyInputEditor *ui {nullptr};
 };
 
 KisKeyInputEditor::KisKeyInputEditor(QWidget *parent)

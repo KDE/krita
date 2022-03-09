@@ -20,7 +20,7 @@ class KisMouseInputEditor::Private
 public:
     Private() { }
 
-    Ui::KisMouseInputEditor *ui;
+    Ui::KisMouseInputEditor *ui {nullptr};
 };
 
 KisMouseInputEditor::KisMouseInputEditor(QWidget *parent)

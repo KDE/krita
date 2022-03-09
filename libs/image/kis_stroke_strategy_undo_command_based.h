@@ -68,6 +68,8 @@ public:
         {
         }
 
+        ~Data() override;
+
         KUndo2CommandSP command;
         bool undo;
         bool shouldGoToHistory = true;

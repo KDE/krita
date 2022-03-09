@@ -12,6 +12,11 @@
 #include "commands_new/kis_saved_commands.h"
 
 
+KisStrokeStrategyUndoCommandBased::Data::~Data()
+{
+    // acts as a key function
+}
+
 KisStrokeStrategyUndoCommandBased::
 KisStrokeStrategyUndoCommandBased(const KUndo2MagicString &name,
                                   bool undo,

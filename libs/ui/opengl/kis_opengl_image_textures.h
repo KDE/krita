@@ -189,7 +189,7 @@ private:
 private:
     KisImageWSP m_image;
     QRect m_storedImageBounds;
-    const KoColorProfile *m_monitorProfile;
+    const KoColorProfile *m_monitorProfile {nullptr};
     KoColorConversionTransformation::Intent m_renderingIntent;
     KoColorConversionTransformation::ConversionFlags m_conversionFlags;
 
@@ -199,12 +199,12 @@ private:
      * space will not be supported (non-RGB), then it will be enabled anyway.
      * And this valiable will hold the real state of affairs!
      */
-    bool m_internalColorManagementActive;
+    bool m_internalColorManagementActive {true};
 
     boost::optional<GLuint> m_checkerTexture;
 
     KisGLTexturesInfo m_texturesInfo;
-    int m_numCols;
+    int m_numCols {0};
 
     // buffers are used by texture tiles, so they must come first
     KisOpenGLBufferCircularStorage m_bufferStorage;
@@ -212,10 +212,10 @@ private:
     QOpenGLBuffer m_tileVertexBuffer;
     QOpenGLBuffer m_tileTexCoordBuffer;
 
-    QOpenGLFunctions *m_glFuncs;
+    QOpenGLFunctions *m_glFuncs {nullptr};
 
-    bool m_useOcio;
-    bool m_initialized;
+    bool m_useOcio {false};
+    bool m_initialized {false};
 
     KisOpenGLUpdateInfoBuilder m_updateInfoBuilder;
 

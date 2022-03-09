@@ -103,7 +103,7 @@ public:
 private:
     Q_DISABLE_COPY(DataBuffer)
 
-    quint8 *m_data;
+    quint8 *m_data {nullptr};
     int m_pixelSize;
     KisTextureTileInfoPoolSP m_pool;
 };
@@ -309,17 +309,17 @@ private:
     Q_DISABLE_COPY(KisTextureTileUpdateInfo)
 
 private:
-    qint32 m_tileCol;
-    qint32 m_tileRow;
+    qint32 m_tileCol {0};
+    qint32 m_tileRow {0};
     QRect m_currentImageRect;
     QRect m_tileRect;
     QRect m_patchRect;
-    const KoColorSpace* m_patchColorSpace;
+    const KoColorSpace* m_patchColorSpace {nullptr};
 
     QRect m_realPatchRect;
     QRect m_realPatchOffset;
     QRect m_realTileSize;
-    int m_patchLevelOfDetail;
+    int m_patchLevelOfDetail {0};
 
     QRect m_originalPatchRect;
     QRect m_originalTileRect;

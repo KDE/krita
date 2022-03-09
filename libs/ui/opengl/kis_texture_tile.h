@@ -21,28 +21,20 @@ class QOpenGLBuffer;
 
 struct KisGLTexturesInfo {
 
-    KisGLTexturesInfo()
-        : width(0)
-        , height(0)
-        , effectiveWidth(1)
-        , effectiveHeight(1)
-        , border(0)
-    {}
-
     // real width and height
-    int width;
-    int height;
+    int width {0};
+    int height {0};
 
     // width and height minus border padding?
-    int effectiveWidth;
-    int effectiveHeight;
+    int effectiveWidth {1};
+    int effectiveHeight {1};
 
     // size of the border padding
-    int border;
+    int border {0};
 
-    GLint internalFormat;
-    GLint format;
-    GLint type;
+    GLint internalFormat {0};
+    GLint format {0};
+    GLint type {0};
 };
 
 class KisTextureTile

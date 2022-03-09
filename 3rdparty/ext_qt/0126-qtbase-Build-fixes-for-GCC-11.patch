@@ -1,0 +1,59 @@
+From 8bcf1828f4d75606fb8d6913dfe09e2363a06cac Mon Sep 17 00:00:00 2001
+From: Ville Voutilainen <ville.voutilainen@qt.io>
+Date: Mon, 18 Jan 2021 09:58:17 +0200
+Subject: [PATCH] Build fixes for GCC 11
+
+Task-number: QTBUG-89977
+Change-Id: Ic1b7ddbffb8a0a00f8c621d09a868f1d94a52c21
+Reviewed-by: Lars Knoll <lars.knoll@qt.io>
+Reviewed-by: Thiago Macieira <thiago.macieira@intel.com>
+(cherry picked from commit 813a928c7c3cf98670b6043149880ed5c955efb9)
+---
+ src/corelib/tools/qbytearraymatcher.h    | 2 ++
+ src/corelib/tools/qsharedpointer_impl.h  | 3 ---
+ src/plugins/platforms/xcb/qxcbwindow.cpp | 2 +-
+ 3 files changed, 3 insertions(+), 4 deletions(-)
+
+diff --git a/src/corelib/tools/qbytearraymatcher.h b/src/corelib/tools/qbytearraymatcher.h
+index 0eedfc1d20..f5f9bef7b8 100644
+--- a/src/corelib/tools/qbytearraymatcher.h
++++ b/src/corelib/tools/qbytearraymatcher.h
+@@ -42,6 +42,8 @@
+ 
+ #include <QtCore/qbytearray.h>
+ 
++#include <limits>
++
+ QT_BEGIN_NAMESPACE
+ 
+ 
+diff --git a/src/corelib/tools/qsharedpointer_impl.h b/src/corelib/tools/qsharedpointer_impl.h
+index 790c187cb9..4aee98af53 100644
+--- a/src/corelib/tools/qsharedpointer_impl.h
++++ b/src/corelib/tools/qsharedpointer_impl.h
+@@ -155,9 +155,6 @@ namespace QtSharedPointer {
+ #endif
+         inline void checkQObjectShared(...) { }
+         inline void setQObjectShared(...) { }
+-
+-        inline void operator delete(void *ptr) { ::operator delete(ptr); }
+-        inline void operator delete(void *, void *) { }
+     };
+     // sizeof(ExternalRefCountData) = 12 (32-bit) / 16 (64-bit)
+ 
+diff --git a/src/plugins/platforms/xcb/qxcbwindow.cpp b/src/plugins/platforms/xcb/qxcbwindow.cpp
+index 9e7e1a5572..f0866a90ac 100644
+--- a/src/plugins/platforms/xcb/qxcbwindow.cpp
++++ b/src/plugins/platforms/xcb/qxcbwindow.cpp
+@@ -698,7 +698,7 @@ void QXcbWindow::show()
+         if (isTransient(window())) {
+             const QWindow *tp = window()->transientParent();
+             if (tp && tp->handle())
+-                transientXcbParent = static_cast<const QXcbWindow *>(tp->handle())->winId();
++                transientXcbParent = tp->handle()->winId();
+             // Default to client leader if there is no transient parent, else modal dialogs can
+             // be hidden by their parents.
+             if (!transientXcbParent)
+-- 
+GitLab
+

@@ -1,0 +1,52 @@
+From 9c56d4da2ff631a8c1c30475bd792f6c86bda53c Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Mon, 18 Jan 2021 07:40:54 -0800
+Subject: [PATCH] Fix build with GCC 11: include <limits>
+
+Fixes: QTBUG-90395
+Pick-to: 6.0
+Change-Id: Iecc74d2000eb40dfbe7bfffd165b5dd3708b7a40
+Reviewed-by: Edward Welbourne <edward.welbourne@qt.io>
+---
+ src/corelib/global/qendian.h  | 6 ++++--
+ src/corelib/global/qfloat16.h | 1 +
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/corelib/global/qendian.h b/src/corelib/global/qendian.h
+index 99b529f17cda..c874c5e47abd 100644
+--- a/src/corelib/global/qendian.h
++++ b/src/corelib/global/qendian.h
+@@ -1,7 +1,7 @@
+ /****************************************************************************
+ **
+-** Copyright (C) 2016 The Qt Company Ltd.
+-** Copyright (C) 2016 Intel Corporation.
++** Copyright (C) 2021 The Qt Company Ltd.
++** Copyright (C) 2021 Intel Corporation.
+ ** Contact: https://www.qt.io/licensing/
+ **
+ ** This file is part of the QtCore module of the Qt Toolkit.
+@@ -44,6 +44,8 @@
+ #include <QtCore/qfloat16.h>
+ #include <QtCore/qglobal.h>
+ 
++#include <limits>
++
+ // include stdlib.h and hope that it defines __GLIBC__ for glibc-based systems
+ #include <stdlib.h>
+ #include <string.h>
+diff --git a/src/corelib/global/qfloat16.h b/src/corelib/global/qfloat16.h
+index 5b369bf3c5..6c52c94466 100644
+--- a/src/corelib/global/qfloat16.h
++++ b/src/corelib/global/qfloat16.h
+@@ -43,6 +43,7 @@
+ 
+ #include <QtCore/qglobal.h>
+ #include <QtCore/qmetatype.h>
++#include <limits>
+ #include <string.h>
+ 
+ #if defined(QT_COMPILER_SUPPORTS_F16C) && defined(__AVX2__) && !defined(__F16C__)
+-- 
+2.16.3
+

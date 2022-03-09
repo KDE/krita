@@ -66,7 +66,7 @@ public:
     QTransform localTransform(QPointF vp_a, QPointF vp_b, QPointF pt_c, qreal* size);
 
 protected:
-    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
+    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=nullptr, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 
     KisPaintingAssistantHandleSP firstLocalHandle() const override;
@@ -76,19 +76,19 @@ protected:
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool snapToAny);
     explicit TwoPointAssistant(const TwoPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
-    KisCanvas2 *m_canvas;
+    KisCanvas2 *m_canvas {nullptr};
 
     QLineF m_snapLine;
-    double m_gridDensity = 1.0;
-    bool m_useVertical = true;
+    double m_gridDensity {1.0};
+    bool m_useVertical {true};
 
     // Needed to make sure that when we are in the middle of a brush stroke, the
     // guides follow the brush position, not the cursor position.
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
+    bool m_followBrushPosition {false};
+    bool m_adjustedPositionValid {false};
     QPointF m_adjustedBrushPosition;
-    int m_lastUsedPoint = -1;
-    bool m_hasBeenInsideLocal = false;
+    int m_lastUsedPoint {-1};
+    bool m_hasBeenInsideLocal {false};
 
 };
 

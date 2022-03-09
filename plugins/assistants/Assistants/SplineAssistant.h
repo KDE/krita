@@ -30,7 +30,7 @@ private:
     explicit SplineAssistant(const SplineAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
     /// used for getting the decoration so the bezier handles aren't drawn while editing
-    KisCanvas2* m_canvas;
+    KisCanvas2* m_canvas {nullptr};
 };
 
 class SplineAssistantFactory : public KisPaintingAssistantFactory

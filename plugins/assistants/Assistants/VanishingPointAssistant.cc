@@ -294,7 +294,7 @@ KisPaintingAssistantHandleSP VanishingPointAssistant::firstLocalHandle() const
     if (handles().size() > LocalFirstHandle) {
         return handles().at(LocalFirstHandle);
     } else {
-        return 0;
+        return nullptr;
     }
 }
 
@@ -303,7 +303,7 @@ KisPaintingAssistantHandleSP VanishingPointAssistant::secondLocalHandle() const
     if (handles().size() > LocalSecondHandle) {
         return handles().at(LocalSecondHandle);
     } else {
-        return 0;
+        return nullptr;
     }
 }
 

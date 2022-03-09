@@ -59,7 +59,7 @@ public:
     bool loadCustomXml(QXmlStreamReader* xml) override;
 
 protected:
-    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
+    void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool  cached = true,KisCanvas2* canvas=nullptr, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 
     KisPaintingAssistantHandleSP firstLocalHandle() const override;
@@ -71,16 +71,16 @@ private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     explicit VanishingPointAssistant(const VanishingPointAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
-    KisCanvas2 *m_canvas;
+    KisCanvas2 *m_canvas {nullptr};
 
-    float m_referenceLineDensity = 15.0;
+    float m_referenceLineDensity {15.0};
 
     // Needed to make sure that when we are in the middle of a brush stroke, the
     // guides follow the brush position, not the cursor position.
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
+    bool m_followBrushPosition {false};
+    bool m_adjustedPositionValid {false};
     QPointF m_adjustedBrushPosition;
-    bool m_hasBeenInsideLocalRect;
+    bool m_hasBeenInsideLocalRect {false};
 
 };
 

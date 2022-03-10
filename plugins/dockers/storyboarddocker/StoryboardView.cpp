@@ -209,14 +209,16 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
                     return parentRect;
                 }
                 else {
-                    const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
-                    int numVisibleComments = Model->visibleCommentCount();
+                    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(model(), QRect());
+                    const StoryboardModel* storyboardModel = dynamic_cast<const StoryboardModel*>(model());
+                    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(storyboardModel, QRect());
+                    int numVisibleComments = storyboardModel->visibleCommentCount();
                     int commentWidth = 200;
                     if (numVisibleComments) {
                         commentWidth = qMax(200, (viewport()->width() - 250) / numVisibleComments);
                     }
                     parentRect.setSize(QSize(commentWidth, thumbnailheight + fontHeight));
-                    parentRect.moveLeft(parentRect.left() + thumbnailWidth + Model->visibleCommentsUpto(index) * commentWidth);
+                    parentRect.moveLeft(parentRect.left() + thumbnailWidth + storyboardModel->visibleCommentsUpto(index) * commentWidth);
                     return parentRect;
                 }
             }
@@ -316,8 +318,10 @@ void StoryboardView::slotItemClicked(const QModelIndex &clicked)
 
 void StoryboardView::setCurrentItem(int frame)
 {
-    const StoryboardModel* Model = dynamic_cast<const StoryboardModel*>(model());
-    QModelIndex index = Model->indexFromFrame(frame);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(model());
+    const StoryboardModel* sbModel = dynamic_cast<const StoryboardModel*>(model());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(sbModel);
+    QModelIndex index = sbModel->indexFromFrame(frame);
     if (index.isValid()) {
         selectionModel()->select(index, QItemSelectionModel::ClearAndSelect);
         selectionModel()->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);

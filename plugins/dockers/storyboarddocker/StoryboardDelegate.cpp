@@ -144,7 +144,9 @@ void StoryboardDelegate::paint(QPainter *p, const QStyleOptionViewItem &option, 
             }
             default:
             {
+                KIS_SAFE_ASSERT_RECOVER_RETURN(index.model());
                 const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+                KIS_SAFE_ASSERT_RECOVER_RETURN(model);
                 if (m_view->commentIsVisible() && model->getComment(index.row() - 4).visibility) {
                     p->setPen(QPen(option.palette.dark(), 2));
                     drawCommentHeader(p, option, index);
@@ -178,6 +180,7 @@ void StoryboardDelegate::drawSpinBox(QPainter *p, const QStyleOptionViewItem &op
 QStyleOptionSlider StoryboardDelegate::drawCommentHeader(QPainter *p, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     QStyle *style = option.widget ? option.widget->style() : QApplication::style();
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(index.model(), QStyleOptionSlider());
     const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
     QString data = index.data().toString();
 
@@ -252,9 +255,11 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
                                    const QModelIndex &index) const
 {
     if (!index.parent().isValid()) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(index.model(), option.rect.size());
         if (m_view->itemOrientation() == Qt::Vertical) {
             int width = option.widget->width() - 17;
             const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(model, option.rect.size());
             int numComments = model->visibleCommentCount();
             int numItem = width/250;
             if (numItem <= 0) {
@@ -267,6 +272,7 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
         }
         else {
             const StoryboardModel* model = dynamic_cast<const StoryboardModel*>(index.model());
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(model, option.rect.size());
             int numComments = model->visibleCommentCount();
             int commentWidth = 0;
             if (numComments && m_view->commentIsVisible()) {
@@ -324,6 +330,7 @@ QWidget *StoryboardDelegate::createEditor(QWidget *parent,
 
 bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(model, false);
     if ((event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseButtonDblClick)
             && (index.flags() & Qt::ItemIsEnabled))
     {
@@ -339,6 +346,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool downButtonClicked = downButton.isValid() && downButton.contains(mouseEvent->pos());
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(sbModel, false);
             if (leftButton && upButtonClicked) {
                 KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
                                                                                     index.data().toInt() + 1,
@@ -397,6 +405,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             bool deleteItemButtonClicked = deleteItemButton.isValid() && deleteItemButton.contains(mouseEvent->pos());
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+            KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(sbModel, false);
             if (leftButton && addItemButtonClicked) {
                 sbModel->insertItem(index.parent(), true);
                 return true;
@@ -426,6 +435,7 @@ bool StoryboardDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, c
             if (lastClickPosInScroll && currClickPosInScroll) {
                 int lastValue = model->data(index, Qt::UserRole).toInt();
                 int value = lastValue + mouseEvent->pos().y() - m_lastDragPos.y();
+
                 StoryboardModel* modelSB = dynamic_cast<StoryboardModel*>(model);
                 if (value >= 0 && value <= scrollBarOption.maximum) {
                     modelSB->setCommentScrollData(index, value);
@@ -481,6 +491,7 @@ void StoryboardDelegate::setEditorData(QWidget *editor,
 void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                       const QModelIndex &index) const
 {
+    KIS_ASSERT(model);
     QVariant value = index.data();
     if (index.parent().isValid()) {
         int row = index.row();
@@ -518,6 +529,7 @@ void StoryboardDelegate::setModelData(QWidget *editor, QAbstractItemModel *model
             QString value = textEdit->toPlainText();
 
             StoryboardModel* sbModel = dynamic_cast<StoryboardModel*>(model);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(sbModel);
             KisStoryboardChildEditCommand *cmd = new KisStoryboardChildEditCommand(index.data(),
                                                                                    value,
                                                                                    index.parent().row(),
@@ -588,7 +600,9 @@ QRect StoryboardDelegate::spinBoxEditField(const QStyleOptionViewItem &option)
 void StoryboardDelegate::slotCommentScrolledTo(int value) const
 {
     const QModelIndex index = sender()->property("index").toModelIndex();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_view->model());
     StoryboardModel* model = dynamic_cast<StoryboardModel*>(m_view->model());
+    KIS_SAFE_ASSERT_RECOVER_RETURN(model);
     model->setCommentScrollData(index, value);
 }
 

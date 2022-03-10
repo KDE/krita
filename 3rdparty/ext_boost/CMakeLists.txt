@@ -10,8 +10,8 @@ if(WIN32)
 
        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-       URL https://boostorg.jfrog.io/artifactory/main/release/1.77.0/source/boost_1_77_0.tar.bz2
-        URL_HASH SHA256=fc9f85fc030e233142908241af7a846e60630aa7388de9a5fafb1f3a26840854
+       URL https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.bz2
+        URL_HASH SHA256=8681f175d4bdb26c52222665793eef08490d7758529330f98d3b29dd0735bccc
 
        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-Krita-builds-with-Clang.patch
              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-building-Boost.Build-with-a-chosen-toolset.patch
@@ -27,7 +27,7 @@ if(WIN32)
    ExternalProject_Add_Step(
        ext_boost
        post_install
-       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-x64-1_77.dll ${PREFIX_ext_boost}/bin/
+       COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/libboost_system-mgw${KRITA_boost_COMPILER_VERSION}-mt-x64-1_78.dll ${PREFIX_ext_boost}/bin/
        DEPENDEES install
    )
    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -60,8 +60,8 @@ if(WIN32)
         ext_boost
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
-        URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee
+        URL https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.bz2
+        URL_HASH SHA256=8681f175d4bdb26c52222665793eef08490d7758529330f98d3b29dd0735bccc
 
         CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.bat msvc --prefix=${PREFIX_ext_boost}
         BUILD_COMMAND <SOURCE_DIR>/b2.exe -j${SUBMAKE_JOBS} --with-system --build-dir=build-dir --prefix=${PREFIX_ext_boost} toolset=msvc variant=release link=shared threading=multi architecture=x86 install
@@ -81,19 +81,18 @@ if(WIN32)
       ExternalProject_Add_Step(
         ext_boost
         post_install
-        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc${KRITA_boost_COMPILER_VERSION}-mt-x32-1_71.dll ${PREFIX_ext_boost}/bin/
-            COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc${KRITA_boost_COMPILER_VERSION}-mt-x64-1_71.dll ${PREFIX_ext_boost}/bin/
+        COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc${KRITA_boost_COMPILER_VERSION}-mt-x32-1_78.dll ${PREFIX_ext_boost}/bin/
+            COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_boost}/lib/boost_system-vc${KRITA_boost_COMPILER_VERSION}-mt-x64-1_78.dll ${PREFIX_ext_boost}/bin/
         DEPENDEES install
       )
    endif()
 elseif(ANDROID)
     ExternalProject_Add( ext_boost
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/moritz-wundke/Boost-for-Android/archive/dc37be02fd7e4bc87a184d0f6934da5a5beb7f51.tar.gz
-        URL_HASH SHA256=a962e2572bd15b5b8fcf5a9331195ebd41954209b556766ae178bb82de5dd0d1
+        URL https://github.com/moritz-wundke/Boost-for-Android/archive/ccfc74f1c9ceb35d304294d4f1ed3abff43d2e01.zip
+        URL_HASH SHA256=717f02b034acfff9a0bfd2eb3533d181a1a7c5d25db1ac1a37df3ce953c9f61d
 
-        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Update-Boost-URLs-Bintray-shut-down.patch
-              COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Support-Android-NDK-r22b.patch
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Support-Android-NDK-r22b.patch
 
         CONFIGURE_COMMAND ""
         BUILD_COMMAND <SOURCE_DIR>/build-android.sh --prefix=${PREFIX_ext_boost} --with-libraries=system --boost=1.71.0 --arch=${ANDROID_ABI} ${CMAKE_ANDROID_NDK}
@@ -112,8 +111,8 @@ elseif(ANDROID)
 else()
 	ExternalProject_Add( ext_boost
         	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	        URL https://boostorg.jfrog.io/artifactory/main/release/1.71.0/source/boost_1_71_0.tar.bz2
-        	URL_HASH SHA256=d73a8da01e8bf8c7eda40b4c84915071a8c8a0df4a6734537ddde4a8580524ee
+          URL https://boostorg.jfrog.io/artifactory/main/release/1.78.0/source/boost_1_78_0.tar.bz2
+          URL_HASH SHA256=8681f175d4bdb26c52222665793eef08490d7758529330f98d3b29dd0735bccc
 
         	CONFIGURE_COMMAND <SOURCE_DIR>/bootstrap.sh --prefix=${PREFIX_ext_boost} --with-libraries=system
 	        BUILD_COMMAND <SOURCE_DIR>/b2 -j${SUBMAKE_JOBS} install

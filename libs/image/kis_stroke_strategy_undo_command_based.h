@@ -42,7 +42,7 @@ public:
     };
 
 
-    class Data : public KisStrokeJobData {
+    class KRITAIMAGE_EXPORT Data : public KisStrokeJobData {
     public:
         Data(KUndo2CommandSP _command,
              bool _undo = false,

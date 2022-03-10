@@ -9,8 +9,8 @@ endif()
 if (WIN32)
 ExternalProject_Add( ext_fftw3
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://fftw.org/fftw-3.3.9.tar.gz
-        URL_HASH SHA256=bf2c7ce40b04ae811af714deb512510cc2c17b9ab9d6ddcf49fe4487eea7af3d
+        URL https://fftw.org/fftw-3.3.10.tar.gz
+        URL_HASH SHA256=56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch_mingw.patch
 
@@ -22,8 +22,8 @@ ExternalProject_Add( ext_fftw3
 else()
 ExternalProject_Add( ext_fftw3
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://fftw.org/fftw-3.3.9.tar.gz
-        URL_HASH SHA256=bf2c7ce40b04ae811af714deb512510cc2c17b9ab9d6ddcf49fe4487eea7af3d
+        URL https://fftw.org/fftw-3.3.10.tar.gz
+        URL_HASH SHA256=56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/patch_mingw.patch
 

@@ -621,28 +621,17 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     {
         d->debugEvent<QTouchEvent, false>(event);
         if (startTouch(retval)) {
-            QTouchEvent *touchEvent = static_cast<QTouchEvent *> (event);
+            QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
             KisAbstractInputAction::setInputManager(this);
-
-            if (!KisConfig(true).disableTouchOnCanvas()
-                && touchEvent->touchPoints().count() == 1)
-            {
-                d->previousPos = touchEvent->touchPoints().at(0).pos();
-                // we don't want to lose this event
-                KoPointerEvent::copyQtPointerEvent(touchEvent, d->originatingTouchBeginEvent);
-                d->buttonPressed = false;
-                d->resetCompressor();
-            }
-            else {
-                retval = d->matcher.touchBeginEvent(touchEvent);
-            }
+            d->previousPos = touchEvent->touchPoints().at(0).pos();
+            // we don't want to lose this event
+            KoPointerEvent::copyQtPointerEvent(touchEvent, d->originatingTouchBeginEvent);
+            retval = d->matcher.touchBeginEvent(touchEvent);
+            d->buttonPressed = false;
+            d->resetCompressor();
             event->accept();
+            break;
         }
-
-        // if the event isn't handled, Qt starts to send MouseEvents
-        if (!KisConfig(true).disableTouchOnCanvas())
-            retval = true;
-        break;
     }
 
     case QEvent::TouchUpdate:

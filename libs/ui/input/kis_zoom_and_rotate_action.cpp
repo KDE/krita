@@ -70,6 +70,15 @@ void KisZoomAndRotateAction::cursorMovedAbsolute(const QPointF &, const QPointF 
 {
 }
 
+qreal angleForSnapping(qreal angle)
+{
+    if (angle < 0) {
+        return std::fmod(angle - 2, 45) + 2;
+    } else {
+        return std::fmod(angle + 2, 45) - 2;
+    }
+}
+
 void KisZoomAndRotateAction::inputEvent(QEvent *event)
 {
     switch (event->type()) {
@@ -100,6 +109,13 @@ void KisZoomAndRotateAction::inputEvent(QEvent *event)
         QTransform transform;
         transform.rotate(rotationAngle);
         QPointF stationaryPointOffset = (p0 - d->lastPosition) * transform * scaleDelta;
+
+        const qreal canvasAnglePostRotation = controller->rotation() + rotationAngle;
+        const qreal snapDelta = angleForSnapping(canvasAnglePostRotation);
+        // we snap the canvas to an angle that is a multiple of 45
+        if (abs(snapDelta) <= 2) {
+            rotationAngle = rotationAngle - snapDelta;
+        }
 
         controller->zoomRelativeToPoint(p0.toPoint(), scaleDelta);
         controller->rotateCanvas(rotationAngle, p0);

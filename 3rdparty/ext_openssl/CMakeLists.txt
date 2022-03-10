@@ -40,8 +40,8 @@ if (WIN32)
 elseif (ANDROID)
     ExternalProject_Add( ext_openssl
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.openssl.org/source/openssl-1.1.1l.tar.gz
-        URL_HASH SHA1=f8819dd31642eebea6cc1fa5c256fc9a4f40809b
+        URL https://www.openssl.org/source/openssl-1.1.1m.tar.gz
+        URL_HASH SHA256=f89199be8b23ca45fc7cb9f1d8d3ee67312318286ad030f5316aca6462db6c96
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
             ANDROID_NDK_HOME=${CMAKE_ANDROID_NDK}
@@ -66,8 +66,8 @@ else (WIN32)
 
     ExternalProject_Add( ext_openssl
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://www.openssl.org/source/openssl-1.1.1i.tar.gz
-        URL_HASH SHA1=eb684ba4ed31fe2c48062aead75233ecd36882a6
+        URL https://www.openssl.org/source/openssl-1.1.1m.tar.gz
+        URL_HASH SHA256=f89199be8b23ca45fc7cb9f1d8d3ee67312318286ad030f5316aca6462db6c96
 
         CONFIGURE_COMMAND <SOURCE_DIR>/config --prefix=${PREFIX_ext_openssl} --openssldir=ssl
 

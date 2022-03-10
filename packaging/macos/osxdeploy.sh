@@ -65,7 +65,12 @@ print_error() {
 }
 
 get_script_dir() {
-    script_source="${BASH_SOURCE[0]}"
+    if [[ -n "$ZSH_VERSION" ]]; then
+        script_source="${(%):-%x}"
+    else
+        # transitional, macos should use ZSH
+        script_source="${BASH_SOURCE[0]}"
+    fi
     # go to target until finding root.
     while [ -L "${script_source}" ]; do
         script_target="$(readlink ${script_source})"

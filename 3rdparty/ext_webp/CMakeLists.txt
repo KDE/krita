@@ -2,8 +2,8 @@ SET(EXTPREFIX_webp "${EXTPREFIX}" )
 
 ExternalProject_Add( ext_webp
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.0.tar.gz
-    URL_HASH SHA512=c46b41899a543cc80914c89646dd607dbb5d025a9727dd83ef70994b9310eedc697666bd812141a90aa16632a9a354a031d9360a9ee1112295c7e154e69f0b74
+    URL https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.2.tar.gz
+    URL_HASH SHA256=7656532f837af5f4cec3ff6bafe552c044dc39bf453587bd5b77450802f4aee6
 
     PATCH_COMMAND  ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-CMake-targets-install-directory.patch
 

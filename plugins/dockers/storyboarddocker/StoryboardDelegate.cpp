@@ -279,7 +279,6 @@ QSize StoryboardDelegate::sizeHint(const QStyleOptionViewItem &option,
     else {
         return option.rect.size();
     }
-    return QSize(0,0);
 }
 
 QWidget *StoryboardDelegate::createEditor(QWidget *parent,

@@ -222,7 +222,6 @@ QRect StoryboardView::visualRect(const QModelIndex &index) const
             }
         }
     }
-    return QRect();
 }
 
 QModelIndex StoryboardView::indexAt(const QPoint &point) const

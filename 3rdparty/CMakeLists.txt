@@ -373,7 +373,6 @@ endif ()
 
 if (WIN32)
     add_subdirectory( ext_drmingw )
-#    add_subdirectory( ext_ffmpeg )
 endif ()
 
 if(UNIX)

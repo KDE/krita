@@ -192,8 +192,13 @@ void KisUpdaterContext::waitForDone()
 bool KisUpdaterContext::walkerIntersectsJob(KisBaseRectsWalkerSP walker,
                                             const KisUpdateJobItem* job)
 {
-    return (walker->accessRect().intersects(job->changeRect())) ||
-        (job->accessRect().intersects(walker->changeRect()));
+    /**
+     * TODO: theoretically, we should compare rects intersection
+     * on a per-layer basis. The current solution is too rough and
+     * basically makes updates single-threaded in some cases (e.g.
+     * when a transform mask is present in the stack)
+     */
+    return walker->accessRect().intersects(job->accessRect());
 }
 
 qint32 KisUpdaterContext::findSpareThread()

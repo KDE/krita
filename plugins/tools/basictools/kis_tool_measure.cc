@@ -181,8 +181,8 @@ void KisToolMeasure::endPrimaryAction(KoPointerEvent *event)
 QWidget* KisToolMeasure::createOptionWidget()
 {
     if (!currentImage())
-        return 0;
-    m_optionsWidget = new KisToolMeasureOptionsWidget(0, currentImage()->xRes());
+        return nullptr;
+    m_optionsWidget = new KisToolMeasureOptionsWidget(nullptr, currentImage()->xRes());
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
     QWidget *specialSpacer = new QWidget(m_optionsWidget);

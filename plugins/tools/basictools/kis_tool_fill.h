@@ -88,24 +88,24 @@ private:
     static constexpr int minimumDragDistance{4};
     static constexpr int minimumDragDistanceSquared{minimumDragDistance * minimumDragDistance};
 
-    FillMode m_fillMode;
+    FillMode m_fillMode {FillContiguousRegion};
 
-    FillType m_fillType;
-    qreal m_patternScale;
-    qreal m_patternRotation;
+    FillType m_fillType {FillWithForegroundColor};
+    qreal m_patternScale {100.0};
+    qreal m_patternRotation {0.0};
 
-    int m_threshold;
-    int m_opacitySpread;
-    bool m_useSelectionAsBoundary;
+    int m_threshold {8};
+    int m_opacitySpread {100};
+    bool m_useSelectionAsBoundary {true};
 
-    bool m_antiAlias;
-    int m_sizemod;
-    int m_feather;
+    bool m_antiAlias {true};
+    int m_sizemod {0};
+    int m_feather {0};
 
-    Reference m_reference;
+    Reference m_reference {CurrentLayer};
     QList<int> m_selectedColorLabels;
 
-    ContinuousFillMode m_continuousFillMode;
+    ContinuousFillMode m_continuousFillMode {FillAnyRegion};
     
     KisSelectionSP m_continuousFillMask;
     KoColor m_continuousFillReferenceColor;
@@ -113,9 +113,9 @@ private:
     KisResourcesSnapshotSP m_resourcesSnapshot;
     QTransform m_transform;
 
-    FillMode m_effectiveFillMode;
-    bool m_isFilling{false};
-    bool m_isDragging{false};
+    FillMode m_effectiveFillMode {FillSelection};
+    bool m_isFilling {false};
+    bool m_isDragging {false};
     QPoint m_fillStartWidgetPosition;
     KisSignalCompressor m_compressorContinuousFillUpdate;
     QVector<QPoint> m_seedPoints;
@@ -123,32 +123,32 @@ private:
 
     KConfigGroup m_configGroup;
 
-    KisOptionCollectionWidget *m_optionWidget;
+    KisOptionCollectionWidget *m_optionWidget {nullptr};
 
-    QToolButton *m_buttonWhatToFillSelection;
-    QToolButton *m_buttonWhatToFillContiguous;
+    QToolButton *m_buttonWhatToFillSelection {nullptr};
+    QToolButton *m_buttonWhatToFillContiguous {nullptr};
 
-    QToolButton *m_buttonFillWithFG;
-    QToolButton *m_buttonFillWithBG;
-    QToolButton *m_buttonFillWithPattern;
-    KisDoubleSliderSpinBox *m_sliderPatternScale;
-    KisAngleSelector *m_angleSelectorPatternRotation;
+    QToolButton *m_buttonFillWithFG {nullptr};
+    QToolButton *m_buttonFillWithBG {nullptr};
+    QToolButton *m_buttonFillWithPattern {nullptr};
+    KisDoubleSliderSpinBox *m_sliderPatternScale {nullptr};
+    KisAngleSelector *m_angleSelectorPatternRotation {nullptr};
 
-    KisSliderSpinBox *m_sliderThreshold;
-    KisSliderSpinBox *m_sliderSpread;
-    QCheckBox *m_checkBoxSelectionAsBoundary;
+    KisSliderSpinBox *m_sliderThreshold {nullptr};
+    KisSliderSpinBox *m_sliderSpread {nullptr};
+    QCheckBox *m_checkBoxSelectionAsBoundary {nullptr};
 
-    QCheckBox *m_checkBoxAntiAlias;
-    KisSliderSpinBox *m_sliderGrow;
-    KisSliderSpinBox *m_sliderFeather;
+    QCheckBox *m_checkBoxAntiAlias {nullptr};
+    KisSliderSpinBox *m_sliderGrow {nullptr};
+    KisSliderSpinBox *m_sliderFeather {nullptr};
 
-    QToolButton *m_buttonReferenceCurrent;
-    QToolButton *m_buttonReferenceAll;
-    QToolButton *m_buttonReferenceLabeled;
-    KisColorLabelSelectorWidget *m_widgetLabels;
+    QToolButton *m_buttonReferenceCurrent {nullptr};
+    QToolButton *m_buttonReferenceAll {nullptr};
+    QToolButton *m_buttonReferenceLabeled {nullptr};
+    KisColorLabelSelectorWidget *m_widgetLabels {nullptr};
 
-    QToolButton *m_buttonMultipleFillAny;
-    QToolButton *m_buttonMultipleFillSimilar;
+    QToolButton *m_buttonMultipleFillAny {nullptr};
+    QToolButton *m_buttonMultipleFillSimilar {nullptr};
 
     void beginFilling(const QPoint &seedPoint);
     void addFillingOperation(const QPoint &seedPoint);

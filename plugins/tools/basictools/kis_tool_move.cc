@@ -60,7 +60,7 @@ KisToolMove::KisToolMove(KoCanvasBase *canvas)
     m_showCoordinatesAction = action("movetool-show-coordinates");
     connect(&m_updateCursorCompressor, SIGNAL(timeout()), this, SLOT(resetCursorStyle()));
 
-    m_optionsWidget = new MoveToolOptionsWidget(0, currentImage()->xRes(), toolId());
+    m_optionsWidget = new MoveToolOptionsWidget(nullptr, currentImage()->xRes(), toolId());
 
     // See https://bugs.kde.org/show_bug.cgi?id=316896
     QWidget *specialSpacer = new QWidget(m_optionsWidget);
@@ -352,7 +352,7 @@ void KisToolMove::moveDiscrete(MoveDirection direction, bool big)
     if (!image()) return;
     if (!currentNode()->isEditable()) return; // Don't move invisible nodes
 
-    if (startStrokeImpl(MoveSelectedLayer, 0)) {
+    if (startStrokeImpl(MoveSelectedLayer, nullptr)) {
         setMode(KisTool::PAINT_MODE);
     }
 
@@ -734,7 +734,7 @@ void KisToolMove::moveBySpinX(int newX)
     // but in this case no change is expected
     int handlesRectX = m_handlesRect.x();
 
-    if (startStrokeImpl(MoveSelectedLayer, 0)) {
+    if (startStrokeImpl(MoveSelectedLayer, nullptr)) {
         setMode(KisTool::PAINT_MODE);
     }
 
@@ -758,7 +758,7 @@ void KisToolMove::moveBySpinY(int newY)
     // but in this case no change is expected
     int handlesRectY = m_handlesRect.y();
 
-    if (startStrokeImpl(MoveSelectedLayer, 0)) {
+    if (startStrokeImpl(MoveSelectedLayer, nullptr)) {
         setMode(KisTool::PAINT_MODE);
     }
 

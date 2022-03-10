@@ -40,11 +40,11 @@ public Q_SLOTS:
 private:
     void updateDistance();
 
-    double m_resolution;
-    QLabel* m_angleLabel;
-    double m_distance;
+    double m_resolution {0.0};
+    QLabel* m_angleLabel {nullptr};
+    double m_distance {0.0};
 public:
-    QLabel* m_distanceLabel;
+    QLabel* m_distanceLabel {nullptr};
     KoUnit m_unit;
 };
 
@@ -83,7 +83,7 @@ private:
     }
 
 private:
-    KisToolMeasureOptionsWidget *m_optionsWidget;
+    KisToolMeasureOptionsWidget *m_optionsWidget {nullptr};
 
     QPointF m_startPos {QPointF(0, 0)};
     QPointF m_endPos {QPointF(0, 0)};

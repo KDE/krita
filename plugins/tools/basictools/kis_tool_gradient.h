@@ -82,18 +82,18 @@ private:
     KisGradientPainter::enumGradientShape m_shape;
     KisGradientPainter::enumGradientRepeat m_repeat;
 
-    bool m_dither;
-    bool m_reverse;
-    double m_antiAliasThreshold;
+    bool m_dither {false};
+    bool m_reverse {false};
+    double m_antiAliasThreshold {0.0};
 
-    QLabel *m_lbShape;
-    QLabel *m_lbRepeat;
-    QCheckBox *m_ckDither;
-    QCheckBox *m_ckReverse;
-    KComboBox *m_cmbShape;
-    KComboBox *m_cmbRepeat;
-    QLabel *m_lbAntiAliasThreshold;
-    KisDoubleSliderSpinBox *m_slAntiAliasThreshold;
+    QLabel *m_lbShape {nullptr};
+    QLabel *m_lbRepeat {nullptr};
+    QCheckBox *m_ckDither {nullptr};
+    QCheckBox *m_ckReverse {nullptr};
+    KComboBox *m_cmbShape {nullptr};
+    KComboBox *m_cmbRepeat {nullptr};
+    QLabel *m_lbAntiAliasThreshold {nullptr};
+    KisDoubleSliderSpinBox *m_slAntiAliasThreshold {nullptr};
     KConfigGroup m_configGroup;
 };
 

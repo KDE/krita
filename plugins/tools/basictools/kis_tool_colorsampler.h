@@ -109,7 +109,7 @@ private:
     bool m_isActivated {false};
     bool m_colorPreviewShowComparePlate {false};
 
-    bool m_isOutlineEnabled;
+    bool m_isOutlineEnabled {false};
     QPointF m_outlineDocPoint;
 
 

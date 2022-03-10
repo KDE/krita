@@ -153,10 +153,10 @@ private:
     KisStrokeId m_strokeId;
 
     KisNodeList m_currentlyProcessingNodes;
-    bool m_currentlyUsingSelection = false;
-    MoveToolMode m_currentMode = MoveSelectedLayer;
+    bool m_currentlyUsingSelection {false};
+    MoveToolMode m_currentMode {MoveSelectedLayer};
 
-    int m_resolution;
+    int m_resolution {0};
 
     QAction *m_showCoordinatesAction {0};
 

@@ -40,7 +40,7 @@ KisLayerFilterWidget::KisLayerFilterWidget(QWidget *parent) : QWidget(parent)
 
     textFilter = new KisPopupSelfActivatingLineEdit(this);
     textFilter->setPlaceholderText(i18n("Filter by name..."));
-    textFilter->setMinimumWidth(255);
+    textFilter->setMinimumWidth(200);
     textFilter->setMinimumHeight(28);
     textFilter->setClearButtonEnabled(true);
 

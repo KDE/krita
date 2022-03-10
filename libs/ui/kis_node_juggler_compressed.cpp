@@ -747,7 +747,8 @@ void KisNodeJugglerCompressed::lowerNode(const KisNodeList &nodes)
     m_d->applicator->applyCommand(
         new LowerRaiseLayer(m_d->updateData,
                             m_d->image,
-                            nodes, activeNode, true));
+                            nodes, activeNode, true),
+                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
 }
 
@@ -758,7 +759,8 @@ void KisNodeJugglerCompressed::raiseNode(const KisNodeList &nodes)
     m_d->applicator->applyCommand(
         new LowerRaiseLayer(m_d->updateData,
                             m_d->image,
-                            nodes, activeNode, false));
+                            nodes, activeNode, false),
+                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisNodeJugglerCompressed::removeNode(const KisNodeList &nodes)
@@ -768,7 +770,8 @@ void KisNodeJugglerCompressed::removeNode(const KisNodeList &nodes)
     m_d->applicator->applyCommand(
         new RemoveLayers(m_d->updateData,
                          m_d->image,
-                         nodes, activeNode));
+                         nodes, activeNode),
+                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisNodeJugglerCompressed::duplicateNode(const KisNodeList &nodes)
@@ -781,7 +784,8 @@ void KisNodeJugglerCompressed::duplicateNode(const KisNodeList &nodes)
                             nodes,
                             KisNodeSP(), KisNodeSP(),
                             activeNode,
-                            DuplicateLayers::COPY));
+                            DuplicateLayers::COPY),
+                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisNodeJugglerCompressed::copyNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
@@ -794,7 +798,8 @@ void KisNodeJugglerCompressed::copyNode(const KisNodeList &nodes, KisNodeSP dstP
                             nodes,
                             dstParent, dstAbove,
                             activeNode,
-                            DuplicateLayers::COPY));
+                            DuplicateLayers::COPY),
+                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisNodeJugglerCompressed::moveNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
@@ -807,7 +812,8 @@ void KisNodeJugglerCompressed::moveNode(const KisNodeList &nodes, KisNodeSP dstP
                             nodes,
                             dstParent, dstAbove,
                             activeNode,
-                            DuplicateLayers::MOVE));
+                            DuplicateLayers::MOVE),
+                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisNodeJugglerCompressed::addNode(const KisNodeList &nodes, KisNodeSP dstParent, KisNodeSP dstAbove)
@@ -820,12 +826,14 @@ void KisNodeJugglerCompressed::addNode(const KisNodeList &nodes, KisNodeSP dstPa
                             nodes,
                             dstParent, dstAbove,
                             activeNode,
-                            DuplicateLayers::ADD));
+                            DuplicateLayers::ADD),
+                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 }
 
 void KisNodeJugglerCompressed::moveNode(KisNodeSP node, KisNodeSP parent, KisNodeSP above)
 {
-    m_d->applicator->applyCommand(new KisImageLayerMoveCommand(m_d->image, node, parent, above, false));
+    m_d->applicator->applyCommand(new KisImageLayerMoveCommand(m_d->image, node, parent, above, false),
+                                  KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
 
     MoveNodeStructSP moveStruct = toQShared(new MoveNodeStruct(m_d->image, node, parent, above));
 

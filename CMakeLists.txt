@@ -248,6 +248,11 @@ option(ENABLE_UPDATERS "Enable updaters/update notifications" ON)
 configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
 add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
 
+if (UNIX AND NOT APPLE)
+option(ENABLE_UBUNTU_RAQM_WORKAROUND "Enable workaround for freetype include directory snafu in raqm.h" OFF)
+endif()
+
+
 # Branding. Available options: default, Beta, Plus, Next. Can be set from command line
 if ("${BRANDING}" STREQUAL "")
     if (DEFINED KRITA_STABLE)
@@ -1025,6 +1030,14 @@ set_package_properties(QUAZIP PROPERTIES
     PURPOSE "Needed for reading and writing KRA and ORA files"
 )
 
+if (ENABLE_UBUNTU_RAQM_WORKAROUND)
+##
+## Use this method to check for raqm on Ubuntu, where the freetype
+## header included in raqm.h would not be found
+##
+    pkg_check_modules(RAQM REQUIRED IMPORTED_TARGET raqm)
+    include_directories(SYSTEM ${RAQM_INCLUDE_DIRS})
+else()
 ##
 ## Check for freetype
 ##
@@ -1048,6 +1061,8 @@ set_package_properties(RAQM PROPERTIES
     PURPOSE "Needed for rendering text vector shapes"
 )
 include_directories(SYSTEM ${RAQM_INCLUDE_DIRS})
+endif()
+
 
 # FIXME: better way to do this?
 list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}

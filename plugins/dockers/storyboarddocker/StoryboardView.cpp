@@ -63,6 +63,7 @@ public:
 
 StoryboardView::StoryboardView(QWidget *parent)
     : QListView(parent)
+    , m_itemOrientation(Qt::Vertical)
     , m_commentIsVisible(true)
     , m_thumbnailIsVisible(true)
 {

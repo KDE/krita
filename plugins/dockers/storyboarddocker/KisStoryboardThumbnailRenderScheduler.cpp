@@ -12,6 +12,7 @@
 KisStoryboardThumbnailRenderScheduler::KisStoryboardThumbnailRenderScheduler(QObject *parent)
     : QObject(parent)
     , m_renderer(new KisAsyncStoryboardThumbnailRenderer(this))
+    , m_currentFrame(-1)
 {
     //connect signals to the renderer.
     connect(m_renderer, SIGNAL(sigNotifyFrameCompleted(int,KisPaintDeviceSP)), this, SLOT(slotFrameRegenerationCompleted(int, KisPaintDeviceSP)));

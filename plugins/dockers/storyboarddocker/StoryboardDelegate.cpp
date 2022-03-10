@@ -27,6 +27,7 @@
 
 StoryboardDelegate::StoryboardDelegate(QObject *parent)
     : QStyledItemDelegate(parent)
+    , m_view(nullptr)
     , m_imageSize(QSize())
 {
 }

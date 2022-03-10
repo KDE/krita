@@ -804,7 +804,8 @@ StoryboardDockerDock::ExportPage StoryboardDockerDock::getPageLayout(QString lay
         qDebug()<<"svg layout file didn't open";
         return page;
     }
-    svgDoc.setContent(&f);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(svgDoc.setContent(&f), page);
     f.close();
 
     QDomElement eroot = svgDoc.documentElement();

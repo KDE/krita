@@ -504,15 +504,21 @@ if not "%GCC_VERSION_LINE:tdm64=%" == "%GCC_VERSION_LINE%" (
 
 echo.
 echo Trying to guess target architecture...
-objdump --version > NUL
-if errorlevel 1 (
-	echo ERROR: objdump is not working.
-	exit /B 1
+set OBJDUMP=
+for %%a in (objdump llvm-objdump) do (
+    %%a --version > NUL
+    if not errorlevel 1 (
+        set OBJDUMP=%%a
+    )
 )
-for /f "delims=, tokens=1" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
+if "OBJDUMP" == "" (
+    echo ERROR: objdump is not working.
+    exit /B 1
+)
+for /f "delims=, tokens=1" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
 if "%TARGET_ARCH_LINE%" == "" (
     echo "Possible LLVM objdump, trying to detect architecture..."
-    for /f "delims=" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "coff"') do set TARGET_ARCH_LINE=%%a
+    for /f "delims=" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "coff"') do set TARGET_ARCH_LINE=%%a
 )
 echo -- %TARGET_ARCH_LINE%
 if "%TARGET_ARCH_LINE:x86-64=%" == "%TARGET_ARCH_LINE%" (

@@ -278,6 +278,8 @@ ExternalProject_Add(
     URL https://github.com/strukturag/libheif/archive/8f8035a102e959a3488f69e8befe09d51cf596a7.tar.gz
     URL_HASH SHA256=12cfab1aaa588191bb28a67b275d0e99b379ab8221dcc7a18adcb6a34b661943
 
+    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/clang-aom-link-pthread.patch
+
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""

@@ -369,10 +369,6 @@ QMenu* KisSelectionToolHelper::getSelectionContextMenu(KisCanvas2* canvas)
             m_contextMenu->addAction(actionCollection->action("convert_to_raster_selection"));
         }
 
-        if (actionCollection->action("convert_shapes_to_vector_selection")->isEnabled()){
-            m_contextMenu->addAction(actionCollection->action("convert_shapes_to_vector_selection"));
-        }
-
         m_contextMenu->addAction(actionCollection->action("convert_selection_to_shape"));
 
         QMenu *transformMenu = m_contextMenu->addMenu(i18n("Transform"));

@@ -1872,6 +1872,8 @@ QMenu* DefaultTool::popupActionsMenu()
             m_contextMenu->addAction(action("object_group"));
             m_contextMenu->addAction(action("object_ungroup"));
         }
+        m_contextMenu->addSeparator();
+        m_contextMenu->addAction(action("convert_shapes_to_vector_selection"));
     }
 
     return m_contextMenu.data();

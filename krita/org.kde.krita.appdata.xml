@@ -20,7 +20,7 @@
   <developer_name xml:lang="hi">क्रिता संस्थान</developer_name>
   <developer_name xml:lang="hu">Krita Alapítvány</developer_name>
   <developer_name xml:lang="ia">Krita Foundation (Fundatiomn de Krita)</developer_name>
-  <developer_name xml:lang="id">Yayasan Krita</developer_name>
+  <developer_name xml:lang="id">Asas Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
   <developer_name xml:lang="ko">Krita Foundation</developer_name>
   <developer_name xml:lang="nl">Krita Foundation</developer_name>
@@ -94,7 +94,7 @@
   <summary xml:lang="hi">डिजिटल चित्रकारी, रचनात्मक स्वतंत्रता</summary>
   <summary xml:lang="hu">Digitális festészet, kreatív szabadság</summary>
   <summary xml:lang="ia">Pictura digital, Libertate creative</summary>
-  <summary xml:lang="id">Pelukisan Digital, Kebebasan Kreatif</summary>
+  <summary xml:lang="id">Pelukisan Digital, Kebebasan Berkreatif</summary>
   <summary xml:lang="it">Pittura digitale, libertà creativa</summary>
   <summary xml:lang="ko">디지털 페인팅, 자유로운 창의성</summary>
   <summary xml:lang="nl">Digital Painting, Creative Freedom</summary>
@@ -168,7 +168,7 @@
     <p xml:lang="hi">यह रेखाचित्र और पेंटिंग बनाने के लिए उत्तम है, और यह निपुण चित्रकारों को नए सिरे से डिजिटल पेंटिंग फाइलों को बनाने के लिए आद्योपान्त समाधान प्रस्तुत करता है।</p>
     <p xml:lang="hu">Tökéletes vázlatoláshoz és festéshez, teljes körű megoldást nyújt digitális festmények készítéséhez a semmiből.</p>
     <p xml:lang="ia">Illo es perfecte pro schizzar e pinger, e presenta un solution ab fin al fin pro crear files de pictura digital ab grattamentos per maestros.</p>
-    <p xml:lang="id">Sempurna untuk mensketsa dan melukis, dan menghadirkan sebuah solusi untuk menciptakan file-file pelukisan digital dari goresan si pelukis ulung.</p>
+    <p xml:lang="id">Ini adalah sempurna untuk mensketsa dan melukis, dan menghadirkan sebuah solusi untuk menciptakan file-file pelukisan digital dari goresan si pelukis ulung.</p>
     <p xml:lang="it">Perfetto per fare schizzi e dipingere, prevede una soluzione completa che consente agli artisti di creare file di dipinti digitali partendo da zero.</p>
     <p xml:lang="ko">스케치, 페인팅에 사용할 완벽한 도구이며, 생각으로부터 디지털 페인팅 파일을 만들어 낼 수 있는 종합적인 도구를 제공합니다.</p>
     <p xml:lang="nl">Het is perfect voor schetsen en schilderen en zet een end–to–end oplossing voor het maken van digitale bestanden voor schilderingen vanuit het niets door meesters.</p>
@@ -241,7 +241,7 @@
     <p xml:lang="hi">क्रिता को काफी उत्पादक बनाने वाले उन्नत ब्रश इंजन, अद्भुत फिल्टर और कई उपयोगी सुविधाओं के साथ पेंटिंग करने के मजे़ं लें।</p>
     <p xml:lang="hu">Érezze jól magát festés közben a speciális ecsetalrendszerekkel, lenyűgöző szűrőkkel és számos praktikus szolgáltatással, amik mind roppant hatékonnyá teszik a Kritát.</p>
     <p xml:lang="ia">Amusa te a pinger con le motores de pincel avantiate, filtros stupende e multe characteristicas amical que face Krita enormemente productive.</p>
-    <p xml:lang="id">Bersenang-senanglah melukis dengan mesin kuas canggih, saringan luar biasa dan banyak fitur berguna yang membuat Krita sangat produktif.</p>
+    <p xml:lang="id">Bersenang-senanglah melukis dengan mesin kuas canggih, filter luar biasa dan banyak fitur berguna yang membuat Krita sangat produktif.</p>
     <p xml:lang="it">Divertiti a dipingere con gli avanzati sistemi di pennelli, i sorprendenti filtri e molte altre utili caratteristiche che fanno di Krita un software enormemente produttivo.</p>
     <p xml:lang="ja">Krita のソフトウェアとしての生産性を高めている先進的なブラシエンジンや素晴らしいフィルタのほか、便利な機能の数々をお楽しみください。</p>
     <p xml:lang="ko">Krita의 고급 브러시 엔진, 다양한 필터, 여러 도움이 되는 기능으로 생산성을 즐겁게 향상시킬 수 있습니다.</p>
@@ -373,7 +373,7 @@
       <caption xml:lang="fr">Vous réalisez des animations ? Krita vous fournit tout ce dont vous avez besoin pour l'animation traditionnelle et dessinée à la main</caption>
       <caption xml:lang="hi">आपको एनीमेशन में आसक्ती है? क्रिता आपको पारंपरिक, हाथ से तैयार एनीमेशन बनाने के लिए आवश्यक सब कुछ प्रदान करता है</caption>
       <caption xml:lang="hu">Animációt készítene? A Krita minden eszközt biztosít a hagyományos, kézzel rajzolt animációkhoz</caption>
-      <caption xml:lang="id">Soal animasi? Krita menyediakan apa pun yang Anda perlukan untuk animasi gambar-tangan, tradisional</caption>
+      <caption xml:lang="id">Soal animasi? Krita menyediakan apa pun yang kamu perlukan untuk animasi gambar-tangan, tradisional</caption>
       <caption xml:lang="it">Per le animazioni? Krita fornisce tutto ciò che ti server per l'animazione tradizionale, disegnata a mano</caption>
       <caption xml:lang="ko">애니메이션을 만들 계획이 있으신가요? Krita를 통해서 수작업 애니메이션을 작업할 수 있습니다</caption>
       <caption xml:lang="nl">Naar animatie? Krita biedt alles wat u nodig hebt voor traditionele, met de hand getekende animatie</caption>
@@ -405,7 +405,7 @@
       <caption xml:lang="fr">Si vous êtes nouveau en art graphique, il y a un manuel à jour et très fourni</caption>
       <caption xml:lang="hi">यदि आप डिजिटल पेंटिंग में नए हैं, तो एक व्यापक, अद्यतन पु्स्तिका है</caption>
       <caption xml:lang="hu">Ha még kezdő a digitális festészetben, a bőséges, naprakész kézikönyv segítségére lesz</caption>
-      <caption xml:lang="id">Jika Anda baru dalam pelukisan digital, di situ ada buku manual luas yang terkini</caption>
+      <caption xml:lang="id">Jika kamu baru dalam pelukisan digital, di situ ada buku manual panjang-lebar yang ter-update</caption>
       <caption xml:lang="it">Se sei nuovo del disegno digitale è disponibile un manuale completo e aggiornato</caption>
       <caption xml:lang="ko">디지털 페인팅을 처음 시작하시거나, Krita의 기능을 더 알아 보려면 사용 설명서를 참조하십시오</caption>
       <caption xml:lang="nl">Als u nieuw bent in digitaal schilderen, dan is er een uitgebreide, bijgewerkte handleiding.</caption>

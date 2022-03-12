@@ -67,10 +67,10 @@ KisColorLabelSelectorWidget::KisColorLabelSelectorWidget(QWidget *parent)
             {
                 const int index = m_d->colorButtonGroup->id(button);
                 emit buttonToggled(index, state);
-                if (!state) {
-                    return;
-                }
                 if (m_d->colorButtonGroup->exclusive()) {
+                    if (!state) {
+                        return;
+                    }
                     emit currentIndexChanged(index);
                 } else {
                     emit selectionChanged();

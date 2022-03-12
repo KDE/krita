@@ -78,6 +78,10 @@ if (WIN32)
 		endif ()
     endif ()
 
+    if(USE_EXTERNAL_ANGLE AND NOT QT_ENABLE_DYNAMIC_OPENGL)
+        message(WARNING "USE_EXTERNAL_ANGLE does not have any effect when QT_ENABLE_DYNAMIC_OPENGL is disabled.")
+    endif()
+
     if(ENABLE_MSYS2_FIXES)
         find_package(ZLIB)
         find_package(Iconv)
@@ -361,7 +365,7 @@ add_subdirectory( ext_openjpeg )
 add_subdirectory( ext_fontconfig)
 add_subdirectory( ext_freetype)
 
-if(USE_EXTERNAL_ANGLE)
+if(USE_EXTERNAL_ANGLE AND QT_ENABLE_DYNAMIC_OPENGL)
     add_subdirectory(ext_googleangle)
 endif()
 

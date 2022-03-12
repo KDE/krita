@@ -118,7 +118,16 @@ if (WIN32)
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-Implement-a-manual-test-for-checking-is-HDR-features.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-Fix-notification-of-QDockWidget-when-it-gets-undocke.patch
             COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-Fix-Rec2020-display-format.patch
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-Request-floating-point-format-properly-for-scRGB.patch
             )
+
+    # Custom ANGLE
+    if(USE_EXTERNAL_ANGLE AND QT_ENABLE_DYNAMIC_OPENGL)
+        set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
+            COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/disable-builtin-ANGLE.patch
+        )
+        set(QT_EXTRA_DEPS ${QT_EXTRA_DEPS} ext_googleangle)
+    endif()
 
     # Other patches
     set(ext_qt_PATCH_COMMAND ${ext_qt_PATCH_COMMAND}
@@ -182,6 +191,8 @@ if (WIN32)
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Return-0-for-Window-if-there-is-no-widget.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-QMenu-make-less-sensitive-to-mouse-jitter.patch
         COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-win-Fix-unbalanced-KeyPress-Release-events-when-usin.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0132-Resize-D3D-surface-to-reduce-flickering-on-resize.patch
+        COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0133-HACK-Force-glFinish-in-flushShared-for-ANGLE.patch
     )
 
 

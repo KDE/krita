@@ -159,8 +159,8 @@ private:
     void loadConfiguration();
 
 private Q_SLOTS:
-    void slot_buttonGroupWhatToFill_idToggled(int id, bool checked);
-    void slot_buttonGroupFillWith_idToggled(int id, bool checked);
+    void slot_buttonGroupWhatToFill_buttonToggled(QAbstractButton *button, bool checked);
+    void slot_buttonGroupFillWith_buttonToggled(QAbstractButton *button, bool checked);
     void slot_sliderPatternScale_valueChanged(double value);
     void slot_angleSelectorPatternRotation_angleChanged(double value);
     void slot_sliderThreshold_valueChanged(int value);
@@ -169,9 +169,9 @@ private Q_SLOTS:
     void slot_checkBoxAntiAlias_toggled(bool checked);
     void slot_sliderGrow_valueChanged(int value);
     void slot_sliderFeather_valueChanged(int value);
-    void slot_buttonGroupReference_idToggled(int id, bool checked);
+    void slot_buttonGroupReference_buttonToggled(QAbstractButton *button, bool checked);
     void slot_widgetLabels_selectionChanged();
-    void slot_buttonGroupMultipleFill_idToggled(int id, bool checked);
+    void slot_buttonGroupMultipleFill_buttonToggled(QAbstractButton *button, bool checked);
     void slot_buttonReset_clicked();
 };
 

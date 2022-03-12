@@ -554,8 +554,8 @@ QWidget* KisToolFill::createOptionWidget()
     m_widgetLabels->setSelection(m_selectedColorLabels);
 
     // Make connections
-    connect(m_buttonWhatToFillSelection->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupWhatToFill_idToggled(int, bool)));
-    connect(m_buttonFillWithFG->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupFillWith_idToggled(int, bool)));
+    connect(m_buttonWhatToFillSelection->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupWhatToFill_buttonToggled(QAbstractButton*, bool)));
+    connect(m_buttonFillWithFG->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupFillWith_buttonToggled(QAbstractButton*, bool)));
     connect(m_sliderPatternScale, SIGNAL(valueChanged(double)), SLOT(slot_sliderPatternScale_valueChanged(double)));
     connect(m_angleSelectorPatternRotation, SIGNAL(angleChanged(double)), SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
     connect(m_sliderThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderThreshold_valueChanged(int)));
@@ -564,9 +564,9 @@ QWidget* KisToolFill::createOptionWidget()
     connect(m_checkBoxAntiAlias, SIGNAL(toggled(bool)), SLOT(slot_checkBoxAntiAlias_toggled(bool)));
     connect(m_sliderGrow, SIGNAL(valueChanged(int)), SLOT(slot_sliderGrow_valueChanged(int)));
     connect(m_sliderFeather, SIGNAL(valueChanged(int)), SLOT(slot_sliderFeather_valueChanged(int)));
-    connect(m_buttonReferenceCurrent->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupReference_idToggled(int, bool)));
+    connect(m_buttonReferenceCurrent->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupReference_buttonToggled(QAbstractButton*, bool)));
     connect(m_widgetLabels, SIGNAL(selectionChanged()), SLOT(slot_widgetLabels_selectionChanged()));
-    connect(m_buttonMultipleFillAny->group(), SIGNAL(idToggled(int, bool)), SLOT(slot_buttonGroupMultipleFill_idToggled(int, bool)));
+    connect(m_buttonMultipleFillAny->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupMultipleFill_buttonToggled(QAbstractButton*, bool)));
     connect(buttonReset, SIGNAL(clicked()), SLOT(slot_buttonReset_clicked()));
     
     return m_optionWidget;
@@ -633,38 +633,39 @@ void KisToolFill::loadConfiguration()
     }
 }
 
-void KisToolFill::slot_buttonGroupWhatToFill_idToggled(int id, bool checked)
+void KisToolFill::slot_buttonGroupWhatToFill_buttonToggled(QAbstractButton *button, bool checked)
 {
     if (!checked) {
         return;
     }
-    const bool visible = id == 1;
+    const bool visible = button == m_buttonWhatToFillContiguous;
     m_optionWidget->setWidgetVisible("sectionRegionExtent", visible);
     m_optionWidget->setWidgetVisible("sectionAdjustments", visible);
     m_optionWidget->setWidgetVisible("sectionReference", visible);
     m_optionWidget->setWidgetVisible("sectionMultipleFill", visible);
 
-    m_fillMode = id == 0 ? FillSelection : FillContiguousRegion;
+    m_fillMode = button == m_buttonWhatToFillSelection ? FillSelection : FillContiguousRegion;
 
-    m_configGroup.writeEntry("fillSelection", id == 0);
+    m_configGroup.writeEntry("fillSelection", button == m_buttonWhatToFillSelection);
 }
 
-void KisToolFill::slot_buttonGroupFillWith_idToggled(int id, bool checked)
+void KisToolFill::slot_buttonGroupFillWith_buttonToggled(QAbstractButton *button, bool checked)
 {
     if (!checked) {
         return;
     }
-    const bool visible = id == 2;
+    const bool visible = button == m_buttonFillWithPattern;
     KisOptionCollectionWidgetWithHeader *sectionFillWith =
         m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionFillWith");
     sectionFillWith->setWidgetVisible("sliderPatternScale", visible);
     sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", visible);
     
-    m_fillType = id == 0 ? FillWithForegroundColor : (id == 1 ? FillWithBackgroundColor : FillWithPattern);
+    m_fillType = button == m_buttonFillWithFG ? FillWithForegroundColor
+                                              : (button == m_buttonFillWithBG ? FillWithBackgroundColor : FillWithPattern);
 
     m_configGroup.writeEntry(
         "fillWith",
-        id == 0 ? "foregroundColor" : (id == 1 ? "backgroundColor" : "pattern")
+        button == m_buttonFillWithFG ? "foregroundColor" : (button == m_buttonFillWithBG ? "backgroundColor" : "pattern")
     );
 }
 
@@ -740,20 +741,21 @@ void KisToolFill::slot_sliderFeather_valueChanged(int value)
     m_configGroup.writeEntry("featherAmount", value);
 }
 
-void KisToolFill::slot_buttonGroupReference_idToggled(int id, bool checked)
+void KisToolFill::slot_buttonGroupReference_buttonToggled(QAbstractButton *button, bool checked)
 {
     if (!checked) {
         return;
     }
     KisOptionCollectionWidgetWithHeader *sectionReference =
         m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionReference");
-    sectionReference->setWidgetVisible("widgetLabels", id == 2);
+    sectionReference->setWidgetVisible("widgetLabels", button == m_buttonReferenceLabeled);
     
-    m_reference = id == 0 ? CurrentLayer : (id == 1 ? AllLayers : ColorLabeledLayers);
+    m_reference = button == m_buttonReferenceCurrent ? CurrentLayer
+                                                     : (button == m_buttonReferenceAll ? AllLayers : ColorLabeledLayers);
 
     m_configGroup.writeEntry(
         "sampleLayersMode",
-        id == 0 ? "currentLayer" : (id == 1 ? "allLayers" : "colorLabeledLayers")
+        button == m_buttonReferenceCurrent ? "currentLayer" : (button == m_buttonReferenceAll ? "allLayers" : "colorLabeledLayers")
     );
 }
 
@@ -774,13 +776,13 @@ void KisToolFill::slot_widgetLabels_selectionChanged()
     m_configGroup.writeEntry("colorLabels", colorLabels);
 }
 
-void KisToolFill::slot_buttonGroupMultipleFill_idToggled(int id, bool checked)
+void KisToolFill::slot_buttonGroupMultipleFill_buttonToggled(QAbstractButton *button, bool checked)
 {
     if (!checked) {
         return;
     }
-    m_continuousFillMode = id == 0 ? FillAnyRegion : FillSimilarRegions;
-    m_configGroup.writeEntry("continuousFillMode", id == 0 ? "fillAnyRegion" : "fillSimilarRegions");
+    m_continuousFillMode = button == m_buttonMultipleFillAny ? FillAnyRegion : FillSimilarRegions;
+    m_configGroup.writeEntry("continuousFillMode", button == m_buttonMultipleFillAny ? "fillAnyRegion" : "fillSimilarRegions");
 }
 
 void KisToolFill::slot_buttonReset_clicked()

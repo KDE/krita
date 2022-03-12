@@ -1,0 +1,59 @@
+From 97ecbd358af7a06713b03ba418359dbeeddb9d6a Mon Sep 17 00:00:00 2001
+From: Oliver Wolff <oliver.wolff@qt.io>
+Date: Mon, 10 Dec 2018 08:33:14 +0100
+Subject: [PATCH 09/17] ANGLE: Dynamically load D3D compiler from a list
+
+If the default compiler cannot be found, load it from a list of DLL names,
+including a non-versioned proxy DLL provided by Qt. On Desktop Windows,
+the default compiler can also be specified by an environment variable,
+QT_D3DCOMPILER_DLL.
+---
+ src/libANGLE/renderer/d3d/HLSLCompiler.cpp | 25 ++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+diff --git a/src/libANGLE/renderer/d3d/HLSLCompiler.cpp b/src/libANGLE/renderer/d3d/HLSLCompiler.cpp
+index 38e52eae0..8e8c9fc56 100644
+--- a/src/libANGLE/renderer/d3d/HLSLCompiler.cpp
++++ b/src/libANGLE/renderer/d3d/HLSLCompiler.cpp
+@@ -16,6 +16,10 @@
+ #include "libANGLE/renderer/d3d/ContextD3D.h"
+ #include "libANGLE/trace.h"
+ 
++#ifndef QT_D3DCOMPILER_DLL
++#define QT_D3DCOMPILER_DLL D3DCOMPILER_DLL_W
++#endif
++
+ namespace
+ {
+ #if ANGLE_APPEND_ASSEMBLY_TO_SHADER_DEBUG_INFO == ANGLE_ENABLED
+@@ -136,6 +140,27 @@ angle::Result HLSLCompiler::ensureInitialized(d3d::Context *context)
+     }
+ #    endif  // ANGLE_PRELOADED_D3DCOMPILER_MODULE_NAMES
+ 
++    // Load the compiler DLL specified by the environment, or default to QT_D3DCOMPILER_DLL
++    const wchar_t *defaultCompiler = _wgetenv(L"QT_D3DCOMPILER_DLL");
++    if (!defaultCompiler)
++        defaultCompiler = QT_D3DCOMPILER_DLL;
++
++    const wchar_t *compilerDlls[] = {
++        defaultCompiler,
++        L"d3dcompiler_47.dll",
++        L"d3dcompiler_46.dll",
++        L"d3dcompiler_43.dll",
++        0
++    };
++
++    // Load the first available known compiler DLL
++    for (int i = 0; compilerDlls[i]; ++i)
++    {
++        mD3DCompilerModule = LoadLibraryW(compilerDlls[i]);
++        if (mD3DCompilerModule)
++            break;
++    }
++
+     if (!mD3DCompilerModule)
+     {
+         // Load the version of the D3DCompiler DLL associated with the Direct3D version ANGLE was
+-- 
+2.24.1.windows.2
+

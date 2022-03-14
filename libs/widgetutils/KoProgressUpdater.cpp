@@ -165,15 +165,20 @@ void KoProgressUpdater::cancel()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(QThread::currentThread() == this->thread());
 
+    QList<QPointer<KoUpdaterPrivate> > subtasks;
+
     {
         QMutexLocker l(&d->mutex);
-
-        Q_FOREACH (KoUpdaterPrivate *updater, d->subtasks) {
-            updater->setProgress(100);
-            updater->setInterrupted(true);
-        }
-        d->canceled = true;
+        subtasks = d->subtasks;
     }
+
+    Q_FOREACH (QPointer<KoUpdaterPrivate> updater, subtasks) {
+        if (!updater) continue;
+
+        updater->setProgress(100);
+        updater->setInterrupted(true);
+    }
+    d->canceled = true;
 
     Q_EMIT triggerUpdateAsynchronously();
 }

@@ -236,7 +236,10 @@ QPainterPath KoSvgTextShape::textOutline() const
     }
     const KoSvgTextChunkShape *chunkShape =
         dynamic_cast<const KoSvgTextChunkShape *>(this);
-    chunkShape->layoutInterface()->clearAssociatedOutline();
+    if (chunkShape->shapes().size() > 0 && this->isTextNode() != true) {
+        chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(
+            chunkShape->shapes().first());
+    }
     chunkShape->layoutInterface()->addAssociatedOutline(result.boundingRect());
 
     return result;

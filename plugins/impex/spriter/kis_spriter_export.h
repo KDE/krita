@@ -15,19 +15,19 @@
 #include <kis_types.h>
 
 struct SpriterFile {
-    qreal id;
+    qreal id {0.0};
     QString name;
     QString pathName;
     QString baseName;
     QString layerName;
-    qreal width;
-    qreal height;
-    qreal x;
-    qreal y;
+    qreal width {0.0};
+    qreal height {0.0};
+    qreal x {0.0};
+    qreal y {0.0};
 };
 
 struct Folder {
-    qreal id;
+    qreal id {0.0};
     QString name;
     QString pathName;
     QString baseName;
@@ -36,23 +36,23 @@ struct Folder {
 };
 
 struct Bone {
-    qreal id;
-    const Bone *parentBone;
+    qreal id {0.0};
+    const Bone *parentBone {nullptr};
     QString name;
-    qreal x;
-    qreal y;
-    qreal width;
-    qreal height;
-    qreal localX;
-    qreal localY;
-    qreal localAngle;
-    qreal localScaleX;
-    qreal localScaleY;
-    qreal fixLocalX;
-    qreal fixLocalY;
-    qreal fixLocalAngle;
-    qreal fixLocalScaleX;
-    qreal fixLocalScaleY;
+    qreal x {0.0};
+    qreal y {0.0};
+    qreal width {0.0};
+    qreal height {0.0};
+    qreal localX {0.0};
+    qreal localY {0.0};
+    qreal localAngle {0.0};
+    qreal localScaleX {0.0};
+    qreal localScaleY {0.0};
+    qreal fixLocalX {0.0};
+    qreal fixLocalY {0.0};
+    qreal fixLocalAngle {0.0};
+    qreal fixLocalScaleX {0.0};
+    qreal fixLocalScaleY {0.0};
     QList<Bone*> bones;
 
     ~Bone() {
@@ -67,23 +67,23 @@ struct SpriterSlot {
 };
 
 struct SpriterObject {
-    qreal id;
-    qreal folderId;
-    qreal fileId;
-    Bone *bone;
-    SpriterSlot *slot;
-    qreal x;
-    qreal y;
-    qreal localX;
-    qreal localY;
-    qreal localAngle;
-    qreal localScaleX;
-    qreal localScaleY;
-    qreal fixLocalX;
-    qreal fixLocalY;
-    qreal fixLocalAngle;
-    qreal fixLocalScaleX;
-    qreal fixLocalScaleY;
+    qreal id {0.0};
+    qreal folderId {0.0};
+    qreal fileId {0.0};
+    Bone *bone {nullptr};
+    SpriterSlot *slot {nullptr};
+    qreal x {0.0};
+    qreal y {0.0};
+    qreal localX {0.0};
+    qreal localY {0.0};
+    qreal localAngle {0.0};
+    qreal localScaleX {0.0};
+    qreal localScaleY {0.0};
+    qreal fixLocalX {0.0};
+    qreal fixLocalY {0.0};
+    qreal fixLocalAngle {0.0};
+    qreal fixLocalScaleX {0.0};
+    qreal fixLocalScaleY {0.0};
 
     ~SpriterObject() {
         delete slot;
@@ -110,9 +110,9 @@ private:
     void writeBone(const Bone *bone, QDomElement &timeline, QDomDocument &scml);
 
     KisImageSP m_image;
-    qreal m_timelineid;
+    qreal m_timelineid {0.0};
     QList<Folder> m_folders;
-    Bone *m_rootBone;
+    Bone *m_rootBone {nullptr};
     QList<SpriterObject> m_objects;
     KisGroupLayerSP m_rootLayer; // Not the image's root later, but the one that is named "root"
     KisLayerSP m_boneLayer;

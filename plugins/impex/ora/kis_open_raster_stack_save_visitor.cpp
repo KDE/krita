@@ -25,7 +25,7 @@
 
 struct KisOpenRasterStackSaveVisitor::Private {
     Private() {}
-    KisOpenRasterSaveContext* saveContext;
+    KisOpenRasterSaveContext* saveContext {nullptr};
     QDomDocument layerStack;
     QDomElement currentElement;
     vKisNodeSP activeNodes;

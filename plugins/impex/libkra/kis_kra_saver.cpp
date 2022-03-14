@@ -60,7 +60,7 @@ using namespace KRA;
 
 struct KisKraSaver::Private
 {
-    KisDocument* doc;
+    KisDocument* doc {nullptr};
     QMap<const KisNode*, QString> nodeFileNames;
     QMap<const KisNode*, QString> keyframeFilenames;
     QString imageName;
@@ -68,7 +68,7 @@ struct KisKraSaver::Private
     QStringList errorMessages;
     QStringList warningMessages;
     QStringList specialAnnotations;
-    bool addMergedImage;
+    bool addMergedImage {false};
     QList<KoResourceLoadResult> linkedDocumentResources;
 
     Private() {

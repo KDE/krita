@@ -38,11 +38,11 @@ private:
     bool readLAB(QIODevice &io, KisPaintDeviceSP dev);
     bool readGrayscale(QIODevice &io, KisPaintDeviceSP dev);
 
-    PSDHeader *m_header;
+    PSDHeader *m_header {nullptr};
 
-    quint16 m_compression;
-    quint64 m_channelDataLength;
-    quint32 m_channelSize;
+    quint16 m_compression {0};
+    quint64 m_channelDataLength {0};
+    quint32 m_channelSize {0};
 
     QVector<ChannelInfo> m_channelInfoRecords;
     QVector<int> m_channelOffsets; // this doesn't need to be global

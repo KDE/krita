@@ -6,7 +6,9 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/libs/flake/svg
     ${CMAKE_SOURCE_DIR}/libs/flake/text
     ${CMAKE_BINARY_DIR}/libs/flake
-)
+    #${FREETYPE_INCLUDE_DIRS}
+    #${RAQM_INCLUDE_DIRS}
+    )
 
 add_subdirectory(styles)
 add_subdirectory(tests)
@@ -228,7 +230,7 @@ target_include_directories(kritaflake
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/text>
 )
 
-target_link_libraries(kritaflake kritapigment kritawidgetutils kritacommand KF5::WidgetsAddons Qt5::Svg KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::Gui Qt5::Xml)
+target_link_libraries(kritaflake kritapigment kritawidgetutils kritacommand KF5::WidgetsAddons Qt5::Svg KF5::CoreAddons KF5::ConfigCore KF5::I18n Qt5::Gui Qt5::Xml ${RAQM_LIBRARIES} ${FREETYPE_LIBRARIES})
 
 set_target_properties(kritaflake PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

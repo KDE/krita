@@ -46,7 +46,7 @@ public:
      */
     void relayout() const;
 
-    QPainterPath textOutline();
+    QPainterPath textOutline() const;
 
 protected:
     /**

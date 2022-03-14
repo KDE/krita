@@ -7,6 +7,8 @@
 #include "KoSvgTextShape.h"
 
 #include <QTextLayout>
+
+#include <raqm.h>
 #include <klocalizedstring.h>
 
 #include "KoSvgText.h"
@@ -43,6 +45,7 @@
 
 #include <QSharedData>
 
+
 class KoSvgTextShape::Private
 {
 public:
@@ -50,9 +53,12 @@ public:
     // NOTE: the cache data is shared between all the instances of
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
-    std::vector<std::shared_ptr<QTextLayout>> cachedLayouts;
+    std::vector<raqm_t*> cachedLayouts;
     std::vector<QPointF> cachedLayoutsOffsets;
     QThread *cachedLayoutsWorkingThread = 0;
+    FT_Library library = NULL;
+
+    QPainterPath path;
 
 
     void clearAssociatedOutlines(const KoShape *rootShape);
@@ -104,14 +110,18 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
      * If the cached layout has been created in a different thread, we should just
      * recreate the layouts in the current thread to be able to render them.
      */
-
+    qDebug() << "paint component code";
     if (QThread::currentThread() != d->cachedLayoutsWorkingThread) {
         relayout();
     }
 
-    for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
-        d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
-    }
+    /*for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
+        //d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
+    }*/
+    qDebug() << "drawing...";
+    painter.setBrush(Qt::black);
+    painter.setOpacity(1.0);
+    painter.drawPath(d->path);
 
     /**
      * HACK ALERT:
@@ -135,17 +145,36 @@ void KoSvgTextShape::paintStroke(QPainter &painter, KoShapePaintingContext &pain
     // do nothing! everything is painted in paintComponent()
 }
 
-QPainterPath KoSvgTextShape::textOutline()
+QPainterPath KoSvgTextShape::textOutline() const
 {
 
     QPainterPath result;
     result.setFillRule(Qt::WindingFill);
-
+    qDebug() << "starting creation textoutlne";
 
     for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
-        const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
-        const QTextLayout *layout = d->cachedLayouts[i].get();
+        //const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
+        //const QTextLayout *layout = d->cachedLayouts[i].get();
+        size_t count = 0;
+        raqm_glyph_t *glyphs = raqm_get_glyphs (d->cachedLayouts.at(i), &count);
 
+        QRawFont font(QString("/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf"), 16.0);
+
+        QPointF oldOffset = QPointF(0,0);
+        int freetypeMultiplier = 64;
+
+        for (int j = 0; j < int(count); j++) {
+            QPainterPath glyph = font.pathForGlyph(glyphs[j].index);
+            QPointF offset = QPointF(glyphs[j].x_offset/freetypeMultiplier, glyphs[j].y_offset/freetypeMultiplier);
+            QPointF advance = QPointF(glyphs[j].x_advance/freetypeMultiplier, glyphs[j].y_advance/freetypeMultiplier);
+            qDebug() << "adding glyph" << j << "offset" << offset << "advance" << advance;
+            oldOffset += offset;
+            glyph.translate(oldOffset);
+            result += glyph;
+            oldOffset += advance;
+        }
+
+        /*
         for (int j = 0; j < layout->lineCount(); j++) {
             QTextLine line = layout->lineAt(j);
 
@@ -203,8 +232,11 @@ QPainterPath KoSvgTextShape::textOutline()
                     result += path;
                 }
             }
-        }
+        }*/
     }
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(this);
+    chunkShape->layoutInterface()->clearAssociatedOutline();
+    chunkShape->layoutInterface()->addAssociatedOutline(result.boundingRect());
 
     return result;
 }
@@ -400,39 +432,60 @@ private:
 
 void KoSvgTextShape::relayout() const
 {
-
     d->cachedLayouts.clear();
     d->cachedLayoutsOffsets.clear();
     d->cachedLayoutsWorkingThread = QThread::currentThread();
+    d->path.clear();
 
     QPointF currentTextPos;
 
     QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
 
     Q_FOREACH (const TextChunk &chunk, textChunks) {
-        std::shared_ptr<QTextLayout> layout(new QTextLayout());
+        raqm_t *layout(raqm_create());
 
-        QTextOption option;
+        // QTextOption option;
 
         // WARNING: never activate this option! It breaks the RTL text layout!
         //option.setFlags(QTextOption::ShowTabsAndSpaces);
 
-        option.setWrapMode(QTextOption::WrapAnywhere);
-        option.setUseDesignMetrics(true); // TODO: investigate if it is needed?
-        option.setTextDirection(chunk.direction);
+        //option.setWrapMode(QTextOption::WrapAnywhere);
+        //option.setUseDesignMetrics(true); // TODO: investigate if it is needed?
+        //option.setTextDirection(chunk.direction);
 
-        layout->setText(chunk.text);
-        layout->setTextOption(option);
-        layout->setFormats(chunk.formats);
-        layout->setCacheEnabled(true);
+        FT_Face face = NULL;
+        if (!d->library) {
+            FT_Init_FreeType(&d->library);
+        }
+        QString font = "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf";
+        if (FT_New_Face(d->library, font.toUtf8().data(), 0, &face) == 0) {
+            qDebug() << "face loaded";
+            FT_Set_Char_Size(face, 16*64, 0, 0, 0);
+        } else {
+            qDebug() << "face did not load";
+        }
 
-        layout->beginLayout();
+        if (raqm_set_text_utf8(layout, chunk.text.toUtf8(), chunk.text.size())) {
+            if (chunk.direction == Qt::RightToLeft) {
+                raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_RTL);
+            } else {
+                raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_LTR);
+            }
+            raqm_set_freetype_face(layout, face);
+            //raqm_set_freetype_face_range(layout, face, 0, chunk.text.size());
+        }
+
+        if (raqm_layout(layout)) {
+            qDebug() << "layout succeeded";
+        }
 
         currentTextPos = chunk.applyStartPosOverride(currentTextPos);
         const QPointF anchorPointPos = currentTextPos;
 
+        /*
         int lastSubChunkStart = 0;
         QPointF lastSubChunkOffset;
+
 
         LayoutChunkWrapper wrapper(layout.get());
 
@@ -458,6 +511,7 @@ void KoSvgTextShape::relayout() const
         }
 
         layout->endLayout();
+        */
 
         QPointF diff;
 
@@ -476,9 +530,13 @@ void KoSvgTextShape::relayout() const
         d->cachedLayoutsOffsets.push_back(-diff);
 
     }
-
+    // Calculate the associated outline for a text chunk.
     d->clearAssociatedOutlines(this);
 
+    if (d->path.isEmpty()) {
+        d->path = textOutline();
+    }
+    /*
     for (int i = 0; i < int(d->cachedLayouts.size()); i++) {
         const QTextLayout &layout = *d->cachedLayouts[i];
         const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
@@ -537,7 +595,7 @@ void KoSvgTextShape::relayout() const
                      * BUG: 389528
                      * BUG: 392068
                      * BUG: 420408 (vertically)
-                     */
+                     *
                     rect.setLeft(qMin(rect.left(), lastGlyphRect.left()) - 0.5 * firstGlyphRect.width());
                     rect.setRight(qMax(rect.right(), lastGlyphRect.right()) + 0.5 * lastGlyphRect.width());
 
@@ -548,6 +606,7 @@ void KoSvgTextShape::relayout() const
             }
         }
     }
+    */
 }
 
 void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)

@@ -83,33 +83,34 @@ private Q_SLOTS:
     void slotSetFixedAngle(bool fixedAngle);
 
 private:
-    QGridLayout* m_optionLayout;
+    QGridLayout* m_optionLayout {nullptr};
 
     // dyna gui
-    QCheckBox * m_chkFixedAngle;
-    KisDoubleSliderSpinBox * m_massSPBox;
-    KisDoubleSliderSpinBox * m_dragSPBox;
-    KisAngleSelector * m_angleSelector;
+    QCheckBox * m_chkFixedAngle {nullptr};
+    KisDoubleSliderSpinBox * m_massSPBox {nullptr};
+    KisDoubleSliderSpinBox * m_dragSPBox {nullptr};
+    KisAngleSelector * m_angleSelector {nullptr};
 
     // dyna algorithm
     QVector<QPointF> m_prevPosition;
-    qreal m_odelx, m_odely;
+    qreal m_odelx {0.0};
+    qreal m_odely {0.0};
 
     // mouse info
     QPointF m_mousePos;
 
-    qreal m_surfaceWidth;
-    qreal m_surfaceHeight;
+    qreal m_surfaceWidth {0.0};
+    qreal m_surfaceHeight {0.0};
 
     // settings variables
     KConfigGroup m_configGroup;
-    qreal m_width;
-    qreal m_curmass;
-    qreal m_curdrag;
+    qreal m_width {0.0};
+    qreal m_curmass {0.0};
+    qreal m_curdrag {0.0};
     DynaFilter m_mouse;
-    qreal m_xangle;
-    qreal m_yangle;
-    qreal m_widthRange;
+    qreal m_xangle {0.0};
+    qreal m_yangle {0.0};
+    qreal m_widthRange {0.0};
 
 
     // methods

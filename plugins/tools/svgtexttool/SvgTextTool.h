@@ -77,14 +77,14 @@ private Q_SLOTS:
 
 private:
     QPointer<SvgTextEditor> m_editor;
-    QPushButton *m_edit;
-    QPointF m_dragStart;
-    QPointF m_dragEnd;
-    bool m_dragging;
-    QFontComboBox *m_defFont;
-    QComboBox *m_defPointSize;
-    QButtonGroup *m_defAlignment;
-    QDoubleSpinBox *m_defLetterSpacing;
+    QPushButton *m_edit {nullptr};
+    QPointF m_dragStart {QPointF(0, 0)};
+    QPointF m_dragEnd {QPointF(0, 0)};
+    bool m_dragging {false};
+    QFontComboBox *m_defFont {nullptr};
+    QComboBox *m_defPointSize {nullptr};
+    QButtonGroup *m_defAlignment {nullptr};
+    QDoubleSpinBox *m_defLetterSpacing {nullptr};
     KConfigGroup m_configGroup;
 
     QRectF m_hoveredShapeHighlightRect;

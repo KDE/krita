@@ -30,17 +30,17 @@ struct KisToolLazyBrushOptionsWidget::Private
     {
     }
 
-    Ui_KisToolLazyBrushOptionsWidget *ui;
-    KisPaletteModel *colorModel;
-    int preferredColumnCount = 10;
-    KisCanvasResourceProvider *provider;
+    Ui_KisToolLazyBrushOptionsWidget *ui {nullptr};
+    KisPaletteModel *colorModel {nullptr};
+    int preferredColumnCount {10};
+    KisCanvasResourceProvider *provider {nullptr};
 
     KisSignalAutoConnectionsStore providerSignals;
     KisSignalAutoConnectionsStore maskSignals;
     KisColorizeMaskSP activeMask;
 
     KoColorSetSP colorSet {new KoColorSet(QString())};
-    int transparentColorIndex;
+    int transparentColorIndex {0};
 
     KisSignalCompressor baseNodeChangedCompressor;
 };

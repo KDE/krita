@@ -79,16 +79,14 @@ private:
     void assignNewSize(const QSize &newSize);
     void storeRatioSafe(const QSize &newSize);
 private:
-    bool m_centered;
-    bool m_canGrow;
+    bool m_centered {false};
+    bool m_canGrow {true};
     QRect m_rect;
-    qreal m_ratio;
+    qreal m_ratio {1.0};
 
-    bool m_lockingEnabled;
-
-    bool m_widthLocked;
-    bool m_heightLocked;
-    bool m_ratioLocked;
+    bool m_widthLocked {false};
+    bool m_heightLocked {false};
+    bool m_ratioLocked {false};
 
     QRect m_cropRect;
 };

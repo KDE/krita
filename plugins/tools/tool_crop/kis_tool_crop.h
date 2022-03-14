@@ -165,27 +165,27 @@ private:
 private:
     QPoint m_dragStart;
 
-    qint32 m_handleSize;
-    bool m_haveCropSelection;
-    qint32 m_mouseOnHandleType;
+    qint32 m_handleSize {13};
+    bool m_haveCropSelection {false};
+    qint32 m_mouseOnHandleType {0};
 
-    CropToolType m_cropType;
-    bool m_cropTypeSelectable;
+    CropToolType m_cropType {ImageCropType};
+    bool m_cropTypeSelectable {false};
 
-    int m_decoration;
-    bool m_resettingStroke;
+    int m_decoration {1};
+    bool m_resettingStroke {false};
     QRect m_lastCanvasUpdateRect;
 
     KConfigGroup configGroup;
-    KisToolCropConfigWidget* optionsWidget;
+    KisToolCropConfigWidget* optionsWidget {nullptr};
 
     QScopedPointer<QMenu> m_contextMenu;
-    KisAction* applyCrop;
-    KisAction* centerToggleOption;
-    KisAction* growToggleOption;
-    KisAction* lockWidthToggleOption;
-    KisAction* lockHeightToggleOption;
-    KisAction* lockRatioToggleOption;
+    KisAction* applyCrop {nullptr};
+    KisAction* centerToggleOption {nullptr};
+    KisAction* growToggleOption {nullptr};
+    KisAction* lockWidthToggleOption {nullptr};
+    KisAction* lockHeightToggleOption {nullptr};
+    KisAction* lockRatioToggleOption {nullptr};
 
     enum handleType {
         None = 0,

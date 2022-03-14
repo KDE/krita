@@ -52,10 +52,10 @@ class ImageView
 {
 
 protected:
-    quint8* m_data;
-    int m_imageWidth;
-    int m_imageHeight;
-    int m_pixelSize;
+    quint8* m_data {nullptr};
+    int m_imageWidth {0};
+    int m_imageHeight {0};
+    int m_pixelSize {0};
 
 public:
     void Init(quint8* _data, int _imageWidth, int _imageHeight, int _pixelSize)
@@ -202,10 +202,10 @@ private:
     template <typename T> friend float distance_impl(const MaskedImage& my, int x, int y, const MaskedImage& other, int xo, int yo);
 
     QRect imageSize;
-    int nChannels;
+    int nChannels {0};
 
-    const KoColorSpace* cs;
-    const KoColorSpace* csMask;
+    const KoColorSpace* cs {nullptr};
+    const KoColorSpace* csMask {nullptr};
 
     ImageData maskData;
     ImageData imageData;

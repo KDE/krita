@@ -50,10 +50,6 @@
 
 SvgTextTool::SvgTextTool(KoCanvasBase *canvas)
     : KoToolBase(canvas)
-    , m_editor(0)
-    , m_dragStart( 0, 0)
-    , m_dragEnd( 0, 0)
-    , m_dragging(false)
 {
 }
 
@@ -88,7 +84,7 @@ void SvgTextTool::activate(const QSet<KoShape *> &shapes)
             }
         }
     } else if (shapes.size() > 1) {
-        KoSvgTextShape *foundTextShape = 0;
+        KoSvgTextShape *foundTextShape = nullptr;
 
         Q_FOREACH (KoShape *shape, shapes) {
             KoSvgTextShape *textShape = dynamic_cast<KoSvgTextShape*>(shape);

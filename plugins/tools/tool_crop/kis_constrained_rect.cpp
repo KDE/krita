@@ -12,12 +12,6 @@
 
 
 KisConstrainedRect::KisConstrainedRect()
-    : m_centered(false),
-      m_canGrow(true),
-      m_ratio(1.0),
-      m_widthLocked(false),
-      m_heightLocked(false),
-      m_ratioLocked(false)
 {
 }
 

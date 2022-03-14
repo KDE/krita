@@ -21,7 +21,7 @@ struct KisToolSmartPatchOptionsWidget::Private {
     {
     }
 
-    Ui_KisToolSmartPatchOptionsWidget *ui;
+    Ui_KisToolSmartPatchOptionsWidget *ui {nullptr};
 
     int getPatchRadius(void)
     {

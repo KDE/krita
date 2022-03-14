@@ -35,12 +35,12 @@ private:
     void changeCompositeOp(const KoID& compositeOp);
 
 private:
-    QLabel*                   m_label;
-    QPushButton*              m_bnEraser;
-    KisCompositeOpListWidget* m_list;
+    QLabel*                   m_label {nullptr};
+    QPushButton*              m_bnEraser {nullptr};
+    KisCompositeOpListWidget* m_list {nullptr};
     QString                   m_currCompositeOpID;
-    bool                      m_createConfigWidget;
-    bool                      m_eraserMode;
+    bool                      m_createConfigWidget {false};
+    bool                      m_eraserMode {false};
 
 };
 

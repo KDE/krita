@@ -99,27 +99,15 @@ public:
     void setCommonCurve(KisCubicCurve curve);
 
     struct ValueComponents {
-
-        ValueComponents()
-            : constant(1.0),
-              scaling(1.0),
-              additive(0.0),
-              absoluteOffset(0.0),
-              hasAbsoluteOffset(false),
-              hasScaling(false),
-              hasAdditive(false)
-        {
-        }
-
-        qreal constant;
-        qreal scaling;
-        qreal additive;
-        qreal absoluteOffset;
-        bool hasAbsoluteOffset;
-        bool hasScaling;
-        bool hasAdditive;
-        qreal minSizeLikeValue;
-        qreal maxSizeLikeValue;
+        qreal constant {1.0};
+        qreal scaling {1.0};
+        qreal additive {0.0};
+        qreal absoluteOffset {0.0};
+        bool hasAbsoluteOffset {false};
+        bool hasScaling {false};
+        bool hasAdditive {false};
+        qreal minSizeLikeValue {0.0};
+        qreal maxSizeLikeValue {0.0};
 
         /**
          * @param normalizedBaseAngle canvas rotation angle normalized to range [0; 1]
@@ -173,11 +161,11 @@ protected:
     const KoID m_id;
     KisPaintOpOption::PaintopCategory m_category;
 
-    bool m_checkable;
-    bool m_checked;
-    bool m_useCurve;
-    bool m_useSameCurve;
-    bool m_separateCurveValue;
+    bool m_checkable {true};
+    bool m_checked {false};
+    bool m_useCurve {true};
+    bool m_useSameCurve {true};
+    bool m_separateCurveValue {false};
 
     /**
      * Curve that is being used instead of sensors' internal ones
@@ -185,13 +173,13 @@ protected:
      */
     KisCubicCurve m_commonCurve;
 
-    int m_curveMode;
+    int m_curveMode {0};
 
     QMap<DynamicSensorType, KisDynamicSensorSP> m_sensorMap;
 
-    qreal m_value;
-    qreal m_minValue;
-    qreal m_maxValue;
+    qreal m_value {1.0};
+    qreal m_minValue {0.0};
+    qreal m_maxValue {1.0};
 
 Q_SIGNALS:
     void unCheckUseCurve();

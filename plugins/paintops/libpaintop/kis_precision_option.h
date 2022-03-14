@@ -34,9 +34,9 @@ public:
     bool autoPrecisionEnabled();
 
 private:
-    int m_precisionLevel;
-    bool m_autoPrecisionEnabled;
-    bool m_hasImprecisePositionOptions = false;
+    int m_precisionLevel {0};
+    bool m_autoPrecisionEnabled {false};
+    bool m_hasImprecisePositionOptions {false};
 };
 
 #endif /* __KIS_PRECISION_OPTION_H */

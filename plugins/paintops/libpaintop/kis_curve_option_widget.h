@@ -67,11 +67,11 @@ protected Q_SLOTS:
 
 
 protected:
-    QWidget* m_widget;
-    Ui_WdgCurveOption* m_curveOptionWidget;
-    QComboBox* m_curveMode;
-    KisCurveOption* m_curveOption;
-    qreal strengthToCurveOptionValueScale;
+    QWidget* m_widget {nullptr};
+    Ui_WdgCurveOption* m_curveOptionWidget {nullptr};
+    QComboBox* m_curveMode {nullptr};
+    KisCurveOption* m_curveOption {nullptr};
+    qreal strengthToCurveOptionValueScale {0.0};
 
     void hideRangeLabelsAndBoxes(bool isHidden);
     KisCubicCurve getWidgetCurve();

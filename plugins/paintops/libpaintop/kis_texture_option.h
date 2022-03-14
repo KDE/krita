@@ -109,13 +109,13 @@ private:
 
 private:
 
-    int m_offsetX;
-    int m_offsetY;
-    TexturingMode m_texturingMode;
+    int m_offsetX {0};
+    int m_offsetY {0};
+    TexturingMode m_texturingMode {KisTextureProperties::MULTIPLY};
     KoAbstractGradientSP m_gradient;
     KoCachedGradient m_cachedGradient;
 
-    int m_levelOfDetail;
+    int m_levelOfDetail {0};
 
 private:
     KisPressureTextureStrengthOption m_strengthOption;

@@ -43,11 +43,11 @@ struct KisCurrentOutlineFetcher::Private {
     QScopedPointer<KisPressureMirrorOption> mirrorOption;
     QScopedPointer<KisPressureSharpnessOption> sharpnessOption;
 
-    bool isDirty;
+    bool isDirty {false};
     QElapsedTimer lastUpdateTime;
 
-    qreal lastRotationApplied;
-    qreal lastSizeApplied;
+    qreal lastRotationApplied {0.0};
+    qreal lastSizeApplied {1.0};
     MirrorProperties lastMirrorApplied;
 };
 

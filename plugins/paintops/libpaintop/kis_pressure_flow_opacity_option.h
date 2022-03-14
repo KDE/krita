@@ -34,9 +34,9 @@ public:
     qreal getDynamicOpacity(const KisPaintInformation& info) const;
 
 protected:
-    qreal m_flow;
-    int   m_paintActionType;
-    bool  m_nodeHasIndirectPaintingSupport;
+    qreal m_flow {1.0};
+    int   m_paintActionType {0};
+    bool  m_nodeHasIndirectPaintingSupport {false};
 };
 
 #endif //KIS_PRESSURE_FLOW_OPACITY_OPTION_H

@@ -16,12 +16,7 @@
 
 
 KisDynamicSensorDrawingAngle::KisDynamicSensorDrawingAngle()
-    : KisDynamicSensor(ANGLE),
-      m_fanCornersEnabled(false),
-      m_fanCornersStep(30),
-      m_angleOffset(0),
-      m_lockedAngle(0),
-      m_lockedAngleMode(false)
+    : KisDynamicSensor(ANGLE)
 {
 }
 

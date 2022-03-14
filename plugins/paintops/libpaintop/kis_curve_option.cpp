@@ -50,12 +50,7 @@ qreal KisCurveOption::ValueComponents::sizeLikeValue() const {
 KisCurveOption::KisCurveOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked, qreal value, qreal min, qreal max)
     : m_id(id)
     , m_category(category)
-    , m_checkable(true)
     , m_checked(checked)
-    , m_useCurve(true)
-    , m_useSameCurve(true)
-    , m_separateCurveValue(false)
-    , m_curveMode(0)
 {
     Q_FOREACH (const DynamicSensorType sensorType, this->sensorsTypes()) {
         KisDynamicSensorSP sensor = this->type2Sensor(sensorType, m_id.id());

@@ -44,15 +44,15 @@ public Q_SLOTS:
     void updateGUI();
 
 private:
-    bool m_fanCornersEnabled;
-    int m_fanCornersStep;
-    int m_angleOffset; // in degrees
-    qreal m_lockedAngle;
-    bool m_lockedAngleMode;
+    bool m_fanCornersEnabled {false};
+    int m_fanCornersStep {30};
+    int m_angleOffset {0}; // in degrees
+    qreal m_lockedAngle {0.0};
+    bool m_lockedAngleMode {false};
 
-    QCheckBox *m_chkLockedMode;
-    QCheckBox *m_chkFanCorners;
-    KisSliderSpinBox *m_intFanCornersStep;
+    QCheckBox *m_chkLockedMode {nullptr};
+    QCheckBox *m_chkFanCorners {nullptr};
+    KisSliderSpinBox *m_intFanCornersStep {nullptr};
 };
 
 #endif /* __KIS_DYNAMIC_SENSOR_DRAWING_ANGLE_H */

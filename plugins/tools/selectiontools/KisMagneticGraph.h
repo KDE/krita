@@ -222,7 +222,7 @@ struct neighbour_iterator : public boost::iterator_facade<neighbour_iterator
 
 private:
     VertexDescriptor            m_point;
-    VertexDescriptor::Direction m_direction;
+    VertexDescriptor::Direction m_direction {VertexDescriptor::NONE};
     KisMagneticGraph            m_graph;
 };
 

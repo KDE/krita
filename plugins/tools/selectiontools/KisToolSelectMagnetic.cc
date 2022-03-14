@@ -46,11 +46,9 @@
 KisToolSelectMagnetic::KisToolSelectMagnetic(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_magnetic_selection_cursor.png", 6, 6),
-                    i18n("Magnetic Selection")),
-    m_continuedMode(false), m_complete(false), m_selected(false), m_finished(false),
-    m_worker(nullptr), m_threshold(70), m_searchRadius(30), m_anchorGap(30),
-    m_filterRadius(3.0), m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
-
+                    i18n("Magnetic Selection"))
+  , m_worker(nullptr)
+  , m_mouseHoverCompressor(100, KisSignalCompressor::FIRST_ACTIVE)
 { }
 
 void KisToolSelectMagnetic::keyPressEvent(QKeyEvent *event)

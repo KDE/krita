@@ -58,11 +58,11 @@ protected:
     using KisToolSelectBase::m_widgetHelper;
 
 private:
-    int  m_fuzziness;
-    int  m_opacitySpread;
-    int  m_sizemod;
-    int  m_feather;
-    bool m_useSelectionAsBoundary;
+    int  m_fuzziness {20};
+    int  m_opacitySpread {100};
+    int  m_sizemod {0};
+    int  m_feather {0};
+    bool m_useSelectionAsBoundary {false};
     KConfigGroup m_configGroup;
 };
 

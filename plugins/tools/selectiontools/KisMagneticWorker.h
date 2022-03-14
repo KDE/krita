@@ -37,7 +37,7 @@ public:
 
 private:
     KisMagneticLazyTiles m_lazyTileFilter;
-    KisMagneticGraph *m_graph;
+    KisMagneticGraph *m_graph {nullptr};
 };
 
 #endif // ifndef KISMAGNETICWORKER_H

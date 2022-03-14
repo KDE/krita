@@ -32,7 +32,6 @@ HairyBrush::HairyBrush()
     m_oldPressure = 1.0f;
 
     m_saturationId = -1;
-    m_transfo = 0;
 }
 
 HairyBrush::~HairyBrush()
@@ -65,7 +64,7 @@ void HairyBrush::fromDabWithDensity(KisFixedPaintDeviceSP dab, qreal density)
     int centerY = height * 0.5;
 
     // make mask
-    Bristle * bristle = 0;
+    Bristle * bristle = nullptr;
     qreal alpha;
 
     quint8 * dabPointer = dab->data();
@@ -232,8 +231,8 @@ void HairyBrush::paintLine(KisPaintDeviceSP dab, KisPaintDeviceSP layer, const K
         }
 
     }
-    m_dab = 0;
-    m_dabAccessor = 0;
+    m_dab = nullptr;
+    m_dabAccessor = nullptr;
 }
 
 

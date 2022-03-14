@@ -22,7 +22,7 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 
 private:
-    KisSmudgeOptionWidget *m_smudgeOptionWidget;
+    KisSmudgeOptionWidget *m_smudgeOptionWidget {nullptr};
 };
 
 

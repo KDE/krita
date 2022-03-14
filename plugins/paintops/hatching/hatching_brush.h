@@ -35,31 +35,31 @@ public:
 private:
     void init();
     KoColor m_inkColor;
-    int m_counter;
-    int m_radius;
+    int m_counter {0};
+    int m_radius {0};
     KisHatchingPaintOpSettingsSP m_settings;
     KisPainter m_painter;
 
     /** Thickness in pixels of each hatch line */
-    int thickness;
+    int thickness {0};
 
     /** Angle in degrees of all the lines in a single hatching pass*/
-    double angle;
+    double angle {0.0};
 
     /** Distance separating one line from the other, in pixels */
-    double separation;
+    double separation {0.0};
 
     /** Height of the imaginary square to be hatched, the "hatching area" */
-    double height_;
+    double height_ {0.0};
 
     /** Width of the imaginary square to be hatched, the "hatching area" */
-    double width_;
+    double width_ {0.0};
 
     /** X coordinate of the point that determines the base line */
-    double origin_x;
+    double origin_x {0.0};
 
     /** Y coordinate of the point that determines the base line */
-    double origin_y;
+    double origin_y {0.0};
 
     /** Intercept of the base line */
     double baseLineIntercept {0};
@@ -77,10 +77,10 @@ private:
     *   of a line that passes through the hatching area, this line is used as
     *   a base to start iterating with HatchingBrush::iterateVerticalLines()
     */
-    double verticalHotX;
+    double verticalHotX {0.0};
 
     /** X position of the vertical lines as they are scanned, this value changes constantly */
-    double verticalScanX;
+    double verticalScanX {0.0};
 
     /** Angle of the lines expressed algebraically, as in slope*x + intercept = y */
     double slope {0};

@@ -115,12 +115,12 @@ public:
                                       const KoColor &preparedDullingColor, const quint8 smudgeRateOpacity);
 
 protected:
-    const KoCompositeOp * m_colorRateOp;
+    const KoCompositeOp * m_colorRateOp {nullptr};
     KoColor m_preparedDullingColor;
-    const KoCompositeOp * m_smearOp;
+    const KoCompositeOp * m_smearOp {nullptr};
 private:
     KisFixedPaintDeviceSP m_blendDevice;
-    bool m_useDullingMode = true;
+    bool m_useDullingMode {true};
 };
 
 

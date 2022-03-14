@@ -24,39 +24,39 @@ public:
     ~KisHatchingPaintOpSettings() override;
 
     //Dialogs enabled
-    bool enabledcurveangle;
-    bool enabledcurvecrosshatching;
-    bool enabledcurveopacity;
-    bool enabledcurveseparation;
-    bool enabledcurvesize;
-    bool enabledcurvethickness;
+    bool enabledcurveangle {false};
+    bool enabledcurvecrosshatching {false};
+    bool enabledcurveopacity {false};
+    bool enabledcurveseparation {false};
+    bool enabledcurvesize {false};
+    bool enabledcurvethickness {false};
 
     //Hatching Options
-    double angle;
-    double separation;
-    double thickness;
-    double origin_x;
-    double origin_y;
-    bool nocrosshatching;
-    bool perpendicular;
-    bool minusthenplus;
-    bool plusthenminus;
-    bool moirepattern;
-    int crosshatchingstyle;
-    int separationintervals;
+    double angle {0.0};
+    double separation {0.0};
+    double thickness {0.0};
+    double origin_x {0.0};
+    double origin_y {0.0};
+    bool nocrosshatching {false};
+    bool perpendicular {false};
+    bool minusthenplus {false};
+    bool plusthenminus {false};
+    bool moirepattern {false};
+    int crosshatchingstyle {0};
+    int separationintervals {0};
 
     //Hatching Preferences
-    //bool trigonometryalgebra;
-    //bool scratchoff;
-    bool antialias;
-    bool subpixelprecision;
-    bool opaquebackground;
+    //bool trigonometryalgebra {false};
+    //bool scratchoff {false};
+    bool antialias {false};
+    bool subpixelprecision {false};
+    bool opaquebackground {false};
 
     //Angle, Crosshatching, Separation and Thickness curves
-    double anglesensorvalue;
-    double crosshatchingsensorvalue;
-    double separationsensorvalue;
-    double thicknesssensorvalue;
+    double anglesensorvalue {0.0};
+    double crosshatchingsensorvalue {0.0};
+    double separationsensorvalue {0.0};
+    double thicknesssensorvalue {0.0};
 
     void initializeTwin(KisPaintOpSettingsSP convenienttwin) const;
     using KisPropertiesConfiguration::fromXML;

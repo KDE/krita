@@ -39,14 +39,14 @@ private:
     KisPaintDeviceSP m_heightmapDevice;
     KisPaintDeviceSP m_colorOnlyDevice;
     KisPaintDeviceSP m_projectionDevice;
-    KisOverlayPaintDeviceWrapper *m_layerOverlayDevice;
+    KisOverlayPaintDeviceWrapper *m_layerOverlayDevice {nullptr};
     KisColorSmudgeSourceSP m_sourceWrapperDevice;
     KisPainter m_finalPainter;
     KisPainter m_heightmapPainter;
-    bool m_shouldPreserveOriginalDab = true;
+    bool m_shouldPreserveOriginalDab {true};
     DabColoringStrategyMask m_coloringStrategy;
-    bool m_smearAlpha = true;
-    KisPainter *m_initializationPainter = 0;
+    bool m_smearAlpha {true};
+    KisPainter *m_initializationPainter {nullptr};
     KisPressurePaintThicknessOption::ThicknessMode m_thicknessMode;
 };
 

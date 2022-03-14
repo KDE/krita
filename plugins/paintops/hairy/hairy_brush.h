@@ -101,7 +101,7 @@ private:
     void initAndCache();
 
 private:
-    const KisHairyProperties * m_properties;
+    const KisHairyProperties * m_properties {nullptr};
 
     QVector<Bristle*> m_bristles;
     QTransform m_transform;
@@ -112,17 +112,17 @@ private:
     // temporary device
     KisPaintDeviceSP m_dab;
     KisRandomAccessorSP m_dabAccessor;
-    const KoCompositeOp * m_compositeOp;
-    quint32 m_pixelSize;
+    const KoCompositeOp * m_compositeOp {nullptr};
+    quint32 m_pixelSize {0};
 
-    int m_counter;
+    int m_counter {0};
 
-    double m_lastAngle;
-    double m_oldPressure;
+    double m_lastAngle {0.0};
+    double m_oldPressure {1.0};
     KoColor m_color;
 
-    int m_saturationId;
-    KoColorTransformation * m_transfo;
+    int m_saturationId {-1};
+    KoColorTransformation * m_transfo {nullptr};
 
     // internal counter counts the calls of paint, the counter is 1 when the first call occurs
     inline bool firstStroke() const {

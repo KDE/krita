@@ -55,7 +55,7 @@ private:
     QPointF m_hotSpot;
 
     // simple mode
-    qreal m_radius;
+    qreal m_radius {1.0};
 
     KisPressureOpacityOption m_opacityOption;
     KisPressureSizeOption m_sizeOption;
@@ -70,10 +70,10 @@ private:
     SketchProperties m_sketchProperties;
 
     QVector<QPointF> m_points;
-    int m_count;
-    KisPainter * m_painter;
+    int m_count {0};
+    KisPainter * m_painter {nullptr};
     KisBrushSP m_brush;
-    KisDabCache *m_dabCache;
+    KisDabCache *m_dabCache {nullptr};
 
 private:
     void drawConnection(const QPointF &start, const QPointF &end, double lineWidth);

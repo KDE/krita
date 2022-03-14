@@ -39,12 +39,10 @@ public:
     int bristleInkAmountWeight() const;
     int inkDepletionWeight() const;
 
-    int m_curveSamples;
-
     void writeOptionSetting(KisPropertiesConfigurationSP config) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP config) override;
 private:
-    KisInkOptionsWidget * m_options;
+    KisInkOptionsWidget * m_options {nullptr};
 };
 
 #endif // KIS_HAIRY_SHAPE_OPTION_H

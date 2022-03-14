@@ -53,9 +53,9 @@ public:
     KisDoubleSliderSpinBox* opacitySlider();
 
 private:
-    KisMyPaintOpOptionsWidget *m_options;
+    KisMyPaintOpOptionsWidget *m_options {nullptr};
     QByteArray json;
-    float eraserVal;
+    float eraserVal {0.0};
 
 };
 
@@ -91,12 +91,12 @@ public:
 
 
 public:
-    float diameter;
-    float hardness;
-    float opacity;
-    float eraser;
-    float offset;
-    bool eraserMode;
+    float diameter {1.0};
+    float hardness {1.0};
+    float opacity {1.0};
+    float eraser {0.0};
+    float offset {0.0};
+    bool eraserMode {false};
     QByteArray json;
 
 };

@@ -38,8 +38,8 @@
 
 SprayBrush::SprayBrush()
 {
-    m_painter = 0;
-    m_transfo = 0;
+    m_painter = nullptr;
+    m_transfo = nullptr;
 }
 
 SprayBrush::~SprayBrush()

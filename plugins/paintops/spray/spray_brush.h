@@ -41,23 +41,23 @@ public:
     void setFixedDab(KisFixedPaintDeviceSP dab);
 
 private:
-    int m_dabSeqNo = 0;
+    int m_dabSeqNo {0};
     KoColor m_inkColor;
-    qreal m_radius;
-    quint32 m_particlesCount;
-    quint8 m_dabPixelSize;
+    qreal m_radius {1.0};
+    quint32 m_particlesCount {1};
+    quint8 m_dabPixelSize {1};
 
-    KisPainter * m_painter;
+    KisPainter * m_painter {nullptr};
     KisPaintDeviceSP m_imageDevice;
     QImage m_brushQImage;
     QImage m_transformed;
 
-    KoColorTransformation* m_transfo;
+    KoColorTransformation* m_transfo {nullptr};
 
-    const KisSprayOptionProperties * m_properties;
-    const KisColorProperties * m_colorProperties;
-    const KisShapeProperties * m_shapeProperties;
-    const KisShapeDynamicsProperties * m_shapeDynamicsProperties;
+    const KisSprayOptionProperties * m_properties {nullptr};
+    const KisColorProperties * m_colorProperties {nullptr};
+    const KisShapeProperties * m_shapeProperties {nullptr};
+    const KisShapeDynamicsProperties * m_shapeDynamicsProperties {nullptr};
 
     KisBrushSP m_brush;
     KisFixedPaintDeviceSP m_fixedDab;

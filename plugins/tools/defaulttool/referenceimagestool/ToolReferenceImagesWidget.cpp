@@ -28,8 +28,8 @@ struct ToolReferenceImagesWidget::Private {
     {
     }
 
-    Ui_WdgToolOptions *ui;
-    ToolReferenceImages *tool;
+    Ui_WdgToolOptions *ui {nullptr};
+    ToolReferenceImages *tool {nullptr};
 };
 
 ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, KisCanvasResourceProvider */*provider*/, QWidget *parent)

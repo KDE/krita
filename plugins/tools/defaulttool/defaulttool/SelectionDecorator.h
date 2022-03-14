@@ -83,15 +83,15 @@ private:
 
 private:
     KoFlake::AnchorPosition m_hotPosition;
-    KoSelection *m_selection;
+    KoSelection *m_selection {nullptr};
     KoShapeMeshGradientHandles::Handle m_currentHoveredMeshHandle;
     KoShapeMeshGradientHandles::Handle m_selectedMeshHandle;
-    int m_handleRadius;
-    int m_lineWidth;
-    bool m_showFillGradientHandles;
-    bool m_showStrokeFillGradientHandles;
-    bool m_showFillMeshGradientHandles;
-    bool m_forceShapeOutlines;
+    int m_handleRadius {7};
+    int m_lineWidth {2};
+    bool m_showFillGradientHandles {false};
+    bool m_showStrokeFillGradientHandles {false};
+    bool m_showFillMeshGradientHandles {false};
+    bool m_forceShapeOutlines {false};
 };
 
 #endif

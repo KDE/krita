@@ -47,10 +47,13 @@ private:
     QPointF m_start;
     QPointF m_solidPoint;
     QSizeF m_initialSize;
-    bool m_top, m_left, m_bottom, m_right;
-    qreal m_initialSelectionAngle;
+    bool m_top {false};
+    bool m_left {false};
+    bool m_bottom {false};
+    bool m_right {false};
+    qreal m_initialSelectionAngle {0.0};
     QTransform m_shearMatrix;
-    bool m_isMirrored;
+    bool m_isMirrored {false};
     QList<QTransform> m_oldTransforms;
     QList<KoShape *> m_transformedShapesAndSelection;
 };

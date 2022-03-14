@@ -47,13 +47,16 @@ private:
     QTransform m_postScalingCoveringTransform;
     QSizeF m_initialSelectionSize;
     QTransform m_unwindMatrix;
-    bool m_top, m_left, m_bottom, m_right;
+    bool m_top {false};
+    bool m_left{false};
+    bool m_bottom {false};
+    bool m_right {false};
 
     QPointF m_globalStillPoint;
     QPointF m_globalCenterPoint;
     QScopedPointer<KoShapeResizeCommand> m_executedCommand;
 
-    bool m_forceUniformScalingMode = false;
+    bool m_forceUniformScalingMode {false};
 };
 
 #endif

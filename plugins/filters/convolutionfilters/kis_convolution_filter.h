@@ -33,7 +33,7 @@ protected:
 
 protected:
     KisConvolutionKernelSP m_matrix;
-    bool m_ignoreAlpha;
+    bool m_ignoreAlpha {false};
 };
 
 #endif

@@ -64,13 +64,13 @@ public:
     bool isAlpha() const;
 
 private:
-    Type m_type;
-    int m_pixelIndex;
-    KoChannelInfo *m_realChannelInfo;
+    Type m_type {REAL};
+    int m_pixelIndex {0};
+    KoChannelInfo *m_realChannelInfo {nullptr};
 
     QString m_nameOverride;
-    KoChannelInfo::enumChannelValueType m_valueTypeOverride;
-    int m_channelSizeOverride;
+    KoChannelInfo::enumChannelValueType m_valueTypeOverride {KoChannelInfo::FLOAT32};
+    int m_channelSizeOverride {4};
 };
 
 #endif /* __VIRTUAL_CHANNEL_INFO_H */

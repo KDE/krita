@@ -69,7 +69,7 @@ public:
     virtual bool compareTo(const KisPropertiesConfiguration* rhs) const override;
 
 protected:
-    int m_channelCount;
+    int m_channelCount {0};
     QList<KisCubicCurve> m_curves;
     QVector<QVector<quint16>> m_transfers;
 
@@ -119,12 +119,12 @@ protected:
     inline QPixmap createGradient(Qt::Orientation orient /*, int invert (not used now) */);
 
     QVector<VirtualChannelInfo> m_virtualChannels;
-    int m_activeVChannel = 0;
+    int m_activeVChannel {0};
     mutable QList<KisCubicCurve> m_curves;
 
     KisPaintDeviceSP m_dev;
-    WdgPerChannel * m_page;
-    KisHistogram *m_histogram;
+    WdgPerChannel * m_page {nullptr};
+    KisHistogram *m_histogram {nullptr};
 };
 
 #endif

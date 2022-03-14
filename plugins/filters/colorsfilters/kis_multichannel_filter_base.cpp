@@ -308,6 +308,7 @@ void KisMultiChannelConfigWidget::init() {
 
 KisMultiChannelConfigWidget::~KisMultiChannelConfigWidget()
 {
+    KIS_ASSERT_RECOVER_RETURN(m_histogram);
     delete m_histogram;
 }
 

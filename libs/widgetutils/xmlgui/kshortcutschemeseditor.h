@@ -37,12 +37,12 @@ protected:
     void updateDeleteButton();
 
 private:
-    QPushButton *m_newScheme;
-    QPushButton *m_deleteScheme;
-    QPushButton *m_exportScheme;
-    QComboBox *m_schemesList;
+    QPushButton *m_newScheme {nullptr};
+    QPushButton *m_deleteScheme {nullptr};
+    QPushButton *m_exportScheme {nullptr};
+    QComboBox *m_schemesList {nullptr};
 
-    KisShortcutsDialog *m_dialog;
+    KisShortcutsDialog *m_dialog {nullptr};
     QHash<QString, QString> m_schemeFileLocations;
 };
 

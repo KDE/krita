@@ -65,7 +65,7 @@ private:
     RockerGestureHash m_defaultRockerGestures;
     QPolygon m_points;
     QTimer m_gestureTimeout;
-    bool m_acquiring;
+    bool m_acquiring {false};
 
     KShapeGesture m_shapeGesture;
     KRockerGesture m_rockerGesture;

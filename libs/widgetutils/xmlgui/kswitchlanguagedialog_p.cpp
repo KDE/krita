@@ -82,15 +82,10 @@ namespace KDEPrivate
 {
 
 struct LanguageRowData {
-    LanguageRowData()
-    {
-        label = 0;
-        languageButton = 0;
-        removeButton = 0;
-    }
-    QLabel *label;
-    KLanguageButton *languageButton;
-    QPushButton *removeButton;
+
+    QLabel *label {nullptr};
+    KLanguageButton *languageButton {nullptr};
+    QPushButton *removeButton {nullptr};
 
     void setRowWidgets(
         QLabel *label,
@@ -110,7 +105,7 @@ class KSwitchLanguageDialogPrivate
 public:
     KSwitchLanguageDialogPrivate(KSwitchLanguageDialog *parent);
 
-    KSwitchLanguageDialog *p; //parent class
+    KSwitchLanguageDialog *p {nullptr}; //parent class
 
     /**
         Fills language button with names of languages for which given application has translation.
@@ -129,7 +124,7 @@ public:
 
     QMap<QPushButton *, LanguageRowData> languageRows;
     QList<KLanguageButton *> languageButtons;
-    QGridLayout *languagesLayout;
+    QGridLayout *languagesLayout {nullptr};
 };
 
 /*************************** KSwitchLanguageDialog **************************/

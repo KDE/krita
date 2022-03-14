@@ -52,17 +52,17 @@ public:
 
     void _k_updateUrl();
 
-    KBugReport *q;
-    QProcess *m_process;
+    KBugReport *q {nullptr};
+    QProcess *m_process {nullptr};
     KAboutData m_aboutData;
 
-    QTextEdit *m_lineedit;
-    QLineEdit *m_subject;
-    QLabel *m_version;
+    QTextEdit *m_lineedit {nullptr};
+    QLineEdit *m_subject {nullptr};
+    QLabel *m_version {nullptr};
     QString m_strVersion;
-    QGroupBox *m_bgSeverity;
+    QGroupBox *m_bgSeverity {nullptr};
 
-    QLabel *lblApplicationName;
+    QLabel *lblApplicationName {nullptr};
     QString lastError;
     QString appname;
     QString os;

@@ -39,7 +39,7 @@ public:
         * @param parent The parent of the dialog box. You should use the
         *        toplevel window so that the dialog becomes centered.
         */
-    KSwitchLanguageDialog(QWidget *parent = 0);
+    KSwitchLanguageDialog(QWidget *parent = nullptr);
 
     ~KSwitchLanguageDialog() override;
 

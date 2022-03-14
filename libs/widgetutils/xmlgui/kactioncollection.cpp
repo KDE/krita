@@ -43,8 +43,6 @@ public:
     KActionCollectionPrivate()
         : m_parentGUIClient(0L),
           configGroup(QStringLiteral("Shortcuts")),
-          connectTriggered(false),
-          connectHovered(false),
           q(0)
 
     {
@@ -72,15 +70,14 @@ public:
     QMap<QString, QAction *> actionByName;
     QList<QAction *> actions;
 
-    const KXMLGUIClient *m_parentGUIClient;
+    const KXMLGUIClient *m_parentGUIClient {nullptr};
 
     QString configGroup;
-    bool configIsGlobal : 1;
 
-    bool connectTriggered : 1;
-    bool connectHovered : 1;
+    bool connectTriggered {false};
+    bool connectHovered {false};
 
-    KActionCollection *q;
+    KActionCollection *q {nullptr};
 
     QList<QWidget *> associatedWidgets;
 };

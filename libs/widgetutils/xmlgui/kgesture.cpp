@@ -29,7 +29,7 @@ public:
     }
     QPolygon m_shape;
     QVector<float> m_lengthTo;
-    float m_curveLength;
+    float m_curveLength {0.0};
     QString m_friendlyName;
 };
 

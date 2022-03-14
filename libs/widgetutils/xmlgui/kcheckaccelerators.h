@@ -76,18 +76,18 @@ public:
 
 private:
     void checkAccelerators(bool automatic);
-    int key;
-    bool block;
-    bool alwaysShow;
-    bool autoCheck;
+    int key {0};
+    bool block {false};
+    bool alwaysShow {false};
+    bool autoCheck {false};
 
-    bool copyWidgetText;
+    bool copyWidgetText {false};
     QString copyWidgetTextCommand;
 
     QTimer autoCheckTimer;
     void createDialog(QWidget *parent, bool automatic);
     QPointer<QDialog> drklash;
-    QTextBrowser *drklash_view;
+    QTextBrowser *drklash_view {nullptr};
 
 private Q_SLOTS:
     void autoCheckSlot();

@@ -20,7 +20,7 @@ public:
     KShortcutWidget *const q;
     Ui::KShortcutWidget ui;
     QList<QKeySequence> cut;
-    bool holdChangedSignal;
+    bool holdChangedSignal {false};
 };
 
 KShortcutWidget::KShortcutWidget(QWidget *parent)

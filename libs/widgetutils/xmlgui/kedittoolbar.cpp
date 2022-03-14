@@ -429,7 +429,6 @@ public:
           m_loadedOnce(false)
     {
         m_componentName = cName;
-        m_isPart   = false;
         m_helpArea = 0L;
         // We want items with an icon to align with items without icon
         // So we use an empty QPixmap for that
@@ -518,22 +517,22 @@ public:
     }
 #endif
 
-    QComboBox *m_toolbarCombo;
+    QComboBox *m_toolbarCombo {nullptr};
 
-    QToolButton *m_upAction;
-    QToolButton *m_removeAction;
-    QToolButton *m_insertAction;
-    QToolButton *m_downAction;
+    QToolButton *m_upAction {nullptr};
+    QToolButton *m_removeAction {nullptr};
+    QToolButton *m_insertAction {nullptr};
+    QToolButton *m_downAction {nullptr};
 
     //QValueList<QAction*> m_actionList;
-    KActionCollection *m_collection;
-    KEditToolBarWidget *m_widget;
-    KXMLGUIFactory *m_factory;
+    KActionCollection *m_collection {nullptr};
+    KEditToolBarWidget *m_widget {nullptr};
+    KXMLGUIFactory *m_factory {nullptr};
     QString m_componentName;
 
     QPixmap m_emptyIcon;
 
-    XmlData     *m_currentXmlData;
+    XmlData     *m_currentXmlData {nullptr};
     QDomElement m_currentToolBarElem;
 
     QString            m_xmlFile;
@@ -542,16 +541,15 @@ public:
     QDomDocument       m_localDoc;
 
     ToolBarList        m_barList;
-    ToolBarListWidget *m_inactiveList;
-    ToolBarListWidget *m_activeList;
+    ToolBarListWidget *m_inactiveList {nullptr};
+    ToolBarListWidget *m_activeList {nullptr};
 
     QList<XmlData> m_xmlFiles;
 
-    QLabel     *m_comboLabel;
-    KSeparator *m_comboSeparator;
-    QLabel *m_helpArea;
-    bool m_isPart : 1;
-    bool m_loadedOnce : 1;
+    QLabel     *m_comboLabel {nullptr};
+    KSeparator *m_comboSeparator {nullptr};
+    QLabel *m_helpArea {nullptr};
+    bool m_loadedOnce {false};
 };
 
 }
@@ -561,9 +559,8 @@ using namespace KDEPrivate;
 class KEditToolBarPrivate
 {
 public:
-    KEditToolBarPrivate(KEditToolBar *q): q(q),
-        m_accept(false), m_global(false),
-        m_collection(0), m_factory(0), m_widget(0) {}
+    KEditToolBarPrivate(KEditToolBar *q): q(q)
+    {}
 
     void init();
 
@@ -574,17 +571,17 @@ public:
     void applyClicked();
     void defaultClicked();
 
-    KEditToolBar *q;
-    bool m_accept;
+    KEditToolBar *q {nullptr};
+    bool m_accept {false};
     // Save parameters for recreating widget after resetting toolbar
-    bool m_global;
-    KActionCollection *m_collection;
+    bool m_global {false};
+    KActionCollection *m_collection {nullptr};
     QString m_file;
     QString m_defaultToolBar;
-    KXMLGUIFactory *m_factory;
-    KEditToolBarWidget *m_widget;
-    QVBoxLayout *m_layout;
-    QDialogButtonBox *m_buttonBox;
+    KXMLGUIFactory *m_factory {nullptr};
+    KEditToolBarWidget *m_widget {nullptr};
+    QVBoxLayout *m_layout {nullptr};
+    QDialogButtonBox *m_buttonBox {nullptr};
 };
 
 Q_GLOBAL_STATIC(QString, s_defaultToolBarName)

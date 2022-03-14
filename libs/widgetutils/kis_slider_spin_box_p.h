@@ -938,23 +938,23 @@ private:
     // The duration of the animation 
     static constexpr double fullAnimationDuration{200.0};
 
-    SpinBoxType *m_q{nullptr};
-    QLineEdit *m_lineEdit{nullptr};
-    QWidget *m_widgetRangeToggle{nullptr};
+    SpinBoxType *m_q {nullptr};
+    QLineEdit *m_lineEdit {nullptr};
+    QWidget *m_widgetRangeToggle {nullptr};
     QTimer m_timerStartEditing;
-    ValueType m_softMinimum{static_cast<ValueType>(0)};
-    ValueType m_softMaximum{static_cast<ValueType>(0)};
-    double m_exponentRatio{1.0};
-    bool m_blockUpdateSignalOnDrag{false};
-    ValueType m_fastSliderStep{static_cast<ValueType>(5)};
-    mutable ValueType m_valueBeforeEditing;
-    bool m_isDragging{false};
-    bool m_useRelativeDragging;
-    int m_relativeDraggingOffset;
+    ValueType m_softMinimum {static_cast<ValueType>(0)};
+    ValueType m_softMaximum {static_cast<ValueType>(0)};
+    double m_exponentRatio {1.0};
+    bool m_blockUpdateSignalOnDrag {false};
+    ValueType m_fastSliderStep {static_cast<ValueType>(5)};
+    mutable ValueType m_valueBeforeEditing {static_cast<ValueType>(0)};
+    bool m_isDragging {false};
+    bool m_useRelativeDragging {false};
+    int m_relativeDraggingOffset {0};
     QPoint m_lastMousePressPosition;
-    int m_rightClickCounter{0};
-    bool m_focusLostDueToMenu{false};
-    bool m_isSoftRangeActive{true};
+    int m_rightClickCounter {0};
+    bool m_focusLostDueToMenu {false};
+    bool m_isSoftRangeActive {true};
     QVariantAnimation m_sliderAnimation;
     QVariantAnimation m_rangeToggleHoverAnimation;
     SignalToFunctionProxy m_startEditingSignalProxy;

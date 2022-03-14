@@ -79,10 +79,9 @@ Q_COREAPP_STARTUP_FUNCTION(startupFunc)
 KCheckAccelerators::KCheckAccelerators(QObject *parent, int key_, bool autoCheck_, bool copyWidgetText_)
     : QObject(parent)
     , key(key_)
-    , block(false)
     , autoCheck(autoCheck_)
     , copyWidgetText(copyWidgetText_)
-    , drklash(0)
+    , drklash(nullptr)
 {
     setObjectName(QStringLiteral("kapp_accel_filter"));
 

@@ -239,6 +239,8 @@ target_link_libraries(kritaflake
         Qt5::Gui
         Qt5::Xml
         Boost::boost
+        Raqm::Raqm
+        Freetype::Freetype
 )
 
 set_target_properties(kritaflake PROPERTIES

@@ -241,6 +241,7 @@ target_link_libraries(kritaflake
         Boost::boost
         Raqm::Raqm
         Freetype::Freetype
+        Fontconfig::Fontconfig
 )
 
 set_target_properties(kritaflake PROPERTIES

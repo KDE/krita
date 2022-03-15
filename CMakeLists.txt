@@ -1119,6 +1119,15 @@ set_package_properties(Raqm PROPERTIES
     PURPOSE "Needed for rendering text vector shapes."
 )
 
+##
+## Check for fontconfig
+##
+find_package(Fontconfig REQUIRED)
+set_package_properties(Fontconfig PROPERTIES
+    TYPE REQUIRED
+    PURPOSE "Needed for getting font file information."
+)
+
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)
     ki18n_install(po)

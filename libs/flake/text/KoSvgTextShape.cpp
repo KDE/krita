@@ -9,6 +9,7 @@
 #include <QTextLayout>
 
 #include <raqm.h>
+#include <fontconfig/fontconfig.h>
 #include <klocalizedstring.h>
 
 #include "KoSvgText.h"
@@ -37,6 +38,7 @@
 #include <memory>
 #include <QPainter>
 #include <QPainterPath>
+#include <QFileInfo>
 #include <boost/optional.hpp>
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
@@ -59,6 +61,8 @@ public:
     FT_Library library = NULL;
 
     QPainterPath path;
+    // temp
+    QString fontName;
 
 
     void clearAssociatedOutlines(const KoShape *rootShape);
@@ -158,19 +162,30 @@ QPainterPath KoSvgTextShape::textOutline() const
         size_t count = 0;
         raqm_glyph_t *glyphs = raqm_get_glyphs (d->cachedLayouts.at(i), &count);
 
-        QRawFont font(QString("/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf"), 16.0);
-
         QPointF oldOffset = QPointF(0,0);
-        int freetypeMultiplier = 64;
+        qreal freetypeMultiplier = 64.0;
+        QMap<QString, QRawFont> fontList;
 
         for (int j = 0; j < int(count); j++) {
+
+            QRawFont font;
+            if (fontList.contains(glyphs[j].ftface->family_name)) {
+                font = fontList.value(glyphs[j].ftface->family_name);
+            } else {
+                // point size makes no sense, we need to load the path from freetype directly.
+                qreal pointSize = 16.0;//glyphs[j].ftface->size->metrics.height/freetypeMultiplier;
+                font = QRawFont::fromFont(QFont(glyphs[j].ftface->family_name, pointSize));
+                fontList.insert(glyphs[j].ftface->family_name, font);
+            }
             QPainterPath glyph = font.pathForGlyph(glyphs[j].index);
+            glyph.setFillRule(Qt::WindingFill);
+
             QPointF offset = QPointF(glyphs[j].x_offset/freetypeMultiplier, glyphs[j].y_offset/freetypeMultiplier);
             QPointF advance = QPointF(glyphs[j].x_advance/freetypeMultiplier, glyphs[j].y_advance/freetypeMultiplier);
             qDebug() << "adding glyph" << j << "offset" << offset << "advance" << advance;
             oldOffset += offset;
             glyph.translate(oldOffset);
-            result += glyph;
+            result.addPath(glyph);
             oldOffset += advance;
         }
 
@@ -459,12 +474,28 @@ void KoSvgTextShape::relayout() const
         if (!d->library) {
             FT_Init_FreeType(&d->library);
         }
-        QString font = "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf";
-        if (FT_New_Face(d->library, font.toUtf8().data(), 0, &face) == 0) {
+        FcConfig *config = FcConfigGetCurrent();
+        FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY,FC_FILE, nullptr);
+        FcPattern *p = FcPatternCreate();
+        const FcChar8 *vals = reinterpret_cast<FcChar8*>(chunk.formats.at(0).format.font().family().toUtf8().data());
+        qreal fontSize = 16.0;
+        FcPatternAddString(p, FC_FAMILY, vals);
+        FcFontSet *fontSet = FcFontList(config, p, objectSet);
+        QString fontFileName = "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf";
+        QStringList fontProperties = QString(reinterpret_cast<char*>(FcNameUnparse(fontSet->fonts[0]))).split(':');
+        for (QString value : fontProperties) {
+            if (value.startsWith("file")) {
+                fontFileName = value.split("=").last();
+                fontFileName.remove("\\");
+            }
+        }
+        QFileInfo fi(fontFileName);
+
+        if (FT_New_Face(d->library, fi.filePath().toUtf8().data(), 0, &face) == 0) {
             qDebug() << "face loaded";
-            FT_Set_Char_Size(face, 16*64, 0, 0, 0);
+            FT_Set_Char_Size(face, fontSize*64.0, 0, 0, 0);
         } else {
-            qDebug() << "face did not load";
+            qDebug() << "face did not load" << fontFileName << fi.filePath();
         }
 
         if (raqm_set_text_utf8(layout, chunk.text.toUtf8(), chunk.text.size())) {

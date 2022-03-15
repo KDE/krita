@@ -1048,6 +1048,17 @@ set_package_properties(RAQM PROPERTIES
 )
 include_directories(${RAQM_INCLUDE_DIRS})
 
+##
+## Check for fontconfig.
+##
+find_package(Fontconfig)
+set_package_properties(Fontconfig PROPERTIES
+    DESCRIPTION "Font configuration and customization library"
+    URL "https://gitlab.freedesktop.org/fontconfig/fontconfig/"
+    TYPE REQUIRED
+    PURPOSE "Needed for getting font file information."
+)
+include_directories(${FC_INCLUDE_DIRS})
 # FIXME: better way to do this?
 list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${EXPAT_LIBRARY}

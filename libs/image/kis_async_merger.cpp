@@ -39,7 +39,7 @@
 
 #ifdef DEBUG_MERGER
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)            \
-    qDebug() << message << type << ":" << leaf->node()->name() << rect
+    qDebug() << message << type << ":" << leaf->node()->name() << rect << "rendered:" << leaf->shouldBeRendered()
 #else
 #define DEBUG_NODE_ACTION(message, type, leaf, rect)
 #endif

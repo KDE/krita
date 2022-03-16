@@ -12,7 +12,6 @@
 #include "kis_image_layer_add_command.h"
 #include "kis_image_layer_move_command.h"
 #include "kis_image_layer_remove_command.h"
-#include "kis_image_lock_command.h"
 #include "kis_image_change_visibility_command.h"
 
 #endif

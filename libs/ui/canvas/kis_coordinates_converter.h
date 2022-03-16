@@ -70,6 +70,7 @@ public:
      * A composition of to scale methods: zoom level + image resolution
      */
     qreal effectiveZoom() const;
+    qreal effectivePhysicalZoom() const;
 
     template<class T> typename _Private::Traits<T>::Result
     imageToViewport(const T& obj) const { return _Private::Traits<T>::map(imageToViewportTransform(), obj); }

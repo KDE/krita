@@ -451,8 +451,10 @@ void KisImagePipeBrush::setAutoAdjustMidPoint(bool value)
     d->brushesPipe.setAutoAdjustMidPoint(value);
 }
 
-QPainterPath KisImagePipeBrush::outline() const
+QPainterPath KisImagePipeBrush::outline(bool forcePreciseOutline) const
 {
+    Q_UNUSED(forcePreciseOutline);
+
     KisGbrBrushSP brush = d->brushesPipe.firstBrush();
     Q_ASSERT(brush);
 

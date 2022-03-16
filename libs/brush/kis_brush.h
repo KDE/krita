@@ -315,7 +315,7 @@ public:
 
     static KoResourceLoadResult fromXMLLoadResult(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
-    virtual QPainterPath outline() const;
+    virtual QPainterPath outline(bool forcePreciseOutline = false) const;
 
     virtual void setScale(qreal _scale);
     qreal scale() const;

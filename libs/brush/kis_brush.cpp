@@ -716,8 +716,10 @@ qreal KisBrush::angle() const
     return d->angle;
 }
 
-QPainterPath KisBrush::outline() const
+QPainterPath KisBrush::outline(bool forcePreciseOutline) const
 {
+    Q_UNUSED(forcePreciseOutline);
+
     return *d->brushOutline.value(this);
 }
 

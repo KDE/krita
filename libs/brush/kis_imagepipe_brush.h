@@ -75,7 +75,7 @@ public:
 
     QString parasiteSelection(); // returns random, constant, etc
 
-    QPainterPath outline() const override;
+    QPainterPath outline(bool forcePreciseOutline = false) const override;
 
     bool canPaintFor(const KisPaintInformation& info) override;
 

@@ -251,7 +251,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     info.setRandomSource(m_d->fakeDabRandomSource);
     info.setPerStrokeRandomSource(m_d->fakeStrokeRandomSource);
 
-    QPainterPath outline = settings->brushOutline(info, mode, currentZoom());
+    QPainterPath outline = settings->brushOutline(info, mode, currentPhysicalZoom());
 
     if (m_d->resources &&
         m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER &&
@@ -943,6 +943,11 @@ int KisToolFreehandHelper::computeAirbrushTimerInterval() const
 qreal KisToolFreehandHelper::currentZoom() const
 {
     return m_d->resourceManager ? m_d->resourceManager->resource(KoCanvasResource::EffectiveZoom).toReal() : 1.0;
+}
+
+qreal KisToolFreehandHelper::currentPhysicalZoom() const
+{
+    return m_d->resourceManager ? m_d->resourceManager->resource(KoCanvasResource::EffectivePhysicalZoom).toReal() : 1.0;
 }
 
 void KisToolFreehandHelper::paintAt(int strokeInfoId,

@@ -117,7 +117,7 @@ void KisToolSmartPatch::addMaskPath( KoPointerEvent *event )
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
     QPointF imagePos = currentImage()->documentToPixel(event->point);
-    QPainterPath currentBrushOutline = brushOutline().translated(KisAlgebra2D::alignForZoom(imagePos, converter->effectiveZoom()));
+    QPainterPath currentBrushOutline = brushOutline().translated(KisAlgebra2D::alignForZoom(imagePos, converter->effectivePhysicalZoom()));
     m_d->maskDevPainter.fillPainterPath(currentBrushOutline);
 
     canvas()->updateCanvas(currentImage()->pixelToDocument(m_d->maskDev->exactBounds()));
@@ -204,7 +204,7 @@ QPainterPath KisToolSmartPatch::getBrushOutlinePath(const QPointF &documentPos,
     KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
     const KisCoordinatesConverter *converter = canvas2->coordinatesConverter();
 
-    return path.translated(KisAlgebra2D::alignForZoom(imagePos, converter->effectiveZoom()));
+    return path.translated(KisAlgebra2D::alignForZoom(imagePos, converter->effectivePhysicalZoom()));
 }
 
 void KisToolSmartPatch::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)

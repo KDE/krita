@@ -1019,7 +1019,7 @@ void KisOpenGLCanvasRenderer::renderCanvasGL(const QRect &updateRect)
     drawCheckers(alignedUpdateRect);
     drawImage(alignedUpdateRect);
 
-    if ((coordinatesConverter()->effectiveZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
+    if ((coordinatesConverter()->effectivePhysicalZoom() > d->pixelGridDrawingThreshold - 0.00001) && d->pixelGridEnabled) {
         drawGrid(alignedUpdateRect);
     }
 

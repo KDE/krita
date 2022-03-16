@@ -814,7 +814,7 @@ QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
 
     QPainterPath path = currentPaintOpPreset()->settings()->
         brushOutline(info,
-                     outlineMode, converter->effectiveZoom());
+                     outlineMode, converter->effectivePhysicalZoom());
 
     return path;
 }

@@ -365,10 +365,10 @@ qreal KisAutoBrush::randomness() const
     return d->randomness;
 }
 
-QPainterPath KisAutoBrush::outline() const
+QPainterPath KisAutoBrush::outline(bool forcePreciseOutline) const
 {
     const bool requiresComplexOutline = d->shape->spikes() > 2;
-    if (!requiresComplexOutline) {
+    if (!requiresComplexOutline && !forcePreciseOutline) {
         QPainterPath path;
         QRectF brushBoundingbox(0, 0, width(), height());
         if (maskGenerator()->type() == KisMaskGenerator::CIRCLE) {

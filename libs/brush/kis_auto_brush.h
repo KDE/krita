@@ -62,7 +62,7 @@ public:
         qreal softnessFactor = DEFAULT_SOFTNESS_FACTOR,
         qreal lightnessStrength = DEFAULT_LIGHTNESS_STRENGTH) const override;
 
-    QPainterPath outline() const override;
+    QPainterPath outline(bool forcePreciseOutline = false) const override;
 
     void notifyBrushIsGoingToBeClonedForStroke() override;
 

@@ -115,7 +115,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
         if (!brush) return path;
         qreal finalScale = brush->scale() * additionalScale;
 
-        QPainterPath realOutline = brush->outline();
+        QPainterPath realOutline = brush->outline(alignForZoom > 2.0 || qFuzzyCompare(alignForZoom, 2.0));
 
         if (mode.forceCircle) {
 

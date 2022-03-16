@@ -217,8 +217,11 @@ void KisZoomManager::updateCurrentZoomResource()
 {
     const qreal effectiveZoom =
         m_view->canvasBase()->coordinatesConverter()->effectiveZoom();
+    const qreal effectivePhysicalZoom =
+        m_view->canvasBase()->coordinatesConverter()->effectivePhysicalZoom();
 
     m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectiveZoom, effectiveZoom);
+    m_view->canvasBase()->resourceManager()->setResource(KoCanvasResource::EffectivePhysicalZoom, effectivePhysicalZoom);
 }
 
 void KisZoomManager::updateMouseTrackingConnections()

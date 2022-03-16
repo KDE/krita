@@ -69,6 +69,7 @@ void KisCanvasResourceProvider::setResourceManager(KoCanvasResourceProvider *res
     m_resourceManager->setResource(KoCanvasResource::HdrExposure, 0.0);
     m_resourceManager->setResource(KoCanvasResource::HdrGamma, 1.0);
     m_resourceManager->setResource(KoCanvasResource::EffectiveZoom, 1.0);
+    m_resourceManager->setResource(KoCanvasResource::EffectivePhysicalZoom, 1.0);
 
     connect(m_resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)),
             this, SLOT(slotCanvasResourceChanged(int,QVariant)));

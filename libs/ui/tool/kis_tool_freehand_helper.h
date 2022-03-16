@@ -141,6 +141,7 @@ private:
     int computeAirbrushTimerInterval() const;
 
     qreal currentZoom() const;
+    qreal currentPhysicalZoom() const;
 
 private Q_SLOTS:
     void finishStroke();

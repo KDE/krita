@@ -25,6 +25,7 @@ public:
         UPDATE,
         UPDATE_NO_FILTHY,
         FULL_REFRESH,
+        FULL_REFRESH_NO_FILTHY,
         UNSUPPORTED
     };
 

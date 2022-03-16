@@ -14,14 +14,19 @@
 class KisFullRefreshWalker : public KisRefreshSubtreeWalker, public KisMergeWalker
 {
 public:
-    KisFullRefreshWalker(QRect cropRect, bool skipNonRenderableNodes = false)
-        : KisRefreshSubtreeWalker(cropRect, skipNonRenderableNodes),
+    using KisRefreshSubtreeWalker::Flag;
+    using KisRefreshSubtreeWalker::Flags;
+
+public:
+    KisFullRefreshWalker(QRect cropRect, Flags flags = None)
+        : KisRefreshSubtreeWalker(cropRect, flags),
           KisMergeWalker(cropRect, NO_FILTHY)
     {
     }
 
     UpdateType type() const override {
-        return FULL_REFRESH;
+        return KisRefreshSubtreeWalker::flags() & NoFilthyMode ?
+            FULL_REFRESH_NO_FILTHY : FULL_REFRESH;
     }
 
     void startTrip(KisProjectionLeafSP startWith) override {

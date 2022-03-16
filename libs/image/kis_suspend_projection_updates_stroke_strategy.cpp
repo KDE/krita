@@ -54,13 +54,14 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
 
         struct FullRefreshRequest {
             FullRefreshRequest() {}
-            FullRefreshRequest(const QRect &_rect, const QRect &_cropRect)
-                : rect(_rect), cropRect(_cropRect)
+            FullRefreshRequest(const QRect &_rect, const QRect &_cropRect, KisUpdatesFacade::UpdateFlags _flags)
+                : rect(_rect), cropRect(_cropRect), flags(_flags)
             {
             }
 
             QRect rect;
             QRect cropRect;
+            KisUpdatesFacade::UpdateFlags flags;
         };
 
         struct NoFilthyUpdate {
@@ -95,13 +96,13 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
             return true;
         }
 
-        bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect) override {
+        bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect, KisUpdatesFacade::UpdateFlags flags) override {
             if (image->currentLevelOfDetail() > 0) return false;
 
             QMutexLocker l(&m_mutex);
 
             Q_FOREACH(const QRect &rc, rects) {
-                m_refreshesHash[KisNodeSP(node)].append(FullRefreshRequest(rc, cropRect));
+                m_refreshesHash[KisNodeSP(node)].append(FullRefreshRequest(rc, cropRect, flags));
             }
 
             return true;
@@ -139,7 +140,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void notifyUpdates(KisImageSP image) {
             const int step = 64;
 
-            {
+            {   // fithy refreshes
                 RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
                 RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
 
@@ -150,7 +151,36 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                     QHash<QRect, QVector<QRect>> fullRefreshRequests;
 
                     Q_FOREACH (const FullRefreshRequest &req, it.value()) {
-                        fullRefreshRequests[req.cropRect] += req.rect;
+                        if (!req.flags.testFlag(KisUpdatesFacade::NoFilthyUpdate)) {
+                            fullRefreshRequests[req.cropRect] += req.rect;
+                        }
+                    }
+
+                    auto reqIt = fullRefreshRequests.begin();
+                    for (; reqIt != fullRefreshRequests.end(); ++reqIt) {
+                        const QVector<QRect> simplifiedRects = KisRegion::fromOverlappingRects(reqIt.value(), step).rects();
+
+                        //Block frame cache drop here. We handle this manually later anyway, so we should just block invalidation.
+                        SuspendFrameInvalidationHandle handle(image->animationInterface());
+                        image->refreshGraphAsync(node, simplifiedRects, reqIt.key());
+                    }
+                }
+            }
+
+            {   // non-fithy refreshes
+                RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
+                RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
+
+
+                for (; it != end; ++it) {
+                    KisNodeSP node = it.key();
+
+                    QHash<QRect, QVector<QRect>> fullRefreshRequests;
+
+                    Q_FOREACH (const FullRefreshRequest &req, it.value()) {
+                        if (req.flags.testFlag(KisUpdatesFacade::NoFilthyUpdate)) {
+                            fullRefreshRequests[req.cropRect] += req.rect;
+                        }
                     }
 
                     auto reqIt = fullRefreshRequests.begin();

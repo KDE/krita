@@ -2092,22 +2092,22 @@ void KisImage::initialRefreshGraph()
     waitForDone();
 }
 
-void KisImage::refreshGraphAsync(KisNodeSP root)
+void KisImage::refreshGraphAsync(KisNodeSP root, UpdateFlags flags)
 {
-    refreshGraphAsync(root, bounds(), bounds());
+    refreshGraphAsync(root, bounds(), bounds(), flags);
 }
 
-void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc)
+void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, UpdateFlags flags)
 {
-    refreshGraphAsync(root, rc, bounds());
+    refreshGraphAsync(root, rc, bounds(), flags);
 }
 
-void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect)
+void KisImage::refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect, UpdateFlags flags)
 {
-    refreshGraphAsync(root, QVector<QRect>({rc}), cropRect);
+    refreshGraphAsync(root, QVector<QRect>({rc}), cropRect, flags);
 }
 
-void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect)
+void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect, UpdateFlags flags)
 {
     if (!root) root = m_d->rootLayer;
 
@@ -2121,14 +2121,18 @@ void KisImage::refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, co
 
         KIS_SAFE_ASSERT_RECOVER(*it) { continue; }
 
-        if ((*it)->filterRefreshGraph(this, root.data(), rects, cropRect)) {
+        if ((*it)->filterRefreshGraph(this, root.data(), rects, cropRect, flags)) {
             return;
         }
     }
 
-
     m_d->animationInterface->notifyNodeChanged(root.data(), rects, true);
-    m_d->scheduler.fullRefreshAsync(root, rects, cropRect);
+
+    if (flags & NoFilthyUpdate) {
+        m_d->scheduler.fullRefreshAsyncNoFilthy(root, rects, cropRect);
+    } else {
+        m_d->scheduler.fullRefreshAsync(root, rects, cropRect);
+    }
 }
 
 

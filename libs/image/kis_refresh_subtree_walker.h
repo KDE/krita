@@ -50,7 +50,7 @@ protected:
         while(currentLeaf) {
             nextLeaf = currentLeaf->nextSibling();
 
-            if(currentLeaf->isLayer()) {
+            if(currentLeaf->isLayer() && currentLeaf->shouldBeRendered()) {
                 tempRect |= calculateChangeRect(currentLeaf, requestedRect);
 
                 if(!changeRectVaries)

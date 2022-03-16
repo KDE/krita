@@ -13,10 +13,18 @@
 
 class KRITAIMAGE_EXPORT KisRefreshSubtreeWalker : public virtual KisBaseRectsWalker
 {
+public:
+    enum Flag {
+        None = 0x0,
+        SkipNonRenderableNodes = 0x1,
+        NoFilthyMode = 0x2
+    };
+
+    Q_DECLARE_FLAGS(Flags, Flag);
 
 public:
-    KisRefreshSubtreeWalker(QRect cropRect, bool skipNonRenderableNodes = false)
-        : m_skipNonRenderableNodes(skipNonRenderableNodes)
+    KisRefreshSubtreeWalker(QRect cropRect, Flags flags = None)
+        : m_flags(flags)
     {
         setCropRect(cropRect);
     }
@@ -27,6 +35,10 @@ public:
 
     ~KisRefreshSubtreeWalker() override
     {
+    }
+
+    Flags flags() const {
+        return m_flags;
     }
 
 protected:
@@ -116,18 +128,25 @@ protected:
          * If the node is not renderable and we don't care about hidden groups,
          * e.g. when generating animation frames, then just skip the entire group.
          */
-        if (m_skipNonRenderableNodes && !startWith->shouldBeRendered()) return;
+        if (m_flags & SkipNonRenderableNodes && !startWith->shouldBeRendered()) return;
 
 
         KisProjectionLeafSP currentLeaf = startWith->lastChild();
         while(currentLeaf) {
-            NodePosition pos = N_FILTHY | calculateNodePosition(currentLeaf);
+            NodePosition pos = (m_flags & NoFilthyMode ? N_ABOVE_FILTHY : N_FILTHY) |
+                calculateNodePosition(currentLeaf);
             registerNeedRect(currentLeaf, pos);
 
             // see a comment above
             registerCloneNotification(currentLeaf->node(), pos);
             currentLeaf = currentLeaf->prevSibling();
         }
+
+        /**
+         * In no-filthy mode we just recompose the root layer
+         * without entering any subgroups
+         */
+        if (m_flags & NoFilthyMode) return;
 
         currentLeaf = startWith->lastChild();
         while(currentLeaf) {
@@ -139,9 +158,10 @@ protected:
     }
 
 private:
-    bool m_skipNonRenderableNodes = false;
+    Flags m_flags = None;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisRefreshSubtreeWalker::Flags);
 
 #endif /* __KIS_REFRESH_SUBTREE_WALKER_H */
 

@@ -176,6 +176,11 @@ void KisSimpleUpdateQueue::addFullRefreshJob(KisNodeSP node, const QVector<QRect
     addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH);
 }
 
+void KisSimpleUpdateQueue::addFullRefreshNoFilthyJob(KisNodeSP node, const QVector<QRect> &rects, const QRect &cropRect, int levelOfDetail)
+{
+    addJob(node, rects, cropRect, levelOfDetail, KisBaseRectsWalker::FULL_REFRESH_NO_FILTHY);
+}
+
 void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
                                   const QRect& cropRect,
                                   int levelOfDetail,
@@ -199,6 +204,9 @@ void KisSimpleUpdateQueue::addJob(KisNodeSP node, const QVector<QRect> &rects,
         }
         else if (type == KisBaseRectsWalker::UPDATE_NO_FILTHY) {
             walker = new KisMergeWalker(cropRect, KisMergeWalker::NO_FILTHY);
+        }
+        else if (type == KisBaseRectsWalker::FULL_REFRESH_NO_FILTHY)  {
+            walker = new KisFullRefreshWalker(cropRect, KisFullRefreshWalker::NoFilthyMode);
         }
         /* else if(type == KisBaseRectsWalker::UNSUPPORTED) fatalKrita; */
 

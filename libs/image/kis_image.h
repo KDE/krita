@@ -1119,10 +1119,10 @@ public Q_SLOTS:
     KisProjectionUpdatesFilterCookie currentProjectionUpdatesFilter() const override;
 
 
-    void refreshGraphAsync(KisNodeSP root = KisNodeSP()) override;
-    void refreshGraphAsync(KisNodeSP root, const QRect &rc) override;
-    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect) override;
-    void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect) override;
+    void refreshGraphAsync(KisNodeSP root = KisNodeSP(), UpdateFlags flags = None) override;
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc, UpdateFlags flags = None) override;
+    void refreshGraphAsync(KisNodeSP root, const QRect &rc, const QRect &cropRect, UpdateFlags flags = None) override;
+    void refreshGraphAsync(KisNodeSP root, const QVector<QRect> &rects, const QRect &cropRect, UpdateFlags flags = None) override;
 
     /**
      * Triggers synchronous recomposition of the projection

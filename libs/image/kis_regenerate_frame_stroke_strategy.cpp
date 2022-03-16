@@ -145,7 +145,8 @@ void KisRegenerateFrameStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     KIS_ASSERT(m_d->type == EXTERNAL_FRAME);
 
     const bool skipNonRenderableNodes = m_d->type == EXTERNAL_FRAME;
-    KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(d->cropRect, skipNonRenderableNodes);
+    KisBaseRectsWalkerSP walker = new KisFullRefreshWalker(d->cropRect,
+                                                           skipNonRenderableNodes ? KisFullRefreshWalker::SkipNonRenderableNodes : KisFullRefreshWalker::None);
     walker->collectRects(d->root, d->rect);
 
     KisAsyncMerger merger;

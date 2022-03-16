@@ -9,6 +9,7 @@
 
 #include <QSharedPointer>
 #include "kritaimage_export.h"
+#include "kis_image_interfaces.h"
 
 class KisImage;
 class KisNode;
@@ -23,7 +24,7 @@ public:
      * \return true if an update should be dropped by the image
      */
     virtual bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) = 0;
-    virtual bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rect, const QRect &cropRect) = 0;
+    virtual bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rect, const QRect &cropRect, KisUpdatesFacade::UpdateFlags flags) = 0;
     virtual bool filterProjectionUpdateNoFilthy(KisImage *image, KisNode* pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache) = 0;
 };
 
@@ -36,7 +37,7 @@ class KRITAIMAGE_EXPORT KisDropAllProjectionUpdatesFilter : public KisProjection
 {
 public:
     bool filter(KisImage *image, KisNode *node, const QVector<QRect> &rects, bool resetAnimationCache) override;
-    bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect) override;
+    bool filterRefreshGraph(KisImage *image, KisNode *node, const QVector<QRect> &rects, const QRect &cropRect, KisUpdatesFacade::UpdateFlags flags) override;
     bool filterProjectionUpdateNoFilthy(KisImage *image, KisNode* pseudoFilthy, const QVector<QRect> &rects, const QRect &cropRect, const bool resetAnimationCache) override;
 };
 

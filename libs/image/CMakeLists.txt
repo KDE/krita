@@ -90,7 +90,6 @@ set(kritaimage_LIB_SRCS
    commands/kis_image_layer_move_command.cpp
    commands/kis_image_layer_remove_command.cpp
    commands/kis_image_layer_remove_command_impl.cpp
-   commands/kis_image_lock_command.cpp
    commands/kis_node_command.cpp
    commands/kis_node_compositeop_command.cpp
    commands/kis_node_opacity_command.cpp

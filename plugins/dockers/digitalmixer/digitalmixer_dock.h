@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2022 Bourumir Wyngs <bourumir.wyngs@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -9,18 +10,22 @@
 
 #include <QPointer>
 #include <QDockWidget>
+#include <QPushButton>
 
 #include <KoColor.h>
-#include <KoCanvasObserverBase.h>
-
 #include <KoCanvasBase.h>
+
+#include <kis_workspace_resource.h>
+#include <kis_mainwindow_observer.h>
+#include <KisViewManager.h>
+#include <kis_canvas_resource_provider.h>
 
 class KoColorPopupAction;
 class KoColorSlider;
 class KoColorPatch;
 class KisColorButton;
 
-class DigitalMixerDock : public QDockWidget, public KoCanvasObserverBase {
+class DigitalMixerDock : public QDockWidget, public KisMainwindowObserver {
     Q_OBJECT
 public:
     DigitalMixerDock( );
@@ -28,22 +33,33 @@ public:
     /// reimplemented from KoCanvasObserverBase
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override { m_canvas = 0; setEnabled(false);}
+
+public: // KisMainWindowObserver
+  void setViewManager(KisViewManager* kisview) override;
+
 public Q_SLOTS:
     void setCurrentColor(const KoColor& );
     void canvasResourceChanged(int, const QVariant&);
+
 private Q_SLOTS:
     void popupColorChanged(int i);
     void colorSliderChanged(int i);
     void targetColorChanged(int);
 
+    void resetMixer();
+    void saveToWorkspace(KisWorkspaceResourceSP workspace);
+    void loadFromWorkspace(KisWorkspaceResourceSP workspace);
+
     void gradientStartColorChanged(int);
     void gradientColorSliderChanged(int);
     void gradientEndColorChanged(int);
     void gradientTargetColorChanged(int);
+
 private:
     QPointer<KoCanvasBase> m_canvas;
     KoColor m_currentColor;
     KoColorPatch* m_currentColorPatch;
+
     struct Mixer {
       KoColorPatch* targetColor;
       KoColorSlider* targetSlider;
@@ -60,6 +76,8 @@ private:
     QList<Mixer> m_mixers;
     GradientMixer m_gradientMixer;
     bool m_tellCanvas;
+
+    QPushButton *m_reset_button;
 };
 
 

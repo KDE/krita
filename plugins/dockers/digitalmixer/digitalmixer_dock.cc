@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2022 Bourumir Wyngs <bourumir.wyngs@gmail.com>
  *
  *  SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -11,6 +12,7 @@
 #include <KisSignalMapper.h>
 
 #include <klocalizedstring.h>
+#include "kis_icon_utils.h"
 
 #include <KoColorPatch.h>
 #include <KoColorSlider.h>
@@ -20,6 +22,7 @@
 #include <KoCanvasBase.h>
 
 #include <kis_color_button.h>
+#include <kis_properties_configuration.h>
 
 class DigitalMixerPatch : public KoColorPatch {
     public:
@@ -73,7 +76,6 @@ DigitalMixerDock::DigitalMixerDock( )
         mixer.targetSlider->setMinimumHeight(66);
         layout->addWidget(mixer.targetSlider, 1, i + 1);
         mixer.actionColor = new KisColorButton( this );
-        mixer.actionColor->setColor(initColors[i]);
         mixer.actionColor->setFixedWidth(22);
         layout->addWidget(mixer.actionColor, 2, i + 1);
 
@@ -109,7 +111,6 @@ DigitalMixerDock::DigitalMixerDock( )
     layout->addWidget(m_gradientMixer.targetColor, 3, 0);
 
     m_gradientMixer.startColor = new KisColorButton(this);
-    m_gradientMixer.startColor->setColor(KoColor(Qt::black, sRGB));
     m_gradientMixer.startColor->setFixedWidth(22);
     layout->addWidget(m_gradientMixer.startColor, 3, 1);
 
@@ -121,7 +122,6 @@ DigitalMixerDock::DigitalMixerDock( )
     layout->addWidget(m_gradientMixer.targetSlider, 3, 2, 1, 4);
 
     m_gradientMixer.endColor = new KisColorButton(this);
-    m_gradientMixer.endColor->setColor(KoColor(Qt::white, sRGB));
     m_gradientMixer.endColor->setFixedWidth(22);
     layout->addWidget(m_gradientMixer.endColor, 3, 6);
 
@@ -138,7 +138,12 @@ DigitalMixerDock::DigitalMixerDock( )
     connect(m_gradientMixer.targetColor, SIGNAL(triggered(KoColorPatch*)), signalMapperGradientTargetColor, SLOT(map()));
     signalMapperGradientTargetColor->setMapping(m_gradientMixer.targetColor, 6);
 
-    setCurrentColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+    m_reset_button = new QPushButton(KisIconUtils::loadIcon("select-clear"),i18n("Reset"));
+    m_reset_button->setToolTip(i18n("Return to default settings"));
+    layout->addWidget(m_reset_button, 0, 0, Qt::AlignLeft);
+    connect(m_reset_button, SIGNAL(clicked()), SLOT(resetMixer()));
+
+    resetMixer(); // reset colors to default
     setWidget( widget );
 }
 
@@ -211,6 +216,28 @@ void DigitalMixerDock::targetColorChanged(int i)
     setCurrentColor(m_mixers[i].targetColor->color());
 }
 
+void DigitalMixerDock::resetMixer()
+{
+  const KoColorSpace *sRGB = KoColorSpaceRegistry::instance()->rgb8();
+
+  KoColor initColors[6] = { KoColor(Qt::black, sRGB),
+                            KoColor(Qt::white, sRGB),
+                            KoColor(Qt::red, sRGB),
+                            KoColor(Qt::green, sRGB),
+                            KoColor(Qt::blue, sRGB),
+                            KoColor(Qt::yellow, sRGB) };
+
+  for(int i = 0; i < m_mixers.size(); ++i)
+  {
+    m_mixers[i].actionColor->setColor(initColors[i]);
+  }
+
+  setCurrentColor(KoColor(Qt::black, sRGB));
+
+  m_gradientMixer.startColor->setColor(KoColor(Qt::black, sRGB));
+  m_gradientMixer.endColor->setColor(KoColor(Qt::white, sRGB));
+}
+
 void DigitalMixerDock::setCurrentColor(const KoColor& color)
 {
     m_currentColor = color;
@@ -234,3 +261,48 @@ void DigitalMixerDock::canvasResourceChanged(int key, const QVariant& v)
     m_tellCanvas = true;
 }
 
+void DigitalMixerDock::setViewManager(KisViewManager* kisview)
+{
+  KisCanvasResourceProvider *provider = kisview->canvasResourceProvider();
+  connect(provider, SIGNAL(sigSavingWorkspace(KisWorkspaceResourceSP)),
+          SLOT(saveToWorkspace(KisWorkspaceResourceSP)));
+  connect(provider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResourceSP)),
+          SLOT(loadFromWorkspace(KisWorkspaceResourceSP)));
+}
+
+void DigitalMixerDock::saveToWorkspace(KisWorkspaceResourceSP workspace)
+{
+  KisPropertiesConfiguration configuration;
+
+  configuration.setProperty("gradient_from",
+                            QVariant::fromValue(m_gradientMixer.startColor->color()));
+  configuration.setProperty("gradient_to",
+                            QVariant::fromValue(m_gradientMixer.endColor->color()));
+
+  for(int i = 0; i < m_mixers.size(); ++i)
+  {
+    configuration.setProperty("mixer_" + QString::number(i),
+     QVariant::fromValue(m_mixers[i].actionColor->color()));
+  }
+  workspace->setPrefixedProperties("digital-mixer", &configuration);
+}
+
+static void useColor(const KisPropertiesConfiguration &conf, KisColorButton* colorButton, const QString &color)
+{
+  // Do not change if undefined
+  KoColor koColor = conf.getColor(color, colorButton->color());
+  colorButton->setColor(koColor);
+}
+
+void DigitalMixerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
+{
+  KisPropertiesConfiguration configuration;
+  workspace->getPrefixedProperties("digital-mixer", &configuration);
+
+  useColor(configuration, m_gradientMixer.startColor, "gradient_from");
+  useColor(configuration, m_gradientMixer.endColor, "gradient_to");
+
+  for (int i = 0; i < m_mixers.size(); ++i) {
+    useColor(configuration, m_mixers[i].actionColor, "mixer_" + QString::number(i));
+  }
+}

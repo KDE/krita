@@ -9,7 +9,6 @@
 #include <QTouchEvent>
 
 #include <klocalizedstring.h>
-#include <kis_config.h>
 #include <kis_canvas_controller.h>
 #include <kis_canvas2.h>
 #include <KisViewManager.h>
@@ -40,8 +39,7 @@ KisZoomAndRotateAction::~KisZoomAndRotateAction()
 
 int KisZoomAndRotateAction::priority() const
 {
-    // if rotation is disabled, we set the lowest priority, so that, this action isn't triggered
-    return KisConfig(true).disableTouchRotation() ? 0 : 5;
+    return 5;
 }
 
 void KisZoomAndRotateAction::activate(int shortcut)

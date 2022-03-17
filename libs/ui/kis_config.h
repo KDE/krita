@@ -45,9 +45,6 @@ public:
     bool disableTouchOnCanvas(bool defaultValue = false) const;
     void setDisableTouchOnCanvas(bool value) const;
 
-    bool disableTouchRotation(bool defaultValue = false) const;
-    void setDisableTouchRotation(bool value) const;
-
     // XXX Unused?
     bool useProjections(bool defaultValue = false) const;
     void setUseProjections(bool useProj) const;

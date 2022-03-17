@@ -42,7 +42,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -554,13 +554,6 @@
         </widget>
        </item>
        <item row="5" column="1">
-        <widget class="QCheckBox" name="chkEnableTouchRotation">
-         <property name="text">
-          <string>Enable Touch Rotation</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
         <widget class="QCheckBox" name="chkEnableSmoothZooming">
          <property name="text">
           <string>Enable Smooth Zooming</string>
@@ -570,7 +563,7 @@
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2">
+       <item row="6" column="0" colspan="2">
         <widget class="QGroupBox" name="m_groupBoxKineticScrollingSettings">
          <property name="title">
           <string>Kinetic Scrolling (needs restart)</string>
@@ -608,7 +601,7 @@
          </layout>
         </widget>
        </item>
-       <item row="8" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -851,8 +844,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>685</width>
-            <height>596</height>
+            <width>654</width>
+            <height>652</height>
            </rect>
           </property>
           <property name="sizePolicy">

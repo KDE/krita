@@ -1492,6 +1492,6 @@ void KisPaintopBox::slotMoveToCenterMirrorY() {
 
 void KisPaintopBox::findDefaultPresets()
 {
-    m_eraserName = "a)_Eraser_circle";
-    m_defaultPresetName = "b)_Basic-5_Size_Opacity";
+    m_eraserName = "a) Eraser Circle";
+    m_defaultPresetName = "b) Basic-5 Size Opacity";
 }

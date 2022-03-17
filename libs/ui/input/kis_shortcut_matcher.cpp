@@ -459,11 +459,7 @@ bool KisShortcutMatcher::touchEndEvent(QTouchEvent *event)
 
     DEBUG_TOUCH_ACTION("ending", event)
     // we should try and end the shortcut too (it might be that there is none? (sketch))
-    if (tryEndTouchShortcut(event)) {
-        return true;
-    }
-
-    return false;
+    return tryEndTouchShortcut(event);
 }
 
 void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &localPos)
@@ -489,6 +485,14 @@ void KisShortcutMatcher::touchCancelEvent(QTouchEvent *event, const QPointF &loc
         touchShortcut->action()->end(dstEvent.data());
         touchShortcut->action()->deactivate(touchShortcut->shortcutIndex());
     }
+}
+
+void KisShortcutMatcher::touchResetStateForPointerEvents()
+{
+    // we reset canvas back to the "default" pointer state
+    m_d->readyShortcut = 0;
+    prepareReadyShortcuts();
+    tryActivateReadyShortcut();
 }
 
 bool KisShortcutMatcher::nativeGestureBeginEvent(QNativeGestureEvent *event)

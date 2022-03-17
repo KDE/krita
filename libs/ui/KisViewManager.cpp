@@ -431,7 +431,7 @@ void KisViewManager::setCurrentView(KisView *view)
         // Restore the last used brush preset, color and background color.
         if (first) {
             KisPaintOpPresetResourceServer * rserver = KisResourceServerProvider::instance()->paintOpPresetServer();
-            QString defaultPresetName = "b)_Basic-5_Size_Opacity";
+            const QString defaultPresetName = "b) Basic-5 Size Opacity";
 
             KisConfig cfg(true);
             QString lastPreset = cfg.readEntry("LastPreset", defaultPresetName);

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2021 Felipe Lema <felipelema@mortemale.org>
+# SPDX-FileCopyrightText: 2022 Nicolás Alvarez <nicolas.alvarez@gmail.com>
+# SPDX-License-Identifier: CC0-1.0
+
 variables:
   DEBIAN_FRONTEND: "noninteractive"
 
@@ -14,3 +18,6 @@ clang_format:
     - when: manual
       allow_failure: true
 
+include:
+  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/linux.yml
+  - https://invent.kde.org/sysadmin/ci-utilities/raw/master/gitlab-templates/freebsd.yml

@@ -150,39 +150,133 @@ QPainterPath KoSvgTextShape::textOutline() const
     qDebug() << "starting creation textoutlne";
 
     for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
+        qDebug() << "drawing layout" << i;
         // const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
         // const QTextLayout *layout = d->cachedLayouts[i].get();
         size_t count = 0;
         raqm_glyph_t *glyphs = raqm_get_glyphs(d->cachedLayouts.at(i), &count);
 
         QPointF oldOffset = QPointF(0, 0);
-        qreal freetypeMultiplier = 64.0;
-        QMap<QString, QRawFont> fontList;
+        const qreal factor = 1 / 64.;
+        // QMap<QString, QRawFont> fontList;
 
         for (int j = 0; j < int(count); j++) {
-            QRawFont font;
-            if (fontList.contains(glyphs[j].ftface->family_name)) {
-                font = fontList.value(glyphs[j].ftface->family_name);
-            } else {
-                // point size makes no sense, we need to load the path from
-                // freetype directly.
-                qreal pointSize =
-                    16.0; // glyphs[j].ftface->size->metrics.height/freetypeMultiplier;
-                font = QRawFont::fromFont(
-                    QFont(glyphs[j].ftface->family_name, pointSize));
-                fontList.insert(glyphs[j].ftface->family_name, font);
-            }
-            QPainterPath glyph = font.pathForGlyph(glyphs[j].index);
+            QPainterPath glyph;
             glyph.setFillRule(Qt::WindingFill);
+            FT_Load_Glyph(glyphs[j].ftface, glyphs[j].index, 0);
+            FT_Outline outline = glyphs[j].ftface->glyph->outline;
 
-            QPointF offset = QPointF(glyphs[j].x_offset / freetypeMultiplier,
-                                     glyphs[j].y_offset / freetypeMultiplier);
-            QPointF advance = QPointF(glyphs[j].x_advance / freetypeMultiplier,
-                                      glyphs[j].y_advance / freetypeMultiplier);
+            int contour = 0;
+            int lastContourPoint = outline.n_points - 1;
+            if (outline.n_contours > 0) {
+                lastContourPoint = outline.contours[contour];
+            }
+
+            // Code taken from qfontengine_ft.cpp
+            // TODO: Improve the transforms here, the coordinate system for a
+            // glyph is different from that of a QPainterPath, it's origin at
+            // the (writing mode independant) baseline instead of the topleft.
+
+            QPointF cp = QPointF();
+            // convert the outline to a painter path
+            int i = 0;
+            for (int j = 0; j < outline.n_contours; ++j) {
+                int last_point = outline.contours[j];
+                // qDebug() << "contour:" << i << "to" << last_point;
+                QPointF start = QPointF(outline.points[i].x * factor,
+                                        -outline.points[i].y * factor);
+                if (!(outline.tags[i] & 1)) { // start point is not on curve:
+                    if (!(outline.tags[last_point]
+                          & 1)) { // end point is not on curve:
+                        // qDebug() << "  start and end point are not on curve";
+                        start = (QPointF(outline.points[last_point].x * factor,
+                                         -outline.points[last_point].y * factor)
+                                 + start)
+                            / 2.0;
+                    } else {
+                        // qDebug() << "  end point is on curve, start is not";
+                        start = QPointF(outline.points[last_point].x * factor,
+                                        -outline.points[last_point].y * factor);
+                    }
+                    --i; // to use original start point as control point below
+                }
+                start += cp;
+                // qDebug() << "  start at" << start;
+                glyph.moveTo(start);
+                QPointF c[4];
+                c[0] = start;
+                int n = 1;
+                while (i < last_point) {
+                    ++i;
+                    c[n] = cp
+                        + QPointF(outline.points[i].x * factor,
+                                  -outline.points[i].y * factor);
+                    // qDebug() << "    " << i << c[n] << "tag =" <<
+                    // (int)g->outline.tags[i]
+                    //                    << ": on curve =" <<
+                    //                    (bool)(g->outline.tags[i] & 1);
+                    ++n;
+                    switch (outline.tags[i] & 3) {
+                    case 2:
+                        // cubic bezier element
+                        if (n < 4)
+                            continue;
+                        c[3] = (c[3] + c[2]) / 2;
+                        --i;
+                        break;
+                    case 0:
+                        // quadratic bezier element
+                        if (n < 3)
+                            continue;
+                        c[3] = (c[1] + c[2]) / 2;
+                        c[2] = (2 * c[1] + c[3]) / 3;
+                        c[1] = (2 * c[1] + c[0]) / 3;
+                        --i;
+                        break;
+                    case 1:
+                    case 3:
+                        if (n == 2) {
+                            // qDebug() << "  lineTo" << c[1];
+                            glyph.lineTo(c[1]);
+                            c[0] = c[1];
+                            n = 1;
+                            continue;
+                        } else if (n == 3) {
+                            c[3] = c[2];
+                            c[2] = (2 * c[1] + c[3]) / 3;
+                            c[1] = (2 * c[1] + c[0]) / 3;
+                        }
+                        break;
+                    }
+                    // qDebug() << "  cubicTo" << c[1] << c[2] << c[3];
+                    glyph.cubicTo(c[1], c[2], c[3]);
+                    c[0] = c[3];
+                    n = 1;
+                }
+                if (n == 1) {
+                    // qDebug() << "  closeSubpath";
+                    glyph.closeSubpath();
+                } else {
+                    c[3] = start;
+                    if (n == 2) {
+                        c[2] = (2 * c[1] + c[3]) / 3;
+                        c[1] = (2 * c[1] + c[0]) / 3;
+                    }
+                    // qDebug() << "  close cubicTo" << c[1] << c[2] << c[3];
+                    glyph.cubicTo(c[1], c[2], c[3]);
+                }
+                ++i;
+            }
+            QPointF offset = QPointF(glyphs[j].x_offset * factor,
+                                     glyphs[j].y_offset * factor);
+            QPointF advance = QPointF(glyphs[j].x_advance * factor,
+                                      glyphs[j].y_advance * factor);
             qDebug() << "adding glyph" << j << "offset" << offset << "advance"
                      << advance;
-            oldOffset += offset;
-            glyph.translate(oldOffset);
+            qDebug() << "boundingRect" << glyph.boundingRect();
+            // According to the harfbuzz docs, the offset doesn't advance the
+            // line, just offsets.
+            glyph.translate(oldOffset + offset);
             result.addPath(glyph);
             oldOffset += advance;
         }
@@ -251,7 +345,8 @@ QPainterPath KoSvgTextShape::textOutline() const
     }
     const KoSvgTextChunkShape *chunkShape =
         dynamic_cast<const KoSvgTextChunkShape *>(this);
-    if (chunkShape->shapes().size() > 0 && this->isTextNode() != true) {
+    while (chunkShape->shapes().size() > 0
+           && chunkShape->isTextNode() != true) {
         chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(
             chunkShape->shapes().first());
     }
@@ -472,38 +567,13 @@ void KoSvgTextShape::relayout() const
         // option.setUseDesignMetrics(true); // TODO: investigate if it is
         // needed? option.setTextDirection(chunk.direction);
 
-        FT_Face face = NULL;
         if (!d->library) {
             FT_Init_FreeType(&d->library);
         }
         FcConfig *config = FcConfigGetCurrent();
         FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, nullptr);
-        FcPattern *p = FcPatternCreate();
-        const FcChar8 *vals = reinterpret_cast<FcChar8 *>(
-            chunk.formats.at(0).format.font().family().toUtf8().data());
-        qreal fontSize = 16.0;
-        FcPatternAddString(p, FC_FAMILY, vals);
-        FcFontSet *fontSet = FcFontList(config, p, objectSet);
-        QString fontFileName =
-            "/usr/share/fonts/truetype/noto/NotoSans-Regular.ttf";
-        QStringList fontProperties =
-            QString(reinterpret_cast<char *>(FcNameUnparse(fontSet->fonts[0])))
-                .split(':');
-        for (QString value : fontProperties) {
-            if (value.startsWith("file")) {
-                fontFileName = value.split("=").last();
-                fontFileName.remove("\\");
-            }
-        }
-        QFileInfo fi(fontFileName);
 
-        if (FT_New_Face(d->library, fi.filePath().toUtf8().data(), 0, &face)
-            == 0) {
-            qDebug() << "face loaded";
-            FT_Set_Char_Size(face, fontSize * 64.0, 0, 0, 0);
-        } else {
-            qDebug() << "face did not load" << fontFileName << fi.filePath();
-        }
+        QMap<QString, FT_Face> faces;
 
         if (raqm_set_text_utf8(layout,
                                chunk.text.toUtf8(),
@@ -515,8 +585,52 @@ void KoSvgTextShape::relayout() const
                 raqm_set_par_direction(layout,
                                        raqm_direction_t::RAQM_DIRECTION_LTR);
             }
-            raqm_set_freetype_face(layout, face);
-            // raqm_set_freetype_face_range(layout, face, 0, chunk.text.size());
+
+            for (QTextLayout::FormatRange format : chunk.formats) {
+                FT_Face face = NULL;
+
+                FcPattern *p = FcPatternCreate();
+                const FcChar8 *vals = reinterpret_cast<FcChar8 *>(
+                    format.format.font().family().toUtf8().data());
+                qreal fontSize = format.format.font().pointSizeF();
+                FcPatternAddString(p, FC_FAMILY, vals);
+                FcFontSet *fontSet = FcFontList(config, p, objectSet);
+                QString fontFileName;
+                QStringList fontProperties =
+                    QString(reinterpret_cast<char *>(
+                                FcNameUnparse(fontSet->fonts[0])))
+                        .split(':');
+                for (QString value : fontProperties) {
+                    if (value.startsWith("file")) {
+                        fontFileName = value.split("=").last();
+                        fontFileName.remove("\\");
+                    }
+                }
+
+                /*if (faces.contains(fontFileName)) {
+                    qDebug() << "found face" << fontFileName;
+                    face = faces.value(fontFileName);
+                    raqm_set_freetype_face_range(layout, face, format.start,
+                format.length); } else*/
+                if (FT_New_Face(d->library,
+                                fontFileName.toUtf8().data(),
+                                0,
+                                &face)
+                    == 0) {
+                    qDebug() << "face loaded" << fontFileName;
+                    FT_Set_Char_Size(face, fontSize * 64.0, 0, 0, 0);
+                    if (format.start == 0) {
+                        raqm_set_freetype_face(layout, face);
+                    }
+                    raqm_set_freetype_face_range(layout,
+                                                 face,
+                                                 format.start,
+                                                 format.length);
+                    // faces.insert(fontFileName, face);
+                } else {
+                    qDebug() << "face did not load" << fontFileName;
+                }
+            }
         }
 
         if (raqm_layout(layout)) {

@@ -25,42 +25,38 @@ struct Q_DECL_HIDDEN KoTriangleColorSelector::Private {
     Private(KoTriangleColorSelector *_q, const KoColorDisplayRendererInterface *_displayRenderer)
         : q(_q),
           displayRenderer(_displayRenderer),
-          hue(0),
-          saturation(0),
-          value(0),
-          updateAllowed(true),
-          invalidTriangle(true),
           lastX(-1),
           lastY(-1)
     {
     }
 
-    KoTriangleColorSelector *q;
-    const KoColorDisplayRendererInterface *displayRenderer;
+    KoTriangleColorSelector *q {nullptr};
+    const KoColorDisplayRendererInterface *displayRenderer {nullptr};
     QPixmap wheelPixmap;
     QPixmap trianglePixmap;
-    int hue;
-    int saturation;
-    int value;
-    int sizeColorSelector;
-    qreal centerColorSelector;
-    qreal wheelWidthProportion;
-    qreal wheelWidth;
-    qreal wheelNormExt;
-    qreal wheelNormInt;
-    qreal wheelInnerRadius;
-    qreal triangleRadius;
-    qreal triangleLength;
-    qreal triangleHeight;
-    qreal triangleBottom;
-    qreal triangleTop;
-    qreal normExt;
-    qreal normInt;
-    bool updateAllowed;
-    CurrentHandle handle;
-    qreal triangleHandleSize;
-    bool invalidTriangle;
-    int lastX, lastY;
+    int hue {0};
+    int saturation {0};
+    int value {0};
+    int sizeColorSelector {0};
+    qreal centerColorSelector {0.0};
+    qreal wheelWidthProportion {0.0};
+    qreal wheelWidth {0.0};
+    qreal wheelNormExt {0.0};
+    qreal wheelNormInt {0.0};
+    qreal wheelInnerRadius {0.0};
+    qreal triangleRadius {0.0};
+    qreal triangleLength {0.0};
+    qreal triangleHeight {0.0};
+    qreal triangleBottom {0.0};
+    qreal triangleTop {0.0};
+    qreal normExt {0.0};
+    qreal normInt {0.0};
+    bool updateAllowed {true};
+    CurrentHandle handle {NoHandle};
+    qreal triangleHandleSize {0.0};
+    bool invalidTriangle {true};
+    int lastX {-1};
+    int lastY {-1};
     QTimer updateTimer;
 
     void init();

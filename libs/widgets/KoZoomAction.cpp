@@ -47,18 +47,18 @@ public:
         , guiUpdateCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {}
 
-    KoZoomAction *parent;
+    KoZoomAction *parent {nullptr};
 
     KoZoomMode::Modes zoomModes;
     QList<qreal> sliderLookup;
 
-    qreal effectiveZoom;
+    qreal effectiveZoom {0.0};
 
     QList<qreal> generateSliderZoomLevels() const;
     QList<qreal> filterMenuZoomLevels(const QList<qreal> &zoomLevels) const;
 
-    qreal minimumZoomValue;
-    qreal maximumZoomValue;
+    qreal minimumZoomValue {0.0};
+    qreal maximumZoomValue {0.0};
 
     KisSignalCompressor guiUpdateCompressor;
 };

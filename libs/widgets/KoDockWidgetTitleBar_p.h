@@ -33,13 +33,13 @@ public:
     {
     }
 
-    KoDockWidgetTitleBar* thePublic;
+    KoDockWidgetTitleBar* thePublic {nullptr};
     QIcon lockIcon, floatIcon, removeIcon; 
-    QAbstractButton* closeButton;
-    QAbstractButton* floatButton;
-    QAbstractButton* lockButton;
-    KSqueezedTextLabel* titleLabel;
-    bool locked;
+    QAbstractButton* closeButton {nullptr};
+    QAbstractButton* floatButton {nullptr};
+    QAbstractButton* lockButton {nullptr};
+    KSqueezedTextLabel* titleLabel {nullptr};
+    bool locked {false};
     QDockWidget::DockWidgetFeatures features;
 
     void toggleFloating();

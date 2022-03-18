@@ -32,11 +32,11 @@ public:
 
     QList<QPointer<QWidget> > currentWidgetList;
     QSet<QWidget *> currentAuxWidgets;
-    QScrollArea *scrollArea;
-    QWidget *hiderWidget; // non current widgets are hidden by being children of this
-    QWidget *housekeeperWidget;
-    QGridLayout *housekeeperLayout;
-    KoToolDocker *q;
+    QScrollArea *scrollArea {nullptr};
+    QWidget *hiderWidget {nullptr}; // non current widgets are hidden by being children of this
+    QWidget *housekeeperWidget {nullptr};
+    QGridLayout *housekeeperLayout {nullptr};
+    KoToolDocker *q {nullptr};
     Qt::DockWidgetArea dockingArea;
 
     void resetWidgets()

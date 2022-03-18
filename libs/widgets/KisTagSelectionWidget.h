@@ -35,12 +35,12 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
-    QLabel* m_textLabel;
-    QPushButton* m_closeIconLabel;
+    QLabel* m_textLabel {nullptr};
+    QPushButton* m_closeIconLabel {nullptr};
 
     int m_size{18};
-    bool m_editble;
-    bool m_semiSelected;
+    bool m_editble {false};
+    bool m_semiSelected {false};
     KoID m_tag;
 
     friend class TestKisTagSelectionWidget;
@@ -118,10 +118,9 @@ private Q_SLOTS:
     void slotRemoveTagFromSelection(KoID tag);
 
 private:
-    QLayout* m_layout;
-    QToolButton* m_addTagButton;
-    bool m_editable;
-    bool m_categorized;
+    QLayout* m_layout {nullptr};
+    QToolButton* m_addTagButton {nullptr};
+    bool m_editable {false};
 
     friend class TestKisTagSelectionWidget;
 };

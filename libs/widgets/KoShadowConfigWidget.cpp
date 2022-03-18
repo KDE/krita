@@ -31,8 +31,8 @@ public:
     {
     }
     Ui_KoShadowConfigWidget widget;
-    KoColorPopupAction *actionShadowColor;
-    KoCanvasBase *canvas;
+    KoColorPopupAction *actionShadowColor {nullptr};
+    KoCanvasBase *canvas {nullptr};
 };
 
 KoShadowConfigWidget::KoShadowConfigWidget(QWidget *parent)

@@ -41,11 +41,11 @@ protected:
 Q_SIGNALS:
     void updated();
 protected:
-    const KoChannelInfo* m_channelInfo;
-    KoColor* m_color;
-    KoColorSlider* m_colorSlider;
-    KoColorDisplayRendererInterface *m_displayRenderer;
-    bool m_usePercentage;
+    const KoChannelInfo* m_channelInfo {nullptr};
+    KoColor* m_color {nullptr};
+    KoColorSlider* m_colorSlider {nullptr};
+    KoColorDisplayRendererInterface *m_displayRenderer {nullptr};
+    bool m_usePercentage {false};
 };
 
 class KRITAWIDGETS_EXPORT KisIntegerColorInput : public KisColorInput
@@ -63,7 +63,7 @@ private Q_SLOTS:
     void onColorSliderChanged(int);
     void onNumInputChanged(int);
 private:
-    KisIntParseSpinBox* m_intNumInput;
+    KisIntParseSpinBox* m_intNumInput {nullptr};
 };
 
 
@@ -79,9 +79,9 @@ public Q_SLOTS:
     void sliderChanged(int);
     void update();
 private:
-    KisDoubleParseSpinBox* m_dblNumInput;
-    qreal m_minValue;
-    qreal m_maxValue;
+    KisDoubleParseSpinBox* m_dblNumInput {nullptr};
+    qreal m_minValue {0.0};
+    qreal m_maxValue {0.0};
 };
 
 class KRITAWIDGETS_EXPORT KisHexColorInput : public KisColorInput
@@ -95,7 +95,7 @@ public Q_SLOTS:
     void setValue();
     void update();
 private:
-    QLineEdit* m_hexInput;
+    QLineEdit* m_hexInput {nullptr};
     QLabel* m_colorPreview=nullptr;
 };
 

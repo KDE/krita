@@ -7,6 +7,7 @@ set(kritaspraypaintop_SOURCES
     kis_spray_paintop_settings.cpp
     kis_spray_paintop_settings_widget.cpp
     spray_brush.cpp
+    KisSprayRandomDistributions.cpp
     )
 
 ki18n_wrap_ui(kritaspraypaintop_SOURCES wdgsprayoptions.ui wdgsprayshapeoptions.ui wdgshapedynamicsoptions.ui )

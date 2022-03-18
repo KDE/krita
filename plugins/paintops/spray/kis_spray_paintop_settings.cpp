@@ -36,7 +36,7 @@ void KisSprayPaintOpSettings::setPaintOpSize(qreal value)
 {
     KisSprayOptionProperties option;
     option.readOptionSetting(this);
-    option.diameter = value;
+    option.setDiameter(value);
     option.writeOptionSetting(this);
 }
 
@@ -46,7 +46,7 @@ qreal KisSprayPaintOpSettings::paintOpSize() const
     KisSprayOptionProperties option;
     option.readOptionSetting(this);
 
-    return option.diameter;
+    return option.diameter();
 }
 
 bool KisSprayPaintOpSettings::paintIncremental()
@@ -102,13 +102,13 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
-                    prop->setValue(option.spacing);
+                    prop->setValue(option.spacing());
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
-                    option.spacing = prop->value().toReal();
+                    option.setSpacing(prop->value().toReal());
                     option.writeOptionSetting(prop->settings().data());
                 });
 
@@ -130,20 +130,20 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
 
-                    prop->setValue(int(option.particleCount));
+                    prop->setValue(int(option.particleCount()));
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
-                    option.particleCount = prop->value().toInt();
+                    option.setParticleCount(prop->value().toInt());
                     option.writeOptionSetting(prop->settings().data());
                 });
             prop->setIsVisibleCallback(
                 [](const KisUniformPaintOpProperty *prop) {
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
-                    return !option.useDensity;
+                    return !option.useDensity();
                 });
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -167,20 +167,20 @@ QList<KisUniformPaintOpPropertySP> KisSprayPaintOpSettings::uniformProperties(Ki
                 [](KisUniformPaintOpProperty *prop) {
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
-                    prop->setValue(option.coverage);
+                    prop->setValue(option.coverage());
                 });
             prop->setWriteCallback(
                 [](KisUniformPaintOpProperty *prop) {
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
-                    option.coverage = prop->value().toReal();
+                    option.setCoverage(prop->value().toReal());
                     option.writeOptionSetting(prop->settings().data());
                 });
             prop->setIsVisibleCallback(
                 [](const KisUniformPaintOpProperty *prop) {
                     KisSprayOptionProperties option;
                     option.readOptionSetting(prop->settings().data());
-                    return option.useDensity;
+                    return option.useDensity();
                 });
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
             prop->requestReadValue();

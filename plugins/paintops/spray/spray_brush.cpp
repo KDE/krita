@@ -76,11 +76,11 @@ qreal SprayBrush::rotationAngle(KisRandomSourceSP randomSource)
 
         qreal randomValue = 0.0;
 
-        if (m_properties->gaussian) {
-            randomValue = qBound<qreal>(0.0, randomSource->generateGaussian(0.0, 0.5), 1.0);
-        } else {
-            randomValue = randomSource->generateNormalized();
-        }
+        // if (m_properties->gaussian) {
+        //     randomValue = qBound<qreal>(0.0, randomSource->generateGaussian(0.0, 0.5), 1.0);
+        // } else {
+        randomValue = randomSource->generateNormalized();
+        // }
 
         rotation =
             linearInterpolation(rotation ,
@@ -91,13 +91,62 @@ qreal SprayBrush::rotationAngle(KisRandomSourceSP randomSource)
     return rotation;
 }
 
-
-
 void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                        const KisPaintInformation& info,
                        qreal rotation, qreal scale,
                        qreal additionalScale,
                        const KoColor &color, const KoColor &bgColor)
+{
+    if (m_properties->angularDistributionType() == KisSprayOptionProperties::ParticleDistribution_Uniform) {
+        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor, m_properties->uniformDistribution());
+    } else {
+        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor, m_properties->angularCurveBasedDistribution());
+    }
+}
+
+template <typename AngularDistribution>
+void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
+                           const KisPaintInformation& info,
+                           qreal rotation, qreal scale,
+                           qreal additionalScale,
+                           const KoColor &color,
+                           const KoColor &bgColor,
+                           const AngularDistribution &angularDistribution)
+{
+    if (m_properties->radialDistributionType() == KisSprayOptionProperties::ParticleDistribution_Uniform) {
+        if (m_properties->radialDistributionCenterBiased()) {
+            paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
+                      angularDistribution, m_properties->uniformDistribution());
+        } else {
+            paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
+                      angularDistribution, m_properties->uniformDistributionPolarDistance());
+        }
+    } else if (m_properties->radialDistributionType() == KisSprayOptionProperties::ParticleDistribution_Gaussian) {
+        if (m_properties->radialDistributionCenterBiased()) {
+            paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
+                      angularDistribution, m_properties->normalDistribution());
+        } else {
+            paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
+                      angularDistribution, m_properties->normalDistributionPolarDistance());
+        }
+    } else if (m_properties->radialDistributionType() == KisSprayOptionProperties::ParticleDistribution_ClusterBased) {
+        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
+                  angularDistribution, m_properties->clusterBasedDistributionPolarDistance());
+    } else {
+        paintImpl(dab, source, info, rotation, scale, additionalScale, color, bgColor,
+                  angularDistribution, m_properties->radialCurveBasedDistributionPolarDistance());
+    }
+}
+
+template <typename AngularDistribution, typename RadialDistribution>
+void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
+                           const KisPaintInformation& info,
+                           qreal rotation, qreal scale,
+                           qreal additionalScale,
+                           const KoColor &color,
+                           const KoColor &bgColor,
+                           const AngularDistribution &angularDistribution,
+                           const RadialDistribution &radialDistribution)
 {
     KisRandomSourceSP randomSource = info.randomSource();
 
@@ -131,19 +180,19 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
     m_radius = m_properties->radius() * scale * additionalScale;
 
     // jitter movement
-    if (m_properties->jitterMovement) {
-        x = x + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->amount;
-        y = y + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->amount;
+    if (m_properties->jitterMovement()) {
+        x = x + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->jitterAmount();
+        y = y + ((2 * m_radius * randomSource->generateNormalized()) - m_radius) * m_properties->jitterAmount();
     }
 
     // this is wrong for every shape except pixel and anti-aliased pixel
 
 
-    if (m_properties->useDensity) {
-        m_particlesCount = (m_properties->coverage * (M_PI * pow2(m_radius)) / pow2(additionalScale));
+    if (m_properties->useDensity()) {
+        m_particlesCount = (m_properties->coverage() * (M_PI * pow2(m_radius)) / pow2(additionalScale));
     }
     else {
-        m_particlesCount = m_properties->particleCount;
+        m_particlesCount = m_properties->particleCount();
     }
 
     QHash<QString, QVariant> params;
@@ -163,20 +212,14 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     QTransform m;
     m.reset();
-    m.rotateRadians(-rotation + deg2rad(m_properties->brushRotation));
-    m.scale(m_properties->scale, m_properties->scale);
+    m.rotateRadians(-rotation + deg2rad(m_properties->brushRotation()));
+    m.scale(m_properties->scale(), m_properties->scale());
 
     for (quint32 i = 0; i < m_particlesCount; i++) {
         // generate random angle
-        angle = randomSource->generateNormalized() * M_PI * 2;
-
+        angle = angularDistribution(m_properties->randomGenerator()) * M_PI * 2;
         // generate random length
-        if (m_properties->gaussian) {
-            length = randomSource->generateGaussian(0.0, 0.5);
-        }
-        else {
-            length = randomSource->generateNormalized();
-        }
+        length = radialDistribution(m_properties->randomGenerator());
 
         if (m_shapeDynamicsProperties->enabled) {
             // rotation
@@ -203,7 +246,7 @@ void SprayBrush::paint(KisPaintDeviceSP dab, KisPaintDeviceSP source,
         ny = (m_radius * sin(angle)  * length);
 
         // compute the height of the ellipse
-        ny *= m_properties->aspect;
+        ny *= m_properties->aspect();
 
         // transform
         m.map(nx, ny, &nx, &ny);

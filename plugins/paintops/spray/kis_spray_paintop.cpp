@@ -55,8 +55,10 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
 
     m_colorProperties.fillProperties(settings);
     m_properties.readOptionSetting(settings);
+    // create the actual distribution objects
+    m_properties.updateDistributions();
     // first load tip properties as shape properties are dependent on diameter/scale/aspect
-    m_shapeProperties.loadSettings(settings, m_properties.diameter * m_properties.scale, m_properties.diameter * m_properties.aspect * m_properties.scale);
+    m_shapeProperties.loadSettings(settings, m_properties.diameter() * m_properties.scale(), m_properties.diameter() * m_properties.aspect() * m_properties.scale());
 
     // TODO: what to do with proportional sizes?
     m_shapeDynamicsProperties.loadSettings(settings);
@@ -73,8 +75,8 @@ KisSprayPaintOp::KisSprayPaintOp(const KisPaintOpSettingsSP settings, KisPainter
     m_sprayBrush.setFixedDab(cachedDab());
 
     // spacing
-    if ((m_properties.diameter * 0.5) > 1) {
-        m_ySpacing = m_xSpacing = m_properties.diameter * 0.5 * m_properties.spacing;
+    if ((m_properties.diameter() * 0.5) > 1) {
+        m_ySpacing = m_xSpacing = m_properties.diameter() * 0.5 * m_properties.spacing();
     }
     else {
         m_ySpacing = m_xSpacing = 1.0;

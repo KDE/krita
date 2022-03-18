@@ -32,7 +32,7 @@ public:
     bool operator==(const KisCubicCurve& curve) const;
 public:
     qreal value(qreal x) const;
-    QList<QPointF> points() const;
+    const QList<QPointF>& points() const;
     void setPoints(const QList<QPointF>& points);
     void setPoint(int idx, const QPointF& point);
     /**

@@ -354,7 +354,7 @@ qreal KisCubicCurve::value(qreal x) const
     return value;
 }
 
-QList<QPointF> KisCubicCurve::points() const
+const QList<QPointF>& KisCubicCurve::points() const
 {
     return d->data->points;
 }

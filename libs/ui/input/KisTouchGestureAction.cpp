@@ -15,7 +15,7 @@ KisTouchGestureAction::KisTouchGestureAction()
     : KisAbstractInputAction("Touch Gestures")
 {
     setName(i18n("Touch Gestures"));
-    setDescription(i18n("The Touch Gestures actions launche a single action for the specified gesture"));
+    setDescription(i18n("The Touch Gestures actions launch a single action for the specified gesture"));
 
     QHash<QString, int> shortcuts;
     shortcuts.insert(i18n("Undo"), UndoActionShortcut);

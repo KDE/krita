@@ -149,28 +149,34 @@ QPainterPath KoSvgTextShape::textOutline() const
     result.setFillRule(Qt::WindingFill);
     qDebug() << "starting creation textoutlne";
 
-    for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
-        qDebug() << "drawing layout" << i;
+    for (int layoutIndex = 0; layoutIndex < (int)d->cachedLayouts.size();
+         layoutIndex++) {
+        qDebug() << "drawing layout" << layoutIndex << d->cachedLayouts.size();
         // const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
         // const QTextLayout *layout = d->cachedLayouts[i].get();
+
         size_t count = 0;
-        raqm_glyph_t *glyphs = raqm_get_glyphs(d->cachedLayouts.at(i), &count);
+        raqm_t *layout = d->cachedLayouts[layoutIndex];
+        raqm_glyph_t *glyphs = raqm_get_glyphs(layout, &count);
+        if (!glyphs) {
+            qDebug() << "no glyphs gotten" << count;
+            return result;
+        }
 
         QPointF oldOffset = QPointF(0, 0);
         const qreal factor = 1 / 64.;
         // QMap<QString, QRawFont> fontList;
 
-        for (int j = 0; j < int(count); j++) {
+        for (int g = 0; g < int(count); g++) {
             QPainterPath glyph;
             glyph.setFillRule(Qt::WindingFill);
-            FT_Load_Glyph(glyphs[j].ftface, glyphs[j].index, 0);
-            FT_Outline outline = glyphs[j].ftface->glyph->outline;
-
-            int contour = 0;
-            int lastContourPoint = outline.n_points - 1;
-            if (outline.n_contours > 0) {
-                lastContourPoint = outline.contours[contour];
+            int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, 0);
+            if (error != 0) {
+                continue;
             }
+            FT_Outline outline = glyphs[g].ftface->glyph->outline;
+            qDebug() << "Glyph" << g << "Index:" << glyphs[g].index
+                     << "outline points" << outline.n_points;
 
             // Code taken from qfontengine_ft.cpp
             // TODO: Improve the transforms here, the coordinate system for a
@@ -267,11 +273,11 @@ QPainterPath KoSvgTextShape::textOutline() const
                 }
                 ++i;
             }
-            QPointF offset = QPointF(glyphs[j].x_offset * factor,
-                                     glyphs[j].y_offset * factor);
-            QPointF advance = QPointF(glyphs[j].x_advance * factor,
-                                      glyphs[j].y_advance * factor);
-            qDebug() << "adding glyph" << j << "offset" << offset << "advance"
+            QPointF offset = QPointF(glyphs[g].x_offset * factor,
+                                     glyphs[g].y_offset * factor);
+            QPointF advance = QPointF(glyphs[g].x_advance * factor,
+                                      glyphs[g].y_advance * factor);
+            qDebug() << "adding glyph" << g << "offset" << offset << "advance"
                      << advance;
             qDebug() << "boundingRect" << glyph.boundingRect();
             // According to the harfbuzz docs, the offset doesn't advance the
@@ -343,6 +349,7 @@ QPainterPath KoSvgTextShape::textOutline() const
             }
         }*/
     }
+
     const KoSvgTextChunkShape *chunkShape =
         dynamic_cast<const KoSvgTextChunkShape *>(this);
     while (chunkShape->shapes().size() > 0
@@ -577,7 +584,7 @@ void KoSvgTextShape::relayout() const
 
         if (raqm_set_text_utf8(layout,
                                chunk.text.toUtf8(),
-                               chunk.text.size())) {
+                               chunk.text.toUtf8().size())) {
             if (chunk.direction == Qt::RightToLeft) {
                 raqm_set_par_direction(layout,
                                        raqm_direction_t::RAQM_DIRECTION_RTL);
@@ -586,15 +593,31 @@ void KoSvgTextShape::relayout() const
                                        raqm_direction_t::RAQM_DIRECTION_LTR);
             }
 
-            for (QTextLayout::FormatRange format : chunk.formats) {
+            for (QTextLayout::FormatRange range : chunk.formats) {
                 FT_Face face = NULL;
 
                 FcPattern *p = FcPatternCreate();
                 const FcChar8 *vals = reinterpret_cast<FcChar8 *>(
-                    format.format.font().family().toUtf8().data());
-                qreal fontSize = format.format.font().pointSizeF();
+                    range.format.font().family().toUtf8().data());
+                qreal fontSize = range.format.font().pointSizeF();
                 FcPatternAddString(p, FC_FAMILY, vals);
+                /* this is too strict, and will sometimes prevent
+                 * fonts to be found, so we'll need to handle this
+                differently... if (range.format.font().italic()) {
+                    FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
+                }
+                //The following is wrong, but it'll have to do for now...
+                FcPatternAddInteger(p, FC_WEIGHT,
+                range.format.font().weight()*2); if
+                (range.format.font().stretch() >= 50) { FcPatternAddInteger(p,
+                FC_WIDTH, range.format.font().stretch());
+                }*/
                 FcFontSet *fontSet = FcFontList(config, p, objectSet);
+                if (fontSet->nfont == 0) {
+                    qWarning() << "No fonts found for family name"
+                               << range.format.font().family();
+                    continue;
+                }
                 QString fontFileName;
                 QStringList fontProperties =
                     QString(reinterpret_cast<char *>(
@@ -607,29 +630,37 @@ void KoSvgTextShape::relayout() const
                     }
                 }
 
-                /*if (faces.contains(fontFileName)) {
-                    qDebug() << "found face" << fontFileName;
-                    face = faces.value(fontFileName);
-                    raqm_set_freetype_face_range(layout, face, format.start,
-                format.length); } else*/
-                if (FT_New_Face(d->library,
-                                fontFileName.toUtf8().data(),
-                                0,
-                                &face)
-                    == 0) {
+                int errorCode = FT_New_Face(d->library,
+                                            fontFileName.toUtf8().data(),
+                                            0,
+                                            &face);
+                if (errorCode == 0) {
                     qDebug() << "face loaded" << fontFileName;
-                    FT_Set_Char_Size(face, fontSize * 64.0, 0, 0, 0);
-                    if (format.start == 0) {
-                        raqm_set_freetype_face(layout, face);
+                    errorCode =
+                        FT_Set_Char_Size(face, fontSize * 64.0, 0, 0, 0);
+                    if (errorCode == 0) {
+                        if (range.start == 0) {
+                            raqm_set_freetype_face(layout, face);
+                        }
+                        if (range.length > 0) {
+                            int start =
+                                chunk.text.left(range.start).toUtf8().size();
+                            int length =
+                                chunk.text.mid(range.start, range.length)
+                                    .toUtf8()
+                                    .size();
+                            raqm_set_freetype_face_range(layout,
+                                                         face,
+                                                         start,
+                                                         length);
+                        }
                     }
-                    raqm_set_freetype_face_range(layout,
-                                                 face,
-                                                 format.start,
-                                                 format.length);
-                    // faces.insert(fontFileName, face);
                 } else {
-                    qDebug() << "face did not load" << fontFileName;
+                    qDebug()
+                        << "Face did not load, FreeType Error: " << errorCode
+                        << "Filename:" << fontFileName;
                 }
+                FT_Done_Face(face);
             }
         }
 
@@ -683,10 +714,8 @@ void KoSvgTextShape::relayout() const
             // TODO: fix after t2b text implemented
             diff.ry() = 0;
         }
-
         d->cachedLayouts.push_back(layout);
         d->cachedLayoutsOffsets.push_back(-diff);
-
     }
     // Calculate the associated outline for a text chunk.
     d->clearAssociatedOutlines(this);

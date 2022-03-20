@@ -60,8 +60,6 @@ public:
     FT_Library library = NULL;
 
     QPainterPath path;
-    // temp
-    QString fontName;
 
     void clearAssociatedOutlines(const KoShape *rootShape);
 
@@ -118,10 +116,8 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
         //d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
     }*/
     qDebug() << "drawing...";
-    painter.setBrush(Qt::black);
-    painter.setOpacity(1.0);
-    painter.drawPath(d->path);
 
+    background()->paint(painter, paintContext, d->path);
     /**
      * HACK ALERT:
      * The layouts of non-gui threads must be destroyed in the same thread
@@ -144,150 +140,13 @@ void KoSvgTextShape::paintStroke(QPainter &painter) const
 
 QPainterPath KoSvgTextShape::textOutline() const
 {
-
-    QPainterPath result;
+    /*QPainterPath result;
     result.setFillRule(Qt::WindingFill);
     qDebug() << "starting creation textoutlne";
 
     for (int layoutIndex = 0; layoutIndex < (int)d->cachedLayouts.size();
-         layoutIndex++) {
-        qDebug() << "drawing layout" << layoutIndex << d->cachedLayouts.size();
-        // const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
-        // const QTextLayout *layout = d->cachedLayouts[i].get();
+    layoutIndex++) {
 
-        size_t count = 0;
-        raqm_t *layout = d->cachedLayouts[layoutIndex];
-        raqm_glyph_t *glyphs = raqm_get_glyphs(layout, &count);
-        if (!glyphs) {
-            qDebug() << "no glyphs gotten" << count;
-            return result;
-        }
-
-        QPointF oldOffset = QPointF(0, 0);
-        const qreal factor = 1 / 64.;
-        // QMap<QString, QRawFont> fontList;
-
-        for (int g = 0; g < int(count); g++) {
-            QPainterPath glyph;
-            glyph.setFillRule(Qt::WindingFill);
-            int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, 0);
-            if (error != 0) {
-                continue;
-            }
-            FT_Outline outline = glyphs[g].ftface->glyph->outline;
-            qDebug() << "Glyph" << g << "Index:" << glyphs[g].index
-                     << "outline points" << outline.n_points;
-
-            // Code taken from qfontengine_ft.cpp
-            // TODO: Improve the transforms here, the coordinate system for a
-            // glyph is different from that of a QPainterPath, it's origin at
-            // the (writing mode independant) baseline instead of the topleft.
-
-            QPointF cp = QPointF();
-            // convert the outline to a painter path
-            int i = 0;
-            for (int j = 0; j < outline.n_contours; ++j) {
-                int last_point = outline.contours[j];
-                // qDebug() << "contour:" << i << "to" << last_point;
-                QPointF start = QPointF(outline.points[i].x * factor,
-                                        -outline.points[i].y * factor);
-                if (!(outline.tags[i] & 1)) { // start point is not on curve:
-                    if (!(outline.tags[last_point]
-                          & 1)) { // end point is not on curve:
-                        // qDebug() << "  start and end point are not on curve";
-                        start = (QPointF(outline.points[last_point].x * factor,
-                                         -outline.points[last_point].y * factor)
-                                 + start)
-                            / 2.0;
-                    } else {
-                        // qDebug() << "  end point is on curve, start is not";
-                        start = QPointF(outline.points[last_point].x * factor,
-                                        -outline.points[last_point].y * factor);
-                    }
-                    --i; // to use original start point as control point below
-                }
-                start += cp;
-                // qDebug() << "  start at" << start;
-                glyph.moveTo(start);
-                QPointF c[4];
-                c[0] = start;
-                int n = 1;
-                while (i < last_point) {
-                    ++i;
-                    c[n] = cp
-                        + QPointF(outline.points[i].x * factor,
-                                  -outline.points[i].y * factor);
-                    // qDebug() << "    " << i << c[n] << "tag =" <<
-                    // (int)g->outline.tags[i]
-                    //                    << ": on curve =" <<
-                    //                    (bool)(g->outline.tags[i] & 1);
-                    ++n;
-                    switch (outline.tags[i] & 3) {
-                    case 2:
-                        // cubic bezier element
-                        if (n < 4)
-                            continue;
-                        c[3] = (c[3] + c[2]) / 2;
-                        --i;
-                        break;
-                    case 0:
-                        // quadratic bezier element
-                        if (n < 3)
-                            continue;
-                        c[3] = (c[1] + c[2]) / 2;
-                        c[2] = (2 * c[1] + c[3]) / 3;
-                        c[1] = (2 * c[1] + c[0]) / 3;
-                        --i;
-                        break;
-                    case 1:
-                    case 3:
-                        if (n == 2) {
-                            // qDebug() << "  lineTo" << c[1];
-                            glyph.lineTo(c[1]);
-                            c[0] = c[1];
-                            n = 1;
-                            continue;
-                        } else if (n == 3) {
-                            c[3] = c[2];
-                            c[2] = (2 * c[1] + c[3]) / 3;
-                            c[1] = (2 * c[1] + c[0]) / 3;
-                        }
-                        break;
-                    }
-                    // qDebug() << "  cubicTo" << c[1] << c[2] << c[3];
-                    glyph.cubicTo(c[1], c[2], c[3]);
-                    c[0] = c[3];
-                    n = 1;
-                }
-                if (n == 1) {
-                    // qDebug() << "  closeSubpath";
-                    glyph.closeSubpath();
-                } else {
-                    c[3] = start;
-                    if (n == 2) {
-                        c[2] = (2 * c[1] + c[3]) / 3;
-                        c[1] = (2 * c[1] + c[0]) / 3;
-                    }
-                    // qDebug() << "  close cubicTo" << c[1] << c[2] << c[3];
-                    glyph.cubicTo(c[1], c[2], c[3]);
-                }
-                ++i;
-            }
-            QPointF offset = QPointF(glyphs[g].x_offset * factor,
-                                     glyphs[g].y_offset * factor);
-            QPointF advance = QPointF(glyphs[g].x_advance * factor,
-                                      glyphs[g].y_advance * factor);
-            qDebug() << "adding glyph" << g << "offset" << offset << "advance"
-                     << advance;
-            qDebug() << "boundingRect" << glyph.boundingRect();
-            // According to the harfbuzz docs, the offset doesn't advance the
-            // line, just offsets.
-            glyph.translate(oldOffset + offset);
-            result.addPath(glyph);
-            oldOffset += advance;
-        }
-
-        /*
         for (int j = 0; j < layout->lineCount(); j++) {
             QTextLine line = layout->lineAt(j);
 
@@ -297,7 +156,7 @@ QPainterPath KoSvgTextShape::textOutline() const
                 const QRawFont font = run.rawFont();
 
                 KIS_SAFE_ASSERT_RECOVER(indexes.size() == positions.size()) {
-        continue; }
+    continue; }
 
                 for (int k = 0; k < indexes.size(); k++) {
                     QPainterPath glyph = font.pathForGlyph(indexes[k]);
@@ -310,56 +169,46 @@ QPainterPath KoSvgTextShape::textOutline() const
 
                 if (run.overline()) {
                     // the offset is calculated to be consistent with the way
-        how Qt renders the text const qreal y = line.y(); QRectF
-        overlineBlob(runBounds.x(), y, runBounds.width(), thickness);
+    how Qt renders the text const qreal y = line.y(); QRectF
+    overlineBlob(runBounds.x(), y, runBounds.width(), thickness);
                     overlineBlob.translate(layoutOffset);
 
                     QPainterPath path;
                     path.addRect(overlineBlob);
 
                     // don't use direct addRect, because it doesn't care about
-        Qt::WindingFill result += path;
+    Qt::WindingFill result += path;
                 }
 
                 if (run.strikeOut()) {
                     // the offset is calculated to be consistent with the way
-        how Qt renders the text const qreal y = line.y() + 0.5 * line.height();
+    how Qt renders the text const qreal y = line.y() + 0.5 * line.height();
                     QRectF strikeThroughBlob(runBounds.x(), y,
-        runBounds.width(), thickness);
-                    strikeThroughBlob.translate(layoutOffset);
+    runBounds.width(), thickness); strikeThroughBlob.translate(layoutOffset);
 
                     QPainterPath path;
                     path.addRect(strikeThroughBlob);
 
                     // don't use direct addRect, because it doesn't care about
-        Qt::WindingFill result += path;
+    Qt::WindingFill result += path;
                 }
 
                 if (run.underline()) {
                     const qreal y = line.y() + line.ascent() +
-        font.underlinePosition(); QRectF underlineBlob(runBounds.x(), y,
-        runBounds.width(), thickness); underlineBlob.translate(layoutOffset);
+    font.underlinePosition(); QRectF underlineBlob(runBounds.x(), y,
+    runBounds.width(), thickness); underlineBlob.translate(layoutOffset);
 
                     QPainterPath path;
                     path.addRect(underlineBlob);
 
                     // don't use direct addRect, because it doesn't care about
-        Qt::WindingFill result += path;
+    Qt::WindingFill result += path;
                 }
             }
-        }*/
-    }
+        }
+    }*/
 
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(this);
-    while (chunkShape->shapes().size() > 0
-           && chunkShape->isTextNode() != true) {
-        chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(
-            chunkShape->shapes().first());
-    }
-    chunkShape->layoutInterface()->addAssociatedOutline(result.boundingRect());
-
-    return result;
+    return d->path;
 }
 
 void KoSvgTextShape::resetTextShape()
@@ -557,6 +406,9 @@ void KoSvgTextShape::relayout() const
     d->cachedLayoutsOffsets.clear();
     d->cachedLayoutsWorkingThread = QThread::currentThread();
     d->path.clear();
+    d->path.setFillRule(Qt::WindingFill);
+    // Calculate the associated outline for a text chunk.
+    d->clearAssociatedOutlines(this);
 
     QPointF currentTextPos;
 
@@ -644,9 +496,9 @@ void KoSvgTextShape::relayout() const
                         }
                         if (range.length > 0) {
                             int start =
-                                chunk.text.left(range.start).toUtf8().size();
+                                chunk.text.leftRef(range.start).toUtf8().size();
                             int length =
-                                chunk.text.mid(range.start, range.length)
+                                chunk.text.midRef(range.start, range.length)
                                     .toUtf8()
                                     .size();
                             raqm_set_freetype_face_range(layout,
@@ -662,6 +514,7 @@ void KoSvgTextShape::relayout() const
                 }
                 FT_Done_Face(face);
             }
+            qDebug() << "text-length:" << chunk.text.toUtf8().size();
         }
 
         if (raqm_layout(layout)) {
@@ -671,12 +524,8 @@ void KoSvgTextShape::relayout() const
         currentTextPos = chunk.applyStartPosOverride(currentTextPos);
         const QPointF anchorPointPos = currentTextPos;
 
-        /*
         int lastSubChunkStart = 0;
         QPointF lastSubChunkOffset;
-
-
-        LayoutChunkWrapper wrapper(layout.get());
 
         for (int i = 0; i <= chunk.offsets.size(); i++) {
             const bool isFinalPass = i == chunk.offsets.size();
@@ -688,9 +537,6 @@ void KoSvgTextShape::relayout() const
 
             if (length > 0) {
                 currentTextPos += lastSubChunkOffset;
-                currentTextPos = wrapper.addTextChunk(lastSubChunkStart,
-                                                      length,
-                                                      currentTextPos);
             }
 
             if (!isFinalPass) {
@@ -698,9 +544,6 @@ void KoSvgTextShape::relayout() const
                 lastSubChunkStart = chunk.offsets[i].start;
             }
         }
-
-        layout->endLayout();
-        */
 
         QPointF diff;
 
@@ -714,98 +557,165 @@ void KoSvgTextShape::relayout() const
             // TODO: fix after t2b text implemented
             diff.ry() = 0;
         }
+
+        size_t count;
+        raqm_glyph_t *glyphs = raqm_get_glyphs(layout, &count);
+        if (!glyphs) {
+            continue;
+        }
+
+        QTransform ftTF;
+        const qreal factor = 1 / 64.;
+        // This is dependant on the writing mode, so it needs to be different
+        // for ttb.
+        ftTF.scale(factor, -factor);
+
+        int formatCount = 0;
+        using namespace KoSvgText;
+        QTextLayout::FormatRange range = chunk.formats.at(formatCount);
+
+        QPointF cursorPos = currentTextPos;
+
+        for (int g = 0; g < int(count); g++) {
+            /*
+            uint32_t start = chunk.text.leftRef(range.start).toUtf8().size();
+            uint32_t length = chunk.text.midRef(range.start,
+            range.length).toUtf8().size(); while (glyphs[i].cluster >=
+            start+length) { formatCount += 1; if (formatCount <
+            chunk.formats.size()) { range = chunk.formats.at(formatCount);
+                }
+            }*/
+            const KoSvgCharChunkFormat &format =
+                static_cast<const KoSvgCharChunkFormat &>(range.format);
+
+            int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, 0);
+            if (error != 0) {
+                continue;
+            }
+            FT_GlyphSlotRec *glyphSlot = glyphs[g].ftface->glyph;
+
+            qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
+            // FT_Glyph_Get_CBox( glyphs[i].ftface->glyph, 0, &bbox );
+
+            QPointF cp = QPointF();
+            // convert the outline to a painter path
+            QPainterPath glyph;
+            int i = 0;
+            for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
+                int last_point = glyphSlot->outline.contours[j];
+                // qDebug() << "contour:" << i << "to" << last_point;
+                QPointF start = QPointF(glyphSlot->outline.points[i].x,
+                                        glyphSlot->outline.points[i].y);
+                if (!(glyphSlot->outline.tags[i]
+                      & 1)) { // start point is not on curve:
+                    if (!(glyphSlot->outline.tags[last_point]
+                          & 1)) { // end point is not on curve:
+                        // qDebug() << "  start and end point are not on curve";
+                        start =
+                            (QPointF(glyphSlot->outline.points[last_point].x,
+                                     glyphSlot->outline.points[last_point].y)
+                             + start)
+                            / 2.0;
+                    } else {
+                        // qDebug() << "  end point is on curve, start is not";
+                        start =
+                            QPointF(glyphSlot->outline.points[last_point].x,
+                                    glyphSlot->outline.points[last_point].y);
+                    }
+                    --i; // to use original start point as control point below
+                }
+                start += cp;
+                // qDebug() << "  start at" << start;
+                glyph.moveTo(start);
+                QPointF c[4];
+                c[0] = start;
+                int n = 1;
+                while (i < last_point) {
+                    ++i;
+                    c[n] = cp
+                        + QPointF(glyphSlot->outline.points[i].x,
+                                  glyphSlot->outline.points[i].y);
+                    // qDebug() << "    " << i << c[n] << "tag =" <<
+                    // (int)g->outline.tags[i]
+                    //                    << ": on curve =" <<
+                    //                    (bool)(g->outline.tags[i] & 1);
+                    ++n;
+                    switch (glyphSlot->outline.tags[i] & 3) {
+                    case 2:
+                        // cubic bezier element
+                        if (n < 4)
+                            continue;
+                        c[3] = (c[3] + c[2]) / 2;
+                        --i;
+                        break;
+                    case 0:
+                        // quadratic bezier element
+                        if (n < 3)
+                            continue;
+                        c[3] = (c[1] + c[2]) / 2;
+                        c[2] = (2 * c[1] + c[3]) / 3;
+                        c[1] = (2 * c[1] + c[0]) / 3;
+                        --i;
+                        break;
+                    case 1:
+                    case 3:
+                        if (n == 2) {
+                            // qDebug() << "  lineTo" << c[1];
+                            glyph.lineTo(c[1]);
+                            c[0] = c[1];
+                            n = 1;
+                            continue;
+                        } else if (n == 3) {
+                            c[3] = c[2];
+                            c[2] = (2 * c[1] + c[3]) / 3;
+                            c[1] = (2 * c[1] + c[0]) / 3;
+                        }
+                        break;
+                    }
+                    // qDebug() << "  cubicTo" << c[1] << c[2] << c[3];
+                    glyph.cubicTo(c[1], c[2], c[3]);
+                    c[0] = c[3];
+                    n = 1;
+                }
+                if (n == 1) {
+                    // qDebug() << "  closeSubpath";
+                    glyph.closeSubpath();
+                } else {
+                    c[3] = start;
+                    if (n == 2) {
+                        c[2] = (2 * c[1] + c[3]) / 3;
+                        c[1] = (2 * c[1] + c[0]) / 3;
+                    }
+                    // qDebug() << "  close cubicTo" << c[1] << c[2] << c[3];
+                    glyph.cubicTo(c[1], c[2], c[3]);
+                }
+                ++i;
+            }
+            glyph = ftTF.map(glyph);
+            QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
+            advance = ftTF.map(advance);
+            QPointF offset(glyphs[g].x_offset, glyphs[g].y_offset);
+            offset = ftTF.map(offset);
+            QPointF totalOffset = cursorPos + offset - diff;
+            glyph.translate(totalOffset);
+            QRectF boundingRect(QPointF(), advance);
+            boundingRect.moveTo(totalOffset);
+
+            if (glyph.isEmpty()) {
+                format.associatedShapeWrapper().addCharacterRect(boundingRect);
+            } else {
+                d->path.addPath(glyph);
+                format.associatedShapeWrapper().addCharacterRect(
+                    glyph.boundingRect());
+            }
+            qDebug() << glyph.boundingRect() << boundingRect;
+
+            cursorPos += advance;
+        }
+
         d->cachedLayouts.push_back(layout);
         d->cachedLayoutsOffsets.push_back(-diff);
     }
-    // Calculate the associated outline for a text chunk.
-    d->clearAssociatedOutlines(this);
-
-    if (d->path.isEmpty()) {
-        d->path = textOutline();
-    }
-    /*
-    for (int i = 0; i < int(d->cachedLayouts.size()); i++) {
-        const QTextLayout &layout = *d->cachedLayouts[i];
-        const QPointF layoutOffset = d->cachedLayoutsOffsets[i];
-
-        using namespace KoSvgText;
-
-        Q_FOREACH (const QTextLayout::FormatRange &range, layout.formats()) {
-            const KoSvgCharChunkFormat &format =
-                    static_cast<const KoSvgCharChunkFormat&>(range.format);
-            AssociatedShapeWrapper wrapper = format.associatedShapeWrapper();
-
-            const int rangeStart = range.start;
-            const int safeRangeLength = range.length > 0 ? range.length :
-    layout.text().size() - rangeStart;
-
-            if (safeRangeLength <= 0) continue;
-
-            const int rangeEnd = range.start + safeRangeLength - 1;
-
-            const int firstLineIndex =
-    layout.lineForTextPosition(rangeStart).lineNumber(); const int lastLineIndex
-    = layout.lineForTextPosition(rangeEnd).lineNumber();
-
-            for (int i = firstLineIndex; i <= lastLineIndex; i++) {
-                const QTextLine line = layout.lineAt(i);
-
-                // It might happen that the range contains only one (or two)
-                // symbol that is a whitespace symbol. In such a case we should
-                // just skip this (invalid) line.
-                if (!line.isValid()) continue;
-
-                const int posStart = qMax(line.textStart(), rangeStart);
-                const int posEnd = qMin(line.textStart() + line.textLength() -
-    1, rangeEnd);
-
-                const QList<QGlyphRun> glyphRuns = line.glyphRuns(posStart,
-    posEnd - posStart + 1); Q_FOREACH (const QGlyphRun &run, glyphRuns) { const
-    QPointF firstPosition = run.positions().first(); const quint32
-    firstGlyphIndex = run.glyphIndexes().first();
-
-                    const QPointF lastPosition = run.positions().last();
-                    const quint32 lastGlyphIndex = run.glyphIndexes().last();
-
-                    const QRawFont rawFont = run.rawFont();
-
-                    const QRectF firstGlyphRect =
-    rawFont.boundingRect(firstGlyphIndex).translated(firstPosition); const
-    QRectF lastGlyphRect =
-    rawFont.boundingRect(lastGlyphIndex).translated(lastPosition);
-
-                    QRectF rect = run.boundingRect();
-
-                    /**
-                     * HACK ALERT: there is a bug in a way how Qt calculates
-    boundingRect()
-                     *             of the glyph run. It doesn't care about left
-    and right bearings
-                     *             of the border chars in the run, therefore it
-    becomes cropped.
-                     *
-                     *             Here we just add a half-char width margin to
-    both sides
-                     *             of the glyph run to make sure the glyphs are
-    fully painted.
-                     *
-                     * BUG: 389528
-                     * BUG: 392068
-                     * BUG: 420408 (vertically)
-                     *
-                    rect.setLeft(qMin(rect.left(), lastGlyphRect.left()) - 0.5 *
-    firstGlyphRect.width()); rect.setRight(qMax(rect.right(),
-    lastGlyphRect.right()) + 0.5 * lastGlyphRect.width());
-
-                    rect.adjust(0, -0.5*rect.height(), 0, 0.5*rect.height()); //
-    add some vertical margin too
-
-                    wrapper.addCharacterRect(rect.translated(layoutOffset));
-                }
-            }
-        }
-    }
-    */
 }
 
 void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)

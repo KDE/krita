@@ -14,6 +14,7 @@ Dependencies:
     'frameworks/kitemmodels': '@stable'
     'frameworks/kitemviews': '@stable'
     'frameworks/kwindowsystem': '@stable'
+    'graphics/kseexpr': 'master'
 
 - 'on': ['Linux', 'FreeBSD']
   'require':

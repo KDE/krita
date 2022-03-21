@@ -71,7 +71,7 @@ public:
 private:
     struct Data;
     struct Private;
-    Private* const d;
+    Private* const d {nullptr};
 };
 
 Q_DECLARE_METATYPE(KisCubicCurve)

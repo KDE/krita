@@ -112,7 +112,7 @@ protected:
     QVector<T> m_h;
     T m_begin;
     T m_end;
-    int m_intervals;
+    int m_intervals {0};
 
 public:
     KisCubicSpline() {}
@@ -227,17 +227,10 @@ static bool pointLessThan(const QPointF &a, const QPointF &b)
 
 struct Q_DECL_HIDDEN KisCubicCurve::Data : public QSharedData {
     Data() {
-        init();
     }
     Data(const Data& data) : QSharedData() {
-        init();
         points = data.points;
         name = data.name;
-    }
-    void init() {
-        validSpline = false;
-        validU16Transfer = false;
-        validFTransfer = false;
     }
     ~Data() {
     }
@@ -245,17 +238,19 @@ struct Q_DECL_HIDDEN KisCubicCurve::Data : public QSharedData {
     mutable QString name;
     mutable KisCubicSpline<QPointF, qreal> spline;
     QList<QPointF> points;
-    mutable bool validSpline;
+    mutable bool validSpline {false};
     mutable QVector<quint8> u8Transfer;
-    mutable bool validU8Transfer;
+    mutable bool validU8Transfer {false};
     mutable QVector<quint16> u16Transfer;
-    mutable bool validU16Transfer;
+    mutable bool validU16Transfer {false};
     mutable QVector<qreal> fTransfer;
-    mutable bool validFTransfer;
+    mutable bool validFTransfer {false};
+
     void updateSpline();
     void keepSorted();
     qreal value(qreal x);
     void invalidate();
+
     template<typename _T_, typename _T2_>
     void updateTransfer(QVector<_T_>* transfer, bool& valid, _T2_ min, _T2_ max, int size);
 };

@@ -15,17 +15,16 @@
 struct KisBusyProgressIndicator::Private
 {
     Private(KisBusyProgressIndicator *_q)
-        : timer(new QTimer(_q)),
-          numEmptyTicks(0),
-          isStarted(false) {}
+        : timer(new QTimer(_q))
+        {}
 
-    QTimer *timer; // owned by QObject hierarchy
-    int numEmptyTicks;
+    QTimer *timer {nullptr}; // owned by QObject hierarchy
+    int numEmptyTicks {0};
     QAtomicInt numUpdates;
     QAtomicInt timerStarted;
-    KoProgressProxy *progressProxy;
+    KoProgressProxy *progressProxy {nullptr};
 
-    bool isStarted;
+    bool isStarted {false};
 
     void startProgressReport()
     {

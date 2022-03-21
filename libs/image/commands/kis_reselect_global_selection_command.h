@@ -20,7 +20,7 @@ public:
      * @param image the image
      * @param parent the parent command
      */
-    KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = 0);
+    KisReselectGlobalSelectionCommand(KisImageWSP image, KUndo2Command * parent = nullptr);
     ~KisReselectGlobalSelectionCommand() override;
 
     void redo() override;
@@ -28,7 +28,7 @@ public:
 
 protected:
     KisImageWSP m_image;
-    bool m_canReselect;
+    bool m_canReselect {false};
 };
 
 

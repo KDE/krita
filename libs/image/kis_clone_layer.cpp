@@ -40,7 +40,7 @@ struct Q_DECL_HIDDEN KisCloneLayer::Private
 
     KisLayerSP copyFrom;
     KisNodeUuidInfo copyFromInfo;
-    CopyLayerType type;
+    CopyLayerType type {COPY_PROJECTION};
 };
 
 KisCloneLayer::KisCloneLayer(KisLayerSP from, KisImageWSP image, const QString &name, quint8 opacity)

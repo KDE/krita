@@ -146,7 +146,7 @@ private:
     void setFanCornersInfo(bool fanCornersEnabled, qreal fanCornersStep);
 
 private:
-    Private* const d;
+    Private* const d {nullptr};
 };
 
 

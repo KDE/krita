@@ -106,11 +106,11 @@ struct Leapfrog {
         };
 
         Map& m_map;
-        Table* m_destination;
+        Table* m_destination {nullptr};
         Atomic<quint64> m_workerStatus; // number of workers + end flag
         Atomic<bool> m_overflowed;
         Atomic<qint64> m_unitsRemaining;
-        quint64 m_numSources;
+        quint64 m_numSources {0};
 
         TableMigration(Map& map) : m_map(map)
         {

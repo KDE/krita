@@ -38,17 +38,15 @@
 
 struct Q_DECL_HIDDEN KisPaintOp::Private {
     Private(KisPaintOp *_q)
-        : q(_q), dab(0),
-          fanCornersEnabled(false),
-          fanCornersStep(1.0) {}
+        : q(_q) {}
 
-    KisPaintOp *q;
+    KisPaintOp *q {nullptr};
 
     KisFixedPaintDeviceSP dab;
-    KisPainter* painter;
+    KisPainter* painter {nullptr};
 
-    bool fanCornersEnabled;
-    qreal fanCornersStep;
+    bool fanCornersEnabled {false};
+    qreal fanCornersStep {1.0};
 };
 
 

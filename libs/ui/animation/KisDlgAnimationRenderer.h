@@ -76,6 +76,7 @@ protected Q_SLOTS:
 private: 
     void initializeRenderSettings(const KisDocument &doc, const KisAnimationRenderingOptions &lastUsedOptions);
     void ffmpegWarningCheck();
+    bool ffmpegValidate();
 
     static QString defaultVideoFileName(KisDocument *doc, const QString &mimeType);
 

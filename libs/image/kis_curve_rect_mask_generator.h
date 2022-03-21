@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -13,15 +14,16 @@ class KisCubicCurve;
 class QDomElement;
 class QDomDocument;
 
-#include "kis_mask_generator.h"
+#include "kis_base_mask_generator.h"
+
+template<typename V>
+class FastRowProcessor;
 
 /**
  * Curve based softness for this rectangular mask generator
  */
 class KRITAIMAGE_EXPORT KisCurveRectangleMaskGenerator : public KisMaskGenerator
 {
-public:
-    struct FastRowProcessor;
 public:
 
     KisCurveRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, const KisCubicCurve& curve, bool antialiasEdges);
@@ -44,6 +46,8 @@ public:
 private:
     struct Private;
     const QScopedPointer<Private> d;
+
+    friend class FastRowProcessor<KisCurveRectangleMaskGenerator>;
 };
 
 #endif

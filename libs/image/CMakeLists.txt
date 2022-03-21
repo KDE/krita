@@ -27,9 +27,12 @@ endif()
 
 if(HAVE_VC)
   include_directories(SYSTEM ${Vc_INCLUDE_DIR} ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS})
-  ko_compile_for_all_implementations(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
-else()
-  set(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+  ko_compile_for_all_implementations_no_scalar(__per_arch_circle_mask_generator_objs kis_brush_mask_applicator_factories.cpp)
+  ko_compile_for_all_implementations_no_scalar(_per_arch_processor_objs kis_brush_mask_processor_factories.cpp)
+
+  message("Following objects are generated from the per-arch lib")
+  message("${__per_arch_circle_mask_generator_objs}")
+  message("${_per_arch_processor_objs}")
 endif()
 
 set(kritaimage_LIB_SRCS
@@ -245,6 +248,8 @@ set(kritaimage_LIB_SRCS
    kis_gauss_circle_mask_generator.cpp
    kis_gauss_rect_mask_generator.cpp
    ${__per_arch_circle_mask_generator_objs}
+   ${_per_arch_processor_objs}
+   kis_brush_mask_applicator_factories_Scalar.cpp
    kis_curve_circle_mask_generator.cpp
    kis_curve_rect_mask_generator.cpp
    kis_math_toolbox.cpp

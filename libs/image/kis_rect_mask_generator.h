@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2008-2009 Cyrille Berger <cberger@cberger.net>
  *  SPDX-FileCopyrightText: 2018 Ivan Santa Maria <ghevan@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,18 +9,20 @@
 #ifndef _KIS_RECT_MASK_GENERATOR_H_
 #define _KIS_RECT_MASK_GENERATOR_H_
 
-#include <QScopedPointer>
 #include "kritaimage_export.h"
 
-#include "kis_mask_generator.h"
+#include <QScopedPointer>
+
+#include "kis_base_mask_generator.h"
+
+template<typename V>
+class FastRowProcessor;
 
 /**
  * Represent, serialize and deserialize a rectangular 8-bit mask.
  */
 class KRITAIMAGE_EXPORT KisRectangleMaskGenerator : public KisMaskGenerator
 {
-public:
-    struct FastRowProcessor;
 public:
 
     KisRectangleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
@@ -39,6 +42,8 @@ public:
 private:
     struct Private;
     const QScopedPointer<Private> d;
+
+    friend class FastRowProcessor<KisRectangleMaskGenerator>;
 };
 
 #endif

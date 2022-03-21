@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -11,26 +12,10 @@
 
 class KisBrushMaskApplicatorBase;
 
-template<class MaskGenerator, Vc::Implementation _impl>
-struct KisBrushMaskScalarApplicator;
-
-#ifdef HAVE_VC
-
-template<class MaskGenerator, Vc::Implementation _impl>
-struct KisBrushMaskVectorApplicator;
-
-#else /* HAVE_VC */
-
-#define KisBrushMaskVectorApplicator KisBrushMaskScalarApplicator
-
-#endif /* HAVE_VC */
-
-template<class MaskGenerator,
-         template<class U, Vc::Implementation V> class Applicator>
-struct MaskApplicatorFactory
-{
-    typedef MaskGenerator* ParamType;
-    typedef KisBrushMaskApplicatorBase* ReturnType;
+template<class MaskGenerator>
+struct MaskApplicatorFactory {
+    using ParamType = MaskGenerator *;
+    using ReturnType = KisBrushMaskApplicatorBase *;
 
     template<Vc::Implementation _impl>
     static ReturnType create(ParamType maskGenerator);

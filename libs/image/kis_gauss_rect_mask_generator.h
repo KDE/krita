@@ -1,6 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  SPDX-FileCopyrightText: 2011 Geoffry Song <goffrie@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -10,15 +11,16 @@
 
 #include "kritaimage_export.h"
 
-#include "kis_mask_generator.h"
+#include "kis_base_mask_generator.h"
+
+template<typename V>
+class FastRowProcessor;
 
 /**
  * This mask generator uses a Gaussian-blurred rectangle
  */
 class KRITAIMAGE_EXPORT KisGaussRectangleMaskGenerator : public KisMaskGenerator
 {
-public:
-    struct FastRowProcessor;
 public:
 
     KisGaussRectangleMaskGenerator(qreal diameter, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
@@ -36,6 +38,8 @@ public:
 private:
     struct Private;
     const QScopedPointer<Private> d;
+
+    friend class FastRowProcessor<KisGaussRectangleMaskGenerator>;
 };
 
 #endif

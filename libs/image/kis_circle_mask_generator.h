@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2008-2009 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -9,17 +10,17 @@
 
 #include "kritaimage_export.h"
 
-#include "kis_mask_generator.h"
+#include "kis_base_mask_generator.h"
 #include <QScopedPointer>
 
+template <typename V>
+class FastRowProcessor;
 
 /**
  * Create, serialize and deserialize an elliptical 8-bit mask.
  */
 class KRITAIMAGE_EXPORT KisCircleMaskGenerator : public KisMaskGenerator
 {
-public:
-    struct FastRowProcessor;
 public:
     KisCircleMaskGenerator(qreal radius, qreal ratio, qreal fh, qreal fv, int spikes, bool antialiasEdges);
     KisCircleMaskGenerator(const KisCircleMaskGenerator &rhs);
@@ -46,6 +47,8 @@ private:
 private:
     struct Private;
     const QScopedPointer<Private> d;
+
+    friend class FastRowProcessor<KisCircleMaskGenerator>;
 };
 
 #endif

@@ -2,6 +2,7 @@
  *  SPDX-FileCopyrightText: 2004, 2007-2009 Cyrille Berger <cberger@cberger.net>
  *  SPDX-FileCopyrightText: 2010 Lukáš Tvrdý <lukast.dev@gmail.com>
  *  SPDX-FileCopyrightText: 2011 Sven Langkamp <sven.langkamp@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -134,7 +135,7 @@ KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
 {
     if (!d->defaultMaskProcessor) {
         d->defaultMaskProcessor.reset(
-            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator, KisBrushMaskScalarApplicator> >(this));
+            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator>>(this));
     }
 
     return d->defaultMaskProcessor.data();

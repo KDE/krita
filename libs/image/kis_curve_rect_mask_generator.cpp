@@ -4,28 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
-
 #include <cmath>
-
-#include <config-vc.h>
-#ifdef HAVE_VC
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wundef"
-#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
-#endif
-#if defined _MSC_VER
-// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
-#pragma warning ( push )
-#pragma warning ( disable : 4244 )
-#pragma warning ( disable : 4800 )
-#endif
-#include <Vc/Vc>
-#include <Vc/IO>
-#if defined _MSC_VER
-#pragma warning ( pop )
-#endif
-#endif
 
 #include <QDomDocument>
 #include <QVector>
@@ -38,6 +17,7 @@
 
 #include "kis_curve_rect_mask_generator.h"
 #include "kis_curve_rect_mask_generator_p.h"
+#include "kis_curve_circle_mask_generator.h"
 #include "kis_cubic_curve.h"
 
 
@@ -52,14 +32,14 @@ KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(qreal diameter, q
 
     setScale(1.0, 1.0);
 
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator>>(this));
 }
 
 KisCurveRectangleMaskGenerator::KisCurveRectangleMaskGenerator(const KisCurveRectangleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator>>(this));
 }
 
 KisMaskGenerator* KisCurveRectangleMaskGenerator::clone() const
@@ -144,6 +124,6 @@ KisBrushMaskApplicatorBase* KisCurveRectangleMaskGenerator::applicator()
 
 void KisCurveRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveRectangleMaskGenerator>>(this,forceScalar));
 }
 

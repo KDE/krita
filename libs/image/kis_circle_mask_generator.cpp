@@ -8,25 +8,6 @@
 
 #include <cmath>
 
-#include <config-vc.h>
-#ifdef HAVE_VC
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wundef"
-#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
-#endif
-#if defined _MSC_VER
-// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
-#pragma warning ( push )
-#pragma warning ( disable : 4244 )
-#pragma warning ( disable : 4800 )
-#endif
-#include <Vc/Vc>
-#include <Vc/IO>
-#if defined _MSC_VER
-#pragma warning ( pop )
-#endif
-#endif
-
 #include <QDomDocument>
 
 #include "kis_fast_math.h"
@@ -46,14 +27,14 @@ KisCircleMaskGenerator::KisCircleMaskGenerator(qreal diameter, qreal ratio, qrea
     // store the variable locally to allow vector implementation read it easily
     d->copyOfAntialiasEdges = antialiasEdges;
 
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator> >(this));
 }
 
 KisCircleMaskGenerator::KisCircleMaskGenerator(const KisCircleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator> >(this));
 }
 
 KisMaskGenerator* KisCircleMaskGenerator::clone() const
@@ -121,5 +102,5 @@ void KisCircleMaskGenerator::setSoftness(qreal softness)
 
 void KisCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCircleMaskGenerator> >(this,forceScalar));
 }

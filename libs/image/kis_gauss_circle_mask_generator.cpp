@@ -5,27 +5,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <cmath>
-
-#include <config-vc.h>
-#ifdef HAVE_VC
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wundef"
-#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
-#endif
-#if defined _MSC_VER
-// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
-#pragma warning ( push )
-#pragma warning ( disable : 4244 )
-#pragma warning ( disable : 4800 )
-#endif
-#include <Vc/Vc>
-#include <Vc/IO>
-#if defined _MSC_VER
-#pragma warning ( pop )
-#endif
-#endif
 
 #include <QDomDocument>
 #include <QVector>
@@ -64,7 +44,7 @@ KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(qreal diameter, qreal r
     d->center = (2.5 * (6761.0*d->fade-10000.0))/(M_SQRT_2*6761.0*d->fade);
     d->alphafactor = 255.0 / (2.0 * erf(d->center));
 
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator>>(this));
 
 }
 
@@ -72,7 +52,7 @@ KisGaussCircleMaskGenerator::KisGaussCircleMaskGenerator(const KisGaussCircleMas
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator>>(this));
 }
 
 KisMaskGenerator* KisGaussCircleMaskGenerator::clone() const
@@ -129,5 +109,5 @@ quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const
 
 void KisGaussCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator>>(this,forceScalar));
 }

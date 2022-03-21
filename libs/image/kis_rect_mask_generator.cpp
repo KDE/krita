@@ -1,31 +1,12 @@
 /*
  *  SPDX-FileCopyrightText: 2004, 2007-2010 Cyrille Berger <cberger@cberger.net>
  *  SPDX-FileCopyrightText: 2018 Ivan Santa Maria <ghevan@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoVcMultiArchBuildSupport.h> //MSVC requires that Vc come first
 #include <cmath>
-
-#include <config-vc.h>
-#ifdef HAVE_VC
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wundef"
-#pragma GCC diagnostic ignored "-Wlocal-type-template-args"
-#endif
-#if defined _MSC_VER
-// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
-#pragma warning ( push )
-#pragma warning ( disable : 4244 )
-#pragma warning ( disable : 4800 )
-#endif
-#include <Vc/Vc>
-#include <Vc/IO>
-#if defined _MSC_VER
-#pragma warning ( pop )
-#endif
-#endif
 
 
 #include <QDomDocument>
@@ -47,14 +28,14 @@ KisRectangleMaskGenerator::KisRectangleMaskGenerator(qreal radius, qreal ratio, 
 
     // store the variable locally to allow vector implementation read it easily
     d->copyOfAntialiasEdges = antialiasEdges;
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator>>(this));
 }
 
 KisRectangleMaskGenerator::KisRectangleMaskGenerator(const KisRectangleMaskGenerator &rhs)
     : KisMaskGenerator(rhs),
       d(new Private(*rhs.d))
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator>>(this));
 }
 
 KisMaskGenerator* KisRectangleMaskGenerator::clone() const
@@ -99,7 +80,7 @@ KisBrushMaskApplicatorBase* KisRectangleMaskGenerator::applicator()
 
 void KisRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator, KisBrushMaskVectorApplicator> >(this,forceScalar));
+    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator>>(this,forceScalar));
 }
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const

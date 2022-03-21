@@ -122,7 +122,7 @@ private:
     void updateUiFromFillType(KoShape *shape);
 
     class Private;
-    Private * const d;
+    Private * const d {nullptr};
 };
 
 #endif // FILLCONFIGWIDGET_H

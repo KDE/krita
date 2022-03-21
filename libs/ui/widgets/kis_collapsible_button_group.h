@@ -39,7 +39,7 @@ protected:
 
 private:
     struct Private;
-    Private* m_d;
+    Private* m_d {nullptr};
 };
 
 #endif // KISCOLLAPSIBLEBUTTONGROUP_H

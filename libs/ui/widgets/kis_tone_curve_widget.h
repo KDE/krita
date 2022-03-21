@@ -25,7 +25,7 @@ class KRITAUI_EXPORT KisToneCurveWidget : public QWidget
  
 public:
  
-    KisToneCurveWidget(QWidget *parent=0);
+    KisToneCurveWidget(QWidget *parent = nullptr);
     ~KisToneCurveWidget() override;
 
     void setGreyscaleCurve(QPolygonF poly);
@@ -48,7 +48,7 @@ private:
 private :
  
     class Private;
-    Private* const d;
+    Private* const d {nullptr};
 };
 
 #endif /* KISTONECURVEWIDGET_H */

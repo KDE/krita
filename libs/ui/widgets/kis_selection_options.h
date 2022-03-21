@@ -92,12 +92,12 @@ private:
     void setCmbSampleLayersMode(QString sampleLayersModeId);
 
 private:
-    WdgSelectionOptions * m_page;
-    QButtonGroup* m_mode;
-    QButtonGroup* m_action;
+    WdgSelectionOptions * m_page {nullptr};
+    QButtonGroup* m_mode {nullptr};
+    QButtonGroup* m_action {nullptr};
     KisSignalCompressor m_colorLabelsCompressor;
     KisImageSP m_image;
-    KisCanvas2* m_canvas;
+    KisCanvas2* m_canvas {nullptr};
     QString m_toolId;
     KisSignalAutoConnectionsStore m_nodesUpdatesConnectionsStore;
 };

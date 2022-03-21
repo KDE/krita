@@ -109,14 +109,14 @@ protected:
     }
 
 private:
-    qreal (*m_valueGetter)(T);
+    qreal (*m_valueGetter)(T) {nullptr};
     QList<T> m_selection;
 };
 
 class KRITAUI_EXPORT KisShapePropertySlider : public KisSelectionPropertySlider<KoShape*>
 {
 public:
-    KisShapePropertySlider(QWidget* parent=0);
+    KisShapePropertySlider(QWidget* parent=nullptr);
 };
 
 #endif

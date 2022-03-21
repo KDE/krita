@@ -55,7 +55,7 @@ Q_SIGNALS:
     void sigSizeChanged();
 private:
     struct Private;
-    Private* const d;
+    Private* const d {nullptr};
 };
 
 
@@ -134,7 +134,7 @@ public Q_SLOTS:
 
 private:
 
-    QAbstractItemModel *m_model;
+    QAbstractItemModel *m_model {nullptr};
 
 };
 

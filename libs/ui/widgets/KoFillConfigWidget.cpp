@@ -177,12 +177,12 @@ public:
     {
     }
 
-    KoColorPopupAction *colorAction;
-    KoResourcePopupAction *gradientAction;
-    KoResourcePopupAction *patternAction;
-    QButtonGroup *group;
+    KoColorPopupAction *colorAction {nullptr};
+    KoResourcePopupAction *gradientAction {nullptr};
+    KoResourcePopupAction *patternAction {nullptr};
+    QButtonGroup *group {nullptr};
 
-    KoCanvasBase *canvas;
+    KoCanvasBase *canvas {nullptr};
 
     KisSignalCompressorWithParam<std::pair<QColor, KoFlake::FillVariant>> colorChangedCompressor;
     KisAcyclicSignalConnector shapeChangedAcyclicConnector;
@@ -194,7 +194,7 @@ public:
     KisSignalCompressor shapeChangedCompressor;
     KoFlake::FillVariant fillVariant;
 
-    bool noSelectionTrackingMode;
+    bool noSelectionTrackingMode {false};
 
     SvgMeshPosition meshposition;
     QScopedPointer<SvgMeshGradient> activeMeshGradient;

@@ -58,7 +58,6 @@ KisFloatingMessage::KisFloatingMessage(const QString &message, QWidget *parent, 
     , m_timeout(timeout)
     , m_priority(priority)
     , m_alignment(alignment)
-    , widgetQueuedForDeletion(false)
 {
     m_icon = KisIconUtils::loadIcon("krita-branding").pixmap(256, 256).toImage();
 

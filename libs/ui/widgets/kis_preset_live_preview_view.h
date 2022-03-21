@@ -65,7 +65,7 @@ private Q_SLOTS:
 private:
 
     ///internally sets the Resource Provider for brush preview (allowing gradients in preview)
-    KoCanvasResourceProvider* m_resourceManager;
+    KoCanvasResourceProvider* m_resourceManager {nullptr};
 
     /// internally sets the image area for brush preview
     KisImageSP m_image;
@@ -74,19 +74,19 @@ private:
     KisLayerSP m_layer;
 
     /// internally sets the color space for brush preview
-    const KoColorSpace *m_colorSpace;
+    const KoColorSpace *m_colorSpace {nullptr};
 
     /// the color which is used for rendering the stroke
     KoColor m_paintColor;
 
     /// the scene that can add items like text and the brush stroke image
-    QGraphicsScene *m_brushPreviewScene;
+    QGraphicsScene *m_brushPreviewScene {nullptr};
 
     /// holds the preview brush stroke data
-    QGraphicsPixmapItem *m_sceneImageItem;
+    QGraphicsPixmapItem *m_sceneImageItem {nullptr};
 
     /// holds the 'no preview available' text object
-    QGraphicsTextItem *m_noPreviewText;
+    QGraphicsTextItem *m_noPreviewText {nullptr};
 
     /// holds the width and height of the image of the brush preview
     /// Probably can later add set functions to make this customizable
@@ -110,27 +110,27 @@ private:
     KisPaintOpPresetSP m_currentPreset;
 
     /// holds the current zoom(scale) level of scene
-    float m_scaleFactor;
+    float m_scaleFactor {1.0};
 
     /// internal reference for internal brush size
     /// used to check if our brush size has changed
     /// do zooming and other things internally if it has changed
-    float m_currentBrushSize = 1.0;
+    float m_currentBrushSize {1.0};
 
-    bool m_previewGenerationInProgress = false;
+    bool m_previewGenerationInProgress {false};
     KisSignalCompressor m_updateCompressor;
 
     /// the range of brush sizes that will control zooming in/out
-    const float m_minBrushVal = 10.0;
-    const float m_maxBrushVal = 100.0;
+    const float m_minBrushVal {10.0};
+    const float m_maxBrushVal {100.0};
 
     /// range of scale values. 1.0 == 100%
-    const qreal m_minScale = 1.0;
-    const qreal m_maxScale = 0.3;
+    const qreal m_minScale {1.0};
+    const qreal m_maxScale {0.3};
 
     /// multiplier that is used for lengthening the brush stroke points
-    const float m_minStrokeScale = 0.4; // for smaller brush stroke
-    const float m_maxStrokeScale = 1.0; // for larger brush stroke
+    const float m_minStrokeScale {0.4}; // for smaller brush stroke
+    const float m_maxStrokeScale {1.0}; // for larger brush stroke
 
 
     /**

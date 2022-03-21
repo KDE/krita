@@ -129,34 +129,18 @@ static const double spectral_chromaticity[81][3] =
 class Q_DECL_HIDDEN KisCIETongueWidget::Private
 {
 public:
- 
-    Private() :
-        profileDataAvailable(false),
-        needUpdatePixmap(false),
-        cieTongueNeedsUpdate(true),
-        uncalibratedColor(false),
-        xBias(0),
-        yBias(0),
-        pxcols(0),
-        pxrows(0),
-        gridside(0),
-        Primaries(9),
-        whitePoint(3)
 
-    {
-    }
-
-    bool            profileDataAvailable;
-    bool            needUpdatePixmap;
-    bool            cieTongueNeedsUpdate;
-    bool            uncalibratedColor;
+    bool            profileDataAvailable {false};
+    bool            needUpdatePixmap {false};
+    bool            cieTongueNeedsUpdate {true};
+    bool            uncalibratedColor {false};
  
-    int             xBias;
-    int             yBias;
-    int             pxcols;
-    int             pxrows;
+    int             xBias {0};
+    int             yBias {0};
+    int             pxcols {0};
+    int             pxrows {0};
  
-    double          gridside;
+    double          gridside {0.0};
  
     QPainter        painter;
  
@@ -164,10 +148,10 @@ public:
     QPixmap         cietongue;
     QPixmap         gamutMap;
  
-    QVector <double> Primaries;
-    QVector <double> whitePoint;
+    QVector <double> Primaries {9};
+    QVector <double> whitePoint {3};
     QPolygonF       gamut;
-    model colorModel;
+    model colorModel {model::RGBA};
 };
 
 KisCIETongueWidget::KisCIETongueWidget(QWidget *parent) :

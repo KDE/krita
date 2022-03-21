@@ -10,7 +10,7 @@
 template class KRITAUI_EXPORT KisSelectionPropertySlider<KoShape*>;
 struct KisSelectionPropertySliderBase::Private
 {
-    KisSignalCompressor *signalCompressor;
+    KisSignalCompressor *signalCompressor {nullptr};
     QString normalPrefix;
     QString mixedPrefix;
 

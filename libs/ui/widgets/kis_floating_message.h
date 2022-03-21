@@ -71,15 +71,15 @@ private:
     QImage m_icon;
     QPixmap m_scaledIcon;
     QTimer m_timer;
-    int m_m;
+    int m_m {0};
     QTimeLine m_fadeTimeLine;
-    bool m_showOverParent;
-    int m_timeout;
+    bool m_showOverParent {false};
+    int m_timeout {0};
     Priority m_priority;
-    int m_alignment;
-    bool widgetQueuedForDeletion;
-    QLabel *m_messageLabel;
-    QLabel *m_iconLabel;
+    int m_alignment {0};
+    bool widgetQueuedForDeletion {false};
+    QLabel *m_messageLabel {nullptr};
+    QLabel *m_iconLabel {nullptr};
 };
 
 #endif // KIS_FLOATING_MESSAGE_H

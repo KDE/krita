@@ -45,7 +45,7 @@ public:
 
     static constexpr qreal shrinkEpsilon = 0.00001;
 
-    KisSegmentGradientSlider(QWidget *parent = 0, const char* name = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    KisSegmentGradientSlider(QWidget *parent = nullptr, const char* name = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
 
     Handle selectedHandle() { return m_selectedHandle; }
 
@@ -93,25 +93,31 @@ private Q_SLOTS:
 private:
     struct TemporallyDeletedHandleInfo
     {
-        Handle handle{HandleType_None, 0};
-        KoGradientSegmentEndpointType leftEndPointType, rightEndPointType;
-        qreal leftEndPointOffset, rightEndPointOffset;
-        KoColor leftEndPointColor, rightEndPointColor;
-        int leftInterpolationType, rightInterpolationType;
-        int leftColorInterpolationType, rightColorInterpolationType;
-        qreal leftMiddleOffset, rightMiddleOffset;
+        Handle handle {HandleType_None, 0};
+        KoGradientSegmentEndpointType leftEndPointType {COLOR_ENDPOINT};
+        KoGradientSegmentEndpointType rightEndPointType {COLOR_ENDPOINT};
+        qreal leftEndPointOffset {0.0};
+        qreal rightEndPointOffset {0.0};
+        KoColor leftEndPointColor;
+        KoColor rightEndPointColor;
+        int leftInterpolationType {0};
+        int rightInterpolationType {0};
+        int leftColorInterpolationType {0};
+        int rightColorInterpolationType {0};
+        qreal leftMiddleOffset {0.0};
+        qreal rightMiddleOffset {0.0};
     };
 
     // This epsilon controls how much can shrink a segment when dragging
     static constexpr int removeStopDistance{32};
     KoSegmentGradientSP m_gradient;
-    Handle m_selectedHandle;
-    Handle m_hoveredHandle;
-    QMenu* m_segmentMenu;
-    bool m_drag;
-    qreal m_dragT;
-    qreal m_relativeDragOffset;
-    QAction *m_removeSegmentAction;
+    Handle m_selectedHandle {HandleType_None, 0};
+    Handle m_hoveredHandle {HandleType_None, 0};
+    QMenu* m_segmentMenu {nullptr};
+    bool m_drag {false};
+    qreal m_dragT {0.0};
+    qreal m_relativeDragOffset {0.0};
+    QAction *m_removeSegmentAction {nullptr};
     QSize m_handleSize;
     TemporallyDeletedHandleInfo m_temporallyDeletedHandleInfo;
     KisSignalCompressor m_updateCompressor;

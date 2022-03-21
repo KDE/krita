@@ -29,7 +29,7 @@ class KisGeneratorItem : public QListWidgetItem
 {
 public:
 
-    KisGeneratorItem(KisGeneratorSP _generator, QListWidget *parent = 0, int type = Type)
+    KisGeneratorItem(KisGeneratorSP _generator, QListWidget *parent = nullptr, int type = Type)
         : QListWidgetItem(_generator->name(), parent, type)
         , generator(_generator)
     {
@@ -44,23 +44,20 @@ struct KisWdgGenerator::Private
 {
 
 public:
-    Private()
-        : centralWidget(0), view(0) {
-    }
 
-    QWidget * centralWidget; // Active generator settings widget
+    QWidget * centralWidget {nullptr}; // Active generator settings widget
     KisGeneratorSP currentGenerator;
     Ui_WdgGenerators uiWdgGenerators;
     KisPaintDeviceSP dev;
-    QGridLayout *widgetLayout;
-    KisViewManager *view;
+    QGridLayout *widgetLayout {nullptr};
+    KisViewManager *view {nullptr};
 };
 
 KisWdgGenerator::KisWdgGenerator(QWidget * parent)
     : QWidget(parent)
     , d(new Private())
 {
-    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(0));
+    KisPaintDeviceSP dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8(nullptr));
 }
 
 KisWdgGenerator::~KisWdgGenerator()
@@ -126,7 +123,7 @@ KisFilterConfigurationSP KisWdgGenerator::configuration()
     } else {
         return d->currentGenerator->defaultConfiguration(KisGlobalResourcesInterface::instance());
     }
-    return 0;
+    return nullptr;
 }
 
 

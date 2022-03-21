@@ -51,7 +51,7 @@ public Q_SLOTS:
 private:
 
     struct Private;
-    Private * const d;
+    Private * const d {nullptr};
 };
 
 #endif

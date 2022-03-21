@@ -22,7 +22,7 @@ enum enumState {
 class Q_DECL_HIDDEN KisCurveWidget::Private
 {
 
-    KisCurveWidget *m_curveWidget;
+    KisCurveWidget *m_curveWidget {nullptr};
     KisSpinBoxSplineUnitConverter unitConverter;
 
 
@@ -30,43 +30,43 @@ public:
     Private(KisCurveWidget *parent);
 
     /* Dragging variables */
-    int m_grab_point_index;
-    double m_grabOffsetX;
-    double m_grabOffsetY;
-    double m_grabOriginalX;
-    double m_grabOriginalY;
+    int m_grab_point_index {-1};
+    double m_grabOffsetX {0.0};
+    double m_grabOffsetY {0.0};
+    double m_grabOriginalX {0.0};
+    double m_grabOriginalY {0.0};
     QPointF m_draggedAwayPoint;
-    int m_draggedAwayPointIndex;
+    int m_draggedAwayPointIndex {0};
 
-    bool m_readOnlyMode;
-    bool m_guideVisible;
+    bool m_readOnlyMode {false};
+    bool m_guideVisible {false};
     QColor m_colorGuide;
 
 
     /* The curve itself */
-    bool    m_splineDirty;
+    bool    m_splineDirty {false};
     KisCubicCurve m_curve;
 
     QPixmap m_pix;
     QPixmap m_pixmapBase;
-    bool m_pixmapDirty;
-    QPixmap *m_pixmapCache;
+    bool m_pixmapDirty {true};
+    QPixmap *m_pixmapCache {nullptr};
 
     /* In/Out controls */
-    QSpinBox *m_intIn;
-    QSpinBox *m_intOut;
+    QSpinBox *m_intIn {nullptr};
+    QSpinBox *m_intOut {nullptr};
 
     /* Working range of them */
-    int m_inMin;
-    int m_inMax;
-    int m_outMin;
-    int m_outMax;
+    int m_inMin {0};
+    int m_inMax {0};
+    int m_outMin {0};
+    int m_outMax {0};
 
     /**
      * State functions.
      * At the moment used only for dragging.
      */
-    enumState m_state;
+    enumState m_state {enumState::ST_NORMAL};
 
     inline void setState(enumState st);
     inline enumState state() const;

@@ -32,16 +32,14 @@ static const KLocalizedString stringForInstantPreviewThreshold2 = ki18nc("@label
 
 struct KisLodAvailabilityWidget::Private
 {
-    Private() : chkLod(0), resourceManager(0) {}
-
-    QCheckBox *chkLod;
-    QPushButton *btnLod;
+    QCheckBox *chkLod {nullptr};
+    QPushButton *btnLod {nullptr};
     QScopedPointer<QMenu> thresholdMenu;
-    KisDoubleSliderSpinBox *thresholdSlider = 0;
-    KoCanvasResourceProvider *resourceManager;
+    KisDoubleSliderSpinBox *thresholdSlider {nullptr};
+    KoCanvasResourceProvider *resourceManager {nullptr};
 
     KisPaintopLodLimitations limitations;
-    bool thresholdSupported = true;
+    bool thresholdSupported {true};
 
     bool sizeThresholdPassed();
 };

@@ -7,18 +7,13 @@
 #include "kis_debug.h"
 
 struct KisCollapsibleButtonGroup::Private {
-    Private()
-        : collapsedButton()
-        , allButtons()
-        , autoCollapse(true)
-        , collapsed(false) {}
 
     QScopedPointer<QToolButton> collapsedButton;
     QList<QToolButton*> allButtons;
-    bool autoCollapse;
-    bool collapsed;
+    bool autoCollapse {true};
+    bool collapsed {false};
 
-    QHBoxLayout* layout;
+    QHBoxLayout* layout {nullptr};
 };
 
 KisCollapsibleButtonGroup::KisCollapsibleButtonGroup(QWidget *parent)

@@ -32,7 +32,7 @@ class KRITAUI_EXPORT KisCIETongueWidget : public QWidget
  
 public:
  
-    KisCIETongueWidget(QWidget *parent=0);
+    KisCIETongueWidget(QWidget *parent = nullptr);
     ~KisCIETongueWidget() override;
  
     //this expects a qvector <double> (9), qvector <double> (3) and whether or not there's profile data?;
@@ -83,7 +83,7 @@ private:
 private :
  
     class Private;
-    Private* const d;
+    Private* const d {nullptr};
 };
  
 #endif /* KISCIETONGUEWIDGET_H */

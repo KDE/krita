@@ -56,15 +56,6 @@ KisCurveWidget::KisCurveWidget(QWidget *parent, Qt::WindowFlags f)
         : QWidget(parent, f), d(new KisCurveWidget::Private(this))
 {
     setObjectName("KisCurveWidget");
-    d->m_grab_point_index = -1;
-    d->m_readOnlyMode   = false;
-    d->m_guideVisible   = false;
-    d->m_pixmapDirty = true;
-    d->m_pixmapCache = 0;
-    d->setState(ST_NORMAL);
-
-    d->m_intIn = 0;
-    d->m_intOut = 0;
 
     connect(&d->m_modifiedSignalsCompressor, SIGNAL(timeout()), SLOT(notifyModified()));
     connect(this, SIGNAL(compressorShouldEmitModified()), SLOT(slotCompressorShouldEmitModified()));

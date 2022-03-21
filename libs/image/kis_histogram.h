@@ -44,22 +44,20 @@ public:
     class Calculations
     {
 
-        double m_max, m_min, m_mean, m_total;
+        double m_max {0.0};
+        double m_min {0.0};
+        double m_mean {0.0};
+        double m_total {0.0};
 
-        quint32 m_high, m_low, m_count;
+        quint32 m_high {0};
+        quint32 m_low {0};
+        quint32 m_count {0};
 
         friend class KisHistogram;
 
     public:
 
         Calculations()
-            : m_max(0.0),
-              m_min(0.0),
-              m_mean(0.0),
-              m_total(0.0),
-              m_high(0),
-              m_low(0),
-              m_count(0)
         {
         }
         /**
@@ -177,12 +175,13 @@ private:
 
     const KisPaintDeviceSP m_paintDevice;
     QRect m_bounds;
-    KoHistogramProducer *m_producer;
-    enumHistogramType m_type;
+    KoHistogramProducer *m_producer {nullptr};
+    enumHistogramType m_type {LINEAR};
 
-    qint32 m_channel;
-    double m_selFrom, m_selTo;
-    bool m_selection;
+    qint32 m_channel {0};
+    double m_selFrom {0.0};
+    double m_selTo {0.0};
+    bool m_selection {false};
 
     QVector<Calculations> m_completeCalculations, m_selectionCalculations;
 };

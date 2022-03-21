@@ -23,45 +23,45 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     Private(KisPainter *_q, const KoColorSpace *cs)
         : q(_q), paintColor(cs), backgroundColor(cs) {}
 
-    KisPainter *q;
+    KisPainter *q {nullptr};
 
     KisPaintDeviceSP            device;
     KisSelectionSP              selection;
-    KisTransaction*             transaction;
-    KoUpdater*                  progressUpdater;
+    KisTransaction*             transaction {nullptr};
+    KoUpdater*                  progressUpdater {nullptr};
 
     QVector<QRect>              dirtyRects;
-    KisPaintOp*                 paintOp;
+    KisPaintOp*                 paintOp {nullptr};
     KoColor                     paintColor;
     KoColor                     backgroundColor;
     KoColor                     customColor;
     KisFilterConfigurationSP    generator;
-    KisPaintLayer*              sourceLayer;
-    FillStyle                   fillStyle;
-    StrokeStyle                 strokeStyle;
-    bool                        antiAliasPolygonFill;
+    KisPaintLayer*              sourceLayer {nullptr};
+    FillStyle                   fillStyle {FillStyleNone};
+    StrokeStyle                 strokeStyle {StrokeStyleBrush};
+    bool                        antiAliasPolygonFill {true};
     KoPatternSP                 pattern;
     QPointF                     duplicateOffset;
-    quint32                     pixelSize;
-    const KoColorSpace*         colorSpace;
-    KoColorProfile*             profile;
-    const KoCompositeOp*        compositeOp;
+    quint32                     pixelSize {0};
+    const KoColorSpace*         colorSpace {nullptr};
+    KoColorProfile*             profile {nullptr};
+    const KoCompositeOp*        compositeOp {nullptr};
     KoAbstractGradientSP        gradient;
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
-    QPainter*                   maskPainter;
-    KisFillPainter*             fillPainter;
+    QPainter*                   maskPainter {nullptr};
+    KisFillPainter*             fillPainter {nullptr};
     KisPaintDeviceSP            polygon;
-    qint32                      maskImageWidth;
-    qint32                      maskImageHeight;
+    qint32                      maskImageWidth {255};
+    qint32                      maskImageHeight {255};
     QPointF                     axesCenter;
-    bool                        mirrorHorizontally;
-    bool                        mirrorVertically;
-    bool                        isOpacityUnit; // TODO: move into ParameterInfo
+    bool                        mirrorHorizontally {false};
+    bool                        mirrorVertically {false};
+    bool                        isOpacityUnit {true}; // TODO: move into ParameterInfo
     KoCompositeOp::ParameterInfo paramInfo;
     KoColorConversionTransformation::Intent renderingIntent;
     KoColorConversionTransformation::ConversionFlags conversionFlags;
-    KisRunnableStrokeJobsInterface *runnableStrokeJobsInterface = 0;
+    KisRunnableStrokeJobsInterface *runnableStrokeJobsInterface {nullptr};
     QScopedPointer<KisRunnableStrokeJobsInterface> fakeRunnableStrokeJobsInterface;
     QTransform                  patternTransform;
 

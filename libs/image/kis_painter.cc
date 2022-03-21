@@ -84,21 +84,6 @@ KisPainter::KisPainter(KisPaintDeviceSP device, KisSelectionSP selection)
 
 void KisPainter::init()
 {
-    d->selection = 0 ;
-    d->transaction = 0;
-    d->paintOp = 0;
-    d->sourceLayer = 0;
-    d->fillStyle = FillStyleNone;
-    d->strokeStyle = StrokeStyleBrush;
-    d->antiAliasPolygonFill = true;
-    d->progressUpdater = 0;
-    d->maskPainter = 0;
-    d->fillPainter = 0;
-    d->maskImageWidth = 255;
-    d->maskImageHeight = 255;
-    d->mirrorHorizontally = false;
-    d->mirrorVertically = false;
-    d->isOpacityUnit = true;
     d->paramInfo = KoCompositeOp::ParameterInfo();
     d->renderingIntent = KoColorConversionTransformation::internalRenderingIntent();
     d->conversionFlags = KoColorConversionTransformation::internalConversionFlags();

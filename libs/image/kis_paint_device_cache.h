@@ -114,7 +114,7 @@ private:
     }
 
 private:
-    KisPaintDevice *m_paintDevice;
+    KisPaintDevice *m_paintDevice {nullptr};
 
     struct ExactBoundsCache : KisLockFreeCacheWithModeConsistency<QRect, bool> {
         ExactBoundsCache(KisPaintDevice *paintDevice) : m_paintDevice(paintDevice) {}
@@ -150,7 +150,7 @@ private:
     NonDefaultPixelCache m_nonDefaultPixelAreaCache;
     RegionCache m_regionCache;
 
-    bool m_thumbnailsValid;
+    bool m_thumbnailsValid {false};
     QMap<int, QMap<int, QMap<qreal,QImage> > > m_thumbnails;
     QAtomicInt m_sequenceNumber;
 };

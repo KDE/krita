@@ -166,7 +166,7 @@ struct Q_DECL_HIDDEN KisLayer::Private
     }
 
     QBitArray channelFlags;
-    KisMetaData::Store* metaDataStore;
+    KisMetaData::Store* metaDataStore {nullptr};
     KisCloneLayersList clonesList;
 
     KisPSDLayerStyleSP layerStyle;

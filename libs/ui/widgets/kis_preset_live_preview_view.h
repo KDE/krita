@@ -109,9 +109,6 @@ private:
     /// for setting this externally
     KisPaintOpPresetSP m_currentPreset;
 
-    /// holds the current zoom(scale) level of scene
-    float m_scaleFactor {1.0};
-
     /// internal reference for internal brush size
     /// used to check if our brush size has changed
     /// do zooming and other things internally if it has changed

@@ -75,7 +75,7 @@ public Q_SLOTS:
     void setShowRulers(bool show);
     void setRulersTrackMouse(bool value);
     void mousePositionChanged(const QPoint &viewPos);
-    void changeAspectMode(bool aspectMode);
+    void changeCanvasMappingMode(bool canvasMappingMode);
     void pageOffsetChanged();
     void zoomTo100();
     void slotToggleZoomToFit();
@@ -105,7 +105,7 @@ private:
     qreal m_physicalDpiX;
     qreal m_physicalDpiY;
     qreal m_devicePixelRatio;
-    bool m_aspectMode {false};
+    bool m_canvasMappingMode {false};
     KisSignalCompressor m_guiUpdateCompressor;
     qreal m_previousZoomLevel;
     KoZoomMode::Mode m_previousZoomMode;

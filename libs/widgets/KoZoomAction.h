@@ -80,10 +80,10 @@ public Q_SLOTS:
     void setSelectedZoomMode( KoZoomMode::Mode mode );
 
   /**
-   * Change status of "Use print size" button
-   * (emits aspectModeChanged(bool) after the change, ALWAYS)
+   * Change status of canvas size mapping button
+   * (emits canvasMappingModeChanged(bool) after the change, ALWAYS)
    */
-    void setAspectMode(bool status);
+    void setCanvasMappingMode(bool status);
 
     /**
      * Returns next preferred zoom level that should be used for
@@ -124,11 +124,11 @@ Q_SIGNALS:
     void zoomChanged( KoZoomMode::Mode mode, qreal zoom );
 
   /**
-   * Signal aspectModeChanged is triggered when the user toggles the widget.
+   * Signal canvasMappingModeChanged is triggered when the user toggles the widget.
    * Nothing else happens except that this signal is emitted.
    * @param status Whether the special aspect mode is on
    */
-    void aspectModeChanged( bool status );
+    void canvasMappingModeChanged( bool status );
 
     /**
      * Signal is triggered when the user clicks the zoom to selection button.

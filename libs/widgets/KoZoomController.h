@@ -40,8 +40,8 @@ class QSize;
  * want to store the latest zoom level and mode, for example to
  * restore the last used one at next restart.
  *
- * The specialAspectMode toggle is only a UI element. It does nothing
- * except emit the aspectModeChanged signal.
+ * The special canvasMappingMode toggle is only a UI element. It does nothing
+ * except emit the canvasMappingModeChanged signal.
  *
  */
 class KRITAWIDGETS_EXPORT KoZoomController : public QObject {
@@ -115,9 +115,9 @@ public:
 
 
   /**
-   * Set Aspect Mode button status and begin a chain of signals
+   * Set Canvas Mapping Mode button status and begin a chain of signals
    */
-    void setAspectMode(bool status);
+    void setCanvasMappingMode(bool status);
 
     void setZoomMarginSize(int size);
 
@@ -159,10 +159,10 @@ Q_SIGNALS:
     void zoomChanged (KoZoomMode::Mode mode, qreal zoom);
 
     /**
-     * emitted when the special aspect mode toggle changes.
-     * @see KoZoomAction::aspectModeChanged()
+     * emitted when the special canvas mapping mode toggle changes.
+     * @see KoZoomAction::canvasMappingModeChanged()
      */
-    void aspectModeChanged (bool aspectModeActivated);
+    void canvasMappingModeChanged (bool canvasMappingModeActivated);
 
     /**
      * Signal is triggered when the user clicks the zoom to selection button.

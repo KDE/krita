@@ -1102,7 +1102,7 @@ void KisView::slotLoadingFinished()
     /**
      * Dirty hack alert
      */
-    d->zoomManager.zoomController()->setAspectMode(false);
+    d->zoomManager.zoomController()->setCanvasMappingMode(false);
 
     if (viewConverter()) {
         viewConverter()->setZoomMode(KoZoomMode::ZOOM_PAGE);

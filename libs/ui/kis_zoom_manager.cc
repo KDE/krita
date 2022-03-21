@@ -103,7 +103,7 @@ void KisZoomManager::updateScreenResolution(QWidget *parentWidget)
 
     converter->setDevicePixelRatio(m_devicePixelRatio);
 
-    changeAspectMode(m_aspectMode);
+    changeCanvasMappingMode(m_canvasMappingMode);
 }
 
 void KisZoomManager::setup(KActionCollection * actionCollection)
@@ -175,8 +175,8 @@ void KisZoomManager::setup(KActionCollection * actionCollection)
     connect(m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
             this, SLOT(slotZoomChanged(KoZoomMode::Mode,qreal)));
 
-    connect(m_zoomController, SIGNAL(aspectModeChanged(bool)),
-            this, SLOT(changeAspectMode(bool)));
+    connect(m_zoomController, SIGNAL(canvasMappingModeChanged(bool)),
+            this, SLOT(changeCanvasMappingMode(bool)));
 
     applyRulersUnit(m_view->document()->unit());
 
@@ -262,13 +262,13 @@ qreal KisZoomManager::zoom() const
 qreal KisZoomManager::resolutionX() const
 {
     KisImageSP image = m_view->image();
-    return m_aspectMode ? POINT_TO_INCH(m_physicalDpiX) : image->xRes() / m_devicePixelRatio;
+    return m_canvasMappingMode ? POINT_TO_INCH(m_physicalDpiX) : image->xRes() / m_devicePixelRatio;
 }
 
 qreal KisZoomManager::resolutionY() const
 {
     KisImageSP image = m_view->image();
-    return m_aspectMode ? POINT_TO_INCH(m_physicalDpiY) : image->yRes() / m_devicePixelRatio;
+    return m_canvasMappingMode ? POINT_TO_INCH(m_physicalDpiY) : image->yRes() / m_devicePixelRatio;
 }
 
 void KisZoomManager::mousePositionChanged(const QPoint &viewPos)
@@ -382,17 +382,17 @@ void KisZoomManager::slotScrollAreaSizeChanged()
     updateGuiAfterDocumentSize();
 }
 
-void KisZoomManager::changeAspectMode(bool aspectMode)
+void KisZoomManager::changeCanvasMappingMode(bool canvasMappingMode)
 {
     KisImageSP image = m_view->image();
 
-    // changeAspectMode is called with the same aspectMode when the window is
+    // changeCanvasMappingMode is called with the same canvasMappingMode when the window is
     // moved across screens. Preserve the old zoomMode if this is the case.
     const KoZoomMode::Mode newMode =
-            aspectMode == m_aspectMode ? m_zoomHandler->zoomMode() : KoZoomMode::ZOOM_CONSTANT;
+            canvasMappingMode == m_canvasMappingMode ? m_zoomHandler->zoomMode() : KoZoomMode::ZOOM_CONSTANT;
     const qreal newZoom = m_zoomHandler->zoom();
 
-    m_aspectMode = aspectMode;
+    m_canvasMappingMode = canvasMappingMode;
     m_zoomController->setZoom(newMode, newZoom, resolutionX(), resolutionY());
     m_view->canvasBase()->notifyZoomChanged();
 }

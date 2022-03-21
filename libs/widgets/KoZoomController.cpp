@@ -29,8 +29,8 @@ void KoZoomController::Private::init(KoCanvasController *co,
     zoomHandler = zh;
     connect(action, SIGNAL(zoomChanged(KoZoomMode::Mode,qreal)),
             parent, SLOT(setZoom(KoZoomMode::Mode,qreal)));
-    connect(action, SIGNAL(aspectModeChanged(bool)),
-            parent, SIGNAL(aspectModeChanged(bool)));
+    connect(action, SIGNAL(canvasMappingModeChanged(bool)),
+            parent, SIGNAL(canvasMappingModeChanged(bool)));
     connect(action, SIGNAL(zoomedToSelection()),
             parent, SIGNAL(zoomedToSelection()));
     connect(action, SIGNAL(zoomedToAll()),
@@ -210,10 +210,10 @@ QSize KoZoomController::documentToViewportCeil(const QSizeF &size)
     return QSize(qCeil(viewport.width()), qCeil(viewport.height()));
 }
 
-void KoZoomController::setAspectMode(bool status)
+void KoZoomController::setCanvasMappingMode(bool status)
 {
     if (d->action) {
-        d->action->setAspectMode(status);
+        d->action->setCanvasMappingMode(status);
     }
 }
 

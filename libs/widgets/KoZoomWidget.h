@@ -40,11 +40,11 @@ Q_SIGNALS:
     void zoomLevelChanged(const QString& level);
 
    /**
-    * Signal aspectModeChanged is triggered when the user toggles the widget.
+    * Signal canvasMappingModeChanged is triggered when the user toggles the widget.
     * Nothing else happens except that this signal is emitted.
     * @param status Whether the special aspect mode is on
     */
-    void aspectModeChanged( bool status );
+    void canvasMappingModeChanged( bool status );
 
     /**
      * Signal is triggered when the user clicks the zoom to selection button.
@@ -65,9 +65,9 @@ public Q_SLOTS:
     void setSliderValue(int value);
 
    /**
-    * Change status of "Use print size" button
+    * Change status of canvas size mapping button
     */
-    void setAspectMode(bool status);
+    void setCanvasMappingMode(bool status);
 private:
     class Private;
     QScopedPointer<Private> const d;

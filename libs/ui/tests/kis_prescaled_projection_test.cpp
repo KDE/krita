@@ -236,7 +236,7 @@ void KisPrescaledProjectionTest::benchmarkUpdate()
                                  KoColorConversionTransformation::internalConversionFlags());
     projection.setImage(image);
 
-    // Emulate "Use print size" when disabled
+    // Emulate pixel size aspect canvas mapping
     converter.setResolution(image->xRes(), image->yRes());
 
     converter.setZoom(1.0);

@@ -287,11 +287,11 @@ QWidget * KoZoomAction::createWidget(QWidget *parent)
     connect(this, SIGNAL(sliderZoomLevelsChanged(int)), zoomWidget, SLOT(setSliderSize(int)));
     connect(this, SIGNAL(currentZoomLevelChanged(QString)), zoomWidget, SLOT(setCurrentZoomLevel(QString)));
     connect(this, SIGNAL(sliderChanged(int)), zoomWidget, SLOT(setSliderValue(int)));
-    connect(this, SIGNAL(aspectModeChanged(bool)), zoomWidget, SLOT(setAspectMode(bool)));
+    connect(this, SIGNAL(canvasMappingModeChanged(bool)), zoomWidget, SLOT(setCanvasMappingMode(bool)));
 
     connect(zoomWidget, SIGNAL(sliderValueChanged(int)), this, SLOT(sliderValueChanged(int)));
     connect(zoomWidget, SIGNAL(zoomLevelChanged(QString)), this, SLOT(triggered(QString)));
-    connect(zoomWidget, SIGNAL(aspectModeChanged(bool)), this, SIGNAL(aspectModeChanged(bool)));
+    connect(zoomWidget, SIGNAL(canvasMappingModeChanged(bool)), this, SIGNAL(canvasMappingModeChanged(bool)));
     connect(zoomWidget, SIGNAL(zoomedToSelection()), this, SIGNAL(zoomedToSelection()));
     connect(zoomWidget, SIGNAL(zoomedToAll()), this, SIGNAL(zoomedToAll()));
     regenerateItems(d->effectiveZoom);
@@ -337,9 +337,9 @@ void KoZoomAction::setSelectedZoomMode(KoZoomMode::Mode mode)
     emit currentZoomLevelChanged(modeString);
 }
 
-void KoZoomAction::setAspectMode(bool status)
+void KoZoomAction::setCanvasMappingMode(bool status)
 {
-    emit aspectModeChanged(status);
+    emit canvasMappingModeChanged(status);
 }
 
 void KoZoomAction::syncSliderWithZoom()

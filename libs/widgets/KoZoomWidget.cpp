@@ -25,12 +25,12 @@ public:
     Private()
         : slider(0)
         , input(0)
-        , aspectButton(0)
+        , canvasMappingButton(0)
     {}
 
     QSlider* slider;
     KoZoomInput* input;
-    QToolButton* aspectButton;
+    QToolButton* canvasMappingButton;
 
     qreal effectiveZoom {1.0};
 };
@@ -59,14 +59,13 @@ KoZoomWidget::KoZoomWidget(QWidget* parent, int maxZoom )
     layout->addWidget(d->slider);
     layout->setStretch(1, 1);
 
-    d->aspectButton = new QToolButton(this);
-    d->aspectButton->setIcon(kisIcon("zoom-pixels"));
-    d->aspectButton->setCheckable(true);
-    d->aspectButton->setChecked(false);
-    d->aspectButton->setAutoRaise(true);
-    d->aspectButton->setToolTip(i18n("Use print size"));
-    connect(d->aspectButton, SIGNAL(toggled(bool)), this, SIGNAL(aspectModeChanged(bool)));
-    layout->addWidget(d->aspectButton);
+    d->canvasMappingButton = new QToolButton(this);
+    d->canvasMappingButton->setIcon(kisIcon("zoom-pixels"));
+    d->canvasMappingButton->setCheckable(true);
+    d->canvasMappingButton->setChecked(false);
+    d->canvasMappingButton->setAutoRaise(true);
+    connect(d->canvasMappingButton, SIGNAL(toggled(bool)), this, SIGNAL(canvasMappingModeChanged(bool)));
+    layout->addWidget(d->canvasMappingButton);
 
     connect(d->slider, SIGNAL(valueChanged(int)), this, SIGNAL(sliderValueChanged(int)));
 }
@@ -107,11 +106,26 @@ void KoZoomWidget::setSliderValue(int value)
     d->slider->blockSignals(false);
 }
 
-void KoZoomWidget::setAspectMode(bool status)
+void KoZoomWidget::setCanvasMappingMode(bool status)
 {
-    if(d->aspectButton && d->aspectButton->isChecked() != status) {
-        d->aspectButton->blockSignals(true);
-        d->aspectButton->setChecked(status);
-        d->aspectButton->blockSignals(false);
+    if(d->canvasMappingButton && d->canvasMappingButton->isChecked() != status) {
+        d->canvasMappingButton->blockSignals(true);
+        d->canvasMappingButton->setChecked(status);
+        d->canvasMappingButton->blockSignals(false);
     }
+
+    QString canvasMappingMode;
+
+    if (status) {
+        d->canvasMappingButton->setIcon(kisIcon("zoom-print"));
+        canvasMappingMode = i18n("Print Size");
+    } else {
+        d->canvasMappingButton->setIcon(kisIcon("zoom-pixels"));
+        canvasMappingMode = i18n("Pixel Size");
+    }
+
+    d->canvasMappingButton->setToolTip(
+                        i18n("Map the displayed canvas size between pixel size or print size\n"
+                             "Current Mapping: %1", canvasMappingMode));
 }
+

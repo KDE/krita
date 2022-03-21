@@ -28,7 +28,7 @@ public:
         OGV,
         WEBM,
         GIF,
-        PNG,
+        APNG,
         WEBP
     };
 

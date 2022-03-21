@@ -30,7 +30,7 @@ struct KisVideoExportOptionsDialog::Private
             case ContainerType::GIF:
                 codecs << KoID("gif", i18nc("GIF codec name", "GIF"));
                 break;
-            case ContainerType::PNG:
+            case ContainerType::APNG:
                 codecs << KoID("apng", i18nc("APNG codec name", "APNG"));
                 break;
             case ContainerType::WEBP:
@@ -274,7 +274,7 @@ KisVideoExportOptionsDialog::ContainerType KisVideoExportOptionsDialog::mimeToCo
     } else if (mimeType == "image/gif") {
         return ContainerType::GIF;
     } else if (mimeType == "image/apng") {
-        return ContainerType::PNG;
+        return ContainerType::APNG;
     } else if (mimeType == "image/webp") {
         return ContainerType::WEBP;
     }

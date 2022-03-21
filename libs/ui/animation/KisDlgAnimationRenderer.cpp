@@ -347,7 +347,7 @@ QString KisDlgAnimationRenderer::defaultVideoFileName(KisDocument *doc, const QS
     return
         QString("%1.%2")
             .arg(QFileInfo(docFileName).completeBaseName())
-            .arg(KisMimeDatabase::suffixesForMimeType( mimeType == "image/apng" ? "image/png":mimeType ).first());
+            .arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
 }
 
 void KisDlgAnimationRenderer::selectRenderType(int index)
@@ -367,7 +367,7 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         const QString path = info.path();
 
         videoFileName =
-            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType( mimeType == "image/apng" ? "image/png":mimeType ).first());
+            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
 
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);

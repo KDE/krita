@@ -98,7 +98,6 @@ private:
     KisSignalCompressor m_colorLabelsCompressor;
     KisImageSP m_image;
     KisCanvas2* m_canvas {nullptr};
-    QString m_toolId;
     KisSignalAutoConnectionsStore m_nodesUpdatesConnectionsStore;
 };
 

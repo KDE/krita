@@ -44,6 +44,7 @@ public:
 
     void setMode(KoFileDialog::DialogType mode);
     KoFileDialog::DialogType mode() const;
+    void setReadOnlyText(bool readonly);
 
     /**
      * Sets the mime type filters to use, same format as KoFileDialog::setMimeTypeFilters.

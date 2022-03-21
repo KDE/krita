@@ -62,6 +62,11 @@ KoFileDialog::DialogType KisFileNameRequester::mode() const
     return m_mode;
 }
 
+void KisFileNameRequester::setReadOnlyText(bool readonly)
+{
+    m_ui->txtFileName->setReadOnly(readonly);
+}
+
 void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList, QString defaultFilter)
 {
     m_mime_filter_list = filterList;

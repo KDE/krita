@@ -30,7 +30,6 @@ struct KisSpeedSmoother::Private
 {
     Private(int historySize)
         : distances(historySize),
-          lastSpeed(0),
           timeDiffAccumulator(tag::rolling_window::window_size = 200)
     {
         timer.start();
@@ -38,17 +37,19 @@ struct KisSpeedSmoother::Private
 
     struct DistancePoint {
         DistancePoint()
-            : distance(0), time(0)
+            : distance(0.0)
+            , time(0.0)
         {
         }
 
         DistancePoint(qreal _distance, qreal _time)
-            : distance(_distance), time(_time)
+            : distance(_distance)
+            , time(_time)
         {
         }
 
-        qreal distance;
-        qreal time;
+        qreal distance {0.0};
+        qreal time {0.0};
     };
 
     typedef boost::circular_buffer<DistancePoint> DistanceBuffer;
@@ -56,11 +57,11 @@ struct KisSpeedSmoother::Private
 
     QPointF lastPoint;
     QElapsedTimer timer;
-    qreal lastTime;
-    qreal lastSpeed;
+    qreal lastTime {0.0};
+    qreal lastSpeed {0.0};
 
-    bool useTimestamps = false;
-    int numSmoothingSamples = 3;
+    bool useTimestamps {false};
+    int numSmoothingSamples {3};
 
     accumulator_set<qreal, stats<tag::rolling_mean>> timeDiffAccumulator;
 

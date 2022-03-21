@@ -87,7 +87,7 @@ protected:
     void addOptionWidgetLayout(QLayout *layout);
 
     /// Add a widget and a label to the current option widget layout.
-    virtual void addOptionWidgetOption(QWidget *control, QWidget *label = 0);
+    virtual void addOptionWidgetOption(QWidget *control, QWidget *label = nullptr);
 
     void showControl(QWidget *control, bool value);
     void enableControl(QWidget *control, bool value);
@@ -120,17 +120,17 @@ private Q_SLOTS:
     void slotColorSamplingFinished(KoColor color);
 
 protected:
-    quint8 m_opacity;
+    quint8 m_opacity {OPACITY_OPAQUE_U8};
     bool m_paintOutline {false};
     QPointF m_outlineDocPoint;
     QPainterPath m_currentOutline;
     QRectF m_oldOutlineRect;
 
-    bool m_showColorPreview;
+    bool m_showColorPreview {false};
     QRectF m_oldColorPreviewRect;
     QRectF m_oldColorPreviewUpdateRect;
     QColor m_colorPreviewCurrentColor;
-    bool m_colorPreviewShowComparePlate;
+    bool m_colorPreviewShowComparePlate {false};
     QRectF m_oldColorPreviewBaseColorRect;
     QColor m_colorPreviewBaseColor;
 
@@ -161,10 +161,10 @@ private:
 
 private:
 
-    bool m_specialHoverModifier;
-    QGridLayout *m_optionsWidgetLayout;
+    bool m_specialHoverModifier {false};
+    QGridLayout *m_optionsWidgetLayout {nullptr};
 
-    bool m_supportOutline;
+    bool m_supportOutline {false};
 
     /**
      * Used as a switch for sampleColor

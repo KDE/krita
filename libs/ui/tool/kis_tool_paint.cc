@@ -68,17 +68,9 @@
 
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
-      m_showColorPreview(false),
-      m_colorPreviewShowComparePlate(false),
       m_colorSamplerDelayTimer(),
       m_isOutlineEnabled(true)
 {
-    m_specialHoverModifier = false;
-    m_optionsWidgetLayout = 0;
-
-    m_opacity = OPACITY_OPAQUE_U8;
-
-    m_supportOutline = false;
 
     {
         const int maxSize = KisImageConfig(true).maxBrushSize();

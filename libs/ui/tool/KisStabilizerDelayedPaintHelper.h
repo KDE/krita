@@ -30,8 +30,8 @@ class KRITAUI_EXPORT KisStabilizerDelayedPaintHelper : public QObject
 
     QTimer m_paintTimer;
     QQueue<TimedPaintInfo> m_paintQueue;
-    int m_lastPendingTime;
-    int m_lastPaintTime;
+    int m_lastPendingTime {0};
+    int m_lastPaintTime {0};
     QElapsedTimer m_elapsedTimer;
 
     // Callbacks

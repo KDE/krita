@@ -53,13 +53,8 @@ using namespace std::placeholders; // For _1 placeholder
 
 KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, const KUndo2MagicString &transactionText)
     : KisToolPaint(canvas, cursor),
-      m_paintopBasedSamplingInAction(false),
       m_brushResizeCompressor(200, std::bind(&KisToolFreehand::slotDoResizeBrush, this, _1))
 {
-    m_assistant = false;
-    m_magnetism = 1.0;
-    m_only_one_assistant = true;
-    m_eraser_snapping = false;
 
     setSupportOutline(true);
     setMaskSyntheticEvents(KisConfig(true).disableTouchOnCanvas()); // Disallow mouse events from finger presses unless enabled

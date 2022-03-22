@@ -20,8 +20,8 @@ public:
     struct KisTileInfo {
         KisTileSP tile;
         KisTileSP oldtile;
-        quint8* data;
-        quint8* oldData;
+        quint8* data {nullptr};
+        quint8* oldData {nullptr};
     };
 
 
@@ -43,31 +43,31 @@ public:
     qint32 y() const override;
 
 private:
-    qint32 m_offsetX;
-    qint32 m_offsetY;
+    qint32 m_offsetX {0};
+    qint32 m_offsetY {0};
 
-    qint32 m_x;        // current x position
-    qint32 m_y;        // current y position
-    qint32 m_column;    // current column in tilemgr
-    qint32 m_index;    // current row in tilemgr
-    qint32 m_tileSize;
-    quint8 *m_data;
-    quint8 *m_dataBottom;
-    quint8 *m_oldData;
-    bool m_havePixels;
+    qint32 m_x {0};        // current x position
+    qint32 m_y {0};        // current y position
+    qint32 m_column {0};    // current column in tilemgr
+    qint32 m_index {0};    // current row in tilemgr
+    qint32 m_tileSize {0};
+    quint8 *m_data {nullptr};
+    quint8 *m_dataBottom {nullptr};
+    quint8 *m_oldData {nullptr};
+    bool m_havePixels {false};
 
-    qint32 m_top;
-    qint32 m_bottom;
-    qint32 m_left;
-    qint32 m_topRow;
-    qint32 m_bottomRow;
+    qint32 m_top {0};
+    qint32 m_bottom {0};
+    qint32 m_left {0};
+    qint32 m_topRow {0};
+    qint32 m_bottomRow {0};
 
-    qint32 m_topInTopmostTile;
-    qint32 m_xInTile;
-    qint32 m_lineStride;
+    qint32 m_topInTopmostTile {0};
+    qint32 m_xInTile {0};
+    qint32 m_lineStride {0};
 
     QVector<KisTileInfo> m_tilesCache;
-    qint32 m_tilesCacheSize;
+    qint32 m_tilesCacheSize {0};
 
 private:
 

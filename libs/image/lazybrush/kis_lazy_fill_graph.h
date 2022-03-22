@@ -562,13 +562,13 @@ public:
             return std::make_pair(src_vertex, dst_vertex);
         }
 
-        edges_size_type start;
-        edges_size_type stride;
-        edges_size_type size;
-        edges_size_type xOffset;
-        edges_size_type yOffset;
-        EdgeIndexBinId binId;
-        bool isReversed;
+        edges_size_type start {0};
+        edges_size_type stride {0};
+        edges_size_type size {0};
+        edges_size_type xOffset {0};
+        edges_size_type yOffset {0};
+        EdgeIndexBinId binId {HORIZONTAL};
+        bool isReversed {false};
         QRect rect;
     };
 

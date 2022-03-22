@@ -147,14 +147,14 @@ private:
     bool m_undo;
     KUndo2CommandSP m_initCommand;
     KUndo2CommandSP m_finishCommand;
-    KisStrokeUndoFacade *m_undoFacade;
+    KisStrokeUndoFacade *m_undoFacade {nullptr};
 
     QScopedPointer<KUndo2CommandExtraData> m_commandExtraData;
     int m_macroId;
 
     // protects done commands only
     QMutex m_mutex;
-    KisSavedMacroCommand *m_macroCommand;
+    KisSavedMacroCommand *m_macroCommand {nullptr};
 };
 
 #endif /* __KIS_STROKE_STRATEGY_UNDO_COMMAND_BASED_H */

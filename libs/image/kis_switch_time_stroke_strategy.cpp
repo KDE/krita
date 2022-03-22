@@ -20,8 +20,8 @@ struct KisSwitchTimeStrokeStrategy::Private
     {
     }
 
-    KisImageAnimationInterface *interface;
-    KisPostExecutionUndoAdapter *undoAdapter;
+    KisImageAnimationInterface *interface {nullptr};
+    KisPostExecutionUndoAdapter *undoAdapter {nullptr};
     SharedTokenSP token;
 };
 

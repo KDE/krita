@@ -19,8 +19,8 @@ public:
     struct KisTileInfo {
         KisTileSP tile;
         KisTileSP oldtile;
-        quint8* data;
-        quint8* oldData;
+        quint8* data {nullptr};
+        quint8* oldData {nullptr};
     };
 
 
@@ -42,31 +42,31 @@ public:
     void resetRowPos() override;
 
 private:
-    qint32 m_offsetX;
-    qint32 m_offsetY;
+    qint32 m_offsetX {0};
+    qint32 m_offsetY {0};
 
-    qint32 m_x;        // current x position
-    qint32 m_y;        // current y position
-    qint32 m_row;    // current row in tilemgr
-    quint32 m_index;    // current col in tilemgr
-    quint32 m_tileWidth;
-    quint8 *m_data;
-    quint8 *m_oldData;
-    bool m_havePixels;
+    qint32 m_x {0};        // current x position
+    qint32 m_y {0};        // current y position
+    qint32 m_row {0};    // current row in tilemgr
+    quint32 m_index {0};    // current col in tilemgr
+    quint32 m_tileWidth {0};
+    quint8 *m_data {nullptr};
+    quint8 *m_oldData {nullptr};
+    bool m_havePixels {false};
     
-    qint32 m_right;
-    qint32 m_left;
-    qint32 m_top;
-    qint32 m_leftCol;
-    qint32 m_rightCol;
+    qint32 m_right {0};
+    qint32 m_left {0};
+    qint32 m_top {0};
+    qint32 m_leftCol {0};
+    qint32 m_rightCol {0};
 
-    qint32 m_rightmostInTile; // limited by the current tile border only
+    qint32 m_rightmostInTile {0}; // limited by the current tile border only
 
-    qint32 m_leftInLeftmostTile;
-    qint32 m_yInTile;
+    qint32 m_leftInLeftmostTile {0};
+    qint32 m_yInTile {0};
 
     QVector<KisTileInfo> m_tilesCache;
-    quint32 m_tilesCacheSize;
+    quint32 m_tilesCacheSize {0};
     
 private:
 

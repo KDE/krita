@@ -59,8 +59,8 @@ struct ReadOnlyIteratorPolicy {
     IteratorTypeSP m_iter;
 
 private:
-    const quint8 *m_rawDataConst;
-    const quint8 *m_oldRawData;
+    const quint8 *m_rawDataConst {nullptr};
+    const quint8 *m_oldRawData {nullptr};
 };
 
 template <class SourcePolicy = DevicePolicy>
@@ -91,8 +91,8 @@ struct WritableIteratorPolicy {
     IteratorTypeSP m_iter;
 
 private:
-    quint8 *m_rawData;
-    const quint8 *m_oldRawData;
+    quint8 *m_rawData {nullptr};
+    const quint8 *m_oldRawData {nullptr};
 };
 
 struct NoProgressPolicy

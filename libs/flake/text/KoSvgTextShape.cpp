@@ -47,19 +47,30 @@
 
 #include <QSharedData>
 
+struct CharacterResult {
+    QPointF finalPosition;
+    qreal rotate = 0.0;
+    bool hidden = false;
+    bool addressable = false;
+    bool middle = false;
+    bool anchored_chunk = false;
+
+    QPainterPath path;
+    QRectF boundingBox;
+    int typographic_index = 0;
+    QPointF cssPosition = QPointF();
+};
+
 class KoSvgTextShape::Private
 {
 public:
-
     // NOTE: the cache data is shared between all the instances of
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
-    std::vector<raqm_t *> cachedLayouts;
-    std::vector<QPointF> cachedLayoutsOffsets;
     QThread *cachedLayoutsWorkingThread = 0;
     FT_Library library = NULL;
 
-    QPainterPath path;
+    QVector<CharacterResult> result;
 
     void clearAssociatedOutlines(const KoShape *rootShape);
 
@@ -116,8 +127,17 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
         //d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
     }*/
     qDebug() << "drawing...";
+    QTransform tf;
 
-    background()->paint(painter, paintContext, d->path);
+    for (CharacterResult cr : d->result) {
+        if (cr.addressable && cr.hidden == false) {
+            QPainterPath p = cr.path;
+            tf.reset();
+            tf.translate(cr.finalPosition.x(), cr.finalPosition.y());
+            tf.rotateRadians(cr.rotate);
+            background()->paint(painter, paintContext, tf.map(p));
+        }
+    }
     /**
      * HACK ALERT:
      * The layouts of non-gui threads must be destroyed in the same thread
@@ -126,8 +146,6 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
      * will not be available.
      */
     if (QThread::currentThread() != qApp->thread()) {
-        d->cachedLayouts.clear();
-        d->cachedLayoutsOffsets.clear();
         d->cachedLayoutsWorkingThread = 0;
     }
 }
@@ -208,7 +226,7 @@ QPainterPath KoSvgTextShape::textOutline() const
         }
     }*/
 
-    return d->path;
+    return QPainterPath();
 }
 
 void KoSvgTextShape::resetTextShape()
@@ -217,504 +235,373 @@ void KoSvgTextShape::resetTextShape()
     relayout();
 }
 
-struct TextChunk {
-    QString text;
-    QVector<QTextLayout::FormatRange> formats;
-    Qt::LayoutDirection direction = Qt::LeftToRight;
-    Qt::Alignment alignment = Qt::AlignLeading;
-
-    struct SubChunkOffset {
-        QPointF offset;
-        int start = 0;
-    };
-
-    QVector<SubChunkOffset> offsets;
-
-    boost::optional<qreal> xStartPos;
-    boost::optional<qreal> yStartPos;
-
-    QPointF applyStartPosOverride(const QPointF &pos) const {
-        QPointF result = pos;
-
-        if (xStartPos) {
-            result.rx() = *xStartPos;
-        }
-
-        if (yStartPos) {
-            result.ry() = *yStartPos;
-        }
-
-        return result;
-    }
-};
-
-QVector<TextChunk> mergeIntoChunks(const QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> &subChunks)
-{
-    QVector<TextChunk> chunks;
-
-    for (auto it = subChunks.begin(); it != subChunks.end(); ++it) {
-        if (it->transformation.startsNewChunk() || it == subChunks.begin()) {
-            TextChunk newChunk = TextChunk();
-            newChunk.direction = it->format.layoutDirection();
-            newChunk.alignment = it->format.calculateAlignment();
-            newChunk.xStartPos = it->transformation.xPos;
-            newChunk.yStartPos = it->transformation.yPos;
-            chunks.append(newChunk);
-        }
-
-        TextChunk &currentChunk = chunks.last();
-
-        if (it->transformation.hasRelativeOffset()) {
-            TextChunk::SubChunkOffset o;
-            o.start = currentChunk.text.size();
-            o.offset = it->transformation.relativeOffset();
-
-            KIS_SAFE_ASSERT_RECOVER_NOOP(!o.offset.isNull());
-            currentChunk.offsets.append(o);
-        }
-
-        QTextLayout::FormatRange formatRange;
-        formatRange.start = currentChunk.text.size();
-        formatRange.length = it->text.size();
-        formatRange.format = it->format;
-
-        currentChunk.formats.append(formatRange);
-
-        currentChunk.text += it->text;
-    }
-
-    return chunks;
-}
-
-/**
- * Qt's QTextLayout has a weird trait, it doesn't count space characters as
- * distinct characters in QTextLayout::setNumColumns(), that is, if we want to
- * position a block of text that starts with a space character in a specific
- * position, QTextLayout will drop this space and will move the text to the left.
- *
- * That is why we have a special wrapper object that ensures that no spaces are
- * dropped and their horizontal advance parameter is taken into account.
- */
-struct LayoutChunkWrapper
-{
-    LayoutChunkWrapper(QTextLayout *layout)
-        : m_layout(layout)
-    {
-    }
-
-    QPointF addTextChunk(int startPos, int length, const QPointF &textChunkStartPos)
-    {
-        QPointF currentTextPos = textChunkStartPos;
-
-        const int lastPos = startPos + length - 1;
-
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(startPos == m_addedChars, currentTextPos);
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(lastPos < m_layout->text().size(), currentTextPos);
-
-        //        qDebug() << m_layout->text();
-
-        QTextLine line;
-        std::swap(line, m_danglingLine);
-
-        if (!line.isValid()) {
-            line = m_layout->createLine();
-        }
-
-        // skip all the space characters that were not included into the Qt's text line
-        const int currentLineStart = line.isValid() ? line.textStart() : startPos + length;
-        while (startPos < currentLineStart && startPos <= lastPos) {
-            currentTextPos.rx() += skipSpaceCharacter(startPos);
-            startPos++;
-        }
-
-        if (startPos <= lastPos) {
-            // defines the number of columns to look for glyphs
-            const int numChars = lastPos - startPos + 1;
-            // Tabs break the normal column flow
-            // grow to avoid missing glyphs
-
-            int charOffset = 0;
-            int noChangeCount = 0;
-            while (line.textLength() < numChars) {
-                int tl = line.textLength();
-                line.setNumColumns(numChars + charOffset);
-                if (tl == line.textLength()) {
-                    noChangeCount++;
-                    // 5 columns max are needed to discover tab char. Set to 10 to be safe.
-                    if (noChangeCount > 10) break;
-                } else {
-                    noChangeCount = 0;
-                }
-                charOffset++;
-            }
-
-            line.setPosition(currentTextPos - QPointF(0, line.ascent()));
-            currentTextPos.rx() += line.horizontalAdvance();
-
-            // skip all the space characters that were not included into the Qt's text line
-            for (int i = line.textStart() + line.textLength(); i < lastPos; i++) {
-                currentTextPos.rx() += skipSpaceCharacter(i);
-            }
-
-        } else {
-            // keep the created but unused line for future use
-            std::swap(line, m_danglingLine);
-        }
-        m_addedChars += length;
-
-        return currentTextPos;
-    }
-
-private:
-    qreal skipSpaceCharacter(int pos) {
-        const QTextCharFormat format =
-                formatForPos(pos, m_layout->formats());
-
-        const QChar skippedChar = m_layout->text()[pos];
-        KIS_SAFE_ASSERT_RECOVER_NOOP(skippedChar.isSpace() || !skippedChar.isPrint());
-
-        QFontMetrics metrics(format.font());
-#if QT_VERSION >= QT_VERSION_CHECK(5,11,0)
-        return metrics.horizontalAdvance(skippedChar);
-#else
-        return metrics.width(skippedChar);
-#endif
-    }
-
-    static QTextCharFormat formatForPos(int pos, const QVector<QTextLayout::FormatRange> &formats)
-    {
-        Q_FOREACH (const QTextLayout::FormatRange &range, formats) {
-            if (pos >= range.start && pos < range.start + range.length) {
-                return range.format;
-            }
-        }
-
-        KIS_SAFE_ASSERT_RECOVER_NOOP(0 && "pos should be within the bounds of the layouted text");
-
-        return QTextCharFormat();
-    }
-
-private:
-    int m_addedChars = 0;
-    QTextLayout *m_layout;
-    QTextLine m_danglingLine;
-};
-
 void KoSvgTextShape::relayout() const
 {
-    d->cachedLayouts.clear();
-    d->cachedLayoutsOffsets.clear();
     d->cachedLayoutsWorkingThread = QThread::currentThread();
-    d->path.clear();
-    d->path.setFillRule(Qt::WindingFill);
     // Calculate the associated outline for a text chunk.
     d->clearAssociatedOutlines(this);
 
-    QPointF currentTextPos;
+    // The following is based on the text-layout algorithm in SVG 2.
+    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(
+        this->textProperties()
+            .propertyOrDefault(KoSvgTextProperties::WritingModeId)
+            .toInt());
 
-    QVector<TextChunk> textChunks = mergeIntoChunks(layoutInterface()->collectSubChunks());
+    // first, get text. We use the subChunks because that handles bidi for us.
+    // SVG 1.1 suggests that each time the xy position of a piece of text
+    // changes, that this should be seperately shaped, but according to SVGWG
+    // issues 631 and 635 noone who actually uses bidi likes this, and it also
+    // complicates the alorithm, so we're getting rid of this.
+    // https://github.com/w3c/svgwg/issues/631
+    // https://github.com/w3c/svgwg/issues/635
 
-    Q_FOREACH (const TextChunk &chunk, textChunks) {
-        raqm_t *layout(raqm_create());
+    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks =
+        layoutInterface()->collectSubChunks();
+    QString text;
+    for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
+        text.append(chunk.text);
+    }
 
-        // QTextOption option;
+    // Then, pass everything to a css-compatible text-layout algortihm.
+    raqm_t *layout(raqm_create());
 
-        // WARNING: never activate this option! It breaks the RTL text layout!
-        //option.setFlags(QTextOption::ShowTabsAndSpaces);
+    if (!d->library) {
+        FT_Init_FreeType(&d->library);
+    }
+    FcConfig *config = FcConfigGetCurrent();
+    FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, nullptr);
 
-        // option.setWrapMode(QTextOption::WrapAnywhere);
-        // option.setUseDesignMetrics(true); // TODO: investigate if it is
-        // needed? option.setTextDirection(chunk.direction);
+    QMap<QString, FT_Face> faces;
 
-        if (!d->library) {
-            FT_Init_FreeType(&d->library);
+    if (raqm_set_text_utf8(layout, text.toUtf8(), text.toUtf8().size())) {
+        if (writingMode == KoSvgText::TopToBottom) {
+            raqm_set_par_direction(layout,
+                                   raqm_direction_t::RAQM_DIRECTION_TTB);
+        } else if (writingMode == KoSvgText::RightToLeft) {
+            raqm_set_par_direction(layout,
+                                   raqm_direction_t::RAQM_DIRECTION_RTL);
+        } else {
+            raqm_set_par_direction(layout,
+                                   raqm_direction_t::RAQM_DIRECTION_LTR);
         }
-        FcConfig *config = FcConfigGetCurrent();
-        FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, nullptr);
 
-        QMap<QString, FT_Face> faces;
+        int start = 0;
+        int length = 0;
+        for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
+            length = chunk.text.toUtf8().size();
+            FT_Face face = NULL;
 
-        if (raqm_set_text_utf8(layout,
-                               chunk.text.toUtf8(),
-                               chunk.text.toUtf8().size())) {
-            if (chunk.direction == Qt::RightToLeft) {
-                raqm_set_par_direction(layout,
-                                       raqm_direction_t::RAQM_DIRECTION_RTL);
-            } else {
-                raqm_set_par_direction(layout,
-                                       raqm_direction_t::RAQM_DIRECTION_LTR);
-            }
-
-            for (QTextLayout::FormatRange range : chunk.formats) {
-                FT_Face face = NULL;
-
-                FcPattern *p = FcPatternCreate();
-                const FcChar8 *vals = reinterpret_cast<FcChar8 *>(
-                    range.format.font().family().toUtf8().data());
-                qreal fontSize = range.format.font().pointSizeF();
-                FcPatternAddString(p, FC_FAMILY, vals);
-                /* this is too strict, and will sometimes prevent
+            FcPattern *p = FcPatternCreate();
+            const FcChar8 *vals = reinterpret_cast<FcChar8 *>(
+                chunk.format.font().family().toUtf8().data());
+            qreal fontSize = chunk.format.font().pointSizeF();
+            FcPatternAddString(p, FC_FAMILY, vals);
+            /* this is too strict, and will sometimes prevent
                  * fonts to be found, so we'll need to handle this
-                differently... if (range.format.font().italic()) {
+               differently... if (range.format.font().italic()) {
                     FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
                 }
                 //The following is wrong, but it'll have to do for now...
                 FcPatternAddInteger(p, FC_WEIGHT,
-                range.format.font().weight()*2); if
-                (range.format.font().stretch() >= 50) { FcPatternAddInteger(p,
-                FC_WIDTH, range.format.font().stretch());
+               range.format.font().weight()*2); if
+               (range.format.font().stretch() >= 50) { FcPatternAddInteger(p,
+               FC_WIDTH, range.format.font().stretch());
                 }*/
-                FcFontSet *fontSet = FcFontList(config, p, objectSet);
-                if (fontSet->nfont == 0) {
-                    qWarning() << "No fonts found for family name"
-                               << range.format.font().family();
-                    continue;
-                }
-                QString fontFileName;
-                QStringList fontProperties =
-                    QString(reinterpret_cast<char *>(
-                                FcNameUnparse(fontSet->fonts[0])))
-                        .split(':');
-                for (QString value : fontProperties) {
-                    if (value.startsWith("file")) {
-                        fontFileName = value.split("=").last();
-                        fontFileName.remove("\\");
-                    }
-                }
-
-                int errorCode = FT_New_Face(d->library,
-                                            fontFileName.toUtf8().data(),
-                                            0,
-                                            &face);
-                if (errorCode == 0) {
-                    qDebug() << "face loaded" << fontFileName;
-                    errorCode =
-                        FT_Set_Char_Size(face, fontSize * 64.0, 0, 0, 0);
-                    if (errorCode == 0) {
-                        if (range.start == 0) {
-                            raqm_set_freetype_face(layout, face);
-                        }
-                        if (range.length > 0) {
-                            int start =
-                                chunk.text.leftRef(range.start).toUtf8().size();
-                            int length =
-                                chunk.text.midRef(range.start, range.length)
-                                    .toUtf8()
-                                    .size();
-                            raqm_set_freetype_face_range(layout,
-                                                         face,
-                                                         start,
-                                                         length);
-                        }
-                    }
-                } else {
-                    qDebug()
-                        << "Face did not load, FreeType Error: " << errorCode
-                        << "Filename:" << fontFileName;
-                }
-                FT_Done_Face(face);
-            }
-            qDebug() << "text-length:" << chunk.text.toUtf8().size();
-        }
-
-        if (raqm_layout(layout)) {
-            qDebug() << "layout succeeded";
-        }
-
-        currentTextPos = chunk.applyStartPosOverride(currentTextPos);
-        const QPointF anchorPointPos = currentTextPos;
-
-        int lastSubChunkStart = 0;
-        QPointF lastSubChunkOffset;
-
-        for (int i = 0; i <= chunk.offsets.size(); i++) {
-            const bool isFinalPass = i == chunk.offsets.size();
-
-            const int length =
-                    !isFinalPass ?
-                        chunk.offsets[i].start - lastSubChunkStart :
-                        chunk.text.size() - lastSubChunkStart;
-
-            if (length > 0) {
-                currentTextPos += lastSubChunkOffset;
-            }
-
-            if (!isFinalPass) {
-                lastSubChunkOffset = chunk.offsets[i].offset;
-                lastSubChunkStart = chunk.offsets[i].start;
-            }
-        }
-
-        QPointF diff;
-
-        if (chunk.alignment & Qt::AlignTrailing || chunk.alignment & Qt::AlignHCenter) {
-            if (chunk.alignment & Qt::AlignTrailing) {
-                diff = currentTextPos - anchorPointPos;
-            } else if (chunk.alignment & Qt::AlignHCenter) {
-                diff = 0.5 * (currentTextPos - anchorPointPos);
-            }
-
-            // TODO: fix after t2b text implemented
-            diff.ry() = 0;
-        }
-
-        size_t count;
-        raqm_glyph_t *glyphs = raqm_get_glyphs(layout, &count);
-        if (!glyphs) {
-            continue;
-        }
-
-        QTransform ftTF;
-        const qreal factor = 1 / 64.;
-        // This is dependant on the writing mode, so it needs to be different
-        // for ttb.
-        ftTF.scale(factor, -factor);
-
-        int formatCount = 0;
-        using namespace KoSvgText;
-        QTextLayout::FormatRange range = chunk.formats.at(formatCount);
-
-        QPointF cursorPos = currentTextPos;
-
-        for (int g = 0; g < int(count); g++) {
-            /*
-            uint32_t start = chunk.text.leftRef(range.start).toUtf8().size();
-            uint32_t length = chunk.text.midRef(range.start,
-            range.length).toUtf8().size(); while (glyphs[i].cluster >=
-            start+length) { formatCount += 1; if (formatCount <
-            chunk.formats.size()) { range = chunk.formats.at(formatCount);
-                }
-            }*/
-            const KoSvgCharChunkFormat &format =
-                static_cast<const KoSvgCharChunkFormat &>(range.format);
-
-            int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, 0);
-            if (error != 0) {
+            FcFontSet *fontSet = FcFontList(config, p, objectSet);
+            if (fontSet->nfont == 0) {
+                qWarning() << "No fonts found for family name"
+                           << chunk.format.font().family();
                 continue;
             }
-            FT_GlyphSlotRec *glyphSlot = glyphs[g].ftface->glyph;
+            QString fontFileName;
+            QStringList fontProperties =
+                QString(
+                    reinterpret_cast<char *>(FcNameUnparse(fontSet->fonts[0])))
+                    .split(':');
+            for (QString value : fontProperties) {
+                if (value.startsWith("file")) {
+                    fontFileName = value.split("=").last();
+                    fontFileName.remove("\\");
+                }
+            }
 
-            qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
-            // FT_Glyph_Get_CBox( glyphs[i].ftface->glyph, 0, &bbox );
+            int errorCode =
+                FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
+            if (errorCode == 0) {
+                qDebug() << "face loaded" << fontFileName;
+                errorCode = FT_Set_Char_Size(face, fontSize * 64.0, 0, 0, 0);
+                if (errorCode == 0) {
+                    if (start == 0) {
+                        raqm_set_freetype_face(layout, face);
+                    }
+                    if (length > 0) {
+                        raqm_set_freetype_face_range(layout,
+                                                     face,
+                                                     start,
+                                                     length);
+                    }
+                }
+            } else {
+                qDebug() << "Face did not load, FreeType Error: " << errorCode
+                         << "Filename:" << fontFileName;
+            }
+            FT_Done_Face(face);
+            start += length;
+        }
+        qDebug() << "text-length:" << text.toUtf8().size();
+    }
 
-            QPointF cp = QPointF();
-            // convert the outline to a painter path
-            QPainterPath glyph;
-            int i = 0;
-            for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
-                int last_point = glyphSlot->outline.contours[j];
-                // qDebug() << "contour:" << i << "to" << last_point;
-                QPointF start = QPointF(glyphSlot->outline.points[i].x,
-                                        glyphSlot->outline.points[i].y);
-                if (!(glyphSlot->outline.tags[i]
-                      & 1)) { // start point is not on curve:
-                    if (!(glyphSlot->outline.tags[last_point]
-                          & 1)) { // end point is not on curve:
-                        // qDebug() << "  start and end point are not on curve";
-                        start =
-                            (QPointF(glyphSlot->outline.points[last_point].x,
+    if (raqm_layout(layout)) {
+        qDebug() << "layout succeeded";
+    }
+
+    // 1. Setup.
+
+    QVector<CharacterResult> result(text.toUtf8().size());
+    bool isHorizontal = true;
+    if (writingMode == KoSvgText::TopToBottom) {
+        isHorizontal = false;
+    }
+
+    // 2. Set flags and assign initial positions
+    // We also retreive a path here.
+    size_t count;
+    raqm_glyph_t *glyphs = raqm_get_glyphs(layout, &count);
+    if (!glyphs) {
+        return;
+    }
+    QVector<int> addressableIndices;
+
+    QTransform ftTF;
+    const qreal factor = 1 / 64.;
+    // This is dependant on the writing mode, but it seems also
+    // dependant on whether the fontface was loaded with vertical metrics...
+    ftTF.scale(factor, -factor);
+
+    QPointF totalAdvance;
+
+    for (int g = 0; g < int(count); g++) {
+        int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, 0);
+        if (error != 0) {
+            continue;
+        }
+        FT_GlyphSlotRec *glyphSlot = glyphs[g].ftface->glyph;
+
+        qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
+        // FT_Glyph_Get_CBox( glyphs[i].ftface->glyph, 0, &bbox );
+
+        QPointF cp = QPointF();
+        // convert the outline to a painter path
+        QPainterPath glyph;
+        int i = 0;
+        for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
+            int last_point = glyphSlot->outline.contours[j];
+            // qDebug() << "contour:" << i << "to" << last_point;
+            QPointF start = QPointF(glyphSlot->outline.points[i].x,
+                                    glyphSlot->outline.points[i].y);
+            if (!(glyphSlot->outline.tags[i]
+                  & 1)) { // start point is not on curve:
+                if (!(glyphSlot->outline.tags[last_point]
+                      & 1)) { // end point is not on curve:
+                    // qDebug() << "  start and end point are not on curve";
+                    start = (QPointF(glyphSlot->outline.points[last_point].x,
                                      glyphSlot->outline.points[last_point].y)
                              + start)
-                            / 2.0;
-                    } else {
-                        // qDebug() << "  end point is on curve, start is not";
-                        start =
-                            QPointF(glyphSlot->outline.points[last_point].x,
-                                    glyphSlot->outline.points[last_point].y);
-                    }
-                    --i; // to use original start point as control point below
-                }
-                start += cp;
-                // qDebug() << "  start at" << start;
-                glyph.moveTo(start);
-                QPointF c[4];
-                c[0] = start;
-                int n = 1;
-                while (i < last_point) {
-                    ++i;
-                    c[n] = cp
-                        + QPointF(glyphSlot->outline.points[i].x,
-                                  glyphSlot->outline.points[i].y);
-                    // qDebug() << "    " << i << c[n] << "tag =" <<
-                    // (int)g->outline.tags[i]
-                    //                    << ": on curve =" <<
-                    //                    (bool)(g->outline.tags[i] & 1);
-                    ++n;
-                    switch (glyphSlot->outline.tags[i] & 3) {
-                    case 2:
-                        // cubic bezier element
-                        if (n < 4)
-                            continue;
-                        c[3] = (c[3] + c[2]) / 2;
-                        --i;
-                        break;
-                    case 0:
-                        // quadratic bezier element
-                        if (n < 3)
-                            continue;
-                        c[3] = (c[1] + c[2]) / 2;
-                        c[2] = (2 * c[1] + c[3]) / 3;
-                        c[1] = (2 * c[1] + c[0]) / 3;
-                        --i;
-                        break;
-                    case 1:
-                    case 3:
-                        if (n == 2) {
-                            // qDebug() << "  lineTo" << c[1];
-                            glyph.lineTo(c[1]);
-                            c[0] = c[1];
-                            n = 1;
-                            continue;
-                        } else if (n == 3) {
-                            c[3] = c[2];
-                            c[2] = (2 * c[1] + c[3]) / 3;
-                            c[1] = (2 * c[1] + c[0]) / 3;
-                        }
-                        break;
-                    }
-                    // qDebug() << "  cubicTo" << c[1] << c[2] << c[3];
-                    glyph.cubicTo(c[1], c[2], c[3]);
-                    c[0] = c[3];
-                    n = 1;
-                }
-                if (n == 1) {
-                    // qDebug() << "  closeSubpath";
-                    glyph.closeSubpath();
+                        / 2.0;
                 } else {
-                    c[3] = start;
+                    // qDebug() << "  end point is on curve, start is not";
+                    start = QPointF(glyphSlot->outline.points[last_point].x,
+                                    glyphSlot->outline.points[last_point].y);
+                }
+                --i; // to use original start point as control point below
+            }
+            start += cp;
+            // qDebug() << "  start at" << start;
+            glyph.moveTo(start);
+            QPointF c[4];
+            c[0] = start;
+            int n = 1;
+            while (i < last_point) {
+                ++i;
+                c[n] = cp
+                    + QPointF(glyphSlot->outline.points[i].x,
+                              glyphSlot->outline.points[i].y);
+                // qDebug() << "    " << i << c[n] << "tag =" <<
+                // (int)g->outline.tags[i]
+                //                    << ": on curve =" <<
+                //                    (bool)(g->outline.tags[i] & 1);
+                ++n;
+                switch (glyphSlot->outline.tags[i] & 3) {
+                case 2:
+                    // cubic bezier element
+                    if (n < 4)
+                        continue;
+                    c[3] = (c[3] + c[2]) / 2;
+                    --i;
+                    break;
+                case 0:
+                    // quadratic bezier element
+                    if (n < 3)
+                        continue;
+                    c[3] = (c[1] + c[2]) / 2;
+                    c[2] = (2 * c[1] + c[3]) / 3;
+                    c[1] = (2 * c[1] + c[0]) / 3;
+                    --i;
+                    break;
+                case 1:
+                case 3:
                     if (n == 2) {
+                        // qDebug() << "  lineTo" << c[1];
+                        glyph.lineTo(c[1]);
+                        c[0] = c[1];
+                        n = 1;
+                        continue;
+                    } else if (n == 3) {
+                        c[3] = c[2];
                         c[2] = (2 * c[1] + c[3]) / 3;
                         c[1] = (2 * c[1] + c[0]) / 3;
                     }
-                    // qDebug() << "  close cubicTo" << c[1] << c[2] << c[3];
-                    glyph.cubicTo(c[1], c[2], c[3]);
+                    break;
                 }
-                ++i;
+                // qDebug() << "  cubicTo" << c[1] << c[2] << c[3];
+                glyph.cubicTo(c[1], c[2], c[3]);
+                c[0] = c[3];
+                n = 1;
             }
-            glyph = ftTF.map(glyph);
-            QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
-            advance = ftTF.map(advance);
-            QPointF offset(glyphs[g].x_offset, glyphs[g].y_offset);
-            offset = ftTF.map(offset);
-            QPointF totalOffset = cursorPos + offset - diff;
-            glyph.translate(totalOffset);
-            QRectF boundingRect(QPointF(), advance);
-            boundingRect.moveTo(totalOffset);
-
-            if (glyph.isEmpty()) {
-                format.associatedShapeWrapper().addCharacterRect(boundingRect);
+            if (n == 1) {
+                // qDebug() << "  closeSubpath";
+                glyph.closeSubpath();
             } else {
-                d->path.addPath(glyph);
-                format.associatedShapeWrapper().addCharacterRect(
-                    glyph.boundingRect());
+                c[3] = start;
+                if (n == 2) {
+                    c[2] = (2 * c[1] + c[3]) / 3;
+                    c[1] = (2 * c[1] + c[0]) / 3;
+                }
+                // qDebug() << "  close cubicTo" << c[1] << c[2] << c[3];
+                glyph.cubicTo(c[1], c[2], c[3]);
             }
-            qDebug() << glyph.boundingRect() << boundingRect;
-
-            cursorPos += advance;
+            ++i;
         }
+        glyph = ftTF.map(glyph);
+        QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
+        advance = ftTF.map(advance);
+        QPointF offset(glyphs[g].x_offset, glyphs[g].y_offset);
+        offset = ftTF.map(offset);
 
-        d->cachedLayouts.push_back(layout);
-        d->cachedLayoutsOffsets.push_back(-diff);
+        CharacterResult charResult;
+        charResult.path = glyph;
+        if (glyph.isEmpty()) {
+            charResult.boundingBox = QRectF(QPointF(), advance);
+        } else {
+            charResult.boundingBox = glyph.boundingRect();
+        }
+        charResult.typographic_index = glyphs[g].index;
+        charResult.addressable = true;
+        addressableIndices.append(glyphs[g].cluster);
+        // if character in middle of line, this doesn't mean much rght now,
+        // because we don't do linebreaking yet, but once we do, we should set
+        // these appropriately.
+        if (g == 0) {
+            charResult.anchored_chunk = true;
+        } else {
+            charResult.middle = true;
+        }
+        charResult.cssPosition = totalAdvance + offset;
+        /**
+          There's a weird note in the algorithm here that I do not understand:
+          "if addressable is true and middle is false, then set the css position
+          to the corresponding typographic character as determined by the css
+          renderer. Otherwise if i>0, then set css possition[i] to css position
+          [i-1]."
+          */
+
+        result[glyphs[g].cluster] = charResult;
+        totalAdvance += advance;
+    }
+    // we're done with raqm for now.
+    raqm_destroy(layout);
+
+    // 3. Resolve character positioning
+    qDebug() << "character positing";
+    QVector<KoSvgText::CharTransformation> resolvedTransforms(
+        text.toUtf8().size());
+    bool textInPath = false;
+    int globalIndex = 0;
+    this->layoutInterface()->resolveCharacterPositioning(addressableIndices,
+                                                         resolvedTransforms,
+                                                         textInPath,
+                                                         globalIndex,
+                                                         isHorizontal);
+    // 4. Adjust positions: dx, dy
+
+    QPointF shift = QPointF();
+    for (int i = 0; i < result.size(); i++) {
+        if (addressableIndices.contains(i)) {
+            KoSvgText::CharTransformation transform = resolvedTransforms[i];
+            if (transform.hasRelativeOffset()) {
+                shift += transform.relativeOffset();
+            }
+            CharacterResult charResult = result[i];
+            if (transform.rotate) {
+                charResult.rotate = *transform.rotate;
+            }
+            charResult.finalPosition = charResult.cssPosition + shift;
+            result[i] = charResult;
+        }
+    }
+
+    // 5. Apply ‘textLength’ attribute
+    // 6. Adjust positions: x, y
+
+    shift = QPointF();
+    bool setNextAnchor = false;
+    for (int i = 1; i < result.size(); i++) {
+        if (addressableIndices.contains(i)) {
+            KoSvgText::CharTransformation transform = resolvedTransforms[i];
+            CharacterResult charResult = result[i];
+            if (transform.xPos) {
+                shift.setX(*transform.xPos - charResult.finalPosition.x());
+                charResult.anchored_chunk = true;
+            }
+            if (transform.yPos) {
+                shift.setY(*transform.yPos - charResult.finalPosition.y());
+                charResult.anchored_chunk = true;
+            }
+
+            charResult.finalPosition += shift;
+
+            if (setNextAnchor) {
+                charResult.anchored_chunk = true;
+            }
+
+            if (charResult.middle && charResult.anchored_chunk) {
+                charResult.anchored_chunk = false;
+                if (i + 1 < result.size()) {
+                    setNextAnchor = true;
+                } else {
+                    setNextAnchor = false;
+                }
+            }
+
+            result[i] = charResult;
+        }
+    }
+
+    // 7. Apply anchoring
+    // 8. Position on path
+
+    // 9. return result.
+    d->result = result;
+    QTransform tf;
+    KoSvgText::AssociatedShapeWrapper wrapper =
+        textChunks.at(0).format.associatedShapeWrapper();
+    for (CharacterResult cr : d->result) {
+        if (cr.addressable && cr.hidden == false) {
+            tf.reset();
+            tf.translate(cr.finalPosition.x(), cr.finalPosition.y());
+            tf.rotateRadians(cr.rotate);
+            wrapper.addCharacterRect(tf.mapRect(cr.boundingBox));
+        }
     }
 }
 

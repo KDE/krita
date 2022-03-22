@@ -31,6 +31,7 @@ v *  GNU General Public License for more details.
 #include <SvgSavingContext.h>
 #include <SvgStyleWriter.h>
 #include <kis_dom_utils.h>
+#include <kis_global.h>
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
 #include <commands/KoShapeUngroupCommand.h>
@@ -310,6 +311,74 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
+    void resolveCharacterPositioning(
+        QVector<int> addressableIndices,
+        QVector<KoSvgText::CharTransformation> &resolvedTransforms,
+        bool &textInPath,
+        int &currentIndex,
+        bool horizontal) override
+    {
+        if (isTextNode()) {
+            int length = q->s->text.toUtf8().size();
+            qDebug() << "starting resolving of charTransforms" << q->s->text
+                     << length;
+            QVector<KoSvgText::CharTransformation> transforms =
+                q->s->localTransformations;
+
+            int i = 0;
+
+            // if text_in_path false: newChunkCount == max(x, y)
+            //
+
+            KoSvgText::CharTransformation transform;
+            for (int j = 0; j < length; j++) {
+                if (addressableIndices.contains(currentIndex + j)) {
+                    KoSvgText::CharTransformation newtransform;
+                    if (i < transforms.size()) {
+                        transform = transforms[i];
+
+                        if (!textInPath && horizontal) {
+                            newtransform.xPos = transform.xPos;
+                        } else if (!textInPath && horizontal) {
+                            newtransform.yPos = transform.yPos;
+                        }
+                        newtransform.dxPos = transform.dxPos;
+                        newtransform.dyPos = transform.dyPos;
+
+                        newtransform.rotate = transform.rotate;
+
+                    } else {
+                        if (currentIndex + j != 0) {
+                            newtransform.rotate =
+                                resolvedTransforms[currentIndex + j - 1].rotate;
+                        }
+                    }
+                    resolvedTransforms[currentIndex + j] = newtransform;
+                    i += 1;
+                }
+            }
+            qDebug() << "done";
+
+            currentIndex += q->s->text.toUtf8().size();
+        } else {
+            // TODO: if text in path, set text-in-path true.
+            qDebug() << "iterating over shapes";
+            Q_FOREACH (KoShape *shape, q->shapes()) {
+                KoSvgTextChunkShape *chunkShape =
+                    dynamic_cast<KoSvgTextChunkShape *>(shape);
+                if (chunkShape) {
+                    chunkShape->layoutInterface()->resolveCharacterPositioning(
+                        addressableIndices,
+                        resolvedTransforms,
+                        textInPath,
+                        currentIndex,
+                        horizontal);
+                }
+            }
+            // TODO: if text in path, set text-in-path false.
+        }
+    }
+
     void addAssociatedOutline(const QRectF &rect) override {
         KIS_SAFE_ASSERT_RECOVER_RETURN(isTextNode());
         QPainterPath path;
@@ -550,6 +619,10 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
         QVector<qreal> rotate;
 
         fillTransforms(&xPos, &yPos, &dxPos, &dyPos, &rotate, s->localTransformations);
+
+        for (int i = 0; i < rotate.size(); i++) {
+            rotate[i] = kisRadiansToDegrees(rotate[i]);
+        }
 
         writeTextListAttribute("x", xPos, context.shapeWriter());
         writeTextListAttribute("y", yPos, context.shapeWriter());
@@ -797,7 +870,7 @@ bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContex
 
 void KoSvgTextChunkShape::normalizeCharTransformations()
 {
-    applyParentCharTransformations(s->localTransformations);
+    // applyParentCharTransformations(s->localTransformations);
 }
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()

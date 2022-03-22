@@ -34,11 +34,3 @@ KoColorConversionTransformation* KoCopyColorConversionTransformationFactory::cre
     Q_ASSERT(srcColorSpace->id() == dstColorSpace->id());
     return new KoCopyColorConversionTransformation(srcColorSpace);
 }
-bool KoCopyColorConversionTransformationFactory::conserveColorInformation() const
-{
-    return true;
-}
-bool KoCopyColorConversionTransformationFactory::conserveDynamicRange() const
-{
-    return true;
-}

@@ -154,22 +154,6 @@ KoColorConversionFromAlphaTransformationFactoryImpl<alpha_channel_type>::
     }
 }
 
-template<typename alpha_channel_type>
-bool
-KoColorConversionFromAlphaTransformationFactoryImpl<alpha_channel_type>::
-    conserveColorInformation() const
-{
-    return false;
-}
-
-template<typename alpha_channel_type>
-bool
-KoColorConversionFromAlphaTransformationFactoryImpl<alpha_channel_type>::
-    conserveDynamicRange() const
-{
-    return false;
-}
-
 template class KoColorConversionFromAlphaTransformationFactoryImpl<quint8>;
 template class KoColorConversionFromAlphaTransformationFactoryImpl<quint16>;
 #ifdef HAVE_OPENEXR
@@ -312,22 +296,6 @@ KoColorConversionToAlphaTransformationFactoryImpl<alpha_channel_type>::
     } else {
         return new KoColorConversionToAlphaTransformation<alpha_channel_type>(srcColorSpace, dstColorSpace, renderingIntent, conversionFlags);
     }
-}
-
-template <typename alpha_channel_type>
-bool
-KoColorConversionToAlphaTransformationFactoryImpl<alpha_channel_type>::
-    conserveColorInformation() const
-{
-    return false;
-}
-
-template <typename alpha_channel_type>
-bool
-KoColorConversionToAlphaTransformationFactoryImpl<alpha_channel_type>::
-    conserveDynamicRange() const
-{
-    return false;
 }
 
 template class KoColorConversionToAlphaTransformationFactoryImpl<quint8>;

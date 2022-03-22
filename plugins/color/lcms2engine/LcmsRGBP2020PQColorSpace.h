@@ -101,6 +101,10 @@ class LcmsRGBP2020PQColorSpaceFactoryWrapper : public BaseColorSpaceFactory
         return new RelatedColorSpaceType(this->name(), p->clone());
     }
 
+    bool isHdr() const override {
+        return this->colorDepthId() != Integer8BitsColorDepthID;
+    }
+
     QList<KoColorConversionTransformationFactory *> colorConversionLinks() const override
     {
         QList<KoColorConversionTransformationFactory *> list;

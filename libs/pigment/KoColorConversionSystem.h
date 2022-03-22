@@ -170,16 +170,6 @@ private:
      * Delete all the paths of the list given in argument.
      */
     void deletePaths(QList<KoColorConversionSystem::Path*> paths) const;
-    /**
-     * Don't call that function, but raher findBestPath
-     * @internal
-     */
-    inline Path findBestPathImpl2(const Node* srcNode, const Node* dstNode, bool ignoreHdr, bool ignoreColorCorrectness) const;
-    /**
-     * Don't call that function, but raher findBestPath
-     * @internal
-     */
-    inline Path findBestPathImpl(const Node* srcNode, const Node* dstNode, bool ignoreHdr) const;
 
 private:
     struct Private;

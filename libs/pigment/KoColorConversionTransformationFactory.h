@@ -33,17 +33,7 @@ public:
      */
     KoColorConversionTransformationFactory(const QString &_srcModelId, const QString &_srcDepthId, const QString &_srcProfile, const QString &_dstModelId, const QString &_dstDepthId, const QString &_dstProfile);
     ~KoColorConversionTransformationFactory() override;
-    /**
-     * @return true if this factory creates a color conversion transformation which
-     * conserve color information (typical color transformation that lose that information
-     * is anything to grayscale).
-     */
-    virtual bool conserveColorInformation() const = 0;
-    /**
-     * @return true if this factory creates a color conversion transformation which
-     * conserve the dynamic range of the color.
-     */
-    virtual bool conserveDynamicRange() const = 0;
+
 public:
     /**
      * @return the id of the source color model

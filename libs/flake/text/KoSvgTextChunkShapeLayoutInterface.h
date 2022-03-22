@@ -123,6 +123,8 @@ public:
      * chunks".
      */
     virtual QVector<SubChunk> collectSubChunks() const = 0;
+
+    virtual void resolveCharacterPositioning(QVector<int> addressableIndices, QVector<KoSvgText::CharTransformation> &resolvedTransforms, bool &textInPath, int &currentIndex, bool horizontal) = 0;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPELAYOUTINTERFACE_H

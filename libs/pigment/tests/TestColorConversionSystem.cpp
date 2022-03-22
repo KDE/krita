@@ -87,6 +87,25 @@ inline bool qCompare(const std::vector<KoColorConversionSystem::NodeKey> &t1,
 }
 }
 
+std::vector<KoColorConversionSystem::NodeKey> TestColorConversionSystem::calcPath(const std::vector<KoColorConversionSystem::NodeKey> &expectedPath) {
+
+    const KoColorConversionSystem *system = KoColorSpaceRegistry::instance()->colorConversionSystem();
+
+    KoColorConversionSystem::Path path =
+        system->findBestPath(expectedPath.front(), expectedPath.back());
+
+    std::vector<KoColorConversionSystem::NodeKey> realPath;
+
+    Q_FOREACH (const KoColorConversionSystem::Vertex *vertex, path.vertexes) {
+        if (!vertex->srcNode->isEngine) {
+            realPath.push_back(vertex->srcNode->key());
+        }
+    }
+    realPath.push_back(path.vertexes.last()->dstNode->key());
+
+    return realPath;
+};
+
 void TestColorConversionSystem::testAlphaConnectionPaths()
 {
     const KoColorSpace *alpha8 = KoColorSpaceRegistry::instance()->alpha8();
@@ -98,26 +117,7 @@ void TestColorConversionSystem::testAlphaConnectionPaths()
 
     std::vector<NodeKey> expectedPath;
 
-    auto calcPath = [] (const std::vector<NodeKey> &expectedPath) {
-
-        const KoColorConversionSystem *system = KoColorSpaceRegistry::instance()->colorConversionSystem();
-
-        Path path =
-            system->findBestPath(expectedPath.front(), expectedPath.back());
-
-        std::vector<NodeKey> realPath;
-
-        Q_FOREACH (const Vertex *vertex, path.vertexes) {
-            if (!vertex->srcNode->isEngine) {
-                realPath.push_back(vertex->srcNode->key());
-            }
-        }
-        realPath.push_back(path.vertexes.last()->dstNode->key());
-
-        return realPath;
-    };
-
-    // to Alpha8 conversions. Everything should go via GrayA color space,
+       // to Alpha8 conversions. Everything should go via GrayA color space,
     // we expect alpha colorspace be just a flattened of graya color space
     // with srgb tone curve.
 
@@ -329,6 +329,89 @@ void TestColorConversionSystem::testAlphaU16Conversions()
         QCOMPARE(c.toQColor(), QColor(128,128,128,255));
         c.convertTo(alpha16);
         QCOMPARE(c.opacityU8(), quint8(128));
+    }
+}
+
+void TestColorConversionSystem::testGrayAConnectionPaths()
+{
+    using Path = KoColorConversionSystem::Path;
+    using Vertex = KoColorConversionSystem::Vertex;
+    using NodeKey = KoColorConversionSystem::NodeKey;
+
+    std::vector<NodeKey> expectedPath;
+
+    expectedPath =
+       {{GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+        {GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+
+    expectedPath =
+       {{GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+        {RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+    expectedPath =
+       {{GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"},
+        {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+
+    expectedPath =
+       {{RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), KoColorSpaceRegistry::instance()->p709SRGBProfile()->name()},
+        {GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), "Gray-D50-elle-V2-srgbtrc.icc"}};
+    QCOMPARE(calcPath(expectedPath), expectedPath);
+
+
+}
+
+void TestColorConversionSystem::testGrayAConversions()
+{
+    KoColorSpaceRegistry::instance();
+    const KoColorSpace *graya8 = KoColorSpaceRegistry::instance()->graya8();
+    const KoColorSpace *graya16 = KoColorSpaceRegistry::instance()->graya16();
+    const KoColorSpace *rgb8 = KoColorSpaceRegistry::instance()->rgb8();
+
+    {
+        KoColor c(Qt::transparent, graya8);
+        QCOMPARE(c.opacityU8(), quint8(0));
+        c.convertTo(graya16);
+        QCOMPARE(c.opacityU8(), quint8(0));
+        QCOMPARE(c.toQColor(), QColor(Qt::transparent));
+        c.convertTo(graya8);
+        QCOMPARE(c.opacityU8(), quint8(0));
+
+        c.convertTo(rgb8);
+        QCOMPARE(c.opacityU8(), quint8(0));
+        QCOMPARE(c.toQColor(), QColor(Qt::transparent));
+    }
+
+    {
+        KoColor c(QColor(255,255,255), graya8);
+        QCOMPARE(c.opacityU8(), quint8(255));
+        c.convertTo(graya16);
+        QCOMPARE(c.opacityU8(), quint8(255));
+        QCOMPARE(c.toQColor(), QColor(Qt::white));
+        c.convertTo(graya8);
+        QCOMPARE(c.opacityU8(), quint8(255));
+
+        c.convertTo(rgb8);
+        QCOMPARE(c.opacityU8(), quint8(255));
+        QCOMPARE(c.toQColor(), QColor(Qt::white));
+    }
+
+    {
+        KoColor c(QColor(180,180,180), graya8);
+        QCOMPARE(c.opacityU8(), quint8(255));
+        c.convertTo(graya16);
+        QCOMPARE(c.opacityU8(), quint8(255));
+        QCOMPARE(c.toQColor(), QColor(180,180,180));
+        c.convertTo(graya8);
+        QCOMPARE(c.opacityU8(), quint8(255));
+
+        c.convertTo(rgb8);
+        QCOMPARE(c.opacityU8(), quint8(255));
+        QCOMPARE(c.toQColor(), QColor(180,180,180));
     }
 }
 

@@ -25,8 +25,6 @@ public:
                                                                        const KoColorSpace* dstColorSpace,
                                                                        KoColorConversionTransformation::Intent renderingIntent,
                                                                        KoColorConversionTransformation::ConversionFlags conversionFlags) const override;
-    bool conserveColorInformation() const override;
-    bool conserveDynamicRange() const override;
 };
 
 

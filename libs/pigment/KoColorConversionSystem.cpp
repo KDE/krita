@@ -34,10 +34,9 @@ void KoColorConversionSystem::connectToEngine(Node* _node, Node* _engine)
 {
     Vertex* v1 = createVertex(_node, _engine);
     Vertex* v2 = createVertex(_engine, _node);
-    v1->conserveColorInformation = !_node->isGray;
-    v2->conserveColorInformation = !_node->isGray;
-    v1->conserveDynamicRange = _engine->isHdr;
-    v2->conserveDynamicRange = _engine->isHdr;
+
+    Q_UNUSED(v1);
+    Q_UNUSED(v2);
 }
 
 KoColorConversionSystem::Node* KoColorConversionSystem::insertEngine(const KoColorSpaceEngine* engine)
@@ -244,7 +243,7 @@ void KoColorConversionSystem::createColorConverters(const KoColorSpace* colorSpa
     // from colorSpace to one of the color spaces in the list, but not the other way around
     // it might be worth to look also the return path.
     const Node* csNode = nodeFor(colorSpace);
-    PathQualityChecker pQC(csNode->referenceDepth, !csNode->isHdr, !csNode->isGray);
+    PathQualityChecker pQC(csNode->referenceDepth);
     // Look for a color conversion
     Path bestPath;
     typedef QPair<KoID, KoID> KoID2KoID;
@@ -426,9 +425,14 @@ QString KoColorConversionSystem::bestPathToDot(const QString& srcKey, const QStr
     return dot;
 }
 
-inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode, bool ignoreHdr, bool ignoreColorCorrectness) const
+KoColorConversionSystem::Path KoColorConversionSystem::findBestPath(const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
 {
-    PathQualityChecker pQC(qMin(srcNode->referenceDepth, dstNode->referenceDepth), ignoreHdr, ignoreColorCorrectness);
+    KIS_ASSERT(srcNode);
+    KIS_ASSERT(dstNode);
+
+    dbgPigmentCCS << "Find best path between " << srcNode->id() << " and  " << dstNode->id();
+
+    PathQualityChecker pQC(qMin(srcNode->referenceDepth, dstNode->referenceDepth));
     Node2PathHash node2path; // current best path to reach a given node
     QList<Path> possiblePaths; // list of all paths
     // Generate the initial list of paths
@@ -494,29 +498,11 @@ inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl2(
             possiblePaths.removeAll(p); // Remove from list of remaining paths
         }
     }
+
     if (!currentBestPath.isEmpty()) {
-        warnPigment << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found : length = " << currentBestPath.length() << " cost = " << currentBestPath.cost << " referenceDepth = " << currentBestPath.referenceDepth << " respectColorCorrectness = " << currentBestPath.respectColorCorrectness << " isGood = " << currentBestPath.isGood ;
+        warnPigment << "No good path from " << srcNode->id() << " to " << dstNode->id() << " found : length = " << currentBestPath.length() << " cost = " << currentBestPath.cost << " referenceDepth = " << currentBestPath.referenceDepth << " respectColorCorrectness = " << " isGood = " << currentBestPath.isGood ;
         return currentBestPath;
     }
     errorPigment << "No path from " << srcNode->id() << " to " << dstNode->id() << " found not ";
     return currentBestPath;
-}
-
-inline KoColorConversionSystem::Path KoColorConversionSystem::findBestPathImpl(const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode, bool ignoreHdr) const
-{
-    Q_ASSERT(srcNode);
-    Q_ASSERT(dstNode);
-    return findBestPathImpl2(srcNode, dstNode, ignoreHdr, (srcNode->isGray || dstNode->isGray));
-}
-
-KoColorConversionSystem::Path KoColorConversionSystem::findBestPath(const KoColorConversionSystem::Node* srcNode, const KoColorConversionSystem::Node* dstNode) const
-{
-    Q_ASSERT(srcNode);
-    Q_ASSERT(dstNode);
-    dbgPigmentCCS << "Find best path between " << srcNode->id() << " and  " << dstNode->id();
-    if (srcNode->isHdr &&  dstNode->isHdr) {
-        return findBestPathImpl(srcNode, dstNode, false);
-    } else {
-        return findBestPathImpl(srcNode, dstNode, true);
-    }
 }

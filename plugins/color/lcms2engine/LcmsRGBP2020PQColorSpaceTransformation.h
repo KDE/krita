@@ -134,17 +134,6 @@ public:
     {
     }
 
-    bool conserveColorInformation() const override {
-        return true;
-    }
-
-    bool conserveDynamicRange() const override {
-        return
-            dstColorDepthId() == Float16BitsColorDepthID.id() ||
-            dstColorDepthId() == Float32BitsColorDepthID.id() ||
-            dstColorDepthId() == Float64BitsColorDepthID.id();
-    }
-
     KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
                                                                const KoColorSpace* dstColorSpace,
                                                                KoColorConversionTransformation::Intent renderingIntent,
@@ -172,14 +161,6 @@ public:
                                                  colorDepthIdForChannelType<typename ParentColorSpace::ColorSpaceTraits::channels_type>().id(),
                                                  "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF")
     {
-    }
-
-    bool conserveColorInformation() const override {
-        return true;
-    }
-
-    bool conserveDynamicRange() const override {
-        return true;
     }
 
     KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,
@@ -210,17 +191,6 @@ public:
                                                  "High Dynamic Range UHDTV Wide Color Gamut Display (Rec. 2020) - SMPTE ST 2084 PQ EOTF")
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(srcColorDepthId() != dstColorDepthId());
-    }
-
-    bool conserveColorInformation() const override {
-        return true;
-    }
-
-    bool conserveDynamicRange() const override {
-        return
-            srcColorDepthId() == Float16BitsColorDepthID.id() ||
-            srcColorDepthId() == Float32BitsColorDepthID.id() ||
-            srcColorDepthId() == Float64BitsColorDepthID.id();
     }
 
     KoColorConversionTransformation* createColorTransformation(const KoColorSpace* srcColorSpace,

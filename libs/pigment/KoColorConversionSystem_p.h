@@ -12,18 +12,27 @@
 #include "KoColorModelStandardIds.h"
 #include "KoColorConversionTransformationFactory.h"
 #include "KoColorSpaceEngine.h"
+#include "KoColorConversionSystem.h"
 #include <boost/operators.hpp>
 
 #include <QList>
+
+enum NodeCapability {
+    None = 0x0,
+    HasColor = 0x1,
+    HasAlpha = 0x2,
+    HasHdr = 0x4
+};
+
+Q_DECLARE_FLAGS(NodeCapabilities, NodeCapability)
+Q_DECLARE_OPERATORS_FOR_FLAGS(NodeCapabilities)
 
 struct KoColorConversionSystem::Node : boost::equality_comparable<KoColorConversionSystem::Node>
 {
 
     Node()
-        : isHdr(false)
-        , isInitialized(false)
+        : isInitialized(false)
         , referenceDepth(0)
-        , isGray(false)
         , crossingCost(1)
         , colorSpaceFactory(0)
         , isEngine(false)
@@ -38,12 +47,28 @@ struct KoColorConversionSystem::Node : boost::equality_comparable<KoColorConvers
         isInitialized = true;
 
         if (_colorSpaceFactory) {
-            isHdr = _colorSpaceFactory->isHdr();
+            {
+                const bool isGray = modelId == GrayColorModelID.id() ||
+                        modelId == GrayAColorModelID.id();
+
+                const bool isAlpha = modelId == AlphaColorModelID.id();
+
+                if (_colorSpaceFactory->isHdr()) {
+                    m_capabilities |= HasHdr;
+                }
+
+                if (!isGray && !isAlpha) {
+                    m_capabilities |= HasColor;
+                }
+
+                if (!isAlpha && modelId != GrayColorModelID.id()) {
+                    m_capabilities |= HasAlpha;
+                }
+            }
+
             colorSpaceFactory = _colorSpaceFactory;
             referenceDepth = _colorSpaceFactory->referenceDepth();
-            isGray = (_colorSpaceFactory->colorModelId() == GrayAColorModelID
-                      || _colorSpaceFactory->colorModelId() == GrayColorModelID
-                      || _colorSpaceFactory->colorModelId() == AlphaColorModelID);
+            crossingCost = _colorSpaceFactory->crossingCost();
         }
     }
 
@@ -51,8 +76,8 @@ struct KoColorConversionSystem::Node : boost::equality_comparable<KoColorConvers
         Q_ASSERT(!isInitialized);
         isEngine = true;
         isInitialized = true;
-        isHdr = true;
         engine = _engine;
+        m_capabilities = HasAlpha | HasColor | HasHdr;
     }
 
     QString id() const {
@@ -67,18 +92,21 @@ struct KoColorConversionSystem::Node : boost::equality_comparable<KoColorConvers
             lhs.profileName == rhs.profileName;
     }
 
+    NodeCapabilities capabilities() const {
+        return m_capabilities;
+    }
+
     QString modelId;
     QString depthId;
     QString profileName;
-    bool isHdr;
     bool isInitialized;
     int referenceDepth;
     QList<Vertex*> outputVertexes;
-    bool isGray;
     int crossingCost;
     const KoColorSpaceFactory* colorSpaceFactory;
     bool isEngine;
     const KoColorSpaceEngine* engine;
+    NodeCapabilities m_capabilities = None;
 };
 
 Q_DECLARE_TYPEINFO(KoColorConversionSystem::Node, Q_MOVABLE_TYPE);
@@ -109,17 +137,10 @@ struct KoColorConversionSystem::Vertex {
 
     void setFactoryFromSrc(KoColorConversionTransformationFactory* factory) {
         factoryFromSrc = factory;
-        initParameter(factoryFromSrc);
     }
 
     void setFactoryFromDst(KoColorConversionTransformationFactory* factory) {
         factoryFromDst = factory;
-        if (!factoryFromSrc) initParameter(factoryFromDst);
-    }
-
-    void initParameter(KoColorConversionTransformationFactory* transfo) {
-        conserveColorInformation = transfo->conserveColorInformation();
-        conserveDynamicRange = transfo->conserveDynamicRange();
     }
 
     KoColorConversionTransformationFactory* factory() {
@@ -129,9 +150,6 @@ struct KoColorConversionSystem::Vertex {
 
     Node* srcNode;
     Node* dstNode;
-
-    bool conserveColorInformation {true};
-    bool conserveDynamicRange {true};
 
 private:
 
@@ -174,9 +192,7 @@ inline KoColorConversionSystem::NodeKey KoColorConversionSystem::Node::key() con
 struct KoColorConversionSystem::Path {
 
     Path()
-        : respectColorCorrectness(true)
-        , referenceDepth(0)
-        , keepDynamicRange(true)
+        : referenceDepth(0)
         , isGood(false)
         , cost(0) {}
 
@@ -216,12 +232,25 @@ struct KoColorConversionSystem::Path {
     void appendVertex(Vertex* v) {
         if (vertexes.empty()) {
             referenceDepth = v->srcNode->referenceDepth;
+            commonNodeCapabilities = v->srcNode->capabilities();
         }
+
+        commonNodeCapabilities &= v->dstNode->capabilities();
+
         vertexes.append(v);
-        if (!v->conserveColorInformation) respectColorCorrectness = false;
-        if (!v->conserveDynamicRange) keepDynamicRange = false;
+
         referenceDepth = qMin(referenceDepth, v->dstNode->referenceDepth);
         cost += v->dstNode->crossingCost;
+    }
+
+    NodeCapabilities unsupportedCapabilities() const {
+        NodeCapabilities minimalCaps =
+            !vertexes.isEmpty() ?
+            vertexes.first()->srcNode->capabilities() &
+                vertexes.last()->dstNode->capabilities() :
+            None;
+
+        return (minimalCaps & commonNodeCapabilities) ^ minimalCaps;
     }
 
     // Compress path to hide the Engine node and correctly select the factory
@@ -258,11 +287,11 @@ struct KoColorConversionSystem::Path {
     }
 
     QList<Vertex*> vertexes;
-    bool respectColorCorrectness;
     int referenceDepth;
-    bool keepDynamicRange;
     bool isGood;
     int cost;
+    NodeCapabilities commonNodeCapabilities = None;
+
 };
 Q_DECLARE_TYPEINFO(KoColorConversionSystem::Path, Q_MOVABLE_TYPE);
 
@@ -301,30 +330,16 @@ struct Q_DECL_HIDDEN KoColorConversionSystem::Private {
     RegistryInterface *registryInterface;
 };
 
-#define CHECK_ONE_AND_NOT_THE_OTHER(name) \
-    if(path1. name && !path2. name) \
-{ \
-    return true; \
-    } \
-    if(!path1. name && path2. name) \
-{ \
-    return false; \
-    }
-
 struct PathQualityChecker {
 
-    PathQualityChecker(int _referenceDepth, bool _ignoreHdr, bool _ignoreColorCorrectness)
+    PathQualityChecker(int _referenceDepth)
         : referenceDepth(_referenceDepth)
-        , ignoreHdr(_ignoreHdr)
-        , ignoreColorCorrectness(_ignoreColorCorrectness)
     {}
 
     /// @return true if the path maximize all the criteria (except length)
     inline bool isGoodPath(const KoColorConversionSystem::Path & path) const {
-
-        return (path.respectColorCorrectness || ignoreColorCorrectness) &&
-                (path.referenceDepth >= referenceDepth) &&
-                (path.keepDynamicRange || ignoreHdr);
+        return path.unsupportedCapabilities() == None &&
+            path.referenceDepth >= referenceDepth;
     }
 
     /**
@@ -332,20 +347,28 @@ struct PathQualityChecker {
      */
     inline bool lessWorseThan(const KoColorConversionSystem::Path &path1, const KoColorConversionSystem::Path &path2) const {
         // There is no point in comparing two paths which doesn't start from the same node or doesn't end at the same node
-        if (!ignoreHdr) {
-            CHECK_ONE_AND_NOT_THE_OTHER(keepDynamicRange)
+
+        NodeCapabilities unsupported1 = path1.unsupportedCapabilities();
+        NodeCapabilities unsupported2 = path2.unsupportedCapabilities();
+
+        if (!unsupported1.testFlag(HasHdr) && unsupported2.testFlag(HasHdr)) {
+            return true;
         }
-        if (!ignoreColorCorrectness) {
-            CHECK_ONE_AND_NOT_THE_OTHER(respectColorCorrectness)
+
+        if (!unsupported1.testFlag(HasColor) && unsupported2.testFlag(HasColor)) {
+            return true;
         }
+
+        if (!unsupported1.testFlag(HasAlpha) && unsupported2.testFlag(HasAlpha)) {
+            return true;
+        }
+
         if (path1.referenceDepth == path2.referenceDepth) {
             return path1.cost < path2.cost; // if they have the same cost, well anyway you have to choose one, and there is no point in keeping one and not the other
         }
         return path1.referenceDepth > path2.referenceDepth;
     }
     int referenceDepth;
-    bool ignoreHdr;
-    bool ignoreColorCorrectness;
 };
 
 #undef CHECK_ONE_AND_NOT_THE_OTHER

@@ -11,6 +11,8 @@
 #include <QList>
 #include <QString>
 
+#include <KoColorConversionSystem.h>
+
 struct ModelDepthProfile {
     ModelDepthProfile(const QString& _model, const QString& _depth, const QString& _profile)
             : model(_model), depth(_depth), profile(_profile) {
@@ -31,10 +33,16 @@ private Q_SLOTS:
     void testAlphaConnectionPaths();
     void testAlphaConversions();
     void testAlphaU16Conversions();
+    void testGrayAConnectionPaths();
+    void testGrayAConversions();
     void benchmarkAlphaToRgbConversion();
     void benchmarkRgbToAlphaConversion();
 
     void testCmykBitnessConversion();
+
+private:
+    std::vector<KoColorConversionSystem::NodeKey> calcPath(const std::vector<KoColorConversionSystem::NodeKey> &expectedPath);
+
 private:
     QList< ModelDepthProfile > listModels;
 };

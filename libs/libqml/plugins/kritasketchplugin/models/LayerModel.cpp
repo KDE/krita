@@ -34,18 +34,12 @@
 #include <KisGlobalResourcesInterface.h>
 
 struct LayerModelMetaInfo {
-    LayerModelMetaInfo()
-    : canMoveUp(false)
-    , canMoveRight(false)
-    , canMoveDown(false)
-    , canMoveLeft(false)
-    , depth(-1)
-    {}
-    bool canMoveUp;
-    bool canMoveRight;
-    bool canMoveDown;
-    bool canMoveLeft;
-    int depth;
+
+    bool canMoveUp {false};
+    bool canMoveRight {false};
+    bool canMoveDown {false};
+    bool canMoveLeft {false};
+    int depth {-1};
 };
 
 class LayerModel::Private {
@@ -53,13 +47,6 @@ public:
     Private(LayerModel* qq)
         : q(qq)
         , nodeModel(new KisNodeModel(qq))
-        , aboutToRemoveRoots(false)
-        , canvas(0)
-        , nodeManager(0)
-        , image(0)
-        , activeNode(0)
-        , declarativeEngine(0)
-        , thumbProvider(0)
         , updateActiveLayerWithNewFilterConfigTimer(new QTimer(qq))
         , imageChangedTimer(new QTimer(qq))
     {
@@ -77,25 +64,25 @@ public:
         connect(imageChangedTimer, SIGNAL(timeout()), qq, SLOT(imageHasChanged()));
     }
 
-    LayerModel* q;
+    LayerModel* q {nullptr};
     QList<KisNodeSP> layers;
     QHash<const KisNode*, LayerModelMetaInfo> layerMeta;
-    KisNodeModel* nodeModel;
-    bool aboutToRemoveRoots;
-    KisViewManager* view;
-    KisCanvas2* canvas;
+    KisNodeModel* nodeModel {nullptr};
+    bool aboutToRemoveRoots {false};
+    KisViewManager* view {nullptr};
+    KisCanvas2* canvas {nullptr};
     QScopedPointer<KisSelectionActionsAdapter> selectionActionsAdapter;
     QPointer<KisNodeManager> nodeManager;
     KisImageWSP image;
     KisNodeSP activeNode;
-    QQmlEngine* declarativeEngine;
-    LayerThumbProvider* thumbProvider;
+    QQmlEngine* declarativeEngine {nullptr};
+    LayerThumbProvider* thumbProvider {nullptr};
     QHash<QString, const KisFilter*> filters;
 
     KisFilterConfigurationSP newConfig;
-    QTimer* updateActiveLayerWithNewFilterConfigTimer;
+    QTimer* updateActiveLayerWithNewFilterConfigTimer {nullptr};
 
-    QTimer* imageChangedTimer;
+    QTimer* imageChangedTimer {nullptr};
     static int counter()
     {
         static int count = 0;

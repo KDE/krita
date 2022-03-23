@@ -48,9 +48,9 @@ Q_SIGNALS:
     void gridSizeChanged();
 
 private:
-    qreal m_gridWidth;
-    qreal m_gridHeight;
-    qreal m_toolbarButtonSize;
+    qreal m_gridWidth {0.0};
+    qreal m_gridHeight {0.0};
+    qreal m_toolbarButtonSize {0.0};
 };
 
 #endif // CONSTANTS_H

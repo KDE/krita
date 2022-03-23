@@ -35,16 +35,6 @@ class KisSketchView::Private
 public:
     Private( KisSketchView* qq)
         : q(qq)
-        , actionCollection(0)
-        , doc(0)
-        , viewManager(0)
-        , view(0)
-        , canvas(0)
-        , canvasWidget(0)
-        , selectionExtras(0)
-        , undoAction(0)
-        , redoAction(0)
-        , tabletEventCount(0)
     { }
     ~Private() {
         delete selectionExtras;
@@ -56,31 +46,31 @@ public:
     void resetDocumentPosition();
     void removeNodeAsync(KisNodeSP removedNode);
 
-    KisSketchView* q;
+    KisSketchView* q {nullptr};
 
-    KActionCollection *actionCollection;
+    KActionCollection *actionCollection {nullptr};
 
     QPointer<KisDocument> doc;
     QPointer<KisViewManager> viewManager;
     QPointer<KisView> view;
 
     QPointer<KisCanvas2> canvas;
-    KUndo2Stack* undoStack;
+    KUndo2Stack* undoStack {nullptr};
 
-    QWidget *canvasWidget;
+    QWidget *canvasWidget {nullptr};
 
     QString file;
 
-    KisSelectionExtras *selectionExtras;
+    KisSelectionExtras *selectionExtras {nullptr};
 
-    QTimer *timer;
+    QTimer *timer {nullptr};
 
-    QTimer *loadedTimer;
-    QTimer *savedTimer;
-    QAction* undoAction;
-    QAction* redoAction;
+    QTimer *loadedTimer {nullptr};
+    QTimer *savedTimer {nullptr};
+    QAction* undoAction {nullptr};
+    QAction* redoAction {nullptr};
 
-    unsigned char tabletEventCount;
+    unsigned char tabletEventCount {0};
 };
 
 KisSketchView::KisSketchView(QQuickItem* parent)

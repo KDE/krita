@@ -80,7 +80,7 @@ public:
     bool supportsCaching() const override;
 private:
 
-    QImage createBrushPreview();
+    QImage createBrushPreview(int maxSize = -1);
 
 private:
     struct Private;

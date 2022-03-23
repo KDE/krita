@@ -33,7 +33,7 @@
 #include <kis_boundary.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include <kis_brush_mask_applicator_base.h>
-
+#include "kis_algebra_2d.h"
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
@@ -75,17 +75,32 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
     d->density = density;
     d->idealThreadCountCached = QThread::idealThreadCount();
     setBrushType(MASK);
-    setWidth(qMax(qreal(1.0), d->shape->width()));
-    setHeight(qMax(qreal(1.0), d->shape->height()));
 
-    QImage image = createBrushPreview();
-    setBrushTipImage(image);
+    {
+        /**
+         * Here is a two-stage process of initialization of the brush size.
+         * It is done so for the backward compatibility reasons when the size
+         * was set to the size of brushTipImage(), which initialization is now
+         * skipped for efficiency reasons.
+         */
 
-    // Set angle here so brush tip image is generated unrotated
+        setWidth(qMax(qreal(1.0), d->shape->width()));
+        setHeight(qMax(qreal(1.0), d->shape->height()));
+
+        const int width = maskWidth(KisDabShape(), 0.0, 0.0, KisPaintInformation());
+        const int height = maskHeight(KisDabShape(), 0.0, 0.0, KisPaintInformation());
+
+        setWidth(qMax(1, width));
+        setHeight(qMax(1, height));
+    }
+
+    // We don't initialize setBrushTipImage(), bacause
+    // auto brush doesn't use image pyramid. And generation
+    // of a full-scaled QImage may cause a significant delay
+    // in the beginning of the stroke
+
     setAngle(angle);
-
-    image = createBrushPreview();
-    setImage(image);
+    setImage(createBrushPreview(128));
 }
 
 KisAutoBrush::~KisAutoBrush()
@@ -334,10 +349,30 @@ void KisAutoBrush::toXML(QDomDocument& doc, QDomElement& e) const
     KisBrush::toXML(doc, e);
 }
 
-QImage KisAutoBrush::createBrushPreview()
+QImage KisAutoBrush::createBrushPreview(int maxSize)
 {
+    KisDabShape shape;
+
     int width = maskWidth(KisDabShape(), 0.0, 0.0, KisPaintInformation());
     int height = maskHeight(KisDabShape(), 0.0, 0.0, KisPaintInformation());
+
+    QSize size(width, height);
+
+    if (maxSize > 0 && KisAlgebra2D::maxDimension(size) > maxSize) {
+        size.scale(128, 128, Qt::KeepAspectRatio);
+
+        qreal scale = 1.0;
+
+        if (width > height) {
+            scale = qreal(size.width()) / width;
+        } else {
+            scale = qreal(size.height()) / height;
+        }
+
+        shape = KisDabShape(scale, 1.0, 0.0);
+        width = maskWidth(shape, 0.0, 0.0, KisPaintInformation());
+        height = maskHeight(shape, 0.0, 0.0, KisPaintInformation());
+    }
 
     KisPaintInformation info(QPointF(width * 0.5, height * 0.5), 0.5, 0, 0, angle(), 0, 0, 0, 0);
 
@@ -345,7 +380,7 @@ QImage KisAutoBrush::createBrushPreview()
     fdev->setRect(QRect(0, 0, width, height));
     fdev->initialize();
 
-    mask(fdev, KoColor(Qt::black, fdev->colorSpace()), KisDabShape(), info);
+    mask(fdev, KoColor(Qt::black, fdev->colorSpace()), shape, info);
     return fdev->convertToQImage(0);
 }
 

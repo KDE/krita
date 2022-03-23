@@ -114,8 +114,8 @@ Q_SIGNALS:
 
 protected:
 
-    bool m_checkable;
-    bool m_locked;
+    bool m_checkable {false};
+    bool m_locked {false};
 
 private:
 

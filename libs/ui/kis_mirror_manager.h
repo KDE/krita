@@ -38,8 +38,8 @@ private Q_SLOTS:
 
 private:
     QPointer<KisView> m_imageView;
-    QAction *m_mirrorCanvas;
-    QAction *m_mirrorCanvasAroundCursor;
+    QAction *m_mirrorCanvas {nullptr};
+    QAction *m_mirrorCanvasAroundCursor {nullptr};
     void setDecorationConfig();
     KisMirrorAxisSP decoration() const;
 };

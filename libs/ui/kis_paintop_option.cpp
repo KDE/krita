@@ -14,13 +14,13 @@
 struct KisPaintOpOption::Private
 {
 public:
-    bool checked;
+    bool checked {false};
     QString label;
     KisPaintOpOption::PaintopCategory category;
-    QWidget *configurationPage;
+    QWidget *configurationPage {nullptr};
 
-    bool updatesBlocked;
-    bool isWritingSettings;
+    bool updatesBlocked {false};
+    bool isWritingSettings {false};
 
     KisResourcesInterfaceSP resourcesInterface;
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
@@ -34,9 +34,6 @@ KisPaintOpOption::KisPaintOpOption(const QString label, PaintopCategory category
     m_d->label = label;
     m_d->checked = checked;
     m_d->category = category;
-    m_d->updatesBlocked = false;
-    m_d->isWritingSettings = false;
-    m_d->configurationPage = 0;
 }
 
 KisPaintOpOption::~KisPaintOpOption()

@@ -113,18 +113,18 @@ private:
     QPointer<KisViewManager> m_viewManager;
     QPointer<KisView> m_imageView;
     QPointer<QStatusBar> m_statusBar;
-    KisProgressWidget *m_progress;
+    KisProgressWidget *m_progress {nullptr};
     QScopedPointer<KoProgressUpdater> m_progressUpdater;
 
-    QToolButton *m_selectionStatus;
-    KisMemoryReportButton *m_memoryReportBox;
-    QWidget *m_extraWidgetsParent;
-    QBoxLayout *m_extraWidgetsLayout;
-    KisAngleSelector *m_canvasAngleSelector;
-    QToolButton *m_fullscreenToggle;
+    QToolButton *m_selectionStatus {nullptr};
+    KisMemoryReportButton *m_memoryReportBox {nullptr};
+    QWidget *m_extraWidgetsParent {nullptr};
+    QBoxLayout *m_extraWidgetsLayout {nullptr};
+    KisAngleSelector *m_canvasAngleSelector {nullptr};
+    QToolButton *m_fullscreenToggle {nullptr};
 
-    KSqueezedTextLabel *m_statusBarStatusLabel;
-    KSqueezedTextLabel *m_statusBarProfileLabel;
+    KSqueezedTextLabel *m_statusBarStatusLabel {nullptr};
+    KSqueezedTextLabel *m_statusBarProfileLabel {nullptr};
 
     QString m_shortMemoryTag;
     QString m_longMemoryTag;

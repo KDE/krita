@@ -96,8 +96,8 @@ struct KisNodeManager::Private {
     {
     }
 
-    KisNodeManager * q;
-    KisViewManager * view;
+    KisNodeManager * q {nullptr};
+    KisViewManager * view {nullptr};
     QPointer<KisView>imageView;
     KisLayerManager layerManager;
     KisMaskManager maskManager;
@@ -106,7 +106,7 @@ struct KisNodeManager::Private {
     QScopedPointer<KisNodeInsertionAdapter> nodeInsertionAdapter;
     QScopedPointer<KisNodeDisplayModeAdapter> nodeDisplayModeAdapter;
 
-    KisAction *pinToTimeline;
+    KisAction *pinToTimeline {nullptr};
 
     KisNodeList selectedNodes;
     QPointer<KisNodeJugglerCompressed> nodeJuggler;
@@ -118,7 +118,7 @@ struct KisNodeManager::Private {
     KisSignalMapper nodeCreationSignalMapper;
     KisSignalMapper nodeConversionSignalMapper;
 
-    bool lastRequestedIsolatedModeStatus;
+    bool lastRequestedIsolatedModeStatus {false};
     KisSynchronizedConnection<KisNodeSP, KisNodeList> activateNodeConnection;
 
     void saveDeviceAsImage(KisPaintDeviceSP device,

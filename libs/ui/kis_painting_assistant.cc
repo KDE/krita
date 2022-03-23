@@ -125,17 +125,21 @@ struct KisPaintingAssistant::Private {
     struct SharedData {
         QString id;
         QString name;
-        bool isSnappingActive;
-        bool outlineVisible;
-        bool isLocal;
+        bool isSnappingActive {true};
+        bool outlineVisible {true};
+        bool isLocal {false};
 
-        KisCanvas2* m_canvas = 0;
+        KisCanvas2* m_canvas {nullptr};
 
         QPixmapCache::Key cached;
         QRect cachedRect; // relative to boundingRect().topLeft()
 
         struct TranslationInvariantTransform {
-            qreal m11, m12, m21, m22;
+            qreal m11 {0.0};
+            qreal m12 {0.0};
+            qreal m21 {0.0};
+            qreal m22 {0.0};
+
             TranslationInvariantTransform() { }
             TranslationInvariantTransform(const QTransform& t) : m11(t.m11()), m12(t.m12()), m21(t.m21()), m22(t.m22()) { }
             bool operator==(const TranslationInvariantTransform& b) {
@@ -145,8 +149,8 @@ struct KisPaintingAssistant::Private {
 
         QColor assistantGlobalColorCache = QColor(Qt::red);     // color to paint with if a custom color is not set
 
-        bool useCustomColor = false;
-        QColor assistantCustomColor = KisConfig(true).defaultAssistantsColor();
+        bool useCustomColor {false};
+        QColor assistantCustomColor {KisConfig(true).defaultAssistantsColor()};
     };
 
     QSharedPointer<SharedData> s;

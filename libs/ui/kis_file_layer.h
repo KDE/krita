@@ -84,7 +84,7 @@ Q_SIGNALS:
 private:
     QString m_basePath;
     QString m_filename;
-    ScalingMethod m_scalingMethod;
+    ScalingMethod m_scalingMethod {None};
 
     KisPaintDeviceSP m_paintDevice;
     KisSafeDocumentLoader m_loader;

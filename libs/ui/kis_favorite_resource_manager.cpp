@@ -161,8 +161,6 @@ private:
 
 KisFavoriteResourceManager::KisFavoriteResourceManager(KisPaintopBox *paintopBox)
     : m_paintopBox(paintopBox)
-    , m_colorList(0)
-    , m_initialized(false)
 {
     KisConfig cfg(true);
     m_maxPresets = cfg.favoritePresets();

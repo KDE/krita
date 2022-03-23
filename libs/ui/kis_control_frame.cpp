@@ -55,11 +55,6 @@
 KisControlFrame::KisControlFrame(KisViewManager *view, QWidget *parent, const char* name)
     : QObject(view)
     , m_viewManager(view)
-    , m_patternWidget(0)
-    , m_gradientWidget(0)
-    , m_patternChooserPopup(0)
-    , m_gradientChooserPopup(0)
-    , m_paintopBox(0)
     , m_checkersPainter(4)
 {
     setObjectName(name);

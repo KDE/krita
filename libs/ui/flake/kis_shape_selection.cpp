@@ -53,13 +53,6 @@ KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase,
     init(image, shapeControllerBase);
 }
 
-KisShapeSelection::~KisShapeSelection()
-{
-    m_model->setShapeSelection(0);
-    delete m_canvas;
-    delete m_converter;
-}
-
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
     : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
 {
@@ -79,6 +72,13 @@ KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection*
 
     m_canvas->shapeManager()->setUpdatesBlocked(false);
     m_model->setUpdatesEnabled(true);
+}
+
+KisShapeSelection::~KisShapeSelection()
+{
+    m_model->setShapeSelection(0);
+    delete m_canvas;
+    delete m_converter;
 }
 
 void KisShapeSelection::init(KisImageSP image, KoShapeControllerBase *shapeControllerBase)

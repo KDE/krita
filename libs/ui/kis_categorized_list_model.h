@@ -254,7 +254,7 @@ protected:
     }
 
 private:
-    TModel *m_model;
+    TModel *m_model {nullptr};
 };
 
 #endif /* __KIS_CATEGORIZED_LIST_MODEL_H */

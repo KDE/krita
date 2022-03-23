@@ -52,16 +52,15 @@ private:
 class KoDocumentInfoDlg::KoDocumentInfoDlgPrivate
 {
 public:
-    KoDocumentInfoDlgPrivate() :
-        documentSaved(false) {}
+    KoDocumentInfoDlgPrivate() {}
     ~KoDocumentInfoDlgPrivate() {}
 
-    KoDocumentInfo* info;
+    KoDocumentInfo* info {nullptr};
     QList<KPageWidgetItem*> pages;
-    Ui::KoDocumentInfoAboutWidget* aboutUi;
-    Ui::KoDocumentInfoAuthorWidget* authorUi;
+    Ui::KoDocumentInfoAboutWidget* aboutUi {nullptr};
+    Ui::KoDocumentInfoAuthorWidget* authorUi {nullptr};
 
-    bool documentSaved;
+    bool documentSaved {false};
 };
 
 

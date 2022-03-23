@@ -31,17 +31,15 @@
 class Q_DECL_HIDDEN KisActionManager::Private {
 
 public:
-    Private()
-        : viewManager(0)
-    {}
+    Private() {}
 
     ~Private()
     {
         qDeleteAll(uiRegistry.values());
     }
 
-    KisViewManager* viewManager;
-    KActionCollection *actionCollection;
+    KisViewManager* viewManager {nullptr};
+    KActionCollection *actionCollection {nullptr};
 
     QList<QPointer<KisAction>> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;

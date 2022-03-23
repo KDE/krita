@@ -37,7 +37,6 @@ KisCanvasResourceProvider::KisCanvasResourceProvider(KisViewManager * view)
     : m_view(view),
       m_presetShadowUpdater(view)
 {
-    m_fGChanged = true;
 }
 
 KisCanvasResourceProvider::~KisCanvasResourceProvider()

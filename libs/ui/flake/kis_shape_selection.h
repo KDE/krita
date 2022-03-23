@@ -100,10 +100,10 @@ private:
 
     KisImageWSP m_image;
     QPainterPath m_outline;
-    KisImageViewConverter *m_converter;
-    KisShapeSelectionCanvas *m_canvas;
+    KisImageViewConverter *m_converter {nullptr};
+    KisShapeSelectionCanvas *m_canvas {nullptr};
     KisShapeSelectionModel *m_model;
-    KoShapeControllerBase *m_shapeControllerBase;
+    KoShapeControllerBase *m_shapeControllerBase {nullptr};
     friend class KisShapeSelectionModel;
 };
 

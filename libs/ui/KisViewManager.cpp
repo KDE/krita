@@ -153,20 +153,6 @@ public:
 
     KisViewManagerPrivate(KisViewManager *_q, KActionCollection *_actionCollection, QWidget *_q_parent)
         : filterManager(_q)
-        , createTemplate(0)
-        , saveIncremental(0)
-        , saveIncrementalBackup(0)
-        , openResourcesDirectory(0)
-        , rotateCanvasRight(0)
-        , rotateCanvasLeft(0)
-        , resetCanvasRotation(0)
-        , wrapAroundAction(0)
-        , levelOfDetailAction(0)
-        , showRulersAction(0)
-        , rulersTrackMouseAction(0)
-        , zoomTo100pct(0)
-        , zoomIn(0)
-        , zoomOut(0)
         , selectionManager(_q)
         , statusBar(_q)
         , controlFrame(_q, _q_parent)
@@ -176,43 +162,38 @@ public:
         , canvasControlsManager(_q)
         , paintingAssistantsManager(_q)
         , actionManager(_q, _actionCollection)
-        , mainWindow(0)
-        , showFloatingMessage(true)
-        , currentImageView(0)
         , canvasResourceProvider(_q)
         , canvasResourceManager()
         , guiUpdateCompressor(30, KisSignalCompressor::POSTPONE, _q)
         , actionCollection(_actionCollection)
         , mirrorManager(_q)
         , inputManager(_q)
-        , actionAuthor(0)
-        , showPixelGrid(0)
     {
         KisViewManager::initializeResourceManager(&canvasResourceManager);
     }
 
 public:
     KisFilterManager filterManager;
-    KisAction *createTemplate;
-    KisAction *createCopy;
-    KisAction *saveIncremental;
-    KisAction *saveIncrementalBackup;
-    KisAction *openResourcesDirectory;
-    KisAction *rotateCanvasRight;
-    KisAction *rotateCanvasLeft;
-    KisAction *resetCanvasRotation;
-    KisAction *wrapAroundAction;
-    KisAction *levelOfDetailAction;
-    KisAction *showRulersAction;
-    KisAction *rulersTrackMouseAction;
-    KisAction *zoomTo100pct;
-    KisAction *zoomIn;
-    KisAction *zoomOut;
-    KisAction *toggleZoomToFit;
-    KisAction *softProof;
-    KisAction *gamutCheck;
-    KisAction *toggleFgBg;
-    KisAction *resetFgBg;
+    KisAction *createTemplate {nullptr};
+    KisAction *createCopy {nullptr};
+    KisAction *saveIncremental {nullptr};
+    KisAction *saveIncrementalBackup {nullptr};
+    KisAction *openResourcesDirectory {nullptr};
+    KisAction *rotateCanvasRight {nullptr};
+    KisAction *rotateCanvasLeft {nullptr};
+    KisAction *resetCanvasRotation {nullptr};
+    KisAction *wrapAroundAction {nullptr};
+    KisAction *levelOfDetailAction {nullptr};
+    KisAction *showRulersAction {nullptr};
+    KisAction *rulersTrackMouseAction {nullptr};
+    KisAction *zoomTo100pct {nullptr};
+    KisAction *zoomIn {nullptr};
+    KisAction *zoomOut {nullptr};
+    KisAction *toggleZoomToFit {nullptr};
+    KisAction *softProof {nullptr};
+    KisAction *gamutCheck {nullptr};
+    KisAction *toggleFgBg {nullptr};
+    KisAction *resetFgBg {nullptr};
 
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
@@ -230,20 +211,20 @@ public:
     KisDecorationsManager paintingAssistantsManager;
     BlockingUserInputEventFilter blockingEventFilter;
     KisActionManager actionManager;
-    QMainWindow* mainWindow;
+    QMainWindow* mainWindow {nullptr};
     QPointer<KisFloatingMessage> savedFloatingMessage;
-    bool showFloatingMessage;
+    bool showFloatingMessage {true};
     QPointer<KisView> currentImageView;
     KisCanvasResourceProvider canvasResourceProvider;
     KoCanvasResourceProvider canvasResourceManager;
     KisSignalCompressor guiUpdateCompressor;
-    KActionCollection *actionCollection;
+    KActionCollection *actionCollection {nullptr};
     KisMirrorManager mirrorManager;
     KisInputManager inputManager;
 
     KisSignalAutoConnectionsStore viewConnections;
-    KSelectAction *actionAuthor; // Select action for author profile.
-    KisAction *showPixelGrid;
+    KSelectAction *actionAuthor {nullptr}; // Select action for author profile.
+    KisAction *showPixelGrid {nullptr};
 
     QByteArray canvasState;
 #if QT_VERSION < QT_VERSION_CHECK(5, 10, 0)

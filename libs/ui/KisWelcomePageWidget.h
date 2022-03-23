@@ -80,7 +80,7 @@ private:
     void updateVersionUpdaterFrame();
 #endif
 
-    KisMainWindow *m_mainWindow;
+    KisMainWindow *m_mainWindow {nullptr};
 
     /// help us see how many people are clicking startup screen links
     /// you can see the results in Matomo (stats.kde.org)
@@ -103,8 +103,8 @@ private:
 
 #ifdef Q_OS_ANDROID
 public:
-    static QPushButton* donationLink;
-    static QLabel* donationBannerImage;
+    static QPushButton* donationLink {nullptr};
+    static QLabel* donationBannerImage {nullptr};
 #endif
     QScopedPointer<RecentItemDelegate> recentItemDelegate;
 

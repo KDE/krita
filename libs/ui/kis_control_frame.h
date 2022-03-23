@@ -60,23 +60,23 @@ private:
 
 private:
 
-    KisViewManager *m_viewManager;
+    KisViewManager *m_viewManager {nullptr};
 
-    QTabWidget *m_gradientTab;
-    QTabWidget *m_patternsTab;
+    QTabWidget *m_gradientTab {nullptr};
+    QTabWidget *m_patternsTab {nullptr};
 
-    KisIconWidget *m_patternWidget;
-    KisIconWidget *m_gradientWidget;
+    KisIconWidget *m_patternWidget {nullptr};
+    KisIconWidget *m_gradientWidget {nullptr};
 
-    QWidget *m_patternChooserPopup;
-    QWidget *m_gradientChooserPopup;
+    QWidget *m_patternChooserPopup {nullptr};
+    QWidget *m_gradientChooserPopup {nullptr};
 
-    KisGradientChooser *m_gradientChooser;
-    KisPatternChooser *m_patternChooser;
+    KisGradientChooser *m_gradientChooser {nullptr};
+    KisPatternChooser *m_patternChooser {nullptr};
 
-    KisPaintopBox *m_paintopBox;
+    KisPaintopBox *m_paintopBox {nullptr};
 
-    KoDualColorButton *m_dual;
+    KoDualColorButton *m_dual {nullptr};
     KoCheckerBoardPainter m_checkersPainter;
 
 };

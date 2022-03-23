@@ -186,9 +186,9 @@ Q_SIGNALS:
 
 private:
 
-    KisViewManager * m_view;
-    KoCanvasResourceProvider *m_resourceManager;
-    bool m_fGChanged;
+    KisViewManager * m_view {nullptr};
+    KoCanvasResourceProvider *m_resourceManager {nullptr};
+    bool m_fGChanged {true};
     QList<QPointer<KisAbstractPerspectiveGrid> > m_perspectiveGrids;
     KisPresetShadowUpdater m_presetShadowUpdater;
 };

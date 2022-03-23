@@ -40,10 +40,10 @@ private:
 
     QPointer<KisView> m_imageView;
 
-    KisAction *m_toggleAssistant;
-    KisAction *m_togglePreview;
+    KisAction *m_toggleAssistant {nullptr};
+    KisAction *m_togglePreview {nullptr};
 
-    KisAction *m_toggleReferenceImages;
+    KisAction *m_toggleReferenceImages {nullptr};
 };
 
 #endif // KIS_PAINTING_ASSISTANTS_MANAGER_H

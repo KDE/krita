@@ -134,7 +134,7 @@ private:
 
     ErrorFieldUsed errorFieldUsed;
 
-    ImportExportCodes::ErrorCodeID codeId;
+    ImportExportCodes::ErrorCodeID codeId {ImportExportCodes::OK};
     KisImportExportErrorCannotRead cannotRead;
     KisImportExportErrorCannotWrite cannotWrite;
 };

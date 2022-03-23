@@ -54,20 +54,20 @@ public:
     { }
 
     KisTemplateTree m_tree;
-    QLineEdit *m_name;
-    QRadioButton *m_default;
-    QRadioButton *m_custom;
-    QPushButton *m_select;
-    QLabel *m_preview;
+    QLineEdit *m_name {nullptr};
+    QRadioButton *m_default {nullptr};
+    QRadioButton *m_custom {nullptr};
+    QPushButton *m_select {nullptr};
+    QLabel *m_preview {nullptr};
     QString m_customFile;
     QPixmap m_customPixmap;
-    QTreeWidget *m_groups;
-    QPushButton *m_add;
-    QPushButton *m_remove;
-    QCheckBox *m_defaultTemplate;
+    QTreeWidget *m_groups {nullptr};
+    QPushButton *m_add {nullptr};
+    QPushButton *m_remove {nullptr};
+    QCheckBox *m_defaultTemplate {nullptr};
     QString m_filePath;
     QPixmap m_thumbnail;
-    bool m_changed;
+    bool m_changed {false};
 };
 
 

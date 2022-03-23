@@ -82,8 +82,8 @@ public:
     }
 
 private:
-    int m_sortWeight;
-    int m_widgetIndex;
+    int m_sortWeight {0};
+    int m_widgetIndex {-1};
     QString m_untranslatedName;
 };
 
@@ -91,12 +91,11 @@ class KisOpenPanePrivate : public Ui_KisOpenPaneBase
 {
 public:
     KisOpenPanePrivate() :
-        Ui_KisOpenPaneBase() {
-        m_templatesSeparator = 0;
-    }
+        Ui_KisOpenPaneBase()
+    { }
 
-    int m_freeCustomWidgetIndex;
-    KoSectionListItem* m_templatesSeparator;
+    int m_freeCustomWidgetIndex {0};
+    KoSectionListItem* m_templatesSeparator {nullptr};
 
 
 };

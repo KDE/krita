@@ -215,10 +215,10 @@ public:
         qDeleteAll(toolbarList);
     }
 
-    KisMainWindow *q {0};
+    KisMainWindow *q {nullptr};
     QUuid id;
 
-    KisViewManager *viewManager {0};
+    KisViewManager *viewManager {nullptr};
 
     QPointer<KisView> activeView;
 
@@ -227,47 +227,47 @@ public:
     bool firstTime {true};
     bool windowSizeDirty {false};
 
-    KisAction *showDocumentInfo {0};
-    KisAction *saveAction {0};
-    KisAction *saveActionAs {0};
-    KisAction *importAnimation {0};
-    KisAction *importVideoAnimation {0};
-    KisAction *renderAnimation {0};
-    KisAction *renderAnimationAgain {0};
-    KisAction *closeAll {0};
-    KisAction *importFile {0};
-    KisAction *exportFile {0};
-    KisAction *exportFileAdvance {0};
-    KisAction *undo {0};
-    KisAction *redo {0};
-    KisAction *newWindow {0};
-    KisAction *close {0};
-    KisAction *mdiCascade {0};
-    KisAction *mdiTile {0};
-    KisAction *mdiNextWindow {0};
-    KisAction *mdiPreviousWindow {0};
-    KisAction *toggleDockers {0};
-    KisAction *resetConfigurations {0};
-    KisAction *toggleDockerTitleBars {0};
-    KisAction *toggleDetachCanvas {0};
-    KisAction *fullScreenMode {0};
-    KisAction *showSessionManager {0};
-    KisAction *commandBarAction {0};
+    KisAction *showDocumentInfo {nullptr};
+    KisAction *saveAction {nullptr};
+    KisAction *saveActionAs {nullptr};
+    KisAction *importAnimation {nullptr};
+    KisAction *importVideoAnimation {nullptr};
+    KisAction *renderAnimation {nullptr};
+    KisAction *renderAnimationAgain {nullptr};
+    KisAction *closeAll {nullptr};
+    KisAction *importFile {nullptr};
+    KisAction *exportFile {nullptr};
+    KisAction *exportFileAdvance {nullptr};
+    KisAction *undo {nullptr};
+    KisAction *redo {nullptr};
+    KisAction *newWindow {nullptr};
+    KisAction *close {nullptr};
+    KisAction *mdiCascade {nullptr};
+    KisAction *mdiTile {nullptr};
+    KisAction *mdiNextWindow {nullptr};
+    KisAction *mdiPreviousWindow {nullptr};
+    KisAction *toggleDockers {nullptr};
+    KisAction *resetConfigurations {nullptr};
+    KisAction *toggleDockerTitleBars {nullptr};
+    KisAction *toggleDetachCanvas {nullptr};
+    KisAction *fullScreenMode {nullptr};
+    KisAction *showSessionManager {nullptr};
+    KisAction *commandBarAction {nullptr};
     KisAction *expandingSpacers[2];
 
-    KActionMenu *styleMenu;
-    QActionGroup* styleActions;
+    KActionMenu *styleMenu {nullptr};
+    QActionGroup* styleActions {nullptr};
     QMap<QString, QAction*> actionMap;
 
-    KActionMenu *dockWidgetMenu;
-    KActionMenu *windowMenu;
-    KActionMenu *documentMenu;
-    KActionMenu *workspaceMenu;
+    KActionMenu *dockWidgetMenu {nullptr};
+    KActionMenu *windowMenu {nullptr};
+    KActionMenu *documentMenu {nullptr};
+    KActionMenu *workspaceMenu {nullptr};
 
-    KHelpMenu *helpMenu  {0};
+    KHelpMenu *helpMenu  {nullptr};
 
-    KRecentFilesAction *recentFiles {0};
-    KisResourceModel *workspacemodel {0};
+    KRecentFilesAction *recentFiles {nullptr};
+    KisResourceModel *workspacemodel {nullptr};
 
     QScopedPointer<KisUndoActionsUpdateManager> undoActionsUpdateManager;
 
@@ -275,23 +275,23 @@ public:
 
     QMap<QString, QDockWidget *> dockWidgetsMap;
     QByteArray dockerStateBeforeHiding;
-    KoToolDocker *toolOptionsDocker {0};
+    KoToolDocker *toolOptionsDocker {nullptr};
 
-    QCloseEvent *deferredClosingEvent {0};
+    QCloseEvent *deferredClosingEvent {nullptr};
 
-    Digikam::ThemeManager *themeManager {0};
+    Digikam::ThemeManager *themeManager {nullptr};
 
-    QScrollArea *welcomeScroller {0};
-    KisWelcomePageWidget *welcomePage {0};
+    QScrollArea *welcomeScroller {nullptr};
+    KisWelcomePageWidget *welcomePage {nullptr};
 
 
-    QStackedWidget *widgetStack {0};
+    QStackedWidget *widgetStack {nullptr};
 
-    QMdiArea *mdiArea;
-    QMdiSubWindow *activeSubWindow  {0};
-    KisSignalMapper *windowMapper;
-    KisSignalMapper *documentMapper;
-    KisCanvasWindow *canvasWindow {0};
+    QMdiArea *mdiArea {nullptr};
+    QMdiSubWindow *activeSubWindow  {nullptr};
+    KisSignalMapper *windowMapper {nullptr};
+    KisSignalMapper *documentMapper {nullptr};
+    KisCanvasWindow *canvasWindow {nullptr};
 
     QByteArray lastExportedFormat;
     QScopedPointer<KisSignalCompressorWithParam<int> > tabSwitchCompressor;
@@ -302,7 +302,7 @@ public:
     QUuid workspaceBorrowedBy;
     KisSignalAutoConnectionsStore screenConnectionsStore;
 
-    KateCommandBar *commandBar {0};
+    KateCommandBar *commandBar {nullptr};
 
     KisActionManager * actionManager() {
         return viewManager->actionManager();

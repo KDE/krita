@@ -90,12 +90,32 @@ bool KisImportExportErrorCannotWrite::operator==(KisImportExportErrorCannotWrite
 
 
 
-KisImportExportErrorCode::KisImportExportErrorCode() : errorFieldUsed(None), cannotRead(), cannotWrite() { }
+KisImportExportErrorCode::KisImportExportErrorCode()
+    : errorFieldUsed(None)
+    , cannotRead()
+    , cannotWrite()
+{ }
 
-KisImportExportErrorCode::KisImportExportErrorCode(ImportExportCodes::ErrorCodeID id) : errorFieldUsed(CodeId), codeId(id),  cannotRead(), cannotWrite() { }
+KisImportExportErrorCode::KisImportExportErrorCode(ImportExportCodes::ErrorCodeID id)
+    : errorFieldUsed(CodeId)
+    , codeId(id)
+    , cannotRead()
+    , cannotWrite()
+{ }
 
-KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead error) : errorFieldUsed(CannotRead), cannotRead(error), cannotWrite() { }
-KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite error) : errorFieldUsed(CannotWrite), cannotRead(), cannotWrite(error) { }
+KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotRead error)
+    : errorFieldUsed(CannotRead)
+    , codeId(ImportExportCodes::Failure)
+    , cannotRead(error)
+    , cannotWrite()
+{ }
+
+KisImportExportErrorCode::KisImportExportErrorCode(KisImportExportErrorCannotWrite error)
+    : errorFieldUsed(CannotWrite)
+    , codeId(ImportExportCodes::Failure)
+    , cannotRead()
+    , cannotWrite(error)
+{ }
 
 
 bool KisImportExportErrorCode::isOk() const

@@ -80,7 +80,7 @@ struct KisPresetShadowUpdater::Private
     {
     }
 
-    KisViewManager *view;
+    KisViewManager *view {nullptr};
 
     KisPaintOpPresetSP currentPreset;
     QPointer<KisPaintOpPresetUpdateProxy> currentUpdateProxy;
@@ -88,7 +88,7 @@ struct KisPresetShadowUpdater::Private
     KisSignalAutoConnectionsStore proxyConnections;
     KisSignalCompressor updateStartCompressor;
 
-    int sequenceNumber = 0;
+    int sequenceNumber {0};
 
 };
 

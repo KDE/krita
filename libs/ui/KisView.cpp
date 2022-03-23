@@ -115,28 +115,28 @@ public:
     {
     }
 
-    bool inOperation; //in the middle of an operation (no screen refreshing)?
+    bool inOperation {false}; //in the middle of an operation (no screen refreshing)?
 
     QPointer<KisDocument> document; // our KisDocument
-    QWidget *tempActiveWidget = 0;
+    QWidget *tempActiveWidget {nullptr};
 
-    KActionCollection* actionCollection;
+    KActionCollection* actionCollection {nullptr};
     KisCoordinatesConverter viewConverter;
     KisCanvasController canvasController;
     KisCanvas2 canvas;
     KisZoomManager zoomManager;
-    KisViewManager *viewManager = 0;
+    KisViewManager *viewManager {nullptr};
     KisNodeSP currentNode;
     KisPaintingAssistantsDecorationSP paintingAssistantsDecoration;
     KisReferenceImagesDecorationSP referenceImagesDecoration;
-    bool isCurrent = false;
-    bool showFloatingMessage = false;
+    bool isCurrent {false};
+    bool showFloatingMessage {true};
     QPointer<KisFloatingMessage> savedFloatingMessage;
     KisSignalCompressor floatingMessageCompressor;
-    QMdiSubWindow *subWindow{nullptr};
+    QMdiSubWindow *subWindow {nullptr};
 
-    bool softProofing = false;
-    bool gamutCheck = false;
+    bool softProofing {false};
+    bool gamutCheck {false};
 
     KisSynchronizedConnection<KisNodeSP> addNodeConnection;
     KisSynchronizedConnection<KisNodeSP> removeNodeConnection;

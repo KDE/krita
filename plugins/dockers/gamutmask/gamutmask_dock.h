@@ -88,22 +88,22 @@ private:
     QList<KoShape*> getShapesFromLayer();
     KisShapeLayerSP getShapeLayer();
 
-    KisCanvasResourceProvider* m_resourceProvider;
+    KisCanvasResourceProvider* m_resourceProvider {nullptr};
 
-    bool m_selfClosingTemplate;
-    bool m_externalTemplateClose;
-    bool m_creatingNewMask;
-    bool m_templatePrevSaved;
-    bool m_selfSelectingMask;
+    bool m_selfClosingTemplate {false};
+    bool m_externalTemplateClose {false};
+    bool m_creatingNewMask {false};
+    bool m_templatePrevSaved {false};
+    bool m_selfSelectingMask {false};
 
-    GamutMaskChooserUI* m_dockerUI;
-    KisResourceItemChooser* m_maskChooser;
+    GamutMaskChooserUI* m_dockerUI {nullptr};
+    KisResourceItemChooser* m_maskChooser {nullptr};
 
     KoGamutMaskSP m_selectedMask;
-    QRegExpValidator* m_maskTitleValidator;
+    QRegExpValidator* m_maskTitleValidator {nullptr};
 
-    KisDocument* m_maskDocument;
-    KisView* m_view;
+    KisDocument* m_maskDocument {nullptr};
+    KisView* m_view {nullptr};
 };
 
 

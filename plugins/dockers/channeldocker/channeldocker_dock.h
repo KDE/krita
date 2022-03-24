@@ -38,11 +38,11 @@ private Q_SLOTS:
     void updateChannelTable(void);
 
 private:
-    KisIdleWatcher* m_imageIdleWatcher;
-    KisSignalCompressor *m_compressor;
+    KisIdleWatcher* m_imageIdleWatcher {nullptr};
+    KisSignalCompressor *m_compressor {nullptr};
     QPointer<KisCanvas2> m_canvas;
-    QTableView *m_channelTable;
-    ChannelModel *m_model;
+    QTableView *m_channelTable {nullptr};
+    ChannelModel *m_model {nullptr};
 };
 
 

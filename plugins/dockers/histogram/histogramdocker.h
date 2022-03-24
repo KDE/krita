@@ -22,7 +22,7 @@ class HistogramDockerPlugin : public QObject
         HistogramDockerPlugin(QObject *parent, const QVariantList &);
         ~HistogramDockerPlugin() override;
     private:
-        KisViewManager* m_view;
+        KisViewManager* m_view {nullptr};
 };
 
 #endif

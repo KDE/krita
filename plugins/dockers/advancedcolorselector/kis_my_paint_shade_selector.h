@@ -41,13 +41,17 @@ protected:
     KisColorSelectorBase* createPopup() const override;
 
 private:
-    qreal m_colorH, m_colorS, m_colorV;
-    qreal R, G, B;
-    QTimer* m_updateTimer;
+    qreal m_colorH {0.0};
+    qreal m_colorS {0.0};
+    qreal m_colorV {0.0};
+    qreal R {0.0};
+    qreal G {0.0};
+    qreal B {0.0};
+    QTimer* m_updateTimer {nullptr};
     KoColor m_lastRealColor;
     KisPaintDeviceSP m_realPixelCache;
     KisPaintDeviceSP m_realCircleBorder;
-    const KoColorSpace *m_cachedColorSpace;
+    const KoColorSpace *m_cachedColorSpace {nullptr};
 };
 
 #endif // KIS_MY_PAINT_SHADE_SELECTOR_H

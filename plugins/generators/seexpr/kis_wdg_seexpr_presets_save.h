@@ -58,7 +58,7 @@ public Q_SLOTS:
     void renderScriptToThumbnail();
 
 private:
-    bool m_useNewPresetDialog;
+    bool m_useNewPresetDialog {false};
     KisSeExprScriptSP m_currentPreset;
     KisFilterConfigurationSP m_currentConfiguration;
 };

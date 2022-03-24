@@ -30,8 +30,8 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 
 private:
-    Ui_WdgSimplexNoiseOptions* m_widget;
-    uint seed;
+    Ui_WdgSimplexNoiseOptions* m_widget {nullptr};
+    uint seed {0};
     KisSignalCompressor updateCompressor;
 
 };

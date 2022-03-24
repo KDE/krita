@@ -58,7 +58,7 @@ public:
 
 public:
     KoColorSet *colorSet {0};
-    KoColorSet::PaletteType paletteType;
+    KoColorSet::PaletteType paletteType {UNKNOWN};
     QByteArray data;
     QString comment;
     QStringList groupNames; //names of the groups, this is used to determine the order they are in.

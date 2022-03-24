@@ -49,22 +49,22 @@ struct Q_DECL_HIDDEN KoColorSpaceRegistry::Private {
 
     Private(KoColorSpaceRegistry *_q) : q(_q) {}
 
-    KoColorSpaceRegistry *q;
+    KoColorSpaceRegistry *q {nullptr};
 
     KoGenericRegistry<KoColorSpaceFactory *> colorSpaceFactoryRegistry;
     KoColorProfileStorage profileStorage;
     QHash<QString, const KoColorSpace *> csMap;
     QScopedPointer<ConversionSystemInterface> conversionSystemInterface;
-    KoColorConversionSystem *colorConversionSystem;
-    KoColorConversionCache* colorConversionCache;
-    const KoColorSpace *rgbU8sRGB;
-    const KoColorSpace *lab16sLAB;
-    const KoColorSpace *alphaCs;
-    const KoColorSpace *alphaU16Cs;
+    KoColorConversionSystem *colorConversionSystem {nullptr};
+    KoColorConversionCache* colorConversionCache {nullptr};
+    const KoColorSpace *rgbU8sRGB {nullptr};
+    const KoColorSpace *lab16sLAB {nullptr};
+    const KoColorSpace *alphaCs {nullptr};
+    const KoColorSpace *alphaU16Cs {nullptr};
 #ifdef HAVE_OPENEXR
-    const KoColorSpace *alphaF16Cs;
+    const KoColorSpace *alphaF16Cs {nullptr};
 #endif
-    const KoColorSpace *alphaF32Cs;
+    const KoColorSpace *alphaF32Cs {nullptr};
     QReadWriteLock registrylock;
 
     /**
@@ -132,7 +132,7 @@ struct KoColorSpaceRegistry::Private::ConversionSystemInterface : public KoColor
     }
 
 private:
-    KoColorSpaceRegistry *q;
+    KoColorSpaceRegistry *q {nullptr};
 };
 
 KoColorSpaceRegistry* KoColorSpaceRegistry::instance()
@@ -862,7 +862,7 @@ struct KoColorSpaceRegistry::Private::ProfileRegistrationInterface : public KoCo
         d->colorConversionSystem->insertColorProfile(profile);
     }
 
-    KoColorSpaceRegistry::Private *d;
+    KoColorSpaceRegistry::Private *d {nullptr};
 };
 
 const KoColorProfile* KoColorSpaceRegistry::createColorProfile(const QString& colorModelId, const QString& colorDepthId, const QByteArray& rawData)

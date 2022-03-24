@@ -44,34 +44,34 @@ protected:
     bool eventFilter(QObject *o, QEvent *e) override;
 
 private:
-    static constexpr int showControlsTimerDuration{500};
+    static constexpr int showControlsTimerDuration {500};
     // Hou much the cursor has to move to prevent the showing animation
-    static constexpr double showControlsAreaRadius{4.0};
-    static constexpr double showControlsAnimationDuration{150.0};
-    static constexpr double touchDragDistance{8.0};
-    static constexpr double touchDragDistanceSquared{touchDragDistance * touchDragDistance};
+    static constexpr double showControlsAreaRadius {4.0};
+    static constexpr double showControlsAnimationDuration {150.0};
+    static constexpr double touchDragDistance {8.0};
+    static constexpr double touchDragDistanceSquared {touchDragDistance * touchDragDistance};
 
-    QVBoxLayout *m_controlsLayout;
-    QHBoxLayout *m_controlsSecondRowLayout;
-    QWidget *m_page;
-    OverviewWidget *m_overviewWidget;
-    QWidget *m_controlsContainer;
-    QWidget *m_zoomSlider;
-    KisAngleSelector *m_rotateAngleSelector;
-    QToolButton *m_mirrorCanvas;
-    QToolButton *m_pinControlsButton;
+    QVBoxLayout *m_controlsLayout {nullptr};
+    QHBoxLayout *m_controlsSecondRowLayout {nullptr};
+    QWidget *m_page {nullptr};
+    OverviewWidget *m_overviewWidget {nullptr};
+    QWidget *m_controlsContainer {nullptr};
+    QWidget *m_zoomSlider {nullptr};
+    KisAngleSelector *m_rotateAngleSelector {nullptr};
+    QToolButton *m_mirrorCanvas {nullptr};
+    QToolButton *m_pinControlsButton {nullptr};
     QPointer<KisCanvas2> m_canvas;
-    bool m_pinControls;
-    bool m_cursorIsHover;
-    bool m_isTouching;
-    bool m_isDraggingWithTouch;
-    int m_touchPointId;
+    bool m_pinControls {true};
+    bool m_cursorIsHover {false};
+    bool m_isTouching {false};
+    bool m_isDraggingWithTouch {false};
+    int m_touchPointId {0};
     QPointF m_lastTouchPos;
     mutable QVariantAnimation m_showControlsAnimation;
     mutable QTimer m_showControlsTimer;
-    mutable bool m_areControlsHidden;
+    mutable bool m_areControlsHidden {false};
     QPointF m_lastOverviewMousePos;
-    double m_cumulatedMouseDistanceSquared;
+    double m_cumulatedMouseDistanceSquared {0.0};
 
     void layoutMainWidgets();
 

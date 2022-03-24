@@ -55,16 +55,16 @@ public:
 
     OCIO::ConstConfigRcPtr config;
 
-    const char *inputColorSpaceName;
-    const char *displayDevice;
-    const char *view;
-    const char *look;
-    OCIO_CHANNEL_SWIZZLE swizzle;
-    float exposure;
-    float gamma;
-    float blackPoint;
-    float whitePoint;
-    bool forceInternalColorManagement;
+    const char *inputColorSpaceName {nullptr};
+    const char *displayDevice {nullptr};
+    const char *view {nullptr};
+    const char *look {nullptr};
+    OCIO_CHANNEL_SWIZZLE swizzle {RGBA};
+    float exposure {0.0};
+    float gamma {0.0};
+    float blackPoint {0.0};
+    float whitePoint {0.0};
+    bool forceInternalColorManagement {false};
 
 private:
 
@@ -72,17 +72,17 @@ private:
     OCIO::ConstProcessorRcPtr m_revereseApproximationProcessor;
     OCIO::ConstProcessorRcPtr m_forwardApproximationProcessor;
 
-    KisExposureGammaCorrectionInterface *m_interface;
+    KisExposureGammaCorrectionInterface *m_interface {nullptr};
 
-    bool m_lockCurrentColorVisualRepresentation;
+    bool m_lockCurrentColorVisualRepresentation {false};
 
     QString m_program;
-    GLuint m_lut3dTexID;
+    GLuint m_lut3dTexID {0};
     QVector<float> m_lut3d;
     QString m_lut3dcacheid;
     QString m_shadercacheid;
 
-    bool m_shaderDirty;
+    bool m_shaderDirty {true};
 };
 
 #endif // OCIO_DISPLAY_FILTER_H

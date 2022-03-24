@@ -67,7 +67,7 @@ public:
     {
     }
 
-    TouchDockerDock *q;
+    TouchDockerDock *q {nullptr};
     bool allowClose {true};
     KisSketchView *sketchView {0};
     QString currentSketchPage;

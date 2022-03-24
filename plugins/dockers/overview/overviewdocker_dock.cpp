@@ -36,16 +36,7 @@
 
 OverviewDockerDock::OverviewDockerDock()
     : QDockWidget(i18n("Overview"))
-    , m_zoomSlider(nullptr)
-    , m_rotateAngleSelector(nullptr)
-    , m_mirrorCanvas(nullptr)
-    , m_pinControlsButton(nullptr)
-    , m_canvas(nullptr)
-    , m_cursorIsHover(false)
-    , m_isTouching(false)
-    , m_isDraggingWithTouch(false)
     , m_lastOverviewMousePos(0.0, 0.0)
-    , m_cumulatedMouseDistanceSquared(0.0)
 {
     m_page = new QWidget(this);
 

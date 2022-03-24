@@ -38,14 +38,7 @@
 
 OcioDisplayFilter::OcioDisplayFilter(KisExposureGammaCorrectionInterface *interface, QObject *parent)
     : KisDisplayFilter(parent)
-    , inputColorSpaceName(0)
-    , displayDevice(0)
-    , view(0)
-    , look(0)
-    , swizzle(RGBA)
     , m_interface(interface)
-    , m_lut3dTexID(0)
-    , m_shaderDirty(true)
 {
 }
 

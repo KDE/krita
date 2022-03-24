@@ -22,7 +22,7 @@ class PresetDockerPlugin : public QObject
         PresetDockerPlugin(QObject *parent, const QVariantList &);
         ~PresetDockerPlugin() override;
     private:
-        KisViewManager* m_view;
+        KisViewManager* m_view {nullptr};
 };
 
 #endif

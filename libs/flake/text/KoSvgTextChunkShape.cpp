@@ -181,7 +181,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         int result = 0;
 
         if (!q->shapeCount()) {
-            result = q->s->text.size();
+            result = q->s->text.toUtf8().size();
         } else {
             Q_FOREACH (KoShape *shape, q->shapes()) {
                 KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
@@ -337,10 +337,13 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                     if (i < transforms.size()) {
                         transform = transforms[i];
 
-                        if (!textInPath && horizontal) {
+                        if (!textInPath) {
                             newtransform.xPos = transform.xPos;
-                        } else if (!textInPath && horizontal) {
                             newtransform.yPos = transform.yPos;
+                        } else if (horizontal) {
+                            newtransform.yPos = transform.yPos;
+                        } else {
+                            newtransform.xPos = transform.xPos;
                         }
                         newtransform.dxPos = transform.dxPos;
                         newtransform.dyPos = transform.dyPos;

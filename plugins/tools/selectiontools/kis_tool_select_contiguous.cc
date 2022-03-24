@@ -284,6 +284,11 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
         useSelectionAsBoundary->setChecked(m_configGroup.readEntry("useSelectionAsBoundary", false));
 
+        // manually set up all variables in case there were no signals when setting value
+        m_fuzziness = input->value();
+        m_sizemod = sizemod->value();
+        m_feather = feather->value();
+        m_useSelectionAsBoundary = useSelectionAsBoundary->isChecked();
     }
     return selectionWidget;
 }

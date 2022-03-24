@@ -61,14 +61,14 @@ private:
     QString constructMetadata(QMap<QString, QVariant> metadata, QString resourceType);
 
 private:
-    QWidget *m_page;
+    QWidget *m_page {nullptr};
     QScopedPointer<Ui::WdgDlgResourceManager> m_ui;
-    KisActionManager *m_actionManager;
+    KisActionManager *m_actionManager {nullptr};
     KisResourceTypeModel *m_resourceTypeModel {0};
     KisStorageModel *m_storageModel {0};
     QMap<QString, KisTagModel*> m_tagModelsForResourceType;
 
-    KisResourceModel *m_resourceModel;
+    KisResourceModel *m_resourceModel {nullptr};
     QMap<QString, KisTagFilterResourceProxyModel*> m_resourceProxyModelsForResourceType;
 
     QScopedPointer<KisWdgTagSelectionControllerOneResource> m_tagsController;

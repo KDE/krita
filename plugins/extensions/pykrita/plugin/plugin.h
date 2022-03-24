@@ -21,8 +21,8 @@ public:
     KritaPyQtPlugin(QObject *parent, const QVariantList &);
     virtual ~KritaPyQtPlugin();
 private:
-    PythonPluginManager *pluginManager;
-    bool m_autoReload;
+    PythonPluginManager *pluginManager {nullptr};
+    bool m_autoReload {false};
 };
 
 #endif

@@ -37,11 +37,11 @@
 // LEVELS
 // Level record
 struct KRITAPSD_EXPORT psd_layer_level_record {
-    quint16 input_floor; // (0...253)
-    quint16 input_ceiling; // (2...255)
-    quint16 output_floor; // 255). Matched to input floor.
-    quint16 output_ceiling; // (0...255)
-    float gamma; // Short integer from 10...999 representing 0.1...9.99. Applied to all image data.
+    quint16 input_floor {0}; // (0...253)
+    quint16 input_ceiling {2}; // (2...255)
+    quint16 output_floor {0}; // 255). Matched to input floor.
+    quint16 output_ceiling {0}; // (0...255)
+    float gamma {0.0}; // Short integer from 10...999 representing 0.1...9.99. Applied to all image data.
 };
 
 // Levels settings files are loaded and saved in the Levels dialog.
@@ -49,34 +49,34 @@ struct KRITAPSD_EXPORT psd_layer_levels {
     psd_layer_level_record record[29]; // 29 sets of level records, each level containing 5 qint8 integers
     // Photoshop CS (8.0) Additional information
     // At the end of the Version 2 file is the following information:
-    quint16 extra_level_count; // Count of total level record structures. Subtract the legacy number of level record structures, 29, to determine how many are
+    quint16 extra_level_count {0}; // Count of total level record structures. Subtract the legacy number of level record structures, 29, to determine how many are
                                // remaining in the file for reading.
-    psd_layer_level_record *extra_record; // Additianol level records according to count
+    psd_layer_level_record *extra_record {nullptr}; // Additianol level records according to count
     quint8 lookup_table[3][256];
 };
 
 // CURVES
 // The following is the data for each curve specified by count above
 struct KRITAPSD_EXPORT psd_layer_curves_data {
-    quint16 channel_index; // Before each curve is a channel index.
-    quint16 point_count; // Count of points in the curve (qint8 integer from 2...19)
+    quint16 channel_index {0}; // Before each curve is a channel index.
+    quint16 point_count {0}; // Count of points in the curve (qint8 integer from 2...19)
     quint16 output_value[19]; // All coordinates have range 0 to 255
     quint16 input_value[19];
 };
 
 // Curves file format
 struct KRITAPSD_EXPORT psd_layer_curves {
-    quint16 curve_count; // Count of curves in the file.
-    psd_layer_curves_data *curve;
+    quint16 curve_count {0}; // Count of curves in the file.
+    psd_layer_curves_data *curve {nullptr};
     quint8 lookup_table[3][256];
 };
 
 // BRIGHTNESS AND CONTRAST
 struct KRITAPSD_EXPORT psd_layer_brightness_contrast {
-    qint8 brightness;
-    qint8 contrast;
-    qint8 mean_value; // for brightness and contrast
-    qint8 Lab_color;
+    qint8 brightness {0};
+    qint8 contrast {0};
+    qint8 mean_value {0}; // for brightness and contrast
+    qint8 Lab_color {0};
     quint8 lookup_table[256];
 };
 
@@ -85,22 +85,22 @@ struct KRITAPSD_EXPORT psd_layer_color_balance {
     qint8 cyan_red[3]; // (-100...100). shadows, midtones, highlights
     qint8 magenta_green[3];
     qint8 yellow_blue[3];
-    bool preserve_luminosity;
+    bool preserve_luminosity {false};
     quint8 lookup_table[3][256];
 };
 
 // HUE/SATURATION
 // Hue/Saturation settings files are loaded and saved in Photoshop¡¯s Hue/Saturation dialog
 struct KRITAPSD_EXPORT psd_layer_hue_saturation {
-    quint8 hue_or_colorization; // 0 = Use settings for hue-adjustment; 1 = Use settings for colorization.
-    qint8 colorization_hue; // Photoshop 5.0: The actual values are stored for the new version. Hue is - 180...180, Saturation is 0...100, and Lightness is
+    quint8 hue_or_colorization {0}; // 0 = Use settings for hue-adjustment; 1 = Use settings for colorization.
+    qint8 colorization_hue {0}; // Photoshop 5.0: The actual values are stored for the new version. Hue is - 180...180, Saturation is 0...100, and Lightness is
                             // -100...100.
-    qint8 colorization_saturation; // Photoshop 4.0: Three qint8 integers Hue, Saturation, and Lightness from ¨C100...100.
-    qint8 colorization_lightness; // The user interface represents hue as ¨C180...180, saturation as 0...100, and Lightness as -100...1000, as the traditional
+    qint8 colorization_saturation {0}; // Photoshop 4.0: Three qint8 integers Hue, Saturation, and Lightness from ¨C100...100.
+    qint8 colorization_lightness {0}; // The user interface represents hue as ¨C180...180, saturation as 0...100, and Lightness as -100...1000, as the traditional
                                   // HSB color wheel, with red = 0.
-    qint8 master_hue; // Master hue, saturation and lightness values.
-    qint8 master_saturation;
-    qint8 master_lightness;
+    qint8 master_hue {0}; // Master hue, saturation and lightness values.
+    qint8 master_saturation {0};
+    qint8 master_lightness {0};
     qint8 range_values[6][4]; // For RGB and CMYK, those values apply to each of the six hextants in the HSB color wheel: those image pixels nearest to red,
                               // yellow, green, cyan, blue, or magenta. These numbers appear in the user interface from ¨C60...60, however the slider will
                               // reflect each of the possible 201 values from ¨C100...100.
@@ -112,7 +112,7 @@ struct KRITAPSD_EXPORT psd_layer_hue_saturation {
 // SELECTIVE COLOR
 // Selective Color settings files are loaded and saved in Photoshop¡¯s Selective Color dialog.
 struct KRITAPSD_EXPORT psd_layer_selective_color {
-    quint16 correction_method; // 0 = Apply color correction in relative mode; 1 = Apply color correction in absolute mode.
+    quint16 correction_method {0}; // 0 = Apply color correction in relative mode; 1 = Apply color correction in absolute mode.
     qint8 cyan_correction[10]; // Amount of cyan correction. Short integer from ¨C100...100.
     qint8 magenta_correction[10]; // Amount of magenta correction. Short integer from ¨C100...100.
     qint8 yellow_correction[10]; // Amount of yellow correction. Short integer from ¨C100...100.
@@ -121,7 +121,7 @@ struct KRITAPSD_EXPORT psd_layer_selective_color {
 
 // THRESHOLD
 struct KRITAPSD_EXPORT psd_layer_threshold {
-    quint16 level; // (1...255)
+    quint16 level {1}; // (1...255)
 };
 
 // INVERT
@@ -129,13 +129,13 @@ struct KRITAPSD_EXPORT psd_layer_threshold {
 
 // POSTERIZE
 struct KRITAPSD_EXPORT psd_layer_posterize {
-    quint16 levels; // (2...255)
+    quint16 levels {2}; // (2...255)
     quint8 lookup_table[256];
 };
 
 // CHANNEL MIXER
 struct KRITAPSD_EXPORT psd_layer_channel_mixer {
-    bool monochrome;
+    bool monochrome {false};
     qint8 red_cyan[4]; // RGB or CMYK color plus constant for the mixer settings. 4 * 2 bytes of color with 2 bytes of constant.
     qint8 green_magenta[4]; // (-200...200)
     qint8 blue_yellow[4];
@@ -145,18 +145,18 @@ struct KRITAPSD_EXPORT psd_layer_channel_mixer {
 
 // PHOTO FILTER
 struct KRITAPSD_EXPORT psd_layer_photo_filter {
-    qint32 x_color; // 4 bytes each for XYZ color
-    qint32 y_color;
-    qint32 z_color;
-    qint32 density; // (1...100)
-    bool preserve_luminosity;
+    qint32 x_color {0}; // 4 bytes each for XYZ color
+    qint32 y_color {0};
+    qint32 z_color {0};
+    qint32 density {0}; // (1...100)
+    bool preserve_luminosity {true};
 };
 
 #include <kis_psd_layer_style.h>
 
 struct KRITAPSD_EXPORT psd_layer_solid_color {
     KoColor fill_color;
-    const KoColorSpace *cs;
+    const KoColorSpace *cs {nullptr};
 
     // Used by ASL callback;
     void setColor(const KoColor &color) {
@@ -200,17 +200,17 @@ struct KRITAPSD_EXPORT psd_layer_solid_color {
 };
 
 struct KRITAPSD_EXPORT psd_layer_gradient_fill {
-    double angle = 0.0;
-    QString style = QString("linear");
-    QString repeat = QString("none");
-    double scale = 100.0;
-    bool reverse = false; // Is gradient reverse
-    bool dithered = false; // Is gradient dithered
-    bool align_with_layer = false;
+    double angle {0.0};
+    QString style {QString("linear")};
+    QString repeat {QString("none")};
+    double scale {100.0};
+    bool reverse {false}; // Is gradient reverse
+    bool dithered {false}; // Is gradient dithered
+    bool align_with_layer {false};
     QPointF offset;
     QDomDocument gradient;
-    int imageWidth = 1; // Set when loading.
-    int imageHeight = 1;
+    int imageWidth {1}; // Set when loading.
+    int imageHeight {1};
 
     // Used by ASL callback;
     void setGradient(const KoAbstractGradientSP &newGradient) {
@@ -471,13 +471,13 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
 };
 
 struct KRITAPSD_EXPORT psd_layer_pattern_fill {
-    double angle;
-    double scale;
+    double angle {0.0};
+    double scale {1.0};
     QPointF offset;
     QString patternName;
     QString patternID;
     KoPatternSP pattern;
-    bool align_with_layer;
+    bool align_with_layer {false};
     
     void setAngle(float Angl) {
         angle = Angl;
@@ -579,53 +579,53 @@ struct KRITAPSD_EXPORT psd_layer_pattern_fill {
 };
 
 struct KRITAPSD_EXPORT psd_layer_type_face {
-    qint8 mark; // Mark value
-    qint32 font_type; // Font type data
+    qint8 mark {0}; // Mark value
+    qint32 font_type {0}; // Font type data
     qint8 font_name[256]; // Pascal string of font name
     qint8 font_family_name[256]; // Pascal string of font family name
     qint8 font_style_name[256]; // Pascal string of font style name
-    qint8 script; // Script value
-    qint32 number_axes_vector; // Number of design axes vector to follow
-    qint32 *vector; // Design vector value
+    qint8 script {0}; // Script value
+    qint32 number_axes_vector {0}; // Number of design axes vector to follow
+    qint32 *vector {nullptr}; // Design vector value
 };
 
 struct KRITAPSD_EXPORT psd_layer_type_style {
-    qint8 mark; // Mark value
-    qint8 face_mark; // Face mark value
-    qint32 size; // Size value
-    qint32 tracking; // Tracking value
-    qint32 kerning; // Kerning value
-    qint32 leading; // Leading value
-    qint32 base_shift; // Base shift value
-    bool auto_kern; // Auto kern on/off
-    bool rotate; // Rotate up/down
+    qint8 mark {0}; // Mark value
+    qint8 face_mark {0}; // Face mark value
+    qint32 size {0}; // Size value
+    qint32 tracking {0}; // Tracking value
+    qint32 kerning {0}; // Kerning value
+    qint32 leading {0}; // Leading value
+    qint32 base_shift {0}; // Base shift value
+    bool auto_kern {false}; // Auto kern on/off
+    bool rotate {false}; // Rotate up/down
 };
 
 struct KRITAPSD_EXPORT psd_layer_type_line {
-    qint32 char_count; // Character count value
-    qint8 orientation; // Orientation value
-    qint8 alignment; // Alignment value
-    qint8 actual_char; // Actual character as a double byte character
-    qint8 style; // Style value
+    qint32 char_count {0}; // Character count value
+    qint8 orientation {0}; // Orientation value
+    qint8 alignment {0}; // Alignment value
+    qint8 actual_char {0}; // Actual character as a double byte character
+    qint8 style {0}; // Style value
 };
 
 struct KRITAPSD_EXPORT psd_layer_type_tool {
     double transform_info[6]; // 6 * 8 double precision numbers for the transform information
-    qint8 faces_count; // Count of faces
-    psd_layer_type_face *face;
-    qint8 styles_count; // Count of styles
-    psd_layer_type_style *style;
-    qint8 type; // Type value
-    qint32 scaling_factor; // Scaling factor value
-    qint32 character_count; // Character count value
-    qint32 horz_place; // Horizontal placement
-    qint32 vert_place; // Vertical placement
-    qint32 select_start; // Select start value
-    qint32 select_end; // Select end value
-    qint8 lines_count; // Line count
-    psd_layer_type_line *line;
+    qint8 faces_count {0}; // Count of faces
+    psd_layer_type_face *face {nullptr};
+    qint8 styles_count {0}; // Count of styles
+    psd_layer_type_style *style {nullptr};
+    qint8 type {0}; // Type value
+    qint32 scaling_factor {0}; // Scaling factor value
+    qint32 character_count {0}; // Character count value
+    qint32 horz_place {0}; // Horizontal placement
+    qint32 vert_place {0}; // Vertical placement
+    qint32 select_start {0}; // Select start value
+    qint32 select_end {0}; // Select end value
+    qint8 lines_count {0}; // Line count
+    psd_layer_type_line *line {nullptr};
     QColor color;
-    bool anti_alias; // Anti alias on/off
+    bool anti_alias {false}; // Anti alias on/off
 };
 
 /**

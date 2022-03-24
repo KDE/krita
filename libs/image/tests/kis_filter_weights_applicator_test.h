@@ -65,6 +65,8 @@ private Q_SLOTS:
     void testProcessLine_NearestNeighbourFilter_0098x_vertical();
 
     void benchmarkProcesssLine();
+
+    void testProcessSolidLine();
 };
 
 #endif /* __KIS_FILTER_WEIGHTS_APPLICATOR_TEST_H */

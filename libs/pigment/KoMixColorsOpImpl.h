@@ -216,13 +216,6 @@ private:
             }
 #endif
 
-            // set totalAlpha to the minimum between its value and the unit value of the channels
-            const mix_type sumOfWeights = normalizeFactor;
-
-            if (totalAlpha > MathsTraits::unitValue * sumOfWeights) {
-                totalAlpha = MathsTraits::unitValue * sumOfWeights;
-            }
-
             channels_type* dstColor = _CSTrait::nativeArray(dst);
 
             /**
@@ -248,7 +241,15 @@ private:
                 }
 
                 if (_CSTrait::alpha_pos != -1) {
-                    dstColor[ _CSTrait::alpha_pos ] = safeDivideWithRound(totalAlpha, sumOfWeights);
+                    mix_type v = safeDivideWithRound(totalAlpha, normalizeFactor);
+
+                    if (v > MathsTraits::max) {
+                        v = MathsTraits::max;
+                    }
+                    if (v < MathsTraits::min) {
+                        v = MathsTraits::min;
+                    }
+                    dstColor[ _CSTrait::alpha_pos ] = v;
                 }
             } else {
                 memset(dst, 0, sizeof(channels_type) * _CSTrait::channels_nb);

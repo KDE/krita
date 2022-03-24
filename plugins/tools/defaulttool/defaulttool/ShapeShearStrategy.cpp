@@ -59,6 +59,7 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, KoSelection *selection,
     case KoFlake::TopLeftHandle:
         m_top = true; m_bottom = false; m_left = true; m_right = false; break;
     default:
+        Q_UNREACHABLE();
         ;// throw exception ?  TODO
     }
     m_initialSize = selection->size();

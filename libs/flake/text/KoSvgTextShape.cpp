@@ -50,15 +50,25 @@
 struct CharacterResult {
     QPointF finalPosition;
     qreal rotate = 0.0;
-    bool hidden = false;
-    bool addressable = false;
-    bool middle = false;
-    bool anchored_chunk = false;
+    bool hidden = false; // whether the character will be drawn.
+    // we can't access characters that aren't part of a typographic character
+    // so we're setting 'middle' to true and addressable to 'false'.
+    // The original svg specs' notion of addressable character relies on utf16,
+    // and it's suggested to have it per-typographic character.
+    // https://github.com/w3c/svgwg/issues/537
+    bool addressable = false; // whether the character is not discarded for various reasons.
+    bool middle = true; // whether the character is the second of last of a typographic character.
+    bool anchored_chunk = false; // whether this is the start of a new chunk.
 
     QPainterPath path;
     QRectF boundingBox;
-    int typographic_index = 0;
+    int typographic_index = -1;
     QPointF cssPosition = QPointF();
+    QPointF advance;
+    qreal textLengthApplied = false;
+
+    KoSvgText::TextAnchor anchor = KoSvgText::AnchorStart;
+    KoSvgText::Direction direction = KoSvgText::DirectionLeftToRight;
 
 };
 
@@ -76,6 +86,14 @@ public:
 
 
     void clearAssociatedOutlines(const KoShape *rootShape);
+    void applyTextLength(const KoShape *rootShape,
+                         QVector<CharacterResult> &result,
+                         int &currentIndex,
+                         int &resolvedDescendentNodes,
+                         bool isHorizontal);
+    void getAnchors(const KoShape *rootShape,
+                         QVector<CharacterResult> &result,
+                         int &currentIndex);
 
 };
 
@@ -245,17 +263,19 @@ void KoSvgTextShape::resetTextShape()
 void KoSvgTextShape::relayout() const
 {
     d->cachedLayoutsWorkingThread = QThread::currentThread();
-    // Calculate the associated outline for a text chunk.
     d->clearAssociatedOutlines(this);
 
     // The following is based on the text-layout algorithm in SVG 2.
-    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(
+                this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(
+                this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
 
-    // first, get text. We use the subChunks because that handles bidi for us.
+    // First, get text. We use the subChunks because that handles bidi for us.
     // SVG 1.1 suggests that each time the xy position of a piece of text changes,
     // that this should be seperately shaped, but according to SVGWG issues 631 and 635
-    // noone who actually uses bidi likes this, and it also complicates the alorithm,
-    // so we're getting rid of this.
+    // noone who actually uses bidi likes this, and it also complicates the algorithm,
+    // so we're not doing that. Anchored Chunks will get generated later.
     // https://github.com/w3c/svgwg/issues/631
     // https://github.com/w3c/svgwg/issues/635
 
@@ -274,12 +294,10 @@ void KoSvgTextShape::relayout() const
     FcConfig *config = FcConfigGetCurrent();
     FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY,FC_FILE, nullptr);
 
-    QMap<QString,FT_Face> faces;
-
     if (raqm_set_text_utf8(layout, text.toUtf8(), text.toUtf8().size())) {
         if (writingMode == KoSvgText::TopToBottom) {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_TTB);
-        } else if (writingMode == KoSvgText::RightToLeft) {
+        } else if (direction == KoSvgText::DirectionRightToLeft) {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_RTL);
         } else {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_LTR);
@@ -345,6 +363,7 @@ void KoSvgTextShape::relayout() const
     }
 
     // 1. Setup.
+    qDebug() << "1. Setup";
 
     QVector<CharacterResult> result(text.toUtf8().size());
     bool isHorizontal = true;
@@ -354,6 +373,7 @@ void KoSvgTextShape::relayout() const
 
     // 2. Set flags and assign initial positions
     // We also retreive a path here.
+    qDebug() << "2. Set flags and assign initial positions";
     size_t count;
     raqm_glyph_t *glyphs = raqm_get_glyphs (layout, &count);
     if (!glyphs) {
@@ -382,6 +402,7 @@ void KoSvgTextShape::relayout() const
 
         QPointF cp = QPointF();
         // convert the outline to a painter path
+        // This is taken from qfontengine_ft.cpp.
         QPainterPath glyph;
         int i = 0;
         for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
@@ -471,29 +492,24 @@ void KoSvgTextShape::relayout() const
 
         CharacterResult charResult;
         charResult.path = glyph;
+        charResult.advance = advance;
         if (glyph.isEmpty()) {
+            // TODO: get better bounding box.
             charResult.boundingBox = QRectF(QPointF(), advance);
         } else {
             charResult.boundingBox = glyph.boundingRect();
         }
-        charResult.typographic_index = glyphs[g].index;
+        charResult.typographic_index = g;
         charResult.addressable = true;
         addressableIndices.append(glyphs[g].cluster);
         // if character in middle of line, this doesn't mean much rght now,
         // because we don't do linebreaking yet, but once we do, we should set these
         // appropriately.
-        if (g == 0) {
+        if (glyphs[g].cluster == 0) {
             charResult.anchored_chunk = true;
-        } else {
-            charResult.middle = true;
         }
+        charResult.middle = false;
         charResult.cssPosition = totalAdvance + offset;
-        /**
-          There's a weird note in the algorithm here that I do not understand:
-          "if addressable is true and middle is false, then set the css position to
-          the corresponding typographic character as determined by the css renderer. Otherwise
-          if i>0, then set css possition[i] to css position [i-1]."
-          */
 
         result[glyphs[g].cluster] = charResult;
         totalAdvance += advance;
@@ -501,13 +517,21 @@ void KoSvgTextShape::relayout() const
     // we're done with raqm for now.
     raqm_destroy(layout);
 
+    // This is the best point to start applying linebreaking and text-wrapping.
+    // If we're doing text-wrapping we should skip the other positioning steps of the algorithm.
+
     // 3. Resolve character positioning
-    qDebug() << "character positing";
+    qDebug() << "3. Resolve character positioning";
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.toUtf8().size());
     bool textInPath = false;
     int globalIndex = 0;
-    this->layoutInterface()->resolveCharacterPositioning(addressableIndices, resolvedTransforms, textInPath, globalIndex, isHorizontal);
+    this->layoutInterface()->resolveCharacterPositioning(addressableIndices,
+                                                         resolvedTransforms,
+                                                         textInPath,
+                                                         globalIndex,
+                                                         isHorizontal);
     // 4. Adjust positions: dx, dy
+    qDebug() << "4. Adjust positions: dx, dy";
 
     QPointF shift = QPointF();
     for (int i = 0; i < result.size(); i++) {
@@ -526,25 +550,35 @@ void KoSvgTextShape::relayout() const
     }
 
     // 5. Apply ‘textLength’ attribute
-    // 6. Adjust positions: x, y
+    qDebug() << "5. Apply ‘textLength’ attribute";
+    globalIndex = 0;
+    int resolved = 0;
+    d->applyTextLength(this, result, globalIndex, resolved, isHorizontal);
 
+    // 6. Adjust positions: x, y
+    qDebug() << "6. Adjust positions: x, y";
+
+    // https://github.com/w3c/svgwg/issues/617
     shift = QPointF();
-    bool setNextAnchor = false;
-    for (int i = 1; i < result.size(); i++) {
+    //bool setNextAnchor = false;
+    for (int i = 0; i < result.size(); i++) {
         if (addressableIndices.contains(i)) {
             KoSvgText::CharTransformation transform = resolvedTransforms[i];
             CharacterResult charResult = result[i];
             if (transform.xPos) {
-                shift.setX(*transform.xPos - charResult.finalPosition.x());
+                qreal d = transform.dxPos? *transform.dxPos : 0.0;
+                shift.setX(*transform.xPos + (d - charResult.finalPosition.x()));
                 charResult.anchored_chunk = true;
             }
             if (transform.yPos) {
-                shift.setY(*transform.yPos - charResult.finalPosition.y());
+                qreal d = transform.dyPos? *transform.dyPos : 0.0;
+                qDebug() << "setting Y" << *transform.yPos  << d << charResult.finalPosition.y();
+                shift.setY(*transform.yPos + (d - charResult.finalPosition.y()));
                 charResult.anchored_chunk = true;
             }
-
             charResult.finalPosition += shift;
 
+            /*
             if (setNextAnchor) {
                 charResult.anchored_chunk = true;
             }
@@ -557,13 +591,77 @@ void KoSvgTextShape::relayout() const
                     setNextAnchor = false;
                 }
             }
+            */
 
             result[i] = charResult;
         }
     }
 
     // 7. Apply anchoring
+    qDebug() << "7. Apply anchoring";
+    globalIndex = 0;
+    d->getAnchors(this, result, globalIndex);
+
+    QMap<int, QRectF> anchoredChunk;
+    QRectF a;
+    for (int i = 0; i < result.size(); i++) {
+        if (result[i].anchored_chunk) {
+            anchoredChunk.insert(i, a);
+            a = QRectF();
+        }
+        QRectF b = result[i].boundingBox;
+        b.translate(result[i].finalPosition);
+        a |= b;
+    }
+    anchoredChunk.insert(result.size(), a);
+
+    int last = 0;
+
+    for (int chunk = 0; chunk < anchoredChunk.keys().size(); chunk++) {
+
+        int i = anchoredChunk.keys()[chunk];
+        QRectF rect = anchoredChunk.value(i);
+        qreal a = rect.left();
+        qreal b = rect.right();
+        qreal shift = result[last].finalPosition.x();
+
+        if (!isHorizontal) {
+            a = rect.top();
+            b = rect.bottom();
+            shift = result[last].finalPosition.y();
+        }
+
+        bool rtl = result[last].direction == KoSvgText::DirectionRightToLeft;
+        if ((result[last].anchor == KoSvgText::AnchorStart && !rtl)
+         || (result[last].anchor == KoSvgText::AnchorEnd    && rtl)) {
+
+            shift -= a;
+
+        } else if ((result[last].anchor == KoSvgText::AnchorEnd  && !rtl)
+                || (result[last].anchor == KoSvgText::AnchorStart && rtl)) {
+
+            shift -= b;
+
+        } else {
+
+            shift -= ((a + b) * 0.5);
+
+        }
+        QPointF shiftP(shift, 0);
+        if (!isHorizontal) {
+            shiftP = QPointF(0, shift);
+        }
+
+        for (int j = last; j < i; j++) {
+            CharacterResult cr = result[j];
+            cr.finalPosition += shiftP;
+            result[j] = cr;
+        }
+        last = i;
+    }
+
     // 8. Position on path
+    // qDebug() << "8. Position on path";
 
     // 9. return result.
     d->result = result;
@@ -589,6 +687,106 @@ void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
         clearAssociatedOutlines(child);
+    }
+}
+
+void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
+                                              QVector<CharacterResult> &result,
+                                              int &currentIndex,
+                                              int &resolvedDescendentNodes,
+                                              bool isHorizontal)
+{
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    int i = currentIndex;
+    int j = i + chunkShape->layoutInterface()->numChars();
+    int resolvedChildren = 0;
+
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal);
+    }
+    // TODO: check if node is either a tspan or text node.
+    // Raqm handles bidi reordering for us, but this algorithm does not anticipate
+    // that, so we need to keep track of which typographic item belongs where.
+    // Note: This algorithm doesn't work when two textLength tspans are siblings...
+    QMap<int, int> typographicToIndex;
+    if (!chunkShape->layoutInterface()->textLength().isAuto) {
+        qreal a = 0.0;
+        qreal b = 0.0;
+        int n = 0;
+        for (int k = i; k < j; k++) {
+            if (result[k].addressable) {
+                if (result[k].typographic_index > -1) {
+                    typographicToIndex.insert(result[k].typographic_index, k);
+                }
+                // if character is linebreak, return;
+
+                qreal pos = result[k].finalPosition.x();
+                qreal advance = qAbs(result[k].advance.x());
+                if (!isHorizontal) {
+                    pos = result[k].finalPosition.y();
+                    advance = qAbs(result[k].advance.y());
+                }
+                if (k==0) {
+                    a = qMin(pos, pos+advance);
+                    b = qMax(pos, pos+advance);
+                } else {
+                    a = qMin(a, qMin(pos, pos+advance));
+                    b = qMax(b, qMax(pos, pos+advance));
+                }
+                if (!result[k].textLengthApplied) {
+                    n +=1;
+                }
+            }
+        }
+        n += (resolvedChildren-1);
+        qreal delta = chunkShape->layoutInterface()->textLength().customValue - (b-a);
+        QPointF d (delta/n, 0);
+        // check for rtl.
+        if (!isHorizontal) {
+            d = QPointF(0, delta/n);
+        }
+        QPointF shift;
+        for (int k : typographicToIndex.keys()) {
+            CharacterResult cr = result[typographicToIndex.value(k)];
+            if (cr.addressable) {
+                cr.finalPosition += shift;
+                if (!cr.textLengthApplied) {
+                    shift += d;
+                }
+                cr.textLengthApplied = true;
+            }
+            result[typographicToIndex.value(k)] = cr;
+        }
+        resolvedDescendentNodes += 1;
+    }
+
+    currentIndex = j;
+}
+
+void KoSvgTextShape::Private::getAnchors(const KoShape *rootShape,
+                         QVector<CharacterResult> &result,
+                         int &currentIndex)
+{
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    if (chunkShape->isTextNode()) {
+        int length = chunkShape->layoutInterface()->numChars();
+        for (int i = 0; i < length; i++) {
+            CharacterResult cr = result[currentIndex + i];
+            cr.anchor = KoSvgText::TextAnchor(
+                chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
+            cr.direction = KoSvgText::Direction(
+                chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+            result[currentIndex + i] = cr;
+        }
+        currentIndex += length;
+    } else {
+        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+            getAnchors(child, result, currentIndex);
+        }
     }
 }
 
@@ -635,7 +833,8 @@ KoShape *KoSvgTextShapeFactory::createShape(const KoProperties *params, KoDocume
     KoSvgTextShape *shape = new KoSvgTextShape();
     shape->setShapeId(KoSvgTextShape_SHAPEID);
 
-    QString svgText = params->stringProperty("svgText", i18nc("Default text for the text shape", "<text>Placeholder Text</text>"));
+    QString svgText = params->stringProperty("svgText", i18nc("Default text for the text shape",
+                                                              "<text>Placeholder Text</text>"));
     QString defs = params->stringProperty("defs" , "<defs/>");
     QRectF shapeRect = QRectF(0, 0, 200, 60);
     QVariant rect = params->property("shapeRect");

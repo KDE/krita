@@ -30,7 +30,7 @@ public:
     KUndo2Command *createCommand() override;
 private:
     Ui::SpiralShapeConfigWidget widget;
-    SpiralShape *m_spiral;
+    SpiralShape *m_spiral {nullptr};
 };
 
 #endif // SPIRALSHAPECONFIGWIDGET_H

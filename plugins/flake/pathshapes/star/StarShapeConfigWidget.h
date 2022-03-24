@@ -36,7 +36,7 @@ private Q_SLOTS:
     void typeChanged();
 private:
     Ui::StarShapeConfigWidget widget;
-    StarShape *m_star;
+    StarShape *m_star {nullptr};
 };
 
 #endif // STARSHAPECONFIGWIDGET_H

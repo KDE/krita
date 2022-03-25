@@ -9,8 +9,9 @@
 
 #include <QPointF>
 
+#include "kritaimage_export.h"
 
-class KisGradientShapeStrategy
+class KRITAIMAGE_EXPORT KisGradientShapeStrategy
 {
 public:
     KisGradientShapeStrategy();

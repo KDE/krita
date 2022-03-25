@@ -53,7 +53,7 @@ struct ConversionOptions {
 class KisOpenGLUpdateInfo;
 typedef KisSharedPtr<KisOpenGLUpdateInfo> KisOpenGLUpdateInfoSP;
 
-class KisOpenGLUpdateInfo : public KisUpdateInfo
+class KRITAUI_EXPORT KisOpenGLUpdateInfo : public KisUpdateInfo
 {
 public:
     KisOpenGLUpdateInfo();

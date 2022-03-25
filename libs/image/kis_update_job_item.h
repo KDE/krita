@@ -21,8 +21,7 @@
 
 //#define DEBUG_JOBS_SEQUENCE
 
-
-class KisUpdateJobItem :  public QObject, public QRunnable
+class KRITAIMAGE_EXPORT KisUpdateJobItem : public QObject, public QRunnable
 {
     Q_OBJECT
 public:

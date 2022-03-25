@@ -10,11 +10,13 @@
 #include <QScopedPointer>
 #include <QObject>
 
+#include "kritaimage_export.h"
+
 
 /**
  * @brief The KisPaintOpPresetUpdateProxy class
  */
-class KisPaintOpPresetUpdateProxy : public QObject
+class KRITAIMAGE_EXPORT KisPaintOpPresetUpdateProxy : public QObject
 {
     Q_OBJECT
 

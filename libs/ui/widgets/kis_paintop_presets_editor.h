@@ -124,7 +124,7 @@ private:
 
 
     QMenu * newPresetBrushEnginesMenu;
-    QList<KisAction*> newBrushEngineOptions;
+    QList<QAction*> newBrushEngineOptions;
 
 
     void toggleBrushRenameUIActive(bool isRenaming);

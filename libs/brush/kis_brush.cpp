@@ -152,7 +152,6 @@ struct KisBrush::Private {
           spacing(rhs.spacing),
           hotSpot(rhs.hotSpot),
           hasColor(rhs.hasColor),
-          preserveLightness(rhs.preserveLightness),
           angle(rhs.angle),
           scale(rhs.scale),
           autoSpacingActive(rhs.autoSpacingActive),
@@ -184,7 +183,6 @@ struct KisBrush::Private {
     double spacing;
     QPointF hotSpot;
     bool hasColor;
-    bool preserveLightness;
     qreal angle;
     qreal scale;
 

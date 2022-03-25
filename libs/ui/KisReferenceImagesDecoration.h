@@ -25,7 +25,7 @@ typedef KisSharedPtr<KisReferenceImagesDecoration> KisReferenceImagesDecorationS
  * @brief The KisReferenceImagesDecoration class draws the reference images on the canvas.
  * The document stores the list of reference images.
  */
-class KisReferenceImagesDecoration : public KisCanvasDecoration
+class KRITAUI_EXPORT KisReferenceImagesDecoration : public KisCanvasDecoration
 {
     Q_OBJECT
 public:

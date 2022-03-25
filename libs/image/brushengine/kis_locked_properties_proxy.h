@@ -23,7 +23,7 @@
  */
 class KisLockedPropertiesServer;
 
-class KisLockedPropertiesProxy: public KisPropertiesConfiguration
+class KRITAIMAGE_EXPORT KisLockedPropertiesProxy: public KisPropertiesConfiguration
 {
 public:
     KisLockedPropertiesProxy(KisPropertiesConfiguration *, KisLockedPropertiesSP);

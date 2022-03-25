@@ -587,7 +587,7 @@ void KisToolFill::loadConfiguration()
     m_threshold = m_configGroup.readEntry<int>("thresholdAmount", 8);
     m_opacitySpread = m_configGroup.readEntry<int>("opacitySpread", 100);
     m_useSelectionAsBoundary = m_configGroup.readEntry<bool>("useSelectionAsBoundary", true);
-    m_antiAlias = m_configGroup.readEntry<bool>("antiAlias", true);
+    m_antiAlias = m_configGroup.readEntry<bool>("antiAlias", false);
     m_sizemod = m_configGroup.readEntry<int>("growSelection", 0);
     m_feather = m_configGroup.readEntry<int>("featherAmount", 0);
     {
@@ -782,7 +782,7 @@ void KisToolFill::slot_buttonReset_clicked()
     m_sliderThreshold->setValue(8);
     m_sliderSpread->setValue(100);
     m_checkBoxSelectionAsBoundary->setChecked(true);
-    m_checkBoxAntiAlias->setChecked(true);
+    m_checkBoxAntiAlias->setChecked(false);
     m_sliderGrow->setValue(0);
     m_sliderFeather->setValue(0);
     m_buttonReferenceCurrent->setChecked(true);

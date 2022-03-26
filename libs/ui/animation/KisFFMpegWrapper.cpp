@@ -493,8 +493,23 @@ QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &f
     if (!ffprobeJsonDoc.isNull()) {
         if (ffprobeJsonDoc.isObject()) {
             ffprobeJsonObj = ffprobeJsonDoc.object();
-           
-            ffprobeJsonObj["error"] = (ffprobeSTDERR.indexOf("Unsupported codec with id") == -1) ? 0:1;
+            ffprobeJsonObj["error"] = 0;
+
+            QRegularExpression invalidStreamRX("(?:Unsupported codec with id .+? for input stream|Could not find codec parameters for stream) ([0-9]+)");
+            QRegularExpressionMatchIterator invalidStreamMatchList = invalidStreamRX.globalMatch(ffprobeSTDERR);
+
+            while (invalidStreamMatchList.hasNext()) {
+                QRegularExpressionMatch invalidStreamMatch = invalidStreamMatchList.next();
+
+                if (invalidStreamMatch.hasMatch()) {
+                    const int invalidStreamId = invalidStreamMatch.captured(1).toInt();
+
+                    if (ffprobeJsonObj["streams"].toArray()[invalidStreamId].toObject()["codec_type"] == "video") {
+                        ffprobeJsonObj["error"] = 1;
+                    }
+
+                }
+            }
             
         } else {
             dbgFile << "Document is not an object";
@@ -547,9 +562,9 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
     
     for (const QString &line : stdoutLines) {
         dbgFile << "ffmpeg probe stdout" << line;
-       QRegularExpression videoInfoInputRX("Duration: (\\d+):(\\d+):([\\d\\.]+),");
-    
+        QRegularExpression videoInfoInputRX("Duration: (\\d+):(\\d+):([\\d\\.]+),");
         QRegularExpressionMatch durationMatch = videoInfoInputRX.match(line);
+
         if (ffmpegFormatJsonObj.value("duration").isUndefined() && durationMatch.hasMatch()) {
             ffmpegFormatJsonObj["duration"] = QString::number( (durationMatch.captured(1).toInt() * 60 * 60)
                                                              + (durationMatch.captured(2).toInt() * 60) 

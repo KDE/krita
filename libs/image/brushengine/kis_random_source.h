@@ -10,6 +10,7 @@
 #include <QScopedPointer>
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
+#include <boost/random/taus88.hpp>
 
 #include "kritaimage_export.h"
 
@@ -40,6 +41,16 @@ public:
     ~KisRandomSource();
 
     /**
+     * Return the minimum value the random source can generate
+     */
+    static constexpr qint64 min() { return boost::taus88::min(); }
+
+    /**
+     * Return the maximum value the random source can generate
+     */
+    static constexpr qint64 max() { return boost::taus88::max(); }
+
+    /**
      * Generates a random number in a range from min() to max()
      */
     qint64 generate() const;
@@ -48,6 +59,11 @@ public:
      * Generates a random number in a range from \p min to \p max
      */
     int generate(int min, int max) const;
+
+    /**
+     * Same as generate
+     */
+    qint64 operator()();
 
     /**
      * Generates a random number in a closed range [0; 1.0]

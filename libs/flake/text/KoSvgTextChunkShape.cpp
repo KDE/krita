@@ -19,6 +19,8 @@ v *  GNU General Public License for more details.
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 
+#include <KoPathShape.h>
+
 #include "kis_debug.h"
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -225,6 +227,11 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return !q->shapeCount() ? q->s->text : QString();
     }
 
+    KoSvgText::TextOnPathInfo textOnPathInfo() const override
+    {
+        return q->s->textPathInfo;
+    }
+
     QVector<KoSvgText::CharTransformation> localCharTransformations() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isTextNode(), QVector<KoSvgText::CharTransformation>());
 
@@ -318,6 +325,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         int &currentIndex,
         bool horizontal) override
     {
+        qDebug() << "has textPath" << q->s->textPathInfo.path.length();
         if (isTextNode()) {
             int length = q->s->text.toUtf8().size();
             qDebug() << "starting resolving of charTransforms" << q->s->text
@@ -364,7 +372,9 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
             currentIndex += q->s->text.toUtf8().size();
         } else {
-            // TODO: if text in path, set text-in-path true.
+            if (!q->s->textPathInfo.path.isEmpty()) {
+                textInPath = true;
+            }
             qDebug() << "iterating over shapes";
             Q_FOREACH (KoShape *shape, q->shapes()) {
                 KoSvgTextChunkShape *chunkShape =
@@ -378,7 +388,9 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                         horizontal);
                 }
             }
-            // TODO: if text in path, set text-in-path false.
+            if (!q->s->textPathInfo.path.isEmpty()) {
+                textInPath = false;
+            }
         }
     }
 
@@ -590,6 +602,7 @@ void writeTextListAttribute(const QString &attribute, const QVector<qreal> &valu
 
 bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 {
+    bool isTextPath = !s->textPathInfo.path.isEmpty();
     if (isRootTextNode()) {
         context.shapeWriter().startElement("text", false);
 
@@ -607,9 +620,43 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             SvgStyleWriter::saveSvgStroke(this, context);
         }
     } else {
-        context.shapeWriter().startElement("tspan", false);
+        if (isTextPath) {
+            context.shapeWriter().startElement("textPath", false);
+        } else {
+            context.shapeWriter().startElement("tspan", false);
+        }
         if (!context.strippedTextMode()) {
             SvgStyleWriter::saveSvgBasicStyle(this, context);
+        }
+    }
+
+    if (isTextPath) {
+        KoPathShape *shape =
+            KoPathShape::createShapeFromPainterPath(s->textPathInfo.path);
+        context.shapeWriter().addAttribute(
+            "path",
+            shape->toString(context.userSpaceTransform()));
+        if (s->textPathInfo.startOffset != 0) {
+            QString offset = KisDomUtils::toString(s->textPathInfo.startOffset);
+            if (s->textPathInfo.startOffsetIsPercentage) {
+                offset += "%";
+            }
+            context.shapeWriter().addAttribute("startOffset", offset);
+        }
+        if (s->textPathInfo.method != KoSvgText::TextPathAlign) {
+            context.shapeWriter().addAttribute(
+                "method",
+                KoSvgText::writeTextPathMethod(s->textPathInfo.method));
+        }
+        if (s->textPathInfo.side != KoSvgText::TextPathSideLeft) {
+            context.shapeWriter().addAttribute(
+                "side",
+                KoSvgText::writeTextPathSide(s->textPathInfo.side));
+        }
+        if (s->textPathInfo.spacing != KoSvgText::TextPathAuto) {
+            context.shapeWriter().addAttribute(
+                "spacing",
+                KoSvgText::writeTextPathSpacing(s->textPathInfo.spacing));
         }
     }
 
@@ -749,6 +796,29 @@ bool KoSvgTextChunkShape::loadSvg(const QDomElement &e, SvgLoadingContext &conte
         }
         if (i < rotate.size()) {
             s->localTransformations[i].rotate = rotate[i];
+        }
+    }
+
+    if (e.tagName() == "textPath") {
+        // we'll read the value 'path' later.
+
+        s->textPathInfo.side =
+            KoSvgText::parseTextPathSide(e.attribute("side", "left"));
+        s->textPathInfo.method =
+            KoSvgText::parseTextPathMethod(e.attribute("method", "align"));
+        s->textPathInfo.spacing =
+            KoSvgText::parseTextPathSpacing(e.attribute("spacing", "auto"));
+        // This depends on pathLength;
+        if (e.hasAttribute("startOffset")) {
+            QString offset = e.attribute("startOffset", "0");
+            if (offset.endsWith("%")) {
+                s->textPathInfo.startOffset =
+                    SvgUtil::parseNumber(offset.left(offset.size() - 1));
+                s->textPathInfo.startOffsetIsPercentage = true;
+            } else {
+                s->textPathInfo.startOffset =
+                    SvgUtil::parseUnit(context.currentGC(), offset);
+            }
         }
     }
 
@@ -946,6 +1016,16 @@ void KoSvgTextChunkShape::setRichTextPreferred(bool value)
     s->isRichTextPreferred = value;
 }
 
+void KoSvgTextChunkShape::setTextPath(QPainterPath path)
+{
+    s->textPathInfo.path = path;
+}
+
+const QPainterPath KoSvgTextChunkShape::textPath()
+{
+    return s->textPathInfo.path;
+}
+
 bool KoSvgTextChunkShape::isRootTextNode() const
 {
     return false;
@@ -964,6 +1044,7 @@ KoSvgTextChunkShape::SharedData::SharedData(const SharedData &rhs)
     : QSharedData()
     , properties(rhs.properties)
     , localTransformations(rhs.localTransformations)
+    , textPathInfo(rhs.textPathInfo)
     , textLength(rhs.textLength)
     , lengthAdjust(rhs.lengthAdjust)
     , text(rhs.text)

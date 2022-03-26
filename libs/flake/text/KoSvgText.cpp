@@ -418,6 +418,35 @@ void AssociatedShapeWrapper::addCharacterRect(const QRectF &rect)
     }
 }
 
+TextPathMethod parseTextPathMethod(const QString &value)
+{
+    return value == "stretch" ? TextPathStretch : TextPathAlign;
+}
+
+TextPathSpacing parseTextPathSpacing(const QString &value)
+{
+    return value == "auto" ? TextPathAuto : TextPathExact;
+}
+
+TextPathSide parseTextPathSide(const QString &value)
+{
+    return value == "left" ? TextPathSideLeft : TextPathSideRight;
+}
+
+QString writeTextPathMethod(TextPathMethod value)
+{
+    return value == TextPathAlign ? "align" : "stretch";
+}
+
+QString writeTextPathSpacing(TextPathSpacing value)
+{
+    return value == TextPathAuto ? "auto" : "exact";
+}
+
+QString writeTextPathSide(TextPathSide value)
+{
+    return value == TextPathSideLeft ? "left" : "right";
+}
 }
 
 

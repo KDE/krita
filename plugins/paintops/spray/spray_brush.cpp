@@ -217,9 +217,9 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
 
     for (quint32 i = 0; i < m_particlesCount; i++) {
         // generate random angle
-        angle = angularDistribution(*randomSource) * M_PI * 2;
+        angle = angularDistribution(m_properties->randomGenerator()) * M_PI * 2;
         // generate random length
-        length = radialDistribution(*randomSource);
+        length = radialDistribution(m_properties->randomGenerator());
 
         if (m_shapeDynamicsProperties->enabled) {
             // rotation

@@ -6,6 +6,7 @@
 
 #include "kis_random_source.h"
 
+#include <boost/random/taus88.hpp>
 #include <boost/random/uniform_smallint.hpp>
 #include <boost/random/normal_distribution.hpp>
 
@@ -66,11 +67,6 @@ int KisRandomSource::generate(int min, int max) const
 {
     boost::uniform_smallint<int> smallint(min, max);
     return smallint(m_d->uniformSource);
-}
-
-qint64 KisRandomSource::operator()()
-{
-    return generate();
 }
 
 qreal KisRandomSource::generateNormalized() const

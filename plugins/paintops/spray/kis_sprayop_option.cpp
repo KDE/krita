@@ -548,6 +548,11 @@ void KisSprayOptionProperties::updateDistributions()
     }
 }
 
+std::mt19937& KisSprayOptionProperties::randomGenerator() const
+{
+    return m_randomGenerator;
+}
+
 void KisSprayOptionProperties::readOptionSettingImpl(const KisPropertiesConfiguration *settings)
 {
     QVariant v;

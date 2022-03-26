@@ -120,6 +120,7 @@ public:
     const KisSprayCurveBasedDistribution& radialCurveBasedDistribution() const;
     const KisSprayCurveBasedDistributionPolarDistance& radialCurveBasedDistributionPolarDistance() const;
     void updateDistributions();
+    std::mt19937& randomGenerator() const;
 
     void readOptionSettingImpl(const KisPropertiesConfiguration *settings) override;
     void writeOptionSettingImpl(KisPropertiesConfiguration *setting) const override;
@@ -153,6 +154,7 @@ private:
     KisSprayNormalDistributionPolarDistance m_normalDistributionPolarDistance {};
     KisSprayClusterBasedDistributionPolarDistance m_clusterBasedDistributionPolarDistance {};
     KisSprayCurveBasedDistributionPolarDistance m_radialCurveBasedDistributionPolarDistance {};
+    mutable std::mt19937 m_randomGenerator {};
 };
 
 #endif

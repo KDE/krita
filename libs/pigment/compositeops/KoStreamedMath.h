@@ -502,9 +502,9 @@ struct PixelStateRecoverHelper<float, _impl> {
     ALWAYS_INLINE
     void recoverPixels(const Vc::float_m &mask, Vc::float_v &c1, Vc::float_v &c2, Vc::float_v &c3) const {
         if (!mask.isEmpty()) {
-            c1 = xsimd::select(mask, m_orig_c1, c1);
-            c2 = xsimd::select(mask, m_orig_c2, c2);
-            c3 = xsimd::select(mask, m_orig_c3, c3);
+            c1(mask) = m_orig_c1;
+            c2(mask) = m_orig_c2;
+            c3(mask) = m_orig_c3;
         }
     }
 

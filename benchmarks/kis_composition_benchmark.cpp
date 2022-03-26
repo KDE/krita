@@ -597,7 +597,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
             if(!compareResult || errorcount > 1) {
                 if (pixelSize == 4) {
                     printError<quint8>(src1, dst1, dst2, msk1, 8 * i + j);
-                } if (pixelSize == 8) {
+                } else if (pixelSize == 8) {
                     printError<quint16>(src1, dst1, dst2, msk1, 8 * i + j);
                 } else if (pixelSize == 16) {
                     printError<float>(src1, dst1, dst2, msk1, 8 * i + j);

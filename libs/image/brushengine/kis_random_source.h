@@ -43,12 +43,12 @@ public:
     /**
      * Return the minimum value the random source can generate
      */
-    static constexpr qint64 min() { return boost::taus88::min(); }
+    static inline qint64 min() { return boost::taus88::min(); }
 
     /**
      * Return the maximum value the random source can generate
      */
-    static constexpr qint64 max() { return boost::taus88::max(); }
+    static inline qint64 max() { return boost::taus88::max(); }
 
     /**
      * Generates a random number in a range from min() to max()

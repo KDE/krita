@@ -12,6 +12,7 @@
 #include <QList>
 #include <QFont>
 #include <QTextCharFormat>
+#include <QPainterPath>
 #include <boost/optional.hpp>
 #include <boost/operators.hpp>
 
@@ -102,6 +103,21 @@ enum TextDecoration {
     DecorationLineThrough = 0x4
 };
 
+enum TextPathMethod {
+    TextPathAlign = 0x0,
+    TextPathStretch = 0x1
+};
+
+enum TextPathSpacing {
+    TextPathAuto = 0x0,
+    TextPathExact = 0x1
+};
+
+enum TextPathSide {
+    TextPathSideRight = 0x0,
+    TextPathSideLeft = 0x1
+};
+
 Q_DECLARE_FLAGS(TextDecorations, TextDecoration)
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextDecorations)
 
@@ -146,6 +162,10 @@ AlignmentBaseline parseAlignmentBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
 LengthAdjust parseLengthAdjust(const QString &value);
 
+TextPathMethod parseTextPathMethod(const QString &value);
+TextPathSpacing parseTextPathSpacing(const QString &value);
+TextPathSide parseTextPathSide(const QString &value);
+
 QString writeAutoValue(const AutoValue &value, const QString &autoKeyword = "auto");
 
 QString writeWritingMode(WritingMode value);
@@ -156,6 +176,10 @@ QString writeDominantBaseline(DominantBaseline value);
 QString writeAlignmentBaseline(AlignmentBaseline value);
 QString writeBaselineShiftMode(BaselineShiftMode value, qreal portion);
 QString writeLengthAdjust(LengthAdjust value);
+
+QString writeTextPathMethod(TextPathMethod value);
+QString writeTextPathSpacing(TextPathSpacing value);
+QString writeTextPathSide(TextPathSide value);
 
 struct CharTransformation : public boost::equality_comparable<CharTransformation>
 {
@@ -174,6 +198,15 @@ struct CharTransformation : public boost::equality_comparable<CharTransformation
     QPointF relativeOffset() const;
 
     bool operator==(const CharTransformation & other) const;
+};
+
+struct TextOnPathInfo {
+    QPainterPath path;
+    qreal startOffset = 0.0;
+    bool startOffsetIsPercentage = false;
+    TextPathMethod method = TextPathAlign;
+    TextPathSpacing spacing = TextPathAuto;
+    TextPathSide side = TextPathSideLeft;
 };
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::CharTransformation &t);

@@ -144,6 +144,19 @@ public:
      */
     void setRichTextPreferred(bool value);
 
+    /**
+     * @brief setTextPath
+     * Set the path for textOnPath;
+     * @param shape
+     */
+    void setTextPath(QPainterPath path);
+
+    /**
+     * @brief textPath
+     * @return the path used for text on path, if null, this chunk is not a textPath.
+     */
+    const QPainterPath textPath();
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

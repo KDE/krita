@@ -1729,7 +1729,7 @@ QDomText getTheOnlyTextChild(const QDomElement &e)
 
 KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *mergeIntoShape)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || e.tagName() == "tspan", 0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || e.tagName() == "tspan" || e.tagName() == "textPath", 0);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_isInsideTextSubtree || e.tagName() == "text", 0);
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(e.tagName() == "text" || !mergeIntoShape, 0);
 
@@ -1810,6 +1810,12 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     }
 
     m_context.popGraphicsContext();
+
+    if (e.hasAttribute("path")) {
+        QDomElement p = e.ownerDocument().createElement("path");
+        p.setAttribute("d", e.attribute("path"));
+        textChunk->setTextPath(createPath(p)->outline());
+    }
 
     textChunk->normalizeCharTransformations();
 
@@ -1927,7 +1933,8 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
     } else if (b.tagName() == "style") {
         m_context.addStyleSheet(b);
     } else if (b.tagName() == "text" ||
-               b.tagName() == "tspan") {
+               b.tagName() == "tspan" ||
+               b.tagName() == "textPath") {
 
         shapes += parseTextElement(b);
     } else if (b.tagName() == "rect" ||

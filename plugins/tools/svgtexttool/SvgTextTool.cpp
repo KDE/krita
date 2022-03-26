@@ -332,6 +332,8 @@ void SvgTextTool::paint(QPainter &gc, const KoViewConverter &converter)
         QPainterPath path;
         path.addRect(shape->boundingRect());
         handlePainter.drawPath(path);
+        handlePainter.drawHandleCircle(shape->absoluteTransformation().map(QPointF()),
+                                       KoToolBase::handleRadius());
     }
 
     if (!m_hoveredShapeHighlightRect.isEmpty()) {

@@ -60,6 +60,8 @@ public:
      */
     virtual QString nodeText() const = 0;
 
+    virtual KoSvgText::TextOnPathInfo textOnPathInfo() const = 0;
+
     /**
      * @return a vector of local character transformations x, y, dx, dy and rotate.
      */

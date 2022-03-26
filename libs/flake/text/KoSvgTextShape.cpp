@@ -27,6 +27,7 @@
 #include <KoIcon.h>
 #include <KoProperties.h>
 #include <KoColorBackground.h>
+#include <KoPathShape.h>
 
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
@@ -39,6 +40,8 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QFileInfo>
+#include <QtMath>
+
 #include <boost/optional.hpp>
 
 #include <text/KoSvgTextChunkShapeLayoutInterface.h>
@@ -94,6 +97,8 @@ public:
     void getAnchors(const KoShape *rootShape,
                          QVector<CharacterResult> &result,
                          int &currentIndex);
+    void applyTextPath(const KoShape *rootShape,
+                         QVector<CharacterResult> &result, bool isHorizontal);
 
 };
 
@@ -151,6 +156,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
         //d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
     }*/
     qDebug() << "drawing...";
+
     QTransform tf;
 
     for (CharacterResult cr : d->result) {
@@ -159,9 +165,24 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
             tf.reset();
             tf.translate(cr.finalPosition.x(), cr.finalPosition.y());
             tf.rotateRadians(cr.rotate);
+            /* Debug
+            painter.save();
+            painter.setPen(Qt::red);
+            painter.drawPoint(cr.finalPosition);
+            painter.restore();
+            */
             background()->paint(painter, paintContext, tf.map(p));
         }
     }
+    /* Debug
+    Q_FOREACH (KoShape *child, this->shapes()) {
+        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape*>(child);
+        if (textPathChunk) {
+            painter.strokePath(textPathChunk->layoutInterface()->textOnPathInfo().path, QPen(Qt::green));
+        }
+    }
+    */
+
     /**
      * HACK ALERT:
      * The layouts of non-gui threads must be destroyed in the same thread
@@ -567,6 +588,7 @@ void KoSvgTextShape::relayout() const
             CharacterResult charResult = result[i];
             if (transform.xPos) {
                 qreal d = transform.dxPos? *transform.dxPos : 0.0;
+                qDebug() << "setting x" << i;
                 shift.setX(*transform.xPos + (d - charResult.finalPosition.x()));
                 charResult.anchored_chunk = true;
             }
@@ -661,7 +683,9 @@ void KoSvgTextShape::relayout() const
     }
 
     // 8. Position on path
-    // qDebug() << "8. Position on path";
+    qDebug() << "8. Position on path";
+
+    d->applyTextPath(this, result, isHorizontal);
 
     // 9. return result.
     d->result = result;
@@ -786,6 +810,120 @@ void KoSvgTextShape::Private::getAnchors(const KoShape *rootShape,
     } else {
         Q_FOREACH (KoShape *child, chunkShape->shapes()) {
             getAnchors(child, result, currentIndex);
+        }
+    }
+}
+
+void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
+                                            QVector<CharacterResult> &result,
+                                            bool isHorizontal)
+{
+    // Unlike all the other applying functions, this one only iterrates over the top-level.
+    // SVG is not designed to have nested textPaths.
+    // https://github.com/w3c/svgwg/issues/580
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+    bool inPath = false;
+    bool afterPath = false;
+    int currentIndex = 0;
+    QPointF pathEnd;
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape*>(child);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(textPathChunk);
+
+        QPainterPath path = textPathChunk->layoutInterface()->textOnPathInfo().path;
+        if (!path.isEmpty()) {
+            inPath = true;
+            if(textPathChunk->layoutInterface()->textOnPathInfo().side == KoSvgText::TextPathSideRight) {
+                path = path.toReversed();
+            }
+            qreal length = path.length();
+            qreal offset = 0.0;
+            bool isClosed = false;
+            //figure out how to check for closed path.
+            if (textPathChunk->layoutInterface()->textOnPathInfo().startOffsetIsPercentage) {
+                offset = length * (0.01 * textPathChunk->layoutInterface()->textOnPathInfo().startOffset);
+            } else {
+                offset = textPathChunk->layoutInterface()->textOnPathInfo().startOffset;
+            }
+            // Calculate total size of string, use that to calculate the in regards to the anchoring.
+            // also use this for pathEnd;
+            int endIndex = currentIndex + textPathChunk->layoutInterface()->numChars();
+            //qreal chunkLength = result[endIndex].finalPosition.x() - result[endIndex].currentIndex.finalPosition.x();
+            
+            for (int i = currentIndex; i < endIndex; i++) {
+                CharacterResult cr = result[i];
+                if (cr.middle == false) {
+                    qreal mid = cr.finalPosition.x() + (cr.advance.x() * 0.5) + offset;
+                    if (!isHorizontal) {
+                        mid = cr.finalPosition.y() + (cr.advance.y() * 0.5) + offset;
+                    }
+                    if (isClosed) {
+                        bool rtl = (cr.direction == KoSvgText::DirectionRightToLeft);
+                        if ((cr.anchor == KoSvgText::AnchorStart && !rtl)
+                         || (cr.anchor == KoSvgText::AnchorEnd    && rtl)) {
+                            if (mid - offset < 0 || mid - offset > length) {
+                                cr.hidden = true;
+                            }
+                        } else if ((cr.anchor == KoSvgText::AnchorEnd  && !rtl)
+                                || (cr.anchor == KoSvgText::AnchorStart && rtl)) {
+                            if (mid - offset < -length || mid - offset > 0) {
+                                cr.hidden = true;
+                            }
+                        } else {
+                            if (mid - offset < -(length*0.5) || mid - offset > (length*0.5)) {
+                                cr.hidden = true;
+                            }
+                        }
+                        //mid = fmod(mid, length);
+                    } else if(mid < 0 || mid > length){
+                        cr.hidden = true;
+                    }
+                    if (!cr.hidden) {
+                        QPointF pos = path.pointAtPercent(mid/length);
+                        qreal tAngle = path.angleAtPercent(mid/length);
+                        qreal tAngle2 = tAngle;
+                        if (tAngle>180) {
+                            
+                            tAngle = 0 - (360 - tAngle);
+                        }
+                        QPointF vectorT(qCos(qDegreesToRadians(tAngle)), -qSin(qDegreesToRadians(tAngle)));
+                        if (isHorizontal) {
+                            cr.rotate -= qDegreesToRadians(tAngle2);
+                            QPointF vectorN(-vectorT.y(), vectorT.x());
+                            qreal o = (cr.advance.x()*0.5);
+                            cr.finalPosition = pos - (o*vectorT) + (cr.finalPosition.y()*vectorN);
+                        } else {
+                            cr.rotate -= qDegreesToRadians(tAngle2+90);
+                            QPointF vectorN(vectorT.y(), -vectorT.x());
+                            qreal o = -(cr.advance.y()*0.5);
+                            cr.finalPosition = pos - (o*vectorT) + (cr.finalPosition.x()*vectorN);
+                        }
+                    }
+                }
+                result[i] = cr;
+            }
+            currentIndex = endIndex;
+            pathEnd = path.pointAtPercent(1.0);
+        } else {
+            if (inPath) {
+                inPath = false;
+                afterPath = true;
+                pathEnd -= result[currentIndex].finalPosition;
+            }
+            if (afterPath) {
+                
+                int endIndex = currentIndex + textPathChunk->layoutInterface()->numChars();
+                for (int i = currentIndex; i < endIndex; i++) {
+                    CharacterResult cr = result[i];
+                    if (cr.anchored_chunk) {
+                        afterPath = false;
+                    } else {
+                        cr.finalPosition += pathEnd;
+                        result[i] = cr;
+                    }
+                }
+            }
         }
     }
 }

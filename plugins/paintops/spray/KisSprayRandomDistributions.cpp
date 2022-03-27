@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <cmath>
 #include <random>
 
 #include <kis_assert.h>
@@ -166,14 +167,14 @@ double KisSprayFunctionBasedDistribution::generate(double randomValue) const
 
 double KisSprayFunctionBasedDistribution::min() const
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isValid(), 0.0 / 0.0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isValid(), NAN);
 
     return m_d->samples.front().x;
 }
 
 double KisSprayFunctionBasedDistribution::max() const
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isValid(), 0.0 / 0.0);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isValid(), NAN);
 
     return m_d->samples.back().x;
 }

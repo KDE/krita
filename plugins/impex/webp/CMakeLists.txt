@@ -6,8 +6,7 @@ if (WebP_FOUND)
     ki18n_wrap_ui(kritawebpexport_SOURCES dlg_webp_export.ui)
 
     add_library(kritawebpexport MODULE ${kritawebpexport_SOURCES})
-    target_include_directories(kritawebpexport PRIVATE ${WebP_INCLUDE_DIRS})
-    target_link_libraries(kritawebpexport kritaui kritalibkra kritaimpex WebP::webp)
+    target_link_libraries(kritawebpexport kritaui kritalibkra kritaimpex WebP::libwebp)
 
     install(TARGETS kritawebpexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
@@ -19,8 +18,7 @@ if (WebP_FOUND)
     ki18n_wrap_ui(kritawebpimport_SOURCES dlg_webp_import.ui)
 
     add_library(kritawebpimport MODULE ${kritawebpimport_SOURCES})
-    target_include_directories(kritawebpimport PRIVATE ${WebP_INCLUDE_DIRS})
-    target_link_libraries(kritawebpimport kritaui WebP::webp)
+    target_link_libraries(kritawebpimport kritaui WebP::libwebp)
 
     install(TARGETS kritawebpimport DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
     install(PROGRAMS krita_webp.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})

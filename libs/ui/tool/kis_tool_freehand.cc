@@ -81,14 +81,6 @@ KisSmoothingOptionsSP KisToolFreehand::smoothingOptions() const
 {
     return m_helper->smoothingOptions();
 }
-KisSmoothingOptionsSP KisToolFreehand::normalSmoothingOptions() const
-{
-    return m_helper->normalSmoothingOptions();
-}
-KisSmoothingOptionsSP KisToolFreehand::eraserSmoothingOptions() const
-{
-    return m_helper->eraserSmoothingOptions();
-}
 
 void KisToolFreehand::resetCursorStyle()
 {

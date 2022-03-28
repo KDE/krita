@@ -55,7 +55,6 @@ const qreal TIMING_UPDATE_INTERVAL = 50.0;
 
 struct KisToolFreehandHelper::Private
 {
-    // looking for KoResourceManager
     KoCanvasResourceProvider *resourceManager;
     KisPaintingInformationBuilder *infoBuilder;
     KisStrokesFacade *strokesFacade;
@@ -78,8 +77,7 @@ struct KisToolFreehandHelper::Private
     KisPaintInformation previousPaintInformation;
     KisPaintInformation olderPaintInformation;
 
-    bool useSeparateEraserSmoothing;
-    KisSmoothingOptionsSP smoothingOptions, normalSmoothingOptions, eraserSmoothingOptions;
+    KisSmoothingOptionsSP smoothingOptions;
 
     // fake random sources for hovering outline *only*
     KisRandomSourceSP fakeDabRandomSource;
@@ -117,10 +115,8 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     m_d->resourceManager = resourceManager;
     m_d->infoBuilder = infoBuilder;
     m_d->transactionText = transactionText;
-    m_d->normalSmoothingOptions = KisSmoothingOptionsSP(
+    m_d->smoothingOptions = KisSmoothingOptionsSP(
                 smoothingOptions ? smoothingOptions : new KisSmoothingOptions());
-    m_d->eraserSmoothingOptions = KisSmoothingOptionsSP(new KisSmoothingOptions());
-    m_d->eraserSmoothingOptions->setSmoothingType(KisSmoothingOptions::SmoothingType::NO_SMOOTHING);
 
     m_d->fakeDabRandomSource = new KisRandomSource();
     m_d->fakeStrokeRandomSource = new KisPerStrokeRandomSource();
@@ -129,12 +125,7 @@ KisToolFreehandHelper::KisToolFreehandHelper(KisPaintingInformationBuilder *info
     connect(&m_d->strokeTimeoutTimer, SIGNAL(timeout()), SLOT(finishStroke()));
     connect(&m_d->airbrushingTimer, SIGNAL(timeout()), SLOT(doAirbrushing()));
     connect(&m_d->stabilizerPollTimer, SIGNAL(timeout()), SLOT(stabilizerPollAndPaint()));
-    connect(m_d->normalSmoothingOptions.data(), SIGNAL(sigSmoothingTypeChanged()), SLOT(slotSmoothingTypeChanged()));
-
-    connect(m_d->resourceManager, SIGNAL(canvasResourceChanged(int,QVariant)), SLOT(slotEraserSmoothingTypeChanged(int,QVariant)));
-    connect(m_d->eraserSmoothingOptions.data(), SIGNAL(sigActiveChanged()), SLOT(setEraserSmoothing()));
-
-    m_d->smoothingOptions = m_d->normalSmoothingOptions;
+    connect(m_d->smoothingOptions.data(), SIGNAL(sigSmoothingTypeChanged()), SLOT(slotSmoothingTypeChanged()));
 
     m_d->stabilizerDelayedPaintHelper.setPaintLineCallback(
                 [this](const KisPaintInformation &pi1, const KisPaintInformation &pi2) {
@@ -151,48 +142,14 @@ KisToolFreehandHelper::~KisToolFreehandHelper()
     delete m_d;
 }
 
-void KisToolFreehandHelper::slotEraserSmoothingTypeChanged(int key, const QVariant &value)
-{
-    if(key == KoCanvasResource::EraserMode) {
-        setEraserSmoothing();
-    }
-}
-void KisToolFreehandHelper::setEraserSmoothing()
-{
-    bool use_eraser_stabilizer = m_d->resourceManager->resource(KoCanvasResource::EraserMode).value<bool>() && m_d->eraserSmoothingOptions->active();
-    KisSmoothingOptionsSP oldSmoothing = m_d->smoothingOptions;
-
-    if(!use_eraser_stabilizer) {
-        m_d->smoothingOptions = m_d->normalSmoothingOptions;
-    } else {
-        m_d->smoothingOptions = m_d->eraserSmoothingOptions;
-    }
-    if(m_d->smoothingOptions != oldSmoothing) {
-        emit requestExplicitUpdateOutline();
-    }
-}
-
 void KisToolFreehandHelper::setSmoothness(KisSmoothingOptionsSP smoothingOptions)
 {
-    if(m_d->resources->currentPaintOpPreset()->settings()->eraserMode() && m_d->useSeparateEraserSmoothing) {
-        m_d->eraserSmoothingOptions = smoothingOptions;
-    } else {
-        m_d->normalSmoothingOptions = smoothingOptions;
-    }
     m_d->smoothingOptions = smoothingOptions;
 }
 
 KisSmoothingOptionsSP KisToolFreehandHelper::smoothingOptions() const
 {
     return m_d->smoothingOptions;
-}
-KisSmoothingOptionsSP KisToolFreehandHelper::normalSmoothingOptions() const
-{
-    return m_d->normalSmoothingOptions;
-}
-KisSmoothingOptionsSP KisToolFreehandHelper::eraserSmoothingOptions() const
-{
-    return m_d->eraserSmoothingOptions;
 }
 
 QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,

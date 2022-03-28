@@ -9,7 +9,6 @@
 #include "QVariant"
 #include "kis_assert.h"
 
-
 struct KoDerivedResourceConverter::Private
 {
     Private(int _key, int _sourceKey)

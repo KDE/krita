@@ -98,9 +98,6 @@ protected:
     friend class KisViewManager;
     friend class KisView;
     KisSmoothingOptionsSP smoothingOptions() const;
-    KisSmoothingOptionsSP normalSmoothingOptions() const;
-    KisSmoothingOptionsSP eraserSmoothingOptions() const;
-
     bool m_assistant {false};
     double m_magnetism {1.0};
     bool m_only_one_assistant {true};

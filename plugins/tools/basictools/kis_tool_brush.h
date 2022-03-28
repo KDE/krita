@@ -46,8 +46,6 @@ class KisToolBrush : public KisToolFreehand
     Q_PROPERTY(bool finishStabilizedCurve READ finishStabilizedCurve WRITE setFinishStabilizedCurve NOTIFY finishStabilizedCurveChanged)
     Q_PROPERTY(bool stabilizeSensors READ stabilizeSensors WRITE setStabilizeSensors NOTIFY stabilizeSensorsChanged)
 
-    // Q_PROPERTY(bool eraserSmoothing READ eraserSmoothing WRITE setEraserSmoothing NOTIFY eraserSmoothingChanged)
-
 
 public:
     KisToolBrush(KoCanvasBase * canvas);
@@ -67,8 +65,6 @@ public:
     bool finishStabilizedCurve() const;
     bool stabilizeSensors() const;
 
-    bool eraserSmoothing() const;
-
 protected:
     KConfigGroup m_configGroup; // only used in the multihand tool for now
 
@@ -78,17 +74,12 @@ protected Q_SLOTS:
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-    
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
     void slotSetTailAgressiveness(qreal argh_rhhrr);
     void setSmoothPressure(bool value);
     void setUseScalableDistance(bool value);
-
-    void setEraserSmoothing(bool value);
-
-    void slotSetEraserSmoothingType(int index);
 
     void setUseDelayDistance(bool value);
     void setDelayDistance(qreal value);
@@ -111,43 +102,27 @@ Q_SIGNALS:
     void finishStabilizedCurveChanged();
     void stabilizeSensorsChanged();
 
-    // void eraserSmoothingChanged();
-
 private:
     void addSmoothingAction(int enumId, const QString &id);
     void updateSmoothnessDistanceLabel();
-
 private:
-
-    struct smoothingOptionsControls {
-        QComboBox *cmbSmoothingType {0};
-
-        KisDoubleSliderSpinBox *sliderSmoothnessDistance {0};
-        QLabel *lblSmoothnessDistance {0};
-        KisDoubleSliderSpinBox *sliderTailAggressiveness {0};
-        QCheckBox *chkSmoothPressure {0};
-        QCheckBox *chkUseScalableDistance {0};
-
-        QCheckBox *chkStabilizeSensors {0};
-        QCheckBox *chkDelayDistance {0};
-        KisDoubleSliderSpinBox *sliderDelayDistance {0};
-    
-        QCheckBox *chkFinishStabilizedCurve {0};
-    };
-
-    void createSmoothingOptionsWidget(QWidget *optionsWidget, smoothingOptionsControls& controls);
-    void slotSetSmoothingType_impl(int index, KisSmoothingOptionsSP options, smoothingOptionsControls& constrols);
-
-
-    smoothingOptionsControls m_normalSmoothingCont, m_eraserSmoothingCont;
-
-    QCheckBox *m_chkEraserSmoothing {0};
+    QComboBox *m_cmbSmoothingType {0};
 
     QCheckBox *m_chkAssistant {0};
     KisSliderSpinBox *m_sliderMagnetism {0};
     QCheckBox *m_chkOnlyOneAssistant {0};
     QCheckBox *m_chkSnapEraser {0};
+    KisDoubleSliderSpinBox *m_sliderSmoothnessDistance {0};
+    QLabel *m_lblSmoothnessDistance {0};
+    KisDoubleSliderSpinBox *m_sliderTailAggressiveness {0};
+    QCheckBox *m_chkSmoothPressure {0};
+    QCheckBox *m_chkUseScalableDistance {0};
 
+    QCheckBox *m_chkStabilizeSensors {0};
+    QCheckBox *m_chkDelayDistance {0};
+    KisDoubleSliderSpinBox *m_sliderDelayDistance {0};
+
+    QCheckBox *m_chkFinishStabilizedCurve {0};
     KisSignalMapper m_signalMapper;
 };
 

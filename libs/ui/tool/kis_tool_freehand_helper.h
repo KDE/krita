@@ -42,8 +42,6 @@ public:
 
     void setSmoothness(KisSmoothingOptionsSP smoothingOptions);
     KisSmoothingOptionsSP smoothingOptions() const;
-    KisSmoothingOptionsSP normalSmoothingOptions() const;
-    KisSmoothingOptionsSP eraserSmoothingOptions() const;
 
     bool isRunning() const;
 
@@ -148,8 +146,6 @@ private Q_SLOTS:
     void doAirbrushing();
     void stabilizerPollAndPaint();
     void slotSmoothingTypeChanged();
-    void slotEraserSmoothingTypeChanged(int key, const QVariant &value);
-    void setEraserSmoothing();
 
 private:
     struct Private;

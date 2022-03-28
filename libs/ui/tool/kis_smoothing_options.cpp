@@ -22,7 +22,6 @@ struct KisSmoothingOptions::Private {
         useDelayDistance = cfg.lineSmoothingUseDelayDistance(!useSavedSmoothing);
         finishStabilizedCurve = cfg.lineSmoothingFinishStabilizedCurve(!useSavedSmoothing);
         stabilizeSensors = cfg.lineSmoothingStabilizeSensors(!useSavedSmoothing);
-        active = true;
     }
 
     KisSignalCompressor writeCompressor;
@@ -36,7 +35,6 @@ struct KisSmoothingOptions::Private {
     bool useDelayDistance;
     bool finishStabilizedCurve;
     bool stabilizeSensors;
-    bool active;
 };
 
 KisSmoothingOptions::KisSmoothingOptions(bool useSavedSmoothing)
@@ -152,17 +150,6 @@ void KisSmoothingOptions::setStabilizeSensors(bool value)
 bool KisSmoothingOptions::stabilizeSensors() const
 {
     return m_d->stabilizeSensors;
-}
-
-void KisSmoothingOptions::setActive(bool value)
-{
-    m_d->active = value;
-    emit sigActiveChanged();
-}
-
-bool KisSmoothingOptions::active() const
-{
-    return m_d->active;
 }
 
 void KisSmoothingOptions::slotWriteConfig()

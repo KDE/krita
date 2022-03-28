@@ -5,7 +5,6 @@
  */
 
 #include <cmath>
-#include <random>
 
 #include <kis_assert.h>
 
@@ -160,9 +159,9 @@ KisSprayFunctionBasedDistribution& KisSprayFunctionBasedDistribution::KisSprayFu
     return *this;
 }
 
-double KisSprayFunctionBasedDistribution::generate(double randomValue) const
+double KisSprayFunctionBasedDistribution::operator()(KisRandomSourceSP rs) const
 {
-    return m_d->generate(randomValue);
+    return m_d->generate(rs->generateNormalized());
 }
 
 double KisSprayFunctionBasedDistribution::min() const
@@ -188,6 +187,16 @@ template <typename Function>
 void KisSprayFunctionBasedDistribution::initialize(size_t numberOfSamples, double a, double b, Function f)
 {
     m_d->initialize(numberOfSamples, a, b, f);
+}
+
+double KisSprayUniformDistribution::operator()(KisRandomSourceSP rs) const
+{
+    return rs->generateNormalized();
+}
+
+double KisSprayUniformDistributionPolarDistance::operator()(KisRandomSourceSP rs) const
+{
+    return std::sqrt(rs->generateNormalized());
 }
 
 KisSprayNormalDistribution::KisSprayNormalDistribution()

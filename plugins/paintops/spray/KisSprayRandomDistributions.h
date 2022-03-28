@@ -9,8 +9,7 @@
 
 #include <QScopedPointer>
 
-#include <random>
-
+#include <kis_random_source.h>
 #include <kis_cubic_curve.h>
 
 /**
@@ -47,16 +46,11 @@ public:
 
     /**
      * @brief Get a random value between @ref min and @ref max that follows the distribution
-     * @tparam Generator Type of the generator that will be used to get a uniform value
-     * @param g The generator object that will be used to get a uniform value
+     * @param rs The random source object that will be used to get a uniform value
      * @return A random value between @ref min and @ref max that follows the
      *         distribution
      */
-    template <typename Generator>
-    double operator()(Generator& g) const
-    {
-        return generate(std::generate_canonical<double, std::numeric_limits<double>::digits>(g));
-    }
+    double operator()(KisRandomSourceSP rs) const;
 
     /**
      * @brief Return the minimum value that this distribution can produce
@@ -85,29 +79,22 @@ protected:
 private:
     class Private;
     QScopedPointer<Private> m_d;
-    
-    double generate(double) const;
 };
 
 /**
  * @brief Class that can generate uniformly distributed values in
  *        the [0..1) range
  */
-class KisSprayUniformDistribution : public KisSprayFunctionBasedDistribution
+class KisSprayUniformDistribution
 {
 public:
     /**
      * @brief Get a random value between @ref min and @ref max that follows a uniform distribution
-     * @tparam Generator Type of the generator that will be used to get a uniform value
-     * @param g The generator object that will be used to get a uniform value
+     * @param rs The random source object that will be used to get a uniform value
      * @return A random value between @ref min and @ref max that follows the
      *         distribution
      */
-    template <typename Generator>
-    double operator()(Generator& g) const
-    {
-        return std::generate_canonical<double, std::numeric_limits<double>::digits>(g);
-    }
+    double operator()(KisRandomSourceSP rs) const;
 
     /**
      * @brief Return the minimum value that this distribution can produce
@@ -133,11 +120,7 @@ public:
 class KisSprayUniformDistributionPolarDistance : public KisSprayUniformDistribution
 {
 public:
-    template <typename Generator>
-    double operator()(Generator& g) const
-    {
-        return std::sqrt(KisSprayUniformDistribution::operator()(g));
-    }
+    double operator()(KisRandomSourceSP rs) const;
 };
 
 /**

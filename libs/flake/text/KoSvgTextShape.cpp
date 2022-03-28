@@ -449,6 +449,7 @@ void KoSvgTextShape::relayout() const
         // convert the outline to a painter path
         // This is taken from qfontengine_ft.cpp.
         QPainterPath glyph;
+        glyph.setFillRule(Qt::WindingFill);
         int i = 0;
         for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
             int last_point = glyphSlot->outline.contours[j];
@@ -938,19 +939,12 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                     b = qMax(b, qMax(pos, pos + advance));
                 }
             }
+            qreal baWidth = b - a;
 
             for (int i = currentIndex; i < endIndex; i++) {
                 qreal startpointOnThePath = -a + offset;
                 CharacterResult cr = result[i];
                 bool rtl = (cr.direction == KoSvgText::DirectionRightToLeft);
-
-                if ((cr.anchor == KoSvgText::AnchorEnd && !rtl)
-                    || (cr.anchor == KoSvgText::AnchorStart && rtl)) {
-                    startpointOnThePath = -a + (length - (b - a + offset));
-                } else if (cr.anchor == KoSvgText::AnchorMiddle) {
-                    startpointOnThePath =
-                        -a + (length - (b - a)) * 0.5 + offset;
-                }
 
                 if (cr.middle == false) {
                     qreal mid = cr.finalPosition.x() + (cr.advance.x() * 0.5)
@@ -968,20 +962,31 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                         } else if ((cr.anchor == KoSvgText::AnchorEnd && !rtl)
                                    || (cr.anchor == KoSvgText::AnchorStart
                                        && rtl)) {
+                            mid -= baWidth;
                             if (mid - offset < -length || mid - offset > 0) {
                                 cr.hidden = true;
                             }
                         } else {
+                            mid -= baWidth * 0.5;
                             if (mid - offset < -(length * 0.5)
                                 || mid - offset > (length * 0.5)) {
                                 cr.hidden = true;
                             }
                         }
-                        if (mid > length) {
-                            mid -= length;
+                        if (a < 0) {
+                            mid += length;
                         }
-                    } else if (mid < 0 || mid > length) {
-                        cr.hidden = true;
+                        mid = fmod(mid, length);
+                    } else {
+                        if ((cr.anchor == KoSvgText::AnchorEnd && !rtl)
+                            || (cr.anchor == KoSvgText::AnchorStart && rtl)) {
+                            mid += (length - (baWidth + offset * 2));
+                        } else if (cr.anchor == KoSvgText::AnchorMiddle) {
+                            mid += (length - baWidth) * 0.5;
+                        }
+                        if (mid < 0 || mid > length) {
+                            cr.hidden = true;
+                        }
                     }
                     if (!cr.hidden) {
                         qreal percent = path.percentAtLength(mid);

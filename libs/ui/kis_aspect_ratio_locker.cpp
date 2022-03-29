@@ -94,6 +94,18 @@ struct SliderWrapper
         return result;
     }
 
+    void connectDraggingFinished(QObject *receiver, const char *amember) {
+
+        if (m_slider.canConvert<KisSliderSpinBox*>()) {
+            QObject::connect(m_slider.value<KisSliderSpinBox*>(), SIGNAL(draggingFinished()),
+                             receiver, amember);
+
+        } else if (m_slider.canConvert<KisDoubleSliderSpinBox*>()) {
+            QObject::connect(m_slider.value<KisDoubleSliderSpinBox*>(), SIGNAL(draggingFinished()),
+                             receiver, amember);
+        }
+    }
+
     QObject* object() const {
         return m_object;
     }
@@ -138,6 +150,9 @@ void KisAspectRatioLocker::connectSpinBoxes(SpinBoxType *spinOne, SpinBoxType *s
         connect(spinOne, SIGNAL(valueChanged(int)), SLOT(slotSpinOneChanged()));
         connect(spinTwo, SIGNAL(valueChanged(int)), SLOT(slotSpinTwoChanged()));
     }
+
+    m_d->spinOne->connectDraggingFinished(this, SLOT(slotSpinDraggingFinished()));
+    m_d->spinTwo->connectDraggingFinished(this, SLOT(slotSpinDraggingFinished()));
 
     connect(m_d->aspectButton, SIGNAL(keepAspectRatioChanged(bool)), SLOT(slotAspectButtonChanged()));
     slotAspectButtonChanged();
@@ -189,6 +204,13 @@ void KisAspectRatioLocker::slotAspectButtonChanged()
     if (!m_d->spinTwo->isDragging()) {
         emit aspectButtonChanged();
         emit aspectButtonToggled(m_d->aspectButton->keepAspectRatio());
+    }
+}
+
+void KisAspectRatioLocker::slotSpinDraggingFinished()
+{
+    if (m_d->blockUpdatesOnDrag) {
+        emit sliderValueChanged();
     }
 }
 

@@ -34,6 +34,7 @@ private Q_SLOTS:
     void slotSpinOneChanged();
     void slotSpinTwoChanged();
     void slotAspectButtonChanged();
+    void slotSpinDraggingFinished();
 
 Q_SIGNALS:
     void sliderValueChanged();

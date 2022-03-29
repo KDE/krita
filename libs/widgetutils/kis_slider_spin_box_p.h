@@ -771,6 +771,7 @@ public:
                 }
 
                 m_isDragging = false;
+                emit m_q->draggingFinished();
             }
             return true;
         }

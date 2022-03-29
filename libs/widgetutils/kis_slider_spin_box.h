@@ -189,6 +189,9 @@ public:
      */
     void setSoftMaximum(int newSoftMaximum);
 
+Q_SIGNALS:
+    void draggingFinished();
+
 protected:
     virtual void setInternalValue(int value, bool blockUpdateSignal);
     void setPrivateValue(int value);
@@ -246,6 +249,9 @@ public:
 protected:
     virtual void setInternalValue(qreal newValue, bool newBlockUpdateSignal);
     void setPrivateValue(qreal newValue);
+
+Q_SIGNALS:
+    void draggingFinished();
 
 private:
     template <typename SpinBoxTypeTP, typename BaseSpinBoxTypeTP>

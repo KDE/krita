@@ -303,6 +303,10 @@ void KoSvgTextShape::relayout() const
     KoSvgText::Direction direction = KoSvgText::Direction(
                 this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
 
+    bool isHorizontal = true;
+    if (writingMode == KoSvgText::TopToBottom) {
+        isHorizontal = false;
+    }
     // First, get text. We use the subChunks because that handles bidi for us.
     // SVG 1.1 suggests that each time the xy position of a piece of text changes,
     // that this should be seperately shaped, but according to SVGWG issues 631 and 635
@@ -324,7 +328,7 @@ void KoSvgTextShape::relayout() const
         FT_Init_FreeType(&d->library);
     }
     FcConfig *config = FcConfigGetCurrent();
-    FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY,FC_FILE, nullptr);
+    FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_WIDTH, FC_WEIGHT, FC_SLANT, nullptr);
 
     if (raqm_set_text_utf8(layout, text.toUtf8(), text.toUtf8().size())) {
         if (writingMode == KoSvgText::TopToBottom) {
@@ -345,40 +349,46 @@ void KoSvgTextShape::relayout() const
             const FcChar8 *vals = reinterpret_cast<FcChar8*>(chunk.format.font().family().toUtf8().data());
             qreal fontSize = chunk.format.font().pointSizeF();
             FcPatternAddString(p, FC_FAMILY, vals);
-            /* this is too strict, and will sometimes prevent
-                 * fonts to be found, so we'll need to handle this differently...
-                if (range.format.font().italic()) {
-                    FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
-                }
-                //The following is wrong, but it'll have to do for now...
-                FcPatternAddInteger(p, FC_WEIGHT, range.format.font().weight()*2);
-                if (range.format.font().stretch() >= 50) {
-                    FcPatternAddInteger(p, FC_WIDTH, range.format.font().stretch());
-                }*/
-            FcFontSet *fontSet = FcFontList(config, p, objectSet);
-            if (fontSet->nfont == 0) {
+            if (chunk.format.font().italic()) {
+                FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
+            } else {
+                FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ROMAN);
+            }
+            //The following is wrong, but it'll have to do for now...
+            FcPatternAddInteger(p, FC_WEIGHT, chunk.format.font().weight()*2);
+            if (chunk.format.font().stretch() >= 50) {
+                FcPatternAddInteger(p, FC_WIDTH, 100);
+            }
+
+            FcResult result;
+            FcPattern *pattern = FcFontMatch(config, p, &result);
+            if (result != FcResultMatch) {
                 qWarning() << "No fonts found for family name" << chunk.format.font().family();
                 continue;
             }
             QString fontFileName;
-            QStringList fontProperties = QString(reinterpret_cast<char*>(FcNameUnparse(fontSet->fonts[0]))).split(':');
-            for (QString value : fontProperties) {
-                if (value.startsWith("file")) {
-                    fontFileName = value.split("=").last();
-                    fontFileName.remove("\\");
-                }
+            FcChar8 *fileValue = 0;
+            if (FcPatternGetString(pattern, FC_FILE, 0, &fileValue) == FcResultMatch) {
+                fontFileName = QString(reinterpret_cast<char*>(fileValue));
             }
 
             int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
             if (errorCode == 0) {
                 qDebug() << "face loaded" << fontFileName;
                 errorCode = FT_Set_Char_Size(face, fontSize*64.0, 0, 0, 0);
+                FT_Int32 loadFlags = FT_LOAD_DEFAULT;
+
+                if (!isHorizontal && FT_HAS_VERTICAL(face)) {
+                    loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+                }
                 if (errorCode == 0) {
                     if (start == 0) {
                         raqm_set_freetype_face(layout, face);
+                        raqm_set_freetype_load_flags(layout, loadFlags);
                     }
                     if (length > 0) {
                         raqm_set_freetype_face_range(layout, face, start, length);
+                        raqm_set_freetype_load_flags_range(layout, loadFlags, start, length);
                     }
                 }
             } else {
@@ -398,10 +408,6 @@ void KoSvgTextShape::relayout() const
     qDebug() << "1. Setup";
 
     QVector<CharacterResult> result(text.toUtf8().size());
-    bool isHorizontal = true;
-    if (writingMode == KoSvgText::TopToBottom) {
-        isHorizontal = false;
-    }
 
     // 2. Set flags and assign initial positions
     // We also retreive a path here.
@@ -415,15 +421,19 @@ void KoSvgTextShape::relayout() const
 
     QTransform ftTF;
     const qreal factor = 1/64.;
-    // This is dependant on the writing mode, but it seems also
-    // dependant on whether the fontface was loaded with vertical metrics...
+    // This is dependant on the writing mode. We want this to align to the vertical baseline for vertical metrics.
     ftTF.scale(factor, -factor);
 
     QPointF totalAdvance;
 
     for (int g=0; g < int(count); g++) {
 
-        int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, 0);
+        FT_Int32 loadFlags = FT_LOAD_DEFAULT;
+
+        if (!isHorizontal && FT_HAS_VERTICAL(glyphs[g].ftface)) {
+            loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+        }
+        int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, loadFlags);
         if (error != 0) {
             continue;
         }
@@ -517,20 +527,25 @@ void KoSvgTextShape::relayout() const
             }
             ++i;
         }
+        glyph.translate(glyphs[g].x_offset, glyphs[g].y_offset);
         glyph = ftTF.map(glyph);
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
         advance = ftTF.map(advance);
-        QPointF offset(glyphs[g].x_offset, glyphs[g].y_offset);
-        offset = ftTF.map(offset);
 
-        CharacterResult charResult;
-        charResult.path = glyph;
-        charResult.advance = advance;
+        CharacterResult charResult = result[glyphs[g].cluster];
+
+        if (!charResult.path.isEmpty()) {
+            // this is for glyph clusters, unicode combining marks are always added
+            charResult.path.addPath(glyph.translated(charResult.advance));
+        } else {
+            charResult.path = glyph;
+        }
+        charResult.advance += advance;
         if (glyph.isEmpty()) {
             // TODO: get better bounding box.
             charResult.boundingBox = QRectF(QPointF(), advance);
         } else {
-            charResult.boundingBox = glyph.boundingRect();
+            charResult.boundingBox = charResult.path.boundingRect();
         }
         charResult.typographic_index = g;
         charResult.addressable = true;
@@ -542,10 +557,10 @@ void KoSvgTextShape::relayout() const
             charResult.anchored_chunk = true;
         }
         charResult.middle = false;
-        charResult.cssPosition = totalAdvance + offset;
+        totalAdvance += advance;
+        charResult.cssPosition = totalAdvance - charResult.advance;
 
         result[glyphs[g].cluster] = charResult;
-        totalAdvance += advance;
     }
     // we're done with raqm for now.
     raqm_destroy(layout);
@@ -636,17 +651,37 @@ void KoSvgTextShape::relayout() const
     d->getAnchors(this, result, globalIndex);
 
     QMap<int, QRectF> anchoredChunk;
-    QRectF a;
+    qreal a = 0;
+    qreal b = 0;
     for (int i = 0; i < result.size(); i++) {
-        if (result[i].anchored_chunk) {
-            anchoredChunk.insert(i, a);
-            a = QRectF();
+        qreal pos = result[i].finalPosition.x();
+        qreal advance = result[i].advance.x();
+        if (!isHorizontal) {
+            pos = result[i].finalPosition.y();
+            advance = result[i].advance.y();
         }
-        QRectF b = result[i].boundingBox;
-        b.translate(result[i].finalPosition);
-        a |= b;
+        if (result[i].anchored_chunk) {
+            if (isHorizontal) {
+                QRectF c(a, 0, b-a, 1);
+                anchoredChunk.insert(i, c);
+            } else {
+                QRectF c(0, a, 1, b-a);
+                anchoredChunk.insert(i, c);
+            }
+            a = qMin(pos, pos+advance);
+            b = qMax(pos, pos+advance);
+        } else {
+            a = qMin(a, qMin(pos, pos+advance));
+            b = qMax(b, qMax(pos, pos+advance));
+        }
     }
-    anchoredChunk.insert(result.size(), a);
+    if (isHorizontal) {
+        QRectF c(a, 0, b-a, 1);
+        anchoredChunk.insert(result.size(), c);
+    } else {
+        QRectF c(0, a, 1, b-a);
+        anchoredChunk.insert(result.size(), c);
+    }
 
     int last = 0;
 
@@ -950,7 +985,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                         } else {
                             cr.rotate -= qDegreesToRadians(tAngle+90);
                             QPointF vectorN(vectorT.y(), -vectorT.x());
-                            qreal o = -(cr.advance.y()*0.5);
+                            qreal o = (cr.advance.y()*0.5);
                             cr.finalPosition = pos - (o*vectorT) + (cr.finalPosition.x()*vectorN);
                         }
                     }

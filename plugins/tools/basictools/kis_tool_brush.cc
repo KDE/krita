@@ -354,10 +354,13 @@ QWidget * KisToolBrush::createOptionWidget()
 
     m_sliderSmoothnessDistance = new KisDoubleSliderSpinBox(optionsWidget);
     m_sliderSmoothnessDistance->setEnabled(true);
-    connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
-    m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
     m_lblSmoothnessDistance = new QLabel();
     updateSmoothnessDistanceLabel();
+
+    // make sure that initializaiotion of the value happens **after** we
+    // have configured the slider's range in updateSmoothnessDistanceLabel()
+    connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
+    m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
 
     addOptionWidgetOption(m_sliderSmoothnessDistance, m_lblSmoothnessDistance);
 

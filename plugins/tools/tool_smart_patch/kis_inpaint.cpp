@@ -29,6 +29,7 @@
 #include "kis_paint_device_debug_utils.h"
 //#include "kis_random_accessor_ng.h"
 
+#include <QtMath>
 #include <QList>
 #include <kis_transform_worker.h>
 #include <kis_filter_strategy.h>
@@ -489,7 +490,9 @@ template <typename T> float distance_impl(const MaskedImage& my, int x, int y, c
         float v = ((float)(*(v1 + chan)) - (float)(*(v2 + chan)));
         dsq += v * v;
     }
-    return dsq / ((float)KoColorSpaceMathsTraits<T>::unitValue * KoColorSpaceMathsTraits<T>::unitValue / MAX_DIST );
+
+    // in HDR color spaces the value of the cnannel may become bigger than the unitValue
+    return qMin(1.0f, dsq / (pow2((float)KoColorSpaceMathsTraits<T>::unitValue) / MAX_DIST ));
 }
 
 
@@ -682,9 +685,9 @@ public:
     //compute distance between two patches
     int distance(int x, int y, int xp, int yp)
     {
-        float distance = 0;
-        float wsum = 0;
-        float ssdmax = nColors * 255 * 255;
+        qint64 distance = 0;
+        qint64 wsum = 0;
+        const qint64 ssdmax = nColors * 255 * 255;
 
         //for each pixel in the source patch
         for (int dy = -patchSize; dy <= patchSize; dy++) {
@@ -729,11 +732,12 @@ public:
 
                 //SSD distance between pixels
                 float ssd = input->distance(*input, xks, yks, *output, xkt, ykt);
-                distance += ssd;
+                distance += qRound(ssd);
 
             }
         }
-        return (int)(MAX_DIST * (distance / wsum));
+
+        return qFloor(MAX_DIST * (qreal(distance) / wsum));
     }
 
     static MaskedImageSP ExpectationMaximization(KisSharedPtr<NearestNeighborField> TargetToSource, int level, int radius, QList<MaskedImageSP>& pyramid);
@@ -924,7 +928,7 @@ void NearestNeighborField::ExpectationStep(NearestNeighborFieldSP nnf, MaskedIma
 
                             xst = nnf->field[xpt][ypt].x;
                             yst = nnf->field[xpt][ypt].y;
-                            float dp = nnf->field[xpt][ypt].distance;
+                            int dp = nnf->field[xpt][ypt].distance;
                             // similarity measure between the two patches
                             w = nnf->similarity[dp];
 
@@ -933,7 +937,7 @@ void NearestNeighborField::ExpectationStep(NearestNeighborFieldSP nnf, MaskedIma
                                 continue;
                             xst = 2 * nnf->field[xpt / 2][ypt / 2].x + (xpt % 2);
                             yst = 2 * nnf->field[xpt / 2][ypt / 2].y + (ypt % 2);
-                            float dp = nnf->field[xpt / 2][ypt / 2].distance;
+                            int dp = nnf->field[xpt / 2][ypt / 2].distance;
                             // similarity measure between the two patches
                             w = nnf->similarity[dp];
                         }

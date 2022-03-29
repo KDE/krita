@@ -126,7 +126,7 @@ class UIColorSpace(object):
         if selectedDocuments:
             self.convertColorSpace(selectedDocuments)
             self.msgBox.setText(
-                i18n("The selected documents has been converted."))
+                i18n("The selected documents have been converted."))
         else:
             self.msgBox.setText(i18n("Select at least one document."))
         self.msgBox.exec_()

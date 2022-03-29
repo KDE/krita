@@ -118,7 +118,7 @@
     <p xml:lang="ast">Krita ye l'estudiu dixital d'arte completu.</p>
     <p xml:lang="bs">Krita je potpuni digitalni umjetnički studio.</p>
     <p xml:lang="ca">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
-    <p xml:lang="ca-valencia">El Krita és l'estudi d'art digital ple de funcionalitats.</p>
+    <p xml:lang="ca-valencia">Krita és l'estudi d'art digital ple de funcionalitats.</p>
     <p xml:lang="cs">Krita je plnohodnotné studio digitálního umění.</p>
     <p xml:lang="de">Krita ist ein digitales Designstudio mit umfangreichen Funktionen.</p>
     <p xml:lang="el">Το Krita είναι ένα πλήρες χαρακτηριστικών ψηφιακό ατελιέ.</p>
@@ -193,7 +193,7 @@
     <p xml:lang="ar">يعد كريتا خيارًا رائعًا لإنشاء لوحات مبدئية ورسومات الهزلية و الأنسجة المستخدمة في التصيير ثلاثي الأبعاد واللوحات غير اللامعة. يدعم كريتا العديد من مساحات الألوان مثل RGB و CMYK بقنوات ذات 8 و 16 بت، بالإضافة إلى قنوات فاصلة عائمة 16 بت و 32 بت.</p>
     <p xml:lang="bs">Krita je odličan izbor za kreiranje konceptualne umjetnosti, stripove, teksture za obradu i mat slike. Krita podržava mnoge prostore boja kao RGB i CMIK na 8 i 16 bitnim cjelobrojnim kanalimaa, kao i 16 i 32 bita floating point kanalima.</p>
     <p xml:lang="ca">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
-    <p xml:lang="ca-valencia">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
+    <p xml:lang="ca-valencia">Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="de">Krita ist eine großartige Wahl zur Erstellung von Concept Art, Comics, Rendertexturen und Vorsatzmalerei. Krita unterstützt viele Farbräume, wie RGB und CMYK mit 8 oder 16 Bit Integerkanälen, sowie 16 und 32 Bit Fließkomma-Kanälen.</p>
     <p xml:lang="el">Το Krita είναι μια εξαιρετική επιλογή για τη δημιουργία αφηρημένης τέχνης, ιστοριών με εικόνες, υφής για ζωγραφική αποτύπωσης και διάχυσης φωτός. Το Krita υποστηρίζει πολλούς χρωματικούς χώρους όπως τα RGB και CMYK σε 8 και 16 bit κανάλια ακεραίων καθώς επίσης και σε 16 και 32 bit κανάλια κινητής υποδιαστολής,</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colourspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
@@ -228,7 +228,7 @@
     <p xml:lang="ar">استمتع بالرسم باستخدام محركات الفرشاة المتقدمة والمرشحات المذهلة والعديد من الميزات المفيدة التي تجعل كريتا منتجًا بشكل كبير.</p>
     <p xml:lang="bs">Zabavite se kreirajući napredne pogone četki, filtere i mnoge praktične osobine koje čine Krita vrlo produktivnim.</p>
     <p xml:lang="ca">Gaudiu pintant amb els motors avançats de pinzell, filtres impressionants i moltes característiques útils que fan el Krita molt productiu.</p>
-    <p xml:lang="ca-valencia">Gaudiu pintant amb els motors avançats de pinzell, filtres impressionants i moltes característiques útils que fan el Krita molt productiu.</p>
+    <p xml:lang="ca-valencia">Gaudiu pintant amb els motors avançats de pinzell, filtres impressionants i moltes característiques útils que fan Krita molt productiu.</p>
     <p xml:lang="de">Viel Spaß beim Malen mit den fortschrittlichen Pinsel-Engines, verblüffenden Filtern und vielen praktischen Features, die Krita eine enorme Produktivität verleihen.</p>
     <p xml:lang="el">Διασκεδάστε ζωγραφίζοντας με τις προηγμένες μηχανές πινέλων, με εκπληκτικά φίλτρα και πολλά εύκολης χρήσης χαρακτηριστικά που παρέχουν στο Krita εξαιρετικά αυξημένη παραγωγικότητα.</p>
     <p xml:lang="en-GB">Have fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.</p>
@@ -270,7 +270,7 @@
       <caption>Krita is a full-featured digital painting studio</caption>
       <caption xml:lang="ar">كريتا هو استديو فنون رقميّة بمزايا شاملة.</caption>
       <caption xml:lang="ca">El Krita és un estudi de pintura digital ple de funcionalitats</caption>
-      <caption xml:lang="ca-valencia">El Krita és un estudi de pintura digital ple de funcionalitats</caption>
+      <caption xml:lang="ca-valencia">Krita és un estudi de pintura digital ple de funcionalitats</caption>
       <caption xml:lang="de">Krita ist ein digitales Zeichenstudio mit umfangreichen Funktionen</caption>
       <caption xml:lang="en-GB">Krita is a full-featured digital painting studio</caption>
       <caption xml:lang="es">Krita es un completo estudio de dibujo digital</caption>
@@ -302,7 +302,7 @@
       <caption>The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="ar">توفر لك نافذة بدء التشغيل الآن آخر الأخبار حول كريتا</caption>
       <caption xml:lang="ca">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
-      <caption xml:lang="ca-valencia">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
+      <caption xml:lang="ca-valencia">La finestra d'inici també ofereix les últimes notícies sobre Krita</caption>
       <caption xml:lang="de">Das Startfenster bietet jetzt auch die aktuellsten Neuigkeiten über Krita</caption>
       <caption xml:lang="en-GB">The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="es">La ventana de bienvenida también le proporciona ahora las últimas noticias sobre Krita</caption>
@@ -364,7 +364,7 @@
       <caption>Into animation? Krita provides everything you need for traditional, hand-drawn animation</caption>
       <caption xml:lang="ar">هل مهتم  بالرسوم المتحركة؟ يوفر كريتا كل ما تحتاج للرسوم المتحركة التقليدية المرسومة باليد</caption>
       <caption xml:lang="ca">Esteu amb les animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
-      <caption xml:lang="ca-valencia">Esteu amb les animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
+      <caption xml:lang="ca-valencia">Esteu amb les animacions? Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
       <caption xml:lang="de">Sie interessieren sich für Animation? Krita bietet alles was für traditionelle, handgezeichnete Animation benötigt wird</caption>
       <caption xml:lang="en-GB">Into animation? Krita provides everything you need for traditional, hand-drawn animation</caption>
       <caption xml:lang="es">¿Trabaja con animación? Krita proporciona todo lo necesario para la animación manual tradicional</caption>
@@ -427,7 +427,7 @@
       <caption>Krita offers powerful filters</caption>
       <caption xml:lang="ar">يوفر كرتيا مرشحات قوية</caption>
       <caption xml:lang="ca">El Krita ofereix filtres potents</caption>
-      <caption xml:lang="ca-valencia">El Krita ofereix filtres potents</caption>
+      <caption xml:lang="ca-valencia">Krita ofereix filtres potents</caption>
       <caption xml:lang="cs">Krita poskytuje mocné filtry</caption>
       <caption xml:lang="en-GB">Krita offers powerful filters</caption>
       <caption xml:lang="es">Krita ofrece potentes filtros</caption>
@@ -498,7 +498,7 @@
       <caption>Or the active <a href="https://krita-artists.org">Krita Artists community</a></caption>
       <caption xml:lang="ar">أو نشط <a href="https://krita-artists.org">مجتمع فناني كريتا</a></caption>
       <caption xml:lang="ca">O l'actiu <a href="https://krita-artists.org">La comunitat d'artistes del Krita</a></caption>
-      <caption xml:lang="ca-valencia">O l'actiu <a href="https://krita-artists.org">La comunitat d'artistes del Krita</a></caption>
+      <caption xml:lang="ca-valencia">O l'actiu <a href="https://krita-artists.org">La comunitat d'artistes de Krita</a></caption>
       <caption xml:lang="cs">Nebo aktivní <a href="https://krita-artists.org">Komunita umělců Krita</a></caption>
       <caption xml:lang="en-GB">Or the active <a href="https://krita-artists.org">Krita Artists community</a></caption>
       <caption xml:lang="es">O al activo <a href="https://krita-artists.org">La comunidad de artistas de Krita</a></caption>

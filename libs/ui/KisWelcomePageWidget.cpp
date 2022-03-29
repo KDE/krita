@@ -70,8 +70,8 @@
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>
 
-QPushButton* KisWelcomePageWidget::donationLink;
-QLabel* KisWelcomePageWidget::donationBannerImage;
+QPushButton* KisWelcomePageWidget::donationLink {nullptr};
+QLabel* KisWelcomePageWidget::donationBannerImage {nullptr};
 #endif
 
 #ifdef Q_OS_WIN

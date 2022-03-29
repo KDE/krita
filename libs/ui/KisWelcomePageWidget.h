@@ -103,8 +103,8 @@ private:
 
 #ifdef Q_OS_ANDROID
 public:
-    static QPushButton* donationLink {nullptr};
-    static QLabel* donationBannerImage {nullptr};
+    static QPushButton* donationLink;
+    static QLabel* donationBannerImage;
 #endif
     QScopedPointer<RecentItemDelegate> recentItemDelegate;
 

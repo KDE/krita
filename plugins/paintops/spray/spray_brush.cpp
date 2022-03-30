@@ -148,6 +148,10 @@ void SprayBrush::paintImpl(KisPaintDeviceSP dab, KisPaintDeviceSP source,
                            const AngularDistribution &angularDistribution,
                            const RadialDistribution &radialDistribution)
 {
+    if (!angularDistribution.isValid() || !radialDistribution.isValid()) {
+        return;
+    }
+
     KisRandomSourceSP randomSource = info.randomSource();
 
     // initializing painter

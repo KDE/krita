@@ -41,7 +41,39 @@ public:
         const double intervalSize = domainSize / static_cast<double>(numberOfSamples - 1);
         double sum = 0.0;
         double lastX, lastY, lastSum;
+        size_t effectiveNumberOfSamples = numberOfSamples;
 
+        // Adjust the limits of the pdf if it has a 0 probability segment at
+        // the start or at the end
+        {
+            for (size_t i = 0; i < numberOfSamples; ++i) {
+                const double x = a + intervalSize * static_cast<double>(i);
+                const double y = f(x);
+                if (y > 0.0) {
+                    if (i > 0) {
+                        a += intervalSize * static_cast<double>(i - 1);
+                        effectiveNumberOfSamples -= i - 1;
+                    }
+                    break;
+                }
+                if (i == numberOfSamples - 1) {
+                    // The whole pdf must have 0 probability
+                    return;
+                }
+            }
+
+            for (size_t i = 0; i < numberOfSamples; ++i) {
+                const double x = b - intervalSize * static_cast<double>(i);
+                const double y = f(x);
+                if (y > 0.0) {
+                    if (i > 0) {
+                        b -= intervalSize * static_cast<double>(i - 1);
+                        effectiveNumberOfSamples -= i - 1;
+                    }
+                    break;
+                }
+            }
+        }
         // Insert first point
         {
             samples.push_back({a, 0.0, 0.0});
@@ -58,22 +90,18 @@ public:
             bool mustCheckAngle = false;
             int skippedPoints = 0;
 
-            for (size_t i = 1; i < numberOfSamples; ++i) {
-                double x = a + intervalSize * static_cast<double>(i);
-                double y = f(x);
+            for (size_t i = 1; i < effectiveNumberOfSamples; ++i) {
+                const double x = a + intervalSize * static_cast<double>(i);
+                const double y = f(x);
                 // Accumulate the area under the curve between the two points
                 sum += (x - lastX) * (y + lastY) / 2.0;
                 //
                 if (y == 0.0) {
                     if (lastY == 0.0) {
-                        if (i == numberOfSamples - 1) {
-                            samples.push_back({b, sum, 0.0});
-                        } else {
-                            lastX = x;
-                            lastY = y;
-                            lastSum = sum;
-                            ++skippedPoints;
-                        }
+                        lastX = x;
+                        lastY = y;
+                        lastSum = sum;
+                        ++skippedPoints;
                         continue;
                     } else {
                         mustCheckAngle = false;

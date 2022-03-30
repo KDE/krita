@@ -55,5 +55,14 @@ struct UpdateOp
     }
 };
 
+template <class LayerType>
+struct NotifyColorSpaceChangedOp
+{
+    void operator() (LayerType layer) {
+        layer->notifyColorSpaceChanged();
+    }
+};
+
+
 }
 #endif /* __KIS_DO_SOMETHING_COMMAND_H */

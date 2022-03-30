@@ -17,7 +17,7 @@ class KisResetGroupLayerCacheCommand : public KisCommandUtils::FlipFlopCommand
 public:
     KisResetGroupLayerCacheCommand(KisGroupLayerSP layer, const KoColorSpace *dstColorSpace, State state);
 
-    void partB();
+    void partB() override;
 
 private:
     KisGroupLayerSP m_layer;

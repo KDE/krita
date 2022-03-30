@@ -404,10 +404,6 @@ QString KisShortcutConfiguration::wheelInputToText(const QList<Qt::Key> &keys, K
 QString KisShortcutConfiguration::gestureToText(GestureAction action)
 {
     switch (action) {
-    case NoGesture:
-        return i18n("No Gesture");
-    case MaxGesture:
-        return i18n("Max Gesture");
 #ifdef Q_OS_MACOS
     case PinchGesture:
         return i18n("Pinch Gesture");
@@ -440,6 +436,6 @@ QString KisShortcutConfiguration::gestureToText(GestureAction action)
         return i18n("Five Finger Drag");
 #endif
     default:
-        return QString();
+        return i18n("No Gesture");
     }
 }

@@ -260,6 +260,9 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const KoSvgText::KoSvgCharChunkFormat format = q->fetchCharFormat();
             QVector<KoSvgText::CharTransformation> transforms = q->s->localTransformations;
 
+            QVector<int> values;
+            QStringList fontFamilies(q->s->properties.fontFileNameForText(q->s->text, values));
+            
             /**
              * Sometimes SVG can contain the X,Y offsets for the pieces of text that
              * do not exist, just skip them.
@@ -273,11 +276,11 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const QString bidiOpening = getBidiOpening(direction, bidi);
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk(bidiOpening, format);
+                result << SubChunk(bidiOpening, format, fontFamilies, QVector<int>());
             }
 
             if (transforms.isEmpty()) {
-                result << SubChunk(text, format);
+                result << SubChunk(text, format, fontFamilies, values);
             } else {
                 for (int i = 0; i < transforms.size(); i++) {
                     const KoSvgText::CharTransformation baseTransform = transforms[i];
@@ -295,14 +298,14 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                         subChunkLength = text.size() - i;
                     }
 
-                    result << SubChunk(text.mid(i, subChunkLength), format, baseTransform);
+                    result << SubChunk(text.mid(i, subChunkLength), format,  baseTransform, fontFamilies, values);
                     i += subChunkLength - 1;
                 }
 
             }
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk("\u202c", format);
+                result << SubChunk("\u202c", format, fontFamilies, QVector<int>());
             }
 
         } else {

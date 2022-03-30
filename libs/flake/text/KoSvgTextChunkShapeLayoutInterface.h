@@ -60,6 +60,9 @@ public:
      */
     virtual QString nodeText() const = 0;
 
+    /**
+     * @return a text on path info struct. Check the 'path' value inside to see if this textChunk *is* a textOnPath.
+     **/ 
     virtual KoSvgText::TextOnPathInfo textOnPathInfo() const = 0;
 
     /**
@@ -99,20 +102,28 @@ public:
         {
         }
 
-        SubChunk(const QString &_text, const KoSvgText::KoSvgCharChunkFormat &_format)
-            : text(_text), format(_format)
+        SubChunk(const QString &_text, const KoSvgText::KoSvgCharChunkFormat &_format,
+                 const QStringList &_fontFamilies, const QVector<int> &_familyLengths)
+            : text(_text), format(_format), fontFamilies(_fontFamilies), familyLengths(_familyLengths)
         {
         }
 
         SubChunk(const QString &_text, const KoSvgText::KoSvgCharChunkFormat &_format,
-                  const KoSvgText::CharTransformation &t)
-            : text(_text), format(_format), transformation(t)
+                  const KoSvgText::CharTransformation &t,
+                 const QStringList &_fontFamilies, const QVector<int> &_familyLengths)
+            : text(_text), format(_format), transformation(t), fontFamilies(_fontFamilies), familyLengths(_familyLengths)
         {
         }
 
         QString text;
         KoSvgText::KoSvgCharChunkFormat format;
         KoSvgText::CharTransformation transformation;
+        
+        /**
+         * We need to manually match which character applies to what character.
+         */
+        QStringList fontFamilies;
+        QVector<int> familyLengths;
     };
 
     /**

@@ -341,62 +341,52 @@ void KoSvgTextShape::relayout() const
 
         int start = 0;
         int length = 0;
+        FT_Face face = NULL;
         for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
             length = chunk.text.toUtf8().size();
-            FT_Face face = NULL;
-
-            FcPattern *p = FcPatternCreate();
-            const FcChar8 *vals = reinterpret_cast<FcChar8*>(chunk.format.font().family().toUtf8().data());
-            qreal fontSize = chunk.format.font().pointSizeF();
-            FcPatternAddString(p, FC_FAMILY, vals);
-            if (chunk.format.font().italic()) {
-                FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
-            } else {
-                FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ROMAN);
-            }
-            //The following is wrong, but it'll have to do for now...
-            FcPatternAddInteger(p, FC_WEIGHT, chunk.format.font().weight()*2);
-            if (chunk.format.font().stretch() >= 50) {
-                FcPatternAddInteger(p, FC_WIDTH, 100);
-            }
-
-            FcResult result;
-            FcPattern *pattern = FcFontMatch(config, p, &result);
-            if (result != FcResultMatch) {
-                qWarning() << "No fonts found for family name" << chunk.format.font().family();
+            QVector<int> lengths = chunk.familyLengths;
+            if (length == 0) {
                 continue;
             }
-            QString fontFileName;
-            FcChar8 *fileValue = 0;
-            if (FcPatternGetString(pattern, FC_FILE, 0, &fileValue) == FcResultMatch) {
-                fontFileName = QString(reinterpret_cast<char*>(fileValue));
+            QStringList fontFamilies = chunk.fontFamilies;
+            if (lengths.isEmpty() && !chunk.fontFamilies.isEmpty()) {
+                lengths.append(length);
+                fontFamilies = QStringList(chunk.fontFamilies.first());
             }
 
-            int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
-            if (errorCode == 0) {
-                qDebug() << "face loaded" << fontFileName;
-                errorCode = FT_Set_Char_Size(face, fontSize*64.0, 0, 0, 0);
-                FT_Int32 loadFlags = FT_LOAD_DEFAULT;
+            for (int i = 0; i< chunk.fontFamilies.size(); i++) {
+                length = lengths.at(i);
 
-                if (!isHorizontal && FT_HAS_VERTICAL(face)) {
-                    loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
-                }
+                int fontSize = chunk.format.fontPointSize();
+                QString fontFileName = chunk.fontFamilies.at(i);
+
+                int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
                 if (errorCode == 0) {
-                    if (start == 0) {
-                        raqm_set_freetype_face(layout, face);
-                        raqm_set_freetype_load_flags(layout, loadFlags);
+                    qDebug() << "face loaded" << fontFileName;
+                    errorCode = FT_Set_Char_Size(face, fontSize*64.0, 0, 0, 0);
+                    FT_Int32 loadFlags = FT_LOAD_DEFAULT;
+
+                    if (!isHorizontal && FT_HAS_VERTICAL(face)) {
+                        loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
                     }
-                    if (length > 0) {
-                        raqm_set_freetype_face_range(layout, face, start, length);
-                        raqm_set_freetype_load_flags_range(layout, loadFlags, start, length);
+                    if (errorCode == 0) {
+                        if (start == 0) {
+                            raqm_set_freetype_face(layout, face);
+                            raqm_set_freetype_load_flags(layout, loadFlags);
+                        }
+                        if (length > 0) {
+                            raqm_set_freetype_face_range(layout, face, start, length);
+                            raqm_set_freetype_load_flags_range(layout, loadFlags, start, length);
+                        }
                     }
+                } else {
+                    qDebug() << "Face did not load, FreeType Error: " << errorCode << "Filename:" << fontFileName;
                 }
-            } else {
-                qDebug() << "Face did not load, FreeType Error: " << errorCode << "Filename:" << fontFileName;
+                start += length;
             }
-            FT_Done_Face(face);
-            start += length;
+
         }
+        FT_Done_Face(face);
         qDebug() << "text-length:" << text.toUtf8().size();
     }
 

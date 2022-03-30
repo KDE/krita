@@ -16,6 +16,9 @@
 #include "kis_global.h"
 #include "kis_dom_utils.h"
 
+
+#include <fontconfig/fontconfig.h>
+
 struct KoSvgTextProperties::Private
 {
     QMap<PropertyId, QVariant> properties;
@@ -246,7 +249,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(FontStretchId, newStretch);
 
     } else if (command == "font-weight") {
-        int weight = QFont::Normal;
+        int weight = 400;
 
         // map svg weight to qt weight
         // svg value        qt value
@@ -255,36 +258,28 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         // 500,600          58,66
         // 700              75          (bold)
         // 800,900          87,99
-
-        static const std::vector<int> fontWeights = {1,17,33,50,58,66,75,87,99};
         static const std::vector<int> svgFontWeights = {100,200,300,400,500,600,700,800,900};
 
         if (value == "bold")
-            weight = QFont::Bold;
+            weight = 700;
         else if (value == "bolder") {
-            auto it = std::upper_bound(fontWeights.begin(),
-                                       fontWeights.end(),
+            auto it = std::upper_bound(svgFontWeights.begin(),
+                                       svgFontWeights.end(),
                                        propertyOrDefault(FontWeightId).toInt());
 
-            weight = it != fontWeights.end() ? *it : fontWeights.back();
+            weight = it != svgFontWeights.end() ? *it : svgFontWeights.back();
         } else if (value == "lighter") {
-            auto it = std::upper_bound(fontWeights.rbegin(),
-                                       fontWeights.rend(),
+            auto it = std::upper_bound(svgFontWeights.rbegin(),
+                                       svgFontWeights.rend(),
                                        propertyOrDefault(FontWeightId).toInt(),
                                        std::greater<int>());
 
-            weight = it != fontWeights.rend() ? *it : fontWeights.front();
+            weight = it != svgFontWeights.rend() ? *it : svgFontWeights.front();
         } else {
             bool ok = false;
 
             // try to read numerical weight value
-            const int newWeight = value.toInt(&ok, 10);
-            if (ok) {
-                auto it = std::find(svgFontWeights.begin(), svgFontWeights.end(), newWeight);
-                if (it != svgFontWeights.end()) {
-                    weight = fontWeights[it - svgFontWeights.begin()];
-                }
-            }
+            weight = qBound(0, value.toInt(&ok, 10), 1000);
         }
 
         setProperty(FontWeightId, weight);
@@ -408,15 +403,8 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
 
     if (hasProperty(FontWeightId)) {
-        const int weight = property(FontWeightId).toInt();
 
-        static const std::vector<int> fontWeights = {1,17,33,50,58,66,75,87,99};
-        static const std::vector<int> svgFontWeights = {100,200,300,400,500,600,700,800,900};
-
-        auto it = std::lower_bound(fontWeights.begin(), fontWeights.end(), weight);
-        if (it != fontWeights.end()) {
-            result.insert("font-weight", KisDomUtils::toString(svgFontWeights[it - fontWeights.begin()]));
-        }
+        result.insert("font-weight", KisDomUtils::toString(property(FontWeightId).toInt()));
     }
 
     if (hasProperty(FontSizeId)) {
@@ -515,6 +503,88 @@ QFont KoSvgTextProperties::generateFont() const
     return QFont(font, &fake72DpiPaintDevice);
 }
 
+QStringList KoSvgTextProperties::fontFileNameForText(QString text, QVector<int> &lengths) const
+{
+    if (text.isEmpty()) {
+        return QStringList();
+    }
+
+    //FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_WIDTH, FC_WEIGHT, FC_SLANT, nullptr);
+    FcCharSet *charSet = FcCharSetNew();
+    for (int i = 0; i < text.size(); ++i) {
+        FcCharSetAddChar(charSet, text.at(i).unicode());
+    }
+    FcPattern *p = FcPatternCreate();
+    QStringList familiesList =
+        propertyOrDefault(KoSvgTextProperties::FontFamiliesId).toStringList();
+    for (QString family: familiesList) {
+        const FcChar8 *vals = reinterpret_cast<FcChar8*>(family.toUtf8().data());
+        FcPatternAddString(p, FC_FAMILY, vals);
+    }
+    const QFont::Style style =
+        QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+    if (style == QFont::StyleItalic) {
+        FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
+    } else if (style == QFont::StyleOblique) {
+        FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
+    } else {
+        FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ROMAN);
+    }
+    FcPatternAddInteger(p, FC_WEIGHT, FcWeightFromOpenType(propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt()));
+    FcPatternAddInteger(p, FC_WIDTH, propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
+
+    FcResult result;
+    FcFontSet *fontSet = FcFontSort(FcConfigGetCurrent(), p, FcTrue, &charSet, &result);
+
+    QString fontFileName;
+    FcChar8 *fileValue = 0;
+    FcCharSet *set = 0;
+    QVector<int> familyValues(text.size());
+    familyValues.fill(-1);
+
+    for (int i=0; i<fontSet->nfont; i++) {
+        if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
+            for (int j = 0; j < text.size(); ++j) {
+                if (familyValues.at(j) == -1) {
+                    if (FcCharSetHasChar(set, text.at(j).unicode())) {
+                        familyValues[j] = i;
+                    }
+                }
+            }
+            if (!familyValues.contains(-1)) {
+                break;
+            }
+        }
+    }
+    int length = 0;
+    int startIndex = 0;
+    int lastIndex = familyValues.at(0);
+    if (FcPatternGetString(fontSet->fonts[lastIndex], FC_FILE, 0, &fileValue) == FcResultMatch) {
+        fontFileName = QString(reinterpret_cast<char*>(fileValue));
+    }
+    QStringList fileNames;
+    for (int i = 0; i< familyValues.size(); i++) {
+        if (lastIndex != familyValues.at(i)) {
+            //TODO: Note the utf8.
+            lengths.append(text.mid(startIndex, length).toUtf8().size());
+            fileNames.append(fontFileName);
+            startIndex = i;
+            length = 0;
+            lastIndex = familyValues.at(i);
+            if (FcPatternGetString(fontSet->fonts[lastIndex], FC_FILE, 0, &fileValue) == FcResultMatch) {
+                fontFileName = QString(reinterpret_cast<char*>(fileValue));
+            }
+        }
+        length +=1;
+    }
+    if (length > 0) {
+        lengths.append(text.mid(startIndex, length).toUtf8().size());
+        fileNames.append(fontFileName);
+    }
+
+    return fileNames;
+}
+
 QStringList KoSvgTextProperties::supportedXmlAttributes()
 {
     QStringList attributes;
@@ -553,8 +623,8 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(FontFamiliesId, font.family());
         s_defaultProperties->setProperty(FontStyleId, font.style());
         s_defaultProperties->setProperty(FontIsSmallCapsId, bool(font.capitalization() == QFont::SmallCaps));
-        s_defaultProperties->setProperty(FontStretchId, font.stretch());
-        s_defaultProperties->setProperty(FontWeightId, font.weight());
+        s_defaultProperties->setProperty(FontStretchId, 100);
+        s_defaultProperties->setProperty(FontWeightId, 400);
         s_defaultProperties->setProperty(FontSizeId, font.pointSizeF());
         s_defaultProperties->setProperty(FontSizeAdjustId, fromAutoValue(AutoValue()));
 

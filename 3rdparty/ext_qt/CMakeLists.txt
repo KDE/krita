@@ -49,6 +49,7 @@ if (WIN32)
         -no-feature-d3d12
         -no-feature-wmf
         -no-feature-qdoc
+        -no-direct2d
         #
         -release -platform ${QT_CONFIG_PLATFORM} -prefix ${EXTPREFIX_qt}
         QMAKE_LFLAGS_APP+=${SECURITY_EXE_LINKER_FLAGS}

@@ -165,6 +165,8 @@ public:
 
     QFont generateFont() const;
 
+    QStringList fontFileNameForText(QString text, QVector<int> &lengths) const;
+
     /**
      * Return a list of supported XML attribute names (defined in SVG)
      */

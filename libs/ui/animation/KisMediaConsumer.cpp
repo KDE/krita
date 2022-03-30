@@ -20,6 +20,7 @@
 struct KisPlaybackHandle::Private {
     PlaybackMode mode = PUSH;
     int framesPerSecond = 24; // TODO: Check if necessary -- perhaps we can just use frameRate setting stored in image entirely??
+    QScopedPointer<QFileInfo> media;
 };
 
 KisPlaybackHandle::KisPlaybackHandle(QObject* parent)
@@ -72,5 +73,21 @@ PlaybackMode KisPlaybackHandle::getMode()
 
 void KisPlaybackHandle::resync(const KisFrameDisplayProxy& displayProxy)
 {
+}
+
+void KisPlaybackHandle::setPlaybackMedia(QFileInfo toLoad)
+{
+    if (m_d->media && *m_d->media == toLoad) {
+        return;
+    }
+
+
+    m_d->media.reset(new QFileInfo(toLoad));
+    emit sigPlaybackMediaChanged(*m_d->media);
+}
+
+QFileInfo* KisPlaybackHandle::playbackMedia()
+{
+    return m_d->media.data();
 }
 

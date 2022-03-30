@@ -10,6 +10,7 @@
 
 #include <QObject>
 #include <QSharedPointer>
+#include <QFileInfo>
 #include <mlt++/MltProducer.h>
 #include "KisPlaybackEngine.h"
 #include "animation/KisFrameDisplayProxy.h"
@@ -33,13 +34,17 @@ public:
     PlaybackMode getMode();
 
     void resync(const KisFrameDisplayProxy& displayProxy);
+    void setPlaybackMedia(QFileInfo toload);
+    QFileInfo* playbackMedia();
 
 Q_SIGNALS:
     void sigFrameShow(int p_frame);
+
     void sigDesiredFrameChanged(int p_frame);
     void sigRequestPushAudio();
     void sigFrameRateChanged(int p_frameRate);
     void sigModeChange(PlaybackMode p_mode) const;
+    void sigPlaybackMediaChanged(QFileInfo toLoad);
 
 private:
     struct Private;

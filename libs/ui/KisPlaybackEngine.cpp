@@ -157,6 +157,19 @@ QSharedPointer<KisPlaybackHandle> KisPlaybackEngine::leaseHandle(KoCanvasBase* c
         }
     });
 
+    connect(handle.data(), &KisPlaybackHandle::sigPlaybackMediaChanged, this, [this, handle](QFileInfo file){
+        QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, file.absoluteFilePath().toUtf8().data()));
+        if (m_d->canvasHandles[m_d->activeCanvas] == handle.data()) {
+            StopAndResumeConsumer(m_d->pushConsumer.data());
+            StopAndResumeConsumer(m_d->pullConsumer.data());
+            m_d->pullConsumer->disconnect_all_producers();
+            m_d->handleProducers[handle.data()] = producer;
+            m_d->pullConsumer->connect_producer(*m_d->handleProducers[handle.data()].data());
+        } else {
+            m_d->handleProducers[handle.data()] = producer;
+        }
+    });
+
     QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "count"));
     m_d->handleProducers.insert(handle.data(), producer );
 
@@ -188,10 +201,11 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
     if (m_d->activeCanvas && m_d->canvasHandles.contains(m_d->activeCanvas)) {
         QSharedPointer<KisPlaybackHandle> handle = m_d->canvasHandles[m_d->activeCanvas];
 
-        disconnect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, this, nullptr);
         disconnect(handle.data(), &KisPlaybackHandle::sigRequestPushAudio, this, nullptr);
         disconnect(handle.data(), &KisPlaybackHandle::sigModeChange, this, nullptr);
         disconnect(handle.data(), &KisPlaybackHandle::sigFrameRateChanged, this, nullptr);
+
+        disconnect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, this, nullptr);
     }
 
     m_d->activeCanvas = canvas;

@@ -605,6 +605,7 @@ void KisAnimationPlayer::setupAudioTracks()
         if (toLoad.exists()) {
             //QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->mediaConsumer->getProfile(), toLoad.absoluteFilePath().toUtf8().data()));
             //m_d->mediaConsumer->setProducer(producer);
+            m_d->playbackHandle->setPlaybackMedia(toLoad);
         }
     }
 }

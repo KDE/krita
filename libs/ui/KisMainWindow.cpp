@@ -656,14 +656,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         tabBar->setChangeCurrentOnDrag(true);
     }
 
-    // Initialize Audio Libraries
-    Mlt::Factory::init();
+
 }
 
 KisMainWindow::~KisMainWindow()
 {
-    Mlt::Factory::close();
-
     //    Q_FOREACH (QAction *ac, actionCollection()->actions()) {
     //        QAction *action = qobject_cast<QAction*>(ac);
     //        if (action) {

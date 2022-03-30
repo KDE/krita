@@ -634,9 +634,9 @@ void KisAnimationPlayer::setPlaybackState(PlaybackState p_state)
     if (m_d->state != p_state) {
         m_d->state = p_state;
         if (m_d->state == PLAYING) {
-            m_d->playbackHandle->setMode(KisPlaybackHandle::PULL);
+            m_d->playbackHandle->setMode(PlaybackMode::PULL);
         } else {
-            m_d->playbackHandle->setMode(KisPlaybackHandle::PUSH);
+            m_d->playbackHandle->setMode(PlaybackMode::PUSH);
         }
         emit sigPlaybackStateChanged(m_d->state);
     }

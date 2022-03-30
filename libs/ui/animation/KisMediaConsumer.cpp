@@ -18,9 +18,8 @@
 #include "kis_debug.h"
 
 struct KisPlaybackHandle::Private {
-    KisPlaybackHandle::Mode mode = KisPlaybackHandle::PUSH;
-    int framesPerSecond = 24;
-    int desiredFrame = 0;
+    PlaybackMode mode = PUSH;
+    int framesPerSecond = 24; // TODO: Check if necessary -- perhaps we can just use frameRate setting stored in image entirely??
 };
 
 KisPlaybackHandle::KisPlaybackHandle(QObject* parent)
@@ -35,10 +34,7 @@ KisPlaybackHandle::~KisPlaybackHandle()
 
 void KisPlaybackHandle::seek(int p_frame)
 {
-    if (m_d->desiredFrame != p_frame) {
-        m_d->desiredFrame = p_frame;
-        emit sigDesiredFrameChanged(m_d->desiredFrame);
-    }
+    emit sigDesiredFrameChanged(p_frame);
 }
 
 void KisPlaybackHandle::pushAudio()
@@ -56,15 +52,20 @@ void KisPlaybackHandle::setFrameRate(int p_frameRate)
     }
 }
 
-void KisPlaybackHandle::setMode(Mode setting)
+int KisPlaybackHandle::frameRate()
 {
-    if (m_d->mode != setting) {
-        m_d->mode = setting;
+    return m_d->framesPerSecond;
+}
+
+void KisPlaybackHandle::setMode(PlaybackMode p_setting)
+{
+    if (m_d->mode != p_setting) {
+        m_d->mode = p_setting;
         emit sigModeChange(m_d->mode);
     }
 }
 
-KisPlaybackHandle::Mode KisPlaybackHandle::getMode()
+PlaybackMode KisPlaybackHandle::getMode()
 {
     return m_d->mode;
 }

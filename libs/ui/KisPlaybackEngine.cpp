@@ -14,44 +14,33 @@
 const float SCRUB_AUDIO_SECONDS = 0.25f;
 
 static void onConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_frame) {
-    //KisPlaybackEngine* self = static_cast<KisPlaybackEngine*>(p_self);
+    KisPlaybackEngine* self = static_cast<KisPlaybackEngine*>(p_self);
     Mlt::Frame frame(p_frame);
     Mlt::Consumer consumer(c);
     const int position = frame.get_position();
-    ENTER_FUNCTION() << ppVar(position);
-    //self->sigFrameShow(consumerPosition);
+    self->sigChangeActiveCanvasFrame(position);
 }
 
 struct KisPlaybackEngine::Private {
 
     Private( KisPlaybackEngine* p_self ) {
+        // Initialize Audio Libraries
+        Mlt::Factory::init();
+
         profile.reset(new Mlt::Profile());
         profile->set_frame_rate(24, 1);
-
-        pullConsumer.reset(new Mlt::Consumer(*profile, "sdl2_audio"));
-        pullConsumer->listen("consumer-frame-show", p_self, (mlt_listener)onConsumerFrameShow);
-
-        pushConsumer.reset(new Mlt::PushConsumer(*profile, "sdl2_audio"));
-        pushConsumer->start();
 
         std::function<void (int)> callback(std::bind(&Private::pushAudio, this, std::placeholders::_1));
         sigPushAudioCompressor.reset(
                     new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
                     );
 
+        initializeConsumers(p_self);
     }
 
     ~Private() {
-        if (!pullConsumer->is_stopped()) {
-            pullConsumer->stop();
-        }
-
-        if (!pushConsumer->is_stopped()) {
-            pushConsumer->stop();
-        }
-
-        pullConsumer.reset();
-        pushConsumer.reset();
+        cleanupConsumers();
+        Mlt::Factory::close();
     }
 
     void pushAudio(int frame) {
@@ -63,7 +52,7 @@ struct KisPlaybackEngine::Private {
         QSharedPointer<KisPlaybackHandle> activeHandle = canvasHandles[activeCanvas];
         QSharedPointer<Mlt::Producer> activeProducer = handleProducers[activeHandle.data()];
 
-        if (activeHandle->getMode() == KisPlaybackHandle::PUSH && activeProducer) {
+        if (activeHandle->getMode() == PlaybackMode::PUSH && activeProducer) {
             const int SCRUB_AUDIO_WINDOW = profile->frame_rate_num() * SCRUB_AUDIO_SECONDS;
             for (int i = 0; i < SCRUB_AUDIO_WINDOW; i++ ) {
                 Mlt::Frame* f = activeProducer->get_frame(frame + i );
@@ -75,6 +64,26 @@ struct KisPlaybackEngine::Private {
             // the beginning of playback...
             activeProducer->seek(frame);
         }
+    }
+
+    void initializeConsumers(KisPlaybackEngine* p_self) {
+        pullConsumer.reset(new Mlt::Consumer(*profile, "sdl2_audio"));
+        pullConsumer->listen("consumer-frame-show", p_self, (mlt_listener)onConsumerFrameShow);
+
+        pushConsumer.reset(new Mlt::PushConsumer(*profile, "sdl2_audio"));
+    }
+
+    void cleanupConsumers() {
+        if (pullConsumer && !pullConsumer->is_stopped()) {
+            pullConsumer->stop();
+        }
+
+        if (pushConsumer && !pushConsumer->is_stopped()) {
+            pushConsumer->stop();
+        }
+
+        pullConsumer.reset();
+        pushConsumer.reset();
     }
 
     //MLT PUSH CONSUMER
@@ -94,7 +103,7 @@ struct KisPlaybackEngine::Private {
     //QSharedPointer<Mlt::Filter> loopFilter;
 
     // Map of handles to Mlt producers..
-    QMap<KisPlaybackHandle*, QSharedPointer<Mlt::Producer>> handleProducers;
+    QMap<KisPlaybackHandle*, QSharedPointer<Mlt::Producer>> handleProducers; // TODO: Maybe we can just store a producer in the handle? Should handles remain as abstract as they are now?
 
     QScopedPointer<KisSignalCompressorWithParam<int>> sigPushAudioCompressor;
 };
@@ -106,7 +115,7 @@ struct KisPlaybackEngine::Private {
  */
 struct StopAndResumeConsumer {
 public:
-    StopAndResumeConsumer(Mlt::Consumer* p_consumer)
+    explicit StopAndResumeConsumer(Mlt::Consumer* p_consumer)
         : consumer(p_consumer) {
         KIS_ASSERT(consumer);
         wasRunning = !consumer->is_stopped();
@@ -125,7 +134,6 @@ private:
     Mlt::Consumer* consumer;
     bool wasRunning = false;
 };
-
 
 KisPlaybackEngine::KisPlaybackEngine(QObject *parent)
     : QObject(parent)
@@ -149,6 +157,9 @@ QSharedPointer<KisPlaybackHandle> KisPlaybackEngine::leaseHandle(KoCanvasBase* c
         }
     });
 
+    QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "count"));
+    m_d->handleProducers.insert(handle.data(), producer );
+
     return handle;
 }
 
@@ -163,8 +174,84 @@ void KisPlaybackEngine::returnHandle(KoCanvasBase *canvas)
 
 void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
 {
+    if (m_d->activeCanvas == canvas) {
+        return;
+    }
+
+    m_d->pullConsumer->stop();
+    m_d->pullConsumer->disconnect_all_producers();
+
+    // Destroy existing consumer setup..
+    m_d->cleanupConsumers();
+
+    // Disconnect previously active handle..
+    if (m_d->activeCanvas && m_d->canvasHandles.contains(m_d->activeCanvas)) {
+        QSharedPointer<KisPlaybackHandle> handle = m_d->canvasHandles[m_d->activeCanvas];
+
+        disconnect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, this, nullptr);
+        disconnect(handle.data(), &KisPlaybackHandle::sigRequestPushAudio, this, nullptr);
+        disconnect(handle.data(), &KisPlaybackHandle::sigModeChange, this, nullptr);
+        disconnect(handle.data(), &KisPlaybackHandle::sigFrameRateChanged, this, nullptr);
+    }
+
+    m_d->activeCanvas = canvas;
+
+    // Connect newly active handle..
+    if (m_d->activeCanvas && m_d->canvasHandles.contains(m_d->activeCanvas)) {
+        QSharedPointer<KisPlaybackHandle> handle = m_d->canvasHandles[m_d->activeCanvas];
+
+        connect(handle.data(), &KisPlaybackHandle::sigRequestPushAudio, this, [this](){
+            KIS_ASSERT_RECOVER_RETURN(m_d->activeCanvas);
+            QSharedPointer<KisPlaybackHandle> handle = m_d->canvasHandles[m_d->activeCanvas];
+            QSharedPointer<Mlt::Producer> producer = m_d->handleProducers[handle.data()];
+            m_d->sigPushAudioCompressor->start(producer->position());
+        });
+
+        connect(handle.data(), &KisPlaybackHandle::sigModeChange, this, &KisPlaybackEngine::setupPlaybackMode);
+
+        connect(handle.data(), &KisPlaybackHandle::sigFrameRateChanged, this, [this](int p_frameRate){
+            StopAndResumeConsumer pushStopResume(m_d->pushConsumer.data());
+            StopAndResumeConsumer pullStopResume(m_d->pullConsumer.data());
+
+            m_d->profile->set_frame_rate(p_frameRate, 1);
+        });
+
+        connect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, handle.data(), &KisPlaybackHandle::sigFrameShow);
+
+        // Update MLT Profile to reflect newly active canvas..
+        m_d->profile->set_frame_rate(handle->frameRate(), 1);
+    }
+
+    // Initialize Consumers w/ New Profile..
+    m_d->initializeConsumers(this);
+
+    m_d->pullConsumer->set_profile(*m_d->profile);
+    m_d->pushConsumer->set_profile(*m_d->profile);
+
+    // Redo producer connections
+    m_d->pullConsumer->connect_producer(*m_d->handleProducers[m_d->canvasHandles[m_d->activeCanvas].data()]);
+
 }
 
 void KisPlaybackEngine::unsetCanvas() {
 
+}
+
+void KisPlaybackEngine::setupPlaybackMode(PlaybackMode p_mode)
+{
+    if (p_mode == PlaybackMode::PUSH) {
+        if (!m_d->pullConsumer->is_stopped()) {
+            m_d->pullConsumer->stop();
+            m_d->pullConsumer->purge();
+        }
+
+        m_d->pushConsumer->start();
+    } else {
+        if (!m_d->pushConsumer->is_stopped()) {
+            m_d->pushConsumer->stop();
+            m_d->pushConsumer->purge();
+        }
+
+        m_d->pullConsumer->start();
+    }
 }

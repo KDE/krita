@@ -11,6 +11,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <mlt++/MltProducer.h>
+#include "KisPlaybackEngine.h"
 #include "animation/KisFrameDisplayProxy.h"
 
 class KisPlaybackHandle : public QObject
@@ -18,11 +19,6 @@ class KisPlaybackHandle : public QObject
     Q_OBJECT
 
 public:
-    enum Mode {
-        PUSH,
-        PULL
-    };
-
     KisPlaybackHandle(QObject* parent = nullptr);
     ~KisPlaybackHandle();
 
@@ -31,10 +27,10 @@ public:
     void pushAudio();
 
     void setFrameRate(int p_frameRate);
-    void frameRate();
+    int frameRate();
 
-    void setMode(Mode setting);
-    Mode getMode();
+    void setMode(PlaybackMode p_setting);
+    PlaybackMode getMode();
 
     void resync(const KisFrameDisplayProxy& displayProxy);
 
@@ -43,7 +39,7 @@ Q_SIGNALS:
     void sigDesiredFrameChanged(int p_frame);
     void sigRequestPushAudio();
     void sigFrameRateChanged(int p_frameRate);
-    void sigModeChange(Mode p_mode) const;
+    void sigModeChange(PlaybackMode p_mode) const;
 
 private:
     struct Private;

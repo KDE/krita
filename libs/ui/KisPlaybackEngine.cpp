@@ -205,10 +205,13 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
         disconnect(handle.data(), &KisPlaybackHandle::sigModeChange, this, nullptr);
         disconnect(handle.data(), &KisPlaybackHandle::sigFrameRateChanged, this, nullptr);
 
-        disconnect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, this, nullptr);
+        disconnect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, handle.data(), nullptr);
     }
 
     m_d->activeCanvas = canvas;
+
+    //Canvas should never be active that doesn't have some kind of playback handle...
+    KIS_ASSERT(m_d->canvasHandles.contains(m_d->activeCanvas));
 
     // Connect newly active handle..
     if (m_d->activeCanvas && m_d->canvasHandles.contains(m_d->activeCanvas)) {
@@ -230,6 +233,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
             m_d->profile->set_frame_rate(p_frameRate, 1);
         });
 
+
         connect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, handle.data(), &KisPlaybackHandle::sigFrameShow);
 
         // Update MLT Profile to reflect newly active canvas..
@@ -242,8 +246,13 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
     m_d->pullConsumer->set_profile(*m_d->profile);
     m_d->pushConsumer->set_profile(*m_d->profile);
 
-    // Redo producer connections
+    // Redo producer connections..
     m_d->pullConsumer->connect_producer(*m_d->handleProducers[m_d->canvasHandles[m_d->activeCanvas].data()]);
+
+    // Resume pull consumer based on desired state of playback handle..
+    if (m_d->activeCanvas && m_d->canvasHandles[m_d->activeCanvas]->getMode() == PlaybackMode::PULL) {
+        m_d->pullConsumer->start();
+    }
 
 }
 

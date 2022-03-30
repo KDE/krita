@@ -28,6 +28,8 @@ private:
 
 public:
 
+    void visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter) override;
+    void visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter) override;
     void visit(KisGroupLayer *layer, KisUndoAdapter *undoAdapter) override;
     void visit(KisTransformMask *mask, KisUndoAdapter *undoAdapter) override;
     void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) override;

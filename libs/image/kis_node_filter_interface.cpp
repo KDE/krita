@@ -74,3 +74,19 @@ void KisNodeFilterInterface::setFilter(KisFilterConfigurationSP filterConfig, bo
 
     SANITY_ACQUIRE_FILTER(m_filterConfiguration);
 }
+
+void KisNodeFilterInterface::notifyColorSpaceChanged()
+{
+    /**
+     * On a color space change we need to reset all the
+     * caches stored inside filter configuration. The
+     * current "standard" way for doing that is just to
+     * clone the configuration (which clones everything
+     * except of the caches). We should probably invent
+     * a better approach for that cache resetting later.
+     */
+
+    if (m_filterConfiguration) {
+        m_filterConfiguration = m_filterConfiguration->clone();
+    }
+}

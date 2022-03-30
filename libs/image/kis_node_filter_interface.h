@@ -41,6 +41,8 @@ public:
      */
     virtual void setFilter(KisFilterConfigurationSP filterConfig, bool checkCompareConfig = true);
 
+    virtual void notifyColorSpaceChanged();
+
 // the child classes should access the filter with the filter() method
 private:
     KisNodeFilterInterface& operator=(const KisNodeFilterInterface &other);

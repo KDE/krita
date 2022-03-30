@@ -15,6 +15,8 @@
 #include "kis_transform_mask.h"
 #include "lazybrush/kis_colorize_mask.h"
 
+#include "kis_filter_mask.h"
+#include "kis_adjustment_layer.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
 #include "kis_projection_leaf.h"
@@ -24,6 +26,7 @@
 #include <commands_new/KisChangeChannelFlagsCommand.h>
 #include <commands_new/KisChangeChannelLockFlagsCommand.h>
 #include <commands_new/KisResetGroupLayerCacheCommand.h>
+#include <kis_do_something_command.h>
 
 KisConvertColorSpaceProcessingVisitor::KisConvertColorSpaceProcessingVisitor(const KoColorSpace *srcColorSpace,
                                                                              const KoColorSpace *dstColorSpace,
@@ -42,6 +45,22 @@ void KisConvertColorSpaceProcessingVisitor::visitExternalLayer(KisExternalLayer 
     KoUpdater *updater = helper.updater();
     undoAdapter->addCommand(layer->convertTo(m_dstColorSpace, m_renderingIntent, m_conversionFlags));
     updater->setProgress(100);
+}
+
+void KisConvertColorSpaceProcessingVisitor::visit(KisAdjustmentLayer *layer, KisUndoAdapter *undoAdapter)
+{
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisAdjustmentLayer*>(layer, false));
+    KisSimpleProcessingVisitor::visit(layer, undoAdapter);
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisAdjustmentLayer*>(layer, true));
+}
+
+void KisConvertColorSpaceProcessingVisitor::visit(KisFilterMask *mask, KisUndoAdapter *undoAdapter)
+{
+    using namespace KisDoSomethingCommandOps;
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisFilterMask*>(mask, false));
+    KisSimpleProcessingVisitor::visit(mask, undoAdapter);
+    undoAdapter->addCommand(new KisDoSomethingCommand<NotifyColorSpaceChangedOp, KisFilterMask*>(mask, true));
 }
 
 void KisConvertColorSpaceProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter)

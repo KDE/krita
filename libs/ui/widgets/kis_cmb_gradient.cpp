@@ -22,6 +22,8 @@ KisCmbGradient::KisCmbGradient(QWidget *parent)
 {
     m_gradientChooser->setContentsMargins(10, 10, 10, 10);
     connect(m_gradientChooser, SIGNAL(resourceSelected(KoResourceSP )), SLOT(gradientSelected(KoResourceSP )));
+    connect(m_gradientChooser, &KisGradientChooser::gradientEdited,
+            [this](KoAbstractGradientSP resource) { gradientSelected(resource); });
     setPopupWidget(m_gradientChooser);
 }
 

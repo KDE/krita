@@ -328,6 +328,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             deregisterPopupWidget();
 
             if (wasVisible) {
+                d->popupWasActive = true;
                 event->setAccepted(true);
                 return true; // Event consumed.
             }
@@ -620,6 +621,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     case QEvent::TouchBegin:
     {
         d->debugEvent<QTouchEvent, false>(event);
+        // The popup was dismissed in previous TouchBegin->TouchEnd sequence. We now have a new TouchBegin.
+        d->popupWasActive = false;
         if (startTouch(retval)) {
             QTouchEvent *touchEvent = static_cast<QTouchEvent *>(event);
             KisAbstractInputAction::setInputManager(this);
@@ -636,6 +639,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchUpdate:
     {
+        if (d->popupWasActive) {
+            event->setAccepted(true);
+            return true;
+        }
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         d->debugEvent<QTouchEvent, false>(event);
 
@@ -696,6 +703,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
     case QEvent::TouchEnd:
     {
+        if (d->popupWasActive) {
+            event->setAccepted(true);
+            return true;
+        }
         d->debugEvent<QTouchEvent, false>(event);
         endTouch();
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
@@ -717,6 +728,10 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
     }
     case QEvent::TouchCancel:
     {
+        if (d->popupWasActive) {
+            event->setAccepted(true);
+            return true;
+        }
         d->debugEvent<QTouchEvent, false>(event);
         endTouch();
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);

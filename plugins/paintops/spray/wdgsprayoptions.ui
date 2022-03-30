@@ -30,7 +30,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Area</string>
+      <string comment="Name of the group of options related to the spay area in the spray engine">Area</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
       <property name="fieldGrowthPolicy">
@@ -45,7 +45,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Diameter:</string>
+         <string comment="Label for the diameter of the spray area in the spray engine">Diameter:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -64,7 +64,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Aspect ratio:</string>
+         <string comment="Label for the aspect ratio of the spray area in the spray engine">Aspect ratio:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -83,7 +83,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Angle:</string>
+         <string comment="Label for the angle of the spray area in the spray engine">Angle:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -122,7 +122,7 @@
          </sizepolicy>
         </property>
         <property name="text">
-         <string>Scale:</string>
+         <string comment="Label for the scale of the spray area in the spray engine">Scale:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -135,7 +135,7 @@
       <item row="4" column="0">
        <widget class="QLabel" name="spacingLabel">
         <property name="text">
-         <string>Spacing:</string>
+         <string comment="Label for the spacing of the spray area in the spray engine">Spacing:</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -148,7 +148,7 @@
       <item row="5" column="0">
        <widget class="QLabel" name="labelJitter">
         <property name="text">
-         <string>Jitter Movement:</string>
+         <string comment="Label for the jitter movement of the spray area in the spray engine">Jitter Movement:</string>
         </property>
        </widget>
       </item>
@@ -182,7 +182,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Particles</string>
+      <string comment="Name of the group of options related to the spay particles in the spray engine">Particles</string>
      </property>
      <layout class="QFormLayout" name="formLayout_2">
       <property name="fieldGrowthPolicy">
@@ -191,7 +191,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>Amount:</string>
+         <string comment="Label for the amount of particles in the spray engine">Amount:</string>
         </property>
        </widget>
       </item>
@@ -200,7 +200,7 @@
         <item>
          <widget class="QRadioButton" name="countRadioButton">
           <property name="text">
-           <string>Count</string>
+           <string comment="Check box to indicate that the user should set the exact number of particles in the spray engine">Count</string>
           </property>
           <property name="checked">
            <bool>true</bool>
@@ -210,7 +210,7 @@
         <item>
          <widget class="QRadioButton" name="densityRadioButton">
           <property name="text">
-           <string>Density</string>
+           <string comment="Check box to indicate that the user should set the number of particles in terms of density relative to the spray area in the spray engine">Density</string>
           </property>
          </widget>
         </item>
@@ -234,7 +234,7 @@
         <item>
          <widget class="QGroupBox" name="groupBoxAngularDistribution">
           <property name="title">
-           <string>Angular</string>
+           <string comment="Name of the group of options related to the angular distribution of particles in the spray engine">Angular</string>
           </property>
           <layout class="QVBoxLayout" name="layoutAngularDist" stretch="0,0,1">
            <property name="leftMargin">
@@ -319,7 +319,7 @@
         <item>
          <widget class="QGroupBox" name="groupBoxRadialDistribution">
           <property name="title">
-           <string>Radial</string>
+           <string comment="Name of the group of options related to the radial distribution of particles in the spray engine">Radial</string>
           </property>
           <layout class="QVBoxLayout" name="layoutRadialDist" stretch="0,0,0,0,0,1">
            <property name="leftMargin">
@@ -404,7 +404,7 @@
            <item>
             <widget class="QCheckBox" name="centerBiasedPolarDistanceBox">
              <property name="text">
-              <string>Center-biased spread (legacy)</string>
+              <string comment="Check box to indicate that the radial distribution should use the old method where particles are biased towards the center of the spray area in the spray engine">Center-biased spread (legacy)</string>
              </property>
             </widget>
            </item>
@@ -429,7 +429,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Distribution:</string>
+         <string comment="Label for the distribution of particles in the spray engine">Distribution:</string>
         </property>
        </widget>
       </item>

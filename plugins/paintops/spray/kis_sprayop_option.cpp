@@ -93,9 +93,9 @@ KisSprayOpOption::KisSprayOpOption()
     m_options->clusterRadialDistSpin->setSoftRange(-10.0, 10.0);
     m_options->clusterRadialDistSpin->setToolTip(i18n(
         "Set how the particles should spread in the spray area."
-        "\n Positive values will make the particles concentrate towards the center of the spray area."
-        "\n Negative values will make the particles concentrate towards the border of the spray area."
-        "\n Values near 0 will make the particles spread more uniformly."
+        "\nPositive values will make the particles concentrate towards the center of the spray area."
+        "\nNegative values will make the particles concentrate towards the border of the spray area."
+        "\nValues near 0 will make the particles spread more uniformly."
     ));
 
     m_options->curveRadialDistWidget->setToolTip(i18n(

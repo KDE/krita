@@ -195,6 +195,30 @@ void KisFFMpegWrapper::updateProgressDialog(int progressValue) {
     QApplication::processEvents();
 }
 
+bool KisFFMpegWrapper::ffprobeCheckStreamsValid(const QJsonObject& ffprobeJsonObj, const QString& ffprobeSTDERR)
+{
+    // Sanity checks..
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(ffprobeJsonObj.contains("streams"), false);
+
+    QRegularExpression invalidStreamRX("(?:Unsupported codec with id .+? for input stream|Could not find codec parameters for stream) ([0-9]+)");
+    QRegularExpressionMatchIterator invalidStreamMatchList = invalidStreamRX.globalMatch(ffprobeSTDERR);
+
+    while (invalidStreamMatchList.hasNext()) {
+        QRegularExpressionMatch invalidStreamMatch = invalidStreamMatchList.next();
+
+        if (invalidStreamMatch.hasMatch()) {
+            const int invalidStreamId = invalidStreamMatch.captured(1).toInt();
+
+            // We make sure we're talking about video streams here.
+            if (ffprobeJsonObj["streams"].toArray()[invalidStreamId].toObject()["codec_type"] == "video") {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 void KisFFMpegWrapper::reset()
 {
     if (m_process == nullptr)
@@ -488,33 +512,16 @@ QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &f
     QJsonDocument ffprobeJsonDoc = QJsonDocument::fromJson(ffprobeSTDOUT.toUtf8());
     QJsonObject ffprobeJsonObj;
 
-    if (!ffprobeJsonDoc.isNull()) {
-        if (ffprobeJsonDoc.isObject()) {
-            ffprobeJsonObj = ffprobeJsonDoc.object();
-            ffprobeJsonObj["error"] = FFProbeErrorCodes::NONE;
-
-            QRegularExpression invalidStreamRX("(?:Unsupported codec with id .+? for input stream|Could not find codec parameters for stream) ([0-9]+)");
-            QRegularExpressionMatchIterator invalidStreamMatchList = invalidStreamRX.globalMatch(ffprobeSTDERR);
-
-            while (invalidStreamMatchList.hasNext()) {
-                QRegularExpressionMatch invalidStreamMatch = invalidStreamMatchList.next();
-
-                if (invalidStreamMatch.hasMatch()) {
-                    const int invalidStreamId = invalidStreamMatch.captured(1).toInt();
-
-                    if (ffprobeJsonObj["streams"].toArray()[invalidStreamId].toObject()["codec_type"] == "video") {
-                        ffprobeJsonObj["error"] = FFProbeErrorCodes::UNSUPPORTED_CODEC;
-                    }
-                }
-            }
-            
-        } else {
-            ffprobeJsonObj["error"] = FFProbeErrorCodes::INVALID_JSON_FORMAT;
-        }
-    } else {
+    if (ffprobeJsonDoc.isNull() || !ffprobeJsonDoc.isObject()) {
         ffprobeJsonObj["error"] = FFProbeErrorCodes::INVALID_JSON;
-        
-    } 
+        return ffprobeJsonObj;
+    }
+
+    ffprobeJsonObj = ffprobeJsonDoc.object();
+
+    const bool hasValidStreams = ffprobeCheckStreamsValid(ffprobeJsonObj, ffprobeSTDERR);
+    ffprobeJsonObj["error"] = hasValidStreams ? FFProbeErrorCodes::NONE : FFProbeErrorCodes::UNSUPPORTED_CODEC;
+
     
     return ffprobeJsonObj;
 }
@@ -545,7 +552,6 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
     
     dbgFile << "ffmpegProbe stdout:" << ffmpegSTDOUT;
 
-
     QJsonObject ffmpegJsonObj;
     QJsonArray ffmpegStreamsJsonArr;
     QJsonObject ffmpegFormatJsonObj;
@@ -553,7 +559,7 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
     
     QStringList stdoutLines = ffmpegSTDOUT.split('\n');
     
-    ffmpegJsonObj["error"] = 4;
+    ffmpegJsonObj["error"] = FFProbeErrorCodes::UNSUPPORTED_CODEC;
     
     for (const QString &line : stdoutLines) {
         dbgFile << "ffmpeg probe stdout" << line;
@@ -597,7 +603,7 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
                     ffmpegProgressJsonObj["ffmpeg_fps"] = 0;
                 }
 
-                ffmpegJsonObj["error"] = 0;
+                ffmpegJsonObj["error"] = FFProbeErrorCodes::NONE;
                 
                 dbgFile << "ffmpegProbe stream:" << ffmpegJsonOnStreamObj;
                 
@@ -613,7 +619,6 @@ QJsonObject KisFFMpegWrapper::ffmpegProbe(const QString &inputFile, const QStrin
             }
         }
     }
-    
     
     ffmpegJsonObj.insert("streams",ffmpegStreamsJsonArr);
     ffmpegJsonObj.insert("format",ffmpegFormatJsonObj);

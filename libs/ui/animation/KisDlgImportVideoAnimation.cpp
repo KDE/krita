@@ -637,10 +637,12 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
         QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Your FFMpeg version does not support this format"));
     };
 
-    if (ffprobeInfo["enabled"].toBool())
-        ffprobeJsonObj=ffprobe->ffprobe(inputFile, ffprobeInfo["path"].toString());
+    if (ffprobeInfo["enabled"].toBool()) {
+        ffprobeJsonObj = ffprobe->ffprobe(inputFile, ffprobeInfo["path"].toString());
+    }
 
-    if ( !ffprobeInfo["enabled"].toBool() || ffprobeJsonObj["error"].toInt() > FFProbeErrorCodes::UNSUPPORTED_CODEC ) {
+    // Attempt manual probing with ffmpeg itself if ffprobe is disable or if something went wrong with ffprobe.
+    if ( !ffprobeInfo["enabled"].toBool() || ffprobeJsonObj["error"].toInt() == FFProbeErrorCodes::INVALID_JSON ) {
         KisFFMpegWrapper *ffmpeg = new KisFFMpegWrapper(this);
 
         ffprobeJsonObj = ffmpeg->ffmpegProbe(inputFile, ffmpegInfo["path"].toString(), false);
@@ -650,12 +652,13 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
         QJsonObject ffprobeProgress = ffprobeJsonObj["progress"].toObject();
 
         videoInfoData.frames = ffprobeProgress["frame"].toString().toInt();
-    } else if ( ffprobeJsonObj["error"].toInt() == FFProbeErrorCodes::UNSUPPORTED_CODEC) {
-        warnFFmpegFormatSupport();
-        return {};
     }
 
-    if ( ffprobeJsonObj["error"].toInt() == FFProbeErrorCodes::NONE ) {
+    if ( ffprobeJsonObj["error"].toInt() == FFProbeErrorCodes::UNSUPPORTED_CODEC) {
+        // If, after all of that, we still don't determine a supported codec then we'll back out.
+        warnFFmpegFormatSupport();
+        return {};
+    } else if ( ffprobeJsonObj["error"].toInt() == FFProbeErrorCodes::NONE ) {
 
         QJsonObject ffprobeFormat = ffprobeJsonObj["format"].toObject();
         QJsonArray ffprobeStreams = ffprobeJsonObj["streams"].toArray();
@@ -749,7 +752,6 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
             }
 
         }
-
     }
 
     // if there is no data on frames but duration and fps exists like OGV, try to estimate it

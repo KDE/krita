@@ -33,13 +33,13 @@ Find WebP headers and libraries.
 Imported Targets
 ^^^^^^^^^^^^^^^^
 
-``WebP::libwebp``
+``WebP::webp``
   The WebP library, if found.
 
-``WebP::demux``
+``WebP::webpdemux``
   The WebP demux library, if found.
 
-``WebP::mux``
+``WebP::libwebpmux``
   The WebP mux library, if found.
 
 ``WebP::decoder``
@@ -207,27 +207,27 @@ find_package_handle_standard_args(WebP
     VERSION_VAR WebP_VERSION
 )
 
-if (WebP_LIBRARY AND NOT TARGET WebP::libwebp)
-    add_library(WebP::libwebp UNKNOWN IMPORTED GLOBAL)
-    set_target_properties(WebP::libwebp PROPERTIES
+if (WebP_LIBRARY AND NOT TARGET WebP::webp)
+    add_library(WebP::webp UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(WebP::webp PROPERTIES
         IMPORTED_LOCATION "${WebP_LIBRARY}"
         INTERFACE_COMPILE_OPTIONS "${WebP_COMPILE_OPTIONS}"
         INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"
     )
 endif ()
 
-if (WebP_DEMUX_LIBRARY AND NOT TARGET WebP::demux)
-    add_library(WebP::demux UNKNOWN IMPORTED GLOBAL)
-    set_target_properties(WebP::demux PROPERTIES
+if (WebP_DEMUX_LIBRARY AND NOT TARGET WebP::webpdemux)
+    add_library(WebP::webpdemux UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(WebP::webpdemux PROPERTIES
         IMPORTED_LOCATION "${WebP_DEMUX_LIBRARY}"
         INTERFACE_COMPILE_OPTIONS "${WebP_COMPILE_OPTIONS}"
         INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"
     )
 endif ()
 
-if (WebP_MUX_LIBRARY AND NOT TARGET WebP::webpmux)
-    add_library(WebP::webpmux UNKNOWN IMPORTED GLOBAL)
-    set_target_properties(WebP::webpmux PROPERTIES
+if (WebP_MUX_LIBRARY AND NOT TARGET WebP::libwebpmux)
+    add_library(WebP::libwebpmux UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(WebP::libwebpmux PROPERTIES
         IMPORTED_LOCATION "${WebP_MUX_LIBRARY}"
         INTERFACE_COMPILE_OPTIONS "${WebP_COMPILE_OPTIONS}"
         INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"

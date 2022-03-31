@@ -631,14 +631,16 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
     struct KisBasicVideoInfo videoInfoData;
 
     KisFFMpegWrapper *ffprobe = new KisFFMpegWrapper(this);
-
-    bool supportedCodec = true;
     QJsonObject ffprobeJsonObj;
+
+    std::function<void(void)> warnFFmpegFormatSupport = [this](){
+        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Your FFMpeg version does not support this format"));
+    };
 
     if (ffprobeInfo["enabled"].toBool())
         ffprobeJsonObj=ffprobe->ffprobe(inputFile, ffprobeInfo["path"].toString());
 
-    if ( !ffprobeInfo["enabled"].toBool() || ffprobeJsonObj["error"].toInt() > 1 ) {
+    if ( !ffprobeInfo["enabled"].toBool() || ffprobeJsonObj["error"].toInt() > FFProbeErrorCodes::UNSUPPORTED_CODEC ) {
         KisFFMpegWrapper *ffmpeg = new KisFFMpegWrapper(this);
 
         ffprobeJsonObj = ffmpeg->ffmpegProbe(inputFile, ffmpegInfo["path"].toString(), false);
@@ -648,9 +650,12 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
         QJsonObject ffprobeProgress = ffprobeJsonObj["progress"].toObject();
 
         videoInfoData.frames = ffprobeProgress["frame"].toString().toInt();
+    } else if ( ffprobeJsonObj["error"].toInt() == FFProbeErrorCodes::UNSUPPORTED_CODEC) {
+        warnFFmpegFormatSupport();
+        return {};
     }
 
-    if ( ffprobeJsonObj["error"].toInt() == 0 ) {
+    if ( ffprobeJsonObj["error"].toInt() == FFProbeErrorCodes::NONE ) {
 
         QJsonObject ffprobeFormat = ffprobeJsonObj["format"].toObject();
         QJsonArray ffprobeStreams = ffprobeJsonObj["streams"].toArray();
@@ -672,8 +677,10 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
 
         QJsonObject ffprobeSelectedStream = ffprobeStreams[videoInfoData.stream].toObject();
 
-        if (!ffmpegInfo.value("decoder").toObject()[ffprobeSelectedStream["codec_name"].toString()].toBool())
-            supportedCodec = false;
+        if (!ffmpegInfo.value("decoder").toObject()[ffprobeSelectedStream["codec_name"].toString()].toBool()) {
+            warnFFmpegFormatSupport();
+            return {};
+        }
 
 
         videoInfoData.width = ffprobeSelectedStream["width"].toInt();
@@ -723,7 +730,7 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
 
             dbgFile << "ffmpeg probe2" << ffmpegJsonObj;
 
-            if ( ffprobeJsonObj["error"].toInt() != 0 ) {
+            if ( ffprobeJsonObj["error"].toInt() != FFProbeErrorCodes::NONE ) {
                 QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Failed to load video information"));
                 return {};
             }
@@ -743,16 +750,7 @@ KisBasicVideoInfo KisDlgImportVideoAnimation::loadVideoInfo(const QString &input
 
         }
 
-    } else if ( ffprobeJsonObj["error"].toInt() == 1) {
-        supportedCodec = false;
     }
-
-
-    if (!supportedCodec) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Your FFMpeg version does not support this format"));
-        return {};       
-    }
-
 
     // if there is no data on frames but duration and fps exists like OGV, try to estimate it
     if ( videoInfoData.fps && videoInfoData.duration && !videoInfoData.frames ) {

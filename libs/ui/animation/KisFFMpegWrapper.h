@@ -35,6 +35,13 @@ struct KRITAUI_EXPORT KisFFMpegWrapperSettings
 
 };
 
+enum FFProbeErrorCodes {
+    NONE = 0,
+    UNSUPPORTED_CODEC,
+    INVALID_JSON,
+    INVALID_JSON_FORMAT,
+
+};
 
 const int FFMPEG_TIMEOUT = 600000;
 
@@ -81,7 +88,6 @@ private Q_SLOTS:
 
 private:
     void updateProgressDialog(int progressValue);
-
     
 private:
     QScopedPointer<QProcess> m_process;

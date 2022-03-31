@@ -75,11 +75,6 @@ bool KoStopGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP reso
 {
     Q_UNUSED(resourcesInterface);
 
-    QString strExt;
-    const int result = filename().lastIndexOf('.');
-    if (result >= 0) {
-        strExt = filename().mid(result).toLower();
-    }
     QByteArray ba = dev->readAll();
 
     QBuffer buf(&ba);

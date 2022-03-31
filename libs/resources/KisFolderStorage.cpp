@@ -237,26 +237,20 @@ bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP res
 
     const QString resourcesSaveLocation = location() + "/" + resourceType;
 
-    qDebug() << "Resource location according to resource" << resourcesSaveLocation + "/" + resource->filename();
-
     QFileInfo fi(resourcesSaveLocation + "/" + resource->filename());
-    qDebug() << "Resource location according to file info" << fi.absoluteFilePath();
-
     if (fi.exists()) {
         qWarning() << "Resource" << resourceType << resource->filename() << "already exists in" << resourcesSaveLocation;
         return false;
     }
 
     QFile f(fi.absoluteFilePath());
-    qDebug() << "Resource location according to file" << f.fileName();
-
     if (!f.open(QFile::WriteOnly)) {
-        qWarning() << "Could not open" << fi.absoluteFilePath() << "for writing for resource" << resource->filename();
+        qWarning() << "Could not open" << fi.absoluteFilePath() << "for writing.";
         return false;
     }
 
     if (!resource->saveToDevice(&f)) {
-        qWarning() << "Could not save resource" << resource->filename() << "to" << fi.absoluteFilePath();
+        qWarning() << "Could not save resource to" << fi.absoluteFilePath();
         f.close();
         return false;
     }

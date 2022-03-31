@@ -1,0 +1,47 @@
+From 6961d658a0455406ea6d9d2ab9042b59579f8382 Mon Sep 17 00:00:00 2001
+From: Volker Hilsheimer <volker.hilsheimer@qt.io>
+Date: Wed, 19 Aug 2020 12:38:20 +0200
+Subject: [PATCH] QMenu: make less sensitive to mouse jitter
+
+On systems where a right-press brings up the menu, the next mouse
+move will select an action, even if it's just a move by a single pixel.
+This makes it too easy to activate an action on e.g a context menu
+accidentially when the button is released.
+
+Ignore the first couple of mouse moves, using the same logic that
+prevents accidental tearing off.
+
+Change-Id: Ib4dd448ef2d6ae915b48da62666aa95b37145d63
+Fixes: QTBUG-57849
+Reviewed-by: Mitch Curtis <mitch.curtis@qt.io>
+---
+ src/widgets/widgets/qmenu.cpp | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/src/widgets/widgets/qmenu.cpp b/src/widgets/widgets/qmenu.cpp
+index 6e6825daea..365aabd92f 100644
+--- a/src/widgets/widgets/qmenu.cpp
++++ b/src/widgets/widgets/qmenu.cpp
+@@ -1510,9 +1510,7 @@ bool QMenuPrivate::hasMouseMoved(const QPoint &globalPos)
+ {
+     //determines if the mouse has moved (ie its initial position has
+     //changed by more than QApplication::startDragDistance()
+-    //or if there were at least 6 mouse motions)
+-    return motions > 6 ||
+-        QApplication::startDragDistance() < (mousePopupPos - globalPos).manhattanLength();
++    return QApplication::startDragDistance() < (mousePopupPos - globalPos).manhattanLength();
+ }
+ 
+ 
+@@ -3456,7 +3454,7 @@ void QMenu::mouseMoveEvent(QMouseEvent *e)
+         return;
+ 
+     d->motions++;
+-    if (d->motions == 0)
++    if (!d->hasMouseMoved(e->globalPos()))
+         return;
+ 
+     d->hasHadMouse = d->hasHadMouse || rect().contains(e->pos());
+-- 
+2.35.1
+

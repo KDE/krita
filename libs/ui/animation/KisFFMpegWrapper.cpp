@@ -465,8 +465,6 @@ QJsonObject KisFFMpegWrapper::findFFProbe(const QString &customLocation)
     return findProcessPath("ffprobe", customLocation, false);
 }
 
-
-
 QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &ffprobePath) 
 {
     struct KisFFMpegWrapperSettings ffprobeSettings;
@@ -493,7 +491,7 @@ QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &f
     if (!ffprobeJsonDoc.isNull()) {
         if (ffprobeJsonDoc.isObject()) {
             ffprobeJsonObj = ffprobeJsonDoc.object();
-            ffprobeJsonObj["error"] = 0;
+            ffprobeJsonObj["error"] = FFProbeErrorCodes::NONE;
 
             QRegularExpression invalidStreamRX("(?:Unsupported codec with id .+? for input stream|Could not find codec parameters for stream) ([0-9]+)");
             QRegularExpressionMatchIterator invalidStreamMatchList = invalidStreamRX.globalMatch(ffprobeSTDERR);
@@ -505,19 +503,16 @@ QJsonObject KisFFMpegWrapper::ffprobe(const QString &inputFile, const QString &f
                     const int invalidStreamId = invalidStreamMatch.captured(1).toInt();
 
                     if (ffprobeJsonObj["streams"].toArray()[invalidStreamId].toObject()["codec_type"] == "video") {
-                        ffprobeJsonObj["error"] = 1;
+                        ffprobeJsonObj["error"] = FFProbeErrorCodes::UNSUPPORTED_CODEC;
                     }
-
                 }
             }
             
         } else {
-            dbgFile << "Document is not an object";
-            ffprobeJsonObj["error"] = 3;
+            ffprobeJsonObj["error"] = FFProbeErrorCodes::INVALID_JSON_FORMAT;
         }
     } else {
-        dbgFile << "Invalid JSON...";
-        ffprobeJsonObj["error"] = 2;
+        ffprobeJsonObj["error"] = FFProbeErrorCodes::INVALID_JSON;
         
     } 
     

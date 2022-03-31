@@ -74,10 +74,7 @@ KoResourceSP KoStopGradient::clone() const
 bool KoStopGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface)
 {
     Q_UNUSED(resourcesInterface);
-
-    QByteArray ba = dev->readAll();
-
-    QBuffer buf(&ba);
+    QBuffer buf(dev);
     loadSvgGradient(&buf);
     if (m_stops.count() >= 2) {
         setValid(true);

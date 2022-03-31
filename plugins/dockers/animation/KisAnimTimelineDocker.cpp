@@ -365,7 +365,7 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                     m_d->canvas, SIGNAL(sigCanvasEngineChanged()),
                     this, SLOT(updateFrameCache()));
 
-        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == KisAnimationPlayer::PLAYING);
+        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == PlaybackState::PLAYING);
         connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
@@ -381,12 +381,14 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeEndTime(int)));
 
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, [this](KisAnimationPlayer::PlaybackState state){
-            m_d->titlebar->frameRegister->setDisabled(state == KisAnimationPlayer::PLAYING);
+        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, [this](PlaybackState state){
+            m_d->titlebar->frameRegister->setDisabled(state == PlaybackState::PLAYING);
+            if (state == PlaybackState::STOPPED) {
+                updateFrameRegister();
+            }
         });
-        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, [this](KisAnimationPlayer::PlaybackState state){
-            m_d->titlebar->transport->setPlaying(state == KisAnimationPlayer::PLAYING);
+        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, [this](PlaybackState state){
+            m_d->titlebar->transport->setPlaying(state == PlaybackState::PLAYING);
         });
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStatisticsUpdated()), this, SLOT(updatePlaybackStatistics()));
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));

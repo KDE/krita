@@ -19,6 +19,12 @@
 
 class KisCanvas2;
 
+enum PlaybackState : unsigned int {
+    STOPPED,
+    PAUSED,
+    PLAYING
+};
+
 /**
  * @brief The KisAnimationPlayer class is Krita's high-level
  * animation playback and navigation interface.
@@ -32,12 +38,6 @@ class KRITAUI_EXPORT KisAnimationPlayer : public QObject
 public:
     KisAnimationPlayer(KisCanvas2 *canvas);
     ~KisAnimationPlayer() override;
-
-    enum PlaybackState {
-        STOPPED,
-        PAUSED,
-        PLAYING
-    };
 
     enum SeekFlags {
         NONE = 0,

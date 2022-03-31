@@ -18,6 +18,7 @@
 class KisTimeSpan;
 class KisAnimationPlayer;
 class KisKeyframeChannel;
+enum PlaybackState : unsigned int;
 
 class KRITAANIMATIONDOCKER_EXPORT KisTimeBasedItemModel : public QAbstractTableModel
 {
@@ -99,7 +100,7 @@ private Q_SLOTS:
     void slotInternalScrubPreviewRequested(int time);
 
     void slotPlaybackFrameChanged();
-    void slotPlaybackStopped();
+    void slotPlaybackStateChanged(PlaybackState state);
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

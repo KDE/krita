@@ -2,7 +2,7 @@
 
 #include <QMap>
 
-#include "animation/KisMediaConsumer.h"
+#include "animation/KisPlaybackHandle.h"
 #include "kis_signal_compressor_with_param.h"
 
 #include <mlt++/Mlt.h>
@@ -13,7 +13,7 @@
 
 const float SCRUB_AUDIO_SECONDS = 0.25f;
 
-static void onConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_frame) {
+static void mltOnConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_frame) {
     KisPlaybackEngine* self = static_cast<KisPlaybackEngine*>(p_self);
     Mlt::Frame frame(p_frame);
     Mlt::Consumer consumer(c);
@@ -68,7 +68,7 @@ struct KisPlaybackEngine::Private {
 
     void initializeConsumers(KisPlaybackEngine* p_self) {
         pullConsumer.reset(new Mlt::Consumer(*profile, "sdl2_audio"));
-        pullConsumer->listen("consumer-frame-show", p_self, (mlt_listener)onConsumerFrameShow);
+        pullConsumer->listen("consumer-frame-show", p_self, (mlt_listener)mltOnConsumerFrameShow);
 
         pushConsumer.reset(new Mlt::PushConsumer(*profile, "sdl2_audio"));
     }
@@ -86,11 +86,11 @@ struct KisPlaybackEngine::Private {
         pushConsumer.reset();
     }
 
-    //MLT PUSH CONSUMER
-    //MLT PULL CONSUMER
     QScopedPointer<Mlt::Profile> profile;
 
+    //MLT PUSH CONSUMER
     QScopedPointer<Mlt::Consumer> pullConsumer;
+    //MLT PULL CONSUMER
     QScopedPointer<Mlt::PushConsumer> pushConsumer;
 
     // Currently active canvas
@@ -103,7 +103,7 @@ struct KisPlaybackEngine::Private {
     //QSharedPointer<Mlt::Filter> loopFilter;
 
     // Map of handles to Mlt producers..
-    QMap<KisPlaybackHandle*, QSharedPointer<Mlt::Producer>> handleProducers; // TODO: Maybe we can just store a producer in the handle? Should handles remain as abstract as they are now?
+    QMap<KisPlaybackHandle*, QSharedPointer<Mlt::Producer>> handleProducers;
 
     QScopedPointer<KisSignalCompressorWithParam<int>> sigPushAudioCompressor;
 };
@@ -145,9 +145,9 @@ KisPlaybackEngine::~KisPlaybackEngine()
 {
 }
 
-QSharedPointer<KisPlaybackHandle> KisPlaybackEngine::leaseHandle(KoCanvasBase* canvas)
+QSharedPointer<KisPlaybackHandle> KisPlaybackEngine::leaseHandle(KoCanvasBase* canvas, KisFrameDisplayProxy* display)
 {
-    QSharedPointer<KisPlaybackHandle> handle(new KisPlaybackHandle);
+    QSharedPointer<KisPlaybackHandle> handle(new KisPlaybackHandle(display));
     m_d->canvasHandles.insert(canvas, handle);
 
     connect(handle.data(), &KisPlaybackHandle::sigDesiredFrameChanged, this, [this, handle](int p_frame){
@@ -229,7 +229,6 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
         connect(handle.data(), &KisPlaybackHandle::sigFrameRateChanged, this, [this](int p_frameRate){
             StopAndResumeConsumer pushStopResume(m_d->pushConsumer.data());
             StopAndResumeConsumer pullStopResume(m_d->pullConsumer.data());
-
             m_d->profile->set_frame_rate(p_frameRate, 1);
         });
 
@@ -257,7 +256,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
 }
 
 void KisPlaybackEngine::unsetCanvas() {
-
+    // TODO: What do we **NEED** to do here?
 }
 
 void KisPlaybackEngine::setupPlaybackMode(PlaybackMode p_mode)
@@ -270,6 +269,10 @@ void KisPlaybackEngine::setupPlaybackMode(PlaybackMode p_mode)
 
         m_d->pushConsumer->start();
     } else {
+        QSharedPointer<KisPlaybackHandle> activeHandle = m_d->canvasHandles[m_d->activeCanvas];
+        QSharedPointer<Mlt::Producer> activeProducer = m_d->handleProducers[activeHandle.data()];
+        activeProducer->seek(activeHandle->visibleFrame());
+
         if (!m_d->pushConsumer->is_stopped()) {
             m_d->pushConsumer->stop();
             m_d->pushConsumer->purge();

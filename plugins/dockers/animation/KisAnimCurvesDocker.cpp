@@ -409,7 +409,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
                                                       activeIndex.data(KisAnimCurvesModel::ScalarValueRole).toReal() : 0.0f);
         }
 
-        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == KisAnimationPlayer::PLAYING);
+        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == PlaybackState::PLAYING);
         connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
@@ -424,10 +424,16 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeStartTime(int)));
         connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeEndTime(int)));
 
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->sbFrameRegister, SLOT(setDisabled(bool)));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStateChanged(bool)), m_d->titlebar->transport, SLOT(setPlaying(bool)));
+        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, m_d->titlebar->transport, [this](PlaybackState p_state){
+            m_d->titlebar->transport->setPlaying(p_state == PlaybackState::PLAYING);
+            m_d->titlebar->sbFrameRegister->setDisabled(p_state == PlaybackState::PLAYING);
+
+            if (p_state == PlaybackState::STOPPED) {
+                updateFrameRegister();
+            }
+        });
+
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackStopped()), this, SLOT(updateFrameRegister()));
         connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));

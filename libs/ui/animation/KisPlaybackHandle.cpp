@@ -5,7 +5,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "animation/KisMediaConsumer.h"
+#include "animation/KisPlaybackHandle.h"
 
 #include <mlt++/MltFactory.h>
 #include <mlt++/MltConsumer.h>
@@ -18,14 +18,19 @@
 #include "kis_debug.h"
 
 struct KisPlaybackHandle::Private {
+    explicit Private(KisFrameDisplayProxy* p_display)
+        : displayProxy(p_display) {
+
+    }
     PlaybackMode mode = PUSH;
     int framesPerSecond = 24; // TODO: Check if necessary -- perhaps we can just use frameRate setting stored in image entirely??
     QScopedPointer<QFileInfo> media;
+    KisFrameDisplayProxy *displayProxy;
 };
 
-KisPlaybackHandle::KisPlaybackHandle(QObject* parent)
+KisPlaybackHandle::KisPlaybackHandle(KisFrameDisplayProxy* displayProxy, QObject* parent)
     : QObject(parent)
-    , m_d(new KisPlaybackHandle::Private())
+    , m_d(new KisPlaybackHandle::Private(displayProxy))
 {
 }
 
@@ -36,6 +41,12 @@ KisPlaybackHandle::~KisPlaybackHandle()
 void KisPlaybackHandle::seek(int p_frame)
 {
     emit sigDesiredFrameChanged(p_frame);
+}
+
+int KisPlaybackHandle::visibleFrame()
+{
+    KIS_ASSERT(m_d->displayProxy);
+    return m_d->displayProxy->visibleFrame();
 }
 
 void KisPlaybackHandle::pushAudio()
@@ -69,10 +80,6 @@ void KisPlaybackHandle::setMode(PlaybackMode p_setting)
 PlaybackMode KisPlaybackHandle::getMode()
 {
     return m_d->mode;
-}
-
-void KisPlaybackHandle::resync(const KisFrameDisplayProxy& displayProxy)
-{
 }
 
 void KisPlaybackHandle::setPlaybackMedia(QFileInfo toLoad)

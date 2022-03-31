@@ -37,7 +37,7 @@
 #include "kis_keyframe_channel.h"
 #include "kis_algebra_2d.h"
 #include <mlt++/MltProducer.h>
-#include "animation/KisMediaConsumer.h"
+#include "animation/KisPlaybackHandle.h"
 #include "KisPlaybackEngine.h"
 
 #include "kis_image_config.h"
@@ -69,23 +69,30 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
     return msecToFrames(time, fps) * playbackSpeed;
 }
 
-class PlaybackHandle : public QObject {
+
+/** @brief PlaybackEnvironment (Private)
+ * Constructs and deconstructs the necessary viewing conditions when animation playback begins and ends.
+ * This includes disabling and enabling onion skins based on playback condition and other such tasks.
+ * Also keeps track of original origin frame of initial play command, so play/pause can work while stop
+ * will always return to the origin of playback (where the user first pressed play from the stopped state.)
+ */
+class PlaybackEnvironment : public QObject {
     Q_OBJECT
 public:
-    PlaybackHandle(int originFrame, KisAnimationPlayer* parent = nullptr)
+    PlaybackEnvironment(int originFrame, KisAnimationPlayer* parent = nullptr)
         : QObject(parent)
         , m_originFrame(originFrame)
     {
         connect(&m_cancelTrigger, SIGNAL(output()), parent, SLOT(stop()));
     }
 
-    ~PlaybackHandle() {
+    ~PlaybackEnvironment() {
         restore();
     }
 
-    PlaybackHandle() = delete;
-    PlaybackHandle(const PlaybackHandle&) = delete;
-    PlaybackHandle& operator= (const PlaybackHandle&) = delete;
+    PlaybackEnvironment() = delete;
+    PlaybackEnvironment(const PlaybackEnvironment&) = delete;
+    PlaybackEnvironment& operator= (const PlaybackEnvironment&) = delete;
 
     int originFrame() { return m_originFrame; }
 
@@ -201,17 +208,18 @@ struct KisAnimationPlayer::Private
 public:
     Private(KisCanvas2* p_canvas)
         : canvas(p_canvas)
-        , playbackHandle( KisPart::instance()->playbackEngine()->leaseHandle(p_canvas) )
         , displayProxy( new KisFrameDisplayProxy(p_canvas) )
+        , playbackHandle( KisPart::instance()->playbackEngine()->leaseHandle(p_canvas, displayProxy.data()) )
+        , playbackEnvironment( nullptr )
         , playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
     {
     }
 
     KisCanvas2 *canvas;
     PlaybackState state;
-    QSharedPointer<KisPlaybackHandle> playbackHandle; //Abstraction of playback controls / play-position.
-    QScopedPointer<PlaybackHandle> playbackEnvironment; //Sets up canvas / environment for playback
     QScopedPointer<KisFrameDisplayProxy> displayProxy;
+    QSharedPointer<KisPlaybackHandle> playbackHandle; //Abstraction of playback controls / play-position.
+    QScopedPointer<PlaybackEnvironment> playbackEnvironment; //Sets up canvas / environment for playback
 
     KisSignalCompressor playbackStatisticsCompressor;
 
@@ -224,7 +232,8 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     setPlaybackState(STOPPED);
     setPlaybackSpeedNormalized(1.0f);
 
-
+    // Handle will recieve notifications from playback engine to display a specific frame. We should
+    // only care about these when the user is playing an animation!
     connect(m_d->playbackHandle.data(), &KisPlaybackHandle::sigFrameShow, this, [this](int p_frame){
         KIS_ASSERT(m_d->displayProxy);
         if (m_d->state == PLAYING) {
@@ -260,7 +269,7 @@ KisAnimationPlayer::~KisAnimationPlayer()
 {
 }
 
-KisAnimationPlayer::PlaybackState KisAnimationPlayer::playbackState()
+PlaybackState KisAnimationPlayer::playbackState()
 {
     return m_d->state;
 }
@@ -273,7 +282,7 @@ void KisAnimationPlayer::updateDropFramesMode()
 void KisAnimationPlayer::play()
 {
     if (!m_d->playbackEnvironment) {
-        m_d->playbackEnvironment.reset(new PlaybackHandle(m_d->displayProxy->visibleFrame(), this));
+        m_d->playbackEnvironment.reset(new PlaybackEnvironment(m_d->displayProxy->visibleFrame(), this));
     }
 
     m_d->playbackEnvironment->prepare(m_d->canvas);
@@ -286,7 +295,6 @@ void KisAnimationPlayer::pause()
     KIS_ASSERT(playbackState() == PLAYING);
     m_d->playbackEnvironment->restore();
     setPlaybackState(PAUSED);
-    m_d->playbackHandle->resync(*m_d->displayProxy);
 }
 
 void KisAnimationPlayer::playPause()
@@ -310,7 +318,6 @@ void KisAnimationPlayer::stop()
 
         setPlaybackState(STOPPED);
         m_d->displayProxy->displayFrame(origin);
-        m_d->playbackHandle->resync(*m_d->displayProxy);
     } else if (m_d->displayProxy->visibleFrame() != 0) {
         seek(0);
     }

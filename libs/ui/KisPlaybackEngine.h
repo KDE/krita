@@ -24,7 +24,7 @@ public:
      * Used by canvas to hold onto a handle that communicates to the KisPlaybackEngine
      * so that playback settings can be changed on the fly.
      */
-    QSharedPointer<class KisPlaybackHandle> leaseHandle(class KoCanvasBase* canvas);
+    QSharedPointer<class KisPlaybackHandle> leaseHandle(class KoCanvasBase* canvas, class KisFrameDisplayProxy* display);
     void returnHandle(KoCanvasBase* canvas);
 
 Q_SIGNALS:

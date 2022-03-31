@@ -100,7 +100,8 @@ public:
                          int &currentIndex);
     void applyTextPath(const KoShape *rootShape,
                          QVector<CharacterResult> &result, bool isHorizontal);
-
+    void paintPaths(QPainter &painter, KoShapePaintingContext &paintContext,
+                    const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex);
 };
 
 KoSvgTextShape::KoSvgTextShape()
@@ -159,23 +160,10 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
     }*/
     //qDebug() << "drawing...";
 
-    QTransform tf;
-
-    for (CharacterResult cr : d->result) {
-        if (cr.addressable && cr.hidden == false) {
-            QPainterPath p = cr.path;
-            tf.reset();
-            tf.translate(cr.finalPosition.x(), cr.finalPosition.y());
-            tf.rotateRadians(cr.rotate);
-            /* Debug
-            painter.save();
-            painter.setPen(Qt::red);
-            painter.drawPoint(cr.finalPosition);
-            painter.restore();
-            */
-            background()->paint(painter, paintContext, tf.map(p));
-        }
-    }
+    QPainterPath chunk;
+    chunk.setFillRule(Qt::WindingFill);
+    int currentIndex = 0;
+    d->paintPaths(painter, paintContext, this, d->result, chunk, currentIndex);
     /* Debug
     Q_FOREACH (KoShape *child, this->shapes()) {
         const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape*>(child);
@@ -327,9 +315,6 @@ void KoSvgTextShape::relayout() const
     if (!d->library) {
         FT_Init_FreeType(&d->library);
     }
-    FcConfig *config = FcConfigGetCurrent();
-    FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_WIDTH, FC_WEIGHT, FC_SLANT, nullptr);
-
     if (raqm_set_text_utf8(layout, text.toUtf8(), text.toUtf8().size())) {
         if (writingMode == KoSvgText::TopToBottom) {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_TTB);
@@ -411,7 +396,6 @@ void KoSvgTextShape::relayout() const
 
     QTransform ftTF;
     const qreal factor = 1/64.;
-    // This is dependant on the writing mode. We want this to align to the vertical baseline for vertical metrics.
     ftTF.scale(factor, -factor);
 
     QPointF totalAdvance;
@@ -725,17 +709,21 @@ void KoSvgTextShape::relayout() const
 
     // 9. return result.
     d->result = result;
+    globalIndex = 0;
     QTransform tf;
-    KoSvgText::AssociatedShapeWrapper wrapper = textChunks.at(0).format.associatedShapeWrapper();
-    for (CharacterResult cr : d->result) {
-        if (cr.addressable && cr.hidden == false) {
-            tf.reset();
-            tf.translate(cr.finalPosition.x(), cr.finalPosition.y());
-            tf.rotateRadians(cr.rotate);
-            wrapper.addCharacterRect(tf.mapRect(cr.boundingBox));
+    for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
+        KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
+        int j = chunk.text.toUtf8().size();
+        for (int i = globalIndex; i< globalIndex + j; i++) {
+            if (result.at(i).addressable && result.at(i).hidden == false) {
+                tf.reset();
+                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+                tf.rotateRadians(result.at(i).rotate);
+                wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
+            }
         }
+        globalIndex += j;
     }
-
 }
 
 void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
@@ -766,10 +754,8 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
         applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal);
     }
-    // TODO: check if node is either a tspan or text node.
     // Raqm handles bidi reordering for us, but this algorithm does not anticipate
     // that, so we need to keep track of which typographic item belongs where.
-    // Note: This algorithm doesn't work when two textLength tspans are siblings...
     QMap<int, int> typographicToIndex;
     if (!chunkShape->layoutInterface()->textLength().isAuto) {
         qreal a = 0.0;
@@ -804,7 +790,6 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
         n -= 1;
         qreal delta = chunkShape->layoutInterface()->textLength().customValue - (b-a);
         QPointF d (delta/n, 0);
-        // check for rtl.
         if (!isHorizontal) {
             d = QPointF(0, delta/n);
         }
@@ -1002,6 +987,56 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
             }
         }
         currentIndex = endIndex;
+    }
+}
+
+void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingContext &paintContext,
+                                         const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex)
+{
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+    if (chunkShape->isTextNode()) {
+        QTransform tf;
+        int j = currentIndex + chunkShape->layoutInterface()->numChars();
+        //qDebug() << "drawing chunk" << currentIndex << j;
+
+        for (int i = currentIndex; i< j; i++) {
+            if (result.at(i).addressable && result.at(i).hidden == false) {
+                tf.reset();
+                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+                tf.rotateRadians(result.at(i).rotate);
+                /* Debug
+                painter.save();
+                painter.setPen(Qt::red);
+                painter.drawPoint(result.at(i).finalPosition);
+                painter.restore();
+                */
+                /**
+                 * There's an annoying problem here that officially speaking
+                 * the chunks need to be unified into one single path before
+                 * drawing, so there's no weirdness with the stroke, but
+                 * QPainterPath's union function will frequently lead to
+                 * reduced quality of the paths because of 'numerical
+                 * instability'.
+                 */
+                QPainterPath p = tf.map(result.at(i).path);
+                if (chunk.intersects(p)) {
+                    chunk |= tf.map(result.at(i).path);
+                } else {
+                    chunk.addPath(p);
+                }
+            }
+        }
+        chunk.setFillRule(Qt::WindingFill);
+        chunkShape->background()->paint(painter, paintContext, chunk);
+        chunkShape->stroke()->paint(KoPathShape::createShapeFromPainterPath(chunk), painter);
+        chunk.clear();
+        currentIndex = j;
+
+    } else {
+        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+            paintPaths(painter, paintContext, child, result, chunk, currentIndex);
+        }
     }
 }
 

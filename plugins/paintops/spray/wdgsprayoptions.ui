@@ -259,12 +259,12 @@
              </property>
              <item>
               <property name="text">
-               <string>Uniform</string>
+               <string comment="Uniform distribution in spray engine">Uniform</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Curve</string>
+               <string comment="Custom curve based distribution in spray engine">Curve</string>
               </property>
              </item>
             </widget>
@@ -344,22 +344,22 @@
              </property>
              <item>
               <property name="text">
-               <string>Uniform</string>
+               <string comment="Uniform distribution in spray engine">Uniform</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Gaussian</string>
+               <string comment="Gaussian distribution in spray engine">Gaussian</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Cluster</string>
+               <string comment="Clustering based distribution in spray engine">Cluster</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Curve</string>
+               <string comment="Custom curve based distribution in spray engine">Curve</string>
               </property>
              </item>
             </widget>

@@ -80,6 +80,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP r
     QByteArray data = dev->readAll();
 
     QTextStream fileContent(data, QIODevice::ReadOnly);
+    fileContent.setCodec("UTF-8");
     fileContent.setAutoDetectUnicode(true);
 
     QString header = fileContent.readLine();
@@ -121,7 +122,6 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP r
     for (int i = 0; i < numSegments; i++) {
 
         QString segmentText = fileContent.readLine();
-        QTextStream segmentFields(&segmentText);
         QStringList values = segmentText.split(' ');
 
         qreal leftOffset = values[0].toDouble();
@@ -190,6 +190,7 @@ bool KoSegmentGradient::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP r
 bool KoSegmentGradient::saveToDevice(QIODevice *dev) const
 {
     QTextStream fileContent(dev);
+    fileContent.setCodec("UTF-8");
     fileContent << "GIMP Gradient\n";
     fileContent << "Name: " << name() << "\n";
     fileContent << m_segments.count() << "\n";

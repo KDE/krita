@@ -349,21 +349,21 @@ void KisCurveWidget::paintEvent(QPaintEvent *)
             curveX = d->m_curve.points().at(i).x();
             curveY = d->m_curve.points().at(i).y();
 
-            int handleSize = 12; // how big should control points be (diameter size)
-
             if (i == d->m_grab_point_index) {
                 // active point is slightly more "bold"
                 p.setPen(QPen(appPalette.color(QPalette::Text), 4, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth - (handleSize*0.5),
-                                     wHeight - (handleSize*0.5) - curveY * wHeight,
-                                     handleSize,
-                                     handleSize));
+                p.drawEllipse(QRectF(curveX * wWidth - (d->m_handleSize*0.5),
+                                     wHeight - (d->m_handleSize*0.5) - curveY * wHeight,
+                                     d->m_handleSize,
+                                     d->m_handleSize));
+
             } else {
                 p.setPen(QPen(appPalette.color(QPalette::Text), 2, Qt::SolidLine));
-                p.drawEllipse(QRectF(curveX * wWidth - (handleSize*0.5),
-                                     wHeight - (handleSize*0.5) - curveY * wHeight,
-                                     handleSize,
-                                     handleSize));
+                p.drawEllipse(QRectF(curveX * wWidth - (d->m_handleSize*0.5),
+                                     wHeight - (d->m_handleSize*0.5) - curveY * wHeight,
+                                     d->m_handleSize,
+                                     d->m_handleSize));
+
             }
         }
     }

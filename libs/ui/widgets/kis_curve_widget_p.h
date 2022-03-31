@@ -62,6 +62,9 @@ public:
     int m_outMin {0};
     int m_outMax {0};
 
+    /* view-logic variables */
+    int m_handleSize {12}; // size of the control points (diameter, in logical pixels) - both for painting and for detecting clicks
+
     /**
      * State functions.
      * At the moment used only for dragging.
@@ -163,6 +166,10 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     int nearestIndex = -1;
     int i = 0;
 
+    // Important:
+    // pt and points from the curve are in (0, 1) ranges
+    // hence the usage of wWidth etc.
+
     Q_FOREACH (const QPointF & point, m_curve.points()) {
         double distanceSquared = (pt.x() - point.x()) *
                                  (pt.x() - point.x()) +
@@ -177,8 +184,20 @@ int KisCurveWidget::Private::nearestPointInRange(QPointF pt, int wWidth, int wHe
     }
 
     if (nearestIndex >= 0) {
-        if (fabs(pt.x() - m_curve.points()[nearestIndex].x()) *(wWidth - 1) < 5 &&
-                fabs(pt.y() - m_curve.points()[nearestIndex].y()) *(wHeight - 1) < 5) {
+
+        // difference between points is in (0, 1) range as well (or rather, (-1,1))
+        QPointF distanceVector = QPointF((pt.x() - m_curve.points()[nearestIndex].x()) *(wWidth - 1),
+                                        (pt.y() - m_curve.points()[nearestIndex].y()) *(wHeight - 1));
+
+        if (distanceVector.x() > m_handleSize || distanceVector.y() > m_handleSize) {
+            // small performance optimization
+            // distance is for sure bigger than m_handleSize now, no need to check
+            return -1;
+        }
+
+        double distanceInPixels = QLineF(distanceVector, QPointF(0, 0)).length();
+
+        if (distanceInPixels <= m_handleSize) {
             return nearestIndex;
         }
     }

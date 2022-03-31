@@ -24,6 +24,7 @@ public:
     QPointF lastPosition;
     float lastDistance {0.0};
     qreal previousAngle {0.0};
+    qreal accumRotationAngle {0.0};
 };
 
 KisZoomAndRotateAction::KisZoomAndRotateAction()
@@ -61,6 +62,7 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
         d->lastPosition = touchEvent->touchPoints().at(0).pos();
         d->lastDistance = 0;
         d->previousAngle = 0;
+        d->accumRotationAngle = 0;
     }
 }
 
@@ -111,8 +113,14 @@ void KisZoomAndRotateAction::inputEvent(QEvent *event)
         const qreal canvasAnglePostRotation = controller->rotation() + rotationAngle;
         const qreal snapDelta = angleForSnapping(canvasAnglePostRotation);
         // we snap the canvas to an angle that is a multiple of 45
-        if (abs(snapDelta) <= 2) {
+        if (abs(snapDelta) <= 2 && abs(d->accumRotationAngle) <= 2) {
+            // accumulate the relative angle of finger from the point when we started snapping
+            d->accumRotationAngle += rotationAngle;
             rotationAngle = rotationAngle - snapDelta;
+        } else {
+            // snap the canvas out using the accumulated angle
+            rotationAngle += d->accumRotationAngle;
+            d->accumRotationAngle = 0;
         }
 
         controller->zoomRelativeToPoint(p0.toPoint(), scaleDelta);

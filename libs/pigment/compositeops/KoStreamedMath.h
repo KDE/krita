@@ -483,8 +483,9 @@ struct PixelWrapper<quint16, _impl>
     using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
 
     ALWAYS_INLINE
-    static quint16 lerpMixedUintFloat(quint16 a, quint16 b, float alpha) {
-        return OptiRound<_impl>::roundScalar(qint32(b - a) * alpha + a);
+    static quint16 lerpMixedUintFloat(quint16 a, quint16 b, float alpha)
+    {
+        return OptiRound<_impl>::roundScalar((float(b) - a) * alpha + float(a));
     }
 
     ALWAYS_INLINE

@@ -191,9 +191,10 @@ struct OverCompositor128 {
                         qInfo() << "calc" << s[0] << d[0] << srcBlendNorm * (s[0] - d[0]) + d[0] << s[0] - d[0] << srcBlendNorm * (s[0] - d[0]) << srcBlendNorm;
                     }
 #endif
-                    d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
-                    d[1] = srcBlendNorm * (s[1] - d[1]) + d[1];
-                    d[2] = srcBlendNorm * (s[2] - d[2]) + d[2];
+
+                    d[0] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(d[0], s[0], srcBlendNorm);
+                    d[1] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(d[1], s[1], srcBlendNorm);
+                    d[2] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(d[2], s[2], srcBlendNorm);
                 }
             } else {
                 const QBitArray &channelFlags = oparams.channelFlags;
@@ -203,15 +204,15 @@ struct OverCompositor128 {
                     if(channelFlags.at(1)) d[1] = s[1];
                     if(channelFlags.at(2)) d[2] = s[2];
                 } else if (srcBlendNorm != 0.0f) {
-                    if(channelFlags.at(0)) d[0] = srcBlendNorm * (s[0] - d[0]) + d[0];
-                    if(channelFlags.at(1)) d[1] = srcBlendNorm * (s[1] - d[1]) + d[1];
-                    if(channelFlags.at(2)) d[2] = srcBlendNorm * (s[2] - d[2]) + d[2];
+                    if(channelFlags.at(0)) d[0] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(d[0], s[0], srcBlendNorm);
+                    if(channelFlags.at(1)) d[1] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(d[1], s[1], srcBlendNorm);;
+                    if(channelFlags.at(2)) d[2] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(d[2], s[2], srcBlendNorm);;
                 }
             }
 
             if (!alphaLocked) {
                 PixelWrapper<channels_type, _impl>::denormalizeAlpha(dstAlpha);
-                d[alpha_pos] = dstAlpha;
+                d[alpha_pos] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dstAlpha);
             }
 #if INFO_DEBUG
             if (display) {

@@ -221,20 +221,16 @@ struct CopyCompositor128 {
                     dst_c3 = std::min(dst_c3, unitValue);
                 }
 
-                PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c1);
-                PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c2);
-                PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c3);
-
                 if (allChannelsFlag) {
-                    d[0] = dst_c1;
-                    d[1] = dst_c2;
-                    d[2] = dst_c3;
+                    d[0] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c1);
+                    d[1] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c2);
+                    d[2] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c3);
                 } else {
                     if (dstAlpha != 0.0f || alphaLocked) {
                         const QBitArray &channelFlags = oparams.channelFlags;
-                        if (channelFlags.at(0)) d[0] = dst_c1;
-                        if (channelFlags.at(1)) d[1] = dst_c2;
-                        if (channelFlags.at(2)) d[2] = dst_c3;
+                        if (channelFlags.at(0)) d[0] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c1);
+                        if (channelFlags.at(1)) d[1] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c2);
+                        if (channelFlags.at(2)) d[2] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dst_c3);
                     } else {
                         // Precondition: dstAlpha == 0 && !alphaLocked
                         const QBitArray &channelFlags = oparams.channelFlags;

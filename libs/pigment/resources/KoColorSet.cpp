@@ -59,6 +59,7 @@ QStringList readAllLinesSafe(QByteArray *data)
     QBuffer buffer(data);
     buffer.open(QBuffer::ReadOnly);
     QTextStream stream(&buffer);
+    stream.setCodec("UTF-8");
 
     QString line;
     while (stream.readLineInto(&line)) {
@@ -741,6 +742,7 @@ bool KoColorSet::Private::saveGpl(QIODevice *dev) const
     Q_ASSERT(dev->isWritable());
 
     QTextStream stream(dev);
+    stream.setCodec("UTF-8");
     stream << "GIMP Palette\nName: " << colorSet->name() << "\nColumns: " << colorSet->columnCount() << "\n#\n";
 
     /*

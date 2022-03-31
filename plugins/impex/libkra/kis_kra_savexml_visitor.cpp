@@ -10,7 +10,6 @@
 #include "kis_kra_utils.h"
 #include "kis_layer_properties_icons.h"
 
-#include <QTextStream>
 #include <QDir>
 
 #include <KoProperties.h>

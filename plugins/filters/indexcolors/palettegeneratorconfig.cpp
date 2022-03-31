@@ -6,7 +6,6 @@
 
 #include "palettegeneratorconfig.h"
 #include <QTextStream>
-#include <QDataStream>
 
 PaletteGeneratorConfig::PaletteGeneratorConfig()
 {

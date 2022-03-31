@@ -36,6 +36,7 @@ namespace KisDomUtils {
     inline QString toString(float value) {
         QString str;
         QTextStream stream;
+        stream.setCodec("UTF-8");
         stream.setString(&str, QIODevice::WriteOnly);
         stream.setRealNumberPrecision(FLT_DIG);
         stream << value;
@@ -45,6 +46,7 @@ namespace KisDomUtils {
     inline QString toString(double value) {
         QString str;
         QTextStream stream;
+        stream.setCodec("UTF-8");
         stream.setString(&str, QIODevice::WriteOnly);
         stream.setRealNumberPrecision(15);
         stream << value;

@@ -186,6 +186,7 @@ void KisUpdateTimeMonitor::printValues()
     QFile logFile(QString("log/%1stroke.rdata").arg(prefix));
     logFile.open(QIODevice::Append);
     QTextStream stream(&logFile);
+    stream.setCodec("UTF-8");
 
     stream << i18n("Stroke Time:") << strokeTime << "\t"
            << i18n("Mouse Speed:") << QString::number( mouseSpeed, 'f', 3 ) << "\t"

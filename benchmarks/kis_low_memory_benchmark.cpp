@@ -105,6 +105,7 @@ void KisLowMemoryBenchmark::benchmarkWideArea(const QString presetFileName,
     QFile logFile(fileName);
     logFile.open(QFile::WriteOnly | QFile::Truncate);
     QTextStream logStream(&logFile);
+    logStream.setCodec("UTF-8");
     logStream.setFieldWidth(10);
     logStream.setFieldAlignment(QTextStream::AlignRight);
 

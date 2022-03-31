@@ -8,7 +8,6 @@
 
 #include <QApplication>
 #include <QString>
-#include <QTextStream>
 #include <QTimer>
 #include <QThread>
 #include <QMutex>

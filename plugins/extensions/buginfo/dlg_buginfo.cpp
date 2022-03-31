@@ -98,6 +98,7 @@ void DlgBugInfo::saveToFile()
         }
 
         QTextStream out(&file);
+        out.setCodec("UTF-8");
         QString originalLogFileName = originalFileName();
         if (originalLogFileName.isEmpty() && QFileInfo(originalLogFileName).exists()) {
             QFile src(originalLogFileName);

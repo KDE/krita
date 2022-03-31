@@ -490,6 +490,7 @@ private:
         }
 
         QTextStream in(&file);
+        in.setCodec("UTF-8");
         for (quint32 y = 0; y < m_fftHeight; y++)
         {
             for (quint32 x = 0; x < m_fftWidth; x++)

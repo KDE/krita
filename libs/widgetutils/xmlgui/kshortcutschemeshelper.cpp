@@ -8,7 +8,6 @@
 #include <QAction>
 #include <QCoreApplication>
 #include <QFile>
-#include <QTextStream>
 #include <QDomDocument>
 #include <QStandardPaths>
 

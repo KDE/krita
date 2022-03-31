@@ -1946,6 +1946,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
                 {
                     QString string;
                     QTextStream stream(&string);
+                    stream.setCodec("UTF-8");
                     stream << b;
                     debugFlake << "    " << string;
                 }

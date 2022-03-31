@@ -16,7 +16,6 @@
 #include <QDir>
 #include <QFile>
 #include <QDomDocument>
-#include <QTextStream>
 #include <QRegExp>
 #include <QPointer>
 #include <QCoreApplication>

@@ -22,7 +22,6 @@
 #include <QMap>
 #include <QFile>
 #include <QBuffer>
-#include <QTextStream>
 #include <QFileInfo>
 #include <QImageReader>
 

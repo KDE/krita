@@ -96,6 +96,7 @@ private Q_SLOTS:
                 if (shouldSpitWarning) {
                     QString message;
                     QTextStream log(&message);
+                    log.setCodec("UTF-8");
 
                     log << "WARNING: couldn't reconnect to a removed file layer's file (" << path << "). File is not available for " << absenceTimeMSec / 1000 << " seconds";
 

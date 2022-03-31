@@ -17,12 +17,10 @@
 #include <QFile>
 #include <QRegExp>
 #include <QStringList>
-#include <QTextStream>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <krandom.h>
-
 
 #include "kis_global.h"
 #include "kis_paint_device.h"

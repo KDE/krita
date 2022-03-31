@@ -462,6 +462,8 @@ QString SvgStyleWriter::saveSvgMeshGradient(SvgMeshGradient *gradient,
 
                 QString pathstr;
                 QTextStream stream(&pathstr);
+                stream.setCodec("UTF-8");
+
                 stream.setRealNumberPrecision(10);
                 // TODO: other path type?
                 stream << "C "

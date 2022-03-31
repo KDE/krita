@@ -7,7 +7,6 @@
 #ifndef __KIS_TABLET_DEBUGGER_H
 #define __KIS_TABLET_DEBUGGER_H
 
-#include <QTextStream>
 #include <QTabletEvent>
 #include <QLoggingCategory>
 

@@ -10,7 +10,6 @@
 #include <QMenu>
 #include <QFile>
 #include <QPushButton>
-#include <QTextStream>
 #include <QDomDocument>
 #include <QStandardPaths>
 #include <QInputDialog>

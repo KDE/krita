@@ -49,7 +49,7 @@ KisPopupWidgetAction::~KisPopupWidgetAction()
 {
 }
 
-void KisPopupWidgetAction::begin(int, QEvent *event)
+void KisPopupWidgetAction::end(QEvent *event)
 {
     if (QMenu *popupMenu = inputManager()->toolProxy()->popupActionsMenu()) { // Handle popup menus...
         m_requestedWithStylus = event && event->type() == QEvent::TabletPress;

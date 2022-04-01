@@ -357,10 +357,16 @@ void KoSvgTextShape::relayout() const
                                             0,
                                             &face);
                 if (errorCode == 0) {
-                    qDebug() << "face loaded" << fontFileName;
+                    qDebug() << "face loaded" << fontFileName << fontSize;
+                    // We set the DPI to 72, because we want a result in points
+                    // (1/72 of an inch).
                     errorCode =
-                        FT_Set_Char_Size(face, fontSize * 64.0, 0, 0, 0);
+                        FT_Set_Char_Size(face, fontSize * 64.0, 0, 72, 72);
                     FT_Int32 loadFlags = FT_LOAD_DEFAULT;
+                    // without load_no_hinting, the advance and offset will be
+                    // rounded to nearest pixel, which we don't want as we're
+                    // using the vector outline.
+                    loadFlags |= FT_LOAD_NO_HINTING;
 
                     if (!isHorizontal && FT_HAS_VERTICAL(face)) {
                         loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
@@ -420,6 +426,7 @@ void KoSvgTextShape::relayout() const
 
     for (int g = 0; g < int(count); g++) {
         FT_Int32 loadFlags = FT_LOAD_DEFAULT;
+        loadFlags |= FT_LOAD_NO_HINTING;
 
         if (!isHorizontal && FT_HAS_VERTICAL(glyphs[g].ftface)) {
             loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
@@ -431,7 +438,6 @@ void KoSvgTextShape::relayout() const
         FT_GlyphSlotRec *glyphSlot = glyphs[g].ftface->glyph;
 
         qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
-        // FT_Glyph_Get_CBox( glyphs[i].ftface->glyph, 0, &bbox );
 
         QPointF cp = QPointF();
         // convert the outline to a painter path
@@ -536,7 +542,9 @@ void KoSvgTextShape::relayout() const
 
         if (!charResult.path.isEmpty()) {
             // this is for glyph clusters, unicode combining marks are always
-            // added
+            // added. we could have these as seperate paths, but there's no real
+            // purpose, and the svg standard prefers 'ligatures' to be treated
+            // as a single glyph. It simplifies things for us in any case.
             charResult.path.addPath(glyph.translated(charResult.advance));
         } else {
             charResult.path = glyph;
@@ -1078,6 +1086,11 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                 tf.rotateRadians(result.at(i).rotate);
                 /* Debug
                 painter.save();
+                painter.setBrush(Qt::transparent);
+                QPen pen(Qt::cyan);
+                pen.setWidthF(0.1);
+                painter.setPen(pen);
+                painter.drawPolygon(tf.map(result.at(i).boundingBox));
                 painter.setPen(Qt::red);
                 painter.drawPoint(result.at(i).finalPosition);
                 painter.restore();

@@ -103,7 +103,19 @@ KisMask::~KisMask()
 void KisMask::setImage(KisImageWSP image)
 {
     KisPaintDeviceSP parentPaintDevice = parent() ? parent()->original() : 0;
-    KisDefaultBoundsBaseSP defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice);
+    KisDefaultBoundsBaseSP defaultBounds;
+
+    if (parentPaintDevice) {
+        defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice);
+    } else {
+        /**
+         * FIXME: Ideally we should move setImage() and setDefaultBounds()
+         * calls into KisNode::add() or something like that. But for now
+         * we can just initialize default bounds with "not entirely correct"
+         * default bounds.
+         */
+        defaultBounds = new KisDefaultBounds(image);
+    }
 
     if (m_d->selection) {
         m_d->selection->setDefaultBounds(defaultBounds);

@@ -542,6 +542,7 @@ KoSvgTextProperties::fontFileNameForText(QString text,
         p,
         FC_WIDTH,
         propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
+    FcPatternAddBool(p, FC_OUTLINE, true);
 
     FcResult result;
     FcFontSet *fontSet =

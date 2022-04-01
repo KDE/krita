@@ -1817,7 +1817,8 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
     if (e.hasAttribute("path")) {
         QDomElement p = e.ownerDocument().createElement("path");
         p.setAttribute("d", e.attribute("path"));
-        textChunk->setTextPath(createPath(p)->outline());
+        KoShape *s = createPath(p);
+        textChunk->setTextPath(s->transformation().map(s->outline()));
     }
 
     textChunk->normalizeCharTransformations();

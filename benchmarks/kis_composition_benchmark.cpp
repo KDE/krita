@@ -295,16 +295,46 @@ inline bool fuzzyCompare(channel_type a, channel_type b, channel_type prec) {
     return qAbs(a - b) <= prec;
 }
 
-template <typename channel_type>
+template<typename channel_type>
+struct PixelEqualDirect
+{
+    bool operator() (channel_type c1, channel_type a1,
+                     channel_type c2, channel_type a2,
+                     channel_type prec) {
+
+        Q_UNUSED(a1);
+        Q_UNUSED(a2);
+
+        return fuzzyCompare(c1, c2, prec);
+    }
+};
+
+template<typename channel_type>
+struct PixelEqualPremultiplied
+{
+    bool operator() (channel_type c1, channel_type a1,
+                     channel_type c2, channel_type a2,
+                     channel_type prec) {
+
+        c1 = KoColorSpaceMaths<channel_type>::multiply(c1, a1);
+        c2 = KoColorSpaceMaths<channel_type>::multiply(c2, a2);
+
+        return fuzzyCompare(c1, c2, prec);
+    }
+};
+
+template <typename channel_type, template<typename> class Compare = PixelEqualDirect>
 inline bool comparePixels(channel_type *p1, channel_type *p2, channel_type prec) {
+    Compare<channel_type> comp;
+
     return (p1[3] == p2[3] && p1[3] == 0) ||
-        (fuzzyCompare(p1[0], p2[0], prec) &&
-         fuzzyCompare(p1[1], p2[1], prec) &&
-         fuzzyCompare(p1[2], p2[2], prec) &&
+        (comp(p1[0], p1[3], p2[0], p2[3], prec) &&
+         comp(p1[1], p1[3], p2[1], p2[3], prec) &&
+         comp(p1[2], p1[3], p2[2], p2[3], prec) &&
          fuzzyCompare(p1[3], p2[3], prec));
 }
 
-template <typename channel_type>
+template <typename channel_type, template<typename> class Compare>
 bool compareTwoOpsPixels(QVector<Tile> &tiles, channel_type prec) {
     channel_type *dst1 = reinterpret_cast<channel_type*>(tiles[0].dst);
     channel_type *dst2 = reinterpret_cast<channel_type*>(tiles[1].dst);
@@ -313,7 +343,7 @@ bool compareTwoOpsPixels(QVector<Tile> &tiles, channel_type prec) {
     channel_type *src2 = reinterpret_cast<channel_type*>(tiles[1].src);
 
     for (int i = 0; i < numPixels; i++) {
-        if (!comparePixels<channel_type>(dst1, dst2, prec)) {
+        if (!comparePixels<channel_type, Compare>(dst1, dst2, prec)) {
             qDebug() << "Wrong result:" << i;
             qDebug() << "Act: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
             qDebug() << "Exp: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
@@ -336,6 +366,7 @@ bool compareTwoOpsPixels(QVector<Tile> &tiles, channel_type prec) {
     return true;
 }
 
+template<template<typename> class Compare = PixelEqualDirect>
 bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp *op2)
 {
     Q_ASSERT(op1->colorSpace()->pixelSize() == op2->colorSpace()->pixelSize());
@@ -366,13 +397,13 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
 
     bool compareResult = true;
     if (pixelSize == 4) {
-        compareResult = compareTwoOpsPixels<quint8>(tiles, 10);
+        compareResult = compareTwoOpsPixels<quint8, Compare>(tiles, 10);
     }
     else if (pixelSize == 8) {
-        compareResult = compareTwoOpsPixels<quint16>(tiles, 90);
+        compareResult = compareTwoOpsPixels<quint16, Compare>(tiles, 90);
     }
     else if (pixelSize == 16) {
-        compareResult = compareTwoOpsPixels<float>(tiles, 2e-7);
+        compareResult = compareTwoOpsPixels<float, Compare>(tiles, 2e-7);
     }
     else {
         qFatal("Pixel size %i is not implemented", pixelSize);
@@ -799,7 +830,11 @@ void KisCompositionBenchmark::compareRgbU8CopyOps()
     KoCompositeOp *opAct = KoOptimizedCompositeOpFactory::createCopyOp32(cs);
     KoCompositeOp *opExp = new KoCompositeOpCopy2<KoRgbU8Traits>(cs);
 
-    QVERIFY(compareTwoOps(false, opAct, opExp));
+    // Since composite copy involves a channel division operation,
+    // there might be significant rounding difference with purely
+    // integer implementation. So we should compare in premultiplied
+    // form.
+    QVERIFY(compareTwoOps<PixelEqualPremultiplied>(false, opAct, opExp));
 
     delete opExp;
     delete opAct;

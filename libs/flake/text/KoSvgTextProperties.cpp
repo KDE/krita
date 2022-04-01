@@ -532,6 +532,7 @@ QStringList KoSvgTextProperties::fontFileNameForText(QString text, QVector<int> 
     }
     FcPatternAddInteger(p, FC_WEIGHT, FcWeightFromOpenType(propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt()));
     FcPatternAddInteger(p, FC_WIDTH, propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
+    FcPatternAddBool(p, FC_OUTLINE, true);
 
     FcResult result;
     FcFontSet *fontSet = FcFontSort(FcConfigGetCurrent(), p, FcTrue, &charSet, &result);

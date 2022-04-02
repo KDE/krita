@@ -90,6 +90,7 @@ public:
 
 
     void clearAssociatedOutlines(const KoShape *rootShape);
+    QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
     void applyTextLength(const KoShape *rootShape,
                          QVector<CharacterResult> &result,
                          int &currentIndex,
@@ -416,95 +417,11 @@ void KoSvgTextShape::relayout() const
         if (error != 0) {
             continue;
         }
-        FT_GlyphSlotRec* glyphSlot = glyphs[g].ftface->glyph;
 
         qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
 
-        QPointF cp = QPointF();
-        // convert the outline to a painter path
-        // This is taken from qfontengine_ft.cpp.
-        QPainterPath glyph;
-        glyph.setFillRule(Qt::WindingFill);
-        int i = 0;
-        for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
-            int last_point = glyphSlot->outline.contours[j];
-            // qDebug() << "contour:" << i << "to" << last_point;
-            QPointF start = QPointF(glyphSlot->outline.points[i].x, glyphSlot->outline.points[i].y);
-            if (!(glyphSlot->outline.tags[i] & 1)) {               // start point is not on curve:
-                if (!(glyphSlot->outline.tags[last_point] & 1)) {  // end point is not on curve:
-                    //qDebug() << "  start and end point are not on curve";
-                    start = (QPointF(glyphSlot->outline.points[last_point].x,
-                                     glyphSlot->outline.points[last_point].y) + start) / 2.0;
-                } else {
-                    //qDebug() << "  end point is on curve, start is not";
-                    start = QPointF(glyphSlot->outline.points[last_point].x,
-                                    glyphSlot->outline.points[last_point].y);
-                }
-                --i;   // to use original start point as control point below
-            }
-            start += cp;
-            //qDebug() << "  start at" << start;
-            glyph.moveTo(start);
-            QPointF c[4];
-            c[0] = start;
-            int n = 1;
-            while (i < last_point) {
-                ++i;
-                c[n] = cp + QPointF(glyphSlot->outline.points[i].x, glyphSlot->outline.points[i].y);
-                //qDebug() << "    " << i << c[n] << "tag =" << (int)g->outline.tags[i]
-                //                   << ": on curve =" << (bool)(g->outline.tags[i] & 1);
-                ++n;
-                switch (glyphSlot->outline.tags[i] & 3) {
-                case 2:
-                    // cubic bezier element
-                    if (n < 4)
-                        continue;
-                    c[3] = (c[3] + c[2])/2;
-                    --i;
-                    break;
-                case 0:
-                    // quadratic bezier element
-                    if (n < 3)
-                        continue;
-                    c[3] = (c[1] + c[2])/2;
-                    c[2] = (2*c[1] + c[3])/3;
-                    c[1] = (2*c[1] + c[0])/3;
-                    --i;
-                    break;
-                case 1:
-                case 3:
-                    if (n == 2) {
-                        //qDebug() << "  lineTo" << c[1];
-                        glyph.lineTo(c[1]);
-                        c[0] = c[1];
-                        n = 1;
-                        continue;
-                    } else if (n == 3) {
-                        c[3] = c[2];
-                        c[2] = (2*c[1] + c[3])/3;
-                        c[1] = (2*c[1] + c[0])/3;
-                    }
-                    break;
-                }
-                //qDebug() << "  cubicTo" << c[1] << c[2] << c[3];
-                glyph.cubicTo(c[1], c[2], c[3]);
-                c[0] = c[3];
-                n = 1;
-            }
-            if (n == 1) {
-                //qDebug() << "  closeSubpath";
-                glyph.closeSubpath();
-            } else {
-                c[3] = start;
-                if (n == 2) {
-                    c[2] = (2*c[1] + c[3])/3;
-                    c[1] = (2*c[1] + c[0])/3;
-                }
-                //qDebug() << "  close cubicTo" << c[1] << c[2] << c[3];
-                glyph.cubicTo(c[1], c[2], c[3]);
-            }
-            ++i;
-        }
+        QPainterPath glyph = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
+
         glyph.translate(glyphs[g].x_offset, glyphs[g].y_offset);
         glyph = ftTF.map(glyph);
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
@@ -523,8 +440,18 @@ void KoSvgTextShape::relayout() const
         }
         charResult.advance += advance;
         if (glyph.isEmpty()) {
-            // TODO: get better bounding box.
-            charResult.boundingBox = QRectF(QPointF(), advance);
+            if (isHorizontal) {
+                charResult.boundingBox = QRectF(0,
+                                                -glyphs[g].ftface->size->metrics.ascender*factor,
+                                                advance.x(),
+                                                (glyphs[g].ftface->size->metrics.ascender
+                                                - glyphs[g].ftface->size->metrics.descender) * factor);
+            } else {
+                charResult.boundingBox = QRectF(-(glyphs[g].ftface->size->metrics.height * factor *0.5),
+                                                0,
+                                                glyphs[g].ftface->size->metrics.height * factor,
+                                                advance.y());
+            }
         } else {
             charResult.boundingBox = charResult.path.boundingRect();
         }
@@ -743,6 +670,95 @@ void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
         clearAssociatedOutlines(child);
     }
+}
+
+QPainterPath KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot) {
+    QPointF cp = QPointF();
+    // convert the outline to a painter path
+    // This is taken from qfontengine_ft.cpp.
+    QPainterPath glyph;
+    glyph.setFillRule(Qt::WindingFill);
+    int i = 0;
+    for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
+        int last_point = glyphSlot->outline.contours[j];
+        // qDebug() << "contour:" << i << "to" << last_point;
+        QPointF start = QPointF(glyphSlot->outline.points[i].x, glyphSlot->outline.points[i].y);
+        if (!(glyphSlot->outline.tags[i] & 1)) {               // start point is not on curve:
+            if (!(glyphSlot->outline.tags[last_point] & 1)) {  // end point is not on curve:
+                //qDebug() << "  start and end point are not on curve";
+                start = (QPointF(glyphSlot->outline.points[last_point].x,
+                                 glyphSlot->outline.points[last_point].y) + start) / 2.0;
+            } else {
+                //qDebug() << "  end point is on curve, start is not";
+                start = QPointF(glyphSlot->outline.points[last_point].x,
+                                glyphSlot->outline.points[last_point].y);
+            }
+            --i;   // to use original start point as control point below
+        }
+        start += cp;
+        //qDebug() << "  start at" << start;
+        glyph.moveTo(start);
+        QPointF c[4];
+        c[0] = start;
+        int n = 1;
+        while (i < last_point) {
+            ++i;
+            c[n] = cp + QPointF(glyphSlot->outline.points[i].x, glyphSlot->outline.points[i].y);
+            //qDebug() << "    " << i << c[n] << "tag =" << (int)g->outline.tags[i]
+            //                   << ": on curve =" << (bool)(g->outline.tags[i] & 1);
+            ++n;
+            switch (glyphSlot->outline.tags[i] & 3) {
+            case 2:
+                // cubic bezier element
+                if (n < 4)
+                    continue;
+                c[3] = (c[3] + c[2])/2;
+                --i;
+                break;
+            case 0:
+                // quadratic bezier element
+                if (n < 3)
+                    continue;
+                c[3] = (c[1] + c[2])/2;
+                c[2] = (2*c[1] + c[3])/3;
+                c[1] = (2*c[1] + c[0])/3;
+                --i;
+                break;
+            case 1:
+            case 3:
+                if (n == 2) {
+                    //qDebug() << "  lineTo" << c[1];
+                    glyph.lineTo(c[1]);
+                    c[0] = c[1];
+                    n = 1;
+                    continue;
+                } else if (n == 3) {
+                    c[3] = c[2];
+                    c[2] = (2*c[1] + c[3])/3;
+                    c[1] = (2*c[1] + c[0])/3;
+                }
+                break;
+            }
+            //qDebug() << "  cubicTo" << c[1] << c[2] << c[3];
+            glyph.cubicTo(c[1], c[2], c[3]);
+            c[0] = c[3];
+            n = 1;
+        }
+        if (n == 1) {
+            //qDebug() << "  closeSubpath";
+            glyph.closeSubpath();
+        } else {
+            c[3] = start;
+            if (n == 2) {
+                c[2] = (2*c[1] + c[3])/3;
+                c[1] = (2*c[1] + c[0])/3;
+            }
+            //qDebug() << "  close cubicTo" << c[1] << c[2] << c[3];
+            glyph.cubicTo(c[1], c[2], c[3]);
+        }
+        ++i;
+    }
+    return glyph;
 }
 
 void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,

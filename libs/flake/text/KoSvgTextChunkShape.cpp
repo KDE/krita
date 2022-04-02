@@ -1079,6 +1079,15 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
     KoSvgText::KoSvgCharChunkFormat format;
 
     const KoSvgTextProperties properties = adjustPropertiesForFontSizeWorkaround(s->properties);
+    format.setProperty(
+        KoSvgText::KoSvgCharChunkFormat::RealFontSize,
+        s->properties.propertyOrDefault(KoSvgTextProperties::FontSizeId));
+    format.setProperty(
+        KoSvgText::KoSvgCharChunkFormat::OpentypeFontWeight,
+        s->properties.propertyOrDefault(KoSvgTextProperties::FontWeightId));
+    format.setProperty(
+        KoSvgText::KoSvgCharChunkFormat::RealFontWidth,
+        s->properties.propertyOrDefault(KoSvgTextProperties::FontStretchId));
 
     QFont font(properties.generateFont());
 

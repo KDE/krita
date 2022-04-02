@@ -243,7 +243,10 @@ struct KoSvgCharChunkFormat : public QTextCharFormat
 {
     enum SvgCharProperty {
         TextAnchor = UserProperty + 1,
-        AssociatedShape
+        AssociatedShape,
+        RealFontSize,
+        OpentypeFontWeight,
+        RealFontWidth
     };
 
     inline void setTextAnchor(KoSvgText::TextAnchor value) {

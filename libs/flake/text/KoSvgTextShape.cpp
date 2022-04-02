@@ -10,6 +10,7 @@
 
 #include <raqm.h>
 #include <fontconfig/fontconfig.h>
+#include FT_MULTIPLE_MASTERS_H
 #include <klocalizedstring.h>
 
 #include "KoSvgText.h"
@@ -316,6 +317,10 @@ void KoSvgTextShape::relayout() const
     if (!d->library) {
         FT_Init_FreeType(&d->library);
     }
+    FT_Tag weightTag = FT_MAKE_TAG('w', 'g', 'h', 't');
+    FT_Tag opticalSizeTag= FT_MAKE_TAG('o', 'p', 's', 'z');
+    FT_Tag widthTag= FT_MAKE_TAG('w', 'd', 't', 'h');
+    FT_Tag italicTag= FT_MAKE_TAG('i', 't', 'a', 'l');
     if (raqm_set_text_utf8(layout, text.toUtf8(), text.toUtf8().size())) {
         if (writingMode == KoSvgText::TopToBottom) {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_TTB);
@@ -343,7 +348,7 @@ void KoSvgTextShape::relayout() const
             for (int i = 0; i< chunk.fontFamilies.size(); i++) {
                 length = lengths.at(i);
 
-                int fontSize = chunk.format.fontPointSize();
+                int fontSize = chunk.format.property(KoSvgText::KoSvgCharChunkFormat::RealFontSize).toReal();
                 QString fontFileName = chunk.fontFamilies.at(i);
 
                 int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
@@ -358,6 +363,39 @@ void KoSvgTextShape::relayout() const
 
                     if (!isHorizontal && FT_HAS_VERTICAL(face)) {
                         loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+                    }
+                    if (FT_HAS_MULTIPLE_MASTERS(face)) {
+                        FT_MM_Var*  amaster = nullptr;
+                        FT_Get_MM_Var(face, &amaster);
+                        // note: this only works for opentype, as it uses tag-selection.
+                        // also support slnt
+                        FT_Fixed designCoords[amaster->num_axis];
+                        for (FT_UInt i=0; i < amaster->num_axis; i++) {
+                            FT_Var_Axis axis = amaster->axis[i];
+                            if (axis.tag == weightTag) {
+                                designCoords[i] = qBound(axis.minimum,
+                                                         long(chunk.format.property(KoSvgText::KoSvgCharChunkFormat::OpentypeFontWeight).toInt() * 65535),
+                                                         axis.maximum);
+                            } else if (axis.tag == opticalSizeTag) {
+                                designCoords[i] = qBound(axis.minimum,
+                                                         long(chunk.format.property(KoSvgText::KoSvgCharChunkFormat::RealFontSize).toReal() * 65535),
+                                                         axis.maximum);
+                            }  else if (axis.tag == widthTag) {
+                                designCoords[i] = qBound(axis.minimum,
+                                                         long(chunk.format.property(KoSvgText::KoSvgCharChunkFormat::RealFontWidth).toInt() * 65535),
+                                                         axis.maximum);
+                            }else if (axis.tag == italicTag) {
+                                if (chunk.format.font().italic()) {
+                                    designCoords[i] = axis.maximum;
+                                } else {
+                                    designCoords[i] = axis.minimum;
+                                }
+                            } else {
+                                designCoords[i] = axis.def;
+                            }
+                        }
+                        FT_Set_Var_Design_Coordinates(face, amaster->num_axis, designCoords);
+                        FT_Done_MM_Var(d->library, amaster);
                     }
                     if (errorCode == 0) {
                         if (start == 0) {
@@ -1048,11 +1086,11 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                  * instability'.
                  */
                 QPainterPath p = tf.map(result.at(i).path);
-                if (chunk.intersects(p)) {
-                    chunk |= tf.map(result.at(i).path);
-                } else {
+                //if (chunk.intersects(p)) {
+                //    chunk |= tf.map(result.at(i).path);
+                //} else {
                     chunk.addPath(p);
-                }
+                //}
             }
         }
         chunk.setFillRule(Qt::WindingFill);

@@ -103,12 +103,8 @@ find_library(WebP_LIBRARY
 # There's nothing in the WebP headers that could be used to detect the exact
 # WebP version being used so don't attempt to do so. A version can only be found
 # through pkg-config
-if ("${WebP_FIND_VERSION}" VERSION_GREATER "${WebP_VERSION}")
-    if (WebP_VERSION)
-        message(FATAL_ERROR "Required version (" ${WebP_FIND_VERSION} ") is higher than found version (" ${WebP_VERSION} ")")
-    else ()
-        message(WARNING "Cannot determine WebP version without pkg-config")
-    endif ()
+if (NOT WebP_VERSION)
+    message(WARNING "Cannot determine WebP version without pkg-config")
 endif ()
 
 # Find components
@@ -207,6 +203,7 @@ find_package_handle_standard_args(WebP
     VERSION_VAR WebP_VERSION
 )
 
+if (WebP_FOUND)
 if (WebP_LIBRARY AND NOT TARGET WebP::webp)
     add_library(WebP::webp UNKNOWN IMPORTED GLOBAL)
     set_target_properties(WebP::webp PROPERTIES
@@ -251,7 +248,7 @@ mark_as_advanced(
     WebP_DECODER_LIBRARY
 )
 
-if (WebP_FOUND)
-    set(WebP_LIBRARIES ${WebP_LIBRARY} ${WebP_DEMUX_LIBRARY} ${WebP_MUX_LIBRARY} ${WebP_DECODER_LIBRARY})
-    set(WebP_INCLUDE_DIRS ${WebP_INCLUDE_DIR})
-endif ()
+set(WebP_LIBRARIES ${WebP_LIBRARY} ${WebP_DEMUX_LIBRARY} ${WebP_MUX_LIBRARY} ${WebP_DECODER_LIBRARY})
+set(WebP_INCLUDE_DIRS ${WebP_INCLUDE_DIR})
+
+endif()

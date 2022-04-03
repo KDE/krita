@@ -179,14 +179,13 @@ ExternalProject_Add(
 
     DEPENDS ext_nasm ext_libx265_10bit ext_libx265_12bit
 )
-endif()
 
 ExternalProject_Add(
     ext_libheif
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-    URL https://github.com/strukturag/libheif/archive/8f8035a102e959a3488f69e8befe09d51cf596a7.tar.gz
-    URL_HASH SHA256=12cfab1aaa588191bb28a67b275d0e99b379ab8221dcc7a18adcb6a34b661943
+    URL https://github.com/strukturag/libheif/archive/5a7b2f4ec49c3788460db698cb68223d537ea4c5.tar.gz
+    URL_HASH SHA256=6be490b74bef2f91683d5649f2aa22652b0f558ff7a7f713a016fe3582b01f87
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/clang-aom-link-pthread.patch
 

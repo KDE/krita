@@ -104,38 +104,24 @@ public:
         }
 
         SubChunk(const QString &_text,
-                 const KoSvgText::KoSvgCharChunkFormat &_format,
-                 const QStringList &_fontFamilies,
-                 const QVector<int> &_familyLengths)
+                 const KoSvgText::KoSvgCharChunkFormat &_format)
             : text(_text)
             , format(_format)
-            , fontFamilies(_fontFamilies)
-            , familyLengths(_familyLengths)
         {
         }
 
         SubChunk(const QString &_text,
                  const KoSvgText::KoSvgCharChunkFormat &_format,
-                 const KoSvgText::CharTransformation &t,
-                 const QStringList &_fontFamilies,
-                 const QVector<int> &_familyLengths)
+                 const KoSvgText::CharTransformation &t)
             : text(_text)
             , format(_format)
             , transformation(t)
-            , fontFamilies(_fontFamilies)
-            , familyLengths(_familyLengths)
         {
         }
 
         QString text;
         KoSvgText::KoSvgCharChunkFormat format;
         KoSvgText::CharTransformation transformation;
-
-        /**
-         * We need to manually match which character applies to what character.
-         */
-        QStringList fontFamilies;
-        QVector<int> familyLengths;
     };
 
     /**

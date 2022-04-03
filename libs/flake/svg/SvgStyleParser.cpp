@@ -34,9 +34,24 @@ public:
         textAttributes << KoSvgTextProperties::supportedXmlAttributes();
 
         // the order of the font attributes is important, don't change without reason !!!
-        fontAttributes << "font-family" << "font-size" << "font-weight" << "font-style"
-                       << "font-variant" << "font-stretch" << "font-size-adjust" << "font"
-                       << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
+        fontAttributes << "font-family"
+                       << "font-size"
+                       << "font-weight"
+                       << "font-style"
+                       << "font-variant"
+                       << "font-stretch"
+                       << "font-size-adjust"
+                       << "font"
+                       << "text-decoration"
+                       << "letter-spacing"
+                       << "word-spacing"
+                       << "baseline-shift"
+                       << "font-variant-caps"
+                       << "font-variant-alternates"
+                       << "font-variant-ligatures"
+                       << "font-variant-numeric"
+                       << "font-variant-east-asian"
+                       << "font-variant-position";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -197,12 +212,16 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "font-style") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
-    } else if (command == "font-variant") {
+    } else if (command == "font-variant" || command == "font-variant-caps"
+               || command == "font-variant-alternates"
+               || command == "font-variant-ligatures"
+               || command == "font-variant-numeric"
+               || command == "font-variant-east-asian"
+               || command == "font-variant-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "font-stretch") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
 
     } else if (command == "font-weight") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
@@ -214,8 +233,6 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         warnFile << "WARNING: \'font\' SVG attribute is not yet implemented! Please report a bug!";
     } else if (command == "text-decoration") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
-
 
     } else if (command == "color") {
         QColor color;
@@ -251,11 +268,11 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             gc->clipMaskId = params.mid(start, end - start);
         }
     } else if (command == "marker-start") {
-           if (params != "none" && params.startsWith("url(")) {
-               unsigned int start = params.indexOf('#') + 1;
-               unsigned int end = params.indexOf(')', start);
-               gc->markerStartId = params.mid(start, end - start);
-           }
+        if (params != "none" && params.startsWith("url(")) {
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.indexOf(')', start);
+            gc->markerStartId = params.mid(start, end - start);
+        }
     } else if (command == "marker-end") {
         if (params != "none" && params.startsWith("url(")) {
             unsigned int start = params.indexOf('#') + 1;

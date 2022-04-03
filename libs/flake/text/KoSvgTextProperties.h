@@ -58,15 +58,38 @@ public:
 
         FontFamiliesId,
         FontStyleId,
-        FontIsSmallCapsId,
         FontStretchId,
         FontWeightId,
         FontSizeId,
         FontSizeAdjustId,
-        TextDecorationId,
 
+        FontVariantCommonLigId, //bool
+        FontVariantDiscretionaryLigId, //bool
+        FontVariantHistoricalLigId, //bool
+        FontVariantContextualAltId, //bool
+        FontVariantPositionId,
+        FontVariantCapsId, //int
+        FontVariantNumFigureId,
+        FontVariantNumSpacingId,
+        FontVariantNumFractId,
+        FontVariantNumOrdinalId, //bool
+        FontVariantNumSlashedZeroId, //bool
+        FontVariantStylisticId, //int
+        FontVariantHistoricalFormsId, //bool
+        FontVariantStyleSetId, //int
+        FontVariantCharacterVarId, //int
+        FontVariantSwashId, //int
+        FontVariantOrnamentId, //int
+        FontVariantAnnotationId, //int
+        FontVariantEastAsianVarId,
+        FontVariantEastAsianWidthId,
+        FontVariantRubyId, //bool
+
+        TextDecorationId,
         FillId,
         StrokeId,
+
+        TextLanguage, //a language string.
 
         KraTextVersionId
     };
@@ -165,7 +188,15 @@ public:
 
     QFont generateFont() const;
 
+    /**
+     * @brief fontFileNameForText
+     * @param text
+     * @param lengths
+     * @return
+     */
     QStringList fontFileNameForText(QString text, QVector<int> &lengths) const;
+
+    QStringList fontFeaturesForText(int start, int length) const;
 
     /**
      * Return a list of supported XML attribute names (defined in SVG)

@@ -448,6 +448,115 @@ QString writeTextPathSide(TextPathSide value)
     return value == TextPathSideLeft ? "left" : "right";
 }
 
+QMap<QString, FontVariantFeature> fontVariantStrings()
+{
+    QMap<QString, FontVariantFeature> features;
+    features.insert("normal", FontVariantNormal);
+    features.insert("none", FontVariantNone);
+
+    features.insert("common-ligatures", CommonLigatures);
+    features.insert("no-common-ligatures", NoCommonLigatures);
+    features.insert("discretionary-ligatures", DiscretionaryLigatures);
+    features.insert("no-discretionary-ligatures", NoDiscretionaryLigatures);
+    features.insert("historical-ligatures", HistoricalLigatures);
+    features.insert("no-historical-ligatures", NoHistoricalLigatures);
+    features.insert("contextual", ContextualAlternates);
+    features.insert("no-contextual", NoContextualAlternates);
+
+    features.insert("sub", PositionSub);
+    features.insert("super", PositionSuper);
+
+    features.insert("small-caps", SmallCaps);
+    features.insert("all-small-caps", AllSmallCaps);
+    features.insert("petite-caps", PetiteCaps);
+    features.insert("all-petite-caps", AllPetiteCaps);
+    features.insert("unicase", Unicase);
+    features.insert("titling-caps", TitlingCaps);
+
+    features.insert("lining-nums", LiningNums);
+    features.insert("oldstyle-nums", OldStyleNums);
+    features.insert("proportional-nums", ProportionalNums);
+    features.insert("tabular-nums", TabularNums);
+    features.insert("diagonal-fractions", DiagonalFractions);
+    features.insert("stacked-fractions", StackedFractions);
+    features.insert("ordinal", Ordinal);
+    features.insert("slashed-zero", SlashedZero);
+
+    features.insert("historical-forms", HistoricalForms);
+    features.insert("stylistic", StylisticAlt);
+    features.insert("styleset", StyleSet);
+    features.insert("character-variant", CharacterVariant);
+    features.insert("swash", Swash);
+    features.insert("ornaments", Ornaments);
+    features.insert("annotation", Annotation);
+
+    features.insert("jis78", EastAsianJis78);
+    features.insert("jis83", EastAsianJis83);
+    features.insert("jis90", EastAsianJis90);
+    features.insert("jis04", EastAsianJis04);
+    features.insert("simplified", EastAsiantSimplified);
+    features.insert("traditional", EastAsianTraditional);
+    features.insert("full-width", EastAsianFullWidth);
+    features.insert("proportional-width", EastAsianProportionalWidth);
+    features.insert("ruby", EastAsianRuby);
+
+    return features;
+}
+
+QMap<QString, FontVariantFeature> fontVariantOpentypeTags()
+{
+    QMap<QString, FontVariantFeature> features;
+    features.insert("", FontVariantNormal);
+    features.insert("", FontVariantNone);
+
+    features.insert("clig", CommonLigatures);
+    features.insert("clig", NoCommonLigatures); // can also be 'liga'
+    features.insert("dlig", DiscretionaryLigatures);
+    features.insert("dlig", NoDiscretionaryLigatures);
+    features.insert("hlig", HistoricalLigatures);
+    features.insert("hlig", NoHistoricalLigatures);
+    features.insert("calt", ContextualAlternates);
+    features.insert("calt", NoContextualAlternates);
+
+    features.insert("subs", PositionSub);
+    features.insert("sups", PositionSuper);
+
+    features.insert("smcp", SmallCaps);
+    features.insert("c2sc", AllSmallCaps);
+    features.insert("pcap", PetiteCaps);
+    features.insert("c2pc", AllPetiteCaps);
+    features.insert("unic", Unicase);
+    features.insert("titl", TitlingCaps);
+
+    features.insert("lnum", LiningNums);
+    features.insert("onum", OldStyleNums);
+    features.insert("pnum", ProportionalNums);
+    features.insert("tnum", TabularNums);
+    features.insert("frac", DiagonalFractions);
+    features.insert("afrc", StackedFractions);
+    features.insert("ordn", Ordinal);
+    features.insert("zero", SlashedZero);
+
+    features.insert("hist", HistoricalForms);
+    features.insert("salt", StylisticAlt);
+    features.insert("ss", StyleSet);
+    features.insert("cv", CharacterVariant); // add 01 to 99 at the end
+    features.insert("swsh", Swash); //Note: may also be cswh?
+    features.insert("ornm", Ornaments);
+    features.insert("nalt", Annotation);
+
+    features.insert("jp78", EastAsianJis78);
+    features.insert("jp83", EastAsianJis83);
+    features.insert("jp90", EastAsianJis90);
+    features.insert("jp04", EastAsianJis04);
+    features.insert("smpl", EastAsiantSimplified);
+    features.insert("trad", EastAsianTraditional);
+    features.insert("fwid", EastAsianFullWidth);
+    features.insert("pwid", EastAsianProportionalWidth);
+    features.insert("ruby", EastAsianRuby);
+    return features;
+}
+
 }
 
 

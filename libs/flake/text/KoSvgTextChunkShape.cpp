@@ -259,9 +259,6 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const QString text = q->s->text;
             const KoSvgText::KoSvgCharChunkFormat format = q->fetchCharFormat();
             QVector<KoSvgText::CharTransformation> transforms = q->s->localTransformations;
-
-            QVector<int> values;
-            QStringList fontFamilies(q->s->properties.fontFileNameForText(q->s->text, values));
             
             /**
              * Sometimes SVG can contain the X,Y offsets for the pieces of text that
@@ -276,11 +273,11 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const QString bidiOpening = getBidiOpening(direction, bidi);
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk(bidiOpening, format, fontFamilies, QVector<int>());
+                result << SubChunk(bidiOpening, format);
             }
 
             if (transforms.isEmpty()) {
-                result << SubChunk(text, format, fontFamilies, values);
+                result << SubChunk(text, format);
             } else {
                 for (int i = 0; i < transforms.size(); i++) {
                     const KoSvgText::CharTransformation baseTransform = transforms[i];
@@ -298,14 +295,14 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                         subChunkLength = text.size() - i;
                     }
 
-                    result << SubChunk(text.mid(i, subChunkLength), format,  baseTransform, fontFamilies, values);
+                    result << SubChunk(text.mid(i, subChunkLength), format,  baseTransform);
                     i += subChunkLength - 1;
                 }
 
             }
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk("\u202c", format, fontFamilies, QVector<int>());
+                result << SubChunk("\u202c", format);
             }
 
         } else {
@@ -697,8 +694,20 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     }
 
     QMap<QString, QString> attributes = ownProperties.convertToSvgTextAttributes();
+    QStringList allowedAttributes = textProperties().supportedXmlAttributes();
+    QString styleString;
     for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
-        context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());
+        if (allowedAttributes.contains(it.key())) {
+            context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());
+        } else {
+            styleString.append(it.key().toLatin1().data())
+                    .append(": ")
+                    .append(it.value())
+                    .append(";" );
+        }
+    }
+    if (!styleString.isEmpty()) {
+        context.shapeWriter().addAttribute("style", styleString);
     }
 
     if (layoutInterface()->isTextNode()) {
@@ -1048,12 +1057,6 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
     KoSvgText::KoSvgCharChunkFormat format;
 
     const KoSvgTextProperties properties = adjustPropertiesForFontSizeWorkaround(s->properties);
-    format.setProperty(KoSvgText::KoSvgCharChunkFormat::RealFontSize,
-                       s->properties.propertyOrDefault(KoSvgTextProperties::FontSizeId));
-    format.setProperty(KoSvgText::KoSvgCharChunkFormat::OpentypeFontWeight,
-                       s->properties.propertyOrDefault(KoSvgTextProperties::FontWeightId));
-    format.setProperty(KoSvgText::KoSvgCharChunkFormat::RealFontWidth,
-                       s->properties.propertyOrDefault(KoSvgTextProperties::FontStretchId));
 
     QFont font(properties.generateFont());
 

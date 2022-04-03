@@ -104,18 +104,63 @@ enum TextDecoration {
 };
 
 enum TextPathMethod {
-    TextPathAlign = 0x0,
-    TextPathStretch = 0x1
+    TextPathAlign,
+    TextPathStretch
 };
 
 enum TextPathSpacing {
-    TextPathAuto = 0x0,
-    TextPathExact = 0x1
+    TextPathAuto,
+    TextPathExact
 };
 
 enum TextPathSide {
-    TextPathSideRight = 0x0,
-    TextPathSideLeft = 0x1
+    TextPathSideRight,
+    TextPathSideLeft
+};
+
+enum FontVariantFeature {
+    FontVariantNormal,
+    FontVariantNone,
+    CommonLigatures,/// font-variant-ligatures
+    NoCommonLigatures,
+    DiscretionaryLigatures,
+    NoDiscretionaryLigatures,
+    HistoricalLigatures,
+    NoHistoricalLigatures,
+    ContextualAlternates,
+    NoContextualAlternates,
+    PositionSub,/// font-variant-position
+    PositionSuper,
+    SmallCaps,/// font-variant-caps
+    AllSmallCaps,
+    PetiteCaps,
+    AllPetiteCaps,
+    Unicase,
+    TitlingCaps,
+    LiningNums, /// font-variant-numeric
+    OldStyleNums,
+    ProportionalNums,
+    TabularNums,
+    DiagonalFractions,
+    StackedFractions,
+    Ordinal,
+    SlashedZero,
+    HistoricalForms, /// font-variant-alternates
+    StylisticAlt,
+    StyleSet,
+    CharacterVariant,
+    Swash,
+    Ornaments,
+    Annotation,
+    EastAsianJis78, /// asiant variants
+    EastAsianJis83,
+    EastAsianJis90,
+    EastAsianJis04,
+    EastAsiantSimplified,
+    EastAsianTraditional,
+    EastAsianFullWidth,
+    EastAsianProportionalWidth,
+    EastAsianRuby
 };
 
 Q_DECLARE_FLAGS(TextDecorations, TextDecoration)
@@ -161,6 +206,9 @@ DominantBaseline parseDominantBaseline(const QString &value);
 AlignmentBaseline parseAlignmentBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
 LengthAdjust parseLengthAdjust(const QString &value);
+
+QMap <QString,FontVariantFeature> fontVariantStrings();
+QMap <QString,FontVariantFeature> fontVariantOpentypeTags();
 
 TextPathMethod parseTextPathMethod(const QString &value);
 TextPathSpacing parseTextPathSpacing(const QString &value);
@@ -244,6 +292,8 @@ struct AssociatedShapeWrapper : public KoShape::ShapeChangeListener
 
     void notifyShapeChanged(KoShape::ChangeType type, KoShape *shape) override;
 
+    KoSvgTextChunkShape *shape() { return m_shape; }
+
 private:
     KoSvgTextChunkShape *m_shape = 0;
 };
@@ -252,10 +302,7 @@ struct KoSvgCharChunkFormat : public QTextCharFormat
 {
     enum SvgCharProperty {
         TextAnchor = UserProperty + 1,
-        AssociatedShape,
-        RealFontSize,
-        OpentypeFontWeight,
-        RealFontWidth
+        AssociatedShape
     };
 
     inline void setTextAnchor(KoSvgText::TextAnchor value) {
@@ -263,24 +310,6 @@ struct KoSvgCharChunkFormat : public QTextCharFormat
     }
     inline KoSvgText::TextAnchor textAnchor() const {
         return KoSvgText::TextAnchor(intProperty(TextAnchor));
-    }
-
-    inline Qt::Alignment calculateAlignment() const {
-        const KoSvgText::TextAnchor anchor = textAnchor();
-
-        Qt::Alignment result;
-
-        if (layoutDirection() == Qt::LeftToRight) {
-            result = anchor == AnchorEnd ? Qt::AlignRight :
-                     anchor == AnchorMiddle ? Qt::AlignHCenter :
-                     Qt::AlignLeft;
-        } else {
-            result = anchor == AnchorEnd ? Qt::AlignLeft :
-                     anchor == AnchorMiddle ? Qt::AlignHCenter :
-                     Qt::AlignRight;
-        }
-
-        return result;
     }
 
     inline void setAssociatedShape(KoSvgTextChunkShape *shape) {

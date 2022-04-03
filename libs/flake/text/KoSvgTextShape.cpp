@@ -335,21 +335,27 @@ void KoSvgTextShape::relayout() const
         FT_Face face = NULL;
         for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
             length = chunk.text.toUtf8().size();
-            QVector<int> lengths = chunk.familyLengths;
-            if (length == 0) {
-                continue;
+            QVector<int> lengths;
+            KoSvgTextProperties properties = chunk.format.associatedShapeWrapper().shape()->textProperties();
+            QStringList fontFamilies = properties.fontFileNameForText(chunk.text, lengths);
+            QStringList fontFeatures = properties.fontFeaturesForText(start, length);
+
+            if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
+                raqm_set_language(layout,
+                                  properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
+                                  start, length);
             }
-            QStringList fontFamilies = chunk.fontFamilies;
-            if (lengths.isEmpty() && !chunk.fontFamilies.isEmpty()) {
-                lengths.append(length);
-                fontFamilies = QStringList(chunk.fontFamilies.first());
+            for (QString feature: fontFeatures) {
+                qDebug() << "adding feature" << feature;
+                raqm_add_font_feature(layout, feature.toUtf8(), feature.toUtf8().size());
             }
 
-            for (int i = 0; i< chunk.fontFamilies.size(); i++) {
+            for (int i = 0; i< fontFamilies.size(); i++) {
                 length = lengths.at(i);
+                QString fontFileName = fontFamilies.at(i);
+                qDebug() << start << length << fontFileName;
+                int fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
 
-                int fontSize = chunk.format.property(KoSvgText::KoSvgCharChunkFormat::RealFontSize).toReal();
-                QString fontFileName = chunk.fontFamilies.at(i);
 
                 int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
                 if (errorCode == 0) {
@@ -374,15 +380,15 @@ void KoSvgTextShape::relayout() const
                             FT_Var_Axis axis = amaster->axis[i];
                             if (axis.tag == weightTag) {
                                 designCoords[i] = qBound(axis.minimum,
-                                                         long(chunk.format.property(KoSvgText::KoSvgCharChunkFormat::OpentypeFontWeight).toInt() * 65535),
+                                                         long(properties.property(KoSvgTextProperties::FontWeightId).toInt() * 65535),
                                                          axis.maximum);
                             } else if (axis.tag == opticalSizeTag) {
                                 designCoords[i] = qBound(axis.minimum,
-                                                         long(chunk.format.property(KoSvgText::KoSvgCharChunkFormat::RealFontSize).toReal() * 65535),
+                                                         long(fontSize * 65535),
                                                          axis.maximum);
                             }  else if (axis.tag == widthTag) {
                                 designCoords[i] = qBound(axis.minimum,
-                                                         long(chunk.format.property(KoSvgText::KoSvgCharChunkFormat::RealFontWidth).toInt() * 65535),
+                                                         long(properties.property(KoSvgTextProperties::FontStretchId).toInt() * 65535),
                                                          axis.maximum);
                             }else if (axis.tag == italicTag) {
                                 if (chunk.format.font().italic()) {

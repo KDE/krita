@@ -612,7 +612,7 @@ void KActionCollectionPrivate::_k_actionDestroyed(QObject *obj)
 {
     // obj isn't really a QAction anymore. So make sure we don't do fancy stuff
     // with it.
-    QAction *action = qobject_cast<QAction*>(obj);
+    QAction *action = static_cast<QAction*>(obj);
 
     if (!unlistAction(action)) {
         return;

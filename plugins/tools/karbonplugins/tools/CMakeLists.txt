@@ -1,6 +1,5 @@
 set(karbon_tools_SOURCES
    KarbonToolsPlugin.cpp
-   KarbonCursor.cpp
    CalligraphyTool/KarbonCalligraphyTool.cpp
    CalligraphyTool/KarbonCalligraphyOptionWidget.cpp
    CalligraphyTool/KarbonCalligraphyToolFactory.cpp

@@ -354,7 +354,6 @@ build_3rdparty () {
         ext_tiff \
         ext_openjpeg \
         ext_gsl \
-        ext_vc \
         ext_libraw \
         ext_giflib \
         ext_freetype \

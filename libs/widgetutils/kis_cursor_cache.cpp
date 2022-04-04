@@ -133,70 +133,18 @@ namespace {
     }
 
     QCursor loadImpl(const QString &cursorName, int hotspotX, int hotspotY) {
-        QImage cursorImage = QImage(":/" + cursorName);
+        QPixmap cursorImage = QPixmap(":/" + cursorName);
         if (cursorImage.isNull()) {
             qWarning() << "Could not load cursor from qrc, trying filesystem" << cursorName;
 
-            cursorImage = QImage(KoResourcePaths::findResource("kis_pics", cursorName));
+            cursorImage = QPixmap(KoResourcePaths::findResource("kis_pics", cursorName));
             if (cursorImage.isNull()) {
                 qWarning() << "Could not load cursor from filesystem" << cursorName;
                 return Qt::ArrowCursor;
             }
         }
 
-#ifdef Q_OS_WIN
-        // cursor width must be multiple of 16 on Windows
-        int bitmapWidth = qCeil(cursorImage.width() / 16.0) * 16;
-
-        QBitmap bitmap(bitmapWidth, cursorImage.height());
-        QBitmap mask(bitmapWidth, cursorImage.height());
-
-        if (bitmapWidth != cursorImage.width()) {
-            bitmap.clear();
-            mask.clear();
-        }
-#else
-        QBitmap bitmap(cursorImage.width(), cursorImage.height());
-        QBitmap mask(cursorImage.width(), cursorImage.height());
-#endif
-
-        QPainter bitmapPainter(&bitmap);
-        QPainter maskPainter(&mask);
-
-        for (qint32 x = 0; x < cursorImage.width(); ++x) {
-            for (qint32 y = 0; y < cursorImage.height(); ++y) {
-
-                QRgb pixel = cursorImage.pixel(x, y);
-
-                if (qAlpha(pixel) < 128) {
-                    bitmapPainter.setPen(Qt::color0);
-                    maskPainter.setPen(Qt::color0);
-                } else {
-                    maskPainter.setPen(Qt::color1);
-
-                    if (qGray(pixel) < 128) {
-                        bitmapPainter.setPen(Qt::color1);
-                    } else {
-                        bitmapPainter.setPen(Qt::color0);
-                    }
-                }
-
-                bitmapPainter.drawPoint(x, y);
-                maskPainter.drawPoint(x, y);
-            }
-        }
-
-        // Seems to be a bug in QCursor? https://bugreports.qt.io/browse/QTBUG-46259
-        qreal dpr;
-        QWindow* focusWindow = qApp->focusWindow();
-        if (focusWindow) {
-            dpr = focusWindow->devicePixelRatio();
-        } else {
-            dpr = qApp->devicePixelRatio();
-        }
-        bitmap.setDevicePixelRatio(dpr);
-        mask.setDevicePixelRatio(dpr);
-        return QCursor(bitmap, mask, hotspotX, hotspotY);
+        return QCursor(cursorImage, hotspotX, hotspotY);
     }
 
 }

@@ -24,23 +24,12 @@ public:
     static KisCursorCache* instance();
     KisCursorCache();
 
-    QCursor selectCursor;
-    QCursor samplerPlusCursor;
-    QCursor samplerMinusCursor;
-    QCursor penCursor;
-    QCursor brushCursor;
-    QCursor airbrushCursor;
-    QCursor eraserCursor;
-    QCursor colorChangerCursor;
-    QCursor fillerCursor;
-
     QCursor load(const QString & cursorName, int hotspotX, int hotspotY);
 
 private:
 
     // Stores cursor hash
     QHash<QString, QPair<QPoint, QCursor>> cursorHash;
-    void init();
 };
 
 #endif

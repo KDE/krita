@@ -117,7 +117,6 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
     Q_ASSERT(m_canvas);
 
     setObjectName("tool_transform");
-    useCursor(KisCursor::selectCursor());
     m_optionsWidget = 0;
 
     warpAction = new KisAction(i18nc("Warp Transform Tab Label", "Warp"));

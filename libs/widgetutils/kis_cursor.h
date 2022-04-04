@@ -56,17 +56,8 @@ public:
     // Existing custom KimageShop cursors. Use the 'load' function for all new cursors.
     static QCursor moveCursor();          // move tool cursor
     static QCursor moveSelectionCursor(); // move selection action cursor
-    static QCursor penCursor();           // pen tool cursor
-    static QCursor brushCursor();         // brush tool cursor
-    static QCursor airbrushCursor();      // airbrush tool cursor
-    static QCursor eraserCursor();        // eraser tool cursor
-    static QCursor fillerCursor();        // filler tool cursor
     static QCursor samplerCursor();        // color sampler cursor
-    static QCursor samplerPlusCursor();    // color sampler cursor
-    static QCursor samplerMinusCursor();   // color sampler cursor
     static QCursor pickLayerCursor();     // pick layer cursor
-    static QCursor colorChangerCursor();  // color changer tool cursor
-    static QCursor selectCursor();        // select cursor
     static QCursor handCursor();          // hand tool cursor
     static QCursor openHandCursor();      // Pan tool cursor
     static QCursor closedHandCursor();    // Pan tool cursor

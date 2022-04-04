@@ -112,49 +112,9 @@ QCursor KisCursor::samplerCursor()
     return samplerLayerForegroundCursor();
 }
 
-QCursor KisCursor::samplerPlusCursor()
-{
-    return KisCursorCache::instance()->samplerPlusCursor;
-}
-
-QCursor KisCursor::samplerMinusCursor()
-{
-    return KisCursorCache::instance()->samplerMinusCursor;
-}
-
 QCursor KisCursor::pickLayerCursor()
 {
     return load("precise-pick-layer-icon.xpm", 7, 23);
-}
-
-QCursor KisCursor::penCursor()
-{
-    return KisCursorCache::instance()->penCursor;
-}
-
-QCursor KisCursor::brushCursor()
-{
-    return KisCursorCache::instance()->brushCursor;
-}
-
-QCursor KisCursor::airbrushCursor()
-{
-    return KisCursorCache::instance()->airbrushCursor;
-}
-
-QCursor KisCursor::eraserCursor()
-{
-    return KisCursorCache::instance()->eraserCursor;
-}
-
-QCursor KisCursor::fillerCursor()
-{
-    return KisCursorCache::instance()->fillerCursor;
-}
-
-QCursor KisCursor::colorChangerCursor()
-{
-    return KisCursorCache::instance()->colorChangerCursor;
 }
 
 QCursor KisCursor::zoomSmoothCursor()
@@ -230,11 +190,6 @@ QCursor KisCursor::moveSelectionCursor()
 QCursor KisCursor::handCursor()
 {
     return Qt::PointingHandCursor;
-}
-
-QCursor KisCursor::selectCursor()
-{
-    return KisCursorCache::instance()->selectCursor;
 }
 
 QCursor KisCursor::openHandCursor()

@@ -469,9 +469,10 @@ template<bool useMask, bool useFlow, class Compositor>
     genericComposite<useMask, useFlow, Compositor, 8>(params);
 }
 
+};
+
 template<typename channels_type, Vc::Implementation _impl>
 struct PixelStateRecoverHelper {
-
     ALWAYS_INLINE
     PixelStateRecoverHelper(const Vc::float_v &c1, const Vc::float_v &c2, const Vc::float_v &c3)
     {
@@ -481,7 +482,7 @@ struct PixelStateRecoverHelper {
     }
 
     ALWAYS_INLINE
-    void recoverPixels(const Vc::float_m &mask, Vc::float_v &c1, Vc::float_v &c2, float_v &c3) const {
+    void recoverPixels(const Vc::float_m &mask, Vc::float_v &c1, Vc::float_v &c2, Vc::float_v &c3) const {
         Q_UNUSED(mask);
         Q_UNUSED(c1);
         Q_UNUSED(c2);
@@ -512,10 +513,6 @@ private:
     const Vc::float_v m_orig_c1;
     const Vc::float_v m_orig_c2;
     const Vc::float_v m_orig_c3;
-};
-
-template<typename channels_type, Vc::Implementation _impl>
-struct PixelWrapper {
 };
 
 template<typename channels_type, Vc::Implementation _impl>

@@ -749,6 +749,12 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
             if (feature == NoCommonLigatures || feature == CommonLigatures) {
                 fontFeatures.append(QString("liga[%1:%2]=%3").arg(start).arg(start+length).arg((feature == CommonLigatures)? 1 : 0));
             }
+            if (feature == AllSmallCaps) {
+                fontFeatures.append(QString("smcp[%1:%2]=%3").arg(start).arg(start+length).arg(1));
+            }
+            if (feature == AllPetiteCaps) {
+                fontFeatures.append(QString("pcap[%1:%2]=%3").arg(start).arg(start+length).arg(1));
+            }
         }
     }
 

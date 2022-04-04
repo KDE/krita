@@ -39,19 +39,20 @@ public:
                        << "font-weight"
                        << "font-style"
                        << "font-variant"
+                       << "font-variant-caps"
+                       << "font-variant-alternates"
+                       << "font-variant-ligatures"
+                       << "font-variant-numeric"
+                       << "font-variant-east-asian"
+                       << "font-variant-position"
+                       << "font-feature-settings"
                        << "font-stretch"
                        << "font-size-adjust"
                        << "font"
                        << "text-decoration"
                        << "letter-spacing"
                        << "word-spacing"
-                       << "baseline-shift"
-                       << "font-variant-caps"
-                       << "font-variant-alternates"
-                       << "font-variant-ligatures"
-                       << "font-variant-numeric"
-                       << "font-variant-east-asian"
-                       << "font-variant-position";
+                       << "baseline-shift";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -220,6 +221,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                || command == "font-variant-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
+    } else if (command == "font-feature-settings") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-stretch") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 

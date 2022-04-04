@@ -58,16 +58,48 @@
 
 #include <math.h>
 
-static const unsigned char needle_bits[] = {
-    0x00, 0x00, 0x10, 0x00, 0x20, 0x00, 0x60, 0x00, 0xc0, 0x00, 0xc0, 0x01,
-    0x80, 0x03, 0x80, 0x07, 0x00, 0x0f, 0x00, 0x1f, 0x00, 0x3e, 0x00, 0x7e,
-    0x00, 0x7c, 0x00, 0x1c, 0x00, 0x18, 0x00, 0x00
+static const char *const needle_xpm[] = {
+    "16 16 2 1",
+    "  c None",
+    "# c #000000",
+    "                ",
+    "    #           ",
+    "     #          ",
+    "     ##         ",
+    "      ##        ",
+    "      ###       ",
+    "       ###      ",
+    "       ####     ",
+    "        ####    ",
+    "        #####   ",
+    "         #####  ",
+    "         ###### ",
+    "          ##### ",
+    "          ###   ",
+    "           ##   ",
+    "                "
 };
 
-static const unsigned char needle_move_bits[] = {
-    0x00, 0x00, 0x10, 0x00, 0x20, 0x00, 0x60, 0x00, 0xc0, 0x00, 0xc0, 0x01,
-    0x80, 0x03, 0x80, 0x07, 0x10, 0x0f, 0x38, 0x1f, 0x54, 0x3e, 0xfe, 0x7e,
-    0x54, 0x7c, 0x38, 0x1c, 0x10, 0x18, 0x00, 0x00
+static const char *const needle_move_xpm[] = {
+    "16 16 2 1",
+    "  c None",
+    "# c #000000",
+    "                ",
+    "    #           ",
+    "     #          ",
+    "     ##         ",
+    "      ##        ",
+    "      ###       ",
+    "       ###      ",
+    "       ####     ",
+    "    #   ####    ",
+    "   ###  #####   ",
+    "  # # #  #####  ",
+    " ####### ###### ",
+    "  # # #   ##### ",
+    "   ###    ###   ",
+    "    #      ##   ",
+    "                "
 };
 
 // helper function to calculate the squared distance between two points
@@ -131,15 +163,8 @@ KoPathTool::KoPathTool(KoCanvasBase *canvas)
 
     m_contextMenu.reset(new QMenu());
 
-    QBitmap b = QBitmap::fromData(QSize(16, 16), needle_bits);
-    QBitmap m = b.createHeuristicMask(false);
-
-    m_selectCursor = QCursor(b, m, 2, 0);
-
-    b = QBitmap::fromData(QSize(16, 16), needle_move_bits);
-    m = b.createHeuristicMask(false);
-
-    m_moveCursor = QCursor(b, m, 2, 0);
+    m_selectCursor = QCursor(QPixmap(needle_xpm), 2, 0);
+    m_moveCursor = QCursor(QPixmap(needle_move_xpm), 2, 0);
 
     connect(&m_pointSelection, SIGNAL(selectionChanged()), SLOT(repaintDecorations()));
 }

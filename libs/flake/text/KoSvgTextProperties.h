@@ -72,18 +72,14 @@ public:
         FontVariantNumFigureId,
         FontVariantNumSpacingId,
         FontVariantNumFractId,
-        FontVariantNumOrdinalId, //bool
+        FontVariantNumOrdinalId,
         FontVariantNumSlashedZeroId, //bool
-        FontVariantStylisticId, //int
         FontVariantHistoricalFormsId, //bool
-        FontVariantStyleSetId, //int
-        FontVariantCharacterVarId, //int
-        FontVariantSwashId, //int
-        FontVariantOrnamentId, //int
-        FontVariantAnnotationId, //int
         FontVariantEastAsianVarId,
         FontVariantEastAsianWidthId,
         FontVariantRubyId, //bool
+
+        FontFeatureSettingsId, //string list
 
         TextDecorationId,
         FillId,

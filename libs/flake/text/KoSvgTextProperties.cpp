@@ -95,7 +95,8 @@ bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
             id != DominantBaselineId &&
             id != AlignmentBaselineId &&
             id != BaselineShiftModeId &&
-            id != BaselineShiftValueId;
+            id != BaselineShiftValueId &&
+            id != FontFeatureSettingsId;
 }
 
 void KoSvgTextProperties::resetNonInheritableToDefault()
@@ -219,10 +220,6 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         for (QString f: features) {
 
             KoSvgText::FontVariantFeature feature = featureMap.value(f.split("(").first());
-            int featureNumber = 0;
-            if (f.contains("(")) {
-                featureNumber = f.split("(").last().split(")").first().toInt();
-            }
 
             if (feature == KoSvgText::CommonLigatures || feature == KoSvgText::NoCommonLigatures) {
                 setProperty(FontVariantCommonLigId, feature);
@@ -271,24 +268,6 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             if (feature == KoSvgText::HistoricalForms) {
                 setProperty(FontVariantHistoricalFormsId, feature);
             }
-            if (feature == KoSvgText::StylisticAlt) {
-                setProperty(FontVariantStylisticId, featureNumber);
-            }
-            if (feature == KoSvgText::StyleSet) {
-                setProperty(FontVariantStyleSetId, featureNumber);
-            }
-            if (feature == KoSvgText::CharacterVariant) {
-                setProperty(FontVariantCharacterVarId, featureNumber);
-            }
-            if (feature == KoSvgText::Swash) {
-                setProperty(FontVariantSwashId, featureNumber);
-            }
-            if (feature == KoSvgText::Ornaments) {
-                setProperty(FontVariantOrnamentId, featureNumber);
-            }
-            if (feature == KoSvgText::Annotation) {
-                setProperty(FontVariantAnnotationId, featureNumber);
-            }
 
             if (feature == KoSvgText::FontVariantNone || feature == KoSvgText::FontVariantNormal) {
                 if (command == "font-variant" || command == "font-variant-ligatures") {
@@ -317,17 +296,13 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 }
                 if (command == "font-variant" || command == "font-variant-alternates") {
                     removeProperty(FontVariantHistoricalFormsId);
-                    removeProperty(FontVariantStylisticId);
-                    removeProperty(FontVariantStyleSetId);
-                    removeProperty(FontVariantCharacterVarId);
-                    removeProperty(FontVariantSwashId);
-                    removeProperty(FontVariantOrnamentId);
-                    removeProperty(FontVariantAnnotationId);
                 }
             }
 
         }
 
+    } else if (command == "font-feature-settings"){
+        setProperty(FontFeatureSettingsId, value.split(","));
     } else if (command == "font-stretch") {
         int newStretch = 100;
 
@@ -509,82 +484,28 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     QVector<PropertyId> liga = {FontVariantCommonLigId,
                                 FontVariantDiscretionaryLigId,
                                 FontVariantHistoricalLigId,
-                                FontVariantContextualAltId};
+                                FontVariantContextualAltId,
+                                FontVariantNumFigureId,
+                                FontVariantNumSpacingId,
+                                FontVariantNumFractId,
+                                FontVariantNumSlashedZeroId,
+                                FontVariantNumOrdinalId,
+                                FontVariantEastAsianVarId,
+                                FontVariantEastAsianWidthId,
+                                FontVariantRubyId,
+                                FontVariantHistoricalFormsId,
+                                FontVariantPositionId,
+                                FontVariantCapsId};
     for (PropertyId id: liga) {
         if (hasProperty(id)) {
             features.append(featureMap.key(KoSvgText::FontVariantFeature(property(id).toInt())));
         }
     }
     if (!features.isEmpty()) {
-        result.insert("font-variant-ligatures", features.join(" "));
+        result.insert("font-variant", features.join(" "));
     }
-    features.clear();
-    QVector<PropertyId> numeric = {FontVariantNumFigureId,
-                                   FontVariantNumSpacingId,
-                                   FontVariantNumFractId,
-                                   FontVariantNumSlashedZeroId,
-                                   FontVariantNumOrdinalId};
-    for (PropertyId id: numeric) {
-        if (hasProperty(id)) {
-            features.append(featureMap.key(KoSvgText::FontVariantFeature(property(id).toInt())));
-        }
-    }
-    if (!features.isEmpty()) {
-        result.insert("font-variant-numeric", features.join(" "));
-    }
-    features.clear();
-    QVector<PropertyId> eastasian = {FontVariantEastAsianVarId,
-                                   FontVariantEastAsianWidthId,
-                                   FontVariantRubyId};
-    for (PropertyId id: eastasian) {
-        if (hasProperty(id)) {
-            features.append(featureMap.key(KoSvgText::FontVariantFeature(property(id).toInt())));
-        }
-    }
-    if (!features.isEmpty()) {
-        result.insert("font-variant-east-asian", features.join(" "));
-    }
-    features.clear();
-    QVector<PropertyId> alternates = {FontVariantHistoricalFormsId,
-                                      FontVariantStylisticId,
-                                      FontVariantStyleSetId,
-                                      FontVariantCharacterVarId,
-                                      FontVariantSwashId,
-                                      FontVariantOrnamentId,
-                                      FontVariantAnnotationId};
-    for (PropertyId id: alternates) {
-        if (hasProperty(id)) {
-            QString function;
-            if (id == FontVariantHistoricalFormsId) {
-                features.append(featureMap.key(KoSvgText::FontVariantFeature(property(id).toInt())));
-            } else {
-                if (id == FontVariantStylisticId) {
-                    function = featureMap.key(KoSvgText::StylisticAlt);
-                } else if (id == FontVariantStyleSetId) {
-                    function = featureMap.key(KoSvgText::StyleSet);
-                } else if (id == FontVariantCharacterVarId) {
-                    function = featureMap.key(KoSvgText::CharacterVariant);
-                } else if (id == FontVariantSwashId) {
-                    function = featureMap.key(KoSvgText::Swash);
-                } else if (id == FontVariantOrnamentId) {
-                    function = featureMap.key(KoSvgText::Ornaments);
-                } else if (id == FontVariantAnnotationId) {
-                    function = featureMap.key(KoSvgText::Annotation);
-                }
-                features.append(QString("%1(%2)").arg(function).arg(property(id).toInt()));
-            }
-
-        }
-    }
-    if (!features.isEmpty()) {
-        result.insert("font-variant-alternates", features.join(" "));
-    }
-
-    if (hasProperty(FontVariantPositionId)) {
-        result.insert("font-variant-position", featureMap.key(KoSvgText::FontVariantFeature(property(FontVariantPositionId).toInt())));
-    }
-    if (hasProperty(FontVariantCapsId)) {
-        result.insert("font-variant-caps", featureMap.key(KoSvgText::FontVariantFeature(property(FontVariantCapsId).toInt())));
+    if (hasProperty(FontFeatureSettingsId)) {
+        result.insert("font-feature-settings", property(FontFeatureSettingsId).toStringList().join(", "));
     }
 
     if (hasProperty(FontStretchId)) {
@@ -825,62 +746,49 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
                 }
                 fontFeatures.append(openTypeTag);
             }
-        }
-    }
-
-    list = {
-        FontVariantStylisticId,
-        FontVariantSwashId,
-        FontVariantOrnamentId,
-        FontVariantAnnotationId
-    };
-    for (PropertyId id: list) {
-        if (hasProperty(id)) {
-            QString openTypeTag;
-            if (id == FontVariantStylisticId) {
-                openTypeTag = opentypeMap.key(KoSvgText::StylisticAlt);
-            } else if (id == FontVariantSwashId) {
-                openTypeTag = opentypeMap.key(KoSvgText::Swash);
-            } else if (id == FontVariantOrnamentId) {
-                openTypeTag = opentypeMap.key(KoSvgText::Ornaments);
-            } else if (id == FontVariantAnnotationId) {
-                openTypeTag = opentypeMap.key(KoSvgText::Annotation);
+            if (feature == NoCommonLigatures || feature == CommonLigatures) {
+                fontFeatures.append(QString("liga[%1:%2]=%3").arg(start).arg(start+length).arg((feature == CommonLigatures)? 1 : 0));
             }
-            openTypeTag += QString("[%1:%2]=%3").arg(start).arg(start+length).arg(property(id).toInt());
-            fontFeatures.append(openTypeTag);
         }
     }
-
-   if (hasProperty(FontVariantStyleSetId)) {
-       QString openTypeTag = opentypeMap.key(KoSvgText::StyleSet);
-       int val = property(FontVariantStyleSetId).toInt();
-       if (val < 10) {
-           openTypeTag += QString("0") + QString::number(val);
-       } else {
-           openTypeTag += QString::number(val);
-       }
-       openTypeTag += QString("[%1:%2]=1").arg(start).arg(start+length);
-   }
-   if (hasProperty(FontVariantCharacterVarId)) {
-       QString openTypeTag = opentypeMap.key(KoSvgText::CharacterVariant);
-       int val = property(FontVariantCharacterVarId).toInt();
-       if (val < 10) {
-           openTypeTag += QString("0") + QString::number(val);
-       } else {
-           openTypeTag += QString::number(val);
-       }
-       openTypeTag += QString("[%1:%2]=1").arg(start).arg(start+length);
-   }
 
     if (!property(KerningId).value<AutoValue>().isAuto) {
         QString openTypeTag = "kern";
-        openTypeTag += QString("[%1:%2]").arg(start, start+length);
+        openTypeTag += QString("[%1:%2]").arg(start).arg(start+length);
         openTypeTag += "=0";
         fontFeatures.append(openTypeTag);
         openTypeTag = "vkrn";
-        openTypeTag += QString("[%1:%2]").arg(start, start+length);
+        openTypeTag += QString("[%1:%2]").arg(start).arg(start+length);
         openTypeTag += "=0";
         fontFeatures.append(openTypeTag);
+    }
+
+    if (hasProperty(FontFeatureSettingsId)) {
+        QStringList features = property(FontFeatureSettingsId).toStringList();
+        for (int i=0; i < features.size(); i++) {
+            QString feature = features.at(i).trimmed();
+            if ((!feature.startsWith('\'') && !feature.startsWith('\"')) || feature.isEmpty()) {
+                continue;
+            }
+            QString openTypeTag = feature.mid(1, 4);
+            if (feature.size() == 6) {
+                openTypeTag += QString("[%1:%2]=1").arg(start).arg(start+length);
+            } else {
+                feature = feature.remove(0, 6).trimmed();
+                bool ok = false;
+                int featureVal = feature.toInt(&ok);
+                if (feature == "on") {
+                    openTypeTag += QString("[%1:%2]=1").arg(start).arg(start+length);
+                } else if (feature == "off") {
+                    openTypeTag += QString("[%1:%2]=0").arg(start).arg(start+length);
+                } else if (ok) {
+                    openTypeTag += QString("[%1:%2]=%3").arg(start).arg(start+length).arg(featureVal);
+                } else {
+                    continue;
+                }
+            }
+            fontFeatures.append(openTypeTag);
+        }
     }
 
     return fontFeatures;

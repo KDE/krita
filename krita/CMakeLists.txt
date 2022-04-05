@@ -105,6 +105,7 @@ else()
 endif()
 target_link_libraries(krita
     PRIVATE
+                      kritamultiarch
                       kritaui
                       Qt5::Core
                       Qt5::Gui

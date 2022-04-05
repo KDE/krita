@@ -54,6 +54,10 @@
 #include "KisUiFont.h"
 #include <KisMainWindow.h>
 
+#include <KisSupportedArchitectures.h>
+
+
+
 #include <KLocalizedTranslator>
 
 #ifdef Q_OS_ANDROID
@@ -691,7 +695,12 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     KisUsageLogger::writeSysInfo(QString("  GPU Acceleration: %1").arg(kritarc.value("OpenGLRenderer", "auto").toString()));
     KisUsageLogger::writeSysInfo(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
     KisUsageLogger::writeSysInfo(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
-    KisUsageLogger::writeSysInfo(QString("  Swap Location: %1\n").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo(QString("  Swap Location: %1").arg(KisImageConfig(true).swapDir()));
+    KisUsageLogger::writeSysInfo(QString("  Built for: %1").arg(xsimd::current_arch::name()));
+    KisUsageLogger::writeSysInfo(QString("  Base instruction set: %1").arg(KisSupportedArchitectures<QString>::currentArchitecture()));
+    KisUsageLogger::writeSysInfo(QString("  Supported instruction sets: %1").arg(KisSupportedArchitectures<QString>::supportedInstructionSets()));
+
+    KisUsageLogger::writeSysInfo("");
 
     KisConfig(true).logImportantSettings();
 

@@ -37,8 +37,11 @@
 
 namespace xsimd
 {
-class generic
+struct generic
 {
+    static constexpr bool supported() noexcept { return true; }
+    static constexpr bool available() noexcept { return true; }
+    static constexpr char const* name() noexcept { return "xsimd not available, unvectorized"; }
 };
 }; // namespace xsimd
 

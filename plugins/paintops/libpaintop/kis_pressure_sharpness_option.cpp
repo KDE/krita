@@ -17,6 +17,7 @@
 
 KisPressureSharpnessOption::KisPressureSharpnessOption()
     : KisCurveOption(KoID("Sharpness", i18n("Sharpness")), KisPaintOpOption::GENERAL, false)
+    , m_alignoutlinepixels(false)
     , m_softness(0)
 {
 }
@@ -24,12 +25,14 @@ KisPressureSharpnessOption::KisPressureSharpnessOption()
 void KisPressureSharpnessOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOption::writeOptionSetting(setting);
+    setting->setProperty(SHARPNESS_ALIGN_OUTLINE_PIXELS, m_alignoutlinepixels);
     setting->setProperty(SHARPNESS_SOFTNESS, m_softness);
 }
 
 void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOption::readOptionSetting(setting);
+    m_alignoutlinepixels = setting->getBool(SHARPNESS_ALIGN_OUTLINE_PIXELS);
     m_softness = quint32(setting->getInt(SHARPNESS_SOFTNESS));
 
     // backward compatibility: test for a "sharpness factor" property

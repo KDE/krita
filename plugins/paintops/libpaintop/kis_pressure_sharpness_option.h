@@ -13,6 +13,7 @@
 #include <kis_types.h>
 
 const QString SHARPNESS_FACTOR = "Sharpness/factor";
+const QString SHARPNESS_ALIGN_OUTLINE_PIXELS = "Sharpness/alignoutline";
 const QString SHARPNESS_SOFTNESS  = "Sharpness/softness";
 
 /**
@@ -36,6 +37,12 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
+    void setAlignOutlineToPixels(bool alignOutlineToPixels) {
+        m_alignoutlinepixels = alignOutlineToPixels;
+    }
+    bool alignOutlineToPixels() {
+        return m_alignoutlinepixels;
+    }
     /// threshold has 100 levels (like opacity)
     void setThreshold(qint32 threshold) {
         m_softness = qBound<quint32>(0, quint32(threshold), 100);
@@ -52,6 +59,7 @@ public:
     }
 
 private:
+    bool m_alignoutlinepixels {false};
     quint32 m_softness {0};
 };
 

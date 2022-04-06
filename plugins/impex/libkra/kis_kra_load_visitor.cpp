@@ -164,6 +164,7 @@ bool KisKraLoadVisitor::visit(KisExternalLayer * layer)
             }
         }
     } else if (KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(layer)) {
+        loadNodeKeyframes(shapeLayer);
 
         if (!loadMetaData(layer)) {
             return false;

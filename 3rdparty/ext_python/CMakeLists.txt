@@ -4,8 +4,8 @@ if (UNIX)
         set(ENV{PATH} "${PREFIX_ext_python}/lib/Python.framework/Versions/Current/bin:$ENV{PATH}")
         ExternalProject_Add( ext_python
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.python.org/ftp/python/3.9.1/Python-3.9.1.tar.xz
-            URL_MD5 61981498e75ac8f00adcb908281fadb6
+            URL https://www.python.org/ftp/python/3.9.12/Python-3.9.12.tar.xz
+            URL_MD5 4b5fda03e3fbfceca833c997d501bcca
             
             PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/osx_fixappinstall.diff
 

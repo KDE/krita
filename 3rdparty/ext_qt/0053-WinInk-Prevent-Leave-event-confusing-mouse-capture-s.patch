@@ -1,0 +1,78 @@
+From 5c29a8f7d18edd5097acd585ac302e8c14114d56 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Wed, 6 Apr 2022 18:46:29 +0800
+Subject: [PATCH] WinInk: Prevent Leave event confusing mouse capture state
+
+When mouse events are synthesized from tablet strokes, the WM_LBUTTONUP
+event can arrive later than WM_POINTERLEAVE if the pen is lifted very
+quickly. Normally, the mouse capture does not get released until the
+mouse button is released, and no Leave event is generated before that.
+However, WM_POINTERLEAVE does not consider the mouse capture state
+before unconditionally generating a Leave event. This confuses the mouse
+andling and no Enter event is sent before the following mouse events,
+which causes parts of Qt to think the cursor isn't inside the window.
+
+The fix is to not generate the Leave event on WM_POINTERLEAVE if mouse
+capture is active. In addition, when it does send the Leave event,
+immediately handle it synchronously, before more mouse events arrive,
+so that the next Enter event can be generated correctly.
+
+Another issue discovered is that, sometimes the Enter event arrives
+later than the Tablet events for unknown reasons. The fix (workaround)
+is also to handle the Enter event synchronously.
+---
+ .../windows/qwindowspointerhandler.cpp        | 23 ++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/src/plugins/platforms/windows/qwindowspointerhandler.cpp b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+index 9e518a262f..2da76a59ec 100644
+--- a/src/plugins/platforms/windows/qwindowspointerhandler.cpp
++++ b/src/plugins/platforms/windows/qwindowspointerhandler.cpp
+@@ -657,13 +657,25 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+         // The local coordinates may fall outside the window.
+         // Wait until the next update to send the enter event.
+         m_needsEnterOnPointerUpdate = true;
++        qCDebug(lcQpaEvents) << "WM_POINTERENTER received, m_windowUnderPointer:" << window;
+         break;
+     }
+     case WM_POINTERLEAVE:
+         if (m_windowUnderPointer && m_windowUnderPointer == m_currentWindow) {
+-            QWindowSystemInterface::handleLeaveEvent(m_windowUnderPointer);
+-            m_windowUnderPointer = nullptr;
+-            m_currentWindow = nullptr;
++            QWindowsWindow *platformWindow = static_cast<QWindowsWindow *>(window->handle());
++            const bool hasCapture = platformWindow->hasMouseCapture();
++            if (!hasCapture) {
++                qCDebug(lcQpaEvents) << "Leaving window " << m_windowUnderPointer << "(WM_POINTERLEAVE)";
++                QWindowSystemInterface::handleLeaveEvent(m_windowUnderPointer);
++                m_windowUnderPointer = nullptr;
++                m_currentWindow = nullptr;
++                // Flush to make sure the Leave event gets processed before
++                // we we potentially get more mouse events, so that Qt can
++                // correctly generate a new Enter event for them.
++                QWindowSystemInterface::flushWindowSystemEvents();
++            } else {
++                qCDebug(lcQpaEvents) << "WM_POINTERLEAVE blocked from sending Leave event due to existing mouse capture";
++            }
+         }
+         QWindowSystemInterface::handleTabletLeaveProximityEvent(device, type, sourceDevice);
+         break;
+@@ -682,10 +694,15 @@ bool QWindowsPointerHandler::translatePenEvent(QWindow *window, HWND hwnd, QtWin
+                 // make sure we subscribe to leave events for this window
+                 trackLeave(hwnd);
+ 
++                qCDebug(lcQpaEvents) << "Entering window " << window << "(WM_POINTERDOWN / WM_POINTERUP / WM_POINTERUPDATE)";
+                 QWindowSystemInterface::handleEnterEvent(window, localPos, globalPos);
+                 m_currentWindow = window;
+                 if (QWindowsWindow *wumPlatformWindow = QWindowsWindow::windowsWindowOf(target))
+                     wumPlatformWindow->applyCursor();
++                // Make sure the Enter event is processed before sending tablet
++                // events. Without this, sometimes the tablet events reaches
++                // the widget before the Enter event For unknown reasons.
++                QWindowSystemInterface::flushWindowSystemEvents();
+             }
+         }
+         const Qt::KeyboardModifiers keyModifiers = QWindowsKeyMapper::queryKeyboardModifiers();
+-- 
+2.24.1.windows.2
+

@@ -1873,8 +1873,8 @@
       <whatsThis/>
       <toolTip>Add blank frame</toolTip>
       <iconText>Add blank frame</iconText>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>10000</activationFlags>
+      <activationConditions>10</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -1885,7 +1885,7 @@
       <whatsThis/>
       <toolTip>Add duplicate frame</toolTip>
       <iconText>Add duplicate frame</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>10000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -1897,7 +1897,7 @@
       <whatsThis/>
       <toolTip>Toggle onion skin</toolTip>
       <iconText>Toggle onion skin</iconText>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -1909,6 +1909,7 @@
       <whatsThis/>
       <toolTip/>
       <iconText/>
+      <activationFlags>1</activationFlags>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -1919,6 +1920,7 @@
       <whatsThis/>
       <toolTip/>
       <iconText/>
+      <activationFlags>1</activationFlags>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -1929,6 +1931,7 @@
       <whatsThis/>
       <toolTip/>
       <iconText/>
+      <activationFlags>1</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -1939,6 +1942,7 @@
       <whatsThis/>
       <toolTip>Drop Frames, enable to preserve playback timing.</toolTip>
       <iconText/>
+      <activationFlags>1</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -1949,6 +1953,7 @@
       <whatsThis/>
       <toolTip>If checked, layer becomes pinned to the timeline, making it visible even when inactive.</toolTip>
       <iconText/>
+      <activationFlags>1</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -1959,8 +1964,8 @@
       <whatsThis/>
       <toolTip>Insert keyframes to the left of selection, moving the tail of animation to the right.</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -1971,8 +1976,8 @@
       <whatsThis/>
       <toolTip>Insert keyframes to the right of selection, moving the tail of animation to the right.</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -1983,8 +1988,8 @@
       <whatsThis/>
       <toolTip>Insert several keyframes based on user parameters.</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -1995,8 +2000,8 @@
       <whatsThis/>
       <toolTip>Remove keyframes moving the tail of animation to the left</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2007,8 +2012,8 @@
       <whatsThis/>
       <toolTip>Remove keyframes without moving anything around</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2019,7 +2024,7 @@
       <whatsThis/>
       <toolTip>Insert column to the left of selection, moving the tail of animation to the right</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2031,7 +2036,7 @@
       <whatsThis/>
       <toolTip>Insert column to the right of selection, moving the tail of animation to the right</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2043,7 +2048,7 @@
       <whatsThis/>
       <toolTip>Insert several columns based on user parameters.</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2055,7 +2060,7 @@
       <whatsThis/>
       <toolTip>Remove columns moving the tail of animation to the left</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2067,7 +2072,7 @@
       <whatsThis/>
       <toolTip>Remove columns without moving anything around</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2079,8 +2084,8 @@
       <whatsThis/>
       <toolTip>Insert a hold frame after every keyframe</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2091,8 +2096,8 @@
       <whatsThis/>
       <toolTip>Insert N hold frames after every keyframe</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2103,8 +2108,8 @@
       <whatsThis/>
       <toolTip>Remove a hold frame after every keyframe</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2115,8 +2120,8 @@
       <whatsThis/>
       <toolTip>Remove N hold frames after every keyframe</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2127,7 +2132,7 @@
       <whatsThis/>
       <toolTip>Insert a hold column into the frame at the current position</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2139,7 +2144,7 @@
       <whatsThis/>
       <toolTip>Insert N hold columns into the frame at the current position</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2151,7 +2156,7 @@
       <whatsThis/>
       <toolTip>Remove a hold column from the frame at the current position</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2163,7 +2168,7 @@
       <whatsThis/>
       <toolTip>Remove N hold columns from the frame at the current position</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2175,8 +2180,8 @@
       <whatsThis></whatsThis>
       <toolTip>Adds keyframe to control scalar property</toolTip>
       <iconText></iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2187,8 +2192,8 @@
       <whatsThis></whatsThis>
       <toolTip>Removes the selected scalar keyframe</toolTip>
       <iconText></iconText>
-      <activationFlags>0</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2199,8 +2204,8 @@
       <whatsThis/>
       <toolTip>Mirror frames' position</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2211,7 +2216,7 @@
       <whatsThis/>
       <toolTip>Mirror columns' position</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2223,8 +2228,8 @@
         <whatsThis/>
         <toolTip>Clear entire animation cache. Useful for debugging.</toolTip>
         <iconText/>
-        <activationFlags>100000</activationFlags>
-        <activationConditions>0</activationConditions>
+        <activationFlags>1</activationFlags>
+        <activationConditions>1000</activationConditions>
         <shortcut/>
         <isCheckable>false</isCheckable>
         <statusTip/>
@@ -2235,7 +2240,7 @@
       <whatsThis/>
       <toolTip>Copy frames to clipboard</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2247,7 +2252,7 @@
       <whatsThis/>
       <toolTip>Clone frames to clipboard</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2259,8 +2264,8 @@
       <whatsThis/>
       <toolTip>Convert clones to unique keyframe instances.</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2271,8 +2276,8 @@
       <whatsThis/>
       <toolTip>Cut frames to clipboard</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2283,8 +2288,8 @@
       <whatsThis/>
       <toolTip>Paste frames from clipboard</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
-      <activationConditions>0</activationConditions>
+      <activationFlags>1000</activationFlags>
+      <activationConditions>1</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -2295,7 +2300,7 @@
       <whatsThis/>
       <toolTip>Copy columns to clipboard</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2307,7 +2312,7 @@
       <whatsThis/>
       <toolTip>Cut columns to clipboard</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2319,7 +2324,7 @@
       <whatsThis/>
       <toolTip>Paste columns from clipboard</toolTip>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2331,7 +2336,7 @@
       <whatsThis/>
       <toolTip/>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2343,7 +2348,7 @@
       <whatsThis/>
       <toolTip/>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2355,7 +2360,7 @@
       <whatsThis/>
       <toolTip/>
       <iconText/>
-      <activationFlags>100000</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>

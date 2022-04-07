@@ -88,6 +88,9 @@ private:
 
     KisPaintDeviceSP m_paintDevice;
     KisSafeDocumentLoader m_loader;
+    QSize m_generatedForImageSize;
+    qreal m_generatedForXRes = 0.0;
+    qreal m_generatedForYRes = 0.0;
 };
 
 #endif // KIS_FILE_LAYER_H

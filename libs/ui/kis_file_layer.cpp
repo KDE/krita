@@ -221,6 +221,10 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
             KisTransformWorker worker(m_paintDevice, xscale, yscale, 0.0, 0.0, 0.0, 0, 0, 0, 0, 0, KisFilterStrategyRegistry::instance()->get("Bicubic"));
             worker.run();
         }
+
+        m_generatedForImageSize = image->size();
+        m_generatedForXRes = image->xRes();
+        m_generatedForYRes = image->yRes();
     }
 
     m_paintDevice->setX(oldX);
@@ -273,13 +277,13 @@ void KisFileLayer::setImage(KisImageWSP image)
     if (m_scalingMethod != None && image && oldImage != image) {
         bool canSkipReloading = false;
 
-        if (m_scalingMethod == ToImageSize && oldImage && image && oldImage->size() == image->size()) {
+        if (m_scalingMethod == ToImageSize && image && image->size() == m_generatedForImageSize) {
             canSkipReloading = true;
         }
 
-        if (m_scalingMethod == ToImagePPI && oldImage && image &&
-                qFuzzyCompare(oldImage->xRes(), image->xRes()) &&
-                qFuzzyCompare(oldImage->yRes(), image->yRes())) {
+        if (m_scalingMethod == ToImagePPI && image &&
+                qFuzzyCompare(image->xRes(), m_generatedForXRes) &&
+                qFuzzyCompare(image->yRes(), m_generatedForYRes)) {
 
             canSkipReloading = true;
         }

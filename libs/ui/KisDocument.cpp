@@ -303,7 +303,6 @@ public:
         , nserver(new KisNameServer(1))
         , imageIdleWatcher(2000 /*ms*/)
         , globalAssistantsColor(KisConfig(true).defaultAssistantsColor())
-        , savingLock(&savingMutex)
         , batchMode(false)
     {
         if (QLocale().measurementSystem() == QLocale::ImperialSystem) {
@@ -323,7 +322,6 @@ public:
         , nserver(new KisNameServer(*rhs.nserver))
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
-        , savingLock(&savingMutex)
     {
         copyFromImpl(rhs, _q, CONSTRUCT);
         connect(&imageIdleWatcher, SIGNAL(startedIdleMode()), q, SLOT(slotPerformIdleRoutines()));
@@ -389,8 +387,6 @@ public:
     QColor globalAssistantsColor;
 
     KisGridConfig gridConfig;
-
-    StdLockableWrapper<QMutex> savingLock;
 
     bool imageModifiedWithoutUndo = false;
     bool modifiedWhileSaving = false;
@@ -775,15 +771,20 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
                 i18n("Exporting Document...") :
                 i18n("Saving Document...");
 
-    bool started =
+    KritaUtils::JobResult result =
             initiateSavingInBackground(actionName,
                                        this, SLOT(slotCompleteSavingDocument(KritaUtils::ExportFileJob, KisImportExportErrorCode, QString, QString)),
                                        job, exportConfiguration, isAdvancedExporting);
-    if (!started) {
-        emit canceled(QString());
+
+    if (result == KritaUtils::JobResult::Busy) {
+        KisUsageLogger::log(QString("Failed to initiate saving %1 in background.").arg(job.filePath));
+        slotCompleteSavingDocument(job, ImportExportCodes::Busy,
+                                   i18n("Could not start saving %1. Wait until the current save operation has finished.", job.filePath),
+                                   "");
+        return false;
     }
 
-    return started;
+    return (result == KritaUtils::JobResult::Success);
 }
 
 bool KisDocument::exportDocument(const QString &path, const QByteArray &mimeType, bool isAdvancedExporting, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration)
@@ -832,7 +833,6 @@ bool KisDocument::saveAs(const QString &_path, const QByteArray &mimeType, bool 
     if (resourceSavingFilter(_path, mimeType, exportConfiguration)) {
         return true;
     }
-
 
     return exportDocumentImpl(ExportFileJob(_path,
                                             mimeType,
@@ -1191,7 +1191,7 @@ bool KisDocument::exportDocumentSync(const QString &path, const QByteArray &mime
 }
 
 
-bool KisDocument::initiateSavingInBackground(const QString actionName,
+KritaUtils::JobResult KisDocument::initiateSavingInBackground(const QString actionName,
                                              const QObject *receiverObject, const char *receiverMethod,
                                              const KritaUtils::ExportFileJob &job,
                                              KisPropertiesConfigurationSP exportConfiguration,bool isAdvancedExporting)
@@ -1200,13 +1200,13 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
                                       job, exportConfiguration, std::unique_ptr<KisDocument>(), isAdvancedExporting);
 }
 
-bool KisDocument::initiateSavingInBackground(const QString actionName,
+KritaUtils::JobResult KisDocument::initiateSavingInBackground(const QString actionName,
                                              const QObject *receiverObject, const char *receiverMethod,
                                              const KritaUtils::ExportFileJob &job,
                                              KisPropertiesConfigurationSP exportConfiguration,
                                              std::unique_ptr<KisDocument> &&optionalClonedDocument,bool isAdvancedExporting)
 {
-    KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), false);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(job.isValid(), KritaUtils::JobResult::Failure);
 
     QScopedPointer<KisDocument> clonedDocument;
 
@@ -1216,9 +1216,12 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
         clonedDocument.reset(optionalClonedDocument.release());
     }
 
-    // we block saving until the current saving is finished!
-    if (!clonedDocument || !d->savingMutex.tryLock()) {
-        return false;
+    if (!d->savingMutex.tryLock()){
+        return KritaUtils::JobResult::Busy;
+    }
+
+    if (!clonedDocument) {
+        return KritaUtils::JobResult::Failure;
     }
 
     auto waitForImage = [] (KisImageSP image) {
@@ -1254,8 +1257,8 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
         waitForImage(clonedDocument->image());
     }
 
-    KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, false);
-    KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveJob.isValid(), false);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveDocument, KritaUtils::JobResult::Failure);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(!d->backgroundSaveJob.isValid(), KritaUtils::JobResult::Failure);
     d->backgroundSaveDocument.reset(clonedDocument.take());
     d->backgroundSaveJob = job;
     d->modifiedWhileSaving = false;
@@ -1283,15 +1286,15 @@ bool KisDocument::initiateSavingInBackground(const QString actionName,
 
     if (!started) {
         // the state should have been deinitialized in slotChildCompletedSavingInBackground()
-
         KIS_SAFE_ASSERT_RECOVER (!d->backgroundSaveDocument && !d->backgroundSaveJob.isValid()) {
             d->backgroundSaveDocument.take()->deleteLater();
             d->savingMutex.unlock();
             d->backgroundSaveJob = KritaUtils::ExportFileJob();
         }
+        return KritaUtils::JobResult::Failure;
     }
 
-    return started;
+    return KritaUtils::JobResult::Success;
 }
 
 
@@ -1342,10 +1345,10 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
     KisUsageLogger::log(QString("Autosaving: %1").arg(autoSaveFileName));
 
     const bool hadClonedDocument = bool(optionalClonedDocument);
-    bool started = false;
+    KritaUtils::JobResult result = KritaUtils::JobResult::Failure;
 
     if (d->image->isIdle() || hadClonedDocument) {
-        started = initiateSavingInBackground(i18n("Autosaving..."),
+        result = initiateSavingInBackground(i18n("Autosaving..."),
                                              this, SLOT(slotCompleteAutoSaving(KritaUtils::ExportFileJob, KisImportExportErrorCode, QString, QString)),
                                              KritaUtils::ExportFileJob(autoSaveFileName, nativeFormatMimeType(), KritaUtils::SaveIsExporting | KritaUtils::SaveInAutosaveMode),
                                              0,
@@ -1354,7 +1357,7 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
         emit statusBarMessage(i18n("Autosaving postponed: document is busy..."), errorMessageTimeout);
     }
 
-    if (!started && !hadClonedDocument && d->autoSaveFailureCount >= 3) {
+    if (result != KritaUtils::JobResult::Success && !hadClonedDocument && d->autoSaveFailureCount >= 3) {
         KisCloneDocumentStroke *stroke = new KisCloneDocumentStroke(this);
         connect(stroke, SIGNAL(sigDocumentCloned(KisDocument*)),
                 this, SLOT(slotInitiateAsyncAutosaving(KisDocument*)),
@@ -1365,7 +1368,7 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
 
         setInfiniteAutoSaveInterval();
 
-    } else if (!started) {
+    } else if (result != KritaUtils::JobResult::Success) {
         setEmergencyAutoSaveInterval();
     } else {
         d->modifiedAfterAutosave = false;

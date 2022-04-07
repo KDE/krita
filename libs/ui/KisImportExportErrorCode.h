@@ -42,6 +42,9 @@ namespace ImportExportCodes
         // Other
         Failure, // unspecified error
 
+        // Could not save because a save operation was already going on
+        Busy,
+
         // OK
         OK, // everything went ok
 

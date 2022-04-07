@@ -19,6 +19,12 @@ enum SaveFlag {
     SaveInAutosaveMode = 0x4
 };
 
+enum JobResult {
+    Success = 0,
+    Failure = 1,
+    Busy = 2
+};
+
 Q_DECLARE_FLAGS(SaveFlags, SaveFlag)
 Q_DECLARE_OPERATORS_FOR_FLAGS(SaveFlags)
 

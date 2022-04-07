@@ -1128,9 +1128,10 @@ void KisMainWindow::slotSaveCompleted()
 {
     KisUsageLogger::log(QString("Saving Completed"));
     KisDocument* doc = qobject_cast<KisDocument*>(sender());
-    Q_ASSERT(doc);
-    disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
-    disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
+    if (doc) {
+        disconnect(doc, SIGNAL(completed()), this, SLOT(slotSaveCompleted()));
+        disconnect(doc, SIGNAL(canceled(QString)), this, SLOT(slotSaveCanceled(QString)));
+    }
 
     if (d->deferredClosingEvent) {
         KXmlGuiWindow::closeEvent(d->deferredClosingEvent);

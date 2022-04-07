@@ -178,7 +178,8 @@ QString KisImportExportErrorCode::errorMessage() const
                 return i18n("Unknown error.");
             case ImportExportCodes::InternalError:
                 return internal;
-
+            case ImportExportCodes::Busy:
+                return i18n("Image is busy.");
             // OK
             case ImportExportCodes::OK:
                 return i18n("The action has been completed successfully.");

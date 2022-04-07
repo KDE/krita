@@ -103,7 +103,8 @@ if (WIN32)
     if (NOT OpenSSL_FOUND)
         set (OPENSSL_DEP ext_openssl)
     endif()
-          
+elseif (APPLE OR ANDROID)
+    set (ZLIB_DEP ext_zlib)
 endif (WIN32)
 
 if (WIN32)

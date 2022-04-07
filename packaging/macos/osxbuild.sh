@@ -333,12 +333,12 @@ build_3rdparty () {
     # build 3rdparty tools
     # The order must not be changed!
     cmake_3rdparty \
+        ext_zlib \
         ext_iconv \
         ext_pkgconfig \
         ext_gettext \
         ext_openssl \
         ext_qt \
-        ext_zlib \
         ext_boost \
         ext_eigen3 \
         ext_exiv2 \

@@ -40,7 +40,7 @@ if (WIN32)
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite
         #
-        -qt-zlib -qt-pcre -qt-libpng -qt-libjpeg -openssl-linked -qt-freetype -qt-harfbuzz
+        -system-zlib -qt-pcre -qt-libpng -qt-libjpeg -openssl-linked -qt-freetype -qt-harfbuzz
         -I ${EXTPREFIX_qt}/include
         -L ${EXTPREFIX_qt}/lib
         #
@@ -189,7 +189,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_patch ${OPENSSL_DEP} ${QT_EXTRA_DEPS}
+      DEPENDS ext_patch ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP}
   )
 elseif (ANDROID)
   ExternalProject_Add(
@@ -271,7 +271,7 @@ elseif (ANDROID)
 
 
 
-      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -android-sdk ${ANDROID_SDK_ROOT} -android-ndk ${CMAKE_ANDROID_NDK} -android-arch ${ANDROID_ABI} -xplatform android-clang -android-ndk-platform android-23 -make libs -qt-sqlite -openssl-linked OPENSSL_PREFIX=${EXTPREFIX_qt} -translationdir ${LOCALE_INSTALL_DIR}
+      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -verbose -nomake examples -nomake tests -nomake tools -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -android-sdk ${ANDROID_SDK_ROOT} -android-ndk ${CMAKE_ANDROID_NDK} -android-arch ${ANDROID_ABI} -xplatform android-clang -android-ndk-platform android-23 -make libs -qt-sqlite -openssl-linked OPENSSL_PREFIX=${EXTPREFIX_qt} -translationdir ${LOCALE_INSTALL_DIR} -system-zlib
 
       INSTALL_DIR ${EXTPREFIX_qt}
 
@@ -280,7 +280,7 @@ elseif (ANDROID)
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
 
-      DEPENDS ext_openssl
+      DEPENDS ext_openssl ${ZLIB_DEP}
 )
 elseif (NOT APPLE)
   ExternalProject_Add(
@@ -322,7 +322,7 @@ elseif (NOT APPLE)
 
       CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 
-      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -feature-relocatable -openssl-linked -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite
+      CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -feature-relocatable -openssl-linked -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite -system-zlib
 
       INSTALL_DIR ${EXTPREFIX_qt}
 
@@ -330,6 +330,7 @@ elseif (NOT APPLE)
       INSTALL_COMMAND $(MAKE) install
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
+      DEPENDS ${ZLIB_DEP}
   )
 else( APPLE )
 
@@ -523,5 +524,6 @@ else( APPLE )
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1
+        DEPENDS ${ZLIB_DEP}
       )
 endif()

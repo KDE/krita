@@ -108,12 +108,11 @@ void KisMask::setImage(KisImageWSP image)
     if (parentPaintDevice) {
         defaultBounds = new KisSelectionDefaultBounds(parentPaintDevice);
     } else {
-        /**
-         * FIXME: Ideally we should move setImage() and setDefaultBounds()
-         * calls into KisNode::add() or something like that. But for now
-         * we can just initialize default bounds with "not entirely correct"
-         * default bounds.
-         */
+        if (image) {
+            qWarning() << "WARNING: KisMask::setImage() was called without any parent layer being set";
+        }
+
+        // just a fallback solution
         defaultBounds = new KisDefaultBounds(image);
     }
 

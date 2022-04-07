@@ -125,6 +125,17 @@ bool KisAutoBrush::saveToDevice(QIODevice *dev) const
     return false;
 }
 
+bool KisAutoBrush::isPiercedApprox() const
+{
+    bool result = false;
+
+    if (d->shape->id() == SoftId.id()) {
+        result = d->shape->valueAt(0,0) > 0.05 * 255;
+    }
+
+    return result;
+}
+
 qreal KisAutoBrush::userEffectiveSize() const
 {
     return d->shape->diameter();

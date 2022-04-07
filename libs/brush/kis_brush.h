@@ -359,7 +359,7 @@ public:
      * WARNING: this method is relatively expensive since it iterates
      *          up to 100 pixels of the brush.
      */
-    bool isPiercedApprox() const;
+    virtual bool isPiercedApprox() const;
 
 protected:
 

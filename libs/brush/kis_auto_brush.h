@@ -36,6 +36,8 @@ public:
     bool loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourcesInterface) override;
     bool saveToDevice(QIODevice *dev) const override;
 
+    bool isPiercedApprox() const override;
+
 public:
 
     qreal userEffectiveSize() const override;

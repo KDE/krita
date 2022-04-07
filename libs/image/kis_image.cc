@@ -176,11 +176,6 @@ public:
 
     ~KisImagePrivate() {
         /**
-         * Stop animation interface. It may use the rootLayer.
-         */
-        delete animationInterface;
-
-        /**
          * First delete the nodes, while strokes
          * and undo are still alive
          */
@@ -188,17 +183,26 @@ public:
         KIS_SAFE_ASSERT_RECOVER_NOOP(rootLayer->graphListener() == q);
         KIS_SAFE_ASSERT_RECOVER_NOOP(rootLayer->image() == q);
 
+        /**
+         * Firstly we need to disconnect the nodes from the image,
+         * because some of the nodes (e.g. KisGroupLayer) may
+         * request the image back via defaultBouds() and/or
+         * animationInyterface()
+         */
+        if (rootLayer->image() == q) {
+            rootLayer->setImage(0);
+        }
+
         if (rootLayer->graphListener() == q) {
             rootLayer->setGraphListener(0);
         }
 
-        /// resetting of the image link is disabled in Krita 5.0, because it
-        /// may lead to unexpected bugs like bug 447126
-//        if (rootLayer->image() == q) {
-//            rootLayer->setImage(0);
-//        }
-
         rootLayer.clear();
+
+        /**
+         * Stop animation interface. It may use the rootLayer.
+         */
+        delete animationInterface;
     }
 
     KisImage *q;

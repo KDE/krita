@@ -122,8 +122,10 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
             ///             and skip initilizing shapeController!
             ///             Ideally, we should call initializeExternalNode()
             ///             instead.
-            clonedNode->setImage(image);
             image->addNode(clonedNode);
+            KIS_SAFE_ASSERT_RECOVER(clonedNode->image() == KisImageWSP(image)) {
+                clonedNode->setImage(image);
+            }
         }
     }
 
@@ -220,9 +222,6 @@ void KisMimeData::initializeExternalNode(KisNodeSP *node,
                                          KisImageWSP image,
                                          KisShapeController *shapeController)
 {
-    // adjust the link to a correct image object
-    (*node)->setImage(image);
-
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node->data());
     if (shapeLayer) {
         // attach the layer to a new shape controller

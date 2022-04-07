@@ -535,6 +535,8 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
         newNode->setGraphListener(m_d->graphListener);
     }
 
+    newNode->setImage(image());
+
     if (m_d->graphListener) {
         m_d->graphListener->nodeHasBeenAdded(this, idx);
     }
@@ -553,13 +555,14 @@ bool KisNode::remove(quint32 index)
             m_d->graphListener->aboutToRemoveANode(this, index);
         }
 
+        removedNode->setImage(0);
+
         {
             QWriteLocker l(&m_d->nodeSubgraphLock);
 
             removedNode->setGraphListener(0);
 
             removedNode->setParent(0);   // after calling aboutToRemoveANode or then the model get broken according to TT's modeltest
-
             m_d->nodes.removeAt(index);
         }
 

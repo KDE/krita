@@ -1274,7 +1274,6 @@ KisNodeSP KisKraLoader::loadColorizeMask(KisImageSP image, const QDomElement& el
     mask->setLimitToDeviceBounds(limitToDevice);
 
     delete mask->setColorSpace(colorSpace);
-    mask->setImage(image);
 
     return mask;
 }

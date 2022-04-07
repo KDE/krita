@@ -15,7 +15,6 @@
 #include "kis_canvas_resource_provider.h"
 #include "kis_image.h"
 
-class QKeyEvent;
 class KisCanvas2;
 class KisSelectionOptions;
 class KoCanvasResourceProvider;

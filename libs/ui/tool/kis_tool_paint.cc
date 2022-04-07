@@ -19,7 +19,6 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QGridLayout>
-#include <QKeyEvent>
 #include <QEvent>
 #include <QVariant>
 #include <QAction>

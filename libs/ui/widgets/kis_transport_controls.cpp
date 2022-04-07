@@ -7,7 +7,6 @@
 
 #include "kis_transport_controls.h"
 
-#include <QKeyEvent>
 #include <QHBoxLayout>
 #include <QToolButton>
 

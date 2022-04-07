@@ -6,7 +6,6 @@
 
 #include "kis_selection_tool_config_widget_helper.h"
 
-#include <QKeyEvent>
 #include "kis_selection_options.h"
 #include "kis_canvas2.h"
 #include "KisViewManager.h"

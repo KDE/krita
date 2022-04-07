@@ -20,7 +20,6 @@
 #include <QWidget>
 #include <QEvent>
 #include <QHBoxLayout>
-#include <QKeyEvent>
 #include <QMenu>
 #include <QWidgetAction>
 #include <QFontDatabase>

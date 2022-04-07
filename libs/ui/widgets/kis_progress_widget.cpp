@@ -10,7 +10,6 @@
 #include <kis_debug.h>
 #include <QToolButton>
 #include <QHBoxLayout>
-#include <QKeyEvent>
 
 #include <kis_icon.h>
 

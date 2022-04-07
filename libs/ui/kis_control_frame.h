@@ -12,7 +12,6 @@
 #define __kis_control_frame_h__
 
 #include <QMenu>
-#include <QKeyEvent>
 #include <QObject>
 
 #include <KoPattern.h>

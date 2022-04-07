@@ -42,6 +42,10 @@ Q_SIGNALS:
     void parametersChanged();
 
     void highlightedSensorChanged(KisDynamicSensorSP sensor);
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 private:
     struct Private;
     Private* const d;

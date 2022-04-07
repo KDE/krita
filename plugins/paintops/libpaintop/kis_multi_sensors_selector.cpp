@@ -32,6 +32,9 @@ KisMultiSensorsSelector::KisMultiSensorsSelector(QWidget* parent)
     connect(d->form.sensorsList, SIGNAL(clicked(QModelIndex)), SLOT(setCurrent(QModelIndex)));
     d->form.sensorsList->setModel(d->model);
     d->layout = new QHBoxLayout(d->form.widgetConfiguration);
+
+    // allow the list viewport to be responsive to input release events
+    d->form.sensorsList->viewport()->installEventFilter(this);
 }
 
 KisMultiSensorsSelector::~KisMultiSensorsSelector()
@@ -106,4 +109,15 @@ void KisMultiSensorsSelector::setCurrentCurve(const KisCubicCurve& curve, bool u
 void KisMultiSensorsSelector::reload()
 {
     d->model->resetCurveOption();
+}
+
+bool KisMultiSensorsSelector::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == (QEvent::MouseButtonRelease) || event->type() == QEvent::TabletRelease) {
+        QModelIndex index = d->form.sensorsList->currentIndex();
+        setCurrent(index);
+        event->accept();
+    }
+
+    return QObject::eventFilter(obj, event);
 }

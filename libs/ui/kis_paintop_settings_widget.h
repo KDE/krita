@@ -63,6 +63,7 @@ private Q_SLOTS:
 protected:
     void addPaintOpOption(KisPaintOpOption *option, QString category);
     virtual void notifyPageChanged();
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     

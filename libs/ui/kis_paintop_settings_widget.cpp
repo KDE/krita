@@ -76,6 +76,8 @@ KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
     connect(m_d->optionsList, SIGNAL(sigEntryChecked(QModelIndex)), this, SLOT(slotEntryChecked(QModelIndex)));
     connect (m_d->optionsList, SIGNAL(lockAreaTriggered(QModelIndex)), this, SLOT(lockProperties(QModelIndex)));
 
+    // allow the list viewport to be responsive to input release events
+    m_d->optionsList->viewport()->installEventFilter(this);
 }
 
 
@@ -262,4 +264,20 @@ void KisPaintOpSettingsWidget::slotEntryChecked(const QModelIndex &index)
 {
     Q_UNUSED(index);
     emit sigConfigurationItemChanged();
+}
+
+bool KisPaintOpSettingsWidget::eventFilter(QObject *obj, QEvent *event)
+{
+    if (event->type() == (QEvent::MouseButtonRelease) || event->type() == QEvent::TabletRelease) {
+        // bit of a hack to properly work with the KisCategorizedListView type:
+        // get the mouse position and utilize indexAt() instead of currentIndex() to
+        // ensure the pages don't swap back and forth if the user repeatedly clicks
+        // another option's checkbox too quickly
+        const QMouseEvent* mevent = static_cast<const QMouseEvent*>(event);
+        QModelIndex index = m_d->optionsList->indexAt(mevent->pos());
+        changePage(index);
+        event->accept();
+    }
+
+    return QObject::eventFilter(obj, event);
 }

@@ -1102,7 +1102,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
         chunk.setFillRule(Qt::WindingFill);
         chunkShape->background()->paint(painter, paintContext, chunk);
         chunkShape->stroke()->paint(KoPathShape::createShapeFromPainterPath(chunk), painter);
-        chunk.clear();
+        chunk = QPainterPath();
         currentIndex = j;
 
     } else {

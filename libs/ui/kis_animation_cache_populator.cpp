@@ -293,6 +293,7 @@ bool KisAnimationCachePopulator::regenerate(KisAnimationFrameCacheSP cache, int 
 void KisAnimationCachePopulator::requestRegenerationWithPriorityFrame(KisImageSP image, int frameIndex)
 {
     if (!m_d->calculateAnimationCacheInBackground) return;
+    if (!KisAnimationFrameCache::cacheForImage(image)) return;
 
     m_d->priorityFrames.append(qMakePair(image, frameIndex));
 

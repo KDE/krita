@@ -163,7 +163,8 @@ bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParen
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resource, false);
     KisResourceModel resourceModel(resource->resourceType().first);
-    resourceModel.setResourceFilter(KisResourceModel::ShowActiveResources); // inactive don't count here
+    // allow inactive, because this code is used in addResourceWithUserInput
+    resourceModel.setResourceFilter(KisResourceModel::ShowAllResources);
 
     if (resource->resourceId() < 0) {
         // that's a resource that didn't come from a database

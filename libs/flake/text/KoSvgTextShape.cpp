@@ -1203,7 +1203,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
         chunkShape->stroke()->paint(
             KoPathShape::createShapeFromPainterPath(chunk),
             painter);
-        chunk.clear();
+        chunk = QPainterPath();
         currentIndex = j;
 
     } else {

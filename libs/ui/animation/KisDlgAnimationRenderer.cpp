@@ -208,10 +208,11 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     const QString documentPath = m_doc->localFilePath();
 
     // Initialize these settings based on last used configuration when possible..
-    m_page->txtBasename->setText(lastUsedOptions.basename);
-
     if (!lastUsedOptions.lastDocuemntPath.isEmpty() &&
             lastUsedOptions.lastDocuemntPath == documentPath) {
+
+        // If the file is the same as last time, we use the last used basename.
+        m_page->txtBasename->setText(lastUsedOptions.basename);
 
         m_page->sequenceStart->setValue(lastUsedOptions.sequenceStart);
         m_page->intWidth->setValue(lastUsedOptions.width);

@@ -2070,6 +2070,8 @@ void KisMainWindow::renderAnimation()
 
 void KisMainWindow::renderAnimationAgain()
 {
+    if (!activeView()) return;
+
     KisImageSP image = viewManager()->image();
 
     if (!image) return;

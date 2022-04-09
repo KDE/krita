@@ -696,7 +696,15 @@ KoSvgTextProperties::fontFileNameForText(QString text,
             == FcResultMatch) {
             for (int j = 0; j < text.size(); ++j) {
                 if (familyValues.at(j) == -1) {
-                    if (FcCharSetHasChar(set, text.at(j).unicode())) {
+                    QString unicode = text.at(j);
+                    if (text.at(j).isHighSurrogate()) {
+                        unicode += text.at(j + 1);
+                    }
+                    if (text.at(j).isLowSurrogate()) {
+                        familyValues[j] = familyValues[j - 1];
+                        continue;
+                    }
+                    if (FcCharSetHasChar(set, unicode.toUcs4().first())) {
                         familyValues[j] = i;
                     }
                 }
@@ -722,12 +730,14 @@ KoSvgTextProperties::fontFileNameForText(QString text,
             startIndex = i;
             length = 0;
             lastIndex = familyValues.at(i);
-            if (FcPatternGetString(fontSet->fonts[lastIndex],
-                                   FC_FILE,
-                                   0,
-                                   &fileValue)
-                == FcResultMatch) {
-                fontFileName = QString(reinterpret_cast<char *>(fileValue));
+            if (lastIndex != -1) {
+                if (FcPatternGetString(fontSet->fonts[lastIndex],
+                                       FC_FILE,
+                                       0,
+                                       &fileValue)
+                    == FcResultMatch) {
+                    fontFileName = QString(reinterpret_cast<char *>(fileValue));
+                }
             }
         }
         length += 1;

@@ -11,6 +11,7 @@
 
 #include <QTextCharFormat>
 
+#include "KoPathShape.h"
 #include "KoSvgText.h"
 #include <boost/optional.hpp>
 
@@ -61,10 +62,13 @@ public:
     virtual QString nodeText() const = 0;
 
     /**
-     * @return a text on path info struct. Check the 'path' value inside to see
-     *if this textChunk *is* a textOnPath.
+     * @return a text on path info struct.
      **/
     virtual KoSvgText::TextOnPathInfo textOnPathInfo() const = 0;
+    /**
+     * @return the textPath. returns null if this is not a textPath element.
+     */
+    virtual KoShape *textPath() const = 0;
 
     /**
      * @return a vector of local character transformations x, y, dx, dy and rotate.

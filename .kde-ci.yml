@@ -22,3 +22,4 @@ Dependencies:
 
 Options:
     use-ccache: True
+    per-test-timeout: 4:00

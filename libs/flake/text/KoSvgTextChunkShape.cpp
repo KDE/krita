@@ -231,6 +231,10 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return q->s->textPathInfo;
     }
 
+    KoShape * textPath() const override {
+        return q->s->textPath;
+    }
+
     QVector<KoSvgText::CharTransformation> localCharTransformations() const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(isTextNode(), QVector<KoSvgText::CharTransformation>());
 
@@ -322,7 +326,6 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                                      bool &textInPath,
                                      int &currentIndex,
                                      bool horizontal) override {
-        qDebug() << "has textPath" << q->s->textPathInfo.path.length();
         if (isTextNode()) {
             int length = q->s->text.toUtf8().size();
             qDebug() << "starting resolving of charTransforms" << q->s->text << length;
@@ -366,7 +369,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
             currentIndex += q->s->text.toUtf8().size();
         } else {
-            if (!q->s->textPathInfo.path.isEmpty()) {
+            if (q->s->textPath) {
                 textInPath = true;
             }
             qDebug() << "iterating over shapes";
@@ -380,7 +383,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                                                                                horizontal);
                 }
             }
-            if (!q->s->textPathInfo.path.isEmpty()) {
+            if (q->s->textPath) {
                 textInPath = false;
             }
         }
@@ -595,7 +598,10 @@ void writeTextListAttribute(const QString &attribute, const QVector<qreal> &valu
 
 bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
 {
-    bool isTextPath = !s->textPathInfo.path.isEmpty();
+    bool isTextPath = false;
+    if (s->textPath) {
+        isTextPath = true;
+    }
     if (isRootTextNode()) {
         context.shapeWriter().startElement("text", false);
 
@@ -624,8 +630,11 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     }
 
     if (isTextPath) {
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(s->textPathInfo.path);
-        context.shapeWriter().addAttribute("path", shape->toString(context.userSpaceTransform()));
+        if (s->textPath) {
+            // we'll always save as an embedded shape as "path" is an svg 2.0 feature.
+            QString id = SvgStyleWriter::embedShape(s->textPath, context);
+            context.shapeWriter().addAttribute("href", "#"+id);
+        }
         if (s->textPathInfo.startOffset != 0) {
             QString offset = KisDomUtils::toString(s->textPathInfo.startOffset);
             if (s->textPathInfo.startOffsetIsPercentage) {
@@ -741,6 +750,7 @@ void KoSvgTextChunkShape::resetTextShape()
     s->properties = KoSvgTextProperties();
 
     s->textLength = AutoValue();
+    s->textPath = 0;
     s->lengthAdjust = LengthAdjustSpacing;
 
     s->localTransformations.clear();
@@ -1008,14 +1018,14 @@ void KoSvgTextChunkShape::setRichTextPreferred(bool value)
     s->isRichTextPreferred = value;
 }
 
-void KoSvgTextChunkShape::setTextPath(QPainterPath path)
+void KoSvgTextChunkShape::setTextPath(KoShape *path)
 {
-    s->textPathInfo.path = path;
+    s->textPath = path;
 }
 
-const QPainterPath KoSvgTextChunkShape::textPath()
+const KoShape *KoSvgTextChunkShape::textPath()
 {
-    return s->textPathInfo.path;
+    return s->textPath;
 }
 
 bool KoSvgTextChunkShape::isRootTextNode() const
@@ -1040,12 +1050,17 @@ KoSvgTextChunkShape::SharedData::SharedData(const SharedData &rhs)
     , textLength(rhs.textLength)
     , lengthAdjust(rhs.lengthAdjust)
     , text(rhs.text)
+    , associatedOutline(rhs.associatedOutline)
     , isRichTextPreferred(rhs.isRichTextPreferred)
 {
+    if (rhs.textPath) {
+        textPath = rhs.textPath->cloneShape();
+    }
 }
 
 KoSvgTextChunkShape::SharedData::~SharedData()
 {
+    delete textPath;
 }
 
 #include <QBrush>

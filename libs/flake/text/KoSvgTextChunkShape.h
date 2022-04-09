@@ -149,13 +149,13 @@ public:
      * Set the path for textOnPath;
      * @param shape
      */
-    void setTextPath(QPainterPath path);
+    void setTextPath(KoShape *path);
 
     /**
      * @brief textPath
      * @return the path used for text on path, if null, this chunk is not a textPath.
      */
-    const QPainterPath textPath();
+    const KoShape* textPath();
 
 protected:
     /**

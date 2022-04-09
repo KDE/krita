@@ -173,11 +173,14 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
             painter.save();
             painter.setPen(Qt::magenta);
             painter.setOpacity(0.5);
-            QPainterPath p = textPathChunk->layoutInterface()->textOnPathInfo().path;
-            painter.strokePath(p, QPen(Qt::green));
-            painter.drawPoint(p.pointAtPercent(0));
-            painter.drawPoint(p.pointAtPercent(p.percentAtLength(p.length()*0.5)));
-            painter.drawPoint(p.pointAtPercent(1.0));
+            if (textPathChunk->layoutInterface()->textPath()) {
+                QPainterPath p = textPathChunk->layoutInterface()->textPath()->outline();
+                p = textPathChunk->layoutInterface()->textPath()->transformation().map(p);
+                painter.strokePath(p, QPen(Qt::green));
+                painter.drawPoint(p.pointAtPercent(0));
+                painter.drawPoint(p.pointAtPercent(p.percentAtLength(p.length()*0.5)));
+                painter.drawPoint(p.pointAtPercent(1.0));
+            }
             painter.restore();
         }
     }
@@ -903,7 +906,7 @@ void KoSvgTextShape::Private::getAnchors(const KoShape *rootShape,
                 chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
             cr.direction = KoSvgText::Direction(
                 chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
-            if (!chunkShape->layoutInterface()->textOnPathInfo().path.isEmpty() && i == 0) {
+            if (chunkShape->layoutInterface()->textPath() && i == 0) {
                 cr.anchored_chunk = true;
             }
             result[currentIndex + i] = cr;
@@ -934,16 +937,17 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
         KIS_SAFE_ASSERT_RECOVER_RETURN(textPathChunk);
         int endIndex = currentIndex + textPathChunk->layoutInterface()->numChars();
 
-        QPainterPath path = textPathChunk->layoutInterface()->textOnPathInfo().path;
-        if (!path.isEmpty()) {
+        KoPathShape *shape = dynamic_cast<KoPathShape*>(textPathChunk->layoutInterface()->textPath());
+        if (shape) {
+            QPainterPath path = shape->outline();
+            path = shape->absoluteTransformation().map(path);
             inPath = true;
             if(textPathChunk->layoutInterface()->textOnPathInfo().side == KoSvgText::TextPathSideRight) {
                 path = path.toReversed();
             }
             qreal length = path.length();
             qreal offset = 0.0;
-            //unsure if this is correct...
-            bool isClosed = path.pointAtPercent(0.0) == path.pointAtPercent(1.0);
+            bool isClosed = (shape->isClosedSubpath(0) && shape->subpathCount() == 1);
             if (textPathChunk->layoutInterface()->textOnPathInfo().startOffsetIsPercentage) {
                 offset = length * (0.01 * textPathChunk->layoutInterface()->textOnPathInfo().startOffset);
             } else {

@@ -249,7 +249,6 @@ struct CharTransformation : public boost::equality_comparable<CharTransformation
 };
 
 struct TextOnPathInfo {
-    QPainterPath path;
     qreal startOffset = 0.0;
     bool startOffsetIsPercentage = false;
     TextPathMethod method = TextPathAlign;

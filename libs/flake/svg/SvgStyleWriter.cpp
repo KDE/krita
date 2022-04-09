@@ -202,6 +202,15 @@ void embedShapes(const QList<KoShape*> &shapes, KoXmlWriter &outWriter)
     outWriter.addCompleteElement(&buffer);
 }
 
+QString SvgStyleWriter::embedShape(KoShape *shape, SvgSavingContext &context)
+{
+    QList<KoShape*> shapes;
+    const QString uid = context.createUID("path");
+    shapes.append(shape);
+    shape->setName(uid);
+    embedShapes(shapes, context.styleWriter());
+    return uid;
+}
 
 void SvgStyleWriter::saveSvgClipping(KoShape *shape, SvgSavingContext &context)
 {

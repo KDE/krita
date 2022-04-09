@@ -43,6 +43,9 @@ public:
     /// Saves stroke style of specified shape
     static void saveSvgStroke(KoShape *shape, SvgSavingContext &context);
 
+    //embed the given shape, returns an id to refer to.
+    static QString embedShape(KoShape *shape, SvgSavingContext &context);
+
 protected:
     /// Saves effects of specified shape
     static void saveSvgEffects(KoShape *shape, SvgSavingContext &context);

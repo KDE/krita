@@ -1815,7 +1815,17 @@ KoShape *SvgParser::parseTextElement(const QDomElement &e, KoSvgTextShape *merge
         QDomElement p = e.ownerDocument().createElement("path");
         p.setAttribute("d", e.attribute("path"));
         KoShape *s = createPath(p);
-        textChunk->setTextPath(s->transformation().map(s->outline()));
+        textChunk->setTextPath(s);
+    } else if (e.hasAttribute("href")) {
+        KoShape *s = m_context.shapeById(e.attribute("href").remove(0, 1));
+        if (s) {
+            textChunk->setTextPath(s->cloneShape());
+        }
+    } else if (e.hasAttribute("xlink:href")) {
+        KoShape *s = m_context.shapeById(e.attribute("xlink:href").remove(0, 1));
+        if (s) {
+            textChunk->setTextPath(s->cloneShape());
+        }
     }
 
     textChunk->normalizeCharTransformations();

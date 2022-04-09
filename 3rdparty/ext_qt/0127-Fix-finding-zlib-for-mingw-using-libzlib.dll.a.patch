@@ -1,0 +1,25 @@
+From 7a3e07b6aac770b63820311ee2d9c0242823ee4b Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Sun, 10 Apr 2022 01:53:39 +0800
+Subject: [PATCH] Fix finding zlib for mingw using libzlib.dll.a
+
+---
+ configure.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.json b/configure.json
+index 0b06f3549a..3985e905e0 100644
+--- a/configure.json
++++ b/configure.json
+@@ -161,7 +161,7 @@
+             "headers": "zlib.h",
+             "sources": [
+                 { "libs": "-lzdll", "condition": "config.msvc" },
+-                { "libs": "-lzlib", "condition": "config.msvc" },
++                { "libs": "-lzlib", "condition": "config.win32" },
+                 { "libs": "-lz", "condition": "!config.msvc" },
+                 { "libs": "-s USE_ZLIB=1", "condition": "config.wasm" }
+             ]
+-- 
+2.24.1.windows.2
+

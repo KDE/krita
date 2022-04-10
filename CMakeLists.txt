@@ -185,6 +185,17 @@ add_feature_info("Dr. Mingw" USE_DRMINGW "Enable the Dr. Mingw crash handler")
         else (USE_MINGW_HARDENING_LINKER)
             message(WARNING "Linker Security Flags not enabled!")
         endif (USE_MINGW_HARDENING_LINKER)
+
+        # Clang does not generate DWARF aranges data by default, which makes
+        # DrMingw not able to parse the DWARF debug symbols. Add -gdwarf-aranges
+        # explicitly.
+        # See: https://github.com/jrfonseca/drmingw/issues/42#issuecomment-516614561
+        if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+            set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -gdwarf-aranges")
+        endif ()
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -gdwarf-aranges")
+        endif ()
     elseif (MSVC)
         # Increase the stack size to match MinGW's. Prevents crashes with GMic.
         set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /STACK:4194304")

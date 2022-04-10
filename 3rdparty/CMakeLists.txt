@@ -136,6 +136,22 @@ if (MINGW)
 	else ()
 		message(WARNING "Linker Security Flags not enabled!")
 	endif ()
+
+    # Clang does not generate DWARF aranges data by default, which makes
+    # DrMingw not able to parse the DWARF debug symbols. Add -gdwarf-aranges
+    # explicitly.
+    # See: https://github.com/jrfonseca/drmingw/issues/42#issuecomment-516614561
+    if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
+        set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -gdwarf-aranges")
+    endif ()
+    if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -gdwarf-aranges")
+    endif ()
+
+    set(GLOBAL_PROFILE ${GLOBAL_PROFILE}
+        -DCMAKE_C_FLAGS_RELWITHDEBINFO=${CMAKE_C_FLAGS_RELWITHDEBINFO}
+        -DCMAKE_CXX_FLAGS_RELWITHDEBINFO=${CMAKE_CXX_FLAGS_RELWITHDEBINFO}
+    )
 elseif (MSVC)
 	set(SECURITY_C_FLAGS ${CMAKE_C_FLAGS})
 	set(SECURITY_CXX_FLAGS ${CMAKE_CXX_FLAGS})

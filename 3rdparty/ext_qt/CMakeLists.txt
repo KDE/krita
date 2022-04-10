@@ -64,6 +64,14 @@ if (WIN32)
     if (QT_ENABLE_DEBUG_INFO)
         # Set the option to build Qt with debugging info enabled
         list(APPEND _QT_conf -force-debug-info)
+        if (MINGW)
+            if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+                list(APPEND _QT_conf
+                    QMAKE_CFLAGS+=-gdwarf-aranges
+                    QMAKE_CXXFLAGS+=-gdwarf-aranges
+                )
+            endif ()
+        endif ()
     endif(QT_ENABLE_DEBUG_INFO)
     if (QT_ENABLE_DYNAMIC_OPENGL)
         list(APPEND _QT_conf -opengl dynamic -angle)

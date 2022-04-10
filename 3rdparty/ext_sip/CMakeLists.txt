@@ -103,16 +103,13 @@ elseif (WIN32)
 
             DEPENDERS build
         )
-        find_library(ucrt ucrt)
-        if (NOT ucrt)
-            message(STATUS "UCRT library not detected, will deploy workaround for setuptools.")
-            ExternalProject_Add_Step(ext_sip
-                distutils_system_mod
-                COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/_distutils_system_mod.py ${KRITA_PYTHONPATH}
+        message(STATUS "Using mingw, Will deploy workaround for setuptools.")
+        ExternalProject_Add_Step(ext_sip
+            distutils_system_mod
+            COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/../ext_python/_distutils_system_mod.py ${KRITA_PYTHONPATH}
 
-                DEPENDERS build
-            )
-        endif()
+            DEPENDERS build
+        )
     endif()
 endif()
 

@@ -200,7 +200,7 @@ void KisColorSelectorSimple::setColor(const KoColor &color)
     case KisColorSelectorConfiguration::hsySH:
         m_lastClickPos.setX(qBound<qreal>(0., hsyH, 1.));
         m_lastClickPos.setY(1 - hsyS);
-        emit paramChanged(hsyH, -1, -1, hsyS, -1, -1, -1, -1, -1);
+        emit paramChanged(hsyH, -1, -1, -1, -1, -1, -1, hsyS, -1);
         break;
     case KisColorSelectorConfiguration::L:
         m_lastClickPos.setX(qBound<qreal>(0., hslL, 1.));

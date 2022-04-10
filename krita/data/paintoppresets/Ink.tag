@@ -23,6 +23,7 @@ Name[pl]=Atrament
 Name[pt]=Tinta
 Name[pt_BR]=Tinta
 Name[ru]=Чернила
+Name[sk]=Atrament
 Name[sl]=Črnilo
 Name[sv]=Bläck
 Name[uk]=Чорнило

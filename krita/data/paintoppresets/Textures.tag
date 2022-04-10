@@ -23,6 +23,7 @@ Name[pl]=Tekstury
 Name[pt]=Texturas
 Name[pt_BR]=Texturas
 Name[ru]=Текстура
+Name[sk]=Textúra
 Name[sl]=Teksture
 Name[sv]=Strukturer
 Name[uk]=Текстури

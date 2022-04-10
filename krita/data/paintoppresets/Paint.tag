@@ -23,6 +23,7 @@ Name[pl]=Farba
 Name[pt]=Pintura
 Name[pt_BR]=Pintar
 Name[ru]=Краска
+Name[sk]=Kresliť
 Name[sl]=Slikaj
 Name[sv]=Måla
 Name[uk]=Малювання

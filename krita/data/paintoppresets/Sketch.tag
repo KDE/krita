@@ -23,6 +23,7 @@ Name[pl]=Szkic
 Name[pt]=Desenhos
 Name[pt_BR]=Esboço
 Name[ru]=Эскизная кисть
+Name[sk]=Skica
 Name[sl]=Skica
 Name[sv]=Skissa
 Name[uk]=Ескіз

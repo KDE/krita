@@ -51,7 +51,14 @@ KisUsageLogger::KisUsageLogger()
     d->logFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita.log");
     d->sysInfoFile.setFileName(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + "/krita-sysinfo.log");
 
-    rotateLog();
+    QFileInfo fi(d->logFile.fileName());
+    if (fi.size() > 100 * 1000 * 1000) { // 100 mb seems a reasonable max
+        d->logFile.open(QIODevice::Truncate);
+        d->logFile.close();
+    }
+    else {
+        rotateLog();
+    }
 
     d->logFile.open(QFile::Append | QFile::Text);
     d->sysInfoFile.open(QFile::WriteOnly | QFile::Text);
@@ -231,6 +238,7 @@ QString KisUsageLogger::screenInformation()
 void KisUsageLogger::rotateLog()
 {
     if (d->logFile.exists()) {
+
         {
             // Check for CLOSING SESSION
             d->logFile.open(QFile::ReadOnly);

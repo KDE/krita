@@ -53,7 +53,7 @@ KisUsageLogger::KisUsageLogger()
 
     QFileInfo fi(d->logFile.fileName());
     if (fi.size() > 100 * 1000 * 1000) { // 100 mb seems a reasonable max
-        d->logFile.open(QIODevice::Truncate);
+        d->logFile.open(QIODevice::WriteOnly | QIODevice::Truncate);
         d->logFile.close();
     }
     else {

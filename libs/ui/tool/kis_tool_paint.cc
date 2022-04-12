@@ -68,7 +68,8 @@
 KisToolPaint::KisToolPaint(KoCanvasBase *canvas, const QCursor &cursor)
     : KisTool(canvas, cursor),
       m_colorSamplerDelayTimer(),
-      m_isOutlineEnabled(true)
+      m_isOutlineEnabled(true),
+      m_isOutlineVisible(true)
 {
 
     {
@@ -608,13 +609,13 @@ void KisToolPaint::slotPopupQuickHelp()
 void KisToolPaint::activatePrimaryAction()
 {
     sampleColorWasOverridden();
-    setOutlineEnabled(true);
+    setOutlineVisible(true);
     KisTool::activatePrimaryAction();
 }
 
 void KisToolPaint::deactivatePrimaryAction()
 {
-    setOutlineEnabled(false);
+    setOutlineVisible(false);
     KisTool::deactivatePrimaryAction();
 }
 
@@ -623,9 +624,20 @@ bool KisToolPaint::isOutlineEnabled() const
     return m_isOutlineEnabled;
 }
 
-void KisToolPaint::setOutlineEnabled(bool value)
+void KisToolPaint::setOutlineEnabled(bool enabled)
 {
-    m_isOutlineEnabled = value;
+    m_isOutlineEnabled = enabled;
+    requestUpdateOutline(m_outlineDocPoint, lastDeliveredPointerEvent());
+}
+
+bool KisToolPaint::isOutlineVisible() const
+{
+    return m_isOutlineVisible;
+}
+
+void KisToolPaint::setOutlineVisible(bool visible)
+{
+    m_isOutlineVisible = visible;
     requestUpdateOutline(m_outlineDocPoint, lastDeliveredPointerEvent());
 }
 
@@ -701,7 +713,7 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         KisConfig cfg(true);
         KisPaintOpSettings::OutlineMode outlineMode;
 
-        if (isOutlineEnabled() &&
+        if (isOutlineEnabled() && isOutlineVisible() &&
                 (mode() == KisTool::GESTURE_MODE ||
                  ((cfg.newOutlineStyle() == OUTLINE_FULL ||
                    cfg.newOutlineStyle() == OUTLINE_CIRCLE ||

@@ -80,6 +80,8 @@ protected:
 protected:
     bool isOutlineEnabled() const;
     void setOutlineEnabled(bool enabled);
+    bool isOutlineVisible() const;
+    void setOutlineVisible(bool visible);
 
     bool sampleColor(const QPointF &documentPixel, AlternateAction action);
 
@@ -175,6 +177,7 @@ private:
     AlternateAction delayedAction {AlternateAction::NONE};
 
     bool m_isOutlineEnabled;
+    bool m_isOutlineVisible;
     std::vector<int> m_standardBrushSizes;
 
     KisStrokeId m_samplerStrokeId;

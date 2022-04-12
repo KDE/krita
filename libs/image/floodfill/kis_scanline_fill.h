@@ -45,6 +45,36 @@ public:
     void fillSelection(KisPixelSelectionSP pixelSelection);
 
     /**
+     * Fill \p pixelSelection with the opacity of the contiguous area, which
+     * encompass all the connected pixels as long as the color in the
+     * pixels of the source device is not similar to \p referenceColor.
+     * This method uses an existing selection as boundary for the flood fill.
+     */
+    void fillSelectionUntilColorWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection);
+
+    /**
+     * Fill \p pixelSelection with the opacity of the contiguous area, which
+     * encompass all the connected pixels as long as the color in the
+     * pixels of the source device is not similar to \p referenceColor.
+     */
+    void fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor);
+
+    /**
+     * Fill \p pixelSelection with the opacity of the contiguous area, which
+     * encompass all the connected pixels as long as the color in the
+     * pixels of the source device is not similar to \p referenceColor or transparent.
+     * This method uses an existing selection as boundary for the flood fill.
+     */
+    void fillSelectionUntilColorOrTransparentWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection);
+
+    /**
+     * Fill \p pixelSelection with the opacity of the contiguous area, which
+     * encompass all the connected pixels as long as the color in the
+     * pixels of the source device is not similar to \p referenceColor or transparent.
+     */
+    void fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor);
+
+    /**
      * Clear the contiguous non-zero area of the device
      *
      * WARNING: the threshold parameter is not counted!

@@ -169,6 +169,7 @@ public:
     KisOptionCollectionWidgetWithHeader(const QString &title, QWidget *parent = nullptr);
     ~KisOptionCollectionWidgetWithHeader() override;
 
+    QSize minimumSizeHint() const override;
     /**
      * @brief Get the primary widget
      */

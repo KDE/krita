@@ -79,6 +79,7 @@ QPainter *KoClipMaskPainter::maskPainter()
 void KoClipMaskPainter::renderOnGlobalPainter()
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->maskImage.size() == m_d->shapeImage.size());
+    const qreal normCoeff = 1.0 / 255.0;
 
     for (int y = 0; y < m_d->maskImage.height(); y++) {
         QRgb *shapeData = reinterpret_cast<QRgb*>(m_d->shapeImage.scanLine(y));
@@ -86,14 +87,14 @@ void KoClipMaskPainter::renderOnGlobalPainter()
 
         for (int x = 0; x < m_d->maskImage.width(); x++) {
 
-            const qreal normCoeff = 1.0 / 255.0 * 255.0;
 
-            qreal maskValue = qreal(qAlpha(*maskData)) *
+
+            qreal maskValue = qAlpha(*maskData) *
                 (0.2125 * qRed(*maskData) +
                  0.7154 * qGreen(*maskData) +
-                 0.0721 * qBlue(*maskData));
+                 0.0721 * qBlue(*maskData))*normCoeff;
 
-            int alpha = qRound(maskValue * qAlpha(*shapeData) * normCoeff);
+            int alpha = qRound(maskValue * (qAlpha(*shapeData) * normCoeff));
 
             *shapeData = (alpha << 24) | (*shapeData & 0x00ffffff);
 

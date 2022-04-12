@@ -29,6 +29,7 @@
 #include <KoProperties.h>
 #include <KoColorBackground.h>
 #include <KoPathShape.h>
+#include <KoClipMaskPainter.h>
 
 #include <SvgLoadingContext.h>
 #include <SvgGraphicContext.h>
@@ -42,6 +43,7 @@
 #include <QPainterPath>
 #include <QFileInfo>
 #include <QtMath>
+#include <QLineF>
 
 #include <boost/optional.hpp>
 
@@ -65,6 +67,7 @@ struct CharacterResult {
     bool anchored_chunk = false; // whether this is the start of a new chunk.
 
     QPainterPath path;
+    QImage image{0};
     QRectF boundingBox;
     int typographic_index = -1;
     QPointF cssPosition = QPointF();
@@ -84,14 +87,20 @@ public:
     // NOTE: the cache data is shared between all the instances of
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
+
     QThread *cachedLayoutsWorkingThread = 0;
     FT_Library library = NULL;
+
+    TextRendering textRendering = Auto;
+    int xRes = 72;
+    int yRes = 72;
 
     QVector<CharacterResult> result;
 
 
     void clearAssociatedOutlines(const KoShape *rootShape);
     QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
+    QImage convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot);
     void applyTextLength(const KoShape *rootShape,
                          QVector<CharacterResult> &result,
                          int &currentIndex,
@@ -105,6 +114,7 @@ public:
     void applyTextPath(const KoShape *rootShape,
                          QVector<CharacterResult> &result, bool isHorizontal);
     void paintPaths(QPainter &painter, KoShapePaintingContext &paintContext,
+                    QPainterPath outlineRect,
                     const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex);
 };
 
@@ -121,6 +131,7 @@ KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
 {
     setShapeId(KoSvgTextShape_SHAPEID);
     // QTextLayout has no copy-ctor, so just relayout everything!
+    setTextRenderingFromString(rhs.textRenderingString());
     relayout();
 }
 
@@ -147,27 +158,39 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
 
     Q_UNUSED(paintContext);
 
-    /**
-     * HACK ALERT:
-     * QTextLayout should only be accessed from the thread it has been created in.
-     * If the cached layout has been created in a different thread, we should just
-     * recreate the layouts in the current thread to be able to render them.
-     */
-    /*
-    qDebug() << "paint component code";
-    if (QThread::currentThread() != d->cachedLayoutsWorkingThread) {
-        relayout();
-    }*/
-
-    /*for (int i = 0; i < (int)d->cachedLayouts.size(); i++) {
-        //d->cachedLayouts[i]->draw(&painter, d->cachedLayoutsOffsets[i]);
-    }*/
-    //qDebug() << "drawing...";
+    if (d->textRendering == OptimizeLegibility) {
+        /**
+         * HACK ALERT:
+         *
+         * For hinting and bitmaps, we need to get the hinting metrics from freetype,
+         * but those need the DPI. We can't get the DPI normally, however, neither rotate
+         * and shear change the length of a line, and it may not be that bad if freetype
+         * receives a scaled value for the DPI.
+         */
+        int xRes = qRound(painter.transform().map(QLineF(QPointF(), QPointF(72, 0))).length());
+        int yRes = qRound(painter.transform().map(QLineF(QPointF(), QPointF(0, 72))).length());
+        if (xRes != d->xRes || yRes != d->yRes) {
+            d->xRes = xRes;
+            d->yRes = yRes;
+            relayout();
+        }
+    } else {
+        if (72 != d->xRes || 72 != d->yRes) {
+            d->xRes = 72;
+            d->yRes = 72;
+            relayout();
+        }
+    }
+    painter.save();
+    if (d->textRendering == OptimizeSpeed) {
+        painter.setRenderHint(QPainter::Antialiasing, false);
+    }
 
     QPainterPath chunk;
-    chunk.setFillRule(Qt::WindingFill);
     int currentIndex = 0;
-    d->paintPaths(painter, paintContext, this, d->result, chunk, currentIndex);
+    if (d->result.size()>0) {
+        d->paintPaths(painter, paintContext, this->outline(), this, d->result, chunk, currentIndex);
+    }
     /* Debug
     Q_FOREACH (KoShape *child, this->shapes()) {
         const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape*>(child);
@@ -187,6 +210,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
         }
     }
     */
+    painter.restore();
 
     /**
      * HACK ALERT:
@@ -281,6 +305,32 @@ QPainterPath KoSvgTextShape::textOutline() const
     return QPainterPath();
 }
 
+void KoSvgTextShape::setTextRenderingFromString(QString textRendering)
+{
+    if (textRendering == "optimizeSpeed") {
+        d->textRendering = OptimizeSpeed;
+    } else if (textRendering == "optimizeLegibility") {
+        d->textRendering = OptimizeLegibility;
+    } else if (textRendering == "geometricPrecision") {
+        d->textRendering = GeometricPrecision;
+    } else{
+        d->textRendering = Auto;
+    }
+}
+
+QString KoSvgTextShape::textRenderingString() const
+{
+    if (d->textRendering == OptimizeSpeed) {
+        return "optimizeSpeed";
+    } else if (d->textRendering == OptimizeLegibility) {
+        return "optimizeLegibility";
+    } else if (d->textRendering == GeometricPrecision) {
+        return "geometricPrecision";
+    } else {
+        return "auto";
+    }
+}
+
 void KoSvgTextShape::resetTextShape()
 {
     KoSvgTextChunkShape::resetTextShape();
@@ -301,6 +351,15 @@ void KoSvgTextShape::relayout() const
     bool isHorizontal = true;
     if (writingMode == KoSvgText::TopToBottom) {
         isHorizontal = false;
+    }
+    FT_Int32 loadFlags = FT_LOAD_DEFAULT;
+    if (d->textRendering == GeometricPrecision && d->textRendering == Auto) {
+        // without load_no_hinting, the advance and offset will be rounded
+        // to nearest pixel, which we don't want as we're using the vector outline.
+        loadFlags |= FT_LOAD_NO_HINTING;
+        loadFlags |= FT_LOAD_NO_BITMAP;
+    } else {
+        loadFlags |= FT_LOAD_RENDER;
     }
     // First, get text. We use the subChunks because that handles bidi for us.
     // SVG 1.1 suggests that each time the xy position of a piece of text changes,
@@ -359,21 +418,20 @@ void KoSvgTextShape::relayout() const
                 length = lengths.at(i);
                 QString fontFileName = fontFamilies.at(i);
                 qDebug() << start << length << fontFileName;
-                int fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
+                qreal fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
 
 
                 int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
                 if (errorCode == 0) {
                     qDebug() << "face loaded" << fontFileName << fontSize;
                     // We set the DPI to 72, because we want a result in points (1/72 of an inch).
-                    errorCode = FT_Set_Char_Size(face, fontSize*64.0, 0, 72, 72);
-                    FT_Int32 loadFlags = FT_LOAD_DEFAULT;
-                    // without load_no_hinting, the advance and offset will be rounded
-                    // to nearest pixel, which we don't want as we're using the vector outline.
-                    loadFlags |= FT_LOAD_NO_HINTING;
+                    errorCode = FT_Set_Char_Size(face, fontSize*64.0, 0, d->xRes, d->yRes);
 
                     if (!isHorizontal && FT_HAS_VERTICAL(face)) {
                         loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+                    }
+                    if (FT_HAS_COLOR(face)) {
+                        loadFlags |= FT_LOAD_COLOR;
                     }
                     if (FT_HAS_MULTIPLE_MASTERS(face)) {
                         FT_MM_Var*  amaster = nullptr;
@@ -448,33 +506,32 @@ void KoSvgTextShape::relayout() const
     }
     QVector<int> addressableIndices;
 
-    QTransform ftTF;
     const qreal factor = 1/64.;
-    ftTF.scale(factor, -factor);
+    QTransform ftTF = QTransform::fromScale(factor, -factor);
+    QTransform dpiScale = QTransform::fromScale(float(72./d->xRes), float(72./d->yRes));
+    ftTF *= dpiScale;
 
-    QPointF totalAdvance;
+    QPointF totalAdvanceFTFontCoordinates;
 
     for (int g=0; g < int(count); g++) {
 
-        FT_Int32 loadFlags = FT_LOAD_DEFAULT;
-        loadFlags |= FT_LOAD_NO_HINTING;
-
         if (!isHorizontal && FT_HAS_VERTICAL(glyphs[g].ftface)) {
             loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+        }
+        if (FT_HAS_COLOR(glyphs[g].ftface)) {
+            loadFlags |= FT_LOAD_COLOR;
         }
         int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, loadFlags);
         if (error != 0) {
             continue;
         }
 
-        qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
+        //qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
 
         QPainterPath glyph = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
 
         glyph.translate(glyphs[g].x_offset, glyphs[g].y_offset);
         glyph = ftTF.map(glyph);
-        QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
-        advance = ftTF.map(advance);
 
         CharacterResult charResult = result[glyphs[g].cluster];
 
@@ -487,20 +544,28 @@ void KoSvgTextShape::relayout() const
         } else {
             charResult.path = glyph;
         }
-        charResult.advance += advance;
+        // TODO: Handle glyph clusters better...
+        charResult.image = d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph);
         if (glyph.isEmpty()) {
-            if (isHorizontal) {
+            bool usePixmap = !charResult.image.isNull();
+
+            if (usePixmap) {
+                QPointF topLeft(glyphs[g].ftface->glyph->bitmap_left*64,
+                                (glyphs[g].ftface->glyph->bitmap_top - charResult.image.size().height())*64);
+                charResult.boundingBox = QRectF(topLeft, charResult.image.size()*64);
+            } else if (isHorizontal) {
                 charResult.boundingBox = QRectF(0,
-                                                -glyphs[g].ftface->size->metrics.ascender*factor,
-                                                advance.x(),
+                                                glyphs[g].ftface->size->metrics.descender,
+                                                glyphs[g].x_advance,
                                                 (glyphs[g].ftface->size->metrics.ascender
-                                                - glyphs[g].ftface->size->metrics.descender) * factor);
+                                                 - glyphs[g].ftface->size->metrics.descender));
             } else {
-                charResult.boundingBox = QRectF(-(glyphs[g].ftface->size->metrics.height * factor *0.5),
+                charResult.boundingBox = QRectF(-(glyphs[g].ftface->size->metrics.height *0.5),
                                                 0,
-                                                glyphs[g].ftface->size->metrics.height * factor,
-                                                advance.y());
+                                                glyphs[g].ftface->size->metrics.height,
+                                                glyphs[g].y_advance);
             }
+            charResult.boundingBox = ftTF.mapRect(charResult.boundingBox);
         } else {
             charResult.boundingBox = charResult.path.boundingRect();
         }
@@ -514,8 +579,10 @@ void KoSvgTextShape::relayout() const
             charResult.anchored_chunk = true;
         }
         charResult.middle = false;
-        totalAdvance += advance;
-        charResult.cssPosition = totalAdvance - charResult.advance;
+        QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
+        charResult.advance += ftTF.map(advance);
+        totalAdvanceFTFontCoordinates += advance;
+        charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
 
         result[glyphs[g].cluster] = charResult;
     }
@@ -734,6 +801,37 @@ QPainterPath KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec
     return glyph;
 }
 
+QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot)
+{
+   QImage img;
+   QSize size(glyphSlot->bitmap.width, glyphSlot->bitmap.rows);
+
+   if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_MONO) {
+       img = QImage(size, QImage::Format_Mono);
+       uchar *src = glyphSlot->bitmap.buffer;
+       for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
+           memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+           src += glyphSlot->bitmap.pitch;
+       }
+   } else if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_GRAY) {
+       img = QImage(size, QImage::Format_Grayscale8);
+       uchar *src = glyphSlot->bitmap.buffer;
+       for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
+           memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+           src += glyphSlot->bitmap.pitch;
+       }
+   } else if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
+       img = QImage(size, QImage::Format_ARGB32_Premultiplied);
+       uchar *src = glyphSlot->bitmap.buffer;
+       for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
+           memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+           src += glyphSlot->bitmap.pitch;
+       }
+   }
+
+   return img;
+}
+
 void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                                               QVector<CharacterResult> &result,
                                               int &currentIndex,
@@ -852,7 +950,6 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, b
     int start = 0;
     while (start < result.size()) {
         int lowestTypographicalIndex = result.size();
-        int highestTypographicalIndex = 0;
         qreal a = 0;
         qreal b = 0;
         for (i = start; i < result.size(); i++) {
@@ -862,7 +959,6 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, b
             if (result.at(i).typographic_index > -1) {
                 typographicToIndex.insert(result.at(i).typographic_index, i);
                 lowestTypographicalIndex = qMin(lowestTypographicalIndex, result.at(i).typographic_index);
-                highestTypographicalIndex = qMax(highestTypographicalIndex, result.at(i).typographic_index);
             }
             qreal pos = result.at(i).finalPosition.x();
             qreal advance = result.at(i).advance.x();
@@ -921,7 +1017,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
 {
     // Unlike all the other applying functions, this one only iterrates over the top-level.
     // SVG is not designed to have nested textPaths.
-    // https://github.com/w3c/svgwg/issues/580
+    // Source: https://github.com/w3c/svgwg/issues/580
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
     bool inPath = false;
@@ -1032,14 +1128,32 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
 }
 
 void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingContext &paintContext,
-                                         const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex)
+                                         QPainterPath outlineRect, const KoShape *rootShape,
+                                         QVector<CharacterResult> &result, QPainterPath &chunk,
+                                         int &currentIndex)
 {
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
     if (chunkShape->isTextNode()) {
         QTransform tf;
         int j = currentIndex + chunkShape->layoutInterface()->numChars();
-        //qDebug() << "drawing chunk" << currentIndex << j;
+        KoClipMaskPainter fillPainter(&painter,
+                                      painter.transform().mapRect(outlineRect.boundingRect()));
+        if (chunkShape->background()) {
+            if (dynamic_cast<KoColorBackground*>(chunkShape->background().data())) {
+                chunkShape->background()->paint(*fillPainter.shapePainter(), paintContext, chunkShape->outline());
+            } else {
+                chunkShape->background()->paint(*fillPainter.shapePainter(), paintContext, outlineRect);
+            }
+            fillPainter.maskPainter()->fillPath(outlineRect, Qt::black);
+            if (textRendering != OptimizeSpeed) {
+                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
+                fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, true);
+            } else {
+                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
+                fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, false);
+            }
+        }
 
         for (int i = currentIndex; i< j; i++) {
             if (result.at(i).addressable && result.at(i).hidden == false) {
@@ -1071,21 +1185,64 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                 //} else {
                     chunk.addPath(p);
                 //}
+                if (p.isEmpty() && !result.at(i).image.isNull()) {
+                    if (result.at(i).image.isGrayscale() || result.at(i).image.format() == QImage::Format_Mono) {
+                        fillPainter.maskPainter()->save();
+                        fillPainter.maskPainter()->translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+                        fillPainter.maskPainter()->rotate(qRadiansToDegrees(result.at(i).rotate));
+                        fillPainter.maskPainter()->setCompositionMode(QPainter::CompositionMode_Plus);
+                        fillPainter.maskPainter()->drawImage(result.at(i).boundingBox, result.at(i).image);
+                        fillPainter.maskPainter()->restore();
+                    } else {
+                        painter.save();
+                        painter.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+                        painter.rotate(qRadiansToDegrees(result.at(i).rotate));
+                        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+                        painter.drawImage(result.at(i).boundingBox, result.at(i).image);
+                        painter.restore();
+                    }
+                }
             }
         }
-        chunk.setFillRule(Qt::WindingFill);
         if (chunkShape->background()) {
-            chunkShape->background()->paint(painter, paintContext, chunk);
+            chunk.setFillRule(Qt::WindingFill);
+            fillPainter.maskPainter()->fillPath(chunk, Qt::white);
         }
+        fillPainter.renderOnGlobalPainter();
+        KoShapeStrokeSP maskStroke;
         if (chunkShape->stroke()) {
-            chunkShape->stroke()->paint(KoPathShape::createShapeFromPainterPath(chunk), painter);
+
+            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(chunkShape->stroke());
+
+            if (stroke) {
+                if (stroke->lineBrush().gradient()) {
+                    KoClipMaskPainter strokePainter(&painter,
+                                                    painter.transform().mapRect(outlineRect.boundingRect()));
+                    strokePainter.shapePainter()->fillRect(outlineRect.boundingRect(), stroke->lineBrush());
+                    maskStroke = KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
+                    maskStroke->setColor(Qt::white);
+                    maskStroke->setLineBrush(Qt::white);
+                    strokePainter.maskPainter()->fillPath(outlineRect, Qt::black);
+                    if (textRendering != OptimizeSpeed) {
+                        strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
+                    } else {
+                        qDebug() << "turning off antialiasing for strokes";
+                        strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false); 
+                    }
+                    maskStroke->paint(KoPathShape::createShapeFromPainterPath(chunk), *strokePainter.maskPainter());
+                    strokePainter.renderOnGlobalPainter();
+                } else {
+                    stroke->paint(KoPathShape::createShapeFromPainterPath(chunk), painter);
+                }
+            }
+
         }
         chunk = QPainterPath();
         currentIndex = j;
 
     } else {
         Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            paintPaths(painter, paintContext, child, result, chunk, currentIndex);
+            paintPaths(painter, paintContext, outlineRect, child, result, chunk, currentIndex);
         }
     }
 }

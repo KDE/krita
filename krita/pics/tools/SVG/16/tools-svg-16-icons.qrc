@@ -84,5 +84,7 @@
         <file>dark_krita_tool_assistant.svg</file>
         <file>dark_krita_tool_reference_images.svg</file>
         <file>light_krita_tool_reference_images.svg</file>
+        <file>dark_krita_tool_enclose_and_fill.svg</file>
+        <file>light_krita_tool_enclose_and_fill.svg</file>
     </qresource>
 </RCC>

@@ -346,6 +346,8 @@ set(kritaimage_LIB_SRCS
    kis_psd_layer_style.cpp
    KisBezierGradientMesh.cpp
    KisBezierTransformMesh.cpp
+
+   KisEncloseAndFillPainter.cpp
 )
 
 set(einspline_SRCS

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActionCollection version="2" name="Tools">
+  <Actions category="tool-shortcuts">
+    <text>Tool Shortcuts</text>
+   <Action name="KisToolEncloseAndFill">
+      <icon>krita_tool_enclose_and_fill</icon>
+      <text>Enclose and Fill Tool</text>
+      <whatsThis></whatsThis>
+      <toolTip>Enclose and Fill Tool</toolTip>
+      <iconText>Enclose and Fill Tool</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+  </Actions>
+</ActionCollection>

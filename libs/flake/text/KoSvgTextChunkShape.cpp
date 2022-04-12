@@ -619,12 +619,17 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             context.shapeWriter().addAttribute("id", context.getID(this));
             context.shapeWriter().addAttribute("krita:useRichText", s->isRichTextPreferred ? "true" : "false");
 
+            context.shapeWriter().addAttribute("text-rendering",
+                                               textRenderingString());
+
             // save the version to distinguish from the buggy Krita version
             context.shapeWriter().addAttribute("krita:textVersion", 2);
 
             SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
             SvgStyleWriter::saveSvgStyle(this, context);
         } else {
+            context.shapeWriter().addAttribute("text-rendering",
+                                               textRenderingString());
             SvgStyleWriter::saveSvgFill(this, context);
             SvgStyleWriter::saveSvgStroke(this, context);
         }

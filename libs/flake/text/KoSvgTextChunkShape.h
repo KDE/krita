@@ -158,6 +158,11 @@ public:
      */
     const KoShape *textPath();
 
+    virtual QString textRenderingString() const
+    {
+        return QString();
+    }
+
 protected:
     /**
      * Show if the shape is a root of the text hierarchy. Always true for

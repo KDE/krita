@@ -17,14 +17,13 @@
 #include "kis_signal_compressor_with_param.h"
 #include "kis_debug.h"
 
-struct KisPlaybackHandle::Private {
+/*struct KisPlaybackHandle::Private {
     explicit Private(KisFrameDisplayProxy* p_display)
         : displayProxy(p_display) {
 
     }
     PlaybackMode mode = PUSH;
     int framesPerSecond = 24; // TODO: Check if necessary -- perhaps we can just use frameRate setting stored in image entirely??
-    QScopedPointer<QFileInfo> media;
     KisFrameDisplayProxy *displayProxy;
 };
 
@@ -84,17 +83,12 @@ PlaybackMode KisPlaybackHandle::getMode()
 
 void KisPlaybackHandle::setPlaybackMedia(QFileInfo toLoad)
 {
-    if (m_d->media && *m_d->media == toLoad) {
-        return;
-    }
-
-
     m_d->media.reset(new QFileInfo(toLoad));
-    emit sigPlaybackMediaChanged(*m_d->media);
+
 }
 
 QFileInfo* KisPlaybackHandle::playbackMedia()
 {
     return m_d->media.data();
-}
+}*/
 

@@ -11,8 +11,10 @@
 
 #include <QScopedPointer>
 #include <QObject>
+#include <QFileInfo>
 
 #include <kis_time_span.h>
+#include <boost/optional.hpp>
 
 #include "kritaui_export.h"
 
@@ -39,65 +41,23 @@ public:
     KisAnimationPlayer(KisCanvas2 *canvas);
     ~KisAnimationPlayer() override;
 
-    enum SeekFlags {
-        NONE = 0,
-        PUSH_AUDIO = 1,
-        FORCE_RECACHE = 1 << 1
-    };
-
+    void setPlaybackState(PlaybackState state);
     PlaybackState playbackState();
-    qreal playbackSpeed();
+    boost::optional<QFileInfo> mediaInfo();
 
-public Q_SLOTS:
-    void play();
-    void pause();
-    void playPause();
-    void stop();
-
-    void seek(int frameIndex, SeekFlags flags = PUSH_AUDIO);
-    void previousFrame();
-    void nextFrame();
-    void previousKeyframe();
-    void nextKeyframe();
-
+    boost::optional<int> playbackOrigin();
     int visibleFrame();
 
-    /**
-     * @brief previousMatchingKeyframe && nextMatchingKeyframe
-     * Navigate to the next keyframe that has the same color-label
-     * as the current keyframe. Useful to quickly navigate to user-specified
-     * 'similar' keyframes. E.g. Contact points in an animation might have
-     * a specific color to specify importance and be quickly swapped between.
-     */
-    void previousMatchingKeyframe();
-    void nextMatchingKeyframe();
-
-    /**
-     * @brief previousUnfilteredKeyframe && nextUnfilteredKeyframe
-     * Navigate to keyframes based on the current onion skin filtration.
-     * This lets users easily navigate to the next visible "onion-skinned"
-     * keyframe on the active layer.
-     */
-    void previousUnfilteredKeyframe();
-    void nextUnfilteredKeyframe();
-
-    void setPlaybackSpeedPercent(int value);
-    void setPlaybackSpeedNormalized(double value);
+public Q_SLOTS:
+    void showFrame(int frame);
 
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);
-    void sigFrameChanged();
-    void sigPlaybackSpeedChanged(double normalizedSpeed);
     void sigPlaybackStatisticsUpdated();
+    void sigFrameChanged();
+    void sigPlaybackMediaChanged(QFileInfo toLoad);
 
 private:
-    void setPlaybackState(PlaybackState state);
-
-    void nextKeyframeWithColor(int color);
-    void nextKeyframeWithColor(const QSet<int> &validColors);
-    void previousKeyframeWithColor(int color);
-    void previousKeyframeWithColor(const QSet<int> &validColors);
-
     void updateDropFramesMode();
     KisTimeSpan activePlaybackRange();
 

@@ -23,6 +23,7 @@
 #include "commands_new/kis_switch_current_time_command.h"
 #include "kis_command_utils.h"
 #include "KisPart.h"
+#include "KisPlaybackEngine.h"
 #include "kis_animation_cache_populator.h"
 
 struct KisTimeBasedItemModel::Private
@@ -513,11 +514,10 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     return true;
 }
 
+// Where the scrubbing flags should be considered in the future...
 void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 {
-    if (m_d->animationPlayer && m_d->animationPlayer->playbackState() != PlaybackState::PLAYING ) {
-        m_d->animationPlayer->seek(time);
-    }
+    KisPart::instance()->playbackEngine()->seek(time);
 }
 
 void KisTimeBasedItemModel::setScrubState(bool active)
@@ -644,8 +644,7 @@ bool KisTimeBasedItemModel::isPlaybackPaused() const
 }
 
 void KisTimeBasedItemModel::stopPlayback() const {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->animationPlayer);
-    m_d->animationPlayer->stop();
+    KisPart::instance()->playbackEngine()->stop();
 }
 
 int KisTimeBasedItemModel::currentTime() const

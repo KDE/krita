@@ -27,7 +27,7 @@ class KisFrameDisplayProxy;
  * This should also enable us to play back unfocused canvases using a less accurate timer
  * to take up less system resource later down the line.
  */
-class KisPlaybackHandle : public QObject
+/*class KisPlaybackHandle : public QObject
 {
     Q_OBJECT
 
@@ -56,11 +56,10 @@ Q_SIGNALS:
     void sigRequestPushAudio();
     void sigFrameRateChanged(int p_frameRate);
     void sigModeChange(PlaybackMode p_mode) const;
-    void sigPlaybackMediaChanged(QFileInfo toLoad);
 
 private:
     struct Private;
     QScopedPointer<Private> m_d;
-};
+};*/
 
 #endif // KISMLTPLAYER_H

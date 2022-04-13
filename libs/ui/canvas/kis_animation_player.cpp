@@ -209,7 +209,6 @@ public:
     Private(KisCanvas2* p_canvas)
         : canvas(p_canvas)
         , displayProxy( new KisFrameDisplayProxy(p_canvas) )
-        , playbackHandle( KisPart::instance()->playbackEngine()->leaseHandle(p_canvas, displayProxy.data()) )
         , playbackEnvironment( nullptr )
         , playbackStatisticsCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
     {
@@ -217,8 +216,9 @@ public:
 
     KisCanvas2 *canvas;
     PlaybackState state;
+    PlaybackMode mode;
     QScopedPointer<KisFrameDisplayProxy> displayProxy;
-    QSharedPointer<KisPlaybackHandle> playbackHandle; //Abstraction of playback controls / play-position.
+    QScopedPointer<QFileInfo> media;
     QScopedPointer<PlaybackEnvironment> playbackEnvironment; //Sets up canvas / environment for playback
 
     KisSignalCompressor playbackStatisticsCompressor;
@@ -230,16 +230,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
     , m_d(new Private(canvas))
 {
     setPlaybackState(STOPPED);
-    setPlaybackSpeedNormalized(1.0f);
-
-    // Handle will recieve notifications from playback engine to display a specific frame. We should
-    // only care about these when the user is playing an animation!
-    connect(m_d->playbackHandle.data(), &KisPlaybackHandle::sigFrameShow, this, [this](int p_frame){
-        KIS_ASSERT(m_d->displayProxy);
-        if (m_d->state == PLAYING) {
-            m_d->displayProxy->displayFrame(p_frame);
-        }
-    }, Qt::QueuedConnection);
 
     connect(m_d->displayProxy.data(), SIGNAL(sigDisplayFrameChanged()), this, SIGNAL(sigFrameChanged()));
 
@@ -256,11 +246,6 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
         }
     });
 
-    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
-       m_d->playbackHandle->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
-    });
-    m_d->playbackHandle->setFrameRate(m_d->canvas->image()->animationInterface()->framerate());
-
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisAnimationPlayer::setupAudioTracks);
     setupAudioTracks();
 }
@@ -274,180 +259,21 @@ PlaybackState KisAnimationPlayer::playbackState()
     return m_d->state;
 }
 
-void KisAnimationPlayer::updateDropFramesMode()
+boost::optional<QFileInfo> KisAnimationPlayer::mediaInfo()
 {
-    KisConfig cfg(true);
-}
-
-void KisAnimationPlayer::play()
-{
-    if (!m_d->playbackEnvironment) {
-        m_d->playbackEnvironment.reset(new PlaybackEnvironment(m_d->displayProxy->visibleFrame(), this));
-    }
-
-    m_d->playbackEnvironment->prepare(m_d->canvas);
-    setPlaybackState(PLAYING);
-}
-
-void KisAnimationPlayer::pause()
-{
-    KIS_ASSERT(m_d->playbackEnvironment);
-    KIS_ASSERT(playbackState() == PLAYING);
-    m_d->playbackEnvironment->restore();
-    setPlaybackState(PAUSED);
-}
-
-void KisAnimationPlayer::playPause()
-{
-    if (m_d->state == PLAYING) {
-        pause();
+    if (m_d->media) {
+        return boost::optional<QFileInfo>(*m_d->media);
     } else {
-        play();
+        return boost::none;
     }
 }
 
-void KisAnimationPlayer::stop()
+boost::optional<int> KisAnimationPlayer::playbackOrigin()
 {
-    if (playbackState() != STOPPED) {
-        KIS_ASSERT(m_d->playbackEnvironment);
-        if (playbackState() != PAUSED)
-            m_d->playbackEnvironment->restore();
-
-        const int origin = m_d->playbackEnvironment->originFrame();
-        m_d->playbackEnvironment.reset();
-
-        setPlaybackState(STOPPED);
-        m_d->displayProxy->displayFrame(origin);
-    } else if (m_d->displayProxy->visibleFrame() != 0) {
-        seek(0);
-    }
-}
-
-void KisAnimationPlayer::seek(int frameIndex, SeekFlags flags)
-{
-    if (!m_d->canvas || !m_d->canvas->image()) return;
-
-    if (m_d->state != PLAYING) {
-        m_d->playbackHandle->seek(frameIndex);
-        if (flags & PUSH_AUDIO) {
-            m_d->playbackHandle->pushAudio();
-        }
-        m_d->displayProxy->displayFrame(frameIndex);
-    }
-}
-
-void KisAnimationPlayer::previousFrame()
-{
-    if (!m_d->canvas) return;
-    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-
-    const int startFrame = animInterface->playbackRange().start();
-    const int endFrame = animInterface->playbackRange().end();
-
-    int frame = visibleFrame() - 1;
-
-    if (frame < startFrame || frame >  endFrame) {
-        frame = endFrame;
-    }
-
-    if (frame >= 0) {
-        if (m_d->state != STOPPED) {
-            stop();
-        }
-
-        seek(frame);
-    }
-}
-
-void KisAnimationPlayer::nextFrame()
-{
-    if (!m_d->canvas) return;
-    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-
-    const int startFrame = animInterface->playbackRange().start();
-    const int endFrame = animInterface->playbackRange().end();
-
-    int frame = visibleFrame() + 1;
-
-    if (frame > endFrame || frame < startFrame ) {
-        frame = startFrame;
-    }
-
-    if (frame >= 0) {
-        if (m_d->state != STOPPED) {
-            stop();
-        }
-
-        seek(frame);
-    }
-}
-
-void KisAnimationPlayer::previousKeyframe()
-{
-    if (!m_d->canvas) return;
-
-    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int currentFrame = visibleFrame();
-
-    int destinationTime = -1;
-    if (!keyframes->keyframeAt(currentFrame)) {
-        destinationTime = keyframes->activeKeyframeTime(currentFrame);
+    if (m_d->playbackEnvironment) {
+        return boost::optional<int>(m_d->playbackEnvironment->originFrame());
     } else {
-        destinationTime = keyframes->previousKeyframeTime(currentFrame);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->state != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime);
-    }
-}
-
-void KisAnimationPlayer::nextKeyframe()
-{
-    if (!m_d->canvas) return;
-    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int currentTime = visibleFrame();
-
-    int destinationTime = -1;
-    if (keyframes->activeKeyframeAt(currentTime)) {
-        destinationTime = keyframes->nextKeyframeTime(currentTime);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        // Jump to next key...
-        if (m_d->state != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime);
-    } else {
-        // Jump ahead by estimated timing...
-        const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
-        const int previousKeyTime = keyframes->previousKeyframeTime(activeKeyTime);
-
-        if (previousKeyTime != -1) {
-            if (m_d->state != STOPPED) {
-                stop();
-            }
-
-            const int timing = activeKeyTime - previousKeyTime;
-            seek(currentTime + timing);
-        }
+        return boost::none;
     }
 }
 
@@ -456,132 +282,14 @@ int KisAnimationPlayer::visibleFrame()
     return m_d->displayProxy->visibleFrame();
 }
 
-void KisAnimationPlayer::previousMatchingKeyframe()
+void KisAnimationPlayer::showFrame(int frame)
 {
-    if (!m_d->canvas) return;
-
-    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = visibleFrame();
-
-    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : keyframes->keyframeAt(destinationTime)->colorLabel();
-    previousKeyframeWithColor(desiredColor);
+    m_d->displayProxy->displayFrame(frame);
 }
 
-void KisAnimationPlayer::nextMatchingKeyframe()
+void KisAnimationPlayer::updateDropFramesMode()
 {
-    if (!m_d->canvas) return;
-
-    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = visibleFrame();
-
-    if (!keyframes->activeKeyframeAt(time)) {
-        return;
-    }
-
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    nextKeyframeWithColor(keyframes->keyframeAt(destinationTime)->colorLabel());
-}
-
-void KisAnimationPlayer::previousUnfilteredKeyframe()
-{
-    previousKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
-}
-
-void KisAnimationPlayer::nextUnfilteredKeyframe()
-{
-    nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
-}
-
-void KisAnimationPlayer::nextKeyframeWithColor(int color)
-{
-    QSet<int> validColors;
-    validColors.insert(color);
-    nextKeyframeWithColor(validColors);
-}
-
-void KisAnimationPlayer::nextKeyframeWithColor(const QSet<int> &validColors)
-{
-    if (!m_d->canvas) return;
-
-    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = visibleFrame();
-
-    if (!keyframes->activeKeyframeAt(time)) {
-        return;
-    }
-
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    while ( keyframes->keyframeAt(destinationTime) &&
-            ((destinationTime == time) ||
-            !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
-
-        destinationTime = keyframes->nextKeyframeTime(destinationTime);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->state != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime);
-    }
-}
-
-void KisAnimationPlayer::previousKeyframeWithColor(int color)
-{
-    QSet<int> validColors;
-    validColors.insert(color);
-    previousKeyframeWithColor(validColors);
-}
-
-void KisAnimationPlayer::previousKeyframeWithColor(const QSet<int> &validColors)
-{
-    if (!m_d->canvas) return;
-
-    KisNodeSP node = m_d->canvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = visibleFrame();
-
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    while (keyframes->keyframeAt(destinationTime) &&
-           ((destinationTime == time) ||
-           !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
-
-        destinationTime = keyframes->previousKeyframeTime(destinationTime);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->state != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime);
-    }
+    KisConfig cfg(true);
 }
 
 KisTimeSpan KisAnimationPlayer::activePlaybackRange()
@@ -610,29 +318,10 @@ void KisAnimationPlayer::setupAudioTracks()
         //Only get first file for now and make that a producer...
         QFileInfo toLoad = files.first();
         if (toLoad.exists()) {
-            m_d->playbackHandle->setPlaybackMedia(toLoad);
+            m_d->media.reset(new QFileInfo(toLoad));
+            emit sigPlaybackMediaChanged(*m_d->media);
         }
     }
-}
-
-qreal KisAnimationPlayer::playbackSpeed()
-{
-    Q_UNIMPLEMENTED();
-    return 1.0;
-}
-
-void KisAnimationPlayer::setPlaybackSpeedPercent(int value)
-{
-    const float normalizedSpeed = value / 100.0;
-    setPlaybackSpeedNormalized(normalizedSpeed);
-}
-
-void KisAnimationPlayer::setPlaybackSpeedNormalized(double value)
-{
-    /*if (m_d->mediaConsumer->playbackSpeed() != value) {
-        m_d->mediaConsumer->setPlaybackSpeed( value );
-        emit sigPlaybackSpeedChanged(m_d->mediaConsumer->playbackSpeed());
-    }*/
 }
 
 void KisAnimationPlayer::setPlaybackState(PlaybackState p_state)
@@ -640,10 +329,21 @@ void KisAnimationPlayer::setPlaybackState(PlaybackState p_state)
     if (m_d->state != p_state) {
         m_d->state = p_state;
         if (m_d->state == PLAYING) {
-            m_d->playbackHandle->setMode(PlaybackMode::PULL);
+            if (!m_d->playbackEnvironment) {
+                m_d->playbackEnvironment.reset(new PlaybackEnvironment(m_d->displayProxy->visibleFrame(), this));
+            }
+
+            m_d->playbackEnvironment->prepare(m_d->canvas);
         } else {
-            m_d->playbackHandle->setMode(PlaybackMode::PUSH);
+            if (m_d->playbackEnvironment) {
+                m_d->playbackEnvironment->restore();
+            }
+
+            if (m_d->state == STOPPED) {
+                m_d->playbackEnvironment.reset();
+            }
         }
+
         emit sigPlaybackStateChanged(m_d->state);
     }
 }

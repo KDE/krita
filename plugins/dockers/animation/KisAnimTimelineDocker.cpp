@@ -33,6 +33,8 @@
 #include "kis_image_config.h"
 #include "kis_keyframe_channel.h"
 #include "kis_image.h"
+#include "KisPart.h"
+#include "KisPlaybackEngine.h"
 
 #include "KisAnimTimelineFramesModel.h"
 #include "KisAnimTimelineFramesView.h"
@@ -494,81 +496,61 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     action = actionManager->createAction("toggle_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->playPause();
-        }
+        KisPart::instance()->playbackEngine()->playPause();
     });
 
     action = actionManager->createAction("stop_playback");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->stop();
-        }
+        KisPart::instance()->playbackEngine()->stop();
     });
 
     action = actionManager->createAction("previous_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->previousFrame();
-        }
+        KisPart::instance()->playbackEngine()->previousFrame();
     });
 
     action = actionManager->createAction("next_frame");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->nextFrame();
-        }
+        KisPart::instance()->playbackEngine()->nextFrame();
     });
 
     action = actionManager->createAction("previous_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->previousKeyframe();
-        }
+    connect(action, &KisAction::triggered, this, [](bool){
+        KisPart::instance()->playbackEngine()->previousKeyframe();
     });
 
     action = actionManager->createAction("next_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->nextKeyframe();
-        }
+    connect(action, &KisAction::triggered, this, [](bool){
+        KisPart::instance()->playbackEngine()->nextKeyframe();
     });
 
     action = actionManager->createAction("previous_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->previousMatchingKeyframe();
-        }
+    connect(action, &KisAction::triggered, this, [](bool){
+        KisPart::instance()->playbackEngine()->previousMatchingKeyframe();
     });
 
     action = actionManager->createAction("next_matching_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->nextMatchingKeyframe();
-        }
+    connect(action, &KisAction::triggered, this, [](bool){
+        KisPart::instance()->playbackEngine()->nextMatchingKeyframe();
     });
 
     action = actionManager->createAction("previous_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->previousUnfilteredKeyframe();
-        }
+    connect(action, &KisAction::triggered, this, [](bool){
+        KisPart::instance()->playbackEngine()->previousUnfilteredKeyframe();
     });
 
     action = actionManager->createAction("next_unfiltered_keyframe");
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
-    connect(action, &KisAction::triggered, [this](bool){
-        if (m_d->canvas) {
-            m_d->canvas->animationPlayer()->nextUnfilteredKeyframe();
-        }
+    connect(action, &KisAction::triggered, this, [](bool){
+        KisPart::instance()->playbackEngine()->nextUnfilteredKeyframe();
     });
 
     action = actionManager->createAction("last_frame");

@@ -368,15 +368,15 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                     this, SLOT(updateFrameCache()));
 
         m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == PlaybackState::PLAYING);
-        connect(m_d->titlebar->transport, SIGNAL(skipBack()), m_d->canvas->animationPlayer(), SLOT(previousKeyframe()));
-        connect(m_d->titlebar->transport, SIGNAL(back()), m_d->canvas->animationPlayer(), SLOT(previousFrame()));
-        connect(m_d->titlebar->transport, SIGNAL(stop()), m_d->canvas->animationPlayer(), SLOT(stop()));
-        connect(m_d->titlebar->transport, SIGNAL(playPause()), m_d->canvas->animationPlayer(), SLOT(playPause()));
-        connect(m_d->titlebar->transport, SIGNAL(forward()), m_d->canvas->animationPlayer(), SLOT(nextFrame()));
-        connect(m_d->titlebar->transport, SIGNAL(skipForward()), m_d->canvas->animationPlayer(), SLOT(nextKeyframe()));
+        connect(m_d->titlebar->transport, SIGNAL(skipBack()), KisPart::instance()->playbackEngine(), SLOT(previousKeyframe()));
+        connect(m_d->titlebar->transport, SIGNAL(back()), KisPart::instance()->playbackEngine(), SLOT(previousFrame()));
+        connect(m_d->titlebar->transport, SIGNAL(stop()), KisPart::instance()->playbackEngine(), SLOT(stop()));
+        connect(m_d->titlebar->transport, SIGNAL(playPause()), KisPart::instance()->playbackEngine(), SLOT(playPause()));
+        connect(m_d->titlebar->transport, SIGNAL(forward()), KisPart::instance()->playbackEngine(), SLOT(nextFrame()));
+        connect(m_d->titlebar->transport, SIGNAL(skipForward()), KisPart::instance()->playbackEngine(), SLOT(nextKeyframe()));
 
-        connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(seek(int)));
-        connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), m_d->canvas->animationPlayer(), SLOT(setPlaybackSpeedPercent(int)));
+        connect(m_d->titlebar->frameRegister, SIGNAL(valueChanged(int)), KisPart::instance()->playbackEngine(), SLOT(seek(int)));
+        connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), KisPart::instance()->playbackEngine(), SLOT(setPlaybackSpeedPercent(int)));
 
         connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
         connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeStartTime(int)));

@@ -490,9 +490,18 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
 //            activeProducer->seek(m_d->activePlayer()->visibleFrame());
 //        });
 
+        connect(m_d->activePlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, this, [this](PlaybackState state){
+            Q_UNUSED(state);
+            if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
+                m_d->pullConsumer->stop();
+            } else {
+                m_d->pullConsumer->start();
+            }
+        });
+
         connect(m_d->activePlayer(), &KisAnimationPlayer::sigPlaybackMediaChanged, this, &KisPlaybackEngine::setupProducerFromFile);
 
-        m_d->profile->set_frame_rate(1, m_d->activeCanvas->image()->animationInterface()->framerate());
+        m_d->profile->set_frame_rate(m_d->activeCanvas->image()->animationInterface()->framerate(), 1);
 
         if (m_d->activePlayer()->mediaInfo().has_value()) {
             setupProducerFromFile(m_d->activePlayer()->mediaInfo().value());

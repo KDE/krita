@@ -11,6 +11,7 @@
 #include <raqm.h>
 #include <fontconfig/fontconfig.h>
 #include FT_MULTIPLE_MASTERS_H
+#include FT_COLOR_H
 #include <klocalizedstring.h>
 
 #include "KoSvgText.h"
@@ -68,6 +69,11 @@ struct CharacterResult {
 
     QPainterPath path;
     QImage image{0};
+
+    QVector<QPainterPath> colorLayers;
+    QVector<QBrush> colorLayerColors;
+    QVector<bool> replaceWithForeGroundColor;
+
     QRectF boundingBox;
     int typographic_index = -1;
     QPointF cssPosition = QPointF();
@@ -184,6 +190,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
     painter.save();
     if (d->textRendering == OptimizeSpeed) {
         painter.setRenderHint(QPainter::Antialiasing, false);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform, false);
     }
 
     QPainterPath chunk;
@@ -361,6 +368,14 @@ void KoSvgTextShape::relayout() const
     } else {
         loadFlags |= FT_LOAD_RENDER;
     }
+
+    // Whenever the freetype docs talk about a 26.6 floating point unit, they mean a 1/64 value.
+    const qreal ftFontUnit = 64.0;
+    const qreal ftFontUnitFactor = 1/ftFontUnit;
+    QTransform ftTF = QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor);
+    QTransform dpiScale = QTransform::fromScale(float(72./d->xRes), float(72./d->yRes));
+    ftTF *= dpiScale;
+
     // First, get text. We use the subChunks because that handles bidi for us.
     // SVG 1.1 suggests that each time the xy position of a piece of text changes,
     // that this should be seperately shaped, but according to SVGWG issues 631 and 635
@@ -424,15 +439,45 @@ void KoSvgTextShape::relayout() const
                 int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
                 if (errorCode == 0) {
                     qDebug() << "face loaded" << fontFileName << fontSize;
-                    // We set the DPI to 72, because we want a result in points (1/72 of an inch).
-                    errorCode = FT_Set_Char_Size(face, fontSize*64.0, 0, d->xRes, d->yRes);
+                    FT_Int32 faceLoadFlags = loadFlags;
+                    if (FT_HAS_COLOR(face)) {
+                        faceLoadFlags |= FT_LOAD_COLOR;
+                    }
+                    if (!FT_IS_SCALABLE(face)) {
+                        int fontSizePixels = fontSize * ftFontUnit * (72./300.);
+                        int sizeDelta = 0;
+                        int selectedIndex = -1;
+
+                        for (int i=0; i<face->num_fixed_sizes; i++) {
+                            int newDelta = qAbs((fontSizePixels) - face->available_sizes[i].height);
+                            if (newDelta < sizeDelta || i == 0) {
+                                selectedIndex = i;
+                                sizeDelta = newDelta;
+                            }
+                        }
+
+                        if (selectedIndex >= 0) {
+                            if (FT_HAS_COLOR(face)) {
+                                qreal scale = qreal(fontSizePixels/face->available_sizes[selectedIndex].x_ppem);
+                                FT_Matrix matrix;
+                                matrix.xx = scale;
+                                matrix.yy = scale;
+                                FT_Vector v;
+                                FT_Set_Transform(face, &matrix, &v);
+                            }
+                            errorCode = FT_Select_Size(face, selectedIndex);
+                            qDebug() << errorCode << face->available_sizes[selectedIndex].height << face->available_sizes[selectedIndex].width;
+                        }
+                    } else {
+                        // We set the DPI to 72, because we want a result in points (1/72 of an inch).
+                        errorCode = FT_Set_Char_Size(face, fontSize*ftFontUnit, 0, d->xRes, d->yRes);
+                    }
+
 
                     if (!isHorizontal && FT_HAS_VERTICAL(face)) {
-                        loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+                        faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
                     }
-                    if (FT_HAS_COLOR(face)) {
-                        loadFlags |= FT_LOAD_COLOR;
-                    }
+
                     if (FT_HAS_MULTIPLE_MASTERS(face)) {
                         FT_MM_Var*  amaster = nullptr;
                         FT_Get_MM_Var(face, &amaster);
@@ -469,11 +514,11 @@ void KoSvgTextShape::relayout() const
                     if (errorCode == 0) {
                         if (start == 0) {
                             raqm_set_freetype_face(layout, face);
-                            raqm_set_freetype_load_flags(layout, loadFlags);
+                            raqm_set_freetype_load_flags(layout, faceLoadFlags);
                         }
                         if (length > 0) {
                             raqm_set_freetype_face_range(layout, face, start, length);
-                            raqm_set_freetype_load_flags_range(layout, loadFlags, start, length);
+                            raqm_set_freetype_load_flags_range(layout, faceLoadFlags, start, length);
                         }
                     }
                 } else {
@@ -506,27 +551,22 @@ void KoSvgTextShape::relayout() const
     }
     QVector<int> addressableIndices;
 
-    const qreal factor = 1/64.;
-    QTransform ftTF = QTransform::fromScale(factor, -factor);
-    QTransform dpiScale = QTransform::fromScale(float(72./d->xRes), float(72./d->yRes));
-    ftTF *= dpiScale;
-
     QPointF totalAdvanceFTFontCoordinates;
 
     for (int g=0; g < int(count); g++) {
-
+        FT_Int32 faceLoadFlags = loadFlags;
         if (!isHorizontal && FT_HAS_VERTICAL(glyphs[g].ftface)) {
-            loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+            faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
         }
         if (FT_HAS_COLOR(glyphs[g].ftface)) {
-            loadFlags |= FT_LOAD_COLOR;
+            faceLoadFlags |= FT_LOAD_COLOR;
         }
-        int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, loadFlags);
+        int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, faceLoadFlags);
         if (error != 0) {
             continue;
         }
 
-        //qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster;
+        //qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster << glyphs[g].index;
 
         QPainterPath glyph = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
 
@@ -546,6 +586,7 @@ void KoSvgTextShape::relayout() const
         }
         // TODO: Handle glyph clusters better...
         charResult.image = d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph);
+
         if (glyph.isEmpty()) {
             bool usePixmap = !charResult.image.isNull();
 
@@ -569,6 +610,50 @@ void KoSvgTextShape::relayout() const
         } else {
             charResult.boundingBox = charResult.path.boundingRect();
         }
+
+        // Retreive CPAL/COLR V0 color layers, directly based off the sample code in the freetype docs.
+        FT_UInt layerGlyphIndex = 0;
+        FT_UInt layerColorIndex = 0;
+        FT_LayerIterator  iterator;
+        FT_Color*         palette;
+        int paletteIndex = 0;
+        error = FT_Palette_Select( glyphs[g].ftface, paletteIndex, &palette );
+        if ( error ) {
+            palette = NULL;
+        }
+        iterator.p = NULL;
+        bool haveLayers = FT_Get_Color_Glyph_Layer( glyphs[g].ftface,
+                                                  glyphs[g].index,
+                                                  &layerGlyphIndex,
+                                                  &layerColorIndex,
+                                                  &iterator );
+        if (haveLayers && palette) {
+            do {
+                QBrush layerColor;
+                bool isForeGroundColor = false;
+
+                if ( layerColorIndex == 0xFFFF ) {
+                    layerColor = Qt::black;
+                    isForeGroundColor = true;
+                } else {
+                    FT_Color color = palette[layerColorIndex];
+                    layerColor = QColor(color.red, color.green, color.blue, color.alpha);
+                }
+                FT_Load_Glyph(glyphs[g].ftface, layerGlyphIndex, faceLoadFlags);
+                QPainterPath p = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
+                p.translate(glyphs[g].x_offset, glyphs[g].y_offset);
+                charResult.colorLayers.append(ftTF.map(p));
+                charResult.colorLayerColors.append(layerColor);
+                charResult.replaceWithForeGroundColor.append(isForeGroundColor);
+
+            } while (FT_Get_Color_Glyph_Layer( glyphs[g].ftface,
+                                               glyphs[g].index,
+                                               &layerGlyphIndex,
+                                               &layerColorIndex,
+                                               &iterator ));
+        }
+
+
         charResult.typographic_index = g;
         charResult.addressable = true;
         addressableIndices.append(glyphs[g].cluster);
@@ -824,7 +909,18 @@ QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyph
        img = QImage(size, QImage::Format_ARGB32_Premultiplied);
        uchar *src = glyphSlot->bitmap.buffer;
        for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
-           memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+           if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
+               // TODO: actually test this... We need to go from BGRA to ARGB.
+               for (int x = 0; x < static_cast<int>(size.width()); x++) {
+                   int p = x*4;
+                   img.scanLine(y)[p]   = src[p+3];
+                   img.scanLine(y)[p+1] = src[p+2];
+                   img.scanLine(y)[p+2] = src[p+1];
+                   img.scanLine(y)[p+3] = src[p];
+               }
+           } else {
+               memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+           }
            src += glyphSlot->bitmap.pitch;
        }
    }
@@ -1183,7 +1279,21 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                 //if (chunk.intersects(p)) {
                 //    chunk |= tf.map(result.at(i).path);
                 //} else {
+                if (result.at(i).colorLayers.size()) {
+                    for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
+                        QBrush color = result.at(i).colorLayerColors.at(c);
+                        bool replace = result.at(i).replaceWithForeGroundColor.at(c);
+                        // In theory we can use the pattern or gradient as well for ColorV0 fonts, but ColorV1
+                        // fonts can have gradients, so I am hesitant.
+                        KoColorBackground *b = dynamic_cast<KoColorBackground*>(chunkShape->background().data());
+                        if (b && replace) {
+                            color = b->brush();
+                        }
+                        painter.fillPath(tf.map(result.at(i).colorLayers.at(c)), color);
+                    }
+                } else {
                     chunk.addPath(p);
+                }
                 //}
                 if (p.isEmpty() && !result.at(i).image.isNull()) {
                     if (result.at(i).image.isGrayscale() || result.at(i).image.format() == QImage::Format_Mono) {

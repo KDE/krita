@@ -17,7 +17,12 @@
 KisDocumentUndoStore::KisDocumentUndoStore(KisDocument *doc)
     : m_doc(doc)
 {
-    connect(doc->undoStack(), SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()));
+    /// The thread of the document should be the same as the store to
+    /// avoid incorrect signal delivery
+    KIS_SAFE_ASSERT_RECOVER_NOOP(doc->thread() == this->thread());
+
+    // Use direct connection to avoid queueing the singal forwarding (BUG:447985)
+    connect(doc->undoStack(), SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()), Qt::DirectConnection);
 }
 
 const KUndo2Command* KisDocumentUndoStore::presentCommand()

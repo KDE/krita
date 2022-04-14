@@ -16,11 +16,14 @@
 KisSurrogateUndoStore::KisSurrogateUndoStore()
     : m_undoStack(new KUndo2Stack)
 {
-    connect(m_undoStack, SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()));
+    // Use direct connection to avoid queueing the singal forwarding (BUG:447985)
+    connect(m_undoStack, SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()), Qt::DirectConnection);
 }
 
 KisSurrogateUndoStore::~KisSurrogateUndoStore()
 {
+    // disconnect the signal to avoid the it being emitted on destruction
+    disconnect(m_undoStack, SIGNAL(indexChanged(int)), this, SIGNAL(historyStateChanged()));
     delete m_undoStack;
 }
 

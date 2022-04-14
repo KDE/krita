@@ -188,7 +188,7 @@ void KisOpenGLCanvas2::paintGL()
     }
 
     KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
-    QRect canvasImageDirtyRect = d->canvasImageDirtyRect;
+    QRect canvasImageDirtyRect = d->canvasImageDirtyRect & rect();
     d->canvasImageDirtyRect = QRect();
     d->renderer->paintCanvasOnly(canvasImageDirtyRect, updateRect);
     {

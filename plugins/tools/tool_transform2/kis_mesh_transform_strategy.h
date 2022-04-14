@@ -32,7 +32,7 @@ public:
 
 
     void setTransformFunction(const QPointF &mousePos, bool perspectiveModifierActive, bool shiftModifierActive, bool altModifierActive) override;
-    QPointF handleSnapPoint(const QPointF &imagePos);
+    QPointF handleSnapPoint(const QPointF &imagePos) override;
     bool shiftModifierIsUsed() const override;
 
     void paint(QPainter &gc) override;

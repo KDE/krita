@@ -28,22 +28,40 @@
 class FileSystemWatcherWrapper : public QObject
 {
     Q_OBJECT
+
+private:
+    enum FileState {
+        Exists = 0,
+        Reattaching,
+        Lost
+    };
+
+    struct FileEntry
+    {
+        int numConnections = 0;
+        QElapsedTimer lostTimer;
+        FileState state = Exists;
+    };
+
 public:
     FileSystemWatcherWrapper()
-        : m_reattachmentCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+        : m_reattachmentCompressor(100, KisSignalCompressor::FIRST_INACTIVE),
+          m_lostCompressor(1000, KisSignalCompressor::FIRST_INACTIVE)
+
     {
         connect(&m_watcher, SIGNAL(fileChanged(QString)), SLOT(slotFileChanged(QString)));
-        connect(&m_reattachmentCompressor, SIGNAL(timeout()), SLOT(slotReattachLostFiles()));
+        connect(&m_reattachmentCompressor, SIGNAL(timeout()), SLOT(slotReattachFiles()));
+        connect(&m_lostCompressor, SIGNAL(timeout()), SLOT(slotFindLostFiles()));
     }
 
     bool addPath(const QString &file) {
         bool result = true;
         const QString ufile = unifyFilePath(file);
 
-        if (m_pathCount.contains(ufile)) {
-            m_pathCount[ufile]++;
+        if (m_fileEntries.contains(ufile)) {
+            m_fileEntries[ufile].numConnections++;
         } else {
-            m_pathCount.insert(ufile, 1);
+            m_fileEntries.insert(ufile, {1, {}, Exists});
             result = m_watcher.addPath(ufile);
         }
 
@@ -54,13 +72,13 @@ public:
         bool result = true;
         const QString ufile = unifyFilePath(file);
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_pathCount.contains(ufile), false);
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(m_fileEntries.contains(ufile), false);
 
-        if (m_pathCount[ufile] == 1) {
-            m_pathCount.remove(ufile);
+        if (m_fileEntries[ufile].numConnections == 1) {
+            m_fileEntries.remove(ufile);
             result = m_watcher.removePath(ufile);
         } else {
-            m_pathCount[ufile]--;
+            m_fileEntries[ufile].numConnections--;
         }
         return result;
     }
@@ -71,23 +89,48 @@ public:
 
 private Q_SLOTS:
     void slotFileChanged(const QString &path) {
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(m_fileEntries.contains(path));
+
+        FileEntry &entry = m_fileEntries[path];
+
         // re-add the file after QSaveFile optimization
         if (!m_watcher.files().contains(path)) {
 
             if (QFileInfo(path).exists()) {
+                const FileState oldState = entry.state;
+
                 m_watcher.addPath(path);
-                m_lostFilesAbsenceCounter.remove(path);
-                emit fileChanged(path);
-            } else {
-                if (m_lostFilesAbsenceCounter.contains(path)) {
-                    m_lostFilesAbsenceCounter[path]++;
+                entry.state = Exists;
+
+                if (oldState == Lost) {
+                    emit fileExistsStateChanged(path, true);
                 } else {
-                    m_lostFilesAbsenceCounter[path] = 0;
+                    emit fileChanged(path);
                 }
 
-                const int absenceTimeMSec =
-                    m_reattachmentCompressor.delay() * m_lostFilesAbsenceCounter[path];
+            } else {
 
+                if (entry.state == Exists) {
+                    entry.state = Reattaching;
+                    entry.lostTimer.start();
+                    m_reattachmentCompressor.start();
+
+                } else if (entry.state == Reattaching) {
+                    if (entry.lostTimer.elapsed() > 10000) {
+                        entry.state = Lost;
+                        m_lostCompressor.start();
+                        emit fileExistsStateChanged(path, false);
+                    } else {
+                        m_reattachmentCompressor.start();
+                    }
+
+                } else if (entry.state == Lost) {
+                    m_lostCompressor.start();
+                }
+
+
+#if 0
                 const bool shouldSpitWarning =
                     absenceTimeMSec <= 600000 &&
                         ((absenceTimeMSec >= 60000 && (absenceTimeMSec % 60000 == 0)) ||
@@ -113,23 +156,31 @@ private Q_SLOTS:
                         KisUsageLogger::log(message);
                     }
                 }
-
-                m_reattachmentCompressor.start();
+#endif
             }
         } else {
             emit fileChanged(path);
         }
     }
 
-    void slotReattachLostFiles() {
-        const QList<QString> lostFiles = m_lostFilesAbsenceCounter.keys();
-        Q_FOREACH (const QString &path, lostFiles) {
-            slotFileChanged(path);
+    void slotFindLostFiles() {
+        for (auto it = m_fileEntries.constBegin(); it != m_fileEntries.constEnd(); ++it) {
+            if (it.value().state == Lost)
+            slotFileChanged(it.key());
         }
     }
 
+    void slotReattachFiles() {
+        for (auto it = m_fileEntries.constBegin(); it != m_fileEntries.constEnd(); ++it) {
+            if (it.value().state == Reattaching)
+            slotFileChanged(it.key());
+        }
+    }
+
+
 Q_SIGNALS:
     void fileChanged(const QString &path);
+    void fileExistsStateChanged(const QString &path, bool exists);
 
 public:
     static QString unifyFilePath(const QString &path) {
@@ -140,7 +191,9 @@ private:
     QFileSystemWatcher m_watcher;
     QHash<QString, int> m_pathCount;
     KisSignalCompressor m_reattachmentCompressor;
+    KisSignalCompressor m_lostCompressor;
     QHash<QString, int> m_lostFilesAbsenceCounter;
+    QHash<QString, FileEntry> m_fileEntries;
 };
 
 Q_GLOBAL_STATIC(FileSystemWatcherWrapper, s_fileSystemWatcher)
@@ -172,6 +225,9 @@ KisSafeDocumentLoader::KisSafeDocumentLoader(const QString &path, QObject *paren
 {
     connect(s_fileSystemWatcher, SIGNAL(fileChanged(QString)),
             SLOT(fileChanged(QString)));
+
+    connect(s_fileSystemWatcher, SIGNAL(fileExistsStateChanged(QString, bool)),
+            SLOT(slotFileExistsStateChanged(QString, bool)));
 
     connect(&m_d->fileChangedSignalCompressor, SIGNAL(timeout()),
             SLOT(fileChangedCompressed()));
@@ -210,6 +266,16 @@ void KisSafeDocumentLoader::fileChanged(QString path)
     if (FileSystemWatcherWrapper::unifyFilePath(m_d->path) == path) {
         m_d->fileChangedFlag = true;
         m_d->fileChangedSignalCompressor.start();
+    }
+}
+
+void KisSafeDocumentLoader::slotFileExistsStateChanged(const QString &path, bool fileExists)
+{
+    if (FileSystemWatcherWrapper::unifyFilePath(m_d->path) == path) {
+        emit fileExistsStateChanged(fileExists);
+        if (fileExists) {
+            fileChanged(path);
+        }
     }
 }
 
@@ -288,9 +354,12 @@ void KisSafeDocumentLoader::delayedLoadStart()
         else {
             successfullyLoaded = m_d->doc->openPath(m_d->temporaryPath,
                                                    KisDocument::DontAddToRecent);
-            // Wait for required updates, if any. BUG: 448256
-            KisLayerUtils::forceAllDelayedNodesUpdate(m_d->doc->image()->root());
-            m_d->doc->image()->waitForDone();
+
+            if (successfullyLoaded) {
+                // Wait for required updates, if any. BUG: 448256
+                KisLayerUtils::forceAllDelayedNodesUpdate(m_d->doc->image()->root());
+                m_d->doc->image()->waitForDone();
+            }
         }
     } else {
         dbgKrita << "File was modified externally. Restarting.";

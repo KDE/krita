@@ -9,12 +9,12 @@
 
 #include <QObject>
 #include "kis_types.h"
+#include "kritaui_export.h"
 
-class KisSafeDocumentLoader : public QObject
+class KRITAUI_EXPORT KisSafeDocumentLoader : public QObject
 {
     Q_OBJECT
-private:
-    friend class KisFileLayer;
+public:
 
     KisSafeDocumentLoader(const QString &path = "", QObject *parent = 0);
     ~KisSafeDocumentLoader() override;
@@ -23,12 +23,14 @@ private:
     void reloadImage();
 private Q_SLOTS:
     void fileChanged(QString);
+    void slotFileExistsStateChanged(const QString &path, bool fileExists);
     void fileChangedCompressed(bool sync = false);
     void delayedLoadStart();
 
 Q_SIGNALS:
     void loadingFinished(KisPaintDeviceSP paintDevice, qreal xRes, qreal yRes, const QSize &size);
     void loadingFailed();
+    void fileExistsStateChanged(bool fileExists);
 
 private:
     struct Private;

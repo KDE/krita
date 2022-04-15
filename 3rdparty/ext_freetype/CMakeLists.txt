@@ -6,7 +6,7 @@ ExternalProject_Add( ext_freetype
     URL_HASH SHA256=3333ae7cfda88429c97a7ae63b7d01ab398076c3b67182e960e5684050f2c5c8
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_freetype} ${GLOBAL_AUTOMAKE_PROFILE}
-    BUILD_COMMAND make
+    BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
     INSTALL_COMMAND make install
 
     UPDATE_COMMAND ""

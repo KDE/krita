@@ -312,7 +312,7 @@ elseif (ANDROID)
 
       INSTALL_DIR ${EXTPREFIX_qt}
 
-      BUILD_COMMAND $(MAKE)
+      BUILD_COMMAND $(MAKE) ${SUBMAKE_JOBS}
       INSTALL_COMMAND $(MAKE) install
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
@@ -368,31 +368,19 @@ elseif (NOT APPLE)
 
       INSTALL_DIR ${EXTPREFIX_qt}
 
-      BUILD_COMMAND $(MAKE)
-      INSTALL_COMMAND $(MAKE) install
+      BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
+      INSTALL_COMMAND make install
+
+
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
       DEPENDS ${ZLIB_DEP}
   )
 else( APPLE )
-      # Qt is big - try and parallelize if at all possible
-      include(ProcessorCount)
-      ProcessorCount(NUM_CORES)
-      if(NOT NUM_CORES EQUAL 0)
-        if (NUM_CORES GREATER 2)
-          # be nice...
-          MATH( EXPR NUM_CORES "${NUM_CORES} - 2" )
-        endif()
-        set(PARALLEL_MAKE "make;-j${NUM_CORES}")
-        message(STATUS "${EXTPREFIX_qt}:Parallelized make: ${PARALLEL_MAKE}")
-      else()
-        set(PARALLEL_MAKE "make")
-      endif()
 
       if(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "arm64")
         set(QT_DEVICE_OPTION "-device-option" "QMAKE_APPLE_DEVICE_ARCHS=arm64")
       endif()
-
 
       ExternalProject_Add(
         ext_qt
@@ -441,7 +429,7 @@ else( APPLE )
             -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
             -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
             ${QT_DEVICE_OPTION}
-        BUILD_COMMAND ${PARALLEL_MAKE}
+        BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
         INSTALL_COMMAND make install
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1

@@ -7,7 +7,7 @@ ExternalProject_Add( ext_fontconfig
     # patch from: https://gitlab.freedesktop.org/fontconfig/fontconfig/-/commit/889097353ecd7b061ae7cf677e3db56db77a135f
     PATCH_COMMAND ${PATCH_COMMAND} -Z --binary -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-FC_DEFAULT_FONTS-on-macOS.patch
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_fontconfig}  ${GLOBAL_AUTOMAKE_PROFILE}
-    BUILD_COMMAND make
+    BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
     INSTALL_COMMAND make install 
 
     UPDATE_COMMAND ""

@@ -18,7 +18,7 @@ if(APPLE)
         CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py --deployment-target=10.11
             -b ${PREFIX_ext_sip}/bin -d ${PREFIX_ext_sip}/lib/Python.framework/Versions/Current/site-packages/ 
             -e ${PREFIX_ext_sip}/include --sipdir ${PREFIX_ext_sip}/share/sip --target-py-version 3.8 --sip-module PyQt5.sip
-        BUILD_COMMAND make
+        BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script

@@ -20,7 +20,7 @@ if (APPLE)
         URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
 
         CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
-        BUILD_COMMAND make
+        BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script
@@ -48,7 +48,6 @@ elseif(UNIX)
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
             ${Python_EXECUTABLE} <SOURCE_DIR>/setup.py build ${_compiler} -j ${SUBMAKE_JOBS}
-
 
         INSTALL_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"

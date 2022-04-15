@@ -44,7 +44,7 @@ if (WIN32)
     )
     add_custom_target(ext_gettext)
     add_dependencies(ext_gettext ext_gettext_bin ext_gettext_lib)
-else (WIN32)
+else ()
 ExternalProject_Add( ext_gettext
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL https://files.kde.org/krita/build/dependencies/gettext-0.21.tar.xz
@@ -53,10 +53,10 @@ ExternalProject_Add( ext_gettext
 
     INSTALL_DIR ${PREFIX_ext_gettext}
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_gettext} --disable-java   ${GLOBAL_AUTOMAKE_PROFILE} --disable-native-java 
-   BUILD_COMMAND make
-   INSTALL_COMMAND make install
+    BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
+    INSTALL_COMMAND make install
 
     UPDATE_COMMAND ""
     DEPENDS ext_iconv
 )
-endif (WIN32)
+endif ()

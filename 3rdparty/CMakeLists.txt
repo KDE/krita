@@ -21,9 +21,21 @@ else(APPLE)
 	cmake_minimum_required(VERSION 3.7.0 FATAL_ERROR)
 endif()
 
-if(NOT SUBMAKE_JOBS)
-	set(SUBMAKE_JOBS 1)
+if (NOT SUBMAKE_JOBS)
+    include(ProcessorCount)
+    ProcessorCount(NUM_CORES)
+    if  (NOT NUM_CORES EQUAL 0)
+        if (NUM_CORES GREATER 2)
+            # be nice...
+            MATH( EXPR NUM_CORES "${NUM_CORES} - 2" )
+        endif()
+        set(SUBMAKE_JOBS ${NUM_CORES})
+    else()
+        set(SUBMAKE_JOBS 1)
+    endif()
 endif()
+
+MESSAGE("SUBMAKE_JOBS: " ${SUBMAKE_JOBS})
 
 if (CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
 	message(FATAL_ERROR "Compiling in the source directory is not supported. Use for example 'mkdir build; cd build; cmake ..'.")

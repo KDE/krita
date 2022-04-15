@@ -8,6 +8,6 @@ ExternalProject_Add( ext_pkgconfig
     BUILD_IN_SOURCE 1
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_pkgconfig} ${GLOBAL_AUTOMAKE_PROFILE} --with-internal-glib
-    BUILD_COMMAND make
+    BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
     INSTALL_COMMAND make install
 )

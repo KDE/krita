@@ -18,7 +18,7 @@ ExternalProject_Add(
     URL_HASH SHA1=207ba741d387e2c1607104cf0bd8cff27deb2605
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_zlib}   ${GLOBAL_AUTOMAKE_PROFILE}
-    BUILD_COMMAND make
+    BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
     INSTALL_COMMAND make install
 
     UPDATE_COMMAND ""

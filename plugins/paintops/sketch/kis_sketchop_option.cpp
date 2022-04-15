@@ -32,7 +32,6 @@ KisSketchOpOption::KisSketchOpOption()
     m_options->lineWidthSPBox->setSuffix(i18n(" px"));
     m_options->lineWidthSPBox->setExponentRatio(1.5);
 
-
     m_options->offsetSPBox->setRange(0.0, 200.0, 0);
     m_options->offsetSPBox->setValue(30.0);
     m_options->offsetSPBox->setSuffix(i18n("%"));
@@ -52,7 +51,7 @@ KisSketchOpOption::KisSketchOpOption()
     connect(m_options->randomOpacityCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->distanceDensityCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
     connect(m_options->distanceOpacityCHbox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
-
+    connect(m_options->antiAliasingCHBox, SIGNAL(toggled(bool)), SLOT(emitSettingChanged()));
 
     setConfigurationPage(m_options);
 }
@@ -74,6 +73,7 @@ void KisSketchOpOption::writeOptionSetting(KisPropertiesConfigurationSP settings
     settings->setProperty(SKETCH_RANDOM_OPACITY, m_options->randomOpacityCHbox->isChecked());
     settings->setProperty(SKETCH_DISTANCE_DENSITY, m_options->distanceDensityCHBox->isChecked());
     settings->setProperty(SKETCH_DISTANCE_OPACITY, m_options->distanceOpacityCHbox->isChecked());
+    settings->setProperty(SKETCH_ANTIALIASING, m_options->antiAliasingCHBox->isChecked());
 }
 
 void KisSketchOpOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
@@ -88,6 +88,7 @@ void KisSketchOpOption::readOptionSetting(const KisPropertiesConfigurationSP set
     m_options->randomOpacityCHbox->setChecked(settings->getBool(SKETCH_RANDOM_OPACITY));
     m_options->distanceDensityCHBox->setChecked(settings->getBool(SKETCH_DISTANCE_DENSITY));
     m_options->distanceOpacityCHbox->setChecked(settings->getBool(SKETCH_DISTANCE_OPACITY));
+    m_options->antiAliasingCHBox->setChecked(settings->getBool(SKETCH_ANTIALIASING));
 }
 
 void KisSketchOpOption::lodLimitations(KisPaintopLodLimitations *l) const

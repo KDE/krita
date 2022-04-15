@@ -1668,8 +1668,8 @@ void KisPainter::drawLine(const QPointF& start, const QPointF& end, qreal width,
             if (!selectionAccessor || *selectionAccessor->oldRawData() > SELECTION_THRESHOLD) {
                 KoColor mycolor = d->paintColor;
 
-                if (antialias && AA_ > halfWidth-1.0) {
-                    mycolor.colorSpace()->multiplyAlpha(mycolor.data(), 1.0 - (AA_-(halfWidth-1.0)), 1);
+                if (antialias && AA_ > halfWidth - 1.0) {
+                    mycolor.colorSpace()->multiplyAlpha(mycolor.data(), (1.0 - (AA_ - (halfWidth - 1.0))) * 256, 1);
                 }
 
                 compositeOnePixel(accessor->rawData(), mycolor);

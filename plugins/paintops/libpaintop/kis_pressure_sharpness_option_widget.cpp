@@ -23,46 +23,46 @@ KisPressureSharpnessOptionWidget::KisPressureSharpnessOptionWidget():
 {
     setObjectName("KisPressureSharpnessOptionWidget");
 
-    m_alignoutline = new QCheckBox(i18n("Align the brush preview outline to the pixel grid"));
-    m_alignoutline->setCheckable(true);
-    m_alignoutline->setChecked(false);
+    m_alignOutline = new QCheckBox(i18n("Align the brush preview outline to the pixel grid"));
+    m_alignOutline->setCheckable(true);
+    m_alignOutline->setChecked(false);
 
     QLabel* thresholdLbl = new QLabel(i18n("Soften edge:"));
-    m_softenedge = new KisSliderSpinBox();
-    m_softenedge->setRange(0, 100);
-    m_softenedge->setValue(0); // Sets old behaviour
-    m_softenedge->setSingleStep(1);
+    m_softenEdge = new KisSliderSpinBox();
+    m_softenEdge->setRange(0, 100);
+    m_softenEdge->setValue(0); // Sets old behaviour
+    m_softenEdge->setSingleStep(1);
 
-    QHBoxLayout* align_hl = new QHBoxLayout;
-    align_hl->setMargin(2);
-    align_hl->addWidget(m_alignoutline);
+    QHBoxLayout* alignHL = new QHBoxLayout;
+    alignHL->setMargin(2);
+    alignHL->addWidget(m_alignOutline);
 
-    QHBoxLayout* softness_hl = new QHBoxLayout;
-    softness_hl->setMargin(2);
-    softness_hl->addWidget(thresholdLbl);
-    softness_hl->addWidget(m_softenedge, 1);
+    QHBoxLayout* softnessHL = new QHBoxLayout;
+    softnessHL->setMargin(9);
+    softnessHL->addWidget(thresholdLbl);
+    softnessHL->addWidget(m_softenEdge, 1);
 
     QWidget* page = new QWidget;
     QVBoxLayout* pageLayout = new QVBoxLayout(page);
     pageLayout->setMargin(0);
-    pageLayout->addLayout(align_hl);
-    pageLayout->addLayout(softness_hl);
+    pageLayout->addLayout(alignHL);
+    pageLayout->addLayout(softnessHL);
     pageLayout->addWidget(KisCurveOptionWidget::curveWidget());
 
-    connect(m_alignoutline, SIGNAL(toggled(bool)), SLOT(setAlignOutlineToPixels(bool)));
-    connect(m_softenedge, SIGNAL(valueChanged(int)), SLOT(setThreshold(int)));
+    connect(m_alignOutline, SIGNAL(toggled(bool)), SLOT(setAlignOutlineToPixels(bool)));
+    connect(m_softenEdge, SIGNAL(valueChanged(int)), SLOT(setThreshold(int)));
 
     setConfigurationPage(page);
 
-    setAlignOutlineToPixels(m_alignoutline->isChecked());
-    setThreshold(m_softenedge->value());
+    setAlignOutlineToPixels(m_alignOutline->isChecked());
+    setThreshold(m_softenEdge->value());
 }
 
 void KisPressureSharpnessOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisCurveOptionWidget::readOptionSetting(setting);
-    m_alignoutline->setChecked(static_cast<KisPressureSharpnessOption*>(curveOption())->alignOutlineToPixels());
-    m_softenedge->setValue(static_cast<KisPressureSharpnessOption*>(curveOption())->threshold());
+    m_alignOutline->setChecked(static_cast<KisPressureSharpnessOption*>(curveOption())->alignOutlineToPixels());
+    m_softenEdge->setValue(static_cast<KisPressureSharpnessOption*>(curveOption())->threshold());
 }
 
 void KisPressureSharpnessOptionWidget::setAlignOutlineToPixels(bool alignOutline)

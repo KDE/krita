@@ -26,8 +26,8 @@ private Q_SLOTS:
     void setThreshold(int threshold);
 
 private:
-    QCheckBox* m_alignoutline;
-    KisSliderSpinBox* m_softenedge;
+    QCheckBox* m_alignOutline;
+    KisSliderSpinBox* m_softenEdge;
 };
 
 #endif // KIS_PRESSURE_SHARPNESS_OPTION_WIDGET_H

@@ -38,10 +38,10 @@ public:
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     void setAlignOutlineToPixels(bool alignOutlineToPixels) {
-        m_alignoutlinepixels = alignOutlineToPixels;
+        m_alignOutlinePixels = alignOutlineToPixels;
     }
     bool alignOutlineToPixels() {
-        return m_alignoutlinepixels;
+        return m_alignOutlinePixels;
     }
     /// threshold has 100 levels (like opacity)
     void setThreshold(qint32 threshold) {
@@ -59,7 +59,7 @@ public:
     }
 
 private:
-    bool m_alignoutlinepixels {false};
+    bool m_alignOutlinePixels {false};
     quint32 m_softness {0};
 };
 

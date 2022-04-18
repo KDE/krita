@@ -83,12 +83,12 @@ KisClipboard::~KisClipboard()
     delete d;
 }
 
-KisClipboard* KisClipboard::instance()
+KisClipboard *KisClipboard::instance()
 {
     return s_instance;
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const KisTimeSpan &range)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint &topLeft, const KisTimeSpan &range)
 {
     if (!dev)
         return;
@@ -141,7 +141,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
         KisAnnotationSP annotation;
 
         if (profile && profile->type() == "icc" && !profile->rawData().isEmpty()) {
-            annotation = new  KisAnnotation("icc", profile->name(), profile->rawData());
+            annotation = new KisAnnotation("icc", profile->name(), profile->rawData());
 
             if (annotation) {
                 // save layer profile
@@ -163,8 +163,11 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
     // We also create a QImage so we can interchange with other applications
     QImage qimage;
     KisConfig cfg(true);
-    const KoColorProfile *monitorProfile = cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
-    qimage = dev->convertToQImage(monitorProfile, KoColorConversionTransformation::internalRenderingIntent(), KoColorConversionTransformation::internalConversionFlags());
+    const KoColorProfile *monitorProfile =
+        cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow()));
+    qimage = dev->convertToQImage(monitorProfile,
+                                  KoColorConversionTransformation::internalRenderingIntent(),
+                                  KoColorConversionTransformation::internalConversionFlags());
     if (!qimage.isNull() && mimeData) {
         mimeData->setImageData(qimage);
     }
@@ -173,18 +176,15 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft, const Ki
         d->pushedClipboard = true;
         d->clipboard->setMimeData(mimeData);
     }
-
 }
 
-void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint& topLeft)
+void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint &topLeft)
 {
     setClip(dev, topLeft, KisTimeSpan());
 }
 
-KisPaintDeviceSP KisClipboard::clip(const QRect &imageBounds,
-                                    bool showPopup,
-                                    int overridePasteBehaviour,
-                                    KisTimeSpan *clipRange) const
+KisPaintDeviceSP
+KisClipboard::clip(const QRect &imageBounds, bool showPopup, int overridePasteBehaviour, KisTimeSpan *clipRange) const
 {
     const QMimeData *cbData = d->clipboard->mimeData();
 
@@ -209,11 +209,7 @@ KisPaintDeviceSP KisClipboard::clipFromMimeData(const QMimeData *cbData,
     KisPaintDeviceSP clip = clipFromKritaSelection(cbData, imageBounds, clipRange);
 
     if (!clip) {
-        clip = clipFromBoardContents(cbData,
-                                     imageBounds,
-                                     showPopup,
-                                     overridePasteBehaviour,
-                                     useClipboardFallback);
+        clip = clipFromBoardContents(cbData, imageBounds, showPopup, overridePasteBehaviour, useClipboardFallback);
     }
 
     return clip;
@@ -258,7 +254,6 @@ KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &image
             data = store->read(store->size());
             store->close();
             profile = KoColorSpaceRegistry::instance()->createColorProfile(csModel, csDepth, data);
-
         }
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
@@ -274,7 +269,6 @@ KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &image
             }
 
             if (clip && !imageBounds.isEmpty()) {
-
                 // load topLeft
                 if (store->hasFile("topLeft")) {
                     store->open("topLeft");
@@ -290,9 +284,7 @@ KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &image
 
                 QRect clipBounds = clip->exactBounds();
 
-                if (!imageBounds.contains(clipBounds) &&
-                    !imageBounds.intersects(clipBounds)) {
-
+                if (!imageBounds.contains(clipBounds) && !imageBounds.intersects(clipBounds)) {
                     QPoint diff = imageBounds.center() - clipBounds.center();
                     clip->setX(clip->x() + diff.x());
                     clip->setY(clip->y() + diff.y());
@@ -334,7 +326,7 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
 
     auto choice = (PasteFormatBehaviour)cfg.pasteFormat(false);
 
-    if ((cbData->hasImage() || cbData->hasUrls()) && choice == PASTE_FORMAT_ASK) {
+    if ((cbData->hasImage() || cbData->hasUrls())) {
         const auto &urls = cbData->urls();
 
         bool local = false;
@@ -345,7 +337,13 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             remote |= !url.isLocalFile();
         });
 
-        if ((remote && local) || (remote && cbData->hasImage()) || (local && cbData->hasImage())) {
+        const bool hasMultipleFormatsAvailable =
+            (remote && local) || (remote && cbData->hasImage()) || (local && cbData->hasImage());
+
+        const bool defaultOptionUnavailable = (!remote && choice == PASTE_FORMAT_DOWNLOAD)
+            || (!local && choice == PASTE_FORMAT_LOCAL) || (!cbData->hasImage() && choice == PASTE_FORMAT_CLIP);
+
+        if (hasMultipleFormatsAvailable && choice == PASTE_FORMAT_ASK) {
             KisDlgPasteFormat dlg(qApp->activeWindow());
 
             dlg.setSourceAvailable(PASTE_FORMAT_DOWNLOAD, remote);
@@ -359,14 +357,16 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             choice = dlg.source();
 
             saveSourceSetting = dlg.remember();
-        } else if (remote) {
-            choice = PASTE_FORMAT_DOWNLOAD;
-        } else if (local) {
-            choice = PASTE_FORMAT_LOCAL;
-        } else if (cbData->hasImage()) {
-            choice = PASTE_FORMAT_CLIP;
-        } else {
-            return nullptr;
+        } else if (defaultOptionUnavailable) {
+            if (remote) {
+                choice = PASTE_FORMAT_DOWNLOAD;
+            } else if (local) {
+                choice = PASTE_FORMAT_LOCAL;
+            } else if (cbData->hasImage()) {
+                choice = PASTE_FORMAT_CLIP;
+            } else {
+                return nullptr;
+            }
         }
     }
 
@@ -472,7 +472,6 @@ void KisClipboard::clipboardDataChanged()
     emit clipChanged();
 }
 
-
 bool KisClipboard::hasClip() const
 {
     return d->hasClip;
@@ -511,7 +510,6 @@ QSize KisClipboard::clipSize() const
             data = store->read(store->size());
             store->close();
             profile = KoColorSpaceRegistry::instance()->createColorProfile(csModel, csDepth, data);
-
         }
 
         const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(csModel, csDepth, profile);
@@ -542,7 +540,8 @@ void KisClipboard::setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy
      * See a comment in KisMimeData::deepCopyNodes()
      */
     QMimeData *data = KisMimeData::mimeForLayersDeepCopy(nodes, image, forceCopy);
-    if (!data) return;
+    if (!data)
+        return;
 
     d->clipboard->setMimeData(data);
 }
@@ -561,7 +560,7 @@ bool KisClipboard::hasLayerStyles() const
     return d->clipboard->mimeData()->hasFormat("application/x-krita-layer-style");
 }
 
-const QMimeData* KisClipboard::layersMimeData() const
+const QMimeData *KisClipboard::layersMimeData() const
 {
     const QMimeData *cbData = d->clipboard->mimeData();
     return cbData->hasFormat("application/x-krita-node") ? cbData : 0;

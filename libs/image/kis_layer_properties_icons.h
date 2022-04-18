@@ -32,12 +32,15 @@ public:
     static const KoID colorizeEditKeyStrokes;
     static const KoID colorizeShowColoring;
     static const KoID openFileLayerFile;
+    static const KoID layerError;
 
     static KisLayerPropertiesIcons* instance();
 
     static KisBaseNode::Property getProperty(const KoID &id, bool state);
     static KisBaseNode::Property getProperty(const KoID &id, bool state,
                                               bool isInStasis, bool stateInStasis);
+
+    static KisBaseNode::Property getErrorProperty(const QString &message);
 
     /**
      * Sets the specified property of the node and updates it

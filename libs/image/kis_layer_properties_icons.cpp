@@ -30,7 +30,7 @@ const KoID KisLayerPropertiesIcons::colorizeNeedsUpdate("colorize-needs-update",
 const KoID KisLayerPropertiesIcons::colorizeEditKeyStrokes("colorize-show-key-strokes", ki18n("Edit Key Strokes"));
 const KoID KisLayerPropertiesIcons::colorizeShowColoring("colorize-show-coloring", ki18n("Show Coloring"));
 const KoID KisLayerPropertiesIcons::openFileLayerFile("open-file-layer-file", ki18n("Open File"));
-
+const KoID KisLayerPropertiesIcons::layerError("layer-error", ki18n("Error"));
 
 struct IconsPair {
     IconsPair() {}
@@ -79,6 +79,7 @@ void KisLayerPropertiesIcons::updateIcons()
     m_d->icons.insert(colorizeEditKeyStrokes.id(), IconsPair(KisIconUtils::loadIcon("showMarks"), KisIconUtils::loadIcon("showMarksOff")));
     m_d->icons.insert(colorizeShowColoring.id(), IconsPair(KisIconUtils::loadIcon("showColoring"), KisIconUtils::loadIcon("showColoringOff")));
     m_d->icons.insert(openFileLayerFile.id(), IconsPair(KisIconUtils::loadIcon("document-open"), KisIconUtils::loadIcon("document-open")));
+    m_d->icons.insert(layerError.id(), IconsPair(KisIconUtils::loadIcon("warning"), KisIconUtils::loadIcon("warning")));
 }
 
 KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool state)
@@ -95,6 +96,20 @@ KisBaseNode::Property KisLayerPropertiesIcons::getProperty(const KoID &id, bool 
     return KisBaseNode::Property(id,
                                  pair.on, pair.off, state,
                                  isInStasis, stateInStasis);
+}
+
+KisBaseNode::Property KisLayerPropertiesIcons::getErrorProperty(const QString &message)
+{
+    const IconsPair &pair = instance()->m_d->icons[layerError.id()];
+
+    KisBaseNode::Property prop;
+    prop.id = layerError.id();
+    prop.name =  layerError.name();
+    prop.state = message;
+    prop.onIcon = pair.on;
+    prop.offIcon = pair.off;
+
+    return prop;
 }
 
 void KisLayerPropertiesIcons::setNodePropertyAutoUndo(KisNodeSP node, const KoID &id, const QVariant &value, KisImageSP image)

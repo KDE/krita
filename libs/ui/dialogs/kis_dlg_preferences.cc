@@ -419,7 +419,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_pasteFormatGroup.addButton(btnBitmap, KisClipboard::PASTE_FORMAT_CLIP);
     m_pasteFormatGroup.addButton(btnAsk, KisClipboard::PASTE_FORMAT_ASK);
 
-    QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
+    QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(false));
 
     Q_ASSERT(button);
 

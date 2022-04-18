@@ -65,7 +65,7 @@ public:
 
     //! Remove a action from our internal bookkeeping. Returns 0 if the
     //! action doesn't belong to us.
-    QAction *unlistAction(QAction *);
+    QAction *unlistAction(QObject *);
 
     QMap<QString, QAction *> actionByName;
     QList<QAction *> actions;
@@ -346,7 +346,6 @@ QAction *KActionCollection::takeAction(QAction *action)
 
     action->disconnect(this);
 
-    emit removed(action);   //deprecated
     return action;
 }
 
@@ -610,16 +609,7 @@ void KActionCollection::slotActionHovered()
 
 void KActionCollectionPrivate::_k_actionDestroyed(QObject *obj)
 {
-    // obj isn't really a QAction anymore. So make sure we don't do fancy stuff
-    // with it.
-    QAction *action = static_cast<QAction*>(obj);
-
-    if (!unlistAction(action)) {
-        return;
-    }
-
-    //HACK the object we emit is partly destroyed
-    emit q->removed(action); //deprecated. remove in KDE5
+    unlistAction(obj);
 }
 
 void KActionCollection::connectNotify(const QMetaMethod &signal)
@@ -683,7 +673,7 @@ void KActionCollection::removeAssociatedWidget(QWidget *widget)
     disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(_k_associatedWidgetDestroyed(QObject*)));
 }
 
-QAction *KActionCollectionPrivate::unlistAction(QAction *action)
+QAction *KActionCollectionPrivate::unlistAction(QObject *action)
 {
     // ATTENTION:
     //   This method is called with an QObject formerly known as a QAction
@@ -691,7 +681,16 @@ QAction *KActionCollectionPrivate::unlistAction(QAction *action)
     //   real QAction!
 
     // Get the index for the action
-    int index = actions.indexOf(action);
+    const auto indexOf = [&](const QObject *action, int from = 0) -> int {
+        for (int i = from; i < actions.size(); i++) {
+            if (actions[i] == action) {
+                return i;
+            }
+        }
+        return -1;
+    };
+
+    int index = indexOf(action);
 
     // Action not found.
     if (index == -1) {
@@ -699,22 +698,25 @@ QAction *KActionCollectionPrivate::unlistAction(QAction *action)
     }
 
     // An action collection can't have the same action twice.
-    Q_ASSERT(actions.indexOf(action, index + 1) == -1);
+    Q_ASSERT(indexOf(action, index + 1) == -1);
 
     // Get the actions name
     const QString name = action->objectName();
 
     // Remove the action
     actionByName.remove(name);
+    // Retrieve the typed QObject* pointer
+    // ATTENTION: THIS ACTION IS PARTIALLY DESTROYED!
+    QAction *tmp = actions.at(index);
     actions.removeAt(index);
 
     // Remove the action from the categories. Should be only one
     QList<KActionCategory *> categories = q->findChildren<KActionCategory *>();
     Q_FOREACH (KActionCategory *category, categories) {
-        category->unlistAction(action);
+        category->unlistAction(tmp);
     }
 
-    return action;
+    return tmp;
 }
 
 QList< QWidget * > KActionCollection::associatedWidgets() const

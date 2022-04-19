@@ -63,116 +63,47 @@ endif(WIN32)
 
 set(EXTRA_AVIF_DEPS "")
 
-find_program(MESON_BINARY_PATH meson)
-find_program(NINJA_BINARY_PATH ninja)
-find_program(RUSTC_BINARY_PATH rustc)
-
-if(MESON_BINARY_PATH AND NINJA_BINARY_PATH AND RUSTC_BINARY_PATH)
-    message(STATUS "Enabling AVIF support.")
-
+find_package(Perl)
+if(NOT PERL_FOUND AND WIN32)
     ExternalProject_Add(
-        ext_dav1d
+        ext_strawberryperl
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://downloads.videolan.org/pub/videolan/dav1d/0.9.0/dav1d-0.9.0.tar.xz
-        URL_HASH SHA256=cfae88e8067c9b2e5b96d95a7a00155c353376fe9b992a96b4336e0eab19f9f6
+        # From https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-32bit-portable.zip
+        URL https://files.kde.org/krita/build/dependencies/strawberry-perl-5.32.1.1-32bit-portable.zip
+        URL_HASH SHA1=28bca91cadd6651c2b2463db8587c170bf17f2fa
 
-        CONFIGURE_COMMAND meson <SOURCE_DIR> --prefix=${EXTPREFIX_heif}
-
-        BUILD_COMMAND meson compile -j${SUBMAKE_JOBS}
-
-        INSTALL_COMMAND meson install
-
-        DEPENDS ext_nasm
-    )
-
-    ExternalProject_Add(
-        ext_cargo_c
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/lu-zero/cargo-c/archive/refs/tags/v0.8.1.tar.gz
-        URL_HASH SHA256=c8eeac1ac6852e551597f38411ac741aeacd6927cc8057e73ed73c7c1e63ee61
-
+        BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Strawberry Perl portable
         CONFIGURE_COMMAND ""
+        INSTALL_COMMAND ""
+        UPDATE_COMMAND ""
 
-        BUILD_COMMAND ""
+        SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/Strawberry"
+    )
+    set(USE_STRAWBERRYPERL 1)
+    set(LIBAOM_EXTRA_CMAKE_ARGS -DPERL_EXECUTABLE=${CMAKE_CURRENT_BINARY_DIR}/Strawberry/perl/bin/perl.exe)
+    set(LIBAOM_STRAWBERRYPERL_DEP ext_strawberryperl)
+endif()
 
-        INSTALL_COMMAND cargo install --path <SOURCE_DIR> -j ${SUBMAKE_JOBS} --root ${EXTPREFIX_heif}
+if(PERL_FOUND OR USE_STRAWBERRYPERL)
+    message(WARNING "Building alternative AVIF support using libaom.")
+
+    ExternalProject_Add(
+        ext_libaom
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+
+        URL https://storage.googleapis.com/aom-releases/libaom-3.2.0.tar.gz
+        URL_HASH SHA256=8fa7418bf4ea12ef6dcf0eeb21cba932b71c6079ffdf7b9d13cf907fa46c0568
+
+        CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
 
         UPDATE_COMMAND ""
 
-        BUILD_IN_SOURCE 1
+        DEPENDS ext_nasm ${LIBAOM_STRAWBERRYPERL_DEP}
     )
 
-    ExternalProject_Add(
-        ext_rav1e
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/xiph/rav1e/archive/v0.5.0-alpha.tar.gz
-        URL_HASH SHA256=fd884fa387d01860eaf22a0a97353525221eb32bf6b9154bbfa21b6cce5988c8
-
-        CONFIGURE_COMMAND ""
-
-        BUILD_COMMAND cargo cbuild --release --prefix=${EXTPREFIX_heif} --library-type=cdylib -j${SUBMAKE_JOBS}
-
-        INSTALL_COMMAND cargo cinstall --release --library-type=cdylib --prefix=${EXTPREFIX_heif}
-
-        BUILD_IN_SOURCE 1
-
-        DEPENDS ext_nasm ext_cargo_c
-    )
-
-    set(EXTRA_AVIF_DEPS ext_rav1e ext_dav1d)
+    set(EXTRA_AVIF_DEPS ext_libaom)
 else()
-    if (NOT MESON_BINARY_PATH)
-        message(WARNING "Meson Build system was not found, see https://mesonbuild.com")
-    endif()
-    if (NOT NINJA_BINARY_PATH)
-        message(WARNING "Ninja Build system was not found, see https://ninja-build.org/")
-    endif()
-    if (NOT RUSTC_BINARY_PATH)
-        message(WARNING "Rust compiler was not found, see https://www.rust-lang.org/")
-    endif()
-
-    find_package(Perl)
-    if(NOT PERL_FOUND AND WIN32)
-        ExternalProject_Add(
-            ext_strawberryperl
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            # From https://strawberryperl.com/download/5.32.1.1/strawberry-perl-5.32.1.1-32bit-portable.zip
-            URL https://files.kde.org/krita/build/dependencies/strawberry-perl-5.32.1.1-32bit-portable.zip
-            URL_HASH SHA1=28bca91cadd6651c2b2463db8587c170bf17f2fa
-
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying Strawberry Perl portable
-            CONFIGURE_COMMAND ""
-            INSTALL_COMMAND ""
-            UPDATE_COMMAND ""
-
-            SOURCE_DIR "${CMAKE_CURRENT_BINARY_DIR}/Strawberry"
-        )
-        set(USE_STRAWBERRYPERL 1)
-        set(LIBAOM_EXTRA_CMAKE_ARGS -DPERL_EXECUTABLE=${CMAKE_CURRENT_BINARY_DIR}/Strawberry/perl/bin/perl.exe)
-        set(LIBAOM_STRAWBERRYPERL_DEP ext_strawberryperl)
-    endif(NOT PERL_FOUND AND WIN32)
-
-    if(PERL_FOUND OR USE_STRAWBERRYPERL)
-        message(WARNING "Building alternative AVIF support using libaom.")
-
-        ExternalProject_Add(
-            ext_libaom
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-
-            URL https://storage.googleapis.com/aom-releases/libaom-3.2.0.tar.gz
-            URL_HASH SHA256=8fa7418bf4ea12ef6dcf0eeb21cba932b71c6079ffdf7b9d13cf907fa46c0568
-
-            CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
-
-            UPDATE_COMMAND ""
-
-            DEPENDS ext_nasm ${LIBAOM_STRAWBERRYPERL_DEP}
-        )
-
-        set(EXTRA_AVIF_DEPS ext_libaom)
-    else(PERL_FOUND OR USE_STRAWBERRYPERL)
-        message(WARNING "Perl not available, disabling AVIF support.")
-    endif(PERL_FOUND OR USE_STRAWBERRYPERL)
+    message(WARNING "Perl not available, disabling AVIF support.")
 endif()
 
 # Incorporate Handbrake's extensions for building x265

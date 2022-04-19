@@ -260,6 +260,9 @@ public:
     QColor canvasBorderColor(bool defaultValue = false) const;
     void setCanvasBorderColor(const QColor &color) const;
 
+    QList<QColor> colorHistory() const;
+    void setColorHistory(const QList<QColor> &history) const;
+
     bool hideScrollbars(bool defaultValue = false) const;
     void setHideScrollbars(bool value) const;
 

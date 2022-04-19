@@ -1041,6 +1041,29 @@ void KisConfig::setCanvasBorderColor(const QColor& color) const
     m_cfg.writeEntry("canvasBorderColor", color);
 }
 
+QList<QColor> KisConfig::colorHistory() const
+{
+    QList<QColor> colorList;
+    QVariantList defaults;
+    QVariantList history = m_cfg.readEntry("colorHistory", defaults);
+    for (const QVariant &variantColor: history) {
+        colorList.push_back(variantColor.value<QColor>());
+    }
+    return colorList;
+}
+
+void KisConfig::setColorHistory(const QList<QColor> &history) const
+{
+    QVariantList variantHistory;
+    variantHistory.reserve(history.size());
+
+    for (const QColor &color: history) {
+        variantHistory.push_back(QVariant::fromValue(color));
+    }
+
+    m_cfg.writeEntry("colorHistory", variantHistory);
+}
+
 bool KisConfig::hideScrollbars(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("hideScrollbars", false));

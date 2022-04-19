@@ -22,12 +22,15 @@ public:
 
 protected:
     KisColorSelectorBase* createPopup() const override;
+    ~KisColorHistory();
 
 public Q_SLOTS:
     void addColorToHistory(const KoColor& color);
 
     void clearColorHistory();
 private:
+    void restoreColorHistory();
+
     QToolButton* m_clearButton;
     QList<KoColor> m_colorHistory;
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...

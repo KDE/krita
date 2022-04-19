@@ -28,6 +28,8 @@ KisColorHistory::KisColorHistory(QWidget *parent)
     connect(m_clearButton, SIGNAL(clicked()), this, SLOT(clearColorHistory()));
 
     setAdditionalButtons({m_clearButton});
+
+    restoreColorHistory();
 }
 
 void KisColorHistory::unsetCanvas()
@@ -82,3 +84,30 @@ void KisColorHistory::clearColorHistory() {
     m_colorHistory.clear();
     setColors(m_colorHistory);
 }
+
+KisColorHistory::~KisColorHistory()
+{
+    KisConfig config(false);
+    QList<QColor> history;
+    history.reserve(m_colorHistory.size());
+
+    for (const KoColor & koColor: m_colorHistory) {
+        history.push_back(koColor.toQColor());
+    }
+    config.setColorHistory(history);
+}
+
+void KisColorHistory::restoreColorHistory()
+{
+    KisConfig config(true);
+    QList<QColor> history = config.colorHistory();
+    KoColor color;
+
+    m_colorHistory.clear();
+    for (const QColor &qColor: history) {
+        color.fromQColor(qColor);
+        m_colorHistory.push_back(color);
+    }
+    setColors(m_colorHistory);
+}
+

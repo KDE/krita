@@ -80,6 +80,7 @@ private:
 
 private:
     struct Private;
+    struct StopAndResume;
     QScopedPointer<Private> m_d;
 };
 

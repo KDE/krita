@@ -29,7 +29,10 @@ static void mltOnConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_fra
 
 struct KisPlaybackEngine::Private {
 
-    Private( KisPlaybackEngine* p_self ) {
+    Private( KisPlaybackEngine* p_self )
+        : m_self(p_self)
+        , activeCanvas(nullptr)
+    {
         // Initialize Audio Libraries
         Mlt::Factory::init();
 
@@ -41,7 +44,7 @@ struct KisPlaybackEngine::Private {
                     new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
                     );
 
-        initializeConsumers(p_self);
+        initializeConsumers();
     }
 
     ~Private() {
@@ -71,9 +74,9 @@ struct KisPlaybackEngine::Private {
         }
     }
 
-    void initializeConsumers(KisPlaybackEngine* p_self) {
+    void initializeConsumers() {
         pullConsumer.reset(new Mlt::Consumer(*profile, "sdl2_audio"));
-        pullConsumer->listen("consumer-frame-show", p_self, (mlt_listener)mltOnConsumerFrameShow);
+        pullConsumer->listen("consumer-frame-show", m_self, (mlt_listener)mltOnConsumerFrameShow);
 
         pushConsumer.reset(new Mlt::PushConsumer(*profile, "sdl2_audio"));
     }
@@ -101,6 +104,10 @@ struct KisPlaybackEngine::Private {
         return activePlayer()->playbackState() == PlaybackState::PLAYING ? PLAYBACK_PULL : PLAYBACK_PUSH;
     }
 
+private:
+    KisPlaybackEngine* m_self; //temp, we need a back pointer for callback binding. Maybe we can just use the private class itself instead?
+
+public:
     QScopedPointer<Mlt::Profile> profile;
 
     //MLT PUSH CONSUMER
@@ -125,26 +132,42 @@ struct KisPlaybackEngine::Private {
  * stop-and-then-resume behavior of a consumer. Using RAII, we can stop
  * a consumer at construction and simply resume it when it exits scope.
  */
-struct StopAndResumeConsumer {
+struct KisPlaybackEngine::StopAndResume {
 public:
-    explicit StopAndResumeConsumer(Mlt::Consumer* p_consumer)
-        : consumer(p_consumer) {
-        KIS_ASSERT(consumer);
-        wasRunning = !consumer->is_stopped();
-        if (wasRunning) {
-            consumer->stop();
+    explicit StopAndResume(KisPlaybackEngine::Private* p_d, bool requireFullRestart = false)
+        : m_d(p_d)
+    {
+        KIS_ASSERT(p_d);
+
+        m_d->pushConsumer->stop();
+        m_d->pullConsumer->stop();
+        m_d->pullConsumer->disconnect_all_producers();
+
+        if (requireFullRestart) {
+            m_d->cleanupConsumers();
         }
     }
 
-    ~StopAndResumeConsumer() {
-        if (wasRunning) {
-            consumer->start();
+    ~StopAndResume() {
+        KIS_ASSERT(m_d);
+        if (!m_d->pushConsumer || !m_d->pullConsumer) {
+            m_d->initializeConsumers();
+        }
+
+        if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
+            m_d->pushConsumer->start();
+        } else {
+            m_d->pullConsumer->connect_producer(*m_d->canvasProducers[m_d->activeCanvas]);
+            m_d->pullConsumer->start();
+        }
+
+        if (m_d->activeCanvas && m_d->canvasProducers.contains(m_d->activeCanvas)) {
+            m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activePlayer()->visibleFrame());
         }
     }
 
 private:
-    Mlt::Consumer* consumer;
-    bool wasRunning = false;
+    Private* m_d;
 };
 
 KisPlaybackEngine::KisPlaybackEngine(QObject *parent)
@@ -199,9 +222,11 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
 
     if (m_d->activePlayer()->playbackState() != PLAYING) {
         m_d->canvasProducers[m_d->activeCanvas]->seek(frameIndex);
+
         if (flags & SEEK_PUSH_AUDIO) {
-            m_d->pushAudio(frameIndex);
+            m_d->sigPushAudioCompressor->start(frameIndex);
         }
+
         emit sigChangeActiveCanvasFrame(frameIndex);
     }
 }
@@ -464,39 +489,21 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
         return;
     }
 
-    m_d->pullConsumer->stop();
-    m_d->pullConsumer->disconnect_all_producers();
-
-
     // Disconnect player, prepare for new active player..
     if (m_d->activeCanvas && m_d->activePlayer()) {
         this->disconnect(m_d->activePlayer());
         m_d->activePlayer()->disconnect(this);
     }
 
-    // Destroy existing consumer setup..
-    m_d->cleanupConsumers();
+    StopAndResume sr(m_d.data(), true);
 
     m_d->activeCanvas = canvas2;
-
-    // Initialize Consumers w/ New Profile..
-    m_d->initializeConsumers(this);
 
     if (m_d->activePlayer()) {
         connect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, m_d->activePlayer(), &KisAnimationPlayer::showFrame, Qt::QueuedConnection);
 
-//        connect(m_d->activePlayer(), &KisAnimationPlayer::sigFrameChanged, this, [this]( int frame ){
-//            QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[m_d->activeCanvas];
-//            activeProducer->seek(m_d->activePlayer()->visibleFrame());
-//        });
-
         connect(m_d->activePlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, this, [this](PlaybackState state){
-            Q_UNUSED(state);
-            if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
-                m_d->pullConsumer->stop();
-            } else {
-                m_d->pullConsumer->start();
-            }
+            StopAndResume stopResume(m_d.data());
         });
 
         connect(m_d->activePlayer(), &KisAnimationPlayer::sigPlaybackMediaChanged, this, &KisPlaybackEngine::setupProducerFromFile);
@@ -509,18 +516,6 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
             m_d->canvasProducers[m_d->activeCanvas] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "count"));
         }
     }
-
-    m_d->pullConsumer->set_profile(*m_d->profile);
-    m_d->pushConsumer->set_profile(*m_d->profile);
-
-    // Redo producer connections..
-    m_d->pullConsumer->connect_producer(*m_d->canvasProducers[m_d->activeCanvas]);
-
-    // Resume pull consumer based on desired state of playback handle..
-    if (m_d->activeCanvas && m_d->activePlaybackMode() == PLAYBACK_PULL) {
-        m_d->pullConsumer->start();
-    }
-
 }
 
 void KisPlaybackEngine::unsetCanvas() {

@@ -57,6 +57,8 @@ Q_SIGNALS:
     void sigFrameChanged();
     void sigPlaybackMediaChanged(QFileInfo toLoad);
 
+    void sigCancelPlayback();
+
 private:
     void updateDropFramesMode();
     KisTimeSpan activePlaybackRange();

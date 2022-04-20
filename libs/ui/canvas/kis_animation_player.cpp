@@ -163,6 +163,8 @@ public:
                     canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                     &m_cancelTrigger, SLOT(tryFire()));
         }
+
+        ENTER_FUNCTION();
     }
 
     void restore() {
@@ -184,6 +186,8 @@ public:
 
             m_canvas = nullptr;
         }
+
+        ENTER_FUNCTION();
     }
 
 

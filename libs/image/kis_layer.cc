@@ -331,6 +331,7 @@ void KisLayer::disableAlphaChannel(bool disable)
 
 bool KisLayer::alphaChannelDisabled() const
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(colorSpace(), false);
     QBitArray flags = colorSpace()->channelFlags(false, true) & m_d->channelFlags;
     return flags.count(true) == 0 && !m_d->channelFlags.isEmpty();
 }

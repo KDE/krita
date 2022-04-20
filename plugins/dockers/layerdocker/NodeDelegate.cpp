@@ -65,7 +65,7 @@ public:
     OptionalProperty findProperty(KisBaseNode::PropertyList &props, const OptionalProperty &refProp) const;
     OptionalProperty findVisibilityProperty(KisBaseNode::PropertyList &props) const;
 
-    void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, const Qt::KeyboardModifiers modifier, const QModelIndex &index);
+    void toggleProperty(KisBaseNode::PropertyList &props, const OptionalProperty clickedProperty, const Qt::KeyboardModifiers modifier, const QModelIndex &index);
     void togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, StasisOperation record, bool mode);
 
     bool stasisIsDirty(const QModelIndex &root, const OptionalProperty &clickedProperty, bool on = false, bool off = false);
@@ -481,7 +481,7 @@ OptionalProperty NodeDelegate::Private::findVisibilityProperty(KisBaseNode::Prop
     return 0;
 }
 
-void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty clickedProperty, const Qt::KeyboardModifiers modifier, const QModelIndex &index)
+void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, const OptionalProperty clickedProperty, const Qt::KeyboardModifiers modifier, const QModelIndex &index)
 {
     QModelIndex root(view->rootIndex());
 
@@ -518,12 +518,16 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
         const bool hasPropInStasis = (shiftClickedIndexes.count() > 0 || checkImmediateStasis(root, clickedProperty));
         if (clickedProperty->canHaveStasis && hasPropInStasis) {
             shiftClickedIndexes.clear();
+
             restorePropertyInStasisRecursive(root, clickedProperty);
         } else {
             shiftClickedIndexes.clear();
+
             resetPropertyStateRecursive(root, clickedProperty);
-            clickedProperty->state = !clickedProperty->state.toBool();
-            clickedProperty->isInStasis = false;
+
+            OptionalProperty prop = findProperty(props, clickedProperty);
+            prop->state = !prop->state.toBool();
+            prop->isInStasis = false;
             view->model()->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
         }
     }
@@ -908,6 +912,7 @@ NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &m
     KisNodeViewColorScheme scm;
 
     const QRect iconsRect = q->iconsRect(option, index);
+
     const bool iconsClicked = iconsRect.isValid() &&
         iconsRect.contains(mousePos);
 
@@ -924,6 +929,7 @@ NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &m
     const int xPos = mousePos.x() - iconsRect.left();
     const int clickedIcon = xPos / iconWidth;
     const int distToBorder = qMin(xPos % iconWidth, iconWidth - xPos % iconWidth);
+
 
     if (clickedIcon >= 0 &&
         clickedIcon < numProps &&
@@ -973,51 +979,55 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
         if (leftButton) {
-            auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), newOption);
-            if (!clickedProperty) return false;
+            if (visibilityClicked) {
+                KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+                OptionalProperty clickedProperty = d->findVisibilityProperty(props);
+                if (!clickedProperty) return false;
 
-            KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-            d->toggleProperty(props, &(*clickedProperty), mouseEvent->modifiers(), index);
-            return true;
-        } else if (leftButton && visibilityClicked) {
-            KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-            OptionalProperty clickedProperty = d->findVisibilityProperty(props);
-            if (!clickedProperty) return false;
+                d->toggleProperty(props, clickedProperty, mouseEvent->modifiers(), index);
 
-            d->toggleProperty(props, clickedProperty, mouseEvent->modifiers(), index);
+                return true;
+            } else if (decorationClicked) {
+                bool isExpandable = model->hasChildren(index);
+                if (isExpandable) {
+                    bool isExpanded = d->view->isExpanded(index);
+                    d->view->setExpanded(index, !isExpanded);
+                }
+                return true;
 
-            return true;
-        } else if (leftButton && decorationClicked) {
-            bool isExpandable = model->hasChildren(index);
-            if (isExpandable) {
-                bool isExpanded = d->view->isExpanded(index);
-                d->view->setExpanded(index, !isExpanded);
-            }
-            return true;
-        } else if (leftButton && thumbnailClicked) {
-            bool hasCorrectModifier = false;
-            SelectionAction action = SELECTION_REPLACE;
+            } else if (thumbnailClicked) {
+                bool hasCorrectModifier = false;
+                SelectionAction action = SELECTION_REPLACE;
 
-            if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                action = SELECTION_REPLACE;
-                hasCorrectModifier = true;
-            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
-                action = SELECTION_ADD;
-                hasCorrectModifier = true;
-            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) {
-                action = SELECTION_SUBTRACT;
-                hasCorrectModifier = true;
-            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier)) {
-                action = SELECTION_INTERSECT;
-                hasCorrectModifier = true;
-            }
+                if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                    action = SELECTION_REPLACE;
+                    hasCorrectModifier = true;
+                } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+                    action = SELECTION_ADD;
+                    hasCorrectModifier = true;
+                } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) {
+                    action = SELECTION_SUBTRACT;
+                    hasCorrectModifier = true;
+                } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier)) {
+                    action = SELECTION_INTERSECT;
+                    hasCorrectModifier = true;
+                }
 
-            if (hasCorrectModifier) {
-                model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
+                if (hasCorrectModifier) {
+                    model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
+                } else {
+                    d->view->setCurrentIndex(index);
+                }
+                return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
+
             } else {
-                d->view->setCurrentIndex(index);
+                auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), newOption);
+                if (!clickedProperty) return false;
+
+                KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+                d->toggleProperty(props, &(*clickedProperty), mouseEvent->modifiers(), index);
+                return true;
             }
-            return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
         }
 
         if (mouseEvent->button() == Qt::LeftButton &&

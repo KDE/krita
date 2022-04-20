@@ -1,0 +1,13 @@
+maintainer: rempt
+description: scripting api for Krita
+platforms:
+    - name: Linux
+    - name: FreeBSD
+    - name: Windows
+    - name: macOS
+    - name: Android
+deprecated: false
+release: true
+public_lib: true
+public_source_dirs:
+    libs/libkis

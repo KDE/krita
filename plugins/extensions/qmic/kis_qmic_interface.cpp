@@ -89,7 +89,7 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
             if (selection) {
                 cropRect = selection->selectedExactRect();
             } else {
-                cropRect = p->m_viewManager->image()->bounds();
+                cropRect = node->exactBounds();
             }
 
             dbgPlugins << "Converting node" << node->name() << cropRect;

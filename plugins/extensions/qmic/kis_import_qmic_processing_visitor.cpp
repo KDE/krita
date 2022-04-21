@@ -96,6 +96,7 @@ void KisImportQmicProcessingVisitor::applyLayerNameChanges(const gmic_image<floa
         int x = match.captured(1).toInt();
         int y = match.captured(2).toInt();
         dst->moveTo(x, y);
+        dbgPlugins << "Detected layer position: " << x << y;
     }
 }
 

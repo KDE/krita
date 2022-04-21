@@ -32,10 +32,10 @@ void KisQmicSynchronizeImageSizeCommand::redo()
 
         dbgPlugins << "\tkrita image" << kritaSize << "gmic size" << gmicBoundingLayerSize;
 
-        if (gmicBoundingLayerSize.width() > kritaSize.width() || gmicBoundingLayerSize.height() > kritaSize.height())
+        if (gmicBoundingLayerSize != kritaSize)
         {
             QSize newSize = kritaSize.expandedTo(gmicBoundingLayerSize);
-            dbgPlugins << "G'Mic expands Krita canvas from " << kritaSize << " to " << newSize;
+            dbgPlugins << "G'Mic changes layer size from " << kritaSize << " to " << newSize;
             m_resizeCommand = new KisImageResizeCommand(m_image, newSize);
             m_resizeCommand->redo();
         }

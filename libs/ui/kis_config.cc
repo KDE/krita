@@ -1046,7 +1046,7 @@ QList<QColor> KisConfig::colorHistory() const
     QList<QColor> colorList;
     QVariantList defaults;
     QVariantList history = m_cfg.readEntry("colorHistory", defaults);
-    for (const QVariant &variantColor: history) {
+    Q_FOREACH(const QVariant &variantColor, history) {
         colorList.push_back(variantColor.value<QColor>());
     }
     return colorList;
@@ -1057,7 +1057,7 @@ void KisConfig::setColorHistory(const QList<QColor> &history) const
     QVariantList variantHistory;
     variantHistory.reserve(history.size());
 
-    for (const QColor &color: history) {
+    Q_FOREACH(const QColor &color, history) {
         variantHistory.push_back(QVariant::fromValue(color));
     }
 

@@ -20,6 +20,7 @@
 KisColorHistory::KisColorHistory(QWidget *parent)
     : KisColorPatches("lastUsedColors", parent)
     , m_resourceProvider(0)
+    , m_id(m_idCount++)
 {
     m_clearButton = new QToolButton(this);
     m_clearButton->setIcon(KisIconUtils::loadIcon("dialog-cancel-16"));
@@ -78,6 +79,7 @@ void KisColorHistory::addColorToHistory(const KoColor& color)
     }
 
     setColors(m_colorHistory);
+    m_lastUsed = m_id; // This history becomes the last used.
 }
 
 void KisColorHistory::clearColorHistory() {
@@ -87,14 +89,17 @@ void KisColorHistory::clearColorHistory() {
 
 KisColorHistory::~KisColorHistory()
 {
-    KisConfig config(false);
-    QList<QColor> history;
-    history.reserve(m_colorHistory.size());
+    // Only save the color history where the last color has been added.
+    if (m_lastUsed == m_id) {
+        KisConfig config(false);
+        QList<QColor> history;
+        history.reserve(m_colorHistory.size());
 
-    for (const KoColor & koColor: m_colorHistory) {
-        history.push_back(koColor.toQColor());
+        Q_FOREACH(const KoColor &koColor, m_colorHistory) {
+                history.push_back(koColor.toQColor());
+        }
+        config.setColorHistory(history);
     }
-    config.setColorHistory(history);
 }
 
 void KisColorHistory::restoreColorHistory()
@@ -104,10 +109,12 @@ void KisColorHistory::restoreColorHistory()
     KoColor color;
 
     m_colorHistory.clear();
-    for (const QColor &qColor: history) {
+    Q_FOREACH(const QColor &qColor, history) {
         color.fromQColor(qColor);
         m_colorHistory.push_back(color);
     }
     setColors(m_colorHistory);
 }
 
+int KisColorHistory::m_idCount = 0;
+int KisColorHistory::m_lastUsed = -1; // None initially

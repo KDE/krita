@@ -19,3 +19,6 @@ Dependencies:
 - 'on': ['Linux', 'FreeBSD']
   'require':
     'frameworks/kcrash': '@stable'
+
+Options:
+    use-ccache: True

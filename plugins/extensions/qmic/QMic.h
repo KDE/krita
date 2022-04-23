@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,20 +9,8 @@
 #define QMIC_H
 
 #include <KisActionPlugin.h>
-#include <QPointer>
-#include <QVariant>
-#include <QVector>
-#include <kis_types.h>
-
-#include "gmic.h"
-#include "kis_qmic_interface.h"
-#include "kis_qmic_plugin_interface.h"
 
 class KisAction;
-class QLocalServer;
-class QSharedMemory;
-
-class KisQmicApplicator;
 
 class QMic : public KisActionPlugin
 {
@@ -31,14 +20,12 @@ public:
     ~QMic() override = default;
 
 private Q_SLOTS:
-
     void slotQMicAgain();
     void slotQMic(bool again = false);
 
 private:
-    QString m_key;
-    KisAction *m_qmicAction {0};
-    KisAction *m_againAction {0};
+    KisAction *m_qmicAction;
+    KisAction *m_againAction;
 };
 
 #endif // QMic_H

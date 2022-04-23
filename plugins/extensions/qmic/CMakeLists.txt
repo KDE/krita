@@ -1,12 +1,9 @@
 # GMic bindings exposure.
 set(kritaqmicinterface_SOURCES
-    kis_import_qmic_processing_visitor.cpp
     kis_input_output_mapper.cpp
-    kis_qmic_applicator.cpp
-    kis_qmic_data.cpp
     kis_qmic_interface.cpp
+    kis_qmic_processing_visitor.cpp
     kis_qmic_plugin_interface.cpp
-    kis_qmic_progress_manager.cpp
     kis_qmic_simple_convertor.cpp
     kis_qmic_synchronize_image_size_command.cpp
     kis_qmic_synchronize_layers_command.cpp

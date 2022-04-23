@@ -309,7 +309,7 @@ static KoColorTransformation* createTransformation(const KoColorSpace* colorSpac
 }
 
 
-void KisQmicSimpleConvertor::convertFromGmicFast(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicUnitValue)
+void KisQmicSimpleConvertor::convertFromGmicFast(const gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicUnitValue)
 {
     dbgPlugins << "convertFromGmicFast";
     const KoColorSpace * dstColorSpace = dst->colorSpace();
@@ -642,7 +642,7 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev, gmic_image
     delete pixelToGmicPixelFormat;
 }
 
-void KisQmicSimpleConvertor::convertFromGmicImage(gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue)
+void KisQmicSimpleConvertor::convertFromGmicImage(const gmic_image<float>& gmicImage, KisPaintDeviceSP dst, float gmicMaxChannelValue)
 {
     dbgPlugins << "convertFromGmicSlow";
     Q_ASSERT(!dst.isNull());

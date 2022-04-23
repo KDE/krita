@@ -16,7 +16,6 @@
 #include <QObject>
 #include <QRect>
 #include <QScopedPointer>
-#include <QSharedPointer>
 #include <QSize>
 #include <QVector>
 
@@ -76,10 +75,6 @@ public:
 private:
     struct Private;
     const QScopedPointer<Private> p;
-
-private Q_SLOTS:
-    void slotStartApplicator(QVector<KisQMicImageSP> gmicImages);
-    void slotGmicFinished(bool successfully, int milliseconds, const QString &msg);
 };
 
 #endif

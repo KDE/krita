@@ -1,36 +1,35 @@
 /*
  * SPDX-FileCopyrightText: 2017 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2020 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <KoJsonTrader.h>
+#include "QMic.h"
+
 #include <QApplication>
-#include <QDebug>
-#include <QFileInfo>
-#include <QList>
 #include <QMessageBox>
-#include <QUuid>
+#include <memory>
+
+#include <KisViewManager.h>
+#include <KoJsonTrader.h>
 #include <kis_action.h>
-#include <kis_config.h>
+#include <kis_debug.h>
 #include <klocalizedstring.h>
 #include <kpluginfactory.h>
 
-#include "QMic.h"
-#include "kis_qmic_interface.h"
-#include "KisViewManager.h"
+#include "kis_qmic_plugin_interface.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(QMicFactory, "kritaqmic.json", registerPlugin<QMic>();)
 
 QMic::QMic(QObject *parent, const QVariantList &)
     : KisActionPlugin(parent)
+    , m_qmicAction(createAction("QMic"))
+    , m_againAction(createAction("QMicAgain"))
 {
-    m_qmicAction = createAction("QMic");
     m_qmicAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
-
     connect(m_qmicAction, SIGNAL(triggered()), this, SLOT(slotQMic()));
 
-    m_againAction = createAction("QMicAgain");
     m_againAction->setActivationFlags(KisAction::ACTIVE_DEVICE);
     m_againAction->setEnabled(false);
     connect(m_againAction, SIGNAL(triggered()), this, SLOT(slotQMicAgain()));
@@ -83,7 +82,6 @@ void QMic::slotQMic(bool again)
 
     qDeleteAll(offers);
 
-    m_key = QUuid::createUuid().toString();
     auto image = std::make_shared<KisImageInterface>(this->viewManager().data());
     int status = plugin->launch(image, again);
 

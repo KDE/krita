@@ -57,7 +57,8 @@ enum CanvasResourceId {
     DisablePressure,
     PreviousPaintOpPreset,
     EffectiveZoom, ///<-Used only by painting tools for non-displaying purposes
-    EffectivePhysicalZoom ///<-Used by tool for displaying purposes
+    EffectivePhysicalZoom, ///<-Used by tool for displaying purposes
+    LastColorHistory
 };
 
 }

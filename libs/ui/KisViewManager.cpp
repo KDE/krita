@@ -305,6 +305,7 @@ KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollec
     d->canvasResourceProvider.setFGColor(cfg.readKoColor("LastForeGroundColor",foreground));
     KoColor background(Qt::white, cs);
     d->canvasResourceProvider.setBGColor(cfg.readKoColor("LastBackGroundColor",background));
+    d->canvasResourceProvider.setLastColorHistory(cfg.readKoColors("LastColorHistory"));
 
     // Initialize the old imagesize plugin
     new ImageSize(this);
@@ -317,6 +318,10 @@ KisViewManager::~KisViewManager()
     if (canvasResourceProvider() && canvasResourceProvider()->currentPreset()) {
         cfg.writeKoColor("LastForeGroundColor",canvasResourceProvider()->fgColor());
         cfg.writeKoColor("LastBackGroundColor",canvasResourceProvider()->bgColor());
+    }
+
+    if (canvasResourceProvider()) {
+        cfg.writeKoColors("LastColorHistory", canvasResourceProvider()->lastColorHistory());
     }
 
     cfg.writeEntry("baseLength", KisResourceItemChooserSync::instance()->baseLength());

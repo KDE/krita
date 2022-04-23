@@ -56,6 +56,9 @@ public:
     KoColor fgColor() const;
     void setFGColor(const KoColor& c);
 
+    QList<KoColor> lastColorHistory() const;
+    void setLastColorHistory(const QList<KoColor>& colors);
+
     float HDRExposure() const;
     void setHDRExposure(float exposure);
 

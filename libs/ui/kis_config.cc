@@ -1041,29 +1041,6 @@ void KisConfig::setCanvasBorderColor(const QColor& color) const
     m_cfg.writeEntry("canvasBorderColor", color);
 }
 
-QList<QColor> KisConfig::colorHistory() const
-{
-    QList<QColor> colorList;
-    QVariantList defaults;
-    QVariantList history = m_cfg.readEntry("colorHistory", defaults);
-    Q_FOREACH(const QVariant &variantColor, history) {
-        colorList.push_back(variantColor.value<QColor>());
-    }
-    return colorList;
-}
-
-void KisConfig::setColorHistory(const QList<QColor> &history) const
-{
-    QVariantList variantHistory;
-    variantHistory.reserve(history.size());
-
-    Q_FOREACH(const QColor &color, history) {
-        variantHistory.push_back(QVariant::fromValue(color));
-    }
-
-    m_cfg.writeEntry("colorHistory", variantHistory);
-}
-
 bool KisConfig::hideScrollbars(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("hideScrollbars", false));
@@ -2460,5 +2437,41 @@ KoColor KisConfig::readKoColor(const QString& name, const KoColor& _color) const
         color =  KoColor::fromXML(e, Integer16BitsColorDepthID.id());
     }
     return color;
+}
 
+void KisConfig::writeKoColors(const QString& name, const QList<KoColor>& colors) const
+{
+    QDomDocument doc = QDomDocument(name);
+    QDomElement colorsElement = doc.createElement("colors");
+    doc.appendChild(colorsElement);
+
+    // Writes like <colors><RGB ../><RGB .. /> ... </colors>
+    Q_FOREACH(const KoColor & color, colors) {
+        color.toXML(doc, colorsElement);
+    }
+    m_cfg.writeEntry(name, doc.toString());
+}
+
+QList<KoColor> KisConfig::readKoColors(const QString& name) const
+{
+    QList<KoColor> colors;
+    QString colorListXML = m_cfg.readEntry(name);
+
+    if (!colorListXML.isNull()) {
+        QDomDocument doc;
+        doc.setContent(colorListXML);
+        QDomElement colorsElement = doc.firstChildElement();
+        if (!colorsElement.isNull()) {
+            QDomNodeList colorNodes = colorsElement.childNodes();
+            colors.reserve(colorNodes.size());
+
+            for (int k = 0; k < colorNodes.size(); k++) {
+                QDomElement colorElement = colorNodes.at(k).toElement();
+                KoColor color = KoColor::fromXML(colorElement, Integer16BitsColorDepthID.id());
+                colors.push_back(color);
+            }
+        }
+    }
+
+    return colors;
 }

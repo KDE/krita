@@ -22,23 +22,16 @@ public:
 
 protected:
     KisColorSelectorBase* createPopup() const override;
-    ~KisColorHistory();
 
 public Q_SLOTS:
     void addColorToHistory(const KoColor& color);
 
     void clearColorHistory();
-private:
-    void restoreColorHistory();
 
+private:
     QToolButton* m_clearButton;
     QList<KoColor> m_colorHistory;
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...
-
-    int m_id; // The id of this history
-
-    static int m_idCount; // The id provider for the history widgets
-    static int m_lastUsed; // The id of the last used history
 };
 
 #endif // KIS_COLOR_HISTORY_H

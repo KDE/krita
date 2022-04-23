@@ -107,6 +107,24 @@ KoColor KisCanvasResourceProvider::fgColor() const
     }
 }
 
+QList<KoColor> KisCanvasResourceProvider::lastColorHistory() const
+{
+    QVariant c = m_resourceManager->resource(KoCanvasResource::LastColorHistory);
+    if (c.isValid()) {
+        return c.value<QList<KoColor>>();
+    }
+    else {
+        return QList<KoColor>();
+    }
+}
+
+void KisCanvasResourceProvider::setLastColorHistory(const QList<KoColor>& colors)
+{
+    QVariant v;
+    v.setValue(colors);
+    m_resourceManager->setResource(KoCanvasResource::LastColorHistory, v);
+}
+
 float KisCanvasResourceProvider::HDRExposure() const
 {
     return static_cast<float>(m_resourceManager->resource(KoCanvasResource::HdrExposure).toDouble());

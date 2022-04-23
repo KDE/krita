@@ -50,6 +50,7 @@ public:
     QString proposedFileName;
     QUrl defaultUri;
     QStringList filterList;
+    QMap<QString, QString> suffixes; // Filter description to extension, may lack some entries
     QString defaultFilter;
     QScopedPointer<KisPreviewFileDialog> fileDialog;
     QString mimeType;
@@ -107,7 +108,9 @@ void KoFileDialog::setImageFilters()
 
 void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString defaultMimeType)
 {
-    d->filterList = getFilterStringListFromMime(mimeTypeList, true);
+    QPair<QStringList, QMap<QString, QString>> filters = getFilterStringListFromMime(mimeTypeList, true);
+    d->filterList = filters.first;
+    d->suffixes = filters.second;
 
     QString defaultFilter;
 
@@ -118,7 +121,8 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
             d->proposedFileName = QFileInfo(d->proposedFileName).completeBaseName() + "." + suffix;
         }
 
-        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultMimeType, false);
+        QStringList defaultFilters =
+            getFilterStringListFromMime(QStringList() << defaultMimeType, false).first;
         if (defaultFilters.size() > 0) {
             defaultFilter = defaultFilters.first();
         }
@@ -143,6 +147,8 @@ void KoFileDialog::createFileDialog()
     if (!d->defaultUri.isEmpty()) {
         d->fileDialog->setDirectoryUrl(d->defaultUri);
     }
+    connect(d->fileDialog.get(), SIGNAL(filterSelected(const QString&)), this, SLOT(onFilterSelected(const QString&)));
+
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
     bool dontUseNative = true;
@@ -173,6 +179,7 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, dontUseNative ? true : false);
 
+
 #ifdef Q_OS_MACOS
     QList<QUrl> urls = d->fileDialog->sidebarUrls();
     QUrl volumes = QUrl::fromLocalFile("/Volumes");
@@ -191,13 +198,12 @@ void KoFileDialog::createFileDialog()
 
         d->fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
 
-        if (d->type == ImportDirectory || d->type == OpenDirectory){
+        if (d->type == ImportDirectory || d->type == OpenDirectory) {
             d->fileDialog->setFileMode(QFileDialog::Directory);
             d->fileDialog->setOption(QFileDialog::ShowDirsOnly, true);
         }
         else { // open / import file(s)
-            if (d->type == OpenFile
-                    || d->type == ImportFile)
+            if (d->type == OpenFile || d->type == ImportFile)
             {
                 d->fileDialog->setFileMode(QFileDialog::ExistingFile);
             }
@@ -240,6 +246,9 @@ void KoFileDialog::createFileDialog()
         }
     }
     d->fileDialog->resetIconProvider();
+
+    // Trigger event to set default suffix
+    emit d->fileDialog->filterSelected(d->defaultFilter);
 }
 
 QString KoFileDialog::filename()
@@ -359,7 +368,7 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
     return filters;
 }
 
-const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_mimeList,
+const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringListFromMime(const QStringList &_mimeList,
                                                             bool withAllSupportedEntry)
 {
     QStringList mimeSeen;
@@ -371,8 +380,9 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
     // 3
     QString ora;
 
-    QStringList ret;
+    QPair<QStringList, QMap<QString, QString>> ret;
     QStringList mimeList = _mimeList;
+
     mimeList.sort();
 
     Q_FOREACH(const QString &mimeType, mimeList) {
@@ -389,6 +399,7 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
             QString oneFilter;
             QStringList patterns = KisMimeDatabase::suffixesForMimeType(mimeType);
             QStringList globPatterns;
+
             Q_FOREACH(const QString &pattern, patterns) {
                 if (pattern.startsWith(".")) {
                     globPatterns << "*" + pattern;
@@ -420,6 +431,10 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
 
             oneFilter = description + " ( " + oneFilter + ")";
 
+            // the "simplified" version that comes to "onFilterSelect" when details are disabled
+            ret.second[description] = patterns.first();
+            // "full version" that comes when details are enabled
+            ret.second[oneFilter] = patterns.first();
 
             if (mimeType == "application/x-krita") {
                 kritaNative = oneFilter;
@@ -430,22 +445,22 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
                 continue;
             }
             else {
-                ret << oneFilter;
+                ret.first << oneFilter;
             }
             mimeSeen << mimeType;
         }
     }
 
-    ret.sort();
-    ret.removeDuplicates();
+    ret.first.sort();
+    ret.first.removeDuplicates();
 
     if (allSupported.contains("*.kra")) {
         allSupported.remove("*.kra ");
         allSupported.prepend("*.kra ");
     }
-    if (!ora.isEmpty()) ret.prepend(ora);
-    if (!kritaNative.isEmpty())  ret.prepend(kritaNative);
-    if (!allSupported.isEmpty()) ret.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));
+    if (!ora.isEmpty()) ret.first.prepend(ora);
+    if (!kritaNative.isEmpty())  ret.first.prepend(kritaNative);
+    if (!allSupported.isEmpty()) ret.first.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));
 
     return ret;
 
@@ -470,4 +485,22 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     group.writeEntry(dialogName, fileInfo.absolutePath());
 
+}
+
+void KoFileDialog::onFilterSelected(const QString &filter)
+{
+// Setting default suffix for Android is broken as of Qt 5.12.0, returning the file
+// with extension added but no write permissions granted.
+#ifndef Q_OS_ANDROID
+    QFileDialog::FileMode mode = d->fileDialog->fileMode();
+    if (mode != QFileDialog::FileMode::Directory && mode != QFileDialog::FileMode::DirectoryOnly) {
+        // we do not need suffixes for directories
+        if (d->suffixes.contains(filter)) {
+            QString suffix = d->suffixes[filter];
+            d->fileDialog->setDefaultSuffix(suffix);
+        } else {
+            d->fileDialog->setDefaultSuffix("");
+        }
+    }
+#endif
 }

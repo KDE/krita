@@ -357,7 +357,7 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             choice = dlg.source();
 
             saveSourceSetting = dlg.remember();
-        } else if (defaultOptionUnavailable) {
+        } else if (defaultOptionUnavailable || choice == PASTE_FORMAT_ASK) {
             if (remote) {
                 choice = PASTE_FORMAT_DOWNLOAD;
             } else if (local) {

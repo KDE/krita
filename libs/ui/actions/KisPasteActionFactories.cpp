@@ -202,14 +202,23 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
 
     const QPointF docPos = view->canvasBase()->canvasController()->currentCursorPosition();
 
+    // Activate the current tool's paste functionality
+    if (view->canvasBase()->toolProxy()->paste()) {
+        // XXX: "Add saving of XML data for Paste of shapes"
+        return;
+    }
+
+    // Paste shapes
     if (tryPasteShapes(pasteAtCursorPosition, view)) {
         return;
     }
 
+    // If no shapes, check for layers
     if (KisClipboard::instance()->hasLayers() && !pasteAtCursorPosition) {
         view->nodeManager()->pasteLayersFromClipboard();
         return;
     }
+
     KisTimeSpan range;
     const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, -1, &range);
@@ -264,9 +273,6 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         }
         
         endAction(ap, KisOperationConfiguration(id()).toXML());
-    } else {
-        // XXX: "Add saving of XML data for Paste of shapes"
-        view->canvasBase()->toolProxy()->paste();
     }
 }
 

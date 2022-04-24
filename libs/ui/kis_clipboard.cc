@@ -9,13 +9,11 @@
 
 #include <QApplication>
 #include <QBuffer>
-#include <QCheckBox>
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QMimeData>
-#include <QPushButton>
 #include <QScopedPointer>
 #include <QTemporaryFile>
 
@@ -192,6 +190,11 @@ KisClipboard::clip(const QRect &imageBounds, bool showPopup, int overridePasteBe
         return nullptr;
     }
 
+    dbgUI << Q_FUNC_INFO;
+    dbgUI << "\t Formats: " << cbData->formats();
+    dbgUI << "\t Urls: " << cbData->urls();
+    dbgUI << "\t Has images: " << cbData->hasImage();
+
     return clipFromMimeData(cbData, imageBounds, showPopup, overridePasteBehaviour, clipRange, true);
 }
 
@@ -218,7 +221,7 @@ KisPaintDeviceSP KisClipboard::clipFromMimeData(const QMimeData *cbData,
 KisPaintDeviceSP
 KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &imageBounds, KisTimeSpan *clipRange) const
 {
-    QByteArray mimeType("application/x-krita-selection");
+    const QByteArray mimeType("application/x-krita-selection");
 
     KisPaintDeviceSP clip;
 
@@ -298,7 +301,7 @@ KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &image
                     if (list.size() == 2) {
                         KisTimeSpan range = KisTimeSpan::fromTimeToTime(list[0].toInt(), list[1].toInt());
                         *clipRange = range;
-                        qDebug() << "Pasted time range" << range;
+                        dbgUI << "Pasted time range" << range;
                     }
                 }
             }
@@ -343,6 +346,14 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
         const bool defaultOptionUnavailable = (!remote && choice == PASTE_FORMAT_DOWNLOAD)
             || (!local && choice == PASTE_FORMAT_LOCAL) || (!cbData->hasImage() && choice == PASTE_FORMAT_CLIP);
 
+        dbgUI << "Incoming paste event:";
+        dbgUI << "\t Has attached bitmap:" << cbData->hasImage();
+        dbgUI << "\t Has local images:" << local;
+        dbgUI << "\t Has remote images:" << remote;
+        dbgUI << "\t Has multiple formats:" << hasMultipleFormatsAvailable;
+        dbgUI << "\t Default source preference" << choice;
+        dbgUI << "\t Default source available:" << !defaultOptionUnavailable;
+
         if (hasMultipleFormatsAvailable && choice == PASTE_FORMAT_ASK) {
             KisDlgPasteFormat dlg(qApp->activeWindow());
 
@@ -373,6 +384,8 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
     if (saveSourceSetting) {
         cfg.setPasteFormat(choice);
     }
+
+    dbgUI << "Selected source for the paste:" << choice;
 
     if (choice == PASTE_FORMAT_CLIP) {
         QImage qimage = getImageFromMimeData(cbData);

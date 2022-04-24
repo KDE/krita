@@ -88,12 +88,6 @@ public:
 
     bool hasUrls() const;
 
-    /**
-     * load an image from clipboard handling different supported formats
-     * @return image
-     */
-    QImage getImageFromClipboard() const;
-
 Q_SIGNALS:
     void clipCreated();
     void clipChanged();

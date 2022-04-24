@@ -91,11 +91,6 @@ struct KisReferenceImage::Private : public QSharedData
         return (!image.isNull());
     }
 
-    bool loadFromClipboard() {
-        image = KisClipboard::instance()->getImageFromClipboard();
-        return !image.isNull();
-    }
-
     void updateCache() {
         if (saturation < 1.0) {
             cachedImage = KritaUtils::convertQImageToGrayA(image);
@@ -188,19 +183,9 @@ KisReferenceImage * KisReferenceImage::fromFile(const QString &filename, const K
 
 KisReferenceImage *KisReferenceImage::fromClipboard(const KisCoordinatesConverter &converter)
 {
-    KisReferenceImage *reference = new KisReferenceImage();
-    bool ok = reference->d->loadFromClipboard();
-
-    if (ok) {
-        QRect r = QRect(QPoint(), reference->d->image.size());
-        QSizeF size = converter.imageToDocument(r).size();
-        reference->setSize(size);
-    } else {
-        delete reference;
-        reference = nullptr;
-    }
-
-    return reference;
+    const auto sz = KisClipboard::instance()->clipSize();
+    KisPaintDeviceSP clip = KisClipboard::instance()->clip({0, 0, sz.width(), sz.height()}, true);
+    return fromPaintDevice(clip, converter, nullptr);
 }
 
 KisReferenceImage *

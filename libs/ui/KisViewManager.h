@@ -218,6 +218,9 @@ public Q_SLOTS:
 
     void slotToggleFgBg();
     void slotResetFgBg();
+
+    // Enable the last set brush outline, or disable it if already enabled
+    void slotToggleBrushOutline();
     
 Q_SIGNALS:
 
@@ -227,6 +230,8 @@ Q_SIGNALS:
      * sent out when the view has changed.
      */
     void viewChanged();
+
+    void brushOutlineToggled();
 
 private Q_SLOTS:
 

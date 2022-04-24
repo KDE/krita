@@ -694,6 +694,16 @@
       <isCheckable>false</isCheckable>
       <statusTip/>
     </Action>
+    <Action name="toggle_brush_outline">
+      <icon/>
+      <text>Toggle Brush Outline</text>
+      <whatsThis/>
+      <toolTip>Disable the brush outline, or enable the previously used brush outline shape if already disabled</toolTip>
+      <iconText>Toggle Brush Outline</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
     <Action name="selection_tool_mode_add">
       <icon/>
       <text>Selection Mode: Add</text>

@@ -194,6 +194,7 @@ public:
     KisAction *gamutCheck {nullptr};
     KisAction *toggleFgBg {nullptr};
     KisAction *resetFgBg {nullptr};
+    KisAction *toggleBrushOutline {nullptr};
 
     KisSelectionManager selectionManager;
     KisGuidesManager guidesManager;
@@ -750,6 +751,9 @@ void KisViewManager::createActions()
 
     d->resetFgBg =  actionManager()->createAction("reset_fg_bg");
     connect(d->resetFgBg, SIGNAL(triggered(bool)), this, SLOT(slotResetFgBg()));
+
+    d->toggleBrushOutline =  actionManager()->createAction("toggle_brush_outline");
+    connect(d->toggleBrushOutline, SIGNAL(triggered(bool)), this, SLOT(slotToggleBrushOutline()));
 
 }
 
@@ -1532,6 +1536,25 @@ void KisViewManager::slotResetFgBg()
     // see a comment in slotToggleFgBg()
     d->canvasResourceManager.setBackgroundColor(KoColor(Qt::white, KoColorSpaceRegistry::instance()->rgb8()));
     d->canvasResourceManager.setForegroundColor(KoColor(Qt::black, KoColorSpaceRegistry::instance()->rgb8()));
+}
+
+void KisViewManager::slotToggleBrushOutline()
+{
+    KisConfig cfg(true);
+
+    OutlineStyle style;
+
+    if (cfg.newOutlineStyle() != OUTLINE_NONE) {
+        style = OUTLINE_NONE;
+        cfg.setLastUsedOutlineStyle(cfg.newOutlineStyle());
+    } else {
+        style = cfg.lastUsedOutlineStyle();
+        cfg.setLastUsedOutlineStyle(OUTLINE_NONE);
+    }
+
+    cfg.setNewOutlineStyle(style);
+
+    emit brushOutlineToggled();
 }
 
 void KisViewManager::slotResetRotation()

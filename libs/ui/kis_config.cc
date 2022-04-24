@@ -400,6 +400,22 @@ void KisConfig::setNewOutlineStyle(OutlineStyle style)
     m_cfg.writeEntry("newOutlineStyle", (int)style);
 }
 
+OutlineStyle KisConfig::lastUsedOutlineStyle(bool defaultValue) const
+{
+    if (defaultValue) {
+        return OUTLINE_NONE;
+    }
+
+    int style = m_cfg.readEntry("lastUsedOutlineStyle", int(-1));
+
+    return (OutlineStyle) style;
+}
+
+void KisConfig::setLastUsedOutlineStyle(OutlineStyle style)
+{
+    m_cfg.writeEntry("lastUsedOutlineStyle", (int)style);
+}
+
 QRect KisConfig::colorPreviewRect() const
 {
     return m_cfg.readEntry("colorPreviewRect", QVariant(QRect(32, 32, 48, 48))).toRect();

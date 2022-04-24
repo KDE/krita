@@ -63,6 +63,8 @@ KisToolFreehand::KisToolFreehand(KoCanvasBase * canvas, const QCursor & cursor, 
     m_helper = new KisToolFreehandHelper(m_infoBuilder, canvas->resourceManager(), transactionText);
 
     connect(m_helper, SIGNAL(requestExplicitUpdateOutline()), SLOT(explicitUpdateOutline()));
+
+    connect(qobject_cast<KisCanvas2*>(canvas)->viewManager(), SIGNAL(brushOutlineToggled()), SLOT(explicitUpdateOutline()));
 }
 
 KisToolFreehand::~KisToolFreehand()

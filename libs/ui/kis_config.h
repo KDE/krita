@@ -117,6 +117,9 @@ public:
     OutlineStyle newOutlineStyle(bool defaultValue = false) const;
     void setNewOutlineStyle(OutlineStyle style);
 
+    OutlineStyle lastUsedOutlineStyle(bool defaultValue = false) const;
+    void setLastUsedOutlineStyle(OutlineStyle style);
+
     QRect colorPreviewRect() const;
     void setColorPreviewRect(const QRect &rect);
 

@@ -19,11 +19,14 @@ ExternalProject_Add(ext_freetype_bootstrap
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_freetype}
         -DFT_DISABLE_BZIP2=ON
         -DFT_DISABLE_BROTLI=ON
+        -DFT_REQUIRE_PNG=ON
         -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
         -DBUILD_SHARED_LIBS=TRUE
         ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
+
+    DEPENDS ext_png
 )
 
 if(NOT MESON_BINARY_PATH)
@@ -79,9 +82,10 @@ ExternalProject_Add( ext_freetype
         -DFT_DISABLE_BZIP2=ON
         -DFT_DISABLE_BROTLI=ON
         -DFT_REQUIRE_HARFBUZZ=ON
+        -DFT_REQUIRE_PNG=ON
         -DBUILD_SHARED_LIBS=TRUE
         ${GLOBAL_PROFILE}
 
     UPDATE_COMMAND ""
-    DEPENDS ext_harfbuzz
+    DEPENDS ext_harfbuzz ext_png
 )

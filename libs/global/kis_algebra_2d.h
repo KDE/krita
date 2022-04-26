@@ -727,6 +727,8 @@ private:
     bool valid = true;
 };
 
+// NOTE: tiar: this seems to ignore perspective transformation, be wary and use the class in PerspectiveEllipseAssistant.cpp instead
+// this is only good for rotation, translation and possibly shear
 std::pair<QPointF, QTransform> KRITAGLOBAL_EXPORT transformEllipse(const QPointF &axes, const QTransform &fullLocalToGlobal);
 
 QPointF KRITAGLOBAL_EXPORT alignForZoom(const QPointF &pt, qreal zoom);
@@ -858,6 +860,19 @@ private:
     int m_d = 1;
     const int m_base = 0;
 };
+
+
+// find minimum of the function f(x) between points xA and xB, with eps precision, using Golden Ratio Section
+// requirements: only one local minimum between xA and xB
+// Golden Section is supposed to be usually faster than Ternary Section
+// NOTE: tiar: this function was debugged and should be working correctly but is not used anywhere any longer
+qreal findMinimumGoldenSection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
+
+// find minimum of the function f(x) between points xA and xB, with eps precision, using Ternary Section
+// requirements: only one local minimum between xA and xB
+// Golden Section is supposed to be usually faster than Ternary Section
+// NOTE: tiar: this function was debugged and should be working correctly but is not used anywhere any longer
+qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
 
 
 }

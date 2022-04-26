@@ -175,6 +175,24 @@ void KisAlgebra2DTest::testMatrixDecomposition2()
     QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
 }
 
+void KisAlgebra2DTest::testMatrixDecomposition3()
+{
+    //QTransform t0 = QTransform(177.097, 28.4105, -0.344587, -231.26, -33.6893, -0.338797, 95.3185, -54.9594, 0.658308);
+    QTransform t0 = QTransform(266.715, 65.9483, 0.153259, 331.445, 81.615, 0.922963, 500.68, 363.222, 1.53811);
+    ENTER_FUNCTION() << ppVar(t0.m33()) << ppVar(t0.determinant());
+    KisAlgebra2D::DecomposedMatix matrix(t0);
+
+    QCOMPARE(matrix.isValid(), true);
+    QVERIFY(KisAlgebra2D::fuzzyMatrixCompare(matrix.transform(), t0, 1e-4));
+    ENTER_FUNCTION() << matrix.transform();
+
+    // test 4
+
+
+
+
+}
+
 
 
 void KisAlgebra2DTest::testDivisionWithFloor()

@@ -33,27 +33,33 @@ private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral
     bool quad(QPolygonF& out) const;
+
     // finds the transform from perspective coordinates (a unit square) to the document
-    bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
+    bool getTransform(QPolygonF& polyOut, QTransform& transformOut);
+
+
+    bool isEllipseValid();
+    void updateCache();
+
+
      
     explicit PerspectiveEllipseAssistant(const PerspectiveEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
-    
-    // which direction to snap to (in transformed coordinates)
-    QLineF m_snapLine;
-    
-    mutable Ellipse e;
+
 
     mutable QTransform m_cachedTransform;
-    mutable QTransform m_cachedEllipseTransform;
     mutable QPolygonF m_cachedPolygon;
     mutable QPointF m_cachedPoints[4];
-    mutable QPointF m_cachedEllipsePoints[4];
-    mutable bool m_cacheValid {false};
+
+
+    QVector<QPointF> pointsToDraw;
     
     
     bool m_followBrushPosition;
     bool m_adjustedPositionValid;
     QPointF m_adjustedBrushPosition;
+
+    class Private;
+    QScopedPointer<Private> d;
     
 };
 

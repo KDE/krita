@@ -22,6 +22,7 @@ private Q_SLOTS:
 
     void testMatrixDecomposition1();
     void testMatrixDecomposition2();
+    void testMatrixDecomposition3();
 
     void testDivisionWithFloor();
     void testDrawEllipse();

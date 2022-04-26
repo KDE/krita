@@ -35,18 +35,22 @@ public:
     void applyThreshold(KisFixedPaintDeviceSP dab, const KisPaintInformation &info);
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     void setAlignOutlineToPixels(bool alignOutlineToPixels) {
         m_alignOutlinePixels = alignOutlineToPixels;
     }
-    bool alignOutlineToPixels() {
+
+    bool alignOutlineToPixels() const {
         return m_alignOutlinePixels;
     }
+
     /// threshold has 100 levels (like opacity)
     void setThreshold(qint32 threshold) {
         m_softness = qBound<quint32>(0, quint32(threshold), 100);
     }
+
     qint32 threshold() {
         return qint32(m_softness);
     }
@@ -54,6 +58,7 @@ public:
     void setSharpnessFactor(qreal factor) {
         KisCurveOption::setValue(factor);
     }
+
     qreal sharpnessFactor() {
         return KisCurveOption::value();
     }

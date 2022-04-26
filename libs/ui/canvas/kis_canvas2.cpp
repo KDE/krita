@@ -982,9 +982,15 @@ void KisCanvas2::slotDoCanvasUpdate()
 
 void KisCanvas2::updateCanvasWidgetImpl(const QRect &rc)
 {
+    QRect rect = m_d->canvasWidget->widget()->rect();
+    if (!rc.isEmpty()) {
+        rect &= rc;
+        if (rect.isEmpty()) {
+            return;
+        }
+    }
     // We don't know if it's the canvas projection or the overlay that's
     // changed, so we update both.
-    QRect rect = !rc.isEmpty() ? rc : m_d->canvasWidget->widget()->rect();
     m_d->savedCanvasProjectionUpdateRect |= rect;
     m_d->savedOverlayUpdateRect |= rect;
     m_d->canvasUpdateCompressor.start();
@@ -999,7 +1005,7 @@ QRect KisCanvas2::KisCanvas2Private::docUpdateRectToWidget(const QRectF &docRect
 {
     QRect widgetRect = coordinatesConverter->documentToWidget(docRect).toAlignedRect();
     widgetRect.adjust(-2, -2, 2, 2);
-    return widgetRect;
+    return widgetRect & canvasWidget->widget()->rect();
 }
 
 void KisCanvas2::updateCanvas(const QRectF& documentRect)
@@ -1046,8 +1052,11 @@ void KisCanvas2::updateCanvasToolOutlineDoc(const QRectF &docRect)
 
 void KisCanvas2::updateCanvasToolOutlineWdg(const QRect &widgetRect)
 {
-    m_d->savedOverlayUpdateRect |= widgetRect;
-    m_d->canvasUpdateCompressor.start();
+    QRect rect = widgetRect & m_d->canvasWidget->widget()->rect();
+    if (!rect.isEmpty()) {
+        m_d->savedOverlayUpdateRect |= rect;
+        m_d->canvasUpdateCompressor.start();
+    }
 }
 
 void KisCanvas2::updateCanvasScene()

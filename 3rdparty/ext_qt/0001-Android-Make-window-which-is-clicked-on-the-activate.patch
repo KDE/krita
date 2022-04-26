@@ -1,4 +1,4 @@
-From 105b8b9a7db9d80a3c732e7c226969f7d5413e93 Mon Sep 17 00:00:00 2001
+From 4394338d534a33d249f79e815b7d62ea92a78e40 Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 27 Jan 2022 11:46:29 +0000
 Subject: [PATCH] Android: Make window which is clicked on the activated window
@@ -22,7 +22,7 @@ z-order can changed.
  4 files changed, 70 insertions(+), 2 deletions(-)
 
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 257d013fa8..c6ddd729cb 100644
+index 257d013fa8..363ec8eab6 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -46,11 +46,13 @@
@@ -46,7 +46,7 @@ index 257d013fa8..c6ddd729cb 100644
 +    static void checkAndSetTopLevelWindow(QWindow *window)
 +    {
 +        QWindow *focusWindow = QGuiApplication::focusWindow();
-+        if (focusWindow == window) {
++        if (focusWindow == window || (window->flags() & Qt::WindowDoesNotAcceptFocus)) {
 +            return;
 +        }
 +
@@ -54,8 +54,8 @@ index 257d013fa8..c6ddd729cb 100644
 +        // should be closed (see notifyActiveWindowChange). So we close the popup first if some
 +        // other window is clicked. Otherwise Qt goes in an undefined state. I'm not 100% sure
 +        // though.
-+        if (focusWindow && (focusWindow->flags() & Qt::Popup) == Qt::Popup) {
-+            focusWindow->close();
++        if (focusWindow && (focusWindow->type() == Qt::Popup || focusWindow->type() == Qt::ToolTip)) {
++            focusWindow->hide();
 +        }
 +
 +        QAndroidPlatformWindowManager *wm = dynamic_cast<QAndroidPlatformWindowManager *>(window);

@@ -36,7 +36,7 @@ public:
 
     int priority() const override {return 1;}
 
-    void begin(int, QEvent *) override;
+    void end(QEvent *) override;
 
 private:
     bool m_requestedWithStylus;

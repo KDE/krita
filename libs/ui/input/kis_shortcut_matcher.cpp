@@ -395,18 +395,6 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
     bool retval = false;
 
     const int touchPointCount = event->touchPoints().size();
-
-    // for a first few events we don't process the events right away. But analyze and keep track of the event with most
-    // touchpoints. This is done to prevent conditions where in three-finger-tap, two-finger-tap be preceded due to
-    // latency
-    const int numIterations = 10;
-    if (m_d->matchingIteration <= numIterations) {
-        m_d->matchingIteration++;
-        setMaxTouchPointEvent(event);
-        DEBUG_TOUCH_ACTION("return best", event)
-        return matchTouchShortcut((QTouchEvent *)m_d->bestCandidateTouchEvent.data());
-    }
-
     const int touchSlop = 10;
     // check whether the touchpoints are relatively stationary or have been moved for dragging.
     for (int i = 0; i < event->touchPoints().size() && !m_d->isTouchDragDetected; ++i) {
@@ -416,6 +404,17 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
         // if the drag is detected, until the next TouchBegin even, we'll be assuming the gesture to be of dragging
         // type.
         m_d->isTouchDragDetected = abs(delta.x()) > touchSlop || abs(delta.y()) > touchSlop;
+    }
+
+    // for a first few events we don't process the events right away. But analyze and keep track of the event with most
+    // touchpoints. This is done to prevent conditions where in three-finger-tap, two-finger-tap be preceded due to
+    // latency
+    const int numIterations = 10;
+    if (m_d->matchingIteration <= numIterations && !m_d->isTouchDragDetected) {
+        m_d->matchingIteration++;
+        setMaxTouchPointEvent(event);
+        DEBUG_TOUCH_ACTION("return best", event)
+        return matchTouchShortcut((QTouchEvent *)m_d->bestCandidateTouchEvent.data());
     }
 
     if (m_d->isTouchDragDetected) {

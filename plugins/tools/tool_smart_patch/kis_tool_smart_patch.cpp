@@ -100,13 +100,13 @@ void KisToolSmartPatch::resetCursorStyle()
 
 void KisToolSmartPatch::activatePrimaryAction()
 {
-    setOutlineEnabled(true);
+    setOutlineVisible(true);
     KisToolPaint::activatePrimaryAction();
 }
 
 void KisToolSmartPatch::deactivatePrimaryAction()
 {
-    setOutlineEnabled(false);
+    setOutlineVisible(false);
     KisToolPaint::deactivatePrimaryAction();
 }
 

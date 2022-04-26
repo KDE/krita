@@ -2,8 +2,8 @@ SET(PREFIX_ext_gmic "${EXTPREFIX}" )
 
 ExternalProject_Add( ext_gmic
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://files.kde.org/krita/build/dependencies/gmic-3.0.2.1-patched.tar.gz
-    URL_HASH SHA256=7c09144583ab071b0bcedbd4292ee22ba5b3a73e92d44f7551f1ee03c3fea05d
+    URL https://github.com/amyspark/gmic/releases/download/v3.0.2.2/gmic-3.0.2.2-patched.tar.gz
+    URL_HASH SHA256=117f0469e8697271f8808318d928013dc5036fe7dc6be180aa30757b65444aae
 
     SOURCE_SUBDIR gmic-qt
 

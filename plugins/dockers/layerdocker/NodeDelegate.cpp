@@ -24,6 +24,7 @@
 #include <QStyle>
 #include <QStyleOptionViewItem>
 #include <QBitmap>
+#include <QToolTip>
 
 #include <klocalizedstring.h>
 #include "kis_node_view_color_scheme.h"
@@ -40,7 +41,9 @@ typedef KisBaseNode::Property* OptionalProperty;
 class NodeDelegate::Private
 {
 public:
-    Private() : view(0), edit(0) { }
+    Private(NodeDelegate *_q) : q(_q), view(0), edit(0) { }
+
+    NodeDelegate *q;
 
     NodeView *view;
     QPointer<QWidget> edit;
@@ -62,7 +65,7 @@ public:
     OptionalProperty findProperty(KisBaseNode::PropertyList &props, const OptionalProperty &refProp) const;
     OptionalProperty findVisibilityProperty(KisBaseNode::PropertyList &props) const;
 
-    void toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty prop, const Qt::KeyboardModifiers modifier, const QModelIndex &index);
+    void toggleProperty(KisBaseNode::PropertyList &props, const OptionalProperty clickedProperty, const Qt::KeyboardModifiers modifier, const QModelIndex &index);
     void togglePropertyRecursive(const QModelIndex &root, const OptionalProperty &clickedProperty, const QList<QModelIndex> &items, StasisOperation record, bool mode);
 
     bool stasisIsDirty(const QModelIndex &root, const OptionalProperty &clickedProperty, bool on = false, bool off = false);
@@ -74,11 +77,13 @@ public:
     void getParentsIndex(QList<QModelIndex> &items, const QModelIndex &index);
     void getChildrenIndex(QList<QModelIndex> &items, const QModelIndex &index);
     void getSiblingsIndex(QList<QModelIndex> &items, const QModelIndex &index);
+    boost::optional<KisBaseNode::Property>
+    propForMousePos(const QModelIndex &index, const QPoint &mousePos, const QStyleOptionViewItem &option);
 };
 
 NodeDelegate::NodeDelegate(NodeView *view, QObject *parent)
     : QAbstractItemDelegate(parent)
-    , d(new Private)
+    , d(new Private(this))
 {
     d->view = view;
 
@@ -411,7 +416,7 @@ QList<OptionalProperty> NodeDelegate::Private::rightmostProperties(const KisBase
     KisBaseNode::PropertyList::const_iterator it = props.constBegin();
     KisBaseNode::PropertyList::const_iterator end = props.constEnd();
     for (; it != end; ++it) {
-        if (!it->isMutable) continue;
+        if (!it->isMutable && it->id != KisLayerPropertiesIcons::layerError.id()) continue;
 
         if (it->id == KisLayerPropertiesIcons::visible.id()) {
             // noop...
@@ -476,7 +481,7 @@ OptionalProperty NodeDelegate::Private::findVisibilityProperty(KisBaseNode::Prop
     return 0;
 }
 
-void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, OptionalProperty clickedProperty, const Qt::KeyboardModifiers modifier, const QModelIndex &index)
+void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, const OptionalProperty clickedProperty, const Qt::KeyboardModifiers modifier, const QModelIndex &index)
 {
     QModelIndex root(view->rootIndex());
 
@@ -513,12 +518,16 @@ void NodeDelegate::Private::toggleProperty(KisBaseNode::PropertyList &props, Opt
         const bool hasPropInStasis = (shiftClickedIndexes.count() > 0 || checkImmediateStasis(root, clickedProperty));
         if (clickedProperty->canHaveStasis && hasPropInStasis) {
             shiftClickedIndexes.clear();
+
             restorePropertyInStasisRecursive(root, clickedProperty);
         } else {
             shiftClickedIndexes.clear();
+
             resetPropertyStateRecursive(root, clickedProperty);
-            clickedProperty->state = !clickedProperty->state.toBool();
-            clickedProperty->isInStasis = false;
+
+            OptionalProperty prop = findProperty(props, clickedProperty);
+            prop->state = !prop->state.toBool();
+            prop->isInStasis = false;
             view->model()->setData(index, QVariant::fromValue(props), KisNodeModel::PropertiesRole);
         }
     }
@@ -897,6 +906,41 @@ void NodeDelegate::drawAnimatedDecoration(QPainter *p, const QStyleOptionViewIte
     p->setOpacity(oldOpacity);
 }
 
+boost::optional<KisBaseNode::Property>
+NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &mousePos, const QStyleOptionViewItem &option)
+{
+    KisNodeViewColorScheme scm;
+
+    const QRect iconsRect = q->iconsRect(option, index);
+
+    const bool iconsClicked = iconsRect.isValid() &&
+        iconsRect.contains(mousePos);
+
+    if (!iconsClicked) return boost::none;
+
+    KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+    QList<OptionalProperty> realProps = this->rightmostProperties(props);
+    if (option.direction == Qt::RightToLeft) {
+        std::reverse(realProps.begin(), realProps.end());
+    }
+    const int numProps = realProps.size();
+
+    const int iconWidth = scm.iconSize() + 2 * scm.iconMargin() + scm.border();
+    const int xPos = mousePos.x() - iconsRect.left();
+    const int clickedIcon = xPos / iconWidth;
+    const int distToBorder = qMin(xPos % iconWidth, iconWidth - xPos % iconWidth);
+
+
+    if (clickedIcon >= 0 &&
+        clickedIcon < numProps &&
+        distToBorder > scm.iconMargin()) {
+
+        return *realProps[clickedIcon];
+    }
+
+    return boost::none;
+}
+
 bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
 {
     KisNodeViewColorScheme scm;
@@ -932,74 +976,58 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
         const bool decorationClicked = decorationRect.isValid() &&
             decorationRect.contains(mouseEvent->pos());
 
-        const QRect iconsRect = this->iconsRect(newOption, index);
-        const bool iconsClicked = iconsRect.isValid() &&
-            iconsRect.contains(mouseEvent->pos());
-
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
 
-        if (leftButton && iconsClicked) {
-            KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-            QList<OptionalProperty> realProps = d->rightmostProperties(props);
-            if (newOption.direction == Qt::RightToLeft) {
-                std::reverse(realProps.begin(), realProps.end());
-            }
-            const int numProps = realProps.size();
-
-            const int iconWidth = scm.iconSize() + 2 * scm.iconMargin() + scm.border();
-            const int xPos = mouseEvent->pos().x() - iconsRect.left();
-            const int clickedIcon = xPos / iconWidth;
-            const int distToBorder = qMin(xPos % iconWidth, iconWidth - xPos % iconWidth);
-
-            if (iconsClicked &&
-                clickedIcon >= 0 &&
-                clickedIcon < numProps &&
-                distToBorder > scm.iconMargin()) {
-
-                OptionalProperty clickedProperty = realProps[clickedIcon];
+        if (leftButton) {
+            if (visibilityClicked) {
+                KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+                OptionalProperty clickedProperty = d->findVisibilityProperty(props);
                 if (!clickedProperty) return false;
+
                 d->toggleProperty(props, clickedProperty, mouseEvent->modifiers(), index);
+
+                return true;
+            } else if (decorationClicked) {
+                bool isExpandable = model->hasChildren(index);
+                if (isExpandable) {
+                    bool isExpanded = d->view->isExpanded(index);
+                    d->view->setExpanded(index, !isExpanded);
+                }
+                return true;
+
+            } else if (thumbnailClicked) {
+                bool hasCorrectModifier = false;
+                SelectionAction action = SELECTION_REPLACE;
+
+                if (mouseEvent->modifiers() == Qt::ControlModifier) {
+                    action = SELECTION_REPLACE;
+                    hasCorrectModifier = true;
+                } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
+                    action = SELECTION_ADD;
+                    hasCorrectModifier = true;
+                } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) {
+                    action = SELECTION_SUBTRACT;
+                    hasCorrectModifier = true;
+                } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier)) {
+                    action = SELECTION_INTERSECT;
+                    hasCorrectModifier = true;
+                }
+
+                if (hasCorrectModifier) {
+                    model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
+                } else {
+                    d->view->setCurrentIndex(index);
+                }
+                return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
+
+            } else {
+                auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), newOption);
+                if (!clickedProperty) return false;
+
+                KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
+                d->toggleProperty(props, &(*clickedProperty), mouseEvent->modifiers(), index);
                 return true;
             }
-        } else if (leftButton && visibilityClicked) {
-            KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
-            OptionalProperty clickedProperty = d->findVisibilityProperty(props);
-            if (!clickedProperty) return false;
-
-            d->toggleProperty(props, clickedProperty, mouseEvent->modifiers(), index);
-
-            return true;
-        } else if (leftButton && decorationClicked) {
-            bool isExpandable = model->hasChildren(index);
-            if (isExpandable) {
-                bool isExpanded = d->view->isExpanded(index);
-                d->view->setExpanded(index, !isExpanded);
-            }
-            return true;
-        } else if (leftButton && thumbnailClicked) {
-            bool hasCorrectModifier = false;
-            SelectionAction action = SELECTION_REPLACE;
-
-            if (mouseEvent->modifiers() == Qt::ControlModifier) {
-                action = SELECTION_REPLACE;
-                hasCorrectModifier = true;
-            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier)) {
-                action = SELECTION_ADD;
-                hasCorrectModifier = true;
-            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::AltModifier)) {
-                action = SELECTION_SUBTRACT;
-                hasCorrectModifier = true;
-            } else if (mouseEvent->modifiers() == (Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier)) {
-                action = SELECTION_INTERSECT;
-                hasCorrectModifier = true;
-            }
-
-            if (hasCorrectModifier) {
-                model->setData(index, QVariant(int(action)), KisNodeModel::SelectOpaqueRole);
-            } else {
-                d->view->setCurrentIndex(index);
-            }
-            return hasCorrectModifier; //If not here then the item is !expanded when reaching return false;
         }
 
         if (mouseEvent->button() == Qt::LeftButton &&
@@ -1013,7 +1041,14 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
     else if (event->type() == QEvent::ToolTip) {
         if (!KisConfig(true).hidePopups()) {
             QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
-            d->tip.showTip(d->view, helpEvent->pos(), newOption, index);
+
+            auto hoveredProperty = d->propForMousePos(index, helpEvent->pos(), newOption);
+            if (hoveredProperty && hoveredProperty->id == KisLayerPropertiesIcons::layerError.id()) {
+                QToolTip::showText(helpEvent->globalPos(), hoveredProperty->state.toString(), d->view);
+            } else {
+                QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
+                d->tip.showTip(d->view, helpEvent->pos(), newOption, index);
+            }
         }
         return true;
     } else if (event->type() == QEvent::Leave) {

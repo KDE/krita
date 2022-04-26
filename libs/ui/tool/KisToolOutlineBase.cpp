@@ -54,6 +54,9 @@ void KisToolOutlineBase::mouseMoveEvent(KoPointerEvent *event)
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
     }
+    if (mode() == PAINT_MODE) {
+        KisToolShape::requestUpdateOutline(event->point, event);
+    }
 
     m_lastCursorPos = convertToPixelCoord(event);
     KisToolShape::mouseMoveEvent(event);
@@ -140,8 +143,6 @@ void KisToolOutlineBase::finishOutlineAction()
 
 void KisToolOutlineBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    Q_UNUSED(converter);
-
     if ((mode() == KisTool::PAINT_MODE || m_continuedMode) && !m_points.isEmpty()) {
 
         QPainterPath outline = m_paintPath;
@@ -150,6 +151,8 @@ void KisToolOutlineBase::paint(QPainter& gc, const KoViewConverter &converter)
         }
         paintToolOutline(&gc, outline);
     }
+
+    KisToolShape::paint(gc, converter);
 }
 
 void KisToolOutlineBase::updateFeedback()

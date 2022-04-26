@@ -229,7 +229,16 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     // Prevent tablet events from being captured by the canvas
     setAttribute(Qt::WA_NoMousePropagation, true);
-    
+
+    // Because we can create a popup in canvas widget, synthetic events sometimes arrive here (see mousePressEvent()).
+    setAttribute(Qt::WA_AcceptTouchEvents, true);
+    installEventFilter(this);
+    const QList<QWidget *> childrenWidgets = findChildren<QWidget *>();
+    for (const auto &child: childrenWidgets) {
+        child->setAttribute(Qt::WA_AcceptTouchEvents, true);
+        child->installEventFilter(this);
+    }
+
     // Load configuration..
     KisConfig cfg(true);
     m_brushHudButton->setChecked(cfg.showBrushHud());
@@ -915,6 +924,38 @@ void KisPopupPalette::mousePressEvent(QMouseEvent *event)
             }
         }
     }
+}
+
+bool KisPopupPalette::eventFilter(QObject *, QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::TouchBegin:
+        m_touchBeginReceived = true;
+        break;
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseMove:
+        // HACK(sh_zam): Let's say the tap gesture is used by the canvas to launch the popup. Following that, a
+        // synthesized mousePress is sent and this arrives in our event filter here. But, this event was meant for the
+        // canvas (even though it blocks it), so we only act on the event if we got a TouchBegin on it first.
+        if (static_cast<QMouseEvent *>(event)->source() == Qt::MouseEventSynthesizedBySystem && !m_touchBeginReceived) {
+            event->accept();
+            return true;
+        }
+        break;
+    case QEvent::MouseButtonRelease:
+        if (static_cast<QMouseEvent *>(event)->source() == Qt::MouseEventSynthesizedBySystem && !m_touchBeginReceived) {
+            event->accept();
+            return true;
+        }
+        // fallthrough
+    case QEvent::Show:
+    case QEvent::FocusOut:
+        m_touchBeginReceived = false;
+        break;
+    default:
+        break;
+    }
+    return false;
 }
 
 void KisPopupPalette::slotShowTagsPopup()

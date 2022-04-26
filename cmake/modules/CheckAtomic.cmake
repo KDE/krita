@@ -7,9 +7,8 @@ CheckAtomic
 -----------
 
 Check if the compiler supports std:atomic out of the box or if libatomic is
-needed for atomic support. If it is needed libatomicis added to
-``CMAKE_REQUIRED_LIBRARIES``. So after running CheckAtomic you can use
-std:atomic.
+needed for atomic support. If it is needed, ``HAVE_CXX_ATOMICS_WITH_LIB``
+or ``HAVE_CXX_ATOMICS64_WITH_LIB`` set to ``ON``.
 
 Since 5.75.0.
 #]=======================================================================]

@@ -245,12 +245,6 @@ Q_SIGNALS:
     void inserted(QAction *action);
 
     /**
-     * Indicates that \a action was removed from this action collection.
-     * @deprecated
-     */
-    QT_MOC_COMPAT void removed(QAction *action);
-
-    /**
      * Indicates that \a action was highlighted (hovered over).
      * @deprecated Replaced by actionHovered(QAction* action);
      */

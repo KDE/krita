@@ -68,6 +68,7 @@ public:
     int priorityEventFilterSeqNo;
 
     bool touchStrokeStarted = false;
+    bool popupWasActive = false;
 
     QPointF previousPos;
     QScopedPointer<QEvent> originatingTouchBeginEvent;

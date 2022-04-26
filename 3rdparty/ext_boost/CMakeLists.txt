@@ -42,12 +42,14 @@ if(WIN32)
         configure_clang_mingw
         COMMAND ${CMAKE_COMMAND} -E rm <SOURCE_DIR>/project-config.jam
         DEPENDEES configure
+        DEPENDERS build
     )
     ExternalProject_Add_Step(
         ext_boost
         patch_clang_mingw
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_BINARY_DIR}/user-config.jam <SOURCE_DIR>/tools/build/src/user-config.jam
         DEPENDEES patch
+        DEPENDERS configure
     )
    endif()
    else()

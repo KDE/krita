@@ -257,7 +257,7 @@ public:
     }
     
     /** Get if antiAlias should be applied to the selection */
-    bool antiAlias() {
+    bool antiAlias() const {
         return m_antiAlias;
     }
 
@@ -268,7 +268,7 @@ public:
     
     /** Sets how much to auto-grow or shrink (if @p sizemod is negative) the selection
     flood before painting, this affects every fill operation except fillRect */
-    int sizemod() {
+    int sizemod() const {
         return m_sizemod;
     }
     
@@ -279,7 +279,7 @@ public:
     
     /** defines the feathering radius for selection flood operations, this affects every
     fill operation except fillRect */
-    uint feather() {
+    uint feather() const {
         return m_feather;
     }
 
@@ -289,15 +289,26 @@ public:
     }
 
     /** defines if the selection borders are treated as boundary in flood fill or not */
-    uint useSelectionAsBoundary() {
+    uint useSelectionAsBoundary() const {
         return m_useSelectionAsBoundary;
     }
 
-private:
+protected:
+    void setCurrentFillSelection(KisSelectionSP fillSelection)
+    {
+        m_fillSelection = fillSelection;
+    }
+
+    KisSelectionSP currentFillSelection() const
+    {
+        return m_fillSelection;
+    }
+
     // for floodfill
     void genericFillStart(int startX, int startY, KisPaintDeviceSP sourceDevice);
     void genericFillEnd(KisPaintDeviceSP filled);
 
+private:
     KisSelectionSP m_fillSelection;
 
     int m_feather;

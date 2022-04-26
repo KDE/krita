@@ -10,6 +10,7 @@ add_subdirectory( karbonplugins )
 add_subdirectory( tool_lazybrush )
 add_subdirectory( tool_smart_patch )
 add_subdirectory( svgtexttool )
+add_subdirectory( tool_enclose_and_fill )
 
 install( FILES
     tools.action

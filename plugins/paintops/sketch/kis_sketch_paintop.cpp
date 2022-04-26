@@ -95,11 +95,22 @@ QList<KoResourceLoadResult> KisSketchPaintOp::prepareLinkedResources(const KisPa
 
 void KisSketchPaintOp::drawConnection(const QPointF& start, const QPointF& end, double lineWidth)
 {
-    if (lineWidth == 1.0) {
-        m_painter->drawThickLine(start, end, lineWidth, lineWidth);
+    //Both drawWuLine() and the drawDDALine produce nicer 1px lines than the drawLine()
+    if (m_sketchProperties.antiAliasing) {
+        if (lineWidth == 1.0) {
+            m_painter->drawWuLine(start, end);
+        }
+        else {
+            m_painter->drawLine(start, end, lineWidth, true);
+        }
     }
     else {
-        m_painter->drawLine(start, end, lineWidth, true);
+        if (lineWidth == 1.0) {
+            m_painter->drawDDALine(start, end);
+        }
+        else {
+            m_painter->drawLine(start, end, lineWidth, false);
+        }
     }
 }
 

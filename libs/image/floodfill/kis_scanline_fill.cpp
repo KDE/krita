@@ -199,6 +199,48 @@ private:
     int m_threshold;
 };
 
+template <typename SrcPixelType>
+class ColorOrTransparentDifferencePolicyOptimized
+{
+    typedef SrcPixelType HashKeyType;
+    typedef QHash<HashKeyType, quint8> HashType;
+
+public:
+    ALWAYS_INLINE void initDifferences(KisPaintDeviceSP device, const KoColor &srcPixel, int threshold) {
+        m_colorSpace = device->colorSpace();
+        m_srcPixel = srcPixel;
+        m_srcPixelPtr = m_srcPixel.data();
+        m_threshold = threshold;
+    }
+
+    ALWAYS_INLINE quint8 calculateDifference(quint8* pixelPtr) {
+        HashKeyType key = *reinterpret_cast<HashKeyType*>(pixelPtr);
+
+        quint8 result;
+
+        typename HashType::iterator it = m_differences.find(key);
+
+        if (it != m_differences.end()) {
+            result = *it;
+        } else {
+            const quint8 colorDifference = m_colorSpace->difference(m_srcPixelPtr, pixelPtr);
+            const quint8 opacityDifference = m_colorSpace->opacityU8(pixelPtr) * 100 / quint8_MAX;
+            result = qMin(colorDifference, opacityDifference);
+            m_differences.insert(key, result);
+        }
+
+        return result;
+    }
+
+private:
+    HashType m_differences;
+
+    const KoColorSpace *m_colorSpace;
+    KoColor m_srcPixel;
+    const quint8 *m_srcPixelPtr;
+    int m_threshold;
+};
+
 class SelectednessPolicyOptimized
 {
     typedef quint8 HashKeyType;
@@ -344,7 +386,102 @@ protected:
 
 
 
+template <class DifferencePolicy,
+          template <class> class PixelFiller>
+class SelectAllUntilColorHardSelectionPolicy: public HardSelectionPolicy<DifferencePolicy, PixelFiller>
+{
+public:
+    SelectAllUntilColorHardSelectionPolicy(KisPaintDeviceSP device, const KoColor &referenceColor, int threshold)
+        : HardSelectionPolicy<DifferencePolicy, PixelFiller>(device, referenceColor, threshold)
+    {}
 
+    ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr, int, int) {
+        return this->calculateDifference(pixelPtr) > m_threshold ? MAX_SELECTED : MIN_SELECTED;
+    }
+
+protected:
+    using HardSelectionPolicy<DifferencePolicy, PixelFiller>::m_threshold;
+};
+
+template <class DifferencePolicy,
+          template <class> class PixelFiller>
+class SelectAllUntilColorSoftSelectionPolicy : public SoftSelectionPolicy<DifferencePolicy, PixelFiller>
+{
+public:
+    SelectAllUntilColorSoftSelectionPolicy(KisPaintDeviceSP device, const KoColor &referenceColor, int threshold, int softness)
+        : SoftSelectionPolicy<DifferencePolicy, PixelFiller>(device, referenceColor, threshold, softness)
+    {}
+
+    ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr, int, int) {
+        if (m_threshold == 0) {
+            return MAX_SELECTED;
+        }
+        // Integer version of: 1 - ((1-threshold) - diff) / ((1-threshold) * softness)
+        const int diff = this->calculateDifference(pixelPtr);
+        if (diff < m_threshold) {
+            const int v = MAX_SELECTED - (m_threshold - diff) * MAX_SELECTED * 100 / (m_threshold * m_softness);
+            return v < MIN_SELECTED ? MIN_SELECTED : v;
+        } else {
+            return MAX_SELECTED;
+        }
+    }
+
+protected:
+    using SoftSelectionPolicy<DifferencePolicy, PixelFiller>::m_threshold;
+    using SoftSelectionPolicy<DifferencePolicy, PixelFiller>::m_softness;
+};
+
+
+template <class DifferencePolicy,
+          template <class> class PixelFiller,
+          class SelectednessCheckPolicy>
+class SelectAllUntilColorHardSelectionPolicyExtended : public HardSelectionPolicyExtended<DifferencePolicy, PixelFiller, SelectednessCheckPolicy>
+{
+public:
+    SelectAllUntilColorHardSelectionPolicyExtended(KisPaintDeviceSP mainDevice, KisPaintDeviceSP selectionDevice, const KoColor &referenceColor, int threshold)
+        : HardSelectionPolicyExtended<DifferencePolicy, PixelFiller, SelectednessCheckPolicy>(mainDevice, selectionDevice, referenceColor, threshold)
+    {}
+    
+    ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr, int x, int y) {
+        return this->calculateDifference(pixelPtr) > m_threshold && this->calculateSelectedness(x, y) > 0 ? MAX_SELECTED : MIN_SELECTED;
+    }
+
+protected:
+    using HardSelectionPolicyExtended<DifferencePolicy, PixelFiller, SelectednessCheckPolicy>::m_threshold;
+};
+
+template <class DifferencePolicy,
+          template <class> class PixelFiller,
+          class SelectednessCheckPolicy>
+class SelectAllUntilColorSoftSelectionPolicyExtended : public SoftSelectionPolicyExtended<DifferencePolicy, PixelFiller, SelectednessCheckPolicy>
+{
+public:
+    SelectAllUntilColorSoftSelectionPolicyExtended(KisPaintDeviceSP mainDevice, KisPaintDeviceSP selectionDevice, const KoColor &referenceColor, int threshold, int softness)
+        : SoftSelectionPolicyExtended<DifferencePolicy, PixelFiller, SelectednessCheckPolicy>(mainDevice, selectionDevice, referenceColor, threshold, softness)
+    {}
+    
+    ALWAYS_INLINE quint8 calculateOpacity(quint8* pixelPtr, int x, int y) {
+        if (m_threshold == 0) {
+            return MAX_SELECTED;
+        }
+        const quint8 selectedness = this->calculateSelectedness(x, y);
+        if (selectedness == 0) {
+            return MIN_SELECTED;
+        }
+        // Integer version of: 1 - ((1-threshold) - diff) / ((1-threshold) * softness)
+        const int diff = this->calculateDifference(pixelPtr);
+        if (diff < m_threshold) {
+            const int v = MAX_SELECTED - (m_threshold - diff) * MAX_SELECTED * 100 / (m_threshold * m_softness);
+            return v < MIN_SELECTED ? MIN_SELECTED : v;
+        } else {
+            return MAX_SELECTED;
+        }
+    }
+
+protected:
+    using SoftSelectionPolicyExtended<DifferencePolicy, PixelFiller, SelectednessCheckPolicy>::m_threshold;
+    using SoftSelectionPolicyExtended<DifferencePolicy, PixelFiller, SelectednessCheckPolicy>::m_softness;
+};
 
 
 class IsNonNullPolicySlow
@@ -853,6 +990,270 @@ void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection)
             runImpl(policy);
         } else {
             SoftSelectionPolicy<DifferencePolicySlow, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    }
+}
+
+void KisScanlineFill::fillSelectionUntilColorWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection)
+{
+    KoColor srcColor(referenceColor);
+    srcColor.convertTo(m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+    const int softness = 100 - m_d->opacitySpread;
+
+    if (softness == 0) {
+        if (pixelSize == 1) {
+            SelectAllUntilColorHardSelectionPolicyExtended<DifferencePolicyOptimized<quint8>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorHardSelectionPolicyExtended<DifferencePolicyOptimized<quint16>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorHardSelectionPolicyExtended<DifferencePolicyOptimized<quint32>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorHardSelectionPolicyExtended<DifferencePolicyOptimized<quint64>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorHardSelectionPolicyExtended<DifferencePolicySlow, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    } else {
+        if (pixelSize == 1) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<DifferencePolicyOptimized<quint8>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<DifferencePolicyOptimized<quint16>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<DifferencePolicyOptimized<quint32>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<DifferencePolicyOptimized<quint64>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorSoftSelectionPolicyExtended<DifferencePolicySlow, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    }
+}
+
+void KisScanlineFill::fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor)
+{
+    KoColor srcColor(referenceColor);
+    srcColor.convertTo(m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+    const int softness = 100 - m_d->opacitySpread;
+
+    if (softness == 0) {
+        if (pixelSize == 1) {
+            SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint8>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint16>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint32>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint64>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorHardSelectionPolicy<DifferencePolicySlow, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    } else {
+        if (pixelSize == 1) {
+            SelectAllUntilColorSoftSelectionPolicy<DifferencePolicyOptimized<quint8>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorSoftSelectionPolicy<DifferencePolicyOptimized<quint16>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorSoftSelectionPolicy<DifferencePolicyOptimized<quint32>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorSoftSelectionPolicy<DifferencePolicyOptimized<quint64>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorSoftSelectionPolicy<DifferencePolicySlow, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    }
+}
+
+void KisScanlineFill::fillSelectionUntilColorOrTransparentWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection)
+{
+    KoColor srcColor(referenceColor);
+    srcColor.convertTo(m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+    const int softness = 100 - m_d->opacitySpread;
+
+    if (softness == 0) {
+        if (pixelSize == 1) {
+            SelectAllUntilColorHardSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint8>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorHardSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint16>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorHardSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint32>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorHardSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint64>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorHardSelectionPolicyExtended<DifferencePolicySlow, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    } else {
+        if (pixelSize == 1) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint8>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint16>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint32>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorSoftSelectionPolicyExtended<ColorOrTransparentDifferencePolicyOptimized<quint64>, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorSoftSelectionPolicyExtended<DifferencePolicySlow, CopyToSelection, SelectednessPolicyOptimized>
+                policy(m_d->device, existingSelection, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    }
+}
+
+void KisScanlineFill::fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor)
+{
+    KoColor srcColor(referenceColor);
+    srcColor.convertTo(m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+    const int softness = 100 - m_d->opacitySpread;
+
+    if (softness == 0) {
+        if (pixelSize == 1) {
+            SelectAllUntilColorHardSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint8>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorHardSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint16>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorHardSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint32>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorHardSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint64>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorHardSelectionPolicy<DifferencePolicySlow, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        }
+    } else {
+        if (pixelSize == 1) {
+            SelectAllUntilColorSoftSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint8>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 2) {
+            SelectAllUntilColorSoftSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint16>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 4) {
+            SelectAllUntilColorSoftSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint32>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else if (pixelSize == 8) {
+            SelectAllUntilColorSoftSelectionPolicy<ColorOrTransparentDifferencePolicyOptimized<quint64>, CopyToSelection>
+                policy(m_d->device, srcColor, m_d->threshold, softness);
+            policy.setDestinationSelection(pixelSelection);
+            runImpl(policy);
+        } else {
+            SelectAllUntilColorSoftSelectionPolicy<DifferencePolicySlow, CopyToSelection>
                 policy(m_d->device, srcColor, m_d->threshold, softness);
             policy.setDestinationSelection(pixelSelection);
             runImpl(policy);

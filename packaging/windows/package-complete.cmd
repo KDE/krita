@@ -476,43 +476,59 @@ if errorlevel 1 (
 )
 for /f "delims=" %%a in ('g++ --version ^| find "g++"') do set GCC_VERSION_LINE=%%a
 if "%GCC_VERSION_LINE%" == "" (
-    echo "Possible Clang compiler, trying to detect target triplet..."
-    for /f "delims=" %%a in ('g++ --version ^| find "windows"') do set GCC_VERSION_LINE=%%a
+    for /f "delims=" %%a in ('g++ --version ^| find "clang"') do set GCC_VERSION_LINE=%%a
+)
+if "%GCC_VERSION_LINE%" == "" (
+	echo ERROR: Failed to get version of g++.
+	exit /B 1
 )
 echo -- %GCC_VERSION_LINE%
+set IS_TDM=
+set IS_MSYS=
+set IS_CLANG=
 if not "%GCC_VERSION_LINE:tdm64=%" == "%GCC_VERSION_LINE%" (
 	echo Compiler looks like TDM64-GCC
 	set IS_TDM=1
-    set IS_MSYS=
-    set IS_MSYS_CLANG=
 ) else if not "%GCC_VERSION_LINE:MSYS=%" == "%GCC_VERSION_LINE%" (
     echo Compiler looks like MSYS GCC
-	set IS_TDM=
     set IS_MSYS=1
-    set IS_MSYS_CLANG=
-) else if not "%GCC_VERSION_LINE:windows-gnu=%" == "%GCC_VERSION_LINE%" (
-    echo Compiler looks like MSYS Clang
-    set IS_TDM=
-    set IS_MSYS=
-    set IS_MSYS_CLANG=1
+) else if not "%GCC_VERSION_LINE:clang=%" == "%GCC_VERSION_LINE%" (
+    echo Compiler looks like Clang
+    set IS_CLANG=1
 ) else (
     echo Compiler looks like plain old MinGW64
-    set IS_TDM=
-    set IS_MSYS=
-    set IS_MSYS_CLANG=
+)
+set IS_LLVM_MINGW=
+set IS_MSYS_CLANG=
+if not x%IS_CLANG% == x (
+    :: Look for "llvm-mingw" in the toolchain path. Unfortunately there is
+    :: no surefire way to detect a llvm-mingw toolchain.
+    if not "%MINGW_BIN_DIR:llvm-mingw=%" == "%MINGW_BIN_DIR%" (
+        echo Toolchain looks like llvm-mingw
+        set IS_LLVM_MINGW=1
+    ) else (
+        echo Toolchain does not look like llvm-mingw, assuming MSYS Clang
+        set IS_MSYS_CLANG=1
+    )
 )
 
 echo.
 echo Trying to guess target architecture...
-objdump --version > NUL
-if errorlevel 1 (
-	echo ERROR: objdump is not working.
-	exit /B 1
+set OBJDUMP=
+for %%a in (objdump llvm-objdump) do (
+    %%a --version > NUL
+    if not errorlevel 1 (
+        set OBJDUMP=%%a
+    )
 )
-for /f "delims=, tokens=1" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
+if "OBJDUMP" == "" (
+    echo ERROR: objdump is not working.
+    exit /B 1
+)
+for /f "delims=, tokens=1" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
 if "%TARGET_ARCH_LINE%" == "" (
     echo "Possible LLVM objdump, trying to detect architecture..."
-    for /f "delims=" %%a in ('objdump -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "coff"') do set TARGET_ARCH_LINE=%%a
+    for /f "delims=" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "coff"') do set TARGET_ARCH_LINE=%%a
 )
 echo -- %TARGET_ARCH_LINE%
 if "%TARGET_ARCH_LINE:x86-64=%" == "%TARGET_ARCH_LINE%" (
@@ -553,6 +569,7 @@ if errorlevel 1 (
 
 echo.
 echo Copying GCC libraries...
+set "STDLIBS_DIR=%MINGW_BIN_DIR%"
 if not x%IS_TDM% == x (
 	if x%is_x64% == x (
 		:: TDM-GCC x86
@@ -577,6 +594,16 @@ if not x%IS_TDM% == x (
 		:: msys-mingw-w64-clang64 x64
 		set "STDLIBS=libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1-x64 libcrypto-1_1-x64"
 	)
+) else if not x%IS_LLVM_MINGW% == x (
+    :: llvm-mingw
+    set "STDLIBS=libc++ libomp libssp-0 libunwind libwinpthread-1"
+    :: The toolchain does not include all of the DLLs in the compiler bin dir,
+    :: so we need to copy them from the cross target bin dir.
+    if x%is_x64% == x (
+        set "STDLIBS_DIR=%MINGW_BIN_DIR%\..\i686-w64-mingw32\bin"
+    ) else (
+        set "STDLIBS_DIR=%MINGW_BIN_DIR%\..\x86_64-w64-mingw32\bin"
+    )
 ) else (    
     if x%is_x64% == x (
 		:: mingw-w64 x86
@@ -587,7 +614,7 @@ if not x%IS_TDM% == x (
 	)
 )
 
-for %%L in (%STDLIBS%) do copy "%MINGW_BIN_DIR%\%%L.dll" %pkg_root%\bin
+for %%L in (%STDLIBS%) do copy "%STDLIBS_DIR%\%%L.dll" %pkg_root%\bin
 
 echo.
 echo Copying files...

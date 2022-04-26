@@ -1,0 +1,73 @@
+From 17b92f74b54af5a09f2ee98f0a53231b87ec8fd7 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Mon, 14 Mar 2022 14:51:28 +0000
+Subject: [PATCH] Android: setBackingStore of a window if the platformWindow
+ changed
+
+Sometimes when Qt destroys the platform window without destroying the
+backing store. The QPA doesn't "reattach" the backing store to the
+platform window, which results in window not being drawn at all.
+---
+ .../android/qandroidplatformbackingstore.cpp        | 13 +++++++++----
+ .../android/qandroidplatformbackingstore.h          |  3 +++
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformbackingstore.cpp b/src/plugins/platforms/android/qandroidplatformbackingstore.cpp
+index 75f9b41342..e51338991b 100644
+--- a/src/plugins/platforms/android/qandroidplatformbackingstore.cpp
++++ b/src/plugins/platforms/android/qandroidplatformbackingstore.cpp
+@@ -49,8 +49,10 @@ QT_BEGIN_NAMESPACE
+ QAndroidPlatformBackingStore::QAndroidPlatformBackingStore(QWindow *window)
+     : QPlatformBackingStore(window)
+ {
+-    if (window->handle())
++    if (window->handle()) {
++        m_platformWindow = static_cast<QAndroidPlatformWindow *>(window->handle());
+         setBackingStore(window);
++    }
+ }
+ 
+ QPaintDevice *QAndroidPlatformBackingStore::paintDevice()
+@@ -61,12 +63,15 @@ QPaintDevice *QAndroidPlatformBackingStore::paintDevice()
+ 
+ void QAndroidPlatformBackingStore::flush(QWindow *window, const QRegion &region, const QPoint &offset)
+ {
++    Q_ASSERT(window);
+     Q_UNUSED(offset);
+ 
+-    if (!m_backingStoreSet)
+-        setBackingStore(window);
++    QAndroidPlatformWindow *platformWindow = static_cast<QAndroidPlatformWindow *>(window->handle());
+ 
+-    (static_cast<QAndroidPlatformWindow *>(window->handle()))->repaint(region);
++    if (!m_backingStoreSet || (m_platformWindow != platformWindow)) {
++        setBackingStore(window);
++    }
++    platformWindow->repaint(region);
+ }
+ 
+ void QAndroidPlatformBackingStore::resize(const QSize &size, const QRegion &staticContents)
+diff --git a/src/plugins/platforms/android/qandroidplatformbackingstore.h b/src/plugins/platforms/android/qandroidplatformbackingstore.h
+index ec1761c789..8b6ec6e0e4 100644
+--- a/src/plugins/platforms/android/qandroidplatformbackingstore.h
++++ b/src/plugins/platforms/android/qandroidplatformbackingstore.h
+@@ -44,6 +44,8 @@
+ #include <qpa/qplatformbackingstore.h>
+ #include <qpa/qwindowsysteminterface.h>
+ 
++class QAndroidPlatformWindow;
++
+ QT_BEGIN_NAMESPACE
+ 
+ class QAndroidPlatformBackingStore : public QPlatformBackingStore
+@@ -58,6 +60,7 @@ public:
+ protected:
+     QImage m_image;
+     bool m_backingStoreSet = false;
++    QAndroidPlatformWindow *m_platformWindow {nullptr};
+ };
+ 
+ QT_END_NAMESPACE
+-- 
+2.35.1
+

@@ -494,6 +494,39 @@ KisOptionCollectionWidgetWithHeader::KisOptionCollectionWidgetWithHeader(const Q
 KisOptionCollectionWidgetWithHeader::~KisOptionCollectionWidgetWithHeader()
 {}
 
+QSize KisOptionCollectionWidgetWithHeader::minimumSizeHint() const
+{
+    if (m_d->orientation == Qt::Horizontal) {
+        return QWidget::minimumSizeHint();
+    }
+
+    const QSize widgetListMinimumSizeHint = m_d->layoutWidgets->minimumSize();
+    // label.width + primaryWidget.size + 10px spacing + 4px extra (just in case)
+    const int minimumHeaderWidth = m_d->label->minimumSizeHint().width() +
+                                   (m_d->primaryWidget ? m_d->primaryWidget->minimumSizeHint().width() + 10 + 4 : 0);
+    const QSize headerMinimumSizeHint =
+        QSize(
+            qMax(
+                m_d->label->minimumSizeHint().width(),
+                m_d->primaryWidget ? m_d->layoutPrimaryWidget->minimumSize().width() : 0
+            ),
+            width() < minimumHeaderWidth
+            ? m_d->label->minimumSizeHint().height() +
+              (m_d->primaryWidget ? m_d->layoutPrimaryWidget->minimumSize().height() + m_d->layoutHeader->spacing() : 0)
+            : qMax(
+                m_d->label->minimumSizeHint().height(),
+                m_d->primaryWidget ? m_d->layoutPrimaryWidget->minimumSize().height() : 0
+              )
+        );
+
+    return
+        QSize(
+            qMax(widgetListMinimumSizeHint.width(), headerMinimumSizeHint.width()),
+            headerMinimumSizeHint.height() +
+                (m_d->widgetCollection->numberOfVisibleWidgets() > 0 ? widgetListMinimumSizeHint.height() + layout()->spacing() : 0)
+        );
+}
+
 QWidget* KisOptionCollectionWidgetWithHeader::primaryWidget() const
 {
     return m_d->primaryWidget;

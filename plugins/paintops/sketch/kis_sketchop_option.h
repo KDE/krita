@@ -18,6 +18,7 @@ const QString SKETCH_LINE_WIDTH = "Sketch/lineWidth";
 const QString SKETCH_RANDOM_RGB = "Sketch/randomRGB";
 const QString SKETCH_RANDOM_OPACITY = "Sketch/randomOpacity";
 const QString SKETCH_DISTANCE_OPACITY = "Sketch/distanceOpacity";
+const QString SKETCH_ANTIALIASING = "Sketch/antiAliasing";
 
 class KisSketchOpOptionsWidget;
 
@@ -53,6 +54,7 @@ public:
     bool randomOpacity;
     bool distanceOpacity;
     bool distanceDensity;
+    bool antiAliasing;
     int lineWidth; // px
 
     void readOptionSetting(const KisPropertiesConfigurationSP settings) {
@@ -66,6 +68,7 @@ public:
         randomOpacity = settings->getBool(SKETCH_RANDOM_OPACITY);
         distanceDensity = settings->getBool(SKETCH_DISTANCE_DENSITY);
         distanceOpacity = settings->getBool(SKETCH_DISTANCE_OPACITY);
+        antiAliasing = settings->getBool(SKETCH_ANTIALIASING);
     }
 };
 

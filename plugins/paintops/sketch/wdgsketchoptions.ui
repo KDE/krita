@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -26,19 +26,19 @@
     <height>60</height>
    </size>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>9</y>
-     <width>421</width>
-     <height>271</height>
+     <width>408</width>
+     <height>248</height>
     </rect>
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QGridLayout" name="gridLayout">
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Line width:</string>
@@ -48,8 +48,8 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="0">
-       <widget class="KisDoubleSliderSpinBox" name="lineWidthSPBox">
+      <item row="0" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="lineWidthSPBox" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -58,7 +58,7 @@
         </property>
        </widget>
       </item>
-      <item column="0" row="1">
+      <item row="1" column="0">
        <widget class="QLabel" name="label">
         <property name="text">
          <string>Offset scale:</string>
@@ -68,10 +68,10 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="1">
-       <widget class="KisDoubleSliderSpinBox" name="offsetSPBox"/>
+      <item row="1" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="offsetSPBox" native="true"/>
       </item>
-      <item column="0" row="2">
+      <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>Density:</string>
@@ -81,8 +81,8 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="2">
-       <widget class="KisDoubleSliderSpinBox" name="densitySPBox">
+      <item row="2" column="1">
+       <widget class="KisDoubleSliderSpinBox" name="densitySPBox" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -108,7 +108,7 @@
     </item>
     <item>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item column="0" row="0">
+      <item row="0" column="0">
        <widget class="QCheckBox" name="distanceDensityCHBox">
         <property name="text">
          <string>Use distance density</string>
@@ -118,14 +118,14 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="0">
+      <item row="0" column="1">
        <widget class="QCheckBox" name="simpleModeCHBox">
         <property name="text">
          <string>Simple mode</string>
         </property>
        </widget>
       </item>
-      <item column="0" row="1">
+      <item row="1" column="0">
        <widget class="QCheckBox" name="magnetifyCHBox">
         <property name="text">
          <string>Magnetify</string>
@@ -135,7 +135,7 @@
         </property>
        </widget>
       </item>
-      <item column="1" row="1">
+      <item row="1" column="1">
        <widget class="QCheckBox" name="connectionCHBox">
         <property name="text">
          <string>Paint connection line</string>
@@ -148,25 +148,35 @@
      </layout>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
-      <item>
-       <widget class="QCheckBox" name="randomRGBCHbox">
-        <property name="text">
-         <string>Random RGB</string>
-        </property>
-       </widget>
-      </item>
-      <item>
+     <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0" columnstretch="0,0">
+      <item row="1" column="0">
        <widget class="QCheckBox" name="randomOpacityCHbox">
         <property name="text">
          <string>Random opacity</string>
         </property>
        </widget>
       </item>
-      <item>
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="randomRGBCHbox">
+        <property name="text">
+         <string>Random RGB</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
        <widget class="QCheckBox" name="distanceOpacityCHbox">
         <property name="text">
          <string>Distance opacity</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="antiAliasingCHBox">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>Anti-aliasing</string>
         </property>
        </widget>
       </item>

@@ -287,7 +287,7 @@ void KisToolFreehand::activateAlternateAction(AlternateAction action)
     }
 
     useCursor(KisCursor::blankCursor());
-    setOutlineEnabled(true);
+    setOutlineVisible(true);
 }
 
 void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
@@ -298,7 +298,7 @@ void KisToolFreehand::deactivateAlternateAction(AlternateAction action)
     }
 
     resetCursorStyle();
-    setOutlineEnabled(false);
+    setOutlineVisible(false);
 }
 
 void KisToolFreehand::beginAlternateAction(KoPointerEvent *event, AlternateAction action)

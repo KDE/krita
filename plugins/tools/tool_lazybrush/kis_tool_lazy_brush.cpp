@@ -114,7 +114,7 @@ void KisToolLazyBrush::resetCursorStyle()
     if (!colorizeMaskActive() && canCreateColorizeMask()) {
         useCursor(KisCursor::handCursor());
         m_d->activateMaskMode = true;
-        setOutlineEnabled(false);
+        setOutlineVisible(false);
     }
     else {
         KisToolFreehand::resetCursorStyle();
@@ -175,7 +175,7 @@ void KisToolLazyBrush::activatePrimaryAction()
         qDebug() << "2";
         useCursor(KisCursor::handCursor());
         m_d->activateMaskMode = true;
-        setOutlineEnabled(false);
+        setOutlineVisible(false);
     }
 }
 
@@ -183,7 +183,7 @@ void KisToolLazyBrush::deactivatePrimaryAction()
 {
     if (m_d->activateMaskMode) {
         m_d->activateMaskMode = false;
-        setOutlineEnabled(true);
+        setOutlineVisible(true);
         resetCursorStyle();
     }
 

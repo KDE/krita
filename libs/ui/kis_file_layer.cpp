@@ -34,6 +34,8 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacit
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
+    connect(&m_loader, SIGNAL(loadingFailed()), SLOT(slotLoadingFailed()));
+    connect(&m_loader, SIGNAL(fileExistsStateChanged(bool)), SLOT(slotFileExistsStateChanged(bool)));
     connect(this, SIGNAL(sigRequestOpenFile()), SLOT(openFile()));
 }
 
@@ -52,6 +54,8 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));
+    connect(&m_loader, SIGNAL(loadingFailed()), SLOT(slotLoadingFailed()));
+    connect(&m_loader, SIGNAL(fileExistsStateChanged(bool)), SLOT(slotFileExistsStateChanged(bool)));
     connect(this, SIGNAL(sigRequestOpenFile()), SLOT(openFile()));
 
     QFileInfo fi(path());
@@ -122,6 +126,19 @@ KisBaseNode::PropertyList KisFileLayer::sectionModelProperties() const
     KisBaseNode::PropertyList l = KisLayer::sectionModelProperties();
     l << KisBaseNode::Property(KoID("sourcefile", i18n("File")), m_filename);
     l << KisLayerPropertiesIcons::getProperty(KisLayerPropertiesIcons::openFileLayerFile, true);
+
+    auto fileNameOrPlaceholder =
+    [this] () {
+        return !m_filename.isEmpty() ? m_filename : i18nc("placeholder test for a warning when not file is set in the file layer", "<No file name is set>");
+    };
+
+    if (m_state == FileNotFound) {
+        l << KisLayerPropertiesIcons::getErrorProperty(i18nc("a tooltip shown when a file layer cannot find its linked file",
+                                                             "Linked file not found: %1", fileNameOrPlaceholder()));
+    } else if (m_state == FileLoadingFailed) {
+        l << KisLayerPropertiesIcons::getErrorProperty(i18nc("a tooltip shown when a file layer cannot load its linked file",
+                                                             "Failed to load linked file: %1", fileNameOrPlaceholder()));
+    }
     return l;
 }
 
@@ -165,6 +182,15 @@ void KisFileLayer::openFile() const
     }
     if (!fileAlreadyOpen && QFile::exists(QFileInfo(path()).absoluteFilePath())) {
         KisPart::instance()->openExistingFile(QFileInfo(path()).absoluteFilePath());
+    }
+}
+
+void KisFileLayer::changeState(State newState)
+{
+    const State oldState = m_state;
+    m_state = newState;
+    if (oldState != newState) {
+        baseNodeChangedCallback();
     }
 }
 
@@ -230,7 +256,18 @@ void KisFileLayer::slotLoadingFinished(KisPaintDeviceSP projection,
     m_paintDevice->setX(oldX);
     m_paintDevice->setY(oldY);
 
+    changeState(FileLoaded);
     setDirty(m_paintDevice->extent() | oldLayerExtent);
+}
+
+void KisFileLayer::slotLoadingFailed()
+{
+    changeState(FileLoadingFailed);
+}
+
+void KisFileLayer::slotFileExistsStateChanged(bool exists)
+{
+    changeState(exists ? FileLoaded : FileNotFound);
 }
 
 KisNodeSP KisFileLayer::clone() const

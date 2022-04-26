@@ -199,6 +199,9 @@ void KisPixelSelection::addSelection(KisPixelSelectionSP selection)
         src->nextRow();
     }
 
+    const quint8 defPixel = qMax(*defaultPixel().data(), *selection->defaultPixel().data());
+    setDefaultPixel(KoColor(&defPixel, colorSpace()));
+
     m_d->outlineCacheValid &= selection->outlineCacheValid();
 
     if (m_d->outlineCacheValid) {
@@ -228,6 +231,11 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
         src->nextRow();
     }
 
+    const quint8 defPixel = *selection->defaultPixel().data() > *defaultPixel().data()
+                            ? MIN_SELECTED
+                            : *defaultPixel().data() - *selection->defaultPixel().data();
+    setDefaultPixel(KoColor(&defPixel, colorSpace()));
+
     m_d->outlineCacheValid &= selection->outlineCacheValid();
 
     if (m_d->outlineCacheValid) {
@@ -239,8 +247,11 @@ void KisPixelSelection::subtractSelection(KisPixelSelectionSP selection)
 
 void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
 {
-    QRect r = selection->selectedRect().united(selectedRect());
-    if (r.isEmpty()) return;
+    const QRect r = selection->selectedRect().united(selectedRect());
+    if (r.isEmpty()) {
+        clear();
+        return;
+    }
 
     KisHLineIteratorSP dst = createHLineIteratorNG(r.x(), r.y(), r.width());
     KisHLineConstIteratorSP src = selection->createHLineConstIteratorNG(r.x(), r.y(), r.width());
@@ -252,10 +263,16 @@ void KisPixelSelection::intersectSelection(KisPixelSelectionSP selection)
         src->nextRow();
     }
 
+    const quint8 defPixel = qMin(*defaultPixel().data(), *selection->defaultPixel().data());
+    setDefaultPixel(KoColor(&defPixel, colorSpace()));
+
+    crop(r);
+
     m_d->outlineCacheValid &= selection->outlineCacheValid();
 
     if (m_d->outlineCacheValid) {
         m_d->outlineCache &= selection->outlineCache();
+        m_d->outlineCache.closeSubpath();
     }
 
     m_d->invalidateThumbnailImage();
@@ -277,6 +294,9 @@ void KisPixelSelection::symmetricdifferenceSelection(KisPixelSelectionSP selecti
         dst->nextRow();
         src->nextRow();
     }
+
+    const quint8 defPixel = abs(*defaultPixel().data() - *selection->defaultPixel().data());
+    setDefaultPixel(KoColor(&defPixel, colorSpace()));
     
     m_d->outlineCacheValid &= selection->outlineCacheValid();
 

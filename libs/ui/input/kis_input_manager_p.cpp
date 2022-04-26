@@ -724,7 +724,7 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 
     if (event->type() == QTouchEvent::TouchUpdate && touchHasBlockedPressEvents) {
         matcher.touchUpdateEvent((QTouchEvent *)event);
-    } else if (!matcher.pointerMoved(event) && toolProxy) {
+    } else if (!matcher.pointerMoved(event) && toolProxy && event->type() != QTouchEvent::TouchUpdate) {
         toolProxy->forwardHoverEvent(event);
     }
     retval = true;

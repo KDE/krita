@@ -346,10 +346,12 @@ void ToolReferenceImages::cut()
 void ToolReferenceImages::copy() const
 {
     QList<KoShape *> shapes = koSelection()->selectedShapes();
-    KoShape* shape = shapes.at(0);
-    KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
-    QClipboard *cb = QApplication::clipboard();
-    cb->setImage(reference->getImage());
+    if (!shapes.isEmpty()) {
+        KoShape* shape = shapes.at(0);
+        KisReferenceImage *reference = dynamic_cast<KisReferenceImage*>(shape);
+        QClipboard *cb = QApplication::clipboard();
+        cb->setImage(reference->getImage());
+    }
 }
 
 bool ToolReferenceImages::paste()

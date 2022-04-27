@@ -8,7 +8,8 @@
 #include "kis_specific_color_selector_widget.h"
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QCheckBox>
+#include <QButtonGroup>
+#include <QRadioButton>
 #include <QSpacerItem>
 
 #include <klocalizedstring.h>
@@ -20,6 +21,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorDisplayRendererInterface.h>
 
 #include <kis_color_input.h>
 #include <KoColorProfile.h>
@@ -34,17 +36,54 @@
 
 KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     : QWidget(parent)
-    , m_colorSpace(0)
-    , m_spacer(0)
+    , m_inputs()
+    , m_hexInput(nullptr)
+    , m_hsvSlider(nullptr)
+    , m_rgbButton(nullptr)
+    , m_hsvButton(nullptr)
+    , m_hsvSelector(nullptr)
+    , m_colorSpace(nullptr)
+    , m_color()
+    , m_updateAllowed(true)
     , m_updateCompressor(new KisSignalCompressor(10, KisSignalCompressor::POSTPONE, this))
+    , m_colorspaceSelector(nullptr)
     , m_customColorSpaceSelected(false)
-    , m_displayConverter(0)
+    , m_ui(nullptr)
+    , m_displayConverter(nullptr)
+    , m_converterConnection()
 {
 
     m_ui.reset(new Ui_wdgSpecificColorSelectorWidget());
     m_ui->setupUi(this);
 
-    m_updateAllowed = true;
+    // Set up "RGB/HSV" button group
+    m_hsvSelector = new QButtonGroup(this);
+    m_rgbButton = new QRadioButton("RGB", this);
+    m_hsvButton = new QRadioButton("HSV", this);
+    m_rgbButton->setChecked(true);
+
+    connect(m_hsvSelector, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(hsvSelectorClicked(QAbstractButton*)));
+
+    m_hsvSelector->addButton(m_rgbButton);
+    m_hsvSelector->addButton(m_hsvButton);
+    m_hsvSelector->setExclusive(true);
+    m_rgbButton->setVisible(false);
+    m_hsvButton->setVisible(false);
+
+    QSpacerItem *hsvButtonSpacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_ui->hsvButtonsLayout->addWidget(m_rgbButton);
+    m_ui->hsvButtonsLayout->addWidget(m_hsvButton);
+    m_ui->hsvButtonsLayout->addItem(hsvButtonSpacer);
+
+    // Set up HSV sliders
+    m_hsvSlider = new KisHsvColorInput(this, &m_color);
+    m_hsvSlider->setVisible(false);
+
+    connect(m_hsvSlider, SIGNAL(updated()), this,  SLOT(update()));
+    connect(this,  SIGNAL(updated()), m_hsvSlider, SLOT(update()));
+
+    m_ui->hsvSlidersLayout->addWidget(m_hsvSlider);
+
     connect(m_updateCompressor, SIGNAL(timeout()), SLOT(updateTimeout()));
 
     m_colorspaceSelector = new KisColorSpaceSelector(this);
@@ -60,8 +99,8 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 
     m_colorspaceSelector->showColorBrowserButton(false);
 
-    m_spacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
-    m_ui->slidersLayout->addItem(m_spacer);
+    QSpacerItem *bottomSpacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
+    m_ui->spacerLayout->addItem(bottomSpacer);
 }
 
 KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
@@ -145,9 +184,11 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
     Q_FOREACH (KisColorInput* input, m_inputs) {
         delete input;
     }
+    if (m_hexInput) {
+        delete m_hexInput;
+        m_hexInput = nullptr;
+    }
     m_inputs.clear();
-
-    m_ui->slidersLayout->removeItem(m_spacer);
 
     QList<KoChannelInfo *> channels = KoChannelInfo::displayOrderSorted(m_colorSpace->channels());
 
@@ -206,13 +247,14 @@ void KisSpecificColorSelectorWidget::setColorSpace(const KoColorSpace* cs, bool 
         }
     }
     if (allChannels8Bit) {
-        KisColorInput* input = new KisHexColorInput(this, &m_color, displayRenderer, false, true);
-        m_inputs.append(input);
-        m_ui->slidersLayout->addWidget(input);
-        connect(input, SIGNAL(updated()), this,  SLOT(update()));
-        connect(this,  SIGNAL(updated()), input, SLOT(update()));
+        // Set up the Hex input
+        m_hexInput = new KisHexColorInput(this, &m_color, displayRenderer, false, true);
+        m_ui->hexSelectorLayout->addWidget(m_hexInput);
+        connect(m_hexInput, SIGNAL(updated()), this,  SLOT(update()));
+        connect(this,  SIGNAL(updated()), m_hexInput, SLOT(update()));
     }
-    m_ui->slidersLayout->addItem(m_spacer);
+
+    updateHsvSelector(m_colorSpace->colorModelId() == RGBAColorModelID);
 
     m_colorspaceSelector->blockSignals(true);
     m_colorspaceSelector->setCurrentColorSpace(cs);
@@ -256,3 +298,41 @@ void KisSpecificColorSelectorWidget::onChkUsePercentageChanged(bool isChecked)
     }
     emit(updated());
 }
+
+void KisSpecificColorSelectorWidget::hsvSelectorClicked(QAbstractButton *)
+{
+    updateHsvSelector(m_colorSpace ? m_colorSpace->colorModelId() == RGBAColorModelID : false);
+}
+
+void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
+{
+    if (isRgbColorSpace) {
+        m_rgbButton->setVisible(true);
+        m_hsvButton->setVisible(true);
+    } else {
+        m_rgbButton->setVisible(false);
+        m_hsvButton->setVisible(false);
+
+        // Force to be RGB only
+        Q_FOREACH (KisColorInput* input, m_inputs) {
+            input->setVisible(true);
+        }
+        m_hsvSlider->setVisible(false);
+
+        return;
+    }
+
+    QAbstractButton *checked = m_hsvSelector->checkedButton();
+    if (checked == m_rgbButton) {
+        Q_FOREACH (KisColorInput* input, m_inputs) {
+            input->setVisible(true);
+        }
+        m_hsvSlider->setVisible(false);
+    } else if (checked == m_hsvButton) {
+        Q_FOREACH (KisColorInput* input, m_inputs) {
+            input->setVisible(false);
+        }
+        m_hsvSlider->setVisible(true);
+    }
+}
+

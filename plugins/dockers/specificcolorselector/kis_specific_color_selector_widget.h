@@ -19,11 +19,15 @@ class KoColorSpace;
 class QVBoxLayout;
 class KisColorInput;
 class KisColorSpaceSelector;
-class QCheckBox;
+class QButtonGroup;
+class QRadioButton;
+class QAbstractButton;
 class KisSignalCompressor;
 class QSpacerItem;
 class KisDisplayColorConverter;
 class KisPopupButton;
+class KisHexColorInput;
+class KisHsvColorInput;
 
 class KisSpecificColorSelectorWidget : public QWidget
 {
@@ -41,26 +45,35 @@ public Q_SLOTS:
 
     void setColorSpace(const KoColorSpace *cs, bool force = false);
     void setColor(const KoColor&);
+
 private Q_SLOTS:
     void update();
     void updateTimeout();
     void setCustomColorSpace(const KoColorSpace *);
     void rereadCurrentColorSpace(bool force = false);
     void onChkUsePercentageChanged(bool);
+    void hsvSelectorClicked(QAbstractButton *);
+
 Q_SIGNALS:
     void colorChanged(const KoColor&);
     void updated();
+
 private:
-    QList<KisColorInput*> m_inputs;
+    void updateHsvSelector(bool isRgbColorSpace);
+
+    QList<KisColorInput *> m_inputs;
+    KisHexColorInput *m_hexInput;
+    KisHsvColorInput *m_hsvSlider;
+    QRadioButton *m_rgbButton;
+    QRadioButton *m_hsvButton;
+    QButtonGroup *m_hsvSelector;
     const KoColorSpace* m_colorSpace;
-    QSpacerItem *m_spacer;
     KoColor m_color;
     bool m_updateAllowed;
     KisSignalCompressor *m_updateCompressor;
     KisColorSpaceSelector *m_colorspaceSelector;
     bool m_customColorSpaceSelected;
     QScopedPointer<Ui_wdgSpecificColorSelectorWidget> m_ui;
-
 
     KisDisplayColorConverter *m_displayConverter;
     KisSignalAutoConnectionsStore m_converterConnection;

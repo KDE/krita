@@ -17,6 +17,7 @@ class QDoubleSpinBox;
 class KisIntParseSpinBox;
 class KisDoubleParseSpinBox;
 class KoColorSlider;
+class KisHsvColorSlider;
 class QLineEdit;
 class QLabel;
 
@@ -97,6 +98,46 @@ public Q_SLOTS:
 private:
     QLineEdit* m_hexInput {nullptr};
     QLabel* m_colorPreview=nullptr;
+};
+
+class KRITAWIDGETS_EXPORT KisHsvColorInput : public QWidget
+{
+    Q_OBJECT
+
+public:
+    KisHsvColorInput(QWidget* parent, KoColor* color);
+
+public Q_SLOTS:
+    void setHue(double);
+    void setSaturation(double);
+    void setValue(double);
+
+    void hueSliderChanged(int);
+    void saturationSliderChanged(int);
+    void valueSliderChanged(int);
+
+    void update();
+
+Q_SIGNALS:
+    void updated();
+
+private:
+    void sendUpdate();
+    void recolorSliders();
+
+    KoColor* m_color;
+
+    KisHsvColorSlider* m_hSlider;
+    KisHsvColorSlider* m_sSlider;
+    KisHsvColorSlider* m_vSlider;
+
+    KisDoubleParseSpinBox* m_hInput;
+    KisDoubleParseSpinBox* m_sInput;
+    KisDoubleParseSpinBox* m_vInput;
+
+    qreal m_h;
+    qreal m_s;
+    qreal m_v;
 };
 
 #endif

@@ -94,6 +94,18 @@
     <layout class="QVBoxLayout" name="slidersLayout"/>
    </item>
    <item>
+    <layout class="QVBoxLayout" name="hsvSlidersLayout"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="hexSelectorLayout"/>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="hsvButtonsLayout"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="spacerLayout"/>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

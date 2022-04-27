@@ -29,9 +29,11 @@
 #include <KoColor.h>
 #include <KoColorSlider.h>
 #include <KoColorSpace.h>
+#include <KisHsvColorSlider.h>
 
 #include "kis_double_parse_spin_box.h"
 #include "kis_int_parse_spin_box.h"
+#include "kis_signals_blocker.h"
 
 KisColorInput::KisColorInput(QWidget* parent, const KoChannelInfo* channelInfo, KoColor* color, KoColorDisplayRendererInterface *displayRenderer, bool usePercentage) :
     QWidget(parent), m_channelInfo(channelInfo), m_color(color), m_displayRenderer(displayRenderer),
@@ -435,3 +437,223 @@ QWidget* KisHexColorInput::createInput()
     return m_hexInput;
 }
 
+
+KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
+    : QWidget(parent)
+    , m_color(color)
+    , m_hSlider(nullptr)
+    , m_sSlider(nullptr)
+    , m_vSlider(nullptr)
+    , m_hInput(nullptr)
+    , m_sInput(nullptr)
+    , m_vInput(nullptr)
+    , m_h(0)
+    , m_s(0)
+    , m_v(0)
+{
+
+    QLabel *labels[3];
+    KisHsvColorSlider *sliders[3];
+    KisDoubleParseSpinBox *inputs[3];
+    const char *labelNames[3] = { "H:", "S:", "V:" };
+    qreal maxValues[3] = { 360, 100, 100 };
+    int labelWidth = 0;
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    mainLayout->setContentsMargins(0,0,0,0);
+
+    for (int i = 0; i < 3; i++) {
+        // Slider layout
+        QHBoxLayout *sliderLayout = new QHBoxLayout();
+        sliderLayout->setContentsMargins(0,0,0,0);
+        sliderLayout->setSpacing(1);
+
+        // Label
+        QLabel *label = new QLabel(i18n(labelNames[i]), this);
+        sliderLayout->addWidget(label);
+
+        // Slider itself
+        KisHsvColorSlider *slider = new KisHsvColorSlider(Qt::Horizontal, this);
+        slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sliderLayout->addWidget(slider);
+
+        // Input box
+        KisDoubleParseSpinBox *input = new KisDoubleParseSpinBox(this);
+        input->setMinimum(0);
+        input->setMaximum(maxValues[i]);
+
+        input->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        input->setMinimumWidth(60);
+        input->setMaximumWidth(60);
+
+        // For some reason, the size hint is off by 1px
+        slider->setFixedHeight(input->sizeHint().height() - 1);
+        sliderLayout->addWidget(input);
+
+        mainLayout->addLayout(sliderLayout);
+
+        // Record max label width
+        labelWidth = qMax(labelWidth, label->sizeHint().width());
+
+        sliders[i] = slider;
+        inputs[i] = input;
+        labels[i] = label;
+    }
+
+    // Align the labels
+    for (int i = 0; i < 3; i++) {
+        labels[i]->setMinimumWidth(labelWidth);
+    }
+
+    // Connect slots
+    connect(sliders[0], SIGNAL(valueChanged(int)), this, SLOT(hueSliderChanged(int)));
+    connect(inputs[0], SIGNAL(valueChanged(double)), this, SLOT(setHue(double)));
+    connect(sliders[1], SIGNAL(valueChanged(int)), this, SLOT(saturationSliderChanged(int)));
+    connect(inputs[1], SIGNAL(valueChanged(double)), this, SLOT(setSaturation(double)));
+    connect(sliders[2], SIGNAL(valueChanged(int)), this, SLOT(valueSliderChanged(int)));
+    connect(inputs[2], SIGNAL(valueChanged(double)), this, SLOT(setValue(double)));
+
+    m_hSlider = sliders[0];
+    m_sSlider = sliders[1];
+    m_vSlider = sliders[2];
+
+    m_hInput = inputs[0];
+    m_sInput = inputs[1];
+    m_vInput = inputs[2];
+
+    // Set initial values
+    QColor c = m_color->toQColor();
+    c.getHsvF(&m_h, &m_s, &m_v);
+    m_hInput->setValue(m_h);
+    m_sInput->setValue(m_s);
+    m_vInput->setValue(m_v);
+
+    // Update sliders
+    QColor minC, maxC;
+    KoColor minK, maxK;
+
+    minC.setHsvF(0, 1, 1);
+    maxC.setHsvF(1, 1, 1);
+    minK.fromQColor(minC);
+    maxK.fromQColor(maxC);
+    m_hSlider->setColors(minK, maxK);
+    m_hSlider->setCircularHue(true);
+
+    recolorSliders();
+}
+
+void KisHsvColorInput::sendUpdate()
+{
+    recolorSliders();
+
+    QColor c;
+    c.setHsvF(m_h, m_s, m_v);
+
+    m_color->fromQColor(c);
+    emit(updated());
+}
+
+void KisHsvColorInput::setHue(double x)
+{
+    if (x < 0) {
+        x = 0;
+    }
+
+    if (x > 360) {
+        x = 360;
+    }
+
+    m_h = x / 360;
+    sendUpdate();
+}
+
+void KisHsvColorInput::setSaturation(double x)
+{
+    if (x < 0) {
+        x = 0;
+    }
+
+    if (x > 100) {
+        x = 100;
+    }
+
+    m_s = x / 100;
+    sendUpdate();
+}
+
+void KisHsvColorInput::setValue(double x)
+{
+    if (x < 0) {
+        x = 0;
+    }
+
+    if (x > 100) {
+        x = 100;
+    }
+
+    m_v = x / 100;
+    sendUpdate();
+}
+
+void KisHsvColorInput::hueSliderChanged(int i)
+{
+    m_hInput->setValue((i / 255.0) * 360);
+}
+
+void KisHsvColorInput::saturationSliderChanged(int i)
+{
+    m_sInput->setValue((i / 255.0) * 100);
+}
+
+void KisHsvColorInput::valueSliderChanged(int i)
+{
+    m_vInput->setValue((i / 255.0) * 100);
+}
+
+void KisHsvColorInput::recolorSliders() {
+    // Update sliders
+    QColor minC, maxC;
+    KoColor minK, maxK;
+
+    minC.setHsvF(m_h, 0, m_v);
+    maxC.setHsvF(m_h, 1, m_v);
+    minK.fromQColor(minC);
+    maxK.fromQColor(maxC);
+    m_sSlider->setColors(minK, maxK);
+
+    minC.setHsvF(0, 0, 0);
+    maxC.setHsvF(0, 0, 1);
+    minK.fromQColor(minC);
+    maxK.fromQColor(maxC);
+    m_vSlider->setColors(minK, maxK);
+}
+
+void KisHsvColorInput::update()
+{
+    KisSignalsBlocker blocker(
+        m_hInput, m_sInput, m_vInput,
+        m_hSlider, m_sSlider, m_vSlider
+    );
+
+    // Check if it is the same color we have
+    QColor current;
+    current.setHsvF(m_h, m_s, m_v);
+    QColor theirs = m_color->toQColor();
+
+    // Truncate to integer for this check
+    if (!(current.red() == theirs.red() && current.green() == theirs.green() && current.blue() == theirs.blue())) {
+        // Apply the update
+        theirs.getHsvF(&m_h, &m_s, &m_v);
+
+        m_hInput->setValue(m_h * 360);
+        m_sInput->setValue(m_s * 100);
+        m_vInput->setValue(m_v * 100);
+
+        recolorSliders();
+
+        // Update slider positions
+        m_hSlider->setValue(m_h * 255);
+        m_sSlider->setValue(m_s * 255);
+        m_vSlider->setValue(m_v * 255);
+    }
+}

@@ -54,6 +54,7 @@
 #include "kis_node_manager.h"
 #include "kis_layer_utils.h"
 #include <kis_selection_mask.h>
+#include <KisReferenceImagesLayer.h>
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_selection_tool_helper.h>
@@ -266,7 +267,14 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
     KisImageSP image = view->image();
     if (!image) return;
 
-    const bool haveShapesSelected = view->selectionManager()->haveShapesSelected();
+    // Reference layers is a fake node, so it isn't added to the layer stack, this results in KisSelectedShapesProxy not
+    // being aware of the active shapeManager and its selected shapes.
+    const auto hasReferenceImageSelected = [&]() {
+        KisReferenceImagesLayerSP refLayer = view->document()->referenceImagesLayer();
+        return refLayer && refLayer->shapeManager()->selection()->count();
+    };
+
+    const bool haveShapesSelected = view->selectionManager()->haveShapesSelected() || hasReferenceImageSelected();
 
     KisNodeSP node = view->activeNode();
     KisSelectionSP selection = view->selection();

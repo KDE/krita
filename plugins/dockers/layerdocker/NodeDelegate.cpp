@@ -977,9 +977,15 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             decorationRect.contains(mouseEvent->pos());
 
         const bool leftButton = mouseEvent->buttons() & Qt::LeftButton;
+        const bool altButton = mouseEvent->modifiers() & Qt::AltModifier;
 
         if (leftButton) {
-            if (visibilityClicked) {
+            if (altButton) {
+                d->view->setCurrentIndex(index);
+                model->setData(index, true, KisNodeModel::AlternateActiveRole);
+
+                return true;
+            } else if (visibilityClicked) {
                 KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 OptionalProperty clickedProperty = d->findVisibilityProperty(props);
                 if (!clickedProperty) return false;
@@ -1028,14 +1034,6 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
                 d->toggleProperty(props, &(*clickedProperty), mouseEvent->modifiers(), index);
                 return true;
             }
-        }
-
-        if (mouseEvent->button() == Qt::LeftButton &&
-            mouseEvent->modifiers() == Qt::AltModifier) {
-
-            d->view->setCurrentIndex(index);
-            model->setData(index, true, KisNodeModel::AlternateActiveRole);
-            return true;
         }
     }
     else if (event->type() == QEvent::ToolTip) {

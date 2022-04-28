@@ -95,7 +95,7 @@ void KisClipboard::setClip(KisPaintDeviceSP dev, const QPoint &topLeft, const Ki
 
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
-    QByteArray mimeType("application/x-krita-selection");
+    const auto mimeType = QByteArrayLiteral("application/x-krita-selection");
     QScopedPointer<KoStore> store(KoStore::createStore(&buffer, KoStore::Write, mimeType));
     KisStorePaintDeviceWriter writer(store.data());
     Q_ASSERT(store);
@@ -191,9 +191,9 @@ KisClipboard::clip(const QRect &imageBounds, bool showPopup, int overridePasteBe
     }
 
     dbgUI << Q_FUNC_INFO;
-    dbgUI << "\t Formats: " << cbData->formats();
-    dbgUI << "\t Urls: " << cbData->urls();
-    dbgUI << "\t Has images: " << cbData->hasImage();
+    dbgUI << "\tFormats: " << cbData->formats();
+    dbgUI << "\tUrls: " << cbData->urls();
+    dbgUI << "\tHas images: " << cbData->hasImage();
 
     return clipFromMimeData(cbData, imageBounds, showPopup, overridePasteBehaviour, clipRange, true);
 }
@@ -221,7 +221,7 @@ KisPaintDeviceSP KisClipboard::clipFromMimeData(const QMimeData *cbData,
 KisPaintDeviceSP
 KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &imageBounds, KisTimeSpan *clipRange) const
 {
-    const QByteArray mimeType("application/x-krita-selection");
+    const QByteArray mimeType = QByteArrayLiteral("application/x-krita-selection");
 
     KisPaintDeviceSP clip;
 
@@ -347,12 +347,12 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             || (!local && choice == PASTE_FORMAT_LOCAL) || (!cbData->hasImage() && choice == PASTE_FORMAT_CLIP);
 
         dbgUI << "Incoming paste event:";
-        dbgUI << "\t Has attached bitmap:" << cbData->hasImage();
-        dbgUI << "\t Has local images:" << local;
-        dbgUI << "\t Has remote images:" << remote;
-        dbgUI << "\t Has multiple formats:" << hasMultipleFormatsAvailable;
-        dbgUI << "\t Default source preference" << choice;
-        dbgUI << "\t Default source available:" << !defaultOptionUnavailable;
+        dbgUI << "\tHas attached bitmap:" << cbData->hasImage();
+        dbgUI << "\tHas local images:" << local;
+        dbgUI << "\tHas remote images:" << remote;
+        dbgUI << "\tHas multiple formats:" << hasMultipleFormatsAvailable;
+        dbgUI << "\tDefault source preference" << choice;
+        dbgUI << "\tDefault source available:" << !defaultOptionUnavailable;
 
         if (hasMultipleFormatsAvailable && choice == PASTE_FORMAT_ASK) {
             KisDlgPasteFormat dlg(qApp->activeWindow());
@@ -473,7 +473,7 @@ void KisClipboard::clipboardDataChanged()
                 d->hasClip = true;
 
             const QMimeData *cbData = d->clipboard->mimeData();
-            QByteArray mimeType("application/x-krita-selection");
+            const auto mimeType = QByteArrayLiteral("application/x-krita-selection");
             if (cbData && cbData->hasFormat(mimeType))
                 d->hasClip = true;
         }
@@ -492,7 +492,7 @@ bool KisClipboard::hasClip() const
 
 QSize KisClipboard::clipSize() const
 {
-    QByteArray mimeType("application/x-krita-selection");
+    const auto mimeType = QByteArrayLiteral("application/x-krita-selection");
     const QMimeData *cbData = d->clipboard->mimeData();
 
     KisPaintDeviceSP clip;

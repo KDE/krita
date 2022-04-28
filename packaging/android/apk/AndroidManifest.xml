@@ -71,6 +71,7 @@
                 <data android:mimeType="application/x-krita-paintoppreset" />
                 <data android:mimeType="application/pdf" />
 
+                <data android:mimeType="image/jxl" />
             </intent-filter>
 
             <intent-filter>

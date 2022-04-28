@@ -1,0 +1,12 @@
+AV1 Image Files
+COPYRIGHT AND LICENSE INFORMATION
+September, 2019
+
+NETFLIX INC.
+100 Winchester Circle, Los Gatos, CA 95032, USA
+
+The AVIF images and sequences in this folder and all intellectual property rights
+therein remain the property of Netflix Inc. The images and sequences are licensed
+under the Creative Commons Attribution-NonCommercial-NoDerivatives 4.0
+International License. To view a copy of this license, visit
+http://creativecommons.org/licenses/by-nc-nd/4.0/

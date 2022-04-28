@@ -817,6 +817,16 @@ set_package_properties(LibRaw PROPERTIES
     TYPE OPTIONAL
     PURPOSE "Required to build the raw import plugin")
 
+find_package(JPEGXL 0.7.0)
+set_package_properties(JPEGXL PROPERTIES
+    DESCRIPTION "JPEG XL is a royalty-free raster-graphics file format that supports both lossy and lossless compression and is experimentally supported by Chrome, Firefox, and Edge."
+    URL "https://github.com/libjxl/libjxl"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita JPEG-XL filter")
+if (JPEGXL_FOUND)
+    list (APPEND ANDROID_EXTRA_LIBS ${JPEGXL_LIBRARIES})
+endif()
+
 find_package(FFTW3)
 set_package_properties(FFTW3 PROPERTIES
     DESCRIPTION "A fast, free C FFT library"

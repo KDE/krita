@@ -340,6 +340,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "apng";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "image/jxl";
+        mimeType.description = i18nc("description of a file type", "JPEG-XL Image");
+        mimeType.suffixes = QStringList() << "jxl";
+        s_mimeDatabase << mimeType;
+
         dbgPlugins << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }
 }

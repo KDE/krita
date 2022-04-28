@@ -1,0 +1,12 @@
+{
+    "Icon": "",
+    "Id": "Krita JPEG-XL Export Filter",
+    "Type": "Service",
+    "X-KDE-Export": "image/jxl",
+    "X-KDE-Library": "kritajxlexport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": 1,
+    "X-KDE-Extensions" : "jxl"
+}

@@ -60,3 +60,7 @@ add_subdirectory(krz)
 if (WebP_FOUND)
     add_subdirectory(webp)
 endif()
+
+if (JPEGXL_FOUND)
+    add_subdirectory(jxl)
+endif()

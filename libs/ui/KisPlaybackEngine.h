@@ -69,8 +69,18 @@ protected Q_SLOTS:
     void setCanvas(KoCanvasBase* canvas) override;
     void unsetCanvas() override;
 
+    /**
+     * @brief throttledShowFrame
+     * @param frame
+     *
+     * In order to throttle calls from MLT to respect our
+     * playback mode, we need to redirect `showFrame` calls
+     * to this thread and enforce that we only allow MLT to
+     * show frames when we are in PULL mode.
+     */
+    void throttledShowFrame(const int frame);
+
 private:
-    void setupPlaybackMode(PlaybackMode p_mode);
     void nextKeyframeWithColor(int color);
     void nextKeyframeWithColor(const QSet<int> &validColors);
     void previousKeyframeWithColor(int color);

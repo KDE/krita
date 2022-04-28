@@ -314,10 +314,10 @@ void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
         m_hsvButton->setVisible(false);
 
         // Force to be RGB only
+        m_hsvSlider->setVisible(false);
         Q_FOREACH (KisColorInput* input, m_inputs) {
             input->setVisible(true);
         }
-        m_hsvSlider->setVisible(false);
         m_ui->chkUsePercentage->setEnabled(true);
 
         return;
@@ -325,10 +325,10 @@ void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
 
     QAbstractButton *checked = m_hsvSelector->checkedButton();
     if (checked == m_rgbButton) {
+        m_hsvSlider->setVisible(false);
         Q_FOREACH (KisColorInput* input, m_inputs) {
             input->setVisible(true);
         }
-        m_hsvSlider->setVisible(false);
         m_ui->chkUsePercentage->setEnabled(true);
     } else if (checked == m_hsvButton) {
         Q_FOREACH (KisColorInput* input, m_inputs) {

@@ -318,6 +318,7 @@ void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
             input->setVisible(true);
         }
         m_hsvSlider->setVisible(false);
+        m_ui->chkUsePercentage->setEnabled(true);
 
         return;
     }
@@ -328,11 +329,13 @@ void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
             input->setVisible(true);
         }
         m_hsvSlider->setVisible(false);
+        m_ui->chkUsePercentage->setEnabled(true);
     } else if (checked == m_hsvButton) {
         Q_FOREACH (KisColorInput* input, m_inputs) {
             input->setVisible(false);
         }
         m_hsvSlider->setVisible(true);
+        m_ui->chkUsePercentage->setEnabled(false);
     }
 }
 

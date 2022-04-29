@@ -51,11 +51,10 @@ void KisColorInput::init()
     m_layout->addWidget(m_label);
 
     m_colorSlider = new KoColorSlider(Qt::Horizontal, this, m_displayRenderer);
-    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    m_colorSlider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_layout->addWidget(m_colorSlider);
 
     QWidget* m_input = createInput();
-    m_colorSlider->setFixedHeight(m_input->sizeHint().height());
     m_layout->addWidget(m_input);
 }
 
@@ -486,8 +485,7 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
         input->setMinimumWidth(60);
         input->setMaximumWidth(60);
 
-        // For some reason, the size hint is off by 1px
-        slider->setFixedHeight(input->sizeHint().height() - 1);
+        slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sliderLayout->addWidget(input);
 
         mainLayout->addLayout(sliderLayout);

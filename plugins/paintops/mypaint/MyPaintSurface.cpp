@@ -39,9 +39,9 @@ KisMyPaintSurface::KisMyPaintSurface(KisPainter *painter, KisPaintDeviceSP paint
 {
     m_blendDevice = KisFixedPaintDeviceSP(new KisFixedPaintDevice(m_precisePainterWrapper.overlayColorSpace()));
 
-    m_backgroundPainter->setCompositeOp(COMPOSITE_COPY);
+    m_backgroundPainter->setCompositeOpId(COMPOSITE_COPY);
     m_backgroundPainter->setOpacity(OPACITY_OPAQUE_U8);
-    m_tempPainter->setCompositeOp(COMPOSITE_COPY);
+    m_tempPainter->setCompositeOpId(COMPOSITE_COPY);
     m_tempPainter->setSelection(painter->selection());
     m_tempPainter->setChannelFlags(painter->channelFlags());
     m_tempPainter->copyMirrorInformationFrom(painter);
@@ -160,7 +160,7 @@ int KisMyPaintSurface::drawDabImpl(MyPaintSurface *self, float x, float y, float
     float unitValue = KoColorSpaceMathsTraits<channelType>::unitValue;
     float minValue = KoColorSpaceMathsTraits<channelType>::min;
     float maxValue = KoColorSpaceMathsTraits<channelType>::max;
-    bool eraser = painter()->compositeOp()->id() == COMPOSITE_ERASE;
+    bool eraser = painter()->compositeOpId() == COMPOSITE_ERASE;
 
 
     m_maskDevice->setRect(dabRectAligned);

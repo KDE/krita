@@ -38,12 +38,12 @@ KisMyPaintPaintOp::KisMyPaintPaintOp(const KisPaintOpSettingsSP settings, KisPai
 
         mypaint_brush_from_defaults(m_brush->brush());
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_RADIUS_LOGARITHMIC, log(settings->getFloat(MYPAINT_DIAMETER)/2));
-        painter->setCompositeOp(COMPOSITE_ERASE);
+        painter->setCompositeOpId(COMPOSITE_ERASE);
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
     else if (qRound(settings->getFloat(MYPAINT_ERASER)) && settings->getBool("EraserMode")) {
 
-        painter->setCompositeOp(COMPOSITE_ERASE);
+        painter->setCompositeOpId(COMPOSITE_ERASE);
         mypaint_brush_set_base_value(m_brush->brush(), MYPAINT_BRUSH_SETTING_ERASER, false);
     }
 

@@ -45,7 +45,9 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     quint32                     pixelSize {0};
     const KoColorSpace*         colorSpace {nullptr};
     KoColorProfile*             profile {nullptr};
-    const KoCompositeOp*        compositeOp {nullptr};
+    const KoColorSpace*         cachedSourceColorSpace {nullptr};
+    const KoCompositeOp*        cachedCompositeOp {nullptr};
+    QString                     compositeOpId;
     KoAbstractGradientSP        gradient;
     KisPaintOpPresetSP          paintOpPreset;
     QImage                      polygonMaskImage;
@@ -64,6 +66,8 @@ struct Q_DECL_HIDDEN KisPainter::Private {
     KisRunnableStrokeJobsInterface *runnableStrokeJobsInterface {nullptr};
     QScopedPointer<KisRunnableStrokeJobsInterface> fakeRunnableStrokeJobsInterface;
     QTransform                  patternTransform;
+
+    const KoCompositeOp*        compositeOp(const KoColorSpace *srcCS);
 
     bool tryReduceSourceRect(const KisPaintDevice *srcDev,
                              QRect *srcRect,

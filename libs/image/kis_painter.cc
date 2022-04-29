@@ -140,7 +140,7 @@ void copyAreaOptimizedImpl(const QPoint &dstPt,
             }
 
             KisPainter gc(dst);
-            gc.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc.setCompositeOpId(COMPOSITE_COPY);
 
             if (useOldData) {
                 gc.bitBltOldData(dstCopyRect.topLeft(), src, srcCopyRect);
@@ -194,7 +194,7 @@ void KisPainter::copyAreaOptimized(const QPoint &dstPt,
         {
             KisPainter gc(dst);
             gc.setSelection(selection);
-            gc.setCompositeOp(dst->colorSpace()->compositeOp(COMPOSITE_COPY));
+            gc.setCompositeOpId(COMPOSITE_COPY);
             gc.bitBlt(dstRect.topLeft(), src, srcRect);
         }
     }
@@ -304,7 +304,8 @@ void KisPainter::begin(KisPaintDeviceSP device, KisSelectionSP selection)
 
     d->device = device;
     d->colorSpace = device->colorSpace();
-    d->compositeOp = d->colorSpace->compositeOp(COMPOSITE_OVER);
+    d->compositeOpId = COMPOSITE_OVER;
+    d->cachedCompositeOp = nullptr;
     d->pixelSize = device->pixelSize();
 }
 
@@ -426,6 +427,16 @@ void KisPainter::addDirtyRects(const QVector<QRect> &rects)
     }
 }
 
+const KoCompositeOp *KisPainter::Private::compositeOp(const KoColorSpace *srcCS)
+{
+    if (!cachedCompositeOp || !cachedSourceColorSpace || !(*cachedSourceColorSpace == *srcCS)) {
+        cachedCompositeOp = colorSpace->compositeOp(compositeOpId, srcCS);
+        cachedSourceColorSpace = srcCS;
+        KIS_ASSERT(cachedCompositeOp);
+    }
+    return cachedCompositeOp;
+}
+
 inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDev,
                                                      QRect *srcRect,
                                                      qint32 *srcX,
@@ -443,9 +454,9 @@ inline bool KisPainter::Private::tryReduceSourceRect(const KisPaintDevice *srcDe
      * directly copied (former case) or cloned from another area of
      * the image.
      */
-    if (compositeOp->id() != COMPOSITE_COPY &&
-        compositeOp->id() != COMPOSITE_DESTINATION_IN  &&
-        compositeOp->id() != COMPOSITE_DESTINATION_ATOP &&
+    if (compositeOpId != COMPOSITE_COPY &&
+        compositeOpId != COMPOSITE_DESTINATION_IN  &&
+        compositeOpId != COMPOSITE_DESTINATION_ATOP &&
         !srcDev->defaultBounds()->wrapAroundMode()) {
 
         /**
@@ -515,6 +526,8 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
     // Check that selection has an alpha colorspace, crash if false
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
 
+    const KoCompositeOp *compositeOp = d->compositeOp(srcDev->colorSpace());
+
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
 
     // save selection offset in case tryReduceSourceRect() will change rects
@@ -581,7 +594,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.maskRowStride = selBounds.width() * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
-        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
     }
     else {
         /* Read the user selection (d->selection) bytes into an array, ready
@@ -621,7 +634,7 @@ void KisPainter::bitBltWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
-        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
         delete[] mergedSelectionBytes;
     }
 
@@ -656,7 +669,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
 
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
 
-    if (d->compositeOp->id() == COMPOSITE_COPY) {
+    if (d->compositeOpId == COMPOSITE_COPY) {
         if(!d->selection && d->isOpacityUnit &&
            srcX == dstX && srcY == dstY &&
            d->device->fastBitBltPossible(srcDev) &&
@@ -687,6 +700,8 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
     qint32 dstY_ = dstY;
     qint32 srcY_ = srcY;
     qint32 rowsRemaining = srcHeight;
+
+    const KoCompositeOp *compositeOp = d->compositeOp(srcDev->colorSpace());
 
     // Read below
     KisRandomConstAccessorSP srcIt = srcDev->createRandomConstAccessorNG();
@@ -740,7 +755,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
                 d->paramInfo.maskRowStride = maskRowStride;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
 
                 srcX_ += columns;
                 dstX_ += columns;
@@ -788,7 +803,7 @@ void KisPainter::bitBltImpl(qint32 dstX, qint32 dstY,
                 d->paramInfo.maskRowStride = 0;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
 
                 srcX_ += columns;
                 dstX_ += columns;
@@ -842,6 +857,8 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
         return;
 
     KoColor srcColor(color, d->device->compositionSourceColorSpace());
+    const KoCompositeOp *compositeOp = d->compositeOp(srcColor.colorSpace());
+
     qint32  dstY          = y;
     qint32  rowsRemaining = height;
 
@@ -882,7 +899,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 d->paramInfo.maskRowStride = maskRowStride;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcColor.colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcColor.colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
 
                 dstX             += columns;
                 columnsRemaining -= columns;
@@ -916,7 +933,7 @@ void KisPainter::fill(qint32 x, qint32 y, qint32 width, qint32 height, const KoC
                 d->paramInfo.maskRowStride = 0;
                 d->paramInfo.rows          = rows;
                 d->paramInfo.cols          = columns;
-                d->colorSpace->bitBlt(srcColor.colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+                d->colorSpace->bitBlt(srcColor.colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
 
                 dstX             += columns;
                 columnsRemaining -= columns;
@@ -949,6 +966,8 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     so crash if someone attempts to do this. Don't resize as it would obfuscate the mistake. */
     KIS_SAFE_ASSERT_RECOVER_RETURN(srcBounds.contains(srcRect));
     Q_UNUSED(srcRect); // only used in above assertion
+
+    const KoCompositeOp *compositeOp = d->compositeOp(srcDev->colorSpace());
 
     /* Create an intermediate byte array to hold information before it is written
     to the current paint device (aka: d->device) */
@@ -992,7 +1011,7 @@ void KisPainter::bltFixed(qint32 dstX, qint32 dstY,
     }
 
     // ...and then blit.
-    d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+    d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
     d->device->writeBytes(dstBytes, dstX, dstY, srcWidth, srcHeight);
 
     delete[] d->paramInfo.maskRowStart;
@@ -1023,6 +1042,8 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
 
      // Check that selection has an alpha colorspace, crash if false
     Q_ASSERT(selection->colorSpace() == KoColorSpaceRegistry::instance()->alpha8());
+
+    const KoCompositeOp *compositeOp = d->compositeOp(srcDev->colorSpace());
 
     QRect srcRect = QRect(srcX, srcY, srcWidth, srcHeight);
     QRect selRect = QRect(selX, selY, srcWidth, srcHeight);
@@ -1064,7 +1085,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.maskRowStride = selBounds.width() * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
-        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
     }
     else {
         /* Read the user selection (d->selection) bytes into an array, ready
@@ -1104,7 +1125,7 @@ void KisPainter::bltFixedWithFixedSelection(qint32 dstX, qint32 dstY,
         d->paramInfo.maskRowStride = srcWidth * selection->pixelSize();
         d->paramInfo.rows          = srcHeight;
         d->paramInfo.cols          = srcWidth;
-        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, d->compositeOp, d->renderingIntent, d->conversionFlags);
+        d->colorSpace->bitBlt(srcDev->colorSpace(), d->paramInfo, compositeOp, d->renderingIntent, d->conversionFlags);
 
         delete[] mergedSelectionBytes;
     }
@@ -1592,7 +1613,7 @@ inline void KisPainter::compositeOnePixel(quint8 *dst, const KoColor &color)
     d->paramInfo.rows = 1;
     d->paramInfo.cols = 1;
 
-    d->colorSpace->bitBlt(color.colorSpace(), d->paramInfo, d->compositeOp,
+    d->colorSpace->bitBlt(color.colorSpace(), d->paramInfo, d->compositeOp(color.colorSpace()),
                           d->renderingIntent,
                           d->conversionFlags);
 }
@@ -2665,22 +2686,22 @@ quint8 KisPainter::opacity() const
     return quint8(d->paramInfo.opacity * 255.0f);
 }
 
-void KisPainter::setCompositeOp(const KoCompositeOp * op)
+void KisPainter::setCompositeOpId(const KoCompositeOp * op)
 {
-    d->compositeOp = op;
+    setCompositeOpId(op->id());
 }
 
-const KoCompositeOp * KisPainter::compositeOp()
+QString KisPainter::compositeOpId()
 {
-    return d->compositeOp;
+    return d->compositeOpId;
 }
 
-/**
- * TODO: Rename this setCompositeOpId().  See KoCompositeOpRegistry.h
- */
-void KisPainter::setCompositeOp(const QString& op)
+void KisPainter::setCompositeOpId(const QString& op)
 {
-    d->compositeOp = d->colorSpace->compositeOp(op);
+    if (op != d->compositeOpId) {
+        d->compositeOpId = op;
+        d->cachedCompositeOp = nullptr;
+    }
 }
 
 void KisPainter::setSelection(KisSelectionSP selection)

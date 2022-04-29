@@ -326,7 +326,7 @@ void KisTextureProperties::applyLightness(KisFixedPaintDeviceSP dab, const QPoin
     const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
 
     KisFillPainter fillMaskPainter(fillMaskDevice);
-    fillMaskPainter.setCompositeOp(COMPOSITE_COPY);
+    fillMaskPainter.setCompositeOpId(COMPOSITE_COPY);
     fillMaskPainter.fillRect(kisGrowRect(maskPatchRect, 1), mask, maskBounds);
     fillMaskPainter.end();
 
@@ -360,7 +360,7 @@ void KisTextureProperties::applyGradient(KisFixedPaintDeviceSP dab, const QPoint
     const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
 
     KisFillPainter fillPainter(fillDevice);
-    fillPainter.setCompositeOp(COMPOSITE_COPY);
+    fillPainter.setCompositeOpId(COMPOSITE_COPY);
     fillPainter.fillRect(kisGrowRect(maskPatchRect, 1), mask, maskBounds);
     fillPainter.end();
 
@@ -424,7 +424,7 @@ void KisTextureProperties::apply(KisFixedPaintDeviceSP dab, const QPoint &offset
     const QRect maskPatchRect = QRect(x, y, rect.width(), rect.height());
 
     KisFillPainter fillPainter(maskPatch);
-    fillPainter.setCompositeOp(COMPOSITE_COPY);
+    fillPainter.setCompositeOpId(COMPOSITE_COPY);
     fillPainter.fillRect(kisGrowRect(maskPatchRect, 1), mask, maskBounds);
     fillPainter.end();
 

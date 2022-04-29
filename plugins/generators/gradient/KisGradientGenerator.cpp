@@ -39,7 +39,7 @@ void KisGradientGenerator::generate(KisProcessingInformation dst,
         generatorConfiguration->absoluteCartesianPositionsInPixels(imageSize.width(), imageSize.height());
 
     KisGradientPainter painter(device);
-    painter.setCompositeOp(COMPOSITE_COPY);
+    painter.setCompositeOpId(COMPOSITE_COPY);
     painter.setProgress(progressUpdater);
     painter.setGradientShape(generatorConfiguration->shape());
     painter.setGradient(generatorConfiguration->gradient());

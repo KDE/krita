@@ -150,7 +150,7 @@ void KisAutoBrushTest::testCopyMasking()
 
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     KisPainter painter(dev);
-    painter.setCompositeOp(COMPOSITE_COPY);
+    painter.setCompositeOpId(COMPOSITE_COPY);
     painter.bltFixedWithFixedSelection(x, y, dev2fixed, maskDab, 0, 0, 0, 0, rc.width(), rc.height());
     //painter.bitBltWithFixedSelection(x, y, tempDev, maskDab, 0, 0, 0, 0, rc.width(), rc.height());
 

@@ -56,7 +56,7 @@ KisExperimentPaintOp::KisExperimentPaintOp(const KisPaintOpSettingsSP settings, 
     if (m_useMirroring) {
         m_originalDevice = source()->createCompositionSourceDevice();        
         m_originalPainter = new KisPainter(m_originalDevice);
-        m_originalPainter->setCompositeOp(COMPOSITE_COPY);
+        m_originalPainter->setCompositeOpId(COMPOSITE_COPY);
         m_originalPainter->setPaintColor(painter->paintColor());
         m_originalPainter->setPattern(painter->pattern());        
         m_originalPainter->setFillStyle(m_fillStyle);
@@ -91,7 +91,7 @@ void KisExperimentPaintOp::paintRegion(const KisRegion &changedRegion)
         //Sets options when mirror is not selected
         painter()->setFillStyle(m_fillStyle);
 
-        painter()->setCompositeOp(COMPOSITE_COPY);
+        painter()->setCompositeOpId(COMPOSITE_COPY);
         painter()->setAntiAliasPolygonFill(!m_hardEdge);
 
         Q_FOREACH (const QRect & rect, changedRegion.rects()) {

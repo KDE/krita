@@ -82,7 +82,7 @@ void KisGaussianHighPassFilter::processImpl(KisPaintDeviceSP device,
                                      true); // make sure we craate an internal transaction on temp device
     
     KisPainter painter(device);
-    painter.setCompositeOp(blur->colorSpace()->compositeOp(COMPOSITE_GRAIN_EXTRACT));
+    painter.setCompositeOpId(COMPOSITE_GRAIN_EXTRACT);
     painter.bitBlt(applyRect.topLeft(), blur, applyRect);
     painter.end();
 }

@@ -206,7 +206,7 @@ void KisResourcesSnapshot::setupPainter(KisPainter* painter)
     }
 
     painter->setOpacity(m_d->opacity);
-    painter->setCompositeOp(m_d->compositeOp);
+    painter->setCompositeOpId(m_d->compositeOpId);
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 
     painter->setStrokeStyle(m_d->strokeStyle);
@@ -233,7 +233,7 @@ void KisResourcesSnapshot::setupMaskingBrushPainter(KisPainter *painter)
     painter->setChannelFlags(QBitArray());
 
     // masked brush always paints in indirect mode
-    painter->setCompositeOp(COMPOSITE_ALPHA_DARKEN);
+    painter->setCompositeOpId(COMPOSITE_ALPHA_DARKEN);
 
     painter->setMirrorInformation(m_d->axesCenter, m_d->mirrorMaskHorizontal, m_d->mirrorMaskVertical);
 

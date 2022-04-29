@@ -194,7 +194,7 @@ KisSpacingInformation KisDuplicateOp::paintAt(const KisPaintInformation& info)
     // else
     {
         KisPainter copyPainter(m_srcdev);
-        copyPainter.setCompositeOp(COMPOSITE_COPY);
+        copyPainter.setCompositeOpId(COMPOSITE_COPY);
         copyPainter.bitBltOldData(0, 0, realSourceDevice, srcPoint.x(), srcPoint.y(), sw, sh);
         copyPainter.end();
     }

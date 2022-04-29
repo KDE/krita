@@ -224,7 +224,7 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
 {
     if (!m_useCompositioning) {
         if (m_sizemod || m_feather ||
-            compositeOp()->id() != COMPOSITE_OVER ||
+            compositeOpId() != COMPOSITE_OVER ||
             opacity() != MAX_SELECTED ||
             sourceDevice != device()) {
 

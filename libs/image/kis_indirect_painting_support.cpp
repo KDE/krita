@@ -128,7 +128,7 @@ bool KisIndirectPaintingSupport::hasTemporaryTarget() const
 void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) const
 {
      painter->setOpacity(d->compositeOpacity);
-     painter->setCompositeOp(d->compositeOp);
+     painter->setCompositeOpId(d->compositeOp);
      painter->setChannelFlags(d->channelFlags);
      painter->setSelection(d->selection);
 }

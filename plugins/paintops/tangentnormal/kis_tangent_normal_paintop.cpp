@@ -141,7 +141,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
     Q_UNUSED(dabRect);
 
     quint8  oldOpacity = painter()->opacity();
-    QString oldCompositeOpId = painter()->compositeOp()->id();
+    QString oldCompositeOpId = painter()->compositeOpId();
 
 
     m_opacityOption.setFlow(m_flowOption.apply(info));
@@ -154,7 +154,7 @@ KisSpacingInformation KisTangentNormalPaintOp::paintAt(const KisPaintInformation
 
     // restore original opacity and composite mode values
     painter()->setOpacity(oldOpacity);
-    painter()->setCompositeOp(oldCompositeOpId);
+    painter()->setCompositeOpId(oldCompositeOpId);
 
     return computeSpacing(info, scale, rotation);
 }

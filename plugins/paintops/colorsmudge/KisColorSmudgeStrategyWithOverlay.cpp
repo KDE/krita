@@ -40,10 +40,10 @@ void KisColorSmudgeStrategyWithOverlay::initializePainting()
 {
     initializePaintingImpl(m_layerOverlayDevice->overlayColorSpace(),
                            m_smearAlpha,
-                           m_initializationPainter->compositeOp()->id());
+                           m_initializationPainter->compositeOpId());
 
     m_finalPainter.begin(m_layerOverlayDevice->overlay());
-    m_finalPainter.setCompositeOp(finalCompositeOp(m_smearAlpha));
+    m_finalPainter.setCompositeOpId(finalCompositeOp(m_smearAlpha));
     m_finalPainter.setSelection(m_initializationPainter->selection());
     m_finalPainter.setChannelFlags(m_initializationPainter->channelFlags());
     m_finalPainter.copyMirrorInformationFrom(m_initializationPainter);
@@ -51,7 +51,7 @@ void KisColorSmudgeStrategyWithOverlay::initializePainting()
     if (m_imageOverlayDevice) {
         m_overlayPainter.reset(new KisPainter());
         m_overlayPainter->begin(m_imageOverlayDevice->overlay());
-        m_overlayPainter->setCompositeOp(finalCompositeOp(m_smearAlpha));
+        m_overlayPainter->setCompositeOpId(finalCompositeOp(m_smearAlpha));
         m_overlayPainter->setSelection(m_initializationPainter->selection());
         m_overlayPainter->setChannelFlags(m_initializationPainter->channelFlags());
         m_overlayPainter->copyMirrorInformationFrom(m_initializationPainter);

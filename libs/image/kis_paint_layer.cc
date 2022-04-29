@@ -159,7 +159,7 @@ void KisPaintLayer::copyOriginalToProjection(const KisPaintDeviceSP original,
         KisPaintDeviceSP skins = m_d->onionSkinCache.projection(m_d->paintDevice);
 
         KisPainter gcDest(projection);
-        gcDest.setCompositeOp(m_d->paintDevice->colorSpace()->compositeOp(COMPOSITE_BEHIND));
+        gcDest.setCompositeOpId(COMPOSITE_BEHIND);
         gcDest.bitBlt(rect.topLeft(), skins, rect);
         gcDest.end();
     }

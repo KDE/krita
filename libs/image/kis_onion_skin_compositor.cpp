@@ -142,7 +142,7 @@ void KisOnionSkinCompositor::composite(const KisPaintDeviceSP sourceDevice, KisP
     KisPaintDeviceSP forwardTintDevice = m_d->setUpTintDevice(m_d->forwardTintColor, sourceDevice->colorSpace());
 
     KisPainter gcDest(targetDevice);
-    gcDest.setCompositeOp(sourceDevice->colorSpace()->compositeOp(COMPOSITE_BEHIND));
+    gcDest.setCompositeOpId(sourceDevice->colorSpace()->compositeOp(COMPOSITE_BEHIND));
 
     int keyframeTimeBck;
     int keyframeTimeFwd;

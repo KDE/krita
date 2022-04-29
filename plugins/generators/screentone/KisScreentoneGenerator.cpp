@@ -347,12 +347,12 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
 
     {
         KisPainter gc(backgroundDevice, selection);
-        gc.setCompositeOp(COMPOSITE_OVER);
+        gc.setCompositeOpId(COMPOSITE_OVER);
         gc.bitBlt(bounds.topLeft(), foregroundDevice, bounds);
     }
     if (device->colorSpace()->profile()->isLinear()) {
         KisPainter gc(device);
-        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.setCompositeOpId(COMPOSITE_COPY);
         gc.bitBlt(bounds.topLeft(), backgroundDevice, bounds);
     }
     checkUpdaterInterruptedAndSetPercent(progressUpdater, 100);

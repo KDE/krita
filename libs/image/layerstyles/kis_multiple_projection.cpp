@@ -143,7 +143,7 @@ void KisMultipleProjection::apply(KisPaintDeviceSP dstDevice, const QRect &rect,
 
     for (; it != end; ++it) {
         KisPainter gc(dstDevice);
-        gc.setCompositeOp(it->compositeOpId);
+        gc.setCompositeOpId(it->compositeOpId);
         env->setupFinalPainter(&gc, it->opacity, it->channelFlags);
         gc.bitBlt(rect.topLeft(), it->device, rect);
     }

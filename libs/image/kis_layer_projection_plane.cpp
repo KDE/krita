@@ -97,7 +97,7 @@ void KisLayerProjectionPlane::applyImpl(KisPainter *painter, const QRect &rect, 
     }
 
     painter->setChannelFlags(channelFlags);
-    painter->setCompositeOp(m_d->layer->compositeOpId());
+    painter->setCompositeOpId(m_d->layer->compositeOpId());
     painter->setOpacity(m_d->layer->projectionLeaf()->opacity());
     painter->bitBlt(needRect.topLeft(), device, needRect);
 }

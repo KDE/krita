@@ -232,8 +232,10 @@ public:
 
     /**
      * Tests if the colorspace offers the specific composite op.
+     * @param srcSpace optional source color space. Some color spaces prefer blitting in source
+     *        color space. If already known, additional composite ops may be available.
      */
-    virtual bool hasCompositeOp(const QString & id) const;
+    virtual bool hasCompositeOp(const QString & id, const KoColorSpace *srcSpace = nullptr) const;
 
     /**
      * Returns the list of user-visible composite ops supported by this colorspace.
@@ -243,8 +245,11 @@ public:
     /**
      * Retrieve a single composite op from the ones this colorspace offers.
      * If the requeste composite op does not exist, COMPOSITE_OVER is returned.
+     * @param srcSpace optional source color space. Some color spaces prefer blitting in source
+     *        color space. If already known, additional composite ops may be available.
+     *        _Note_: if given, the returned op is only safe to use with this exact source color space!
      */
-    const KoCompositeOp * compositeOp(const QString & id) const;
+    const KoCompositeOp * compositeOp(const QString & id, const KoColorSpace *srcSpace = nullptr) const;
 
     /**
      * add a composite op to this colorspace.
@@ -624,7 +629,13 @@ public:
      * @param srcSpace the colorspace of the source pixels that will be composited onto "us"
      * @param params the information needed for blitting e.g. the source and destination pixel data,
      *        the opacity and flow, ...
-     * @param op the composition operator to use, e.g. COPY_OVER
+     * @param op the composition operator instance to use, e.g. COPY_OVER.
+     *        This operator must belong to this (dst) color space, UNLESS preferCompositionInSourceColorSpace()
+     *        returns true. In this case, the operator should be from the source color space. Besides avoiding
+     *        recurring lookups via ::compositeOp(), this is necessary if this color space does not implement
+     *        the desired composite op, but srcPace does.
+     *        Use ::compositeOp() with valid srcSpace to get the appropriate op.
+     *
      * @param renderingIntent the rendering intent
      * @param conversionFlags the conversion flags.
      *

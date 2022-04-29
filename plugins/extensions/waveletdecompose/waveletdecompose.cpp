@@ -97,7 +97,7 @@ void WaveletDecompose::slotWaveletDecompose()
        
             //do grain extract blur from original
             KisPainter painter(original);
-            painter.setCompositeOp(op);
+            painter.setCompositeOpId(op);
             painter.bitBlt(0, 0, blur, 0, 0, rc.width(), rc.height());
             painter.end();
         

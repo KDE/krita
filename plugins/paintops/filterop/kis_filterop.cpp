@@ -111,7 +111,7 @@ KisSpacingInformation KisFilterOp::paintAt(const KisPaintInformation& info)
 
     KisPainter p(m_tmpDevice);
     if (!m_smudgeMode) {
-        p.setCompositeOp(COMPOSITE_COPY);
+        p.setCompositeOpId(COMPOSITE_COPY);
     }
     p.bitBltOldData(neededRect.topLeft(), source(), neededRect);
 

@@ -70,7 +70,7 @@ void KisSmallTilesFilter::processImpl(KisPaintDeviceSP device,
     device->clear(applyRect);
 
     KisPainter gc(device);
-    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.setCompositeOpId(COMPOSITE_COPY);
 
     if (progressUpdater) {
         progressUpdater->setRange(0, numberOfTiles);

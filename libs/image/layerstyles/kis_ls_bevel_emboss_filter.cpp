@@ -74,7 +74,7 @@ void paintBevelSelection(KisPixelSelectionSP srcSelection,
     KisPixelSelectionSP fillDevice = s2.selection()->pixelSelection();
 
     KisPainter gc(dstSelection);
-    gc.setCompositeOp(COMPOSITE_COPY);
+    gc.setCompositeOpId(COMPOSITE_COPY);
 
     for (int i = 0; i < size; i++) {
         const int growSize = initialSize - i - 1;
@@ -362,7 +362,7 @@ void KisLsBevelEmbossFilter::applyBevelEmboss(KisPaintDeviceSP srcDevice,
 
         {
             KisPainter gc(bumpmapSelection);
-            gc.setCompositeOp(COMPOSITE_MULT);
+            gc.setCompositeOpId(COMPOSITE_MULT);
             gc.bitBlt(d.applyTextureRect.topLeft(), textureSelection, d.applyTextureRect);
             gc.end();
         }

@@ -280,7 +280,7 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
         halftoneDevice->fill(applyRect, backgroundColor);
 
         KisPainter painter(halftoneDevice, maskDevice);
-        painter.setCompositeOp(COMPOSITE_OVER);
+        painter.setCompositeOpId(COMPOSITE_OVER);
         painter.bitBlt(applyRect.topLeft(), foregroundDevice, applyRect);
 
         m_genericDevicesCache.putDevice(foregroundDevice);
@@ -293,12 +293,12 @@ void KisHalftoneFilter::processIntensity(KisPaintDeviceSP device,
     // Make the final image
     {
         KisPainter painter(halftoneDevice);
-        painter.setCompositeOp(COMPOSITE_DESTINATION_IN);
+        painter.setCompositeOpId(COMPOSITE_DESTINATION_IN);
         painter.bitBlt(applyRect.topLeft(), device, applyRect);
     }
     {
         KisPainter painter(device);
-        painter.setCompositeOp(COMPOSITE_COPY);
+        painter.setCompositeOpId(COMPOSITE_COPY);
         painter.bitBlt(applyRect.topLeft(), halftoneDevice, applyRect);
     }
     m_genericDevicesCache.putDevice(halftoneDevice);

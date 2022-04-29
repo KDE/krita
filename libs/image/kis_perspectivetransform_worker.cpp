@@ -210,7 +210,7 @@ void KisPerspectiveTransformWorker::runPartialDst(KisPaintDeviceSP srcDev,
 
     if (m_isIdentity || m_isTranslating) {
         KisPainter gc(dstDev);
-        gc.setCompositeOp(COMPOSITE_COPY);
+        gc.setCompositeOpId(COMPOSITE_COPY);
         gc.bitBlt(dstRect.topLeft(), srcDev, m_backwardTransform.mapRect(dstRect));
     } else {
         KisProgressUpdateHelper progressHelper(m_progressUpdater, 100, dstRect.height());

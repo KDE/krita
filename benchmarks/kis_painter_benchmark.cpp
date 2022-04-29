@@ -94,7 +94,7 @@ void KisPainterBenchmark::benchmarkFastBitBlt()
     dst->fill(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT, m_color.data());
 
     KisPainter gc(dst);
-    gc.setCompositeOp(m_colorSpace->compositeOp(COMPOSITE_COPY));
+    gc.setCompositeOpId(COMPOSITE_COPY);
 
     QPoint pos(0,0);
     QRect rc(0,0,TEST_IMAGE_WIDTH, TEST_IMAGE_HEIGHT);

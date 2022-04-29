@@ -640,19 +640,19 @@ void KisLayerStyleProjectionPlaneTest::testBlending()
     KisPainter painter(bg);
 
     painter.setOpacity(layerOpacity);
-    painter.setCompositeOp(COMPOSITE_OVER);
+    painter.setCompositeOpId(COMPOSITE_OVER);
 
     painter.bitBlt(rc.topLeft(), layer, rc);
 
     painter.setOpacity(overlayOpacity);
-    painter.setCompositeOp(COMPOSITE_ADD);
+    painter.setCompositeOpId(COMPOSITE_ADD);
 
     painter.bitBlt(rc.topLeft(), overlay, rc);
 
     KIS_DUMP_DEVICE_2(bg, rc, "03_result", "dd");
 
     KisPainter bgPainter(originalBg);
-    bgPainter.setCompositeOp(COMPOSITE_COPY);
+    bgPainter.setCompositeOpId(COMPOSITE_COPY);
     bgPainter.setSelection(selection);
     bgPainter.bitBlt(rc.topLeft(), bg, rc);
 

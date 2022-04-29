@@ -197,7 +197,7 @@ void KisImagePipeBrushTest::testColoredDabWash()
 
     KisPaintDeviceSP layer = new KisPaintDevice(cs);
     KisPainter painter(layer);
-    painter.setCompositeOp(COMPOSITE_ALPHA_DARKEN);
+    painter.setCompositeOpId(COMPOSITE_ALPHA_DARKEN);
 
     const QVector<KisGbrBrushSP> gbrs = brush->brushes();
 

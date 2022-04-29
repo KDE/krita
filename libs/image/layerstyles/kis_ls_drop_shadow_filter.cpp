@@ -215,7 +215,7 @@ void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
         knockOutRect &= d.dstRect;
 
         KisPainter gc(selection);
-        gc.setCompositeOp(COMPOSITE_ERASE);
+        gc.setCompositeOpId(COMPOSITE_ERASE);
         gc.bitBlt(knockOutRect.topLeft(), knockOutSelection, knockOutRect);
     }
     //selection->convertToQImage(0, QRect(0,0,300,300)).save("5_selection_knockout.png");

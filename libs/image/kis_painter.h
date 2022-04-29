@@ -779,13 +779,17 @@ public:
     /// Returns the opacity that is used in painting
     quint8 opacity() const;
 
-    /// Set the composite op for this painter
-    void setCompositeOp(const KoCompositeOp * op);
-    const KoCompositeOp * compositeOp();
+    /**
+     * Set the composite op ID for this painter
+     * Only kept for convenience, it will just call ::setCompositeOpId(QString) with op->Id().
+     */
+    void setCompositeOpId(const KoCompositeOp * op);
+
+    /// Returns the current composite op Id
+    QString compositeOpId();
 
     /// Set the composite op for this painter by string.
-    /// Note: the colorspace must be set previously!
-    void setCompositeOp(const QString& op);
+    void setCompositeOpId(const QString& op);
 
     /**
      * Add \p r to the current set of dirty rects

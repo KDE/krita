@@ -308,8 +308,11 @@ void KoColorSpace::addChannel(KoChannelInfo * ci)
 {
     d->channels.push_back(ci);
 }
-bool KoColorSpace::hasCompositeOp(const QString& id) const
+bool KoColorSpace::hasCompositeOp(const QString& id, const KoColorSpace *srcSpace) const
 {
+    if (srcSpace && preferCompositionInSourceColorSpace() && srcSpace->hasCompositeOp(id)) {
+        return true;
+    }
     return d->compositeOps.contains(id);
 }
 
@@ -360,8 +363,13 @@ KoConvolutionOp* KoColorSpace::convolutionOp() const
     return d->convolutionOp;
 }
 
-const KoCompositeOp * KoColorSpace::compositeOp(const QString & id) const
+const KoCompositeOp * KoColorSpace::compositeOp(const QString & id, const KoColorSpace *srcSpace) const
 {
+    if (srcSpace && preferCompositionInSourceColorSpace()) {
+        if (const KoCompositeOp *op = srcSpace->compositeOp(id)) {
+            return op;
+        }
+    }
     const QHash<QString, KoCompositeOp*>::ConstIterator it = d->compositeOps.constFind(id);
     if (it != d->compositeOps.constEnd()) {
         return it.value();
@@ -481,14 +489,15 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
                           KoColorConversionTransformation::Intent renderingIntent,
                           KoColorConversionTransformation::ConversionFlags conversionFlags) const
 {
-    Q_ASSERT_X(*op->colorSpace() == *this, "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
+    Q_ASSERT_X(*op->colorSpace() == *this || (preferCompositionInSourceColorSpace() && *op->colorSpace() == *srcSpace),
+               "KoColorSpace::bitBlt", QString("Composite op is for color space %1 (%2) while this is %3 (%4)").arg(op->colorSpace()->id()).arg(op->colorSpace()->profile()->name()).arg(id()).arg(profile()->name()).toLatin1());
 
     if(params.rows <= 0 || params.cols <= 0)
         return;
 
     if(!(*this == *srcSpace)) {
         if (preferCompositionInSourceColorSpace() &&
-                srcSpace->hasCompositeOp(op->id())) {
+                (*op->colorSpace() == *srcSpace || srcSpace->hasCompositeOp(op->id()))) {
 
             quint32           conversionDstBufferStride = params.cols * srcSpace->pixelSize();
             QVector<quint8> * conversionDstCache        = threadLocalConversionCache(params.rows * conversionDstBufferStride);
@@ -500,8 +509,9 @@ void KoColorSpace::bitBlt(const KoColorSpace* srcSpace, const KoCompositeOp::Par
                                 renderingIntent, conversionFlags);
             }
 
-            // FIXME: do not calculate the otherOp every time
-            const KoCompositeOp *otherOp = srcSpace->compositeOp(op->id());
+            // TODO: Composite op substitution should eventually be removed here, but it's not urgent.
+            //       Code should just provide srcSpace to KoColorSpace::compositeOp() to avoid the lookups.
+            const KoCompositeOp *otherOp = (*op->colorSpace() == *srcSpace) ? op : srcSpace->compositeOp(op->id());
 
             KoCompositeOp::ParameterInfo paramInfo(params);
             paramInfo.dstRowStart  = conversionDstData;

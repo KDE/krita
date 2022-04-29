@@ -62,7 +62,7 @@ void KisColorSmudgeStrategyLightness::initializePainting()
 
     initializePaintingImpl(m_colorOnlyDevice->colorSpace(),
                            m_smearAlpha,
-                           m_initializationPainter->compositeOp()->id());
+                           m_initializationPainter->compositeOpId());
 
     m_heightmapPainter.begin(m_heightmapDevice);
 
@@ -70,12 +70,12 @@ void KisColorSmudgeStrategyLightness::initializePainting()
     m_sourceWrapperDevice = toQShared(new KisColorSmudgeSourcePaintDevice(*m_layerOverlayDevice, 1));
 
     m_finalPainter.begin(m_colorOnlyDevice);
-    m_finalPainter.setCompositeOp(COMPOSITE_COPY);
+    m_finalPainter.setCompositeOpId(COMPOSITE_COPY);
     m_finalPainter.setSelection(m_initializationPainter->selection());
     m_finalPainter.setChannelFlags(m_initializationPainter->channelFlags());
     m_finalPainter.copyMirrorInformationFrom(m_initializationPainter);
 
-    m_heightmapPainter.setCompositeOp(COMPOSITE_OVER);
+    m_heightmapPainter.setCompositeOpId(COMPOSITE_OVER);
     m_heightmapPainter.setSelection(m_initializationPainter->selection());
     m_heightmapPainter.copyMirrorInformationFrom(m_initializationPainter);
 

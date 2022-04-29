@@ -543,7 +543,7 @@ QRect KisColorizeMask::decorateRect(KisPaintDeviceSP &src,
         if (m_d->shouldShowColoring()) {
 
             gc.setOpacity(opacity());
-            gc.setCompositeOp(compositeOpId());
+            gc.setCompositeOpId(compositeOpId());
             gc.bitBlt(rect.topLeft(), m_d->coloringProjection, rect);
         }
     }

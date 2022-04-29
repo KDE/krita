@@ -57,7 +57,7 @@ void KisLayerStyleKnockoutBlower::apply(KisPainter *painter, KisPaintDeviceSP me
 
     painter->setOpacity(OPACITY_OPAQUE_U8);
     painter->setChannelFlags(QBitArray());
-    painter->setCompositeOp(COMPOSITE_COPY);
+    painter->setCompositeOpId(COMPOSITE_COPY);
     painter->setSelection(m_knockoutSelection);
     painter->bitBlt(rect.topLeft(), mergedStyle, rect);
     painter->setSelection(0);

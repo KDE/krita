@@ -255,14 +255,6 @@ KisPostExecutionUndoAdapter* KisResourcesSnapshot::postExecutionUndoAdapter() co
 void KisResourcesSnapshot::setCurrentNode(KisNodeSP node)
 {
     m_d->currentNode = node;
-
-    KisPaintDeviceSP device;
-    if(m_d->currentNode && (device = m_d->currentNode->paintDevice())) {
-        m_d->compositeOp = device->colorSpace()->compositeOp(m_d->compositeOpId);
-        if(!m_d->compositeOp) {
-            m_d->compositeOp = device->colorSpace()->compositeOp(COMPOSITE_OVER);
-        }
-    }
 }
 
 void KisResourcesSnapshot::setStrokeStyle(KisPainter::StrokeStyle strokeStyle)
@@ -366,11 +358,6 @@ void KisResourcesSnapshot::setOpacity(qreal opacity)
 quint8 KisResourcesSnapshot::opacity() const
 {
     return m_d->opacity;
-}
-
-const KoCompositeOp* KisResourcesSnapshot::compositeOp() const
-{
-    return m_d->compositeOp;
 }
 
 QString KisResourcesSnapshot::compositeOpId() const

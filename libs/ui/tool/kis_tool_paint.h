@@ -103,8 +103,6 @@ protected:
         return QString();
     }
 
-    const KoCompositeOp* compositeOp();
-
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;

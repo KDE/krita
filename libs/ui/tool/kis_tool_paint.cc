@@ -594,18 +594,6 @@ void KisToolPaint::setOpacity(qreal opacity)
     m_opacity = quint8(opacity * OPACITY_OPAQUE_U8);
 }
 
-const KoCompositeOp* KisToolPaint::compositeOp()
-{
-    if (currentNode()) {
-        KisPaintDeviceSP device = currentNode()->paintDevice();
-        if (device) {
-            QString op = canvas()->resourceManager()->resource(KoCanvasResource::CurrentCompositeOp).toString();
-            return device->colorSpace()->compositeOp(op);
-        }
-    }
-    return 0;
-}
-
 void KisToolPaint::slotPopupQuickHelp()
 {
     QWhatsThis::showText(QCursor::pos(), quickHelp());

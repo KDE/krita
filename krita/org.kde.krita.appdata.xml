@@ -620,6 +620,10 @@
     <release date="2022-04-12" version="5.0.5">
       <url>https://krita.org/en/item/krita-5.0.5-released/</url>
     </release>
+    <release date="2022-04-27" version="5.0.6">
+      <url>https://krita.org/en/item/krita-5.0.6-released/</url>
+    </release>
+
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

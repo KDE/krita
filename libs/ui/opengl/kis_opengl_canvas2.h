@@ -69,6 +69,7 @@ public: // Implement kis_abstract_canvas_widget interface
     void updateCanvasImage(const QRect &imageUpdateRect) override;
     void updateCanvasDecorations(const QRect &decoUpdateRect) override;
 
+
     QWidget *widget() override {
         return this;
     }
@@ -81,6 +82,7 @@ public: // Implement kis_abstract_canvas_widget interface
 public Q_SLOTS:
     void slotConfigChanged();
     void slotPixelGridModeChanged();
+    void slotUpdateCursorColor();
 
 private Q_SLOTS:
     void slotShowFloatingMessage(const QString &message, int timeout, bool priority);

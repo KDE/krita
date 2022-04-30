@@ -17,6 +17,7 @@
 #include "canvas/kis_display_color_converter.h"
 #include "canvas/kis_canvas_widget_base.h"
 #include "KisOpenGLModeProber.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_config.h"
 #include "kis_debug.h"
 
@@ -35,6 +36,7 @@
 #include <QOpenGLFramebufferObject>
 #include <QOpenGLFramebufferObjectFormat>
 #include <QMessageBox>
+#include <KoCompositeOpRegistry.h>
 #include <KoColorModelStandardIds.h>
 #include "KisOpenGLBufferCircularStorage.h"
 #include "kis_painting_tweaks.h"
@@ -940,7 +942,16 @@ void KisOpenGLCanvasRenderer::updateConfig()
     d->openGLImageTextures->updateConfig(cfg.useOpenGLTextureBuffer(), cfg.numMipmapLevels());
     d->filterMode = (KisOpenGL::FilterMode) cfg.openGLFilteringMode();
 
-    d->cursorColor = cfg.getCursorMainColor();
+    updateCursorColor();
+}
+
+void KisOpenGLCanvasRenderer::updateCursorColor()
+{
+    KisConfig cfg(true);
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
+            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+
+    d->cursorColor = (!useSeparateEraserCursor) ? cfg.getCursorMainColor() : cfg.getEraserCursorMainColor();
 }
 
 void KisOpenGLCanvasRenderer::updatePixelGridMode()

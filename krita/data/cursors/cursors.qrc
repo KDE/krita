@@ -15,6 +15,7 @@
         <file>cursor-round.xpm</file>
         <file>cursor-triangle_lefthanded.xpm</file>
         <file>cursor-triangle_righthanded.xpm</file>
+        <file>cursor-eraser.xpm</file>
         <file>exposure-cursor-gesture.xpm</file>
         <file>gamma-cursor-gesture.xpm</file>
         <file>precise-pick-layer-icon.xpm</file>

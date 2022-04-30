@@ -180,22 +180,31 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     // Cursor Tab
     //
-    m_cmbCursorShape->addItem(i18n("No Cursor"));
-    m_cmbCursorShape->addItem(i18n("Tool Icon"));
-    m_cmbCursorShape->addItem(i18n("Arrow"));
-    m_cmbCursorShape->addItem(i18n("Small Circle"));
-    m_cmbCursorShape->addItem(i18n("Crosshair"));
-    m_cmbCursorShape->addItem(i18n("Triangle Righthanded"));
-    m_cmbCursorShape->addItem(i18n("Triangle Lefthanded"));
-    m_cmbCursorShape->addItem(i18n("Black Pixel"));
-    m_cmbCursorShape->addItem(i18n("White Pixel"));
+
+    QStringList cursorItems = QStringList()
+            << i18n("No Cursor")
+            << i18n("Tool Icon")
+            << i18n("Arrow")
+            << i18n("Small Circle")
+            << i18n("Crosshair")
+            << i18n("Triangle Righthanded")
+            << i18n("Triangle Lefthanded")
+            << i18n("Black Pixel")
+            << i18n("White Pixel");
+
+    QStringList outlineItems = QStringList()
+            << i18nc("Display options label to not DISPLAY brush outline", "No Outline")
+            << i18n("Circle Outline")
+            << i18n("Preview Outline")
+            << i18n("Tilt Outline");
+
+    // brush
+
+    m_cmbCursorShape->addItems(cursorItems);
 
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle());
 
-    m_cmbOutlineShape->addItem(i18nc("Display options label to not DISPLAY brush outline", "No Outline"));
-    m_cmbOutlineShape->addItem(i18n("Circle Outline"));
-    m_cmbOutlineShape->addItem(i18n("Preview Outline"));
-    m_cmbOutlineShape->addItem(i18n("Tilt Outline"));
+    m_cmbOutlineShape->addItems(outlineItems);
 
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle());
 
@@ -204,7 +213,27 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
     cursorColor.fromQColor(cfg.getCursorMainColor());
-    cursorColorBtutton->setColor(cursorColor);
+    cursorColorButton->setColor(cursorColor);
+
+    // eraser
+
+    m_chkSeparateEraserCursor->setChecked(cfg.separateEraserCursor());
+
+    m_cmbEraserCursorShape->addItems(cursorItems);
+    m_cmbEraserCursorShape->addItem(i18n("Eraser"));
+
+    m_cmbEraserCursorShape->setCurrentIndex(cfg.eraserCursorStyle());
+
+    m_cmbEraserOutlineShape->addItems(outlineItems);
+
+    m_cmbEraserOutlineShape->setCurrentIndex(cfg.eraserOutlineStyle());
+
+    m_showEraserOutlinePainting->setChecked(cfg.showEraserOutlineWhilePainting());
+    m_changeEraserBrushOutline->setChecked(!cfg.forceAlwaysFullSizedEraserOutline());
+
+    KoColor eraserCursorColor(KoColorSpaceRegistry::instance()->rgb8());
+    eraserCursorColor.fromQColor(cfg.getEraserCursorMainColor());
+    eraserCursorColorButton->setColor(eraserCursorColor);
 
     //
     // Window Tab
@@ -434,6 +463,10 @@ void GeneralTab::setDefault()
 
     m_cmbCursorShape->setCurrentIndex(cfg.newCursorStyle(true));
     m_cmbOutlineShape->setCurrentIndex(cfg.newOutlineStyle(true));
+    m_chkSeparateEraserCursor->setChecked(cfg.readEntry<bool>("separateEraserCursor", false));
+    m_cmbEraserCursorShape->setCurrentIndex(cfg.eraserCursorStyle(true));
+    m_cmbEraserOutlineShape->setCurrentIndex(cfg.eraserOutlineStyle(true));
+
     chkShowRootLayer->setChecked(cfg.showRootLayer(true));
     m_autosaveCheckBox->setChecked(cfg.autoSaveInterval(true) > 0);
     //convert to minutes
@@ -449,6 +482,8 @@ void GeneralTab::setDefault()
 
     m_showOutlinePainting->setChecked(cfg.showOutlineWhilePainting(true));
     m_changeBrushOutline->setChecked(!cfg.forceAlwaysFullSizedOutline(true));
+    m_showEraserOutlinePainting->setChecked(cfg.showEraserOutlineWhilePainting(true));
+    m_changeEraserBrushOutline->setChecked(!cfg.forceAlwaysFullSizedEraserOutline(true));
 
 #if defined Q_OS_ANDROID || defined Q_OS_MACOS || defined Q_OS_WIN
     m_chkNativeFileDialog->setChecked(true);
@@ -495,7 +530,12 @@ void GeneralTab::setDefault()
 
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
     cursorColor.fromQColor(cfg.getCursorMainColor(true));
-    cursorColorBtutton->setColor(cursorColor);
+    cursorColorButton->setColor(cursorColor);
+
+    KoColor eraserCursorColor(KoColorSpaceRegistry::instance()->rgb8());
+    eraserCursorColor.fromQColor(cfg.getEraserCursorMainColor(true));
+    eraserCursorColorButton->setColor(eraserCursorColor);
+
 
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline(true));
     m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange(false));
@@ -523,6 +563,16 @@ CursorStyle GeneralTab::cursorStyle()
 OutlineStyle GeneralTab::outlineStyle()
 {
     return (OutlineStyle)m_cmbOutlineShape->currentIndex();
+}
+
+CursorStyle GeneralTab::eraserCursorStyle()
+{
+    return (CursorStyle)m_cmbEraserCursorShape->currentIndex();
+}
+
+OutlineStyle GeneralTab::eraserOutlineStyle()
+{
+    return (OutlineStyle)m_cmbEraserOutlineShape->currentIndex();
 }
 
 KisConfig::SessionOnStartup GeneralTab::sessionOnStartup() const
@@ -554,6 +604,11 @@ int GeneralTab::undoStackSize()
 bool GeneralTab::showOutlineWhilePainting()
 {
     return m_showOutlinePainting->isChecked();
+}
+
+bool GeneralTab::showEraserOutlineWhilePainting()
+{
+    return m_showEraserOutlinePainting->isChecked();
 }
 
 int GeneralTab::mdiMode()
@@ -2002,9 +2057,14 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setNewCursorStyle(m_general->cursorStyle());
         cfg.setNewOutlineStyle(m_general->outlineStyle());
+        cfg.setSeparateEraserCursor(m_general->m_chkSeparateEraserCursor->isChecked());
+        cfg.setEraserCursorStyle(m_general->eraserCursorStyle());
+        cfg.setEraserOutlineStyle(m_general->eraserOutlineStyle());
         cfg.setShowRootLayer(m_general->showRootLayer());
         cfg.setShowOutlineWhilePainting(m_general->showOutlineWhilePainting());
         cfg.setForceAlwaysFullSizedOutline(!m_general->m_changeBrushOutline->isChecked());
+        cfg.setShowEraserOutlineWhilePainting(m_general->showEraserOutlineWhilePainting());
+        cfg.setForceAlwaysFullSizedEraserOutline(!m_general->m_changeEraserBrushOutline->isChecked());
         cfg.setSessionOnStartup(m_general->sessionOnStartup());
         cfg.setSaveSessionOnQuit(m_general->saveSessionOnQuit());
 
@@ -2168,7 +2228,8 @@ bool KisDlgPreferences::editPreferences()
         cfg.setHideTitlebarFullscreen(m_fullscreenSettings->chkTitlebar->checkState());
         cfg.setHideToolbarFullscreen(m_fullscreenSettings->chkToolbar->checkState());
 
-        cfg.setCursorMainColor(m_general->cursorColorBtutton->color().toQColor());
+        cfg.setCursorMainColor(m_general->cursorColorButton->color().toQColor());
+        cfg.setEraserCursorMainColor(m_general->eraserCursorColorButton->color().toQColor());
         cfg.setPixelGridColor(m_displaySettings->pixelGridColorButton->color().toQColor());
         cfg.setPixelGridDrawingThreshold(m_displaySettings->pixelGridDrawingThresholdBox->value() / 100);
 

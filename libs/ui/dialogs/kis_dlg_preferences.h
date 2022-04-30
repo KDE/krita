@@ -61,6 +61,8 @@ public:
 
     CursorStyle cursorStyle();
     OutlineStyle outlineStyle();
+    CursorStyle eraserCursorStyle();
+    OutlineStyle eraserOutlineStyle();
 
     KisConfig::SessionOnStartup sessionOnStartup() const;
     bool saveSessionOnQuit() const;
@@ -70,6 +72,7 @@ public:
     void setDefault();
     int undoStackSize();
     bool showOutlineWhilePainting();
+    bool showEraserOutlineWhilePainting();
 
     int mdiMode();
     bool showCanvasMessages();

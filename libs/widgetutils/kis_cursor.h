@@ -52,6 +52,7 @@ public:
     static QCursor changeGammaCursor();
     static QCursor triangleLeftHandedCursor();
     static QCursor triangleRightHandedCursor();
+    static QCursor eraserCursor();
 
     // Existing custom KimageShop cursors. Use the 'load' function for all new cursors.
     static QCursor moveCursor();          // move tool cursor

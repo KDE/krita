@@ -185,6 +185,8 @@ void KisCanvasResourceProvider::setPaintOpPreset(const KisPaintOpPresetSP preset
     QVariant v;
     v.setValue(preset);
     m_resourceManager->setResource(KoCanvasResource::CurrentPaintOpPreset, v);
+
+    emit sigPaintOpPresetChanged(preset);
 }
 
 KisPaintOpPresetSP KisCanvasResourceProvider::previousPreset() const
@@ -337,6 +339,7 @@ void KisCanvasResourceProvider::setEraserMode(bool value)
 {
     m_resourceManager->setResource(KoCanvasResource::EraserMode,
                                    QVariant::fromValue(value));
+    emit sigEraserModeToggled(value);
 }
 
 void KisCanvasResourceProvider::slotPainting()

@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>552</width>
-    <height>406</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -58,7 +58,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Cursor Shape:</string>
+          <string>Brush Cursor Icon:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -80,7 +80,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Outline Shape:</string>
+          <string>Brush Outline Shape:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -155,15 +155,8 @@
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>Cursor Color:</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1">
-        <widget class="KisColorButton" name="cursorColorBtutton">
+        <widget class="KisColorButton" name="cursorColorButton">
          <property name="maximumSize">
           <size>
            <width>48</width>
@@ -176,6 +169,135 @@
         </widget>
        </item>
        <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="m_chkSeparateEraserCursor">
+         <property name="title">
+          <string>Use separate settings for eraser</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QWidget" name="widget_7" native="true">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <layout class="QFormLayout" name="formLayout_3">
+             <property name="leftMargin">
+              <number>3</number>
+             </property>
+             <property name="topMargin">
+              <number>3</number>
+             </property>
+             <property name="rightMargin">
+              <number>3</number>
+             </property>
+             <property name="bottomMargin">
+              <number>3</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_19">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Eraser Cursor Icon:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QComboBox" name="m_cmbEraserCursorShape"/>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_20">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string>Eraser Outline Shape:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QComboBox" name="m_cmbEraserOutlineShape"/>
+             </item>
+             <item row="2" column="1">
+              <widget class="QGroupBox" name="groupBox_6">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="title">
+                <string>While painting with an eraser...</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_5">
+                <property name="spacing">
+                 <number>3</number>
+                </property>
+                <property name="topMargin">
+                 <number>3</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>3</number>
+                </property>
+                <item>
+                 <widget class="QCheckBox" name="m_showEraserOutlinePainting">
+                  <property name="text">
+                   <string>Show outline</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="m_changeEraserBrushOutline">
+                  <property name="text">
+                   <string>Use effective outline size</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="KisColorButton" name="eraserCursorColorButton">
+               <property name="maximumSize">
+                <size>
+                 <width>48</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_21">
+               <property name="text">
+                <string>Eraser Outline Color:</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -187,6 +309,13 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_11">
+         <property name="text">
+          <string>Brush Outline Color:</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -844,8 +973,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>554</width>
-            <height>506</height>
+            <width>655</width>
+            <height>636</height>
            </rect>
           </property>
           <property name="sizePolicy">

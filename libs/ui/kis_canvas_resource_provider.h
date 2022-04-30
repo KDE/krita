@@ -163,6 +163,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
+    void sigPaintOpPresetChanged(const KisPaintOpPresetSP);
     void sigFGColorChanged(const KoColor &);
     void sigBGColorChanged(const KoColor &);
     void sigGradientChanged(KoAbstractGradientSP);
@@ -171,6 +172,7 @@ Q_SIGNALS:
     void sigDisplayProfileChanged(const KoColorProfile *);
     void sigFGColorUsed(const KoColor&);
     void sigOnScreenResolutionChanged(qreal scaleX, qreal scaleY);
+    void sigEraserModeToggled(bool);
     void sigOpacityChanged(qreal);
     void sigSavingWorkspace(KisWorkspaceResourceSP workspace);
     void sigLoadingWorkspace(KisWorkspaceResourceSP workspace);

@@ -170,7 +170,12 @@ void KisToolPaint::deactivate()
 QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
 {
     KisConfig cfg(true);
-    if (cfg.newOutlineStyle() == OUTLINE_NONE) return originalOutline;
+
+    bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
+            canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+
+    const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
+    if (currentOutlineStyle == OUTLINE_NONE) return originalOutline;
 
     const qreal minThresholdSize = cfg.outlineSizeMinimum();
 
@@ -713,27 +718,40 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
         KisConfig cfg(true);
         KisPaintOpSettings::OutlineMode outlineMode;
 
+        bool useSeparateEraserCursor = cfg.separateEraserCursor() &&
+                canvas()->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE;
+
+        const OutlineStyle currentOutlineStyle = !useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle();
+        const auto outlineStyleIsVisible = [&]() {
+            return currentOutlineStyle == OUTLINE_FULL ||
+                   currentOutlineStyle == OUTLINE_CIRCLE ||
+                   currentOutlineStyle == OUTLINE_TILT;
+        };
+        const auto shouldShowOutlineWhilePainting = [&]() {
+            return !useSeparateEraserCursor ? cfg.showOutlineWhilePainting() : cfg.showEraserOutlineWhilePainting();
+        };
         if (isOutlineEnabled() && isOutlineVisible() &&
                 (mode() == KisTool::GESTURE_MODE ||
-                 ((cfg.newOutlineStyle() == OUTLINE_FULL ||
-                   cfg.newOutlineStyle() == OUTLINE_CIRCLE ||
-                   cfg.newOutlineStyle() == OUTLINE_TILT) &&
-                  ((mode() == HOVER_MODE) ||
-                   (mode() == PAINT_MODE && cfg.showOutlineWhilePainting()))))) { // lisp forever!
+                    (outlineStyleIsVisible() &&
+                        (mode() == HOVER_MODE ||
+                         (mode() == PAINT_MODE && shouldShowOutlineWhilePainting()))))) { // lisp forever!
 
             outlineMode.isVisible = true;
 
-            if (cfg.newOutlineStyle() == OUTLINE_CIRCLE) {
+            switch (!useSeparateEraserCursor ? cfg.newOutlineStyle() : cfg.eraserOutlineStyle()) {
+            case OUTLINE_CIRCLE:
                 outlineMode.forceCircle = true;
-            } else if(cfg.newOutlineStyle() == OUTLINE_TILT) {
+                break;
+            case OUTLINE_TILT:
                 outlineMode.forceCircle = true;
                 outlineMode.showTiltDecoration = true;
-            } else {
-                // noop
+                break;
+            default:
+                break;
             }
         }
 
-        outlineMode.forceFullSize = cfg.forceAlwaysFullSizedOutline();
+        outlineMode.forceFullSize = !useSeparateEraserCursor ? cfg.forceAlwaysFullSizedOutline() : cfg.forceAlwaysFullSizedEraserOutline();
 
         m_outlineDocPoint = outlineDocPoint;
         m_currentOutline = getOutlinePath(m_outlineDocPoint, event, outlineMode);

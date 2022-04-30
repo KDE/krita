@@ -88,6 +88,7 @@ public:
     KisOpenGLImageTexturesSP openGLImageTextures() const;
 
     void updateConfig();
+    void updateCursorColor();
     void updatePixelGridMode();
 
 private:

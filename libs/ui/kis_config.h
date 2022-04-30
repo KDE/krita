@@ -120,6 +120,18 @@ public:
     OutlineStyle lastUsedOutlineStyle(bool defaultValue = false) const;
     void setLastUsedOutlineStyle(OutlineStyle style);
 
+    bool separateEraserCursor(bool defaultValue = false) const;
+    void setSeparateEraserCursor(bool value) const;
+
+    CursorStyle eraserCursorStyle(bool defaultValue = false) const;
+    void setEraserCursorStyle(CursorStyle style);
+
+    QColor getEraserCursorMainColor(bool defaultValue = false) const;
+    void setEraserCursorMainColor(const QColor& v) const;
+
+    OutlineStyle eraserOutlineStyle(bool defaultValue = false) const;
+    void setEraserOutlineStyle(OutlineStyle style);
+
     QRect colorPreviewRect() const;
     void setColorPreviewRect(const QRect &rect);
 
@@ -271,6 +283,12 @@ public:
 
     bool forceAlwaysFullSizedOutline(bool defaultValue = false) const;
     void setForceAlwaysFullSizedOutline(bool value) const;
+
+    bool showEraserOutlineWhilePainting(bool defaultValue = false) const;
+    void setShowEraserOutlineWhilePainting(bool showEraserOutlineWhilePainting) const;
+
+    bool forceAlwaysFullSizedEraserOutline(bool defaultValue = false) const;
+    void setForceAlwaysFullSizedEraserOutline(bool value) const;
 
     enum SessionOnStartup {
         SOS_BlankSession,

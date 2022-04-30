@@ -177,6 +177,11 @@ QCursor KisCursor::triangleRightHandedCursor()
     return load("cursor-triangle_righthanded.xpm");
 }
 
+QCursor KisCursor::eraserCursor()
+{
+    return load("cursor-eraser.xpm", 2, 2);
+}
+
 QCursor KisCursor::moveCursor()
 {
     return load("move-tool.xpm");

@@ -808,8 +808,9 @@ void KisPaintopBox::updateCompositeOp(QString compositeOpID)
     KisNodeSP node = m_resourceProvider->currentNode();
 
     if (node && node->paintDevice()) {
-        if (!node->paintDevice()->colorSpace()->hasCompositeOp(compositeOpID))
+        if (!node->paintDevice()->compositionSourceColorSpace()->hasCompositeOp(compositeOpID)) {
             compositeOpID = KoCompositeOpRegistry::instance().getDefaultCompositeOp().id();
+        }
 
         {
             KisSignalsBlocker b1(m_cmbCompositeOp);
@@ -1030,15 +1031,16 @@ void KisPaintopBox::slotSetupDefaultPreset()
 
 void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
 {
-    if (m_previousNode.isValid() && m_previousNode->paintDevice())
-        disconnect(m_previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
+    KisNodeSP previousNode(m_currentNode);
+    if (previousNode && previousNode->paintDevice())
+        disconnect(previousNode->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
 
     // Reconnect colorspace change of node
     if (node && node->paintDevice()) {
         connect(node->paintDevice().data(), SIGNAL(colorSpaceChanged(const KoColorSpace*)), this, SLOT(slotColorSpaceChanged(const KoColorSpace*)));
         m_resourceProvider->setCurrentCompositeOp(m_currCompositeOpID);
-        m_previousNode = node;
-        slotColorSpaceChanged(node->colorSpace());
+        m_currentNode = node;
+        slotColorSpaceChanged(node->paintDevice()->colorSpace());
     }
 
     if (m_optionWidget) {
@@ -1048,7 +1050,15 @@ void KisPaintopBox::slotNodeChanged(const KisNodeSP node)
 
 void KisPaintopBox::slotColorSpaceChanged(const KoColorSpace* colorSpace)
 {
-    m_cmbCompositeOp->validate(colorSpace);
+    KisNodeSP node(m_currentNode);
+    const KoColorSpace *compositionSpace = colorSpace;
+    if (node && node->paintDevice()) {
+        // Currently, composition source is enough to determine the available blending mode,
+        // because either destination is the same (paint layers), or composition happens
+        // in source space (masks).
+        compositionSpace = node->paintDevice()->compositionSourceColorSpace();
+    }
+    m_cmbCompositeOp->validate(compositionSpace);
 }
 
 void KisPaintopBox::slotToggleEraseMode(bool checked)

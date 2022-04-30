@@ -203,7 +203,7 @@ private:
     KisAction*                          m_disablePressureAction {0};
 
     QString    m_currCompositeOpID;
-    KisNodeWSP m_previousNode;
+    KisNodeWSP m_currentNode;
 
     KisAction* m_hMirrorAction {0};
     KisAction* m_vMirrorAction {0};

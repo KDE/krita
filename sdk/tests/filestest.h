@@ -136,8 +136,11 @@ void prepareFile(QFileInfo sourceFileInfo, bool removePermissionToWrite, bool re
                  & ~QFileDevice::WriteGroup & ~QFileDevice::WriteOther);
     }
 
-    QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsNow);
-
+    bool success = QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsNow);
+    if (!success) {
+        qWarning() << "prepareFile(): Failed to set permission of file" << sourceFileInfo.absoluteFilePath()
+                   << "from" << permissionsBefore << "to" << permissionsNow;
+    }
 }
 
 void restorePermissionsToReadAndWrite(QFileInfo sourceFileInfo)
@@ -148,7 +151,11 @@ void restorePermissionsToReadAndWrite(QFileInfo sourceFileInfo)
             | QFileDevice::ReadGroup | QFileDevice::ReadOther)
             | (QFileDevice::WriteUser | QFileDevice::WriteOwner
             | QFileDevice::WriteGroup | QFileDevice::WriteOther);
-    QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsAfter);
+    bool success = QFile::setPermissions(sourceFileInfo.absoluteFilePath(), permissionsAfter);
+    if (!success) {
+        qWarning() << "restorePermissionsToReadAndWrite(): Failed to set permission of file" << sourceFileInfo.absoluteFilePath()
+                   << "from" << permissionsNow << "to" << permissionsAfter;
+    }
 }
 
 

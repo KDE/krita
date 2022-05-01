@@ -528,13 +528,9 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
 
     // Update sliders
     QColor minC, maxC;
-    KoColor minK, maxK;
-
     minC.setHsvF(0, 1, 1);
     maxC.setHsvF(1, 1, 1);
-    minK.fromQColor(minC);
-    maxK.fromQColor(maxC);
-    m_hSlider->setColors(minK, maxK);
+    m_hSlider->setColors(minC, maxC);
     m_hSlider->setCircularHue(true);
 
     recolorSliders();
@@ -611,19 +607,13 @@ void KisHsvColorInput::valueSliderChanged(int i)
 void KisHsvColorInput::recolorSliders() {
     // Update sliders
     QColor minC, maxC;
-    KoColor minK, maxK;
-
     minC.setHsvF(m_h, 0, m_v);
     maxC.setHsvF(m_h, 1, m_v);
-    minK.fromQColor(minC);
-    maxK.fromQColor(maxC);
-    m_sSlider->setColors(minK, maxK);
+    m_sSlider->setColors(minC, maxC);
 
     minC.setHsvF(m_h, m_s, 0);
     maxC.setHsvF(m_h, m_s, 1);
-    minK.fromQColor(minC);
-    maxK.fromQColor(maxC);
-    m_vSlider->setColors(minK, maxK);
+    m_vSlider->setColors(minC, maxC);
 }
 
 void KisHsvColorInput::update()

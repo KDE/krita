@@ -21,8 +21,8 @@ public:
     explicit KisHsvColorSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KisHsvColorSlider() override;
 
-    void setColors(const KoColor& minColor, const KoColor& maxColor);
-    KoColor currentColor() const;
+    void setColors(const KoColor minColor, const KoColor maxColor);
+    void setColors(const QColor minColor, const QColor maxColor);
 
     void setCircularHue(bool);
 
@@ -32,10 +32,6 @@ protected:
 
     struct Private;
     Private* const d;
-
-private:
-    // Determine the commonly used hsv values for calulations.
-    void baseRange(qreal &minH, qreal &minS, qreal &minV, qreal &dH, qreal &dS, qreal &dV) const;
 };
 
 #endif

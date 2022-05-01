@@ -374,14 +374,22 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
 {
     QStringList mimeSeen;
 
+    struct FilterData
+    {
+        QString descriptionOnly;
+        QString fullLine;
+        QString defaultSuffix;
+    };
+
     // 1
     QString allSupported;
     // 2
-    QString kritaNative;
+    FilterData kritaNative {};
     // 3
-    QString ora;
+    FilterData ora {};
+    // remaining
+    QVector<FilterData> otherFileTypes;
 
-    QPair<QStringList, QMap<QString, QString>> ret;
     QStringList mimeList = _mimeList;
 
     mimeList.sort();
@@ -430,40 +438,65 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
 
             Q_ASSERT(!description.isEmpty());
 
-            oneFilter = description + " ( " + oneFilter + ")";
-
-            // the "simplified" version that comes to "onFilterSelect" when details are disabled
-            ret.second[description] = patterns.first();
-            // "full version" that comes when details are enabled
-            ret.second[oneFilter] = patterns.first();
+            FilterData filterData {};
+            filterData.descriptionOnly = description;
+            filterData.fullLine = description + " ( " + oneFilter + ")";
+            filterData.defaultSuffix = patterns.first();
 
             if (mimeType == "application/x-krita") {
-                kritaNative = oneFilter;
-                continue;
-            }
-            if (mimeType == "image/openraster") {
-                ora = oneFilter;
-                continue;
-            }
-            else {
-                ret.first << oneFilter;
+                kritaNative = filterData;
+            } else if (mimeType == "image/openraster") {
+                ora = filterData;
+            } else {
+                otherFileTypes.append(filterData);
             }
             mimeSeen << mimeType;
         }
     }
 
-    ret.first.sort();
-    ret.first.removeDuplicates();
+    QStringList retFilterList;
+    QMap<QString, QString> retFilterToSuffixMap;
+    auto addFilterItem = [&](const FilterData &filterData) {
+        if (retFilterList.contains(filterData.fullLine)) {
+            debugWidgetUtils << "KoFileDialog: Duplicated filter" << filterData.fullLine;
+            return;
+        }
+        retFilterList.append(filterData.fullLine);
+        // the "simplified" version that comes to "onFilterSelect" when details are disabled
+        retFilterToSuffixMap.insert(filterData.descriptionOnly, filterData.defaultSuffix);
+        // "full version" that comes when details are enabled
+        retFilterToSuffixMap.insert(filterData.fullLine, filterData.defaultSuffix);
+    };
 
-    if (allSupported.contains("*.kra")) {
-        allSupported.remove("*.kra ");
-        allSupported.prepend("*.kra ");
+    if (!allSupported.isEmpty()) {
+        FilterData allFilter {};
+        if (allSupported.contains("*.kra")) {
+            allSupported.remove("*.kra ");
+            allSupported.prepend("*.kra ");
+            allFilter.defaultSuffix = QStringLiteral("kra");
+        } else {
+            // TODO: set default suffix from default mime type
+            allFilter.defaultSuffix = QStringLiteral("");
+        }
+        allFilter.descriptionOnly = i18n("All supported formats");
+        allFilter.fullLine = allFilter.descriptionOnly + " ( " + allSupported + ")";
+        addFilterItem(allFilter);
     }
-    if (!ora.isEmpty()) ret.first.prepend(ora);
-    if (!kritaNative.isEmpty())  ret.first.prepend(kritaNative);
-    if (!allSupported.isEmpty()) ret.first.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));
+    if (!kritaNative.fullLine.isEmpty()) {
+        addFilterItem(kritaNative);
+    }
+    if (!ora.fullLine.isEmpty()) {
+        addFilterItem(ora);
+    }
 
-    return ret;
+    std::sort(otherFileTypes.begin(), otherFileTypes.end(), [](const FilterData &a, const FilterData &b) {
+        return a.descriptionOnly < b.descriptionOnly;
+    });
+    Q_FOREACH(const FilterData &filterData, otherFileTypes) {
+        addFilterItem(filterData);
+    }
+
+    return qMakePair(retFilterList, retFilterToSuffixMap);
 
 }
 

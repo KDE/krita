@@ -84,8 +84,12 @@ if(NOT PERL_FOUND AND WIN32)
     set(LIBAOM_STRAWBERRYPERL_DEP ext_strawberryperl)
 endif()
 
+if(NOT WIN32)
+    set(LIBAOM_EXTRA_CMAKE_ARGS -DCONFIG_PIC=1)
+endif()
+
 if(PERL_FOUND OR USE_STRAWBERRYPERL)
-    message(WARNING "Building alternative AVIF support using libaom.")
+    message(STATUS "Building AVIF support using libaom.")
 
     ExternalProject_Add(
         ext_libaom

@@ -16,6 +16,7 @@ class QString;
 class QStringList;
 
 #include "kritalibkra_export.h"
+#include "KoColor.h"
 
 class KRITALIBKRA_EXPORT KisKraSaver
 {
@@ -58,6 +59,9 @@ private:
     void saveResourcesToXML(QDomDocument& doc, QDomElement &element);
     void saveStoryboardToXML(QDomDocument& doc, QDomElement &element);
     void saveAnimationMetadataToXML(QDomDocument& doc, QDomElement &element, KisImageSP image);
+    void saveColorHistory(QDomDocument &doc, QDomElement &element);
+
+    bool saveKoColors(QDomDocument& doc, QDomElement &element, const QList<KoColor> &colors) const;
 
     struct Private;
     Private * const m_d;

@@ -143,6 +143,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     saveGuides(doc, imageElement);
     saveMirrorAxis(doc, imageElement);
     saveAudio(doc, imageElement);
+    saveColorHistory(doc, imageElement);
     saveResourcesToXML(doc, imageElement);
 
     // Redundancy -- Save animation metadata in XML to prevent data loss for the time being...
@@ -637,6 +638,14 @@ void KisKraSaver::saveBackgroundColor(QDomDocument& doc, QDomElement& element, K
     element.appendChild(e);
 }
 
+void KisKraSaver::saveColorHistory(QDomDocument &doc, QDomElement &element)
+{
+    QDomElement colorsElement = doc.createElement(COLORHISTORY);
+    saveKoColors(doc, colorsElement, m_d->doc->colorHistory());
+
+    element.appendChild(colorsElement);
+}
+
 void KisKraSaver::saveAssistantsGlobalColor(QDomDocument& doc, QDomElement& element)
 {
     QDomElement e = doc.createElement(GLOBALASSISTANTSCOLOR);
@@ -815,6 +824,16 @@ bool KisKraSaver::saveAudio(QDomDocument& doc, QDomElement& element)
     KisDomUtils::saveValue(&audioElement, "audioVolume", interface->audioVolume());
     element.appendChild(audioElement);
 
+    return true;
+}
+
+bool KisKraSaver::saveKoColors(QDomDocument &doc, QDomElement &colorsElement,
+                               const QList<KoColor> &colors) const
+{
+    // Writes like <colors><RGB ../><RGB .. /> ... </colors>
+    Q_FOREACH(const KoColor & color, colors) {
+        color.toXML(doc, colorsElement);
+    }
     return true;
 }
 

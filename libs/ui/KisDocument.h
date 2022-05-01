@@ -66,7 +66,6 @@ class KisReferenceImagesLayer;
 class KRITAUI_EXPORT KisDocument : public QObject
 {
     Q_OBJECT
-
 protected:
 
     explicit KisDocument(bool addStorage = true);
@@ -668,7 +667,8 @@ public:
     void setAssistantsGlobalColor(QColor color);
     QColor assistantsGlobalColor();
 
-
+    void setColorHistory(const QList<KoColor> &colors);
+    QList<KoColor> colorHistory();
 
     /**
      * Get existing reference images layer or null if none exists.

@@ -19,6 +19,8 @@ class StoryboardComment;
 
 #include <kis_types.h>
 #include "kritalibkra_export.h"
+#include "KoColor.h"
+
 /**
  * Load old-style 1.x .kra files. Updated for 2.0, let's try to stay
  * compatible. But 2.0 won't be able to save 1.x .kra files unless we
@@ -114,6 +116,8 @@ private:
     void loadAudio(const QDomElement& elem, KisImageSP image);
     void loadStoryboardItemList(const QDomElement& elem);
     void loadStoryboardCommentList(const QDomElement& elem);
+
+    QList<KoColor> loadKoColors(const QDomElement& elem) const;
 private:
 
     struct Private;

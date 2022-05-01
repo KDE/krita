@@ -310,6 +310,10 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
                 }
             }
 
+            if(e.tagName() == COLORHISTORY) {
+                QList<KoColor> colors = loadKoColors(e);
+                m_d->document->setColorHistory(colors);
+            }
 
             if(e.tagName() == GLOBALASSISTANTSCOLOR) {
                 if (e.hasAttribute(SIMPLECOLORDATA)) {
@@ -317,7 +321,6 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
                     m_d->document->setAssistantsGlobalColor(KisDomUtils::qStringToQColor(colorData));
                 }
             }
-
 
             if(e.tagName()== PROOFINGWARNINGCOLOR) {
                 QDomDocument dom;
@@ -649,6 +652,7 @@ StoryboardCommentList KisKraLoader::storyboardCommentList() const
 {
     return m_d->storyboardCommentList;
 }
+
 QStringList KisKraLoader::errorMessages() const
 {
     return m_d->errorMessages;
@@ -1453,4 +1457,19 @@ KisNodeSP KisKraLoader::loadReferenceImagesLayer(const QDomElement &elem, KisIma
     }
 
     return layer;
+}
+
+QList<KoColor> KisKraLoader::loadKoColors(const QDomElement &colorElement) const
+{
+    QList<KoColor> colors;
+    QDomNodeList colorNodes = colorElement.childNodes();
+    colors.reserve(colorNodes.size());
+
+    for (int k = 0; k < colorNodes.size(); k++) {
+        QDomElement colorElement = colorNodes.at(k).toElement();
+        KoColor color = KoColor::fromXML(colorElement, Integer16BitsColorDepthID.id());
+        colors.push_back(color);
+    }
+
+    return colors;
 }

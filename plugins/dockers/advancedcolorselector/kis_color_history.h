@@ -30,7 +30,8 @@ public Q_SLOTS:
 
 private:
     QToolButton* m_clearButton;
-    QList<KoColor> m_colorHistory;
+
+    KisDocument *m_document; // Color history is now stored in the document
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...
 };
 

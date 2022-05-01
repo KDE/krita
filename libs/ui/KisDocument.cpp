@@ -321,6 +321,7 @@ public:
         , importExportManager(new KisImportExportManager(_q))
         , autoSaveTimer(new QTimer(_q))
         , undoStack(new UndoStack(_q))
+        , colorHistory(rhs.colorHistory)
         , nserver(new KisNameServer(*rhs.nserver))
         , preActivatedNode(0) // the node is from another hierarchy!
         , imageIdleWatcher(2000 /*ms*/)
@@ -348,6 +349,7 @@ public:
     QTimer *autoSaveTimer;
     QString lastErrorMessage; // see openFile()
     QString lastWarningMessage;
+
     int autoSaveDelay = 300; // in seconds, 0 to disable.
     bool modifiedAfterAutosave = false;
     bool isAutosaving = false;
@@ -388,6 +390,7 @@ public:
     QVector<StoryboardComment> m_storyboardCommentList;
 
     QColor globalAssistantsColor;
+    QList<KoColor> colorHistory;
 
     KisGridConfig gridConfig;
 
@@ -2654,6 +2657,11 @@ QColor KisDocument::assistantsGlobalColor()
     return d->globalAssistantsColor;
 }
 
+QList<KoColor> KisDocument::colorHistory()
+{
+    return d->colorHistory;
+}
+
 QRectF KisDocument::documentBounds() const
 {
     QRectF bounds = d->image->bounds();
@@ -2665,4 +2673,9 @@ QRectF KisDocument::documentBounds() const
     }
 
     return bounds;
+}
+
+void KisDocument::setColorHistory(const QList<KoColor> &colors)
+{
+    d->colorHistory = colors;
 }

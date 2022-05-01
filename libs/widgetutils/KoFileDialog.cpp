@@ -19,6 +19,7 @@
 
 #include <KisMimeDatabase.h>
 #include <KoJsonTrader.h>
+#include "WidgetUtilsDebug.h"
 
 class Q_DECL_HIDDEN KoFileDialog::Private
 {
@@ -247,8 +248,8 @@ void KoFileDialog::createFileDialog()
     }
     d->fileDialog->resetIconProvider();
 
-    // Trigger event to set default suffix
-    emit d->fileDialog->filterSelected(d->defaultFilter);
+    // QFileDialog::filterSelected is not emitted with the initial value
+    onFilterSelected(d->fileDialog->selectedNameFilter());
 }
 
 QString KoFileDialog::filename()
@@ -489,16 +490,20 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
 
 void KoFileDialog::onFilterSelected(const QString &filter)
 {
-// Setting default suffix for Android is broken as of Qt 5.12.0, returning the file
-// with extension added but no write permissions granted.
+    debugWidgetUtils << "KoFileDialog::onFilterSelected" << filter;
+
+    // Setting default suffix for Android is broken as of Qt 5.12.0, returning the file
+    // with extension added but no write permissions granted.
 #ifndef Q_OS_ANDROID
     QFileDialog::FileMode mode = d->fileDialog->fileMode();
     if (mode != QFileDialog::FileMode::Directory && mode != QFileDialog::FileMode::DirectoryOnly) {
         // we do not need suffixes for directories
         if (d->suffixes.contains(filter)) {
             QString suffix = d->suffixes[filter];
+            debugWidgetUtils << "  Setting default suffix to" << suffix;
             d->fileDialog->setDefaultSuffix(suffix);
         } else {
+            warnWidgetUtils << "KoFileDialog::onFilterSelected: Cannot find suffix for filter" << filter;
             d->fileDialog->setDefaultSuffix("");
         }
     }

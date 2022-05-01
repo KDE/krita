@@ -198,6 +198,10 @@ void testImportFromWriteonly(const QString& _dirname, QString mimetype = "")
 
     delete doc;
 
+    if (fail || status.isOk()) {
+        qDebug() << "The file permission is:" << QFile::permissions(sourceFileInfo.absoluteFilePath());
+    }
+
     restorePermissionsToReadAndWrite(sourceFileInfo);
 
     QVERIFY(!status.isOk());
@@ -243,6 +247,10 @@ void testExportToReadonly(const QString& _dirname, QString mimetype = "")
 
     }
     delete doc;
+
+    if (status.isOk()) {
+        qDebug() << "The file permission is:" << QFile::permissions(sourceFileInfo.absoluteFilePath());
+    }
 
     restorePermissionsToReadAndWrite(sourceFileInfo);
 

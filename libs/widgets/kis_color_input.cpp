@@ -619,8 +619,8 @@ void KisHsvColorInput::recolorSliders() {
     maxK.fromQColor(maxC);
     m_sSlider->setColors(minK, maxK);
 
-    minC.setHsvF(0, 0, 0);
-    maxC.setHsvF(0, 0, 1);
+    minC.setHsvF(m_h, m_s, 0);
+    maxC.setHsvF(m_h, m_s, 1);
     minK.fromQColor(minC);
     maxK.fromQColor(maxC);
     m_vSlider->setColors(minK, maxK);

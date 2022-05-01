@@ -641,7 +641,14 @@ void KisHsvColorInput::update()
     // Truncate to integer for this check
     if (!(current.red() == theirs.red() && current.green() == theirs.green() && current.blue() == theirs.blue())) {
         // Apply the update
-        theirs.getHsvF(&m_h, &m_s, &m_v);
+        qreal theirH;
+        theirs.getHsvF(&theirH, &m_s, &m_v);
+
+        // Don't jump the Hue slider around to 0 if it is currently on 360
+        const qreal EPSILON = 1e-6;
+        if (!((1.0 - m_h) < EPSILON && (theirH - 0.0) < EPSILON)) {
+            m_h = theirH;
+        }
 
         m_hInput->setValue(m_h * 360);
         m_sInput->setValue(m_s * 100);

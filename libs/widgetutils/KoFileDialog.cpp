@@ -406,33 +406,21 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
 
 
             QString oneFilter;
-            QStringList patterns = KisMimeDatabase::suffixesForMimeType(mimeType);
-            QStringList globPatterns;
+            const QStringList suffixes = KisMimeDatabase::suffixesForMimeType(mimeType);
 
-            Q_FOREACH(const QString &pattern, patterns) {
-                if (pattern.startsWith(".")) {
-                    globPatterns << "*" + pattern;
+            Q_FOREACH(const QString &suffix, suffixes) {
+                const QString glob = QStringLiteral("*.") + suffix;
+                oneFilter.append(glob + " ");
+                if (withAllSupportedEntry) {
+                    allSupported.append(glob + " ");
                 }
-                else if (pattern.startsWith("*.")) {
-                    globPatterns << pattern;
-                }
-                else {
-                    globPatterns << "*." + pattern;
-                }
-            }
-
-            Q_FOREACH(const QString &glob, globPatterns) {
-                    oneFilter.append(glob + " ");
-                    if (withAllSupportedEntry) {
-                        allSupported.append(glob + " ");
-                    }
 #ifdef Q_OS_LINUX
-                    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-                        oneFilter.append(glob.toUpper() + " ");
-                        if (withAllSupportedEntry) {
-                            allSupported.append(glob.toUpper() + " ");
-                        }
+                if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+                    oneFilter.append(glob.toUpper() + " ");
+                    if (withAllSupportedEntry) {
+                        allSupported.append(glob.toUpper() + " ");
                     }
+                }
 #endif
             }
 
@@ -441,7 +429,7 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
             FilterData filterData {};
             filterData.descriptionOnly = description;
             filterData.fullLine = description + " ( " + oneFilter + ")";
-            filterData.defaultSuffix = patterns.first();
+            filterData.defaultSuffix = suffixes.first();
 
             if (mimeType == "application/x-krita") {
                 kritaNative = filterData;

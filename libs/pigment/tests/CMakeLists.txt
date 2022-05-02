@@ -3,8 +3,6 @@ macro_add_unittest_definitions()
 include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../colorspaces)
 
-add_definitions(-DFILES_DEST_DIR="${CMAKE_CURRENT_BINARY_DIR}/data/")
-
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   # avoid "cannot open file 'LIBC.lib'" error
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")

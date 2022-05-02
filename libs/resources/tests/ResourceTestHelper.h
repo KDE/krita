@@ -25,11 +25,13 @@
 #error "FILES_DATA_DIR not set. A directory with the data used for testing installing resources"
 #endif
 
-#ifndef FILES_DEST_DIR
-#error "FILES_DEST_DIR not set. A directory where data will be written to for testing installing resources"
-#endif
-
 namespace ResourceTestHelper {
+
+const QString &filesDestDir() {
+    static const QString s_path = QDir::cleanPath(
+            QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + "/testdest") + '/';
+    return s_path;
+}
 
 void rmTestDb() {
     QDir dbLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
@@ -105,7 +107,7 @@ bool cleanDstLocation(const QString &dstLocation)
             QDirIterator iter(dstLocation, QStringList() << "*", QDir::Dirs | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
             while (iter.hasNext()) {
                 iter.next();
-                QDir(iter.filePath()).rmpath(iter.filePath());
+                QDir(iter.filePath()).rmdir(iter.filePath());
                 //qDebug() << (r ? "Removed" : "Failed to remove") << iter.filePath();
             }
         }

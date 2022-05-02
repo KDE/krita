@@ -44,19 +44,19 @@ void KisJpegTest::testFiles()
 
 void KisJpegTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), JpegMimetype);
+    TestUtil::testImportFromWriteonly(JpegMimetype);
 }
 
 
 void KisJpegTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), JpegMimetype);
+    TestUtil::testExportToReadonly(JpegMimetype);
 }
 
 
 void KisJpegTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), JpegMimetype);
+    TestUtil::testImportIncorrectFormat(JpegMimetype);
 }
 KISTEST_MAIN(KisJpegTest)
 

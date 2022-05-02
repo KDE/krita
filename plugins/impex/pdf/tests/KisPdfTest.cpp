@@ -23,19 +23,19 @@ const QString PdfMimetype = "image/x-gimp-brush";
 
 void KisPdfTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), PdfMimetype);
+    TestUtil::testImportFromWriteonly(PdfMimetype);
 }
 
 
 void KisPdfTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), PdfMimetype);
+    TestUtil::testExportToReadonly(PdfMimetype);
 }
 
 
 void KisPdfTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), PdfMimetype);
+    TestUtil::testImportIncorrectFormat(PdfMimetype);
 }
 
 

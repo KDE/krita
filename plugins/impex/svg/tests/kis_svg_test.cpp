@@ -31,14 +31,14 @@ void KisSvgTest::testFiles()
 
 void KisSvgTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), SvgMimetype);
+    TestUtil::testImportFromWriteonly(SvgMimetype);
 }
 
 
 
 void KisSvgTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), SvgMimetype);
+    TestUtil::testImportIncorrectFormat(SvgMimetype);
 }
 
 

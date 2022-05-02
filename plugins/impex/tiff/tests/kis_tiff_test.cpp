@@ -109,7 +109,7 @@ void KisTiffTest::testSaveTiffColorSpace(QString colorModel, QString colorDepth,
 {
     const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
     if (space) {
-        TestUtil::testExportToColorSpace(QString(FILES_DATA_DIR), TiffMimetype, space, ImportExportCodes::OK);
+        TestUtil::testExportToColorSpace(TiffMimetype, space, ImportExportCodes::OK);
     }
 }
 
@@ -166,19 +166,19 @@ void KisTiffTest::testSaveTiffYCbCrAColorSpace()
 
 void KisTiffTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), TiffMimetype);
+    TestUtil::testImportFromWriteonly(TiffMimetype);
 }
 
 
 void KisTiffTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), TiffMimetype);
+    TestUtil::testExportToReadonly(TiffMimetype);
 }
 
 
 void KisTiffTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), TiffMimetype);
+    TestUtil::testImportIncorrectFormat(TiffMimetype);
 }
 
 

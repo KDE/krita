@@ -28,7 +28,7 @@ void KisPngTest::testFiles()
 
 void KisPngTest::testWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), PngMimetype);
+    TestUtil::testImportFromWriteonly(PngMimetype);
 }
 
 void roudTripHdrImage(const KoColorSpace *savingColorSpace)

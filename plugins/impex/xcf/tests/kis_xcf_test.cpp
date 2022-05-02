@@ -29,20 +29,20 @@ void KisXCFTest::testFiles()
 
 void KisXCFTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), XcfMimetype);
+    TestUtil::testImportFromWriteonly(XcfMimetype);
 }
 
 /*
 void KisXCFTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), XcfMimetype);
+    TestUtil::testExportToReadonly(XcfMimetype);
 }
 */
 
 
 void KisXCFTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), XcfMimetype);
+    TestUtil::testImportIncorrectFormat(XcfMimetype);
 }
 
 

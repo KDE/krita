@@ -30,19 +30,19 @@ void KisHeightmapTest::testFiles()
 
 void KisHeightmapTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), HeightmapMimetype);
+    TestUtil::testImportFromWriteonly(HeightmapMimetype);
 }
 
 
 void KisHeightmapTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), HeightmapMimetype);
+    TestUtil::testExportToReadonly(HeightmapMimetype);
 }
 
 
 void KisHeightmapTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), HeightmapMimetype);
+    TestUtil::testImportIncorrectFormat(HeightmapMimetype);
 }
 
 

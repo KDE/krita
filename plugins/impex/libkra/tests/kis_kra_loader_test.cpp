@@ -166,13 +166,13 @@ void KisKraLoaderTest::testLoadAnimated()
 
 void KisKraLoaderTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), KraMimetype);
+    TestUtil::testImportFromWriteonly(KraMimetype);
 }
 
 
 void KisKraLoaderTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), KraMimetype);
+    TestUtil::testImportIncorrectFormat(KraMimetype);
 }
 
 

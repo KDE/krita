@@ -26,22 +26,22 @@ const QString AvifMimetype = "image/avif";
 
 void KisHeifTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), HeifMimetype);
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), AvifMimetype);
+    TestUtil::testImportFromWriteonly(HeifMimetype);
+    TestUtil::testImportFromWriteonly(AvifMimetype);
 }
 
 
 void KisHeifTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), HeifMimetype);
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), AvifMimetype);
+    TestUtil::testExportToReadonly(HeifMimetype);
+    TestUtil::testExportToReadonly(AvifMimetype);
 }
 
 
 void KisHeifTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), HeifMimetype);
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), AvifMimetype);
+    TestUtil::testImportIncorrectFormat(HeifMimetype);
+    TestUtil::testImportIncorrectFormat(AvifMimetype);
 }
 
 void KisHeifTest::testLoadMonochrome(int bitDepth)

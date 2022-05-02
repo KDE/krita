@@ -565,7 +565,7 @@ void KisKraSaverTest::testRoundTripStoryboard()
 
 void KisKraSaverTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), KraMimetype);
+    TestUtil::testExportToReadonly(KraMimetype);
 }
 
 KISTEST_MAIN(KisKraSaverTest)

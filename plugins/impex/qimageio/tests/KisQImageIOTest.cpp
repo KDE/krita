@@ -23,19 +23,19 @@ const QString QImageIOMimetype = "image/x-gimp-brush";
 
 void KisQImageIOTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), QImageIOMimetype);
+    TestUtil::testImportFromWriteonly(QImageIOMimetype);
 }
 
 
 void KisQImageIOTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), QImageIOMimetype);
+    TestUtil::testExportToReadonly(QImageIOMimetype);
 }
 
 
 void KisQImageIOTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), QImageIOMimetype);
+    TestUtil::testImportIncorrectFormat(QImageIOMimetype);
 }
 
 

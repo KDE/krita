@@ -23,19 +23,19 @@ const QString GifMimetype = "image/gif";
 
 void KisGifTest::testImportFromWriteonly()
 {
-    TestUtil::testImportFromWriteonly(QString(FILES_DATA_DIR), GifMimetype);
+    TestUtil::testImportFromWriteonly(GifMimetype);
 }
 
 
 void KisGifTest::testExportToReadonly()
 {
-    TestUtil::testExportToReadonly(QString(FILES_DATA_DIR), GifMimetype);
+    TestUtil::testExportToReadonly(GifMimetype);
 }
 
 
 void KisGifTest::testImportIncorrectFormat()
 {
-    TestUtil::testImportIncorrectFormat(QString(FILES_DATA_DIR), GifMimetype);
+    TestUtil::testImportIncorrectFormat(GifMimetype);
 }
 
 

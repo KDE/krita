@@ -633,8 +633,8 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             d->buttonPressed = false;
             d->resetCompressor();
             event->accept();
-            break;
         }
+        break;
     }
 
     case QEvent::TouchUpdate:

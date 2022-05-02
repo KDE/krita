@@ -241,6 +241,21 @@ void KisHsvColorSlider::setColors(const QColor min, const QColor max)
     QTimer::singleShot(1, this, SLOT(update()));
 }
 
+void KisHsvColorSlider::setColors(qreal minH, qreal minS, qreal minV, qreal maxH, qreal maxS, qreal maxV)
+{
+    d->minColor = HSVColor(minH, minS, minV);
+    d->maxColor = HSVColor(maxH, maxS, maxV);
+
+    QColor minQ, maxQ;
+    minQ.setHsvF(minH, minS, minV);
+    maxQ.setHsvF(maxH, maxS, maxV);
+    d->minKoColor.fromQColor(minQ);
+    d->maxKoColor.fromQColor(maxQ);
+    d->upToDate = false;
+
+    QTimer::singleShot(1, this, SLOT(update()));
+}
+
 void KisHsvColorSlider::setCircularHue(bool value) {
     d->circularHue = value;
     d->upToDate = false;

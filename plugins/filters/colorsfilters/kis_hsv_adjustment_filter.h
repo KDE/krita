@@ -61,6 +61,7 @@ private Q_SLOTS:
 
     void configureSliderLimitsAndLabels();
     void resetFilter();
+    void recolorSliders();
 
 private:
     bool m_prevColorize;

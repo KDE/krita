@@ -103,7 +103,7 @@
      <item row="2" column="1">
       <layout class="QHBoxLayout" name="hueLayout">
        <item>
-        <widget class="QSlider" name="hSlider">
+        <widget class="KisHsvColorSlider" name="hSlider" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -170,7 +170,7 @@
      <item row="3" column="1">
       <layout class="QHBoxLayout" name="saturationLayout">
        <item>
-        <widget class="QSlider" name="sSlider">
+        <widget class="KisHsvColorSlider" name="sSlider">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -231,7 +231,7 @@
      <item row="4" column="1">
       <layout class="QHBoxLayout" name="valueLayout">
        <item>
-        <widget class="QSlider" name="vSlider">
+        <widget class="KisHsvColorSlider" name="vSlider" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
            <horstretch>0</horstretch>
@@ -349,6 +349,11 @@
    <class>KisIntParseSpinBox</class>
    <extends>QSpinBox</extends>
    <header>kis_int_parse_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KisHsvColorSlider</class>
+   <extends>QWidget</extends>
+   <header>KisHsvColorSlider.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

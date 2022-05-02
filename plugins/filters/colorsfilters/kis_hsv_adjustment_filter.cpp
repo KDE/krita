@@ -14,8 +14,15 @@
 #include <kis_selection.h>
 #include <kis_paint_device.h>
 #include <kis_processing_information.h>
+#include <KoColorSpace.h>
 #include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorModelStandardIds.h>
+#include <KoColorConversions.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisHsvColorSlider.h>
+
+#include "kis_signals_blocker.h"
 
 namespace {
 
@@ -49,7 +56,7 @@ struct SliderSettings {
     {
     }
 
-    void apply(QLabel *label, QSlider *slider, QSpinBox *spinBox, bool prevColorize, bool colorize) const {
+    void apply(QLabel *label, KisHsvColorSlider *slider, QSpinBox *spinBox, bool prevColorize, bool colorize) const {
         int value = slider->value();
         const double norm = normalize(prevColorize, value);
         const int min = colorize ? m_min : m_minRelative;
@@ -71,7 +78,115 @@ struct SliderSettings {
         slider->setValue(value);
     }
 
-    void reset(QSlider *slider) const {
+    void recolor(KisHsvColorSlider *slider, SLIDER_SET set, bool colorize, qreal nh, qreal ns, qreal nv) {
+        SLIDER_TYPE type = m_type;
+        if (!colorize) {
+            switch (m_type) {
+            case SLIDER_TYPE::GREEN_RED: // fallthrough
+            case SLIDER_TYPE::YELLOW_BLUE:
+                nh = 0.5;
+                ns = 0.5;
+                nv = 0.5;
+                break;
+
+            default:
+                nh = 0;
+                ns = 0;
+                nv = 1;
+
+                // Display a gray bar for YUV Luma in non-colorize mode
+                if (m_type == SLIDER_TYPE::LUMA_YUV) {
+                    type = SLIDER_TYPE::LUMA;
+                }
+            }
+        }
+
+        switch (type) {
+        case SLIDER_TYPE::HUE: {
+            KoColor k;
+            k.fromQColor(QColor(255, 0, 0));
+            slider->setMixMode(KisHsvColorSlider::MIX_MODE::HSV);
+            slider->setColors(k, k);
+            slider->setCircularHue(true);
+            break;
+        }
+
+        case SLIDER_TYPE::SATURATION: {
+            slider->setColors(nh, 0, nv, nh, 1, nv);
+            break;
+        }
+
+        case SLIDER_TYPE::VALUE:     // fallthrough
+        case SLIDER_TYPE::LIGHTNESS: // fallthrough
+        case SLIDER_TYPE::LUMA:      // fallthrough
+        case SLIDER_TYPE::INTENSITY: {
+            switch (set) {
+            case SLIDER_SET::HSY:
+                slider->setMixMode(KisHsvColorSlider::MIX_MODE::HSY);
+                break;
+
+            case SLIDER_SET::HSI:
+                slider->setMixMode(KisHsvColorSlider::MIX_MODE::HSI);
+                break;
+
+            case SLIDER_SET::HSL:
+                slider->setMixMode(KisHsvColorSlider::MIX_MODE::HSL);
+                break;
+
+            default: // fallthrough
+            case SLIDER_SET::HSV:
+                slider->setMixMode(KisHsvColorSlider::MIX_MODE::HSV);
+                break;
+            }
+
+            slider->setColors(nh, ns, 0, nh, ns, 1);
+            break;
+        }
+
+        case SLIDER_TYPE::GREEN_RED:
+        case SLIDER_TYPE::YELLOW_BLUE:
+        case SLIDER_TYPE::LUMA_YUV: {
+            slider->setMixMode(KisHsvColorSlider::MIX_MODE::COLOR_SPACE);
+
+            const KoColorSpace *cs = KoColorSpaceRegistry::instance()->colorSpace(YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id());
+
+            qreal minR, minG, minB;
+            qreal maxR, maxG, maxB;
+
+            if (m_type == SLIDER_TYPE::GREEN_RED) { // Cr
+                YUVToRGB(nv, nh, 0, &minR, &minG, &minB);
+                YUVToRGB(nv, nh, 1, &maxR, &maxG, &maxB);
+            } else if (m_type == SLIDER_TYPE::YELLOW_BLUE) { // Cb
+                YUVToRGB(nv, 0, ns, &minR, &minG, &minB);
+                YUVToRGB(nv, 1, ns, &maxR, &maxG, &maxB);
+            } else { // Y
+                YUVToRGB(0, nh, ns, &minR, &minG, &minB);
+                YUVToRGB(1, nh, ns, &maxR, &maxG, &maxB);
+            }
+
+            // Clamp
+            minR = qBound(0.0, minR, 1.0);
+            minG = qBound(0.0, minG, 1.0);
+            minB = qBound(0.0, minB, 1.0);
+
+            maxR = qBound(0.0, maxR, 1.0);
+            maxG = qBound(0.0, maxG, 1.0);
+            maxB = qBound(0.0, maxB, 1.0);
+
+            QColor minC, maxC;
+            minC.setRgbF(minR, minG, minB);
+            maxC.setRgbF(maxR, maxG, maxB);
+
+            KoColor minK(minC, cs);
+            KoColor maxK(maxC, cs);
+
+            slider->setColors(minK, maxK);
+            break;
+        }
+        }
+    }
+
+    void reset(KisHsvColorSlider *slider) const {
         slider->setValue(m_resetValue);
     }
 
@@ -199,6 +314,9 @@ KisHSVConfigWidget::KisHSVConfigWidget(QWidget *parent, Qt::WindowFlags f)
     connect(m_page->sSlider, SIGNAL(valueChanged(int)), m_page->sSpinBox, SLOT(setValue(int)));
     connect(m_page->vSlider, SIGNAL(valueChanged(int)), m_page->vSpinBox, SLOT(setValue(int)));
 
+    connect(m_page->hSlider, SIGNAL(valueChanged(int)), this, SLOT(recolorSliders()));
+    connect(m_page->sSlider, SIGNAL(valueChanged(int)), this, SLOT(recolorSliders()));
+    connect(m_page->vSlider, SIGNAL(valueChanged(int)), this, SLOT(recolorSliders()));
 }
 
 KisHSVConfigWidget::~KisHSVConfigWidget()
@@ -236,11 +354,15 @@ void KisHSVConfigWidget::configureSliderLimitsAndLabels()
     const std::array<SLIDER_TYPE, 3> sliderSet = SLIDER_SETS[m_page->cmbType->currentIndex()];
     const bool colorize = m_page->chkColorize->isChecked();
 
+    // Prevent the sliders from recoloring when setValue is triggered in apply()
+    // Since some values will be invalid while inside this function if colorize is changed
+    KisSignalsBlocker blocker(m_page->hSlider, m_page->sSlider, m_page->vSlider);
 
     sliderSetting(sliderSet[0]).apply(m_page->hLabel, m_page->hSlider, m_page->hSpinBox, m_prevColorize, colorize);
     sliderSetting(sliderSet[1]).apply(m_page->sLabel, m_page->sSlider, m_page->sSpinBox, m_prevColorize, colorize);
     sliderSetting(sliderSet[2]).apply(m_page->vLabel, m_page->vSlider, m_page->vSpinBox, m_prevColorize, colorize);
 
+    recolorSliders();
 
     const bool compat = !m_page->chkColorize->isChecked() &&
             m_page->cmbType->currentIndex() >= 0 && m_page->cmbType->currentIndex() <= 3;
@@ -249,6 +371,21 @@ void KisHSVConfigWidget::configureSliderLimitsAndLabels()
     m_prevColorize = colorize;
 
     emit sigConfigurationItemChanged();
+}
+
+void KisHSVConfigWidget::recolorSliders()
+{
+    const SLIDER_SET set = static_cast<SLIDER_SET>(m_page->cmbType->currentIndex());
+    const std::array<SLIDER_TYPE, 3> sliderSet = SLIDER_SETS[m_page->cmbType->currentIndex()];
+    const bool colorize = m_page->chkColorize->isChecked();
+
+    const double nh = sliderSetting(sliderSet[0]).normalize(colorize, m_page->hSlider->value());
+    const double ns = sliderSetting(sliderSet[1]).normalize(colorize, m_page->sSlider->value());
+    const double nv = sliderSetting(sliderSet[2]).normalize(colorize, m_page->vSlider->value());
+
+    sliderSetting(sliderSet[0]).recolor(m_page->hSlider, set, colorize, nh, ns, nv);
+    sliderSetting(sliderSet[1]).recolor(m_page->sSlider, set, colorize, nh, ns, nv);
+    sliderSetting(sliderSet[2]).recolor(m_page->vSlider, set, colorize, nh, ns, nv);
 }
 
 void KisHSVConfigWidget::resetFilter()

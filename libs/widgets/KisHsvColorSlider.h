@@ -28,6 +28,7 @@ public:
 
     void setColors(const KoColor minColor, const KoColor maxColor);
     void setColors(const QColor minColor, const QColor maxColor);
+    void setColors(qreal minH, qreal minS, qreal minV, qreal maxH, qreal maxS, qreal maxV);
 
     void setMixMode(MIX_MODE mode);
 

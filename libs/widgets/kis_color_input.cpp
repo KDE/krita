@@ -473,6 +473,8 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
 
         // Slider itself
         KisHsvColorSlider *slider = new KisHsvColorSlider(Qt::Horizontal, this);
+        slider->setMinimum(0);
+        slider->setMaximum(maxValues[i]);
         slider->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
         sliderLayout->addWidget(slider);
 
@@ -538,6 +540,15 @@ KisHsvColorInput::KisHsvColorInput(QWidget *parent, KoColor *color)
 
 void KisHsvColorInput::sendUpdate()
 {
+    {
+        KisSignalsBlocker blocker(
+            m_hSlider, m_sSlider, m_vSlider
+        );
+        m_hSlider->setValue(m_h * 360);
+        m_sSlider->setValue(m_s * 100);
+        m_vSlider->setValue(m_v * 100);
+    }
+
     recolorSliders();
 
     QColor c;
@@ -591,17 +602,17 @@ void KisHsvColorInput::setValue(double x)
 
 void KisHsvColorInput::hueSliderChanged(int i)
 {
-    m_hInput->setValue((i / 255.0) * 360);
+    m_hInput->setValue(i);
 }
 
 void KisHsvColorInput::saturationSliderChanged(int i)
 {
-    m_sInput->setValue((i / 255.0) * 100);
+    m_sInput->setValue(i);
 }
 
 void KisHsvColorInput::valueSliderChanged(int i)
 {
-    m_vInput->setValue((i / 255.0) * 100);
+    m_vInput->setValue(i);
 }
 
 void KisHsvColorInput::recolorSliders() {
@@ -647,8 +658,8 @@ void KisHsvColorInput::update()
         recolorSliders();
 
         // Update slider positions
-        m_hSlider->setValue(m_h * 255);
-        m_sSlider->setValue(m_s * 255);
-        m_vSlider->setValue(m_v * 255);
+        m_hSlider->setValue(m_h * 360);
+        m_sSlider->setValue(m_s * 100);
+        m_vSlider->setValue(m_v * 100);
     }
 }

@@ -18,6 +18,7 @@ namespace {
 
 const qreal EPSILON = 1e-6;
 const int ARROW_SIZE = 8;
+const int FRAME_SIZE = 5;
 
 // Internal color representation used by the slider.
 // h, s, v are values between 0 and 1
@@ -92,12 +93,8 @@ struct Q_DECL_HIDDEN KisHsvColorSlider::Private
 };
 
 KisHsvColorSlider::KisHsvColorSlider(QWidget *parent, KoColorDisplayRendererInterface *displayRenderer)
-    : KSelector(parent)
-    , d(new Private)
+    : KisHsvColorSlider(Qt::Horizontal, parent, displayRenderer)
 {
-    setMaximum(255);
-    d->displayRenderer = displayRenderer;
-    connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), SLOT(update()), Qt::UniqueConnection);
 }
 
 KisHsvColorSlider::KisHsvColorSlider(Qt::Orientation orientation, QWidget *parent, KoColorDisplayRendererInterface *displayRenderer)
@@ -195,7 +192,34 @@ void KisHsvColorSlider::drawContents(QPainter *painter)
     painter->drawPixmap(contentsRect_, d->pixmap, QRect(0, 0, d->pixmap.width(), d->pixmap.height()));
 }
 
-void KisHsvColorSlider::drawArrow(QPainter *painter, const QPoint &pos)
+QPoint KisHsvColorSlider::calcArrowPos(int value) {
+    QPoint p;
+    int w = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
+    int iw = (w < FRAME_SIZE) ? FRAME_SIZE : w;
+
+    double t = static_cast<double>(value - minimum()) / static_cast<double>(maximum() - minimum());
+    if (orientation() == Qt::Vertical) {
+        p.setY(height() - iw - 1 - (height() - 2 * iw - 1) * t);
+
+        if (arrowDirection() == Qt::RightArrow) {
+            p.setX(0);
+        } else {
+            p.setX(width() - FRAME_SIZE);
+        }
+    } else {
+        p.setX(iw + (width() - 2 * iw - 1) * t);
+
+        if (arrowDirection() == Qt::DownArrow) {
+            p.setY(0);
+        } else {
+            p.setY(height() - FRAME_SIZE);
+        }
+    }
+
+    return p;
+}
+
+void KisHsvColorSlider::drawArrow(QPainter *painter, const QPoint &)
 {
     painter->setPen(QPen(palette().text().color(), 0));
     painter->setBrush(palette().text());
@@ -203,6 +227,9 @@ void KisHsvColorSlider::drawArrow(QPainter *painter, const QPoint &pos)
     QStyleOption o;
     o.initFrom(this);
     o.state &= ~QStyle::State_MouseOver;
+
+    // Recalculate pos since the value returned by the parent is bugged and doesn't account for negative setMinimum/setMaximum values
+    QPoint pos = calcArrowPos(value());
 
     if (orientation() == Qt::Vertical) {
         o.rect = QRect(pos.x(), pos.y() - ARROW_SIZE / 2, ARROW_SIZE, ARROW_SIZE);

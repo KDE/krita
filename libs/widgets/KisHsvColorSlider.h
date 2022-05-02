@@ -30,6 +30,8 @@ protected:
     void drawContents(QPainter*) override;
     void drawArrow(QPainter *painter, const QPoint &pos) override;
 
+    QPoint calcArrowPos(int value);
+
     struct Private;
     Private* const d;
 };

@@ -6,12 +6,17 @@
 #include "KisHsvColorSlider.h"
 
 #include "KoColorSpace.h"
+#include <KoMixColorsOp.h>
 #include <KoColor.h>
+#include <KoColorConversions.h>
 
 #include <QPainter>
 #include <QTimer>
 #include <QStyleOption>
 #include <QPointer>
+
+#include <memory>
+
 #include "KoColorDisplayRendererInterface.h"
 
 namespace {
@@ -53,19 +58,120 @@ void fromQColor(const QColor minC, const QColor maxC, HSVColor &min, HSVColor &m
     }
 }
 
-void baseRange(HSVColor min, HSVColor max, bool circularHue, qreal &dH, qreal &dS, qreal &dV) {
-    dH = max.h - min.h;
-    if (circularHue) {
-        if (dH < EPSILON) {
-            dH += 1;
-        }
-    } else {
-        dH = 0;
+class Mixer {
+public:
+    // mix two colors
+    // t is a qreal between 0 and 1
+    virtual QColor mix(qreal t) const = 0;
+    virtual ~Mixer() = default;
+};
+
+class ColorSpaceMixer : public Mixer {
+public:
+    ColorSpaceMixer(KoColor minKColor, KoColor maxKColor, KoColorDisplayRendererInterface *renderer = KoDumbColorDisplayRenderer::instance())
+        : minColor(minKColor)
+        , maxColor(maxKColor)
+        , mixOp(minKColor.colorSpace()->mixColorsOp())
+        , displayRenderer(renderer)
+    {
     }
 
-    dS = max.s - min.s;
-    dV = max.v - min.v;
-}
+    QColor mix(qreal t) const override
+    {
+        const quint8 *colors[2] = {
+            minColor.data(),
+            maxColor.data()
+        };
+
+        quint8 weight = static_cast<quint8>((1.0 - t) * 255);
+        qint16 weights[2] = {
+             weight,
+             static_cast<qint16>(255 - weight),
+        };
+
+        KoColor color(minColor.colorSpace());
+        mixOp->mixColors(colors, weights, 2, color.data());
+
+        if (displayRenderer) {
+            return displayRenderer->toQColor(color);
+        }
+
+        return color.toQColor();
+    }
+
+private:
+    KoColor minColor;
+    KoColor maxColor;
+    KoMixColorsOp *mixOp;
+    KoColorDisplayRendererInterface *displayRenderer;
+};
+
+class HsxMixer : public Mixer {
+public:
+    HsxMixer(const HSVColor &minColor, const HSVColor &maxColor, bool circular, KisHsvColorSlider::MIX_MODE mode)
+        : Mixer()
+        , min(minColor)
+        , max(maxColor)
+        , dH(), dS(), dV()
+        , circularHue(circular)
+        , mixMode(mode)
+    {
+
+        dH = max.h - min.h;
+        if (circularHue) {
+            if (dH < EPSILON) {
+                dH += 1;
+            }
+        } else {
+            dH = 0;
+        }
+
+        dS = max.s - min.s;
+        dV = max.v - min.v;
+    }
+
+    QColor mix(qreal t) const override
+    {
+        QColor color;
+        const qreal h = fmod(min.h + t * dH, 1);
+        const qreal s = min.s + t * dS;
+        const qreal v = min.v + t * dV;
+
+        switch (mixMode) {
+            case KisHsvColorSlider::MIX_MODE::HSL:
+                color.setHslF(h, s, v);
+                break;
+
+            case KisHsvColorSlider::MIX_MODE::HSY: {
+                qreal r, g, b;
+                HSYToRGB(h, s, v, &r, &g, &b);
+                color.setRgbF(r, g, b);
+                break;
+            }
+
+            case KisHsvColorSlider::MIX_MODE::HSI: {
+                qreal r, g, b;
+                HSIToRGB(h, s, v, &r, &g, &b);
+                color.setRgbF(r, g, b);
+                break;
+            }
+
+            default: // fallthrough
+            case KisHsvColorSlider::MIX_MODE::HSV:
+                color.setHsvF(h, s, v);
+                break;
+        }
+
+        return color;
+    }
+
+private:
+    HSVColor min;
+    HSVColor max;
+    qreal dH, dS, dV;
+    bool circularHue;
+    KisHsvColorSlider::MIX_MODE mixMode;
+};
 
 }
 
@@ -74,22 +180,28 @@ struct Q_DECL_HIDDEN KisHsvColorSlider::Private
     Private()
         : minColor()
         , maxColor()
+        , minKoColor()
+        , maxKoColor()
         , pixmap()
         , upToDate(false)
         , displayRenderer(nullptr)
         , circularHue(false)
+        , mixMode(KisHsvColorSlider::MIX_MODE::HSV)
     {
 
     }
 
     HSVColor minColor;
     HSVColor maxColor;
+    KoColor minKoColor;
+    KoColor maxKoColor;
     QPixmap pixmap;
     bool upToDate;
     QPointer<KoColorDisplayRendererInterface> displayRenderer;
 
     // If the min and max color has the same hue, should the widget display the entire gamut of hues.
     bool circularHue;
+    MIX_MODE mixMode;
 };
 
 KisHsvColorSlider::KisHsvColorSlider(QWidget *parent, KoColorDisplayRendererInterface *displayRenderer)
@@ -114,6 +226,8 @@ KisHsvColorSlider::~KisHsvColorSlider()
 void KisHsvColorSlider::setColors(const KoColor min, const KoColor max)
 {
     fromQColor(min.toQColor(), max.toQColor(), d->minColor, d->maxColor);
+    d->minKoColor = min;
+    d->maxKoColor = max;
     d->upToDate = false;
     QTimer::singleShot(1, this, SLOT(update()));
 }
@@ -121,12 +235,22 @@ void KisHsvColorSlider::setColors(const KoColor min, const KoColor max)
 void KisHsvColorSlider::setColors(const QColor min, const QColor max)
 {
     fromQColor(min, max, d->minColor, d->maxColor);
+    d->minKoColor.fromQColor(min);
+    d->maxKoColor.fromQColor(max);
     d->upToDate = false;
     QTimer::singleShot(1, this, SLOT(update()));
 }
 
 void KisHsvColorSlider::setCircularHue(bool value) {
     d->circularHue = value;
+    d->upToDate = false;
+    QTimer::singleShot(1, this, SLOT(update()));
+}
+
+void KisHsvColorSlider::setMixMode(MIX_MODE mode) {
+    d->mixMode = mode;
+    d->upToDate = false;
+    QTimer::singleShot(1, this, SLOT(update()));
 }
 
 void KisHsvColorSlider::drawContents(QPainter *painter)
@@ -138,15 +262,27 @@ void KisHsvColorSlider::drawContents(QPainter *painter)
     p.fillRect(0, 4, 4, 4, Qt::darkGray);
     p.fillRect(4, 4, 4, 4, Qt::lightGray);
     p.end();
+
     QRect contentsRect_(contentsRect());
     painter->fillRect(contentsRect_, QBrush(checker));
 
     if (!d->upToDate || d->pixmap.isNull() || d->pixmap.width() != contentsRect_.width()
         || d->pixmap.height() != contentsRect_.height())
     {
-        qreal dH, dS, dV;
-        HSVColor min = d->minColor;
-        baseRange(d->minColor, d->maxColor, d->circularHue, dH, dS, dV);
+        std::unique_ptr<Mixer> m;
+        switch (d->mixMode) {
+            case MIX_MODE::COLOR_SPACE:
+                m = std::make_unique<ColorSpaceMixer>(d->minKoColor, d->maxKoColor, d->displayRenderer);
+                break;
+
+            default: // fallthrough
+            case MIX_MODE::HSV: // fallthrough
+            case MIX_MODE::HSL: // fallthrough
+            case MIX_MODE::HSI: // fallthrough
+            case MIX_MODE::HSY: // fallthrough
+                m = std::make_unique<HsxMixer>(d->minColor, d->maxColor, d->circularHue, d->mixMode);
+                break;
+        }
 
         QImage image(contentsRect_.width(), contentsRect_.height(), QImage::Format_ARGB32);
 
@@ -155,15 +291,8 @@ void KisHsvColorSlider::drawContents(QPainter *painter)
                 for (int x = 0; x < contentsRect_.width(); x++) {
                     const qreal t = static_cast<qreal>(x) / (contentsRect_.width() - 1);
 
-                    const qreal h = fmod(min.h + t * dH, 1);
-                    const qreal s = min.s + t * dS;
-                    const qreal v = min.v + t * dV;
-
-                    QColor color;
-                    color.setHsvF(h, s, v);
-
                     for (int y = 0; y < contentsRect_.height(); y++) {
-                        image.setPixel(x, y, color.rgba());
+                        image.setPixel(x, y, m->mix(t).rgba());
                     }
                 }
             }
@@ -172,19 +301,13 @@ void KisHsvColorSlider::drawContents(QPainter *painter)
                 for (int y = 0; y < contentsRect_.height(); y++) {
                     const qreal t = static_cast<qreal>(y) / (contentsRect_.height() - 1);
 
-                    const qreal h = fmod(min.h + t * dH, 1);
-                    const qreal s = min.s + t * dS;
-                    const qreal v = min.v + t * dV;
-
-                    QColor color;
-                    color.setHsvF(h, s, v);
-
                     for (int x = 0; x < contentsRect_.width(); x++) {
-                        image.setPixel(x, y, color.rgba());
+                        image.setPixel(x, y, m->mix(t).rgba());
                     }
                 }
             }
         }
+
         d->pixmap = QPixmap::fromImage(image);
         d->upToDate = true;
     }

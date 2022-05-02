@@ -16,13 +16,20 @@ class KoColor;
 class KRITAWIDGETS_EXPORT KisHsvColorSlider : public KSelector
 {
     Q_OBJECT
+
 public:
+    enum class MIX_MODE {
+        COLOR_SPACE, HSV, HSL, HSI, HSY,
+    };
+
     explicit KisHsvColorSlider(QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     explicit KisHsvColorSlider(Qt::Orientation orientation, QWidget *parent = 0, KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
     ~KisHsvColorSlider() override;
 
     void setColors(const KoColor minColor, const KoColor maxColor);
     void setColors(const QColor minColor, const QColor maxColor);
+
+    void setMixMode(MIX_MODE mode);
 
     void setCircularHue(bool);
 

@@ -156,7 +156,7 @@ void KisHsvColorSlider::drawContents(QPainter *painter)
         if (orientation() == Qt::Horizontal) {
             if (contentsRect_.width() > 0) {
                 for (int x = 0; x < contentsRect_.width(); x++) {
-                    const qreal t = static_cast<qreal>(x) / (contentsRect_.width());
+                    const qreal t = static_cast<qreal>(x) / (contentsRect_.width() - 1);
 
                     const qreal h = fmod(min.h + t * dH, 1);
                     const qreal s = min.s + t * dS;
@@ -173,7 +173,7 @@ void KisHsvColorSlider::drawContents(QPainter *painter)
         } else {
             if (contentsRect_.height() > 0) {
                 for (int y = 0; y < contentsRect_.height(); y++) {
-                    const qreal t = static_cast<qreal>(y) / (contentsRect_.height());
+                    const qreal t = static_cast<qreal>(y) / (contentsRect_.height() - 1);
 
                     const qreal h = fmod(min.h + t * dH, 1);
                     const qreal s = min.s + t * dS;

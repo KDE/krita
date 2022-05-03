@@ -86,7 +86,8 @@ struct SliderSettings {
         if (!colorize) {
             switch (m_type) {
             case SLIDER_TYPE::HUE:
-                nHue = fmod((1 - nHue) + 0.5, 1);
+                // Slider colors shift to mimic hue changes on canvas.
+                nHue = fmod(nHue + 0.5, 1);
                 break;
             case SLIDER_TYPE::GREEN_RED: // fallthrough
             case SLIDER_TYPE::YELLOW_BLUE:

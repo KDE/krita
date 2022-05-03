@@ -183,7 +183,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         int result = 0;
 
         if (!q->shapeCount()) {
-            result = q->s->text.toUtf8().size();
+            result = q->s->text.size();
         } else {
             Q_FOREACH (KoShape *shape, q->shapes()) {
                 KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
@@ -333,7 +333,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         bool horizontal) override
     {
         if (isTextNode()) {
-            int length = q->s->text.toUtf8().size();
+            int length = q->s->text.size();
             qDebug() << "starting resolving of charTransforms" << q->s->text
                      << length;
             QVector<KoSvgText::CharTransformation> transforms =
@@ -376,7 +376,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             }
             qDebug() << "done";
 
-            currentIndex += q->s->text.toUtf8().size();
+            currentIndex += q->s->text.size();
         } else {
             if (q->s->textPath) {
                 textInPath = true;

@@ -11,6 +11,7 @@
 #include <fontconfig/fontconfig.h>
 #include FT_MULTIPLE_MASTERS_H
 #include FT_COLOR_H
+
 #include <klocalizedstring.h>
 #include <raqm.h>
 
@@ -387,8 +388,10 @@ void KoSvgTextShape::relayout() const
     const qreal ftFontUnitFactor = 1 / ftFontUnit;
     QTransform ftTF =
         QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor);
-    QTransform dpiScale =
-        QTransform::fromScale(float(72. / d->xRes), float(72. / d->yRes));
+    qreal finalRes = qMin(d->xRes, d->yRes);
+    qreal scaleToPT = float(72. / finalRes);
+    qreal scaleToPixel = float(finalRes / 72.);
+    QTransform dpiScale = QTransform::fromScale(scaleToPT, scaleToPT);
     ftTF *= dpiScale;
 
     // First, get text. We use the subChunks because that handles bidi for us.
@@ -416,7 +419,7 @@ void KoSvgTextShape::relayout() const
     FT_Tag opticalSizeTag = FT_MAKE_TAG('o', 'p', 's', 'z');
     FT_Tag widthTag = FT_MAKE_TAG('w', 'd', 't', 'h');
     FT_Tag italicTag = FT_MAKE_TAG('i', 't', 'a', 'l');
-    if (raqm_set_text_utf8(layout, text.toUtf8(), text.toUtf8().size())) {
+    if (raqm_set_text_utf16(layout, text.utf16(), text.size())) {
         if (writingMode == KoSvgText::TopToBottom) {
             raqm_set_par_direction(layout,
                                    raqm_direction_t::RAQM_DIRECTION_TTB);
@@ -432,7 +435,7 @@ void KoSvgTextShape::relayout() const
         int length = 0;
         FT_Face face = NULL;
         for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
-            length = chunk.text.toUtf8().size();
+            length = chunk.text.size();
             QVector<int> lengths;
             KoSvgTextProperties properties =
                 chunk.format.associatedShapeWrapper().shape()->textProperties();
@@ -441,6 +444,8 @@ void KoSvgTextShape::relayout() const
             QStringList fontFeatures =
                 properties.fontFeaturesForText(start, length);
 
+            qreal fontSize =
+                properties.property(KoSvgTextProperties::FontSizeId).toReal();
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(
                     layout,
@@ -450,6 +455,30 @@ void KoSvgTextShape::relayout() const
                     start,
                     length);
             }
+            KoSvgText::AutoValue letterSpacing =
+                properties
+                    .propertyOrDefault(KoSvgTextProperties::LetterSpacingId)
+                    .value<KoSvgText::AutoValue>();
+            if (!letterSpacing.isAuto) {
+                raqm_set_letter_spacing_range(layout,
+                                              letterSpacing.customValue
+                                                  * ftFontUnit * scaleToPixel,
+                                              false,
+                                              start,
+                                              length);
+            }
+            KoSvgText::AutoValue wordSpacing =
+                properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId)
+                    .value<KoSvgText::AutoValue>();
+            if (!wordSpacing.isAuto) {
+                raqm_set_word_spacing_range(layout,
+                                            wordSpacing.customValue * ftFontUnit
+                                                * scaleToPixel,
+                                            false,
+                                            start,
+                                            length);
+            }
+
             for (QString feature : fontFeatures) {
                 qDebug() << "adding feature" << feature;
                 raqm_add_font_feature(layout,
@@ -461,9 +490,6 @@ void KoSvgTextShape::relayout() const
                 length = lengths.at(i);
                 QString fontFileName = fontFamilies.at(i);
                 qDebug() << start << length << fontFileName;
-                qreal fontSize =
-                    properties.property(KoSvgTextProperties::FontSizeId)
-                        .toReal();
 
                 int errorCode = FT_New_Face(d->library,
                                             fontFileName.toUtf8().data(),
@@ -477,7 +503,7 @@ void KoSvgTextShape::relayout() const
                     }
                     if (!FT_IS_SCALABLE(face)) {
                         int fontSizePixels =
-                            fontSize * ftFontUnit * (72. / 300.);
+                            fontSize * ftFontUnit * scaleToPixel;
                         int sizeDelta = 0;
                         int selectedIndex = -1;
 
@@ -510,13 +536,11 @@ void KoSvgTextShape::relayout() const
                                 << face->available_sizes[selectedIndex].width;
                         }
                     } else {
-                        // We set the DPI to 72, because we want a result in
-                        // points (1/72 of an inch).
                         errorCode = FT_Set_Char_Size(face,
                                                      fontSize * ftFontUnit,
                                                      0,
-                                                     d->xRes,
-                                                     d->yRes);
+                                                     finalRes,
+                                                     finalRes);
                     }
 
                     if (!isHorizontal && FT_HAS_VERTICAL(face)) {
@@ -568,6 +592,7 @@ void KoSvgTextShape::relayout() const
                                                       designCoords);
                         FT_Done_MM_Var(d->library, amaster);
                     }
+
                     if (errorCode == 0) {
                         if (start == 0) {
                             raqm_set_freetype_face(layout, face);
@@ -593,7 +618,7 @@ void KoSvgTextShape::relayout() const
             }
         }
         FT_Done_Face(face);
-        qDebug() << "text-length:" << text.toUtf8().size();
+        qDebug() << "text-length:" << text.size();
     }
 
     if (raqm_layout(layout)) {
@@ -603,7 +628,7 @@ void KoSvgTextShape::relayout() const
     // 1. Setup.
     qDebug() << "1. Setup";
 
-    QVector<CharacterResult> result(text.toUtf8().size());
+    QVector<CharacterResult> result(text.size());
 
     // 2. Set flags and assign initial positions
     // We also retreive a path here.
@@ -756,8 +781,7 @@ void KoSvgTextShape::relayout() const
 
     // 3. Resolve character positioning
     qDebug() << "3. Resolve character positioning";
-    QVector<KoSvgText::CharTransformation> resolvedTransforms(
-        text.toUtf8().size());
+    QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
     bool textInPath = false;
     int globalIndex = 0;
     this->layoutInterface()->resolveCharacterPositioning(addressableIndices,
@@ -853,7 +877,7 @@ void KoSvgTextShape::relayout() const
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
         KoSvgText::AssociatedShapeWrapper wrapper =
             chunk.format.associatedShapeWrapper();
-        int j = chunk.text.toUtf8().size();
+        int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
             if (result.at(i).addressable && result.at(i).hidden == false) {
                 tf.reset();

@@ -377,6 +377,9 @@ bool StoryboardModel::insertRows(int position, int rows, const QModelIndex &pare
 
 bool StoryboardModel::removeRows(int position, int rows, const QModelIndex &parent)
 {
+    if (rows <= 0) {
+        return false;
+    }
     //remove 1st level nodes
     if (!parent.isValid()) {
 

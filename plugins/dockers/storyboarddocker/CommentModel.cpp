@@ -120,6 +120,9 @@ bool StoryboardCommentModel::insertRows(int position, int rows, const QModelInde
 
 bool StoryboardCommentModel::removeRows(int position, int rows, const QModelIndex &/*parent*/)
 {
+    if (rows <= 0) {
+        return false;
+    }
     beginRemoveRows(QModelIndex(), position, position+rows-1);
 
     for (int row = 0; row < rows; ++row) {

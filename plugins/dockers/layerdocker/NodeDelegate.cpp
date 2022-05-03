@@ -980,12 +980,7 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
         const bool altButton = mouseEvent->modifiers() & Qt::AltModifier;
 
         if (leftButton) {
-            if (altButton) {
-                d->view->setCurrentIndex(index);
-                model->setData(index, true, KisNodeModel::AlternateActiveRole);
-
-                return true;
-            } else if (visibilityClicked) {
+            if (visibilityClicked) {
                 KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 OptionalProperty clickedProperty = d->findVisibilityProperty(props);
                 if (!clickedProperty) return false;
@@ -1028,7 +1023,16 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
 
             } else {
                 auto clickedProperty = d->propForMousePos(index, mouseEvent->pos(), newOption);
-                if (!clickedProperty) return false;
+
+                if (!clickedProperty) {
+                    if (altButton) {
+                        d->view->setCurrentIndex(index);
+                        model->setData(index, true, KisNodeModel::AlternateActiveRole);
+
+                        return true;
+                    }
+                    return false;
+                }
 
                 KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
                 d->toggleProperty(props, &(*clickedProperty), mouseEvent->modifiers(), index);

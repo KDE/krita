@@ -656,7 +656,9 @@ void KisFreeTransformStrategy::continuePrimaryAction(const QPointF &mousePos,
     }
     case MOVECENTER: {
         QPointF pt = m_d->transform.inverted().map(mousePos);
-        pt = KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect());
+        if (altModifierActive) {
+            pt = KisTransformUtils::clipInRect(pt, m_d->transaction.originalRect());
+        }
 
         QPointF newRotationCenterOffset = pt - m_d->currentArgs.originalCenter();
 

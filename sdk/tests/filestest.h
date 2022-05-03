@@ -30,6 +30,10 @@
 #include <QFileDevice>
 #include <QIODevice>
 
+#ifdef Q_OS_UNIX
+#   include <unistd.h>
+#endif
+
 namespace TestUtil
 {
 
@@ -174,8 +178,13 @@ void testImportFromWriteonly(QString mimetype)
 #ifdef Q_OS_WIN
     /// on Windows one cannot create a write-only file, so just skip this test
     /// (but keep it compiled to avoid compilation issues)
+    QSKIP("Cannot test write-only file on Windows.");
+#endif
 
-    return;
+#ifdef Q_OS_UNIX
+    if (geteuid() == 0) {
+        QSKIP("Test is being run as root; removing read permission has no effect.");
+    }
 #endif
 
     QString writeonlyFilename = impexTempFilesDir() + "writeonlyFile.txt";
@@ -224,6 +233,12 @@ void testImportFromWriteonly(QString mimetype)
 
 void testExportToReadonly(QString mimetype)
 {
+#ifdef Q_OS_UNIX
+    if (geteuid() == 0) {
+        QSKIP("Test is being run as root; removing write permission has no effect.");
+    }
+#endif
+
     QString readonlyFilename = impexTempFilesDir() + "readonlyFile.txt";
 
     QFileInfo sourceFileInfo(readonlyFilename);

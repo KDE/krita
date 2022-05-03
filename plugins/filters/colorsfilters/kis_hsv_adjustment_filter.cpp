@@ -82,6 +82,9 @@ struct SliderSettings {
         SLIDER_TYPE type = m_type;
         if (!colorize) {
             switch (m_type) {
+            case SLIDER_TYPE::HUE:
+                nh = fmod((1 - nh) + 0.5, 1);
+                break;
             case SLIDER_TYPE::GREEN_RED: // fallthrough
             case SLIDER_TYPE::YELLOW_BLUE:
                 nh = 0.5;
@@ -103,10 +106,8 @@ struct SliderSettings {
 
         switch (type) {
         case SLIDER_TYPE::HUE: {
-            KoColor k;
-            k.fromQColor(QColor(255, 0, 0));
             slider->setMixMode(KisHsvColorSlider::MIX_MODE::HSV);
-            slider->setColors(k, k);
+            slider->setColors(nh, 1, 1, nh, 1, 1);
             slider->setCircularHue(true);
             break;
         }

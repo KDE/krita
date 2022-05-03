@@ -79,26 +79,26 @@ struct SliderSettings {
         slider->setValue(value);
     }
 
-    void recolor(KisHsvColorSlider *slider, SLIDER_SET set, bool colorize, qreal nh, qreal ns, qreal nv) {
+    void recolor(KisHsvColorSlider *slider, SLIDER_SET set, bool colorize, qreal nHue, qreal nSaturation, qreal nValue) {
         slider->setMixMode(m_mixMode);
         SLIDER_TYPE type = m_type;
 
         if (!colorize) {
             switch (m_type) {
             case SLIDER_TYPE::HUE:
-                nh = fmod((1 - nh) + 0.5, 1);
+                nHue = fmod((1 - nHue) + 0.5, 1);
                 break;
             case SLIDER_TYPE::GREEN_RED: // fallthrough
             case SLIDER_TYPE::YELLOW_BLUE:
-                nh = 0.5;
-                ns = 0.5;
-                nv = 0.5;
+                nHue = 0.5;
+                nSaturation = 0.5;
+                nValue = 0.5;
                 break;
 
             default:
-                nh = 0;
-                ns = 0;
-                nv = 1;
+                nHue = 0;
+                nSaturation = 0;
+                nValue = 1;
 
                 // Display a gray bar for YUV Luma in non-colorize mode
                 if (m_type == SLIDER_TYPE::LUMA_YUV) {
@@ -111,9 +111,9 @@ struct SliderSettings {
         case SLIDER_TYPE::HUE: {
             // The hue slider does not move on colorize mode
             if (colorize) {
-                nh = 0;
+                nHue = 0;
             }
-            slider->setColors(nh, 1, 1, nh, 1, 1);
+            slider->setColors(nHue, 1, 1, nHue, 1, 1);
             slider->setCircularHue(true);
             break;
         }
@@ -139,7 +139,7 @@ struct SliderSettings {
                 }
             }
 
-            slider->setColors(nh, 0, nv, nh, 1, nv);
+            slider->setColors(nHue, 0, nValue, nHue, 1, nValue);
             break;
         }
 
@@ -147,7 +147,7 @@ struct SliderSettings {
         case SLIDER_TYPE::LIGHTNESS: // fallthrough
         case SLIDER_TYPE::LUMA:      // fallthrough
         case SLIDER_TYPE::INTENSITY: {
-            slider->setColors(nh, ns, 0, nh, ns, 1);
+            slider->setColors(nHue, nSaturation, 0, nHue, nSaturation, 1);
             break;
         }
 
@@ -160,14 +160,14 @@ struct SliderSettings {
             qreal maxR, maxG, maxB;
 
             if (m_type == SLIDER_TYPE::GREEN_RED) { // Cr
-                YUVToRGB(nv, nh, 0, &minR, &minG, &minB);
-                YUVToRGB(nv, nh, 1, &maxR, &maxG, &maxB);
+                YUVToRGB(nValue, nHue, 0, &minR, &minG, &minB);
+                YUVToRGB(nValue, nHue, 1, &maxR, &maxG, &maxB);
             } else if (m_type == SLIDER_TYPE::YELLOW_BLUE) { // Cb
-                YUVToRGB(nv, 0, ns, &minR, &minG, &minB);
-                YUVToRGB(nv, 1, ns, &maxR, &maxG, &maxB);
+                YUVToRGB(nValue, 0, nSaturation, &minR, &minG, &minB);
+                YUVToRGB(nValue, 1, nSaturation, &maxR, &maxG, &maxB);
             } else { // Y
-                YUVToRGB(0, nh, ns, &minR, &minG, &minB);
-                YUVToRGB(1, nh, ns, &maxR, &maxG, &maxB);
+                YUVToRGB(0, nHue, nSaturation, &minR, &minG, &minB);
+                YUVToRGB(1, nHue, nSaturation, &maxR, &maxG, &maxB);
             }
 
             // Clamp

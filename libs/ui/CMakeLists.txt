@@ -508,7 +508,7 @@ endif()
         dialogs/KisAsyncAnimationRenderDialogBase.cpp
         dialogs/KisAsyncAnimationCacheRenderDialog.cpp
         dialogs/KisAsyncAnimationFramesSaveDialog.cpp
-        canvas/kis_animation_player.cpp
+        canvas/kis_canvas_animation_state.cpp
         kis_animation_importer.cpp
         KisSyncedAudioPlayback.cpp
         KisFrameDataSerializer.cpp

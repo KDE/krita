@@ -6,7 +6,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_animation_player.h"
+#include "kis_canvas_animation_state.h"
 
 #include "KisElapsedTimer.h"
 #include <QTimer>
@@ -79,7 +79,7 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
 class PlaybackEnvironment : public QObject {
     Q_OBJECT
 public:
-    PlaybackEnvironment(int originFrame, KisAnimationPlayer* parent = nullptr)
+    PlaybackEnvironment(int originFrame, KisCanvasAnimationState* parent = nullptr)
         : QObject(parent)
         , m_originFrame(originFrame)
     {
@@ -205,9 +205,9 @@ private:
     KisTimeSpan m_playbackRange;
 };
 
-#include "kis_animation_player.moc"
+#include "kis_canvas_animation_state.moc"
 
-struct KisAnimationPlayer::Private
+struct KisCanvasAnimationState::Private
 {
 public:
     Private(KisCanvas2* p_canvas)
@@ -229,7 +229,7 @@ public:
 
 };
 
-KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
+KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
     : QObject(canvas)
     , m_d(new Private(canvas))
 {
@@ -250,20 +250,20 @@ KisAnimationPlayer::KisAnimationPlayer(KisCanvas2 *canvas)
         }
     });
 
-    connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisAnimationPlayer::setupAudioTracks);
+    connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
     setupAudioTracks();
 }
 
-KisAnimationPlayer::~KisAnimationPlayer()
+KisCanvasAnimationState::~KisCanvasAnimationState()
 {
 }
 
-PlaybackState KisAnimationPlayer::playbackState()
+PlaybackState KisCanvasAnimationState::playbackState()
 {
     return m_d->state;
 }
 
-boost::optional<QFileInfo> KisAnimationPlayer::mediaInfo()
+boost::optional<QFileInfo> KisCanvasAnimationState::mediaInfo()
 {
     if (m_d->media) {
         return boost::optional<QFileInfo>(*m_d->media);
@@ -272,7 +272,7 @@ boost::optional<QFileInfo> KisAnimationPlayer::mediaInfo()
     }
 }
 
-boost::optional<int> KisAnimationPlayer::playbackOrigin()
+boost::optional<int> KisCanvasAnimationState::playbackOrigin()
 {
     if (m_d->playbackEnvironment) {
         return boost::optional<int>(m_d->playbackEnvironment->originFrame());
@@ -281,22 +281,22 @@ boost::optional<int> KisAnimationPlayer::playbackOrigin()
     }
 }
 
-int KisAnimationPlayer::visibleFrame()
+int KisCanvasAnimationState::visibleFrame()
 {
     return m_d->displayProxy->visibleFrame();
 }
 
-void KisAnimationPlayer::showFrame(int frame)
+void KisCanvasAnimationState::showFrame(int frame)
 {
     m_d->displayProxy->displayFrame(frame);
 }
 
-void KisAnimationPlayer::updateDropFramesMode()
+void KisCanvasAnimationState::updateDropFramesMode()
 {
     KisConfig cfg(true);
 }
 
-KisTimeSpan KisAnimationPlayer::activePlaybackRange()
+KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
 {
     if (!m_d->canvas || !m_d->canvas->image()) {
         return KisTimeSpan::infinite(0);
@@ -306,7 +306,7 @@ KisTimeSpan KisAnimationPlayer::activePlaybackRange()
     return animation->playbackRange();
 }
 
-void KisAnimationPlayer::setupAudioTracks()
+void KisCanvasAnimationState::setupAudioTracks()
 {
     if (!m_d->canvas || !m_d->canvas->imageView()) {
         return;
@@ -328,7 +328,7 @@ void KisAnimationPlayer::setupAudioTracks()
     }
 }
 
-void KisAnimationPlayer::setPlaybackState(PlaybackState p_state)
+void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
 {
     if (m_d->state != p_state) {
         m_d->state = p_state;

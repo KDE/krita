@@ -10,7 +10,7 @@
 #include <kis_config.h>
 
 #include "kis_animation_frame_cache.h"
-#include "kis_animation_player.h"
+#include "kis_canvas_animation_state.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
@@ -41,7 +41,7 @@ struct KisTimeBasedItemModel::Private
 
     KisImageWSP image;
     KisAnimationFrameCacheWSP framesCache;
-    QPointer<KisAnimationPlayer> animationPlayer;
+    QPointer<KisCanvasAnimationState> animationPlayer;
     KisDocument* document;
 
     QVector<bool> cachedFrames;
@@ -158,7 +158,7 @@ bool KisTimeBasedItemModel::isFrameCached(const int frame)
     return m_d->framesCache && m_d->framesCache->frameStatus(frame) == KisAnimationFrameCache::Cached;
 }
 
-void KisTimeBasedItemModel::setAnimationPlayer(KisAnimationPlayer *player)
+void KisTimeBasedItemModel::setAnimationPlayer(KisCanvasAnimationState *player)
 {
     if (m_d->animationPlayer == player) return;
 

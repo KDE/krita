@@ -33,13 +33,13 @@ enum PlaybackState : unsigned int {
  * Its main clients are Krita's Timeline and Curves dockers.
  * It makes heavy use of KisImageAnimationInterface.
  */
-class KRITAUI_EXPORT KisAnimationPlayer : public QObject
+class KRITAUI_EXPORT KisCanvasAnimationState : public QObject
 {
     Q_OBJECT
 
 public:
-    KisAnimationPlayer(KisCanvas2 *canvas);
-    ~KisAnimationPlayer() override;
+    KisCanvasAnimationState(KisCanvas2 *canvas);
+    ~KisCanvasAnimationState() override;
 
     void setPlaybackState(PlaybackState state);
     PlaybackState playbackState();

@@ -20,7 +20,7 @@
 
 class KisNodeDummy;
 class KisDummiesFacadeBase;
-class KisAnimationPlayer;
+class KisCanvasAnimationState;
 class KisNodeDisplayModeAdapter;
 
 

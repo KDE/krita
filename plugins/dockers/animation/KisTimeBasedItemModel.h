@@ -16,7 +16,7 @@
 #include "kis_types.h"
 
 class KisTimeSpan;
-class KisAnimationPlayer;
+class KisCanvasAnimationState;
 class KisKeyframeChannel;
 enum PlaybackState : unsigned int;
 
@@ -31,7 +31,7 @@ public:
     void setImage(KisImageWSP image);
     void setFrameCache(KisAnimationFrameCacheSP cache);
     bool isFrameCached(const int frame);
-    void setAnimationPlayer(KisAnimationPlayer *player);
+    void setAnimationPlayer(KisCanvasAnimationState *player);
     void setDocument(class KisDocument* document);
     KisDocument* document() const;
 

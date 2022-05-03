@@ -5,7 +5,7 @@
 #include "kis_canvas2.h"
 #include "animation/KisPlaybackHandle.h"
 #include "kis_signal_compressor_with_param.h"
-#include "kis_animation_player.h"
+#include "kis_canvas_animation_state.h"
 #include "kis_image_animation_interface.h"
 #include "KisViewManager.h"
 #include "kis_raster_keyframe_channel.h"
@@ -97,9 +97,9 @@ struct KisPlaybackEngine::Private {
         pushConsumer.reset();
     }
 
-    KisAnimationPlayer* activeCanvasAnimationPlayer() {
+    KisCanvasAnimationState* activeCanvasAnimationPlayer() {
         KIS_ASSERT_RECOVER_RETURN_VALUE(activeCanvas, nullptr);
-        return activeCanvas->animationPlayer();
+        return activeCanvas->animationState();
     }
 
     PlaybackMode activePlaybackMode() {
@@ -521,13 +521,13 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
     m_d->activeCanvas = canvas2;
 
     if (m_d->activeCanvasAnimationPlayer()) {
-        connect(m_d->activeCanvasAnimationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, this, [this](PlaybackState state){
+        connect(m_d->activeCanvasAnimationPlayer(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[m_d->activeCanvas];
 
             StopAndResume stopResume(m_d.data());
         });
 
-        connect(m_d->activeCanvasAnimationPlayer(), &KisAnimationPlayer::sigPlaybackMediaChanged, this, &KisPlaybackEngine::setupProducerFromFile);
+        connect(m_d->activeCanvasAnimationPlayer(), &KisCanvasAnimationState::sigPlaybackMediaChanged, this, &KisPlaybackEngine::setupProducerFromFile);
 
         m_d->profile->set_frame_rate(m_d->activeCanvas->image()->animationInterface()->framerate(), 1);
 

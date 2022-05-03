@@ -41,7 +41,7 @@ class KisDisplayColorConverter;
 struct KisExposureGammaCorrectionInterface;
 class KisView;
 class KisInputManager;
-class KisAnimationPlayer;
+class KisCanvasAnimationState;
 class KisShapeController;
 class KisCoordinatesConverter;
 class KoViewConverter;
@@ -193,7 +193,7 @@ public: // KisCanvas2 methods
 
     void setCursor(const QCursor &cursor) override;
     KisAnimationFrameCacheSP frameCache() const;
-    KisAnimationPlayer *animationPlayer() const;
+    KisCanvasAnimationState *animationState() const;
     void refetchDataFromImage();
 
     /**

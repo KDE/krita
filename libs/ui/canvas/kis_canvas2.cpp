@@ -66,7 +66,7 @@
 #include "kis_grid_config.h"
 #include "KisMainWindow.h"
 
-#include "kis_animation_player.h"
+#include "kis_canvas_animation_state.h"
 #include "kis_animation_frame_cache.h"
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl.h"
@@ -165,7 +165,7 @@ public:
     KisDisplayColorConverter displayColorConverter;
 
     KisCanvasUpdatesCompressor projectionUpdatesCompressor;
-    QScopedPointer<KisAnimationPlayer> animationPlayer;
+    QScopedPointer<KisCanvasAnimationState> animationPlayer;
     KisAnimationFrameCacheSP frameCache;
     bool lodPreferredInImage = false;
     bool bootstrapLodBlocked = false;
@@ -260,7 +260,7 @@ void KisCanvas2::setup()
     createCanvas(cfg.useOpenGL());
 
     setLodPreferredInCanvas(m_d->lodPreferredInImage);
-    m_d->animationPlayer.reset(new KisAnimationPlayer(this));
+    m_d->animationPlayer.reset(new KisCanvasAnimationState(this));
     connect(m_d->view->canvasController()->proxyObject, SIGNAL(moveDocumentOffset(QPoint)), SLOT(documentOffsetMoved(QPoint)));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
 
@@ -1306,7 +1306,7 @@ KisAnimationFrameCacheSP KisCanvas2::frameCache() const
     return m_d->frameCache;
 }
 
-KisAnimationPlayer *KisCanvas2::animationPlayer() const
+KisCanvasAnimationState *KisCanvas2::animationState() const
 {
     return m_d->animationPlayer.data();
 }

@@ -21,7 +21,7 @@
 #include "KisAnimCurvesChannelsModel.h"
 #include "KisAnimCurvesChannelDelegate.h"
 
-#include "kis_animation_player.h"
+#include "kis_canvas_animation_state.h"
 #include "kis_keyframe_channel.h"
 
 #include "kis_image_animation_interface.h"
@@ -349,11 +349,11 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         m_d->canvasConnections.clear();
         m_d->canvas->disconnectCanvasObserver(this);
         m_d->channelTreeModel->selectedNodesChanged(KisNodeList());
-        m_d->canvas->animationPlayer()->disconnect(this);
-        m_d->titlebar->transport->disconnect(m_d->canvas->animationPlayer());
+        m_d->canvas->animationState()->disconnect(this);
+        m_d->titlebar->transport->disconnect(m_d->canvas->animationState());
         m_d->titlebar->transport->setPlaying(false);
-        m_d->titlebar->sbFrameRegister->disconnect(m_d->canvas->animationPlayer());
-        m_d->titlebar->sbSpeed->disconnect(m_d->canvas->animationPlayer());
+        m_d->titlebar->sbFrameRegister->disconnect(m_d->canvas->animationState());
+        m_d->titlebar->sbSpeed->disconnect(m_d->canvas->animationState());
 
         if (m_d->canvas->image()) {
             m_d->canvas->image()->animationInterface()->disconnect(this);
@@ -375,7 +375,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
 
         m_d->curvesModel->setImage(m_d->canvas->image());
         m_d->curvesModel->setFrameCache(m_d->canvas->frameCache());
-        m_d->curvesModel->setAnimationPlayer(m_d->canvas->animationPlayer());
+        m_d->curvesModel->setAnimationPlayer(m_d->canvas->animationState());
 
         m_d->canvasConnections.addConnection(
             m_d->canvas->viewManager()->nodeManager(), SIGNAL(sigUiNeedChangeSelectedNodes(KisNodeList)),
@@ -411,7 +411,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
                                                       activeIndex.data(KisAnimCurvesModel::ScalarValueRole).toReal() : 0.0f);
         }
 
-        m_d->titlebar->transport->setPlaying(m_d->canvas->animationPlayer()->playbackState() == PlaybackState::PLAYING);
+        m_d->titlebar->transport->setPlaying(m_d->canvas->animationState()->playbackState() == PlaybackState::PLAYING);
         connect(m_d->titlebar->transport, SIGNAL(skipBack()), KisPart::instance()->playbackEngine(), SLOT(previousKeyframe()));
         connect(m_d->titlebar->transport, SIGNAL(back()), KisPart::instance()->playbackEngine(), SLOT(previousFrame()));
         connect(m_d->titlebar->transport, SIGNAL(stop()), KisPart::instance()->playbackEngine(), SLOT(stop()));
@@ -426,7 +426,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeStartTime(int)));
         connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeEndTime(int)));
 
-        connect(m_d->canvas->animationPlayer(), &KisAnimationPlayer::sigPlaybackStateChanged, m_d->titlebar->transport, [this](PlaybackState p_state){
+        connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, m_d->titlebar->transport, [this](PlaybackState p_state){
             m_d->titlebar->transport->setPlaying(p_state == PlaybackState::PLAYING);
             m_d->titlebar->sbFrameRegister->setDisabled(p_state == PlaybackState::PLAYING);
 
@@ -435,8 +435,8 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
             }
         });
 
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->animationPlayer(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
+        connect(m_d->canvas->animationState(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
+        connect(m_d->canvas->animationState(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFullClipRangeChanged()), SLOT(handleClipRangeChange()));
@@ -606,7 +606,7 @@ void KisAnimCurvesDocker::updateFrameRegister(){
         return;
     }
 
-    const int frame = m_d->canvas->animationPlayer()->visibleFrame();
+    const int frame = m_d->canvas->animationState()->visibleFrame();
 
     m_d->titlebar->sbFrameRegister->setValue(frame);
 }

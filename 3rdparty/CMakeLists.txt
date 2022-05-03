@@ -349,11 +349,9 @@ endif ()
 
 find_program(MESON_BINARY_PATH meson)
 find_program(NINJA_BINARY_PATH ninja)
-find_program(RUSTC_BINARY_PATH rustc)
 
 message("MESON:" ${MESON_BINARY_PATH})
 message("NINJA:" ${NINJA_BINARY_PATH})
-message("RUSTC:" ${RUSTC_BINARY_PATH})
 
 # this list must be dependency-ordered
 if (NOT WIN32 OR OPENSSL_DEP)

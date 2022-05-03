@@ -1,0 +1,54 @@
+From 7a36efc03259c9c612d22d870a72c32a48740332 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wolthera=20van=20H=C3=B6vell=20tot=20Westerflier?=
+ <griffinvalley@gmail.com>
+Date: Mon, 2 May 2022 16:01:40 +0200
+Subject: [PATCH] Fix add_font_feature to take into account alternative
+ encodings
+
+The documentation says that every syntax supported by harfbuzz is
+accepted, but the harfbuzz buffer raqm builds is always in UTF32,
+while raqm itself keeps track of UTF8 or UTF16 ranges.
+
+This converts the range from the other encoding to UTF32, like
+is done for every other range-based function.
+---
+ src/raqm.c | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/src/raqm.c b/src/raqm.c
+index 804dd6a..d8b4903 100644
+--- a/src/raqm.c
++++ b/src/raqm.c
+@@ -854,6 +854,29 @@ raqm_add_font_feature (raqm_t     *rq,
+     if (!new_features)
+       return false;
+ 
++    if (fea.start != HB_FEATURE_GLOBAL_START)
++    {
++      if (rq->text_utf8)
++      {
++        fea.start = _raqm_u8_to_u32_index (rq, fea.start);
++      }
++      else if (rq->text_utf16)
++      {
++        fea.start = _raqm_u16_to_u32_index (rq, fea.start);
++      }
++    }
++    if (fea.end != HB_FEATURE_GLOBAL_END)
++    {
++      if (rq->text_utf8)
++      {
++        fea.end = _raqm_u8_to_u32_index (rq, fea.end);
++      }
++      else if (rq->text_utf16)
++      {
++        fea.end = _raqm_u16_to_u32_index (rq, fea.end);
++      }
++    }
++
+     rq->features = new_features;
+     rq->features[rq->features_len] = fea;
+     rq->features_len++;
+-- 
+2.25.1
+

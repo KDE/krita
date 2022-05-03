@@ -55,32 +55,20 @@ enum TextAnchor {
     AnchorEnd
 };
 
-enum DominantBaseline {
-    DominantBaselineAuto,
-    DominantBaselineUseScript,
-    DominantBaselineNoChange,
-    DominantBaselineResetSize,
-    DominantBaselineIdeographic,
-    DominantBaselineAlphabetic,
-    DominantBaselineHanging,
-    DominantBaselineMathematical,
-    DominantBaselineCentral,
-    DominantBaselineMiddle,
-    DominantBaselineTextAfterEdge,
-    DominantBaselineTextBeforeEdge
-};
-
-enum AlignmentBaseline {
-    AlignmentBaselineAuto,
-    AlignmentBaselineDominant,
-    AlignmentBaselineIdeographic,
-    AlignmentBaselineAlphabetic,
-    AlignmentBaselineHanging,
-    AlignmentBaselineMathematical,
-    AlignmentBaselineCentral,
-    AlignmentBaselineMiddle,
-    AlignmentBaselineTextAfterEdge,
-    AlignmentBaselineTextBeforeEdge
+enum Baseline {
+    BaselineAuto,
+    BaselineUseScript, //SVG 1.1 feature, Deprecated in CSS.
+    BaselineDominant,
+    BaselineNoChange,
+    BaselineResetSize,
+    BaselineIdeographic,
+    BaselineAlphabetic,
+    BaselineHanging,
+    BaselineMathematical,
+    BaselineCentral,
+    BaselineMiddle,
+    BaselineTextBottom,
+    BaselineTextTop
 };
 
 enum BaselineShiftMode {
@@ -152,11 +140,11 @@ enum FontVariantFeature {
     Swash,
     Ornaments,
     Annotation,
-    EastAsianJis78, /// asiant variants
+    EastAsianJis78, /// asian variants
     EastAsianJis83,
     EastAsianJis90,
     EastAsianJis04,
-    EastAsiantSimplified,
+    EastAsianSimplified,
     EastAsianTraditional,
     EastAsianFullWidth,
     EastAsianProportionalWidth,
@@ -202,13 +190,15 @@ WritingMode parseWritingMode(const QString &value);
 Direction parseDirection(const QString &value);
 UnicodeBidi parseUnicodeBidi(const QString &value);
 TextAnchor parseTextAnchor(const QString &value);
-DominantBaseline parseDominantBaseline(const QString &value);
-AlignmentBaseline parseAlignmentBaseline(const QString &value);
+
+Baseline parseBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
+QString opentypeBaselineTag(Baseline base);
+
 LengthAdjust parseLengthAdjust(const QString &value);
 
 QMap <QString,FontVariantFeature> fontVariantStrings();
-QMap <QString,FontVariantFeature> fontVariantOpentypeTags();
+QStringList fontVariantOpentypeTags(FontVariantFeature feature);
 
 TextPathMethod parseTextPathMethod(const QString &value);
 TextPathSpacing parseTextPathSpacing(const QString &value);
@@ -220,8 +210,8 @@ QString writeWritingMode(WritingMode value);
 QString writeDirection(Direction value);
 QString writeUnicodeBidi(UnicodeBidi value);
 QString writeTextAnchor(TextAnchor value);
-QString writeDominantBaseline(DominantBaseline value);
-QString writeAlignmentBaseline(AlignmentBaseline value);
+QString writeDominantBaseline(Baseline value);
+QString writeAlignmentBaseline(Baseline value);
 QString writeBaselineShiftMode(BaselineShiftMode value, qreal portion);
 QString writeLengthAdjust(LengthAdjust value);
 

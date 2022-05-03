@@ -5,8 +5,11 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH)
     ExternalProject_Add(
         ext_raqm
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://github.com/HOST-Oman/libraqm/archive/refs/tags/v0.9.0.tar.gz
-        URL_HASH SHA256=826e43bc638b53ec720e93a26f4ead494c6a28006d280609dac6aef09b39283e
+        URL https://github.com/HOST-Oman/libraqm/archive/refs/heads/master.zip
+        URL_HASH SHA256=fb9d0a9c9269299a85b6bcb39cd49915305dbc86e182431f1e2544856a6bcace
+        
+        PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Implement-letter-and-word-spacing.patch
+            COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Fix-add_font_feature-range.patch
 
         CONFIGURE_COMMAND meson <SOURCE_DIR> --prefix=${EXTPREFIX_raqm}
 

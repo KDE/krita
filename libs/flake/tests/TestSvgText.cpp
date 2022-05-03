@@ -110,8 +110,8 @@ void TestSvgText::testTextProperties()
 
 
     addProp(context, props, "text-anchor", "middle", KoSvgTextProperties::TextAnchorId, KoSvgText::AnchorMiddle);
-    addProp(context, props, "dominant-baseline", "ideographic", KoSvgTextProperties::DominantBaselineId, KoSvgText::DominantBaselineIdeographic);
-    addProp(context, props, "alignment-baseline", "alphabetic", KoSvgTextProperties::AlignmentBaselineId, KoSvgText::AlignmentBaselineAlphabetic);
+    addProp(context, props, "dominant-baseline", "ideographic", KoSvgTextProperties::DominantBaselineId, KoSvgText::BaselineIdeographic);
+    addProp(context, props, "alignment-baseline", "alphabetic", KoSvgTextProperties::AlignmentBaselineId, KoSvgText::BaselineAlphabetic);
     addProp(context, props, "baseline-shift", "sub", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftSub);
     addProp(context, props, "baseline-shift", "super", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftSuper);
     addProp(context, props, "baseline-shift", "baseline", KoSvgTextProperties::BaselineShiftModeId, KoSvgText::ShiftNone);
@@ -160,8 +160,8 @@ void TestSvgText::testTextPropertiesDifference()
     props.setProperty(KoSvgTextProperties::DirectionId, DirectionRightToLeft);
     props.setProperty(KoSvgTextProperties::UnicodeBidiId, BidiEmbed);
     props.setProperty(KoSvgTextProperties::TextAnchorId, AnchorEnd);
-    props.setProperty(KoSvgTextProperties::DominantBaselineId, DominantBaselineNoChange);
-    props.setProperty(KoSvgTextProperties::AlignmentBaselineId, AlignmentBaselineIdeographic);
+    props.setProperty(KoSvgTextProperties::DominantBaselineId, BaselineNoChange);
+    props.setProperty(KoSvgTextProperties::AlignmentBaselineId, BaselineIdeographic);
     props.setProperty(KoSvgTextProperties::BaselineShiftModeId, ShiftPercentage);
     props.setProperty(KoSvgTextProperties::BaselineShiftValueId, 0.5);
     props.setProperty(KoSvgTextProperties::KerningId, fromAutoValue(AutoValue(10)));

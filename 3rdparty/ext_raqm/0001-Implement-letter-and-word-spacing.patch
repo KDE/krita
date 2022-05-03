@@ -1,0 +1,523 @@
+From ad0428ae52f88e2082d0f08f05df1b008e547b75 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Wolthera=20van=20H=C3=B6vell=20tot=20Westerflier?=
+ <griffinvalley@gmail.com>
+Date: Mon, 2 May 2022 12:52:33 +0200
+Subject: [PATCH] Implement letter and word spacing.
+
+---
+ docs/raqm-sections.txt            |   2 +
+ src/raqm.c                        | 200 ++++++++++++++++++++++++++++++
+ src/raqm.h                        |  13 ++
+ tests/letter-and-wordspacing.test | 144 +++++++++++++++++++++
+ tests/meson.build                 |   1 +
+ tests/raqm-test.c                 |  32 +++++
+ 6 files changed, 392 insertions(+)
+ create mode 100644 tests/letter-and-wordspacing.test
+
+diff --git a/docs/raqm-sections.txt b/docs/raqm-sections.txt
+index 6edd7be..493835c 100644
+--- a/docs/raqm-sections.txt
++++ b/docs/raqm-sections.txt
+@@ -13,6 +13,8 @@ raqm_set_freetype_face
+ raqm_set_freetype_face_range
+ raqm_set_freetype_load_flags
+ raqm_set_freetype_load_flags_range
++raqm_set_letter_spacing_range
++raqm_set_word_spacing_range
+ raqm_set_invisible_glyph
+ raqm_add_font_feature
+ raqm_layout
+diff --git a/src/raqm.c b/src/raqm.c
+index 804dd6a..3a05139 100644
+--- a/src/raqm.c
++++ b/src/raqm.c
+@@ -172,6 +172,8 @@ typedef struct {
+   int           ftloadflags;
+   hb_language_t lang;
+   hb_script_t   script;
++  int           spacing_after;
++  bool          spacing_is_percentage;
+ } _raqm_text_info;
+ 
+ typedef struct _raqm_run raqm_run_t;
+@@ -232,6 +234,8 @@ _raqm_init_text_info (raqm_t *rq)
+     rq->text_info[i].ftloadflags = -1;
+     rq->text_info[i].lang = default_lang;
+     rq->text_info[i].script = HB_SCRIPT_INVALID;
++    rq->text_info[i].spacing_after = 0;
++    rq->text_info[i].spacing_is_percentage = false;
+   }
+ }
+ 
+@@ -264,6 +268,8 @@ _raqm_compare_text_info (_raqm_text_info a,
+   if (a.script != b.script)
+     return false;
+ 
++  /* Spacing shouldn't break runs, so we don't compare them here. */
++
+   return true;
+ }
+ 
+@@ -1077,6 +1083,159 @@ raqm_set_freetype_load_flags_range (raqm_t *rq,
+   return _raqm_set_freetype_load_flags (rq, flags, start, end);
+ }
+ 
++/* CSS  Word seperators, word spacing is only applied on these.*/
++static size_t word_separators_len = 7;
++static const uint32_t word_separators[] =
++{
++  0x0020,  /// Space
++  0x00A0,  /// No break space
++  0x1361,  /// Ethiopic word space
++  0x10100, /// Aegean wordspace
++  0x10101, /// Aegean wordspace
++  0x1039F, /// Ugaric word divider
++  0x1091F  /// Phoenician word separator
++};
++
++static bool
++_raqm_set_spacing (raqm_t *rq,
++                   int    spacing,
++                   bool   percentage,
++                   bool   word_spacing,
++                   size_t start,
++                   size_t end)
++{
++  if (!rq)
++    return false;
++
++  if (!rq->text_len)
++    return true;
++
++  if (start >= rq->text_len || end > rq->text_len)
++    return false;
++
++  if (!rq->text_info)
++    return false;
++
++  for (size_t i = start; i < end; i++)
++    if (word_spacing)
++    {
++      for (size_t j = 0; j < word_separators_len; j++)
++      {
++        if (rq->text[i] == word_separators[j])
++        {
++          rq->text_info[i].spacing_after = spacing;
++          rq->text_info[i].spacing_is_percentage = percentage;
++        }
++      }
++    }
++    else
++    {
++      rq->text_info[i].spacing_after = spacing;
++      rq->text_info[i].spacing_is_percentage = percentage;
++    }
++
++  return true;
++}
++
++/**
++ * raqm_set_letter_spacing_range:
++ * @rq: a #raqm_t.
++ * @spacing: amount of spacing in Freetype Font Units (26.6 format), or percentages of the advance (0 - 100)
++ * @percentage: whether to interpret the @spacing amount as a percentage of
++ * the character advance.
++ * @start: index of first character that should use @spacing.
++ * @len: number of characters using @spacing.
++ * 
++ * Set the letter spacing or tracking for a given range, the value
++ * will be added onto the advance and offset for RTL, and the advance for
++ * other directions. Letter spacing will be applied between characters, so
++ * the last character will not have spacing applied after it.
++ * Note that not all scripts have a letter-spacing tradition,
++ * for example, Arabic does not, while Devanagari does.
++ *
++ * Return value:
++ * `true` if no errors happened, `false` otherwise.
++ *
++ * Since: 0.10 
++ */
++bool
++raqm_set_letter_spacing_range(raqm_t *rq,
++                              int    spacing,
++                              bool   percentage,
++                              size_t start,
++                              size_t len)
++{
++  size_t end = start + (len-1);
++
++  if (!rq)
++    return false;
++
++  if (!rq->text_len)
++    return true;
++
++  if (rq->text_utf8)
++  {
++    start = _raqm_u8_to_u32_index (rq, start);
++    end = _raqm_u8_to_u32_index (rq, end);
++  }
++  else if (rq->text_utf16)
++  {
++    start = _raqm_u16_to_u32_index (rq, start);
++    end = _raqm_u16_to_u32_index (rq, end);
++  }
++
++  return _raqm_set_spacing (rq, spacing, percentage, false, start, end);
++}
++
++/**
++ * raqm_set_word_spacing_range:
++ * @rq: a #raqm_t.
++ * @spacing: amount of spacing in Freetype Font Units (26.6 format), or percentages of the advance (0 - 100)
++ * @percentage: whether to interpret the @spacing amount as a percentage of
++ * the character advance.
++ * @start: index of first character that should use @spacing.
++ * @len: number of characters using @spacing.
++ * 
++ * Set the word spacing for a given range. Word spacing will only be applied to
++ * 'word separator' characters, such as 'space', 'no break space' and
++ * Ethiopic word separator'.
++ * The value will be added onto the advance and offset for RTL, and the advance
++ * for other directions.
++ *
++ * Return value:
++ * `true` if no errors happened, `false` otherwise.
++ *
++ * Since: 0.10 
++ */
++bool
++raqm_set_word_spacing_range(raqm_t *rq,
++                            int    spacing,
++                            bool   percentage,
++                            size_t start,
++                            size_t len)
++{
++  size_t end = start + len;
++
++  if (!rq)
++    return false;
++
++  if (!rq->text_len)
++    return true;
++
++  if (rq->text_utf8)
++  {
++    start = _raqm_u8_to_u32_index (rq, start);
++    end = _raqm_u8_to_u32_index (rq, end);
++  }
++  else if (rq->text_utf16)
++  {
++    start = _raqm_u16_to_u32_index (rq, start);
++    end = _raqm_u16_to_u32_index (rq, end);
++  }
++
++  return _raqm_set_spacing (rq, spacing, percentage, true, start, end);
++}
++
+ /**
+  * raqm_set_invisible_glyph:
+  * @rq: a #raqm_t.
+@@ -2017,15 +2176,56 @@ _raqm_shape (raqm_t *rq)
+ 
+     {
+       FT_Matrix matrix;
++      hb_glyph_info_t *info;
+       hb_glyph_position_t *pos;
+       unsigned int len;
+ 
+       FT_Get_Transform (hb_ft_font_get_face (run->font), &matrix, NULL);
+       pos = hb_buffer_get_glyph_positions (run->buffer, &len);
++      info = hb_buffer_get_glyph_infos (run->buffer, &len);
+       for (unsigned int i = 0; i < len; i++)
+       {
+         _raqm_ft_transform (&pos[i].x_advance, &pos[i].y_advance, matrix);
+         _raqm_ft_transform (&pos[i].x_offset, &pos[i].y_offset, matrix);
++
++        if (rq->text_info[info[i].cluster].spacing_after != 0)
++        {
++          if (run->direction == HB_DIRECTION_TTB)
++          {
++            if (rq->text_info[info[i].cluster].spacing_is_percentage)
++            {
++              int spacing = pos[i].y_advance * (rq->text_info[info[i].cluster].spacing_after * 0.01);
++              pos[i].y_advance += spacing;
++            }
++            else {
++              pos[i].y_advance -= rq->text_info[info[i].cluster].spacing_after;
++            }
++          }
++          else if (run->direction == HB_DIRECTION_RTL)
++          {
++            if (rq->text_info[info[i].cluster].spacing_is_percentage)
++            {
++              int spacing = pos[i].x_advance * (rq->text_info[info[i].cluster].spacing_after * 0.01);
++              pos[i].x_offset += spacing;
++              pos[i].x_advance += spacing;
++            }
++            else {
++              pos[i].x_advance += rq->text_info[info[i].cluster].spacing_after;
++              pos[i].x_offset += rq->text_info[info[i].cluster].spacing_after;
++            }
++          }
++          else
++          {
++            if (rq->text_info[info[i].cluster].spacing_is_percentage)
++            {
++              pos[i].x_advance *= 1.0 + (rq->text_info[info[i].cluster].spacing_after * 0.01);
++            }
++            else {
++              pos[i].x_advance += rq->text_info[info[i].cluster].spacing_after;
++            }
++          }
++        }
++
+       }
+     }
+   }
+diff --git a/src/raqm.h b/src/raqm.h
+index 3588616..c41037f 100644
+--- a/src/raqm.h
++++ b/src/raqm.h
+@@ -158,6 +158,19 @@ raqm_set_freetype_load_flags_range (raqm_t *rq,
+                                     size_t  start,
+                                     size_t  len);
+ 
++RAQM_API bool
++raqm_set_letter_spacing_range(raqm_t *rq,
++                              int    spacing,
++                              bool   percentage,
++                              size_t start,
++                              size_t len);
++RAQM_API bool
++raqm_set_word_spacing_range(raqm_t *rq,
++                            int    spacing,
++                            bool   percentage,
++                            size_t start,
++                            size_t len);
++
+ RAQM_API bool
+ raqm_set_invisible_glyph (raqm_t *rq,
+                           int gid);
+diff --git a/tests/letter-and-wordspacing.test b/tests/letter-and-wordspacing.test
+new file mode 100644
+index 0000000..40ada91
+--- /dev/null
++++ b/tests/letter-and-wordspacing.test
+@@ -0,0 +1,144 @@
++fonts/sha1sum/d46a2549d27c32605024201abf801bb9a9273da3.ttf
++عربيעבריתأهلב ריתمم(ُeng lish ) مرحبا
++--direction rtl --letterspacing 10,0,37 --wordspacing 50,0,37
++ 
++Direction is: RTL
++
++Before script detection:
++script for ch[0]	Arab
++script for ch[1]	Arab
++script for ch[2]	Arab
++script for ch[3]	Arab
++script for ch[4]	Hebr
++script for ch[5]	Hebr
++script for ch[6]	Hebr
++script for ch[7]	Hebr
++script for ch[8]	Hebr
++script for ch[9]	Arab
++script for ch[10]	Arab
++script for ch[11]	Arab
++script for ch[12]	Hebr
++script for ch[13]	Zyyy
++script for ch[14]	Hebr
++script for ch[15]	Hebr
++script for ch[16]	Hebr
++script for ch[17]	Arab
++script for ch[18]	Arab
++script for ch[19]	Zyyy
++script for ch[20]	Zinh
++script for ch[21]	Latn
++script for ch[22]	Latn
++script for ch[23]	Latn
++script for ch[24]	Zyyy
++script for ch[25]	Latn
++script for ch[26]	Latn
++script for ch[27]	Latn
++script for ch[28]	Latn
++script for ch[29]	Zyyy
++script for ch[30]	Zyyy
++script for ch[31]	Zyyy
++script for ch[32]	Arab
++script for ch[33]	Arab
++script for ch[34]	Arab
++script for ch[35]	Arab
++script for ch[36]	Arab
++
++After script detection:
++script for ch[0]	Arab
++script for ch[1]	Arab
++script for ch[2]	Arab
++script for ch[3]	Arab
++script for ch[4]	Hebr
++script for ch[5]	Hebr
++script for ch[6]	Hebr
++script for ch[7]	Hebr
++script for ch[8]	Hebr
++script for ch[9]	Arab
++script for ch[10]	Arab
++script for ch[11]	Arab
++script for ch[12]	Hebr
++script for ch[13]	Hebr
++script for ch[14]	Hebr
++script for ch[15]	Hebr
++script for ch[16]	Hebr
++script for ch[17]	Arab
++script for ch[18]	Arab
++script for ch[19]	Arab
++script for ch[20]	Arab
++script for ch[21]	Latn
++script for ch[22]	Latn
++script for ch[23]	Latn
++script for ch[24]	Latn
++script for ch[25]	Latn
++script for ch[26]	Latn
++script for ch[27]	Latn
++script for ch[28]	Latn
++script for ch[29]	Latn
++script for ch[30]	Arab
++script for ch[31]	Arab
++script for ch[32]	Arab
++script for ch[33]	Arab
++script for ch[34]	Arab
++script for ch[35]	Arab
++script for ch[36]	Arab
++
++Number of runs before script itemization: 3
++
++BiDi Runs:
++run[0]:	 start: 29	length: 8	level: 1
++run[1]:	 start: 21	length: 8	level: 2
++run[2]:	 start: 0	length: 21	level: 1
++
++Number of runs after script itemization: 8
++
++Final Runs:
++run[0]:	 start: 30	length: 7	direction: rtl	script: Arab	font: DejaVu Sans
++run[1]:	 start: 29	length: 1	direction: rtl	script: Latn	font: DejaVu Sans
++run[2]:	 start: 21	length: 8	direction: ltr	script: Latn	font: DejaVu Sans
++run[3]:	 start: 17	length: 4	direction: rtl	script: Arab	font: DejaVu Sans
++run[4]:	 start: 12	length: 5	direction: rtl	script: Hebr	font: DejaVu Sans
++run[5]:	 start: 9	length: 3	direction: rtl	script: Arab	font: DejaVu Sans
++run[6]:	 start: 4	length: 5	direction: rtl	script: Hebr	font: DejaVu Sans
++run[7]:	 start: 0	length: 4	direction: rtl	script: Arab	font: DejaVu Sans
++
++Glyph information:
++glyph [35]	x_offset: 0	y_offset: 0	x_advance: 624	font: DejaVu Sans
++glyph [38]	x_offset: 0	y_offset: 0	x_advance: 618	font: DejaVu Sans
++glyph [40]	x_offset: 0	y_offset: 0	x_advance: 1266	font: DejaVu Sans
++glyph [42]	x_offset: 0	y_offset: 0	x_advance: 1130	font: DejaVu Sans
++glyph [50]	x_offset: 0	y_offset: 0	x_advance: 1097	font: DejaVu Sans
++glyph [1]	x_offset: 0	y_offset: 0	x_advance: 651	font: DejaVu Sans
++glyph [2]	x_offset: 0	y_offset: 0	x_advance: 799	font: DejaVu Sans
++glyph [1]	x_offset: 0	y_offset: 0	x_advance: 651	font: DejaVu Sans
++glyph [4]	x_offset: 0	y_offset: 0	x_advance: 1260	font: DejaVu Sans
++glyph [9]	x_offset: 0	y_offset: 0	x_advance: 1298	font: DejaVu Sans
++glyph [5]	x_offset: 0	y_offset: 0	x_advance: 1300	font: DejaVu Sans
++glyph [1]	x_offset: 0	y_offset: 0	x_advance: 651	font: DejaVu Sans
++glyph [8]	x_offset: 0	y_offset: 0	x_advance: 569	font: DejaVu Sans
++glyph [7]	x_offset: 0	y_offset: 0	x_advance: 569	font: DejaVu Sans
++glyph [10]	x_offset: 0	y_offset: 0	x_advance: 1067	font: DejaVu Sans
++glyph [6]	x_offset: 0	y_offset: 0	x_advance: 1298	font: DejaVu Sans
++glyph [27]	x_offset: 0	y_offset: 0	x_advance: 0	font: DejaVu Sans
++glyph [3]	x_offset: 0	y_offset: 0	x_advance: 799	font: DejaVu Sans
++glyph [49]	x_offset: 0	y_offset: 0	x_advance: 1363	font: DejaVu Sans
++glyph [50]	x_offset: 10	y_offset: 0	x_advance: 1107	font: DejaVu Sans
++glyph [15]	x_offset: 10	y_offset: 0	x_advance: 1356	font: DejaVu Sans
++glyph [12]	x_offset: 10	y_offset: 0	x_advance: 468	font: DejaVu Sans
++glyph [14]	x_offset: 10	y_offset: 0	x_advance: 1166	font: DejaVu Sans
++glyph [1]	x_offset: 50	y_offset: 0	x_advance: 701	font: DejaVu Sans
++glyph [11]	x_offset: 10	y_offset: 0	x_advance: 1194	font: DejaVu Sans
++glyph [46]	x_offset: 10	y_offset: 0	x_advance: 1561	font: DejaVu Sans
++glyph [53]	x_offset: 10	y_offset: 0	x_advance: 1090	font: DejaVu Sans
++glyph [16]	x_offset: 10	y_offset: 0	x_advance: 579	font: DejaVu Sans
++glyph [15]	x_offset: 10	y_offset: 0	x_advance: 1356	font: DejaVu Sans
++glyph [12]	x_offset: 10	y_offset: 0	x_advance: 468	font: DejaVu Sans
++glyph [14]	x_offset: 10	y_offset: 0	x_advance: 1166	font: DejaVu Sans
++glyph [11]	x_offset: 10	y_offset: 0	x_advance: 1194	font: DejaVu Sans
++glyph [13]	x_offset: 10	y_offset: 0	x_advance: 1292	font: DejaVu Sans
++glyph [56]	x_offset: 10	y_offset: 0	x_advance: 1717	font: DejaVu Sans
++glyph [37]	x_offset: 10	y_offset: 0	x_advance: 580	font: DejaVu Sans
++glyph [42]	x_offset: 10	y_offset: 0	x_advance: 1140	font: DejaVu Sans
++glyph [44]	x_offset: 10	y_offset: 0	x_advance: 1232	font: DejaVu Sans
++
++UTF-32 clusters: 36 35 34 33 32 31 30 29 21 22 23 24 25 26 27 28 19 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
++UTF-8 clusters:  59 57 55 53 51 50 49 48 40 41 42 43 44 45 46 47 37 37 35 33 31 29 27 26 24 22 20 18 16 14 12 10 08 06 04 02 00
+diff --git a/tests/meson.build b/tests/meson.build
+index 8e25c1b..903d646 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -42,6 +42,7 @@ tests = [
+   'invisible-glyph-space.test',
+   'languages-sr-ru.test',
+   'languages-sr.test',
++  'letter-and-wordspacing.test',
+   'multi-fonts-1.test',
+   'multi-fonts-2.test',
+   'scripts-backward-ltr.test',
+diff --git a/tests/raqm-test.c b/tests/raqm-test.c
+index 1137fff..151624a 100644
+--- a/tests/raqm-test.c
++++ b/tests/raqm-test.c
+@@ -40,6 +40,8 @@ static char *languages = NULL;
+ static char *direction = NULL;
+ static char *features = NULL;
+ static char *require = NULL;
++static char *letterspacing = NULL;
++static char *wordspacing = NULL;
+ static int cluster = -1;
+ static int position = -1;
+ static int invisible_glyph = 0;
+@@ -100,6 +102,10 @@ parse_args (int argc, char **argv)
+       direction = argv[++i];
+     else if (strcmp (argv[i], "--font-features") == 0)
+       features = argv[++i];
++    else if (strcmp (argv[i], "--letterspacing") == 0)
++      letterspacing = argv[++i];
++    else if (strcmp (argv[i], "--wordspacing") == 0)
++      wordspacing = argv[++i];
+     else if (strcmp (argv[i], "--require") == 0)
+       require = argv[++i];
+     else if (strcmp (argv[i], "--cluster") == 0)
+@@ -227,6 +233,32 @@ main (int argc, char **argv)
+     for (char *tok = strtok (features, ","); tok; tok = strtok (NULL, ","))
+       assert (raqm_add_font_feature (rq, tok, -1));
+   }
++  
++  if (letterspacing)
++  {
++    for (char *tok = strtok (letterspacing, ","); tok; tok = strtok (NULL, ","))
++    {
++      int spacing = atoi (tok);
++      bool percentage = false;
++      int start, length;
++      start = atoi (strtok (NULL, ","));
++      length = atoi (strtok (NULL, ","));
++      assert (raqm_set_letter_spacing_range (rq, spacing, percentage, start, length));
++    }
++  }
++  
++  if (wordspacing)
++  {
++    for (char *tok = strtok (wordspacing, ","); tok; tok = strtok (NULL, ","))
++    {
++      int spacing = atoi (tok);
++      bool percentage = false;
++      int start, length;
++      start = atoi (strtok (NULL, ","));
++      length = atoi (strtok (NULL, ","));
++      assert (raqm_set_word_spacing_range (rq, spacing, percentage, start, length));
++    }
++  }
+ 
+   if (invisible_glyph)
+   {
+-- 
+2.25.1
+

@@ -89,34 +89,21 @@ TextAnchor parseTextAnchor(const QString &value)
            AnchorStart;
 }
 
-DominantBaseline parseDominantBaseline(const QString &value)
+Baseline parseBaseline(const QString &value)
 {
-    return value == "use-script" ? DominantBaselineUseScript :
-           value == "no-change" ? DominantBaselineNoChange:
-           value == "reset-size" ? DominantBaselineResetSize:
-           value == "ideographic" ? DominantBaselineIdeographic :
-           value == "alphabetic" ? DominantBaselineAlphabetic :
-           value == "hanging" ? DominantBaselineHanging :
-           value == "mathematical" ? DominantBaselineMathematical :
-           value == "central" ? DominantBaselineCentral :
-           value == "middle" ? DominantBaselineMiddle :
-           value == "text-after-edge" ? DominantBaselineTextAfterEdge :
-           value == "text-before-edge" ? DominantBaselineTextBeforeEdge :
-           DominantBaselineAuto;
-}
-
-AlignmentBaseline parseAlignmentBaseline(const QString &value)
-{
-    return value == "baseline" ? AlignmentBaselineDominant :
-           value == "ideographic" ? AlignmentBaselineIdeographic :
-           value == "alphabetic" ? AlignmentBaselineAlphabetic :
-           value == "hanging" ? AlignmentBaselineHanging :
-           value == "mathematical" ? AlignmentBaselineMathematical :
-           value == "central" ? AlignmentBaselineCentral :
-           value == "middle" ? AlignmentBaselineMiddle :
-           (value == "text-after-edge" || value == "after-edge") ? AlignmentBaselineTextAfterEdge :
-           (value == "text-before-edge" || value == "before-edge") ? AlignmentBaselineTextBeforeEdge :
-           AlignmentBaselineAuto;
+    return value == "use-script" ? BaselineUseScript :
+           value == "no-change" ? BaselineNoChange:
+           value == "reset-size" ? BaselineResetSize:
+           value == "ideographic" ? BaselineIdeographic :
+           value == "alphabetic" ? BaselineAlphabetic :
+           value == "hanging" ? BaselineHanging :
+           value == "mathematical" ? BaselineMathematical :
+           value == "central" ? BaselineCentral :
+           value == "middle" ? BaselineMiddle :
+           value == "baseline" ? BaselineDominant :
+           (value == "text-after-edge" || value == "after-edge" || value == "text-bottom") ? BaselineTextBottom :
+           (value == "text-before-edge" || value == "before-edge" || value == "text-top") ? BaselineTextTop :
+           BaselineAuto;
 }
 
 BaselineShiftMode parseBaselineShiftMode(const QString &value)
@@ -157,33 +144,33 @@ QString writeTextAnchor(TextAnchor value)
     return value == AnchorEnd ? "end" : value == AnchorMiddle ? "middle" : "start";
 }
 
-QString writeDominantBaseline(DominantBaseline value)
+QString writeDominantBaseline(Baseline value)
 {
-    return value == DominantBaselineUseScript ? "use-script" :
-           value == DominantBaselineNoChange ? "no-change" :
-           value == DominantBaselineResetSize ? "reset-size" :
-           value == DominantBaselineIdeographic ? "ideographic" :
-           value == DominantBaselineAlphabetic ? "alphabetic" :
-           value == DominantBaselineHanging ? "hanging" :
-           value == DominantBaselineMathematical ? "mathematical" :
-           value == DominantBaselineCentral ? "central" :
-           value == DominantBaselineMiddle ? "middle" :
-           value == DominantBaselineTextAfterEdge ? "text-after-edge" :
-           value == DominantBaselineTextBeforeEdge ? "text-before-edge" :
+    return value == BaselineUseScript ? "use-script" :
+           value == BaselineNoChange ? "no-change" :
+           value == BaselineResetSize ? "reset-size" :
+           value == BaselineIdeographic ? "ideographic" :
+           value == BaselineAlphabetic ? "alphabetic" :
+           value == BaselineHanging ? "hanging" :
+           value == BaselineMathematical ? "mathematical" :
+           value == BaselineCentral ? "central" :
+           value == BaselineMiddle ? "middle" :
+           value == BaselineTextBottom ? "text-bottom" : //text-after-edge in svg 1.1
+           value == BaselineTextTop ? "text-before-edge" : //text-before-edge in svg 1.1
            "auto";
 }
 
-QString writeAlignmentBaseline(AlignmentBaseline value)
+QString writeAlignmentBaseline(Baseline value)
 {
-    return value == AlignmentBaselineDominant ? "baseline" :
-           value == AlignmentBaselineIdeographic ? "ideographic" :
-           value == AlignmentBaselineAlphabetic ? "alphabetic" :
-           value == AlignmentBaselineHanging ? "hanging" :
-           value == AlignmentBaselineMathematical ? "mathematical" :
-           value == AlignmentBaselineCentral ? "central" :
-           value == AlignmentBaselineMiddle ? "middle" :
-           value == AlignmentBaselineTextAfterEdge ? "text-after-edge" :
-           value == AlignmentBaselineTextBeforeEdge ? "text-before-edge" :
+    return value == BaselineDominant ? "baseline" :
+           value == BaselineIdeographic ? "ideographic" :
+           value == BaselineAlphabetic ? "alphabetic" :
+           value == BaselineHanging ? "hanging" :
+           value == BaselineMathematical ? "mathematical" :
+           value == BaselineCentral ? "central" :
+           value == BaselineMiddle ? "middle" :
+           value == BaselineTextBottom ? "text-bottom" : //text-after-edge in svg 1.1
+           value == BaselineTextTop ? "text-before-edge" : //text-before-edge in svg 1.1
            "auto";
 }
 
@@ -494,7 +481,7 @@ QMap<QString, FontVariantFeature> fontVariantStrings()
     features.insert("jis83", EastAsianJis83);
     features.insert("jis90", EastAsianJis90);
     features.insert("jis04", EastAsianJis04);
-    features.insert("simplified", EastAsiantSimplified);
+    features.insert("simplified", EastAsianSimplified);
     features.insert("traditional", EastAsianTraditional);
     features.insert("full-width", EastAsianFullWidth);
     features.insert("proportional-width", EastAsianProportionalWidth);
@@ -503,58 +490,111 @@ QMap<QString, FontVariantFeature> fontVariantStrings()
     return features;
 }
 
-QMap<QString, FontVariantFeature> fontVariantOpentypeTags()
+QStringList fontVariantOpentypeTags(FontVariantFeature feature)
 {
-    QMap<QString, FontVariantFeature> features;
-    features.insert("", FontVariantNormal);
-    features.insert("", FontVariantNone);
+    switch (feature) {
+    case CommonLigatures:
+    case NoCommonLigatures:
+        return {"clig", "liga"};
+    case DiscretionaryLigatures:
+    case NoDiscretionaryLigatures:
+        return {"dlig"};
+    case HistoricalLigatures:
+    case NoHistoricalLigatures:
+        return {"hlig"};
+    case ContextualAlternates:
+    case NoContextualAlternates:
+        return {"calt"};
 
-    features.insert("clig", CommonLigatures);
-    features.insert("clig", NoCommonLigatures); // can also be 'liga'
-    features.insert("dlig", DiscretionaryLigatures);
-    features.insert("dlig", NoDiscretionaryLigatures);
-    features.insert("hlig", HistoricalLigatures);
-    features.insert("hlig", NoHistoricalLigatures);
-    features.insert("calt", ContextualAlternates);
-    features.insert("calt", NoContextualAlternates);
+    case PositionSub:
+        return {"subs"};
+    case PositionSuper:
+        return {"sups"};
 
-    features.insert("subs", PositionSub);
-    features.insert("sups", PositionSuper);
+    case SmallCaps:
+        return {"smcp"};
+    case AllSmallCaps:
+        return {"smcp", "c2sc"};
+    case PetiteCaps:
+        return {"pcap"};
+    case AllPetiteCaps:
+        return {"pcap", "c2pc"};
+    case Unicase:
+        return {"unic"};
+    case TitlingCaps:
+        return {"titl"};
 
-    features.insert("smcp", SmallCaps);
-    features.insert("c2sc", AllSmallCaps);
-    features.insert("pcap", PetiteCaps);
-    features.insert("c2pc", AllPetiteCaps);
-    features.insert("unic", Unicase);
-    features.insert("titl", TitlingCaps);
+    case LiningNums:
+        return {"lnum"};
+    case OldStyleNums:
+        return {"onum"};
+    case ProportionalNums:
+        return {"pnum"};
+    case TabularNums:
+        return {"tnum"};
+    case DiagonalFractions:
+        return {"frac"};
+    case StackedFractions:
+        return {"afrc"};
+    case Ordinal:
+        return {"ordn"};
+    case SlashedZero:
+        return {"zero"};
 
-    features.insert("lnum", LiningNums);
-    features.insert("onum", OldStyleNums);
-    features.insert("pnum", ProportionalNums);
-    features.insert("tnum", TabularNums);
-    features.insert("frac", DiagonalFractions);
-    features.insert("afrc", StackedFractions);
-    features.insert("ordn", Ordinal);
-    features.insert("zero", SlashedZero);
+    case HistoricalForms:
+        return {"hist"};
+    case StylisticAlt:
+        return {"salt"};
+    case StyleSet:// add 01 to 99 at the end
+        return {"ss"};
+    case CharacterVariant:// add 01 to 99 at the end
+        return {"cv"};
+    case Swash:
+        return {"swsh", "cswh"};
+    case Ornaments:
+        return {"ornm"};
+    case Annotation:
+        return {"nalt"};
 
-    features.insert("hist", HistoricalForms);
-    features.insert("salt", StylisticAlt);
-    features.insert("ss", StyleSet);
-    features.insert("cv", CharacterVariant); // add 01 to 99 at the end
-    features.insert("swsh", Swash); //Note: may also be cswh?
-    features.insert("ornm", Ornaments);
-    features.insert("nalt", Annotation);
+    case EastAsianJis78:
+        return {"jp78"};
+    case EastAsianJis83:
+        return {"jp83"};
+    case EastAsianJis90:
+        return {"jp90"};
+    case EastAsianJis04:
+        return {"jp04"};
+    case EastAsianSimplified:
+        return {"smpl"};
+    case EastAsianTraditional:
+        return {"trad"};
+    case EastAsianFullWidth:
+        return {"fwid"};
+    case EastAsianProportionalWidth:
+        return {"pwid"};
+    case EastAsianRuby:
+        return {"ruby"};
+    default:
+        return QStringList();
+    }
+}
 
-    features.insert("jp78", EastAsianJis78);
-    features.insert("jp83", EastAsianJis83);
-    features.insert("jp90", EastAsianJis90);
-    features.insert("jp04", EastAsianJis04);
-    features.insert("smpl", EastAsiantSimplified);
-    features.insert("trad", EastAsianTraditional);
-    features.insert("fwid", EastAsianFullWidth);
-    features.insert("pwid", EastAsianProportionalWidth);
-    features.insert("ruby", EastAsianRuby);
-    return features;
+QString opentypeBaselineTag(Baseline base)
+{
+    switch (base) {
+    case BaselineAlphabetic:
+        return "romn";
+    case BaselineHanging:
+        return "hang";
+    case BaselineMathematical:
+        return "math";
+    case BaselineIdeographic: //Ideagraphic under.
+        return "idea";
+    case BaselineCentral:
+        return "Icfc"; // unique to harfbuzz, this is center of icfb and icft.
+    default:
+        return QString();
+    }
 }
 
 }

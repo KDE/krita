@@ -92,7 +92,6 @@ bool KoSvgTextProperties::isEmpty() const
 bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
     return
             id != UnicodeBidiId &&
-            id != DominantBaselineId &&
             id != AlignmentBaselineId &&
             id != BaselineShiftModeId &&
             id != BaselineShiftValueId &&
@@ -165,9 +164,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "text-anchor") {
         setProperty(TextAnchorId, KoSvgText::parseTextAnchor(value));
     } else if (command == "dominant-baseline") {
-        setProperty(DominantBaselineId, KoSvgText::parseDominantBaseline(value));
+        setProperty(DominantBaselineId, KoSvgText::parseBaseline(value));
     } else if (command == "alignment-baseline") {
-        setProperty(AlignmentBaselineId, KoSvgText::parseAlignmentBaseline(value));
+        setProperty(AlignmentBaselineId, KoSvgText::parseBaseline(value));
     } else if (command == "baseline-shift") {
         KoSvgText::BaselineShiftMode mode = KoSvgText::parseBaselineShiftMode(value);
         setProperty(BaselineShiftModeId, mode);
@@ -372,7 +371,10 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             bool ok = false;
 
             // try to read numerical weight value
-            weight = qBound(0, value.toInt(&ok, 10), 1000);
+            int parsed = value.toInt(&ok, 10);
+            if (ok) {
+                weight = qBound(0, parsed, 1000);
+            }
         }
 
         setProperty(FontWeightId, weight);
@@ -439,11 +441,11 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
 
     if (hasProperty(DominantBaselineId)) {
-        result.insert("dominant-baseline", writeDominantBaseline(DominantBaseline(property(DominantBaselineId).toInt())));
+        result.insert("dominant-baseline", writeDominantBaseline(Baseline(property(DominantBaselineId).toInt())));
     }
 
     if (hasProperty(AlignmentBaselineId)) {
-        result.insert("alignment-baseline", writeAlignmentBaseline(AlignmentBaseline(property(AlignmentBaselineId).toInt())));
+        result.insert("alignment-baseline", writeAlignmentBaseline(Baseline(property(AlignmentBaselineId).toInt())));
     }
 
     if (hasProperty(BaselineShiftModeId)) {
@@ -695,8 +697,7 @@ QStringList KoSvgTextProperties::fontFileNameForText(QString text, QVector<int> 
     QStringList fileNames;
     for (int i = 0; i< familyValues.size(); i++) {
         if (lastIndex != familyValues.at(i)) {
-            //TODO: Note the utf8.
-            lengths.append(text.mid(startIndex, length).toUtf8().size());
+            lengths.append(text.mid(startIndex, length).size());
             fileNames.append(fontFileName);
             startIndex = i;
             length = 0;
@@ -710,7 +711,7 @@ QStringList KoSvgTextProperties::fontFileNameForText(QString text, QVector<int> 
         length +=1;
     }
     if (length > 0) {
-        lengths.append(text.mid(startIndex, length).toUtf8().size());
+        lengths.append(text.mid(startIndex, length).size());
         fileNames.append(fontFileName);
     }
 
@@ -721,7 +722,6 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
 {
     using namespace KoSvgText;
     QStringList fontFeatures;
-    QMap <QString, FontVariantFeature> opentypeMap = fontVariantOpentypeTags();
     QVector<PropertyId> list = {
         FontVariantCommonLigId,
         FontVariantDiscretionaryLigId,
@@ -744,26 +744,20 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
         if (hasProperty(id)) {
             FontVariantFeature feature = FontVariantFeature(property(id).toInt());
             if (feature != FontVariantNormal) {
-                QString openTypeTag = opentypeMap.key(feature);
-                openTypeTag += QString("[%1:%2]").arg(start).arg(start+length);
-                if (feature == NoCommonLigatures ||
-                        feature == NoDiscretionaryLigatures||
-                        feature == NoHistoricalLigatures ||
-                        feature == NoContextualAlternates) {
-                    openTypeTag += "=0";
-                } else {
-                    openTypeTag += "=1";
+                QStringList openTypeTags = fontVariantOpentypeTags(feature);
+                for (QString tag: openTypeTags) {
+                    QString openTypeTag = tag;
+                    openTypeTag += QString("[%1:%2]").arg(start).arg(start+length);
+                    if (feature == NoCommonLigatures ||
+                            feature == NoDiscretionaryLigatures||
+                            feature == NoHistoricalLigatures ||
+                            feature == NoContextualAlternates) {
+                        openTypeTag += "=0";
+                    } else {
+                        openTypeTag += "=1";
+                    }
+                    fontFeatures.append(openTypeTag);
                 }
-                fontFeatures.append(openTypeTag);
-            }
-            if (feature == NoCommonLigatures || feature == CommonLigatures) {
-                fontFeatures.append(QString("liga[%1:%2]=%3").arg(start).arg(start+length).arg((feature == CommonLigatures)? 1 : 0));
-            }
-            if (feature == AllSmallCaps) {
-                fontFeatures.append(QString("smcp[%1:%2]=%3").arg(start).arg(start+length).arg(1));
-            }
-            if (feature == AllPetiteCaps) {
-                fontFeatures.append(QString("pcap[%1:%2]=%3").arg(start).arg(start+length).arg(1));
             }
         }
     }
@@ -833,8 +827,8 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(DirectionId, DirectionLeftToRight);
         s_defaultProperties->setProperty(UnicodeBidiId, BidiNormal);
         s_defaultProperties->setProperty(TextAnchorId, AnchorStart);
-        s_defaultProperties->setProperty(DominantBaselineId, DominantBaselineAuto);
-        s_defaultProperties->setProperty(AlignmentBaselineId, AlignmentBaselineAuto);
+        s_defaultProperties->setProperty(DominantBaselineId, BaselineAuto);
+        s_defaultProperties->setProperty(AlignmentBaselineId, BaselineAuto);
         s_defaultProperties->setProperty(BaselineShiftModeId, ShiftNone);
         s_defaultProperties->setProperty(BaselineShiftValueId, 0.0);
         s_defaultProperties->setProperty(KerningId, fromAutoValue(AutoValue()));

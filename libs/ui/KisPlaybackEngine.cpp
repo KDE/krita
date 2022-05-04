@@ -249,6 +249,8 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
         }
 
         m_d->activeCanvasAnimationPlayer()->showFrame(frameIndex);
+    } else {
+        m_d->canvasProducers[m_d->activeCanvas]->seek(frameIndex);
     }
 }
 

@@ -175,6 +175,7 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisCanvasAnimationState *player)
 
         const int frame = player ? player->displayProxy()->frame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
+        setHeaderData(frame, Qt::Horizontal, true, ScrubToRole);
     }
 }
 
@@ -240,10 +241,12 @@ bool KisTimeBasedItemModel::setData(const QModelIndex &index, const QVariant &va
     if (!index.isValid()) return false;
 
     switch (role) {
-        case ActiveFrameRole: {
+        case ActiveFrameRole:
             setHeaderData(index.column(), Qt::Horizontal, value, role);
             break;
-        }
+        case ScrubToRole:
+            setHeaderData(index.column(), Qt::Horizontal, value, role);
+            break;
     }
 
     return false;
@@ -277,17 +280,6 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
 
                 int prevFrame = m_d->activeFrameIndex;
                 m_d->activeFrameIndex = section;
-
-                // BUG:445265
-                // Edgecase occurs where if we move from a cached frame to a non-cached frame,
-                // we never technically "switch" to the cached one during scrubbing, which
-                // will prevent the uncached frame from ever determining it needs to be
-                // regenerated. We will force a frame switch when going from uncached to cached
-                // to work around this issue.
-                bool needsRegeneration = isFrameCached(m_d->activeFrameIndex) && !isFrameCached(prevFrame);
-
-                bool usePreview = m_d->scrubInProgress && !needsRegeneration;
-                scrubTo(m_d->activeFrameIndex, usePreview);
 
                 /**
                  * Optimization Hack Alert:
@@ -324,6 +316,10 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
                     emit headerDataChanged (Qt::Horizontal, m_d->activeFrameIndex, m_d->activeFrameIndex);
                 }
             }
+            break;
+        case ScrubToRole:
+            scrubTo(m_d->activeFrameIndex);
+            break;
         }
     }
 
@@ -545,7 +541,7 @@ void KisTimeBasedItemModel::setScrubState(bool active)
         prioritizeCache();
 
         if (m_d->image) {
-            scrubTo(m_d->activeFrameIndex, false);
+            scrubTo(m_d->activeFrameIndex);
         }
 
         m_d->scrubStartFrame = -1;
@@ -557,19 +553,9 @@ bool KisTimeBasedItemModel::isScrubbing()
     return m_d->scrubInProgress;
 }
 
-void KisTimeBasedItemModel::scrubTo(int time, bool preview)
+void KisTimeBasedItemModel::scrubTo(int time)
 {
-    if (m_d->animationPlayer && m_d->animationPlayer->playbackState() == PlaybackState::PLAYING) return;
-
-    KIS_ASSERT_RECOVER_RETURN(m_d->image);
-
-    if (preview) {
-        if (m_d->animationPlayer) {
-            m_d->scrubbingCompressor->start(time);
-        }
-    } else {
-        m_d->image->animationInterface()->requestTimeSwitchWithUndo(time);
-    }
+    m_d->scrubbingCompressor->start(time);
 }
 
 void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)

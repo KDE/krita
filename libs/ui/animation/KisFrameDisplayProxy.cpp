@@ -59,7 +59,7 @@ bool KisFrameDisplayProxy::displayFrame(int frame)
         m_d->displayedFrame = frame;
         emit sigFrameDisplayRefreshed();
         return true;
-    } else if (!cache && ai->hasAnimation() && ai->currentUITime() != frame){
+    } else if (ai->hasAnimation() && ai->currentUITime() != frame){
         if (m_d->canvas->image()->tryBarrierLock(true)) {
             m_d->canvas->image()->unlock();
             ai->switchCurrentTimeAsync(frame);

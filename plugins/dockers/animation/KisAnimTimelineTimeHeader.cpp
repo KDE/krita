@@ -477,6 +477,7 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
         if (e->button() == Qt::RightButton) {
             if (numSelectedColumns <= 1) {
                 model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+                model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ScrubToRole);
             }
 
             /* Fix for safe-assert involving kis_animation_curve_docker.
@@ -538,6 +539,7 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
         } else if (e->button() == Qt::LeftButton) {
             m_d->lastPressSectionIndex = logical;
             model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+            model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ScrubToRole);
         }
     }
 
@@ -553,6 +555,7 @@ void KisAnimTimelineTimeHeader::mouseMoveEvent(QMouseEvent *e)
 
             m_d->model->setScrubState(true);
             model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+            model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ScrubToRole);
 
             if (m_d->lastPressSectionIndex >= 0 &&
                 logical != m_d->lastPressSectionIndex &&

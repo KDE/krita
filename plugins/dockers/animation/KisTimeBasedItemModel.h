@@ -54,7 +54,7 @@ public:
 
     void setScrubState(bool active);
     bool isScrubbing();
-    void scrubTo(int time, bool preview);
+    void scrubTo(int time);
 
     void setPlaybackRange(const KisTimeSpan &range);
     bool isPlaybackActive() const;
@@ -65,6 +65,7 @@ public:
     enum ItemDataRole
     {
         ActiveFrameRole = Qt::UserRole + 101,
+        ScrubToRole,
         CloneOfActiveFrame,
         CloneCount,
         FrameExistsRole,

@@ -986,6 +986,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
 
             model()->setData(index, true, KisAnimTimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, KisAnimTimelineFramesModel::ActiveFrameRole);
+            model()->setData(index, true, KisAnimTimelineFramesModel::ScrubToRole);
             setCurrentIndex(index);
 
             if (model()->data(index, KisAnimTimelineFramesModel::FrameExistsRole).toBool() ||
@@ -1390,6 +1391,7 @@ void KisAnimTimelineFramesView::currentChanged(const QModelIndex &current, const
     if (previous.column() != current.column()) {
         m_d->model->setData(previous, false, KisAnimTimelineFramesModel::ActiveFrameRole);
         m_d->model->setData(current, true, KisAnimTimelineFramesModel::ActiveFrameRole);
+        m_d->model->setData(current, true, KisAnimTimelineFramesModel::ScrubToRole);
     }
 }
 

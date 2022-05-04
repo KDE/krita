@@ -163,8 +163,6 @@ public:
                     canvas->image().data(), SIGNAL(sigStrokeEndRequested()),
                     &m_cancelTrigger, SLOT(tryFire()));
         }
-
-        ENTER_FUNCTION();
     }
 
     void restore() {
@@ -186,8 +184,6 @@ public:
 
             m_canvas = nullptr;
         }
-
-        ENTER_FUNCTION();
     }
 
 
@@ -235,7 +231,7 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 {
     setPlaybackState(STOPPED);
 
-    connect(m_d->displayProxy.data(), SIGNAL(sigDisplayFrameChanged()), this, SIGNAL(sigFrameChanged()));
+    connect(m_d->displayProxy.data(), SIGNAL(sigFrameChange()), this, SIGNAL(sigFrameChanged()));
 
     // Grow to new playback range when new frames added (configurable)...
     connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigKeyframeAdded, this, [this](const KisKeyframeChannel*, int time){
@@ -281,9 +277,9 @@ boost::optional<int> KisCanvasAnimationState::playbackOrigin()
     }
 }
 
-int KisCanvasAnimationState::visibleFrame()
+KisFrameDisplayProxy const *KisCanvasAnimationState::displayProxy() const
 {
-    return m_d->displayProxy->visibleFrame();
+    return m_d->displayProxy.data();
 }
 
 void KisCanvasAnimationState::showFrame(int frame)

@@ -7,6 +7,7 @@
 #include "kis_signal_compressor_with_param.h"
 #include "kis_canvas_animation_state.h"
 #include "kis_image_animation_interface.h"
+#include "animation/KisFrameDisplayProxy.h"
 #include "KisViewManager.h"
 #include "kis_raster_keyframe_channel.h"
 #include "kis_onion_skin_compositor.h"
@@ -159,7 +160,7 @@ public:
         }
 
         if (m_d->activeCanvas) {
-            m_d->activeProducer()->seek(m_d->activeCanvasAnimationPlayer()->visibleFrame());
+            m_d->activeProducer()->seek(m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame());
         }
     }
 
@@ -177,9 +178,9 @@ public:
         }
 
         if (m_d->activeCanvas && m_d->canvasProducers.contains(m_d->activeCanvas)) {
-            if ( m_d->activeCanvasAnimationPlayer()->visibleFrame() > 0) {
-                m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationPlayer()->visibleFrame());
-                KIS_ASSERT(m_d->canvasProducers[m_d->activeCanvas]->frame() == m_d->activeCanvasAnimationPlayer()->visibleFrame());
+            if ( m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame() > 0) {
+                m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame());
+                KIS_ASSERT(m_d->canvasProducers[m_d->activeCanvas]->frame() == m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame());
             }
         }
 
@@ -229,9 +230,9 @@ void KisPlaybackEngine::stop()
         const boost::optional<int> origin = m_d->activeCanvasAnimationPlayer()->playbackOrigin();
         m_d->activeCanvasAnimationPlayer()->setPlaybackState(STOPPED);
         if (origin.has_value()) {
-            emit sigChangeActiveCanvasFrame(origin.value());
+            seek(origin.value());
         }
-    } else if (m_d->activeCanvasAnimationPlayer()->visibleFrame() != 0) {
+    } else if (m_d->activeCanvasAnimationPlayer()->displayProxy()->frame() != 0) {
         seek(0);
     }
 }
@@ -240,15 +241,14 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationPlayer()) return;
 
-    if (m_d->activeCanvasAnimationPlayer()->playbackState() != PLAYING) {
+    if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
         m_d->canvasProducers[m_d->activeCanvas]->seek(frameIndex);
 
         if (flags & SEEK_PUSH_AUDIO) {
             m_d->sigPushAudioCompressor->start(frameIndex);
         }
 
-        //TODO: Seems to be called multiple times per frame change. Investigate!
-        emit sigChangeActiveCanvasFrame(frameIndex);
+        m_d->activeCanvasAnimationPlayer()->showFrame(frameIndex);
     }
 }
 
@@ -261,7 +261,7 @@ void KisPlaybackEngine::previousFrame()
     const int startFrame = animInterface->playbackRange().start();
     const int endFrame = animInterface->playbackRange().end();
 
-    int frame = m_d->activeCanvasAnimationPlayer()->visibleFrame() - 1;
+    int frame = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame() - 1;
 
     if (frame < startFrame || frame >  endFrame) {
         frame = endFrame;
@@ -283,7 +283,7 @@ void KisPlaybackEngine::nextFrame()
     const int startFrame = animInterface->playbackRange().start();
     const int endFrame = animInterface->playbackRange().end();
 
-    int frame = m_d->activeCanvasAnimationPlayer()->visibleFrame() + 1;
+    int frame = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame() + 1;
 
     if (frame > endFrame || frame < startFrame ) {
         frame = startFrame;
@@ -309,7 +309,7 @@ void KisPlaybackEngine::previousKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int currentFrame = m_d->activeCanvasAnimationPlayer()->visibleFrame();
+    int currentFrame = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame();
 
     int destinationTime = -1;
     if (!keyframes->keyframeAt(currentFrame)) {
@@ -338,7 +338,7 @@ void KisPlaybackEngine::nextKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int currentTime = m_d->activeCanvasAnimationPlayer()->visibleFrame();
+    int currentTime = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame();
 
     int destinationTime = -1;
     if (keyframes->activeKeyframeAt(currentTime)) {
@@ -379,7 +379,7 @@ void KisPlaybackEngine::previousMatchingKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationPlayer()->visibleFrame();
+    int time = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame();
 
     KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
     int destinationTime = keyframes->activeKeyframeTime(time);
@@ -398,7 +398,7 @@ void KisPlaybackEngine::nextMatchingKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationPlayer()->visibleFrame();
+    int time = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame();
 
     if (!keyframes->activeKeyframeAt(time)) {
         return;
@@ -436,7 +436,7 @@ void KisPlaybackEngine::nextKeyframeWithColor(const QSet<int> &validColors)
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationPlayer()->visibleFrame();
+    int time = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame();
 
     if (!keyframes->activeKeyframeAt(time)) {
         return;
@@ -477,7 +477,7 @@ void KisPlaybackEngine::previousKeyframeWithColor(const QSet<int> &validColors)
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationPlayer()->visibleFrame();
+    int time = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame();
 
     int destinationTime = keyframes->activeKeyframeTime(time);
     while (keyframes->keyframeAt(destinationTime) &&

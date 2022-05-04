@@ -11,7 +11,10 @@
 #include <QObject>
 #include <QPointer>
 
-class KisFrameDisplayProxy : public QObject
+#include "kritaui_export.h"
+
+
+class KRITAUI_EXPORT KisFrameDisplayProxy : public QObject
 {
     Q_OBJECT
 public:
@@ -19,10 +22,24 @@ public:
     ~KisFrameDisplayProxy();
 
     bool displayFrame(int frame);
+
+    /**
+     * @brief visibleFrame
+     * @return int Frame that is actually visible. This is not the same as the position of playback
+     * since the visible frame only changes to actual keyframe content.
+     */
     int visibleFrame() const;
 
+    /**
+     * @brief frame
+     * @return int Frame that is intended to be shown. This should always reflect the actual
+     * time position of the canvas at any given point.
+     */
+    int frame() const;
+
 Q_SIGNALS:
-    void sigDisplayFrameChanged();
+    void sigFrameChange();
+    void sigFrameDisplayRefreshed();
 
 private:
     QScopedPointer<struct Private> m_d;

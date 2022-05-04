@@ -14,8 +14,10 @@
 struct Private {
     Private(KisCanvas2* c)
         : displayedFrame(-1)
+        , intendedFrame(0)
         , canvas(c) {}
 
+    int intendedFrame;
     int displayedFrame;
     KisCanvas2 *canvas;
 };
@@ -25,8 +27,15 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
     , m_d(new Private(canvas))
 {
     connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFrameRegenerated, this, [this](int frame){
-        m_d->displayedFrame = frame;
-        emit sigDisplayFrameChanged();
+        if (m_d->intendedFrame != frame ) {
+            m_d->intendedFrame = frame;
+            emit sigFrameChange();
+        }
+
+        if (m_d->displayedFrame != frame) {
+            m_d->displayedFrame = frame;
+            emit sigFrameDisplayRefreshed();
+        }
     });
 }
 
@@ -38,11 +47,17 @@ bool KisFrameDisplayProxy::displayFrame(int frame)
 {
     KisAnimationFrameCacheSP cache = m_d->canvas->frameCache();
     KisImageAnimationInterface* ai = m_d->canvas->image()->animationInterface();
+
+    if (frame != m_d->intendedFrame) {
+        m_d->intendedFrame = frame;
+        emit sigFrameChange();
+    }
+
     if (cache && cache->shouldUploadNewFrame(frame, m_d->displayedFrame)
               && cache->uploadFrame(frame) ) {
         m_d->canvas->updateCanvas();
         m_d->displayedFrame = frame;
-        emit sigDisplayFrameChanged();
+        emit sigFrameDisplayRefreshed();
         return true;
     } else if (!cache && ai->hasAnimation() && ai->currentUITime() != frame){
         if (m_d->canvas->image()->tryBarrierLock(true)) {
@@ -58,4 +73,9 @@ bool KisFrameDisplayProxy::displayFrame(int frame)
 int KisFrameDisplayProxy::visibleFrame() const
 {
     return m_d->displayedFrame;
+}
+
+int KisFrameDisplayProxy::frame() const
+{
+    return m_d->intendedFrame;
 }

@@ -29,6 +29,7 @@
 #include "kis_action.h"
 #include "kis_action_manager.h"
 #include "kis_canvas_animation_state.h"
+#include "animation/KisFrameDisplayProxy.h"
 #include "KisAnimUtils.h"
 #include "kis_image_config.h"
 #include "kis_keyframe_channel.h"
@@ -417,7 +418,7 @@ void KisAnimTimelineDocker::updateFrameRegister()
         return;
     }
 
-    const int frame = m_d->canvas->animationState()->visibleFrame();
+    const int frame = m_d->canvas->animationState()->displayProxy()->frame();
 
     m_d->titlebar->frameRegister->setValue(frame);
 }

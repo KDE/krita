@@ -46,7 +46,8 @@ public:
     boost::optional<QFileInfo> mediaInfo();
 
     boost::optional<int> playbackOrigin();
-    int visibleFrame();
+
+    class KisFrameDisplayProxy const *displayProxy() const;
 
 public Q_SLOTS:
     void showFrame(int frame);

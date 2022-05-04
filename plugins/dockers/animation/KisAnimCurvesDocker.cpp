@@ -22,6 +22,7 @@
 #include "KisAnimCurvesChannelDelegate.h"
 
 #include "kis_canvas_animation_state.h"
+#include "animation/KisFrameDisplayProxy.h"
 #include "kis_keyframe_channel.h"
 
 #include "kis_image_animation_interface.h"
@@ -606,7 +607,7 @@ void KisAnimCurvesDocker::updateFrameRegister(){
         return;
     }
 
-    const int frame = m_d->canvas->animationState()->visibleFrame();
+    const int frame = m_d->canvas->animationState()->displayProxy()->frame();
 
     m_d->titlebar->sbFrameRegister->setValue(frame);
 }

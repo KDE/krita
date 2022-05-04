@@ -11,6 +11,7 @@
 
 #include "kis_animation_frame_cache.h"
 #include "kis_canvas_animation_state.h"
+#include "animation/KisFrameDisplayProxy.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
@@ -172,7 +173,7 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisCanvasAnimationState *player)
         connect(m_d->animationPlayer, SIGNAL(sigPlaybackStateChanged(PlaybackState)), SLOT(slotPlaybackStateChanged(PlaybackState)));
         connect(m_d->animationPlayer, SIGNAL(sigFrameChanged()), SLOT(slotPlaybackFrameChanged()));
 
-        const int frame = player ? player->visibleFrame() : m_d->image->animationInterface()->currentUITime();
+        const int frame = player ? player->displayProxy()->frame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
     }
 }
@@ -615,7 +616,7 @@ void KisTimeBasedItemModel::slotCacheChanged()
 void KisTimeBasedItemModel::slotPlaybackFrameChanged()
 {
     if (m_d->animationPlayer->playbackState() != PlaybackState::PLAYING) return;
-    setHeaderData(m_d->animationPlayer->visibleFrame(), Qt::Horizontal, true, ActiveFrameRole);
+    setHeaderData(m_d->animationPlayer->displayProxy()->frame(), Qt::Horizontal, true, ActiveFrameRole);
 }
 
 void KisTimeBasedItemModel::slotPlaybackStateChanged(PlaybackState p_state)

@@ -515,7 +515,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
         m_d->activeCanvasAnimationPlayer()->disconnect(this);
     }
 
-    StopAndResume sr(m_d.data(), true);
+    StopAndResume stopResume(m_d.data(), true);
 
     m_d->activeCanvas = canvas;
 
@@ -523,7 +523,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
         connect(m_d->activeCanvasAnimationPlayer(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[m_d->activeCanvas];
 
-            StopAndResume stopResume(m_d.data());
+            StopAndResume callbackStopResume(m_d.data());
         });
 
         connect(m_d->activeCanvasAnimationPlayer(), &KisCanvasAnimationState::sigPlaybackMediaChanged, this, &KisPlaybackEngine::setupProducerFromFile);

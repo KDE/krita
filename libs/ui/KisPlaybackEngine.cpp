@@ -503,9 +503,9 @@ void KisPlaybackEngine::setupProducerFromFile(QFileInfo file)
 
 void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
 {
-    KisCanvas2* canvas2 = dynamic_cast<KisCanvas2*>(canvas);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(canvas);
 
-    if (!canvas2 || m_d->activeCanvas == canvas2) {
+    if (!canvas || m_d->activeCanvas == canvas) {
         return;
     }
 
@@ -517,7 +517,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
 
     StopAndResume sr(m_d.data(), true);
 
-    m_d->activeCanvas = canvas2;
+    m_d->activeCanvas = canvas;
 
     if (m_d->activeCanvasAnimationPlayer()) {
         connect(m_d->activeCanvasAnimationPlayer(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){

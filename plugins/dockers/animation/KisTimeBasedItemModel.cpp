@@ -85,7 +85,7 @@ struct KisTimeBasedItemModel::Private
             return true;
         }
 
-        KisTimeSpan clipRange = image->animationInterface()->documentClipRange();
+        KisTimeSpan clipRange = image->animationInterface()->documentPlaybackRange();
         return clipRange.contains(time);
     }
 };
@@ -129,9 +129,9 @@ void KisTimeBasedItemModel::setImage(KisImageWSP p_image)
     if (m_d->image) {
         KisImageAnimationInterface *ai = m_d->image->animationInterface();
 
-        connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
-        connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
-        connect(ai, SIGNAL(sigDocumentClipRangeChange()), SLOT(slotClipRangeChanged()));
+        connect(ai, SIGNAL(sigFramerateChanged()), this, SLOT(slotFramerateChanged()));
+        connect(ai, SIGNAL(sigUiTimeChanged(int)), this, SLOT(slotCurrentTimeChanged(int)));
+        connect(ai, SIGNAL(sigPlaybackRangeChanged()), this, SLOT(slotPlaybackRangeChanged()));
     }
 
     endResetModel();
@@ -574,14 +574,14 @@ void KisTimeBasedItemModel::slotFramerateChanged()
     emit headerDataChanged(Qt::Horizontal, 0, columnCount() - 1);
 }
 
-void KisTimeBasedItemModel::slotClipRangeChanged()
+void KisTimeBasedItemModel::slotPlaybackRangeChanged()
 {
     if (m_d->image && m_d->image->animationInterface() ) {
         const KisImageAnimationInterface* const interface = m_d->image->animationInterface();
-        const int lastFrame = interface->activeClipRange().end();
+        const int lastFrame = interface->activePlaybackRange().end();
         if (lastFrame > m_d->numFramesOverride) {
-            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->activeClipRange().end());
-            m_d->numFramesOverride = interface->activeClipRange().end();
+            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->activePlaybackRange().end());
+            m_d->numFramesOverride = interface->activePlaybackRange().end();
             endInsertColumns();
         }
 
@@ -621,7 +621,7 @@ void KisTimeBasedItemModel::setPlaybackRange(const KisTimeSpan &range)
     if (m_d->image.isNull()) return;
 
     KisImageAnimationInterface *i = m_d->image->animationInterface();
-    i->setPlaybackRange(range);
+    i->setActivePlaybackRange(range);
 }
 
 bool KisTimeBasedItemModel::isPlaybackActive() const

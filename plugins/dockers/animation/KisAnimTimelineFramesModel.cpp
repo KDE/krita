@@ -285,12 +285,10 @@ void KisAnimTimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesF
 
     if (m_d->dummiesFacade) {
         m_d->converter.reset(new TimelineNodeListKeeper(this, m_d->dummiesFacade, displayModeAdapter));
-        connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
-                SLOT(slotDummyChanged(KisNodeDummy*)));
-        connect(m_d->image->animationInterface(),
-                SIGNAL(sigDocumentClipRangeChange()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
-        connect(m_d->image, SIGNAL(sigImageModified()), SLOT(slotImageContentChanged()));
-        connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotImageContentChanged()));
+        connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)), this, SLOT(slotDummyChanged(KisNodeDummy*)));
+        connect(m_d->image->animationInterface(), SIGNAL(sigPlaybackRangeChanged()), this, SIGNAL(sigInfiniteTimelineUpdateNeeded()));
+        connect(m_d->image, SIGNAL(sigImageModified()), this, SLOT(slotImageContentChanged()));
+        connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), this, SLOT(slotImageContentChanged()));
     }
 
     if (m_d->dummiesFacade != oldDummiesFacade) {
@@ -1114,12 +1112,12 @@ void KisAnimTimelineFramesModel::setAudioVolume(qreal value)
 
 void KisAnimTimelineFramesModel::setDocumentClipRangeStart(int column)
 {
-    m_d->image->animationInterface()->setDocumentClipRangeStartTime(column);
+    m_d->image->animationInterface()->setDocumentRangeStartFrame(column);
 }
 
 void KisAnimTimelineFramesModel::setDocumentClipRangeEnd(int column)
 {
-    m_d->image->animationInterface()->setDocumentClipRangeEndTime(column);
+    m_d->image->animationInterface()->setDocumentRangeEndFrame(column);
 }
 
 void KisAnimTimelineFramesModel::clearEntireCache()

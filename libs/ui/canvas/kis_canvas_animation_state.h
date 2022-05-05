@@ -56,7 +56,7 @@ Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);
     void sigPlaybackStatisticsUpdated();
     void sigFrameChanged();
-    void sigPlaybackMediaChanged(QFileInfo toLoad);
+    void sigPlaybackMediaChanged();
 
     void sigCancelPlayback();
 

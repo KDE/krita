@@ -180,7 +180,7 @@ struct KisAnimationCachePopulator::Private
         if (!image) return false;
 
         KisImageAnimationInterface *animation = image->animationInterface();
-        KisTimeSpan currentRange = animation->documentClipRange();
+        KisTimeSpan currentRange = animation->documentPlaybackRange();
 
         const int frame = priorityFrame >= 0 ? priorityFrame : KisAsyncAnimationCacheRenderDialog::calcFirstDirtyFrame(cache, currentRange, skipRange);
 

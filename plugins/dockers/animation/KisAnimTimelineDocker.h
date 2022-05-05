@@ -95,7 +95,6 @@ public:
 public Q_SLOTS:
     void setAutoKey(bool value);
 
-    void handleClipRangeChange();
     void handleFrameRateChange();
     void handlePlaybackSpeedChange(double normalizedPlaybackSpeed);
 

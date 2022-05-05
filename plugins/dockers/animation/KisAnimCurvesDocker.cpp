@@ -400,8 +400,8 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
                                       m_d->titlebar->sbValueRegister);
 
             KisImageAnimationInterface *animinterface = m_d->canvas->image()->animationInterface();
-            m_d->titlebar->sbStartFrame->setValue(animinterface->documentClipRange().start());
-            m_d->titlebar->sbEndFrame->setValue(animinterface->documentClipRange().end());
+            m_d->titlebar->sbStartFrame->setValue(animinterface->documentPlaybackRange().start());
+            m_d->titlebar->sbEndFrame->setValue(animinterface->documentPlaybackRange().end());
             m_d->titlebar->sbFrameRate->setValue(animinterface->framerate());
             m_d->titlebar->sbSpeed->setValue(100);
             m_d->titlebar->sbFrameRegister->setValue(animinterface->currentTime());
@@ -424,8 +424,8 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         connect(m_d->titlebar->sbSpeed, SIGNAL(valueChanged(int)), KisPart::instance()->playbackEngine(), SLOT(setPlaybackSpeedPercent(int)));
 
         connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
-        connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentClipRangeStartTime(int)));
-        connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentClipRangeEndTime(int)));
+        connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeStartFrame(int)));
+        connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeEndFrame(int)));
 
         connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, m_d->titlebar->transport, [this](PlaybackState p_state){
             m_d->titlebar->transport->setPlaying(p_state == PlaybackState::PLAYING);
@@ -440,7 +440,16 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         connect(m_d->canvas->animationState(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigDocumentClipRangeChange()), SLOT(handleClipRangeChange()));
+
+        connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigPlaybackRangeChanged, this, [this]() {
+            if (!m_d->canvas || !m_d->canvas->image()) return;
+
+            KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
+
+            m_d->titlebar->sbStartFrame->setValue(animInterface->documentPlaybackRange().start());
+            m_d->titlebar->sbEndFrame->setValue(animInterface->documentPlaybackRange().end());
+        });
+
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), this, SLOT(handleFrameRateChange()));
     }
 }
@@ -619,16 +628,6 @@ void KisAnimCurvesDocker::handleFrameRateChange()
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
     m_d->titlebar->sbFrameRate->setValue(animInterface->framerate());
-}
-
-void KisAnimCurvesDocker::handleClipRangeChange()
-{
-    if (!m_d->canvas || !m_d->canvas->image()) return;
-
-    KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
-
-    m_d->titlebar->sbStartFrame->setValue(animInterface->documentClipRange().start());
-    m_d->titlebar->sbEndFrame->setValue(animInterface->documentClipRange().end());
 }
 
 void KisAnimCurvesDocker::handlePlaybackSpeedChange(double normalizedSpeed)

@@ -99,17 +99,18 @@ public:
      * @return A KisTimeSpan reflecting actual document time range. This is
      * the actual play back range associated with the krita document.
      */
-    const KisTimeSpan& documentClipRange() const;
-    void setDocumentClipRange(const KisTimeSpan range);
+    const KisTimeSpan& documentPlaybackRange() const;
+    void setDocumentRange(const KisTimeSpan range);
 
     /**
-     * @brief activeClipRange
+     * @brief activePlaybackRange
      * @return Returns the current clip range that the user wishes play through.
      * Takes into account selection range when available as a custom loop override.
      * Should be used in the PlaybackEngine to determine proper loop points.
      */
-    const KisTimeSpan &activeClipRange() const;
-    void setPlaybackRange(const KisTimeSpan range);
+    const KisTimeSpan &activePlaybackRange() const;
+    void setActivePlaybackRange(const KisTimeSpan range);
+
     int framerate() const;
 
     QString exportSequenceFilePath();
@@ -135,8 +136,8 @@ public Q_SLOTS:
      */
     void switchCurrentTimeAsync(int frameId, bool useUndo = false);
 
-    void setDocumentClipRangeStartTime(int column);
-    void setDocumentClipRangeEndTime(int column);
+    void setDocumentRangeStartFrame(int column);
+    void setDocumentRangeEndFrame(int column);
 
     void setFramerate(int fps);
 
@@ -168,7 +169,6 @@ Q_SIGNALS:
     void sigInternalRequestTimeSwitch(int frameId, bool useUndo);
 
     void sigFramerateChanged();
-    void sigDocumentClipRangeChange();
     void sigPlaybackRangeChanged();
 
     /**

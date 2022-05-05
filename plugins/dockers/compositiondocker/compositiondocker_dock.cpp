@@ -375,7 +375,7 @@ void CompositionDockerDock::exportAnimationClicked()
             image->waitForDone();
             image->refreshGraph();
 
-            KisTimeSpan range = image->animationInterface()->documentClipRange();
+            KisTimeSpan range = image->animationInterface()->documentPlaybackRange();
 
             exportOptions.firstFrame = range.start();
             exportOptions.lastFrame = range.end();

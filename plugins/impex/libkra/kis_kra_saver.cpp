@@ -147,7 +147,7 @@ QDomElement KisKraSaver::saveXML(QDomDocument& doc,  KisImageSP image)
     // Redundancy -- Save animation metadata in XML to prevent data loss for the time being...
     QDomElement animationElement = doc.createElement("animation");
     KisDomUtils::saveValue(&animationElement, "framerate", image->animationInterface()->framerate());
-    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->documentClipRange());
+    KisDomUtils::saveValue(&animationElement, "range", image->animationInterface()->documentPlaybackRange());
     KisDomUtils::saveValue(&animationElement, "currentTime", image->animationInterface()->currentUITime());
     imageElement.appendChild(animationElement);
 
@@ -396,7 +396,7 @@ void KisKraSaver::saveStoryboardToXML(QDomDocument& doc, QDomElement &element)
 void KisKraSaver::saveAnimationMetadataToXML(QDomDocument &doc, QDomElement &element, KisImageSP image)
 {
     KisDomUtils::saveValue(&element, "framerate", image->animationInterface()->framerate());
-    KisDomUtils::saveValue(&element, "range", image->animationInterface()->documentClipRange());
+    KisDomUtils::saveValue(&element, "range", image->animationInterface()->documentPlaybackRange());
     KisDomUtils::saveValue(&element, "currentTime", image->animationInterface()->currentUITime());
 
     {

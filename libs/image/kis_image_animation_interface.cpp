@@ -39,8 +39,8 @@ struct KisImageAnimationInterface::Private
         : image(newImage),
           externalFrameActive(false),
           frameInvalidationBlocked(false),
-          documentClipRange(rhs.documentClipRange),
-          playbackClipRange(rhs.playbackClipRange),
+          documentRange(rhs.documentRange),
+          activePlaybackRange(rhs.activePlaybackRange),
           framerate(rhs.framerate),
           cachedLastFrameValue(-1),
           exportSequenceFilePath(rhs.exportSequenceFilePath),
@@ -55,8 +55,8 @@ struct KisImageAnimationInterface::Private
     bool externalFrameActive;
     bool frameInvalidationBlocked;
 
-    KisTimeSpan documentClipRange;
-    KisTimeSpan playbackClipRange;
+    KisTimeSpan documentRange;
+    KisTimeSpan activePlaybackRange;
     int framerate;
     int cachedLastFrameValue;
 
@@ -96,7 +96,7 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->image = image;
 
     m_d->framerate = 24;
-    m_d->documentClipRange = KisTimeSpan::fromTimeToTime(0, 100);
+    m_d->documentRange = KisTimeSpan::fromTimeToTime(0, 100);
 
     connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
 }
@@ -134,39 +134,39 @@ int KisImageAnimationInterface::currentUITime() const
     return m_d->currentUITime();
 }
 
-const KisTimeSpan& KisImageAnimationInterface::documentClipRange() const
+const KisTimeSpan& KisImageAnimationInterface::documentPlaybackRange() const
 {
-    return m_d->documentClipRange;
+    return m_d->documentRange;
 }
 
-void KisImageAnimationInterface::setDocumentClipRange(const KisTimeSpan range)
+void KisImageAnimationInterface::setDocumentRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
-    m_d->documentClipRange = range;
-    emit sigDocumentClipRangeChange();
+    m_d->documentRange = range;
+    emit sigPlaybackRangeChanged();
 }
 
-void KisImageAnimationInterface::setDocumentClipRangeStartTime(int column)
+void KisImageAnimationInterface::setDocumentRangeStartFrame(int column)
 {
-    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(column,  m_d->documentClipRange.end());
-    setDocumentClipRange(newRange);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(column,  m_d->documentRange.end());
+    setDocumentRange(newRange);
 }
 
-void KisImageAnimationInterface::setDocumentClipRangeEndTime(int column)
+void KisImageAnimationInterface::setDocumentRangeEndFrame(int column)
 {
-    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(m_d->documentClipRange.start(), column);
-    setDocumentClipRange(newRange);
+    KisTimeSpan newRange = KisTimeSpan::fromTimeToTime(m_d->documentRange.start(), column);
+    setDocumentRange(newRange);
 }
 
-const KisTimeSpan& KisImageAnimationInterface::activeClipRange() const
+const KisTimeSpan& KisImageAnimationInterface::activePlaybackRange() const
 {
-    return m_d->playbackClipRange.isValid() ? m_d->playbackClipRange : m_d->documentClipRange;
+    return m_d->activePlaybackRange.isValid() ? m_d->activePlaybackRange : m_d->documentRange;
 }
 
-void KisImageAnimationInterface::setPlaybackRange(const KisTimeSpan range)
+void KisImageAnimationInterface::setActivePlaybackRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
-    m_d->playbackClipRange = range;
+    m_d->activePlaybackRange = range;
     emit sigPlaybackRangeChanged();
 }
 
@@ -460,7 +460,7 @@ int KisImageAnimationInterface::totalLength()
 
     int lastKey = m_d->cachedLastFrameValue;
 
-    lastKey  = std::max(lastKey, m_d->documentClipRange.end());
+    lastKey  = std::max(lastKey, m_d->documentRange.end());
     lastKey  = std::max(lastKey, m_d->currentUITime());
 
     return lastKey + 1;

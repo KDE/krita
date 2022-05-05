@@ -991,7 +991,7 @@ void Document::setFullClipRangeStartTime(int startTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setDocumentClipRangeStartTime(startTime);
+    d->document->image()->animationInterface()->setDocumentRangeStartFrame(startTime);
 }
 
 
@@ -1000,7 +1000,7 @@ int Document::fullClipRangeStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->documentClipRange().start();
+    return d->document->image()->animationInterface()->documentPlaybackRange().start();
 }
 
 
@@ -1009,7 +1009,7 @@ void Document::setFullClipRangeEndTime(int endTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setDocumentClipRangeEndTime(endTime);
+    d->document->image()->animationInterface()->setDocumentRangeEndFrame(endTime);
 }
 
 
@@ -1018,7 +1018,7 @@ int Document::fullClipRangeEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->documentClipRange().end();
+    return d->document->image()->animationInterface()->documentPlaybackRange().end();
 }
 
 int Document::animationLength()
@@ -1035,7 +1035,7 @@ void Document::setPlayBackRange(int start, int stop)
     if (!d->document->image()) return;
 
     const KisTimeSpan newTimeRange = KisTimeSpan::fromTimeWithDuration(start, (stop-start));
-    d->document->image()->animationInterface()->setPlaybackRange(newTimeRange);
+    d->document->image()->animationInterface()->setActivePlaybackRange(newTimeRange);
 }
 
 int Document::playBackStartTime()
@@ -1043,7 +1043,7 @@ int Document::playBackStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->activeClipRange().start();
+    return d->document->image()->animationInterface()->activePlaybackRange().start();
 }
 
 int Document::playBackEndTime()
@@ -1051,7 +1051,7 @@ int Document::playBackEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->activeClipRange().end();
+    return d->document->image()->animationInterface()->activePlaybackRange().end();
 }
 
 int Document::currentTime()

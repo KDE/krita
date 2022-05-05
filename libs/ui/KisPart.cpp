@@ -515,7 +515,7 @@ KisPlaybackEngine *KisPart::playbackEngine() const
 
 void KisPart::prioritizeFrameForCache(KisImageSP image, int frame) {
     KisImageAnimationInterface* animInterface = image->animationInterface();
-    if ( animInterface && animInterface->documentClipRange().contains(frame)) {
+    if ( animInterface && animInterface->documentPlaybackRange().contains(frame)) {
         d->animationCachePopulator.requestRegenerationWithPriorityFrame(image, frame);
     }
 }

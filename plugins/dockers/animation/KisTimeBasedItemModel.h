@@ -95,7 +95,7 @@ protected Q_SLOTS:
 
 private Q_SLOTS:
     void slotFramerateChanged();
-    void slotClipRangeChanged();
+    void slotPlaybackRangeChanged();
     void slotCacheChanged();
     void slotInternalScrubPreviewRequested(int time);
 

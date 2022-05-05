@@ -108,7 +108,7 @@ public:
         KIS_ASSERT(canvas); // Sanity check...
         m_canvas = canvas;
 
-        const KisTimeSpan range = canvas->image()->animationInterface()->activeClipRange();
+        const KisTimeSpan range = canvas->image()->animationInterface()->activePlaybackRange();
         setPlaybackRange(range);
 
         // Initialize and optimize playback environment...
@@ -238,9 +238,9 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
             KisImageAnimationInterface* animInterface = m_d->canvas->image()->animationInterface();
             KisConfig cfg(true);
             if (animInterface && cfg.adaptivePlaybackRange()) {
-                KisTimeSpan desiredPlaybackRange = animInterface->documentClipRange();
+                KisTimeSpan desiredPlaybackRange = animInterface->documentPlaybackRange();
                 desiredPlaybackRange.include(time);
-                animInterface->setDocumentClipRange(desiredPlaybackRange);
+                animInterface->setDocumentRange(desiredPlaybackRange);
             }
         }
     });
@@ -298,7 +298,7 @@ KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
     }
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    return animation->activeClipRange();
+    return animation->activePlaybackRange();
 }
 
 void KisCanvasAnimationState::setupAudioTracks()
@@ -318,7 +318,7 @@ void KisCanvasAnimationState::setupAudioTracks()
         QFileInfo toLoad = files.first();
         if (toLoad.exists()) {
             m_d->media.reset(new QFileInfo(toLoad));
-            emit sigPlaybackMediaChanged(*m_d->media);
+            emit sigPlaybackMediaChanged();
         }
     }
 }

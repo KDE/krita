@@ -7,6 +7,7 @@
 
 #include <QScopedPointer>
 #include <QFileInfo>
+#include <boost/optional.hpp>
 
 
 enum PlaybackMode {
@@ -86,7 +87,7 @@ private:
     void previousKeyframeWithColor(int color);
     void previousKeyframeWithColor(const QSet<int> &validColors);
 
-    void setupProducerFromFile(QFileInfo file);
+    void setupProducer(boost::optional<QFileInfo> file);
 
 private:
     struct Private;

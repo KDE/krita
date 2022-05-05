@@ -126,7 +126,7 @@ KisImportExportErrorCode CSVSaver::encode(QIODevice *io)
         node = node->nextSibling();
     }
 
-    KisTimeSpan range = animation->documentClipRange();
+    KisTimeSpan range = animation->documentPlaybackRange();
 
     start = (range.isValid()) ? range.start() : 0;
 

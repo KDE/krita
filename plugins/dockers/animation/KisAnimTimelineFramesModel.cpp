@@ -288,7 +288,7 @@ void KisAnimTimelineFramesModel::setDummiesFacade(KisDummiesFacadeBase *dummiesF
         connect(m_d->dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
                 SLOT(slotDummyChanged(KisNodeDummy*)));
         connect(m_d->image->animationInterface(),
-                SIGNAL(sigFullClipRangeChanged()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
+                SIGNAL(sigDocumentClipRangeChange()), SIGNAL(sigInfiniteTimelineUpdateNeeded()));
         connect(m_d->image, SIGNAL(sigImageModified()), SLOT(slotImageContentChanged()));
         connect(m_d->image, SIGNAL(sigIsolatedModeChanged()), SLOT(slotImageContentChanged()));
     }

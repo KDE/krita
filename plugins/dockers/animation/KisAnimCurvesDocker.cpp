@@ -440,7 +440,7 @@ void KisAnimCurvesDocker::setCanvas(KoCanvasBase *canvas)
         connect(m_d->canvas->animationState(), SIGNAL(sigPlaybackSpeedChanged(double)), this, SLOT(handlePlaybackSpeedChange(double)));
 
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigUiTimeChanged(int)), this, SLOT(updateFrameRegister()));
-        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFullClipRangeChanged()), SLOT(handleClipRangeChange()));
+        connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigDocumentClipRangeChange()), SLOT(handleClipRangeChange()));
         connect(m_d->canvas->image()->animationInterface(), SIGNAL(sigFramerateChanged()), this, SLOT(handleFrameRateChange()));
     }
 }

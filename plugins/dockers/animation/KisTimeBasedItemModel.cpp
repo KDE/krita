@@ -131,7 +131,7 @@ void KisTimeBasedItemModel::setImage(KisImageWSP p_image)
 
         connect(ai, SIGNAL(sigFramerateChanged()), SLOT(slotFramerateChanged()));
         connect(ai, SIGNAL(sigUiTimeChanged(int)), SLOT(slotCurrentTimeChanged(int)));
-        connect(ai, SIGNAL(sigFullClipRangeChanged()), SLOT(slotClipRangeChanged()));
+        connect(ai, SIGNAL(sigDocumentClipRangeChange()), SLOT(slotClipRangeChanged()));
     }
 
     endResetModel();

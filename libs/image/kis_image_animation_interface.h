@@ -168,7 +168,7 @@ Q_SIGNALS:
     void sigInternalRequestTimeSwitch(int frameId, bool useUndo);
 
     void sigFramerateChanged();
-    void sigFullClipRangeChanged();
+    void sigDocumentClipRangeChange();
     void sigPlaybackRangeChanged();
 
     /**

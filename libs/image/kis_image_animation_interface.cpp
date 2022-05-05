@@ -143,7 +143,7 @@ void KisImageAnimationInterface::setDocumentClipRange(const KisTimeSpan range)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!range.isInfinite());
     m_d->documentClipRange = range;
-    emit sigFullClipRangeChanged();
+    emit sigDocumentClipRangeChange();
 }
 
 void KisImageAnimationInterface::setDocumentClipRangeStartTime(int column)

@@ -691,8 +691,8 @@ target_link_libraries(kritaui
         kritaresources
 
         SDL2
-        mlt-7
-        mlt++-7
+        mlt
+        mlt++
 )
 
 if (ANDROID)

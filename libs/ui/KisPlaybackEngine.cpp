@@ -501,9 +501,9 @@ void KisPlaybackEngine::setupProducerFromFile(QFileInfo file)
     m_d->canvasProducers[m_d->activeCanvas] = producer;
 }
 
-void KisPlaybackEngine::setCanvas(KoCanvasBase *canvas)
+void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 {
-    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(canvas);
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
 
     if (!canvas || m_d->activeCanvas == canvas) {
         return;

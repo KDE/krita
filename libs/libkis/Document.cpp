@@ -991,7 +991,7 @@ void Document::setFullClipRangeStartTime(int startTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setFullClipRangeStartTime(startTime);
+    d->document->image()->animationInterface()->setDocumentClipRangeStartTime(startTime);
 }
 
 
@@ -1000,7 +1000,7 @@ int Document::fullClipRangeStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->fullClipRange().start();
+    return d->document->image()->animationInterface()->documentClipRange().start();
 }
 
 
@@ -1009,7 +1009,7 @@ void Document::setFullClipRangeEndTime(int endTime)
     if (!d->document) return;
     if (!d->document->image()) return;
 
-    d->document->image()->animationInterface()->setFullClipRangeEndTime(endTime);
+    d->document->image()->animationInterface()->setDocumentClipRangeEndTime(endTime);
 }
 
 
@@ -1018,7 +1018,7 @@ int Document::fullClipRangeEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->fullClipRange().end();
+    return d->document->image()->animationInterface()->documentClipRange().end();
 }
 
 int Document::animationLength()
@@ -1043,7 +1043,7 @@ int Document::playBackStartTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->playbackRange().start();
+    return d->document->image()->animationInterface()->activeClipRange().start();
 }
 
 int Document::playBackEndTime()
@@ -1051,7 +1051,7 @@ int Document::playBackEndTime()
     if (!d->document) return false;
     if (!d->document->image()) return false;
 
-    return d->document->image()->animationInterface()->playbackRange().end();
+    return d->document->image()->animationInterface()->activeClipRange().end();
 }
 
 int Document::currentTime()

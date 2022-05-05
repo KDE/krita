@@ -728,7 +728,7 @@ void KisKraLoader::loadAnimationMetadataFromXML(const QDomElement &element, KisI
     }
 
     if (KisDomUtils::loadValue(rootElement, "range", &range)) {
-        animation->setFullClipRange(range);
+        animation->setDocumentClipRange(range);
     }
 
     if (KisDomUtils::loadValue(rootElement, "currentTime", &currentTime)) {

@@ -109,7 +109,7 @@ public:
         KIS_ASSERT(canvas); // Sanity check...
         m_canvas = canvas;
 
-        const KisTimeSpan range = canvas->image()->animationInterface()->playbackRange();
+        const KisTimeSpan range = canvas->image()->animationInterface()->activeClipRange();
         setPlaybackRange(range);
 
         // Initialize and optimize playback environment...
@@ -239,9 +239,9 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
             KisImageAnimationInterface* animInterface = m_d->canvas->image()->animationInterface();
             KisConfig cfg(true);
             if (animInterface && cfg.adaptivePlaybackRange()) {
-                KisTimeSpan desiredPlaybackRange = animInterface->fullClipRange();
+                KisTimeSpan desiredPlaybackRange = animInterface->documentClipRange();
                 desiredPlaybackRange.include(time);
-                animInterface->setFullClipRange(desiredPlaybackRange);
+                animInterface->setDocumentClipRange(desiredPlaybackRange);
             }
         }
     });
@@ -299,7 +299,7 @@ KisTimeSpan KisCanvasAnimationState::activePlaybackRange()
     }
 
     const KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
-    return animation->playbackRange();
+    return animation->activeClipRange();
 }
 
 void KisCanvasAnimationState::setupAudioTracks()

@@ -286,7 +286,7 @@ KisImportExportErrorCode CSVLoader::decode(QIODevice *io, const QString &filenam
             if (frame > frameCount)
                 frameCount = frame;
 
-            animation->setFullClipRange(KisTimeSpan::fromTimeToTime(0,frameCount - 1));
+            animation->setDocumentClipRange(KisTimeSpan::fromTimeToTime(0,frameCount - 1));
             animation->setFramerate((int)framerate);
         }
 

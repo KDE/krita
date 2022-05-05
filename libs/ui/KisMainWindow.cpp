@@ -2106,8 +2106,8 @@ void KisMainWindow::importVideoAnimation()
 
             dbgFile << "Current frames:" << document->image()->animationInterface()->totalLength() << "total frames:" << totalFrames;
             if ( document->image()->animationInterface()->totalLength() < totalFrames ) {
-                document->image()->animationInterface()->setFullClipRangeStartTime(0);
-                document->image()->animationInterface()->setFullClipRangeEndTime(totalFrames);
+                document->image()->animationInterface()->setDocumentClipRangeStartTime(0);
+                document->image()->animationInterface()->setDocumentClipRangeEndTime(totalFrames);
             }
 
         } else {
@@ -2138,8 +2138,8 @@ void KisMainWindow::importVideoAnimation()
             }
 
             document->image()->animationInterface()->setFramerate(fps);
-            document->image()->animationInterface()->setFullClipRangeStartTime(0);
-            document->image()->animationInterface()->setFullClipRangeEndTime(totalFrames);
+            document->image()->animationInterface()->setDocumentClipRangeStartTime(0);
+            document->image()->animationInterface()->setDocumentClipRangeEndTime(totalFrames);
 
 
             this->showDocument(document);

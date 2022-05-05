@@ -85,8 +85,8 @@ public:
     qreal audioVolume() const;
     void setAudioVolume(qreal value);
 
-    void setFullClipRangeStart(int column);
-    void setFullClipRangeEnd(int column);
+    void setDocumentClipRangeStart(int column);
+    void setDocumentClipRangeEnd(int column);
 
     void clearEntireCache();
     void setActiveLayerSelectedTimes(const QSet<int>& times);

@@ -584,12 +584,12 @@ void KisAnimTimelineFramesView::slotTryTransferSelectionBetweenRows(int fromRow,
 
 void KisAnimTimelineFramesView::slotSetStartTimeToCurrentPosition()
 {
-     m_d->model->setFullClipRangeStart(this->currentIndex().column());
+     m_d->model->setDocumentClipRangeStart(this->currentIndex().column());
 }
 
 void KisAnimTimelineFramesView::slotSetEndTimeToCurrentPosition()
 {
-    m_d->model->setFullClipRangeEnd(this->currentIndex().column());
+    m_d->model->setDocumentClipRangeEnd(this->currentIndex().column());
 }
 
 void KisAnimTimelineFramesView::slotUpdatePlackbackRange()
@@ -600,8 +600,8 @@ void KisAnimTimelineFramesView::slotUpdatePlackbackRange()
 
     calculateSelectionMetrics(minColumn, maxColumn, rows);
 
-    m_d->model->setFullClipRangeStart(minColumn);
-    m_d->model->setFullClipRangeEnd(maxColumn);
+    m_d->model->setDocumentClipRangeStart(minColumn);
+    m_d->model->setDocumentClipRangeEnd(maxColumn);
 }
 
 void KisAnimTimelineFramesView::slotUpdateInfiniteFramesCount()

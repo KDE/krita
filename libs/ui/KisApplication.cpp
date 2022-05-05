@@ -623,7 +623,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
                     int sequenceStart = 0;
 
                     KisAsyncAnimationFramesSaveDialog exporter(doc->image(),
-                                               doc->image()->animationInterface()->fullClipRange(),
+                                               doc->image()->animationInterface()->documentClipRange(),
                                                exportFileName,
                                                sequenceStart,
                                                false,

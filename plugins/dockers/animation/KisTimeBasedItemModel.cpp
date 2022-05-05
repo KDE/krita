@@ -85,7 +85,7 @@ struct KisTimeBasedItemModel::Private
             return true;
         }
 
-        KisTimeSpan clipRange = image->animationInterface()->fullClipRange();
+        KisTimeSpan clipRange = image->animationInterface()->documentClipRange();
         return clipRange.contains(time);
     }
 };
@@ -574,10 +574,10 @@ void KisTimeBasedItemModel::slotClipRangeChanged()
 {
     if (m_d->image && m_d->image->animationInterface() ) {
         const KisImageAnimationInterface* const interface = m_d->image->animationInterface();
-        const int lastFrame = interface->playbackRange().end();
+        const int lastFrame = interface->activeClipRange().end();
         if (lastFrame > m_d->numFramesOverride) {
-            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->playbackRange().end());
-            m_d->numFramesOverride = interface->playbackRange().end();
+            beginInsertColumns(QModelIndex(), m_d->numFramesOverride, interface->activeClipRange().end());
+            m_d->numFramesOverride = interface->activeClipRange().end();
             endInsertColumns();
         }
 

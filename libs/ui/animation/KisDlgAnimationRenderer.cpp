@@ -61,8 +61,8 @@ KisDlgAnimationRenderer::KisDlgAnimationRenderer(KisDocument *doc, QWidget *pare
     m_page->dirRequester->setMode(KoFileDialog::OpenDirectory);
 
     m_page->intStart->setMinimum(0);
-    m_page->intStart->setMaximum(doc->image()->animationInterface()->fullClipRange().end());
-    m_page->intEnd->setMinimum(doc->image()->animationInterface()->fullClipRange().start());
+    m_page->intStart->setMaximum(doc->image()->animationInterface()->documentClipRange().end());
+    m_page->intEnd->setMinimum(doc->image()->animationInterface()->documentClipRange().start());
 
     m_page->intHeight->setMinimum(1);
     m_page->intHeight->setMaximum(100000);
@@ -167,7 +167,7 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
         m_page->dirRequester->setStartDir(lastUsedOptions.resolveAbsoluteDocumentFilePath(documentPath));
         m_page->dirRequester->setFileName(lastUsedOptions.directory);
     } else {
-        m_page->sequenceStart->setValue(m_image->animationInterface()->playbackRange().start());
+        m_page->sequenceStart->setValue(m_image->animationInterface()->activeClipRange().start());
         m_page->intWidth->setValue(m_image->width());
         m_page->intHeight->setValue(m_image->height());
 
@@ -242,8 +242,8 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     m_page->ffmpegLocation->setReadOnlyText(true);
 
     // Initialize these settings based on the current document context..
-    m_page->intStart->setValue(doc.image()->animationInterface()->playbackRange().start());
-    m_page->intEnd->setValue(doc.image()->animationInterface()->playbackRange().end());
+    m_page->intStart->setValue(doc.image()->animationInterface()->activeClipRange().start());
+    m_page->intEnd->setValue(doc.image()->animationInterface()->activeClipRange().end());
     m_page->intFramesPerSecond->setValue(doc.image()->animationInterface()->framerate());
 
     if (!doc.image()->animationInterface()->exportSequenceFilePath().isEmpty()

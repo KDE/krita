@@ -1112,14 +1112,14 @@ void KisAnimTimelineFramesModel::setAudioVolume(qreal value)
 //    m_d->image->animationInterface()->setAudioVolume(value);
 }
 
-void KisAnimTimelineFramesModel::setFullClipRangeStart(int column)
+void KisAnimTimelineFramesModel::setDocumentClipRangeStart(int column)
 {
-    m_d->image->animationInterface()->setFullClipRangeStartTime(column);
+    m_d->image->animationInterface()->setDocumentClipRangeStartTime(column);
 }
 
-void KisAnimTimelineFramesModel::setFullClipRangeEnd(int column)
+void KisAnimTimelineFramesModel::setDocumentClipRangeEnd(int column)
 {
-    m_d->image->animationInterface()->setFullClipRangeEndTime(column);
+    m_d->image->animationInterface()->setDocumentClipRangeEndTime(column);
 }
 
 void KisAnimTimelineFramesModel::clearEntireCache()

@@ -233,9 +233,9 @@ bool StoryboardModel::setData(const QModelIndex & index, const QVariant & value,
                     if (cfg.adaptivePlaybackRange()) {
                         int frameNum = this->index(StoryboardItem::FrameNumber, 0, lastScene).data().toInt();
                         int totalDuration = data(lastScene, TotalSceneDurationInFrames).toInt();
-                        KisTimeSpan playbackRange = m_image->animationInterface()->fullClipRange();
+                        KisTimeSpan playbackRange = m_image->animationInterface()->documentClipRange();
                         playbackRange.include(frameNum+totalDuration);
-                        m_image->animationInterface()->setFullClipRange(playbackRange);
+                        m_image->animationInterface()->setDocumentClipRange(playbackRange);
                     }
                 }
 

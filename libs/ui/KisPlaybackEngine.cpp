@@ -258,8 +258,8 @@ void KisPlaybackEngine::previousFrame()
 
     KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
 
-    const int startFrame = animInterface->playbackRange().start();
-    const int endFrame = animInterface->playbackRange().end();
+    const int startFrame = animInterface->activeClipRange().start();
+    const int endFrame = animInterface->activeClipRange().end();
 
     int frame = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame() - 1;
 
@@ -280,8 +280,8 @@ void KisPlaybackEngine::nextFrame()
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationPlayer()) return;
     KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
 
-    const int startFrame = animInterface->playbackRange().start();
-    const int endFrame = animInterface->playbackRange().end();
+    const int startFrame = animInterface->activeClipRange().start();
+    const int endFrame = animInterface->activeClipRange().end();
 
     int frame = m_d->activeCanvasAnimationPlayer()->displayProxy()->visibleFrame() + 1;
 

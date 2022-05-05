@@ -345,8 +345,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                                       m_d->titlebar->frameRegister);
 
             KisImageAnimationInterface *animinterface = m_d->canvas->image()->animationInterface();
-            m_d->titlebar->sbStartFrame->setValue(animinterface->fullClipRange().start());
-            m_d->titlebar->sbEndFrame->setValue(animinterface->fullClipRange().end());
+            m_d->titlebar->sbStartFrame->setValue(animinterface->documentClipRange().start());
+            m_d->titlebar->sbEndFrame->setValue(animinterface->documentClipRange().end());
             m_d->titlebar->sbFrameRate->setValue(animinterface->framerate());
             m_d->titlebar->sbSpeed->setValue(100);
             m_d->titlebar->frameRegister->setValue(animinterface->currentTime());
@@ -378,8 +378,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
         m_d->titlebar->transport->setPlaying(m_d->canvas->animationState()->playbackState() == PlaybackState::PLAYING);
 
         connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
-        connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeStartTime(int)));
-        connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFullClipRangeEndTime(int)));
+        connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentClipRangeStartTime(int)));
+        connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentClipRangeEndTime(int)));
 
         connect(m_d->canvas->animationState(), SIGNAL(sigFrameChanged()), this, SLOT(updateFrameRegister()));
         connect(m_d->canvas->animationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, [this](PlaybackState state){
@@ -618,8 +618,8 @@ void KisAnimTimelineDocker::handleClipRangeChange()
 
     KisImageAnimationInterface *animInterface = m_d->canvas->image()->animationInterface();
 
-    m_d->titlebar->sbStartFrame->setValue(animInterface->fullClipRange().start());
-    m_d->titlebar->sbEndFrame->setValue(animInterface->fullClipRange().end());
+    m_d->titlebar->sbStartFrame->setValue(animInterface->documentClipRange().start());
+    m_d->titlebar->sbEndFrame->setValue(animInterface->documentClipRange().end());
 }
 
 void KisAnimTimelineDocker::handleFrameRateChange()

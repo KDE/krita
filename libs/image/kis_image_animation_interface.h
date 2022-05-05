@@ -95,13 +95,20 @@ public:
     void setDefaultProjectionColor(const KoColor &color);
 
     /**
-     * The current time range selected by user.
-     * @return current time range
+     * @brief documentClipRange
+     * @return A KisTimeSpan reflecting actual document time range. This is
+     * the actual play back range associated with the krita document.
      */
-    const KisTimeSpan& fullClipRange() const;
-    void setFullClipRange(const KisTimeSpan range);
+    const KisTimeSpan& documentClipRange() const;
+    void setDocumentClipRange(const KisTimeSpan range);
 
-    const KisTimeSpan &playbackRange() const;
+    /**
+     * @brief activeClipRange
+     * @return Returns the current clip range that the user wishes play through.
+     * Takes into account selection range when available as a custom loop override.
+     * Should be used in the PlaybackEngine to determine proper loop points.
+     */
+    const KisTimeSpan &activeClipRange() const;
     void setPlaybackRange(const KisTimeSpan range);
     int framerate() const;
 
@@ -128,8 +135,8 @@ public Q_SLOTS:
      */
     void switchCurrentTimeAsync(int frameId, bool useUndo = false);
 
-    void setFullClipRangeStartTime(int column);
-    void setFullClipRangeEndTime(int column);
+    void setDocumentClipRangeStartTime(int column);
+    void setDocumentClipRangeEndTime(int column);
 
     void setFramerate(int fps);
 

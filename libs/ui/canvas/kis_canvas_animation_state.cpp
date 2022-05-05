@@ -76,23 +76,23 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
  * Also keeps track of original origin frame of initial play command, so play/pause can work while stop
  * will always return to the origin of playback (where the user first pressed play from the stopped state.)
  */
-class PlaybackEnvironment : public QObject {
+class CanvasPlaybackEnvironment : public QObject {
     Q_OBJECT
 public:
-    PlaybackEnvironment(int originFrame, KisCanvasAnimationState* parent = nullptr)
+    CanvasPlaybackEnvironment(int originFrame, KisCanvasAnimationState* parent = nullptr)
         : QObject(parent)
         , m_originFrame(originFrame)
     {
         connect(&m_cancelTrigger, SIGNAL(output()), parent, SLOT(stop()));
     }
 
-    ~PlaybackEnvironment() {
+    ~CanvasPlaybackEnvironment() {
         restore();
     }
 
-    PlaybackEnvironment() = delete;
-    PlaybackEnvironment(const PlaybackEnvironment&) = delete;
-    PlaybackEnvironment& operator= (const PlaybackEnvironment&) = delete;
+    CanvasPlaybackEnvironment() = delete;
+    CanvasPlaybackEnvironment(const CanvasPlaybackEnvironment&) = delete;
+    CanvasPlaybackEnvironment& operator= (const CanvasPlaybackEnvironment&) = delete;
 
     int originFrame() { return m_originFrame; }
 
@@ -219,7 +219,7 @@ public:
     PlaybackMode mode;
     QScopedPointer<KisFrameDisplayProxy> displayProxy;
     QScopedPointer<QFileInfo> media;
-    QScopedPointer<PlaybackEnvironment> playbackEnvironment; //Sets up canvas / environment for playback
+    QScopedPointer<CanvasPlaybackEnvironment> playbackEnvironment; //Sets up canvas / environment for playback
 
     KisSignalCompressor playbackStatisticsCompressor;
 
@@ -330,7 +330,7 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
         m_d->state = p_state;
         if (m_d->state == PLAYING) {
             if (!m_d->playbackEnvironment) {
-                m_d->playbackEnvironment.reset(new PlaybackEnvironment(m_d->displayProxy->visibleFrame(), this));
+                m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->visibleFrame(), this));
             }
 
             m_d->playbackEnvironment->prepare(m_d->canvas);

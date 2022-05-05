@@ -36,6 +36,7 @@ struct KisTimeBasedItemModel::Private
         , activeFrameIndex(0)
         , scrubInProgress(false)
         , scrubStartFrame(-1)
+        , shouldReturnToPlay(false)
         , scrubHeaderMin(0)
         , scrubHeaderMax(0)
     {}
@@ -52,6 +53,7 @@ struct KisTimeBasedItemModel::Private
 
     bool scrubInProgress;
     int scrubStartFrame;
+    bool shouldReturnToPlay;
 
     QScopedPointer<KisSignalCompressorWithParam<int>> scrubbingCompressor;
     QScopedPointer<KisSignalCompressorWithParam<int>> scrubHeaderUpdateCompressor;
@@ -517,34 +519,40 @@ void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
     KisPart::instance()->playbackEngine()->seek(time);
 }
 
-void KisTimeBasedItemModel::setScrubState(bool active)
+void KisTimeBasedItemModel::setScrubState(bool p_state)
 {
-    auto prioritizeCache = [this](){
-        if (m_d->image) {
-            const int currentFrame = m_d->image->animationInterface()->currentUITime();
-            if(!isFrameCached(currentFrame)) {
-                KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
+
+//    auto prioritizeCache = [this](){
+//        if (m_d->image) {
+//            const int currentFrame = m_d->image->animationInterface()->currentUITime();
+//            if(!isFrameCached(currentFrame)) {
+//                KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
+//            }
+//        }
+//    };
+
+    if (m_d->scrubInProgress != p_state) {
+        m_d->scrubInProgress = p_state;
+
+        if (m_d->scrubInProgress == true) {
+            m_d->scrubStartFrame = m_d->activeFrameIndex;
+
+            if (m_d->animationPlayer->playbackState() == PLAYING) {
+                m_d->shouldReturnToPlay = true;
+                m_d->animationPlayer->setPlaybackState(PAUSED);
             }
-        }
-    };
 
-    if (!m_d->scrubInProgress && active) {
+        } else {
 
-        prioritizeCache();
-        m_d->scrubStartFrame = m_d->activeFrameIndex;
-        m_d->scrubInProgress = true;
-    }
-
-    if (m_d->scrubInProgress && !active) {
-
-        m_d->scrubInProgress = false;
-        prioritizeCache();
-
-        if (m_d->image) {
             scrubTo(m_d->activeFrameIndex);
-        }
 
-        m_d->scrubStartFrame = -1;
+            if (m_d->shouldReturnToPlay) {
+                m_d->animationPlayer->setPlaybackState(PLAYING);
+            }
+
+            m_d->scrubStartFrame = -1;
+            m_d->shouldReturnToPlay = false;
+        }
     }
 }
 

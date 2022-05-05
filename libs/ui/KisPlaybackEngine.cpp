@@ -3,7 +3,6 @@
 #include <QMap>
 
 #include "kis_canvas2.h"
-#include "animation/KisPlaybackHandle.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_canvas_animation_state.h"
 #include "kis_image_animation_interface.h"

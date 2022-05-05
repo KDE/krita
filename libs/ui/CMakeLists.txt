@@ -368,7 +368,6 @@ set(kritaui_LIB_SRCS
     animation/VideoHDRMetadataOptionsDialog.cpp
     animation/KisHDRMetadataOptions.cpp
     animation/KisDlgImportVideoAnimation.cpp
-    animation/KisPlaybackHandle.cpp
     animation/KisFrameDisplayProxy.cpp
     input/kis_touch_shortcut.cpp
     kis_document_undo_store.cpp

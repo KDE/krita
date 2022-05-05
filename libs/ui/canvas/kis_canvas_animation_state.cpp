@@ -37,7 +37,6 @@
 #include "kis_keyframe_channel.h"
 #include "kis_algebra_2d.h"
 #include <mlt++/MltProducer.h>
-#include "animation/KisPlaybackHandle.h"
 #include "KisPlaybackEngine.h"
 
 #include "kis_image_config.h"

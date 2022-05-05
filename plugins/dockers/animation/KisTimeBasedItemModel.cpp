@@ -528,6 +528,10 @@ void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 
 void KisTimeBasedItemModel::setScrubState(bool p_state)
 {
+    if (!m_d->animationPlayer) {
+        return;
+    }
+
     if (m_d->scrubInProgress != p_state) {
         m_d->scrubInProgress = p_state;
 

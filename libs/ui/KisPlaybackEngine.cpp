@@ -505,20 +505,30 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 {
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
 
-    if (!canvas || m_d->activeCanvas == canvas) {
+    if (!canvas && m_d->activeCanvas == canvas) {
         return;
     }
 
-    // Disconnect player, prepare for new active player..
-    if (m_d->activeCanvas && m_d->activeCanvasAnimationPlayer()) {
-        this->disconnect(m_d->activeCanvasAnimationPlayer());
-        m_d->activeCanvasAnimationPlayer()->disconnect(this);
+    if (m_d->activeCanvas) {
+        // Disconnect old player, prepare for new one..
+        if (m_d->activeCanvasAnimationPlayer()) {
+            this->disconnect(m_d->activeCanvasAnimationPlayer());
+            m_d->activeCanvasAnimationPlayer()->disconnect(this);
+        }
+
+        // Disconnect old image, prepare for new one..
+        auto image = m_d->activeCanvas->image();
+        if (image && image->animationInterface()) {
+            this->disconnect(image->animationInterface());
+            image->animationInterface()->disconnect(this);
+        }
     }
 
     StopAndResume stopResume(m_d.data(), true);
 
     m_d->activeCanvas = canvas;
 
+    // Connect new player..
     if (m_d->activeCanvasAnimationPlayer()) {
         connect(m_d->activeCanvasAnimationPlayer(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[m_d->activeCanvas];
@@ -528,13 +538,19 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 
         connect(m_d->activeCanvasAnimationPlayer(), &KisCanvasAnimationState::sigPlaybackMediaChanged, this, &KisPlaybackEngine::setupProducerFromFile);
 
-        m_d->profile->set_frame_rate(m_d->activeCanvas->image()->animationInterface()->framerate(), 1);
-
         if (m_d->activeCanvasAnimationPlayer()->mediaInfo().has_value()) {
             setupProducerFromFile(m_d->activeCanvasAnimationPlayer()->mediaInfo().value());
         } else {
             m_d->canvasProducers[m_d->activeCanvas] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "count"));
         }
+    }
+
+    // Connect new image..
+    auto image = m_d->activeCanvas->image();
+    if (image && image->animationInterface()) {
+        connect(image->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
+            m_d->profile->set_frame_rate(m_d->activeCanvas->image()->animationInterface()->framerate(), 1);
+        });
     }
 }
 

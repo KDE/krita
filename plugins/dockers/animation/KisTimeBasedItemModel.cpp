@@ -55,7 +55,6 @@ struct KisTimeBasedItemModel::Private
     int scrubStartFrame;
     bool shouldReturnToPlay;
 
-    QScopedPointer<KisSignalCompressorWithParam<int>> scrubbingCompressor;
     QScopedPointer<KisSignalCompressorWithParam<int>> scrubHeaderUpdateCompressor;
     int scrubHeaderMin;
     int scrubHeaderMax;
@@ -103,9 +102,6 @@ KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
 
     std::function<void (int)> scrubHorizHeaderUpdateCallback(
         std::bind(&KisTimeBasedItemModel::scrubHorizontalHeaderUpdate, this, _1));
-
-    m_d->scrubbingCompressor.reset(
-        new KisSignalCompressorWithParam<int>(cfg.scrubbingUpdatesDelay(), scrubCompressCallback, KisSignalCompressor::FIRST_ACTIVE));
 
     m_d->scrubHeaderUpdateCompressor.reset(
         new KisSignalCompressorWithParam<int>(100, scrubHorizHeaderUpdateCallback, KisSignalCompressor::FIRST_ACTIVE));
@@ -320,7 +316,8 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
             }
             break;
         case ScrubToRole:
-            scrubTo(m_d->activeFrameIndex);
+            SeekFlags flags = value.toBool() ? SEEK_PUSH_AUDIO : SEEK_NONE;
+            KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, flags);
             break;
         }
     }
@@ -560,10 +557,6 @@ bool KisTimeBasedItemModel::isScrubbing()
     return m_d->scrubInProgress;
 }
 
-void KisTimeBasedItemModel::scrubTo(int time)
-{
-    m_d->scrubbingCompressor->start(time);
-}
 
 void KisTimeBasedItemModel::slotCurrentTimeChanged(int time)
 {

@@ -641,6 +641,7 @@ void KisAnimTimelineFramesView::slotDataChanged(const QModelIndex &topLeft, cons
 
     if (selectedColumn != index.column() && !m_d->dragInProgress) {
         int row= index.isValid() ? index.row() : 0;
+        // Todo: This is causing double audio pushes. We should fix this eventually.
         selectionModel()->setCurrentIndex(m_d->model->index(row, selectedColumn), QItemSelectionModel::ClearAndSelect);
     }
 }

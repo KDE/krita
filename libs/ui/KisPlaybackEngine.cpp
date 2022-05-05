@@ -47,7 +47,7 @@ struct KisPlaybackEngine::Private {
 
         std::function<void (int)> callback(std::bind(&Private::pushAudio, this, std::placeholders::_1));
         sigPushAudioCompressor.reset(
-                    new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE_POSTPONE_NEXT)
+                    new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE)
                     );
 
         initializeConsumers();

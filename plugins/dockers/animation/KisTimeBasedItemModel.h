@@ -54,7 +54,6 @@ public:
 
     void setScrubState(bool active);
     bool isScrubbing();
-    void scrubTo(int time);
 
     void setPlaybackRange(const KisTimeSpan &range);
     bool isPlaybackActive() const;

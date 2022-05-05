@@ -270,6 +270,15 @@ QVariant KisTimeBasedItemModel::headerData(int section, Qt::Orientation orientat
 
 bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role)
 {
+    auto prioritizeCache = [this](int frame){
+        if (m_d->image) {
+            if(!isFrameCached(frame)) {
+                KisPart::instance()->prioritizeFrameForCache(m_d->image, frame);
+            }
+        }
+    };
+
+
     if (orientation == Qt::Horizontal) {
         switch (role) {
         case ActiveFrameRole:
@@ -317,6 +326,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
             break;
         case ScrubToRole:
             SeekFlags flags = value.toBool() ? SEEK_PUSH_AUDIO : SEEK_NONE;
+            prioritizeCache(m_d->activeFrameIndex);
             KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, flags);
             break;
         }
@@ -518,16 +528,6 @@ void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
 
 void KisTimeBasedItemModel::setScrubState(bool p_state)
 {
-
-//    auto prioritizeCache = [this](){
-//        if (m_d->image) {
-//            const int currentFrame = m_d->image->animationInterface()->currentUITime();
-//            if(!isFrameCached(currentFrame)) {
-//                KisPart::instance()->prioritizeFrameForCache(m_d->image, currentFrame);
-//            }
-//        }
-//    };
-
     if (m_d->scrubInProgress != p_state) {
         m_d->scrubInProgress = p_state;
 

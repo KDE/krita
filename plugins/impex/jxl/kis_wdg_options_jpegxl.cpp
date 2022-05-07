@@ -19,118 +19,118 @@ KisWdgOptionsJPEGXL::KisWdgOptionsJPEGXL(QWidget *parent)
     }
 
     {
-        resampling->addItem(i18nd("JPEG-XL encoder options", "Default (only for low quality)"), -1);
-        resampling->addItem(i18nd("JPEG-XL encoder options", "No downsampling"), 1);
-        resampling->addItem(i18nd("JPEG-XL encoder options", "2x2 downsampling"), 2);
-        resampling->addItem(i18nd("JPEG-XL encoder options", "4x4 downsampling"), 4);
-        resampling->addItem(i18nd("JPEG-XL encoder options", "8x8 downsampling"), 8);
+        resampling->addItem(i18nc("JPEG-XL encoder options", "Default (only for low quality)"), -1);
+        resampling->addItem(i18nc("JPEG-XL encoder options", "No downsampling"), 1);
+        resampling->addItem(i18nc("JPEG-XL encoder options", "2x2 downsampling"), 2);
+        resampling->addItem(i18nc("JPEG-XL encoder options", "4x4 downsampling"), 4);
+        resampling->addItem(i18nc("JPEG-XL encoder options", "8x8 downsampling"), 8);
 
-        extraChannelResampling->addItem(i18nd("JPEG-XL encoder options", "Default (only for low quality)"), -1);
-        extraChannelResampling->addItem(i18nd("JPEG-XL encoder options", "No downsampling"), 1);
-        extraChannelResampling->addItem(i18nd("JPEG-XL encoder options", "2x2 downsampling"), 2);
-        extraChannelResampling->addItem(i18nd("JPEG-XL encoder options", "4x4 downsampling"), 4);
-        extraChannelResampling->addItem(i18nd("JPEG-XL encoder options", "8x8 downsampling"), 8);
+        extraChannelResampling->addItem(i18nc("JPEG-XL encoder options", "Default (only for low quality)"), -1);
+        extraChannelResampling->addItem(i18nc("JPEG-XL encoder options", "No downsampling"), 1);
+        extraChannelResampling->addItem(i18nc("JPEG-XL encoder options", "2x2 downsampling"), 2);
+        extraChannelResampling->addItem(i18nc("JPEG-XL encoder options", "4x4 downsampling"), 4);
+        extraChannelResampling->addItem(i18nc("JPEG-XL encoder options", "8x8 downsampling"), 8);
     }
 
     {
-        dots->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        dots->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        dots->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        dots->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        dots->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        dots->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        patches->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        patches->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        patches->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        patches->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        patches->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        patches->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        gaborish->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        gaborish->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        gaborish->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        gaborish->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        gaborish->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        gaborish->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        modular->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        modular->addItem(i18nd("JPEG-XL encoder options", "VarDCT mode (e.g. for photographic images)"), 0);
-        modular->addItem(i18nd("JPEG-XL encoder options", "Modular mode (e.g. for lossless images)"), -1);
+        modular->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        modular->addItem(i18nc("JPEG-XL encoder options", "VarDCT mode (e.g. for photographic images)"), 0);
+        modular->addItem(i18nc("JPEG-XL encoder options", "Modular mode (e.g. for lossless images)"), -1);
     }
 
     {
-        keepInvisible->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        keepInvisible->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        keepInvisible->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        keepInvisible->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        keepInvisible->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        keepInvisible->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        groupOrder->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        groupOrder->addItem(i18nd("JPEG-XL encoder options", "Scanline order"), 0);
-        groupOrder->addItem(i18nd("JPEG-XL encoder options", "Center-first order"), -1);
+        groupOrder->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        groupOrder->addItem(i18nc("JPEG-XL encoder options", "Scanline order"), 0);
+        groupOrder->addItem(i18nc("JPEG-XL encoder options", "Center-first order"), -1);
     }
 
     {
-        responsive->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        responsive->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        responsive->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        responsive->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        responsive->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        responsive->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        progressiveAC->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        progressiveAC->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        progressiveAC->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        progressiveAC->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        progressiveAC->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        progressiveAC->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        qProgressiveAC->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        qProgressiveAC->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        qProgressiveAC->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        qProgressiveAC->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        qProgressiveAC->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        qProgressiveAC->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        progressiveDC->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        progressiveDC->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        progressiveDC->addItem(i18nd("JPEG-XL encoder options", "64x64 lower resolution pass"), 1);
-        progressiveDC->addItem(i18nd("JPEG-XL encoder options", "512x512 + 64x64 lower resolution passes"), 2);
+        progressiveDC->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        progressiveDC->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        progressiveDC->addItem(i18nc("JPEG-XL encoder options", "64x64 lower resolution pass"), 1);
+        progressiveDC->addItem(i18nc("JPEG-XL encoder options", "512x512 + 64x64 lower resolution passes"), 2);
     }
 
     {
-        lossyPalette->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        lossyPalette->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        lossyPalette->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        lossyPalette->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        lossyPalette->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        lossyPalette->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     {
-        modularGroupSize->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        modularGroupSize->addItem(i18nd("JPEG-XL encoder options", "128"), 0);
-        modularGroupSize->addItem(i18nd("JPEG-XL encoder options", "256"), 1);
-        modularGroupSize->addItem(i18nd("JPEG-XL encoder options", "512"), 2);
-        modularGroupSize->addItem(i18nd("JPEG-XL encoder options", "1024"), 3);
+        modularGroupSize->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        modularGroupSize->addItem(i18nc("JPEG-XL encoder options", "128"), 0);
+        modularGroupSize->addItem(i18nc("JPEG-XL encoder options", "256"), 1);
+        modularGroupSize->addItem(i18nc("JPEG-XL encoder options", "512"), 2);
+        modularGroupSize->addItem(i18nc("JPEG-XL encoder options", "1024"), 3);
     }
 
     {
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Zero"), 0);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Left"), 1);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Top"), 2);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Avg0"), 3);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Select"), 4);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Gradient"), 5);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Weighted"), 6);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Top right"), 7);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Top left"), 8);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Left left"), 9);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Avg1"), 10);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Avg2"), 11);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Avg3"), 12);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Toptop predictive average"), 13);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Gradient + Weighted"), 14);
-        modularPredictor->addItem(i18nd("JPEG-XL encoder options", "Use all predictors"), 15);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Zero"), 0);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Left"), 1);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Top"), 2);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Avg0"), 3);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Select"), 4);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Gradient"), 5);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Weighted"), 6);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Top right"), 7);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Top left"), 8);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Left left"), 9);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Avg1"), 10);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Avg2"), 11);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Avg3"), 12);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Toptop predictive average"), 13);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Gradient + Weighted"), 14);
+        modularPredictor->addItem(i18nc("JPEG-XL encoder options", "Use all predictors"), 15);
     }
 
     {
-        jpegReconCFL->addItem(i18nd("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
-        jpegReconCFL->addItem(i18nd("JPEG-XL encoder options", "Disabled"), 0);
-        jpegReconCFL->addItem(i18nd("JPEG-XL encoder options", "Enabled"), 1);
+        jpegReconCFL->addItem(i18nc("JPEG-XL encoder options", "Default (encoder chooses)"), -1);
+        jpegReconCFL->addItem(i18nc("JPEG-XL encoder options", "Disabled"), 0);
+        jpegReconCFL->addItem(i18nc("JPEG-XL encoder options", "Enabled"), 1);
     }
 
     metaDataFilters->setModel(&m_filterRegistryModel);

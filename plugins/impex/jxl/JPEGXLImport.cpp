@@ -241,7 +241,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                                       tgt,
                                                       reinterpret_cast<uint8_t *>(icc_profile.data()),
                                                       static_cast<size_t>(icc_profile.size()))) {
-                    document->setErrorMessage(i18nd("JPEG-XL errors", "Unable to read the image profile."));
+                    document->setErrorMessage(i18nc("JPEG-XL errors", "Unable to read the image profile."));
                     return ImportExportCodes::ErrorWhileReading;
                 }
 
@@ -253,7 +253,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             } else {
                 // XXX: Need to either create the LCMS profile manually
                 // here or inject it into createColorProfile
-                document->setErrorMessage(i18nd("JPEG-XL errors", "JPEG-XL encoded profile not implemented"));
+                document->setErrorMessage(i18nc("JPEG-XL errors", "JPEG-XL encoded profile not implemented"));
                 return ImportExportCodes::FormatFeaturesUnsupported;
             }
 
@@ -297,7 +297,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
         } else if (status == JXL_DEC_FRAME) {
             if (d.m_info.have_animation) {
                 if (JXL_DEC_SUCCESS != JxlDecoderGetFrameHeader(dec.get(), &d.m_header)) {
-                    document->setErrorMessage(i18nd("JPEG-XL errors", "JPEG-XL image is animated, but cannot retrieve animation frame header."));
+                    document->setErrorMessage(i18nc("JPEG-XL errors", "JPEG-XL image is animated, but cannot retrieve animation frame header."));
                     return ImportExportCodes::ErrorWhileReading;
                 }
             }

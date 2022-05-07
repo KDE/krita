@@ -12,6 +12,7 @@
 #include <QImageReader>
 #include <QClipboard>
 #include <QInputDialog>
+#include <QMessageBox>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -285,38 +286,69 @@ QString KoFileDialog::filename()
     }
 #endif
 
-    if (d->fileDialog->exec() == QDialog::Accepted) {
-        url = d->fileDialog->selectedFiles().first();
-    }
-
-    if (!url.isEmpty()) {
-        QString suffix = QFileInfo(url).suffix();
-        if (KisMimeDatabase::mimeTypeForSuffix(suffix).isEmpty()) {
-            suffix = "";
+    bool retryNeeded;
+    do {
+        retryNeeded = false;
+        if (d->fileDialog->exec() == QDialog::Accepted) {
+            url = d->fileDialog->selectedFiles().first();
+        } else {
+            url = QString();
+            break;
         }
 
-        if (d->type == SaveFile && suffix.isEmpty()) {
-            QString selectedFilter;
-            // index 0 is all supported; if that is chosen, saveDocument will automatically make it .kra
-            for (int i = 1; i < d->filterList.size(); ++i) {
-                if (d->filterList[i].startsWith(d->fileDialog->selectedNameFilter())) {
-                    selectedFilter = d->filterList[i];
-                    break;
+        // The Android native file selector does not know to add the .kra
+        // extension (MIME type not registered), so just skip the whole file
+        // suffix check for Android.
+#ifndef Q_OS_ANDROID
+        const QString suffix = QFileInfo(url).suffix();
+        bool isValidSuffix = true;
+        if (KisMimeDatabase::mimeTypeForSuffix(suffix).isEmpty()) {
+            warnWidgetUtils << "Selected file name suffix" << suffix << "does not match known MIME types";
+            isValidSuffix = false;
+        }
+
+        if (d->type == SaveFile && (suffix.isEmpty() || !isValidSuffix)) {
+            QString extension;
+            if (d->suffixes.contains(d->fileDialog->selectedNameFilter())) {
+                extension = d->suffixes[d->fileDialog->selectedNameFilter()];
+                if (!extension.isEmpty()) {
+                    // Append the default file extension to the file name before
+                    // relaunching the file selector. We do _not_ just append
+                    // the extension and return the new file name because:
+                    //  * it bypasses the file overwrite prompt provided by the
+                    //    file selector.
+                    //  * doing so will break sandboxed macOS and Android,
+                    //    because access to user files is restricted and must
+                    //    be done through the native file selector.
+                    url.append('.').append(extension);
+                    d->fileDialog->selectFile(url);
                 }
             }
-            int start = selectedFilter.indexOf("*.") + 1;
-            int end = selectedFilter.indexOf(" ", start);
-            int n = end - start;
-            QString extension = selectedFilter.mid(start, n);
-            if (!(extension.contains(".") || url.endsWith("."))) {
-                extension = "." + extension;
+            if (extension.isEmpty()) {
+                // Use the first extension of the selected filter just as a suggestion
+                QString selectedFilter;
+                // skip index 0 which is "All supported formats"
+                for (int i = 1; i < d->filterList.size(); ++i) {
+                    if (d->filterList[i].startsWith(d->fileDialog->selectedNameFilter())) {
+                        selectedFilter = d->filterList[i];
+                        break;
+                    }
+                }
+                int start = selectedFilter.indexOf("*.") + 2;
+                int end = selectedFilter.indexOf(" ", start);
+                if (start != -1 + 2 && end != -1) {
+                    extension = selectedFilter.mid(start, end - start);
+                }
             }
-// We can only write to the Uri that was returned, we don't have permission to change the Uri.
-#ifndef Q_OS_ANDROID
-            url = url + extension;
-#endif
+            QMessageBox::warning(d->parent, d->caption,
+                i18n("The selected file name does not have a file extension that Krita understands.\n"
+                     "Make sure the file name ends in '.%1' for example.", extension));
+            retryNeeded = true;
         }
+#endif
+    } while (retryNeeded);
 
+    if (!url.isEmpty()) {
         d->mimeType = KisMimeDatabase::mimeTypeForFile(url, d->type == KoFileDialog::SaveFile ? false : true);
         saveUsedDir(url, d->dialogName);
     }

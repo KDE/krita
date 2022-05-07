@@ -338,6 +338,7 @@ build_3rdparty () {
         ext_pkgconfig \
         ext_gettext \
         ext_openssl \
+        ext_python \
         ext_qt \
         ext_boost \
         ext_eigen3 \
@@ -376,7 +377,6 @@ build_3rdparty () {
 
     # for python
     cmake_3rdparty \
-        ext_python \
         ext_sip \
         ext_pyqt
 

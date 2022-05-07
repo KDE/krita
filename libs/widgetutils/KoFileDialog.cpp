@@ -108,31 +108,6 @@ void KoFileDialog::setImageFilters()
     setMimeTypeFilters(imageFilters);
 }
 
-void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString defaultMimeType)
-{
-    QPair<QStringList, QMap<QString, QString>> filters = getFilterStringListFromMime(mimeTypeList, true);
-    d->filterList = filters.first;
-    d->suffixes = filters.second;
-
-    QString defaultFilter;
-
-    if (!defaultMimeType.isEmpty()) {
-        QString suffix = KisMimeDatabase::suffixesForMimeType(defaultMimeType).first();
-
-        if (!d->proposedFileName.isEmpty()) {
-            d->proposedFileName = QFileInfo(d->proposedFileName).completeBaseName() + "." + suffix;
-        }
-
-        QStringList defaultFilters =
-            getFilterStringListFromMime(QStringList() << defaultMimeType, false).first;
-        if (defaultFilters.size() > 0) {
-            defaultFilter = defaultFilters.first();
-        }
-    }
-
-    d->defaultFilter = defaultFilter;
-}
-
 QString KoFileDialog::selectedNameFilter() const
 {
     return d->fileDialog->selectedNameFilter();
@@ -401,9 +376,9 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
     return filters;
 }
 
-const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringListFromMime(const QStringList &_mimeList,
-                                                            bool withAllSupportedEntry)
+void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString defaultMimeType)
 {
+    constexpr bool withAllSupportedEntry = true;
     QStringList mimeSeen;
 
     struct FilterData
@@ -413,6 +388,7 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
         QString defaultSuffix;
     };
 
+    FilterData defaultFilter {};
     // 1
     QString allSupported;
     // 2
@@ -422,8 +398,7 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
     // remaining
     QVector<FilterData> otherFileTypes;
 
-    QStringList mimeList = _mimeList;
-
+    QStringList mimeList = mimeTypeList;
     mimeList.sort();
 
     Q_FOREACH(const QString &mimeType, mimeList) {
@@ -463,12 +438,16 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
             filterData.fullLine = description + " ( " + oneFilter + ")";
             filterData.defaultSuffix = suffixes.first();
 
-            if (mimeType == "application/x-krita") {
+            if (mimeType == QLatin1String("application/x-krita")) {
                 kritaNative = filterData;
-            } else if (mimeType == "image/openraster") {
+            } else if (mimeType == QLatin1String("image/openraster")) {
                 ora = filterData;
             } else {
                 otherFileTypes.append(filterData);
+            }
+            if (defaultMimeType == mimeType) {
+                debugWidgetUtils << "KoFileDialog: Matched default MIME type to filter" << filterData.fullLine;
+                defaultFilter = filterData;
             }
             mimeSeen << mimeType;
         }
@@ -494,8 +473,14 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
             allSupported.remove("*.kra ");
             allSupported.prepend("*.kra ");
             allFilter.defaultSuffix = QStringLiteral("kra");
+        } else if (!defaultFilter.fullLine.isEmpty()) {
+            const QString suffixToMove = QString("*.") + defaultFilter.defaultSuffix + " ";
+            allSupported.remove(suffixToMove);
+            allSupported.prepend(suffixToMove);
+            allFilter.defaultSuffix = defaultFilter.defaultSuffix;
         } else {
-            // TODO: set default suffix from default mime type
+            // XXX: we don't have a meaningful default suffix
+            warnWidgetUtils << "KoFileDialog: No default suffix for 'All supported formats'";
             allFilter.defaultSuffix = QStringLiteral("");
         }
         allFilter.descriptionOnly = i18n("All supported formats");
@@ -516,8 +501,9 @@ const QPair<QStringList, QMap<QString, QString>> KoFileDialog::getFilterStringLi
         addFilterItem(filterData);
     }
 
-    return qMakePair(retFilterList, retFilterToSuffixMap);
-
+    d->filterList = retFilterList;
+    d->suffixes = retFilterToSuffixMap;
+    d->defaultFilter = defaultFilter.fullLine; // this can be empty
 }
 
 QString KoFileDialog::getUsedDir(const QString &dialogName)

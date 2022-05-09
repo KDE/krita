@@ -197,7 +197,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="lblResampling">
              <property name="text">
-              <string comment="Filter options specifically for JPEG-XL">Color channel resampling</string>
+              <string comment="JPEG-XL encoder options">Color channel resampling</string>
              </property>
             </widget>
            </item>
@@ -225,7 +225,7 @@
            <item row="2" column="0">
             <widget class="QLabel" name="lblPhotonNoise">
              <property name="text">
-              <string>Photon noise</string>
+              <string comment="JPEG-XL encoder options">Photon noise</string>
              </property>
             </widget>
            </item>
@@ -248,7 +248,7 @@
            <item row="3" column="0">
             <widget class="QLabel" name="lblDots">
              <property name="text">
-              <string>Generate dots</string>
+              <string comment="JPEG-XL encoder options">Generate dots</string>
              </property>
             </widget>
            </item>
@@ -262,7 +262,7 @@
            <item row="4" column="0">
             <widget class="QLabel" name="label">
              <property name="text">
-              <string>Generate patches</string>
+              <string comment="JPEG-XL encoder options">Generate patches</string>
              </property>
             </widget>
            </item>
@@ -295,7 +295,7 @@
              <item row="0" column="0">
               <widget class="QLabel" name="lblNone1">
                <property name="text">
-                <string>Default (encoder chooses)</string>
+                <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
                </property>
               </widget>
              </item>
@@ -317,7 +317,7 @@
            <item row="6" column="0">
             <widget class="QLabel" name="lblGaborishFilter">
              <property name="text">
-              <string>Gaborish filter</string>
+              <string comment="JPEG-XL encoder options">Gaborish filter</string>
              </property>
             </widget>
            </item>
@@ -331,7 +331,7 @@
            <item row="7" column="0">
             <widget class="QLabel" name="lbModularEncoding">
              <property name="text">
-              <string>Modular encoding</string>
+              <string comment="JPEG-XL encoder options">Modular encoding</string>
              </property>
             </widget>
            </item>
@@ -359,7 +359,7 @@
            <item row="9" column="0">
             <widget class="QLabel" name="lblGroupOrder">
              <property name="text">
-              <string comment="Filter options specifically for JPEG-XL">Group order</string>
+              <string comment="JPEG-XL encoder options">Group order</string>
              </property>
             </widget>
            </item>
@@ -373,7 +373,7 @@
            <item row="10" column="0">
             <widget class="QLabel" name="lblJPEGReconCFL">
              <property name="text">
-              <string>Chroma-from-luma</string>
+              <string comment="JPEG-XL encoder options">Chroma-from-luma</string>
              </property>
             </widget>
            </item>
@@ -471,7 +471,7 @@
                 <item row="0" column="0">
                  <widget class="QLabel" name="lblNone">
                   <property name="text">
-                   <string>Default (encoder chooses)</string>
+                   <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
                   </property>
                  </widget>
                 </item>
@@ -521,7 +521,7 @@
                 <item row="0" column="0">
                  <widget class="QLabel" name="lblNone2">
                   <property name="text">
-                   <string>Default (encoder chooses)</string>
+                   <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
                   </property>
                  </widget>
                 </item>
@@ -575,7 +575,7 @@
               <item row="5" column="0">
                <widget class="QLabel" name="lblLossyPalette">
                 <property name="text">
-                 <string comment="Filter options specifically for JPEG-XL">Delta palette</string>
+                 <string comment="JPEG-XL encoder options">Delta palette</string>
                 </property>
                </widget>
               </item>
@@ -589,7 +589,7 @@
               <item row="6" column="0">
                <widget class="QLabel" name="lblModularGroupSize">
                 <property name="text">
-                 <string >Group size</string>
+                 <string comment="JPEG-XL encoder options">Group size</string>
                 </property>
                </widget>
               </item>
@@ -603,7 +603,7 @@
               <item row="7" column="0">
                <widget class="QLabel" name="lblModularPredictor">
                 <property name="text">
-                 <string comment="Filter options specifically for JPEG-XL">Predictor</string>
+                 <string comment="JPEG-XL encoder options">Predictor</string>
                 </property>
                </widget>
               </item>
@@ -636,7 +636,7 @@
                 <item row="0" column="0">
                  <widget class="QLabel" name="lblNoDegradation">
                   <property name="text">
-                   <string>Default (encoder chooses)</string>
+                   <string comment="JPEG-XL encoder options">Default (encoder chooses)</string>
                   </property>
                  </widget>
                 </item>
@@ -735,7 +735,7 @@
           <item row="0" column="1">
            <widget class="QGroupBox" name="groupBox_4">
             <property name="title">
-             <string>Filters:</string>
+             <string comment="JPEG-XL metadata options">Filters:</string>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>

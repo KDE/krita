@@ -78,7 +78,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="lblPredictor">
         <property name="text">
-         <string>Predictor</string>
+         <string comment="TIFF encoder options">Predictor</string>
         </property>
         <property name="wordWrap">
          <bool>false</bool>

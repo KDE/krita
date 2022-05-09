@@ -128,8 +128,8 @@ else()
 endif()
 ExternalProject_Add(ext_libx265_10bit
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220209-12707.tar.gz
-    URL_HASH SHA256=ef09012449f535d2399ab489dfe094e91dc49fda3e847017f9830dd3233fc44f
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220222-12712.tar.gz
+    URL_HASH SHA256=e6182435b25b04a00c75770d2a1c11e7731eb5e118c377933eeec2665980db70
 
     SOURCE_SUBDIR source/
 
@@ -144,8 +144,8 @@ ExternalProject_Add(ext_libx265_10bit
 )
 ExternalProject_Add(ext_libx265_12bit
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220209-12707.tar.gz
-    URL_HASH SHA256=ef09012449f535d2399ab489dfe094e91dc49fda3e847017f9830dd3233fc44f
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220222-12712.tar.gz
+    URL_HASH SHA256=e6182435b25b04a00c75770d2a1c11e7731eb5e118c377933eeec2665980db70
 
     SOURCE_SUBDIR source/
 
@@ -162,8 +162,8 @@ ExternalProject_Add(ext_libx265_12bit
 ExternalProject_Add(
     ext_libx265
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220209-12707.tar.gz
-    URL_HASH SHA256=ef09012449f535d2399ab489dfe094e91dc49fda3e847017f9830dd3233fc44f
+    URL https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs/x265-snapshot-20220222-12712.tar.gz
+    URL_HASH SHA256=e6182435b25b04a00c75770d2a1c11e7731eb5e118c377933eeec2665980db70
 
     SOURCE_SUBDIR source/
 
@@ -188,6 +188,7 @@ ExternalProject_Add(
     URL_HASH SHA256=6be490b74bef2f91683d5649f2aa22652b0f558ff7a7f713a016fe3582b01f87
 
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/clang-aom-link-pthread.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Don-t-assume-wide-char-streams-are-supported-on-Wind.patch
 
     CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DBUILD_EXAMPLES=OFF ${GLOBAL_PROFILE}
 

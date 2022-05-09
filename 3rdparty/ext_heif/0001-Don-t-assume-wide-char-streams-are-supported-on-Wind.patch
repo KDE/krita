@@ -1,0 +1,91 @@
+From acf2dab113e39e0688354876216559ded58b8e98 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Mon, 9 May 2022 22:03:12 +0000
+Subject: [PATCH] Don't assume wide-char streams are supported on Windows
+
+---
+ CMakeLists.txt       | 17 +++++++++++++++++
+ libheif/heif.cc      |  2 +-
+ libheif/heif_file.cc |  4 ++--
+ libheif/heif_file.h  |  2 +-
+ 4 files changed, 21 insertions(+), 4 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f522032..61ab485 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -118,6 +118,23 @@ else ()
+     message("AVIF decoder, dav1d: not found")
+ endif ()
+ 
++if (MINGW OR MSVC)
++include(CheckCXXSourceCompiles)
++check_cxx_source_compiles("""
++#include <fstream>
++#include <string>
++int main()
++{
++const wchar_t* s=L\"wide string\";
++const std::ifstream t(s, std::ios_base::binary);
++return 0;
++}
++""" SUPPORTS_WSTREAM)
++endif()
++
++if(SUPPORTS_WSTREAM)
++    add_compile_definitions(-DSUPPORTS_WSTREAM)
++endif()
+ 
+ # Create libheif pkgconfig file
+ set(prefix ${CMAKE_INSTALL_PREFIX})
+diff --git a/libheif/heif.cc b/libheif/heif.cc
+index 239ebdc..0d0d07e 100644
+--- a/libheif/heif.cc
++++ b/libheif/heif.cc
+@@ -1657,7 +1657,7 @@ static struct heif_error heif_file_writer_write(struct heif_context* ctx,
+ {
+   const char* filename = static_cast<const char*>(userdata);
+ 
+-#if defined(__MINGW32__) || defined(__MINGW64__) || defined(_MSC_VER)
++#if defined(SUPPORTS_WSTREAM)
+   std::ofstream ostr(HeifFile::convert_utf8_path_to_utf16(filename).c_str(), std::ios_base::binary);
+ #else
+   std::ofstream ostr(filename, std::ios_base::binary);
+diff --git a/libheif/heif_file.cc b/libheif/heif_file.cc
+index dce316a..4bb3505 100644
+--- a/libheif/heif_file.cc
++++ b/libheif/heif_file.cc
+@@ -60,7 +60,7 @@ std::vector<heif_item_id> HeifFile::get_item_IDs() const
+ 
+ Error HeifFile::read_from_file(const char* input_filename)
+ {
+-#if defined(__MINGW32__) || defined(__MINGW64__) || defined(_MSC_VER)
++#if defined(SUPPORTS_WSTREAM)
+   auto input_stream_istr = std::unique_ptr<std::istream>(new std::ifstream(convert_utf8_path_to_utf16(input_filename).c_str(), std::ios_base::binary));
+ #else
+   auto input_stream_istr = std::unique_ptr<std::istream>(new std::ifstream(input_filename, std::ios_base::binary));
+@@ -870,7 +870,7 @@ void HeifFile::set_hdlr_library_info(const std::string& encoder_plugin_version)
+ }
+ 
+ 
+-#if defined(__MINGW32__) || defined(__MINGW64__) || defined(_MSC_VER)
++#if defined(SUPPORTS_WSTREAM)
+ std::wstring HeifFile::convert_utf8_path_to_utf16(std::string str)
+ {
+   std::wstring ret;
+diff --git a/libheif/heif_file.h b/libheif/heif_file.h
+index 9ea14b5..735e09e 100644
+--- a/libheif/heif_file.h
++++ b/libheif/heif_file.h
+@@ -155,7 +155,7 @@ namespace heif {
+     // TODO: the hdlr box is probably not the right place for this. Into which box should we write comments?
+     void set_hdlr_library_info(const std::string& encoder_plugin_version);
+ 
+-#if defined(__MINGW32__) || defined(__MINGW64__) || defined(_MSC_VER)
++#if defined(SUPPORTS_WSTREAM)
+     static std::wstring convert_utf8_path_to_utf16(std::string pathutf8);
+ #endif
+ 
+-- 
+2.35.1
+

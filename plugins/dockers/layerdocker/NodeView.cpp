@@ -76,13 +76,14 @@ NodeView::NodeView(QWidget *parent)
     , m_draggingFlag(false)
     , d(new Private(this))
 {
-    setItemDelegateForColumn(0, &d->delegate);
+    setItemDelegate(&d->delegate);
 
     setMouseTracking(true);
     setSelectionBehavior(SelectRows);
     setDefaultDropAction(Qt::MoveAction);
     setVerticalScrollMode(QAbstractItemView::ScrollPerItem);
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setRootIsDecorated(false);
 
     header()->hide();
     setDragEnabled(true);
@@ -102,6 +103,24 @@ NodeView::NodeView(QWidget *parent)
 NodeView::~NodeView()
 {
     delete d;
+}
+
+void NodeView::setModel(QAbstractItemModel *model)
+{
+    QTreeView::setModel(model);
+
+    if (!this->model()->inherits("KisNodeModel") && !this->model()->inherits("KisNodeFilterProxyModel")) {
+        qWarning() << "NodeView may not work with" << model->metaObject()->className();
+    }
+    if (this->model()->columnCount() != 2) {
+        qWarning() << "NodeView: expected 2 model columns, got " << this->model()->columnCount();
+    }
+
+    if (header()->sectionPosition(1) != 0) {
+        header()->moveSection(1, 0);
+    }
+    // the default may be too large for our visibility icon
+    header()->setMinimumSectionSize(KisNodeViewColorScheme::instance()->visibilityColumnWidth());
 }
 
 void NodeView::setDisplayMode(DisplayMode mode)
@@ -193,46 +212,6 @@ QItemSelectionModel::SelectionFlags NodeView::selectionCommand(const QModelIndex
     }
 
     return QAbstractItemView::selectionCommand(index, event);
-}
-
-QRect NodeView::visualRect(const QModelIndex &index) const
-{
-    QRect rc = QTreeView::visualRect(index);
-
-    /**
-     * Adjust visual rect to include the thumbnail. This visual
-     * rect is used for rendering the drop indicator. NodeDelegate
-     * uses `originalVisualRect()` instead. See bug 410970.
-     */
-
-    KisNodeViewColorScheme scm;
-    const int thumbnailOffset = scm.relThumbnailRect().width();
-
-    if (layoutDirection() == Qt::RightToLeft) {
-        rc.setRight(width() + thumbnailOffset);
-    } else {
-        rc.setLeft(rc.left() - thumbnailOffset);
-    }
-
-    return rc;
-}
-
-QRect NodeView::fullLineVisualRect(const QModelIndex &index) const
-{
-    QRect rc = QTreeView::visualRect(index);
-
-    if (layoutDirection() == Qt::RightToLeft) {
-        rc.setRight(width());
-    } else {
-        rc.setLeft(0);
-    }
-
-    return rc;
-}
-
-QRect NodeView::originalVisualRect(const QModelIndex &index) const
-{
-    return QTreeView::visualRect(index);
 }
 
 QModelIndex NodeView::indexAt(const QPoint &point) const
@@ -347,48 +326,16 @@ void NodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottom
 {
     QTreeView::dataChanged(topLeft, bottomRight);
 
-    /// a flag for jumping out of both loops instead of
-    /// using 'goto' statement
-    bool activeFound = false;
-
-    for (int x = topLeft.row(); !activeFound && x <= bottomRight.row(); ++x) {
-        for (int y = topLeft.column(); !activeFound &&  y <= bottomRight.column(); ++y) {
+    for (int x = topLeft.row(); x <= bottomRight.row(); ++x) {
+        for (int y = topLeft.column(); y <= bottomRight.column(); ++y) {
             QModelIndex index = topLeft.sibling(x, y);
             if (index.data(KisNodeModel::ActiveRole).toBool()) {
                 if (currentIndex() != index) {
                     setCurrentIndex(index);
                 }
 
-                // jump out of both loops
-                activeFound = true;
+                return;
             }
-        }
-    }
-
-    /**
-     * This is basically an override of
-     * void QAbstractItemView::update(const QModelIndex &index)
-     * which is not virtual, so we cannot change the call to
-     * visualRect() properly.
-     *
-     * The correct solution would be to keep visualRect() as Qt expects
-     * it to be (cover full line) and fix the entire hierarchy of
-     * QAbstractItemView::dragMoveEvent() overrides, so that they prepared
-     * 'dropIndicatorRect' in alternative way. It would make
-     * QAbstractItemView::Private::paintDropIndicator() paint a correct
-     * indicator. But this approach doesn't look feasible enough.
-     *
-     * Another approach would be to patch Qt and add
-     * virtual QRect visualRectForDropIndicator(const QModelIndex &index) const,
-     * which looks even more scary.
-     */
-    if (topLeft == bottomRight) {
-        const QRect rect = fullLineVisualRect(topLeft);
-        //this test is important for performance reason
-        //For example in dataChanged we simply update all the cells without checking
-        //it can be a major bottleneck to update rects that aren't even part of the viewport
-        if (viewport()->rect().intersects(rect)) {
-            viewport()->update(rect);
         }
     }
 }
@@ -396,6 +343,7 @@ void NodeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottom
 void NodeView::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QTreeView::selectionChanged(selected, deselected);
+    // XXX: selectedIndexes() does not include hidden (collapsed) items, is this really intended?
     emit selectionChanged(selectedIndexes());
 }
 
@@ -420,7 +368,7 @@ void NodeView::startDrag(Qt::DropActions supportedActions)
     DRAG_WHILE_DRAG_WORKAROUND_START();
 
     if (displayMode() == NodeView::ThumbnailMode) {
-        const QModelIndexList indexes = selectionModel()->selectedIndexes();
+        const QModelIndexList indexes = selectionModel()->selectedRows();
         if (!indexes.isEmpty()) {
             QMimeData *data = model()->mimeData(indexes);
             if (!data) {
@@ -498,8 +446,9 @@ void NodeView::resizeEvent(QResizeEvent * event)
 {
     KisNodeViewColorScheme scm;
     header()->setStretchLastSection(false);
-    header()->setOffset(-scm.visibilityColumnWidth());
-    header()->resizeSection(0, event->size().width() - scm.visibilityColumnWidth());
+    header()->resizeSection(0, event->size().width() - scm.visibilityColumnWidth()/* + offset*/);
+    header()->resizeSection(1, scm.visibilityColumnWidth());
+
     setIndentation(scm.indentation());
     QTreeView::resizeEvent(event);
 }
@@ -531,14 +480,10 @@ void NodeView::paintEvent(QPaintEvent *event)
 void NodeView::drawBranches(QPainter *painter, const QRect &rect,
                                const QModelIndex &index) const
 {
-    Q_UNUSED(painter);
-    Q_UNUSED(rect);
-    Q_UNUSED(index);
-
-    /**
-     * Noop... Everything is going to be painted by NodeDelegate.
-     * So this override basically disables painting of Qt's branch-lines.
-     */
+    QStyleOptionViewItem options = viewOptions();
+    options.rect = rect;
+    // This is not really a job for an item delegate, but the logic was already there
+    d->delegate.drawBranches(painter, options, index);
 }
 
 void NodeView::dropEvent(QDropEvent *ev)

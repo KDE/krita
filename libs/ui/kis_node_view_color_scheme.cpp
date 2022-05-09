@@ -57,7 +57,7 @@ KisNodeViewColorScheme* KisNodeViewColorScheme::instance()
     return s_instance;
 }
 
-QColor KisNodeViewColorScheme::gridColor(const QStyleOptionViewItem &option, QTreeView *view)
+QColor KisNodeViewColorScheme::gridColor(const QStyleOptionViewItem &option, QTreeView *view) const
 {
     const int gridHint = view->style()->styleHint(QStyle::SH_Table_GridLineColor, &option, view);
     const QColor gridColor = static_cast<QRgb>(gridHint);

@@ -69,6 +69,7 @@ struct KisNodeModel::Private
     bool needFinishInsertRows = false;
     bool showRootLayer = false;
     bool showGlobalSelection = false;
+    int dummyColumns {0};
     QPersistentModelIndex activeNodeIndex;
 
     QPointer<KisNodeDummy> parentOfRemovedNode = 0;
@@ -76,10 +77,11 @@ struct KisNodeModel::Private
     QSet<quintptr> dropEnabled;
 };
 
-KisNodeModel::KisNodeModel(QObject * parent)
+KisNodeModel::KisNodeModel(QObject * parent, int clonedColumns)
         : QAbstractItemModel(parent)
         , m_d(new Private)
 {
+    m_d->dummyColumns = qMax(0, clonedColumns);
     connect(&m_d->updateCompressor, SIGNAL(timeout()), SLOT(processUpdateQueue()));
 }
 
@@ -155,7 +157,7 @@ KisModelIndexConverterBase *KisNodeModel::createIndexConverter()
 void KisNodeModel::regenerateItems(KisNodeDummy *dummy)
 {
     const QModelIndex &index = m_d->indexConverter->indexFromDummy(dummy);
-    emit dataChanged(index, index);
+    emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
 
     dummy = dummy->firstChild();
     while (dummy) {
@@ -405,7 +407,7 @@ void KisNodeModel::processUpdateQueue()
     }
 
     Q_FOREACH (const QModelIndex &index, indexes) {
-        emit dataChanged(index, index);
+        emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
     }
 
     m_d->updateQueue.clear();
@@ -422,18 +424,28 @@ QModelIndex KisNodeModel::index(int row, int col, const QModelIndex &parent) con
         itemIndex = m_d->indexConverter->indexFromDummy(dummy);
     }
 
+    if (itemIndex.isValid() && itemIndex.column() != col) {
+        itemIndex = createIndex(itemIndex.row(), col, itemIndex.internalPointer());
+    }
+
     return itemIndex;
 }
 
 int KisNodeModel::rowCount(const QModelIndex &parent) const
 {
     if(!m_d->dummiesFacade) return 0;
+    if (parent.column() > 0) {
+        return 0;
+    }
     return m_d->indexConverter->rowCount(parent);
 }
 
-int KisNodeModel::columnCount(const QModelIndex&) const
+int KisNodeModel::columnCount(const QModelIndex &parent) const
 {
-    return 1;
+    if (parent.column() > 0) {
+        return 0;
+    }
+    return 1 + m_d->dummyColumns;
 }
 
 QModelIndex KisNodeModel::parent(const QModelIndex &index) const
@@ -450,6 +462,19 @@ QModelIndex KisNodeModel::parent(const QModelIndex &index) const
     }
 
     return parentIndex;
+}
+
+QModelIndex KisNodeModel::sibling(int row, int column, const QModelIndex &idx) const
+{
+    // if it's just a different clone column, there's no need to lookup anything
+    if (row == idx.row()) {
+        if (column == idx.column()) {
+            return idx;
+        }
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(idx.model() == this, QModelIndex());
+        return createIndex(row, column, idx.internalPointer());
+    }
+    return index(row, column, parent(idx));
 }
 
 QVariant KisNodeModel::data(const QModelIndex &index, int role) const
@@ -536,10 +561,16 @@ Qt::ItemFlags KisNodeModel::flags(const QModelIndex &index) const
 {
     if(!m_d->dummiesFacade || !index.isValid()) return Qt::ItemIsDropEnabled;
 
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEditable;
-    if (m_d->dropEnabled.contains(index.internalId())) {
-        flags |= Qt::ItemIsDropEnabled;
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsEditable;
+    // currently dummy columns are neither selectable nor drag&drop enabled
+    if (index.column() == 0) {
+        flags |=  Qt::ItemIsDragEnabled | Qt::ItemIsSelectable;
+        if (m_d->dropEnabled.contains(index.internalId())) {
+            flags |= Qt::ItemIsDropEnabled;
+        }
+
     }
+
     return flags;
 }
 
@@ -587,7 +618,7 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             emit toggleIsolateActiveNode();
         }
 
-        emit dataChanged(index, index);
+        emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
         return true;
     }
 
@@ -628,10 +659,10 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             QSet<QModelIndex> indexes;
             addChangedIndex(index, &indexes);
             Q_FOREACH (const QModelIndex &index, indexes) {
-                emit dataChanged(index, index);
+                emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
             }
         } else {
-            emit dataChanged(index, index);
+            emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
         }
     }
 
@@ -668,6 +699,12 @@ QMimeData * KisNodeModel::mimeData(const QModelIndexList &indexes) const
     bool hasLockedLayer = false;
     KisNodeList nodes;
     Q_FOREACH (const QModelIndex &idx, indexes) {
+        // Although clone columns should not be selectable, make sure we only use column 0,
+        // because nodeFromIndex doesn't like duplicate list entries.
+        if (idx.column() != 0) {
+            continue;
+        }
+
         KisNodeSP node = nodeFromIndex(idx);
 
         nodes << node;

@@ -212,7 +212,7 @@ LayerBox::LayerBox()
     m_wdgLayerBox->bnProperties->setMenu(m_opLayerMenu);
     m_wdgLayerBox->bnProperties->setPopupMode(QToolButton::MenuButtonPopup);
 
-    m_nodeModel = new KisNodeModel(this);
+    m_nodeModel = new KisNodeModel(this, 1);
     m_filteringModel = new KisNodeFilterProxyModel(this);
     m_filteringModel->setNodeModel(m_nodeModel);
 
@@ -331,7 +331,6 @@ LayerBox::LayerBox()
 
     connect(thumbnailSizeSlider, SIGNAL(sliderMoved(int)), &m_thumbnailSizeCompressor, SLOT(start()));
     connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
-
 }
 
 LayerBox::~LayerBox()
@@ -940,6 +939,11 @@ void LayerBox::selectionChanged(const QModelIndexList selection)
 
     QList<KisNodeSP> selectedNodes;
     Q_FOREACH (const QModelIndex &idx, selection) {
+        // Precaution because node manager doesn't like duplicates in that list.
+        // NodeView Selection behavior is SelectRows, although currently only column 0 allows selections.
+        if (idx.column() != 0) {
+            continue;
+        }
         selectedNodes << m_filteringModel->nodeFromIndex(idx);
     }
 
@@ -993,7 +997,7 @@ void LayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
 
     QItemSelectionModel *model = m_wdgLayerBox->listLayers->selectionModel();
 
-    if (KritaUtils::compareListsUnordered(newSelection, model->selectedIndexes())) {
+    if (KritaUtils::compareListsUnordered(newSelection, model->selectedRows())) {
         return;
     }
 
@@ -1002,7 +1006,7 @@ void LayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
         selection.select(idx, idx);
     }
 
-    model->select(selection, QItemSelectionModel::ClearAndSelect);
+    model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 }
 
 void LayerBox::updateThumbnail()

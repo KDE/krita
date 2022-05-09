@@ -24,7 +24,7 @@ public:
 
     static KisNodeViewColorScheme* instance();
 
-    QColor gridColor(const QStyleOptionViewItem &option, QTreeView *view);
+    QColor gridColor(const QStyleOptionViewItem &option, QTreeView *view) const;
 
     int visibilitySize() const;
     int visibilityMargin() const;

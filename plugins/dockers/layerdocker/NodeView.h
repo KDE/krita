@@ -58,6 +58,7 @@ public:
         MinimalMode
     };
 
+    void setModel(QAbstractItemModel *model) override;
     void resizeEvent(QResizeEvent * event) override;
     void paintEvent (QPaintEvent *event) override;
     void drawBranches(QPainter *painter, const QRect &rect,
@@ -116,14 +117,10 @@ public:
 
     void toggleSolo(const QModelIndex &index);
 
-    QRect originalVisualRect(const QModelIndex &index) const;
-    QRect fullLineVisualRect(const QModelIndex &index) const;
-
 protected:
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index,
                                                          const QEvent *event) const override;
 
-    QRect visualRect(const QModelIndex &index) const override;
     QModelIndex indexAt(const QPoint &point) const override;
     bool viewportEvent(QEvent *event) override;
     void contextMenuEvent(QContextMenuEvent *event) override;

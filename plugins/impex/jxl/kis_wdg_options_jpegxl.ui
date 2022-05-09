@@ -316,9 +316,6 @@
            </item>
            <item row="6" column="0">
             <widget class="QLabel" name="lblGaborishFilter">
-             <property name="toolTip">
-              <string>Spatial Noise Shaping: 0 = off, 100 = maximum.</string>
-             </property>
              <property name="text">
               <string>Gaborish filter</string>
              </property>
@@ -361,11 +358,8 @@
            </item>
            <item row="9" column="0">
             <widget class="QLabel" name="lblGroupOrder">
-             <property name="toolTip">
-              <string>Filter strength: 0 = off, 100 = strongest.</string>
-             </property>
              <property name="text">
-              <string comment="Filter options specifically for WebP">Group order</string>
+              <string comment="Filter options specifically for JPEG-XL">Group order</string>
              </property>
             </widget>
            </item>
@@ -581,7 +575,7 @@
               <item row="5" column="0">
                <widget class="QLabel" name="lblLossyPalette">
                 <property name="text">
-                 <string comment="Filter options specifically for WebP">Delta palette</string>
+                 <string comment="Filter options specifically for JPEG-XL">Delta palette</string>
                 </property>
                </widget>
               </item>
@@ -595,7 +589,7 @@
               <item row="6" column="0">
                <widget class="QLabel" name="lblModularGroupSize">
                 <property name="text">
-                 <string>Group size</string>
+                 <string >Group size</string>
                 </property>
                </widget>
               </item>
@@ -609,7 +603,7 @@
               <item row="7" column="0">
                <widget class="QLabel" name="lblModularPredictor">
                 <property name="text">
-                 <string>Predictor</string>
+                 <string comment="Filter options specifically for JPEG-XL">Predictor</string>
                 </property>
                </widget>
               </item>
@@ -622,9 +616,6 @@
               </item>
               <item row="8" column="0">
                <widget class="QLabel" name="lblModularMATreeLearningPercent">
-                <property name="toolTip">
-                 <string>Quality degradation allowed to fit the 512KB limit on prediction modes coding (0 = no degradation, 100 = maximum possible degradation).</string>
-                </property>
                 <property name="text">
                  <string>Pixels for MA tree learning</string>
                 </property>
@@ -680,9 +671,6 @@
               </item>
               <item row="0" column="0">
                <widget class="QLabel" name="lblResponsive">
-                <property name="toolTip">
-                 <string>If enabled, export the compressed picture back. In-loop filtering is not applied.</string>
-                </property>
                 <property name="text">
                  <string>Progressive encoding</string>
                 </property>

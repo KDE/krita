@@ -196,11 +196,8 @@
           <layout class="QFormLayout" name="formLayout_2">
            <item row="0" column="0">
             <widget class="QLabel" name="lblResampling">
-             <property name="toolTip">
-              <string>0 = Simple, 1 = Strong. Only used if Filter Strength is higher than 0 or Auto Adjust Filter is enabled.</string>
-             </property>
              <property name="text">
-              <string comment="Filter options specifically for WebP">Color channel resampling</string>
+              <string comment="Filter options specifically for JPEG-XL">Color channel resampling</string>
              </property>
             </widget>
            </item>
@@ -227,9 +224,6 @@
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lblPhotonNoise">
-             <property name="toolTip">
-              <string>If non-zero, sets the desired target size in bytes. Takes precedence over the compression parameters.</string>
-             </property>
              <property name="text">
               <string>Photon noise</string>
              </property>
@@ -252,10 +246,7 @@
             </widget>
            </item>
            <item row="3" column="0">
-            <widget class="QLabel" name="lblTargetPSNR">
-             <property name="toolTip">
-              <string>If non-zero, specifies the minimal distortion to try to achieve. Takes precedence over Target Size.</string>
-             </property>
+            <widget class="QLabel" name="lblDots">
              <property name="text">
               <string>Generate dots</string>
              </property>

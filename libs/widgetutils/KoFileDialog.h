@@ -96,6 +96,10 @@ public:
 
     QString selectedMimeType() const;
 
+public Q_SLOTS:
+    // Set default file extension matching the filter.
+    void onFilterSelected(const QString &filter);
+
 private:
     /**
      * @brief splitNameFilter take a single line of a QDialog name filter and split it
@@ -114,10 +118,9 @@ private:
     QString getUsedDir(const QString &dialogName);
     void saveUsedDir(const QString &fileName, const QString &dialogName);
 
-    const QStringList getFilterStringListFromMime(const QStringList &mimeList,
+    // Get list of user friendly descriptions and map of these descriptions to the proposed file extension.
+    const QPair<QStringList, QMap<QString, QString>> getFilterStringListFromMime(const QStringList &mimeList,
                                                   bool withAllSupportedEntry = false);
-
-
 
     class Private;
     Private * const d;

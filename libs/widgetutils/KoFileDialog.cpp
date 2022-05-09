@@ -12,6 +12,7 @@
 #include <QImageReader>
 #include <QClipboard>
 #include <QInputDialog>
+#include <QMessageBox>
 
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
@@ -19,6 +20,7 @@
 
 #include <KisMimeDatabase.h>
 #include <KoJsonTrader.h>
+#include "WidgetUtilsDebug.h"
 
 class Q_DECL_HIDDEN KoFileDialog::Private
 {
@@ -50,6 +52,7 @@ public:
     QString proposedFileName;
     QUrl defaultUri;
     QStringList filterList;
+    QMap<QString, QString> suffixes; // Filter description to extension, may lack some entries
     QString defaultFilter;
     QScopedPointer<KisPreviewFileDialog> fileDialog;
     QString mimeType;
@@ -105,28 +108,6 @@ void KoFileDialog::setImageFilters()
     setMimeTypeFilters(imageFilters);
 }
 
-void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString defaultMimeType)
-{
-    d->filterList = getFilterStringListFromMime(mimeTypeList, true);
-
-    QString defaultFilter;
-
-    if (!defaultMimeType.isEmpty()) {
-        QString suffix = KisMimeDatabase::suffixesForMimeType(defaultMimeType).first();
-
-        if (!d->proposedFileName.isEmpty()) {
-            d->proposedFileName = QFileInfo(d->proposedFileName).completeBaseName() + "." + suffix;
-        }
-
-        QStringList defaultFilters = getFilterStringListFromMime(QStringList() << defaultMimeType, false);
-        if (defaultFilters.size() > 0) {
-            defaultFilter = defaultFilters.first();
-        }
-    }
-
-    d->defaultFilter = defaultFilter;
-}
-
 QString KoFileDialog::selectedNameFilter() const
 {
     return d->fileDialog->selectedNameFilter();
@@ -143,6 +124,8 @@ void KoFileDialog::createFileDialog()
     if (!d->defaultUri.isEmpty()) {
         d->fileDialog->setDirectoryUrl(d->defaultUri);
     }
+    connect(d->fileDialog.get(), SIGNAL(filterSelected(const QString&)), this, SLOT(onFilterSelected(const QString&)));
+
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
 
     bool dontUseNative = true;
@@ -173,6 +156,7 @@ void KoFileDialog::createFileDialog()
     d->fileDialog->setOption(QFileDialog::DontConfirmOverwrite, false);
     d->fileDialog->setOption(QFileDialog::HideNameFilterDetails, dontUseNative ? true : false);
 
+
 #ifdef Q_OS_MACOS
     QList<QUrl> urls = d->fileDialog->sidebarUrls();
     QUrl volumes = QUrl::fromLocalFile("/Volumes");
@@ -191,13 +175,12 @@ void KoFileDialog::createFileDialog()
 
         d->fileDialog->setAcceptMode(QFileDialog::AcceptOpen);
 
-        if (d->type == ImportDirectory || d->type == OpenDirectory){
+        if (d->type == ImportDirectory || d->type == OpenDirectory) {
             d->fileDialog->setFileMode(QFileDialog::Directory);
             d->fileDialog->setOption(QFileDialog::ShowDirsOnly, true);
         }
         else { // open / import file(s)
-            if (d->type == OpenFile
-                    || d->type == ImportFile)
+            if (d->type == OpenFile || d->type == ImportFile)
             {
                 d->fileDialog->setFileMode(QFileDialog::ExistingFile);
             }
@@ -240,6 +223,9 @@ void KoFileDialog::createFileDialog()
         }
     }
     d->fileDialog->resetIconProvider();
+
+    // QFileDialog::filterSelected is not emitted with the initial value
+    onFilterSelected(d->fileDialog->selectedNameFilter());
 }
 
 QString KoFileDialog::filename()
@@ -275,38 +261,69 @@ QString KoFileDialog::filename()
     }
 #endif
 
-    if (d->fileDialog->exec() == QDialog::Accepted) {
-        url = d->fileDialog->selectedFiles().first();
-    }
-
-    if (!url.isEmpty()) {
-        QString suffix = QFileInfo(url).suffix();
-        if (KisMimeDatabase::mimeTypeForSuffix(suffix).isEmpty()) {
-            suffix = "";
+    bool retryNeeded;
+    do {
+        retryNeeded = false;
+        if (d->fileDialog->exec() == QDialog::Accepted) {
+            url = d->fileDialog->selectedFiles().first();
+        } else {
+            url = QString();
+            break;
         }
 
-        if (d->type == SaveFile && suffix.isEmpty()) {
-            QString selectedFilter;
-            // index 0 is all supported; if that is chosen, saveDocument will automatically make it .kra
-            for (int i = 1; i < d->filterList.size(); ++i) {
-                if (d->filterList[i].startsWith(d->fileDialog->selectedNameFilter())) {
-                    selectedFilter = d->filterList[i];
-                    break;
+        // The Android native file selector does not know to add the .kra
+        // extension (MIME type not registered), so just skip the whole file
+        // suffix check for Android.
+#ifndef Q_OS_ANDROID
+        const QString suffix = QFileInfo(url).suffix();
+        bool isValidSuffix = true;
+        if (KisMimeDatabase::mimeTypeForSuffix(suffix).isEmpty()) {
+            warnWidgetUtils << "Selected file name suffix" << suffix << "does not match known MIME types";
+            isValidSuffix = false;
+        }
+
+        if (d->type == SaveFile && (suffix.isEmpty() || !isValidSuffix)) {
+            QString extension;
+            if (d->suffixes.contains(d->fileDialog->selectedNameFilter())) {
+                extension = d->suffixes[d->fileDialog->selectedNameFilter()];
+                if (!extension.isEmpty()) {
+                    // Append the default file extension to the file name before
+                    // relaunching the file selector. We do _not_ just append
+                    // the extension and return the new file name because:
+                    //  * it bypasses the file overwrite prompt provided by the
+                    //    file selector.
+                    //  * doing so will break sandboxed macOS and Android,
+                    //    because access to user files is restricted and must
+                    //    be done through the native file selector.
+                    url.append('.').append(extension);
+                    d->fileDialog->selectFile(url);
                 }
             }
-            int start = selectedFilter.indexOf("*.") + 1;
-            int end = selectedFilter.indexOf(" ", start);
-            int n = end - start;
-            QString extension = selectedFilter.mid(start, n);
-            if (!(extension.contains(".") || url.endsWith("."))) {
-                extension = "." + extension;
+            if (extension.isEmpty()) {
+                // Use the first extension of the selected filter just as a suggestion
+                QString selectedFilter;
+                // skip index 0 which is "All supported formats"
+                for (int i = 1; i < d->filterList.size(); ++i) {
+                    if (d->filterList[i].startsWith(d->fileDialog->selectedNameFilter())) {
+                        selectedFilter = d->filterList[i];
+                        break;
+                    }
+                }
+                int start = selectedFilter.indexOf("*.") + 2;
+                int end = selectedFilter.indexOf(" ", start);
+                if (start != -1 + 2 && end != -1) {
+                    extension = selectedFilter.mid(start, end - start);
+                }
             }
-// We can only write to the Uri that was returned, we don't have permission to change the Uri.
-#ifndef Q_OS_ANDROID
-            url = url + extension;
-#endif
+            QMessageBox::warning(d->parent, d->caption,
+                i18n("The selected file name does not have a file extension that Krita understands.\n"
+                     "Make sure the file name ends in '.%1' for example.", extension));
+            retryNeeded = true;
         }
+#endif
+    } while (retryNeeded);
 
+    if (!url.isEmpty()) {
         d->mimeType = KisMimeDatabase::mimeTypeForFile(url, d->type == KoFileDialog::SaveFile ? false : true);
         saveUsedDir(url, d->dialogName);
     }
@@ -359,20 +376,29 @@ QStringList KoFileDialog::splitNameFilter(const QString &nameFilter, QStringList
     return filters;
 }
 
-const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_mimeList,
-                                                            bool withAllSupportedEntry)
+void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString defaultMimeType)
 {
+    constexpr bool withAllSupportedEntry = true;
     QStringList mimeSeen;
 
+    struct FilterData
+    {
+        QString descriptionOnly;
+        QString fullLine;
+        QString defaultSuffix;
+    };
+
+    FilterData defaultFilter {};
     // 1
     QString allSupported;
     // 2
-    QString kritaNative;
+    FilterData kritaNative {};
     // 3
-    QString ora;
+    FilterData ora {};
+    // remaining
+    QVector<FilterData> otherFileTypes;
 
-    QStringList ret;
-    QStringList mimeList = _mimeList;
+    QStringList mimeList = mimeTypeList;
     mimeList.sort();
 
     Q_FOREACH(const QString &mimeType, mimeList) {
@@ -387,68 +413,97 @@ const QStringList KoFileDialog::getFilterStringListFromMime(const QStringList &_
 
 
             QString oneFilter;
-            QStringList patterns = KisMimeDatabase::suffixesForMimeType(mimeType);
-            QStringList globPatterns;
-            Q_FOREACH(const QString &pattern, patterns) {
-                if (pattern.startsWith(".")) {
-                    globPatterns << "*" + pattern;
-                }
-                else if (pattern.startsWith("*.")) {
-                    globPatterns << pattern;
-                }
-                else {
-                    globPatterns << "*." + pattern;
-                }
-            }
+            const QStringList suffixes = KisMimeDatabase::suffixesForMimeType(mimeType);
 
-            Q_FOREACH(const QString &glob, globPatterns) {
-                    oneFilter.append(glob + " ");
-                    if (withAllSupportedEntry) {
-                        allSupported.append(glob + " ");
-                    }
+            Q_FOREACH(const QString &suffix, suffixes) {
+                const QString glob = QStringLiteral("*.") + suffix;
+                oneFilter.append(glob + " ");
+                if (withAllSupportedEntry) {
+                    allSupported.append(glob + " ");
+                }
 #ifdef Q_OS_LINUX
-                    if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
-                        oneFilter.append(glob.toUpper() + " ");
-                        if (withAllSupportedEntry) {
-                            allSupported.append(glob.toUpper() + " ");
-                        }
+                if (qgetenv("XDG_CURRENT_DESKTOP") == "GNOME") {
+                    oneFilter.append(glob.toUpper() + " ");
+                    if (withAllSupportedEntry) {
+                        allSupported.append(glob.toUpper() + " ");
                     }
+                }
 #endif
             }
 
             Q_ASSERT(!description.isEmpty());
 
-            oneFilter = description + " ( " + oneFilter + ")";
+            FilterData filterData {};
+            filterData.descriptionOnly = description;
+            filterData.fullLine = description + " ( " + oneFilter + ")";
+            filterData.defaultSuffix = suffixes.first();
 
-
-            if (mimeType == "application/x-krita") {
-                kritaNative = oneFilter;
-                continue;
+            if (mimeType == QLatin1String("application/x-krita")) {
+                kritaNative = filterData;
+            } else if (mimeType == QLatin1String("image/openraster")) {
+                ora = filterData;
+            } else {
+                otherFileTypes.append(filterData);
             }
-            if (mimeType == "image/openraster") {
-                ora = oneFilter;
-                continue;
-            }
-            else {
-                ret << oneFilter;
+            if (defaultMimeType == mimeType) {
+                debugWidgetUtils << "KoFileDialog: Matched default MIME type to filter" << filterData.fullLine;
+                defaultFilter = filterData;
             }
             mimeSeen << mimeType;
         }
     }
 
-    ret.sort();
-    ret.removeDuplicates();
+    QStringList retFilterList;
+    QMap<QString, QString> retFilterToSuffixMap;
+    auto addFilterItem = [&](const FilterData &filterData) {
+        if (retFilterList.contains(filterData.fullLine)) {
+            debugWidgetUtils << "KoFileDialog: Duplicated filter" << filterData.fullLine;
+            return;
+        }
+        retFilterList.append(filterData.fullLine);
+        // the "simplified" version that comes to "onFilterSelect" when details are disabled
+        retFilterToSuffixMap.insert(filterData.descriptionOnly, filterData.defaultSuffix);
+        // "full version" that comes when details are enabled
+        retFilterToSuffixMap.insert(filterData.fullLine, filterData.defaultSuffix);
+    };
 
-    if (allSupported.contains("*.kra")) {
-        allSupported.remove("*.kra ");
-        allSupported.prepend("*.kra ");
+    if (!allSupported.isEmpty()) {
+        FilterData allFilter {};
+        if (allSupported.contains("*.kra")) {
+            allSupported.remove("*.kra ");
+            allSupported.prepend("*.kra ");
+            allFilter.defaultSuffix = QStringLiteral("kra");
+        } else if (!defaultFilter.fullLine.isEmpty()) {
+            const QString suffixToMove = QString("*.") + defaultFilter.defaultSuffix + " ";
+            allSupported.remove(suffixToMove);
+            allSupported.prepend(suffixToMove);
+            allFilter.defaultSuffix = defaultFilter.defaultSuffix;
+        } else {
+            // XXX: we don't have a meaningful default suffix
+            warnWidgetUtils << "KoFileDialog: No default suffix for 'All supported formats'";
+            allFilter.defaultSuffix = QStringLiteral("");
+        }
+        allFilter.descriptionOnly = i18n("All supported formats");
+        allFilter.fullLine = allFilter.descriptionOnly + " ( " + allSupported + ")";
+        addFilterItem(allFilter);
     }
-    if (!ora.isEmpty()) ret.prepend(ora);
-    if (!kritaNative.isEmpty())  ret.prepend(kritaNative);
-    if (!allSupported.isEmpty()) ret.prepend(i18n("All supported formats") + " ( " + allSupported + (")"));
+    if (!kritaNative.fullLine.isEmpty()) {
+        addFilterItem(kritaNative);
+    }
+    if (!ora.fullLine.isEmpty()) {
+        addFilterItem(ora);
+    }
 
-    return ret;
+    std::sort(otherFileTypes.begin(), otherFileTypes.end(), [](const FilterData &a, const FilterData &b) {
+        return a.descriptionOnly < b.descriptionOnly;
+    });
+    Q_FOREACH(const FilterData &filterData, otherFileTypes) {
+        addFilterItem(filterData);
+    }
 
+    d->filterList = retFilterList;
+    d->suffixes = retFilterToSuffixMap;
+    d->defaultFilter = defaultFilter.fullLine; // this can be empty
 }
 
 QString KoFileDialog::getUsedDir(const QString &dialogName)
@@ -470,4 +525,26 @@ void KoFileDialog::saveUsedDir(const QString &fileName,
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     group.writeEntry(dialogName, fileInfo.absolutePath());
 
+}
+
+void KoFileDialog::onFilterSelected(const QString &filter)
+{
+    debugWidgetUtils << "KoFileDialog::onFilterSelected" << filter;
+
+    // Setting default suffix for Android is broken as of Qt 5.12.0, returning the file
+    // with extension added but no write permissions granted.
+#ifndef Q_OS_ANDROID
+    QFileDialog::FileMode mode = d->fileDialog->fileMode();
+    if (mode != QFileDialog::FileMode::Directory && mode != QFileDialog::FileMode::DirectoryOnly) {
+        // we do not need suffixes for directories
+        if (d->suffixes.contains(filter)) {
+            QString suffix = d->suffixes[filter];
+            debugWidgetUtils << "  Setting default suffix to" << suffix;
+            d->fileDialog->setDefaultSuffix(suffix);
+        } else {
+            warnWidgetUtils << "KoFileDialog::onFilterSelected: Cannot find suffix for filter" << filter;
+            d->fileDialog->setDefaultSuffix("");
+        }
+    }
+#endif
 }

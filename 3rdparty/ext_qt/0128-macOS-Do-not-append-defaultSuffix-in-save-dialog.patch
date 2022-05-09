@@ -1,0 +1,34 @@
+From ae88845f35e0243c4c0b973fb859cd4b6441dff0 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Sat, 7 May 2022 18:39:19 +0800
+Subject: [PATCH] macOS: Do not append defaultSuffix in save dialog
+
+Doing this when sandboxing is active will break the sandboxing.
+NSSavePanel should append the file extension in most cases anyway.
+
+See https://invent.kde.org/graphics/krita/-/merge_requests/1429#note_440796
+---
+ src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm b/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm
+index d1695ea860..9e68e63e95 100644
+--- a/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm
++++ b/src/plugins/platforms/cocoa/qcocoafiledialoghelper.mm
+@@ -407,13 +407,6 @@ static QString strippedText(QString s)
+     } else {
+         QList<QUrl> result;
+         QString filename = QString::fromNSString([[mSavePanel URL] path]).normalized(QString::NormalizationForm_C);
+-        const QString defaultSuffix = mOptions->defaultSuffix();
+-        const QFileInfo fileInfo(filename);
+-        // If neither the user or the NSSavePanel have provided a suffix, use
+-        // the default suffix (if it exists).
+-        if (fileInfo.suffix().isEmpty() && !defaultSuffix.isEmpty()) {
+-                filename.append('.').append(defaultSuffix);
+-        }
+         result << QUrl::fromLocalFile(filename.remove(QLatin1String("___qt_very_unlikely_prefix_")));
+         return result;
+     }
+-- 
+2.24.1.windows.2
+

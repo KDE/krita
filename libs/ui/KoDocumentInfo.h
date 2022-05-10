@@ -132,20 +132,6 @@ private:
     void setActiveAuthorInfo(const QString& info, const QString& data);
 
     /**
-     * Load the information about the document from an OASIS file
-     * @param metaDoc a reference to the information node
-     * @return true if success
-     */
-    bool loadOasisAboutInfo(const QDomNode& metaDoc);
-
-    /**
-     * Save the information about the document to an OASIS file
-     * @param xmlWriter a reference to the KoXmlWriter to write in
-     * @return true if success
-     */
-    bool saveOasisAboutInfo(KoXmlWriter &xmlWriter);
-
-    /**
      * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
@@ -160,13 +146,6 @@ private:
     QDomElement saveAboutInfo(QDomDocument& doc);
 
     /**
-     * Load the information about the document from an OASIS file
-     * @param metaDoc a reference to the information node
-     * @return true if success
-     */
-    bool loadOasisAuthorInfo(const QDomNode& metaDoc);
-
-    /**
      * Load the information about the document from a Calligra-1.3 file
      * @param e the element to load from
      * @return true if success
@@ -179,13 +158,6 @@ private:
      * @return the QDomElement to which was saved
      */
     QDomElement saveAuthorInfo(QDomDocument& doc);
-
-    /**
-     * Save the information about the document to an OASIS file
-     * @param xmlWriter a reference to the KoXmlWriter to write in
-     * @return true if success
-     */
-    bool saveOasisAuthorInfo(KoXmlWriter &xmlWriter);
 
     /** A QStringList containing all tags for the document information */
     QStringList m_aboutTags;

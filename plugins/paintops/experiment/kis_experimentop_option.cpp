@@ -35,7 +35,7 @@ public:
 };
 
 KisExperimentOpOption::KisExperimentOpOption()
-    : KisPaintOpOption(i18n("Blending Mode"), KisPaintOpOption::GENERAL, false)
+    : KisPaintOpOption(i18n("Experiment Option"), KisPaintOpOption::GENERAL, false)
 {
     setObjectName("KisExperimentOpOption");
 

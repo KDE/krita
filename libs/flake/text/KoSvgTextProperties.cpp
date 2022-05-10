@@ -804,6 +804,26 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
     return fontFeatures;
 }
 
+QMap<QString, qreal> KoSvgTextProperties::fontAxisSettings() const
+{
+    QMap<QString, qreal> settings;
+    settings.insert("wght", propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt());
+    settings.insert("wdth", propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt());
+    settings.insert("opsz", propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal());
+    const QFont::Style style =
+        QFont::Style(propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+    if (style == QFont::StyleItalic) {
+        settings.insert("ital", 1);
+    } else if (style == QFont::StyleOblique) {
+        settings.insert("ital", 1);
+        settings.insert("slnt", 11);
+    } else {
+        settings.insert("ital", 0);
+    }
+
+    return settings;
+}
+
 QStringList KoSvgTextProperties::supportedXmlAttributes()
 {
     QStringList attributes;

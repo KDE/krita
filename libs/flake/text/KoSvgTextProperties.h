@@ -194,6 +194,8 @@ public:
 
     QStringList fontFeaturesForText(int start, int length) const;
 
+    QMap<QString, qreal> fontAxisSettings() const;
+
     /**
      * Return a list of supported XML attribute names (defined in SVG)
      */

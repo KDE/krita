@@ -10,7 +10,6 @@
 
 #include <raqm.h>
 #include <fontconfig/fontconfig.h>
-#include FT_MULTIPLE_MASTERS_H
 #include FT_COLOR_H
 
 #include <klocalizedstring.h>
@@ -20,6 +19,7 @@
 #include <KoShapeContainer_p.h>
 #include <text/KoSvgTextChunkShape_p.h>
 #include <text/KoSvgTextShapeMarkupConverter.h>
+#include <text/KoFontRegistery.h>
 #include <KoDocumentResourceManager.h>
 #include <KoShapeController.h>
 
@@ -95,8 +95,16 @@ public:
     //       the shape, though it will be reset locally if the
     //       accessing thread changes
 
-    QThread *cachedLayoutsWorkingThread = 0;
-    FT_Library library = NULL;
+    Private()
+    {}
+
+    Private(const Private &rhs)
+    , textRendering(rhs.textRendering)
+    , xRes(rhs.xRes)
+    , yRes(rhs.yRes)
+    , result(rhs.result)
+    {
+    }
 
     TextRendering textRendering = Auto;
     int xRes = 72;
@@ -134,12 +142,9 @@ KoSvgTextShape::KoSvgTextShape()
 
 KoSvgTextShape::KoSvgTextShape(const KoSvgTextShape &rhs)
     : KoSvgTextChunkShape(rhs)
-    , d(new Private)
+    , d(new Private(*rhs.d))
 {
     setShapeId(KoSvgTextShape_SHAPEID);
-    // QTextLayout has no copy-ctor, so just relayout everything!
-    setTextRenderingFromString(rhs.textRenderingString());
-    relayout();
 }
 
 KoSvgTextShape::~KoSvgTextShape()
@@ -220,17 +225,6 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
     */
     painter.restore();
 
-    /**
-     * HACK ALERT:
-     * The layouts of non-gui threads must be destroyed in the same thread
-     * they have been created. Because the thread might be restarted in the
-     * meantime or just destroyed, meaning that the per-thread freetype data
-     * will not be available.
-     */
-    /*
-    if (QThread::currentThread() != qApp->thread()) {
-        d->cachedLayoutsWorkingThread = 0;
-    }*/
 }
 
 void KoSvgTextShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintContext) const
@@ -347,7 +341,6 @@ void KoSvgTextShape::resetTextShape()
 
 void KoSvgTextShape::relayout() const
 {
-    d->cachedLayoutsWorkingThread = QThread::currentThread();
     d->clearAssociatedOutlines(this);
 
     // The following is based on the text-layout algorithm in SVG 2.
@@ -397,13 +390,6 @@ void KoSvgTextShape::relayout() const
     // Then, pass everything to a css-compatible text-layout algortihm.
     raqm_t *layout(raqm_create());
 
-    if (!d->library) {
-        FT_Init_FreeType(&d->library);
-    }
-    FT_Tag weightTag = FT_MAKE_TAG('w', 'g', 'h', 't');
-    FT_Tag opticalSizeTag= FT_MAKE_TAG('o', 'p', 's', 'z');
-    FT_Tag widthTag= FT_MAKE_TAG('w', 'd', 't', 'h');
-    FT_Tag italicTag= FT_MAKE_TAG('i', 't', 'a', 'l');
     if (raqm_set_text_utf16(layout, text.utf16(), text.size())) {
         if (writingMode == KoSvgText::TopToBottom) {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_TTB);
@@ -420,14 +406,27 @@ void KoSvgTextShape::relayout() const
             length = chunk.text.size();
             QVector<int> lengths;
             KoSvgTextProperties properties = chunk.format.associatedShapeWrapper().shape()->textProperties();
-            QStringList fontFamilies = properties.fontFileNameForText(chunk.text, lengths);
             QStringList fontFeatures = properties.fontFeaturesForText(start, length);
 
             qreal fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
+            const QFont::Style style =
+                QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+            QVector<FT_Face> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+                                                                                    lengths,
+                                                                                    chunk.text,
+                                                                                    fontSize,
+                                                                                    properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+                                                                                    properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+                                                                                    style != QFont::StyleNormal);
+            KoFontRegistery::instance()->configureFaces(faces, fontSize, finalRes, finalRes, properties.fontAxisSettings());
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(layout,
                                   properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
                                   start, length);
+            }
+            for (QString feature: fontFeatures) {
+                qDebug() << "adding feature" << feature;
+                raqm_add_font_feature(layout, feature.toUtf8(), feature.toUtf8().size());
             }
             KoSvgText::AutoValue letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoValue>();
             if (!letterSpacing.isAuto) {
@@ -438,104 +437,26 @@ void KoSvgTextShape::relayout() const
                 raqm_set_word_spacing_range(layout, wordSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
             }
 
-            for (QString feature: fontFeatures) {
-                qDebug() << "adding feature" << feature;
-                raqm_add_font_feature(layout, feature.toUtf8(), feature.toUtf8().size());
-            }
+            QVector<int> familyValues(text.size());
+            familyValues.fill(-1);
 
-            for (int i = 0; i< fontFamilies.size(); i++) {
+            for (int i = 0; i < lengths.size(); i++ )  {
                 length = lengths.at(i);
-                QString fontFileName = fontFamilies.at(i);
-                qDebug() << start << length << fontFileName;
-
-
-                int errorCode = FT_New_Face(d->library, fontFileName.toUtf8().data(), 0, &face);
-                if (errorCode == 0) {
-                    qDebug() << "face loaded" << fontFileName << fontSize;
-                    FT_Int32 faceLoadFlags = loadFlags;
-                    if (FT_HAS_COLOR(face)) {
-                        faceLoadFlags |= FT_LOAD_COLOR;
-                    }
-                    if (!FT_IS_SCALABLE(face)) {
-                        int fontSizePixels = fontSize * ftFontUnit * scaleToPixel;
-                        int sizeDelta = 0;
-                        int selectedIndex = -1;
-
-                        for (int i=0; i<face->num_fixed_sizes; i++) {
-                            int newDelta = qAbs((fontSizePixels) - face->available_sizes[i].height);
-                            if (newDelta < sizeDelta || i == 0) {
-                                selectedIndex = i;
-                                sizeDelta = newDelta;
-                            }
-                        }
-
-                        if (selectedIndex >= 0) {
-                            if (FT_HAS_COLOR(face)) {
-                                qreal scale = qreal(fontSizePixels/face->available_sizes[selectedIndex].x_ppem);
-                                FT_Matrix matrix;
-                                matrix.xx = scale;
-                                matrix.yy = scale;
-                                FT_Vector v;
-                                FT_Set_Transform(face, &matrix, &v);
-                            }
-                            errorCode = FT_Select_Size(face, selectedIndex);
-                            qDebug() << errorCode << face->available_sizes[selectedIndex].height << face->available_sizes[selectedIndex].width;
-                        }
-                    } else {
-                        errorCode = FT_Set_Char_Size(face, fontSize * ftFontUnit, 0, finalRes, finalRes);
-                    }
-
-
-                    if (!isHorizontal && FT_HAS_VERTICAL(face)) {
-                        faceLoadFlags |= FT_LOAD_VERTICAL_LAYOUT;
-                    }
-
-                    if (FT_HAS_MULTIPLE_MASTERS(face)) {
-                        FT_MM_Var*  amaster = nullptr;
-                        FT_Get_MM_Var(face, &amaster);
-                        // note: this only works for opentype, as it uses tag-selection.
-                        // also support slnt
-                        FT_Fixed designCoords[amaster->num_axis];
-                        for (FT_UInt i=0; i < amaster->num_axis; i++) {
-                            FT_Var_Axis axis = amaster->axis[i];
-                            if (axis.tag == weightTag) {
-                                designCoords[i] = qBound(axis.minimum,
-                                                         long(properties.property(KoSvgTextProperties::FontWeightId).toInt() * 65535),
-                                                         axis.maximum);
-                            } else if (axis.tag == opticalSizeTag) {
-                                designCoords[i] = qBound(axis.minimum,
-                                                         long(fontSize * 65535),
-                                                         axis.maximum);
-                            }  else if (axis.tag == widthTag) {
-                                designCoords[i] = qBound(axis.minimum,
-                                                         long(properties.property(KoSvgTextProperties::FontStretchId).toInt() * 65535),
-                                                         axis.maximum);
-                            }else if (axis.tag == italicTag) {
-                                if (chunk.format.font().italic()) {
-                                    designCoords[i] = axis.maximum;
-                                } else {
-                                    designCoords[i] = axis.minimum;
-                                }
-                            } else {
-                                designCoords[i] = axis.def;
-                            }
-                        }
-                        FT_Set_Var_Design_Coordinates(face, amaster->num_axis, designCoords);
-                        FT_Done_MM_Var(d->library, amaster);
-                    }
-
-                    if (errorCode == 0) {
-                        if (start == 0) {
-                            raqm_set_freetype_face(layout, face);
-                            raqm_set_freetype_load_flags(layout, faceLoadFlags);
-                        }
-                        if (length > 0) {
-                            raqm_set_freetype_face_range(layout, face, start, length);
-                            raqm_set_freetype_load_flags_range(layout, faceLoadFlags, start, length);
-                        }
-                    }
-                } else {
-                    qDebug() << "Face did not load, FreeType Error: " << errorCode << "Filename:" << fontFileName;
+                FT_Int32 faceLoadFlags = loadFlags;
+                FT_Face face = faces.at(i);
+                if (FT_HAS_COLOR(face)) {
+                    loadFlags |= FT_LOAD_COLOR;
+                }
+                if (FT_HAS_VERTICAL(face)) {
+                    loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
+                }
+                if (start == 0) {
+                    raqm_set_freetype_face(layout, face);
+                    raqm_set_freetype_load_flags(layout, faceLoadFlags);
+                }
+                if (length > 0) {
+                    raqm_set_freetype_face_range(layout, face, start, length);
+                    raqm_set_freetype_load_flags_range(layout, faceLoadFlags, start, length);
                 }
                 start += length;
             }

@@ -31,7 +31,6 @@
 #include <KoFileDialog.h>
 #include <KoIcon.h>
 #include <KoCanvasBase.h>
-#include <KoImageCollection.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoShapeController.h>

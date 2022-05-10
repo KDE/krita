@@ -19,7 +19,6 @@ class KoShapeLayer;
 class KoShape;
 class KoShapeControllerBase;
 class KoLoadingShapeUpdater;
-class KoImageCollection;
 class KoSharedLoadingData;
 class KoDocumentResourceManager;
 class KoSectionModel;
@@ -106,9 +105,6 @@ public:
      * this needs to be done via the shape id and
      */
     void shapeLoaded(KoShape *shape);
-
-    /// Returns the image collection for loading images
-    KoImageCollection *imageCollection();
 
     /// Get current z-index
     int zIndex();

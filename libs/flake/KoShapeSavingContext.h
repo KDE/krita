@@ -16,8 +16,6 @@
 
 class KoShape;
 class KoXmlWriter;
-class KoDataCenterBase;
-class KoImageData;
 class KoMarker;
 class KoShapeLayer;
 class KoStore;
@@ -134,19 +132,6 @@ public:
     void clearLayers();
 
     /**
-     * Get the image href under which the image will be saved in the store
-     */
-    QString imageHref(const KoImageData *image);
-
-    /**
-     * Get the image href under which the image will be save in the store
-     *
-     * This should only be used for temporary images that are onle there during
-     * saving, e.g. a pixmap representation of a draw:frame
-     */
-    QString imageHref(const QImage &image);
-
-    /**
      * Get the images that needs to be saved to the store
      */
     QMap<qint64, QString> imagesToSave();
@@ -155,19 +140,6 @@ public:
      * Get the reference to use for the marker lookup
      */
     QString markerRef(const KoMarker *marker);
-
-    /**
-     * Add data center
-     */
-    void addDataCenter(KoDataCenterBase *dataCenter);
-
-    /**
-     * Save the data centers
-     *
-     * This calls KoDataCenterBase::completeSaving()
-     * @returns false if an error occurred, which typically cancels the save.
-     */
-    bool saveDataCenter(KoStore *store, KoXmlWriter *manifestWriter);
 
     /**
      * Add shared data

@@ -38,7 +38,6 @@
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <KoImageCollection.h>
 #include <KoResourcePopupAction.h>
 #include "KoZoomHandler.h"
 #include "KoColorPopupButton.h"
@@ -796,12 +795,10 @@ void KoFillConfigWidget::patternChanged(QSharedPointer<KoShapeBackground>  backg
         return;
     }
 
-    KoImageCollection *imageCollection = d->canvas->shapeController()->resourceManager()->imageCollection();
-    if (imageCollection) {
-        QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
-        fill->setPattern(patternBackground->pattern());
-        d->canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
-    }
+    QSharedPointer<KoPatternBackground> fill(new KoPatternBackground());
+    fill->setPattern(patternBackground->pattern());
+    d->canvas->addCommand(new KoShapeBackgroundCommand(selectedShapes, fill));
+
 #endif
 }
 

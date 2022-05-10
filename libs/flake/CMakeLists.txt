@@ -26,7 +26,6 @@ set(kritaflake_SRCS
     KoCanvasSupervisor.cpp
     KoDockFactoryBase.cpp
     KoDockRegistry.cpp
-    KoDataCenterBase.cpp
     KoInsets.cpp
     KoPathShape.cpp
     KoPathPoint.cpp
@@ -43,7 +42,6 @@ set(kritaflake_SRCS
     KoShapeGroup.cpp
     KoShapeManager.cpp
     KoShapePaintingContext.cpp
-    KoFrameShape.cpp
     KoMarker.cpp
     KoMarkerCollection.cpp
     KoToolBase.cpp
@@ -93,9 +91,6 @@ set(kritaflake_SRCS
     KoSharedLoadingData.cpp
     KoSharedSavingData.cpp
     KoViewConverter.cpp
-    KoImageData.cpp
-    KoImageData_p.cpp
-    KoImageCollection.cpp
     KoFilterEffect.cpp
     KoFilterEffectStack.cpp
     KoFilterEffectFactoryBase.cpp

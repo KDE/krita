@@ -11,7 +11,6 @@
 #include "KoShapeContainer.h"
 #include "KoSharedLoadingData.h"
 #include "KoShapeControllerBase.h"
-#include "KoImageCollection.h"
 #include "KoMarkerCollection.h"
 #include "KoDocumentResourceManager.h"
 #include "KoLoadingShapeUpdater.h"
@@ -133,10 +132,6 @@ void KoShapeLoadingContext::shapeLoaded(KoShape * shape)
     }
 }
 
-KoImageCollection * KoShapeLoadingContext::imageCollection()
-{
-    return d->documentResources ? d->documentResources->imageCollection() : 0;
-}
 
 int KoShapeLoadingContext::zIndex()
 {

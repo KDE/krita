@@ -184,11 +184,6 @@ int SvgLoadingContext::nextZIndex()
     return d->zIndex++;
 }
 
-KoImageCollection* SvgLoadingContext::imageCollection()
-{
-    return d->documentResourceManager->imageCollection();
-}
-
 void SvgLoadingContext::registerShape(const QString &id, KoShape *shape)
 {
     if (!id.isEmpty())

@@ -31,7 +31,6 @@
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
 #include <KoXmlReader.h>
-#include <KoImageCollection.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoMeshGradientBackground.h>

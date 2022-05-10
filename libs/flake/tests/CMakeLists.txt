@@ -12,7 +12,6 @@ if (APPLE)
         TestKoShapeFactory.cpp
         TestShapeContainer.cpp
         TestShapeGroupCommand.cpp
-        TestImageCollection.cpp
         TestShapeBackgroundCommand.cpp
         TestShapeStrokeCommand.cpp
         TestShapeShadowCommand.cpp
@@ -121,7 +120,6 @@ ecm_add_tests(
     TestShapeContainer.cpp
     TestShapeGroupCommand.cpp
     TestShapeReorderCommand.cpp
-    TestImageCollection.cpp
     TestResourceManager.cpp
     TestShapeBackgroundCommand.cpp
     TestShapeStrokeCommand.cpp

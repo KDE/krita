@@ -19,7 +19,6 @@
 #include <resources/KoPattern.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
-#include <KoImageCollection.h>
 
 #include <QMenu>
 #include <QHBoxLayout>
@@ -37,7 +36,6 @@ public:
     KisResourceModel *model = 0;
     KisResourceItemListView *resourceList = 0;
     QSharedPointer<KoShapeBackground> background;
-    KoImageCollection *imageCollection = 0;
     KoCheckerBoardPainter checkerPainter {4};
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 };
@@ -92,7 +90,6 @@ KoResourcePopupAction::~KoResourcePopupAction()
     }
 
     delete d->menu;
-    delete d->imageCollection;
     delete d;
 }
 
@@ -149,8 +146,7 @@ void KoResourcePopupAction::indexChanged(const QModelIndex &modelIndex)
             qg->setCoordinateMode(QGradient::ObjectBoundingMode);
             d->background = QSharedPointer<KoShapeBackground>(new KoGradientBackground(qg));
         } else if (pattern) {
-            KoImageCollection *collection = new KoImageCollection();
-            d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground(collection));
+            d->background = QSharedPointer<KoShapeBackground>(new KoPatternBackground());
             qSharedPointerDynamicCast<KoPatternBackground>(d->background)->setPattern(pattern->pattern());
         }
 

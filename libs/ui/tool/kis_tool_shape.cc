@@ -194,7 +194,6 @@ void KisToolShape::addShape(KoShape* shape)
 {
     using namespace KisToolShapeUtils;
 
-    KoImageCollection* imageCollection = canvas()->shapeController()->resourceManager()->imageCollection();
     switch(fillStyle()) {
         case FillStyleForegroundColor:
             shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentFgColor().toQColor())));
@@ -203,16 +202,7 @@ void KisToolShape::addShape(KoShape* shape)
             shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(currentBgColor().toQColor())));
             break;
         case FillStylePattern:
-            if (imageCollection) {
-                QSharedPointer<KoPatternBackground> fill(new KoPatternBackground(imageCollection));
-                if (currentPattern()) {
-                    fill->setPattern(currentPattern()->pattern());
-                    fill->setTransform(fillTransform());
-                    shape->setBackground(fill);
-                }
-            } else {
-                shape->setBackground(QSharedPointer<KoShapeBackground>(0));
-            }
+            shape->setBackground(QSharedPointer<KoShapeBackground>(0));
             break;
         case FillStyleNone:
             shape->setBackground(QSharedPointer<KoShapeBackground>(0));

@@ -145,20 +145,6 @@ void KoDocumentResourceManager::setUndoStack(KUndo2Stack *undoStack)
     setResource(UndoStack, variant);
 }
 
-KoImageCollection *KoDocumentResourceManager::imageCollection() const
-{
-    if (!hasResource(ImageCollection))
-        return 0;
-    return static_cast<KoImageCollection*>(resource(ImageCollection).value<void*>());
-}
-
-void KoDocumentResourceManager::setImageCollection(KoImageCollection *ic)
-{
-    QVariant variant;
-    variant.setValue<void*>(ic);
-    setResource(ImageCollection, variant);
-}
-
 qreal KoDocumentResourceManager::documentResolution() const
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(hasResource(DocumentResolution), 72.0);

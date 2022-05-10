@@ -11,7 +11,6 @@
 
 class KoXmlWriter;
 class KoShape;
-class KoImageData;
 class QIODevice;
 class QString;
 class QTransform;
@@ -53,9 +52,6 @@ public:
 
     /// Saves given image and returns the href used
     QString saveImage(const QImage &image);
-
-    /// Saves given image and returns the href used
-    QString saveImage(KoImageData *image);
 
     void setStrippedTextMode(bool value);
     bool strippedTextMode() const;

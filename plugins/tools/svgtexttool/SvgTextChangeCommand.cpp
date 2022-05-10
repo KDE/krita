@@ -8,7 +8,6 @@
 
 #include <math.h>
 #include <klocalizedstring.h>
-#include <KoImageData.h>
 
 #include "KoSvgTextShape.h"
 #include "KoSvgTextShapeMarkupConverter.h"

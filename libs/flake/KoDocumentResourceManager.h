@@ -14,7 +14,6 @@
 
 class KoShape;
 class KUndo2Stack;
-class KoImageCollection;
 class KoShapeController;
 class KoColor;
 class KoUnit;
@@ -57,7 +56,6 @@ public:
      */
 enum DocumentResource {
     UndoStack,              ///< The document-wide undo stack (KUndo2Stack)
-    ImageCollection,        ///< The KoImageCollection for the document
     OdfDocument,            ///< OBSOLETE The document this canvas shows
     HandleRadius,           ///< The handle radius used for drawing handles of any kind
     GrabSensitivity,        ///< The grab sensitivity used for grabbing handles of any kind
@@ -210,9 +208,6 @@ enum DocumentResource {
 
     KUndo2Stack *undoStack() const;
     void setUndoStack(KUndo2Stack *undoStack);
-
-    KoImageCollection *imageCollection() const;
-    void setImageCollection(KoImageCollection *ic);
 
     qreal documentResolution() const;
     QRectF documentRectInPixels() const;

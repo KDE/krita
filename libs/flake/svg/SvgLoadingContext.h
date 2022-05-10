@@ -15,7 +15,6 @@
 class SvgGraphicsContext;
 class SvgStyleParser;
 class KoDocumentResourceManager;
-class KoImageCollection;
 class KoShape;
 class KoColorProfile;
 
@@ -48,9 +47,6 @@ public:
 
     /// Returns the next z-index
     int nextZIndex();
-
-    /// Returns the image collection used for managing images
-    KoImageCollection* imageCollection();
 
     /// Registers a shape so it can be referenced later
     void registerShape(const QString &id, KoShape *shape);

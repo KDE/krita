@@ -83,7 +83,9 @@
             <item row="1" column="0" colspan="2">
              <widget class="KisSliderSpinBox" name="effort">
               <property name="toolTip">
-               <string>Sets encoder effort/speed level without affecting decoding speed. Valid values are, from faster to slower speed: 1:lightning 2:thunder 3:falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise. Default: squirrel (7). </string>
+               <string>Sets encoder effort/speed level without affecting decoding speed.
+Valid values are, from faster to slower speed: 1:lightning 2:thunder 3:falcon 4:cheetah 5:hare 6:wombat 7:squirrel 8:kitten 9:tortoise.
+Default: squirrel (7).</string>
               </property>
               <property name="minimum">
                <number>1</number>
@@ -127,7 +129,9 @@
             <item row="1" column="0" colspan="2">
              <widget class="KisSliderSpinBox" name="decodingSpeed">
               <property name="toolTip">
-               <string>Sets the decoding speed tier for the provided options. Minimum is 0 (slowest to decode, best quality/density), and maximum is 4 (fastest to decode, at the cost of some quality/density). Default is 0.</string>
+               <string>Sets the decoding speed tier for the provided options.
+Minimum is 0 (slowest to decode, best quality/density), and maximum is 4 (fastest to decode, at the cost of some quality/density).
+Default is 0.</string>
               </property>
               <property name="maximum">
                <number>4</number>
@@ -238,7 +242,9 @@
               </sizepolicy>
              </property>
              <property name="toolTip">
-              <string>Adds noise to the image emulating photographic film noise, the higher the given number, the grainier the image will be. As an example, a value of 100 gives low noise whereas a value of 3200 gives a lot of noise. The default value is 0.</string>
+              <string>Adds noise to the image emulating photographic film noise, the higher the given number, the grainier the image will be.
+As an example, a value of 100 gives low noise whereas a value of 3200 gives a lot of noise.
+The default value is 0.</string>
              </property>
              <property name="maximum">
               <number>1000000000</number>
@@ -424,7 +430,7 @@
               <item row="2" column="1">
                <widget class="QComboBox" name="progressiveDC">
                 <property name="toolTip">
-                 <string>Set the progressive mode using lower-resolution DC images for VarDCT. </string>
+                 <string>Set the progressive mode using lower-resolution DC images for VarDCT.</string>
                 </property>
                </widget>
               </item>
@@ -449,7 +455,9 @@
                 <item row="1" column="0" colspan="2">
                  <widget class="KisSliderSpinBox" name="channelColorsGlobalPercent">
                   <property name="toolTip">
-                   <string>Use Global channel palette if the amount of colors is smaller than this percentage of range. Use 0-100 to set an explicit percentage, -1 to use the encoder default. Used for modular encoding.</string>
+                   <string>Use Global channel palette if the amount of colors is smaller than this percentage of range.
+Use 0-100 to set an explicit percentage, -1 to use the encoder default.
+Used for modular encoding.</string>
                   </property>
                   <property name="suffix">
                    <string>%</string>
@@ -499,7 +507,9 @@
                 <item row="1" column="0" colspan="2">
                  <widget class="KisSliderSpinBox" name="channelColorsGroupPercent">
                   <property name="toolTip">
-                   <string>Use Local (per-group) channel palette if the amount of colors is smaller than this percentage of range. Use 0-100 to set an explicit percentage, -1 to use the encoder default. Used for modular encoding.</string>
+                   <string>Use Local (per-group) channel palette if the amount of colors is smaller than this percentage of range.
+Use 0-100 to set an explicit percentage, -1 to use the encoder default.
+Used for modular encoding.</string>
                   </property>
                   <property name="suffix">
                    <string>%</string>
@@ -553,7 +563,8 @@
                  </sizepolicy>
                 </property>
                 <property name="toolTip">
-                 <string>Use color palette if amount of colors is smaller than or equal to this amount, or -1 to use the encoder default. Used for modular encoding.</string>
+                 <string>Use color palette if amount of colors is smaller than or equal to this amount, or -1 to use the encoder default.
+Used for modular encoding.</string>
                 </property>
                 <property name="minimum">
                  <number>-1</number>
@@ -582,7 +593,7 @@
               <item row="5" column="1">
                <widget class="QComboBox" name="lossyPalette">
                 <property name="toolTip">
-                 <string>Enables or disables delta palette. Used in modular mode. </string>
+                 <string>Enables or disables delta palette. Used in modular mode.</string>
                 </property>
                </widget>
               </item>
@@ -643,8 +654,9 @@
                 <item row="1" column="0" colspan="2">
                  <widget class="KisSliderSpinBox" name="modularMATreeLearningPercent">
                   <property name="toolTip">
-                   <string>Fraction of pixels used to learn MA trees as a percentage. -1 = default, 0 = no MA and fast decode, 50 = default value, 100 = all. Higher values use more encoder memory.
-</string>
+                   <string>Fraction of pixels used to learn MA trees as a percentage.
+-1 = default, 0 = no MA and fast decode, 50 = default value, 100 = all.
+Higher values use more encoder memory.</string>
                   </property>
                   <property name="suffix">
                    <string>%</string>

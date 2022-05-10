@@ -8,13 +8,9 @@
 #include "KoDocumentInfo.h"
 
 #include "KisDocument.h"
-#include "KoXmlNS.h"
-
 #include <QDateTime>
 #include <KoStoreDevice.h>
-#include <KoXmlWriter.h>
 #include <QDomDocument>
-#include <KoXmlReader.h>
 #include <QDir>
 
 #include <kconfig.h>

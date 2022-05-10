@@ -196,6 +196,7 @@ set(kritaflake_SRCS
     text/KoSvgTextChunkShape.cpp
     text/KoSvgTextShape.cpp
     text/KoSvgTextShapeMarkupConverter.cpp
+    text/KoFontRegistery.cpp
 
     resources/KoSvgSymbolCollectionResource.cpp
     resources/KoGamutMask.cpp

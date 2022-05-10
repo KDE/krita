@@ -11,7 +11,10 @@
 #ifdef HAVE_OPENEXR
 
 #include <half.h>
+
+#if (IMATH_VERSION_MAJOR <= 3) && (IMATH_VERSION_MINOR <= 1) && (IMATH_VERSION_PATCH <= 4)
 #include <halfLimits.h>
+#endif
 
 #include <type_traits>
 

@@ -249,18 +249,18 @@ bool KisFolderStorage::addResource(const QString &resourceType, KoResourceSP res
         return false;
     }
 
-    QFile f(fi.absoluteFilePath());
-    if (!f.open(QFile::WriteOnly)) {
+    QFile resourceFile(fi.absoluteFilePath());
+    if (!resourceFile.open(QFile::WriteOnly)) {
         qWarning() << "Could not open" << fi.absoluteFilePath() << "for writing.";
         return false;
     }
 
-    if (!resource->saveToDevice(&f)) {
+    if (!resource->saveToDevice(&resourceFile)) {
         qWarning() << "Could not save resource to" << fi.absoluteFilePath();
-        f.close();
+        resourceFile.close();
         return false;
     }
-    f.close();
+    resourceFile.close();
 
 
 

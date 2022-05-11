@@ -47,8 +47,8 @@ KoGradientSegment::SineInterpolationStrategy *KoGradientSegment::SineInterpolati
 KoGradientSegment::SphereIncreasingInterpolationStrategy *KoGradientSegment::SphereIncreasingInterpolationStrategy::m_instance = 0;
 KoGradientSegment::SphereDecreasingInterpolationStrategy *KoGradientSegment::SphereDecreasingInterpolationStrategy::m_instance = 0;
 
-KoSegmentGradient::KoSegmentGradient(const QString& file)
-    : KoAbstractGradient(file)
+KoSegmentGradient::KoSegmentGradient(const QString& filename)
+    : KoAbstractGradient(filename)
 {
 }
 

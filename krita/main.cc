@@ -851,7 +851,10 @@ void installEcmTranslations(KisApplication &app)
 #else
             const QString root = QLibraryInfo::location(QLibraryInfo::PrefixPath);
 
-            // Our patched k18n uses AppDataLocation (for AppImage).
+            // Our patched k18n uses AppDataLocation (for AppImage). Not using
+            // KoResourcePaths::getAppDataLocation is correct here, because we
+            // need to look into the installation folder, not the configured appdata
+            // folder.
             QString fullPath = QStandardPaths::locate(QStandardPaths::AppDataLocation, subPath);
 
             if (fullPath.isEmpty()) {

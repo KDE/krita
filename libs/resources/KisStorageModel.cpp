@@ -8,6 +8,7 @@
 #include <QtSql>
 #include <QElapsedTimer>
 #include <KisResourceLocator.h>
+#include <KoResourcePaths.h>
 #include <KisResourceModelProvider.h>
 #include <QFileInfo>
 #include <kis_assert.h>
@@ -372,12 +373,7 @@ bool KisStorageModel::importStorage(QString filename, StorageImportOption import
 {
     // 1. Copy the bundle/storage to the resource folder
     QFileInfo oldFileInfo(filename);
-
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString newDir = cfg.readEntry(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-    if (newDir == "") {
-        newDir = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    }
+    QString newDir = KoResourcePaths::getAppDataLocation();
     QString newName = oldFileInfo.fileName();
     QString newLocation = newDir + '/' + newName;
 

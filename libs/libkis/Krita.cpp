@@ -441,6 +441,11 @@ QString Krita::krita_i18nc(const QString &context, const QString &text)
     return i18nc(context.toUtf8().constData(), text.toUtf8().constData());
 }
 
+QString Krita::getAppDataLocation()
+{
+    return KoResourcePaths::getAppDataLocation();
+}
+
 void Krita::mainWindowIsBeingCreated(KisMainWindow *kisWindow)
 {
     Q_FOREACH(Extension *extension, d->extensions) {

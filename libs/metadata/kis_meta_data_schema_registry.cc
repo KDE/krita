@@ -33,9 +33,9 @@ SchemaRegistry* SchemaRegistry::instance()
 SchemaRegistry::SchemaRegistry()
     : d(new Private)
 {
-    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addAssetType("metadata_schema", "data", "/metadata/schemas/");
 
-    QStringList schemasFilenames = KoResourcePaths::findAllResources("metadata_schema", "*.schema");
+    QStringList schemasFilenames = KoResourcePaths::findAllAssets("metadata_schema", "*.schema");
 
     Q_FOREACH (const QString& fileName, schemasFilenames) {
         Schema* schema = new Schema();

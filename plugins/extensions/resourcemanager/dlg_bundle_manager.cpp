@@ -220,9 +220,7 @@ void DlgBundleManager::addBundle()
         // 1. Copy the bundle to the resource folder
         QFileInfo oldFileInfo(filename);
 
-        KisConfig cfg(true);
-        QString newDir = cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey,
-                                                QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+        QString newDir = KoResourcePaths::getAppDataLocation();
         QString newName = oldFileInfo.fileName();
         const QString newLocation = QStringLiteral("%1/%2").arg(newDir, newName);
 

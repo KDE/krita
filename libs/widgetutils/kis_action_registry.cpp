@@ -372,7 +372,7 @@ QString KisActionRegistry::getActionProperty(const QString &name, const QString 
 void KisActionRegistry::Private::loadActionFiles()
 {
     QStringList actionDefinitions =
-        KoResourcePaths::findAllResources("kis_actions", "*.action", KoResourcePaths::Recursive);
+        KoResourcePaths::findAllAssets("kis_actions", "*.action", KoResourcePaths::Recursive);
     dbgAction << "Action Definitions" << actionDefinitions;
 
     // Extract actions all XML .action files.

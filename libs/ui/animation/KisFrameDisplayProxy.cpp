@@ -8,7 +8,6 @@
 #include "KisFrameDisplayProxy.h"
 
 #include "kis_canvas2.h"
-#include "kis_animation_frame_cache.h"
 #include "kis_image_animation_interface.h"
 
 struct Private {
@@ -41,6 +40,11 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
 
 KisFrameDisplayProxy::~KisFrameDisplayProxy()
 {
+
+//    bool needsRegeneration = isFrameCached(m_d->activeFrameIndex) && !isFrameCached(prevFrame);
+
+//    bool usePreview = m_d->scrubInProgress && !needsRegeneration;
+//    scrubTo(m_d->activeFrameIndex, usePreview);
 }
 
 bool KisFrameDisplayProxy::displayFrame(int frame)
@@ -53,13 +57,23 @@ bool KisFrameDisplayProxy::displayFrame(int frame)
         emit sigFrameChange();
     }
 
-    if (cache && cache->shouldUploadNewFrame(frame, m_d->displayedFrame)
-              && cache->uploadFrame(frame) ) {
+    if (forceRegeneration(cache, m_d->displayedFrame, frame)) {
+        // BUG:445265
+        // Edgecase occurs where if we move from a cached frame to a non-cached frame,
+        // we never technically "switch" to the cached one during scrubbing, which
+        // will prevent the uncached frame from ever determining it needs to be
+        // regenerated. We will force a frame switch when going from uncached to cached
+        // to work around this issue.
+        ai->switchCurrentTimeAsync(frame);
+
+    } else if ( shouldUploadFrame(cache, m_d->displayedFrame, frame) && cache->uploadFrame(frame) ) {
+
         m_d->canvas->updateCanvas();
         m_d->displayedFrame = frame;
         emit sigFrameDisplayRefreshed();
         return true;
-    } else if (ai->hasAnimation() && ai->currentUITime() != frame){
+
+    } else if (!cache && ai->hasAnimation() && ai->currentUITime() != frame){
         if (m_d->canvas->image()->tryBarrierLock(true)) {
             m_d->canvas->image()->unlock();
             ai->switchCurrentTimeAsync(frame);
@@ -78,4 +92,14 @@ int KisFrameDisplayProxy::visibleFrame() const
 int KisFrameDisplayProxy::frame() const
 {
     return m_d->intendedFrame;
+}
+
+bool KisFrameDisplayProxy::shouldUploadFrame(KisAnimationFrameCacheSP cache, int from, int to)
+{
+    return cache && cache->shouldUploadNewFrame(to, from);
+}
+
+bool KisFrameDisplayProxy::forceRegeneration(KisAnimationFrameCacheSP cache, int from, int to)
+{
+    return cache && cache->frameStatus(from) != cache->frameStatus(to);
 }

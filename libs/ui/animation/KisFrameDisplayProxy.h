@@ -13,6 +13,7 @@
 
 #include "kritaui_export.h"
 
+#include "kis_animation_frame_cache.h"
 
 class KRITAUI_EXPORT KisFrameDisplayProxy : public QObject
 {
@@ -40,6 +41,10 @@ public:
 Q_SIGNALS:
     void sigFrameChange();
     void sigFrameDisplayRefreshed();
+
+protected:
+    bool shouldUploadFrame(KisAnimationFrameCacheSP cache, int from, int to);
+    bool forceRegeneration(KisAnimationFrameCacheSP cache, int from, int to);
 
 private:
     QScopedPointer<struct Private> m_d;

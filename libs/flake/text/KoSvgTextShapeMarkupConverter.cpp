@@ -24,7 +24,6 @@
 
 #include <KoSvgTextShape.h>
 #include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KoDocumentResourceManager.h>
 #include <KoMarker.h>
 

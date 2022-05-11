@@ -9,7 +9,6 @@
 #include <QDomDocument>
 
 #include <KoColorSpaceConstants.h>
-#include <KoXmlReader.h>
 #include <KisDocument.h>
 #include <kis_image.h>
 #include <KisPart.h>

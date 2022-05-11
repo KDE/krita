@@ -8,7 +8,6 @@
 #include "KoShapeSavingContext.h"
 #include <KoXmlNS.h>
 #include <KoUnit.h>
-#include <KoXmlReader.h>
 
 #include <FlakeDebug.h>
 

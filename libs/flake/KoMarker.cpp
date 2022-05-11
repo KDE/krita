@@ -6,7 +6,6 @@
 
 #include "KoMarker.h"
 
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include "KoPathShape.h"
 #include "KoPathShapeLoader.h"

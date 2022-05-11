@@ -40,7 +40,6 @@
 #include <KoStoreDevice.h>
 #include <KoViewConverter.h>
 #include <KoXmlNS.h>
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoSelection.h>
 #include <KoShapeMoveCommand.h>

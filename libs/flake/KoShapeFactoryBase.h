@@ -12,10 +12,9 @@
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <QDomDocument>
 
 #include "kritaflake_export.h"
-
-#include <KoXmlReader.h>
 
 class KoShape;
 class KoProperties;

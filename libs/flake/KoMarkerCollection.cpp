@@ -10,7 +10,6 @@
 
 #include <klocalizedstring.h>
 #include "KoMarker.h"
-#include <KoXmlReader.h>
 #include <FlakeDebug.h>
 #include <KoResourcePaths.h>
 #include <SvgParser.h>

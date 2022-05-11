@@ -19,9 +19,7 @@ v *  GNU General Public License for more details.
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 
-
 #include "kis_debug.h"
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 

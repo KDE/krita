@@ -30,7 +30,6 @@
 #include <KoPathShapeLoader.h>
 #include <commands/KoShapeGroupCommand.h>
 #include <commands/KoShapeUngroupCommand.h>
-#include <KoXmlReader.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoMeshGradientBackground.h>
@@ -278,7 +277,7 @@ SvgFilterHelper* SvgParser::findFilter(const QString &id, const QString &href)
         return 0;
 
     const QDomElement &e = m_context.definition(id);
-    if (KoXml::childNodesCount(e) == 0) {
+    if (e.childNodes().count() == 0) {
         QString mhref = e.attribute("xlink:href").mid(1);
 
         if (m_context.hasDefinition(mhref))
@@ -536,6 +535,10 @@ SvgGradientHelper* SvgParser::parseMeshGradient(const QDomElement &e)
     return &m_gradients[gradientId];
 }
 
+#define forEachElement( elem, parent ) \
+    for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+    if ( ( elem = _node.toElement() ).isNull() ) {} else
+
 QList<QPair<QString, QColor>> SvgParser::parseMeshPatch(const QDomNode& meshpatchNode)
 {
     // path and its associated color
@@ -547,6 +550,7 @@ QList<QPair<QString, QColor>> SvgParser::parseMeshPatch(const QDomNode& meshpatc
     QDomElement e = meshpatchNode.toElement();
 
     QDomElement stop;
+
     forEachElement(stop, e) {
         qreal X = 0;    // dummy value, don't care, just to ensure the function won't blow up (also to avoid a Coverity issue)
         QColor color = m_context.styleParser().parseColorStop(stop, gc, X).second;
@@ -1899,7 +1903,7 @@ QList<KoShape*> SvgParser::parseSingleElement(const QDomElement &b, DeferredUseS
         shapes += parseContainer(b);
         m_context.popGraphicsContext();
     } else if (b.tagName() == "defs") {
-        if (KoXml::childNodesCount(b) > 0) {
+        if (b.childNodes().count() > 0) {
             /**
              * WARNING: 'defs' are basically 'display:none' style, therefore they should not play
              *          any role in shapes outline calculation. But setVisible(false) shapes do!

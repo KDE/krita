@@ -13,7 +13,6 @@
 #include "KoShapeSavingContext.h"
 #include "KoShapeLoadingContext.h"
 #include "KoXmlWriter.h"
-#include "KoXmlReader.h"
 #include "KoShapeRegistry.h"
 #include "KoShapeStrokeModel.h"
 #include "KoShapeShadow.h"

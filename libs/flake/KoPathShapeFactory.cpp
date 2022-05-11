@@ -15,7 +15,6 @@
 
 #include <klocalizedstring.h>
 
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 #include "kis_pointer_utils.h"

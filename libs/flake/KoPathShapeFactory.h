@@ -10,8 +10,6 @@
 
 #include "KoShapeFactoryBase.h"
 
-#include "KoXmlReader.h"
-
 class KoShape;
 
 /// Factory for path shapes.

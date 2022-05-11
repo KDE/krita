@@ -9,7 +9,9 @@
 
 #include <functional>
 #include <QStringList>
-#include <KoXmlReader.h>
+#include <QDomDocument>
+#include <QScopedPointer>
+
 #include "kritaflake_export.h"
 
 class SvgGraphicsContext;

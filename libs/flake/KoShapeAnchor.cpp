@@ -11,7 +11,6 @@
 
 #include <KoShapeContainer.h>
 #include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>

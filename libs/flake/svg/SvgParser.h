@@ -9,8 +9,6 @@
 #ifndef SVGPARSER_H
 #define SVGPARSER_H
 
-#include <KoXmlReader.h>
-
 #include <QMap>
 #include <QSizeF>
 #include <QRectF>

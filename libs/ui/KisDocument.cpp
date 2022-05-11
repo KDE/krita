@@ -28,7 +28,6 @@
 #include <KoStore.h>
 #include <KoUpdater.h>
 #include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 #include <KoStoreDevice.h>
 #include <KoDialog.h>
 #include <KisImportExportErrorCode.h>

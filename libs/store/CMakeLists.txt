@@ -8,7 +8,6 @@ set(kritastore_LIB_SRCS
     KoLZF.cpp
     KoStore.cpp
     KoXmlNS.cpp
-    KoXmlReader.cpp
     KoXmlWriter.cpp
     KoQuaZipStore.cpp
     StoreDebug.cpp

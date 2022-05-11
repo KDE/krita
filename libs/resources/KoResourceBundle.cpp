@@ -24,7 +24,6 @@
 #include <KoMD5Generator.h>
 #include <KoResourcePaths.h>
 #include <KoStore.h>
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include "KisStoragePlugin.h"
 #include "KisResourceLoaderRegistry.h"

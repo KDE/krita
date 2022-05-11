@@ -6,7 +6,6 @@
 
 #include "KoSvgText.h"
 #include <SvgUtil.h>
-#include <KoXmlReader.h>
 #include <SvgLoadingContext.h>
 #include <QDebug>
 #include "kis_dom_utils.h"

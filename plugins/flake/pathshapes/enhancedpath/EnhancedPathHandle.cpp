@@ -8,7 +8,6 @@
 #include "EnhancedPathShape.h"
 #include "EnhancedPathParameter.h"
 #include <KoShapeSavingContext.h>
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>

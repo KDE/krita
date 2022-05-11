@@ -20,7 +20,6 @@
 class QDomDocument;
 class QDomElement;
 class KoStore;
-class KoXmlWriter;
 
 /**
  * @short The class containing all meta information about a document

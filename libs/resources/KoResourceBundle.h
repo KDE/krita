@@ -10,6 +10,7 @@
 #include <QSet>
 #include <QList>
 #include <QSharedPointer>
+#include <QDomDocument>
 
 #include <KoXmlWriter.h>
 

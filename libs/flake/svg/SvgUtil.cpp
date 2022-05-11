@@ -8,7 +8,6 @@
 #include "SvgGraphicContext.h"
 
 #include <KoUnit.h>
-#include <KoXmlReader.h>
 
 #include <QString>
 #include <QRectF>

@@ -37,7 +37,6 @@
 #include "KoFilterEffectStack.h"
 #include <KoSnapData.h>
 
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoUnit.h>

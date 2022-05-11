@@ -21,7 +21,6 @@
 #include <KoDocumentInfo.h>
 #include <KoFileDialog.h>
 #include <KisImportExportManager.h>
-#include <KoXmlReader.h>
 #include <KoStoreDevice.h>
 #include <KisResourceServerProvider.h>
 #include <KoResourceServer.h>
@@ -321,7 +320,8 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
 
             if(e.tagName()== PROOFINGWARNINGCOLOR) {
                 QDomDocument dom;
-                KoXml::asQDomElement(dom, e);
+                QDomNode node = e;
+                dom.appendChild(dom.importNode(node, true));
                 QDomElement eq = dom.firstChildElement();
                 proofingConfig->warningColor = KoColor::fromXML(eq.firstChildElement(), Integer8BitsColorDepthID.id());
             }
@@ -696,7 +696,8 @@ void KisKraLoader::loadAssistants(KoStore *store, const QString &uri, bool exter
 void KisKraLoader::loadAnimationMetadataFromXML(const QDomElement &element, KisImageSP image)
 {
     QDomDocument qDom;
-    KoXml::asQDomElement(qDom, element);
+    QDomNode node = element;
+    qDom.appendChild(qDom.importNode(node, true));
     QDomElement rootElement = qDom.firstChildElement();
 
     float framerate;
@@ -761,7 +762,7 @@ KisNodeSP KisKraLoader::loadNodes(const QDomElement& element, KisImageSP image, 
 
                     if (node ) {
                         image->addNode(node, parent);
-                        if (node->inherits("KisLayer") && KoXml::childNodesCount(child) > 0) {
+                        if (node->inherits("KisLayer") && child.childNodes().count() > 0) {
                             loadNodes(child.toElement(), image, node);
                         }
                     }
@@ -1322,7 +1323,7 @@ void KisKraLoader::loadAssistantsList(const QDomElement &elem)
 void KisKraLoader::loadGrid(const QDomElement& elem)
 {
     QDomDocument dom;
-    KoXml::asQDomElement(dom, elem);
+    dom.appendChild(dom.importNode(elem, true));
     QDomElement domElement = dom.firstChildElement();
 
     KisGridConfig config;
@@ -1334,7 +1335,7 @@ void KisKraLoader::loadGrid(const QDomElement& elem)
 void KisKraLoader::loadGuides(const QDomElement& elem)
 {
     QDomDocument dom;
-    KoXml::asQDomElement(dom, elem);
+    dom.appendChild(dom.importNode(elem, true));
     QDomElement domElement = dom.firstChildElement();
 
     KisGuidesConfig guides;
@@ -1345,7 +1346,7 @@ void KisKraLoader::loadGuides(const QDomElement& elem)
 void KisKraLoader::loadMirrorAxis(const QDomElement &elem)
 {
     QDomDocument dom;
-    KoXml::asQDomElement(dom, elem);
+    dom.appendChild(dom.importNode(elem, true));
     QDomElement domElement = dom.firstChildElement();
 
     KisMirrorAxisConfig mirrorAxis;
@@ -1356,7 +1357,7 @@ void KisKraLoader::loadMirrorAxis(const QDomElement &elem)
 void KisKraLoader::loadAudio(const QDomElement& elem, KisImageSP image)
 {
     QDomDocument dom;
-    KoXml::asQDomElement(dom, elem);
+    dom.appendChild(dom.importNode(elem, true));
     QDomElement qElement = dom.firstChildElement();
 
     QString fileName;

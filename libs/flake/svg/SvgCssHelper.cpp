@@ -5,7 +5,6 @@
  */
 
 #include "SvgCssHelper.h"
-#include <KoXmlReader.h>
 #include <FlakeDebug.h>
 #include <QPair>
 

@@ -46,7 +46,6 @@ KoDocumentInfo::KoDocumentInfo(const KoDocumentInfo &rhs, QObject *parent)
       m_authorInfoOverride(rhs.m_authorInfoOverride),
       m_aboutInfo(rhs.m_aboutInfo),
       m_generator(rhs.m_generator)
-
 {
 }
 

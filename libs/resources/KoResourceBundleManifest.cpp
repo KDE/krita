@@ -15,7 +15,6 @@
 #include <QFileInfo>
 
 #include <KoXmlNS.h>
-#include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 
 #include <kis_debug.h>

@@ -17,7 +17,6 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoDocumentInfo.h>
 #include <KoXmlWriter.h>
-#include <KoXmlReader.h>
 
 #include <KritaVersionWrapper.h>
 #include <kis_group_layer.h>

@@ -348,6 +348,10 @@ QPair<qreal, QColor> SvgStyleParser::parseColorStop(const QDomElement& stop,
     return QPair<qreal, QColor>(offset, color);
 }
 
+#define forEachElement( elem, parent ) \
+    for ( QDomNode _node = parent.firstChild(); !_node.isNull(); _node = _node.nextSibling() ) \
+    if ( ( elem = _node.toElement() ).isNull() ) {} else
+
 void SvgStyleParser::parseColorStops(QGradient *gradient,
                                      const QDomElement &e,
                                      SvgGraphicsContext *context,

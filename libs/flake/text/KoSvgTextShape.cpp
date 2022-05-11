@@ -19,7 +19,6 @@
 
 #include "kis_debug.h"
 
-#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoShapeLoadingContext.h>
 #include <KoIcon.h>

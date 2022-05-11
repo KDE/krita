@@ -33,7 +33,6 @@
 
 const QString dbDriver = "QSQLITE";
 
-const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
 const QString KisResourceCacheDb::databaseVersion { "0.0.17" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };

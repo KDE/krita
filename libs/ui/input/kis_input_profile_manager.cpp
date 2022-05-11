@@ -189,7 +189,7 @@ void KisInputProfileManager::loadProfiles()
     d->profiles.clear();
 
     //Look up all profiles (this includes those installed to $prefix as well as the user's local data dir)
-    QStringList profiles = KoResourcePaths::findAllResources("data", "input/*.profile", KoResourcePaths::Recursive);
+    QStringList profiles = KoResourcePaths::findAllAssets("data", "input/*.profile", KoResourcePaths::Recursive);
 
     dbgKrita << "profiles" << profiles;
 
@@ -323,8 +323,8 @@ void KisInputProfileManager::saveProfiles()
 
 void KisInputProfileManager::resetAll()
 {
-    QString kdeHome = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QStringList profiles = KoResourcePaths::findAllResources("data", "input/*", KoResourcePaths::Recursive);
+    QString kdeHome = KoResourcePaths::getAppDataLocation();
+    QStringList profiles = KoResourcePaths::findAllAssets("data", "input/*", KoResourcePaths::Recursive);
 
     Q_FOREACH (const QString &profile, profiles) {
         if(profile.contains(kdeHome)) {

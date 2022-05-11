@@ -14,18 +14,26 @@
 
 
 /**
- * DEBUGGING KoResourcePaths:
- *
- * The usual place to look for resources is Qt's AppDataLocation.
+ * The usual place to look for assets is Qt's AppDataLocation.
  * This corresponds to XDG_DATA_DIRS on Linux. To ensure your installation and
  * path are configured correctly, ensure your files are located in the directories
  * contained in this variable:
  *
  * QStandardPaths::standardLocations(QStandardPaths::AppDataLocation);
  *
+ * This can be overridden in Krita's configuration.
+ *
+ * Unfortunately, we are mixing up two things in the appdatalocation:
+ *
+ *  * resources: brushes, presets and so on
+ *  * assets: color themes, icc profiles and other weird stuff, as
+ *
  * There are many debug lines that can be uncommented for more specific installation
  * checks. In the future these should be converted to qloggingcategory to enable
  * convenient enable/disable functionality.
+ *
+ * T
+ *
  *
  * Note: DO NOT USE THIS CLASS WHEN LOCATING RESOURCES LIKE BRUSHES OR GRADIENTS. Use
  * KisResourceLocator instead.
@@ -43,10 +51,22 @@ public:
                       };
     Q_DECLARE_FLAGS(SearchOptions, SearchOption)
 
+
+
     static QString getApplicationRoot();
 
     /**
-     * Adds suffixes for types.
+     * @brief getAppDataLocation Use this instead of QStandardPaths::AppDataLocation! The
+     * user can configure the location where resources and other user writable items are stored
+     * now.
+     *
+     * @return the configured location for the appdata folder
+     */
+    static QString s_overrideAppDataLocation; // This is set from KisApplicationArguments
+    static QString getAppDataLocation();
+
+    /**
+     * Adds suffixes for asset types.
      *
      * You may add as many as you need, but it is advised that there
      * is exactly one to make writing definite.
@@ -63,7 +83,7 @@ public:
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */
-    static void addResourceType(const QString &type, const char *basetype,
+    static void addAssetType(const QString &type, const char *basetype,
                                 const QString &relativeName, bool priority = true);
 
 
@@ -82,7 +102,7 @@ public:
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */
-    static void addResourceDir(const QString &type, const QString &dir, bool priority = true);
+    static void addAssetDir(const QString &type, const QString &dir, bool priority = true);
 
     /**
      * Tries to find a resource in the following order:
@@ -108,7 +128,7 @@ public:
      *         argument, or QString() if not found.
      */
 
-    static QString findResource(const QString &type, const QString &fileName);
+    static QString findAsset(const QString &type, const QString &fileName);
 
     /**
      * Tries to find all directories whose names consist of the
@@ -149,7 +169,7 @@ public:
      * @return List of all the files whose filename matches the
      *         specified filter.
      */
-    static QStringList findAllResources(const QString &type,
+    static QStringList findAllAssets(const QString &type,
                                         const QString &filter = QString(),
                                         SearchOptions options = NoSearchOptions);
 
@@ -161,7 +181,7 @@ public:
      * Note, that the directories are assured to exist beside the save
      * location, which may not exist, but is returned anyway.
      */
-    static QStringList resourceDirs(const QString &type);
+    static QStringList assetDirs(const QString &type);
 
     /**
      * Finds a location to save files into for the given type

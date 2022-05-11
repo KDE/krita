@@ -148,6 +148,8 @@ void KisTemplateTree::readGroups()
         if (!dir.exists())
             continue;
         QStringList templateDirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+
+
         Q_FOREACH (const QString & templateDirName, templateDirs) {
             QDir templateDir(dirName + "/" + templateDirName);
             QString name = templateDirName;

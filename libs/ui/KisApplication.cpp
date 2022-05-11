@@ -274,23 +274,23 @@ void KisApplication::initializeGlobals(const KisApplicationArguments &args)
 void KisApplication::addResourceTypes()
 {
     // All Krita's resource types
-    KoResourcePaths::addResourceType("markers", "data", "/styles/");
-    KoResourcePaths::addResourceType("kis_pics", "data", "/pics/");
-    KoResourcePaths::addResourceType("kis_images", "data", "/images/");
-    KoResourcePaths::addResourceType("metadata_schema", "data", "/metadata/schemas/");
-    KoResourcePaths::addResourceType("gmic_definitions", "data", "/gmic/");
-    KoResourcePaths::addResourceType("kis_shortcuts", "data", "/shortcuts/");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/actions");
-    KoResourcePaths::addResourceType("kis_actions", "data", "/pykrita");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/color/icc");
-    KoResourcePaths::addResourceType("icc_profiles", "data", "/profiles/");
-    KoResourcePaths::addResourceType(ResourceType::FilterEffects, "data", "/effects/");
-    KoResourcePaths::addResourceType("tags", "data", "/tags/");
-    KoResourcePaths::addResourceType("templates", "data", "/templates");
-    KoResourcePaths::addResourceType("pythonscripts", "data", "/pykrita");
-    KoResourcePaths::addResourceType("preset_icons", "data", "/preset_icons");
+    KoResourcePaths::addAssetType("markers", "data", "/styles/");
+    KoResourcePaths::addAssetType("kis_pics", "data", "/pics/");
+    KoResourcePaths::addAssetType("kis_images", "data", "/images/");
+    KoResourcePaths::addAssetType("metadata_schema", "data", "/metadata/schemas/");
+    KoResourcePaths::addAssetType("gmic_definitions", "data", "/gmic/");
+    KoResourcePaths::addAssetType("kis_shortcuts", "data", "/shortcuts/");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/actions");
+    KoResourcePaths::addAssetType("kis_actions", "data", "/pykrita");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/color/icc");
+    KoResourcePaths::addAssetType("icc_profiles", "data", "/profiles/");
+    KoResourcePaths::addAssetType(ResourceType::FilterEffects, "data", "/effects/");
+    KoResourcePaths::addAssetType("tags", "data", "/tags/");
+    KoResourcePaths::addAssetType("templates", "data", "/templates");
+    KoResourcePaths::addAssetType("pythonscripts", "data", "/pykrita");
+    KoResourcePaths::addAssetType("preset_icons", "data", "/preset_icons");
 #if defined HAVE_SEEXPR
-    KoResourcePaths::addResourceType(ResourceType::SeExprScripts, "data", "/seexpr_scripts/", true);
+    KoResourcePaths::addAssetType(ResourceType::SeExprScripts, "data", "/seexpr_scripts/", true);
 #endif
 
     // Make directories for all resources we can save, and tags
@@ -361,12 +361,8 @@ bool KisApplication::registerResources()
                                                      QStringList() << "application/x-photoshop-style"));
 
     reg->registerFixup(10, new KisBrushTypeMetaDataFixup());
+    QString databaseLocation = KoResourcePaths::getAppDataLocation();
 
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString databaseLocation = cfg.readEntry(KisResourceCacheDb::dbLocationKey, "");
-    if (databaseLocation.isEmpty()) {
-        databaseLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    }
 
     if (!KisResourceCacheDb::initialize(databaseLocation)) {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita: Fatal error"), i18n("%1\n\nKrita will quit now.", KisResourceCacheDb::lastError()));
@@ -964,9 +960,9 @@ bool KisApplication::createNewDocFromTemplate(const QString &fileName, KisMainWi
         QString desktopName(fileName);
         const QString templatesResourcePath =  QStringLiteral("templates/");
 
-        QStringList paths = KoResourcePaths::findAllResources("data", templatesResourcePath + "*/" + desktopName);
+        QStringList paths = KoResourcePaths::findAllAssets("data", templatesResourcePath + "*/" + desktopName);
         if (paths.isEmpty()) {
-            paths = KoResourcePaths::findAllResources("data", templatesResourcePath + desktopName);
+            paths = KoResourcePaths::findAllAssets("data", templatesResourcePath + desktopName);
         }
 
         if (paths.isEmpty()) {

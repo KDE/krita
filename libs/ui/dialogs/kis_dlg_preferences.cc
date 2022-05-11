@@ -59,7 +59,6 @@
 #include <kstandardguiitem.h>
 #include <kundo2stack.h>
 
-
 #include <KisResourceCacheDb.h>
 #include <KisResourceLocator.h>
 
@@ -382,13 +381,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     // Resources
     //
-    m_urlCacheDbLocation->setMode(KoFileDialog::OpenDirectory);
-    m_urlCacheDbLocation->setConfigurationName("cachedb_location");
-    m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
-
     m_urlResourceFolder->setMode(KoFileDialog::OpenDirectory);
     m_urlResourceFolder->setConfigurationName("resource_directory");
-    m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlResourceFolder->setFileName(KoResourcePaths::getAppDataLocation());
 
     grpWindowsAppData->setVisible(false);
 #ifdef Q_OS_WIN
@@ -543,8 +538,7 @@ void GeneralTab::setDefault()
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline(true));
     m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange(false));
 
-    m_urlCacheDbLocation->setFileName(cfg.readEntry<QString>(KisResourceCacheDb::dbLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
-    m_urlResourceFolder->setFileName(cfg.readEntry<QString>(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)));
+    m_urlResourceFolder->setFileName(KoResourcePaths::getAppDataLocation());
 
     chkForcedFontDPI->setChecked(false);
     intForcedFontDPI->setValue(qt_defaultDpi());
@@ -2142,7 +2136,6 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
         cfg.setAdaptivePlaybackRange(m_general->adaptivePlaybackRange());
 
-        cfg.writeEntry(KisResourceCacheDb::dbLocationKey, m_general->m_urlCacheDbLocation->fileName());
         cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());
 
         KisImageConfig(true).setRenameMergedLayers(m_general->renameMergedLayers());

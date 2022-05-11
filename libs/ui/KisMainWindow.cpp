@@ -2504,12 +2504,11 @@ void KisMainWindow::updateWindowMenu()
         QPointer<KisView>child = qobject_cast<KisView*>(windows.at(i)->widget());
         if (child && child->document()) {
             QString text;
-            const QString elidedPath = fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth);
             if (i < 9) {
-                text = i18nc("@item:inmenu opened document, %1=index %2=document path", "&%1 %2", i + 1, elidedPath);
+                text = i18n("&%1 %2", i + 1, fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth));
             }
             else {
-                text = i18nc("@item:inmenu opened document, %1=index %2=document path", "%1 %2", i + 1, elidedPath);
+                text = i18n("%1 %2", i + 1, fontMetrics.elidedText(child->document()->path(), Qt::ElideMiddle, fileStringWidth));
             }
 
             QAction *action  = menu->addAction(text);

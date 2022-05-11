@@ -79,7 +79,9 @@ KisResourceLocator::LocatorError KisResourceLocator::initialize(const QString &i
 {
     InitializationStatus initializationStatus = InitializationStatus::Unknown;
 
-    d->resourceLocation = resourceLocationBaseFromConfig();
+    d->resourceLocation = KoResourcePaths::getAppDataLocation();
+
+    if (!d->resourceLocation.endsWith('/')) d->resourceLocation += '/';
 
     QFileInfo fi(d->resourceLocation);
 

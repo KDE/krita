@@ -443,6 +443,9 @@ public:
     int layerThumbnailSize(bool defaultValue = false) const;
     void setLayerThumbnailSize(int size);
 
+    int layerTreeIndentation(bool defaultValue = false) const;
+    void setLayerTreeIndentation(int percentage);
+
 
     bool sliderLabels(bool defaultValue = false) const;
     void setSliderLabels(bool enabled);

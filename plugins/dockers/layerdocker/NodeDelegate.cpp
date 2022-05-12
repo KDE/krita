@@ -49,8 +49,11 @@ public:
     QPointer<QWidget> edit;
     NodeToolTip tip;
 
-    QColor checkersColor1;
-    QColor checkersColor2;
+    QImage checkers;
+
+    QRect thumbnailGeometry;
+    int thumbnailSize {-1};
+    int rowHeight {-1};
 
     QList<QModelIndex> shiftClickedIndexes;
 
@@ -102,9 +105,9 @@ QSize NodeDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelInd
 {
     KisNodeViewColorScheme scm;
     if (index.column() == 1) {
-        return QSize(scm.visibilityColumnWidth(), scm.rowHeight());
+        return QSize(scm.visibilityColumnWidth(), d->rowHeight);
     }
-    return QSize(option.rect.width(), scm.rowHeight());
+    return QSize(option.rect.width(), d->rowHeight);
 }
 
 void NodeDelegate::paint(QPainter *p, const QStyleOptionViewItem &o, const QModelIndex &index) const
@@ -156,7 +159,7 @@ void NodeDelegate::drawBranches(QPainter *p, const QStyleOptionViewItem &option,
 
     int rtlNum = (option.direction == Qt::RightToLeft) ? 1 : -1;
     QPoint nodeCorner = (option.direction == Qt::RightToLeft) ? option.rect.topLeft() : option.rect.topRight();
-    int branchSpacing = rtlNum * scm.indentation();
+    int branchSpacing = rtlNum * d->view->indentation();
 
     QPoint base = nodeCorner + 0.5 * QPoint(branchSpacing, option.rect.height()) + QPoint(0, scm.iconSize()/4);
 
@@ -170,7 +173,7 @@ void NodeDelegate::drawBranches(QPainter *p, const QStyleOptionViewItem &option,
     // p->setPen(QPen(p->pen().color(), 2, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin));
     p->setPen(QPen(color, 0, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-    QPoint p2 = base - QPoint(rtlNum*(qMin(scm.indentation(), scm.iconSize())/2), 0);
+    QPoint p2 = base - QPoint(rtlNum*(qMin(d->view->indentation(), scm.iconSize())/2), 0);
     QPoint p3 = base - QPoint(0, scm.iconSize()/2);
     p->drawLine(base, p2);
     p->drawLine(base, p3);
@@ -261,9 +264,8 @@ void NodeDelegate::drawFrame(QPainter *p, const QStyleOptionViewItem &option, co
 QRect NodeDelegate::thumbnailClickRect(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index);
-    KisNodeViewColorScheme scm;
 
-    QRect rc = scm.relThumbnailRect();
+    QRect rc = d->thumbnailGeometry;
 
     // Move to current index
     rc.moveTop(option.rect.topLeft().y());
@@ -281,9 +283,8 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
 {
     KisNodeViewColorScheme scm;
 
-    const int thumbSize = scm.thumbnailSize();
     const qreal devicePixelRatio = p->device()->devicePixelRatioF();
-    const int thumbSizeHighRes = thumbSize*devicePixelRatio;
+    const int thumbSizeHighRes = d->thumbnailSize*devicePixelRatio;
 
     const qreal oldOpacity = p->opacity(); // remember previous opacity
 
@@ -292,16 +293,6 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     if (!(option.state & QStyle::State_Enabled)) {
         p->setOpacity(0.35);
     }
-
-    // paint in a checkerboard pattern behind the layer contents to represent transparent
-    const int step = scm.thumbnailSize() / 6;
-    QImage checkers(2 * step, 2 * step, QImage::Format_ARGB32);
-    QPainter gc(&checkers);
-    gc.fillRect(QRect(0, 0, step, step), d->checkersColor1);
-    gc.fillRect(QRect(step, 0, step, step), d->checkersColor2);
-    gc.fillRect(QRect(step, step, step, step), d->checkersColor1);
-    gc.fillRect(QRect(0, step, step, step), d->checkersColor2);
-
 
     QRect fitRect = thumbnailClickRect(option, index);
     // Shrink to icon rect
@@ -312,7 +303,7 @@ void NodeDelegate::drawThumbnail(QPainter *p, const QStyleOptionViewItem &option
     offset.setY((fitRect.height() - img.height()/devicePixelRatio) / 2);
     offset += fitRect.topLeft();
 
-    QBrush brush(checkers);
+    QBrush brush(d->checkers);
     p->setBrushOrigin(offset);
     QRect imageRectLowRes = QRect(img.rect().topLeft(), img.rect().size()/devicePixelRatio);
     p->fillRect(imageRectLowRes.translated(offset), brush);
@@ -334,8 +325,7 @@ QRect NodeDelegate::iconsRect(const QStyleOptionViewItem &option, const QModelIn
         propCount * (scm.iconSize() + 2 * scm.iconMargin()) +
         (propCount + 1) * scm.border();
 
-    QRect fitRect = QRect(0, 0,
-                          iconsWidth, scm.rowHeight() - scm.border());
+    QRect fitRect = QRect(0, 0, iconsWidth, d->rowHeight - scm.border());
     // Move to current index
     fitRect.moveTop(option.rect.topLeft().y());
     // Move to correct location.
@@ -687,7 +677,7 @@ void NodeDelegate::drawIcons(QPainter *p, const QStyleOptionViewItem &option, co
     p->setPen(scm.gridColor(option, d->view));
 
     int x = 0;
-    const int y = (scm.rowHeight() - scm.border() - scm.iconSize()) / 2;
+    const int y = (d->rowHeight - scm.border() - scm.iconSize()) / 2;
     KisBaseNode::PropertyList props = index.data(KisNodeModel::PropertiesRole).value<KisBaseNode::PropertyList>();
     QList<OptionalProperty> realProps = d->rightmostProperties(props);
 
@@ -727,7 +717,7 @@ QRect NodeDelegate::visibilityClickRect(const QStyleOptionViewItem &option, cons
     KisNodeViewColorScheme scm;
 
     QRect rc = scm.relVisibilityRect();
-    rc.setHeight(scm.rowHeight());
+    rc.setHeight(d->rowHeight);
 
     // Move to current index
     rc.moveCenter(option.rect.center());
@@ -750,12 +740,12 @@ QRect NodeDelegate::decorationClickRect(const QStyleOptionViewItem &option, cons
 
     // Move to current index
     rc.moveTop(option.rect.topLeft().y());
-    rc.setHeight(scm.rowHeight());
+    rc.setHeight(d->rowHeight);
     // Move to correct location.
     if (option.direction == Qt::RightToLeft) {
-        rc.moveRight(option.rect.topRight().x() - scm.relThumbnailRect().width());
+        rc.moveRight(option.rect.right() - d->thumbnailGeometry.width());
     } else {
-        rc.moveLeft(option.rect.topLeft().x() + scm.relThumbnailRect().width());
+        rc.moveLeft(option.rect.left() + d->thumbnailGeometry.width());
     }
 
     return rc;
@@ -1203,9 +1193,27 @@ void NodeDelegate::drawProgressBar(QPainter *p, const QStyleOptionViewItem &opti
 void NodeDelegate::slotConfigChanged()
 {
     KisConfig cfg(true);
+    const int oldHeight = d->rowHeight;
+    // cache vlues that require a config lookup and get used frequently
+    d->thumbnailSize = KisNodeViewColorScheme::instance()->thumbnailSize();
+    d->thumbnailGeometry = KisNodeViewColorScheme::instance()->relThumbnailRect();
+    d->rowHeight = KisNodeViewColorScheme::instance()->rowHeight();
 
-    d->checkersColor1 = cfg.checkersColor1();
-    d->checkersColor2 = cfg.checkersColor2();
+    // generate the checker backdrop for thumbnails
+    const int step = d->thumbnailSize / 6;
+    if (d->checkers.width() != 2 * step) {
+        d->checkers = QImage(2 * step, 2 * step, QImage::Format_ARGB32);
+        QPainter gc(&d->checkers);
+        gc.fillRect(QRect(0, 0, step, step), cfg.checkersColor1());
+        gc.fillRect(QRect(step, 0, step, step), cfg.checkersColor2());
+        gc.fillRect(QRect(step, step, step, step), cfg.checkersColor1());
+        gc.fillRect(QRect(0, step, step, step), cfg.checkersColor2());
+    }
+
+    if (d->rowHeight != oldHeight) {
+        // QAbstractItemView/QTreeView don't even look at the index and redo the whole layout...
+        emit sizeHintChanged(QModelIndex());
+    }
 }
 
 void NodeDelegate::slotUpdateIcon()

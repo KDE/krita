@@ -1703,6 +1703,16 @@ void KisConfig::setLayerThumbnailSize(int size)
     m_cfg.writeEntry("layerThumbnailSize", size);
 }
 
+int KisConfig::layerTreeIndentation(bool defaultValue) const
+{
+    return (defaultValue ? 100 : m_cfg.readEntry("layerTreeIndentation", 100));
+}
+
+void KisConfig::setLayerTreeIndentation(int percentage)
+{
+    m_cfg.writeEntry("layerTreeIndentation", percentage);
+}
+
 bool KisConfig::sliderLabels(bool defaultValue) const
 {
     return (defaultValue ? true : m_cfg.readEntry("sliderLabels", true));

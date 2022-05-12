@@ -132,9 +132,11 @@ int KisNodeViewColorScheme::visibilityColumnWidth() const
 
 int KisNodeViewColorScheme::indentation() const
 {
-    return
-        2 * thumbnailMargin() + thumbnailSize() +
-        border();
+    KisConfig cfg(true);
+    int percentage = cfg.layerTreeIndentation();
+    int absoluteMax = 2 * thumbnailMargin() + thumbnailSize() + border();
+
+    return qMax(8, percentage*absoluteMax/100);
 }
 
 QRect KisNodeViewColorScheme::relVisibilityRect() const

@@ -585,3 +585,9 @@ void NodeView::slotUpdateIcons()
 void NodeView::slotScrollerStateChanged(QScroller::State state){
     KisKineticScroller::updateCursor(this, state);
 }
+
+void NodeView::slotConfigurationChanged()
+{
+    setIndentation(KisNodeViewColorScheme::instance()->indentation());
+    d->delegate.slotConfigChanged();
+}

@@ -159,6 +159,7 @@ LayerBox::LayerBox()
     , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    , m_treeIndentationCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
 
@@ -302,11 +303,10 @@ LayerBox::LayerBox()
 
     // set up the configure menu for changing thumbnail size
     QMenu* configureMenu = new QMenu(this);
-    configureMenu->setStyleSheet("margin: 6px");
+    configureMenu->setContentsMargins(6, 6, 6, 6);
     configureMenu->addSection(i18n("Thumbnail Size"));
 
     m_wdgLayerBox->configureLayerDockerToolbar->setMenu(configureMenu);
-    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("view-choose"));
     m_wdgLayerBox->configureLayerDockerToolbar->setIconSize(QSize(16, 16));
     m_wdgLayerBox->configureLayerDockerToolbar->setPopupMode(QToolButton::InstantPopup);
     m_wdgLayerBox->configureLayerDockerToolbar->setAutoRaise(true);
@@ -329,8 +329,28 @@ LayerBox::LayerBox()
     configureMenu->addAction(sliderAction);
 
 
-    connect(thumbnailSizeSlider, SIGNAL(sliderMoved(int)), &m_thumbnailSizeCompressor, SLOT(start()));
+    connect(thumbnailSizeSlider, SIGNAL(valueChanged(int)), &m_thumbnailSizeCompressor, SLOT(start()));
     connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
+
+    configureMenu->addSection(i18n("Tree Indentation"));
+
+    // add horizontal slider
+    indentationSlider = new QSlider(Qt::Horizontal, this);
+    indentationSlider->setRange(20, 100);
+    indentationSlider->setMinimumSize(40, 20);
+    indentationSlider->setSingleStep(5);
+    indentationSlider->setPageStep(20);
+    indentationSlider->setValue(cfg.layerTreeIndentation());
+
+
+    sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(indentationSlider);
+    configureMenu->addAction(sliderAction);
+
+    // NOTE: if KisConfig would just compress its file sync events, we wouldn't need
+    // this extra compressor that juggles between slow UI and disk thrashing
+    connect(indentationSlider, SIGNAL(valueChanged(int)), &m_treeIndentationCompressor, SLOT(start()));
+    connect(&m_treeIndentationCompressor, SIGNAL(timeout()), SLOT(slotUpdateTreeIndentation()));
 }
 
 LayerBox::~LayerBox()
@@ -1185,6 +1205,7 @@ void LayerBox::slotUpdateIcons() {
     m_wdgLayerBox->bnLower->setIcon(KisIconUtils::loadIcon("arrowdown"));
     m_wdgLayerBox->bnProperties->setIcon(KisIconUtils::loadIcon("properties"));
     m_wdgLayerBox->bnDuplicate->setIcon(KisIconUtils::loadIcon("duplicatelayer"));
+    m_wdgLayerBox->configureLayerDockerToolbar->setIcon(KisIconUtils::loadIcon("view-choose"));
 
     // call child function about needing to update icons
     m_wdgLayerBox->listLayers->slotUpdateIcons();
@@ -1211,10 +1232,17 @@ void LayerBox::slotUpdateThumbnailIconSize()
     KisConfig cfg(false);
     cfg.setLayerThumbnailSize(thumbnailSizeSlider->value());
 
-    // this is a hack to force the layers list to update its display and
-    // re-layout all the layers with the new thumbnail size
-    resize(this->width()+1, this->height()+1);
-    resize(this->width()-1, this->height()-1);
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+}
+
+void LayerBox::slotUpdateTreeIndentation()
+{
+    KisConfig cfg(false);
+    if (indentationSlider->value() == cfg.layerTreeIndentation()) {
+        return;
+    }
+    cfg.setLayerTreeIndentation(indentationSlider->value());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
 }
 
 

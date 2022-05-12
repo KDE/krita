@@ -125,6 +125,7 @@ private Q_SLOTS:
     void updateLayerFiltering();
 
     void slotUpdateThumbnailIconSize();
+    void slotUpdateTreeIndentation();
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
@@ -164,9 +165,11 @@ private:
     KisSignalCompressor m_thumbnailCompressor;
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
+    KisSignalCompressor m_treeIndentationCompressor;
 
     KisLayerFilterWidget* layerFilterWidget;
-    QSlider* thumbnailSizeSlider;
+    QSlider *thumbnailSizeSlider;
+    QSlider *indentationSlider;
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;

@@ -137,6 +137,7 @@ public Q_SLOTS:
     /// called with a theme change to refresh icon colors
     void slotUpdateIcons();
     void slotScrollerStateChanged(QScroller::State state);
+    void slotConfigurationChanged();
 
 protected Q_SLOTS:
     void currentChanged(const QModelIndex &current, const QModelIndex &previous) override;

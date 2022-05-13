@@ -20,7 +20,7 @@ index f522032..61ab485 100644
  
 +if (MINGW OR MSVC)
 +include(CheckCXXSourceCompiles)
-+check_cxx_source_compiles("""
++check_cxx_source_compiles("
 +#include <fstream>
 +#include <string>
 +int main()
@@ -29,11 +29,11 @@ index f522032..61ab485 100644
 +const std::ifstream t(s, std::ios_base::binary);
 +return 0;
 +}
-+""" SUPPORTS_WSTREAM)
++" SUPPORTS_WSTREAM)
 +endif()
 +
 +if(SUPPORTS_WSTREAM)
-+    add_compile_definitions(-DSUPPORTS_WSTREAM)
++    add_compile_definitions(SUPPORTS_WSTREAM)
 +endif()
  
  # Create libheif pkgconfig file

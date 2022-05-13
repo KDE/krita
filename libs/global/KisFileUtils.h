@@ -12,7 +12,7 @@
 
 class QString;
 
-namespace KritaUtils {
+namespace KisFileUtils {
 
 /**
  * @brief Resolve absolute file path from a file path and base dir
@@ -22,6 +22,11 @@ namespace KritaUtils {
  * path
  */
 QString KRITAGLOBAL_EXPORT resolveAbsoluteFilePath(const QString &baseDir, const QString &filePath);
+
+
+
+/// This percent-encodes characters that commonly cause problems when creating files
+QString KRITAGLOBAL_EXPORT sanitizeFileName(QString filename);
 
 
 }

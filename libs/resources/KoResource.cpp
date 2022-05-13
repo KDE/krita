@@ -183,7 +183,7 @@ QString KoResource::filename() const
 
 void KoResource::setFilename(const QString& filename)
 {
-    d->filename = QFileInfo(filename).fileName();
+    d->filename = filename;
 }
 
 QString KoResource::name() const

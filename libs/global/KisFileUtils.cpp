@@ -9,8 +9,9 @@
 #include <QString>
 #include <QFileInfo>
 #include <QDir>
+#include <QUrl>
 
-namespace KritaUtils {
+namespace KisFileUtils {
 
 QString resolveAbsoluteFilePath(const QString &baseDir, const QString &fileName)
 {
@@ -24,6 +25,11 @@ QString resolveAbsoluteFilePath(const QString &baseDir, const QString &fileName)
                               fallbackBaseDirInfo.absoluteFilePath() :
                               fallbackBaseDirInfo.absolutePath()),
                      fileName).absoluteFilePath();
+}
+
+QString sanitizeFileName(QString filename)
+{
+    return QUrl::toPercentEncoding(filename, "{}()[]", ":/\\<>\n").split(' ').join('_');
 }
 
 }

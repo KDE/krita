@@ -155,7 +155,7 @@ void KisLevelsFilterConfiguration::fromXML(const QDomElement& root)
         KisLevelsCurve levelsCurve;
 
         while (!e.isNull()) {
-            attributeName = e.attribute("name");
+            attributeName = KisDomUtils::unescapeText(e.attribute("name"));
             if (attributeName == "mode") {
                 lightnessMode = e.text() != "channels";
             } else if (attributeName == "histogram_mode") {
@@ -199,7 +199,7 @@ void addParamNode(QDomDocument& doc,
                   const QString &value,
                   bool internal = false)
 {
-    QDomText text = doc.createTextNode(value);
+    QDomText text = doc.createTextNode(KisDomUtils::escapeText(value));
     QDomElement t = doc.createElement("param");
     t.setAttribute("name", name);
     if (internal) {

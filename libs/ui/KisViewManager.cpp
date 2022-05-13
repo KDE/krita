@@ -110,7 +110,6 @@
 #include "kis_statusbar.h"
 #include <KisTemplateCreateDia.h>
 #include <kis_tool_freehand.h>
-#include "kis_tooltip_manager.h"
 #include <kis_undo_adapter.h>
 #include "KisView.h"
 #include "kis_zoom_manager.h"

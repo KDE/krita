@@ -256,8 +256,11 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
-    QVector<SubChunk> collectSubChunks() const override {
+    QVector<SubChunk> collectSubChunks(bool textInPath) const override {
         QVector<SubChunk> result;
+        if (q->s->textPath) {
+            textInPath = true;
+        }
 
         if (isTextNode()) {
             const QString text = q->s->text;
@@ -277,7 +280,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const QString bidiOpening = getBidiOpening(direction, bidi);
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk(bidiOpening, format);
+                result << SubChunk(bidiOpening, format, textInPath);
             }
 
             if (transforms.isEmpty()) {
@@ -299,14 +302,14 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                         subChunkLength = text.size() - i;
                     }
 
-                    result << SubChunk(text.mid(i, subChunkLength), format,  baseTransform);
+                    result << SubChunk(text.mid(i, subChunkLength), format,  baseTransform, textInPath);
                     i += subChunkLength - 1;
                 }
 
             }
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk("\u202c", format);
+                result << SubChunk("\u202c", format, textInPath);
             }
 
         } else {
@@ -314,79 +317,14 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                 KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
                 KIS_SAFE_ASSERT_RECOVER_BREAK(chunkShape);
 
-                result += chunkShape->layoutInterface()->collectSubChunks();
+                result += chunkShape->layoutInterface()->collectSubChunks(textInPath);
             }
+        }
+        if (q->s->textPath) {
+            textInPath = false;
         }
 
         return result;
-    }
-
-    void resolveCharacterPositioning(QVector<int> addressableIndices,
-                                     QVector<KoSvgText::CharTransformation> &resolvedTransforms,
-                                     bool &textInPath,
-                                     int &currentIndex,
-                                     bool horizontal) override {
-        if (isTextNode()) {
-            int length = q->s->text.size();
-            qDebug() << "starting resolving of charTransforms" << q->s->text << length;
-            QVector<KoSvgText::CharTransformation> transforms = q->s->localTransformations;
-
-            int i = 0;
-
-            // if text_in_path false: newChunkCount == max(x, y)
-            //
-
-            KoSvgText::CharTransformation transform;
-            for (int j=0; j < length; j++) {
-                if (addressableIndices.contains(currentIndex + j)) {
-                    KoSvgText::CharTransformation newtransform;
-                    if (i < transforms.size()) {
-                        transform = transforms[i];
-
-                        if (!textInPath) {
-                            newtransform.xPos = transform.xPos;
-                            newtransform.yPos = transform.yPos;
-                        } else if (horizontal) {
-                            newtransform.yPos = transform.yPos;
-                        } else {
-                            newtransform.xPos = transform.xPos;
-                        }
-                        newtransform.dxPos = transform.dxPos;
-                        newtransform.dyPos = transform.dyPos;
-
-                        newtransform.rotate = transform.rotate;
-
-                    } else {
-                        if (currentIndex + j != 0) {
-                            newtransform.rotate = resolvedTransforms[currentIndex + j - 1].rotate;
-                        }
-                    }
-                    resolvedTransforms[currentIndex + j] = newtransform;
-                    i+=1;
-                }
-            }
-            qDebug() << "done";
-
-            currentIndex += q->s->text.size();
-        } else {
-            if (q->s->textPath) {
-                textInPath = true;
-            }
-            qDebug() << "iterating over shapes";
-            Q_FOREACH (KoShape *shape, q->shapes()) {
-                KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
-                if (chunkShape) {
-                    chunkShape->layoutInterface()->resolveCharacterPositioning(addressableIndices,
-                                                                               resolvedTransforms,
-                                                                               textInPath,
-                                                                               currentIndex,
-                                                                               horizontal);
-                }
-            }
-            if (q->s->textPath) {
-                textInPath = false;
-            }
-        }
     }
 
     void addAssociatedOutline(const QRectF &rect) override {
@@ -949,7 +887,7 @@ bool KoSvgTextChunkShape::loadSvgTextNode(const QDomText &text, SvgLoadingContex
 
 void KoSvgTextChunkShape::normalizeCharTransformations()
 {
-    //applyParentCharTransformations(s->localTransformations);
+    applyParentCharTransformations(s->localTransformations);
 }
 
 void KoSvgTextChunkShape::simplifyFillStrokeInheritance()

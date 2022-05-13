@@ -107,20 +107,21 @@ public:
         {
         }
 
-        SubChunk(const QString &_text, const KoSvgText::KoSvgCharChunkFormat &_format)
-            : text(_text), format(_format)
+        SubChunk(const QString &_text, const KoSvgText::KoSvgCharChunkFormat &_format, bool textInPath = false)
+            : text(_text), format(_format), textInPath(textInPath)
         {
         }
 
         SubChunk(const QString &_text, const KoSvgText::KoSvgCharChunkFormat &_format,
-                  const KoSvgText::CharTransformation &t)
-            : text(_text), format(_format), transformation(t)
+                  const KoSvgText::CharTransformation &t, bool textInPath = false)
+            : text(_text), format(_format), transformation(t), textInPath(textInPath)
         {
         }
 
         QString text;
         KoSvgText::KoSvgCharChunkFormat format;
         KoSvgText::CharTransformation transformation;
+        bool textInPath = false;
     };
 
     /**
@@ -132,9 +133,8 @@ public:
      * split up into even smaller parts and then joined into proper "svg text
      * chunks".
      */
-    virtual QVector<SubChunk> collectSubChunks() const = 0;
+    virtual QVector<SubChunk> collectSubChunks(bool textInPath = false) const = 0;
 
-    virtual void resolveCharacterPositioning(QVector<int> addressableIndices, QVector<KoSvgText::CharTransformation> &resolvedTransforms, bool &textInPath, int &currentIndex, bool horizontal) = 0;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPELAYOUTINTERFACE_H

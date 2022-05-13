@@ -329,11 +329,11 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
     void addAssociatedOutline(const QRectF &rect) override {
         KIS_SAFE_ASSERT_RECOVER_RETURN(isTextNode());
+        QPainterPath rects;
+        rects.addRect(rect);
+        rects.addPath(q->s->associatedOutline);
         QPainterPath path;
-        path.addRect(rect);
-        path |= q->s->associatedOutline;
-        path.setFillRule(Qt::WindingFill);
-        path = path.simplified();
+        path.addRect(rects.boundingRect());
 
         q->s->associatedOutline = path;
         q->setSize(path.boundingRect().size());

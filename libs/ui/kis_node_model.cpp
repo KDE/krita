@@ -658,8 +658,8 @@ bool KisNodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (shouldUpdateRecursively) {
             QSet<QModelIndex> indexes;
             addChangedIndex(index, &indexes);
-            Q_FOREACH (const QModelIndex &index, indexes) {
-                emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));
+            Q_FOREACH (const QModelIndex &idx, indexes) {
+                emit dataChanged(idx.siblingAtColumn(0), idx.siblingAtColumn(m_d->dummyColumns));
             }
         } else {
             emit dataChanged(index.siblingAtColumn(0), index.siblingAtColumn(m_d->dummyColumns));

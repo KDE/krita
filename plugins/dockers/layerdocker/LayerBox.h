@@ -109,7 +109,7 @@ private Q_SLOTS:
     void slotRenameCurrentNode();
 
     void slotAdjustCurrentBeforeRemoveRows(const QModelIndex &parent, int first, int last);
-    void selectionChanged(const QModelIndexList selection);
+    void selectionChanged(const QModelIndexList &selection);
     void slotNodeManagerChangedSelection(const QList<KisNodeSP> &nodes);
     void slotColorLabelChanged(int index);
     void slotUpdateIcons();

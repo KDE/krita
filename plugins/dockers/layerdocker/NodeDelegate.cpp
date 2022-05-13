@@ -1007,7 +1007,6 @@ bool NodeDelegate::editorEvent(QEvent *event, QAbstractItemModel *model, const Q
             if (hoveredProperty && hoveredProperty->id == KisLayerPropertiesIcons::layerError.id()) {
                 QToolTip::showText(helpEvent->globalPos(), hoveredProperty->state.toString(), d->view);
             } else {
-                QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
                 d->tip.showTip(d->view, helpEvent->pos(), option, index);
             }
         }

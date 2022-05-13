@@ -939,7 +939,7 @@ void LayerBox::slotEditGlobalSelection(bool showSelections)
     }
 }
 
-void LayerBox::selectionChanged(const QModelIndexList selection)
+void LayerBox::selectionChanged(const QModelIndexList &selection)
 {
     if (!m_nodeManager) return;
 

@@ -105,7 +105,7 @@ public:
 
 public: // from QAbstractItemModel
 
-    KisNodeModel(QObject * parent, int clonedColumns = 0);
+    explicit KisNodeModel(QObject * parent, int clonedColumns = 0);
     ~KisNodeModel() override;
 
     void setDummiesFacade(KisDummiesFacadeBase *dummiesFacade,

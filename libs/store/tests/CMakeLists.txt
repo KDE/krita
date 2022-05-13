@@ -9,13 +9,6 @@ ecm_add_test(
     NAME_PREFIX "libs-odf"
     ${MACOS_GUI_TEST})
 
-ecm_add_test(
-    ../KoLZF.cpp TestKoXmlVector.cpp
-    TEST_NAME TestKoXmlVector
-    LINK_LIBRARIES kritastore Qt5::Test
-    NAME_PREFIX "libs-odf"
-    ${MACOS_GUI_TEST})
-
 
 ########### manual test for file contents ###############
 add_executable(storedroptest storedroptest.cpp)
@@ -24,6 +17,5 @@ ecm_mark_as_test(storedroptest)
 
 macos_test_fixrpath(
     TestKoLZF
-    TestKoXmlVector
     storedroptest
     )

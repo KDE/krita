@@ -32,6 +32,7 @@
 #include <QThread>
 #include <QLibraryInfo>
 #include <QTranslator>
+#include <QDomImplementation>
 
 #include <QOperatingSystemVersion>
 
@@ -251,6 +252,9 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     QCoreApplication::setAttribute(Qt::AA_UseHighDpiPixmaps, true);
 
     QCoreApplication::setAttribute(Qt::AA_DisableShaderDiskCache, true);
+
+    // We don't want to save invalid XML through QDomDocument
+    QDomImplementation::setInvalidDataPolicy(QDomImplementation::DropInvalidChars);
 
 #ifdef HAVE_HIGH_DPI_SCALE_FACTOR_ROUNDING_POLICY
     // This rounding policy depends on a series of patches to Qt related to

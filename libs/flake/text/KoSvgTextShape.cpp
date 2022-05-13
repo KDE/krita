@@ -99,8 +99,11 @@ public:
     {
     }
 
-    Private(const Private &rhs), textRendering(rhs.textRendering),
-        xRes(rhs.xRes), yRes(rhs.yRes), result(rhs.result)
+    Private(const Private &rhs)
+        : textRendering(rhs.textRendering)
+        , xRes(rhs.xRes)
+        , yRes(rhs.yRes)
+        , result(rhs.result)
     {
     }
 
@@ -118,9 +121,6 @@ public:
                          int &currentIndex,
                          int &resolvedDescendentNodes,
                          bool isHorizontal);
-    void getAnchors(const KoShape *rootShape,
-                    QVector<CharacterResult> &result,
-                    int &currentIndex);
     void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
     void applyTextPath(const KoShape *rootShape,
                        QVector<CharacterResult> &result,
@@ -399,7 +399,16 @@ void KoSvgTextShape::relayout() const
         text.append(chunk.text);
     }
 
-    // Then, pass everything to a css-compatible text-layout algortihm.
+    // 1. Setup.
+
+    QVector<CharacterResult> result(text.size());
+    // 3. Resolve character positioning.
+    // This is done earlier so it's possible to get preresolved transforms from
+    // the subchunks.
+    QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
+    int globalIndex = 0;
+
+    // pass everything to a css-compatible text-layout algortihm.
     raqm_t *layout(raqm_create());
 
     if (raqm_set_text_utf16(layout, text.utf16(), text.size())) {
@@ -419,9 +428,49 @@ void KoSvgTextShape::relayout() const
         FT_Face face = NULL;
         for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
             length = chunk.text.size();
-            QVector<int> lengths;
             KoSvgTextProperties properties =
                 chunk.format.associatedShapeWrapper().shape()->textProperties();
+
+            // In this section we retrieve the resolved transforms and
+            // direction/anchoring that we can get from the subchunks.
+            if (start < text.size()) {
+                if (chunk.transformation.isNull() && start > 0) {
+                    resolvedTransforms[start].rotate =
+                        resolvedTransforms[start - 1].rotate;
+                } else {
+                    KoSvgText::CharTransformation newTransform =
+                        chunk.transformation;
+                    if (chunk.textInPath) {
+                        if (isHorizontal) {
+                            newTransform.xPos.reset();
+                        } else {
+                            newTransform.yPos.reset();
+                        }
+                    }
+                    resolvedTransforms[start] = newTransform;
+                }
+            }
+            for (int i = 0; i < length; i++) {
+                CharacterResult cr = result[start + i];
+                cr.anchor = KoSvgText::TextAnchor(
+                    properties
+                        .propertyOrDefault(KoSvgTextProperties::TextAnchorId)
+                        .toInt());
+                cr.direction = KoSvgText::Direction(
+                    properties
+                        .propertyOrDefault(KoSvgTextProperties::DirectionId)
+                        .toInt());
+                if (chunk.format.associatedShapeWrapper()
+                        .shape()
+                        ->layoutInterface()
+                        ->textPath()
+                    && i == 0) {
+                    cr.anchored_chunk = true;
+                }
+                result[start + i] = cr;
+            }
+
+            QVector<int> lengths;
             QStringList fontFeatures =
                 properties.fontFeaturesForText(start, length);
 
@@ -524,14 +573,8 @@ void KoSvgTextShape::relayout() const
         qDebug() << "layout succeeded";
     }
 
-    // 1. Setup.
-    qDebug() << "1. Setup";
-
-    QVector<CharacterResult> result(text.size());
-
     // 2. Set flags and assign initial positions
-    // We also retreive a path here.
-    qDebug() << "2. Set flags and assign initial positions";
+    // We also retreive a glyph path here.
     size_t count;
     raqm_glyph_t *glyphs = raqm_get_glyphs(layout, &count);
     if (!glyphs) {
@@ -678,18 +721,7 @@ void KoSvgTextShape::relayout() const
     // If we're doing text-wrapping we should skip the other positioning steps
     // of the algorithm.
 
-    // 3. Resolve character positioning
-    qDebug() << "3. Resolve character positioning";
-    QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
-    bool textInPath = false;
-    int globalIndex = 0;
-    this->layoutInterface()->resolveCharacterPositioning(addressableIndices,
-                                                         resolvedTransforms,
-                                                         textInPath,
-                                                         globalIndex,
-                                                         isHorizontal);
     // 4. Adjust positions: dx, dy
-    qDebug() << "4. Adjust positions: dx, dy";
 
     QPointF shift = QPointF();
     for (int i = 0; i < result.size(); i++) {
@@ -711,13 +743,11 @@ void KoSvgTextShape::relayout() const
     }
 
     // 5. Apply ‘textLength’ attribute
-    qDebug() << "5. Apply ‘textLength’ attribute";
     globalIndex = 0;
     int resolved = 0;
     d->applyTextLength(this, result, globalIndex, resolved, isHorizontal);
 
     // 6. Adjust positions: x, y
-    qDebug() << "6. Adjust positions: x, y";
 
     // https://github.com/w3c/svgwg/issues/617
     shift = QPointF();
@@ -758,14 +788,10 @@ void KoSvgTextShape::relayout() const
     }
 
     // 7. Apply anchoring
-    qDebug() << "7. Apply anchoring";
     globalIndex = 0;
-    d->getAnchors(this, result, globalIndex);
-
     d->applyAnchoring(result, isHorizontal);
 
     // 8. Position on path
-    qDebug() << "8. Position on path";
 
     d->applyTextPath(this, result, isHorizontal);
 
@@ -1035,39 +1061,6 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
     }
 
     currentIndex = j;
-}
-
-void KoSvgTextShape::Private::getAnchors(const KoShape *rootShape,
-                                         QVector<CharacterResult> &result,
-                                         int &currentIndex)
-{
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
-
-    if (chunkShape->isTextNode()) {
-        int length = chunkShape->layoutInterface()->numChars();
-        for (int i = 0; i < length; i++) {
-            CharacterResult cr = result[currentIndex + i];
-            cr.anchor = KoSvgText::TextAnchor(
-                chunkShape->textProperties()
-                    .propertyOrDefault(KoSvgTextProperties::TextAnchorId)
-                    .toInt());
-            cr.direction = KoSvgText::Direction(
-                chunkShape->textProperties()
-                    .propertyOrDefault(KoSvgTextProperties::DirectionId)
-                    .toInt());
-            if (chunkShape->layoutInterface()->textPath() && i == 0) {
-                cr.anchored_chunk = true;
-            }
-            result[currentIndex + i] = cr;
-        }
-        currentIndex += length;
-    } else {
-        Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            getAnchors(child, result, currentIndex);
-        }
-    }
 }
 
 void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,

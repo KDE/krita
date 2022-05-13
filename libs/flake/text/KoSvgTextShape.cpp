@@ -77,6 +77,11 @@ struct CharacterResult {
     QVector<QBrush> colorLayerColors;
     QVector<bool> replaceWithForeGroundColor;
 
+    QPainterPath textDecorationUnderline;
+    QPen textDecorationPenUnderline;
+    QVector<QPainterPath> textDecorationRest;
+    QVector<QPen> textDecorationPenRest;
+
     QRectF boundingBox;
     int typographic_index = -1;
     QPointF cssPosition = QPointF();
@@ -167,33 +172,31 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
 
 void KoSvgTextShape::paintComponent(QPainter &painter) const
 {
-    if (d->textRendering == OptimizeLegibility) {
-        /**
-         * HACK ALERT:
-         *
-         * For hinting and bitmaps, we need to get the hinting metrics from
-         * freetype, but those need the DPI. We can't get the DPI normally,
-         * however, neither rotate and shear change the length of a line, and it
-         * may not be that bad if freetype receives a scaled value for the DPI.
-         */
-        int xRes = qRound(painter.transform()
-                              .map(QLineF(QPointF(), QPointF(72, 0)))
-                              .length());
-        int yRes = qRound(painter.transform()
-                              .map(QLineF(QPointF(), QPointF(0, 72)))
-                              .length());
-        if (xRes != d->xRes || yRes != d->yRes) {
-            d->xRes = xRes;
-            d->yRes = yRes;
-            relayout();
-        }
-    } else {
+    // if (d->textRendering == OptimizeLegibility) {
+    /**
+     * HACK ALERT:
+     *
+     * For hinting and bitmaps, we need to get the hinting metrics from
+     * freetype, but those need the DPI. We can't get the DPI normally, however,
+     * neither rotate and shear change the length of a line, and it may not be
+     * that bad if freetype receives a scaled value for the DPI.
+     */
+    int xRes = qRound(
+        painter.transform().map(QLineF(QPointF(), QPointF(72, 0))).length());
+    int yRes = qRound(
+        painter.transform().map(QLineF(QPointF(), QPointF(0, 72))).length());
+    if (xRes != d->xRes || yRes != d->yRes) {
+        d->xRes = xRes;
+        d->yRes = yRes;
+        relayout();
+    }
+    /*} else {
         if (72 != d->xRes || 72 != d->yRes) {
             d->xRes = 72;
             d->yRes = 72;
             relayout();
         }
-    }
+    }*/
     painter.save();
     if (d->textRendering == OptimizeSpeed) {
         painter.setRenderHint(QPainter::Antialiasing, false);
@@ -361,17 +364,23 @@ void KoSvgTextShape::relayout() const
     if (writingMode == KoSvgText::TopToBottom) {
         isHorizontal = false;
     }
-    FT_Int32 loadFlags = FT_LOAD_DEFAULT;
-    if (d->textRendering == GeometricPrecision && d->textRendering == Auto) {
+    FT_Int32 loadFlags = FT_LOAD_RENDER;
+
+    if (d->textRendering == GeometricPrecision || d->textRendering == Auto) {
         // without load_no_hinting, the advance and offset will be rounded
         // to nearest pixel, which we don't want as we're using the vector
         // outline.
-        loadFlags |= FT_LOAD_NO_HINTING;
-        loadFlags |= FT_LOAD_NO_BITMAP;
-    } else {
-        loadFlags |= FT_LOAD_RENDER;
-    }
 
+        loadFlags |= FT_LOAD_NO_HINTING;
+    } else {
+        // When using hinting, sometimes the bounding box does not encompass the
+        // drawn glyphs properly.
+        // The default hinting works best for vertical, while the 'light'
+        // hinting mode works best for horizontal.
+        if (isHorizontal) {
+            loadFlags |= FT_LOAD_TARGET_LIGHT;
+        }
+    }
     // Whenever the freetype docs talk about a 26.6 floating point unit, they
     // mean a 1/64 value.
     const qreal ftFontUnit = 64.0;
@@ -406,6 +415,7 @@ void KoSvgTextShape::relayout() const
     // This is done earlier so it's possible to get preresolved transforms from
     // the subchunks.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
+    QVector<KoSvgText::TextDecorations> textDecorations(text.size());
     int globalIndex = 0;
 
     // pass everything to a css-compatible text-layout algortihm.
@@ -460,6 +470,11 @@ void KoSvgTextShape::relayout() const
                     properties
                         .propertyOrDefault(KoSvgTextProperties::DirectionId)
                         .toInt());
+                textDecorations[start + i] =
+                    properties
+                        .propertyOrDefault(
+                            KoSvgTextProperties::TextDecorationId)
+                        .value<KoSvgText::TextDecorations>();
                 if (chunk.format.associatedShapeWrapper()
                         .shape()
                         ->layoutInterface()
@@ -583,6 +598,9 @@ void KoSvgTextShape::relayout() const
     QVector<int> addressableIndices;
 
     QPointF totalAdvanceFTFontCoordinates;
+    qreal textDecorationThickness = 0;
+    QPointF textDecorationUnderlineOffset;
+    QPointF textDecorationOverlineOffset;
 
     for (int g = 0; g < int(count); g++) {
         FT_Int32 faceLoadFlags = loadFlags;
@@ -622,34 +640,36 @@ void KoSvgTextShape::relayout() const
         charResult.image =
             d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph);
 
-        if (glyph.isEmpty()) {
-            bool usePixmap = !charResult.image.isNull();
+        // if (glyph.isEmpty()) {
+        bool usePixmap =
+            !charResult.image.isNull() && charResult.path.isEmpty();
 
-            if (usePixmap) {
-                QPointF topLeft(glyphs[g].ftface->glyph->bitmap_left * 64,
-                                (glyphs[g].ftface->glyph->bitmap_top
-                                 - charResult.image.size().height())
-                                    * 64);
-                charResult.boundingBox =
-                    QRectF(topLeft, charResult.image.size() * 64);
-            } else if (isHorizontal) {
-                charResult.boundingBox =
-                    QRectF(0,
-                           glyphs[g].ftface->size->metrics.descender,
-                           glyphs[g].x_advance,
-                           (glyphs[g].ftface->size->metrics.ascender
-                            - glyphs[g].ftface->size->metrics.descender));
-            } else {
-                charResult.boundingBox =
-                    QRectF(-(glyphs[g].ftface->size->metrics.height * 0.5),
-                           0,
-                           glyphs[g].ftface->size->metrics.height,
-                           glyphs[g].y_advance);
-            }
-            charResult.boundingBox = ftTF.mapRect(charResult.boundingBox);
+        if (usePixmap) {
+            QPointF topLeft(glyphs[g].ftface->glyph->bitmap_left * 64,
+                            (glyphs[g].ftface->glyph->bitmap_top
+                             - charResult.image.size().height())
+                                * 64);
+            charResult.boundingBox =
+                QRectF(topLeft, charResult.image.size() * 64);
+        } else if (isHorizontal) {
+            charResult.boundingBox =
+                QRectF(0,
+                       glyphs[g].ftface->size->metrics.descender,
+                       glyphs[g].x_advance,
+                       (glyphs[g].ftface->size->metrics.ascender
+                        - glyphs[g].ftface->size->metrics.descender));
         } else {
-            charResult.boundingBox = charResult.path.boundingRect();
+            charResult.boundingBox =
+                QRectF(-(glyphs[g].ftface->size->metrics.height * 0.5),
+                       0,
+                       glyphs[g].ftface->size->metrics.height,
+                       -(glyphs[g].ftface->glyph->metrics.vertBearingY
+                         + glyphs[g].ftface->glyph->metrics.height));
         }
+        charResult.boundingBox = ftTF.mapRect(charResult.boundingBox);
+        //} else {
+        //    charResult.boundingBox = charResult.path.boundingRect();
+        //}
 
         // Retreive CPAL/COLR V0 color layers, directly based off the sample
         // code in the freetype docs.
@@ -705,13 +725,78 @@ void KoSvgTextShape::relayout() const
         if (glyphs[g].cluster == 0) {
             charResult.anchored_chunk = true;
         }
+
+        if (charResult.anchored_chunk) {
+            textDecorationOverlineOffset = QPointF();
+            if (isHorizontal) {
+                textDecorationThickness =
+                    ftTF.map(QPointF(0, glyphs[g].ftface->underline_thickness))
+                        .y();
+                textDecorationUnderlineOffset =
+                    ftTF.map(QPointF(0, glyphs[g].ftface->underline_position));
+            } else {
+                textDecorationThickness =
+                    ftTF.map(QPointF(glyphs[g].ftface->underline_thickness, 0))
+                        .x();
+                textDecorationUnderlineOffset = ftTF.map(
+                    QPointF(-(glyphs[g].ftface->size->metrics.height * 0.5),
+                            0));
+            }
+        }
+        if (isHorizontal) {
+            QPointF ascender = QPointF(0, charResult.path.boundingRect().top());
+            if (ascender.y() < textDecorationOverlineOffset.y()) {
+                textDecorationOverlineOffset = ascender;
+            }
+        } else {
+            QPointF ascender =
+                ftTF.map(QPointF(glyphs[g].ftface->height * 0.5, 0));
+            if (ascender.x() < textDecorationOverlineOffset.x()) {
+                textDecorationOverlineOffset = ascender;
+            }
+        }
+
         charResult.middle = false;
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
         charResult.advance += ftTF.map(advance);
+
         totalAdvanceFTFontCoordinates += advance;
         charResult.cssPosition =
             ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
 
+        bool createTextDecor = false;
+        if (g + 1 < int(count)) {
+            createTextDecor = glyphs[g].cluster != glyphs[g + 1].cluster;
+        } else {
+            createTextDecor = true;
+        }
+        if (createTextDecor) {
+            QPainterPath p;
+            p.moveTo(QPointF());
+            p.lineTo(charResult.advance);
+            QPen pen;
+            pen.setWidthF(qMax(textDecorationThickness, 1.0));
+            if (textDecorations[glyphs[g].cluster].testFlag(
+                    KoSvgText::DecorationUnderline)) {
+                charResult.textDecorationUnderline =
+                    p.translated(textDecorationUnderlineOffset);
+                charResult.textDecorationPenUnderline = pen;
+            }
+            if (textDecorations[glyphs[g].cluster].testFlag(
+                    KoSvgText::DecorationOverline)) {
+                charResult.textDecorationRest.append(
+                    p.translated(textDecorationOverlineOffset));
+                charResult.textDecorationPenRest.append(pen);
+            }
+            if (textDecorations[glyphs[g].cluster].testFlag(
+                    KoSvgText::DecorationLineThrough)) {
+                charResult.textDecorationRest.append(
+                    p.translated((textDecorationUnderlineOffset
+                                  + textDecorationOverlineOffset)
+                                 * 0.5));
+                charResult.textDecorationPenRest.append(pen);
+            }
+        }
         result[glyphs[g].cluster] = charResult;
     }
     // we're done with raqm for now.
@@ -1286,16 +1371,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
             &painter,
             painter.transform().mapRect(outlineRect.boundingRect()));
         if (chunkShape->background()) {
-            if (dynamic_cast<KoColorBackground *>(
-                    chunkShape->background().data())) {
-                chunkShape->background()->paint(*fillPainter.shapePainter(),
-                                                paintContext,
-                                                chunkShape->outline());
-            } else {
-                chunkShape->background()->paint(*fillPainter.shapePainter(),
-                                                paintContext,
-                                                outlineRect);
-            }
+            chunkShape->background()->paint(*fillPainter.shapePainter(),
+                                            outlineRect);
             fillPainter.maskPainter()->fillPath(outlineRect, Qt::black);
             if (textRendering != OptimizeSpeed) {
                 fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing,
@@ -1311,6 +1388,9 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                     false);
             }
         }
+        QPainterPathStroker stroker;
+        QPainterPath textDecorationsRest;
+        textDecorationsRest.setFillRule(Qt::WindingFill);
 
         for (int i = currentIndex; i < j; i++) {
             if (result.at(i).addressable && result.at(i).hidden == false) {
@@ -1337,6 +1417,21 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                  * reduced quality of the paths because of 'numerical
                  * instability'.
                  */
+
+                stroker.setWidth(
+                    result.at(i).textDecorationPenUnderline.widthF());
+                QPainterPath textDecor =
+                    stroker.createStroke(result.at(i).textDecorationUnderline);
+                fillPainter.maskPainter()->fillPath(tf.map(textDecor),
+                                                    Qt::white);
+                for (int j = 0; j < result.at(i).textDecorationRest.size();
+                     j++) {
+                    stroker.setWidth(
+                        result.at(i).textDecorationPenRest.at(j).widthF());
+                    textDecorationsRest.addPath(tf.map(stroker.createStroke(
+                        result.at(i).textDecorationRest.at(j))));
+                }
+
                 QPainterPath p = tf.map(result.at(i).path);
                 // if (chunk.intersects(p)) {
                 //     chunk |= tf.map(result.at(i).path);
@@ -1395,6 +1490,11 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
             chunk.setFillRule(Qt::WindingFill);
             fillPainter.maskPainter()->fillPath(chunk, Qt::white);
         }
+        if (!textDecorationsRest.isEmpty()) {
+            fillPainter.maskPainter()->fillPath(
+                textDecorationsRest.simplified(),
+                Qt::white);
+        }
         fillPainter.renderOnGlobalPainter();
         KoShapeStrokeSP maskStroke;
         if (chunkShape->stroke()) {
@@ -1421,7 +1521,6 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                             QPainter::Antialiasing,
                             true);
                     } else {
-                        qDebug() << "turning off antialiasing for strokes";
                         strokePainter.maskPainter()->setRenderHint(
                             QPainter::Antialiasing,
                             false);
@@ -1429,6 +1528,12 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                     maskStroke->paint(
                         KoPathShape::createShapeFromPainterPath(chunk),
                         *strokePainter.maskPainter());
+                    if (!textDecorationsRest.isEmpty()) {
+                        maskStroke->paint(
+                            KoPathShape::createShapeFromPainterPath(
+                                textDecorationsRest),
+                            *strokePainter.maskPainter());
+                    }
                     strokePainter.renderOnGlobalPainter();
                 } else {
                     stroke->paint(

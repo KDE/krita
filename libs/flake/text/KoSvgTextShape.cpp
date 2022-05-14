@@ -389,7 +389,9 @@ void KoSvgTextShape::relayout() const
     // https://github.com/w3c/svgwg/issues/631
     // https://github.com/w3c/svgwg/issues/635
 
-    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = layoutInterface()->collectSubChunks();
+    QVector<KoSvgText::TextDecorationInfo> textDecorationInfo;
+    int globalIndex = 0;
+    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = layoutInterface()->collectSubChunks(globalIndex, textDecorationInfo);
     QString text;
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
         text.append(chunk.text);
@@ -401,8 +403,6 @@ void KoSvgTextShape::relayout() const
     // 3. Resolve character positioning.
     // This is done earlier so it's possible to get preresolved transforms from the subchunks.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
-    QVector<KoSvgText::TextDecorations> textDecorations(text.size());
-    int globalIndex = 0;
 
     // pass everything to a css-compatible text-layout algortihm.
     raqm_t *layout(raqm_create());
@@ -446,8 +446,6 @@ void KoSvgTextShape::relayout() const
                     properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
                 cr.direction = KoSvgText::Direction(
                     properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
-                textDecorations[start+i] = properties.propertyOrDefault(KoSvgTextProperties::TextDecorationId)
-                        .value<KoSvgText::TextDecorations>();
                 if (chunk.format.associatedShapeWrapper().shape()->layoutInterface()->textPath() && i == 0) {
                     cr.anchored_chunk = true;
                 }
@@ -529,9 +527,6 @@ void KoSvgTextShape::relayout() const
     QVector<int> addressableIndices;
 
     QPointF totalAdvanceFTFontCoordinates;
-    qreal textDecorationThickness = 0;
-    QPointF textDecorationUnderlineOffset;
-    QPointF textDecorationOverlineOffset;
 
     for (int g=0; g < int(count); g++) {
         FT_Int32 faceLoadFlags = loadFlags;
@@ -644,28 +639,6 @@ void KoSvgTextShape::relayout() const
             charResult.anchored_chunk = true;
         }
 
-        if (charResult.anchored_chunk) {
-            textDecorationOverlineOffset = QPointF();
-            if (isHorizontal) {
-                textDecorationThickness = ftTF.map(QPointF(0, glyphs[g].ftface->underline_thickness)).y();
-                textDecorationUnderlineOffset = ftTF.map(QPointF(0, glyphs[g].ftface->underline_position));
-            } else {
-                textDecorationThickness = ftTF.map(QPointF(glyphs[g].ftface->underline_thickness, 0)).x();
-                textDecorationUnderlineOffset = ftTF.map(QPointF(-(glyphs[g].ftface->size->metrics.height *0.5), 0));
-            }
-        }
-        if (isHorizontal) {
-            QPointF ascender = QPointF(0, charResult.path.boundingRect().top());
-            if (ascender.y() < textDecorationOverlineOffset.y()) {
-                textDecorationOverlineOffset = ascender;
-            }
-        } else {
-            QPointF ascender = ftTF.map(QPointF(glyphs[g].ftface->height*0.5, 0));
-            if (ascender.x() < textDecorationOverlineOffset.x()) {
-                textDecorationOverlineOffset = ascender;
-            }
-        }
-
         charResult.middle = false;
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
         charResult.advance += ftTF.map(advance);
@@ -680,28 +653,107 @@ void KoSvgTextShape::relayout() const
             createTextDecor = true;
         }
         if (createTextDecor) {
-            QPainterPath p;
-            p.moveTo(QPointF());
-            p.lineTo(charResult.advance);
-            QPen pen;
-            pen.setWidthF(qMax(textDecorationThickness, 1.0));
-            if (textDecorations[glyphs[g].cluster].testFlag(KoSvgText::DecorationUnderline)) {
-                charResult.textDecorationUnderline = p.translated(textDecorationUnderlineOffset);
-                charResult.textDecorationPenUnderline = pen;
-            }
-            if (textDecorations[glyphs[g].cluster].testFlag(KoSvgText::DecorationOverline)) {
-                charResult.textDecorationRest.append(p.translated(textDecorationOverlineOffset));
-                charResult.textDecorationPenRest.append(pen);
-            }
-            if (textDecorations[glyphs[g].cluster].testFlag(KoSvgText::DecorationLineThrough)) {
-                charResult.textDecorationRest.append(p.translated((textDecorationUnderlineOffset+textDecorationOverlineOffset)*0.5));
-                charResult.textDecorationPenRest.append(pen);
+            for (int i = 0; i < textDecorationInfo.size(); i++) {
+                int cluster = int(glyphs[g].cluster);
+                if (textDecorationInfo.at(i).startIndex <= cluster
+                        && cluster < textDecorationInfo.at(i).startIndex + textDecorationInfo.at(i).length) {
+                    KoSvgText::TextDecorationInfo info = textDecorationInfo.at(i);
+                    info.clusters.append(cluster);
+                    if (info.startIndex == cluster) {
+                        qreal width = glyphs[g].ftface->underline_thickness;
+                        QRectF underline(QPointF(), QPointF(width * (glyphs[g].ftface->size->metrics.x_scale / 65535.0)
+                                                  , width * (glyphs[g].ftface->size->metrics.y_scale / 65535.0)));
+                        if (isHorizontal) {
+                            info.lineWidth = ftTF.mapRect(underline).height();
+                            info.underlineOffset = ftTF.map(QPointF(0, glyphs[g].ftface->underline_position
+                                                                    * (glyphs[g].ftface->size->metrics.y_scale / 65535.0)));
+                        } else {
+                            info.lineWidth = (ftTF.mapRect(underline).width());
+                        }
+                    }
+                    if (isHorizontal) {
+                        qreal top = charResult.path.boundingRect().top();
+                        qreal bottom = charResult.path.boundingRect().bottom();
+                        if (info.overlineOffset.y() > top) {
+                            info.overlineOffset = QPointF(info.overlineOffset.x(), top);
+                        }
+                        if (info.underlineOffset.y() < bottom && info.positionHorizontal == KoSvgText::UnderlineUnder) {
+                            info.underlineOffset = QPointF(info.underlineOffset.x(), bottom);
+                        }
+                    } else {
+                        qreal left = charResult.path.boundingRect().left();
+                        qreal right = charResult.path.boundingRect().right();
+                        if (info.positionHorizontal == KoSvgText::UnderlineRight) {
+                            if (info.overlineOffset.x() > left) {
+                                info.overlineOffset = QPointF(left, info.overlineOffset.y());
+                            }
+                            if (info.underlineOffset.x() < right) {
+                                info.underlineOffset = QPointF(right, info.underlineOffset.y());
+                            }
+                        } else {
+                            if (info.overlineOffset.x() < right) {
+                                info.overlineOffset = QPointF(right, info.overlineOffset.y());
+                            }
+                            if (info.underlineOffset.x() > left) {
+                                info.underlineOffset = QPointF(left, info.underlineOffset.y());
+                            }
+                        }
+                    }
+                    textDecorationInfo[i] = info;
+                }
             }
         }
         result[glyphs[g].cluster] = charResult;
     }
     // we're done with raqm for now.
     raqm_destroy(layout);
+
+    for (KoSvgText::TextDecorationInfo info: textDecorationInfo) {
+        for (quint32 cluster : info.clusters) {
+            CharacterResult charResult = result[cluster];
+            QPen pen;
+            pen.setWidthF(qMax(info.lineWidth, 0.1));
+            if (isHorizontal) {
+                pen.setDashOffset(charResult.cssPosition.x());
+            } else {
+                pen.setDashOffset(charResult.cssPosition.y());
+            }
+            pen.setCapStyle(Qt::FlatCap);
+            pen.setColor(info.color);
+
+            QPainterPath p;
+            p.moveTo(QPointF());
+            p.lineTo(charResult.advance);
+            if (info.style == KoSvgText::Double) {
+                qreal linewidthOffset = pen.widthF() * 1.5;
+                if (isHorizontal) {
+                    p.moveTo(QPointF(0, linewidthOffset));
+                    p.lineTo(QPointF(charResult.advance.x(), linewidthOffset));
+                } else {
+                    p.moveTo(QPointF(linewidthOffset, 0));
+                    p.lineTo(QPointF(linewidthOffset, charResult.advance.y()));
+                }
+            } else if (info.style == KoSvgText::Dotted) {
+                pen.setStyle(Qt::DotLine);
+            } else if (info.style == KoSvgText::Dashed) {
+                pen.setStyle(Qt::DashLine);
+            }
+
+            if (info.line.testFlag(KoSvgText::DecorationUnderline)) {
+                charResult.textDecorationUnderline = p.translated(info.underlineOffset);
+                charResult.textDecorationPenUnderline = pen;
+            }
+            if (info.line.testFlag(KoSvgText::DecorationOverline)) {
+                charResult.textDecorationRest.append(p.translated(info.overlineOffset));
+                charResult.textDecorationPenRest.append(pen);
+            }
+            if (info.line.testFlag(KoSvgText::DecorationLineThrough)) {
+                charResult.textDecorationRest.append(p.translated((info.underlineOffset+info.overlineOffset)*0.5));
+                charResult.textDecorationPenRest.append(pen);
+            }
+            result[cluster] = charResult;
+        }
+    }
 
     // This is the best point to start applying linebreaking and text-wrapping.
     // If we're doing text-wrapping we should skip the other positioning steps of the algorithm.
@@ -1259,12 +1311,28 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                  * instability'.
                  */
 
-                stroker.setWidth(result.at(i).textDecorationPenUnderline.widthF());
-                QPainterPath textDecor = stroker.createStroke(result.at(i).textDecorationUnderline);
-                fillPainter.maskPainter()->fillPath(tf.map(textDecor), Qt::white);
+                QPen pen = result.at(i).textDecorationPenUnderline;
+                stroker.setWidth(pen.widthF());
+                stroker.setDashPattern(pen.dashPattern());
+                stroker.setDashOffset(pen.dashOffset());
+                stroker.setCapStyle(pen.capStyle());
+                QPainterPath textDecor = tf.map(stroker.createStroke(result.at(i).textDecorationUnderline));
+                if (pen.color().isValid()) {
+                    painter.fillPath(textDecor, pen.color());
+                } else {
+                    chunk.addPath(textDecor);
+                }
                 for (int j = 0; j < result.at(i).textDecorationRest.size(); j++) {
-                    stroker.setWidth(result.at(i).textDecorationPenRest.at(j).widthF());
-                    textDecorationsRest.addPath(tf.map(stroker.createStroke(result.at(i).textDecorationRest.at(j))));
+                    pen = result.at(i).textDecorationPenRest.at(j);
+                    stroker.setWidth(pen.widthF());
+                    stroker.setDashPattern(pen.dashPattern());
+                    stroker.setCapStyle(pen.capStyle());
+                    textDecor = tf.map(stroker.createStroke(result.at(i).textDecorationRest.at(j)));
+                    if (pen.color().isValid()) {
+                        painter.fillPath(textDecor, pen.color());
+                    } else {
+                        textDecorationsRest.addPath(textDecor);
+                    }
                 }
 
                 QPainterPath p = tf.map(result.at(i).path);
@@ -1340,6 +1408,9 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                     strokePainter.renderOnGlobalPainter();
                 } else {
                     stroke->paint(KoPathShape::createShapeFromPainterPath(chunk), painter);
+                    if (!textDecorationsRest.isEmpty()) {
+                        stroke->paint(KoPathShape::createShapeFromPainterPath(textDecorationsRest), painter);
+                    }
                 }
             }
 

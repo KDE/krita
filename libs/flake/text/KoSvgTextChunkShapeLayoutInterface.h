@@ -133,7 +133,7 @@ public:
      * split up into even smaller parts and then joined into proper "svg text
      * chunks".
      */
-    virtual QVector<SubChunk> collectSubChunks(bool textInPath = false) const = 0;
+    virtual QVector<SubChunk> collectSubChunks(int &globalIndex, QVector<KoSvgText::TextDecorationInfo> &textDecorationInfo, bool textInPath = false) const = 0;
 
 };
 

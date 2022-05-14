@@ -81,7 +81,11 @@ public:
 
         FontFeatureSettingsId, //string list
 
-        TextDecorationId,
+        TextDecorationLineId,
+        TextDecorationStyleId,
+        TextDecorationColorId,
+        TextDecorationPositionHorizontalId,
+        TextDecorationPositionVerticalId,
         FillId,
         StrokeId,
 

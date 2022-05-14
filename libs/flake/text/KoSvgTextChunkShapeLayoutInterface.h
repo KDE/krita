@@ -143,7 +143,9 @@ public:
      * chunks".
      */
     virtual QVector<SubChunk>
-    collectSubChunks(bool textInPath = false) const = 0;
+    collectSubChunks(int &globalIndex,
+                     QVector<KoSvgText::TextDecorationInfo> &textDecorationInfo,
+                     bool textInPath = false) const = 0;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPELAYOUTINTERFACE_H

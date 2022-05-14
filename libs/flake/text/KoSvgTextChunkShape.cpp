@@ -258,11 +258,52 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
-    QVector<SubChunk> collectSubChunks(bool textInPath) const override
+    QVector<SubChunk>
+    collectSubChunks(int &globalIndex,
+                     QVector<KoSvgText::TextDecorationInfo> &textDecorationInfo,
+                     bool textInPath) const override
     {
         QVector<SubChunk> result;
         if (q->s->textPath) {
             textInPath = true;
+        }
+
+        KoSvgText::TextDecorationInfo textDecorInfo;
+        if (q->s->properties.hasProperty(
+                KoSvgTextProperties::TextDecorationLineId)) {
+            textDecorInfo.line =
+                q->s->properties
+                    .propertyOrDefault(
+                        KoSvgTextProperties::TextDecorationLineId)
+                    .value<KoSvgText::TextDecorations>();
+        }
+        if (textDecorInfo.line != KoSvgText::DecorationNone) {
+            using namespace KoSvgText;
+            textDecorInfo.line =
+                q->s->properties
+                    .property(KoSvgTextProperties::TextDecorationLineId)
+                    .value<TextDecorations>();
+            textDecorInfo.style = TextDecorationStyle(
+                q->s->properties
+                    .propertyOrDefault(
+                        KoSvgTextProperties::TextDecorationStyleId)
+                    .toInt());
+            textDecorInfo.positionHorizontal = TextDecorationUnderlinePosition(
+                q->s->properties
+                    .propertyOrDefault(
+                        KoSvgTextProperties::TextDecorationPositionHorizontalId)
+                    .toInt());
+            textDecorInfo.positionVertical = TextDecorationUnderlinePosition(
+                q->s->properties
+                    .propertyOrDefault(
+                        KoSvgTextProperties::TextDecorationPositionVerticalId)
+                    .toInt());
+            textDecorInfo.color =
+                q->s->properties
+                    .propertyOrDefault(
+                        KoSvgTextProperties::TextDecorationColorId)
+                    .value<QColor>();
+            textDecorInfo.startIndex = globalIndex;
         }
 
         if (isTextNode()) {
@@ -318,15 +359,26 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                 result << SubChunk("\u202c", format, textInPath);
             }
 
+            for (SubChunk chunk : result) {
+                globalIndex += chunk.text.size();
+            }
         } else {
             Q_FOREACH (KoShape *shape, q->shapes()) {
                 KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
                 KIS_SAFE_ASSERT_RECOVER_BREAK(chunkShape);
 
-                result +=
-                    chunkShape->layoutInterface()->collectSubChunks(textInPath);
+                result += chunkShape->layoutInterface()->collectSubChunks(
+                    globalIndex,
+                    textDecorationInfo,
+                    textInPath);
             }
         }
+
+        if (textDecorInfo.startIndex > -1) {
+            textDecorInfo.length = globalIndex - textDecorInfo.startIndex;
+            textDecorationInfo.append(textDecorInfo);
+        }
+
         if (q->s->textPath) {
             textInPath = false;
         }

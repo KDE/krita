@@ -1025,6 +1025,9 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${EXPAT_LIBRARY}
                                 ${KF5_LIBRARIES}/libssl_1_1.so
                                 ${KF5_LIBRARIES}/libcrypto_1_1.so
+                                ${KF5_LIBRARIES}/libbrotlidec.so
+                                ${KF5_LIBRARIES}/libbrotlicommon.so
+                                ${KF5_LIBRARIES}/libbrotlienc.so
                                 ${KF5_LIBRARIES}/libKF5Completion.so
                                 ${KF5_LIBRARIES}/libKF5WindowSystem.so
                                 ${KF5_LIBRARIES}/libKF5WidgetsAddons.so

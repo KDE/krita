@@ -50,6 +50,10 @@ public:
                        << "font-size-adjust"
                        << "font"
                        << "text-decoration"
+                       << "text-decoration-line"
+                       << "text-decoration-style"
+                       << "text-decoration-color"
+                       << "text-decoration-position"
                        << "letter-spacing"
                        << "word-spacing"
                        << "baseline-shift";
@@ -234,7 +238,10 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         warnFile << "WARNING: \'font-size-adjust\' SVG attribute is not supported!";
     } else if (command == "font") {
         warnFile << "WARNING: \'font\' SVG attribute is not yet implemented! Please report a bug!";
-    } else if (command == "text-decoration") {
+    } else if (command == "text-decoration" || command == "text-decoration-line"
+               || command == "text-decoration-style"
+               || command == "text-decoration-color"
+               || command == "text-decoration-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "color") {

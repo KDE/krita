@@ -34,6 +34,9 @@ public:
     KoSvgText::AutoValue textLength;
     KoSvgText::LengthAdjust lengthAdjust = KoSvgText::LengthAdjustSpacing;
 
+    QVector<QPainterPath> textDecorations;
+    QVector<KoSvgText::TextDecoration> textDecorationTypes;
+
     QString text;
 
     QPainterPath associatedOutline;

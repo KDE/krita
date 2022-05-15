@@ -298,11 +298,6 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                     .propertyOrDefault(
                         KoSvgTextProperties::TextDecorationPositionVerticalId)
                     .toInt());
-            textDecorInfo.color =
-                q->s->properties
-                    .propertyOrDefault(
-                        KoSvgTextProperties::TextDecorationColorId)
-                    .value<QColor>();
             textDecorInfo.startIndex = globalIndex;
         }
 
@@ -407,6 +402,29 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
         q->notifyChanged();
         q->shapeChangedPriv(KoShape::SizeChanged);
+    }
+
+    void addTextDecoration(KoSvgText::TextDecoration type,
+                           QPainterPath path) override
+    {
+        q->s->textDecorations.append(path);
+        q->s->textDecorationTypes.append(type);
+    }
+
+    void clearTextDecorations() override
+    {
+        q->s->textDecorations.clear();
+        q->s->textDecorationTypes.clear();
+    }
+
+    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations() override
+    {
+        QMap<KoSvgText::TextDecoration, QPainterPath> map;
+        for (int i = 0; i < q->s->textDecorationTypes.size(); i++) {
+            map.insert(q->s->textDecorationTypes.at(i),
+                       q->s->textDecorations.at(i));
+        }
+        return map;
     }
 
 private:
@@ -1063,6 +1081,8 @@ KoSvgTextChunkShape::SharedData::SharedData(const SharedData &rhs)
     , textPathInfo(rhs.textPathInfo)
     , textLength(rhs.textLength)
     , lengthAdjust(rhs.lengthAdjust)
+    , textDecorations(rhs.textDecorations)
+    , textDecorationTypes(rhs.textDecorationTypes)
     , text(rhs.text)
     , associatedOutline(rhs.associatedOutline)
     , isRichTextPreferred(rhs.isRichTextPreferred)

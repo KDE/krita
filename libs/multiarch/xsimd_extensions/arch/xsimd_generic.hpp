@@ -127,7 +127,6 @@ inline batch<T, A> pow2 (batch<T, A> const& self) noexcept
 {
     return self * self;
 }
-
 }; // namespace xsimd
 
 #endif

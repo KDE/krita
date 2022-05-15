@@ -17,11 +17,11 @@
 #include <QSlider>
 #include <QSpinBox>
 #include <QCheckBox>
-#include <QToolButton>
 #include <QPushButton>
-#include <QButtonGroup>
 
 #include <KisOptionCollectionWidget.h>
+#include <KoGroupButton.h>
+#include <KisOptionButtonStrip.h>
 
 #include <ksharedconfig.h>
 
@@ -329,48 +329,21 @@ void KisToolFill::slotUpdateContinuousFill()
     m_seedPoints = {m_seedPoints.last()};
 }
 
-QToolButton* makeToolButton(const QString &iconFile, bool checked = false)
-{
-    QToolButton *button = new QToolButton;
-    button->setCheckable(true);
-    button->setChecked(checked);
-    button->setAutoRaise(true);
-    button->setAutoExclusive(true);
-    button->setIcon(KisIconUtils::loadIcon(iconFile));
-    return button;
-}
-
-QWidget* makeToolButtonContainer(const QVector<QToolButton*> &buttons)
-{
-    QWidget *buttonContainer = new QWidget;
-    QButtonGroup *buttonGroup = new QButtonGroup(buttonContainer);
-    QHBoxLayout *layout = new QHBoxLayout;
-    layout->setSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setAlignment(Qt::AlignLeft);
-    int id = 0;
-    for (QToolButton *button : buttons) {
-        button->setParent(buttonContainer);
-        buttonGroup->addButton(button, id++);
-        layout->addWidget(button);
-    }
-    buttonContainer->setLayout(layout);
-    return buttonContainer;
-}
-
 QWidget* KisToolFill::createOptionWidget()
 {
     loadConfiguration();
 
     // Create widgets
-    m_buttonWhatToFillSelection = makeToolButton("tool_outline_selection");
-    m_buttonWhatToFillContiguous = makeToolButton("contiguous-selection", true);
-    QWidget *containerWhatToFillButtons = makeToolButtonContainer({m_buttonWhatToFillSelection, m_buttonWhatToFillContiguous});
+    KisOptionButtonStrip *optionButtonStripWhatToFill = new KisOptionButtonStrip;
+    m_buttonWhatToFillSelection = optionButtonStripWhatToFill->addButton(KisIconUtils::loadIcon("tool_outline_selection"));
+    m_buttonWhatToFillContiguous = optionButtonStripWhatToFill->addButton(KisIconUtils::loadIcon("contiguous-selection"));
+    m_buttonWhatToFillContiguous->setChecked(true);
 
-    m_buttonFillWithFG = makeToolButton("object-order-lower-calligra", true);
-    m_buttonFillWithBG = makeToolButton("object-order-raise-calligra");
-    m_buttonFillWithPattern = makeToolButton("pattern");
-    QWidget *containerFillWithButtons = makeToolButtonContainer({m_buttonFillWithFG, m_buttonFillWithBG, m_buttonFillWithPattern});
+    KisOptionButtonStrip *optionButtonStripFillWith = new KisOptionButtonStrip;
+    m_buttonFillWithFG = optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("object-order-lower-calligra"));
+    m_buttonFillWithBG = optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("object-order-raise-calligra"));
+    m_buttonFillWithPattern = optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("pattern"));
+    m_buttonFillWithFG->setChecked(true);
     m_sliderPatternScale = new KisDoubleSliderSpinBox;
     m_sliderPatternScale->setRange(0, 500, 2);
     m_sliderPatternScale->setPrefix(i18nc("The pattern 'scale' spinbox prefix in fill tool options", "Scale: "));
@@ -403,19 +376,21 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderFeather->setRange(0, 40);
     m_sliderFeather->setSuffix(i18n(" px"));
 
-    m_buttonReferenceCurrent = makeToolButton("current-layer", true);
-    m_buttonReferenceAll = makeToolButton("all-layers");
-    m_buttonReferenceLabeled = makeToolButton("tag");
-    QWidget *containerReferenceButtons = makeToolButtonContainer({m_buttonReferenceCurrent, m_buttonReferenceAll, m_buttonReferenceLabeled});
+    KisOptionButtonStrip *optionButtonStripReference = new KisOptionButtonStrip;
+    m_buttonReferenceCurrent = optionButtonStripReference->addButton(KisIconUtils::loadIcon("current-layer"));
+    m_buttonReferenceAll = optionButtonStripReference->addButton(KisIconUtils::loadIcon("all-layers"));
+    m_buttonReferenceLabeled = optionButtonStripReference->addButton(KisIconUtils::loadIcon("tag"));
+    m_buttonReferenceCurrent->setChecked(true);
     m_widgetLabels = new KisColorLabelSelectorWidget;
     m_widgetLabels->setExclusive(false);
     m_widgetLabels->setButtonSize(20);
     m_widgetLabels->setButtonWrapEnabled(true);
     m_widgetLabels->setMouseDragEnabled(true);
 
-    m_buttonMultipleFillAny = makeToolButton("different-regions", true);
-    m_buttonMultipleFillSimilar = makeToolButton("similar-regions");
-    QWidget *containerMultipleFillButtons = makeToolButtonContainer({m_buttonMultipleFillAny, m_buttonMultipleFillSimilar});
+    KisOptionButtonStrip *optionButtonStripMultipleFill = new KisOptionButtonStrip;
+    m_buttonMultipleFillAny = optionButtonStripMultipleFill->addButton(KisIconUtils::loadIcon("different-regions"));
+    m_buttonMultipleFillSimilar = optionButtonStripMultipleFill->addButton(KisIconUtils::loadIcon("similar-regions"));
+    m_buttonMultipleFillAny->setChecked(true);
 
     QPushButton *buttonReset = new QPushButton(i18nc("The 'reset' button in fill tool options", "Reset"));
 
@@ -457,14 +432,14 @@ QWidget* KisToolFill::createOptionWidget()
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'what to fill' section label in fill tool options", "What to fill")
         );
-    sectionWhatToFill->setPrimaryWidget(containerWhatToFillButtons);
+    sectionWhatToFill->setPrimaryWidget(optionButtonStripWhatToFill);
     m_optionWidget->appendWidget("sectionWhatToFill", sectionWhatToFill);
 
     KisOptionCollectionWidgetWithHeader *sectionFillWith =
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'fill with' section label in fill tool options", "Fill with")
         );
-    sectionFillWith->setPrimaryWidget(containerFillWithButtons);
+    sectionFillWith->setPrimaryWidget(optionButtonStripFillWith);
     sectionFillWith->appendWidget("sliderPatternScale", m_sliderPatternScale);
     sectionFillWith->appendWidget("angleSelectorPatternRotation", m_angleSelectorPatternRotation);
     sectionFillWith->setWidgetVisible("sliderPatternScale", false);
@@ -493,7 +468,7 @@ QWidget* KisToolFill::createOptionWidget()
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'reference' section label in fill tool options", "Reference")
         );
-    sectionReference->setPrimaryWidget(containerReferenceButtons);
+    sectionReference->setPrimaryWidget(optionButtonStripReference);
     sectionReference->appendWidget("widgetLabels", m_widgetLabels);
     sectionReference->setWidgetVisible("widgetLabels", false);
     m_optionWidget->appendWidget("sectionReference", sectionReference);
@@ -502,7 +477,7 @@ QWidget* KisToolFill::createOptionWidget()
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'multiple fill' section label in fill tool options", "Multiple fill")
         );
-    sectionMultipleFill->setPrimaryWidget(containerMultipleFillButtons);
+    sectionMultipleFill->setPrimaryWidget(optionButtonStripMultipleFill);
     m_optionWidget->appendWidget("sectionMultipleFill", sectionMultipleFill);
 
     m_optionWidget->appendWidget("buttonReset", buttonReset);
@@ -542,8 +517,8 @@ QWidget* KisToolFill::createOptionWidget()
     m_widgetLabels->setSelection(m_selectedColorLabels);
 
     // Make connections
-    connect(m_buttonWhatToFillSelection->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupWhatToFill_buttonToggled(QAbstractButton*, bool)));
-    connect(m_buttonFillWithFG->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupFillWith_buttonToggled(QAbstractButton*, bool)));
+    connect(optionButtonStripWhatToFill, SIGNAL(buttonToggled(KoGroupButton*, bool)), SLOT(slot_optionButtonStripWhatToFill_buttonToggled(KoGroupButton*, bool)));
+    connect(optionButtonStripFillWith, SIGNAL(buttonToggled(KoGroupButton*, bool)), SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton*, bool)));
     connect(m_sliderPatternScale, SIGNAL(valueChanged(double)), SLOT(slot_sliderPatternScale_valueChanged(double)));
     connect(m_angleSelectorPatternRotation, SIGNAL(angleChanged(double)), SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
     connect(m_sliderThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderThreshold_valueChanged(int)));
@@ -552,9 +527,9 @@ QWidget* KisToolFill::createOptionWidget()
     connect(m_checkBoxAntiAlias, SIGNAL(toggled(bool)), SLOT(slot_checkBoxAntiAlias_toggled(bool)));
     connect(m_sliderGrow, SIGNAL(valueChanged(int)), SLOT(slot_sliderGrow_valueChanged(int)));
     connect(m_sliderFeather, SIGNAL(valueChanged(int)), SLOT(slot_sliderFeather_valueChanged(int)));
-    connect(m_buttonReferenceCurrent->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupReference_buttonToggled(QAbstractButton*, bool)));
+    connect(optionButtonStripReference, SIGNAL(buttonToggled(KoGroupButton*, bool)), SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton*, bool)));
     connect(m_widgetLabels, SIGNAL(selectionChanged()), SLOT(slot_widgetLabels_selectionChanged()));
-    connect(m_buttonMultipleFillAny->group(), SIGNAL(buttonToggled(QAbstractButton*, bool)), SLOT(slot_buttonGroupMultipleFill_buttonToggled(QAbstractButton*, bool)));
+    connect(optionButtonStripMultipleFill, SIGNAL(buttonToggled(KoGroupButton*, bool)), SLOT(slot_optionButtonStripMultipleFill_buttonToggled(KoGroupButton*, bool)));
     connect(buttonReset, SIGNAL(clicked()), SLOT(slot_buttonReset_clicked()));
     
     return m_optionWidget;
@@ -621,7 +596,7 @@ void KisToolFill::loadConfiguration()
     }
 }
 
-void KisToolFill::slot_buttonGroupWhatToFill_buttonToggled(QAbstractButton *button, bool checked)
+void KisToolFill::slot_optionButtonStripWhatToFill_buttonToggled(KoGroupButton *button, bool checked)
 {
     if (!checked) {
         return;
@@ -637,7 +612,7 @@ void KisToolFill::slot_buttonGroupWhatToFill_buttonToggled(QAbstractButton *butt
     m_configGroup.writeEntry("fillSelection", button == m_buttonWhatToFillSelection);
 }
 
-void KisToolFill::slot_buttonGroupFillWith_buttonToggled(QAbstractButton *button, bool checked)
+void KisToolFill::slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *button, bool checked)
 {
     if (!checked) {
         return;
@@ -729,7 +704,7 @@ void KisToolFill::slot_sliderFeather_valueChanged(int value)
     m_configGroup.writeEntry("featherAmount", value);
 }
 
-void KisToolFill::slot_buttonGroupReference_buttonToggled(QAbstractButton *button, bool checked)
+void KisToolFill::slot_optionButtonStripReference_buttonToggled(KoGroupButton *button, bool checked)
 {
     if (!checked) {
         return;
@@ -764,7 +739,7 @@ void KisToolFill::slot_widgetLabels_selectionChanged()
     m_configGroup.writeEntry("colorLabels", colorLabels);
 }
 
-void KisToolFill::slot_buttonGroupMultipleFill_buttonToggled(QAbstractButton *button, bool checked)
+void KisToolFill::slot_optionButtonStripMultipleFill_buttonToggled(KoGroupButton *button, bool checked)
 {
     if (!checked) {
         return;

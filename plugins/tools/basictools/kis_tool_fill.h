@@ -25,7 +25,7 @@
 #include <kis_resources_snapshot.h>
 
 class KisOptionCollectionWidget;
-class QToolButton;
+class KoGroupButton;
 class KisDoubleSliderSpinBox;
 class KisAngleSelector;
 class KisSliderSpinBox;
@@ -125,12 +125,12 @@ private:
 
     KisOptionCollectionWidget *m_optionWidget {nullptr};
 
-    QToolButton *m_buttonWhatToFillSelection {nullptr};
-    QToolButton *m_buttonWhatToFillContiguous {nullptr};
+    KoGroupButton *m_buttonWhatToFillSelection {nullptr};
+    KoGroupButton *m_buttonWhatToFillContiguous {nullptr};
 
-    QToolButton *m_buttonFillWithFG {nullptr};
-    QToolButton *m_buttonFillWithBG {nullptr};
-    QToolButton *m_buttonFillWithPattern {nullptr};
+    KoGroupButton *m_buttonFillWithFG {nullptr};
+    KoGroupButton *m_buttonFillWithBG {nullptr};
+    KoGroupButton *m_buttonFillWithPattern {nullptr};
     KisDoubleSliderSpinBox *m_sliderPatternScale {nullptr};
     KisAngleSelector *m_angleSelectorPatternRotation {nullptr};
 
@@ -142,13 +142,13 @@ private:
     KisSliderSpinBox *m_sliderGrow {nullptr};
     KisSliderSpinBox *m_sliderFeather {nullptr};
 
-    QToolButton *m_buttonReferenceCurrent {nullptr};
-    QToolButton *m_buttonReferenceAll {nullptr};
-    QToolButton *m_buttonReferenceLabeled {nullptr};
+    KoGroupButton *m_buttonReferenceCurrent {nullptr};
+    KoGroupButton *m_buttonReferenceAll {nullptr};
+    KoGroupButton *m_buttonReferenceLabeled {nullptr};
     KisColorLabelSelectorWidget *m_widgetLabels {nullptr};
 
-    QToolButton *m_buttonMultipleFillAny {nullptr};
-    QToolButton *m_buttonMultipleFillSimilar {nullptr};
+    KoGroupButton *m_buttonMultipleFillAny {nullptr};
+    KoGroupButton *m_buttonMultipleFillSimilar {nullptr};
 
     void beginFilling(const QPoint &seedPoint);
     void addFillingOperation(const QPoint &seedPoint);
@@ -159,8 +159,8 @@ private:
     void loadConfiguration();
 
 private Q_SLOTS:
-    void slot_buttonGroupWhatToFill_buttonToggled(QAbstractButton *button, bool checked);
-    void slot_buttonGroupFillWith_buttonToggled(QAbstractButton *button, bool checked);
+    void slot_optionButtonStripWhatToFill_buttonToggled(KoGroupButton *button, bool checked);
+    void slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *button, bool checked);
     void slot_sliderPatternScale_valueChanged(double value);
     void slot_angleSelectorPatternRotation_angleChanged(double value);
     void slot_sliderThreshold_valueChanged(int value);
@@ -169,9 +169,9 @@ private Q_SLOTS:
     void slot_checkBoxAntiAlias_toggled(bool checked);
     void slot_sliderGrow_valueChanged(int value);
     void slot_sliderFeather_valueChanged(int value);
-    void slot_buttonGroupReference_buttonToggled(QAbstractButton *button, bool checked);
+    void slot_optionButtonStripReference_buttonToggled(KoGroupButton *button, bool checked);
     void slot_widgetLabels_selectionChanged();
-    void slot_buttonGroupMultipleFill_buttonToggled(QAbstractButton *button, bool checked);
+    void slot_optionButtonStripMultipleFill_buttonToggled(KoGroupButton *button, bool checked);
     void slot_buttonReset_clicked();
 };
 

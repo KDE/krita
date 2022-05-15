@@ -41,7 +41,9 @@ public:
                        << "font-variant-east-asian" << "font-variant-position"
                        << "font-feature-settings"
                        << "font-stretch" << "font-size-adjust" << "font"
-                       << "text-decoration" << "letter-spacing" << "word-spacing" << "baseline-shift";
+                       << "text-decoration" << "text-decoration-line" << "text-decoration-style"
+                       << "text-decoration-color"  << "text-decoration-position"
+                       << "letter-spacing" << "word-spacing" << "baseline-shift";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -225,7 +227,11 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         warnFile << "WARNING: \'font-size-adjust\' SVG attribute is not supported!";
     } else if (command == "font") {
         warnFile << "WARNING: \'font\' SVG attribute is not yet implemented! Please report a bug!";
-    } else if (command == "text-decoration") {
+    } else if (command == "text-decoration"
+               || command == "text-decoration-line"
+               || command == "text-decoration-style"
+               || command == "text-decoration-color"
+               || command == "text-decoration-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "color") {

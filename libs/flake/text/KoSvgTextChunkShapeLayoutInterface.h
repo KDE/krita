@@ -98,6 +98,26 @@ public:
     virtual void clearAssociatedOutline() = 0;
 
     /**
+     * @brief addTextDecoration
+     * @param type whether it's an underline, over, etc.
+     * @param path the full text-decoration path.
+     *
+     * textDecorations are applied on textChunks, so a KoSvgTextChunk with
+     * two child chunks will not apply the text-decoration per child-chunk,
+     * but rather on the parent chunk. The text decoration can thus
+     * only reliably be calculated during the text-layout process.
+     */
+    virtual void addTextDecoration(KoSvgText::TextDecoration type, QPainterPath path) = 0;
+    /**
+     * Clear all text-decorations
+     *
+     * @see addTextDecoration
+     */
+    virtual void clearTextDecorations() = 0;
+
+    virtual QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations() = 0;
+
+    /**
      * A QTextLayout-compatible representation of a single leaf of
      * KoSvgTextChunkShape subtree
      */

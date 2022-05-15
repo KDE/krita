@@ -73,6 +73,59 @@ macro(xsimd_check_assembler)
    endif()
 endmacro()
 
+# Sets a list of the available architectures.
+macro(xsimd_set_available_architectures)
+   set(_archs)
+   set(_x86_aliases x86 i386 i686)
+   set(_amd64_aliases x86_64 amd64 x86-64)
+   set(_arm_aliases armv6l armv7l armv7-a)
+   set(_arm64_aliases arm64 arm64e aarch64)
+
+   if (NOT CMAKE_OSX_ARCHITECTURES)
+      string(TOLOWER "${CMAKE_SYSTEM_PROCESSOR}" _processor)
+
+      list(FIND _x86_aliases "${_processor}" _has_x86)
+      list(FIND _amd64_aliases "${_processor}" _has_amd64)
+      list(FIND _arm_aliases "${_processor}" _has_arm32)
+      list(FIND _arm64_aliases "${_processor}" _has_aarch64)
+
+      if(_has_x86 GREATER -1)
+         list(APPEND _archs "x86")
+      elseif(_has_amd64 GREATER -1)
+         list(APPEND _archs "x86-64")
+      elseif(_has_arm32 GREATER -1)
+         list(APPEND _archs "arm")
+      elseif(_has_aarch64 GREATER -1)
+         list(APPEND _archs "aarch64")
+      else()
+         message(WARNING "Unknown processor: ${CMAKE_SYSTEM_PROCESSOR}")
+         message(WARNING "Only the scalar architecture will be built.\nPlease fill out the missing parts in the CMake scripts and submit a patch to https://invent.kde.org/graphics/krita")
+      endif()
+   else()
+      # Now handle CMAKE_OSX_ARCHITECTURES for lipoization.
+      foreach(_arch IN LISTS CMAKE_OSX_ARCHITECTURES)
+         message(STATUS "${_arch} ${CMAKE_OSX_ARCHITECTURES}")
+         list(FIND _x86_aliases "${_arch}" _has_x86)
+         list(FIND _amd64_aliases "${_arch}" _has_amd64)
+         list(FIND _arm_aliases "${_arch}" _has_arm32)
+         list(FIND _arm64_aliases "${_arch}" _has_aarch64)
+
+         if(_has_x86 GREATER -1)
+            list(APPEND _archs "x86")
+         elseif(_has_amd64 GREATER -1)
+            list(APPEND _archs "x86-64")
+         elseif(_has_arm32 GREATER -1)
+            list(APPEND _archs "arm")
+         elseif(_has_aarch64 GREATER -1)
+            list(APPEND _archs "aarch64")
+         endif()
+      endforeach()
+   endif()
+
+   set(XSIMD_ARCH "${_archs}" CACHE STRING "Define the available architectures for xsimd.")
+   message(STATUS "Available architectures for xsimd: ${XSIMD_ARCH}")
+endmacro()
+
 macro(xsimd_set_preferred_compiler_flags)
    xsimd_determine_compiler()
 
@@ -103,6 +156,8 @@ macro(xsimd_set_preferred_compiler_flags)
          AddCompilerFlag("-fPIC" CXX_FLAGS xsimd_ARCHITECTURE_FLAGS)
       endif()
    endif()
+
+   xsimd_set_available_architectures()
 endmacro()
 
 # helper macro for xsimd_compile_for_all_implementations
@@ -213,18 +268,18 @@ macro(xsimd_compile_for_all_implementations _srcs _src)
    ## MSVC requires manual patching to detect NEON,
    ## its intrinsics are available but they are not detectable.
 
-   if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)")
-      _xsimd_compile_one_implementation(${_srcs} Scalar
-         NO_FLAG)
+   _xsimd_compile_one_implementation(${_srcs} Scalar
+      NO_FLAG)
+
+   if("aarch64" IN_LIST XSIMD_ARCH)
+      _xsimd_compile_one_implementation(${_srcs} NEON64 NO_FLAG)
+   endif()
+
+   if ("arm" IN_LIST XSIMD_ARCH)
       _xsimd_compile_one_implementation(${_srcs} NEON
          "-mfpu=neon")
-   elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
-      _xsimd_compile_one_implementation(${_srcs} Scalar
-         NO_FLAG)
-      _xsimd_compile_one_implementation(${_srcs} NEON64 NO_FLAG)
-   else()
-      _xsimd_compile_one_implementation(${_srcs} Scalar
-         NO_FLAG)
+   endif()
+   if ("x86" IN_LIST XSIMD_ARCH OR "x86-64" IN_LIST XSIMD_ARCH)
       _xsimd_compile_one_implementation(${_srcs} SSE2
          "-msse2"         "/arch:SSE2")
       _xsimd_compile_one_implementation(${_srcs} SSE3

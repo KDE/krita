@@ -30,8 +30,9 @@ if(HAVE_XSIMD)
   ko_compile_for_all_implementations_no_scalar(_per_arch_processor_objs kis_brush_mask_processor_factories.cpp)
 
   message("Following objects are generated from the per-arch lib")
-  message("${__per_arch_circle_mask_generator_objs}")
-  message("${_per_arch_processor_objs}")
+  foreach(_obj IN LISTS __per_arch_circle_mask_generator_objs _per_arch_processor_objs)
+    message("    * ${_obj}")
+  endforeach()
 endif()
 
 set(kritaimage_LIB_SRCS

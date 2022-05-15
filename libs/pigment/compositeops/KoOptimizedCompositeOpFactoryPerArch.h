@@ -8,13 +8,9 @@
 #ifndef KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 #define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
-
 #include <compositeops/KoMultiArchBuildSupport.h>
-
-
 class KoCompositeOp;
 class KoColorSpace;
-
 
 template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenCreamy32;

@@ -15,8 +15,8 @@ template<typename _channels_type_,
 class KRITAPIGMENT_EXPORT KoAlphaMaskApplicatorFactoryImpl
 {
 public:
-    typedef int ParamType;
-    typedef KoAlphaMaskApplicatorBase* ReturnType;
+    using ParamType = int;
+    using ReturnType = KoAlphaMaskApplicatorBase *;
 
     template<typename _impl>
     static KoAlphaMaskApplicatorBase* create(int);

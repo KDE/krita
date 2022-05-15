@@ -6,14 +6,13 @@
  */
 
 #include "KoOptimizedCompositeOpFactoryPerArch.h"
+
+#if XSIMD_UNIVERSAL_BUILD_PASS
 #include "KoOptimizedCompositeOpAlphaDarken32.h"
 #include "KoOptimizedCompositeOpAlphaDarken128.h"
 #include "KoOptimizedCompositeOpOver32.h"
 #include "KoOptimizedCompositeOpOver128.h"
 #include "KoOptimizedCompositeOpCopy128.h"
-
-#include <QString>
-#include "DebugPigment.h"
 
 #include <KoCompositeOpRegistry.h>
 
@@ -114,3 +113,5 @@ KoOptimizedCompositeOpFactoryPerArch<KoOptimizedCompositeOpAlphaDarkenCreamyU64>
 {
     return new KoOptimizedCompositeOpAlphaDarkenCreamyU64<xsimd::current_arch>(param);
 }
+
+#endif // XSIMD_UNIVERSAL_BUILD_PASS

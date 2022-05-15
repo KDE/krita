@@ -13,8 +13,8 @@
 class KRITAPIGMENT_EXPORT KoOptimizedPixelDataScalerU8ToU16FactoryImpl
 {
 public:
-    typedef int ParamType;
-    typedef KoOptimizedPixelDataScalerU8ToU16Base* ReturnType;
+    using ParamType = int;
+    using ReturnType = KoOptimizedPixelDataScalerU8ToU16Base *;
 
     template<typename _impl>
     static KoOptimizedPixelDataScalerU8ToU16Base* create(int);

@@ -5,9 +5,9 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "xsimd_extensions/xsimd.hpp"
+#include <xsimd_extensions/xsimd.hpp>
 
-#if defined HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
 
 #include "kis_circle_mask_generator.h"
 #include "kis_circle_mask_generator_p.h"
@@ -552,4 +552,4 @@ void FastRowProcessor<KisCurveRectangleMaskGenerator>::process<xsimd::current_ar
     }
 }
 
-#endif /* defined HAVE_XSIMD */
+#endif /* defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS */

@@ -4,13 +4,8 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
-#include "KoOptimizedCompositeOpFactoryPerArch.h" // vc.h must come first
+#include "KoOptimizedCompositeOpFactoryPerArch.h"
 #include "KoOptimizedCompositeOpFactory.h"
-
-#if defined(__clang__)
-#pragma GCC diagnostic ignored "-Wundef"
-#endif
-
 
 KoCompositeOp* KoOptimizedCompositeOpFactory::createAlphaDarkenOpHard32(const KoColorSpace *cs)
 {

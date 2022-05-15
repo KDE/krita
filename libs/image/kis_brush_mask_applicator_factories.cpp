@@ -7,6 +7,7 @@
 
 #include "kis_brush_mask_applicator_factories.h"
 
+#if XSIMD_UNIVERSAL_BUILD_PASS
 #include "kis_circle_mask_generator.h"
 #include "kis_gauss_circle_mask_generator.h"
 #include "kis_curve_circle_mask_generator.h"
@@ -71,3 +72,5 @@ MaskApplicatorFactory<KisCurveRectangleMaskGenerator>::create<xsimd::current_arc
 {
     return new KisBrushMaskVectorApplicator<KisCurveRectangleMaskGenerator,xsimd::current_arch>(maskGenerator);
 }
+
+#endif

@@ -28,18 +28,22 @@
 #define AVX512BW 0x00B00000
 #define AVX512CD 0x00C00000
 #define AVX512DQ 0x00D00000
-#define NEON 0x00E00000
-#define NEON64 0x00F00000
+#define NEON 0x10100000
+#define NEON64 0x10200000
 
 #define FMA 0x00000001
 
+#define Intel_Architecture 0x00000000
+#define Arm_Architecture 0x10000000
+
 #define IMPL_MASK 0xFFF00000
+#define PLATFORM_MASK 0xF0000000
 
 namespace xsimd
 {
 #if !defined(HAVE_XSIMD) || defined(XSIMD_IMPL) && (XSIMD_IMPL & IMPL_MASK) == Scalar
 using current_arch = generic;
-#elif !defined(_MSC_VER) || !defined(XSIMD_IMPL)
+#elif !defined(XSIMD_IMPL)
 using current_arch = default_arch;
 #elif (XSIMD_IMPL & IMPL_MASK) == SSE2
 using current_arch = sse2;
@@ -83,6 +87,23 @@ using current_arch = neon;
 using current_arch = neon64;
 #endif
 }; // namespace xsimd
+
+// xsimd extension to block AppleClang's auto-lipoization of
+// compiled objects.
+// If the defined instruction sets don't match what's expected
+// from the build flags, zonk out the included file.
+
+#if !defined(HAVE_XSIMD) || !defined(XSIMD_IMPL) || defined(XSIMD_IMPL) && (XSIMD_IMPL & IMPL_MASK) == Scalar
+#define XSIMD_UNIVERSAL_BUILD_PASS 3
+#elif XSIMD_WITH_SSE2 && (XSIMD_IMPL & PLATFORM_MASK) == Intel_Architecture
+#define XSIMD_UNIVERSAL_BUILD_PASS 2
+#elif (XSIMD_WITH_NEON || XSIMD_WITH_NEON64) && (XSIMD_IMPL & PLATFORM_MASK) == Arm_Architecture
+#define XSIMD_UNIVERSAL_BUILD_PASS 1
+#endif
+
+#ifndef XSIMD_UNIVERSAL_BUILD_PASS
+#define XSIMD_UNIVERSAL_BUILD_PASS 0
+#endif
 
 #undef Scalar
 #undef SSE2

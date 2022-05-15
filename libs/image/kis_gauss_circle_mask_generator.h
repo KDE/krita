@@ -15,7 +15,7 @@
 #include <QScopedPointer>
 
 template<typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * This mask generator uses a Gaussian-blurred circle
@@ -47,7 +47,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisGaussCircleMaskGenerator>;
+    friend struct FastRowProcessor<KisGaussCircleMaskGenerator>;
 };
 
 #endif

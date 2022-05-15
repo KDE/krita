@@ -9,11 +9,9 @@
 #ifndef KIS_BRUSH_VECTOR_APPLICATOR_H
 #define KIS_BRUSH_VECTOR_APPLICATOR_H
 
-#include <config-vc.h>
+#include <xsimd_extensions/xsimd.hpp>
 
-#if defined HAVE_VC
-
-#include <KoVcMultiArchBuildSupport.h>
+#if defined HAVE_XSIMD
 
 #include "kis_brush_mask_scalar_applicator.h"
 
@@ -24,13 +22,13 @@ struct FastRowProcessor {
     {
     }
 
-    template<Vc::Implementation _impl>
+    template<typename _impl>
     void process(float *buffer, int width, float y, float cosa, float sina, float centerX, float centerY);
 
     typename V::Private *d;
 };
 
-template<class MaskGenerator, Vc::Implementation _impl>
+template<class MaskGenerator, typename _impl>
 struct KisBrushMaskVectorApplicator : public KisBrushMaskScalarApplicator<MaskGenerator, _impl> {
     KisBrushMaskVectorApplicator(MaskGenerator *maskGenerator)
         : KisBrushMaskScalarApplicator<MaskGenerator, _impl>(maskGenerator)
@@ -46,18 +44,18 @@ protected:
     void processVector(const QRect &rect);
 
 private:
-    template<class U, Vc::Implementation V>
+    template<class U, typename V>
     struct TypeHelper {
     };
 
 private:
     template<class U>
-    inline void startProcessing(const QRect &rect, TypeHelper<U, Vc::ScalarImpl>)
+    inline void startProcessing(const QRect &rect, TypeHelper<U, xsimd::generic>)
     {
         KisBrushMaskScalarApplicator<MaskGenerator, _impl>::processScalar(rect);
     }
 
-    template<class U, Vc::Implementation V>
+    template<class U, typename V>
     inline void startProcessing(const QRect &rect, TypeHelper<U, V>)
     {
         MaskGenerator *m_maskGenerator = KisBrushMaskScalarApplicator<MaskGenerator, _impl>::m_maskGenerator;
@@ -70,9 +68,11 @@ private:
     }
 };
 
-template<class MaskGenerator, Vc::Implementation impl>
+template<class MaskGenerator, typename impl>
 void KisBrushMaskVectorApplicator<MaskGenerator, impl>::processVector(const QRect &rect)
 {
+    using float_v = xsimd::batch<float, impl>;
+
     const MaskProcessingData *m_d = KisBrushMaskApplicatorBase::m_d;
     MaskGenerator *m_maskGenerator = KisBrushMaskScalarApplicator<MaskGenerator, impl>::m_maskGenerator;
 
@@ -86,12 +86,12 @@ void KisBrushMaskVectorApplicator<MaskGenerator, impl>::processVector(const QRec
 
     // We need to calculate with a multiple of the width of the simd register
     size_t alignOffset = 0;
-    if (width % Vc::float_v::size() != 0) {
-        alignOffset = Vc::float_v::size() - (width % Vc::float_v::size());
+    if (width % float_v::size != 0) {
+        alignOffset = float_v::size - (width % float_v::size);
     }
     size_t simdWidth = width + alignOffset;
 
-    float *buffer = Vc::malloc<float, Vc::AlignOnCacheline>(simdWidth);
+    auto *buffer =xsimd::vector_aligned_malloc<float>(simdWidth);
 
     FastRowProcessor<MaskGenerator> processor(m_maskGenerator);
 
@@ -135,9 +135,9 @@ void KisBrushMaskVectorApplicator<MaskGenerator, impl>::processVector(const QRec
         } // endfor x
         dabPointer += offset;
     } // endfor y
-    Vc::free(buffer);
+    xsimd::vector_aligned_free(buffer);
 }
 
-#endif /* defined HAVE_VC */
+#endif /* defined HAVE_XSIMD */
 
 #endif /* KIS_BRUSH_VECTOR_APPLICATOR_H */

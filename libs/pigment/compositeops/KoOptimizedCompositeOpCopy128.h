@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2021 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -31,54 +32,57 @@ struct CopyCompositor128 {
         channels_type alpha;
     };
 
-    template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
+    template<bool haveMask, bool src_aligned, typename _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
         Q_UNUSED(oparams);
 
-        Vc::float_v src_alpha;
-        Vc::float_v src_c1;
-        Vc::float_v src_c2;
-        Vc::float_v src_c3;
+        using float_v = typename KoStreamedMath<_impl>::float_v;
+        using float_m = typename float_v::batch_bool_type;
+
+        float_v src_alpha;
+        float_v src_c1;
+        float_v src_c2;
+        float_v src_c3;
 
         PixelWrapper<channels_type, _impl> dataWrapper;
         dataWrapper.read(const_cast<quint8*>(src), src_c1, src_c2, src_c3, src_alpha);
 
-        Vc::float_v opacity_norm_vec(opacity);
+        float_v opacity_norm_vec(opacity);
 
         if (haveMask) {
-            const Vc::float_v uint8MaxRec1(1.0f / 255.0f);
-            Vc::float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
+            const float_v uint8MaxRec1(1.0f / 255.0f);
+            float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             opacity_norm_vec *= mask_vec * uint8MaxRec1;
         }
 
-        const Vc::float_v zeroValue(0.0f);
-        const Vc::float_v oneValue(1.0f);
+        const float_v zeroValue(0.0f);
+        const float_v oneValue(1.0f);
 
-        const Vc::float_m opacity_is_null_mask = opacity_norm_vec == zeroValue;
+        const float_m opacity_is_null_mask = opacity_norm_vec == zeroValue;
 
         // The source cannot change the colors in the destination,
         // since its fully transparent
-        if (opacity_is_null_mask.isFull()) {
+        if (xsimd::all(opacity_is_null_mask)) {
             // noop
-        } else if ((opacity_norm_vec == oneValue).isFull()) {
-            if ((src_alpha == zeroValue).isFull()) {
+        } else if (xsimd::all(opacity_norm_vec == oneValue)) {
+            if (xsimd::all(src_alpha == zeroValue)) {
                 dataWrapper.clearPixels(dst);
             } else {
                 dataWrapper.copyPixels(src, dst);
             }
 
         } else {
-            Vc::float_v dst_alpha;
-            Vc::float_v dst_c1;
-            Vc::float_v dst_c2;
-            Vc::float_v dst_c3;
+            float_v dst_alpha;
+            float_v dst_c1;
+            float_v dst_c2;
+            float_v dst_c3;
 
             dataWrapper.read(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
 
-            Vc::float_v newAlpha = dst_alpha + opacity_norm_vec * (src_alpha - dst_alpha);
+            float_v newAlpha = dst_alpha + opacity_norm_vec * (src_alpha - dst_alpha);
 
-            if ((newAlpha == zeroValue).isFull()) {
+            if (xsimd::all(newAlpha == zeroValue)) {
                 dataWrapper.clearPixels(dst);
             } else {
                 PixelStateRecoverHelper<channels_type, _impl> pixelRecoverHelper(dst_c1, dst_c2, dst_c3);
@@ -95,12 +99,12 @@ struct CopyCompositor128 {
                 dst_c2 += opacity_norm_vec * (src_c2 - dst_c2);
                 dst_c3 += opacity_norm_vec * (src_c3 - dst_c3);
 
-                if (!(newAlpha == oneValue).isFull()) {
+                if (!xsimd::all(newAlpha == oneValue)) {
                     /// This division by newAlpha may be unsafe in case
                     /// **some** elements of newAlpha are null. We don't
                     /// care, because:
                     ///
-                    /// 1) the value will be clamped by Vc::min a bit later;
+                    /// 1) the value will be clamped by xsimd::min a bit later;
                     ///
                     /// 2) even if it doesn't, the new alpha will be null,
                     ///    so the state of the color channels is undefined
@@ -109,11 +113,11 @@ struct CopyCompositor128 {
                     dst_c2 /= newAlpha;
                     dst_c3 /= newAlpha;
 
-                    Vc::float_v unitValue(KoColorSpaceMathsTraits<channels_type>::unitValue);
+                    float_v unitValue(KoColorSpaceMathsTraits<channels_type>::unitValue);
 
-                    dst_c1 = Vc::min(dst_c1, unitValue);
-                    dst_c2 = Vc::min(dst_c2, unitValue);
-                    dst_c3 = Vc::min(dst_c3, unitValue);
+                    dst_c1 = xsimd::min(dst_c1, unitValue);
+                    dst_c2 = xsimd::min(dst_c2, unitValue);
+                    dst_c3 = xsimd::min(dst_c3, unitValue);
                 }
 
                 /**
@@ -129,7 +133,7 @@ struct CopyCompositor128 {
         }
     }
 
-    template <bool haveMask, Vc::Implementation _impl>
+    template <bool haveMask, typename _impl = xsimd::current_arch>
     static ALWAYS_INLINE void compositeOnePixelScalar(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
         using namespace Arithmetic;
@@ -267,7 +271,7 @@ struct CopyCompositor128 {
  * colorspaces with alpha channel placed at the last byte of
  * the pixel: C1_C2_C3_A.
  */
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpCopy128 : public KoCompositeOp
 {
 public:
@@ -276,7 +280,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
             composite<true>(params);
@@ -311,7 +315,7 @@ public:
     }
 };
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpCopyU64 : public KoCompositeOp
 {
 public:
@@ -320,7 +324,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
             composite<true>(params);
@@ -356,7 +360,7 @@ public:
 };
 
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpCopy32 : public KoCompositeOp
 {
 public:
@@ -365,7 +369,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
             composite<true>(params);

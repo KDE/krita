@@ -8,16 +8,17 @@
 #ifndef __KIS_BRUSH_MASK_APPLICATOR_FACTORIES_H
 #define __KIS_BRUSH_MASK_APPLICATOR_FACTORIES_H
 
-#include <compositeops/KoVcMultiArchBuildSupport.h>
+#include <compositeops/KoMultiArchBuildSupport.h>
 
 class KisBrushMaskApplicatorBase;
 
 template<class MaskGenerator>
-struct MaskApplicatorFactory {
+struct MaskApplicatorFactory
+{
     using ParamType = MaskGenerator *;
     using ReturnType = KisBrushMaskApplicatorBase *;
 
-    template<Vc::Implementation _impl>
+    template<typename _impl>
     static ReturnType create(ParamType maskGenerator);
 };
 

@@ -16,7 +16,7 @@
 // 3x3 supersampling
 #define SUPERSAMPLING 3
 
-template<class MaskGenerator, Vc::Implementation impl>
+template<class MaskGenerator, typename impl>
 struct KisBrushMaskScalarApplicator : public KisBrushMaskApplicatorBase {
     KisBrushMaskScalarApplicator(MaskGenerator *maskGenerator)
         : m_maskGenerator(maskGenerator)

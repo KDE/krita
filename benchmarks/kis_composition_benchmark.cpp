@@ -2,25 +2,14 @@
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
  *  SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
  *  SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 // for calculation of the needed alignment
-#include <config-vc.h>
-#ifdef HAVE_VC
-#if defined _MSC_VER
-// Lets shut up the "possible loss of data" and "forcing value to bool 'true' or 'false'
-#pragma warning ( push )
-#pragma warning ( disable : 4244 )
-#pragma warning ( disable : 4800 )
-#endif
-#include <Vc/Vc>
-#include <Vc/IO>
-#if defined _MSC_VER
-#pragma warning ( pop )
-#endif
-
+#include <xsimd_extensions/xsimd.hpp>
+#ifdef HAVE_XSIMD
 #include <KoOptimizedCompositeOpOver32.h>
 #include <KoOptimizedCompositeOpOver128.h>
 #include <KoOptimizedCompositeOpCopy128.h>
@@ -53,6 +42,10 @@
 #else
 #define MEMALIGN_ALLOC(p, a, s) posix_memalign((p), (a), (s))
 #define MEMALIGN_FREE(p) free((p))
+#endif
+
+#ifdef HAVE_XSIMD
+using float_v = xsimd::batch<float, xsimd::current_arch>;
 #endif
 
 enum AlphaRange {
@@ -238,8 +231,8 @@ QVector<Tile> generateTiles(int size,
 {
     QVector<Tile> tiles(size);
 
-#ifdef HAVE_VC
-    const int vecSize = Vc::float_v::size();
+#ifdef HAVE_XSIMD
+    const int vecSize = float_v::size;
 #else
     const int vecSize = 1;
 #endif
@@ -512,7 +505,7 @@ void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
     benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_UNIT, ALPHA_UNIT);
 }
 
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
 
 template <typename channels_type>
 void printError(quint8 *s, quint8 *d1, quint8 *d2, quint8 *msk1, int pos)
@@ -535,7 +528,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
     QVector<Tile> tiles =
         generateTiles(2, 0, 0, ALPHA_RANDOM, ALPHA_RANDOM, pixelSize);
 
-    const int vecSize = Vc::float_v::size();
+    const int vecSize = float_v::size;
 
     const int numBlocks = numPixels / vecSize;
 
@@ -562,7 +555,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
     // The error count is needed as 38.5 gets rounded to 38 instead of 39 in the vc version.
     int errorcount = 0;
     for (int i = 0; i < numBlocks; i++) {
-        Compositor::template compositeVector<true,true, Vc::CurrentImplementation::current()>(src1, dst1, msk1, params.opacity, paramsWrapper);
+        Compositor::template compositeVector<true,true, xsimd::current_arch>(src1, dst1, msk1, params.opacity, paramsWrapper);
         for (int j = 0; j < vecSize; j++) {
 
             //if (8 * i + j == 7080) {
@@ -571,7 +564,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
             //    qDebug() << "msk:" << msk2[0];
             //}
 
-            Compositor::template compositeOnePixelScalar<true, Vc::CurrentImplementation::current()>(src2, dst2, msk2, params.opacity, paramsWrapper);
+            Compositor::template compositeOnePixelScalar<true, xsimd::current_arch>(src2, dst2, msk2, params.opacity, paramsWrapper);
 
             bool compareResult = true;
             if (pixelSize == 4) {
@@ -623,107 +616,134 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
 #endif
 
 
+void KisCompositionBenchmark::detectBuildArchitecture()
+{
+#ifdef HAVE_XSIMD
+    using namespace xsimd;
+
+    qDebug() << "built for" << ppVar(current_arch().name());
+    qDebug() << "built for" << ppVar(default_arch().name());
+
+    qDebug() << ppVar(supported_architectures().contains<sse2>());
+    qDebug() << ppVar(supported_architectures().contains<sse3>());
+    qDebug() << ppVar(supported_architectures().contains<ssse3>());
+    qDebug() << ppVar(supported_architectures().contains<sse4_1>());
+    qDebug() << ppVar(supported_architectures().contains<sse4_2>());
+    qDebug() << ppVar(supported_architectures().contains<fma3<sse4_2>>());
+
+    qDebug() << ppVar(supported_architectures().contains<avx>());
+    qDebug() << ppVar(supported_architectures().contains<avx2>());
+    qDebug() << ppVar(supported_architectures().contains<fma3<avx2>>());
+    qDebug() << ppVar(supported_architectures().contains<fma4>());
+    qDebug() << ppVar(supported_architectures().contains<avx512f>());
+    qDebug() << ppVar(supported_architectures().contains<avx512bw>());
+    qDebug() << ppVar(supported_architectures().contains<avx512dq>());
+    qDebug() << ppVar(supported_architectures().contains<avx512cd>());
+    qDebug().nospace() << "running on " << hex << "0x" << xsimd::available_architectures().best;
+#endif
+}
+
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_03()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.3);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_05()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.5);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_07()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.7);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,1.0);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,1.0,0.8);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_03()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor128<float, false, true> >(0.5, 0.3, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_05()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor128<float, false, true> >(0.5, 0.5, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_07()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor128<float, false, true> >(0.5, 0.7, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10_08()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, 0.8, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingOver()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor32<quint8, quint32, false, true> >(0.5, 0.3);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingOverRgbaU16()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor128<quint16, false, true> >(0.5, 1.0, -1, 8);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingOverRgbaF32()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
 #include <cfenv>
 void KisCompositionBenchmark::checkRoundingCopyRgbaU16()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<CopyCompositor128<quint16, false, true> >(0.5, 1.0, -1, 8);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingCopyRgbaF32()
 {
-#ifdef HAVE_VC
+#ifdef HAVE_XSIMD
     checkRounding<CopyCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
@@ -1036,8 +1056,8 @@ void KisCompositionBenchmark::benchmarkMemcpy()
     freeTiles(tiles, 0, 0);
 }
 
-#ifdef HAVE_VC
-    const int vecSize = Vc::float_v::size();
+#ifdef HAVE_XSIMD
+    const int vecSize = float_v::size;
     const size_t uint8VecAlignment = qMax(vecSize * sizeof(quint8), sizeof(void*));
     const size_t uint32VecAlignment = qMax(vecSize * sizeof(quint32), sizeof(void*));
     const size_t floatVecAlignment = qMax(vecSize * sizeof(float), sizeof(void*));
@@ -1045,8 +1065,8 @@ void KisCompositionBenchmark::benchmarkMemcpy()
 
 void KisCompositionBenchmark::benchmarkUintFloat()
 {
-#ifdef HAVE_VC
-    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+#ifdef HAVE_XSIMD
+    using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
 
     const int dataSize = 4096;
     void *ptr = 0;
@@ -1062,11 +1082,13 @@ void KisCompositionBenchmark::benchmarkUintFloat()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
+        for (int i = 0; i < dataSize; i += float_v::size) {
             // convert uint -> float directly, this causes
             // static_cast helper be called
-            Vc::float_v b(uint_v(iData + i));
-            b.store(fData + i);
+            const auto b = xsimd::batch_cast<typename float_v::value_type>(
+                xsimd::load_and_extend<uint_v>(iData + i)
+            );
+            b.store_aligned(fData + i);
         }
     }
 
@@ -1077,9 +1099,8 @@ void KisCompositionBenchmark::benchmarkUintFloat()
 
 void KisCompositionBenchmark::benchmarkUintIntFloat()
 {
-#ifdef HAVE_VC
-    using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
-    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+#ifdef HAVE_XSIMD
+    using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
 
     const int dataSize = 4096;
     void *ptr = 0;
@@ -1095,11 +1116,11 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
+        for (int i = 0; i < dataSize; i += float_v::size) {
             // convert uint->int->float, that avoids special sign
             // treating, and gives 2.6 times speedup
-            Vc::float_v b(int_v(uint_v(iData + i)));
-            b.store(fData + i);
+            const auto b = xsimd::batch_cast<typename float_v::value_type>(xsimd::load_and_extend<uint_v>(iData + i));
+            b.store_aligned(fData + i);
         }
     }
 
@@ -1110,8 +1131,8 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
 
 void KisCompositionBenchmark::benchmarkFloatUint()
 {
-#ifdef HAVE_VC
-    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
+#ifdef HAVE_XSIMD
+    using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
 
     const int dataSize = 4096;
     void *ptr = 0;
@@ -1127,11 +1148,12 @@ void KisCompositionBenchmark::benchmarkFloatUint()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
+        for (int i = 0; i < dataSize; i += float_v::size) {
             // conversion float -> uint
-            uint_v b(Vc::float_v(fData + i));
+            // this being a direct conversion, load_and_extend does not apply
+            const auto b = xsimd::batch_cast<typename uint_v::value_type>(float_v::load_aligned(fData + i));
 
-            b.store(iData + i);
+            b.store_aligned(iData + i);
         }
     }
 
@@ -1142,10 +1164,8 @@ void KisCompositionBenchmark::benchmarkFloatUint()
 
 void KisCompositionBenchmark::benchmarkFloatIntUint()
 {
-#ifdef HAVE_VC
-    using int_v = Vc::SimdArray<int, Vc::float_v::size()>;
-    using uint_v = Vc::SimdArray<unsigned int, Vc::float_v::size()>;
-
+#ifdef HAVE_XSIMD
+    using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
     const int dataSize = 4096;
     void *ptr = 0;
     int error = MEMALIGN_ALLOC(&ptr, uint32VecAlignment, dataSize * sizeof(quint32));
@@ -1160,11 +1180,11 @@ void KisCompositionBenchmark::benchmarkFloatIntUint()
     float *fData = (float*)ptr;
 
     QBENCHMARK {
-        for (int i = 0; i < dataSize; i += Vc::float_v::size()) {
+        for (int i = 0; i < dataSize; i += float_v::size) {
             // conversion float -> int -> uint
-            uint_v b(int_v(Vc::float_v(fData + i)));
+            const auto b = xsimd::batch_cast<typename uint_v::value_type>(float_v::load_aligned(fData + i));
 
-            b.store(iData + i);
+            b.store_aligned(iData + i);
         }
     }
 

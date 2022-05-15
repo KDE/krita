@@ -19,9 +19,7 @@ endif()
 
 set(LINK_VC_LIB)
 
-if(HAVE_VC)
-    include_directories(SYSTEM ${Vc_INCLUDE_DIR})
-    set(LINK_VC_LIB ${Vc_LIBRARIES})
+if(HAVE_XSIMD)
     ko_compile_for_all_implementations_no_scalar(__per_arch_factory_objs compositeops/KoOptimizedCompositeOpFactoryPerArch.cpp)
     ko_compile_for_all_implementations(__per_arch_alpha_applicator_factory_objs KoAlphaMaskApplicatorFactoryImpl.cpp)
     ko_compile_for_all_implementations(__per_arch_rgb_scaler_factory_objs KoOptimizedPixelDataScalerU8ToU16FactoryImpl.cpp)
@@ -96,7 +94,7 @@ set(kritapigment_SRCS
     resources/KisGradientConversion.cpp
 )
 
-set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} ${LINK_VC_LIB})
+set (EXTRA_LIBRARIES ${LINK_OPENEXR_LIB} kritamultiarch)
 
 if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   # avoid "cannot open file 'LIBC.lib'" error

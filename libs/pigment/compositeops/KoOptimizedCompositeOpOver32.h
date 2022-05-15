@@ -1,6 +1,7 @@
 /*
  * SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
  * SPDX-FileCopyrightText: 2011 Silvio Heinrich <plassy@web.de>
+ * SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -11,38 +12,6 @@
 #include "KoCompositeOpBase.h"
 #include "KoCompositeOpRegistry.h"
 #include "KoStreamedMath.h"
-
-
-template<Vc::Implementation _impl>
-struct OptiDiv {
-    static ALWAYS_INLINE float divScalar(const float& divident, const float& divisor) {
-#ifdef __SSE__
-        float result;
-
-        __m128 x = _mm_set_ss(divisor);
-        __m128 y = _mm_set_ss(divident);
-        x = _mm_rcp_ss(x);
-        x = _mm_mul_ss(x, y);
-
-
-        _mm_store_ss(&result, x);
-        return result;
-#else
-        return divident / divisor;
-#endif
-
-    }
-
-    static ALWAYS_INLINE Vc::float_v divVector(Vc::float_v::AsArg divident, Vc::float_v::AsArg  divisor) {
-#ifdef __SSE__
-        return divident * Vc::reciprocal(divisor);
-#else
-        return divident / divisor;
-#endif
-
-    }
-
-};
 
 
 template<typename channels_type, typename pixel_type, bool alphaLocked, bool allChannelsFlag>
@@ -56,56 +25,58 @@ struct OverCompositor32 {
     };
 
     // \see docs in AlphaDarkenCompositor32
-    template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
+    template<bool haveMask, bool src_aligned, typename _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
         Q_UNUSED(oparams);
 
-        Vc::float_v src_alpha;
-        Vc::float_v dst_alpha;
+        using float_v = typename KoStreamedMath<_impl>::float_v;
+
+        float_v src_alpha;
+        float_v dst_alpha;
 
         src_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<src_aligned>(src);
 
         bool haveOpacity = opacity != 1.0f;
-        Vc::float_v opacity_norm_vec(opacity);
+        float_v opacity_norm_vec(opacity);
 
-        Vc::float_v uint8Max(255.0f);
-        Vc::float_v uint8MaxRec1(1.0f / 255.0f);
-        Vc::float_v zeroValue(Vc::Zero);
-        Vc::float_v oneValue(Vc::One);
+        float_v uint8Max(255.0f);
+        float_v uint8MaxRec1(1.0f / 255.0f);
+        float_v zeroValue(0);
+        float_v oneValue(1);
 
         src_alpha *= opacity_norm_vec;
 
         if (haveMask) {
-            Vc::float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
+            float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             src_alpha *= mask_vec * uint8MaxRec1;
         }
 
         // The source cannot change the colors in the destination,
         // since its fully transparent
-        if ((src_alpha == zeroValue).isFull()) {
+        if (xsimd::all(src_alpha == zeroValue)) {
             return;
         }
 
         dst_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<true>(dst);
 
-        Vc::float_v src_c1;
-        Vc::float_v src_c2;
-        Vc::float_v src_c3;
+        float_v src_c1;
+        float_v src_c2;
+        float_v src_c3;
 
-        Vc::float_v dst_c1;
-        Vc::float_v dst_c2;
-        Vc::float_v dst_c3;
+        float_v dst_c1;
+        float_v dst_c2;
+        float_v dst_c3;
 
 
         KoStreamedMath<_impl>::template fetch_colors_32<src_aligned>(src, src_c1, src_c2, src_c3);
-        Vc::float_v src_blend;
-        Vc::float_v new_alpha;
+        float_v src_blend;
+        float_v new_alpha;
 
-        if ((dst_alpha == uint8Max).isFull()) {
+        if (xsimd::all(dst_alpha == uint8Max)) {
             new_alpha = dst_alpha;
             src_blend = src_alpha * uint8MaxRec1;
-        } else if ((dst_alpha == zeroValue).isFull()) {
+        } else if (xsimd::all(dst_alpha == zeroValue)) {
             new_alpha = src_alpha;
             src_blend = oneValue;
         } else {
@@ -123,7 +94,7 @@ struct OverCompositor32 {
 
         }
 
-        if (!(src_blend == oneValue).isFull()) {
+        if (!xsimd::all(src_blend == oneValue)) {
             KoStreamedMath<_impl>::template fetch_colors_32<true>(dst, dst_c1, dst_c2, dst_c3);
 
             dst_c1 = src_blend * (src_c1 - dst_c1) + dst_c1;
@@ -132,7 +103,7 @@ struct OverCompositor32 {
 
         } else {
             if (!haveMask && !haveOpacity) {
-                memcpy(dst, src, 4 * Vc::float_v::size());
+                memcpy(dst, src, 4 * float_v::size);
                 return;
             } else {
                 // opacity has changed the alpha of the source,
@@ -146,7 +117,7 @@ struct OverCompositor32 {
         KoStreamedMath<_impl>::write_channels_32(dst, new_alpha, dst_c1, dst_c2, dst_c3);
     }
 
-    template <bool haveMask, Vc::Implementation _impl>
+    template <bool haveMask, typename _impl>
     static ALWAYS_INLINE void compositeOnePixelScalar(const channels_type *src, channels_type *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
         using namespace Arithmetic;
@@ -227,7 +198,7 @@ struct OverCompositor32 {
  * colorspaces with alpha channel placed at the last byte of
  * the pixel: C1_C2_C3_A.
  */
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpOver32 : public KoCompositeOp
 {
 public:
@@ -236,7 +207,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
             composite<true>(params);

@@ -14,7 +14,7 @@
 #include <QScopedPointer>
 
 template <typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * Create, serialize and deserialize an elliptical 8-bit mask.
@@ -48,7 +48,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisCircleMaskGenerator>;
+    friend struct FastRowProcessor<KisCircleMaskGenerator>;
 };
 
 #endif

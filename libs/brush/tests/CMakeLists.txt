@@ -8,12 +8,6 @@ include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
 )
 
-if(HAVE_VC)
-  include_directories(SYSTEM
-      ${Vc_INCLUDE_DIR}
-  )
-endif()
-
 macro_add_unittest_definitions()
 
 include(ECMAddTests)

@@ -13,6 +13,8 @@ class KisCompositionBenchmark : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void detectBuildArchitecture();
+
     void checkRoundingAlphaDarken_05_03();
     void checkRoundingAlphaDarken_05_05();
     void checkRoundingAlphaDarken_05_07();

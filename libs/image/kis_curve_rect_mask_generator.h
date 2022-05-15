@@ -17,7 +17,7 @@ class QDomDocument;
 #include "kis_base_mask_generator.h"
 
 template<typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * Curve based softness for this rectangular mask generator
@@ -47,7 +47,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisCurveRectangleMaskGenerator>;
+    friend struct FastRowProcessor<KisCurveRectangleMaskGenerator>;
 };
 
 #endif

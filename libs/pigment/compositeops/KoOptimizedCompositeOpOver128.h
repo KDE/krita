@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2015 Thorsten Zachmann <zachmann@kde.org>
+ * SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -34,7 +35,7 @@ struct OverCompositor128 {
     };
 
     // \see docs in AlphaDarkenCompositor32
-    template<bool haveMask, bool src_aligned, Vc::Implementation _impl>
+    template<bool haveMask, bool src_aligned, typename _impl>
     static ALWAYS_INLINE void compositeVector(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
     {
 #if INFO_DEBUG
@@ -48,52 +49,55 @@ struct OverCompositor128 {
             qInfo() << "count" << countOne << countTwo << countThree << countFour << countTotal << opacity;
         }
 #endif
+        using float_v = typename KoStreamedMath<_impl>::float_v;
+        using float_m = typename float_v::batch_bool_type;
+
         Q_UNUSED(oparams);
 
-        Vc::float_v src_alpha;
-        Vc::float_v dst_alpha;
+        float_v src_alpha;
+        float_v dst_alpha;
 
-        Vc::float_v src_c1;
-        Vc::float_v src_c2;
-        Vc::float_v src_c3;
+        float_v src_c1;
+        float_v src_c2;
+        float_v src_c3;
 
         PixelWrapper<channels_type, _impl> dataWrapper;
         dataWrapper.read(const_cast<quint8*>(src), src_c1, src_c2, src_c3, src_alpha);
 
         //bool haveOpacity = opacity != 1.0;
-        const Vc::float_v opacity_norm_vec(opacity);
+        const float_v opacity_norm_vec(opacity);
         src_alpha *= opacity_norm_vec;
 
         if (haveMask) {
-            const Vc::float_v uint8MaxRec1((float)1.0 / 255);
-            Vc::float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
+            const float_v uint8MaxRec1((float)1.0 / 255);
+            float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             src_alpha *= mask_vec * uint8MaxRec1;
         }
 
-        const Vc::float_v zeroValue(static_cast<float>(NATIVE_OPACITY_TRANSPARENT));
+        const float_v zeroValue(static_cast<float>(NATIVE_OPACITY_TRANSPARENT));
         // The source cannot change the colors in the destination,
         // since its fully transparent
-        if ((src_alpha == zeroValue).isFull()) {
+        if (xsimd::all(src_alpha == zeroValue)) {
 #if INFO_DEBUG
             countFour++;
 #endif
             return;
         }
 
-        Vc::float_v dst_c1;
-        Vc::float_v dst_c2;
-        Vc::float_v dst_c3;
+        float_v dst_c1;
+        float_v dst_c2;
+        float_v dst_c3;
 
         dataWrapper.read(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
 
-        Vc::float_v src_blend;
-        Vc::float_v new_alpha;
+        float_v src_blend;
+        float_v new_alpha;
 
-        const Vc::float_v oneValue(1.0f);
-        if ((dst_alpha == oneValue).isFull()) {
+        const float_v oneValue(1.0f);
+        if (xsimd::all(dst_alpha == oneValue)) {
             new_alpha = dst_alpha;
             src_blend = src_alpha;
-        } else if ((dst_alpha == zeroValue).isFull()) {
+        } else if (xsimd::all(dst_alpha == zeroValue)) {
             new_alpha = src_alpha;
             src_blend = oneValue;
         } else {
@@ -102,12 +106,12 @@ struct OverCompositor128 {
              * which will result in NaN values while division.
              */
             new_alpha = dst_alpha + (oneValue - dst_alpha) * src_alpha;
-            Vc::float_m mask = (new_alpha == zeroValue);
+            float_m mask = (new_alpha == zeroValue);
             src_blend = src_alpha / new_alpha;
-            src_blend.setZero(mask);
+            src_blend = xsimd::set_zero(src_blend, mask);
         }
 
-        if (!(src_blend == oneValue).isFull()) {
+        if (!xsimd::all(src_blend == oneValue)) {
 #if INFO_DEBUG
             ++countOne;
 #endif
@@ -125,8 +129,12 @@ struct OverCompositor128 {
         }
     }
 
-    template <bool haveMask, Vc::Implementation _impl>
-    static ALWAYS_INLINE void compositeOnePixelScalar(const quint8 *src, quint8 *dst, const quint8 *mask, float opacity, const ParamsWrapper &oparams)
+    template<bool haveMask, typename _impl>
+    static ALWAYS_INLINE void compositeOnePixelScalar(const quint8 *src,
+                                                      quint8 *dst,
+                                                      const quint8 *mask,
+                                                      float opacity,
+                                                      const ParamsWrapper &oparams)
     {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
@@ -229,7 +237,7 @@ struct OverCompositor128 {
  * colorspaces with alpha channel placed at the last byte of
  * the pixel: C1_C2_C3_A.
  */
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpOver128 : public KoCompositeOp
 {
 public:
@@ -238,7 +246,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
             composite<true>(params);
@@ -273,7 +281,7 @@ public:
     }
 };
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpOverU64 : public KoCompositeOp
 {
 public:
@@ -282,7 +290,7 @@ public:
 
     using KoCompositeOp::composite;
 
-    virtual void composite(const KoCompositeOp::ParameterInfo& params) const
+    void composite(const KoCompositeOp::ParameterInfo& params) const override
     {
         if(params.maskRowStart) {
             composite<true>(params);

@@ -22,7 +22,7 @@ class QDomDocument;
 class QPointF;
 
 template<typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * This mask generator use softness/hardness defined by user curve
@@ -61,7 +61,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisCurveCircleMaskGenerator>;
+    friend struct FastRowProcessor<KisCurveCircleMaskGenerator>;
 };
 
 #endif

@@ -5,9 +5,9 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoVcMultiArchBuildSupport.h>
+#include "xsimd_extensions/xsimd.hpp"
 
-#if defined HAVE_VC
+#if defined HAVE_XSIMD
 
 #include "kis_circle_mask_generator.h"
 #include "kis_circle_mask_generator_p.h"
@@ -32,14 +32,17 @@
 
 template<>
 template<>
-void FastRowProcessor<KisCircleMaskGenerator>::process<Vc::CurrentImplementation::current()>(float *buffer,
-                                                                                             int width,
-                                                                                             float y,
-                                                                                             float cosa,
-                                                                                             float sina,
-                                                                                             float centerX,
-                                                                                             float centerY)
+void FastRowProcessor<KisCircleMaskGenerator>::process<xsimd::current_arch>(float *buffer,
+                                                                            int width,
+                                                                            float y,
+                                                                            float cosa,
+                                                                            float sina,
+                                                                            float centerX,
+                                                                            float centerY)
 {
+    using float_v = xsimd::batch<float, xsimd::current_arch>;
+    using float_m = typename float_v::batch_bool_type;
+
     const bool useSmoothing = d->copyOfAntialiasEdges;
 
     float y_ = y - centerY;
@@ -48,150 +51,156 @@ void FastRowProcessor<KisCircleMaskGenerator>::process<Vc::CurrentImplementation
 
     float *bufferPointer = buffer;
 
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+    float_v currentIndices = xsimd::detail::make_sequence_as_batch<float_v>();
 
-    Vc::float_v increment((float)Vc::float_v::size());
-    Vc::float_v vCenterX(centerX);
+    float_v increment((float)float_v::size);
+    float_v vCenterX(centerX);
 
-    Vc::float_v vCosa(cosa);
-    Vc::float_v vSina(sina);
-    Vc::float_v vCosaY_(cosay_);
-    Vc::float_v vSinaY_(sinay_);
+    float_v vCosa(cosa);
+    float_v vSina(sina);
+    float_v vCosaY_(cosay_);
+    float_v vSinaY_(sinay_);
 
-    Vc::float_v vXCoeff(static_cast<float>(d->xcoef));
-    Vc::float_v vYCoeff(static_cast<float>(d->ycoef));
+    float_v vXCoeff(static_cast<float>(d->xcoef));
+    float_v vYCoeff(static_cast<float>(d->ycoef));
 
-    Vc::float_v vTransformedFadeX(static_cast<float>(d->transformedFadeX));
-    Vc::float_v vTransformedFadeY(static_cast<float>(d->transformedFadeY));
+    float_v vTransformedFadeX(static_cast<float>(d->transformedFadeX));
+    float_v vTransformedFadeY(static_cast<float>(d->transformedFadeY));
 
-    Vc::float_v vOne(Vc::One);
+    float_v vOne(1);
 
-    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
-        Vc::float_v x_ = currentIndices - vCenterX;
+    for (size_t i = 0; i < static_cast<size_t>(width); i += float_v::size) {
+        float_v x_ = currentIndices - vCenterX;
 
-        Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = x_ * vSina + vCosaY_;
+        float_v xr = x_ * vCosa - vSinaY_;
+        float_v yr = x_ * vSina + vCosaY_;
 
-        Vc::float_v n = pow2(xr * vXCoeff) + pow2(yr * vYCoeff);
-        Vc::float_m outsideMask = n > vOne;
+        float_v n = xsimd::pow2(xr * vXCoeff) + xsimd::pow2(yr * vYCoeff);
+        float_m outsideMask = n > vOne;
 
-        if (!outsideMask.isFull()) {
+        if (!xsimd::all(outsideMask)) {
             if (useSmoothing) {
-                xr = Vc::abs(xr) + vOne;
-                yr = Vc::abs(yr) + vOne;
+                xr = xsimd::abs(xr) + vOne;
+                yr = xsimd::abs(yr) + vOne;
             }
-            Vc::float_v vNormFade = pow2(xr * vTransformedFadeX) + pow2(yr * vTransformedFadeY);
-            Vc::float_m vNormLowMask = vNormFade < vOne;
-            vNormFade.setZero(vNormLowMask);
+            float_v vNormFade = xsimd::pow2(xr * vTransformedFadeX) + xsimd::pow2(yr * vTransformedFadeY);
+            float_m vNormLowMask = vNormFade < vOne;
+            vNormFade = xsimd::set_zero(vNormFade, vNormLowMask);
 
             // 255 * n * (normeFade - 1) / (normeFade - n)
-            Vc::float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
+            float_v vFade = n * (vNormFade - vOne) / (vNormFade - n);
 
             // Mask in the inner circle of the mask
-            Vc::float_m mask = vNormFade < vOne;
-            vFade.setZero(mask);
+            float_m mask = vNormFade < vOne;
+            vFade = xsimd::set_zero(vFade, mask);
 
             // Mask out the outer circle of the mask
-            vFade(outsideMask) = vOne;
+            vFade = xsimd::set_one(vFade, outsideMask);
 
-            vFade.store(bufferPointer, Vc::Aligned);
+            vFade.store_aligned(bufferPointer);
 
         } else {
             // Mask out everything outside the circle
-            vOne.store(bufferPointer, Vc::Aligned);
+            vOne.store_aligned(bufferPointer);
         }
 
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+        bufferPointer += float_v::size;
     }
 }
 
 template<>
 template<>
-void FastRowProcessor<KisGaussCircleMaskGenerator>::process<Vc::CurrentImplementation::current()>(float *buffer,
-                                                                                                  int width,
-                                                                                                  float y,
-                                                                                                  float cosa,
-                                                                                                  float sina,
-                                                                                                  float centerX,
-                                                                                                  float centerY)
+void FastRowProcessor<KisGaussCircleMaskGenerator>::process<xsimd::current_arch>(float *buffer,
+                                                                                 int width,
+                                                                                 float y,
+                                                                                 float cosa,
+                                                                                 float sina,
+                                                                                 float centerX,
+                                                                                 float centerY)
 {
+    using float_v = xsimd::batch<float, xsimd::current_arch>;
+    using float_m = float_v::batch_bool_type;
+
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
 
     float *bufferPointer = buffer;
 
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+    float_v currentIndices = xsimd::detail::make_sequence_as_batch<float_v>();
 
-    Vc::float_v increment(static_cast<float>(Vc::float_v::size()));
-    Vc::float_v vCenterX(centerX);
-    Vc::float_v vCenter(static_cast<float>(d->center));
+    float_v increment(static_cast<float>(float_v::size));
+    float_v vCenterX(centerX);
+    float_v vCenter(static_cast<float>(d->center));
 
-    Vc::float_v vCosa(cosa);
-    Vc::float_v vSina(sina);
-    Vc::float_v vCosaY_(cosay_);
-    Vc::float_v vSinaY_(sinay_);
+    float_v vCosa(cosa);
+    float_v vSina(sina);
+    float_v vCosaY_(cosay_);
+    float_v vSinaY_(sinay_);
 
-    Vc::float_v vYCoeff(static_cast<float>(d->ycoef));
-    Vc::float_v vDistfactor(static_cast<float>(d->distfactor));
-    Vc::float_v vAlphafactor(static_cast<float>(d->alphafactor));
+    float_v vYCoeff(static_cast<float>(d->ycoef));
+    float_v vDistfactor(static_cast<float>(d->distfactor));
+    float_v vAlphafactor(static_cast<float>(d->alphafactor));
 
-    Vc::float_v vZero(Vc::Zero);
-    Vc::float_v vValMax(255.f);
+    float_v vZero(0);
+    float_v vValMax(255.f);
 
-    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
-        Vc::float_v x_ = currentIndices - vCenterX;
+    for (size_t i = 0; i < static_cast<size_t>(width); i += float_v::size) {
+        float_v x_ = currentIndices - vCenterX;
 
-        Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = x_ * vSina + vCosaY_;
+        float_v xr = x_ * vCosa - vSinaY_;
+        float_v yr = x_ * vSina + vCosaY_;
 
-        Vc::float_v dist = sqrt(pow2(xr) + pow2(yr * vYCoeff));
+        float_v dist = xsimd::sqrt(xsimd::pow2(xr) + xsimd::pow2(yr * vYCoeff));
 
         // Apply FadeMaker mask and operations
-        Vc::float_m excludeMask = d->fadeMaker.needFade(dist);
+        float_m excludeMask = d->fadeMaker.needFade(dist);
 
-        if (!excludeMask.isFull()) {
-            Vc::float_v valDist = dist * vDistfactor;
-            Vc::float_v fullFade =
-                vAlphafactor * (VcExtraMath::erf(valDist + vCenter) - VcExtraMath::erf(valDist - vCenter));
+        if (!xsimd::all(excludeMask)) {
+            float_v valDist = dist * vDistfactor;
+            float_v fullFade = vAlphafactor * (VcExtraMath::erf(valDist + vCenter) - VcExtraMath::erf(valDist - vCenter));
 
-            Vc::float_m mask;
+            float_m mask;
             // Mask in the inner circle of the mask
             mask = fullFade < vZero;
-            fullFade.setZero(mask);
+            fullFade = xsimd::set_zero(fullFade, mask);
 
             // Mask the outer circle
             mask = fullFade > 254.974f;
-            fullFade(mask) = vValMax;
+            fullFade = xsimd::select(mask, vValMax, fullFade);
 
             // Mask (value - value), precision errors.
-            Vc::float_v vFade = (vValMax - fullFade) / vValMax;
+            float_v vFade = (vValMax - fullFade) / vValMax;
 
             // return original dist values before vFade transform
-            vFade(excludeMask) = dist;
-            vFade.store(bufferPointer, Vc::Aligned);
+            vFade = xsimd::select(excludeMask, dist, vFade);
+            vFade.store_aligned(bufferPointer);
 
         } else {
-            dist.store(bufferPointer, Vc::Aligned);
+            dist.store_aligned(bufferPointer);
         }
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+        bufferPointer += float_v::size;
     }
 }
 
 template<>
 template<>
-void FastRowProcessor<KisCurveCircleMaskGenerator>::process<Vc::CurrentImplementation::current()>(float *buffer,
-                                                                                                  int width,
-                                                                                                  float y,
-                                                                                                  float cosa,
-                                                                                                  float sina,
-                                                                                                  float centerX,
-                                                                                                  float centerY)
+void FastRowProcessor<KisCurveCircleMaskGenerator>::process<xsimd::current_arch>(float *buffer,
+                                                                                 int width,
+                                                                                 float y,
+                                                                                 float cosa,
+                                                                                 float sina,
+                                                                                 float centerX,
+                                                                                 float centerY)
 {
+    using int_v = xsimd::batch<int, xsimd::current_arch>;
+    using float_v = xsimd::batch<float, xsimd::current_arch>;
+    using float_m = float_v::batch_bool_type;
+
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -200,88 +209,89 @@ void FastRowProcessor<KisCurveCircleMaskGenerator>::process<Vc::CurrentImplement
 
     qreal *curveDataPointer = d->curveData.data();
 
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+    float_v currentIndices = xsimd::detail::make_sequence_as_batch<float_v>();
 
-    Vc::float_v increment((float)Vc::float_v::size());
-    Vc::float_v vCenterX(centerX);
+    float_v increment((float)float_v::size);
+    float_v vCenterX(centerX);
 
-    Vc::float_v vCosa(cosa);
-    Vc::float_v vSina(sina);
-    Vc::float_v vCosaY_(cosay_);
-    Vc::float_v vSinaY_(sinay_);
+    float_v vCosa(cosa);
+    float_v vSina(sina);
+    float_v vCosaY_(cosay_);
+    float_v vSinaY_(sinay_);
 
-    Vc::float_v vYCoeff(static_cast<float>(d->ycoef));
-    Vc::float_v vXCoeff(static_cast<float>(d->xcoef));
-    Vc::float_v vCurveResolution(static_cast<float>(d->curveResolution));
+    float_v vYCoeff(static_cast<float>(d->ycoef));
+    float_v vXCoeff(static_cast<float>(d->xcoef));
+    float_v vCurveResolution(static_cast<float>(d->curveResolution));
 
-    Vc::float_v vCurvedData(Vc::Zero);
-    Vc::float_v vCurvedData1(Vc::Zero);
+    float_v vCurvedData(0);
+    float_v vCurvedData1(0);
 
-    Vc::float_v vOne(Vc::One);
-    Vc::float_v vZero(Vc::Zero);
+    float_v vOne(1);
+    float_v vZero(0);
 
-    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
-        Vc::float_v x_ = currentIndices - vCenterX;
+    for (size_t i = 0; i < static_cast<size_t>(width); i += float_v::size) {
+        float_v x_ = currentIndices - vCenterX;
 
-        Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = x_ * vSina + vCosaY_;
+        float_v xr = x_ * vCosa - vSinaY_;
+        float_v yr = x_ * vSina + vCosaY_;
 
-        Vc::float_v dist = pow2(xr * vXCoeff) + pow2(yr * vYCoeff);
+        float_v dist = xsimd::pow2(xr * vXCoeff) + xsimd::pow2(yr * vYCoeff);
 
         // Apply FadeMaker mask and operations
-        Vc::float_m excludeMask = d->fadeMaker.needFade(dist);
+        float_m excludeMask = d->fadeMaker.needFade(dist);
 
-        if (!excludeMask.isFull()) {
-            Vc::float_v valDist = dist * vCurveResolution;
+        if (!xsimd::all(excludeMask)) {
+            float_v valDist = dist * vCurveResolution;
             // truncate
-            Vc::float_v::IndexType vAlphaValue(valDist);
-            Vc::float_v vFloatAlphaValue = vAlphaValue;
+            int_v vAlphaValue = xsimd::to_int(valDist);
+            float_v vFloatAlphaValue = xsimd::to_float(vAlphaValue);
 
-            Vc::float_v alphaValueF = valDist - vFloatAlphaValue;
+            float_v alphaValueF = valDist - vFloatAlphaValue;
 
-            Vc::float_m alphaMask = vAlphaValue < vZero;
-            vAlphaValue.setZero(alphaMask);
+            auto alphaMask = vAlphaValue < int_v(0);
+            vAlphaValue = xsimd::set_zero(vAlphaValue, alphaMask);
 
-            vCurvedData.gather(curveDataPointer, vAlphaValue);
-            vCurvedData1.gather(curveDataPointer, vAlphaValue + 1);
-            //            Vc::float_v vCurvedData1(curveDataPointer,vAlphaValue + 1);
+            vCurvedData = float_v::gather(curveDataPointer, vAlphaValue);
+            vCurvedData1 = float_v::gather(curveDataPointer, vAlphaValue + 1);
 
             // vAlpha
-            Vc::float_v fullFade = ((vOne - alphaValueF) * vCurvedData + alphaValueF * vCurvedData1);
+            float_v fullFade = ((vOne - alphaValueF) * vCurvedData + alphaValueF * vCurvedData1);
 
-            Vc::float_m mask;
             // Mask in the inner circle of the mask
-            mask = fullFade < vZero;
-            fullFade.setZero(mask);
+            float_m mask = fullFade < vZero;
+            fullFade = xsimd::set_zero(fullFade, mask);
 
             // Mask outer circle of mask
             mask = fullFade >= vOne;
-            Vc::float_v vFade = (vOne - fullFade);
-            vFade.setZero(mask);
+            float_v vFade = (vOne - fullFade);
+            vFade = xsimd::set_zero(vFade, mask);
 
             // return original dist values before vFade transform
-            vFade(excludeMask) = dist;
-            vFade.store(bufferPointer, Vc::Aligned);
+            vFade = xsimd::select(excludeMask, dist, vFade);
+            vFade.store_aligned(bufferPointer);
 
         } else {
-            dist.store(bufferPointer, Vc::Aligned);
+            dist.store_aligned(bufferPointer);
         }
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+        bufferPointer += float_v::size;
     }
 }
 
 template<>
 template<>
-void FastRowProcessor<KisRectangleMaskGenerator>::process<Vc::CurrentImplementation::current()>(float *buffer,
-                                                                                                int width,
-                                                                                                float y,
-                                                                                                float cosa,
-                                                                                                float sina,
-                                                                                                float centerX,
-                                                                                                float centerY)
+void FastRowProcessor<KisRectangleMaskGenerator>::process<xsimd::current_arch>(float *buffer,
+                                                                               int width,
+                                                                               float y,
+                                                                               float cosa,
+                                                                               float sina,
+                                                                               float centerX,
+                                                                               float centerY)
 {
+    using float_v = xsimd::batch<float, xsimd::current_arch>;
+    using float_m = float_v::batch_bool_type;
+
     const bool useSmoothing = d->copyOfAntialiasEdges;
 
     float y_ = y - centerY;
@@ -290,165 +300,168 @@ void FastRowProcessor<KisRectangleMaskGenerator>::process<Vc::CurrentImplementat
 
     float *bufferPointer = buffer;
 
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+    float_v currentIndices = xsimd::detail::make_sequence_as_batch<float_v>();
 
-    Vc::float_v increment((float)Vc::float_v::size());
-    Vc::float_v vCenterX(centerX);
+    float_v increment((float)float_v::size);
+    float_v vCenterX(centerX);
 
-    Vc::float_v vCosa(cosa);
-    Vc::float_v vSina(sina);
-    Vc::float_v vCosaY_(cosay_);
-    Vc::float_v vSinaY_(sinay_);
+    float_v vCosa(cosa);
+    float_v vSina(sina);
+    float_v vCosaY_(cosay_);
+    float_v vSinaY_(sinay_);
 
-    Vc::float_v vXCoeff(static_cast<float>(d->xcoeff));
-    Vc::float_v vYCoeff(static_cast<float>(d->ycoeff));
+    float_v vXCoeff(static_cast<float>(d->xcoeff));
+    float_v vYCoeff(static_cast<float>(d->ycoeff));
 
-    Vc::float_v vTransformedFadeX(static_cast<float>(d->transformedFadeX));
-    Vc::float_v vTransformedFadeY(static_cast<float>(d->transformedFadeY));
+    float_v vTransformedFadeX(static_cast<float>(d->transformedFadeX));
+    float_v vTransformedFadeY(static_cast<float>(d->transformedFadeY));
 
-    Vc::float_v vOne(Vc::One);
-    Vc::float_v vZero(Vc::Zero);
-    Vc::float_v vTolerance(10000.f);
+    float_v vOne(1);
+    float_v vZero(0);
+    float_v vTolerance(10000.f);
 
-    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
-        Vc::float_v x_ = currentIndices - vCenterX;
+    for (size_t i = 0; i < static_cast<size_t>(width); i += float_v::size) {
+        float_v x_ = currentIndices - vCenterX;
 
-        Vc::float_v xr = Vc::abs(x_ * vCosa - vSinaY_);
-        Vc::float_v yr = Vc::abs(x_ * vSina + vCosaY_);
+        float_v xr = xsimd::abs(x_ * vCosa - vSinaY_);
+        float_v yr = xsimd::abs(x_ * vSina + vCosaY_);
 
-        Vc::float_v nxr = xr * vXCoeff;
-        Vc::float_v nyr = yr * vYCoeff;
+        float_v nxr = xr * vXCoeff;
+        float_v nyr = yr * vYCoeff;
 
-        Vc::float_m outsideMask = (nxr > vOne) || (nyr > vOne);
+        float_m outsideMask = (nxr > vOne) || (nyr > vOne);
 
-        if (!outsideMask.isFull()) {
+        if (!xsimd::all(outsideMask)) {
             if (useSmoothing) {
-                xr = Vc::abs(xr) + vOne;
-                yr = Vc::abs(yr) + vOne;
+                xr = xsimd::abs(xr) + vOne;
+                yr = xsimd::abs(yr) + vOne;
             }
 
-            Vc::float_v fxr = xr * vTransformedFadeX;
-            Vc::float_v fyr = yr * vTransformedFadeY;
+            float_v fxr = xr * vTransformedFadeX;
+            float_v fyr = yr * vTransformedFadeY;
 
-            Vc::float_v fxrNorm = nxr * (fxr - vOne) / (fxr - nxr);
-            Vc::float_v fyrNorm = nyr * (fyr - vOne) / (fyr - nyr);
+            float_v fxrNorm = nxr * (fxr - vOne) / (fxr - nxr);
+            float_v fyrNorm = nyr * (fyr - vOne) / (fyr - nyr);
 
-            Vc::float_v vFade(vZero);
+            float_v vFade(vZero);
 
-            Vc::float_m vFadeMask = fxrNorm < fyrNorm;
-            Vc::float_v vMaxVal = vFade;
-            vMaxVal(fxr > vOne) = fxrNorm;
-            vMaxVal(vFadeMask && fyr > vOne) = fyrNorm;
+            float_m vFadeMask = fxrNorm < fyrNorm;
+            float_v vMaxVal = vFade;
+            vMaxVal = xsimd::select(fxr > vOne, fxrNorm, vMaxVal);
+            vMaxVal = xsimd::select(vFadeMask && fyr > vOne, fyrNorm, vMaxVal);
             vFade = vMaxVal;
 
             // Mask out the outer circle of the mask
-            vFade(outsideMask) = vOne;
-            vFade.store(bufferPointer, Vc::Aligned);
+            vFade = xsimd::select(outsideMask, vOne, vFade);
+            vFade.store_aligned(bufferPointer);
         } else {
             // Mask out everything outside the circle
-            vOne.store(bufferPointer, Vc::Aligned);
+            vOne.store_aligned(bufferPointer);
         }
 
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+        bufferPointer += float_v::size;
     }
 }
 
 template<>
 template<>
-void FastRowProcessor<KisGaussRectangleMaskGenerator>::process<Vc::CurrentImplementation::current()>(float *buffer,
-                                                                                                     int width,
-                                                                                                     float y,
-                                                                                                     float cosa,
-                                                                                                     float sina,
-                                                                                                     float centerX,
-                                                                                                     float centerY)
+void FastRowProcessor<KisGaussRectangleMaskGenerator>::process<xsimd::current_arch>(float *buffer,
+                                                                                    int width,
+                                                                                    float y,
+                                                                                    float cosa,
+                                                                                    float sina,
+                                                                                    float centerX,
+                                                                                    float centerY)
 {
+    using float_v = xsimd::batch<float, xsimd::current_arch>;
+    using float_m = float_v::batch_bool_type;
+
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
 
     float *bufferPointer = buffer;
 
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+    float_v currentIndices = xsimd::detail::make_sequence_as_batch<float_v>();
 
-    Vc::float_v increment((float)Vc::float_v::size());
-    Vc::float_v vCenterX(centerX);
+    float_v increment((float)float_v::size);
+    float_v vCenterX(centerX);
 
-    Vc::float_v vCosa(cosa);
-    Vc::float_v vSina(sina);
-    Vc::float_v vCosaY_(cosay_);
-    Vc::float_v vSinaY_(sinay_);
+    float_v vCosa(cosa);
+    float_v vSina(sina);
+    float_v vCosaY_(cosay_);
+    float_v vSinaY_(sinay_);
 
-    Vc::float_v vhalfWidth(static_cast<float>(d->halfWidth));
-    Vc::float_v vhalfHeight(static_cast<float>(d->halfHeight));
-    Vc::float_v vXFade(static_cast<float>(d->xfade));
-    Vc::float_v vYFade(static_cast<float>(d->yfade));
+    float_v vhalfWidth(static_cast<float>(d->halfWidth));
+    float_v vhalfHeight(static_cast<float>(d->halfHeight));
+    float_v vXFade(static_cast<float>(d->xfade));
+    float_v vYFade(static_cast<float>(d->yfade));
 
-    Vc::float_v vAlphafactor(static_cast<float>(d->alphafactor));
+    float_v vAlphafactor(static_cast<float>(d->alphafactor));
 
-    Vc::float_v vOne(Vc::One);
-    Vc::float_v vZero(Vc::Zero);
-    Vc::float_v vValMax(255.f);
+    float_v vOne(1);
+    float_v vZero(0);
+    float_v vValMax(255.f);
 
-    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
-        Vc::float_v x_ = currentIndices - vCenterX;
+    for (size_t i = 0; i < static_cast<size_t>(width); i += float_v::size) {
+        float_v x_ = currentIndices - vCenterX;
 
-        Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = Vc::abs(x_ * vSina + vCosaY_);
+        float_v xr = x_ * vCosa - vSinaY_;
+        float_v yr = xsimd::abs(x_ * vSina + vCosaY_);
 
-        Vc::float_v vValue;
+        float_v vValue;
 
         // check if we need to apply fader on values
-        Vc::float_m excludeMask = d->fadeMaker.needFade(xr, yr);
-        vValue(excludeMask) = vOne;
+        float_m excludeMask = d->fadeMaker.needFade(xr, yr);
+        vValue = xsimd::select(excludeMask, vOne, vValue);
 
-        if (!excludeMask.isFull()) {
-            Vc::float_v fullFade = vValMax
-                - (vAlphafactor
-                   * (VcExtraMath::erf((vhalfWidth + xr) * vXFade) + VcExtraMath::erf((vhalfWidth - xr) * vXFade))
+        if (!xsimd::all(excludeMask)) {
+            float_v fullFade = vValMax
+                - (vAlphafactor * (VcExtraMath::erf((vhalfWidth + xr) * vXFade) + VcExtraMath::erf((vhalfWidth - xr) * vXFade))
                    * (VcExtraMath::erf((vhalfHeight + yr) * vYFade) + VcExtraMath::erf((vhalfHeight - yr) * vYFade)));
 
             // apply antialias fader
             d->fadeMaker.apply2DFader(fullFade, excludeMask, xr, yr);
 
-            Vc::float_m mask;
-
             // Mask in the inner circle of the mask
-            mask = fullFade < vZero;
-            fullFade.setZero(mask);
+            float_m mask = fullFade < vZero;
+            fullFade = xsimd::set_zero(fullFade, mask);
 
             // Mask the outer circle
             mask = fullFade > 254.974f;
-            fullFade(mask) = vValMax;
+            fullFade = xsimd::select(mask, vValMax, fullFade);
 
             // Mask (value - value), precision errors.
-            Vc::float_v vFade = fullFade / vValMax;
+            float_v vFade = fullFade / vValMax;
 
             // return original vValue values before vFade transform
-            vFade(excludeMask) = vValue;
-            vFade.store(bufferPointer, Vc::Aligned);
+            vFade = xsimd::select(excludeMask, vValue, vFade);
+            vFade.store_aligned(bufferPointer);
 
         } else {
-            vValue.store(bufferPointer, Vc::Aligned);
+            vValue.store_aligned(bufferPointer);
         }
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+        bufferPointer += float_v::size;
     }
 }
 
 template<>
 template<>
-void FastRowProcessor<KisCurveRectangleMaskGenerator>::process<Vc::CurrentImplementation::current()>(float *buffer,
-                                                                                                     int width,
-                                                                                                     float y,
-                                                                                                     float cosa,
-                                                                                                     float sina,
-                                                                                                     float centerX,
-                                                                                                     float centerY)
+void FastRowProcessor<KisCurveRectangleMaskGenerator>::process<xsimd::current_arch>(float *buffer,
+                                                                                    int width,
+                                                                                    float y,
+                                                                                    float cosa,
+                                                                                    float sina,
+                                                                                    float centerX,
+                                                                                    float centerY)
 {
+    using float_v = xsimd::batch<float, xsimd::current_arch>;
+    using float_m = float_v::batch_bool_type;
+
     float y_ = y - centerY;
     float sinay_ = sina * y_;
     float cosay_ = cosa * y_;
@@ -457,57 +470,57 @@ void FastRowProcessor<KisCurveRectangleMaskGenerator>::process<Vc::CurrentImplem
 
     qreal *curveDataPointer = d->curveData.data();
 
-    Vc::float_v currentIndices = Vc::float_v::IndexesFromZero();
+    float_v currentIndices = xsimd::detail::make_sequence_as_batch<float_v>();
 
-    Vc::float_v increment((float)Vc::float_v::size());
-    Vc::float_v vCenterX(centerX);
+    float_v increment((float)float_v::size);
+    float_v vCenterX(centerX);
 
-    Vc::float_v vCosa(cosa);
-    Vc::float_v vSina(sina);
-    Vc::float_v vCosaY_(cosay_);
-    Vc::float_v vSinaY_(sinay_);
+    float_v vCosa(cosa);
+    float_v vSina(sina);
+    float_v vCosaY_(cosay_);
+    float_v vSinaY_(sinay_);
 
-    Vc::float_v vYCoeff(static_cast<float>(d->ycoeff));
-    Vc::float_v vXCoeff(static_cast<float>(d->xcoeff));
-    Vc::float_v vCurveResolution(static_cast<float>(d->curveResolution));
+    float_v vYCoeff(static_cast<float>(d->ycoeff));
+    float_v vXCoeff(static_cast<float>(d->xcoeff));
+    float_v vCurveResolution(static_cast<float>(d->curveResolution));
 
-    Vc::float_v vOne(Vc::One);
-    Vc::float_v vZero(Vc::Zero);
-    Vc::float_v vValMax(255.f);
+    float_v vOne(1);
+    float_v vZero(0);
+    float_v vValMax(255.f);
 
-    for (size_t i = 0; i < static_cast<size_t>(width); i += Vc::float_v::size()) {
-        Vc::float_v x_ = currentIndices - vCenterX;
+    for (size_t i = 0; i < static_cast<size_t>(width); i += float_v::size) {
+        float_v x_ = currentIndices - vCenterX;
 
-        Vc::float_v xr = x_ * vCosa - vSinaY_;
-        Vc::float_v yr = Vc::abs(x_ * vSina + vCosaY_);
+        float_v xr = x_ * vCosa - vSinaY_;
+        float_v yr = xsimd::abs(x_ * vSina + vCosaY_);
 
-        Vc::float_v vValue;
+        float_v vValue;
 
         // check if we need to apply fader on values
-        Vc::float_m excludeMask = d->fadeMaker.needFade(xr, yr);
-        vValue(excludeMask) = vOne;
+        float_m excludeMask = d->fadeMaker.needFade(xr, yr);
+        vValue = xsimd::select(excludeMask, vOne, vValue);
 
-        if (!excludeMask.isFull()) {
+        if (!xsimd::all(excludeMask)) {
             // We need to mask the extra area given for aliniation
             // the next operation should never give values above 1
-            Vc::float_v preSIndex = Vc::abs(xr) * vXCoeff;
-            Vc::float_v preTIndex = Vc::abs(yr) * vYCoeff;
+            float_v preSIndex = xsimd::abs(xr) * vXCoeff;
+            float_v preTIndex = xsimd::abs(yr) * vYCoeff;
 
-            preSIndex(preSIndex > vOne) = vOne;
-            preTIndex(preTIndex > vOne) = vOne;
+            preSIndex = xsimd::select(preSIndex > vOne, vOne, preSIndex);
+            preTIndex = xsimd::select(preTIndex > vOne, vOne, preTIndex);
 
-            Vc::float_v::IndexType sIndex(round(preSIndex * vCurveResolution));
-            Vc::float_v::IndexType tIndex(round(preTIndex * vCurveResolution));
+            const auto sIndex = xsimd::nearbyint_as_int(preSIndex * vCurveResolution);
+            const auto tIndex = xsimd::nearbyint_as_int(preTIndex * vCurveResolution);
 
-            Vc::float_v::IndexType sIndexInverted = vCurveResolution - sIndex;
-            Vc::float_v::IndexType tIndexInverted = vCurveResolution - tIndex;
+            auto sIndexInverted = xsimd::to_int(vCurveResolution - xsimd::to_float(sIndex));
+            auto tIndexInverted = xsimd::to_int(vCurveResolution - xsimd::to_float(tIndex));
 
-            Vc::float_v vCurvedDataSIndex(curveDataPointer, sIndex);
-            Vc::float_v vCurvedDataTIndex(curveDataPointer, tIndex);
-            Vc::float_v vCurvedDataSIndexInv(curveDataPointer, sIndexInverted);
-            Vc::float_v vCurvedDataTIndexInv(curveDataPointer, tIndexInverted);
+            const auto vCurvedDataSIndex = float_v::gather(curveDataPointer, sIndex);
+            const auto vCurvedDataTIndex = float_v::gather(curveDataPointer, tIndex);
+            const auto vCurvedDataSIndexInv = float_v::gather(curveDataPointer, sIndexInverted);
+            const auto vCurvedDataTIndexInv = float_v::gather(curveDataPointer, tIndexInverted);
 
-            Vc::float_v fullFade = vValMax
+            float_v fullFade = vValMax
                 * (vOne
                    - (vCurvedDataSIndex * (vOne - vCurvedDataSIndexInv) * vCurvedDataTIndex
                       * (vOne - vCurvedDataTIndexInv)));
@@ -515,30 +528,28 @@ void FastRowProcessor<KisCurveRectangleMaskGenerator>::process<Vc::CurrentImplem
             // apply antialias fader
             d->fadeMaker.apply2DFader(fullFade, excludeMask, xr, yr);
 
-            Vc::float_m mask;
-
             // Mask in the inner circle of the mask
-            mask = fullFade < vZero;
-            fullFade.setZero(mask);
+            float_m mask = fullFade < vZero;
+            fullFade = xsimd::set_zero(fullFade, mask);
 
             // Mask the outer circle
             mask = fullFade > 254.974f;
-            fullFade(mask) = vValMax;
+            fullFade = xsimd::select(mask, vValMax, fullFade);
 
             // Mask (value - value), precision errors.
-            Vc::float_v vFade = fullFade / vValMax;
+            float_v vFade = fullFade / vValMax;
 
             // return original vValue values before vFade transform
-            vFade(excludeMask) = vValue;
-            vFade.store(bufferPointer, Vc::Aligned);
+            vFade = xsimd::select(excludeMask, vValue, vFade);
+            vFade.store_aligned(bufferPointer);
 
         } else {
-            vValue.store(bufferPointer, Vc::Aligned);
+            vValue.store_aligned(bufferPointer);
         }
         currentIndices = currentIndices + increment;
 
-        bufferPointer += Vc::float_v::size();
+        bufferPointer += float_v::size;
     }
 }
 
-#endif /* defined HAVE_VC */
+#endif /* defined HAVE_XSIMD */

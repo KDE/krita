@@ -36,12 +36,7 @@ else ()
     target_link_libraries(kritalibbrush kritaimage Qt5::Svg)
 endif ()
 
-
-if(HAVE_VC)
-  include_directories(SYSTEM ${Vc_INCLUDE_DIR})
-  target_link_libraries(kritalibbrush  ${Vc_LIBRARIES})
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-endif()
+target_link_libraries(kritalibbrush kritamultiarch)
 
 set_target_properties(kritalibbrush PROPERTIES
     VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}

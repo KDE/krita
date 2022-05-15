@@ -9,7 +9,7 @@
 
 #include "KoOptimizedPixelDataScalerU8ToU16Base.h"
 
-#include "KoVcMultiArchBuildSupport.h"
+#include "KoMultiArchBuildSupport.h"
 #include "kis_debug.h"
 
 #if defined(__i386__) || defined(__x86_64__)
@@ -17,7 +17,7 @@
 #endif
 
 
-template<Vc::Implementation _impl>
+template<typename _impl = xsimd::current_arch>
 class KoOptimizedPixelDataScalerU8ToU16 : public KoOptimizedPixelDataScalerU8ToU16Base
 {
 public:

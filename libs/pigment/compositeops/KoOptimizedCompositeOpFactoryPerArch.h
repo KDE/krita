@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2012 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  */
@@ -8,58 +9,56 @@
 #define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
 
-#include <compositeops/KoVcMultiArchBuildSupport.h>
+#include <compositeops/KoMultiArchBuildSupport.h>
 
 
 class KoCompositeOp;
 class KoColorSpace;
 
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenCreamy32;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenHard32;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpOver32;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenHard128;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenCreamy128;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenHardU64;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpAlphaDarkenCreamyU64;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpOver128;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpOverU64;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpCopy128;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpCopyU64;
 
-template<Vc::Implementation _impl>
+template<typename _impl>
 class KoOptimizedCompositeOpCopy32;
 
-template<template<Vc::Implementation I> class CompositeOp>
-struct KoOptimizedCompositeOpFactoryPerArch
-{
-    typedef const KoColorSpace* ParamType;
-    typedef KoCompositeOp* ReturnType;
+template<template<typename I> class CompositeOp>
+struct KoOptimizedCompositeOpFactoryPerArch {
+    using ParamType = const KoColorSpace *;
+    using ReturnType = KoCompositeOp *;
 
-    template<Vc::Implementation _impl>
+    template <typename _impl>
     static ReturnType create(ParamType param);
 };
-
 
 #endif /* KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H */

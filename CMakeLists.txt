@@ -960,31 +960,19 @@ endif()
 list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 
 ##
-## Test for Vc
+## Test for xsimd
 ##
-set(OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} )
-set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
-set(HAVE_VC FALSE)
-if (NOT (CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*|riscv64.*|RISCV64.*)" 
-    OR CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)"))
-    find_package(Vc 1.1.0)
-    set_package_properties(Vc PROPERTIES
-        DESCRIPTION "Portable, zero-overhead SIMD library for C++"
-        URL "https://github.com/VcDevel/Vc"
-        TYPE OPTIONAL
-        PURPOSE "Required by the Krita for vectorization")
-    macro_bool_to_01(Vc_FOUND HAVE_VC)
-endif()
-configure_file(config-vc.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-vc.h )
+find_package(xsimd 8.0.5)
+set_package_properties(xsimd PROPERTIES
+    DESCRIPTION "C++ wrappers for SIMD intrinsics"
+    URL "https://github.com/xtensor-stack/xsimd"
+    TYPE OPTIONAL
+    PURPOSE "Required by Krita for vectorization")
+macro_bool_to_01(xsimd_FOUND HAVE_XSIMD)
+configure_file(config-xsimd.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-xsimd.h )
 
-if(HAVE_VC)
-    message(STATUS "Vc found!")
-    set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH}
-                        "${CMAKE_SOURCE_DIR}/cmake/vc")
-
-    include (VcMacros)
-
-    if(Vc_COMPILER_IS_CLANG)
+if(HAVE_XSIMD)
+    if(xsimd_COMPILER_IS_CLANG)
         set(ADDITIONAL_VC_FLAGS "-ffp-contract=fast")
         if(NOT WIN32)
             set(ADDITIONAL_VC_FLAGS "${ADDITIONAL_VC_FLAGS} -fPIC")
@@ -996,15 +984,32 @@ if(HAVE_VC)
         endif()
     endif()
 
-    macro(ko_compile_for_all_implementations_no_scalar _objs _src)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-    endmacro()
+    if (CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm.*|ARM.*)")
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+            xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY NEON)
+        endmacro()
 
-    macro(ko_compile_for_all_implementations _objs _src)
-        vc_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA+BMI2)
-    endmacro()
+        macro(ko_compile_for_all_implementations _objs _src)
+            xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar NEON)
+        endmacro()
+    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64.*|AARCH64.*|arm64.*|ARM64.*)")
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+            xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY NEON64)
+        endmacro()
+
+        macro(ko_compile_for_all_implementations _objs _src)
+            xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar NEON64)
+        endmacro()
+    else()
+        macro(ko_compile_for_all_implementations_no_scalar _objs _src)
+            xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY SSE2 SSSE3 SSE4_1 AVX AVX2+FMA)
+        endmacro()
+
+        macro(ko_compile_for_all_implementations _objs _src)
+            xsimd_compile_for_all_implementations(${_objs} ${_src} FLAGS ${ADDITIONAL_VC_FLAGS} ONLY Scalar SSE2 SSSE3 SSE4_1 AVX AVX2+FMA)
+        endmacro()
+    endif()
 endif()
-set(CMAKE_MODULE_PATH ${OLD_CMAKE_MODULE_PATH} )
 
 ##
 ## Test endianness

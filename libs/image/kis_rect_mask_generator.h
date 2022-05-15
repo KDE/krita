@@ -16,7 +16,7 @@
 #include "kis_base_mask_generator.h"
 
 template<typename V>
-class FastRowProcessor;
+struct FastRowProcessor;
 
 /**
  * Represent, serialize and deserialize a rectangular 8-bit mask.
@@ -43,7 +43,7 @@ private:
     struct Private;
     const QScopedPointer<Private> d;
 
-    friend class FastRowProcessor<KisRectangleMaskGenerator>;
+    friend struct FastRowProcessor<KisRectangleMaskGenerator>;
 };
 
 #endif

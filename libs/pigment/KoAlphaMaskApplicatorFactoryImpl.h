@@ -7,7 +7,7 @@
 #define KOALPHAMASKAPPLICATORFACTORYIMPL_H
 
 #include <KoAlphaMaskApplicatorBase.h>
-#include <KoVcMultiArchBuildSupport.h>
+#include <KoMultiArchBuildSupport.h>
 
 template<typename _channels_type_,
          int _channels_nb_,
@@ -18,7 +18,7 @@ public:
     typedef int ParamType;
     typedef KoAlphaMaskApplicatorBase* ReturnType;
 
-    template<Vc::Implementation _impl>
+    template<typename _impl>
     static KoAlphaMaskApplicatorBase* create(int);
 };
 

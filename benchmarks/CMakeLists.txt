@@ -7,14 +7,6 @@ include_directories(SYSTEM
     ${EIGEN3_INCLUDE_DIR}
 )
 
-
-set(LINK_VC_LIB)
-if(HAVE_VC)
-  include_directories(${Vc_INCLUDE_DIR})
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Vc_DEFINITIONS}")
-  set(LINK_VC_LIB ${Vc_LIBRARIES})
-endif()
-
 macro_add_unittest_definitions()
 
 ########### next target ###############
@@ -76,9 +68,9 @@ target_link_libraries(KisLowMemoryBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  Qt5::Test)
 target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  Qt5::Test)
 
-target_link_libraries(KisCompositionBenchmark  kritaimage  Qt5::Test ${LINK_VC_LIB})
-if(HAVE_VC)
-    set_property(TARGET KisCompositionBenchmark APPEND PROPERTY COMPILE_OPTIONS "${Vc_ARCHITECTURE_FLAGS}")
+target_link_libraries(KisCompositionBenchmark  kritaimage  Qt5::Test kritamultiarch)
+if(HAVE_XSIMD)
+    set_property(TARGET KisCompositionBenchmark APPEND PROPERTY COMPILE_OPTIONS "${xsimd_ARCHITECTURE_FLAGS}")
 endif()
 target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisThumbnailBenchmark  kritaimage  Qt5::Test)

@@ -1705,7 +1705,7 @@ void KisConfig::setLayerThumbnailSize(int size)
 
 int KisConfig::layerTreeIndentation(bool defaultValue) const
 {
-    return (defaultValue ? 100 : m_cfg.readEntry("layerTreeIndentation", 100));
+    return (defaultValue ? 50 : m_cfg.readEntry("layerTreeIndentation", 50));
 }
 
 void KisConfig::setLayerTreeIndentation(int percentage)

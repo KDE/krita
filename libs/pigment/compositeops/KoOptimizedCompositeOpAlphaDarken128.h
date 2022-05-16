@@ -13,10 +13,9 @@
 #include "KoStreamedMath.h"
 #include "KoAlphaDarkenParamsWrapper.h"
 
-
-template<typename channels_type, typename _ParamsWrapper>
+template<typename channels_type, typename ParamsWrapperT>
 struct AlphaDarkenCompositor128 {
-    using ParamsWrapper = _ParamsWrapper;
+    using ParamsWrapper = ParamsWrapperT;
 
     struct Pixel {
         channels_type red;
@@ -50,24 +49,25 @@ struct AlphaDarkenCompositor128 {
         float_v src_alpha;
 
         PixelWrapper<channels_type, _impl> dataWrapper;
-        dataWrapper.read(const_cast<quint8*>(src), src_c1, src_c2, src_c3, src_alpha);
+        dataWrapper.read(src, src_c1, src_c2, src_c3, src_alpha);
 
-        float_v msk_norm_alpha;
-        if (haveMask) {
-            const float_v uint8Rec1(1.0f / 255.0f);
-            float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
-            msk_norm_alpha = mask_vec * uint8Rec1 * src_alpha;
-        }
-        else {
-            msk_norm_alpha = src_alpha;
-        }
+        const float_v msk_norm_alpha = [&](){;
+            if (haveMask) {
+                const float_v uint8Rec1(1.0f / 255.0f);
+                const float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
+                return mask_vec * uint8Rec1 * src_alpha;
+            }
+            else {
+                return src_alpha;
+            }
+        }();
 
         // we don't use directly passed value
         Q_UNUSED(opacity);
 
         // instead we use value calculated by ParamsWrapper
         opacity = oparams.opacity;
-        float_v opacity_vec(opacity);
+        const float_v opacity_vec(opacity);
 
         src_alpha = msk_norm_alpha * opacity_vec;
 
@@ -80,7 +80,7 @@ struct AlphaDarkenCompositor128 {
 
         dataWrapper.read(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
 
-        float_m empty_dst_pixels_mask = dst_alpha == zeroValue;
+        const float_m empty_dst_pixels_mask = dst_alpha == zeroValue;
 
         if (!xsimd::all(empty_dst_pixels_mask)) {
             if (xsimd::none(empty_dst_pixels_mask)) {
@@ -100,26 +100,34 @@ struct AlphaDarkenCompositor128 {
             dst_c3 = src_c3;
         }
 
-        float_v fullFlowAlpha(dst_alpha);
+        const float_v fullFlowAlpha = [&]() {
+            if (oparams.averageOpacity > opacity) {
+                const float_v average_opacity_vec(oparams.averageOpacity);
+                const float_m fullFlowAlpha_mask = average_opacity_vec > dst_alpha;
+                return xsimd::select(fullFlowAlpha_mask,
+                                (average_opacity_vec - src_alpha)
+                                        * (dst_alpha / average_opacity_vec)
+                                    + src_alpha,
+                                dst_alpha);
+            } else {
+                const float_m fullFlowAlpha_mask = opacity_vec > dst_alpha;
+                return xsimd::select(
+                    fullFlowAlpha_mask,
+                    (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha,
+                    dst_alpha);
+            }
+        }();
 
-        if (oparams.averageOpacity > opacity) {
-            float_v average_opacity_vec(oparams.averageOpacity);
-            float_m fullFlowAlpha_mask = average_opacity_vec > dst_alpha;
-            fullFlowAlpha = xsimd::select(fullFlowAlpha_mask,(average_opacity_vec - src_alpha) * (dst_alpha / average_opacity_vec) + src_alpha, fullFlowAlpha);
-        }
-        else {
-            float_m fullFlowAlpha_mask = opacity_vec > dst_alpha;
-            fullFlowAlpha = xsimd::select(fullFlowAlpha_mask, (opacity_vec - dst_alpha) * msk_norm_alpha + dst_alpha, fullFlowAlpha);
-        }
-
-        if (oparams.flow == 1.0) {
-            dst_alpha = fullFlowAlpha;
-        }
-        else {
-            float_v zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(src_alpha, dst_alpha);
-            float_v flow_norm_vec(oparams.flow);
-            dst_alpha = (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
-        }
+        dst_alpha = [&]() {
+            if (oparams.flow == 1.0) {
+                return fullFlowAlpha;
+            }
+            else {
+                const float_v zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(src_alpha, dst_alpha);
+                const float_v flow_norm_vec(oparams.flow);
+                return (fullFlowAlpha - zeroFlowAlpha) * flow_norm_vec + zeroFlowAlpha;
+            }
+        }();
 
         dataWrapper.write(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
     }
@@ -133,8 +141,8 @@ struct AlphaDarkenCompositor128 {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
-        const channels_type *src = reinterpret_cast<const channels_type*>(s);
-        channels_type *dst = reinterpret_cast<channels_type*>(d);
+        const auto *src = reinterpret_cast<const channels_type*>(s);
+        auto *dst = reinterpret_cast<channels_type*>(d);
 
         float dstAlphaNorm = dst[alpha_pos];
         PixelWrapper<channels_type, _impl>::normalizeAlpha(dstAlphaNorm);
@@ -146,35 +154,37 @@ struct AlphaDarkenCompositor128 {
         Q_UNUSED(opacity);
         opacity = oparams.opacity;
 
-        float srcAlphaNorm = mskAlphaNorm * opacity;
+        const float srcAlphaNorm = mskAlphaNorm * opacity;
 
         if (dstAlphaNorm != 0) {
             dst[0] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(dst[0], src[0], srcAlphaNorm);
             dst[1] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(dst[1], src[1], srcAlphaNorm);
             dst[2] = PixelWrapper<channels_type, _impl>::lerpMixedUintFloat(dst[2], src[2], srcAlphaNorm);
         } else {
-            const Pixel *s = reinterpret_cast<const Pixel*>(src);
-            Pixel *d = reinterpret_cast<Pixel*>(dst);
+            const auto *s = reinterpret_cast<const Pixel*>(src);
+            auto *d = reinterpret_cast<Pixel*>(dst);
             *d = *s;
         }
 
-        float flow = oparams.flow;
-        float averageOpacity = oparams.averageOpacity;
+        const float flow = oparams.flow;
+        const float averageOpacity = oparams.averageOpacity;
 
-        float fullFlowAlpha;
+        const float fullFlowAlpha = [&]() {
+            if (averageOpacity > opacity) {
+                return averageOpacity > dstAlphaNorm ? lerp(srcAlphaNorm, averageOpacity, dstAlphaNorm / averageOpacity) : dstAlphaNorm;
+            } else {
+                return opacity > dstAlphaNorm ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm;
+            }
+        }();
 
-        if (averageOpacity > opacity) {
-            fullFlowAlpha = averageOpacity > dstAlphaNorm ? lerp(srcAlphaNorm, averageOpacity, dstAlphaNorm / averageOpacity) : dstAlphaNorm;
-        } else {
-            fullFlowAlpha = opacity > dstAlphaNorm ? lerp(dstAlphaNorm, opacity, mskAlphaNorm) : dstAlphaNorm;
-        }
-
-        if (flow == 1.0f) {
-            dstAlphaNorm = fullFlowAlpha;
-        } else {
-            float zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(srcAlphaNorm, dstAlphaNorm);
-            dstAlphaNorm = lerp(zeroFlowAlpha, fullFlowAlpha, flow);
-        }
+        dstAlphaNorm = [&]() {
+            if (flow == 1.0f) {
+                return fullFlowAlpha;
+            } else {
+                const float zeroFlowAlpha = ParamsWrapper::calculateZeroFlowAlpha(srcAlphaNorm, dstAlphaNorm);
+                return lerp(zeroFlowAlpha, fullFlowAlpha, flow);
+            }
+        }();
 
         PixelWrapper<channels_type, _impl>::denormalizeAlpha(dstAlphaNorm);
         dst[alpha_pos] = PixelWrapper<channels_type, _impl>::roundFloatToUint(dstAlphaNorm);

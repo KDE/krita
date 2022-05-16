@@ -9,6 +9,8 @@
 #ifndef KOOPTIMIZEDCOMPOSITEOPOVER32_H_
 #define KOOPTIMIZEDCOMPOSITEOPOVER32_H_
 
+#include <math.h>
+
 #include "KoCompositeOpBase.h"
 #include "KoCompositeOpRegistry.h"
 #include "KoStreamedMath.h"
@@ -32,23 +34,21 @@ struct OverCompositor32 {
 
         using float_v = typename KoStreamedMath<_impl>::float_v;
 
-        float_v src_alpha;
+        float_v src_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<src_aligned>(src);
         float_v dst_alpha;
 
-        src_alpha = KoStreamedMath<_impl>::template fetch_alpha_32<src_aligned>(src);
+        const bool haveOpacity = opacity != 1.0f;
+        const float_v opacity_norm_vec(opacity);
 
-        bool haveOpacity = opacity != 1.0f;
-        float_v opacity_norm_vec(opacity);
-
-        float_v uint8Max(255.0f);
-        float_v uint8MaxRec1(1.0f / 255.0f);
-        float_v zeroValue(0);
-        float_v oneValue(1);
+        const float_v uint8Max(255.0f);
+        const float_v uint8MaxRec1(1.0f / 255.0f);
+        const float_v zeroValue(0);
+        const float_v oneValue(1);
 
         src_alpha *= opacity_norm_vec;
 
         if (haveMask) {
-            float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
+            const float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
             src_alpha *= mask_vec * uint8MaxRec1;
         }
 
@@ -136,7 +136,7 @@ struct OverCompositor32 {
         if (srcAlpha != 0.0f) {
 
             float dstAlpha = dst[alpha_pos];
-            float srcBlendNorm;
+            float srcBlendNorm = NAN;
 
             if (alphaLocked || dstAlpha == uint8Max) {
                 srcBlendNorm = srcAlpha * uint8Rec1;
@@ -145,7 +145,7 @@ struct OverCompositor32 {
                 srcBlendNorm = 1.0f;
 
                 if (!allChannelsFlag) {
-                    pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+                    auto *d = reinterpret_cast<pixel_type*>(dst);
                     *d = 0; // dstAlpha is already null
                 }
             } else {
@@ -153,14 +153,13 @@ struct OverCompositor32 {
                 // Optimized version of:
                 //     srcBlendNorm = srcAlpha / dstAlpha);
                 srcBlendNorm = OptiDiv<_impl>::divScalar(srcAlpha, dstAlpha);
-
             }
 
             if(allChannelsFlag) {
                 if (srcBlendNorm == 1.0f) {
                     if (!alphaLocked) {
-                        const pixel_type *s = reinterpret_cast<const pixel_type*>(src);
-                        pixel_type *d = reinterpret_cast<pixel_type*>(dst);
+                        const auto *s = reinterpret_cast<const pixel_type*>(src);
+                        auto *d = reinterpret_cast<pixel_type*>(dst);
                         *d = *s;
                     } else {
                         dst[0] = src[0];

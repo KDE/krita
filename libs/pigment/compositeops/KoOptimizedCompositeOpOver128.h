@@ -62,7 +62,7 @@ struct OverCompositor128 {
         float_v src_c3;
 
         PixelWrapper<channels_type, _impl> dataWrapper;
-        dataWrapper.read(const_cast<quint8*>(src), src_c1, src_c2, src_c3, src_alpha);
+        dataWrapper.read(src, src_c1, src_c2, src_c3, src_alpha);
 
         //bool haveOpacity = opacity != 1.0;
         const float_v opacity_norm_vec(opacity);
@@ -106,7 +106,7 @@ struct OverCompositor128 {
              * which will result in NaN values while division.
              */
             new_alpha = dst_alpha + (oneValue - dst_alpha) * src_alpha;
-            float_m mask = (new_alpha == zeroValue);
+            const float_m mask = (new_alpha == zeroValue);
             src_blend = src_alpha / new_alpha;
             src_blend = xsimd::set_zero(src_blend, mask);
         }
@@ -139,8 +139,8 @@ struct OverCompositor128 {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
-        const channels_type *s = reinterpret_cast<const channels_type*>(src);
-        channels_type *d = reinterpret_cast<channels_type*>(dst);
+        const auto *s = reinterpret_cast<const channels_type*>(src);
+        auto *d = reinterpret_cast<channels_type*>(dst);
 
         float srcAlpha = s[alpha_pos];
         PixelWrapper<channels_type, _impl>::normalizeAlpha(srcAlpha);
@@ -163,7 +163,7 @@ struct OverCompositor128 {
 
             float dstAlpha = d[alpha_pos];
             PixelWrapper<channels_type, _impl>::normalizeAlpha(dstAlpha);
-            float srcBlendNorm;
+            float srcBlendNorm = 0.0f;
 
             if (alphaLocked || dstAlpha == 1.0f) {
                 srcBlendNorm = srcAlpha;

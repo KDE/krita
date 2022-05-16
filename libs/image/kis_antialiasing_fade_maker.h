@@ -40,8 +40,8 @@ public:
     {
         m_radius = 1.0;
 
-        qreal xf = qMax(0.0, ((1.0 / xcoeff) - 1.0) * xcoeff);
-        qreal yf = qMax(0.0, ((1.0 / ycoeff) - 1.0) * ycoeff);
+        const qreal xf = qMax(0.0, ((1.0 / xcoeff) - 1.0) * xcoeff);
+        const qreal yf = qMax(0.0, ((1.0 / ycoeff) - 1.0) * ycoeff);
 
         m_antialiasingFadeStart = pow2(0.5 * (xf + yf));
 
@@ -87,12 +87,12 @@ public:
         const float_v vOne(1);
         const float_v vValMax(255.f);
 
-        float_v vRadius(m_radius);
-        float_v vFadeStartValue(m_fadeStartValue);
-        float_v vAntialiasingFadeStart(m_antialiasingFadeStart);
-        float_v vAntialiasingFadeCoeff(m_antialiasingFadeCoeff);
+        const float_v vRadius(m_radius);
+        const float_v vFadeStartValue(m_fadeStartValue);
+        const float_v vAntialiasingFadeStart(m_antialiasingFadeStart);
+        const float_v vAntialiasingFadeCoeff(m_antialiasingFadeCoeff);
 
-        float_m outsideMask = dist > vRadius;
+        const float_m outsideMask = dist > vRadius;
         dist = xsimd::set_one(dist, outsideMask);
 
         float_m fadeStartMask(false);
@@ -208,11 +208,11 @@ public:
         using float_v = xsimd::batch<float, A>;
         using float_m = typename float_v::batch_bool_type;
 
-        float_v vXLimit(m_xLimit);
-        float_v vYLimit(m_yLimit);
+        const float_v vXLimit(m_xLimit);
+        const float_v vYLimit(m_yLimit);
 
-        float_m outXMask = xsimd::abs(xr) > vXLimit;
-        float_m outYMask = xsimd::abs(yr) > vYLimit;
+        const float_m outXMask = xsimd::abs(xr) > vXLimit;
+        const float_m outYMask = xsimd::abs(yr) > vYLimit;
 
         return (outXMask | outYMask);
     }
@@ -227,17 +227,18 @@ public:
         const float_v vValMax(255.f);
 
         if (m_enableAntialiasing) {
-            float_v vXFadeLimitStart(m_xFadeLimitStart);
-            float_v vYFadeLimitStart(m_yFadeLimitStart);
-            float_v vXFadeCoeff(m_xFadeCoeff);
-            float_v vYFadeCoeff(m_yFadeCoeff);
+            const float_v vXFadeLimitStart(m_xFadeLimitStart);
+            const float_v vYFadeLimitStart(m_yFadeLimitStart);
+            const float_v vXFadeCoeff(m_xFadeCoeff);
+            const float_v vYFadeCoeff(m_yFadeCoeff);
 
-            float_v xra = xsimd::abs(xr);
+            const float_v xra = xsimd::abs(xr);
             float_m fadeXStartMask(false);
             float_m fadeYStartMask(false);
 
-            float_v fadeValue{};
-            float_v vBaseValue = xsimd::truncate_to_type<uint16_t>(vValue);
+            float_v fadeValue(0);
+            const float_v vBaseValue =
+                xsimd::truncate_to_type<uint16_t>(vValue);
 
             fadeXStartMask = xra > vXFadeLimitStart;
             fadeXStartMask = (fadeXStartMask ^ excludeMask) & fadeXStartMask;

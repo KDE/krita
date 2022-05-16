@@ -46,15 +46,17 @@ struct CopyCompositor128 {
         float_v src_c3;
 
         PixelWrapper<channels_type, _impl> dataWrapper;
-        dataWrapper.read(const_cast<quint8*>(src), src_c1, src_c2, src_c3, src_alpha);
+        dataWrapper.read(src, src_c1, src_c2, src_c3, src_alpha);
 
-        float_v opacity_norm_vec(opacity);
-
-        if (haveMask) {
-            const float_v uint8MaxRec1(1.0f / 255.0f);
-            float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
-            opacity_norm_vec *= mask_vec * uint8MaxRec1;
-        }
+        const float_v opacity_norm_vec = [&]() {
+            float_v o(opacity);
+            if (haveMask) {
+                const float_v uint8MaxRec1(1.0f / 255.0f);
+                const float_v mask_vec = KoStreamedMath<_impl>::fetch_mask_8(mask);
+                o *= mask_vec * uint8MaxRec1;
+            }
+            return o;
+        }();
 
         const float_v zeroValue(0.0f);
         const float_v oneValue(1.0f);
@@ -80,7 +82,7 @@ struct CopyCompositor128 {
 
             dataWrapper.read(dst, dst_c1, dst_c2, dst_c3, dst_alpha);
 
-            float_v newAlpha = dst_alpha + opacity_norm_vec * (src_alpha - dst_alpha);
+            const float_v newAlpha = dst_alpha + opacity_norm_vec * (src_alpha - dst_alpha);
 
             if (xsimd::all(newAlpha == zeroValue)) {
                 dataWrapper.clearPixels(dst);
@@ -113,7 +115,7 @@ struct CopyCompositor128 {
                     dst_c2 /= newAlpha;
                     dst_c3 /= newAlpha;
 
-                    float_v unitValue(KoColorSpaceMathsTraits<channels_type>::unitValue);
+                    const float_v unitValue(KoColorSpaceMathsTraits<channels_type>::unitValue);
 
                     dst_c1 = xsimd::min(dst_c1, unitValue);
                     dst_c2 = xsimd::min(dst_c2, unitValue);
@@ -139,8 +141,8 @@ struct CopyCompositor128 {
         using namespace Arithmetic;
         const qint32 alpha_pos = 3;
 
-        const channels_type *s = reinterpret_cast<const channels_type*>(src);
-        channels_type *d = reinterpret_cast<channels_type*>(dst);
+        const auto *s = reinterpret_cast<const channels_type*>(src);
+        auto *d = reinterpret_cast<channels_type*>(dst);
 
         const channels_type nativeOriginalSrcAlpha = s[alpha_pos];
 

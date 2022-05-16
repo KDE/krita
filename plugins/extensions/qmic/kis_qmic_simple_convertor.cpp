@@ -437,7 +437,7 @@ void KisQmicSimpleConvertor::convertFromGmicFast(const gmic_image<float>& gmicIm
     delete [] convertedTile;
     delete gmicToDstPixelFormat;
 
-    dst->crop(dst->x(), dst->y(), static_cast<qint32>(width), static_cast<qint32>(height));
+    dst->crop(x, y, static_cast<qint32>(width), static_cast<qint32>(height));
 }
 
 

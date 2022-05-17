@@ -11,6 +11,9 @@
 #include <raqm.h>
 #include <fontconfig/fontconfig.h>
 #include FT_COLOR_H
+#include <hb.h>
+#include <hb-ft.h>
+#include <hb-ot.h>
 
 #include <klocalizedstring.h>
 
@@ -125,9 +128,13 @@ public:
                         bool isHorizontal);
     void applyTextPath(const KoShape *rootShape,
                          QVector<CharacterResult> &result, bool isHorizontal);
+    void computeFontMetrics(const KoShape *rootShape, QMap<int, int> parentBaselineTable,
+                            QPointF superScript, QPointF subScript, QVector<CharacterResult> &result,
+                            int &currentIndex, qreal res, bool isHorizontal);
     void paintPaths(QPainter &painter, KoShapePaintingContext &paintContext,
                     QPainterPath outlineRect,
                     const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex);
+
 };
 
 KoSvgTextShape::KoSvgTextShape()
@@ -471,6 +478,7 @@ void KoSvgTextShape::relayout() const
                 raqm_add_font_feature(layout, feature.toUtf8(), feature.toUtf8().size());
             }
             KoSvgText::AutoValue letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoValue>();
+
             if (!letterSpacing.isAuto) {
                 raqm_set_letter_spacing_range(layout, letterSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
             }
@@ -478,9 +486,6 @@ void KoSvgTextShape::relayout() const
             if (!wordSpacing.isAuto) {
                 raqm_set_word_spacing_range(layout, wordSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
             }
-
-            QVector<int> familyValues(text.size());
-            familyValues.fill(-1);
 
             for (int i = 0; i < lengths.size(); i++ )  {
                 length = lengths.at(i);
@@ -557,31 +562,6 @@ void KoSvgTextShape::relayout() const
         // TODO: Handle glyph clusters better...
         charResult.image = d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph);
 
-        //if (glyph.isEmpty()) {
-            bool usePixmap = !charResult.image.isNull() && charResult.path.isEmpty();
-
-            if (usePixmap) {
-                QPointF topLeft(glyphs[g].ftface->glyph->bitmap_left*64,
-                                (glyphs[g].ftface->glyph->bitmap_top - charResult.image.size().height())*64);
-                charResult.boundingBox = QRectF(topLeft, charResult.image.size()*64);
-            } else if (isHorizontal) {
-                charResult.boundingBox = QRectF(0,
-                                                glyphs[g].ftface->size->metrics.descender,
-                                                glyphs[g].x_advance,
-                                                (glyphs[g].ftface->size->metrics.ascender
-                                                 - glyphs[g].ftface->size->metrics.descender));
-            } else {
-                charResult.boundingBox = QRectF(-(glyphs[g].ftface->size->metrics.height *0.5),
-                                                0,
-                                                glyphs[g].ftface->size->metrics.height,
-                                                -(glyphs[g].ftface->glyph->metrics.vertBearingY
-                                                + glyphs[g].ftface->glyph->metrics.height));
-            }
-            charResult.boundingBox = ftTF.mapRect(charResult.boundingBox);
-        //} else {
-        //    charResult.boundingBox = charResult.path.boundingRect();
-        //}
-
         // Retreive CPAL/COLR V0 color layers, directly based off the sample code in the freetype docs.
         FT_UInt layerGlyphIndex = 0;
         FT_UInt layerColorIndex = 0;
@@ -637,6 +617,29 @@ void KoSvgTextShape::relayout() const
         charResult.middle = false;
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
         charResult.advance += ftTF.map(advance);
+
+        bool usePixmap = !charResult.image.isNull() && charResult.path.isEmpty();
+
+        if (usePixmap) {
+            QPointF topLeft(glyphs[g].ftface->glyph->bitmap_left*64,
+                            (glyphs[g].ftface->glyph->bitmap_top - charResult.image.size().height())*64);
+            charResult.boundingBox = QRectF(topLeft, charResult.image.size()*64);
+        } else if (isHorizontal) {
+            charResult.boundingBox = QRectF(0,
+                                            glyphs[g].ftface->size->metrics.descender,
+                                            ftTF.inverted().map(charResult.advance).x(),
+                                            (glyphs[g].ftface->size->metrics.ascender
+                                             - glyphs[g].ftface->size->metrics.descender));
+        } else {
+            charResult.boundingBox = QRectF(-(glyphs[g].ftface->size->metrics.height *0.5),
+                                            0,
+                                            glyphs[g].ftface->size->metrics.height,
+                                            -(glyphs[g].ftface->glyph->metrics.vertBearingY
+                                              + glyphs[g].ftface->glyph->metrics.height));
+        }
+        charResult.boundingBox = ftTF.mapRect(charResult.boundingBox);
+
+        charResult.boundingBox |= charResult.path.boundingRect();
 
         totalAdvanceFTFontCoordinates += advance;
         charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
@@ -703,13 +706,16 @@ void KoSvgTextShape::relayout() const
     // we're done with raqm for now.
     raqm_destroy(layout);
 
+    // Handle baseline alignment.
+    globalIndex = 0;
+    d->computeFontMetrics(this, QMap<int, int>(), QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
 
     // This is the best point to start applying linebreaking and text-wrapping.
     // If we're doing text-wrapping we should skip the other positioning steps of the algorithm.
 
     // 4. Adjust positions: dx, dy
-
     QPointF shift = QPointF();
+
     for (int i = 0; i < result.size(); i++) {
         if (addressableIndices.contains(i)) {
             KoSvgText::CharTransformation transform = resolvedTransforms[i];
@@ -751,6 +757,7 @@ void KoSvgTextShape::relayout() const
                 shift.setY(*transform.yPos + (d - charResult.finalPosition.y()));
             }
             charResult.finalPosition += shift;
+            charResult.anchored_chunk = transform.startsNewChunk();
 
             /*
             if (setNextAnchor) {
@@ -1100,6 +1107,168 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
     currentIndex = j;
 }
 
+/**
+ * @brief KoSvgTextShape::Private::computeFontMetrics
+ * This function handles computing the baselineOffsets
+ */
+void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
+                                                 QMap<int, int> parentBaselineTable, QPointF superScript, QPointF subScript, QVector<CharacterResult> &result,
+                                                 int &currentIndex, qreal res, bool isHorizontal) {
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    QMap<int, int> baselineTable;
+    int i = currentIndex;
+    int j = qMin(i + chunkShape->layoutInterface()->numChars(), result.size());
+
+    KoSvgTextProperties properties = chunkShape->textProperties();
+
+    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
+    if (baselineAdjust == KoSvgText::BaselineAuto) {
+        baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
+    }
+    qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+    qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
+    QPointF baselineShiftTotal;
+    KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());
+    //TODO: only apply if the current run is horizontal?
+    if (baselineShiftMode == KoSvgText::ShiftSuper) {
+         if (isHorizontal) {
+            baselineShiftTotal = superScript;
+         }
+    } else if (baselineShiftMode == KoSvgText::ShiftSub) {
+        if (isHorizontal) {
+
+            baselineShiftTotal = subScript;
+        }
+    } else if (baselineShiftMode == KoSvgText::ShiftPercentage) {
+        if (isHorizontal) {
+            baselineShiftTotal = QPointF(0, baselineShift);
+        } else {
+            baselineShiftTotal = QPointF(baselineShift, 0);
+        }
+    }
+
+    QVector<int> lengths;
+    const QFont::Style style =
+        QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+    QVector<FT_Face> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+                                                                            lengths,
+                                                                            QString(),
+                                                                            fontSize,
+                                                                            properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+                                                                            properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+                                                                            style != QFont::StyleNormal);
+    KoFontRegistery::instance()->configureFaces(faces, fontSize, res, res, properties.fontAxisSettings());
+    hb_font_t *font = hb_ft_font_create_referenced (faces.first());
+
+    hb_direction_t dir = HB_DIRECTION_LTR;
+    if (!isHorizontal) {
+        dir = HB_DIRECTION_TTB;
+    }
+    hb_script_t script = HB_SCRIPT_UNKNOWN;
+
+    hb_position_t baseline = 0;
+    if (hb_version_atleast(4, 0, 0)) {
+        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
+                                                dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
+        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
+                                                dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
+        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+                                                dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineHanging, baseline);
+        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
+                                                dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineCentral, baseline);
+        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
+                                                dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
+        if (isHorizontal) {
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+            baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+
+        } else {
+            baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+        }
+        hb_position_t baseline2 = 0;
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
+        superScript = QPointF(baseline * (-1.0/64) * (72./res), baseline2 * (-1.0/64) * (72./res));
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
+        subScript = QPointF(baseline * (-1.0/64) * (72./res), baseline2 * (-1.0/64) * (72./res));
+    } else {
+        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
+                                  dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
+        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
+                                  dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
+        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+                                  dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineHanging, baseline);
+        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
+                                  dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineCentral, baseline);
+        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
+                                  dir, script, HB_TAG_NONE, &baseline);
+        baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
+        if (isHorizontal) {
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+            baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+        } else {
+            baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
+            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+        }
+        hb_position_t baseline2 = 0;
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
+        superScript = QPointF(baseline * (1.0/64) * (72./res), baseline2 * (-1.0/64) * (72./res));
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
+        subScript = QPointF(baseline * (1.0/64) * (72./res), baseline2 * (1.0/64) * (72./res));
+    }
+
+
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        computeFontMetrics(child, baselineTable, superScript, subScript, result, currentIndex, res, isHorizontal);
+    }
+
+    int offset = parentBaselineTable.value(baselineAdjust) - baselineTable.value(baselineAdjust);
+    QPointF shift;
+    if (isHorizontal) {
+        shift = QPointF(0, offset * (-1.0/64) * (72./res));
+    } else {
+        shift = QPointF(offset * (1.0/64) * (72./res), 0);
+    }
+    shift += baselineShiftTotal;
+
+    for (int k = i; k < j; k++) {
+        CharacterResult cr = result[k];
+        cr.cssPosition += shift;
+        result[k] = cr;
+    }
+
+    currentIndex = j;
+}
+
 void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal)
 {
     QMap<int, int> typographicToIndex;
@@ -1340,7 +1509,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                 tf.reset();
                 tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
-                /* Debug
+                //* Debug
                 painter.save();
                 painter.setBrush(Qt::transparent);
                 QPen pen(Qt::cyan);
@@ -1350,7 +1519,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                 painter.setPen(Qt::red);
                 painter.drawPoint(result.at(i).finalPosition);
                 painter.restore();
-                */
+                //*/
                 /**
                  * There's an annoying problem here that officially speaking
                  * the chunks need to be unified into one single path before

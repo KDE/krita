@@ -579,24 +579,6 @@ QStringList fontVariantOpentypeTags(FontVariantFeature feature)
     }
 }
 
-QString opentypeBaselineTag(Baseline base)
-{
-    switch (base) {
-    case BaselineAlphabetic:
-        return "romn";
-    case BaselineHanging:
-        return "hang";
-    case BaselineMathematical:
-        return "math";
-    case BaselineIdeographic: //Ideagraphic under.
-        return "idea";
-    case BaselineCentral:
-        return "Icfc"; // unique to harfbuzz, this is center of icfb and icft.
-    default:
-        return QString();
-    }
-}
-
 }
 
 

@@ -72,21 +72,13 @@ QVector<FT_Face> KoFontRegistery::facesForCSSValues(QStringList families,
     lengths.clear();
 
     if (text.isEmpty()) {
-        for (QString family: families) {
-            for (int j = 0; j < fontSet->nfont; j++) {
-                QString fontFileName;
-                if (FcPatternGetString(fontSet->fonts[j], FC_FAMILY, 0, &fileValue) == FcResultMatch) {
-                    if (family == QString(reinterpret_cast<char*>(fileValue))) {
-                        if (FcPatternGetString(fontSet->fonts[j], FC_FILE, 0, &fileValue) == FcResultMatch) {
-                            fontFileName = QString(reinterpret_cast<char*>(fileValue));
-
-                            fontFileNames.append(fontFileName);
-                            lengths.append(0);
-
-                            break;
-                        }
-                    }
-                }
+        for (int j = 0; j < fontSet->nfont; j++) {
+            QString fontFileName;
+            if (FcPatternGetString(fontSet->fonts[j], FC_FILE, 0, &fileValue) == FcResultMatch) {
+                fontFileName = QString(reinterpret_cast<char*>(fileValue));
+                fontFileNames.append(fontFileName);
+                lengths.append(0);
+                break;
             }
         }
     } else {

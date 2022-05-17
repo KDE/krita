@@ -31,7 +31,7 @@ public:
 
     /**
      * @brief facesForCSSValues
-     * This selects fonts with fontconfig using the given
+     * This selects a font with fontconfig using the given
      * values. If "text" is not empty, it will try to select
      * fallback fonts as well.
      * 

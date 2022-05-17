@@ -208,7 +208,6 @@ TextAnchor parseTextAnchor(const QString &value);
 
 Baseline parseBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
-QString opentypeBaselineTag(Baseline base);
 
 LengthAdjust parseLengthAdjust(const QString &value);
 

@@ -23,14 +23,18 @@
 #include <QGuiApplication>
 #include <QStyle>
 #include <QStyleFactory>
+#include <QTextCodec>
 
 #ifdef Q_OS_WIN
 #include "KisWindowsPackageUtils.h"
+#include <windows.h>
 #endif
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroidExtras/QtAndroid>
 #endif
+
+#include <clocale>
 
 Q_GLOBAL_STATIC(KisUsageLogger, s_instance)
 
@@ -104,7 +108,6 @@ QString KisUsageLogger::basicSystemInfo()
         }
     }
 #endif
-    systemInfo.append("\n Languages: ").append(KLocalizedString::languages().join(", "));
     systemInfo.append("\n Hidpi: ").append(QCoreApplication::testAttribute(Qt::AA_EnableHighDpiScaling) ? "true" : "false");
     systemInfo.append("\n\n");
 
@@ -137,6 +140,49 @@ QString KisUsageLogger::basicSystemInfo()
     systemInfo.append("\n\n");
 
     return systemInfo;
+}
+
+void KisUsageLogger::writeLocaleSysInfo()
+{
+    if (!s_instance->d->active) {
+        return;
+    }
+    QString systemInfo;
+    systemInfo.append("Locale\n");
+    systemInfo.append("\n  Languages: ").append(KLocalizedString::languages().join(", "));
+    systemInfo.append("\n  C locale: ").append(std::setlocale(LC_ALL, nullptr));
+    systemInfo.append("\n  QLocale current: ").append(QLocale().bcp47Name());
+    systemInfo.append("\n  QLocale system: ").append(QLocale::system().bcp47Name());
+    const QTextCodec *codecForLocale = QTextCodec::codecForLocale();
+    systemInfo.append("\n  QTextCodec for locale: ").append(codecForLocale->name());
+#ifdef Q_OS_WIN
+    {
+        systemInfo.append("\n  Process ACP: ");
+        CPINFOEXW cpInfo {};
+        if (GetCPInfoExW(CP_ACP, 0, &cpInfo)) {
+            systemInfo.append(QString::fromWCharArray(cpInfo.CodePageName));
+        } else {
+            // Shouldn't happen, but just in case
+            systemInfo.append(QString::number(GetACP()));
+        }
+        wchar_t lcData[2];
+        int result = GetLocaleInfoEx(LOCALE_NAME_SYSTEM_DEFAULT, LOCALE_IDEFAULTANSICODEPAGE | LOCALE_RETURN_NUMBER, lcData, sizeof(lcData) / sizeof(lcData[0]));
+        if (result == 2) {
+            systemInfo.append("\n  System locale default ACP: ");
+            int systemACP = lcData[1] << 16 | lcData[0];
+            if (systemACP == CP_ACP) {
+                systemInfo.append("N/A");
+            } else if (GetCPInfoExW(systemACP, 0, &cpInfo)) {
+                systemInfo.append(QString::fromWCharArray(cpInfo.CodePageName));
+            } else {
+                // Shouldn't happen, but just in case
+                systemInfo.append(QString::number(systemACP));
+            }
+        }
+    }
+#endif
+    systemInfo.append("\n\n");
+    s_instance->d->sysInfoFile.write(systemInfo.toUtf8());
 }
 
 void KisUsageLogger::close()

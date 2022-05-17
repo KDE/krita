@@ -496,6 +496,8 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
 
+    KisUsageLogger::writeLocaleSysInfo();
+
 #if defined Q_OS_WIN && defined USE_QT_TABLET_WINDOWS && defined QT_HAS_WINTAB_SWITCH
     const bool forceWinTab = !KisConfig::useWin8PointerInputNoApp(&kritarc);
     QCoreApplication::setAttribute(Qt::AA_MSWindowsUseWinTabAPI, forceWinTab);

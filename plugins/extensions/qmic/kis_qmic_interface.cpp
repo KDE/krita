@@ -79,15 +79,15 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
 
     for (auto &node : *nodes) {
          if (node && node->paintDevice()) {
-            QRect cropRect;
-
             KisSelectionSP selection = p->m_viewManager->image()->globalSelection();
 
-            if (selection) {
-                cropRect = selection->selectedExactRect();
-            } else {
-                cropRect = node->exactBounds();
-            }
+            QRect cropRect = [&]() {
+                if (selection) {
+                    return selection->selectedExactRect();
+                } else {
+                    return node->exactBounds();
+                }
+            }();
 
             dbgPlugins << "Converting node" << node->name() << cropRect;
 
@@ -113,12 +113,18 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
                 QMutexLocker lock(&m->m_mutex);
 
                 gmic_image<float> img;
-                img.assign(resultRect.width(), resultRect.height(), 1, 4);
+                img.assign(static_cast<unsigned int>(resultRect.width()),
+                           static_cast<unsigned int>(resultRect.height()),
+                           1,
+                           4);
 
                 img._data = m->m_data;
                 img._is_shared = true;
 
-                KisQmicSimpleConvertor::convertToGmicImageFast(node->paintDevice(), &img, resultRect);
+                KisQmicSimpleConvertor::convertToGmicImageFast(
+                    node->paintDevice(),
+                    img,
+                    resultRect);
             }
 
             message << m;
@@ -158,26 +164,40 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
 
     for (const auto &image : layers) {
         QString layerName = image->m_layerName;
-        int spectrum = image->m_spectrum;
-        int width = image->m_width;
-        int height = image->m_height;
+        const auto spectrum = image->m_spectrum;
+        const auto width = image->m_width;
+        const auto height = image->m_height;
 
-        dbgPlugins << "Received image: " << (quintptr)image.data() << layerName << width << height;
+        dbgPlugins << "Received image: " << static_cast<void *>(image.data())
+                   << layerName << width << height;
 
         gmic_image<float> *gimg = nullptr;
 
         {
             QMutexLocker lock(&image->m_mutex);
 
-            dbgPlugins << "Memory segment" << (quintptr)image.data() << image->size() << (quintptr)image->constData() << (quintptr)image->m_data;
+            dbgPlugins << "Memory segment" << static_cast<void *>(image.data())
+                       << image->size()
+                       << static_cast<const void *>(image->constData())
+                       << static_cast<void *>(image->m_data);
             gimg = new gmic_image<float>();
-            gimg->assign(width, height, 1, spectrum);
+            gimg->assign(static_cast<unsigned int>(width),
+                         static_cast<unsigned int>(height),
+                         1,
+                         static_cast<unsigned int>(spectrum));
             gimg->name = layerName;
 
-            gimg->_data = new float[width * height * spectrum * sizeof(float)];
-            dbgPlugins << "width" << width << "height" << height << "size" << width * height * spectrum * sizeof(float) << "shared memory size"
-                       << image->size();
-            memcpy(gimg->_data, image->constData(), width * height * spectrum * sizeof(float));
+            gimg->_data =
+                new float[static_cast<size_t>(width * height * spectrum)
+                          * sizeof(float)];
+            dbgPlugins << "width" << width << "height" << height << "size"
+                       << static_cast<size_t>(width * height * spectrum)
+                    * sizeof(float)
+                       << "shared memory size" << image->size();
+            memcpy(gimg->_data,
+                   image->constData(),
+                   static_cast<size_t>(width * height * spectrum)
+                       * sizeof(float));
 
             dbgPlugins << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
         }

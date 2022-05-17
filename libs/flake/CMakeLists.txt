@@ -243,6 +243,7 @@ target_link_libraries(kritaflake
         Raqm::Raqm
         Freetype::Freetype
         Fontconfig::Fontconfig
+        HarfBuzz::HarfBuzz
 )
 
 set_target_properties(kritaflake PROPERTIES

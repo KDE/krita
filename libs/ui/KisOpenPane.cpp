@@ -177,8 +177,8 @@ void KisOpenPane::openFileDialog()
 
 void KisOpenPane::slotOpenTemplate(const QUrl &url)
 {
-    accept();
     emit openTemplate(url);
+    accept();
 }
 
 void KisOpenPane::initTemplates(const QString& templatesResourcePath)

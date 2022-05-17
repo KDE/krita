@@ -28,8 +28,9 @@ struct KisPaintOpPresetsChooserPopup::Private
 {
 public:
     Ui_WdgPaintOpPresets uiWdgPaintOpPresets;
-    bool firstShown;
-    KisPopupButton *viewModeButton;
+    bool firstShown {true};
+    QSlider* iconSizeSlider {nullptr};
+    KisPopupButton *viewModeButton {nullptr};
 };
 
 KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
@@ -64,7 +65,7 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
     iconSizeSlider->setMinimumHeight(20);
     iconSizeSlider->setMinimumWidth(40);
     iconSizeSlider->setTickInterval(10);
-
+    m_d->iconSizeSlider = iconSizeSlider;
 
     QWidgetAction *sliderAction= new QWidgetAction(this);
     sliderAction->setDefaultWidget(iconSizeSlider);
@@ -89,13 +90,11 @@ KisPaintOpPresetsChooserPopup::KisPaintOpPresetsChooserPopup(QWidget * parent)
             this, SIGNAL(resourceClicked(KoResourceSP ))) ;
 
 
-    connect (iconSizeSlider, SIGNAL(sliderMoved(int)),
-             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setIconSize(int)));
-    connect( iconSizeSlider, SIGNAL(sliderReleased()),
-             m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(saveIconSize()));
-
-
-    m_d->firstShown = true;
+    connect(iconSizeSlider, SIGNAL(valueChanged(int)),
+            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(setIconSize(int)));
+    connect(menu, SIGNAL(aboutToHide()),
+            m_d->uiWdgPaintOpPresets.wdgPresetChooser, SLOT(saveIconSize()));
+    connect(m_d->viewModeButton, SIGNAL(pressed()), this, SLOT(slotUpdateMenu()));
 
 }
 
@@ -114,6 +113,12 @@ void KisPaintOpPresetsChooserPopup::slotDetailMode()
 {
     KisConfig(false).setPresetChooserViewMode(KisPresetChooser::DETAIL);
     m_d->uiWdgPaintOpPresets.wdgPresetChooser->setViewMode(KisPresetChooser::DETAIL);
+}
+
+void KisPaintOpPresetsChooserPopup::slotUpdateMenu()
+{
+    QSignalBlocker b(m_d->iconSizeSlider);
+    m_d->iconSizeSlider->setValue(KisConfig(true).presetIconSize());
 }
 
 void KisPaintOpPresetsChooserPopup::paintEvent(QPaintEvent* event)

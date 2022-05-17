@@ -344,8 +344,9 @@ int KisPresetChooser::iconSize()
 void KisPresetChooser::saveIconSize()
 {
     // save icon size
-    KisConfig cfg(false);
-    cfg.setPresetIconSize(iconSize());
+    if (KisConfig(true).presetIconSize() != iconSize()) {
+        KisConfig(false).setPresetIconSize(iconSize());
+    }
 }
 
 void KisPresetChooser::slotScrollerStateChanged(QScroller::State state)

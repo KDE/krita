@@ -492,7 +492,7 @@ template <typename T> float distance_impl(const MaskedImage& my, int x, int y, c
     }
 
     // in HDR color spaces the value of the cnannel may become bigger than the unitValue
-    return qMin(1.0f, dsq / (pow2((float)KoColorSpaceMathsTraits<T>::unitValue) / MAX_DIST ));
+    return qMin((float)(nchannels * MAX_DIST), dsq / (pow2((float)KoColorSpaceMathsTraits<T>::unitValue) / MAX_DIST ));
 }
 
 

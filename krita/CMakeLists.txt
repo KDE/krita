@@ -156,8 +156,16 @@ install(DIRECTORY DESTINATION ${DATA_INSTALL_DIR}/krita/shortcuts)
 
 if (WIN32)
     configure_file(versioninfo.rc.in ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+    configure_file(krita.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest)
+    # CMake does not know how to embed manifest on mingw, so we create our own RC file to be included
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc "1 24 \"krita.exe.manifest\"\n")
 
-    add_executable(krita_windows_stub_exe windows_stub_main.cpp ${krita_windows_stub_ICONS_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+    add_executable(krita_windows_stub_exe
+        windows_stub_main.cpp
+        ${krita_windows_stub_ICONS_SRCS}
+        ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc
+        ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc
+    )
     target_link_libraries(krita_windows_stub_exe PRIVATE krita Qt5::WinMain)
     set_target_properties(krita_windows_stub_exe
         PROPERTIES
@@ -168,7 +176,11 @@ if (WIN32)
     endif()
     install(TARGETS krita_windows_stub_exe ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-    add_executable(krita_windows_stub_com windows_stub_main.cpp ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc)
+    add_executable(krita_windows_stub_com
+        windows_stub_main.cpp
+        ${CMAKE_CURRENT_BINARY_DIR}/versioninfo.rc
+        ${CMAKE_CURRENT_BINARY_DIR}/krita.exe.manifest.rc
+    )
     target_link_libraries(krita_windows_stub_com PRIVATE krita)
     set_target_properties(krita_windows_stub_com
         PROPERTIES

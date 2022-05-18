@@ -124,6 +124,7 @@ public:
 
     //MLT PUSH CONSUMER
     QScopedPointer<Mlt::Consumer> pullConsumer;
+
     //MLT PULL CONSUMER
     QScopedPointer<Mlt::PushConsumer> pushConsumer;
 
@@ -170,9 +171,11 @@ public:
         }
 
         if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
+            m_d->pushConsumer->set("volume", m_d->activeCanvasAnimationState()->currentVolume());
             m_d->pushConsumer->start();
         } else {
             m_d->pullConsumer->connect_producer(*m_d->activeProducer());
+            m_d->pullConsumer->set("volume", m_d->activeCanvasAnimationState()->currentVolume());
             m_d->pullConsumer->start();
         }
 
@@ -185,7 +188,6 @@ public:
         if (m_d->activeCanvas && m_d->canvasProducers.contains(m_d->activeCanvas)) {
             if ( m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame() >= 0) {
                 m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame());
-                //KIS_ASSERT(m_d->canvasProducers[m_d->activeCanvas]->frame() == m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame());
             }
         }
 
@@ -552,6 +554,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
         KIS_ASSERT(m_d->activeCanvasAnimationState());
 
         connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
+            Q_UNUSED(state); // We don't need the state yet -- we just want to stop and resume playback according to new state info.
             QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[m_d->activeCanvas];
             StopAndResume callbackStopResume(m_d.data());
         });
@@ -559,6 +562,8 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
         connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigPlaybackMediaChanged, this, [this](){
             setupProducer(m_d->activeCanvasAnimationState()->mediaInfo());
         });
+
+        connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigAudioLevelChanged, this, &KisPlaybackEngine::setAudioVolume);
 
         auto image = m_d->activeCanvas->image();
 
@@ -579,6 +584,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 
         setupProducer(m_d->activeCanvasAnimationState()->mediaInfo());
     }
+
 }
 
 void KisPlaybackEngine::unsetCanvas() {
@@ -590,6 +596,12 @@ void KisPlaybackEngine::throttledShowFrame(const int frame)
     if (m_d->activeCanvas && m_d->activePlaybackMode() == PLAYBACK_PULL) {
         m_d->activeCanvasAnimationState()->showFrame(frame);
     }
+}
+
+void KisPlaybackEngine::setAudioVolume(qreal volumeNormalized)
+{
+    m_d->pullConsumer->set("volume", volumeNormalized);
+    m_d->pushConsumer->set("volume", volumeNormalized);
 }
 
 void KisPlaybackEngine::setPlaybackSpeedPercent(int value)

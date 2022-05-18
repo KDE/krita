@@ -401,6 +401,9 @@ public:
     QVector<QFileInfo> getAudioTracks();
     void setAudioTracks(QVector<QFileInfo> f);
 
+    void setAudioLevel(qreal level);
+    qreal getAudioLevel();
+
     const KisMirrorAxisConfig& mirrorAxisConfig() const;
     void setMirrorAxisConfig(const KisMirrorAxisConfig& config);
 
@@ -502,6 +505,8 @@ Q_SIGNALS:
     void sigStoryboardCommentListChanged();
 
     void sigAudioTracksChanged();
+
+    void sigAudioLevelChanged(qreal level);
 
 private Q_SLOTS:
     void finishExportInBackground();

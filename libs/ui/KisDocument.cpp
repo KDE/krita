@@ -387,6 +387,7 @@ public:
     QVector<StoryboardComment> m_storyboardCommentList;
 
     QVector<QFileInfo> audioTracks;
+    qreal audioLevel = 1.0;
 
     QColor globalAssistantsColor;
 
@@ -2346,7 +2347,16 @@ void KisDocument::setAudioTracks(QVector<QFileInfo> f)
     emit sigAudioTracksChanged();
 }
 
+void KisDocument::setAudioLevel(qreal level)
+{
+    d->audioLevel = level;
+    emit sigAudioLevelChanged(level);
+}
 
+qreal KisDocument::getAudioLevel()
+{
+    return d->audioLevel;
+}
 
 const KisGuidesConfig& KisDocument::guidesConfig() const
 {

@@ -171,17 +171,6 @@ Q_SIGNALS:
     void sigFramerateChanged();
     void sigPlaybackRangeChanged();
 
-    /**
-     * Emitted when the audio channel of the document is changed
-     */
-    void sigAudioChannelChanged();
-
-    /**
-     * Emitted when audion volume changes. Please note that it doesn't change
-     * when you mute the channel! When muting, sigAudioChannelChanged() is used instead!
-     */
-    void sigAudioVolumeChanged();
-
     void sigKeyframeAdded(const KisKeyframeChannel* channel, int time);
     void sigKeyframeRemoved(const KisKeyframeChannel* channel, int time);
 

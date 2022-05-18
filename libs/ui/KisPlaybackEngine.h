@@ -81,6 +81,12 @@ protected Q_SLOTS:
      */
     void throttledShowFrame(const int frame);
 
+    /**
+     * @brief setAudioVolume
+     * @param volume (normalized)
+     */
+    void setAudioVolume(qreal volumeNormalized);
+
 private:
     void nextKeyframeWithColor(int color);
     void nextKeyframeWithColor(const QSet<int> &validColors);

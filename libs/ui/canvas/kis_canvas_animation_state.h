@@ -43,7 +43,9 @@ public:
 
     void setPlaybackState(PlaybackState state);
     PlaybackState playbackState();
+
     boost::optional<QFileInfo> mediaInfo();
+    qreal currentVolume();
 
     boost::optional<int> playbackOrigin();
 
@@ -57,6 +59,7 @@ Q_SIGNALS:
     void sigPlaybackStatisticsUpdated();
     void sigFrameChanged();
     void sigPlaybackMediaChanged();
+    void sigAudioLevelChanged(qreal value);
 
     void sigCancelPlayback();
 

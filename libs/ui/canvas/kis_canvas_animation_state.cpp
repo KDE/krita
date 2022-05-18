@@ -247,6 +247,8 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
 
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
     setupAudioTracks();
+
+    connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioLevelChanged, this, &KisCanvasAnimationState::sigAudioLevelChanged);
 }
 
 KisCanvasAnimationState::~KisCanvasAnimationState()
@@ -264,6 +266,15 @@ boost::optional<QFileInfo> KisCanvasAnimationState::mediaInfo()
         return boost::optional<QFileInfo>(*m_d->media);
     } else {
         return boost::none;
+    }
+}
+
+qreal KisCanvasAnimationState::currentVolume()
+{
+    if (m_d->canvas && m_d->canvas->imageView() && m_d->canvas->imageView()->document()) {
+        return m_d->canvas->imageView()->document()->getAudioLevel();
+    } else {
+        return 0.0;
     }
 }
 

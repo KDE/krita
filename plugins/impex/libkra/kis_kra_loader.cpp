@@ -1441,18 +1441,25 @@ void KisKraLoader::loadAudioXML(QDomDocument &xmlDoc, QDomElement &xmlElement, K
     if (audioClip.nodeName() == "audioClips") {
         QDomElement audioClipElement = audioClip.toElement();
         QVector<QFileInfo> clipFiles;
+        qreal volume = 1.0;
         QDomNode clip;
         for (clip = audioClipElement.firstChild(); !clip.isNull(); clip = clip.nextSibling()) {
             QDomElement clipElem = clip.toElement();
-            QFileInfo f(clipElem.attribute("filePath"));
-            ENTER_FUNCTION() << ppVar(clipElem.attribute("filePath"));
-            if (f.exists()) {
-                clipFiles << f;
+
+            if (clipElem.hasAttribute("filePath")) {
+                QFileInfo f(clipElem.attribute("filePath"));
+                if (f.exists()) {
+                    clipFiles << f;
+                }
+            }
+
+            if (clipElem.hasAttribute("volume")) {
+                volume = clipElem.attribute("volume").toDouble();
             }
         }
 
         kisDoc->setAudioTracks(clipFiles);
-        ENTER_FUNCTION();
+        kisDoc->setAudioLevel(volume);
     }
 }
 

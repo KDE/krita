@@ -836,12 +836,15 @@ bool KisKraSaver::saveMirrorAxis(QDomDocument &doc, QDomElement &element)
 bool KisKraSaver::saveAudioXML(QDomDocument& doc, QDomElement& element)
 {
     QVector<QFileInfo> clips = m_d->doc->getAudioTracks();
+    const qreal volume = m_d->doc->getAudioLevel();
 
     if (!clips.isEmpty()) {
         QDomElement audioClips = doc.createElement("audioClips");
         Q_FOREACH(const QFileInfo& file, clips) {
             QDomElement clip = doc.createElement(QString("Clip"));
             clip.setAttribute("filePath", file.absoluteFilePath());
+            clip.setAttribute("volume", volume);
+            ENTER_FUNCTION() << ppVar(volume);
             audioClips.appendChild(clip);
         }
         element.appendChild(audioClips);

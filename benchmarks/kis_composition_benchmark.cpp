@@ -396,7 +396,7 @@ bool compareTwoOps(bool haveMask, const KoCompositeOp *op1, const KoCompositeOp 
         compareResult = compareTwoOpsPixels<quint16, Compare>(tiles, 90);
     }
     else if (pixelSize == 16) {
-        compareResult = compareTwoOpsPixels<float, Compare>(tiles, 2e-7);
+        compareResult = compareTwoOpsPixels<float, Compare>(tiles, 2e-6);
     }
     else {
         qFatal("Pixel size %i is not implemented", pixelSize);

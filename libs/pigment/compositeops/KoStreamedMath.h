@@ -18,24 +18,89 @@
 
 #define BLOCKDEBUG 0
 
-template<typename _impl>
+template<typename _impl, typename result_type>
 struct OptiRound {
-    ALWAYS_INLINE static float roundScalar(const float &value)
+    ALWAYS_INLINE static result_type roundScalar(const float value)
     {
-#ifdef __SSE4_1__
+#ifdef __SSE__
         // SSE/AVX instructions use round-to-even rounding rule so we
         // should reuse it when possible
+        return _mm_cvtss_si32(_mm_set_ss(value));
+#elif XSIMD_WITH_NEON64
+        return vgetq_lane_s32(vcvtnq_s32_f32(vrndiq_f32(vdupq_n_f32(value))),
+                              0);
+#elif XSIMD_WITH_NEON
+        /* origin:
+         * https://github.com/DLTcollab/sse2neon/blob/cad518a93b326f0f644b7972d488d04eaa2b0475/sse2neon.h#L4028-L4047
+         */
+        //  Contributors to this work are:
+        //   John W. Ratcliff <jratcliffscarab@gmail.com>
+        //   Brandon Rowlett <browlett@nvidia.com>
+        //   Ken Fast <kfast@gdeb.com>
+        //   Eric van Beurden <evanbeurden@nvidia.com>
+        //   Alexander Potylitsin <apotylitsin@nvidia.com>
+        //   Hasindu Gamaarachchi <hasindu2008@gmail.com>
+        //   Jim Huang <jserv@biilabs.io>
+        //   Mark Cheng <marktwtn@biilabs.io>
+        //   Malcolm James MacLeod <malcolm@gulden.com>
+        //   Devin Hussey (easyaspi314) <husseydevin@gmail.com>
+        //   Sebastian Pop <spop@amazon.com>
+        //   Developer Ecosystem Engineering
+        //   <DeveloperEcosystemEngineering@apple.com> Danila Kutenin
+        //   <danilak@google.com> François Turban (JishinMaster)
+        //   <francois.turban@gmail.com> Pei-Hsuan Hung <afcidk@gmail.com>
+        //   Yang-Hao Yuan <yanghau@biilabs.io>
+        //   Syoyo Fujita <syoyo@lighttransport.com>
+        //   Brecht Van Lommel <brecht@blender.org>
 
-        float result;
-
-        __m128 x = _mm_set_ss(value);
-        __m128 y{};
-        y = _mm_round_ss(y, x, 0x00);
-        _mm_store_ss(&result, y);
-
-        return result;
+        /*
+         * sse2neon is freely redistributable under the MIT License.
+         *
+         * Permission is hereby granted, free of charge, to any person obtaining
+         * a copy of this software and associated documentation files (the
+         * "Software"), to deal in the Software without restriction, including
+         * without limitation the rights to use, copy, modify, merge, publish,
+         * distribute, sublicense, and/or sell copies of the Software, and to
+         * permit persons to whom the Software is furnished to do so, subject to
+         * the following conditions:
+         *
+         * The above copyright notice and this permission notice shall be
+         * included in all copies or substantial portions of the Software.
+         *
+         * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+         * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+         * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+         * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+         * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+         * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+         * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+         * SOFTWARE.
+         */
+        const auto nearbyint_as_int = [](const float v) {
+            const auto a = vdupq_n_f32(v);
+            const auto signmask = vdupq_n_u32(0x80000000);
+            const auto half =
+                vbslq_f32(signmask, a, vdupq_n_f32(0.5f)); /* +/- 0.5 */
+            const auto r_normal = vcvtq_s32_f32(
+                vaddq_f32(a, half)); /* round to integer: [a + 0.5]*/
+            const auto r_trunc =
+                vcvtq_s32_f32(a); /* truncate to integer: [a] */
+            const auto plusone = vreinterpretq_s32_u32(
+                vshrq_n_u32(vreinterpretq_u32_s32(vnegq_s32(r_trunc)),
+                            31)); /* 1 or 0 */
+            const auto r_even =
+                vbicq_s32(vaddq_s32(r_trunc, plusone),
+                          vdupq_n_s32(1)); /* ([a] + {0,1}) & ~1 */
+            const auto delta = vsubq_f32(
+                a,
+                vcvtq_f32_s32(r_trunc)); /* compute delta: delta = (a - [a]) */
+            const auto is_delta_half =
+                vceqq_f32(delta, half); /* delta == +/- 0.5 */
+            return vbslq_s32(is_delta_half, r_even, r_normal);
+        };
+        return vgetq_lane_s32(nearbyint_as_int(value), 0);
 #else
-        return value + 0.5f;
+        return std::lroundf(value);
 #endif
     }
 };
@@ -149,7 +214,7 @@ struct KoStreamedMath {
 
     static inline quint8 round_float_to_u8(float x)
     {
-        return OptiRound<_impl>::roundScalar(x);
+        return OptiRound<_impl, quint8>::roundScalar(x);
     }
 
     static inline quint8 lerp_mixed_u8_float(quint8 a, quint8 b, float alpha)
@@ -503,13 +568,13 @@ struct PixelWrapper<quint16, _impl> {
     ALWAYS_INLINE
     static quint16 lerpMixedUintFloat(quint16 a, quint16 b, float alpha)
     {
-        return OptiRound<_impl>::roundScalar((float(b) - a) * alpha + float(a));
+        return OptiRound<_impl, quint16>::roundScalar((float(b) - a) * alpha + float(a));
     }
 
     ALWAYS_INLINE
     static quint16 roundFloatToUint(float x)
     {
-        return OptiRound<_impl>::roundScalar(x);
+        return OptiRound<_impl, quint16>::roundScalar(x);
     }
 
     ALWAYS_INLINE

@@ -34,8 +34,9 @@ public:
     KoSvgText::AutoValue textLength;
     KoSvgText::LengthAdjust lengthAdjust = KoSvgText::LengthAdjustSpacing;
 
-    QVector<QPainterPath> textDecorations;
-    QVector<KoSvgText::TextDecoration> textDecorationTypes;
+    QMap<KoSvgText::TextDecoration, qreal> textDecorationOffsets;
+    QMap<KoSvgText::TextDecoration, qreal> textDecorationWidths;
+    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations;
 
     QString text;
 

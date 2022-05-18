@@ -1,0 +1,36 @@
+From 5d368320f93c75e5e94ed34309f8d1baf27cda14 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Wed, 18 May 2022 23:09:51 +0800
+Subject: [PATCH] Use DebugBreak instead of fast-fail exception to abort
+
+Fast-fail exception bypasses DrMingw which we use to dump backtraces on
+crashes. To make DrMingw work when Qt does an abort, use DebugBreak at
+first so DrMingw is not bypassed.
+---
+ src/corelib/global/qlogging.cpp | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/src/corelib/global/qlogging.cpp b/src/corelib/global/qlogging.cpp
+index 3c82097cfe..6c565a8bd2 100644
+--- a/src/corelib/global/qlogging.cpp
++++ b/src/corelib/global/qlogging.cpp
+@@ -1891,6 +1891,16 @@ static void qt_message_fatal(QtMsgType, const QMessageLogContext &context, const
+     // [support.start.term]). So we bypass std::abort() and directly
+     // terminate the application.
+ 
++    // Fast-fail exception bypasses DrMingw and we don't want that. Try
++    // something else first. A debug breakpoint (`int 3` on x86) should
++    // terminate the process when not attached to a debugger, and it should
++    // trigger DrMingw to dump the backtrace.
++#  if defined(Q_CC_MSVC)
++    __debugbreak();
++#  else
++    DebugBreak();
++#  endif
++
+ #  if defined(Q_CC_MSVC) && !defined(Q_CC_INTEL)
+     if (IsProcessorFeaturePresent(PF_FASTFAIL_AVAILABLE))
+         __fastfail(FAST_FAIL_FATAL_APP_EXIT);
+-- 
+2.24.1.windows.2
+

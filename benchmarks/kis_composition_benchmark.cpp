@@ -517,6 +517,7 @@ void printError(quint8 *s, quint8 *d1, quint8 *d2, quint8 *msk1, int pos)
     qDebug() << "Wrong rounding in pixel:" << pos;
     qDebug() << "Vector version: " << dst1[0] << dst1[1] << dst1[2] << dst1[3];
     qDebug() << "Scalar version: " << dst2[0] << dst2[1] << dst2[2] << dst2[3];
+    qDebug() << "Dif: " << dst1[0] - dst2[0] << dst1[1] - dst2[1] << dst1[2] - dst2[2] << dst1[3] - dst2[3];
 
     qDebug() << "src:" << src1[0] << src1[1] << src1[2] << src1[3];
     qDebug() << "msk:" << msk1[0];

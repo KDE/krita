@@ -301,25 +301,6 @@ private:
     KoSvgTextChunkShape *m_shape = 0;
 };
 
-/**
- * @brief The TextDecorationInfo struct
- * Text decorations can be nested, so we need to have this struct to figure out
- * how 'long' a text decoration is, which we retrieve as we go over the nodes.
- */
-struct TextDecorationInfo {
-    int startIndex = -1;
-    int length;
-    TextDecorations line;
-    TextDecorationStyle style;
-    TextDecorationUnderlinePosition positionHorizontal;
-    TextDecorationUnderlinePosition positionVertical;
-    // The following values will be adjusted when calculating the text decoration.
-    QVector<quint32> clusters;
-    qreal lineWidth;
-    QPointF underlineOffset;
-    QPointF overlineOffset;
-};
-
 struct KoSvgCharChunkFormat : public QTextCharFormat
 {
     enum SvgCharProperty {

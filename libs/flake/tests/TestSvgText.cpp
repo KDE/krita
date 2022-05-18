@@ -381,10 +381,8 @@ void TestSvgText::testSimpleText()
     QCOMPARE(*transform[0].xPos, 7.0);
     QCOMPARE(*transform[0].yPos, 27.0);
 
-    int globalIndex = 0;
-    QVector<KoSvgText::TextDecorationInfo> vector;
     QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-            chunkShape->layoutInterface()->collectSubChunks(globalIndex, vector);
+            chunkShape->layoutInterface()->collectSubChunks();
 
     QCOMPARE(subChunks.size(), 1);
     QCOMPARE(subChunks[0].text.size(), 17);
@@ -456,10 +454,8 @@ void TestSvgText::testComplexText()
             }
         }
 
-        int globalIndex = 0;
-        QVector<KoSvgText::TextDecorationInfo> vector;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-                chunk->layoutInterface()->collectSubChunks(globalIndex, vector);
+                chunk->layoutInterface()->collectSubChunks();
 
         QCOMPARE(subChunks.size(), 7);
         QCOMPARE(subChunks[0].text.size(), 1);
@@ -487,9 +483,8 @@ void TestSvgText::testComplexText()
         }
 
         int globalIndex = 0;
-        QVector<KoSvgText::TextDecorationInfo> vector;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-                chunk->layoutInterface()->collectSubChunks(globalIndex, vector);
+                chunk->layoutInterface()->collectSubChunks();
 
         QCOMPARE(subChunks.size(), 2);
         QCOMPARE(subChunks[0].text.size(), 1);
@@ -508,10 +503,8 @@ void TestSvgText::testComplexText()
         QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
         QCOMPARE(transform.size(), 0);
 
-        int globalIndex = 0;
-        QVector<KoSvgText::TextDecorationInfo> vector;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-                chunk->layoutInterface()->collectSubChunks(globalIndex, vector);
+                chunk->layoutInterface()->collectSubChunks();
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 7);
@@ -529,10 +522,8 @@ void TestSvgText::testComplexText()
         QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
         QCOMPARE(transform.size(), 0);
 
-        int globalIndex = 0;
-        QVector<KoSvgText::TextDecorationInfo> vector;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-                chunk->layoutInterface()->collectSubChunks(globalIndex, vector);
+                chunk->layoutInterface()->collectSubChunks();
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 24);

@@ -128,9 +128,10 @@ public:
                         bool isHorizontal);
     void applyTextPath(const KoShape *rootShape,
                          QVector<CharacterResult> &result, bool isHorizontal);
-    void computeFontMetrics(const KoShape *rootShape, QMap<int, int> parentBaselineTable,
+    void computeFontMetrics(const KoShape *rootShape, QMap<int, int> parentBaselineTable, qreal parentFontSize,
                             QPointF superScript, QPointF subScript, QVector<CharacterResult> &result,
                             int &currentIndex, qreal res, bool isHorizontal);
+    void computeTextDecorations(const KoShape *rootShape, QVector<CharacterResult> result, int &currentIndex, bool isHorizontal);
     void paintPaths(QPainter &painter, KoShapePaintingContext &paintContext,
                     QPainterPath outlineRect,
                     const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex);
@@ -391,9 +392,7 @@ void KoSvgTextShape::relayout() const
     // https://github.com/w3c/svgwg/issues/631
     // https://github.com/w3c/svgwg/issues/635
 
-    QVector<KoSvgText::TextDecorationInfo> textDecorationInfo;
-    int globalIndex = 0;
-    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = layoutInterface()->collectSubChunks(globalIndex, textDecorationInfo);
+    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = layoutInterface()->collectSubChunks();
     QString text;
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
         text.append(chunk.text);
@@ -401,6 +400,7 @@ void KoSvgTextShape::relayout() const
 
     // 1. Setup.
 
+    int globalIndex = 0;
     QVector<CharacterResult> result(text.size());
     // 3. Resolve character positioning.
     // This is done earlier so it's possible to get preresolved transforms from the subchunks.
@@ -644,63 +644,6 @@ void KoSvgTextShape::relayout() const
         totalAdvanceFTFontCoordinates += advance;
         charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
 
-        bool createTextDecor = false;
-        if (g+1 < int(count)) {
-            createTextDecor = glyphs[g].cluster != glyphs[g+1].cluster;
-        } else {
-            createTextDecor = true;
-        }
-        if (createTextDecor) {
-            for (int i = 0; i < textDecorationInfo.size(); i++) {
-                int cluster = int(glyphs[g].cluster);
-                if (textDecorationInfo.at(i).startIndex <= cluster
-                        && cluster < textDecorationInfo.at(i).startIndex + textDecorationInfo.at(i).length) {
-                    KoSvgText::TextDecorationInfo info = textDecorationInfo.at(i);
-                    info.clusters.append(cluster);
-                    if (info.startIndex == cluster) {
-                        qreal width = glyphs[g].ftface->underline_thickness;
-                        QRectF underline(QPointF(), QPointF(width * (glyphs[g].ftface->size->metrics.x_scale / 65535.0)
-                                                  , width * (glyphs[g].ftface->size->metrics.y_scale / 65535.0)));
-                        if (isHorizontal) {
-                            info.lineWidth = ftTF.mapRect(underline).height();
-                            info.underlineOffset = ftTF.map(QPointF(0, glyphs[g].ftface->underline_position
-                                                                    * (glyphs[g].ftface->size->metrics.y_scale / 65535.0)));
-                        } else {
-                            info.lineWidth = (ftTF.mapRect(underline).width());
-                        }
-                    }
-                    if (isHorizontal) {
-                        qreal top = charResult.path.boundingRect().top();
-                        qreal bottom = charResult.path.boundingRect().bottom();
-                        if (info.overlineOffset.y() > top) {
-                            info.overlineOffset = QPointF(info.overlineOffset.x(), top);
-                        }
-                        if (info.underlineOffset.y() < bottom && info.positionHorizontal == KoSvgText::UnderlineUnder) {
-                            info.underlineOffset = QPointF(info.underlineOffset.x(), bottom);
-                        }
-                    } else {
-                        qreal left = charResult.path.boundingRect().left();
-                        qreal right = charResult.path.boundingRect().right();
-                        if (info.positionHorizontal == KoSvgText::UnderlineRight) {
-                            if (info.overlineOffset.x() > left) {
-                                info.overlineOffset = QPointF(left, info.overlineOffset.y());
-                            }
-                            if (info.underlineOffset.x() < right) {
-                                info.underlineOffset = QPointF(right, info.underlineOffset.y());
-                            }
-                        } else {
-                            if (info.overlineOffset.x() < right) {
-                                info.overlineOffset = QPointF(right, info.overlineOffset.y());
-                            }
-                            if (info.underlineOffset.x() > left) {
-                                info.underlineOffset = QPointF(left, info.underlineOffset.y());
-                            }
-                        }
-                    }
-                    textDecorationInfo[i] = info;
-                }
-            }
-        }
         result[glyphs[g].cluster] = charResult;
     }
     // we're done with raqm for now.
@@ -708,7 +651,7 @@ void KoSvgTextShape::relayout() const
 
     // Handle baseline alignment.
     globalIndex = 0;
-    d->computeFontMetrics(this, QMap<int, int>(), QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
+    d->computeFontMetrics(this, QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
 
     // This is the best point to start applying linebreaking and text-wrapping.
     // If we're doing text-wrapping we should skip the other positioning steps of the algorithm.
@@ -779,88 +722,14 @@ void KoSvgTextShape::relayout() const
     }
 
     // 7. Apply anchoring
-    globalIndex = 0;
     d->applyAnchoring(result, isHorizontal);
 
     // 8. Position on path
 
     d->applyTextPath(this, result, isHorizontal);
 
-    for (KoSvgText::TextDecorationInfo info: textDecorationInfo) {
-        QPainterPath underline;
-        QPainterPath overline;
-        QPainterPath linethrough;
-        QPainterPathStroker stroker;
-        stroker.setWidth(qMax(info.lineWidth, 0.1));
-        stroker.setCapStyle(Qt::FlatCap);
-        if (info.style == KoSvgText::Dotted) {
-            QPen pen;
-            pen.setStyle(Qt::DotLine);
-            stroker.setDashPattern(pen.dashPattern());
-        } else if (info.style == KoSvgText::Dashed) {
-            QPen pen;
-            pen.setStyle(Qt::DashLine);
-            stroker.setDashPattern(pen.dashPattern());
-        }
-        for (quint32 cluster : info.clusters) {
-            CharacterResult charResult = result.at(cluster);
-            if (charResult.hidden) {
-                continue;
-            }
-
-            QPainterPath p;
-            p.moveTo(QPointF());
-            p.lineTo(charResult.advance);
-            if (info.style == KoSvgText::Double) {
-                qreal linewidthOffset = stroker.width() * 1.5;
-                if (isHorizontal) {
-                    p.moveTo(QPointF(0, linewidthOffset));
-                    p.lineTo(QPointF(charResult.advance.x(), linewidthOffset));
-                } else {
-                    p.moveTo(QPointF(linewidthOffset, 0));
-                    p.lineTo(QPointF(linewidthOffset, charResult.advance.y()));
-                }
-            }
-            QTransform tf;
-            tf.translate(charResult.finalPosition.x(), charResult.finalPosition.y());
-            tf.rotateRadians(charResult.rotate);
-
-            if (info.line.testFlag(KoSvgText::DecorationUnderline)) {
-                underline.addPath(tf.map(p.translated(info.underlineOffset)));
-            }
-            if (info.line.testFlag(KoSvgText::DecorationOverline)) {
-                overline.addPath(tf.map(p.translated(info.overlineOffset)));
-            }
-            if (info.line.testFlag(KoSvgText::DecorationLineThrough)) {
-                linethrough.addPath(tf.map(p.translated((info.underlineOffset + info.overlineOffset) * 0.5)));
-            }
-        }
-        // This is incorrect, because it now adds the textdecoration to the shape that contains the first character,
-        // even when the textdecoration might actually be from it's parent. I do not know how to solve this.
-        globalIndex = 0;
-        for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
-            int j = chunk.text.size();
-            if (globalIndex == info.startIndex) {
-                KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
-                wrapper.shape()->layoutInterface()->clearTextDecorations();
-                if (!underline.isEmpty()) {
-                    underline = stroker.createStroke(underline).simplified();
-                    wrapper.shape()->layoutInterface()->addTextDecoration(KoSvgText::DecorationUnderline, underline.simplified());
-                }
-                if (!overline.isEmpty()) {
-                    overline = stroker.createStroke(overline).simplified();
-                    wrapper.shape()->layoutInterface()->addTextDecoration(KoSvgText::DecorationOverline, overline.simplified());
-                }
-                if (!linethrough.isEmpty()) {
-                    linethrough = stroker.createStroke(linethrough).simplified();
-                    wrapper.shape()->layoutInterface()->addTextDecoration(KoSvgText::DecorationLineThrough, linethrough.simplified());
-                }
-                break;
-            }
-            globalIndex += j;
-        }
-
-    }
+    globalIndex = 0;
+    d->computeTextDecorations(this, result, globalIndex, isHorizontal);
 
     // 9. return result.
     d->result = result;
@@ -1112,7 +981,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
  * This function handles computing the baselineOffsets
  */
 void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
-                                                 QMap<int, int> parentBaselineTable, QPointF superScript, QPointF subScript, QVector<CharacterResult> &result,
+                                                 QMap<int, int> parentBaselineTable, qreal parentFontSize, QPointF superScript, QPointF subScript, QVector<CharacterResult> &result,
                                                  int &currentIndex, qreal res, bool isHorizontal) {
     const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
@@ -1123,10 +992,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
 
     KoSvgTextProperties properties = chunkShape->textProperties();
 
-    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
-    if (baselineAdjust == KoSvgText::BaselineAuto) {
-        baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
-    }
+
     qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
     qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
     QPointF baselineShiftTotal;
@@ -1161,102 +1027,178 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
                                                                             style != QFont::StyleNormal);
     KoFontRegistery::instance()->configureFaces(faces, fontSize, res, res, properties.fontAxisSettings());
     hb_font_t *font = hb_ft_font_create_referenced (faces.first());
+    qreal freetypePixelsToPt = (1.0/64) * (72./res);
 
     hb_direction_t dir = HB_DIRECTION_LTR;
     if (!isHorizontal) {
         dir = HB_DIRECTION_TTB;
     }
     hb_script_t script = HB_SCRIPT_UNKNOWN;
+    KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
 
     hb_position_t baseline = 0;
-    if (hb_version_atleast(4, 0, 0)) {
-        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
-                                                dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
-        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
-                                                dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
-        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
-                                                dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineHanging, baseline);
-        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
-                                                dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-        hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
-                                                dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
-        if (isHorizontal) {
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
-            baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+    if (dominantBaseline == KoSvgText::BaselineResetSize && parentFontSize > 0) {
+        baselineTable = parentBaselineTable;
+        qreal multiplier = 1.0 / parentFontSize * fontSize;
+        for (int key : baselineTable.keys()) {
+            baselineTable.insert(key, baselineTable.value(key) * multiplier);
+        }
+        dominantBaseline = KoSvgText::BaselineAuto;
+    } else if(dominantBaseline == KoSvgText::BaselineNoChange) {
+        baselineTable = parentBaselineTable;
+        dominantBaseline = KoSvgText::BaselineAuto;
+    } else {
+        if (hb_version_atleast(4, 0, 0)) {
+            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
+                                                    dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
+            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
+                                                    dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
+            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+                                                    dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineHanging, baseline);
+            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
+                                                    dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineCentral, baseline);
+            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
+                                                    dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
+            if (isHorizontal) {
+                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+                baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+
+            } else {
+                baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
+                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+            }
+            hb_position_t baseline2 = 0;
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
+            superScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
+            subScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
 
         } else {
-            baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
+                                      dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
+            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
+                                      dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
+            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+                                      dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineHanging, baseline);
+            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
+                                      dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineCentral, baseline);
+            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
+                                      dir, script, HB_TAG_NONE, &baseline);
+            baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
+            if (isHorizontal) {
+                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+                baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+            } else {
+                baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
+                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
+                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
+                baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
+            }
+            hb_position_t baseline2 = 0;
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
+            superScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
+            subScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
         }
-        hb_position_t baseline2 = 0;
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
-        superScript = QPointF(baseline * (-1.0/64) * (72./res), baseline2 * (-1.0/64) * (72./res));
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
-        subScript = QPointF(baseline * (-1.0/64) * (72./res), baseline2 * (-1.0/64) * (72./res));
-    } else {
-        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
-                                  dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
-        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
-                                  dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
-        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
-                                  dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineHanging, baseline);
-        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
-                                  dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-        hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
-                                  dir, script, HB_TAG_NONE, &baseline);
-        baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
-        if (isHorizontal) {
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
-            baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
-        } else {
-            baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
-            baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
-        }
-        hb_position_t baseline2 = 0;
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
-        superScript = QPointF(baseline * (1.0/64) * (72./res), baseline2 * (-1.0/64) * (72./res));
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
-        subScript = QPointF(baseline * (1.0/64) * (72./res), baseline2 * (1.0/64) * (72./res));
     }
+
+    if (hb_version_atleast(4, 0, 0)) {
+        qreal width = 0;
+        qreal offset = 0;
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
+        width = baseline;
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
+        offset = baseline;
+        offset *= -freetypePixelsToPt;
+        width *= -freetypePixelsToPt;
+
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
+
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
+        width = baseline;
+        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
+        width *= -freetypePixelsToPt;
+        offset *= -freetypePixelsToPt;
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
+    } else {
+        qreal width = 0;
+        qreal offset = 0;
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
+        width = baseline;
+
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
+        offset = baseline;
+        offset *= -freetypePixelsToPt;
+        width *= -freetypePixelsToPt;
+
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
+
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
+        width = baseline;
+        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
+        if (baseline == 0) {
+            offset = baselineTable.value(KoSvgText::BaselineCentral);
+        }
+        width *= -freetypePixelsToPt;
+        offset *= -freetypePixelsToPt;
+
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
+    }
+
+
 
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        computeFontMetrics(child, baselineTable, superScript, subScript, result, currentIndex, res, isHorizontal);
+        computeFontMetrics(child, baselineTable, fontSize, superScript, subScript, result, currentIndex, res, isHorizontal);
     }
 
-    int offset = parentBaselineTable.value(baselineAdjust) - baselineTable.value(baselineAdjust);
+    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
+
+    if (baselineAdjust == KoSvgText::BaselineDominant) {
+        baselineAdjust = dominantBaseline;
+    }
+    if (baselineAdjust == KoSvgText::BaselineAuto || baselineAdjust == KoSvgText::BaselineUseScript) {
+        // UseScript got deprecated in CSS-Inline-3.
+        if (isHorizontal) {
+            baselineAdjust = KoSvgText::BaselineAlphabetic;
+        } else {
+            baselineAdjust = KoSvgText::BaselineMiddle;
+        }
+    }
+
+    int offset = parentBaselineTable.value(baselineAdjust, 0) - baselineTable.value(baselineAdjust, 0);
     QPointF shift;
     if (isHorizontal) {
-        shift = QPointF(0, offset * (-1.0/64) * (72./res));
+        shift = QPointF(0, offset * -freetypePixelsToPt);
     } else {
-        shift = QPointF(offset * (1.0/64) * (72./res), 0);
+        shift = QPointF(offset * freetypePixelsToPt, 0);
     }
     shift += baselineShiftTotal;
 
@@ -1266,6 +1208,211 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
         result[k] = cr;
     }
 
+    currentIndex = j;
+}
+
+void KoSvgTextShape::Private::computeTextDecorations(const KoShape *rootShape, QVector<CharacterResult> result, int &currentIndex, bool isHorizontal) {
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape*>(rootShape);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
+
+    int i = currentIndex;
+    int j = qMin(i + chunkShape->layoutInterface()->numChars(), result.size());
+
+    Q_FOREACH (KoShape *child, chunkShape->shapes()) {
+        computeTextDecorations(child, result, currentIndex, isHorizontal);
+    }
+
+    KoSvgText::TextDecorations decor = chunkShape->textProperties().propertyOrDefault(
+                KoSvgTextProperties::TextDecorationLineId).value<KoSvgText::TextDecorations>();
+    if (decor != KoSvgText::DecorationNone) {
+        using namespace KoSvgText;
+        KoSvgTextProperties properties = chunkShape->textProperties();
+        TextDecorationStyle style =
+                TextDecorationStyle(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationStyleId).toInt());
+        QPainterPath underline;
+        QPointF underlineOffset;
+        QPainterPath overline;
+        QPointF overlineOffset;
+        QPainterPath linethrough;
+        QPointF lineThroughOffset;
+        if (isHorizontal) {
+            underlineOffset = QPointF(0, chunkShape->layoutInterface()->getTextDecorationOffset(KoSvgText::DecorationUnderline));
+            lineThroughOffset = QPointF(0, chunkShape->layoutInterface()->getTextDecorationOffset(KoSvgText::DecorationLineThrough));
+        } else {
+            underlineOffset = QPointF(chunkShape->layoutInterface()->getTextDecorationOffset(KoSvgText::DecorationUnderline), 0);
+            lineThroughOffset = QPointF(chunkShape->layoutInterface()->getTextDecorationOffset(KoSvgText::DecorationLineThrough), 0);
+        }
+        QPainterPathStroker stroker;
+        stroker.setWidth(qMin(0.1, chunkShape->layoutInterface()->getTextDecorationWidth(KoSvgText::DecorationUnderline)));
+        stroker.setCapStyle(Qt::FlatCap);
+        if (style == KoSvgText::Dotted) {
+            QPen pen;
+            pen.setStyle(Qt::DotLine);
+            stroker.setDashPattern(pen.dashPattern());
+        } else if (style == KoSvgText::Dashed) {
+            QPen pen;
+            pen.setStyle(Qt::DashLine);
+            stroker.setDashPattern(pen.dashPattern());
+        }
+        qreal top = 0;
+        qreal bottom = 0;
+        for (int k = i; k < j; k++) {
+            if (isHorizontal) {
+                if (result.at(k).path.isEmpty()) {
+                    top = qMin(top, result.at(k).boundingBox.top());
+                    bottom = qMax(bottom, result.at(k).boundingBox.bottom());
+                } else {
+                    top = qMin(top, result.at(k).path.boundingRect().top());
+                    bottom = qMax(bottom, result.at(k).path.boundingRect().bottom());
+                }
+            } else {
+                if (result.at(k).path.isEmpty()) {
+                    top = qMax(top, result.at(k).boundingBox.right());
+                    bottom = qMin(bottom, result.at(k).boundingBox.left());
+                } else {
+                    top = qMax(top, result.at(k).path.boundingRect().right());
+                    bottom = qMin(bottom, result.at(k).path.boundingRect().left());
+                }
+            }
+        }
+        if (isHorizontal) {
+            overlineOffset = QPointF(0, top);
+            KoSvgText::TextDecorationUnderlinePosition underlinePosH =
+                    KoSvgText::TextDecorationUnderlinePosition(properties.propertyOrDefault(
+                                                                   KoSvgTextProperties::TextDecorationPositionHorizontalId).toInt());
+            if (underlinePosH == KoSvgText::UnderlineUnder) {
+                underlineOffset = QPointF(0, bottom);
+            }
+            lineThroughOffset = (underlineOffset + overlineOffset) * 0.5;
+        } else {
+            KoSvgText::TextDecorationUnderlinePosition underlinePosV =
+                    KoSvgText::TextDecorationUnderlinePosition(properties.propertyOrDefault(
+                                                                   KoSvgTextProperties::TextDecorationPositionVerticalId).toInt());
+            if (underlinePosV == KoSvgText::UnderlineLeft) {
+                overlineOffset = QPointF(top, 0);
+                underlineOffset = QPointF(bottom, 0);
+            } else {
+                overlineOffset = QPointF(bottom, 0);
+                underlineOffset = QPointF(top, 0);
+            }
+            lineThroughOffset = (underlineOffset + overlineOffset) * 0.5;
+
+        }
+        qreal wavyOffset = 0;
+        for (int k = i; k < j; k++) {
+            CharacterResult charResult = result.at(k);
+            if (charResult.hidden) {
+                continue;
+            }
+
+            QPainterPath p;
+            p.moveTo(QPointF());
+            p.lineTo(charResult.advance);
+            QPointF pathWidth;
+            if (style == KoSvgText::Double) {
+                qreal linewidthOffset = stroker.width() * 1.5;
+                if (isHorizontal) {
+                    p.moveTo(QPointF(0, linewidthOffset));
+                    p.lineTo(QPointF(charResult.advance.x(), linewidthOffset));
+                    pathWidth =  QPointF(0, stroker.width() * 1.5);
+                } else {
+                    p.moveTo(QPointF(linewidthOffset, 0));
+                    p.lineTo(QPointF(linewidthOffset, charResult.advance.y()));
+                    pathWidth = QPointF(stroker.width() * 1.5, 0);
+                }
+            } else if (style == KoSvgText::Wavy) {
+
+                qreal width = isHorizontal? charResult.advance.x(): charResult.advance.y();
+                qreal height = stroker.width() * 2;
+
+                qreal offset = fmod(wavyOffset, height);
+                bool down = int(wavyOffset/height) % 2;
+                p = QPainterPath();
+                if (isHorizontal) {
+                    if (down) {
+                        p.moveTo(0, offset);
+                        p.lineTo(height-offset, height);
+                    } else {
+                        p.moveTo(0, height-offset);
+                        p.lineTo(height-offset, 0);
+                    }
+                    qreal restWidth = width - (height-offset);
+                    down = !down;
+                    for (int i = 0; i < qFloor(restWidth/height); i++) {
+                        if (down) {
+                            p.lineTo(p.currentPosition().x() + height, height);
+                        } else {
+                            p.lineTo(p.currentPosition().x() + height, 0);
+                        }
+                        down = !down;
+                    }
+                    offset = fmod(restWidth, height);
+                    if (down) {
+                        p.lineTo(width, offset);
+                    } else {
+                        p.lineTo(width, height-offset);
+                    }
+                    pathWidth = QPointF(0, stroker.width() * 2);
+                } else {
+                    if (down) {
+                        p.moveTo(offset, 0);
+                        p.lineTo(height, height-offset);
+                    } else {
+                        p.moveTo(height-offset, 0);
+                        p.lineTo(0, height-offset);
+                    }
+                    qreal restWidth = width - (height-offset);
+                    down = !down;
+                    for (int i = 0; i < qFloor(restWidth/height); i++) {
+                        if (down) {
+                            p.lineTo(height, p.currentPosition().y() + height);
+                        } else {
+                            p.lineTo(0, p.currentPosition().y() + height);
+                        }
+                        down = !down;
+                    }
+                    offset = fmod(restWidth, height);
+                    if (down) {
+                        p.lineTo(offset, width);
+                    } else {
+                        p.lineTo(height-offset, width);
+                    }
+                    pathWidth = QPointF((stroker.width() * 2), 0);
+                }
+
+                wavyOffset += width;
+            }
+            QTransform tf;
+            tf.translate(charResult.finalPosition.x(), charResult.finalPosition.y());
+            tf.rotateRadians(charResult.rotate);
+
+            if (decor.testFlag(KoSvgText::DecorationUnderline)) {
+                underline.addPath(tf.map(p.translated(underlineOffset)));
+            }
+            if (decor.testFlag(KoSvgText::DecorationOverline)) {
+                overline.addPath(tf.map(p.translated(overlineOffset - pathWidth)));
+            }
+            if (decor.testFlag(KoSvgText::DecorationLineThrough)) {
+                linethrough.addPath(tf.map(p.translated(lineThroughOffset - (pathWidth*0.5))));
+            }
+        }
+        chunkShape->layoutInterface()->clearTextDecorations();
+        if (!underline.isEmpty()) {
+            stroker.setWidth(qMin(0.1, chunkShape->layoutInterface()->getTextDecorationWidth(KoSvgText::DecorationUnderline)));
+            underline = stroker.createStroke(underline).simplified();
+            chunkShape->layoutInterface()->addTextDecoration(KoSvgText::DecorationUnderline, underline.simplified());
+        }
+        if (!overline.isEmpty()) {
+            stroker.setWidth(qMin(0.1, chunkShape->layoutInterface()->getTextDecorationWidth(KoSvgText::DecorationOverline)));
+            overline = stroker.createStroke(overline).simplified();
+            chunkShape->layoutInterface()->addTextDecoration(KoSvgText::DecorationOverline, overline.simplified());
+        }
+        if (!linethrough.isEmpty()) {
+            stroker.setWidth(qMin(0.1, chunkShape->layoutInterface()->getTextDecorationWidth(KoSvgText::DecorationLineThrough)));
+            linethrough = stroker.createStroke(linethrough).simplified();
+            chunkShape->layoutInterface()->addTextDecoration(KoSvgText::DecorationLineThrough, linethrough.simplified());
+        }
+    }
     currentIndex = j;
 }
 
@@ -1509,7 +1656,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                 tf.reset();
                 tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
-                //* Debug
+                /* Debug
                 painter.save();
                 painter.setBrush(Qt::transparent);
                 QPen pen(Qt::cyan);
@@ -1519,7 +1666,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                 painter.setPen(Qt::red);
                 painter.drawPoint(result.at(i).finalPosition);
                 painter.restore();
-                //*/
+                */
                 /**
                  * There's an annoying problem here that officially speaking
                  * the chunks need to be unified into one single path before

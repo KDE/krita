@@ -98,6 +98,27 @@ public:
     virtual void clearAssociatedOutline() = 0;
 
     /**
+     * @brief addTextDecorationFontMetrics
+     * To compute the text decoration, it's best to use values gained from the first
+     * available font. In the layout code this is retrieved together with the baseline
+     * metrics, it is then cached so the text decoration can be drawn later.
+     * @param type whether it's underline, overline or linethrough.
+     * @param offset the offset metric of the given decoration.
+     * @param width the width metric of the given decoration.
+     */
+    virtual void setTextDecorationFontMetrics(KoSvgText::TextDecoration type, qreal offset, qreal width) = 0;
+
+    /**
+     * @brief getTextDecorationWidth
+     * @return get the offset for the given decoration.
+     */
+    virtual qreal getTextDecorationOffset(KoSvgText::TextDecoration type) = 0;
+    /**
+     * @brief getTextDecorationWidth
+     * @return get the line width for the given decoration.
+     */
+    virtual qreal getTextDecorationWidth(KoSvgText::TextDecoration type) = 0;
+    /**
      * @brief addTextDecoration
      * @param type whether it's an underline, over, etc.
      * @param path the full text-decoration path.
@@ -115,6 +136,10 @@ public:
      */
     virtual void clearTextDecorations() = 0;
 
+    /**
+     * @brief textDecorations
+     * get the cached textDecorations so they can be drawn.
+     */
     virtual QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations() = 0;
 
     /**
@@ -153,7 +178,7 @@ public:
      * split up into even smaller parts and then joined into proper "svg text
      * chunks".
      */
-    virtual QVector<SubChunk> collectSubChunks(int &globalIndex, QVector<KoSvgText::TextDecorationInfo> &textDecorationInfo, bool textInPath = false) const = 0;
+    virtual QVector<SubChunk> collectSubChunks(bool textInPath = false) const = 0;
 
 };
 

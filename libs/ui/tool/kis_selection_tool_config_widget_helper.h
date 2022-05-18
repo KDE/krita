@@ -14,11 +14,9 @@
 #include "kis_selection.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_image.h"
+#include <kis_selection_options.h>
 
-class KisCanvas2;
-class KisSelectionOptions;
 class KoCanvasResourceProvider;
-
 
 class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject
 {
@@ -26,29 +24,30 @@ class KRITAUI_EXPORT KisSelectionToolConfigWidgetHelper : public QObject
 public:
     KisSelectionToolConfigWidgetHelper(const QString &windowTitle);
 
-    void createOptionWidget(KisCanvas2 *canvas, const QString &toolId);
+    void createOptionWidget(const QString &toolId);
     KisSelectionOptions* optionWidget() const;
 
     SelectionMode selectionMode() const;
     SelectionAction selectionAction() const;
     bool antiAliasSelection() const;
-    QList<int> colorLabelsSelected() const;
-    QString sampleLayersMode() const;
+    KisSelectionOptions::ReferenceLayers referenceLayers() const;
+    QList<int> selectedColorLabels() const;
+
     int action() const { return selectionAction(); }
 
     void setConfigGroupForExactTool(QString toolId);
 
 Q_SIGNALS:
-    void selectionActionChanged(int newAction);
+    void selectionActionChanged(SelectionAction newAction);
 
 public Q_SLOTS:
     void slotToolActivatedChanged(bool isActivated);
 
-    void slotWidgetActionChanged(int action);
-    void slotWidgetModeChanged(int mode);
+    void slotWidgetModeChanged(SelectionMode mode);
+    void slotWidgetActionChanged(SelectionAction action);
     void slotWidgetAntiAliasChanged(bool value);
+    void slotReferenceLayersChanged(KisSelectionOptions::ReferenceLayers referenceLayers);
     void slotSelectedColorLabelsChanged();
-    void slotSampleLayersModeChanged(QString mode);
 
     void slotReplaceModeRequested();
     void slotAddModeRequested();
@@ -58,16 +57,10 @@ public Q_SLOTS:
 
 private:
     KisSelectionOptions* m_optionsWidget;
-
     QString m_windowTitle;
-
-    SelectionMode m_selectionMode {SHAPE_PROTECTION};
-    SelectionAction m_selectionAction {SELECTION_DEFAULT};
-    bool m_antiAliasSelection {true};
-    QList<int> m_colorLabelsSelected {};
-    QString m_sampleLayersMode {""};
-
     QString m_configGroupForTool {""};
+
+    void reloadExactToolConfig();
 };
 
 #endif /* __KIS_SELECTION_TOOL_CONFIG_WIDGET_HELPER_H */

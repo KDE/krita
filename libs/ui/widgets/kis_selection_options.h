@@ -7,98 +7,57 @@
 #ifndef __KIS_SELECTION_OPTIONS_H__
 #define __KIS_SELECTION_OPTIONS_H__
 
-#include <QWidget>
-#include <QList>
-
 #include "kritaui_export.h"
 
-#include "ui_wdgselectionoptions.h"
-#include "kis_image.h"
-#include "kis_signal_compressor.h"
-#include "kis_signal_auto_connection.h"
+#include <KisOptionCollectionWidget.h>
+#include <KisSelectionTags.h>
 
-class KisCanvas2;
-class QButtonGroup;
 class QKeySequence;
-class KisSignalCompressor;
 
-class WdgSelectionOptions : public QWidget, public Ui::WdgSelectionOptions
+class KRITAUI_EXPORT KisSelectionOptions : public KisOptionCollectionWidget
 {
     Q_OBJECT
 
 public:
-    WdgSelectionOptions(QWidget *parent) : QWidget(parent) {
-        setupUi(this);
-    }
-};
+    enum ReferenceLayers
+    {
+        CurrentLayer,
+        AllLayers,
+        ColorLabeledLayers
+    };
 
-/**
- */
-class KRITAUI_EXPORT KisSelectionOptions : public QWidget
-{
-
-    Q_OBJECT
-
-public:
-    KisSelectionOptions(KisCanvas2 * subject);
+    KisSelectionOptions(QWidget *parent = nullptr);
     ~KisSelectionOptions() override;
 
-public:
-    const QString SAMPLE_LAYERS_MODE_ALL = "sampleAllLayers";
-    const QString SAMPLE_LAYERS_MODE_COLOR_LABELED = "sampleColorLabeledLayers";
-    const QString SAMPLE_LAYERS_MODE_CURRENT = "sampleCurrentLayer";
+    SelectionMode mode() const;
+    SelectionAction action() const;
+    bool antiAliasSelection() const;
+    ReferenceLayers referenceLayers() const;
+    QList<int> selectedColorLabels() const;
 
-public:
-    int action();
+    void setMode(SelectionMode newMode);
+    void setAction(SelectionAction newAction);
+    void setAntiAliasSelection(bool newAntiAliasSelection);
+    void setReferenceLayers(ReferenceLayers newReferenceLayers);
+    void setSelectedColorLabels(const QList<int> &newSelectedColorLabels);
 
-    bool antiAliasSelection();
-    QList<int> colorLabelsSelected();
-    QString sampleLayersMode();
+    void setModeSectionVisible(bool visible);
+    void setActionSectionVisible(bool visible);
+    void setAdjustmentsSectionVisible(bool visible);
+    void setReferenceSectionVisible(bool visible);
 
-    void disableAntiAliasSelectionOption();
-    void disableSelectionModeOption();
-
-    void setAction(int);
-    void setMode(int);
-    void setAntiAliasSelection(bool value);
-    void setSampleLayersMode(QString mode);
-
-    void enablePixelOnlySelectionMode();
-    void setColorLabelsEnabled(bool enabled);
-
-    void updateActionButtonToolTip(int action, const QKeySequence &shortcut);
-
-    void attachToImage(KisImageSP image, KisCanvas2* canvas);
-
-    void activateConnectionToImage();
-    void deactivateConnectionToImage();
-
-
+    void updateActionButtonToolTip(SelectionAction action, const QKeySequence &shortcut);
 
 Q_SIGNALS:
-    void actionChanged(int);
-    void modeChanged(int);
-    void antiAliasSelectionChanged(bool);
+    void modeChanged(SelectionMode mode);
+    void actionChanged(SelectionAction action);
+    void antiAliasSelectionChanged(bool antiAliasSelection);
+    void referenceLayersChanged(ReferenceLayers referenceLayers);
     void selectedColorLabelsChanged();
-    void sampleLayersModeChanged(QString mode);
-
-private Q_SLOTS:
-    void hideActionsForSelectionMode(int mode);
-    void slotUpdateAvailableColorLabels();
-    void slotSampleLayersModeChanged(int index);
 
 private:
-    QString sampleLayerModeToUserString(QString sampleLayersMode);
-    void setCmbSampleLayersMode(QString sampleLayersModeId);
-
-private:
-    WdgSelectionOptions * m_page {nullptr};
-    QButtonGroup* m_mode {nullptr};
-    QButtonGroup* m_action {nullptr};
-    KisSignalCompressor m_colorLabelsCompressor;
-    KisImageSP m_image;
-    KisCanvas2* m_canvas {nullptr};
-    KisSignalAutoConnectionsStore m_nodesUpdatesConnectionsStore;
+    class Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif

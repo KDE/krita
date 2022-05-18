@@ -24,7 +24,7 @@ class KRITAWIDGETUTILS_EXPORT KisOptionButtonStrip : public QWidget
 
 public:
     explicit KisOptionButtonStrip(QWidget *parent = nullptr);
-    virtual ~KisOptionButtonStrip() override;
+    ~KisOptionButtonStrip() override;
 
     KoGroupButton* addButton(const QIcon &icon, const QString &text = QString());
     KoGroupButton* addButton(const QString &text);
@@ -35,6 +35,9 @@ public:
 
     bool exclusive() const;
     void setExclusive(bool exclusive);
+
+    KoGroupButton* checkedButton() const;
+    int checkedButtonIndex() const;
 
 Q_SIGNALS:
     void buttonToggled(KoGroupButton *button, bool checked);

@@ -12,6 +12,7 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
+#include <QApplication>
 
 #include <ksharedconfig.h>
 
@@ -30,8 +31,10 @@
 #include "commands_new/KisMergeLabeledLayersCommand.h"
 #include "kis_command_utils.h"
 #include "krita_utils.h"
+#include <kis_selection_filters.h>
 
-void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 *c, int fuzziness, const QRect & rc)
+
+void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const quint8 *c, int threshold, const QRect & rc)
 {
     if (rc.isEmpty()) {
         return;
@@ -52,7 +55,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
 
     for (int row = y; row < y + h; ++row) {
         do {
-            if (fuzziness == 1) {
+            if (threshold == 1) {
                 if (wantedOpacity == 0 && cs->opacityU8(hiter->rawDataConst()) == 0) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }
@@ -62,7 +65,7 @@ void selectByColor(KisPaintDeviceSP dev, KisPixelSelectionSP selection, const qu
             }
             else {
                 quint8 match = cs->difference(c, hiter->rawDataConst());
-                if (match <= fuzziness) {
+                if (match <= threshold) {
                     *(selIter->rawData()) = MAX_SELECTED;
                 }
             }
@@ -79,18 +82,13 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
                     i18n("Similar Color Selection")),
-      m_fuzziness(20)
+      m_threshold(20)
 {
 }
 
 void KisToolSelectSimilar::activate(const QSet<KoShape*> &shapes)
 {
     KisToolSelect::activate(shapes);
-    if (selectionOptionWidget()) {
-        // similar color selection tool doesn't use antialiasing option for now
-        // hence explicit disabling it
-        selectionOptionWidget()->disableAntiAliasSelectionOption();
-    }
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
@@ -105,7 +103,6 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 
     if (!currentNode() ||
         !(dev = currentNode()->projection()) ||
-        !currentNode()->visible() ||
         !selectionEditable()) {
 
         event->ignore();
@@ -159,7 +156,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     } else {
         KoColor pixelColor;
         sourceDevice->pixel(pos.x(), pos.y(), &pixelColor);
-        if (sourceDevice->colorSpace()->difference(pixelColor.data(), sourceDevice->defaultPixel().data()) <= m_fuzziness) {
+        if (sourceDevice->colorSpace()->difference(pixelColor.data(), sourceDevice->defaultPixel().data()) <= m_threshold) {
             areaToCheck = imageSP->bounds() | sourceDevice->exactBounds();
         } else {
             areaToCheck = sourceDevice->exactBounds();
@@ -172,17 +169,18 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
 
 
-    int fuzziness = m_fuzziness;
+    int threshold = m_threshold;
+    bool antialias = antiAliasSelection();
     // new stroke
 
     QSharedPointer<KoColor> color = QSharedPointer<KoColor>(new KoColor(sourceDevice->colorSpace()));
     QSharedPointer<bool> isDefaultPixel = QSharedPointer<bool>(new bool(true));
 
     KUndo2Command* cmdPickColor = new KisCommandUtils::LambdaCommand(
-                [pos, sourceDevice, color, isDefaultPixel, fuzziness] () mutable -> KUndo2Command* {
+                [pos, sourceDevice, color, isDefaultPixel, threshold] () mutable -> KUndo2Command* {
 
                     sourceDevice->pixel(pos.x(), pos.y(), color.data());
-                    *isDefaultPixel.data() = sourceDevice->colorSpace()->difference(color.data()->data(), sourceDevice->defaultPixel().data()) < fuzziness;
+                    *isDefaultPixel.data() = sourceDevice->colorSpace()->difference(color.data()->data(), sourceDevice->defaultPixel().data()) < threshold;
 
                     return 0;
     });
@@ -194,7 +192,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     for (int i = 0; i < patches.count(); i++) {
         QSharedPointer<QRect> patch = QSharedPointer<QRect>(new QRect(patches[i]));
         KUndo2Command* patchCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, patch, color, isDefaultPixel] () mutable -> KUndo2Command* {
+                    [threshold, tmpSel, sourceDevice, patch, color, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect patchRect = *patch.data();
                         QRect finalRect = patchRect;
@@ -202,7 +200,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
                             finalRect = patchRect.intersected(sourceDevice->exactBounds());
                         }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, patchRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, patchRect);
                         }
                         return 0;
         });
@@ -233,7 +231,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         QRect imageRect = image()->bounds();
 
         KUndo2Command* topCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
                         QRect patchRect = QRect(QPoint(0, contentRect.top()), QPoint(qMax(contentRect.right(), imageRect.right()), 0));
@@ -242,13 +240,13 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
                             finalRect = patchRect.intersected(contentRect);
                         }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
                         }
                         return 0;
         });
 
         KUndo2Command* rightCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
                         QRect patchRect = QRect(QPoint(imageRect.width(), 0), QPoint(contentRect.right(), qMax(contentRect.bottom(), imageRect.bottom())));
@@ -257,13 +255,13 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
                             finalRect = patchRect.intersected(contentRect);
                         }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
                         }
                         return 0;
         });
 
         KUndo2Command* bottomCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
                         QRect patchRect = QRect(QPoint(qMin(contentRect.left(), imageRect.left()), imageRect.bottom()), QPoint(imageRect.right(), contentRect.bottom()));
@@ -272,13 +270,13 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
                             finalRect = patchRect.intersected(contentRect);
                         }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
                         }
                         return 0;
         });
 
         KUndo2Command* leftCmd = new KisCommandUtils::LambdaCommand(
-                    [fuzziness, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
+                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
 
                         QRect contentRect = sourceDevice->exactBounds();
                         QRect patchRect = QRect(QPoint(contentRect.left(), qMin(contentRect.top(), imageRect.top())), QPoint(0, imageRect.bottom()));
@@ -287,7 +285,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
                             finalRect = patchRect.intersected(contentRect);
                         }
                         if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), fuzziness, finalRect);
+                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
                         }
                         return 0;
         });
@@ -299,6 +297,18 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         applicator.applyCommand(leftCmd, KisStrokeJobData::CONCURRENT);
 
     }
+
+
+    KUndo2Command* cmdAdjustSelection = new KisCommandUtils::LambdaCommand(
+                    [tmpSel, antialias] () mutable -> KUndo2Command* {
+                        if (antialias) {
+                            KisAntiAliasSelectionFilter antiAliasFilter;
+                            antiAliasFilter.process(tmpSel, tmpSel->selectedRect());
+                        }
+                        return 0;
+                    }
+    );
+    applicator.applyCommand(cmdAdjustSelection, KisStrokeJobData::SEQUENTIAL);
 
 
     KUndo2Command* cmdInvalidateCache = new KisCommandUtils::LambdaCommand(
@@ -327,41 +337,42 @@ void KisToolSelectSimilar::endPrimaryAction(KoPointerEvent *event)
     endSelectInteraction();
 }
 
-void KisToolSelectSimilar::slotSetFuzziness(int fuzziness)
+void KisToolSelectSimilar::slotSetThreshold(int threshold)
 {
-    m_fuzziness = fuzziness;
-    m_configGroup.writeEntry("fuzziness", fuzziness);
+    m_threshold = threshold;
+    m_configGroup.writeEntry("threshold", threshold);
 }
 
 QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
-    // similar color selection tool doesn't use antialiasing option for now
-    // hence explicit disabling it
-    selectionWidget->disableAntiAliasSelectionOption();
 
-    QHBoxLayout* fl = new QHBoxLayout();
-    QLabel * lbl = new QLabel(i18n("Fuzziness: "), selectionWidget);
-    fl->addWidget(lbl);
-
-    KisSliderSpinBox* input = new KisSliderSpinBox(selectionWidget);
-    input->setObjectName("fuzziness");
-    input->setRange(1, 200);
-    input->setSingleStep(10);
-    fl->addWidget(input);
-    connect(input, SIGNAL(valueChanged(int)), this, SLOT(slotSetFuzziness(int)));
-
-    selectionWidget->attachToImage(image(), dynamic_cast<KisCanvas2*>(canvas()));
     m_widgetHelper.setConfigGroupForExactTool(toolId());
 
-    QVBoxLayout* l = dynamic_cast<QVBoxLayout*>(selectionWidget->layout());
-    Q_ASSERT(l);
-    l->insertLayout(1, fl);
+    KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
+    sliderThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in similar selection tool options", "Threshold: "));
+    sliderThreshold->setRange(1, 200);
+    sliderThreshold->setSingleStep(20);
+    sliderThreshold->setToolTip(i18n("Set how far the selection should extend in terms of color similarity"));
+
+    KisOptionCollectionWidgetWithHeader *sectionSelectionExtent =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'selection extent' section label in similar selection tool options", "Selection extent")
+        );
+    sectionSelectionExtent->appendWidget("sliderThreshold", sliderThreshold);
+    selectionWidget->insertWidget(2, "sectionSelectionExtent", sectionSelectionExtent);
 
     // load setting from config
-    m_fuzziness = m_configGroup.readEntry("fuzziness", 20);
-    input->setValue(m_fuzziness);
+    if (m_configGroup.hasKey("threshold")) {
+        m_threshold = m_configGroup.readEntry("threshold", 20);
+    } else {
+        m_threshold = m_configGroup.readEntry("fuzziness", 20);
+    }
+    sliderThreshold->setValue(m_threshold);
+
+    connect(sliderThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
+
     return selectionWidget;
 }
 

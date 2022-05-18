@@ -11,11 +11,13 @@
 #include <KoShape.h>
 
 #include <QPointer>
+#include <QLayout>
 
 #include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
 #include "kis_delegated_tool_policies.h"
 #include "kis_tool.h"
+#include <KisOptionCollectionWidget.h>
 
 #define PRESS_CONDITION_OM(_event, _mode, _button, _modifier)           \
     (this->mode() == (_mode) && (_event)->button() == (_button) &&      \
@@ -120,9 +122,23 @@ public:
 
     QList<QPointer<QWidget> > createOptionWidgets() override
     {
-        QList<QPointer<QWidget> > list = BaseClass::createOptionWidgets();
-        list.append(m_localTool->createOptionWidgets());
-        return list;
+        QList<QPointer<QWidget>> baseWidgetList = BaseClass::createOptionWidgets();
+        QList<QPointer<QWidget>> localWidgetList = m_localTool->createOptionWidgets();
+
+        if (baseWidgetList.size() > 0 && dynamic_cast<KisOptionCollectionWidget*>(baseWidgetList.first().data())) {
+            KisOptionCollectionWidget *baseOptionsWidget = dynamic_cast<KisOptionCollectionWidget*>(baseWidgetList.first().data());
+            for (int i = 0; i < localWidgetList.size(); ++i) {
+                QWidget *widget = localWidgetList[i];
+                KisOptionCollectionWidgetWithHeader *section =
+                    new KisOptionCollectionWidgetWithHeader(widget->windowTitle());
+                const QString sectionName = "section" + QString::number(i);
+                section->appendWidget(sectionName + "Widget", widget);
+                baseOptionsWidget->appendWidget(sectionName, section);
+            }
+        } else {
+            baseWidgetList.append(localWidgetList);
+        }
+        return baseWidgetList;
     }
 
 protected:

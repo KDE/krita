@@ -7,55 +7,34 @@
 #include "kis_selection_tool_config_widget_helper.h"
 
 #include "kis_selection_options.h"
-#include "kis_canvas2.h"
-#include "KisViewManager.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_signals_blocker.h"
+#include <kis_signals_blocker.h>
 
 #include <KConfigGroup>
 #include <KSharedConfig>
 
 KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(const QString &windowTitle)
-    : m_optionsWidget(0),
-      m_windowTitle(windowTitle)
-{
-}
+    : m_optionsWidget(0)
+    , m_windowTitle(windowTitle)
+{}
 
-void KisSelectionToolConfigWidgetHelper::createOptionWidget(KisCanvas2 *canvas, const QString &toolId)
+void KisSelectionToolConfigWidgetHelper::createOptionWidget(const QString &toolId)
 {
-    m_optionsWidget = new KisSelectionOptions(canvas);
+    m_optionsWidget = new KisSelectionOptions;
     Q_CHECK_PTR(m_optionsWidget);
 
     m_optionsWidget->setObjectName(toolId + "option widget");
-    m_optionsWidget->setWindowTitle(m_windowTitle);
     slotToolActivatedChanged(true);
-
-    // See https://bugs.kde.org/show_bug.cgi?id=316896
-    QWidget *specialSpacer = new QWidget(m_optionsWidget);
-    specialSpacer->setObjectName("SpecialSpacer");
-    specialSpacer->setFixedSize(0, 0);
-    m_optionsWidget->layout()->addWidget(specialSpacer);
-
-    connect(m_optionsWidget, &KisSelectionOptions::actionChanged,
-            this, &KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged);
 
     connect(m_optionsWidget, &KisSelectionOptions::modeChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged);
-
+    connect(m_optionsWidget, &KisSelectionOptions::actionChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged);
     connect(m_optionsWidget, &KisSelectionOptions::antiAliasSelectionChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged);
-
+    connect(m_optionsWidget, &KisSelectionOptions::referenceLayersChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged);
     connect(m_optionsWidget, &KisSelectionOptions::selectedColorLabelsChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotSelectedColorLabelsChanged);
-
-    connect(m_optionsWidget, &KisSelectionOptions::sampleLayersModeChanged,
-            this, &KisSelectionToolConfigWidgetHelper::slotSampleLayersModeChanged);
-
-
-    m_optionsWidget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-    m_optionsWidget->adjustSize();
-
-    m_sampleLayersMode = m_optionsWidget->sampleLayersMode();
 }
 
 KisSelectionOptions* KisSelectionToolConfigWidgetHelper::optionWidget() const
@@ -65,80 +44,93 @@ KisSelectionOptions* KisSelectionToolConfigWidgetHelper::optionWidget() const
 
 SelectionMode KisSelectionToolConfigWidgetHelper::selectionMode() const
 {
-    return m_selectionMode;
+    if (!m_optionsWidget) {
+        return SHAPE_PROTECTION;
+    }
+    return m_optionsWidget->mode();
 }
 
 SelectionAction KisSelectionToolConfigWidgetHelper::selectionAction() const
 {
-    return m_selectionAction;
+    if (!m_optionsWidget) {
+        return SELECTION_DEFAULT;
+    }
+    return m_optionsWidget->action();
 }
 
 bool KisSelectionToolConfigWidgetHelper::antiAliasSelection() const
 {
-    return m_antiAliasSelection;
+    if (!m_optionsWidget) {
+        return true;
+    }
+    return m_optionsWidget->antiAliasSelection();
 }
 
-QList<int> KisSelectionToolConfigWidgetHelper::colorLabelsSelected() const
+KisSelectionOptions::ReferenceLayers KisSelectionToolConfigWidgetHelper::referenceLayers() const
 {
-    return m_colorLabelsSelected;
+    if (!m_optionsWidget) {
+        return KisSelectionOptions::CurrentLayer;
+    }
+    return m_optionsWidget->referenceLayers();
 }
 
-QString KisSelectionToolConfigWidgetHelper::sampleLayersMode() const
+QList<int> KisSelectionToolConfigWidgetHelper::selectedColorLabels() const
 {
-    return m_sampleLayersMode;
+    if (!m_optionsWidget) {
+        return {};
+    }
+    return m_optionsWidget->selectedColorLabels();
 }
 
 void KisSelectionToolConfigWidgetHelper::setConfigGroupForExactTool(QString toolId)
 {
     m_configGroupForTool = toolId;
-    if (m_configGroupForTool != "") {
-        KConfigGroup cfgToolSpecific = KSharedConfig::openConfig()->group(m_configGroupForTool);
-        QString newSampleMode = cfgToolSpecific.readEntry("sampleLayersMode", m_optionsWidget->SAMPLE_LAYERS_MODE_CURRENT);
-        if (newSampleMode != m_sampleLayersMode) {
-            m_optionsWidget->setSampleLayersMode(newSampleMode);
-        }
-        m_sampleLayersMode = newSampleMode;
-    }
+    reloadExactToolConfig();
 }
 
-void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(int action)
+void KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged(SelectionMode mode)
 {
-    if (action >= SELECTION_REPLACE && action <= SELECTION_SYMMETRICDIFFERENCE) {
-        m_selectionAction = (SelectionAction)action;
-
-        KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
-        cfg.writeEntry("selectionAction", action);
-
-        emit selectionActionChanged(action);
-    }
-}
-
-void KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged(int mode)
-{
-    m_selectionMode = (SelectionMode)mode;
-
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
-    cfg.writeEntry("selectionMode", mode);
+    cfg.writeEntry("selectionMode", static_cast<int>(mode));
+}
+
+void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(SelectionAction action)
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
+    cfg.writeEntry("selectionAction", static_cast<int>(action));
+    emit selectionActionChanged(action);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged(bool value)
 {
-    m_antiAliasSelection = value;
-
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     cfg.writeEntry("antiAliasSelection", value);
 }
 
-void KisSelectionToolConfigWidgetHelper::slotSelectedColorLabelsChanged()
-{
-    m_colorLabelsSelected = m_optionsWidget->colorLabelsSelected();
-}
-
-void KisSelectionToolConfigWidgetHelper::slotSampleLayersModeChanged(QString mode)
+void KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged(KisSelectionOptions::ReferenceLayers referenceLayers)
 {
     KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
-    cfg.writeEntry("sampleLayersMode", mode);
-    m_sampleLayersMode = mode;
+    cfg.writeEntry(
+        "sampleLayersMode",
+        referenceLayers == KisSelectionOptions::AllLayers ? "sampleAllLayers" :
+            (referenceLayers == KisSelectionOptions::ColorLabeledLayers ? "sampleColorLabeledLayers" :
+                                                                          "sampleCurrentLayer")
+    );
+}
+
+void KisSelectionToolConfigWidgetHelper::slotSelectedColorLabelsChanged()
+{
+    const QList<int> colorLabels = m_optionsWidget->selectedColorLabels();
+    if (colorLabels.isEmpty()) {
+        return;
+    }
+    QString colorLabelsStr = QString::number(colorLabels.first());
+    for (int i = 1; i < colorLabels.size(); ++i) {
+        colorLabelsStr += "," + QString::number(colorLabels[i]);
+    }
+
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
+    cfg.writeEntry("colorLabels", colorLabelsStr);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotReplaceModeRequested()
@@ -173,21 +165,48 @@ void KisSelectionToolConfigWidgetHelper::slotSymmetricDifferenceModeRequested()
 
 void KisSelectionToolConfigWidgetHelper::slotToolActivatedChanged(bool isActivated)
 {
-    if (!isActivated) return;
+    if (!isActivated || !m_optionsWidget) {
+        return;
+    }
 
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
-    m_selectionAction = (SelectionAction)cfg.readEntry("selectionAction", (int)SELECTION_REPLACE);
-    m_selectionMode = (SelectionMode)cfg.readEntry("selectionMode", (int)SHAPE_PROTECTION);
-    m_antiAliasSelection = cfg.readEntry("antiAliasSelection", true);
-    if (m_configGroupForTool != "")
-    {
-        KConfigGroup cfgToolSpecific = KSharedConfig::openConfig()->group(m_configGroupForTool);
-        m_sampleLayersMode = cfgToolSpecific.readEntry("sampleLayersMode", m_optionsWidget->SAMPLE_LAYERS_MODE_CURRENT);
+    
+    const SelectionMode selectionMode = (SelectionMode)cfg.readEntry("selectionMode", static_cast<int>(SHAPE_PROTECTION));
+    const SelectionAction selectionAction = (SelectionAction)cfg.readEntry("selectionAction", static_cast<int>(SELECTION_REPLACE));
+    const bool antiAliasSelection = cfg.readEntry("antiAliasSelection", true);
+    
+    KisSignalsBlocker b(m_optionsWidget);
+    m_optionsWidget->setMode(selectionMode);
+    m_optionsWidget->setAction(selectionAction);
+    m_optionsWidget->setAntiAliasSelection(antiAliasSelection);
+    
+    reloadExactToolConfig();
+}
+
+void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
+{
+    if (m_configGroupForTool == "") {
+        return;
+    }
+
+    KConfigGroup cfgToolSpecific = KSharedConfig::openConfig()->group(m_configGroupForTool);
+    const QString referenceLayersStr = cfgToolSpecific.readEntry("sampleLayersMode", "sampleCurrentLayer");
+    const QStringList colorLabelsStr = cfgToolSpecific.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
+
+    const KisSelectionOptions::ReferenceLayers referenceLayers =
+        referenceLayersStr == "sampleAllLayers" ? KisSelectionOptions::AllLayers :
+            (referenceLayersStr == "sampleColorLabeledLayers" ? KisSelectionOptions::ColorLabeledLayers :
+                                                                KisSelectionOptions::CurrentLayer);
+    QList<int> colorLabels;
+    for (const QString &colorLabelStr : colorLabelsStr) {
+        bool ok;
+        const int colorLabel = colorLabelStr.toInt(&ok);
+        if (ok) {
+            colorLabels << colorLabel;
+        }
     }
 
     KisSignalsBlocker b(m_optionsWidget);
-    m_optionsWidget->setAction(m_selectionAction);
-    m_optionsWidget->setMode(m_selectionMode);
-    m_optionsWidget->setAntiAliasSelection(m_antiAliasSelection);
-    m_optionsWidget->setSampleLayersMode(m_sampleLayersMode);
+    m_optionsWidget->setReferenceLayers(referenceLayers);
+    m_optionsWidget->setSelectedColorLabels(colorLabels);
 }

@@ -47,7 +47,7 @@ protected:
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
-    virtual void slotSetFuzziness(int);
+    virtual void slotSetThreshold(int);
     virtual void slotSetOpacitySpread(int);
     virtual void slotSetSizemod(int);
     virtual void slotSetFeather(int);
@@ -58,7 +58,7 @@ protected:
     using KisToolSelectBase::m_widgetHelper;
 
 private:
-    int  m_fuzziness {20};
+    int  m_threshold {20};
     int  m_opacitySpread {100};
     int  m_sizemod {0};
     int  m_feather {0};

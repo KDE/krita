@@ -47,8 +47,6 @@ KisRectangleConstraintWidget::KisRectangleConstraintWidget(QWidget *parent, KisT
     if (!showRoundCornersGUI) {
         intRoundCornersX->setVisible(false);
         intRoundCornersY->setVisible(false);
-        lblRoundCornersX->setVisible(false);
-        lblRoundCornersY->setVisible(false);
         cornersAspectButton->setVisible(false);
     }
 }

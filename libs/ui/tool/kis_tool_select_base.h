@@ -135,13 +135,11 @@ public:
         updateActionShortcutToolTips();
 
         if (m_widgetHelper.optionWidget()) {
-
-            m_widgetHelper.optionWidget()->activateConnectionToImage();
-
             if (isPixelOnly()) {
-                m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+                m_widgetHelper.optionWidget()->setModeSectionVisible(false);
+                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(true);
             }
-            m_widgetHelper.optionWidget()->setColorLabelsEnabled(usesColorLabels());
+            m_widgetHelper.optionWidget()->setReferenceSectionVisible(usesColorLabels());
         }
     }
 
@@ -149,26 +147,22 @@ public:
     {
         BaseClass::deactivate();
         m_modeConnections.clear();
-        if (m_widgetHelper.optionWidget()) {
-            m_widgetHelper.optionWidget()->deactivateConnectionToImage();
-        }
     }
 
     QWidget* createOptionWidget()
     {
-        KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(this->canvas());
-        Q_ASSERT(canvas);
-
-        m_widgetHelper.createOptionWidget(canvas, this->toolId());
+        m_widgetHelper.createOptionWidget(this->toolId());
         this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
-        this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(int)), this, SLOT(resetCursorStyle()));
+        this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(SelectionAction)), this, SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
         if (m_widgetHelper.optionWidget()) {
+            m_widgetHelper.optionWidget()->setContentsMargins(0, 10, 0, 10);
             if (isPixelOnly()) {
-                m_widgetHelper.optionWidget()->enablePixelOnlySelectionMode();
+                m_widgetHelper.optionWidget()->setModeSectionVisible(false);
+                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(true);
             }
-            m_widgetHelper.optionWidget()->setColorLabelsEnabled(usesColorLabels());
+            m_widgetHelper.optionWidget()->setReferenceSectionVisible(usesColorLabels());
         }
 
         return m_widgetHelper.optionWidget();
@@ -194,17 +188,17 @@ public:
 
     QList<int> colorLabelsSelected() const
     {
-        return m_widgetHelper.colorLabelsSelected();
+        return m_widgetHelper.selectedColorLabels();
     }
 
     SampleLayersMode sampleLayersMode() const
     {
-        QString layersMode = m_widgetHelper.sampleLayersMode();
-        if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_ALL) {
+        KisSelectionOptions::ReferenceLayers referenceLayers = m_widgetHelper.referenceLayers();
+        if (referenceLayers == KisSelectionOptions::AllLayers) {
             return SampleAllLayers;
-        } else if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_CURRENT) {
+        } else if (referenceLayers == KisSelectionOptions::CurrentLayer) {
             return SampleCurrentLayer;
-        } else if (layersMode == m_widgetHelper.optionWidget()->SAMPLE_LAYERS_MODE_COLOR_LABELED) {
+        } else if (referenceLayers == KisSelectionOptions::ColorLabeledLayers) {
             return SampleColorLabeledLayers;
         }
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(true, SampleAllLayers);

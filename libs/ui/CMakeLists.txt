@@ -565,7 +565,6 @@ ki18n_wrap_ui(kritaui_LIB_SRCS
     forms/wdgcolorspaceselectoradvanced.ui
     forms/wdgdisplaysettings.ui
     forms/kis_matrix_widget.ui
-    forms/wdgselectionoptions.ui
     forms/wdggeometryoptions.ui
     forms/wdgnewimage.ui
     forms/wdgimageproperties.ui

@@ -6,12 +6,7 @@
 
 #include "kis_selection_options.h"
 
-#include <QWidget>
-#include <QRadioButton>
-#include <QComboBox>
-#include <QVBoxLayout>
-#include <QLayout>
-#include <QButtonGroup>
+#include <QCheckBox>
 
 #include <kis_icon.h>
 #include "kis_types.h"
@@ -19,284 +14,323 @@
 #include "kis_image.h"
 #include "kis_selection.h"
 #include "kis_paint_device.h"
-#include "canvas/kis_canvas2.h"
 #include "KisViewManager.h"
-#include "kis_signal_compressor.h"
 #include "kis_shape_controller.h"
-#include "kis_canvas2.h"
-#include "KisDocument.h"
-#include "kis_dummies_facade_base.h"
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
 
-KisSelectionOptions::KisSelectionOptions(KisCanvas2 * /*canvas*/)
-    : m_colorLabelsCompressor(900, KisSignalCompressor::FIRST_INACTIVE)
+#include <KisOptionButtonStrip.h>
+#include <KoGroupButton.h>
+#include <kis_color_label_selector_widget.h>
+
+class KisSelectionOptions::Private
 {
-    m_page = new WdgSelectionOptions(this);
-    Q_CHECK_PTR(m_page);
+public:
+    KisSelectionOptions *q;
+    KisOptionButtonStrip *optionButtonStripMode {nullptr};
+    KisOptionButtonStrip *optionButtonStripAction {nullptr};
+    QCheckBox *checkBoxAntiAliasSelection {nullptr};
+    KisOptionButtonStrip *optionButtonStripReference {nullptr};
+    KisColorLabelSelectorWidget *widgetLabels {nullptr};
 
-    QVBoxLayout * l = new QVBoxLayout(this);
-    l->addWidget(m_page);
-    l->addSpacerItem(new QSpacerItem(0,0, QSizePolicy::Preferred, QSizePolicy::Expanding));
-    l->setContentsMargins(0,0,0,0);
+    int modeToButtonIndex(SelectionMode mode) const
+    {
+        return mode == PIXEL_SELECTION ? 0 : 1;
+    }
 
-    m_mode = new QButtonGroup(this);
-    m_mode->addButton(m_page->pixel, PIXEL_SELECTION);
-    m_mode->addButton(m_page->shape, SHAPE_PROTECTION);
+    SelectionMode buttonIndexToMode(int index) const
+    {
+        return index == 0 ? PIXEL_SELECTION : SHAPE_PROTECTION;
+    }
 
-    m_action = new QButtonGroup(this);
-    m_action->addButton(m_page->add, SELECTION_ADD);
-    m_action->addButton(m_page->subtract, SELECTION_SUBTRACT);
-    m_action->addButton(m_page->replace, SELECTION_REPLACE);
-    m_action->addButton(m_page->intersect, SELECTION_INTERSECT);
-    m_action->addButton(m_page->symmetricdifference, SELECTION_SYMMETRICDIFFERENCE);
+    int actionToButtonIndex(SelectionAction action) const
+    {
+        switch (action) {
+        case SELECTION_REPLACE: return 0;
+        case SELECTION_INTERSECT: return 1;
+        case SELECTION_ADD: return 2;
+        case SELECTION_SUBTRACT: return 3;
+        case SELECTION_SYMMETRICDIFFERENCE: return 4;
+        default: return 0;
+        }
+    }
 
-    m_page->pixel->setGroupPosition(KoGroupButton::GroupLeft);
-    m_page->shape->setGroupPosition(KoGroupButton::GroupRight);
-    m_page->pixel->setIcon(KisIconUtils::loadIcon("select-pixel"));
-    m_page->shape->setIcon(KisIconUtils::loadIcon("select-shape"));
+    SelectionAction buttonIndexToAction(int index) const
+    {
+        switch (index) {
+        case 0: return SELECTION_REPLACE;
+        case 1: return SELECTION_INTERSECT;
+        case 2: return SELECTION_ADD;
+        case 3: return SELECTION_SUBTRACT;
+        case 4: return SELECTION_SYMMETRICDIFFERENCE;
+        default: return SELECTION_REPLACE;
+        }
+    }
 
-    m_page->add->setGroupPosition(KoGroupButton::GroupCenter);
-    m_page->subtract->setGroupPosition(KoGroupButton::GroupCenter);
-    m_page->replace->setGroupPosition(KoGroupButton::GroupLeft);
-    m_page->intersect->setGroupPosition(KoGroupButton::GroupCenter);
-    m_page->symmetricdifference->setGroupPosition(KoGroupButton::GroupRight);
-    m_page->add->setIcon(KisIconUtils::loadIcon("selection_add"));
-    m_page->subtract->setIcon(KisIconUtils::loadIcon("selection_subtract"));
-    m_page->replace->setIcon(KisIconUtils::loadIcon("selection_replace"));
-    m_page->intersect->setIcon(KisIconUtils::loadIcon("selection_intersect"));
-    m_page->symmetricdifference->setIcon(KisIconUtils::loadIcon("selection_symmetric_difference"));
+    int referenceLayersToButtonIndex(ReferenceLayers action) const
+    {
+        switch (action) {
+        case CurrentLayer: return 0;
+        case AllLayers: return 1;
+        case ColorLabeledLayers: return 2;
+        default: return 0;
+        }
+    }
 
-    m_page->cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_CURRENT), SAMPLE_LAYERS_MODE_CURRENT);
-    m_page->cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_ALL), SAMPLE_LAYERS_MODE_ALL);
-    m_page->cmbSampleLayersMode->addItem(sampleLayerModeToUserString(SAMPLE_LAYERS_MODE_COLOR_LABELED), SAMPLE_LAYERS_MODE_COLOR_LABELED);
-    m_page->cmbSampleLayersMode->setEditable(false);
+    ReferenceLayers buttonIndexToReferenceLayers(int index) const
+    {
+        switch (index) {
+        case 0: return CurrentLayer;
+        case 1: return AllLayers;
+        case 2: return ColorLabeledLayers;
+        default: return CurrentLayer;
+        }
+    }
 
-    m_page->cmbColorLabels->setModes(false, false);
+    void on_optionButtonStripMode_buttonToggled(int index, bool checked)
+    {
+        if (!checked) {
+            return;
+        }
+        const SelectionMode mode = buttonIndexToMode(index);
+        q->setAdjustmentsSectionVisible(mode == PIXEL_SELECTION);
+        emit q->modeChanged(mode);
+    }
 
-    connect(m_mode, SIGNAL(buttonClicked(int)), this, SIGNAL(modeChanged(int)));
-    connect(m_action, SIGNAL(buttonClicked(int)), this, SIGNAL(actionChanged(int)));
-    connect(m_mode, SIGNAL(buttonClicked(int)), this, SLOT(hideActionsForSelectionMode(int)));
-    connect(m_page->chkAntiAliasing, SIGNAL(toggled(bool)), this, SIGNAL(antiAliasSelectionChanged(bool)));
-    connect(m_page->cmbColorLabels, SIGNAL(selectedColorsChanged()), this, SIGNAL(selectedColorLabelsChanged()));
-    connect(m_page->cmbSampleLayersMode, SIGNAL(currentIndexChanged(int)), this, SLOT(slotSampleLayersModeChanged(int)));
+    void on_optionButtonStripAction_buttonToggled(int index, bool checked)
+    {
+        if (!checked) {
+            return;
+        }
+        emit q->actionChanged(buttonIndexToAction(index));
+    }
 
-    KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
-    m_page->chkAntiAliasing->setChecked(cfg.readEntry("antiAliasSelection", true));
+    void on_optionButtonStripReference_buttonToggled(int index, bool checked)
+    {
+        if (!checked) {
+            return;
+        }
+        const ReferenceLayers referenceLayers = buttonIndexToReferenceLayers(index);
+        KisOptionCollectionWidgetWithHeader *sectionReference =
+            q->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionReference");
+        sectionReference->setWidgetVisible("widgetLabels", referenceLayers == ColorLabeledLayers);
+        
+        emit q->referenceLayersChanged(referenceLayers);
+    }
+};
 
-    connect(&m_colorLabelsCompressor, SIGNAL(timeout()), this, SLOT(slotUpdateAvailableColorLabels()));
+KisSelectionOptions::KisSelectionOptions(QWidget *parent)
+    : KisOptionCollectionWidget(parent)
+    , m_d(new Private)
+{
+    m_d->q = this;
+    // Create widgets
+    m_d->optionButtonStripMode = new KisOptionButtonStrip;
+    m_d->optionButtonStripMode->addButton(KisIconUtils::loadIcon("select-pixel"));
+    m_d->optionButtonStripMode->addButton(KisIconUtils::loadIcon("select-shape"));
+    m_d->optionButtonStripMode->button(0)->setChecked(true);
+
+    m_d->optionButtonStripAction = new KisOptionButtonStrip;
+    m_d->optionButtonStripAction->addButton(KisIconUtils::loadIcon("selection_replace"));
+    m_d->optionButtonStripAction->addButton(KisIconUtils::loadIcon("selection_intersect"));
+    m_d->optionButtonStripAction->addButton(KisIconUtils::loadIcon("selection_add"));
+    m_d->optionButtonStripAction->addButton(KisIconUtils::loadIcon("selection_subtract"));
+    m_d->optionButtonStripAction->addButton(KisIconUtils::loadIcon("selection_symmetric_difference"));
+    m_d->optionButtonStripAction->button(0)->setChecked(true);
+
+    m_d->checkBoxAntiAliasSelection = new QCheckBox(i18nc("The anti-alias checkbox in fill tool options", "Anti-aliasing"));
+
+    m_d->optionButtonStripReference = new KisOptionButtonStrip;
+    m_d->optionButtonStripReference->addButton(KisIconUtils::loadIcon("current-layer"));
+    m_d->optionButtonStripReference->addButton(KisIconUtils::loadIcon("all-layers"));
+    m_d->optionButtonStripReference->addButton(KisIconUtils::loadIcon("tag"));
+    m_d->optionButtonStripReference->button(0)->setChecked(true);
+    m_d->widgetLabels = new KisColorLabelSelectorWidget;
+    m_d->widgetLabels->setExclusive(false);
+    m_d->widgetLabels->setButtonSize(20);
+    m_d->widgetLabels->setButtonWrapEnabled(true);
+    m_d->widgetLabels->setMouseDragEnabled(true);
+
+    // Set the tooltips
+    m_d->optionButtonStripMode->button(0)->setToolTip(i18nc("@info:tooltip", "Pixel Selection"));
+    m_d->optionButtonStripMode->button(1)->setToolTip(i18nc("@info:tooltip", "Vector Selection"));
+
+    m_d->optionButtonStripAction->button(0)->setToolTip(i18nc("@info:tooltip", "Replace"));
+    m_d->optionButtonStripAction->button(1)->setToolTip(i18nc("@info:tooltip", "Intersect"));
+    m_d->optionButtonStripAction->button(2)->setToolTip(i18nc("@info:tooltip", "Add"));
+    m_d->optionButtonStripAction->button(3)->setToolTip(i18nc("@info:tooltip", "Subtract"));
+    m_d->optionButtonStripAction->button(4)->setToolTip(i18nc("@info:tooltip", "Symmetric Difference"));
+
+    m_d->checkBoxAntiAliasSelection->setToolTip(i18n("Smooth the jagged edges"));
+
+    m_d->optionButtonStripReference->button(0)->setToolTip(i18n("Make the selection using the active layer"));
+    m_d->optionButtonStripReference->button(1)->setToolTip(i18n("Make the selection using a merged copy of all layers"));
+    m_d->optionButtonStripReference->button(2)->setToolTip(i18n("Make the selection using a merged copy of the selected color-labeled layers"));
+
+    // Construct the option widget
+    setSeparatorsVisible(true);
+
+    KisOptionCollectionWidgetWithHeader *sectionMode =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'mode' section label in selection tools options", "Mode")
+        );
+    sectionMode->setPrimaryWidget(m_d->optionButtonStripMode);
+    appendWidget("sectionMode", sectionMode);
+
+    KisOptionCollectionWidgetWithHeader *sectionAction =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'action' section label in selection tools options", "Action")
+        );
+    sectionAction->setPrimaryWidget(m_d->optionButtonStripAction);
+    appendWidget("sectionAction", sectionAction);
+
+    KisOptionCollectionWidgetWithHeader *sectionAdjustments =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'adjustments' section label in selection tools options", "Adjustments")
+        );
+    sectionAdjustments->appendWidget("checkBoxAntiAliasSelection", m_d->checkBoxAntiAliasSelection);
+    appendWidget("sectionAdjustments", sectionAdjustments);
+
+    KisOptionCollectionWidgetWithHeader *sectionReference =
+        new KisOptionCollectionWidgetWithHeader(
+            i18nc("The 'reference' section label in selection tools options", "Reference")
+        );
+    sectionReference->setPrimaryWidget(m_d->optionButtonStripReference);
+    sectionReference->appendWidget("widgetLabels", m_d->widgetLabels);
+    sectionReference->setWidgetVisible("widgetLabels", false);
+    appendWidget("sectionReference", sectionReference);
+
+    // Make connections
+    connect(m_d->optionButtonStripMode,
+            QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
+            [this](int i, int c) { m_d->on_optionButtonStripMode_buttonToggled(i, c); });
+    connect(m_d->optionButtonStripAction,
+            QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
+            [this](int i, int c) { m_d->on_optionButtonStripAction_buttonToggled(i, c); });
+    connect(m_d->checkBoxAntiAliasSelection, SIGNAL(toggled(bool)), SIGNAL(antiAliasSelectionChanged(bool)));
+    connect(m_d->optionButtonStripReference,
+            QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
+            [this](int i, int c) { m_d->on_optionButtonStripReference_buttonToggled(i, c); });
+    connect(m_d->widgetLabels, SIGNAL(selectionChanged()), SIGNAL(selectedColorLabelsChanged()));
 }
 
 KisSelectionOptions::~KisSelectionOptions()
+{}
+
+SelectionMode KisSelectionOptions::mode() const
 {
+    return m_d->buttonIndexToMode(m_d->optionButtonStripMode->checkedButtonIndex());
 }
 
-int KisSelectionOptions::action()
+SelectionAction KisSelectionOptions::action() const
 {
-    return m_action->checkedId();
+    return m_d->buttonIndexToAction(m_d->optionButtonStripAction->checkedButtonIndex());
 }
 
-void KisSelectionOptions::setAction(int action) {
-    QAbstractButton* button = m_action->button(action);
+bool KisSelectionOptions::antiAliasSelection() const
+{
+    return m_d->checkBoxAntiAliasSelection->isChecked();
+}
+
+KisSelectionOptions::ReferenceLayers KisSelectionOptions::referenceLayers() const
+{
+    return m_d->buttonIndexToReferenceLayers(m_d->optionButtonStripReference->checkedButtonIndex());
+}
+
+QList<int> KisSelectionOptions::selectedColorLabels() const
+{
+    return m_d->widgetLabels->selection();
+}
+
+void KisSelectionOptions::setMode(SelectionMode newMode)
+{
+    KoGroupButton* button = m_d->optionButtonStripMode->button(m_d->modeToButtonIndex(newMode));
     KIS_SAFE_ASSERT_RECOVER_RETURN(button);
 
     button->setChecked(true);
 }
 
-void KisSelectionOptions::setMode(int mode) {
-    QAbstractButton* button = m_mode->button(mode);
+void KisSelectionOptions::setAction(SelectionAction newAction)
+{
+    KoGroupButton* button = m_d->optionButtonStripAction->button(m_d->actionToButtonIndex(newAction));
     KIS_SAFE_ASSERT_RECOVER_RETURN(button);
 
     button->setChecked(true);
-    hideActionsForSelectionMode(mode);
 }
 
-void KisSelectionOptions::setAntiAliasSelection(bool value)
+void KisSelectionOptions::setAntiAliasSelection(bool newAntiAliasSelection)
 {
-    m_page->chkAntiAliasing->setChecked(value);
+    m_d->checkBoxAntiAliasSelection->setChecked(newAntiAliasSelection);
 }
 
-void KisSelectionOptions::setSampleLayersMode(QString mode)
+void KisSelectionOptions::setReferenceLayers(ReferenceLayers newReferenceLayers)
 {
-    if (mode != SAMPLE_LAYERS_MODE_ALL && mode != SAMPLE_LAYERS_MODE_COLOR_LABELED && mode != SAMPLE_LAYERS_MODE_CURRENT) {
-        mode = SAMPLE_LAYERS_MODE_CURRENT;
-    }
-    setCmbSampleLayersMode(mode);
+    KoGroupButton* button = m_d->optionButtonStripReference->button(m_d->referenceLayersToButtonIndex(newReferenceLayers));
+    KIS_SAFE_ASSERT_RECOVER_RETURN(button);
+
+    button->setChecked(true);
 }
 
-void KisSelectionOptions::enablePixelOnlySelectionMode()
+void KisSelectionOptions::setSelectedColorLabels(const QList<int> &newSelectedColorLabels)
 {
-    setMode(PIXEL_SELECTION);
-    disableSelectionModeOption();
+    m_d->widgetLabels->setSelection(newSelectedColorLabels);
 }
 
-void KisSelectionOptions::setColorLabelsEnabled(bool enabled)
+void KisSelectionOptions::setModeSectionVisible(bool visible)
 {
-    if (enabled) {
-        m_page->cmbColorLabels->show();
-        m_page->cmbSampleLayersMode->show();
-    } else {
-        m_page->cmbColorLabels->hide();
-        m_page->cmbSampleLayersMode->hide();
-    }
+    setWidgetVisible("sectionMode", visible);
 }
 
-void KisSelectionOptions::updateActionButtonToolTip(int action, const QKeySequence &shortcut)
+void KisSelectionOptions::setActionSectionVisible(bool visible)
+{
+    setWidgetVisible("sectionAction", visible);
+}
+
+void KisSelectionOptions::setAdjustmentsSectionVisible(bool visible)
+{
+    setWidgetVisible("sectionAdjustments", visible);
+}
+
+void KisSelectionOptions::setReferenceSectionVisible(bool visible)
+{
+    setWidgetVisible("sectionReference", visible);
+}
+
+void KisSelectionOptions::updateActionButtonToolTip(SelectionAction action, const QKeySequence &shortcut)
 {
     const QString shortcutString = shortcut.toString(QKeySequence::NativeText);
     QString toolTipText;
-    switch ((SelectionAction)action) {
+    const int buttonIndex = m_d->actionToButtonIndex(action);
+
+    switch (action) {
     case SELECTION_DEFAULT:
     case SELECTION_REPLACE:
         toolTipText = shortcutString.isEmpty() ?
             i18nc("@info:tooltip", "Replace") :
             i18nc("@info:tooltip", "Replace (%1)", shortcutString);
-
-        m_action->button(SELECTION_REPLACE)->setToolTip(toolTipText);
         break;
     case SELECTION_ADD:
         toolTipText = shortcutString.isEmpty() ?
             i18nc("@info:tooltip", "Add") :
             i18nc("@info:tooltip", "Add (%1)", shortcutString);
-
-        m_action->button(SELECTION_ADD)->setToolTip(toolTipText);
         break;
     case SELECTION_SUBTRACT:
         toolTipText = shortcutString.isEmpty() ?
             i18nc("@info:tooltip", "Subtract") :
             i18nc("@info:tooltip", "Subtract (%1)", shortcutString);
-
-        m_action->button(SELECTION_SUBTRACT)->setToolTip(toolTipText);
-
         break;
     case SELECTION_INTERSECT:
         toolTipText = shortcutString.isEmpty() ?
             i18nc("@info:tooltip", "Intersect") :
             i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
-
-        m_action->button(SELECTION_INTERSECT)->setToolTip(toolTipText);
-
         break;
-        
     case SELECTION_SYMMETRICDIFFERENCE:
         toolTipText = shortcutString.isEmpty() ?
             i18nc("@info:tooltip", "Symmetric Difference") :
             i18nc("@info:tooltip", "Symmetric Difference (%1)", shortcutString);
-
-        m_action->button(SELECTION_SYMMETRICDIFFERENCE)->setToolTip(toolTipText);
-
         break;
     }
+
+    m_d->optionButtonStripAction->button(buttonIndex)->setToolTip(toolTipText);
 }
-
-void KisSelectionOptions::attachToImage(KisImageSP image, KisCanvas2* canvas)
-{
-    m_image = image;
-    m_canvas = canvas;
-    activateConnectionToImage();
-}
-
-void KisSelectionOptions::activateConnectionToImage()
-{
-    if (m_image && m_canvas) {
-        m_page->cmbColorLabels->updateAvailableLabels(m_image->root());
-        KIS_SAFE_ASSERT_RECOVER_RETURN(m_canvas);
-        KisDocument *doc = m_canvas->imageView()->document();
-
-        KisShapeController *kritaShapeController =
-                dynamic_cast<KisShapeController*>(doc->shapeController());
-        KisDummiesFacadeBase* m_dummiesFacade = static_cast<KisDummiesFacadeBase*>(kritaShapeController);
-        if (m_dummiesFacade) {
-            m_nodesUpdatesConnectionsStore.addConnection(m_dummiesFacade, SIGNAL(sigEndInsertDummy(KisNodeDummy*)),
-                                                         &m_colorLabelsCompressor, SLOT(start()));
-            m_nodesUpdatesConnectionsStore.addConnection(m_dummiesFacade, SIGNAL(sigEndRemoveDummy()),
-                                                         &m_colorLabelsCompressor, SLOT(start()));
-            m_nodesUpdatesConnectionsStore.addConnection(m_dummiesFacade, SIGNAL(sigDummyChanged(KisNodeDummy*)),
-                                                         &m_colorLabelsCompressor, SLOT(start()));
-        }
-    }
-}
-
-void KisSelectionOptions::deactivateConnectionToImage()
-{
-    m_nodesUpdatesConnectionsStore.clear();
-}
-
-//hide action buttons and antialiasing, if shape selection is active (actions currently don't work on shape selection)
-void KisSelectionOptions::hideActionsForSelectionMode(int mode) {
-    const bool isPixelSelection = (mode == (int)PIXEL_SELECTION);
-
-    m_page->chkAntiAliasing->setVisible(isPixelSelection);
-}
-
-void KisSelectionOptions::slotUpdateAvailableColorLabels()
-{
-    if (m_image) {
-        m_page->cmbColorLabels->updateAvailableLabels(m_image->root());
-    }
-}
-
-void KisSelectionOptions::slotSampleLayersModeChanged(int index)
-{
-    QString newSampleLayersMode = m_page->cmbSampleLayersMode->itemData(index).toString();
-    m_page->cmbColorLabels->setEnabled(newSampleLayersMode == SAMPLE_LAYERS_MODE_COLOR_LABELED);
-    emit sampleLayersModeChanged(newSampleLayersMode);
-}
-
-QString KisSelectionOptions::sampleLayerModeToUserString(QString sampleLayersModeId)
-{
-    QString currentLayer = i18nc("Option in selection tool: take only the current layer into account when calculating the selection", "Current Layer");
-    if (sampleLayersModeId == SAMPLE_LAYERS_MODE_CURRENT) {
-        return currentLayer;
-    } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_ALL) {
-        return i18nc("Option in selection tool: take all layers (merged) into account when calculating the selection", "All Layers");
-    } else if (sampleLayersModeId == SAMPLE_LAYERS_MODE_COLOR_LABELED) {
-        return i18nc("Option in selection tool: take all layers that were marked with specific color labels (more precisely, all of them merged) "
-                     "into account when calculating the selection", "Color Labeled Layers");
-    }
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(false, currentLayer);
-    return currentLayer;
-}
-
-void KisSelectionOptions::setCmbSampleLayersMode(QString sampleLayersModeId)
-{
-    for (int i = 0; i < m_page->cmbSampleLayersMode->count(); i++) {
-        if (m_page->cmbSampleLayersMode->itemData(i).toString() == sampleLayersModeId)
-        {
-            m_page->cmbSampleLayersMode->setCurrentIndex(i);
-            break;
-        }
-    }
-    m_page->cmbColorLabels->setEnabled(sampleLayersModeId == SAMPLE_LAYERS_MODE_COLOR_LABELED);
-}
-
-bool KisSelectionOptions::antiAliasSelection()
-{
-    return m_page->chkAntiAliasing->isChecked();
-}
-
-QList<int> KisSelectionOptions::colorLabelsSelected()
-{
-    return m_page->cmbColorLabels->selectedColors();
-}
-
-QString KisSelectionOptions::sampleLayersMode()
-{
-    return m_page->cmbSampleLayersMode->currentData().toString();
-}
-
-void KisSelectionOptions::disableAntiAliasSelectionOption()
-{
-    m_page->chkAntiAliasing->hide();
-    disconnect(m_page->pixel, SIGNAL(clicked()), m_page->chkAntiAliasing, SLOT(show()));
-}
-
-void KisSelectionOptions::disableSelectionModeOption()
-{
-    m_page->lblMode->hide();
-    m_page->pixel->hide();
-    m_page->shape->hide();
-}
-

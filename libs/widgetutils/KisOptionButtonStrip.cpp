@@ -102,3 +102,13 @@ void KisOptionButtonStrip::setExclusive(bool exclusive)
 {
     m_d->buttonGroup->setExclusive(exclusive);
 }
+
+KoGroupButton* KisOptionButtonStrip::checkedButton() const
+{
+    return dynamic_cast<KoGroupButton*>(m_d->buttonGroup->checkedButton());
+}
+
+int KisOptionButtonStrip::checkedButtonIndex() const
+{
+    return m_d->buttonGroup->checkedId();
+}

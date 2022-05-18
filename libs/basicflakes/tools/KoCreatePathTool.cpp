@@ -29,7 +29,8 @@
 #include <QSpinBox>
 #include <QPainter>
 #include <QLabel>
-#include <QGridLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QCheckBox>
 
 
@@ -539,37 +540,49 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
 
     QList<QPointer<QWidget> > list;
 
-    QCheckBox *smoothCurves = new QCheckBox(i18n("Autosmooth curve"));
+    QWidget *widget = new QWidget();
+    widget->setObjectName("bezier-curve-tool-widget");
+    widget->setWindowTitle(i18n("Path options"));
+
+    QCheckBox *smoothCurves = new QCheckBox(i18n("Autosmooth curve"), widget);
     smoothCurves->setObjectName("smooth-curves-widget");
     smoothCurves->setChecked(d->autoSmoothCurves);
-    connect(smoothCurves, SIGNAL(toggled(bool)), this, SLOT(autoSmoothCurvesChanged(bool)));
-    connect(this, SIGNAL(sigUpdateAutoSmoothCurvesGUI(bool)), smoothCurves, SLOT(setChecked(bool)));
 
-    list.append(smoothCurves);
+    QCheckBox *angleSnap = new QCheckBox(i18n("Activate angle snap"), widget);
+    angleSnap->setObjectName("angle-snap-widget");
+    angleSnap->setChecked(false);
+    angleSnap->setCheckable(true);
 
-    QWidget *angleWidget = new QWidget();
-    angleWidget->setObjectName("Angle Constraints");
-    QGridLayout *layout = new QGridLayout(angleWidget);
-    layout->addWidget(new QLabel(i18n("Angle snapping delta:"), angleWidget), 0, 0);
-    KisAngleSelector *angleEdit = new KisAngleSelector(angleWidget);
+    KisAngleSelector *angleEdit = new KisAngleSelector(widget);
+    angleEdit->setObjectName("angle-edit-widget");
     angleEdit->setAngle(d->angleSnappingDelta);
     angleEdit->setRange(1, 360);
     angleEdit->setDecimals(0);
     angleEdit->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_MenuButton);
-    layout->addWidget(angleEdit, 0, 1);
-    layout->addWidget(new QLabel(i18n("Activate angle snap:"), angleWidget), 1, 0);
-    QCheckBox *angleSnap = new QCheckBox(angleWidget);
-    angleSnap->setChecked(false);
-    angleSnap->setCheckable(true);
-    layout->addWidget(angleSnap, 1, 1);
-    QWidget *specialSpacer = new QWidget();
-    specialSpacer->setObjectName("SpecialSpacer");
-    layout->addWidget(specialSpacer, 2, 1);
-    angleWidget->setWindowTitle(i18n("Angle Constraints"));
-    list.append(angleWidget);
+    angleEdit->setEnabled(angleSnap->isChecked());
 
+    QHBoxLayout *angleEditLayout = new QHBoxLayout;
+    angleEditLayout->setContentsMargins(10, 0, 0, 0);
+    angleEditLayout->setSpacing(0);
+    angleEditLayout->addWidget(angleEdit);
+
+    QVBoxLayout *mainLayout = new QVBoxLayout;
+    mainLayout->setContentsMargins(0, 0, 0, 0);
+    mainLayout->setSpacing(5);
+
+    mainLayout->addWidget(smoothCurves);
+    mainLayout->addWidget(angleSnap);
+    mainLayout->addLayout(angleEditLayout);
+
+    widget->setLayout(mainLayout);
+    
+    list.append(widget);
+
+    connect(smoothCurves, SIGNAL(toggled(bool)), this, SLOT(autoSmoothCurvesChanged(bool)));
+    connect(this, SIGNAL(sigUpdateAutoSmoothCurvesGUI(bool)), smoothCurves, SLOT(setChecked(bool)));
     connect(angleEdit, SIGNAL(angleChanged(qreal)), this, SLOT(angleDeltaChanged(qreal)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
+    connect(angleSnap, SIGNAL(toggled(bool)), angleEdit, SLOT(setEnabled(bool)));
 
     return list;
 }

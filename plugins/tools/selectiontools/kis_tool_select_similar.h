@@ -30,7 +30,7 @@ public:
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
-    void slotSetFuzziness(int);
+    void slotSetThreshold(int);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
@@ -38,7 +38,7 @@ protected:
     bool usesColorLabels() const override { return true; }
 
 private:
-    int m_fuzziness;
+    int m_threshold;
     KConfigGroup m_configGroup;
 };
 

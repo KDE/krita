@@ -16,6 +16,7 @@
 #include "KisViewManager.h"
 #include <kis_icon.h>
 #include <input/kis_extended_modifiers_mapper.h>
+#include <KisOptionCollectionWidget.h>
 
 #include "kis_rectangle_constraint_widget.h"
 
@@ -43,25 +44,36 @@ KisToolRectangleBase::KisToolRectangleBase(KoCanvasBase * canvas, KisToolRectang
 
 QList<QPointer<QWidget> > KisToolRectangleBase::createOptionWidgets()
 {
-  QList<QPointer<QWidget> > widgetsList = KisToolShape::createOptionWidgets();
+    QList<QPointer<QWidget> > widgetsList = KisToolShape::createOptionWidgets();
 
-  widgetsList.append(new KisRectangleConstraintWidget(0, this, showRoundCornersGUI()));
+    KisRectangleConstraintWidget *widget = new KisRectangleConstraintWidget(0, this, showRoundCornersGUI());
 
-  return widgetsList;
+    if (widgetsList.size() > 0 && dynamic_cast<KisOptionCollectionWidget*>(widgetsList.first().data())) {
+        KisOptionCollectionWidget *baseOptions = dynamic_cast<KisOptionCollectionWidget*>(widgetsList.first().data());
+        KisOptionCollectionWidgetWithHeader *sectionRectangle =
+            new KisOptionCollectionWidgetWithHeader(widget->windowTitle());
+        sectionRectangle->appendWidget("rectangleConstraintWidget", widget);
+        baseOptions->appendWidget("sectionRectangle", sectionRectangle);
+    } else {
+        widget->setContentsMargins(10, 10, 10, 10);
+        widgetsList.append(widget);
+    }
+
+    return widgetsList;
 }
 
 void KisToolRectangleBase::constraintsChanged(bool forceRatio, bool forceWidth, bool forceHeight, float ratio, float width, float height)
 {
-  m_isWidthForced = forceWidth;
-  m_isHeightForced = forceHeight;
-  m_isRatioForced = forceRatio;
+    m_isWidthForced = forceWidth;
+    m_isHeightForced = forceHeight;
+    m_isRatioForced = forceRatio;
 
-  m_forcedHeight = height;
-  m_forcedWidth = width;
-  m_forcedRatio = ratio;
+    m_forcedHeight = height;
+    m_forcedWidth = width;
+    m_forcedRatio = ratio;
 
-  // Avoid division by zero in size calculations
-  if (ratio < 0.0001f) m_isRatioForced = false;
+    // Avoid division by zero in size calculations
+    if (ratio < 0.0001f) m_isRatioForced = false;
 }
 
 void KisToolRectangleBase::roundCornersChanged(int rx, int ry)

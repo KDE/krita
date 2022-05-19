@@ -133,7 +133,8 @@ public:
     QPainterPath stretchGlyphOnPath(QPainterPath glyph,
                                     QPainterPath path,
                                     bool isHorizontal,
-                                    qreal offset);
+                                    qreal offset,
+                                    bool isClosed);
     void applyTextPath(const KoShape *rootShape,
                        QVector<CharacterResult> &result,
                        bool isHorizontal);
@@ -1822,11 +1823,12 @@ void KoSvgTextShape::Private::computeTextDecorations(
                     if (textPathSide) {
                         path = path.toReversed();
                     }
-                    underline.addPath(
-                        stretchGlyphOnPath(p.translated(underlineOffset),
-                                           path,
-                                           isHorizontal,
-                                           currentTextPathOffset));
+                    underline.addPath(stretchGlyphOnPath(
+                        p.translated(underlineOffset),
+                        path,
+                        isHorizontal,
+                        currentTextPathOffset,
+                        currentTextPath->isClosedSubpath(0)));
                 } else {
                     underline.addPath(p.translated(underlineOffset));
                 }
@@ -1842,7 +1844,8 @@ void KoSvgTextShape::Private::computeTextDecorations(
                         p.translated(overlineOffset - pathWidth),
                         path,
                         isHorizontal,
-                        currentTextPathOffset));
+                        currentTextPathOffset,
+                        currentTextPath->isClosedSubpath(0)));
                 } else {
                     overline.addPath(p.translated(overlineOffset - pathWidth));
                 }
@@ -1858,7 +1861,8 @@ void KoSvgTextShape::Private::computeTextDecorations(
                         p.translated(lineThroughOffset - (pathWidth * 0.5)),
                         path,
                         isHorizontal,
-                        currentTextPathOffset));
+                        currentTextPathOffset,
+                        currentTextPath->isClosedSubpath(0)));
                 } else {
                     linethrough.addPath(
                         p.translated(lineThroughOffset - (pathWidth * 0.5)));
@@ -2012,13 +2016,23 @@ qreal KoSvgTextShape::Private::characterResultOnPath(CharacterResult &cr,
 QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(QPainterPath glyph,
                                                          QPainterPath path,
                                                          bool isHorizontal,
-                                                         qreal offset)
+                                                         qreal offset,
+                                                         bool isClosed)
 {
     QPainterPath p = glyph;
     for (int i = 0; i < glyph.elementCount(); i++) {
         qreal mid = isHorizontal ? glyph.elementAt(i).x + offset
                                  : glyph.elementAt(i).y + offset;
-        mid = qBound(0.0, mid, qreal(path.length()));
+        qreal midUnbound = mid;
+        if (isClosed) {
+            if (mid < 0) {
+                mid += path.length();
+            }
+            mid = fmod(mid, qreal(path.length()));
+            midUnbound = mid;
+        } else {
+            mid = qBound(0.0, mid, qreal(path.length()));
+        }
         qreal percent = path.percentAtLength(mid);
         QPointF pos = path.pointAtPercent(percent);
         qreal tAngle = path.angleAtPercent(percent);
@@ -2030,11 +2044,11 @@ QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(QPainterPath glyph,
         QPointF finalPos = pos;
         if (isHorizontal) {
             QPointF vectorN(-vectorT.y(), vectorT.x());
-            qreal o = mid - (glyph.elementAt(i).x + offset);
+            qreal o = mid - (midUnbound);
             finalPos = pos - (o * vectorT) + (glyph.elementAt(i).y * vectorN);
         } else {
             QPointF vectorN(vectorT.y(), -vectorT.x());
-            qreal o = mid - (glyph.elementAt(i).y + offset);
+            qreal o = mid - (midUnbound);
             finalPos = pos - (o * vectorT) + (glyph.elementAt(i).x * vectorN);
         }
         p.setElementPositionAt(i, finalPos.x(), finalPos.y());
@@ -2090,6 +2104,9 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                              ->textOnPathInfo()
                              .startOffset;
             }
+            bool stretch =
+                textPathChunk->layoutInterface()->textOnPathInfo().method
+                == KoSvgText::TextPathStretch;
 
             for (int i = currentIndex; i < endIndex; i++) {
                 CharacterResult cr = result[i];
@@ -2101,6 +2118,19 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                                                       isHorizontal,
                                                       isClosed);
                     if (!cr.hidden) {
+                        if (stretch && !cr.path.isEmpty()) {
+                            QTransform tf =
+                                QTransform::fromTranslate(cr.finalPosition.x(),
+                                                          cr.finalPosition.y());
+                            tf.rotateRadians(cr.rotate);
+                            QPainterPath glyph =
+                                stretchGlyphOnPath(tf.map(cr.path),
+                                                   path,
+                                                   isHorizontal,
+                                                   offset,
+                                                   isClosed);
+                            cr.path = glyph;
+                        }
                         qreal percent = path.percentAtLength(mid);
                         QPointF pos = path.pointAtPercent(percent);
                         qreal tAngle = path.angleAtPercent(percent);
@@ -2121,6 +2151,13 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                             qreal o = (cr.advance.y() * 0.5);
                             cr.finalPosition = pos - (o * vectorT)
                                 + (cr.finalPosition.x() * vectorN);
+                        }
+                        if (stretch && !cr.path.isEmpty()) {
+                            QTransform tf =
+                                QTransform::fromTranslate(cr.finalPosition.x(),
+                                                          cr.finalPosition.y());
+                            tf.rotateRadians(cr.rotate);
+                            cr.path = tf.inverted().map(cr.path);
                         }
                     }
                 }

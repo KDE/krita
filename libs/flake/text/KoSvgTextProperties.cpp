@@ -445,7 +445,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         if (command == "text-decoration" || command == "text-decoration-color") {
             setProperty(TextDecorationColorId, QVariant::fromValue(textDecorationColor));
         }
-        if (command == "text-decoration" || command == "text-decoration-underline-position") {
+        if (command == "text-decoration" || command == "text-decoration-position") {
             setProperty(TextDecorationPositionHorizontalId, underlinePosH);
             setProperty(TextDecorationPositionVerticalId, underlinePosV);
         }

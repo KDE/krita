@@ -839,6 +839,8 @@ void KisAnimTimelineFramesView::slotUpdateAudioActions()
 {
     if (!m_d->model) return;
 
+    if (!m_d->canvas) return;
+
     const QString currentFile = m_d->model->audioChannelFileName();
 
     if (currentFile.isEmpty()) {

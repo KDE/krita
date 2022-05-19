@@ -39,6 +39,7 @@ struct KisPlaybackEngine::Private {
     Private( KisPlaybackEngine* p_self )
         : m_self(p_self)
         , activeCanvas(nullptr)
+        , mute(false)
     {
         // Initialize Audio Libraries
         Mlt::Factory::init();
@@ -135,6 +136,8 @@ public:
     QMap<KisCanvas2*, QSharedPointer<Mlt::Producer>> canvasProducers;
 
     QScopedPointer<KisSignalCompressorWithParam<int>> sigPushAudioCompressor;
+
+    bool mute;
 };
 
 /**
@@ -171,11 +174,11 @@ public:
         }
 
         if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
-            m_d->pushConsumer->set("volume", m_d->activeCanvasAnimationState()->currentVolume());
+            m_d->pushConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
             m_d->pushConsumer->start();
         } else {
             m_d->pullConsumer->connect_producer(*m_d->activeProducer());
-            m_d->pullConsumer->set("volume", m_d->activeCanvasAnimationState()->currentVolume());
+            m_d->pullConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
             m_d->pullConsumer->start();
         }
 
@@ -600,8 +603,13 @@ void KisPlaybackEngine::throttledShowFrame(const int frame)
 
 void KisPlaybackEngine::setAudioVolume(qreal volumeNormalized)
 {
-    m_d->pullConsumer->set("volume", volumeNormalized);
-    m_d->pushConsumer->set("volume", volumeNormalized);
+    if (m_d->mute) {
+        m_d->pullConsumer->set("volume", 0.0);
+        m_d->pushConsumer->set("volume", 0.0);
+    } else {
+        m_d->pullConsumer->set("volume", volumeNormalized);
+        m_d->pushConsumer->set("volume", volumeNormalized);
+    }
 }
 
 void KisPlaybackEngine::setPlaybackSpeedPercent(int value)
@@ -613,4 +621,19 @@ void KisPlaybackEngine::setPlaybackSpeedNormalized(double value)
 {
     Q_UNIMPLEMENTED();
 }
+
+void KisPlaybackEngine::setMute(bool val)
+{
+    KIS_ASSERT_RECOVER_RETURN(m_d->activeCanvasAnimationState());
+    qreal currentVolume = m_d->activeCanvasAnimationState()->currentVolume();
+    m_d->mute = val;
+    setAudioVolume(currentVolume);
+}
+
+bool KisPlaybackEngine::isMute()
+{
+    return m_d->mute;
+}
+
+
 

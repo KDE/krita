@@ -35,6 +35,7 @@
 
 #include "KisAnimUtils.h"
 #include "KisAnimTimelineColors.h"
+#include "KisPlaybackEngine.h"
 #include "kis_node_model.h"
 #include "kis_projection_leaf.h"
 #include "kis_time_span.h"
@@ -1092,12 +1093,13 @@ void KisAnimTimelineFramesModel::setAudioChannelFileName(const QFileInfo &fileNa
 
 bool KisAnimTimelineFramesModel::isAudioMuted() const
 {
-    return false;
+    return KisPart::instance()->playbackEngine()->isMute();
 }
 
 void KisAnimTimelineFramesModel::setAudioMuted(bool value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->image);
+    KisPart::instance()->playbackEngine()->setMute(value);
 }
 
 qreal KisAnimTimelineFramesModel::audioVolume() const

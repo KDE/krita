@@ -65,6 +65,8 @@ public Q_SLOTS:
     void setPlaybackSpeedPercent(int value);
     void setPlaybackSpeedNormalized(double value);
 
+    void setMute(bool val);
+    bool isMute();
 
 protected Q_SLOTS:
     void setCanvas(KoCanvasBase* canvas) override;

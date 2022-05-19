@@ -28,7 +28,6 @@ set(kis_mask_generator_benchmark_SRCS kis_mask_generator_benchmark.cpp)
 set(kis_low_memory_benchmark_SRCS kis_low_memory_benchmark.cpp)
 set(KisAnimationRenderingBenchmark_SRCS KisAnimationRenderingBenchmark.cpp)
 set(kis_filter_selections_benchmark_SRCS kis_filter_selections_benchmark.cpp)
-set(kis_composition_benchmark_SRCS kis_composition_benchmark.cpp)
 set(kis_thumbnail_benchmark_SRCS kis_thumbnail_benchmark.cpp)
 
 krita_add_benchmark(KisDatamanagerBenchmark TESTNAME krita-benchmarks-KisDataManager ${kis_datamanager_benchmark_SRCS})
@@ -48,7 +47,6 @@ krita_add_benchmark(KisMaskGeneratorBenchmark TESTNAME krita-benchmarks-KisMaskG
 krita_add_benchmark(KisLowMemoryBenchmark TESTNAME krita-benchmarks-KisLowMemory ${kis_low_memory_benchmark_SRCS})
 krita_add_benchmark(KisAnimationRenderingBenchmark TESTNAME krita-benchmarks-KisAnimationRenderingBenchmark ${KisAnimationRenderingBenchmark_SRCS})
 krita_add_benchmark(KisFilterSelectionsBenchmark TESTNAME krita-image-KisFilterSelectionsBenchmark ${kis_filter_selections_benchmark_SRCS})
-krita_add_benchmark(KisCompositionBenchmark TESTNAME krita-benchmarks-KisComposition ${kis_composition_benchmark_SRCS})
 krita_add_benchmark(KisThumbnailBenchmark TESTNAME krita-benchmarks-KisThumbnail ${kis_thumbnail_benchmark_SRCS})
 
 target_link_libraries(KisDatamanagerBenchmark  kritaimage  Qt5::Test)
@@ -68,11 +66,32 @@ target_link_libraries(KisLowMemoryBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisAnimationRenderingBenchmark  kritaimage kritaui  Qt5::Test)
 target_link_libraries(KisFilterSelectionsBenchmark   kritaimage  Qt5::Test)
 
-target_link_libraries(KisCompositionBenchmark  kritaimage  Qt5::Test kritamultiarch)
 if(HAVE_XSIMD)
-    set_property(TARGET KisCompositionBenchmark APPEND PROPERTY COMPILE_OPTIONS "${xsimd_ARCHITECTURE_FLAGS}")
+ko_compile_for_all_implementations_no_scalar(__per_arch_composition_objects kis_composition_benchmark.cpp)
+message("Following objects are generated for the composition benchmark")
+foreach(_obj IN LISTS __per_arch_composition_objects)
+    string(REPLACE "\.cpp" "" _target ${_obj})
+    string(REPLACE "\.cpp" "\.h" _fake_header ${_obj})
+    get_filename_component(_target ${_target} NAME)
+    message("    * ${_target} <- ${_obj}")
+    krita_add_benchmark(${_target} TESTNAME "krita-benchmarks-${_target}" ${_obj})
+
+    # Automoc goes crazy if the source file is located in the build
+    # directory and does not have a header with exactly the same
+    # base name. It just skips generation for such a source, since
+    # it doesn't include Q_OBJECT macro directly.
+    #
+    # So here we just generate a fake header which makes
+    # automoc happy
+    #
+    # `configure_file` is used to create a semantic dependency
+    # between the two files
+
+    configure_file(kis_composition_benchmark.h ${_fake_header} COPYONLY)
+
+    target_link_libraries(${_target} kritaimage Qt5::Test kritamultiarch)
+endforeach()
 endif()
+
 target_link_libraries(KisMaskGeneratorBenchmark  kritaimage  Qt5::Test)
 target_link_libraries(KisThumbnailBenchmark  kritaimage  Qt5::Test)
-
-

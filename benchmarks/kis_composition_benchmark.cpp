@@ -9,7 +9,7 @@
 
 // for calculation of the needed alignment
 #include <xsimd_extensions/xsimd.hpp>
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
 #include <KoOptimizedCompositeOpOver32.h>
 #include <KoOptimizedCompositeOpOver128.h>
 #include <KoOptimizedCompositeOpCopy128.h>
@@ -44,7 +44,7 @@
 #define MEMALIGN_FREE(p) free((p))
 #endif
 
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
 using float_v = xsimd::batch<float, xsimd::current_arch>;
 #endif
 
@@ -231,7 +231,7 @@ QVector<Tile> generateTiles(int size,
 {
     QVector<Tile> tiles(size);
 
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     const int vecSize = float_v::size;
 #else
     const int vecSize = 1;
@@ -505,7 +505,7 @@ void benchmarkCompositeOp(const KoCompositeOp *op, const QString &postfix)
     benchmarkCompositeOp(op, false, 1.0, 1.0, 0, 0, ALPHA_UNIT, ALPHA_UNIT);
 }
 
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
 
 template <typename channels_type>
 void printError(quint8 *s, quint8 *d1, quint8 *d2, quint8 *msk1, int pos)
@@ -618,7 +618,7 @@ void checkRounding(qreal opacity, qreal flow, qreal averageOpacity = -1, quint32
 
 void KisCompositionBenchmark::detectBuildArchitecture()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     using namespace xsimd;
 
     qDebug() << "built for" << ppVar(current_arch().name());
@@ -645,105 +645,105 @@ void KisCompositionBenchmark::detectBuildArchitecture()
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_03()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.3);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_05()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.5);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_07()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,0.7);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,1.0);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarken_05_10_08()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<AlphaDarkenCompositor32<quint8, quint32, KoAlphaDarkenParamsWrapperCreamy> >(0.5,1.0,0.8);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_03()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor128<float, false, true> >(0.5, 0.3, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_05()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor128<float, false, true> >(0.5, 0.5, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_07()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor128<float, false, true> >(0.5, 0.7, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingAlphaDarkenF32_05_10_08()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, 0.8, 16);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingOver()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor32<quint8, quint32, false, true> >(0.5, 0.3);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingOverRgbaU16()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor128<quint16, false, true> >(0.5, 1.0, -1, 8);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingOverRgbaF32()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<OverCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
 #include <cfenv>
 void KisCompositionBenchmark::checkRoundingCopyRgbaU16()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<CopyCompositor128<quint16, false, true> >(0.5, 1.0, -1, 8);
 #endif
 }
 
 void KisCompositionBenchmark::checkRoundingCopyRgbaF32()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     checkRounding<CopyCompositor128<float, false, true> >(0.5, 1.0, -1, 16);
 #endif
 }
@@ -1056,7 +1056,7 @@ void KisCompositionBenchmark::benchmarkMemcpy()
     freeTiles(tiles, 0, 0);
 }
 
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     const int vecSize = float_v::size;
     const size_t uint8VecAlignment = qMax(vecSize * sizeof(quint8), sizeof(void*));
     const size_t uint32VecAlignment = qMax(vecSize * sizeof(quint32), sizeof(void*));
@@ -1065,7 +1065,7 @@ void KisCompositionBenchmark::benchmarkMemcpy()
 
 void KisCompositionBenchmark::benchmarkUintFloat()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
 
     const int dataSize = 4096;
@@ -1099,7 +1099,7 @@ void KisCompositionBenchmark::benchmarkUintFloat()
 
 void KisCompositionBenchmark::benchmarkUintIntFloat()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
 
     const int dataSize = 4096;
@@ -1131,7 +1131,7 @@ void KisCompositionBenchmark::benchmarkUintIntFloat()
 
 void KisCompositionBenchmark::benchmarkFloatUint()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
 
     const int dataSize = 4096;
@@ -1164,7 +1164,7 @@ void KisCompositionBenchmark::benchmarkFloatUint()
 
 void KisCompositionBenchmark::benchmarkFloatIntUint()
 {
-#ifdef HAVE_XSIMD
+#if defined HAVE_XSIMD && XSIMD_UNIVERSAL_BUILD_PASS
     using uint_v = xsimd::batch<unsigned int, xsimd::current_arch>;
     const int dataSize = 4096;
     void *ptr = 0;

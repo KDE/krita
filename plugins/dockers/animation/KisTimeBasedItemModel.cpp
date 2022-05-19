@@ -184,7 +184,7 @@ void KisTimeBasedItemModel::setDocument(KisDocument *document)
     m_d->document = document;
 }
 
-KisDocument *KisTimeBasedItemModel::document() const
+KisDocument* KisTimeBasedItemModel::document() const
 {
     return m_d->document;
 }

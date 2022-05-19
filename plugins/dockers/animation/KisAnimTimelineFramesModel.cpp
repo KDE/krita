@@ -1101,7 +1101,11 @@ void KisAnimTimelineFramesModel::setAudioMuted(bool value)
 
 qreal KisAnimTimelineFramesModel::audioVolume() const
 {
-    return 0.5;
+    if (document()) {
+        return document()->getAudioLevel();
+    } else {
+        return 1.0;
+    }
 }
 
 void KisAnimTimelineFramesModel::setAudioVolume(qreal value)

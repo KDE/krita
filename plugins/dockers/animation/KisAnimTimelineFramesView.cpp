@@ -364,6 +364,7 @@ void KisAnimTimelineFramesView::setModel(QAbstractItemModel *model)
             &m_d->selectionChangedCompressor, SLOT(start()));
 
     connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
+
     slotUpdateAudioActions();
 }
 
@@ -467,6 +468,7 @@ void KisAnimTimelineFramesView::updateGeometries()
 void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
 {
     horizontalScrollBar()->setEnabled(canvas != nullptr);
+    slotUpdateAudioActions();
 }
 
 void KisAnimTimelineFramesView::slotUpdateIcons()

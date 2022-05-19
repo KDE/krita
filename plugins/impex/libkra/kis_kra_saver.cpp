@@ -844,7 +844,6 @@ bool KisKraSaver::saveAudioXML(QDomDocument& doc, QDomElement& element)
             QDomElement clip = doc.createElement(QString("Clip"));
             clip.setAttribute("filePath", file.absoluteFilePath());
             clip.setAttribute("volume", volume);
-            ENTER_FUNCTION() << ppVar(volume);
             audioClips.appendChild(clip);
         }
         element.appendChild(audioClips);

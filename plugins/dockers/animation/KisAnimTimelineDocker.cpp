@@ -297,10 +297,6 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 {
     if (m_d->canvas == canvas) return;
 
-    if (m_d->framesView) {
-        m_d->framesView->slotCanvasUpdate(canvas);
-    }
-
     if (m_d->framesModel->hasConnectionToCanvas()) {
         m_d->canvasConnections.clear();
         m_d->framesModel->setDummiesFacade(0, 0, 0);
@@ -334,6 +330,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                                      m_d->canvas->viewManager()->nodeManager()->nodeDisplayModeAdapter());
 
         m_d->framesModel->setDocument(doc);
+        m_d->framesView->slotCanvasUpdate(m_d->canvas);
+
 
         updateFrameCache();
 

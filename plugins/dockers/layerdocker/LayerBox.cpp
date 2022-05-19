@@ -332,7 +332,7 @@ LayerBox::LayerBox()
     connect(thumbnailSizeSlider, SIGNAL(valueChanged(int)), &m_thumbnailSizeCompressor, SLOT(start()));
     connect(&m_thumbnailSizeCompressor, SIGNAL(timeout()), SLOT(slotUpdateThumbnailIconSize()));
 
-    configureMenu->addSection(i18n("Tree Indentation"));
+    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, slider", "Tree Indentation"));
 
     // add horizontal slider
     indentationSlider = new QSlider(Qt::Horizontal, this);

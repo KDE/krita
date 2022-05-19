@@ -604,31 +604,32 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
             decoStrings.append("line-through");
         }
 
+        if (deco != DecorationNone) {
+            if (hasProperty(TextDecorationStyleId)) {
+                TextDecorationStyle style = TextDecorationStyle(property(TextDecorationStyleId).toInt());
 
-    }
-    if (hasProperty(TextDecorationStyleId)) {
-        TextDecorationStyle style = TextDecorationStyle(property(TextDecorationStyleId).toInt());
-
-        if (style == Solid) {
-            decoStrings.append("solid");
-        } else if (style == Double) {
-            decoStrings.append("double");
-        } else if (style == Dotted) {
-            decoStrings.append("dotted");
-        } else if (style == Dashed) {
-            decoStrings.append("dashed");
-        } else if (style == Wavy) {
-            decoStrings.append("wavy");
+                if (style == Solid) {
+                    decoStrings.append("solid");
+                } else if (style == Double) {
+                    decoStrings.append("double");
+                } else if (style == Dotted) {
+                    decoStrings.append("dotted");
+                } else if (style == Dashed) {
+                    decoStrings.append("dashed");
+                } else if (style == Wavy) {
+                    decoStrings.append("wavy");
+                }
+            }
+            if (hasProperty(TextDecorationColorId)) {
+                QColor color = property(TextDecorationColorId).value<QColor>();
+                if (color.isValid()) {
+                    decoStrings.append(color.name());
+                }
+            }
         }
-    }
-    if (hasProperty(TextDecorationColorId)) {
-        QColor color = property(TextDecorationColorId).value<QColor>();
-        if (color.isValid()) {
-            decoStrings.append(color.name());
+        if (!decoStrings.isEmpty()) {
+            result.insert("text-decoration", decoStrings.join(' '));
         }
-    }
-    if (!decoStrings.isEmpty()) {
-        result.insert("text-decoration", decoStrings.join(' '));
     }
 
     QStringList decoPositionStrings;
@@ -970,6 +971,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
             using namespace KoSvgText;
             TextDecorations deco = DecorationNone;
 
+            /*
             if (font.underline()) {
                 deco |= DecorationUnderline;
             }
@@ -981,6 +983,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
             if (font.overline()) {
                 deco |= DecorationOverline;
             }
+            */
 
             s_defaultProperties->setProperty(TextDecorationLineId, QVariant::fromValue(deco));
             s_defaultProperties->setProperty(TextDecorationPositionHorizontalId, UnderlineAuto);

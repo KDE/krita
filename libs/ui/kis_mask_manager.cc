@@ -55,7 +55,7 @@ void KisMaskManager::setView(QPointer<KisView>imageView)
     m_imageView = imageView;
 }
 
-void KisMaskManager::setup(KActionCollection *actionCollection, KisActionManager *actionManager)
+void KisMaskManager::setup(KisKActionCollection *actionCollection, KisActionManager *actionManager)
 {
     Q_UNUSED(actionCollection);
     Q_UNUSED(actionManager);

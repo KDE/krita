@@ -17,14 +17,14 @@
 #include <kstandardaction.h>
 #include "kactioncollection.h"
 
-struct KActionCategoryPrivate;
+struct KisKActionCategoryPrivate;
 
 class QAction;
 
 /**
  * Categorize actions for KShortcutsEditor.
  *
- * KActionCategory provides a second level to organize the actions in
+ * KisKActionCategory provides a second level to organize the actions in
  * KShortcutsEditor.
  *
  * The first possibility is using more than one action collection. Each
@@ -39,7 +39,7 @@ class QAction;
  *   + second action
  *   + third action
  *
- * Using KActionCategory it's possible to group the actions of one collection.
+ * Using KisKActionCategory it's possible to group the actions of one collection.
  * + action collection 1
  *   + first action
  *   + first category
@@ -52,14 +52,14 @@ class QAction;
  * The usage is analog to action collections. Just create a category and use
  * it instead of the collection to create the actions.
  *
- * The synchronization between KActionCollection and KActionCategory is done
+ * The synchronization between KisKActionCollection and KisKActionCategory is done
  * internally. There is for example no need to remove actions from a category.
  * It is done implicitly if the action is removed from the associated
  * collection.
  *
  * \code
  *
- * KActionCategory *file = new KActionCategory(i18n("File"), actionCollection());
+ * KisKActionCategory *file = new KisKActionCategory(i18n("File"), actionCollection());
  * file->addAction(
  *      KStandardAction::New,   //< see KStandardAction
  *      this,                   //< Receiver
@@ -67,7 +67,7 @@ class QAction;
  *
  * ... more actions added to file ...
  *
- * KActionCategory *edit = new KActionCategory(i18n("Edit"), actionCollection());
+ * KisKActionCategory *edit = new KisKActionCategory(i18n("Edit"), actionCollection());
  * edit->addAction(
  *      KStandardAction::Copy,  //< see KStandardAction
  *      this,                   //< Receiver
@@ -77,7 +77,7 @@ class QAction;
  *
  * \endcode
  */
-class KRITAWIDGETUTILS_EXPORT KActionCategory : public QObject
+class KRITAWIDGETUTILS_EXPORT KisKActionCategory : public QObject
 {
     Q_OBJECT
 
@@ -88,12 +88,12 @@ public:
     /**
      * Default constructor
      */
-    explicit KActionCategory(const QString &text, KActionCollection *parent = 0);
+    explicit KisKActionCategory(const QString &text, KisKActionCollection *parent = 0);
 
     /**
      * Destructor
      */
-    ~KActionCategory() override;
+    ~KisKActionCategory() override;
 
     /**
      * \name Adding Actions
@@ -101,7 +101,7 @@ public:
      * Add a action to the category.
      *
      * This methods are provided for your convenience. They call the
-     * corresponding method of KActionCollection.
+     * corresponding method of KisKActionCollection.
      */
     //@{
     QAction *addAction(const QString &name, QAction *action);
@@ -141,7 +141,7 @@ public:
     /**
      * The action collection this category is associated with.
      */
-    KActionCollection *collection() const;
+    KisKActionCollection *collection() const;
 
     /**
      * The action categorys descriptive text
@@ -165,11 +165,11 @@ private:
      */
     void addAction(QAction *action);
 
-    //! KActionCollection needs access to some of our helper methods
-    friend class KActionCollectionPrivate;
+    //! KisKActionCollection needs access to some of our helper methods
+    friend class KisKActionCollectionPrivate;
 
     //! Implementation details
-    KActionCategoryPrivate *const d;
+    KisKActionCategoryPrivate *const d;
 };
 
 #endif /* #ifndef KACTIONCATEGORY_H */

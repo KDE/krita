@@ -12,19 +12,19 @@
 #include <QList>
 #include <QWidget>
 
-class KActionCollection;
-class KShortcutWidgetPrivate;
+class KisKActionCollection;
+class KisKShortcutWidgetPrivate;
 
 /**
  * \image html kshortcutwidget.png "KDE Shortcut Widget"
  */
-class KRITAWIDGETUTILS_EXPORT KShortcutWidget : public QWidget
+class KRITAWIDGETUTILS_EXPORT KisKShortcutWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY(bool modifierlessAllowed READ isModifierlessAllowed WRITE setModifierlessAllowed)
 public:
-    KShortcutWidget(QWidget *parent = 0);
-    ~KShortcutWidget() override;
+    KisKShortcutWidget(QWidget *parent = 0);
+    ~KisKShortcutWidget() override;
 
     void setModifierlessAllowed(bool allow);
     bool isModifierlessAllowed();
@@ -46,7 +46,7 @@ public:
      *
      * @since 4.1
      */
-    void setCheckActionCollections(const QList<KActionCollection *> &actionCollections);
+    void setCheckActionCollections(const QList<KisKActionCollection *> &actionCollections);
 
 Q_SIGNALS:
     void shortcutChanged(const QList<QKeySequence> &cut);
@@ -69,8 +69,8 @@ private:
     Q_PRIVATE_SLOT(d, void altKeySequenceChanged(const QKeySequence &))
 
 private:
-    friend class KShortcutWidgetPrivate;
-    KShortcutWidgetPrivate *const d;
+    friend class KisKShortcutWidgetPrivate;
+    KisKShortcutWidgetPrivate *const d;
 };
 
 #endif //KSHORTCUTWIDGET_H

@@ -237,7 +237,7 @@ KXmlGuiVersionHandler::KXmlGuiVersionHandler(const QStringList &files)
     if (files.count() == 1) {
         // No need to parse version numbers if there's only one file anyway
         m_file = files.first();
-        m_doc = KXMLGUIFactory::readConfigFile(m_file);
+        m_doc = KisKXMLGUIFactory::readConfigFile(m_file);
         return;
     }
 
@@ -246,7 +246,7 @@ KXmlGuiVersionHandler::KXmlGuiVersionHandler(const QStringList &files)
     Q_FOREACH (const QString &file, files) {
         DocStruct d;
         d.file = file;
-        d.data = KXMLGUIFactory::readConfigFile(file);
+        d.data = KisKXMLGUIFactory::readConfigFile(file);
         allDocuments.append(d);
     }
 

@@ -77,7 +77,7 @@ public:
         toolActions.clear();
         disabledGlobalActions.clear();
 
-        KActionCollection *windowActionCollection = canvas->actionCollection();
+        KisKActionCollection *windowActionCollection = canvas->actionCollection();
 
         if (!windowActionCollection) {
             qWarning() << "We haven't got an action collection";
@@ -161,7 +161,7 @@ public:
 
         //qDebug() << "............... deactivating previous tool because activating" << activeToolId;
 
-        KActionCollection *windowActionCollection = canvas->actionCollection();
+        KisKActionCollection *windowActionCollection = canvas->actionCollection();
 
         Q_FOREACH(const QString &action, toolActions) {
             //qDebug() << "disabling" << action;
@@ -218,7 +218,7 @@ KoInputDevice KoToolManager::currentInputDevice() const
     return d->inputDevice;
 }
 
-void KoToolManager::registerToolActions(KActionCollection *ac, KoCanvasController *controller)
+void KoToolManager::registerToolActions(KisKActionCollection *ac, KoCanvasController *controller)
 {
     Q_ASSERT(controller);
     Q_ASSERT(ac);

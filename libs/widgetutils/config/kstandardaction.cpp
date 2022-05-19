@@ -179,7 +179,7 @@ QAction *create(StandardAction id, const QObject *recvr, const char *slot, QObje
 
         QList<QKeySequence> cut = KStandardShortcut::shortcut(pInfo->idAccel);
         if (!cut.isEmpty()) {
-            // emulate KActionCollection::setDefaultShortcuts to allow the use of "configure shortcuts"
+            // emulate KisKActionCollection::setDefaultShortcuts to allow the use of "configure shortcuts"
             pAction->setShortcuts(cut);
             pAction->setProperty("defaultShortcuts", QVariant::fromValue(cut));
         }
@@ -199,7 +199,7 @@ QAction *create(StandardAction id, const QObject *recvr, const char *slot, QObje
         }
     }
 
-    if (pAction && parent && parent->inherits("KActionCollection")) {
+    if (pAction && parent && parent->inherits("KisKActionCollection")) {
         QMetaObject::invokeMethod(parent, "addAction", Q_ARG(QString, pAction->objectName()), Q_ARG(QAction *, pAction));
     }
 
@@ -471,7 +471,7 @@ static QAction *buildAutomaticAction(QObject *parent, StandardAction id, const c
         action->setToolTip(i18n(p->psToolTip));
     }
 
-    if (parent && parent->inherits("KActionCollection")) {
+    if (parent && parent->inherits("KisKActionCollection")) {
         QMetaObject::invokeMethod(parent, "addAction", Q_ARG(QString, action->objectName()), Q_ARG(QAction *, action));
     }
 
@@ -509,7 +509,7 @@ KToggleAction *showMenubar(const QObject *recvr, const char *slot, QObject *pare
     ret->setObjectName(name(ShowMenubar));
     ret->setIcon(KisIconUtils::loadIcon("show-menu"));
 
-    // emulate KActionCollection::setDefaultShortcuts to allow the use of "configure shortcuts"
+    // emulate KisKActionCollection::setDefaultShortcuts to allow the use of "configure shortcuts"
 // This shortcut is dangerous and should not be enabled by default.
 //    ret->setShortcuts(KStandardShortcut::shortcut(KStandardShortcut::ShowMenubar));
 //    ret->setProperty("defaultShortcuts", QVariant::fromValue(KStandardShortcut::shortcut(KStandardShortcut::ShowMenubar)));
@@ -523,7 +523,7 @@ KToggleAction *showMenubar(const QObject *recvr, const char *slot, QObject *pare
         QObject::connect(ret, SIGNAL(triggered(bool)), recvr, slot);
     }
 
-    if (parent && parent->inherits("KActionCollection")) {
+    if (parent && parent->inherits("KisKActionCollection")) {
         QMetaObject::invokeMethod(parent, "addAction", Q_ARG(QString, ret->objectName()), Q_ARG(QAction *, ret));
     }
 
@@ -544,7 +544,7 @@ KToggleAction *showStatusbar(const QObject *recvr, const char *slot, QObject *pa
         QObject::connect(ret, SIGNAL(triggered(bool)), recvr, slot);
     }
 
-    if (parent && parent->inherits("KActionCollection")) {
+    if (parent && parent->inherits("KisKActionCollection")) {
         QMetaObject::invokeMethod(parent, "addAction", Q_ARG(QString, ret->objectName()), Q_ARG(QAction *, ret));
     }
 

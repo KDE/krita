@@ -97,7 +97,7 @@ public:
     // horizontal alignment - it seems to work without saving
     // line height - it seems to work without saving
 
-    void saveFromWidgets(KActionCollection* actions)
+    void saveFromWidgets(KisKActionCollection* actions)
     {
 
         FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actions->action("svg_font_size"));
@@ -123,7 +123,7 @@ public:
         saveBoolActionFromWidget(actions, "svg_font_kerning", kerning);
     }
 
-    void setSavedToWidgets(KActionCollection* actions)
+    void setSavedToWidgets(KisKActionCollection* actions)
     {
 
         FontSizeAction *fontSizeAction = qobject_cast<FontSizeAction*>(actions->action("svg_font_size"));
@@ -205,7 +205,7 @@ public:
     }
 
 
-    void setSavedLineDecorationToWidgets(KActionCollection* actions)
+    void setSavedLineDecorationToWidgets(KisKActionCollection* actions)
     {
         setBoolActionToWidget(actions, "svg_format_underline", underline);
         setBoolActionToWidget(actions, "svg_format_strike_through", strikeThrough);
@@ -213,14 +213,14 @@ public:
 
 private:
 
-    void saveBoolActionFromWidget(KActionCollection* actions, QString actionName, bool &variable)
+    void saveBoolActionFromWidget(KisKActionCollection* actions, QString actionName, bool &variable)
     {
         QAction *boolAction = actions->action(actionName);
         KIS_ASSERT_RECOVER_RETURN(boolAction);
         variable = boolAction->isChecked();
     }
 
-    void setBoolActionToWidget(KActionCollection* actions, QString actionName, bool variable)
+    void setBoolActionToWidget(KisKActionCollection* actions, QString actionName, bool variable)
     {
         QAction *boolAction = actions->action(actionName);
         KIS_ASSERT_RECOVER_RETURN(boolAction);
@@ -308,7 +308,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
-        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+        KisToolBar * toolBar = ::qobject_cast<KisToolBar *>(it);
         if (toolBar) {
             toolBar->setToolButtonStyle(Qt::ToolButtonIconOnly);
             KToggleAction* act = new KToggleAction(i18n("Show %1 Toolbar", toolBar->windowTitle()), this);

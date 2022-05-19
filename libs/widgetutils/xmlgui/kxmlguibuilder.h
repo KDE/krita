@@ -9,8 +9,8 @@
 
 #include <kritawidgetutils_export.h>
 
-class KXMLGUIBuilderPrivate;
-class KXMLGUIClient;
+class KisKXMLGUIBuilderPrivate;
+class KisKXMLGUIClient;
 
 class QAction;
 class QDomElement;
@@ -22,19 +22,19 @@ class QWidget;
  * as requested by the GUI factory.
  *
  * The virtual methods are mostly for historical reasons, there isn't really
- * a need to derive from KXMLGUIBuilder anymore.
+ * a need to derive from KisKXMLGUIBuilder anymore.
  */
-class KRITAWIDGETUTILS_EXPORT KXMLGUIBuilder
+class KRITAWIDGETUTILS_EXPORT KisKXMLGUIBuilder
 {
 public:
 
-    explicit KXMLGUIBuilder(QWidget *widget);
-    virtual ~KXMLGUIBuilder();
+    explicit KisKXMLGUIBuilder(QWidget *widget);
+    virtual ~KisKXMLGUIBuilder();
 
     /* @internal */
-    KXMLGUIClient *builderClient() const;
+    KisKXMLGUIClient *builderClient() const;
     /* @internal */
-    void setBuilderClient(KXMLGUIClient *client);
+    void setBuilderClient(KisKXMLGUIClient *client);
     /* @internal */
     QWidget *widget();
 
@@ -69,12 +69,12 @@ public:
 
     virtual void removeCustomElement(QWidget *parent, QAction *action);
 
-    virtual void finalizeGUI(KXMLGUIClient *client);
+    virtual void finalizeGUI(KisKXMLGUIClient *client);
 
 protected:
     virtual void virtual_hook(int id, void *data);
 private:
-    KXMLGUIBuilderPrivate *const d;
+    KisKXMLGUIBuilderPrivate *const d;
 };
 
 #endif

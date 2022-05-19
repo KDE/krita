@@ -48,7 +48,7 @@ public:
 
     KisSketchView* q {nullptr};
 
-    KActionCollection *actionCollection {nullptr};
+    KisKActionCollection *actionCollection {nullptr};
 
     QPointer<KisDocument> doc;
     QPointer<KisViewManager> viewManager;
@@ -84,7 +84,7 @@ KisSketchView::KisSketchView(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::LeftButton | Qt::MiddleButton | Qt::RightButton);
     setAcceptHoverEvents(true);
 
-    d->actionCollection = new KActionCollection(this, "krita");
+    d->actionCollection = new KisKActionCollection(this, "krita");
     d->viewManager = 0; //new KisViewManager(qApp->activeWindow(), d->actionCollection);
 
     // QT5TODO

@@ -80,10 +80,10 @@ enum SettingLevel { Level_KDEDefault, Level_AppXML, Level_UserSettings,
                   };
 enum { Unset = -1 };
 
-class KToolBar::Private
+class KisToolBar::Private
 {
 public:
-    Private(KToolBar *qq)
+    Private(KisToolBar *qq)
         : q(qq),
           isMainToolBar(false),
           unlockedMovable(true),
@@ -134,20 +134,20 @@ public:
     void applyCurrentSettings();
     void customizeButtonPalette(QToolButton *button, bool checked);
 
-    QAction *findAction(const QString &actionName, KXMLGUIClient **client = 0) const;
+    QAction *findAction(const QString &actionName, KisKXMLGUIClient **client = 0) const;
 
     static Qt::ToolButtonStyle toolButtonStyleFromString(const QString &style);
     static QString toolButtonStyleToString(Qt::ToolButtonStyle);
     static Qt::ToolBarArea positionFromString(const QString &position);
     static Qt::ToolButtonStyle toolButtonStyleSetting();
 
-    KToolBar *q;
+    KisToolBar *q;
     bool isMainToolBar : 1;
     bool unlockedMovable : 1;
     static bool s_editable;
     static bool s_locked;
 
-    QSet<KXMLGUIClient *> xmlguiClients;
+    QSet<KisKXMLGUIClient *> xmlguiClients;
 
     QMenu *contextOrient;
     QMenu *contextMode;
@@ -224,10 +224,10 @@ public:
     QPoint dragStartPosition;
 };
 
-bool KToolBar::Private::s_editable = false;
-bool KToolBar::Private::s_locked = true;
+bool KisToolBar::Private::s_editable = false;
+bool KisToolBar::Private::s_locked = true;
 
-void KToolBar::Private::init(bool readConfig, bool _isMainToolBar)
+void KisToolBar::Private::init(bool readConfig, bool _isMainToolBar)
 {
     isMainToolBar = _isMainToolBar;
     loadKDESettings();
@@ -252,7 +252,7 @@ void KToolBar::Private::init(bool readConfig, bool _isMainToolBar)
                 q->mainWindow(), SLOT(setSettingsDirty()));
     }
 
-    q->setMovable(!KToolBar::toolBarsLocked());
+    q->setMovable(!KisToolBar::toolBarsLocked());
 
     connect(q, SIGNAL(movableChanged(bool)),
             q, SLOT(slotMovableChanged(bool)));
@@ -260,15 +260,15 @@ void KToolBar::Private::init(bool readConfig, bool _isMainToolBar)
     q->setAcceptDrops(true);
 
 #ifdef HAVE_DBUS
-    QDBusConnection::sessionBus().connect(QString(), QStringLiteral("/KToolBar"), QStringLiteral("org.kde.KToolBar"),
+    QDBusConnection::sessionBus().connect(QString(), QStringLiteral("/KisToolBar"), QStringLiteral("org.kde.KisToolBar"),
                                           QStringLiteral("styleChanged"), q, SLOT(slotAppearanceChanged()));
 #endif
 }
 
-QString KToolBar::Private::getPositionAsString() const
+QString KisToolBar::Private::getPositionAsString() const
 {
     // get all of the stuff to save
-    switch (q->mainWindow()->toolBarArea(const_cast<KToolBar *>(q))) {
+    switch (q->mainWindow()->toolBarArea(const_cast<KisToolBar *>(q))) {
     case Qt::BottomToolBarArea:
         return QStringLiteral("Bottom");
     case Qt::LeftToolBarArea:
@@ -281,7 +281,7 @@ QString KToolBar::Private::getPositionAsString() const
     }
 }
 
-QMenu *KToolBar::Private::contextMenu(const QPoint &globalPos)
+QMenu *KisToolBar::Private::contextMenu(const QPoint &globalPos)
 {
     if (!context) {
         context = new QMenu(q);
@@ -410,14 +410,14 @@ QMenu *KToolBar::Private::contextMenu(const QPoint &globalPos)
     return context;
 }
 
-void KToolBar::Private::setLocked(bool locked)
+void KisToolBar::Private::setLocked(bool locked)
 {
     if (unlockedMovable) {
         q->setMovable(!locked);
     }
 }
 
-void KToolBar::Private::adjustSeparatorVisibility()
+void KisToolBar::Private::adjustSeparatorVisibility()
 {
     bool visibleNonSeparator = false;
     int separatorToShow = -1;
@@ -447,7 +447,7 @@ void KToolBar::Private::adjustSeparatorVisibility()
     }
 }
 
-Qt::ToolButtonStyle KToolBar::Private::toolButtonStyleFromString(const QString &_style)
+Qt::ToolButtonStyle KisToolBar::Private::toolButtonStyleFromString(const QString &_style)
 {
     QString style = _style.toLower();
     if (style == QStringLiteral("textbesideicon") || style == QLatin1String("icontextright")) {
@@ -461,7 +461,7 @@ Qt::ToolButtonStyle KToolBar::Private::toolButtonStyleFromString(const QString &
     }
 }
 
-QString KToolBar::Private::toolButtonStyleToString(Qt::ToolButtonStyle style)
+QString KisToolBar::Private::toolButtonStyleToString(Qt::ToolButtonStyle style)
 {
     switch (style) {
     case Qt::ToolButtonIconOnly:
@@ -476,7 +476,7 @@ QString KToolBar::Private::toolButtonStyleToString(Qt::ToolButtonStyle style)
     }
 }
 
-Qt::ToolBarArea KToolBar::Private::positionFromString(const QString &position)
+Qt::ToolBarArea KisToolBar::Private::positionFromString(const QString &position)
 {
     Qt::ToolBarArea newposition = Qt::TopToolBarArea;
     if (position == QStringLiteral("left")) {
@@ -490,20 +490,20 @@ Qt::ToolBarArea KToolBar::Private::positionFromString(const QString &position)
 }
 
 // Global setting was changed
-void KToolBar::Private::slotAppearanceChanged()
+void KisToolBar::Private::slotAppearanceChanged()
 {
     loadKDESettings();
     applyCurrentSettings();
 }
 
-Qt::ToolButtonStyle KToolBar::Private::toolButtonStyleSetting()
+Qt::ToolButtonStyle KisToolBar::Private::toolButtonStyleSetting()
 {
     KConfigGroup group(KSharedConfig::openConfig(), "Toolbar style");
-    const QString fallback = KToolBar::Private::toolButtonStyleToString(Qt::ToolButtonTextBesideIcon);
-    return KToolBar::Private::toolButtonStyleFromString(group.readEntry("ToolButtonStyle", fallback));
+    const QString fallback = KisToolBar::Private::toolButtonStyleToString(Qt::ToolButtonTextBesideIcon);
+    return KisToolBar::Private::toolButtonStyleFromString(group.readEntry("ToolButtonStyle", fallback));
 }
 
-void KToolBar::Private::loadKDESettings()
+void KisToolBar::Private::loadKDESettings()
 {
     iconSizeSettings[Level_KDEDefault] = q->iconSizeDefault();
 
@@ -513,12 +513,12 @@ void KToolBar::Private::loadKDESettings()
         const QString fallBack = toolButtonStyleToString(Qt::ToolButtonTextBesideIcon);
         KConfigGroup group(KSharedConfig::openConfig(), "Toolbar style");
         const QString value = group.readEntry("ToolButtonStyleOtherToolbars", fallBack);
-        toolButtonStyleSettings[Level_KDEDefault] = KToolBar::Private::toolButtonStyleFromString(value);
+        toolButtonStyleSettings[Level_KDEDefault] = KisToolBar::Private::toolButtonStyleFromString(value);
     }
 }
 
 // Call this after changing something in d->iconSizeSettings or d->toolButtonStyleSettings
-void KToolBar::Private::applyCurrentSettings()
+void KisToolBar::Private::applyCurrentSettings()
 {
     //qDebug() << q->objectName() << "iconSizeSettings:" << iconSizeSettings.toString() << "->" << iconSizeSettings.currentValue();
     const int currentIconSize = iconSizeSettings.currentValue();
@@ -527,14 +527,14 @@ void KToolBar::Private::applyCurrentSettings()
     q->setToolButtonStyle(static_cast<Qt::ToolButtonStyle>(toolButtonStyleSettings.currentValue()));
 
     // And remember to save the new look later
-    KMainWindow *kmw = q->mainWindow();
+    KisKMainWindow *kmw = q->mainWindow();
     if (kmw) {
         kmw->setSettingsDirty();
     }
 }
 
 // Krita widget style "hack" setting button palette depending on check state
-void KToolBar::Private::customizeButtonPalette(QToolButton *button, bool checked)
+void KisToolBar::Private::customizeButtonPalette(QToolButton *button, bool checked)
 {
     QPalette p = button->palette();
     QColor color = q->palette().color(checked ? QPalette::Highlight : QPalette::Button);
@@ -542,9 +542,9 @@ void KToolBar::Private::customizeButtonPalette(QToolButton *button, bool checked
     button->setPalette(p);
 }
 
-QAction *KToolBar::Private::findAction(const QString &actionName, KXMLGUIClient **clientOut) const
+QAction *KisToolBar::Private::findAction(const QString &actionName, KisKXMLGUIClient **clientOut) const
 {
-    Q_FOREACH (KXMLGUIClient *client, xmlguiClients) {
+    Q_FOREACH (KisKXMLGUIClient *client, xmlguiClients) {
         QAction *action = client->actionCollection()->action(actionName);
         if (action) {
             if (clientOut) {
@@ -556,7 +556,7 @@ QAction *KToolBar::Private::findAction(const QString &actionName, KXMLGUIClient 
     return 0;
 }
 
-void KToolBar::Private::slotContextAboutToShow()
+void KisToolBar::Private::slotContextAboutToShow()
 {
     /**
      * The idea here is to reuse the "static" part of the menu to save time.
@@ -593,7 +593,7 @@ void KToolBar::Private::slotContextAboutToShow()
         }
     }
 
-    KEditToolBar::setGlobalDefaultToolBar(q->QObject::objectName().toLatin1().constData());
+    KisKEditToolBar::setGlobalDefaultToolBar(q->QObject::objectName().toLatin1().constData());
 
     // Check the actions that should be checked
     switch (q->toolButtonStyle()) {
@@ -647,7 +647,7 @@ void KToolBar::Private::slotContextAboutToShow()
     }
 }
 
-void KToolBar::Private::slotContextAboutToHide()
+void KisToolBar::Private::slotContextAboutToHide()
 {
     // We have to unplug whatever slotContextAboutToShow plugged into the menu.
     // Unplug the toolbar menu action
@@ -675,17 +675,17 @@ void KToolBar::Private::slotContextAboutToHide()
     context->removeAction(contextLockAction);
 }
 
-void KToolBar::Private::slotContextLeft()
+void KisToolBar::Private::slotContextLeft()
 {
     q->mainWindow()->addToolBar(Qt::LeftToolBarArea, q);
 }
 
-void KToolBar::Private::slotContextRight()
+void KisToolBar::Private::slotContextRight()
 {
     q->mainWindow()->addToolBar(Qt::RightToolBarArea, q);
 }
 
-void KToolBar::Private::slotContextShowText()
+void KisToolBar::Private::slotContextShowText()
 {
     Q_ASSERT(contextButtonAction);
     const QAction::Priority priority = contextShowText->isChecked()
@@ -695,7 +695,7 @@ void KToolBar::Private::slotContextShowText()
     // Find to which xml file and componentData the action belongs to
     QString componentName;
     QString filename;
-    KXMLGUIClient *client;
+    KisKXMLGUIClient *client;
     if (findAction(contextButtonAction->objectName(), &client)) {
         componentName = client->componentName();
         filename = client->xmlFile();
@@ -706,51 +706,51 @@ void KToolBar::Private::slotContextShowText()
     }
 
     // Save the priority state of the action
-    const QString configFile = KXMLGUIFactory::readConfigFile(filename, componentName);
+    const QString configFile = KisKXMLGUIFactory::readConfigFile(filename, componentName);
 
     QDomDocument document;
     document.setContent(configFile);
-    QDomElement elem = KXMLGUIFactory::actionPropertiesElement(document);
-    QDomElement actionElem = KXMLGUIFactory::findActionByName(elem, contextButtonAction->objectName(), true);
+    QDomElement elem = KisKXMLGUIFactory::actionPropertiesElement(document);
+    QDomElement actionElem = KisKXMLGUIFactory::findActionByName(elem, contextButtonAction->objectName(), true);
     actionElem.setAttribute(QStringLiteral("priority"), priority);
-    KXMLGUIFactory::saveConfigFile(document, filename, componentName);
+    KisKXMLGUIFactory::saveConfigFile(document, filename, componentName);
 }
 
-void KToolBar::Private::slotContextTop()
+void KisToolBar::Private::slotContextTop()
 {
     q->mainWindow()->addToolBar(Qt::TopToolBarArea, q);
 }
 
-void KToolBar::Private::slotContextBottom()
+void KisToolBar::Private::slotContextBottom()
 {
     q->mainWindow()->addToolBar(Qt::BottomToolBarArea, q);
 }
 
-void KToolBar::Private::slotContextIcons()
+void KisToolBar::Private::slotContextIcons()
 {
     q->setToolButtonStyle(Qt::ToolButtonIconOnly);
     toolButtonStyleSettings[Level_UserSettings] = q->toolButtonStyle();
 }
 
-void KToolBar::Private::slotContextText()
+void KisToolBar::Private::slotContextText()
 {
     q->setToolButtonStyle(Qt::ToolButtonTextOnly);
     toolButtonStyleSettings[Level_UserSettings] = q->toolButtonStyle();
 }
 
-void KToolBar::Private::slotContextTextUnder()
+void KisToolBar::Private::slotContextTextUnder()
 {
     q->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     toolButtonStyleSettings[Level_UserSettings] = q->toolButtonStyle();
 }
 
-void KToolBar::Private::slotContextTextRight()
+void KisToolBar::Private::slotContextTextRight()
 {
     q->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     toolButtonStyleSettings[Level_UserSettings] = q->toolButtonStyle();
 }
 
-void KToolBar::Private::slotContextIconSize()
+void KisToolBar::Private::slotContextIconSize()
 {
     QAction *action = qobject_cast<QAction *>(q->sender());
     if (action && contextIconSizes.contains(action)) {
@@ -759,13 +759,13 @@ void KToolBar::Private::slotContextIconSize()
     }
 }
 
-void KToolBar::Private::slotLockToolBars(bool lock)
+void KisToolBar::Private::slotLockToolBars(bool lock)
 {
     q->setToolBarsLocked(lock);
 }
 
 // Krita widget style "hack" reacting to QToolButton toggles
-void KToolBar::Private::slotToolButtonToggled(bool checked)
+void KisToolBar::Private::slotToolButtonToggled(bool checked)
 {
     QToolButton *tb = qobject_cast<QToolButton *>(q->sender());
     if (tb) {
@@ -773,7 +773,7 @@ void KToolBar::Private::slotToolButtonToggled(bool checked)
     }
 }
 
-KToolBar::KToolBar(const QString &objectName, QWidget *parent, bool readConfig)
+KisToolBar::KisToolBar(const QString &objectName, QWidget *parent, bool readConfig)
     : QToolBar(parent),
       d(new Private(this))
 {
@@ -782,19 +782,19 @@ KToolBar::KToolBar(const QString &objectName, QWidget *parent, bool readConfig)
     // others      -> isMainToolBar = false -> ### hardcoded default for buttonStyle !!! should be configurable? -> hidden key added
     d->init(readConfig, objectName == QStringLiteral("mainToolBar"));
 
-    // KToolBar is auto-added to the top area of the main window if parent is a QMainWindow
+    // KisToolBar is auto-added to the top area of the main window if parent is a QMainWindow
     if (QMainWindow *mw = qobject_cast<QMainWindow *>(parent)) {
         mw->addToolBar(this);
     }
 }
 
-KToolBar::~KToolBar()
+KisToolBar::~KisToolBar()
 {
     delete d->contextLockAction;
     delete d;
 }
 
-void KToolBar::saveSettings(KConfigGroup &cg)
+void KisToolBar::saveSettings(KConfigGroup &cg)
 {
     Q_ASSERT(!cg.name().isEmpty());
 
@@ -819,22 +819,22 @@ void KToolBar::saveSettings(KConfigGroup &cg)
 }
 
 
-void KToolBar::addXMLGUIClient(KXMLGUIClient *client)
+void KisToolBar::addXMLGUIClient(KisKXMLGUIClient *client)
 {
     d->xmlguiClients << client;
 }
 
-void KToolBar::removeXMLGUIClient(KXMLGUIClient *client)
+void KisToolBar::removeXMLGUIClient(KisKXMLGUIClient *client)
 {
     d->xmlguiClients.remove(client);
 }
 
-void KToolBar::contextMenuEvent(QContextMenuEvent *event)
+void KisToolBar::contextMenuEvent(QContextMenuEvent *event)
 {
     QToolBar::contextMenuEvent(event);
 }
 
-void KToolBar::loadState(const QDomElement &element)
+void KisToolBar::loadState(const QDomElement &element)
 {
     QMainWindow *mw = mainWindow();
     if (!mw) {
@@ -885,7 +885,7 @@ void KToolBar::loadState(const QDomElement &element)
       - for the initial loading of the app's XML. In that case the settings
       are only the defaults (Level_AppXML), the user's KConfig settings will override them
 
-      - for later re-loading when switching between parts in KXMLGUIFactory.
+      - for later re-loading when switching between parts in KisKXMLGUIFactory.
       In that case the XML contains the final settings, not the defaults.
       We do need the defaults, and the toolbar might have been completely
       deleted and recreated meanwhile. So we store the app-default settings
@@ -945,7 +945,7 @@ void KToolBar::loadState(const QDomElement &element)
     {
         QString attrPosition = element.attribute(QStringLiteral("position")).toLower();
         if (!attrPosition.isEmpty()) {
-            pos = KToolBar::Private::positionFromString(attrPosition);
+            pos = KisToolBar::Private::positionFromString(attrPosition);
         }
     }
     if (pos != Qt::NoToolBarArea) {
@@ -959,7 +959,7 @@ void KToolBar::loadState(const QDomElement &element)
 
 // Called when switching between xmlgui clients, in order to find any unsaved settings
 // again when switching back to the current xmlgui client.
-void KToolBar::saveState(QDomElement &current) const
+void KisToolBar::saveState(QDomElement &current) const
 {
     Q_ASSERT(!current.isNull());
 
@@ -982,7 +982,7 @@ void KToolBar::saveState(QDomElement &current) const
         current.setAttribute(QStringLiteral("iconText"), d->toolButtonStyleToString(toolButtonStyle()));
     }
 
-    // Note: if this method is used by more than KXMLGUIBuilder, e.g. to save XML settings to *disk*,
+    // Note: if this method is used by more than KisKXMLGUIBuilder, e.g. to save XML settings to *disk*,
     // then the stuff below shouldn't always be done. This is not the case currently though.
     if (d->iconSizeSettings[Level_AppXML] != Unset) {
         current.setAttribute(QStringLiteral("iconSizeDefault"), d->iconSizeSettings[Level_AppXML]);
@@ -993,8 +993,8 @@ void KToolBar::saveState(QDomElement &current) const
     }
 }
 
-// called by KMainWindow::applyMainWindowSettings to read from the user settings
-void KToolBar::applySettings(const KConfigGroup &cg)
+// called by KisKMainWindow::applyMainWindowSettings to read from the user settings
+void KisToolBar::applySettings(const KConfigGroup &cg)
 {
     Q_ASSERT(!cg.name().isEmpty());
 
@@ -1008,28 +1008,28 @@ void KToolBar::applySettings(const KConfigGroup &cg)
     d->applyCurrentSettings();
 }
 
-KMainWindow *KToolBar::mainWindow() const
+KisKMainWindow *KisToolBar::mainWindow() const
 {
-    return qobject_cast<KMainWindow *>(const_cast<QObject *>(parent()));
+    return qobject_cast<KisKMainWindow *>(const_cast<QObject *>(parent()));
 }
 
-void KToolBar::setIconDimensions(int size)
+void KisToolBar::setIconDimensions(int size)
 {
     QToolBar::setIconSize(QSize(size, size));
     d->iconSizeSettings[Level_UserSettings] = size;
 }
 
-int KToolBar::iconSizeDefault() const
+int KisToolBar::iconSizeDefault() const
 {
     return 22;
 }
 
-void KToolBar::slotMovableChanged(bool movable)
+void KisToolBar::slotMovableChanged(bool movable)
 {
     setMovable(movable);
 }
 
-void KToolBar::dragEnterEvent(QDragEnterEvent *event)
+void KisToolBar::dragEnterEvent(QDragEnterEvent *event)
 {
     if (toolBarsEditable() && event->proposedAction() & (Qt::CopyAction | Qt::MoveAction) &&
             event->mimeData()->hasFormat(QStringLiteral("application/x-kde-action-list"))) {
@@ -1042,7 +1042,7 @@ void KToolBar::dragEnterEvent(QDragEnterEvent *event)
         stream >> actionNames;
 
         Q_FOREACH (const QString &actionName, actionNames) {
-            Q_FOREACH (KActionCollection *ac, KActionCollection::allCollections()) {
+            Q_FOREACH (KisKActionCollection *ac, KisKActionCollection::allCollections()) {
                 QAction *newAction = ac->action(actionName);
                 if (newAction) {
                     d->actionsBeingDragged.append(newAction);
@@ -1071,7 +1071,7 @@ void KToolBar::dragEnterEvent(QDragEnterEvent *event)
     QToolBar::dragEnterEvent(event);
 }
 
-void KToolBar::dragMoveEvent(QDragMoveEvent *event)
+void KisToolBar::dragMoveEvent(QDragMoveEvent *event)
 {
     if (toolBarsEditable())
         Q_FOREVER {
@@ -1110,7 +1110,7 @@ void KToolBar::dragMoveEvent(QDragMoveEvent *event)
     QToolBar::dragMoveEvent(event);
 }
 
-void KToolBar::dragLeaveEvent(QDragLeaveEvent *event)
+void KisToolBar::dragLeaveEvent(QDragLeaveEvent *event)
 {
     // Want to clear this even if toolBarsEditable was changed mid-drag (unlikely)
     delete d->dropIndicatorAction;
@@ -1125,7 +1125,7 @@ void KToolBar::dragLeaveEvent(QDragLeaveEvent *event)
     QToolBar::dragLeaveEvent(event);
 }
 
-void KToolBar::dropEvent(QDropEvent *event)
+void KisToolBar::dropEvent(QDropEvent *event)
 {
     if (toolBarsEditable()) {
         Q_FOREACH (QAction *action, d->actionsBeingDragged) {
@@ -1149,7 +1149,7 @@ void KToolBar::dropEvent(QDropEvent *event)
     QToolBar::dropEvent(event);
 }
 
-void KToolBar::mousePressEvent(QMouseEvent *event)
+void KisToolBar::mousePressEvent(QMouseEvent *event)
 {
     if (toolBarsEditable() && event->button() == Qt::LeftButton) {
         if (QAction *action = actionAt(event->pos())) {
@@ -1163,7 +1163,7 @@ void KToolBar::mousePressEvent(QMouseEvent *event)
     QToolBar::mousePressEvent(event);
 }
 
-void KToolBar::mouseMoveEvent(QMouseEvent *event)
+void KisToolBar::mouseMoveEvent(QMouseEvent *event)
 {
     if (!toolBarsEditable() || !d->dragAction) {
         return QToolBar::mouseMoveEvent(event);
@@ -1204,7 +1204,7 @@ void KToolBar::mouseMoveEvent(QMouseEvent *event)
     event->accept();
 }
 
-void KToolBar::mouseReleaseEvent(QMouseEvent *event)
+void KisToolBar::mouseReleaseEvent(QMouseEvent *event)
 {
     // Want to clear this even if toolBarsEditable was changed mid-drag (unlikely)
     if (d->dragAction) {
@@ -1216,7 +1216,7 @@ void KToolBar::mouseReleaseEvent(QMouseEvent *event)
     QToolBar::mouseReleaseEvent(event);
 }
 
-bool KToolBar::eventFilter(QObject *watched, QEvent *event)
+bool KisToolBar::eventFilter(QObject *watched, QEvent *event)
 {
     // Generate context menu events for disabled buttons too...
     if (event->type() == QEvent::MouseButtonPress) {
@@ -1315,7 +1315,7 @@ bool KToolBar::eventFilter(QObject *watched, QEvent *event)
     return QToolBar::eventFilter(watched, event);
 }
 
-void KToolBar::actionEvent(QActionEvent *event)
+void KisToolBar::actionEvent(QActionEvent *event)
 {
     if (event->type() == QEvent::ActionRemoved) {
         QWidget *widget = widgetForAction(event->action());
@@ -1366,40 +1366,40 @@ void KToolBar::actionEvent(QActionEvent *event)
     d->adjustSeparatorVisibility();
 }
 
-bool KToolBar::toolBarsEditable()
+bool KisToolBar::toolBarsEditable()
 {
-    return KToolBar::Private::s_editable;
+    return KisToolBar::Private::s_editable;
 }
 
-void KToolBar::setToolBarsEditable(bool editable)
+void KisToolBar::setToolBarsEditable(bool editable)
 {
-    if (KToolBar::Private::s_editable != editable) {
-        KToolBar::Private::s_editable = editable;
+    if (KisToolBar::Private::s_editable != editable) {
+        KisToolBar::Private::s_editable = editable;
     }
 }
 
-void KToolBar::setToolBarsLocked(bool locked)
+void KisToolBar::setToolBarsLocked(bool locked)
 {
-    if (KToolBar::Private::s_locked != locked) {
-        KToolBar::Private::s_locked = locked;
+    if (KisToolBar::Private::s_locked != locked) {
+        KisToolBar::Private::s_locked = locked;
 
-        Q_FOREACH (KMainWindow *mw, KMainWindow::memberList()) {
-            Q_FOREACH (KToolBar *toolbar, mw->findChildren<KToolBar *>()) {
+        Q_FOREACH (KisKMainWindow *mw, KisKMainWindow::memberList()) {
+            Q_FOREACH (KisToolBar *toolbar, mw->findChildren<KisToolBar *>()) {
                 toolbar->d->setLocked(locked);
             }
         }
     }
 }
 
-bool KToolBar::toolBarsLocked()
+bool KisToolBar::toolBarsLocked()
 {
-    return KToolBar::Private::s_locked;
+    return KisToolBar::Private::s_locked;
 }
 
-void KToolBar::emitToolbarStyleChanged()
+void KisToolBar::emitToolbarStyleChanged()
 {
 #ifdef HAVE_DBUS
-    QDBusMessage message = QDBusMessage::createSignal(QStringLiteral("/KToolBar"), QStringLiteral("org.kde.KToolBar"), QStringLiteral("styleChanged"));
+    QDBusMessage message = QDBusMessage::createSignal(QStringLiteral("/KisToolBar"), QStringLiteral("org.kde.KisToolBar"), QStringLiteral("styleChanged"));
     QDBusConnection::sessionBus().send(message);
 #endif
 }

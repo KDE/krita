@@ -93,7 +93,7 @@ public:
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
-    KActionCollection *actionCollection{0};
+    KisKActionCollection *actionCollection{0};
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
 
@@ -526,7 +526,7 @@ void KisPart::updateShortcuts()
     // Update any non-UI actionCollections.  That includes:
     // Now update the UI actions.
     Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
-        KActionCollection *ac = mainWindow->actionCollection();
+        KisKActionCollection *ac = mainWindow->actionCollection();
 
         ac->updateShortcuts();
 

@@ -116,7 +116,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
     if (m_canvas) {
         m_canvas->disconnectCanvasObserver(this);
         m_canvas->viewManager()->nodeManager()->disconnect(this);
-        KActionCollection *ac = m_canvas->viewManager()->actionCollection();
+        KisKActionCollection *ac = m_canvas->viewManager()->actionCollection();
         ac->takeAction(ac->action("show_color_selector"));
         ac->takeAction(ac->action("show_mypaint_shade_selector"));
         ac->takeAction(ac->action("show_minimal_shade_selector"));
@@ -148,7 +148,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
 
         m_gamutMaskToolbar->connectMaskSignals(m_canvas->viewManager()->canvasResourceProvider());
 
-        KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
+        KisKActionCollection* actionCollection = canvas->viewManager()->actionCollection();
         actionCollection->addAction("show_color_selector", m_colorSelAction);
         actionCollection->addAction("show_mypaint_shade_selector", m_mypaintAction);
         actionCollection->addAction("show_minimal_shade_selector", m_minimalAction);

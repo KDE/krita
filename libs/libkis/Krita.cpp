@@ -86,7 +86,7 @@ QList<QAction *> Krita::actions() const
     if (!mainWindow) {
         return QList<QAction*>();
     }
-    KActionCollection *actionCollection = mainWindow->actionCollection();
+    KisKActionCollection *actionCollection = mainWindow->actionCollection();
     return actionCollection->actions();
 }
 
@@ -96,7 +96,7 @@ QAction *Krita::action(const QString &name) const
     if (!mainWindow) {
         return 0;
     }
-    KActionCollection *actionCollection = mainWindow->actionCollection();
+    KisKActionCollection *actionCollection = mainWindow->actionCollection();
     QAction *action = actionCollection->action(name);
     return action;
 }

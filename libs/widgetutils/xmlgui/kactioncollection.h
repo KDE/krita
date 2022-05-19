@@ -19,30 +19,30 @@
 #include <QObject>
 
 class QAction;
-class KXMLGUIClient;
+class KisKXMLGUIClient;
 class KConfigGroup;
 class QActionGroup;
 class QString;
-class KActionCategory;
+class KisKActionCategory;
 
 /**
  * \short A container for a set of QAction objects.
  *
- * KActionCollection manages a set of QAction objects.  It
+ * KisKActionCollection manages a set of QAction objects.  It
  * allows them to be grouped for organized presentation of configuration to the user,
  * saving + loading of configuration, and optionally for automatic plugging into
  * specified widget(s).
  *
- * Additionally, KActionCollection provides several convenience functions for locating
+ * Additionally, KisKActionCollection provides several convenience functions for locating
  * named actions, and actions grouped by QActionGroup.
  *
  * \note If you create your own action collection and need to assign shortcuts
  * to the actions within, you have to call associateWidget() or
  * addAssociatedWidget() to have them working.
  */
-class KRITAWIDGETUTILS_EXPORT KActionCollection : public QObject
+class KRITAWIDGETUTILS_EXPORT KisKActionCollection : public QObject
 {
-    friend class KXMLGUIClient;
+    friend class KisKXMLGUIClient;
 
     Q_OBJECT
 
@@ -53,17 +53,17 @@ public:
      * Constructor.  Allows specification of a component name other than the default
      * application name, where needed (remember to call setComponentDisplayName() too).
      */
-    explicit KActionCollection(QObject *parent, const QString &cName = QString());
+    explicit KisKActionCollection(QObject *parent, const QString &cName = QString());
 
     /**
      * Destructor.
      */
-    ~KActionCollection() override;
+    ~KisKActionCollection() override;
 
     /**
      * Access the list of all action collections in existence for this app
      */
-    static const QList<KActionCollection *> &allCollections();
+    static const QList<KisKActionCollection *> &allCollections();
 
     /**
      * Clears the entire action collection, deleting all actions.
@@ -197,7 +197,7 @@ public:
     /**
      * Set the \a componentName associated with this action collection.
      *
-     * \warning Don't call this method on a KActionCollection that contains
+     * \warning Don't call this method on a KisKActionCollection that contains
      * actions. This is not supported.
      *
      * \param componentName the name which is to be associated with this action collection,
@@ -220,15 +220,15 @@ public:
     QString componentDisplayName() const;
 
     /**
-     * The parent KXMLGUIClient, or null if not available.
+     * The parent KisKXMLGUIClient, or null if not available.
      */
-    const KXMLGUIClient *parentGUIClient() const;
+    const KisKXMLGUIClient *parentGUIClient() const;
 
 
     /**
      * Returns the KActionCategories inside this collection
      */
-    QList<KActionCategory *> categories() const;
+    QList<KisKActionCategory *> categories() const;
 
 
     /**
@@ -236,7 +236,7 @@ public:
      *
      * Creates a new category if one does not exist.
      */
-    KActionCategory *getCategory(const QString &categoryName);
+    KisKActionCategory *getCategory(const QString &categoryName);
 
 Q_SIGNALS:
     /**
@@ -484,10 +484,10 @@ private:
     Q_PRIVATE_SLOT(d, void _k_actionDestroyed(QObject *))
     Q_PRIVATE_SLOT(d, void _k_associatedWidgetDestroyed(QObject *))
 
-    KActionCollection(const KXMLGUIClient *parent);   // used by KXMLGUIClient
+    KisKActionCollection(const KisKXMLGUIClient *parent);   // used by KisKXMLGUIClient
 
-    friend class KActionCollectionPrivate;
-    class KActionCollectionPrivate *const d;
+    friend class KisKActionCollectionPrivate;
+    class KisKActionCollectionPrivate *const d;
 };
 
 #endif

@@ -39,13 +39,13 @@ const char guiDescription[] = ""
 class BarActionBuilder
 {
 public:
-    BarActionBuilder(KActionCollection *actionCollection, KXmlGuiWindow *mainWindow,
-                     QLinkedList<KToolBar *> &oldToolBarList)
+    BarActionBuilder(KisKActionCollection *actionCollection, KXmlGuiWindow *mainWindow,
+                     QLinkedList<KisToolBar *> &oldToolBarList)
         : m_actionCollection(actionCollection), m_mainWindow(mainWindow), m_needsRebuild(false)
     {
-        QList<KToolBar *> toolBars = m_mainWindow->findChildren<KToolBar *>();
+        QList<KisToolBar *> toolBars = m_mainWindow->findChildren<KisToolBar *>();
 
-        Q_FOREACH (KToolBar *toolBar, toolBars) {
+        Q_FOREACH (KisToolBar *toolBar, toolBars) {
             if (toolBar->mainWindow() != m_mainWindow) {
                 continue;
             }
@@ -75,7 +75,7 @@ public:
             return actions;
         }
 
-        Q_FOREACH (KToolBar *bar, m_toolBars) {
+        Q_FOREACH (KisToolBar *bar, m_toolBars) {
             handleToolBar(bar);
         }
 
@@ -101,13 +101,13 @@ public:
         return actions;
     }
 
-    const QLinkedList<KToolBar *> &toolBars() const
+    const QLinkedList<KisToolBar *> &toolBars() const
     {
         return m_toolBars;
     }
 
 private:
-    void handleToolBar(KToolBar *toolBar)
+    void handleToolBar(KisToolBar *toolBar)
     {
         KToggleToolBarAction *action = new KToggleToolBarAction(
             toolBar,
@@ -119,10 +119,10 @@ private:
         m_toolBarActions.append(action);
     }
 
-    KActionCollection *m_actionCollection;
+    KisKActionCollection *m_actionCollection;
     KXmlGuiWindow *m_mainWindow;
 
-    QLinkedList<KToolBar *> m_toolBars;
+    QLinkedList<KisToolBar *> m_toolBars;
     QList<QAction *> m_toolBarActions;
 
     bool m_needsRebuild : 1;
@@ -139,7 +139,7 @@ public:
     {
     }
 
-    void clientAdded(KXMLGUIClient *client)
+    void clientAdded(KisKXMLGUIClient *client)
     {
         Q_UNUSED(client);
         parent->setupActions();
@@ -153,15 +153,15 @@ public:
     ToolBarHandler *parent;
     QPointer<KXmlGuiWindow> mainWindow;
     QList<QAction *> actions;
-    QLinkedList<KToolBar *> toolBars;
+    QLinkedList<KisToolBar *> toolBars;
 };
 
 void ToolBarHandler::Private::init(KXmlGuiWindow *mw)
 {
     mainWindow = mw;
 
-    QObject::connect(mainWindow->guiFactory(), SIGNAL(clientAdded(KXMLGUIClient*)),
-                     parent, SLOT(clientAdded(KXMLGUIClient*)));
+    QObject::connect(mainWindow->guiFactory(), SIGNAL(clientAdded(KisKXMLGUIClient*)),
+                     parent, SLOT(clientAdded(KisKXMLGUIClient*)));
 
     if (parent->domDocument().documentElement().isNull()) {
 
@@ -200,14 +200,14 @@ void ToolBarHandler::Private::connectToActionContainer(QWidget *container)
 }
 
 ToolBarHandler::ToolBarHandler(KXmlGuiWindow *mainWindow)
-    : QObject(mainWindow), KXMLGUIClient(mainWindow),
+    : QObject(mainWindow), KisKXMLGUIClient(mainWindow),
       d(new Private(this))
 {
     d->init(mainWindow);
 }
 
 ToolBarHandler::ToolBarHandler(KXmlGuiWindow *mainWindow, QObject *parent)
-    : QObject(parent), KXMLGUIClient(mainWindow),
+    : QObject(parent), KisKXMLGUIClient(mainWindow),
       d(new Private(this))
 {
     d->init(mainWindow);

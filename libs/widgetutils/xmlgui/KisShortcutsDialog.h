@@ -42,16 +42,16 @@
 //   KF5 XmlGui's kshortcutseditor.cpp to begin of KisShortcutsEditorItem.cpp
 
 /**
- * @short Dialog for configuration of KActionCollection and KGlobalAccel.
+ * @short Dialog for configuration of KisKActionCollection and KGlobalAccel.
  *
  * The KisShortcutsDialog class is used for configuring dictionaries of
- * key/action associations for KActionCollection and KGlobalAccel. It uses the
+ * key/action associations for KisKActionCollection and KGlobalAccel. It uses the
  * KShortcutsEditor widget and offers buttons to set all keys to defaults and
  * invoke on-line help.
  *
  * Several static methods are supplied which provide the most convenient
  * interface to the dialog. The most common and most encouraged use is with
- * KActionCollection.
+ * KisKActionCollection.
  *
  * \code
  * KisShortcutsDialog::configure( actionCollection() );
@@ -115,12 +115,12 @@ public:
      * @param collection the action collection.
      * @param title the title associated with the collection.
      */
-    void addCollection(KActionCollection *, const QString &title = QString());
+    void addCollection(KisKActionCollection *, const QString &title = QString());
 
     /**
      * @return the list of action collections that are available for configuration in the dialog.
      */
-    QList<KActionCollection *> actionCollections() const;
+    QList<KisKActionCollection *> actionCollections() const;
 
     /** @see QWidget::sizeHint() */
     QSize sizeHint() const override;

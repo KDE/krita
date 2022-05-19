@@ -21,18 +21,18 @@ class QDomElement;
 
 class KConfigGroup;
 class KConfig;
-class KMainWindow;
-class KXMLGUIClient;
+class KisKMainWindow;
+class KisKXMLGUIClient;
 
 /**
  * @short Floatable toolbar with auto resize.
  *
  * A KDE-style toolbar.
  *
- * KToolBar can be used as a standalone widget, but KMainWindow
+ * KisToolBar can be used as a standalone widget, but KisKMainWindow
  * provides easy factories and management of one or more toolbars.
  *
- * KToolBar uses a global config group to load toolbar settings on
+ * KisToolBar uses a global config group to load toolbar settings on
  * construction. It will reread this config group on a
  * KApplication::appearanceChanged() signal.
  *
@@ -42,7 +42,7 @@ class KXMLGUIClient;
  *    Settings from "Other toolbars" will only work on widget styles derived from KStyle
  * @author Reginald Stadlbauer <reggie@kde.org>, Stephan Kulow <coolo@kde.org>, Sven Radej <radej@kde.org>, Hamish Rodda <rodda@kde.org>.
  */
-class KRITAWIDGETUTILS_EXPORT KToolBar : public QToolBar
+class KRITAWIDGETUTILS_EXPORT KisToolBar : public QToolBar
 {
     Q_OBJECT
 
@@ -54,25 +54,25 @@ public:
      * if @p parent is a QMainWindow.
      *
      * Normally KDE applications do not call this directly, they either
-     * call KMainWindow::toolBar(name), or they use XML-GUI and specify
+     * call KisKMainWindow::toolBar(name), or they use XML-GUI and specify
      * toolbars using XML.
      *
      * @param objectName  The QObject name of this toolbar, required so that QMainWindow can save and load the toolbar position,
-     *                    and so that KToolBar can find out if it's the main toolbar.
-     * @param parent      The standard toolbar parent (usually a KMainWindow)
+     *                    and so that KisToolBar can find out if it's the main toolbar.
+     * @param parent      The standard toolbar parent (usually a KisKMainWindow)
      * @param readConfig  whether to apply the configuration (global and application-specific)
      */
-    explicit KToolBar(const QString &objectName, QWidget *parent, bool readConfig = true);
+    explicit KisToolBar(const QString &objectName, QWidget *parent, bool readConfig = true);
 
     /**
      * Destroys the toolbar.
      */
-    ~KToolBar() override;
+    ~KisToolBar() override;
 
     /**
      * Returns the main window that this toolbar is docked with.
      */
-    KMainWindow *mainWindow() const;
+    KisKMainWindow *mainWindow() const;
 
     /**
      * Convenience function to set icon size
@@ -101,21 +101,21 @@ public:
      * Adds an XML gui client that uses this toolbar
      * @since 4.8.1
      */
-    void addXMLGUIClient(KXMLGUIClient *client);
+    void addXMLGUIClient(KisKXMLGUIClient *client);
 
     /**
      * Removes an XML gui client that uses this toolbar
      * @since 4.8.5
      */
-    void removeXMLGUIClient(KXMLGUIClient *client);
+    void removeXMLGUIClient(KisKXMLGUIClient *client);
 
     /**
-     * Load state from an XML @p element, called by KXMLGUIBuilder.
+     * Load state from an XML @p element, called by KisKXMLGUIBuilder.
      */
     void loadState(const QDomElement &element);
 
     /**
-     * Save state into an XML @p element, called by KXMLGUIBuilder.
+     * Save state into an XML @p element, called by KisKXMLGUIBuilder.
      */
     void saveState(QDomElement &element) const;
 
@@ -131,8 +131,8 @@ public:
 
     /**
      * Enable or disable toolbar editing via drag & drop of actions.  This is
-     * called by KEditToolbar and should generally be set to disabled whenever
-     * KEditToolbar is not active.
+     * called by KisKEditToolbar and should generally be set to disabled whenever
+     * KisKEditToolbar is not active.
      */
     static void setToolBarsEditable(bool editable);
 

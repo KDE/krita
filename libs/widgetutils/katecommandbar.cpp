@@ -298,7 +298,7 @@ KateCommandBar::KateCommandBar(QWidget *parent)
     setHidden(true);
 }
 
-void KateCommandBar::updateBar(const QList<KActionCollection *> &actionCollections, int totalActions)
+void KateCommandBar::updateBar(const QList<KisKActionCollection *> &actionCollections, int totalActions)
 {
     qDeleteAll(m_disposableActionCollections);
     m_disposableActionCollections.clear();

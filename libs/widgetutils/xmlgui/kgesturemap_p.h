@@ -18,35 +18,35 @@ class QApplication;
 class QAction;
 class QEvent;
 
-class KRITAWIDGETUTILS_EXPORT KGestureMap : public QObject
+class KRITAWIDGETUTILS_EXPORT KisKGestureMap : public QObject
 {
     Q_OBJECT
 public:
-    static KGestureMap *self();
+    static KisKGestureMap *self();
 
     bool eventFilter(QObject *obj, QEvent *e) override;
-    void setShapeGesture(QAction *kact, const KShapeGesture &gesture);
-    void setRockerGesture(QAction *kact, const KRockerGesture &gesture);
-    void setDefaultShapeGesture(QAction *kact, const KShapeGesture &gesture);
-    void setDefaultRockerGesture(QAction *kact, const KRockerGesture &gesture);
+    void setShapeGesture(QAction *kact, const KisKShapeGesture &gesture);
+    void setRockerGesture(QAction *kact, const KisKRockerGesture &gesture);
+    void setDefaultShapeGesture(QAction *kact, const KisKShapeGesture &gesture);
+    void setDefaultRockerGesture(QAction *kact, const KisKRockerGesture &gesture);
     /**
      * This method will remove all gestures defined for a given action
      */
     void removeAllGestures(QAction *kact);
-    QAction *findAction(const KShapeGesture &gesture) const;
-    QAction *findAction(const KRockerGesture &gesture) const;
-    KShapeGesture shapeGesture(const QAction *kact) const;
-    KShapeGesture defaultShapeGesture(const QAction *kact) const;
-    KRockerGesture rockerGesture(const QAction *kact) const;
-    KRockerGesture defaultRockerGesture(const QAction *kact) const;
+    QAction *findAction(const KisKShapeGesture &gesture) const;
+    QAction *findAction(const KisKRockerGesture &gesture) const;
+    KisKShapeGesture shapeGesture(const QAction *kact) const;
+    KisKShapeGesture defaultShapeGesture(const QAction *kact) const;
+    KisKRockerGesture rockerGesture(const QAction *kact) const;
+    KisKRockerGesture defaultRockerGesture(const QAction *kact) const;
 
 private Q_SLOTS:
     void stopAcquisition();
 
 private:
-    friend class KGestureMapContainer;
-    KGestureMap();
-    ~KGestureMap() override;
+    friend class KisKGestureMapContainer;
+    KisKGestureMap();
+    ~KisKGestureMap() override;
 
     friend class KApplicationPrivate;
     //intended to be used at application initialization
@@ -57,8 +57,8 @@ private:
     void matchShapeGesture();
 
     //this is an internal class so don't bother with a d-pointer
-    typedef QHash< KShapeGesture, QAction * > ShapeGestureHash;
-    typedef QHash< KRockerGesture, QAction * > RockerGestureHash;
+    typedef QHash< KisKShapeGesture, QAction * > ShapeGestureHash;
+    typedef QHash< KisKRockerGesture, QAction * > RockerGestureHash;
     ShapeGestureHash m_shapeGestures;
     ShapeGestureHash m_defaultShapeGestures;
     RockerGestureHash m_rockerGestures;
@@ -67,8 +67,8 @@ private:
     QTimer m_gestureTimeout;
     bool m_acquiring {false};
 
-    KShapeGesture m_shapeGesture;
-    KRockerGesture m_rockerGesture;
+    KisKShapeGesture m_shapeGesture;
+    KisKRockerGesture m_rockerGesture;
 };
 
 #endif //KGESTUREMAP_H

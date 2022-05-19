@@ -49,7 +49,7 @@ struct KisFilterManager::Private {
     KisAction* reapplyActionReprompt = nullptr;
     QHash<QString, KActionMenu*> filterActionMenus;
     QHash<KisFilter*, QAction *> filters2Action;
-    KActionCollection *actionCollection = nullptr;
+    KisKActionCollection *actionCollection = nullptr;
     KisActionManager *actionManager = nullptr;
     KisViewManager *view = nullptr;
 
@@ -86,7 +86,7 @@ void KisFilterManager::setView(QPointer<KisView>imageView)
 }
 
 
-void KisFilterManager::setup(KActionCollection * ac, KisActionManager *actionManager)
+void KisFilterManager::setup(KisKActionCollection * ac, KisActionManager *actionManager)
 {
     d->actionCollection = ac;
     d->actionManager = actionManager;

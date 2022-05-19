@@ -61,7 +61,7 @@
 class QAction;
 class KUndo2CommandPrivate;
 class KUndo2Group;
-class KActionCollection;
+class KisKActionCollection;
 
 #ifndef QT_NO_UNDOCOMMAND
 
@@ -251,8 +251,8 @@ public:
     explicit KUndo2Stack(QObject *parent = 0);
 
     // functions from KUndoStack
-    QAction* createRedoAction(KActionCollection* actionCollection, const QString& actionName = QString());
-    QAction* createUndoAction(KActionCollection* actionCollection, const QString& actionName = QString());
+    QAction* createRedoAction(KisKActionCollection* actionCollection, const QString& actionName = QString());
+    QAction* createUndoAction(KisKActionCollection* actionCollection, const QString& actionName = QString());
 };
 
 #endif // QT_NO_UNDOSTACK

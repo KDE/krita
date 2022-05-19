@@ -30,7 +30,7 @@ int KisCanvasOnlyAction::priority() const
 
 void KisCanvasOnlyAction::begin(int, QEvent */*event*/)
 {
-    KActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
+    KisKActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
     QAction *action = actionCollection->action("view_show_canvas_only");
     if (action)
     {

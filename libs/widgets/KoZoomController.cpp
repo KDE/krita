@@ -22,7 +22,7 @@
 
 void KoZoomController::Private::init(KoCanvasController *co,
                                      KoZoomHandler *zh,
-                                     KActionCollection *actionCollection)
+                                     KisKActionCollection *actionCollection)
 {
     canvasController = co;
     fitMargin = co->margin();
@@ -43,7 +43,7 @@ void KoZoomController::Private::init(KoCanvasController *co,
     connect(canvasController->proxyObject, SIGNAL(zoomRelative(qreal,QPointF)), parent, SLOT(requestZoomRelative(qreal,QPointF)) );
 }
 
-KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KActionCollection *actionCollection, QObject *parent)
+KoZoomController::KoZoomController(KoCanvasController *co, KoZoomHandler *zh, KisKActionCollection *actionCollection, QObject *parent)
     : QObject(parent),
       d(new Private(this))
 {

@@ -13,9 +13,9 @@
 #include <QList>
 #include <QPushButton>
 
-class KKeySequenceWidgetPrivate;
+class KisKKeySequenceWidgetPrivate;
 class QAction;
-class KActionCollection;
+class KisKActionCollection;
 
 /**
  * @short A widget to input a QKeySequence.
@@ -32,7 +32,7 @@ class KActionCollection;
  * @author Mark Donohoe <donohoe@kde.org>
  * @internal
  */
-class KRITAWIDGETUTILS_EXPORT KKeySequenceWidget: public QWidget
+class KRITAWIDGETUTILS_EXPORT KisKKeySequenceWidget: public QWidget
 {
     Q_OBJECT
 
@@ -66,12 +66,12 @@ public:
     /**
     * Constructor.
     */
-    explicit KKeySequenceWidget(QWidget *parent = 0);
+    explicit KisKKeySequenceWidget(QWidget *parent = 0);
 
     /**
     * Destructs the widget.
     */
-    ~KKeySequenceWidget() override;
+    ~KisKKeySequenceWidget() override;
 
     /**
      * \name Configuration
@@ -109,7 +109,7 @@ public:
      * manually. It's your responsibility to save that change later when
      * you think it is appropriate.
      *
-     * 2. Call applyStealShortcut and KKeySequenceWidget will steal the
+     * 2. Call applyStealShortcut and KisKKeySequenceWidget will steal the
      * shortcut. This will save the actionCollections the shortcut is part
      * of so make sure it doesn't inadvertly save some unwanted changes
      * too. Read its documentation for some limitation when handling
@@ -208,7 +208,7 @@ public:
      *
      * @since 4.1
      */
-    void setCheckActionCollections(const QList<KActionCollection *> &actionCollections);
+    void setCheckActionCollections(const QList<KisKActionCollection *> &actionCollections);
 
     /**
      * If the component using this widget supports shortcuts contexts, it has
@@ -277,12 +277,12 @@ private:
     Q_PRIVATE_SLOT(d, void doneRecording())
 
 private:
-    friend class KKeySequenceWidgetPrivate;
-    KKeySequenceWidgetPrivate *const d;
+    friend class KisKKeySequenceWidgetPrivate;
+    KisKKeySequenceWidgetPrivate *const d;
 
-    Q_DISABLE_COPY(KKeySequenceWidget)
+    Q_DISABLE_COPY(KisKKeySequenceWidget)
 };
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(KKeySequenceWidget::ShortcutTypes)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisKKeySequenceWidget::ShortcutTypes)
 
 #endif //KKEYSEQUENCEWIDGET_H

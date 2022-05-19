@@ -18,7 +18,7 @@
 
 #include <kis_icon_utils.h>
 
-QAction *KUndoActions::createRedoAction(QUndoStack *undoStack, KActionCollection *actionCollection, const QString &actionName)
+QAction *KisKUndoActions::createRedoAction(QUndoStack *undoStack, KisKActionCollection *actionCollection, const QString &actionName)
 {
     QAction *action = undoStack->createRedoAction(actionCollection);
 
@@ -37,7 +37,7 @@ QAction *KUndoActions::createRedoAction(QUndoStack *undoStack, KActionCollection
     return action;
 }
 
-QAction *KUndoActions::createUndoAction(QUndoStack *undoStack, KActionCollection *actionCollection, const QString &actionName)
+QAction *KisKUndoActions::createUndoAction(QUndoStack *undoStack, KisKActionCollection *actionCollection, const QString &actionName)
 {
     QAction *action = undoStack->createUndoAction(actionCollection);
 

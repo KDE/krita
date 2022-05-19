@@ -1399,7 +1399,7 @@ void KUndo2QStack::setStrokesN(int value)
 
 
 
-QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, const QString& actionName)
+QAction* KUndo2Stack::createRedoAction(KisKActionCollection* actionCollection, const QString& actionName)
 {
     QAction* action = KUndo2QStack::createRedoAction(actionCollection);
 
@@ -1418,7 +1418,7 @@ QAction* KUndo2Stack::createRedoAction(KActionCollection* actionCollection, cons
     return action;
 }
 
-QAction* KUndo2Stack::createUndoAction(KActionCollection* actionCollection, const QString& actionName)
+QAction* KUndo2Stack::createUndoAction(KisKActionCollection* actionCollection, const QString& actionName)
 {
     QAction* action = KUndo2QStack::createUndoAction(actionCollection);
 

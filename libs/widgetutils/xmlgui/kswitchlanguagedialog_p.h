@@ -14,34 +14,34 @@
 namespace KDEPrivate
 {
 
-class KSwitchLanguageDialogPrivate;
+class KisKSwitchLanguageDialogPrivate;
 
 /**
  * @short Standard "switch application language" dialog box.
  *
  * This class provides "switch application language" dialog box that is used
- * in KHelpMenu
+ * in KisKHelpMenu
  *
  * @author Krzysztof Lichota (lichota@mimuw.edu.pl)
  * @internal
  */
 
-class KSwitchLanguageDialog : public QDialog
+class KisKSwitchLanguageDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     /**
         * Constructor. Creates a fully featured "Switch application language" dialog box.
-        * Note that this dialog is made modeless in the KHelpMenu class so
+        * Note that this dialog is made modeless in the KisKHelpMenu class so
         * the users may expect a modeless dialog.
         *
         * @param parent The parent of the dialog box. You should use the
         *        toplevel window so that the dialog becomes centered.
         */
-    KSwitchLanguageDialog(QWidget *parent = nullptr);
+    KisKSwitchLanguageDialog(QWidget *parent = nullptr);
 
-    ~KSwitchLanguageDialog() override;
+    ~KisKSwitchLanguageDialog() override;
 
 protected Q_SLOTS:
     /**
@@ -66,9 +66,9 @@ protected Q_SLOTS:
     virtual void removeButtonClicked();
 
 private:
-    KSwitchLanguageDialogPrivate *const d;
+    KisKSwitchLanguageDialogPrivate *const d;
 
-    friend class KSwitchLanguageDialogPrivate;
+    friend class KisKSwitchLanguageDialogPrivate;
 };
 
 }

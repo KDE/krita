@@ -14,30 +14,30 @@
 class KXmlGuiWindow;
 
 /**
- * @short D-Bus interface to KMainWindow.
+ * @short D-Bus interface to KisKMainWindow.
  *
- * This is the main interface to the KMainWindow.  This will provide a consistent
+ * This is the main interface to the KisKMainWindow.  This will provide a consistent
  * D-Bus interface to all KDE applications that use it.
  *
  * @author Ian Reinhart Geiser <geiseri@yahoo.com>
  */
-class KMainWindowInterface : public QDBusAbstractAdaptor
+class KisKMainWindowInterface : public QDBusAbstractAdaptor
 {
     Q_OBJECT
-    Q_CLASSINFO("D-Bus Interface", "org.kde.KMainWindow")
+    Q_CLASSINFO("D-Bus Interface", "org.kde.KisKMainWindow")
 
 public:
     /**
     Construct a new interface object.
-    @param mainWindow - The parent KMainWindow object
+    @param mainWindow - The parent KisKMainWindow object
     that will provide us with the KAction objects.
     */
-    KMainWindowInterface(KXmlGuiWindow *mainWindow);
+    KisKMainWindowInterface(KXmlGuiWindow *mainWindow);
     /**
     Destructor
     Cleans up the dcop action proxy object.
     **/
-    ~KMainWindowInterface() override;
+    ~KisKMainWindowInterface() override;
 
 public Q_SLOTS:
     /**

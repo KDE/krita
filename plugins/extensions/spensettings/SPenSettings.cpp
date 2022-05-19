@@ -77,7 +77,7 @@ void SPenSettings::slotActivateAction(SPenSettings::Action gestureType)
 //    qDebug() << "Gesture " << gestureType << " action " << actionName;
 
     if (!actionName.isEmpty()) {
-        KActionCollection* actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
+        KisKActionCollection* actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
         QAction* action = actionCollection->action(actionName);
         if (action) {
 //            qDebug() << "triggering action " << actionName;

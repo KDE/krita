@@ -32,7 +32,7 @@ KisMirrorManager::~KisMirrorManager()
 {
 }
 
-void KisMirrorManager::setup(KActionCollection * collection)
+void KisMirrorManager::setup(KisKActionCollection * collection)
 {
     m_mirrorCanvas = new KToggleAction(i18n("Mirror View"), this);
     m_mirrorCanvas->setChecked(false);

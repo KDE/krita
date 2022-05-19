@@ -34,7 +34,7 @@ void KisTouchGestureAction::begin(int shortcut, QEvent *event)
 void KisTouchGestureAction::end(QEvent *event)
 {
     Q_UNUSED(event)
-    KActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
+    KisKActionCollection *actionCollection = KisPart::instance()->currentMainwindow()->actionCollection();
     switch (m_shortcut) {
     case UndoActionShortcut: {
         QAction *action = actionCollection->action("edit_undo");

@@ -44,7 +44,7 @@ KoToolFactoryBase::~KoToolFactoryBase()
     delete d;
 }
 
-QList<QAction *> KoToolFactoryBase::createActions(KActionCollection *actionCollection)
+QList<QAction *> KoToolFactoryBase::createActions(KisKActionCollection *actionCollection)
 {
     QList<QAction *> toolActions;
 

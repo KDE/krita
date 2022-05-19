@@ -22,7 +22,7 @@
 #include <kconfiggroup.h>
 #include <KoIcon.h>
 
-class KActionCollection;
+class KisKActionCollection;
 class KoCanvasBase;
 class KisPaintInformation;
 class KisSpacingInfomation;

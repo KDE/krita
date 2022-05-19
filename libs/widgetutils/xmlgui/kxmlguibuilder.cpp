@@ -31,11 +31,11 @@
 
 using namespace KDEPrivate;
 
-class KXMLGUIBuilderPrivate
+class KisKXMLGUIBuilderPrivate
 {
 public:
-    KXMLGUIBuilderPrivate() { }
-    ~KXMLGUIBuilderPrivate() { }
+    KisKXMLGUIBuilderPrivate() { }
+    ~KisKXMLGUIBuilderPrivate() { }
 
     QWidget *m_widget {0};
 
@@ -59,11 +59,11 @@ public:
 
     QString attrIcon;
 
-    KXMLGUIClient *m_client {0};
+    KisKXMLGUIClient *m_client {0};
 };
 
-KXMLGUIBuilder::KXMLGUIBuilder(QWidget *widget)
-    : d(new KXMLGUIBuilderPrivate)
+KisKXMLGUIBuilder::KisKXMLGUIBuilder(QWidget *widget)
+    : d(new KisKXMLGUIBuilderPrivate)
 {
     d->m_widget = widget;
 
@@ -88,17 +88,17 @@ KXMLGUIBuilder::KXMLGUIBuilder(QWidget *widget)
     d->attrIcon = QStringLiteral("icon");
 }
 
-KXMLGUIBuilder::~KXMLGUIBuilder()
+KisKXMLGUIBuilder::~KisKXMLGUIBuilder()
 {
     delete d;
 }
 
-QWidget *KXMLGUIBuilder::widget()
+QWidget *KisKXMLGUIBuilder::widget()
 {
     return d->m_widget;
 }
 
-QStringList KXMLGUIBuilder::containerTags() const
+QStringList KisKXMLGUIBuilder::containerTags() const
 {
     QStringList res;
     res << d->tagMenu << d->tagToolBar << d->tagMainWindow << d->tagMenuBar << d->tagStatusBar;
@@ -106,7 +106,7 @@ QStringList KXMLGUIBuilder::containerTags() const
     return res;
 }
 
-QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomElement &element, QAction *&containerAction)
+QWidget *KisKXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomElement &element, QAction *&containerAction)
 {
     containerAction = 0;
 
@@ -116,12 +116,12 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
 
     const QString tagName = element.tagName().toLower();
     if (tagName == d->tagMainWindow) {
-        KMainWindow *mainwindow = qobject_cast<KMainWindow *>(d->m_widget);  // could be 0
+        KisKMainWindow *mainwindow = qobject_cast<KisKMainWindow *>(d->m_widget);  // could be 0
         return mainwindow;
     }
 
     if (tagName == d->tagMenuBar) {
-        KMainWindow *mainWin = qobject_cast<KMainWindow *>(d->m_widget);
+        KisKMainWindow *mainWin = qobject_cast<KisKMainWindow *>(d->m_widget);
         QMenuBar *bar = 0;
         if (mainWin) {
             bar = mainWin->menuBar();
@@ -214,12 +214,12 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
     if (tagName == d->tagToolBar) {
         QString name = element.attribute(d->attrName);
 
-        KToolBar *bar = static_cast<KToolBar *>(d->m_widget->findChild<KToolBar *>(name));
+        KisToolBar *bar = static_cast<KisToolBar *>(d->m_widget->findChild<KisToolBar *>(name));
         if (!bar) {
-            bar = new KToolBar(name, d->m_widget, false);
+            bar = new KisToolBar(name, d->m_widget, false);
         }
 
-        if (qobject_cast<KMainWindow *>(d->m_widget)) {
+        if (qobject_cast<KisKMainWindow *>(d->m_widget)) {
             if (d->m_client && !d->m_client->xmlFile().isEmpty()) {
                 bar->addXMLGUIClient(d->m_client);
             }
@@ -231,7 +231,7 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
     }
 
     if (tagName == d->tagStatusBar) {
-        KMainWindow *mainWin = qobject_cast<KMainWindow *>(d->m_widget);
+        KisKMainWindow *mainWin = qobject_cast<KisKMainWindow *>(d->m_widget);
         if (mainWin) {
             mainWin->statusBar()->show();
             return mainWin->statusBar();
@@ -243,7 +243,7 @@ QWidget *KXMLGUIBuilder::createContainer(QWidget *parent, int index, const QDomE
     return 0L;
 }
 
-void KXMLGUIBuilder::removeContainer(QWidget *container, QWidget *parent, QDomElement &element, QAction *containerAction)
+void KisKXMLGUIBuilder::removeContainer(QWidget *container, QWidget *parent, QDomElement &element, QAction *containerAction)
 {
     // Warning parent can be 0L
 
@@ -253,8 +253,8 @@ void KXMLGUIBuilder::removeContainer(QWidget *container, QWidget *parent, QDomEl
         }
 
         delete container;
-    } else if (qobject_cast<KToolBar *>(container)) {
-        KToolBar *tb = static_cast<KToolBar *>(container);
+    } else if (qobject_cast<KisToolBar *>(container)) {
+        KisToolBar *tb = static_cast<KisToolBar *>(container);
 
         tb->saveState(element);
         delete tb;
@@ -266,7 +266,7 @@ void KXMLGUIBuilder::removeContainer(QWidget *container, QWidget *parent, QDomEl
         // sure that QMainWindow::d->mb does not point to a deleted
         // menubar object.
     } else if (qobject_cast<QStatusBar *>(container)) {
-        if (qobject_cast<KMainWindow *>(d->m_widget)) {
+        if (qobject_cast<KisKMainWindow *>(d->m_widget)) {
             container->hide();
         } else {
             delete static_cast<QStatusBar *>(container);
@@ -276,14 +276,14 @@ void KXMLGUIBuilder::removeContainer(QWidget *container, QWidget *parent, QDomEl
     }
 }
 
-QStringList KXMLGUIBuilder::customTags() const
+QStringList KisKXMLGUIBuilder::customTags() const
 {
     QStringList res;
     res << d->tagSeparator << d->tagTearOffHandle << d->tagMenuTitle;
     return res;
 }
 
-QAction *KXMLGUIBuilder::createCustomElement(QWidget *parent, int index, const QDomElement &element)
+QAction *KisKXMLGUIBuilder::createCustomElement(QWidget *parent, int index, const QDomElement &element)
 {
     QAction *before = 0L;
     if (index > 0 && index < parent->actions().count()) {
@@ -301,7 +301,7 @@ QAction *KXMLGUIBuilder::createCustomElement(QWidget *parent, int index, const Q
             separatorAction->setSeparator(true);
             bar->insertAction(before, separatorAction);
             return separatorAction;
-        } else if (KToolBar *bar = qobject_cast<KToolBar *>(parent)) {
+        } else if (KisToolBar *bar = qobject_cast<KisToolBar *>(parent)) {
             /* FIXME KAction port - any need to provide a replacement for lineSeparator/normal separator?
             bool isLineSep = true;
 
@@ -366,32 +366,32 @@ QAction *KXMLGUIBuilder::createCustomElement(QWidget *parent, int index, const Q
     return blank;
 }
 
-void KXMLGUIBuilder::removeCustomElement(QWidget *parent, QAction *action)
+void KisKXMLGUIBuilder::removeCustomElement(QWidget *parent, QAction *action)
 {
     parent->removeAction(action);
 }
 
-KXMLGUIClient *KXMLGUIBuilder::builderClient() const
+KisKXMLGUIClient *KisKXMLGUIBuilder::builderClient() const
 {
     return d->m_client;
 }
 
-void KXMLGUIBuilder::setBuilderClient(KXMLGUIClient *client)
+void KisKXMLGUIBuilder::setBuilderClient(KisKXMLGUIClient *client)
 {
     d->m_client = client;
 }
 
-void KXMLGUIBuilder::finalizeGUI(KXMLGUIClient *)
+void KisKXMLGUIBuilder::finalizeGUI(KisKXMLGUIClient *)
 {
     KXmlGuiWindow *window = qobject_cast<KXmlGuiWindow *>(d->m_widget);
     if (!window) {
         return;
     }
 #if 0
-    KToolBar *toolbar = 0;
-    QListIterator<KToolBar> it(((KMainWindow *)d->m_widget)->toolBarIterator());
+    KisToolBar *toolbar = 0;
+    QListIterator<KisToolBar> it(((KisKMainWindow *)d->m_widget)->toolBarIterator());
     while ((toolbar = it.current())) {
-        //qDebug(260) << "KXMLGUIBuilder::finalizeGUI toolbar=" << (void*)toolbar;
+        //qDebug(260) << "KisKXMLGUIBuilder::finalizeGUI toolbar=" << (void*)toolbar;
         ++it;
         toolbar->positionYourself();
     }
@@ -400,7 +400,7 @@ void KXMLGUIBuilder::finalizeGUI(KXMLGUIClient *)
 #endif
 }
 
-void KXMLGUIBuilder::virtual_hook(int, void *)
+void KisKXMLGUIBuilder::virtual_hook(int, void *)
 {
     /*BASE::virtual_hook( id, data );*/
 }

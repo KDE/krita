@@ -32,7 +32,7 @@ namespace {
      * piece of information is a QDomElement, containing the raw data from the
      * .action XML file. The second and third are QKeySequences, the first of
      * which is the default shortcut, the last of which is any custom shortcut.
-     * The last two are the KActionCollection and KActionCategory used to
+     * The last two are the KisKActionCollection and KisKActionCategory used to
      * organize the shortcut editor.
      */
     struct ActionInfoItem {
@@ -189,7 +189,7 @@ KisActionRegistry::KisActionRegistry()
 {
     KConfigGroup cg = KSharedConfig::openConfig()->group("Shortcut Schemes");
     QString schemeName = cg.readEntry("Current Scheme", "Default");
-    QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+    QString schemeFileName = KisKShortcutSchemesHelper::schemeFileLocations().value(schemeName);
     if (!QFileInfo(schemeFileName).exists()) {
         schemeName = "Default";
     }
@@ -223,7 +223,7 @@ void KisActionRegistry::loadShortcutScheme(const QString &schemeName)
 {
     // Load scheme file
     if (schemeName != QStringLiteral("Default")) {
-        QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(schemeName);
+        QString schemeFileName = KisKShortcutSchemesHelper::schemeFileLocations().value(schemeName);
         if (schemeFileName.isEmpty() || !QFileInfo(schemeFileName).exists()) {
             applyShortcutScheme();
             return;
@@ -377,7 +377,7 @@ void KisActionRegistry::Private::loadActionFiles()
         }
 
         // Loop over <Actions> nodes. Each of these corresponds to a
-        // KActionCategory, producing a group of actions in the shortcut dialog.
+        // KisKActionCategory, producing a group of actions in the shortcut dialog.
         QDomElement actions = base.firstChild().toElement();
         while (!actions.isNull()) {
 

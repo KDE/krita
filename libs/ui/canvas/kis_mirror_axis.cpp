@@ -407,7 +407,7 @@ const KisMirrorAxisConfig &KisMirrorAxis::mirrorAxisConfig() const
 
 void KisMirrorAxis::toggleMirrorActions()
 {
-    KActionCollection* collection = view()->viewManager()->actionCollection();
+    KisKActionCollection* collection = view()->viewManager()->actionCollection();
     // first uncheck the action, then set according to config;
     // otherwise the connected KisHighlightedToolButton's highlight color is not
     // properly set

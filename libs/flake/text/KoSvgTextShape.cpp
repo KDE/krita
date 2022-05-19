@@ -1088,6 +1088,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
         qreal delta =
             chunkShape->layoutInterface()->textLength().customValue - (b - a);
         QPointF d(delta / n, 0);
+
         if (!isHorizontal) {
             d = QPointF(0, delta / n);
         }
@@ -1096,6 +1097,16 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             CharacterResult cr = result[typographicToIndex.value(k)];
             if (cr.addressable) {
                 cr.finalPosition += shift;
+                if (chunkShape->layoutInterface()->lengthAdjust()
+                    == KoSvgText::LengthAdjustSpacingAndGlyphs) {
+                    QPointF scale(
+                        d.x() != 0 ? (d.x() / cr.advance.x()) + 1 : 1.0,
+                        d.y() != 0 ? (d.y() / cr.advance.y()) + 1 : 1.0);
+                    QTransform tf = QTransform::fromScale(scale.x(), scale.y());
+                    cr.path = tf.map(cr.path);
+                    cr.advance = tf.map(cr.advance);
+                    cr.boundingBox = tf.mapRect(cr.boundingBox);
+                }
                 if (!cr.textLengthApplied) {
                     shift += d;
                 }

@@ -1,0 +1,55 @@
+From d5c2a9154ffb0bdb37ce027b7acc3bd139544587 Mon Sep 17 00:00:00 2001
+From: Alvin Wong <alvinhochun@gmail.com>
+Date: Thu, 19 May 2022 18:39:11 +0800
+Subject: [PATCH] Support UTF-8 code page directly in QTextCodec
+
+If `GetACP() == CP_UTF8` then just use Qt's internal UTF-8 codec, which
+does not have bugs and will be much faster than MultiByteToWideChar.
+
+Ref: https://lists.qt-project.org/pipermail/interest/2022-May/038245.html
+---
+ src/corelib/codecs/qtextcodec.cpp | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/src/corelib/codecs/qtextcodec.cpp b/src/corelib/codecs/qtextcodec.cpp
+index eb05446beb..76937ff170 100644
+--- a/src/corelib/codecs/qtextcodec.cpp
++++ b/src/corelib/codecs/qtextcodec.cpp
+@@ -86,6 +86,10 @@
+ #endif // icu
+ #endif // QT_BOOTSTRAPPED
+ 
++#ifdef Q_OS_WIN
++#  include <qt_windows.h>
++#endif
++
+ #include "qmutex.h"
+ 
+ #include <stdlib.h>
+@@ -174,7 +178,11 @@ static QTextCodec *setupLocaleMapper()
+ #if defined(QT_LOCALE_IS_UTF8)
+     locale = QTextCodec::codecForName("UTF-8");
+ #elif defined(Q_OS_WIN)
+-    locale = QTextCodec::codecForName("System");
++    if (GetACP() == CP_UTF8) {
++        locale = QTextCodec::codecForName("UTF-8");
++    } else {
++        locale = QTextCodec::codecForName("System");
++    }
+ #else
+ 
+     // First try getting the codecs name from nl_langinfo and see
+@@ -294,7 +302,9 @@ static void setup()
+     (void) new QIconvCodec;
+ #endif
+ #if defined(Q_OS_WIN32)
+-    (void) new QWindowsLocalCodec;
++    if (GetACP() != CP_UTF8) {
++        (void) new QWindowsLocalCodec;
++    }
+ #endif // Q_OS_WIN32
+ #endif // codecs && !QT_BOOTSTRAPPED
+ 
+-- 
+2.24.1.windows.2
+

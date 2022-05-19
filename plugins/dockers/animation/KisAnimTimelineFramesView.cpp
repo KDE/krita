@@ -33,6 +33,8 @@
 #include "kis_zoom_button.h"
 #include "kis_icon_utils.h"
 #include "KisAnimUtils.h"
+#include "kis_canvas_animation_state.h"
+#include "kis_canvas2.h"
 #include "kis_custom_modifiers_catcher.h"
 #include "kis_action.h"
 #include "kis_signal_compressor.h"
@@ -111,6 +113,8 @@ struct KisAnimTimelineFramesView::Private
     QMenu* existingLayersMenu;
     TimelineInsertKeyframeDialog* insertKeyframeDialog;
     KisZoomButton* zoomDragButton;
+
+    KoCanvasBase* canvas;
 
     int fps;
     QPoint initialDragPanValue;
@@ -224,10 +228,6 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     m_d->audioOptionsMenu->addSection(i18n("Edit Audio:"));
     m_d->audioOptionsMenu->addSeparator();
 
-#ifndef HAVE_QT_MULTIMEDIA
-    m_d->audioOptionsMenu->addSection(i18nc("@item:inmenu", "Audio playback is not supported in this build!"));
-#endif
-
     m_d->openAudioAction = new QAction("XXX", this);
     connect(m_d->openAudioAction, SIGNAL(triggered()), this, SLOT(slotSelectAudioChannelFile()));
     m_d->audioOptionsMenu->addAction(m_d->openAudioAction);
@@ -237,7 +237,7 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     connect(m_d->audioMuteAction, SIGNAL(triggered(bool)), SLOT(slotAudioChannelMute(bool)));
 
     m_d->audioOptionsMenu->addAction(m_d->audioMuteAction);
-    m_d->audioOptionsMenu->addAction(i18nc("@item:inmenu", "Remove audio"), this, SLOT(slotAudioChannelRemove()));
+    m_d->audioOptionsMenu->addAction(i18nc("@item:inmenu", "Remove audio track"), this, SLOT(slotAudioChannelRemove()));
 
     m_d->audioOptionsMenu->addSeparator();
 
@@ -467,7 +467,24 @@ void KisAnimTimelineFramesView::updateGeometries()
 
 void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
 {
-    horizontalScrollBar()->setEnabled(canvas != nullptr);
+    if (m_d->canvas) {
+        KisCanvas2* canvas2 = dynamic_cast<KisCanvas2*>(m_d->canvas);
+        if (canvas2) {
+            KisCanvasAnimationState* state = canvas2->animationState();
+            state->disconnect(this);
+        }
+    }
+
+    m_d->canvas = canvas;
+
+    horizontalScrollBar()->setEnabled(m_d->canvas != nullptr);
+
+    KisCanvas2* canvas2 = dynamic_cast<KisCanvas2*>(canvas);
+    if (canvas2) {
+        KisCanvasAnimationState* state = canvas2->animationState();
+        connect(state, &KisCanvasAnimationState::sigPlaybackMediaChanged, this, &KisAnimTimelineFramesView::slotUpdateAudioActions);
+    }
+
     slotUpdateAudioActions();
 }
 

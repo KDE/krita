@@ -1086,6 +1086,7 @@ void KisAnimTimelineFramesModel::setAudioChannelFileName(const QFileInfo &fileNa
     if (fileName.exists()) {
         tracks << fileName;
     }
+
     document()->setAudioTracks(tracks);
 }
 

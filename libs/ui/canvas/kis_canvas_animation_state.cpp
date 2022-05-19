@@ -321,16 +321,17 @@ void KisCanvasAnimationState::setupAudioTracks()
     KisDocument* doc = m_d->canvas->imageView()->document();
     if (doc) {
         QVector<QFileInfo> files = doc->getAudioTracks();
+
         if (doc->getAudioTracks().isEmpty()) {
-            return;
+            m_d->media.reset();
+        } else {
+            //Only get first file for now and make that a producer...
+            QFileInfo toLoad = files.first();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(toLoad.exists());
+            m_d->media.reset(new QFileInfo(toLoad));
         }
 
-        //Only get first file for now and make that a producer...
-        QFileInfo toLoad = files.first();
-        if (toLoad.exists()) {
-            m_d->media.reset(new QFileInfo(toLoad));
-            emit sigPlaybackMediaChanged();
-        }
+        emit sigPlaybackMediaChanged();
     }
 }
 

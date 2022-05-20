@@ -84,8 +84,7 @@
 #include <KoToolManager.h>
 #include <KoZoomController.h>
 #include "KoToolDocker.h"
-#include "KoToolBoxDocker_p.h"
-#include <KoToolBoxFactory.h>
+#include "toolbox/KoToolBoxFactory.h"
 #include <KoDockRegistry.h>
 #include <KoPluginLoader.h>
 #include <KoColorSpaceEngine.h>

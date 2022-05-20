@@ -34,10 +34,6 @@ set(kritawidgets_LIB_SRCS
     
     KoTitledTabWidget.cpp
 
-    KoToolBoxButton.cpp
-    KoToolBox.cpp
-    KoToolBoxDocker.cpp
-    KoToolBoxFactory.cpp
     KoToolDocker.cpp
     
     KoShadowConfigWidget.cpp

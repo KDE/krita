@@ -223,6 +223,11 @@ set(kritaui_LIB_SRCS
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp
 
+    toolbox/KoToolBox.cpp
+    toolbox/KoToolBoxButton.cpp
+    toolbox/KoToolBoxDocker.cpp
+    toolbox/KoToolBoxFactory.cpp
+
     widgets/kis_canvas_drop.cpp
     widgets/kis_cmb_composite.cc
     widgets/kis_cmb_contour.cpp

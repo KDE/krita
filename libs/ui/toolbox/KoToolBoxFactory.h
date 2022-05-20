@@ -9,7 +9,7 @@
 #define KOTOOLBOXFACTORY_H
 
 #include <KoDockFactoryBase.h>
-#include "kritawidgets_export.h"
+#include "kritaui_export.h"
 
 #include <QString>
 #include <QDockWidget>
@@ -19,7 +19,7 @@
  * Factory class to create a new KoToolBox that contains the buttons
  * to activate tools.
  */
-class KRITAWIDGETS_EXPORT KoToolBoxFactory : public KoDockFactoryBase
+class KRITAUI_EXPORT KoToolBoxFactory : public KoDockFactoryBase
 {
 public:
     explicit KoToolBoxFactory();

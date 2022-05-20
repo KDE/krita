@@ -329,7 +329,17 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
 
     auto choice = (PasteFormatBehaviour)cfg.pasteFormat(false);
 
-    if ((cbData->hasImage() || cbData->hasUrls())) {
+    const QImage qimage = [&]() {
+        QImage qimage = getImageFromMimeData(cbData);
+
+        if (qimage.isNull() && useClipboardFallback) {
+            qimage = d->clipboard->image();
+        }
+
+        return qimage;
+    }();
+
+    if (!qimage.isNull() || cbData->hasUrls()) {
         const auto &urls = cbData->urls();
 
         bool local = false;
@@ -340,11 +350,13 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             remote |= !url.isLocalFile();
         });
 
-        const bool hasMultipleFormatsAvailable =
-            (remote && local) || (remote && cbData->hasImage()) || (local && cbData->hasImage());
+        const bool hasMultipleFormatsAvailable = (remote && local)
+            || (remote && !qimage.isNull()) || (local && !qimage.isNull());
 
-        const bool defaultOptionUnavailable = (!remote && choice == PASTE_FORMAT_DOWNLOAD)
-            || (!local && choice == PASTE_FORMAT_LOCAL) || (!cbData->hasImage() && choice == PASTE_FORMAT_CLIP);
+        const bool defaultOptionUnavailable =
+            (!remote && choice == PASTE_FORMAT_DOWNLOAD)
+            || (!local && choice == PASTE_FORMAT_LOCAL)
+            || (qimage.isNull() && choice == PASTE_FORMAT_CLIP);
 
         dbgUI << "Incoming paste event:";
         dbgUI << "\tHas attached bitmap:" << cbData->hasImage();
@@ -359,7 +371,7 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
 
             dlg.setSourceAvailable(PASTE_FORMAT_DOWNLOAD, remote);
             dlg.setSourceAvailable(PASTE_FORMAT_LOCAL, local);
-            dlg.setSourceAvailable(PASTE_FORMAT_CLIP, cbData->hasImage());
+            dlg.setSourceAvailable(PASTE_FORMAT_CLIP, !qimage.isNull());
 
             if (dlg.exec() != KoDialog::Accepted) {
                 return nullptr;
@@ -388,12 +400,6 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
     dbgUI << "Selected source for the paste:" << choice;
 
     if (choice == PASTE_FORMAT_CLIP) {
-        QImage qimage = getImageFromMimeData(cbData);
-
-        if (qimage.isNull() && useClipboardFallback) {
-            qimage = d->clipboard->image();
-        }
-
         KIS_ASSERT(!qimage.isNull());
 
         int behaviour = pasteBehaviourOverride;

@@ -379,6 +379,10 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
 
             assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
         }
+        if (QRectF(actionsPosition + QPointF(10, 10), editorShared.boundingSize).adjusted(-2, -2, 2, 2).contains(uiMousePosition)) {
+            newAssistantAllowed = false;
+            assistantSelected(assistant);
+        }
     }
     if (newAssistantAllowed==true){//don't make a new assistant when I'm just toggling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();

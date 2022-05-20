@@ -10,7 +10,7 @@
 #ifndef _KO_TOOLBOX_DOCKER_H_
 #define _KO_TOOLBOX_DOCKER_H_
 
-#include <KoCanvasObserverBase.h>
+#include <kis_mainwindow_observer.h>
 
 #include <QDockWidget>
 
@@ -20,7 +20,7 @@ class KoToolBoxScrollArea;
 
 class QMenu;
 
-class KoToolBoxDocker : public QDockWidget, public KoCanvasObserverBase
+class KoToolBoxDocker : public QDockWidget, public KisMainwindowObserver
 {
     Q_OBJECT
 public:
@@ -30,6 +30,8 @@ public:
     void setCanvas(KoCanvasBase *canvas) override;
     void unsetCanvas() override;
     QString observerName() override { return "KoToolBoxDocker"; }
+    /// reimplemented from KisMainwindowObserver
+    void setViewManager(KisViewManager *viewManager) override;
 
 protected:
     void resizeEvent(QResizeEvent *event) override;

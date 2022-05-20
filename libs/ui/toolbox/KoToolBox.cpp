@@ -29,6 +29,8 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 
+#include <kactioncollection.h>
+#include <KisViewManager.h>
 #include <KoCanvasController.h>
 #include <KoShapeLayer.h>
 
@@ -130,6 +132,21 @@ void KoToolBox::applyIconSize()
 
     Q_FOREACH (Section *section, d->sections.values())  {
         section->setButtonSize(QSize(d->iconSize + BUTTON_MARGIN,  d->iconSize + BUTTON_MARGIN));
+    }
+}
+
+
+void KoToolBox::setViewManager(KisViewManager *viewManager)
+{
+    KisKActionCollection *actionCollection = viewManager->actionCollection();
+    Q_FOREACH(KoToolAction *toolAction, KoToolManager::instance()->toolActionList()) {
+        QAction *toolQAction = actionCollection->action(toolAction->id());
+        auto button = d->buttonsByToolId.find(toolAction->id());
+        if (button == d->buttonsByToolId.end()) {
+            qWarning() << "Toolbox is missing button for tool" << toolAction->id();
+            continue;
+        }
+        (*button)->attachAction(toolQAction);
     }
 }
 

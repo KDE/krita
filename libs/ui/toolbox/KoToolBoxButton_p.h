@@ -16,10 +16,13 @@ class KoToolBoxButton : public QToolButton
     Q_OBJECT
 public:
     explicit KoToolBoxButton(KoToolAction *toolAction, QWidget * parent);
+    void attachAction(QAction *action);
     void setHighlightColor();
 
+private:
+    void setDataFromToolAction(QAction *action); // Generates tooltips.
 private Q_SLOTS:
-    void setDataFromToolAction(); // Generates tooltips.
+    void slotUpdateActionData();
 private:
     KoToolAction *m_toolAction;
 };

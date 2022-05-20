@@ -6,7 +6,10 @@
 
 #include "KoToolBoxButton_p.h"
 
+#include <kis_debug.h>
+
 #include <KoToolManager.h>
+#include <QAction>
 #include <QIcon>
 #include <QPalette>
 #include <QApplication>
@@ -24,10 +27,20 @@ KoToolBoxButton::KoToolBoxButton(KoToolAction *toolAction, QWidget *parent)
     setAutoRaise(true);
     setIcon(kisIcon(m_toolAction->iconName()));
 
-    setDataFromToolAction();
+    // only a fallback
+    setToolTip(m_toolAction->toolTip());
 
     connect(this, SIGNAL(clicked(bool)), m_toolAction, SLOT(trigger()));
-    connect(m_toolAction, SIGNAL(changed()), SLOT(setDataFromToolAction()));
+}
+
+void KoToolBoxButton::attachAction(QAction *action)
+{
+    if (!action) {
+        return;
+    }
+
+    connect(action, SIGNAL(changed()), SLOT(slotUpdateActionData()));
+    setDataFromToolAction(action);
 }
 
 void KoToolBoxButton::setHighlightColor()
@@ -44,15 +57,20 @@ void KoToolBoxButton::setHighlightColor()
     }
 }
 
-void KoToolBoxButton::setDataFromToolAction()
+void KoToolBoxButton::setDataFromToolAction(QAction *action)
 {
-    const QString plainToolTip = m_toolAction->toolTip();
-    const QKeySequence shortcut = m_toolAction->shortcut();
-    const QString toolTip =
-        shortcut.isEmpty() ?
-            plainToolTip :
-            i18nc("@info:tooltip %2 is shortcut", "%1 (%2)", plainToolTip,
-                shortcut.toString(QKeySequence::NativeText));
+    if (!action) {
+        warnUI << "No tool action available, using fallback!";
+        setToolTip(m_toolAction->toolTip());
+        return;
+    }
+    setToolTip(action->toolTip());
+}
 
-    setToolTip(toolTip);
+void KoToolBoxButton::slotUpdateActionData()
+{
+    QAction *action = qobject_cast<QAction*>(sender());
+    if (action) {
+        setDataFromToolAction(action);
+    }
 }

@@ -67,6 +67,11 @@ void KoToolBoxDocker::unsetCanvas()
 {
 }
 
+void KoToolBoxDocker::setViewManager(KisViewManager *viewManager)
+{
+    m_toolBox->setViewManager(viewManager);
+}
+
 void KoToolBoxDocker::resizeEvent(QResizeEvent *event)
 {
     QDockWidget::resizeEvent(event);

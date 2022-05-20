@@ -17,6 +17,7 @@
 
 #include <KoToolManager.h>
 
+class KisViewManager;
 class KoCanvasController;
 class KoShapeLayer;
 class KoToolBoxLayout;
@@ -43,6 +44,7 @@ public:
     ~KoToolBox() override;
 
     void applyIconSize();
+    void setViewManager(KisViewManager *viewManager);
 
 public Q_SLOTS:
     /**

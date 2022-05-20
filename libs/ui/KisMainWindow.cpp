@@ -428,6 +428,11 @@ KisMainWindow::KisMainWindow(QUuid uuid)
             this, SLOT(slotUpdateWidgetStyle()));
 
 
+    // Load all the actions from the tool plugins
+    // ToolBoxDocker needs them when at setViewManager()
+    Q_FOREACH(KoToolFactoryBase *toolFactory, KoToolRegistry::instance()->values()) {
+        toolFactory->createActions(actionCollection());
+    }
 
 
     Q_FOREACH (QDockWidget *wdg, dockWidgets()) {
@@ -442,11 +447,6 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         if (mainwindowObserver) {
             mainwindowObserver->setViewManager(d->viewManager);
         }
-    }
-
-    // Load all the actions from the tool plugins
-    Q_FOREACH(KoToolFactoryBase *toolFactory, KoToolRegistry::instance()->values()) {
-        toolFactory->createActions(actionCollection());
     }
 
     d->mdiArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);

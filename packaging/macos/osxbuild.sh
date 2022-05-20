@@ -60,6 +60,7 @@ for arg in "${@}"; do
         OSXBUILD_CLEAN="keep dirty"
     elif [[ "${arg}" = --debug ]]; then
         OSXBUILD_TYPE="Debug"
+    elif [[ "${arg}" = --tests ]]; then
         OSXBUILD_TESTING="ON"
     elif [[ "${arg}" = --install_tarball ]]; then
         OSXBUILD_TARBALLINSTALL="TRUE"
@@ -745,6 +746,8 @@ print_usage () {
     printf "OPTIONS:\t\t"
     printf "\n \t --dirty \t [build/install] (old default) Keep old build directories before build to start fresh"
     printf "\n \t --debug \t [build] Build in Debug mode"
+    printf "\n \t --tests \t [build] Build tests"
+    printf "\n \t --showasserts \t [build] Do not hide asserts"
     printf "\n \t --universal \t [build] (arm only) Build universal binary files."
     printf "\n"
     printf "\n \t --install_tarball \n \t\t\t [buildtarball] Install just built tarball file."

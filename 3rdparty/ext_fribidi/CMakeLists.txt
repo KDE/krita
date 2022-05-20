@@ -8,7 +8,7 @@ if(MESON_BINARY_PATH AND NINJA_BINARY_PATH)
         URL https://github.com/fribidi/fribidi/releases/download/v1.0.11/fribidi-1.0.11.tar.xz
         URL_HASH SHA256=30f93e9c63ee627d1a2cedcf59ac34d45bf30240982f99e44c6e015466b4e73d
 
-        CONFIGURE_COMMAND meson <SOURCE_DIR> --prefix=${EXTPREFIX_fribidi}
+        CONFIGURE_COMMAND meson <SOURCE_DIR> --prefix=${EXTPREFIX_fribidi} --libdir=lib
 
         BUILD_COMMAND meson compile -j${SUBMAKE_JOBS}
 

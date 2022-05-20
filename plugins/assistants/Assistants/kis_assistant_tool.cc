@@ -382,6 +382,8 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
     }
     if (newAssistantAllowed==true){//don't make a new assistant when I'm just toggling visibility//
         QString key = m_options.availableAssistantsComboBox->model()->index( m_options.availableAssistantsComboBox->currentIndex(), 0 ).data(Qt::UserRole).toString();
+        KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+        cfg.writeEntry("AssistantType", key);
         m_newAssistant = toQShared(KisPaintingAssistantFactoryRegistry::instance()->get(key)->createPaintingAssistant());
         if (m_newAssistant->canBeLocal()) {
             m_newAssistant->setLocal(m_options.localAssistantCheckbox->isChecked());
@@ -1410,6 +1412,8 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_optionsWidget = new QWidget;
         m_options.setupUi(m_optionsWidget);
 
+        KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+
         // See https://bugs.kde.org/show_bug.cgi?id=316896
         QWidget *specialSpacer = new QWidget(m_optionsWidget);
         specialSpacer->setObjectName("SpecialSpacer");
@@ -1429,9 +1433,18 @@ QWidget *KisAssistantTool::createOptionWidget()
             assistants << KoID(key, name);
         }
         std::sort(assistants.begin(), assistants.end(), KoID::compareNames);
+
+        QString currentAssistantType = cfg.readEntry("AssistantType", "two point");
+        int i = 0;
+        int currentAssistantIndex = 0;
         Q_FOREACH(const KoID &id, assistants) {
             m_options.availableAssistantsComboBox->addItem(id.name(), id.id());
+            if (id.id() == currentAssistantType) {
+                currentAssistantIndex = i;
+            }
+            i++;
         }
+        m_options.availableAssistantsComboBox->setCurrentIndex(currentAssistantIndex);
 
         connect(m_options.availableAssistantsComboBox, SIGNAL(currentIndexChanged(int)), SLOT(slotSelectedAssistantTypeChanged()));
 
@@ -1514,7 +1527,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         m_options.fixedLengthSpinbox->setVisible(false);
         m_options.fixedLengthUnit->setVisible(false);
         
-        KConfigGroup cfg = KSharedConfig::openConfig()->group(toolId());
+
         m_options.localAssistantCheckbox->setChecked(cfg.readEntry("LimitAssistantToArea", false));
 
         connect(m_options.localAssistantCheckbox, SIGNAL(stateChanged(int)), SLOT(slotLocalAssistantCheckboxChanged()));

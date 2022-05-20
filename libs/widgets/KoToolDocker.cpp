@@ -12,6 +12,7 @@
 
 #include <QApplication>
 #include <QGridLayout>
+#include <QBoxLayout>
 #include <QScrollArea>
 #include <QScroller>
 #include <QLabel>
@@ -36,6 +37,7 @@ public:
     QWidget *hiderWidget {nullptr}; // non current widgets are hidden by being children of this
     QWidget *housekeeperWidget {nullptr};
     QGridLayout *housekeeperLayout {nullptr};
+    QBoxLayout *housekeeperMainLayout {nullptr};
     KoToolDocker *q {nullptr};
     Qt::DockWidgetArea dockingArea;
 
@@ -61,71 +63,64 @@ public:
         // need to unstretch row that have previously been stretched
         housekeeperLayout->setRowStretch(housekeeperLayout->rowCount()-1, 0);
 
-            int cnt = 0;
-            QFrame *s;
-            QLabel *l;
-            switch(dockingArea) {
-            case Qt::TopDockWidgetArea:
-            case Qt::BottomDockWidgetArea:
-                housekeeperLayout->setHorizontalSpacing(2);
-                housekeeperLayout->setVerticalSpacing(0);
-                Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
-                    if (widget.isNull() || widget->objectName().isEmpty()) {
-                        continue;
-                    }
-                    if (!widget->windowTitle().isEmpty()) {
-                        housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2*cnt);
-                        currentAuxWidgets.insert(l);
-                    }
-                    housekeeperLayout->addWidget(widget, 1, 2*cnt);
-                    widget->show();
-                    if (widget != currentWidgetList.last()) {
-                        housekeeperLayout->addWidget(s = new QFrame(), 0, 2*cnt+1, 2, 1);
-                        s->setFrameShape(QFrame::VLine);
-                        currentAuxWidgets.insert(s);
-                    }
-                    cnt++;
+        int cnt = 0;
+        QFrame *s;
+        QLabel *l;
+        switch(dockingArea) {
+        case Qt::TopDockWidgetArea:
+        case Qt::BottomDockWidgetArea:
+            housekeeperMainLayout->setDirection(QBoxLayout::LeftToRight);
+            housekeeperMainLayout->setStretch(0, 1);
+            housekeeperMainLayout->setStretch(1, 0);
+            housekeeperLayout->setHorizontalSpacing(2);
+            housekeeperLayout->setVerticalSpacing(0);
+            Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
+                if (widget.isNull() || widget->objectName().isEmpty()) {
+                    continue;
                 }
-                break;
-            case Qt::NoDockWidgetArea:
-            case Qt::LeftDockWidgetArea:
-            case Qt::RightDockWidgetArea: {
-                housekeeperLayout->setHorizontalSpacing(0);
-                housekeeperLayout->setVerticalSpacing(2);
-                int specialCount = 0;
-                Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
-                    if (widget.isNull() || widget->objectName().isEmpty()) {
-                        continue;
-                    }
-                    if (!widget->windowTitle().isEmpty()) {
-                        housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 0);
-                        currentAuxWidgets.insert(l);
-                    }
-                    housekeeperLayout->addWidget(widget, cnt++, 0);
-                    QLayout *subLayout = widget->layout();
-                    if (subLayout) {
-                        for (int i = 0; i < subLayout->count(); ++i) {
-                            QWidget *spacerWidget = subLayout->itemAt(i)->widget();
-                            if (spacerWidget && spacerWidget->objectName().contains("SpecialSpacer")) {
-                                specialCount++;
-                            }
-                        }
-                    }
-                    widget->show();
-                    if (widget != currentWidgetList.last()) {
-                        housekeeperLayout->addWidget(s = new QFrame(), cnt++, 0);
-                        s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
-                        currentAuxWidgets.insert(s);
-                    }
+                if (!widget->windowTitle().isEmpty()) {
+                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), 0, 2*cnt);
+                    currentAuxWidgets.insert(l);
                 }
-                if (specialCount == currentWidgetList.count() || qApp->applicationName().contains("krita")) {
-                    housekeeperLayout->setRowStretch(cnt, 10000);
+                housekeeperLayout->addWidget(widget, 1, 2*cnt);
+                widget->show();
+                if (widget != currentWidgetList.last()) {
+                    housekeeperLayout->addWidget(s = new QFrame(), 0, 2*cnt+1, 2, 1);
+                    s->setFrameShape(QFrame::VLine);
+                    currentAuxWidgets.insert(s);
                 }
-                break;
+                cnt++;
             }
-            default:
-                break;
+            break;
+        case Qt::NoDockWidgetArea:
+        case Qt::LeftDockWidgetArea:
+        case Qt::RightDockWidgetArea: {
+            housekeeperMainLayout->setDirection(QBoxLayout::TopToBottom);
+            housekeeperMainLayout->setStretch(0, 0);
+            housekeeperMainLayout->setStretch(1, 1);
+            housekeeperLayout->setHorizontalSpacing(0);
+            housekeeperLayout->setVerticalSpacing(2);
+            Q_FOREACH (QPointer<QWidget> widget, currentWidgetList) {
+                if (widget.isNull() || widget->objectName().isEmpty()) {
+                    continue;
+                }
+                if (!widget->windowTitle().isEmpty()) {
+                    housekeeperLayout->addWidget(l = new QLabel(widget->windowTitle()), cnt++, 0);
+                    currentAuxWidgets.insert(l);
+                }
+                housekeeperLayout->addWidget(widget, cnt++, 0);
+                widget->show();
+                if (widget != currentWidgetList.last()) {
+                    housekeeperLayout->addWidget(s = new QFrame(), cnt++, 0);
+                    s->setFrameStyle(QFrame::HLine | QFrame::Sunken);
+                    currentAuxWidgets.insert(s);
+                }
             }
+            break;
+        }
+        default:
+            break;
+        }
 
         housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
         housekeeperLayout->invalidate();
@@ -146,9 +141,14 @@ KoToolDocker::KoToolDocker(QWidget *parent)
     connect(this, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(locationChanged(Qt::DockWidgetArea)));
 
     d->housekeeperWidget = new QWidget();
-    d->housekeeperLayout = new QGridLayout(d->housekeeperWidget);
+    d->housekeeperLayout = new QGridLayout;
     d->housekeeperLayout->setContentsMargins(4,4,4,0);
     d->housekeeperLayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
+    d->housekeeperMainLayout = new QBoxLayout(QBoxLayout::TopToBottom, d->housekeeperWidget);
+    d->housekeeperMainLayout->setContentsMargins(0, 0, 0, 0);
+    d->housekeeperMainLayout->setSpacing(0);
+    d->housekeeperMainLayout->addLayout(d->housekeeperLayout, 0);
+    d->housekeeperMainLayout->addStretch(1);
 
     d->hiderWidget = new QWidget();
     d->hiderWidget->setVisible(false);

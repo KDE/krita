@@ -118,6 +118,11 @@ if [[ ${OSXBUILD_UNIVERSAL} ]]; then
     OSX_ARCHITECTURES="x86_64\;arm64"
 fi
 
+OSXBUILD_GENERATOR="Unix Makefiles"
+if [[ -e $(which ninja) ]]; then
+    OSXBUILD_GENERATOR="Ninja"
+fi
+
 # Prints stderr and stdout to log files
 # >(tee) works but breaks sigint
 log_cmd () {
@@ -203,7 +208,7 @@ cmake_3rdparty () {
             continue
         fi
         print_msg "Building ${package}"
-        log_cmd cmake --build . --config RelWithDebInfo --target ${package}
+        log_cmd cmake --build . --config RelWithDebInfo -j${MAKE_THREADS} --target ${package}
 
         print_if_error "Failed build ${package}"
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
@@ -237,8 +242,8 @@ cmake_3rdparty_plugins () {
             continue
         fi
         print_msg "Building ${package}"
-        log_cmd cmake --build . --config RelWithDebInfo --target ${package}
-        
+        log_cmd cmake --build . --config RelWithDebInfo -j${MAKE_THREADS} --target ${package}
+
         print_if_error "Failed build ${package}"
         if [[ ! ${osxbuild_error} -ne 0 ]]; then
             print_msg "Build Success! ${package}"
@@ -449,42 +454,44 @@ build_krita () {
         fi
     fi
 
-
-    CMAKE_CMD="cmake ${KIS_SRC_DIR} \
-        -DFOUNDATION_BUILD=ON \
-        -DBRANDING=${KRITA_BRANDING} \
-        -DBoost_INCLUDE_DIR=${KIS_INSTALL_DIR}/include \
-        -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
-        -DCMAKE_PREFIX_PATH=${KIS_INSTALL_DIR} \
-        -DDEFINE_NO_DEPRECATED=1 \
-        -DBUILD_TESTING=${OSXBUILD_TESTING} \
-        -DHIDE_SAFE_ASSERTS=${OSXBUILD_HIDE_SAFEASSERTS} \
-        -DFETCH_TRANSLATIONS=ON \
-        -DKDE_INSTALL_BUNDLEDIR=${KIS_INSTALL_DIR}/bin \
-        -DPYQT_SIP_DIR_OVERRIDE=${KIS_INSTALL_DIR}/share/sip/ \
-        -DCMAKE_BUILD_TYPE=${OSXBUILD_TYPE} \
-        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
-        -DPYTHON_INCLUDE_DIR=${KIS_INSTALL_DIR}/lib/Python.framework/Headers \
-        -DCMAKE_OSX_ARCHITECTURES=${OSX_ARCHITECTURES} \
-        -DMACOS_UNIVERSAL=${OSXBUILD_UNIVERSAL}"
+    declare -a CMAKE_CMD
+    CMAKE_CMD=(cmake "${KIS_SRC_DIR}"
+        -G "${OSXBUILD_GENERATOR}"
+        -DFOUNDATION_BUILD=ON
+        -DBRANDING="${KRITA_BRANDING}"
+        -DBoost_INCLUDE_DIR="${KIS_INSTALL_DIR}/include"
+        -DCMAKE_INSTALL_PREFIX="${KIS_INSTALL_DIR}"
+        -DCMAKE_PREFIX_PATH="${KIS_INSTALL_DIR}"
+        -DDEFINE_NO_DEPRECATED=1
+        -DBUILD_TESTING="${OSXBUILD_TESTING}"
+        -DHIDE_SAFE_ASSERTS"=${OSXBUILD_HIDE_SAFEASSERTS}"
+        -DFETCH_TRANSLATIONS=ON
+        -DKDE_INSTALL_BUNDLEDIR="${KIS_INSTALL_DIR}/bin"
+        -DPYQT_SIP_DIR_OVERRIDE="${KIS_INSTALL_DIR}/share/sip/"
+        -DCMAKE_BUILD_TYPE="${OSXBUILD_TYPE}"
+        -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13
+        -DPYTHON_INCLUDE_DIR="${KIS_INSTALL_DIR}/lib/Python.framework/Headers"
+        -DCMAKE_OSX_ARCHITECTURES="${OSX_ARCHITECTURES}"
+        -DMACOS_UNIVERSAL="${OSXBUILD_UNIVERSAL}"
+        )
 
     # hack:: Jenkins runs in x86_64 env, force run cmake in arm64 env.
     if [[ ${OSXBUILD_UNIVERSAL} ]]; then
-        log_cmd env /usr/bin/arch -arm64 /bin/zsh -c "${CMAKE_CMD}"
+        log_cmd env /usr/bin/arch -arm64 /bin/zsh -c "${CMAKE_CMD[@]}"
     else
-        log_cmd ${CMAKE_CMD}
+        log_cmd "${CMAKE_CMD[@]}"
     fi
 
     print_if_error "Configuration error! ${filename}" "exit"
 
     # copiling phase
-    log_cmd make -j${MAKE_THREADS}
+    log_cmd cmake --build . -j${MAKE_THREADS}
     print_if_error "Krita compilation failed! ${filename}" "exit"
 
     # compile integrations
-    if test ${OSTYPE} == "darwin*"; then
-        cd ${KIS_BUILD_DIR}/krita/integration/kritaquicklook
-        make -j${MAKE_THREADS}
+    if test "${OSTYPE}" == "darwin*"; then
+        cd "${KIS_BUILD_DIR}/krita/integration/kritaquicklook"
+        cmake --build . -j${MAKE_THREADS}
     fi
 }
 
@@ -533,12 +540,12 @@ install_krita () {
     osxbuild_error="${?}"
     print_if_error "could not cd to ${KIS_BUILD_DIR}" "exit"
 
-    make install
+    cmake --install .
 
     # compile integrations
     if test ${OSTYPE} == "darwin*"; then
         cd ${KIS_BUILD_DIR}/krita/integration
-        make install
+        cmake --install .
     fi
 }
 

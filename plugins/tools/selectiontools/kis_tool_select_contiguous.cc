@@ -50,11 +50,10 @@
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     : KisToolSelect(canvas,
                     KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                    i18n("Contiguous Area Selection")),
-    m_threshold(8),
-    m_opacitySpread(100),
-    m_sizemod(0),
-    m_feather(0)
+                    i18n("Contiguous Area Selection"))
+    , m_threshold(8)
+    , m_opacitySpread(100)
+    , m_useSelectionAsBoundary(false)
 {
     setObjectName("tool_select_contiguous");
 }
@@ -120,14 +119,14 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         sourceDevice = dev;
     }
 
-    KisPixelSelectionSP selection = KisPixelSelectionSP(new KisPixelSelection(new KisSelectionDefaultBounds(dev)));
+    KisPixelSelectionSP selection = new KisPixelSelection(new KisSelectionDefaultBounds(dev));
 
     int threshold = m_threshold;
     int opacitySpread = m_opacitySpread;
-    int feather = m_feather;
-    int sizemod = m_sizemod;
     bool useSelectionAsBoundary = m_useSelectionAsBoundary;
     bool antiAlias = antiAliasSelection();
+    int grow = growSelection();
+    int feather = featherSelection();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
     KIS_SAFE_ASSERT_RECOVER(kisCanvas) {
@@ -143,7 +142,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     }
 
     KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [dev, rc, threshold, opacitySpread, antiAlias, feather, sizemod, useSelectionAsBoundary,
+                [dev, rc, threshold, opacitySpread, antiAlias, feather, grow, useSelectionAsBoundary,
                 selection, pos, sourceDevice, existingSelection] () mutable -> KUndo2Command* {
 
                     KisFillPainter fillpainter(dev);
@@ -153,7 +152,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setOpacitySpread(opacitySpread);
                     fillpainter.setAntiAlias(antiAlias);
                     fillpainter.setFeather(feather);
-                    fillpainter.setSizemod(sizemod);
+                    fillpainter.setSizemod(grow);
                     fillpainter.setUseCompositioning(true);
 
                     useSelectionAsBoundary &=
@@ -209,18 +208,6 @@ void KisToolSelectContiguous::slotSetOpacitySpread(int opacitySpread)
     m_configGroup.writeEntry("opacitySpread", opacitySpread);
 }
 
-void KisToolSelectContiguous::slotSetSizemod(int sizemod)
-{
-    m_sizemod = sizemod;
-    m_configGroup.writeEntry("sizemod", sizemod);
-}
-
-void KisToolSelectContiguous::slotSetFeather(int feather)
-{
-    m_feather = feather;
-    m_configGroup.writeEntry("feather", feather);
-}
-
 void KisToolSelectContiguous::slotSetUseSelectionAsBoundary(bool useSelectionAsBoundary)
 {
     m_useSelectionAsBoundary = useSelectionAsBoundary;
@@ -231,8 +218,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
-
-    m_widgetHelper.setConfigGroupForExactTool(toolId());
 
     // Create widgets
     KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
@@ -278,11 +263,6 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
     sectionSelectionExtent->appendWidget("checkBoxSelectionAsBoundary", checkBoxSelectionAsBoundary);
     selectionWidget->insertWidget(2, "sectionSelectionExtent", sectionSelectionExtent);
 
-    KisOptionCollectionWidgetWithHeader *sectionAdjustments =
-        selectionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionAdjustments");
-    sectionAdjustments->appendWidget("sliderGrow", sliderGrow);
-    sectionAdjustments->appendWidget("sliderFeather", sliderFeather);
-    
     // Load configuration settings into tool options
     if (m_configGroup.hasKey("threshold")) {
         m_threshold = m_configGroup.readEntry("threshold", 8);
@@ -290,21 +270,15 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         m_threshold = m_configGroup.readEntry("fuzziness", 8);
     }
     m_opacitySpread = m_configGroup.readEntry("opacitySpread", 100);
-    m_sizemod = m_configGroup.readEntry("sizemod", 0);
-    m_feather = m_configGroup.readEntry("feather", 0);
     m_useSelectionAsBoundary = m_configGroup.readEntry("useSelectionAsBoundary", false);
 
     sliderThreshold->setValue(m_threshold);
     sliderSpread->setValue(m_opacitySpread);
     checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
-    sliderGrow->setValue(m_sizemod);
-    sliderFeather->setValue(m_feather);
 
     // Make connections
     connect(sliderThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
     connect(sliderSpread, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
-    connect(sliderGrow, SIGNAL(valueChanged(int)), this, SLOT(slotSetSizemod(int)));
-    connect(sliderFeather, SIGNAL(valueChanged(int)), this, SLOT(slotSetFeather(int)));
     connect(checkBoxSelectionAsBoundary, SIGNAL(toggled(bool)), this, SLOT(slotSetUseSelectionAsBoundary(bool)));
 
     return selectionWidget;

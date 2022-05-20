@@ -22,6 +22,8 @@
 
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
+#include <kis_command_utils.h>
+#include <kis_selection_filters.h>
 
 __KisToolSelectRectangularLocal::__KisToolSelectRectangularLocal(KoCanvasBase * canvas)
     : KisToolRectangleBase(canvas, KisToolRectangleBase::SELECT,
@@ -59,32 +61,68 @@ void KisToolSelectRectangular::finishRect(const QRectF& rect, qreal roundCorners
                                         selectionAction());
 
     if (mode == PIXEL_SELECTION) {
-        if (rc.isValid()) {
-            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+        if (!rc.isValid()) {
+            return;
+        }
+        KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector(),
+                                           kundo2_i18n("Select Rectangle"));
 
-            QPainterPath cache;
+        KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisDefaultBounds(currentImage()));
 
-            if (roundCornersX > 0 || roundCornersY > 0) {
-                cache.addRoundedRect(rc, roundCornersX, roundCornersY);
-            } else {
-                cache.addRect(rc);
-            }
-            getRotatedPath(cache, rc.center(), getRotationAngle());
+
+        const bool antiAlias = antiAliasSelection();
+        const int grow = growSelection();
+        const int feather = featherSelection();
+
+        QPainterPath path;
+        if (roundCornersX > 0 || roundCornersY > 0) {
+            path.addRoundedRect(rc, roundCornersX, roundCornersY);
+        } else {
+            path.addRect(rc);
+        }
+        getRotatedPath(path, rc.center(), getRotationAngle());
+
+        KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+            [tmpSel, antiAlias, grow, feather, path] () mutable -> KUndo2Command*
             {
                 KisPainter painter(tmpSel);
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-                painter.setAntiAliasPolygonFill(antiAliasSelection());
+                // Since the feathering already smooths the selection, the antiAlias
+                // is not applied if we must feather
+                painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
 
-                painter.paintPainterPath(cache);
+                painter.paintPainterPath(path);
+
+                if (grow > 0) {
+                    KisGrowSelectionFilter biggy(grow, grow);
+                    biggy.process(tmpSel, tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                } else if (grow < 0) {
+                    KisShrinkSelectionFilter tiny(-grow, -grow, false);
+                    tiny.process(tmpSel, tmpSel->selectedRect());
+                }
+                if (feather > 0) {
+                    KisFeatherSelectionFilter feathery(feather);
+                    feathery.process(tmpSel, tmpSel->selectedRect().adjusted(-feather, -feather, feather, feather));
+                }
+
+                if (grow == 0 && feather == 0) {
+                    tmpSel->setOutlineCache(path);
+                } else {
+                    tmpSel->invalidateOutlineCache();
+                }
+
+                return 0;
             }
+        );
 
+        applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+        helper.selectPixelSelection(applicator, tmpSel, selectionAction());
+        applicator.end();
 
-            tmpSel->setOutlineCache(cache);
-
-            helper.selectPixelSelection(tmpSel, selectionAction());
-        }
     } else {
         QRectF documentRect = convertToPt(rc);
         const qreal docRoundCornersX = convertToPt(roundCornersX);

@@ -31,6 +31,10 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(const QString &toolI
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged);
     connect(m_optionsWidget, &KisSelectionOptions::antiAliasSelectionChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged);
+    connect(m_optionsWidget, &KisSelectionOptions::growSelectionChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotWidgetGrowChanged);
+    connect(m_optionsWidget, &KisSelectionOptions::featherSelectionChanged,
+            this, &KisSelectionToolConfigWidgetHelper::slotWidgetFeatherChanged);
     connect(m_optionsWidget, &KisSelectionOptions::referenceLayersChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged);
     connect(m_optionsWidget, &KisSelectionOptions::selectedColorLabelsChanged,
@@ -64,6 +68,22 @@ bool KisSelectionToolConfigWidgetHelper::antiAliasSelection() const
         return true;
     }
     return m_optionsWidget->antiAliasSelection();
+}
+
+int KisSelectionToolConfigWidgetHelper::growSelection() const
+{
+    if (!m_optionsWidget) {
+        return 0;
+    }
+    return m_optionsWidget->growSelection();
+}
+
+int KisSelectionToolConfigWidgetHelper::featherSelection() const
+{
+    if (!m_optionsWidget) {
+        return 0;
+    }
+    return m_optionsWidget->featherSelection();
 }
 
 KisSelectionOptions::ReferenceLayers KisSelectionToolConfigWidgetHelper::referenceLayers() const
@@ -103,8 +123,20 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(SelectionAction
 
 void KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged(bool value)
 {
-    KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
     cfg.writeEntry("antiAliasSelection", value);
+}
+
+void KisSelectionToolConfigWidgetHelper::slotWidgetGrowChanged(int value)
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
+    cfg.writeEntry("growSelection", value);
+}
+
+void KisSelectionToolConfigWidgetHelper::slotWidgetFeatherChanged(int value)
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
+    cfg.writeEntry("featherSelection", value);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged(KisSelectionOptions::ReferenceLayers referenceLayers)
@@ -173,12 +205,10 @@ void KisSelectionToolConfigWidgetHelper::slotToolActivatedChanged(bool isActivat
     
     const SelectionMode selectionMode = (SelectionMode)cfg.readEntry("selectionMode", static_cast<int>(SHAPE_PROTECTION));
     const SelectionAction selectionAction = (SelectionAction)cfg.readEntry("selectionAction", static_cast<int>(SELECTION_REPLACE));
-    const bool antiAliasSelection = cfg.readEntry("antiAliasSelection", true);
     
     KisSignalsBlocker b(m_optionsWidget);
     m_optionsWidget->setMode(selectionMode);
     m_optionsWidget->setAction(selectionAction);
-    m_optionsWidget->setAntiAliasSelection(antiAliasSelection);
     
     reloadExactToolConfig();
 }
@@ -190,6 +220,9 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
     }
 
     KConfigGroup cfgToolSpecific = KSharedConfig::openConfig()->group(m_configGroupForTool);
+    const bool antiAliasSelection = cfgToolSpecific.readEntry("antiAliasSelection", true);
+    const int growSelection = cfgToolSpecific.readEntry("growSelection", 0);
+    const int featherSelection = cfgToolSpecific.readEntry("featherSelection", 0);
     const QString referenceLayersStr = cfgToolSpecific.readEntry("sampleLayersMode", "sampleCurrentLayer");
     const QStringList colorLabelsStr = cfgToolSpecific.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
 
@@ -207,6 +240,9 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
     }
 
     KisSignalsBlocker b(m_optionsWidget);
+    m_optionsWidget->setAntiAliasSelection(antiAliasSelection);
+    m_optionsWidget->setGrowSelection(growSelection);
+    m_optionsWidget->setFeatherSelection(featherSelection);
     m_optionsWidget->setReferenceLayers(referenceLayers);
     m_optionsWidget->setSelectedColorLabels(colorLabels);
 }

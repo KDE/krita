@@ -83,8 +83,7 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase * canvas)
                     KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
                     i18n("Similar Color Selection")),
       m_threshold(20)
-{
-}
+{}
 
 void KisToolSelectSimilar::activate(const QSet<KoShape*> &shapes)
 {
@@ -125,7 +124,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisProcessingApplicator applicator(currentImage(), currentNode(),
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector(),
-                                       kundo2_i18n("Select Contiguous Area"));
+                                       kundo2_i18n("Select Similar Color"));
 
 
     KisImageSP imageSP = currentImage();
@@ -166,24 +165,27 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 
     // XXX we should make this configurable: "allow to select transparent"
     // if (opacity > OPACITY_TRANSPARENT)
-    KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+    KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisSelectionDefaultBounds(dev));
 
 
-    int threshold = m_threshold;
-    bool antialias = antiAliasSelection();
+    const int threshold = m_threshold;
+    const bool antiAlias = antiAliasSelection();
+    const int grow = growSelection();
+    const int feather = featherSelection();
     // new stroke
 
     QSharedPointer<KoColor> color = QSharedPointer<KoColor>(new KoColor(sourceDevice->colorSpace()));
     QSharedPointer<bool> isDefaultPixel = QSharedPointer<bool>(new bool(true));
 
     KUndo2Command* cmdPickColor = new KisCommandUtils::LambdaCommand(
-                [pos, sourceDevice, color, isDefaultPixel, threshold] () mutable -> KUndo2Command* {
+        [pos, sourceDevice, color, isDefaultPixel, threshold] () mutable -> KUndo2Command*
+        {
+            sourceDevice->pixel(pos.x(), pos.y(), color.data());
+            *isDefaultPixel.data() = sourceDevice->colorSpace()->difference(color.data()->data(), sourceDevice->defaultPixel().data()) < threshold;
 
-                    sourceDevice->pixel(pos.x(), pos.y(), color.data());
-                    *isDefaultPixel.data() = sourceDevice->colorSpace()->difference(color.data()->data(), sourceDevice->defaultPixel().data()) < threshold;
-
-                    return 0;
-    });
+            return 0;
+        }
+    );
 
     applicator.applyCommand(cmdPickColor, KisStrokeJobData::SEQUENTIAL);
 
@@ -192,18 +194,19 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     for (int i = 0; i < patches.count(); i++) {
         QSharedPointer<QRect> patch = QSharedPointer<QRect>(new QRect(patches[i]));
         KUndo2Command* patchCmd = new KisCommandUtils::LambdaCommand(
-                    [threshold, tmpSel, sourceDevice, patch, color, isDefaultPixel] () mutable -> KUndo2Command* {
-
-                        QRect patchRect = *patch.data();
-                        QRect finalRect = patchRect;
-                        if (!isDefaultPixel) {
-                            finalRect = patchRect.intersected(sourceDevice->exactBounds());
-                        }
-                        if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, patchRect);
-                        }
-                        return 0;
-        });
+            [threshold, tmpSel, sourceDevice, patch, color, isDefaultPixel] () mutable -> KUndo2Command*
+            {
+                QRect patchRect = *patch.data();
+                QRect finalRect = patchRect;
+                if (!isDefaultPixel) {
+                    finalRect = patchRect.intersected(sourceDevice->exactBounds());
+                }
+                if (!finalRect.isEmpty()) {
+                    selectByColor(sourceDevice, tmpSel, color->data(), threshold, patchRect);
+                }
+                return 0;
+            }
+        );
 
         applicator.applyCommand(patchCmd, KisStrokeJobData::CONCURRENT);
     }
@@ -231,65 +234,68 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         QRect imageRect = image()->bounds();
 
         KUndo2Command* topCmd = new KisCommandUtils::LambdaCommand(
-                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
-
-                        QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(0, contentRect.top()), QPoint(qMax(contentRect.right(), imageRect.right()), 0));
-                        QRect finalRect = patchRect;
-                        if (!*isDefaultPixel) {
-                            finalRect = patchRect.intersected(contentRect);
-                        }
-                        if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
-                        }
-                        return 0;
-        });
+            [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command*
+            {
+                QRect contentRect = sourceDevice->exactBounds();
+                QRect patchRect = QRect(QPoint(0, contentRect.top()), QPoint(qMax(contentRect.right(), imageRect.right()), 0));
+                QRect finalRect = patchRect;
+                if (!*isDefaultPixel) {
+                    finalRect = patchRect.intersected(contentRect);
+                }
+                if (!finalRect.isEmpty()) {
+                    selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
+                }
+                return 0;
+            }
+        );
 
         KUndo2Command* rightCmd = new KisCommandUtils::LambdaCommand(
-                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
-
-                        QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(imageRect.width(), 0), QPoint(contentRect.right(), qMax(contentRect.bottom(), imageRect.bottom())));
-                        QRect finalRect = patchRect;
-                        if (!*isDefaultPixel) {
-                            finalRect = patchRect.intersected(contentRect);
-                        }
-                        if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
-                        }
-                        return 0;
-        });
+            [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command*
+            {
+                QRect contentRect = sourceDevice->exactBounds();
+                QRect patchRect = QRect(QPoint(imageRect.width(), 0), QPoint(contentRect.right(), qMax(contentRect.bottom(), imageRect.bottom())));
+                QRect finalRect = patchRect;
+                if (!*isDefaultPixel) {
+                    finalRect = patchRect.intersected(contentRect);
+                }
+                if (!finalRect.isEmpty()) {
+                    selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
+                }
+                return 0;
+            }
+        );
 
         KUndo2Command* bottomCmd = new KisCommandUtils::LambdaCommand(
-                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
-
-                        QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(qMin(contentRect.left(), imageRect.left()), imageRect.bottom()), QPoint(imageRect.right(), contentRect.bottom()));
-                        QRect finalRect = patchRect;
-                        if (!*isDefaultPixel) {
-                            finalRect = patchRect.intersected(contentRect);
-                        }
-                        if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
-                        }
-                        return 0;
-        });
+            [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command*
+            {
+                QRect contentRect = sourceDevice->exactBounds();
+                QRect patchRect = QRect(QPoint(qMin(contentRect.left(), imageRect.left()), imageRect.bottom()), QPoint(imageRect.right(), contentRect.bottom()));
+                QRect finalRect = patchRect;
+                if (!*isDefaultPixel) {
+                    finalRect = patchRect.intersected(contentRect);
+                }
+                if (!finalRect.isEmpty()) {
+                    selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
+                }
+                return 0;
+            }
+        );
 
         KUndo2Command* leftCmd = new KisCommandUtils::LambdaCommand(
-                    [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command* {
-
-                        QRect contentRect = sourceDevice->exactBounds();
-                        QRect patchRect = QRect(QPoint(contentRect.left(), qMin(contentRect.top(), imageRect.top())), QPoint(0, imageRect.bottom()));
-                        QRect finalRect = patchRect;
-                        if (!*isDefaultPixel) {
-                            finalRect = patchRect.intersected(contentRect);
-                        }
-                        if (!finalRect.isEmpty()) {
-                            selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
-                        }
-                        return 0;
-        });
-
+            [threshold, tmpSel, sourceDevice, color, imageRect, isDefaultPixel] () mutable -> KUndo2Command*
+            {
+                QRect contentRect = sourceDevice->exactBounds();
+                QRect patchRect = QRect(QPoint(contentRect.left(), qMin(contentRect.top(), imageRect.top())), QPoint(0, imageRect.bottom()));
+                QRect finalRect = patchRect;
+                if (!*isDefaultPixel) {
+                    finalRect = patchRect.intersected(contentRect);
+                }
+                if (!finalRect.isEmpty()) {
+                    selectByColor(sourceDevice, tmpSel, color->data(), threshold, finalRect);
+                }
+                return 0;
+            }
+        );
 
         applicator.applyCommand(topCmd, KisStrokeJobData::CONCURRENT);
         applicator.applyCommand(rightCmd, KisStrokeJobData::CONCURRENT);
@@ -300,23 +306,40 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 
 
     KUndo2Command* cmdAdjustSelection = new KisCommandUtils::LambdaCommand(
-                    [tmpSel, antialias] () mutable -> KUndo2Command* {
-                        if (antialias) {
-                            KisAntiAliasSelectionFilter antiAliasFilter;
-                            antiAliasFilter.process(tmpSel, tmpSel->selectedRect());
-                        }
-                        return 0;
-                    }
+        [tmpSel, antiAlias, grow, feather] () mutable -> KUndo2Command*
+        {
+            if (grow > 0) {
+                KisGrowSelectionFilter biggy(grow, grow);
+                biggy.process(tmpSel, tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+            }
+            else if (grow < 0) {
+                KisShrinkSelectionFilter tiny(-grow, -grow, false);
+                tiny.process(tmpSel, tmpSel->selectedRect());
+            }
+            // Since the feathering already smooths the selection, the antiAlias
+            // is not applied if we must feather
+            if (feather > 0) {
+                KisFeatherSelectionFilter feathery(feather);
+                feathery.process(tmpSel, tmpSel->selectedRect().adjusted(-feather, -feather, feather, feather));
+            } else if (antiAlias) {
+                KisAntiAliasSelectionFilter antiAliasFilter;
+                antiAliasFilter.process(tmpSel, tmpSel->selectedRect());
+            }
+            
+            return 0;
+        }
     );
     applicator.applyCommand(cmdAdjustSelection, KisStrokeJobData::SEQUENTIAL);
 
 
     KUndo2Command* cmdInvalidateCache = new KisCommandUtils::LambdaCommand(
-                [tmpSel] () mutable -> KUndo2Command* {
+        [tmpSel] () mutable -> KUndo2Command*
+        {
 
-                    tmpSel->invalidateOutlineCache();
-                    return 0;
-    });
+            tmpSel->invalidateOutlineCache();
+            return 0;
+        }
+    );
     applicator.applyCommand(cmdInvalidateCache, KisStrokeJobData::SEQUENTIAL);
 
     KisSelectionToolHelper helper(kisCanvas, kundo2_i18n("Select Similar Color"));
@@ -347,8 +370,6 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
-
-    m_widgetHelper.setConfigGroupForExactTool(toolId());
 
     KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
     sliderThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in similar selection tool options", "Threshold: "));

@@ -32,12 +32,16 @@ public:
     SelectionMode mode() const;
     SelectionAction action() const;
     bool antiAliasSelection() const;
+    int growSelection() const;
+    int featherSelection() const;
     ReferenceLayers referenceLayers() const;
     QList<int> selectedColorLabels() const;
 
     void setMode(SelectionMode newMode);
     void setAction(SelectionAction newAction);
     void setAntiAliasSelection(bool newAntiAliasSelection);
+    void setGrowSelection(int newGrowSelection);
+    void setFeatherSelection(int newFeatherSelection);
     void setReferenceLayers(ReferenceLayers newReferenceLayers);
     void setSelectedColorLabels(const QList<int> &newSelectedColorLabels);
 
@@ -52,6 +56,8 @@ Q_SIGNALS:
     void modeChanged(SelectionMode mode);
     void actionChanged(SelectionAction action);
     void antiAliasSelectionChanged(bool antiAliasSelection);
+    void growSelectionChanged(int growSelection);
+    void featherSelectionChanged(int featherSelection);
     void referenceLayersChanged(ReferenceLayers referenceLayers);
     void selectedColorLabelsChanged();
 

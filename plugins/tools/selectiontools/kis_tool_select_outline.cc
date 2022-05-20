@@ -32,6 +32,8 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include <kis_command_utils.h>
+#include <kis_selection_filters.h>
 
 #include "kis_algebra_2d.h"
 
@@ -63,49 +65,88 @@ void KisToolSelectOutline::finishOutline(const QVector<QPointF>& points)
         return;
     }
 
-    if (points.count() > 2) {
-        QApplication::setOverrideCursor(KisCursor::waitCursor());
-
-        const SelectionMode mode =
-            helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
-                                            selectionMode(),
-                                            selectionAction());
-
-        if (mode == PIXEL_SELECTION) {
-
-            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
-
-            KisPainter painter(tmpSel);
-            painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-            painter.setAntiAliasPolygonFill(antiAliasSelection());
-            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-            painter.setStrokeStyle(KisPainter::StrokeStyleNone);
-
-            painter.paintPolygon(points);
-
-            QPainterPath cache;
-            cache.addPolygon(points);
-            cache.closeSubpath();
-            tmpSel->setOutlineCache(cache);
-
-            helper.selectPixelSelection(tmpSel, selectionAction());
-        } else {
-
-            KoPathShape* path = new KoPathShape();
-            path->setShapeId(KoPathShapeId);
-
-            QTransform resolutionMatrix;
-            resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
-            path->moveTo(resolutionMatrix.map(points[0]));
-            for (int i = 1; i < points.count(); i++)
-                path->lineTo(resolutionMatrix.map(points[i]));
-            path->close();
-            path->normalize();
-
-            helper.addSelectionShape(path, selectionAction());
-        }
-        QApplication::restoreOverrideCursor();
+    if (points.count() < 3) {
+        return;
     }
+
+    QApplication::setOverrideCursor(KisCursor::waitCursor());
+
+    const SelectionMode mode =
+        helper.tryOverrideSelectionMode(kisCanvas->viewManager()->selection(),
+                                        selectionMode(),
+                                        selectionAction());
+
+    if (mode == PIXEL_SELECTION) {
+        KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector(),
+                                           kundo2_i18n("Freehand Selection"));
+
+        KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisDefaultBounds(currentImage()));
+
+        const bool antiAlias = antiAliasSelection();
+        const int grow = growSelection();
+        const int feather = featherSelection();
+
+        QPainterPath path;
+        path.addPolygon(points);
+        path.closeSubpath();
+
+        KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+            [tmpSel, antiAlias, grow, feather, path] () mutable -> KUndo2Command*
+            {
+                KisPainter painter(tmpSel);
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+                // Since the feathering already smooths the selection, the antiAlias
+                // is not applied if we must feather
+                painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
+                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+                painter.paintPainterPath(path);
+
+                if (grow > 0) {
+                    KisGrowSelectionFilter biggy(grow, grow);
+                    biggy.process(tmpSel, tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                } else if (grow < 0) {
+                    KisShrinkSelectionFilter tiny(-grow, -grow, false);
+                    tiny.process(tmpSel, tmpSel->selectedRect());
+                }
+                if (feather > 0) {
+                    KisFeatherSelectionFilter feathery(feather);
+                    feathery.process(tmpSel, tmpSel->selectedRect().adjusted(-feather, -feather, feather, feather));
+                }
+
+                if (grow == 0 && feather == 0) {
+                    tmpSel->setOutlineCache(path);
+                } else {
+                    tmpSel->invalidateOutlineCache();
+                }
+
+                return 0;
+            }
+        );
+
+        applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+        helper.selectPixelSelection(applicator, tmpSel, selectionAction());
+        applicator.end();
+        
+    } else {
+
+        KoPathShape* path = new KoPathShape();
+        path->setShapeId(KoPathShapeId);
+
+        QTransform resolutionMatrix;
+        resolutionMatrix.scale(1 / currentImage()->xRes(), 1 / currentImage()->yRes());
+        path->moveTo(resolutionMatrix.map(points[0]));
+        for (int i = 1; i < points.count(); i++)
+            path->lineTo(resolutionMatrix.map(points[i]));
+        path->close();
+        path->normalize();
+
+        helper.addSelectionShape(path, selectionAction());
+    }
+    QApplication::restoreOverrideCursor();
 }
 
 void KisToolSelectOutline::beginShape()

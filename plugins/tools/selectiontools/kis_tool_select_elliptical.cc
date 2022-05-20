@@ -21,6 +21,8 @@
 #include "kis_shape_tool_helper.h"
 #include "KisViewManager.h"
 #include "kis_selection_manager.h"
+#include <kis_command_utils.h>
+#include <kis_selection_filters.h>
 
 __KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *canvas)
     : KisToolEllipseBase(canvas, KisToolEllipseBase::SELECT,
@@ -54,22 +56,60 @@ void KisToolSelectElliptical::finishRect(const QRectF &rect, qreal roundCornersX
                                         selectionAction());
 
     if (mode == PIXEL_SELECTION) {
-        KisPixelSelectionSP tmpSel = new KisPixelSelection();
-        QPainterPath cache;
-        cache.addEllipse(rect);
-        getRotatedPath(cache, rect.center(), getRotationAngle());
+        KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                           KisProcessingApplicator::NONE,
+                                           KisImageSignalVector(),
+                                           kundo2_i18n("Select Ellipse"));
 
-        KisPainter painter(tmpSel);
-        painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-        painter.setAntiAliasPolygonFill(antiAliasSelection());
-        painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-        painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+        KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisDefaultBounds(currentImage()));
 
-        painter.paintPainterPath(cache);
+        const bool antiAlias = antiAliasSelection();
+        const int grow = growSelection();
+        const int feather = featherSelection();
 
-        tmpSel->setOutlineCache(cache);
+        QPainterPath path;
+        path.addEllipse(rect);
+        getRotatedPath(path, rect.center(), getRotationAngle());
 
-        helper.selectPixelSelection(tmpSel, selectionAction());
+        KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+            [tmpSel, antiAlias, grow, feather, path] () mutable -> KUndo2Command*
+            {
+                KisPainter painter(tmpSel);
+                painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+                // Since the feathering already smooths the selection, the antiAlias
+                // is not applied if we must feather
+                painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
+                painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+                painter.paintPainterPath(path);
+
+                if (grow > 0) {
+                    KisGrowSelectionFilter biggy(grow, grow);
+                    biggy.process(tmpSel, tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                } else if (grow < 0) {
+                    KisShrinkSelectionFilter tiny(-grow, -grow, false);
+                    tiny.process(tmpSel, tmpSel->selectedRect());
+                }
+                if (feather > 0) {
+                    KisFeatherSelectionFilter feathery(feather);
+                    feathery.process(tmpSel, tmpSel->selectedRect().adjusted(-feather, -feather, feather, feather));
+                }
+
+                if (grow == 0 && feather == 0) {
+                    tmpSel->setOutlineCache(path);
+                } else {
+                    tmpSel->invalidateOutlineCache();
+                }
+
+                return 0;
+            }
+        );
+
+        applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+        helper.selectPixelSelection(applicator, tmpSel, selectionAction());
+        applicator.end();
+
     } else {
         QRectF ptRect = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(ptRect);

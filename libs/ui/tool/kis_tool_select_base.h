@@ -152,6 +152,8 @@ public:
     QWidget* createOptionWidget()
     {
         m_widgetHelper.createOptionWidget(this->toolId());
+        m_widgetHelper.setConfigGroupForExactTool(this->toolId());
+
         this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
         this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(SelectionAction)), this, SLOT(resetCursorStyle()));
 
@@ -184,6 +186,16 @@ public:
     bool antiAliasSelection() const
     {
         return m_widgetHelper.antiAliasSelection();
+    }
+
+    int growSelection() const
+    {
+        return m_widgetHelper.growSelection();
+    }
+
+    int featherSelection() const
+    {
+        return m_widgetHelper.featherSelection();
     }
 
     QList<int> colorLabelsSelected() const

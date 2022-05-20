@@ -22,6 +22,7 @@
 
 #include <KisOptionButtonStrip.h>
 #include <KoGroupButton.h>
+#include <kis_slider_spin_box.h>
 #include <kis_color_label_selector_widget.h>
 
 class KisSelectionOptions::Private
@@ -31,6 +32,8 @@ public:
     KisOptionButtonStrip *optionButtonStripMode {nullptr};
     KisOptionButtonStrip *optionButtonStripAction {nullptr};
     QCheckBox *checkBoxAntiAliasSelection {nullptr};
+    KisSliderSpinBox *sliderGrowSelection {nullptr};
+    KisSliderSpinBox *sliderFeatherSelection {nullptr};
     KisOptionButtonStrip *optionButtonStripReference {nullptr};
     KisColorLabelSelectorWidget *widgetLabels {nullptr};
 
@@ -140,6 +143,14 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->optionButtonStripAction->button(0)->setChecked(true);
 
     m_d->checkBoxAntiAliasSelection = new QCheckBox(i18nc("The anti-alias checkbox in fill tool options", "Anti-aliasing"));
+    m_d->sliderGrowSelection = new KisSliderSpinBox;
+    m_d->sliderGrowSelection->setPrefix(i18nc("The 'grow/shrink' spinbox prefix in selection tools options", "Grow: "));
+    m_d->sliderGrowSelection->setRange(-40, 40);
+    m_d->sliderGrowSelection->setSuffix(i18n(" px"));
+    m_d->sliderFeatherSelection = new KisSliderSpinBox;
+    m_d->sliderFeatherSelection->setPrefix(i18nc("The 'feather' spinbox prefix in selection tools options", "Feather: "));
+    m_d->sliderFeatherSelection->setRange(0, 40);
+    m_d->sliderFeatherSelection->setSuffix(i18n(" px"));
 
     m_d->optionButtonStripReference = new KisOptionButtonStrip;
     m_d->optionButtonStripReference->addButton(KisIconUtils::loadIcon("current-layer"));
@@ -163,6 +174,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
     m_d->optionButtonStripAction->button(4)->setToolTip(i18nc("@info:tooltip", "Symmetric Difference"));
 
     m_d->checkBoxAntiAliasSelection->setToolTip(i18n("Smooth the jagged edges"));
+    m_d->sliderGrowSelection->setToolTip(i18n("Grow (positive values) or shrink (negative values) the selection by the set amount"));
+    m_d->sliderFeatherSelection->setToolTip(i18n("Blur the selection by the set amount"));
 
     m_d->optionButtonStripReference->button(0)->setToolTip(i18n("Make the selection using the active layer"));
     m_d->optionButtonStripReference->button(1)->setToolTip(i18n("Make the selection using a merged copy of all layers"));
@@ -190,6 +203,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
             i18nc("The 'adjustments' section label in selection tools options", "Adjustments")
         );
     sectionAdjustments->appendWidget("checkBoxAntiAliasSelection", m_d->checkBoxAntiAliasSelection);
+    sectionAdjustments->appendWidget("sliderGrow", m_d->sliderGrowSelection);
+    sectionAdjustments->appendWidget("sliderFeather", m_d->sliderFeatherSelection);
     appendWidget("sectionAdjustments", sectionAdjustments);
 
     KisOptionCollectionWidgetWithHeader *sectionReference =
@@ -209,6 +224,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
             [this](int i, int c) { m_d->on_optionButtonStripAction_buttonToggled(i, c); });
     connect(m_d->checkBoxAntiAliasSelection, SIGNAL(toggled(bool)), SIGNAL(antiAliasSelectionChanged(bool)));
+    connect(m_d->sliderGrowSelection, SIGNAL(valueChanged(int)), SIGNAL(growSelectionChanged(int)));
+    connect(m_d->sliderFeatherSelection, SIGNAL(valueChanged(int)), SIGNAL(featherSelectionChanged(int)));
     connect(m_d->optionButtonStripReference,
             QOverload<int, bool>::of(&KisOptionButtonStrip::buttonToggled),
             [this](int i, int c) { m_d->on_optionButtonStripReference_buttonToggled(i, c); });
@@ -231,6 +248,16 @@ SelectionAction KisSelectionOptions::action() const
 bool KisSelectionOptions::antiAliasSelection() const
 {
     return m_d->checkBoxAntiAliasSelection->isChecked();
+}
+
+int KisSelectionOptions::growSelection() const
+{
+    return m_d->sliderGrowSelection->value();
+}
+
+int KisSelectionOptions::featherSelection() const
+{
+    return m_d->sliderFeatherSelection->value();
 }
 
 KisSelectionOptions::ReferenceLayers KisSelectionOptions::referenceLayers() const
@@ -262,6 +289,16 @@ void KisSelectionOptions::setAction(SelectionAction newAction)
 void KisSelectionOptions::setAntiAliasSelection(bool newAntiAliasSelection)
 {
     m_d->checkBoxAntiAliasSelection->setChecked(newAntiAliasSelection);
+}
+
+void KisSelectionOptions::setGrowSelection(int newGrowSelection)
+{
+    m_d->sliderGrowSelection->setValue(newGrowSelection);
+}
+
+void KisSelectionOptions::setFeatherSelection(int newFeatherSelection)
+{
+    m_d->sliderFeatherSelection->setValue(newFeatherSelection);
 }
 
 void KisSelectionOptions::setReferenceLayers(ReferenceLayers newReferenceLayers)

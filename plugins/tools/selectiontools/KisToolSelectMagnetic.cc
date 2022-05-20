@@ -32,6 +32,8 @@
 #include "canvas/kis_canvas2.h"
 #include "kis_pixel_selection.h"
 #include "kis_selection_tool_helper.h"
+#include <kis_command_utils.h>
+#include <kis_selection_filters.h>
 
 #include "kis_algebra_2d.h"
 
@@ -493,22 +495,60 @@ void KisToolSelectMagnetic::finishSelectionAction()
                                             selectionMode(),
                                             selectionAction());
         if (mode == PIXEL_SELECTION) {
-            KisPixelSelectionSP tmpSel = KisPixelSelectionSP(new KisPixelSelection());
+            KisProcessingApplicator applicator(currentImage(), currentNode(),
+                                               KisProcessingApplicator::NONE,
+                                               KisImageSignalVector(),
+                                               kundo2_i18n("Magnetic Selection"));
 
-            KisPainter painter(tmpSel);
-            painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-            painter.setAntiAliasPolygonFill(antiAliasSelection());
-            painter.setFillStyle(KisPainter::FillStyleForegroundColor);
-            painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+            KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisDefaultBounds(currentImage()));
 
-            painter.paintPolygon(m_points);
+            const bool antiAlias = antiAliasSelection();
+            const int grow = growSelection();
+            const int feather = featherSelection();
 
-            QPainterPath cache;
-            cache.addPolygon(m_points);
-            cache.closeSubpath();
-            tmpSel->setOutlineCache(cache);
+            QPainterPath path;
+            path.addPolygon(m_points);
+            path.closeSubpath();
 
-            helper.selectPixelSelection(tmpSel, selectionAction());
+            KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
+                [tmpSel, antiAlias, grow, feather, path] () mutable -> KUndo2Command*
+                {
+                    KisPainter painter(tmpSel);
+                    painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
+                    // Since the feathering already smooths the selection, the antiAlias
+                    // is not applied if we must feather
+                    painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
+                    painter.setFillStyle(KisPainter::FillStyleForegroundColor);
+                    painter.setStrokeStyle(KisPainter::StrokeStyleNone);
+
+                    painter.paintPainterPath(path);
+
+                    if (grow > 0) {
+                        KisGrowSelectionFilter biggy(grow, grow);
+                        biggy.process(tmpSel, tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                    } else if (grow < 0) {
+                        KisShrinkSelectionFilter tiny(-grow, -grow, false);
+                        tiny.process(tmpSel, tmpSel->selectedRect());
+                    }
+                    if (feather > 0) {
+                        KisFeatherSelectionFilter feathery(feather);
+                        feathery.process(tmpSel, tmpSel->selectedRect().adjusted(-feather, -feather, feather, feather));
+                    }
+
+                    if (grow == 0 && feather == 0) {
+                        tmpSel->setOutlineCache(path);
+                    } else {
+                        tmpSel->invalidateOutlineCache();
+                    }
+
+                    return 0;
+                }
+            );
+
+            applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+            helper.selectPixelSelection(applicator, tmpSel, selectionAction());
+            applicator.end();
+
         } else {
             KoPathShape *path = new KoPathShape();
             path->setShapeId(KoPathShapeId);

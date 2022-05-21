@@ -23,7 +23,9 @@ if(WIN32)
     configure_file(kritarunner.exe.manifest.in ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest)
     # CMake does not know how to embed manifest on mingw, so we create our own RC file to be included
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest.rc "1 24 \"kritarunner.exe.manifest\"\n")
-    set(kritarunner_SRCS ${kritarunner_SRCS} ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest.rc)
+    add_library(kritarunner_manifest_res OBJECT ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest.rc)
+    set_property(TARGET kritarunner_manifest_res PROPERTY AUTOMOC OFF)
+    set(kritarunner_SRCS ${kritarunner_SRCS} $<TARGET_OBJECTS:kritarunner_manifest_res>)
 endif()
 
 add_executable(kritarunner ${kritarunner_SRCS})

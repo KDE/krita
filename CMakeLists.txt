@@ -143,12 +143,11 @@ get_git_branch(GIT_BRANCH)
 
 if(GIT_SHA1)
    string(SUBSTRING ${GIT_SHA1} 0 7 GIT_SHA1)
-   set(KRITA_GIT_SHA1_STRING ${GIT_SHA1})
-   if(GIT_BRANCH)
-       set(KRITA_GIT_BRANCH_STRING ${GIT_BRANCH})
-   else()
-       set(KRITA_GIT_BRANCH_STRING "(detached HEAD)")
+   set(KRITA_GIT_SHA1_STRING ${GIT_SHA1} CACHE STRING "Git commit of the current build" FORCE)
+   if(NOT GIT_BRANCH)
+       set(GIT_BRANCH "(detached HEAD)")
    endif()
+   set(KRITA_GIT_BRANCH_STRING ${GIT_BRANCH} CACHE STRING "Git branch of the current build" FORCE)
 endif()
 
 # create test make targets

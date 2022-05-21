@@ -25,6 +25,7 @@ if(WIN32)
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest.rc "1 24 \"kritarunner.exe.manifest\"\n")
     add_library(kritarunner_manifest_res OBJECT ${CMAKE_CURRENT_BINARY_DIR}/kritarunner.exe.manifest.rc)
     set_property(TARGET kritarunner_manifest_res PROPERTY AUTOMOC OFF)
+    set_property(TARGET kritarunner_manifest_res PROPERTY INCLUDE_DIRECTORIES "")
     set(kritarunner_SRCS ${kritarunner_SRCS} $<TARGET_OBJECTS:kritarunner_manifest_res>)
 endif()
 

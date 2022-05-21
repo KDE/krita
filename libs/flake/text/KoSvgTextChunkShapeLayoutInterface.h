@@ -40,9 +40,10 @@ public:
 
     /**
      * The number of characters contained in the dom **subtree**
-     * FIXME: not used now!
+     * @param withControls this will enable the bidi controls to be
+     * counted as well.
      */
-    virtual int numChars() const = 0;
+    virtual int numChars(bool withControls = false) const = 0;
 
     /**
      * Relative position of a character at position \p pos inside one of the children \p child.

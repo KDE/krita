@@ -357,10 +357,8 @@ void KoSvgTextShape::relayout() const
     KoSvgText::Direction direction = KoSvgText::Direction(
                 this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
 
-    bool isHorizontal = true;
-    if (writingMode == KoSvgText::TopToBottom) {
-        isHorizontal = false;
-    }
+    bool isHorizontal = writingMode != KoSvgText::HorizontalTB;
+
     FT_Int32 loadFlags = FT_LOAD_RENDER;
 
     if (d->textRendering == GeometricPrecision || d->textRendering == Auto) {
@@ -413,7 +411,7 @@ void KoSvgTextShape::relayout() const
     raqm_t *layout(raqm_create());
 
     if (raqm_set_text_utf16(layout, text.utf16(), text.size())) {
-        if (writingMode == KoSvgText::TopToBottom) {
+        if (writingMode == KoSvgText::VerticalRL) {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_TTB);
         } else if (direction == KoSvgText::DirectionRightToLeft) {
             raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_RTL);
@@ -909,7 +907,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     int i = currentIndex;
-    int j = i + chunkShape->layoutInterface()->numChars();
+    int j = i + chunkShape->layoutInterface()->numChars(true);
     int resolvedChildren = 0;
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
@@ -961,7 +959,8 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             if (cr.addressable) {
                 cr.finalPosition += shift;
                 if (chunkShape->layoutInterface()->lengthAdjust() == KoSvgText::LengthAdjustSpacingAndGlyphs) {
-                    QPointF scale(d.x()!=0? (d.x()/cr.advance.x()) + 1: 1.0, d.y()!=0? (d.y()/cr.advance.y()) + 1: 1.0);
+                    QPointF scale(d.x()!=0? (d.x()/cr.advance.x()) + 1: 1.0,
+                                  d.y()!=0? (d.y()/cr.advance.y()) + 1: 1.0);
                     QTransform tf = QTransform::fromScale(scale.x(), scale.y());
                     cr.path = tf.map(cr.path);
                     cr.advance = tf.map(cr.advance);
@@ -1002,7 +1001,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
 
     QMap<int, int> baselineTable;
     int i = currentIndex;
-    int j = qMin(i + chunkShape->layoutInterface()->numChars(), result.size());
+    int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
 
     KoSvgTextProperties properties = chunkShape->textProperties();
 
@@ -1237,7 +1236,7 @@ void KoSvgTextShape::Private::computeTextDecorations(const KoShape *rootShape, Q
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     int i = currentIndex;
-    int j = qMin(i + chunkShape->layoutInterface()->numChars(), result.size());
+    int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
 
     KoPathShape *currentTextPath = textPath? textPath : dynamic_cast<KoPathShape*>(chunkShape->layoutInterface()->textPath());
     qreal currentTextPathOffset = textPathoffset;
@@ -1653,7 +1652,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
         const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape*>(child);
         KIS_SAFE_ASSERT_RECOVER_RETURN(textPathChunk);
-        int endIndex = currentIndex + textPathChunk->layoutInterface()->numChars();
+        int endIndex = currentIndex + textPathChunk->layoutInterface()->numChars(true);
 
         KoPathShape *shape = dynamic_cast<KoPathShape*>(textPathChunk->layoutInterface()->textPath());
         if (shape) {
@@ -1772,7 +1771,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
 
     if (chunkShape->isTextNode()) {
         QTransform tf;
-        int j = currentIndex + chunkShape->layoutInterface()->numChars();
+        int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
         KoClipMaskPainter fillPainter(&painter,
                                       painter.transform().mapRect(outlineRect.boundingRect()));
         if (chunkShape->background()) {

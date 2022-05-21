@@ -157,9 +157,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             autoValue.customValue = roundToStraightAngle(autoValue.customValue);
         }
 
-        setProperty(GlyphOrientationVerticalId, KoSvgText::fromAutoValue(autoValue));
-    } else if (command == "glyph-orientation-horizontal") {
-        setProperty(GlyphOrientationHorizontalId, roundToStraightAngle(SvgUtil::parseUnitAngular(context.currentGC(), value)));
+        setProperty(TextOrientationId, KoSvgText::parseTextOrientationFromGlyphOrientation(autoValue));
+    } else if (command == "text-orientation") {
+        setProperty(TextOrientationId, KoSvgText::parseTextOrientation(value));
     } else if (command == "direction") {
         setProperty(DirectionId, KoSvgText::parseDirection(value));
     } else if (command == "unicode-bidi") {
@@ -463,16 +463,25 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
 
     QMap<QString, QString> result;
 
+    bool svg1_1 = false;
+
     if (hasProperty(WritingModeId)) {
-        result.insert("writing-mode", writeWritingMode(WritingMode(property(WritingModeId).toInt())));
+        result.insert("writing-mode", writeWritingMode(WritingMode(property(WritingModeId).toInt()), svg1_1));
     }
 
-    if (hasProperty(GlyphOrientationVerticalId)) {
-        result.insert("glyph-orientation-vertical", writeAutoValue(property(GlyphOrientationVerticalId).value<AutoValue>()));
-    }
-
-    if (hasProperty(GlyphOrientationHorizontalId)) {
-        result.insert("glyph-orientation-horizontal", writeAutoValue(property(GlyphOrientationHorizontalId).value<AutoValue>()));
+    if (hasProperty(TextOrientationId)) {
+        if (svg1_1) {
+            TextOrientation orientation = TextOrientation(property(TextOrientationId).toInt());
+            QString value = "auto";
+            if (orientation == OrientationUpright){
+                value = "0";
+            } else if (orientation == OrientationSideWays) {
+                value = "90";
+            }
+            result.insert("glyph-orientation-vertical", value);
+        } else {
+            result.insert("text-orientation", writeTextOrientation(TextOrientation(property(TextOrientationId).toInt())));
+        }
     }
 
     if (hasProperty(DirectionId)) {
@@ -944,7 +953,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
     if (!s_defaultProperties.exists()) {
         using namespace KoSvgText;
 
-        s_defaultProperties->setProperty(WritingModeId, LeftToRight);
+        s_defaultProperties->setProperty(WritingModeId, HorizontalTB);
         s_defaultProperties->setProperty(DirectionId, DirectionLeftToRight);
         s_defaultProperties->setProperty(UnicodeBidiId, BidiNormal);
         s_defaultProperties->setProperty(TextAnchorId, AnchorStart);
@@ -953,8 +962,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
         s_defaultProperties->setProperty(BaselineShiftModeId, ShiftNone);
         s_defaultProperties->setProperty(BaselineShiftValueId, 0.0);
         s_defaultProperties->setProperty(KerningId, fromAutoValue(AutoValue()));
-        s_defaultProperties->setProperty(GlyphOrientationVerticalId, fromAutoValue(AutoValue()));
-        s_defaultProperties->setProperty(GlyphOrientationHorizontalId, fromAutoValue(AutoValue()));
+        s_defaultProperties->setProperty(TextOrientationId, OrientationMixed);
         s_defaultProperties->setProperty(LetterSpacingId, fromAutoValue(AutoValue()));
         s_defaultProperties->setProperty(WordSpacingId, fromAutoValue(AutoValue()));
 

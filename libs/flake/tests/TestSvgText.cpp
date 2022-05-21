@@ -86,23 +86,17 @@ void TestSvgText::testTextProperties()
 
     KoSvgTextProperties props;
 
-    addProp(context, props, "writing-mode", "tb-rl", KoSvgTextProperties::WritingModeId, KoSvgText::TopToBottom);
-    addProp(context, props, "writing-mode", "rl", KoSvgTextProperties::WritingModeId, KoSvgText::RightToLeft);
+    addProp(context, props, "writing-mode", "tb-rl", KoSvgTextProperties::WritingModeId, KoSvgText::VerticalRL);
+    addProp(context, props, "writing-mode", "rl", KoSvgTextProperties::WritingModeId, KoSvgText::HorizontalTB);
 
-    addProp(context, props, "glyph-orientation-vertical", "auto", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue());
-    addProp(context, props, "glyph-orientation-vertical", "0", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue(0));
-    addProp(context, props, "glyph-orientation-vertical", "90", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue(M_PI_2));
-    addProp(context, props, "glyph-orientation-vertical", "95", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue(M_PI_2));
-    addProp(context, props, "glyph-orientation-vertical", "175", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue(M_PI));
-    addProp(context, props, "glyph-orientation-vertical", "280", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue(3 * M_PI_2));
-    addProp(context, props, "glyph-orientation-vertical", "350", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue(0));
-    addProp(context, props, "glyph-orientation-vertical", "105", KoSvgTextProperties::GlyphOrientationVerticalId, KoSvgText::AutoValue(M_PI_2));
-
-    addProp(context, props, "glyph-orientation-horizontal", "0", KoSvgTextProperties::GlyphOrientationHorizontalId, 0.0);
-    addProp(context, props, "glyph-orientation-horizontal", "90", KoSvgTextProperties::GlyphOrientationHorizontalId, M_PI_2);
-    addProp(context, props, "glyph-orientation-horizontal", "95", KoSvgTextProperties::GlyphOrientationHorizontalId, M_PI_2);
-    addProp(context, props, "glyph-orientation-horizontal", "175", KoSvgTextProperties::GlyphOrientationHorizontalId, M_PI);
-    addProp(context, props, "glyph-orientation-horizontal", "280", KoSvgTextProperties::GlyphOrientationHorizontalId, 3 * M_PI_2);
+    addProp(context, props, "glyph-orientation-vertical", "auto", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationMixed);
+    addProp(context, props, "glyph-orientation-vertical", "0", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationUpright);
+    addProp(context, props, "glyph-orientation-vertical", "90", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationSideWays);
+    addProp(context, props, "glyph-orientation-vertical", "95", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationSideWays);
+    addProp(context, props, "glyph-orientation-vertical", "175", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationMixed);
+    addProp(context, props, "glyph-orientation-vertical", "280", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationMixed);
+    addProp(context, props, "glyph-orientation-vertical", "350", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationMixed);
+    addProp(context, props, "glyph-orientation-vertical", "105", KoSvgTextProperties::TextOrientationId, KoSvgText::OrientationMixed);
 
     addProp(context, props, "direction", "rtl", KoSvgTextProperties::WritingModeId, KoSvgText::DirectionRightToLeft);
     addProp(context, props, "unicode-bidi", "embed", KoSvgTextProperties::UnicodeBidiId, KoSvgText::BidiEmbed);
@@ -156,7 +150,7 @@ void TestSvgText::testTextPropertiesDifference()
 
     KoSvgTextProperties props;
 
-    props.setProperty(KoSvgTextProperties::WritingModeId, RightToLeft);
+    props.setProperty(KoSvgTextProperties::WritingModeId, HorizontalTB);
     props.setProperty(KoSvgTextProperties::DirectionId, DirectionRightToLeft);
     props.setProperty(KoSvgTextProperties::UnicodeBidiId, BidiEmbed);
     props.setProperty(KoSvgTextProperties::TextAnchorId, AnchorEnd);
@@ -165,8 +159,7 @@ void TestSvgText::testTextPropertiesDifference()
     props.setProperty(KoSvgTextProperties::BaselineShiftModeId, ShiftPercentage);
     props.setProperty(KoSvgTextProperties::BaselineShiftValueId, 0.5);
     props.setProperty(KoSvgTextProperties::KerningId, fromAutoValue(AutoValue(10)));
-    props.setProperty(KoSvgTextProperties::GlyphOrientationVerticalId, fromAutoValue(AutoValue(90)));
-    props.setProperty(KoSvgTextProperties::GlyphOrientationHorizontalId, fromAutoValue(AutoValue(180)));
+    props.setProperty(KoSvgTextProperties::TextOrientationId, OrientationSideWays);
     props.setProperty(KoSvgTextProperties::LetterSpacingId, fromAutoValue(AutoValue(20)));
     props.setProperty(KoSvgTextProperties::WordSpacingId, fromAutoValue(AutoValue(30)));
 
@@ -320,8 +313,8 @@ void TestSvgText::testParseTextStyles()
 
     KoSvgTextProperties &props = context.currentGC()->textProperties;
 
-    QCOMPARE(props.property(KoSvgTextProperties::WritingModeId).toInt(), int(KoSvgText::TopToBottom));
-    QCOMPARE(props.property(KoSvgTextProperties::GlyphOrientationVerticalId).value<KoSvgText::AutoValue>(), KoSvgText::AutoValue(M_PI_2));
+    QCOMPARE(props.property(KoSvgTextProperties::WritingModeId).toInt(), int(KoSvgText::VerticalRL));
+    QCOMPARE(props.property(KoSvgTextProperties::TextOrientationId).toInt(), int(KoSvgText::OrientationSideWays));
 
 }
 
@@ -482,7 +475,6 @@ void TestSvgText::testComplexText()
             QCOMPARE(*transform[i].dxPos, qreal(i + 7));
         }
 
-        int globalIndex = 0;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
                 chunk->layoutInterface()->collectSubChunks();
 

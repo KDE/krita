@@ -44,6 +44,20 @@ v *  GNU General Public License for more details.
 
 namespace {
 
+const QString BIDI_CONTROL_LRE = "\u202a";
+const QString BIDI_CONTROL_RLE = "\u202b";
+const QString BIDI_CONTROL_PDF = "\u202c";
+const QString BIDI_CONTROL_LRO = "\u202d";
+const QString BIDI_CONTROL_RLO = "\u202e";
+const QString BIDI_CONTROL_LRI = "\u2066";
+const QString BIDI_CONTROL_RLI = "\u2067";
+const QString BIDI_CONTROL_FSI = "\u2068";
+const QString BIDI_CONTROL_PDI = "\u2069";
+const QString UNICODE_BIDI_ISOLATE_OVERRIDE_LR_START = "\u2068\u202d";
+const QString UNICODE_BIDI_ISOLATE_OVERRIDE_RL_START = "\u2068\u202e";
+const QString UNICODE_BIDI_ISOLATE_OVERRIDE_END = "\u202c\u2069";
+
+
 
 void appendLazy(QVector<qreal> *list, boost::optional<qreal> value, int iteration, bool hasDefault = true, qreal defaultValue = 0.0)
 {
@@ -177,18 +191,26 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return q->s->lengthAdjust;
     }
 
-    int numChars() const override {
+    int numChars(bool withControls) const override {
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!q->shapeCount() || q->s->text.isEmpty(), 0);
 
         int result = 0;
 
         if (!q->shapeCount()) {
-            result = q->s->text.size();
+            if (withControls) {
+            KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(q->s->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
+            KoSvgText::Direction direction = KoSvgText::Direction(q->s->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+            result = getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi).size();
+            result += q->s->text.size();
+            result += getBidiClosing(bidi).size();
+            } else {
+                result = q->s->text.size();
+            }
         } else {
             Q_FOREACH (KoShape *shape, q->shapes()) {
                 KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
                 KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(chunkShape, 0);
-                result += chunkShape->layoutInterface()->numChars();
+                result += chunkShape->layoutInterface()->numChars(withControls);
             }
         }
 
@@ -242,15 +264,51 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return t.mid(0, qMin(t.size(), q->s->text.size()));
     }
 
-    static QString getBidiOpening(KoSvgText::Direction direction, KoSvgText::UnicodeBidi bidi) {
+    static QString getBidiOpening(bool ltr, KoSvgText::UnicodeBidi bidi) {
         using namespace KoSvgText;
 
         QString result;
 
-        if (bidi == BidiEmbed) {
-            result = direction == DirectionLeftToRight ? "\u202a" : "\u202b";
-        } else if (bidi == BidiOverride) {
-            result = direction == DirectionLeftToRight ? "\u202d" : "\u202e";
+        if (ltr) {
+            if (bidi == BidiEmbed) {
+                result = BIDI_CONTROL_LRE;
+            } else if (bidi == BidiOverride) {
+                result = BIDI_CONTROL_LRI;
+            } else if (bidi == BidiIsolate) {
+                result = BIDI_CONTROL_LRO;
+            } else if (bidi == BidiIsolateOverride) {
+                result =  UNICODE_BIDI_ISOLATE_OVERRIDE_LR_START;
+            } else if (bidi == BidiPlainText) {
+                result = BIDI_CONTROL_FSI;
+            }
+        } else {
+            if (bidi == BidiEmbed) {
+                result = BIDI_CONTROL_RLE;
+            } else if (bidi == BidiOverride) {
+                result = BIDI_CONTROL_RLI;
+            } else if (bidi == BidiIsolate) {
+                result = BIDI_CONTROL_RLO;
+            } else if (bidi == BidiIsolateOverride) {
+                result =  UNICODE_BIDI_ISOLATE_OVERRIDE_RL_START;
+            } else if (bidi == BidiPlainText) {
+                result = BIDI_CONTROL_FSI;
+            }
+        }
+
+        return result;
+    }
+
+    static QString getBidiClosing(KoSvgText::UnicodeBidi bidi) {
+        using namespace KoSvgText;
+
+        QString result;
+
+        if (bidi == BidiEmbed || bidi == BidiOverride) {
+            result = BIDI_CONTROL_PDF;
+        } else if (bidi == BidiIsolate || bidi == BidiPlainText) {
+            result = BIDI_CONTROL_PDI;
+        } else if (bidi == BidiIsolateOverride) {
+            result = UNICODE_BIDI_ISOLATE_OVERRIDE_END;
         }
 
         return result;
@@ -277,7 +335,8 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
             KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(q->s->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
             KoSvgText::Direction direction = KoSvgText::Direction(q->s->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
-            const QString bidiOpening = getBidiOpening(direction, bidi);
+            const QString bidiOpening = getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi);
+            const QString bidiClosing = getBidiClosing(bidi);
 
             if (!bidiOpening.isEmpty()) {
                 result << SubChunk(bidiOpening, format, textInPath);
@@ -308,8 +367,8 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
             }
 
-            if (!bidiOpening.isEmpty()) {
-                result << SubChunk("\u202c", format, textInPath);
+            if (!bidiClosing.isEmpty()) {
+                result << SubChunk(bidiClosing, format, textInPath);
             }
 
         } else {

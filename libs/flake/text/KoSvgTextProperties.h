@@ -51,8 +51,7 @@ public:
         BaselineShiftModeId,
         BaselineShiftValueId,
         KerningId,
-        GlyphOrientationVerticalId,
-        GlyphOrientationHorizontalId,
+        TextOrientationId,
         LetterSpacingId,
         WordSpacingId,
 

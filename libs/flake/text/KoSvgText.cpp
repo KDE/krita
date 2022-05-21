@@ -66,9 +66,10 @@ AutoValue parseAutoValueAngular(const QString &value, const SvgLoadingContext &c
 }
 
 WritingMode parseWritingMode(const QString &value) {
-    return (value == "tb-rl" || value == "tb") ? TopToBottom :
-           (value == "rl-tb" || value == "rl") ? RightToLeft :
-           LeftToRight;
+    return (value == "tb-rl" || value == "tb" || value == "vertical-rl")
+        ? VerticalRL
+        : (value == "vertical-lr") ? VerticalLR
+                                   : HorizontalTB;
 }
 
 Direction parseDirection(const QString &value) {
@@ -77,9 +78,31 @@ Direction parseDirection(const QString &value) {
 
 UnicodeBidi parseUnicodeBidi(const QString &value)
 {
-    return value == "embed" ? BidiEmbed :
-           value == "bidi-override" ? BidiOverride :
-           BidiNormal;
+    return value == "embed"           ? BidiEmbed
+        : value == "bidi-override"    ? BidiOverride
+        : value == "isolate"          ? BidiIsolate
+        : value == "isolate-override" ? BidiIsolateOverride
+        : value == "plaintext"        ? BidiPlainText
+                                      : BidiNormal;
+}
+
+TextOrientation parseTextOrientation(const QString &value)
+{
+    return value == "upright" ? OrientationUpright
+        : value == "sideways" ? OrientationSideWays
+                              : OrientationMixed;
+}
+TextOrientation parseTextOrientationFromGlyphOrientation(AutoValue value)
+{
+    if (value.isAuto) {
+        return OrientationMixed;
+    } else if (value.customValue == 0) {
+        return OrientationUpright;
+    } else if (value.customValue == 90) {
+        return OrientationSideWays;
+    } else {
+        return OrientationMixed;
+    }
 }
 
 TextAnchor parseTextAnchor(const QString &value)
@@ -128,9 +151,15 @@ QString writeAutoValue(const AutoValue &value, const QString &autoKeyword)
     return value.isAuto ? autoKeyword : KisDomUtils::toString(value.customValue);
 }
 
-QString writeWritingMode(WritingMode value)
+QString writeWritingMode(WritingMode value, bool svg1_1)
 {
-    return value == TopToBottom ? "tb" : value == RightToLeft ? "rl" : "lr";
+    if (svg1_1) {
+        return value == VerticalRL ? "tb" : "lr";
+    } else {
+        return value == VerticalRL ? "vertical-rl"
+            : value == VerticalLR  ? "vertical-lr"
+                                   : "horizontal-tb";
+    }
 }
 
 QString writeDirection(Direction value)
@@ -140,7 +169,19 @@ QString writeDirection(Direction value)
 
 QString writeUnicodeBidi(UnicodeBidi value)
 {
-    return value == BidiEmbed ? "embed" : value == BidiOverride ? "bidi-override" : "normal";
+    return value == BidiEmbed          ? "embed"
+        : value == BidiOverride        ? "bidi-override"
+        : value == BidiIsolate         ? "isolate"
+        : value == BidiIsolateOverride ? "isolate-override"
+        : value == BidiPlainText       ? "plaintext"
+                                       : "normal";
+}
+
+QString writeTextOrientation(TextOrientation orientation)
+{
+    return orientation == OrientationUpright ? "upright"
+        : orientation == OrientationSideWays ? "sideways"
+                                             : "mixed";
 }
 
 QString writeTextAnchor(TextAnchor value)

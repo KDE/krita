@@ -32,11 +32,7 @@ class KoSvgTextChunkShape;
 
 namespace KoSvgText
 {
-enum WritingMode {
-    LeftToRight,
-    RightToLeft,
-    TopToBottom
-};
+enum WritingMode { HorizontalTB, VerticalRL, VerticalLR };
 
 enum Direction {
     DirectionLeftToRight,
@@ -46,7 +42,16 @@ enum Direction {
 enum UnicodeBidi {
     BidiNormal,
     BidiEmbed,
-    BidiOverride
+    BidiOverride,
+    BidiIsolate,
+    BidiIsolateOverride,
+    BidiPlainText
+};
+
+enum TextOrientation {
+    OrientationMixed,
+    OrientationUpright,
+    OrientationSideWays
 };
 
 enum TextAnchor {
@@ -189,6 +194,8 @@ AutoValue parseAutoValueAngular(const QString &value, const SvgLoadingContext &c
 WritingMode parseWritingMode(const QString &value);
 Direction parseDirection(const QString &value);
 UnicodeBidi parseUnicodeBidi(const QString &value);
+TextOrientation parseTextOrientation(const QString &value);
+TextOrientation parseTextOrientationFromGlyphOrientation(AutoValue value);
 TextAnchor parseTextAnchor(const QString &value);
 
 Baseline parseBaseline(const QString &value);
@@ -205,9 +212,10 @@ TextPathSide parseTextPathSide(const QString &value);
 
 QString writeAutoValue(const AutoValue &value, const QString &autoKeyword = "auto");
 
-QString writeWritingMode(WritingMode value);
+QString writeWritingMode(WritingMode value, bool svg1_1 = false);
 QString writeDirection(Direction value);
 QString writeUnicodeBidi(UnicodeBidi value);
+QString writeTextOrientation(TextOrientation orientation);
 QString writeTextAnchor(TextAnchor value);
 QString writeDominantBaseline(Baseline value);
 QString writeAlignmentBaseline(Baseline value);

@@ -384,10 +384,8 @@ void KoSvgTextShape::relayout() const
             .propertyOrDefault(KoSvgTextProperties::DirectionId)
             .toInt());
 
-    bool isHorizontal = true;
-    if (writingMode == KoSvgText::TopToBottom) {
-        isHorizontal = false;
-    }
+    bool isHorizontal = writingMode != KoSvgText::HorizontalTB;
+
     FT_Int32 loadFlags = FT_LOAD_RENDER;
 
     if (d->textRendering == GeometricPrecision || d->textRendering == Auto) {
@@ -445,7 +443,7 @@ void KoSvgTextShape::relayout() const
     raqm_t *layout(raqm_create());
 
     if (raqm_set_text_utf16(layout, text.utf16(), text.size())) {
-        if (writingMode == KoSvgText::TopToBottom) {
+        if (writingMode == KoSvgText::VerticalRL) {
             raqm_set_par_direction(layout,
                                    raqm_direction_t::RAQM_DIRECTION_TTB);
         } else if (direction == KoSvgText::DirectionRightToLeft) {
@@ -1039,7 +1037,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     int i = currentIndex;
-    int j = i + chunkShape->layoutInterface()->numChars();
+    int j = i + chunkShape->layoutInterface()->numChars(true);
     int resolvedChildren = 0;
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
@@ -1152,7 +1150,8 @@ void KoSvgTextShape::Private::computeFontMetrics(
 
     QMap<int, int> baselineTable;
     int i = currentIndex;
-    int j = qMin(i + chunkShape->layoutInterface()->numChars(), result.size());
+    int j =
+        qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
 
     KoSvgTextProperties properties = chunkShape->textProperties();
 
@@ -1568,7 +1567,8 @@ void KoSvgTextShape::Private::computeTextDecorations(
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     int i = currentIndex;
-    int j = qMin(i + chunkShape->layoutInterface()->numChars(), result.size());
+    int j =
+        qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
 
     KoPathShape *currentTextPath = textPath
         ? textPath
@@ -2086,7 +2086,7 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
             dynamic_cast<const KoSvgTextChunkShape *>(child);
         KIS_SAFE_ASSERT_RECOVER_RETURN(textPathChunk);
         int endIndex =
-            currentIndex + textPathChunk->layoutInterface()->numChars();
+            currentIndex + textPathChunk->layoutInterface()->numChars(true);
 
         KoPathShape *shape = dynamic_cast<KoPathShape *>(
             textPathChunk->layoutInterface()->textPath());
@@ -2251,7 +2251,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
     if (chunkShape->isTextNode()) {
         QTransform tf;
-        int j = currentIndex + chunkShape->layoutInterface()->numChars();
+        int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
         KoClipMaskPainter fillPainter(
             &painter,
             painter.transform().mapRect(outlineRect.boundingRect()));

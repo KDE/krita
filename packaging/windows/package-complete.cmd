@@ -501,12 +501,15 @@ if not "%GCC_VERSION_LINE:tdm64=%" == "%GCC_VERSION_LINE%" (
 set IS_LLVM_MINGW=
 set IS_MSYS_CLANG=
 if not x%IS_CLANG% == x (
-    :: Look for "llvm-mingw" in the toolchain path. Unfortunately there is
-    :: no surefire way to detect a llvm-mingw toolchain.
-    if not "%MINGW_BIN_DIR:llvm-mingw=%" == "%MINGW_BIN_DIR%" (
-        echo Toolchain looks like llvm-mingw
-        set IS_LLVM_MINGW=1
-    ) else (
+    rem Look for the multiarch target binary dirs. Unfortunately there is
+    rem no surefire way to detect a llvm-mingw toolchain.
+    if exist "%MINGW_BIN_DIR%\..\i686-w64-mingw32\bin\" (
+        if exist "%MINGW_BIN_DIR%\..\x86_64-w64-mingw32\bin\" (
+            echo Toolchain looks like llvm-mingw
+            set IS_LLVM_MINGW=1
+        )
+    )
+    if "!IS_LLVM_MINGW!" == "" (
         echo Toolchain does not look like llvm-mingw, assuming MSYS Clang
         set IS_MSYS_CLANG=1
     )
@@ -521,7 +524,7 @@ for %%a in (objdump llvm-objdump) do (
         set OBJDUMP=%%a
     )
 )
-if "OBJDUMP" == "" (
+if "%OBJDUMP%" == "" (
     echo ERROR: objdump is not working.
     exit /B 1
 )
@@ -597,8 +600,8 @@ if not x%IS_TDM% == x (
 ) else if not x%IS_LLVM_MINGW% == x (
     :: llvm-mingw
     set "STDLIBS=libc++ libomp libssp-0 libunwind libwinpthread-1"
-    :: The toolchain does not include all of the DLLs in the compiler bin dir,
-    :: so we need to copy them from the cross target bin dir.
+    rem The toolchain does not include all of the DLLs in the compiler bin dir,
+    rem so we need to copy them from the cross target bin dir.
     if x%is_x64% == x (
         set "STDLIBS_DIR=%MINGW_BIN_DIR%\..\i686-w64-mingw32\bin"
     ) else (

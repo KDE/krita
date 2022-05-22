@@ -338,7 +338,8 @@ QList<KisNodeSP> KisMimeData::loadNodes(const QMimeData *data,
         defaultConfig->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());
 
         if (image) {
-            KisGeneratorLayerSP fillLayer = new KisGeneratorLayer(image, image->nextLayerName("Fill Layer"), defaultConfig, image->globalSelection());
+            KisGeneratorLayerSP fillLayer = new KisGeneratorLayer(image, image->nextLayerName(i18n("Fill Layer")),
+                                                                  defaultConfig, image->globalSelection());
             nodes << fillLayer;
             skipRecenter = true;
         }

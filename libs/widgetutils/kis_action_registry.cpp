@@ -287,6 +287,17 @@ void KisActionRegistry::updateShortcut(const QString &name, QAction *action)
     action->setProperty("defaultShortcuts", QVariant::fromValue(info.defaultShortcuts()));
 
     d->sanityPropertizedShortcuts.insert(name);
+
+    // TODO: KisShortcutsEditor overwrites shortcuts as you edit them, so we cannot know here
+    // if the old shortcut is indeed "old" and must regenerate the tooltip unconditionally.
+
+    QString plainTip = quietlyTranslate(getChild(info.xmlData, "toolTip"));
+    if (action->shortcut().isEmpty()) {
+        action->setToolTip(plainTip);
+    } else {
+        //qDebug() << "action with shortcut:" << name << action->shortcut();
+        action->setToolTip(plainTip + " (" + action->shortcut().toString(QKeySequence::NativeText) + ")");
+    }
 }
 
 bool KisActionRegistry::sanityCheckPropertized(const QString &name)
@@ -317,7 +328,8 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         QString icon      = getChildContent(actionXml, "icon");
         QString text      = getChildContent_i18n("text");
         QString whatsthis = getChildContent_i18n("whatsThis");
-        QString toolTip   = getChildContent_i18n("toolTip");
+        // tooltip is set in updateShortcut() because shortcit gets appended to the tooltip
+        //QString toolTip   = getChildContent_i18n("toolTip");
         QString statusTip = getChildContent_i18n("statusTip");
         QString iconText  = getChildContent_i18n("iconText");
         bool isCheckable  = getChildContent(actionXml, "isCheckable") == QString("true");
@@ -325,11 +337,13 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         a->setObjectName(name); // This is helpful, should be added more places in Krita
         if (!icon.isEmpty()) {
             a->setIcon(KisIconUtils::loadIcon(icon.toLatin1()));
+            a->setProperty("iconName", QVariant::fromValue(icon)); // test
         }
         a->setText(text);
         a->setObjectName(name);
         a->setWhatsThis(whatsthis);
-        a->setToolTip(toolTip);
+
+        //a->setToolTip(toolTip);
         a->setStatusTip(statusTip);
         a->setIconText(iconText);
         a->setCheckable(isCheckable);

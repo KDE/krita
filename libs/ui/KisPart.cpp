@@ -93,7 +93,6 @@ public:
     QList<QPointer<KisView> > views;
     QList<QPointer<KisMainWindow> > mainWindows;
     QList<QPointer<KisDocument> > documents;
-    KisKActionCollection *actionCollection{0};
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
 
@@ -523,27 +522,12 @@ void KisPart::openExistingFile(const QString &path)
 
 void KisPart::updateShortcuts()
 {
-    // Update any non-UI actionCollections.  That includes:
-    // Now update the UI actions.
+    // Update the UI actions. KisActionRegistry also takes care of updating
+    // shortcut hints in tooltips.
     Q_FOREACH (KisMainWindow *mainWindow, d->mainWindows) {
         KisKActionCollection *ac = mainWindow->actionCollection();
 
         ac->updateShortcuts();
-
-        // Loop through mainWindow->actionCollections() to modify tooltips
-        // so that they list shortcuts at the end in parentheses
-        Q_FOREACH ( QAction* action, ac->actions())
-        {
-            // Remove any existing suffixes from the tooltips.
-            // Note this regexp starts with a space, e.g. " (Ctrl-a)"
-            QString strippedTooltip = action->toolTip().remove(QRegExp("\\s\\(.*\\)"));
-
-            // Now update the tooltips with the new shortcut info.
-            if (action->shortcut() == QKeySequence(0))
-                action->setToolTip(strippedTooltip);
-            else
-                action->setToolTip( strippedTooltip + " (" + action->shortcut().toString(QKeySequence::NativeText) + ")");
-        }
     }
 }
 

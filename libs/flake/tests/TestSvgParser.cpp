@@ -11,6 +11,7 @@
 #include <simpletest.h>
 #include <svg/SvgUtil.h>
 #include <KoColorBackground.h>
+#include <KoColorProfile.h>
 
 
 #include "SvgParserTestingUtils.h"
@@ -1107,6 +1108,29 @@ void TestSvgParser::testRenderStrokeWithInlineStyle()
 
 void TestSvgParser::testIccColor()
 {
+    struct ScopedProfileRemover
+    {
+        ScopedProfileRemover()
+            : m_profile(KoColorSpaceRegistry::instance()->profileByUniqueId(QByteArray::fromHex("133a66607cffeebdd64dd433ada9bf4e")))
+        {
+            if (m_profile) {
+                qWarning() << "Profile already loaded, removing profile before test";
+                KoColorProfile *clone = m_profile->clone();
+                KoColorSpaceRegistry::instance()->removeProfile(clone);
+                m_profile = clone;
+            }
+        }
+        ~ScopedProfileRemover() {
+            if (m_profile) {
+                qWarning() << "Restoring removed profile after test";
+                KoColorSpaceRegistry::instance()->addProfile(m_profile);
+                delete m_profile;
+            }
+        }
+        const KoColorProfile *m_profile;
+    };
+    ScopedProfileRemover _profileRemover;
+
     // This test works because the icc-color won't be loaded unless there's a profile for it,
     // and the fill will be red if the icc-color is not loaded (it should be cyan).
     const QString data =
@@ -1130,12 +1154,13 @@ void TestSvgParser::testIccColor()
 
     int numFetches = 0;
 
-
-
     t.parser.setFileFetcher(
         [&numFetches](const QString &name) {
             numFetches++;
-            const QString fileName = TestUtil::fetchDataFileLazy(name);
+            QString fileName = TestUtil::fetchDataFileLazy(name);
+            if (fileName.isEmpty()) {
+                fileName = TestUtil::fetchDataFileLazy("icc/" + name);
+            }
             QFile file(fileName);
             KIS_ASSERT(file.exists());
             file.open(QIODevice::ReadOnly);
@@ -1149,6 +1174,7 @@ void TestSvgParser::testIccColor()
         QSharedPointer<KoColorBackground>  bg = qSharedPointerDynamicCast<KoColorBackground>(shape->background());
         QVERIFY2(bg->color() == QColor("#00FFFF"), "icc-color is not being loaded during parsing");
     }
+    QCOMPARE(numFetches, 1);
 }
 
 void TestSvgParser::testRenderFillLinearGradientRelativePercent()

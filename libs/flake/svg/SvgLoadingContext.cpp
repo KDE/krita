@@ -1,4 +1,4 @@
-﻿/* This file is part of the KDE project
+/* This file is part of the KDE project
  * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
@@ -236,7 +236,7 @@ void SvgLoadingContext::parseProfile(const QDomElement &element)
 
     if (element.attribute("rendering-intent", "auto") != "auto") {
         // WARNING: Krita does *not* treat rendering intents attributes of the profile!
-        debugFlake << "WARNING: we do *not* treat rendering intents attributes of the profile!";
+        warnFlake << "WARNING: we do *not* treat rendering intents attributes of the profile!";
     }
 
     if (d->profiles.contains(name)) {
@@ -257,12 +257,12 @@ void SvgLoadingContext::parseProfile(const QDomElement &element)
                 profile = engine->addProfile(profileData);
 
                 if (profile->uniqueId() != uniqueId) {
-                    debugFlake << "WARNING: ProfileID of the attached profile doesn't match the one mentioned in SVG element";
-                    debugFlake << "       " << ppVar(profile->uniqueId().toHex());
-                    debugFlake << "       " << ppVar(uniqueId.toHex());
+                    warnFlake << "WARNING: ProfileID of the attached profile doesn't match the one mentioned in SVG element";
+                    warnFlake << "       " << ppVar(profile->uniqueId().toHex());
+                    warnFlake << "       " << ppVar(uniqueId.toHex());
                 }
             } else {
-                debugFlake << "WARNING: couldn't fetch the ICCprofile file!" << fileName;
+                warnFlake << "WARNING: couldn't fetch the ICCprofile file!" << fileName;
             }
         }
     }
@@ -270,7 +270,7 @@ void SvgLoadingContext::parseProfile(const QDomElement &element)
     if (profile) {
         d->profiles.insert(name, profile);
     } else {
-        debugFlake << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
+        warnFlake << "WARNING: couldn't load SVG profile" << ppVar(name) << ppVar(href) << ppVar(uniqueId);
     }
 }
 

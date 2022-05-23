@@ -25,7 +25,7 @@ public:
     void setFollowBrushPosition(bool follow) override;
     void endStroke() override;
 
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return 3; }
     bool isAssistantComplete() const override;
 

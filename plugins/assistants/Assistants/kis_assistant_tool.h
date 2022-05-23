@@ -38,7 +38,8 @@ class KisAssistantTool : public KisTool
         MODE_CREATION, // This is the mode when there is not yet a perspective grid
         MODE_EDITING, // This is the mode when the grid has been created, and we are waiting for the user to click on a control box
         MODE_DRAGGING_NODE, // In this mode one node is translated
-        MODE_DRAGGING_TRANSLATING_TWONODES // This mode is used when creating a new sub perspective grid
+        MODE_DRAGGING_TRANSLATING_TWONODES, // This mode is used when creating a new sub perspective grid
+        MODE_DRAGGING_EDITOR_WIDGET // This mode is used when dragging/moving the little editor widget
     };
 public:
     KisAssistantTool(KoCanvasBase * canvas);

@@ -46,7 +46,7 @@ public:
     void setAdjustedBrushPosition(const QPointF position) override;
     void setFollowBrushPosition(bool follow) override;
     void endStroke() override;
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return isLocal() ? 3 : 1; }
 
     float referenceLineDensity();

@@ -202,7 +202,7 @@ KisPaintingAssistantHandleSP ParallelRulerAssistant::secondLocalHandle() const
     return handles().size() > 3 ? handles()[3] : 0;
 }
 
-QPointF ParallelRulerAssistant::getEditorPosition() const
+QPointF ParallelRulerAssistant::getDefaultEditorPosition() const
 {
     if (handles().size() > 1) {
         return (*handles()[0] + *handles()[1]) * 0.5;

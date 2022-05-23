@@ -131,6 +131,8 @@ struct KisPaintingAssistant::Private {
 
         KisCanvas2* m_canvas {nullptr};
 
+        QPointF editorWidgetOffset {QPointF(0, 0)};
+
         QPixmapCache::Key cached;
         QRect cachedRect; // relative to boundingRect().topLeft()
 
@@ -258,6 +260,11 @@ void KisPaintingAssistant::setSnappingActive(bool set)
     d->s->isSnappingActive = set;
 }
 
+QPointF KisPaintingAssistant::getEditorPosition() const
+{
+    return getDefaultEditorPosition() + d->s->editorWidgetOffset;
+}
+
 bool KisPaintingAssistant::canBeLocal() const
 {
     return false;
@@ -271,6 +278,16 @@ bool KisPaintingAssistant::isLocal() const
 void KisPaintingAssistant::setLocal(bool value)
 {
     d->s->isLocal = value;
+}
+
+QPointF KisPaintingAssistant::editorWidgetOffset()
+{
+    return d->s->editorWidgetOffset;
+}
+
+void KisPaintingAssistant::setEditorWidgetOffset(QPointF offset)
+{
+    d->s->editorWidgetOffset = offset;
 }
 
 

@@ -28,7 +28,7 @@ public:
     void setFollowBrushPosition(bool follow) override;
     void endStroke() override;
 
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return 4; }
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached = true,KisCanvas2* canvas=0, bool assistantVisible=true, bool previewVisible=true) override;
 

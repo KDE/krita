@@ -381,7 +381,10 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         }
         if (QRectF(actionsPosition + QPointF(10, 10), editorShared.boundingSize).adjusted(-2, -2, 2, 2).contains(uiMousePosition)) {
             newAssistantAllowed = false;
+            m_internalMode = MODE_DRAGGING_EDITOR_WIDGET;
             assistantSelected(assistant);
+            m_dragStart = event->point;
+            m_dragEnd = event->point;
         }
     }
     if (newAssistantAllowed==true){//don't make a new assistant when I'm just toggling visibility//
@@ -456,6 +459,13 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
         m_assistantDrag->uncache();
         m_currentAdjustment = newAdjustment;
         m_canvas->updateCanvas();
+
+    } else if (m_internalMode == MODE_DRAGGING_EDITOR_WIDGET) {
+
+        KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+        QPointF currentOffset = selectedAssistant->editorWidgetOffset();
+        selectedAssistant->setEditorWidgetOffset(currentOffset + (event->point - m_dragEnd));
+        m_dragEnd = event->point;
 
     } else {
         event->ignore();
@@ -644,6 +654,10 @@ void KisAssistantTool::endActionImpl(KoPointerEvent *event)
     } else if(m_internalMode == MODE_DRAGGING_TRANSLATING_TWONODES) {
         addAssistant();
         m_internalMode = MODE_CREATION;
+    } else if (m_internalMode == MODE_DRAGGING_EDITOR_WIDGET) {
+        KisPaintingAssistantSP selectedAssistant = m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+        QPointF currentOffset = selectedAssistant->editorWidgetOffset();
+        selectedAssistant->setEditorWidgetOffset(currentOffset + (event->point - m_dragEnd));
     }
     else {
         event->ignore();

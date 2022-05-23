@@ -236,7 +236,7 @@ InfiniteRulerAssistant::ClippingResult InfiniteRulerAssistant::clipLineParametri
     return ClippingResult{tmin < tmax, tmin, tmax};
 }
 
-QPointF InfiniteRulerAssistant::getEditorPosition() const
+QPointF InfiniteRulerAssistant::getDefaultEditorPosition() const
 {
     return (*handles()[0]);
 }

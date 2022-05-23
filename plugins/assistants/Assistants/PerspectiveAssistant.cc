@@ -370,7 +370,7 @@ void PerspectiveAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter
     Q_UNUSED(assistantVisible);
 }
 
-QPointF PerspectiveAssistant::getEditorPosition() const
+QPointF PerspectiveAssistant::getDefaultEditorPosition() const
 {
     QPointF centroid(0, 0);
     for (int i = 0; i < 4; ++i) {

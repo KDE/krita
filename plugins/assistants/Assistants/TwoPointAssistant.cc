@@ -458,7 +458,7 @@ KisPaintingAssistantHandleSP TwoPointAssistant::secondLocalHandle() const
     }
 }
 
-QPointF TwoPointAssistant::getEditorPosition() const
+QPointF TwoPointAssistant::getDefaultEditorPosition() const
 {
     int centerOfVisionHandle = 2;
     if (handles().size() > centerOfVisionHandle) {

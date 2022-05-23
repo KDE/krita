@@ -593,7 +593,7 @@ QRect PerspectiveEllipseAssistant::boundingRect() const
     }
 }
 
-QPointF PerspectiveEllipseAssistant::getEditorPosition() const
+QPointF PerspectiveEllipseAssistant::getDefaultEditorPosition() const
 {
     QPointF centroid(0, 0);
     for (int i = 0; i < 4; ++i) {

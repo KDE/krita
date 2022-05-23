@@ -135,7 +135,7 @@ QRect EllipseAssistant::boundingRect() const
     }
 }
 
-QPointF EllipseAssistant::getEditorPosition() const
+QPointF EllipseAssistant::getDefaultEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

@@ -36,7 +36,7 @@ public:
     void setFollowBrushPosition(bool follow) override;
     void endStroke() override;
 
-    QPointF getEditorPosition() const override;
+    QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return isLocal() ? 5 : 3; }
 
     void saveCustomXml(QXmlStreamWriter* xml) override;

@@ -220,7 +220,7 @@ QRect FisheyePointAssistant::boundingRect() const
     }
 }
 
-QPointF FisheyePointAssistant::getEditorPosition() const
+QPointF FisheyePointAssistant::getDefaultEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

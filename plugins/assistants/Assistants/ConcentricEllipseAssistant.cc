@@ -192,7 +192,7 @@ QRect ConcentricEllipseAssistant::boundingRect() const
     }
 }
 
-QPointF ConcentricEllipseAssistant::getEditorPosition() const
+QPointF ConcentricEllipseAssistant::getDefaultEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

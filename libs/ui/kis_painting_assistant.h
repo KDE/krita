@@ -112,7 +112,8 @@ public:
     virtual void endStroke() {}
     virtual void setAdjustedBrushPosition(const QPointF position) { Q_UNUSED(position) }
     virtual void setFollowBrushPosition(bool follow) { Q_UNUSED(follow) }
-    virtual QPointF getEditorPosition() const = 0; // Returns editor widget position in document-space coordinates.
+    virtual QPointF getDefaultEditorPosition() const = 0; // Returns standard editor widget position for this assistant
+    virtual QPointF getEditorPosition() const; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
 
     /**
@@ -130,6 +131,9 @@ public:
      * @param value set the indication if the assistant is limited to a rectangular area or not
      */
     void setLocal(bool value);
+
+    QPointF editorWidgetOffset();
+    void setEditorWidgetOffset(QPointF offset);
 
     void replaceHandle(KisPaintingAssistantHandleSP _handle, KisPaintingAssistantHandleSP _with);
     void addHandle(KisPaintingAssistantHandleSP handle, HandleType type);

@@ -306,7 +306,7 @@ KisPaintingAssistantHandleSP VanishingPointAssistant::secondLocalHandle() const
     }
 }
 
-QPointF VanishingPointAssistant::getEditorPosition() const
+QPointF VanishingPointAssistant::getDefaultEditorPosition() const
 {
     int pointHandle = 0;
     if (handles().size() > pointHandle) {

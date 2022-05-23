@@ -210,7 +210,7 @@ void RulerAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *conv
     drawPath(gc, path, isSnappingActive());
 }
 
-QPointF RulerAssistant::getEditorPosition() const
+QPointF RulerAssistant::getDefaultEditorPosition() const
 {
     return (*handles()[0] + *handles()[1]) * 0.5;
 }

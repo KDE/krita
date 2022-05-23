@@ -51,6 +51,7 @@ struct FreehandStrokeStrategy::Private
         if (needsAsynchronousUpdates) {
             timeSinceLastUpdate.start();
         }
+        efficiencyMeasurer.setEnabled(rhs.efficiencyMeasurer.isEnabled());
     }
 
     KisStrokeRandomSource randomSource;

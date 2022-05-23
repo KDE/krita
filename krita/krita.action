@@ -197,7 +197,7 @@
       <text>Search Actions</text>
       <whatsThis/>
       <toolTip>Open the command bar to search through actions.</toolTip>
-      <iconText>Search Actions.</iconText>
+      <iconText>Search Actions</iconText>
       <shortcut>Ctrl+Return</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -813,7 +813,7 @@
       <text>Toggle Snap To Assistants</text>
       <whatsThis/>
       <toolTip>Toggle Snap to Assistants</toolTip>
-      <iconText>ToggleAssistant</iconText>
+      <iconText>Toggle Snap To Assistants</iconText>
       <shortcut>Ctrl+Shift+L</shortcut>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -1762,7 +1762,7 @@
       <text>Previous Frame</text>
       <whatsThis/>
       <toolTip>Change time to previous frame</toolTip>
-      <iconText>Change time to previous frame</iconText>
+      <iconText>Previous Frame</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1774,7 +1774,7 @@
       <text>Next Frame</text>
       <whatsThis/>
       <toolTip>Change time to next frame</toolTip>
-      <iconText>Change time to next frame</iconText>
+      <iconText>Next Frame</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1786,7 +1786,7 @@
       <text>Previous Keyframe</text>
       <whatsThis/>
       <toolTip>Change time to previous keyframe</toolTip>
-      <iconText>Change time to previous keyframe</iconText>
+      <iconText>Previous Keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1798,7 +1798,7 @@
       <text>Next Keyframe</text>
       <whatsThis/>
       <toolTip>Change time to next keyframe</toolTip>
-      <iconText>Change time to next keyframe</iconText>
+      <iconText>Next Keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1810,7 +1810,7 @@
       <text>Previous Matching Keyframe</text>
       <whatsThis/>
       <toolTip>Change time to previous keyframe of the same color</toolTip>
-      <iconText>Change time to previous matching keyframe</iconText>
+      <iconText>Previous Matching Keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1822,7 +1822,7 @@
       <text>Next Matching Keyframe</text>
       <whatsThis/>
       <toolTip>Change time to next keyframe of the same color</toolTip>
-      <iconText>Change time to next matching keyframe</iconText>
+      <iconText>Next Matching Keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1834,7 +1834,7 @@
       <text>Previous Unfiltered Keyframe</text>
       <whatsThis/>
       <toolTip>Change time to previous keyframe that has visible onion skin</toolTip>
-      <iconText>Change time to previous matching keyframe</iconText>
+      <iconText>Previous Unfiltered Keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
@@ -1846,7 +1846,7 @@
       <text>Next Unfiltered Keyframe</text>
       <whatsThis/>
       <toolTip>Change time to next keyframe that has visible onion skin</toolTip>
-      <iconText>Change time to next matching keyframe</iconText>
+      <iconText>Next Unfiltered Keyframe</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>

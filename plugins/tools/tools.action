@@ -84,7 +84,7 @@
       <text>Fill Tool</text>
       <whatsThis/>
       <toolTip>Fill a contiguous area of color with a color, or fill a selection.</toolTip>
-      <iconText>Fill</iconText>
+      <iconText>Fill Tool</iconText>
       <shortcut>F</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip/>

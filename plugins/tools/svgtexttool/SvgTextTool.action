@@ -43,7 +43,7 @@
       <text>Font Size</text>
     </Action>
     <Action name="svg_font">
-      <iconText>Font</iconText>
+      <iconText>Font...</iconText>
       <shortcut>Ctrl+Alt+F</shortcut>
       <toolTip>Change character size, font, boldface, italics etc.</toolTip>
       <icon/>
@@ -53,7 +53,7 @@
       <text>Font...</text>
     </Action>
     <Action name="svg_insert_special_character">
-      <iconText>Special Character</iconText>
+      <iconText>Special Character...</iconText>
       <shortcut>Alt+Shift+C</shortcut>
       <toolTip>Insert one or more symbols or characters not found on the keyboard</toolTip>
       <icon>character-set</icon>
@@ -243,7 +243,7 @@
       <text context="Text Editor Settings label">Settings...</text>
     </Action>
     <Action name="svg_sample_color">
-      <iconText>Colorsampler</iconText>
+      <iconText>Color Sampler</iconText>
       <shortcut></shortcut>
       <toolTip>Sample a color from the screen</toolTip>
       <icon></icon>

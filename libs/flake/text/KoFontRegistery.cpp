@@ -169,7 +169,7 @@ bool KoFontRegistery::configureFaces(QVector<FT_Face> &faces,
             int selectedIndex = -1;
 
             for (int i=0; i<face->num_fixed_sizes; i++) {
-                int newDelta = qAbs((fontSizePixels) - face->available_sizes[i].height);
+                int newDelta = qAbs((fontSizePixels) - face->available_sizes[i].x_ppem);
                 if (newDelta < sizeDelta || i == 0) {
                     selectedIndex = i;
                     sizeDelta = newDelta;
@@ -178,9 +178,11 @@ bool KoFontRegistery::configureFaces(QVector<FT_Face> &faces,
 
             if (selectedIndex >= 0) {
                 if (FT_HAS_COLOR(face)) {
-                    qreal scale = qreal(fontSizePixels/face->available_sizes[selectedIndex].x_ppem);
+                    long scale = long(65535 * qreal(fontSizePixels)/qreal(face->available_sizes[selectedIndex].x_ppem));
                     FT_Matrix matrix;
                     matrix.xx = scale;
+                    matrix.xy = 0;
+                    matrix.yx = 0;
                     matrix.yy = scale;
                     FT_Vector v;
                     FT_Set_Transform(face, &matrix, &v);

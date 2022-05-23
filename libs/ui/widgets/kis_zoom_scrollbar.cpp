@@ -9,6 +9,7 @@
 #include "kis_config.h"
 #include "kis_global.h"
 #include "kis_debug.h"
+#include "kis_tool_utils.h"
 #include <QMouseEvent>
 #include <QTabletEvent>
 
@@ -82,7 +83,7 @@ void KisZoomableScrollBar::handleWrap( const QPoint &accel, const QPoint &mouseC
             y -= (windowHeight - 2);
         }
 
-        QCursor::setPos(x, y);
+        KisToolUtils::setCursorPos(QPoint(x, y));
         lastKnownPosition = QPoint(x, y) - accel;
 
         //Important -- teleportation needs to caught to prevent high-acceleration
@@ -195,7 +196,7 @@ void KisZoomableScrollBar::mouseReleaseEvent(QMouseEvent *event)
                 qMax(minimumCoordinates.x(), qMin(maximumCoordinates.x(), desiredCoordinates.x())),
                 qMax(minimumCoordinates.y(), qMin(maximumCoordinates.y(), desiredCoordinates.y()))
                 );
-    QCursor::setPos(cursorPosition);
+    KisToolUtils::setCursorPos(cursorPosition);
     setCursor(Qt::ArrowCursor);
     QScrollBar::mouseReleaseEvent(event);
 }

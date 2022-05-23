@@ -24,6 +24,7 @@
 #include "kis_liquify_paint_helper.h"
 #include "kis_liquify_transform_worker.h"
 #include "KoCanvasResourceProvider.h"
+#include "kis_tool_utils.h"
 
 
 struct KisLiquifyTransformStrategy::Private
@@ -242,7 +243,7 @@ bool KisLiquifyTransformStrategy::endAlternateAction(KoPointerEvent *event, KisT
     Q_UNUSED(event);
 
     if (action == KisTool::ChangeSize || action == KisTool::ChangeSizeSnap) {
-        QCursor::setPos(m_d->startResizeGlobalCursorPos);
+        KisToolUtils::setCursorPos(m_d->startResizeGlobalCursorPos);
         return true;
     } else if (action == KisTool::SampleFgNode || action == KisTool::SampleBgNode ||
                action == KisTool::SampleFgImage || action == KisTool::SampleBgImage) {

@@ -47,6 +47,7 @@
 #include "kis_painting_information_builder.h"
 #include "kis_tool_freehand_helper.h"
 #include "strokes/freehand_stroke.h"
+#include "kis_tool_utils.h"
 
 using namespace std::placeholders; // For _1 placeholder
 
@@ -397,7 +398,7 @@ void KisToolFreehand::endAlternateAction(KoPointerEvent *event, AlternateAction 
         return;
     }
 
-    QCursor::setPos(m_initialGestureGlobalPoint);
+    KisToolUtils::setCursorPos(m_initialGestureGlobalPoint);
     requestUpdateOutline(m_initialGestureDocPoint, 0);
 
     setMode(HOVER_MODE);

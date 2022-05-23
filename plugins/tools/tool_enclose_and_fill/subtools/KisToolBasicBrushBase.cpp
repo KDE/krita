@@ -18,6 +18,7 @@
 #include <kis_config_notifier.h>
 #include <kis_image_config.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <kis_tool_utils.h>
 
 #include "KisToolBasicBrushBase.h"
 
@@ -211,7 +212,7 @@ void KisToolBasicBrushBase::endAlternateAction(KoPointerEvent *event, AlternateA
         return;
     }
 
-    QCursor::setPos(m_changeSizeInitialGestureGlobalPoint);
+    KisToolUtils::setCursorPos(m_changeSizeInitialGestureGlobalPoint);
     requestUpdateOutline(m_changeSizeInitialGestureDocPoint, 0);
 
     setMode(HOVER_MODE);

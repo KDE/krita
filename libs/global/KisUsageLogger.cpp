@@ -270,6 +270,9 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tName: ").append(screen->name());
         info.append("\n\t\tDepth: ").append(QString::number(screen->depth()));
         info.append("\n\t\tScale: ").append(QString::number(screen->devicePixelRatio()));
+        info.append("\n\t\tPosition: ").append(QString::number(screen->geometry().x()))
+                .append(", ")
+                .append(QString::number(screen->geometry().y()));
         info.append("\n\t\tResolution in pixels: ").append(QString::number(screen->geometry().width()))
                 .append("x")
                 .append(QString::number(screen->geometry().height()));

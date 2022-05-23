@@ -60,6 +60,14 @@ KisNodeSP KRITAUI_EXPORT findNode(KisNodeSP node, const QPoint &point, bool whol
  * Clears the image. Selection is optional, use 0 to clear everything.
  */
 bool KRITAUI_EXPORT clearImage(KisImageSP image, KisNodeList nodes, KisSelectionSP selection);
+
+/**
+ * Moves the cursor (hot spot) of the primary screen to the global screen position (x, y).
+ *
+ * This function is provided as a replacement to `QCursor::setPos` which does
+ * not properly handle multiple monitors with different scale factors.
+ */
+void KRITAUI_EXPORT setCursorPos(const QPoint &point);
 }
 
 #endif // KIS_TOOL_UTILS_H

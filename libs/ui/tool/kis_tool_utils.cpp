@@ -18,6 +18,8 @@
 #include "kis_command_utils.h"
 #include "kis_processing_applicator.h"
 
+#include <QApplication>
+
 namespace KisToolUtils {
 
     bool sampleColor(KoColor &out_color, KisPaintDeviceSP dev, const QPoint &pos,
@@ -227,5 +229,15 @@ namespace KisToolUtils {
         sampleMerged = props.getBool("sampleMerged", true);
         radius = props.getInt("radius", 1);
         blend = props.getInt("blend", 100);
+    }
+
+    void KRITAUI_EXPORT setCursorPos(const QPoint &point)
+    {
+        // https://bugreports.qt.io/browse/QTBUG-99009
+        QScreen *screen = qApp->screenAt(point);
+        if (!screen) {
+            screen = qApp->primaryScreen();
+        }
+        QCursor::setPos(screen, point);
     }
 }

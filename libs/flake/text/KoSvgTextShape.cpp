@@ -384,7 +384,7 @@ void KoSvgTextShape::relayout() const
             .propertyOrDefault(KoSvgTextProperties::DirectionId)
             .toInt());
 
-    bool isHorizontal = writingMode != KoSvgText::HorizontalTB;
+    bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
     FT_Int32 loadFlags = FT_LOAD_RENDER;
 
@@ -577,7 +577,7 @@ void KoSvgTextShape::relayout() const
                 if (FT_HAS_COLOR(face)) {
                     loadFlags |= FT_LOAD_COLOR;
                 }
-                if (FT_HAS_VERTICAL(face)) {
+                if (!isHorizontal && FT_HAS_VERTICAL(face)) {
                     loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
                 }
                 if (start == 0) {
@@ -648,8 +648,25 @@ void KoSvgTextShape::relayout() const
             charResult.path = glyph;
         }
         // TODO: Handle glyph clusters better...
-        charResult.image =
-            d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph);
+        FT_Matrix matrix;
+        FT_Vector delta;
+        FT_Get_Transform(glyphs[g].ftface, &matrix, &delta);
+        QTransform glyphTf;
+        qreal factor_16 = 1.0 / 65536.0;
+        glyphTf.setMatrix(matrix.xx * factor_16,
+                          matrix.xy * factor_16,
+                          0,
+                          matrix.yx * factor_16,
+                          matrix.yy * factor_16,
+                          0,
+                          0,
+                          0,
+                          1);
+        charResult.image = d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph)
+                               .transformed(glyphTf,
+                                            d->textRendering == OptimizeSpeed
+                                                ? Qt::FastTransformation
+                                                : Qt::SmoothTransformation);
 
         // Retreive CPAL/COLR V0 color layers, directly based off the sample
         // code in the freetype docs.
@@ -713,31 +730,37 @@ void KoSvgTextShape::relayout() const
         bool usePixmap =
             !charResult.image.isNull() && charResult.path.isEmpty();
 
+        QRectF bbox;
         if (usePixmap) {
-            QPointF topLeft(glyphs[g].ftface->glyph->bitmap_left * 64,
-                            (glyphs[g].ftface->glyph->bitmap_top
-                             - charResult.image.size().height())
-                                * 64);
-            charResult.boundingBox =
-                QRectF(topLeft, charResult.image.size() * 64);
+            QPointF topLeft((glyphs[g].ftface->glyph->bitmap_left * 64),
+                            (glyphs[g].ftface->glyph->bitmap_top * 64));
+            topLeft = glyphTf.map(topLeft);
+            QPointF bottomRight(topLeft.x() + (charResult.image.height() * 64),
+                                topLeft.y() - (charResult.image.height() * 64));
+            bbox = QRectF(topLeft, bottomRight);
+            if (isHorizontal) {
+                bbox.setWidth(ftTF.inverted().map(charResult.advance).x());
+            } else {
+                bbox.setHeight(ftTF.inverted().map(charResult.advance).y());
+                bbox.translate(-(bbox.width() * 0.5), 0);
+            }
         } else if (isHorizontal) {
-            charResult.boundingBox =
-                QRectF(0,
-                       glyphs[g].ftface->size->metrics.descender,
-                       ftTF.inverted().map(charResult.advance).x(),
-                       (glyphs[g].ftface->size->metrics.ascender
-                        - glyphs[g].ftface->size->metrics.descender));
+            bbox = QRectF(0,
+                          glyphs[g].ftface->size->metrics.descender,
+                          ftTF.inverted().map(charResult.advance).x(),
+                          (glyphs[g].ftface->size->metrics.ascender
+                           - glyphs[g].ftface->size->metrics.descender));
         } else {
-            charResult.boundingBox =
-                QRectF(-(glyphs[g].ftface->size->metrics.height * 0.5),
-                       0,
-                       glyphs[g].ftface->size->metrics.height,
-                       -(glyphs[g].ftface->glyph->metrics.vertBearingY
-                         + glyphs[g].ftface->glyph->metrics.height));
+            bbox = QRectF(glyphs[g].ftface->glyph->metrics.vertBearingX,
+                          0,
+                          glyphs[g].ftface->glyph->metrics.width,
+                          ftTF.inverted().map(charResult.advance).y());
         }
-        charResult.boundingBox = ftTF.mapRect(charResult.boundingBox);
+        charResult.boundingBox = ftTF.mapRect(bbox);
 
-        charResult.boundingBox |= charResult.path.boundingRect();
+        if (!charResult.path.isEmpty()) {
+            charResult.boundingBox |= charResult.path.boundingRect();
+        }
 
         totalAdvanceFTFontCoordinates += advance;
         charResult.cssPosition =

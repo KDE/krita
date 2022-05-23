@@ -890,7 +890,7 @@
     </Action>
   </Actions>
   <Actions category="Filters">
-    <text comment="Filter as an effect">Filters</text>
+    <text context="Filter as an effect">Filters</text>
     <Action name="krita_filter_colortoalpha">
       <icon>color-to-alpha</icon>
       <text>&amp;Color to Alpha...</text>
@@ -3459,8 +3459,8 @@
       <icon>properties</icon>
       <text>&amp;Properties...</text>
       <whatsThis/>
-      <toolTip comment="Layer Properties">Properties</toolTip>
-      <iconText comment="Layer Properties">Properties</iconText>
+      <toolTip context="Layer Properties">Properties</toolTip>
+      <iconText context="Layer Properties">Properties</iconText>
       <activationFlags>1000</activationFlags>
       <activationConditions>1</activationConditions>
       <shortcut>F3</shortcut>

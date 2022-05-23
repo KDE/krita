@@ -903,6 +903,7 @@ NodeDelegate::Private::propForMousePos(const QModelIndex &index, const QPoint &m
 
     if (clickedIcon >= 0 &&
         clickedIcon < numProps &&
+        realProps[clickedIcon] &&
         distToBorder > scm.iconMargin()) {
 
         return *realProps[clickedIcon];

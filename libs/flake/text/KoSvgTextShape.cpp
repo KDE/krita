@@ -464,13 +464,10 @@ void KoSvgTextShape::relayout() const
 
             // In this section we retrieve the resolved transforms and
             // direction/anchoring that we can get from the subchunks.
-            if (start < text.size()) {
-                if (chunk.transformation.isNull() && start > 0) {
-                    resolvedTransforms[start].rotate =
-                        resolvedTransforms[start - 1].rotate;
-                } else {
+            for (int i = 0; i < length; i++) {
+                if (i < chunk.transformation.size()) {
                     KoSvgText::CharTransformation newTransform =
-                        chunk.transformation;
+                        chunk.transformation.at(i);
                     if (chunk.textInPath) {
                         if (isHorizontal) {
                             newTransform.xPos.reset();
@@ -478,7 +475,10 @@ void KoSvgTextShape::relayout() const
                             newTransform.yPos.reset();
                         }
                     }
-                    resolvedTransforms[start] = newTransform;
+                    resolvedTransforms[start + i] = newTransform;
+                } else if (start > 0) {
+                    resolvedTransforms[start + i].rotate =
+                        resolvedTransforms[start - 1].rotate;
                 }
             }
             for (int i = 0; i < length; i++) {

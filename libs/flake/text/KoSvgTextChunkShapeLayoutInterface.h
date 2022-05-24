@@ -168,7 +168,7 @@ public:
 
         SubChunk(const QString &_text,
                  const KoSvgText::KoSvgCharChunkFormat &_format,
-                 const KoSvgText::CharTransformation &t,
+                 const QVector<KoSvgText::CharTransformation> &t,
                  bool textInPath = false)
             : text(_text)
             , format(_format)
@@ -179,18 +179,12 @@ public:
 
         QString text;
         KoSvgText::KoSvgCharChunkFormat format;
-        KoSvgText::CharTransformation transformation;
+        QVector<KoSvgText::CharTransformation> transformation;
         bool textInPath = false;
     };
 
     /**
      * Return a linearized representation of a subtree of text "subchunks".
-     *
-     * TRICK ALERT: every `SubChunk` represents a single `KoSvgTextChunkShape`.
-     * The name is changed because KoSvgTextChunkShape is not the same thing as
-     * "svg text chunk". Later in the layouting code, the "subchunks" will be
-     * split up into even smaller parts and then joined into proper "svg text
-     * chunks".
      */
     virtual QVector<SubChunk>
     collectSubChunks(bool textInPath = false) const = 0;

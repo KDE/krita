@@ -452,8 +452,8 @@ void TestSvgText::testComplexText()
 
         QCOMPARE(subChunks.size(), 7);
         QCOMPARE(subChunks[0].text.size(), 1);
-        QCOMPARE(*subChunks[0].transformation.xPos, 7.0);
-        QVERIFY(!subChunks[1].transformation.xPos);
+        QCOMPARE(*subChunks[0].transformation.at(0).xPos, 7.0);
+        QVERIFY(!subChunks[0].transformation.at(0).xPos);
     }
 
     {   // chunk 1: "out"

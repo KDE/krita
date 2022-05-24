@@ -345,26 +345,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             if (transforms.isEmpty()) {
                 result << SubChunk(text, format);
             } else {
-                for (int i = 0; i < transforms.size(); i++) {
-                    const KoSvgText::CharTransformation baseTransform = transforms[i];
-                    int subChunkLength = 1;
-
-                    for (int j = i + 1; j < transforms.size(); j++) {
-                        if (transforms[j].isNull()) {
-                            subChunkLength++;
-                        } else {
-                            break;
-                        }
-                    }
-
-                    if (i + subChunkLength >= transforms.size()) {
-                        subChunkLength = text.size() - i;
-                    }
-
-                    result << SubChunk(text.mid(i, subChunkLength), format,  baseTransform, textInPath);
-                    i += subChunkLength - 1;
-                }
-
+                result << SubChunk(text, format,  transforms, textInPath);
             }
 
             if (!bidiClosing.isEmpty()) {

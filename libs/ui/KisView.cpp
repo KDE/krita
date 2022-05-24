@@ -114,7 +114,7 @@ public:
     QPointer<KisDocument> document; // our KisDocument
     QWidget *tempActiveWidget = 0;
 
-    KActionCollection* actionCollection;
+    KisKActionCollection* actionCollection;
     KisCoordinatesConverter viewConverter;
     KisCanvasController canvasController;
     KisCanvas2 canvas;

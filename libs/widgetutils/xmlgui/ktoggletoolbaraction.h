@@ -18,7 +18,7 @@
 #include <ktoggleaction.h>
 #include <kritawidgetutils_export.h>
 
-class KToolBar;
+class KisToolBar;
 
 /**
  * An action that takes care of everything associated with
@@ -38,7 +38,7 @@ class KRITAWIDGETUTILS_EXPORT KToggleToolBarAction : public KToggleAction
 
 public:
     /**
-     * Create a KToggleToolbarAction that manages the toolbar
+     * Create a KisKToggleToolbarAction that manages the toolbar
      * named @p toolBarName. This can be either the name of a
      * toolbar in an xml ui file, or a toolbar programmatically
      * created with that name.
@@ -50,7 +50,7 @@ public:
     KToggleToolBarAction(const char *toolBarName, const QString &text, QObject *parent);
 
     /**
-     * Create a KToggleToolbarAction that manages the @p toolBar.
+     * Create a KisKToggleToolbarAction that manages the @p toolBar.
      * This can be either the name of a toolbar in an xml ui file,
      * or a toolbar programmatically created with that name.
      *
@@ -58,7 +58,7 @@ public:
      * @param text The action's text
      * @param parent The action's parent object.
      */
-    KToggleToolBarAction(KToolBar *toolBar, const QString &text, QObject *parent);
+    KToggleToolBarAction(KisToolBar *toolBar, const QString &text, QObject *parent);
 
     /**
      * Destroys toggle toolbar action.
@@ -68,7 +68,7 @@ public:
     /**
      * Returns a pointer to the tool bar it manages.
      */
-    KToolBar *toolBar();
+    KisToolBar *toolBar();
 
     /**
      * Reimplemented from @see QObject.

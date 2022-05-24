@@ -16,7 +16,7 @@
 #include "kritawidgetutils_export.h"
 
 
-class KActionCollection;
+class KisKActionCollection;
 class QDomElement;
 class KConfigBase;
 class KisShortcutsDialog;
@@ -36,7 +36,7 @@ class KisShortcutsDialog;
  * sort of data you wish to the .action configuration file.
  *
  * This class is also in charge of displaying the shortcut configuration dialog.
- * The interplay between this class, KActionCollection, KisShortcutsEditor and
+ * The interplay between this class, KisKActionCollection, KisShortcutsEditor and
  * so on can be complex, and is sometimes synchronized by file I/O by reading
  * and writing the configuration files mentioned above.
  *

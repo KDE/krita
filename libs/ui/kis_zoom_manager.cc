@@ -40,7 +40,7 @@
 class KisZoomController : public KoZoomController
 {
 public:
-    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KActionCollection *actionCollection, QObject *parent)
+    KisZoomController(KoCanvasController *co, KisCoordinatesConverter *zh, KisKActionCollection *actionCollection, QObject *parent)
         : KoZoomController(co, zh, actionCollection, parent),
           m_converter(zh)
     {
@@ -103,7 +103,7 @@ void KisZoomManager::updateScreenResolution(QWidget *parentWidget)
     changeAspectMode(m_aspectMode);
 }
 
-void KisZoomManager::setup(KActionCollection * actionCollection)
+void KisZoomManager::setup(KisKActionCollection * actionCollection)
 {
 
     KisImageWSP image = m_view->image();

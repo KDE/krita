@@ -19,7 +19,7 @@ class QWidget;
 class QAction;
 
 class KAboutData;
-class KHelpMenuPrivate;
+class KisKHelpMenuPrivate;
 
 /**
  * @short Standard %KDE help menu with dialog boxes.
@@ -27,33 +27,33 @@ class KHelpMenuPrivate;
  * This class provides the standard %KDE help menu with the default "about"
  * dialog boxes and help entry.
  *
- * This class is used in KMainWindow so
+ * This class is used in KisKMainWindow so
  * normally you don't need to use this class yourself. However, if you
  * need the help menu or any of its dialog boxes in your code that is
- * not subclassed from KMainWindow you should use this class.
+ * not subclassed from KisKMainWindow you should use this class.
  *
  * The usage is simple:
  *
  * \code
- * mHelpMenu = new KHelpMenu( this, <someText> );
+ * mHelpMenu = new KisKHelpMenu( this, <someText> );
  * kmenubar->addMenu(mHelpMenu->menu() );
  * \endcode
  *
  * or if you just want to open a dialog box:
  *
  * \code
- * mHelpMenu = new KHelpMenu( this, <someText> );
+ * mHelpMenu = new KisKHelpMenu( this, <someText> );
  * connect( this, SIGNAL(someSignal()), mHelpMenu,SLOT(aboutKDE()));
  * \endcode
  *
  * IMPORTANT:
- * The first time you use KHelpMenu::menu(), a QMenu object is
+ * The first time you use KisKHelpMenu::menu(), a QMenu object is
  * allocated. Only one object is created by the class so if you call
- * KHelpMenu::menu() twice or more, the same pointer is returned. The class
+ * KisKHelpMenu::menu() twice or more, the same pointer is returned. The class
  * will destroy the popupmenu in the destructor so do not delete this
  * pointer yourself.
  *
- * The KHelpMenu object will be deleted when its parent is destroyed but you
+ * The KisKHelpMenu object will be deleted when its parent is destroyed but you
  * can delete it yourself if you want. The code below will always work.
  *
  * \code
@@ -75,7 +75,7 @@ class KHelpMenuPrivate;
  * void MyClass::myFunc()
  * {
  *   ..
- *   KHelpMenu *helpMenu = new KHelpMenu( this );
+ *   KisKHelpMenu *helpMenu = new KisKHelpMenu( this );
  *   connect( helpMenu, SIGNAL(showAboutApplication()),
  *          this, SLOT(myDialogSlot()));
  *   ..
@@ -102,7 +102,7 @@ class KHelpMenuPrivate;
  * @author Espen Sand (espen@kde.org)
  */
 
-class KRITAWIDGETUTILS_EXPORT KHelpMenu : public QObject
+class KRITAWIDGETUTILS_EXPORT KisKHelpMenu : public QObject
 {
     Q_OBJECT
 
@@ -118,7 +118,7 @@ public:
      *        added to the dialog.
      *
      */
-    explicit KHelpMenu(QWidget *parent = 0, const QString &aboutAppText = QString(),
+    explicit KisKHelpMenu(QWidget *parent = 0, const QString &aboutAppText = QString(),
                        bool showWhatsThis = true);
 
     /**
@@ -134,7 +134,7 @@ public:
      * @param showWhatsThis Decides whether a "Whats this" entry will be
      *        added to the dialog.
      */
-    KHelpMenu(QWidget *parent, const KAboutData &aboutData,
+    KisKHelpMenu(QWidget *parent, const KAboutData &aboutData,
               bool showWhatsThis = true);
 
     /**
@@ -142,7 +142,7 @@ public:
      *
      * Destroys dialogs and the menu pointer returned by menu
      */
-    ~KHelpMenu() override;
+    ~KisKHelpMenu() override;
 
     /**
      * Returns a popup menu you can use in the menu bar or where you
@@ -217,7 +217,7 @@ private Q_SLOTS:
     /**
      * Connected to the menu pointer (if created) to detect a delete
      * operation on the pointer. You should not delete the pointer in your
-     * code yourself. Let the KHelpMenu destructor do the job.
+     * code yourself. Let the KisKHelpMenu destructor do the job.
      */
     void menuDestroyed();
 
@@ -245,7 +245,7 @@ Q_SIGNALS:
     void showAboutApplication();
 
 private:
-    KHelpMenuPrivate *const d;
+    KisKHelpMenuPrivate *const d;
 };
 
 #endif

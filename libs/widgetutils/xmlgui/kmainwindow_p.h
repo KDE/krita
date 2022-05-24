@@ -25,13 +25,13 @@
 class QObject;
 class QSessionManager;
 class QTimer;
-class KHelpMenu;
-class KMainWindow;
+class KisKHelpMenu;
+class KisKMainWindow;
 
-class KMainWindowPrivate
+class KisKMainWindowPrivate
 {
 public:
-    virtual ~KMainWindowPrivate() = default;
+    virtual ~KisKMainWindowPrivate() = default;
 
     bool autoSaveSettings: 1;
     bool settingsDirty: 1;
@@ -41,8 +41,8 @@ public:
     QTimer *settingsTimer;
     QTimer *sizeTimer;
     QRect defaultWindowSize;
-    KHelpMenu *helpMenu;
-    KMainWindow *q;
+    KisKHelpMenu *helpMenu;
+    KisKMainWindow *q;
     QPointer<QObject> dockResizeListener;
     QString dbusName;
     bool letDirtySettings;
@@ -53,8 +53,8 @@ public:
     void _k_slotSettingsChanged(int category);
     void _k_slotSaveAutoSaveSize();
 
-    void init(KMainWindow *_q);
-    void polish(KMainWindow *q);
+    void init(KisKMainWindow *_q);
+    void polish(KisKMainWindow *q);
     enum CallCompression {
         NoCompressCalls = 0,
         CompressCalls

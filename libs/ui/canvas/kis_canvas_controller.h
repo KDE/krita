@@ -21,7 +21,7 @@ class KRITAUI_EXPORT KisCanvasController : public KoCanvasControllerWidget
     Q_OBJECT
 
 public:
-    KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KActionCollection * actionCollection);
+    KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KisKActionCollection * actionCollection);
     ~KisCanvasController() override;
 
     void setCanvas(KoCanvasBase *canvas) override;

@@ -313,7 +313,7 @@ void RecorderDockerDock::unsetCanvas()
 
 void RecorderDockerDock::onMainWindowIsBeingCreated(KisMainWindow *window)
 {
-    KActionCollection *actionCollection = window->viewManager()->actionCollection();
+    KisKActionCollection *actionCollection = window->viewManager()->actionCollection();
     actionCollection->addAction(keyActionRecordToggle, d->recordToggleAction);
     actionCollection->addAction(keyActionExport, d->exportAction);
 }

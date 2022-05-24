@@ -24,7 +24,7 @@
 #include <QList>
 #include <QAction>
 
-class KActionCollection;
+class KisKActionCollection;
 class KisNodeManager;
 
 class KisNodeActivationActionCreatorVisitor : public KisNodeVisitor
@@ -33,7 +33,7 @@ public:
 
     using KisNodeVisitor::visit;
 
-    KisNodeActivationActionCreatorVisitor(KActionCollection *actionCollection, KisNodeManager *nodeManager);
+    KisNodeActivationActionCreatorVisitor(KisKActionCollection *actionCollection, KisNodeManager *nodeManager);
     ~KisNodeActivationActionCreatorVisitor() {}
 
     bool visit(KisNode* node) override {
@@ -89,7 +89,7 @@ private:
     bool createAction(KisNode *node);
 
     KisNodeManager *m_nodeManager {0};
-    KActionCollection *m_actionCollection {0};
+    KisKActionCollection *m_actionCollection {0};
 
 };
 

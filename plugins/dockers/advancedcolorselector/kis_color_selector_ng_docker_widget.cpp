@@ -141,7 +141,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
 {
     if (m_canvas) {
         m_canvas->disconnect(this);
-        KActionCollection *ac = m_canvas->viewManager()->actionCollection();
+        KisKActionCollection *ac = m_canvas->viewManager()->actionCollection();
         ac->takeAction(ac->action("show_color_history"));
         ac->takeAction(ac->action("show_common_colors"));
     }
@@ -153,7 +153,7 @@ void KisColorSelectorNgDockerWidget::setCanvas(KisCanvas2 *canvas)
     m_colorSelectorContainer->setCanvas(canvas);
 
     if (m_canvas && m_canvas->viewManager()) {
-        KActionCollection* actionCollection = canvas->viewManager()->actionCollection();
+        KisKActionCollection* actionCollection = canvas->viewManager()->actionCollection();
 
         actionCollection->addAction("show_color_history", m_colorHistoryAction);
         actionCollection->addAction("show_common_colors", m_commonColorsAction);

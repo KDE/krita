@@ -41,7 +41,7 @@ public:
     }
 
     KisViewManager* viewManager;
-    KActionCollection *actionCollection;
+    KisKActionCollection *actionCollection;
 
     QList<QPointer<KisAction>> actions;
     KoGenericRegistry<KisOperationUIFactory*> uiRegistry;
@@ -49,7 +49,7 @@ public:
 
 };
 
-KisActionManager::KisActionManager(KisViewManager* viewManager, KActionCollection *actionCollection)
+KisActionManager::KisActionManager(KisViewManager* viewManager, KisKActionCollection *actionCollection)
     : d(new Private)
 {
     d->viewManager = viewManager;

@@ -56,13 +56,13 @@ public:
      * @param parent   a parent widget we show ourselves in.
      * @param actionCollection an action collection.
      */
-    KisViewManager(QWidget *parent, KActionCollection *actionCollection);
+    KisViewManager(QWidget *parent, KisKActionCollection *actionCollection);
     ~KisViewManager() override;
 
     /**
      * Retrieves the entire action collection.
      */
-    virtual KActionCollection* actionCollection() const;
+    virtual KisKActionCollection* actionCollection() const;
 
 public:  // Krita specific interfaces
 

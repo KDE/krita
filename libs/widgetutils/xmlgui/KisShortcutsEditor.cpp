@@ -85,7 +85,7 @@ void KisShortcutsEditor::clearSearch()
 }
 
 
-void KisShortcutsEditor::addCollection(KActionCollection *collection, const QString &title)
+void KisShortcutsEditor::addCollection(KisKActionCollection *collection, const QString &title)
 {
     // KXmlGui add action collections unconditionally. If some plugin doesn't
     // provide actions we don't want to create empty subgroups.
@@ -127,9 +127,9 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
     QSet<QAction *> actionsSeen;
 
     // Add a subtree for each category? Perhaps easier to think that this
-    // doesn't exist. Basically you add KActionCategory as a QObject child of
-    // KActionCollection, and then tag objects as belonging to the category.
-    foreach (KActionCategory *category, collection->categories()) {
+    // doesn't exist. Basically you add KisKActionCategory as a QObject child of
+    // KisKActionCollection, and then tag objects as belonging to the category.
+    foreach (KisKActionCategory *category, collection->categories()) {
 
         // Don't display empty categories.
         if (category->actions().isEmpty()) {
@@ -145,7 +145,7 @@ void KisShortcutsEditor::addCollection(KActionCollection *collection, const QStr
             d->addAction(action, hierarchy, KisShortcutsEditorPrivate::Action);
         }
 
-        // Fold in each KActionCategory by default.
+        // Fold in each KisKActionCategory by default.
         hierarchy[KisShortcutsEditorPrivate::Action]->setExpanded(false);
 
     }
@@ -210,7 +210,7 @@ void KisShortcutsEditor::exportConfiguration(KConfigBase *config) const
 
     if (d->actionTypes) {
         KConfigGroup group(config,QStringLiteral("Shortcuts"));
-        foreach (KActionCollection *collection, d->actionCollections) {
+        foreach (KisKActionCollection *collection, d->actionCollections) {
             collection->writeSettings(&group, true);
         }
     }
@@ -230,7 +230,7 @@ void KisShortcutsEditor::saveShortcuts(KConfigGroup *config) const
 
     // Clear and reset temporary shortcuts
     config->deleteGroup();
-    foreach (KActionCollection *collection, d->actionCollections) {
+    foreach (KisKActionCollection *collection, d->actionCollections) {
         collection->writeSettings(config, false);
     }
 

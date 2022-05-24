@@ -588,14 +588,14 @@ ShortcutSettingsTab::ShortcutSettingsTab(QWidget *parent, const char *name)
 
     m_snapshot.reset(new KisActionsSnapshot);
 
-    KActionCollection *collection =
+    KisKActionCollection *collection =
         KisPart::instance()->currentMainwindow()->actionCollection();
 
     Q_FOREACH (QAction *action, collection->actions()) {
         m_snapshot->addAction(action->objectName(), action);
     }
 
-    QMap<QString, KActionCollection*> sortedCollections =
+    QMap<QString, KisKActionCollection*> sortedCollections =
         m_snapshot->actionCollections();
 
     for (auto it = sortedCollections.constBegin(); it != sortedCollections.constEnd(); ++it) {

@@ -265,7 +265,7 @@ KRITAWIDGETUTILS_EXPORT QAction *mail(const QObject *recvr, const char *slot, QO
  *
  * Note that you probably want to connect this action to either QWidget::close()
  * or QApplication::closeAllWindows(), but not QApplication::quit(), so that
- * KMainWindow::queryClose() is called on any open window (to warn the user
+ * KisKMainWindow::queryClose() is called on any open window (to warn the user
  * about unsaved changes for example).
  */
 KRITAWIDGETUTILS_EXPORT QAction *quit(const QObject *recvr, const char *slot, QObject *parent);
@@ -526,7 +526,7 @@ KRITAWIDGETUTILS_EXPORT QAction *saveOptions(const QObject *recvr, const char *s
 /**
  * Display the configure key bindings dialog.
  *
- *  Note that you might be able to use the pre-built KXMLGUIFactory's function:
+ *  Note that you might be able to use the pre-built KisKXMLGUIFactory's function:
  *  KStandardAction::keyBindings(guiFactory(), SLOT(configureShortcuts()), actionCollection());
  */
 KRITAWIDGETUTILS_EXPORT QAction *keyBindings(const QObject *recvr, const char *slot, QObject *parent);

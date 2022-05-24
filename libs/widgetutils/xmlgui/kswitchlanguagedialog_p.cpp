@@ -105,12 +105,12 @@ struct LanguageRowData {
 
 };
 
-class KSwitchLanguageDialogPrivate
+class KisKSwitchLanguageDialogPrivate
 {
 public:
-    KSwitchLanguageDialogPrivate(KSwitchLanguageDialog *parent);
+    KisKSwitchLanguageDialogPrivate(KisKSwitchLanguageDialog *parent);
 
-    KSwitchLanguageDialog *p; //parent class
+    KisKSwitchLanguageDialog *p; //parent class
 
     /**
         Fills language button with names of languages for which given application has translation.
@@ -132,11 +132,11 @@ public:
     QGridLayout *languagesLayout;
 };
 
-/*************************** KSwitchLanguageDialog **************************/
+/*************************** KisKSwitchLanguageDialog **************************/
 
-KSwitchLanguageDialog::KSwitchLanguageDialog(QWidget *parent)
+KisKSwitchLanguageDialog::KisKSwitchLanguageDialog(QWidget *parent)
     : QDialog(parent),
-      d(new KSwitchLanguageDialogPrivate(this))
+      d(new KisKSwitchLanguageDialogPrivate(this))
 {
     setWindowTitle(i18n("Switch Application Language"));
 
@@ -194,34 +194,34 @@ KSwitchLanguageDialog::KSwitchLanguageDialog(QWidget *parent)
             this, SLOT(slotDefault()));
 }
 
-KSwitchLanguageDialog::~KSwitchLanguageDialog()
+KisKSwitchLanguageDialog::~KisKSwitchLanguageDialog()
 {
     delete d;
 }
 
-void KSwitchLanguageDialog::slotAddLanguageButton()
+void KisKSwitchLanguageDialog::slotAddLanguageButton()
 {
     //adding new button with en_US as it should always be present
     d->addLanguageButton(QStringLiteral("en_US"), d->languageButtons.isEmpty());
 }
 
-void KSwitchLanguageDialog::removeButtonClicked()
+void KisKSwitchLanguageDialog::removeButtonClicked()
 {
     QObject const *signalSender = sender();
     if (!signalSender) {
-        qCritical() << "KSwitchLanguageDialog::removeButtonClicked() called directly, not using signal" << endl;
+        qCritical() << "KisKSwitchLanguageDialog::removeButtonClicked() called directly, not using signal" << endl;
         return;
     }
 
     QPushButton *removeButton = const_cast<QPushButton *>(::qobject_cast<const QPushButton *>(signalSender));
     if (!removeButton) {
-        qCritical() << "KSwitchLanguageDialog::removeButtonClicked() called from something else than QPushButton" << endl;
+        qCritical() << "KisKSwitchLanguageDialog::removeButtonClicked() called from something else than QPushButton" << endl;
         return;
     }
 
     QMap<QPushButton *, LanguageRowData>::iterator it = d->languageRows.find(removeButton);
     if (it == d->languageRows.end()) {
-        qCritical() << "KSwitchLanguageDialog::removeButtonClicked called from unknown QPushButton" << endl;
+        qCritical() << "KisKSwitchLanguageDialog::removeButtonClicked called from unknown QPushButton" << endl;
         return;
     }
 
@@ -235,7 +235,7 @@ void KSwitchLanguageDialog::removeButtonClicked()
     d->languageRows.erase(it);
 }
 
-void KSwitchLanguageDialog::languageOnButtonChanged(const QString &languageCode)
+void KisKSwitchLanguageDialog::languageOnButtonChanged(const QString &languageCode)
 {
     Q_UNUSED(languageCode);
 #if 0
@@ -250,7 +250,7 @@ void KSwitchLanguageDialog::languageOnButtonChanged(const QString &languageCode)
 #endif
 }
 
-void KSwitchLanguageDialog::slotOk()
+void KisKSwitchLanguageDialog::slotOk()
 {
     QStringList languages;
 
@@ -272,16 +272,16 @@ void KSwitchLanguageDialog::slotOk()
     accept();
 }
 
-void KSwitchLanguageDialog::slotDefault()
+void KisKSwitchLanguageDialog::slotDefault()
 {
     setApplicationSpecificLanguage(QByteArray());
     accept();
 }
 
-/************************ KSwitchLanguageDialogPrivate ***********************/
+/************************ KisKSwitchLanguageDialogPrivate ***********************/
 
-KSwitchLanguageDialogPrivate::KSwitchLanguageDialogPrivate(
-    KSwitchLanguageDialog *parent)
+KisKSwitchLanguageDialogPrivate::KisKSwitchLanguageDialogPrivate(
+    KisKSwitchLanguageDialog *parent)
     : p(parent)
 {
     //NOTE: do NOT use "p" in constructor, it is not fully constructed
@@ -297,7 +297,7 @@ static bool stripCountryCode(QString *languageCode)
     return false;
 }
 
-void KSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *button)
+void KisKSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *button)
 {
     QLocale defaultLocale;
     QLocale cLocale(QLocale::C);
@@ -346,7 +346,7 @@ void KSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *but
     QLocale::setDefault(defaultLocale);
 }
 
-QStringList KSwitchLanguageDialogPrivate::applicationLanguageList()
+QStringList KisKSwitchLanguageDialogPrivate::applicationLanguageList()
 {
     QStringList languagesList;
 
@@ -383,7 +383,7 @@ QStringList KSwitchLanguageDialogPrivate::applicationLanguageList()
     return languagesList;
 }
 
-void KSwitchLanguageDialogPrivate::addLanguageButton(const QString &languageCode, bool primaryLanguage)
+void KisKSwitchLanguageDialogPrivate::addLanguageButton(const QString &languageCode, bool primaryLanguage)
 {
     QString labelText = primaryLanguage ? i18n("Primary language:") : i18n("Fallback language:");
 

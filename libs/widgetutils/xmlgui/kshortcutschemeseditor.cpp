@@ -31,7 +31,7 @@
 #include "KoResourcePaths.h"
 
 
-KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
+KisKShortcutSchemesEditor::KisKShortcutSchemesEditor(KisShortcutsDialog *parent)
     : m_dialog(parent)
 {
     KConfigGroup group(KSharedConfig::openConfig(), "Shortcut Schemes");
@@ -39,11 +39,11 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     QStringList schemes;
     schemes << QStringLiteral("Default");
 
-    auto schemeFileLocations = KShortcutSchemesHelper::schemeFileLocations();
+    auto schemeFileLocations = KisKShortcutSchemesHelper::schemeFileLocations();
     schemes << schemeFileLocations.keys();
 
     QString currentScheme = group.readEntry("Current Scheme", "Default");
-    QString schemeFileName = KShortcutSchemesHelper::schemeFileLocations().value(currentScheme);
+    QString schemeFileName = KisKShortcutSchemesHelper::schemeFileLocations().value(currentScheme);
     if (!QFileInfo(schemeFileName).exists()) {
         currentScheme = "Default";
     }
@@ -91,7 +91,7 @@ KShortcutSchemesEditor::KShortcutSchemesEditor(KisShortcutsDialog *parent)
     updateDeleteButton();
 }
 
-void KShortcutSchemesEditor::newScheme()
+void KisKShortcutSchemesEditor::newScheme()
 {
     bool ok;
     const QString newName = QInputDialog::getText(m_dialog, i18n("Name for New Scheme"),
@@ -105,7 +105,7 @@ void KShortcutSchemesEditor::newScheme()
         return;
     }
 
-    const QString newSchemeFileName = KShortcutSchemesHelper::shortcutSchemeFileName(newName) + ".shortcuts";
+    const QString newSchemeFileName = KisKShortcutSchemesHelper::shortcutSchemeFileName(newName) + ".shortcuts";
 
     QFile schemeFile(newSchemeFileName);
     if (!schemeFile.open(QFile::WriteOnly | QFile::Truncate)) {
@@ -122,7 +122,7 @@ void KShortcutSchemesEditor::newScheme()
     emit shortcutsSchemeChanged(newName);
 }
 
-void KShortcutSchemesEditor::deleteScheme()
+void KisKShortcutSchemesEditor::deleteScheme()
 {
     if (KMessageBox::questionYesNo(m_dialog,
                                    i18n("Do you really want to delete the scheme %1?\n\
@@ -131,19 +131,19 @@ Note that this will not remove any system wide shortcut schemes.", currentScheme
     }
 
     //delete the scheme for the app itself
-    QFile::remove(KShortcutSchemesHelper::shortcutSchemeFileName(currentScheme()));
+    QFile::remove(KisKShortcutSchemesHelper::shortcutSchemeFileName(currentScheme()));
 
     m_schemesList->removeItem(m_schemesList->findText(currentScheme()));
     updateDeleteButton();
     emit shortcutsSchemeChanged(currentScheme());
 }
 
-QString KShortcutSchemesEditor::currentScheme()
+QString KisKShortcutSchemesEditor::currentScheme()
 {
     return m_schemesList->currentText();
 }
 
-void KShortcutSchemesEditor::exportShortcutsScheme()
+void KisKShortcutSchemesEditor::exportShortcutsScheme()
 {
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     QString proposedPath = group.readEntry("ExportShortcuts", KoResourcePaths::saveLocation("kis_shortcuts"));
@@ -159,7 +159,7 @@ void KShortcutSchemesEditor::exportShortcutsScheme()
     }
 }
 
-void KShortcutSchemesEditor::saveCustomShortcuts()
+void KisKShortcutSchemesEditor::saveCustomShortcuts()
 {
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     QString proposedPath = group.readEntry("SaveCustomShortcuts", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
@@ -177,7 +177,7 @@ void KShortcutSchemesEditor::saveCustomShortcuts()
 
 
 
-void KShortcutSchemesEditor::loadCustomShortcuts()
+void KisKShortcutSchemesEditor::loadCustomShortcuts()
 {
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     QString proposedPath = group.readEntry("ImportShortcuts", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
@@ -198,7 +198,7 @@ void KShortcutSchemesEditor::loadCustomShortcuts()
 
 }
 
-void KShortcutSchemesEditor::importShortcutsScheme()
+void KisKShortcutSchemesEditor::importShortcutsScheme()
 {
     KConfigGroup group =  KSharedConfig::openConfig()->group("File Dialogs");
     QString proposedPath = group.readEntry("ImportShortcuts", QStandardPaths::writableLocation(QStandardPaths::HomeLocation));
@@ -218,15 +218,15 @@ void KShortcutSchemesEditor::importShortcutsScheme()
 
 #if 0
 // XXX: Not implemented
-void KShortcutSchemesEditor::saveAsDefaultsForScheme()
+void KisKShortcutSchemesEditor::saveAsDefaultsForScheme()
 {
-    foreach (KActionCollection *collection, m_dialog->actionCollections()) {
-        KShortcutSchemesHelper::exportActionCollection(collection, currentScheme());
+    foreach (KisKActionCollection *collection, m_dialog->actionCollections()) {
+        KisKShortcutSchemesHelper::exportActionCollection(collection, currentScheme());
     }
 }
 #endif
 
-void KShortcutSchemesEditor::updateDeleteButton()
+void KisKShortcutSchemesEditor::updateDeleteButton()
 {
     m_deleteScheme->setEnabled(m_schemesList->count() >= 1);
 }

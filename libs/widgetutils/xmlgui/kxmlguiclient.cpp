@@ -31,10 +31,10 @@
 # define authorizeAction authorizeKAction
 #endif
 
-class KXMLGUIClientPrivate
+class KisKXMLGUIClientPrivate
 {
 public:
-    KXMLGUIClientPrivate()
+    KisKXMLGUIClientPrivate()
         : m_componentName(QCoreApplication::applicationName()),
           m_actionCollection(0),
           m_parent(0L),
@@ -44,14 +44,14 @@ public:
         m_textTagNames.append(QLatin1String("Text"));
         m_textTagNames.append(QLatin1String("title"));
     }
-    ~KXMLGUIClientPrivate()
+    ~KisKXMLGUIClientPrivate()
     {
     }
 
     bool mergeXML(QDomElement &base, QDomElement &additive,
-                  KActionCollection *actionCollection);
+                  KisKActionCollection *actionCollection);
     bool isEmptyContainer(const QDomElement &base,
-                          KActionCollection *actionCollection) const;
+                          KisKActionCollection *actionCollection) const;
 
     QDomElement findMatchingElement(const QDomElement &base,
                                     const QDomElement &additive);
@@ -59,33 +59,33 @@ public:
     QString m_componentName;
 
     QDomDocument m_doc;
-    KActionCollection *m_actionCollection;
+    KisKActionCollection *m_actionCollection;
     QDomDocument m_buildDocument;
-    QPointer<KXMLGUIFactory> m_factory;
-    KXMLGUIClient *m_parent;
-    //QPtrList<KXMLGUIClient> m_supers;
-    QList<KXMLGUIClient *> m_children;
-    KXMLGUIBuilder *m_builder;
+    QPointer<KisKXMLGUIFactory> m_factory;
+    KisKXMLGUIClient *m_parent;
+    //QPtrList<KisKXMLGUIClient> m_supers;
+    QList<KisKXMLGUIClient *> m_children;
+    KisKXMLGUIBuilder *m_builder;
     QString m_xmlFile;
     QString m_localXMLFile;
     QStringList m_textTagNames;
 
     // Actions to enable/disable on a state change
-    QMap<QString, KXMLGUIClient::StateChange> m_actionsStateMap;
+    QMap<QString, KisKXMLGUIClient::StateChange> m_actionsStateMap;
 };
 
-KXMLGUIClient::KXMLGUIClient()
-    : d(new KXMLGUIClientPrivate)
+KisKXMLGUIClient::KisKXMLGUIClient()
+    : d(new KisKXMLGUIClientPrivate)
 {
 }
 
-KXMLGUIClient::KXMLGUIClient(KXMLGUIClient *parent)
-    : d(new KXMLGUIClientPrivate)
+KisKXMLGUIClient::KisKXMLGUIClient(KisKXMLGUIClient *parent)
+    : d(new KisKXMLGUIClientPrivate)
 {
     parent->insertChildClient(this);
 }
 
-KXMLGUIClient::~KXMLGUIClient()
+KisKXMLGUIClient::~KisKXMLGUIClient()
 {
     if (d->m_parent) {
         d->m_parent->removeChildClient(this);
@@ -96,7 +96,7 @@ KXMLGUIClient::~KXMLGUIClient()
         d->m_factory->forgetClient(this);
     }
 
-    Q_FOREACH (KXMLGUIClient *client, d->m_children) {
+    Q_FOREACH (KisKXMLGUIClient *client, d->m_children) {
         if (d->m_factory) {
             d->m_factory->forgetClient(client);
         }
@@ -108,11 +108,11 @@ KXMLGUIClient::~KXMLGUIClient()
     delete d;
 }
 
-QAction *KXMLGUIClient::action(const char *name) const
+QAction *KisKXMLGUIClient::action(const char *name) const
 {
     QAction *act = actionCollection()->action(QLatin1String(name));
     if (!act) {
-        Q_FOREACH (KXMLGUIClient *client, d->m_children) {
+        Q_FOREACH (KisKXMLGUIClient *client, d->m_children) {
             act = client->actionCollection()->action(QLatin1String(name));
             if (act) {
                 break;
@@ -122,36 +122,36 @@ QAction *KXMLGUIClient::action(const char *name) const
     return act;
 }
 
-KActionCollection *KXMLGUIClient::actionCollection() const
+KisKActionCollection *KisKXMLGUIClient::actionCollection() const
 {
     if (!d->m_actionCollection) {
-        d->m_actionCollection = new KActionCollection(this);
-        d->m_actionCollection->setObjectName(QStringLiteral("KXMLGUIClient-KActionCollection"));
+        d->m_actionCollection = new KisKActionCollection(this);
+        d->m_actionCollection->setObjectName(QStringLiteral("KisKXMLGUIClient-KisKActionCollection"));
     }
     return d->m_actionCollection;
 }
 
-QAction *KXMLGUIClient::action(const QDomElement &element) const
+QAction *KisKXMLGUIClient::action(const QDomElement &element) const
 {
     return actionCollection()->action(element.attribute(QStringLiteral("name")));
 }
 
-QString KXMLGUIClient::componentName() const
+QString KisKXMLGUIClient::componentName() const
 {
     return d->m_componentName;
 }
 
-QDomDocument KXMLGUIClient::domDocument() const
+QDomDocument KisKXMLGUIClient::domDocument() const
 {
     return d->m_doc;
 }
 
-QString KXMLGUIClient::xmlFile() const
+QString KisKXMLGUIClient::xmlFile() const
 {
     return d->m_xmlFile;
 }
 
-QString KXMLGUIClient::localXMLFile() const
+QString KisKXMLGUIClient::localXMLFile() const
 {
     if (!d->m_localXMLFile.isEmpty()) {
         return d->m_localXMLFile;
@@ -169,18 +169,18 @@ QString KXMLGUIClient::localXMLFile() const
            componentName() + QLatin1Char('/') + d->m_xmlFile;
 }
 
-void KXMLGUIClient::reloadXML()
+void KisKXMLGUIClient::reloadXML()
 {
     // TODO: this method can't be used for the KXmlGuiWindow, since it doesn't merge in ui_standards.xmlgui!
     //   -> KDE5: load ui_standards_rc in setXMLFile using a flag, and remember that flag?
-    //            and then KEditToolBar can use reloadXML.
+    //            and then KisKEditToolBar can use reloadXML.
     QString file(xmlFile());
     if (!file.isEmpty()) {
         setXMLFile(file);
     }
 }
 
-void KXMLGUIClient::setComponentName(const QString &componentName, const QString &componentDisplayName)
+void KisKXMLGUIClient::setComponentName(const QString &componentName, const QString &componentDisplayName)
 {
     d->m_componentName = componentName;
     actionCollection()->setComponentName(componentName);
@@ -190,7 +190,7 @@ void KXMLGUIClient::setComponentName(const QString &componentName, const QString
     }
 }
 
-QString KXMLGUIClient::standardsXmlFileLocation()
+QString KisKXMLGUIClient::standardsXmlFileLocation()
 {
     QString file = QStandardPaths::locate(QStandardPaths::GenericConfigLocation, QStringLiteral("ui/ui_standards.xmlgui"));
     if (file.isEmpty()) {
@@ -201,12 +201,12 @@ QString KXMLGUIClient::standardsXmlFileLocation()
     return file;
 }
 
-void KXMLGUIClient::loadStandardsXmlFile()
+void KisKXMLGUIClient::loadStandardsXmlFile()
 {
-    setXML(KXMLGUIFactory::readConfigFile(standardsXmlFileLocation()));
+    setXML(KisKXMLGUIFactory::readConfigFile(standardsXmlFileLocation()));
 }
 
-void KXMLGUIClient::setXMLFile(const QString &_file, bool merge, bool setXMLDoc)
+void KisKXMLGUIClient::setXMLFile(const QString &_file, bool merge, bool setXMLDoc)
 {
     // store our xml file name
     if (!_file.isNull()) {
@@ -239,7 +239,7 @@ void KXMLGUIClient::setXMLFile(const QString &_file, bool merge, bool setXMLDoc)
                    QStandardPaths::locateAll(QStandardPaths::AppDataLocation, _file); // kdelibs4, KF 5.0, caller passes component name
 
         if (allFiles.isEmpty() && !compatFiles.isEmpty()) {
-            qWarning() << "kxmlguiclient: KXMLGUI file found at deprecated location" << compatFiles << "-- please use ${KXMLGUI_INSTALL_DIR} to install this file instead.";
+            qWarning() << "kxmlguiclient: KisKXMLGUI file found at deprecated location" << compatFiles << "-- please use ${KisKXMLGUI_INSTALL_DIR} to install this file instead.";
         }
         allFiles += compatFiles;
     }
@@ -266,12 +266,12 @@ void KXMLGUIClient::setXMLFile(const QString &_file, bool merge, bool setXMLDoc)
     setXML(doc, merge);
 }
 
-void KXMLGUIClient::setLocalXMLFile(const QString &file)
+void KisKXMLGUIClient::setLocalXMLFile(const QString &file)
 {
     d->m_localXMLFile = file;
 }
 
-void KXMLGUIClient::replaceXMLFile(const QString &xmlfile, const QString &localxmlfile, bool merge)
+void KisKXMLGUIClient::replaceXMLFile(const QString &xmlfile, const QString &localxmlfile, bool merge)
 {
     if (!QDir::isAbsolutePath(xmlfile)) {
         qWarning() << "xml file" << xmlfile << "is not an absolute path";
@@ -311,7 +311,7 @@ static void propagateTranslationDomain(QDomDocument &doc, const QStringList tagN
     }
 }
 
-void KXMLGUIClient::setXML(const QString &document, bool merge)
+void KisKXMLGUIClient::setXML(const QString &document, bool merge)
 {
     QDomDocument doc;
     QString errorMsg;
@@ -333,7 +333,7 @@ void KXMLGUIClient::setXML(const QString &document, bool merge)
     }
 }
 
-void KXMLGUIClient::setDOMDocument(const QDomDocument &document, bool merge)
+void KisKXMLGUIClient::setDOMDocument(const QDomDocument &document, bool merge)
 {
     if (merge && !d->m_doc.isNull()) {
         QDomElement base = d->m_doc.documentElement();
@@ -370,7 +370,7 @@ static inline bool equalstr(const QString &a, const QLatin1String &b)
     return a.compare(b, Qt::CaseInsensitive) == 0;
 }
 
-bool KXMLGUIClientPrivate::mergeXML(QDomElement &base, QDomElement &additive, KActionCollection *actionCollection)
+bool KisKXMLGUIClientPrivate::mergeXML(QDomElement &base, QDomElement &additive, KisKActionCollection *actionCollection)
 {
     const QLatin1String tagAction("Action");
     const QLatin1String tagMerge("Merge");
@@ -549,7 +549,7 @@ bool KXMLGUIClientPrivate::mergeXML(QDomElement &base, QDomElement &additive, KA
     return isEmptyContainer(base, actionCollection);
 }
 
-bool KXMLGUIClientPrivate::isEmptyContainer(const QDomElement &base, KActionCollection *actionCollection) const
+bool KisKXMLGUIClientPrivate::isEmptyContainer(const QDomElement &base, KisKActionCollection *actionCollection) const
 {
     // now we check if we are empty (in which case we return "true", to
     // indicate the caller that it can delete "us" (the base element
@@ -602,7 +602,7 @@ bool KXMLGUIClientPrivate::isEmptyContainer(const QDomElement &base, KActionColl
     return true; // I'm empty, please delete me.
 }
 
-QDomElement KXMLGUIClientPrivate::findMatchingElement(const QDomElement &base, const QDomElement &additive)
+QDomElement KisKXMLGUIClientPrivate::findMatchingElement(const QDomElement &base, const QDomElement &additive)
 {
     QDomNode n = additive.firstChild();
     while (!n.isNull()) {
@@ -630,32 +630,32 @@ QDomElement KXMLGUIClientPrivate::findMatchingElement(const QDomElement &base, c
     return QDomElement();
 }
 
-void KXMLGUIClient::setXMLGUIBuildDocument(const QDomDocument &doc)
+void KisKXMLGUIClient::setXMLGUIBuildDocument(const QDomDocument &doc)
 {
     d->m_buildDocument = doc;
 }
 
-QDomDocument KXMLGUIClient::xmlguiBuildDocument() const
+QDomDocument KisKXMLGUIClient::xmlguiBuildDocument() const
 {
     return d->m_buildDocument;
 }
 
-void KXMLGUIClient::setFactory(KXMLGUIFactory *factory)
+void KisKXMLGUIClient::setFactory(KisKXMLGUIFactory *factory)
 {
     d->m_factory = factory;
 }
 
-KXMLGUIFactory *KXMLGUIClient::factory() const
+KisKXMLGUIFactory *KisKXMLGUIClient::factory() const
 {
     return d->m_factory;
 }
 
-KXMLGUIClient *KXMLGUIClient::parentClient() const
+KisKXMLGUIClient *KisKXMLGUIClient::parentClient() const
 {
     return d->m_parent;
 }
 
-void KXMLGUIClient::insertChildClient(KXMLGUIClient *child)
+void KisKXMLGUIClient::insertChildClient(KisKXMLGUIClient *child)
 {
     if (child->d->m_parent) {
         child->d->m_parent->removeChildClient(child);
@@ -664,14 +664,14 @@ void KXMLGUIClient::insertChildClient(KXMLGUIClient *child)
     child->d->m_parent = this;
 }
 
-void KXMLGUIClient::removeChildClient(KXMLGUIClient *child)
+void KisKXMLGUIClient::removeChildClient(KisKXMLGUIClient *child)
 {
     assert(d->m_children.contains(child));
     d->m_children.removeAll(child);
     child->d->m_parent = 0;
 }
 
-/*bool KXMLGUIClient::addSuperClient( KXMLGUIClient *super )
+/*bool KisKXMLGUIClient::addSuperClient( KisKXMLGUIClient *super )
 {
   if ( d->m_supers.contains( super ) )
     return false;
@@ -679,22 +679,22 @@ void KXMLGUIClient::removeChildClient(KXMLGUIClient *child)
   return true;
 }*/
 
-QList<KXMLGUIClient *> KXMLGUIClient::childClients()
+QList<KisKXMLGUIClient *> KisKXMLGUIClient::childClients()
 {
     return d->m_children;
 }
 
-void KXMLGUIClient::setClientBuilder(KXMLGUIBuilder *builder)
+void KisKXMLGUIClient::setClientBuilder(KisKXMLGUIBuilder *builder)
 {
     d->m_builder = builder;
 }
 
-KXMLGUIBuilder *KXMLGUIClient::clientBuilder() const
+KisKXMLGUIBuilder *KisKXMLGUIClient::clientBuilder() const
 {
     return d->m_builder;
 }
 
-void KXMLGUIClient::plugActionList(const QString &name, const QList<QAction *> &actionList)
+void KisKXMLGUIClient::plugActionList(const QString &name, const QList<QAction *> &actionList)
 {
     if (!d->m_factory) {
         return;
@@ -703,7 +703,7 @@ void KXMLGUIClient::plugActionList(const QString &name, const QList<QAction *> &
     d->m_factory->plugActionList(this, name, actionList);
 }
 
-void KXMLGUIClient::unplugActionList(const QString &name)
+void KisKXMLGUIClient::unplugActionList(const QString &name)
 {
     if (!d->m_factory) {
         return;
@@ -712,41 +712,41 @@ void KXMLGUIClient::unplugActionList(const QString &name)
     d->m_factory->unplugActionList(this, name);
 }
 
-QString KXMLGUIClient::findMostRecentXMLFile(const QStringList &files, QString &doc)
+QString KisKXMLGUIClient::findMostRecentXMLFile(const QStringList &files, QString &doc)
 {
     KXmlGuiVersionHandler versionHandler(files);
     doc = versionHandler.finalDocument();
     return versionHandler.finalFile();
 }
 
-void KXMLGUIClient::addStateActionEnabled(const QString &state,
+void KisKXMLGUIClient::addStateActionEnabled(const QString &state,
         const QString &action)
 {
     StateChange stateChange = getActionsToChangeForState(state);
 
     stateChange.actionsToEnable.append(action);
-    //qDebug(260) << "KXMLGUIClient::addStateActionEnabled( " << state << ", " << action << ")";
+    //qDebug(260) << "KisKXMLGUIClient::addStateActionEnabled( " << state << ", " << action << ")";
 
     d->m_actionsStateMap.insert(state, stateChange);
 }
 
-void KXMLGUIClient::addStateActionDisabled(const QString &state,
+void KisKXMLGUIClient::addStateActionDisabled(const QString &state,
         const QString &action)
 {
     StateChange stateChange = getActionsToChangeForState(state);
 
     stateChange.actionsToDisable.append(action);
-    //qDebug(260) << "KXMLGUIClient::addStateActionDisabled( " << state << ", " << action << ")";
+    //qDebug(260) << "KisKXMLGUIClient::addStateActionDisabled( " << state << ", " << action << ")";
 
     d->m_actionsStateMap.insert(state, stateChange);
 }
 
-KXMLGUIClient::StateChange KXMLGUIClient::getActionsToChangeForState(const QString &state)
+KisKXMLGUIClient::StateChange KisKXMLGUIClient::getActionsToChangeForState(const QString &state)
 {
     return d->m_actionsStateMap[state];
 }
 
-void KXMLGUIClient::stateChanged(const QString &newstate, KXMLGUIClient::ReverseStateChange reverse)
+void KisKXMLGUIClient::stateChanged(const QString &newstate, KisKXMLGUIClient::ReverseStateChange reverse)
 {
     StateChange stateChange = getActionsToChangeForState(newstate);
 
@@ -777,27 +777,27 @@ void KXMLGUIClient::stateChanged(const QString &newstate, KXMLGUIClient::Reverse
 
 }
 
-void KXMLGUIClient::beginXMLPlug(QWidget *w)
+void KisKXMLGUIClient::beginXMLPlug(QWidget *w)
 {
     actionCollection()->addAssociatedWidget(w);
-    foreach (KXMLGUIClient *client, d->m_children) {
+    foreach (KisKXMLGUIClient *client, d->m_children) {
         client->beginXMLPlug(w);
     }
 }
 
-void KXMLGUIClient::endXMLPlug()
+void KisKXMLGUIClient::endXMLPlug()
 {
 }
 
-void KXMLGUIClient::prepareXMLUnplug(QWidget *w)
+void KisKXMLGUIClient::prepareXMLUnplug(QWidget *w)
 {
     actionCollection()->removeAssociatedWidget(w);
-    foreach (KXMLGUIClient *client, d->m_children) {
+    foreach (KisKXMLGUIClient *client, d->m_children) {
         client->prepareXMLUnplug(w);
     }
 }
 
-void KXMLGUIClient::virtual_hook(int, void *)
+void KisKXMLGUIClient::virtual_hook(int, void *)
 {
     /*BASE::virtual_hook( id, data );*/
 }

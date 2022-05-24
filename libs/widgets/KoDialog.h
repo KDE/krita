@@ -414,7 +414,7 @@ public:
      * application is running, pass in a pointer to the window the caption will
      * be applied to.
      *
-     * If using a KoDialog or KMainWindow subclass, call setCaption instead and
+     * If using a KoDialog or KisKMainWindow subclass, call setCaption instead and
      * an appropriate standard caption will be created for you
      *
      * @param userCaption The caption string you want to display in the

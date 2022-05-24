@@ -56,7 +56,7 @@ void KisTooltipManager::record()
 {
     m_recording = true;
     QList<QAction*> actions =  m_view->actionCollection()->actions();
-    Q_FOREACH (KXMLGUIClient* client, m_view->mainWindow()->childClients() ) {
+    Q_FOREACH (KisKXMLGUIClient* client, m_view->mainWindow()->childClients() ) {
         actions.append(client->actionCollection()->actions());
     }
 

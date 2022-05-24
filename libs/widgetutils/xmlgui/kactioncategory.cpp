@@ -8,12 +8,12 @@
 #include <QAction>
 #include "kstandardaction.h"
 
-struct KActionCategoryPrivate {
+struct KisKActionCategoryPrivate {
 
-    KActionCategoryPrivate(KActionCategory *host);
+    KisKActionCategoryPrivate(KisKActionCategory *host);
 
     //! Our host
-    KActionCategory *q;
+    KisKActionCategory *q;
 
     //! The text for this category
     QString text;
@@ -21,33 +21,33 @@ struct KActionCategoryPrivate {
     //! List of actions
     QList<QAction *> actions;
 
-}; // class KActionCategoryPrivate
+}; // class KisKActionCategoryPrivate
 
-KActionCategory::KActionCategory(const QString &text, KActionCollection *parent)
+KisKActionCategory::KisKActionCategory(const QString &text, KisKActionCollection *parent)
     :   QObject(parent)
-    , d(new KActionCategoryPrivate(this))
+    , d(new KisKActionCategoryPrivate(this))
 {
     d->text = text;
 }
 
-KActionCategory::~KActionCategory()
+KisKActionCategory::~KisKActionCategory()
 {
     delete d;
 }
 
-const QList<QAction *> KActionCategory::actions() const
+const QList<QAction *> KisKActionCategory::actions() const
 {
     return d->actions;
 }
 
-QAction *KActionCategory::addAction(const QString &name, QAction *action)
+QAction *KisKActionCategory::addAction(const QString &name, QAction *action)
 {
     collection()->addAction(name, action);
     addAction(action);
     return action;
 }
 
-QAction *KActionCategory::addAction(
+QAction *KisKActionCategory::addAction(
     KStandardAction::StandardAction actionType,
     const QObject *receiver,
     const char *member)
@@ -57,7 +57,7 @@ QAction *KActionCategory::addAction(
     return action;
 }
 
-QAction *KActionCategory::addAction(
+QAction *KisKActionCategory::addAction(
     KStandardAction::StandardAction actionType,
     const QString &name,
     const QObject *receiver,
@@ -68,7 +68,7 @@ QAction *KActionCategory::addAction(
     return action;
 }
 
-QAction *KActionCategory::addAction(
+QAction *KisKActionCategory::addAction(
     const QString &name,
     const QObject *receiver,
     const char *member)
@@ -78,7 +78,7 @@ QAction *KActionCategory::addAction(
     return action;
 }
 
-void KActionCategory::addAction(QAction *action)
+void KisKActionCategory::addAction(QAction *action)
 {
     // Only add the action if wasn't added earlier.
     if (!d->actions.contains(action)) {
@@ -86,25 +86,25 @@ void KActionCategory::addAction(QAction *action)
     }
 }
 
-KActionCollection *KActionCategory::collection() const
+KisKActionCollection *KisKActionCategory::collection() const
 {
-    return qobject_cast<KActionCollection *>(parent());
+    return qobject_cast<KisKActionCollection *>(parent());
 }
 
-QString KActionCategory::text() const
+QString KisKActionCategory::text() const
 {
     return d->text;
 }
 
-void KActionCategory::setText(const QString &text)
+void KisKActionCategory::setText(const QString &text)
 {
     d->text = text;
 }
 
-void KActionCategory::unlistAction(QAction *action)
+void KisKActionCategory::unlistAction(QAction *action)
 {
     // ATTENTION:
-    //   This method is called from KActionCollection with an QObject formerly
+    //   This method is called from KisKActionCollection with an QObject formerly
     //   known as a QAction during _k_actionDestroyed(). So don't do fancy stuff
     //   here that needs a real QAction!
 
@@ -120,7 +120,7 @@ void KActionCategory::unlistAction(QAction *action)
     d->actions.takeAt(index);
 }
 
-KActionCategoryPrivate::KActionCategoryPrivate(KActionCategory *host)
+KisKActionCategoryPrivate::KisKActionCategoryPrivate(KisKActionCategory *host)
     : q(host)
 {}
 

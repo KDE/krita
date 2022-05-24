@@ -35,7 +35,7 @@ class KoCanvasResourceProvider;
 
 // KDE classes
 class QAction;
-class KActionCollection;
+class KisKActionCollection;
 class KConfigGroup;
 
 // Qt classes

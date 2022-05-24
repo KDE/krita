@@ -25,7 +25,7 @@ public:
     explicit ArrangeDockerWidget(QWidget *parent = 0);
     ~ArrangeDockerWidget() override;
 
-    void setActionCollection(KActionCollection *collection);
+    void setActionCollection(KisKActionCollection *collection);
     void switchState(bool enabled);
 
 private:

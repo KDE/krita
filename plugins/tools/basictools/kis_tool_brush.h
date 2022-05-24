@@ -25,7 +25,7 @@ class QCheckBox;
 class QComboBox;
 class QLabel;
 
-class KActionCollection;
+class KisKActionCollection;
 
 class KoCanvasBase;
 class KisSliderSpinBox;

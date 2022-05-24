@@ -19,7 +19,7 @@
 #include <QPointF>
 #include <QPointer>
 
-class KActionCollection;
+class KisKActionCollection;
 class QRect;
 class QRectF;
 
@@ -65,7 +65,7 @@ public:
      * Constructor.
      * @param actionCollection the action collection for this canvas
      */
-    explicit KoCanvasController(KActionCollection* actionCollection);
+    explicit KoCanvasController(KisKActionCollection* actionCollection);
     virtual ~KoCanvasController();
 
 public:
@@ -283,7 +283,7 @@ public:
      * Returns the action collection for the window
      * @returns action collection for this window, can be 0
      */
-    KActionCollection* actionCollection() const;
+    KisKActionCollection* actionCollection() const;
 
     QPoint documentOffset() const;
 
@@ -427,7 +427,7 @@ class KRITAFLAKE_EXPORT  KoDummyCanvasController : public KoCanvasController {
 
 public:
 
-    explicit KoDummyCanvasController(KActionCollection* actionCollection)
+    explicit KoDummyCanvasController(KisKActionCollection* actionCollection)
         : KoCanvasController(actionCollection)
     {}
 

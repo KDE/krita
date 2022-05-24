@@ -15,7 +15,7 @@
 
 #include <assert.h>
 
-using namespace KXMLGUI;
+using namespace KisKXMLGUI;
 
 void ActionList::plug(QWidget *container, int index) const
 {
@@ -44,7 +44,7 @@ void ActionList::unplug(QWidget *container) const
 
 ContainerNode::ContainerNode(QWidget *_container, const QString &_tagName,
                              const QString &_name, ContainerNode *_parent,
-                             KXMLGUIClient *_client, KXMLGUIBuilder *_builder,
+                             KisKXMLGUIClient *_client, KisKXMLGUIBuilder *_builder,
                              QAction *_containerAction, const QString &_mergingName,
                              const QString &_groupName, const QStringList &customTags,
                              const QStringList &containerTags)
@@ -138,7 +138,7 @@ ContainerNode *ContainerNode::findContainer(const QString &_name, bool tag)
  */
 ContainerNode *ContainerNode::findContainer(const QString &name, const QString &tagName,
         const QList<QWidget *> *excludeList,
-        KXMLGUIClient * /*currClient*/)
+        KisKXMLGUIClient * /*currClient*/)
 {
     ContainerNode *res = 0L;
     ContainerNodeList::ConstIterator nIt = children.constBegin();
@@ -182,7 +182,7 @@ ContainerNode *ContainerNode::findContainer(const QString &name, const QString &
     return res;
 }
 
-ContainerClient *ContainerNode::findChildContainerClient(KXMLGUIClient *currentGUIClient,
+ContainerClient *ContainerNode::findChildContainerClient(KisKXMLGUIClient *currentGUIClient,
         const QString &groupName,
         const MergingIndexList::Iterator &mergingIdx)
 {
@@ -403,7 +403,7 @@ void ContainerNode::unplugActions(BuildState &state)
     QMutableListIterator<ContainerClient *> clientIt(clients);
 
     /*
-        Disabled because it means in KToolBar::saveState isHidden is always true then,
+        Disabled because it means in KisToolBar::saveState isHidden is always true then,
         which is clearly wrong.
 
     if ( clients.count() == 1 && clientIt.current()->client == client &&
@@ -437,7 +437,7 @@ void ContainerNode::unplugClient(ContainerClient *client)
         builder->removeCustomElement(container, *custIt);
     }
 
-    KToolBar *bar = qobject_cast<KToolBar *>(container);
+    KisToolBar *bar = qobject_cast<KisToolBar *>(container);
     if (bar) {
         bar->removeXMLGUIClient(client->client);
     }
@@ -785,7 +785,7 @@ void BuildHelper::processContainerElement(const QDomElement &e, const QString &t
 
         QAction *containerAction;
 
-        KXMLGUIBuilder *builder;
+        KisKXMLGUIBuilder *builder;
 
         QWidget *container = createContainer(parentNode->container, idx, e, containerAction, &builder);
 
@@ -817,13 +817,13 @@ void BuildHelper::processContainerElement(const QDomElement &e, const QString &t
                                           mergingName, group, cusTags, conTags);
     } else {
         if (tag == QStringLiteral("toolbar")) {
-            KToolBar *bar = qobject_cast<KToolBar *>(containerNode->container);
+            KisToolBar *bar = qobject_cast<KisToolBar *>(containerNode->container);
             if (bar) {
                 if (m_state.guiClient && !m_state.guiClient->xmlFile().isEmpty()) {
                     bar->addXMLGUIClient(m_state.guiClient);
                 }
             } else {
-                qWarning() << "toolbar container is not a KToolBar";
+                qWarning() << "toolbar container is not a KisToolBar";
             }
         }
     }
@@ -838,7 +838,7 @@ void BuildHelper::processContainerElement(const QDomElement &e, const QString &t
 
 QWidget *BuildHelper::createContainer(QWidget *parent, int index,
                                       const QDomElement &element, QAction *&containerAction,
-                                      KXMLGUIBuilder **builder)
+                                      KisKXMLGUIBuilder **builder)
 {
     QWidget *res = 0L;
 
@@ -851,7 +851,7 @@ QWidget *BuildHelper::createContainer(QWidget *parent, int index,
         }
     }
 
-    KXMLGUIClient *oldClient = m_state.builder->builderClient();
+    KisKXMLGUIClient *oldClient = m_state.builder->builderClient();
 
     m_state.builder->setBuilderClient(m_state.guiClient);
 

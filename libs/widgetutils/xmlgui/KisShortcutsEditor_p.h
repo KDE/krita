@@ -82,7 +82,7 @@ public:
 public:
 
     // Members
-    QList<KActionCollection *> actionCollections;
+    QList<KisKActionCollection *> actionCollections;
     KisShortcutsEditor *q;
 
     Ui::KisShortcutsDialog ui;

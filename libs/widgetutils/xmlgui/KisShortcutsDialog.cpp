@@ -47,7 +47,7 @@ KisShortcutsDialog::KisShortcutsDialog(KisShortcutsEditor::ActionTypes types,
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->addWidget(d->m_shortcutsEditor);
     QHBoxLayout *bottomLayout = new QHBoxLayout;
-    d->m_schemeEditor = new KShortcutSchemesEditor(this);
+    d->m_schemeEditor = new KisKShortcutSchemesEditor(this);
     connect(d->m_schemeEditor, SIGNAL(shortcutsSchemeChanged(QString)),
             this, SLOT(changeShortcutScheme(QString)));
     bottomLayout->addLayout(d->m_schemeEditor);
@@ -71,7 +71,7 @@ KisShortcutsDialog::~KisShortcutsDialog()
     delete d;
 }
 
-void KisShortcutsDialog::addCollection(KActionCollection *collection, const QString &title)
+void KisShortcutsDialog::addCollection(KisKActionCollection *collection, const QString &title)
 {
     d->m_shortcutsEditor->addCollection(collection, title);
     d->m_collections.insert(title, collection);
@@ -83,7 +83,7 @@ void KisShortcutsDialog::save()
     d->save();
 }
 
-QList<KActionCollection *> KisShortcutsDialog::actionCollections() const
+QList<KisKActionCollection *> KisShortcutsDialog::actionCollections() const
 {
     return d->m_collections.values();
 }

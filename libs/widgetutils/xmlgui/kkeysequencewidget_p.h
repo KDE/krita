@@ -14,7 +14,7 @@ class KKeySequenceButton: public QPushButton
     Q_OBJECT
 
 public:
-    explicit KKeySequenceButton(KKeySequenceWidgetPrivate *d, QWidget *parent)
+    explicit KKeySequenceButton(KisKKeySequenceWidgetPrivate *d, QWidget *parent)
         : QPushButton(parent),
           d(d) {}
 
@@ -29,7 +29,7 @@ protected:
     void keyReleaseEvent(QKeyEvent *event) override;
 
 private:
-    KKeySequenceWidgetPrivate *const d;
+    KisKKeySequenceWidgetPrivate *const d;
 };
 
 #endif //KKEYSEQUENCEWIDGET_P_H

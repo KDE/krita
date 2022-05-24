@@ -77,7 +77,7 @@ void KisCanvasController::Private::updateDocumentSizeAfterTransform()
 }
 
 
-KisCanvasController::KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KActionCollection * actionCollection)
+KisCanvasController::KisCanvasController(QPointer<KisView>parent, KoCanvasSupervisor *observerProvider, KisKActionCollection * actionCollection)
     : KoCanvasControllerWidget(actionCollection, observerProvider, parent),
       m_d(new Private(this))
 {

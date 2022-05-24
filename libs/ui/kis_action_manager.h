@@ -32,8 +32,8 @@ class KisOperation;
  * to the state of the application.
  *
  * Some of the primitive actions (load/save and so on) are not defined as
- * KisActions, but instead KActions, automacially registered through KXMLGUI.
- * It tracks these actions through the KActionCollection owned by the window.
+ * KisActions, but instead KActions, automacially registered through KisKXMLGUI.
+ * It tracks these actions through the KisKActionCollection owned by the window.
  * Ultimately it would be nice to unify these things more fully.
  *
  */
@@ -41,7 +41,7 @@ class KRITAUI_EXPORT KisActionManager : public QObject
 {
     Q_OBJECT
 public:
-    KisActionManager(KisViewManager* viewManager, KActionCollection *actionCollection);
+    KisActionManager(KisViewManager* viewManager, KisKActionCollection *actionCollection);
     ~KisActionManager() override;
 
     void setView(QPointer<KisView> imageView);

@@ -37,10 +37,10 @@
 # define authorizeAction authorizeKAction
 #endif
 
-class KActionCollectionPrivate
+class KisKActionCollectionPrivate
 {
 public:
-    KActionCollectionPrivate()
+    KisKActionCollectionPrivate()
         : m_parentGUIClient(0L),
           configGroup(QStringLiteral("Shortcuts")),
           connectTriggered(false),
@@ -55,12 +55,12 @@ public:
         Q_UNUSED(action);
     }
 
-    static QList<KActionCollection *> s_allCollections;
+    static QList<KisKActionCollection *> s_allCollections;
 
     void _k_associatedWidgetDestroyed(QObject *obj);
     void _k_actionDestroyed(QObject *obj);
 
-    bool writeKXMLGUIConfigFile();
+    bool writeKisKXMLGUIConfigFile();
 
     QString m_componentName;
     QString m_componentDisplayName;
@@ -72,7 +72,7 @@ public:
     QMap<QString, QAction *> actionByName;
     QList<QAction *> actions;
 
-    const KXMLGUIClient *m_parentGUIClient;
+    const KisKXMLGUIClient *m_parentGUIClient;
 
     QString configGroup;
     bool configIsGlobal : 1;
@@ -80,70 +80,70 @@ public:
     bool connectTriggered : 1;
     bool connectHovered : 1;
 
-    KActionCollection *q;
+    KisKActionCollection *q;
 
     QList<QWidget *> associatedWidgets;
 };
 
-QList<KActionCollection *> KActionCollectionPrivate::s_allCollections;
+QList<KisKActionCollection *> KisKActionCollectionPrivate::s_allCollections;
 
-KActionCollection::KActionCollection(QObject *parent, const QString &cName)
+KisKActionCollection::KisKActionCollection(QObject *parent, const QString &cName)
     : QObject(parent)
-    , d(new KActionCollectionPrivate)
+    , d(new KisKActionCollectionPrivate)
 {
     d->q = this;
-    KActionCollectionPrivate::s_allCollections.append(this);
+    KisKActionCollectionPrivate::s_allCollections.append(this);
 
     setComponentName(cName);
 }
 
-KActionCollection::KActionCollection(const KXMLGUIClient *parent)
+KisKActionCollection::KisKActionCollection(const KisKXMLGUIClient *parent)
     : QObject(0)
-    , d(new KActionCollectionPrivate)
+    , d(new KisKActionCollectionPrivate)
 {
     d->q = this;
-    KActionCollectionPrivate::s_allCollections.append(this);
+    KisKActionCollectionPrivate::s_allCollections.append(this);
 
     d->m_parentGUIClient = parent;
     d->m_componentName = parent->componentName();
 }
 
-KActionCollection::~KActionCollection()
+KisKActionCollection::~KisKActionCollection()
 {
-    KActionCollectionPrivate::s_allCollections.removeAll(this);
+    KisKActionCollectionPrivate::s_allCollections.removeAll(this);
 
     delete d;
 }
 
 
-QList<KActionCategory *> KActionCollection::categories() const
+QList<KisKActionCategory *> KisKActionCollection::categories() const
 {
-    return this->findChildren<KActionCategory *>();
+    return this->findChildren<KisKActionCategory *>();
 }
 
-KActionCategory *KActionCollection::getCategory(const QString &name) {
-    KActionCategory *category = 0;
-    foreach (KActionCategory *c, categories()) {
+KisKActionCategory *KisKActionCollection::getCategory(const QString &name) {
+    KisKActionCategory *category = 0;
+    foreach (KisKActionCategory *c, categories()) {
         if (c->text() == name) {
             category = c;
         }
     }
 
     if (category == 0) {
-        category = new KActionCategory(name, this);
+        category = new KisKActionCategory(name, this);
     }
     return category;
 }
 
 
-void KActionCollection::clear()
+void KisKActionCollection::clear()
 {
     d->actionByName.clear();
     qDeleteAll(d->actions);
     d->actions.clear();
 }
 
-QAction *KActionCollection::action(const QString &name) const
+QAction *KisKActionCollection::action(const QString &name) const
 {
     QAction *action = 0L;
 
@@ -154,23 +154,23 @@ QAction *KActionCollection::action(const QString &name) const
     return action;
 }
 
-QAction *KActionCollection::action(int index) const
+QAction *KisKActionCollection::action(int index) const
 {
     // ### investigate if any apps use this at all
     return actions().value(index);
 }
 
-int KActionCollection::count() const
+int KisKActionCollection::count() const
 {
     return d->actions.count();
 }
 
-bool KActionCollection::isEmpty() const
+bool KisKActionCollection::isEmpty() const
 {
     return count() == 0;
 }
 
-void KActionCollection::setComponentName(const QString &cName)
+void KisKActionCollection::setComponentName(const QString &cName)
 {
     if (count() > 0) {
         // Its component name is part of an action's signature in the context of
@@ -179,7 +179,7 @@ void KActionCollection::setComponentName(const QString &cName)
         // As of now this only matters for global shortcuts. We could
         // thus relax the requirement and only refuse to change the component data
         // if we have actions with global shortcuts in this collection.
-        qWarning() << "this does not work on a KActionCollection containing actions!";
+        qWarning() << "this does not work on a KisKActionCollection containing actions!";
     }
 
     if (!cName.isEmpty()) {
@@ -189,17 +189,17 @@ void KActionCollection::setComponentName(const QString &cName)
     }
 }
 
-QString KActionCollection::componentName() const
+QString KisKActionCollection::componentName() const
 {
     return d->m_componentName;
 }
 
-void KActionCollection::setComponentDisplayName(const QString &displayName)
+void KisKActionCollection::setComponentDisplayName(const QString &displayName)
 {
     d->m_componentDisplayName = displayName;
 }
 
-QString KActionCollection::componentDisplayName() const
+QString KisKActionCollection::componentDisplayName() const
 {
     if (!d->m_componentDisplayName.isEmpty()) {
         return d->m_componentDisplayName;
@@ -210,17 +210,17 @@ QString KActionCollection::componentDisplayName() const
     return QCoreApplication::applicationName();
 }
 
-const KXMLGUIClient *KActionCollection::parentGUIClient() const
+const KisKXMLGUIClient *KisKActionCollection::parentGUIClient() const
 {
     return d->m_parentGUIClient;
 }
 
-QList<QAction *> KActionCollection::actions() const
+QList<QAction *> KisKActionCollection::actions() const
 {
     return d->actions;
 }
 
-const QList< QAction * > KActionCollection::actionsWithoutGroup() const
+const QList< QAction * > KisKActionCollection::actionsWithoutGroup() const
 {
     QList<QAction *> ret;
     Q_FOREACH (QAction *action, d->actions)
@@ -230,7 +230,7 @@ const QList< QAction * > KActionCollection::actionsWithoutGroup() const
     return ret;
 }
 
-const QList< QActionGroup * > KActionCollection::actionGroups() const
+const QList< QActionGroup * > KisKActionCollection::actionGroups() const
 {
     QSet<QActionGroup *> set;
     Q_FOREACH (QAction *action, d->actions)
@@ -244,12 +244,12 @@ const QList< QActionGroup * > KActionCollection::actionGroups() const
 #endif
 }
 
-QAction *KActionCollection::addCategorizedAction(const QString &name, QAction *action, const QString &categoryName)
+QAction *KisKActionCollection::addCategorizedAction(const QString &name, QAction *action, const QString &categoryName)
 {
     return getCategory(categoryName)->addAction(name, action);
 }
 
-QAction *KActionCollection::addAction(const QString &name, QAction *action)
+QAction *KisKActionCollection::addAction(const QString &name, QAction *action)
 {
     if (!action) {
         return action;
@@ -324,19 +324,19 @@ QAction *KActionCollection::addAction(const QString &name, QAction *action)
     return action;
 }
 
-void KActionCollection::addActions(const QList<QAction *> &actions)
+void KisKActionCollection::addActions(const QList<QAction *> &actions)
 {
     Q_FOREACH (QAction *action, actions) {
         addAction(action->objectName(), action);
     }
 }
 
-void KActionCollection::removeAction(QAction *action)
+void KisKActionCollection::removeAction(QAction *action)
 {
     delete takeAction(action);
 }
 
-QAction *KActionCollection::takeAction(QAction *action)
+QAction *KisKActionCollection::takeAction(QAction *action)
 {
     if (!d->unlistAction(action)) {
         return 0;
@@ -353,16 +353,16 @@ QAction *KActionCollection::takeAction(QAction *action)
     return action;
 }
 
-QAction *KActionCollection::addAction(KStandardAction::StandardAction actionType, const QObject *receiver, const char *member)
+QAction *KisKActionCollection::addAction(KStandardAction::StandardAction actionType, const QObject *receiver, const char *member)
 {
     QAction *action = KStandardAction::create(actionType, receiver, member, this);
     return action;
 }
 
-QAction *KActionCollection::addAction(KStandardAction::StandardAction actionType, const QString &name,
+QAction *KisKActionCollection::addAction(KStandardAction::StandardAction actionType, const QString &name,
                                       const QObject *receiver, const char *member)
 {
-    // pass 0 as parent, because if the parent is a KActionCollection KStandardAction::create automatically
+    // pass 0 as parent, because if the parent is a KisKActionCollection KStandardAction::create automatically
     // adds the action to it under the default name. We would trigger the
     // warning about renaming the action then.
     QAction *action = KStandardAction::create(actionType, receiver, member, 0);
@@ -374,7 +374,7 @@ QAction *KActionCollection::addAction(KStandardAction::StandardAction actionType
     return addAction(name, action);
 }
 
-QAction *KActionCollection::addAction(const QString &name, const QObject *receiver, const char *member)
+QAction *KisKActionCollection::addAction(const QString &name, const QObject *receiver, const char *member)
 {
     QAction *a = new QAction(this);
     if (receiver && member) {
@@ -383,51 +383,51 @@ QAction *KActionCollection::addAction(const QString &name, const QObject *receiv
     return addAction(name, a);
 }
 
-QKeySequence KActionCollection::defaultShortcut(QAction *action) const
+QKeySequence KisKActionCollection::defaultShortcut(QAction *action) const
 {
     const QList<QKeySequence> shortcuts = defaultShortcuts(action);
     return shortcuts.isEmpty() ? QKeySequence() : shortcuts.first();
 }
 
-QList<QKeySequence> KActionCollection::defaultShortcuts(QAction *action) const
+QList<QKeySequence> KisKActionCollection::defaultShortcuts(QAction *action) const
 {
     return action->property("defaultShortcuts").value<QList<QKeySequence> >();
 }
 
-void KActionCollection::setDefaultShortcut(QAction *action, const QKeySequence &shortcut)
+void KisKActionCollection::setDefaultShortcut(QAction *action, const QKeySequence &shortcut)
 {
     setDefaultShortcuts(action, QList<QKeySequence>() << shortcut);
 }
 
-void KActionCollection::setDefaultShortcuts(QAction *action, const QList<QKeySequence> &shortcuts)
+void KisKActionCollection::setDefaultShortcuts(QAction *action, const QList<QKeySequence> &shortcuts)
 {
     action->setShortcuts(shortcuts);
     action->setProperty("defaultShortcuts", QVariant::fromValue(shortcuts));
 }
 
-bool KActionCollection::isShortcutsConfigurable(QAction *action) const
+bool KisKActionCollection::isShortcutsConfigurable(QAction *action) const
 {
     // Considered as true by default
     const QVariant value = action->property("isShortcutConfigurable");
     return value.isValid() ? value.toBool() : true;
 }
 
-void KActionCollection::setShortcutsConfigurable(QAction *action, bool configurable)
+void KisKActionCollection::setShortcutsConfigurable(QAction *action, bool configurable)
 {
     action->setProperty("isShortcutConfigurable", configurable);
 }
 
-QString KActionCollection::configGroup() const
+QString KisKActionCollection::configGroup() const
 {
     return d->configGroup;
 }
 
-void KActionCollection::setConfigGroup(const QString &group)
+void KisKActionCollection::setConfigGroup(const QString &group)
 {
     d->configGroup = group;
 }
 
-void KActionCollection::updateShortcuts()
+void KisKActionCollection::updateShortcuts()
 {
     auto actionRegistry = KisActionRegistry::instance();
 
@@ -438,7 +438,7 @@ void KActionCollection::updateShortcuts()
 }
 
 
-void KActionCollection::readSettings()
+void KisKActionCollection::readSettings()
 {
     auto ar = KisActionRegistry::instance();
     ar->loadCustomShortcuts();
@@ -458,10 +458,10 @@ void KActionCollection::readSettings()
 }
 
 
-bool KActionCollectionPrivate::writeKXMLGUIConfigFile()
+bool KisKActionCollectionPrivate::writeKisKXMLGUIConfigFile()
 {
-    const KXMLGUIClient *kxmlguiClient = q->parentGUIClient();
-    // return false if there is no KXMLGUIClient
+    const KisKXMLGUIClient *kxmlguiClient = q->parentGUIClient();
+    // return false if there is no KisKXMLGUIClient
     if (!kxmlguiClient || kxmlguiClient->xmlFile().isEmpty()) {
         return false;
     }
@@ -470,14 +470,14 @@ bool KActionCollectionPrivate::writeKXMLGUIConfigFile()
     QString attrShortcut = QStringLiteral("shortcut");
 
     // Read XML file
-    QString sXml(KXMLGUIFactory::readConfigFile(kxmlguiClient->xmlFile(), q->componentName()));
+    QString sXml(KisKXMLGUIFactory::readConfigFile(kxmlguiClient->xmlFile(), q->componentName()));
     QDomDocument doc;
     doc.setContent(sXml);
 
     // Process XML data
 
     // Get hold of ActionProperties tag
-    QDomElement elem = KXMLGUIFactory::actionPropertiesElement(doc);
+    QDomElement elem = KisKXMLGUIFactory::actionPropertiesElement(doc);
 
     // now, iterate through our actions
     for (QMap<QString, QAction *>::ConstIterator it = actionByName.constBegin();
@@ -500,7 +500,7 @@ bool KActionCollectionPrivate::writeKXMLGUIConfigFile()
 
         // now see if this element already exists
         // and create it if necessary (unless bSameAsDefault)
-        QDomElement act_elem = KXMLGUIFactory::findActionByName(elem, actionName, !bSameAsDefault);
+        QDomElement act_elem = KisKXMLGUIFactory::findActionByName(elem, actionName, !bSameAsDefault);
         if (act_elem.isNull()) {
             continue;
         }
@@ -516,18 +516,18 @@ bool KActionCollectionPrivate::writeKXMLGUIConfigFile()
     }
 
     // Write back to XML file
-    KXMLGUIFactory::saveConfigFile(doc, kxmlguiClient->localXMLFile(), q->componentName());
+    KisKXMLGUIFactory::saveConfigFile(doc, kxmlguiClient->localXMLFile(), q->componentName());
     return true;
 }
 
-void KActionCollection::writeSettings(KConfigGroup *config,
+void KisKActionCollection::writeSettings(KConfigGroup *config,
                                       bool writeScheme,
                                       QAction *oneAction) const
 {
-    // If the caller didn't provide a config group we try to save the KXMLGUI
+    // If the caller didn't provide a config group we try to save the KisKXMLGUI
     // Configuration file. (This will work if the parentGUI was set and has a
     // valid configuration file.)
-    if (config == 0 && d->writeKXMLGUIConfigFile()) {
+    if (config == 0 && d->writeKisKXMLGUIConfigFile()) {
         return;
     }
 
@@ -589,7 +589,7 @@ void KActionCollection::writeSettings(KConfigGroup *config,
     config->sync();
 }
 
-void KActionCollection::slotActionTriggered()
+void KisKActionCollection::slotActionTriggered()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
@@ -597,12 +597,12 @@ void KActionCollection::slotActionTriggered()
     }
 }
 
-void KActionCollection::slotActionHighlighted()
+void KisKActionCollection::slotActionHighlighted()
 {
     slotActionHovered();
 }
 
-void KActionCollection::slotActionHovered()
+void KisKActionCollection::slotActionHovered()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (action) {
@@ -611,7 +611,7 @@ void KActionCollection::slotActionHovered()
     }
 }
 
-void KActionCollectionPrivate::_k_actionDestroyed(QObject *obj)
+void KisKActionCollectionPrivate::_k_actionDestroyed(QObject *obj)
 {
     // obj isn't really a QAction anymore. So make sure we don't do fancy stuff
     // with it.
@@ -625,7 +625,7 @@ void KActionCollectionPrivate::_k_actionDestroyed(QObject *obj)
     emit q->removed(action); //deprecated. remove in KDE5
 }
 
-void KActionCollection::connectNotify(const QMetaMethod &signal)
+void KisKActionCollection::connectNotify(const QMetaMethod &signal)
 {
     if (d->connectHovered && d->connectTriggered) {
         return;
@@ -652,12 +652,12 @@ void KActionCollection::connectNotify(const QMetaMethod &signal)
     QObject::connectNotify(signal);
 }
 
-const QList< KActionCollection * > &KActionCollection::allCollections()
+const QList< KisKActionCollection * > &KisKActionCollection::allCollections()
 {
-    return KActionCollectionPrivate::s_allCollections;
+    return KisKActionCollectionPrivate::s_allCollections;
 }
 
-void KActionCollection::associateWidget(QWidget *widget) const
+void KisKActionCollection::associateWidget(QWidget *widget) const
 {
     Q_FOREACH (QAction *action, actions()) {
         if (!widget->actions().contains(action)) {
@@ -666,7 +666,7 @@ void KActionCollection::associateWidget(QWidget *widget) const
     }
 }
 
-void KActionCollection::addAssociatedWidget(QWidget *widget)
+void KisKActionCollection::addAssociatedWidget(QWidget *widget)
 {
     if (!d->associatedWidgets.contains(widget)) {
         widget->addActions(actions());
@@ -676,7 +676,7 @@ void KActionCollection::addAssociatedWidget(QWidget *widget)
     }
 }
 
-void KActionCollection::removeAssociatedWidget(QWidget *widget)
+void KisKActionCollection::removeAssociatedWidget(QWidget *widget)
 {
     Q_FOREACH (QAction *action, actions()) {
         widget->removeAction(action);
@@ -686,7 +686,7 @@ void KActionCollection::removeAssociatedWidget(QWidget *widget)
     disconnect(widget, SIGNAL(destroyed(QObject*)), this, SLOT(_k_associatedWidgetDestroyed(QObject*)));
 }
 
-QAction *KActionCollectionPrivate::unlistAction(QAction *action)
+QAction *KisKActionCollectionPrivate::unlistAction(QAction *action)
 {
     // ATTENTION:
     //   This method is called with an QObject formerly known as a QAction
@@ -712,20 +712,20 @@ QAction *KActionCollectionPrivate::unlistAction(QAction *action)
     actions.removeAt(index);
 
     // Remove the action from the categories. Should be only one
-    QList<KActionCategory *> categories = q->findChildren<KActionCategory *>();
-    Q_FOREACH (KActionCategory *category, categories) {
+    QList<KisKActionCategory *> categories = q->findChildren<KisKActionCategory *>();
+    Q_FOREACH (KisKActionCategory *category, categories) {
         category->unlistAction(action);
     }
 
     return action;
 }
 
-QList< QWidget * > KActionCollection::associatedWidgets() const
+QList< QWidget * > KisKActionCollection::associatedWidgets() const
 {
     return d->associatedWidgets;
 }
 
-void KActionCollection::clearAssociatedWidgets()
+void KisKActionCollection::clearAssociatedWidgets()
 {
     Q_FOREACH (QWidget *widget, d->associatedWidgets)
         Q_FOREACH (QAction *action, actions()) {
@@ -735,7 +735,7 @@ void KActionCollection::clearAssociatedWidgets()
     d->associatedWidgets.clear();
 }
 
-void KActionCollectionPrivate::_k_associatedWidgetDestroyed(QObject *obj)
+void KisKActionCollectionPrivate::_k_associatedWidgetDestroyed(QObject *obj)
 {
     associatedWidgets.removeAll(static_cast<QWidget *>(obj));
 }

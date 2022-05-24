@@ -19,15 +19,15 @@
  -"rocker" (i.e. two mouse button) gestures
  */
 
-class KShapeGesturePrivate;
+class KisKShapeGesturePrivate;
 //TODO: implement operator== for special situations like in KKeyChooser.
-class KRITAWIDGETUTILS_EXPORT KShapeGesture
+class KRITAWIDGETUTILS_EXPORT KisKShapeGesture
 {
 public:
     /**
      * Create a new invalid shape gesture.
      */
-    KShapeGesture();
+    KisKShapeGesture();
 
     /**
      * Creates a new gesture consisting of given shape.
@@ -38,24 +38,24 @@ public:
      * are allowed to be at the same position.
      * @param shape shape to draw to trigger this gesture
      */
-    KShapeGesture(const QPolygon &shape);
+    KisKShapeGesture(const QPolygon &shape);
 
     /**
      * Creates a new gesture from a string description.
      * @param description create gesture according to this
      */
-    KShapeGesture(const QString &description);
+    KisKShapeGesture(const QString &description);
 
     /**
      * Copies the given gesture.
      * @param other gesture to copy
      */
-    KShapeGesture(const KShapeGesture &other);
+    KisKShapeGesture(const KisKShapeGesture &other);
 
     /**
      * Destructor.
      */
-    ~KShapeGesture();
+    ~KisKShapeGesture();
 
     /**
      * Set the shape to draw to trigger this gesture.
@@ -102,22 +102,22 @@ public:
      * and return a very large difference in that case.
      * Usual return values range from x to y //TODO: fill in x and y
      */
-    float distance(const KShapeGesture &other, float abortThreshold) const;
+    float distance(const KisKShapeGesture &other, float abortThreshold) const;
 
     /**
      * Set this gesture to the other gesture.
      */
-    KShapeGesture &operator=(const KShapeGesture &other);
+    KisKShapeGesture &operator=(const KisKShapeGesture &other);
 
     /**
      * Return whether this gesture is equal to the other gesture.
      */
-    bool operator==(const KShapeGesture &other) const;
+    bool operator==(const KisKShapeGesture &other) const;
 
     /**
      * Return the opposite of operator==()
      */
-    bool operator!=(const KShapeGesture &other) const;
+    bool operator!=(const KisKShapeGesture &other) const;
 
     /**
      * Return an opaque value for use in hash tables
@@ -125,47 +125,47 @@ public:
     uint hashable() const;
 
 private:
-    KShapeGesturePrivate *const d;
+    KisKShapeGesturePrivate *const d;
 };
 
-inline uint qHash(const KShapeGesture &key)
+inline uint qHash(const KisKShapeGesture &key)
 {
     return qHash(key.hashable());
 }
 
-class KRockerGesturePrivate;
+class KisKRockerGesturePrivate;
 
-class KRITAWIDGETUTILS_EXPORT KRockerGesture
+class KRITAWIDGETUTILS_EXPORT KisKRockerGesture
 {
 public:
     /**
      * Create a new invalid rocker gesture.
      */
-    KRockerGesture();
+    KisKRockerGesture();
 
     /**
      * Creates a new gesture consisting of given buttons.
      * @param hold create gesture according to this hold
      * @param thenPush create gesture according to this push
      */
-    KRockerGesture(enum Qt::MouseButton hold, enum Qt::MouseButton thenPush);
+    KisKRockerGesture(enum Qt::MouseButton hold, enum Qt::MouseButton thenPush);
 
     /**
      * Creates a new gesture from a string description.
      * @param description create gesture according to this
      */
-    KRockerGesture(const QString &description);
+    KisKRockerGesture(const QString &description);
 
     /**
      * Copies the given gesture.
      * @param other gesture to copy
      */
-    KRockerGesture(const KRockerGesture &other);
+    KisKRockerGesture(const KisKRockerGesture &other);
 
     /**
      * Destructor.
      */
-    ~KRockerGesture();
+    ~KisKRockerGesture();
 
     /**
      * set button combination to trigger
@@ -204,17 +204,17 @@ public:
     /**
      * Set this gesture to the other gesture.
      */
-    KRockerGesture &operator=(const KRockerGesture &other);
+    KisKRockerGesture &operator=(const KisKRockerGesture &other);
 
     /**
      * Return whether this gesture is equal to the other gesture.
      */
-    bool operator==(const KRockerGesture &other) const;
+    bool operator==(const KisKRockerGesture &other) const;
 
     /**
      * Return the opposite of operator==()
      */
-    bool operator!=(const KRockerGesture &other) const;
+    bool operator!=(const KisKRockerGesture &other) const;
 
     /**
      * Return an opaque value for use in hash tables
@@ -222,10 +222,10 @@ public:
     uint hashable() const;
 
 private:
-    KRockerGesturePrivate *const d;
+    KisKRockerGesturePrivate *const d;
 };
 
-inline uint qHash(const KRockerGesture &key)
+inline uint qHash(const KisKRockerGesture &key)
 {
     return qHash(key.hashable());
 }

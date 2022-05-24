@@ -27,10 +27,10 @@ public:
     QPoint documentOffset;
     qreal preferredCenterFractionX;
     qreal preferredCenterFractionY;
-    KActionCollection* actionCollection;
+    KisKActionCollection* actionCollection;
 };
 
-KoCanvasController::KoCanvasController(KActionCollection* actionCollection)
+KoCanvasController::KoCanvasController(KisKActionCollection* actionCollection)
     : d(new Private())
 {
     proxyObject = new KoCanvasControllerProxyObject(this);
@@ -110,7 +110,7 @@ void KoCanvasControllerProxyObject::updateDocumentSize(const QSize &newSize, boo
     m_canvasController->updateDocumentSize(newSize, recalculateCenter);
 }
 
-KActionCollection* KoCanvasController::actionCollection() const
+KisKActionCollection* KoCanvasController::actionCollection() const
 {
     return d->actionCollection;
 }

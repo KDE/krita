@@ -29,11 +29,11 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QRadioButton;
 class QAction;
-class KActionCollection;
+class KisKActionCollection;
 class QPushButton;
 class QComboBox;
 class KisShortcutsDialog;
-class KShortcutSchemesEditor;
+class KisKShortcutSchemesEditor;
 class QAction;
 
 
@@ -78,15 +78,15 @@ public:
     void undo();
     void save();
 
-    QHash<QString, KActionCollection *> m_collections;
+    QHash<QString, KisKActionCollection *> m_collections;
     KisShortcutsDialog *q;
     KisShortcutsEditor *m_shortcutsEditor {0};
-    KShortcutSchemesEditor *m_schemeEditor{0};
+    KisKShortcutSchemesEditor *m_schemeEditor{0};
 };
 
 
 /**
- * Mixes the KShortcutWidget into the treeview used by KisShortcutsEditor. When
+ * Mixes the KisKShortcutWidget into the treeview used by KisShortcutsEditor. When
  * selecting an shortcut it changes the display from "CTRL-W" to the Widget.
  *
  * @bug That delegate uses KExtendableItemDelegate. That means a cell can be
@@ -113,9 +113,9 @@ public:
      * Set a list of action collections to check against for conflicting
      * shortcuts.
      *
-     * @see KKeySequenceWidget::setCheckActionCollections
+     * @see KisKKeySequenceWidget::setCheckActionCollections
      */
-    void setCheckActionCollections(const QList<KActionCollection *> checkActionCollections);
+    void setCheckActionCollections(const QList<KisKActionCollection *> checkActionCollections);
     bool eventFilter(QObject *, QEvent *) override;
 private:
     mutable QPersistentModelIndex m_editingIndex;
@@ -123,7 +123,7 @@ private:
     QWidget *m_editor;
 
     //! List of actionCollections to check for conflicts.
-    QList<KActionCollection *> m_checkActionCollections;
+    QList<KisKActionCollection *> m_checkActionCollections;
 
 
 Q_SIGNALS:
@@ -169,22 +169,22 @@ public:
     ShortcutEditWidget(QWidget *viewport, const QKeySequence &defaultSeq, const QKeySequence &activeSeq,
                        bool allowLetterShortcuts);
 
-    //! @see KKeySequenceWidget::setCheckActionCollections()
-    void setCheckActionCollections(const QList<KActionCollection *> checkActionCollections);
+    //! @see KisKKeySequenceWidget::setCheckActionCollections()
+    void setCheckActionCollections(const QList<KisKActionCollection *> checkActionCollections);
 
     //@{
-    //! @see KKeySequenceWidget::checkAgainstStandardShortcuts()
-    KKeySequenceWidget::ShortcutTypes checkForConflictsAgainst() const;
-    void setCheckForConflictsAgainst(KKeySequenceWidget::ShortcutTypes);
+    //! @see KisKKeySequenceWidget::checkAgainstStandardShortcuts()
+    KisKKeySequenceWidget::ShortcutTypes checkForConflictsAgainst() const;
+    void setCheckForConflictsAgainst(KisKKeySequenceWidget::ShortcutTypes);
     //@}
 
     //@{
-    //! @see KKeySequenceWidget::checkAgainstStandardShortcuts()
+    //! @see KisKKeySequenceWidget::checkAgainstStandardShortcuts()
     bool multiKeyShortcutsAllowed() const;
     void setMultiKeyShortcutsAllowed(bool);
     //@}
 
-    //! @see KKeySequenceWidget::setComponentName
+    //! @see KisKKeySequenceWidget::setComponentName
     void setComponentName(const QString componentName);
 
     void setAction(QObject *action);
@@ -195,7 +195,7 @@ Q_SIGNALS:
     //! Emitted when the key sequence is changed.
     void keySequenceChanged(const QKeySequence &);
 
-    //! @see KKeySequenceWidget::stealShortcut()
+    //! @see KisKKeySequenceWidget::stealShortcut()
     void stealShortcut(const QKeySequence &seq, QAction *action);
 
 
@@ -214,7 +214,7 @@ private:
     QKeySequence m_defaultKeySequence;
     QRadioButton *m_defaultRadio;
     QRadioButton *m_customRadio;
-    KKeySequenceWidget *m_customEditor;
+    KisKKeySequenceWidget *m_customEditor;
     bool m_isUpdating;
     QObject *m_action;
 };

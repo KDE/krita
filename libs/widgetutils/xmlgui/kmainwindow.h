@@ -26,8 +26,8 @@ class QMenu;
 class KConfig;
 class KConfigGroup;
 class KMWSessionManager;
-class KMainWindowPrivate;
-class KToolBar;
+class KisKMainWindowPrivate;
+class KisToolBar;
 
 // internal, not public API, may change any time
 #define XMLGUI_DECLARE_PRIVATE(classname) \
@@ -44,7 +44,7 @@ class KToolBar;
  * It manages the geometry for all its children, including your
  * main widget.
  *
- * Normally, you will inherit from KMainWindow,
+ * Normally, you will inherit from KisKMainWindow,
  * then construct (or use some existing) widget as
  * your main view. You can set only one main view.
  *
@@ -52,18 +52,18 @@ class KToolBar;
  * and only one statusbar.
  *
  * The toolbars, menubar, and statusbar can be created by the
- * KMainWindow and - unlike the old KMainWindow - may, but do not
- * have to, be deleted by you. KMainWindow will handle that internally.
+ * KisKMainWindow and - unlike the old KisKMainWindow - may, but do not
+ * have to, be deleted by you. KisKMainWindow will handle that internally.
  *
  * Height and width can be operated independently from each other. Simply
  * define the minimum/maximum height/width of your main widget and
- * KMainWindow will take this into account. For fixed size windows set
+ * KisKMainWindow will take this into account. For fixed size windows set
  * your main widget to a fixed size.
  *
  * Fixed aspect ratios (heightForWidth()) and fixed width widgets are
  * not supported.
  *
- * KMainWindow will set icon, mini icon and caption, which it gets
+ * KisKMainWindow will set icon, mini icon and caption, which it gets
  * from KApplication. It provides full session management, and
  * will save its position, geometry and positions of toolbars and
  * menubar on logout. If you want to save additional data, reimplement
@@ -77,7 +77,7 @@ class KToolBar;
  * There are also kRestoreMainWindows convenience functions which
  * can do this for you and restore all your windows on next login.
  *
- * Note that KMainWindow uses KGlobal::ref() and KGlobal::deref() so that closing
+ * Note that KisKMainWindow uses KGlobal::ref() and KGlobal::deref() so that closing
  * the last mainwindow will quit the application unless there is still something
  * that holds a ref in KGlobal - like a KIO job, or a systray icon.
  *
@@ -85,11 +85,11 @@ class KToolBar;
  * @author Reginald Stadlbauer (reggie@kde.org) Stephan Kulow (coolo@kde.org), Matthias Ettrich (ettrich@kde.org), Chris Schlaeger (cs@kde.org), Sven Radej (radej@kde.org). Maintained by David Faure (faure@kde.org)
  */
 
-class KRITAWIDGETUTILS_EXPORT KMainWindow : public QMainWindow
+class KRITAWIDGETUTILS_EXPORT KisKMainWindow : public QMainWindow
 {
     friend class KMWSessionManager;
     friend class DockResizeListener;
-    XMLGUI_DECLARE_PRIVATE(KMainWindow)
+    XMLGUI_DECLARE_PRIVATE(KisKMainWindow)
     Q_OBJECT
     Q_PROPERTY(bool hasMenuBar READ hasMenuBar)
     Q_PROPERTY(bool autoSaveSettings READ autoSaveSettings)
@@ -100,35 +100,35 @@ public:
      * Construct a main window.
      *
      * @param parent The widget parent. This is usually 0 but it may also be the window
-     * group leader. In that case, the KMainWindow becomes sort of a
+     * group leader. In that case, the KisKMainWindow becomes sort of a
      * secondary window.
      *
      * @param f Specify the window flags. The default is none.
      *
-     * Note that a KMainWindow per-default is created with the
+     * Note that a KisKMainWindow per-default is created with the
      * WA_DeleteOnClose attribute, i.e. it is automatically destroyed when the
      * window is closed. If you do not want this behavior, call
      * setAttribute(Qt::WA_DeleteOnClose, false);
      *
-     * KMainWindows must be created on the heap with 'new', like:
+     * KisKMainWindows must be created on the heap with 'new', like:
      * \code
-     * KMainWindow *kmw = new KMainWindow(...);
+     * KisKMainWindow *kmw = new KisKMainWindow(...);
      * kmw->setObjectName(...);
      * \endcode
      *
      * IMPORTANT: For session management and window management to work
      * properly, all main windows in the application should have a
-     * different name. If you don't do it, KMainWindow will create
+     * different name. If you don't do it, KisKMainWindow will create
      * a unique name, but it's recommended to explicitly pass a window name that will
      * also describe the type of the window. If there can be several windows of the same
-     * type, append '#' (hash) to the name, and KMainWindow will replace it with numbers to make
+     * type, append '#' (hash) to the name, and KisKMainWindow will replace it with numbers to make
      * the names unique. For example, for a mail client which has one main window showing
      * the mails and folders, and which can also have one or more windows for composing
      * mails, the name for the folders window should be e.g. "mainwindow" and
      * for the composer windows "composer#".
      *
      */
-    explicit KMainWindow(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
+    explicit KisKMainWindow(QWidget *parent = 0, Qt::WindowFlags f = Qt::WindowFlags());
 
     /**
      * \brief Destructor.
@@ -136,7 +136,7 @@ public:
      * Will also destroy the toolbars, and menubar if
      * needed.
      */
-    ~KMainWindow() override;
+    ~KisKMainWindow() override;
 
     /**
      * If the session did contain so high a number, @p true is returned,
@@ -166,7 +166,7 @@ public:
      * \code
      * if (qApp->isSessionRestored()){
      *   int n = 1;
-     *   while (KMainWindow::canBeRestored(n)){
+     *   while (KisKMainWindow::canBeRestored(n)){
      *     (new childMW)->restore(n);
      *     n++;
      *   }
@@ -181,7 +181,7 @@ public:
      * application.
      *
      * If your application uses different kinds of toplevel
-     * windows, then you can use KMainWindow::classNameOfToplevel(n)
+     * windows, then you can use KisKMainWindow::classNameOfToplevel(n)
      * to determine the exact type before calling the childMW
      * constructor in the example from above.
      *
@@ -199,9 +199,9 @@ public:
     bool hasMenuBar();
 
     /**
-     * List of members of KMainWindow class.
+     * List of members of KisKMainWindow class.
      */
-    static QList<KMainWindow *> memberList();
+    static QList<KisKMainWindow *> memberList();
 
     /**
      * Returns a pointer to the toolbar with the specified name.
@@ -213,12 +213,12 @@ public:
      *
      * @return A pointer to the toolbar
      **/
-    KToolBar *toolBar(const QString &name = QString());
+    KisToolBar *toolBar(const QString &name = QString());
 
     /**
      * @return A list of all toolbars for this window
      */
-    QList<KToolBar *> toolBars() const;
+    QList<KisToolBar *> toolBars() const;
 
     /**
      * Call this to enable "auto-save" of toolbar/menubar/statusbar settings
@@ -233,11 +233,11 @@ public:
      * when saving.
      *
      * Typically, you will call setAutoSaveSettings() in your
-     * KMainWindow-inherited class constructor, and it will take care
+     * KisKMainWindow-inherited class constructor, and it will take care
      * of restoring and saving automatically. Make sure you call this
      * _after all_ your *bars have been created.
      *
-     * To make sure that KMainWindow properly obtains the default
+     * To make sure that KisKMainWindow properly obtains the default
      * size of the window you should do the following:
      * - Remove hard coded resize() calls in the constructor or main, they
      *   should be removed in favor of letting the automatic resizing
@@ -278,7 +278,7 @@ public:
      * @return the group used for setting-autosaving.
      * Only meaningful if setAutoSaveSettings(QString) was called.
      * This can be useful for forcing a save or an apply, e.g. before and after
-     * using KEditToolbar.
+     * using KisKEditToolbar.
      *
      * NOTE: you should rather use saveAutoSaveSettings() for saving or autoSaveConfigGroup() for loading.
      * This method doesn't make sense if setAutoSaveSettings(KConfigGroup) was called.
@@ -288,7 +288,7 @@ public:
     /**
      * @return the group used for setting-autosaving.
      * Only meaningful if setAutoSaveSettings() was called.
-     * This can be useful for forcing an apply, e.g. after using KEditToolbar.
+     * This can be useful for forcing an apply, e.g. after using KisKEditToolbar.
      * @since 4.1
      */
     KConfigGroup autoSaveConfigGroup() const;
@@ -479,9 +479,9 @@ protected Q_SLOTS:
     void saveAutoSaveSettings();
 
 protected:
-    KMainWindow(KMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f);
+    KisKMainWindow(KisKMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f);
 
-    KMainWindowPrivate *const k_ptr;
+    KisKMainWindowPrivate *const k_ptr;
 private:
     Q_PRIVATE_SLOT(k_func(), void _k_slotSettingsChanged(int))
     Q_PRIVATE_SLOT(k_func(), void _k_slotSaveAutoSaveSize())
@@ -499,7 +499,7 @@ private:
  * Restores the last session. (To be used in your main function).
  *
  * These functions work also if you have more than one kind of toplevel
- * widget (each derived from KMainWindow, of course).
+ * widget (each derived from KisKMainWindow, of course).
  *
  * Imagine you have three kinds of toplevel widgets: the classes childMW1,
  * childMW2 and childMW3. Than you can just do:
@@ -514,7 +514,7 @@ private:
  *
  * kRestoreMainWindows<>() will create (on the heap) as many instances
  * of your main windows as have existed in the last session and
- * call KMainWindow::restore() with the correct arguments. Note that
+ * call KisKMainWindow::restore() with the correct arguments. Note that
  * also QWidget::show() is called implicitly.
  *
  * Currently, these functions are provided for up to three
@@ -522,14 +522,14 @@ private:
  * deciding whether or not you can use kRestoreMainWindows, a
  * define #KDE_RESTORE_MAIN_WINDOWS_NUM_TEMPLATE_ARGS is provided.
  *
- * @see KMainWindow::restore()
- * @see KMainWindow::classNameOfToplevel()
+ * @see KisKMainWindow::restore()
+ * @see KisKMainWindow::classNameOfToplevel()
  **/
 template <typename T>
 inline void kRestoreMainWindows()
 {
-    for (int n = 1; KMainWindow::canBeRestored(n); ++n) {
-        const QString className = KMainWindow::classNameOfToplevel(n);
+    for (int n = 1; KisKMainWindow::canBeRestored(n); ++n) {
+        const QString className = KisKMainWindow::classNameOfToplevel(n);
         if (className == QLatin1String(T::staticMetaObject.className())) {
             (new T)->restore(n);
         }
@@ -542,8 +542,8 @@ inline void kRestoreMainWindows()
     const char *classNames[2];
     classNames[0] = T0::staticMetaObject.className();
     classNames[1] = T1::staticMetaObject.className();
-    for (int n = 1; KMainWindow::canBeRestored(n); ++n) {
-        const QString className = KMainWindow::classNameOfToplevel(n);
+    for (int n = 1; KisKMainWindow::canBeRestored(n); ++n) {
+        const QString className = KisKMainWindow::classNameOfToplevel(n);
         if (className == QLatin1String(classNames[0])) {
             (new T0)->restore(n);
         } else if (className == QLatin1String(classNames[1])) {
@@ -559,8 +559,8 @@ inline void kRestoreMainWindows()
     classNames[0] = T0::staticMetaObject.className();
     classNames[1] = T1::staticMetaObject.className();
     classNames[2] = T2::staticMetaObject.className();
-    for (int n = 1; KMainWindow::canBeRestored(n); ++n) {
-        const QString className = KMainWindow::classNameOfToplevel(n);
+    for (int n = 1; KisKMainWindow::canBeRestored(n); ++n) {
+        const QString className = KisKMainWindow::classNameOfToplevel(n);
         if (className == QLatin1String(classNames[0])) {
             (new T0)->restore(n);
         } else if (className == QLatin1String(classNames[1])) {

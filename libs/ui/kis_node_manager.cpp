@@ -245,7 +245,7 @@ void KisNodeManager::setView(QPointer<KisView>imageView)
 #define CONVERT_NODE_ACTION(id, layerType)              \
     CONVERT_NODE_ACTION_2(id, layerType, layerType)
 
-void KisNodeManager::setup(KActionCollection * actionCollection, KisActionManager* actionManager)
+void KisNodeManager::setup(KisKActionCollection * actionCollection, KisActionManager* actionManager)
 {
     m_d->layerManager.setup(actionManager);
     m_d->maskManager.setup(actionCollection, actionManager);

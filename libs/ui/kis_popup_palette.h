@@ -138,7 +138,7 @@ private:
     KisColorSelectorInterface *m_colorSelector {0};
     const KoColorDisplayRendererInterface *m_displayRenderer;
     QScopedPointer<KisSignalCompressor> m_colorChangeCompressor;
-    KActionCollection *m_actionCollection;
+    KisKActionCollection *m_actionCollection;
 
     QSpacerItem *m_mainArea {0};
     KisBrushHud *m_brushHud {0};

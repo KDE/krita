@@ -148,7 +148,7 @@ void KoCanvasControllerWidget::Private::unsetCanvas()
 }
 
 ////////////
-KoCanvasControllerWidget::KoCanvasControllerWidget(KActionCollection * actionCollection, KoCanvasSupervisor *observerProvider, QWidget *parent)
+KoCanvasControllerWidget::KoCanvasControllerWidget(KisKActionCollection * actionCollection, KoCanvasSupervisor *observerProvider, QWidget *parent)
     : QAbstractScrollArea(parent)
     , KoCanvasController(actionCollection)
     , d(new Private(this, observerProvider))

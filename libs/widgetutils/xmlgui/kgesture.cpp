@@ -15,13 +15,13 @@ inline float metric(float dx, float dy)
     return (dx * dx + dy * dy);
 }
 
-class KShapeGesturePrivate
+class KisKShapeGesturePrivate
 {
 public:
-    KShapeGesturePrivate()
+    KisKShapeGesturePrivate()
     {
     }
-    KShapeGesturePrivate(const KShapeGesturePrivate &other)
+    KisKShapeGesturePrivate(const KisKShapeGesturePrivate &other)
         : m_shape(other.m_shape),
           m_lengthTo(other.m_lengthTo),
           m_curveLength(other.m_curveLength)
@@ -33,19 +33,19 @@ public:
     QString m_friendlyName;
 };
 
-KShapeGesture::KShapeGesture()
-    : d(new KShapeGesturePrivate)
+KisKShapeGesture::KisKShapeGesture()
+    : d(new KisKShapeGesturePrivate)
 {
 }
 
-KShapeGesture::KShapeGesture(const QPolygon &shape)
-    : d(new KShapeGesturePrivate)
+KisKShapeGesture::KisKShapeGesture(const QPolygon &shape)
+    : d(new KisKShapeGesturePrivate)
 {
     setShape(shape);
 }
 
-KShapeGesture::KShapeGesture(const QString &description)
-    : d(new KShapeGesturePrivate)
+KisKShapeGesture::KisKShapeGesture(const QString &description)
+    : d(new KisKShapeGesturePrivate)
 {
     QStringList sl = description.split(QLatin1Char(','));
     d->m_friendlyName = sl.takeFirst();
@@ -75,17 +75,17 @@ KShapeGesture::KShapeGesture(const QString &description)
     setShape(poly);
 }
 
-KShapeGesture::KShapeGesture(const KShapeGesture &other)
-    : d(new KShapeGesturePrivate(*(other.d)))
+KisKShapeGesture::KisKShapeGesture(const KisKShapeGesture &other)
+    : d(new KisKShapeGesturePrivate(*(other.d)))
 {
 }
 
-KShapeGesture::~KShapeGesture()
+KisKShapeGesture::~KisKShapeGesture()
 {
     delete d;
 }
 
-void KShapeGesture::setShape(const QPolygon &shape)
+void KisKShapeGesture::setShape(const QPolygon &shape)
 {
     //Scale and translate into a 100x100 square with its
     //upper left corner at origin.
@@ -125,22 +125,22 @@ void KShapeGesture::setShape(const QPolygon &shape)
     }
 }
 
-void KShapeGesture::setShapeName(const QString &friendlyName)
+void KisKShapeGesture::setShapeName(const QString &friendlyName)
 {
     d->m_friendlyName = friendlyName;
 }
 
-QString KShapeGesture::shapeName() const
+QString KisKShapeGesture::shapeName() const
 {
     return d->m_friendlyName;
 }
 
-bool KShapeGesture::isValid() const
+bool KisKShapeGesture::isValid() const
 {
     return !d->m_shape.isEmpty();
 }
 
-QString KShapeGesture::toString() const
+QString KisKShapeGesture::toString() const
 {
     if (!isValid()) {
         return QString();
@@ -160,7 +160,7 @@ QString KShapeGesture::toString() const
     return ret;
 }
 
-QByteArray KShapeGesture::toSvg(const QString &attributes) const
+QByteArray KisKShapeGesture::toSvg(const QString &attributes) const
 {
     if (!isValid()) {
         return QByteArray();
@@ -200,7 +200,7 @@ QByteArray KShapeGesture::toSvg(const QString &attributes) const
   fabs(a->distance(b) - b->distance(a)) might turn out to be very interesting,
   too. in fact, i think it's the most interesting value.
  */
-float KShapeGesture::distance(const KShapeGesture &other, float abortThreshold) const
+float KisKShapeGesture::distance(const KisKShapeGesture &other, float abortThreshold) const
 {
     Q_UNUSED(abortThreshold); //for optimizations, later
     const QPolygon &o_shape = other.d->m_shape;
@@ -340,7 +340,7 @@ float KShapeGesture::distance(const KShapeGesture &other, float abortThreshold) 
     return retval / 30.0;
 }
 
-KShapeGesture &KShapeGesture::operator=(const KShapeGesture &other)
+KisKShapeGesture &KisKShapeGesture::operator=(const KisKShapeGesture &other)
 {
     d->m_lengthTo = other.d->m_lengthTo;
     d->m_shape = other.d->m_shape;
@@ -348,7 +348,7 @@ KShapeGesture &KShapeGesture::operator=(const KShapeGesture &other)
     return *this;
 }
 
-bool KShapeGesture::operator==(const KShapeGesture &other) const
+bool KisKShapeGesture::operator==(const KisKShapeGesture &other) const
 {
     //a really fast and workable shortcut
     if (fabs(d->m_curveLength - other.d->m_curveLength) > 0.1) {
@@ -357,12 +357,12 @@ bool KShapeGesture::operator==(const KShapeGesture &other) const
     return d->m_shape == other.d->m_shape;
 }
 
-bool KShapeGesture::operator!=(const KShapeGesture &other) const
+bool KisKShapeGesture::operator!=(const KisKShapeGesture &other) const
 {
     return !operator==(other);
 }
 
-uint KShapeGesture::hashable() const
+uint KisKShapeGesture::hashable() const
 {
     uint hash = 0;
 
@@ -374,18 +374,18 @@ uint KShapeGesture::hashable() const
 }
 
 /********************************************************
- * KRockerGesture *
+ * KisKRockerGesture *
  *******************************************************/
 
-class KRockerGesturePrivate
+class KisKRockerGesturePrivate
 {
 public:
-    KRockerGesturePrivate()
+    KisKRockerGesturePrivate()
         : m_hold(Qt::NoButton),
           m_thenPush(Qt::NoButton)
     {
     }
-    KRockerGesturePrivate(const KRockerGesturePrivate &other)
+    KisKRockerGesturePrivate(const KisKRockerGesturePrivate &other)
         : m_hold(other.m_hold),
           m_thenPush(other.m_thenPush)
     {
@@ -394,19 +394,19 @@ public:
     Qt::MouseButton m_thenPush;
 };
 
-KRockerGesture::KRockerGesture()
-    : d(new KRockerGesturePrivate)
+KisKRockerGesture::KisKRockerGesture()
+    : d(new KisKRockerGesturePrivate)
 {
 }
 
-KRockerGesture::KRockerGesture(Qt::MouseButton hold, Qt::MouseButton thenPush)
-    : d(new KRockerGesturePrivate)
+KisKRockerGesture::KisKRockerGesture(Qt::MouseButton hold, Qt::MouseButton thenPush)
+    : d(new KisKRockerGesturePrivate)
 {
     setButtons(hold, thenPush);
 }
 
-KRockerGesture::KRockerGesture(const QString &description)
-    : d(new KRockerGesturePrivate)
+KisKRockerGesture::KisKRockerGesture(const QString &description)
+    : d(new KisKRockerGesturePrivate)
 {
     if (description.length() != 2) {
         return;
@@ -440,17 +440,17 @@ KRockerGesture::KRockerGesture(const QString &description)
     d->m_thenPush = thenPush;
 }
 
-KRockerGesture::KRockerGesture(const KRockerGesture &other)
-    : d(new KRockerGesturePrivate(*(other.d)))
+KisKRockerGesture::KisKRockerGesture(const KisKRockerGesture &other)
+    : d(new KisKRockerGesturePrivate(*(other.d)))
 {
 }
 
-KRockerGesture::~KRockerGesture()
+KisKRockerGesture::~KisKRockerGesture()
 {
     delete d;
 }
 
-void KRockerGesture::setButtons(Qt::MouseButton hold, Qt::MouseButton thenPush)
+void KisKRockerGesture::setButtons(Qt::MouseButton hold, Qt::MouseButton thenPush)
 {
     if (hold == thenPush) {
         d->m_hold = Qt::NoButton;
@@ -479,13 +479,13 @@ void KRockerGesture::setButtons(Qt::MouseButton hold, Qt::MouseButton thenPush)
     d->m_thenPush = thenPush;
 }
 
-void KRockerGesture::getButtons(Qt::MouseButton *hold, Qt::MouseButton *thenPush) const
+void KisKRockerGesture::getButtons(Qt::MouseButton *hold, Qt::MouseButton *thenPush) const
 {
     *hold = d->m_hold;
     *thenPush = d->m_thenPush;
 }
 
-QString KRockerGesture::mouseButtonName(Qt::MouseButton button)
+QString KisKRockerGesture::mouseButtonName(Qt::MouseButton button)
 {
     switch (button) {
     case Qt::LeftButton:
@@ -503,7 +503,7 @@ QString KRockerGesture::mouseButtonName(Qt::MouseButton button)
     }
 }
 
-QString KRockerGesture::rockerName() const
+QString KisKRockerGesture::rockerName() const
 {
     if (!isValid()) {
         return QString();
@@ -515,12 +515,12 @@ QString KRockerGesture::rockerName() const
                      "Hold %1, then push %2", mouseButtonName(d->m_hold), mouseButtonName(d->m_thenPush));
 }
 
-bool KRockerGesture::isValid() const
+bool KisKRockerGesture::isValid() const
 {
     return (d->m_hold != Qt::NoButton);
 }
 
-QString KRockerGesture::toString() const
+QString KisKRockerGesture::toString() const
 {
     if (!isValid()) {
         return QString();
@@ -554,24 +554,24 @@ QString KRockerGesture::toString() const
     return ret;
 }
 
-KRockerGesture &KRockerGesture::operator=(const KRockerGesture &other)
+KisKRockerGesture &KisKRockerGesture::operator=(const KisKRockerGesture &other)
 {
     d->m_hold = other.d->m_hold;
     d->m_thenPush = other.d->m_thenPush;
     return *this;
 }
 
-bool KRockerGesture::operator==(const KRockerGesture &other) const
+bool KisKRockerGesture::operator==(const KisKRockerGesture &other) const
 {
     return d->m_hold == other.d->m_hold && d->m_thenPush == other.d->m_thenPush;
 }
 
-bool KRockerGesture::operator!=(const KRockerGesture &other) const
+bool KisKRockerGesture::operator!=(const KisKRockerGesture &other) const
 {
     return !operator==(other);
 }
 
-uint KRockerGesture::hashable() const
+uint KisKRockerGesture::hashable() const
 {
     //make it asymmetric
     return qHash(d->m_hold) + d->m_thenPush;

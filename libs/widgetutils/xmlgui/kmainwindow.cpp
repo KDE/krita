@@ -52,36 +52,36 @@
 
 static const char WINDOW_PROPERTIES[]="WindowProperties";
 
-static QMenuBar *internalMenuBar(KMainWindow *mw)
+static QMenuBar *internalMenuBar(KisKMainWindow *mw)
 {
     return mw->findChild<QMenuBar *>(QString(), Qt::FindDirectChildrenOnly);
 }
 
-static QStatusBar *internalStatusBar(KMainWindow *mw)
+static QStatusBar *internalStatusBar(KisKMainWindow *mw)
 {
     return mw->findChild<QStatusBar *>(QString(), Qt::FindDirectChildrenOnly);
 }
 
 /**
 
- * Listens to resize events from QDockWidgets. The KMainWindow
+ * Listens to resize events from QDockWidgets. The KisKMainWindow
  * settings are set as dirty, as soon as at least one resize
  * event occurred. The listener is attached to the dock widgets
  * by dock->installEventFilter(dockResizeListener) inside
- * KMainWindow::event().
+ * KisKMainWindow::event().
  */
 class DockResizeListener : public QObject
 {
 public:
-    DockResizeListener(KMainWindow *win);
+    DockResizeListener(KisKMainWindow *win);
     ~DockResizeListener() override;
     bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
-    KMainWindow *m_win;
+    KisKMainWindow *m_win;
 };
 
-DockResizeListener::DockResizeListener(KMainWindow *win) :
+DockResizeListener::DockResizeListener(KisKMainWindow *win) :
     QObject(win),
     m_win(win)
 {
@@ -97,7 +97,7 @@ bool DockResizeListener::eventFilter(QObject *watched, QEvent *event)
     case QEvent::Resize:
     case QEvent::Move:
     case QEvent::Hide:
-        m_win->k_ptr->setSettingsDirty(KMainWindowPrivate::CompressCalls);
+        m_win->k_ptr->setSettingsDirty(KisKMainWindowPrivate::CompressCalls);
         break;
 
     default:
@@ -123,14 +123,14 @@ bool KMWSessionManager::saveState(QSessionManager &)
     KConfigGui::setSessionConfig(sm.sessionId(), sm.sessionKey());
 
     KConfig *config = KConfigGui::sessionConfig();
-    if (KMainWindow::memberList().count()) {
+    if (KisKMainWindow::memberList().count()) {
         // According to Jochen Wilhelmy <digisnap@cs.tu-berlin.de>, this
         // hook is useful for better document orientation
-        KMainWindow::memberList().first()->saveGlobalProperties(config);
+        KisKMainWindow::memberList().first()->saveGlobalProperties(config);
     }
 
     int n = 0;
-    foreach (KMainWindow *mw, KMainWindow::memberList()) {
+    foreach (KisKMainWindow *mw, KisKMainWindow::memberList()) {
         n++;
         mw->savePropertiesInternal(config, n);
     }
@@ -154,21 +154,21 @@ bool KMWSessionManager::saveState(QSessionManager &)
 }
 
 Q_GLOBAL_STATIC(KMWSessionManager, ksm)
-Q_GLOBAL_STATIC(QList<KMainWindow *>, sMemberList)
+Q_GLOBAL_STATIC(QList<KisKMainWindow *>, sMemberList)
 
-KMainWindow::KMainWindow(QWidget *parent, Qt::WindowFlags f)
-    : QMainWindow(parent, f), k_ptr(new KMainWindowPrivate)
+KisKMainWindow::KisKMainWindow(QWidget *parent, Qt::WindowFlags f)
+    : QMainWindow(parent, f), k_ptr(new KisKMainWindowPrivate)
 {
     k_ptr->init(this);
 }
 
-KMainWindow::KMainWindow(KMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f)
+KisKMainWindow::KisKMainWindow(KisKMainWindowPrivate &dd, QWidget *parent, Qt::WindowFlags f)
     : QMainWindow(parent, f), k_ptr(&dd)
 {
     k_ptr->init(this);
 }
 
-void KMainWindowPrivate::init(KMainWindow *_q)
+void KisKMainWindowPrivate::init(KisKMainWindow *_q)
 {
     q = _q;
 
@@ -226,7 +226,7 @@ static inline bool isValidDBusObjectPathCharacter(const QChar &c)
            || (u == QLatin1Char('_')) || (u == QLatin1Char('/'));
 }
 #endif
-void KMainWindowPrivate::polish(KMainWindow *q)
+void KisKMainWindowPrivate::polish(KisKMainWindow *q)
 {
     // Set a unique object name. Required by session management, window management, and for the dbus interface.
     QString objname;
@@ -299,7 +299,7 @@ void KMainWindowPrivate::polish(KMainWindow *q)
 #endif
 }
 
-void KMainWindowPrivate::setSettingsDirty(CallCompression callCompression)
+void KisKMainWindowPrivate::setSettingsDirty(CallCompression callCompression)
 {
     if (!letDirtySettings) {
         return;
@@ -321,7 +321,7 @@ void KMainWindowPrivate::setSettingsDirty(CallCompression callCompression)
     }
 }
 
-void KMainWindowPrivate::setSizeDirty()
+void KisKMainWindowPrivate::setSizeDirty()
 {
     if (autoSaveWindowSize) {
         if (!sizeTimer) {
@@ -334,14 +334,14 @@ void KMainWindowPrivate::setSizeDirty()
     }
 }
 
-KMainWindow::~KMainWindow()
+KisKMainWindow::~KisKMainWindow()
 {
     sMemberList()->removeAll(this);
     delete static_cast<QObject *>(k_ptr->dockResizeListener);  //so we don't get anymore events after k_ptr is destroyed
     delete k_ptr;
 }
 
-bool KMainWindow::canBeRestored(int number)
+bool KisKMainWindow::canBeRestored(int number)
 {
     if (!qApp->isSessionRestored()) {
         return false;
@@ -356,7 +356,7 @@ bool KMainWindow::canBeRestored(int number)
     return number >= 1 && number <= n;
 }
 
-const QString KMainWindow::classNameOfToplevel(int )
+const QString KisKMainWindow::classNameOfToplevel(int )
 {
     return QString();
 #if 0
@@ -377,7 +377,7 @@ const QString KMainWindow::classNameOfToplevel(int )
 #endif
 }
 
-bool KMainWindow::restore(int , bool )
+bool KisKMainWindow::restore(int , bool )
 {
 #if 0
     if (!canBeRestored(number)) {
@@ -386,7 +386,7 @@ bool KMainWindow::restore(int , bool )
     KConfig *config = KConfigGui::sessionConfig();
     if (readPropertiesInternal(config, number)) {
         if (show) {
-            KMainWindow::show();
+            KisKMainWindow::show();
         }
         return false;
     }
@@ -395,11 +395,11 @@ bool KMainWindow::restore(int , bool )
 }
 
 
-void KMainWindow::appHelpActivated(void)
+void KisKMainWindow::appHelpActivated(void)
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
     if (!d->helpMenu) {
-        d->helpMenu = new KHelpMenu(this);
+        d->helpMenu = new KisKHelpMenu(this);
         if (!d->helpMenu) {
             return;
         }
@@ -407,9 +407,9 @@ void KMainWindow::appHelpActivated(void)
     d->helpMenu->appHelpActivated();
 }
 
-void KMainWindow::closeEvent(QCloseEvent *e)
+void KisKMainWindow::closeEvent(QCloseEvent *e)
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
 
     // Save settings if auto-save is enabled, and settings have changed
     if (d->settingsTimer && d->settingsTimer->isActive()) {
@@ -432,22 +432,22 @@ void KMainWindow::closeEvent(QCloseEvent *e)
     }
 }
 
-bool KMainWindow::queryClose()
+bool KisKMainWindow::queryClose()
 {
     return true;
 }
 
-void KMainWindow::saveGlobalProperties(KConfig *)
+void KisKMainWindow::saveGlobalProperties(KConfig *)
 {
 }
 
-void KMainWindow::readGlobalProperties(KConfig *)
+void KisKMainWindow::readGlobalProperties(KConfig *)
 {
 }
 
-void KMainWindow::savePropertiesInternal(KConfig *config, int number)
+void KisKMainWindow::savePropertiesInternal(KConfig *config, int number)
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
     const bool oldASWS = d->autoSaveWindowSize;
     d->autoSaveWindowSize = true; // make saveMainWindowSettings save the window size
 
@@ -466,10 +466,10 @@ void KMainWindow::savePropertiesInternal(KConfig *config, int number)
     d->autoSaveWindowSize = oldASWS;
 }
 
-void KMainWindow::saveMainWindowSettings(KConfigGroup &cg)
+void KisKMainWindow::saveMainWindowSettings(KConfigGroup &cg)
 {
-    K_D(KMainWindow);
-    //qDebug(200) << "KMainWindow::saveMainWindowSettings " << cg.name();
+    K_D(KisKMainWindow);
+    //qDebug(200) << "KisKMainWindow::saveMainWindowSettings " << cg.name();
 
     // Called by session management - or if we want to save the window size anyway
     if (d->autoSaveWindowSize) {
@@ -507,15 +507,15 @@ void KMainWindow::saveMainWindowSettings(KConfigGroup &cg)
 
     if (!autoSaveSettings() || cg.name() == autoSaveGroup()) {
         // TODO should be cg == d->autoSaveGroup, to compare both kconfig and group name
-        if (!cg.hasDefault("ToolBarsMovable") && !KToolBar::toolBarsLocked()) {
+        if (!cg.hasDefault("ToolBarsMovable") && !KisToolBar::toolBarsLocked()) {
             cg.revertToDefault("ToolBarsMovable");
         } else {
-            cg.writeEntry("ToolBarsMovable", KToolBar::toolBarsLocked() ? "Disabled" : "Enabled");
+            cg.writeEntry("ToolBarsMovable", KisToolBar::toolBarsLocked() ? "Disabled" : "Enabled");
         }
     }
 
     int n = 1; // Toolbar counter. toolbars are counted from 1,
-    foreach (KToolBar *toolbar, toolBars()) {
+    foreach (KisToolBar *toolbar, toolBars()) {
         QByteArray groupName("Toolbar");
         // Give a number to the toolbar, but prefer a name if there is one,
         // because there's no real guarantee on the ordering of toolbars
@@ -527,9 +527,9 @@ void KMainWindow::saveMainWindowSettings(KConfigGroup &cg)
     }
 }
 
-bool KMainWindow::readPropertiesInternal(KConfig *config, int number)
+bool KisKMainWindow::readPropertiesInternal(KConfig *config, int number)
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
 
     const bool oldLetDirtySettings = d->letDirtySettings;
     d->letDirtySettings = false;
@@ -558,10 +558,10 @@ bool KMainWindow::readPropertiesInternal(KConfig *config, int number)
     return true;
 }
 
-void KMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
+void KisKMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
 {
-    K_D(KMainWindow);
-    //qDebug(200) << "KMainWindow::applyMainWindowSettings " << cg.name();
+    K_D(KisKMainWindow);
+    //qDebug(200) << "KisKMainWindow::applyMainWindowSettings " << cg.name();
 
     QWidget *focusedWidget = QApplication::focusWidget();
 
@@ -598,11 +598,11 @@ void KMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
 
     if (!autoSaveSettings() || cg.name() == autoSaveGroup()) {   // TODO should be cg == d->autoSaveGroup, to compare both kconfig and group name
         QString entry = cg.readEntry("ToolBarsMovable", "Disabled");
-        KToolBar::setToolBarsLocked(entry == QLatin1String("Disabled"));
+        KisToolBar::setToolBarsLocked(entry == QLatin1String("Disabled"));
     }
 
     int n = 1; // Toolbar counter. toolbars are counted from 1,
-    foreach (KToolBar *toolbar, toolBars()) {
+    foreach (KisToolBar *toolbar, toolBars()) {
         QByteArray groupName("Toolbar");
         // Give a number to the toolbar, but prefer a name if there is one,
         // because there's no real guarantee on the ordering of toolbars
@@ -629,27 +629,27 @@ void KMainWindow::applyMainWindowSettings(const KConfigGroup &cg)
     d->letDirtySettings = oldLetDirtySettings;
 }
 
-void KMainWindow::setSettingsDirty()
+void KisKMainWindow::setSettingsDirty()
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
     d->setSettingsDirty();
 }
 
-bool KMainWindow::settingsDirty() const
+bool KisKMainWindow::settingsDirty() const
 {
-    K_D(const KMainWindow);
+    K_D(const KisKMainWindow);
     return d->settingsDirty;
 }
 
-void KMainWindow::setAutoSaveSettings(const QString &groupName, bool saveWindowSize)
+void KisKMainWindow::setAutoSaveSettings(const QString &groupName, bool saveWindowSize)
 {
     setAutoSaveSettings(KConfigGroup(KSharedConfig::openConfig(), groupName), saveWindowSize);
 }
 
-void KMainWindow::setAutoSaveSettings(const KConfigGroup &group,
+void KisKMainWindow::setAutoSaveSettings(const KConfigGroup &group,
                                       bool saveWindowSize)
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
     d->autoSaveSettings = true;
     d->autoSaveGroup = group;
     d->autoSaveWindowSize = saveWindowSize;
@@ -662,46 +662,46 @@ void KMainWindow::setAutoSaveSettings(const KConfigGroup &group,
     applyMainWindowSettings(d->autoSaveGroup);
 }
 
-void KMainWindow::resetAutoSaveSettings()
+void KisKMainWindow::resetAutoSaveSettings()
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
     d->autoSaveSettings = false;
     if (d->settingsTimer) {
         d->settingsTimer->stop();
     }
 }
 
-bool KMainWindow::autoSaveSettings() const
+bool KisKMainWindow::autoSaveSettings() const
 {
-    K_D(const KMainWindow);
+    K_D(const KisKMainWindow);
     return d->autoSaveSettings;
 }
 
-QString KMainWindow::autoSaveGroup() const
+QString KisKMainWindow::autoSaveGroup() const
 {
-    K_D(const KMainWindow);
+    K_D(const KisKMainWindow);
     return d->autoSaveSettings ? d->autoSaveGroup.name() : QString();
 }
 
-KConfigGroup KMainWindow::autoSaveConfigGroup() const
+KConfigGroup KisKMainWindow::autoSaveConfigGroup() const
 {
-    K_D(const KMainWindow);
+    K_D(const KisKMainWindow);
     return d->autoSaveSettings ? d->autoSaveGroup : KConfigGroup();
 }
 
-void KMainWindow::saveAutoSaveSettings()
+void KisKMainWindow::saveAutoSaveSettings()
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
     Q_ASSERT(d->autoSaveSettings);
-    //qDebug(200) << "KMainWindow::saveAutoSaveSettings -> saving settings";
+    //qDebug(200) << "KisKMainWindow::saveAutoSaveSettings -> saving settings";
     saveMainWindowSettings(d->autoSaveGroup);
     d->autoSaveGroup.sync();
     d->settingsDirty = false;
 }
 
-bool KMainWindow::event(QEvent *ev)
+bool KisKMainWindow::event(QEvent *ev)
 {
-    K_D(KMainWindow);
+    K_D(KisKMainWindow);
     switch (ev->type()) {
 #ifdef Q_OS_WIN
     case QEvent::Move:
@@ -715,7 +715,7 @@ bool KMainWindow::event(QEvent *ev)
     case QEvent::ChildPolished: {
         QChildEvent *event = static_cast<QChildEvent *>(ev);
         QDockWidget *dock = qobject_cast<QDockWidget *>(event->child());
-        KToolBar *toolbar = qobject_cast<KToolBar *>(event->child());
+        KisToolBar *toolbar = qobject_cast<KisToolBar *>(event->child());
         QMenuBar *menubar = qobject_cast<QMenuBar *>(event->child());
         if (dock) {
             connect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
@@ -742,7 +742,7 @@ bool KMainWindow::event(QEvent *ev)
     case QEvent::ChildRemoved: {
         QChildEvent *event = static_cast<QChildEvent *>(ev);
         QDockWidget *dock = qobject_cast<QDockWidget *>(event->child());
-        KToolBar *toolbar = qobject_cast<KToolBar *>(event->child());
+        KisToolBar *toolbar = qobject_cast<KisToolBar *>(event->child());
         QMenuBar *menubar = qobject_cast<QMenuBar *>(event->child());
         if (dock) {
             disconnect(dock, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)),
@@ -765,65 +765,65 @@ bool KMainWindow::event(QEvent *ev)
     return QMainWindow::event(ev);
 }
 
-bool KMainWindow::hasMenuBar()
+bool KisKMainWindow::hasMenuBar()
 {
     return internalMenuBar(this);
 }
 
-void KMainWindowPrivate::_k_slotSettingsChanged(int category)
+void KisKMainWindowPrivate::_k_slotSettingsChanged(int category)
 {
     Q_UNUSED(category);
 
     // This slot will be called when the style KCM changes settings that need
     // to be set on the already running applications.
 
-    // At this level (KMainWindow) the only thing we need to restore is the
+    // At this level (KisKMainWindow) the only thing we need to restore is the
     // animations setting (whether the user wants builtin animations or not).
 
     q->setAnimated(q->style()->styleHint(QStyle::SH_Widget_Animate, 0, q));
 }
 
-void KMainWindowPrivate::_k_slotSaveAutoSaveSize()
+void KisKMainWindowPrivate::_k_slotSaveAutoSaveSize()
 {
     if (autoSaveGroup.isValid()) {
         KWindowConfig::saveWindowSize(q->windowHandle(), autoSaveGroup);
     }
 }
 
-KToolBar *KMainWindow::toolBar(const QString &name)
+KisToolBar *KisKMainWindow::toolBar(const QString &name)
 {
     QString childName = name;
     if (childName.isEmpty()) {
         childName = QStringLiteral("mainToolBar");
     }
 
-    KToolBar *tb = findChild<KToolBar *>(childName);
+    KisToolBar *tb = findChild<KisToolBar *>(childName);
     if (tb) {
         return tb;
     }
 
-    KToolBar *toolbar = new KToolBar(childName, this); // non-XMLGUI toolbar
+    KisToolBar *toolbar = new KisToolBar(childName, this); // non-XMLGUI toolbar
     return toolbar;
 }
 
-QList<KToolBar *> KMainWindow::toolBars() const
+QList<KisToolBar *> KisKMainWindow::toolBars() const
 {
-    QList<KToolBar *> ret;
+    QList<KisToolBar *> ret;
 
     foreach (QObject *child, children())
-        if (KToolBar *toolBar = qobject_cast<KToolBar *>(child)) {
+        if (KisToolBar *toolBar = qobject_cast<KisToolBar *>(child)) {
             ret.append(toolBar);
         }
 
     return ret;
 }
 
-QList<KMainWindow *> KMainWindow::memberList()
+QList<KisKMainWindow *> KisKMainWindow::memberList()
 {
     return *sMemberList();
 }
 
-QString KMainWindow::dbusName() const
+QString KisKMainWindow::dbusName() const
 {
     return k_func()->dbusName;
 }

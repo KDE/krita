@@ -46,7 +46,7 @@ public:
 
     void updateScreenResolution(QWidget *parentWidget);
 
-    void setup(KActionCollection * actionCollection);
+    void setup(KisKActionCollection * actionCollection);
     void updateGuiAfterDocumentSize();
     KoZoomController * zoomController() const {
         return m_zoomController;

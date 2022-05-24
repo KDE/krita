@@ -146,7 +146,7 @@ class KisViewManager::KisViewManagerPrivate
 
 public:
 
-    KisViewManagerPrivate(KisViewManager *_q, KActionCollection *_actionCollection, QWidget *_q_parent)
+    KisViewManagerPrivate(KisViewManager *_q, KisKActionCollection *_actionCollection, QWidget *_q_parent)
         : filterManager(_q)
         , createTemplate(0)
         , saveIncremental(0)
@@ -231,7 +231,7 @@ public:
     KisCanvasResourceProvider canvasResourceProvider;
     KoCanvasResourceProvider canvasResourceManager;
     KisSignalCompressor guiUpdateCompressor;
-    KActionCollection *actionCollection;
+    KisKActionCollection *actionCollection;
     KisMirrorManager mirrorManager;
     KisInputManager inputManager;
 
@@ -247,7 +247,7 @@ public:
     bool blockUntilOperationsFinishedImpl(KisImageSP image, bool force);
 };
 
-KisViewManager::KisViewManager(QWidget *parent, KActionCollection *_actionCollection)
+KisViewManager::KisViewManager(QWidget *parent, KisKActionCollection *_actionCollection)
     : d(new KisViewManagerPrivate(this, _actionCollection, parent))
 {
     d->actionCollection = _actionCollection;
@@ -363,7 +363,7 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
                       KoCanvasResource::BackgroundColor)));
 }
 
-KActionCollection *KisViewManager::actionCollection() const
+KisKActionCollection *KisViewManager::actionCollection() const
 {
     return d->actionCollection;
 }

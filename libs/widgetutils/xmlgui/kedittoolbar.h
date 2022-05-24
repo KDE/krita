@@ -11,10 +11,10 @@
 
 #include <kritawidgetutils_export.h>
 
-class KActionCollection;
+class KisKActionCollection;
 
-class KEditToolBarPrivate;
-class KXMLGUIFactory;
+class KisKEditToolBarPrivate;
+class KisKXMLGUIFactory;
 /**
  * @short A dialog used to customize or configure toolbars.
  *
@@ -38,14 +38,14 @@ class KXMLGUIFactory;
  * }
  * \endcode
  *
- * When created, KEditToolBar takes a KXMLGUIFactory object, and uses it to
+ * When created, KisKEditToolBar takes a KisKXMLGUIFactory object, and uses it to
  * find all of the action collections and XML files (there is one of each for the
  * mainwindow, but there could be more, when adding other XMLGUI clients like
  * KParts or plugins). The editor aims to be semi-intelligent about where it
  * assigns any modifications. In other words, it will not write out part specific
  * changes to your application's main XML file.
  *
- * KXmlGuiWindow and KParts::MainWindow take care of creating KEditToolBar correctly
+ * KXmlGuiWindow and KParts::MainWindow take care of creating KisKEditToolBar correctly
  * and connecting to its newToolBarConfig slot, but if you really really want to do it
  * yourself, see the KXmlGuiWindow::configureToolbars() and KXmlGuiWindow::saveNewToolbarConfig() code.
  *
@@ -54,7 +54,7 @@ class KXMLGUIFactory;
  * @author Kurt Granroth <granroth@kde.org>
  * @maintainer David Faure <faure@kde.org>
  */
-class KRITAWIDGETUTILS_EXPORT KEditToolBar : public QDialog
+class KRITAWIDGETUTILS_EXPORT KisKEditToolBar : public QDialog
 {
     Q_OBJECT
 public:
@@ -68,7 +68,7 @@ public:
      *
      * Use this like so:
      * \code
-     * KEditToolBar edit(factory());
+     * KisKEditToolBar edit(factory());
      * if (edit.exec())
      * ...
      * \endcode
@@ -76,11 +76,11 @@ public:
      * @param factory Your application's factory object
      * @param parent The usual parent for the dialog.
      */
-    explicit KEditToolBar(KXMLGUIFactory *factory,
+    explicit KisKEditToolBar(KisKXMLGUIFactory *factory,
                           QWidget *parent = 0);
 
     /// destructor
-    ~KEditToolBar() override;
+    ~KisKEditToolBar() override;
 
     /**
      * Sets the default toolbar that will be selected when the dialog is shown.
@@ -112,7 +112,7 @@ public:
 
     /**
      * Sets the default toolbar which will be auto-selected for all
-     * KEditToolBar instances. Can be overridden on a per-dialog basis
+     * KisKEditToolBar instances. Can be overridden on a per-dialog basis
      * by calling setDefaultToolBar( const QString& ) on the dialog.
      *   @param  toolBarName  the name of the tool bar
      */
@@ -133,14 +133,14 @@ protected:
     void hideEvent(QHideEvent *event) override;
 
 private:
-    friend class KEditToolBarPrivate;
-    KEditToolBarPrivate *const d;
+    friend class KisKEditToolBarPrivate;
+    KisKEditToolBarPrivate *const d;
 
     Q_PRIVATE_SLOT(d, void _k_slotButtonClicked(QAbstractButton *))
     Q_PRIVATE_SLOT(d, void _k_acceptOK(bool))
     Q_PRIVATE_SLOT(d, void _k_enableApply(bool))
 
-    Q_DISABLE_COPY(KEditToolBar)
+    Q_DISABLE_COPY(KisKEditToolBar)
 };
 
 #endif // _KEDITTOOLBAR_H

@@ -32,11 +32,11 @@
 #include <klocalizedstring.h>
 #include <kacceleratormanager.h>
 
-class KCheckAcceleratorsInitializer : public QObject
+class KisKCheckAcceleratorsInitializer : public QObject
 {
     Q_OBJECT
 public:
-    explicit KCheckAcceleratorsInitializer(QObject *parent = 0)
+    explicit KisKCheckAcceleratorsInitializer(QObject *parent = 0)
         : QObject(parent)
     {
     }
@@ -60,7 +60,7 @@ public Q_SLOTS:
             return;
         }
 
-        new KCheckAccelerators(qApp, key, autoCheck, copyWidgetText);
+        new KisKCheckAccelerators(qApp, key, autoCheck, copyWidgetText);
         deleteLater();
     }
 };
@@ -70,13 +70,13 @@ static void startupFunc()
     // Call initiateIfNeeded once we're in the event loop
     // This is to prevent using KSharedConfig before main() can set the app name
     QCoreApplication *app = QCoreApplication::instance();
-    KCheckAcceleratorsInitializer *initializer = new KCheckAcceleratorsInitializer(app);
+    KisKCheckAcceleratorsInitializer *initializer = new KisKCheckAcceleratorsInitializer(app);
     QMetaObject::invokeMethod(initializer, "initiateIfNeeded", Qt::QueuedConnection);
 }
 
 Q_COREAPP_STARTUP_FUNCTION(startupFunc)
 
-KCheckAccelerators::KCheckAccelerators(QObject *parent, int key_, bool autoCheck_, bool copyWidgetText_)
+KisKCheckAccelerators::KisKCheckAccelerators(QObject *parent, int key_, bool autoCheck_, bool copyWidgetText_)
     : QObject(parent)
     , key(key_)
     , block(false)
@@ -94,7 +94,7 @@ KCheckAccelerators::KCheckAccelerators(QObject *parent, int key_, bool autoCheck
     connect(&autoCheckTimer, SIGNAL(timeout()), SLOT(autoCheckSlot()));
 }
 
-bool KCheckAccelerators::eventFilter(QObject *obj, QEvent *e)
+bool KisKCheckAccelerators::eventFilter(QObject *obj, QEvent *e)
 {
     if (block) {
         return false;
@@ -187,13 +187,13 @@ bool KCheckAccelerators::eventFilter(QObject *obj, QEvent *e)
     case QEvent::Paint:
         return false;
     default:
-        // qDebug() << "KCheckAccelerators::eventFilter " << e->type() << " " << autoCheck;
+        // qDebug() << "KisKCheckAccelerators::eventFilter " << e->type() << " " << autoCheck;
         break;
     }
     return false;
 }
 
-void KCheckAccelerators::autoCheckSlot()
+void KisKCheckAccelerators::autoCheckSlot()
 {
     if (block) {
         autoCheckTimer.setSingleShot(true);
@@ -205,7 +205,7 @@ void KCheckAccelerators::autoCheckSlot()
     block = false;
 }
 
-void KCheckAccelerators::createDialog(QWidget *actWin, bool automatic)
+void KisKCheckAccelerators::createDialog(QWidget *actWin, bool automatic)
 {
     if (drklash) {
         return;
@@ -235,7 +235,7 @@ void KCheckAccelerators::createDialog(QWidget *actWin, bool automatic)
     }
 }
 
-void KCheckAccelerators::slotDisableCheck(bool on)
+void KisKCheckAccelerators::slotDisableCheck(bool on)
 {
     autoCheck = !on;
     if (!on) {
@@ -243,7 +243,7 @@ void KCheckAccelerators::slotDisableCheck(bool on)
     }
 }
 
-void KCheckAccelerators::checkAccelerators(bool automatic)
+void KisKCheckAccelerators::checkAccelerators(bool automatic)
 {
     QWidget *actWin = qApp->activeWindow();
     if (!actWin) {

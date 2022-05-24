@@ -262,7 +262,7 @@ public:
     KActionMenu *documentMenu;
     KActionMenu *workspaceMenu;
 
-    KHelpMenu *helpMenu  {0};
+    KisKHelpMenu *helpMenu  {0};
 
     KRecentFilesAction *recentFiles {0};
     KisRecentDocumentsModelWrapper recentFilesModel;
@@ -499,20 +499,20 @@ KisMainWindow::KisMainWindow(QUuid uuid)
         KAboutData aboutData(KAboutData::applicationData());
         aboutData.setOrganizationDomain(app->organizationDomain().toUtf8());
 
-        d->helpMenu = new KHelpMenu(this, aboutData, false);
+        d->helpMenu = new KisKHelpMenu(this, aboutData, false);
 
         // workaround-less version:
-        // d->helpMenu = new KHelpMenu(this, QString()/*unused*/, false);
+        // d->helpMenu = new KisKHelpMenu(this, QString()/*unused*/, false);
 
-        // The difference between using KActionCollection->addAction() is that
+        // The difference between using KisKActionCollection->addAction() is that
         // these actions do not get tied to the MainWindow.  What does this all do?
-        KActionCollection *actions = d->viewManager->actionCollection();
-        QAction *helpContentsAction = d->helpMenu->action(KHelpMenu::menuHelpContents);
-        QAction *whatsThisAction = d->helpMenu->action(KHelpMenu::menuWhatsThis);
-        QAction *reportBugAction = d->helpMenu->action(KHelpMenu::menuReportBug);
-        QAction *switchLanguageAction = d->helpMenu->action(KHelpMenu::menuSwitchLanguage);
-        QAction *aboutAppAction = d->helpMenu->action(KHelpMenu::menuAboutApp);
-        QAction *aboutKdeAction = d->helpMenu->action(KHelpMenu::menuAboutKDE);
+        KisKActionCollection *actions = d->viewManager->actionCollection();
+        QAction *helpContentsAction = d->helpMenu->action(KisKHelpMenu::menuHelpContents);
+        QAction *whatsThisAction = d->helpMenu->action(KisKHelpMenu::menuWhatsThis);
+        QAction *reportBugAction = d->helpMenu->action(KisKHelpMenu::menuReportBug);
+        QAction *switchLanguageAction = d->helpMenu->action(KisKHelpMenu::menuSwitchLanguage);
+        QAction *aboutAppAction = d->helpMenu->action(KisKHelpMenu::menuAboutApp);
+        QAction *aboutKdeAction = d->helpMenu->action(KisKHelpMenu::menuAboutKDE);
 
         if (helpContentsAction) {
             actions->addAction(helpContentsAction->objectName(), helpContentsAction);
@@ -569,7 +569,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // Create and plug toolbar list for Settings menu
     QList<QAction *> toolbarList;
     Q_FOREACH (QWidget* it, guiFactory()->containers("ToolBar")) {
-        KToolBar * toolBar = ::qobject_cast<KToolBar *>(it);
+        KisToolBar * toolBar = ::qobject_cast<KisToolBar *>(it);
         if (toolBar) {
             toolBar->setMovable(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
 
@@ -1575,7 +1575,7 @@ void KisMainWindow::saveWindowSettings()
     }
 
     KSharedConfig::openConfig()->sync();
-    resetAutoSaveSettings(); // Don't let KMainWindow override the good stuff we wrote down
+    resetAutoSaveSettings(); // Don't let KisKMainWindow override the good stuff we wrote down
 
 }
 
@@ -1857,11 +1857,11 @@ void KisMainWindow::restoreWorkspace()
 
 void KisMainWindow::openCommandBar()
 {
-    QList<KActionCollection *> actionCollections;
+    QList<KisKActionCollection *> actionCollections;
 
     auto clients = guiFactory()->clients();
     int actionsCount = 0;
-    for (const KXMLGUIClient *c : clients) {
+    for (const KisKXMLGUIClient *c : clients) {
         if (!c) {
             continue;
         }
@@ -1872,7 +1872,7 @@ void KisMainWindow::openCommandBar()
     }
 
     if (activeKisView()) {
-        KActionCollection *layerActionCollection = new KActionCollection(0, "layeractions (disposable)");
+        KisKActionCollection *layerActionCollection = new KisKActionCollection(0, "layeractions (disposable)");
         layerActionCollection->setComponentDisplayName(i18n("Layers/Masks"));
         KisNodeActivationActionCreatorVisitor v(layerActionCollection, viewManager()->nodeManager());
         activeKisView()->image()->rootLayer()->accept(v);
@@ -2184,7 +2184,7 @@ void KisMainWindow::renderAnimationAgain()
 void KisMainWindow::slotConfigureToolbars()
 {
     saveWindowState();
-    KEditToolBar edit(factory(), this);
+    KisKEditToolBar edit(factory(), this);
     connect(&edit, SIGNAL(newToolBarConfig()), this, SLOT(slotNewToolbarConfig()));
     (void) edit.exec();
     applyToolBarLayout();
@@ -2200,7 +2200,7 @@ void KisMainWindow::slotNewToolbarConfig()
 {
     applyMainWindowSettings(d->windowStateConfig);
 
-    KXMLGUIFactory *factory = guiFactory();
+    KisKXMLGUIFactory *factory = guiFactory();
     Q_UNUSED(factory);
 
     // Check if there's an active view
@@ -2215,7 +2215,7 @@ void KisMainWindow::slotToolbarToggled(bool toggle)
 {
     //dbgUI <<"KisMainWindow::slotToolbarToggled" << sender()->name() <<" toggle=" << true;
     // The action (sender) and the toolbar have the same name
-    KToolBar * bar = toolBar(sender()->objectName());
+    KisToolBar * bar = toolBar(sender()->objectName());
     if (bar) {
         if (toggle) {
             bar->show();
@@ -2957,9 +2957,9 @@ void KisMainWindow::createActions()
 
 void KisMainWindow::applyToolBarLayout()
 {
-    KToolBar::setToolBarsLocked(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
+    KisToolBar::setToolBarsLocked(KisConfig(true).readEntry<bool>("LockAllDockerPanels", false));
 
-    Q_FOREACH (KToolBar *toolBar, toolBars()) {
+    Q_FOREACH (KisToolBar *toolBar, toolBars()) {
         toolBar->layout()->setSpacing(4);
         toolBar->setStyleSheet("QToolBar { border: none }"); // has a border in "Fusion" style that people don't like
 

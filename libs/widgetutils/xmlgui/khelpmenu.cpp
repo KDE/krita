@@ -37,10 +37,10 @@
 
 using namespace KDEPrivate;
 
-class KHelpMenuPrivate
+class KisKHelpMenuPrivate
 {
 public:
-    KHelpMenuPrivate()
+    KisKHelpMenuPrivate()
         :
           mSwitchApplicationLanguage(0),
           mActionsCreated(false),
@@ -57,7 +57,7 @@ public:
         mAboutAppAction = 0;
         mAboutKDEAction = 0;
     }
-    ~KHelpMenuPrivate()
+    ~KisKHelpMenuPrivate()
     {
         delete mMenu;
         delete mAboutApp;
@@ -66,13 +66,13 @@ public:
         delete mSwitchApplicationLanguage;
     }
 
-    void createActions(KHelpMenu *q);
+    void createActions(KisKHelpMenu *q);
 
     QMenu *mMenu;
     QDialog *mAboutApp;
-    KAboutKdeDialog *mAboutKDE;
-    KBugReport *mBugReport;
-    KSwitchLanguageDialog *mSwitchApplicationLanguage;
+    KisKAboutKdeDialog *mAboutKDE;
+    KisKBugReport *mBugReport;
+    KisKSwitchLanguageDialog *mSwitchApplicationLanguage;
     // TODO evaluate if we use static_cast<QWidget*>(parent()) instead of mParent to win that bit of memory
     QWidget *mParent;
     QString mAboutAppText;
@@ -86,9 +86,9 @@ public:
     KAboutData mAboutData;
 };
 
-KHelpMenu::KHelpMenu(QWidget *parent, const QString &aboutAppText,
+KisKHelpMenu::KisKHelpMenu(QWidget *parent, const QString &aboutAppText,
                      bool showWhatsThis)
-    : QObject(parent), d(new KHelpMenuPrivate)
+    : QObject(parent), d(new KisKHelpMenuPrivate)
 {
     d->mAboutAppText = aboutAppText;
     d->mShowWhatsThis = showWhatsThis;
@@ -96,9 +96,9 @@ KHelpMenu::KHelpMenu(QWidget *parent, const QString &aboutAppText,
     d->createActions(this);
 }
 
-KHelpMenu::KHelpMenu(QWidget *parent, const KAboutData &aboutData,
+KisKHelpMenu::KisKHelpMenu(QWidget *parent, const KAboutData &aboutData,
                      bool showWhatsThis)
-    : QObject(parent), d(new KHelpMenuPrivate)
+    : QObject(parent), d(new KisKHelpMenuPrivate)
 {
     d->mShowWhatsThis = showWhatsThis;
     d->mParent = parent;
@@ -106,12 +106,12 @@ KHelpMenu::KHelpMenu(QWidget *parent, const KAboutData &aboutData,
     d->createActions(this);
 }
 
-KHelpMenu::~KHelpMenu()
+KisKHelpMenu::~KisKHelpMenu()
 {
     delete d;
 }
 
-void KHelpMenuPrivate::createActions(KHelpMenu *q)
+void KisKHelpMenuPrivate::createActions(KisKHelpMenu *q)
 {
     if (mActionsCreated) {
         return;
@@ -132,7 +132,7 @@ void KHelpMenuPrivate::createActions(KHelpMenu *q)
 }
 
 // Used in the non-xml-gui case, like kfind or ksnapshot's help button.
-QMenu *KHelpMenu::menu()
+QMenu *KisKHelpMenu::menu()
 {
     if (!d->mMenu) {
         d->mMenu = new QMenu();
@@ -185,7 +185,7 @@ QMenu *KHelpMenu::menu()
     return d->mMenu;
 }
 
-QAction *KHelpMenu::action(MenuId id) const
+QAction *KisKHelpMenu::action(MenuId id) const
 {
     switch (id) {
     case menuHelpContents:
@@ -216,55 +216,55 @@ QAction *KHelpMenu::action(MenuId id) const
     return 0;
 }
 
-void KHelpMenu::appHelpActivated()
+void KisKHelpMenu::appHelpActivated()
 {
     QDesktopServices::openUrl(QUrl(QStringLiteral("help:/")));
 }
 
-void KHelpMenu::aboutApplication()
+void KisKHelpMenu::aboutApplication()
 {
     if (receivers(SIGNAL(showAboutApplication())) > 0) {
         emit showAboutApplication();
     }
 }
 
-void KHelpMenu::aboutKDE()
+void KisKHelpMenu::aboutKDE()
 {
     if (!d->mAboutKDE) {
-        d->mAboutKDE = new KAboutKdeDialog(d->mParent);
+        d->mAboutKDE = new KisKAboutKdeDialog(d->mParent);
         connect(d->mAboutKDE, SIGNAL(finished(int)), this, SLOT(dialogFinished()));
     }
     d->mAboutKDE->show();
 }
 
-void KHelpMenu::reportBug()
+void KisKHelpMenu::reportBug()
 {
 #ifdef KRITA_STABLE
     QDesktopServices::openUrl(QUrl("https://docs.krita.org/en/untranslatable_pages/reporting_bugs.html"));
 #else
     if (!d->mBugReport) {
-        d->mBugReport = new KBugReport(d->mAboutData, d->mParent);
+        d->mBugReport = new KisKBugReport(d->mAboutData, d->mParent);
         connect(d->mBugReport, SIGNAL(finished(int)), this, SLOT(dialogFinished()));
     }
     d->mBugReport->show();
 #endif
 }
 
-void KHelpMenu::switchApplicationLanguage()
+void KisKHelpMenu::switchApplicationLanguage()
 {
     if (!d->mSwitchApplicationLanguage) {
-        d->mSwitchApplicationLanguage = new KSwitchLanguageDialog(d->mParent);
+        d->mSwitchApplicationLanguage = new KisKSwitchLanguageDialog(d->mParent);
         connect(d->mSwitchApplicationLanguage, SIGNAL(finished(int)), this, SLOT(dialogFinished()));
     }
     d->mSwitchApplicationLanguage->show();
 }
 
-void KHelpMenu::dialogFinished()
+void KisKHelpMenu::dialogFinished()
 {
     QTimer::singleShot(0, this, SLOT(timerExpired()));
 }
 
-void KHelpMenu::timerExpired()
+void KisKHelpMenu::timerExpired()
 {
     if (d->mAboutKDE && !d->mAboutKDE->isVisible()) {
         delete d->mAboutKDE; d->mAboutKDE = 0;
@@ -281,12 +281,12 @@ void KHelpMenu::timerExpired()
     }
 }
 
-void KHelpMenu::menuDestroyed()
+void KisKHelpMenu::menuDestroyed()
 {
     d->mMenu = 0;
 }
 
-void KHelpMenu::contextHelpActivated()
+void KisKHelpMenu::contextHelpActivated()
 {
     QWhatsThis::enterWhatsThisMode();
 }

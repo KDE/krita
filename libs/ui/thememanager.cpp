@@ -199,7 +199,7 @@ void ThemeManager::setThemeMenuAction(KActionMenu* const action)
     populateThemeMenu();
 }
 
-void ThemeManager::registerThemeActions(KActionCollection *actionCollection)
+void ThemeManager::registerThemeActions(KisKActionCollection *actionCollection)
 {
     if (!d->themeMenuAction) return;
     actionCollection->addAction("theme_menu", d->themeMenuAction);

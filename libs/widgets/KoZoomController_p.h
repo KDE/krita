@@ -53,7 +53,7 @@ public:
 
     void init(KoCanvasController *co,
               KoZoomHandler *zh,
-              KActionCollection *actionCollection);
+              KisKActionCollection *actionCollection);
 
     KoCanvasController *canvasController;
     KoZoomHandler *zoomHandler;

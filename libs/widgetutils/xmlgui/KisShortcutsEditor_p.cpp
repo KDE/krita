@@ -184,7 +184,7 @@ void KisShortcutsEditorPrivate::capturedShortcut(const QVariant &newShortcut, co
 
 void KisShortcutsEditorPrivate::changeKeyShortcut(KisShortcutsEditorItem *item, uint column, const QKeySequence &capture)
 {
-    // The keySequence we get is cleared by KKeySequenceWidget. No conflicts.
+    // The keySequence we get is cleared by KisKKeySequenceWidget. No conflicts.
     if (capture == item->keySequence(column)) {
         return;
     }

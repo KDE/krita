@@ -13,8 +13,8 @@
 
 */
 
-#ifndef KXMLGUIWINDOW_H
-#define KXMLGUIWINDOW_H
+#ifndef KisKXMLGUIWINDOW_H
+#define KisKXMLGUIWINDOW_H
 
 #include "kxmlguiclient.h"
 #include "kxmlguibuilder.h"
@@ -22,28 +22,28 @@
 #include <QMetaClassInfo>
 
 class KMenu;
-class KXMLGUIFactory;
+class KisKXMLGUIFactory;
 class KConfig;
 class KConfigGroup;
-class KToolBar;
+class KisToolBar;
 class KXmlGuiWindowPrivate;
 
 /**
  * @short %KDE top level main window with predefined action layout
  *
- * Instead of creating a KMainWindow manually and assigning menus, menu entries,
+ * Instead of creating a KisKMainWindow manually and assigning menus, menu entries,
  * toolbar buttons and actions to it by hand, this class can be used to load an
  * rc file to manage the main window's actions.
  *
  * See http://techbase.kde.org/Development/Tutorials/Using_KActions#XMLGUI
  * for essential information on the XML file format and usage of this class.
  *
- * @see KMainWindow
+ * @see KisKMainWindow
  * @author Reginald Stadlbauer (reggie@kde.org) Stephan Kulow (coolo@kde.org), Matthias Ettrich (ettrich@kde.org), Chris Schlaeger (cs@kde.org), Sven Radej (radej@kde.org). Maintained by Sven Radej (radej@kde.org)
 
  */
 
-class KRITAWIDGETUTILS_EXPORT KXmlGuiWindow : public KMainWindow, public KXMLGUIBuilder, virtual public KXMLGUIClient
+class KRITAWIDGETUTILS_EXPORT KXmlGuiWindow : public KisKMainWindow, public KisKXMLGUIBuilder, virtual public KisKXMLGUIClient
 {
     XMLGUI_DECLARE_PRIVATE(KXmlGuiWindow)
     Q_OBJECT
@@ -58,7 +58,7 @@ public:
      * Construct a main window.
      *
      * @param parent The widget parent. This is usually 0 but it may also be the window
-     * group leader. In that case, the KMainWindow becomes sort of a
+     * group leader. In that case, the KisKMainWindow becomes sort of a
      * secondary window.
      *
      * @param f Specify the widget flags. The default is
@@ -70,18 +70,18 @@ public:
      *
      * @see http://doc.trolltech.com/qt.html#WindowType-enum
      *
-     * KMainWindows must be created on the heap with 'new', like:
+     * KisKMainWindows must be created on the heap with 'new', like:
      * \code
-     * KMainWindow *kmw = new KMainWindow(...);
+     * KisKMainWindow *kmw = new KisKMainWindow(...);
      * kmw->setObjectName(...);
      * \endcode
      *
      * IMPORTANT: For session management and window management to work
      * properly, all main windows in the application should have a
-     * different name. If you don't do it, KMainWindow will create
+     * different name. If you don't do it, KisKMainWindow will create
      * a unique name, but it's recommended to explicitly pass a window name that will
      * also describe the type of the window. If there can be several windows of the same
-     * type, append '#' (hash) to the name, and KMainWindow will replace it with numbers to make
+     * type, append '#' (hash) to the name, and KisKMainWindow will replace it with numbers to make
      * the names unique. For example, for a mail client which has one main window showing
      * the mails and folders, and which can also have one or more windows for composing
      * mails, the name for the folders window should be e.g. "mainwindow" and
@@ -111,7 +111,7 @@ public:
      */
     bool isHelpMenuEnabled() const;
 
-    virtual KXMLGUIFactory *guiFactory();
+    virtual KisKXMLGUIFactory *guiFactory();
 
     /**
      * Create a GUI given a local XML file. In a regular app you usually want to use
@@ -129,7 +129,7 @@ public:
     void createGUI(const QString &xmlfile = QString());
 
     /**
-     * Sets whether KMainWindow should provide a menu that allows showing/hiding
+     * Sets whether KisKMainWindow should provide a menu that allows showing/hiding
      * the available toolbars ( using KToggleToolBarAction ) . In case there
      * is only one toolbar configured a simple 'Show \<toolbar name here\>' menu item
      * is shown.
@@ -148,7 +148,7 @@ public:
     bool isStandardToolBarMenuEnabled() const;
 
     /**
-     * Sets whether KMainWindow should provide a menu that allows showing/hiding
+     * Sets whether KisKMainWindow should provide a menu that allows showing/hiding
      * of the statusbar ( using KToggleStatusBarAction ).
      *
      * The menu / menu item is implemented using xmlgui. It will be inserted
@@ -158,13 +158,13 @@ public:
      * ( or similar ).
      *
      * If an application maintains the action on its own (i.e. never calls
-     * this function) a connection needs to be made to let KMainWindow
+     * this function) a connection needs to be made to let KisKMainWindow
      * know when that status (hidden/shown) of the statusbar has changed.
      * For example:
      * connect(action, SIGNAL(activated()),
      *         kmainwindow, SLOT(setSettingsDirty()));
      * Otherwise the status (hidden/show) of the statusbar might not be saved
-     * by KMainWindow.
+     * by KisKMainWindow.
      */
     void createStandardStatusBarAction();
 
@@ -265,12 +265,12 @@ public:
     QAction *toolBarMenuAction();
 
     /**
-     * @internal for KToolBar
+     * @internal for KisToolBar
      */
     void setupToolbarMenuActions();
 
-    // KDE5 TODO: change it to "using KXMLGUIBuilder::finalizeGUI;"
-    void finalizeGUI(KXMLGUIClient *client) override;
+    // KDE5 TODO: change it to "using KisKXMLGUIBuilder::finalizeGUI;"
+    void finalizeGUI(KisKXMLGUIClient *client) override;
 
     /**
      * @internal
@@ -320,7 +320,7 @@ protected:
 
 protected Q_SLOTS:
     /**
-     * Rebuilds the GUI after KEditToolbar changed the toolbar layout.
+     * Rebuilds the GUI after KisKEditToolbar changed the toolbar layout.
      * @see configureToolbars()
      */
     virtual void saveNewToolbarConfig();

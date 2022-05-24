@@ -44,7 +44,7 @@ KisImageInterface::KisImageInterface(KisViewManager *parent)
 
 KisImageInterface::~KisImageInterface() = default;
 
-QSize KisImageInterface::gmic_qt_get_image_size()
+QSize KisImageInterface::gmic_qt_get_image_size(int mode)
 {
     KisSelectionSP selection = p->m_viewManager->image()->globalSelection();
 
@@ -52,7 +52,83 @@ QSize KisImageInterface::gmic_qt_get_image_size()
         QRect selectionRect = selection->selectedExactRect();
         return selectionRect.size();
     } else {
-        return p->m_viewManager->image()->size();
+        p->m_inputMode = static_cast<InputLayerMode>(mode);
+
+        QSize size(0, 0);
+
+        dbgPlugins << "getImageSize()" << mode;
+
+        KisInputOutputMapper mapper(p->m_viewManager->image(),
+                                    p->m_viewManager->activeNode());
+        KisNodeListSP nodes = mapper.inputNodes(p->m_inputMode);
+        if (nodes->isEmpty()) {
+            return size;
+        }
+
+        switch (p->m_inputMode) {
+        case InputLayerMode::NoInput:
+        case InputLayerMode::AllInvisible:
+            break;
+        case InputLayerMode::Active:
+        case InputLayerMode::ActiveAndBelow: {
+            // The last layer in the list is always the layer the user
+            // has selected in Paint.NET, so it will be treated as the
+            // active layer. The clipboard layer (if present) will be
+            // placed above the active layer.
+            const auto activeLayer = nodes->last();
+
+            if (activeLayer && activeLayer->paintDevice()) {
+                KisSelectionSP selection =
+                    p->m_viewManager->image()->globalSelection();
+
+                QRect cropRect = [&]() {
+                    if (selection) {
+                        return selection->selectedExactRect();
+                    } else {
+                        return activeLayer->exactBounds();
+                    }
+                }();
+
+                size = cropRect.size();
+            }
+        } break;
+        case InputLayerMode::All:
+        case InputLayerMode::ActiveAndAbove:
+        case InputLayerMode::AllVisible:
+            for (auto &node : *nodes) {
+                if (node && node->paintDevice()) {
+                    KisSelectionSP selection =
+                        p->m_viewManager->image()->globalSelection();
+
+                    QRect cropRect = [&]() {
+                        if (selection) {
+                            return selection->selectedExactRect();
+                        } else {
+                            return node->exactBounds();
+                        }
+                    }();
+
+                    size.setWidth(std::max(size.width(), cropRect.width()));
+                    size.setHeight(std::max(size.height(), cropRect.height()));
+                }
+            }
+            break;
+        case InputLayerMode::AllVisiblesDesc_DEPRECATED:
+        case InputLayerMode::AllInvisiblesDesc_DEPRECATED:
+        case InputLayerMode::AllDesc_DEPRECATED: {
+            warnPlugins << "Inputmode" << static_cast<int>(p->m_inputMode)
+                        << "is not supported by GMic anymore";
+            break;
+        }
+        default: {
+            warnPlugins
+                << "Inputmode" << static_cast<int>(p->m_inputMode)
+                << "must be specified by GMic or is not implemented in Krita";
+            break;
+        }
+        }
+
+        return size;
     }
 }
 

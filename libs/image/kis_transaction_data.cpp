@@ -56,21 +56,18 @@ public:
     int transactionFrameId;
     KisDataManagerSP savedDataManager;
 
-    KUndo2Command newFrameCommand;
+//    KUndo2Command newFrameCommand;
     QScopedPointer<OptionalInterstrokeInfo> interstrokeInfo;
-    AutoKeyMode autoKeyMode;
-    boost::optional<QRect> autoKeyCleanupRect; // Needed for bug 441588
-    // TODO Perhaps we can try to find the root cause of difference between
-    // instant preview windows and linux to see why this is needed?
+//    boost::optional<QRect> autoKeyCleanupRect; // Needed for bug 441588
+//    // TODO Perhaps we can try to find the root cause of difference between
+//    // instant preview windows and linux to see why this is needed?
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
     void moveDevice(const QPoint newOffset);
-
-    void tryCreateNewFrame(KisPaintDeviceSP device, int time);
 };
 
-KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, AutoKeyMode autoKeyMode,  KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent)
+KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent)
     : KUndo2Command(name, parent)
     , m_d(new Private())
 {
@@ -86,43 +83,41 @@ KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDe
         m_d->interstrokeInfo->factory.reset(interstrokeDataFactory);
     }
 
-    m_d->autoKeyMode = autoKeyMode;
-
     possiblyFlattenSelection(device);
     init(device);
     saveSelectionOutlineCache();
 }
 
-void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int time)
-{
-    if (!device->framesInterface()) return;
+//void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int time)
+//{
+//    if (!device->framesInterface()) return;
 
-    if (autoKeyMode == AUTOKEY_DISABLED) return;
+//    if (autoKeyMode == AUTOKEY_DISABLED) return;
 
-    KisRasterKeyframeChannel *channel = device->keyframeChannel();
-    KIS_ASSERT_RECOVER(channel) { return; }
+//    KisRasterKeyframeChannel *channel = device->keyframeChannel();
+//    KIS_ASSERT_RECOVER(channel) { return; }
 
-    KisKeyframeSP keyframe = channel->keyframeAt(time);
-    if (!keyframe) {
-        int activeKeyTime = channel->activeKeyframeTime(time);
+//    KisKeyframeSP keyframe = channel->keyframeAt(time);
+//    if (!keyframe) {
+//        int activeKeyTime = channel->activeKeyframeTime(time);
 
-        if (autoKeyMode == AUTOKEY_DUPLICATE) {
-            channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
-        } else {
-            autoKeyCleanupRect = device->exactBounds();
-            channel->addKeyframe(time, &newFrameCommand);
-        }
+//        if (autoKeyMode == AUTOKEY_DUPLICATE) {
+//            channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
+//        } else {
+//            autoKeyCleanupRect = device->exactBounds();
+//            channel->addKeyframe(time, &newFrameCommand);
+//        }
 
-        keyframe = channel->keyframeAt(time);
-        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
+//        keyframe = channel->keyframeAt(time);
+//        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
 
-        // Use the same color label as previous keyframe...
-        KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
-        if (previousKey) {
-            keyframe->setColorLabel(previousKey->colorLabel());
-        }
-    }
-}
+//        // Use the same color label as previous keyframe...
+//        KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
+//        if (previousKey) {
+//            keyframe->setColorLabel(previousKey->colorLabel());
+//        }
+//    }
+//}
 
 void KisTransactionData::init(KisPaintDeviceSP device)
 {
@@ -135,8 +130,6 @@ void KisTransactionData::init(KisPaintDeviceSP device)
     m_d->transactionFinished = false;
 
     m_d->transactionTime = device->defaultBounds()->currentTime();
-
-    m_d->tryCreateNewFrame(m_d->device, m_d->transactionTime);
 
     if (m_d->interstrokeInfo) {
         m_d->interstrokeInfo->beginTransactionCommand.reset(m_d->interstrokeInfo->factory->createBeginTransactionCommand(m_d->device));
@@ -213,10 +206,6 @@ void KisTransactionData::startUpdates()
 
         if (m_d->defaultPixelChanged) {
             rc |= m_d->device->defaultBounds()->bounds();
-        }
-
-        if (m_d->autoKeyCleanupRect) {
-            rc |= m_d->autoKeyCleanupRect.value();
         }
 
         m_d->device->setDirty(rc);
@@ -306,8 +295,6 @@ void KisTransactionData::redo()
     doFlattenUndoRedo(false);
     restoreSelectionOutlineCache(false);
 
-    m_d->newFrameCommand.redo();
-
     DEBUG_ACTION("Redo()");
 
     if (m_d->interstrokeInfo && m_d->interstrokeInfo->beginTransactionCommand) {
@@ -355,8 +342,6 @@ void KisTransactionData::undo()
     m_d->possiblySwitchCurrentTime();
     startUpdates();
     possiblyNotifySelectionChanged();
-
-    m_d->newFrameCommand.undo();
 }
 
 void KisTransactionData::saveSelectionOutlineCache()

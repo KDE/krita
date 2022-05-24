@@ -273,9 +273,11 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 return;
             }
 
+            //TODO: Reinstate autokey behavior for filters...
+
             // Make a transaction, change the target device, and "end" transaction.
             // Should be useful for undoing later.
-            QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(shared->targetDevice(), AUTOKEY_DISABLED) );
+            QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(shared->targetDevice()) );
             KisPainter::copyAreaOptimized(shared->processRect.topLeft(), shared->filterDevice, shared->targetDevice(), shared->processRect, shared->selection());
             runAndSaveCommand( toQShared(workingTransaction->endAndTake()), KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE );
 

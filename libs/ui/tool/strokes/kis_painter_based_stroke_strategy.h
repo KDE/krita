@@ -14,6 +14,7 @@
 #include "kis_resources_snapshot.h"
 #include "kis_selection.h"
 #include "kis_indirect_painting_support.h"
+#include "KisAnimAutoKey.h"
 
 class KisPainter;
 class KisDistanceInformation;
@@ -116,12 +117,6 @@ private:
     }
 
 private:
-    enum AutokeyMode {
-        AUTOKEY_NONE,
-        AUTOKEY_BLANK,
-        AUTOKEY_DUPLICATE
-    };
-
     KisResourcesSnapshotSP m_resources;
     QVector<KisFreehandStrokeInfo*> m_strokeInfos;
     QVector<KisFreehandStrokeInfo*> m_maskStrokeInfos;
@@ -134,7 +129,7 @@ private:
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
 
-    AutokeyMode m_autokeyMode {AUTOKEY_NONE};
+    KisAutoKey::Mode m_autokeyMode {KisAutoKey::NONE};
     KUndo2CommandSP m_autokeyCommand;
     QRect m_autokeyCleanup = {QRect(0,0,0,0)};
 

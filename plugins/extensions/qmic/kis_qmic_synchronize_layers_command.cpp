@@ -108,7 +108,10 @@ void KisQmicSynchronizeLayersCommand::redo()
                     dbgPlugins << "Adding paint layer" << (i - nodesCount + 1) << paintLayer << "to parent" << parent->name() << "above" << aboveThis;
                 }
 
-                auto *layerNameCmd = KisQmicImportTools::applyLayerNameChanges(*d->m_images[i], paintLayer.data());
+                auto *layerNameCmd =
+                    KisQmicImportTools::applyLayerNameChanges(*d->m_images[i],
+                                                              paintLayer.data(),
+                                                              d->m_selection);
                 layerNameCmd->redo();
 
                 addCommand(new KisCommandUtils::SkipFirstRedoWrapper(layerNameCmd));

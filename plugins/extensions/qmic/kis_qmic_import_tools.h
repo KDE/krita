@@ -26,7 +26,10 @@
 
 namespace KisQmicImportTools
 {
-[[nodiscard]] inline KUndo2Command *applyLayerNameChanges(const gmic_image<float> &srcGmicImage, KisNode *node)
+[[nodiscard]] inline KUndo2Command *
+applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
+                      KisNode *node,
+                      KisSelectionSP selection)
 {
     dbgPlugins << "KisQmicImportTools::applyLayerNameChanges";
 
@@ -67,7 +70,7 @@ namespace KisQmicImportTools
         }
     }
 
-    {
+    if (!selection) {
         // Some GMic filters encode layer position into the layer name.
         // E.g. from extract foreground: "name([unnamed] [foreground]),pos(55,35)"
         const QRegularExpression positionPattern(R"(\Wpos\((\d+),(\d+)\))");

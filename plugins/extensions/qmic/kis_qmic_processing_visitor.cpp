@@ -67,7 +67,10 @@ void KisQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAd
         KisTransaction transaction(dst);
         KisQmicImportTools::gmicImageToPaintDevice(*gimg, dst, selection, d->m_dstRect);
         if (undoAdapter) {
-            undoAdapter->addCommand(KisQmicImportTools::applyLayerNameChanges(*gimg, node));
+            undoAdapter->addCommand(
+                KisQmicImportTools::applyLayerNameChanges(*gimg,
+                                                          node,
+                                                          selection));
             transaction.commit(undoAdapter);
             node->setDirty(d->m_dstRect);
         }

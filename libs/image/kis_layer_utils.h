@@ -81,6 +81,10 @@ namespace KisLayerUtils
     void updateFrameJobs(FrameJobs *jobs, KisNodeSP node);
     void updateFrameJobsRecursive(FrameJobs *jobs, KisNodeSP rootNode);
 
+    /**
+     * @brief The SwitchFrameCommand struct
+     * Switches to frame with undo/redo support.
+     */
     struct KRITAIMAGE_EXPORT SwitchFrameCommand : public KisCommandUtils::FlipFlopCommand {
         struct KRITAIMAGE_EXPORT SharedStorage {
             /**

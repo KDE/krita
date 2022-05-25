@@ -233,7 +233,7 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
               <string>If non-zero, sets the desired target size in bytes. Takes precedence over the compression parameters.</string>
              </property>
              <property name="suffix">
-              <string> kB</string>
+              <string> B</string>
              </property>
              <property name="maximum">
               <number>1000000000</number>

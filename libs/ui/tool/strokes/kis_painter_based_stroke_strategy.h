@@ -8,6 +8,7 @@
 #define __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 
 #include <QVector>
+#include <QRect>
 
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "kis_resources_snapshot.h"
@@ -115,6 +116,12 @@ private:
     }
 
 private:
+    enum AutokeyMode {
+        AUTOKEY_NONE,
+        AUTOKEY_BLANK,
+        AUTOKEY_DUPLICATE
+    };
+
     KisResourcesSnapshotSP m_resources;
     QVector<KisFreehandStrokeInfo*> m_strokeInfos;
     QVector<KisFreehandStrokeInfo*> m_maskStrokeInfos;
@@ -126,6 +133,11 @@ private:
 
     KisPaintDeviceSP m_targetDevice;
     KisSelectionSP m_activeSelection;
+
+    AutokeyMode m_autokeyMode {AUTOKEY_NONE};
+    KUndo2CommandSP m_autokeyCommand;
+    QRect m_autokeyCleanup = {QRect(0,0,0,0)};
+
     bool m_useMergeID {false};
 
     bool m_supportsMaskingBrush {false};

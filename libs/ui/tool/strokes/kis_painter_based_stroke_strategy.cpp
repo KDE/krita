@@ -9,11 +9,13 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoCompositeOp.h>
+#include <kis_config.h>
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
 #include "kis_transaction.h"
 #include "kis_image.h"
+#include "kis_raster_keyframe_channel.h"
 #include <kis_distance_information.h>
 #include "kis_undo_stores.h"
 #include "KisFreehandStrokeInfo.h"
@@ -66,6 +68,11 @@ KisPainterBasedStrokeStrategy::~KisPainterBasedStrokeStrategy()
 
 void KisPainterBasedStrokeStrategy::init()
 {
+    KisImageConfig cfg(true);
+    if (cfg.autoKeyEnabled()) {
+        m_autokeyMode = cfg.autoKeyModeDuplicate() ? AUTOKEY_DUPLICATE : AUTOKEY_BLANK;
+    }
+
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
     enableJob(KisSimpleStrokeStrategy::JOB_CANCEL, true, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
@@ -77,6 +84,7 @@ void KisPainterBasedStrokeStrategy::init()
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const KisPainterBasedStrokeStrategy &rhs, int levelOfDetail)
     : KisRunnableBasedStrokeStrategy(rhs),
       m_resources(rhs.m_resources),
+      m_autokeyMode(rhs.m_autokeyMode),
       m_useMergeID(rhs.m_useMergeID),
       m_supportsMaskingBrush(rhs.m_supportsMaskingBrush),
       m_supportsIndirectPainting(rhs.m_supportsIndirectPainting),
@@ -246,6 +254,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     KisPaintDeviceSP targetDevice = paintDevice;
     bool hasIndirectPainting = supportsIndirectPainting() && m_resources->needsIndirectPainting();
     const QString indirectCompositeOp = m_resources->indirectPaintingCompositeOp();
+    const int time = targetDevice->defaultBounds()->currentTime();
 
     KisSelectionSP selection =  m_resources->activeSelection();
 
@@ -284,6 +293,37 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(
                           interstrokeDataFactory.take(),
                           supportsContinuedInterstrokeData()));
+    }
+
+    KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
+    if (channel)
+    {
+        KisKeyframeSP keyframe = channel->keyframeAt(time);
+        if (!keyframe && m_autokeyMode > AUTOKEY_NONE) {
+            int activeKeyTime = channel->activeKeyframeTime(time);
+
+            m_autokeyCommand = toQShared( new KUndo2Command() );
+
+            if (m_autokeyMode == AUTOKEY_DUPLICATE) {
+                channel->copyKeyframe(activeKeyTime, time, m_autokeyCommand.data());
+            } else { // Otherwise, create a fresh keyframe.
+                m_autokeyCleanup = node->exactBounds();
+                channel->addKeyframe(time, m_autokeyCommand.data());
+            }
+
+            keyframe = channel->keyframeAt(time);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
+
+            // Use the same color label as previous keyframe...
+            KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
+            if (previousKey) {
+                keyframe->setColorLabel(previousKey->colorLabel());
+            }
+
+            if (m_autokeyCleanup.isValid()) {
+                node->setDirty(m_autokeyCleanup);
+            }
+        }
     }
 
     m_transaction.reset(new KisTransaction(name(), targetDevice, nullptr,
@@ -334,6 +374,8 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     KisPostExecutionUndoAdapter *undoAdapter =
         m_resources->postExecutionUndoAdapter();
 
+    undoAdapter->addCommand(m_autokeyCommand);
+
     if (!undoAdapter) {
         m_fakeUndoData.reset(new FakeUndoData());
         undoAdapter = m_fakeUndoData->undoAdapter.data();
@@ -374,6 +416,8 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
     if (!m_transaction) return;
+
+    m_autokeyCommand->undo();
 
     KisNodeSP node = m_resources->currentNode();
     KisIndirectPaintingSupport *indirect =

@@ -98,7 +98,9 @@ bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
             id != FontFeatureSettingsId &&
             id != TextDecorationLineId &&
             id != TextDecorationColorId &&
-            id != TextDecorationStyleId;
+            id != TextDecorationStyleId &&
+            id != InlineSizeId &&
+            id != TextTrimId;
 }
 
 void KoSvgTextProperties::resetNonInheritableToDefault()
@@ -430,7 +432,6 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             } else if (param == "auto") {
                 underlinePosV = UnderlineRight;
             } else if (QColor::isValidColor(param)) {
-                qDebug() << "parsed color" << param << QColor(param);
                 // TODO: Convert to KoColor::fromSvg11.
                 textDecorationColor = QColor(param);
             }
@@ -452,6 +453,73 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
 
     } else if (command == "xml:lang") {
         setProperty(TextLanguage, value);
+    } else if (command == "text-transform") {
+        setProperty(TextTransformId, KoSvgText::parseTextTransform(value));
+    } else if (command == "white-space") {
+        KoSvgText::TextSpaceTrims trims = propertyOrDefault(TextTrimId).value<KoSvgText::TextSpaceTrims>();
+        KoSvgText::TextWrap wrap = KoSvgText::TextWrap(propertyOrDefault(TextWrapId).toInt());
+        KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(propertyOrDefault(TextCollapseId).toInt());
+
+        KoSvgText::whiteSpaceValueToLongHands(value, collapse, wrap, trims);
+
+        setProperty(TextTrimId, QVariant::fromValue(trims));
+        setProperty(TextWrapId, wrap);
+        setProperty(TextCollapseId, collapse);
+
+    } else if (command == "xml:space") {
+        KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(propertyOrDefault(TextCollapseId).toInt());
+        KoSvgText::xmlSpaceToLongHands(value, collapse);
+        setProperty(TextCollapseId, collapse);
+    } else if (command == "word-break") {
+        setProperty(WordBreakId, KoSvgText::parseWordBreak(value));
+    } else if (command == "line-break") {
+        setProperty(LineBreakId, KoSvgText::parseLineBreak(value));
+    } else if (command == "text-align" || command == "text-align-all" || command == "text-align-last") {
+        if (command == "text-align" || command == "text-align-all") {
+            setProperty(TextAlignAllId, KoSvgText::parseTextAlign(value));
+        }
+        if (command == "text-align" || command == "text-align-last") {
+            setProperty(TextAlignLastId, KoSvgText::parseTextAlign(value));
+        }
+    } else if (command == "line-height") {
+        setProperty(LineHeightId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
+    } else if (command == "text-indent") {
+        bool hanging = false;
+        bool eachLine = false;
+        int length = 0;
+        Q_FOREACH (const QString &param, value.split(' ', QString::SkipEmptyParts)) {
+            bool ok = false;
+            int parsed = value.toInt(&ok, 10);
+
+            if (param == "hanging") {
+                hanging = true;
+            } else if (param == "each-line") {
+                eachLine = true;
+            } else if (ok) {
+                length = parsed;
+            }
+        }
+        setProperty(TextIndentValueId, length);
+        setProperty(TextIndentHangingId, hanging);
+        setProperty(TextIndentEachLineId, eachLine);
+    } else if (command == "hanging-punctuation") {
+        KoSvgText::HangingPunctuations hang;
+        Q_FOREACH (const QString &param, value.split(' ', QString::SkipEmptyParts)) {
+            if (param == "first") {
+                hang.setFlag(KoSvgText::HangFirst, true);
+            } else if (param == "last") {
+                hang.setFlag(KoSvgText::HangLast, true);
+            } else if (param == "allow-end") {
+                hang.setFlag(KoSvgText::HangEnd, true);
+                hang.setFlag(KoSvgText::HangForce, false);
+            } else if (param == "force-end") {
+                hang.setFlag(KoSvgText::HangEnd, true);
+                hang.setFlag(KoSvgText::HangForce, true);
+            }
+        }
+        setProperty(HangingPunctuationId, QVariant::fromValue(hang));
+    } else if (command == "inline-size") {
+        setProperty(InlineSizeId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "auto")));
     } else {
         qFatal("FATAL: Unknown SVG property: %s = %s", command.toUtf8().data(), value.toUtf8().data());
     }
@@ -671,6 +739,75 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
     if (hasProperty(TextLanguage)) {
         result.insert("xml:lang", property(TextLanguage).toString());
+    }
+
+    if (hasProperty(TextTransformId)) {
+        result.insert("text-transform", writeTextTransform(TextTransform(property(TextTransformId).toInt())));
+    }
+    if (hasProperty(WordBreakId)) {
+        result.insert("word-break", writeWordBreak(WordBreak(property(WordBreakId).toInt())));
+    }
+    if (hasProperty(LineBreakId)) {
+        result.insert("line-break", writeLineBreak(LineBreak(property(LineBreakId).toInt())));
+    }
+    if (hasProperty(TextAlignAllId)) {
+        TextAlign all = TextAlign(property(TextAlignAllId).toInt());
+        result.insert("text-align", writeTextAlign(all));
+        TextAlign last = TextAlign(property(TextAlignLastId).toInt());
+        if (last != all || last != AlignLastAuto) {
+            result.insert("text-align-last", writeTextAlign(last));
+        }
+    }
+    if (hasProperty(TextCollapseId) || hasProperty(TextWrapId)) {
+        KoSvgText::TextSpaceTrims trims = propertyOrDefault(TextTrimId).value<KoSvgText::TextSpaceTrims>();
+        KoSvgText::TextWrap wrap = KoSvgText::TextWrap(propertyOrDefault(TextWrapId).toInt());
+        KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(propertyOrDefault(TextCollapseId).toInt());
+        if (collapse == KoSvgText::PreserveSpaces || svg1_1) {
+            result.insert("xml:space", writeXmlSpace(collapse));
+        } else {
+            result.insert("white-space", writeWhiteSpaceValue(collapse, wrap, trims));
+        }
+    }
+    if (hasProperty(LineHeightId)) {
+        result.insert("line-height", writeAutoValue(property(LineHeightId).value<AutoValue>(), "normal"));
+    }
+    if (hasProperty(InlineSizeId)) {
+        result.insert("inline-size", writeAutoValue(property(InlineSizeId).value<AutoValue>(), "auto"));
+    }
+    if (hasProperty(TextIndentValueId)) {
+        bool hanging = propertyOrDefault(TextIndentHangingId).toBool();
+        bool eachLine = propertyOrDefault(TextIndentEachLineId).toBool();
+        QStringList value;
+        value.append(QString::number(property(TextIndentValueId).toInt()));
+        if (hanging) {
+            value.append("hanging");
+        }
+        if (eachLine) {
+            value.append("each-line");
+        }
+        result.insert("text-indent", value.join(" "));
+    }
+    if (hasProperty(HangingPunctuationId)) {
+        HangingPunctuations hang = property(HangingPunctuationId).value<HangingPunctuations>();
+        QStringList value;
+
+        if (hang.testFlag(HangFirst)) {
+            value.append("first");
+        }
+        if (hang.testFlag(HangLast)) {
+            value.append("last");
+        }
+        if (hang.testFlag(HangEnd)) {
+            if (hang.testFlag(HangForce)) {
+                value.append("force-end");
+            } else {
+                value.append("allow-end");
+            }
+        }
+
+        if (!value.isEmpty()) {
+            result.insert("hanging-punctuation", value.join(" "));
+        }
     }
 
     return result;
@@ -979,25 +1116,31 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
             using namespace KoSvgText;
             TextDecorations deco = DecorationNone;
 
-            /*
-            if (font.underline()) {
-                deco |= DecorationUnderline;
-            }
-
-            if (font.strikeOut()) {
-                deco |= DecorationLineThrough;
-            }
-
-            if (font.overline()) {
-                deco |= DecorationOverline;
-            }
-            */
-
             s_defaultProperties->setProperty(TextDecorationLineId, QVariant::fromValue(deco));
             s_defaultProperties->setProperty(TextDecorationPositionHorizontalId, UnderlineAuto);
             s_defaultProperties->setProperty(TextDecorationPositionVerticalId, UnderlineAuto);
             s_defaultProperties->setProperty(TextDecorationColorId, QVariant::fromValue(Qt::transparent));
             s_defaultProperties->setProperty(TextDecorationStyleId, Solid);
+
+            s_defaultProperties->setProperty(TextCollapseId, Collapse);
+            s_defaultProperties->setProperty(TextWrapId, Wrap);
+            TextSpaceTrims trim = TrimNone;
+            s_defaultProperties->setProperty(TextTrimId, QVariant::fromValue(trim));
+            s_defaultProperties->setProperty(LineBreakId, LineBreakAuto);
+            s_defaultProperties->setProperty(WordBreakId, WordBreakNormal);
+            s_defaultProperties->setProperty(TextAlignAllId, AlignStart);
+            s_defaultProperties->setProperty(TextAlignLastId, AlignLastAuto);
+            s_defaultProperties->setProperty(TextTransformId, TextTransformNone);
+            s_defaultProperties->setProperty(LineHeightId, fromAutoValue(AutoValue()));
+            s_defaultProperties->setProperty(TextIndentValueId, 0);
+            s_defaultProperties->setProperty(TabSizeId, 8);
+            s_defaultProperties->setProperty(TextIndentEachLineId, false);
+            s_defaultProperties->setProperty(TextIndentHangingId, false);
+            HangingPunctuations hang = HangNone;
+            s_defaultProperties->setProperty(HangingPunctuationId, QVariant::fromValue(hang));
+
+            s_defaultProperties->setProperty(InlineSizeId, fromAutoValue(AutoValue()));
+
         }
     }
     return *s_defaultProperties;

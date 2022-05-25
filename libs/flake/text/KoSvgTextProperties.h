@@ -42,55 +42,73 @@ public:
      * Defines a set of supported properties. See SVG 1.1 for details.
      */
     enum PropertyId {
-        WritingModeId,
-        DirectionId,
-        UnicodeBidiId,
-        TextAnchorId,
-        DominantBaselineId,
-        AlignmentBaselineId,
-        BaselineShiftModeId,
-        BaselineShiftValueId,
-        KerningId,
-        TextOrientationId,
-        LetterSpacingId,
-        WordSpacingId,
+        WritingModeId,       ///< KoSvgText::WritingMode
+        DirectionId,         ///< KoSvgText::Direction
+        UnicodeBidiId,       ///< KoSvgText::UnicodeBidi
+        TextAnchorId,        ///< KoSvgText::TextAnchor
+        DominantBaselineId,  ///< KoSvgText::Baseline
+        AlignmentBaselineId, ///< KoSvgText::Baseline
+        BaselineShiftModeId, ///< KoSvgText::BaselineShiftMode
+        BaselineShiftValueId,///< Double
+        KerningId,           ///< KoSvgText::AutoValue
+        TextOrientationId,   ///< KoSvgText::TextOrientation
+        LetterSpacingId,     ///< KoSvgText::AutoValue
+        WordSpacingId,       ///< KoSvgText::AutoValue
 
-        FontFamiliesId,
-        FontStyleId,
-        FontStretchId,
-        FontWeightId,
-        FontSizeId,
-        FontSizeAdjustId,
+        FontFamiliesId,      ///< QStringList
+        FontStyleId,         ///< QFont::Style
+        FontStretchId,       ///< Int
+        FontWeightId,        ///< Int
+        FontSizeId,          ///< Double
+        FontSizeAdjustId,    ///< KoSvgText::AutoValue
 
-        FontVariantCommonLigId, //bool
-        FontVariantDiscretionaryLigId, //bool
-        FontVariantHistoricalLigId, //bool
-        FontVariantContextualAltId, //bool
+        /// KoSvgText::FontVariantFeature
+        FontVariantCommonLigId,
+        FontVariantDiscretionaryLigId,
+        FontVariantHistoricalLigId,
+        FontVariantContextualAltId,
         FontVariantPositionId,
-        FontVariantCapsId, //int
+        FontVariantCapsId,
         FontVariantNumFigureId,
         FontVariantNumSpacingId,
         FontVariantNumFractId,
         FontVariantNumOrdinalId,
-        FontVariantNumSlashedZeroId, //bool
-        FontVariantHistoricalFormsId, //bool
+        FontVariantNumSlashedZeroId,
+        FontVariantHistoricalFormsId,
         FontVariantEastAsianVarId,
         FontVariantEastAsianWidthId,
-        FontVariantRubyId, //bool
+        FontVariantRubyId,
 
-        FontFeatureSettingsId, //string list
+        FontFeatureSettingsId, ///< QStringList
 
-        TextDecorationLineId,
-        TextDecorationStyleId,
-        TextDecorationColorId,
-        TextDecorationPositionHorizontalId,
-        TextDecorationPositionVerticalId,
-        FillId,
-        StrokeId,
+        TextDecorationLineId,              ///< Flags, KoSvgText::TextDecorations
+        TextDecorationStyleId,             ///< KoSvgText::TextDecorationStyle
+        TextDecorationColorId,             ///< QColor
+        TextDecorationPositionHorizontalId,///< KoSvgText::TextDecorationUnderlinePosition
+        TextDecorationPositionVerticalId,  ///< KoSvgText::TextDecorationUnderlinePosition
+        FillId,    ///< KoSvgText::BackgroundProperty
+        StrokeId,  ///< KoSvgText::StrokeProperty
 
-        TextLanguage, //a language string.
+        TextLanguage,         ///< a language string.
 
-        KraTextVersionId
+        TextCollapseId,       ///< KoSvgText::TextSpaceCollapse
+        TextWrapId,           ///< KoSvgText::TextWrap
+        TextTrimId,           ///< Flags, KoSvgText::TextSpaceTrims
+        LineBreakId,          ///< KoSvgText::LineBreak
+        WordBreakId,          ///< KoSvgText::WordBreak
+        TextAlignAllId,       ///< KoSvgText::TextAlign
+        TextAlignLastId,      ///< KoSvgText::TextAlign
+        TextTransformId,      ///< KoSvgText::TextTransform
+        TextOverFlowId,       ///< KoSvgText::WordBreak
+        InlineSizeId,         ///< KoSvgText::AutoValue
+        LineHeightId,         ///< KoSvgText::AutoValue
+        TextIndentValueId,    ///< Int
+        TextIndentEachLineId, ///< Bool
+        TextIndentHangingId,  ///< Bool
+        HangingPunctuationId, ///< Flags, KoSvgText::HangingPunctuations
+        TabSizeId,            ///< Int
+
+        KraTextVersionId      ///< Int, used for handling incorrectly saved files.
     };
 
 public:

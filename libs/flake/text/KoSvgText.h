@@ -33,66 +33,159 @@ class KoSvgTextChunkShape;
 namespace KoSvgText
 {
 enum WritingMode {
-    HorizontalTB,
-    VerticalRL,
-    VerticalLR
+    HorizontalTB,///< Left to right, lay out new lines bottom of previous. RTL scripts use this with BIDI reordering.
+    VerticalRL,  ///< Top to bottom, lay out new lines right of the previous. used for CJK scripts.
+    VerticalLR   ///< Top to bottom, lay out new lines left of the previous. Used for Mongolian.
 };
 
+/// Base direction used by Bidi algorithm.
 enum Direction {
     DirectionLeftToRight,
     DirectionRightToLeft
 };
 
+/// These values control the type of bidi-controls we'll inject into the final text.
 enum UnicodeBidi {
-    BidiNormal,
-    BidiEmbed,
-    BidiOverride,
-    BidiIsolate,
-    BidiIsolateOverride,
-    BidiPlainText
+    BidiNormal,          ///< No new bidi-level is started.
+    BidiEmbed,           ///< Opens an additional Bidi-reordering level.
+    BidiOverride,        ///< Opens an additional Bidi-reordering level, implicit part of the algorithm is ignored.
+    BidiIsolate,         ///< Content is ordered as if in a seperate paragraph.
+    BidiIsolateOverride, ///< Ordered like a directional override inside an isolated paragraph.
+    BidiPlainText        ///< Behaves like isolate, except using heuristics defined in P2 and P3 of the unicode bidirectional algorithm.
 };
 
+/// Orientation of the glyphs, used for vertical writing modes.
 enum TextOrientation {
-    OrientationMixed,
-    OrientationUpright,
-    OrientationSideWays
+    OrientationMixed,   ///< Use UA50 to determine whether a character should be sideways.
+    OrientationUpright, ///< Set all characters upright.
+    OrientationSideWays ///< Set all characters sideways.
 };
 
+/// Where the text is anchored for SVG 1.1 text and 'inline-size'.
 enum TextAnchor {
-    AnchorStart,
-    AnchorMiddle,
-    AnchorEnd
+    AnchorStart,  ///< Anchor left for LTR, right for RTL.
+    AnchorMiddle, ///< Anchor to the middle.
+    AnchorEnd     ///< Anchor right for LTR, left for RTL.
 };
 
+/*
+ * CSS-Text-3 defines the white space property, and SVG 2 adopts this, except,
+ * CSS-Text-3 doesn't have a concept of 'xml:space="preserve"'. CSS-Text-4 *does*,
+ * however, that works by splitting the white-space property into the the following
+ * three enums. Officially the SVG2 spec says to use 'white-space' of CSS-Text-4 because of this.
+ */
+
+/// Part of "white-space", NOTE: white-space:break-spaces; is not really covered by this new method yet.
+enum TextSpaceCollapse {
+    Collapse,       ///< Collapse white space sequences into a single character.
+    Discard,        ///< Discard all Spaces
+    Preserve,       ///< Do not collapse any space
+    PreserveBreaks, ///< Preserve segment breaks like /n, but otherwise collapse all whitespace.
+    PreserveSpaces  ///< Preserve spaces, convert tabs and linebreaks to spaces, required for 'xml:space="preserve"' emulation.
+};
+
+/// Part of "white-space", in practice we only support wrap and nowrap.
+enum TextWrap {
+    Wrap,    ///< Do any kind of text wrapping at soft wrapping opportunities, typically greedy.
+    NoWrap,  ///< Do not do any text wrapping.
+    Balance, ///< Select algorithm that tries to ensure white space is balanced instead of as much text as possible on each line.
+    Stable,  ///< Select algorithm that doesn't change the text before the cursor when adjusting text.
+    Pretty   ///< select algorithm that gives the best looking result, may require looking ahead.
+};
+
+/// Part of "white-space"
+enum TextSpaceTrim {
+    TrimNone      = 0x0, ///< No trimming.
+    TrimInner     = 0x1, ///< Discard white space at the beginning and end of element.
+    DiscardBefore = 0x2, ///< Trim white space before the start of the element.
+    DiscardAfter  = 0x4  ///< Trim white space after the end of the element.
+};
+
+/// Whether to break words.
+enum WordBreak {
+    WordBreakNormal,   ///< Set according to script. Also "break-word"
+    WordBreakKeepAll,  ///< Never break inside words.
+    WordBreakBreakAll, ///< Always break inside words.
+};
+
+/// Line breaking strictness. A number of these values are values to be handed over to the line/word breaking algorithm.
+enum LineBreak {
+    LineBreakAuto,    ///< Use preferred method.
+    LineBreakLoose,   ///< Use loose method, language specific.
+    LineBreakNormal,  ///< Use normal method, language specific.
+    LineBreakStrict,  ///< Use strict method, language specific.
+    LineBreakAnywhere ///< Break between any typographic clusters.
+};
+/// brief TextAlign values @see https://www.w3.org/TR/css-writing-modes-4/#logical-to-physical for interaction with writing mode and direction.
+enum TextAlign {
+    AlignLastAuto,   ///< TextAlignLast: same as text-align-all, unless that's justify, then this is AlignStart.
+    AlignStart,      ///< Align text to left side of line with LTR, right with RTL, top with the vertical writing modes.
+    AlignEnd,        ///< Align text to right side of line with LTR, left with RTL, bottom with the vertical writing modes.
+    AlignLeft,       ///< Align text to left side of line. Top with the vertical writing modes, bottom in sideways.
+    AlignRight,      ///< Align text to right side of line. Bottom with the vertical writing modes, top in sideways
+    AlignCenter,     ///< Center text in line.
+    AlignJustify,    ///< Justify text, so that the end and start both touch the end and start of the line.
+    AlignMatchParent ///< Inherit, except Start and End are matched against the parent values... We don't support this.
+};
+
+/// Whether and how to transform text. Not strictly necessary according to SVG2.
+enum TextTransform {
+    TextTransformNone,        ///< No transforms.
+    TextTransformCapitalize,  ///< Convert first letter in word of bicarmel text to upper-case, locale dependant.
+    TextTransformUppercase,   ///< Convert all bicarmel text to upper-case, locale dependant.
+    TextTransformLowercase,   ///< Convert all bicarmel text to lower-case, locale dependant.
+    TextTransformFullWidth,   ///< Convert proportional or half-width text to full-width text.
+    TextTransformFullSizeKana ///< Convert Japanese Katakana and Hiragana to their 'fullsize' equivelants.
+};
+
+/// How to handle overflow.
+enum TextOverflow {
+    OverFlowVisible, ///< Determined by 'overflow' property, not by text-overflow. In svg all the non-visible values compute to 'clip'.
+    OverFlowClip,    ///< Clip the rendered content.
+    OverFlowEllipse  ///< Replace the last characters with "U+2026"
+};
+
+/// Flags. Whether and how to hang punctuation. Not strictly necessary according to SVG2.
+enum HangingPunctuation {
+    HangNone  = 0x0, ///< Hang nothing.
+    HangFirst = 0x1, ///< Hang opening brackets and quotes.
+    HangLast  = 0x2, ///< Hang closing brackets and quotes.
+    HangEnd   = 0x4, ///< Hang stops and commas. Force/Allow is a seperate boolean.
+    HangForce = 0x8  ///< Whether to force hanging stops or commas.
+};
+
+/// Baseline values used by dominant-baseline and baseline-align.
 enum Baseline {
-    BaselineAuto,
-    BaselineUseScript, //SVG 1.1 feature, Deprecated in CSS.
-    BaselineDominant,
-    BaselineNoChange,
-    BaselineResetSize,
-    BaselineIdeographic,
-    BaselineAlphabetic,
-    BaselineHanging,
-    BaselineMathematical,
-    BaselineCentral,
-    BaselineMiddle,
-    BaselineTextBottom,
-    BaselineTextTop
+    BaselineAuto,        ///< Use the preferred baseline for the writing-mode and text-orientation.
+    BaselineUseScript,   ///< SVG 1.1 feature, Deprecated in CSS-Inline-3. Use the preferred baseline for the given script.
+    BaselineDominant,    ///< alignment-baseline has the same value as dominant-baseline.
+    BaselineNoChange,    ///< Use parent baseline table.
+    BaselineResetSize,   ///< Use parent baseline table, but adjust to current fontsize.
+    BaselineIdeographic, ///< Use 'ideo' or 'ideographic under/left' baselines. Used for CJK.
+    BaselineAlphabetic,  ///< Use 'romn' or the baseline for LCG scripts.
+    BaselineHanging,     ///< Use 'hang', or the baseline for scripts that hang like Tibetan and Devanagari.
+    BaselineMathematical,///< Use 'math' or the mathematical baseline, used for aligning numbers and mathematical symbols correctly.
+    BaselineCentral,     ///< Use the center between the ideographic over and under.
+    BaselineMiddle,      ///< Use the center between the alphabetical and x-height, or central in vertical.
+    BaselineTextBottom,  ///< Bottom side of the inline line-box.
+    BaselineTextTop      ///< Top side of the inline line-box.
 };
 
+/// Mode of the baseline shift.
 enum BaselineShiftMode {
-    ShiftNone,
-    ShiftSub,
-    ShiftSuper,
-    ShiftPercentage
+    ShiftNone,      ///< No shift.
+    ShiftSub,       ///< Use parent font metric for 'subscript'.
+    ShiftSuper,     ///< Use parent font metric for 'superscript'.
+    ShiftPercentage ///< Percentage of the current fontsize.
     // note: we convert all the <length> values into the relative font values!
 };
 
 enum LengthAdjust {
-    LengthAdjustSpacing,
-    LengthAdjustSpacingAndGlyphs
+    LengthAdjustSpacing,         ///< Only stretch the spaces.
+    LengthAdjustSpacingAndGlyphs ///< Stretches the glyphs as well.
 };
 
+/// Flags for text-decoration, for underline, overline and strikethrough.
 enum TextDecoration {
     DecorationNone = 0x0,
     DecorationUnderline = 0x1,
@@ -100,40 +193,47 @@ enum TextDecoration {
     DecorationLineThrough = 0x4
 };
 
+/// Style of the text-decoration.
 enum TextDecorationStyle {
-    Solid,
-    Double,
-    Dotted,
-    Dashed,
-    Wavy
+    Solid,   ///< Draw a solid line.Ex: -----
+    Double,  ///< Draw two lines. Ex: =====
+    Dotted,  ///< Draw a dotted line. Ex: .....
+    Dashed,  ///< Draw a dashed line. Ex: - - - - -
+    Wavy     ///< Draw a wavy line. We currently make a zigzag, ex: ^^^^^
 };
 
+/// Which location to choose for the underline.
 enum TextDecorationUnderlinePosition {
-    UnderlineAuto,
-    UnderlineUnder,
-    UnderlineLeft,
-    UnderlineRight
+    UnderlineAuto,  ///< Use Font metrics.
+    UnderlineUnder, ///< Use the bottom of the text decoration bounding box.
+    UnderlineLeft,  ///< Put the underline on the left of the text decoration bounding box, overline right.
+    UnderlineRight  ///< Put the underline on the right of the text decoration bounding box, overline left.
 };
 
+/// Whether to stretch the glyphs along a path.
 enum TextPathMethod {
-    TextPathAlign,
-    TextPathStretch
+    TextPathAlign,  ///< Only align position and rotation of glyphs to the path.
+    TextPathStretch ///< Align position and rotation and stretch glyphs' path points along the path as well.
 };
 
+/// Currently not used, this value suggest using either the default values or 'better' ones. Currently not used.
 enum TextPathSpacing {
     TextPathAuto,
     TextPathExact
 };
 
+/// Whether to reverse the path before laying out text.
 enum TextPathSide {
     TextPathSideRight,
     TextPathSideLeft
 };
 
+/// CSS defines a number of font features as CSS properties. Not all Opentype features are part of this.
 enum FontVariantFeature {
-    FontVariantNormal,
-    FontVariantNone,
-    CommonLigatures,/// font-variant-ligatures
+    FontVariantNormal, ///< Use default features.
+    FontVariantNone,   ///< All features are disabled.
+    /// font-variant-ligatures, common and contextual are on by default.
+    CommonLigatures,
     NoCommonLigatures,
     DiscretionaryLigatures,
     NoDiscretionaryLigatures,
@@ -141,15 +241,18 @@ enum FontVariantFeature {
     NoHistoricalLigatures,
     ContextualAlternates,
     NoContextualAlternates,
-    PositionSub,/// font-variant-position
+    /// font-variant-position, neither values are on by default.
+    PositionSub,
     PositionSuper,
-    SmallCaps,/// font-variant-caps
+    /// font-variant-caps, none of the values applicable are on by default.
+    SmallCaps,
     AllSmallCaps,
     PetiteCaps,
     AllPetiteCaps,
     Unicase,
     TitlingCaps,
-    LiningNums, /// font-variant-numeric
+    /// font-variant-numeric, none of the values applicable are on by default.
+    LiningNums,
     OldStyleNums,
     ProportionalNums,
     TabularNums,
@@ -157,14 +260,16 @@ enum FontVariantFeature {
     StackedFractions,
     Ordinal,
     SlashedZero,
-    HistoricalForms, /// font-variant-alternates
+    /// font-variant-alternates
+    HistoricalForms,
     StylisticAlt,
     StyleSet,
     CharacterVariant,
     Swash,
     Ornaments,
     Annotation,
-    EastAsianJis78, /// asian variants
+    /// font-variant-east-asian, none of the values applicable are on by default.
+    EastAsianJis78,
     EastAsianJis83,
     EastAsianJis90,
     EastAsianJis04,
@@ -177,6 +282,12 @@ enum FontVariantFeature {
 
 Q_DECLARE_FLAGS(TextDecorations, TextDecoration)
 Q_DECLARE_OPERATORS_FOR_FLAGS(TextDecorations)
+
+Q_DECLARE_FLAGS(TextSpaceTrims, TextSpaceTrim)
+Q_DECLARE_OPERATORS_FOR_FLAGS(TextSpaceTrims)
+
+Q_DECLARE_FLAGS(HangingPunctuations, HangingPunctuation)
+Q_DECLARE_OPERATORS_FOR_FLAGS(HangingPunctuations)
 
 /**
  * AutoValue represents the "auto-or-real" values used in SVG
@@ -217,6 +328,32 @@ TextOrientation parseTextOrientation(const QString &value);
 TextOrientation parseTextOrientationFromGlyphOrientation(AutoValue value);
 TextAnchor parseTextAnchor(const QString &value);
 
+/**
+ * @brief whiteSpaceValueToLongHands
+ * CSS-Text-4 takes CSS-Text-3 whitespace values and treats them as a shorthand for
+ * three more specific properties. This method sets the three properties according to
+ * the white space value given.
+ *
+ * @return whether the value could be parsed.
+ * Some CSS-Text-3 whitespace values ("break-spaces") have no CSS-Text-4 variants yet, and
+ * thus will be interpreted as "Normal" while this boolean returns false.
+ */
+bool whiteSpaceValueToLongHands(const QString &value,
+                                TextSpaceCollapse &collapseMethod,
+                                TextWrap &wrapMethod, TextSpaceTrims &trimMethod);
+/**
+ * @brief xmlSpaceToLongHands
+ * This takes xml:space values and converts them to CSS-Text-4 properties.
+ * @see whiteSpaceValueToLongHands
+ */
+bool xmlSpaceToLongHands(const QString &value,
+                         TextSpaceCollapse &collapseMethod);
+
+WordBreak parseWordBreak(const QString &value);
+LineBreak parseLineBreak(const QString &value);
+TextAlign parseTextAlign(const QString &value);
+TextTransform parseTextTransform(const QString &value);
+
 Baseline parseBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
 
@@ -244,6 +381,20 @@ QString writeLengthAdjust(LengthAdjust value);
 QString writeTextPathMethod(TextPathMethod value);
 QString writeTextPathSpacing(TextPathSpacing value);
 QString writeTextPathSide(TextPathSide value);
+
+QString writeWordBreak(WordBreak value);
+QString writeLineBreak(LineBreak value);
+QString writeTextAlign(TextAlign value);
+QString writeTextTransform(TextTransform value);
+
+/**
+ * @brief writeWhiteSpaceValue
+ * determine the CSS-3-Whitespace shorthand value.
+ * @see whiteSpaceValueToLongHands
+ */
+QString writeWhiteSpaceValue(TextSpaceCollapse collapseMethod,
+                             TextWrap wrapMethod, KoSvgText::TextSpaceTrims trimMethod);
+QString writeXmlSpace(TextSpaceCollapse collapseMethod);
 
 struct CharTransformation : public boost::equality_comparable<CharTransformation>
 {
@@ -378,6 +529,8 @@ QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::StrokeProperty 
 
 Q_DECLARE_METATYPE(KoSvgText::AutoValue)
 Q_DECLARE_METATYPE(KoSvgText::TextDecorations)
+Q_DECLARE_METATYPE(KoSvgText::HangingPunctuations)
+Q_DECLARE_METATYPE(KoSvgText::TextSpaceTrims)
 Q_DECLARE_METATYPE(KoSvgText::BackgroundProperty)
 Q_DECLARE_METATYPE(KoSvgText::StrokeProperty)
 Q_DECLARE_METATYPE(KoSvgText::AssociatedShapeWrapper)

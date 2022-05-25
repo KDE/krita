@@ -616,6 +616,170 @@ QStringList fontVariantOpentypeTags(FontVariantFeature feature)
     }
 }
 
+bool whiteSpaceValueToLongHands(const QString &value,
+                                TextSpaceCollapse &collapseMethod,
+                                TextWrap &wrapMethod,
+                                TextSpaceTrims &trimMethod)
+{
+    bool result = true;
+    if (value == "pre") {
+        collapseMethod = Preserve;
+        wrapMethod = NoWrap;
+        trimMethod = TrimNone;
+    } else if (value == "nowrap") {
+        collapseMethod = Collapse;
+        wrapMethod = NoWrap;
+        trimMethod = TrimNone;
+    } else if (value == "pre-wrap") {
+        collapseMethod = Preserve;
+        wrapMethod = Wrap;
+        trimMethod = TrimNone;
+    } else if (value == "pre-line" || value == "break-spaces") {
+        if (value == "break-spaces") {result = false;}
+        collapseMethod = PreserveBreaks;
+        wrapMethod = Wrap;
+        trimMethod = TrimNone;
+    } else { // "normal"
+        if (value != "normal") {result = false; }
+        collapseMethod = Collapse;
+        wrapMethod = Wrap;
+        trimMethod = TrimNone;
+    }
+    return result;
+}
+
+bool xmlSpaceToLongHands(const QString &value,
+                         TextSpaceCollapse &collapseMethod)
+{
+    bool result = true;
+
+    if (value == "preserve") {
+        /*
+         * "When xml:space="preserve", the SVG user agent will do the following
+         * using a copy of the original character data content. It will convert
+         * all newline and tab characters into space characters. Then, it will
+         * draw all space characters, including leading, trailing and multiple
+         * contiguous space characters."
+         */
+        collapseMethod = PreserveSpaces;
+    } else {
+        /*
+         * "When xml:space="default", the SVG user agent will do the following
+         * using a copy of the original character data content. First, it will
+         * remove all newline characters. Then it will convert all tab characters
+         * into space characters. Then, it will strip off all leading and
+         * trailing space characters. Then, all contiguous space characters
+         * will be consolidated."
+         */
+        if (value != "default") {result = false; }
+        collapseMethod = Collapse;
+    }
+
+    return result;
+}
+
+QString writeWhiteSpaceValue(TextSpaceCollapse collapseMethod, TextWrap wrapMethod, TextSpaceTrims trimMethod)
+{
+    Q_UNUSED(trimMethod);
+    if (wrapMethod != NoWrap) {
+        if (collapseMethod == Preserve) {
+            return "pre-wrap";
+        } else if (collapseMethod == PreserveBreaks) {
+            return "pre-line";
+        } else {
+            return "normal";
+        }
+
+    } else {
+        if (collapseMethod == Preserve) {
+            return "pre";
+        } else {
+            return "nowrap";
+        }
+    }
+}
+
+QString writeXmlSpace(TextSpaceCollapse collapseMethod)
+{
+    return collapseMethod == PreserveSpaces? "preserve" : "default";
+}
+
+WordBreak parseWordBreak(const QString &value)
+{
+    return value == "keep-all"? WordBreakKeepAll:
+           value == "break-all"? WordBreakBreakAll:
+                                 WordBreakNormal;
+}
+
+LineBreak parseLineBreak(const QString &value)
+{
+    return value == "loose"? LineBreakLoose :
+           value == "normal"? LineBreakNormal :
+           value == "strict"? LineBreakStrict :
+           value == "anywhere"? LineBreakAnywhere :
+                                LineBreakAuto;
+}
+
+TextAlign parseTextAlign(const QString &value)
+{
+    return value == "end"?  AlignEnd:
+           value == "left"? AlignLeft:
+           value == "right"? AlignRight:
+           value == "center"? AlignCenter:
+           value == "justify"? AlignJustify:
+           value == "match-parent"? AlignMatchParent:
+           value == "auto"? AlignLastAuto: //only for text-align-last
+                            AlignStart;
+}
+
+TextTransform parseTextTransform(const QString &value)
+{
+    return value == "uppercase"? TextTransformUppercase:
+           value == "lowercase"? TextTransformLowercase:
+           value == "capitalize"? TextTransformCapitalize:
+           value == "full-width"? TextTransformFullWidth:
+           value == "full-size-kana"? TextTransformFullSizeKana:
+                                      TextTransformNone;
+}
+
+QString writeWordBreak(WordBreak value)
+{
+    return value == WordBreakKeepAll? "keep-all":
+           value == WordBreakBreakAll? "break-all":
+                                       "normal";
+}
+
+QString writeLineBreak(LineBreak value)
+{
+    return value == LineBreakLoose? "loose" :
+           value == LineBreakNormal? "normal" :
+           value == LineBreakStrict? "strict" :
+           value == LineBreakAnywhere? "anywhere" :
+                                       "auto";
+}
+
+QString writeTextAlign(TextAlign value)
+{
+    return value == AlignEnd? "end":
+           value == AlignLeft? "left":
+           value == AlignRight? "right":
+           value == AlignCenter? "center":
+           value == AlignJustify? "justify":
+           value == AlignMatchParent? "match-parent":
+           value == AlignLastAuto? "auto": //only for text-align-last
+                                   "start";
+}
+
+QString writeTextTransform(TextTransform value)
+{
+    return value == TextTransformUppercase? "uppercase":
+           value == TextTransformLowercase? "lowercase":
+           value == TextTransformCapitalize? "capitalize":
+           value == TextTransformFullWidth? "full-width":
+           value == TextTransformFullSizeKana? "full-size-kana":
+                                      "none";
+}
+
 }
 
 

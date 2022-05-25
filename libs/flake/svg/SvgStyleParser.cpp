@@ -56,7 +56,22 @@ public:
                        << "text-decoration-position"
                        << "letter-spacing"
                        << "word-spacing"
-                       << "baseline-shift";
+                       << "baseline-shift"
+                       << "line-height"
+                       << "white-space"
+                       << "xml:space"
+                       << "text-transform"
+                       << "text-indent"
+                       << "word-break"
+                       << "line-break"
+                       << "hanging-punctuation"
+                       << "text-align"
+                       << "text-align-all"
+                       << "text-align-last"
+                       << "inline-size"
+                       << "overflow"
+                       << "text-overflow"
+                       << "tab-size";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";

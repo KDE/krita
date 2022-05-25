@@ -22,6 +22,7 @@
 #include "KisMaskedFreehandStrokePainter.h"
 #include "KisMaskingBrushRenderer.h"
 #include "KisRunnableStrokeJobData.h"
+#include "KisAnimAutoKey.h"
 
 #include "kis_paintop_registry.h"
 #include "kis_paintop_preset.h"
@@ -68,10 +69,7 @@ KisPainterBasedStrokeStrategy::~KisPainterBasedStrokeStrategy()
 
 void KisPainterBasedStrokeStrategy::init()
 {
-    KisImageConfig cfg(true);
-    if (cfg.autoKeyEnabled()) {
-        m_autokeyMode = cfg.autoKeyModeDuplicate() ? AUTOKEY_DUPLICATE : AUTOKEY_BLANK;
-    }
+    m_autokeyMode = KisAutoKey::activeMode();
 
     enableJob(KisSimpleStrokeStrategy::JOB_INIT);
     enableJob(KisSimpleStrokeStrategy::JOB_FINISH);
@@ -299,12 +297,12 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     if (channel)
     {
         KisKeyframeSP keyframe = channel->keyframeAt(time);
-        if (!keyframe && m_autokeyMode > AUTOKEY_NONE) {
+        if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
             int activeKeyTime = channel->activeKeyframeTime(time);
 
             m_autokeyCommand = toQShared( new KUndo2Command() );
 
-            if (m_autokeyMode == AUTOKEY_DUPLICATE) {
+            if (m_autokeyMode == KisAutoKey::DUPLICATE) {
                 channel->copyKeyframe(activeKeyTime, time, m_autokeyCommand.data());
             } else { // Otherwise, create a fresh keyframe.
                 m_autokeyCleanup = node->exactBounds();

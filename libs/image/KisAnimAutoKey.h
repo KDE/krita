@@ -14,7 +14,7 @@
 namespace KisAutoKey {
     enum KRITAIMAGE_EXPORT Mode {
         NONE,     // AutoKey is disabled. Keyframes must be created manually.
-        BLANK,    // AutoKey creates an empty/blank frame.
+        BLANK,    // AutoKey creates an empty/blank frame. Acts like DUPLICATE when not applicable (i.e.: filters, transforms, etc.).
         DUPLICATE // AutoKey will duplicate the active frame.
     };
 

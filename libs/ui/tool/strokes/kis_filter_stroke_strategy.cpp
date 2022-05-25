@@ -19,26 +19,31 @@
 #include "kis_image_config.h"
 #include "kis_image_animation_interface.h"
 #include "kis_painter.h"
+#include "kis_raster_keyframe_channel.h"
+#include "KisAnimAutoKey.h"
 #include <commands_new/KisDisableDirtyRequestsCommand.h>
 
 
 struct KisFilterStrokeStrategy::Private {
     Private()
-        : updatesFacade(0),
-          levelOfDetail(0)
+        : updatesFacade(0)
+        , levelOfDetail(0)
+        , m_autokeyMode(KisAutoKey::activeMode())
     {
     }
 
     Private(const Private &rhs)
-        : filter(rhs.filter),
-          filterConfig(rhs.filterConfig),
-          node(rhs.node),
-          targetDevice(rhs.targetDevice),
-          activeSelection(rhs.activeSelection),
-          image(rhs.image),
-          updatesFacade(rhs.updatesFacade),
-          levelOfDetail(0),
-          cancelledUpdates(rhs.cancelledUpdates)
+        : filter(rhs.filter)
+        , filterConfig(rhs.filterConfig)
+        , node(rhs.node)
+        , targetDevice(rhs.targetDevice)
+        , activeSelection(rhs.activeSelection)
+        , image(rhs.image)
+        , updatesFacade(rhs.updatesFacade)
+        , levelOfDetail(0)
+        , cancelledUpdates(rhs.cancelledUpdates)
+        , m_autokeyCommand(rhs.m_autokeyCommand)
+
     {
         KIS_ASSERT_RECOVER_RETURN(!rhs.levelOfDetail);
     }
@@ -52,10 +57,12 @@ struct KisFilterStrokeStrategy::Private {
     KisUpdatesFacade *updatesFacade;
     int levelOfDetail;
 
+    KisAutoKey::Mode m_autokeyMode;
+    QSharedPointer<KUndo2Command> m_autokeyCommand;
+
     ExternalCancelUpdatesStorageSP cancelledUpdates;
     QRect nextExternalUpdateRect;
     bool hasBeenLodCloned = false;
-
 };
 
 struct SubTaskSharedData {
@@ -95,7 +102,9 @@ struct SubTaskSharedData {
 
     KisFilterConfigurationSP filterConfig() { return m_filterConfig; }
 
-    int frameTime() { return m_frameTime; }
+    int frameTime() {
+        return m_frameTime;
+    }
 
     bool shouldSwitchTime() { return m_shouldSwitchTime; }
 
@@ -124,6 +133,7 @@ private:
 
 };
 
+using namespace KritaUtils;
 
 KisFilterStrokeStrategy::KisFilterStrokeStrategy(KisFilterSP filter, KisFilterConfigurationSP filterConfig, KisResourcesSnapshotSP resources)
     : KisFilterStrokeStrategy(filter, filterConfig, resources, toQShared(new ExternalCancelUpdatesStorage()))
@@ -178,6 +188,28 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     qSwap(m_d->nextExternalUpdateRect, m_d->cancelledUpdates->updateRect);
     KisLodTransform t(m_d->levelOfDetail);
     m_d->nextExternalUpdateRect = t.map(m_d->nextExternalUpdateRect);
+
+    // Create keyframe if necessary (ie: AutoKey enabled)..
+    const int time = m_d->image->animationInterface()->currentTime();
+    KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(m_d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
+    if (channel)
+    {
+        KisKeyframeSP keyframe = channel->keyframeAt(time);
+        if (!keyframe && m_d->m_autokeyMode != KisAutoKey::NONE) {
+            int activeKeyTime = channel->activeKeyframeTime(time);
+            m_d->m_autokeyCommand = toQShared( new KUndo2Command() );
+            channel->copyKeyframe(activeKeyTime, time, m_d->m_autokeyCommand.data());
+
+            keyframe = channel->keyframeAt(time);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
+
+            // Use the same color label as previous keyframe...
+            KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
+            if (previousKey) {
+                keyframe->setColorLabel(previousKey->colorLabel());
+            }
+        }
+    }
 }
 
 
@@ -186,9 +218,9 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     FilterJobData *filterFrameData = dynamic_cast<FilterJobData*>(data);
     KisRunnableStrokeJobData *jobData = dynamic_cast<KisRunnableStrokeJobData*>(data);
 
-    if (filterFrameData) { // Populate list of jobs for filter application...
+    // Populate list of jobs for filter application...
+    if (filterFrameData) {
 
-        using namespace KritaUtils;
         QVector<KisRunnableStrokeJobData*> jobs;
 
         QSharedPointer<SubTaskSharedData> shared( new SubTaskSharedData(m_d->image, m_d->node, m_d->levelOfDetail,
@@ -273,8 +305,6 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 return;
             }
 
-            //TODO: Reinstate autokey behavior for filters...
-
             // Make a transaction, change the target device, and "end" transaction.
             // Should be useful for undoing later.
             QScopedPointer<KisTransaction> workingTransaction( new KisTransaction(shared->targetDevice()) );
@@ -323,6 +353,10 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
     QVector<KisStrokeJobData *> jobs;
 
+    if (m_d->m_autokeyCommand) {
+        m_d->m_autokeyCommand->undo();
+    }
+
     jobs << new Data(toQShared(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisDisableDirtyRequestsCommand::INITIALIZING)));
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallbackImpl(jobs);
     jobs << new Data(toQShared(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisDisableDirtyRequestsCommand::FINALIZING)));
@@ -356,6 +390,9 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
 void KisFilterStrokeStrategy::finishStrokeCallback()
 {
+    if (m_d->m_autokeyCommand) {
+        undoFacade()->postExecutionUndoAdapter()->addCommand(m_d->m_autokeyCommand);
+    }
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
 

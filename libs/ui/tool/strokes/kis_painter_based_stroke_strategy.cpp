@@ -372,12 +372,13 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
     KisPostExecutionUndoAdapter *undoAdapter =
         m_resources->postExecutionUndoAdapter();
 
-    undoAdapter->addCommand(m_autokeyCommand);
 
     if (!undoAdapter) {
         m_fakeUndoData.reset(new FakeUndoData());
         undoAdapter = m_fakeUndoData->undoAdapter.data();
     }
+
+    undoAdapter->addCommand(m_autokeyCommand);
 
     if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();

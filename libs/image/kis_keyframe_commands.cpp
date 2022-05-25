@@ -32,7 +32,6 @@ void KisInsertKeyframeCommand::undo()
     }
 }
 
-
 KisRemoveKeyframeCommand::KisRemoveKeyframeCommand(KisKeyframeChannel *channel, int time, KUndo2Command *parentCmd)
     : KUndo2Command(parentCmd),
       m_channel(channel),
@@ -50,6 +49,8 @@ void KisRemoveKeyframeCommand::undo()
 {
     m_channel->insertKeyframe(m_time, m_cached);
 }
+
+
 
 KisScalarKeyframeUpdateCommand::KisScalarKeyframeUpdateCommand(KisScalarKeyframe *keyframe, qreal value, KisScalarKeyframe::InterpolationMode interpolationMode, KisScalarKeyframe::TangentsMode tangentMode, QPointF tangentLeft, QPointF tangentRight, KUndo2Command *parentCmd)
     : KUndo2Command(parentCmd),

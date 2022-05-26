@@ -5,12 +5,13 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include "kis_qmic_simple_convertor.h"
+
 #include <array>
 #include <cstddef>
 #include <map>
+#include <memory>
 #include <vector>
-
-#include <kis_qmic_simple_convertor.h>
 
 #include <kis_debug.h>
 #include <kis_random_accessor_ng.h>

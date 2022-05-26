@@ -30,6 +30,8 @@ export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
+source ${KRITA_SOURCES}/packaging/linux/appimage/override_compiler.sh.inc
+
 cd $KRITA_SOURCES
 
 if [ -z "${KRITA_BRANDING}" ]; then

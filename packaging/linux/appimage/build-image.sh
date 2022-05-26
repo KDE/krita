@@ -38,6 +38,8 @@ export PYTHONPATH=$DEPS_INSTALL_PREFIX/sip
 fi
 export PYTHONHOME=$DEPS_INSTALL_PREFIX
 
+source ${KRITA_SOURCES}/packaging/linux/appimage/override_compiler.sh.inc
+
 # Switch over to our build prefix
 cd $BUILD_PREFIX
 

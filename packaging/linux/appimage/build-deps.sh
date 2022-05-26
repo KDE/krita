@@ -32,6 +32,8 @@ export PATH=$DEPS_INSTALL_PREFIX/bin:$PATH
 export PKG_CONFIG_PATH=$DEPS_INSTALL_PREFIX/share/pkgconfig:$DEPS_INSTALL_PREFIX/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH
 export CMAKE_PREFIX_PATH=$DEPS_INSTALL_PREFIX:$CMAKE_PREFIX_PATH
 
+source ${KRITA_SOURCES}/packaging/linux/appimage/override_compiler.sh.inc
+
 # A krita build layout looks like this:
 # krita/ -- the source directory
 # downloads/ -- downloads of the dependencies from files.kde.org

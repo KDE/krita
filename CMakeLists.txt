@@ -967,7 +967,7 @@ list (APPEND ANDROID_EXTRA_LIBS ${LCMS2_LIBRARIES})
 ##
 ## Test for xsimd
 ##
-find_package(xsimd 8.0.5)
+find_package(xsimd 8.1.0)
 set_package_properties(xsimd PROPERTIES
     DESCRIPTION "C++ wrappers for SIMD intrinsics"
     URL "https://github.com/xtensor-stack/xsimd"

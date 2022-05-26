@@ -42,11 +42,11 @@ index 000000000..08fcc235c
 +
 +if(MSVC)
 +    add_compile_options(/d2guard4 /Wv:18 /guard:cf /permissive /bigobj)
-+else()
-+    set(CMAKE_CXX_STANDARD 17)
-+    set(CMAKE_CXX_STANDARD_REQUIRED ON)
-+    set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 +endif()
++set(CMAKE_CXX_STANDARD 17)
++set(CMAKE_CXX_STANDARD_REQUIRED ON)
++set(CMAKE_POSITION_INDEPENDENT_CODE ON)
++
 +
 +if (APPLE)
 +    set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -framework Cocoa -framework OpenGL -framework IOKit -framework CoreFoundation -framework IOSurface -framework QuartzCore -framework CoreGraphics")

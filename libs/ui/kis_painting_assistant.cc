@@ -156,6 +156,14 @@ struct KisPaintingAssistant::Private {
     };
 
     QSharedPointer<SharedData> s;
+
+
+    const int previewLineWidth {1};
+    const int mainLineWidth {2}; // for "drawPath" etc.
+    const int errorLineWidth {2};
+
+
+
 };
 
 KisPaintingAssistant::Private::Private()
@@ -301,7 +309,7 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
     }
 
     painter.save();
-    QPen pen_a(paintingColor, 2);
+    QPen pen_a(paintingColor, d->mainLineWidth);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);
@@ -311,8 +319,19 @@ void KisPaintingAssistant::drawPath(QPainter& painter, const QPainterPath &path,
 void KisPaintingAssistant::drawPreview(QPainter& painter, const QPainterPath &path)
 {
     painter.save();
-    QPen pen_a(effectiveAssistantColor(), 1);
+    QPen pen_a(effectiveAssistantColor(), d->previewLineWidth);
     pen_a.setStyle(Qt::SolidLine);
+    pen_a.setCosmetic(true);
+    painter.setPen(pen_a);
+    painter.drawPath(path);
+    painter.restore();
+}
+
+void KisPaintingAssistant::drawError(QPainter &painter, const QPainterPath &path)
+{
+    painter.save();
+    qreal size = painter.device() ? d->errorLineWidth*painter.device()->devicePixelRatioF() : d->errorLineWidth;
+    QPen pen_a(QColor(255, 0, 0, 125), size);
     pen_a.setCosmetic(true);
     painter.setPen(pen_a);
     painter.drawPath(path);

@@ -529,16 +529,12 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
         if (!isEllipseValid()) {
             // color red for an invalid transform, but not for an incomplete one
             if(isAssistantComplete()) {
-                QPen pen_a(QColor(255, 0, 0, 125), 5);
-                pen_a.setCosmetic(true);
-                gc.setPen(pen_a);
-
                 QPainterPath path;
                 QPolygonF polyAllConnected;
                 // that will create a triangle with a point inside connected to all vertices of the triangle
                 polyAllConnected << *handles()[0] << *handles()[1] << *handles()[2] << *handles()[3] << *handles()[0] << *handles()[2] << *handles()[1] << *handles()[3];
                 path.addPolygon(polyAllConnected);
-                gc.drawPath(path);
+                drawError(gc, path);
             } else {
                 QPainterPath path;
                 path.addPolygon(poly);

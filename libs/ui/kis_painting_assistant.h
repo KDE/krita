@@ -211,6 +211,8 @@ public:
      */
     void drawPath(QPainter& painter, const QPainterPath& path, bool drawActive=true);
     void drawPreview(QPainter& painter, const QPainterPath& path);
+    // draw a path in a red color, signalizing incorrect state
+    void drawError(QPainter& painter, const QPainterPath& path);
     static double norm2(const QPointF& p);
 
 protected:

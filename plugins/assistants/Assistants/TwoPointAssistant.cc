@@ -377,7 +377,8 @@ void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, co
             fade.setColorAt(0.6, effectiveAssistantColor());
             const QPen pen = gc.pen();
             const QBrush new_brush = QBrush(fade);
-            const QPen new_pen = QPen(new_brush, pen.width(), pen.style());
+            int width = 1;
+            const QPen new_pen = QPen(new_brush, width, pen.style());
             gc.setPen(new_pen);
 
             const QList<QPointF> station_points = {upper, lower};

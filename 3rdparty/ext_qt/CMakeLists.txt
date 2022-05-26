@@ -62,18 +62,28 @@ if (WIN32)
         QMAKE_CXXFLAGS+=${SECURITY_CXX_FLAGS}
       )
     endif (MSVC)
-    if (QT_ENABLE_DEBUG_INFO)
+    if (QT_ENABLE_DEBUG_INFO OR MINGW)
         # Set the option to build Qt with debugging info enabled
         list(APPEND _QT_conf -force-debug-info)
-        if (MINGW)
-            if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-                list(APPEND _QT_conf
-                    QMAKE_CFLAGS+=-gdwarf-aranges
-                    QMAKE_CXXFLAGS+=-gdwarf-aranges
-                )
-            endif ()
-        endif ()
     endif(QT_ENABLE_DEBUG_INFO)
+    if (MINGW)
+        if (NOT QT_ENABLE_DEBUG_INFO)
+            # Generate minimal debug info for backtraces
+            list(APPEND _QT_conf
+                QMAKE_CFLAGS-=-g
+                QMAKE_CFLAGS+=-g1
+                QMAKE_CXXFLAGS-=-g
+                QMAKE_CXXFLAGS+=-g1
+            )
+        endif ()
+        if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            # Workaround for DrMingw, see parent CMakeLists.txt
+            list(APPEND _QT_conf
+                QMAKE_CFLAGS+=-gdwarf-aranges
+                QMAKE_CXXFLAGS+=-gdwarf-aranges
+            )
+        endif ()
+    endif ()
     if (QT_ENABLE_DYNAMIC_OPENGL)
         list(APPEND _QT_conf -opengl dynamic -angle)
     else (QT_ENABLE_DYNAMIC_OPENGL)

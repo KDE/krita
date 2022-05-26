@@ -66,7 +66,7 @@ set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 
 if (WIN32)
         option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
-	option(QT_ENABLE_DEBUG_INFO "Build Qt with debug info included" OFF)
+	option(QT_ENABLE_DEBUG_INFO "Build Qt with full debug info included" OFF)
 	option(QT_ENABLE_DYNAMIC_OPENGL "Build Qt with dynamic ANGLE support '-opengl dynamic -angle' (needs env var 'WindowsSdkDir' set to path of Windows 10 SDK)" ON)
     option(USE_EXTERNAL_ANGLE "Use a newer custom Google ANGLE build instead of the one bundled in Qt" ON)
 
@@ -142,6 +142,10 @@ if (MINGW)
 	else ()
 		message(WARNING "Linker Security Flags not enabled!")
 	endif ()
+
+    # Generate reduced debug info
+    set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -g1")
+    set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -g1")
 
     # Clang does not generate DWARF aranges data by default, which makes
     # DrMingw not able to parse the DWARF debug symbols. Add -gdwarf-aranges

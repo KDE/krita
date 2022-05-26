@@ -95,6 +95,15 @@ endlocal & set "%1=%RESULT%"
 goto :EOF
 
 
+:has_target out_variable folder
+setlocal
+set RESULT=
+if exist "%~2" (
+    set RESULT=1
+)
+endlocal & set "%1=%RESULT%"
+goto :EOF
+
 :usage
 echo Usage:
 echo %~n0 [--no-interactive] [ OPTIONS ... ]
@@ -110,6 +119,8 @@ echo --skip-krita                    Skips (re)building of Krita
 echo --cmd                           Launch a cmd prompt instead of building.
 echo                                 The environment is set up like the build
 echo                                 environment with some helper command macros.
+echo --dev                           Activate developer options, like 'CodeBlocks'
+echo                                 generator and BUILD_TESTING
 echo.
 echo Path options:
 echo --src-dir ^<dir_path^>            Specify Krita source dir
@@ -154,6 +165,7 @@ set ARG_KRITA_BUILD_DIR=
 set ARG_KRITA_INSTALL_DIR=
 set ARG_PLUGINS_BUILD_DIR=
 set ARG_CMD=
+set ARG_DEV=
 :args_parsing_loop
 set CURRENT_MATCHED=
 if not "%1" == "" (
@@ -182,6 +194,10 @@ if not "%1" == "" (
     )
     if "%1" == "--skip-krita" (
         set ARG_SKIP_KRITA=1
+        set CURRENT_MATCHED=1
+    )
+    if "%1" == "--dev" (
+        set ARG_DEV=1
         set CURRENT_MATCHED=1
     )
     if "%1" == "--src-dir" (
@@ -418,6 +434,14 @@ if "%KRITA_GIT_DIR%" == "" (
     )
 ) else echo Git found on %KRITA_GIT_DIR%
 
+if "%KRITA_NINJA_DIR%" == "" (
+    call :find_on_path KRITA_NINJA_EXE_DIR ninja.exe
+    if NOT "!KRITA_NINJA_EXE_DIR!" == "" (
+        call :get_dir_path KRITA_NINJA_DIR "!KRITA_NINJA_EXE_DIR!"
+        echo Found Ninja on PATH: !KRITA_NINJA_DIR!
+    )
+) else echo Ninja found on %KRITA_NINJA_DIR%
+
 if "%SVN_DIR%" == "" (
     call :find_on_path SVN_EXE_DIR svn.exe
     if NOT "!SVN_EXE_DIR!" == "" (
@@ -425,6 +449,14 @@ if "%SVN_DIR%" == "" (
         echo Found SVN on PATH: !SVN_DIR!
     )
 ) else echo SVN found on %SVN_DIR%
+
+if "%PERL_DIR%" == "" (
+    call :find_on_path PERL_EXE_DIR perl.exe
+    if NOT "!PERL_EXE_DIR!" == "" (
+        call :get_dir_path PERL_DIR "!PERL_EXE_DIR!"
+        echo Found Perl on PATH: !PERL_DIR!
+    )
+) else echo Perl found on %PERL_DIR%
 
 if "%ARG_SKIP_DEPS%" == "1" goto skip_windows_sdk_dir_check
 
@@ -680,8 +712,16 @@ set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMRO
 :: Set PATH for calling Python scripts
 set PATH=%PYTHON_BIN_DIR%;%PATH%
 :: Set PATH for external tools (Meson/Ninja)
-if not "%GETTEXT_SEARCH_PATH%" == "" (
-    set PATH=!PATH!;!GETTEXT_SEARCH_PATH!
+if NOT "%KRITA_GIT_DIR%" == "" (
+    set PATH=%PATH%;%KRITA_GIT_DIR%
+)
+if NOT "%KRITA_NINJA_DIR%" == "" (
+    if NOT "%KRITA_NINJA_DIR%" == "%MINGW_BIN_DIR%" (
+        set PATH=%PATH%;%KRITA_NINJA_DIR%
+    )
+)
+if NOT "%SVN_DIR%" == "" (
+    set PATH=%PATH%;%SVN_DIR%
 )
 
 echo Creating dirs...
@@ -745,6 +785,26 @@ echo.
 set CMAKE_BUILD_TYPE=RelWithDebInfo
 set QT_ENABLE_DEBUG_INFO=OFF
 
+set KRITA_GENERATOR=Visual Studio 17 2022
+set KRITA_BUILD_TESTING=OFF
+set KRITA_INSTALL_BENCHMARKS=OFF
+
+if "%ARG_DEV%" == "1" (
+    set KRITA_BUILD_TESTING=ON
+    set KRITA_INSTALL_BENCHMARKS=ON
+)
+
+if "%KRITA_BRANDING%" == "" (
+    rem Check Jenkins job name
+    if "%JOB_NAME%" == "Krita_Nightly_Windows_Build" (
+        set KRITA_BRANDING=Next
+    ) else (
+        if "%JOB_NAME%" == "Krita_Stable_Windows_Build" (
+            set KRITA_BRANDING=Plus
+        )
+    )
+)
+
 :: Paths for CMake
 set "BUILDDIR_DOWNLOAD_CMAKE=%DEPS_DOWNLOAD_DIR:\=/%"
 set "BUILDDIR_DOWNLOAD_CMAKE=%BUILDDIR_DOWNLOAD_CMAKE: =\ %"
@@ -757,12 +817,16 @@ set "BUILDDIR_KRITA_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%KRITA_INSTALL_DIR:\=/%"
 set "BUILDDIR_PLUGINS_INSTALL_CMAKE=%BUILDDIR_KRITA_INSTALL_CMAKE: =\ %"
 
-set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
-if NOT "%KRITA_GIT_DIR%" == "" (
-    set PATH=%PATH%;%KRITA_GIT_DIR%
+if not "%PERL_DIR%" == "" (
+    set "PERL_EXECUTABLE=%PERL_DIR%\perl.exe"
+    set "PERL_EXECUTABLE=%PERL_EXECUTABLE:\=/%"
+    set "PERL_EXECUTABLE=%PERL_EXECUTABLE: =\ %"
 )
-if NOT "%SVN_DIR%" == "" (
-    set PATH=%PATH%;%SVN_DIR%
+
+set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
+
+if not "%GETTEXT_SEARCH_PATH%" == "" (
+    set PATH=!PATH!;!GETTEXT_SEARCH_PATH!
 )
 
 :: Prepare the CMake command lines
@@ -770,9 +834,10 @@ set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DSUBMAKE_JOBS=%PARALLEL_JOBS% ^
     -DQT_ENABLE_DEBUG_INFO=%QT_ENABLE_DEBUG_INFO% ^
     -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
+    -DPERL_EXECUTABLE=%PERL_EXECUTABLE% ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -G "Visual Studio 17 2022" ^
+    -G "%KRITA_GENERATOR%" ^
     -A "x64" ^
     -T "host=x64" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -784,14 +849,16 @@ set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
     -DBOOST_LIBRARYDIR=%BUILDDIR_DEPS_INSTALL_CMAKE%/lib ^
     -DCMAKE_PREFIX_PATH=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
     -DCMAKE_INSTALL_PREFIX=%BUILDDIR_KRITA_INSTALL_CMAKE% ^
-    -DBUILD_TESTING=OFF ^
+    -DBUILD_TESTING=%KRITA_BUILD_TESTING% ^
+    -DINSTALL_BENCHMARKS=%KRITA_INSTALL_BENCHMARKS% ^
     -DHAVE_MEMORY_LEAK_TRACKER=OFF ^
     -DFOUNDATION_BUILD=ON ^
     -DUSE_QT_TABLET_WINDOWS=ON ^
     -DHIDE_SAFE_ASSERTS=ON ^
-    -Wno-dev ^
     -DFETCH_TRANSLATIONS=ON ^
-    -G "Visual Studio 17 2022" ^
+    -DBRANDING=%KRITA_BRANDING% ^
+    -Wno-dev ^
+    -G "%KRITA_GENERATOR%" ^
     -A "x64" ^
     -T "host=x64" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -802,7 +869,7 @@ set CMDLINE_CMAKE_PLUGINS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty_plugins" ^
     -DQT_ENABLE_DYNAMIC_OPENGL=%QT_ENABLE_DYNAMIC_OPENGL% ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_PLUGINS_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_PLUGINS_INSTALL_CMAKE% ^
-    -G "Visual Studio 17 2022" ^
+    -G "%KRITA_GENERATOR%" ^
     -A "x64" ^
     -T "host=x64" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
@@ -864,11 +931,23 @@ set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp jpegxl xsimd
 
 for %%a in (%EXT_TARGETS%) do (
-    echo Building ext_%%a...
-    "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a --parallel %PARALLEL_JOBS%
-    if errorlevel 1 (
-        echo ERROR: Building of ext_%%a failed! 1>&2
-        exit /b 105
+    set TEST_HAS_TARGET=
+    call :has_target TEST_HAS_TARGET_SELF "ext_%%a\"
+    call :has_target TEST_HAS_KF5_TARGET "ext_frameworks\ext_%%a-prefix\"
+    call :has_target TEST_HAS_HEIF_TARGET "ext_heif\ext_%%a-prefix\"
+    if "!TEST_HAS_TARGET_SELF!" == "1" set TEST_HAS_TARGET=1
+    if "!TEST_HAS_KF5_TARGET!" == "1" set TEST_HAS_TARGET=1
+    if "!TEST_HAS_HEIF_TARGET!" == "1" set TEST_HAS_TARGET=1
+
+    if defined TEST_HAS_TARGET (
+        echo Building ext_%%a...
+        "%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target ext_%%a --parallel %PARALLEL_JOBS%
+        if errorlevel 1 (
+            echo ERROR: Building of ext_%%a failed! 1>&2
+            exit /b 105
+        )
+    ) else (
+        echo Skipping ext_%%a, using OS package...
     )
 )
 echo.
@@ -907,7 +986,7 @@ echo Running CMake for Krita...
 echo.
 
 echo Building Krita...
-"%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target install
+"%CMAKE_EXE%" --build . --config %CMAKE_BUILD_TYPE% --target install --parallel %PARALLEL_JOBS%
 if errorlevel 1 (
     echo ERROR: Building of Krita failed! 1>&2
     exit /b 105

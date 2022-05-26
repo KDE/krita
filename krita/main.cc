@@ -136,7 +136,7 @@ typedef enum ORIENTATION_PREFERENCE {
     typedef BOOL (WINAPI *pSetDisplayAutoRotationPreferences_t)(
         ORIENTATION_PREFERENCE orientation
         );
-#endif()
+#endif
 void resetRotation()
 {
     QLibrary user32Lib("user32");

@@ -826,6 +826,12 @@ set_package_properties(JPEGXL PROPERTIES
     PURPOSE "Required by the Krita JPEG-XL filter")
 if (JPEGXL_FOUND)
     list (APPEND ANDROID_EXTRA_LIBS ${JPEGXL_LIBRARIES})
+    # because libjxl depends on brotli and it is installed in the same folder
+    get_filename_component (_base_dir ${JPEGXL_LIBRARY} DIRECTORY)
+    list (APPEND ANDROID_EXTRA_LIBS 
+                    ${_base_dir}/libbrotlidec.so
+                    ${_base_dir}/libbrotlicommon.so
+                    ${_base_dir}/libbrotlienc.so)
 endif()
 
 find_package(FFTW3)
@@ -1024,9 +1030,6 @@ list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${EXPAT_LIBRARY}
                                 ${KF5_LIBRARIES}/libssl_1_1.so
                                 ${KF5_LIBRARIES}/libcrypto_1_1.so
-                                ${KF5_LIBRARIES}/libbrotlidec.so
-                                ${KF5_LIBRARIES}/libbrotlicommon.so
-                                ${KF5_LIBRARIES}/libbrotlienc.so
                                 ${KF5_LIBRARIES}/libKF5Completion.so
                                 ${KF5_LIBRARIES}/libKF5WindowSystem.so
                                 ${KF5_LIBRARIES}/libKF5WidgetsAddons.so

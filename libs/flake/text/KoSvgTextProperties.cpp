@@ -520,7 +520,17 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(HangingPunctuationId, QVariant::fromValue(hang));
     } else if (command == "inline-size") {
         setProperty(InlineSizeId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "auto")));
-    } else {
+    } else if (command == "overflow") {
+        setProperty(TextOverFlowId, value == "visible"? KoSvgText::OverFlowVisible: KoSvgText::OverFlowClip);
+    } else if (command == "text-overflow") {
+        setProperty(TextOverFlowId, value == "ellipse"? KoSvgText::OverFlowEllipse: KoSvgText::OverFlowClip);
+    } else if (command == "tab-size") {
+        bool ok = false;
+        int parsed = value.toInt(&ok, 10);
+        if (ok) {
+            setProperty(TabSizeId, parsed);
+        }
+    }else {
         qFatal("FATAL: Unknown SVG property: %s = %s", command.toUtf8().data(), value.toUtf8().data());
     }
 }

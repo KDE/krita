@@ -3,7 +3,6 @@ include_directories(${CMAKE_BINARY_DIR}/libs/psdutils)
 include_directories(${CMAKE_BINARY_DIR}/libs/pigment)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/..
     ${CMAKE_SOURCE_DIR}/sdk/tests
     ${CMAKE_SOURCE_DIR}/libs/psd
     ${CMAKE_SOURCE_DIR}/libs/psdutils

@@ -358,7 +358,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             }
 
             if (transforms.isEmpty()) {
-                result << SubChunk(text, format);
+                result << SubChunk(text, format, textInPath);
             } else {
                 result << SubChunk(text, format, transforms, textInPath);
             }

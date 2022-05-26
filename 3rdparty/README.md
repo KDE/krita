@@ -2,13 +2,13 @@
 
 If you need to build Krita's dependencies for the following reasons:
 
-* you develop on Windows and aren't using build-tools/windows/build.cmd or KDE's craft
+* you develop on Windows and aren't using build-tools/windows/build.cmd
 * you develop on OSX and aren't using the scripts in krita/packaging/osx or Homebrew
 * you want to build a generic, distro-agnostic version of Krita for Linux and aren't using the scripts in packaging/linux/appimage
 * you develop on Linux, but some dependencies aren't available for your distribution and aren't using the scripts in packaging/linux/appimage
 
 and you know what you're doing, you can use the following guide to build
-the dependencies that Krita needs. 
+the dependencies that Krita needs.
 
 Using the scripts mentioned above is strongly preferred because that's what
 the Krita team uses to build the binaries on the binary factory
@@ -20,6 +20,11 @@ YOU DO NOT NEED THIS GUIDE AND YOU SHOULD STOP READING NOW
 
 Otherwise you risk major confusion.
 
+**Important**: This document is not updated consistently. It may contain
+outdated information and missing steps. For clearer information on building
+Krita with the build scripts, check:
+https://docs.krita.org/en/untranslatable_pages/building_krita.html.
+
 ## Prerequisites
 
 Note: on all operating systems the entire procedure is done in a terminal window.
@@ -30,13 +35,12 @@ Note: on all operating systems the entire procedure is done in a terminal window
 3. Make sure you have a compiler:
     * Linux: gcc, minimum version 4.8
     * OSX: clang, you need to install xcode for this
-    * Windows: mingw-w64 7.3 (by mingw-builds): https://files.kde.org/krita/build/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z
-        * For threading, select posix.
-        * For exceptions, select seh (64-bit) or dwarf (32-bit).
-        * Install mingw to something like C:\mingw; the full path must not contain any spaces.
-            * Make sure mingw's bin folder is in your path. It might be a good
-               idea to create a batch file which sets the path and start cmd.
-        * MSVC is *not* supported at the moment.
+    * Windows: LLVM MinGW (20220323 LLVM 14.0): https://github.com/mstorsjo/llvm-mingw/releases/download/20220323/llvm-mingw-20220323-ucrt-x86_64.zip
+        * Install to something like C:\llvm-mingw; the full path must not contain any spaces.
+            * Make sure the `bin` folder and the `x86_64-w64-mingw32\bin` folder
+              are in your path. It might be a good idea to create a batch file
+              which sets the path and start cmd.
+        * If you want to use MSVC, check the script in `build-tools/windows`.
 
 4. On Windows, you will also need a release of Python 3.8 (not 3.7, probably not 3.9): https://www.python.org. Make sure to have that version of python.exe in your path. This version of Python will be used for two things: to configure Qt and to build the Python scripting module.  Make sure that this version of Python comes first in your path. Do not set PYTHONHOME or PYTHONPATH.
     * Make sure that your Python will have the correct architecture for the version you are trying to build. If building for 32-bit target, you need the 32-bit release of Python.
@@ -48,8 +52,6 @@ Note: on all operating systems the entire procedure is done in a terminal window
     * Example:
         set "WindowsSdkDir=%ProgramFiles(x86)%\Windows Kits\10"
         set "WindowsSdkVerBinPath=%ProgramFiles(x86)%\Windows Kits\10\bin\10.0.18362.0"
-
-THIS IS ALSO NEEDED IF YOU USE THE build.cmd script.
 
 ## Setup your environment
 

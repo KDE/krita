@@ -27,7 +27,8 @@ class QDomElement;
 namespace KisBezierMeshDetails {
 
 struct BaseMeshNode : public boost::equality_comparable<BaseMeshNode> {
-    BaseMeshNode() {}
+    BaseMeshNode() = default;
+
     BaseMeshNode(const QPointF &_node)
         : leftControl(_node),
           topControl(_node),
@@ -169,7 +170,7 @@ public:
         };
 
         ControlPointIndex()  = default;
-        ControlPointIndex(const ControlPointIndex &rhs) = default;
+
         ControlPointIndex(NodeIndex _nodeIndex, ControlType _controlType)
             : nodeIndex(_nodeIndex),
               controlType(_controlType)

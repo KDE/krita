@@ -13,9 +13,7 @@ struct KisLodPreferences
     };
     Q_DECLARE_FLAGS(PreferenceFlags, PreferenceFlag)
 
-    KisLodPreferences()
-    {
-    }
+    KisLodPreferences() = default;
 
     KisLodPreferences(PreferenceFlags flags, int desiredLevelOfDetail)
         : m_flags(flags), m_desiredLevelOfDetail(desiredLevelOfDetail)
@@ -29,8 +27,6 @@ struct KisLodPreferences
         : m_flags(LodSupported | LodPreferred), m_desiredLevelOfDetail(desiredLevelOfDetail)
     {
     }
-
-    KisLodPreferences(const KisLodPreferences &rhs) = default;
 
     PreferenceFlags flags() const {
         return m_flags;

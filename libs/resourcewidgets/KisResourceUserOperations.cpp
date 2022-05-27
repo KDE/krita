@@ -180,7 +180,9 @@ bool KisResourceUserOperations::updateResourceWithUserInput(QWidget *widgetParen
         bool result = KisResourceCacheDb::getResourceIdFromVersionedFilename(resource->filename(), resource->resourceType().first,
                                                                KisResourceLocator::instance()->makeStorageLocationRelative(resource->storageLocation()), outResourceId);
         if (!result) {
-            qWarning() << "Could not get resource id from versioned filename" << resource->filename(), resource->resourceType().first;
+            qWarning() << "Could not get resource id from versioned filename"
+                       << resource->filename()
+                       << resource->resourceType().first;
         }
         KoResourceSP cachedPointer;
         if (outResourceId >= 0) {

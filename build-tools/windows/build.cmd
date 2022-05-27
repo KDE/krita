@@ -733,18 +733,18 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 )
 
 :: Initialize clean PATH
-set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
-set PATH=%PYTHON_BIN_DIR%;%MINGW_BIN_DIR%;%PATH%
+set "PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\"
+set "PATH=%PYTHON_BIN_DIR%;%MINGW_BIN_DIR%;%PATH%"
 if NOT "%KRITA_GIT_DIR%" == "" (
-    set PATH=%PATH%;%KRITA_GIT_DIR%
+    set "PATH=%PATH%;%KRITA_GIT_DIR%"
 )
 if NOT "%KRITA_NINJA_DIR%" == "" (
     if NOT "%KRITA_NINJA_DIR%" == "%MINGW_BIN_DIR%" (
-        set PATH=%PATH%;%KRITA_NINJA_DIR%
+        set "PATH=%PATH%;%KRITA_NINJA_DIR%"
     )
 )
 if NOT "%SVN_DIR%" == "" (
-    set PATH=%PATH%;%SVN_DIR%
+    set "PATH=%PATH%;%SVN_DIR%"
 )
 
 echo Creating dirs...
@@ -851,10 +851,10 @@ if not "%PERL_DIR%" == "" (
     set "PERL_EXECUTABLE=!PERL_EXECUTABLE: =\ !"
 )
 
-set PATH=%DEPS_INSTALL_DIR%\bin;%PATH%
+set "PATH=%DEPS_INSTALL_DIR%\bin;%PATH%"
 
 if not "%GETTEXT_SEARCH_PATH%" == "" (
-    set PATH=!PATH!;!GETTEXT_SEARCH_PATH!
+    set "PATH=%PATH%;%GETTEXT_SEARCH_PATH%"
 )
 
 :: Prepare the CMake command lines

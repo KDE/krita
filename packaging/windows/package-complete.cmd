@@ -463,8 +463,8 @@ if not "%ARG_NO_INTERACTIVE%" == "1" (
 
 
 :: Initialize clean PATH
-set PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\
-set PATH=%MINGW_BIN_DIR%;%DEPS_INSTALL_DIR%\bin;%PATH%
+set "PATH=%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;%SYSTEMROOT%\System32\WindowsPowerShell\v1.0\"
+set "PATH=%MINGW_BIN_DIR%;%DEPS_INSTALL_DIR%\bin;%PATH%"
 
 
 echo.

@@ -49,16 +49,6 @@ private:
     void initFillPainter();
 
 public:
-
-    /**
-     * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
-     */
-    void eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h);
-    /**
-     * Overloaded version of the above function.
-     */
-    void eraseRect(const QRect& rc);
-
     /**
      * Fill current selection of KisPainter with a specified \p color.
      *
@@ -68,24 +58,39 @@ public:
     void fillSelection(const QRect &rc, const KoColor &color);
 
     /**
-     * Fill a rectangle with a certain color.
-     */
-    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c);
-
-    /**
-     * Overloaded version of the above function.
-     */
-    void fillRect(const QRect& rc, const KoColor& c);
-
-    /**
      * Fill a rectangle with a certain color and opacity.
      */
-    void fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c, quint8 opacity);
+    void fillRect(qint32 x,
+                  qint32 y,
+                  qint32 w,
+                  qint32 h,
+                  const KoColor &c,
+                  quint8 opacity);
 
     /**
      * Overloaded version of the above function.
      */
-    void fillRect(const QRect& rc, const KoColor& c, quint8 opacity);
+    inline void fillRect(const QRect &rc, const KoColor &c, quint8 opacity)
+    {
+        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
+    }
+
+    /**
+     * Fill a rectangle with a certain color.
+     */
+    inline void
+    fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor &c)
+    {
+        fillRect(x, y, w, h, c, OPACITY_OPAQUE_U8);
+    }
+
+    /**
+     * Overloaded version of the above function.
+     */
+    inline void fillRect(const QRect &rc, const KoColor &c)
+    {
+        fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE_U8);
+    }
 
     /**
      * Fill a rectangle with a certain pattern. The pattern is repeated if it does not fit the
@@ -110,6 +115,31 @@ public:
      * Overloaded version of the above function.
      */
     void fillRect(const QRect& rc, const KoPatternSP pattern, const QPoint &offset = QPoint());
+
+    /**
+     * Fill a rectangle with black transparent pixels (0, 0, 0, 0 for RGBA).
+     */
+    inline void eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
+    {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+        KoColor c(Qt::black, cs);
+        fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT_U8);
+    }
+
+    /**
+     * Overloaded version of the above function.
+     */
+    inline void eraseRect(const QRect &rc)
+    {
+        const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
+        KoColor c(Qt::black, cs);
+        fillRect(rc.x(),
+                 rc.y(),
+                 rc.width(),
+                 rc.height(),
+                 c,
+                 OPACITY_TRANSPARENT_U8);
+    }
 
     /**
      * @brief fillRect
@@ -195,7 +225,10 @@ public:
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only
      * fill parts that are the exact same color, 255 means anything will be filled
      */
-    void setFillThreshold(int threshold);
+    inline void setFillThreshold(int threshold)
+    {
+        m_threshold = threshold;
+    }
 
     /** Returns the fill threshold, see setFillThreshold for details */
     int fillThreshold() const {
@@ -322,49 +355,5 @@ private:
     bool m_useCompositioning;
     bool m_useSelectionAsBoundary;
 };
-
-
-inline
-void KisFillPainter::fillRect(qint32 x, qint32 y, qint32 w, qint32 h, const KoColor& c)
-{
-    fillRect(x, y, w, h, c, OPACITY_OPAQUE_U8);
-}
-
-inline
-void KisFillPainter::fillRect(const QRect& rc, const KoColor& c)
-{
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_OPAQUE_U8);
-}
-
-inline
-void KisFillPainter::eraseRect(qint32 x1, qint32 y1, qint32 w, qint32 h)
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoColor c(Qt::black, cs);
-    fillRect(x1, y1, w, h, c, OPACITY_TRANSPARENT_U8);
-}
-
-inline
-void KisFillPainter::eraseRect(const QRect& rc)
-{
-    const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
-    KoColor c(Qt::black, cs);
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, OPACITY_TRANSPARENT_U8);
-}
-
-inline
-void KisFillPainter::fillRect(const QRect& rc, const KoColor& c, quint8 opacity)
-{
-    fillRect(rc.x(), rc.y(), rc.width(), rc.height(), c, opacity);
-}
-
-
-
-inline
-void KisFillPainter::setFillThreshold(int threshold)
-{
-    m_threshold = threshold;
-}
-
 
 #endif //KIS_FILL_PAINTER_H_

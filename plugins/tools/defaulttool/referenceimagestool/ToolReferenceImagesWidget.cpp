@@ -121,7 +121,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
     bool anyNotKeepingAspectRatio = false;
     bool anyEmbedded = false;
     bool anyLinked = false;
-    bool anyNonLinkable = false;
+    // bool anyNonLinkable = false;
     bool anySelected = selection->count() > 0;
 
     Q_FOREACH(KoShape *shape, shapes) {
@@ -133,7 +133,7 @@ void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)
         if (reference) {
             anyEmbedded |= reference->embed();
             anyLinked |= !reference->embed();
-            anyNonLinkable |= !reference->hasLocalFile();
+            // anyNonLinkable |= !reference->hasLocalFile();
         }
     }
 

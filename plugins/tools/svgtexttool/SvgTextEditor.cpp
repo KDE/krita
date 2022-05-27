@@ -261,7 +261,7 @@ SvgTextEditor::SvgTextEditor(QWidget *parent, Qt::WindowFlags flags)
     actionCollection()->setComponentDisplayName(i18n("Text Tool"));
 
     if (cg.hasKey("WindowState")) {
-        QByteArray state = cg.readEntry("State", state);
+        QByteArray state = cg.readEntry("State", QByteArray());
         // One day will need to load the version number, but for now, assume 0
         restoreState(QByteArray::fromBase64(state));
     }

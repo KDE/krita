@@ -828,6 +828,9 @@ void KisInputManager::slotAboutToChangeTool()
     if (canvas() && canvas()->canvasWidget()) {
         currentLocalPos = canvas()->canvasWidget()->mapFromGlobal(QCursor::pos());
     }
+    // once more, don't forget the global state whenever matcher may trigger a KisAbstractInputAction
+    KisAbstractInputAction::setInputManager(this);
+
     d->matcher.lostFocusEvent(currentLocalPos);
 }
 
@@ -837,6 +840,9 @@ void KisInputManager::slotToolChanged()
     KoToolManager *toolManager = KoToolManager::instance();
     KoToolBase *tool = toolManager->toolById(canvas(), toolManager->activeToolId());
     if (tool) {
+        // once more, don't forget the global state whenever matcher may trigger a KisAbstractInputAction
+        KisAbstractInputAction::setInputManager(this);
+
         d->setMaskSyntheticEvents(tool->maskSyntheticEvents());
         if (tool->isInTextMode()) {
             d->forwardAllEventsToTool = true;

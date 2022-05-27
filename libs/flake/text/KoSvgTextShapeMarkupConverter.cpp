@@ -821,7 +821,8 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
                 // mnemonic for a newline is (dy != 0 && x == 0)
 
-                boost::optional<qreal> blockAbsoluteXOffset = boost::none;
+                boost::optional<qreal> blockAbsoluteXOffset =
+                    boost::make_optional(false, qreal());
 
                 if (elementAttributes.hasAttribute("x")) {
                     QString xString = elementAttributes.value("x").toString();

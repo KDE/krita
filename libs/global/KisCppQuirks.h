@@ -75,6 +75,15 @@ struct add_const_if
 template <bool is_const, class T>
 using add_const_if_t = typename add_const_if<is_const, T>::type;
 
-}
+} // namespace std
+
+#if __cplusplus >= 201603L                                                     \
+    || defined(__has_cpp_attribute) && __has_cpp_attribute(maybe_unused)
+#define MAYBE_UNUSED [[maybe_unused]]
+#elif defined(__GNUC__) || defined(__clang__)
+#define MAYBE_UNUSED __attribute__((unused))
+#else
+#define MAYBE_UNUSED
+#endif
 
 #endif // KISCPPQUIRKS_H

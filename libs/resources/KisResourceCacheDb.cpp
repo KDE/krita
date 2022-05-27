@@ -29,6 +29,8 @@
 #include "ResourceDebug.h"
 #include <kis_assert.h>
 
+#include <KisCppQuirks.h>
+
 const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
@@ -1609,6 +1611,7 @@ struct ResourceVersion : public boost::less_than_comparable<ResourceVersion>
 
 };
 
+MAYBE_UNUSED
 QDebug operator<<(QDebug dbg, const ResourceVersion &ver)
 {
     dbg.nospace() << "ResourceVersion("

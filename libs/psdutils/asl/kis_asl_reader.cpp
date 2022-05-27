@@ -230,7 +230,10 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
 
     SETUP_OFFSET_VERIFIER(vaEndVerifier, device, arrayLength, 100);
 
-    quint32 x0, y0, x1, y1;
+    quint32 x0 = 0;
+    quint32 y0 = 0;
+    quint32 x1 = 0;
+    quint32 y1 = 0;
     SAFE_READ_EX(byteOrder, device, y0);
     SAFE_READ_EX(byteOrder, device, x0);
     SAFE_READ_EX(byteOrder, device, y1);
@@ -274,7 +277,10 @@ QImage readVirtualArrayList(QIODevice &device, int numPlanes, const QVector<QRgb
 
         SAFE_READ_EX(byteOrder, device, pixelDepth1);
 
-        quint32 x0, y0, x1, y1;
+        quint32 x0 = 0;
+        quint32 y0 = 0;
+        quint32 x1 = 0;
+        quint32 y1 = 0;
         SAFE_READ_EX(byteOrder, device, y0);
         SAFE_READ_EX(byteOrder, device, x0);
         SAFE_READ_EX(byteOrder, device, y1);
@@ -507,7 +513,9 @@ qint64 readPattern(QIODevice &device, QDomElement *parent, QDomDocument *doc)
 
     if (mode == Indexed) {
         for(auto i = 0; i < 256; i++) {
-            quint8 r, g, b;
+            quint8 r = 0;
+            quint8 g = 0;
+            quint8 b = 0;
             psdread<byteOrder>(device, r);
             psdread<byteOrder>(device, g);
             psdread<byteOrder>(device, b);
@@ -653,7 +661,7 @@ QDomDocument readFileImpl(QIODevice &device)
     return doc;
 }
 
-} // namespace
+} // namespace Private
 
 QDomDocument KisAslReader::readFile(QIODevice &device)
 {

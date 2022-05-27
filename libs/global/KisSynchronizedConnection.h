@@ -13,13 +13,13 @@
 #include <QEvent>
 
 #include <KisMpl.h>
-#include <functional>
-#include <queue>
-#include <boost/bind.hpp>
-#include <kis_assert.h>
-#include <QPointer>
 #include <QMutex>
 #include <QMutexLocker>
+#include <QPointer>
+#include <boost/bind/bind.hpp>
+#include <functional>
+#include <kis_assert.h>
+#include <queue>
 
 /**
  * @brief Event type used for synchronizing connection in KisSynchronizedConnection

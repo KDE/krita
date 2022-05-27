@@ -70,9 +70,9 @@ if (WIN32)
         if (NOT QT_ENABLE_DEBUG_INFO)
             # Generate minimal debug info for backtraces
             list(APPEND _QT_conf
-                QMAKE_CFLAGS-=-g
+                QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO-=-g
                 QMAKE_CFLAGS+=-g1
-                QMAKE_CXXFLAGS-=-g
+                QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO-=-g
                 QMAKE_CXXFLAGS+=-g1
             )
         endif ()

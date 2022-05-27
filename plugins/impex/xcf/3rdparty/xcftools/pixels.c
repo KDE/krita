@@ -121,8 +121,10 @@ initTileDirectory(struct tileDimensions *dim,struct xcfTiles *tiles,
    */
   data = xcfL(ptr) ;
   if( xcfL(ptr) != tiles->params->bpp ) {
-    FatalBadXCF("%"PRIu32" bytes per pixel for %s drawable",xcfL(ptr),type);
-    return XCF_ERROR;
+      FatalBadXCF("%" PRIuPTR " bytes per pixel for %s drawable",
+                  xcfL(ptr),
+                  type);
+      return XCF_ERROR;
   }
   uint32_t ptrout;
   if(xcfOffset(ptr+4,3*4, &ptrout) != XCF_OK) return XCF_ERROR;

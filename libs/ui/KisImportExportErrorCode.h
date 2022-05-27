@@ -52,7 +52,6 @@ namespace ImportExportCodes
 
 };
 
-
 class KisImportExportErrorCode;
 
 struct KRITAUI_EXPORT KisImportExportComplexError
@@ -60,13 +59,13 @@ struct KRITAUI_EXPORT KisImportExportComplexError
     virtual QString errorMessage() const = 0;
     KisImportExportComplexError(QFileDevice::FileError error);
 
-    friend KRITAUI_EXPORT QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
-
+    friend inline QDebug &operator<<(QDebug &d,
+                                     const KisImportExportErrorCode &errorCode);
+    virtual ~KisImportExportComplexError() = default;
 
 protected:
     QString qtErrorMessage() const;
     QFileDevice::FileError m_error;
-    virtual ~KisImportExportComplexError() {}
 };
 
 struct KRITAUI_EXPORT KisImportExportErrorCannotWrite : KisImportExportComplexError
@@ -75,7 +74,7 @@ struct KRITAUI_EXPORT KisImportExportErrorCannotWrite : KisImportExportComplexEr
     KisImportExportErrorCannotWrite(QFileDevice::FileError error);
     QString errorMessage() const override;
 
-    ~KisImportExportErrorCannotWrite() { }
+    ~KisImportExportErrorCannotWrite() override = default;
 
     bool operator==(KisImportExportErrorCannotWrite other);
 
@@ -93,7 +92,7 @@ struct KRITAUI_EXPORT KisImportExportErrorCannotRead : KisImportExportComplexErr
     KisImportExportErrorCannotRead(QFileDevice::FileError error);
     QString errorMessage() const override;
 
-    ~KisImportExportErrorCannotRead() { }
+    ~KisImportExportErrorCannotRead() override = default;
 
     bool operator==(KisImportExportErrorCannotRead other);
 
@@ -122,7 +121,8 @@ public:
     bool isCancelled() const;
     bool isInternalError() const;
 
-    friend KRITAUI_EXPORT QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
+    friend inline QDebug &operator<<(QDebug &d,
+                                     const KisImportExportErrorCode &errorCode);
 
     bool operator==(KisImportExportErrorCode errorCode);
 
@@ -142,12 +142,23 @@ private:
     KisImportExportErrorCannotWrite cannotWrite;
 };
 
-
-
-
-
-
-KRITAUI_EXPORT QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode);
+inline QDebug &operator<<(QDebug &d, const KisImportExportErrorCode &errorCode)
+{
+    switch (errorCode.errorFieldUsed) {
+    case KisImportExportErrorCode::None:
+        d << "None of the error fields is in use.";
+        break;
+    case KisImportExportErrorCode::CannotRead:
+        d << "Cannot read: " << errorCode.cannotRead.m_error;
+        break;
+    case KisImportExportErrorCode::CannotWrite:
+        d << "Cannot write: " << errorCode.cannotRead.m_error;
+        break;
+    case KisImportExportErrorCode::CodeId:
+        d << "Error code = " << errorCode.codeId;
+    }
+    d << " " << errorCode.errorMessage();
+    return d;
+}
 
 #endif // KIS_IMPORT_EXPORT_ERROR_CODES_H
-

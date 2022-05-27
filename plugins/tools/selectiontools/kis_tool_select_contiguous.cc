@@ -157,7 +157,6 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                  pos,
                  sourceDevice,
                  existingSelection]() mutable -> KUndo2Command * {
-
                     KisFillPainter fillpainter(dev);
                     fillpainter.setHeight(rc.height());
                     fillpainter.setWidth(rc.width());

@@ -423,29 +423,31 @@ void KisSelectionOptions::updateActionButtonToolTip(
     switch (action) {
     case SELECTION_DEFAULT:
     case SELECTION_REPLACE:
-        toolTipText = shortcutString.isEmpty() ?
-            i18nc("@info:tooltip", "Replace") :
-            i18nc("@info:tooltip", "Replace (%1)", shortcutString);
+        toolTipText = shortcutString.isEmpty()
+            ? i18nc("@info:tooltip", "Replace")
+            : i18nc("@info:tooltip", "Replace (%1)", shortcutString);
         break;
     case SELECTION_ADD:
-        toolTipText = shortcutString.isEmpty() ?
-            i18nc("@info:tooltip", "Add") :
-            i18nc("@info:tooltip", "Add (%1)", shortcutString);
+        toolTipText = shortcutString.isEmpty()
+            ? i18nc("@info:tooltip", "Add")
+            : i18nc("@info:tooltip", "Add (%1)", shortcutString);
         break;
     case SELECTION_SUBTRACT:
-        toolTipText = shortcutString.isEmpty() ?
-            i18nc("@info:tooltip", "Subtract") :
-            i18nc("@info:tooltip", "Subtract (%1)", shortcutString);
+        toolTipText = shortcutString.isEmpty()
+            ? i18nc("@info:tooltip", "Subtract")
+            : i18nc("@info:tooltip", "Subtract (%1)", shortcutString);
         break;
     case SELECTION_INTERSECT:
-        toolTipText = shortcutString.isEmpty() ?
-            i18nc("@info:tooltip", "Intersect") :
-            i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
+        toolTipText = shortcutString.isEmpty()
+            ? i18nc("@info:tooltip", "Intersect")
+            : i18nc("@info:tooltip", "Intersect (%1)", shortcutString);
         break;
     case SELECTION_SYMMETRICDIFFERENCE:
-        toolTipText = shortcutString.isEmpty() ?
-            i18nc("@info:tooltip", "Symmetric Difference") :
-            i18nc("@info:tooltip", "Symmetric Difference (%1)", shortcutString);
+        toolTipText = shortcutString.isEmpty()
+            ? i18nc("@info:tooltip", "Symmetric Difference")
+            : i18nc("@info:tooltip",
+                    "Symmetric Difference (%1)",
+                    shortcutString);
         break;
     }
 

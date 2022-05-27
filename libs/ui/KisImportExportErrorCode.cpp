@@ -206,25 +206,3 @@ bool KisImportExportErrorCode::operator==(KisImportExportErrorCode errorCode)
     }
     return cannotWrite == errorCode.cannotWrite;
 }
-
-
-QDebug operator<<(QDebug d, const KisImportExportErrorCode& errorCode)
-{
-    switch(errorCode.errorFieldUsed) {
-    case KisImportExportErrorCode::None:
-            d << "None of the error fields is in use.";
-        break;
-    case KisImportExportErrorCode::CannotRead:
-            d << "Cannot read: " << errorCode.cannotRead.m_error;
-        break;
-    case KisImportExportErrorCode::CannotWrite:
-        d << "Cannot write: " << errorCode.cannotRead.m_error;
-        break;
-    case KisImportExportErrorCode::CodeId:
-        d << "Error code = " << errorCode.codeId;
-    }
-    d << " " << errorCode.errorMessage();
-    return d;
-}
-
-

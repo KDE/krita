@@ -1037,7 +1037,7 @@ set_package_properties(Freetype PROPERTIES
     DESCRIPTION "A library for rendering glyphs"
     URL "https://download.savannah.gnu.org/releases/freetype"
     TYPE REQUIRED
-    PURPOSE "Needed for rendering text vector shapes"
+    PURPOSE "Needed for rendering text vector shapes."
 )
 include_directories(${FREETYPE_INCLUDE_DIRS})
 ##
@@ -1048,7 +1048,7 @@ set_package_properties(RAQM PROPERTIES
     DESCRIPTION "Raqm is a small library that encapsulates the logic for complex text layout and provides a convenient API."
     URL "https://github.com/HOST-Oman/libraqm"
     TYPE REQUIRED
-    PURPOSE "Needed for rendering text vector shapes"
+    PURPOSE "Needed for rendering text vector shapes."
 )
 include_directories(${RAQM_INCLUDE_DIRS})
 
@@ -1062,7 +1062,13 @@ set_package_properties(Fontconfig PROPERTIES
     TYPE REQUIRED
     PURPOSE "Needed for getting font file information."
 )
+
 include_directories(${FC_INCLUDE_DIRS})
+##
+## Check for Lib Unibreak
+##
+pkg_check_modules(LIBUNIBREAK REQUIRED IMPORTED_TARGET libunibreak)
+include_directories(${LIBUNIBREAK_INCLUDE_DIRS})
 # FIXME: better way to do this?
 list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${EXPAT_LIBRARY}

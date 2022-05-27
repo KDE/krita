@@ -66,7 +66,12 @@ const qint32 KisTileDataPooler::TIMEOUT_FACTOR = 2;
 #define DEBUG_SIMPLE_ACTION(action)
 #define RUNTIME_SANITY_CHECK(td)
 #define DEBUG_TILE_STATISTICS()
-#define DEBUG_LISTS(mem, beggers, beggersMem, donors, donorsMem)
+#define DEBUG_LISTS(mem, beggers, beggersMem, donors, donorsMem)               \
+    Q_UNUSED(mem);                                                             \
+    Q_UNUSED(beggers);                                                         \
+    Q_UNUSED(beggersMem);                                                      \
+    Q_UNUSED(donors);                                                          \
+    Q_UNUSED(donorsMem);
 #define DEBUG_ALLOC_CLONE(mem, totalMem)
 #define DEBUG_FREE_CLONE(freed, demanded)
 #endif

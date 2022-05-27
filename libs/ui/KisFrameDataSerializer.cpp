@@ -212,6 +212,8 @@ KisFrameDataSerializer::Frame KisFrameDataSerializer::loadFrame(int frameId, Kis
         frame.frameTiles.push_back(std::move(tile));
     }
 
+    Q_UNUSED(compressionTime);
+
     file.close();
 
     return frame;

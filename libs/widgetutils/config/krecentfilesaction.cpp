@@ -142,7 +142,6 @@ void KRecentFilesActionPrivate::_k_urlSelected(QAction *action)
 
 void KRecentFilesActionPrivate::updateIcon(const QStandardItem *item)
 {
-    Q_Q(KRecentFilesAction);
     if (!item) {
         return;
     }

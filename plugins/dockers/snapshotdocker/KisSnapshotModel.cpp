@@ -24,7 +24,7 @@ struct KisSnapshotModel::Private
     virtual ~Private();
 
     QPointer<KisDocument> curDocument();
-    QScopedPointer<KisNameServer> curNameServer;
+    QSharedPointer<KisNameServer> curNameServer;
     bool switchToDocument(QPointer<KisDocument> doc);
 
     using DocPList = QList<QPair<QString, QPointer<KisDocument> > >;
@@ -32,7 +32,7 @@ struct KisSnapshotModel::Private
     DocPList curDocList;
 
     QMap<KisDocument *, DocPList> documentGroups;
-    QMap<KisDocument *, KisNameServer *> nameServers;
+    QMap<KisDocument *, QSharedPointer<KisNameServer>> nameServers;
     QPointer<KisCanvas2> curCanvas;
 };
 
@@ -133,11 +133,11 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
         return;
     }
 
+    m_d->curNameServer.reset();
+
     if (m_d->curDocument()) {
         m_d->documentGroups.insert(m_d->curDocument(), m_d->curDocList);
-        m_d->nameServers.insert(m_d->curDocument(), m_d->curNameServer.take());
     } else {
-        m_d->curNameServer.reset(0);
         Q_FOREACH (auto const &i, m_d->curDocList) {
             delete i.second.data();
         }
@@ -157,12 +157,12 @@ void KisSnapshotModel::setCanvas(QPointer<KisCanvas2> canvas)
         m_d->curDocList = docList;
         endInsertRows();
 
-        // TODO: memory leak!
-        KisNameServer *nameServer = m_d->nameServers.take(curDoc);
+        QSharedPointer<KisNameServer> nameServer = m_d->nameServers[curDoc];
         if (!nameServer) {
-            nameServer = new KisNameServer;
+            nameServer.reset(new KisNameServer);
+            m_d->nameServers.insert(curDoc, nameServer);
         }
-        m_d->curNameServer.reset(nameServer);
+        m_d->curNameServer = nameServer;
     }
 
 }

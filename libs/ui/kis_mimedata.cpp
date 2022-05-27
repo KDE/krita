@@ -222,6 +222,7 @@ void KisMimeData::initializeExternalNode(KisNodeSP *node,
                                          KisImageWSP image,
                                          KisShapeController *shapeController)
 {
+    Q_UNUSED(image);
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node->data());
     if (shapeLayer) {
         // attach the layer to a new shape controller

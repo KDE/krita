@@ -697,7 +697,7 @@ static rgba **collectPointer ;
 static void
 collector(unsigned num,rgba *row)
 {
-    num += 0;
+    (void)num;
     *collectPointer++ = row ;
 }
 

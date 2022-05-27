@@ -21,14 +21,16 @@ public:
         : Base(args...),
           m_prefix(prefix) {}
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const {
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override
+    {
         // TODO: check if preinitialization for embeddedSettings is needed (for locked settings)
         KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
         Base::writeOptionSetting(embeddedConfig);
         setting->setPrefixedProperties(m_prefix, embeddedConfig);
     }
 
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) {
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override
+    {
         KisPropertiesConfigurationSP embeddedConfig = new KisPropertiesConfiguration();
         setting->getPrefixedProperties(m_prefix, embeddedConfig);
         Base::readOptionSetting(embeddedConfig);

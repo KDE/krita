@@ -112,7 +112,7 @@ public:
         }
     }
 
-    void activate(const QSet<KoShape*> &shapes)
+    void activate(const QSet<KoShape *> &shapes) override
     {
         BaseClass::activate(shapes);
 
@@ -145,13 +145,13 @@ public:
         }
     }
 
-    void deactivate()
+    void deactivate() override
     {
         BaseClass::deactivate();
         m_modeConnections.clear();
     }
 
-    QWidget* createOptionWidget()
+    QWidget *createOptionWidget() override
     {
         m_widgetHelper.createOptionWidget(this->toolId());
         m_widgetHelper.setConfigGroupForExactTool(this->toolId());
@@ -241,29 +241,35 @@ public:
         dbgKrita << "Changing to selection action" << m_selectionActionAlternate;
     }
 
-    void activateAlternateAction(KisTool::AlternateAction action)
+    void activateAlternateAction(KisTool::AlternateAction action) override
     {
         Q_UNUSED(action);
         BaseClass::activatePrimaryAction();
     }
 
-    void deactivateAlternateAction(KisTool::AlternateAction action)
+    void deactivateAlternateAction(KisTool::AlternateAction action) override
     {
         Q_UNUSED(action);
         BaseClass::deactivatePrimaryAction();
     }
 
-    void beginAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) {
+    void beginAlternateAction(KoPointerEvent *event,
+                              KisTool::AlternateAction action) override
+    {
         Q_UNUSED(action);
         beginPrimaryAction(event);
     }
 
-    void continueAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) {
+    void continueAlternateAction(KoPointerEvent *event,
+                                 KisTool::AlternateAction action) override
+    {
         Q_UNUSED(action);
         continuePrimaryAction(event);
     }
 
-    void endAlternateAction(KoPointerEvent *event, KisTool::AlternateAction action) {
+    void endAlternateAction(KoPointerEvent *event,
+                            KisTool::AlternateAction action) override
+    {
         Q_UNUSED(action);
         endPrimaryAction(event);
     }
@@ -295,7 +301,8 @@ public:
         return 0;
     }
 
-    void keyPressEvent(QKeyEvent *event) {
+    void keyPressEvent(QKeyEvent *event) override
+    {
         m_currentModifiers = event->modifiers();
         const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
 
@@ -320,7 +327,8 @@ public:
         this->resetCursorStyle();
     }
 
-    void keyReleaseEvent(QKeyEvent *event) {
+    void keyReleaseEvent(QKeyEvent *event) override
+    {
         m_currentModifiers = event->modifiers();
         const Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(event);
 
@@ -354,7 +362,8 @@ public:
         }
     }
 
-    void mouseMoveEvent(KoPointerEvent *event) {
+    void mouseMoveEvent(KoPointerEvent *event) override
+    {
         m_currentPos = this->convertToPixelCoord(event->point);
 
         if (isSelecting()) {
@@ -374,7 +383,7 @@ public:
         }
     }
 
-    virtual void beginPrimaryAction(KoPointerEvent *event)
+    void beginPrimaryAction(KoPointerEvent *event) override
     {
         if (isSelecting()) {
             BaseClass::beginPrimaryAction(event);
@@ -403,7 +412,7 @@ public:
         BaseClass::beginPrimaryAction(event);
     }
 
-    virtual void continuePrimaryAction(KoPointerEvent *event)
+    void continuePrimaryAction(KoPointerEvent *event) override
     {
         if (isMovingSelection()) {
             const QPointF pos = this->convertToPixelCoord(event->point);
@@ -416,7 +425,7 @@ public:
         BaseClass::continuePrimaryAction(event);
     }
 
-    void endPrimaryAction(KoPointerEvent *event)
+    void endPrimaryAction(KoPointerEvent *event) override
     {
         if (isMovingSelection()) {
             this->image()->endStroke(m_moveStrokeId);
@@ -428,11 +437,13 @@ public:
         BaseClass::endPrimaryAction(event);
     }
 
-    bool selectionDidMove() const {
+    bool selectionDidMove() const
+    {
         return m_didMove;
     }
 
-    QMenu* popupActionsMenu() {
+    QMenu *popupActionsMenu() override
+    {
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
 

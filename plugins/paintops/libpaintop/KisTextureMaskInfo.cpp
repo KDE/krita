@@ -150,9 +150,8 @@ void KisTextureMaskInfo::recalculateMask()
 
     QImage mask = m_pattern->pattern();
 
-    if ((mask.format() != QImage::Format_RGB32) |
-        (mask.format() != QImage::Format_ARGB32)) {
-
+    if ((mask.format() != QImage::Format_RGB32)
+        || (mask.format() != QImage::Format_ARGB32)) {
         mask = mask.convertToFormat(QImage::Format_ARGB32);
     }
 

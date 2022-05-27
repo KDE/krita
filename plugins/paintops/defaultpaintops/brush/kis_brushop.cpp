@@ -87,10 +87,9 @@ KisBrushOp::KisBrushOp(const KisPaintOpSettingsSP settings, KisPainter *painter,
     m_rotationOption.applyFanCornersInfo(this);
 
     m_precisionOption.setHasImprecisePositionOptions(
-        m_precisionOption.hasImprecisePositionOptions() |
-        m_scatterOption.isChecked() |
-        m_rotationOption.isChecked() |
-        m_airbrushOption.enabled);
+        m_precisionOption.hasImprecisePositionOptions()
+        || m_scatterOption.isChecked() || m_rotationOption.isChecked()
+        || m_airbrushOption.enabled);
 
     m_brush->notifyBrushIsGoingToBeClonedForStroke();
 

@@ -345,8 +345,14 @@ private:
     // and pixel size
     friend class KisAbstractTileCompressor;
     friend class KisTileDataWrapper;
-    qint32 xToCol(qint32 x) const;
-    qint32 yToRow(qint32 y) const;
+    inline qint32 xToCol(qint32 x) const
+    {
+        return divideRoundDown(x, KisTileData::WIDTH);
+    }
+    inline qint32 yToRow(qint32 y) const
+    {
+        return divideRoundDown(y, KisTileData::HEIGHT);
+    }
 
 private:
     void setDefaultPixelImpl(const quint8 *defPixel);
@@ -354,7 +360,15 @@ private:
     bool writeTilesHeader(KisPaintDeviceWriter &store, quint32 numTiles);
     bool processTilesHeader(QIODevice *stream, quint32 &numTiles);
 
-    qint32 divideRoundDown(qint32 x, const qint32 y) const;
+    inline qint32 divideRoundDown(qint32 x, const qint32 y) const
+    {
+        /**
+         * Equivalent to the following:
+         * -(( -x + (y-1) ) / y)
+         */
+
+        return x >= 0 ? x / y : -(((-x - 1) / y) + 1);
+    }
 
     void recalculateExtent();
 
@@ -387,28 +401,6 @@ public:
     }
 
 };
-
-inline qint32 KisTiledDataManager::divideRoundDown(qint32 x, const qint32 y) const
-{
-    /**
-     * Equivalent to the following:
-     * -(( -x + (y-1) ) / y)
-     */
-
-    return x >= 0 ?
-           x / y :
-           -(((-x - 1) / y) + 1);
-}
-
-inline qint32 KisTiledDataManager::xToCol(qint32 x) const
-{
-    return divideRoundDown(x, KisTileData::WIDTH);
-}
-
-inline qint32 KisTiledDataManager::yToRow(qint32 y) const
-{
-    return divideRoundDown(y, KisTileData::HEIGHT);
-}
 
 // during development the following line helps to check the interface is correct
 // it should be safe to keep it here even during normal compilation

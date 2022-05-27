@@ -384,10 +384,8 @@ void KisQmicSimpleConvertor::convertFromGmicFast(
 
     const qint32 x = dst->exactBounds().x();
     const qint32 y = dst->exactBounds().y();
-    const size_t width =
-        gmicImage._width < 0 ? 0 : static_cast<size_t>(gmicImage._width);
-    const size_t height =
-        gmicImage._height < 0 ? 0 : static_cast<size_t>(gmicImage._height);
+    const auto width = static_cast<size_t>(gmicImage._width);
+    const auto height = static_cast<size_t>(gmicImage._height);
 
     const auto *rgbaFloat32bitcolorSpace =
         KoColorSpaceRegistry::instance()->colorSpace(
@@ -552,10 +550,8 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
                                            gmicImage._data + alphaOffset};
 
     KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG();
-    const auto tileWidth =
-        static_cast<size_t>(it->numContiguousColumns(dev->x()));
-    const auto tileHeight =
-        static_cast<size_t>(it->numContiguousRows(dev->y()));
+    const auto tileWidth = it->numContiguousColumns(dev->x());
+    const auto tileHeight = it->numContiguousRows(dev->y());
 
     Q_ASSERT(tileWidth == 64);
     Q_ASSERT(tileHeight == 64);
@@ -569,8 +565,8 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
     const auto dstPixelSize = rgbaFloat32bitcolorSpace->pixelSize();
     const auto srcPixelSize = dev->pixelSize();
 
-    std::vector<quint8> dstTile(static_cast<size_t>(dstPixelSize) * tileWidth
-                                * tileHeight);
+    std::vector<quint8> dstTile(dstPixelSize * static_cast<size_t>(tileWidth)
+                                * static_cast<size_t>(tileHeight));
 
     size_t dataY = 0;
     int imageY = y;
@@ -582,10 +578,10 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
         size_t dataX = 0;
         imageX = x;
         size_t columnsRemaining = width;
-        const auto numContiguousImageRows =
-            static_cast<size_t>(it->numContiguousRows(imageY));
+        const auto numContiguousImageRows = it->numContiguousRows(imageY);
 
-        const auto rowsToWork = qMin(numContiguousImageRows, rowsRemaining);
+        const auto rowsToWork =
+            qMin(numContiguousImageRows, static_cast<qint32>(rowsRemaining));
         const auto convertedTileY = tileHeight - rowsToWork;
         Q_ASSERT(convertedTileY >= 0);
 
@@ -594,16 +590,17 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
                 static_cast<size_t>(it->numContiguousColumns(imageX));
             const auto columnsToWork =
                 qMin(numContiguousImageColumns, columnsRemaining);
-            const auto convertedTileX = tileWidth - columnsToWork;
+            const auto convertedTileX =
+                tileWidth - static_cast<qint32>(columnsToWork);
             Q_ASSERT(convertedTileX >= 0);
 
             const auto dataIdx = dataX + dataY * width;
             const auto dstTileIndex =
                 convertedTileX + convertedTileY * tileWidth;
             const auto tileRowStride =
-                (tileWidth - columnsToWork) * dstPixelSize;
+                (static_cast<size_t>(tileWidth) - columnsToWork) * dstPixelSize;
             const auto srcTileRowStride =
-                (tileWidth - columnsToWork) * srcPixelSize;
+                (static_cast<size_t>(tileWidth) - columnsToWork) * srcPixelSize;
 
             it->moveTo(imageX, imageY);
             quint8 *tileItStart = dstTile.data() + dstTileIndex * dstPixelSize;
@@ -635,7 +632,7 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
                 const auto dataStride = (width - columnsToWork);
                 quint8 *tileIt = tileItStart;
 
-                for (size_t row = 0; row < rowsToWork; row++) {
+                for (int row = 0; row < rowsToWork; row++) {
                     for (size_t col = 0; col < columnsToWork; col++) {
                         memcpy(planeIt, tileIt, channelSize);
                         tileIt += dstPixelSize;

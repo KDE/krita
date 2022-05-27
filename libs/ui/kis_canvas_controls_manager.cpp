@@ -322,15 +322,11 @@ void KisCanvasControlsManager::stepFlow(float step)
 
 void KisCanvasControlsManager::increaseFlow()
 {
-    qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
-
     stepFlow(0.1f);
 }
 
 void KisCanvasControlsManager::decreaseFlow()
 {
-    qreal flow = m_view->canvasResourceProvider()->resourceManager()->resource(KoCanvasResource::Flow).toDouble();
-
     stepFlow(-0.1f);
 }
 

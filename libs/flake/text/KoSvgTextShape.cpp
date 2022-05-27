@@ -408,20 +408,19 @@ void KoSvgTextShape::relayout() const
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
 
     // pass everything to a css-compatible text-layout algortihm.
-    raqm_t *layout(raqm_create());
+    raqm_t_up layout = toLibraryResource(raqm_create());
 
-    if (raqm_set_text_utf16(layout, text.utf16(), text.size())) {
+    if (raqm_set_text_utf16(layout.data(), text.utf16(), text.size())) {
         if (writingMode == KoSvgText::VerticalRL) {
-            raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_TTB);
+            raqm_set_par_direction(layout.data(), raqm_direction_t::RAQM_DIRECTION_TTB);
         } else if (direction == KoSvgText::DirectionRightToLeft) {
-            raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_RTL);
+            raqm_set_par_direction(layout.data(), raqm_direction_t::RAQM_DIRECTION_RTL);
         } else {
-            raqm_set_par_direction(layout, raqm_direction_t::RAQM_DIRECTION_LTR);
+            raqm_set_par_direction(layout.data(), raqm_direction_t::RAQM_DIRECTION_LTR);
         }
 
         int start = 0;
         int length = 0;
-        FT_Face face = NULL;
         for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
             length = chunk.text.size();
             KoSvgTextProperties properties = chunk.format.associatedShapeWrapper().shape()->textProperties();
@@ -462,7 +461,7 @@ void KoSvgTextShape::relayout() const
             qreal fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
             const QFont::Style style =
                 QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-            QVector<FT_Face> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+            std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
                                                                                     lengths,
                                                                                     chunk.text,
                                                                                     fontSize,
@@ -471,28 +470,28 @@ void KoSvgTextShape::relayout() const
                                                                                     style != QFont::StyleNormal);
             KoFontRegistery::instance()->configureFaces(faces, fontSize, finalRes, finalRes, properties.fontAxisSettings());
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
-                raqm_set_language(layout,
+                raqm_set_language(layout.data(),
                                   properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(),
                                   start, length);
             }
             for (QString feature: fontFeatures) {
                 qDebug() << "adding feature" << feature;
-                raqm_add_font_feature(layout, feature.toUtf8(), feature.toUtf8().size());
+                raqm_add_font_feature(layout.data(), feature.toUtf8(), feature.toUtf8().size());
             }
             KoSvgText::AutoValue letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoValue>();
 
             if (!letterSpacing.isAuto) {
-                raqm_set_letter_spacing_range(layout, letterSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
+                raqm_set_letter_spacing_range(layout.data(), letterSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
             }
             KoSvgText::AutoValue wordSpacing = properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoValue>();
             if (!wordSpacing.isAuto) {
-                raqm_set_word_spacing_range(layout, wordSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
+                raqm_set_word_spacing_range(layout.data(), wordSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
             }
 
             for (int i = 0; i < lengths.size(); i++ )  {
                 length = lengths.at(i);
                 FT_Int32 faceLoadFlags = loadFlags;
-                FT_Face face = faces.at(i);
+                FT_FaceUP &face = faces.at(i);
                 if (FT_HAS_COLOR(face)) {
                     loadFlags |= FT_LOAD_COLOR;
                 }
@@ -500,29 +499,28 @@ void KoSvgTextShape::relayout() const
                     loadFlags |= FT_LOAD_VERTICAL_LAYOUT;
                 }
                 if (start == 0) {
-                    raqm_set_freetype_face(layout, face);
-                    raqm_set_freetype_load_flags(layout, faceLoadFlags);
+                    raqm_set_freetype_face(layout.data(), face.data());
+                    raqm_set_freetype_load_flags(layout.data(), faceLoadFlags);
                 }
                 if (length > 0) {
-                    raqm_set_freetype_face_range(layout, face, start, length);
-                    raqm_set_freetype_load_flags_range(layout, faceLoadFlags, start, length);
+                    raqm_set_freetype_face_range(layout.data(), face.data(), start, length);
+                    raqm_set_freetype_load_flags_range(layout.data(), faceLoadFlags, start, length);
                 }
                 start += length;
             }
 
         }
-        FT_Done_Face(face);
         qDebug() << "text-length:" << text.size();
     }
 
-    if (raqm_layout(layout)) {
+    if (raqm_layout(layout.data())) {
         qDebug() << "layout succeeded";
     }
 
     // 2. Set flags and assign initial positions
     // We also retreive a glyph path here.
     size_t count;
-    raqm_glyph_t *glyphs = raqm_get_glyphs (layout, &count);
+    raqm_glyph_t *glyphs = raqm_get_glyphs (layout.data(), &count);
     if (!glyphs) {
         return;
     }
@@ -667,8 +665,6 @@ void KoSvgTextShape::relayout() const
 
         result[glyphs[g].cluster] = charResult;
     }
-    // we're done with raqm for now.
-    raqm_destroy(layout);
 
     // Handle baseline alignment.
     globalIndex = 0;
@@ -1051,7 +1047,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
     QVector<int> lengths;
     const QFont::Style style =
         QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    QVector<FT_Face> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+    std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
                                                                             lengths,
                                                                             QString(),
                                                                             fontSize,
@@ -1059,7 +1055,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
                                                                             properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
                                                                             style != QFont::StyleNormal);
     KoFontRegistery::instance()->configureFaces(faces, fontSize, res, res, properties.fontAxisSettings());
-    hb_font_t *font = hb_ft_font_create_referenced (faces.first());
+    hb_font_t_up font = toLibraryResource(hb_ft_font_create_referenced(faces.front().data()));
     qreal freetypePixelsToPt = (1.0/64.0) * float(72./res);
 
     hb_direction_t dir = HB_DIRECTION_LTR;
@@ -1082,80 +1078,80 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
         dominantBaseline = KoSvgText::BaselineAuto;
     } else {
         if (hb_version_atleast(4, 0, 0)) {
-            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
                                                     dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_MATH,
                                                     dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_HANGING,
                                                     dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineHanging, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
                                                     dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-            hb_ot_layout_get_baseline_with_fallback(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
                                                     dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
-                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
                 baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
-                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
 
             } else {
                 baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
-                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             }
             hb_position_t baseline2 = 0;
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
             superScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
-            hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
             subScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
 
         } else {
-            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
                                       dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
-            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_MATH,
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_MATH,
                                       dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
-            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_HANGING,
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_HANGING,
                                       dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineHanging, baseline);
-            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
                                       dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-            hb_ot_layout_get_baseline(font, HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
                                       dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
-                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
                 baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
-                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             } else {
                 baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
-                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             }
             hb_position_t baseline2 = 0;
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
             superScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
-            hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
             subScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
         }
     }
@@ -1163,9 +1159,9 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
     if (hb_version_atleast(4, 0, 0)) {
         qreal width = 0;
         qreal offset = 0;
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
         width = baseline;
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
         offset = baseline;
         offset *= -freetypePixelsToPt;
         width *= -freetypePixelsToPt;
@@ -1173,20 +1169,20 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
 
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
         width = baseline;
-        hb_ot_metrics_get_position_with_fallback(font, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
         width *= -freetypePixelsToPt;
         offset *= -freetypePixelsToPt;
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
     } else {
         qreal width = 0;
         qreal offset = 0;
-        int fallbackThickness = faces.first()->underline_thickness * (faces.first()->size->metrics.y_scale / 65535.0);
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
+        const int fallbackThickness = faces.front()->underline_thickness * (faces.front()->size->metrics.y_scale / 65535.0);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
         width = qMax(baseline, fallbackThickness);
 
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
         offset = baseline;
         offset *= -freetypePixelsToPt;
         width *= freetypePixelsToPt;
@@ -1194,9 +1190,9 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
 
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
         width = qMax(baseline, fallbackThickness);
-        hb_ot_metrics_get_position(font, HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
         if (baseline == 0) {
             offset = baselineTable.value(KoSvgText::BaselineCentral);
         }
@@ -1205,8 +1201,6 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
 
         chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
     }
-
-
 
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
@@ -1775,7 +1769,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
             painter.fillPath(textDecorations.value(KoSvgText::DecorationUnderline), textDecorationColor);
         }
         if (chunkShape->stroke()) {
-            chunkShape->stroke()->paint(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline)), painter);
+            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline)));
+            chunkShape->stroke()->paint(shape.data(), painter);
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationOverline)) {
@@ -1785,7 +1780,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
             painter.fillPath(textDecorations.value(KoSvgText::DecorationOverline), textDecorationColor);
         }
         if (chunkShape->stroke()) {
-            chunkShape->stroke()->paint(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline)), painter);
+            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline)));
+            chunkShape->stroke()->paint(shape.data(), painter);
         }
     }
 
@@ -1899,15 +1895,23 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
                     } else {
                         strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false); 
                     }
-                    maskStroke->paint(KoPathShape::createShapeFromPainterPath(chunk), *strokePainter.maskPainter());
+                    {
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
+                        maskStroke->paint(shape.data(), *strokePainter.maskPainter());
+                    }
                     if (!textDecorationsRest.isEmpty()) {
-                        maskStroke->paint(KoPathShape::createShapeFromPainterPath(textDecorationsRest), *strokePainter.maskPainter());
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
+                        maskStroke->paint(shape.data(), *strokePainter.maskPainter());
                     }
                     strokePainter.renderOnGlobalPainter();
                 } else {
-                    stroke->paint(KoPathShape::createShapeFromPainterPath(chunk), painter);
+                    {
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
+                        stroke->paint(shape.data(), painter);
+                    }
                     if (!textDecorationsRest.isEmpty()) {
-                        stroke->paint(KoPathShape::createShapeFromPainterPath(textDecorationsRest), painter);
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
+                        stroke->paint(shape.data(), painter);
                     }
                 }
             }
@@ -1928,7 +1932,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter, KoShapePaintingConte
             painter.fillPath(textDecorations.value(KoSvgText::DecorationLineThrough), textDecorationColor);
         }
         if (chunkShape->stroke()) {
-            chunkShape->stroke()->paint(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough)), painter);
+            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough)));
+            chunkShape->stroke()->paint(shape.data(), painter);
         }
     }
 }

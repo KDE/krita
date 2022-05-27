@@ -8,65 +8,81 @@
 #include <QGlobalStatic>
 #include <QMutex>
 #include <QDebug>
+#include <QThreadStorage>
+#include <QThread>
+#include <QApplication>
 
-#include FT_MULTIPLE_MASTERS_H
-#include <fontconfig/fontconfig.h>
+#include "KoFontLibraryResourceUtils.h"
 
 Q_GLOBAL_STATIC(KoFontRegistery, s_instance)
 
 class KoFontRegistery::Private
 {
+private:
+    QThreadStorage<FT_LibraryUP*> m_library;
+
 public:
-    FT_Library library = 0;
+    FT_LibraryUP& library() {
+        if (!m_library.hasLocalData()) {
+            FT_Error error;
+            FT_LibraryUP *lib = new FT_LibraryUP();
+            error = FT_Init_FreeType(lib->externalInitialization());
+            if (error) {
+                qWarning() << "Error with initializing FreeType library:" << error
+                           << "Current thread:" << QThread::currentThread()
+                           << "GUI thread:" << qApp->thread();
+            } else {
+                m_library.setLocalData(lib);
+            }
+        }
+        return *m_library.localData();
+    }
+
 };
 
 KoFontRegistery::KoFontRegistery() : d(new Private())
 {
-
 }
 
 KoFontRegistery *KoFontRegistery::instance()
 {
-    if (!s_instance.exists()) {
-        s_instance->init();
-    }
     return s_instance;
 }
 
-QVector<FT_Face> KoFontRegistery::facesForCSSValues(QStringList families,
-                                                    QVector<int> &lengths,
-                                                    QString text,
-                                                    qreal size,
-                                                    int weight,
-                                                    int width,
-                                                    bool italic,
-                                                    int slant,
-                                                    QString language)
+std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
+                                                          QVector<int> &lengths,
+                                                          QString text,
+                                                          qreal size,
+                                                          int weight,
+                                                          int width,
+                                                          bool italic,
+                                                          int slant,
+                                                          QString language)
 {
     Q_UNUSED(size)
     Q_UNUSED(language)
-    int errorCode = 0;
     //FcObjectSet *objectSet = FcObjectSetBuild(FC_FAMILY, FC_FILE, FC_WIDTH, FC_WEIGHT, FC_SLANT, nullptr);
-    FcCharSet *charSet = FcCharSetNew();
-    FcPattern *p = FcPatternCreate();
+    FcPatternUP p = toLibraryResource(FcPatternCreate());
     for (QString family: families) {
-        const FcChar8 *vals = reinterpret_cast<FcChar8*>(family.toUtf8().data());
-        FcPatternAddString(p, FC_FAMILY, vals);
+        QByteArray utfData = family.toUtf8();
+        const FcChar8 *vals = reinterpret_cast<FcChar8*>(utfData.data());
+        FcPatternAddString(p.data(), FC_FAMILY, vals);
     }
     if (italic == true) {
-        FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
+        FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ITALIC);
     } else if(slant != 0) {
-        FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ITALIC);
+        FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ITALIC);
     } else {
-        FcPatternAddInteger(p, FC_SLANT, FC_SLANT_ROMAN);
+        FcPatternAddInteger(p.data(), FC_SLANT, FC_SLANT_ROMAN);
     }
-    FcPatternAddInteger(p, FC_WEIGHT, FcWeightFromOpenType(weight));
-    FcPatternAddInteger(p, FC_WIDTH, width);
-    FcPatternAddBool(p, FC_OUTLINE, true);
+    FcPatternAddInteger(p.data(), FC_WEIGHT, FcWeightFromOpenType(weight));
+    FcPatternAddInteger(p.data(), FC_WIDTH, width);
+    FcPatternAddBool(p.data(), FC_OUTLINE, true);
 
     FcResult result;
     FcChar8 *fileValue = 0;
-    FcFontSet *fontSet = FcFontSort(FcConfigGetCurrent(), p, FcTrue, &charSet, &result);
+    FcCharSetUP charSet;
+    FcFontSetUP fontSet = toLibraryResource(FcFontSort(FcConfigGetCurrent(), p.data(), FcTrue, charSet.externalInitialization(), &result));
 
     QStringList fontFileNames;
     lengths.clear();
@@ -137,22 +153,20 @@ QVector<FT_Face> KoFontRegistery::facesForCSSValues(QStringList families,
         }
     }
 
-    QVector<FT_Face> faces;
-    QMutex mutex;
+    std::vector<FT_FaceUP> faces;
 
     for (int i = 0; i < lengths.size(); i++) {
-        mutex.lock();
-        FT_Face face = NULL;
-        if (FT_New_Face(d->library, fontFileNames.at(i).toUtf8().data(), 0, &face) == 0) {
-            faces.append(face);
+        FT_FaceUP face;
+        QByteArray utfData = fontFileNames.at(i).toUtf8();
+        if (FT_New_Face(d->library().data(), utfData.data(), 0, face.externalInitialization()) == 0) {
+            faces.emplace_back(std::move(face));
         }
-        mutex.unlock();
     }
 
     return faces;
 }
 
-bool KoFontRegistery::configureFaces(QVector<FT_Face> &faces,
+bool KoFontRegistery::configureFaces(std::vector<FT_FaceUP> &faces,
                                      qreal size,
                                      int xRes,
                                      int yRes,
@@ -162,7 +176,7 @@ bool KoFontRegistery::configureFaces(QVector<FT_Face> &faces,
     int ftFontUnit = 64.0;
     qreal finalRes = qMin(xRes, yRes);
     qreal scaleToPixel = float(finalRes/72.);
-    for (FT_Face face: faces) {
+    for (FT_FaceUP &face: faces) {
         if (!FT_IS_SCALABLE(face)) {
             int fontSizePixels = size * ftFontUnit * scaleToPixel;
             int sizeDelta = 0;
@@ -185,26 +199,27 @@ bool KoFontRegistery::configureFaces(QVector<FT_Face> &faces,
                     matrix.yx = 0;
                     matrix.yy = scale;
                     FT_Vector v;
-                    FT_Set_Transform(face, &matrix, &v);
+                    FT_Set_Transform(face.data(), &matrix, &v);
                 }
-                errorCode = FT_Select_Size(face, selectedIndex);
+                errorCode = FT_Select_Size(face.data(), selectedIndex);
             }
         } else {
-            errorCode = FT_Set_Char_Size(face, size * ftFontUnit, 0, xRes, yRes);
+            errorCode = FT_Set_Char_Size(face.data(), size * ftFontUnit, 0, xRes, yRes);
         }
 
         QMap<FT_Tag, qreal> tags;
         for (QString tagName: axisSettings.keys()) {
             if (tagName.size() == 4) {
-                char *t = tagName.toUtf8().data();
+                QByteArray utfData = tagName.toUtf8();
+                char *t = utfData.data();
                 tags.insert(FT_MAKE_TAG(t[0], t[1], t[2], t[3]), axisSettings.value(tagName));
             }
         }
         if (FT_HAS_MULTIPLE_MASTERS(face)) {
             FT_MM_Var*  amaster = nullptr;
-            FT_Get_MM_Var(face, &amaster);
+            FT_Get_MM_Var(face.data(), &amaster);
             // note: this only works for opentype, as it uses tag-based-selection.
-            FT_Fixed designCoords[amaster->num_axis];
+            std::vector<FT_Fixed> designCoords(amaster->num_axis);
             for (FT_UInt i = 0; i < amaster->num_axis; i++) {
                 FT_Var_Axis axis = amaster->axis[i];
                 for (FT_Tag tag: tags.keys()) {
@@ -215,18 +230,9 @@ bool KoFontRegistery::configureFaces(QVector<FT_Face> &faces,
                     }
                 }
             }
-            FT_Set_Var_Design_Coordinates(face, amaster->num_axis, designCoords);
-            FT_Done_MM_Var(d->library, amaster);
+            FT_Set_Var_Design_Coordinates(face.data(), amaster->num_axis, designCoords.data());
+            FT_Done_MM_Var(d->library().data(), amaster);
         }
     }
     return (errorCode == 0);
-}
-
-void KoFontRegistery::init()
-{
-    FT_Error error;
-    error = FT_Init_FreeType( &d->library );
-    if (error) {
-        qWarning() << "Error with initializing FreeType library:" << error;
-    }
 }

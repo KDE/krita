@@ -9,8 +9,8 @@
 #include <QVector>
 #include <QScopedPointer>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <KoFontLibraryResourceUtils.h>
+
 /**
  * @brief The KoFontRegistery class
  * A wrapper around a freetype library.
@@ -39,7 +39,7 @@ public:
      * will be filled with the lengths of consequetive characters
      * a face can be set on.
      */
-    QVector<FT_Face> facesForCSSValues(QStringList families,
+    std::vector<FT_FaceUP> facesForCSSValues(QStringList families,
                                        QVector<int> &lengths,
                                        QString text = "",
                                        qreal size = -1,
@@ -59,13 +59,12 @@ public:
      * 
      * @returns whether the configuration was successful.
      */
-    bool configureFaces(QVector<FT_Face> &faces,
+    bool configureFaces(std::vector<FT_FaceUP> &faces,
                         qreal size,
                         int xRes,
                         int yRes,
                         QMap<QString, qreal> axisSettings);
 private:
-    void init();
     class Private;
     QScopedPointer<Private> d;
 };

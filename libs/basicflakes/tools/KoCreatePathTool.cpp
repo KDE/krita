@@ -26,13 +26,12 @@
 
 #include <klocalizedstring.h>
 
-#include <QSpinBox>
-#include <QPainter>
-#include <QLabel>
-#include <QVBoxLayout>
-#include <QHBoxLayout>
 #include <QCheckBox>
-
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QPainter>
+#include <QSpinBox>
+#include <QVBoxLayout>
 
 KoCreatePathTool::KoCreatePathTool(KoCanvasBase *canvas)
     : KoToolBase(*(new KoCreatePathToolPrivate(this, canvas)))
@@ -575,14 +574,23 @@ QList<QPointer<QWidget> > KoCreatePathTool::createOptionWidgets()
     mainLayout->addLayout(angleEditLayout);
 
     widget->setLayout(mainLayout);
-    
+
     list.append(widget);
 
-    connect(smoothCurves, SIGNAL(toggled(bool)), this, SLOT(autoSmoothCurvesChanged(bool)));
-    connect(this, SIGNAL(sigUpdateAutoSmoothCurvesGUI(bool)), smoothCurves, SLOT(setChecked(bool)));
+    connect(smoothCurves,
+            SIGNAL(toggled(bool)),
+            this,
+            SLOT(autoSmoothCurvesChanged(bool)));
+    connect(this,
+            SIGNAL(sigUpdateAutoSmoothCurvesGUI(bool)),
+            smoothCurves,
+            SLOT(setChecked(bool)));
     connect(angleEdit, SIGNAL(angleChanged(qreal)), this, SLOT(angleDeltaChanged(qreal)));
     connect(angleSnap, SIGNAL(stateChanged(int)), this, SLOT(angleSnapChanged(int)));
-    connect(angleSnap, SIGNAL(toggled(bool)), angleEdit, SLOT(setEnabled(bool)));
+    connect(angleSnap,
+            SIGNAL(toggled(bool)),
+            angleEdit,
+            SLOT(setEnabled(bool)));
 
     return list;
 }

@@ -19,8 +19,8 @@ class CurveEditorItem : public QQuickPaintedItem
     Q_PROPERTY(bool pointSelected READ pointSelected NOTIFY pointSelectedChanged);
 public:
     explicit CurveEditorItem(QQuickItem* parent = 0);
-    virtual ~CurveEditorItem();
-    virtual void paint(QPainter* p);
+    ~CurveEditorItem() override;
+    void paint(QPainter *p) override;
 
     KisCubicCurve curve() const;
     void setCurve(KisCubicCurve curve);
@@ -33,10 +33,11 @@ Q_SIGNALS:
     void pointSelectedChanged();
 
 protected:
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+    void geometryChanged(const QRectF &newGeometry,
+                         const QRectF &oldGeometry) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
     class Private;

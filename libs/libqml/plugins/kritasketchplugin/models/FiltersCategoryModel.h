@@ -22,11 +22,12 @@ public:
     enum FiltersCategoryModelRoles {
         TextRole = Qt::UserRole + 1
     };
-    explicit FiltersCategoryModel(QObject* parent = 0);
-    virtual ~FiltersCategoryModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    explicit FiltersCategoryModel(QObject *parent = nullptr);
+    ~FiltersCategoryModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index,
+                  int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QObject* filterModel() const;
     Q_INVOKABLE void activateItem(int index);
@@ -49,7 +50,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void activeLayerChanged(KisLayerSP layer);
     void activeSelectionChanged();
-    void filterConfigurationChanged(int index, FiltersModel* model = 0);
+    void filterConfigurationChanged(int index, FiltersModel *model = nullptr);
     void filterActivated(int index);
     void updatePreview();
 

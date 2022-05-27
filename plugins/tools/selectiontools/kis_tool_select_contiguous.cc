@@ -46,11 +46,11 @@
 
 #include "kis_command_utils.h"
 
-
 KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
-    : KisToolSelect(canvas,
-                    KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
-                    i18n("Contiguous Area Selection"))
+    : KisToolSelect(
+        canvas,
+        KisCursor::load("tool_contiguous_selection_cursor.png", 6, 6),
+        i18n("Contiguous Area Selection"))
     , m_threshold(8)
     , m_opacitySpread(100)
     , m_useSelectionAsBoundary(false)
@@ -119,7 +119,8 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         sourceDevice = dev;
     }
 
-    KisPixelSelectionSP selection = new KisPixelSelection(new KisSelectionDefaultBounds(dev));
+    KisPixelSelectionSP selection =
+        new KisPixelSelection(new KisSelectionDefaultBounds(dev));
 
     int threshold = m_threshold;
     int opacitySpread = m_opacitySpread;
@@ -141,9 +142,21 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         existingSelection = kisCanvas->imageView()->selection()->pixelSelection();
     }
 
-    KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-                [dev, rc, threshold, opacitySpread, antiAlias, feather, grow, useSelectionAsBoundary,
-                selection, pos, sourceDevice, existingSelection] () mutable -> KUndo2Command* {
+    KUndo2Command
+        *cmd =
+            new KisCommandUtils::LambdaCommand(
+                [dev,
+                 rc,
+                 threshold,
+                 opacitySpread,
+                 antiAlias,
+                 feather,
+                 grow,
+                 useSelectionAsBoundary,
+                 selection,
+                 pos,
+                 sourceDevice,
+                 existingSelection]() mutable -> KUndo2Command * {
 
                     KisFillPainter fillpainter(dev);
                     fillpainter.setHeight(rc.height());
@@ -166,7 +179,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     selection->invalidateOutlineCache();
 
                     return 0;
-    });
+                });
     applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
 
 
@@ -221,47 +234,67 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
     // Create widgets
     KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
-    sliderThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in contiguous selection tool options", "Threshold: "));
+    sliderThreshold->setPrefix(i18nc(
+        "The 'threshold' spinbox prefix in contiguous selection tool options",
+        "Threshold: "));
     sliderThreshold->setRange(1, 100);
     KisSliderSpinBox *sliderSpread = new KisSliderSpinBox;
-    sliderSpread->setPrefix(i18nc("The 'spread' spinbox prefix in contiguous selection tool options", "Spread: "));
+    sliderSpread->setPrefix(i18nc(
+        "The 'spread' spinbox prefix in contiguous selection tool options",
+        "Spread: "));
     sliderSpread->setSuffix(i18n("%"));
     sliderSpread->setRange(0, 100);
-    QCheckBox *checkBoxSelectionAsBoundary =
-        new QCheckBox(
-            i18nc("The 'use selection as boundary' checkbox in contiguous selection tool to use selection borders as boundary when filling",
-                  "Use selection as boundary")
-        );
-    checkBoxSelectionAsBoundary->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
+    QCheckBox *checkBoxSelectionAsBoundary = new QCheckBox(i18nc(
+        "The 'use selection as boundary' checkbox in contiguous selection tool "
+        "to use selection borders as boundary when filling",
+        "Use selection as boundary"));
+    checkBoxSelectionAsBoundary->setSizePolicy(QSizePolicy::Ignored,
+                                               QSizePolicy::Preferred);
 
     KisSliderSpinBox *sliderGrow = new KisSliderSpinBox;
-    sliderGrow->setPrefix(i18nc("The 'grow/shrink' spinbox prefix in contiguous selection tool options", "Grow: "));
+    sliderGrow->setPrefix(i18nc(
+        "The 'grow/shrink' spinbox prefix in contiguous selection tool options",
+        "Grow: "));
     sliderGrow->setRange(-40, 40);
     sliderGrow->setSuffix(i18n(" px"));
     KisSliderSpinBox *sliderFeather = new KisSliderSpinBox;
-    sliderFeather->setPrefix(i18nc("The 'feather' spinbox prefix in contiguous selection tool options", "Feather: "));
+    sliderFeather->setPrefix(i18nc(
+        "The 'feather' spinbox prefix in contiguous selection tool options",
+        "Feather: "));
     sliderFeather->setRange(0, 40);
     sliderFeather->setSuffix(i18n(" px"));
 
     // Set the tooltips
-    sliderThreshold->setToolTip(i18n("Set how far the selection should extend from the selected pixel in terms of color similarity"));
-    sliderSpread->setToolTip(i18n("Set how far the fully opaque portion of the selection should extend."
-                                  "\n0% will make the selection opaque only where the pixels are exactly equal to the selected pixel."
-                                  "\n100% will make all the selection opaque up to its boundary."));
-    checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the current selection should be treated as a boundary when obtaining the new one"));
+    sliderThreshold->setToolTip(
+        i18n("Set how far the selection should extend from the selected pixel "
+             "in terms of color similarity"));
+    sliderSpread->setToolTip(i18n(
+        "Set how far the fully opaque portion of the selection should extend."
+        "\n0% will make the selection opaque only where the pixels are exactly "
+        "equal to the selected pixel."
+        "\n100% will make all the selection opaque up to its boundary."));
+    checkBoxSelectionAsBoundary->setToolTip(
+        i18n("Set if the contour of the current selection should be treated as "
+             "a boundary when obtaining the new one"));
 
-    sliderGrow->setToolTip(i18n("Grow (positive values) or shrink (negative values) the selection by the set amount"));
+    sliderGrow->setToolTip(
+        i18n("Grow (positive values) or shrink (negative values) the selection "
+             "by the set amount"));
     sliderFeather->setToolTip(i18n("Blur the selection by the set amount"));
-    
+
     // Construct the option widget
     KisOptionCollectionWidgetWithHeader *sectionSelectionExtent =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'selection extent' section label in contiguous selection tool options", "Selection extent")
-        );
+            i18nc("The 'selection extent' section label in contiguous "
+                  "selection tool options",
+                  "Selection extent"));
     sectionSelectionExtent->appendWidget("sliderThreshold", sliderThreshold);
     sectionSelectionExtent->appendWidget("sliderSpread", sliderSpread);
-    sectionSelectionExtent->appendWidget("checkBoxSelectionAsBoundary", checkBoxSelectionAsBoundary);
-    selectionWidget->insertWidget(2, "sectionSelectionExtent", sectionSelectionExtent);
+    sectionSelectionExtent->appendWidget("checkBoxSelectionAsBoundary",
+                                         checkBoxSelectionAsBoundary);
+    selectionWidget->insertWidget(2,
+                                  "sectionSelectionExtent",
+                                  sectionSelectionExtent);
 
     // Load configuration settings into tool options
     if (m_configGroup.hasKey("threshold")) {
@@ -270,16 +303,26 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
         m_threshold = m_configGroup.readEntry("fuzziness", 8);
     }
     m_opacitySpread = m_configGroup.readEntry("opacitySpread", 100);
-    m_useSelectionAsBoundary = m_configGroup.readEntry("useSelectionAsBoundary", false);
+    m_useSelectionAsBoundary =
+        m_configGroup.readEntry("useSelectionAsBoundary", false);
 
     sliderThreshold->setValue(m_threshold);
     sliderSpread->setValue(m_opacitySpread);
     checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
 
     // Make connections
-    connect(sliderThreshold, SIGNAL(valueChanged(int)), this, SLOT(slotSetThreshold(int)));
-    connect(sliderSpread, SIGNAL(valueChanged(int)), this, SLOT(slotSetOpacitySpread(int)));
-    connect(checkBoxSelectionAsBoundary, SIGNAL(toggled(bool)), this, SLOT(slotSetUseSelectionAsBoundary(bool)));
+    connect(sliderThreshold,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetThreshold(int)));
+    connect(sliderSpread,
+            SIGNAL(valueChanged(int)),
+            this,
+            SLOT(slotSetOpacitySpread(int)));
+    connect(checkBoxSelectionAsBoundary,
+            SIGNAL(toggled(bool)),
+            this,
+            SLOT(slotSetUseSelectionAsBoundary(bool)));
 
     return selectionWidget;
 }

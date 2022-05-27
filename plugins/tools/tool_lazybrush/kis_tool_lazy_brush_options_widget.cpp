@@ -47,7 +47,8 @@ struct KisToolLazyBrushOptionsWidget::Private
 
 struct PaletteEventFilter : public QObject
 {
-    bool eventFilter(QObject *watched, QEvent *event) {
+    bool eventFilter(QObject *watched, QEvent *event) override
+    {
         if (event->type() == QEvent::Wheel) {
             QWheelEvent *wevent = static_cast<QWheelEvent*>(event);
 

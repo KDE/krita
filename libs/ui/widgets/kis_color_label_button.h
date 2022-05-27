@@ -23,7 +23,7 @@ public:
     };
 
     KisColorLabelButton(QColor color, uint sizeSquared = 32, QWidget *parent = nullptr);
-    ~KisColorLabelButton();
+    ~KisColorLabelButton() override;
 
     void paintEvent(QPaintEvent* event) override;
     void enterEvent(QEvent *event) override;
@@ -33,7 +33,7 @@ public:
     void setSelectionVisType( SelectionIndicationType type );
     void setSize(uint size);
 
-    virtual void nextCheckState() override;
+    void nextCheckState() override;
 
 private:
     struct Private;
@@ -84,7 +84,7 @@ public:
     KisColorLabelMouseDragFilter(QObject *parent = nullptr);
 
 protected:
-    bool eventFilter(QObject *obj, QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event) override;
     void checkSlideOverNeighborButtons(QMouseEvent* mouseEvent, class QAbstractButton* startingButton);
 };
 

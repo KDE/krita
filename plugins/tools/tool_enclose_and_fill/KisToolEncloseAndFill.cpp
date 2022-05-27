@@ -13,9 +13,9 @@
 #include <QCheckBox>
 #include <QPushButton>
 
+#include <KisOptionButtonStrip.h>
 #include <KisOptionCollectionWidget.h>
 #include <KoGroupButton.h>
-#include <KisOptionButtonStrip.h>
 
 #include <ksharedconfig.h>
 
@@ -303,12 +303,20 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     loadConfiguration();
 
     // Create widgets
-    KisOptionButtonStrip *optionButtonStripEnclosingMethod = new KisOptionButtonStrip;
-    m_buttonEnclosingMethodRectangle = optionButtonStripEnclosingMethod->addButton(KisIconUtils::loadIcon("tool_rect_selection"));
-    m_buttonEnclosingMethodEllipse = optionButtonStripEnclosingMethod->addButton(KisIconUtils::loadIcon("tool_elliptical_selection"));
-    m_buttonEnclosingMethodPath = optionButtonStripEnclosingMethod->addButton(KisIconUtils::loadIcon("tool_path_selection"));
-    m_buttonEnclosingMethodLasso = optionButtonStripEnclosingMethod->addButton(KisIconUtils::loadIcon("tool_outline_selection"));
-    m_buttonEnclosingMethodBrush = optionButtonStripEnclosingMethod->addButton(KisIconUtils::loadIcon("krita_tool_freehand"));
+    KisOptionButtonStrip *optionButtonStripEnclosingMethod =
+        new KisOptionButtonStrip;
+    m_buttonEnclosingMethodRectangle =
+        optionButtonStripEnclosingMethod->addButton(
+            KisIconUtils::loadIcon("tool_rect_selection"));
+    m_buttonEnclosingMethodEllipse =
+        optionButtonStripEnclosingMethod->addButton(
+            KisIconUtils::loadIcon("tool_elliptical_selection"));
+    m_buttonEnclosingMethodPath = optionButtonStripEnclosingMethod->addButton(
+        KisIconUtils::loadIcon("tool_path_selection"));
+    m_buttonEnclosingMethodLasso = optionButtonStripEnclosingMethod->addButton(
+        KisIconUtils::loadIcon("tool_outline_selection"));
+    m_buttonEnclosingMethodBrush = optionButtonStripEnclosingMethod->addButton(
+        KisIconUtils::loadIcon("krita_tool_freehand"));
     m_buttonEnclosingMethodLasso->setChecked(true);
 
     m_comboBoxRegionSelectionMethod = new QComboBox;
@@ -345,9 +353,12 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_checkBoxRegionSelectionIncludeSurroundingRegions->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
     KisOptionButtonStrip *optionButtonStripFillWith = new KisOptionButtonStrip;
-    m_buttonFillWithFG = optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("object-order-lower-calligra"));
-    m_buttonFillWithBG = optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("object-order-raise-calligra"));
-    m_buttonFillWithPattern = optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("pattern"));
+    m_buttonFillWithFG = optionButtonStripFillWith->addButton(
+        KisIconUtils::loadIcon("object-order-lower-calligra"));
+    m_buttonFillWithBG = optionButtonStripFillWith->addButton(
+        KisIconUtils::loadIcon("object-order-raise-calligra"));
+    m_buttonFillWithPattern =
+        optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("pattern"));
     m_buttonFillWithFG->setChecked(true);
     m_sliderPatternScale = new KisDoubleSliderSpinBox;
     m_sliderPatternScale->setRange(0, 500, 2);
@@ -382,9 +393,12 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_sliderFeather->setSuffix(i18n(" px"));
 
     KisOptionButtonStrip *optionButtonStripReference = new KisOptionButtonStrip;
-    m_buttonReferenceCurrent = optionButtonStripReference->addButton(KisIconUtils::loadIcon("current-layer"));
-    m_buttonReferenceAll = optionButtonStripReference->addButton(KisIconUtils::loadIcon("all-layers"));
-    m_buttonReferenceLabeled = optionButtonStripReference->addButton(KisIconUtils::loadIcon("tag"));
+    m_buttonReferenceCurrent = optionButtonStripReference->addButton(
+        KisIconUtils::loadIcon("current-layer"));
+    m_buttonReferenceAll = optionButtonStripReference->addButton(
+        KisIconUtils::loadIcon("all-layers"));
+    m_buttonReferenceLabeled =
+        optionButtonStripReference->addButton(KisIconUtils::loadIcon("tag"));
     m_buttonReferenceCurrent->setChecked(true);
     m_widgetLabels = new KisColorLabelSelectorWidget;
     m_widgetLabels->setExclusive(false);
@@ -554,13 +568,20 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_widgetLabels->setSelection(m_selectedColorLabels);
 
     // Make connections
-    connect(optionButtonStripEnclosingMethod, SIGNAL(buttonToggled(KoGroupButton*, bool)), SLOT(slot_optionButtonStripEnclosingMethod_buttonToggled(KoGroupButton*, bool)));
+    connect(optionButtonStripEnclosingMethod,
+            SIGNAL(buttonToggled(KoGroupButton *, bool)),
+            SLOT(slot_optionButtonStripEnclosingMethod_buttonToggled(
+                KoGroupButton *,
+                bool)));
     connect(m_comboBoxRegionSelectionMethod, SIGNAL(currentIndexChanged(int)), SLOT(slot_comboBoxRegionSelectionMethod_currentIndexChanged(int)));
     connect(m_buttonRegionSelectionColor, SIGNAL(changed(const KoColor&)), SLOT(slot_buttonRegionSelectionColor_changed(const KoColor&)));
     connect(m_checkBoxRegionSelectionInvert, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionInvert_toggled(bool)));
     connect(m_checkBoxRegionSelectionIncludeContourRegions, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionIncludeContourRegions_toggled(bool)));
     connect(m_checkBoxRegionSelectionIncludeSurroundingRegions, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionIncludeSurroundingRegions_toggled(bool)));
-    connect(optionButtonStripFillWith, SIGNAL(buttonToggled(KoGroupButton*, bool)), SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton*, bool)));
+    connect(optionButtonStripFillWith,
+            SIGNAL(buttonToggled(KoGroupButton *, bool)),
+            SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *,
+                                                              bool)));
     connect(m_sliderPatternScale, SIGNAL(valueChanged(double)), SLOT(slot_sliderPatternScale_valueChanged(double)));
     connect(m_angleSelectorPatternRotation, SIGNAL(angleChanged(double)), SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
     connect(m_sliderFillThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderFillThreshold_valueChanged(int)));
@@ -569,7 +590,10 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     connect(m_checkBoxAntiAlias, SIGNAL(toggled(bool)), SLOT(slot_checkBoxAntiAlias_toggled(bool)));
     connect(m_sliderExpand, SIGNAL(valueChanged(int)), SLOT(slot_sliderExpand_valueChanged(int)));
     connect(m_sliderFeather, SIGNAL(valueChanged(int)), SLOT(slot_sliderFeather_valueChanged(int)));
-    connect(optionButtonStripReference, SIGNAL(buttonToggled(KoGroupButton*, bool)), SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton*, bool)));
+    connect(optionButtonStripReference,
+            SIGNAL(buttonToggled(KoGroupButton *, bool)),
+            SLOT(slot_optionButtonStripReference_buttonToggled(KoGroupButton *,
+                                                               bool)));
     connect(m_widgetLabels, SIGNAL(selectionChanged()), SLOT(slot_widgetLabels_selectionChanged()));
     connect(buttonReset, SIGNAL(clicked()), SLOT(slot_buttonReset_clicked()));
     
@@ -817,7 +841,9 @@ KisToolEncloseAndFill::Reference KisToolEncloseAndFill::configStringToReference(
     return CurrentLayer;
 }
 
-void KisToolEncloseAndFill::slot_optionButtonStripEnclosingMethod_buttonToggled(KoGroupButton *button, bool checked)
+void KisToolEncloseAndFill::slot_optionButtonStripEnclosingMethod_buttonToggled(
+    KoGroupButton *button,
+    bool checked)
 {
     if (!checked) {
         return;
@@ -910,7 +936,9 @@ void KisToolEncloseAndFill::slot_checkBoxRegionSelectionIncludeSurroundingRegion
     m_configGroup.writeEntry("regionSelectionIncludeSurroundingRegions", checked);
 }
 
-void KisToolEncloseAndFill::slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *button, bool checked)
+void KisToolEncloseAndFill::slot_optionButtonStripFillWith_buttonToggled(
+    KoGroupButton *button,
+    bool checked)
 {
     if (!checked) {
         return;
@@ -1002,7 +1030,9 @@ void KisToolEncloseAndFill::slot_sliderFeather_valueChanged(int value)
     m_configGroup.writeEntry("feather", value);
 }
 
-void KisToolEncloseAndFill::slot_optionButtonStripReference_buttonToggled(KoGroupButton *button, bool checked)
+void KisToolEncloseAndFill::slot_optionButtonStripReference_buttonToggled(
+    KoGroupButton *button,
+    bool checked)
 {
     if (!checked) {
         return;

@@ -14,8 +14,8 @@ class ImageBuilder : public QObject
 {
     Q_OBJECT
 public:
-    explicit ImageBuilder(QObject* parent = 0);
-    virtual ~ImageBuilder();
+    explicit ImageBuilder(QObject *parent = nullptr);
+    ~ImageBuilder() override;
 
     Q_INVOKABLE QString createBlankImage(int width, int height, int resolution);
     Q_INVOKABLE QString createBlankImage(const QVariantMap& options);

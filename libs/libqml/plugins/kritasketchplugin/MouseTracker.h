@@ -19,15 +19,15 @@ class MouseTracker : public QObject
 {
     Q_OBJECT
 public:
-    explicit MouseTracker(QObject* parent = 0);
-    virtual ~MouseTracker();
+    explicit MouseTracker(QObject *parent = nullptr);
+    ~MouseTracker() override;
 
 public Q_SLOTS:
     void addItem(QQuickItem* item, const QPointF& offset = QPointF());
     void removeItem(QQuickItem* item);
 
 protected:
-    virtual bool eventFilter(QObject* target, QEvent* event);
+    bool eventFilter(QObject *target, QEvent *event) override;
 
 private:
 private:

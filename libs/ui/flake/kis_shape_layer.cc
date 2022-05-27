@@ -657,13 +657,13 @@ public:
     {
     }
 
-    void undo()
+    void undo() override
     {
         KIS_SAFE_ASSERT_RECOVER_NOOP(QThread::currentThread() != qApp->thread());
         m_blockingConnection.start(m_savedTransform);
     }
 
-    void redo()
+    void redo() override
     {
         m_savedTransform = m_shapeLayer->transformation();
 

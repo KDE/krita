@@ -19,9 +19,9 @@ class ColorSelectorItem : public QQuickPaintedItem
     // This is a heuristic assistance property - if this is set to false, the item will not be painted
     Q_PROPERTY(bool shown READ shown WRITE setShown NOTIFY shownChanged)
 public:
-    explicit ColorSelectorItem(QQuickItem* parent = 0);
-    virtual ~ColorSelectorItem();
-    virtual void paint(QPainter* painter);
+    explicit ColorSelectorItem(QQuickItem *parent = nullptr);
+    ~ColorSelectorItem() override;
+    void paint(QPainter *painter) override;
 
     QObject* view() const;
     void setView(QObject* newView);
@@ -41,10 +41,11 @@ Q_SIGNALS:
     void colorChanged(QColor newColor, qreal newAlpha, bool backgroundChanged);
 
 protected:
-    virtual void geometryChanged(const QRectF & newGeometry, const QRectF & oldGeometry);
-    virtual void mouseMoveEvent(QMouseEvent* event);
-    virtual void mousePressEvent(QMouseEvent* event);
-    virtual void mouseReleaseEvent(QMouseEvent* event);
+    void geometryChanged(const QRectF &newGeometry,
+                         const QRectF &oldGeometry) override;
+    void mouseMoveEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+    void mouseReleaseEvent(QMouseEvent *event) override;
     virtual void mouseEvent(QMouseEvent* event);
 
 private Q_SLOTS:

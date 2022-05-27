@@ -12,12 +12,15 @@
 #include <KConfigGroup>
 #include <KSharedConfig>
 
-KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(const QString &windowTitle)
+KisSelectionToolConfigWidgetHelper::KisSelectionToolConfigWidgetHelper(
+    const QString &windowTitle)
     : m_optionsWidget(0)
     , m_windowTitle(windowTitle)
-{}
+{
+}
 
-void KisSelectionToolConfigWidgetHelper::createOptionWidget(const QString &toolId)
+void KisSelectionToolConfigWidgetHelper::createOptionWidget(
+    const QString &toolId)
 {
     m_optionsWidget = new KisSelectionOptions;
     Q_CHECK_PTR(m_optionsWidget);
@@ -27,16 +30,24 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(const QString &toolI
 
     connect(m_optionsWidget, &KisSelectionOptions::modeChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged);
-    connect(m_optionsWidget, &KisSelectionOptions::actionChanged,
-            this, &KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged);
+    connect(m_optionsWidget,
+            &KisSelectionOptions::actionChanged,
+            this,
+            &KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged);
     connect(m_optionsWidget, &KisSelectionOptions::antiAliasSelectionChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotWidgetAntiAliasChanged);
-    connect(m_optionsWidget, &KisSelectionOptions::growSelectionChanged,
-            this, &KisSelectionToolConfigWidgetHelper::slotWidgetGrowChanged);
-    connect(m_optionsWidget, &KisSelectionOptions::featherSelectionChanged,
-            this, &KisSelectionToolConfigWidgetHelper::slotWidgetFeatherChanged);
-    connect(m_optionsWidget, &KisSelectionOptions::referenceLayersChanged,
-            this, &KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged);
+    connect(m_optionsWidget,
+            &KisSelectionOptions::growSelectionChanged,
+            this,
+            &KisSelectionToolConfigWidgetHelper::slotWidgetGrowChanged);
+    connect(m_optionsWidget,
+            &KisSelectionOptions::featherSelectionChanged,
+            this,
+            &KisSelectionToolConfigWidgetHelper::slotWidgetFeatherChanged);
+    connect(m_optionsWidget,
+            &KisSelectionOptions::referenceLayersChanged,
+            this,
+            &KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged);
     connect(m_optionsWidget, &KisSelectionOptions::selectedColorLabelsChanged,
             this, &KisSelectionToolConfigWidgetHelper::slotSelectedColorLabelsChanged);
 }
@@ -86,7 +97,8 @@ int KisSelectionToolConfigWidgetHelper::featherSelection() const
     return m_optionsWidget->featherSelection();
 }
 
-KisSelectionOptions::ReferenceLayers KisSelectionToolConfigWidgetHelper::referenceLayers() const
+KisSelectionOptions::ReferenceLayers
+KisSelectionToolConfigWidgetHelper::referenceLayers() const
 {
     if (!m_optionsWidget) {
         return KisSelectionOptions::CurrentLayer;
@@ -102,19 +114,22 @@ QList<int> KisSelectionToolConfigWidgetHelper::selectedColorLabels() const
     return m_optionsWidget->selectedColorLabels();
 }
 
-void KisSelectionToolConfigWidgetHelper::setConfigGroupForExactTool(QString toolId)
+void KisSelectionToolConfigWidgetHelper::setConfigGroupForExactTool(
+    QString toolId)
 {
     m_configGroupForTool = toolId;
     reloadExactToolConfig();
 }
 
-void KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged(SelectionMode mode)
+void KisSelectionToolConfigWidgetHelper::slotWidgetModeChanged(
+    SelectionMode mode)
 {
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     cfg.writeEntry("selectionMode", static_cast<int>(mode));
 }
 
-void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(SelectionAction action)
+void KisSelectionToolConfigWidgetHelper::slotWidgetActionChanged(
+    SelectionAction action)
 {
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
     cfg.writeEntry("selectionAction", static_cast<int>(action));
@@ -139,15 +154,17 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetFeatherChanged(int value)
     cfg.writeEntry("featherSelection", value);
 }
 
-void KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged(KisSelectionOptions::ReferenceLayers referenceLayers)
+void KisSelectionToolConfigWidgetHelper::slotReferenceLayersChanged(
+    KisSelectionOptions::ReferenceLayers referenceLayers)
 {
     KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
     cfg.writeEntry(
         "sampleLayersMode",
-        referenceLayers == KisSelectionOptions::AllLayers ? "sampleAllLayers" :
-            (referenceLayers == KisSelectionOptions::ColorLabeledLayers ? "sampleColorLabeledLayers" :
-                                                                          "sampleCurrentLayer")
-    );
+        referenceLayers == KisSelectionOptions::AllLayers
+            ? "sampleAllLayers"
+            : (referenceLayers == KisSelectionOptions::ColorLabeledLayers
+                   ? "sampleColorLabeledLayers"
+                   : "sampleCurrentLayer"));
 }
 
 void KisSelectionToolConfigWidgetHelper::slotSelectedColorLabelsChanged()
@@ -202,14 +219,18 @@ void KisSelectionToolConfigWidgetHelper::slotToolActivatedChanged(bool isActivat
     }
 
     KConfigGroup cfg = KSharedConfig::openConfig()->group("KisToolSelectBase");
-    
-    const SelectionMode selectionMode = (SelectionMode)cfg.readEntry("selectionMode", static_cast<int>(SHAPE_PROTECTION));
-    const SelectionAction selectionAction = (SelectionAction)cfg.readEntry("selectionAction", static_cast<int>(SELECTION_REPLACE));
-    
+
+    const SelectionMode selectionMode =
+        (SelectionMode)cfg.readEntry("selectionMode",
+                                     static_cast<int>(SHAPE_PROTECTION));
+    const SelectionAction selectionAction =
+        (SelectionAction)cfg.readEntry("selectionAction",
+                                       static_cast<int>(SELECTION_REPLACE));
+
     KisSignalsBlocker b(m_optionsWidget);
     m_optionsWidget->setMode(selectionMode);
     m_optionsWidget->setAction(selectionAction);
-    
+
     reloadExactToolConfig();
 }
 
@@ -219,17 +240,25 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
         return;
     }
 
-    KConfigGroup cfgToolSpecific = KSharedConfig::openConfig()->group(m_configGroupForTool);
-    const bool antiAliasSelection = cfgToolSpecific.readEntry("antiAliasSelection", true);
+    KConfigGroup cfgToolSpecific =
+        KSharedConfig::openConfig()->group(m_configGroupForTool);
+    const bool antiAliasSelection =
+        cfgToolSpecific.readEntry("antiAliasSelection", true);
     const int growSelection = cfgToolSpecific.readEntry("growSelection", 0);
-    const int featherSelection = cfgToolSpecific.readEntry("featherSelection", 0);
-    const QString referenceLayersStr = cfgToolSpecific.readEntry("sampleLayersMode", "sampleCurrentLayer");
-    const QStringList colorLabelsStr = cfgToolSpecific.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
+    const int featherSelection =
+        cfgToolSpecific.readEntry("featherSelection", 0);
+    const QString referenceLayersStr =
+        cfgToolSpecific.readEntry("sampleLayersMode", "sampleCurrentLayer");
+    const QStringList colorLabelsStr =
+        cfgToolSpecific.readEntry<QString>("colorLabels", "")
+            .split(',', QString::SkipEmptyParts);
 
     const KisSelectionOptions::ReferenceLayers referenceLayers =
-        referenceLayersStr == "sampleAllLayers" ? KisSelectionOptions::AllLayers :
-            (referenceLayersStr == "sampleColorLabeledLayers" ? KisSelectionOptions::ColorLabeledLayers :
-                                                                KisSelectionOptions::CurrentLayer);
+        referenceLayersStr == "sampleAllLayers"
+        ? KisSelectionOptions::AllLayers
+        : (referenceLayersStr == "sampleColorLabeledLayers"
+               ? KisSelectionOptions::ColorLabeledLayers
+               : KisSelectionOptions::CurrentLayer);
     QList<int> colorLabels;
     for (const QString &colorLabelStr : colorLabelsStr) {
         bool ok;

@@ -20,19 +20,19 @@ class PyQtPluginSettings : public KisPreferenceSet
 {
     Q_OBJECT
 public:
+    PyQtPluginSettings(PythonPluginManager *pluginManager,
+                       QWidget *parent = nullptr);
+    ~PyQtPluginSettings() override;
 
-    PyQtPluginSettings(PythonPluginManager *pluginManager, QWidget *parent = 0);
-    ~PyQtPluginSettings();
-
-    virtual QString id();
-    virtual QString name();
-    virtual QString header();
-    virtual QIcon icon();
+    QString id() override;
+    QString name() override;
+    QString header() override;
+    QIcon icon() override;
 
 public Q_SLOTS:
-    void savePreferences() const;
-    void loadPreferences();
-    void loadDefaultPreferences();
+    void savePreferences() const override;
+    void loadPreferences() override;
+    void loadDefaultPreferences() override;
 
 Q_SIGNALS:
     void settingsChanged() const;
@@ -65,17 +65,19 @@ public Q_SLOTS:
 class PyQtPluginSettingsFactory : public KisAbstractPreferenceSetFactory
 {
 public:
-
-    PyQtPluginSettingsFactory(PythonPluginManager *engine) {
-        m_pluginManager = engine;
+    PyQtPluginSettingsFactory(PythonPluginManager *engine)
+        : m_pluginManager(engine)
+    {
     }
 
-    KisPreferenceSet* createPreferenceSet() {
+    KisPreferenceSet *createPreferenceSet() override
+    {
         PyQtPluginSettings* ps = new PyQtPluginSettings(m_pluginManager);
         QObject::connect(ps, SIGNAL(settingsChanged()), &repeater, SLOT(updateSettings()), Qt::UniqueConnection);
         return ps;
     }
-    virtual QString id() const {
+    QString id() const override
+    {
         return "PyQtSettings";
     }
     PyQtPluginSettingsUpdateRepeater repeater;

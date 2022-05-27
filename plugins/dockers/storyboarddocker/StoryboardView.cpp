@@ -20,8 +20,10 @@ class StoryboardStyle : public QProxyStyle
 public:
     StoryboardStyle(QStyle *baseStyle = 0) : QProxyStyle(baseStyle) {}
 
-    void drawPrimitive(PrimitiveElement element, const QStyleOption *option,
-                       QPainter *painter, const QWidget *widget) const
+    void drawPrimitive(PrimitiveElement element,
+                       const QStyleOption *option,
+                       QPainter *painter,
+                       const QWidget *widget) const override
     {
         if (element == QStyle::PE_IndicatorItemViewItemDrop)
         {

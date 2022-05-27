@@ -13,7 +13,9 @@ class ColorImageProvider : public QQuickImageProvider
 {
 public:
     explicit ColorImageProvider();
-    QPixmap requestPixmap(const QString &id, QSize *size, const QSize &requestedSize);
+    QPixmap requestPixmap(const QString &id,
+                          QSize *size,
+                          const QSize &requestedSize) override;
 };
 
 #endif // COLORIMAGEPROVIDER_H

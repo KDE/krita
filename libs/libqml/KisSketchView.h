@@ -27,8 +27,8 @@ class KRITA_SKETCH_EXPORT KisSketchView : public QQuickItem
 //    Q_PROPERTY(int imageWidth READ imageWidth NOTIFY imageSizeChanged)
 
 public:
-    explicit KisSketchView(QQuickItem* parent = 0);
-    virtual ~KisSketchView();
+    explicit KisSketchView(QQuickItem *parent = nullptr);
+    ~KisSketchView() override;
 
     QObject* selectionManager() const;
     QObject* selectionExtras() const;
@@ -38,8 +38,9 @@ public:
     QString fileTitle() const;
     bool isModified() const;
 
-    virtual void componentComplete();
-    virtual void geometryChanged(const QRectF& newGeometry, const QRectF& oldGeometry);
+    void componentComplete() override;
+    void geometryChanged(const QRectF &newGeometry,
+                         const QRectF &oldGeometry) override;
 
     void setFile(const QString &file);
 
@@ -84,7 +85,7 @@ Q_SIGNALS:
     void imageSizeChanged();
 
 protected:
-    virtual bool event(QEvent* event);
+    bool event(QEvent *event) override;
     // QT5TODO
 //     virtual bool sceneEvent(QEvent* event);
 

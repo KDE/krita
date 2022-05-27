@@ -53,7 +53,7 @@ public:
      */
     ToolTransformArgs(const ToolTransformArgs& args);
 
-    KisToolChangesTrackerData *clone() const;
+    KisToolChangesTrackerData *clone() const override;
 
     /**
      * If mode is warp, original and transformed vector points will be of size 0.

@@ -878,7 +878,8 @@ void KisImage::purgeUnusedData(bool isCancellable)
             setCanForgetAboutMe(isCancellable);
         }
 
-        void initStrokeCallback() {
+        void initStrokeCallback() override
+        {
             KisPaintDeviceList deviceList;
             QVector<KisStrokeJobData*> jobsData;
 

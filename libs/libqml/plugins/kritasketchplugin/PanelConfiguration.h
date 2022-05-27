@@ -21,11 +21,11 @@ class PanelConfiguration : public QObject, public QQmlParserStatus
     Q_INTERFACES(QQmlParserStatus)
 
 public:
-    explicit PanelConfiguration(QObject* parent = 0);
-    virtual ~PanelConfiguration();
+    explicit PanelConfiguration(QObject *parent = nullptr);
+    ~PanelConfiguration() override;
 
-    virtual void componentComplete();
-    virtual void classBegin();
+    void componentComplete() override;
+    void classBegin() override;
 
     QQmlListProperty<QQuickItem> panels();
     QQmlListProperty<QQuickItem> panelAreas();

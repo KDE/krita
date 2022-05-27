@@ -44,7 +44,7 @@ public:
     void setImage(KisImageWSP image);
 
 protected:
-    virtual void showEvent(QShowEvent *);
+    void showEvent(QShowEvent *) override;
 
 private Q_SLOTS:
     void slotAddPredefined();

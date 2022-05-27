@@ -22,9 +22,9 @@ public:
     virtual ~SvgTextChangeCommand();
 
     /// redo the command
-    virtual void redo();
+    void redo() override;
     /// revert the actions done in redo
-    virtual void undo();
+    void undo() override;
 
 private:
     KoSvgTextShape *m_shape;

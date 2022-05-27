@@ -71,11 +71,13 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
             this->enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
         }
 
-        void finishStrokeCallback() {
+        void finishStrokeCallback() override
+        {
             makeKisDeleteLaterWrapper(m_shapeSelection)->deleteLater();
         }
 
-        void cancelStrokeCallback() {
+        void cancelStrokeCallback() override
+        {
             finishStrokeCallback();
         }
 
@@ -162,7 +164,8 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
         m_isFlatten = !shapeSelection;
     }
 
-    ~ChangeShapeSelectionCommand() {
+    ~ChangeShapeSelectionCommand() override
+    {
         if (m_shapeSelection) {
             Private::safeDeleteShapeSelection(m_shapeSelection, m_selection ? m_selection.data() : 0);
         }

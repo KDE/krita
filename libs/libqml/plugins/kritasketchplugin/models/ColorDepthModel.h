@@ -20,11 +20,11 @@ public:
         TextRole = Qt::UserRole + 1,
     };
 
-    explicit ColorDepthModel(QObject* parent = 0);
-    virtual ~ColorDepthModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    explicit ColorDepthModel(QObject *parent = nullptr);
+    ~ColorDepthModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent) const override;
 
     QString colorModelId() const;
 

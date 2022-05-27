@@ -24,11 +24,11 @@ public:
         GroupName,
         GroupFolded
     };
-    explicit TemplatesModel(QObject* parent = 0);
-    virtual ~TemplatesModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual QVariant data(const QModelIndex& index, int role) const;
-    virtual int rowCount(const QModelIndex& parent) const;
+    explicit TemplatesModel(QObject *parent = nullptr);
+    ~TemplatesModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex &parent) const override;
     Q_INVOKABLE QString groupNameOf(int index) const;
     Q_INVOKABLE void toggleGroup(const QString& name);
     Q_SLOT void populate();

@@ -23,10 +23,10 @@ class KisQmicSynchronizeImageSizeCommand : public KUndo2Command
 {
 public:
     KisQmicSynchronizeImageSizeCommand(QVector<gmic_image<float> *> images, KisImageWSP image);
-    ~KisQmicSynchronizeImageSizeCommand();
+    ~KisQmicSynchronizeImageSizeCommand() override;
 
-    void redo();
-    void undo();
+    void redo() override;
+    void undo() override;
 
 private:
     QSize findMaxLayerSize(QVector<gmic_image<float> *> images);

@@ -53,18 +53,22 @@ public:
         CanMoveUpRole,
         CanMoveDownRole
     };
-    explicit LayerModel(QObject* parent = 0);
-    virtual ~LayerModel();
-    QHash<int, QByteArray> roleNames() const;
+    explicit LayerModel(QObject *parent = nullptr);
+    ~LayerModel() override;
+    QHash<int, QByteArray> roleNames() const override;
     QObject* view() const;
     void setView(QObject* newView);
     QObject* engine() const;
     void setEngine(QObject* newEngine);
     QString fullImageThumbUrl() const;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    Q_INVOKABLE virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index,
+                  int role = Qt::DisplayRole) const override;
+    Q_INVOKABLE int
+    rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant headerData(int section,
+                        Qt::Orientation orientation,
+                        int role = Qt::DisplayRole) const override;
 
     Q_INVOKABLE void setActive(int index);
     Q_INVOKABLE void moveUp();

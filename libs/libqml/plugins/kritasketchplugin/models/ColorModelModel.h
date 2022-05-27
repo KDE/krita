@@ -19,11 +19,11 @@ public:
         TextRole = Qt::UserRole + 1,
     };
 
-    ColorModelModel(QObject* parent = 0);
-    ~ColorModelModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual int rowCount(const QModelIndex& parent) const;
-    virtual QVariant data(const QModelIndex& index, int role) const;
+    ColorModelModel(QObject *parent = nullptr);
+    ~ColorModelModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
     Q_INVOKABLE QString id(int index);
     Q_INVOKABLE int indexOf(const QString& id);

@@ -4,8 +4,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <QHBoxLayout>
 #include <QButtonGroup>
+#include <QHBoxLayout>
 
 #include <KoGroupButton.h>
 
@@ -14,8 +14,8 @@
 class KisOptionButtonStrip::Private
 {
 public:
-    int numberOfButtons {0};
-    QButtonGroup *buttonGroup {nullptr};
+    int numberOfButtons{0};
+    QButtonGroup *buttonGroup{nullptr};
 };
 
 KisOptionButtonStrip::KisOptionButtonStrip(QWidget *parent)
@@ -33,19 +33,21 @@ KisOptionButtonStrip::KisOptionButtonStrip(QWidget *parent)
     m_d->buttonGroup = new QButtonGroup(this);
     m_d->buttonGroup->setExclusive(true);
 
-    connect(m_d->buttonGroup, QOverload<QAbstractButton*, bool>::of(&QButtonGroup::buttonToggled),
-        [this](QAbstractButton *button, bool checked)
-        {
-            emit buttonToggled(dynamic_cast<KoGroupButton*>(button), checked);
+    connect(
+        m_d->buttonGroup,
+        QOverload<QAbstractButton *, bool>::of(&QButtonGroup::buttonToggled),
+        [this](QAbstractButton *button, bool checked) {
+            emit buttonToggled(dynamic_cast<KoGroupButton *>(button), checked);
             emit buttonToggled(m_d->buttonGroup->id(button), checked);
-        }
-    );
+        });
 }
 
 KisOptionButtonStrip::~KisOptionButtonStrip()
-{}
+{
+}
 
-KoGroupButton* KisOptionButtonStrip::addButton(const QIcon &icon, const QString &text)
+KoGroupButton *KisOptionButtonStrip::addButton(const QIcon &icon,
+                                               const QString &text)
 {
     KoGroupButton *newButton = new KoGroupButton(this);
     newButton->setCheckable(true);
@@ -54,14 +56,17 @@ KoGroupButton* KisOptionButtonStrip::addButton(const QIcon &icon, const QString 
     newButton->setMinimumSize(28, 28);
 
     if (m_d->numberOfButtons > 0) {
-        KoGroupButton *prevButton = dynamic_cast<KoGroupButton*>(m_d->buttonGroup->button(m_d->numberOfButtons - 1));
-        prevButton->setGroupPosition(m_d->numberOfButtons == 1 ? KoGroupButton::GroupLeft : KoGroupButton::GroupCenter);
+        KoGroupButton *prevButton = dynamic_cast<KoGroupButton *>(
+            m_d->buttonGroup->button(m_d->numberOfButtons - 1));
+        prevButton->setGroupPosition(m_d->numberOfButtons == 1
+                                         ? KoGroupButton::GroupLeft
+                                         : KoGroupButton::GroupCenter);
         newButton->setGroupPosition(KoGroupButton::GroupRight);
     }
 
     m_d->buttonGroup->addButton(newButton, m_d->numberOfButtons);
 
-    QHBoxLayout *mainLayout = dynamic_cast<QHBoxLayout*>(layout());
+    QHBoxLayout *mainLayout = dynamic_cast<QHBoxLayout *>(layout());
     mainLayout->insertWidget(m_d->numberOfButtons, newButton);
 
     ++m_d->numberOfButtons;
@@ -69,26 +74,26 @@ KoGroupButton* KisOptionButtonStrip::addButton(const QIcon &icon, const QString 
     return newButton;
 }
 
-KoGroupButton* KisOptionButtonStrip::addButton(const QString &text)
+KoGroupButton *KisOptionButtonStrip::addButton(const QString &text)
 {
     return addButton(QIcon(), text);
 }
 
-KoGroupButton* KisOptionButtonStrip::addButton()
+KoGroupButton *KisOptionButtonStrip::addButton()
 {
     return addButton(QIcon(), QString());
 }
 
-KoGroupButton* KisOptionButtonStrip::button(int index) const
+KoGroupButton *KisOptionButtonStrip::button(int index) const
 {
-    return dynamic_cast<KoGroupButton*>(m_d->buttonGroup->button(index));
+    return dynamic_cast<KoGroupButton *>(m_d->buttonGroup->button(index));
 }
 
-QList<KoGroupButton*> KisOptionButtonStrip::buttons() const
+QList<KoGroupButton *> KisOptionButtonStrip::buttons() const
 {
-    QList<KoGroupButton*> list;
+    QList<KoGroupButton *> list;
     for (QAbstractButton *b : m_d->buttonGroup->buttons()) {
-        list.append(dynamic_cast<KoGroupButton*>(b));
+        list.append(dynamic_cast<KoGroupButton *>(b));
     }
     return list;
 }
@@ -103,9 +108,9 @@ void KisOptionButtonStrip::setExclusive(bool exclusive)
     m_d->buttonGroup->setExclusive(exclusive);
 }
 
-KoGroupButton* KisOptionButtonStrip::checkedButton() const
+KoGroupButton *KisOptionButtonStrip::checkedButton() const
 {
-    return dynamic_cast<KoGroupButton*>(m_d->buttonGroup->checkedButton());
+    return dynamic_cast<KoGroupButton *>(m_d->buttonGroup->checkedButton());
 }
 
 int KisOptionButtonStrip::checkedButtonIndex() const

@@ -55,7 +55,7 @@ protected:
     using KisToolSelectBase::m_widgetHelper;
 
 private:
-    int  m_threshold {8};
+    int m_threshold{8};
     int  m_opacitySpread {100};
     bool m_useSelectionAsBoundary {false};
     KConfigGroup m_configGroup;

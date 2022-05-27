@@ -17,8 +17,8 @@ class KritaSketchPlugin : public QQmlExtensionPlugin
     Q_PLUGIN_METADATA(IID "QQmlExtensionInterface_iid")
 
 public:
-    virtual void registerTypes(const char* uri);
-    virtual void initializeEngine(QQmlEngine* engine, const char* uri);
+    void registerTypes(const char *uri) override;
+    void initializeEngine(QQmlEngine *engine, const char *uri) override;
 
 private:
 

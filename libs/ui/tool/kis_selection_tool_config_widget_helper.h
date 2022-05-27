@@ -10,10 +10,10 @@
 #include <QObject>
 #include <QList>
 
-#include "kritaui_export.h"
-#include "kis_selection.h"
 #include "kis_canvas_resource_provider.h"
 #include "kis_image.h"
+#include "kis_selection.h"
+#include "kritaui_export.h"
 #include <kis_selection_options.h>
 
 class KoCanvasResourceProvider;
@@ -50,7 +50,8 @@ public Q_SLOTS:
     void slotWidgetAntiAliasChanged(bool value);
     void slotWidgetGrowChanged(int value);
     void slotWidgetFeatherChanged(int value);
-    void slotReferenceLayersChanged(KisSelectionOptions::ReferenceLayers referenceLayers);
+    void slotReferenceLayersChanged(
+        KisSelectionOptions::ReferenceLayers referenceLayers);
     void slotSelectedColorLabelsChanged();
 
     void slotReplaceModeRequested();

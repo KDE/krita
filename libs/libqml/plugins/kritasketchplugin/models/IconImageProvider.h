@@ -13,7 +13,9 @@ class IconImageProvider : public QQuickImageProvider
 {
 public:
     explicit IconImageProvider();
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+    QImage requestImage(const QString &id,
+                        QSize *size,
+                        const QSize &requestedSize) override;
 };
 
 #endif // ICONIMAGEPROVIDER_H

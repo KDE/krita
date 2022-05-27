@@ -18,11 +18,12 @@ public:
     enum FiltersModelRoles {
         TextRole = Qt::UserRole + 1
     };
-    explicit FiltersModel(QObject* parent = 0);
-    virtual ~FiltersModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    explicit FiltersModel(QObject *parent = nullptr);
+    ~FiltersModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index,
+                  int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     Q_INVOKABLE bool filterRequiresConfiguration(int index);
     Q_INVOKABLE QString filterID(int index);
     Q_INVOKABLE void activateFilter(int index);

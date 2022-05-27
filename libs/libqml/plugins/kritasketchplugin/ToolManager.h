@@ -18,8 +18,8 @@ class ToolManager : public QQuickItem
     Q_PROPERTY(QObject* view READ view WRITE setView NOTIFY viewChanged)
     Q_PROPERTY(QObject* currentTool READ currentTool NOTIFY currentToolChanged);
 public:
-    explicit ToolManager(QQuickItem* parent = 0);
-    virtual ~ToolManager();
+    explicit ToolManager(QQuickItem *parent = nullptr);
+    ~ToolManager() override;
 
     QObject* view() const;
     void setView(QObject* newView);

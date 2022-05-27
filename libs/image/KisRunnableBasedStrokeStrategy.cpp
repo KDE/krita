@@ -19,8 +19,9 @@ struct KisRunnableBasedStrokeStrategy::JobsInterface : public KisRunnableStrokeJ
     {
     }
 
-
-    void addRunnableJobs(const QVector<KisRunnableStrokeJobDataBase*> &list) {
+    void addRunnableJobs(
+        const QVector<KisRunnableStrokeJobDataBase *> &list) override
+    {
         QVector<KisStrokeJobData*> newList;
 
         Q_FOREACH (KisRunnableStrokeJobDataBase *item, list) {

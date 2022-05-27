@@ -17,8 +17,10 @@ class LayerThumbProvider : public QQuickImageProvider
 
 public:
     LayerThumbProvider();
-    virtual ~LayerThumbProvider();
-    virtual QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
+    ~LayerThumbProvider() override;
+    QImage requestImage(const QString &id,
+                        QSize *size,
+                        const QSize &requestedSize) override;
 
     void setLayerModel(LayerModel* model);
     void setLayerID(int id);

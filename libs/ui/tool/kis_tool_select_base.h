@@ -137,9 +137,11 @@ public:
         if (m_widgetHelper.optionWidget()) {
             if (isPixelOnly()) {
                 m_widgetHelper.optionWidget()->setModeSectionVisible(false);
-                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(true);
+                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(
+                    true);
             }
-            m_widgetHelper.optionWidget()->setReferenceSectionVisible(usesColorLabels());
+            m_widgetHelper.optionWidget()->setReferenceSectionVisible(
+                usesColorLabels());
         }
     }
 
@@ -155,16 +157,21 @@ public:
         m_widgetHelper.setConfigGroupForExactTool(this->toolId());
 
         this->connect(this, SIGNAL(isActiveChanged(bool)), &m_widgetHelper, SLOT(slotToolActivatedChanged(bool)));
-        this->connect(&m_widgetHelper, SIGNAL(selectionActionChanged(SelectionAction)), this, SLOT(resetCursorStyle()));
+        this->connect(&m_widgetHelper,
+                      SIGNAL(selectionActionChanged(SelectionAction)),
+                      this,
+                      SLOT(resetCursorStyle()));
 
         updateActionShortcutToolTips();
         if (m_widgetHelper.optionWidget()) {
             m_widgetHelper.optionWidget()->setContentsMargins(0, 10, 0, 10);
             if (isPixelOnly()) {
                 m_widgetHelper.optionWidget()->setModeSectionVisible(false);
-                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(true);
+                m_widgetHelper.optionWidget()->setAdjustmentsSectionVisible(
+                    true);
             }
-            m_widgetHelper.optionWidget()->setReferenceSectionVisible(usesColorLabels());
+            m_widgetHelper.optionWidget()->setReferenceSectionVisible(
+                usesColorLabels());
         }
 
         return m_widgetHelper.optionWidget();
@@ -205,7 +212,8 @@ public:
 
     SampleLayersMode sampleLayersMode() const
     {
-        KisSelectionOptions::ReferenceLayers referenceLayers = m_widgetHelper.referenceLayers();
+        KisSelectionOptions::ReferenceLayers referenceLayers =
+            m_widgetHelper.referenceLayers();
         if (referenceLayers == KisSelectionOptions::AllLayers) {
             return SampleAllLayers;
         } else if (referenceLayers == KisSelectionOptions::CurrentLayer) {

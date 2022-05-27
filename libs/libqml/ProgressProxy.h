@@ -17,15 +17,15 @@ class KRITA_SKETCH_EXPORT ProgressProxy : public QObject, public KoProgressProxy
     Q_PROPERTY(QString taskName READ taskName NOTIFY taskNameChanged)
 
 public:
-    ProgressProxy(QObject* parent = 0);
-    virtual ~ProgressProxy();
+    ProgressProxy(QObject *parent = nullptr);
+    ~ProgressProxy() override;
 
     QString taskName() const;
 
-    virtual void setFormat(const QString& format);
-    virtual void setRange(int minimum, int maximum);
-    virtual void setValue(int value);
-    virtual int maximum() const;
+    void setFormat(const QString &format) override;
+    void setRange(int minimum, int maximum) override;
+    void setValue(int value) override;
+    int maximum() const override;
 
 Q_SIGNALS:
     void valueChanged(int value);

@@ -51,17 +51,20 @@ class LutDockerDock : public QDockWidget, public KoCanvasObserverBase, public Ui
 public:
 
     LutDockerDock();
-    ~LutDockerDock();
-    QString observerName() { return "LutDockerDock"; }
+    ~LutDockerDock() override;
+    QString observerName() override
+    {
+        return "LutDockerDock";
+    }
     /// reimplemented from KoCanvasObserverBase
-    virtual void setCanvas(KoCanvasBase *canvas);
-    virtual void unsetCanvas();
+    void setCanvas(KoCanvasBase *canvas) override;
+    void unsetCanvas() override;
 
-    bool canChangeExposureAndGamma() const;
-    qreal currentExposure() const;
-    void setCurrentExposure(qreal value);
-    qreal currentGamma() const;
-    void setCurrentGamma(qreal value);
+    bool canChangeExposureAndGamma() const override;
+    qreal currentExposure() const override;
+    void setCurrentExposure(qreal value) override;
+    qreal currentGamma() const override;
+    void setCurrentGamma(qreal value) override;
 
 private Q_SLOTS:
 

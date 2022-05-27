@@ -22,12 +22,14 @@ public:
         TextRole
     };
 
-    explicit PaletteColorsModel(QObject *parent = 0);
-    virtual ~PaletteColorsModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual int rowCount(const QModelIndex &parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    explicit PaletteColorsModel(QObject *parent = nullptr);
+    ~PaletteColorsModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section,
+                        Qt::Orientation orientation,
+                        int role) const override;
 
     QObject* view() const;
     void setView(QObject* newView);

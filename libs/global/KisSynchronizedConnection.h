@@ -31,7 +31,7 @@ struct KRITAGLOBAL_EXPORT KisSynchronizedConnectionEvent : public QEvent
 {
     KisSynchronizedConnectionEvent(QObject *_destination);
     KisSynchronizedConnectionEvent(const KisSynchronizedConnectionEvent &rhs);
-    ~KisSynchronizedConnectionEvent();
+    ~KisSynchronizedConnectionEvent() override;
 
     const QPointer<QObject> destination;
 };
@@ -52,7 +52,7 @@ public:
     static void registerSynchronizedEventBarrier(std::function<void()> callback);
 
 protected:
-    bool event(QEvent *event);
+    bool event(QEvent *event) override;
 
 protected:
     virtual void deliverEventToReceiver() = 0;

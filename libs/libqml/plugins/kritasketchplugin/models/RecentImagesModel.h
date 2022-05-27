@@ -22,12 +22,14 @@ public:
         DateRole
     };
 
-    explicit RecentImagesModel(QObject *parent = 0);
-    virtual ~RecentImagesModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual int rowCount(const QModelIndex &parent) const;
-    virtual QVariant data(const QModelIndex &index, int role) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    explicit RecentImagesModel(QObject *parent = nullptr);
+    ~RecentImagesModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
+    QVariant headerData(int section,
+                        Qt::Orientation orientation,
+                        int role) const override;
 
     QObject* recentFileManager() const;
     void setRecentFileManager(QObject* recentFileManager);

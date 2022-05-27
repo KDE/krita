@@ -19,12 +19,7 @@ class KRITAUI_EXPORT KisSelectionOptions : public KisOptionCollectionWidget
     Q_OBJECT
 
 public:
-    enum ReferenceLayers
-    {
-        CurrentLayer,
-        AllLayers,
-        ColorLabeledLayers
-    };
+    enum ReferenceLayers { CurrentLayer, AllLayers, ColorLabeledLayers };
 
     KisSelectionOptions(QWidget *parent = nullptr);
     ~KisSelectionOptions() override;
@@ -50,7 +45,8 @@ public:
     void setAdjustmentsSectionVisible(bool visible);
     void setReferenceSectionVisible(bool visible);
 
-    void updateActionButtonToolTip(SelectionAction action, const QKeySequence &shortcut);
+    void updateActionButtonToolTip(SelectionAction action,
+                                   const QKeySequence &shortcut);
 
 Q_SIGNALS:
     void modeChanged(SelectionMode mode);

@@ -25,7 +25,7 @@ class PresetHistoryList : public QListWidget {
 public:
     PresetHistoryList(QWidget *parent = nullptr);
 protected:
-    void mouseReleaseEvent(QMouseEvent *e);
+    void mouseReleaseEvent(QMouseEvent *e) override;
 Q_SIGNALS:
     void mouseReleased(QListWidgetItem *item);
 };

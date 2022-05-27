@@ -21,8 +21,8 @@ class KritaNamespace : public QObject
     Q_PROPERTY(QObject* ProgressProxy READ progressProxy CONSTANT)
 
 public:
-    explicit KritaNamespace(QObject* parent = 0);
-    virtual ~KritaNamespace();
+    explicit KritaNamespace(QObject *parent = nullptr);
+    ~KritaNamespace() override;
 
     QObject *imageBuilder() const;
     QObject *window() const;

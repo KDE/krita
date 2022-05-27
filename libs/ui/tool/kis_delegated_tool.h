@@ -10,11 +10,11 @@
 #include <KoPointerEvent.h>
 #include <KoShape.h>
 
-#include <QPointer>
 #include <QLayout>
+#include <QPointer>
 
-#include "input/kis_input_manager.h"
 #include "canvas/kis_canvas2.h"
+#include "input/kis_input_manager.h"
 #include "kis_delegated_tool_policies.h"
 #include "kis_tool.h"
 #include <KisOptionCollectionWidget.h>
@@ -122,15 +122,22 @@ public:
 
     QList<QPointer<QWidget> > createOptionWidgets() override
     {
-        QList<QPointer<QWidget>> baseWidgetList = BaseClass::createOptionWidgets();
-        QList<QPointer<QWidget>> localWidgetList = m_localTool->createOptionWidgets();
+        QList<QPointer<QWidget>> baseWidgetList =
+            BaseClass::createOptionWidgets();
+        QList<QPointer<QWidget>> localWidgetList =
+            m_localTool->createOptionWidgets();
 
-        if (baseWidgetList.size() > 0 && dynamic_cast<KisOptionCollectionWidget*>(baseWidgetList.first().data())) {
-            KisOptionCollectionWidget *baseOptionsWidget = dynamic_cast<KisOptionCollectionWidget*>(baseWidgetList.first().data());
+        if (baseWidgetList.size() > 0
+            && dynamic_cast<KisOptionCollectionWidget *>(
+                baseWidgetList.first().data())) {
+            KisOptionCollectionWidget *baseOptionsWidget =
+                dynamic_cast<KisOptionCollectionWidget *>(
+                    baseWidgetList.first().data());
             for (int i = 0; i < localWidgetList.size(); ++i) {
                 QWidget *widget = localWidgetList[i];
                 KisOptionCollectionWidgetWithHeader *section =
-                    new KisOptionCollectionWidgetWithHeader(widget->windowTitle());
+                    new KisOptionCollectionWidgetWithHeader(
+                        widget->windowTitle());
                 const QString sectionName = "section" + QString::number(i);
                 section->appendWidget(sectionName + "Widget", widget);
                 baseOptionsWidget->appendWidget(sectionName, section);

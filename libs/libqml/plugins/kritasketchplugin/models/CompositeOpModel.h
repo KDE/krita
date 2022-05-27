@@ -36,11 +36,12 @@ public:
         TextRole = Qt::UserRole + 1,
         IsCategoryRole
     };
-    explicit CompositeOpModel(QObject* parent = 0);
-    virtual ~CompositeOpModel();
-    QHash<int, QByteArray> roleNames() const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    explicit CompositeOpModel(QObject *parent = nullptr);
+    ~CompositeOpModel() override;
+    QHash<int, QByteArray> roleNames() const override;
+    QVariant data(const QModelIndex &index,
+                  int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     Q_INVOKABLE void activateItem(int index);
 

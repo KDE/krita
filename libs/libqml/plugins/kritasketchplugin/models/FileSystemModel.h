@@ -31,14 +31,15 @@ public:
         FileDateRole
     };
 
-    explicit FileSystemModel(QObject* parent = 0);
-    virtual ~FileSystemModel();
+    explicit FileSystemModel(QObject *parent = nullptr);
+    ~FileSystemModel() override;
 
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index,
+                  int role = Qt::DisplayRole) const override;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    virtual void classBegin() override;
-    virtual void componentComplete() override;
+    void classBegin() override;
+    void componentComplete() override;
 
     virtual QString path();
     virtual void setPath(const QString& path);

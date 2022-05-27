@@ -62,12 +62,14 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
                                         selectionAction());
 
     if (mode == PIXEL_SELECTION) {
-        KisProcessingApplicator applicator(currentImage(), currentNode(),
+        KisProcessingApplicator applicator(currentImage(),
+                                           currentNode(),
                                            KisProcessingApplicator::NONE,
                                            KisImageSignalVector(),
                                            kundo2_i18n("Select Polygon"));
 
-        KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisDefaultBounds(currentImage()));
+        KisPixelSelectionSP tmpSel =
+            new KisPixelSelection(new KisDefaultBounds(currentImage()));
 
         const bool antiAlias = antiAliasSelection();
         const int grow = growSelection();
@@ -77,13 +79,13 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
         path.addPolygon(points);
         path.closeSubpath();
 
-        KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-            [tmpSel, antiAlias, grow, feather, path] () mutable -> KUndo2Command*
-            {
+        KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
+            [tmpSel, antiAlias, grow, feather, path]() mutable
+            -> KUndo2Command * {
                 KisPainter painter(tmpSel);
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-                // Since the feathering already smooths the selection, the antiAlias
-                // is not applied if we must feather
+                // Since the feathering already smooths the selection, the
+                // antiAlias is not applied if we must feather
                 painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -92,14 +94,22 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
 
                 if (grow > 0) {
                     KisGrowSelectionFilter biggy(grow, grow);
-                    biggy.process(tmpSel, tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                    biggy.process(tmpSel,
+                                  tmpSel->selectedRect().adjusted(-grow,
+                                                                  -grow,
+                                                                  grow,
+                                                                  grow));
                 } else if (grow < 0) {
                     KisShrinkSelectionFilter tiny(-grow, -grow, false);
                     tiny.process(tmpSel, tmpSel->selectedRect());
                 }
                 if (feather > 0) {
                     KisFeatherSelectionFilter feathery(feather);
-                    feathery.process(tmpSel, tmpSel->selectedRect().adjusted(-feather, -feather, feather, feather));
+                    feathery.process(tmpSel,
+                                     tmpSel->selectedRect().adjusted(-feather,
+                                                                     -feather,
+                                                                     feather,
+                                                                     feather));
                 }
 
                 if (grow == 0 && feather == 0) {
@@ -109,8 +119,7 @@ void KisToolSelectPolygonal::finishPolyline(const QVector<QPointF> &points)
                 }
 
                 return 0;
-            }
-        );
+            });
 
         applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
         helper.selectPixelSelection(applicator, tmpSel, selectionAction());

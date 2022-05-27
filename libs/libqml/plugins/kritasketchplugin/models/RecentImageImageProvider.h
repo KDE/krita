@@ -13,7 +13,9 @@ class RecentImageImageProvider : public QQuickImageProvider
 {
 public:
     explicit RecentImageImageProvider();
-    QImage requestImage(const QString &id, QSize *size, const QSize &requestedSize);
+    QImage requestImage(const QString &id,
+                        QSize *size,
+                        const QSize &requestedSize) override;
 };
 
 #endif // RECENTIMAGEIMAGEPROVIDER_H

@@ -28,8 +28,7 @@ namespace KisAutoLevels
 /**
  * @brief The different methods to enhance the contrast
  */
-enum KRITAIMAGE_EXPORT ShadowsAndHighlightsAdjustmentMethod
-{
+enum ShadowsAndHighlightsAdjustmentMethod {
     ShadowsAndHighlightsAdjustmentMethod_MonochromaticContrast,
     ShadowsAndHighlightsAdjustmentMethod_PerChannelContrast
 };
@@ -37,8 +36,7 @@ enum KRITAIMAGE_EXPORT ShadowsAndHighlightsAdjustmentMethod
 /**
  * @brief The different methods to enhance the mid tones
  */
-enum KRITAIMAGE_EXPORT MidtonesAdjustmentMethod
-{
+enum MidtonesAdjustmentMethod {
     MidtonesAdjustmentMethod_None,
     MidtonesAdjustmentMethod_UseMedian,
     MidtonesAdjustmentMethod_UseMean

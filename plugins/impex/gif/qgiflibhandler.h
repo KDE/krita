@@ -15,13 +15,13 @@ class QGIFLibHandler : public QImageIOHandler
 {
 public:
     QGIFLibHandler();
-    bool canRead () const;
-    bool read ( QImage * image );
-    bool write ( const QImage & image );
+    bool canRead() const override;
+    bool read(QImage *image) override;
+    bool write(const QImage &image) override;
     static bool canRead(QIODevice *device);
-    bool supportsOption ( ImageOption option ) const;
-    void setOption ( ImageOption option, const QVariant & value );
-    QVariant option( ImageOption option ) const;
+    bool supportsOption(ImageOption option) const override;
+    void setOption(ImageOption option, const QVariant &value) override;
+    QVariant option(ImageOption option) const override;
 
 private:
     QString m_description;

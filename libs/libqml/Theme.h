@@ -103,8 +103,8 @@ class KRITA_SKETCH_EXPORT Theme : public QObject
 public:
 
     static Theme *instance();
-    explicit Theme(QObject* parent = 0);
-    virtual ~Theme();
+    explicit Theme(QObject *parent = nullptr);
+    ~Theme() override;
 
     /**
      * Getter for property #id.
@@ -202,7 +202,7 @@ public:
      */
     Q_INVOKABLE QUrl image(const QString& name);
 
-    static Theme* load(const QString& id, QQmlEngine *engine = 0);
+    static Theme *load(const QString &id, QQmlEngine *engine = nullptr);
 
 Q_SIGNALS:
     void idChanged();
@@ -216,7 +216,7 @@ Q_SIGNALS:
     void fontCacheRebuilt();
 
 protected:
-    virtual bool eventFilter(QObject*, QEvent*);
+    bool eventFilter(QObject *, QEvent *) override;
 
 private:
     

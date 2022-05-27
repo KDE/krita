@@ -8,13 +8,13 @@
 
 #include <KoPathShape.h>
 
+#include "kis_canvas2.h"
+#include "kis_canvas_resource_provider.h"
 #include "kis_cursor.h"
 #include "kis_image.h"
 #include "kis_painter.h"
-#include "kis_selection_options.h"
-#include "kis_canvas_resource_provider.h"
-#include "kis_canvas2.h"
 #include "kis_pixel_selection.h"
+#include "kis_selection_options.h"
 #include "kis_selection_tool_helper.h"
 #include <KisView.h>
 #include <kis_command_utils.h>
@@ -157,13 +157,15 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
                                         m_selectionTool->selectionAction());
 
     if (mode == PIXEL_SELECTION) {
-        KisProcessingApplicator applicator(m_selectionTool->currentImage(),
-                                           m_selectionTool->currentNode(),
-                                           KisProcessingApplicator::NONE,
-                                           KisImageSignalVector(),
-                                           kundo2_i18n("Select by Bezier Curve"));
+        KisProcessingApplicator applicator(
+            m_selectionTool->currentImage(),
+            m_selectionTool->currentNode(),
+            KisProcessingApplicator::NONE,
+            KisImageSignalVector(),
+            kundo2_i18n("Select by Bezier Curve"));
 
-        KisPixelSelectionSP tmpSel = new KisPixelSelection(new KisDefaultBounds(m_selectionTool->currentImage()));
+        KisPixelSelectionSP tmpSel = new KisPixelSelection(
+            new KisDefaultBounds(m_selectionTool->currentImage()));
 
         const bool antiAlias = m_selectionTool->antiAliasSelection();
         const int grow = m_selectionTool->growSelection();
@@ -175,13 +177,13 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
         QPainterPath path = matrix.map(pathShape->outline());
 
-        KUndo2Command* cmd = new KisCommandUtils::LambdaCommand(
-            [tmpSel, antiAlias, grow, feather, path] () mutable -> KUndo2Command*
-            {
+        KUndo2Command *cmd = new KisCommandUtils::LambdaCommand(
+            [tmpSel, antiAlias, grow, feather, path]() mutable
+            -> KUndo2Command * {
                 KisPainter painter(tmpSel);
                 painter.setPaintColor(KoColor(Qt::black, tmpSel->colorSpace()));
-                // Since the feathering already smooths the selection, the antiAlias
-                // is not applied if we must feather
+                // Since the feathering already smooths the selection, the
+                // antiAlias is not applied if we must feather
                 painter.setAntiAliasPolygonFill(antiAlias && feather == 0);
                 painter.setFillStyle(KisPainter::FillStyleForegroundColor);
                 painter.setStrokeStyle(KisPainter::StrokeStyleNone);
@@ -190,14 +192,22 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
 
                 if (grow > 0) {
                     KisGrowSelectionFilter biggy(grow, grow);
-                    biggy.process(tmpSel, tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                    biggy.process(tmpSel,
+                                  tmpSel->selectedRect().adjusted(-grow,
+                                                                  -grow,
+                                                                  grow,
+                                                                  grow));
                 } else if (grow < 0) {
                     KisShrinkSelectionFilter tiny(-grow, -grow, false);
                     tiny.process(tmpSel, tmpSel->selectedRect());
                 }
                 if (feather > 0) {
                     KisFeatherSelectionFilter feathery(feather);
-                    feathery.process(tmpSel, tmpSel->selectedRect().adjusted(-feather, -feather, feather, feather));
+                    feathery.process(tmpSel,
+                                     tmpSel->selectedRect().adjusted(-feather,
+                                                                     -feather,
+                                                                     feather,
+                                                                     feather));
                 }
 
                 if (grow == 0 && feather == 0) {
@@ -207,11 +217,12 @@ void __KisToolSelectPathLocalTool::addPathShape(KoPathShape* pathShape)
                 }
 
                 return 0;
-            }
-        );
+            });
 
         applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
-        helper.selectPixelSelection(applicator, tmpSel, m_selectionTool->selectionAction());
+        helper.selectPixelSelection(applicator,
+                                    tmpSel,
+                                    m_selectionTool->selectionAction());
         applicator.end();
 
         delete pathShape;

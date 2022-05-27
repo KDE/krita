@@ -7,9 +7,9 @@
 #ifndef KISOPTIONBUTTONSTRIP_H
 #define KISOPTIONBUTTONSTRIP_H
 
-#include <QWidget>
-#include <QScopedPointer>
 #include <QList>
+#include <QScopedPointer>
+#include <QWidget>
 
 #include <kritawidgetutils_export.h>
 
@@ -26,17 +26,18 @@ public:
     explicit KisOptionButtonStrip(QWidget *parent = nullptr);
     ~KisOptionButtonStrip() override;
 
-    KoGroupButton* addButton(const QIcon &icon, const QString &text = QString());
-    KoGroupButton* addButton(const QString &text);
-    KoGroupButton* addButton();
+    KoGroupButton *addButton(const QIcon &icon,
+                             const QString &text = QString());
+    KoGroupButton *addButton(const QString &text);
+    KoGroupButton *addButton();
 
-    KoGroupButton* button(int index) const;
-    QList<KoGroupButton*> buttons() const;
+    KoGroupButton *button(int index) const;
+    QList<KoGroupButton *> buttons() const;
 
     bool exclusive() const;
     void setExclusive(bool exclusive);
 
-    KoGroupButton* checkedButton() const;
+    KoGroupButton *checkedButton() const;
     int checkedButtonIndex() const;
 
 Q_SIGNALS:

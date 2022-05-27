@@ -670,6 +670,7 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         }
     }
 #elif defined QT_HAS_WINTAB_SWITCH
+    Q_UNUSED(supportedWindowsVersion);
 
     // Check if WinTab/WinInk has actually activated
     const bool useWinInkAPI = !app.testAttribute(Qt::AA_MSWindowsUseWinTabAPI);

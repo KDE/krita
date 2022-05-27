@@ -245,6 +245,7 @@ target_link_libraries(kritaflake
         Freetype::Freetype
         Fontconfig::Fontconfig
         HarfBuzz::HarfBuzz
+        libunibreak::libunibreak
 )
 
 set_target_properties(kritaflake PROPERTIES

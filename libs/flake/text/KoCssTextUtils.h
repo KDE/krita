@@ -53,6 +53,9 @@ public:
     static QVector<bool>
     collapseSpaces(QString &text, KoSvgText::TextSpaceCollapse collapseMethod);
 
+    static bool collapseLastSpace(const QChar c,
+                                  KoSvgText::TextSpaceCollapse collapseMethod);
+
     static bool characterCanHang(const QChar c,
                                  KoSvgText::HangingPunctuations hangType);
 };

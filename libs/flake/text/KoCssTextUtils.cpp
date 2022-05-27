@@ -25,8 +25,10 @@ KoCssTextUtils::collapseSpaces(QString &text,
                 case KoSvgText::Collapse:
                 case KoSvgText::Discard:
                     collapse = true;
+                    break;
                 case KoSvgText::Preserve:
                     collapse = false;
+                    break;
                 case KoSvgText::PreserveBreaks:
                     collapse = isSegmentBreak ? false : true;
                     // if (isTab) {text[i] = QChar::Space;}
@@ -42,6 +44,33 @@ KoCssTextUtils::collapseSpaces(QString &text,
         collapseList[i] = collapse;
     }
     return collapseList;
+}
+
+bool KoCssTextUtils::collapseLastSpace(
+    const QChar c,
+    KoSvgText::TextSpaceCollapse collapseMethod)
+{
+    bool collapse = false;
+    if (c == QChar::LineFeed) {
+        collapse = true;
+    } else if (c.isSpace()) {
+        switch (collapseMethod) {
+        case KoSvgText::Collapse:
+        case KoSvgText::Discard:
+            collapse = true;
+            break;
+        case KoSvgText::Preserve:
+            collapse = false;
+            break;
+        case KoSvgText::PreserveBreaks:
+            collapse = true;
+            break;
+        case KoSvgText::PreserveSpaces:
+            collapse = false;
+            break;
+        }
+    }
+    return collapse;
 }
 
 bool KoCssTextUtils::characterCanHang(const QChar c,

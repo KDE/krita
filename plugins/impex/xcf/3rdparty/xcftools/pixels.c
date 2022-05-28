@@ -43,6 +43,9 @@ typedef const struct _convertParams {
   const rgba *lookup ;
 } convertParams ;
 #define RGB_SHIFT RED_SHIFT, GREEN_SHIFT, BLUE_SHIFT
+#ifdef OPAQUE
+#undef OPAQUE
+#endif
 #define OPAQUE (255 << ALPHA_SHIFT)
 static convertParams convertRGB       = { 3, {RGB_SHIFT}, OPAQUE, 0 };
 static convertParams convertRGBA      = { 4, {RGB_SHIFT, ALPHA_SHIFT}, 0,0 };

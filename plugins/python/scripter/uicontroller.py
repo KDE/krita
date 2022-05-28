@@ -10,7 +10,7 @@ from PyQt5.QtWidgets import (QToolBar, QMenuBar, QTabWidget,
                              QSplitter, QSizePolicy)
 from .ui_scripter.syntax import syntax, syntaxstyles
 from .ui_scripter.editor import pythoneditor
-from . import scripterdialog
+from . import scripterdialog, utils
 import importlib
 import krita
 
@@ -67,6 +67,7 @@ class UIController(object):
         p.setColor(QPalette.Text, syntaxstyles.DefaultSyntaxStyle()['foreground'].foreground().color())
         self.editor.setPalette(p)
 
+        utils.setNeedDarkIcon(self.mainWidget.palette().window().color())
         self.scripter = scripter
 
         self.loadMenus()

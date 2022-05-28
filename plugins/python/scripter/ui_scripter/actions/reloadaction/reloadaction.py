@@ -6,6 +6,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 from PyQt5.QtWidgets import QAction, QMessageBox
 from PyQt5.QtGui import QIcon, QKeySequence
 from PyQt5.QtCore import Qt
+from .... import utils
 import krita
 
 
@@ -23,7 +24,7 @@ class ReloadAction(QAction):
         self.setShortcut(QKeySequence(Qt.ALT + Qt.Key_R))
 
         self.setToolTip(i18n('Reload File Alt+R'))
-        self.setIcon(QIcon(':/icons/reload_script.svg'))
+        self.setIcon(utils.getThemedIcon(':/icons/reload_script.svg'))
 
     @property
     def parent(self):

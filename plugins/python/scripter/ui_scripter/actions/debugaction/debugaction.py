@@ -4,9 +4,10 @@ SPDX-FileCopyrightText: 2017 Eliakin Costa <eliakim170@gmail.com>
 SPDX-License-Identifier: GPL-2.0-or-later
 """
 from PyQt5.QtWidgets import QAction
-from PyQt5.QtGui import QIcon, QPixmap, QKeySequence
+from PyQt5.QtGui import QIcon, QKeySequence
 from scripter import resources_rc
 from PyQt5.QtCore import Qt
+from .... import utils
 import krita
 
 
@@ -20,7 +21,8 @@ class DebugAction(QAction):
 
         self.setText(i18n("Debug"))
         self.setToolTip(i18n("Debug Ctrl+D"))
-        self.setIcon(QIcon(':/icons/debug.svg'))
+        self.setIcon(utils.getThemedIcon(":/icons/debug.svg"))
+
         self.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_D))
 
     @property

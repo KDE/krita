@@ -111,7 +111,13 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
                 }
 
                 compareWithRemovable.setReferenceTag(tag);
-                std::remove_if(assignableTags.begin(), assignableTags.end(), compareWithRemovable);
+                const auto b2 = std::remove_if(assignableTags.begin(),
+                                               assignableTags.end(),
+                                               compareWithRemovable);
+
+                if (b2 != assignableTags.end()) {
+                    assignableTags.removeAll(*b2);
+                }
 
                 SimpleExistingTagAction *removeTagAction = new SimpleExistingTagAction(resource, tag, this);
 

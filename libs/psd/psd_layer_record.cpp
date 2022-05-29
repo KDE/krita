@@ -317,7 +317,7 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
             return false;
         }
 
-        memset(&layerMask, 0, sizeof(LayerMaskData));
+        layerMask = {};
 
         if (layerMaskLength == 20 || layerMaskLength == 36) {
             if (!psdread<byteOrder>(io, layerMask.top) || !psdread<byteOrder>(io, layerMask.left) || !psdread<byteOrder>(io, layerMask.bottom)

@@ -5,8 +5,8 @@
  */
 #include "KoFontRegistery.h"
 
-#include <QApplication>
-#include <QDebug>
+#include <graphemebreak.h>
+
 #include <QGlobalStatic>
 #include <QMutex>
 #include <QThread>
@@ -113,29 +113,81 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
         QVector<int> familyValues(text.size());
         familyValues.fill(-1);
 
+        // First, we're going to split up the text into graphemes. This is both
+        // because the css spec requires it, but also because of why the css
+        // spec requires it: graphemes' parts should not end up in seperate
+        // runs, which they will if they get assigned different fonts,
+        // potentially breaking ligatures and emoji sequences.
+        char graphemeBreaks[text.size()];
+        set_graphemebreaks_utf16(text.utf16(),
+                                 text.size(),
+                                 language.toUtf8().data(),
+                                 graphemeBreaks);
+        QStringList graphemes;
+        int graphemeLength = 0;
+        int lastGrapheme = 0;
+        for (int i = 0; i < text.size(); i++) {
+            graphemeLength += 1;
+            bool breakGrapheme = lastGrapheme + graphemeLength < text.size()
+                ? graphemeBreaks[i] == GRAPHEMEBREAK_BREAK
+                : false;
+            if (breakGrapheme) {
+                graphemes.append(text.mid(lastGrapheme, graphemeLength));
+                lastGrapheme += graphemeLength;
+                graphemeLength = 0;
+            }
+        }
+        graphemes.append(text.mid(lastGrapheme, text.size() - lastGrapheme));
+
+        // Parse over the fonts and graphemes and try to see if we can get the
+        // best match for a given grapheme.
         for (int i = 0; i < fontSet->nfont; i++) {
             if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set)
                 == FcResultMatch) {
-                for (int j = 0; j < text.size(); ++j) {
-                    if (familyValues.at(j) == -1) {
-                        QString unicode = text.at(j);
-                        if (text.at(j).isHighSurrogate()) {
-                            unicode += text.at(j + 1);
+                int index = 0;
+                for (QString grapheme : graphemes) {
+                    int familyIndex = -1;
+                    if (familyValues.at(index) == -1) {
+                        for (uint unicode : grapheme.toUcs4()) {
+                            if (FcCharSetHasChar(set, unicode)) {
+                                familyIndex = i;
+                            } else {
+                                familyIndex = -1;
+                                break;
+                            }
                         }
-                        if (text.at(j).isLowSurrogate()) {
-                            familyValues[j] = familyValues[j - 1];
-                            continue;
-                        }
-                        if (FcCharSetHasChar(set, unicode.toUcs4().first())) {
-                            familyValues[j] = i;
+                        for (int k = 0; k < grapheme.size(); k++) {
+                            familyValues[index + k] = familyIndex;
                         }
                     }
+                    index += grapheme.size();
                 }
                 if (!familyValues.contains(-1)) {
                     break;
                 }
             }
         }
+
+        // Remove the -1 entries.
+        if (familyValues.contains(-1)) {
+            int val = -1;
+            for (int i : familyValues) {
+                if (i != val) {
+                    val = i;
+                    break;
+                }
+            }
+            val = qMax(0, val);
+            for (int i = 0; i < familyValues.size(); i++) {
+                if (familyValues.at(i) < 0) {
+                    familyValues[i] = val;
+                } else {
+                    val = familyValues.at(i);
+                }
+            }
+        }
+
+        // Get the filenames and lengths for the entries.
         int length = 0;
         int startIndex = 0;
         int lastIndex = familyValues.at(0);
@@ -153,15 +205,12 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
                 startIndex = i;
                 length = 0;
                 lastIndex = familyValues.at(i);
-                if (lastIndex != -1) {
-                    if (FcPatternGetString(fontSet->fonts[lastIndex],
-                                           FC_FILE,
-                                           0,
-                                           &fileValue)
-                        == FcResultMatch) {
-                        fontFileName =
-                            QString(reinterpret_cast<char *>(fileValue));
-                    }
+                if (FcPatternGetString(fontSet->fonts[lastIndex],
+                                       FC_FILE,
+                                       0,
+                                       &fileValue)
+                    == FcResultMatch) {
+                    fontFileName = QString(reinterpret_cast<char *>(fileValue));
                 }
             }
             length += 1;
@@ -251,6 +300,7 @@ bool KoFontRegistery::configureFaces(std::vector<FT_FaceUP> &faces,
             std::vector<FT_Fixed> designCoords(amaster->num_axis);
             for (FT_UInt i = 0; i < amaster->num_axis; i++) {
                 FT_Var_Axis axis = amaster->axis[i];
+                designCoords[i] = axis.def;
                 for (FT_Tag tag : tags.keys()) {
                     if (axis.tag == tag) {
                         designCoords[i] = qBound(axis.minimum,

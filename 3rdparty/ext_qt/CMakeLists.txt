@@ -312,8 +312,7 @@ elseif (ANDROID)
 
       INSTALL_DIR ${EXTPREFIX_qt}
 
-      BUILD_COMMAND $(MAKE) ${SUBMAKE_JOBS}
-      INSTALL_COMMAND $(MAKE) install
+
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 1
 
@@ -367,9 +366,6 @@ elseif (NOT APPLE)
       CONFIGURE_COMMAND <SOURCE_DIR>/configure -prefix ${EXTPREFIX_qt} -opensource -confirm-license -feature-relocatable -openssl-linked -verbose -nomake examples -skip qt3d -skip qtactiveqt -skip qtcanvas3d -skip qtconnectivity -skip qtlocation -skip qtwayland -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview -skip qtandroidextras -skip qtserialport -skip qtdatavis3d -skip qtvirtualkeyboard -skip qtspeech -skip qtsensors -skip qtgamepad -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth  -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite -system-zlib ${QT_DEBUG_OPTIONS}
 
       INSTALL_DIR ${EXTPREFIX_qt}
-
-      BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
-      INSTALL_COMMAND make install
 
 
       UPDATE_COMMAND ""
@@ -429,8 +425,7 @@ else( APPLE )
             -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
             -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
             ${QT_DEVICE_OPTION}
-        BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
-        INSTALL_COMMAND make install
+
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1
         DEPENDS ${ZLIB_DEP}

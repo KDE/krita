@@ -71,7 +71,7 @@ else (WIN32)
 
         CONFIGURE_COMMAND <SOURCE_DIR>/config --prefix=${PREFIX_ext_openssl} --openssldir=ssl
 
-        BUILD_COMMAND make depend COMMAND make
+        BUILD_COMMAND make -j${SUBMAKE_JOBS} depend COMMAND make -j${SUBMAKE_JOBS}
         INSTALL_COMMAND make install
 
         INSTALL_DIR ${PREFIX_ext_openssl}

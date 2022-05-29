@@ -6,13 +6,14 @@ if (UNIX)
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
             URL https://www.python.org/ftp/python/3.9.12/Python-3.9.12.tar.xz
             URL_MD5 4b5fda03e3fbfceca833c997d501bcca
-            
+
             PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/osx_fixappinstall.diff
 
             # Setuptools needs OpenSSL 1.1, the stock libssl isn't enough
             CONFIGURE_COMMAND <SOURCE_DIR>/configure MACOSX_DEPLOYMENT_TARGET=10.13 --prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE} --with-openssl=${PREFIX_ext_python}
                 --enable-framework=${PREFIX_ext_python}/lib --enable-optimizations --without-sufix
-            BUILD_COMMAND 
+
+            # force single-threaded installation to avoid race conditions
             INSTALL_COMMAND make -j1 install
                 COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python
                 COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_CURRENT_SOURCE_DIR}/sitecustomize.py ${PREFIX_ext_python}/lib/Python.framework/Versions/Current/lib/python${PYTHON_VERSION}/
@@ -43,7 +44,7 @@ if (UNIX)
         URL_MD5 b3fb85fd479c0bf950c626ef80cacb57
         
         CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_python} ${GLOBAL_AUTOMAKE_PROFILE} --enable-shared
-        BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
+
         INSTALL_COMMAND make install
                         COMMAND ${CMAKE_COMMAND} -E copy ${PREFIX_ext_python}/bin/python3 ${PREFIX_ext_python}/bin/python
 

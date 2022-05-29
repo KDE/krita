@@ -20,7 +20,6 @@ if (APPLE)
         URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
 
         CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
-        BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
 
         # force single-threaded installation to avoid
         # race conditions in post-install .py script
@@ -173,7 +172,7 @@ elseif(WIN32)
         INSTALL_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
-            ${_make_command} -j1 install
+            ${_make_command} install
 
         BUILD_IN_SOURCE 1
 

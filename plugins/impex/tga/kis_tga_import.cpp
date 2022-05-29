@@ -222,7 +222,7 @@ static bool loadTGA(QDataStream & s, const TgaHeader & tga, QImage &img)
                     const uchar alpha = src[3];
                     scanline[x] = qRgba(src[2], src[1], src[0], alpha);
                     src += 4;
-                    hasAlpha |= alpha;
+                    hasAlpha |= (alpha > 0);
                 }
             }
         }

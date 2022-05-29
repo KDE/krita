@@ -797,7 +797,8 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     int prevBlockCursorPosition = -1;
     qreal prevLineDescent = 0.0;
     qreal prevLineAscent = 0.0;
-    boost::optional<qreal> previousBlockAbsoluteXOffset = boost::none;
+    boost::optional<qreal> previousBlockAbsoluteXOffset =
+        boost::optional<qreal>(false, qreal());
 
     while (!svgReader.atEnd()) {
         QXmlStreamReader::TokenType token = svgReader.readNext();

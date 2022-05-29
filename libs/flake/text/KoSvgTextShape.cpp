@@ -473,7 +473,6 @@ void KoSvgTextShape::relayout() const
                     cr.anchored_chunk = true;
                     textInPath = chunk.textInPath;
                 }
-                // TODO: Replace the following with a proper linebreaking algorithm.
                 if (lineBreaks[start+i] == LINEBREAK_MUSTBREAK) {
                     cr.breakType = HardBreak;
                     cr.collapseIfAtEndOfLine = true;
@@ -704,9 +703,14 @@ void KoSvgTextShape::relayout() const
                            - glyphs[g].ftface->size->metrics.descender));
             bbox = glyphTf.mapRect(bbox);
         } else {
-            bbox = QRectF(glyphs[g].ftface->glyph->metrics.vertBearingX,
+            hb_font_t_up font = toLibraryResource(hb_ft_font_create_referenced(glyphs[g].ftface));
+            hb_position_t ascender = 0;
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender);
+            hb_position_t descender = 0;
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &descender);
+            bbox = QRectF(descender,
                           0,
-                          glyphs[g].ftface->glyph->metrics.width,
+                          ascender - descender,
                           ftTF.inverted().map(charResult.advance).y());
             bbox = glyphTf.mapRect(bbox);
         }
@@ -997,8 +1001,11 @@ QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyph
  * @brief addWordToLine
  * Small function used in break lines to quickly add a 'word' to the current line. Returns the last added index.
  */
-int addWordToLine(QVector<CharacterResult> &result, QPointF &currentPos, QVector<int> &wordIndices, QRectF &lineBox, qreal &a, qreal &b, QPointF wordFirstPos, bool ltr) {
+int addWordToLine(QVector<CharacterResult> &result, QPointF &currentPos, QVector<int> &wordIndices, QRectF &lineBox, qreal &a, qreal &b, QVector<int> &lineIndices, QPointF wordFirstPos, bool ltr) {
     QPointF lineAdvance = currentPos;
+    if (lineBox.isEmpty()) {
+        lineIndices.clear();
+    }
     for (int j : wordIndices) {
         CharacterResult cr = result.at(j);
         cr.cssPosition = currentPos + cr.cssPosition - wordFirstPos;
@@ -1014,8 +1021,36 @@ int addWordToLine(QVector<CharacterResult> &result, QPointF &currentPos, QVector
     a = 0;
     b = 0;
     int lastIndex = wordIndices.last();
+    lineIndices += wordIndices;
     wordIndices.clear();
     return lastIndex;
+}
+
+/**
+ * This offsets the last line by it's ascent, and then returns the last line's descent.
+ */
+QPointF lineHeightOffset(KoSvgText::WritingMode writingMode, QVector<CharacterResult> &result, QVector<int> lineIndices, QRectF lineBox, QPointF currentPos, KoSvgText::AutoValue lineHeight) {
+    QPointF offset;
+    if (lineHeight.isAuto) {
+        offset = writingMode == KoSvgText::HorizontalTB? QPointF(0, lineBox.height()): writingMode == KoSvgText::VerticalLR ?
+                                   QPointF(lineBox.width(), 0): QPointF(-lineBox.width(), 0);
+    } else {
+        offset = writingMode == KoSvgText::HorizontalTB? QPointF(0, lineHeight.customValue): writingMode == KoSvgText::VerticalLR ?
+                                   QPointF(lineHeight.customValue, 0): QPointF(-lineHeight.customValue, 0);
+    }
+    qreal ascentRatio = writingMode == KoSvgText::HorizontalTB? abs(lineBox.top()-currentPos.y())/lineBox.height() : writingMode == KoSvgText::VerticalLR ?
+                                                                    abs(lineBox.left()-currentPos.x())/lineBox.width() : abs(lineBox.right()-currentPos.x())/lineBox.width();
+    QPointF ascent = offset * ascentRatio;
+    bool returnDescent = lineIndices.isEmpty()? false: lineIndices.first() == 0;
+    if (!returnDescent) {
+        for (int j: lineIndices) {
+            result[j].cssPosition += ascent;
+            result[j].finalPosition = result.at(j).cssPosition;
+        }
+    } else {
+        offset = offset * (1 - ascentRatio);
+    }
+    return offset;
 }
 
 void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties, QMap<int, int> indexToTypographic, QVector<CharacterResult> &result)
@@ -1026,19 +1061,22 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties, QMap<in
                 properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
     KoSvgText::AutoValue inlineSize = properties.propertyOrDefault(
                 KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
-    //KoSvgText::AutoValue lineHeight = properties.propertyOrDefault(
-    //            KoSvgTextProperties::LineHeightId).value<KoSvgText::AutoValue>();
+    KoSvgText::AutoValue lineHeight = properties.propertyOrDefault(
+                KoSvgTextProperties::LineHeightId).value<KoSvgText::AutoValue>();
 
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
     QVector<int> wordIndices; // 'word' in this case meaning characters inbetween softbreaks.
     QPointF wordFirstPos;
     int lastIndex = 0;
-    QRectF lineBox; // The line box gets used to
+    QRectF lineBox; // The line box gets used to determine lineHeight;
+
     QPointF currentPos;
     QPointF lineOffset;
 
     qreal a = 0.0; // for determining the advance of the current 'word'.
     qreal b = 0.0;
+
+    QVector<int> lineIndices;
 
     // The following is because we want to do line-length calculations on the 'visual order' instead of the
     // 'logical' order. For rtl, we'll need to count backwards.
@@ -1086,17 +1124,16 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties, QMap<in
             qreal lineLength = isHorizontal? (currentPos + wordAdvance).x():
                                              (currentPos + wordAdvance).y();
             if (!inlineSize.isAuto) {
-            if (abs(lineLength) > inlineSize.customValue) {
-                breakLine = true;
-                wordToNextLine = true;
-            } else {
-                lastIndex = addWordToLine(result, currentPos, wordIndices, lineBox, a, b, wordFirstPos, ltr);
-            }
+                if (abs(lineLength) > inlineSize.customValue) {
+                    breakLine = true;
+                    wordToNextLine = true;
+                } else {
+                    lastIndex = addWordToLine(result, currentPos, wordIndices, lineBox, a, b, lineIndices, wordFirstPos, ltr);
+                }
             }
         }
 
         if (breakLine) {
-            QPointF offset;
             if (wordToNextLine) {
                 if (lastIndex < result.size()) {
                     CharacterResult cr = result.at(lastIndex);
@@ -1104,36 +1141,22 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties, QMap<in
                     cr.hidden = cr.collapseIfAtEndOfLine;
                     result[lastIndex] = cr;
                 }
-                if (isHorizontal) {
-                    qreal height = lineBox.height();
-                    offset = QPointF(0, height);
-                } else {
-                    qreal width = writingMode == KoSvgText::VerticalLR? lineBox.width(): -lineBox.width();
-                    offset = QPointF(width, 0);
-                }
-                lineOffset += offset;
+
+                lineOffset += lineHeightOffset(writingMode, result, lineIndices, lineBox, currentPos, lineHeight);
                 currentPos = lineOffset;
                 lineBox = QRectF();
-                lastIndex = addWordToLine(result, currentPos, wordIndices, lineBox, a, b, wordFirstPos, ltr);
+
+                lastIndex = addWordToLine(result, currentPos, wordIndices, lineBox, a, b, lineIndices, wordFirstPos, ltr);
             } else {
-                lastIndex = addWordToLine(result, currentPos, wordIndices, lineBox, a, b, wordFirstPos, ltr);
-                if (lastIndex < result.size()) {
-                    CharacterResult cr = result.at(lastIndex);
-                    cr.addressable = !cr.collapseIfAtEndOfLine;
-                    cr.hidden = cr.collapseIfAtEndOfLine;
-                    result[lastIndex] = cr;
-                }
-                if (isHorizontal) {
-                    qreal height = lineBox.height();
-                    offset = QPointF(0, height);
-                } else {
-                    qreal width = writingMode == KoSvgText::VerticalLR? lineBox.width(): -lineBox.width();
-                    offset = QPointF(width, 0);
-                }
-                lineOffset += offset;
+                lastIndex = addWordToLine(result, currentPos, wordIndices, lineBox, a, b, lineIndices, wordFirstPos, ltr);
+
+                lineOffset += lineHeightOffset(writingMode, result, lineIndices, lineBox, lineOffset, lineHeight);
                 currentPos = lineOffset;
                 lineBox = QRectF();
             }
+        }
+        if (atEnd) {
+            lineOffset += lineHeightOffset(writingMode, result, lineIndices, lineBox, currentPos, lineHeight);
         }
     }
     qDebug() << "break lines finished";

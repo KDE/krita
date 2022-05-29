@@ -482,7 +482,22 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             setProperty(TextAlignLastId, KoSvgText::parseTextAlign(value));
         }
     } else if (command == "line-height") {
-        setProperty(LineHeightId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
+
+        bool ok = false;
+        qreal parsed = value.toDouble(&ok);
+        qreal fontSize = propertyOrDefault(FontSizeId).toReal();
+        KoSvgText::AutoValue lineheightVal;
+        // Normal: use font metrics, ratio/percentage: multiply with fontsize, other: is absolute length.
+        if (ok) {
+            lineheightVal.customValue = fontSize * parsed;
+            lineheightVal.isAuto = false;
+        } else if (value.endsWith("%")) {
+            lineheightVal.isAuto = false;
+            lineheightVal.customValue = fontSize * SvgUtil::fromPercentage(value);
+        } else {
+            lineheightVal = KoSvgText::parseAutoValueXY(value, context, "normal");
+        }
+        setProperty(LineHeightId, KoSvgText::fromAutoValue(lineheightVal));
     } else if (command == "text-indent") {
         bool hanging = false;
         bool eachLine = false;
@@ -779,7 +794,14 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         }
     }
     if (hasProperty(LineHeightId)) {
-        result.insert("line-height", writeAutoValue(property(LineHeightId).value<AutoValue>(), "normal"));
+        KoSvgText::AutoValue lineHeight = property(LineHeightId).value<AutoValue>();
+        if (lineHeight.isAuto) {
+            result.insert("line-height", "normal");
+        } else {
+            // We always compute the percentage because it's the least ambiguous with regard to SVG units.
+            qreal fontSize = propertyOrDefault(FontSizeId).toReal();
+            result.insert("line-height", QString::number((lineHeight.customValue/fontSize)*100)+"%");
+        }
     }
     if (hasProperty(InlineSizeId)) {
         result.insert("inline-size", writeAutoValue(property(InlineSizeId).value<AutoValue>(), "auto"));
@@ -1148,9 +1170,6 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
             s_defaultProperties->setProperty(TextIndentHangingId, false);
             HangingPunctuations hang = HangNone;
             s_defaultProperties->setProperty(HangingPunctuationId, QVariant::fromValue(hang));
-
-            s_defaultProperties->setProperty(InlineSizeId, fromAutoValue(AutoValue()));
-
         }
     }
     return *s_defaultProperties;

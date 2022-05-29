@@ -60,7 +60,7 @@ void KisEqualizerSlider::setToggleState(bool value)
 
 QRect KisEqualizerSlider::Private::boundingRect() const
 {
-    QRect bounds = q->rect().adjusted(0, 0, -isRightmost, -1);
+    QRect bounds = q->rect().adjusted(0, 0, -static_cast<int>(isRightmost), -1);
     return bounds;
 }
 

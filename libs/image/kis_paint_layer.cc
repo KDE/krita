@@ -276,10 +276,10 @@ bool KisPaintLayer::onionSkinEnabled() const
 
 void KisPaintLayer::setOnionSkinEnabled(bool state)
 {
-    int oldState = onionSkinEnabled();
+    const auto oldState = onionSkinEnabled();
     if (oldState == state) return;
 
-    if (state == false && oldState) {
+    if (!state && oldState) {
         // FIXME: change ordering! race condition possible!
 
         // Turning off onionskins shrinks our extent. Let's clean up the onion skins first

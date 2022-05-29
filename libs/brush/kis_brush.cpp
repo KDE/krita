@@ -11,6 +11,8 @@
 
 #include "kis_brush.h"
 
+#include <vector>
+
 #include <QDomElement>
 #include <QFile>
 #include <QPainterPath>
@@ -644,7 +646,7 @@ void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,
                 }
             }
 
-            QScopedArrayPointer<quint8> alphaArray(new quint8[maskWidth]);
+            std::vector<quint8> alphaArray(maskWidth);
             fetchPremultipliedRed(reinterpret_cast<const QRgb*>(maskPointer), alphaArray.data(), maskWidth);
             cs->applyAlphaU8Mask(rowPointer, alphaArray.data(), maskWidth);
         }

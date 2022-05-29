@@ -128,4 +128,6 @@ void KisUniformPaintOpProperty::writeValueImpl()
 }
 
 #include "kis_callback_based_paintop_property_impl.h"
-template class KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty>;
+
+template class KRITAIMAGE_EXPORT_INSTANCE
+    KisCallbackBasedPaintopProperty<KisUniformPaintOpProperty>;

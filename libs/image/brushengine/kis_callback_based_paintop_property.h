@@ -9,8 +9,9 @@
 
 #include <functional>
 
-template <class ParentClass>
-class KRITAIMAGE_EXPORT KisCallbackBasedPaintopProperty : public ParentClass
+template<class ParentClass>
+class KRITAIMAGE_EXPORT_TEMPLATE KisCallbackBasedPaintopProperty
+    : public ParentClass
 {
 public:
     KisCallbackBasedPaintopProperty(typename ParentClass::Type type,

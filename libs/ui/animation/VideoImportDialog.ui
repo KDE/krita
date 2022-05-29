@@ -539,7 +539,7 @@ The higher the sensitivity, the more frames are added to Krita.</string>
            <property name="title">
             <string>Document</string>
            </property>
-           <layout class="QFormLayout" name="formLayout">
+           <layout class="QFormLayout" name="formLayout1">
             <item row="0" column="0">
              <widget class="QLabel" name="documentWidthLabel">
               <property name="text">

@@ -22,8 +22,6 @@
 
 ConcentricEllipseAssistant::ConcentricEllipseAssistant()
     : KisPaintingAssistant("concentric ellipse", i18n("Concentric Ellipse assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
 {
 }
 
@@ -36,28 +34,7 @@ ConcentricEllipseAssistant::ConcentricEllipseAssistant(const ConcentricEllipseAs
     : KisPaintingAssistant(rhs, handleMap)
     , m_ellipse(rhs.m_ellipse)
     , m_extraEllipse(rhs.m_extraEllipse)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
-}
-
-void ConcentricEllipseAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedPositionValid = true;
-    m_adjustedBrushPosition = position;
-}
-
-void ConcentricEllipseAssistant::endStroke()
-{
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
-}
-
-void ConcentricEllipseAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
 }
 
 QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin) const

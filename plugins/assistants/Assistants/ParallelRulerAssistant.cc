@@ -26,8 +26,6 @@
 
 ParallelRulerAssistant::ParallelRulerAssistant()
     : KisPaintingAssistant("parallel ruler", i18n("Parallel Ruler assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
 {
 }
 
@@ -38,30 +36,7 @@ KisPaintingAssistantSP ParallelRulerAssistant::clone(QMap<KisPaintingAssistantHa
 
 ParallelRulerAssistant::ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
-}
-
-void ParallelRulerAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
-}
-
-void ParallelRulerAssistant::endStroke()
-{
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
-    m_hasBeenInsideLocalRect = false;
-}
-
-
-void ParallelRulerAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
 }
 
 QPointF ParallelRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)

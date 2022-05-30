@@ -26,8 +26,6 @@
 
 FisheyePointAssistant::FisheyePointAssistant()
     : KisPaintingAssistant("fisheye-point", i18n("Fish Eye Point assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
 {
 }
 
@@ -35,33 +33,12 @@ FisheyePointAssistant::FisheyePointAssistant(const FisheyePointAssistant &rhs, Q
     : KisPaintingAssistant(rhs, handleMap)
     , e(rhs.e)
     , extraE(rhs.extraE)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
 }
 
 KisPaintingAssistantSP FisheyePointAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new FisheyePointAssistant(*this, handleMap));
-}
-
-void FisheyePointAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
-}
-
-void FisheyePointAssistant::endStroke()
-{
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
-}
-
-void FisheyePointAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
 }
 
 QPointF FisheyePointAssistant::project(const QPointF& pt, const QPointF& strokeBegin)

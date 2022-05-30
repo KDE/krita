@@ -24,8 +24,6 @@ public:
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
-    void setAdjustedBrushPosition(const QPointF position) override;
-    void setFollowBrushPosition(bool follow) override;
     void endStroke() override;
 
     QPointF getDefaultEditorPosition() const override;
@@ -61,11 +59,6 @@ private:
     mutable QPolygonF m_cachedPolygon;
     mutable QPointF m_cachedPoints[4];
     mutable bool m_cacheValid {false};
-    // Needed to make sure that when we are in the middle of a brush stroke, the
-    // guides follow the brush position, not the cursor position.
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
-    QPointF m_adjustedBrushPosition;
 };
 
 class PerspectiveAssistantFactory : public KisPaintingAssistantFactory

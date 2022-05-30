@@ -109,9 +109,9 @@ public:
      *         is in the decoration, so those two options are enough.
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) = 0;
-    virtual void endStroke() {}
-    virtual void setAdjustedBrushPosition(const QPointF position) { Q_UNUSED(position) }
-    virtual void setFollowBrushPosition(bool follow) { Q_UNUSED(follow) }
+    virtual void endStroke();
+    virtual void setAdjustedBrushPosition(const QPointF position);
+    virtual void setFollowBrushPosition(bool follow);
     virtual QPointF getDefaultEditorPosition() const = 0; // Returns standard editor widget position for this assistant
     virtual QPointF getEditorPosition() const; // Returns editor widget position in document-space coordinates.
     virtual int numHandles() const = 0;
@@ -265,6 +265,14 @@ public:
     /// the originally shared handles will still be shared
     /// the cloned assistants do not share any handle with the original assistants
     static QList<KisPaintingAssistantSP> cloneAssistantList(const QList<KisPaintingAssistantSP> &list);
+
+protected:
+
+    bool m_followBrushPosition {false};
+    bool m_adjustedPositionValid {false};
+    QPointF m_adjustedBrushPosition;
+
+    bool m_hasBeenInsideLocalRect {false};
 
 private:
     struct Private;

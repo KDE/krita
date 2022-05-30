@@ -328,8 +328,6 @@ public:
 
 PerspectiveEllipseAssistant::PerspectiveEllipseAssistant()
     : KisPaintingAssistant("perspective ellipse", i18n("Perspective Ellipse assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
     , d(new Private())
 {
 
@@ -337,35 +335,13 @@ PerspectiveEllipseAssistant::PerspectiveEllipseAssistant()
 
 PerspectiveEllipseAssistant::PerspectiveEllipseAssistant(const PerspectiveEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
-    , m_cachedTransform(rhs.m_cachedTransform)
-    , m_cachedPolygon(rhs.m_cachedPolygon)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
     , d(new Private())
 {
-    for (int i = 0; i < 4; ++i) {
-        m_cachedPoints[i] = rhs.m_cachedPoints[i];
-    }
-
-    // need to provide proper copying
-    d->ellipseInPolygon.updateToPolygon(m_cachedPolygon);
 }
 
 KisPaintingAssistantSP PerspectiveEllipseAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new PerspectiveEllipseAssistant(*this, handleMap));
-}
-
-void PerspectiveEllipseAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
-}
-
-void PerspectiveEllipseAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
 }
 
 QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -381,13 +357,6 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
 QPointF PerspectiveEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
-}
-
-void PerspectiveEllipseAssistant::endStroke()
-{
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
 }
 
 void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)

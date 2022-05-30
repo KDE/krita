@@ -29,8 +29,6 @@
 PerspectiveAssistant::PerspectiveAssistant(QObject *parent)
     : KisAbstractPerspectiveGrid(parent)
     , KisPaintingAssistant("perspective", i18n("Perspective assistant"))
-    , m_followBrushPosition(false)
-    , m_adjustedPositionValid(false)
 {
 }
 
@@ -42,9 +40,6 @@ PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap
     , m_cachedTransform(rhs.m_cachedTransform)
     , m_cachedPolygon(rhs.m_cachedPolygon)
     , m_cacheValid(rhs.m_cacheValid)
-    , m_followBrushPosition(rhs.m_followBrushPosition)
-    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
-    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
 {
     for (int i = 0; i < 4; ++i) {
         m_cachedPoints[i] = rhs.m_cachedPoints[i];
@@ -54,17 +49,6 @@ PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap
 KisPaintingAssistantSP PerspectiveAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new PerspectiveAssistant(*this, handleMap));
-}
-
-void PerspectiveAssistant::setAdjustedBrushPosition(const QPointF position)
-{
-    m_adjustedBrushPosition = position;
-    m_adjustedPositionValid = true;
-}
-
-void PerspectiveAssistant::setFollowBrushPosition(bool follow)
-{
-    m_followBrushPosition = follow;
 }
 
 QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
@@ -131,11 +115,8 @@ QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& s
 
 void PerspectiveAssistant::endStroke()
 {
-    // Brush stroke ended, guides should follow the brush position again.
-    m_followBrushPosition = false;
-    m_adjustedPositionValid = false;
-
     m_snapLine = QLineF();
+    KisPaintingAssistant::endStroke();
 }
 
 bool PerspectiveAssistant::contains(const QPointF& pt) const

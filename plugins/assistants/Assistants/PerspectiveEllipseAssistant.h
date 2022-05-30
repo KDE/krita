@@ -21,10 +21,6 @@ public:
     int numHandles() const override { return 4; }
     bool isAssistantComplete() const override;
     
-    void setAdjustedBrushPosition(const QPointF position) override;
-    void setFollowBrushPosition(bool follow) override;
-    void endStroke() override;
-    
 protected:
     QRect boundingRect() const override;
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
@@ -43,18 +39,6 @@ private:
      
     explicit PerspectiveEllipseAssistant(const PerspectiveEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
-
-    mutable QTransform m_cachedTransform;
-    mutable QPolygonF m_cachedPolygon;
-    mutable QPointF m_cachedPoints[4];
-
-
-    QVector<QPointF> pointsToDraw;
-    
-    
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
-    QPointF m_adjustedBrushPosition;
 
     class Private;
     QScopedPointer<Private> d;

@@ -25,9 +25,6 @@ public:
     ParallelRulerAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
-    void setAdjustedBrushPosition(const QPointF position) override;
-    void setFollowBrushPosition(bool follow) override;
-    void endStroke() override;
     QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return isLocal() ? 4 : 2; }
     bool isAssistantComplete() const override;
@@ -47,12 +44,6 @@ private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     explicit ParallelRulerAssistant(const ParallelRulerAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
-    // Needed to make sure that when we are in the middle of a brush stroke, the
-    // guides follow the brush position, not the cursor position.
-    bool m_followBrushPosition;
-    bool m_adjustedPositionValid;
-    QPointF m_adjustedBrushPosition;
-    bool m_hasBeenInsideLocalRect {false};
 };
 
 class ParallelRulerAssistantFactory : public KisPaintingAssistantFactory

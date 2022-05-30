@@ -238,6 +238,10 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
 
 KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : d(new Private(*(rhs.d)))
+    , m_followBrushPosition(rhs.m_followBrushPosition)
+    , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
+    , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
+    , m_hasBeenInsideLocalRect(rhs.m_hasBeenInsideLocalRect)
 {
     dbgUI << "creating handles...";
     Q_FOREACH (const KisPaintingAssistantHandleSP origHandle, rhs.d->handles) {
@@ -267,6 +271,24 @@ bool KisPaintingAssistant::isSnappingActive() const
 void KisPaintingAssistant::setSnappingActive(bool set)
 {
     d->s->isSnappingActive = set;
+}
+
+void KisPaintingAssistant::endStroke()
+{
+    m_adjustedPositionValid = false;
+    m_followBrushPosition = false;
+    m_hasBeenInsideLocalRect = false;
+}
+
+void KisPaintingAssistant::setAdjustedBrushPosition(const QPointF position)
+{
+    m_adjustedBrushPosition = position;
+    m_adjustedPositionValid = true;
+}
+
+void KisPaintingAssistant::setFollowBrushPosition(bool follow)
+{
+    m_followBrushPosition = follow;
 }
 
 QPointF KisPaintingAssistant::getEditorPosition() const

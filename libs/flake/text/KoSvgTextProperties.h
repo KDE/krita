@@ -102,7 +102,8 @@ public:
         TextOverFlowId, ///< KoSvgText::WordBreak
         InlineSizeId, ///< KoSvgText::AutoValue
         LineHeightId, ///< KoSvgText::AutoValue
-        TextIndentValueId, ///< Int
+        TextIndentValueId, ///< qreal
+        TextIndentIsPercentId, ///< Bool
         TextIndentEachLineId, ///< Bool
         TextIndentHangingId, ///< Bool
         HangingPunctuationId, ///< Flags, KoSvgText::HangingPunctuations

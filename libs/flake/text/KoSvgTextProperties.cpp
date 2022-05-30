@@ -530,11 +530,18 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "text-indent") {
         bool hanging = false;
         bool eachLine = false;
-        int length = 0;
+        bool isPercentage = false;
+        qreal length = 0;
         Q_FOREACH (const QString &param,
                    value.split(' ', QString::SkipEmptyParts)) {
             bool ok = false;
-            int parsed = value.toInt(&ok, 10);
+            qreal parsed = 0.0;
+            if (value.endsWith("%")) {
+                parsed = SvgUtil::fromPercentage(value, &ok);
+            } else {
+                parsed = SvgUtil::parseUnitXY(context.currentGC(), value);
+                ok = true;
+            }
 
             if (param == "hanging") {
                 hanging = true;
@@ -545,6 +552,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
             }
         }
         setProperty(TextIndentValueId, length);
+        setProperty(TextIndentIsPercentId, isPercentage);
         setProperty(TextIndentHangingId, hanging);
         setProperty(TextIndentEachLineId, eachLine);
     } else if (command == "hanging-punctuation") {
@@ -879,7 +887,12 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         bool hanging = propertyOrDefault(TextIndentHangingId).toBool();
         bool eachLine = propertyOrDefault(TextIndentEachLineId).toBool();
         QStringList value;
-        value.append(QString::number(property(TextIndentValueId).toInt()));
+        QString indentVal =
+            QString::number(property(TextIndentValueId).toDouble());
+        if (property(TextIndentIsPercentId).toBool()) {
+            indentVal += "%";
+        }
+        value.append(indentVal);
         if (hanging) {
             value.append("hanging");
         }
@@ -1287,6 +1300,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
             s_defaultProperties->setProperty(TabSizeId, 8);
             s_defaultProperties->setProperty(TextIndentEachLineId, false);
             s_defaultProperties->setProperty(TextIndentHangingId, false);
+            s_defaultProperties->setProperty(TextIndentIsPercentId, false);
             HangingPunctuations hang = HangNone;
             s_defaultProperties->setProperty(HangingPunctuationId,
                                              QVariant::fromValue(hang));

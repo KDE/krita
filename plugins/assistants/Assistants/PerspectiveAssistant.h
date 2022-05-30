@@ -48,7 +48,6 @@ protected:
 private:
     QPointF project(const QPointF& pt, const QPointF& strokeBegin);
     // creates the convex hull, returns false if it's not a quadrilateral
-    bool quad(QPolygonF& out) const;
     // finds the transform from perspective coordinates (a unit square) to the document
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;
     explicit PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);

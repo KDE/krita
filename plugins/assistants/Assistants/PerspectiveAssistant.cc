@@ -21,6 +21,8 @@
 #include <kis_coordinates_converter.h>
 #include <kis_dom_utils.h>
 
+#include "PerspectiveBasedAssistantHelper.h"
+
 #include <math.h>
 #include <limits>
 
@@ -52,16 +54,6 @@ PerspectiveAssistant::PerspectiveAssistant(const PerspectiveAssistant &rhs, QMap
 KisPaintingAssistantSP PerspectiveAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
 {
     return KisPaintingAssistantSP(new PerspectiveAssistant(*this, handleMap));
-}
-// squared distance from a point to a line
-inline qreal distsqr(const QPointF& pt, const QLineF& line)
-{
-    // distance = |(p2 - p1) x (p1 - pt)| / |p2 - p1|
-
-    // magnitude of (p2 - p1) x (p1 - pt)
-    const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
-
-    return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
 }
 
 void PerspectiveAssistant::setAdjustedBrushPosition(const QPointF position)
@@ -115,7 +107,7 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
         const QLineF horizontalLine = QLineF(strokeBegin, transform.map(start + QPointF(1, 0)));
 
         // determine whether the horizontal or vertical line is closer to the point
-        m_snapLine = distsqr(pt, verticalLine) < distsqr(pt, horizontalLine) ? verticalLine : horizontalLine;
+        m_snapLine = KisAlgebra2D::pointToLineDistSquared(pt, verticalLine) < KisAlgebra2D::pointToLineDistSquared(pt, horizontalLine) ? verticalLine : horizontalLine;
     }
 
     // snap to line
@@ -149,7 +141,7 @@ void PerspectiveAssistant::endStroke()
 bool PerspectiveAssistant::contains(const QPointF& pt) const
 {
     QPolygonF poly;
-    if (!quad(poly)) return false;
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) return false;
     return poly.containsPoint(pt, Qt::OddEvenFill);
 }
 
@@ -316,7 +308,8 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
             // color red for an invalid transform, but not for an incomplete one
             if(isAssistantComplete()) {
                 QPainterPath path;
-                path.addPolygon(poly);
+                // that will create a triangle with a point inside connected to all vertices of the triangle
+                path.addPolygon(PerspectiveBasedAssistantHelper::getAllConnectedTetragon(handles()));
                 drawError(gc, path);
             } else {
                 QPainterPath path;
@@ -372,67 +365,6 @@ QPointF PerspectiveAssistant::getDefaultEditorPosition() const
     return centroid * 0.25;
 }
 
-template <typename T> int sign(T a)
-{
-    return (a > 0) - (a < 0);
-}
-// perpendicular dot product
-inline qreal pdot(const QPointF& a, const QPointF& b)
-{
-    return a.x() * b.y() - a.y() * b.x();
-}
-
-bool PerspectiveAssistant::quad(QPolygonF& poly) const
-{
-    for (int i = 0; i < handles().size(); ++i) {
-        poly.push_back(*handles()[i]);
-    }
-
-    if (!isAssistantComplete()) {
-        return false;
-    }
-
-    int sum = 0;
-    int signs[4];
-
-    for (int i = 0; i < 4; ++i) {
-        int j = (i == 3) ? 0 : (i + 1);
-        int k = (j == 3) ? 0 : (j + 1);
-        signs[i] = sign(pdot(poly[j] - poly[i], poly[k] - poly[j]));
-        sum += signs[i];
-    }
-
-    if (sum == 0) {
-        // complex (crossed)
-        for (int i = 0; i < 4; ++i) {
-            int j = (i == 3) ? 0 : (i + 1);
-            if (signs[i] * signs[j] == -1) {
-                // opposite signs: uncross
-                std::swap(poly[i], poly[j]);
-                return true;
-            }
-        }
-        // okay, maybe it's just a line
-        return false;
-    } else if (sum != 4 && sum != -4) {
-        // concave, or a triangle
-        if (sum == 2 || sum == -2) {
-            // concave, let's return a triangle instead
-            for (int i = 0; i < 4; ++i) {
-                int j = (i == 3) ? 0 : (i + 1);
-                if (signs[i] != sign(sum)) {
-                    // wrong sign: drop the inside node
-                    poly.remove(j);
-                    return false;
-                }
-            }
-        }
-        return false;
-    }
-    // convex
-    return true;
-}
-
 bool PerspectiveAssistant::getTransform(QPolygonF& poly, QTransform& transform) const
 {
     if (m_cachedPolygon.size() != 0 && isAssistantComplete()) {
@@ -449,7 +381,7 @@ bool PerspectiveAssistant::getTransform(QPolygonF& poly, QTransform& transform) 
     m_cachedPolygon.clear();
     m_cacheValid = false;
 
-    if (!quad(poly)) {
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) {
         m_cachedPolygon = poly;
         return false;
     }

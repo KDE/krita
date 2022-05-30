@@ -7,6 +7,7 @@ set(kritaassistanttool_SOURCES
     InfiniteRulerAssistant.cc
     kis_assistant_tool.cc
     ParallelRulerAssistant.cc
+    PerspectiveBasedAssistantHelper.cpp
     PerspectiveAssistant.cc
     Ruler.cc
     RulerAssistant.cc

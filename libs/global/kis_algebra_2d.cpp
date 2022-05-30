@@ -1372,4 +1372,14 @@ qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal x
     return (l + r)/2;
 }
 
+qreal pointToLineDistSquared(const QPointF &pt, const QLineF &line)
+{
+    // distance = |(p2 - p1) x (p1 - pt)| / |p2 - p1|
+
+    // magnitude of (p2 - p1) x (p1 - pt)
+    const qreal cross = (line.dx() * (line.y1() - pt.y()) - line.dy() * (line.x1() - pt.x()));
+
+    return cross * cross / (line.dx() * line.dx() + line.dy() * line.dy());
+}
+
 }

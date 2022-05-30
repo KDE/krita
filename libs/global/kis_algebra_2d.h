@@ -874,6 +874,8 @@ qreal findMinimumGoldenSection(std::function<qreal(qreal)> f, qreal xA, qreal xB
 // NOTE: tiar: this function was debugged and should be working correctly but is not used anywhere any longer
 qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal xB, qreal eps, int maxIter);
 
+qreal KRITAGLOBAL_EXPORT pointToLineDistSquared(const QPointF& pt, const QLineF& line);
+
 
 }
 

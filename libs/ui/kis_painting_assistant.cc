@@ -23,6 +23,7 @@
 #include <QPixmapCache>
 #include <QDomElement>
 #include <QDomDocument>
+#include <QPainterPath>
 
 Q_GLOBAL_STATIC(KisPaintingAssistantFactoryRegistry, s_instance)
 
@@ -336,6 +337,14 @@ void KisPaintingAssistant::drawError(QPainter &painter, const QPainterPath &path
     painter.setPen(pen_a);
     painter.drawPath(path);
     painter.restore();
+}
+
+void KisPaintingAssistant::drawX(QPainter &painter, const QPointF &pt)
+{
+    QPainterPath path;
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
+    path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
+    drawPath(painter, path);
 }
 
 void KisPaintingAssistant::initHandles(QList<KisPaintingAssistantHandleSP> _handles)

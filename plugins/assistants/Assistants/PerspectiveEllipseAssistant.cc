@@ -385,14 +385,6 @@ inline qreal pdot(const QPointF& a, const QPointF& b)
 {
     return a.x() * b.y() - a.y() * b.x();
 }
-// draw a vanishing point marker
-inline QPainterPath drawX(const QPointF& pt)
-{
-    QPainterPath path;
-    path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
-    path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
-    return path;
-}
 
 QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
@@ -438,12 +430,12 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
         QPointF intersection(0, 0);
         if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0 || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
             if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-                drawPath(gc, drawX(initialTransform.map(intersection)));
+                drawX(gc, initialTransform.map(intersection));
             }
         }
         if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0 || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
             if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-                drawPath(gc, drawX(initialTransform.map(intersection)));
+                drawX(gc, initialTransform.map(intersection));
             }
         }
     }

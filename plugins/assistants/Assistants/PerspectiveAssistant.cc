@@ -215,15 +215,6 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
     return localScale(transform, inverse.map(pt)) * inverseMaxLocalScale(transform);
 }
 
-// draw a vanishing point marker
-inline QPainterPath drawX(const QPointF& pt)
-{
-    QPainterPath path;
-    path.moveTo(QPointF(pt.x() - 5.0, pt.y() - 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() + 5.0));
-    path.moveTo(QPointF(pt.x() - 5.0, pt.y() + 5.0)); path.lineTo(QPointF(pt.x() + 5.0, pt.y() - 5.0));
-    return path;
-}
-
 void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();
@@ -237,12 +228,12 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
         QPointF intersection(0, 0);
         if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0 || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
             if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-                drawPath(gc, drawX(initialTransform.map(intersection)));
+                drawX(gc, initialTransform.map(intersection));
             }
         }
         if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0 || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
             if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-                drawPath(gc, drawX(initialTransform.map(intersection)));
+                drawX(gc, initialTransform.map(intersection));
             }
         }
     }

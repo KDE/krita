@@ -213,6 +213,8 @@ public:
     void drawPreview(QPainter& painter, const QPainterPath& path);
     // draw a path in a red color, signalizing incorrect state
     void drawError(QPainter& painter, const QPainterPath& path);
+    // draw a vanishing point marker
+    void drawX(QPainter& painter, const QPointF& pt);
     static double norm2(const QPointF& p);
 
 protected:

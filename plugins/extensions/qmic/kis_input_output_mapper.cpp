@@ -62,12 +62,6 @@ KisNodeListSP KisInputOutputMapper::inputNodes(InputLayerMode inputMode)
         allLayers(result);
         break;
     }
-    case InputLayerMode::AllVisiblesDesc_DEPRECATED:
-    case InputLayerMode::AllInvisiblesDesc_DEPRECATED:
-    case InputLayerMode::AllDesc_DEPRECATED: {
-        qWarning() << "Inputmode" << static_cast<int>(inputMode) << "is not supported by GMic anymore";
-        break;
-    }
     case InputLayerMode::Unspecified:
     default: {
         qWarning() << "Inputmode" << static_cast<int>(inputMode) << "must be specified by GMic or is not implemented in Krita";

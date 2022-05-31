@@ -381,8 +381,11 @@ void KisQmicSimpleConvertor::convertFromGmicFast(const KisQMicImage &gmicImage,
         return;
     }
 
-    const qint32 x = dst->exactBounds().x();
-    const qint32 y = dst->exactBounds().y();
+    dst->clear();
+    dst->moveTo(0, 0);
+
+    const qint32 x = 0;
+    const qint32 y = 0;
     const auto width = static_cast<size_t>(gmicImage.m_width);
     const auto height = static_cast<size_t>(gmicImage.m_height);
 

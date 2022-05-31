@@ -84,7 +84,8 @@ applyLayerNameChanges(const KisQMicImage &srcGmicImage,
             const auto y = match.captured(2).toInt();
             const QPoint oldPos(node->x(), node->y());
             const QPoint newPos(x, y);
-            dbgPlugins << "Detected layer position: " << x << y;
+            dbgPlugins << "Detected layer position: " << oldPos << newPos
+                       << node->paintDevice()->exactBounds();
             cmd->addCommand(new KisNodeMoveCommand2(node, oldPos, newPos));
         }
     }
@@ -97,7 +98,7 @@ inline void gmicImageToPaintDevice(const KisQMicImage &srcGmicImage,
                                    KisSelectionSP selection = nullptr,
                                    const QRect &dstRect = {})
 {
-    dbgPlugins << "KisQmicImportTools::gmicImageToPaintDevice();";
+    dbgPlugins << "KisQmicImportTools::gmicImageToPaintDevice()" << dstRect;
 
     if (selection) {
         KisPaintDeviceSP src = new KisPaintDevice(dst->colorSpace());

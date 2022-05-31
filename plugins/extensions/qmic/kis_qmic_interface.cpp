@@ -22,7 +22,6 @@
 #include "gmic.h"
 #include "kis_qmic_processing_visitor.h"
 #include "kis_qmic_simple_convertor.h"
-#include "kis_qmic_synchronize_image_size_command.h"
 #include "kis_qmic_synchronize_layers_command.h"
 
 struct KisImageInterface::Private {
@@ -234,53 +233,8 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
     dbgPlugins << "slotStartApplicator();" << layers;
     if (!p->m_viewManager)
         return;
-    // Create a vector of gmic images
 
-    QVector<gmic_image<float> *> images;
-
-    for (const auto &image : layers) {
-        QString layerName = image->m_layerName;
-        const auto spectrum = image->m_spectrum;
-        const auto width = image->m_width;
-        const auto height = image->m_height;
-
-        dbgPlugins << "Received image: " << static_cast<void *>(image.data())
-                   << layerName << width << height;
-
-        gmic_image<float> *gimg = nullptr;
-
-        {
-            QMutexLocker lock(&image->m_mutex);
-
-            dbgPlugins << "Memory segment" << static_cast<void *>(image.data())
-                       << image->size()
-                       << static_cast<const void *>(image->constData())
-                       << static_cast<void *>(image->m_data);
-            gimg = new gmic_image<float>();
-            gimg->assign(static_cast<unsigned int>(width),
-                         static_cast<unsigned int>(height),
-                         1,
-                         static_cast<unsigned int>(spectrum));
-            gimg->name = layerName;
-
-            gimg->_data =
-                new float[static_cast<size_t>(width * height * spectrum)
-                          * sizeof(float)];
-            dbgPlugins << "width" << width << "height" << height << "size"
-                       << static_cast<size_t>(width * height * spectrum)
-                    * sizeof(float)
-                       << "shared memory size" << image->size();
-            memcpy(gimg->_data,
-                   image->constData(),
-                   static_cast<size_t>(width * height * spectrum)
-                       * sizeof(float));
-
-            dbgPlugins << "created gmic image" << gimg->name << gimg->_width << gimg->_height;
-        }
-        images.append(gimg);
-    }
-
-    dbgPlugins << "Got" << images.size() << "gmic images";
+    dbgPlugins << "Got" << layers.size() << "gmic images";
 
     {
         // Start the applicator
@@ -311,19 +265,26 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
 
         // This is a three-stage process.
 
-        if (!selection) {
-            // 1. synchronize Krita image size with biggest gmic layer size
-            applicator.applyCommand(new KisQmicSynchronizeImageSizeCommand(images, p->m_viewManager->image()));
-        }
+        // 1. Layer sizes must be adjusted individually
 
         // 2. synchronize layer count and convert excess GMic nodes to paint layers
-        applicator.applyCommand(new KisQmicSynchronizeLayersCommand(mappedLayers, images, p->m_viewManager->image(), layerSize, selection),
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
+        applicator.applyCommand(
+            new KisQmicSynchronizeLayersCommand(mappedLayers,
+                                                layers,
+                                                p->m_viewManager->image(),
+                                                layerSize,
+                                                selection),
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE);
 
         // 3. visit the existing nodes and reuse them to apply the remaining changes from GMic
-        applicator.applyVisitor(new KisQmicProcessingVisitor(mappedLayers, images, layerSize, selection),
-                                KisStrokeJobData::SEQUENTIAL); // undo information is stored in this visitor
+        applicator.applyVisitor(
+            new KisQmicProcessingVisitor(mappedLayers,
+                                         layers,
+                                         layerSize,
+                                         selection),
+            KisStrokeJobData::SEQUENTIAL); // undo information is stored in this
+                                           // visitor
 
         applicator.end();
     }

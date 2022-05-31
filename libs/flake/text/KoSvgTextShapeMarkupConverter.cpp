@@ -797,6 +797,7 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
     int prevBlockCursorPosition = -1;
     qreal prevLineDescent = 0.0;
     qreal prevLineAscent = 0.0;
+    // work around uninitialized memory warning, therefore, no boost::none
     boost::optional<qreal> previousBlockAbsoluteXOffset =
         boost::optional<qreal>(false, qreal());
 
@@ -822,6 +823,8 @@ bool KoSvgTextShapeMarkupConverter::convertSvgToDocument(const QString &svgText,
 
                 // mnemonic for a newline is (dy != 0 && x == 0)
 
+                // work around uninitialized memory warning, therefore, no
+                // boost::none
                 boost::optional<qreal> blockAbsoluteXOffset =
                     boost::make_optional(false, qreal());
 

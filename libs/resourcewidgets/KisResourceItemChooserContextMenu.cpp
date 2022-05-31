@@ -81,14 +81,14 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
 
         if (!currentTag.isNull() && currentTagInRemovables) {
             // remove the current tag from both "Remove from tag: " and "Assign to tag: " lists
-            QList<QSharedPointer<KisTag> >::iterator b = std::remove_if(removableTags.begin(), removableTags.end(), comparer);
-            if (b != removableTags.end()) {
-                removableTags.removeAll(*b);
-            }
-            QList<QSharedPointer<KisTag> >::iterator b2 = std::remove_if(assignableTags.begin(), assignableTags.end(), comparer);
-            if (b2 != assignableTags.end()) {
-                assignableTags.removeAll(*b2);
-            }
+            removableTags.erase(std::remove_if(removableTags.begin(),
+                                               removableTags.end(),
+                                               comparer),
+                                removableTags.end());
+            assignableTags.erase(std::remove_if(assignableTags.begin(),
+                                                assignableTags.end(),
+                                                comparer),
+                                 assignableTags.end());
 
             SimpleExistingTagAction *removeTagAction = new SimpleExistingTagAction(resource, currentTag, this);
             removeTagAction->setText(i18n("Remove from this tag"));
@@ -111,13 +111,10 @@ KisResourceItemChooserContextMenu::KisResourceItemChooserContextMenu(KoResourceS
                 }
 
                 compareWithRemovable.setReferenceTag(tag);
-                const auto b2 = std::remove_if(assignableTags.begin(),
-                                               assignableTags.end(),
-                                               compareWithRemovable);
-
-                if (b2 != assignableTags.end()) {
-                    assignableTags.removeAll(*b2);
-                }
+                assignableTags.erase(std::remove_if(assignableTags.begin(),
+                                                    assignableTags.end(),
+                                                    compareWithRemovable),
+                                     assignableTags.end());
 
                 SimpleExistingTagAction *removeTagAction = new SimpleExistingTagAction(resource, tag, this);
 

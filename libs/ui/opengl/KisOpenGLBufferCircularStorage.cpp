@@ -89,7 +89,8 @@ void KisOpenGLBufferCircularStorage::reset()
 
 void KisOpenGLBufferCircularStorage::allocateMoreBuffers(uint numBuffers)
 {
-    if (numBuffers <= (int)m_d->buffers.size()) return;
+    if (numBuffers <= m_d->buffers.size())
+        return;
     KIS_SAFE_ASSERT_RECOVER_RETURN(!m_d->buffers.empty());
 
     std::rotate(m_d->buffers.begin(), m_d->buffers.begin() + m_d->nextBuffer, m_d->buffers.end());

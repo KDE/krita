@@ -17,10 +17,13 @@
 #include <commands/kis_node_opacity_command.h>
 #include <commands_new/kis_node_move_command2.h>
 #include <kis_command_utils.h>
+#include <kis_layer_utils.h>
 #include <kis_node.h>
+#include <kis_paint_layer.h>
 #include <kis_painter.h>
 #include <kis_types.h>
 
+#include "gmic.h"
 #include "kis_qmic_interface.h"
 #include "kis_qmic_simple_convertor.h"
 
@@ -104,6 +107,95 @@ inline void gmicImageToPaintDevice(const KisQMicImage &srcGmicImage,
     } else {
         KisQmicSimpleConvertor::convertFromGmicFast(srcGmicImage, dst, 255.0f);
     }
+}
+
+inline KisNodeListSP inputNodes(InputLayerMode inputMode, KisNodeSP currentNode)
+{
+    /*
+        ACTIVE_LAYER,
+        ALL_LAYERS,
+        ACTIVE_LAYER_BELOW_LAYER,
+        ACTIVE_LAYER_ABOVE_LAYER,
+        ALL_VISIBLE_LAYERS,
+        ALL_INVISIBLE_LAYERS,
+        ALL_VISIBLE_LAYERS_DECR,
+        ALL_INVISIBLE_DECR,
+        ALL_DECR
+    */
+    const auto isAvailable = [](KisNodeSP node) -> bool {
+        auto *paintLayer = dynamic_cast<KisPaintLayer *>(node.data());
+        return paintLayer && paintLayer->visible(false);
+    };
+
+    KisNodeListSP result(new QList<KisNodeSP>());
+    switch (inputMode) {
+    case InputLayerMode::Active: {
+        if (isAvailable(currentNode)) {
+            result->append(currentNode);
+        }
+        break; // drop down in case of one more layer modes
+    }
+    case InputLayerMode::ActiveAndBelow: {
+        if (isAvailable(currentNode)) {
+            result->append(currentNode);
+            if (isAvailable(currentNode->prevSibling())) {
+                result->append(currentNode->prevSibling());
+            }
+        }
+        break;
+    }
+    case InputLayerMode::ActiveAndAbove: {
+        if (isAvailable(currentNode)) {
+            result->append(currentNode);
+            if (isAvailable(currentNode->nextSibling())) {
+                result->append(currentNode->nextSibling());
+            }
+        }
+        break;
+    }
+    case InputLayerMode::NoInput: {
+        break;
+    }
+    case InputLayerMode::AllVisible:
+    case InputLayerMode::AllInvisible: {
+        const bool visibility = (inputMode == InputLayerMode::AllInvisible);
+
+        result = [&]() {
+            KisNodeListSP r(new QList<KisNodeSP>());
+            KisLayerUtils::recursiveApplyNodes(
+                currentNode,
+                [&](KisNodeSP item) {
+                    auto *paintLayer =
+                        dynamic_cast<KisPaintLayer *>(item.data());
+                    if (paintLayer
+                        && paintLayer->visible(false) == visibility) {
+                        r->append(item);
+                    }
+                });
+            return r;
+        }();
+        break;
+    }
+    case InputLayerMode::All: {
+        result = [&]() {
+            KisNodeListSP r(new QList<KisNodeSP>());
+            KisLayerUtils::recursiveApplyNodes(currentNode,
+                                               [&](KisNodeSP item) {
+                                                   r->append(item);
+                                               });
+            return r;
+        }();
+        break;
+    }
+    case InputLayerMode::Unspecified:
+    default: {
+        qWarning()
+            << "Inputmode" << static_cast<int>(inputMode)
+            << "must be specified by GMic or is not implemented in Krita";
+        break;
+    }
+    }
+    return result;
 }
 } // namespace KisQmicImportTools
 

@@ -14,12 +14,12 @@
 #include <kis_debug.h>
 #include <kis_image.h>
 #include <kis_image_barrier_locker.h>
-#include <kis_input_output_mapper.h>
 #include <kis_processing_applicator.h>
 #include <kis_selection.h>
 #include <kundo2magicstring.h>
 
 #include "gmic.h"
+#include "kis_qmic_import_tools.h"
 #include "kis_qmic_processing_visitor.h"
 #include "kis_qmic_simple_convertor.h"
 #include "kis_qmic_synchronize_layers_command.h"
@@ -57,9 +57,9 @@ QSize KisImageInterface::gmic_qt_get_image_size(int mode)
 
         dbgPlugins << "getImageSize()" << mode;
 
-        KisInputOutputMapper mapper(p->m_viewManager->image(),
-                                    p->m_viewManager->activeNode());
-        KisNodeListSP nodes = mapper.inputNodes(p->m_inputMode);
+        KisNodeListSP nodes =
+            KisQmicImportTools::inputNodes(p->m_inputMode,
+                                           p->m_viewManager->activeNode());
         if (nodes->isEmpty()) {
             return size;
         }
@@ -146,8 +146,9 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
 
     dbgPlugins << "prepareCroppedImages()" << message << rc << inputMode;
 
-    KisInputOutputMapper mapper(p->m_viewManager->image(), p->m_viewManager->activeNode());
-    KisNodeListSP nodes = mapper.inputNodes(p->m_inputMode);
+    KisNodeListSP nodes =
+        KisQmicImportTools::inputNodes(p->m_inputMode,
+                                       p->m_viewManager->activeNode());
     if (nodes->isEmpty()) {
         return {};
     }
@@ -231,8 +232,9 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
         // Start the applicator
         KUndo2MagicString actionName = kundo2_i18n("G'MIC filter");
         KisNodeSP rootNode = p->m_viewManager->image()->root();
-        KisInputOutputMapper mapper(p->m_viewManager->image(), p->m_viewManager->activeNode());
-        KisNodeListSP mappedLayers = mapper.inputNodes(p->m_inputMode);
+        KisNodeListSP mappedLayers =
+            KisQmicImportTools::inputNodes(p->m_inputMode,
+                                           p->m_viewManager->activeNode());
         // p->m_gmicApplicator->setProperties(p->m_viewManager->image(), rootNode, images, actionName, layers);
         // p->m_gmicApplicator->apply();
 

@@ -1,5 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2013 Lukáš Tvrdý <lukast.dev@gmail.com>
+ * SPDX-FileCopyrightText: 2013 Dmitry Kazakov <dimula73@gmail.com>
  * SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
@@ -15,6 +16,8 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
+#include <kis_surrogate_undo_adapter.h>
+#include <kis_transaction.h>
 #include <kis_types.h>
 
 #include "kis_qmic_import_tools.h"
@@ -47,6 +50,7 @@ struct Q_DECL_HIDDEN KisQmicSynchronizeLayersCommand::Private {
     QRect m_dstRect;
     KisSelectionSP m_selection;
     QVector<KisImageCommand *> m_imageCommands;
+    KisSurrogateUndoAdapter m_undoAdapter;
     bool m_firstRedo;
 };
 
@@ -146,10 +150,42 @@ void KisQmicSynchronizeLayersCommand::redo()
         // if gmic produces less layers, we are going to drop some
         errPlugins << "no support for removing layers from G'MIC yet!!";
     }
+
+    for (auto index = 0; index < d->m_nodes->size(); index++) {
+        auto node = d->m_nodes->at(index);
+
+        const auto &gimg = d->m_images[index];
+        dbgPlugins << "Importing layer index" << index
+                   << "Size: " << gimg->m_width << "x" << gimg->m_height
+                   << "colorchannels: " << gimg->m_spectrum;
+
+        auto dst = node->paintDevice();
+
+        const auto *layer = dynamic_cast<const KisLayer *>(node.data());
+        const KisSelectionSP selection =
+            layer ? layer->selection() : d->m_selection;
+
+        KisTransaction transaction(dst);
+        KisQmicImportTools::gmicImageToPaintDevice(*gimg,
+                                                   dst,
+                                                   selection,
+                                                   d->m_dstRect);
+        auto *layerNameCmd =
+            KisQmicImportTools::applyLayerNameChanges(*gimg,
+                                                      node.data(),
+                                                      selection);
+        layerNameCmd->redo();
+
+        addCommand(new KisCommandUtils::SkipFirstRedoWrapper(layerNameCmd));
+
+        transaction.commit(&d->m_undoAdapter);
+        node->setDirty(d->m_dstRect);
+    }
 }
 
 void KisQmicSynchronizeLayersCommand::undo()
 {
     KisCommandUtils::CompositeCommand::undo();
+    d->m_undoAdapter.undoAll();
     d->m_newNodes->clear();
 }

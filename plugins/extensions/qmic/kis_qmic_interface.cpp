@@ -20,7 +20,6 @@
 
 #include "gmic.h"
 #include "kis_qmic_import_tools.h"
-#include "kis_qmic_processing_visitor.h"
 #include "kis_qmic_simple_convertor.h"
 #include "kis_qmic_synchronize_layers_command.h"
 
@@ -259,8 +258,10 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
         // This is a three-stage process.
 
         // 1. Layer sizes must be adjusted individually
-
-        // 2. synchronize layer count and convert excess GMic nodes to paint layers
+        // 2. synchronize layer count and convert excess GMic nodes to paint
+        // layers
+        // 3. visit the existing nodes and reuse them to apply the remaining
+        // changes from GMic
         applicator.applyCommand(
             new KisQmicSynchronizeLayersCommand(mappedLayers,
                                                 layers,
@@ -269,15 +270,6 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
                                                 selection),
             KisStrokeJobData::SEQUENTIAL,
             KisStrokeJobData::EXCLUSIVE);
-
-        // 3. visit the existing nodes and reuse them to apply the remaining changes from GMic
-        applicator.applyVisitor(
-            new KisQmicProcessingVisitor(mappedLayers,
-                                         layers,
-                                         layerSize,
-                                         selection),
-            KisStrokeJobData::SEQUENTIAL); // undo information is stored in this
-                                           // visitor
 
         applicator.end();
     }

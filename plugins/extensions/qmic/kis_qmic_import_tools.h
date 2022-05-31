@@ -82,8 +82,10 @@ applyLayerNameChanges(const KisQMicImage &srcGmicImage,
         if (match.hasMatch()) {
             const auto x = match.captured(1).toInt();
             const auto y = match.captured(2).toInt();
+            const QPoint oldPos(node->x(), node->y());
+            const QPoint newPos(x, y);
             dbgPlugins << "Detected layer position: " << x << y;
-            cmd->addCommand(new KisNodeMoveCommand2(node, QPoint(node->x(), node->y()), QPoint(x, y)));
+            cmd->addCommand(new KisNodeMoveCommand2(node, oldPos, newPos));
         }
     }
 

@@ -15,12 +15,15 @@
 
 #include <kis_node.h>
 
-#include "gmic.h"
+#include "kis_qmic_interface.h"
 
 class KisQmicProcessingVisitor : public KisSimpleProcessingVisitor
 {
 public:
-    KisQmicProcessingVisitor(const KisNodeListSP nodes, QVector<gmic_image<float> *> images, const QRect &dstRect, const KisSelectionSP selection);
+    KisQmicProcessingVisitor(const KisNodeListSP nodes,
+                             QVector<KisQMicImageSP> images,
+                             const QRect &dstRect,
+                             const KisSelectionSP selection);
 
     ~KisQmicProcessingVisitor() override;
 

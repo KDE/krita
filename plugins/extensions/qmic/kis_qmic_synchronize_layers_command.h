@@ -16,17 +16,16 @@
 #include <kis_types.h>
 #include <kis_command_utils.h>
 
-#include "gmic.h"
+#include "kis_qmic_interface.h"
 
 class KisQmicSynchronizeLayersCommand : public KisCommandUtils::CompositeCommand
 {
 public:
     KisQmicSynchronizeLayersCommand(KisNodeListSP nodes,
-                                    QVector<gmic_image<float> *> images,
+                                    QVector<KisQMicImageSP> images,
                                     KisImageWSP image,
                                     const QRect &dstRect = QRect(),
-                                    const KisSelectionSP selection = nullptr
-    );
+                                    KisSelectionSP selection = nullptr);
 
     ~KisQmicSynchronizeLayersCommand() override;
 

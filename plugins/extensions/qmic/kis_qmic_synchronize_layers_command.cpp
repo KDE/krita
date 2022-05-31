@@ -7,8 +7,6 @@
 
 #include "kis_qmic_synchronize_layers_command.h"
 
-#include <QList>
-#include <QSharedPointer>
 #include <utility>
 
 #include <KoColorSpaceConstants.h>
@@ -22,7 +20,11 @@
 #include "kis_qmic_import_tools.h"
 
 struct Q_DECL_HIDDEN KisQmicSynchronizeLayersCommand::Private {
-    Private(KisNodeListSP nodes, QVector<gmic_image<float> *> images, KisImageWSP image, const QRect &dstRect, KisSelectionSP selection)
+    Private(KisNodeListSP nodes,
+            QVector<KisQMicImageSP> images,
+            KisImageWSP image,
+            const QRect &dstRect,
+            KisSelectionSP selection)
         : m_nodes(std::move(nodes))
         , m_newNodes(new KisNodeList())
         , m_images(std::move(images))
@@ -40,7 +42,7 @@ struct Q_DECL_HIDDEN KisQmicSynchronizeLayersCommand::Private {
 
     KisNodeListSP m_nodes;
     KisNodeListSP m_newNodes;
-    QVector<gmic_image<float> *> m_images;
+    QVector<KisQMicImageSP> m_images;
     KisImageWSP m_image;
     QRect m_dstRect;
     KisSelectionSP m_selection;
@@ -48,13 +50,18 @@ struct Q_DECL_HIDDEN KisQmicSynchronizeLayersCommand::Private {
     bool m_firstRedo;
 };
 
-KisQmicSynchronizeLayersCommand::KisQmicSynchronizeLayersCommand(KisNodeListSP nodes,
-                                                                 QVector<gmic_image<float> *> images,
-                                                                 KisImageWSP image,
-                                                                 const QRect &dstRect,
-                                                                 KisSelectionSP selection)
+KisQmicSynchronizeLayersCommand::KisQmicSynchronizeLayersCommand(
+    KisNodeListSP nodes,
+    QVector<KisQMicImageSP> images,
+    KisImageWSP image,
+    const QRect &dstRect,
+    KisSelectionSP selection)
     : KisCommandUtils::CompositeCommand()
-    , d(new Private{std::move(nodes), std::move(images), image, dstRect, selection})
+    , d(new Private{std::move(nodes),
+                    std::move(images),
+                    image,
+                    dstRect,
+                    selection})
 {
     dbgPlugins << "KisQmicSynchronizeLayersCommand";
 }
@@ -92,7 +99,11 @@ void KisQmicSynchronizeLayersCommand::redo()
                 KisPaintDeviceSP device = new KisPaintDevice(d->m_image->colorSpace());
                 KisLayerSP paintLayer = new KisPaintLayer(d->m_image, QString("New layer %1 from gmic filter").arg(i), OPACITY_OPAQUE_U8, device);
 
-                KisQmicImportTools::gmicImageToPaintDevice(*d->m_images[i], device, d->m_selection, d->m_dstRect);
+                KisQmicImportTools::gmicImageToPaintDevice(
+                    *d->m_images[i].data(),
+                    device,
+                    d->m_selection,
+                    d->m_dstRect);
 
                 KisNodeSP aboveThis(nullptr);
                 KisNodeSP parent(nullptr);

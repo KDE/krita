@@ -17,12 +17,14 @@
 #include <kis_transaction.h>
 #include <kis_types.h>
 
-#include "gmic.h"
 #include "kis_qmic_import_tools.h"
 #include "kis_qmic_processing_visitor.h"
 
 struct Q_DECL_HIDDEN KisQmicProcessingVisitor::Private {
-    Private(const KisNodeListSP nodes, QVector<gmic_image<float> *> images, const QRect &dstRect, KisSelectionSP selection)
+    Private(const KisNodeListSP nodes,
+            QVector<KisQMicImageSP> images,
+            const QRect &dstRect,
+            KisSelectionSP selection)
         : m_nodes(nodes)
         , m_images(std::move(images))
         , m_dstRect(dstRect)
@@ -33,15 +35,16 @@ struct Q_DECL_HIDDEN KisQmicProcessingVisitor::Private {
     ~Private() = default;
 
     const KisNodeListSP m_nodes;
-    QVector<gmic_image<float> *> m_images;
+    QVector<KisQMicImageSP> m_images;
     QRect m_dstRect;
     const KisSelectionSP m_selection;
 };
 
-KisQmicProcessingVisitor::KisQmicProcessingVisitor(const KisNodeListSP nodes,
-                                                               QVector<gmic_image<float> *> images,
-                                                               const QRect &dstRect,
-                                                               KisSelectionSP selection)
+KisQmicProcessingVisitor::KisQmicProcessingVisitor(
+    const KisNodeListSP nodes,
+    QVector<KisQMicImageSP> images,
+    const QRect &dstRect,
+    KisSelectionSP selection)
     : d(new Private{nodes, std::move(images), dstRect, selection})
 {
     dbgPlugins << "KisImportQmicProcessingVisitor";
@@ -56,8 +59,10 @@ void KisQmicProcessingVisitor::visitNodeWithPaintDevice(KisNode *node, KisUndoAd
 {
     int index = d->m_nodes->indexOf(node);
     if (index >= 0 && index < d->m_images.size()) {
-        const auto *gimg = d->m_images[index];
-        dbgPlugins << "Importing layer index" << index << "Size: " << gimg->_width << "x" << gimg->_height << "colorchannels: " << gimg->_spectrum;
+        const auto &gimg = d->m_images[index];
+        dbgPlugins << "Importing layer index" << index
+                   << "Size: " << gimg->m_width << "x" << gimg->m_height
+                   << "colorchannels: " << gimg->m_spectrum;
 
         auto dst = node->paintDevice();
 

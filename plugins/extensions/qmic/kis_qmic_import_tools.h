@@ -21,13 +21,13 @@
 #include <kis_painter.h>
 #include <kis_types.h>
 
-#include "gmic.h"
+#include "kis_qmic_interface.h"
 #include "kis_qmic_simple_convertor.h"
 
 namespace KisQmicImportTools
 {
 [[nodiscard]] inline KUndo2Command *
-applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
+applyLayerNameChanges(const KisQMicImage &srcGmicImage,
                       KisNode *node,
                       KisSelectionSP selection)
 {
@@ -35,11 +35,11 @@ applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
 
     auto *cmd = new KisCommandUtils::CompositeCommand();
 
-    dbgPlugins << "Layer name: " << srcGmicImage.name;
+    dbgPlugins << "Layer name: " << srcGmicImage.m_layerName;
 
     {
         const QRegExp modeRe(R"(mode\(\s*([^)]*)\s*\))");
-        if (modeRe.indexIn(srcGmicImage.name) != -1) {
+        if (modeRe.indexIn(srcGmicImage.m_layerName) != -1) {
             QString modeStr = modeRe.cap(1).trimmed();
             auto translatedMode = KisQmicSimpleConvertor::stringToBlendingMode(modeStr);
             dbgPlugins << "Detected mode: " << modeStr << " => " << translatedMode;
@@ -52,7 +52,7 @@ applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
     {
         const QRegExp opacityRe(R"(opacity\(\s*([^)]*)\s*\))");
 
-        if (opacityRe.indexIn(srcGmicImage.name) != -1) {
+        if (opacityRe.indexIn(srcGmicImage.m_layerName) != -1) {
             const auto opacity = opacityRe.cap(1).toFloat();
             dbgPlugins << "Detected opacity: " << opacity << std::lround(opacity / 100.f * 255.f);
             cmd->addCommand(new KisNodeOpacityCommand(node, static_cast<quint8>(std::lround(float(opacity * 255) / 100.f))));
@@ -62,7 +62,7 @@ applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
     {
         const QRegExp nameRe(R"(name\(\s*([^)]*)\s*\))");
 
-        if (nameRe.indexIn(srcGmicImage.name) != -1) {
+        if (nameRe.indexIn(srcGmicImage.m_layerName) != -1) {
             const auto name = nameRe.cap(1);
             dbgPlugins << "Detected layer name: " << name;
             cmd->addCommand(new KisNodeRenameCommand(node, node->name(), name));
@@ -74,7 +74,8 @@ applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
         // Some GMic filters encode layer position into the layer name.
         // E.g. from extract foreground: "name([unnamed] [foreground]),pos(55,35)"
         const QRegularExpression positionPattern(R"(\Wpos\((\d+),(\d+)\))");
-        const QRegularExpressionMatch match = positionPattern.match(srcGmicImage.name);
+        const QRegularExpressionMatch match =
+            positionPattern.match(srcGmicImage.m_layerName);
         if (match.hasMatch()) {
             const auto x = match.captured(1).toInt();
             const auto y = match.captured(2).toInt();
@@ -86,7 +87,10 @@ applyLayerNameChanges(const gmic_image<float> &srcGmicImage,
     return cmd;
 }
 
-inline void gmicImageToPaintDevice(const gmic_image<float> &srcGmicImage, KisPaintDeviceSP dst, KisSelectionSP selection = nullptr, const QRect &dstRect = {})
+inline void gmicImageToPaintDevice(const KisQMicImage &srcGmicImage,
+                                   KisPaintDeviceSP dst,
+                                   KisSelectionSP selection = nullptr,
+                                   const QRect &dstRect = {})
 {
     dbgPlugins << "KisQmicImportTools::gmicImageToPaintDevice();";
 

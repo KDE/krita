@@ -187,18 +187,9 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
             {
                 QMutexLocker lock(&m->m_mutex);
 
-                gmic_image<float> img;
-                img.assign(static_cast<unsigned int>(resultRect.width()),
-                           static_cast<unsigned int>(resultRect.height()),
-                           1,
-                           4);
-
-                img._data = m->m_data;
-                img._is_shared = true;
-
                 KisQmicSimpleConvertor::convertToGmicImageFast(
                     node->paintDevice(),
-                    img,
+                    *m.data(),
                     resultRect);
             }
 

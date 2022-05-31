@@ -250,7 +250,7 @@ const std::map<QString, QString> blendingModeMap = {
 
 static KoColorTransformation *
 createTransformationFromGmic(const KoColorSpace *colorSpace,
-                             quint32 gmicSpectrum,
+                             int gmicSpectrum,
                              float gmicUnitValue)
 {
     KoColorTransformation *colorTransformation = nullptr;
@@ -365,16 +365,15 @@ createTransformation(const KoColorSpace *colorSpace)
     return colorTransformation;
 }
 
-void KisQmicSimpleConvertor::convertFromGmicFast(
-    const gmic_image<float> &gmicImage,
-    KisPaintDeviceSP dst,
-    float gmicUnitValue)
+void KisQmicSimpleConvertor::convertFromGmicFast(const KisQMicImage &gmicImage,
+                                                 KisPaintDeviceSP dst,
+                                                 float gmicUnitValue)
 {
     dbgPlugins << "convertFromGmicFast";
     const KoColorSpace *dstColorSpace = dst->colorSpace();
     const KoColorTransformationSP gmicToDstPixelFormat(
         createTransformationFromGmic(dstColorSpace,
-                                     gmicImage._spectrum,
+                                     gmicImage.m_spectrum,
                                      gmicUnitValue));
     if (!gmicToDstPixelFormat) {
         dbgPlugins << "Fall-back to slow color conversion";
@@ -384,8 +383,8 @@ void KisQmicSimpleConvertor::convertFromGmicFast(
 
     const qint32 x = dst->exactBounds().x();
     const qint32 y = dst->exactBounds().y();
-    const auto width = static_cast<size_t>(gmicImage._width);
-    const auto height = static_cast<size_t>(gmicImage._height);
+    const auto width = static_cast<size_t>(gmicImage.m_width);
+    const auto height = static_cast<size_t>(gmicImage.m_height);
 
     const auto *rgbaFloat32bitcolorSpace =
         KoColorSpaceRegistry::instance()->colorSpace(
@@ -396,17 +395,17 @@ void KisQmicSimpleConvertor::convertFromGmicFast(
     const auto dstNumChannels = rgbaFloat32bitcolorSpace->channelCount();
 
     // number of channels that we will copy
-    const auto numChannels = gmicImage._spectrum;
+    const auto numChannels = gmicImage.m_spectrum;
 
     // gmic image has 4, 3, 2, 1 channel
     std::vector<float *> planes(dstNumChannels);
     const size_t channelOffset = width * height;
-    for (unsigned int channelIndex = 0; channelIndex < gmicImage._spectrum;
+    for (unsigned int channelIndex = 0; channelIndex < gmicImage.m_spectrum;
          channelIndex++) {
-        planes[channelIndex] = gmicImage._data + channelOffset * channelIndex;
+        planes[channelIndex] = gmicImage.m_data + channelOffset * channelIndex;
     }
 
-    for (unsigned int channelIndex = gmicImage._spectrum;
+    for (auto channelIndex = gmicImage.m_spectrum;
          channelIndex < dstNumChannels;
          channelIndex++) {
         planes[channelIndex] = 0; // turn off
@@ -431,7 +430,7 @@ void KisQmicSimpleConvertor::convertFromGmicFast(
 
     // grayscale and rgb case does not have alpha, so let's fill 4th channel of
     // rgba tile with opacity opaque
-    if (gmicImage._spectrum == 1 || gmicImage._spectrum == 3) {
+    if (gmicImage.m_spectrum == 1 || gmicImage.m_spectrum == 3) {
         const auto nPixels = tileWidth * tileHeight;
         auto *srcPixel =
             reinterpret_cast<KoRgbF32Traits::Pixel *>(convertedTile.data());
@@ -509,10 +508,9 @@ void KisQmicSimpleConvertor::convertFromGmicFast(
     dst->crop(x, y, static_cast<qint32>(width), static_cast<qint32>(height));
 }
 
-void KisQmicSimpleConvertor::convertToGmicImageFast(
-    KisPaintDeviceSP dev,
-    gmic_image<float> &gmicImage,
-    QRect rc)
+void KisQmicSimpleConvertor::convertToGmicImageFast(KisPaintDeviceSP dev,
+                                                    KisQMicImage &gmicImage,
+                                                    QRect rc)
 {
     KoColorTransformationSP pixelToGmicPixelFormat(
         createTransformation(dev->colorSpace()));
@@ -527,8 +525,8 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
             << "Image rectangle is empty! Using supplied gmic layer dimension";
         rc = QRect(0,
                    0,
-                   static_cast<int>(gmicImage._width),
-                   static_cast<int>(gmicImage._height));
+                   static_cast<int>(gmicImage.m_width),
+                   static_cast<int>(gmicImage.m_height));
     }
 
     const auto x = rc.x();
@@ -540,14 +538,14 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
     const qint32 numChannels = 4;
 
     const size_t greenOffset =
-        static_cast<size_t>(gmicImage._width) * gmicImage._height;
+        static_cast<size_t>(gmicImage.m_width) * gmicImage.m_height;
     const size_t blueOffset = greenOffset * 2;
     const size_t alphaOffset = greenOffset * 3;
 
-    const std::array<float *, 4> planes = {gmicImage._data,
-                                           gmicImage._data + greenOffset,
-                                           gmicImage._data + blueOffset,
-                                           gmicImage._data + alphaOffset};
+    const std::array<float *, 4> planes = {gmicImage.m_data,
+                                           gmicImage.m_data + greenOffset,
+                                           gmicImage.m_data + blueOffset,
+                                           gmicImage.m_data + alphaOffset};
 
     KisRandomConstAccessorSP it = dev->createRandomConstAccessorNG();
     const auto tileWidth = it->numContiguousColumns(dev->x());
@@ -659,17 +657,17 @@ void KisQmicSimpleConvertor::convertToGmicImageFast(
 
 // gmic assumes float rgba in 0.0 - 255.0
 void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev,
-                                                gmic_image<float> &gmicImage,
+                                                KisQMicImage &gmicImage,
                                                 QRect rc)
 {
     Q_ASSERT(!dev.isNull());
-    Q_ASSERT(gmicImage._spectrum == 4); // rgba
+    Q_ASSERT(gmicImage.m_spectrum == 4); // rgba
 
     if (rc.isEmpty()) {
         rc = QRect(0,
                    0,
-                   static_cast<int>(gmicImage._width),
-                   static_cast<int>(gmicImage._height));
+                   static_cast<int>(gmicImage.m_width),
+                   static_cast<int>(gmicImage.m_height));
     }
 
     const KoColorSpace *rgbaFloat32bitcolorSpace =
@@ -683,7 +681,7 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev,
         createTransformation(rgbaFloat32bitcolorSpace));
 
     const size_t greenOffset =
-        static_cast<size_t>(gmicImage._width) * gmicImage._height;
+        static_cast<size_t>(gmicImage.m_width) * gmicImage.m_height;
     const size_t blueOffset = greenOffset * 2;
     const size_t alphaOffset = greenOffset * 3;
 
@@ -724,19 +722,19 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev,
                 floatRGBApixel,
                 static_cast<qint32>(numContiguousColumns));
 
-            auto pos = static_cast<size_t>(y) * gmicImage._width
+            auto pos = static_cast<size_t>(y) * gmicImage.m_width
                 + static_cast<size_t>(x);
             for (size_t bx = 0; bx < numContiguousColumns; bx++) {
-                memcpy(gmicImage._data + pos,
+                memcpy(gmicImage.m_data + pos,
                        floatRGBApixel + bx * pixelSize,
                        4);
-                memcpy(gmicImage._data + pos + greenOffset,
+                memcpy(gmicImage.m_data + pos + greenOffset,
                        floatRGBApixel + bx * pixelSize + 4,
                        4);
-                memcpy(gmicImage._data + pos + blueOffset,
+                memcpy(gmicImage.m_data + pos + blueOffset,
                        floatRGBApixel + bx * pixelSize + 8,
                        4);
-                memcpy(gmicImage._data + pos + alphaOffset,
+                memcpy(gmicImage.m_data + pos + alphaOffset,
                        floatRGBApixel + bx * pixelSize + 12,
                        4);
                 pos++;
@@ -747,10 +745,9 @@ void KisQmicSimpleConvertor::convertToGmicImage(KisPaintDeviceSP dev,
     }
 }
 
-void KisQmicSimpleConvertor::convertFromGmicImage(
-    const gmic_image<float> &gmicImage,
-    KisPaintDeviceSP dst,
-    float gmicMaxChannelValue)
+void KisQmicSimpleConvertor::convertFromGmicImage(const KisQMicImage &gmicImage,
+                                                  KisPaintDeviceSP dst,
+                                                  float gmicMaxChannelValue)
 {
     dbgPlugins << "convertFromGmicSlow";
     Q_ASSERT(!dst.isNull());
@@ -763,13 +760,13 @@ void KisQmicSimpleConvertor::convertFromGmicImage(
 
     KisPaintDeviceSP dev = dst;
     const size_t greenOffset =
-        static_cast<size_t>(gmicImage._width) * gmicImage._height;
+        static_cast<size_t>(gmicImage.m_width) * gmicImage.m_height;
     const size_t blueOffset = greenOffset * 2;
     const size_t alphaOffset = greenOffset * 3;
     QRect rc(0,
              0,
-             static_cast<int>(gmicImage._width),
-             static_cast<int>(gmicImage._height));
+             static_cast<int>(gmicImage.m_width),
+             static_cast<int>(gmicImage.m_height));
 
     KisRandomAccessorSP it = dev->createRandomAccessorNG();
     float r = 0;
@@ -793,7 +790,7 @@ void KisQmicSimpleConvertor::convertFromGmicImage(
     const float multiplied =
         KoColorSpaceMathsTraits<float>::unitValue / gmicMaxChannelValue;
 
-    switch (gmicImage._spectrum) {
+    switch (gmicImage.m_spectrum) {
     case 1: {
         // convert grayscale to rgba
         for (int y = 0; y < rc.height(); y++) {
@@ -807,10 +804,10 @@ void KisQmicSimpleConvertor::convertFromGmicImage(
                     qMin(numContiguousColumns,
                          static_cast<size_t>(rc.width() - x));
 
-                size_t pos = static_cast<size_t>(y) * gmicImage._width
+                size_t pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
                 for (size_t bx = 0; bx < numContiguousColumns; bx++) {
-                    r = g = b = gmicImage._data[pos] * multiplied;
+                    r = g = b = gmicImage.m_data[pos] * multiplied;
                     a = KoColorSpaceMathsTraits<float>::unitValue;
 
                     memcpy(floatRGBApixel + bx * pixelSize, &r, 4);
@@ -844,11 +841,11 @@ void KisQmicSimpleConvertor::convertFromGmicImage(
                     qMin(numContiguousColumns,
                          static_cast<size_t>(rc.width() - x));
 
-                size_t pos = static_cast<size_t>(y) * gmicImage._width
+                size_t pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
                 for (size_t bx = 0; bx < numContiguousColumns; bx++) {
-                    r = g = b = gmicImage._data[pos] * multiplied;
-                    a = gmicImage._data[pos + greenOffset] * multiplied;
+                    r = g = b = gmicImage.m_data[pos] * multiplied;
+                    a = gmicImage.m_data[pos + greenOffset] * multiplied;
 
                     memcpy(floatRGBApixel + bx * pixelSize, &r, 4);
                     memcpy(floatRGBApixel + bx * pixelSize + 4, &g, 4);
@@ -881,12 +878,12 @@ void KisQmicSimpleConvertor::convertFromGmicImage(
                     qMin(numContiguousColumns,
                          static_cast<size_t>(rc.width() - x));
 
-                size_t pos = static_cast<size_t>(y) * gmicImage._width
+                size_t pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
                 for (size_t bx = 0; bx < numContiguousColumns; bx++) {
-                    r = gmicImage._data[pos] * multiplied;
-                    g = gmicImage._data[pos + greenOffset] * multiplied;
-                    b = gmicImage._data[pos + blueOffset] * multiplied;
+                    r = gmicImage.m_data[pos] * multiplied;
+                    g = gmicImage.m_data[pos + greenOffset] * multiplied;
+                    b = gmicImage.m_data[pos + blueOffset] * multiplied;
                     a = gmicMaxChannelValue * multiplied;
 
                     memcpy(floatRGBApixel + bx * pixelSize, &r, 4);
@@ -919,13 +916,13 @@ void KisQmicSimpleConvertor::convertFromGmicImage(
                     qMin(numContiguousColumns,
                          static_cast<size_t>(rc.width() - x));
 
-                size_t pos = static_cast<size_t>(y) * gmicImage._width
+                size_t pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
                 for (size_t bx = 0; bx < numContiguousColumns; bx++) {
-                    r = gmicImage._data[pos] * multiplied;
-                    g = gmicImage._data[pos + greenOffset] * multiplied;
-                    b = gmicImage._data[pos + blueOffset] * multiplied;
-                    a = gmicImage._data[pos + alphaOffset] * multiplied;
+                    r = gmicImage.m_data[pos] * multiplied;
+                    g = gmicImage.m_data[pos + greenOffset] * multiplied;
+                    b = gmicImage.m_data[pos + blueOffset] * multiplied;
+                    a = gmicImage.m_data[pos + alphaOffset] * multiplied;
 
                     memcpy(floatRGBApixel + bx * pixelSize, &r, 4);
                     memcpy(floatRGBApixel + bx * pixelSize + 4, &g, 4);
@@ -947,38 +944,38 @@ void KisQmicSimpleConvertor::convertFromGmicImage(
     }
 
     default: {
-        dbgPlugins << "Unsupported gmic output format : " << gmicImage._width
-                   << gmicImage._height << gmicImage._depth
-                   << gmicImage._spectrum;
+        dbgPlugins << "Unsupported gmic output format : " << gmicImage.m_width
+                   << gmicImage.m_height << gmicImage.m_spectrum;
     }
     }
 }
 
-QImage KisQmicSimpleConvertor::convertToQImage(gmic_image<float> &gmicImage,
+QImage KisQmicSimpleConvertor::convertToQImage(const KisQMicImage &gmicImage,
                                                float gmicActualMaxChannelValue)
 {
-    QImage image = QImage(static_cast<int>(gmicImage._width),
-                          static_cast<int>(gmicImage._height),
+    QImage image = QImage(static_cast<int>(gmicImage.m_width),
+                          static_cast<int>(gmicImage.m_height),
                           QImage::Format_ARGB32);
 
-    dbgPlugins << image.format() << "first pixel:" << gmicImage._data[0]
-               << gmicImage._width << gmicImage._height << gmicImage._spectrum;
+    dbgPlugins << image.format() << "first pixel:" << gmicImage.m_data[0]
+               << gmicImage.m_width << gmicImage.m_height
+               << gmicImage.m_spectrum;
 
     const size_t greenOffset =
-        static_cast<size_t>(gmicImage._width) * gmicImage._height;
+        static_cast<size_t>(gmicImage.m_width) * gmicImage.m_height;
     const size_t blueOffset = greenOffset * 2;
 
     // always put 255 to qimage
     const float multiplied = 255.0f / gmicActualMaxChannelValue;
 
-    for (size_t y = 0; y < gmicImage._height; y++) {
+    for (size_t y = 0; y < gmicImage.m_height; y++) {
         QRgb *pixel =
             reinterpret_cast<QRgb *>(image.scanLine(static_cast<int>(y)));
-        for (size_t x = 0; x < gmicImage._width; x++) {
-            const auto pos = y * gmicImage._width + x;
-            const float r = gmicImage._data[pos] * multiplied;
-            const float g = gmicImage._data[pos + greenOffset] * multiplied;
-            const float b = gmicImage._data[pos + blueOffset] * multiplied;
+        for (size_t x = 0; x < gmicImage.m_width; x++) {
+            const auto pos = y * gmicImage.m_width + x;
+            const float r = gmicImage.m_data[pos] * multiplied;
+            const float g = gmicImage.m_data[pos + greenOffset] * multiplied;
+            const float b = gmicImage.m_data[pos + blueOffset] * multiplied;
             pixel[x] = qRgb(int(r), int(g), int(b));
         }
     }
@@ -986,11 +983,11 @@ QImage KisQmicSimpleConvertor::convertToQImage(gmic_image<float> &gmicImage,
 }
 
 void KisQmicSimpleConvertor::convertFromQImage(const QImage &image,
-                                               gmic_image<float> &gmicImage,
+                                               KisQMicImage &gmicImage,
                                                float gmicUnitValue)
 {
     const auto greenOffset =
-        static_cast<size_t>(gmicImage._width) * gmicImage._height;
+        static_cast<size_t>(gmicImage.m_width) * gmicImage.m_height;
     const size_t blueOffset = greenOffset * 2;
     const size_t alphaOffset = greenOffset * 3;
 
@@ -998,19 +995,19 @@ void KisQmicSimpleConvertor::convertFromQImage(const QImage &image,
     const float qimageUnitValue = 255.0f;
     const float multiplied = gmicUnitValue / qimageUnitValue;
 
-    Q_ASSERT(image.width() == int(gmicImage._width));
-    Q_ASSERT(image.height() == int(gmicImage._height));
+    Q_ASSERT(image.width() == int(gmicImage.m_width));
+    Q_ASSERT(image.height() == int(gmicImage.m_height));
     Q_ASSERT(image.format() == QImage::Format_ARGB32);
 
-    switch (gmicImage._spectrum) {
+    switch (gmicImage.m_spectrum) {
     case 1: {
         for (int y = 0; y < image.height(); y++) {
             const QRgb *pixel =
                 reinterpret_cast<const QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
-                const auto pos = static_cast<size_t>(y) * gmicImage._width
+                const auto pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
-                gmicImage._data[pos] =
+                gmicImage.m_data[pos] =
                     static_cast<float>(qGray(pixel[x])) * multiplied;
             }
         }
@@ -1021,11 +1018,11 @@ void KisQmicSimpleConvertor::convertFromQImage(const QImage &image,
             const QRgb *pixel =
                 reinterpret_cast<const QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
-                const auto pos = static_cast<size_t>(y) * gmicImage._width
+                const auto pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
-                gmicImage._data[pos] =
+                gmicImage.m_data[pos] =
                     static_cast<float>(qGray(pixel[x])) * multiplied;
-                gmicImage._data[pos + greenOffset] =
+                gmicImage.m_data[pos + greenOffset] =
                     static_cast<float>(qAlpha(pixel[x])) * multiplied;
             }
         }
@@ -1036,13 +1033,13 @@ void KisQmicSimpleConvertor::convertFromQImage(const QImage &image,
             const QRgb *pixel =
                 reinterpret_cast<const QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
-                const auto pos = static_cast<size_t>(y) * gmicImage._width
+                const auto pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
-                gmicImage._data[pos] =
+                gmicImage.m_data[pos] =
                     static_cast<float>(qRed(pixel[x])) * multiplied;
-                gmicImage._data[pos + greenOffset] =
+                gmicImage.m_data[pos + greenOffset] =
                     static_cast<float>(qGreen(pixel[x])) * multiplied;
-                gmicImage._data[pos + blueOffset] =
+                gmicImage.m_data[pos + blueOffset] =
                     static_cast<float>(qBlue(pixel[x])) * multiplied;
             }
         }
@@ -1053,15 +1050,15 @@ void KisQmicSimpleConvertor::convertFromQImage(const QImage &image,
             const QRgb *pixel =
                 reinterpret_cast<const QRgb *>(image.scanLine(y));
             for (int x = 0; x < image.width(); x++) {
-                const auto pos = static_cast<size_t>(y) * gmicImage._width
+                const auto pos = static_cast<size_t>(y) * gmicImage.m_width
                     + static_cast<size_t>(x);
-                gmicImage._data[pos] =
+                gmicImage.m_data[pos] =
                     static_cast<float>(qRed(pixel[x])) * multiplied;
-                gmicImage._data[pos + greenOffset] =
+                gmicImage.m_data[pos + greenOffset] =
                     static_cast<float>(qGreen(pixel[x])) * multiplied;
-                gmicImage._data[pos + blueOffset] =
+                gmicImage.m_data[pos + blueOffset] =
                     static_cast<float>(qBlue(pixel[x])) * multiplied;
-                gmicImage._data[pos + alphaOffset] =
+                gmicImage.m_data[pos + alphaOffset] =
                     static_cast<float>(qAlpha(pixel[x])) * multiplied;
             }
         }

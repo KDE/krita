@@ -73,6 +73,7 @@ struct KisAnimTimelineFramesView::Private
         , existingLayersMenu(nullptr)
         , insertKeyframeDialog(nullptr)
         , zoomDragButton(nullptr)
+        , canvas(nullptr)
         , fps(1)
         , dragInProgress(false)
         , dragWasSuccessful(false)

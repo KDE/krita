@@ -374,26 +374,16 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
         qputenv("XDG_DATA_DIRS", QFile::encodeName(root + "share") + ":" + originalXdgDataDirs);
 
         // APPIMAGE SOUND ADDITIONS
-        // GStreamer needs a few environment variables to properly function in an appimage context.
-        // The following code should be configured to **only** run when we detect that Krita is being
-        // run within an appimage. Checking for the presence of an APPDIR path env variable seems to be
-        // enough to filter out this step for non-appimage krita builds.
-
         const bool isInAppimage = qEnvironmentVariableIsSet("APPIMAGE");
         if (isInAppimage) {
             QByteArray appimageMountDir = qgetenv("APPDIR");
 
-            //We need to add new gstreamer plugin paths for the system to find the
-            //appropriate plugins.
-            const QByteArray gstPluginSystemPath = qgetenv("GST_PLUGIN_SYSTEM_PATH_1_0");
-            const QByteArray gstPluginScannerPath = qgetenv("GST_PLUGIN_SCANNER");
-
-            //Plugins Path is where libgstreamer-1.0 should expect to find plugin libraries.
-            qputenv("GST_PLUGIN_SYSTEM_PATH_1_0", appimageMountDir + QFile::encodeName("/usr/lib/gstreamer-1.0/") + ":" + gstPluginSystemPath);
-
-            //Plugin scanner is where gstreamer should expect to find the plugin scanner.
-            //Perhaps invoking the scanenr earlier in the code manually could allow ldd to quickly find all plugin dependencies?
-            qputenv("GST_PLUGIN_SCANNER", appimageMountDir + QFile::encodeName("/usr/lib/gstreamer-1.0/gst-plugin-scanner"));
+            //Plugins Path is where mlt should expect to find its plugin libraries.
+            qputenv("MLT_REPOSITORY", appimageMountDir + QFile::encodeName("/usr/lib/mlt/"));
+            qputenv("MLT_DATA", appimageMountDir + QFile::encodeName("/usr/share/mlt/"));
+            qputenv("MLT_ROOT_DIR", appimageMountDir + QFile::encodeName("/usr/"));
+            qputenv("MLT_PROFILES_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/profiles/"));
+            qputenv("MLT_PRESETS_PATH", appimageMountDir + QFile::encodeName("/usr/share/mlt/presets/"));
         }
     }
 #else

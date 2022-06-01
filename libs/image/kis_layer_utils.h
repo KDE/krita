@@ -14,6 +14,7 @@
 #include "kritaimage_export.h"
 #include "kis_command_utils.h"
 #include "kis_time_span.h"
+#include "kis_image.h"
 
 class KoProperties;
 class KoColor;

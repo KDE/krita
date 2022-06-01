@@ -31,6 +31,7 @@ find_library(MLT_LIBRARIES
     ${PC_MLT_PREFIX}/lib
   PATHS
     /usr/local/lib
+    /usr/local/lib64
     /usr/lib
 )
 
@@ -52,6 +53,7 @@ find_library(MLTPP_LIBRARIES
     ${PC_MLT_PREFIX}/lib
   PATHS
     /usr/local/lib
+    /usr/local/lib64
     /usr/lib
 )
 

@@ -9,6 +9,7 @@
 #include <QString>
 #include <QLocale>
 #include <KoSvgText.h>
+#include <QDebug>
 /**
  * @brief The KoCssTextUtils class
  *
@@ -19,35 +20,125 @@ class KoCssTextUtils
 {
 public:
 
+    /**
+     * @brief transformTextToUpperCase
+     * convenience function that creates a QLocale and uses it's 'toUpper' function.
+     * Note: When building Qt without ICU, this uses platform dependant functions.
+     *
+     * @param text the text to transform.
+     * @param langCode the language code in BCP format, it gets transformed to qLocale's format.
+     * @return the transformed string.
+     */
     static QString transformTextToUpperCase(const QString &text, const QString langCode) {
-        QLocale locale(langCode);
+        QLocale locale(langCode.split("-").join("_"));
         return locale.toUpper(text);
     };
 
+    /**
+     * @brief transformTextToUpperCase
+     * convenience function that creates a QLocale and uses it's 'toLower' function.
+     * Note: When building Qt without ICU, this uses platform dependant functions.
+     *
+     * @param text the text to transform.
+     * @param langCode the language code in BCP format, it gets transformed to qLocale's format.
+     * @return the transformed string.
+     */
     static QString transformTextToLowerCase(const QString &text, const QString langCode) {
-        QLocale locale(langCode);
+        QLocale locale(langCode.split("-").join("_"));
         return locale.toLower(text);
     };
 
-    static QString transformTextCapitalize(const QString &text, const QString langCode) {
-        QLocale locale(langCode);
-        //TODO
-        return text;
-    };
-    static QString transformTextFullWidth(const QString &text) {
-        //TODO
-        return text;
-    };
-    static QString transformTextFullSizeKana(const QString &text) {
-        //TODO
-        return text;
-    };
+    /**
+     * @brief transformTextToUpperCase
+     * This function splits the text into graphemes, and then uses QLocale::toUpper for each
+     * letter following a whitespace character or CSS Wordseparator. It has a small codepath
+     * for transforming the Dutch IJ correctly, as this is more readable.
+     * Note: When building Qt without ICU, this uses platform dependant functions.
+     *
+     * @param text the text to transform.
+     * @param langCode the language code in BCP format, it gets transformed to qLocale's format.
+     * @return the transformed string.
+     */
+    static QString transformTextCapitalize(const QString &text, const QString langCode);
 
+    /**
+     * @brief transformTextFullWidth
+     * This function will transform 'narrow' or 'halfwidth' characters to their normal
+     * counterparts, and will transform ascii characters to their 'fullwidth'/'ideographic'
+     * counterparts.
+     *
+     * @param text the text to transform.
+     * @return the transformed text.
+     */
+    static QString transformTextFullWidth(const QString &text);
+    /**
+     * @brief transformTextFullSizeKana
+     * This function will take 'small' Kana (Japanese phonetic script) and
+     * transform it to their 'full-size' equivelants, following the list in the CSS-Text-3 spec.
+     *
+     * @param text the text to transform.
+     * @return the transformed text.
+     */
+    static QString transformTextFullSizeKana(const QString &text);
+
+    /**
+     * @brief collapseSpaces
+     * Some versions of CSS-Text 'white-space' or 'text-space-collapse' will collapse or
+     * transform white space characters while others don't.
+     * This function returns whether that's the case.
+     *
+     * @param text the text to check against, this text will be transformed if the collapse method requires that.
+     * @param collapseMethod the white-space/text-space-collapse method.
+     * @return A vector of booleans the size of the input text that marks whether the character should be collapsed.
+     */
     static QVector<bool> collapseSpaces(QString &text, KoSvgText::TextSpaceCollapse collapseMethod);
 
+    /**
+     * @brief collapseLastSpace
+     * Some versions of CSS-Text 'white-space' or 'text-space-collapse' will collapse the
+     * last spaces while others don't. This function returns whether that's the case.
+     *
+     * @param c the character to check.
+     * @param collapseMethod the text-space collapse type.
+     * @return whether the character should collapse if it's the last space in a line.
+     */
     static bool collapseLastSpace(const QChar c, KoSvgText::TextSpaceCollapse collapseMethod);
 
+    /**
+     * @brief characterCanHang
+     * The function returns whether the character qualifies for 'hanging-punctuation', using
+     * the given hang-type.
+     *
+     * @param c the character to check.
+     * @param hangType how to hang.
+     * @return whether the character can hang.
+     */
     static bool characterCanHang(const QChar c, KoSvgText::HangingPunctuations hangType);
+
+    /**
+     * @brief IsCssWordSeparator
+     * CSS has a number of characters it considers word-separators, which are used
+     * in justification and for word-spacing.
+     *
+     * @param grapheme a grapheme to check. Using graphemes here, because some of
+     * the word-separators are not in the unicode basic plane.
+     * @return true if it is a word-separator
+     */
+    static bool IsCssWordSeparator(const QString grapheme);
+
+    /**
+     * @brief textToUnicodeGraphemes
+     * In letters like Å, the amount of unicode codpoints can be 1, but it can also be 2,
+     * one for 'A', and one for 'Combining Mark Ring Above". In some letters used by Vietnamese,
+     * such as ỗ there can be even 3. Such codepoint sequences are considered 'grapheme-clusters'.
+     * For editing text, matching fonts or capitalizing the first letter, it's wisest to do
+     * so on the grapheme clusters instead of the individual codepoints.
+     *
+     * @param text the text to break.
+     * @param langCode the language code of the text, BCP style.
+     * @return a QStringList of the graphemes as seperate strings.
+     */
+    static QStringList textToUnicodeGraphemeClusters(const QString text, const QString langCode);
 };
 
 #endif // KOCSSTEXTUTILS_H

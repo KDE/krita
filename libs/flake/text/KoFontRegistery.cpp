@@ -4,8 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KoFontRegistery.h"
-
-#include <graphemebreak.h>
+#include "KoCssTextUtils.h"
 
 #include <QGlobalStatic>
 #include <QMutex>
@@ -110,21 +109,7 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
         // spec requires it, but also because of why the css spec requires it: graphemes' parts should
         // not end up in seperate runs, which they will if they get assigned different fonts, potentially breaking
         // ligatures and emoji sequences.
-        char graphemeBreaks[text.size()];
-        set_graphemebreaks_utf16(text.utf16(), text.size(), language.toUtf8().data(), graphemeBreaks);
-        QStringList graphemes;
-        int graphemeLength = 0;
-        int lastGrapheme = 0;
-        for (int i = 0; i < text.size(); i++) {
-            graphemeLength += 1;
-            bool breakGrapheme = lastGrapheme+graphemeLength < text.size()? graphemeBreaks[i] == GRAPHEMEBREAK_BREAK : false;
-            if (breakGrapheme) {
-                graphemes.append(text.mid(lastGrapheme, graphemeLength));
-                lastGrapheme += graphemeLength;
-                graphemeLength = 0;
-            }
-        }
-        graphemes.append(text.mid(lastGrapheme, text.size()-lastGrapheme));
+        QStringList graphemes = KoCssTextUtils::textToUnicodeGraphemeClusters(text, language);
 
         // Parse over the fonts and graphemes and try to see if we can get the best match for a given grapheme.
         for (int i=0; i<fontSet->nfont; i++) {

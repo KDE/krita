@@ -116,7 +116,7 @@ enum LineBreak {
     LineBreakStrict,  ///< Use strict method, language specific.
     LineBreakAnywhere ///< Break between any typographic clusters.
 };
-/// brief TextAlign values @see https://www.w3.org/TR/css-writing-modes-4/#logical-to-physical for interaction with writing mode and direction.
+/// TextAlign values, see https://www.w3.org/TR/css-writing-modes-4/#logical-to-physical for interaction with writing mode and direction.
 enum TextAlign {
     AlignLastAuto,   ///< TextAlignLast: same as text-align-all, unless that's justify, then this is AlignStart.
     AlignStart,      ///< Align text to left side of line with LTR, right with RTL, top with the vertical writing modes.
@@ -129,13 +129,12 @@ enum TextAlign {
 };
 
 /// Whether and how to transform text. Not strictly necessary according to SVG2.
+/// Fullwidth and FullSizeKana are inside the textTransform Struct.
 enum TextTransform {
-    TextTransformNone,        ///< No transforms.
-    TextTransformCapitalize,  ///< Convert first letter in word of bicarmel text to upper-case, locale dependant.
-    TextTransformUppercase,   ///< Convert all bicarmel text to upper-case, locale dependant.
-    TextTransformLowercase,   ///< Convert all bicarmel text to lower-case, locale dependant.
-    TextTransformFullWidth,   ///< Convert proportional or half-width text to full-width text.
-    TextTransformFullSizeKana ///< Convert Japanese Katakana and Hiragana to their 'fullsize' equivelants.
+    TextTransformNone         = 0x0, ///< No transforms.
+    TextTransformCapitalize   = 0x1, ///< Convert first letter in word of bicarmel text to upper-case, locale dependant.
+    TextTransformUppercase    = 0x2, ///< Convert all bicarmel text to upper-case, locale dependant.
+    TextTransformLowercase    = 0x4, ///< Convert all bicarmel text to lower-case, locale dependant.
 };
 
 /// How to handle overflow.
@@ -145,7 +144,8 @@ enum TextOverflow {
     OverFlowEllipse  ///< Replace the last characters with "U+2026"
 };
 
-/// Flags. Whether and how to hang punctuation. Not strictly necessary according to SVG2.
+/// Flags. Whether and how to hang punctuation. Not strictly necessary according to SVG2,
+/// marked as 'at-risk' in CSS-Text-3, though this feature is useful for East-Asian text layout.
 enum HangingPunctuation {
     HangNone  = 0x0, ///< Hang nothing.
     HangFirst = 0x1, ///< Hang opening brackets and quotes.
@@ -352,7 +352,6 @@ bool xmlSpaceToLongHands(const QString &value,
 WordBreak parseWordBreak(const QString &value);
 LineBreak parseLineBreak(const QString &value);
 TextAlign parseTextAlign(const QString &value);
-TextTransform parseTextTransform(const QString &value);
 
 Baseline parseBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
@@ -385,7 +384,6 @@ QString writeTextPathSide(TextPathSide value);
 QString writeWordBreak(WordBreak value);
 QString writeLineBreak(LineBreak value);
 QString writeTextAlign(TextAlign value);
-QString writeTextTransform(TextTransform value);
 
 /**
  * @brief writeWhiteSpaceValue
@@ -414,16 +412,70 @@ struct CharTransformation : public boost::equality_comparable<CharTransformation
 
     bool operator==(const CharTransformation & other) const;
 };
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::CharTransformation &t);
 
 struct TextOnPathInfo {
-    qreal startOffset = 0.0;
+    qreal startOffset            = 0.0;
     bool startOffsetIsPercentage = false;
-    TextPathMethod method = TextPathAlign;
-    TextPathSpacing spacing = TextPathAuto;
-    TextPathSide side = TextPathSideLeft;
+    TextPathMethod  method       = TextPathAlign;
+    TextPathSpacing spacing      = TextPathAuto;
+    TextPathSide    side         = TextPathSideLeft;
 };
 
-QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::CharTransformation &t);
+/// "This property transforms text for styling purposes.
+///  It has no effect on the underlying content, and must not affect the content of a plain text copy & paste operation."
+/// -- CSS-Text-3
+struct TextTransformInfo : public boost::equality_comparable<TextTransformInfo> {
+    TextTransformInfo() {}
+    TextTransform capitals = TextTransformNone; ///< Text transform upper/lower/capitalize.
+    bool fullWidth         = false; ///< Convert proportional or half-width text to full-width text. 'at-risk'
+    bool fullSizeKana      = false; ///< Convert Japanese Katakana and Hiragana to their 'fullsize' equivelants. 'at-risk'
+    bool operator==(const TextTransformInfo &rhs) const {
+        return (capitals == rhs.capitals)
+                && (fullWidth == rhs.fullWidth)
+                && (fullSizeKana == rhs.fullSizeKana);
+    }
+
+};
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextTransformInfo &t);
+TextTransformInfo parseTextTransform(QString value);
+QString writeTextTransform(const TextTransformInfo textTransform);
+
+/// "This property specifies the indentation applied to lines of inline content in a block.
+///  The indent is treated as a margin applied to the start edge of the line box." -- CSS-Text-3
+struct TextIndentInfo : public boost::equality_comparable<TextIndentInfo> {
+    TextIndentInfo() {}
+
+    qreal value    = 0.0;   ///< The indentation length or percentage.
+    bool  isPercentage  = false; ///< Interpret the value as a percentage of the total run length of a box.
+    bool  hanging       = false; ///< Flip the lines to which text-indent is applied.
+    bool  eachLine      = false; ///< Apply the text-indent to each line following a hardbreak.
+    bool operator==(const TextIndentInfo &rhs) const {
+        return (value == rhs.value)
+                && (isPercentage == rhs.isPercentage)
+                && (hanging == rhs.hanging)
+                && (eachLine == rhs.eachLine);
+    }
+};
+
+TextIndentInfo parseTextIndent(QString value, const SvgLoadingContext &context);
+QString writeTextIndent(const TextIndentInfo textIndent);
+
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextIndentInfo &value);
+
+/// "This property determines the tab size used to render preserved tab characters (U+0009)." -- CSS-Text-3
+struct TabSizeInfo : public boost::equality_comparable<TabSizeInfo>  {
+    qreal value = 8;        ///< A length or a number. Length is currently marked 'at-risk'.
+    bool isNumber = true;     ///< Multiply by width of 'space' character, including word- and letter-spacing.
+    qreal extraSpacing = 0.0; ///< Extra spacing due word or letter-spacing. Not written to css and only used during layout.
+    bool operator==(const TabSizeInfo &rhs) const {
+        return (value == rhs.value)
+                && (isNumber == rhs.isNumber);
+    }
+};
+TabSizeInfo parseTabSize(QString value, const SvgLoadingContext &context);
+QString writeTabSize(const TabSizeInfo tabSize);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TabSizeInfo &value);
 
 /**
  * @brief The AssociatedShapeWrapper struct is a special shared-pointer-like class
@@ -533,6 +585,9 @@ Q_DECLARE_METATYPE(KoSvgText::HangingPunctuations)
 Q_DECLARE_METATYPE(KoSvgText::TextSpaceTrims)
 Q_DECLARE_METATYPE(KoSvgText::BackgroundProperty)
 Q_DECLARE_METATYPE(KoSvgText::StrokeProperty)
+Q_DECLARE_METATYPE(KoSvgText::TextTransformInfo)
+Q_DECLARE_METATYPE(KoSvgText::TextIndentInfo)
+Q_DECLARE_METATYPE(KoSvgText::TabSizeInfo)
 Q_DECLARE_METATYPE(KoSvgText::AssociatedShapeWrapper)
 
 #endif // KOSVGTEXT_H

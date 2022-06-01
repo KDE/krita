@@ -35,6 +35,18 @@ struct TextPropertiesStaticRegistrar {
         QMetaType::registerEqualsComparator<KoSvgText::StrokeProperty>();
         QMetaType::registerDebugStreamOperator<KoSvgText::StrokeProperty>();
 
+        qRegisterMetaType<KoSvgText::TextTransformInfo>("KoSvgText::TextTransformInfo");
+        QMetaType::registerEqualsComparator<KoSvgText::TextTransformInfo>();
+        QMetaType::registerDebugStreamOperator<KoSvgText::TextTransformInfo>();
+
+        qRegisterMetaType<KoSvgText::TextIndentInfo>("KoSvgText::TextIndentInfo");
+        QMetaType::registerEqualsComparator<KoSvgText::TextIndentInfo>();
+        QMetaType::registerDebugStreamOperator<KoSvgText::TextIndentInfo>();
+
+        qRegisterMetaType<KoSvgText::TabSizeInfo>("KoSvgText::TabSizeInfo");
+        QMetaType::registerEqualsComparator<KoSvgText::TabSizeInfo>();
+        QMetaType::registerDebugStreamOperator<KoSvgText::TabSizeInfo>();
+
         qRegisterMetaType<KoSvgText::AssociatedShapeWrapper>("KoSvgText::AssociatedShapeWrapper");
     }
 };
@@ -350,7 +362,31 @@ QDebug operator<<(QDebug dbg, const CharTransformation &t)
     return dbg.space();
 }
 
+QDebug operator<<(QDebug dbg, const TextTransformInfo &t)
+{
+    dbg.nospace() << "TextTransformInfo(";
+    dbg.nospace() << writeTextTransform(t);
+    dbg.nospace() << ")";
+    return dbg.space();
+}
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextIndentInfo &value)
+{
+    dbg.nospace() << "TextIndentInfo(";
+    dbg.nospace() << writeTextIndent(value);
+    dbg.nospace() << ")";
+    return dbg.space();
+}
 
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TabSizeInfo &value)
+{
+    dbg.nospace() << "TextIndentInfo(";
+    dbg.nospace() << writeTabSize(value);
+    if (value.isNumber) {
+        dbg.nospace() << "x Spaces";
+    }
+    dbg.nospace() << ")";
+    return dbg.space();
+}
 
 QDebug operator<<(QDebug dbg, const BackgroundProperty &prop)
 {
@@ -732,16 +768,6 @@ TextAlign parseTextAlign(const QString &value)
                             AlignStart;
 }
 
-TextTransform parseTextTransform(const QString &value)
-{
-    return value == "uppercase"? TextTransformUppercase:
-           value == "lowercase"? TextTransformLowercase:
-           value == "capitalize"? TextTransformCapitalize:
-           value == "full-width"? TextTransformFullWidth:
-           value == "full-size-kana"? TextTransformFullSizeKana:
-                                      TextTransformNone;
-}
-
 QString writeWordBreak(WordBreak value)
 {
     return value == WordBreakKeepAll? "keep-all":
@@ -770,14 +796,117 @@ QString writeTextAlign(TextAlign value)
                                    "start";
 }
 
-QString writeTextTransform(TextTransform value)
+TextTransformInfo parseTextTransform(QString value)
 {
-    return value == TextTransformUppercase? "uppercase":
-           value == TextTransformLowercase? "lowercase":
-           value == TextTransformCapitalize? "capitalize":
-           value == TextTransformFullWidth? "full-width":
-           value == TextTransformFullSizeKana? "full-size-kana":
-                                      "none";
+    TextTransformInfo textTransform;
+    QStringList values = value.toLower().split(" ");
+    for (QString param: values) {
+        if (param == "capitalize") {
+            textTransform.capitals = TextTransformCapitalize;
+        } else if (param == "uppercase") {
+            textTransform.capitals = TextTransformUppercase;
+        } else if (param == "lowercase") {
+            textTransform.capitals = TextTransformLowercase;
+        } else if (param == "full-width") {
+            textTransform.fullWidth = true;
+        } else if (param == "full-size-kana") {
+            textTransform.fullSizeKana = true;
+        } else {
+            qWarning() << "Unknown parameter in text-transform" << param;
+        }
+    }
+    return textTransform;
+
+}
+
+QString writeTextTransform(const TextTransformInfo textTransform)
+{
+    QStringList values;
+    if (textTransform.capitals == TextTransformNone && !textTransform.fullWidth && !textTransform.fullSizeKana) {
+        values.append("none");
+    } else {
+        if (textTransform.capitals == TextTransformLowercase) {
+            values.append("lowercase");
+        } else if (textTransform.capitals == TextTransformUppercase) {
+            values.append("uppercase");
+        } else if (textTransform.capitals == TextTransformCapitalize) {
+            values.append("capitalize");
+        }
+        if (textTransform.fullWidth) {
+            values.append("full-width");
+        }
+        if (textTransform.fullSizeKana) {
+            values.append("full-size-kana");
+        }
+    }
+    return values.join(" ");
+}
+
+TextIndentInfo parseTextIndent(QString value, const SvgLoadingContext &context)
+{
+    QStringList values = value.toLower().split(" ");
+    TextIndentInfo textIndent;
+    for (QString param: values) {
+        bool ok = false;
+        qreal parsed = 0.0;
+        if (param.endsWith("%")) {
+            parsed = SvgUtil::fromPercentage(param, &ok);
+            textIndent.isPercentage = true;
+        } else {
+            parsed = SvgUtil::parseUnitXY(context.currentGC(), param);
+            ok = true;
+        }
+
+        if (param == "hanging") {
+            textIndent.hanging = true;
+        } else if (param == "each-line") {
+            textIndent.eachLine = true;
+        } else if (ok) {
+            textIndent.value = parsed;
+        } else {
+            qWarning() << "Unknown parameter in text-indent" << param;
+        }
+    }
+    return textIndent;
+}
+
+QString writeTextIndent(const TextIndentInfo textIndent)
+{
+    QStringList values;
+    QString indentVal = QString::number(textIndent.value);
+    if (textIndent.isPercentage) {
+        indentVal += "%";
+    }
+    values.append(indentVal);
+    if (textIndent.hanging) {
+        values.append("hanging");
+    }
+    if (textIndent.eachLine) {
+        values.append("each-line");
+    }
+    return values.join(" ");
+}
+
+TabSizeInfo parseTabSize(QString value, const SvgLoadingContext &context)
+{
+    TabSizeInfo tabSizeInfo;
+    bool ok = false;
+    qreal parsed = KisDomUtils::toDouble(value, &ok);
+    if (!ok) {
+        parsed = SvgUtil::parseUnitXY(context.currentGC(), value);
+    }
+    tabSizeInfo.value = parsed;
+    tabSizeInfo.isNumber = ok;
+    return tabSizeInfo;
+}
+
+QString writeTabSize(const TabSizeInfo tabSize)
+{
+    QString val = KisDomUtils::toString(tabSize.value);
+    if (!tabSize.isNumber) {
+        val += "pt";
+    }
+    return val;
 }
 
 }

@@ -103,9 +103,7 @@ inline void gmicImageToPaintDevice(const KisQMicImage &srcGmicImage,
     if (selection) {
         KisPaintDeviceSP src = new KisPaintDevice(dst->colorSpace());
         KisQmicSimpleConvertor::convertFromGmicFast(srcGmicImage, src, 255.0f);
-
         KisPainter painter(dst, selection);
-        painter.setCompositeOpId(COMPOSITE_COPY);
         painter.bitBlt(dstRect.topLeft(), src, QRect(QPoint(0, 0), dstRect.size()));
     } else {
         KisQmicSimpleConvertor::convertFromGmicFast(srcGmicImage, dst, 255.0f);

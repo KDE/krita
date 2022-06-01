@@ -127,13 +127,48 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
         btnOnionSkinsMenu->setAutoRaise(true);
         layout->addWidget(btnOnionSkinsMenu);
 
-        // Audio menu..
-        btnAudioMenu = new QToolButton(this);
-        btnAudioMenu->setIcon(KisIconUtils::loadIcon("audio-none"));
-        btnAudioMenu->setToolTip(i18n("Audio menu"));
-        btnAudioMenu->setAutoRaise(true);
-        btnAudioMenu->hide(); // (NOTE: Hidden for now while audio features develop.)
-        layout->addWidget(btnAudioMenu);
+        {   // Audio menu..
+            btnAudioMenu = new QToolButton(this);
+            btnAudioMenu->setIcon(KisIconUtils::loadIcon("audio-none"));
+            btnAudioMenu->setToolTip(i18n("Animation audio menu"));
+            btnAudioMenu->setIconSize(QSize(22, 22));
+            btnAudioMenu->setAutoRaise(true);
+
+            QMenu *audioMenu = new QMenu(this);
+
+            strImportAudio = QString(i18nc("@item:inmenu Load audio file into Krita from disk.", "Import Audio..."));
+            importAudioAction = new QAction(strImportAudio, audioMenu);
+            removeAudioAction = new QAction(i18nc("@item:inmenu", "Remove audio"), audioMenu);
+
+            muteAudioAction = new QAction(i18nc("@item:inmenu Mute audio playback.", "Mute"), audioMenu);
+            muteAudioAction->setCheckable(true);
+
+            volumeSlider = new KisSliderSpinBox(audioMenu);
+            volumeSlider->setRange(0, 100);
+            volumeSlider->setSuffix(i18n("%"));
+            volumeSlider->setPrefix(i18nc("@item:inmenu Volume slider", "Volume: "));
+            volumeSlider->setSingleStep(1);
+            volumeSlider->setPageStep(10);
+            volumeSlider->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
+
+            QWidgetAction *volumeAction = new QWidgetAction(audioMenu);
+            volumeAction->setDefaultWidget(volumeSlider);
+
+            audioMenu->addSeparator();
+
+            audioMenu->addAction(importAudioAction);
+            audioMenu->addAction(removeAudioAction);
+
+            audioMenu->addSeparator();
+
+            audioMenu->addAction(volumeAction);
+            audioMenu->addAction(muteAudioAction);
+
+            btnAudioMenu->setPopupMode(QToolButton::InstantPopup);
+            btnAudioMenu->setMenu(audioMenu);
+
+            layout->addWidget(btnAudioMenu);
+        }
 
         {   // Settings menu..
             btnSettingsMenu = new QToolButton(this);
@@ -215,6 +250,8 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
     }
 }
 
+
+
 struct KisAnimTimelineDocker::Private
 {
     Private(QWidget *parent)
@@ -225,6 +262,11 @@ struct KisAnimTimelineDocker::Private
     {
         framesView->setModel(framesModel);
         framesView->setMinimumHeight(50);
+
+        connect(titlebar->importAudioAction, &QAction::triggered, framesView, &KisAnimTimelineFramesView::slotSelectAudioChannelFile);
+        connect(titlebar->removeAudioAction, &QAction::triggered, framesView, [&](){framesView->slotAudioChannelRemove();});
+        connect(titlebar->muteAudioAction, &QAction::triggered, framesView, &KisAnimTimelineFramesView::slotAudioChannelMute);
+        connect(titlebar->volumeSlider, SIGNAL(valueChanged(int)), framesView, SLOT(slotAudioVolumeChanged(int)));
     }
 
     KisAnimTimelineFramesModel *framesModel;
@@ -236,6 +278,8 @@ struct KisAnimTimelineDocker::Private
     KisSignalAutoConnectionsStore canvasConnections;
     KisMainWindow *mainWindow;
 };
+
+
 
 KisAnimTimelineDocker::KisAnimTimelineDocker()
     : QDockWidget(i18n("Animation Timeline"))

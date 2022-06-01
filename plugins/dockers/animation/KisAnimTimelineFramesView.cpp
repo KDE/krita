@@ -65,15 +65,10 @@ struct KisAnimTimelineFramesView::Private
         , layersHeader(nullptr)
         , addLayersButton(nullptr)
         , pinLayerToTimelineAction(nullptr)
-        , audioOptionsButton(nullptr)
         , colorSelector(nullptr)
         , colorSelectorAction(nullptr)
         , multiframeColorSelector(nullptr)
         , multiframeColorSelectorAction(nullptr)
-        , audioOptionsMenu(nullptr)
-        , openAudioAction(nullptr)
-        , audioMuteAction(nullptr)
-        , volumeSlider(nullptr)
         , layerEditingMenu(nullptr)
         , existingLayersMenu(nullptr)
         , insertKeyframeDialog(nullptr)
@@ -97,17 +92,10 @@ struct KisAnimTimelineFramesView::Private
     QToolButton* addLayersButton;
     KisAction* pinLayerToTimelineAction;
 
-    QToolButton* audioOptionsButton;
-
     KisColorLabelSelectorWidgetMenuWrapper* colorSelector;
     QWidgetAction* colorSelectorAction;
     KisColorLabelSelectorWidgetMenuWrapper* multiframeColorSelector;
     QWidgetAction* multiframeColorSelectorAction;
-
-    QMenu* audioOptionsMenu;
-    QAction* openAudioAction;
-    QAction* audioMuteAction;
-    KisSliderSpinBox* volumeSlider;
 
     QMenu* layerEditingMenu;
     QMenu* existingLayersMenu;
@@ -216,47 +204,6 @@ KisAnimTimelineFramesView::KisAnimTimelineFramesView(QWidget *parent)
     m_d->addLayersButton->setPopupMode(QToolButton::InstantPopup);
     m_d->addLayersButton->setMenu(m_d->layerEditingMenu);
 
-    /********** Audio Channel Menu *******************************************************/
-
-    m_d->audioOptionsButton = new QToolButton(this);
-    m_d->audioOptionsButton->setAutoRaise(true);
-    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
-    m_d->audioOptionsButton->setIconSize(QSize(22, 22));
-    m_d->audioOptionsButton->setPopupMode(QToolButton::InstantPopup);
-
-    m_d->audioOptionsMenu = new QMenu(this);
-    m_d->audioOptionsMenu->addSection(i18n("Edit Audio:"));
-    m_d->audioOptionsMenu->addSeparator();
-
-    m_d->openAudioAction = new QAction("XXX", this);
-    connect(m_d->openAudioAction, SIGNAL(triggered()), this, SLOT(slotSelectAudioChannelFile()));
-    m_d->audioOptionsMenu->addAction(m_d->openAudioAction);
-
-    m_d->audioMuteAction = new QAction(i18nc("@item:inmenu", "Mute"), this);
-    m_d->audioMuteAction->setCheckable(true);
-    connect(m_d->audioMuteAction, SIGNAL(triggered(bool)), SLOT(slotAudioChannelMute(bool)));
-
-    m_d->audioOptionsMenu->addAction(m_d->audioMuteAction);
-    m_d->audioOptionsMenu->addAction(i18nc("@item:inmenu", "Remove audio track"), this, SLOT(slotAudioChannelRemove()));
-
-    m_d->audioOptionsMenu->addSeparator();
-
-    m_d->volumeSlider = new KisSliderSpinBox(this);
-    m_d->volumeSlider->setRange(0, 100);
-    m_d->volumeSlider->setSuffix(i18n("%"));
-    m_d->volumeSlider->setPrefix(i18nc("@item:inmenu, slider", "Volume:"));
-    m_d->volumeSlider->setSingleStep(1);
-    m_d->volumeSlider->setPageStep(10);
-    m_d->volumeSlider->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Fixed);
-
-    connect(m_d->volumeSlider, SIGNAL(valueChanged(int)), SLOT(slotAudioVolumeChanged(int)));
-
-    QWidgetAction *volumeAction = new QWidgetAction(m_d->audioOptionsMenu);
-    volumeAction->setDefaultWidget(m_d->volumeSlider);
-    m_d->audioOptionsMenu->addAction(volumeAction);
-
-    m_d->audioOptionsButton->setMenu(m_d->audioOptionsMenu);
-
     /********** Frame Editing Context Menu ***********************************************/
 
     m_d->colorSelector = new KisColorLabelSelectorWidgetMenuWrapper(this);
@@ -364,8 +311,6 @@ void KisAnimTimelineFramesView::setModel(QAbstractItemModel *model)
             &m_d->selectionChangedCompressor, SLOT(start()));
 
     connect(m_d->model, SIGNAL(sigEnsureRowVisible(int)), SLOT(slotEnsureRowVisible(int)));
-
-    slotUpdateAudioActions();
 }
 
 void KisAnimTimelineFramesView::setActionManager(KisActionManager *actionManager)
@@ -451,13 +396,11 @@ void KisAnimTimelineFramesView::updateGeometries()
     const int minimalSize = availableHeight - 2 * margin;
 
     resizeToMinimalSize(m_d->addLayersButton, minimalSize);
-    resizeToMinimalSize(m_d->audioOptionsButton, minimalSize);
     resizeToMinimalSize(m_d->zoomDragButton, minimalSize);
 
     int x = 2 * margin;
     int y = (availableHeight - minimalSize) / 2;
     m_d->addLayersButton->move(x, 2 * y);
-    m_d->audioOptionsButton->move(x + minimalSize + 2 * margin, 2 * y);
 
     const int availableWidth = m_d->layersHeader->width();
 
@@ -491,7 +434,6 @@ void KisAnimTimelineFramesView::slotCanvasUpdate(KoCanvasBase *canvas)
 void KisAnimTimelineFramesView::slotUpdateIcons()
 {
     m_d->addLayersButton->setIcon(KisIconUtils::loadIcon("list-add-22"));
-    m_d->audioOptionsButton->setIcon(KisIconUtils::loadIcon("audio-none"));
     m_d->zoomDragButton->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
 }
 
@@ -837,38 +779,36 @@ void KisAnimTimelineFramesView::slotAudioChannelRemove()
 
 void KisAnimTimelineFramesView::slotUpdateAudioActions()
 {
-    if (!m_d->model) return;
-
     if (!m_d->canvas) return;
 
-    const QString currentFile = m_d->model->audioChannelFileName();
+//    const QString currentFile = m_d->model->audioChannelFileName();
 
-    if (currentFile.isEmpty()) {
-        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Open audio..."));
-    } else {
-        QFileInfo info(currentFile);
-        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Change audio (%1)...", info.fileName()));
-    }
+//    if (currentFile.isEmpty()) {
+//        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Open audio..."));
+//    } else {
+//        QFileInfo info(currentFile);
+//        m_d->openAudioAction->setText(i18nc("@item:inmenu", "Change audio (%1)...", info.fileName()));
+//    }
 
-    m_d->audioMuteAction->setChecked(m_d->model->isAudioMuted());
+//    m_d->audioMuteAction->setChecked(m_d->model->isAudioMuted());
 
-    QIcon audioIcon;
-    if (currentFile.isEmpty()) {
-        audioIcon = KisIconUtils::loadIcon("audio-none");
-    } else {
-        if (m_d->model->isAudioMuted()) {
-            audioIcon = KisIconUtils::loadIcon("audio-volume-mute");
-        } else {
-            audioIcon = KisIconUtils::loadIcon("audio-volume-high");
-        }
-    }
+//    QIcon audioIcon;
+//    if (currentFile.isEmpty()) {
+//        audioIcon = KisIconUtils::loadIcon("audio-none");
+//    } else {
+//        if (m_d->model->isAudioMuted()) {
+//            audioIcon = KisIconUtils::loadIcon("audio-volume-mute");
+//        } else {
+//            audioIcon = KisIconUtils::loadIcon("audio-volume-high");
+//        }
+//    }
 
-    m_d->audioOptionsButton->setIcon(audioIcon);
+//    m_d->audioOptionsButton->setIcon(audioIcon);
 
-    m_d->volumeSlider->setEnabled(!m_d->model->isAudioMuted());
+//    m_d->volumeSlider->setEnabled(!m_d->model->isAudioMuted());
 
-    KisSignalsBlocker b(m_d->volumeSlider);
-    m_d->volumeSlider->setValue(qRound(m_d->model->audioVolume() * 100.0));
+//    KisSignalsBlocker b(m_d->volumeSlider);
+//    m_d->volumeSlider->setValue(qRound(m_d->model->audioVolume() * 100.0));
 }
 
 void KisAnimTimelineFramesView::slotAudioVolumeChanged(int value)

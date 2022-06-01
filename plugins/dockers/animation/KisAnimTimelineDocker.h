@@ -56,6 +56,12 @@ public:
     QToolButton *btnAudioMenu;
     QToolButton *btnSettingsMenu;
 
+    QString strImportAudio;
+    QAction *importAudioAction;
+    QAction *removeAudioAction;
+    QAction *muteAudioAction;
+    KisSliderSpinBox *volumeSlider;
+
     KisIntParseSpinBox *sbStartFrame;
     KisIntParseSpinBox *sbEndFrame;
     KisIntParseSpinBox *sbFrameRate;

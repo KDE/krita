@@ -20,6 +20,7 @@
 #include <kis_surrogate_undo_adapter.h>
 #include <kis_transaction.h>
 #include <kis_types.h>
+#include <kis_layer_utils.h>
 
 #include "kis_qmic_import_tools.h"
 
@@ -159,20 +160,34 @@ void KisQmicSynchronizeLayersCommand::redo()
                 d->m_newNodes->append(paintLayer);
             }
         }
-    } else if (d->m_nodes->size() > int(d->m_images.size())) {
+    } else if (d->m_nodes->size() > d->m_images.size()) {
         // if gmic produces less layers, we are going to drop some
-        errPlugins << "no support for removing layers from G'MIC yet!!";
+
+        const KisNodeList extraNodes = [&]() {
+            KisNodeList result;
+            const auto minIndex = d->m_images.size();
+            for (auto i = minIndex; i < d->m_nodes->size(); i++) {
+                result.append(d->m_nodes->at(i));
+            }
+            return result;
+        }();
+
+        auto *removeLayerCmd = new KisLayerUtils::SimpleRemoveLayers(extraNodes, d->m_image);
+        removeLayerCmd->redo();
+        addCommand(new KisCommandUtils::SkipFirstRedoWrapper(removeLayerCmd));
     }
 
-    for (auto index = 0; index < d->m_nodes->size(); index++) {
-        auto node = d->m_nodes->at(index);
+    const int boundary = std::min(d->m_nodes->size(), d->m_images.size());
 
-        const auto &gimg = d->m_images[index];
+    for (int index = 0; index < boundary; index++) {
+        KisNodeSP node = d->m_nodes->at(index);
+
+        const KisQMicImageSP &gimg = d->m_images.at(index);
         dbgPlugins << "Importing layer index" << index
                    << "Size: " << gimg->m_width << "x" << gimg->m_height
                    << "colorchannels: " << gimg->m_spectrum;
 
-        auto dst = node->paintDevice();
+        KisPaintDeviceSP dst = node->paintDevice();
 
         const auto *layer = dynamic_cast<const KisLayer *>(node.data());
         const KisSelectionSP selection =

@@ -152,7 +152,7 @@ namespace KisLayerUtils
         static bool scanForLastLayer(KisImageWSP image, KisNodeList nodesToRemove);
     };
 
-    struct SimpleRemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
+    struct KRITAIMAGE_EXPORT SimpleRemoveLayers : private KisLayerUtils::RemoveNodeHelper, public KisCommandUtils::AggregateCommand {
         SimpleRemoveLayers(const KisNodeList &nodes,
                            KisImageSP image);
 

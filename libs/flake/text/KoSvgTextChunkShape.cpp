@@ -16,6 +16,7 @@ v *  GNU General Public License for more details.
 #include "KoSvgTextChunkShape.h"
 #include "KoSvgTextChunkShape_p.h"
 
+#include "KoCssTextUtils.h"
 #include "KoSvgText.h"
 #include "KoSvgTextProperties.h"
 
@@ -205,11 +206,23 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                     q->s->properties
                         .propertyOrDefault(KoSvgTextProperties::DirectionId)
                         .toInt());
+                // In some circumstances, textTransform can change the length of
+                // the text, so we're doing it here too.
+                KoSvgText::TextTransformInfo textTransformInfo =
+                    q->s->properties
+                        .propertyOrDefault(KoSvgTextProperties::TextTransformId)
+                        .value<KoSvgText::TextTransformInfo>();
+                QString lang =
+                    q->s->properties.property(KoSvgTextProperties::TextLanguage)
+                        .toString()
+                        .toUtf8();
+
                 result =
                     getBidiOpening(direction == KoSvgText::DirectionLeftToRight,
                                    bidi)
                         .size();
-                result += q->s->text.size();
+                result +=
+                    transformText(q->s->text, textTransformInfo, lang).size();
                 result += getBidiClosing(bidi).size();
             } else {
                 result = q->s->text.size();
@@ -326,6 +339,29 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
+    static QString transformText(QString text,
+                                 KoSvgText::TextTransformInfo textTransformInfo,
+                                 const QString lang)
+    {
+        if (textTransformInfo.capitals == KoSvgText::TextTransformCapitalize) {
+            text = KoCssTextUtils::transformTextCapitalize(text, lang);
+        } else if (textTransformInfo.capitals
+                   == KoSvgText::TextTransformUppercase) {
+            text = KoCssTextUtils::transformTextToUpperCase(text, lang);
+        } else if (textTransformInfo.capitals
+                   == KoSvgText::TextTransformLowercase) {
+            text = KoCssTextUtils::transformTextToLowerCase(text, lang);
+        }
+
+        if (textTransformInfo.fullWidth) {
+            text = KoCssTextUtils::transformTextFullWidth(text);
+        }
+        if (textTransformInfo.fullSizeKana) {
+            text = KoCssTextUtils::transformTextFullSizeKana(text);
+        }
+        return text;
+    }
+
     QVector<SubChunk> collectSubChunks(bool textInPath) const override
     {
         QVector<SubChunk> result;
@@ -334,7 +370,16 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         }
 
         if (isTextNode()) {
-            const QString text = q->s->text;
+            KoSvgText::TextTransformInfo textTransformInfo =
+                q->s->properties
+                    .propertyOrDefault(KoSvgTextProperties::TextTransformId)
+                    .value<KoSvgText::TextTransformInfo>();
+            QString lang =
+                q->s->properties.property(KoSvgTextProperties::TextLanguage)
+                    .toString()
+                    .toUtf8();
+            const QString text =
+                transformText(q->s->text, textTransformInfo, lang);
             const KoSvgText::KoSvgCharChunkFormat format = q->fetchCharFormat();
             QVector<KoSvgText::CharTransformation> transforms = q->s->localTransformations;
 

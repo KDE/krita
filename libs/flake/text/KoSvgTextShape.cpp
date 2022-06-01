@@ -411,6 +411,10 @@ void KoSvgTextShape::relayout() const
         this->textProperties()
             .propertyOrDefault(KoSvgTextProperties::InlineSizeId)
             .value<KoSvgText::AutoValue>();
+    QString lang = this->textProperties()
+                       .property(KoSvgTextProperties::TextLanguage)
+                       .toString()
+                       .toUtf8();
 
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
@@ -476,10 +480,6 @@ void KoSvgTextShape::relayout() const
                                  .toInt());
     QVector<bool> collapseChars =
         KoCssTextUtils::collapseSpaces(text, collapse);
-    QString lang = this->textProperties()
-                       .property(KoSvgTextProperties::TextLanguage)
-                       .toString()
-                       .toUtf8();
     if (!lang.isEmpty()) {
         // Libunibreak currently only has support for strict, and even then only
         // for very specific cases.
@@ -504,6 +504,7 @@ void KoSvgTextShape::relayout() const
     // This is done earlier so it's possible to get preresolved transforms from
     // the subchunks.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
+    QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
     // pass everything to a css-compatible text-layout algortihm.
     raqm_t_up layout = toLibraryResource(raqm_create());
@@ -545,6 +546,23 @@ void KoSvgTextShape::relayout() const
                     .propertyOrDefault(
                         KoSvgTextProperties::HangingPunctuationId)
                     .value<KoSvgText::HangingPunctuations>();
+            KoSvgText::TabSizeInfo tabInfo =
+                properties.propertyOrDefault(KoSvgTextProperties::TabSizeId)
+                    .value<KoSvgText::TabSizeInfo>();
+            KoSvgText::AutoValue letterSpacing =
+                properties
+                    .propertyOrDefault(KoSvgTextProperties::LetterSpacingId)
+                    .value<KoSvgText::AutoValue>();
+            KoSvgText::AutoValue wordSpacing =
+                properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId)
+                    .value<KoSvgText::AutoValue>();
+
+            if (!letterSpacing.isAuto) {
+                tabInfo.extraSpacing += letterSpacing.customValue;
+            }
+            if (!wordSpacing.isAuto) {
+                tabInfo.extraSpacing += wordSpacing.customValue;
+            }
 
             for (int i = 0; i < length; i++) {
                 CharacterResult cr = result[start + i];
@@ -601,6 +619,9 @@ void KoSvgTextShape::relayout() const
                             ? edge
                             : cr.lineEnd;
                     }
+                }
+                if (text.at(start + i) == QChar::Tabulation) {
+                    tabSizeInfo.insert(start + i, tabInfo);
                 }
                 result[start + i] = cr;
                 // TODO: figure out how to use addressability to only set
@@ -667,10 +688,6 @@ void KoSvgTextShape::relayout() const
                                       feature.toUtf8(),
                                       feature.toUtf8().size());
             }
-            KoSvgText::AutoValue letterSpacing =
-                properties
-                    .propertyOrDefault(KoSvgTextProperties::LetterSpacingId)
-                    .value<KoSvgText::AutoValue>();
 
             if (!letterSpacing.isAuto) {
                 raqm_set_letter_spacing_range(layout.data(),
@@ -680,9 +697,7 @@ void KoSvgTextShape::relayout() const
                                               start,
                                               length);
             }
-            KoSvgText::AutoValue wordSpacing =
-                properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId)
-                    .value<KoSvgText::AutoValue>();
+
             if (!wordSpacing.isAuto) {
                 raqm_set_word_spacing_range(layout.data(),
                                             wordSpacing.customValue * ftFontUnit
@@ -750,6 +765,15 @@ void KoSvgTextShape::relayout() const
         }
         if (FT_HAS_COLOR(glyphs[g].ftface)) {
             faceLoadFlags |= FT_LOAD_COLOR;
+        }
+
+        QPointF spaceAdvance;
+        if (tabSizeInfo.contains(glyphs[g].cluster)) {
+            FT_Load_Glyph(glyphs[g].ftface,
+                          FT_Get_Char_Index(glyphs[g].ftface, ' '),
+                          faceLoadFlags);
+            spaceAdvance = QPointF(glyphs[g].ftface->glyph->advance.x,
+                                   glyphs[g].ftface->glyph->advance.y);
         }
 
         int error =
@@ -849,6 +873,22 @@ void KoSvgTextShape::relayout() const
 
         charResult.middle = false;
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
+        if (tabSizeInfo.contains(glyphs[g].cluster)) {
+            KoSvgText::TabSizeInfo tabSize =
+                tabSizeInfo.value(glyphs[g].cluster);
+            qreal newAdvance = tabSize.value * ftFontUnit;
+            if (tabSize.isNumber) {
+                QPointF extraSpacing = isHorizontal
+                    ? QPointF(tabSize.extraSpacing * ftFontUnit, 0)
+                    : QPointF(0, tabSize.extraSpacing * ftFontUnit);
+                advance = (spaceAdvance + extraSpacing) * tabSize.value;
+            } else {
+                advance = isHorizontal ? QPointF(newAdvance, advance.y())
+                                       : QPointF(advance.x(), newAdvance);
+            }
+            charResult.path = QPainterPath();
+            charResult.image = QImage();
+        }
         charResult.advance += ftTF.map(advance);
 
         bool usePixmap =
@@ -1380,21 +1420,12 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
 
     QPointF endPos; ///< Used for hanging glyphs at the end of a line.
     QPointF textIndent; ///< The textIndent.
-    /// Inverts which lines are indented.
-    bool textIndentHang =
-        properties.propertyOrDefault(KoSvgTextProperties::TextIndentHangingId)
-            .toBool();
-    /// Indent each line following a harddbreak instead of only the first.
-    bool textIndentEach =
-        properties.propertyOrDefault(KoSvgTextProperties::TextIndentEachLineId)
-            .toBool();
+    KoSvgText::TextIndentInfo textIndentInfo =
+        properties.propertyOrDefault(KoSvgTextProperties::TextIndentId)
+            .value<KoSvgText::TextIndentInfo>();
     if (!inlineSize.isAuto) {
-        qreal textIdentValue =
-            properties.propertyOrDefault(KoSvgTextProperties::TextIndentValueId)
-                .toReal();
-        if (properties
-                .propertyOrDefault(KoSvgTextProperties::TextIndentIsPercentId)
-                .toBool()) {
+        qreal textIdentValue = textIndentInfo.value;
+        if (textIndentInfo.isPercentage) {
             textIndent *= inlineSize.customValue;
         }
         if (isHorizontal) {
@@ -1418,7 +1449,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
     bool firstLine = true;
     QPointF currentPos =
         startPos; ///< Current position with advances of each character.
-    if (!textIndentHang) {
+    if (!textIndentInfo.hanging) {
         currentPos += textIndent;
     }
     QPointF lineOffset = startPos; ///< Current line offset.
@@ -1484,7 +1515,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                   wordFirstPos,
                                   ltr,
                                   firstLine,
-                                  textIndentHang ? QPointF() : textIndent);
+                                  textIndentInfo.hanging ? QPointF()
+                                                         : textIndent);
                 }
             }
         }
@@ -1508,7 +1540,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                                lineHeight);
                 currentPos = lineOffset;
                 if (!inlineSize.isAuto) {
-                    if (textIndentHang) {
+                    if (textIndentInfo.hanging) {
                         currentPos += textIndent;
                     }
                 }
@@ -1523,7 +1555,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                               wordFirstPos,
                               ltr,
                               firstLine,
-                              textIndentHang ? QPointF() : textIndent);
+                              textIndentInfo.hanging ? QPointF() : textIndent);
             } else {
                 addWordToLine(result,
                               currentPos,
@@ -1533,7 +1565,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                               wordFirstPos,
                               ltr,
                               firstLine,
-                              textIndentHang ? QPointF() : textIndent);
+                              textIndentInfo.hanging ? QPointF() : textIndent);
 
                 handleCollapseAndHang(result,
                                       lineIndices,
@@ -1552,7 +1584,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                                lineHeight);
                 currentPos = lineOffset;
                 if (!inlineSize.isAuto) {
-                    if (!textIndentHang && textIndentEach) {
+                    if (!textIndentInfo.hanging && textIndentInfo.eachLine) {
                         currentPos += textIndent;
                     }
                 }

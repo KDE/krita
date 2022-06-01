@@ -98,14 +98,11 @@ public:
         WordBreakId, ///< KoSvgText::WordBreak
         TextAlignAllId, ///< KoSvgText::TextAlign
         TextAlignLastId, ///< KoSvgText::TextAlign
-        TextTransformId, ///< KoSvgText::TextTransform
+        TextTransformId, ///< KoSvgText::TextTransformInfo Struct
         TextOverFlowId, ///< KoSvgText::WordBreak
         InlineSizeId, ///< KoSvgText::AutoValue
         LineHeightId, ///< KoSvgText::AutoValue
-        TextIndentValueId, ///< qreal
-        TextIndentIsPercentId, ///< Bool
-        TextIndentEachLineId, ///< Bool
-        TextIndentHangingId, ///< Bool
+        TextIndentId, ///< KoSvgText::TextIndentInfo Struct.
         HangingPunctuationId, ///< Flags, KoSvgText::HangingPunctuations
         TabSizeId, ///< Int
 

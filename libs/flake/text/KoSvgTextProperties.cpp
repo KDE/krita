@@ -476,7 +476,8 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "xml:lang") {
         setProperty(TextLanguage, value);
     } else if (command == "text-transform") {
-        setProperty(TextTransformId, KoSvgText::parseTextTransform(value));
+        setProperty(TextTransformId,
+                    QVariant::fromValue(KoSvgText::parseTextTransform(value)));
     } else if (command == "white-space") {
         KoSvgText::TextSpaceTrims trims =
             propertyOrDefault(TextTrimId).value<KoSvgText::TextSpaceTrims>();
@@ -528,33 +529,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         }
         setProperty(LineHeightId, KoSvgText::fromAutoValue(lineheightVal));
     } else if (command == "text-indent") {
-        bool hanging = false;
-        bool eachLine = false;
-        bool isPercentage = false;
-        qreal length = 0;
-        Q_FOREACH (const QString &param,
-                   value.split(' ', QString::SkipEmptyParts)) {
-            bool ok = false;
-            qreal parsed = 0.0;
-            if (value.endsWith("%")) {
-                parsed = SvgUtil::fromPercentage(value, &ok);
-            } else {
-                parsed = SvgUtil::parseUnitXY(context.currentGC(), value);
-                ok = true;
-            }
-
-            if (param == "hanging") {
-                hanging = true;
-            } else if (param == "each-line") {
-                eachLine = true;
-            } else if (ok) {
-                length = parsed;
-            }
-        }
-        setProperty(TextIndentValueId, length);
-        setProperty(TextIndentIsPercentId, isPercentage);
-        setProperty(TextIndentHangingId, hanging);
-        setProperty(TextIndentEachLineId, eachLine);
+        setProperty(
+            TextIndentId,
+            QVariant::fromValue(KoSvgText::parseTextIndent(value, context)));
     } else if (command == "hanging-punctuation") {
         KoSvgText::HangingPunctuations hang;
         Q_FOREACH (const QString &param,
@@ -585,11 +562,9 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                     value == "ellipse" ? KoSvgText::OverFlowEllipse
                                        : KoSvgText::OverFlowClip);
     } else if (command == "tab-size") {
-        bool ok = false;
-        int parsed = value.toInt(&ok, 10);
-        if (ok) {
-            setProperty(TabSizeId, parsed);
-        }
+        setProperty(
+            TabSizeId,
+            QVariant::fromValue(KoSvgText::parseTabSize(value, context)));
     } else {
         qFatal("FATAL: Unknown SVG property: %s = %s", command.toUtf8().data(), value.toUtf8().data());
     }
@@ -829,9 +804,10 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     }
 
     if (hasProperty(TextTransformId)) {
-        result.insert("text-transform",
-                      writeTextTransform(
-                          TextTransform(property(TextTransformId).toInt())));
+        result.insert(
+            "text-transform",
+            writeTextTransform(
+                property(TextTransformId).value<TextTransformInfo>()));
     }
     if (hasProperty(WordBreakId)) {
         result.insert("word-break",
@@ -883,23 +859,16 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
             "inline-size",
             writeAutoValue(property(InlineSizeId).value<AutoValue>(), "auto"));
     }
-    if (hasProperty(TextIndentValueId)) {
-        bool hanging = propertyOrDefault(TextIndentHangingId).toBool();
-        bool eachLine = propertyOrDefault(TextIndentEachLineId).toBool();
-        QStringList value;
-        QString indentVal =
-            QString::number(property(TextIndentValueId).toDouble());
-        if (property(TextIndentIsPercentId).toBool()) {
-            indentVal += "%";
-        }
-        value.append(indentVal);
-        if (hanging) {
-            value.append("hanging");
-        }
-        if (eachLine) {
-            value.append("each-line");
-        }
-        result.insert("text-indent", value.join(" "));
+    if (hasProperty(TextIndentId)) {
+        result.insert(
+            "text-indent",
+            writeTextIndent(
+                propertyOrDefault(TextIndentId).value<TextIndentInfo>()));
+    }
+    if (hasProperty(TabSizeId)) {
+        result.insert(
+            "tab-size",
+            writeTabSize(propertyOrDefault(TabSizeId).value<TabSizeInfo>()));
     }
     if (hasProperty(HangingPunctuationId)) {
         HangingPunctuations hang =
@@ -1296,11 +1265,7 @@ const KoSvgTextProperties &KoSvgTextProperties::defaultProperties()
                                              TextTransformNone);
             s_defaultProperties->setProperty(LineHeightId,
                                              fromAutoValue(AutoValue()));
-            s_defaultProperties->setProperty(TextIndentValueId, 0);
             s_defaultProperties->setProperty(TabSizeId, 8);
-            s_defaultProperties->setProperty(TextIndentEachLineId, false);
-            s_defaultProperties->setProperty(TextIndentHangingId, false);
-            s_defaultProperties->setProperty(TextIndentIsPercentId, false);
             HangingPunctuations hang = HangNone;
             s_defaultProperties->setProperty(HangingPunctuationId,
                                              QVariant::fromValue(hang));

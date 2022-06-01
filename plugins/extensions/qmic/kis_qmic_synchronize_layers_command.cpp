@@ -8,6 +8,7 @@
 
 #include "kis_qmic_synchronize_layers_command.h"
 
+#include <tuple>
 #include <utility>
 
 #include <KoColorSpaceConstants.h>
@@ -98,10 +99,22 @@ void KisQmicSynchronizeLayersCommand::redo()
     // if gmic produces more layers
     if (d->m_nodes->size() < d->m_images.size()) {
         if (d->m_image) {
-            const auto nodesCount = d->m_nodes->size();
+            const QPoint origin = [&]() -> QPoint {
+                if (d->m_selection) {
+                    return d->m_selection->selectedExactRect().topLeft();
+                } else if (!d->m_nodes->isEmpty()) {
+                    const auto root = d->m_nodes->at(0);
+                    return {root->x(), root->y()};
+                } else {
+                    return {};
+                }
+            }();
+            const int nodesCount = d->m_nodes->size();
             for (int i = nodesCount; i < d->m_images.size(); i++) {
                 KisPaintDeviceSP device = new KisPaintDevice(d->m_image->colorSpace());
                 KisLayerSP paintLayer = new KisPaintLayer(d->m_image, QString("New layer %1 from gmic filter").arg(i), OPACITY_OPAQUE_U8, device);
+                paintLayer->setX(origin.x());
+                paintLayer->setY(origin.y());
 
                 KisQmicImportTools::gmicImageToPaintDevice(
                     *d->m_images[i].data(),

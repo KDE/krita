@@ -909,6 +909,81 @@ QString writeTabSize(const TabSizeInfo tabSize)
     return val;
 }
 
+int parseCSSFontStretch(const QString &value, int currentStretch)
+{
+    int newStretch = 100;
+
+    static const std::vector<int> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
+
+    if (value == "wider") {
+        auto it = std::upper_bound(fontStretches.begin(),
+                                   fontStretches.end(),
+                                   currentStretch);
+
+        newStretch = it != fontStretches.end() ? *it : fontStretches.back();
+    } else if (value == "narrower") {
+        auto it = std::upper_bound(fontStretches.rbegin(),
+                                   fontStretches.rend(),
+                                   currentStretch,
+                                   std::greater<int>());
+
+        newStretch = it != fontStretches.rend() ? *it : fontStretches.front();
+
+    } else {
+        // try to read numerical stretch value
+        bool ok = false;
+        newStretch = value.toInt(&ok, 10);
+
+        if (!ok) {
+            auto it = std::find(fontStretchNames.begin(), fontStretchNames.end(), value);
+            if (it != fontStretchNames.end()) {
+                newStretch = fontStretches[it - fontStretchNames.begin()];
+            }
+        }
+    }
+    return newStretch;
+}
+
+int parseCSSFontWeight(const QString &value, int currentWeight)
+{
+    int weight = 400;
+
+    // map svg weight to qt weight
+    // svg value        qt value
+    // 100,200,300      1, 17, 33
+    // 400              50          (normal)
+    // 500,600          58,66
+    // 700              75          (bold)
+    // 800,900          87,99
+    static const std::vector<int> svgFontWeights = {100,200,300,400,500,600,700,800,900};
+
+    if (value == "bold")
+        weight = 700;
+    else if (value == "bolder") {
+        auto it = std::upper_bound(svgFontWeights.begin(),
+                                   svgFontWeights.end(),
+                                   currentWeight);
+
+        weight = it != svgFontWeights.end() ? *it : svgFontWeights.back();
+    } else if (value == "lighter") {
+        auto it = std::upper_bound(svgFontWeights.rbegin(),
+                                   svgFontWeights.rend(),
+                                   currentWeight,
+                                   std::greater<int>());
+
+        weight = it != svgFontWeights.rend() ? *it : svgFontWeights.front();
+    } else {
+        bool ok = false;
+
+        // try to read numerical weight value
+        int parsed = value.toInt(&ok, 10);
+        if (ok) {
+            weight = qBound(0, parsed, 1000);
+        }
+    }
+    return weight;
+}
+
 }
 
 

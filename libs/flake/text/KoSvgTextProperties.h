@@ -79,7 +79,9 @@ public:
         FontVariantEastAsianWidthId,
         FontVariantRubyId,
 
-        FontFeatureSettingsId, ///< QStringList
+        FontFeatureSettingsId,    ///< QStringList
+        FontOpticalSizingId,      ///< Bool
+        FontVariationSettingsId,  ///< QStringList
 
         TextDecorationLineId,              ///< Flags, KoSvgText::TextDecorations
         TextDecorationStyleId,             ///< KoSvgText::TextDecorationStyle
@@ -100,9 +102,10 @@ public:
         TextAlignLastId,      ///< KoSvgText::TextAlign
         TextTransformId,      ///< KoSvgText::TextTransformInfo Struct
         TextOverFlowId,       ///< KoSvgText::WordBreak
+        OverflowWrapId,       ///<
         InlineSizeId,         ///< KoSvgText::AutoValue
         LineHeightId,         ///< KoSvgText::AutoValue
-        TextIndentId,    ///< KoSvgText::TextIndentInfo Struct.
+        TextIndentId,         ///< KoSvgText::TextIndentInfo Struct.
         HangingPunctuationId, ///< Flags, KoSvgText::HangingPunctuations
         TabSizeId,            ///< Int
 
@@ -204,15 +207,22 @@ public:
     QFont generateFont() const;
 
     /**
-     * @brief fontFileNameForText
-     * @param text
-     * @param lengths
-     * @return
+     * @brief fontFeaturesForText
+     * Returns a harfbuzz friendly list of opentype font-feature settings using
+     * the various font-variant and font-feature-settings values.
+     * @param start the start pos of the text.
+     * @param length the length of the text.
+     * @return a list of strings for font-features and their ranges that can be understood by harfbuzz.
      */
-    QStringList fontFileNameForText(QString text, QVector<int> &lengths) const;
-
     QStringList fontFeaturesForText(int start, int length) const;
 
+    /**
+     * @brief fontAxisSettings
+     * This is used to configure variable fonts. It gets the appropriate values
+     * from font width, stretch, style, size, if font-optical-sizing is not set to 'none,
+     * and finally the font-variation-settings property.
+     * @return a map of axis-tags and their values.
+     */
     QMap<QString, qreal> fontAxisSettings() const;
 
     /**

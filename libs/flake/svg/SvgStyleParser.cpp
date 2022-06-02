@@ -40,14 +40,15 @@ public:
                        << "font-variant-ligatures" << "font-variant-numeric"
                        << "font-variant-east-asian" << "font-variant-position"
                        << "font-feature-settings"
-                       << "font-stretch" << "font-size-adjust" << "font"
+                       << "font-stretch" << "font-size-adjust" << "font" //why are we doing this after the rest?
+                       << "font-optical-sizing" << "font-variation-settings"
                        << "text-decoration" << "text-decoration-line" << "text-decoration-style"
                        << "text-decoration-color"  << "text-decoration-position"
                        << "letter-spacing" << "word-spacing" << "baseline-shift"
                        << "line-height" << "white-space" << "xml:space" << "text-transform"
                        << "text-indent" << "word-break" << "line-break" << "hanging-punctuation"
                        << "text-align" << "text-align-all" << "text-align-last" << "inline-size"
-                       << "overflow" << "text-overflow" << "tab-size";
+                       << "overflow" << "text-overflow" << "tab-size" << "overflow-wrap" << "word-wrap";
         // the order of the style attributes is important, don't change without reason !!!
         styleAttributes << "color" << "display" << "visibility";
         styleAttributes << "fill" << "fill-rule" << "fill-opacity";
@@ -221,16 +222,16 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-stretch") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
-
     } else if (command == "font-weight") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-
+    } else if (command == "font-variation-settings") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+    } else if (command == "font-optical-sizing") {
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font-size-adjust") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
-        warnFile << "WARNING: \'font-size-adjust\' SVG attribute is not supported!";
     } else if (command == "font") {
-        warnFile << "WARNING: \'font\' SVG attribute is not yet implemented! Please report a bug!";
+        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "text-decoration"
                || command == "text-decoration-line"
                || command == "text-decoration-style"
@@ -299,19 +300,21 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         }
     } else if (command == "line-height"
                || command ==  "white-space"
-               ||  command == "xml:space"
-               ||  command == "text-transform"
-               ||  command == "text-indent"
-               ||  command == "word-break"
-               ||  command == "line-break"
-               ||  command == "hanging-punctuation"
-               ||  command == "text-align"
-               ||  command == "text-align-all"
-               ||  command == "text-align-last"
-               ||  command == "inline-size"
-               ||  command == "overflow"
-               ||  command == "text-overflow"
-               ||  command == "tab-size"){
+               || command == "xml:space"
+               || command == "text-transform"
+               || command == "text-indent"
+               || command == "word-break"
+               || command == "line-break"
+               || command == "hanging-punctuation"
+               || command == "text-align"
+               || command == "text-align-all"
+               || command == "text-align-last"
+               || command == "inline-size"
+               || command == "overflow"
+               || command == "text-overflow"
+               || command == "tab-size"
+               || command == "overflow-wrap"
+               || command == "word-wrap"){
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";

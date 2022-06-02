@@ -1002,7 +1002,7 @@ QString KoSvgTextShapeMarkupConverter::style(QTextCharFormat format,
             style.append(c);
             c.clear();
             QFontMetricsF metrics(format.fontFamily());
-            qreal xRatio = metrics.xHeight()/metrics.height();
+            qreal xRatio = metrics.xHeight()/format.properties()[propertyId].toDouble();
             c.append("font-size-adjust").append(":").append(QString::number(xRatio));
         }
         if (propertyId == QTextCharFormat::FontWeight) {

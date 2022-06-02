@@ -1212,6 +1212,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                 KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
     KoSvgText::AutoValue lineHeight = properties.propertyOrDefault(
                 KoSvgTextProperties::LineHeightId).value<KoSvgText::AutoValue>();
+    KoSvgText::OverflowWrap overflowWrap = KoSvgText::OverflowWrap(
+                properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt());
 
     bool ltr = direction == KoSvgText::DirectionLeftToRight;
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
@@ -1281,11 +1283,11 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
         wordIndices.append(index);
         bool atEnd = !(ltr? it.hasNext(): it.hasPrevious());
 
-
         if (charResult.breakType == HardBreak) {
             breakLine = true;
-        } else if (charResult.breakType == SoftBreak || atEnd) {
-
+        } else if (charResult.breakType == SoftBreak
+                   || atEnd
+                   || overflowWrap == KoSvgText::OverflowWrapAnywhere) {
             qreal lineLength = isHorizontal? (currentPos - startPos + wordAdvance).x():
                                              (currentPos - startPos + wordAdvance).y();
             if (!inlineSize.isAuto) {
@@ -1326,6 +1328,56 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                 lineBox = QRectF();
                 firstLine = false;
 
+                if (overflowWrap == KoSvgText::OverflowWrapBreakWord) {
+                    qreal wordLength = isHorizontal? wordAdvance.x(): wordAdvance.y();
+                    if (!inlineSize.isAuto
+                            && wordLength > inlineSize.customValue) {
+                        // Word is too large, so we try to add it in max-width-friendly-chunks.
+                        wordLength = 0;
+                        QVector<int> partialWord;
+                        QPointF partialWordFirstPos = wordFirstPos;
+                        for (int i: wordIndices) {
+                            wordAdvance = result.at(i).cssPosition - partialWordFirstPos;
+                            wordAdvance = ltr? wordAdvance + result.at(i).advance: wordAdvance;
+                            wordLength = isHorizontal? wordAdvance.x(): wordAdvance.y();
+                            if (wordLength <= inlineSize.customValue) {
+                                partialWord.append(i);
+                            } else {
+                                addWordToLine(result,
+                                              currentPos,
+                                              partialWord,
+                                              lineBox,
+                                              lineIndices,
+                                              partialWordFirstPos,
+                                              ltr,
+                                              firstLine,
+                                              textIndentInfo.hanging? QPointF(): textIndent);
+
+                                handleCollapseAndHang(result, lineIndices, endPos, lineOffset,
+                                                      !inlineSize.isAuto, writingMode, ltr, false);
+
+                                lineOffset += lineHeightOffset(writingMode, result,
+                                                               lineIndices, lineBox,
+                                                               currentPos, lineHeight);
+                                currentPos = lineOffset;
+                                if (!inlineSize.isAuto) {
+                                    if (textIndentInfo.hanging) {
+                                        currentPos += textIndent;
+                                    }
+                                }
+                                lineBox = QRectF();
+                                firstLine = false;
+
+                                partialWordFirstPos = ltr? result.at(i).cssPosition :
+                                                           result.at(i).cssPosition + result.at(i).advance;
+                                partialWord.append(i);
+                            }
+                        }
+                        wordFirstPos = partialWordFirstPos;
+                        wordIndices = partialWord;
+                    }
+                }
+
                 addWordToLine(result,
                               currentPos,
                               wordIndices,
@@ -1335,6 +1387,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                               ltr,
                               firstLine,
                               textIndentInfo.hanging? QPointF(): textIndent);
+
             } else {
                 addWordToLine(result,
                               currentPos,

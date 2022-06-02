@@ -667,9 +667,20 @@ void KoSvgTextShape::relayout() const
                         .propertyOrDefault(KoSvgTextProperties::FontStretchId)
                         .toInt(),
                     style != QFont::StyleNormal);
+            KoSvgText::AutoValue fontSizeAdjust =
+                properties
+                    .propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId)
+                    .value<KoSvgText::AutoValue>();
+            if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
+                fontSizeAdjust.isAuto =
+                    (properties.property(KoSvgTextProperties::KraTextVersionId)
+                         .toInt()
+                     < 3);
+            }
             KoFontRegistery::instance()->configureFaces(
                 faces,
                 fontSize,
+                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
                 finalRes,
                 finalRes,
                 properties.fontAxisSettings());
@@ -1783,11 +1794,21 @@ void KoSvgTextShape::Private::computeFontMetrics(
             properties.propertyOrDefault(KoSvgTextProperties::FontStretchId)
                 .toInt(),
             style != QFont::StyleNormal);
-    KoFontRegistery::instance()->configureFaces(faces,
-                                                fontSize,
-                                                res,
-                                                res,
-                                                properties.fontAxisSettings());
+    KoSvgText::AutoValue fontSizeAdjust =
+        properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId)
+            .value<KoSvgText::AutoValue>();
+    if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
+        fontSizeAdjust.isAuto =
+            (properties.property(KoSvgTextProperties::KraTextVersionId).toInt()
+             < 3);
+    }
+    KoFontRegistery::instance()->configureFaces(
+        faces,
+        fontSize,
+        fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+        res,
+        res,
+        properties.fontAxisSettings());
     hb_font_t_up font =
         toLibraryResource(hb_ft_font_create_referenced(faces.front().data()));
     qreal freetypePixelsToPt = (1.0 / 64.0) * float(72. / res);

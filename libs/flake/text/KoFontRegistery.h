@@ -61,6 +61,7 @@ public:
      */
     bool configureFaces(std::vector<FT_FaceUP> &faces,
                         qreal size,
+                        qreal fontSizeAdjust,
                         int xRes,
                         int yRes,
                         QMap<QString, qreal> axisSettings);

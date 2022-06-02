@@ -134,6 +134,16 @@ enum LineBreak {
     LineBreakStrict, ///< Use strict method, language specific.
     LineBreakAnywhere ///< Break between any typographic clusters.
 };
+
+/// What to do with words that cannot be broken, but still overflow.
+enum OverflowWrap {
+    OverflowWrapNormal, ///< Do nothing besides 'relaxing' the strictness of
+                        ///< 'wordbreak'.
+    OverflowWrapAnywhere, ///< Break anywhere as soon as overflow happens.
+    OverflowWrapBreakWord ///< Break previous soft-break before breaking the
+                          ///< word.
+};
+
 /// TextAlign values, see
 /// https://www.w3.org/TR/css-writing-modes-4/#logical-to-physical for
 /// interaction with writing mode and direction.
@@ -402,6 +412,25 @@ Baseline parseBaseline(const QString &value);
 BaselineShiftMode parseBaselineShiftMode(const QString &value);
 
 LengthAdjust parseLengthAdjust(const QString &value);
+
+static const QStringList fontStretchNames = {"ultra-condensed",
+                                             "extra-condensed",
+                                             "condensed",
+                                             "semi-condensed",
+                                             "normal",
+                                             "semi-expanded",
+                                             "expanded",
+                                             "extra-expanded",
+                                             "ultra-expanded"};
+/**
+ * @brief parseCSSFontStretch
+ * For CSS3, the font-stretches were only given as keywords. In Css 4 and above,
+ * they also allow values, except in the "font"-shorthand. The css3 bool will
+ * restrict parsing to this value for this reason.
+ */
+int parseCSSFontStretch(const QString &value, int currentStretch);
+
+int parseCSSFontWeight(const QString &value, int currentWeight);
 
 QMap<QString, FontVariantFeature> fontVariantStrings();
 QStringList fontVariantOpentypeTags(FontVariantFeature feature);

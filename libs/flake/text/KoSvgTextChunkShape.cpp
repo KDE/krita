@@ -155,7 +155,9 @@ int forcedDpiForQtFontBugWorkaround() {
 
 KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextProperties &properties)
 {
-    if (!properties.hasProperty(KoSvgTextProperties::FontSizeId)) return properties;
+    if (!properties.hasProperty(KoSvgTextProperties::FontSizeId)
+        || !properties.hasProperty(KoSvgTextProperties::FontSizeAdjustId))
+        return properties;
 
     KoSvgTextProperties result = properties;
 
@@ -169,8 +171,14 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
         fontSize *= qreal(forcedFontDPI) / 72.0;
         result.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
     }
+    if (result.hasProperty(KoSvgTextProperties::KraTextVersionId)
+        && result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3
+        && result.hasProperty(KoSvgTextProperties::FontSizeAdjustId)) {
+        result.setProperty(KoSvgTextProperties::FontSizeAdjustId,
+                           KoSvgText::fromAutoValue(KoSvgText::AutoValue()));
+    }
 
-    result.setProperty(KoSvgTextProperties::KraTextVersionId, 2);
+    result.setProperty(KoSvgTextProperties::KraTextVersionId, 3);
 
     return result;
 }
@@ -686,7 +694,9 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
                                                textRenderingString());
 
             // save the version to distinguish from the buggy Krita version
-            context.shapeWriter().addAttribute("krita:textVersion", 2);
+            // 2: Wrong font-size.
+            // 3: Wrong font-size-adjust.
+            context.shapeWriter().addAttribute("krita:textVersion", 3);
 
             SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
             SvgStyleWriter::saveSvgStyle(this, context);

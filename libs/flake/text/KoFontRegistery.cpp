@@ -221,6 +221,7 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
 
 bool KoFontRegistery::configureFaces(std::vector<FT_FaceUP> &faces,
                                      qreal size,
+                                     qreal fontSizeAdjust,
                                      int xRes,
                                      int yRes,
                                      QMap<QString, qreal> axisSettings)
@@ -262,6 +263,21 @@ bool KoFontRegistery::configureFaces(std::vector<FT_FaceUP> &faces,
         } else {
             errorCode =
                 FT_Set_Char_Size(face.data(), size * ftFontUnit, 0, xRes, yRes);
+            hb_font_t_up font =
+                toLibraryResource(hb_ft_font_create_referenced(face.data()));
+            hb_position_t xHeight = 0;
+            hb_ot_metrics_get_position(font.data(),
+                                       HB_OT_METRICS_TAG_X_HEIGHT,
+                                       &xHeight);
+            if (xHeight > 0 && fontSizeAdjust > 0 && fontSizeAdjust < 1.0) {
+                qreal aspect = xHeight / (size * ftFontUnit * scaleToPixel);
+                errorCode = FT_Set_Char_Size(face.data(),
+                                             (fontSizeAdjust / aspect)
+                                                 * (size * ftFontUnit),
+                                             0,
+                                             xRes,
+                                             yRes);
+            }
         }
 
         QMap<FT_Tag, qreal> tags;

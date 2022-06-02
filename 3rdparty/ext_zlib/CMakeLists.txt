@@ -19,8 +19,6 @@ ExternalProject_Add(
 
     CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_zlib}   ${GLOBAL_AUTOMAKE_PROFILE}
 
-    INSTALL_COMMAND make install
-
     UPDATE_COMMAND ""
 )
 endif()

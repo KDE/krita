@@ -46,8 +46,6 @@ else ()
 
         INSTALL_DIR ${PREFIX_ext_lzma}
         CONFIGURE_COMMAND ./configure --prefix=${PREFIX_ext_lzma} --disable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo --disable-lzma-links --disable-scripts --disable-doc --disable-static --enable-shared ${GLOBAL_AUTOMAKE_PROFILE}
-        BUILD_COMMAND $(MAKE) -j${SUBMAKE_JOBS}
-        INSTALL_COMMAND make install
 
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE 1

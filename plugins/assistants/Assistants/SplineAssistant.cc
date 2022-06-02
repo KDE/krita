@@ -162,7 +162,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
         QColor assistantColor = effectiveAssistantColor();
         QPen bezierlinePen(assistantColor);
         bezierlinePen.setStyle(Qt::DotLine);
-        bezierlinePen.setWidth(1);
+        bezierlinePen.setWidth(2);
 
         if (m_canvas->paintingAssistantsDecoration()->isEditingAssistants()) {
 
@@ -172,6 +172,7 @@ void SplineAssistant::drawCache(QPainter& gc, const KisCoordinatesConverter *con
 
                 bezierlinePen.setColor(snappingColor);
             }
+            bezierlinePen.setCosmetic(true);
 
             gc.setPen(bezierlinePen);
             gc.drawLine(pts[0], pts[2]);

@@ -33,34 +33,34 @@ public:
     KisMirrorAxisConfig& operator=(const KisMirrorAxisConfig& rhs);
     bool operator==(const KisMirrorAxisConfig& rhs) const;
 
-    bool mirrorHorizontal();
+    bool mirrorHorizontal() const;
     void setMirrorHorizontal(bool state);
 
-    bool mirrorVertical();
+    bool mirrorVertical() const;
     void setMirrorVertical(bool state);
 
-    bool lockHorizontal();
+    bool lockHorizontal() const;
     void setLockHorizontal(bool state);
 
-    bool lockVertical();
+    bool lockVertical() const;
     void setLockVertical(bool state);
 
-    bool hideVerticalDecoration();
+    bool hideVerticalDecoration() const;
     void setHideVerticalDecoration(bool state);
 
-    bool hideHorizontalDecoration();
+    bool hideHorizontalDecoration() const;
     void setHideHorizontalDecoration(bool state);
 
-    float handleSize();
+    float handleSize() const;
     void setHandleSize(float size);
 
-    float horizontalHandlePosition();
+    float horizontalHandlePosition() const;
     void setHorizontalHandlePosition(float position);
 
-    float verticalHandlePosition();
+    float verticalHandlePosition() const;
     void setVerticalHandlePosition(float position);
 
-    QPointF axisPosition();
+    QPointF axisPosition() const;
     void setAxisPosition(QPointF position);
 
     /**

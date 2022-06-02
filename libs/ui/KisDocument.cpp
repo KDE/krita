@@ -121,6 +121,7 @@
 #include "kis_async_action_feedback.h"
 #include "KisCloneDocumentStroke.h"
 
+#include <kis_algebra_2d.h>
 #include <KisMirrorAxisConfig.h>
 #include <KisDecorationsWrapperLayer.h>
 #include "kis_simple_stroke_strategy.h"
@@ -2266,6 +2267,10 @@ void KisDocument::setMirrorAxisConfig(const KisMirrorAxisConfig &config)
     }
 
     d->mirrorAxisConfig = config;
+    if (d->image) {
+        d->image->setMirrorAxesCenter(KisAlgebra2D::absoluteToRelative(d->mirrorAxisConfig.axisPosition(),
+                                                                       d->image->bounds()));
+    }
     setModified(true);
 
     emit sigMirrorAxisConfigChanged();
@@ -2451,6 +2456,8 @@ bool KisDocument::newImage(const QString& name,
     image->addNode(bgLayer.data(), image->rootLayer().data());
     bgLayer->setDirty(QRect(0, 0, width, height));
 
+    // reset mirror axis to default:
+    d->mirrorAxisConfig.setAxisPosition(QRectF(image->bounds()).center());
     setCurrentImage(image);
 
     for(int i = 1; i < numberOfLayers; ++i) {
@@ -2598,6 +2605,7 @@ void KisDocument::setCurrentImage(KisImageSP image, bool forceInitialUpdate)
     d->setImageAndInitIdleWatcher(image);
     d->image->setUndoStore(new KisDocumentUndoStore(this));
     d->shapeController->setImage(image);
+    d->image->setMirrorAxesCenter(KisAlgebra2D::absoluteToRelative(d->mirrorAxisConfig.axisPosition(), image->bounds()));
     setModified(false);
     connect(d->image, SIGNAL(sigImageModified()), this, SLOT(setImageModified()), Qt::UniqueConnection);
     connect(d->image, SIGNAL(sigImageModifiedWithoutUndo()), this, SLOT(setImageModifiedWithoutUndo()), Qt::UniqueConnection);

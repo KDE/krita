@@ -90,7 +90,7 @@ bool KisMirrorAxisConfig::operator==(const KisMirrorAxisConfig &rhs) const
     return *d == *rhs.d;
 }
 
-bool KisMirrorAxisConfig::mirrorHorizontal()
+bool KisMirrorAxisConfig::mirrorHorizontal() const
 {
     return d->mirrorHorizontal;
 }
@@ -100,7 +100,7 @@ void KisMirrorAxisConfig::setMirrorHorizontal(bool state)
     d->mirrorHorizontal = state;
 }
 
-bool KisMirrorAxisConfig::mirrorVertical()
+bool KisMirrorAxisConfig::mirrorVertical() const
 {
     return d->mirrorVertical;
 }
@@ -110,7 +110,7 @@ void KisMirrorAxisConfig::setMirrorVertical(bool state)
     d->mirrorVertical = state;
 }
 
-bool KisMirrorAxisConfig::lockHorizontal()
+bool KisMirrorAxisConfig::lockHorizontal() const
 {
     return d->lockHorizontal;
 }
@@ -120,7 +120,7 @@ void KisMirrorAxisConfig::setLockHorizontal(bool state)
     d->lockHorizontal = state;
 }
 
-bool KisMirrorAxisConfig::lockVertical()
+bool KisMirrorAxisConfig::lockVertical() const
 {
     return d->lockVertical;
 }
@@ -130,7 +130,7 @@ void KisMirrorAxisConfig::setLockVertical(bool state)
     d->lockVertical = state;
 }
 
-bool KisMirrorAxisConfig::hideVerticalDecoration()
+bool KisMirrorAxisConfig::hideVerticalDecoration() const
 {
     return d->hideVerticalDecoration;
 }
@@ -140,7 +140,7 @@ void KisMirrorAxisConfig::setHideVerticalDecoration(bool state)
     d->hideVerticalDecoration = state;
 }
 
-bool KisMirrorAxisConfig::hideHorizontalDecoration()
+bool KisMirrorAxisConfig::hideHorizontalDecoration() const
 {
     return d->hideHorizontalDecoration;
 }
@@ -150,7 +150,7 @@ void KisMirrorAxisConfig::setHideHorizontalDecoration(bool state)
     d->hideHorizontalDecoration = state;
 }
 
-float KisMirrorAxisConfig::handleSize()
+float KisMirrorAxisConfig::handleSize() const
 {
     return d->handleSize;
 }
@@ -160,7 +160,7 @@ void KisMirrorAxisConfig::setHandleSize(float size)
     d->handleSize = size;
 }
 
-float KisMirrorAxisConfig::horizontalHandlePosition()
+float KisMirrorAxisConfig::horizontalHandlePosition() const
 {
     return d->horizontalHandlePosition;
 }
@@ -170,7 +170,7 @@ void KisMirrorAxisConfig::setHorizontalHandlePosition(float position)
     d->horizontalHandlePosition = position;
 }
 
-float KisMirrorAxisConfig::verticalHandlePosition()
+float KisMirrorAxisConfig::verticalHandlePosition() const
 {
     return d->verticalHandlePosition;
 }
@@ -180,7 +180,7 @@ void KisMirrorAxisConfig::setVerticalHandlePosition(float position)
     d->verticalHandlePosition = position;
 }
 
-QPointF KisMirrorAxisConfig::axisPosition()
+QPointF KisMirrorAxisConfig::axisPosition() const
 {
     return d->axisPosition;
 }

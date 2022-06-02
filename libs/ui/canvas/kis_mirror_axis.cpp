@@ -381,19 +381,18 @@ void KisMirrorAxis::setMirrorAxisConfig(const KisMirrorAxisConfig &config)
 
         d->config = config;
 
-        d->setAxisPosition(d->config.axisPosition().x(), d->config.axisPosition().y());
-
         d->resourceProvider->setMirrorHorizontal(d->config.mirrorHorizontal());
         d->resourceProvider->setMirrorVertical(d->config.mirrorVertical());
 
         d->resourceProvider->setMirrorHorizontalLock(d->config.lockHorizontal());
         d->resourceProvider->setMirrorVerticalLock(d->config.lockVertical());
 
-        d->resourceProvider->setMirrorHorizontal(d->config.mirrorHorizontal());
-        d->resourceProvider->setMirrorVertical(d->config.mirrorVertical());
-
         d->resourceProvider->setMirrorHorizontalHideDecorations(d->config.hideHorizontalDecoration());
         d->resourceProvider->setMirrorVerticalHideDecorations(d->config.hideVerticalDecoration());
+
+        if (view()) {
+            view()->canvasBase()->updateCanvas();
+        }
     }
 
     toggleMirrorActions();
@@ -456,9 +455,6 @@ void KisMirrorAxis::Private::setAxisPosition(float x, float y)
 
     config.setAxisPosition(newPosition);
 
-    const QPointF relativePosition = KisAlgebra2D::absoluteToRelative(newPosition, image->bounds());
-    image->setMirrorAxesCenter(relativePosition);
-
     q->view()->canvasBase()->updateCanvas();
 }
 
@@ -466,8 +462,6 @@ void KisMirrorAxis::Private::setAxisPosition(float x, float y)
 void KisMirrorAxis::Private::recomputeVisibleAxes(QRect viewport)
 {
     KisCoordinatesConverter *converter = q->view()->viewConverter();
-
-    config.setAxisPosition(KisAlgebra2D::relativeToAbsolute(image->mirrorAxesCenter(), image->bounds()));
 
     QPointF samplePt1 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x(), 0));
     QPointF samplePt2 = converter->imageToWidget<QPointF>(QPointF(config.axisPosition().x(), 100));

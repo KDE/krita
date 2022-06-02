@@ -84,8 +84,13 @@ if ! ninja --version > /dev/null 2>&1; then
     rm ninja-linux.zip
 fi
 
+QT_DEBUG=off
+if [[ -n $QT_ENABLE_DEBUG_INFO ]]; then
+    QT_DEBUG=on
+fi
+
 # Configure the dependencies for building
-cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR
+cmake $KRITA_SOURCES/3rdparty -DCMAKE_INSTALL_PREFIX=$DEPS_INSTALL_PREFIX -DINSTALL_ROOT=$DEPS_INSTALL_PREFIX -DEXTERNALS_DOWNLOAD_DIR=$DOWNLOADS_DIR -DQT_ENABLE_DEBUG_INFO=$QT_DEBUG
 
 # Now start building everything we need, in the appropriate order
 #cmake --build . --config RelWithDebInfo --target ext_png

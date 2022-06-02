@@ -64,9 +64,17 @@ message( STATUS "CMAKE_CL_64: ${CMAKE_CL_64}")
 set(GLOBAL_BUILD_TYPE RelWithDebInfo)
 set(GLOBAL_PROFILE ${GLOBAL_PROFILE} -DBUILD_TESTING=false)
 
+if (UNIX AND NOT APPLE)
+        set(LINUX true)
+    set(PATCH_COMMAND patch)
+endif ()
+
+if (WIN32 OR LINUX)
+option(QT_ENABLE_DEBUG_INFO "Build Qt with full debug info included" OFF)
+endif()
+
 if (WIN32)
         option(ENABLE_MSYS2_FIXES "Enable patches that are needed for MSYS2+Clang Krita build" OFF)
-	option(QT_ENABLE_DEBUG_INFO "Build Qt with full debug info included" OFF)
 	option(QT_ENABLE_DYNAMIC_OPENGL "Build Qt with dynamic ANGLE support '-opengl dynamic -angle' (needs env var 'WindowsSdkDir' set to path of Windows 10 SDK)" ON)
     option(USE_EXTERNAL_ANGLE "Use a newer custom Google ANGLE build instead of the one bundled in Qt" ON)
 
@@ -241,11 +249,6 @@ if (ANDROID)
   # see: https://github.com/android/ndk/issues/929
   unset (CMAKE_SYSROOT)
 endif()
-
-if (UNIX AND NOT APPLE)
-	set(LINUX true)
-    set(PATCH_COMMAND patch)
-endif ()
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)
 	include(CheckCXXSourceCompiles)

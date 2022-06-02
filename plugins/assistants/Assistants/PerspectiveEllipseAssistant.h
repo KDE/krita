@@ -10,16 +10,24 @@
 #include "Ellipse.h"
 #include <QObject>
 
-class PerspectiveEllipseAssistant : public KisPaintingAssistant
+class PerspectiveEllipseAssistant : public KisAbstractPerspectiveGrid, public KisPaintingAssistant
 {
+    Q_OBJECT
 public:
-    PerspectiveEllipseAssistant();
+    PerspectiveEllipseAssistant(QObject * parent = 0);
+    ~PerspectiveEllipseAssistant();
+
+
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
     
     QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return 4; }
     bool isAssistantComplete() const override;
+
+    // implements KisAbstractPerspectiveGrid
+    bool contains(const QPointF& point) const override;
+    qreal distance(const QPointF& point) const override;
     
 protected:
     QRect boundingRect() const override;

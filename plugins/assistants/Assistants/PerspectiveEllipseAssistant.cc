@@ -326,15 +326,19 @@ public:
 
 };
 
-PerspectiveEllipseAssistant::PerspectiveEllipseAssistant()
-    : KisPaintingAssistant("perspective ellipse", i18n("Perspective Ellipse assistant"))
+PerspectiveEllipseAssistant::PerspectiveEllipseAssistant(QObject *parent)
+    : KisAbstractPerspectiveGrid(parent)
+    , KisPaintingAssistant("perspective ellipse", i18n("Perspective Ellipse assistant"))
     , d(new Private())
 {
 
 }
 
+PerspectiveEllipseAssistant::~PerspectiveEllipseAssistant() {}
+
 PerspectiveEllipseAssistant::PerspectiveEllipseAssistant(const PerspectiveEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
-    : KisPaintingAssistant(rhs, handleMap)
+    : KisAbstractPerspectiveGrid(rhs.parent())
+    , KisPaintingAssistant(rhs, handleMap)
     , d(new Private())
 {
 }
@@ -591,6 +595,19 @@ void PerspectiveEllipseAssistant::updateCache()
 bool PerspectiveEllipseAssistant::isAssistantComplete() const
 {   
     return handles().size() >= 4;
+}
+
+bool PerspectiveEllipseAssistant::contains(const QPointF &point) const
+{
+
+    QPolygonF poly;
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) return false;
+    return poly.containsPoint(point, Qt::OddEvenFill);
+}
+
+qreal PerspectiveEllipseAssistant::distance(const QPointF &point) const
+{
+    return PerspectiveBasedAssistantHelper::distanceInGrid(handles(), isAssistantComplete(), point);
 }
 
 PerspectiveEllipseAssistantFactory::PerspectiveEllipseAssistantFactory()

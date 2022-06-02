@@ -86,6 +86,69 @@ QPolygonF PerspectiveBasedAssistantHelper::getAllConnectedTetragon(const QList<K
     return polyAllConnected;
 }
 
+qreal PerspectiveBasedAssistantHelper::localScale(const QTransform &transform, QPointF pt)
+{
+    //    const qreal epsilon = 1e-5, epsilonSquared = epsilon * epsilon;
+    //    qreal xSizeSquared = lengthSquared(transform.map(pt + QPointF(epsilon, 0.0)) - orig) / epsilonSquared;
+    //    qreal ySizeSquared = lengthSquared(transform.map(pt + QPointF(0.0, epsilon)) - orig) / epsilonSquared;
+    //    xSizeSquared /= lengthSquared(transform.map(QPointF(0.0, pt.y())) - transform.map(QPointF(1.0, pt.y())));
+    //    ySizeSquared /= lengthSquared(transform.map(QPointF(pt.x(), 0.0)) - transform.map(QPointF(pt.x(), 1.0)));
+    //  when taking the limit epsilon->0:
+    //  xSizeSquared=((m23*y+m33)^2*(m23*y+m33+m13)^2)/(m23*y+m13*x+m33)^4
+    //  ySizeSquared=((m23*y+m33)^2*(m23*y+m33+m13)^2)/(m23*y+m13*x+m33)^4
+    //  xSize*ySize=(abs(m13*x+m33)*abs(m13*x+m33+m23)*abs(m23*y+m33)*abs(m23*y+m33+m13))/(m23*y+m13*x+m33)^4
+    const qreal x = transform.m13() * pt.x(),
+            y = transform.m23() * pt.y(),
+            a = x + transform.m33(),
+            b = y + transform.m33(),
+            c = x + y + transform.m33(),
+            d = c * c;
+    return fabs(a*(a + transform.m23())*b*(b + transform.m13()))/(d * d);
+}
+
+qreal PerspectiveBasedAssistantHelper::inverseMaxLocalScale(const QTransform &transform)
+{
+    const qreal a = fabs((transform.m33() + transform.m13()) * (transform.m33() + transform.m23())),
+            b = fabs((transform.m33()) * (transform.m13() + transform.m33() + transform.m23())),
+            d00 = transform.m33() * transform.m33(),
+            d11 = (transform.m33() + transform.m23() + transform.m13())*(transform.m33() + transform.m23() + transform.m13()),
+            s0011 = qMin(d00, d11) / a,
+            d10 = (transform.m33() + transform.m13()) * (transform.m33() + transform.m13()),
+            d01 = (transform.m33() + transform.m23()) * (transform.m33() + transform.m23()),
+            s1001 = qMin(d10, d01) / b;
+    return qMin(s0011, s1001);
+}
+
+qreal PerspectiveBasedAssistantHelper::distanceInGrid(const QList<KisPaintingAssistantHandleSP>& handles, bool isAssistantComplete, const QPointF &point)
+{
+    const qreal defaultValue = 1.0;
+    const qreal infinity = 0.0;
+
+    QPolygonF poly;
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles, isAssistantComplete, poly)) {
+        return defaultValue;
+    }
+
+    QTransform transform;
+    if (!QTransform::squareToQuad(poly, transform)) {
+        return defaultValue;
+    }
+
+    bool invertible;
+    QTransform inverse = transform.inverted(&invertible);
+
+    if (!invertible) {
+        return defaultValue;
+    }
+
+    if (inverse.m13() * point.x() + inverse.m23() * point.y() + inverse.m33() == 0.0) {
+        return infinity; // point at infinity
+    }
+
+    return localScale(transform, inverse.map(point)) * inverseMaxLocalScale(transform);
+
+}
+
 qreal PerspectiveBasedAssistantHelper::pdot(const QPointF &a, const QPointF &b)
 {
     return a.x() * b.y() - a.y() * b.x();

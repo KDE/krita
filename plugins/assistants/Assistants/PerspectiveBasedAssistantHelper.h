@@ -22,6 +22,17 @@ public:
     // this is useful for drawing a wrong state in perspective-based assistants (when one vertex is inside the triangle created by the rest of them)
     static QPolygonF getAllConnectedTetragon(const QList<KisPaintingAssistantHandleSP>& handles);
 
+    // distance in Perspective grid
+    // used for calculating the Perspective sensor
+    static qreal distanceInGrid(const QList<KisPaintingAssistantHandleSP>& handles, bool isAssistantComplete, const QPointF &point);
+
+
+    static qreal localScale(const QTransform& transform, QPointF pt);
+
+    // returns the reciprocal of the maximum local scale at the points (0,0),(0,1),(1,0),(1,1)
+    static qreal inverseMaxLocalScale(const QTransform& transform);
+
+
     // *** small helper functions ***
 
     // perpendicular dot product

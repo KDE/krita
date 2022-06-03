@@ -112,6 +112,8 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
 
     m_acyclicConnector->connectBackwardKoColor(this, SIGNAL(sigChangefGColor(KoColor)),
                                                m_resourceManager, SIGNAL(sigSetFGColor(KoColor)));
+    // just update() to repaint color labels on external background color change
+    connect(viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), SLOT(update()));
 
     connect(this, SIGNAL(sigChangeActivePaintop(int)), m_resourceManager, SLOT(slotChangeActivePaintop(int)));
     connect(this, SIGNAL(sigUpdateRecentColor(int)), m_resourceManager, SLOT(slotUpdateRecentColor(int)));
@@ -398,7 +400,9 @@ void KisPopupPalette::slotDisplayConfigurationChanged()
 
 void KisPopupPalette::slotExternalFgColorChanged(const KoColor &color)
 {
+    KisSignalsBlocker b(m_colorSelector);
     m_colorSelector->slotSetColor(color);
+    update();
 }
 
 void KisPopupPalette::slotEmitColorChanged()

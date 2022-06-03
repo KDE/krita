@@ -44,7 +44,7 @@ public:
                        << "font-optical-sizing" << "font-variation-settings"
                        << "text-decoration" << "text-decoration-line" << "text-decoration-style"
                        << "text-decoration-color"  << "text-decoration-position"
-                       << "letter-spacing" << "word-spacing" << "baseline-shift"
+                       << "letter-spacing" << "word-spacing" << "baseline-shift" << "vertical-align"
                        << "line-height" << "white-space" << "xml:space" << "text-transform"
                        << "text-indent" << "word-break" << "line-break" << "hanging-punctuation"
                        << "text-align" << "text-align-all" << "text-align-last" << "inline-size"
@@ -314,7 +314,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                || command == "text-overflow"
                || command == "tab-size"
                || command == "overflow-wrap"
-               || command == "word-wrap"){
+               || command == "word-wrap"
+               || command == "vertical-align"){
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";

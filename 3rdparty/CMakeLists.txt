@@ -178,11 +178,14 @@ if (MINGW)
     # DrMingw not able to parse the DWARF debug symbols. Add -gdwarf-aranges
     # explicitly.
     # See: https://github.com/jrfonseca/drmingw/issues/42#issuecomment-516614561
+    #
+    # `-fdebug-info-for-profiling` is needed for proper C++ function signatures
+    # when using Clang with `-g1`.
     if (CMAKE_C_COMPILER_ID STREQUAL "Clang")
-        set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -gdwarf-aranges")
+        set(CMAKE_C_FLAGS_RELWITHDEBINFO "${CMAKE_C_FLAGS_RELWITHDEBINFO} -gdwarf-aranges -fdebug-info-for-profiling")
     endif ()
     if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -gdwarf-aranges")
+        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} -gdwarf-aranges -fdebug-info-for-profiling")
     endif ()
 
     set(GLOBAL_PROFILE ${GLOBAL_PROFILE}

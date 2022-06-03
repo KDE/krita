@@ -75,6 +75,13 @@ if (WIN32)
                 QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO-=-g
                 QMAKE_CXXFLAGS+=-g1
             )
+            if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+                # This is needed for proper C++ function signatures
+                list(APPEND _QT_conf
+                    QMAKE_CFLAGS+=-fdebug-info-for-profiling
+                    QMAKE_CXXFLAGS+=-fdebug-info-for-profiling
+                )
+            endif ()
         endif ()
         if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
             # Workaround for DrMingw, see parent CMakeLists.txt

@@ -855,8 +855,21 @@ void KisNodeJugglerCompressed::slotUpdateTimeout()
     // by slotEndStrokeRequested(). In such a case the final updates
     // will be issued by the last command of the stroke.
 
-    if (!m_d->updateData) return;
-    m_d->updateData->processUnhandledUpdates();
+    if (!m_d->updateData || !m_d->isStarted) return;
+
+    BatchMoveUpdateDataSP updateData = m_d->updateData;
+
+    /**
+     * Since the update should be synchronized with the
+     * flow of layer-add commands, we issue it from a fake
+     * undo command that doesn't generate any history
+     */
+    m_d->applicator->applyCommand(
+        new KisCommandUtils::LambdaCommand(
+            [updateData] () {
+                updateData->processUnhandledUpdates();
+                return nullptr;
+            }));
 }
 
 void KisNodeJugglerCompressed::end()

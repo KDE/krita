@@ -59,6 +59,7 @@ public:
                        << "letter-spacing"
                        << "word-spacing"
                        << "baseline-shift"
+                       << "vertical-align"
                        << "line-height"
                        << "white-space"
                        << "xml:space"
@@ -331,7 +332,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
                || command == "text-align-last" || command == "inline-size"
                || command == "overflow" || command == "text-overflow"
                || command == "tab-size" || command == "overflow-wrap"
-               || command == "word-wrap") {
+               || command == "word-wrap" || command == "vertical-align") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";

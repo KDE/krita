@@ -183,8 +183,28 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 }
             }
         }
+    } else if (command == "vertical-align") {
+        QRegExp digits = QRegExp("\\d");
+        Q_FOREACH (const QString &param,
+                   value.split(' ', QString::SkipEmptyParts)) {
+            if (param == "sub" || param == "super" || param.contains(digits)) {
+                parseSvgTextAttribute(context, "baseline-shift", param);
+            } else {
+                parseSvgTextAttribute(context, "alignment-baseline", param);
+            }
+        }
     } else if (command == "kerning") {
-        setProperty(KerningId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context)));
+        KoSvgText::AutoValue kerning;
+        if (value == "none") {
+            kerning.isAuto = false;
+            kerning.customValue = 0;
+        } else if (value == "normal") {
+            kerning.isAuto = false;
+            kerning.customValue = 1;
+        } else {
+            kerning = KoSvgText::parseAutoValueXY(value, context);
+        }
+        setProperty(KerningId, KoSvgText::fromAutoValue(kerning));
     } else if (command == "letter-spacing") {
         setProperty(LetterSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
     } else if (command == "word-spacing") {
@@ -408,7 +428,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
     } else if (command == "font-optical-sizing") {
         setProperty(FontOpticalSizingId, value == "auto");
     } else if (command == "font-variation-settings") {
-        setProperty(FontVariationSettingsId, value.split(" "));
+        setProperty(FontVariationSettingsId, value.split(", "));
     } else if (command == "text-decoration" || command == "text-decoration-line"
                || command == "text-decoration-style"
                || command == "text-decoration-color"
@@ -632,20 +652,52 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
                           Baseline(property(DominantBaselineId).toInt())));
     }
 
-    if (hasProperty(AlignmentBaselineId)) {
-        result.insert("alignment-baseline",
-                      writeAlignmentBaseline(
-                          Baseline(property(AlignmentBaselineId).toInt())));
-    }
+    if (svg1_1) {
+        if (hasProperty(AlignmentBaselineId)) {
+            result.insert("alignment-baseline",
+                          writeAlignmentBaseline(
+                              Baseline(property(AlignmentBaselineId).toInt())));
+        }
 
-    if (hasProperty(BaselineShiftModeId)) {
-        result.insert("baseline-shift", writeBaselineShiftMode(
-                      BaselineShiftMode(property(BaselineShiftModeId).toInt()),
-                      property(BaselineShiftValueId).toReal()));
+        if (hasProperty(BaselineShiftModeId)) {
+            result.insert(
+                "baseline-shift",
+                writeBaselineShiftMode(
+                    BaselineShiftMode(property(BaselineShiftModeId).toInt()),
+                    property(BaselineShiftValueId).toReal()));
+        }
+    } else {
+        QStringList verticalAlign;
+        if (hasProperty(AlignmentBaselineId)) {
+            verticalAlign.append(writeAlignmentBaseline(
+                Baseline(property(AlignmentBaselineId).toInt())));
+        }
+
+        if (hasProperty(BaselineShiftModeId)) {
+            verticalAlign.append(writeBaselineShiftMode(
+                BaselineShiftMode(property(BaselineShiftModeId).toInt()),
+                property(BaselineShiftValueId).toReal()));
+        }
+        if (!verticalAlign.isEmpty()) {
+            result.insert("vertical-align", verticalAlign.join(" "));
+        }
     }
 
     if (hasProperty(KerningId)) {
-        result.insert("kerning", writeAutoValue(property(KerningId).value<AutoValue>()));
+        if (svg1_1) {
+            result.insert(
+                "kerning",
+                writeAutoValue(property(KerningId).value<AutoValue>()));
+        } else {
+            AutoValue kerning = property(KerningId).value<AutoValue>();
+            if (kerning.isAuto) {
+                result.insert("kerning", "auto");
+            } else if (kerning.customValue == 0) {
+                result.insert("kerning", "none");
+            } else {
+                result.insert("kerning", "normal");
+            }
+        }
     }
 
     if (hasProperty(LetterSpacingId)) {
@@ -712,21 +764,24 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
     if (hasProperty(FontVariationSettingsId)) {
         result.insert(
             "font-variation-settings",
-            property(FontVariationSettingsId).toStringList().join(" "));
+            property(FontVariationSettingsId).toStringList().join(", "));
     }
 
     if (hasProperty(FontStretchId)) {
         const int stretch = property(FontStretchId).toInt();
-
-        static const std::vector<int> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
-        static const std::vector<QString> fontStretchNames =
-            {"ultra-condensed","extra-condensed","condensed","semi-condensed",
-             "normal",
-             "semi-expanded","expanded","extra-expanded","ultra-expanded"};
-
-        auto it = std::lower_bound(fontStretches.begin(), fontStretches.end(), stretch);
-        if (it != fontStretches.end()) {
-            result.insert("font-stretch", fontStretchNames[it - fontStretches.begin()]);
+        static const QVector<int> fontStretches =
+            {50, 62, 75, 87, 100, 112, 125, 150, 200};
+        if (svg1_1 || fontStretches.contains(stretch)) {
+            auto it = std::lower_bound(fontStretches.begin(),
+                                       fontStretches.end(),
+                                       stretch);
+            if (it != fontStretches.end()) {
+                result.insert(
+                    "font-stretch",
+                    KoSvgText::fontStretchNames[it - fontStretches.begin()]);
+            }
+        } else {
+            result.insert("font-stretch", KisDomUtils::toString(stretch));
         }
     }
 
@@ -1049,7 +1104,8 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start,
         }
     }
 
-    if (!property(KerningId).value<AutoValue>().isAuto) {
+    if (!property(KerningId).value<AutoValue>().isAuto
+        || property(KerningId).value<AutoValue>().customValue == 0) {
         QString openTypeTag = "kern";
         openTypeTag += QString("[%1:%2]").arg(start).arg(start + length);
         openTypeTag += "=0";

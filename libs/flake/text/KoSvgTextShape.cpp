@@ -1836,21 +1836,17 @@ void KoSvgTextShape::Private::computeFontMetrics(
         KoSvgText::BaselineShiftMode(
             properties.property(KoSvgTextProperties::BaselineShiftModeId)
                 .toInt());
-    // TODO: only apply if the current run is horizontal?
+
     if (baselineShiftMode == KoSvgText::ShiftSuper) {
-        if (isHorizontal) {
-            baselineShiftTotal = superScript;
-        }
+        baselineShiftTotal = isHorizontal
+            ? superScript
+            : QPointF(-superScript.y(), superScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftSub) {
-        if (isHorizontal) {
-            baselineShiftTotal = subScript;
-        }
+        baselineShiftTotal =
+            isHorizontal ? subScript : QPointF(-subScript.y(), subScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftPercentage) {
-        if (isHorizontal) {
-            baselineShiftTotal = QPointF(0, baselineShift);
-        } else {
-            baselineShiftTotal = QPointF(baselineShift, 0);
-        }
+        baselineShiftTotal = isHorizontal ? QPointF(0, baselineShift)
+                                          : QPointF(-baselineShift, 0);
     }
 
     QVector<int> lengths;
@@ -1985,28 +1981,6 @@ void KoSvgTextShape::Private::computeFontMetrics(
                     &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             }
-            hb_position_t baseline2 = 0;
-            hb_ot_metrics_get_position_with_fallback(
-                font.data(),
-                HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
-                &baseline);
-            hb_ot_metrics_get_position_with_fallback(
-                font.data(),
-                HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
-                &baseline2);
-            superScript = QPointF(baseline * freetypePixelsToPt,
-                                  baseline2 * -freetypePixelsToPt);
-            hb_ot_metrics_get_position_with_fallback(
-                font.data(),
-                HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
-                &baseline);
-            hb_ot_metrics_get_position_with_fallback(
-                font.data(),
-                HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET,
-                &baseline2);
-            subScript = QPointF(baseline * freetypePixelsToPt,
-                                baseline2 * -freetypePixelsToPt);
-
         } else {
             hb_ot_layout_get_baseline(font.data(),
                                       HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
@@ -2077,29 +2051,35 @@ void KoSvgTextShape::Private::computeFontMetrics(
                                            &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             }
-            hb_position_t baseline2 = 0;
-            hb_ot_metrics_get_position(
-                font.data(),
-                HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
-                &baseline);
-            hb_ot_metrics_get_position(
-                font.data(),
-                HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
-                &baseline2);
-            superScript = QPointF(baseline * freetypePixelsToPt,
-                                  baseline2 * -freetypePixelsToPt);
-            hb_ot_metrics_get_position(font.data(),
-                                       HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
-                                       &baseline);
-            hb_ot_metrics_get_position(font.data(),
-                                       HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET,
-                                       &baseline2);
-            subScript = QPointF(baseline * freetypePixelsToPt,
-                                baseline2 * -freetypePixelsToPt);
         }
     }
 
+    // Get underline and super/subscripts.
+    QPointF newSuperScript;
+    QPointF newSubScript;
     if (hb_version_atleast(4, 0, 0)) {
+        hb_position_t baseline2 = 0;
+        hb_ot_metrics_get_position_with_fallback(
+            font.data(),
+            HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
+            &baseline);
+        hb_ot_metrics_get_position_with_fallback(
+            font.data(),
+            HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
+            &baseline2);
+        newSuperScript = QPointF(baseline * freetypePixelsToPt,
+                                 baseline2 * -freetypePixelsToPt);
+        hb_ot_metrics_get_position_with_fallback(
+            font.data(),
+            HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
+            &baseline);
+        hb_ot_metrics_get_position_with_fallback(
+            font.data(),
+            HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET,
+            &baseline2);
+        newSubScript = QPointF(baseline * freetypePixelsToPt,
+                               baseline2 * freetypePixelsToPt);
+
         qreal width = 0;
         qreal offset = 0;
         hb_ot_metrics_get_position_with_fallback(
@@ -2140,6 +2120,36 @@ void KoSvgTextShape::Private::computeFontMetrics(
             offset,
             width);
     } else {
+        baseline = 0;
+        hb_position_t baseline2 = 0;
+        hb_ot_metrics_get_position(font.data(),
+                                   HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
+                                   &baseline);
+        hb_ot_metrics_get_position(font.data(),
+                                   HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
+                                   &baseline2);
+        if (baseline2 == 0) {
+            newSuperScript = QPointF(0, 0.6 * -fontSize);
+        } else {
+            newSuperScript = QPointF(baseline * freetypePixelsToPt,
+                                     baseline2 * -freetypePixelsToPt);
+        }
+        baseline = 0;
+        baseline2 = 0;
+        hb_ot_metrics_get_position(font.data(),
+                                   HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
+                                   &baseline);
+        hb_ot_metrics_get_position(font.data(),
+                                   HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET,
+                                   &baseline2);
+        // Subscript should be 'added' onto the baseline'.
+        if (baseline2 == 0) {
+            newSubScript = QPointF(0, 0.2 * fontSize);
+        } else {
+            newSubScript = QPointF(baseline * freetypePixelsToPt,
+                                   baseline2 * freetypePixelsToPt);
+        }
+
         qreal width = 0;
         qreal offset = 0;
         const int fallbackThickness = faces.front()->underline_thickness
@@ -2188,8 +2198,8 @@ void KoSvgTextShape::Private::computeFontMetrics(
         computeFontMetrics(child,
                            baselineTable,
                            fontSize,
-                           superScript,
-                           subScript,
+                           newSuperScript,
+                           newSubScript,
                            result,
                            currentIndex,
                            res,
@@ -2412,12 +2422,12 @@ void KoSvgTextShape::Private::computeTextDecorations(
                         .propertyOrDefault(KoSvgTextProperties::
                                                TextDecorationPositionVerticalId)
                         .toInt());
-            if (underlinePosV == KoSvgText::UnderlineLeft) {
-                overlineOffset = QPointF(top, 0);
-                underlineOffset = QPointF(bottom, 0);
-            } else {
+            if (underlinePosV == KoSvgText::UnderlineRight) {
                 overlineOffset = QPointF(bottom, 0);
                 underlineOffset = QPointF(top, 0);
+            } else {
+                overlineOffset = QPointF(top, 0);
+                underlineOffset = QPointF(bottom, 0);
             }
             lineThroughOffset = (underlineOffset + overlineOffset) * 0.5;
         }

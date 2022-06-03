@@ -11,16 +11,22 @@
 #include <tuple>
 #include <utility>
 
+#include <KisDocument.h>
+#include <KisMainWindow.h>
+#include <KisPart.h>
+#include <KisViewManager.h>
 #include <KoColorSpaceConstants.h>
 #include <commands/kis_image_layer_add_command.h>
 #include <kis_command_utils.h>
 #include <kis_image.h>
+#include <kis_layer_utils.h>
+#include <kis_node_manager.h>
+#include <kis_node_selection_adapter.h>
 #include <kis_paint_layer.h>
 #include <kis_selection.h>
 #include <kis_surrogate_undo_adapter.h>
 #include <kis_transaction.h>
 #include <kis_types.h>
-#include <kis_layer_utils.h>
 
 #include "kis_qmic_import_tools.h"
 
@@ -96,6 +102,33 @@ void KisQmicSynchronizeLayersCommand::redo()
             return d->m_nodes->at(i);
         }
     };
+
+    KisNodeManager *nodeManager = [&]() -> KisNodeManager * {
+        KisMainWindow *mainWin = KisPart::instance()->currentMainwindow();
+        if (!mainWin)
+            return nullptr;
+        KisViewManager *viewManager = mainWin->viewManager();
+        if (!viewManager)
+            return nullptr;
+        if (viewManager->document()->image() != d->m_image)
+            return nullptr;
+        return viewManager->nodeManager();
+    }();
+
+    if (!nodeManager)
+        return;
+
+    auto *selectOldLayer = new KisLayerUtils::KeepNodesSelectedCommand(
+        nodeManager->selectedNodes(),
+        nodeManager->selectedNodes(),
+        nodeManager->activeNode(),
+        nodeManager->activeNode(),
+        d->m_image,
+        false);
+
+    selectOldLayer->redo();
+
+    addCommand(new KisCommandUtils::SkipFirstRedoWrapper(selectOldLayer));
 
     // if gmic produces more layers
     if (d->m_nodes->size() < d->m_images.size()) {
@@ -184,8 +217,8 @@ void KisQmicSynchronizeLayersCommand::redo()
 
         const KisQMicImageSP &gimg = d->m_images.at(index);
         dbgPlugins << "Importing layer index" << index
-                   << "Size: " << gimg->m_width << "x" << gimg->m_height
-                   << "colorchannels: " << gimg->m_spectrum;
+                << "Size: " << gimg->m_width << "x" << gimg->m_height
+                << "colorchannels: " << gimg->m_spectrum;
 
         KisPaintDeviceSP dst = node->paintDevice();
 
@@ -209,6 +242,32 @@ void KisQmicSynchronizeLayersCommand::redo()
         transaction.commit(&d->m_undoAdapter);
         node->setDirty(d->m_dstRect);
     }
+
+    KisNodeSP currentNode = [&]() -> KisNodeSP {
+        if (!d->m_nodes->empty()) {
+            return d->m_nodes->first();
+        } else if (!d->m_newNodes->empty()) {
+            return d->m_newNodes->first();
+        }
+        return {};
+    }();
+
+    if (!currentNode)
+        return;
+
+    auto *selectNewLayer = new KisLayerUtils::KeepNodesSelectedCommand(
+        nodeManager->selectedNodes(),
+        {currentNode},
+        nodeManager->activeNode(),
+        currentNode,
+        d->m_image,
+        true);
+
+    selectNewLayer->redo();
+
+    addCommand(new KisCommandUtils::SkipFirstRedoWrapper(selectNewLayer));
+
+    dbgPlugins << "Set selected node to" << currentNode->name();
 }
 
 void KisQmicSynchronizeLayersCommand::undo()

@@ -145,10 +145,7 @@ public:
                          int &currentIndex,
                          int &resolvedDescendentNodes,
                          bool isHorizontal);
-    void applyAnchoring(QVector<CharacterResult> &result,
-                        bool isHorizontal,
-                        KoSvgText::AutoValue inlineSize,
-                        QPointF startPos);
+    void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
     qreal characterResultOnPath(CharacterResult &cr,
                                 qreal length,
                                 qreal offset,
@@ -974,7 +971,8 @@ void KoSvgTextShape::relayout() const
     }
 
     // Handle linebreaking.
-    QPointF startPos;
+    QPointF startPos =
+        inlineSize.isAuto ? QPointF() : resolvedTransforms[0].absolutePos();
     d->breakLines(this->textProperties(), indexToTypographic, result, startPos);
 
     // Handle baseline alignment.
@@ -1061,7 +1059,7 @@ void KoSvgTextShape::relayout() const
         }
 
         // 7. Apply anchoring
-        d->applyAnchoring(result, isHorizontal, inlineSize, startPos);
+        d->applyAnchoring(result, isHorizontal);
 
         // Computing the textDecorations needs to happen before applying the
         // textPath to the results, as we need the unapplied result vector for
@@ -1082,12 +1080,6 @@ void KoSvgTextShape::relayout() const
 
         d->applyTextPath(this, result, isHorizontal);
     } else {
-        // We don't go through anchoring if 'start', because
-        // text-indent only applies to start, and will be removed
-        // by the anchoring process.
-        if (result.at(0).anchor != KoSvgText::AnchorStart) {
-            d->applyAnchoring(result, isHorizontal, inlineSize, startPos);
-        }
         globalIndex = 0;
         d->computeTextDecorations(this,
                                   result,
@@ -1428,6 +1420,139 @@ void handleCollapseAndHang(QVector<CharacterResult> &result,
     }
 }
 
+void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
+                              QVector<int> lineIndices,
+                              QPointF startPos,
+                              QPointF endPos,
+                              KoSvgText::TextAnchor anchor,
+                              bool ltr,
+                              bool isHorizontal)
+{
+    qreal shift = isHorizontal ? startPos.x() : startPos.y();
+
+    qreal a = 0;
+    qreal b = 0;
+
+    QPointF aStartPos = startPos;
+    QPointF inlineWidth = startPos - endPos;
+    QPointF aEndPos = aStartPos - inlineWidth;
+
+    for (int i : lineIndices) {
+        if (!result.at(i).addressable || result.at(i).isHanging) {
+            continue;
+        }
+        qreal pos = isHorizontal ? result.at(i).finalPosition.x()
+                                 : result.at(i).finalPosition.y();
+        qreal advance =
+            isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
+
+        if (i == lineIndices.first()) {
+            a = qMin(pos, pos + advance);
+            b = qMax(pos, pos + advance);
+        } else {
+            a = qMin(a, qMin(pos, pos + advance));
+            b = qMax(b, qMax(pos, pos + advance));
+        }
+    }
+
+    if (anchor == KoSvgText::AnchorEnd) {
+        aEndPos = aStartPos;
+        aStartPos = aStartPos + inlineWidth;
+    }
+
+    if ((anchor == KoSvgText::AnchorStart && ltr)
+        || (anchor == KoSvgText::AnchorEnd && !ltr)) {
+        shift -= a;
+
+    } else if ((anchor == KoSvgText::AnchorEnd && ltr)
+               || (anchor == KoSvgText::AnchorStart && !ltr)) {
+        shift -= b;
+
+    } else {
+        aEndPos = (startPos + aEndPos) * 0.5;
+        aStartPos = startPos - aEndPos;
+        shift -= ((a + b) * 0.5);
+    }
+
+    QPointF shiftP = isHorizontal ? QPointF(shift, 0) : QPointF(0, shift);
+    for (int j : lineIndices) {
+        if (!result.at(j).isHanging) {
+            result[j].cssPosition += shiftP;
+            result[j].finalPosition = result.at(j).cssPosition;
+        } else if (result.at(j).anchored_chunk) {
+            QPointF shift = isHorizontal
+                ? QPointF(aStartPos.x(), result[j].finalPosition.y())
+                : QPointF(result[j].finalPosition.x(), aStartPos.y());
+            shift = ltr ? shift - result.at(j).advance : shift;
+            result[j].cssPosition = shift;
+            result[j].finalPosition = result.at(j).cssPosition;
+        } else if (result.at(j).lineEnd != NoChange) {
+            QPointF shift = isHorizontal
+                ? QPointF(aEndPos.x(), result[j].finalPosition.y())
+                : QPointF(result[j].finalPosition.x(), aEndPos.y());
+            shift = ltr ? shift : shift - result.at(j).advance;
+            result[j].cssPosition = shift;
+            result[j].finalPosition = result.at(j).cssPosition;
+        }
+    }
+}
+
+/// Finalizing the line consists of several steps, like hang/collapse, anchoring
+/// into place and offsetting correctly. This can happen several times during a
+/// linebreak, hence this convenience function to handle this.
+void finalizeLine(QVector<CharacterResult> &result,
+                  QPointF &currentPos,
+                  QRectF &lineBox,
+                  QVector<int> &lineIndices,
+                  QPointF &lineOffset,
+                  QPointF startPos,
+                  QPointF endPos,
+                  KoSvgText::TextAnchor anchor,
+                  bool &firstLine,
+                  KoSvgText::AutoValue lineHeight,
+                  KoSvgText::WritingMode writingMode,
+                  bool ltr,
+                  bool inlineSize,
+                  bool atEnd,
+                  bool hangTextIndent,
+                  QPointF textIndent)
+{
+    bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
+
+    handleCollapseAndHang(result,
+                          lineIndices,
+                          endPos,
+                          lineOffset,
+                          inlineSize,
+                          writingMode,
+                          ltr,
+                          atEnd);
+
+    if (inlineSize) {
+        applyInlineSizeAnchoring(result,
+                                 lineIndices,
+                                 startPos,
+                                 endPos,
+                                 anchor,
+                                 ltr,
+                                 isHorizontal);
+    }
+    lineOffset += lineHeightOffset(writingMode,
+                                   result,
+                                   lineIndices,
+                                   lineBox,
+                                   currentPos,
+                                   lineHeight);
+    currentPos = lineOffset;
+    if (inlineSize) {
+        if (hangTextIndent) {
+            currentPos += textIndent;
+        }
+    }
+    lineBox = QRectF();
+    firstLine = false;
+}
+
 void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                          QMap<int, int> indexToTypographic,
                                          QVector<CharacterResult> &result,
@@ -1446,6 +1571,9 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
             .value<KoSvgText::AutoValue>();
     KoSvgText::OverflowWrap overflowWrap = KoSvgText::OverflowWrap(
         properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId)
+            .toInt());
+    KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(
+        properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId)
             .toInt());
 
     bool ltr = direction == KoSvgText::DirectionLeftToRight;
@@ -1557,29 +1685,22 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
 
         if (breakLine) {
             if (wordToNextLine) {
-                handleCollapseAndHang(result,
-                                      lineIndices,
-                                      endPos,
-                                      lineOffset,
-                                      !inlineSize.isAuto,
-                                      writingMode,
-                                      ltr,
-                                      false);
-
-                lineOffset += lineHeightOffset(writingMode,
-                                               result,
-                                               lineIndices,
-                                               lineBox,
-                                               currentPos,
-                                               lineHeight);
-                currentPos = lineOffset;
-                if (!inlineSize.isAuto) {
-                    if (textIndentInfo.hanging) {
-                        currentPos += textIndent;
-                    }
-                }
-                lineBox = QRectF();
-                firstLine = false;
+                finalizeLine(result,
+                             currentPos,
+                             lineBox,
+                             lineIndices,
+                             lineOffset,
+                             startPos,
+                             endPos,
+                             anchor,
+                             firstLine,
+                             lineHeight,
+                             writingMode,
+                             ltr,
+                             !inlineSize.isAuto,
+                             false,
+                             textIndentInfo.hanging,
+                             textIndent);
 
                 if (overflowWrap == KoSvgText::OverflowWrapBreakWord) {
                     qreal wordLength =
@@ -1614,29 +1735,22 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                                   ? QPointF()
                                                   : textIndent);
 
-                                handleCollapseAndHang(result,
-                                                      lineIndices,
-                                                      endPos,
-                                                      lineOffset,
-                                                      !inlineSize.isAuto,
-                                                      writingMode,
-                                                      ltr,
-                                                      false);
-
-                                lineOffset += lineHeightOffset(writingMode,
-                                                               result,
-                                                               lineIndices,
-                                                               lineBox,
-                                                               currentPos,
-                                                               lineHeight);
-                                currentPos = lineOffset;
-                                if (!inlineSize.isAuto) {
-                                    if (textIndentInfo.hanging) {
-                                        currentPos += textIndent;
-                                    }
-                                }
-                                lineBox = QRectF();
-                                firstLine = false;
+                                finalizeLine(result,
+                                             currentPos,
+                                             lineBox,
+                                             lineIndices,
+                                             lineOffset,
+                                             startPos,
+                                             endPos,
+                                             anchor,
+                                             firstLine,
+                                             lineHeight,
+                                             writingMode,
+                                             ltr,
+                                             !inlineSize.isAuto,
+                                             false,
+                                             textIndentInfo.hanging,
+                                             textIndent);
 
                                 partialWordFirstPos = ltr
                                     ? result.at(i).cssPosition
@@ -1671,46 +1785,42 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                               firstLine,
                               textIndentInfo.hanging ? QPointF() : textIndent);
 
-                handleCollapseAndHang(result,
-                                      lineIndices,
-                                      endPos,
-                                      lineOffset,
-                                      !inlineSize.isAuto,
-                                      writingMode,
-                                      ltr,
-                                      false);
-
-                lineOffset += lineHeightOffset(writingMode,
-                                               result,
-                                               lineIndices,
-                                               lineBox,
-                                               lineOffset,
-                                               lineHeight);
-                currentPos = lineOffset;
-                if (!inlineSize.isAuto) {
-                    if (!textIndentInfo.hanging && textIndentInfo.eachLine) {
-                        currentPos += textIndent;
-                    }
-                }
-                lineBox = QRectF();
+                finalizeLine(result,
+                             currentPos,
+                             lineBox,
+                             lineIndices,
+                             lineOffset,
+                             startPos,
+                             endPos,
+                             anchor,
+                             firstLine,
+                             lineHeight,
+                             writingMode,
+                             ltr,
+                             !inlineSize.isAuto,
+                             false,
+                             textIndentInfo.hanging,
+                             textIndent);
             }
             firstLine = false;
         }
         if (atEnd) {
-            handleCollapseAndHang(result,
-                                  lineIndices,
-                                  endPos,
-                                  lineOffset,
-                                  !inlineSize.isAuto,
-                                  writingMode,
-                                  ltr,
-                                  true);
-            lineOffset += lineHeightOffset(writingMode,
-                                           result,
-                                           lineIndices,
-                                           lineBox,
-                                           currentPos,
-                                           lineHeight);
+            finalizeLine(result,
+                         currentPos,
+                         lineBox,
+                         lineIndices,
+                         lineOffset,
+                         startPos,
+                         endPos,
+                         anchor,
+                         firstLine,
+                         lineHeight,
+                         writingMode,
+                         ltr,
+                         !inlineSize.isAuto,
+                         true,
+                         textIndentInfo.hanging,
+                         textIndent);
         }
     }
     qDebug() << "break lines finished";
@@ -2603,9 +2713,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
 }
 
 void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
-                                             bool isHorizontal,
-                                             KoSvgText::AutoValue inlineSize,
-                                             QPointF startPos)
+                                             bool isHorizontal)
 {
     QMap<int, int> typographicToIndex;
     int i = 0;
@@ -2632,49 +2740,20 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             qreal advance = isHorizontal ? result.at(i).advance.x()
                                          : result.at(i).advance.y();
 
-            bool count = (!inlineSize.isAuto) ? !result.at(i).isHanging : true;
-            if (count) {
-                if (result.at(i).anchored_chunk) {
-                    a = qMin(pos, pos + advance);
-                    b = qMax(pos, pos + advance);
-                } else {
-                    a = qMin(a, qMin(pos, pos + advance));
-                    b = qMax(b, qMax(pos, pos + advance));
-                }
+            if (result.at(i).anchored_chunk) {
+                a = qMin(pos, pos + advance);
+                b = qMax(pos, pos + advance);
+            } else {
+                a = qMin(a, qMin(pos, pos + advance));
+                b = qMax(b, qMax(pos, pos + advance));
             }
         }
-        qreal shift = isHorizontal ? startPos.x() : startPos.y();
+        qreal shift = 0;
         int typo = typographicToIndex.value(lowestTypographicalIndex);
-        if (inlineSize.isAuto) {
-            shift = isHorizontal ? result.at(typo).finalPosition.x()
-                                 : result.at(typo).finalPosition.y();
-        }
-
-        // Start pos and endpos are only used for inlinesize handling of hanging
-        // punctuation.
-        QPointF aStartPos = startPos;
-        QPointF endPos = isHorizontal ? QPointF(inlineSize.customValue, 0)
-                                      : QPointF(0, inlineSize.customValue);
-        QPointF aEndPos;
-
+        shift = isHorizontal ? result.at(typo).finalPosition.x()
+                             : result.at(typo).finalPosition.y();
         bool rtl =
             result.at(start).direction == KoSvgText::DirectionRightToLeft;
-
-        if (result.at(start).anchor == KoSvgText::AnchorMiddle) {
-            qreal halfLength = inlineSize.customValue * 0.5;
-            if (isHorizontal) {
-                aStartPos = !rtl ? QPointF(startPos.x() - halfLength, 0)
-                                 : QPointF(startPos.x() + halfLength, 0);
-            } else {
-                aStartPos = !rtl ? QPointF(0, startPos.y() - halfLength)
-                                 : QPointF(0, startPos.y() + halfLength);
-            }
-        }
-        aEndPos = rtl ? aStartPos - endPos : aStartPos + endPos;
-        if (result.at(start).anchor == KoSvgText::AnchorEnd) {
-            aStartPos = rtl ? aStartPos + endPos : aStartPos - endPos;
-            aEndPos = rtl ? aEndPos + endPos : aEndPos - endPos;
-        }
 
         if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl)
             || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
@@ -2693,22 +2772,10 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
         QPointF fPos;
         for (int j = start; j < i; j++) {
             CharacterResult cr = result[j];
-            if (cr.isHanging && !inlineSize.isAuto) {
-                if (cr.lineStart == HangBehaviour && start == 0
-                    && cr.anchored_chunk == true) {
-                    fPos = rtl ? aStartPos : aStartPos - cr.advance;
-                } else if (cr.lineEnd != NoChange) {
-                    fPos = isHorizontal ? QPointF(aEndPos.x(), fPos.y())
-                                        : QPointF(fPos.x(), aEndPos.y());
-                    if (rtl) {
-                        fPos -= cr.advance;
-                    }
-                }
-                cr.finalPosition = fPos;
-            } else {
-                cr.finalPosition += shiftP;
-                fPos = cr.finalPosition;
-            }
+
+            cr.finalPosition += shiftP;
+            fPos = cr.finalPosition;
+
             result[j] = cr;
         }
         start = i;

@@ -992,7 +992,7 @@ QStringList KoSvgTextProperties::fontFeaturesForText(int start, int length) cons
         }
     }
 
-    if (!property(KerningId).value<AutoValue>().isAuto || property(KerningId).value<AutoValue>().customValue == 0) {
+    if (!property(KerningId).value<AutoValue>().isAuto && property(KerningId).value<AutoValue>().customValue == 0) {
         QString openTypeTag = "kern";
         openTypeTag += QString("[%1:%2]").arg(start).arg(start+length);
         openTypeTag += "=0";

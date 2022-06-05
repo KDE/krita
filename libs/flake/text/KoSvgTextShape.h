@@ -53,7 +53,7 @@ public:
      */
     void relayout() const;
 
-    QPainterPath textOutline() const;
+    QList<KoShape *> textOutline() const;
 
     /**
      * @brief setTextRenderingFromString

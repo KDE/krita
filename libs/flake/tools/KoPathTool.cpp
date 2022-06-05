@@ -8,42 +8,44 @@
  */
 
 #include "KoPathTool.h"
-#include "KoToolBase_p.h"
-#include "KoPathShape_p.h"
-#include "KoPathToolHandle.h"
 #include "KoCanvasBase.h"
-#include "KoShapeManager.h"
-#include "KoSelectedShapesProxy.h"
 #include "KoDocumentResourceManager.h"
-#include "KoViewConverter.h"
-#include "KoSelection.h"
-#include "KoPointerEvent.h"
-#include "commands/KoPathPointTypeCommand.h"
-#include "commands/KoPathPointInsertCommand.h"
-#include "commands/KoPathPointRemoveCommand.h"
-#include "commands/KoPathSegmentTypeCommand.h"
-#include "commands/KoPathBreakAtPointCommand.h"
-#include "commands/KoPathSegmentBreakCommand.h"
-#include "commands/KoParameterToPathCommand.h"
-#include "commands/KoSubpathJoinCommand.h"
-#include <commands/KoMultiPathPointMergeCommand.h>
-#include <commands/KoMultiPathPointJoinCommand.h>
-#include <commands/KoKeepShapesSelectedCommand.h>
+#include "KoParameterChangeStrategy.h"
 #include "KoParameterShape.h"
-#include <text/KoSvgTextShape.h>
 #include "KoPathPoint.h"
 #include "KoPathPointRubberSelectStrategy.h"
 #include "KoPathSegmentChangeStrategy.h"
-#include "KoParameterChangeStrategy.h"
-#include "PathToolOptionWidget.h"
-#include "KoSnapGuide.h"
+#include "KoPathShape_p.h"
+#include "KoPathToolHandle.h"
+#include "KoPointerEvent.h"
+#include "KoSelectedShapesProxy.h"
+#include "KoSelection.h"
 #include "KoShapeController.h"
+#include "KoShapeGroup.h"
+#include "KoShapeManager.h"
+#include "KoSnapGuide.h"
+#include "KoToolBase_p.h"
+#include "KoToolManager.h"
+#include "KoViewConverter.h"
+#include "PathToolOptionWidget.h"
+#include "commands/KoParameterToPathCommand.h"
+#include "commands/KoPathBreakAtPointCommand.h"
+#include "commands/KoPathPointInsertCommand.h"
+#include "commands/KoPathPointRemoveCommand.h"
+#include "commands/KoPathPointTypeCommand.h"
+#include "commands/KoPathSegmentBreakCommand.h"
+#include "commands/KoPathSegmentTypeCommand.h"
+#include "commands/KoSubpathJoinCommand.h"
 #include "kis_action_registry.h"
-#include <KisHandlePainterHelper.h>
-#include <KoShapeStrokeModel.h>
 #include "kis_command_utils.h"
 #include "kis_pointer_utils.h"
-#include "KoToolManager.h"
+#include <KisHandlePainterHelper.h>
+#include <KoShapeStrokeModel.h>
+#include <commands/KoKeepShapesSelectedCommand.h>
+#include <commands/KoMultiPathPointJoinCommand.h>
+#include <commands/KoMultiPathPointMergeCommand.h>
+#include <commands/KoShapeGroupCommand.h>
+#include <text/KoSvgTextShape.h>
 
 #include <KoIcon.h>
 
@@ -366,20 +368,17 @@ void KoPathTool::convertToPath()
 
         QList<KoShape*> newSelectedShapes;
         Q_FOREACH (KoSvgTextShape *shape, textShapes) {
-            const QPainterPath path = shape->textOutline();
-            if (path.isEmpty()) continue;
+            KoShapeGroup *groupShape = new KoShapeGroup();
+            KoShapeGroupCommand groupCmd(groupShape, shape->textOutline(), false);
+            groupCmd.redo();
 
-            KoPathShape *pathShape = KoPathShape::createShapeFromPainterPath(path);
-
-            pathShape->setBackground(shape->background());
-            pathShape->setStroke(shape->stroke());
-            pathShape->setZIndex(shape->zIndex());
-            pathShape->setTransformation(shape->absoluteTransformation());
+            groupShape->setZIndex(shape->zIndex());
+            groupShape->setTransformation(shape->absoluteTransformation());
 
             KoShapeContainer *parent = shape->parent();
-            canvas()->shapeController()->addShapeDirect(pathShape, parent, cmd);
+            canvas()->shapeController()->addShapeDirect(groupShape, parent, cmd);
 
-            newSelectedShapes << pathShape;
+            newSelectedShapes << groupShape;
         }
 
         canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);

@@ -1384,7 +1384,12 @@ void TestSvgText::testTextOutline()
     gc.setPen(Qt::NoPen);
     gc.setBrush(Qt::black);
     gc.setRenderHint(QPainter::Antialiasing, true);
-    gc.drawPath(textShape->textOutline());
+    for (KoShape *shape : textShape->textOutline()) {
+        KoPathShape *outline = dynamic_cast<KoPathShape *>(shape);
+        if (shape) {
+            gc.drawPath(outline->outline());
+        }
+    }
 
     QVERIFY(TestUtil::checkQImage(canvas, "svg_render", "load_text_outline", "converted_to_path", 3, 5));
 }

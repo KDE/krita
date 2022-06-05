@@ -1367,7 +1367,10 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
                               QPointF endPos,
                               KoSvgText::TextAnchor anchor,
                               bool ltr,
-                              bool isHorizontal)
+                              bool isHorizontal,
+                              bool firstLine,
+                              bool hangTextIndent,
+                              QPointF textIndent)
 {
     qreal shift = isHorizontal ? startPos.x() : startPos.y();
 
@@ -1393,6 +1396,19 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
         } else {
             a = qMin(a, qMin(pos, pos + advance));
             b = qMax(b, qMax(pos, pos + advance));
+        }
+    }
+    bool indenting = firstLine ? true : false;
+    if (hangTextIndent) {
+        indenting = !indenting;
+    }
+
+    if (indenting && anchor == KoSvgText::AnchorStart) {
+        qreal indent = isHorizontal ? textIndent.x() : textIndent.y();
+        if (ltr) {
+            a -= indent;
+        } else {
+            b -= indent;
         }
     }
 
@@ -1476,7 +1492,10 @@ void finalizeLine(QVector<CharacterResult> &result,
                                  endPos,
                                  anchor,
                                  ltr,
-                                 isHorizontal);
+                                 isHorizontal,
+                                 firstLine,
+                                 hangTextIndent,
+                                 textIndent);
     }
     lineOffset += lineHeightOffset(writingMode,
                                    result,

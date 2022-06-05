@@ -402,6 +402,7 @@ void KoSvgTextShape::relayout() const
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
         text.append(chunk.text);
     }
+    debugFlake << "Laying out the following text: " << text;
 
     // 1. Setup.
 
@@ -635,7 +636,7 @@ void KoSvgTextShape::relayout() const
                     length);
             }
             for (QString feature : fontFeatures) {
-                qDebug() << "adding feature" << feature;
+                debugFlake << "adding feature" << feature;
                 raqm_add_font_feature(layout.data(),
                                       feature.toUtf8(),
                                       feature.toUtf8().size());
@@ -686,11 +687,11 @@ void KoSvgTextShape::relayout() const
                 start += length;
             }
         }
-        qDebug() << "text-length:" << text.size();
+        debugFlake << "text-length:" << text.size();
     }
 
     if (raqm_layout(layout.data())) {
-        qDebug() << "layout succeeded";
+        debugFlake << "layout succeeded";
     }
 
     // 2. Set flags and assign initial positions
@@ -734,8 +735,8 @@ void KoSvgTextShape::relayout() const
             continue;
         }
 
-        // qDebug() << "glyph" << g << "cluster" << glyphs[g].cluster <<
-        // glyphs[g].index;
+        debugFlake << "glyph" << g << "cluster" << glyphs[g].cluster
+                   << glyphs[g].index;
 
         FT_Matrix matrix;
         FT_Vector delta;
@@ -910,6 +911,7 @@ void KoSvgTextShape::relayout() const
             result[i].addressable = false;
         }
     }
+    debugFlake << "Glyphs retreived";
 
     // Handle linebreaking.
     QPointF startPos =
@@ -933,6 +935,8 @@ void KoSvgTextShape::relayout() const
     // of the algorithm.
 
     if (inlineSize.isAuto) {
+        debugFlake << "Starting with SVG 1.1 specific portion";
+        debugFlake << "4. Adjust positions: dx, dy";
         // 4. Adjust positions: dx, dy
         QPointF shift = QPointF();
 
@@ -955,12 +959,13 @@ void KoSvgTextShape::relayout() const
         }
 
         // 5. Apply ‘textLength’ attribute
+        debugFlake << "5. Apply ‘textLength’ attribute";
         globalIndex = 0;
         int resolved = 0;
         d->applyTextLength(this, result, globalIndex, resolved, isHorizontal);
 
         // 6. Adjust positions: x, y
-
+        debugFlake << "6. Adjust positions: x, y";
         // https://github.com/w3c/svgwg/issues/617
         shift = QPointF();
         // bool setNextAnchor = false;
@@ -1000,11 +1005,13 @@ void KoSvgTextShape::relayout() const
         }
 
         // 7. Apply anchoring
+        debugFlake << "7. Apply anchoring";
         d->applyAnchoring(result, isHorizontal);
 
         // Computing the textDecorations needs to happen before applying the
         // textPath to the results, as we need the unapplied result vector for
         // positioning.
+        debugFlake << "Now Computing text-decorations";
         globalIndex = 0;
         d->computeTextDecorations(this,
                                   result,
@@ -1019,9 +1026,11 @@ void KoSvgTextShape::relayout() const
 
         // 8. Position on path
 
+        debugFlake << "8. Position on path";
         d->applyTextPath(this, result, isHorizontal);
     } else {
         globalIndex = 0;
+        debugFlake << "Computing text-decorationsfor inline-size";
         d->computeTextDecorations(this,
                                   result,
                                   indexToTypographic,
@@ -1035,6 +1044,7 @@ void KoSvgTextShape::relayout() const
     }
 
     // 9. return result.
+    debugFlake << "9. return result.";
     d->result = result;
     globalIndex = 0;
     QTransform tf;
@@ -1783,7 +1793,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                          textIndent);
         }
     }
-    qDebug() << "break lines finished";
+    debugFlake << "Linebreaking finished";
 }
 
 void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,

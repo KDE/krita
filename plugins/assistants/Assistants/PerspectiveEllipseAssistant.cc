@@ -470,17 +470,56 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
          QPainterPath path;
 
-         if (isEditing) {
-             path.moveTo(QPointF(-d->simpleEllipse.semiMajor(), 0));
-             path.lineTo(QPointF(d->simpleEllipse.semiMajor(), 0));
-
-             path.moveTo(QPointF(0, -d->simpleEllipse.semiMinor()));
-             path.lineTo(QPointF(0, d->simpleEllipse.semiMinor()));
-         }
-
          path.addEllipse(QPointF(0.0, 0.0), d->simpleEllipse.semiMajor(), d->simpleEllipse.semiMinor());
          drawPath(gc, path, isSnappingActive());
+
+
+         if (isEditing) {
+             QPainterPath axes;
+             axes.moveTo(QPointF(-d->simpleEllipse.semiMajor(), 0));
+             axes.lineTo(QPointF(d->simpleEllipse.semiMajor(), 0));
+
+             axes.moveTo(QPointF(0, -d->simpleEllipse.semiMinor()));
+             axes.lineTo(QPointF(0, d->simpleEllipse.semiMinor()));
+
+             gc.save();
+
+             QPen p(gc.pen());
+             p.setCosmetic(true);
+             p.setStyle(Qt::DotLine);
+             QColor color = effectiveAssistantColor();
+             if (!isSnappingActive()) {
+                 color.setAlpha(color.alpha()*0.2);
+             }
+             p.setWidthF(1.5);
+             p.setColor(color);
+             gc.setPen(p);
+
+             gc.drawPath(axes);
+
+             gc.restore();
+         }
+
+         gc.setTransform(converter->documentToWidgetTransform());
+         gc.setTransform(d->ellipseInPolygon.originalTransform, true);
+
+         // drawing original axes ("lines to touching points")
+         QPointF pt1 = QPointF(0.5, 1.0);
+         QPointF pt2 = QPointF(1.0, 0.5);
+         QPointF pt3 = QPointF(0.5, 0.0);
+         QPointF pt4 = QPointF(0.0, 0.5);
+
+         QPainterPath touchingLine;
+
+         touchingLine.moveTo(pt1);
+         touchingLine.lineTo(pt3);
+
+         touchingLine.moveTo(pt2);
+         touchingLine.lineTo(pt4);
+
+         drawPath(gc, touchingLine, isSnappingActive());
     }
+
 
     gc.setTransform(converter->documentToWidgetTransform());
 

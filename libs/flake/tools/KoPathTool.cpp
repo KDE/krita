@@ -10,6 +10,7 @@
 #include "KoPathTool.h"
 #include "KoToolBase_p.h"
 #include "KoPathShape_p.h"
+#include "KoShapeGroup.h"
 #include "KoPathToolHandle.h"
 #include "KoCanvasBase.h"
 #include "KoShapeManager.h"
@@ -29,6 +30,7 @@
 #include <commands/KoMultiPathPointMergeCommand.h>
 #include <commands/KoMultiPathPointJoinCommand.h>
 #include <commands/KoKeepShapesSelectedCommand.h>
+#include <commands/KoShapeGroupCommand.h>
 #include "KoParameterShape.h"
 #include <text/KoSvgTextShape.h>
 #include "KoPathPoint.h"
@@ -366,20 +368,18 @@ void KoPathTool::convertToPath()
 
         QList<KoShape*> newSelectedShapes;
         Q_FOREACH (KoSvgTextShape *shape, textShapes) {
-            const QPainterPath path = shape->textOutline();
-            if (path.isEmpty()) continue;
 
-            KoPathShape *pathShape = KoPathShape::createShapeFromPainterPath(path);
+            KoShapeGroup *groupShape = new KoShapeGroup();
+            KoShapeGroupCommand groupCmd(groupShape, shape->textOutline(), false);
+            groupCmd.redo();
 
-            pathShape->setBackground(shape->background());
-            pathShape->setStroke(shape->stroke());
-            pathShape->setZIndex(shape->zIndex());
-            pathShape->setTransformation(shape->absoluteTransformation());
+            groupShape->setZIndex(shape->zIndex());
+            groupShape->setTransformation(shape->absoluteTransformation());
 
             KoShapeContainer *parent = shape->parent();
-            canvas()->shapeController()->addShapeDirect(pathShape, parent, cmd);
+            canvas()->shapeController()->addShapeDirect(groupShape, parent, cmd);
 
-            newSelectedShapes << pathShape;
+            newSelectedShapes << groupShape;
         }
 
         canvas()->shapeController()->removeShapes(oldSelectedShapes, cmd);

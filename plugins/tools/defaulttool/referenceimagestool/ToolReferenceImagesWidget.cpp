@@ -83,7 +83,7 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
     connect(d->ui->bnAddReferenceImage, SIGNAL(clicked()), tool, SLOT(addReferenceImage()));
     connect(d->ui->bnPasteReferenceImage, SIGNAL(clicked()), tool, SLOT(pasteReferenceImage()));
 
-    connect(KisClipboard::instance(), &KisClipboard::clipChanged, [&]() {
+    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, [&]() {
         d->ui->bnPasteReferenceImage->setEnabled(KisClipboard::instance()->hasClip() || KisClipboard::instance()->hasUrls());
     });
 

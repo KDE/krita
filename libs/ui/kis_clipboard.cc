@@ -686,7 +686,7 @@ KisPaintDeviceSP KisClipboard::fetchImageByURL(const QUrl &originalUrl) const
 
         QScopedPointer<KisDocument> doc(KisPart::instance()->createDocument());
 
-        if (doc->importDocument(url.toLocalFile())) {
+        if (doc->openPath(url.toLocalFile(), KisDocument::DontAddToRecent)) {
             // Wait for required updates, if any. BUG: 448256
             KisLayerUtils::forceAllDelayedNodesUpdate(doc->image()->root());
             doc->image()->waitForDone();

@@ -1,3 +1,7 @@
+if(NOT MSVC AND NOT APPLE)
+add_subdirectory(tests)
+endif()
+
 set(kritaassistanttool_SOURCES
     assistant_tool.cc
     ConcentricEllipseAssistant.cc

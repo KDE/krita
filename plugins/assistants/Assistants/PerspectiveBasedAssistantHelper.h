@@ -10,7 +10,7 @@
 #include "Ellipse.h"
 #include <QObject>
 
-class PerspectiveBasedAssistantHelper
+class __attribute__((visibility("default"))) PerspectiveBasedAssistantHelper
 {
 public:
     // *** main functions ***

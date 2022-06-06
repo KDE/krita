@@ -379,26 +379,6 @@ void KisCanvasResourceProvider::slotGamutMaskDeactivate()
     emit sigGamutMaskDeactivated();
 }
 
-QList<QPointer<KisAbstractPerspectiveGrid> > KisCanvasResourceProvider::perspectiveGrids() const
-{
-    return m_perspectiveGrids;
-}
-
-void KisCanvasResourceProvider::addPerspectiveGrid(KisAbstractPerspectiveGrid* grid)
-{
-    m_perspectiveGrids.append(grid);
-}
-
-void KisCanvasResourceProvider::removePerspectiveGrid(KisAbstractPerspectiveGrid* grid)
-{
-    m_perspectiveGrids.removeOne(grid);
-}
-
-void KisCanvasResourceProvider::clearPerspectiveGrids()
-{
-    m_perspectiveGrids.clear();
-}
-
 void KisCanvasResourceProvider::setMirrorHorizontal(bool mirrorHorizontal)
 {
     m_resourceManager->setResource(KoCanvasResource::MirrorHorizontal, mirrorHorizontal);

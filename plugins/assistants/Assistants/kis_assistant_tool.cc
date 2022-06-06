@@ -670,11 +670,6 @@ void KisAssistantTool::addAssistant()
 {
     m_canvas->paintingAssistantsDecoration()->addAssistant(m_newAssistant);
 
-    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(m_newAssistant.data());
-    if (grid) {
-        m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
-    }
-
     // generate the side handles for the Two Point assistant
     if (m_newAssistant->id() == "two point"){
         QList<KisPaintingAssistantHandleSP> handles = m_newAssistant->handles();
@@ -737,10 +732,6 @@ void KisAssistantTool::removeAssistant(KisPaintingAssistantSP assistant)
 {
     QList<KisPaintingAssistantSP> assistants = m_canvas->paintingAssistantsDecoration()->assistants();
 
-    KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-    if (grid) {
-        m_canvas->viewManager()->canvasResourceProvider()->removePerspectiveGrid(grid);
-    }
     m_canvas->paintingAssistantsDecoration()->removeAssistant(assistant);
 
     KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()), EditAssistantsCommand::REMOVE, assistants.indexOf(assistant));
@@ -1157,7 +1148,6 @@ void KisAssistantTool::removeAllAssistants()
 {
     m_origAssistantList = m_canvas->paintingAssistantsDecoration()->assistants();
 
-    m_canvas->viewManager()->canvasResourceProvider()->clearPerspectiveGrids();
     m_canvas->paintingAssistantsDecoration()->removeAll();
 
     KUndo2Command *removeAssistantCmd = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
@@ -1300,10 +1290,6 @@ void KisAssistantTool::loadAssistants()
                             assistant->addHandle(new KisPaintingAssistantHandle(pos+QPointF(140,0)), HandleType::SIDE);
                         }
                         m_canvas->paintingAssistantsDecoration()->addAssistant(assistant);
-                        KisAbstractPerspectiveGrid* grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-                        if (grid) {
-                            m_canvas->viewManager()->canvasResourceProvider()->addPerspectiveGrid(grid);
-                        }
                     } else {
                         errors = true;
                     }

@@ -85,11 +85,6 @@ public:
     void setCurrentCompositeOp(const QString& compositeOp);
     QString currentCompositeOp() const;
 
-    QList<QPointer<KisAbstractPerspectiveGrid> > perspectiveGrids() const;
-    void addPerspectiveGrid(KisAbstractPerspectiveGrid*);
-    void removePerspectiveGrid(KisAbstractPerspectiveGrid*);
-    void clearPerspectiveGrids();
-
     void setMirrorHorizontal(bool mirrorHorizontal);
     bool mirrorHorizontal() const;
 
@@ -191,7 +186,6 @@ private:
     KisViewManager * m_view {nullptr};
     KoCanvasResourceProvider *m_resourceManager {nullptr};
     bool m_fGChanged {true};
-    QList<QPointer<KisAbstractPerspectiveGrid> > m_perspectiveGrids;
     KisPresetShadowUpdater m_presetShadowUpdater;
 };
 

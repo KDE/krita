@@ -235,6 +235,13 @@ Java_org_krita_android_JNIWrappers_openFileFromIntent(JNIEnv* /*env*/,
 
 extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
 {
+#ifdef Q_OS_WIN
+    // Fix QCommandLineParser help output with UTF-8 codepage:
+    if (GetACP() == CP_UTF8) {
+        SetConsoleOutputCP(CP_UTF8);
+    }
+#endif
+
     // The global initialization of the random generator
     qsrand(time(0));
     bool runningInKDE = !qgetenv("KDE_FULL_SESSION").isEmpty();

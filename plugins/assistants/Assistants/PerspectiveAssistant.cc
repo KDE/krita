@@ -188,6 +188,11 @@ qreal PerspectiveAssistant::distance(const QPointF& pt) const
     return localScale(transform, inverse.map(pt)) * inverseMaxLocalScale(transform);
 }
 
+bool PerspectiveAssistant::isActive() const
+{
+    return isSnappingActive();
+}
+
 void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();

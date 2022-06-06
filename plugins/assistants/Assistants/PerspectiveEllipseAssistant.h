@@ -28,6 +28,7 @@ public:
     // implements KisAbstractPerspectiveGrid
     bool contains(const QPointF& point) const override;
     qreal distance(const QPointF& point) const override;
+    bool isActive() const  override;
     
 protected:
     QRect boundingRect() const override;

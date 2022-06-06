@@ -30,6 +30,8 @@ public:
      * distance and 1 = closest.
      */
     virtual qreal distance(const QPointF& pt) const = 0;
+
+    virtual bool isActive() const = 0;
 };
 
 #endif

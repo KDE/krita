@@ -610,6 +610,11 @@ qreal PerspectiveEllipseAssistant::distance(const QPointF &point) const
     return PerspectiveBasedAssistantHelper::distanceInGrid(handles(), isAssistantComplete(), point);
 }
 
+bool PerspectiveEllipseAssistant::isActive() const
+{
+    return isSnappingActive();
+}
+
 PerspectiveEllipseAssistantFactory::PerspectiveEllipseAssistantFactory()
 {
 }

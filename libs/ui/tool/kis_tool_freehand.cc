@@ -448,7 +448,7 @@ qreal KisToolFreehand::calculatePerspective(const QPointF &documentPoint)
     qreal perspective = 1.0;
     Q_FOREACH (const KisPaintingAssistantSP assistant, static_cast<KisCanvas2*>(canvas())->paintingAssistantsDecoration()->assistants()) {
         QPointer<KisAbstractPerspectiveGrid> grid = dynamic_cast<KisAbstractPerspectiveGrid*>(assistant.data());
-        if (grid && grid->contains(documentPoint)) {
+        if (grid && grid->isActive() && grid->contains(documentPoint)) {
             perspective = grid->distance(documentPoint);
             break;
         }

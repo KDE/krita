@@ -32,6 +32,7 @@ public:
 
     bool contains(const QPointF& point) const override;
     qreal distance(const QPointF& point) const override;
+    bool isActive() const override;
 
     int subdivisions() const;
     void setSubdivisions(int subdivisions);

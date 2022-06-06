@@ -90,6 +90,16 @@ if (WIN32)
                 QMAKE_CXXFLAGS+=-gdwarf-aranges
             )
         endif ()
+    elseif (MSVC)
+      if (NOT QT_ENABLE_DEBUG_INFO)
+        # Generate minimal debug info for backtraces
+        list(APPEND _QT_conf
+            QMAKE_CFLAGS_RELEASE_WITH_DEBUGINFO-=-Zi
+            QMAKE_CFLAGS+=-Zi
+            QMAKE_CXXFLAGS_RELEASE_WITH_DEBUGINFO-=-Zi
+            QMAKE_CXXFLAGS+=-Zi
+        )
+      endif ()
     endif ()
     if (QT_ENABLE_DYNAMIC_OPENGL)
         list(APPEND _QT_conf -opengl dynamic -angle)

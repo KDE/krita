@@ -28,10 +28,48 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 
+#include "kis_command_utils.h"
+
 #include "KisInterstrokeDataFactory.h"
 #include "KisInterstrokeDataTransactionWrapperFactory.h"
 #include "KisRunnableStrokeJobsInterface.h"
 #include "KisRunnableStrokeJobUtils.h"
+
+
+class DirtyFrameContents : public KUndo2Command
+{
+public:
+    DirtyFrameContents(KisNodeSP node, QRect originalFrameContents, KisAutoKey::Mode autokeyMode, KUndo2Command* parent = 0)
+        : KUndo2Command(parent)
+        , m_node(node)
+        , m_originalFrameContents(originalFrameContents)
+        , m_autokeyMode(autokeyMode)
+    {
+    }
+
+    ~DirtyFrameContents(){}
+
+    void redo() override {
+        KUndo2Command::redo();
+        if (m_autokeyMode == KisAutoKey::BLANK) {
+            m_node->setDirty(m_originalFrameContents);
+        }
+    }
+
+    void undo() override {
+        QRect existingContent = m_node->exactBounds();
+        KUndo2Command::undo();
+        if (m_autokeyMode == KisAutoKey::BLANK) {
+            existingContent |= m_originalFrameContents;
+        }
+        m_node->setDirty(existingContent);
+    }
+
+private:
+    KisNodeSP m_node;
+    QRect m_originalFrameContents;
+    KisAutoKey::Mode m_autokeyMode;
+};
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
@@ -300,13 +338,16 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
             int activeKeyTime = channel->activeKeyframeTime(time);
 
-            m_autokeyCommand.reset(new KUndo2Command());
+            m_autokeyCommand.reset(new DirtyFrameContents(node, node->exactBounds(), m_autokeyMode));
+            m_autokeyCommand->redo(); // Instantly dirty layer to remove frame content during blank key insertion.
+
+            KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
 
             if (m_autokeyMode == KisAutoKey::DUPLICATE) {
-                channel->copyKeyframe(activeKeyTime, time, m_autokeyCommand.data());
+                channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
             } else { // Otherwise, create a fresh keyframe.
                 m_autokeyCleanup = node->exactBounds();
-                channel->addKeyframe(time, m_autokeyCommand.data());
+                channel->addKeyframe(time, keyframeCommand);
             }
 
             keyframe = channel->keyframeAt(time);
@@ -318,9 +359,6 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                 keyframe->setColorLabel(previousKey->colorLabel());
             }
 
-            if (m_autokeyCleanup.isValid()) {
-                node->setDirty(m_autokeyCleanup);
-            }
         }
     }
 

@@ -305,7 +305,7 @@ void KisColorSelectorSettings::changedColorDocker(int index)
 
 void KisColorSelectorSettings::changedACSColorSelectorType(int index)
 {
-    ui->lumaCoefficientGroupbox->setVisible(false);
+    ui->lumaCoefficientGroupbox->setEnabled(false);
 
     if (index == 0)     {  // HSV
         ui->ACSTypeDescriptionLabel->setText(i18n("Values goes from black to white, or black to the most saturated color. Saturation, in turn, goes from the most saturated color to white, gray or black."));
@@ -318,7 +318,7 @@ void KisColorSelectorSettings::changedACSColorSelectorType(int index)
     }
     else {  // HSY'
         ui->ACSTypeDescriptionLabel->setText(i18n("Luma(Y') is weighted by its coefficients which are configurable. Default values are set to 'rec 709'."));
-        ui->lumaCoefficientGroupbox->setVisible(true);
+        ui->lumaCoefficientGroupbox->setEnabled(true);
     }
 
     ui->colorSelectorConfiguration->update();

@@ -12,10 +12,8 @@ if (WebP_FOUND)
 
 
     set(kritawebpimport_SOURCES
-        dlg_webp_import.cpp
         kis_webp_import.cpp
     )
-    ki18n_wrap_ui(kritawebpimport_SOURCES dlg_webp_import.ui)
 
     add_library(kritawebpimport MODULE ${kritawebpimport_SOURCES})
     target_link_libraries(kritawebpimport kritaui WebP::webp WebP::webpdemux)

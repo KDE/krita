@@ -39,38 +39,7 @@ KisWebPImport::KisWebPImport(QObject *parent, const QVariantList &)
 {
 }
 
-KisWebPImport::~KisWebPImport()
-{
-}
-
-KisPropertiesConfigurationSP KisWebPImport::defaultConfiguration(const QByteArray & /*from*/, const QByteArray & /*to*/) const
-{
-    KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-
-    WebPDecoderConfig preset;
-
-    if (!WebPInitDecoderConfig(&preset)) {
-        return cfg;
-    }
-
-    cfg->setProperty("alpha_dithering_strength", preset.options.alpha_dithering_strength == 1);
-    cfg->setProperty("no_fancy_upsampling", preset.options.no_fancy_upsampling);
-    cfg->setProperty("use_cropping", preset.options.use_cropping);
-    cfg->setProperty("crop_left", preset.options.crop_left);
-    cfg->setProperty("crop_top", preset.options.crop_top);
-    cfg->setProperty("crop_width", preset.options.crop_width);
-    cfg->setProperty("crop_height", preset.options.crop_height);
-    cfg->setProperty("use_scaling", preset.options.use_scaling);
-    cfg->setProperty("scaled_width", preset.options.scaled_width);
-    cfg->setProperty("scaled_height", preset.options.scaled_height);
-    cfg->setProperty("use_threads", preset.options.use_threads == 1);
-    cfg->setProperty("use_dithering", false);
-    cfg->setProperty("dithering_strength", preset.options.dithering_strength);
-    cfg->setProperty("flip", preset.options.flip == 1);
-    cfg->setProperty("alpha_dithering_strength", preset.options.alpha_dithering_strength);
-
-    return cfg;
-}
+KisWebPImport::~KisWebPImport() = default;
 
 KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
                                                 QIODevice *io,
@@ -218,67 +187,10 @@ KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
                     }
                 }
 
-                {
-                    KisPropertiesConfigurationSP cfg(
-                        defaultConfiguration(QByteArray(), QByteArray()));
-
-                    cfg->setProperty("original_width", config.input.width);
-                    cfg->setProperty("original_height", config.input.height);
-                    cfg->setProperty("crop_width", config.input.width);
-                    cfg->setProperty("crop_height", config.input.height);
-                    cfg->setProperty("scaled_width", config.input.width);
-                    cfg->setProperty("scaled_height", config.input.height);
-                    cfg->setProperty("has_transparency",
-                                     config.input.has_alpha);
-                    cfg->setProperty("format", config.input.format);
-                    cfg->setProperty("has_animation",
-                                     config.input.has_animation);
-
-                    m_dialog->setConfiguration(cfg.data());
-                }
-
-                {
-                    if (m_dialog->exec() != QDialog::Accepted) {
-                        return ImportExportCodes::Cancelled;
-                    }
-
-                    KisPropertiesConfigurationSP cfg(m_dialog->configuration());
-
-                    // Krita follows BGRA layout (checks RgbU8).
-                    config.output.colorspace = MODE_BGRA;
-                    config.options.bypass_filtering =
-                        cfg->getBool("bypass_filtering", false) ? 1 : 0;
-                    config.options.no_fancy_upsampling =
-                        cfg->getBool("no_fancy_upsampling", false) ? 1 : 0;
-                    if (cfg->getBool("use_cropping", false)) {
-                        config.options.use_cropping = 1;
-                        config.options.crop_left = cfg->getInt("crop_left", 0);
-                        config.options.crop_top = cfg->getInt("crop_top", 0);
-                        config.options.crop_width =
-                            cfg->getInt("crop_width", config.input.width);
-                        config.options.crop_height =
-                            cfg->getInt("crop_height", config.input.height);
-                    }
-
-                    if (cfg->getBool("use_scaling", false)) {
-                        config.options.scaled_width =
-                            cfg->getInt("scaled_width", config.input.height);
-                        config.options.scaled_height =
-                            cfg->getInt("scaled_height", config.input.height);
-                    }
-
-                    config.options.use_threads =
-                        cfg->getBool("use_threads", false) ? 1 : 0;
-
-                    if (cfg->getBool("use_dithering", false)) {
-                        config.options.dithering_strength =
-                            cfg->getInt("dithering_strength", 0);
-                        config.options.alpha_dithering_strength =
-                            cfg->getInt("alpha_dithering_strength", 0);
-                    }
-
-                    config.options.flip = cfg->getBool("flip", false) ? 1 : 0;
-                }
+                // Doesn't make sense to ask for options for each individual
+                // frame. See jxl plugin for a similar approach.
+                config.output.colorspace = MODE_BGRA;
+                config.options.use_threads = 1;
 
                 {
                     const VP8StatusCode result = WebPDecode(iter.fragment.bytes,

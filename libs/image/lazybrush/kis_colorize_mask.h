@@ -109,7 +109,7 @@ public:
     void setLimitToDeviceBounds(bool value);
     bool limitToDeviceBounds() const;
 
-    void addKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
+    void testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent = false);
     KisPaintDeviceSP testingFilteredSource() const;
 
     void forceRegenerateMask();

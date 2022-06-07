@@ -42,21 +42,21 @@ struct ColorizeMaskTester
         {
             KisPaintDeviceSP key1 = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
             key1->fill(QRect(50,50,10,20), KoColor(Qt::black, key1->colorSpace()));
-            mask->addKeyStroke(key1, KoColor(Qt::green, src->colorSpace()));
+            mask->testingAddKeyStroke(key1, KoColor(Qt::green, src->colorSpace()));
             // KIS_DUMP_DEVICE_2(key1, refRect, "key1", "dd");
         }
 
         {
             KisPaintDeviceSP key2 = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
             key2->fill(QRect(150,50,10,20), KoColor(Qt::black, key2->colorSpace()));
-            mask->addKeyStroke(key2, KoColor(Qt::red, src->colorSpace()));
+            mask->testingAddKeyStroke(key2, KoColor(Qt::red, src->colorSpace()));
             // KIS_DUMP_DEVICE_2(key2, refRect, "key2", "dd");
         }
 
         {
             KisPaintDeviceSP key3 = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
             key3->fill(QRect(0,0,10,10), KoColor(Qt::black, key3->colorSpace()));
-            mask->addKeyStroke(key3, KoColor(Qt::blue, src->colorSpace()), true);
+            mask->testingAddKeyStroke(key3, KoColor(Qt::blue, src->colorSpace()), true);
             // KIS_DUMP_DEVICE_2(key3, refRect, "key3", "dd");
         }
 

@@ -1095,7 +1095,7 @@ void KisColorizeMask::rerenderFakePaintDevice()
     }
 }
 
-void KisColorizeMask::addKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent)
+void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &color, bool isTransparent)
 {
     m_d->keyStrokes << KeyStroke(dev, color, isTransparent);
 }

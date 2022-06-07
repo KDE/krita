@@ -300,7 +300,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
             int activeKeyTime = channel->activeKeyframeTime(time);
 
-            m_autokeyCommand = toQShared( new KUndo2Command() );
+            m_autokeyCommand.reset(new KUndo2Command());
 
             if (m_autokeyMode == KisAutoKey::DUPLICATE) {
                 channel->copyKeyframe(activeKeyTime, time, m_autokeyCommand.data());
@@ -324,8 +324,8 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         }
     }
 
-    m_transaction.reset(new KisTransaction(name(), targetDevice, nullptr,
-                                           m_useMergeID ? timedID(this->id()) : -1,
+    m_transaction.reset(new KisTransaction(KUndo2MagicString(), targetDevice, nullptr,
+                                           -1,
                                            wrapper.take()));
 
     // WARNING: masked brush cannot work without indirect painting mode!
@@ -362,7 +362,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
         KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || !indirect->temporarySelection() || !m_strokeInfos.first()->painter->selection());
     }
 }
-
+#include "kis_command_utils.h"
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 {
     KisNodeSP node = m_resources->currentNode();
@@ -378,7 +378,13 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         undoAdapter = m_fakeUndoData->undoAdapter.data();
     }
 
-    undoAdapter->addCommand(m_autokeyCommand);
+    QSharedPointer<KisCommandUtils::CompositeCommand> parentCommand(new KisCommandUtils::CompositeCommand());
+    parentCommand->setText(name());
+    parentCommand->setTimedID(m_useMergeID ? timedID(this->id()) : -1);
+
+    if (m_autokeyCommand) {
+        parentCommand->addCommand(m_autokeyCommand.take());
+    }
 
     if (indirect && indirect->hasTemporaryTarget()) {
         KUndo2MagicString transactionText = m_transaction->text();
@@ -389,10 +395,19 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         QVector<KisRunnableStrokeJobData*> jobs;
 
         indirect->mergeToLayerThreaded(node,
-                               undoAdapter,
-                               transactionText,
-                               m_useMergeID ? timedID(this->id()) : -1,
+                               parentCommand.data(),
+                               KUndo2MagicString(),
+                               -1,
                                &jobs);
+
+        KritaUtils::addJobBarrier(jobs,
+            [parentCommand, undoAdapter] () {
+                parentCommand->redo();
+
+                if (undoAdapter) {
+                    undoAdapter->addCommand(parentCommand);
+                }
+            });
 
         /// When the transaction is reset to zero, cancel job does nothing.
         /// Therefore, we should ensure that the merging jobs are never
@@ -405,9 +420,14 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         runnableJobsInterface()->addRunnableJobs(jobs);
     }
     else {
-        m_transaction->commit(undoAdapter);
+        parentCommand->addCommand(m_transaction->endAndTake());
         m_transaction.reset();
         deletePainters();
+
+        if (undoAdapter) {
+            undoAdapter->addCommand(parentCommand);
+        }
+
     }
 
 }
@@ -416,7 +436,9 @@ void KisPainterBasedStrokeStrategy::cancelStrokeCallback()
 {
     if (!m_transaction) return;
 
-    m_autokeyCommand->undo();
+    if (m_autokeyCommand) {
+        m_autokeyCommand->undo();
+    }
 
     KisNodeSP node = m_resources->currentNode();
     KisIndirectPaintingSupport *indirect =

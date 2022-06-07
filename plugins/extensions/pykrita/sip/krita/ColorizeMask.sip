@@ -22,7 +22,7 @@ public:
     virtual QString type() const;
 
     QList<ManagedColor*> keyStrokesColors() const /Factory/;
-    void setKeyStrokeColors(QList<ManagedColor*> colors, int transparentIndex = -1);
+    void initializeKeyStrokeColors(QList<ManagedColor*> colors, int transparentIndex = -1);
     void removeKeyStroke(ManagedColor* color);
     int transparencyIndex() const;
     QByteArray keyStrokePixelData(ManagedColor* color, int x, int y, int w, int h) const;

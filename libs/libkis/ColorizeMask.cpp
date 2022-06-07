@@ -48,35 +48,39 @@ QList<ManagedColor*> ColorizeMask::keyStrokesColors() const
     return colorList;
 }
 
-void ColorizeMask::setKeyStrokeColors(QList<ManagedColor*> colors, int transparentIndex)
+void ColorizeMask::initializeKeyStrokeColors(QList<ManagedColor*> colors, int transparentIndex)
 {
     KisColorizeMaskSP mask = qobject_cast<KisColorizeMask*>(this->node().data());
     KIS_SAFE_ASSERT_RECOVER_RETURN(mask);
 
+    /**
+     *  This method is supposed to to initial initialization only!
+     *
+     *  It is necessary because the function also changes the color
+     *  space and blending mode of the mask
+     *
+     *  TODO: inplement a proper API that modifies key strokes
+     *  of a colorize mask without breaking undo history
+     */
+    KIS_SAFE_ASSERT_RECOVER_RETURN(mask->keyStrokesColors().colors.size() == 0);
+
     mask->initializeCompositeOp();
     delete mask->setColorSpace(mask->parent()->colorSpace());
 
-    KisColorizeMask::KeyStrokeColors keycolors;
-    QVector<KoColor> oldColors(mask->keyStrokesColors().colors);
-
-    for (KoColor color : oldColors) {
-        mask->removeKeyStroke(color);
-    }
+    QList<KisLazyFillTools::KeyStroke> keyStrokes;
 
     for (int i = 0; i < colors.size(); i++) {
-        KoColor color = colors[i]->color();
-        KisPaintDeviceSP activeDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+        KisLazyFillTools::KeyStroke keyStroke;
+        keyStroke.color = colors[i]->color();
+        keyStroke.dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
+        keyStroke.dev->setParentNode(this->node());
+        keyStroke.dev->setDefaultBounds(new KisDefaultBounds(this->node()->image()));
+        keyStroke.isTransparent = transparentIndex == i;
 
-        activeDevice->setParentNode(this->node());
-        activeDevice->setDefaultBounds(KisDefaultBoundsBaseSP(new KisDefaultBounds(this->node()->image())));
-        mask->addKeyStroke(activeDevice, color, (transparentIndex == i ? true:false));
-
-        keycolors.colors << color;
+        keyStrokes.append(keyStroke);
     }
 
-    keycolors.transparentIndex=transparentIndex;
-
-    mask->setKeyStrokesColors(keycolors);
+    mask->setKeyStrokesDirect(keyStrokes);
 }
 
 

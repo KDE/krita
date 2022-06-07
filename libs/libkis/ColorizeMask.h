@@ -46,7 +46,7 @@ mask.setUseEdgeDetection(True)
 mask.setEdgeDetectionSize(4.0)
 mask.setCleanUpAmount(70.0)
 mask.setLimitToDeviceBounds(True)
-mask.setKeyStrokeColors(cols)
+mask.initializeKeyStrokeColors(cols)
 
 for col,key in zip(cols,keys):
     mask.setKeyStrokePixelData(key,col,0,0,20,3)
@@ -86,12 +86,12 @@ public Q_SLOTS:
     QList<ManagedColor*> keyStrokesColors() const;
 
     /**
-     * @brief setKeyStrokeColors
+     * @brief initializeKeyStrokeColors
      * Set the colors to use for the Colorize Mask's keystrokes.
      * @param colors a list of ManagedColor to use for the keystrokes.
      * @param transparentIndex index of the color that should be marked as transparent.
      */
-    void setKeyStrokeColors(QList<ManagedColor*> colors, int transparentIndex = -1);
+    void initializeKeyStrokeColors(QList<ManagedColor*> colors, int transparentIndex = -1);
 
     /**
      * @brief removeKeyStroke

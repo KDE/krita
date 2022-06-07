@@ -300,7 +300,7 @@ void TestDocument::testCreateColorizeMask()
     mask->setLimitToDeviceBounds(true);
     QVERIFY(mask->limitToDeviceBounds() == true);
 
-    mask->setKeyStrokeColors({&col1, &col2});
+    mask->initializeKeyStrokeColors({&col1, &col2});
 
     QByteArray pdata1 = QByteArray::fromBase64("//8AAAAAAAAAAP8AAAAAAAAAAAAAAAAAAAAAAAAA");
     QByteArray pdata2 = QByteArray::fromBase64("AAAAAAAAAAD//wAAAAAAAAAAAP8AAAAAAAAAAAAA");

@@ -121,25 +121,67 @@ qreal PerspectiveBasedAssistantHelper::inverseMaxLocalScale(const QTransform &tr
 
 qreal PerspectiveBasedAssistantHelper::distanceInGrid(const QList<KisPaintingAssistantHandleSP>& handles, bool isAssistantComplete, const QPointF &point)
 {
-    const qreal defaultValue = 1.0;
-    const qreal infinity = 0.0;
+    // TODO: make it not calculate the poly max distance over and over
+    qreal defaultValue = 1;
+    int vertexCount = 4;
 
     QPolygonF poly;
     if (!PerspectiveBasedAssistantHelper::getTetragon(handles, isAssistantComplete, poly)) {
         return defaultValue;
     }
 
-    QTransform transform;
-    if (!QTransform::squareToQuad(poly, transform)) {
-        return defaultValue;
+    boost::optional<QPointF> vp1;
+    boost::optional<QPointF> vp2;
+
+    PerspectiveBasedAssistantHelper::getVanishingPointsOptional(poly, vp1, vp2);
+    if (!vp1 && !vp2) {
+        return defaultValue; // possibly wrong shape
+    } else if (!vp1 || !vp2) {
+        // result should be:
+        // dist from horizon / max dist from horizon
+        // horizon is parallel to the parallel sides of the tetragon (two must be parallel if there is only one vp)
+        QLineF horizon;
+        if (vp1) {
+            // that means the 0-1 line is the horizon parallel line
+            horizon = QLineF(vp1.get(), vp1.get() + poly[1] - poly[0]);
+        } else {
+            horizon = QLineF(vp2.get(), vp2.get() + poly[2] - poly[1]);
+        }
+
+        qreal dist = kisDistanceToLine(point, horizon);
+        qreal distMax = 0;
+        for (int i = 0; i < vertexCount; i++) {
+            qreal vertexDist = kisDistanceToLine(poly[i], horizon);
+            if (vertexDist > distMax) {
+                distMax = vertexDist;
+            }
+        }
+        if (distMax == 0) {
+            return defaultValue;
+        }
+        return dist/distMax;
+    } else if (vp1 && vp2) {
+        // should be:
+        // dist from vp-line / max dist from vp-line
+        QLineF horizon = QLineF(vp1.get(), vp2.get());
+
+        qreal dist = kisDistanceToLine(point, horizon);
+        qreal distMax = 0;
+        for (int i = 0; i < vertexCount; i++) {
+            qreal vertexDist = kisDistanceToLine(poly[i], horizon);
+            if (vertexDist > distMax) {
+                distMax = vertexDist;
+            }
+        }
+        if (distMax == 0) {
+            return defaultValue;
+        }
+        return dist/distMax;
     }
 
-    bool invertible;
-    QTransform inverse = transform.inverted(&invertible);
+    return defaultValue;
 
-    if (!invertible) {
-        return defaultValue;
-    }
+}
 
     if (inverse.m13() * point.x() + inverse.m23() * point.y() + inverse.m33() == 0.0) {
         return infinity; // point at infinity
@@ -147,6 +189,30 @@ qreal PerspectiveBasedAssistantHelper::distanceInGrid(const QList<KisPaintingAss
 
     return localScale(transform, inverse.map(point)) * inverseMaxLocalScale(transform);
 
+bool PerspectiveBasedAssistantHelper::getVanishingPointsOptional(const QPolygonF &poly, boost::optional<QPointF> &vp1, boost::optional<QPointF> &vp2)
+{
+    bool either = false;
+    vp1 = boost::none;
+    vp2 = boost::none;
+
+    QPointF intersection(0, 0);
+    // note: in code it seems like vp1 and vp2 are swapped, but it's all correct if you read carefully
+
+    if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0
+            || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
+        if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
+            vp2 = intersection;
+            either = true;
+        }
+    }
+    if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0
+            || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
+        if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
+            vp1 = intersection;
+            either = true;
+        }
+    }
+    return either;
 }
 
 qreal PerspectiveBasedAssistantHelper::pdot(const QPointF &a, const QPointF &b)

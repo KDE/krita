@@ -167,25 +167,7 @@ inline qreal inverseMaxLocalScale(const QTransform& transform)
 
 qreal PerspectiveAssistant::distance(const QPointF& pt) const
 {
-    QPolygonF poly;
-    QTransform transform;
-
-    if (!getTransform(poly, transform)) {
-        return 1.0;
-    }
-
-    bool invertible;
-    QTransform inverse = transform.inverted(&invertible);
-
-    if (!invertible) {
-        return 1.0;
-    }
-
-    if (inverse.m13() * pt.x() + inverse.m23() * pt.y() + inverse.m33() == 0.0) {
-        return 0.0; // point at infinity
-    }
-
-    return localScale(transform, inverse.map(pt)) * inverseMaxLocalScale(transform);
+    return PerspectiveBasedAssistantHelper::distanceInGrid(handles(), isAssistantComplete(), pt);
 }
 
 bool PerspectiveAssistant::isActive() const

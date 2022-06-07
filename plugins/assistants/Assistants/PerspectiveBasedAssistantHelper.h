@@ -5,10 +5,15 @@
 #ifndef _PERSPECTIVE_BASED_ASSISTANT_HELPER_H_
 #define _PERSPECTIVE_BASED_ASSISTANT_HELPER_H_
 
+
+#include <QObject>
+#include <boost/optional.hpp>
+
+
 #include "kis_abstract_perspective_grid.h"
 #include "kis_painting_assistant.h"
+
 #include "Ellipse.h"
-#include <QObject>
 
 class __attribute__((visibility("default"))) PerspectiveBasedAssistantHelper
 {
@@ -25,6 +30,11 @@ public:
     // distance in Perspective grid
     // used for calculating the Perspective sensor
     static qreal distanceInGrid(const QList<KisPaintingAssistantHandleSP>& handles, bool isAssistantComplete, const QPointF &point);
+
+    // vp1 - vp for lines 0-1 and 2-3
+    // vp2 - vp for lines 1-2 and 3-0
+    static bool getVanishingPointsOptional(const QPolygonF &poly, boost::optional<QPointF>& vp1, boost::optional<QPointF>& vp2);
+
 
 
     static qreal localScale(const QTransform& transform, QPointF pt);

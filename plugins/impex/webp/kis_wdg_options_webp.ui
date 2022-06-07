@@ -4,8 +4,8 @@
   SPDX-FileCopyrightText: 2021 L. E. Segovia &lt;amy@amyspark.me&gt;
   SPDX-License-Identifier: GPL-3.0-or-later
  </author>
- <class>DlgWebPExport</class>
- <widget class="QWidget" name="DlgWebPExport">
+ <class>KisWdgOptionsWebP</class>
+ <widget class="QWidget" name="KisWdgOptionsWebP">
   <property name="geometry">
    <rect>
     <x>0</x>

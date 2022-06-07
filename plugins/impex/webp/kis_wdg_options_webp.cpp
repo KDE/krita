@@ -10,9 +10,9 @@
 
 #include <kis_properties_configuration.h>
 
-#include "dlg_webp_export.h"
+#include "kis_wdg_options_webp.h"
 
-KisDlgWebPExport::KisDlgWebPExport(QWidget *parent)
+KisWdgOptionsWebP::KisWdgOptionsWebP(QWidget *parent)
     : KisConfigWidget(parent)
 {
     setupUi(this);
@@ -41,20 +41,28 @@ KisDlgWebPExport::KisDlgWebPExport(QWidget *parent)
     filterType->addItem(i18nc("WebP filters", "Strong"), 1);
 
     alphaCompression->addItem(i18nc("WebP alpha plane compression", "None"), 0);
-    alphaCompression->addItem(i18nc("WebP alpha plane compression", "Lossless"), 1);
+    alphaCompression->addItem(i18nc("WebP alpha plane compression", "Lossless"),
+                              1);
 
     preprocessing->addItem(i18nc("WebP preprocessing filters", "None"), 0);
-    preprocessing->addItem(i18nc("WebP preprocessing filters", "Segment-smooth"), 1);
-    preprocessing->addItem(i18nc("WebP preprocessing filters", "Pseudo-random dithering"), 2);
+    preprocessing->addItem(
+        i18nc("WebP preprocessing filters", "Segment-smooth"),
+        1);
+    preprocessing->addItem(
+        i18nc("WebP preprocessing filters", "Pseudo-random dithering"),
+        2);
 
     targetPSNR->setDisplayUnit(false);
     targetPSNR->setSuffix(" dB");
 
-    connect(preset, SIGNAL(currentIndexChanged(int)), this, SLOT(changePreset(void)));
+    connect(preset,
+            SIGNAL(currentIndexChanged(int)),
+            this,
+            SLOT(changePreset(void)));
     connect(lossless, SIGNAL(toggled(bool)), this, SLOT(changePreset(void)));
 }
 
-void KisDlgWebPExport::setConfiguration(const KisPropertiesConfigurationSP cfg)
+void KisWdgOptionsWebP::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
     preset->setCurrentIndex(cfg->getInt("preset", 0));
     lossless->setChecked(cfg->getBool("lossless", true));
@@ -90,15 +98,19 @@ void KisDlgWebPExport::setConfiguration(const KisPropertiesConfigurationSP cfg)
 #endif
 }
 
-void KisDlgWebPExport::changePreset()
+void KisWdgOptionsWebP::changePreset()
 {
     WebPConfig preset;
 
-    if (!WebPConfigPreset(&preset, static_cast<WebPPreset>(this->preset->currentData().value<int>()), static_cast<float>(this->quality->value()))) {
+    if (!WebPConfigPreset(
+            &preset,
+            static_cast<WebPPreset>(this->preset->currentData().value<int>()),
+            static_cast<float>(this->quality->value()))) {
         return;
     }
 
-    if (this->lossless->isChecked() && !WebPConfigLosslessPreset(&preset, this->tradeoff->value())) {
+    if (this->lossless->isChecked()
+        && !WebPConfigLosslessPreset(&preset, this->tradeoff->value())) {
         return;
     }
 
@@ -113,12 +125,14 @@ void KisDlgWebPExport::changePreset()
     filterSharpness->setValue(preset.filter_sharpness);
     filterType->setCurrentIndex(preset.filter_type);
     autofilter->setChecked(preset.autofilter == 1);
-    alphaCompression->setCurrentIndex(alphaCompression->findData(preset.alpha_compression));
+    alphaCompression->setCurrentIndex(
+        alphaCompression->findData(preset.alpha_compression));
     alphaFiltering->setValue(preset.alpha_filtering);
     alphaQuality->setValue(preset.alpha_quality);
     pass->setValue(preset.pass);
     showCompressed->setChecked(preset.show_compressed == 1);
-    preprocessing->setCurrentIndex(preprocessing->findData(preset.preprocessing));
+    preprocessing->setCurrentIndex(
+        preprocessing->findData(preset.preprocessing));
     partitions->setValue(preset.partitions);
     partitionLimit->setValue(preset.partition_limit);
     emulateJPEGSize->setChecked(preset.emulate_jpeg_size == 1);
@@ -133,7 +147,7 @@ void KisDlgWebPExport::changePreset()
 #endif
 }
 
-KisPropertiesConfigurationSP KisDlgWebPExport::configuration() const
+KisPropertiesConfigurationSP KisWdgOptionsWebP::configuration() const
 {
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
@@ -151,12 +165,14 @@ KisPropertiesConfigurationSP KisDlgWebPExport::configuration() const
     cfg->setProperty("filter_sharpness", filterSharpness->value());
     cfg->setProperty("filter_type", filterType->currentData().value<int>());
     cfg->setProperty("autofilter", autofilter->isChecked());
-    cfg->setProperty("alpha_compression", alphaCompression->currentData().value<int>());
+    cfg->setProperty("alpha_compression",
+                     alphaCompression->currentData().value<int>());
     cfg->setProperty("alpha_filtering", alphaFiltering->value());
     cfg->setProperty("alpha_quality", alphaQuality->value());
     cfg->setProperty("pass", pass->value());
     cfg->setProperty("show_compressed", showCompressed->isChecked());
-    cfg->setProperty("preprocessing", preprocessing->currentData().value<int>());
+    cfg->setProperty("preprocessing",
+                     preprocessing->currentData().value<int>());
     cfg->setProperty("partitions", partitions->value());
     cfg->setProperty("partition_limit", partitionLimit->value());
     cfg->setProperty("emulate_jpeg_size", emulateJPEGSize->isChecked());

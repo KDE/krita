@@ -11,14 +11,14 @@
 
 #include <kis_config_widget.h>
 
-#include "ui_dlg_webp_export.h"
+#include "ui_kis_wdg_options_webp.h"
 
-class KisDlgWebPExport : public KisConfigWidget, public Ui::DlgWebPExport
+class KisWdgOptionsWebP : public KisConfigWidget, public Ui::KisWdgOptionsWebP
 {
     Q_OBJECT
 
 public:
-    KisDlgWebPExport(QWidget *parent);
+    KisWdgOptionsWebP(QWidget *parent);
     void setConfiguration(const KisPropertiesConfigurationSP cfg) override;
     KisPropertiesConfigurationSP configuration() const override;
 private Q_SLOTS:

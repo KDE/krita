@@ -42,7 +42,6 @@ struct KisFilterStrokeStrategy::Private {
         , updatesFacade(rhs.updatesFacade)
         , levelOfDetail(0)
         , cancelledUpdates(rhs.cancelledUpdates)
-        , m_autokeyCommand(rhs.m_autokeyCommand)
 
     {
         KIS_ASSERT_RECOVER_RETURN(!rhs.levelOfDetail);
@@ -58,7 +57,6 @@ struct KisFilterStrokeStrategy::Private {
     int levelOfDetail;
 
     KisAutoKey::Mode m_autokeyMode;
-    QSharedPointer<KUndo2Command> m_autokeyCommand;
 
     ExternalCancelUpdatesStorageSP cancelledUpdates;
     QRect nextExternalUpdateRect;
@@ -197,8 +195,8 @@ void KisFilterStrokeStrategy::initStrokeCallback()
         KisKeyframeSP keyframe = channel->keyframeAt(time);
         if (!keyframe && m_d->m_autokeyMode != KisAutoKey::NONE) {
             int activeKeyTime = channel->activeKeyframeTime(time);
-            m_d->m_autokeyCommand = toQShared( new KUndo2Command() );
-            channel->copyKeyframe(activeKeyTime, time, m_d->m_autokeyCommand.data());
+            KUndo2CommandSP autokeyCommand = toQShared( new KUndo2Command() );
+            channel->copyKeyframe(activeKeyTime, time, autokeyCommand.data());
 
             keyframe = channel->keyframeAt(time);
             KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
@@ -208,6 +206,8 @@ void KisFilterStrokeStrategy::initStrokeCallback()
             if (previousKey) {
                 keyframe->setColorLabel(previousKey->colorLabel());
             }
+
+            runAndSaveCommand(autokeyCommand, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
         }
     }
 }
@@ -353,10 +353,6 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
     QVector<KisStrokeJobData *> jobs;
 
-    if (m_d->m_autokeyCommand) {
-        m_d->m_autokeyCommand->undo();
-    }
-
     jobs << new Data(toQShared(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisDisableDirtyRequestsCommand::INITIALIZING)));
     KisStrokeStrategyUndoCommandBased::cancelStrokeCallbackImpl(jobs);
     jobs << new Data(toQShared(new KisDisableDirtyRequestsCommand(m_d->updatesFacade, KisDisableDirtyRequestsCommand::FINALIZING)));
@@ -390,9 +386,6 @@ void KisFilterStrokeStrategy::cancelStrokeCallback()
 
 void KisFilterStrokeStrategy::finishStrokeCallback()
 {
-    if (m_d->m_autokeyCommand) {
-        undoFacade()->postExecutionUndoAdapter()->addCommand(m_d->m_autokeyCommand);
-    }
     KisStrokeStrategyUndoCommandBased::finishStrokeCallback();
 }
 

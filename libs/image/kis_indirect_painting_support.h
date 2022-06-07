@@ -58,8 +58,8 @@ public:
      * Writes the temporary target into the paint device of the layer.
      * This action will lock the temporary target itself.
      */
-    void mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID);
-    virtual void mergeToLayerThreaded(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID, QVector<KisRunnableStrokeJobData *> *jobs);
+    void mergeToLayer(KisNodeSP layer, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText, int timedID);
+    virtual void mergeToLayerThreaded(KisNodeSP layer, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText, int timedID, QVector<KisRunnableStrokeJobData *> *jobs);
 
     KisPaintDeviceSP temporaryTarget() const;
 
@@ -148,7 +148,7 @@ protected:
 
     using WriteLockerSP = QSharedPointer<WriteLocker>;
 
-    void mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID, bool cleanResources, WriteLockerSP sharedWriteLock, QVector<KisRunnableStrokeJobData *> *jobs);
+    void mergeToLayerImpl(KisPaintDeviceSP dst, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText, int timedID, bool cleanResources, WriteLockerSP sharedWriteLock, QVector<KisRunnableStrokeJobData *> *jobs);
     virtual void writeMergeData(KisPainter *painter, KisPaintDeviceSP src, const QRect &rc);
     void lockTemporaryTargetForWrite() const;
 

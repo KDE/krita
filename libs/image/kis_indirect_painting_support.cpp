@@ -132,10 +132,10 @@ void KisIndirectPaintingSupport::setupTemporaryPainter(KisPainter *painter) cons
      painter->setSelection(d->selection);
 }
 
-void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID)
+void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText, int timedID)
 {
     QVector<KisRunnableStrokeJobData*> jobs;
-    mergeToLayerThreaded(layer, undoAdapter, transactionText, timedID, &jobs);
+    mergeToLayerThreaded(layer, parentCommand, transactionText, timedID, &jobs);
 
     /**
      * When merging, we use barrier jobs only for ensuring that the merge jobs
@@ -148,7 +148,7 @@ void KisIndirectPaintingSupport::mergeToLayer(KisNodeSP layer, KisPostExecutionU
     executor.addRunnableJobs(implicitCastList<KisRunnableStrokeJobDataBase*>(jobs));
 }
 
-void KisIndirectPaintingSupport::mergeToLayerThreaded(KisNodeSP layer, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText,int timedID, QVector<KisRunnableStrokeJobData*> *jobs)
+void KisIndirectPaintingSupport::mergeToLayerThreaded(KisNodeSP layer, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText,int timedID, QVector<KisRunnableStrokeJobData*> *jobs)
 {
     /**
      * We create the lock in an unlocked state to avoid a deadlock, when
@@ -166,12 +166,12 @@ void KisIndirectPaintingSupport::mergeToLayerThreaded(KisNodeSP layer, KisPostEx
             sharedWriteLock->relock();
         });
 
-    mergeToLayerImpl(layer->paintDevice(), undoAdapter, transactionText,
+    mergeToLayerImpl(layer->paintDevice(), parentCommand, transactionText,
                      timedID, true, sharedWriteLock,
                      jobs);
 }
 
-void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostExecutionUndoAdapter *undoAdapter, const KUndo2MagicString &transactionText, int timedID, bool cleanResources,
+void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KUndo2Command *parentCommand, const KUndo2MagicString &transactionText, int timedID, bool cleanResources,
                                                   WriteLockerSP sharedWriteLock, QVector<KisRunnableStrokeJobData*> *jobs)
 {
     struct SharedState {
@@ -181,15 +181,15 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
     QSharedPointer<SharedState> sharedState(new SharedState());
 
     KritaUtils::addJobSequential(*jobs,
-        [sharedState, sharedWriteLock, dst, undoAdapter, transactionText, timedID] () {
+        [sharedState, sharedWriteLock, dst, parentCommand, transactionText, timedID] () {
             Q_UNUSED(sharedWriteLock); // just a RAII holder object for the lock
 
             /**
              * Move tool may not have an undo adapter
              */
-             if (undoAdapter) {
+             if (parentCommand) {
                  sharedState->transaction.reset(
-                     new KisTransaction(transactionText, dst, nullptr, timedID));
+                     new KisTransaction(transactionText, dst, parentCommand, timedID));
              }
         }
     );
@@ -213,7 +213,7 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
     }
 
     KritaUtils::addJobSequential(*jobs,
-        [this, sharedState, sharedWriteLock, undoAdapter, cleanResources] () {
+        [this, sharedState, sharedWriteLock, cleanResources] () {
             Q_UNUSED(sharedWriteLock); // just a RAII holder object for the lock
 
             if (cleanResources) {
@@ -221,7 +221,9 @@ void KisIndirectPaintingSupport::mergeToLayerImpl(KisPaintDeviceSP dst, KisPostE
             }
 
             if (sharedState->transaction) {
-                sharedState->transaction->commit(undoAdapter);
+                // the internal command is stored using
+                // the link to the parent command
+                (void) sharedState->transaction->endAndTake();
             }
         }
     );

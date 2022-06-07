@@ -62,7 +62,7 @@ struct ColorizeMaskTester
 
         mask->resetCache();
 
-        mask->testingRegenerateMask();
+        mask->forceRegenerateMask();
         p.image->waitForDone();
 
         // KIS_DUMP_DEVICE_2(mask->coloringProjection(), refRect, "coloring", "dd");

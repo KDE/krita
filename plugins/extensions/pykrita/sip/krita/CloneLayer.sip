@@ -19,6 +19,8 @@ class CloneLayer : Node
 public:
     virtual ~CloneLayer();
     virtual QString type() const;
+    Node* sourceNode() const /Factory/;
+    void setSourceNode(Node* node);
 Q_SIGNALS:
 private:
 };

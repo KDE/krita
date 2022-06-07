@@ -5,6 +5,9 @@ class Shape : QObject
 %End
     Shape(const Shape & __0);
     virtual ~Shape();
+    bool operator==(const Shape &other) const;
+    bool operator!=(const Shape &other) const;
+
 public Q_SLOTS:
     QString type() const;
     QString name() const;
@@ -22,6 +25,7 @@ public Q_SLOTS:
     void setPosition(QPointF point);
     QTransform transformation() const;
     void setTransformation(QTransform matrix);
+    QTransform absoluteTransformation() const;
     bool remove();
     void update();
     void updateAbsolute(QRectF box);
@@ -29,6 +33,7 @@ public Q_SLOTS:
     void select();
     void deselect();
     bool isSelected();
+    Shape * parentShape() const /Factory/;
 Q_SIGNALS:
 private:
 };

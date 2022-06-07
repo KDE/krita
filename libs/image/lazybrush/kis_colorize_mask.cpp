@@ -1100,7 +1100,7 @@ void KisColorizeMask::testingAddKeyStroke(KisPaintDeviceSP dev, const KoColor &c
     m_d->keyStrokes << KeyStroke(dev, color, isTransparent);
 }
 
-void KisColorizeMask::testingRegenerateMask()
+void KisColorizeMask::forceRegenerateMask()
 {
     slotUpdateRegenerateFilling();
     m_d->updateIsRunning = false;

@@ -8,6 +8,7 @@
 #define LIBKISUTILS_H
 
 class Node;
+class Document;
 
 #include <kis_types.h>
 
@@ -15,6 +16,8 @@ namespace LibKisUtils
 {
 
 QList<Node *> createNodeList(KisNodeList kisnodes, KisImageWSP image);
+
+Document* findNodeInDocuments(KisNodeSP kisnode);
 
 }
 

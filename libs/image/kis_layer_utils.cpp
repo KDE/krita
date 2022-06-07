@@ -1997,6 +1997,32 @@ namespace KisLayerUtils {
         });
     }
 
+    QList<KisNodeSP> findNodesByName(KisNodeSP root, const QString &name, bool recursive, bool partialMatch)
+    {
+        KisNodeList nodeList;
+        KisNodeSP child = root->firstChild();
+
+        while (child) {
+            if (name.isEmpty() || (!partialMatch && child->name() == name) || (partialMatch && child->name().contains(name, Qt::CaseInsensitive))) {
+                nodeList << child;
+            }
+            if (recursive && child->childCount() > 0) {
+                nodeList << findNodesByName(child, name, recursive, partialMatch);
+            }
+            child = child->nextSibling();
+        }
+
+        return nodeList;
+    }
+
+    KisNodeSP findNodeByName(KisNodeSP root, const QString &name)
+    {
+        return recursiveFindNode(root,
+            [name] (KisNodeSP node) {
+                return node->name() == name;
+        });
+    }
+
     void forceAllDelayedNodesUpdate(KisNodeSP root)
     {
         KisLayerUtils::recursiveApplyNodes(root,

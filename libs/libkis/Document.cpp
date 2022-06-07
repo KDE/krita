@@ -26,6 +26,7 @@
 #include <kis_transform_mask.h>
 #include <kis_transparency_mask.h>
 #include <kis_selection_mask.h>
+#include <lazybrush/kis_colorize_mask.h>
 #include <kis_effect_mask.h>
 #include <kis_paint_layer.h>
 #include <kis_generator_layer.h>
@@ -62,6 +63,7 @@
 #include <QMessageBox>
 
 #include <kis_image_animation_interface.h>
+#include <kis_layer_utils.h>
 
 struct Document::Private {
     Private() {}
@@ -152,7 +154,7 @@ QList<Node *> Document::topLevelNodes() const
 Node *Document::nodeByName(const QString &name) const
 {
     if (!d->document) return 0;
-    KisNodeSP node = d->document->image()->rootLayer()->findChildByName(name);
+    KisNodeSP node = KisLayerUtils::findNodeByName(d->document->image()->rootLayer(),name);
     if (node.isNull()) return 0;
     return Node::createNode(d->document->image(), node);
 }
@@ -160,7 +162,9 @@ Node *Document::nodeByName(const QString &name) const
 Node *Document::nodeByUniqueID(const QUuid &id) const
 {
     if (!d->document) return 0;
-    KisNodeSP node = d->document->image()->rootLayer()->findChildByUniqueID(id);
+
+    KisNodeSP node = KisLayerUtils::findNodeByUuid(d->document->image()->rootLayer(), id);
+
     if (node.isNull()) return 0;
     return Node::createNode(d->document->image(), node);
 }
@@ -629,6 +633,9 @@ Node* Document::createNode(const QString &name, const QString &nodeType)
     else if (nodeType.toLower()  == "selectionmask") {
         node = new Node(image, new KisSelectionMask(image, name));
     }
+    else if (nodeType.toLower()  == "colorizemask") {
+        node = new Node(image, new KisColorizeMask(image, name));
+    }
 
     return node;
 }
@@ -744,6 +751,15 @@ SelectionMask *Document::createSelectionMask(const QString &name)
     return new SelectionMask(image, name);
 }
 
+TransparencyMask *Document::createTransparencyMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new TransparencyMask(image, name);
+}
+
 TransformMask *Document::createTransformMask(const QString &name)
 {
     if (!d->document) return 0;
@@ -751,6 +767,15 @@ TransformMask *Document::createTransformMask(const QString &name)
     KisImageSP image = d->document->image();
 
     return new TransformMask(image, name);
+}
+
+ColorizeMask *Document::createColorizeMask(const QString &name)
+{
+    if (!d->document) return 0;
+    if (!d->document->image()) return 0;
+    KisImageSP image = d->document->image();
+
+    return new ColorizeMask(image, name);
 }
 
 QImage Document::projection(int x, int y, int w, int h) const

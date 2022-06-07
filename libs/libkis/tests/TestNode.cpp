@@ -18,6 +18,10 @@
 #include <kis_image.h>
 #include <kis_fill_painter.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
+#include <kis_shape_layer.h>
+#include <KisDocument.h>
+#include <KisPart.h>
 
 #include <sdk/tests/testui.h>
 
@@ -147,6 +151,109 @@ void TestNode::testMergeDown()
     Node *n2 = n1->mergeDown();
     delete n2;
 }
+
+void TestNode::testFindChildNodes()
+{
+    QScopedPointer<KisDocument> kisdoc(KisPart::instance()->createDocument());
+
+    KisImageSP image = new KisImage(0, 100, 100, KoColorSpaceRegistry::instance()->rgb8(), "test");
+    KisNodeSP gLayer1 = new KisGroupLayer(image, "gLayer1", OPACITY_OPAQUE_U8);
+    KisNodeSP pLayer1 = new KisPaintLayer(image, "pLayer1", 255);
+    KisNodeSP pLayer2 = new KisPaintLayer(image, "pLayer2", 255);
+    KisNodeSP vLayer1 = new KisShapeLayer(kisdoc->shapeController(), image, "vLayer1", OPACITY_OPAQUE_U8);
+    KisNodeSP vLayer2 = new KisShapeLayer(kisdoc->shapeController(), image, "vLayer2", OPACITY_OPAQUE_U8);
+
+    gLayer1->setColorLabelIndex(2);
+
+    NodeSP rootNode = NodeSP(Node::createNode(image, image->rootLayer()));
+
+    image->addNode(pLayer1);
+    image->addNode(vLayer1);
+    image->addNode(pLayer2, gLayer1, gLayer1->childCount());
+    image->addNode(vLayer2, gLayer1, gLayer1->childCount());
+    image->addNode(gLayer1);
+
+    kisdoc->setCurrentImage(image);
+
+    {
+        QStringList test = {"pLayer1", "vLayer1", "gLayer1"};
+        QList<Node *> nodeList = rootNode->findChildNodes();
+
+        QVERIFY(test.size() == nodeList.size());
+        for (Node* n : nodeList) {
+            QVERIFY(test.contains(n->name()) == true);
+            delete n;
+        }
+    }
+
+    {
+        QStringList test = {"pLayer1", "vLayer1", "gLayer1", "vLayer2", "pLayer2"};
+        QList<Node *> nodeList = rootNode->findChildNodes("", true);
+
+        QVERIFY(test.size() == nodeList.size());
+        for (Node* n : nodeList) {
+            QVERIFY(test.contains(n->name()) == true);
+            delete n;
+        }
+    }
+
+    {
+        QStringList test = {"vLayer1"};
+        QList<Node *> nodeList = rootNode->findChildNodes("vLayer1");
+
+        QVERIFY(test.size() == nodeList.size());
+        for (Node* n : nodeList) {
+            QVERIFY(test.contains(n->name()) == true);
+            delete n;
+        }
+    }
+
+    {
+        QStringList test = {"vLayer2"};
+        QList<Node *> nodeList = rootNode->findChildNodes("vLayer2", true);
+
+        QVERIFY(test.size() == nodeList.size());
+        for (Node* n : nodeList) {
+            QVERIFY(test.contains(n->name()) == true);
+            delete n;
+        }
+    }
+
+    {
+        QStringList test = {"vLayer1", "vLayer2"};
+        QList<Node *> nodeList = rootNode->findChildNodes("vLayer", true, true);
+
+        QVERIFY(test.size() == nodeList.size());
+        for (Node* n : nodeList) {
+            QVERIFY(test.contains(n->name()) == true);
+            delete n;
+        }
+    }
+
+    {
+        QStringList test = {"pLayer1", "pLayer2"};
+        QList<Node *> nodeList = rootNode->findChildNodes("", true, false, "paintlayer");
+
+        QVERIFY(test.size() == nodeList.size());
+        for (Node* n : nodeList) {
+            QVERIFY(test.contains(n->name()) == true);
+            delete n;
+        }
+    }
+
+    {
+        QStringList test = {"gLayer1"};
+        QList<Node *> nodeList = rootNode->findChildNodes("", true, false, "", 2);
+
+        QVERIFY(test.size() == nodeList.size());
+        for (Node* n : nodeList) {
+            QVERIFY(test.contains(n->name()) == true);
+            delete n;
+        }
+    }
+
+}
+
 
 KISTEST_MAIN(TestNode)
 

@@ -40,6 +40,7 @@
 #include <kis_fast_math.h>
 #include <math.h>
 #include <kis_dom_utils.h>
+#include <kis_layer_utils.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(KisSpriterExportFactory, "krita_spriter_export.json", registerPlugin<KisSpriterExport>();)
 
@@ -477,10 +478,10 @@ KisImportExportErrorCode KisSpriterExport::convert(KisDocument *document, QIODev
 
     KisGroupLayerSP root = m_image->rootLayer();
 
-    m_boneLayer = qobject_cast<KisLayer*>(root->findChildByName("bone").data());
+    m_boneLayer = qobject_cast<KisLayer*>(KisLayerUtils::findNodeByName(root,"bone").data());
     //qDebug() << "Found boneLayer" << m_boneLayer;
 
-    m_rootLayer= qobject_cast<KisGroupLayer*>(root->findChildByName("root").data());
+    m_rootLayer= qobject_cast<KisGroupLayer*>(KisLayerUtils::findNodeByName(root,"root").data());
     //qDebug() << "Fond rootLayer" << m_rootLayer;
 
     KisImportExportErrorCode result = parseFolder(m_image->rootLayer(), "", fi.absolutePath());

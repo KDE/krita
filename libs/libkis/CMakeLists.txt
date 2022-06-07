@@ -11,6 +11,7 @@ set(kritalibkis_LIB_SRCS
     Node.cpp
     Notifier.cpp
     PresetChooser.cpp
+    Preset.cpp
     Palette.cpp
     PaletteView.cpp
     Scratchpad.cpp
@@ -28,7 +29,9 @@ set(kritalibkis_LIB_SRCS
     VectorLayer.cpp
     FilterMask.cpp
     SelectionMask.cpp
+    TransparencyMask.cpp
     TransformMask.cpp
+    ColorizeMask.cpp
 
     Shape.cpp
     GroupShape.cpp

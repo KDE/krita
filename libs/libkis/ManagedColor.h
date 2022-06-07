@@ -196,6 +196,7 @@ private:
     friend class View;
     friend class PaletteView;
     friend class Swatch;
+    friend class ColorizeMask;
 
     KoColor color() const;
 

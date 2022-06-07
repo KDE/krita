@@ -146,7 +146,7 @@
     <p>It is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.</p>
     <p xml:lang="bs">On je savršen za skiciranje i slikanje i predstavlja finalno rješenje za kreiranje digitalnih slika od nule s majstorima</p>
     <p xml:lang="ca">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fitxers de dibuix digital des de zero per a mestres.</p>
-    <p xml:lang="ca-valencia">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fitxers de dibuix digital des de zero per a mestres.</p>
+    <p xml:lang="ca-valencia">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fichers de dibuix digital des de zero per a mestres.</p>
     <p xml:lang="de">Krita ist perfekt zum Zeichnen oder Malen und stellt eine umfängliche Lösung für die Erstellung digitaler Bilder dar.</p>
     <p xml:lang="el">Είναι ιδανικό για σκιτσογραφία και ζωγραφική, και παρουσιάζει μια από άκρη σε άκρη λύση για τη δημιουργία από το μηδέν αρχείων ψηφιακης ζωγραφικής από τους δασκάλους της τέχνης.</p>
     <p xml:lang="en-GB">It is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.</p>
@@ -347,7 +347,7 @@
     <screenshot type="default">
       <caption>Into animation? Krita provides everything you need for traditional, hand-drawn animation</caption>
       <caption xml:lang="ca">Esteu amb les animacions? El Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
-      <caption xml:lang="ca-valencia">Esteu amb les animacions? Krita proporciona tot lo que cal per a l'animació a mà tradicional</caption>
+      <caption xml:lang="ca-valencia">Esteu amb les animacions? Krita proporciona tot el que cal per a l'animació a mà tradicional</caption>
       <caption xml:lang="de">Sie interessieren sich für Animation? Krita bietet alles was für traditionelle, handgezeichnete Animation benötigt wird</caption>
       <caption xml:lang="en-GB">Into animation? Krita provides everything you need for traditional, hand-drawn animation</caption>
       <caption xml:lang="es">¿Trabaja con animación? Krita proporciona todo lo necesario para la animación manual tradicional</caption>

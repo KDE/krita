@@ -90,6 +90,7 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
           <text>&amp;Canvas</text>
           <Action name="mirror_canvas"/>
           <Action name="mirror_canvas_around_cursor"/>
+          <Action name="mirror_canvas_around_canvas"/>
           <Separator/>
           <Action name="zoom_to_100pct" />
           <Action name="rotate_canvas_right" />

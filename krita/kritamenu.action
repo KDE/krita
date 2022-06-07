@@ -711,6 +711,16 @@
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
     </Action>
+      <Action name="mirror_canvas_around_canvas">
+      <icon>mirror-view</icon>
+      <text>Mirror View Around Canvas</text>
+      <whatsThis></whatsThis>
+      <toolTip>Mirror View Around Canvas</toolTip>
+      <iconText>Mirror View Around Canvas</iconText>
+      <shortcut></shortcut>
+      <isCheckable>false</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="zoom_to_100pct">
       <icon>zoom-original</icon>
       <text>&amp;Reset zoom</text>

@@ -200,6 +200,25 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
     }
 }
 
+void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
+{
+    int docWidth = KoCanvasControllerWidget::documentSize().width();
+    int docOffsetX = KoCanvasControllerWidget::canvasOffsetX();
+        
+    QPoint center = QPoint(docOffsetX + (docWidth / 2), 0);
+    QPoint newOffset = m_d->coordinatesConverter->mirror(center, enable, false);
+    
+    setScrollBarValue(newOffset);
+    
+    // When the width is odd one side will be 1 pixel bigger, mirroring will 
+    // make the canvas move left by 1 pixel hence we pan it back to place.
+    if (docWidth % 2 == 1) 
+        KoCanvasControllerWidget::pan(QPoint(-1, 0));
+    
+    m_d->updateDocumentSizeAfterTransform();
+    m_d->showMirrorStateOnCanvas();
+}
+
 void KisCanvasController::Private::showRotationValueOnCanvas()
 {
     qreal rotationAngle = coordinatesConverter->rotationAngle();

@@ -68,7 +68,7 @@ public:
     virtual void finishResizingImage(qint32 w, qint32 h) = 0;
 
     // Called from KisCanvas2::startUpdateProjection
-    virtual KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags) = 0;
+    virtual KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc) = 0;
 
     // Called from KisCanvas2::updateCanvasProjection
     virtual QRect updateCanvasProjection(KisUpdateInfoSP info) = 0;

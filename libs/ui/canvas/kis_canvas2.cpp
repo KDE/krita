@@ -824,7 +824,7 @@ void KisCanvas2::finishResizingImage(qint32 w, qint32 h)
 
 void KisCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
-    KisUpdateInfoSP info = m_d->canvasWidget->startUpdateCanvasProjection(rc, m_d->channelFlags);
+    KisUpdateInfoSP info = m_d->canvasWidget->startUpdateCanvasProjection(rc);
     if (m_d->projectionUpdatesCompressor.putUpdateInfo(info)) {
         emit sigCanvasCacheUpdated();
     }

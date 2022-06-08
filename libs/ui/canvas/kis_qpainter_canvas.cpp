@@ -197,10 +197,8 @@ void KisQPainterCanvas::finishResizingImage(qint32 w, qint32 h)
     m_d->prescaledProjection->slotImageSizeChanged(w, h);
 }
 
-KisUpdateInfoSP KisQPainterCanvas::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
+KisUpdateInfoSP KisQPainterCanvas::startUpdateCanvasProjection(const QRect & rc)
 {
-    Q_UNUSED(channelFlags);
-
     return m_d->prescaledProjection->updateCache(rc);
 }
 

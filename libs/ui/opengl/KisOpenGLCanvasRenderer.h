@@ -76,7 +76,7 @@ public:
     void channelSelectionChanged(const QBitArray &channelFlags);
     void setDisplayColorConverter(KisDisplayColorConverter *colorConverter);
     void finishResizingImage(qint32 w, qint32 h);
-    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags);
+    KisUpdateInfoSP startUpdateCanvasProjection(const QRect & rc);
     QRect updateCanvasProjection(KisUpdateInfoSP info);
 
     void setLodResetInProgress(bool value);

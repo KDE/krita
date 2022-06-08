@@ -304,9 +304,9 @@ void KisOpenGLCanvas2::finishResizingImage(qint32 w, qint32 h)
     d->renderer->finishResizingImage(w, h);
 }
 
-KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
+KisUpdateInfoSP KisOpenGLCanvas2::startUpdateCanvasProjection(const QRect & rc)
 {
-    return d->renderer->startUpdateCanvasProjection(rc, channelFlags);
+    return d->renderer->startUpdateCanvasProjection(rc);
 }
 
 

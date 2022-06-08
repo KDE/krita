@@ -13,12 +13,13 @@
 #include <QHash>
 #include <QTabletEvent>
 #include <QDebug>
+#include <boost/operators.hpp>
 
 /**
  * This class represents an input device.
  * A user can manipulate flake-shapes using a large variety of input devices. This ranges from
  * a mouse to a paintbrush-like tool connected to a tablet. */
-class KRITAFLAKE_EXPORT KoInputDevice
+class KRITAFLAKE_EXPORT KoInputDevice : public boost::equality_comparable<KoInputDevice>
 {
 public:
     /**
@@ -67,8 +68,6 @@ public:
 
     /// equal
     bool operator==(const KoInputDevice&) const;
-    /// not equal
-    bool operator!=(const KoInputDevice&) const;
     /// assignment
     KoInputDevice & operator=(const KoInputDevice &);
 

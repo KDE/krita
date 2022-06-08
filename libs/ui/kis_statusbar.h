@@ -14,6 +14,7 @@
 
 #include <kis_types.h>
 #include "KisView.h"
+#include <boost/operators.hpp>
 
 class QLabel;
 class QToolButton;
@@ -30,7 +31,7 @@ class KisAngleSelector;
 
 class KRITAUI_EXPORT KisStatusBar : public QObject
 {
-    class StatusBarItem
+    class StatusBarItem : public boost::equality_comparable<StatusBarItem>
     {
     public:
         StatusBarItem()
@@ -41,10 +42,6 @@ class KRITAUI_EXPORT KisStatusBar : public QObject
 
         bool operator==(const StatusBarItem& rhs) {
             return m_widget == rhs.m_widget;
-        }
-
-        bool operator!=(const StatusBarItem& rhs) {
-            return m_widget != rhs.m_widget;
         }
 
         QWidget * widget() const {

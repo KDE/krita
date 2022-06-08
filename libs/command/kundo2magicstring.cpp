@@ -38,8 +38,3 @@ bool KUndo2MagicString::operator==(const KUndo2MagicString &rhs) const
 {
     return m_text == rhs.m_text;
 }
-
-bool KUndo2MagicString::operator!=(const KUndo2MagicString &rhs) const
-{
-    return !(*this == rhs);
-}

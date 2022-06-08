@@ -169,11 +169,6 @@ bool KisDistanceInitInfo::operator==(const KisDistanceInitInfo &other) const
     return true;
 }
 
-bool KisDistanceInitInfo::operator!=(const KisDistanceInitInfo &other) const
-{
-    return !(*this == other);
-}
-
 KisDistanceInitInfo &KisDistanceInitInfo::operator=(const KisDistanceInitInfo &rhs)
 {
     *m_d = *rhs.m_d;

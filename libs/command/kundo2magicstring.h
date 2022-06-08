@@ -12,6 +12,7 @@
 #include <QDebug>
 
 #include <klocalizedstring.h>
+#include <boost/operators.hpp>
 
 #include "kritacommand_export.h"
 
@@ -35,7 +36,7 @@
  *       because in many languages you cannot combine words without
  *       knowing the proper case.
  */
-class KRITACOMMAND_EXPORT KUndo2MagicString
+class KRITACOMMAND_EXPORT KUndo2MagicString : public boost::equality_comparable<KUndo2MagicString>
 {
 public:
     /**
@@ -65,7 +66,6 @@ public:
     bool isEmpty() const;
 
     bool operator==(const KUndo2MagicString &rhs) const;
-    bool operator!=(const KUndo2MagicString &rhs) const;
 
 private:
     /**

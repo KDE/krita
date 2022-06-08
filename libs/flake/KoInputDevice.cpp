@@ -72,11 +72,6 @@ bool KoInputDevice::operator==(const KoInputDevice &other) const
            d->uniqueTabletId == other.d->uniqueTabletId && d->mouse == other.d->mouse;
 }
 
-bool KoInputDevice::operator!=(const KoInputDevice &other) const
-{
-    return !(operator==(other));
-}
-
 KoInputDevice & KoInputDevice::operator=(const KoInputDevice & other)
 {
     d->device = other.d->device;

@@ -143,7 +143,7 @@ public:
 
     // Hmm sorry for polluting the private class with such a big inner class.
     // At the beginning it was a little struct :)
-    class StatusBarItem
+    class StatusBarItem : public boost::equality_comparable<StatusBarItem>
     {
     public:
 
@@ -156,10 +156,6 @@ public:
 
         bool operator==(const StatusBarItem& rhs) {
             return m_widget == rhs.m_widget;
-        }
-
-        bool operator!=(const StatusBarItem& rhs) {
-            return m_widget != rhs.m_widget;
         }
 
         QWidget * widget() const {

@@ -19,6 +19,7 @@
 #include <QMetaType>
 // std
 #include <math.h> // for floor
+#include <boost/operators.hpp>
 
 class QStringList;
 
@@ -67,7 +68,7 @@ static const qreal CC_ROUNDING {100000.0}; // cicero
  * bound to the order in the enum (so ABI-compatible extension is possible) and
  * with the order and scope of listed types controlled by the @c ListOptions parameter.
  */
-class KRITAGLOBAL_EXPORT KoUnit
+class KRITAGLOBAL_EXPORT KoUnit : public boost::equality_comparable<KoUnit>
 {
 public:
     /** Length units supported by Calligra. */
@@ -107,10 +108,6 @@ public:
 
     KoUnit& operator=(Type unit) {
         m_type = unit; m_pixelConversion = 1.0; return *this;
-    }
-
-    bool operator!=(const KoUnit &other) const {
-        return !operator==(other);
     }
 
     bool operator==(const KoUnit &other) const {

@@ -14,6 +14,7 @@
 #include <QDomElement>
 #include "kritaimage_export.h"
 #include <boost/optional.hpp>
+#include <boost/operators.hpp>
 
 class KisPaintInformation;
 class KisSpacingInformation;
@@ -25,7 +26,7 @@ class KisDistanceInformation;
  * main purpose of this class is to allow serialization of KisDistanceInformation initial settings
  * to XML.
  */
-class KRITAIMAGE_EXPORT KisDistanceInitInfo {
+class KRITAIMAGE_EXPORT KisDistanceInitInfo : boost::equality_comparable<KisDistanceInitInfo> {
 
 public:
 
@@ -59,8 +60,6 @@ public:
     ~KisDistanceInitInfo();
 
     bool operator==(const KisDistanceInitInfo &other) const;
-
-    bool operator!=(const KisDistanceInitInfo &other) const;
 
     KisDistanceInitInfo &operator=(const KisDistanceInitInfo &rhs);
 

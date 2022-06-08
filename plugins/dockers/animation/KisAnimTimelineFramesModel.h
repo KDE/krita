@@ -23,6 +23,7 @@ class KisAnimationPlayer;
 class KisNodeDisplayModeAdapter;
 
 
+
 struct TimelineSelectionEntry {
     KisRasterKeyframeChannel* channel;
     int time;
@@ -37,6 +38,9 @@ inline uint qHash(const TimelineSelectionEntry &key)
 {
     return reinterpret_cast<quint64>(key.channel) * reinterpret_cast<quint64>(key.keyframe.data()) * key.time;
 }
+
+
+
 
 class KRITAANIMATIONDOCKER_EXPORT KisAnimTimelineFramesModel : public TimelineNodeListKeeper::ModelWithExternalNotifications
 {
@@ -122,7 +126,6 @@ public:
 
     typedef TimelineNodeListKeeper::OtherLayer OtherLayer;
     typedef TimelineNodeListKeeper::OtherLayersList OtherLayersList;
-
 
     struct NodeManipulationInterface {
         virtual ~NodeManipulationInterface() {}

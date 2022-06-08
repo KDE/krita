@@ -40,50 +40,54 @@ namespace KisAnimUtils {
             parentCommand,
 
             [image, node, channelId, time, copy] () mutable -> KUndo2Command* {
-                bool result = false;
+                bool success = false;
 
                 QScopedPointer<KUndo2Command> cmd(new KUndo2Command());
 
                 KisKeyframeChannel *channel = node->getKeyframeChannel(channelId);
-                bool isScalar = (channelId != KisKeyframeChannel::Raster.id());
                 quint8 originalOpacity = node->opacity();
-                bool createdChannel = false;
 
                 // Try get channel...
+                bool channelCreated = false;
                 if (!channel) {
                     node->enableAnimation();
                     channel = node->getKeyframeChannel(channelId, true);
+
                     if (!channel) return nullptr;
 
-                    createdChannel = true;
+                    channelCreated = true;
                 }
 
-                if (copy && channel->activeKeyframeAt(time)) {
+                bool shouldPreserveCanvas = channelCreated && time == 0;
+
+                if ((copy || shouldPreserveCanvas) && channel->activeKeyframeAt(time)) {
                     if (!channel->keyframeAt(time)) {
                         channel->copyKeyframe(channel->activeKeyframeTime(time), time, cmd.data());
-                        result = true;
+                        success = true;
                     }
                 } else {
-                    if (channel->keyframeAt(time) && !createdChannel) { // Overwrite existing...
-                        if (image->animationInterface()->currentTime() == time && channelId == KisKeyframeChannel::Raster.id()) {
+                    bool clearExistingFrame = channel->keyframeAt(time) && !channelCreated;
+                    if (clearExistingFrame) { // Overwrite existing keyframe with a new blank one...
+                        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(image->animationInterface()->currentTime() == time, nullptr);
+                        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(channelId == KisKeyframeChannel::Raster.id(), nullptr);
 
-                            //shortcut: clearing the image instead
-                            KisPaintDeviceSP device = node->paintDevice();
-                            if (device) {
-                                const QRect dirtyRect = device->extent();
+                        // Clear the frame...
+                        KisPaintDeviceSP device = node->paintDevice();
+                        if (device) {
+                            const QRect dirtyRect = device->extent();
 
-                                KisTransaction transaction(kundo2_i18n("Clear"), device, cmd.data());
-                                device->clear();
-                                (void) transaction.endAndTake(); // saved as 'parent'
+                            KisTransaction transaction(kundo2_i18n("Clear"), device, cmd.data());
+                            device->clear();
+                            (void) transaction.endAndTake(); // saved as 'parent'
 
-                                node->setDirty(dirtyRect);
+                            node->setDirty(dirtyRect);
 
-                                result = true;
-                            }
+                            success = true;
                         }
-                    } else { // Make new...
+                    } else { // Make a regular new blank keyframe...
                         KisKeyframeSP previousKey = channel->activeKeyframeAt(time);
 
+                        bool isScalar = (channelId != KisKeyframeChannel::Raster.id());
                         if (isScalar && previousKey) {
                             KisScalarKeyframeChannel* scalarChannel = static_cast<KisScalarKeyframeChannel*>(channel);
                             const qreal value = scalarChannel->valueAt(time); //Get interpolated value.
@@ -97,7 +101,7 @@ namespace KisAnimUtils {
                             channel->keyframeAt(time)->setColorLabel(previousKey->colorLabel());
                         }
 
-                        result = true;
+                        success = true;
                     }
                 }
 
@@ -106,7 +110,7 @@ namespace KisAnimUtils {
                 // maybe there is a better way to do this
                 node->setOpacity(originalOpacity);
 
-                return result ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
+                return success ? new KisCommandUtils::SkipFirstRedoWrapper(cmd.take()) : nullptr;
         });
 
         return cmd;

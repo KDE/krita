@@ -842,21 +842,6 @@ int KisConfig::openGLTextureSize(bool defaultValue) const
     return (defaultValue ? 256 : m_cfg.readEntry("textureSize", 256));
 }
 
-bool KisConfig::disableVSync(bool defaultValue) const
-{
-    return (defaultValue ? true : m_cfg.readEntry("disableVSync", true));
-}
-
-void KisConfig::setDisableVSync(bool disableVSync)
-{
-    m_cfg.writeEntry("disableVSync", disableVSync);
-}
-
-bool KisConfig::showAdvancedOpenGLSettings(bool defaultValue) const
-{
-    return (defaultValue ? false : m_cfg.readEntry("showAdvancedOpenGLSettings", false));
-}
-
 bool KisConfig::forceOpenGLFenceWorkaround(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("forceOpenGLFenceWorkaround", false));

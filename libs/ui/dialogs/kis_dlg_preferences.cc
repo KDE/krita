@@ -1524,16 +1524,12 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
-        chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         grpOpenGL->setEnabled(true);
         grpOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
-        chkDisableVsync->setVisible(cfg.showAdvancedOpenGLSettings());
-        chkDisableVsync->setEnabled(cfg.useOpenGL());
-        chkDisableVsync->setChecked(cfg.disableVSync());
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
@@ -1675,7 +1671,6 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
-        chkDisableVsync->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     }
     else {
@@ -1683,8 +1678,6 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setChecked(cfg.useOpenGL(true));
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer(true));
         chkUseTextureBuffer->setEnabled(true);
-        chkDisableVsync->setEnabled(true);
-        chkDisableVsync->setChecked(cfg.disableVSync(true));
         cmbFilterMode->setEnabled(true);
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode(true));
     }
@@ -1726,7 +1719,6 @@ void DisplaySettingsTab::setDefault()
 void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
     chkUseTextureBuffer->setEnabled(isChecked);
-    chkDisableVsync->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
 }
 
@@ -2204,7 +2196,6 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setUseOpenGLTextureBuffer(m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(m_displaySettings->cmbFilterMode->currentIndex());
-        cfg.setDisableVSync(m_displaySettings->chkDisableVsync->isChecked());
         cfg.setRootSurfaceFormat(&kritarc, indexToFormat(m_displaySettings->cmbPreferedRootSurfaceFormat->currentIndex()));
 
         cfg.setCheckSize(m_displaySettings->intCheckSize->value());

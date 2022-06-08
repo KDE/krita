@@ -154,7 +154,6 @@ private:
 
 private:
     void rerenderFakePaintDevice();
-    KisImageSP fetchImage() const;
     void moveAllInternalDevices(const QPoint &diff);
 
     template <class DeviceMetricPolicy>

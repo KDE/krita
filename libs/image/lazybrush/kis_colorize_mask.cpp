@@ -657,14 +657,6 @@ QRect KisColorizeMask::nonDependentExtent() const
     return extent();
 }
 
-KisImageSP KisColorizeMask::fetchImage() const
-{
-    KisLayerSP parentLayer(qobject_cast<KisLayer*>(parent().data()));
-    if (!parentLayer) return KisImageSP();
-
-    return parentLayer->image();
-}
-
 void KisColorizeMask::setImage(KisImageWSP image)
 {
     KisDefaultBoundsSP bounds(new KisDefaultBounds(image));
@@ -701,7 +693,7 @@ void KisColorizeMask::setCurrentColor(const KoColor &_color)
     if (it == m_d->keyStrokes.constEnd()) {
         activeDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
         activeDevice->setParentNode(this);
-        activeDevice->setDefaultBounds(KisDefaultBoundsBaseSP(new KisDefaultBounds(fetchImage())));
+        activeDevice->setDefaultBounds(KisDefaultBoundsBaseSP(new KisDefaultBounds(image())));
         newKeyStroke = true;
     } else {
         activeDevice = it->dev;
@@ -956,7 +948,7 @@ void KisColorizeMask::setKeyStrokesColors(KeyStrokeColors colors)
         newList[i].isTransparent = colors.transparentIndex == i;
     }
 
-    KisProcessingApplicator applicator(fetchImage(), KisNodeSP(this),
+    KisProcessingApplicator applicator(image(), KisNodeSP(this),
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector(),
                                        kundo2_i18n("Change Key Stroke Color"));
@@ -983,7 +975,7 @@ void KisColorizeMask::removeKeyStroke(const KoColor &_color)
 
     const int index = it - m_d->keyStrokes.begin();
 
-    KisProcessingApplicator applicator(KisImageWSP(fetchImage()), KisNodeSP(this),
+    KisProcessingApplicator applicator(image(), KisNodeSP(this),
                                        KisProcessingApplicator::NONE,
                                        KisImageSignalVector(),
                                        kundo2_i18n("Remove Key Stroke"));
@@ -1124,9 +1116,7 @@ void KisColorizeMask::setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStrok
         it->dev->setParentNode(this);
     }
 
-    KisImageSP image = fetchImage();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
-    setImage(image);
+    KIS_SAFE_ASSERT_RECOVER(image());
 }
 
 qint32 KisColorizeMask::x() const

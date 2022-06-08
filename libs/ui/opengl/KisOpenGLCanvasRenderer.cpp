@@ -966,9 +966,8 @@ void KisOpenGLCanvasRenderer::finishResizingImage(qint32 w, qint32 h)
     }
 }
 
-KisUpdateInfoSP KisOpenGLCanvasRenderer::startUpdateCanvasProjection(const QRect & rc, const QBitArray &channelFlags)
+KisUpdateInfoSP KisOpenGLCanvasRenderer::startUpdateCanvasProjection(const QRect & rc)
 {
-    d->openGLImageTextures->setChannelFlags(channelFlags);
     if (canvas()->proofingConfigUpdated()) {
         d->openGLImageTextures->setProofingConfig(canvas()->proofingConfiguration());
         canvas()->setProofingConfigUpdated(false);

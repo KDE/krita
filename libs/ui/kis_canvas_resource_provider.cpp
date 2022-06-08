@@ -107,9 +107,9 @@ KoColor KisCanvasResourceProvider::fgColor() const
     }
 }
 
-QList<KoColor> KisCanvasResourceProvider::lastColorHistory() const
+QList<KoColor> KisCanvasResourceProvider::colorHistory() const
 {
-    QVariant c = m_resourceManager->resource(KoCanvasResource::LastColorHistory);
+    QVariant c = m_resourceManager->resource(KoCanvasResource::ColorHistory);
     if (c.isValid()) {
         return c.value<QList<KoColor>>();
     }
@@ -118,11 +118,11 @@ QList<KoColor> KisCanvasResourceProvider::lastColorHistory() const
     }
 }
 
-void KisCanvasResourceProvider::setLastColorHistory(const QList<KoColor>& colors)
+void KisCanvasResourceProvider::setColorHistory(const QList<KoColor>& colors)
 {
     QVariant v;
     v.setValue(colors);
-    m_resourceManager->setResource(KoCanvasResource::LastColorHistory, v);
+    m_resourceManager->setResource(KoCanvasResource::ColorHistory, v);
 }
 
 float KisCanvasResourceProvider::HDRExposure() const

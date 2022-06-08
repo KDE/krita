@@ -667,6 +667,7 @@ public:
     void setAssistantsGlobalColor(QColor color);
     QColor assistantsGlobalColor();
 
+    // Color history if per document (configuration dependent)
     void setColorHistory(const QList<KoColor> &colors);
     QList<KoColor> colorHistory();
 

@@ -28,7 +28,17 @@ public Q_SLOTS:
 
     void clearColorHistory();
 
+    void updateStrategy();
+
 private:
+    // Get reference to the relevant color history, either from resource provider or doucment.
+    QList<KoColor> colorHistory();
+
+    // Write the changed color history where it is stored, depending on the settings.
+    void updateColorHistory(const QList<KoColor> &history);
+
+    bool m_history_per_document = false;
+
     QToolButton* m_clearButton;
 
     KisDocument *m_document; // Color history is now stored in the document

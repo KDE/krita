@@ -712,6 +712,16 @@ void KisConfig::setForcePaletteColors(bool forcePaletteColors)
     m_cfg.writeEntry("colorsettings/forcepalettecolors", forcePaletteColors);
 }
 
+bool KisConfig::colorHistoryPerDocument(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("colorsettings/colorhistoryperdocument", false));
+}
+
+void KisConfig::setColorHistoryPerDocument(bool perDocument)
+{
+    m_cfg.writeEntry("colorsettings/colorhistoryperdocument", perDocument);
+}
+
 bool KisConfig::showRulers(bool defaultValue) const
 {
     return (defaultValue ? false : m_cfg.readEntry("showrulers", false));

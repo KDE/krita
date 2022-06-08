@@ -845,6 +845,7 @@ ColorSettingsTab::ColorSettingsTab(QWidget *parent, const char *name)
     m_page->chkBlackpoint->setChecked(cfg.useBlackPointCompensation());
     m_page->chkAllowLCMSOptimization->setChecked(cfg.allowLCMSOptimization());
     m_page->chkForcePaletteColor->setChecked(cfg.forcePaletteColors());
+    m_page->chkColorHistoryPerDocument->setChecked(cfg.colorHistoryPerDocument());
     KisImageConfig cfgImage(true);
 
     KisProofingConfigurationSP proofingConfig = cfgImage.defaultProofingconfiguration();
@@ -2165,6 +2166,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseBlackPointCompensation(m_colorSettings->m_page->chkBlackpoint->isChecked());
         cfg.setAllowLCMSOptimization(m_colorSettings->m_page->chkAllowLCMSOptimization->isChecked());
         cfg.setForcePaletteColors(m_colorSettings->m_page->chkForcePaletteColor->isChecked());
+        cfg.setColorHistoryPerDocument(m_colorSettings->m_page->chkColorHistoryPerDocument->isChecked());
         cfg.setPasteBehaviour(m_colorSettings->m_pasteBehaviourGroup.checkedId());
         cfg.setRenderIntent(m_colorSettings->m_page->cmbMonitorIntent->currentIndex());
 

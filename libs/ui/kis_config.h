@@ -168,6 +168,9 @@ public:
     bool forcePaletteColors(bool defaultValue = false) const;
     void setForcePaletteColors(bool forcePaletteColors);
 
+    bool colorHistoryPerDocument(bool defaultValue = false) const;
+    void setColorHistoryPerDocument(bool perDocument);
+
     void writeKoColor(const QString& name, const KoColor& color) const;
     KoColor readKoColor(const QString& name, const KoColor& color = KoColor()) const;
 

@@ -16,6 +16,7 @@
 #include <QList>
 #include <kis_icon.h>
 #include "KisDocument.h"
+#include "kis_config_notifier.h"
 
 KisColorHistory::KisColorHistory(QWidget *parent)
     : KisColorPatches("lastUsedColors", parent)
@@ -26,19 +27,18 @@ KisColorHistory::KisColorHistory(QWidget *parent)
     m_clearButton->setIcon(KisIconUtils::loadIcon("dialog-cancel-16"));
     m_clearButton->setToolTip(i18n("Clear all color history"));
     m_clearButton->setAutoRaise(true);
+    updateStrategy();
+
     connect(m_clearButton, SIGNAL(clicked()), this, SLOT(clearColorHistory()));
+    connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateStrategy()));
 
     setAdditionalButtons({m_clearButton});
 }
 
 void KisColorHistory::unsetCanvas()
 {
-    if (m_resourceProvider && m_document) {
-        // Remember color history so we can use it as default for new image or save on shutdown
-        m_resourceProvider->setLastColorHistory(m_document->colorHistory());
-    }
-    m_resourceProvider = 0;
-    m_document = 0;
+    m_resourceProvider = nullptr;
+    m_document = nullptr;
 
     KisColorPatches::unsetCanvas();
 }
@@ -56,56 +56,68 @@ void KisColorHistory::setCanvas(KisCanvas2 *canvas)
     m_resourceProvider = canvas->imageView()->resourceProvider();
     m_document = canvas->viewManager()->document();
 
-    if (m_resourceProvider && m_document) {
-        // For new document, or if loaded from non .kra file, inherit the recent history if available
-        if (m_document->colorHistory().empty()) {
-            QList<KoColor> existingColors = colors();
-            if (existingColors.empty()) {
-                // Use last color history if otherwise it would be empty (new start).
-                m_document->setColorHistory(m_resourceProvider->lastColorHistory());
-            } else {
-                // Try to stick with what the user has seen the last
-                m_document->setColorHistory(existingColors);
-            }
-        }
+    setColors(colorHistory());
 
-        connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)),
-                this, SLOT(addColorToHistory(KoColor)), Qt::UniqueConnection);
-
-        setColors(m_document->colorHistory());
-    }
+    connect(m_resourceProvider, SIGNAL(sigFGColorUsed(KoColor)),
+            this, SLOT(addColorToHistory(KoColor)), Qt::UniqueConnection);
 }
 
-KisColorSelectorBase* KisColorHistory::createPopup() const
+KisColorSelectorBase *KisColorHistory::createPopup() const
 {
-    KisColorHistory* ret = new KisColorHistory();
+    KisColorHistory *ret = new KisColorHistory();
     ret->setCanvas(m_canvas);
     ret->setColors(colors());
     return ret;
 }
 
-void KisColorHistory::addColorToHistory(const KoColor& color)
+void KisColorHistory::addColorToHistory(const KoColor &color)
 {
     // don't add color in erase mode. See https://bugs.kde.org/show_bug.cgi?id=298940
     if (m_resourceProvider && m_resourceProvider->currentCompositeOp() == COMPOSITE_ERASE) return;
 
-    if (m_document) {
-        QList<KoColor> colorHistory = m_document->colorHistory();
+    QList<KoColor> history = colorHistory();
 
-        colorHistory.removeAll(color);
-        colorHistory.prepend(color);
+    history.removeAll(color);
+    history.prepend(color);
 
-        //the history holds 200 colors, but not all are displayed
-        if (colorHistory.size() > 200) {
-            colorHistory.removeLast();
-        }
-        m_document->setColorHistory(colorHistory);
-        setColors(colorHistory);
+    //the history holds 200 colors, but not all are displayed
+    if (history.size() > 200) {
+        history.removeLast();
+    }
+
+    updateColorHistory(history);
+}
+
+void KisColorHistory::clearColorHistory()
+{
+    updateColorHistory(QList<KoColor>());
+}
+
+QList<KoColor> KisColorHistory::colorHistory()
+{
+    if (m_history_per_document && m_document) {
+        return m_document->colorHistory();
+    } else if (m_resourceProvider) {
+        return m_resourceProvider->colorHistory();
+    } else {
+        return QList<KoColor>();
     }
 }
 
-void KisColorHistory::clearColorHistory() {
-    QList<KoColor> empty;
-    m_document->setColorHistory(empty);
-    setColors(empty);
+void KisColorHistory::updateColorHistory(const QList<KoColor> &history)
+{
+    if (m_history_per_document && m_document) {
+        m_document->setColorHistory(history);
+    } else if (m_resourceProvider) {
+        m_resourceProvider->setColorHistory(history);
+    }
+    setColors(history);
 }
+
+void KisColorHistory::updateStrategy()
+{
+   KisConfig config(true);
+   m_history_per_document = config.colorHistoryPerDocument();
+   updateColorHistory(colorHistory()); // Show with respect to the current strategy
+}
+

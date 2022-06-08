@@ -127,7 +127,14 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="2">
+       <item row="5" column="1">
+        <widget class="QCheckBox" name="chkColorHistoryPerDocument">
+         <property name="text">
+          <string>Separate color history for each document.</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2">
         <spacer name="verticalSpacer_3">
          <property name="orientation">
           <enum>Qt::Vertical</enum>

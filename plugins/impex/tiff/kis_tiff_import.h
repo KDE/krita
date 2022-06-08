@@ -8,7 +8,16 @@
 
 #include <QVariant>
 
+#include <tiffio.h>
+
 #include <KisImportExportFilter.h>
+#include <config-tiff.h>
+#include <kis_types.h>
+
+class QBuffer;
+class KisTiffPsdLayerRecord;
+class KisTiffPsdResourceRecord;
+struct KisTiffBasicInfo;
 
 class KisTIFFImport : public KisImportExportFilter
 {
@@ -17,8 +26,36 @@ public:
     KisTIFFImport(QObject *parent, const QVariantList &);
     ~KisTIFFImport() override;
     bool supportsIO() const override { return false; }
-public:
-    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
+    KisImportExportErrorCode
+    convert(KisDocument *document,
+            QIODevice *io,
+            KisPropertiesConfigurationSP configuration = nullptr) override;
+
+private:
+    KisImportExportErrorCode readTIFFDirectory(KisDocument *m_doc, TIFF *image);
+
+    /**
+     * Imports the image from the TIFF descriptor.
+     */
+    KisImportExportErrorCode readImageFromTiff(KisDocument *m_doc,
+                                               TIFF *image,
+                                               KisTiffBasicInfo &basicInfo);
+#ifdef TIFF_HAS_PSD_TAGS
+    /**
+     * Imports the image from the PSD descriptor attached.
+     * If this function is invoked, readTIFFDirectory will only
+     * parse the first image descriptor.
+     */
+    KisImportExportErrorCode
+    readImageFromPsd(KisDocument *m_doc,
+                     const KisTiffPsdLayerRecord &photoshopLayerRecord,
+                     KisTiffPsdResourceRecord &photoshopImageResourceRecord,
+                     QBuffer &photoshopLayerData,
+                     const KisTiffBasicInfo &basicInfo);
+#endif // TIFF_HAS_PSD_TAGS
+
+    KisImageSP m_image;
+    bool m_photoshopBlockParsed = false;
 };
 
 #endif

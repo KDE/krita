@@ -59,6 +59,23 @@ struct KisDisplayColorConverter::Private
 
     const KoColorProfile* inputImageProfile = 0;
 
+    mutable const KoColorSpace *cachedOcioInputColorSpace = 0;
+    mutable const KoColorSpace *cachedOcioOutputColorSpace = 0;
+    mutable const KoColorSpace *cachedQtWidgetsColorSpace = 0;
+    mutable const KoColorSpace *cachedOpenGLSurfaceColorSpace = 0;
+
+    // this color space will never change during the run of Krita
+    mutable const KoColorSpace *cachedIntermediateColorSpace = 0;
+
+    void notifyDisplayConfigurationChanged() {
+        cachedOcioInputColorSpace = 0;
+        cachedOcioOutputColorSpace = 0;
+        cachedQtWidgetsColorSpace = 0;
+        cachedOpenGLSurfaceColorSpace = 0;
+
+        emit q->displayConfigurationChanged();
+    }
+
     const KoColorProfile* qtWidgetsProfile() const {
         return useHDRMode ? KoColorSpaceRegistry::instance()->p709SRGBProfile() : monitorProfile;
     }
@@ -77,45 +94,62 @@ struct KisDisplayColorConverter::Private
     }
 
     const KoColorSpace* ocioInputColorSpace() const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Float32BitsColorDepthID.id(),
-                    ocioInputProfile());
+        return cachedOcioInputColorSpace
+            ? cachedOcioInputColorSpace
+            : (cachedOcioInputColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Float32BitsColorDepthID.id(),
+                                    ocioInputProfile()));
     }
 
     const KoColorSpace* ocioOutputColorSpace() const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Float32BitsColorDepthID.id(),
-                    ocioOutputProfile());
+        return cachedOcioOutputColorSpace
+            ? cachedOcioOutputColorSpace
+            : (cachedOcioOutputColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Float32BitsColorDepthID.id(),
+                                    ocioOutputProfile()));
+
     }
 
     const KoColorSpace* qtWidgetsColorSpace() const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Integer8BitsColorDepthID.id(),
-                    qtWidgetsProfile());
+        return cachedQtWidgetsColorSpace
+            ? cachedQtWidgetsColorSpace
+            : (cachedQtWidgetsColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Integer8BitsColorDepthID.id(),
+                                    qtWidgetsProfile()));
+
     }
 
     const KoColorSpace* openGLSurfaceColorSpace(const KoID &bitDepthId) const {
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    bitDepthId.id(),
-                    openGLSurfaceProfile());
+        return cachedOpenGLSurfaceColorSpace
+            ? cachedOpenGLSurfaceColorSpace
+            : (cachedOpenGLSurfaceColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    bitDepthId.id(),
+                                    openGLSurfaceProfile()));
     }
 
     const KoColorSpace* intermediateColorSpace() const {
         // the color space where we apply exposure and
         // gamma should always be linear
-        return KoColorSpaceRegistry::instance()->
-                colorSpace(
-                    RGBAColorModelID.id(),
-                    Float32BitsColorDepthID.id(),
-                    KoColorSpaceRegistry::instance()->p2020G10Profile());
+        return cachedIntermediateColorSpace
+            ? cachedIntermediateColorSpace
+            : (cachedIntermediateColorSpace =
+                KoColorSpaceRegistry::instance()->
+                                colorSpace(
+                                    RGBAColorModelID.id(),
+                                    Float32BitsColorDepthID.id(),
+                                    KoColorSpaceRegistry::instance()->p2020G10Profile()));
     }
 
     const KoColorProfile *monitorProfile;
@@ -242,7 +276,7 @@ void KisDisplayColorConverter::setImageColorSpace(const KoColorSpace *cs)
         cs->profile() :
         KoColorSpaceRegistry::instance()->p709SRGBProfile();
 
-    emit displayConfigurationChanged();
+    m_d->notifyDisplayConfigurationChanged();
 }
 
 
@@ -337,7 +371,7 @@ void KisDisplayColorConverter::Private::selectPaintingColorSpace()
         paintingColorSpace = nodeColorSpace;
     }
 
-    emit q->displayConfigurationChanged();
+    notifyDisplayConfigurationChanged();
 }
 
 const KoColorSpace* KisDisplayColorConverter::paintingColorSpace() const
@@ -361,7 +395,7 @@ void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorPr
     m_d->renderingIntent = renderingIntent();
     m_d->conversionFlags = conversionFlags();
 
-    emit displayConfigurationChanged();
+    m_d->notifyDisplayConfigurationChanged();
 }
 
 void KisDisplayColorConverter::setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter)
@@ -436,7 +470,7 @@ bool KisDisplayColorConverter::isHDRMode() const
 void KisDisplayColorConverter::notifyOpenGLCanvasIsActive(bool value)
 {
     m_d->openGLCanvasIsActive = value;
-    emit displayConfigurationChanged();
+    m_d->notifyDisplayConfigurationChanged();
 }
 
 

@@ -6,6 +6,14 @@
   </author>
  <class>WdgDisplaySettings</class>
  <widget class="QWidget" name="WdgDisplaySettings">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>642</width>
+    <height>293</height>
+   </rect>
+  </property>
   <property name="sizePolicy">
    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
     <horstretch>0</horstretch>
@@ -93,25 +101,6 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="1">
-           <widget class="QCheckBox" name="chkDisableVsync">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="toolTip">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Try to disable vsync for Krita. This makes painting more responsive. Uncheck only when experiencing crashes with some GPU/driver combinations.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-            <property name="text">
-             <string>Disable vsync (needs restart)</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="1">
            <widget class="QCheckBox" name="chkUseTextureBuffer">
             <property name="sizePolicy">
@@ -138,7 +127,7 @@
             </property>
            </widget>
           </item>
-          <item row="5" column="0" colspan="2">
+          <item row="4" column="0" colspan="2">
            <widget class="QLabel" name="lblOpenGLWarnings">
             <property name="text">
              <string notr="true">OpenGL Warnings</string>
@@ -190,7 +179,7 @@
             </property>
            </widget>
           </item>
-          <item row="6" column="0" colspan="2">
+          <item row="5" column="0" colspan="2">
            <spacer name="verticalSpacer_3">
             <property name="orientation">
              <enum>Qt::Vertical</enum>

@@ -204,12 +204,6 @@ public:
     bool useOpenGLTextureBuffer(bool defaultValue = false) const;
     void setUseOpenGLTextureBuffer(bool useBuffer);
 
-    // XXX Unused?
-    bool disableVSync(bool defaultValue = false) const;
-    void setDisableVSync(bool disableVSync);
-
-    bool showAdvancedOpenGLSettings(bool defaultValue = false) const;
-
     bool forceOpenGLFenceWorkaround(bool defaultValue = false) const;
 
     int numMipmapLevels(bool defaultValue = false) const;

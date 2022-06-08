@@ -55,6 +55,8 @@ KisWdgOptionsWebP::KisWdgOptionsWebP(QWidget *parent)
     targetPSNR->setDisplayUnit(false);
     targetPSNR->setSuffix(" dB");
 
+    metaDataFilters->setModel(&m_filterRegistryModel);
+
     connect(preset,
             SIGNAL(currentIndexChanged(int)),
             this,
@@ -64,6 +66,8 @@ KisWdgOptionsWebP::KisWdgOptionsWebP(QWidget *parent)
 
 void KisWdgOptionsWebP::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {
+    haveAnimation->setChecked(cfg->getBool("haveAnimation", true));
+
     preset->setCurrentIndex(cfg->getInt("preset", 0));
     lossless->setChecked(cfg->getBool("lossless", true));
     quality->setValue(cfg->getDouble("quality", 75.0));
@@ -90,12 +94,18 @@ void KisWdgOptionsWebP::setConfiguration(const KisPropertiesConfigurationSP cfg)
     threadLevel->setChecked(cfg->getBool("thread_level", false));
     lowMemory->setChecked(cfg->getBool("low_memory", false));
     nearLossless->setValue(cfg->getInt("near_lossless", 100));
-    exact->setChecked(cfg->getBool("exact", 0));
+    exact->setChecked(cfg->getBool("exact", false));
     useSharpYUV->setChecked(cfg->getBool("use_sharp_yuv", false));
 #if WEBP_ENCODER_ABI_VERSION >= 0x020f
     qMin->setValue(cfg->getInt("qmin", 0));
     qMax->setValue(cfg->getInt("qmax", 100));
 #endif
+
+    exif->setChecked(cfg->getBool("exif", true));
+    xmp->setChecked(cfg->getBool("xmp", true));
+    chkMetadata->setChecked(cfg->getBool("storeMetaData", true));
+    m_filterRegistryModel.setEnabledFilters(
+        cfg->getString("filters").split(','));
 }
 
 void KisWdgOptionsWebP::changePreset()
@@ -151,6 +161,8 @@ KisPropertiesConfigurationSP KisWdgOptionsWebP::configuration() const
 {
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
 
+    cfg->setProperty("haveAnimation", haveAnimation->isChecked());
+
     cfg->setProperty("preset", preset->currentIndex());
     cfg->setProperty("lossless", lossless->isChecked());
     cfg->setProperty("quality", quality->value());
@@ -185,6 +197,17 @@ KisPropertiesConfigurationSP KisWdgOptionsWebP::configuration() const
     cfg->setProperty("qmin", qMin->value());
     cfg->setProperty("qmax", qMax->value());
 #endif
+
+    cfg->setProperty("exif", exif->isChecked());
+    cfg->setProperty("xmp", xmp->isChecked());
+    cfg->setProperty("storeMetaData", chkMetadata->isChecked());
+
+    QString enabledFilters;
+    for (const KisMetaData::Filter *filter :
+         m_filterRegistryModel.enabledFilters()) {
+        enabledFilters += filter->id() + ',';
+    }
+    cfg->setProperty("filters", enabledFilters);
 
     return cfg;
 }

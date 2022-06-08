@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>557</width>
-    <height>529</height>
+    <width>480</width>
+    <height>360</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -31,114 +31,113 @@
        <string>General</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout">
-       <property name="formAlignment">
-        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
-       </property>
-       <item row="0" column="0">
-        <widget class="QLabel" name="lblPreset">
+       <item row="0" column="0" colspan="2">
+        <widget class="QCheckBox" name="haveAnimation">
          <property name="text">
-          <string>Preset</string>
+          <string>Save as animated WebP</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QComboBox" name="preset"/>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="lblLossless">
-         <property name="text">
-          <string>Lossless compression</string>
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Encoding options</string>
          </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="lossless">
-         <property name="text">
-          <string>Enabled</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="lblQuality">
-         <property name="toolTip">
-          <string>If Lossless is enabled: 0 = fastest but larger files, 100 = slower but better.
+         <layout class="QFormLayout" name="formLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblPreset">
+            <property name="text">
+             <string>Preset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="preset"/>
+          </item>
+          <item row="1" column="0" colspan="2">
+           <widget class="QCheckBox" name="lossless">
+            <property name="text">
+             <string>Lossless encoding</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="lblQuality">
+            <property name="toolTip">
+             <string>If Lossless is enabled: 0 = fastest but larger files, 100 = slower but better.
 If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
-         </property>
-         <property name="text">
-          <string>Quality</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="KisDoubleSliderSpinBox" name="quality">
-         <property name="toolTip">
-          <string>If Lossless is enabled: 0 = fastest but larger files, 100 = slower but better.
+            </property>
+            <property name="text">
+             <string>Quality</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="KisDoubleSliderSpinBox" name="quality">
+            <property name="toolTip">
+             <string>If Lossless is enabled: 0 = fastest but larger files, 100 = slower but better.
 If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
-         </property>
-         <property name="suffix">
-          <string>%</string>
-         </property>
-         <property name="maximum">
-          <number>100</number>
-         </property>
-         <property name="value">
-          <number>100</number>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="lblTradeoff">
-         <property name="text">
-          <string>Tradeoff</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
-          <widget class="QLabel" name="lblFaster">
-           <property name="text">
-            <string>Faster</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="lblSlowerBetter">
-           <property name="text">
-            <string>Slower/Better</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0" colspan="2">
-          <widget class="KisSliderSpinBox" name="tradeoff">
-           <property name="toolTip">
-            <string>Quality/speed trade-off (0 = fast, 6 = slower-better)</string>
-           </property>
-           <property name="maximum">
-            <number>6</number>
-           </property>
-           <property name="value">
-            <number>3</number>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="lblDithering">
-         <property name="text">
-          <string>Dithering</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="dithering">
-         <property name="text">
-          <string>Enabled</string>
-         </property>
+            </property>
+            <property name="suffix">
+             <string>%</string>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="lblTradeoff">
+            <property name="text">
+             <string>Tradeoff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblFaster">
+              <property name="text">
+               <string>Faster</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="lblSlowerBetter">
+              <property name="text">
+               <string>Slower/Better</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+             <widget class="KisSliderSpinBox" name="tradeoff">
+              <property name="toolTip">
+               <string>Quality/speed trade-off (0 = fast, 6 = slower-better)</string>
+              </property>
+              <property name="maximum">
+               <number>6</number>
+              </property>
+              <property name="value">
+               <number>3</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="4" column="0" colspan="2">
+           <widget class="QCheckBox" name="dithering">
+            <property name="text">
+             <string>Dithering</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
@@ -168,12 +167,6 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
-         <property name="minimumSize">
-          <size>
-           <width>535</width>
-           <height>476</height>
-          </size>
-         </property>
          <property name="frameShape">
           <enum>QFrame::NoFrame</enum>
          </property>
@@ -193,14 +186,6 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
           <set>Qt::AlignHCenter|Qt::AlignTop</set>
          </property>
          <widget class="QWidget" name="scrollAreaWidgetContents">
-          <property name="geometry">
-           <rect>
-            <x>0</x>
-            <y>0</y>
-            <width>521</width>
-            <height>858</height>
-           </rect>
-          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
             <horstretch>0</horstretch>
@@ -797,6 +782,60 @@ If Lossless is disabled: 0 = smallest size, 100 = largest size.</string>
            </item>
           </layout>
          </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="metadata">
+      <attribute name="title">
+       <string>Metadata</string>
+      </attribute>
+      <layout class="QFormLayout" name="formLayout_7">
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="chkMetadata">
+         <property name="title">
+          <string>Store Document Metadata</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5" columnstretch="0,0">
+          <item row="0" column="0">
+           <widget class="QGroupBox" name="groupBox_3">
+            <property name="title">
+             <string>Formats:</string>
+            </property>
+            <layout class="QFormLayout" name="formLayout_5">
+             <item row="0" column="0" colspan="2">
+              <widget class="QCheckBox" name="exif">
+               <property name="text">
+                <string>Exif</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0" colspan="2">
+              <widget class="QCheckBox" name="xmp">
+               <property name="text">
+                <string>XMP</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QGroupBox" name="groupBox_4">
+            <property name="title">
+             <string comment="WebP metadata options">Filters:</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_4">
+             <item>
+              <widget class="QListView" name="metaDataFilters"/>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>

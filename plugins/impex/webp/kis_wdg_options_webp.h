@@ -10,6 +10,7 @@
 #define DLG_WEBP_EXPORT_H
 
 #include <kis_config_widget.h>
+#include <kis_meta_data_filter_registry_model.h>
 
 #include "ui_kis_wdg_options_webp.h"
 
@@ -23,6 +24,9 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 private Q_SLOTS:
     void changePreset();
+
+private:
+    KisMetaData::FilterRegistryModel m_filterRegistryModel;
 };
 
 #endif // DLG_WEBP_EXPORT_H

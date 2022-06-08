@@ -226,7 +226,7 @@ void KisOpenGLImageTextures::recreateImageTextureTiles()
     KisConfig config(true);
     KisOpenGL::FilterMode mode = (KisOpenGL::FilterMode)config.openGLFilteringMode();
 
-    initBufferStorage(config.useOpenGLTextureBuffer());
+    initBufferStorage(KisOpenGL::shouldUseTextureBuffers(config.useOpenGLTextureBuffer()));
 
     QOpenGLContext *ctx = QOpenGLContext::currentContext();
     if (ctx) {
@@ -441,10 +441,11 @@ void KisOpenGLImageTextures::updateConfig(bool useBuffer, int NumMipmapLevels)
 {
     if(m_textureTiles.isEmpty()) return;
 
-    initBufferStorage(useBuffer);
+    const bool effectiveUseBuffer = KisOpenGL::shouldUseTextureBuffers(useBuffer);
+    initBufferStorage(effectiveUseBuffer);
 
     Q_FOREACH (KisTextureTile *tile, m_textureTiles) {
-        tile->setBufferStorage(useBuffer ? &m_bufferStorage : 0);
+        tile->setBufferStorage(effectiveUseBuffer ? &m_bufferStorage : 0);
         tile->setNumMipmapLevels(NumMipmapLevels);
     }
 }

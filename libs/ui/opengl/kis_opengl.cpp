@@ -72,6 +72,8 @@ namespace
     bool g_useBufferInvalidation = false;
     PFNGLINVALIDATEBUFFERDATAPROC g_glInvalidateBufferData = nullptr;
 
+    bool g_forceDisableTextureBuffers = false;
+
     void overrideSupportedRenderers(KisOpenGL::OpenGLRenderers supportedRenderers, KisOpenGL::OpenGLRenderer preferredByQt) {
         g_supportedRenderers = supportedRenderers;
         g_rendererPreferredByQt = preferredByQt;
@@ -139,6 +141,33 @@ void KisOpenGL::initialize()
     openGLCheckResult =
         KisOpenGLModeProber::instance()->probeFormat(config, false);
 
+#ifdef Q_OS_WIN
+
+    if (!qEnvironmentVariableIsSet("KRITA_UNLOCK_TEXTURE_BUFFERS") &&
+        openGLCheckResult->rendererString().toUpper().contains("ANGLE")) {
+
+        // Angle should always be openGLES...
+        KIS_SAFE_ASSERT_RECOVER_NOOP(KisOpenGL::hasOpenGLES());
+
+        /**
+         * Angle works badly with texture buffers on DirectX. It does no distinction
+         * between stream and dynamic buffers, therefore it does too many copies of the
+         * data:
+         *
+         * source user data -> ram buffer -> staging buffer -> native buffer -> texture,
+         *
+         * which is extremely slow when painting with big brushes. On Angle we should
+         * just use normal unbuffered texture uploads
+         */
+
+        g_forceDisableTextureBuffers = true;
+        appendOpenGLWarningString(
+            ki18n("Texture buffers are explicitly disabled on ANGLE renderer due "
+                  "to performance issues."));
+    }
+#endif
+
+
     g_debugText.clear();
     QDebug debugOut(&g_debugText);
     debugOut << "OpenGL Info\n";
@@ -157,6 +186,7 @@ void KisOpenGL::initialize()
         debugOut << "\n     is OpenGL ES:" << openGLCheckResult->isOpenGLES();
         debugOut << "\n  supportsBufferMapping:" << openGLCheckResult->supportsBufferMapping();
         debugOut << "\n  supportsBufferInvalidation:" << openGLCheckResult->supportsBufferInvalidation();
+        debugOut << "\n  forceDisableTextureBuffers:" << g_forceDisableTextureBuffers;
         debugOut << "\n  Extensions:";
         for (const auto &i: openGLCheckResult->extensions()) {
             debugOut << "\n    " << QString::fromLatin1(i);
@@ -338,6 +368,18 @@ bool KisOpenGL::supportsBufferMapping()
 {
     initialize();
     return openGLCheckResult && openGLCheckResult->supportsBufferMapping();
+}
+
+bool KisOpenGL::forceDisableTextureBuffers()
+{
+    initialize();
+    return g_forceDisableTextureBuffers;
+}
+
+bool KisOpenGL::shouldUseTextureBuffers(bool userPreference)
+{
+    initialize();
+    return !g_forceDisableTextureBuffers && userPreference;
 }
 
 bool KisOpenGL::useTextureBufferInvalidation()

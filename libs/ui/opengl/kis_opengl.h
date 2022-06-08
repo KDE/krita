@@ -100,6 +100,9 @@ public:
 
     static bool supportsBufferMapping();
 
+    static bool forceDisableTextureBuffers();
+    static bool shouldUseTextureBuffers(bool userPreference);
+
     static bool useTextureBufferInvalidation();
 
     /**

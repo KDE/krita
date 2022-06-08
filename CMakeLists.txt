@@ -786,7 +786,7 @@ endif()
 ###########################
 
 
-find_package(WebP 1.2.0)
+find_package(WebP 1.2.0 COMPONENTS demux mux)
 set_package_properties(WebP PROPERTIES
     URL "https://developers.google.com/speed/webp"
     TYPE OPTIONAL

@@ -199,12 +199,21 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
 
     // Set the compression options
     TIFFSetField(image(), TIFFTAG_COMPRESSION, m_options->compressionType);
-    TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
-    TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
-    TIFFSetField(image(), TIFFTAG_PIXARLOGQUALITY, m_options->pixarLogCompress);
+    if (m_options->compressionType == COMPRESSION_JPEG) {
+        TIFFSetField(image(), TIFFTAG_JPEGQUALITY, m_options->jpegQuality);
+    } else if (m_options->compressionType == COMPRESSION_DEFLATE) {
+        TIFFSetField(image(), TIFFTAG_ZIPQUALITY, m_options->deflateCompress);
+    } else if (m_options->compressionType == COMPRESSION_PIXARLOG) {
+        TIFFSetField(image(),
+                     TIFFTAG_PIXARLOGQUALITY,
+                     m_options->pixarLogCompress);
+    }
 
     // Set the predictor
-    TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
+    if (m_options->compressionType == COMPRESSION_LZW
+        || m_options->compressionType == COMPRESSION_ADOBE_DEFLATE
+        || m_options->compressionType == COMPRESSION_DEFLATE)
+        TIFFSetField(image(), TIFFTAG_PREDICTOR, m_options->predictor);
 
     // Use contiguous configuration
     TIFFSetField(image(), TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);

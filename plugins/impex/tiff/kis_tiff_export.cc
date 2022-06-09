@@ -62,9 +62,6 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
         cfg = lastSavedConfiguration(KisDocument::nativeFormatMimeType(), "image/tiff");
     }
 
-    const KoColorSpace* cs = document->savingImage()->colorSpace();
-    cfg->setProperty("type", (int)cs->channels()[0]->channelValueType());
-
     KisTIFFOptions options;
     options.fromProperties(configuration);
 
@@ -75,12 +72,6 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
                     return node->parent() && node->inherits("KisGroupLayer");
                 });
         options.flatten = hasGroupLayers;
-    }
-
-    if ((cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT16
-         || cs->channels()[0]->channelValueType() == KoChannelInfo::FLOAT32) && options.predictor == 2) {
-        // FIXME THIS IS AN HACK FIX THAT IN 2.0 !! (62456a7b47636548c6507593df3e2bdf440f7544, BUG:135649)
-        options.predictor = 3;
     }
 
     KisImageSP kisimage = [&]() {

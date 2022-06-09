@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author><![CDATA[
-  SPDX-FileCopyrightText: 2021 L. E. Segovia <amy@amyspark.me>
+ <author>
+  SPDX-FileCopyrightText: 2021 L. E. Segovia &lt;amy@amyspark.me&gt;
   SPDX-License-Identifier: GPL-3.0-or-later
- ]]></author>
+ </author>
  <class>KisWdgOptionsTIFF</class>
  <widget class="QWidget" name="KisWdgOptionsTIFF">
   <property name="geometry">
@@ -61,28 +61,16 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="KComboBox" name="kComboBoxPredictor">
+       <widget class="QComboBox" name="kComboBoxPredictor">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="toolTip">
          <string>Using a predictor can improve the compression (mostly for LZW and deflate.)</string>
         </property>
         <property name="currentItem" stdset="0">
          <number>0</number>
         </property>
-        <item>
-         <property name="text">
-          <string>None</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Horizontal Differencing</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Floating Point Horizontal Differencing</string>
-         </property>
-        </item>
        </widget>
       </item>
       <item row="2" column="0" colspan="2">
@@ -102,7 +90,7 @@
           </widget>
          </item>
          <item row="0" column="1">
-          <widget class="KComboBox" name="kComboBoxPSDCompressionType">
+          <widget class="QComboBox" name="kComboBoxPSDCompressionType">
            <property name="currentItem" stdset="0">
             <number>0</number>
            </property>
@@ -557,11 +545,6 @@ You can uncheck the box if you are not using transparency and you want to make t
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">kcombobox.h</header>
-  </customwidget>
   <customwidget>
    <class>KisSliderSpinBox</class>
    <extends>QSpinBox</extends>

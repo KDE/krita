@@ -1481,10 +1481,11 @@ KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice
         // HACK!! Externally parse the Exif metadata
         // libtiff has no way to access the fields wholesale
         try {
-            Exiv2::BasicIo::AutoPtr fileIo(
-                new Exiv2::FileIo(QFile::encodeName(filename()).toStdString()));
+            const std::string encodedFilename =
+                QFile::encodeName(filename()).toStdString();
 
-            Exiv2::Image::AutoPtr readImg(Exiv2::ImageFactory::open(fileIo));
+            const std::unique_ptr<Exiv2::Image> readImg(
+                Exiv2::ImageFactory::open(encodedFilename).release());
 
             readImg->readMetadata();
 

@@ -688,66 +688,58 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
 
     KisTIFFReaderBase *tiffReader = nullptr;
 
-    quint8 poses[5];
     KisTIFFPostProcessor *postprocessor = nullptr;
 
     // Configure poses
     uint16_t nbcolorsamples = nbchannels - extrasamplescount;
+    const auto poses = [&]() -> std::array<quint8, 5> {
+        switch (color_type) {
+        case PHOTOMETRIC_MINISWHITE:
+        case PHOTOMETRIC_MINISBLACK:
+            return {0, 1};
+        case PHOTOMETRIC_CIELAB:
+        case PHOTOMETRIC_ICCLAB:
+            return {0, 1, 2, 3};
+        case PHOTOMETRIC_RGB:
+            if (sampletype == SAMPLEFORMAT_IEEEFP) {
+                return {0, 1, 2, 3};
+            } else {
+                return {2, 1, 0, 3};
+            }
+        case PHOTOMETRIC_SEPARATED:
+            return {0, 1, 2, 3, 4};
+        default:
+            return {};
+        }
+    }();
+
     switch (color_type) {
     case PHOTOMETRIC_MINISWHITE: {
-        poses[0] = 0;
-        poses[1] = 1;
         postprocessor =
             makePostProcessor<KisTIFFPostProcessorInvert>(nbcolorsamples,
                                                           colorSpaceIdTag);
     } break;
     case PHOTOMETRIC_MINISBLACK: {
-        poses[0] = 0;
-        poses[1] = 1;
         postprocessor =
             makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
                                                          colorSpaceIdTag);
     } break;
     case PHOTOMETRIC_CIELAB: {
-        poses[0] = 0;
-        poses[1] = 1;
-        poses[2] = 2;
-        poses[3] = 3;
         postprocessor = makePostProcessor<KisTIFFPostProcessorCIELABtoICCLAB>(
             nbcolorsamples,
             colorSpaceIdTag);
     } break;
     case PHOTOMETRIC_ICCLAB: {
-        poses[0] = 0;
-        poses[1] = 1;
-        poses[2] = 2;
-        poses[3] = 3;
         postprocessor =
             makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
                                                          colorSpaceIdTag);
     } break;
     case PHOTOMETRIC_RGB: {
-        if (sampletype == SAMPLEFORMAT_IEEEFP) {
-            poses[2] = 2;
-            poses[1] = 1;
-            poses[0] = 0;
-            poses[3] = 3;
-        } else {
-            poses[0] = 2;
-            poses[1] = 1;
-            poses[2] = 0;
-            poses[3] = 3;
-        }
         postprocessor =
             makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
                                                          colorSpaceIdTag);
     } break;
     case PHOTOMETRIC_SEPARATED: {
-        poses[0] = 0;
-        poses[1] = 1;
-        poses[2] = 2;
-        poses[3] = 3;
-        poses[4] = 4;
         postprocessor =
             makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
                                                          colorSpaceIdTag);

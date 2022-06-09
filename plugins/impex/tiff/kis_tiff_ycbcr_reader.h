@@ -36,7 +36,7 @@ public:
     KisTIFFYCbCrReader(KisPaintDeviceSP device,
                        quint32 width,
                        quint32 height,
-                       quint8 *poses,
+                       const std::array<quint8, 5> &poses,
                        int32_t alphapos,
                        uint16_t sourceDepth,
                        uint16_t sampleformat,

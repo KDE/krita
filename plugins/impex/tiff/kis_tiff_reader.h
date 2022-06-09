@@ -7,6 +7,7 @@
 #ifndef _KIS_TIFF_READER_H_
 #define _KIS_TIFF_READER_H_
 
+#include <array>
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
@@ -221,7 +222,7 @@ protected:
         return m_premultipliedAlpha;
     }
 
-    inline quint8 *poses()
+    inline const std::array<quint8, 5> &poses() const
     {
         return m_poses;
     }
@@ -244,7 +245,7 @@ private:
     quint16 m_nbcolorssamples;
     quint16 m_nbextrasamples;
     bool m_premultipliedAlpha;
-    quint8 *m_poses;
+    std::array<quint8, 5> m_poses;
     KoColorTransformation *m_transformProfile;
     KisTIFFPostProcessor *mpostProcessImpl;
 };
@@ -255,7 +256,7 @@ public:
     using type = T;
 
     KisTIFFReaderTarget(KisPaintDeviceSP device,
-                        quint8 *poses,
+                        const std::array<quint8, 5> &poses,
                         int32_t alphapos,
                         uint16_t sourceDepth,
                         uint16_t sample_format,
@@ -439,7 +440,7 @@ public:
                              uint16_t *red,
                              uint16_t *green,
                              uint16_t *blue,
-                             quint8 *poses,
+                             const std::array<quint8, 5> &poses,
                              int32_t alphapos,
                              uint16_t sourceDepth,
                              uint16_t sample_format,

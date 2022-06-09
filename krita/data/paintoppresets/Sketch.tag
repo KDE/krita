@@ -13,6 +13,7 @@ Name[fi]=Luonnostelu
 Name[fr]=Croquis
 Name[hi]=रेखा-चित्र
 Name[hu]=Vázlat
+Name[ia]=Sketch
 Name[id]=Sketsa
 Name[it]=Schizzo
 Name[ko]=스케치

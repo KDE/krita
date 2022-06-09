@@ -13,6 +13,7 @@ Name[fi]=Muste
 Name[fr]=Encre
 Name[hi]=स्याही
 Name[hu]=Tinta
+Name[ia]=Tinta
 Name[id]=Tinta
 Name[it]=Inchiostro
 Name[ko]=잉크

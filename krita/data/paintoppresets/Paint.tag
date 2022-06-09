@@ -13,6 +13,7 @@ Name[fi]=Maalaus
 Name[fr]=Peinture
 Name[hi]=पेंट
 Name[hu]=Festés
+Name[ia]=Pictura
 Name[id]=Cat
 Name[it]=Pittura
 Name[ko]=페인트

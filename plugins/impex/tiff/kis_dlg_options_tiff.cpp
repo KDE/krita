@@ -54,6 +54,14 @@ KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
                 kComboBoxPredictor->setEnabled(index == deflate
                                                || index == lzw);
             });
+
+    kComboBoxPredictor->addItem(i18nc("TIFF options", "None"), 0);
+    kComboBoxPredictor->addItem(
+        i18nc("TIFF options", "Horizontal Differencing"),
+        1);
+    kComboBoxPredictor->addItem(
+        i18nc("TIFF options", "Floating Point Horizontal Differencing"),
+        2);
 }
 
 void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -77,10 +85,18 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
     compressionLevelPixarLog->setValue(cfg->getInt("pixarlog", 6));
     chkSaveProfile->setChecked(cfg->getBool("saveProfile", true));
 
-    if (cfg->getInt("type", -1) == KoChannelInfo::FLOAT16 || cfg->getInt("type", -1) == KoChannelInfo::FLOAT32) {
-        kComboBoxPredictor->removeItem(1);
-    } else {
-        kComboBoxPredictor->removeItem(2);
+    {
+        const QString colorDepthId =
+            cfg->getString(KisImportExportFilter::ColorDepthIDTag);
+
+        if (colorDepthId == Float16BitsColorDepthID.id()
+            || colorDepthId == Float32BitsColorDepthID.id()
+            || colorDepthId == Float16BitsColorDepthID.id()) {
+            kComboBoxPredictor->removeItem(1);
+        } else {
+            kComboBoxPredictor->removeItem(2);
+        }
+        }
     }
 
     {
@@ -93,8 +109,6 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
             alpha->setEnabled(false);
         }
     }
-
-
 }
 
 KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
@@ -102,7 +116,7 @@ KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
     cfg->setProperty("compressiontype",
                      kComboBoxCompressionType->currentData());
-    cfg->setProperty("predictor", kComboBoxPredictor->currentIndex());
+    cfg->setProperty("predictor", kComboBoxPredictor->currentData());
     cfg->setProperty("alpha", alpha->isChecked());
     cfg->setProperty("saveAsPhotoshop", chkPhotoshop->isChecked());
     cfg->setProperty("psdCompressionType", kComboBoxPSDCompressionType->currentIndex());

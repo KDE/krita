@@ -219,6 +219,37 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
             TIFFSetField(image(), TIFFTAG_ICCPROFILE, ba.size(), ba.constData());
         }
     }
+
+    {
+        // IPTC
+        KisMetaData::IOBackend *io =
+            KisMetadataBackendRegistry::instance()->value("iptc");
+        QBuffer buf;
+        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
+
+        if (!TIFFSetField(image(),
+                          TIFFTAG_RICHTIFFIPTC,
+                          static_cast<uint32_t>(buf.size()),
+                          buf.data().data())) {
+            dbgFile << "Failed to write the IPTC metadata to the TIFF field";
+        }
+    }
+
+    {
+        // XMP
+        KisMetaData::IOBackend *io =
+            KisMetadataBackendRegistry::instance()->value("xmp");
+        QBuffer buf;
+        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
+
+        if (!TIFFSetField(image(),
+                          TIFFTAG_XMLPACKET,
+                          static_cast<uint32_t>(buf.size()),
+                          buf.data().data())) {
+            dbgFile << "Failed to write the XMP metadata to the TIFF field";
+        }
+    }
+
     tsize_t stripsize = TIFFStripSize(image());
     std::unique_ptr<std::remove_pointer_t<tdata_t>, decltype(&_TIFFfree)> buff(
         _TIFFmalloc(stripsize),
@@ -285,27 +316,6 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     }
     buff.reset();
 
-    {
-        // IPTC
-        KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("iptc");
-        QBuffer buf;
-        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
-
-        if (!TIFFSetField(image(), TIFFTAG_RICHTIFFIPTC, static_cast<uint32_t>(buf.size()), buf.data().data())) {
-            dbgFile << "Failed to write the IPTC metadata to the TIFF field";
-        }
-    }
-
-    {
-        // XMP
-        KisMetaData::IOBackend *io = KisMetadataBackendRegistry::instance()->value("xmp");
-        QBuffer buf;
-        io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
-
-        if (!TIFFSetField(image(), TIFFTAG_XMLPACKET, static_cast<uint32_t>(buf.size()), buf.data().data())) {
-            dbgFile << "Failed to write the XMP metadata to the TIFF field";
-        }
-    }
     TIFFWriteDirectory(image());
     return true;
 }

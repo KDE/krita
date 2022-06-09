@@ -15,9 +15,46 @@
 
 #include "Ellipse.h"
 
+
 class __attribute__((visibility("default"))) PerspectiveBasedAssistantHelper
 {
+private:
+    PerspectiveBasedAssistantHelper();
+    ~PerspectiveBasedAssistantHelper();
+
+
 public:
+
+    class CacheData
+    {
+    public:
+        // vanishing points that one gets from getVanishingPoints
+        boost::optional<QPointF> vanishingPoint1 {boost::none};
+        boost::optional<QPointF> vanishingPoint2 {boost::none};
+
+        // distances from the horizon line to point 1, 2, 3 and 4 on the final polygon
+        QVector<qreal> distancesFromPoints;
+        qreal maxDistanceFromPoint {0.0};
+
+        QLineF horizon;
+
+        // final polygon
+        QPolygonF polygon;
+
+
+        typedef enum PerspectiveType {
+            None,
+            OneVp,
+            TwoVps
+        } PerspectiveType;
+
+
+        PerspectiveType type {None};
+
+    };
+
+
+
     // *** main functions ***
 
     // creates the convex hull, returns false if it's not a quadrilateral/tetragon
@@ -30,6 +67,12 @@ public:
     // distance in Perspective grid
     // used for calculating the Perspective sensor
     static qreal distanceInGrid(const QList<KisPaintingAssistantHandleSP>& handles, bool isAssistantComplete, const QPointF &point);
+
+    // distance in Perspective grid
+    // used for calculating the Perspective sensor
+    static qreal distanceInGrid(const CacheData& cache, const QPointF &point);
+
+    static void updateCacheData(CacheData& cache, const QPolygonF& poly);
 
     // vp1 - vp for lines 0-1 and 2-3
     // vp2 - vp for lines 1-2 and 3-0

@@ -183,17 +183,81 @@ qreal PerspectiveBasedAssistantHelper::distanceInGrid(const QList<KisPaintingAss
 
 }
 
-    if (inverse.m13() * point.x() + inverse.m23() * point.y() + inverse.m33() == 0.0) {
-        return infinity; // point at infinity
+qreal PerspectiveBasedAssistantHelper::distanceInGrid(const PerspectiveBasedAssistantHelper::CacheData &cache, const QPointF& point)
+{
+    qreal defaultValue = 1;
+    if (cache.maxDistanceFromPoint == 0.0) {
+        return defaultValue;
     }
 
-    return localScale(transform, inverse.map(point)) * inverseMaxLocalScale(transform);
+    if (!cache.vanishingPoint1 && !cache.vanishingPoint2) {
+        return defaultValue; // possibly wrong shape
+    } else if (!cache.vanishingPoint1 || !cache.vanishingPoint2) {
+        // result should be:
+        // dist from horizon / max dist from horizon
+        // horizon is parallel to the parallel sides of the tetragon (two must be parallel if there is only one vp)
+        qreal dist = kisDistanceToLine(point, cache.horizon);
+        return dist/cache.maxDistanceFromPoint;
+    } else if (cache.vanishingPoint1 && cache.vanishingPoint2) {
+        // should be:
+        // dist from vp-line / max dist from vp-line
+        qreal dist = kisDistanceToLine(point, cache.horizon);
+        return dist/cache.maxDistanceFromPoint;
+    }
+
+    return defaultValue;
+}
+
+void PerspectiveBasedAssistantHelper::updateCacheData(PerspectiveBasedAssistantHelper::CacheData &cache, const QPolygonF &poly)
+{
+    cache.polygon = poly;
+    bool r = PerspectiveBasedAssistantHelper::getVanishingPointsOptional(poly, cache.vanishingPoint1, cache.vanishingPoint2);
+    Q_UNUSED(r);
+
+    if (cache.vanishingPoint1 && cache.vanishingPoint2) {
+        cache.type = CacheData::TwoVps;
+    } else if (cache.vanishingPoint1 || cache.vanishingPoint2) {
+        cache.type = CacheData::OneVp;
+    } else {
+        cache.type = CacheData::None;
+        cache.horizon = QLineF();
+        cache.distancesFromPoints = QVector<qreal>();
+        cache.maxDistanceFromPoint = 0.0;
+        return;
+    }
+
+    if (cache.type == CacheData::TwoVps) {
+        cache.horizon = QLineF(cache.vanishingPoint1.get(), cache.vanishingPoint2.get());
+    } else if (cache.type == CacheData::OneVp) {
+        if (cache.vanishingPoint1) {
+            // that means the 0-1 line is the horizon parallel line
+            cache.horizon = QLineF(cache.vanishingPoint1.get(), cache.vanishingPoint1.get() + cache.polygon[1] - cache.polygon[0]);
+        } else { // the other vp
+            cache.horizon = QLineF(cache.vanishingPoint2.get(), cache.vanishingPoint2.get() + cache.polygon[2] - cache.polygon[1]);
+        }
+    }
+
+    int vertexCount = 4;
+    cache.distancesFromPoints.fill(0.0, vertexCount);
+    for (int i = 0; i < vertexCount; i++) {
+        qreal vertexDist = kisDistanceToLine(cache.polygon[i], cache.horizon);
+        if (vertexDist > cache.maxDistanceFromPoint) {
+            cache.maxDistanceFromPoint = vertexDist;
+        }
+        cache.distancesFromPoints[i] = vertexDist;
+    }
+
+}
 
 bool PerspectiveBasedAssistantHelper::getVanishingPointsOptional(const QPolygonF &poly, boost::optional<QPointF> &vp1, boost::optional<QPointF> &vp2)
 {
     bool either = false;
     vp1 = boost::none;
     vp2 = boost::none;
+
+    if (poly.size() < 4) { // four points are required for a tetragon
+        return false;
+    }
 
     QPointF intersection(0, 0);
     // note: in code it seems like vp1 and vp2 are swapped, but it's all correct if you read carefully

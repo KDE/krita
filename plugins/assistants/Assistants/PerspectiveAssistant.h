@@ -16,6 +16,8 @@
 #include <QLineF>
 #include <QTransform>
 
+#include <PerspectiveBasedAssistantHelper.h>
+
 class PerspectiveAssistant : public KisAbstractPerspectiveGrid, public KisPaintingAssistant
 {
     Q_OBJECT
@@ -60,6 +62,9 @@ private:
     mutable QPolygonF m_cachedPolygon;
     mutable QPointF m_cachedPoints[4];
     mutable bool m_cacheValid {false};
+
+    mutable PerspectiveBasedAssistantHelper::CacheData m_cache;
+
 };
 
 class PerspectiveAssistantFactory : public KisPaintingAssistantFactory

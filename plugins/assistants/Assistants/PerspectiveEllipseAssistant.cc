@@ -321,8 +321,9 @@ public:
 
     bool cacheValid { false };
 
+    PerspectiveBasedAssistantHelper::CacheData cache;
+
     QVector<QPointF> cachedPoints; // points on the polygon
-    PerspectiveBasedAssistantHelper helper;
 
 };
 
@@ -588,6 +589,8 @@ void PerspectiveEllipseAssistant::updateCache()
     if (d->ellipseInPolygon.isValid()) {
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
     }
+
+    PerspectiveBasedAssistantHelper::updateCacheData(d->cache, poly);
     d->cacheValid = true;
 
 }
@@ -607,7 +610,7 @@ bool PerspectiveEllipseAssistant::contains(const QPointF &point) const
 
 qreal PerspectiveEllipseAssistant::distance(const QPointF &point) const
 {
-    return PerspectiveBasedAssistantHelper::distanceInGrid(handles(), isAssistantComplete(), point);
+    return PerspectiveBasedAssistantHelper::distanceInGrid(d->cache, point);
 }
 
 bool PerspectiveEllipseAssistant::isActive() const

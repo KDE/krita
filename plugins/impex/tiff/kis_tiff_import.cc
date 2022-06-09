@@ -740,12 +740,9 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     }();
 
     // Initisalize tiffReader
-    uint16_t *lineSizeCoeffs = new uint16_t[nbchannels];
+    QVector<uint16_t> lineSizeCoeffs(nbchannels, 1);
     uint16_t vsubsampling = 1;
     uint16_t hsubsampling = 1;
-    for (uint32_t i = 0; i < nbchannels; i++) {
-        lineSizeCoeffs[i] = 1;
-    }
     if (color_type == PHOTOMETRIC_PALETTE) {
         uint16_t *red =
             nullptr; // No need to free them they are free by libtiff
@@ -754,7 +751,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         if ((TIFFGetField(image, TIFFTAG_COLORMAP, &red, &green, &blue)) == 0) {
             dbgFile << "Indexed image does not define a palette";
             TIFFClose(image);
-            delete[] lineSizeCoeffs;
             return ImportExportCodes::FileFormatIncorrect;
         }
 
@@ -1090,7 +1086,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         }
     }
     tiffReader->finalize();
-    delete[] lineSizeCoeffs;
     delete tiffReader;
     delete tiffstream;
     if (planarconfig == PLANARCONFIG_CONTIG) {

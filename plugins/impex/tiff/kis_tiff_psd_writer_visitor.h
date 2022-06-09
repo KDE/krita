@@ -8,6 +8,7 @@
 #ifndef _KIS_TIFF_PSD_WRITER_VISITOR_H
 #define _KIS_TIFF_PSD_WRITER_VISITOR_H
 
+#include <KisImportExportErrorCode.h>
 #include <kis_types.h>
 #include <tiffio.h>
 

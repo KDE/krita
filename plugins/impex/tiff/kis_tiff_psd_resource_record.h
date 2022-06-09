@@ -11,6 +11,8 @@
 #include <QString>
 #include <psd.h>
 
+#include "kritatiffpsd_export.h"
+
 class QIODevice;
 
 class PSDResourceBlock;
@@ -23,7 +25,7 @@ class PSDResourceBlock;
  * WARNING: This record is always in big endian, irrespective of the
  * container's endianness.
  */
-class KisTiffPsdResourceRecord
+class KRITATIFFPSD_EXPORT KisTiffPsdResourceRecord
 {
 public:
     enum PSDResourceID {

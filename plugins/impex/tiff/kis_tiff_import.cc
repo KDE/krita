@@ -967,7 +967,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             }
         } else {
             ps_buf = new tdata_t[nbchannels];
-            tsize_t *lineSizes = new tsize_t[nbchannels];
+            QVector<tsize_t> lineSizes(nbchannels);
             tmsize_t baseSize = TIFFTileSize(image);
             for (uint32_t i = 0; i < nbchannels; i++) {
                 ps_buf[i] = _TIFFmalloc(baseSize);
@@ -978,8 +978,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 reinterpret_cast<uint8_t **>(ps_buf),
                 nbchannels,
                 depth,
-                lineSizes);
-            delete[] lineSizes;
+                lineSizes.data());
         }
         dbgFile << linewidth << "" << nbchannels << ""
                 << layer->paintDevice()->colorSpace()->colorChannelCount();
@@ -1039,7 +1038,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             ps_buf = new tdata_t[nbchannels];
             tsize_t scanLineSize = stripsize / rowsPerStrip;
             dbgFile << " scanLineSize for each plan =" << scanLineSize;
-            tsize_t *lineSizes = new tsize_t[nbchannels];
+            QVector<tsize_t> lineSizes(nbchannels);
             for (uint32_t i = 0; i < nbchannels; i++) {
                 ps_buf[i] = _TIFFmalloc(stripsize);
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
@@ -1048,8 +1047,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 reinterpret_cast<uint8_t **>(ps_buf),
                 nbchannels,
                 depth,
-                lineSizes);
-            delete[] lineSizes;
+                lineSizes.data());
         }
 
         dbgFile << "Scanline size =" << TIFFRasterScanlineSize(image)

@@ -248,6 +248,9 @@ option(ENABLE_UPDATERS "Enable updaters/update notifications" ON)
 configure_file(config-updaters.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-updaters.h)
 add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notifications.")
 
+option(KRITA_ENABLE_PCH "Enable precompiled headers support" ON)
+add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
+
 # Branding. Available options: default, Beta, Plus, Next. Can be set from command line
 if ("${BRANDING}" STREQUAL "")
     if (DEFINED KRITA_STABLE)
@@ -637,6 +640,17 @@ macro(macro_add_unittest_definitions)
   add_definitions(-DSYSTEM_RESOURCES_DATA_DIR="${CMAKE_SOURCE_DIR}/krita/data/")
 endmacro()
 
+macro(kis_add_library)
+    cmake_parse_arguments(LOCAL "" PCH_FILE "" ${ARGV} )
+    add_library(${LOCAL_UNPARSED_ARGUMENTS})
+
+    list(GET LOCAL_UNPARSED_ARGUMENTS 0 NEW_LIBRARY_TARGET)
+
+    if (KRITA_ENABLE_PCH AND LOCAL_PCH_FILE)
+        set_property(TARGET ${NEW_LIBRARY_TARGET} APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
+        target_precompile_headers(${NEW_LIBRARY_TARGET} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/pch/${LOCAL_PCH_FILE}>")
+    endif()
+endmacro()
 
 
 
@@ -1188,4 +1202,3 @@ if(DEFINED QTANDROID_EXPORTED_TARGET AND NOT TARGET "create-apk")
 elseif(ANDROID)
     message(STATUS "You can export a target by specifying -DQTANDROID_EXPORTED_TARGET=<targetname> and -DANDROID_APK_DIR=<paths>")
 endif()
-

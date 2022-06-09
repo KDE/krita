@@ -17,7 +17,7 @@ ki18n_wrap_ui(kritacolorsfilters_SOURCES
     wdg_desaturate.ui
 )
 
-add_library(kritacolorsfilters MODULE ${kritacolorsfilters_SOURCES})
+kis_add_library(kritacolorsfilters MODULE ${kritacolorsfilters_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritacolorsfilters kritaui)
 install(TARGETS kritacolorsfilters  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES

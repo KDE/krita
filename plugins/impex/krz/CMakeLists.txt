@@ -2,7 +2,7 @@ set(kritakrzexport_SOURCES
     krz_export.cpp
 )
 
-add_library(kritakrzexport MODULE ${kritakrzexport_SOURCES})
+kis_add_library(kritakrzexport MODULE ${kritakrzexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritakrzexport kritaui kritalibkra kritaimpex)
 

@@ -15,7 +15,7 @@ set(kritajp2import_SOURCES
     ${libkritaconverter_LIB_SRCS}
 )
 
-add_library(kritajp2import MODULE ${kritajp2import_SOURCES})
+kis_add_library(kritajp2import MODULE ${kritajp2import_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritajp2import kritaui ${OpenJPEG_LIBRARIES} )
 

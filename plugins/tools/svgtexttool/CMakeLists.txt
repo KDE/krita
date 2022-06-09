@@ -25,6 +25,6 @@ install( FILES
 )
 
 
-add_library(krita_tool_svgtext MODULE ${SvgTextTool_SRCS})
+kis_add_library(krita_tool_svgtext MODULE ${SvgTextTool_SRCS} PCH_FILE kis_image_pch.h)
 target_link_libraries(krita_tool_svgtext kritaui KF5::I18n)
 install(TARGETS krita_tool_svgtext DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

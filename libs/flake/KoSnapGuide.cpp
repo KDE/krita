@@ -17,11 +17,7 @@
 #include <QPainterPath>
 
 #include <math.h>
-
-template <class T>
-inline QSharedPointer<T> toQShared(T* ptr) {
-    return QSharedPointer<T>(ptr);
-}
+#include "kis_pointer_utils.h"
 
 class Q_DECL_HIDDEN KoSnapGuide::Private
 {

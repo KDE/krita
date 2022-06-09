@@ -10,7 +10,7 @@ ki18n_wrap_ui(kritahalftone_SOURCES
     KisHalftoneConfigPageWidget.ui
 )
 
-add_library(kritahalftone MODULE ${kritahalftone_SOURCES})
+kis_add_library(kritahalftone MODULE ${kritahalftone_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritahalftone kritaui)
 install(TARGETS kritahalftone DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES

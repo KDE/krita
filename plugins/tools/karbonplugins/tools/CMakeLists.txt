@@ -10,7 +10,7 @@ set(karbon_tools_SOURCES
 
 qt5_add_resources(karbon_tools_SOURCES karbontools.qrc)
 
-add_library(krita_karbontools MODULE ${karbon_tools_SOURCES})
+kis_add_library(krita_karbontools MODULE ${karbon_tools_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(krita_karbontools kritaui kritawidgets KF5::Completion)
 

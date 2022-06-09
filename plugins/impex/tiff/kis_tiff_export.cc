@@ -10,6 +10,8 @@
 #include <QBuffer>
 #include <QFileInfo>
 
+#include <memory>
+
 #include <exiv2/exiv2.hpp>
 #include <kpluginfactory.h>
 #include <tiffio.h>
@@ -18,6 +20,7 @@
 #include <KisExportCheckRegistry.h>
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
+#include <kis_assert.h>
 #include <kis_group_layer.h>
 #include <kis_layer_utils.h>
 #include <kis_meta_data_backend_registry.h>
@@ -103,10 +106,10 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     KIS_ASSERT_RECOVER_RETURN_VALUE(kisimage, ImportExportCodes::InternalError);
 
     // Open file for writing
-    TIFF *image = [&]() {
-        const auto encodedFilename = QFile::encodeName(filename());
-        return TIFFOpen(encodedFilename.data(), "w");
-    }();
+    const QByteArray encodedFilename = QFile::encodeName(filename());
+    std::unique_ptr<TIFF, decltype(&TIFFClose)> image(
+        TIFFOpen(encodedFilename.data(), "w"),
+        &TIFFClose);
 
     if (!image) {
         dbgFile << "Could not open the file for writing" << filename();
@@ -117,28 +120,25 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     KoDocumentInfo *info = document->documentInfo();
     QString title = info->aboutInfo("title");
     if (!title.isEmpty()) {
-        if (!TIFFSetField(image,
+        if (!TIFFSetField(image.get(),
                           TIFFTAG_DOCUMENTNAME,
                           title.toLatin1().constData())) {
-            TIFFClose(image);
             return ImportExportCodes::ErrorWhileWriting;
         }
     }
     QString abstract = info->aboutInfo("description");
     if (!abstract.isEmpty()) {
-        if (!TIFFSetField(image,
+        if (!TIFFSetField(image.get(),
                           TIFFTAG_IMAGEDESCRIPTION,
                           abstract.toLatin1().constData())) {
-            TIFFClose(image);
             return ImportExportCodes::ErrorWhileWriting;
         }
     }
     QString author = info->authorInfo("creator");
     if (!author.isEmpty()) {
-        if (!TIFFSetField(image,
+        if (!TIFFSetField(image.get(),
                           TIFFTAG_ARTIST,
                           author.toLatin1().constData())) {
-            TIFFClose(image);
             return ImportExportCodes::ErrorWhileWriting;
         }
     }
@@ -146,58 +146,51 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     dbgFile << "xres: " << INCH_TO_POINT(kisimage->xRes())
             << " yres: " << INCH_TO_POINT(kisimage->yRes());
     if (!TIFFSetField(
-            image,
+            image.get(),
             TIFFTAG_XRESOLUTION,
             INCH_TO_POINT(kisimage->xRes()))) { // It is the "invert" macro
                                                 // because we convert from
                                                 // pointer-per-inchs to points
-        TIFFClose(image);
         return ImportExportCodes::ErrorWhileWriting;
     }
-    if (!TIFFSetField(image,
+    if (!TIFFSetField(image.get(),
                       TIFFTAG_YRESOLUTION,
                       INCH_TO_POINT(kisimage->yRes()))) {
-        TIFFClose(image);
         return ImportExportCodes::ErrorWhileWriting;
     }
 
     KisGroupLayer *root =
         dynamic_cast<KisGroupLayer *>(kisimage->rootLayer().data());
-    KIS_ASSERT_RECOVER(root)
-    {
-        TIFFClose(image);
-        return ImportExportCodes::InternalError;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(root,
+                                         ImportExportCodes::InternalError);
 
 #ifdef TIFF_CAN_WRITE_PSD_TAGS
     if (options.saveAsPhotoshop) {
-        KisTiffPsdWriter writer(image, &options);
+        KisTiffPsdWriter writer(image.get(), &options);
         KisImportExportErrorCode result = writer.writeImage(root);
         if (!result.isOk()) {
-            TIFFClose(image);
             return result;
         }
     } else
 #endif // TIFF_CAN_WRITE_PSD_TAGS
     {
-        KisTIFFWriterVisitor *visitor =
-            new KisTIFFWriterVisitor(image, &options);
-        if (!(visitor->visit(root))) {
-            TIFFClose(image);
+        KisTIFFWriterVisitor visitor(image.get(), &options);
+        if (!(visitor.visit(root))) {
             return ImportExportCodes::Failure;
         }
     }
 
-    TIFFClose(image);
+    image.reset();
 
     if (!options.flatten && !options.saveAsPhotoshop) {
         // HACK!! Externally inject the Exif metadata
         // libtiff has no way to access the fields wholesale
         try {
-            Exiv2::BasicIo::AutoPtr fileIo(
-                new Exiv2::FileIo(QFile::encodeName(filename()).toStdString()));
+            const std::string encodedFilename =
+                QFile::encodeName(filename()).toStdString();
 
-            Exiv2::Image::AutoPtr img(Exiv2::ImageFactory::open(fileIo));
+            const std::unique_ptr<Exiv2::Image> img(
+                Exiv2::ImageFactory::open(encodedFilename).release());
 
             img->readMetadata();
 

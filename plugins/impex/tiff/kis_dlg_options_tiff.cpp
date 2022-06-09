@@ -33,6 +33,27 @@ KisTIFFOptionsWidget::KisTIFFOptionsWidget(QWidget *parent)
     connect(flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled(bool)));
     QApplication::restoreOverrideCursor();
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum));
+
+    // See KisTIFFOptions::fromProperties
+    kComboBoxCompressionType->addItem(i18nc("TIFF options", "None"), 0);
+    kComboBoxCompressionType->addItem(
+        i18nc("TIFF options", "JPEG DCT compression"),
+        1);
+    kComboBoxCompressionType->addItem(i18nc("TIFF options", "Deflate (ZIP)"),
+                                      2);
+    kComboBoxCompressionType->addItem(
+        i18nc("TIFF options", "Lempel-Ziv & Welch"),
+        3);
+    kComboBoxCompressionType->addItem(i18nc("TIFF options", "Pixar Log"), 4);
+
+    connect(kComboBoxCompressionType,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [&](int index) {
+                const int deflate = kComboBoxCompressionType->findData(2);
+                const int lzw = kComboBoxCompressionType->findData(3);
+                kComboBoxPredictor->setEnabled(index == deflate
+                                               || index == lzw);
+            });
 }
 
 void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -79,7 +100,8 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
 KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
 {
     KisPropertiesConfigurationSP cfg(new KisPropertiesConfiguration());
-    cfg->setProperty("compressiontype", kComboBoxCompressionType->currentIndex());
+    cfg->setProperty("compressiontype",
+                     kComboBoxCompressionType->currentData());
     cfg->setProperty("predictor", kComboBoxPredictor->currentIndex());
     cfg->setProperty("alpha", alpha->isChecked());
     cfg->setProperty("saveAsPhotoshop", chkPhotoshop->isChecked());
@@ -95,14 +117,15 @@ KisPropertiesConfigurationSP KisTIFFOptionsWidget::configuration() const
 
 void KisTIFFOptionsWidget::activated(int index)
 {
-    switch (index) {
-    case 1:
+    const int data = kComboBoxCompressionType->itemData(index).value<int>();
+    switch (data) {
+    case 1: // JPEG
         codecsOptionsStack->setCurrentIndex(1);
         break;
-    case 2:
+    case 2: // Deflate
         codecsOptionsStack->setCurrentIndex(2);
         break;
-    case 4:
+    case 4: // Pixar Log
         codecsOptionsStack->setCurrentIndex(3);
         break;
     default:

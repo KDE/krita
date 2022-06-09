@@ -47,32 +47,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="KComboBox" name="kComboBoxCompressionType">
-        <item>
-         <property name="text">
-          <string>None</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>JPEG DCT Compression</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Deflate (ZIP)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Lempel-Ziv &amp; Welch (LZW)</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Pixar Log</string>
-         </property>
-        </item>
+       <widget class="QComboBox" name="kComboBoxCompressionType">
        </widget>
       </item>
       <item row="1" column="0">

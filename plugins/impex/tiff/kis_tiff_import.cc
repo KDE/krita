@@ -9,6 +9,7 @@
 
 #include <QFileInfo>
 #include <QPair>
+#include <QSharedPointer>
 #include <QStack>
 
 #include <array>
@@ -274,22 +275,22 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
 }
 
 template<template<typename> class T>
-KisTIFFPostProcessor *makePostProcessor(uint32_t nbsamples,
-                                        QPair<QString, QString> id)
+QSharedPointer<KisTIFFPostProcessor>
+makePostProcessor(uint32_t nbsamples, const QPair<QString, QString> &id)
 {
     if (id.second == Integer8BitsColorDepthID.id()) {
-        return new T<uint8_t>(nbsamples);
+        return QSharedPointer<T<uint8_t>>::create(nbsamples);
     } else if (id.second == Integer16BitsColorDepthID.id()) {
-        return new T<uint16_t>(nbsamples);
+        return QSharedPointer<T<uint16_t>>::create(nbsamples);
 #ifdef HAVE_OPENEXR
     } else if (id.second == Float16BitsColorDepthID.id()) {
-        return new T<half>(nbsamples);
+        return QSharedPointer<T<half>>::create(nbsamples);
 #endif
     } else if (id.second == Float32BitsColorDepthID.id()) {
-        return new T<float>(nbsamples);
+        return QSharedPointer<T<float>>::create(nbsamples);
     } else {
         KIS_ASSERT(false && "TIFF does not support this bit depth!");
-        return nullptr;
+        return {};
     }
 }
 
@@ -713,40 +714,30 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         }
     }();
 
-    switch (color_type) {
-    case PHOTOMETRIC_MINISWHITE: {
-        postprocessor =
-            makePostProcessor<KisTIFFPostProcessorInvert>(nbcolorsamples,
-                                                          colorSpaceIdTag);
-    } break;
-    case PHOTOMETRIC_MINISBLACK: {
-        postprocessor =
-            makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
-                                                         colorSpaceIdTag);
-    } break;
-    case PHOTOMETRIC_CIELAB: {
-        postprocessor = makePostProcessor<KisTIFFPostProcessorCIELABtoICCLAB>(
-            nbcolorsamples,
-            colorSpaceIdTag);
-    } break;
-    case PHOTOMETRIC_ICCLAB: {
-        postprocessor =
-            makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
-                                                         colorSpaceIdTag);
-    } break;
-    case PHOTOMETRIC_RGB: {
-        postprocessor =
-            makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
-                                                         colorSpaceIdTag);
-    } break;
-    case PHOTOMETRIC_SEPARATED: {
-        postprocessor =
-            makePostProcessor<KisTIFFPostProcessorDummy>(nbcolorsamples,
-                                                         colorSpaceIdTag);
-    } break;
-    default:
-        break;
-    }
+    auto postprocessor = [&]() -> QSharedPointer<KisTIFFPostProcessor> {
+        switch (color_type) {
+        case PHOTOMETRIC_MINISWHITE:
+            return makePostProcessor<KisTIFFPostProcessorInvert>(
+                nbcolorsamples,
+                colorSpaceIdTag);
+        case PHOTOMETRIC_MINISBLACK:
+            return makePostProcessor<KisTIFFPostProcessorDummy>(
+                nbcolorsamples,
+                colorSpaceIdTag);
+        case PHOTOMETRIC_CIELAB:
+            return makePostProcessor<KisTIFFPostProcessorCIELABtoICCLAB>(
+                nbcolorsamples,
+                colorSpaceIdTag);
+        case PHOTOMETRIC_ICCLAB:
+        case PHOTOMETRIC_RGB:
+        case PHOTOMETRIC_SEPARATED:
+            return makePostProcessor<KisTIFFPostProcessorDummy>(
+                nbcolorsamples,
+                colorSpaceIdTag);
+        default:
+            return {};
+        }
+    }();
 
     // Initisalize tiffReader
     uint16_t *lineSizeCoeffs = new uint16_t[nbchannels];
@@ -947,7 +938,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     }
 
     if (!tiffReader) {
-        delete postprocessor;
         delete[] lineSizeCoeffs;
         TIFFClose(image);
         dbgFile << "Image has an invalid/unsupported color type: "

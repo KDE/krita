@@ -153,7 +153,7 @@ public:
                       uint16_t extrasamplescount,
                       bool premultipliedAlpha,
                       KoColorTransformation *transformProfile,
-                      KisTIFFPostProcessor *postprocessor)
+                      QSharedPointer<KisTIFFPostProcessor> postprocessor)
         : m_device(device)
         , m_alphapos(alphapos)
         , m_sourceDepth(sourceDepth)
@@ -163,7 +163,7 @@ public:
         , m_premultipliedAlpha(premultipliedAlpha)
         , m_poses(poses)
         , m_transformProfile(transformProfile)
-        , mpostProcessImpl(postprocessor)
+        , mpostProcessImpl(std::move(postprocessor))
     {
 
     }
@@ -234,7 +234,7 @@ protected:
 
     inline const KisTIFFPostProcessor *postProcessor() const
     {
-        return mpostProcessImpl;
+        return mpostProcessImpl.get();
     }
 
 private:
@@ -247,7 +247,7 @@ private:
     bool m_premultipliedAlpha;
     std::array<quint8, 5> m_poses;
     KoColorTransformation *m_transformProfile;
-    KisTIFFPostProcessor *mpostProcessImpl;
+    std::shared_ptr<KisTIFFPostProcessor> mpostProcessImpl;
 };
 
 template<typename T> class KisTIFFReaderTarget : public KisTIFFReaderBase
@@ -264,7 +264,7 @@ public:
                         uint16_t extrasamplescount,
                         bool premultipliedAlpha,
                         KoColorTransformation *transformProfile,
-                        KisTIFFPostProcessor *postprocessor,
+                        QSharedPointer<KisTIFFPostProcessor> postprocessor,
                         T alphaValue)
         : KisTIFFReaderBase(device,
                             poses,
@@ -448,7 +448,7 @@ public:
                              bool premultipliedAlpha,
                              uint8_t extrasamplescount,
                              KoColorTransformation *transformProfile,
-                             KisTIFFPostProcessor *postprocessor)
+                             QSharedPointer<KisTIFFPostProcessor> postprocessor)
         : KisTIFFReaderBase(device,
                             poses,
                             alphapos,

@@ -10,6 +10,6 @@ set(KritaDesignerPlugin_SOURCES
     KritaDesignerPluginCollection.cpp
 )
 
-add_library(kritadesignerplugin MODULE ${KritaDesignerPlugin_SOURCES})
+kis_add_library(kritadesignerplugin MODULE ${KritaDesignerPlugin_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritadesignerplugin kritaui)

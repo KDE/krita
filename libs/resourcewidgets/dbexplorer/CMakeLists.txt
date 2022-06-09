@@ -6,7 +6,7 @@ set(kritadbexplorer_SOURCES
 
 ki18n_wrap_ui(kritadbexplorer_SOURCES WdgDbExplorer.ui )
 
-add_library(kritadbexplorer MODULE ${kritadbexplorer_SOURCES})
+kis_add_library(kritadbexplorer MODULE ${kritadbexplorer_SOURCES} PCH_FILE kis_global_pch.h)
 
 target_link_libraries(kritadbexplorer 
     PRIVATE

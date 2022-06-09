@@ -29,7 +29,7 @@ set(kritatiffimport_SOURCES
     )
 
 
-add_library(kritatiffimport MODULE ${kritatiffimport_SOURCES})
+kis_add_library(kritatiffimport MODULE ${kritatiffimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritatiffimport kritaui kritapsd ${TIFF_LIBRARIES} LibExiv2::LibExiv2 kritametadata)
 
@@ -43,7 +43,7 @@ set(kritatiffexport_SOURCES
 
 ki18n_wrap_ui(kritatiffexport_SOURCES kis_wdg_options_tiff.ui)
 
-add_library(kritatiffexport MODULE ${kritatiffexport_SOURCES})
+kis_add_library(kritatiffexport MODULE ${kritatiffexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritatiffexport kritaui kritaimpex kritapsd ${TIFF_LIBRARIES} LibExiv2::LibExiv2 kritametadata)
 

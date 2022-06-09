@@ -11,7 +11,7 @@ set(kritaexrimport_SOURCES
     ${libkritaconverter_LIB_SRCS}
     )
 
-add_library(kritaexrimport MODULE ${kritaexrimport_SOURCES})
+kis_add_library(kritaexrimport MODULE ${kritaexrimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaexrimport kritaui kritalibkra ${OPENEXR_LIBRARIES} )
 
@@ -24,7 +24,7 @@ set(kritaexrexport_SOURCES
 
 ki18n_wrap_ui(kritaexrexport_SOURCES exr_export_widget.ui )
 
-add_library(kritaexrexport MODULE ${kritaexrexport_SOURCES})
+kis_add_library(kritaexrexport MODULE ${kritaexrexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaexrexport kritaui kritalibkra kritaimpex ${OPENEXR_LIBRARIES} )
 

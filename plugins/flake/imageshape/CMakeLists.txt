@@ -6,7 +6,7 @@ set ( ImageShape_SRCS
     ImageShapeFactory.cpp
 )
 
-add_library(krita_shape_image MODULE ${ImageShape_SRCS})
+kis_add_library(krita_shape_image MODULE ${ImageShape_SRCS} PCH_FILE kis_global_pch.h)
 
 target_link_libraries(krita_shape_image kritaflake kritawidgets KF5::I18n )
 

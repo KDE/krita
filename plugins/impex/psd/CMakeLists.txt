@@ -23,7 +23,7 @@ set(kritapsdimport_SOURCES
 )
 
 
-add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES})
+kis_add_library(kritapsdimport MODULE ${kritapsdimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritapsdimport kritaglobal kritaui kritapsd KF5::I18n)
 
@@ -39,7 +39,7 @@ set(kritapsdexport_SOURCES
     ${LIB_PSD_SRCS}
 )
 
-add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES})
+kis_add_library(kritapsdexport MODULE ${kritapsdexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 if (MSVC)
     target_link_libraries(kritapsdexport kritaui kritapsd kritaimpex kritastore ${WIN32_PLATFORM_NET_LIBS})

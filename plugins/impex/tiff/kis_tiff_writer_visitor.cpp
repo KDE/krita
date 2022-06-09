@@ -1,10 +1,13 @@
 /*
  *  SPDX-FileCopyrightText: 2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
 #include <QBuffer>
+
+#include <memory>
 
 #include <tiff.h>
 
@@ -217,7 +220,9 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         }
     }
     tsize_t stripsize = TIFFStripSize(image());
-    tdata_t buff = _TIFFmalloc(stripsize);
+    std::unique_ptr<std::remove_pointer_t<tdata_t>, decltype(&_TIFFfree)> buff(
+        _TIFFmalloc(stripsize),
+        &_TIFFfree);
     qint32 height = layer->image()->height();
     qint32 width = layer->image()->width();
     bool r = true;
@@ -226,7 +231,12 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
             const std::array<quint8, 5> poses = {0, 1};
-            r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
+            r = copyDataToStrips(it,
+                                 buff.get(),
+                                 depth,
+                                 sample_format,
+                                 1,
+                                 poses);
             }
             break;
         case PHOTOMETRIC_RGB: {
@@ -237,28 +247,43 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
                     return {2, 1, 0, 3};
                 }
             }();
-            r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
+            r = copyDataToStrips(it,
+                                 buff.get(),
+                                 depth,
+                                 sample_format,
+                                 3,
+                                 poses);
             }
             break;
         case PHOTOMETRIC_SEPARATED: {
             const std::array<quint8, 5> poses = {0, 1, 2, 3, 4};
-            r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
+            r = copyDataToStrips(it,
+                                 buff.get(),
+                                 depth,
+                                 sample_format,
+                                 4,
+                                 poses);
             }
             break;
         case PHOTOMETRIC_ICCLAB: {
             const std::array<quint8, 5> poses = {0, 1, 2, 3};
-            r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
+            r = copyDataToStrips(it,
+                                 buff.get(),
+                                 depth,
+                                 sample_format,
+                                 3,
+                                 poses);
             }
             break;
             return false;
         }
         if (!r) return false;
         TIFFWriteScanline(image(),
-                          buff,
+                          buff.get(),
                           static_cast<uint32_t>(y),
                           (tsample_t)-1);
     }
-    _TIFFfree(buff);
+    buff.reset();
 
     {
         // IPTC

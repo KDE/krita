@@ -12,6 +12,8 @@
 #include <cstdint>
 #include <memory>
 
+#include <QSharedPointer>
+
 #include <kis_buffer_stream.h>
 #include <kis_global.h>
 #include <kis_iterator_ng.h>
@@ -44,7 +46,7 @@ public:
                        uint16_t extrasamplescount,
                        bool premultipliedAlpha,
                        KoColorTransformation *transformProfile,
-                       KisTIFFPostProcessor *postprocessor,
+                       QSharedPointer<KisTIFFPostProcessor> postprocessor,
                        uint16_t hsub,
                        uint16_t vsub)
         : KisTIFFReaderBase(device,

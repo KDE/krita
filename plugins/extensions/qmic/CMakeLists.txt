@@ -13,7 +13,7 @@ set(kritaqmicinterface_HEADERS
     ${CMAKE_CURRENT_BINARY_DIR}/kritaqmicinterface_export.h
 )
 
-add_library(kritaqmicinterface SHARED ${kritaqmicinterface_SOURCES})
+kis_add_library(kritaqmicinterface SHARED ${kritaqmicinterface_SOURCES} PCH_FILE kis_image_pch.h)
 generate_export_header(kritaqmicinterface)
 target_link_libraries(kritaqmicinterface kritaui kritaimage)
 
@@ -38,7 +38,7 @@ ki18n_wrap_ui (
     kritaqmic_SOURCES
 )
 
-add_library(kritaqmic MODULE ${kritaqmic_SOURCES})
+kis_add_library(kritaqmic MODULE ${kritaqmic_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritaqmic kritaqmicinterface)
 
 install(TARGETS kritaqmic LIBRARY DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

@@ -359,7 +359,16 @@ set(einspline_SRCS
    3rdparty/einspline/nugrid.cpp
 )
 
-add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
+kis_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS}
+                PCH_FILE kis_global_pch.h
+)
+
+set_source_files_properties(
+    ${__per_arch_circle_mask_generator_objs}
+    ${_per_arch_processor_objs}
+    PROPERTIES SKIP_PRECOMPILE_HEADERS TRUE)
+
+
 generate_export_header(kritaimage BASE_NAME kritaimage)
 
 target_link_libraries(kritaimage 

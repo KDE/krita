@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritahighpassfilter_SOURCES
     wdggaussianhighpass.ui
     )
 
-add_library(kritagaussianhighpassfilter MODULE ${kritahighpassfilter_SOURCES})
+kis_add_library(kritagaussianhighpassfilter MODULE ${kritahighpassfilter_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritagaussianhighpassfilter kritaui)
 

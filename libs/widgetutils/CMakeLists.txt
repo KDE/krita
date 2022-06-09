@@ -104,7 +104,7 @@ ki18n_wrap_ui(kritawidgetutils_LIB_SRCS
 
 qt5_add_resources(kritawidgetutils_LIB_SRCS xmlgui/kxmlgui.qrc)
 
-add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS})
+kis_add_library(kritawidgetutils SHARED ${kritawidgetutils_LIB_SRCS} PCH_FILE kis_global_pch.h)
 
 target_include_directories(kritawidgetutils
     PUBLIC

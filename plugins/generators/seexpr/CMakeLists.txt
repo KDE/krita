@@ -12,7 +12,7 @@ ki18n_wrap_ui(kritaseexprgenerator_SOURCES
     wdgseexprsavepreset.ui
     )
 
-add_library(kritaseexprgenerator MODULE ${kritaseexprgenerator_SOURCES})
+kis_add_library(kritaseexprgenerator MODULE ${kritaseexprgenerator_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaseexprgenerator kritaui KSeExpr::KSeExpr KSeExpr::KSeExprUI)
 

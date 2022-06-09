@@ -4,8 +4,6 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_tiff_writer_visitor.h"
-
 #include <QBuffer>
 
 #include <tiff.h>
@@ -21,6 +19,9 @@
 #include <half.h>
 #endif
 
+#include "kis_tiff_converter.h"
+#include "kis_tiff_writer_visitor.h"
+
 namespace
 {
     bool isBitDepthFloat(QString depth) {
@@ -34,7 +35,7 @@ namespace
         QString depth = cs->colorDepthId().id();
         // destColorSpace should be reassigned to a proper color space to convert to
         // if the return value of this function is false
-        destColorSpace = 0;
+        destColorSpace = nullptr;
 
         // sample_format and color_type should be assigned to the destination color space,
         // not /always/ the one we get here
@@ -89,22 +90,25 @@ KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options)
 {
 }
 
-KisTIFFWriterVisitor::~KisTIFFWriterVisitor()
-{
-}
+KisTIFFWriterVisitor::~KisTIFFWriterVisitor() = default;
 
-bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint8_t depth, uint16_t sample_format, uint8_t nbcolorssamples, quint8* poses)
+bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it,
+                                            tdata_t buff,
+                                            uint32_t depth,
+                                            uint16_t sample_format,
+                                            uint8_t nbcolorssamples,
+                                            const std::array<quint8, 5> &poses)
 {
     if (depth == 32) {
         Q_ASSERT(sample_format == SAMPLEFORMAT_IEEEFP);
         float *dst = reinterpret_cast<float *>(buff);
         do {
             const float *d = reinterpret_cast<const float *>(it->oldRawData());
-            int i;
-            for (i = 0; i < nbcolorssamples; i++) {
-                *(dst++) = d[poses[i]];
+            for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                *(dst++) = d[poses.at(i)];
             }
-            if (m_options->alpha) *(dst++) = d[poses[i]];
+            if (m_options->alpha)
+                *(dst++) = d[poses.at(nbcolorssamples)];
         } while (it->nextPixel());
         return true;
     }
@@ -114,12 +118,11 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
             half *dst = reinterpret_cast<half *>(buff);
             do {
                 const half *d = reinterpret_cast<const half *>(it->oldRawData());
-                int i;
-                for (i = 0; i < nbcolorssamples; i++) {
-                    *(dst++) = d[poses[i]];
+                for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses.at(i)];
                 }
-                if (m_options->alpha) *(dst++) = d[poses[i]];
-
+                if (m_options->alpha)
+                    *(dst++) = d[poses.at(nbcolorssamples)];
             } while (it->nextPixel());
             return true;
 #endif
@@ -127,12 +130,13 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
         else {
             quint16 *dst = reinterpret_cast<quint16 *>(buff);
             do {
-                const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-                int i;
-                for (i = 0; i < nbcolorssamples; i++) {
-                    *(dst++) = d[poses[i]];
+                const quint16 *d =
+                    reinterpret_cast<const quint16 *>(it->oldRawData());
+                for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses.at(i)];
                 }
-                if (m_options->alpha) *(dst++) = d[poses[i]];
+                if (m_options->alpha)
+                    *(dst++) = d[poses.at(nbcolorssamples)];
 
             } while (it->nextPixel());
             return true;
@@ -142,11 +146,11 @@ bool KisTIFFWriterVisitor::copyDataToStrips(KisHLineConstIteratorSP it, tdata_t 
         quint8 *dst = reinterpret_cast<quint8 *>(buff);
         do {
             const quint8 *d = it->oldRawData();
-            int i;
-            for (i = 0; i < nbcolorssamples; i++) {
-                *(dst++) = d[poses[i]];
+            for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                *(dst++) = d[poses.at(i)];
             }
-            if (m_options->alpha) *(dst++) = d[poses[i]];
+            if (m_options->alpha)
+                *(dst++) = d[poses.at(nbcolorssamples)];
 
         } while (it->nextPixel());
         return true;
@@ -159,9 +163,9 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     dbgFile << "visiting on layer" << layer->name() << "";
     KisPaintDeviceSP pd = layer->projection();
 
-    uint16_t color_type;
+    uint16_t color_type = 0;
     uint16_t sample_format = SAMPLEFORMAT_UINT;
-    const KoColorSpace* destColorSpace;
+    const KoColorSpace *destColorSpace = nullptr;
     // Check colorspace
     if (!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format, destColorSpace)) { // unsupported colorspace
         if (!destColorSpace) {
@@ -172,13 +176,13 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     }
 
     // Save depth
-    int depth = 8 * pd->pixelSize() / pd->channelCount();
+    uint32_t depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
     // Save number of samples
     if (m_options->alpha) {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount());
-        uint16_t sampleinfo[1] = { EXTRASAMPLE_UNASSALPHA };
-        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
+        const std::array<uint16_t, 1> sampleinfo = {EXTRASAMPLE_UNASSALPHA};
+        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo.data());
     } else {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount() - 1);
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 0);
@@ -221,34 +225,38 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         KisHLineConstIteratorSP it = pd->createHLineConstIteratorNG(0, y, width);
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
-                quint8 poses[] = { 0, 1 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
+            const std::array<quint8, 5> poses = {0, 1};
+            r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
             }
             break;
         case PHOTOMETRIC_RGB: {
-                quint8 poses[4];
+            const auto poses = [&]() -> std::array<quint8, 5> {
                 if (sample_format == SAMPLEFORMAT_IEEEFP) {
-                    poses[2] = 2; poses[1] = 1; poses[0] = 0; poses[3] = 3;
+                    return {0, 1, 2, 3};
                 } else {
-                    poses[0] = 2; poses[1] = 1; poses[2] = 0; poses[3] = 3;
+                    return {2, 1, 0, 3};
                 }
-                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
+            }();
+            r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
             }
             break;
         case PHOTOMETRIC_SEPARATED: {
-                quint8 poses[] = { 0, 1, 2, 3, 4 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
+            const std::array<quint8, 5> poses = {0, 1, 2, 3, 4};
+            r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
             }
             break;
         case PHOTOMETRIC_ICCLAB: {
-                quint8 poses[] = { 0, 1, 2, 3 };
-                r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
+            const std::array<quint8, 5> poses = {0, 1, 2, 3};
+            r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
             }
             break;
             return false;
         }
         if (!r) return false;
-        TIFFWriteScanline(image(), buff, y, (tsample_t) - 1);
+        TIFFWriteScanline(image(),
+                          buff,
+                          static_cast<uint32_t>(y),
+                          (tsample_t)-1);
     }
     _TIFFfree(buff);
 

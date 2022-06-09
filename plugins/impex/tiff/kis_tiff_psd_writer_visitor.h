@@ -8,11 +8,14 @@
 #ifndef _KIS_TIFF_PSD_WRITER_VISITOR_H
 #define _KIS_TIFF_PSD_WRITER_VISITOR_H
 
-#include <KisImportExportErrorCode.h>
-#include <kis_types.h>
 #include <tiffio.h>
 
-#include "kis_tiff_converter.h"
+#include <array>
+
+#include <KisImportExportErrorCode.h>
+#include <kis_types.h>
+
+struct KisTiffOptions;
 
 class KisTiffPsdWriter : public QObject
 {
@@ -30,7 +33,12 @@ private:
         return m_image;
     }
 
-    bool copyDataToStrips(KisHLineConstIteratorSP it, tdata_t buff, uint32_t depth, uint16_t sample_format, uint8_t nbcolorssamples, quint8 *poses);
+    bool copyDataToStrips(KisHLineConstIteratorSP it,
+                          tdata_t buff,
+                          uint32_t depth,
+                          uint16_t sample_format,
+                          uint8_t nbcolorssamples,
+                          const std::array<quint8, 5> &poses);
     bool saveLayerProjection(KisLayer *);
 
 private:

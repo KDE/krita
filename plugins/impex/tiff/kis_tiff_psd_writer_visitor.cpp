@@ -5,7 +5,9 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_tiff_psd_writer_visitor.h"
+#include <QBuffer>
+
+#include <tiffio.h>
 
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
@@ -14,21 +16,20 @@
 #include <KoConfig.h>
 #include <KoID.h>
 #include <KoUnit.h>
-#include <QBuffer>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
 #include <kis_painter.h>
 #include <kis_tiff_psd_resource_record.h>
 #include <psd_resource_block.h>
-#include <tiff.h>
-#include <tiffio.h>
 
 #ifdef HAVE_OPENEXR
 #include <half.h>
 #endif
 
+#include "kis_tiff_converter.h"
 #include "kis_tiff_psd_layer_record.h"
+#include "kis_tiff_psd_writer_visitor.h"
 
 namespace
 {
@@ -44,7 +45,7 @@ inline bool writeColorSpaceInformation(TIFF *image, const KoColorSpace *cs, uint
     QString depth = cs->colorDepthId().id();
     // destColorSpace should be reassigned to a proper color space to convert to
     // if the return value of this function is false
-    destColorSpace = 0;
+    destColorSpace = nullptr;
 
     // sample_format and color_type should be assigned to the destination color space,
     // not /always/ the one we get here
@@ -98,28 +99,25 @@ KisTiffPsdWriter::KisTiffPsdWriter(TIFF *image, KisTIFFOptions *options)
 {
 }
 
-KisTiffPsdWriter::~KisTiffPsdWriter()
-{
-}
+KisTiffPsdWriter::~KisTiffPsdWriter() = default;
 
 bool KisTiffPsdWriter::copyDataToStrips(KisHLineConstIteratorSP it,
                                         tdata_t buff,
                                         uint32_t depth,
                                         uint16_t sample_format,
                                         uint8_t nbcolorssamples,
-                                        quint8 *poses)
+                                        const std::array<quint8, 5> &poses)
 {
     if (depth == 32) {
         Q_ASSERT(sample_format == SAMPLEFORMAT_IEEEFP);
         float *dst = reinterpret_cast<float *>(buff);
         do {
             const float *d = reinterpret_cast<const float *>(it->oldRawData());
-            int i;
-            for (i = 0; i < nbcolorssamples; i++) {
-                *(dst++) = d[poses[i]];
+            for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                *(dst++) = d[poses.at(i)];
             }
             if (m_options->alpha)
-                *(dst++) = d[poses[i]];
+                *(dst++) = d[poses.at(nbcolorssamples)];
         } while (it->nextPixel());
         return true;
     } else if (depth == 16) {
@@ -128,12 +126,11 @@ bool KisTiffPsdWriter::copyDataToStrips(KisHLineConstIteratorSP it,
             half *dst = reinterpret_cast<half *>(buff);
             do {
                 const half *d = reinterpret_cast<const half *>(it->oldRawData());
-                int i;
-                for (i = 0; i < nbcolorssamples; i++) {
-                    *(dst++) = d[poses[i]];
+                for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses.at(i)];
                 }
                 if (m_options->alpha)
-                    *(dst++) = d[poses[i]];
+                    *(dst++) = d[poses.at(nbcolorssamples)];
 
             } while (it->nextPixel());
             return true;
@@ -141,13 +138,13 @@ bool KisTiffPsdWriter::copyDataToStrips(KisHLineConstIteratorSP it,
         } else {
             quint16 *dst = reinterpret_cast<quint16 *>(buff);
             do {
-                const quint16 *d = reinterpret_cast<const quint16 *>(it->oldRawData());
-                int i;
-                for (i = 0; i < nbcolorssamples; i++) {
-                    *(dst++) = d[poses[i]];
+                const quint16 *d =
+                    reinterpret_cast<const quint16 *>(it->oldRawData());
+                for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                    *(dst++) = d[poses.at(i)];
                 }
                 if (m_options->alpha)
-                    *(dst++) = d[poses[i]];
+                    *(dst++) = d[poses.at(nbcolorssamples)];
 
             } while (it->nextPixel());
             return true;
@@ -156,12 +153,11 @@ bool KisTiffPsdWriter::copyDataToStrips(KisHLineConstIteratorSP it,
         quint8 *dst = reinterpret_cast<quint8 *>(buff);
         do {
             const quint8 *d = it->oldRawData();
-            int i;
-            for (i = 0; i < nbcolorssamples; i++) {
-                *(dst++) = d[poses[i]];
+            for (uint8_t i = 0; i < nbcolorssamples; i++) {
+                *(dst++) = d[poses.at(i)];
             }
             if (m_options->alpha)
-                *(dst++) = d[poses[i]];
+                *(dst++) = d[poses.at(nbcolorssamples)];
 
         } while (it->nextPixel());
         return true;
@@ -186,9 +182,9 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
     dbgFile << "Writing root layer projection";
     KisPaintDeviceSP pd = layer->projection();
 
-    uint16_t color_type;
+    uint16_t color_type = 0;
     uint16_t sample_format = SAMPLEFORMAT_UINT;
-    const KoColorSpace *destColorSpace;
+    const KoColorSpace *destColorSpace = nullptr;
     // Check colorspace
     if (!writeColorSpaceInformation(image(), pd->colorSpace(), color_type, sample_format, destColorSpace)) { // unsupported colorspace
         if (!destColorSpace) {
@@ -200,18 +196,15 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
     }
 
     // Save depth
-    quint16 depth = static_cast<quint16>(8 * pd->pixelSize() / pd->channelCount());
+    uint32_t depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
     // Save number of samples
-    quint16 nbchannels;
     if (m_options->alpha) {
-        nbchannels = static_cast<quint16>(pd->channelCount());
-        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, nbchannels);
-        uint16_t sampleinfo[1] = {EXTRASAMPLE_UNASSALPHA};
-        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo);
+        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount());
+        const std::array<uint16_t, 1> sampleinfo = {EXTRASAMPLE_UNASSALPHA};
+        TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 1, sampleinfo.data());
     } else {
-        nbchannels = static_cast<quint16>(pd->channelCount() - 1);
-        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, nbchannels);
+        TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount() - 1);
         TIFFSetField(image(), TIFFTAG_EXTRASAMPLES, 0);
     }
 
@@ -252,37 +245,35 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
         KisHLineConstIteratorSP it = pd->createHLineConstIteratorNG(0, y, width);
         switch (color_type) {
         case PHOTOMETRIC_MINISBLACK: {
-            quint8 poses[] = {0, 1};
+            const std::array<quint8, 5> poses = {0, 1};
             r = copyDataToStrips(it, buff, depth, sample_format, 1, poses);
         } break;
         case PHOTOMETRIC_RGB: {
-            quint8 poses[4];
-            if (sample_format == SAMPLEFORMAT_IEEEFP) {
-                poses[2] = 2;
-                poses[1] = 1;
-                poses[0] = 0;
-                poses[3] = 3;
-            } else {
-                poses[0] = 2;
-                poses[1] = 1;
-                poses[2] = 0;
-                poses[3] = 3;
-            }
+            const auto poses = [&]() -> std::array<quint8, 5> {
+                if (sample_format == SAMPLEFORMAT_IEEEFP) {
+                    return {0, 1, 2, 3};
+                } else {
+                    return {2, 1, 0, 3};
+                }
+            }();
             r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
         } break;
         case PHOTOMETRIC_SEPARATED: {
-            quint8 poses[] = {0, 1, 2, 3, 4};
+            const std::array<quint8, 5> poses = {0, 1, 2, 3, 4};
             r = copyDataToStrips(it, buff, depth, sample_format, 4, poses);
         } break;
         case PHOTOMETRIC_ICCLAB: {
-            quint8 poses[] = {0, 1, 2, 3};
+            const std::array<quint8, 5> poses = {0, 1, 2, 3};
             r = copyDataToStrips(it, buff, depth, sample_format, 3, poses);
         } break;
             return ImportExportCodes::FormatColorSpaceUnsupported;
         }
         if (!r)
             return ImportExportCodes::InternalError;
-        TIFFWriteScanline(image(), buff, static_cast<quint32>(y), (tsample_t)-1);
+        TIFFWriteScanline(image(),
+                          buff,
+                          static_cast<quint32>(y),
+                          (tsample_t)-1);
     }
     _TIFFfree(buff);
 
@@ -301,13 +292,14 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
         dbgFile << "m_image->rootLayer->childCount" << layer->childCount() << buf.pos();
 
         if (haveLayers) {
-            KisTiffPsdLayerRecord layerSection(TIFFIsBigEndian(image()),
-                                               static_cast<uint32_t>(width),
-                                               static_cast<uint32_t>(height),
-                                               static_cast<uint16_t>(depth),
-                                               nbchannels,
-                                               color_type,
-                                               true);
+            KisTiffPsdLayerRecord layerSection(
+                TIFFIsBigEndian(image()),
+                static_cast<uint32_t>(width),
+                static_cast<uint32_t>(height),
+                static_cast<uint16_t>(depth),
+                static_cast<uint16_t>(pd->channelCount()),
+                color_type,
+                true);
 
             if (!layerSection.write(buf, layer, static_cast<psd_compression_type>(m_options->psdCompressionType))) {
                 dbgFile << "failed to write layer section. Error:" << layerSection.record()->error << buf.pos();
@@ -346,7 +338,8 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
             dbgFile << "Annotation:" << annotation->type() << annotation->description();
 
             if (annotation->type().startsWith(QString("PSD Resource Block:"))) { //
-                PSDResourceBlock *resourceBlock = dynamic_cast<PSDResourceBlock *>(annotation.data());
+                PSDResourceBlock *resourceBlock =
+                    dynamic_cast<PSDResourceBlock *>(annotation.data());
                 if (resourceBlock) {
                     dbgFile << "Adding PSD Resource Block" << resourceBlock->identifier;
                     resourceSection.resources[(KisTiffPsdResourceRecord::PSDResourceID)resourceBlock->identifier] = resourceBlock;
@@ -356,10 +349,10 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
 
         // Add resolution block
         {
-            RESN_INFO_1005 *resInfo = new RESN_INFO_1005();
+            auto *resInfo = new RESN_INFO_1005();
             resInfo->hRes = static_cast<int>(INCH_TO_POINT(layer->image()->xRes()));
             resInfo->vRes = static_cast<int>(INCH_TO_POINT(layer->image()->yRes()));
-            PSDResourceBlock *block = new PSDResourceBlock();
+            auto *block = new PSDResourceBlock();
             block->identifier = KisTiffPsdResourceRecord::RESN_INFO;
             block->resource = resInfo;
             resourceSection.resources[KisTiffPsdResourceRecord::RESN_INFO] = block;
@@ -367,9 +360,9 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
 
         // Add icc block
         {
-            ICC_PROFILE_1039 *profileInfo = new ICC_PROFILE_1039();
+            auto *profileInfo = new ICC_PROFILE_1039();
             profileInfo->icc = layer->image()->profile()->rawData();
-            PSDResourceBlock *block = new PSDResourceBlock();
+            auto *block = new PSDResourceBlock();
             block->identifier = KisTiffPsdResourceRecord::ICC_PROFILE;
             block->resource = profileInfo;
             resourceSection.resources[KisTiffPsdResourceRecord::ICC_PROFILE] = block;

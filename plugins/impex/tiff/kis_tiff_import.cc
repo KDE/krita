@@ -683,13 +683,14 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     }
     KisPaintLayer *layer =
         new KisPaintLayer(m_image, m_image->nextLayerName(), quint8_MAX, cs);
-    tdata_t buf = nullptr;
-    tdata_t *ps_buf = nullptr; // used only for planar configuration separated
+    std::unique_ptr<std::remove_pointer_t<tdata_t>, decltype(&_TIFFfree)> buf(
+        nullptr,
+        &_TIFFfree);
+    QVector<tdata_t> ps_buf; // used only for planar configuration separated
+
     KisBufferStreamBase *tiffstream = nullptr;
 
     KisTIFFReaderBase *tiffReader = nullptr;
-
-    KisTIFFPostProcessor *postprocessor = nullptr;
 
     // Configure poses
     uint16_t nbcolorsamples = nbchannels - extrasamplescount;
@@ -934,7 +935,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     }
 
     if (!tiffReader) {
-        delete[] lineSizeCoeffs;
         TIFFClose(image);
         dbgFile << "Image has an invalid/unsupported color type: "
                 << color_type;
@@ -951,22 +951,25 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         TIFFGetField(image, TIFFTAG_TILELENGTH, &tileHeight);
         uint32_t linewidth = (tileWidth * depth * nbchannels) / 8;
         if (planarconfig == PLANARCONFIG_CONTIG) {
-            buf = _TIFFmalloc(TIFFTileSize(image));
+            buf.reset(_TIFFmalloc(TIFFTileSize(image)));
             if (depth < 16) {
-                tiffstream = new KisBufferStreamContigBelow16((uint8_t *)buf,
-                                                              depth,
-                                                              linewidth);
-            } else if (depth < 32) {
-                tiffstream = new KisBufferStreamContigBelow32((uint8_t *)buf,
-                                                              depth,
-                                                              linewidth);
+                tiffstream = new KisBufferStreamContigBelow16(
+                    static_cast<uint8_t *>(buf.get()),
+                    depth,
+                    linewidth);
+            } else if (depth >= 16 && depth < 32) {
+                tiffstream = new KisBufferStreamContigBelow32(
+                    static_cast<uint8_t *>(buf.get()),
+                    depth,
+                    linewidth);
             } else {
-                tiffstream = new KisBufferStreamContigAbove32((uint8_t *)buf,
-                                                              depth,
-                                                              linewidth);
+                tiffstream = new KisBufferStreamContigAbove32(
+                    static_cast<uint8_t *>(buf.get()),
+                    depth,
+                    linewidth);
             }
         } else {
-            ps_buf = new tdata_t[nbchannels];
+            ps_buf.resize(nbchannels);
             QVector<tsize_t> lineSizes(nbchannels);
             tmsize_t baseSize = TIFFTileSize(image);
             for (uint32_t i = 0; i < nbchannels; i++) {
@@ -975,7 +978,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 ;
             }
             tiffstream = new KisBufferStreamSeparate(
-                reinterpret_cast<uint8_t **>(ps_buf),
+                reinterpret_cast<uint8_t **>(ps_buf.data()),
                 nbchannels,
                 depth,
                 lineSizes.data());
@@ -986,7 +989,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             for (x = 0; x < width; x += tileWidth) {
                 dbgFile << "Reading tile x =" << x << " y =" << y;
                 if (planarconfig == PLANARCONFIG_CONTIG) {
-                    TIFFReadTile(image, buf, x, y, 0, (tsample_t)-1);
+                    TIFFReadTile(image, buf.get(), x, y, 0, (tsample_t)-1);
                 } else {
                     for (uint16_t i = 0; i < nbchannels; i++) {
                         TIFFReadTile(image, ps_buf[i], x, y, 0, i);
@@ -1017,25 +1020,25 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                  height); // when TIFFNumberOfStrips(image) == 1 it might happen
                           // that rowsPerStrip is incorrectly set
         if (planarconfig == PLANARCONFIG_CONTIG) {
-            buf = _TIFFmalloc(stripsize);
+            buf.reset(_TIFFmalloc(stripsize));
             if (depth < 16) {
                 tiffstream = new KisBufferStreamContigBelow16(
-                    reinterpret_cast<uint8_t *>(buf),
+                    static_cast<uint8_t *>(buf.get()),
                     depth,
                     stripsize / rowsPerStrip);
             } else if (depth < 32) {
                 tiffstream = new KisBufferStreamContigBelow32(
-                    reinterpret_cast<uint8_t *>(buf),
+                    static_cast<uint8_t *>(buf.get()),
                     depth,
                     stripsize / rowsPerStrip);
             } else {
                 tiffstream = new KisBufferStreamContigAbove32(
-                    reinterpret_cast<uint8_t *>(buf),
+                    static_cast<uint8_t *>(buf.get()),
                     depth,
                     stripsize / rowsPerStrip);
             }
         } else {
-            ps_buf = new tdata_t[nbchannels];
+            ps_buf.resize(nbchannels);
             tsize_t scanLineSize = stripsize / rowsPerStrip;
             dbgFile << " scanLineSize for each plan =" << scanLineSize;
             QVector<tsize_t> lineSizes(nbchannels);
@@ -1044,7 +1047,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
             tiffstream = new KisBufferStreamSeparate(
-                reinterpret_cast<uint8_t **>(ps_buf),
+                reinterpret_cast<uint8_t **>(ps_buf.data()),
                 nbchannels,
                 depth,
                 lineSizes.data());
@@ -1062,7 +1065,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             if (planarconfig == PLANARCONFIG_CONTIG) {
                 TIFFReadEncodedStrip(image,
                                      TIFFComputeStrip(image, y, 0),
-                                     buf,
+                                     buf.get(),
                                      (tsize_t)-1);
             } else {
                 for (uint16_t i = 0; i < nbchannels; i++) {
@@ -1086,13 +1089,10 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     tiffReader->finalize();
     delete tiffReader;
     delete tiffstream;
-    if (planarconfig == PLANARCONFIG_CONTIG) {
-        _TIFFfree(buf);
-    } else {
-        for (uint32_t i = 0; i < nbchannels; i++) {
-            _TIFFfree(ps_buf[i]);
+    if (planarconfig != PLANARCONFIG_CONTIG) {
+        for (auto *const b : ps_buf) {
+            _TIFFfree(b);
         }
-        delete[] ps_buf;
     }
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());

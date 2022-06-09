@@ -14,6 +14,7 @@
 #include <limits>
 #include <tiffio.h>
 #include <type_traits>
+#include <utility>
 
 #include <kis_buffer_stream.h>
 #include <kis_debug.h>
@@ -39,10 +40,10 @@ public:
     virtual ~KisTIFFPostProcessor() = default;
 
 public:
-    virtual void postProcess(void *) = 0;
+    virtual void postProcess(void *) const = 0;
 
 protected:
-    inline uint32_t nbColorsSamples()
+    inline uint32_t nbColorsSamples() const
     {
         return m_nbcolorssamples;
     }
@@ -60,7 +61,7 @@ public:
     }
     ~KisTIFFPostProcessorDummy() override = default;
 
-    void postProcess(void *) override
+    void postProcess(void *) const override
     {
     }
 };
@@ -72,25 +73,29 @@ public:
         : KisTIFFPostProcessor(nbcolorssamples)
     {
     }
-    ~KisTIFFPostProcessorInvert() override
-    {
-    }
+    ~KisTIFFPostProcessorInvert() override = default;
 
 public:
-    void postProcess(void *data) override
+    void postProcess(void *data) const override
     {
         postProcessImpl(reinterpret_cast<T *>(data));
     }
 
 private:
-    template<typename U = T, typename std::enable_if<std::numeric_limits<U>::is_signed, void>::type * = nullptr> inline void postProcessImpl(T *data)
+    template<typename U = T,
+             typename std::enable_if<std::numeric_limits<U>::is_signed,
+                                     void>::type * = nullptr>
+    inline void postProcessImpl(T *data) const
     {
         for (uint32_t i = 0; i < this->nbColorsSamples(); i++) {
             data[i] = -data[i];
         }
     }
 
-    template<typename U = T, typename std::enable_if<!std::numeric_limits<U>::is_signed, void>::type * = nullptr> inline void postProcessImpl(T *data)
+    template<typename U = T,
+             typename std::enable_if<!std::numeric_limits<U>::is_signed,
+                                     void>::type * = nullptr>
+    inline void postProcessImpl(T *data) const
     {
         for (uint32_t i = 0; i < this->nbColorsSamples(); i++) {
             data[i] = std::numeric_limits<T>::max() - data[i];
@@ -105,25 +110,29 @@ public:
         : KisTIFFPostProcessor(nbcolorssamples)
     {
     }
-    ~KisTIFFPostProcessorCIELABtoICCLAB() override
-    {
-    }
+    ~KisTIFFPostProcessorCIELABtoICCLAB() override = default;
 
 public:
-    void postProcess(void *data) override
+    void postProcess(void *data) const override
     {
         postProcessImpl(reinterpret_cast<T *>(data));
     }
 
 private:
-    template<typename U = T, typename std::enable_if<!std::numeric_limits<U>::is_integer, void>::type * = nullptr> inline void postProcessImpl(T *data)
+    template<typename U = T,
+             typename std::enable_if<!std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    inline void postProcessImpl(T *data) const
     {
         for (uint32_t i = 1; i < this->nbColorsSamples(); i++) {
             data[i] += 128.0f;
         }
     }
 
-    template<typename U = T, typename std::enable_if<std::numeric_limits<U>::is_integer, void>::type * = nullptr> inline void postProcessImpl(T *data)
+    template<typename U = T,
+             typename std::enable_if<std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    inline void postProcessImpl(T *data) const
     {
         for (uint32_t i = 1; i < this->nbColorsSamples(); i++) {
             data[i] += std::numeric_limits<T>::max() / 2;
@@ -135,7 +144,7 @@ class KisTIFFReaderBase
 {
 public:
     KisTIFFReaderBase(KisPaintDeviceSP device,
-                      quint8 *poses,
+                      const std::array<quint8, 5> &poses,
                       int32_t alphapos,
                       uint16_t sourceDepth,
                       uint16_t sample_format,
@@ -157,9 +166,7 @@ public:
     {
 
     }
-    virtual ~KisTIFFReaderBase()
-    {
-    }
+    virtual ~KisTIFFReaderBase() = default;
 
 public:
     /**
@@ -180,36 +187,36 @@ public:
     }
 
 protected:
-    inline KisPaintDeviceSP paintDevice()
+    inline KisPaintDeviceSP paintDevice() const
     {
         return m_device;
     }
 
-    inline qint32 alphaPos()
+    inline qint32 alphaPos() const
     {
         return m_alphapos;
     }
 
-    inline quint16 sourceDepth()
+    inline quint16 sourceDepth() const
     {
         return m_sourceDepth;
     }
-    inline uint16_t sampleFormat()
+    inline uint16_t sampleFormat() const
     {
         return m_sample_format;
     }
 
-    inline quint16 nbColorsSamples()
+    inline quint16 nbColorsSamples() const
     {
         return m_nbcolorssamples;
     }
 
-    inline quint16 nbExtraSamples()
+    inline quint16 nbExtraSamples() const
     {
         return m_nbextrasamples;
     }
 
-    inline bool hasPremultipliedAlpha()
+    inline bool hasPremultipliedAlpha() const
     {
         return m_premultipliedAlpha;
     }
@@ -219,12 +226,12 @@ protected:
         return m_poses;
     }
 
-    inline KoColorTransformation *transform()
+    inline KoColorTransformation *transform() const
     {
         return m_transformProfile;
     }
 
-    inline KisTIFFPostProcessor *postProcessor()
+    inline const KisTIFFPostProcessor *postProcessor() const
     {
         return mpostProcessImpl;
     }
@@ -258,7 +265,16 @@ public:
                         KoColorTransformation *transformProfile,
                         KisTIFFPostProcessor *postprocessor,
                         T alphaValue)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, premultipliedAlpha, transformProfile, postprocessor)
+        : KisTIFFReaderBase(device,
+                            poses,
+                            alphapos,
+                            sourceDepth,
+                            sample_format,
+                            nbcolorssamples,
+                            extrasamplescount,
+                            premultipliedAlpha,
+                            transformProfile,
+                            postprocessor)
         , m_alphaValue(alphaValue)
     {
     }
@@ -274,7 +290,7 @@ private:
         KisHLineIteratorSP it = this->paintDevice()->createHLineIteratorNG(x, y, dataWidth);
         do {
             T *d = reinterpret_cast<T *>(it->rawData());
-            quint8 i;
+            quint8 i = 0;
             for (i = 0; i < this->nbColorsSamples(); i++) {
                 // XXX: for half this should use the bit constructor (plus downcast to uint16_t) (same as in the rest accesses)
                 const uint32_t v = tiffstream->nextValue();
@@ -313,7 +329,7 @@ private:
                 };
 
                 if (!unmultipliedColorsConsistent(d)) {
-                    while (1) {
+                    while (true) {
                         T newAlpha = d[this->poses()[i]];
 
                         for (quint8 i = 0; i < this->nbColorsSamples(); i++) {
@@ -351,7 +367,9 @@ private:
             for (i = 0; i < this->nbColorsSamples(); i++) {
                 if (sampleFormat() == SAMPLEFORMAT_INT) {
                     T value;
-                    const typename std::make_signed<T>::type v = static_cast<typename std::make_signed<T>::type>(tiffstream->nextValue());
+                    const typename std::make_signed<T>::type v =
+                        static_cast<typename std::make_signed<T>::type>(
+                            tiffstream->nextValue());
                     value = v + (std::numeric_limits<T>::max() / 2) + 1;
                     if (no_coeff) {
                         d[this->poses()[i]] = static_cast<T>(value);
@@ -375,7 +393,9 @@ private:
                 if (k == this->alphaPos()) {
                     if (sampleFormat() == SAMPLEFORMAT_INT) {
                         T value;
-                        const typename std::make_signed<T>::type v = static_cast<typename std::make_signed<T>::type>(tiffstream->nextValue());
+                        const typename std::make_signed<T>::type v =
+                            static_cast<typename std::make_signed<T>::type>(
+                                tiffstream->nextValue());
                         value = v + (std::numeric_limits<T>::max() / 2) + 1;
                         if (no_coeff) {
                             d[this->poses()[i]] = static_cast<T>(value);
@@ -428,7 +448,16 @@ public:
                              uint8_t extrasamplescount,
                              KoColorTransformation *transformProfile,
                              KisTIFFPostProcessor *postprocessor)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sample_format, nbcolorssamples, extrasamplescount, premultipliedAlpha, transformProfile, postprocessor)
+        : KisTIFFReaderBase(device,
+                            poses,
+                            alphapos,
+                            sourceDepth,
+                            sample_format,
+                            nbcolorssamples,
+                            extrasamplescount,
+                            premultipliedAlpha,
+                            transformProfile,
+                            postprocessor)
         , m_red(red)
         , m_green(green)
         , m_blue(blue)
@@ -439,7 +468,9 @@ public:
     {
         KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(static_cast<int>(x), static_cast<int>(y), static_cast<int>(dataWidth));
         do {
-            KisTIFFReaderFromPalette::type *d = reinterpret_cast<KisTIFFReaderFromPalette::type *>(it->rawData());
+            KisTIFFReaderFromPalette::type *d =
+                reinterpret_cast<KisTIFFReaderFromPalette::type *>(
+                    it->rawData());
             uint32_t index = tiffstream->nextValue();
             d[2] = m_red[index];
             d[1] = m_green[index];

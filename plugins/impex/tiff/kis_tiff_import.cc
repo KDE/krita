@@ -11,6 +11,8 @@
 #include <QPair>
 #include <QStack>
 
+#include <array>
+
 #include <exiv2/exiv2.hpp>
 #include <kpluginfactory.h>
 #include <tiffio.h>
@@ -64,9 +66,7 @@ KisTIFFImport::KisTIFFImport(QObject *parent, const QVariantList &)
 {
 }
 
-KisTIFFImport::~KisTIFFImport()
-{
-}
+KisTIFFImport::~KisTIFFImport() = default;
 
 QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
                                                   uint16_t color_type,
@@ -94,26 +94,21 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
             if (color_nb_bits == 16) {
 #ifdef HAVE_OPENEXR
                 destDepth = 16;
-                return QPair<QString, QString>(GrayAColorModelID.id(),
-                                               Float16BitsColorDepthID.id());
+                return {GrayAColorModelID.id(), Float16BitsColorDepthID.id()};
 #endif
             } else if (color_nb_bits == 32) {
                 destDepth = 32;
-                return QPair<QString, QString>(GrayAColorModelID.id(),
-                                               Float32BitsColorDepthID.id());
+                return {GrayAColorModelID.id(), Float32BitsColorDepthID.id()};
             }
-            return QPair<QString,
-                         QString>(); // sanity check; no support for float of
-                                     // higher or lower bit depth
+            return {}; // sanity check; no support for float of
+                       // higher or lower bit depth
         }
         if (color_nb_bits <= 8) {
             destDepth = 8;
-            return QPair<QString, QString>(GrayAColorModelID.id(),
-                                           Integer8BitsColorDepthID.id());
+            return {GrayAColorModelID.id(), Integer8BitsColorDepthID.id()};
         } else /* if (color_nb_bits == bits16) */ {
             destDepth = 16;
-            return QPair<QString, QString>(GrayAColorModelID.id(),
-                                           Integer16BitsColorDepthID.id());
+            return {GrayAColorModelID.id(), Integer16BitsColorDepthID.id()};
         }
 
     } else if (color_type == PHOTOMETRIC_RGB /*|| color_type == */) {
@@ -125,26 +120,21 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
             if (color_nb_bits == 16) {
 #ifdef HAVE_OPENEXR
                 destDepth = 16;
-                return QPair<QString, QString>(RGBAColorModelID.id(),
-                                               Float16BitsColorDepthID.id());
+                return {RGBAColorModelID.id(), Float16BitsColorDepthID.id()};
 #endif
             } else if (color_nb_bits == 32) {
                 destDepth = 32;
-                return QPair<QString, QString>(RGBAColorModelID.id(),
-                                               Float32BitsColorDepthID.id());
+                return {RGBAColorModelID.id(), Float32BitsColorDepthID.id()};
             }
-            return QPair<QString,
-                         QString>(); // sanity check; no support for float of
-                                     // higher or lower bit depth
+            return {}; // sanity check; no support for float of
+                       // higher or lower bit depth
         } else {
             if (color_nb_bits <= 8) {
                 destDepth = 8;
-                return QPair<QString, QString>(RGBAColorModelID.id(),
-                                               Integer8BitsColorDepthID.id());
+                return {RGBAColorModelID.id(), Integer8BitsColorDepthID.id()};
             } else /* if (color_nb_bits == bits16) */ {
                 destDepth = 16;
-                return QPair<QString, QString>(RGBAColorModelID.id(),
-                                               Integer16BitsColorDepthID.id());
+                return {RGBAColorModelID.id(), Integer16BitsColorDepthID.id()};
             }
         }
     } else if (color_type == PHOTOMETRIC_YCBCR) {
@@ -156,53 +146,47 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
             if (color_nb_bits == 16) {
 #ifdef HAVE_OPENEXR
                 destDepth = 16;
-                return QPair<QString, QString>(YCbCrAColorModelID.id(),
-                                               Float16BitsColorDepthID.id());
+                return {YCbCrAColorModelID.id(), Float16BitsColorDepthID.id()};
 #endif
             } else if (color_nb_bits == 32) {
                 destDepth = 32;
-                return QPair<QString, QString>(YCbCrAColorModelID.id(),
-                                               Float32BitsColorDepthID.id());
+                return {YCbCrAColorModelID.id(), Float32BitsColorDepthID.id()};
             }
-            return QPair<QString,
-                         QString>(); // sanity check; no support for float of
-                                     // higher or lower bit depth
+            return {}; // sanity check; no support for float of
+                       // higher or lower bit depth
         } else {
             if (color_nb_bits <= 8) {
                 destDepth = 8;
-                return QPair<QString, QString>(YCbCrAColorModelID.id(),
-                                               Integer8BitsColorDepthID.id());
+                return {YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id()};
             } else /* if (color_nb_bits == bits16) */ {
                 destDepth = 16;
-                return QPair<QString, QString>(YCbCrAColorModelID.id(),
-                                               Integer16BitsColorDepthID.id());
+                return {YCbCrAColorModelID.id(),
+                        Integer16BitsColorDepthID.id()};
             }
         }
         if (color_nb_bits <= 8) {
             destDepth = 8;
-            return QPair<QString, QString>(YCbCrAColorModelID.id(),
-                                           Integer8BitsColorDepthID.id());
+            return {YCbCrAColorModelID.id(), Integer8BitsColorDepthID.id()};
         } else if (color_nb_bits == bits16) {
             destDepth = 16;
-            return QPair<QString, QString>(YCbCrAColorModelID.id(),
-                                           Integer16BitsColorDepthID.id());
+            return {YCbCrAColorModelID.id(), Integer16BitsColorDepthID.id()};
         } else {
-            return QPair<QString, QString>(); // sanity check; no support
-                                              // integers of higher bit depth
+            return {}; // sanity check; no support
+                       // integers of higher bit depth
         }
     } else if (color_type == PHOTOMETRIC_SEPARATED) {
         if (nbchannels == 0)
             nbchannels = 4;
         // SEPARATED is in general CMYK but not always, so we check
-        uint16_t inkset;
+        uint16_t inkset = 0;
         if ((TIFFGetField(image, TIFFTAG_INKSET, &inkset) == 0)) {
             dbgFile << "Image does not define the inkset.";
             inkset = 2;
         }
         if (inkset != INKSET_CMYK) {
             dbgFile << "Unsupported inkset (right now, only CMYK is supported)";
-            char **ink_names;
-            uint16_t numberofinks;
+            char **ink_names = nullptr;
+            uint16_t numberofinks = 0;
             if (TIFFGetField(image, TIFFTAG_INKNAMES, &ink_names) == 1
                 && TIFFGetField(image, TIFFTAG_NUMBEROFINKS, &numberofinks)
                     == 1) {
@@ -216,7 +200,7 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
                 // information about inks and four channels, then it's a CMYK
                 // file :
                 if (nbchannels - extrasamplescount != 4) {
-                    return QPair<QString, QString>();
+                    return {};
                 }
                 // else - assume it's CMYK and proceed
             }
@@ -225,28 +209,23 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
             if (color_nb_bits == 16) {
 #ifdef HAVE_OPENEXR
                 destDepth = 16;
-                return QPair<QString, QString>(CMYKAColorModelID.id(),
-                                               Float16BitsColorDepthID.id());
+                return {CMYKAColorModelID.id(), Float16BitsColorDepthID.id()};
 #endif
             } else if (color_nb_bits == 32) {
                 destDepth = 32;
-                return QPair<QString, QString>(CMYKAColorModelID.id(),
-                                               Float32BitsColorDepthID.id());
+                return {CMYKAColorModelID.id(), Float32BitsColorDepthID.id()};
             }
-            return QPair<QString,
-                         QString>(); // sanity check; no support for float of
-                                     // higher or lower bit depth
+            return {}; // sanity check; no support for float of
+                       // higher or lower bit depth
         }
         if (color_nb_bits <= 8) {
             destDepth = 8;
-            return QPair<QString, QString>(CMYKAColorModelID.id(),
-                                           Integer8BitsColorDepthID.id());
+            return {CMYKAColorModelID.id(), Integer8BitsColorDepthID.id()};
         } else if (color_nb_bits == 16) {
             destDepth = 16;
-            return QPair<QString, QString>(CMYKAColorModelID.id(),
-                                           Integer16BitsColorDepthID.id());
+            return {CMYKAColorModelID.id(), Integer16BitsColorDepthID.id()};
         } else {
-            return QPair<QString, QString>(); // no support for other bit depths
+            return {}; // no support for other bit depths
         }
     } else if (color_type == PHOTOMETRIC_CIELAB
                || color_type == PHOTOMETRIC_ICCLAB) {
@@ -258,33 +237,28 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
         case bits32: {
             destDepth = bits32;
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
-                return QPair<QString, QString>(LABAColorModelID.id(),
-                                               Float32BitsColorDepthID.id());
+                return {LABAColorModelID.id(), Float32BitsColorDepthID.id()};
             } else {
-                return QPair<QString,
-                             QString>(); // no support for other bit depths
+                return {}; // no support for other bit depths
             }
         }
         case bits16: {
             destDepth = bits16;
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
 #ifdef HAVE_OPENEXR
-                return QPair<QString, QString>(LABAColorModelID.id(),
-                                               Float16BitsColorDepthID.id());
+                return {LABAColorModelID.id(), Float16BitsColorDepthID.id()};
 #endif
             } else {
-                return QPair<QString, QString>(LABAColorModelID.id(),
-                                               Integer16BitsColorDepthID.id());
+                return {LABAColorModelID.id(), Integer16BitsColorDepthID.id()};
             }
-            return QPair<QString, QString>(); // no support for other bit depths
+            return {}; // no support for other bit depths
         }
         case bits8: {
             destDepth = bits8;
-            return QPair<QString, QString>(LABAColorModelID.id(),
-                                           Integer8BitsColorDepthID.id());
+            return {LABAColorModelID.id(), Integer8BitsColorDepthID.id()};
         }
         default: {
-            return QPair<QString, QString>();
+            return {};
         }
         }
     } else if (color_type == PHOTOMETRIC_PALETTE) {
@@ -294,10 +268,9 @@ QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
         extrasamplescount = nbchannels - 2; // FIX the extrasamples count
         // <-- we will convert the index image to RGBA16 as the palette is
         // always on 16bits colors
-        return QPair<QString, QString>(RGBAColorModelID.id(),
-                                       Integer16BitsColorDepthID.id());
+        return {RGBAColorModelID.id(), Integer16BitsColorDepthID.id()};
     }
-    return QPair<QString, QString>();
+    return {};
 }
 
 template<template<typename> class T>
@@ -335,7 +308,7 @@ KisImportExportErrorCode KisTIFFImport::readImageFromPsd(
 
     // Attempt to get the ICC profile from the image resource section
     if (resources.contains(KisTiffPsdResourceRecord::ICC_PROFILE)) {
-        const KoColorProfile *profile = 0;
+        const KoColorProfile *profile = nullptr;
 
         // Use the color mode from the synthetic PSD header
         QPair<QString, QString> colorSpaceId =
@@ -609,7 +582,8 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 // This is reversed in the postprocessor.
                 dbgPlugins << "Detected associated alpha @ " << i;
                 hasPremultipliedAlpha = true;
-                alphapos = extrasamplescount - 1U; // nbsamples - 1
+                alphapos = static_cast<int32_t>(extrasamplescount
+                                                - 1U); // nbsamples - 1
                 break;
             case EXTRASAMPLE_UNASSALPHA:
                 // color values are not premultiplied with alpha, and can be
@@ -636,7 +610,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
 
     // Read META Information
     KoDocumentInfo *info = m_doc->documentInfo();
-    char *text;
+    char *text = nullptr;
     if (TIFFGetField(image, TIFFTAG_ARTIST, &text) == 1) {
         info->setAuthorInfo("creator", text);
     }
@@ -673,7 +647,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     }
 
     // Get the planar configuration
-    uint16_t planarconfig;
+    uint16_t planarconfig = PLANARCONFIG_CONTIG;
     if (TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0) {
         dbgFile << "Plannar configuration is not define";
         TIFFClose(image);
@@ -706,18 +680,16 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             m_image->resizeImage(QRect(0, 0, newwidth, newheight));
         }
     }
-    KisPaintLayer *layer = new KisPaintLayer(m_image,
-                                             m_image->nextLayerName(),
-                                             quint8_MAX,
-                                             cs);
-    tdata_t buf = 0;
-    tdata_t *ps_buf = 0; // used only for planar configuration separated
-    KisBufferStreamBase *tiffstream;
+    KisPaintLayer *layer =
+        new KisPaintLayer(m_image, m_image->nextLayerName(), quint8_MAX, cs);
+    tdata_t buf = nullptr;
+    tdata_t *ps_buf = nullptr; // used only for planar configuration separated
+    KisBufferStreamBase *tiffstream = nullptr;
 
-    KisTIFFReaderBase *tiffReader = 0;
+    KisTIFFReaderBase *tiffReader = nullptr;
 
     quint8 poses[5];
-    KisTIFFPostProcessor *postprocessor = 0;
+    KisTIFFPostProcessor *postprocessor = nullptr;
 
     // Configure poses
     uint16_t nbcolorsamples = nbchannels - extrasamplescount;
@@ -792,9 +764,10 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         lineSizeCoeffs[i] = 1;
     }
     if (color_type == PHOTOMETRIC_PALETTE) {
-        uint16_t *red; // No need to free them they are free by libtiff
-        uint16_t *green;
-        uint16_t *blue;
+        uint16_t *red =
+            nullptr; // No need to free them they are free by libtiff
+        uint16_t *green = nullptr;
+        uint16_t *blue = nullptr;
         if ((TIFFGetField(image, TIFFTAG_COLORMAP, &red, &green, &blue)) == 0) {
             dbgFile << "Indexed image does not define a palette";
             TIFFClose(image);
@@ -822,7 +795,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                               &vsubsampling);
         lineSizeCoeffs[1] = hsubsampling;
         lineSizeCoeffs[2] = hsubsampling;
-        uint16_t position;
+        uint16_t position = 0;
         TIFFGetFieldDefaulted(image, TIFFTAG_YCBCRPOSITIONING, &position);
         if (dstDepth == 8) {
             tiffReader = new KisTIFFYCbCrReader<uint8_t>(
@@ -992,8 +965,10 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
 
     if (TIFFIsTiled(image)) {
         dbgFile << "tiled image";
-        uint32_t tileWidth, tileHeight;
-        uint32_t x, y;
+        uint32_t tileWidth = 0;
+        uint32_t tileHeight = 0;
+        uint32_t x = 0;
+        uint32_t y = 0;
         TIFFGetField(image, TIFFTAG_TILEWIDTH, &tileWidth);
         TIFFGetField(image, TIFFTAG_TILELENGTH, &tileHeight);
         uint32_t linewidth = (tileWidth * depth * nbchannels) / 8;
@@ -1057,7 +1032,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     } else {
         dbgFile << "striped image";
         tsize_t stripsize = TIFFStripSize(image);
-        uint32_t rowsPerStrip;
+        uint32_t rowsPerStrip = 0;
         TIFFGetFieldDefaulted(image, TIFFTAG_ROWSPERSTRIP, &rowsPerStrip);
         dbgFile << rowsPerStrip << "" << height;
         rowsPerStrip =
@@ -1302,9 +1277,9 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
 
     // Read image profile
     dbgFile << "Reading profile";
-    const KoColorProfile *profile = 0;
-    quint32 EmbedLen;
-    uint8_t *EmbedBuffer;
+    const KoColorProfile *profile = nullptr;
+    quint32 EmbedLen = 0;
+    uint8_t *EmbedBuffer = nullptr;
 
     if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer) == 1) {
         dbgFile << "Profile found";
@@ -1329,7 +1304,7 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
                 << " is not compatible with the color space model "
                 << basicInfo.colorSpaceIdTag.first << " "
                 << basicInfo.colorSpaceIdTag.second;
-        profile = 0;
+        profile = nullptr;
     }
 
     // Do not use the linear gamma profile for 16 bits/channel by default, tiff
@@ -1366,10 +1341,10 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         basicInfo.cs = KoColorSpaceRegistry::instance()->colorSpace(
             basicInfo.colorSpaceIdTag.first,
             basicInfo.colorSpaceIdTag.second,
-            0);
+            nullptr);
     }
 
-    if (basicInfo.cs == 0) {
+    if (basicInfo.cs == nullptr) {
         dbgFile << "Color space" << basicInfo.colorSpaceIdTag.first
                 << basicInfo.colorSpaceIdTag.second
                 << " is not available, please check your installation.";
@@ -1489,9 +1464,12 @@ KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice
     }
 
     // Open the TIFF file
-    TIFF *image = nullptr;
+    TIFF *image = [&]() {
+        const QByteArray encodedFilename = QFile::encodeName(filename());
+        return TIFFOpen(encodedFilename.data(), "r");
+    }();
 
-    if ((image = TIFFOpen(QFile::encodeName(filename()), "r")) == 0) {
+    if (!image) {
         dbgFile << "Could not open the file, either it does not exist, either "
                    "it is not a TIFF :"
                 << filename();
@@ -1594,6 +1572,9 @@ KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice
     }
 
     document->setCurrentImage(m_image);
+
+    m_image = nullptr;
+    m_photoshopBlockParsed = false;
 
     return ImportExportCodes::OK;
 }

@@ -47,12 +47,21 @@ public:
                        KisTIFFPostProcessor *postprocessor,
                        uint16_t hsub,
                        uint16_t vsub)
-        : KisTIFFReaderBase(device, poses, alphapos, sourceDepth, sampleformat, nbcolorssamples, extrasamplescount, premultipliedAlpha, transformProfile, postprocessor)
+        : KisTIFFReaderBase(device,
+                            poses,
+                            alphapos,
+                            sourceDepth,
+                            sampleformat,
+                            nbcolorssamples,
+                            extrasamplescount,
+                            premultipliedAlpha,
+                            transformProfile,
+                            postprocessor)
         , m_hsub(hsub)
         , m_vsub(vsub)
+        , m_imageWidth(width)
     {
         // Initialize the buffer
-        m_imageWidth = width;
         if (2 * (m_imageWidth / 2) != m_imageWidth)
             m_imageWidth++;
         m_bufferWidth = m_imageWidth / m_hsub;

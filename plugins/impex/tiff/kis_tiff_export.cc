@@ -41,9 +41,7 @@ KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &) : KisImportE
 {
 }
 
-KisTIFFExport::~KisTIFFExport()
-{
-}
+KisTIFFExport::~KisTIFFExport() = default;
 
 KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {
@@ -81,7 +79,7 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     KisImageSP kisimage = [&]() {
         if (options.flatten) {
             KisImageSP image =
-                new KisImage(0,
+                new KisImage(nullptr,
                              document->savingImage()->width(),
                              document->savingImage()->height(),
                              document->savingImage()->colorSpace(),

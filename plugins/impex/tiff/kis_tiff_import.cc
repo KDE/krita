@@ -651,7 +651,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     uint16_t planarconfig = PLANARCONFIG_CONTIG;
     if (TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0) {
         dbgFile << "Plannar configuration is not define";
-        TIFFClose(image);
         return ImportExportCodes::FileFormatIncorrect;
     }
     // Creating the KisImageSP
@@ -751,7 +750,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         uint16_t *blue = nullptr;
         if ((TIFFGetField(image, TIFFTAG_COLORMAP, &red, &green, &blue)) == 0) {
             dbgFile << "Indexed image does not define a palette";
-            TIFFClose(image);
             return ImportExportCodes::FileFormatIncorrect;
         }
 
@@ -935,7 +933,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     }
 
     if (!tiffReader) {
-        TIFFClose(image);
         dbgFile << "Image has an invalid/unsupported color type: "
                 << color_type;
         return ImportExportCodes::FileFormatIncorrect;
@@ -1173,13 +1170,11 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
 
     if (TIFFGetField(image, TIFFTAG_IMAGEWIDTH, &basicInfo.width) == 0) {
         dbgFile << "Image does not define its width";
-        TIFFClose(image);
         return ImportExportCodes::FileFormatIncorrect;
     }
 
     if (TIFFGetField(image, TIFFTAG_IMAGELENGTH, &basicInfo.height) == 0) {
         dbgFile << "Image does not define its height";
-        TIFFClose(image);
         return ImportExportCodes::FileFormatIncorrect;
     }
 
@@ -1242,7 +1237,6 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         dbgFile << "Image has an unsupported colorspace :"
                 << basicInfo.color_type
                 << " for this depth :" << basicInfo.depth;
-        TIFFClose(image);
         return ImportExportCodes::FormatColorSpaceUnsupported;
     }
     dbgFile << "Color space is :" << basicInfo.colorSpaceIdTag.first
@@ -1323,7 +1317,6 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         dbgFile << "Color space" << basicInfo.colorSpaceIdTag.first
                 << basicInfo.colorSpaceIdTag.second
                 << " is not available, please check your installation.";
-        TIFFClose(image);
         return ImportExportCodes::FormatColorSpaceUnsupported;
     }
 
@@ -1439,10 +1432,10 @@ KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice
     }
 
     // Open the TIFF file
-    TIFF *image = [&]() {
-        const QByteArray encodedFilename = QFile::encodeName(filename());
-        return TIFFOpen(encodedFilename.data(), "r");
-    }();
+    const QByteArray encodedFilename = QFile::encodeName(filename());
+    std::unique_ptr<TIFF, decltype(&TIFFClose)> image(
+        TIFFOpen(encodedFilename.data(), "r"),
+        &TIFFClose);
 
     if (!image) {
         dbgFile << "Could not open the file, either it does not exist, either "
@@ -1451,7 +1444,7 @@ KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice
         return (ImportExportCodes::FileFormatIncorrect);
     }
     dbgFile << "Reading first image descriptor";
-    KisImportExportErrorCode result = readTIFFDirectory(document, image);
+    KisImportExportErrorCode result = readTIFFDirectory(document, image.get());
     if (!result.isOk()) {
         return result;
     }
@@ -1460,15 +1453,15 @@ KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice
         // Photoshop images only have one IFD plus the layer blob
         // Ward off inconsistencies by blocking future attempts to parse them
         m_photoshopBlockParsed = true;
-        while (TIFFReadDirectory(image)) {
-            result = readTIFFDirectory(document, image);
+        while (TIFFReadDirectory(image.get())) {
+            result = readTIFFDirectory(document, image.get());
             if (!result.isOk()) {
                 return result;
             }
         }
     }
     // Freeing memory
-    TIFFClose(image);
+    image.reset();
 
     {
         // HACK!! Externally parse the Exif metadata

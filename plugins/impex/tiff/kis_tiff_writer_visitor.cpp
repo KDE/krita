@@ -227,10 +227,11 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         QBuffer buf;
         io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
 
-        if (!TIFFSetField(image(),
-                          TIFFTAG_RICHTIFFIPTC,
-                          static_cast<uint32_t>(buf.size()),
-                          buf.data().data())) {
+        if (buf.size()
+            && !TIFFSetField(image(),
+                             TIFFTAG_RICHTIFFIPTC,
+                             static_cast<uint32_t>(buf.size()),
+                             buf.data().data())) {
             dbgFile << "Failed to write the IPTC metadata to the TIFF field";
         }
     }
@@ -242,10 +243,11 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         QBuffer buf;
         io->saveTo(layer->metaData(), &buf, KisMetaData::IOBackend::NoHeader);
 
-        if (!TIFFSetField(image(),
-                          TIFFTAG_XMLPACKET,
-                          static_cast<uint32_t>(buf.size()),
-                          buf.data().data())) {
+        if (buf.size()
+            && !TIFFSetField(image(),
+                             TIFFTAG_XMLPACKET,
+                             static_cast<uint32_t>(buf.size()),
+                             buf.data().data())) {
             dbgFile << "Failed to write the XMP metadata to the TIFF field";
         }
     }

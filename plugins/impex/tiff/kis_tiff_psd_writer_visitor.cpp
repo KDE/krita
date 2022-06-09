@@ -7,7 +7,6 @@
 
 #include "kis_tiff_psd_writer_visitor.h"
 
-#include <KisImportExportErrorCode.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>

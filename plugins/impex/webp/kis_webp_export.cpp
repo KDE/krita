@@ -451,6 +451,9 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
 void KisWebPExport::initializeCapabilities()
 {
     addCapability(KisExportCheckRegistry::instance()
+                      ->get("AnimationCheck")
+                      ->create(KisExportCheckBase::SUPPORTED));
+    addCapability(KisExportCheckRegistry::instance()
                       ->get("sRGBProfileCheck")
                       ->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()

@@ -252,20 +252,20 @@ void KisTIFFExport::initializeCapabilities()
     addCapability(
         KisExportCheckRegistry::instance()->get("ColorModelHomogenousCheck")->create(KisExportCheckBase::SUPPORTED));
 
-    QList<QPair<KoID, KoID> > supportedColorModels;
-    supportedColorModels << QPair<KoID, KoID>()
-            << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
-            << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
-            << QPair<KoID, KoID>(RGBAColorModelID, Float16BitsColorDepthID)
-            << QPair<KoID, KoID>(RGBAColorModelID, Float32BitsColorDepthID)
-            << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
-            << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)
-            << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID)
-            << QPair<KoID, KoID>(CMYKAColorModelID, Integer16BitsColorDepthID)
-            << QPair<KoID, KoID>(LABAColorModelID, Integer8BitsColorDepthID)
-            << QPair<KoID, KoID>(LABAColorModelID, Integer16BitsColorDepthID)
-            << QPair<KoID, KoID>(LABAColorModelID, Float16BitsColorDepthID)
-            << QPair<KoID, KoID>(LABAColorModelID, Float32BitsColorDepthID);
+    QList<QPair<KoID, KoID>> supportedColorModels = {
+        {},
+        {RGBAColorModelID, Integer8BitsColorDepthID},
+        {RGBAColorModelID, Integer16BitsColorDepthID},
+        {RGBAColorModelID, Float16BitsColorDepthID},
+        {RGBAColorModelID, Float32BitsColorDepthID},
+        {GrayAColorModelID, Integer8BitsColorDepthID},
+        {GrayAColorModelID, Integer16BitsColorDepthID},
+        {CMYKAColorModelID, Integer8BitsColorDepthID},
+        {CMYKAColorModelID, Integer16BitsColorDepthID},
+        {LABAColorModelID, Integer8BitsColorDepthID},
+        {LABAColorModelID, Integer16BitsColorDepthID},
+        {LABAColorModelID, Float16BitsColorDepthID},
+        {LABAColorModelID, Float32BitsColorDepthID}};
     addSupportedColorModels(supportedColorModels, "TIFF");
 
 }

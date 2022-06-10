@@ -38,7 +38,13 @@ KisConvertHeightToNormalMapFilter::KisConvertHeightToNormalMapFilter(): KisFilte
 void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, const QRect &rect, const KisFilterConfigurationSP config, KoUpdater *progressUpdater) const
 {
     Q_ASSERT(device);
+    Q_ASSERT(device->colorSpace());
+
     KIS_SAFE_ASSERT_RECOVER_RETURN(config);
+
+    if (device->colorSpace()->channelCount() < 3) {
+        return;
+    }
 
     KisFilterConfigurationSP configuration = config;
 
@@ -60,6 +66,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     }
 
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
+
     if (configuration->getString("type") == "prewitt") {
         type = KisEdgeDetectionKernel::Prewit;
     } else if (configuration->getString("type") == "simple") {

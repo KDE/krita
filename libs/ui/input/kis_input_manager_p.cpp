@@ -225,6 +225,14 @@ KisInputManager::Private::Private(KisInputManager *qq)
     useUnbalancedKeyPressEventWorkaround = true;
 #endif
 
+    /**
+     * In Linux distributions Qt is not patched, so we should
+     * use workaround for them
+     */
+#if defined Q_OS_LINUX &&  !defined QT_HAS_ENTER_LEAVE_PATCH
+    useUnbalancedKeyPressEventWorkaround = true;
+#endif
+
     if (qEnvironmentVariableIsSet("KRITA_FIX_UNBALANCED_KEY_EVENTS")) {
         useUnbalancedKeyPressEventWorkaround = qEnvironmentVariableIntValue("KRITA_FIX_UNBALANCED_KEY_EVENTS");
     }

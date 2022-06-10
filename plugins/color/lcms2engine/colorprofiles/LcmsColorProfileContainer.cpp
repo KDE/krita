@@ -232,9 +232,9 @@ bool LcmsColorProfileContainer::init()
         }
 
         // Check if the profile can convert (something->this)
-        d->suitableForOutput = cmsIsMatrixShaper(d->profile)
-                               || (cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_INPUT) &&
-                                   cmsIsCLUT(d->profile, INTENT_PERCEPTUAL, LCMS_USED_AS_OUTPUT));
+        d->suitableForOutput = cmsIsIntentSupported(d->profile,
+                                                    INTENT_PERCEPTUAL,
+                                                    LCMS_USED_AS_OUTPUT);
 
         d->version = cmsGetProfileVersion(d->profile);
         d->defaultIntent = cmsGetHeaderRenderingIntent(d->profile);

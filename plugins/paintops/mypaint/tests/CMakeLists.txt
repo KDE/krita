@@ -21,7 +21,7 @@ if (APPLE)
     macos_test_fixrpath(KisMyPaintOpTest)
 
 else (APPLE)
-    ecm_add_test(
+    kis_add_test(
         kis_mypaintop_test.cpp ../MyPaintPaintOpSettings.cpp ../MyPaintPaintOpPreset.cpp ../MyPaintSurface.cpp
         TEST_NAME KisMyPaintOpTest
         NAME_PREFIX "plugins-kismypaintop-"

@@ -17,7 +17,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    ecm_add_test(
+    kis_add_test(
         KisGifTest.cpp
         TEST_NAME KisGifTest
         LINK_LIBRARIES kritaui Qt5::Test

@@ -31,7 +31,6 @@ QT5_WRAP_CPP(kritalayerdocker_HEADERS_MOC
 kis_add_library(kritalayerdocker MODULE ${kritalayerdocker_SOURCES}
         ${kritalayerdocker_PART_HEADERS}
         ${kritalayerdocker_HEADERS_MOC}
-        PCH_FILE kis_image_pch.h
 )
 
 target_link_libraries(kritalayerdocker kritaui)

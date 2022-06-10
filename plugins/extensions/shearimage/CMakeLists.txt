@@ -1,6 +1,6 @@
 set(kritashearimage_SOURCES shearimage.cc dlg_shearimage.cc )
 ki18n_wrap_ui(kritashearimage_SOURCES wdg_shearimage.ui )
-kis_add_library(kritashearimage MODULE ${kritashearimage_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritashearimage MODULE ${kritashearimage_SOURCES})
 target_link_libraries(kritashearimage kritaui)
 install(TARGETS kritashearimage  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  shearimage.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

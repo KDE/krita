@@ -21,7 +21,7 @@ if (APPLE)
 
 
 else (APPLE)
-    ecm_add_test(
+    kis_add_test(
         KisActionsSnapshotTest.cpp
         NAME_PREFIX "libs-widgetutils-"
         LINK_LIBRARIES kritawidgetutils kritaimage Qt5::Test
@@ -29,7 +29,7 @@ else (APPLE)
 
 endif()
 
-ecm_add_tests(
+kis_add_tests(
     KoPropertiesTest.cpp
     kis_simple_math_parser_test.cpp # FIXME this test should be in the ui directory
     TestKoProgressUpdater.cpp
@@ -45,7 +45,7 @@ ki18n_wrap_ui(DialogStateSaver_SRCS
     dialogsavertestwidget.ui
 )
 
-ecm_add_test(
+kis_add_test(
     KisDialogStateSaverTest.cpp
     ${DialogStateSaver_SRCS}
     TEST_NAME KisDialogStateSaverTest

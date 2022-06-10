@@ -18,7 +18,7 @@ if(APPLE)
 
 
 else(APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         KoGamutMaskTest.cpp
         LINK_LIBRARIES kritaflake kritaimage Qt5::Test
         NAME_PREFIX "libs-flake-")

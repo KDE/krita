@@ -5,7 +5,7 @@ include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 include(ECMAddTests)
 include(KritaAddBrokenUnitTest)
 
-ecm_add_tests(
+kis_add_tests(
     zoomhandler_test.cpp
     zoomcontroller_test.cpp
     KoAnchorSelectionWidgetTest.cpp

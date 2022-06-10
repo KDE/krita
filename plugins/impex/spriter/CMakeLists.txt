@@ -4,7 +4,7 @@ set(kritaspriterexport_SOURCES
     kis_spriter_export.cpp
 )
 
-kis_add_library(kritaspriterexport MODULE ${kritaspriterexport_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritaspriterexport MODULE ${kritaspriterexport_SOURCES})
 
 target_link_libraries(kritaspriterexport kritaui kritaimpex)
 

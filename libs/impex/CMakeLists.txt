@@ -4,7 +4,7 @@ set(kritaimpex_LIB_SRCS
     KisExportCheckRegistry.cpp
 )
 
-kis_add_library(kritaimpex SHARED ${kritaimpex_HEADERS_MOC} ${kritaimpex_LIB_SRCS} PCH_FILE kis_image_pch.h)
+kis_add_library(kritaimpex SHARED ${kritaimpex_HEADERS_MOC} ${kritaimpex_LIB_SRCS})
 
 generate_export_header(kritaimpex BASE_NAME kritaimpex)
 

@@ -27,7 +27,7 @@ set(kritalibbrush_LIB_SRCS
     KisColorfulBrush.cpp
 )
 
-kis_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS} PCH_FILE kis_image_pch.h)
+kis_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS})
 generate_export_header(kritalibbrush BASE_NAME kritabrush EXPORT_MACRO_NAME BRUSH_EXPORT)
 
 if (WIN32)

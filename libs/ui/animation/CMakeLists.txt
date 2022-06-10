@@ -21,7 +21,7 @@ ki18n_wrap_ui(kritaanimation_LIB_SRCS
     
 )
 
-kis_add_library(kritaanimation SHARED ${kritaanimation_HEADERS_MOC} ${kritaanimation_LIB_SRCS} PCH_FILE kis_image_pch.h)
+kis_add_library(kritaanimation SHARED ${kritaanimation_HEADERS_MOC} ${kritaanimation_LIB_SRCS})
 generate_export_header(kritaanimation BASE_NAME kritaanimation)
 
 target_link_libraries( kritaanimation PUBLIC kritaui )

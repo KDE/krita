@@ -40,7 +40,7 @@ if (APPLE)
 
 
 else (APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         TestKoLcmsColorProfile.cpp
         TestColorSpaceRegistry.cpp
         TestLcmsRGBP2020PQColorSpace.cpp

@@ -9,7 +9,7 @@ set(kritagridpaintop_SOURCES
 
 ki18n_wrap_ui(kritagridpaintop_SOURCES wdggridoptions.ui wdggridbrushshapeoptions.ui )
 
-kis_add_library(kritagridpaintop MODULE ${kritagridpaintop_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritagridpaintop MODULE ${kritagridpaintop_SOURCES})
 
 target_link_libraries(kritagridpaintop kritalibpaintop)
 

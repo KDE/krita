@@ -454,6 +454,9 @@ void KisWebPExport::initializeCapabilities()
                       ->get("AnimationCheck")
                       ->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()
+                      ->get("IntegralFrameDurationCheck")
+                      ->create(KisExportCheckBase::PARTIALLY));
+    addCapability(KisExportCheckRegistry::instance()
                       ->get("sRGBProfileCheck")
                       ->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()

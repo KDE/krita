@@ -15,7 +15,7 @@ endif()
 
 ki18n_wrap_ui(kritabuginfo_SOURCES wdg_buginfo.ui )
 
-kis_add_library(kritabuginfo MODULE ${kritabuginfo_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritabuginfo MODULE ${kritabuginfo_SOURCES})
 
 target_link_libraries(kritabuginfo kritaui)
 

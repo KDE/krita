@@ -640,19 +640,61 @@ macro(macro_add_unittest_definitions)
   add_definitions(-DSYSTEM_RESOURCES_DATA_DIR="${CMAKE_SOURCE_DIR}/krita/data/")
 endmacro()
 
+function(krita_select_pch_file targetname pch_file_name)
+    #TODO: make kritaimage and kritaglobal targets to link to its own PCH
+
+    if (targetname STREQUAL "kritaglobal")
+        set(${pch_file_name} kis_qt_only_pch.h PARENT_SCOPE)
+    elseif (targetname STREQUAL "kritaimage")
+        set(${pch_file_name} kis_global_pch.h PARENT_SCOPE)
+    else ()
+        set(immediate_deps $<TARGET_PROPERTY:${targetname},LINK_LIBRARIES>)
+        set(depends_on_kritaui $<IN_LIST:kritaui,${immediate_deps}>)
+        set(depends_on_kritaimage $<IN_LIST:kritaimage,${immediate_deps}>)
+        set(depends_on_kritalibkis $<IN_LIST:kritalibkis,${immediate_deps}>)
+        set(depends_on_kritalibpaintop $<IN_LIST:kritalibpaintop,${immediate_deps}>)
+
+        set(${pch_file_name} $<IF:$<OR:${depends_on_kritalibpaintop},${depends_on_kritalibkis},${depends_on_kritaui},${depends_on_kritaimage}>,kis_image_pch.h,kis_global_pch.h> PARENT_SCOPE)
+    endif()
+endfunction()
+
 macro(kis_add_library)
-    cmake_parse_arguments(LOCAL "" PCH_FILE "" ${ARGV} )
-    add_library(${LOCAL_UNPARSED_ARGUMENTS})
+    # the first run strips only options specific to kis_add_library
+    # to create arguments for real add_library call
+    cmake_parse_arguments(REAL "" PCH_FILE "" ${ARGV} )
+    add_library(${REAL_UNPARSED_ARGUMENTS})
 
-    list(GET LOCAL_UNPARSED_ARGUMENTS 0 NEW_LIBRARY_TARGET)
+    if (KRITA_ENABLE_PCH)
+        # the second run strips out all the option supported by the function
+        # to let the script to calculate the number of source files in
+        # the library
+        set(options INTERFACE STATIC SHARED MODULE EXCLUDE_FROM_ALL OBJECT ALIAS)
+        set(one_value_keywords PCH_FILE)
+        set(multi_value_keywords)
+        cmake_parse_arguments(LOCAL "${options}" "${one_value_keywords}" "" ${ARGV} )
 
-    if (KRITA_ENABLE_PCH AND LOCAL_PCH_FILE)
-        set_property(TARGET ${NEW_LIBRARY_TARGET} APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
-        target_precompile_headers(${NEW_LIBRARY_TARGET} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/pch/${LOCAL_PCH_FILE}>")
+        list(LENGTH LOCAL_UNPARSED_ARGUMENTS source_count)
+        list(GET REAL_UNPARSED_ARGUMENTS 0 NEW_LIBRARY_TARGET)
+
+        if (NOT LOCAL_PCH_FILE)
+            krita_select_pch_file(${NEW_LIBRARY_TARGET} LOCAL_PCH_FILE)
+            #file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/out/${NEW_LIBRARY_TARGET}.txt" CONTENT ${LOCAL_PCH_FILE})
+        endif()
+
+        # if the number of sources in the library is greater
+        # than a threshold value, then we can try to use PCH
+        # for this library
+
+        if (${source_count} GREATER "2" AND
+            NOT LOCAL_INTERFACE AND
+            NOT LOCAL_ALIAS AND
+            LOCAL_PCH_FILE)
+
+            set_property(TARGET ${NEW_LIBRARY_TARGET} APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
+            target_precompile_headers(${NEW_LIBRARY_TARGET} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/pch/${LOCAL_PCH_FILE}>")
+        endif()
     endif()
 endmacro()
-
-
 
 # overcome some platform incompatibilities
 if(WIN32)

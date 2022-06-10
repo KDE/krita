@@ -2,7 +2,7 @@ macro_add_unittest_definitions()
 include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 include(ECMAddTests)
 
-ecm_add_test(
+kis_add_test(
     ../KoLZF.cpp TestKoLZF.cpp
     TEST_NAME TestKoLZF
     LINK_LIBRARIES kritastore Qt5::Test

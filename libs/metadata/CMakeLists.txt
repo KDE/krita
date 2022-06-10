@@ -18,7 +18,7 @@ set(kritametadata_LIB_SRCS
     kis_meta_data_backend_registry.cpp
 )
 
-kis_add_library(kritametadata SHARED ${kritametadata_LIB_SRCS} PCH_FILE kis_global_pch.h)
+kis_add_library(kritametadata SHARED ${kritametadata_LIB_SRCS})
 generate_export_header(kritametadata)
 
 target_link_libraries(kritametadata kritaversion kritaglobal kritaplugin kritawidgetutils)

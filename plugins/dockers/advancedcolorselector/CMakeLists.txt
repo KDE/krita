@@ -30,7 +30,7 @@ ki18n_wrap_ui(KRITA_COLORSELECTORNG_SOURCES
     wdg_color_selector_settings.ui
 )
 
-kis_add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritacolorselectorng MODULE ${KRITA_COLORSELECTORNG_SOURCES})
 
 target_link_libraries(kritacolorselectorng kritaui)
 

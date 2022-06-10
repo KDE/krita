@@ -8,7 +8,7 @@ macro_add_unittest_definitions()
 include(KritaAddBrokenUnitTest)
 
 if (APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         kis_grid_config_test.cpp
         kis_stabilized_events_sampler_test.cpp
         kis_brush_hud_properties_config_test.cpp
@@ -22,31 +22,31 @@ if (APPLE)
         ${MACOS_GUI_TEST})
 
 
-    ecm_add_test( KisMultiFeedRssModelTest.cpp ../../../sdk/tests/testutil.cpp MockNetworkAccessManager.cpp
+    kis_add_test( KisMultiFeedRssModelTest.cpp ../../../sdk/tests/testutil.cpp MockNetworkAccessManager.cpp
         TEST_NAME KisMultiFeedRssModelTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-"
         ${MACOS_GUI_TEST})
 
-    ecm_add_test( kis_node_dummies_graph_test.cpp ../../../sdk/tests/testutil.cpp
+    kis_add_test( kis_node_dummies_graph_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME KisNodeDummiesGraphTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-"
         ${MACOS_GUI_TEST})
 
-    ecm_add_test( kis_node_shapes_graph_test.cpp ../../../sdk/tests/testutil.cpp
+    kis_add_test( kis_node_shapes_graph_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME KisNodeShapesGraphTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-"
         ${MACOS_GUI_TEST})
 
-    ecm_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
+    kis_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
         TEST_NAME KisCategorizedListModelTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-"
         ${MACOS_GUI_TEST})
 
-    ecm_add_test(
+    kis_add_test(
         kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME KisInputManagerTest
         LINK_LIBRARIES kritaui Qt5::Test
@@ -159,7 +159,7 @@ if (APPLE)
 
 
 else (APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         kis_image_view_converter_test.cpp
         kis_shape_selection_test.cpp
         kis_doc2_test.cpp
@@ -189,74 +189,74 @@ else (APPLE)
 
     if (ENABLE_UPDATERS)
     if (UNIX)
-        ecm_add_test( KisAppimageUpdaterTest.cpp
+        kis_add_test( KisAppimageUpdaterTest.cpp
             TEST_NAME KisAppimageUpdaterTest
             LINK_LIBRARIES kritaui Qt5::Test
             NAME_PREFIX "libs-ui-")
     endif()
 
-    ecm_add_test( KisManualUpdaterTest.cpp ../../../sdk/tests/testutil.cpp MockMultiFeedRssModel.cpp
+    kis_add_test( KisManualUpdaterTest.cpp ../../../sdk/tests/testutil.cpp MockMultiFeedRssModel.cpp
         TEST_NAME KisManualUpdaterTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
     endif()
 
 
-    ecm_add_test( KisMultiFeedRssModelTest.cpp ../../../sdk/tests/testutil.cpp MockNetworkAccessManager.cpp
+    kis_add_test( KisMultiFeedRssModelTest.cpp ../../../sdk/tests/testutil.cpp MockNetworkAccessManager.cpp
         TEST_NAME KisMultiFeedRssModelTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
 
-    ecm_add_test( kis_selection_decoration_test.cpp ../../../sdk/tests/stroke_testing_utils.cpp
+    kis_add_test( kis_selection_decoration_test.cpp ../../../sdk/tests/stroke_testing_utils.cpp
         TEST_NAME KisSelectionDecorationTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test( kis_node_dummies_graph_test.cpp ../../../sdk/tests/testutil.cpp
+    kis_add_test( kis_node_dummies_graph_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME KisNodeDummiesGraphTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test( kis_node_shapes_graph_test.cpp ../../../sdk/tests/testutil.cpp
+    kis_add_test( kis_node_shapes_graph_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME KisNodeShapesGraphTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test( kis_model_index_converter_test.cpp ../../../sdk/tests/testutil.cpp
+    kis_add_test( kis_model_index_converter_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME KisModelIndexConverterTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
 
-    ecm_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
+    kis_add_test( kis_categorized_list_model_test.cpp modeltest.cpp
         TEST_NAME KisCategorizedListModelTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.cpp
+    kis_add_test( kis_node_juggler_compressed_test.cpp  ../../../sdk/tests/testutil.cpp
         TEST_NAME KisNodeJugglerCompressedTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test(
+    kis_add_test(
         kis_input_manager_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME KisInputManagerTest
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test(
+    kis_add_test(
         kis_node_model_test.cpp modeltest.cpp
         TEST_NAME kis_node_model_test
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test( kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
+    kis_add_test( kis_shape_controller_test.cpp kis_dummies_facade_base_test.cpp
         TEST_NAME kis_shape_controller_test
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")
 
-    ecm_add_test( kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../../sdk/tests/testutil.cpp
+    kis_add_test( kis_dummies_facade_test.cpp kis_dummies_facade_base_test.cpp ../../../sdk/tests/testutil.cpp
         TEST_NAME kis_dummies_facade_test
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "libs-ui-")

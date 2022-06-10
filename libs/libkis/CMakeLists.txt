@@ -36,7 +36,7 @@ set(kritalibkis_LIB_SRCS
     LibKisUtils.cpp
 )
 
-kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS} PCH_FILE kis_image_pch.h)
+kis_add_library(kritalibkis SHARED ${kritalibkis_LIB_SRCS})
 generate_export_header(kritalibkis)
 
 target_link_libraries(kritalibkis kritaui kritaimage kritaversion)

@@ -16,6 +16,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoID.h>
+#include <kis_assert.h>
 #include <kis_meta_data_backend_registry.h>
 
 #include <KoConfig.h>
@@ -75,6 +76,12 @@ bool writeColorSpaceInformation(TIFF *image,
 
     } else if (id == GrayAColorModelID) {
         color_type = PHOTOMETRIC_MINISBLACK;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+    } else if (id == LABAColorModelID) {
+        color_type = PHOTOMETRIC_CIELAB;
         if (isBitDepthFloat(depth)) {
             sample_format = SAMPLEFORMAT_IEEEFP;
         }
@@ -271,6 +278,9 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     std::unique_ptr<std::remove_pointer_t<tdata_t>, decltype(&_TIFFfree)> buff(
         _TIFFmalloc(stripsize),
         &_TIFFfree);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(
+        buff && "Unable to allocate buffer for TIFF!",
+        false);
     qint32 height = layer->image()->height();
     qint32 width = layer->image()->width();
     bool r = true;
@@ -313,17 +323,15 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
                                  poses);
             }
             break;
-        case PHOTOMETRIC_ICCLAB: {
-            const std::array<quint8, 5> poses = {0, 1, 2, 3};
-            r = copyDataToStrips(it,
-                                 buff.get(),
-                                 depth,
-                                 sample_format,
-                                 3,
-                                 poses);
-            }
-            break;
-            return false;
+            case PHOTOMETRIC_ICCLAB: {
+                const std::array<quint8, 5> poses = {0, 1, 2, 3};
+                r = copyDataToStrips(it,
+                                     buff.get(),
+                                     depth,
+                                     sample_format,
+                                     3,
+                                     poses);
+            } break;
         }
         if (!r) return false;
         TIFFWriteScanline(image(),

@@ -18,6 +18,7 @@
 
 #include <KisDocument.h>
 #include <KisExportCheckRegistry.h>
+#include <KoColorModelStandardIds.h>
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
 #include <kis_assert.h>

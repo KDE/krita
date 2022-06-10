@@ -35,31 +35,35 @@
 
 namespace
 {
-inline bool isBitDepthFloat(QString depth)
+bool isBitDepthFloat(const KoID depth)
 {
-    return depth.contains("F");
+    return depth == Float16BitsColorDepthID || depth == Float32BitsColorDepthID
+        || depth == Float64BitsColorDepthID;
 }
 
-inline bool writeColorSpaceInformation(TIFF *image, const KoColorSpace *cs, uint16_t &color_type, uint16_t &sample_format, const KoColorSpace *&destColorSpace)
+bool writeColorSpaceInformation(TIFF *image,
+                                const KoColorSpace *cs,
+                                uint16_t &color_type,
+                                uint16_t &sample_format,
+                                const KoColorSpace *&destColorSpace)
 {
-    dbgKrita << cs->id();
-    QString id = cs->id();
-    QString depth = cs->colorDepthId().id();
+    const KoID id = cs->colorModelId();
+    const KoID depth = cs->colorDepthId();
     // destColorSpace should be reassigned to a proper color space to convert to
     // if the return value of this function is false
     destColorSpace = nullptr;
 
-    // sample_format and color_type should be assigned to the destination color space,
-    // not /always/ the one we get here
+    // sample_format and color_type should be assigned to the destination color
+    // space, not /always/ the one we get here
 
-    if (id.contains("RGBA")) {
+    if (id == RGBAColorModelID) {
         color_type = PHOTOMETRIC_RGB;
         if (isBitDepthFloat(depth)) {
             sample_format = SAMPLEFORMAT_IEEEFP;
         }
         return true;
 
-    } else if (id.contains("CMYK")) {
+    } else if (id == CMYKAColorModelID) {
         color_type = PHOTOMETRIC_SEPARATED;
         TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
 
@@ -68,7 +72,7 @@ inline bool writeColorSpaceInformation(TIFF *image, const KoColorSpace *cs, uint
         }
         return true;
 
-    } else if (id.contains("LABA")) {
+    } else if (id == LABAColorModelID) {
         color_type = PHOTOMETRIC_ICCLAB;
 
         if (isBitDepthFloat(depth)) {
@@ -76,7 +80,7 @@ inline bool writeColorSpaceInformation(TIFF *image, const KoColorSpace *cs, uint
         }
         return true;
 
-    } else if (id.contains("GRAYA")) {
+    } else if (id == GrayAColorModelID) {
         color_type = PHOTOMETRIC_MINISBLACK;
         if (isBitDepthFloat(depth)) {
             sample_format = SAMPLEFORMAT_IEEEFP;
@@ -85,15 +89,17 @@ inline bool writeColorSpaceInformation(TIFF *image, const KoColorSpace *cs, uint
 
     } else {
         color_type = PHOTOMETRIC_RGB;
-        const KoColorProfile *profile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
-        destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), depth, profile);
+        destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
+            RGBAColorModelID.id(),
+            depth.id(),
+            KoColorSpaceRegistry::instance()->p709SRGBProfile());
         if (isBitDepthFloat(depth)) {
             sample_format = SAMPLEFORMAT_IEEEFP;
         }
         return false;
     }
 }
-}
+} // namespace
 
 KisTiffPsdWriter::KisTiffPsdWriter(TIFF *image, KisTIFFOptions *options)
     : m_image(image)

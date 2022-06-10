@@ -11,6 +11,7 @@
 
 #include <tiff.h>
 
+#include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
@@ -27,65 +28,70 @@
 
 namespace
 {
-    bool isBitDepthFloat(QString depth) {
-        return depth.contains("F");
-    }
+bool isBitDepthFloat(const KoID depth)
+{
+    return depth == Float16BitsColorDepthID || depth == Float32BitsColorDepthID
+        || depth == Float64BitsColorDepthID;
+}
 
-    bool writeColorSpaceInformation(TIFF* image, const KoColorSpace * cs, uint16_t& color_type, uint16_t& sample_format, const KoColorSpace* &destColorSpace)
-    {
-        dbgKrita << cs->id();
-        QString id = cs->id();
-        QString depth = cs->colorDepthId().id();
-        // destColorSpace should be reassigned to a proper color space to convert to
-        // if the return value of this function is false
-        destColorSpace = nullptr;
+bool writeColorSpaceInformation(TIFF *image,
+                                const KoColorSpace *cs,
+                                uint16_t &color_type,
+                                uint16_t &sample_format,
+                                const KoColorSpace *&destColorSpace)
+{
+    const KoID id = cs->colorModelId();
+    const KoID depth = cs->colorDepthId();
+    // destColorSpace should be reassigned to a proper color space to convert to
+    // if the return value of this function is false
+    destColorSpace = nullptr;
 
-        // sample_format and color_type should be assigned to the destination color space,
-        // not /always/ the one we get here
+    // sample_format and color_type should be assigned to the destination color
+    // space, not /always/ the one we get here
 
-        if (id.contains("RGBA")) {
-            color_type = PHOTOMETRIC_RGB;
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else if (id.contains("CMYK")) {
-            color_type = PHOTOMETRIC_SEPARATED;
-            TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
-
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else if (id.contains("LABA")) {
-            color_type = PHOTOMETRIC_ICCLAB;
-
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else if (id.contains("GRAYA")) {
-            color_type = PHOTOMETRIC_MINISBLACK;
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return true;
-
-        } else {
-            color_type = PHOTOMETRIC_RGB;
-            const QString profile = "sRGB-elle-V2-srgbtrc";
-            destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), depth, profile);
-            if (isBitDepthFloat(depth)) {
-                sample_format = SAMPLEFORMAT_IEEEFP;
-            }
-            return false;
+    if (id == RGBAColorModelID) {
+        color_type = PHOTOMETRIC_RGB;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
         }
+        return true;
 
+    } else if (id == CMYKAColorModelID) {
+        color_type = PHOTOMETRIC_SEPARATED;
+        TIFFSetField(image, TIFFTAG_INKSET, INKSET_CMYK);
+
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+
+    } else if (id == LABAColorModelID) {
+        color_type = PHOTOMETRIC_ICCLAB;
+
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+
+    } else if (id == GrayAColorModelID) {
+        color_type = PHOTOMETRIC_MINISBLACK;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
+    } else {
+        color_type = PHOTOMETRIC_RGB;
+        destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
+            RGBAColorModelID.id(),
+            depth.id(),
+            KoColorSpaceRegistry::instance()->p709SRGBProfile());
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return false;
     }
 }
+} // namespace
 
 KisTIFFWriterVisitor::KisTIFFWriterVisitor(TIFF*image, KisTIFFOptions* options)
     : m_image(image)

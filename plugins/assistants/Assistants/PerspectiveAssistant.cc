@@ -146,16 +146,11 @@ void PerspectiveAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect,
     QTransform transform; // unused, but computed for caching purposes
     if (getTransform(poly, transform) && assistantVisible==true) {
         // draw vanishing points
-        QPointF intersection(0, 0);
-        if (fmod(QLineF(poly[0], poly[1]).angle(), 180.0)>=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)+2.0 || fmod(QLineF(poly[0], poly[1]).angle(), 180.0)<=fmod(QLineF(poly[2], poly[3]).angle(), 180.0)-2.0) {
-            if (QLineF(poly[0], poly[1]).intersect(QLineF(poly[2], poly[3]), &intersection) != QLineF::NoIntersection) {
-                drawX(gc, initialTransform.map(intersection));
-            }
+        if (m_cache.vanishingPoint1) {
+            drawX(gc, initialTransform.map(m_cache.vanishingPoint1.get()));
         }
-        if (fmod(QLineF(poly[1], poly[2]).angle(), 180.0)>=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)+2.0 || fmod(QLineF(poly[1], poly[2]).angle(), 180.0)<=fmod(QLineF(poly[3], poly[0]).angle(), 180.0)-2.0){
-            if (QLineF(poly[1], poly[2]).intersect(QLineF(poly[3], poly[0]), &intersection) != QLineF::NoIntersection) {
-                drawX(gc, initialTransform.map(intersection));
-            }
+        if (m_cache.vanishingPoint2) {
+            drawX(gc, initialTransform.map(m_cache.vanishingPoint2.get()));
         }
     }
 

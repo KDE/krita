@@ -39,6 +39,7 @@
 #include "kis_tiff_psd_resource_record.h"
 #endif
 
+#include "kis_tiff_logger.h"
 #include "kis_tiff_reader.h"
 #include "kis_tiff_ycbcr_reader.h"
 
@@ -59,15 +60,9 @@ struct KisTiffBasicInfo {
     uint8_t dstDepth{};
 };
 
-K_PLUGIN_FACTORY_WITH_JSON(TIFFImportFactory, "krita_tiff_import.json", registerPlugin<KisTIFFImport>();)
-
-KisTIFFImport::KisTIFFImport(QObject *parent, const QVariantList &)
-    : KisImportExportFilter(parent)
-    , m_image(nullptr)
-{
-}
-
-KisTIFFImport::~KisTIFFImport() = default;
+K_PLUGIN_FACTORY_WITH_JSON(TIFFImportFactory,
+                           "krita_tiff_import.json",
+                           registerPlugin<KisTIFFImport>();)
 
 QPair<QString, QString> getColorSpaceForColorType(uint16_t sampletype,
                                                   uint16_t color_type,
@@ -292,6 +287,20 @@ makePostProcessor(uint32_t nbsamples, const QPair<QString, QString> &id)
         KIS_ASSERT(false && "TIFF does not support this bit depth!");
         return {};
     }
+}
+
+KisTIFFImport::KisTIFFImport(QObject *parent, const QVariantList &)
+    : KisImportExportFilter(parent)
+    , m_image(nullptr)
+    , oldErrHandler(TIFFSetErrorHandler(&KisTiffErrorHandler))
+    , oldWarnHandler(TIFFSetWarningHandler(&KisTiffWarningHandler))
+{
+}
+
+KisTIFFImport::~KisTIFFImport()
+{
+    TIFFSetErrorHandler(oldErrHandler);
+    TIFFSetWarningHandler(oldWarnHandler);
 }
 
 #ifdef TIFF_HAS_PSD_TAGS

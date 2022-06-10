@@ -9,6 +9,8 @@
 
 #include <QVariant>
 
+#include <tiffio.h>
+
 #include <KisImportExportFilter.h>
 #include <kis_config_widget.h>
 
@@ -23,6 +25,10 @@ public:
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
     void initializeCapabilities() override;
+
+private:
+    TIFFErrorHandler oldErrHandler = nullptr;
+    TIFFErrorHandler oldWarnHandler = nullptr;
 };
 
 #endif

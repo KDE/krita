@@ -15,12 +15,12 @@
 #include <kcombobox.h>
 #include <klocalizedstring.h>
 
-#include <KoColorSpace.h>
+#include <KisImportExportFilter.h>
 #include <KoChannelInfo.h>
 #include <KoColorModelStandardIds.h>
-
-#include <kis_properties_configuration.h>
+#include <KoColorSpace.h>
 #include <kis_config.h>
+#include <kis_properties_configuration.h>
 
 #include <config-tiff.h>
 
@@ -62,9 +62,15 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
         kComboBoxPredictor->removeItem(2);
     }
 
-    if (cfg->getBool("isCMYK")) {
-        alpha->setChecked(false);
-        alpha->setEnabled(false);
+    {
+        const QString colorModelId =
+            cfg->getString(KisImportExportFilter::ColorModelIDTag);
+
+        if (colorModelId == CMYKAColorModelID.id()
+            || colorModelId == YCbCrAColorModelID.id()) {
+            alpha->setChecked(false);
+            alpha->setEnabled(false);
+        }
     }
 
 

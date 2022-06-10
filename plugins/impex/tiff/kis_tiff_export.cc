@@ -64,7 +64,6 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
 
     const KoColorSpace* cs = document->savingImage()->colorSpace();
     cfg->setProperty("type", (int)cs->channels()[0]->channelValueType());
-    cfg->setProperty("isCMYK", (cs->colorModelId() == CMYKAColorModelID));
 
     KisTIFFOptions options;
     options.fromProperties(configuration);

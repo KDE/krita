@@ -86,6 +86,12 @@ bool writeColorSpaceInformation(TIFF *image,
             sample_format = SAMPLEFORMAT_IEEEFP;
         }
         return true;
+    } else if (id == YCbCrAColorModelID) {
+        color_type = PHOTOMETRIC_YCBCR;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
     } else {
         color_type = PHOTOMETRIC_RGB;
         destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
@@ -191,6 +197,19 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
         pd->convertTo(destColorSpace);
     }
 
+    {
+        // WORKAROUND: block any attempts to use YCbCr with alpha channels.
+        // This should not happen because alpha is disabled by default
+        // and the checkbox is blocked for YCbCr and CMYK.
+        KIS_SAFE_ASSERT_RECOVER(color_type != PHOTOMETRIC_YCBCR
+                                || !m_options->alpha)
+        {
+            warnFile << "TIFF does not support exporting alpha channels with "
+                        "YCbCr. Skipping...";
+            m_options->alpha = false;
+        }
+    }
+
     // Save depth
     uint32_t depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
@@ -232,6 +251,15 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
     TIFFSetField(image(), TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
 
     // Do not set the rowsperstrip, as it's incompatible with JPEG
+
+    // But do set YCbCr 4:4:4 if applicable
+    if (color_type == PHOTOMETRIC_YCBCR) {
+        TIFFSetField(image(), TIFFTAG_YCBCRSUBSAMPLING, 1, 1);
+        TIFFSetField(image(), TIFFTAG_YCBCRPOSITIONING, YCBCRPOSITION_CENTERED);
+        if (m_options->compressionType == COMPRESSION_JPEG) {
+            TIFFSetField(image(), TIFFTAG_JPEGCOLORMODE, JPEGCOLORMODE_RAW);
+        }
+    }
 
     // Save profile
     if (m_options->saveProfile) {
@@ -323,7 +351,8 @@ bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer *layer)
                                  poses);
             }
             break;
-            case PHOTOMETRIC_ICCLAB: {
+            case PHOTOMETRIC_ICCLAB:
+            case PHOTOMETRIC_YCBCR: {
                 const std::array<quint8, 5> poses = {0, 1, 2, 3};
                 r = copyDataToStrips(it,
                                      buff.get(),

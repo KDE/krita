@@ -103,7 +103,7 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-kis_add_library(kritapigment SHARED ${kritapigment_SRCS} PCH_FILE kis_global_pch.h)
+kis_add_library(kritapigment SHARED ${kritapigment_SRCS})
 
 set_source_files_properties(
     ${__per_arch_factory_objs}

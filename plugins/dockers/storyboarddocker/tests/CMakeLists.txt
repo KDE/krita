@@ -12,7 +12,7 @@ macro_add_unittest_definitions()
 
 if (APPLE)
 
-    ecm_add_tests(
+    kis_add_tests(
         StoryboardModelTest.cpp
 
         NAME_PREFIX "plugins-dockers-storyboarddocker-"
@@ -35,7 +35,7 @@ macos_test_fixrpath(${OK_TESTS} ${BROKEN_TESTS})
 
 else (APPLE)
 
-    ecm_add_tests(
+    kis_add_tests(
         StoryboardModelTest.cpp
         StoryboardTimelineSyncTest.cpp
         NAME_PREFIX "plugins-dockers-storyboarddocker-"

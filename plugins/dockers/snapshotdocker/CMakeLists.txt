@@ -5,6 +5,6 @@ set(kritasnapshotdocker_SOURCES
   KisSnapshotView.cpp
   )
 
-kis_add_library(kritasnapshotdocker MODULE ${kritasnapshotdocker_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritasnapshotdocker MODULE ${kritasnapshotdocker_SOURCES})
 target_link_libraries(kritasnapshotdocker kritaimage kritaui)
 install(TARGETS kritasnapshotdocker DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

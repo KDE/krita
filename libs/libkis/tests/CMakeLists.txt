@@ -25,7 +25,7 @@ if (APPLE)
     macos_test_fixrpath(${OK_TESTS})
 
 else (APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         #TestKrita.cpp
         TestChannel.cpp
         TestDocument.cpp
@@ -36,7 +36,8 @@ else (APPLE)
         TestManagedColor.cpp
         TestNotifier.cpp
         NAME_PREFIX "libs-libkis-"
-        LINK_LIBRARIES kritalibkis Qt5::Test)
+        LINK_LIBRARIES kritalibkis Qt5::Test
+        )
 
 endif()
 

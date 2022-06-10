@@ -12,7 +12,7 @@ set(kritahairypaintop_SOURCES
 
 ki18n_wrap_ui(kritahairypaintop_SOURCES wdgInkOptions.ui  wdghairyshapeoptions.ui wdgbristleoptions.ui)
 
-kis_add_library(kritahairypaintop MODULE ${kritahairypaintop_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritahairypaintop MODULE ${kritahairypaintop_SOURCES})
 
 target_link_libraries(kritahairypaintop kritalibpaintop)
 

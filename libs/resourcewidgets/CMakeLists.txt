@@ -18,7 +18,7 @@ set(kritaresourcewidgets_LIB_SRCS
     KisResourceUserOperations.cpp
 )
 
-kis_add_library(kritaresourcewidgets SHARED ${kritaresourcewidgets_LIB_SRCS} PCH_FILE kis_global_pch.h)
+kis_add_library(kritaresourcewidgets SHARED ${kritaresourcewidgets_LIB_SRCS})
 
 generate_export_header(kritaresourcewidgets BASE_NAME kritaresourcewidgets)
 

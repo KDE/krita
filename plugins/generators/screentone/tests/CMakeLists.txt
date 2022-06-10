@@ -19,7 +19,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         KisScreentoneGeneratorTest.cpp
 
         NAME_PREFIX "plugins-generators-"

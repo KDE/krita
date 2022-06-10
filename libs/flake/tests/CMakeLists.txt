@@ -6,7 +6,7 @@ include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 macro_add_unittest_definitions()
 
 if (APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         TestPosition.cpp
         TestSelection.cpp
         TestKoShapeFactory.cpp
@@ -110,7 +110,7 @@ if (APPLE)
 
 else(APPLE)
 
-ecm_add_tests(
+kis_add_tests(
     TestPosition.cpp
     TestSelection.cpp
     TestPathTool.cpp
@@ -139,13 +139,13 @@ ecm_add_tests(
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
 
-ecm_add_test(
+kis_add_test(
     TestSvgParser.cpp
     TEST_NAME TestSvgParser
     LINK_LIBRARIES kritaflake Qt5::Test
     NAME_PREFIX "libs-flake-")
 
-ecm_add_test(
+kis_add_test(
     TestSvgParser.cpp
     TEST_NAME TestSvgParserCloned
     LINK_LIBRARIES kritaflake Qt5::Test
@@ -153,7 +153,7 @@ ecm_add_test(
 set_property(TARGET TestSvgParserCloned
              PROPERTY COMPILE_DEFINITIONS USE_CLONED_SHAPES)
 
-ecm_add_test(
+kis_add_test(
     TestSvgParser.cpp
     TEST_NAME TestSvgParserRoundTrip
     LINK_LIBRARIES kritaflake Qt5::Test

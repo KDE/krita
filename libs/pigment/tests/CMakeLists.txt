@@ -15,7 +15,7 @@ target_link_libraries(CCSGraph  kritapigment KF5::I18n)
 ecm_mark_as_test(CCSGraph)
 
 if (APPLE)
-    ecm_add_tests(
+    kis_add_tests(
         TestKoColorSet.cpp
         TestKoColorSpaceAbstract.cpp
         TestKoIntegerMaths.cpp
@@ -28,7 +28,7 @@ if (APPLE)
 
     macos_test_fixrpath(${OK_TESTS})
 
-    ecm_add_tests(
+    kis_add_tests(
         TestColorConversion.cpp
         TestKoColorSpaceMaths.cpp
 
@@ -70,7 +70,7 @@ if (APPLE)
 
 else (APPLE)
 
-    ecm_add_tests(
+    kis_add_tests(
         TestKoColorSet.cpp
         TestKoColorSpaceRegistry.cpp
         TestKoColorSpaceAbstract.cpp
@@ -86,7 +86,7 @@ else (APPLE)
         LINK_LIBRARIES kritapigment KF5::I18n Qt5::Test)
 
 
-    ecm_add_tests(
+    kis_add_tests(
         TestColorConversion.cpp
         TestKoColorSpaceMaths.cpp
         TestKisSwatchGroup.cpp

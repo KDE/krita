@@ -13,7 +13,7 @@ set(kritastore_LIB_SRCS
     StoreDebug.cpp
 )
 
-kis_add_library(kritastore SHARED ${kritastore_LIB_SRCS} PCH_FILE kis_global_pch.h)
+kis_add_library(kritastore SHARED ${kritastore_LIB_SRCS})
 generate_export_header(kritastore BASE_NAME kritastore)
 
 target_link_libraries(kritastore 

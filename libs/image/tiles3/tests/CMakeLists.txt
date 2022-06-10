@@ -10,7 +10,7 @@ include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 
 macro_add_unittest_definitions()
 
-ecm_add_tests(
+kis_add_tests(
     kis_tiled_data_manager_test.cpp
     kis_low_memory_tests.cpp
     kis_lockless_stack_test.cpp

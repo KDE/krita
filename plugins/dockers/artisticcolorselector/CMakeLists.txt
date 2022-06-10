@@ -11,6 +11,6 @@ ki18n_wrap_ui(kritaartisticcolorselector_SOURCES
     forms/wdgWheelPreferencesPopup.ui
 )
 
-kis_add_library(kritaartisticcolorselector MODULE ${kritaartisticcolorselector_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritaartisticcolorselector MODULE ${kritaartisticcolorselector_SOURCES})
 target_link_libraries(kritaartisticcolorselector kritaui)
 install(TARGETS kritaartisticcolorselector DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

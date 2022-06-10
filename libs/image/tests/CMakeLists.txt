@@ -36,7 +36,7 @@ ecm_mark_as_test(KisRandomGeneratorDemo)
 
 if (APPLE)
 
-    ecm_add_tests(
+    kis_add_tests(
         kis_fast_math_test.cpp
         kis_node_test.cpp
         kis_node_facade_test.cpp
@@ -80,8 +80,7 @@ if (APPLE)
         LINK_LIBRARIES kritaimage Qt5::Test
         NAME_PREFIX "libs-image-"
         TARGET_NAMES_VAR OK_TESTS
-        GUI
-    )
+        GUI)
 
     include(KritaAddBrokenUnitTest)
 
@@ -159,14 +158,13 @@ if (APPLE)
         LINK_LIBRARIES kritaimage Qt5::Test
         NAME_PREFIX "libs-image-"
         TARGET_NAMES_VAR BROKEN_TESTS
-        GUI
-    )
+        GUI)
 
     macos_test_fixrpath(${OK_TESTS} ${BROKEN_TESTS} KisRandomGeneratorDemo)
 
 else (APPLE)
 
-ecm_add_tests(
+kis_add_tests(
     kis_base_node_test.cpp
     kis_fast_math_test.cpp
     kis_node_test.cpp
@@ -275,8 +273,7 @@ ecm_add_tests(
     KisKeyframeAnimationInterfaceSignalTest.cpp
     KisOverlayPaintDeviceWrapperTest.cpp
     LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-"
-)
+    NAME_PREFIX "libs-image-")
 
 include(KritaAddBrokenUnitTest)
 
@@ -284,7 +281,6 @@ krita_add_broken_unit_tests(
     kis_transform_mask_test.cpp
     kis_perspective_transform_worker_test.cpp
     LINK_LIBRARIES kritaimage Qt5::Test
-    NAME_PREFIX "libs-image-"
-)
+    NAME_PREFIX "libs-image-")
 
 endif()

@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritapatterngenerator_SOURCES
     wdgpatternoptions.ui
     )
 
-kis_add_library(kritapatterngenerator MODULE ${kritapatterngenerator_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritapatterngenerator MODULE ${kritapatterngenerator_SOURCES})
 
 target_link_libraries(kritapatterngenerator kritaui)
 

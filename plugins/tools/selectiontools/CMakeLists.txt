@@ -14,7 +14,7 @@ set(kritaselectiontools_SOURCES
 
 qt5_add_resources(kritaselectiontools_SOURCES selectiontools.qrc)
 
-kis_add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES} PCH_FILE kis_image_pch.h)
+kis_add_library(kritaselectiontools MODULE ${kritaselectiontools_SOURCES})
 
 generate_export_header(kritaselectiontools BASE_NAME kritaselectiontools)
 

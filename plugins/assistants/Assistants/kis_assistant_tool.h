@@ -138,6 +138,7 @@ protected:
     QList<KisPaintingAssistantHandleSP> m_sideHandles;
     KisPaintingAssistantHandleSP m_handleDrag;
     KisPaintingAssistantHandleSP m_handleCombine;
+    KisPaintingAssistantHandleSP m_handleHover;
     KisPaintingAssistantSP m_assistantDrag;
 
     /// Used while a new assistant is being created. Most assistants need multiple points to exist
@@ -154,6 +155,7 @@ protected:
     bool m_snapIsRadial {false};
     QPointF m_dragEnd;
     int m_handleSize {17}; // how large the editor handles will appear
+    int m_handleMaxDist {81}; // how far away the user can click and still select a handle
 
 
 private:

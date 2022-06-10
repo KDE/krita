@@ -115,7 +115,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         return;
     }
     m_handleDrag = 0;
-    double minDist = 81.0;
+    double minDist = m_handleMaxDist;
 
 
     QPointF mousePos = m_canvas->viewConverter()->documentToView(canvasDecoration->snapToGuide(event, QPointF(), false));//m_canvas->viewConverter()->documentToView(event->point);
@@ -1063,6 +1063,7 @@ void KisAssistantTool::slotChangeFixedLengthUnit(int index) {
 
 void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
 {
+    m_handleHover = 0;
     if (m_newAssistant && m_internalMode == MODE_CREATION) {
 
         KisPaintingAssistantHandleSP new_handle = m_newAssistant->handles().back();
@@ -1076,6 +1077,27 @@ void KisAssistantTool::mouseMoveEvent(KoPointerEvent *event)
         m_dragEnd = event->point;
         m_selectedNode1.data()->operator = (QPointF(m_selectedNode1.data()->x(),m_selectedNode1.data()->y()) + translate);
         m_selectedNode2.data()->operator = (QPointF(m_selectedNode2.data()->x(),m_selectedNode2.data()->y()) + translate);
+    } else if (mode() == KisTool::HOVER_MODE) {
+
+        // find a handle underneath...
+        double minDist = m_handleMaxDist;
+
+        QPointF mousePos = m_canvas->viewConverter()->documentToView(event->point);
+
+        Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
+            QList<KisPaintingAssistantHandleSP> allAssistantHandles;
+            allAssistantHandles.append(assistant->handles());
+            allAssistantHandles.append(assistant->sideHandles());
+
+            Q_FOREACH (const KisPaintingAssistantHandleSP handle, allAssistantHandles) {
+
+                double dist = KisPaintingAssistant::norm2(mousePos - m_canvas->viewConverter()->documentToView(*handle));
+                if (dist < minDist) {
+                    minDist = dist;
+                    m_handleHover = handle;
+                }
+            }
+        }
     }
 
     m_canvas->updateCanvasDecorations();
@@ -1131,7 +1153,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
                            QSizeF(m_handleSize, m_handleSize));
 
             // render handles differently if it is the one being dragged.
-            if (handle == m_handleDrag || handle == m_handleCombine) {
+            if (handle == m_handleDrag || handle == m_handleCombine || handle == m_handleHover) {
                 QPen stroke(assistantColor, 4);
                 _gc.save();
                 _gc.setPen(stroke);

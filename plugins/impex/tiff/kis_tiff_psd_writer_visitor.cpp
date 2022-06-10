@@ -9,7 +9,7 @@
 
 #include <memory>
 
-#include <tiffio.h>
+#include <tiff.h>
 
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
@@ -86,7 +86,12 @@ bool writeColorSpaceInformation(TIFF *image,
             sample_format = SAMPLEFORMAT_IEEEFP;
         }
         return true;
-
+    } else if (id == LABAColorModelID) {
+        color_type = PHOTOMETRIC_CIELAB;
+        if (isBitDepthFloat(depth)) {
+            sample_format = SAMPLEFORMAT_IEEEFP;
+        }
+        return true;
     } else {
         color_type = PHOTOMETRIC_RGB;
         destColorSpace = KoColorSpaceRegistry::instance()->colorSpace(
@@ -257,6 +262,9 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
     std::unique_ptr<std::remove_pointer_t<tdata_t>, decltype(&_TIFFfree)> buff(
         _TIFFmalloc(stripsize),
         &_TIFFfree);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(
+        buff && "Unable to allocate buffer for TIFF!",
+        ImportExportCodes::InsufficientMemory);
     qint32 height = layer->image()->height();
     qint32 width = layer->image()->width();
     bool r = true;
@@ -305,7 +313,6 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
                                  3,
                                  poses);
         } break;
-            return ImportExportCodes::FormatColorSpaceUnsupported;
         }
         if (!r)
             return ImportExportCodes::InternalError;

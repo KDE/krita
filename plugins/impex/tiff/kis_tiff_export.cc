@@ -262,7 +262,10 @@ void KisTIFFExport::initializeCapabilities()
             << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)
             << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID)
             << QPair<KoID, KoID>(CMYKAColorModelID, Integer16BitsColorDepthID)
-            << QPair<KoID, KoID>(LABAColorModelID, Integer16BitsColorDepthID);
+            << QPair<KoID, KoID>(LABAColorModelID, Integer8BitsColorDepthID)
+            << QPair<KoID, KoID>(LABAColorModelID, Integer16BitsColorDepthID)
+            << QPair<KoID, KoID>(LABAColorModelID, Float16BitsColorDepthID)
+            << QPair<KoID, KoID>(LABAColorModelID, Float32BitsColorDepthID);
     addSupportedColorModels(supportedColorModels, "TIFF");
 
 }

@@ -65,7 +65,7 @@ void KisTIFFOptions::fromProperties(KisPropertiesConfigurationSP cfg)
         indexToComp.value(cfg->getInt("compressiontype", 0), COMPRESSION_NONE));
 
     predictor = static_cast<quint16>(cfg->getInt("predictor", 0)) + 1;
-    alpha = cfg->getBool("alpha", true);
+    alpha = cfg->getBool("alpha", false);
     saveAsPhotoshop = cfg->getBool("saveAsPhotoshop", false);
     psdCompressionType =
         psdIndexToComp.value(cfg->getInt("psdCompressionType", 0),

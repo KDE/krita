@@ -13,7 +13,9 @@
 struct KisTIFFOptions {
     quint16 compressionType = 0;
     quint16 predictor = 1;
-    bool alpha = true;
+    // Disable alpha by default because the test suite
+    // doesn't run the dialog's color space checks.
+    bool alpha = false;
     bool saveAsPhotoshop = false;
     quint16 psdCompressionType = 0;
     bool flatten = true;

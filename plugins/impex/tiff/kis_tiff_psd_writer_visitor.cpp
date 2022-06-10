@@ -236,8 +236,8 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
 
     // Use contiguous configuration
     TIFFSetField(image(), TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
-    // Use 8 rows per strip
-    TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
+
+    // Do not set the rowsperstrip, as it's incompatible with JPEG
 
     // Save profile
     if (m_options->saveProfile) {

@@ -34,14 +34,22 @@
 
 #include "kis_dlg_options_tiff.h"
 #include "kis_tiff_converter.h"
+#include "kis_tiff_logger.h"
 
 K_PLUGIN_FACTORY_WITH_JSON(KisTIFFExportFactory, "krita_tiff_export.json", registerPlugin<KisTIFFExport>();)
 
-KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &) : KisImportExportFilter(parent)
+KisTIFFExport::KisTIFFExport(QObject *parent, const QVariantList &)
+    : KisImportExportFilter(parent)
+    , oldErrHandler(TIFFSetErrorHandler(&KisTiffErrorHandler))
+    , oldWarnHandler(TIFFSetWarningHandler(&KisTiffWarningHandler))
 {
 }
 
-KisTIFFExport::~KisTIFFExport() = default;
+KisTIFFExport::~KisTIFFExport()
+{
+    TIFFSetErrorHandler(oldErrHandler);
+    TIFFSetWarningHandler(oldWarnHandler);
+}
 
 KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP configuration)
 {

@@ -56,6 +56,9 @@ private:
 
     KisImageSP m_image;
     bool m_photoshopBlockParsed = false;
+
+    TIFFErrorHandler oldErrHandler = nullptr;
+    TIFFErrorHandler oldWarnHandler = nullptr;
 };
 
 #endif

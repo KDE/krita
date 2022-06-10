@@ -10,12 +10,19 @@
 #include <KoChannelInfo.h>
 #include <KisGlobalResourcesInterface.h>
 
-KisWdgConvertHeightToNormalMap::KisWdgConvertHeightToNormalMap(QWidget *parent, const KoColorSpace *cs) :
-    KisConfigWidget(parent),
-    ui(new Ui_WidgetConvertHeightToNormalMap),
-    m_cs(cs)
+KisWdgConvertHeightToNormalMap::KisWdgConvertHeightToNormalMap(QWidget *parent, const KoColorSpace *cs)
+    : KisConfigWidget(parent)
+    , ui(new Ui_WidgetConvertHeightToNormalMap)
+    , m_cs(cs)
 
 {
+    if (cs->channelCount() < 3) {
+        QVBoxLayout *layout = new QVBoxLayout(this);
+        layout->addWidget(new QLabel(i18n("Height to Normal Map does not work on this colorspace.")));
+        return;
+    }
+
+
     ui->setupUi(this);
     m_types << "prewitt"<< "sobol"<< "simple";
     m_types_translatable << i18n("Prewitt") << i18n("Sobel") << i18n("Simple");
@@ -61,6 +68,8 @@ KisWdgConvertHeightToNormalMap::~KisWdgConvertHeightToNormalMap()
 KisPropertiesConfigurationSP KisWdgConvertHeightToNormalMap::configuration() const
 {
     KisFilterConfigurationSP config = new KisFilterConfiguration("height to normal", 1, KisGlobalResourcesInterface::instance());
+    if (m_cs->channelCount() < 3) return config;
+
     config->setProperty("horizRadius", ui->sldHorizontalRadius->value());
     config->setProperty("vertRadius", ui->sldVerticalRadius->value());
     config->setProperty("type", m_types.at(ui->cmbType->currentIndex()));
@@ -75,6 +84,8 @@ KisPropertiesConfigurationSP KisWdgConvertHeightToNormalMap::configuration() con
 
 void KisWdgConvertHeightToNormalMap::setConfiguration(const KisPropertiesConfigurationSP config)
 {
+    if (m_cs->channelCount() < 3) return;
+
     ui->sldHorizontalRadius->setValue(config->getFloat("horizRadius", 1.0));
     ui->sldVerticalRadius->setValue(config->getFloat("vertRadius", 1.0));
     int index = 0;

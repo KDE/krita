@@ -338,6 +338,8 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
                                                 KoUpdater *progressUpdater,
                                                 boost::optional<bool> useFftw)
 {
+    KIS_ASSERT_RECOVER_RETURN(device->colorSpace()->channelCount() > 3);
+
     QPoint srcTopLeft = rect.topLeft();
     KisPainter finalPainter(device);
     finalPainter.setChannelFlags(channelFlags);
@@ -399,7 +401,7 @@ void KisEdgeDetectionKernel::convertToNormalMap(KisPaintDeviceSP device,
         QVector3D normal = QVector3D((xNormalised[channelToConvert]-0.5)*2, (yNormalised[channelToConvert]-0.5)*2, z);
         normal.normalize();
         finalNorm.fill(1.0);
-        for (int c = 0; c<3; c++) {
+        for (int c = 0; c < 3; c++) {
             finalNorm[device->colorSpace()->channels().at(channelOrder[c])->displayPosition()] = (normal[channelOrder[c]]/2)+0.5;
         }
 

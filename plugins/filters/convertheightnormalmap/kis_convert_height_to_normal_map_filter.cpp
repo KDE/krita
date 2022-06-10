@@ -40,8 +40,6 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     Q_ASSERT(device);
     Q_ASSERT(device->colorSpace());
 
-    KIS_SAFE_ASSERT_RECOVER_RETURN(config);
-
     if (device->colorSpace()->channelCount() < 3) {
         return;
     }

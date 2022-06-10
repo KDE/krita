@@ -149,7 +149,8 @@ QString KisTabletDebugger::eventToString(const QKeyEvent &ev, const QString &pre
 
     s << "key: 0x" << hex << ev.key() << reset << " ";
     s << "mod: 0x" << hex << ev.modifiers() << reset << " ";
-    s << "text: " << (ev.text().isEmpty() ? "none" : ev.text());
+    s << "text: " << (ev.text().isEmpty() ? "none" : ev.text()) << " ";
+    s << "autorepeat: " << bool(ev.isAutoRepeat());
 
     return string;
 }

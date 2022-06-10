@@ -215,6 +215,19 @@ KisInputManager::Private::Private(KisInputManager *qq)
         [this] () {
             return this->canvas ? this->canvas->inputActionGroupsMaskInterface()->inputActionGroupsMask() : AllActionGroup;
         });
+
+    /**
+     * On Windows and Linux we have a proper fix for this bug
+     * patched into our local version of Qt. We don't have a fix
+     * for macOS
+     */
+#ifdef Q_OS_MACOS
+    useUnbalancedKeyPressEventWorkaround = true;
+#endif
+
+    if (qEnvironmentVariableIsSet("KRITA_FIX_UNBALANCED_KEY_EVENTS")) {
+        useUnbalancedKeyPressEventWorkaround = qEnvironmentVariableIntValue("KRITA_FIX_UNBALANCED_KEY_EVENTS");
+    }
 }
 
 static const int InputWidgetsThreshold = 2000;

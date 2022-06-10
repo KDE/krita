@@ -374,6 +374,24 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
 
         Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
 
+        // see a comment in the handler of KeyRelease event
+        if (d->shouldSynchronizeOnNextKeyPress) {
+            QVector<Qt::Key> guessedKeys;
+            KisExtendedModifiersMapper mapper;
+            Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
+            Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
+                QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
+                guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
+            }
+
+            if (!d->matcher.debugPressedKeys().contains(key)) {
+                guessedKeys.removeOne(key);
+            }
+
+            d->matcher.recoveryModifiersWithoutFocus(guessedKeys);
+            d->shouldSynchronizeOnNextKeyPress = false;
+        }
+
         if (!keyEvent->isAutoRepeat()) {
             retval = d->matcher.keyPressed(key);
         } else {
@@ -396,6 +414,40 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         if (!keyEvent->isAutoRepeat()) {
             Qt::Key key = KisExtendedModifiersMapper::workaroundShiftAltMetaHell(keyEvent);
             retval = d->matcher.keyReleased(key);
+
+            /**
+             * On some systems Qt fails to generate a correct
+             * sequence of events when the user releases a
+             * modifier key while some other key is pressed.
+             *
+             * In such cases Qt doesn't understand that the key
+             * has changed its name in the meantime and sends
+             * incorrect key-release event for it (or an auto-
+             * repeated key-release/key-press pair).
+             *
+             * Example (on en-US keyboard):
+             *
+             * 1) Press Shift (Key_Shift-press is delivered)
+             * 2) Press '2' (Key_At-press is delivered)
+             * 3) Release Shift (Key_Shift-release is delivered)
+             * 4) Release '2' (Key_2-release is delivered,
+             *                 which is unbalanced)
+             *
+             * The same issue happens with non-latin keyboards,
+             * where Qt does auto-key-replace routines when
+             * Control modifier is pressed.
+             *
+             * https://bugs.kde.org/show_bug.cgi?id=454256
+             * https://bugreports.qt.io/browse/QTBUG-103868
+             */
+
+            if (d->useUnbalancedKeyPressEventWorkaround &&
+                !d->matcher.debugPressedKeys().isEmpty() &&
+                (key == Qt::Key_Shift || key == Qt::Key_Alt ||
+                 key == Qt::Key_Control || key == Qt::Key_Meta)) {
+
+                d->shouldSynchronizeOnNextKeyPress = true;
+            }
         }
         break;
     }

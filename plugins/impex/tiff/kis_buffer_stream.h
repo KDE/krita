@@ -32,14 +32,18 @@ class KisBufferStreamContigBase : public KisBufferStreamBase
 {
 public:
     KisBufferStreamContigBase(uint8_t *src, uint16_t depth, tsize_t lineSize);
+
+    ~KisBufferStreamContigBase() override = default;
+
     void restart() override;
+
     void moveToLine(tsize_t lineNumber) override;
-    ~KisBufferStreamContigBase() override {}
+
 protected:
-    uint8_t* m_src;
-    uint8_t* m_srcIt;
-    uint8_t m_posinc;
-    tsize_t m_lineSize;
+    uint8_t *const m_src;
+    uint8_t *m_srcIt;
+    uint16_t m_posinc = 0;
+    const tsize_t m_lineSize;
 };
 
 class KisBufferStreamContigBelow16 : public KisBufferStreamContigBase
@@ -49,9 +53,7 @@ public:
         : KisBufferStreamContigBase(src, depth, lineSize)
     {
     }
-
-public:
-    ~KisBufferStreamContigBelow16() override {}
+    ~KisBufferStreamContigBelow16() override = default;
     uint32_t nextValue() override;
 };
 
@@ -64,7 +66,7 @@ public:
     }
 
 public:
-    ~KisBufferStreamContigBelow32() override {}
+    ~KisBufferStreamContigBelow32() override = default;
     uint32_t nextValue() override;
 };
 
@@ -77,23 +79,29 @@ public:
     }
 
 public:
-    ~KisBufferStreamContigAbove32() override {}
+    ~KisBufferStreamContigAbove32() override = default;
     uint32_t nextValue() override;
 };
-
 
 class KisBufferStreamSeparate : public KisBufferStreamBase
 {
 public:
-    KisBufferStreamSeparate(uint8_t **srcs, uint16_t nb_samples, uint16_t depth, tsize_t *lineSize);
-    ~KisBufferStreamSeparate() override;
+    KisBufferStreamSeparate(uint8_t **srcs,
+                            uint16_t nb_samples,
+                            uint16_t depth,
+                            tsize_t *lineSize);
+    ~KisBufferStreamSeparate() override = default;
+
     uint32_t nextValue() override;
+
     void restart() override;
+
     void moveToLine(tsize_t lineNumber) override;
 
 protected:
     QVector<QSharedPointer<KisBufferStreamBase>> streams;
-    uint16_t m_current_sample, m_nb_samples;
+    uint16_t m_current_sample = 0;
+    uint16_t m_nb_samples;
 };
 
 #endif

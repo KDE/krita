@@ -39,6 +39,11 @@
 #include "kis_tiff_psd_resource_record.h"
 #endif
 
+#ifdef HAVE_JPEG_TURBO
+#include <turbojpeg.h>
+#endif
+
+#include "kis_buffer_stream.h"
 #include "kis_tiff_logger.h"
 #include "kis_tiff_reader.h"
 #include "kis_tiff_ycbcr_reader.h"
@@ -782,8 +787,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                               &vsubsampling);
         lineSizeCoeffs[1] = hsubsampling;
         lineSizeCoeffs[2] = hsubsampling;
-        uint16_t position = 0;
-        TIFFGetFieldDefaulted(image, TIFFTAG_YCBCRPOSITIONING, &position);
+        dbgFile << "Subsampling" << 4 << hsubsampling << vsubsampling;
         if (dstDepth == 8) {
             tiffReader = new KisTIFFYCbCrReader<uint8_t>(
                 layer->paintDevice(),
@@ -947,6 +951,9 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         return ImportExportCodes::FileFormatIncorrect;
     }
 
+    uint32_t compression = COMPRESSION_NONE;
+    TIFFGetFieldDefaulted(image, TIFFTAG_COMPRESSION, &compression, COMPRESSION_NONE);
+
     if (TIFFIsTiled(image)) {
         dbgFile << "tiled image";
         uint32_t tileWidth = 0;
@@ -1025,7 +1032,66 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             qMin(rowsPerStrip,
                  height); // when TIFFNumberOfStrips(image) == 1 it might happen
                           // that rowsPerStrip is incorrectly set
-        if (planarconfig == PLANARCONFIG_CONTIG) {
+
+#ifdef HAVE_JPEG_TURBO
+        uint32_t hasSplitTables = 0;
+        uint8_t *tables = nullptr;
+        uint32_t sz = 0;
+        QVector<unsigned char> jpegBuf;
+
+        auto handle = [&]() -> std::unique_ptr<void, decltype(&tjDestroy)> {
+            if (planarconfig == PLANARCONFIG_CONTIG
+                && color_type == PHOTOMETRIC_YCBCR
+                && compression == COMPRESSION_JPEG) {
+                return {tjInitDecompress(), &tjDestroy};
+            } else {
+                return {nullptr, &tjDestroy};
+            }
+        }();
+
+        if (color_type == PHOTOMETRIC_YCBCR && compression == COMPRESSION_JPEG
+            && hsubsampling != 1 && vsubsampling != 1) {
+            jpegBuf.resize(stripsize);
+            dbgFile << "Setting up libjpeg-turbo for handling subsampled JPEG "
+                       "strips...";
+            if (!TIFFGetFieldDefaulted(image,
+                                       TIFFTAG_JPEGTABLESMODE,
+                                       &hasSplitTables)) {
+                errFile << "Error when detecting the JPEG coefficient "
+                           "table mode";
+                return ImportExportCodes::FileFormatIncorrect;
+            }
+            if (hasSplitTables) {
+                if (!TIFFGetField(image, TIFFTAG_JPEGTABLES, &sz, &tables)) {
+                    errFile
+                        << "Unable to retrieve the JPEG abbreviated datastream";
+                    return ImportExportCodes::FileFormatIncorrect;
+                }
+            }
+
+            {
+                int width = 0;
+                int height = 0;
+
+                if (hasSplitTables
+                    && tjDecompressHeader(handle.get(),
+                                          tables,
+                                          sz,
+                                          &width,
+                                          &height)
+                        != 0) {
+                    errFile << tjGetErrorStr2(handle.get());
+                    m_doc->setErrorMessage(i18nc("TIFF errors", "This TIFF file is compressed with JPEG, but libjpeg-turbo could not load its coefficient quantization and/or Huffman coding tables. Please upgrade your version of libjpeg-turbo and try again."));
+                    return ImportExportCodes::FileFormatIncorrect;
+                }
+            }
+        }
+#endif
+
+        if (planarconfig == PLANARCONFIG_CONTIG
+            && !(color_type == PHOTOMETRIC_YCBCR
+                 && compression == COMPRESSION_JPEG && hsubsampling != 1
+                 && vsubsampling != 1)) {
             buf.reset(_TIFFmalloc(stripsize));
             if (depth < 16) {
                 tiffstream = new KisBufferStreamContigBelow16(
@@ -1043,6 +1109,61 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                     depth,
                     stripsize / rowsPerStrip);
             }
+        } else if (planarconfig == PLANARCONFIG_CONTIG
+                   && color_type == PHOTOMETRIC_YCBCR
+                   && compression == COMPRESSION_JPEG) {
+#ifdef HAVE_JPEG_TURBO
+            ps_buf.resize(nbchannels);
+            TIFFReadRawStrip(image, 0, jpegBuf.data(), stripsize);
+
+            int width = basicInfo.width;
+            int height = rowsPerStrip;
+            int jpegSubsamp = TJ_444;
+            int jpegColorspace = TJCS_YCbCr;
+
+            if (tjDecompressHeader3(handle.get(),
+                                    jpegBuf.data(),
+                                    stripsize,
+                                    &width,
+                                    &height,
+                                    &jpegSubsamp,
+                                    &jpegColorspace)
+                != 0) {
+                errFile << tjGetErrorStr2(handle.get());
+                return ImportExportCodes::FileFormatIncorrect;
+            }
+
+            QVector<tsize_t> lineSizes(nbchannels);
+            for (uint32_t i = 0; i < nbchannels; i++) {
+                const unsigned long uncompressedStripsize =
+                    tjPlaneSizeYUV(i, width, 0, height, jpegColorspace);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
+                    uncompressedStripsize != (unsigned long)-1,
+                    ImportExportCodes::FileFormatIncorrect);
+                dbgFile << QString("Uncompressed strip size (plane %1): %2")
+                               .arg(i)
+                               .arg(uncompressedStripsize);
+                tsize_t scanLineSize = uncompressedStripsize / rowsPerStrip;
+                dbgFile << QString("scan line size (plane %1): %2")
+                               .arg(i)
+                               .arg(scanLineSize);
+                ps_buf[i] = _TIFFmalloc(uncompressedStripsize);
+                lineSizes[i] = scanLineSize;
+            }
+            tiffstream = new KisBufferStreamInterleaveUpsample(
+                reinterpret_cast<uint8_t **>(ps_buf.data()),
+                nbchannels,
+                depth,
+                lineSizes.data(),
+                hsubsampling,
+                vsubsampling);
+#else
+            m_doc->setErrorMessage(
+                i18nc("TIFF",
+                      "Subsampled YCbCr TIFF files compressed with JPEG cannot "
+                      "be loaded."));
+            return ImportExportCodes::FileFormatIncorrect;
+#endif
         } else {
             ps_buf.resize(nbchannels);
             tsize_t scanLineSize = stripsize / rowsPerStrip;
@@ -1067,12 +1188,57 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         dbgFile << " NbOfStrips =" << TIFFNumberOfStrips(image)
                 << " rowsPerStrip =" << rowsPerStrip
                 << " stripsize =" << stripsize;
+
         for (uint32_t strip = 0; y < height; strip++) {
+#ifdef HAVE_JPEG_TURBO
+            if (planarconfig == PLANARCONFIG_CONTIG
+                && !(color_type == PHOTOMETRIC_YCBCR
+                     && compression == COMPRESSION_JPEG && hsubsampling != 1
+                     && vsubsampling != 1)) {
+#else
             if (planarconfig == PLANARCONFIG_CONTIG) {
+#endif
                 TIFFReadEncodedStrip(image,
                                      TIFFComputeStrip(image, y, 0),
                                      buf.get(),
                                      (tsize_t)-1);
+#ifdef HAVE_JPEG_TURBO
+            } else if (planarconfig == PLANARCONFIG_CONTIG
+                       && (color_type == PHOTOMETRIC_YCBCR
+                           && compression == COMPRESSION_JPEG)) {
+                TIFFReadRawStrip(image, strip, jpegBuf.data(), stripsize);
+
+                int width = basicInfo.width;
+                int height = rowsPerStrip;
+                int jpegSubsamp = TJ_444;
+                int jpegColorspace = TJCS_YCbCr;
+
+                if (tjDecompressHeader3(handle.get(),
+                                        jpegBuf.data(),
+                                        stripsize,
+                                        &width,
+                                        &height,
+                                        &jpegSubsamp,
+                                        &jpegColorspace)
+                    != 0) {
+                    errFile << tjGetErrorStr2(handle.get());
+                    return ImportExportCodes::FileFormatIncorrect;
+                }
+
+                if (tjDecompressToYUVPlanes(
+                        handle.get(),
+                        jpegBuf.data(),
+                        stripsize,
+                        reinterpret_cast<unsigned char **>(ps_buf.data()),
+                        width,
+                        nullptr,
+                        height,
+                        0)
+                    != 0) {
+                    errFile << tjGetErrorStr2(handle.get());
+                    return ImportExportCodes::FileFormatIncorrect;
+                }
+#endif
             } else {
                 for (uint16_t i = 0; i < nbchannels; i++) {
                     TIFFReadEncodedStrip(image,
@@ -1301,7 +1467,10 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
                 "Chemical proof");
         } else if (basicInfo.colorSpaceIdTag.first == LABAColorModelID.id()) {
             profile = KoColorSpaceRegistry::instance()->profileByName(
-                "Lab identity build-in");
+                "Lab identity built-in");
+        } else if (basicInfo.colorSpaceIdTag.first == YCbCrAColorModelID.id()) {
+            profile = KoColorSpaceRegistry::instance()->profileByName(
+                "ITU-R BT.709-6 YCbCr ICC V4 profile");
         }
         if (!profile) {
             dbgFile << "No suitable default profile found.";
@@ -1429,7 +1598,10 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
     return readImageFromTiff(m_doc, image, basicInfo);
 }
 
-KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice */*io*/,  KisPropertiesConfigurationSP /*configuration*/)
+KisImportExportErrorCode
+KisTIFFImport::convert(KisDocument *document,
+                       QIODevice * /*io*/,
+                       KisPropertiesConfigurationSP /*configuration*/)
 {
     dbgFile << "Start decoding TIFF File";
 
@@ -1558,4 +1730,3 @@ KisImportExportErrorCode KisTIFFImport::convert(KisDocument *document, QIODevice
 }
 
 #include <kis_tiff_import.moc>
-

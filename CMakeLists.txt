@@ -855,6 +855,20 @@ if (JPEG_FOUND)
     macro_bool_to_01(JPEG_FOUND HAVE_JPEG)
 endif()
 
+find_package(libjpeg-turbo 2.1.3)
+set_package_properties(libjpeg-turbo PROPERTIES
+    DESCRIPTION "libjpeg-turbo is a JPEG image codec that uses SIMD instructions (MMX, SSE2, AVX2, Neon, AltiVec) to accelerate baseline JPEG compression and decompression on x86, x86-64, Arm, and PowerPC systems, as well as progressive JPEG compression on x86 and x86-64 systems."
+    URL "https://www.libjpeg-turbo.org"
+    TYPE OPTIONAL
+    PURPOSE "Required by the Krita JPEG and TIFF filters")
+if(libjpeg-turbo_FOUND)
+    get_target_property(JPEG_TURBO_LIBRARY libjpeg-turbo::turbojpeg "LOCATION")
+    set(JPEG_TURBO_LIBRARIES libjpeg-turbo::turbojpeg)
+    list(APPEND ANDROID_EXTRA_LIBS ${JPEG_TURBO_LIBRARY})
+endif()
+macro_bool_to_01(libjpeg-turbo_FOUND HAVE_JPEG_TURBO)
+configure_file(config-jpeg.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-jpeg.h )
+
 find_package(GIF)
 set_package_properties(GIF PROPERTIES
     DESCRIPTION "Library for loading and saving gif files."

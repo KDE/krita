@@ -12,6 +12,7 @@
 
 #include <KisImportExportFilter.h>
 #include <config-tiff.h>
+#include <config-jpeg.h>
 #include <kis_types.h>
 
 class QBuffer;

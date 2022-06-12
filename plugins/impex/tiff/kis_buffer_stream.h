@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2005-2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -7,18 +8,18 @@
 #ifndef _KIS_BUFFER_STREAM_H_
 #define _KIS_BUFFER_STREAM_H_
 
-#ifdef _MSC_VER
-#define KDEWIN_STDIO_H  // Remove KDEWIN extensions to stdio.h
-#include <stdio.h>
-#endif
-
 #include <cstdint>
+
+#include <QSharedPointer>
+#include <QVector>
+
 #include <tiffio.h>
 
 class KisBufferStreamBase
 {
 public:
     KisBufferStreamBase(uint16_t depth) : m_depth(depth) {}
+    virtual ~KisBufferStreamBase() = default;
     virtual uint32_t nextValue() = 0;
     virtual void restart() = 0;
     virtual void moveToLine(tsize_t lineNumber) = 0;
@@ -90,8 +91,8 @@ public:
     void restart() override;
     void moveToLine(tsize_t lineNumber) override;
 
-private:
-    KisBufferStreamContigBase** streams;
+protected:
+    QVector<QSharedPointer<KisBufferStreamBase>> streams;
     uint16_t m_current_sample, m_nb_samples;
 };
 

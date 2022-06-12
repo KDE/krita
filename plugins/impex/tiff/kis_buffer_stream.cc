@@ -6,13 +6,20 @@
  */
 
 #include "kis_buffer_stream.h"
-#include <tiffio.h>
 
-KisBufferStreamContigBase::KisBufferStreamContigBase(uint8_t *src, uint16_t depth, tsize_t lineSize)
+#include <kis_debug.h>
+
+KisBufferStreamContigBase::KisBufferStreamContigBase(uint8_t *src,
+                                                     uint16_t depth,
+                                                     tsize_t lineSize)
+
     : KisBufferStreamBase(depth)
     , m_src(src)
+    , m_srcIt(src)
+    , m_posinc(8)
     , m_lineSize(lineSize)
 {
+    KIS_ASSERT(depth <= 32);
     restart();
 }
 
@@ -30,10 +37,10 @@ void KisBufferStreamContigBase::moveToLine(tsize_t lineNumber)
 
 uint32_t KisBufferStreamContigBelow16::nextValue()
 {
-    uint8_t remain =  static_cast<uint8_t>(m_depth) ;
+    uint16_t remain = m_depth;
     uint32_t value =  0 ;
     while (remain > 0) {
-        uint8_t toread =  remain ;
+        uint16_t toread = remain;
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;
         m_posinc -= toread;
@@ -48,10 +55,10 @@ uint32_t KisBufferStreamContigBelow16::nextValue()
 
 uint32_t KisBufferStreamContigBelow32::nextValue()
 {
-    uint8_t remain = static_cast<uint8_t>(m_depth);
+    uint16_t remain = m_depth;
     uint32_t value = 0;
     while (remain > 0) {
-        uint8_t toread = remain;
+        uint16_t toread = remain;
         if (toread > m_posinc) toread = m_posinc;
         remain -= toread;
         m_posinc -= toread;
@@ -66,10 +73,10 @@ uint32_t KisBufferStreamContigBelow32::nextValue()
 
 uint32_t KisBufferStreamContigAbove32::nextValue()
 {
-    uint8_t remain = static_cast<uint8_t>(m_depth);
+    uint16_t remain = m_depth;
     uint32_t value = 0;
     while (remain > 0) {
-        uint8_t toread = remain;
+        uint16_t toread = remain;
         if (toread > m_posinc)
             toread = m_posinc;
         remain -= toread;
@@ -119,7 +126,7 @@ KisBufferStreamSeparate::KisBufferStreamSeparate(uint8_t **srcs, uint16_t nb_sam
 
 uint32_t KisBufferStreamSeparate::nextValue()
 {
-    uint32_t value = streams[ m_current_sample ]->nextValue();
+    const uint32_t value = streams[m_current_sample]->nextValue();
     if ((++m_current_sample) >= m_nb_samples)
         m_current_sample = 0;
     return value;

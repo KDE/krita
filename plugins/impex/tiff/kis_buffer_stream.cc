@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2005-2006 Cyrille Berger <cberger@cberger.net>
+ *  SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -88,29 +89,32 @@ KisBufferStreamSeparate::KisBufferStreamSeparate(uint8_t **srcs, uint16_t nb_sam
     : KisBufferStreamBase(depth)
     , m_nb_samples(nb_samples)
 {
-    streams = new KisBufferStreamContigBase*[nb_samples];
     if (depth < 16) {
-        for (uint8_t i = 0; i < m_nb_samples; i++) {
-            streams[i] = new KisBufferStreamContigBelow16(srcs[i], depth, lineSize[i]);
+        for (uint16_t i = 0; i < m_nb_samples; i++) {
+            streams.push_back(
+                QSharedPointer<KisBufferStreamContigBelow16>::create(
+                    srcs[i],
+                    depth,
+                    lineSize[i]));
         }
     } else if (depth < 32) {
-        for (uint8_t i = 0; i < m_nb_samples; i++) {
-            streams[i] = new KisBufferStreamContigBelow32(srcs[i], depth, lineSize[i]);
+        for (uint16_t i = 0; i < m_nb_samples; i++) {
+            streams.push_back(
+                QSharedPointer<KisBufferStreamContigBelow32>::create(
+                    srcs[i],
+                    depth,
+                    lineSize[i]));
         }
     } else {
-        for (uint8_t i = 0; i < m_nb_samples; i++) {
-            streams[i] = new KisBufferStreamContigAbove32(srcs[i], depth, lineSize[i]);
+        for (uint16_t i = 0; i < m_nb_samples; i++) {
+            streams.push_back(
+                QSharedPointer<KisBufferStreamContigAbove32>::create(
+                    srcs[i],
+                    depth,
+                    lineSize[i]));
         }
     }
     restart();
-}
-
-KisBufferStreamSeparate::~KisBufferStreamSeparate()
-{
-    for (uint8_t i = 0; i < m_nb_samples; i++) {
-        delete streams[i];
-    }
-    delete[] streams;
 }
 
 uint32_t KisBufferStreamSeparate::nextValue()
@@ -124,14 +128,14 @@ uint32_t KisBufferStreamSeparate::nextValue()
 void KisBufferStreamSeparate::restart()
 {
     m_current_sample = 0;
-    for (uint8_t i = 0; i < m_nb_samples; i++) {
-        streams[i]->restart();
+    for (const auto &stream : streams) {
+        stream->restart();
     }
 }
 
 void KisBufferStreamSeparate::moveToLine(tsize_t lineNumber)
 {
-    for (uint8_t i = 0; i < m_nb_samples; i++) {
-        streams[i]->moveToLine(lineNumber);
+    for (const auto &stream : streams) {
+        stream->moveToLine(lineNumber);
     }
 }

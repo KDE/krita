@@ -23,7 +23,7 @@ set(kritatiffimport_SOURCES
 
 kis_add_library(kritatiffimport MODULE ${kritatiffimport_SOURCES})
 
-target_link_libraries(kritatiffimport kritaui kritaimpex ${KRITATIFFPSD_LIBRARY} ${TIFF_LIBRARIES} LibExiv2::LibExiv2 kritametadata)
+target_link_libraries(kritatiffimport kritaui kritaimpex ${KRITATIFFPSD_LIBRARY} ${TIFF_LIBRARIES} LibExiv2::LibExiv2 kritametadata ${JPEG_TURBO_LIBRARIES})
 
 install(TARGETS kritatiffimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

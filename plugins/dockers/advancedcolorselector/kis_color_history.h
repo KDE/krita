@@ -11,6 +11,7 @@
 
 class QToolButton;
 class KisCanvasResourceProvider;
+class KisColorHistoryNotifier;
 
 class KisColorHistory : public KisColorPatches
 {
@@ -30,6 +31,9 @@ public Q_SLOTS:
 
     void updateStrategy();
 
+    // Receive notification that the color history changed in some selector
+    void colorHistoryChanged(const QList<KoColor> &history);
+
 private:
     // Get reference to the relevant color history, either from resource provider or doucment.
     QList<KoColor> colorHistory();
@@ -44,5 +48,20 @@ private:
     KisDocument *m_document; // Color history is now stored in the document
     KisCanvasResourceProvider  *m_resourceProvider; // to disconnect...
 };
+
+// Singleton instance to update color history when there are multiple windows that must have it in sync.
+class KisColorHistoryNotifier : public QObject
+{
+Q_OBJECT
+
+public:
+    void notifyColorHistoryChanged(const QList<KoColor> &history);
+
+
+Q_SIGNALS:
+
+    void colorHistoryChanged(const QList<KoColor> &history);
+};
+
 
 #endif // KIS_COLOR_HISTORY_H

@@ -18,6 +18,8 @@
 #include "KisDocument.h"
 #include "kis_config_notifier.h"
 
+Q_GLOBAL_STATIC(KisColorHistoryNotifier, s_color_history_change_notifier);
+
 KisColorHistory::KisColorHistory(QWidget *parent)
     : KisColorPatches("lastUsedColors", parent)
     , m_document(0)
@@ -31,14 +33,16 @@ KisColorHistory::KisColorHistory(QWidget *parent)
 
     connect(m_clearButton, SIGNAL(clicked()), this, SLOT(clearColorHistory()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(updateStrategy()));
+    connect(s_color_history_change_notifier, SIGNAL(colorHistoryChanged(const QList<KoColor>&)),
+            this, SLOT(colorHistoryChanged(const QList<KoColor>&)));
 
     setAdditionalButtons({m_clearButton});
 }
 
 void KisColorHistory::unsetCanvas()
 {
-    m_resourceProvider = nullptr;
-    m_document = nullptr;
+    m_resourceProvider = 0;
+    m_document = 0;
 
     KisColorPatches::unsetCanvas();
 }
@@ -86,11 +90,14 @@ void KisColorHistory::addColorToHistory(const KoColor &color)
     }
 
     updateColorHistory(history);
+    s_color_history_change_notifier->notifyColorHistoryChanged(history);
 }
 
 void KisColorHistory::clearColorHistory()
 {
-    updateColorHistory(QList<KoColor>());
+    QList<KoColor> empty;
+    updateColorHistory(empty);
+    s_color_history_change_notifier->notifyColorHistoryChanged(empty);
 }
 
 QList<KoColor> KisColorHistory::colorHistory()
@@ -121,3 +128,21 @@ void KisColorHistory::updateStrategy()
    updateColorHistory(colorHistory()); // Show with respect to the current strategy
 }
 
+void KisColorHistory::colorHistoryChanged(const QList<KoColor> &history)
+{
+   if (sender() != this) {
+       if (m_history_per_document) {
+           // The document is shared also across windows to passed history is not required.
+           // Differently, the update may contain the history for another document.
+           updateColorHistory(colorHistory());
+       } else {
+           // The resource provider is per window so needs an update if the history must be global.
+           updateColorHistory(history);
+       }
+   }
+}
+
+void KisColorHistoryNotifier::notifyColorHistoryChanged(const QList<KoColor> &history)
+{
+    emit colorHistoryChanged(history);
+}

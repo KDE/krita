@@ -194,7 +194,7 @@
     <p xml:lang="ar">يعد كريتا خيارًا رائعًا لإنشاء لوحات مبدئية ورسومات الهزلية و الأنسجة المستخدمة في التصيير ثلاثي الأبعاد واللوحات غير اللامعة. يدعم كريتا العديد من مساحات الألوان مثل RGB و CMYK بقنوات ذات 8 و 16 بت، بالإضافة إلى قنوات فاصلة عائمة 16 بت و 32 بت.</p>
     <p xml:lang="bs">Krita je odličan izbor za kreiranje konceptualne umjetnosti, stripove, teksture za obradu i mat slike. Krita podržava mnoge prostore boja kao RGB i CMIK na 8 i 16 bitnim cjelobrojnim kanalimaa, kao i 16 i 32 bita floating point kanalima.</p>
     <p xml:lang="ca">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
-    <p xml:lang="ca-valencia">Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderisar i pintures «matte». Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, aixina com 16 i 32 bits de canals de coma flotant.</p>
+    <p xml:lang="ca-valencia">Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="de">Krita ist eine großartige Wahl zur Erstellung von Concept Art, Comics, Rendertexturen und Vorsatzmalerei. Krita unterstützt viele Farbräume, wie RGB und CMYK mit 8 oder 16 Bit Integerkanälen, sowie 16 und 32 Bit Fließkomma-Kanälen.</p>
     <p xml:lang="el">Το Krita είναι μια εξαιρετική επιλογή για τη δημιουργία αφηρημένης τέχνης, ιστοριών με εικόνες, υφής για ζωγραφική αποτύπωσης και διάχυσης φωτός. Το Krita υποστηρίζει πολλούς χρωματικούς χώρους όπως τα RGB και CMYK σε 8 και 16 bit κανάλια ακεραίων καθώς επίσης και σε 16 και 32 bit κανάλια κινητής υποδιαστολής,</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colourspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
@@ -400,7 +400,7 @@
       <caption>If you're new to digital painting, there's an extensive, up-to-date manual</caption>
       <caption xml:lang="ar">إذا كنت جديدًا في مجال الرسم الرقمي ، فهناك دليل شامل ومُحدَّث</caption>
       <caption xml:lang="ca">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
-      <caption xml:lang="ca-valencia">Si sou nou en la pintura digital, hi ha un manual extens i actualisat</caption>
+      <caption xml:lang="ca-valencia">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
       <caption xml:lang="de">Für Einsteiger in das digitale Malen gibt es ein umfassendes, ständig aktualisiertes Handbuch</caption>
       <caption xml:lang="en-GB">If you're new to digital painting, there's an extensive, up-to-date manual</caption>
       <caption xml:lang="es">Si está empezando con el dibujo digital, dispone de un extenso y actualizado manual</caption>

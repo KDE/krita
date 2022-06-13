@@ -199,6 +199,11 @@ QString KisResourceStorage::resourceMd5(const QString &url)
     return d->storagePlugin->resourceMd5(url);
 }
 
+QString KisResourceStorage::resourceFilePath(const QString &url)
+{
+    return d->storagePlugin->resourceFilePath(url);
+}
+
 QSharedPointer<KisResourceStorage::ResourceIterator> KisResourceStorage::resources(const QString &resourceType) const
 {
     return d->storagePlugin->resources(resourceType);

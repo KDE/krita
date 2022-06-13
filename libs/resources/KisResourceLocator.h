@@ -113,6 +113,11 @@ public:
      */
     void purgeTag(const QString tagUrl, const QString resourceType);
 
+    /**
+     * Returns the full file path of the resource if it has any
+     * separate physical representation on the disk
+     */
+    QString filePathForResource(KoResourceSP resource);
 
 Q_SIGNALS:
 

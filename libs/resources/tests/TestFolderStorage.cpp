@@ -95,6 +95,21 @@ void TestFolderStorage::testAddResource()
     ResourceTestHelper::testVersionedStorageIterator(folderStorage,
                                                      ResourceType::PaintOpPresets,
                                                      "paintoppresets/anewresource.0000.kpp");
+
+}
+
+void TestFolderStorage::testResourceFilePath()
+{
+    KoResourceSP resource(new DummyResource("anewresource.kpp", ResourceType::PaintOpPresets));
+    resource->setValid(true);
+    resource->setVersion(0);
+
+    KisFolderStorage folderStorage(m_dstLocation);
+    bool r = folderStorage.saveAsNewVersion(ResourceType::PaintOpPresets, resource);
+    QVERIFY(r);
+
+    QCOMPARE(folderStorage.resourceFilePath("paintoppresets/anewresource.0000.kpp"),
+             QFileInfo(m_dstLocation + "/" + "paintoppresets/anewresource.0000.kpp").absoluteFilePath());
 }
 
 void TestFolderStorage::testResourceCaseSensitivity()

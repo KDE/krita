@@ -190,6 +190,13 @@ public:
     /// The MD5 checksum of the resource in the storage
     QString resourceMd5(const QString &url);
 
+    /// If the resource is present on the filesystem as a distinct fine,
+    /// returns the full file path of it, otherwise returns an empty string.
+    ///
+    /// Never manipulate the file in any way directly! It will destroy the
+    /// resources database. Use this file path only for informational purposes.
+    QString resourceFilePath(const QString &url);
+
     /// An iterator over all the resources in the storage
     QSharedPointer<ResourceIterator> resources(const QString &resourceType) const;
 

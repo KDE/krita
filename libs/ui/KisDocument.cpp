@@ -426,6 +426,8 @@ public:
     void uploadLinkedResourcesFromLayersToStorage();
     KisDocument* lockAndCloneImpl(bool fetchResourcesFromLayers);
 
+    void updateDocumentMetadataOnSaving(const QString &filePath, const QByteArray &mimeType);
+
     /// clones the palette list oldList
     /// the ownership of the returned KoColorSet * belongs to the caller
     class StrippedSafeSavingLocker;
@@ -934,26 +936,8 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
             const QString existingAutoSaveBaseName = localFilePath();
             const bool wasRecovered = isRecovered();
 
-            setPath(job.filePath);
-            setLocalFilePath(job.filePath);
-            setMimeType(job.mimeType);
-            updateEditingTime(true);
+            d->updateDocumentMetadataOnSaving(job.filePath, job.mimeType);
 
-            if (!d->modifiedWhileSaving) {
-                /**
-                 * If undo stack is already clean/empty, it doesn't emit any
-                 * signals, so we might forget update document modified state
-                 * (which was set, e.g. while recovering an autosave file)
-                 */
-
-                if (d->undoStack->isClean()) {
-                    setModified(false);
-                } else {
-                    d->imageModifiedWithoutUndo = false;
-                    d->undoStack->setClean();
-                }
-            }
-            setRecovered(false);
             removeAutoSaveFiles(existingAutoSaveBaseName, wasRecovered);
         }
 
@@ -962,6 +946,30 @@ void KisDocument::slotCompleteSavingDocument(const KritaUtils::ExportFileJob &jo
 
         emit statusBarMessage(i18n("Finished saving %1", fileName), successMessageTimeout);
     }
+}
+
+void KisDocument::Private::updateDocumentMetadataOnSaving(const QString &filePath, const QByteArray &mimeType)
+{
+    q->setPath(filePath);
+    q->setLocalFilePath(filePath);
+    q->setMimeType(mimeType);
+    q->updateEditingTime(true);
+
+    if (!modifiedWhileSaving) {
+        /**
+         * If undo stack is already clean/empty, it doesn't emit any
+         * signals, so we might forget update document modified state
+         * (which was set, e.g. while recovering an autosave file)
+         */
+
+        if (undoStack->isClean()) {
+            q->setModified(false);
+        } else {
+            imageModifiedWithoutUndo = false;
+            undoStack->setClean();
+        }
+    }
+    q->setRecovered(false);
 }
 
 QByteArray KisDocument::mimeType() const
@@ -1389,6 +1397,7 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                 model.setResourceFilter(KisResourceModel::ShowAllResources);
 
                 QString tempFileName = QDir::tempPath() + "/" + QFileInfo(path).fileName();
+
                 if (QFileInfo(path).exists()) {
 
                     int outResourceId;
@@ -1398,6 +1407,21 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                     }
 
                     if (res) {
+                        d->modifiedWhileSaving = false;
+
+                        if (!exportConfiguration) {
+                            QScopedPointer<KisImportExportFilter> filter(
+                                KisImportExportManager::filterForMimeType(mimeType, KisImportExportManager::Export));
+                            if (filter) {
+                                exportConfiguration = filter->defaultConfiguration(nativeFormatMimeType(), mimeType);
+                            }
+                        }
+
+                        if (exportConfiguration) {
+                            // make sure the the name of the resource doesn't change
+                            exportConfiguration->setProperty("name", res->name());
+                        }
+
                         if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
                             QFile f2(tempFileName);
                             f2.open(QFile::ReadOnly);
@@ -1407,8 +1431,15 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                             QBuffer buf(&ba);
                             buf.open(QBuffer::ReadOnly);
 
+
+
                             if (res->loadFromDevice(&buf, KisGlobalResourcesInterface::instance())) {
                                 if (model.updateResource(res)) {
+                                    const QString filePath =
+                                        KisResourceLocator::instance()->filePathForResource(res);
+
+                                    d->updateDocumentMetadataOnSaving(filePath, mimeType);
+
                                     return true;
                                 }
                             }
@@ -1416,8 +1447,15 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                     }
                 }
                 else {
+                    d->modifiedWhileSaving = false;
                     if (exportDocumentSync(tempFileName, mimeType, exportConfiguration)) {
-                        if (model.importResourceFile(tempFileName, false)) {
+                        KoResourceSP res = model.importResourceFile(tempFileName, false);
+                        if (res) {
+                            const QString filePath =
+                                KisResourceLocator::instance()->filePathForResource(res);
+
+                            d->updateDocumentMetadataOnSaving(filePath, mimeType);
+
                             return true;
                         }
                     }

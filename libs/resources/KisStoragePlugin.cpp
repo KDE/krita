@@ -68,6 +68,11 @@ QString KisStoragePlugin::resourceMd5(const QString &url)
     }
 }
 
+QString KisStoragePlugin::resourceFilePath(const QString &url)
+{
+    return QString();
+}
+
 bool KisStoragePlugin::supportsVersioning() const
 {
     return true;

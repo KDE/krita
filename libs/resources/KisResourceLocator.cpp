@@ -946,6 +946,20 @@ void KisResourceLocator::purgeTag(const QString tagUrl, const QString resourceTy
     d->tagCache.remove(QPair<QString, QString>(resourceType, tagUrl));
 }
 
+QString KisResourceLocator::filePathForResource(KoResourceSP resource)
+{
+    const QString storageLocation = makeStorageLocationAbsolute(resource->storageLocation());
+    KisResourceStorageSP storage = d->storages[storageLocation];
+    if (!storage) {
+        qWarning() << "Could not find storage" << storageLocation;
+        return QString();
+    }
+
+    const QString resourceUrl = resource->resourceType().first + "/" + resource->filename();
+
+    return storage->resourceFilePath(resourceUrl);
+}
+
 KisResourceLocator::LocatorError KisResourceLocator::firstTimeInstallation(InitializationStatus initializationStatus, const QString &installationResourcesLocation)
 {
     emit progressMessage(i18n("Krita is running for the first time. Initialization will take some time."));

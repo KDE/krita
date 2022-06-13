@@ -19,6 +19,7 @@ private Q_SLOTS:
     void testStorage();
     void testTagIterator();
     void testAddResource();
+    void testResourceFilePath();
     void testResourceCaseSensitivity();
     void cleanupTestCase();
 private:

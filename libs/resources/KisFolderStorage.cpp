@@ -143,6 +143,12 @@ QString KisFolderStorage::resourceMd5(const QString &url)
     return result;
 }
 
+QString KisFolderStorage::resourceFilePath(const QString &url)
+{
+    QFileInfo file(location() + "/" + url);
+    return file.exists() ? file.absoluteFilePath() : QString();
+}
+
 QSharedPointer<KisResourceStorage::ResourceIterator> KisFolderStorage::resources(const QString &resourceType)
 {
     QVector<VersionedResourceEntry> entries;

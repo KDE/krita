@@ -285,120 +285,131 @@ void KisPainterBasedStrokeStrategy::deletePainters()
 
 void KisPainterBasedStrokeStrategy::initStrokeCallback()
 {
-    KisNodeSP node = m_resources->currentNode();
-    KisPaintDeviceSP paintDevice = node->paintDevice();
-    KisPaintDeviceSP targetDevice = paintDevice;
-    bool hasIndirectPainting = supportsIndirectPainting() && m_resources->needsIndirectPainting();
-    const QString indirectCompositeOp = m_resources->indirectPaintingCompositeOp();
-    const int time = targetDevice->defaultBounds()->currentTime();
+    QVector<KisRunnableStrokeJobData*> jobs;
 
-    KisSelectionSP selection =  m_resources->activeSelection();
+    KritaUtils::addJobSequential(jobs, [this] () {
+        KisNodeSP node = m_resources->currentNode();
+        const int time = node->paintDevice()->defaultBounds()->currentTime();
 
-    if (hasIndirectPainting) {
-        KisIndirectPaintingSupport *indirect =
-            dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+        KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
+        if (channel)
+        {
+            KisKeyframeSP keyframe = channel->keyframeAt(time);
+            if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
+                int activeKeyTime = channel->activeKeyframeTime(time);
 
-        if (indirect) {
-            targetDevice = paintDevice->createCompositionSourceDevice();
-            targetDevice->setParentNode(node);
-            indirect->setCurrentColor(m_resources->currentFgColor());
-            indirect->setTemporaryTarget(targetDevice);
+                m_autokeyCommand.reset(new DirtyFrameContents(node, node->exactBounds(), m_autokeyMode));
 
-            indirect->setTemporaryCompositeOp(m_resources->compositeOpId());
-            indirect->setTemporaryOpacity(m_resources->opacity());
-            indirect->setTemporarySelection(selection);
+                KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
 
-            QBitArray channelLockFlags = m_resources->channelLockFlags();
-            indirect->setTemporaryChannelFlags(channelLockFlags);
-        }
-        else {
-            hasIndirectPainting = false;
-        }
-    }
+                if (m_autokeyMode == KisAutoKey::DUPLICATE) {
+                    channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
+                } else { // Otherwise, create a fresh keyframe.
+                    channel->addKeyframe(time, keyframeCommand);
+                }
 
-    QScopedPointer<KisInterstrokeDataFactory> interstrokeDataFactory(
-        KisPaintOpRegistry::instance()->createInterstrokeDataFactory(m_resources->currentPaintOpPreset()));
+                keyframe = channel->keyframeAt(time);
+                KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
 
-    KIS_SAFE_ASSERT_RECOVER(!interstrokeDataFactory || !hasIndirectPainting) {
-        interstrokeDataFactory.reset();
-    }
+                // Use the same color label as previous keyframe...
+                KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
+                if (previousKey) {
+                    keyframe->setColorLabel(previousKey->colorLabel());
+                }
 
-    QScopedPointer<KisInterstrokeDataTransactionWrapperFactory> wrapper;
-
-    if (interstrokeDataFactory) {
-        wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(
-                          interstrokeDataFactory.take(),
-                          supportsContinuedInterstrokeData()));
-    }
-
-    KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
-    if (channel)
-    {
-        KisKeyframeSP keyframe = channel->keyframeAt(time);
-        if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
-            int activeKeyTime = channel->activeKeyframeTime(time);
-
-            m_autokeyCommand.reset(new DirtyFrameContents(node, node->exactBounds(), m_autokeyMode));
-            m_autokeyCommand->redo(); // Instantly dirty layer to remove frame content during blank key insertion.
-
-            KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
-
-            if (m_autokeyMode == KisAutoKey::DUPLICATE) {
-                channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
-            } else { // Otherwise, create a fresh keyframe.
-                m_autokeyCleanup = node->exactBounds();
-                channel->addKeyframe(time, keyframeCommand);
             }
 
-            keyframe = channel->keyframeAt(time);
-            KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
-
-            // Use the same color label as previous keyframe...
-            KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
-            if (previousKey) {
-                keyframe->setColorLabel(previousKey->colorLabel());
-            }
-
+            node->setDirty(); // This doesn't work 100% of the time. The refresh graph stroke
+                              // competes with the regeneration stroke.
+                              // Is there some other way around this?
         }
-    }
+    });
 
-    m_transaction.reset(new KisTransaction(KUndo2MagicString(), targetDevice, nullptr,
-                                           -1,
-                                           wrapper.take()));
+    KritaUtils::addJobSequential(jobs, [this] () mutable {
+        KisNodeSP node = m_resources->currentNode();
+        KisPaintDeviceSP paintDevice = node->paintDevice();
+        KisPaintDeviceSP targetDevice = paintDevice;
+        KisSelectionSP selection =  m_resources->activeSelection();
+        bool hasIndirectPainting = supportsIndirectPainting() && m_resources->needsIndirectPainting();
+        const QString indirectCompositeOp = m_resources->indirectPaintingCompositeOp();
 
-    // WARNING: masked brush cannot work without indirect painting mode!
-    KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
-                                   m_resources->needsMaskingBrushRendering()) || hasIndirectPainting);
+        if (hasIndirectPainting) {
+            KisIndirectPaintingSupport *indirect =
+                dynamic_cast<KisIndirectPaintingSupport*>(node.data());
 
-    if (hasIndirectPainting &&
-        supportsMaskingBrush() &&
-        m_resources->needsMaskingBrushRendering()) {
+            if (indirect) {
+                targetDevice = paintDevice->createCompositionSourceDevice();
+                targetDevice->setParentNode(node);
+                indirect->setCurrentColor(m_resources->currentFgColor());
+                indirect->setTemporaryTarget(targetDevice);
 
-        const QString compositeOpId =
-            m_resources->currentPaintOpPreset()->settings()->maskingBrushCompositeOp();
+                indirect->setTemporaryCompositeOp(m_resources->compositeOpId());
+                indirect->setTemporaryOpacity(m_resources->opacity());
+                indirect->setTemporarySelection(selection);
 
-        m_maskingBrushRenderer.reset(new KisMaskingBrushRenderer(targetDevice, compositeOpId));
+                QBitArray channelLockFlags = m_resources->channelLockFlags();
+                indirect->setTemporaryChannelFlags(channelLockFlags);
+            }
+            else {
+                hasIndirectPainting = false;
+            }
+        }
 
-        initPainters(m_maskingBrushRenderer->strokeDevice(),
-                     m_maskingBrushRenderer->maskDevice(),
-                     selection,
-                     hasIndirectPainting,
-                     indirectCompositeOp);
+        QScopedPointer<KisInterstrokeDataFactory> interstrokeDataFactory(
+            KisPaintOpRegistry::instance()->createInterstrokeDataFactory(m_resources->currentPaintOpPreset()));
 
-    } else {
-        initPainters(targetDevice, nullptr, selection, hasIndirectPainting, indirectCompositeOp);
-    }
+        KIS_SAFE_ASSERT_RECOVER(!interstrokeDataFactory || !hasIndirectPainting) {
+            interstrokeDataFactory.reset();
+        }
 
-    m_targetDevice = targetDevice;
-    m_activeSelection = selection;
+        QScopedPointer<KisInterstrokeDataTransactionWrapperFactory> wrapper;
 
-    // sanity check: selection should be applied only once
-    if (selection && !m_strokeInfos.isEmpty()) {
-        KisIndirectPaintingSupport *indirect =
-            dynamic_cast<KisIndirectPaintingSupport*>(node.data());
-        KIS_ASSERT_RECOVER_RETURN(hasIndirectPainting || m_strokeInfos.first()->painter->selection());
-        KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || !indirect->temporarySelection() || !m_strokeInfos.first()->painter->selection());
-    }
+        if (interstrokeDataFactory) {
+            wrapper.reset(new KisInterstrokeDataTransactionWrapperFactory(
+                              interstrokeDataFactory.take(),
+                              supportsContinuedInterstrokeData()));
+        }
+
+        m_transaction.reset(new KisTransaction(KUndo2MagicString(), targetDevice, nullptr,
+                                               -1,
+                                               wrapper.take()));
+
+        // WARNING: masked brush cannot work without indirect painting mode!
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!(supportsMaskingBrush() &&
+                                       m_resources->needsMaskingBrushRendering()) || hasIndirectPainting);
+
+        if (hasIndirectPainting &&
+            supportsMaskingBrush() &&
+            m_resources->needsMaskingBrushRendering()) {
+
+            const QString compositeOpId =
+                m_resources->currentPaintOpPreset()->settings()->maskingBrushCompositeOp();
+
+            m_maskingBrushRenderer.reset(new KisMaskingBrushRenderer(targetDevice, compositeOpId));
+
+            initPainters(m_maskingBrushRenderer->strokeDevice(),
+                         m_maskingBrushRenderer->maskDevice(),
+                         selection,
+                         hasIndirectPainting,
+                         indirectCompositeOp);
+
+        } else {
+            initPainters(targetDevice, nullptr, selection, hasIndirectPainting, indirectCompositeOp);
+        }
+
+        m_targetDevice = targetDevice;
+        m_activeSelection = selection;
+
+        // sanity check: selection should be applied only once
+        if (selection && !m_strokeInfos.isEmpty()) {
+            KisIndirectPaintingSupport *indirect =
+                dynamic_cast<KisIndirectPaintingSupport*>(node.data());
+            KIS_ASSERT_RECOVER_RETURN(hasIndirectPainting || m_strokeInfos.first()->painter->selection());
+            KIS_ASSERT_RECOVER_RETURN(!hasIndirectPainting || !indirect->temporarySelection() || !m_strokeInfos.first()->painter->selection());
+        }
+    });
+
+    runnableJobsInterface()->addRunnableJobs(jobs);
 }
 #include "kis_command_utils.h"
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()

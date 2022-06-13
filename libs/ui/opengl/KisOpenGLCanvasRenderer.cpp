@@ -256,7 +256,6 @@ void KisOpenGLCanvasRenderer::initializeGL()
         d->outlineVAO.bind();
 
         glEnableVertexAttribArray(PROGRAM_VERTEX_ATTRIBUTE);
-        glEnableVertexAttribArray(PROGRAM_TEXCOORD_ATTRIBUTE);
 
         // The outline buffer has a StreamDraw usage pattern, because it changes constantly
         d->lineVertexBuffer.create();

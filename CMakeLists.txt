@@ -690,7 +690,7 @@ macro(kis_add_library)
             NOT LOCAL_ALIAS AND
             LOCAL_PCH_FILE)
 
-            set_property(TARGET ${NEW_LIBRARY_TARGET} APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
+            set_property(TARGET ${NEW_LIBRARY_TARGET} PROPERTY PCH_WARN_INVALID TRUE )
             target_precompile_headers(${NEW_LIBRARY_TARGET} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/pch/${LOCAL_PCH_FILE}>")
         endif()
     endif()

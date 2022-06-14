@@ -230,6 +230,17 @@ KisImportExportErrorCode KisTiffPsdWriter::writeImage(KisGroupLayerSP layer)
     // Save depth
     uint32_t depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
+
+    {
+        // WORKAROUND: block any attempts to use JPEG with >= 8 bits
+
+        if (m_options->compressionType == COMPRESSION_JPEG && depth != 8) {
+            warnFile << "Attempt to export JPEG with multi-byte depth, "
+                        "disabling compression";
+            m_options->compressionType = COMPRESSION_NONE;
+        }
+    }
+
     // Save number of samples
     if (m_options->alpha) {
         TIFFSetField(image(), TIFFTAG_SAMPLESPERPIXEL, pd->channelCount());

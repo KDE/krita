@@ -77,7 +77,11 @@ public:
 
     ~KisTIFFYCbCrReader() override = default;
 
-    uint32_t copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream) override
+    uint32_t
+    copyDataToChannels(quint32 x,
+                       quint32 y,
+                       quint32 dataWidth,
+                       QSharedPointer<KisBufferStreamBase> tiffstream) override
     {
         return copyDataToChannelsImpl(x, y, dataWidth, tiffstream);
     }
@@ -88,7 +92,14 @@ public:
     }
 
 private:
-    template<typename U = T, typename std::enable_if<!std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t copyDataToChannelsImpl(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
+    template<typename U = T,
+             typename std::enable_if<!std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    uint32_t
+    copyDataToChannelsImpl(quint32 x,
+                           quint32 y,
+                           quint32 dataWidth,
+                           QSharedPointer<KisBufferStreamBase> tiffstream)
     {
         quint32 numcols = dataWidth / m_hsub;
         quint32 buffPos = y / m_vsub * m_bufferWidth + x / m_hsub;
@@ -115,7 +126,14 @@ private:
         return m_vsub;
     }
 
-    template<typename U = T, typename std::enable_if<std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t copyDataToChannelsImpl(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
+    template<typename U = T,
+             typename std::enable_if<std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    uint32_t
+    copyDataToChannelsImpl(quint32 x,
+                           quint32 y,
+                           quint32 dataWidth,
+                           QSharedPointer<KisBufferStreamBase> tiffstream)
     {
         quint32 numcols = dataWidth / m_hsub;
         double coeff = std::numeric_limits<T>::max() / (double)(std::pow(2.0, this->sourceDepth()) - 1);

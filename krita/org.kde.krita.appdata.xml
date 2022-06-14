@@ -304,7 +304,7 @@
       <caption>The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="ar">توفر لك نافذة بدء التشغيل الآن آخر الأخبار حول كريتا</caption>
       <caption xml:lang="ca">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
-      <caption xml:lang="ca-valencia">La finestra d'inici també ofereix les últimes notícies sobre Krita</caption>
+      <caption xml:lang="ca-valencia">La finestra d'inici també oferix les últimes notícies sobre Krita</caption>
       <caption xml:lang="de">Das Startfenster bietet jetzt auch die aktuellsten Neuigkeiten über Krita</caption>
       <caption xml:lang="en-GB">The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="es">La ventana de bienvenida también le proporciona ahora las últimas noticias sobre Krita</caption>
@@ -433,7 +433,7 @@
       <caption>Krita offers powerful filters</caption>
       <caption xml:lang="ar">يوفر كرتيا مرشحات قوية</caption>
       <caption xml:lang="ca">El Krita ofereix filtres potents</caption>
-      <caption xml:lang="ca-valencia">Krita ofereix filtres potents</caption>
+      <caption xml:lang="ca-valencia">Krita oferix filtres potents</caption>
       <caption xml:lang="cs">Krita poskytuje mocné filtry</caption>
       <caption xml:lang="en-GB">Krita offers powerful filters</caption>
       <caption xml:lang="es">Krita ofrece potentes filtros</caption>

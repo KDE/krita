@@ -96,6 +96,10 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
         } else {
             kComboBoxPredictor->removeItem(2);
         }
+
+        if (colorDepthId != Integer8BitsColorDepthID.id()) {
+            kComboBoxCompressionType->removeItem(
+                kComboBoxCompressionType->findData(1));
         }
     }
 

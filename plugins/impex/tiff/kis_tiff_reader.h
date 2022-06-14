@@ -179,7 +179,11 @@ public:
      *
      * @return the number of line which were copied
      */
-    virtual uint32_t copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream) = 0;
+    virtual uint32_t
+    copyDataToChannels(quint32 x,
+                       quint32 y,
+                       quint32 dataWidth,
+                       QSharedPointer<KisBufferStreamBase> tiffstream) = 0;
     /**
      * This function is called when all data has been read and should be used for any postprocessing.
      */
@@ -247,7 +251,7 @@ private:
     bool m_premultipliedAlpha;
     std::array<quint8, 5> m_poses;
     KoColorTransformation *m_transformProfile;
-    std::shared_ptr<KisTIFFPostProcessor> mpostProcessImpl;
+    QSharedPointer<KisTIFFPostProcessor> mpostProcessImpl;
 };
 
 template<typename T> class KisTIFFReaderTarget : public KisTIFFReaderBase
@@ -280,13 +284,23 @@ public:
     {
     }
 public:
-    uint32_t copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream) override
+    uint32_t
+    copyDataToChannels(quint32 x,
+                       quint32 y,
+                       quint32 dataWidth,
+                       QSharedPointer<KisBufferStreamBase> tiffstream) override
     {
         return _copyDataToChannels(x, y, dataWidth, tiffstream);
     }
 
 private:
-    template<typename U = T, typename std::enable_if<!std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t _copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
+    template<typename U = T,
+             typename std::enable_if<!std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    uint32_t _copyDataToChannels(quint32 x,
+                                 quint32 y,
+                                 quint32 dataWidth,
+                                 QSharedPointer<KisBufferStreamBase> tiffstream)
     {
         KisHLineIteratorSP it = this->paintDevice()->createHLineIteratorNG(x, y, dataWidth);
         do {
@@ -356,7 +370,13 @@ private:
         return 1;
     }
 
-    template<typename U = T, typename std::enable_if<std::numeric_limits<U>::is_integer, void>::type * = nullptr> uint32_t _copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream)
+    template<typename U = T,
+             typename std::enable_if<std::numeric_limits<U>::is_integer,
+                                     void>::type * = nullptr>
+    uint32_t _copyDataToChannels(quint32 x,
+                                 quint32 y,
+                                 quint32 dataWidth,
+                                 QSharedPointer<KisBufferStreamBase> tiffstream)
     {
         KisHLineIteratorSP it = this->paintDevice()->createHLineIteratorNG(x, y, dataWidth);
         const double coeff = std::numeric_limits<T>::max() / static_cast<double>(std::pow(2.0, this->sourceDepth()) - 1);
@@ -465,7 +485,11 @@ public:
     {
     }
 public:
-    uint32_t copyDataToChannels(quint32 x, quint32 y, quint32 dataWidth, KisBufferStreamBase *tiffstream) override
+    uint32_t
+    copyDataToChannels(quint32 x,
+                       quint32 y,
+                       quint32 dataWidth,
+                       QSharedPointer<KisBufferStreamBase> tiffstream) override
     {
         KisHLineIteratorSP it = paintDevice()->createHLineIteratorNG(static_cast<int>(x), static_cast<int>(y), static_cast<int>(dataWidth));
         do {

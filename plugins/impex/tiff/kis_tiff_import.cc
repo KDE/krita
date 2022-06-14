@@ -701,9 +701,8 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         &_TIFFfree);
     QVector<tdata_t> ps_buf; // used only for planar configuration separated
 
-    KisBufferStreamBase *tiffstream = nullptr;
-
-    KisTIFFReaderBase *tiffReader = nullptr;
+    QSharedPointer<KisBufferStreamBase> tiffstream = nullptr;
+    QSharedPointer<KisTIFFReaderBase> tiffReader = nullptr;
 
     // Configure poses
     uint16_t nbcolorsamples = nbchannels - extrasamplescount;
@@ -767,19 +766,20 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             return ImportExportCodes::FileFormatIncorrect;
         }
 
-        tiffReader = new KisTIFFReaderFromPalette(layer->paintDevice(),
-                                                  red,
-                                                  green,
-                                                  blue,
-                                                  poses,
-                                                  alphapos,
-                                                  depth,
-                                                  sampletype,
-                                                  nbcolorsamples,
-                                                  extrasamplescount,
-                                                  hasPremultipliedAlpha,
-                                                  transform,
-                                                  postprocessor);
+        tiffReader =
+            QSharedPointer<KisTIFFReaderFromPalette>::create(layer->paintDevice(),
+                                                       red,
+                                                       green,
+                                                       blue,
+                                                       poses,
+                                                       alphapos,
+                                                       depth,
+                                                       sampletype,
+                                                       nbcolorsamples,
+                                                       extrasamplescount,
+                                                       hasPremultipliedAlpha,
+                                                       transform,
+                                                       postprocessor);
     } else if (color_type == PHOTOMETRIC_YCBCR) {
         TIFFGetFieldDefaulted(image,
                               TIFFTAG_YCBCRSUBSAMPLING,
@@ -789,7 +789,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         lineSizeCoeffs[2] = hsubsampling;
         dbgFile << "Subsampling" << 4 << hsubsampling << vsubsampling;
         if (dstDepth == 8) {
-            tiffReader = new KisTIFFYCbCrReader<uint8_t>(
+            tiffReader = QSharedPointer<KisTIFFYCbCrReader<uint8_t>>::create(
                 layer->paintDevice(),
                 static_cast<quint32>(layer->image()->width()),
                 static_cast<quint32>(layer->image()->height()),
@@ -807,7 +807,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         } else if (dstDepth == 16) {
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
 #ifdef HAVE_OPENEXR
-                tiffReader = new KisTIFFYCbCrReader<half>(
+                tiffReader = QSharedPointer<KisTIFFYCbCrReader<half>>::create(
                     layer->paintDevice(),
                     static_cast<quint32>(layer->image()->width()),
                     static_cast<quint32>(layer->image()->height()),
@@ -824,7 +824,8 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                     vsubsampling);
 #endif
             } else {
-                tiffReader = new KisTIFFYCbCrReader<uint16_t>(
+                tiffReader =
+                    QSharedPointer<KisTIFFYCbCrReader<uint16_t>>::create(
                     layer->paintDevice(),
                     static_cast<quint32>(layer->image()->width()),
                     static_cast<quint32>(layer->image()->height()),
@@ -842,7 +843,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             }
         } else if (dstDepth == 32) {
             if (sampletype == SAMPLEFORMAT_IEEEFP) {
-                tiffReader = new KisTIFFYCbCrReader<float>(
+                tiffReader = QSharedPointer<KisTIFFYCbCrReader<float>>::create(
                     layer->paintDevice(),
                     static_cast<quint32>(layer->image()->width()),
                     static_cast<quint32>(layer->image()->height()),
@@ -858,7 +859,8 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                     hsubsampling,
                     vsubsampling);
             } else {
-                tiffReader = new KisTIFFYCbCrReader<uint32_t>(
+                tiffReader =
+                    QSharedPointer<KisTIFFYCbCrReader<uint32_t>>::create(
                     layer->paintDevice(),
                     static_cast<quint32>(layer->image()->width()),
                     static_cast<quint32>(layer->image()->height()),
@@ -876,61 +878,64 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             }
         }
     } else if (dstDepth == 8) {
-        tiffReader = new KisTIFFReaderTarget<uint8_t>(layer->paintDevice(),
-                                                      poses,
-                                                      alphapos,
-                                                      depth,
-                                                      sampletype,
-                                                      nbcolorsamples,
-                                                      extrasamplescount,
-                                                      hasPremultipliedAlpha,
-                                                      transform,
-                                                      postprocessor,
-                                                      quint8_MAX);
+        tiffReader = QSharedPointer<KisTIFFReaderTarget<uint8_t>>::create(
+            layer->paintDevice(),
+            poses,
+            alphapos,
+            depth,
+            sampletype,
+            nbcolorsamples,
+            extrasamplescount,
+            hasPremultipliedAlpha,
+            transform,
+            postprocessor,
+            quint8_MAX);
     } else if (dstDepth == 16) {
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
 #ifdef HAVE_OPENEXR
-            tiffReader = new KisTIFFReaderTarget<half>(layer->paintDevice(),
-                                                       poses,
-                                                       alphapos,
-                                                       depth,
-                                                       sampletype,
-                                                       nbcolorsamples,
-                                                       extrasamplescount,
-                                                       hasPremultipliedAlpha,
-                                                       transform,
-                                                       postprocessor,
-                                                       1.0);
+            tiffReader = QSharedPointer<KisTIFFReaderTarget<half>>::create(
+                layer->paintDevice(),
+                poses,
+                alphapos,
+                depth,
+                sampletype,
+                nbcolorsamples,
+                extrasamplescount,
+                hasPremultipliedAlpha,
+                transform,
+                postprocessor,
+                1.0);
 #endif
         } else {
-            tiffReader =
-                new KisTIFFReaderTarget<uint16_t>(layer->paintDevice(),
-                                                  poses,
-                                                  alphapos,
-                                                  depth,
-                                                  sampletype,
-                                                  nbcolorsamples,
-                                                  extrasamplescount,
-                                                  hasPremultipliedAlpha,
-                                                  transform,
-                                                  postprocessor,
-                                                  quint16_MAX);
+            tiffReader = QSharedPointer<KisTIFFReaderTarget<uint16_t>>::create(
+                layer->paintDevice(),
+                poses,
+                alphapos,
+                depth,
+                sampletype,
+                nbcolorsamples,
+                extrasamplescount,
+                hasPremultipliedAlpha,
+                transform,
+                postprocessor,
+                quint16_MAX);
         }
     } else if (dstDepth == 32) {
         if (sampletype == SAMPLEFORMAT_IEEEFP) {
-            tiffReader = new KisTIFFReaderTarget<float>(layer->paintDevice(),
-                                                        poses,
-                                                        alphapos,
-                                                        depth,
-                                                        sampletype,
-                                                        nbcolorsamples,
-                                                        extrasamplescount,
-                                                        hasPremultipliedAlpha,
-                                                        transform,
-                                                        postprocessor,
-                                                        1.0f);
+            tiffReader = QSharedPointer<KisTIFFReaderTarget<float>>::create(
+                layer->paintDevice(),
+                poses,
+                alphapos,
+                depth,
+                sampletype,
+                nbcolorsamples,
+                extrasamplescount,
+                hasPremultipliedAlpha,
+                transform,
+                postprocessor,
+                1.0f);
         } else {
-            tiffReader = new KisTIFFReaderTarget<uint32_t>(
+            tiffReader = QSharedPointer<KisTIFFReaderTarget<uint32_t>>::create(
                 layer->paintDevice(),
                 poses,
                 alphapos,
@@ -966,17 +971,20 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         if (planarconfig == PLANARCONFIG_CONTIG) {
             buf.reset(_TIFFmalloc(TIFFTileSize(image)));
             if (depth < 16) {
-                tiffstream = new KisBufferStreamContigBelow16(
+                tiffstream =
+                    QSharedPointer<KisBufferStreamContigBelow16>::create(
                     static_cast<uint8_t *>(buf.get()),
                     depth,
                     linewidth);
             } else if (depth >= 16 && depth < 32) {
-                tiffstream = new KisBufferStreamContigBelow32(
+                tiffstream =
+                    QSharedPointer<KisBufferStreamContigBelow32>::create(
                     static_cast<uint8_t *>(buf.get()),
                     depth,
                     linewidth);
             } else {
-                tiffstream = new KisBufferStreamContigAbove32(
+                tiffstream =
+                    QSharedPointer<KisBufferStreamContigAbove32>::create(
                     static_cast<uint8_t *>(buf.get()),
                     depth,
                     linewidth);
@@ -990,7 +998,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 lineSizes[i] = tileWidth;
                 ;
             }
-            tiffstream = new KisBufferStreamSeparate(
+            tiffstream = QSharedPointer<KisBufferStreamSeparate>::create(
                 reinterpret_cast<uint8_t **>(ps_buf.data()),
                 nbchannels,
                 depth,
@@ -1094,17 +1102,20 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                  && vsubsampling != 1)) {
             buf.reset(_TIFFmalloc(stripsize));
             if (depth < 16) {
-                tiffstream = new KisBufferStreamContigBelow16(
+                tiffstream =
+                    QSharedPointer<KisBufferStreamContigBelow16>::create(
                     static_cast<uint8_t *>(buf.get()),
                     depth,
                     stripsize / rowsPerStrip);
             } else if (depth < 32) {
-                tiffstream = new KisBufferStreamContigBelow32(
+                tiffstream =
+                    QSharedPointer<KisBufferStreamContigBelow32>::create(
                     static_cast<uint8_t *>(buf.get()),
                     depth,
                     stripsize / rowsPerStrip);
             } else {
-                tiffstream = new KisBufferStreamContigAbove32(
+                tiffstream =
+                    QSharedPointer<KisBufferStreamContigAbove32>::create(
                     static_cast<uint8_t *>(buf.get()),
                     depth,
                     stripsize / rowsPerStrip);
@@ -1150,7 +1161,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 ps_buf[i] = _TIFFmalloc(uncompressedStripsize);
                 lineSizes[i] = scanLineSize;
             }
-            tiffstream = new KisBufferStreamInterleaveUpsample(
+            tiffstream = QSharedPointer<KisBufferStreamInterleaveUpsample>::create(
                 reinterpret_cast<uint8_t **>(ps_buf.data()),
                 nbchannels,
                 depth,
@@ -1173,7 +1184,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 ps_buf[i] = _TIFFmalloc(stripsize);
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
-            tiffstream = new KisBufferStreamSeparate(
+            tiffstream = QSharedPointer<KisBufferStreamSeparate>::create(
                 reinterpret_cast<uint8_t **>(ps_buf.data()),
                 nbchannels,
                 depth,
@@ -1259,8 +1270,8 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         }
     }
     tiffReader->finalize();
-    delete tiffReader;
-    delete tiffstream;
+    tiffReader.reset();
+    tiffstream.reset();
     if (planarconfig != PLANARCONFIG_CONTIG) {
         for (auto *const b : ps_buf) {
             _TIFFfree(b);

@@ -94,7 +94,7 @@ struct CharacterResult {
     QVector<bool> replaceWithForeGroundColor;
 
     QRectF boundingBox;
-    int typographic_index = -1;
+    int visualIndex = -1;
     QPointF cssPosition = QPointF();
     QPointF advance;
     BreakType breakType = NoBreak;
@@ -137,7 +137,7 @@ public:
     QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
     QImage convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot);
     void breakLines(KoSvgTextProperties properties,
-                    QMap<int, int> indexToTypographic,
+                    QMap<int, int> logicalToVisual,
                     QVector<CharacterResult> &result,
                     QPointF startPos);
     void applyTextLength(const KoShape *rootShape,
@@ -170,7 +170,7 @@ public:
                             bool isHorizontal);
     void computeTextDecorations(const KoShape *rootShape,
                                 QVector<CharacterResult> result,
-                                QMap<int, int> indexToTypographic,
+                                QMap<int, int> logicalToVisual,
                                 KoPathShape *textPath,
                                 qreal textPathoffset,
                                 bool side,
@@ -703,7 +703,7 @@ void KoSvgTextShape::relayout() const
     }
 
     QPointF totalAdvanceFTFontCoordinates;
-    QMap<int, int> indexToTypographic;
+    QMap<int, int> logicalToVisual;
 
     for (int g = 0; g < int(count); g++) {
         CharacterResult charResult = result[glyphs[g].cluster];
@@ -821,8 +821,8 @@ void KoSvgTextShape::relayout() const
                                               &iterator));
         }
 
-        charResult.typographic_index = g;
-        indexToTypographic.insert(glyphs[g].cluster, g);
+        charResult.visualIndex = g;
+        logicalToVisual.insert(glyphs[g].cluster, g);
 
         charResult.middle = false;
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
@@ -901,7 +901,7 @@ void KoSvgTextShape::relayout() const
     // surrogates or part of a ligature, are marked as such.
     int firstCluster = 0;
     for (int i = 0; i < result.size(); i++) {
-        if (result.at(i).typographic_index != -1) {
+        if (result.at(i).visualIndex != -1) {
             firstCluster = i;
         } else {
             result[firstCluster].breakType = result.at(i).breakType;
@@ -916,7 +916,7 @@ void KoSvgTextShape::relayout() const
     // Handle linebreaking.
     QPointF startPos =
         inlineSize.isAuto ? QPointF() : resolvedTransforms[0].absolutePos();
-    d->breakLines(this->textProperties(), indexToTypographic, result, startPos);
+    d->breakLines(this->textProperties(), logicalToVisual, result, startPos);
 
     // Handle baseline alignment.
     globalIndex = 0;
@@ -1015,7 +1015,7 @@ void KoSvgTextShape::relayout() const
         globalIndex = 0;
         d->computeTextDecorations(this,
                                   result,
-                                  indexToTypographic,
+                                  logicalToVisual,
                                   nullptr,
                                   0.0,
                                   false,
@@ -1033,7 +1033,7 @@ void KoSvgTextShape::relayout() const
         debugFlake << "Computing text-decorationsfor inline-size";
         d->computeTextDecorations(this,
                                   result,
-                                  indexToTypographic,
+                                  logicalToVisual,
                                   nullptr,
                                   0.0,
                                   false,
@@ -1230,22 +1230,17 @@ void addWordToLine(QVector<CharacterResult> &result,
                    QVector<int> &wordIndices,
                    QRectF &lineBox,
                    QVector<int> &lineIndices,
-                   QPointF wordFirstPos,
                    bool ltr,
-                   bool firstLine,
-                   QPointF textIndent)
+                   bool firstLine)
 {
     QPointF lineAdvance = currentPos;
 
     if (lineBox.isEmpty()) {
         lineIndices.clear();
     }
-    // We'll need to shift the text-indent to after the first hanging-glyph if
-    // there's one at the start of the line.
 
     for (int j : wordIndices) {
         CharacterResult cr = result.at(j);
-        bool applyTextIndent = false;
         if (lineBox.isEmpty() && j == wordIndices.first()) {
             if (result.at(j).lineStart == Collapse) {
                 result[j].addressable = false;
@@ -1254,8 +1249,6 @@ void addWordToLine(QVector<CharacterResult> &result,
             }
             cr.anchored_chunk = true;
             if (result.at(j).lineStart == HangBehaviour && firstLine) {
-                currentPos -= textIndent;
-                applyTextIndent = true;
                 if (ltr) {
                     currentPos -= cr.advance;
                 } else {
@@ -1264,12 +1257,9 @@ void addWordToLine(QVector<CharacterResult> &result,
                 cr.isHanging = true;
             }
         }
-        cr.cssPosition = currentPos + cr.cssPosition - wordFirstPos;
-        lineAdvance = ltr ? cr.cssPosition + cr.advance : cr.cssPosition;
-        if (applyTextIndent) {
-            currentPos += textIndent;
-        }
-        cr.finalPosition = cr.cssPosition;
+        cr.cssPosition = currentPos;
+        currentPos += cr.advance;
+        lineAdvance = currentPos;
 
         result[j] = cr;
         lineBox |= cr.boundingBox.translated(cr.cssPosition);
@@ -1486,6 +1476,12 @@ void finalizeLine(QVector<CharacterResult> &result,
 {
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
+    QMap<int, int> visualToLogical;
+    for (int j : lineIndices) {
+        visualToLogical.insert(result.at(j).visualIndex, j);
+    }
+    currentPos = lineOffset;
+
     handleCollapseAndHang(result,
                           lineIndices,
                           endPos,
@@ -1494,6 +1490,15 @@ void finalizeLine(QVector<CharacterResult> &result,
                           writingMode,
                           ltr,
                           atEnd);
+
+    for (int j : visualToLogical.values()) {
+        if (!result.at(j).addressable || result.at(j).isHanging) {
+            continue;
+        }
+        result[j].cssPosition = currentPos;
+        result[j].finalPosition = currentPos;
+        currentPos = currentPos + result.at(j).advance;
+    }
 
     if (inlineSize) {
         applyInlineSizeAnchoring(result,
@@ -1524,7 +1529,7 @@ void finalizeLine(QVector<CharacterResult> &result,
 }
 
 void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
-                                         QMap<int, int> indexToTypographic,
+                                         QMap<int, int> logicalToVisual,
                                          QVector<CharacterResult> &result,
                                          QPointF startPos)
 {
@@ -1574,7 +1579,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
 
     QVector<int> wordIndices; ///< 'word' in this case meaning characters
                               ///< inbetween softbreaks.
-    QPointF wordFirstPos; ///< First position of a word.
+    QPointF wordAdvance; ///< Approximated advance of the current wordindices.
     QRectF lineBox; ///< The line box gets used to determine lineHeight;
 
     bool firstLine = true;
@@ -1590,12 +1595,10 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
     // The following is because we want to do line-length calculations on the
     // 'visual order' instead of the 'logical' order. For rtl, we'll need to
     // count backwards.
-    QList<int> values = indexToTypographic.values();
-    std::sort(values.begin(), values.end());
-    QListIterator<int> it(values);
-    ltr ? it.toFront() : it.toBack();
-    while (ltr ? it.hasNext() : it.hasPrevious()) {
-        int index = indexToTypographic.key(ltr ? it.next() : it.previous());
+
+    QListIterator<int> it(logicalToVisual.keys());
+    while (it.hasNext()) {
+        int index = it.next();
         if (index < 0) {
             continue;
         }
@@ -1607,22 +1610,19 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
         bool wordToNextLine =
             false; ///< Whether to add the current 'word' into the next line.
 
-        if (wordIndices.isEmpty()) {
-            wordFirstPos = ltr ? charResult.cssPosition
-                               : charResult.cssPosition + charResult.advance;
-        }
-        /// Approximated advance of the current wordindices.
-        QPointF wordAdvance = charResult.cssPosition - wordFirstPos;
-        wordAdvance = ltr ? wordAdvance + charResult.advance : wordAdvance;
-        if ((charResult.lineEnd == ConditionallyHang
-             || charResult.lineEnd == HangBehaviour
-             || charResult.lineEnd == ForceHang)
-            && !lineBox.isEmpty()) {
-            wordAdvance = ltr ? wordAdvance - charResult.advance
-                              : wordAdvance + charResult.advance;
+        bool doNotCountAdvance = ((charResult.lineEnd == ConditionallyHang
+                                   || charResult.lineEnd == HangBehaviour
+                                   || charResult.lineEnd == ForceHang)
+                                  && !lineBox.isEmpty());
+        if (!doNotCountAdvance) {
+            if (wordIndices.isEmpty()) {
+                wordAdvance = charResult.advance;
+            } else {
+                wordAdvance += charResult.advance;
+            }
         }
         wordIndices.append(index);
-        bool atEnd = !(ltr ? it.hasNext() : it.hasPrevious());
+        bool atEnd = !it.hasNext();
 
         if (charResult.breakType == HardBreak) {
             breakLine = true;
@@ -1644,11 +1644,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                   wordIndices,
                                   lineBox,
                                   lineIndices,
-                                  wordFirstPos,
                                   ltr,
-                                  firstLine,
-                                  textIndentInfo.hanging ? QPointF()
-                                                         : textIndent);
+                                  firstLine);
                 }
             }
         }
@@ -1679,15 +1676,11 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                         && wordLength > inlineSize.customValue) {
                         // Word is too large, so we try to add it in
                         // max-width-friendly-chunks.
+                        wordAdvance = QPointF();
                         wordLength = 0;
                         QVector<int> partialWord;
-                        QPointF partialWordFirstPos = wordFirstPos;
                         for (int i : wordIndices) {
-                            wordAdvance =
-                                result.at(i).cssPosition - partialWordFirstPos;
-                            wordAdvance = ltr
-                                ? wordAdvance + result.at(i).advance
-                                : wordAdvance;
+                            wordAdvance += result.at(i).advance;
                             wordLength = isHorizontal ? wordAdvance.x()
                                                       : wordAdvance.y();
                             if (wordLength <= inlineSize.customValue) {
@@ -1698,12 +1691,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                               partialWord,
                                               lineBox,
                                               lineIndices,
-                                              partialWordFirstPos,
                                               ltr,
-                                              firstLine,
-                                              textIndentInfo.hanging
-                                                  ? QPointF()
-                                                  : textIndent);
+                                              firstLine);
 
                                 finalizeLine(result,
                                              currentPos,
@@ -1722,14 +1711,10 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                                              textIndentInfo.hanging,
                                              textIndent);
 
-                                partialWordFirstPos = ltr
-                                    ? result.at(i).cssPosition
-                                    : result.at(i).cssPosition
-                                        + result.at(i).advance;
+                                wordAdvance = result.at(i).advance;
                                 partialWord.append(i);
                             }
                         }
-                        wordFirstPos = partialWordFirstPos;
                         wordIndices = partialWord;
                     }
                 }
@@ -1739,10 +1724,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                               wordIndices,
                               lineBox,
                               lineIndices,
-                              wordFirstPos,
                               ltr,
-                              firstLine,
-                              textIndentInfo.hanging ? QPointF() : textIndent);
+                              firstLine);
 
             } else {
                 addWordToLine(result,
@@ -1750,10 +1733,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                               wordIndices,
                               lineBox,
                               lineIndices,
-                              wordFirstPos,
                               ltr,
-                              firstLine,
-                              textIndentInfo.hanging ? QPointF() : textIndent);
+                              firstLine);
 
                 finalizeLine(result,
                              currentPos,
@@ -1820,16 +1801,15 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
     // Raqm handles bidi reordering for us, but this algorithm does not
     // anticipate that, so we need to keep track of which typographic item
     // belongs where.
-    QMap<int, int> typographicToIndex;
+    QMap<int, int> visualToLogical;
     if (!chunkShape->layoutInterface()->textLength().isAuto) {
         qreal a = 0.0;
         qreal b = 0.0;
         int n = 0;
         for (int k = i; k < j; k++) {
             if (result.at(k).addressable) {
-                if (result.at(k).typographic_index > -1) {
-                    typographicToIndex.insert(result.at(k).typographic_index,
-                                              k);
+                if (result.at(k).visualIndex > -1) {
+                    visualToLogical.insert(result.at(k).visualIndex, k);
                 }
                 // if character is linebreak, return;
 
@@ -1861,8 +1841,8 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             d = QPointF(0, delta / n);
         }
         QPointF shift;
-        for (int k : typographicToIndex.keys()) {
-            CharacterResult cr = result[typographicToIndex.value(k)];
+        for (int k : visualToLogical.keys()) {
+            CharacterResult cr = result[visualToLogical.value(k)];
             if (cr.addressable) {
                 cr.finalPosition += shift;
                 if (chunkShape->layoutInterface()->lengthAdjust()
@@ -1880,7 +1860,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                 }
                 cr.textLengthApplied = true;
             }
-            result[typographicToIndex.value(k)] = cr;
+            result[visualToLogical.value(k)] = cr;
         }
         resolvedDescendentNodes += 1;
 
@@ -2350,7 +2330,7 @@ void KoSvgTextShape::Private::computeFontMetrics(
 void KoSvgTextShape::Private::computeTextDecorations(
     const KoShape *rootShape,
     QVector<CharacterResult> result,
-    QMap<int, int> indexToTypographic,
+    QMap<int, int> logicalToVisual,
     KoPathShape *textPath,
     qreal textPathoffset,
     bool side,
@@ -2398,7 +2378,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
         computeTextDecorations(child,
                                result,
-                               indexToTypographic,
+                               logicalToVisual,
                                currentTextPath,
                                currentTextPathOffset,
                                textPathSide,
@@ -2456,23 +2436,8 @@ void KoSvgTextShape::Private::computeTextDecorations(
         QVector<QPointF> firstPos;
         QRectF currentRect;
 
-        // We want to do text-decorations on the visual order, not the logical
-        // one.
-        QMap<int, int> visualOrder;
         for (int k = i; k < j; k++) {
-            visualOrder.insert(indexToTypographic.value(k), k);
-        }
-
-        QList<int> values = visualOrder.keys();
-        std::sort(values.begin(), values.end());
-        QListIterator<int> it(values);
-
-        bool noFlip = !(wrapping && !ltr);
-        noFlip ? it.toFront() : it.toBack();
-
-        while (noFlip ? it.hasNext() : it.hasPrevious()) {
-            int index = visualOrder.value(noFlip ? it.next() : it.previous());
-            CharacterResult charResult = result.at(index);
+            CharacterResult charResult = result.at(k);
 
             if (currentTextPath) {
                 characterResultOnPath(charResult,
@@ -2685,12 +2650,12 @@ void KoSvgTextShape::Private::computeTextDecorations(
 void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
                                              bool isHorizontal)
 {
-    QMap<int, int> typographicToIndex;
+    QMap<int, int> visualToLogical;
     int i = 0;
     int start = 0;
 
     while (start < result.size()) {
-        int lowestTypographicalIndex = result.size();
+        int lowestVisualIndex = result.size();
         qreal a = 0;
         qreal b = 0;
         for (i = start; i < result.size(); i++) {
@@ -2700,10 +2665,10 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             if (result.at(i).anchored_chunk && i > start) {
                 break;
             }
-            if (result.at(i).typographic_index > -1) {
-                typographicToIndex.insert(result.at(i).typographic_index, i);
-                lowestTypographicalIndex = qMin(lowestTypographicalIndex,
-                                                result.at(i).typographic_index);
+            if (result.at(i).visualIndex > -1) {
+                visualToLogical.insert(result.at(i).visualIndex, i);
+                lowestVisualIndex =
+                    qMin(lowestVisualIndex, result.at(i).visualIndex);
             }
             qreal pos = isHorizontal ? result.at(i).finalPosition.x()
                                      : result.at(i).finalPosition.y();
@@ -2719,7 +2684,7 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             }
         }
         qreal shift = 0;
-        int typo = typographicToIndex.value(lowestTypographicalIndex);
+        int typo = visualToLogical.value(lowestVisualIndex);
         shift = isHorizontal ? result.at(typo).finalPosition.x()
                              : result.at(typo).finalPosition.y();
         bool rtl =

@@ -1350,25 +1350,24 @@ void KisAnimTimelineFramesView::dropEvent(QDropEvent *event)
 
 void KisAnimTimelineFramesView::wheelEvent(QWheelEvent *e)
 {
-    bool inLayerPanel = verticalHeader()->geometry().contains(verticalHeader()->mapFromGlobal(e->globalPos()));
+    const int scrollDirection = e->delta() > 0 ? 1 : -1;
+    bool mouseOverLayerPanel = verticalHeader()->geometry().contains(verticalHeader()->mapFromGlobal(e->globalPos()));
 
-    if (!inLayerPanel)  {
+    if (mouseOverLayerPanel) {
+        QTableView::wheelEvent(e);
+    } else { // Mouse is over frames table view...
         QModelIndex index = currentIndex();
         int column= -1;
 
         if (index.isValid()) {
-            column= index.column() + ((e->delta() > 0) ? 1 : -1);
+            column = index.column() + scrollDirection;
         }
 
         if (column >= 0 && !m_d->dragInProgress) {
+            slotUpdateInfiniteFramesCount();
             setCurrentIndex(m_d->model->index(index.row(), column));
         }
-        
-    } else {
-        
-        QTableView::wheelEvent(e);
     }
-    
 }
 
 void KisAnimTimelineFramesView::resizeEvent(QResizeEvent *event)

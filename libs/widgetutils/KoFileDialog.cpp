@@ -452,6 +452,7 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
             }
 
             Q_ASSERT(!description.isEmpty());
+            Q_ASSERT(!suffixes.isEmpty());
 
             FilterData filterData {};
             filterData.descriptionOnly = description;

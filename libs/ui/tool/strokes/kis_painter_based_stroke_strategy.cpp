@@ -36,39 +36,22 @@
 #include "KisRunnableStrokeJobUtils.h"
 
 
-class DirtyFrameContents : public KUndo2Command
+struct UpdateNode : public KisCommandUtils::FlipFlopCommand
 {
-public:
-    DirtyFrameContents(KisNodeSP node, QRect originalFrameContents, KisAutoKey::Mode autokeyMode, KUndo2Command* parent = 0)
-        : KUndo2Command(parent)
-        , m_node(node)
-        , m_originalFrameContents(originalFrameContents)
-        , m_autokeyMode(autokeyMode)
-    {
-    }
+    UpdateNode(KisNodeSP node, const QRect &dirtyRect, State state, KUndo2Command *parent = 0)
+        : KisCommandUtils::FlipFlopCommand(state, parent),
+          m_node(node),
+          m_dirtyRect(dirtyRect)
+    {}
 
-    ~DirtyFrameContents(){}
-
-    void redo() override {
-        KUndo2Command::redo();
-        if (m_autokeyMode == KisAutoKey::BLANK) {
-            m_node->setDirty(m_originalFrameContents);
-        }
-    }
-
-    void undo() override {
-        QRect existingContent = m_node->exactBounds();
-        KUndo2Command::undo();
-        if (m_autokeyMode == KisAutoKey::BLANK) {
-            existingContent |= m_originalFrameContents;
-        }
-        m_node->setDirty(existingContent);
+    void partB() {
+        m_node->setDirty(m_dirtyRect);
     }
 
 private:
     KisNodeSP m_node;
-    QRect m_originalFrameContents;
-    KisAutoKey::Mode m_autokeyMode;
+    QRect m_dirtyRect;
+
 };
 
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
@@ -298,14 +281,18 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
                 int activeKeyTime = channel->activeKeyframeTime(time);
 
-                m_autokeyCommand.reset(new DirtyFrameContents(node, node->exactBounds(), m_autokeyMode));
+                const QRect originalDirtyRect = node->exactBounds();
+                m_autokeyCommand.reset(new KUndo2Command());
 
                 KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
 
                 if (m_autokeyMode == KisAutoKey::DUPLICATE) {
                     channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
                 } else { // Otherwise, create a fresh keyframe.
+                    new UpdateNode(node, originalDirtyRect, UpdateNode::INITIALIZING, keyframeCommand);
                     channel->addKeyframe(time, keyframeCommand);
+                    node->setDirty(originalDirtyRect);
+                    new UpdateNode(node, originalDirtyRect, UpdateNode::FINALIZING, keyframeCommand);
                 }
 
                 keyframe = channel->keyframeAt(time);
@@ -316,12 +303,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                 if (previousKey) {
                     keyframe->setColorLabel(previousKey->colorLabel());
                 }
-
             }
-
-            node->setDirty(); // This doesn't work 100% of the time. The refresh graph stroke
-                              // competes with the regeneration stroke.
-                              // Is there some other way around this?
         }
     });
 
@@ -427,12 +409,13 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         undoAdapter = m_fakeUndoData->undoAdapter.data();
     }
 
-    QSharedPointer<KisCommandUtils::CompositeCommand> parentCommand(new KisCommandUtils::CompositeCommand());
+    QSharedPointer<KUndo2Command> parentCommand(new KUndo2Command());
     parentCommand->setText(name());
     parentCommand->setTimedID(m_useMergeID ? timedID(this->id()) : -1);
 
     if (m_autokeyCommand) {
-        parentCommand->addCommand(m_autokeyCommand.take());
+        KisCommandUtils::CompositeCommand *wrapper = new KisCommandUtils::CompositeCommand(parentCommand.data());
+        wrapper->addCommand(m_autokeyCommand.take());
     }
 
     if (indirect && indirect->hasTemporaryTarget()) {
@@ -469,11 +452,14 @@ void KisPainterBasedStrokeStrategy::finishStrokeCallback()
         runnableJobsInterface()->addRunnableJobs(jobs);
     }
     else {
-        parentCommand->addCommand(m_transaction->endAndTake());
+        KisCommandUtils::CompositeCommand *wrapper = new KisCommandUtils::CompositeCommand(parentCommand.data());
+        wrapper->addCommand(m_transaction->endAndTake());
+
         m_transaction.reset();
         deletePainters();
 
         if (undoAdapter) {
+            parentCommand->redo();
             undoAdapter->addCommand(parentCommand);
         }
 

@@ -48,7 +48,7 @@ void QMic::slotQMic(bool again)
     KisQmicPluginInterface *plugin = nullptr;
 
     // find the krita-gmic-qt plugin
-    const auto offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
+    const QList<QSharedPointer<QPluginLoader>> offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
     if (offers.isEmpty()) {
         QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The GMic plugin is not installed or could not be loaded."));
         return;
@@ -79,8 +79,6 @@ void QMic::slotQMic(bool again)
         QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Krita cannot launch the gmic-qt plugin. No bundled library found."));
         return;
     }
-
-    qDeleteAll(offers);
 
     auto image = std::make_shared<KisImageInterface>(this->viewManager().data());
     int status = plugin->launch(image, again);

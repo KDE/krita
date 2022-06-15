@@ -56,9 +56,9 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         query += QString::fromLatin1(" and (%1)").arg(versionString);
     }
 
-    QList<QPluginLoader *> offers = KoJsonTrader::instance()->query(serviceType, QString());
+    QList<QSharedPointer<QPluginLoader>> offers = KoJsonTrader::instance()->query(serviceType, QString());
 
-    QList<QPluginLoader *> plugins;
+    QList<QSharedPointer<QPluginLoader>> plugins;
 
     bool configChanged = false;
     QList<QString> blacklist; // what we will save out afterwards
@@ -74,7 +74,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         if (firstStart) {
             configChanged = true;
         }
-        Q_FOREACH (QPluginLoader *loader, offers) {
+        Q_FOREACH (QSharedPointer<QPluginLoader> loader, offers) {
             QJsonObject json = loader->metaData().value("MetaData").toObject();
             if (json.contains("KPlugin")) {
                 json = json.value("KPlugin").toObject();
@@ -100,15 +100,15 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         plugins = offers;
     }
 
-    QMap<QString, QPluginLoader *> serviceNames;
-    Q_FOREACH (QPluginLoader *loader, plugins) {
+    QMap<QString, QSharedPointer<QPluginLoader>> serviceNames;
+    Q_FOREACH (QSharedPointer<QPluginLoader> loader, plugins) {
         if (serviceNames.contains(loader->fileName())) { // duplicate
             QJsonObject json2 = loader->metaData().value("MetaData").toObject();
             QVariant pluginVersion2 = json2.value("X-Flake-PluginVersion").toVariant();
             if (pluginVersion2.isNull()) { // just take the first one found...
                 continue;
             }
-            QPluginLoader *currentLoader = serviceNames.value(loader->fileName());
+            QSharedPointer<QPluginLoader> currentLoader = serviceNames.value(loader->fileName());
             QJsonObject json = currentLoader->metaData().value("MetaData").toObject();
             QVariant pluginVersion = json.value("X-Flake-PluginVersion").toVariant();
             if (!(pluginVersion.isNull() || pluginVersion.toInt() < pluginVersion2.toInt())) {
@@ -121,7 +121,7 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
     QList<QString> whiteList;
     Q_FOREACH (const QString &serviceName, serviceNames.keys()) {
         dbgPlugins << "loading" << serviceName;
-        QPluginLoader *loader = serviceNames[serviceName];
+        QSharedPointer<QPluginLoader> loader = serviceNames[serviceName];
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(loader->instance());
         QObject *plugin = 0;
         if (factory) {
@@ -146,6 +146,4 @@ void KoPluginLoader::load(const QString & serviceType, const QString & versionSt
         configGroup.writeEntry(config.whiteList, whiteList);
         configGroup.writeEntry(config.blacklist, blacklist);
     }
-
-    qDeleteAll(offers);
 }

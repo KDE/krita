@@ -49,14 +49,22 @@ public:
      *
      * @return A list of QPluginLoader that satisfy the query
      */
-     QList<QPluginLoader *> query(const QString &servicetype, const QString &mimetype) const;
+     QList<QSharedPointer<QPluginLoader>> query(const QString &servicetype, const QString &mimetype);
 
      // Note: this should not be used
      KoJsonTrader();
+     ~KoJsonTrader();
+
+private:
+     void initializePluginLoaderCache();
 
 private:
      QString m_pluginPath;
      mutable QMutex m_mutex;
+
+     struct PluginCacheEntry;
+
+     QList<PluginCacheEntry> m_pluginLoaderCache;
 };
 
 #endif

@@ -28,7 +28,8 @@ QStringList KisBrushTypeMetaDataFixup::executeFix()
     q.bindValue(":metadata_key", KisBrush::brushTypeMetaDataKey);
 
     if (!q.exec()) {
-        errorMessages.append(i18n("Could not access brush tip metadata"));
+        // the message is not translatable for Krita 5.1 due to a string freeze
+        errorMessages.append(/*i18n*/("Could not access brush tip metadata"));
     }
     else {
         bool updatedAtLeastOneResource = false;

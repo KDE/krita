@@ -30,7 +30,10 @@
 
 #include <kis_icon.h>
 #include "KisBrushServerProvider.h"
+#include "kis_algebra_2d.h"
+#include "kis_painting_tweaks.h"
 #include "kis_slider_spin_box.h"
+#include "krita_utils.h"
 #include "widgets/kis_multipliers_double_slider_spinbox.h"
 #include "kis_spacing_selection_widget.h"
 #include "kis_signals_blocker.h"
@@ -73,23 +76,60 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
     QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
 
-    QRect itemRect = option.rect;
+    const QRect itemRect = kisGrowRect(option.rect, -1);
+    const qreal devicePixelRatioF = painter->device()->devicePixelRatioF();
 
-    if (thumbnail.height() > itemRect.height() || thumbnail.width() > itemRect.width()) {
-        thumbnail = thumbnail.scaled(itemRect.size() , Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    }
+    const QSize hidpiSize = itemRect.size() * devicePixelRatioF;
+    thumbnail = thumbnail.scaled(hidpiSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    thumbnail.setDevicePixelRatio(devicePixelRatioF);
 
     painter->save();
-    int dx = (itemRect.width() - thumbnail.width()) / 2;
-    int dy = (itemRect.height() - thumbnail.height()) / 2;
+
+    const QMap<QString, QVariant> metadata =
+        index.data(Qt::UserRole + KisAbstractResourceModel::MetaData).value<QMap<QString, QVariant>>();
+
+    const bool hasImageType =
+        metadata.value(KisBrush::brushTypeMetaDataKey,
+                       QVariant::fromValue(false)).toBool();
+
+
+    if (hasImageType) {
+        KisPaintingTweaks::PenBrushSaver s(painter);
+
+        const int baseSize = qCeil(itemRect.width() / 5.0);
+        QImage brush(2 * baseSize, 2 * baseSize, QImage::Format_ARGB32);
+        brush.fill(Qt::white);
+        QPainter gc(&brush);
+
+        gc.setPen(Qt::NoPen);
+        gc.setBrush(QColor(200,200,200));
+        gc.drawRect(QRect(0,0,baseSize,baseSize));
+        gc.drawRect(QRect(baseSize,baseSize,baseSize,baseSize));
+
+        painter->setBrush(brush);
+
+        painter->setBrushOrigin(itemRect.topLeft());
+        painter->drawRect(itemRect);
+        painter->setBrush(Qt::NoBrush);
+
+    } else {
+        KisPaintingTweaks::PenBrushSaver s(painter);
+        painter->setBrush(Qt::white);
+        painter->setPen(Qt::NoPen);
+        painter->drawRect(itemRect);
+    }
+
+    int dx = (itemRect.width() * devicePixelRatioF - thumbnail.width()) / 2 / devicePixelRatioF;
+    int dy = (itemRect.height() * devicePixelRatioF - thumbnail.height()) / 2 / devicePixelRatioF;
     painter->drawImage(itemRect.x() + dx, itemRect.y() + dy, thumbnail);
 
     if (option.state & QStyle::State_Selected) {
+        painter->setClipRect(option.rect);
         painter->setPen(QPen(option.palette.highlight(), 2.0));
-        painter->drawRect(option.rect);
+        KritaUtils::renderExactRect(painter, itemRect);
         painter->setCompositionMode(QPainter::CompositionMode_HardLight);
         painter->setOpacity(0.65);
-        painter->fillRect(option.rect, option.palette.highlight());
+        painter->fillRect(itemRect, option.palette.highlight());
     }
 
     painter->restore();

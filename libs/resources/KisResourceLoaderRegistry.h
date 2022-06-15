@@ -60,11 +60,29 @@ public:
      */
     QVector<KisResourceLoaderBase*> resourceTypeLoaders(const QString &resourceType) const;
 
+    /**
+     * Sometimes the database needs updates without changing
+     * the schema of the database. E.g. when we need to update
+     * the resources' metadata. In such cacse, fix up should
+     * be created.
+     */
+    struct ResourceCacheFixup {
+        virtual ~ResourceCacheFixup() {};
+        virtual QStringList executeFix() = 0;
+    };
+
+    void registerFixup(int priority, ResourceCacheFixup *fixup);
+    QStringList executeAllFixups();
+
 private:
 
     KisResourceLoaderRegistry(QObject *parent);
     KisResourceLoaderRegistry(const KisResourceLoaderRegistry&);
     KisResourceLoaderRegistry operator=(const KisResourceLoaderRegistry&);
+private:
+
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif // KISRESOURCELOADERREGISTRY_H

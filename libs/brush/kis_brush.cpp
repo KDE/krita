@@ -50,6 +50,7 @@ struct KisBrushSPStaticRegistrar {
 };
 static KisBrushSPStaticRegistrar __registrar1;
 
+const QString KisBrush::brushTypeMetaDataKey = "image-based-brush";
 
 KisBrush::ColoringInformation::~ColoringInformation()
 {
@@ -383,6 +384,8 @@ void KisBrush::setBrushTipImage(const QImage& image)
 void KisBrush::setBrushType(enumBrushType type)
 {
     d->brushType = type;
+    addMetaData(brushTypeMetaDataKey,
+                QVariant::fromValue(type == IMAGE || type == PIPE_IMAGE));
 }
 
 enumBrushType KisBrush::brushType() const

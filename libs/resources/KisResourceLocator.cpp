@@ -652,7 +652,11 @@ bool KisResourceLocator::addResource(const QString &resourceType, const KoResour
 
     d->resourceCache[QPair<QString, QString>(storageLocation, resourceType + "/" + resource->filename())] = resource;
 
-    // And the database
+    /// And to the database.
+    ///
+    /// The metadata will be set by KisResourceCacheDb, which is
+    /// not very consistent with KisResourceLocator::updateResource(),
+    /// but works :)
     const bool result = KisResourceCacheDb::addResource(storage,
                                                         storage->timeStampForResource(resourceType, resource->filename()),
                                                         resource,
@@ -1205,6 +1209,9 @@ bool KisResourceLocator::synchronizeDb()
         }
     }
 
+
+    d->errorMessages <<
+        KisResourceLoaderRegistry::instance()->executeAllFixups();
 
     d->resourceCache.clear();
     return d->errorMessages.isEmpty();

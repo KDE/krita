@@ -25,6 +25,7 @@ set(kritalibbrush_LIB_SRCS
     kis_text_brush_factory.cpp
     KisAbrStorage.cpp
     KisColorfulBrush.cpp
+    KisBrushTypeMetaDataFixup.cpp
 )
 
 kis_add_library(kritalibbrush SHARED ${kritalibbrush_LIB_SRCS})

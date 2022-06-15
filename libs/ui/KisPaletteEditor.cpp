@@ -133,7 +133,7 @@ KoColorSetSP KisPaletteEditor::importPalette()
     dialog.setCaption(i18n("Import Palette"));
 
     dialog.setDefaultDir(QDir::homePath());
-    dialog.setMimeTypeFilters(QStringList() << "krita/x-colorset" << "application/x-gimp-color-palette");
+    dialog.setMimeTypeFilters(QStringList() << "application/x-krita-palette" << "application/x-gimp-color-palette");
 
     QString filename = dialog.filename();
     if (filename.isEmpty()) {

@@ -17,6 +17,7 @@
 #include <QStandardPaths>
 #include <QMenu>
 #include <QAction>
+#include <QProgressDialog>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -260,11 +261,38 @@ void CompositionDockerDock::exportImageClicked()
         KisLayerCompositionSP currentComposition = toQShared(new KisLayerComposition(image, "temp"));
         currentComposition->store();
 
+        const QString exportWindowTitle = i18n("Exporting Compositions...");
+        QSharedPointer<QProgressDialog> m_progressBar(new QProgressDialog(exportWindowTitle, i18n("Cancel"), 0, 0, this));
+        const int compositionCount = image->compositions().size();
+        m_progressBar->setCancelButton(0); //  TODO: This task should be threaded in the future so that canceling is possible,
+                                           // Additionally, we should also be copying the image and working off that copy to
+                                           // improve runtime performance and allow for the current krita instance to work
+                                           // without locking up. **For now, we will simply make this operation uncancelable.**
+        m_progressBar->setMaximum(compositionCount);
+        m_progressBar->setMinimum(0);
+        m_progressBar->setValue(0);
+        int compositionsExported = 0;
+
         Q_FOREACH (KisLayerCompositionSP composition, image->compositions()) {
+            if (m_progressBar->wasCanceled()) {
+                break;
+            }
+
             if (!composition->isExportEnabled()) {
+                compositionsExported++;
                 continue;
             }
 
+            if (m_progressBar->isHidden()) {
+                m_progressBar->show();
+            }
+
+            m_progressBar->setLabelText(i18n("Exporting composition: %1...", composition->name()));
+
+            // TODO: Extension of above, but this algorithm is highly inefficient.
+            // We should simply a) Deep Copy Image, b) Apply Composition, c) RefreshImageGraph,
+            // d) Export Image.
+            // This task can then be threaded to work in parallel.
             composition->apply();
             image->waitForDone();
             image->refreshGraph();
@@ -287,10 +315,13 @@ void CompositionDockerDock::exportImageClicked()
             d->setFileBatchMode(true);
 
             d->exportDocumentSync(path + composition->name() + ".png", "image/png");
+            compositionsExported++;
+            m_progressBar->setValue(compositionsExported);
             d->deleteLater();
         }
 
         currentComposition->apply();
+
         image->waitForDone();
         image->refreshGraph();
     }

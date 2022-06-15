@@ -197,10 +197,11 @@ void KoShapeFactoryBase::getDeferredPlugin()
     QMutexLocker(&d->pluginLoadingMutex);
     if (d->deferredFactory) return;
 
-    const QList<QPluginLoader *> offers = KoJsonTrader::instance()->query("Krita/Deferred", QString());
+    const QList<QSharedPointer<QPluginLoader>> offers =
+        KoJsonTrader::instance()->query("Krita/Deferred", QString());
     Q_ASSERT(offers.size() > 0);
 
-    Q_FOREACH (QPluginLoader *pluginLoader, offers) {
+    Q_FOREACH (QSharedPointer<QPluginLoader> pluginLoader, offers) {
         KPluginFactory *factory = qobject_cast<KPluginFactory *>(pluginLoader->instance());
         KoDeferredShapeFactoryBase *plugin = factory->create<KoDeferredShapeFactoryBase>(this, QVariantList());
 
@@ -208,7 +209,6 @@ void KoShapeFactoryBase::getDeferredPlugin()
             d->deferredFactory = plugin;
         }
     }
-    qDeleteAll(offers);
 }
 
 void KoShapeFactoryBase::pruneDocumentResourceManager(QObject *)

@@ -19,6 +19,15 @@
 #include <QGlobalStatic>
 #include <QMutexLocker>
 
+struct KoJsonTrader::PluginCacheEntry
+{
+    QString filePath;
+    QJsonArray serviceTypes;
+    QStringList mimeTypes;
+    QSharedPointer<QPluginLoader> loader;
+};
+
+
 KoJsonTrader::KoJsonTrader()
 {
     // Allow a command line variable KRITA_PLUGIN_PATH to override the automatic search
@@ -109,7 +118,14 @@ KoJsonTrader::KoJsonTrader()
         }
         dbgPlugins << "KoJsonTrader will load its plugins from" << m_pluginPath;
     }
+
+    initializePluginLoaderCache();
 }
+
+KoJsonTrader::~KoJsonTrader()
+{
+}
+
 
 Q_GLOBAL_STATIC(KoJsonTrader, s_instance)
 
@@ -118,9 +134,11 @@ KoJsonTrader* KoJsonTrader::instance()
     return s_instance;
 }
 
-QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QString &mimetype) const
+void KoJsonTrader::initializePluginLoaderCache()
 {
     QMutexLocker l(&m_mutex);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_pluginLoaderCache.isEmpty());
 
     QList<QPluginLoader *>list;
     QDirIterator dirIter(m_pluginPath, QDirIterator::Subdirectories);
@@ -134,40 +152,54 @@ QList<QPluginLoader *> KoJsonTrader::query(const QString &servicetype, const QSt
 #else
         if (dirIter.fileInfo().isFile() && dirIter.fileName().startsWith("krita") && !dirIter.fileName().endsWith(".debug")) {
 #endif
+
             dbgPlugins << dirIter.fileName();
-            QPluginLoader *loader = new QPluginLoader(dirIter.filePath());
+            QScopedPointer<QPluginLoader> loader(new QPluginLoader(dirIter.filePath()));
             QJsonObject json = loader->metaData().value("MetaData").toObject();
 
-            dbgPlugins << mimetype << json << json.value("X-KDE-ServiceTypes");
+            dbgPlugins << json << json.value("X-KDE-ServiceTypes");
 
             if (json.isEmpty()) {
-                delete loader;
                 qWarning() << dirIter.filePath() << "has no json!";
-            }
-            else {
+                continue;
+            } else {
                 QJsonArray  serviceTypes = json.value("X-KDE-ServiceTypes").toArray();
                 if (serviceTypes.isEmpty()) {
                     qWarning() << dirIter.fileName() << "has no X-KDE-ServiceTypes";
-                }
-                if (!serviceTypes.contains(QJsonValue(servicetype))) {
-                    delete loader;
                     continue;
                 }
 
-                if (!mimetype.isEmpty()) {
-                    QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
-                    mimeTypes += json.value("MimeType").toString().split(';');
-                    mimeTypes += json.value("X-KDE-NativeMimeType").toString();
-                    if (! mimeTypes.contains(mimetype)) {
-                        qWarning() << dirIter.filePath() << "doesn't contain mimetype" << mimetype << "in" << mimeTypes;
-                        delete loader;
-                        continue;
-                    }
-                }
-                list.append(loader);
+                QStringList mimeTypes = json.value("X-KDE-ExtraNativeMimeTypes").toString().split(',');
+                mimeTypes += json.value("MimeType").toString().split(';');
+                mimeTypes += json.value("X-KDE-NativeMimeType").toString();
+
+                PluginCacheEntry cacheEntry;
+                cacheEntry.filePath = dirIter.filePath();
+                cacheEntry.serviceTypes = serviceTypes;
+                cacheEntry.mimeTypes = mimeTypes;
+                cacheEntry.loader = toQShared(loader.take());
+                m_pluginLoaderCache << cacheEntry;
             }
         }
-
     }
+}
+
+QList<QSharedPointer<QPluginLoader>> KoJsonTrader::query(const QString &servicetype, const QString &mimetype)
+{
+    QMutexLocker l(&m_mutex);
+
+    QList<QSharedPointer<QPluginLoader>> list;
+    Q_FOREACH(const PluginCacheEntry &plugin, m_pluginLoaderCache) {
+        if (!plugin.serviceTypes.contains(QJsonValue(servicetype))) {
+            continue;
+        }
+
+        if (!mimetype.isEmpty() && !plugin.mimeTypes.contains(mimetype)) {
+            continue;
+        }
+
+        list << plugin.loader;
+    }
+
     return list;
 }

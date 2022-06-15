@@ -107,15 +107,6 @@ bool KisPngBrush::loadFromDevice(QIODevice *dev, KisResourcesInterfaceSP resourc
             image = image.convertToFormat(QImage::Format_ARGB32);
         }
 
-        //Workaround for transparent uniform RGB images -- should be converted to proper mask.
-        if (isAllGray) {
-            QImage backdrop(image.size(), image.format());
-            backdrop.fill(QColor(Qt::white).rgb());
-            QPainter painter(&backdrop);
-            painter.drawImage(0,0,image);
-            image = backdrop;
-        }
-
         setBrushTipImage(image);
         setBrushType(IMAGE);
         setBrushApplication(isAllGray ? ALPHAMASK : LIGHTNESSMAP);

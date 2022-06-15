@@ -330,6 +330,8 @@ public:
 
     virtual void coldInitBrush();
 
+    static const QString brushTypeMetaDataKey;
+
 protected:
 
     void setWidth(qint32 width);

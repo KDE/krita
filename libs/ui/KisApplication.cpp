@@ -85,6 +85,7 @@
 #include <KisResourceLoader.h>
 #include <KisResourceLoaderRegistry.h>
 
+#include <KisBrushTypeMetaDataFixup.h>
 #include <kis_gbr_brush.h>
 #include <kis_png_brush.h>
 #include <kis_svg_brush.h>
@@ -358,6 +359,8 @@ bool KisApplication::registerResources()
                                                      ResourceType::LayerStyles,
                                                      i18nc("Resource type name", "Layer styles"),
                                                      QStringList() << "application/x-photoshop-style"));
+
+    reg->registerFixup(10, new KisBrushTypeMetaDataFixup());
 
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     QString databaseLocation = cfg.readEntry(KisResourceCacheDb::dbLocationKey, "");

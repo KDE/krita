@@ -131,7 +131,6 @@ private:
 
     KisAutoKey::Mode m_autokeyMode {KisAutoKey::NONE};
     QScopedPointer<KUndo2Command> m_autokeyCommand;
-    QRect m_autokeyCleanup = {QRect(0,0,0,0)};
 
     bool m_useMergeID {false};
 

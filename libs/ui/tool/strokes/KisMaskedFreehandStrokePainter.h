@@ -52,6 +52,7 @@ public:
     void paintPolygon(const QVector<QPointF> &points);
     void paintRect(const QRectF &rect);
     void paintEllipse(const QRectF &rect);
+    void paintEllipse(qreal axis_a, qreal axis_b, qreal angle, QPointF offset);
     void paintPainterPath(const QPainterPath& path);
 
     void drawPainterPath(const QPainterPath& path, const QPen& pen);

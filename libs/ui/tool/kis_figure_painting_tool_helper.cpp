@@ -138,6 +138,17 @@ void KisFigurePaintingToolHelper::paintEllipse(const QRectF &rect)
                                          rect));
 }
 
+void KisFigurePaintingToolHelper::paintEllipse(qreal axis_a,qreal axis_b,qreal angle,const QPointF &offset)
+{
+    m_strokesFacade->addJob(m_strokeId,
+        new FreehandStrokeStrategy::Data(0,
+                                         FreehandStrokeStrategy::Data::REAL_ELLIPSE,
+                                         axis_a,
+                                         axis_b,
+                                         angle,
+                                         offset));
+}
+
 void KisFigurePaintingToolHelper::paintPainterPath(const QPainterPath &path)
 {
     m_strokesFacade->addJob(m_strokeId,

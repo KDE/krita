@@ -40,6 +40,7 @@ public:
             POLYGON,
             RECT,
             ELLIPSE,
+            REAL_ELLIPSE,
             PAINTER_PATH,
             QPAINTER_PATH,
             QPAINTER_PATH_FILL
@@ -85,6 +86,25 @@ public:
             : KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
               strokeInfoId(_strokeInfoId),
             type(_type), rect(_rect)
+        {}
+
+        // Ellipse override,
+        // pi1->ellipse parameters
+        // control2.x->rotate angle
+        // control1->center offset
+        Data(int _strokeInfoId,
+             DabType _type,
+             const qreal axis_a,
+             const qreal axis_b,
+             const qreal angle,
+             const QPointF &offset)
+            :
+            KisStrokeJobData(KisStrokeJobData::UNIQUELY_CONCURRENT),
+            strokeInfoId(_strokeInfoId),
+            type(_type),
+            pi1(QPointF(axis_a,axis_b)),
+            control1(offset),
+            control2(QPointF(angle,0))
         {}
 
         Data(int _strokeInfoId,

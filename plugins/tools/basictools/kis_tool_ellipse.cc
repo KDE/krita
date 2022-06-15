@@ -56,10 +56,7 @@ void KisToolEllipse::finishRect(const QRectF& rect, qreal roundCornersX, qreal r
                                            strokeStyle(),
                                            fillStyle(),
                                            fillTransform());
-        QPainterPath path;
-        path.addEllipse(rect);
-        getRotatedPath(path, rect.center(), getRotationAngle());
-        helper.paintPainterPath(path);
+        helper.paintEllipse(rect.width(),rect.height(),getRotationAngle(),rect.center());
     } else {
         QRectF r = convertToPt(rect);
         KoShape* shape = KisShapeToolHelper::createEllipseShape(r);

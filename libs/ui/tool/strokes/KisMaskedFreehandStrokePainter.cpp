@@ -84,6 +84,14 @@ void KisMaskedFreehandStrokePainter::paintEllipse(const QRectF &rect)
     });
 }
 
+
+void KisMaskedFreehandStrokePainter::paintEllipse(qreal axis_a, qreal axis_b, qreal angle, QPointF offset)
+{
+    applyToAllPainters([&] (KisFreehandStrokeInfo *data) {
+        data->painter->paintEllipse(axis_a,axis_b,angle,offset);
+    });
+}
+
 void KisMaskedFreehandStrokePainter::paintPainterPath(const QPainterPath &path)
 {
     applyToAllPainters([&] (KisFreehandStrokeInfo *data) {

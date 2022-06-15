@@ -518,6 +518,19 @@ public:
                       const qreal h);
 
     /**
+     * Paint an ellipse.
+     *
+     * @param axis_a the length of the ellipse axis on x axis
+     * @param axis_b the length of the ellipse axis on y axis
+     * @param angle the angle of rotation
+     * @param offset the center coordinate of the ellipse
+     */
+    void paintEllipse(qreal axis_a,
+                      qreal axis_b,
+                      qreal angle,
+                      QPointF offset);
+
+    /**
      * Paint the polygon with the points given in points. It automatically closes the polygon
      * by drawing the line from the last point to the first.
      */

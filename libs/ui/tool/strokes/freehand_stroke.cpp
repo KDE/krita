@@ -196,6 +196,9 @@ void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
             m_d->efficiencyMeasurer.addSample(d->rect.bottomRight());
             m_d->efficiencyMeasurer.addSample(d->rect.bottomLeft());
             break;
+        case Data::REAL_ELLIPSE:
+            maskedPainter->paintEllipse(d->pi1.pos().x(),d->pi1.pos().y(),d->control2.x(),d->control1);
+            break;
         case Data::ELLIPSE:
             maskedPainter->paintEllipse(d->rect);
             // TODO: add speed measures

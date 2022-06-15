@@ -1298,6 +1298,37 @@ void KisPainter::paintEllipse(const QRectF &rect)
     paintPolygon(points);
 }
 
+void KisPainter::paintEllipse(qreal axis_a,qreal axis_b,qreal angle,QPointF offset)
+{
+    // Read https://rohankjoshi.medium.com/the-equation-for-a-rotated-ellipse-5888731da76
+    // and https://stackoverflow.com/questions/55100965/algorithm-for-plotting-2d-xy-graph
+    // for information of the algorithm
+    qreal semiAxisA=axis_a/2;
+    qreal semiAxisB=axis_b/2;
+    qreal sinA= qSin(angle);
+    qreal sqSinA= sinA*sinA;
+    qreal cosA= qCos(angle);
+    qreal sqCosA= cosA*cosA;
+    qreal aSq=semiAxisA*semiAxisA;
+    qreal bSq=semiAxisB*semiAxisB;
+    int canvasBound=qCeil(qMax(semiAxisA,semiAxisB));
+    for (int x = -canvasBound; x <= canvasBound; ++x) {
+        for (int y = -canvasBound; y <= canvasBound; ++y) {
+            qreal pdX=2*x*(aSq*sqSinA+bSq*sqCosA)+y*(bSq-aSq)*sin(2*angle);
+            qreal pdY=x*(bSq-aSq)*sin(2*angle)+2*y*(aSq*sqCosA+bSq*sqSinA);
+            qreal gradient= qSqrt(pdX*pdX+pdY*pdY);
+            qreal paraboloid=(aSq*sqSinA+bSq*sqCosA)*x*x
+                    +2*(bSq-aSq)*sinA*cosA*x*y
+                    +(aSq*sqCosA+ bSq*sqSinA)*y*y
+                    -aSq*bSq;
+            if(qAbs(paraboloid) < gradient*0.5){
+                paintAt(KisPaintInformation(QPointF(x+offset.x(),y+offset.y())),
+                        new KisDistanceInformation());
+            }
+        }
+    }
+}
+
 void KisPainter::paintEllipse(const qreal x,
                               const qreal y,
                               const qreal w,

@@ -34,6 +34,7 @@ public:
     void paintPolygon(const vQPointF &points);
     void paintRect(const QRectF &rect);
     void paintEllipse(const QRectF &rect);
+    void paintEllipse(const qreal axis_a,const qreal axis_b,const qreal angle, const QPointF &offset);
     void paintPainterPath(const QPainterPath &path);
     void setFGColorOverride(const KoColor &color);
     void setBGColorOverride(const KoColor &color);

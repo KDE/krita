@@ -273,35 +273,46 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
     KritaUtils::addJobSequential(jobs, [this] () {
         KisNodeSP node = m_resources->currentNode();
         const int time = node->paintDevice()->defaultBounds()->currentTime();
+        const bool isLodNMode = node->paintDevice()->defaultBounds()->currentLevelOfDetail() > 0;
 
         KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
-        if (channel)
-        {
+        if (channel) {
             KisKeyframeSP keyframe = channel->keyframeAt(time);
             if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
-                int activeKeyTime = channel->activeKeyframeTime(time);
 
-                const QRect originalDirtyRect = node->exactBounds();
-                m_autokeyCommand.reset(new KUndo2Command());
+                if (!isLodNMode) {
+                    int activeKeyTime = channel->activeKeyframeTime(time);
 
-                KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
+                    const QRect originalDirtyRect = node->exactBounds();
+                    m_autokeyCommand.reset(new KUndo2Command());
 
-                if (m_autokeyMode == KisAutoKey::DUPLICATE) {
-                    channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
-                } else { // Otherwise, create a fresh keyframe.
-                    new UpdateNode(node, originalDirtyRect, UpdateNode::INITIALIZING, keyframeCommand);
-                    channel->addKeyframe(time, keyframeCommand);
-                    node->setDirty(originalDirtyRect);
-                    new UpdateNode(node, originalDirtyRect, UpdateNode::FINALIZING, keyframeCommand);
-                }
+                    KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
 
-                keyframe = channel->keyframeAt(time);
-                KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
+                    if (m_autokeyMode == KisAutoKey::DUPLICATE) {
+                        channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
+                    } else { // Otherwise, create a fresh keyframe.
+                        new UpdateNode(node, originalDirtyRect, UpdateNode::INITIALIZING, keyframeCommand);
+                        channel->addKeyframe(time, keyframeCommand);
+                        node->setDirty(originalDirtyRect);
+                        new UpdateNode(node, originalDirtyRect, UpdateNode::FINALIZING, keyframeCommand);
+                    }
 
-                // Use the same color label as previous keyframe...
-                KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
-                if (previousKey) {
-                    keyframe->setColorLabel(previousKey->colorLabel());
+                    keyframe = channel->keyframeAt(time);
+                    KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
+
+                    // Use the same color label as previous keyframe...
+                    KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
+                    if (previousKey) {
+                        keyframe->setColorLabel(previousKey->colorLabel());
+                    }
+                } else {
+                    if (m_autokeyMode == KisAutoKey::BLANK) {
+                        const QRect originalDirtyRect = node->exactBounds();
+                        KisTransaction transaction(node->paintDevice());
+                        node->paintDevice()->clear();
+                        node->setDirty(originalDirtyRect);
+                        m_autokeyCommand.reset(transaction.endAndTake());
+                    }
                 }
             }
         }

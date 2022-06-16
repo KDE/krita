@@ -19,7 +19,6 @@
 #include "kis_image_config.h"
 #include "kis_image_animation_interface.h"
 #include "kis_painter.h"
-#include "kis_raster_keyframe_channel.h"
 #include "KisAnimAutoKey.h"
 #include <commands_new/KisDisableDirtyRequestsCommand.h>
 
@@ -189,9 +188,9 @@ void KisFilterStrokeStrategy::initStrokeCallback()
 
     // Create keyframe if necessary (ie: AutoKey enabled)..
     const int time = m_d->image->animationInterface()->currentTime();
+    const bool isLodNMode = m_d->levelOfDetail > 0;
     KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(m_d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
-    if (channel)
-    {
+    if (channel && !isLodNMode) {
         KisKeyframeSP keyframe = channel->keyframeAt(time);
         if (!keyframe && m_d->m_autokeyMode != KisAutoKey::NONE) {
             int activeKeyTime = channel->activeKeyframeTime(time);

@@ -308,6 +308,12 @@ KisTIFFImport::~KisTIFFImport()
     TIFFSetWarningHandler(oldWarnHandler);
 }
 
+template<typename T, typename Deleter>
+auto make_unique_with_deleter(T *data, Deleter d)
+{
+    return std::unique_ptr<T, Deleter>(data, d);
+}
+
 #ifdef TIFF_HAS_PSD_TAGS
 KisImportExportErrorCode KisTIFFImport::readImageFromPsd(
     KisDocument *m_doc,
@@ -699,7 +705,13 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     std::unique_ptr<std::remove_pointer_t<tdata_t>, decltype(&_TIFFfree)> buf(
         nullptr,
         &_TIFFfree);
-    QVector<tdata_t> ps_buf; // used only for planar configuration separated
+    // used only for planar configuration separated
+    auto ps_buf = make_unique_with_deleter(new QVector<uint8_t *>(),
+                                           [](QVector<uint8_t *> *buf) {
+                                               for (uint8_t *p : *buf)
+                                                   _TIFFfree(p);
+                                               delete buf;
+                                           });
 
     QSharedPointer<KisBufferStreamBase> tiffstream = nullptr;
     QSharedPointer<KisTIFFReaderBase> tiffReader = nullptr;
@@ -990,16 +1002,16 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                     linewidth);
             }
         } else {
-            ps_buf.resize(nbchannels);
+            ps_buf->resize(nbchannels);
             QVector<tsize_t> lineSizes(nbchannels);
             tmsize_t baseSize = TIFFTileSize(image);
             for (uint32_t i = 0; i < nbchannels; i++) {
-                ps_buf[i] = _TIFFmalloc(baseSize);
+                (*ps_buf)[i] = static_cast<uint8_t*>(_TIFFmalloc(baseSize));
                 lineSizes[i] = tileWidth;
                 ;
             }
             tiffstream = QSharedPointer<KisBufferStreamSeparate>::create(
-                reinterpret_cast<uint8_t **>(ps_buf.data()),
+                ps_buf->data(),
                 nbchannels,
                 depth,
                 lineSizes.data());
@@ -1013,7 +1025,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                     TIFFReadTile(image, buf.get(), x, y, 0, (tsample_t)-1);
                 } else {
                     for (uint16_t i = 0; i < nbchannels; i++) {
-                        TIFFReadTile(image, ps_buf[i], x, y, 0, i);
+                        TIFFReadTile(image, (*ps_buf)[i], x, y, 0, i);
                     }
                 }
                 uint32_t realTileWidth =
@@ -1124,7 +1136,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                    && color_type == PHOTOMETRIC_YCBCR
                    && compression == COMPRESSION_JPEG) {
 #ifdef HAVE_JPEG_TURBO
-            ps_buf.resize(nbchannels);
+            ps_buf->resize(nbchannels);
             TIFFReadRawStrip(image, 0, jpegBuf.data(), stripsize);
 
             int width = basicInfo.width;
@@ -1158,11 +1170,11 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 dbgFile << QString("scan line size (plane %1): %2")
                                .arg(i)
                                .arg(scanLineSize);
-                ps_buf[i] = _TIFFmalloc(uncompressedStripsize);
+                (*ps_buf)[i] = static_cast<uint8_t*>(_TIFFmalloc(uncompressedStripsize));
                 lineSizes[i] = scanLineSize;
             }
             tiffstream = QSharedPointer<KisBufferStreamInterleaveUpsample>::create(
-                reinterpret_cast<uint8_t **>(ps_buf.data()),
+                ps_buf->data(),
                 nbchannels,
                 depth,
                 lineSizes.data(),
@@ -1176,16 +1188,16 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             return ImportExportCodes::FileFormatIncorrect;
 #endif
         } else {
-            ps_buf.resize(nbchannels);
+            ps_buf->resize(nbchannels);
             tsize_t scanLineSize = stripsize / rowsPerStrip;
             dbgFile << " scanLineSize for each plan =" << scanLineSize;
             QVector<tsize_t> lineSizes(nbchannels);
             for (uint32_t i = 0; i < nbchannels; i++) {
-                ps_buf[i] = _TIFFmalloc(stripsize);
+                (*ps_buf)[i] = static_cast<uint8_t*>(_TIFFmalloc(stripsize));
                 lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
             tiffstream = QSharedPointer<KisBufferStreamSeparate>::create(
-                reinterpret_cast<uint8_t **>(ps_buf.data()),
+                ps_buf->data(),
                 nbchannels,
                 depth,
                 lineSizes.data());
@@ -1240,7 +1252,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                         handle.get(),
                         jpegBuf.data(),
                         stripsize,
-                        reinterpret_cast<unsigned char **>(ps_buf.data()),
+                        ps_buf->data(),
                         width,
                         nullptr,
                         height,
@@ -1254,7 +1266,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 for (uint16_t i = 0; i < nbchannels; i++) {
                     TIFFReadEncodedStrip(image,
                                          TIFFComputeStrip(image, y, i),
-                                         ps_buf[i],
+                                         (*ps_buf)[i],
                                          (tsize_t)-1);
                 }
             }
@@ -1272,11 +1284,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     tiffReader->finalize();
     tiffReader.reset();
     tiffstream.reset();
-    if (planarconfig != PLANARCONFIG_CONTIG) {
-        for (auto *const b : ps_buf) {
-            _TIFFfree(b);
-        }
-    }
+    ps_buf.reset();
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
 

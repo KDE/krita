@@ -36,24 +36,6 @@
 #include "KisRunnableStrokeJobUtils.h"
 
 
-struct UpdateNode : public KisCommandUtils::FlipFlopCommand
-{
-    UpdateNode(KisNodeSP node, const QRect &dirtyRect, State state, KUndo2Command *parent = 0)
-        : KisCommandUtils::FlipFlopCommand(state, parent),
-          m_node(node),
-          m_dirtyRect(dirtyRect)
-    {}
-
-    void partB() {
-        m_node->setDirty(m_dirtyRect);
-    }
-
-private:
-    KisNodeSP m_node;
-    QRect m_dirtyRect;
-
-};
-
 KisPainterBasedStrokeStrategy::KisPainterBasedStrokeStrategy(const QLatin1String &id,
                                                              const KUndo2MagicString &name,
                                                              KisResourcesSnapshotSP resources,
@@ -283,7 +265,6 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                 if (!isLodNMode) {
                     int activeKeyTime = channel->activeKeyframeTime(time);
 
-                    const QRect originalDirtyRect = node->exactBounds();
                     m_autokeyCommand.reset(new KUndo2Command());
 
                     KUndo2Command *keyframeCommand = new  KisCommandUtils::SkipFirstRedoWrapper(nullptr, m_autokeyCommand.data());
@@ -291,10 +272,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
                     if (m_autokeyMode == KisAutoKey::DUPLICATE) {
                         channel->copyKeyframe(activeKeyTime, time, keyframeCommand);
                     } else { // Otherwise, create a fresh keyframe.
-                        new UpdateNode(node, originalDirtyRect, UpdateNode::INITIALIZING, keyframeCommand);
                         channel->addKeyframe(time, keyframeCommand);
-                        node->setDirty(originalDirtyRect);
-                        new UpdateNode(node, originalDirtyRect, UpdateNode::FINALIZING, keyframeCommand);
                     }
 
                     keyframe = channel->keyframeAt(time);

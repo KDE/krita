@@ -631,9 +631,7 @@ void KisNode::handleKeyframeChannelUpdate(const KisTimeSpan &range, const QRect 
         KisDefaultBoundsSP bounds(new KisDefaultBounds(image()));
 
         if (range.contains(bounds->currentTime())) {
-            //setDirty(rect); // BUG:453682
-            // This currently causes KisIndirectPaintingSupport::mergeToLayerImpl to lock up
-            // when "Autokey" features are enabled.
+            setDirty(rect);
         }
     }
 }

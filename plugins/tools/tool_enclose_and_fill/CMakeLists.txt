@@ -9,7 +9,7 @@ set(kritatoolencloseandfill_SOURCES
     subtools/KisBrushEnclosingProducer.cpp
     )
 
-kis_add_library(kritatoolencloseandfill MODULE ${kritatoolencloseandfill_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritatoolencloseandfill MODULE ${kritatoolencloseandfill_SOURCES})
 
 target_link_libraries(kritatoolencloseandfill kritaui kritabasicflakes)
 

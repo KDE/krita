@@ -24,7 +24,7 @@ else()
   set(OCIO_ADDITIONAL_LIBRARIES ${Boost_SYSTEM_LIBRARY})
 endif()
 
-kis_add_library(kritalutdocker MODULE ${KRITA_LUTDOCKER_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritalutdocker MODULE ${KRITA_LUTDOCKER_SOURCES})
 
 target_link_libraries(kritalutdocker kritaui ${OCIO_ADDITIONAL_LIBRARIES} OpenColorIO::OpenColorIO)
 install(TARGETS kritalutdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

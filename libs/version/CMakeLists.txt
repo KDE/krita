@@ -8,7 +8,7 @@ set(kritaversion_LIB_SRCS
     KritaVersionWrapper.cpp
 )
 
-kis_add_library(kritaversion SHARED ${kritaversion_LIB_SRCS})
+add_library(kritaversion SHARED ${kritaversion_LIB_SRCS})
 target_link_libraries(kritaversion Qt5::Core)
 generate_export_header(kritaversion BASE_NAME kritaversion)
 

@@ -13,6 +13,6 @@ set(small_color_selector_QRCS
 )
 qt5_add_resources(KRITA_smallCOLORSELECTOR_SOURCES ${small_color_selector_QRCS})
 
-kis_add_library(kritasmallcolorselector MODULE ${KRITA_smallCOLORSELECTOR_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritasmallcolorselector MODULE ${KRITA_smallCOLORSELECTOR_SOURCES})
 target_link_libraries(kritasmallcolorselector kritaui)
 install(TARGETS kritasmallcolorselector  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

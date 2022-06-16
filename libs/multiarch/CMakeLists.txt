@@ -1,4 +1,4 @@
-kis_add_library(kritamultiarch INTERFACE)
+add_library(kritamultiarch INTERFACE)
 
 if (HAVE_XSIMD)
     target_link_libraries(kritamultiarch INTERFACE xsimd)

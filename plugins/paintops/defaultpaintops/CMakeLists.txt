@@ -24,7 +24,7 @@ set(kritadefaultpaintops_SOURCES
 
 ki18n_wrap_ui(kritadefaultpaintops_SOURCES duplicate/wdgduplicateop.ui )
 
-kis_add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritadefaultpaintops MODULE ${kritadefaultpaintops_SOURCES})
 generate_export_header(kritadefaultpaintops BASE_NAME kritadefaultpaintops EXPORT_MACRO_NAME KRITADEFAULTPAINTOPS_EXPORT)
 
 target_link_libraries(kritadefaultpaintops kritalibpaintop)

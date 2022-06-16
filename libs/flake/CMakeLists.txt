@@ -217,7 +217,7 @@ ki18n_wrap_ui(kritaflake_SRCS
     tools/KoZoomToolWidget.ui
 )
 
-kis_add_library(kritaflake SHARED ${kritaflake_SRCS} PCH_FILE kis_global_pch.h)
+add_library(kritaflake SHARED ${kritaflake_SRCS})
 generate_export_header(kritaflake BASE_NAME kritaflake)
 
 target_include_directories(kritaflake

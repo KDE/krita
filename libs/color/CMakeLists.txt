@@ -10,7 +10,7 @@ else ()
     set(kritacolor_LIB_SRCS kis_color_manager.h dummy/kis_color_manager.cpp)
 endif ()
 
-kis_add_library(kritacolor SHARED ${kritacolor_LIB_SRCS} PCH_FILE kis_global_pch.h)
+add_library(kritacolor SHARED ${kritacolor_LIB_SRCS} )
 generate_export_header(kritacolor BASE_NAME kritacolor)
 
 target_link_libraries(kritacolor kritaglobal ${QT_QTCORE_LIBRARY} KF5::I18n  ${kritacolor_EXTRA_LIBRARIES})

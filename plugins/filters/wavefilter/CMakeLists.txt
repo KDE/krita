@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritawavefilter_SOURCES
     wdgwaveoptions.ui
     )
 
-kis_add_library(kritawavefilter MODULE ${kritawavefilter_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritawavefilter MODULE ${kritawavefilter_SOURCES})
 
 target_link_libraries(kritawavefilter kritaui)
 

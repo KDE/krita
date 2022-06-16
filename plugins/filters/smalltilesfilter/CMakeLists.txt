@@ -1,4 +1,4 @@
 set(kritasmalltilesfilter_SOURCES kis_small_tiles_filter_plugin.cpp kis_small_tiles_filter.cpp )
-kis_add_library(kritasmalltilesfilter MODULE ${kritasmalltilesfilter_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritasmalltilesfilter MODULE ${kritasmalltilesfilter_SOURCES})
 target_link_libraries(kritasmalltilesfilter kritaui)
 install(TARGETS kritasmalltilesfilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

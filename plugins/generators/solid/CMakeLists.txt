@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritacolorgenerator_SOURCES
     wdgcoloroptions.ui
     )
 
-kis_add_library(kritacolorgenerator MODULE ${kritacolorgenerator_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritacolorgenerator MODULE ${kritacolorgenerator_SOURCES})
 
 target_link_libraries(kritacolorgenerator kritaui)
 

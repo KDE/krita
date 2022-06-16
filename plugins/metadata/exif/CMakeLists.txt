@@ -3,7 +3,7 @@ set(kritaexif_SOURCES
     kis_exif_plugin.cpp
 )
 
-kis_add_library(kritaexif MODULE ${kritaexif_SOURCES} PCH_FILE kis_global_pch.h)
+add_library(kritaexif MODULE ${kritaexif_SOURCES})
 
 generate_export_header(kritaexif)
 

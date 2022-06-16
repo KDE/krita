@@ -54,7 +54,7 @@ set(kritaresources_LIB_SRCS
 
 qt5_add_resources(kritaresources_LIB_SRCS sql.qrc)
 
-kis_add_library(kritaresources SHARED ${kritaresources_LIB_SRCS} PCH_FILE kis_global_pch.h)
+add_library(kritaresources SHARED ${kritaresources_LIB_SRCS})
 
 generate_export_header(kritaresources BASE_NAME kritaresources)
 

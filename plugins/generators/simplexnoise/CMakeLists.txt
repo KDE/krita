@@ -7,6 +7,6 @@ ki18n_wrap_ui(kritasimplexnoisegenerator_SOURCES
     wdgsimplexnoiseoptions.ui
     )
 
-kis_add_library(kritasimplexnoisegenerator MODULE ${kritasimplexnoisegenerator_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritasimplexnoisegenerator MODULE ${kritasimplexnoisegenerator_SOURCES})
 target_link_libraries(kritasimplexnoisegenerator kritaui)
 install(TARGETS kritasimplexnoisegenerator  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

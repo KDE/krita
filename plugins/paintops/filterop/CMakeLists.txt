@@ -6,7 +6,7 @@ set(kritafilterop_SOURCES
     )
 
 
-kis_add_library(kritafilterop MODULE ${kritafilterop_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritafilterop MODULE ${kritafilterop_SOURCES})
 
 target_link_libraries(kritafilterop kritalibpaintop)
 

@@ -85,7 +85,7 @@ ki18n_wrap_ui( kritawidgets_LIB_SRCS
     WdgPaletteListWidget.ui
 )
 
-kis_add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS} PCH_FILE kis_global_pch.h)
+add_library(kritawidgets SHARED ${kritawidgets_LIB_SRCS})
 generate_export_header(kritawidgets BASE_NAME kritawidgets)
 target_link_libraries(kritawidgets
     

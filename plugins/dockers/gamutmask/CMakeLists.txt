@@ -8,6 +8,6 @@ ki18n_wrap_ui(kritagamutmask_SOURCES
     forms/wdgGamutMaskChooser.ui
 )
 
-kis_add_library(kritagamutmask MODULE ${kritagamutmask_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritagamutmask MODULE ${kritagamutmask_SOURCES})
 target_link_libraries(kritagamutmask kritaui)
 install(TARGETS kritagamutmask DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

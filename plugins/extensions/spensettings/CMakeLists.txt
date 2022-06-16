@@ -11,7 +11,7 @@ qt5_add_resources(kritaspensettings_SOURCES
     spensettings.qrc
 )
 
-kis_add_library(kritaspensettings MODULE ${kritaspensettings_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritaspensettings MODULE ${kritaspensettings_SOURCES})
 target_link_libraries(kritaspensettings kritaui)
 install(TARGETS kritaspensettings  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

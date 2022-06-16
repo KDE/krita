@@ -8,6 +8,6 @@ ki18n_wrap_ui(kritagradientgenerator_SOURCES
     KisGradientGeneratorConfigWidget.ui
     )
 
-kis_add_library(kritagradientgenerator MODULE ${kritagradientgenerator_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritagradientgenerator MODULE ${kritagradientgenerator_SOURCES})
 target_link_libraries(kritagradientgenerator kritaui)
 install(TARGETS kritagradientgenerator DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

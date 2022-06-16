@@ -94,11 +94,11 @@ set(krita_QRCS
 qt5_add_resources(krita_SRCS ${krita_QRCS})
 
 if (ANDROID)
-    kis_add_library(krita SHARED ${krita_SRCS})
+    add_library(krita SHARED ${krita_SRCS})
     target_link_libraries(krita PRIVATE Qt5::AndroidExtras)
 elseif (WIN32)
     # Build the main implementation into a DLL to be called by a stub EXE.
-    kis_add_library(krita SHARED ${krita_SRCS})
+    add_library(krita SHARED ${krita_SRCS})
     set_target_properties(krita PROPERTIES PREFIX "")
 else()
     add_executable(krita ${krita_SRCS})

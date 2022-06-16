@@ -12,7 +12,7 @@ ki18n_wrap_ui( kritabasicflakes_LIB_SRCS
 )
 
 
-kis_add_library(kritabasicflakes SHARED ${kritabasicflakes_LIB_SRCS} PCH_FILE kis_image_pch.h)
+add_library(kritabasicflakes SHARED ${kritabasicflakes_LIB_SRCS})
 generate_export_header(kritabasicflakes)
 
 target_include_directories(kritabasicflakes

@@ -4,7 +4,7 @@ set(kritajxlimport_SOURCES
     JPEGXLImport.cpp
 )
 
-kis_add_library(kritajxlimport MODULE ${kritajxlimport_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritajxlimport MODULE ${kritajxlimport_SOURCES})
 
 target_link_libraries(kritajxlimport kritaui kritalibkra kritametadata ${JPEGXL_LIBRARIES})
 
@@ -17,7 +17,7 @@ set(kritajxlexport_SOURCES
 
 ki18n_wrap_ui(kritajxlexport_SOURCES kis_wdg_options_jpegxl.ui )
 
-kis_add_library(kritajxlexport MODULE ${kritajxlexport_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritajxlexport MODULE ${kritajxlexport_SOURCES})
 
 target_link_libraries(kritajxlexport kritaui kritalibkra kritaimpex ${JPEGXL_LIBRARIES})
 

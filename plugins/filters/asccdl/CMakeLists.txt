@@ -6,7 +6,7 @@ set(kritaasccdl_SOURCES
 ki18n_wrap_ui(kritaasccdl_SOURCES
     wdg_asccdl.ui
     )
-kis_add_library(kritaasccdl MODULE ${kritaasccdl_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritaasccdl MODULE ${kritaasccdl_SOURCES})
 target_link_libraries(kritaasccdl kritaui)
 install(TARGETS kritaasccdl  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES

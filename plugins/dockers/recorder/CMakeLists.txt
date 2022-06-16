@@ -30,7 +30,7 @@ install(FILES
     DESTINATION ${DATA_INSTALL_DIR}/krita/actions
 )
 
-kis_add_library(kritarecorderdocker MODULE ${KRITA_RECORDERDOCKER_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritarecorderdocker MODULE ${KRITA_RECORDERDOCKER_SOURCES})
 target_link_libraries(kritarecorderdocker kritaui Threads::Threads)
 
 install(TARGETS kritarecorderdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

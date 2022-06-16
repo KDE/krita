@@ -44,7 +44,7 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
     KisOnionSkinsDocker.ui
 )
 
-kis_add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
 
 generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
 target_link_libraries(kritaanimationdocker kritaui kritawidgets)

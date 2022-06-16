@@ -17,8 +17,8 @@ ki18n_wrap_ui(SOURCES
     manager.ui
 )
 
-kis_add_library(kritapykrita MODULE ${SOURCES} PCH_FILE kis_image_pch.h)
-kis_add_library(pykrita STATIC ${SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritapykrita MODULE ${SOURCES})
+add_library(pykrita STATIC ${SOURCES})
 
 target_include_directories(kritapykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
 target_include_directories(pykrita SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")

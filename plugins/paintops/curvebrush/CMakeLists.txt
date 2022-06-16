@@ -10,7 +10,7 @@ set(kritacurvepaintop_SOURCES
 
 ki18n_wrap_ui(kritacurvepaintop_SOURCES wdgcurveoptions.ui )
 
-kis_add_library(kritacurvepaintop MODULE ${kritacurvepaintop_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritacurvepaintop MODULE ${kritacurvepaintop_SOURCES})
 
 target_link_libraries(kritacurvepaintop kritalibpaintop)
 

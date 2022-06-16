@@ -27,7 +27,7 @@ set(kritadefaulttools_SOURCES
 ki18n_wrap_ui(kritadefaulttools_SOURCES wdgcolorsampler.ui wdgmovetool.ui wdgmultihandtool.ui)
 qt5_add_resources(kritadefaulttools_SOURCES defaulttools.qrc )
 
-kis_add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES} PCH_FILE kis_image_pch.h)
+add_library(kritadefaulttools MODULE ${kritadefaulttools_SOURCES})
 
 generate_export_header(kritadefaulttools BASE_NAME kritadefaulttools)
 

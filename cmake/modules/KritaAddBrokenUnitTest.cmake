@@ -41,7 +41,7 @@ function(KRITA_ADD_UNIT_TEST)
   add_executable(${_targetname} ${gui_args} ${_sources})
 
   if (KRITA_ENABLE_PCH AND ARG_PCH_FILE)
-      set_property(TARGET ${_targetname} PROPERTY PCH_WARN_INVALID TRUE )
+      set_property(TARGET ${_targetname} APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
       target_precompile_headers(${_targetname} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/pch/${LOCAL_PCH_FILE}>")
   endif()
 
@@ -104,7 +104,7 @@ function(KRITA_ADD_UNIT_TESTS)
     # and then reuse this PCH for all other tests
 
     if (KRITA_ENABLE_PCH AND ${_testsCount} GREATER "2")
-        set_property(TARGET ${_targetname} PROPERTY PCH_WARN_INVALID TRUE )
+        set_property(TARGET ${_targetname} APPEND PROPERTY COMPILE_FLAGS "-Winvalid-pch" )
 
         if (NOT pch_source_target)
             set (pch_source_target ${target_name})

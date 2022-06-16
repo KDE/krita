@@ -261,6 +261,11 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
             KisKeyframeSP keyframe = channel->keyframeAt(time);
             if (!keyframe && m_autokeyMode != KisAutoKey::NONE) {
 
+                /**
+                 * In instant preview mode we just reuse the LodN plane.
+                 * If autokey mode is "blank", then we just clear the LodN
+                 * plane.
+                 */
                 if (!isLodNMode) {
                     int activeKeyTime = channel->activeKeyframeTime(time);
 

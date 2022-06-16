@@ -50,6 +50,9 @@ public:
 
     KisTransformMaskParamsInterfaceSP clone() const override;
 
+    void translateKeyframesOnChannel(qreal translation, const KoID& channelID);
+    void translateSrcAndDst(const QPointF &offset) override;
+
     static KisTransformMaskParamsInterfaceSP fromXML(const QDomElement &e);
 
     /*** Some utility methods for creating an animated transform mask and for creating keyframes using a reference

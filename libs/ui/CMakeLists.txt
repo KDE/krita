@@ -657,17 +657,6 @@ endif()
 kis_add_library(kritaui SHARED ${kritaui_HEADERS_MOC} ${kritaui_LIB_SRCS})
 generate_export_header(kritaui BASE_NAME kritaui)
 
-#
-# A temporary fix until we find out why $<COMPILE_LANGUAGE:CXX>
-# doesn't filter out objc files
-#
-if(APPLE)
-    set_source_files_properties(
-        input/kis_extended_modifiers_mapper_osx.mm
-        osx.mm
-        PROPERTIES SKIP_PRECOMPILE_HEADERS TRUE)
-endif()
-
 target_link_libraries(kritaui KF5::CoreAddons KF5::Completion KF5::I18n KF5::ItemViews Qt5::Network
                       kritaversion kritaimpex kritacolor kritaimage kritalibbrush kritawidgets kritawidgetutils kritaresources ${PNG_LIBRARIES}
 )

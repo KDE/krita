@@ -6,6 +6,6 @@ ki18n_wrap_ui(kritanoisefilter_SOURCES
     wdgnoiseoptions.ui
     )
 
-kis_add_library(kritanoisefilter MODULE ${kritanoisefilter_SOURCES})
+kis_add_library(kritanoisefilter MODULE ${kritanoisefilter_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritanoisefilter kritaui)
 install(TARGETS kritanoisefilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

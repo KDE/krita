@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritarandompickfilter_SOURCES
     wdgrandompickoptions.ui
     )
 
-kis_add_library(kritarandompickfilter MODULE ${kritarandompickfilter_SOURCES})
+kis_add_library(kritarandompickfilter MODULE ${kritarandompickfilter_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritarandompickfilter kritaui)
 

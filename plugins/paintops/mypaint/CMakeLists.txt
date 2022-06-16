@@ -24,7 +24,7 @@ set(kritamypaintop_SOURCES
 
 ki18n_wrap_ui(kritamypaintop_SOURCES wdgmypaintoptions.ui wdgmypaintcurveoption.ui)
 
-kis_add_library(kritamypaintop MODULE ${kritamypaintop_SOURCES})
+kis_add_library(kritamypaintop MODULE ${kritamypaintop_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritamypaintop kritalibpaintop mypaint kritawidgetutils kritaui kritalibbrush kritaresources)
 

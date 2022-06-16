@@ -7,7 +7,7 @@ set(kritaqimageioexport_SOURCES
 ki18n_wrap_ui(kritaqimageioexport_SOURCES kis_wdg_options_qimageio.ui)
 ki18n_wrap_ui(kritaqimageioexport_SOURCES )
 
-kis_add_library(kritaqimageioexport MODULE ${kritaqimageioexport_SOURCES})
+kis_add_library(kritaqimageioexport MODULE ${kritaqimageioexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaqimageioexport kritaui kritaimpex)
 
@@ -18,7 +18,7 @@ set(kritaqimageioimport_SOURCES
     )
 
 
-kis_add_library(kritaqimageioimport MODULE ${kritaqimageioimport_SOURCES})
+kis_add_library(kritaqimageioimport MODULE ${kritaqimageioimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaqimageioimport kritaui)
 

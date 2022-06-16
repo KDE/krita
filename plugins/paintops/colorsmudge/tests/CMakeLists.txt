@@ -6,7 +6,7 @@ macro_add_unittest_definitions()
 
 include(ECMAddTests)
 
-kis_add_test(
+ecm_add_test(
     KisColorsmudgeOpTest.cpp
     ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
     TEST_NAME KisColorsmudgeOpTest

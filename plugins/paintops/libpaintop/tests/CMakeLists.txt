@@ -19,7 +19,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    kis_add_test(kis_sensors_test.cpp
+    ecm_add_test(kis_sensors_test.cpp
         NAME_PREFIX "plugins-libpaintop-"
         LINK_LIBRARIES kritaimage kritalibpaintop Qt5::Test)
 

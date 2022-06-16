@@ -6,7 +6,7 @@ set(kritatgaexport_SOURCES
 
 ki18n_wrap_ui(kritatgaexport_SOURCES )
 
-kis_add_library(kritatgaexport MODULE ${kritatgaexport_SOURCES})
+kis_add_library(kritatgaexport MODULE ${kritatgaexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritatgaexport kritaui kritaimpex)
 
@@ -18,7 +18,7 @@ set(kritatgaimport_SOURCES
 
 ki18n_wrap_ui(kritatgaimport_SOURCES )
 
-kis_add_library(kritatgaimport MODULE ${kritatgaimport_SOURCES})
+kis_add_library(kritatgaimport MODULE ${kritatgaimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritatgaimport kritaui)
 

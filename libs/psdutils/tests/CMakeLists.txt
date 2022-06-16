@@ -11,7 +11,7 @@ else (WIN32)
     set(PSD_TEST_LIBS kritapsdutils Qt5::Test)
 endif (WIN32)
 
-kis_add_tests(
+ecm_add_tests(
     psd_utils_test.cpp
     compression_test.cpp
     NAME_PREFIX "kritapsdutils-"

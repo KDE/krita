@@ -10,7 +10,7 @@ if (BUILD_TESTING)
     add_definitions(-DCMAKE_INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 endif()
 
-kis_add_library(kritaplugin SHARED ${kritaplugin_LIB_SRCS})
+kis_add_library(kritaplugin SHARED ${kritaplugin_LIB_SRCS} PCH_FILE kis_global_pch.h)
 generate_export_header(kritaplugin BASE_NAME kritaplugin)
 
 target_link_libraries(kritaplugin

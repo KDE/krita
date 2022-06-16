@@ -4,7 +4,7 @@ set(kritatooldyna_SOURCES
     )
 
 
-kis_add_library(kritatooldyna MODULE ${kritatooldyna_SOURCES})
+kis_add_library(kritatooldyna MODULE ${kritatooldyna_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritatooldyna kritaui)
 

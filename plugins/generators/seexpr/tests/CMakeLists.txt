@@ -19,7 +19,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    kis_add_tests(
+    ecm_add_tests(
         kis_seexpr_generator_test.cpp
 
         NAME_PREFIX "plugins-generators-"

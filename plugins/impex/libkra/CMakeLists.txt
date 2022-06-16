@@ -19,7 +19,7 @@ set(kritalibkra_LIB_SRCS
     kra_converter.cpp
 )
 
-kis_add_library(kritalibkra SHARED ${kritalibkra_LIB_SRCS})
+kis_add_library(kritalibkra SHARED ${kritalibkra_LIB_SRCS} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritalibkra kritaui)
 generate_export_header(kritalibkra BASE_NAME kritalibkra)
 

@@ -16,7 +16,7 @@ ki18n_wrap_ui(kritaresourcemanager_SOURCES
     WdgDlgResourceManager.ui
 )
 
-kis_add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES})
+kis_add_library(kritaresourcemanager MODULE ${kritaresourcemanager_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritaresourcemanager kritawidgets kritaui kritalibpaintop kritaresources kritaresourcewidgets)
 install(TARGETS kritaresourcemanager  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install(FILES resourcemanager.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

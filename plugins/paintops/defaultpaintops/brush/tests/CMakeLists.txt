@@ -24,7 +24,7 @@ if (APPLE)
     macos_test_fixrpath(KisDabRenderingQueueTest KisBrushOpTest)
 
 else (APPLE)
-    kis_add_test(KisDabRenderingQueueTest.cpp
+    ecm_add_test(KisDabRenderingQueueTest.cpp
         TEST_NAME KisDabRenderingQueueTest
         LINK_LIBRARIES kritadefaultpaintops kritalibpaintop kritaimage Qt5::Test
         NAME_PREFIX "plugins-defaultpaintops-"

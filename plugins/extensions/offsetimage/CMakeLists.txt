@@ -5,7 +5,7 @@ set(kritaoffsetimage_SOURCES
 )
 
 ki18n_wrap_ui(kritaoffsetimage_SOURCES wdg_offsetimage.ui )
-kis_add_library(kritaoffsetimage MODULE ${kritaoffsetimage_SOURCES})
+kis_add_library(kritaoffsetimage MODULE ${kritaoffsetimage_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritaoffsetimage kritaui)
 install(TARGETS kritaoffsetimage  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( FILES  offsetimage.xmlgui  DESTINATION ${DATA_INSTALL_DIR}/kritaplugins)

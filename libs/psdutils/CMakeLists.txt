@@ -11,7 +11,7 @@ set(kritapsdutils_LIB_SRCS
     asl/kis_asl_writer.cpp
 )
 
-kis_add_library(kritapsdutils SHARED ${kritapsdutils_LIB_SRCS})
+kis_add_library(kritapsdutils SHARED ${kritapsdutils_LIB_SRCS} PCH_FILE kis_global_pch.h)
 generate_export_header(kritapsdutils BASE_NAME kritapsdutils)
 
 target_include_directories(kritapsdutils

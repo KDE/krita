@@ -37,7 +37,7 @@ set(kritaxcfimport_SOURCES
     )
 
 
-kis_add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES})
+kis_add_library(kritaxcfimport MODULE ${kritaxcfimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaxcfimport kritaui )
 

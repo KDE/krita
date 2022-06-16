@@ -18,7 +18,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    kis_add_test(
+    ecm_add_test(
         kis_heightmap_test.cpp
         TEST_NAME kis_heightmap_test
         LINK_LIBRARIES kritaui Qt5::Test

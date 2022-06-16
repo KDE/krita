@@ -3,7 +3,7 @@ include(KritaAddBrokenUnitTest)
 include_directories(${CMAKE_SOURCE_DIR}/sdk/tests)
 macro_add_unittest_definitions()
 
-kis_add_tests(
+ecm_add_tests(
     TestResourceCacheDb.cpp
     TestResourceLoaderRegistry.cpp
     TestResourceLocator.cpp

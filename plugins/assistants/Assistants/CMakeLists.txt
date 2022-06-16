@@ -19,7 +19,7 @@ set(kritaassistanttool_SOURCES
 
 ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )
 
-kis_add_library(kritaassistanttool MODULE ${kritaassistanttool_SOURCES})
+kis_add_library(kritaassistanttool MODULE ${kritaassistanttool_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaassistanttool kritaui kritaflake   )
 

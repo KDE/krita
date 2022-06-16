@@ -4,7 +4,7 @@ include(ECMAddTests)
 
 macro_add_unittest_definitions()
 
-kis_add_test(
+ecm_add_test(
     TestNodeView.cpp
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "plugins-dockers-layerdocker-")

@@ -9,7 +9,7 @@ set(kritatangentnormalpaintop_SOURCES
 
 ki18n_wrap_ui(kritatangentnormalpaintop_SOURCES wdgtangenttiltoption.ui )
 
-kis_add_library(kritatangentnormalpaintop MODULE ${kritatangentnormalpaintop_SOURCES})
+kis_add_library(kritatangentnormalpaintop MODULE ${kritatangentnormalpaintop_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritatangentnormalpaintop kritalibpaintop)
 

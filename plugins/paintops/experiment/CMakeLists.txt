@@ -8,7 +8,7 @@ set(kritaexperimentpaintop_SOURCES
 
 ki18n_wrap_ui(kritaexperimentpaintop_SOURCES wdgexperimentoptions.ui )
 
-kis_add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_SOURCES})
+kis_add_library(kritaexperimentpaintop MODULE ${kritaexperimentpaintop_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaexperimentpaintop kritalibpaintop)
 

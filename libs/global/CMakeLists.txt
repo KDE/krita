@@ -59,7 +59,7 @@ if (ANDROID)
 endif()
 
 kis_add_library(kritaglobal SHARED ${kritaglobal_LIB_SRCS}
-   )
+    PCH_FILE kis_qt_only_pch.h)
 generate_export_header(kritaglobal BASE_NAME kritaglobal)
 
 target_link_libraries(kritaglobal 

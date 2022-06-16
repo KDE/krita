@@ -15,7 +15,7 @@ krita_add_broken_unit_test(move_stroke_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/st
 
 ########### next target ###############
 
-kis_add_test(move_selection_stroke_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp ../strokes/move_selection_stroke_strategy.cpp
+ecm_add_test(move_selection_stroke_test.cpp ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp ../strokes/move_selection_stroke_strategy.cpp
     TEST_NAME MoveSelectionStrokeTest
     LINK_LIBRARIES kritabasicflakes kritaui Qt5::Test
     NAME_PREFIX "plugins-tools-basictools-")

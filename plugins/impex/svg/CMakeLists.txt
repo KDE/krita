@@ -4,7 +4,7 @@ set(kritasvgimport_SOURCES
     kis_svg_import.cc
     )
 
-kis_add_library(kritasvgimport MODULE ${kritasvgimport_SOURCES})
+kis_add_library(kritasvgimport MODULE ${kritasvgimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 add_definitions(${SVG_DEFINITIONS})
 

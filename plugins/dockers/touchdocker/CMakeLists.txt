@@ -11,7 +11,7 @@ endif(WIN32)
 
 qt5_add_resources(KRITA_TOUCHDOCKER_SOURCES touchdocker.qrc)
 
-kis_add_library(kritatouchdocker MODULE ${KRITA_TOUCHDOCKER_SOURCES})
+kis_add_library(kritatouchdocker MODULE ${KRITA_TOUCHDOCKER_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritatouchdocker 
     kritaui 
     kritaqml

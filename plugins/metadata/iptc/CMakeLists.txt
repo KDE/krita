@@ -3,7 +3,7 @@ set(kritaiptc_SOURCES
     kis_iptc_plugin.cpp
 )
 
-kis_add_library(kritaiptc MODULE ${kritaiptc_SOURCES})
+kis_add_library(kritaiptc MODULE ${kritaiptc_SOURCES} PCH_FILE kis_global_pch.h)
 
 generate_export_header(kritaiptc)
 

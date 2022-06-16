@@ -10,7 +10,7 @@ set(kritacommand_LIB_SRCS
         kis_command_utils.cpp
 )
 
-kis_add_library(kritacommand SHARED ${kritacommand_LIB_SRCS})
+kis_add_library(kritacommand SHARED ${kritacommand_LIB_SRCS} PCH_FILE kis_global_pch.h)
 generate_export_header(kritacommand BASE_NAME kritacommand)
 
 target_link_libraries(kritacommand

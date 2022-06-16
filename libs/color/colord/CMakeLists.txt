@@ -36,7 +36,7 @@ set_source_files_properties(${COLORD_SENSOR_INTERFACE_XML} PROPERTIES CLASSNAME 
 qt5_add_dbus_interface(kritacolord_SRCS ${COLORD_SENSOR_INTERFACE_XML} CdSensorInterface)
 
 
-kis_add_library(kritacolord SHARED ${kritacolord_SRCS})
+kis_add_library(kritacolord SHARED ${kritacolord_SRCS} PCH_FILE kis_global_pch.h PCH_FILE kis_global_pch.h)
 target_link_libraries(kritacolord kritaglobal Qt5::DBus Qt5::Concurrent Qt5::Core Qt5::Gui)
 generate_export_header(kritacolord BASE_NAME kritacolord)
 

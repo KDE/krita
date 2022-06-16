@@ -10,7 +10,7 @@ ki18n_wrap_ui(calligradockers_SRCS
 )
 
 
-kis_add_library(kritasvgcollectiondocker MODULE ${calligradockers_SRCS})
+kis_add_library(kritasvgcollectiondocker MODULE ${calligradockers_SRCS} PCH_FILE kis_global_pch.h)
 
 target_link_libraries(kritasvgcollectiondocker kritawidgets kritaui)
 

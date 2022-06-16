@@ -12,7 +12,7 @@ set(kritaheifimport_SOURCES
 
 ki18n_wrap_ui(kritaheifimport_SOURCES DlgHeifImport.ui)
 
-kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
+kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaheifimport kritaui kritalibkra
     ${HEIF_LDFLAGS} ${HEIF_LIBRARIES}
@@ -28,7 +28,7 @@ set(kritaheifexport_SOURCES
 ki18n_wrap_ui(kritaheifexport_SOURCES WdgHeifExport.ui)
 
 
-kis_add_library(kritaheifexport MODULE ${kritaheifexport_SOURCES})
+kis_add_library(kritaheifexport MODULE ${kritaheifexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaheifexport kritaui kritalibkra kritaimpex ${HEIF_LDFLAGS} ${HEIF_LIBRARIES} )
 

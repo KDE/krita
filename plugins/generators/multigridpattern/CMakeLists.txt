@@ -8,7 +8,7 @@ ki18n_wrap_ui(kritamultigridpatterngenerator_SOURCES
     wdgmultigridpatternoptions.ui
     )
 
-kis_add_library(kritamultigridpatterngenerator MODULE ${kritamultigridpatterngenerator_SOURCES})
+kis_add_library(kritamultigridpatterngenerator MODULE ${kritamultigridpatterngenerator_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritamultigridpatterngenerator kritaui)
 

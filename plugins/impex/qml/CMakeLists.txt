@@ -5,7 +5,7 @@ set(kritaqmlexport_SOURCES
     qml_export.cc
     )
 
-kis_add_library(kritaqmlexport MODULE ${kritaqmlexport_SOURCES})
+kis_add_library(kritaqmlexport MODULE ${kritaqmlexport_SOURCES} PCH_FILE kis_image_pch.h)
 
 target_link_libraries(kritaqmlexport kritaui kritaimpex)
 

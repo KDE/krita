@@ -3,6 +3,6 @@ set(kritafastcolortransferfilter_SOURCES
     kis_wdg_fastcolortransfer.cpp
 )
 ki18n_wrap_ui(kritafastcolortransferfilter_SOURCES wdgfastcolortransfer.ui)
-kis_add_library(kritafastcolortransferfilter MODULE ${kritafastcolortransferfilter_SOURCES})
+kis_add_library(kritafastcolortransferfilter MODULE ${kritafastcolortransferfilter_SOURCES} PCH_FILE kis_image_pch.h)
 target_link_libraries(kritafastcolortransferfilter kritaui)
 install(TARGETS kritafastcolortransferfilter  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

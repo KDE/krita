@@ -1298,31 +1298,41 @@ void KisPainter::paintEllipse(const QRectF &rect)
     paintPolygon(points);
 }
 
-void KisPainter::paintEllipse(qreal axis_a,qreal axis_b,qreal angle,QPointF offset)
-{
+void KisPainter::paintEllipse(qreal axis_a, qreal axis_b, qreal angle, QPointF offset) {
     // Read https://rohankjoshi.medium.com/the-equation-for-a-rotated-ellipse-5888731da76
-    // and https://stackoverflow.com/questions/55100965/algorithm-for-plotting-2d-xy-graph
-    // for information of the algorithm
-    qreal semiAxisA=axis_a/2;
-    qreal semiAxisB=axis_b/2;
-    qreal sinA= qSin(angle);
-    qreal sqSinA= sinA*sinA;
-    qreal cosA= qCos(angle);
-    qreal sqCosA= cosA*cosA;
-    qreal aSq=semiAxisA*semiAxisA;
-    qreal bSq=semiAxisB*semiAxisB;
-    int canvasBound=qCeil(qMax(semiAxisA,semiAxisB));
-    for (int x = -canvasBound; x <= canvasBound; ++x) {
-        for (int y = -canvasBound; y <= canvasBound; ++y) {
-            qreal pdX=2*x*(aSq*sqSinA+bSq*sqCosA)+y*(bSq-aSq)*sin(2*angle);
-            qreal pdY=x*(bSq-aSq)*sin(2*angle)+2*y*(aSq*sqCosA+bSq*sqSinA);
-            qreal gradient= qSqrt(pdX*pdX+pdY*pdY);
-            qreal paraboloid=(aSq*sqSinA+bSq*sqCosA)*x*x
-                    +2*(bSq-aSq)*sinA*cosA*x*y
-                    +(aSq*sqCosA+ bSq*sqSinA)*y*y
-                    -aSq*bSq;
-            if(qAbs(paraboloid) < gradient*0.5){
-                paintAt(KisPaintInformation(QPointF(x+offset.x(),y+offset.y())),
+    // and https://stackoverflow.com/questions/55100965/algorithm-for-plotting-2d-xy-graph/55120230#55120230
+    // for information of the algorithm.
+    //
+    // Using long double for more precision, try to see if that improves.
+    // Because Qt does not provide long double version of most functions,
+    // I have to use std instead.
+    //
+    // TODO: take the direction of the gradient in to the drawing condition. The SO answer didn't, but I don't see why.
+    long double semiAxisA = axis_a / 2.0L;
+    long double semiAxisB = axis_b / 2.0L;
+    long double sinA = std::sin(angle);
+    long double sqSinA = sinA * sinA;
+    long double cosA = std::cos(angle);
+    long double sqCosA = cosA * cosA;
+    long double aSq = semiAxisA * semiAxisA;
+    long double bSq = semiAxisB * semiAxisB;
+    int canvasBound = std::ceil(semiAxisA > semiAxisB ? semiAxisA : semiAxisB);
+    for (int xI = -canvasBound; xI <= canvasBound; ++xI) {
+        for (int yI = -canvasBound; yI <= canvasBound; ++yI) {
+            long double xR = xI;
+            long double yR = yI;
+            // pd stands for partial derivative.
+            long double pdX = 2.0L * xR * (aSq * sqSinA + bSq * sqCosA) + yR * (bSq - aSq) * sin(2.0L * angle);
+            long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosA + bSq * sqSinA);
+            long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
+            long double paraboloid = (aSq * sqSinA + bSq * sqCosA) * xR * xR
+                                     + 2.0L * (bSq - aSq) * sinA * cosA * xR * yR
+                                     + (aSq * sqCosA + bSq * sqSinA) * yR * yR
+                                     - aSq * bSq;
+            if (std::abs(paraboloid) < gradient * 0.5L) {
+                paintAt(KisPaintInformation(QPointF(
+                                xI + qRound(offset.x()),
+                                yI + qRound(offset.y()))),
                         new KisDistanceInformation());
             }
         }

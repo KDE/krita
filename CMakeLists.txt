@@ -257,6 +257,13 @@ add_feature_info("Enable updaters" ENABLE_UPDATERS "Enable updaters/update notif
 option(KRITA_ENABLE_PCH "Enable precompiled headers support" ON)
 add_feature_info("Precompiled Headers" KRITA_ENABLE_PCH "precompiled headers make build process faster on some systems")
 
+set(ADDRESS_SANITIZER_ENABLED FALSE)
+if (ECM_ENABLE_SANITIZERS MATCHES address)
+    set(ADDRESS_SANITIZER_ENABLED TRUE)
+endif()
+
+add_feature_info("ASAN address sanitizer" ADDRESS_SANITIZER_ENABLED "crash Krita if it violates address access rules (-DECM_ENABLE_SANITIZERS=address)")
+
 # Branding. Available options: default, Beta, Plus, Next. Can be set from command line
 if ("${BRANDING}" STREQUAL "")
     if (DEFINED KRITA_STABLE)

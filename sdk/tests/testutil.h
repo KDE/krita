@@ -15,7 +15,7 @@
 #include <QDir>
 
 #include <KoResource.h>
-#include <KoConfig.h>
+#include <KoTestConfig.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>

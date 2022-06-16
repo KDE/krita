@@ -7,7 +7,7 @@
 #ifndef KISTEST
 #define KISTEST
 
-#include <KoConfig.h>
+#include <KoTestConfig.h>
 #include <QApplication>
 #include <simpletest.h>
 #include <QStandardPaths>
@@ -248,7 +248,8 @@ int main(int argc, char *argv[]) \
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     qputenv("QT_LOGGING_RULES", ""); \
     QStandardPaths::setTestModeEnabled(true); \
-    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_RESOURCE_DIRS_FOR_TESTS)); \
+    qputenv("KRITA_PLUGIN_PATH", QByteArray(KRITA_PLUGINS_DIR_FOR_TESTS)); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \
     QTEST_DISABLE_KEYPAD_NAVIGATION \
@@ -266,7 +267,8 @@ int main(int argc, char *argv[]) \
     qputenv("LANGUAGE", "en"); \
     QLocale::setDefault(QLocale(QLocale::English, QLocale::UnitedStates)); \
     qputenv("QT_LOGGING_RULES", ""); \
-    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_EXTRA_RESOURCE_DIRS)); \
+    qputenv("EXTRA_RESOURCE_DIRS", QByteArray(KRITA_RESOURCE_DIRS_FOR_TESTS)); \
+    qputenv("KRITA_PLUGIN_PATH", QByteArray(KRITA_PLUGINS_DIR_FOR_TESTS)); \
     QStandardPaths::setTestModeEnabled(true); \
     QApplication app(argc, argv); \
     app.setAttribute(Qt::AA_Use96Dpi, true); \

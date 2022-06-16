@@ -52,10 +52,7 @@ KoJsonTrader::KoJsonTrader()
         appDir.cdUp();
 #endif
         searchDirs << appDir;
-        // help plugin trader find installed plugins when run from uninstalled tests
-#ifdef CMAKE_INSTALL_PREFIX
-        searchDirs << QDir(CMAKE_INSTALL_PREFIX);
-#endif
+
         Q_FOREACH (const QDir& dir, searchDirs) {
             const QStringList nameFilters = {
 #ifdef Q_OS_MACOS

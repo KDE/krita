@@ -9,7 +9,6 @@
 #include <KoColorSpace.h>
 #include <KoColor.h>
 #include <KoCompositeOp.h>
-#include <kis_config.h>
 #include "kis_painter.h"
 #include "kis_paint_device.h"
 #include "kis_paint_layer.h"
@@ -382,7 +381,7 @@ void KisPainterBasedStrokeStrategy::initStrokeCallback()
 
     runnableJobsInterface()->addRunnableJobs(jobs);
 }
-#include "kis_command_utils.h"
+
 void KisPainterBasedStrokeStrategy::finishStrokeCallback()
 {
     KisNodeSP node = m_resources->currentNode();

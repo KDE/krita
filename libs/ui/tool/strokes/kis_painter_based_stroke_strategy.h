@@ -8,7 +8,6 @@
 #define __KIS_PAINTER_BASED_STROKE_STRATEGY_H
 
 #include <QVector>
-#include <QRect>
 
 #include "KisRunnableBasedStrokeStrategy.h"
 #include "kis_resources_snapshot.h"

@@ -13,12 +13,6 @@
 
 class KisTransactionWrapperFactory;
 
-//enum AutoKeyMode {
-//    AUTOKEY_DISABLED = 0,
-//    AUTOKEY_DUPLICATE,
-//    AUTOKEY_BLANK
-//};
-
 /**
  * A tile based undo command.
  *

@@ -56,11 +56,7 @@ public:
     int transactionFrameId;
     KisDataManagerSP savedDataManager;
 
-//    KUndo2Command newFrameCommand;
     QScopedPointer<OptionalInterstrokeInfo> interstrokeInfo;
-//    boost::optional<QRect> autoKeyCleanupRect; // Needed for bug 441588
-//    // TODO Perhaps we can try to find the root cause of difference between
-//    // instant preview windows and linux to see why this is needed?
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
@@ -87,37 +83,6 @@ KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDe
     init(device);
     saveSelectionOutlineCache();
 }
-
-//void KisTransactionData::Private::tryCreateNewFrame(KisPaintDeviceSP device, int time)
-//{
-//    if (!device->framesInterface()) return;
-
-//    if (autoKeyMode == AUTOKEY_DISABLED) return;
-
-//    KisRasterKeyframeChannel *channel = device->keyframeChannel();
-//    KIS_ASSERT_RECOVER(channel) { return; }
-
-//    KisKeyframeSP keyframe = channel->keyframeAt(time);
-//    if (!keyframe) {
-//        int activeKeyTime = channel->activeKeyframeTime(time);
-
-//        if (autoKeyMode == AUTOKEY_DUPLICATE) {
-//            channel->copyKeyframe(activeKeyTime, time, &newFrameCommand);
-//        } else {
-//            autoKeyCleanupRect = device->exactBounds();
-//            channel->addKeyframe(time, &newFrameCommand);
-//        }
-
-//        keyframe = channel->keyframeAt(time);
-//        KIS_SAFE_ASSERT_RECOVER_RETURN(keyframe);
-
-//        // Use the same color label as previous keyframe...
-//        KisKeyframeSP previousKey = channel->keyframeAt(activeKeyTime);
-//        if (previousKey) {
-//            keyframe->setColorLabel(previousKey->colorLabel());
-//        }
-//    }
-//}
 
 void KisTransactionData::init(KisPaintDeviceSP device)
 {

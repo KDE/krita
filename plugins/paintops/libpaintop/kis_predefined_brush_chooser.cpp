@@ -10,6 +10,7 @@
 
 #include "kis_predefined_brush_chooser.h"
 
+#include <QtMath>
 #include <QLabel>
 #include <QLayout>
 #include <QCheckBox>

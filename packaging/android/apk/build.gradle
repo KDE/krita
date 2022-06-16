@@ -70,6 +70,14 @@ task copyAssets(type: Copy) {
     include '**'
 }
 
+task copyLocaleFiles(type: Copy) {
+    def libsDir = "../i/"
+    from "$libsDir/share/locale"
+    from "$libsDir/translations"
+    into 'assets/locale/'
+    include '**'
+}
+
 /*
  * Remove "share" folder in assets. It is copied both manually and by
  * androiddeployqt(reason in copyAssets task).
@@ -156,10 +164,10 @@ android {
     configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
     configure.finalizedBy(copyAssets)
+    configure.finalizedBy(copyLocaleFiles)
     configure.finalizedBy(removeDuplicateAssets)
 }
 
 dependencies {
     implementation 'com.android.billingclient:billing:3.0.3'
 }
-

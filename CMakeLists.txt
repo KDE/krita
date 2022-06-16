@@ -1,6 +1,12 @@
 cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 
-project(krita)
+set(SUPPORTED_LANGUAGES CXX C)
+
+if (APPLE)
+    list (APPEND SUPPORTED_LANGUAGES OBJC OBJCXX)
+endif()
+
+project(krita LANGUAGES ${SUPPORTED_LANGUAGES})
 message(STATUS "Using CMake version: ${CMAKE_VERSION}")
 
 set(MIN_QT_VERSION 5.12.0)

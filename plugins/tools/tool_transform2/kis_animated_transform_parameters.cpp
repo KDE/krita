@@ -320,6 +320,25 @@ KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::clone() co
     return toQShared(new KisAnimatedTransformMaskParameters(*this));
 }
 
+void KisAnimatedTransformMaskParameters::translateKeyframesOnChannel(qreal translation, const KoID &channelID)
+{
+    QSharedPointer<KisScalarKeyframeChannel> channel = m_d->transformChannels[channelID.id()];
+    if (channel) {
+        const QSet<int> keyframeTimes = channel->allKeyframeTimes();
+        Q_FOREACH(int keyframeTime, keyframeTimes) {
+            KisScalarKeyframeSP keyframe = channel->keyframeAt<KisScalarKeyframe>(keyframeTime);
+            keyframe->setValue(keyframe->value() + translation);
+        }
+    }
+}
+
+void KisAnimatedTransformMaskParameters::translateSrcAndDst(const QPointF &offset)
+{
+    translateKeyframesOnChannel(offset.x(), KisKeyframeChannel::PositionX);
+    translateKeyframesOnChannel(offset.y(), KisKeyframeChannel::PositionY);
+    KisTransformMaskAdapter::translateSrcAndDst(offset);
+}
+
 KisTransformMaskParamsInterfaceSP KisAnimatedTransformMaskParameters::fromXML(const QDomElement &e)
 {
     QSharedPointer<KisAnimatedTransformMaskParameters> p = toQShared(new KisAnimatedTransformMaskParameters());

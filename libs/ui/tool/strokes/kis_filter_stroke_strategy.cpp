@@ -190,6 +190,10 @@ void KisFilterStrokeStrategy::initStrokeCallback()
     const int time = m_d->image->animationInterface()->currentTime();
     const bool isLodNMode = m_d->levelOfDetail > 0;
     KisRasterKeyframeChannel* channel = dynamic_cast<KisRasterKeyframeChannel*>(m_d->node->getKeyframeChannel(KisKeyframeChannel::Raster.id()));
+
+    /**
+     * In instant preview mode we just reuse the LodN plane
+     */
     if (channel && !isLodNMode) {
         KisKeyframeSP keyframe = channel->keyframeAt(time);
         if (!keyframe && m_d->m_autokeyMode != KisAutoKey::NONE) {

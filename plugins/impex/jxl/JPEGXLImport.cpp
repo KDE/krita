@@ -306,9 +306,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 dbgFile << "Importing frame @" << d.m_nextFrameTime;
                 auto *channel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
                 auto *frame = dynamic_cast<KisRasterKeyframeChannel *>(channel);
+                image->animationInterface()->setFullClipRangeEndTime(
+                    d.m_nextFrameTime);
                 frame->importFrame(d.m_nextFrameTime, d.m_currentFrame, nullptr);
                 d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
-                image->animationInterface()->setFullClipRangeEndTime(d.m_nextFrameTime);
             } else {
                 layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
             }

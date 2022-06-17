@@ -11,6 +11,7 @@
 #include "kis_algebra_2d.h"
 #include "KisDocument.h"
 #include "KisReferenceImagesLayer.h"
+#include "kis_layer_utils.h"
 
 struct KisReferenceImagesDecoration::Private {
     struct Buffer
@@ -95,6 +96,7 @@ KisReferenceImagesDecoration::KisReferenceImagesDecoration(QPointer<KisView> par
 {
     connect(document->image().data(), SIGNAL(sigNodeAddedAsync(KisNodeSP)), this, SLOT(slotNodeAdded(KisNodeSP)));
     connect(document->image().data(), SIGNAL(sigRemoveNodeAsync(KisNodeSP)), this, SLOT(slotNodeRemoved(KisNodeSP)));
+    connect(document->image().data(), SIGNAL(sigLayersChangedAsync()), this, SLOT(slotLayersChanged()));
     connect(document, &KisDocument::sigReferenceImagesLayerChanged, this, &KisReferenceImagesDecoration::slotNodeAdded);
 
     auto referenceImageLayer = document->referenceImagesLayer();
@@ -159,6 +161,16 @@ void KisReferenceImagesDecoration::slotNodeRemoved(KisNodeSP node)
     if (referenceImagesLayer && referenceImagesLayer == d->layer) {
         setReferenceImageLayer(0, true);
     }
+}
+
+void KisReferenceImagesDecoration::slotLayersChanged()
+{
+    KisImageSP image = view()->image();
+
+    KisReferenceImagesLayer *referenceImagesLayer =
+        KisLayerUtils::findNodeByType<KisReferenceImagesLayer>(image->root());
+
+    setReferenceImageLayer(referenceImagesLayer, true);
 }
 
 void KisReferenceImagesDecoration::slotReferenceImagesChanged(const QRectF &dirtyRect)

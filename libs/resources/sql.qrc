@@ -22,5 +22,6 @@
         <file alias="create_index_tag_translations.sql">sql/create_index_tag_translations.sql</file>
         <file alias="create_index_resource_tags.sql">sql/create_index_resource_tags.sql</file>
         <file alias="create_index_resources.sql">sql/create_index_resources.sql</file>
+        <file alias="create_index_resources_signature.sql">sql/create_index_resources_signature.sql</file>
     </qresource>
 </RCC>

@@ -501,10 +501,15 @@ bool KisAllResourcesModel::reloadResource(KoResourceSP resource)
         qWarning() << "Failed to reload resource" << resource;
         return false;
     }
-    bool r = resetQuery();
+
+    /**
+     * We don't have to call reset query here, because reloading a resource
+     * doesn't change any database content.
+     */
+
     QModelIndex index = indexForResource(resource);
     emit dataChanged(index, index, {Qt::EditRole});
-    return r;
+    return true;
 }
 
 bool KisAllResourcesModel::renameResource(KoResourceSP resource, const QString &name)

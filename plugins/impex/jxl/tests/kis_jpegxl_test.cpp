@@ -66,7 +66,8 @@ void KisJPEGXLTest::testAnimation()
     QCOMPARE(channel1->keyframeCount(), 24);
 
     QCOMPARE(image->animationInterface()->framerate(), 32);
-    QCOMPARE(image->animationInterface()->fullClipRange(), KisTimeSpan::fromTimeToTime(0, 24));
+    QCOMPARE(image->animationInterface()->fullClipRange(),
+             KisTimeSpan::fromTimeToTime(0, 23));
     QCOMPARE(image->animationInterface()->currentTime(), 0);
 }
 

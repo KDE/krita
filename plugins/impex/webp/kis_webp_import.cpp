@@ -264,8 +264,16 @@ KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
                     const int currentFrameTime =
                         std::lround(static_cast<double>(nextTimestamp)
                                     / static_cast<double>(iter.duration));
-                    dbgFile << "Importing frame @" << iter.frame_num
-                            << currentFrameTime << iter.duration;
+                    dbgFile << QString(
+                                   "Importing frame %1 @ %2, duration %3 ms, "
+                                   "blending %4, disposal %5")
+                                   .arg(iter.frame_num)
+                                   .arg(currentFrameTime)
+                                   .arg(iter.duration)
+                                   .arg(iter.blend_method)
+                                   .arg(iter.dispose_method)
+                                   .toStdString()
+                                   .c_str();
                     KisKeyframeChannel *channel = layer->getKeyframeChannel(
                         KisKeyframeChannel::Raster.id(),
                         true);

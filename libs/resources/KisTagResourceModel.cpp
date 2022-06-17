@@ -579,7 +579,6 @@ QString KisAllTagResourceModel::createQuery(bool onlyActive, bool returnADbIndex
                             ",      tags.comment                   as tag_comment"
                             ",      resources.status               as resource_active\n"
                             ",      resources.tooltip              as resource_tooltip\n"
-                            ",      resources.thumbnail            as resource_thumbnail\n"
                             ",      resources.status               as resource_active\n"
                             ",      resources.storage_id           as storage_id\n"
                             ",      storages.active                as resource_storage_active\n"

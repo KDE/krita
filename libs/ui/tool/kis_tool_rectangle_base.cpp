@@ -316,12 +316,6 @@ void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 
 QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end)
 {
-    /**
-     * To make the dragging user-friendly it should work in a bit
-     * non-obvious way: the start-drag point must be handled with
-     * "ceil"/"floor" (depending on the direction of the drag) and the
-     * end-drag point should follow usual "round" semantics.
-     */
     QTransform t;
     t.rotateRadians(-getRotationAngle());
     QPointF end1 = t.map(end-start) + start;
@@ -339,7 +333,7 @@ QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end
 
     QRectF result;
     result.setCoords(newX0, newY0, newX1, newY1);
-    result.moveCenter(m_dragCenter);
+
     return result.normalized();
 }
 

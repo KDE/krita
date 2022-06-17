@@ -427,6 +427,9 @@ void JPEGXLExport::initializeCapabilities()
     // here
 
     QList<QPair<KoID, KoID>> supportedColorModels;
+    addCapability(KisExportCheckRegistry::instance()
+                      ->get("AnimationCheck")
+                      ->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("sRGBProfileCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("ExifCheck")->create(KisExportCheckBase::SUPPORTED));
     addCapability(KisExportCheckRegistry::instance()->get("MultiLayerCheck")->create(KisExportCheckBase::PARTIALLY));

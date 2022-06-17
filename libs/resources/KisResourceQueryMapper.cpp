@@ -4,6 +4,7 @@
 
 #include "KisResourceQueryMapper.h"
 
+#include "kis_assert.h"
 #include <QString>
 #include <QVariant>
 #include <QImage>
@@ -29,7 +30,32 @@ QImage KisResourceQueryMapper::getThumbnailFromQuery(const QSqlQuery &query, boo
     if (!img.isNull()) {
         return img;
     } else {
-        QByteArray ba = query.value(useResourcePrefix ? "resource_thumbnail" : "thumbnail").toByteArray();
+        const int resourceId = query.value(useResourcePrefix ? "resource_id" : "id").toInt();
+        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(resourceId >= 0, img);
+
+        bool result = false;
+        QSqlQuery thumbQuery;
+        result = thumbQuery.prepare("SELECT thumbnail FROM resources WHERE resources.id = :resource_id");
+        if (!result) {
+            qWarning() << "Failed to prepare query for thumbnail of" << resourceId << thumbQuery.lastError();
+            return img;
+        }
+
+        thumbQuery.bindValue(":resource_id", resourceId);
+
+        result = thumbQuery.exec();
+
+        if (!result) {
+            qWarning() << "Failed to execute query for thumbnail of" << resourceId << thumbQuery.lastError();
+            return img;
+        }
+
+        if (!thumbQuery.next()) {
+            qWarning() << "Failed to find thumbnail of" << resourceId;
+            return img;
+        }
+
+        QByteArray ba = thumbQuery.value("thumbnail").toByteArray();
         QBuffer buf(&ba);
         buf.open(QBuffer::ReadOnly);
         img.load(&buf, "PNG");

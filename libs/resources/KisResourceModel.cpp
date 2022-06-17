@@ -56,7 +56,6 @@ KisAllResourcesModel::KisAllResourcesModel(const QString &resourceType, QObject 
                                        ",      resources.name\n"
                                        ",      resources.filename\n"
                                        ",      resources.tooltip\n"
-                                       ",      resources.thumbnail\n"
                                        ",      resources.status\n"
                                        ",      resources.md5sum\n"
                                        ",      storages.location\n"

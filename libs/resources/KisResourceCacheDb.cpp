@@ -35,7 +35,7 @@ const QString dbDriver = "QSQLITE";
 
 const QString KisResourceCacheDb::dbLocationKey { "ResourceCacheDbDirectory" };
 const QString KisResourceCacheDb::resourceCacheDbFilename { "resourcecache.sqlite" };
-const QString KisResourceCacheDb::databaseVersion { "0.0.16" };
+const QString KisResourceCacheDb::databaseVersion { "0.0.17" };
 QStringList KisResourceCacheDb::storageTypes { QStringList() };
 QStringList KisResourceCacheDb::disabledBundles { QStringList() << "Krita_3_Default_Resources.bundle" };
 
@@ -176,12 +176,15 @@ QSqlError createDatabase(const QString &location)
                 schemaIsOutDated = true;
                 KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
-                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.16")
+                if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.17")
                         && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0
-                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.16")) < 0) {
+                        && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.17")) < 0) {
                     bool from14to15 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14");
                     bool from15to16 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
                             || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15");
+                    bool from16to17 = oldSchemaVersionNumber == QVersionNumber::fromString("0.0.14")
+                            || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.15")
+                            || oldSchemaVersionNumber == QVersionNumber::fromString("0.0.16");
 
                     bool success = true;
                     if (from14to15) {
@@ -216,6 +219,23 @@ QSqlError createDatabase(const QString &location)
                             else {
                                 return QSqlError("Error executing SQL", QString("Could not find SQL file %1").arg(index), QSqlError::StatementError);
                             }
+                        }
+                    }
+
+                    if (from16to17) {
+                        qWarning() << "Going to update resource signature index";
+
+                        QFile f(":/create_index_resources_signature.sql");
+                        if (f.open(QFile::ReadOnly)) {
+                            QSqlQuery q;
+                            if (!q.exec(f.readAll())) {
+                                qWarning() << "Could not create index for resources signature" << q.lastError();
+                                return db.lastError();
+                            }
+                            infoResources << "Created resources signature index";
+                        }
+                        else {
+                            return QSqlError("Error executing SQL", QString("Could not find SQL file for resources signature index"), QSqlError::StatementError);
                         }
                     }
 
@@ -272,7 +292,13 @@ QSqlError createDatabase(const QString &location)
     }
 
     // Create indexes
-    QStringList indexes = QStringList() << "storages" << "versioned_resources" << "tags" << "resources" << "tag_translations" << "resource_tags";
+    QStringList indexes;
+
+    // these indexes came in version 0.0.16
+    indexes << "storages" << "versioned_resources" << "tags" << "resources" << "tag_translations" << "resource_tags";
+
+    // this indexes came in version 0.0.17
+    indexes << "resources_signature";
 
     Q_FOREACH(const QString &index, indexes) {
         QFile f(":/create_index_" + index + ".sql");

@@ -27,6 +27,7 @@
 #include <kis_exif_info_visitor.h>
 #include <kis_image_animation_interface.h>
 #include <kis_layer.h>
+#include <kis_layer_utils.h>
 #include <kis_meta_data_backend_registry.h>
 #include <kis_raster_keyframe_channel.h>
 #include <kis_time_span.h>
@@ -73,7 +74,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(io->isWritable(), ImportExportCodes::NoAccessToWrite);
 
-    const auto image = document->savingImage();
+    KisImageSP image = document->savingImage();
     const auto bounds = image->bounds();
     const auto *const cs = image->colorSpace();
 
@@ -312,7 +313,12 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
     }
 
     {
-        if (image->animationInterface()->hasAnimation() && cfg->getBool("haveAnimation", true)) {
+        if (image->animationInterface()->hasAnimation()
+            && cfg->getBool("haveAnimation", true)) {
+            // Flatten the image, projections don't have keyframes.
+            KisLayerUtils::flattenImage(image, nullptr);
+            image->waitForDone();
+
             const auto *frames = image->projection()->keyframeChannel();
             const auto times = [&]() {
                 auto t = frames->allKeyframeTimes().toList();

@@ -340,11 +340,14 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 frameHeader->duration = [&]() {
                     const auto nextKeyframe = frames->nextKeyframeTime(i);
                     if (nextKeyframe == -1) {
-                        return static_cast<uint32_t>(image->animationInterface()->fullClipRange().end() - i);
+                        return static_cast<uint32_t>(
+                            image->animationInterface()->fullClipRange().end()
+                            - i + 1);
                     } else {
                         return static_cast<uint32_t>(frames->nextKeyframeTime(i) - i);
                     }
                 }();
+                frameHeader->is_last = 0;
 
                 if (JxlEncoderSetFrameHeader(frameSettings, frameHeader.get()) != JXL_ENC_SUCCESS) {
                     errFile << "JxlEncoderSetFrameHeader failed";

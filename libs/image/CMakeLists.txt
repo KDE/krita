@@ -36,25 +36,25 @@ if(HAVE_XSIMD)
 endif()
 
 set(kritaimage_LIB_SRCS
-    tiles3/kis_tile.cc
-    tiles3/kis_tile_data.cc
-    tiles3/kis_tile_data_store.cc
-    tiles3/kis_tile_data_pooler.cc
-    tiles3/kis_tiled_data_manager.cc
-    tiles3/KisTiledExtentManager.cpp
-    tiles3/kis_memento_manager.cc
-    tiles3/kis_hline_iterator.cpp
-    tiles3/kis_vline_iterator.cpp
-    tiles3/kis_random_accessor.cc
-    tiles3/swap/kis_abstract_compression.cpp
-    tiles3/swap/kis_lzf_compression.cpp
-    tiles3/swap/kis_abstract_tile_compressor.cpp
-    tiles3/swap/kis_legacy_tile_compressor.cpp
-    tiles3/swap/kis_tile_compressor_2.cpp
-    tiles3/swap/kis_chunk_allocator.cpp
-    tiles3/swap/kis_memory_window.cpp
-    tiles3/swap/kis_swapped_data_store.cpp
-    tiles3/swap/kis_tile_data_swapper.cpp
+   tiles3/kis_tile.cc
+   tiles3/kis_tile_data.cc
+   tiles3/kis_tile_data_store.cc
+   tiles3/kis_tile_data_pooler.cc
+   tiles3/kis_tiled_data_manager.cc
+   tiles3/KisTiledExtentManager.cpp
+   tiles3/kis_memento_manager.cc
+   tiles3/kis_hline_iterator.cpp
+   tiles3/kis_vline_iterator.cpp
+   tiles3/kis_random_accessor.cc
+   tiles3/swap/kis_abstract_compression.cpp
+   tiles3/swap/kis_lzf_compression.cpp
+   tiles3/swap/kis_abstract_tile_compressor.cpp
+   tiles3/swap/kis_legacy_tile_compressor.cpp
+   tiles3/swap/kis_tile_compressor_2.cpp
+   tiles3/swap/kis_chunk_allocator.cpp
+   tiles3/swap/kis_memory_window.cpp
+   tiles3/swap/kis_swapped_data_store.cpp
+   tiles3/swap/kis_tile_data_swapper.cpp
    kis_distance_information.cpp
    kis_painter.cc
    kis_painter_blt_multi_fixed.cpp
@@ -149,6 +149,7 @@ set(kritaimage_LIB_SRCS
    lazybrush/KisWatershedWorker.cpp
    lazybrush/kis_colorize_mask.cpp
    lazybrush/kis_colorize_stroke_strategy.cpp
+   KisAnimAutoKey.cpp
    KisDelayedUpdateNodeInterface.cpp
    KisCroppedOriginalLayerInterface.cpp
    KisDecoratedNodeInterface.cpp

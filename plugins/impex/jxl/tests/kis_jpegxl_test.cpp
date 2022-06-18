@@ -71,6 +71,41 @@ void KisJPEGXLTest::testAnimation()
     QCOMPARE(image->animationInterface()->currentTime(), 0);
 }
 
+void KisJPEGXLTest::testAnimationWithTail()
+{
+    const auto inputFileName =
+        TestUtil::fetchDataFileLazy("/sources/animated/animation_test.jxl");
+
+    QScopedPointer<KisDocument> doc(
+        qobject_cast<KisDocument *>(KisPart::instance()->createDocument()));
+
+    KisImportExportManager manager(doc.data());
+    doc->setFileBatchMode(true);
+
+    const auto status = manager.importDocument(inputFileName, QString());
+    QVERIFY(status.isOk());
+
+    KisImageSP image = doc->image();
+
+    auto node1 = doc->image()->root()->firstChild();
+
+    QVERIFY(node1->inherits("KisPaintLayer"));
+
+    KisPaintLayerSP layer1 = qobject_cast<KisPaintLayer *>(node1.data());
+
+    QVERIFY(layer1->isAnimated());
+
+    const auto *channel1 =
+        layer1->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    QVERIFY(channel1);
+    QCOMPARE(channel1->keyframeCount(), 4);
+
+    QCOMPARE(image->animationInterface()->framerate(), 5);
+    QCOMPARE(image->animationInterface()->fullClipRange(),
+             KisTimeSpan::fromTimeToTime(0, 19));
+    QCOMPARE(image->animationInterface()->currentTime(), 0);
+}
+
 void KisJPEGXLTest::testHDR()
 {
     const auto inputFileName = TestUtil::fetchDataFileLazy("/sources/netflix/hdr_cosmos01000_cicp9-16-0_lossless.jxl");

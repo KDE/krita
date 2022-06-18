@@ -15,6 +15,7 @@ class KisJPEGXLTest : public QObject
 
 private Q_SLOTS:
     void testAnimation();
+    void testAnimationWithTail();
     void testFiles();
     void testHDR();
     void testImportIncorrectFormat();

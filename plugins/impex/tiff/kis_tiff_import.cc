@@ -971,6 +971,60 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     uint32_t compression = COMPRESSION_NONE;
     TIFFGetFieldDefaulted(image, TIFFTAG_COMPRESSION, &compression, COMPRESSION_NONE);
 
+#ifdef HAVE_JPEG_TURBO
+    uint32_t hasSplitTables = 0;
+    uint8_t *tables = nullptr;
+    uint32_t sz = 0;
+    QVector<unsigned char> jpegBuf;
+
+    auto handle = [&]() -> std::unique_ptr<void, decltype(&tjDestroy)> {
+        if (planarconfig == PLANARCONFIG_CONTIG
+            && color_type == PHOTOMETRIC_YCBCR
+            && compression == COMPRESSION_JPEG) {
+            return {tjInitDecompress(), &tjDestroy};
+        } else {
+            return {nullptr, &tjDestroy};
+        }
+    }();
+
+    if (color_type == PHOTOMETRIC_YCBCR && compression == COMPRESSION_JPEG
+        && hsubsampling != 1 && vsubsampling != 1) {
+        dbgFile << "Setting up libjpeg-turbo for handling subsampled JPEG...";
+        if (!TIFFGetFieldDefaulted(image,
+                                   TIFFTAG_JPEGTABLESMODE,
+                                   &hasSplitTables)) {
+            errFile << "Error when detecting the JPEG coefficient "
+                       "table mode";
+            return ImportExportCodes::FileFormatIncorrect;
+        }
+        if (hasSplitTables) {
+            if (!TIFFGetField(image, TIFFTAG_JPEGTABLES, &sz, &tables)) {
+                errFile << "Unable to retrieve the JPEG abbreviated datastream";
+                return ImportExportCodes::FileFormatIncorrect;
+            }
+        }
+
+        {
+            int width = 0;
+            int height = 0;
+
+            if (hasSplitTables
+                && tjDecompressHeader(handle.get(), tables, sz, &width, &height)
+                    != 0) {
+                errFile << tjGetErrorStr2(handle.get());
+                m_doc->setErrorMessage(
+                    i18nc("TIFF errors",
+                          "This TIFF file is compressed with JPEG, but "
+                          "libjpeg-turbo could not load its coefficient "
+                          "quantization and/or Huffman coding tables. "
+                          "Please upgrade your version of libjpeg-turbo "
+                          "and try again."));
+                return ImportExportCodes::FileFormatIncorrect;
+            }
+        }
+    }
+#endif
+
     if (TIFFIsTiled(image)) {
         dbgFile << "tiled image";
         uint32_t tileWidth = 0;
@@ -979,36 +1033,102 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         uint32_t y = 0;
         TIFFGetField(image, TIFFTAG_TILEWIDTH, &tileWidth);
         TIFFGetField(image, TIFFTAG_TILELENGTH, &tileHeight);
-        uint32_t linewidth = (tileWidth * depth * nbchannels) / 8;
-        if (planarconfig == PLANARCONFIG_CONTIG) {
-            buf.reset(_TIFFmalloc(TIFFTileSize(image)));
+        tmsize_t tileSize = TIFFTileSize(image);
+
+        if (planarconfig == PLANARCONFIG_CONTIG
+            && !(color_type == PHOTOMETRIC_YCBCR
+                 && compression == COMPRESSION_JPEG && hsubsampling != 1
+                 && vsubsampling != 1)) {
+            buf.reset(_TIFFmalloc(tileSize));
             if (depth < 16) {
                 tiffstream =
                     QSharedPointer<KisBufferStreamContigBelow16>::create(
-                    static_cast<uint8_t *>(buf.get()),
-                    depth,
-                    linewidth);
+                        static_cast<uint8_t *>(buf.get()),
+                        depth,
+                        tileSize / tileHeight);
             } else if (depth >= 16 && depth < 32) {
                 tiffstream =
                     QSharedPointer<KisBufferStreamContigBelow32>::create(
-                    static_cast<uint8_t *>(buf.get()),
-                    depth,
-                    linewidth);
+                        static_cast<uint8_t *>(buf.get()),
+                        depth,
+                        tileSize / tileHeight);
             } else {
                 tiffstream =
                     QSharedPointer<KisBufferStreamContigAbove32>::create(
-                    static_cast<uint8_t *>(buf.get()),
-                    depth,
-                    linewidth);
+                        static_cast<uint8_t *>(buf.get()),
+                        depth,
+                        tileSize / tileHeight);
             }
+        } else if (planarconfig == PLANARCONFIG_CONTIG
+                   && color_type == PHOTOMETRIC_YCBCR
+                   && compression == COMPRESSION_JPEG) {
+#ifdef HAVE_JPEG_TURBO
+            jpegBuf.resize(tileSize);
+            ps_buf->resize(nbchannels);
+            TIFFReadRawTile(image, 0, jpegBuf.data(), tileSize);
+
+            int width = tileWidth;
+            int height = tileHeight;
+            int jpegSubsamp = TJ_444;
+            int jpegColorspace = TJCS_YCbCr;
+
+            if (tjDecompressHeader3(handle.get(),
+                                    jpegBuf.data(),
+                                    tileSize,
+                                    &width,
+                                    &height,
+                                    &jpegSubsamp,
+                                    &jpegColorspace)
+                != 0) {
+                errFile << tjGetErrorStr2(handle.get());
+                return ImportExportCodes::FileFormatIncorrect;
+            }
+
+            QVector<tsize_t> lineSizes(nbchannels);
+            for (uint32_t i = 0; i < nbchannels; i++) {
+                const unsigned long uncompressedTileSize =
+                    tjPlaneSizeYUV(i, width, 0, height, jpegColorspace);
+                KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
+                    uncompressedTileSize != (unsigned long)-1,
+                    ImportExportCodes::FileFormatIncorrect);
+                dbgFile << QString("Uncompressed tile size (plane %1): %2")
+                               .arg(i)
+                               .arg(uncompressedTileSize)
+                               .toStdString()
+                               .c_str();
+                tsize_t scanLineSize = uncompressedTileSize / tileHeight;
+                dbgFile << QString("scan line size (plane %1): %2")
+                               .arg(i)
+                               .arg(scanLineSize)
+                               .toStdString()
+                               .c_str();
+                (*ps_buf)[i] =
+                    static_cast<uint8_t *>(_TIFFmalloc(uncompressedTileSize));
+                lineSizes[i] = scanLineSize;
+            }
+            tiffstream =
+                QSharedPointer<KisBufferStreamInterleaveUpsample>::create(
+                    ps_buf->data(),
+                    nbchannels,
+                    depth,
+                    lineSizes.data(),
+                    hsubsampling,
+                    vsubsampling);
+#else
+            m_doc->setErrorMessage(
+                i18nc("TIFF",
+                      "Subsampled YCbCr TIFF files compressed with JPEG cannot "
+                      "be loaded."));
+            return ImportExportCodes::FileFormatIncorrect;
+#endif
         } else {
             ps_buf->resize(nbchannels);
+            tsize_t scanLineSize = tileSize / tileHeight;
+            dbgFile << " scanLineSize for each plan =" << scanLineSize;
             QVector<tsize_t> lineSizes(nbchannels);
-            tmsize_t baseSize = TIFFTileSize(image);
             for (uint32_t i = 0; i < nbchannels; i++) {
-                (*ps_buf)[i] = static_cast<uint8_t*>(_TIFFmalloc(baseSize));
-                lineSizes[i] = tileWidth;
-                ;
+                (*ps_buf)[i] = static_cast<uint8_t *>(_TIFFmalloc(tileSize));
+                lineSizes[i] = scanLineSize / lineSizeCoeffs[i];
             }
             tiffstream = QSharedPointer<KisBufferStreamSeparate>::create(
                 ps_buf->data(),
@@ -1016,13 +1136,64 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 depth,
                 lineSizes.data());
         }
-        dbgFile << linewidth << "" << nbchannels << ""
-                << layer->paintDevice()->colorSpace()->colorChannelCount();
+        dbgFile << "Scanline size =" << TIFFRasterScanlineSize(image)
+                << " / tile size =" << TIFFTileSize(image)
+                << " / tile width =" << tileWidth
+                << " tileSize/tileHeight =" << tileSize / tileHeight;
+
+        dbgFile << " NbOfTiles =" << TIFFNumberOfTiles(image)
+                << " tileWidth =" << tileWidth << " tileSize =" << tileSize;
+
         for (y = 0; y < height; y += tileHeight) {
             for (x = 0; x < width; x += tileWidth) {
                 dbgFile << "Reading tile x =" << x << " y =" << y;
+#ifdef HAVE_JPEG_TURBO
+                if (planarconfig == PLANARCONFIG_CONTIG
+                    && !(color_type == PHOTOMETRIC_YCBCR
+                         && compression == COMPRESSION_JPEG && hsubsampling != 1
+                         && vsubsampling != 1)) {
+#else
                 if (planarconfig == PLANARCONFIG_CONTIG) {
+#endif
                     TIFFReadTile(image, buf.get(), x, y, 0, (tsample_t)-1);
+#ifdef HAVE_JPEG_TURBO
+                } else if (planarconfig == PLANARCONFIG_CONTIG
+                           && (color_type == PHOTOMETRIC_YCBCR
+                               && compression == COMPRESSION_JPEG)) {
+                    uint32_t tile =
+                        TIFFComputeTile(image, x, y, 0, (tsample_t)-1);
+                    TIFFReadRawTile(image, tile, jpegBuf.data(), tileSize);
+
+                    int width = tileWidth;
+                    int height = tileHeight;
+                    int jpegSubsamp = TJ_444;
+                    int jpegColorspace = TJCS_YCbCr;
+
+                    if (tjDecompressHeader3(handle.get(),
+                                            jpegBuf.data(),
+                                            tileSize,
+                                            &width,
+                                            &height,
+                                            &jpegSubsamp,
+                                            &jpegColorspace)
+                        != 0) {
+                        errFile << tjGetErrorStr2(handle.get());
+                        return ImportExportCodes::FileFormatIncorrect;
+                    }
+
+                    if (tjDecompressToYUVPlanes(handle.get(),
+                                                jpegBuf.data(),
+                                                tileSize,
+                                                ps_buf->data(),
+                                                width,
+                                                nullptr,
+                                                height,
+                                                0)
+                        != 0) {
+                        errFile << tjGetErrorStr2(handle.get());
+                        return ImportExportCodes::FileFormatIncorrect;
+                    }
+#endif
                 } else {
                     for (uint16_t i = 0; i < nbchannels; i++) {
                         TIFFReadTile(image, (*ps_buf)[i], x, y, 0, i);
@@ -1030,13 +1201,14 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                 }
                 uint32_t realTileWidth =
                     (x + tileWidth) < width ? tileWidth : width - x;
-                for (uint32_t yintile = 0; y + yintile < height
-                     && yintile < tileHeight / vsubsampling;) {
-                    tiffReader->copyDataToChannels(x,
-                                                   y + yintile,
-                                                   realTileWidth,
-                                                   tiffstream);
-                    yintile += 1;
+                for (uint32_t yintile = 0;
+                     yintile < tileHeight && y + yintile < height;) {
+                    uint32_t linesread =
+                        tiffReader->copyDataToChannels(x,
+                                                       y + yintile,
+                                                       realTileWidth,
+                                                       tiffstream);
+                    yintile += linesread;
                     tiffstream->moveToLine(yintile);
                 }
                 tiffstream->restart();
@@ -1052,62 +1224,6 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
             qMin(rowsPerStrip,
                  height); // when TIFFNumberOfStrips(image) == 1 it might happen
                           // that rowsPerStrip is incorrectly set
-
-#ifdef HAVE_JPEG_TURBO
-        uint32_t hasSplitTables = 0;
-        uint8_t *tables = nullptr;
-        uint32_t sz = 0;
-        QVector<unsigned char> jpegBuf;
-
-        auto handle = [&]() -> std::unique_ptr<void, decltype(&tjDestroy)> {
-            if (planarconfig == PLANARCONFIG_CONTIG
-                && color_type == PHOTOMETRIC_YCBCR
-                && compression == COMPRESSION_JPEG) {
-                return {tjInitDecompress(), &tjDestroy};
-            } else {
-                return {nullptr, &tjDestroy};
-            }
-        }();
-
-        if (color_type == PHOTOMETRIC_YCBCR && compression == COMPRESSION_JPEG
-            && hsubsampling != 1 && vsubsampling != 1) {
-            jpegBuf.resize(stripsize);
-            dbgFile << "Setting up libjpeg-turbo for handling subsampled JPEG "
-                       "strips...";
-            if (!TIFFGetFieldDefaulted(image,
-                                       TIFFTAG_JPEGTABLESMODE,
-                                       &hasSplitTables)) {
-                errFile << "Error when detecting the JPEG coefficient "
-                           "table mode";
-                return ImportExportCodes::FileFormatIncorrect;
-            }
-            if (hasSplitTables) {
-                if (!TIFFGetField(image, TIFFTAG_JPEGTABLES, &sz, &tables)) {
-                    errFile
-                        << "Unable to retrieve the JPEG abbreviated datastream";
-                    return ImportExportCodes::FileFormatIncorrect;
-                }
-            }
-
-            {
-                int width = 0;
-                int height = 0;
-
-                if (hasSplitTables
-                    && tjDecompressHeader(handle.get(),
-                                          tables,
-                                          sz,
-                                          &width,
-                                          &height)
-                        != 0) {
-                    errFile << tjGetErrorStr2(handle.get());
-                    m_doc->setErrorMessage(i18nc("TIFF errors", "This TIFF file is compressed with JPEG, but libjpeg-turbo could not load its coefficient quantization and/or Huffman coding tables. Please upgrade your version of libjpeg-turbo and try again."));
-                    return ImportExportCodes::FileFormatIncorrect;
-                }
-            }
-        }
-#endif
-
         if (planarconfig == PLANARCONFIG_CONTIG
             && !(color_type == PHOTOMETRIC_YCBCR
                  && compression == COMPRESSION_JPEG && hsubsampling != 1
@@ -1136,6 +1252,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
                    && color_type == PHOTOMETRIC_YCBCR
                    && compression == COMPRESSION_JPEG) {
 #ifdef HAVE_JPEG_TURBO
+            jpegBuf.resize(stripsize);
             ps_buf->resize(nbchannels);
             TIFFReadRawStrip(image, 0, jpegBuf.data(), stripsize);
 

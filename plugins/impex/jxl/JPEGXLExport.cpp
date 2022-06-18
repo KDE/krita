@@ -319,7 +319,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             KisLayerUtils::flattenImage(image, nullptr);
             image->waitForDone();
 
-            const auto *frames = image->projection()->keyframeChannel();
+            const KisNodeSP projection = image->rootLayer()->firstChild();
+            KIS_ASSERT(projection->isAnimated());
+            KIS_ASSERT(projection->hasEditablePaintDevice());
+
+            const auto *frames = projection->paintDevice()->keyframeChannel();
             const auto times = [&]() {
                 auto t = frames->allKeyframeTimes().toList();
                 std::sort(t.begin(), t.end());

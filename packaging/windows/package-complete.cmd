@@ -592,10 +592,10 @@ if not x%IS_TDM% == x (
 ) else if not x%IS_MSYS_CLANG% == x (
 	if x%is_x64% == x (
 		:: msys-mingw-w64-clang64 x86
-		set "STDLIBS=libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1 libcrypto-1_1"
+		set "STDLIBS=libomp libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1 libcrypto-1_1"
 	) else (
 		:: msys-mingw-w64-clang64 x64
-		set "STDLIBS=libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1-x64 libcrypto-1_1-x64"
+		set "STDLIBS=libomp libssp-0 libunwind libc++ libwinpthread-1 libiconv-2 zlib1 libexpat-1 libintl-8 libssl-1_1-x64 libcrypto-1_1-x64"
 	)
 ) else if not x%IS_LLVM_MINGW% == x (
     :: llvm-mingw

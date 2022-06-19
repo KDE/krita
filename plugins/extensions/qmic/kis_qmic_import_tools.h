@@ -110,7 +110,8 @@ inline void gmicImageToPaintDevice(const KisQMicImage &srcGmicImage,
     }
 }
 
-inline KisNodeListSP inputNodes(InputLayerMode inputMode, KisNodeSP currentNode)
+inline KisNodeListSP
+inputNodes(KisImageSP image, InputLayerMode inputMode, KisNodeSP currentNode)
 {
     /*
         ACTIVE_LAYER,
@@ -130,11 +131,30 @@ inline KisNodeListSP inputNodes(InputLayerMode inputMode, KisNodeSP currentNode)
 
     KisNodeListSP result(new QList<KisNodeSP>());
     switch (inputMode) {
+    case InputLayerMode::NoInput: {
+        break;
+    }
     case InputLayerMode::Active: {
         if (isAvailable(currentNode)) {
             result->append(currentNode);
         }
         break; // drop down in case of one more layer modes
+    }
+    case InputLayerMode::All: {
+        result = [&]() {
+            KisNodeListSP r(new QList<KisNodeSP>());
+            KisLayerUtils::recursiveApplyNodes(
+                image->root(),
+                [&](KisNodeSP item) {
+                    auto *paintLayer =
+                        dynamic_cast<KisPaintLayer *>(item.data());
+                    if (paintLayer) {
+                        r->append(item);
+                    }
+                });
+            return r;
+        }();
+        break;
     }
     case InputLayerMode::ActiveAndBelow: {
         if (isAvailable(currentNode)) {
@@ -154,9 +174,6 @@ inline KisNodeListSP inputNodes(InputLayerMode inputMode, KisNodeSP currentNode)
         }
         break;
     }
-    case InputLayerMode::NoInput: {
-        break;
-    }
     case InputLayerMode::AllVisible:
     case InputLayerMode::AllInvisible: {
         const bool visibility = (inputMode == InputLayerMode::AllInvisible);
@@ -164,7 +181,7 @@ inline KisNodeListSP inputNodes(InputLayerMode inputMode, KisNodeSP currentNode)
         result = [&]() {
             KisNodeListSP r(new QList<KisNodeSP>());
             KisLayerUtils::recursiveApplyNodes(
-                currentNode,
+                image->root(),
                 [&](KisNodeSP item) {
                     auto *paintLayer =
                         dynamic_cast<KisPaintLayer *>(item.data());
@@ -173,17 +190,6 @@ inline KisNodeListSP inputNodes(InputLayerMode inputMode, KisNodeSP currentNode)
                         r->append(item);
                     }
                 });
-            return r;
-        }();
-        break;
-    }
-    case InputLayerMode::All: {
-        result = [&]() {
-            KisNodeListSP r(new QList<KisNodeSP>());
-            KisLayerUtils::recursiveApplyNodes(currentNode,
-                                               [&](KisNodeSP item) {
-                                                   r->append(item);
-                                               });
             return r;
         }();
         break;

@@ -44,6 +44,9 @@ KisImageInterface::~KisImageInterface() = default;
 
 QSize KisImageInterface::gmic_qt_get_image_size(int mode)
 {
+    if (!p->m_viewManager)
+        return {};
+
     KisSelectionSP selection = p->m_viewManager->image()->globalSelection();
 
     if (selection) {
@@ -57,7 +60,8 @@ QSize KisImageInterface::gmic_qt_get_image_size(int mode)
         dbgPlugins << "getImageSize()" << mode;
 
         KisNodeListSP nodes =
-            KisQmicImportTools::inputNodes(p->m_inputMode,
+            KisQmicImportTools::inputNodes(p->m_viewManager->image(),
+                                           p->m_inputMode,
                                            p->m_viewManager->activeNode());
         if (nodes->isEmpty()) {
             return size;
@@ -146,7 +150,8 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
     dbgPlugins << "prepareCroppedImages()" << message << rc << inputMode;
 
     KisNodeListSP nodes =
-        KisQmicImportTools::inputNodes(p->m_inputMode,
+        KisQmicImportTools::inputNodes(p->m_viewManager->image(),
+                                       p->m_inputMode,
                                        p->m_viewManager->activeNode());
     if (nodes->isEmpty()) {
         return {};
@@ -232,7 +237,8 @@ void KisImageInterface::gmic_qt_output_images(int mode, QVector<KisQMicImageSP> 
         KUndo2MagicString actionName = kundo2_i18n("G'MIC filter");
         KisNodeSP rootNode = p->m_viewManager->image()->root();
         KisNodeListSP mappedLayers =
-            KisQmicImportTools::inputNodes(p->m_inputMode,
+            KisQmicImportTools::inputNodes(p->m_viewManager->image(),
+                                           p->m_inputMode,
                                            p->m_viewManager->activeNode());
         // p->m_gmicApplicator->setProperties(p->m_viewManager->image(), rootNode, images, actionName, layers);
         // p->m_gmicApplicator->apply();

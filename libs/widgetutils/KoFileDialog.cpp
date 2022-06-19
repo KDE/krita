@@ -22,6 +22,8 @@
 #include <KoJsonTrader.h>
 #include "WidgetUtilsDebug.h"
 
+#include <kis_assert.h>
+
 class Q_DECL_HIDDEN KoFileDialog::Private
 {
 public:

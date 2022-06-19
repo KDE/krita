@@ -414,6 +414,10 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
 
             QString oneFilter;
             const QStringList suffixes = KisMimeDatabase::suffixesForMimeType(mimeType);
+            KIS_SAFE_ASSERT_RECOVER(!suffixes.isEmpty()) {
+                warnWidgetUtils << "KoFileDialog: Found no suffixes for mime type" << mimeType;
+                continue;
+            }
 
             Q_FOREACH(const QString &suffix, suffixes) {
                 const QString glob = QStringLiteral("*.") + suffix;
@@ -432,7 +436,6 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
             }
 
             Q_ASSERT(!description.isEmpty());
-            Q_ASSERT(!suffixes.isEmpty());
 
             FilterData filterData {};
             filterData.descriptionOnly = description;

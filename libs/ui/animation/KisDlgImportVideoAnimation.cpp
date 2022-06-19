@@ -337,7 +337,7 @@ QStringList KisDlgImportVideoAnimation::makeVideoMimeTypesList()
     supportedMimeTypes << "image/gif";
     supportedMimeTypes << "image/apng"; 
     supportedMimeTypes << "image/png";
-    supportedMimeTypes << "image/mov";       
+    supportedMimeTypes << "video/quicktime"; // MOV
     supportedMimeTypes << "video/ogg";
     supportedMimeTypes << "video/mp4";
     supportedMimeTypes << "video/mpeg";

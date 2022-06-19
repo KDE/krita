@@ -343,8 +343,8 @@ QStringList KisDlgImportVideoAnimation::makeVideoMimeTypesList()
     supportedMimeTypes << "video/mpeg";
     supportedMimeTypes << "video/webm";
 
-
-    supportedMimeTypes << "*/All files";
+    // All files
+    supportedMimeTypes << "application/octet-stream";
 
     return supportedMimeTypes;
 }

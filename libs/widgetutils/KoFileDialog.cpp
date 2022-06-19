@@ -399,12 +399,21 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
     FilterData ora {};
     // remaining
     QVector<FilterData> otherFileTypes;
+    // All files
+    bool hasAllFilesFilter = false;
 
     QStringList mimeList = mimeTypeList;
     mimeList.sort();
 
     Q_FOREACH(const QString &mimeType, mimeList) {
         if (!mimeSeen.contains(mimeType)) {
+            if (mimeType == QLatin1String("application/octet-stream")) {
+                // QFileDialog uses application/octet-stream for the
+                // "All files (*)" filter. We can do the same here.
+                hasAllFilesFilter = true;
+                mimeSeen << mimeType;
+                continue;
+            }
             QString description = KisMimeDatabase::descriptionForMimeType(mimeType);
             if (description.isEmpty() && !mimeType.isEmpty()) {
                 description = mimeType.split("/")[1];
@@ -505,6 +514,11 @@ void KoFileDialog::setMimeTypeFilters(const QStringList &mimeTypeList, QString d
     });
     Q_FOREACH(const FilterData &filterData, otherFileTypes) {
         addFilterItem(filterData);
+    }
+
+    if (hasAllFilesFilter) {
+        // Reusing Qt's existing "All files" translation
+        retFilterList.append(QFileDialog::tr("All files (*)"));
     }
 
     d->filterList = retFilterList;

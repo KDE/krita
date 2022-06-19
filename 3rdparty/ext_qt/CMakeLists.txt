@@ -62,10 +62,11 @@ if (WIN32)
         QMAKE_CXXFLAGS+=${SECURITY_CXX_FLAGS}
       )
     endif (MSVC)
-    if (QT_ENABLE_DEBUG_INFO OR MINGW)
+
+    if(QT_ENABLE_DEBUG_INFO OR WIN32)
         # Set the option to build Qt with debugging info enabled
         list(APPEND _QT_conf -force-debug-info)
-    endif(QT_ENABLE_DEBUG_INFO OR MINGW)
+    endif(QT_ENABLE_DEBUG_INFO OR WIN32)
     if (MINGW)
         if (NOT QT_ENABLE_DEBUG_INFO)
             # Generate minimal debug info for backtraces

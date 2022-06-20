@@ -11,16 +11,23 @@
 #include "kis_paintop_preset.h"
 #include "kis_paintop_settings.h"
 #include "KisPaintOpPresetUpdateProxy.h"
+#include "KisResourceModel.h"
+
 
 struct KisPresetUpdateMediator::Private
 {
+    Private() : model(ResourceType::PaintOpPresets) {}
     KisSignalAutoConnectionsStore connections;
+    KisResourceModel model;
+    QModelIndex linkedResourceIndex;
 };
 
 KisPresetUpdateMediator::KisPresetUpdateMediator()
     : KoResourceUpdateMediator(KoCanvasResource::CurrentPaintOpPreset),
       m_d(new Private)
 {
+    connect(&m_d->model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)),
+            this, SLOT(slotResourceChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&)));
 }
 
 KisPresetUpdateMediator::~KisPresetUpdateMediator()
@@ -38,11 +45,25 @@ void KisPresetUpdateMediator::connectResource(QVariant sourceResource)
         SIGNAL(sigSettingsChanged()),
         this,
         SLOT(slotSettingsChanged()));
+
+    m_d->linkedResourceIndex = m_d->model.indexForResource(preset);
 }
 
 void KisPresetUpdateMediator::slotSettingsChanged()
 {
     emit sigResourceChanged(key());
+}
+
+void KisPresetUpdateMediator::slotResourceChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
+{
+    /// the name of the preset is stored in KoResource, not
+    /// in KisPaintOpSettings, so we should track it separately
+
+    if (m_d->linkedResourceIndex.row() >= topLeft.row() &&
+            m_d->linkedResourceIndex.row() <= bottomRight.row()) {
+
+        emit sigResourceChanged(key());
+    }
 }
 
 
@@ -350,5 +371,26 @@ QVariant KisEraserModeResourceConverter::toSource(const QVariant &value, const Q
     if (!preset) return sourceValue;
 
     preset->settings()->setEraserMode(value.toBool());
+    return QVariant::fromValue(preset);
+}
+
+KisBrushNameResourceConverter::KisBrushNameResourceConverter()
+    : KoDerivedResourceConverter(KoCanvasResource::CurrentPaintOpPresetName,
+                                 KoCanvasResource::CurrentPaintOpPreset)
+{
+}
+
+QVariant KisBrushNameResourceConverter::fromSource(const QVariant &value)
+{
+    KisPaintOpPresetSP preset = value.value<KisPaintOpPresetSP>();
+    return preset ? preset->name() : QVariant();
+}
+
+QVariant KisBrushNameResourceConverter::toSource(const QVariant &value, const QVariant &sourceValue)
+{
+    KisPaintOpPresetSP preset = sourceValue.value<KisPaintOpPresetSP>();
+    if (!preset) return sourceValue;
+
+    preset->setName(value.toString());
     return QVariant::fromValue(preset);
 }

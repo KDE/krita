@@ -21,6 +21,7 @@ public:
 
 private Q_SLOTS:
     void slotSettingsChanged();
+    void slotResourceChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles);
 
 private:
     struct Private;
@@ -135,6 +136,14 @@ public:
     QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
 };
 
+class KisBrushNameResourceConverter : public KoDerivedResourceConverter
+{
+public:
+    KisBrushNameResourceConverter();
+
+    QVariant fromSource(const QVariant &value) override;
+    QVariant toSource(const QVariant &value, const QVariant &sourceValue) override;
+};
 
 
 #endif /* __KIS_DERIVED_RESOURCES_H */

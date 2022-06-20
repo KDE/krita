@@ -339,6 +339,7 @@ void KisViewManager::initializeResourceManager(KoCanvasResourceProvider *resourc
     resourceManager->addDerivedResourceConverter(toQShared(new KisLodSizeThresholdSupportedResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisEraserModeResourceConverter));
     resourceManager->addDerivedResourceConverter(toQShared(new KisPatternSizeResourceConverter));
+    resourceManager->addDerivedResourceConverter(toQShared(new KisBrushNameResourceConverter));
     resourceManager->addResourceUpdateMediator(toQShared(new KisPresetUpdateMediator));
 
     resourceManager->addActiveCanvasResourceDependency(

@@ -117,9 +117,19 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
     case(KoCanvasResource::Opacity):
         setOpacity(v.toDouble());
         break;
-    case(KoCanvasResource::CurrentPaintOpPreset):
-        requestUpdateOutline(m_outlineDocPoint, 0);
+    case(KoCanvasResource::CurrentPaintOpPreset): {
+        if (isActive()) {
+            requestUpdateOutline(m_outlineDocPoint, 0);
+        }
         break;
+    }
+    case KoCanvasResource::CurrentPaintOpPresetName: {
+        if (isActive()) {
+            const QString formattedBrushName = v.toString().replace("_", " ");
+            emit statusTextChanged(formattedBrushName);
+        }
+        break;
+    }
     default: //nothing
         break;
     }
@@ -132,7 +142,7 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 {
     if (currentPaintOpPreset()) {
-        QString formattedBrushName = currentPaintOpPreset()->name().replace("_", " ");
+        const QString formattedBrushName = currentPaintOpPreset() ? currentPaintOpPreset()->name().replace("_", " ") : QString();
         emit statusTextChanged(formattedBrushName);
     }
 
@@ -163,6 +173,7 @@ void KisToolPaint::deactivate()
     m_localOpacity = provider->opacity();
     m_localPreset = provider->currentPreset();
     provider->setOpacity(m_oldOpacity);
+    emit statusTextChanged(QString());
 
     KisTool::deactivate();
 }

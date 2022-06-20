@@ -161,8 +161,10 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             info->have_animation = JXL_TRUE;
             info->animation.have_timecodes = JXL_FALSE;
             info->animation.num_loops = 0;
-            info->animation.tps_numerator = 1;
-            info->animation.tps_denominator = static_cast<uint32_t>(image->animationInterface()->framerate());
+            // Unlike WebP, JXL does allow for setting proper framerates.
+            info->animation.tps_numerator =
+                static_cast<uint32_t>(image->animationInterface()->framerate());
+            info->animation.tps_denominator = 1;
         }
         return info;
     }();

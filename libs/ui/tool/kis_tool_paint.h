@@ -183,9 +183,12 @@ private:
     typedef KisSignalCompressorWithParam<SamplingJob> SamplingCompressor;
     QScopedPointer<SamplingCompressor> m_colorSamplingCompressor;
 
-    qreal m_localOpacity {1.0};
-    KisPaintOpPresetSP m_localPreset;
+    KisPaintOpPresetSP m_oldPreset;
     qreal m_oldOpacity {1.0};
+    bool m_oldPresetIsDirty {false};
+    int m_oldPresetVersion {-1};
+
+    void tryRestoreOpacitySnapshot();
 
 Q_SIGNALS:
     void sigPaintingFinished();

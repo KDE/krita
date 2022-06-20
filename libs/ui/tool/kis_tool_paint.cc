@@ -138,6 +138,43 @@ void KisToolPaint::canvasResourceChanged(int key, const QVariant& v)
 
 }
 
+void KisToolPaint::tryRestoreOpacitySnapshot()
+{
+    /**
+     * Here is a weird heuristics on when to restore
+     * brush opacity and when not. Basically, we should
+     * restore opacity to its saved if the brush preset
+     * hasn't changed too much, that is, its version is
+     * the same and it hasn't been reset into a clean
+     * state since then. The latter condition is checked
+     * in a fuzzy manner by just mangling the isDirty
+     * state before and after.
+     */
+
+    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
+
+    boost::optional<qreal> opacityToRestore;
+
+    KisPaintOpPresetSP newPreset = provider->currentPreset();
+
+    if (newPreset &&
+        newPreset == m_oldPreset &&
+        newPreset->version() == m_oldPresetVersion &&
+        (newPreset->isDirty() || !m_oldPresetIsDirty) ) {
+
+        opacityToRestore = m_oldOpacity;
+    }
+
+    m_oldPreset = newPreset;
+    m_oldPresetIsDirty = newPreset->isDirty();
+    m_oldPresetVersion = newPreset->version();
+    m_oldOpacity = provider->opacity();
+
+    if (opacityToRestore) {
+        provider->setOpacity(*opacityToRestore);
+    }
+}
+
 
 void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 {
@@ -155,11 +192,7 @@ void KisToolPaint::activate(const QSet<KoShape*> &shapes)
 
     }
 
-    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
-    if ( provider->currentPreset() == m_localPreset ) {
-        m_oldOpacity = provider->opacity();
-        provider->setOpacity(m_localOpacity);
-    }
+    tryRestoreOpacitySnapshot();
 }
 
 void KisToolPaint::deactivate()
@@ -169,10 +202,7 @@ void KisToolPaint::deactivate()
         disconnect(action("decrease_brush_size"), 0, this, 0);
     }
 
-    KisCanvasResourceProvider *provider = qobject_cast<KisCanvas2*>(canvas())->viewManager()->canvasResourceProvider();
-    m_localOpacity = provider->opacity();
-    m_localPreset = provider->currentPreset();
-    provider->setOpacity(m_oldOpacity);
+    tryRestoreOpacitySnapshot();
     emit statusTextChanged(QString());
 
     KisTool::deactivate();

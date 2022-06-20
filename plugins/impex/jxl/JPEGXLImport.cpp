@@ -264,15 +264,6 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                  "JPEG-XL image");
 
             layer = new KisPaintLayer(image, image->nextLayerName(), UCHAR_MAX);
-            if (d.m_info.have_animation) {
-                dbgFile << "Animation detected, framerate:" << d.m_info.animation.tps_numerator
-                        << d.m_info.animation.tps_denominator;
-                const int framerate = static_cast<int>(static_cast<double>(d.m_info.animation.tps_denominator)
-                                                       / static_cast<double>(d.m_info.animation.tps_numerator));
-                layer->enableAnimation();
-                image->animationInterface()->setFullClipRangeStartTime(0);
-                image->animationInterface()->setFramerate(framerate);
-            }
         } else if (status == JXL_DEC_NEED_IMAGE_OUT_BUFFER) {
             d.m = this;
             d.m_currentFrame = new KisPaintDevice(image->colorSpace());
@@ -305,10 +296,39 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             if (d.m_info.have_animation) {
                 dbgFile << "Importing frame @" << d.m_nextFrameTime
                         << d.m_header.duration;
+
+                if (d.m_nextFrameTime == 0) {
+                    dbgFile << "Animation detected, ticks per second:"
+                            << d.m_info.animation.tps_numerator
+                            << d.m_info.animation.tps_denominator;
+                    // XXX: How many ticks per second (FPS)?
+                    // If > 240, block the derivation-- it's a stock JXL and
+                    // Krita only supports up to 240 FPS.
+                    // We'll try to derive the framerate from the first frame
+                    // instead.
+                    int framerate =
+                        static_cast<int>(d.m_info.animation.tps_numerator
+                                         / d.m_info.animation.tps_denominator);
+                    if (framerate > 240) {
+                        warnFile << "JXL framerate exceeds 240FPS, "
+                                    "reapproximating from the duration of "
+                                    "the first frame";
+                        const int approximatedFramerate = std::lround(
+                            1000.0 / static_cast<double>(d.m_header.duration));
+                        framerate = std::max(approximatedFramerate, 1);
+                    }
+                    dbgFile << "Framerate:" << framerate;
+                    layer->enableAnimation();
+                    image->animationInterface()->setFullClipRangeStartTime(0);
+                    image->animationInterface()->setFramerate(framerate);
+                }
+
                 auto *channel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
                 auto *frame = dynamic_cast<KisRasterKeyframeChannel *>(channel);
                 frame->importFrame(d.m_nextFrameTime, d.m_currentFrame, nullptr);
-                d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
+                d.m_nextFrameTime +=
+                    std::lround(static_cast<double>(d.m_header.duration)
+                                / image->animationInterface()->framerate());
                 image->animationInterface()->setFullClipRangeEndTime(
                     d.m_nextFrameTime - 1);
             } else {

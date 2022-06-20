@@ -42,6 +42,7 @@ public:
     JxlFrameHeader m_header{};
     KisPaintDeviceSP m_currentFrame{nullptr};
     int m_nextFrameTime{0};
+    int m_durationFrameInTicks{0};
     KoID m_colorID;
     KoID m_depthID;
     bool m_forcedConversion;
@@ -315,7 +316,11 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                                     "the first frame";
                         const int approximatedFramerate = std::lround(
                             1000.0 / static_cast<double>(d.m_header.duration));
+                        d.m_durationFrameInTicks =
+                            static_cast<int>(d.m_header.duration);
                         framerate = std::max(approximatedFramerate, 1);
+                    } else {
+                        d.m_durationFrameInTicks = 1;
                     }
                     dbgFile << "Framerate:" << framerate;
                     layer->enableAnimation();
@@ -323,14 +328,19 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     image->animationInterface()->setFramerate(framerate);
                 }
 
+                const int currentFrameTime = std::lround(
+                    static_cast<double>(d.m_nextFrameTime)
+                    / static_cast<double>(d.m_durationFrameInTicks));
+
                 auto *channel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
                 auto *frame = dynamic_cast<KisRasterKeyframeChannel *>(channel);
-                frame->importFrame(d.m_nextFrameTime, d.m_currentFrame, nullptr);
-                d.m_nextFrameTime +=
-                    std::lround(static_cast<double>(d.m_header.duration)
-                                / image->animationInterface()->framerate());
                 image->animationInterface()->setFullClipRangeEndTime(
-                    d.m_nextFrameTime - 1);
+                    std::lround(static_cast<double>(d.m_nextFrameTime
+                                                    + d.m_header.duration)
+                                / static_cast<double>(d.m_durationFrameInTicks))
+                    - 1);
+                frame->importFrame(currentFrameTime, d.m_currentFrame, nullptr);
+                d.m_nextFrameTime += static_cast<int>(d.m_header.duration);
             } else {
                 layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
             }

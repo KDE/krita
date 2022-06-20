@@ -17,6 +17,7 @@
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
 #include <klocalizedstring.h>
+#include <kstandardguiitem.h>
 
 #include <KisMimeDatabase.h>
 #include <KoJsonTrader.h>
@@ -241,6 +242,8 @@ QString KoFileDialog::filename()
         QInputDialog mimeSelector;
         mimeSelector.setLabelText(i18n("Save As:"));
         mimeSelector.setComboBoxItems(d->filterList);
+        mimeSelector.setOkButtonText(KStandardGuiItem::ok().text());
+        mimeSelector.setCancelButtonText(KStandardGuiItem::cancel().text());
         // combobox as they stand, are very hard to scroll on a touch device
         mimeSelector.setOption(QInputDialog::UseListViewForComboBoxItems);
 

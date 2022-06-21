@@ -2104,53 +2104,6 @@ void KisPaintDeviceTest::testCrossDeviceFrameCopyChannel()
     testCrossDeviceFrameCopyImpl(true);
 }
 
-#include "kis_surrogate_undo_adapter.h"
-
-void KisPaintDeviceTest::testLazyFrameCreation()
-{
-    const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisPaintDeviceSP dev = new KisPaintDevice(cs);
-
-    TestUtil::TestingTimedDefaultBounds *bounds = new TestUtil::TestingTimedDefaultBounds();
-    dev->setDefaultBounds(bounds);
-
-    KisRasterKeyframeChannel *channel = dev->createKeyframeChannel(KisKeyframeChannel::Raster);
-    QVERIFY(channel);
-
-    KisPaintDeviceFramesInterface *i = dev->framesInterface();
-    QVERIFY(i);
-
-    QCOMPARE(i->frames().size(), 1);
-
-    bounds->testingSetTime(10);
-
-    QCOMPARE(i->frames().size(), 1);
-
-    {   //Test auto key creation. Undo adapter should keep frame in memory until it goes out of scope.
-        KisSurrogateUndoAdapter undoAdapter;
-
-        {
-            KisTransaction transaction1(dev);
-            transaction1.commit(&undoAdapter);
-        }
-
-        QCOMPARE(i->frames().size(), 2);
-
-        undoAdapter.undoAll();
-
-        QCOMPARE(i->frames().size(), 2);
-
-        undoAdapter.redoAll();
-
-        QCOMPARE(i->frames().size(), 2);
-
-        undoAdapter.undoAll();
-    }
-
-    //When undoAdapter dies, so should the data.
-    QCOMPARE(i->frames().size(), 1);
-}
-
 void KisPaintDeviceTest::testCopyPaintDeviceWithFrames()
 {
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();

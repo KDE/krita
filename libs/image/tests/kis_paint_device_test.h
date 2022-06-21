@@ -63,7 +63,6 @@ private Q_SLOTS:
     void testFramesUndoRedoWithChannel();
     void testCrossDeviceFrameCopyDirect();
     void testCrossDeviceFrameCopyChannel();
-    void testLazyFrameCreation();
     void testCopyPaintDeviceWithFrames();
 
     void testCompositionAssociativity();

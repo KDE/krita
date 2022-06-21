@@ -1607,19 +1607,22 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
 
     const QStringList openglWarnings = KisOpenGL::getOpenGLWarnings();
     if (openglWarnings.isEmpty()) {
-        lblOpenGLWarnings->setVisible(false);
+        grpOpenGLWarnings->setVisible(false);
     } else {
-        QString text("<span style=\"color: yellow;\">&#x26A0;</span> ");
-        text.append(i18n("Warning(s):"));
+        QString text = QString("<p><b>%1</b>").arg(i18n("Warning(s):"));
         text.append("<ul>");
         Q_FOREACH (const QString &warning, openglWarnings) {
             text.append("<li>");
             text.append(warning.toHtmlEscaped());
             text.append("</li>");
         }
-        text.append("</ul>");
+        text.append("</ul></p>");
         lblOpenGLWarnings->setText(text);
-        lblOpenGLWarnings->setVisible(true);
+        lblOpenGLWarningsIcon->setPixmap(
+            lblOpenGLWarningsIcon->style()
+                ->standardIcon(QStyle::SP_MessageBoxWarning)
+                .pixmap(QSize(32, 32)));
+        grpOpenGLWarnings->setVisible(true);
     }
 
     if (qApp->applicationName() == "kritasketch" || qApp->applicationName() == "kritagemini") {

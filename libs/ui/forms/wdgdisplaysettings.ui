@@ -61,17 +61,42 @@
           <bool>true</bool>
          </property>
          <layout class="QGridLayout">
-          <item row="4" column="0" colspan="2">
-           <widget class="QLabel" name="lblOpenGLWarnings">
-            <property name="text">
-             <string notr="true">OpenGL Warnings</string>
+          <item row="4" column="1">
+           <widget class="QGroupBox" name="grpOpenGLWarnings">
+            <property name="title">
+             <string/>
             </property>
-            <property name="textFormat">
-             <enum>Qt::RichText</enum>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QLabel" name="lblOpenGLWarningsIcon">
+               <property name="text">
+                <string/>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="lblOpenGLWarnings">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string notr="true">OpenGL Warnings</string>
+               </property>
+               <property name="textFormat">
+                <enum>Qt::RichText</enum>
+               </property>
+               <property name="wordWrap">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
           <item row="2" column="0">
@@ -85,8 +110,8 @@
             <property name="text">
              <string>Scaling Mode:</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -94,6 +119,9 @@
            <widget class="QLabel" name="label_6">
             <property name="text">
              <string>Current Renderer:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -164,8 +192,8 @@
             <property name="text">
              <string>Preferred Renderer (needs restart):</string>
             </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
            </widget>
           </item>

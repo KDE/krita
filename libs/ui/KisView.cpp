@@ -528,7 +528,11 @@ void KisView::dropEvent(QDropEvent *event)
 
                 KisImportCatcher::adaptClipToImageColorSpace(clip, this->image());
 
-                KisPaintLayerSP layer = new KisPaintLayer(this->image(), "", OPACITY_OPAQUE_U8, clip);
+                KisPaintLayerSP layer = new KisPaintLayer(
+                    this->image(),
+                    this->image()->nextLayerName() + " " + i18n("(pasted)"),
+                    OPACITY_OPAQUE_U8,
+                    clip);
                 KisNodeCommandsAdapter adapter(this->mainWindow()->viewManager());
                 adapter.addNode(layer,
                                 this->mainWindow()->viewManager()->activeNode()->parent(),

@@ -229,6 +229,7 @@ void KisPlaybackEngine::playPause()
 
     if (m_d->activeCanvasAnimationState()->playbackState() == PLAYING) {
         pause();
+        seek(m_d->activeCanvasAnimationState()->displayProxy()->frame(), SEEK_FINALIZE);
     } else {
         play();
     }
@@ -240,10 +241,10 @@ void KisPlaybackEngine::stop()
         const boost::optional<int> origin = m_d->activeCanvasAnimationState()->playbackOrigin();
         m_d->activeCanvasAnimationState()->setPlaybackState(STOPPED);
         if (origin.has_value()) {
-            seek(origin.value());
+            seek(origin.value(), SEEK_FINALIZE);
         }
     } else if (m_d->activeCanvasAnimationState()->displayProxy()->frame() != 0) {
-        seek(0);
+        seek(0, SEEK_FINALIZE);
     }
 }
 
@@ -258,7 +259,7 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
             m_d->sigPushAudioCompressor->start(frameIndex);
         }
 
-        m_d->activeCanvasAnimationState()->showFrame(frameIndex);
+        m_d->activeCanvasAnimationState()->showFrame(frameIndex, (flags & SEEK_FINALIZE) > 0);
     }
 }
 
@@ -271,7 +272,7 @@ void KisPlaybackEngine::previousFrame()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
-    int frame = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame() - 1;
+    int frame = m_d->activeCanvasAnimationState()->displayProxy()->frame() - 1;
 
     if (frame < startFrame || frame >  endFrame) {
         frame = endFrame;
@@ -281,7 +282,8 @@ void KisPlaybackEngine::previousFrame()
         if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
             stop();
         }
-        seek(frame);
+
+        seek(frame, SEEK_FINALIZE);
     }
 }
 
@@ -293,7 +295,7 @@ void KisPlaybackEngine::nextFrame()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
-    int frame = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame() + 1;
+    int frame = m_d->activeCanvasAnimationState()->displayProxy()->frame() + 1;
 
     if (frame > endFrame || frame < startFrame ) {
         frame = startFrame;
@@ -304,7 +306,7 @@ void KisPlaybackEngine::nextFrame()
             stop();
         }
 
-        seek(frame);
+        seek(frame, SEEK_FINALIZE);
     }
 }
 
@@ -361,7 +363,7 @@ void KisPlaybackEngine::nextKeyframe()
             stop();
         }
 
-        seek(destinationTime);
+        seek(destinationTime, SEEK_FINALIZE);
     } else {
         // Jump ahead by estimated timing...
         const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
@@ -373,7 +375,7 @@ void KisPlaybackEngine::nextKeyframe()
             }
 
             const int timing = activeKeyTime - previousKeyTime;
-            seek(currentTime + timing);
+            seek(currentTime + timing, SEEK_FINALIZE);
         }
     }
 }
@@ -465,7 +467,7 @@ void KisPlaybackEngine::nextKeyframeWithColor(const QSet<int> &validColors)
             stop();
         }
 
-        seek(destinationTime);
+        seek(destinationTime, SEEK_FINALIZE);
     }
 }
 

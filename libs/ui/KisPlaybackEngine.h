@@ -11,14 +11,15 @@
 
 
 enum PlaybackMode {
-    PLAYBACK_PUSH,
-    PLAYBACK_PULL
+    PLAYBACK_PUSH, // MLT is being pushed to, used during pause and stop state for scrubbing.
+    PLAYBACK_PULL // MLT is updating itself, we are getting regular updates from it about when we need to show our next frame.
 };
 
 enum SeekFlags {
     SEEK_NONE = 0,
-    SEEK_PUSH_AUDIO = 1,
-    SEEK_FORCE_RECACHE = 1 << 1
+    SEEK_PUSH_AUDIO = 1, // Whether we should be pushing audio or not. Used to prevent double-takes on scrubbing.
+    SEEK_FORCE_RECACHE = 1 << 1,
+    SEEK_FINALIZE = 1 << 2 // Force reload of KisImage to specific frame, ignore caching ability.
 };
 
 class KRITAUI_EXPORT KisPlaybackEngine : public QObject, public KoCanvasObserverBase

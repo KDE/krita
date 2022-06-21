@@ -22,7 +22,7 @@ public:
     KisFrameDisplayProxy(class KisCanvas2 *canvas, QObject *parent = nullptr);
     ~KisFrameDisplayProxy();
 
-    bool displayFrame(int frame);
+    bool displayFrame(int frame, bool finalize);
 
     /**
      * @brief visibleFrame

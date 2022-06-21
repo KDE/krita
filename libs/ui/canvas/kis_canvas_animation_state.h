@@ -52,7 +52,7 @@ public:
     class KisFrameDisplayProxy const *displayProxy() const;
 
 public Q_SLOTS:
-    void showFrame(int frame);
+    void showFrame(int frame, bool finalize = false);
 
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);

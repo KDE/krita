@@ -292,9 +292,9 @@ KisFrameDisplayProxy const *KisCanvasAnimationState::displayProxy() const
     return m_d->displayProxy.data();
 }
 
-void KisCanvasAnimationState::showFrame(int frame)
+void KisCanvasAnimationState::showFrame(int frame, bool finalize)
 {
-    m_d->displayProxy->displayFrame(frame);
+    m_d->displayProxy->displayFrame(frame, finalize);
 }
 
 void KisCanvasAnimationState::updateDropFramesMode()
@@ -341,7 +341,7 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
         m_d->state = p_state;
         if (m_d->state == PLAYING) {
             if (!m_d->playbackEnvironment) {
-                m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->visibleFrame(), this));
+                m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->frame(), this));
             }
 
             m_d->playbackEnvironment->prepare(m_d->canvas);

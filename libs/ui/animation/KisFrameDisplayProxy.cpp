@@ -47,7 +47,7 @@ KisFrameDisplayProxy::~KisFrameDisplayProxy()
 //    scrubTo(m_d->activeFrameIndex, usePreview);
 }
 
-bool KisFrameDisplayProxy::displayFrame(int frame)
+bool KisFrameDisplayProxy::displayFrame(int frame, bool finalize)
 {
     KisAnimationFrameCacheSP cache = m_d->canvas->frameCache();
     KisImageAnimationInterface* ai = m_d->canvas->image()->animationInterface();
@@ -57,7 +57,7 @@ bool KisFrameDisplayProxy::displayFrame(int frame)
         emit sigFrameChange();
     }
 
-    if (forceRegeneration(cache, m_d->displayedFrame, frame)) {
+    if (finalize || forceRegeneration(cache, m_d->displayedFrame, frame)) {
         // BUG:445265
         // Edgecase occurs where if we move from a cached frame to a non-cached frame,
         // we never technically "switch" to the cached one during scrubbing, which
@@ -65,6 +65,7 @@ bool KisFrameDisplayProxy::displayFrame(int frame)
         // regenerated. We will force a frame switch when going from uncached to cached
         // to work around this issue.
         ai->switchCurrentTimeAsync(frame);
+        return true;
 
     } else if ( shouldUploadFrame(cache, m_d->displayedFrame, frame) && cache->uploadFrame(frame) ) {
 

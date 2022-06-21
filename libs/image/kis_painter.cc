@@ -1306,22 +1306,27 @@ void KisPainter::paintEllipse(qreal axis_a, qreal axis_b, qreal angle, QPointF o
     // Using long double for more precision, try to see if that improves.
     // Because Qt does not provide long double version of most functions,
     // I have to use std instead.
-    //
-    // TODO: take the direction of the gradient in to the drawing condition. The SO answer didn't, but I don't see why.
+    axis_a-=1.0l;
+    axis_b-=1.0l;
     long double semiAxisA = axis_a / 2.0L;
     long double semiAxisB = axis_b / 2.0L;
-    long double sinA = std::sin(angle);
+    long double sinA = std::sin((long double) angle);
     long double sqSinA = sinA * sinA;
-    long double cosA = std::cos(angle);
+    long double cosA = std::cos((long double) angle);
     long double sqCosA = cosA * cosA;
     long double aSq = semiAxisA * semiAxisA;
     long double bSq = semiAxisB * semiAxisB;
-    int canvasBound = std::ceil(semiAxisA > semiAxisB ? semiAxisA : semiAxisB);
+    int canvasBound = std::ceil(std::max(semiAxisA, semiAxisB));
+    bool oddA = (int) axis_a % 2 == 1;
+    bool oddB = (int) axis_b % 2 == 1;
     for (int xI = -canvasBound; xI <= canvasBound; ++xI) {
         for (int yI = -canvasBound; yI <= canvasBound; ++yI) {
             long double xR = xI;
             long double yR = yI;
-            // pd stands for partial derivative.
+            if (xI == 0 && oddA) { continue; }
+            if (yI == 0 && oddB) { continue; }
+            xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
+            yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
             long double pdX = 2.0L * xR * (aSq * sqSinA + bSq * sqCosA) + yR * (bSq - aSq) * sin(2.0L * angle);
             long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosA + bSq * sqSinA);
             long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
@@ -1331,8 +1336,8 @@ void KisPainter::paintEllipse(qreal axis_a, qreal axis_b, qreal angle, QPointF o
                                      - aSq * bSq;
             if (std::abs(paraboloid) < gradient * 0.5L) {
                 paintAt(KisPaintInformation(QPointF(
-                                xI + qRound(offset.x()),
-                                yI + qRound(offset.y()))),
+                                xR + offset.x(),
+                                yR + offset.y())),
                         new KisDistanceInformation());
             }
         }

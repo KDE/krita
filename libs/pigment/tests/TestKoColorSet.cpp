@@ -196,4 +196,4 @@ void TestKoColorSet::testLoadACB()
     QCOMPARE(set2.paletteType(), KoColorSet::KPL);
 }
 
-QTEST_GUILESS_MAIN(TestKoColorSet)
+SIMPLE_TEST_MAIN(TestKoColorSet)

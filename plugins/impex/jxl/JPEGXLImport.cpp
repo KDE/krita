@@ -308,12 +308,17 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     // We'll try to derive the framerate from the first frame
                     // instead.
                     int framerate =
-                        static_cast<int>(d.m_info.animation.tps_numerator
-                                         / d.m_info.animation.tps_denominator);
+                        std::lround(d.m_info.animation.tps_numerator
+                                    / static_cast<double>(
+                                        d.m_info.animation.tps_denominator));
                     if (framerate > 240) {
-                        warnFile << "JXL framerate exceeds 240FPS, "
-                                    "reapproximating from the duration of "
+                        warnFile << "JXL ticks per second value exceeds 240, "
+                                    "approximating FPS from the duration of "
                                     "the first frame";
+                        document->setWarningMessage(
+                            i18nc("JPEG-XL errors",
+                                  "The animation declares a frame rate of more "
+                                  "than 240 FPS."));
                         const int approximatedFramerate = std::lround(
                             1000.0 / static_cast<double>(d.m_header.duration));
                         d.m_durationFrameInTicks =

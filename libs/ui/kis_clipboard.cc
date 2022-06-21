@@ -311,6 +311,34 @@ KisClipboard::clipFromKritaSelection(const QMimeData *cbData, const QRect &image
     return clip;
 }
 
+KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const QRect &imageBounds,
+                                                   const KoColorSpace *cs) const
+{
+    const QMimeData *data = KisClipboard::instance()->layersMimeData();
+
+    if (!data) {
+        return nullptr;
+    }
+
+    const auto *mimedata = qobject_cast<const KisMimeData *>(data);
+    KIS_ASSERT_RECOVER_RETURN_VALUE(mimedata, nullptr);
+
+    KisNodeList nodes = mimedata->nodes();
+
+    KisImageSP tempImage = new KisImage(nullptr,
+                                        imageBounds.width(),
+                                        imageBounds.height(),
+                                        cs,
+                                        "ClipImage");
+    for (KisNodeSP node : nodes) {
+        tempImage->addNode(node, tempImage->root());
+    }
+    tempImage->refreshGraphAsync();
+    tempImage->waitForDone();
+
+    return tempImage->projection();
+}
+
 KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
                                                      const QRect &imageBounds,
                                                      bool showPopup,
@@ -567,7 +595,8 @@ void KisClipboard::setLayers(KisNodeList nodes, KisImageSP image, bool forceCopy
 
 bool KisClipboard::hasLayers() const
 {
-    return d->clipboard->mimeData()->hasFormat("application/x-krita-node");
+    const QByteArray mimeType = QByteArrayLiteral("application/x-krita-node");
+    return d->clipboard->mimeData()->hasFormat(mimeType);
 }
 
 bool KisClipboard::hasLayerStyles() const

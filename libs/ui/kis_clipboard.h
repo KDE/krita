@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QSize>
 
-#include <KoColorProfile.h>
 #include <kis_types.h>
 
 #include <kritaui_export.h>
@@ -21,6 +20,7 @@
 class QRect;
 class QMimeData;
 class KisTimeSpan;
+class KoColorSpace;
 
 class KisClipboardPrivate;
 
@@ -73,6 +73,9 @@ public:
                                       int overridePasteBehaviour = -1,
                                       KisTimeSpan *clipRange = nullptr,
                                       bool useClipboardFallback = false) const;
+
+    KisPaintDeviceSP clipFromKritaLayers(const QRect &imageBounds,
+                                         const KoColorSpace *cs) const;
 
     bool hasClip() const;
 

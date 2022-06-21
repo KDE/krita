@@ -213,27 +213,43 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         return;
     }
 
+    const QRect fittingBounds =
+        pasteAtCursorPosition ? QRect() : image->bounds();
+
     // If no shapes, check for layers
-    if (KisClipboard::instance()->hasLayers() && !pasteAtCursorPosition) {
-        view->nodeManager()->pasteLayersFromClipboard();
+    if (KisClipboard::instance()->hasLayers()) {
+        const QPointF offsetTopLeft = [&]() -> QPointF {
+            if (pasteAtCursorPosition) {
+                KisPaintDeviceSP clip =
+                    KisClipboard::instance()->clipFromKritaLayers(
+                        fittingBounds,
+                        image->colorSpace());
+                KIS_ASSERT(clip);
+                const QPointF imagePos =
+                    view->canvasBase()->coordinatesConverter()->documentToImage(
+                        docPos);
+
+                const QPointF offset =
+                    (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
+                return offset;
+            } else {
+                return {};
+            }
+        }();
+        view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition,
+                                                      offsetTopLeft);
         return;
     }
 
     KisTimeSpan range;
-    const QRect fittingBounds = pasteAtCursorPosition ? QRect() : image->bounds();
     KisPaintDeviceSP clip = KisClipboard::instance()->clip(fittingBounds, true, -1, &range);
 
     if (clip) {
         if (pasteAtCursorPosition) {
             const QPointF imagePos = view->canvasBase()->coordinatesConverter()->documentToImage(docPos);
 
-            const QPointF offset = (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
-            const QPointF offsetTopLeft = (offset + QRectF(clip->exactBounds()).topLeft()).toPoint();
-
-            if (KisClipboard::instance()->hasLayers()) {
-                view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition, offsetTopLeft);
-                return;
-            }
+            const QPoint offset =
+                (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
 
             clip->setX(clip->x() + offset.x());
             clip->setY(clip->y() + offset.y());

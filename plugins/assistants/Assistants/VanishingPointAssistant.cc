@@ -83,6 +83,11 @@ QPointF VanishingPointAssistant::adjustPosition(const QPointF& pt, const QPointF
     return project(pt, strokeBegin);
 }
 
+void VanishingPointAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = project(point, strokeBegin);
+}
+
 void VanishingPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     // HACK ALERT: side handles aren't saved in old krita versions

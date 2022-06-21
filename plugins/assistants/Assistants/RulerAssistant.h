@@ -21,6 +21,7 @@ public:
     RulerAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
+    void adjustLine(QPointF &point, QPointF& strokeBegin) override;
     QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return 2; }
     bool isAssistantComplete() const override;

@@ -37,14 +37,14 @@ ConcentricEllipseAssistant::ConcentricEllipseAssistant(const ConcentricEllipseAs
 {
 }
 
-QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin) const
+QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin, const bool checkForInitialMovement) const
 {
     Q_ASSERT(isAssistantComplete());
     m_ellipse.set(*handles()[0], *handles()[1], *handles()[2]);
 
     qreal dx = pt.x() - strokeBegin.x();
     qreal dy = pt.y() - strokeBegin.y();
-    if (dx * dx + dy * dy < 4.0) {
+    if (checkForInitialMovement && dx * dx + dy * dy < 4.0) {
         // allow some movement before snapping
         return strokeBegin;
     }
@@ -71,7 +71,11 @@ QPointF ConcentricEllipseAssistant::project(const QPointF& pt, const QPointF& st
 QPointF ConcentricEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
+}
 
+void ConcentricEllipseAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = project(point, strokeBegin, false);
 }
 
 void ConcentricEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)

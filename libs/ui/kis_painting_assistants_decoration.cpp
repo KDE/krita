@@ -259,6 +259,56 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
     return best;
 }
 
+void KisPaintingAssistantsDecoration::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    if (assistants().empty()) {
+        // No assisants, so no adjustment
+        return;
+    }
+
+    // TODO: figure it out
+    if  (!d->snapEraser
+        && (d->m_canvas->resourceManager()->resource(KoCanvasResource::CurrentEffectiveCompositeOp).toString() == COMPOSITE_ERASE)) {
+        // No snapping if eraser snapping is disabled and brush is an eraser
+        return;
+    }
+
+    QPointF originalPoint = point;
+    QPointF originalStrokeBegin = strokeBegin;
+
+    qreal minDistance = 10000.0;
+    bool minDistValid = false;
+    QPointF finalPoint = originalPoint;
+    QPointF finalStrokeBegin = originalStrokeBegin;
+    int id = 0;
+    KisPaintingAssistantSP bestAssistant;
+    Q_FOREACH (KisPaintingAssistantSP assistant, assistants()) {
+        if(assistant->isSnappingActive() == true){//this checks if the assistant in question has it's snapping boolean turned on//
+            //QPointF pt = assistant->adjustPosition(point, strokeBegin, true);
+            QPointF p1 = originalPoint;
+            QPointF p2 = originalStrokeBegin;
+            assistant->adjustLine(p1, p2);
+            if (p1.isNull() || p2.isNull()) {
+                // possibly lines cannot snap to this assistant, or this line cannot, at least
+                continue;
+            }
+            qreal distance = kisSquareDistance(p1, originalPoint) + kisSquareDistance(p2, originalStrokeBegin);
+            if (distance < minDistance || !minDistValid) {
+                finalPoint = p1;
+                finalStrokeBegin = p2;
+                minDistValid = true;
+                bestAssistant = assistant;
+            }
+        }
+        id ++;
+    }
+    if (bestAssistant) {
+        bestAssistant->setFollowBrushPosition(true);
+    }
+    point = finalPoint;
+    strokeBegin = finalStrokeBegin;
+}
+
 void KisPaintingAssistantsDecoration::endStroke()
 {
     d->aFirstStroke = false;

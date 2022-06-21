@@ -74,6 +74,12 @@ QPointF RulerAssistant::adjustPosition(const QPointF& pt, const QPointF& /*strok
     return project(pt);
 }
 
+void RulerAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = project(point);
+    strokeBegin = project(strokeBegin);
+}
+
 void RulerAssistant::drawSubdivisions(QPainter& gc, const KisCoordinatesConverter *converter) {
     if (subdivisions() == 0) {
         return;

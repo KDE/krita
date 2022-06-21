@@ -109,6 +109,7 @@ public:
      *         is in the decoration, so those two options are enough.
      */
     virtual QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) = 0;
+    virtual void adjustLine(QPointF& point, QPointF& strokeBegin) = 0;
     virtual void endStroke();
     virtual void setAdjustedBrushPosition(const QPointF position);
     virtual void setFollowBrushPosition(bool follow);

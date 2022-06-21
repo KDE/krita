@@ -71,7 +71,6 @@ void KisToolLineHelper::repaintLine(KisImageWSP image, KisNodeSP node,
                                                           0.0);
     }
 
-
     KisPaintOpPresetSP preset = resourceManager()->resource(KoCanvasResource::CurrentPaintOpPreset)
             .value<KisPaintOpPresetSP>();
 
@@ -121,6 +120,12 @@ void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overrideP
     KisPaintInformation pi =
             m_d->infoBuilder->continueStroke(event, 0);
 
+    addPoint(pi, overridePos);
+}
+
+void KisToolLineHelper::addPoint(KisPaintInformation pi, const QPointF &overridePos)
+{
+    if (!m_d->enabled) return;
     if (!m_d->useSensors) {
         pi = KisPaintInformation(pi.pos());
     }
@@ -150,6 +155,7 @@ void KisToolLineHelper::addPoint(KoPointerEvent *event, const QPointF &overrideP
     }
 
     m_d->linePoints.append(pi);
+
 }
 
 void KisToolLineHelper::translatePoints(const QPointF &offset)
@@ -161,6 +167,21 @@ void KisToolLineHelper::translatePoints(const QPointF &offset)
         it->setPos(it->pos() + offset);
         ++it;
     }
+}
+
+void KisToolLineHelper::movePointsTo(const QPointF &startPoint, const QPointF &endPoint)
+{
+    if (m_d->linePoints.size() <= 1 ) {
+        return;
+    }
+    KisPaintInformation begin = m_d->linePoints.first();
+    KisPaintInformation end = m_d->linePoints.last();
+    m_d->linePoints.clear();
+    begin.setPos(startPoint);
+    end.setPos(endPoint);
+    m_d->linePoints.append(begin);
+    m_d->linePoints.append(end);
+    adjustPointsToDDA(m_d->linePoints);
 }
 
 void KisToolLineHelper::end()

@@ -43,6 +43,7 @@ public:
 
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, bool snapToAny) override;
+    void adjustLine(QPointF &point, QPointF& strokeBegin) override;
     QPointF getDefaultEditorPosition() const override;
     int numHandles() const override { return isLocal() ? 3 : 1; }
 

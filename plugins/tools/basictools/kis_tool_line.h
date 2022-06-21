@@ -61,10 +61,14 @@ private Q_SLOTS:
     void setUseSensors(bool value);
     void setShowPreview(bool value);
     void setShowGuideline(bool value);
+    void setSnapToAssistants(bool value);
+    void setSnapEraser(bool value);
+
 
 private:
     void paintLine(QPainter& gc, const QRect& rc);
     QPointF straightLine(QPointF point);
+    QPointF snapToAssistants(QPointF point);
     void updateGuideline();
     void showSize();
     void updatePreviewTimer(bool showGuide);
@@ -76,8 +80,9 @@ private:
 private:
     bool m_showGuideline {true};
 
-    QPointF m_startPoint;
+    QPointF m_startPoint; // start point to use when painting (after the line was snapped to assistant already)
     QPointF m_endPoint;
+    QPointF m_originalStartPoint; // original starting point (to use when searching for suitable assistant)
     QPointF m_lastUpdatedPoint;
 
     bool m_strokeIsRunning {false};
@@ -86,6 +91,8 @@ private:
     QCheckBox *m_chkUseSensors {nullptr};
     QCheckBox *m_chkShowPreview {nullptr};
     QCheckBox *m_chkShowGuideline {nullptr};
+    QCheckBox *m_chkSnapToAssistants {nullptr};
+    QCheckBox *m_chkSnapEraser {nullptr};
 
     QScopedPointer<KisPaintingInformationBuilder> m_infoBuilder;
     QScopedPointer<KisToolLineHelper> m_helper;

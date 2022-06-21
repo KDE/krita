@@ -26,6 +26,7 @@ public:
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
 
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
+    void adjustLine(QPointF &point, QPointF& strokeBegin) override;
     void endStroke() override;
 
     QPointF getDefaultEditorPosition() const override;
@@ -47,7 +48,7 @@ public:
 protected:
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt, const QPointF& strokeBegin);
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin, const bool alwaysStartAnew = false);
     // creates the convex hull, returns false if it's not a quadrilateral
     // finds the transform from perspective coordinates (a unit square) to the document
     bool getTransform(QPolygonF& polyOut, QTransform& transformOut) const;

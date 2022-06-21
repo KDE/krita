@@ -364,6 +364,12 @@ QPointF PerspectiveEllipseAssistant::adjustPosition(const QPointF& pt, const QPo
     return project(pt, strokeBegin);
 }
 
+void PerspectiveEllipseAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = QPointF();
+    strokeBegin = QPointF();
+}
+
 void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();

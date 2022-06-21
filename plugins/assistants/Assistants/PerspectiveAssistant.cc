@@ -51,13 +51,13 @@ KisPaintingAssistantSP PerspectiveAssistant::clone(QMap<KisPaintingAssistantHand
     return KisPaintingAssistantSP(new PerspectiveAssistant(*this, handleMap));
 }
 
-QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBegin, const bool alwaysStartAnew)
 {
     const static QPointF nullPoint(std::numeric_limits<qreal>::quiet_NaN(), std::numeric_limits<qreal>::quiet_NaN());
 
     Q_ASSERT(isAssistantComplete());
 
-    if (m_snapLine.isNull()) {
+    if (alwaysStartAnew || m_snapLine.isNull()) {
         QPolygonF poly;
         QTransform transform;
 
@@ -111,6 +111,11 @@ QPointF PerspectiveAssistant::project(const QPointF& pt, const QPointF& strokeBe
 QPointF PerspectiveAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
+}
+
+void PerspectiveAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = project(point, strokeBegin, true);
 }
 
 void PerspectiveAssistant::endStroke()

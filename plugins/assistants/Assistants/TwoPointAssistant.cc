@@ -150,6 +150,12 @@ QPointF TwoPointAssistant::adjustPosition(const QPointF& pt, const QPointF& stro
     return project(pt, strokeBegin, snapToAny);
 }
 
+void TwoPointAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    QPointF p = project(point, strokeBegin, true);
+    point = p;
+}
+
 void TwoPointAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     Q_UNUSED(updateRect);

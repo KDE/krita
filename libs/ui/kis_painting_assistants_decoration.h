@@ -57,6 +57,7 @@ public:
     void removeAll();
     void setAssistants(const QList<KisPaintingAssistantSP> &assistants);
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);
+    void adjustLine(QPointF &point, QPointF& strokeBegin);
     void setAdjustedBrushPosition(const QPointF position);
     void endStroke();
     QList<KisPaintingAssistantHandleSP> handles();

@@ -38,20 +38,18 @@ KisPaintingAssistantSP InfiniteRulerAssistant::clone(QMap<KisPaintingAssistantHa
     return KisPaintingAssistantSP(new InfiniteRulerAssistant(*this, handleMap));
 }
 
-QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
+QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& strokeBegin, const bool checkForInitialMovement)
 {
     Q_ASSERT(isAssistantComplete());
     //code nicked from the perspective ruler.
-    qreal
-            dx = pt.x() - strokeBegin.x(),
-            dy = pt.y() - strokeBegin.y();
-        if (dx * dx + dy * dy < 4.0) {
-            // allow some movement before snapping
-            return strokeBegin;
-        }
-    //dbgKrita<<strokeBegin<< ", " <<*handles()[0];
+    qreal dx = pt.x() - strokeBegin.x();
+    qreal dy = pt.y() - strokeBegin.y();
+    if (checkForInitialMovement && dx * dx + dy * dy < 4.0) {
+        // allow some movement before snapping
+        return strokeBegin;
+    }
+
     QLineF snapLine = QLineF(*handles()[0], *handles()[1]);
-    
     
         dx = snapLine.dx();
         dy = snapLine.dy();
@@ -69,6 +67,13 @@ QPointF InfiniteRulerAssistant::project(const QPointF& pt, const QPointF& stroke
 QPointF InfiniteRulerAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/)
 {
     return project(pt, strokeBegin);
+}
+
+void InfiniteRulerAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+
+    point = project(point, strokeBegin, false);
+    strokeBegin = project(strokeBegin, strokeBegin, false);
 }
 
 void InfiniteRulerAssistant::drawSubdivisions(QPainter& gc, const KisCoordinatesConverter *converter) {

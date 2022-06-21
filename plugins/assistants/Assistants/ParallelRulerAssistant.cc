@@ -83,6 +83,11 @@ QPointF ParallelRulerAssistant::adjustPosition(const QPointF& pt, const QPointF&
     return project(pt, strokeBegin);
 }
 
+void ParallelRulerAssistant::adjustLine(QPointF &point, QPointF &strokeBegin)
+{
+    point = project(point, strokeBegin);
+}
+
 void ParallelRulerAssistant::drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible, bool previewVisible)
 {
     gc.save();

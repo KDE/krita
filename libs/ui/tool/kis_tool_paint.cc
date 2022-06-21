@@ -157,18 +157,18 @@ void KisToolPaint::tryRestoreOpacitySnapshot()
 
     KisPaintOpPresetSP newPreset = provider->currentPreset();
 
-    if (newPreset &&
-        newPreset == m_oldPreset &&
-        newPreset->version() == m_oldPresetVersion &&
-        (newPreset->isDirty() || !m_oldPresetIsDirty) ) {
+    if (newPreset) {
+        if (newPreset == m_oldPreset && newPreset->version() == m_oldPresetVersion
+            && (newPreset->isDirty() || !m_oldPresetIsDirty)) {
 
-        opacityToRestore = m_oldOpacity;
+            opacityToRestore = m_oldOpacity;
+        }
+
+        m_oldPreset = newPreset;
+        m_oldPresetIsDirty = newPreset->isDirty();
+        m_oldPresetVersion = newPreset->version();
+        m_oldOpacity = provider->opacity();
     }
-
-    m_oldPreset = newPreset;
-    m_oldPresetIsDirty = newPreset->isDirty();
-    m_oldPresetVersion = newPreset->version();
-    m_oldOpacity = provider->opacity();
 
     if (opacityToRestore) {
         provider->setOpacity(*opacityToRestore);

@@ -552,13 +552,7 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
     }
 
     if (!batchMode && (wdg || !warnings.isEmpty() || isAdvancedExporting)) {
-
-        KoDialog dlg;
-
-        dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
-        dlg.setWindowTitle(mimeUserDescription);
-
-        QWidget *page = new QWidget(&dlg);
+        QWidget *page = new QWidget();
         QVBoxLayout *layout = new QVBoxLayout(page);
 
         if (showWarnings && !warnings.isEmpty()) {
@@ -622,8 +616,11 @@ bool KisImportExportManager::askUserAboutExportConfiguration(
             layout->addWidget(chkAlsoAsKra);
         }
 
+        KoDialog dlg(qApp->activeWindow());
         dlg.setMainWidget(page);
-        dlg.resize(dlg.minimumSize());
+        page->setParent(&dlg);
+        dlg.setButtons(KoDialog::Ok | KoDialog::Cancel);
+        dlg.setWindowTitle(mimeUserDescription);
 
         if (showWarnings || wdg || isAdvancedExporting) {
             if (!dlg.exec()) {

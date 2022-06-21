@@ -286,8 +286,16 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    KisPaintDeviceSP clip = KisClipboard::instance()->clip(image->bounds(), true, -1, nullptr);
-    if (!clip) return;
+    KisPaintDeviceSP clip =
+        KisClipboard::instance()->clipFromKritaLayers(image->bounds(),
+                                                      image->colorSpace());
+
+    if (!clip)
+        clip =
+            KisClipboard::instance()->clip(image->bounds(), true, -1, nullptr);
+
+    if (!clip)
+        return;
 
     KisImportCatcher::adaptClipToImageColorSpace(clip, image);
 

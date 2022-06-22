@@ -89,6 +89,16 @@ if [[ -n $QT_ENABLE_DEBUG_INFO ]]; then
     QT_DEBUG=on
 fi
 
+QT_ASAN=off
+if [[ -n $QT_ENABLE_ASAN ]]; then
+    QT_ASAN=on
+    QT_DEBUG=on
+
+    # moc and qmake may fail during compilation of Qt itself,
+    # don't stop the build because of that
+    export ASAN_OPTIONS=halt_on_error=0
+fi
+
 SUBMAKE_JOBS=`grep -c processor /proc/cpuinfo`
 
 # Configure the dependencies for building

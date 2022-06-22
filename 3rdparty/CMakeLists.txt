@@ -90,6 +90,7 @@ endif ()
 
 if (WIN32 OR LINUX)
 option(QT_ENABLE_DEBUG_INFO "Build Qt with full debug info included" OFF)
+option(QT_ENABLE_ASAN "Build Qt with ASAN" OFF)
 endif()
 
 if (WIN32)

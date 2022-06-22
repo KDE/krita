@@ -67,6 +67,13 @@ if (WIN32)
         # Set the option to build Qt with debugging info enabled
         list(APPEND _QT_conf -force-debug-info)
     endif(QT_ENABLE_DEBUG_INFO OR WIN32)
+    if (QT_ENABLE_ASAN)
+        list(APPEND _QT_conf
+            QMAKE_CFLAGS+=-fsanitize=address
+            QMAKE_CXXFLAGS+=-fsanitize=address
+            QMAKE_LFLAGS+=-fsanitize=address
+            )
+    endif ()
     if (MINGW)
         if (NOT QT_ENABLE_DEBUG_INFO)
             # Generate minimal debug info for backtraces
@@ -341,6 +348,14 @@ elseif (NOT APPLE)
         # Set the option to build Qt with debugging info enabled
         set(QT_DEBUG_OPTIONS -force-debug-info)
     endif()
+    if (QT_ENABLE_ASAN)
+        list(APPEND _QT_conf
+            QMAKE_CFLAGS+=-fsanitize=address
+            QMAKE_CXXFLAGS+=-fsanitize=address
+            QMAKE_LFLAGS+=-fsanitize=address
+            )
+    endif ()
+
 
     ExternalProject_Add(
       ext_qt

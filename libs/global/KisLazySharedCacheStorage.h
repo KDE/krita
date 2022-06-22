@@ -32,7 +32,8 @@ struct DataStorage
 
     DataStorage() {}
     DataStorage(T *value) : m_value(value) {}
-    DataStorage(const DataStorage &rhs) : m_value(rhs.m_value) {}
+    DataStorage(const DataStorage &rhs) = default;
+    DataStorage& operator=(const DataStorage &rhs) = default;
 
     ConstType* lazyInitialize(const std::function<FactoryType> &factory, Args... args) {
         if (!m_value) {
@@ -85,7 +86,8 @@ public:
 
     DataWrapperShared() : m_sharedStorage(new SharedStorage()) {}
     DataWrapperShared(T *value) : m_sharedStorage(new SharedStorage(value)) {}
-    DataWrapperShared(const DataWrapperShared &rhs) : m_sharedStorage(rhs.m_sharedStorage) {}
+    DataWrapperShared(const DataWrapperShared &rhs) = default;
+    DataWrapperShared& operator=(const DataWrapperShared &rhs) = default;
 
     ConstType* lazyInitialize(const std::function<FactoryType> &factory, Args... args) {
         QMutexLocker l(&m_sharedStorage->sharedMutex);

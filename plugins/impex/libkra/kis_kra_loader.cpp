@@ -773,7 +773,8 @@ KisNodeSP KisKraLoader::loadNodes(const QDomElement& element, KisImageSP image, 
                     KisSelectionMask *mask = qobject_cast<KisSelectionMask*>(node.data());
                     if (mask->active()) {
                         if (activeSelectionMask) {
-                            m_d->warningMessages << i18n("Two global selection masks in active state found. \"%1\" is kept active, \"%2\" is deactivated", activeSelectionMask->name(), mask->name());
+                            // TODO: enable translation after 5.1 release!
+                            m_d->warningMessages << /*i18n*/("Two global selection masks in active state found. \"%1\" is kept active, \"%2\" is deactivated", activeSelectionMask->name(), mask->name());
                             mask->setActive(false);
                             KIS_ASSERT(!mask->active());
                         } else {

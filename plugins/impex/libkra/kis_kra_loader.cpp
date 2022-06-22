@@ -767,8 +767,21 @@ KisNodeSP KisKraLoader::loadNodes(const QDomElement& element, KisImageSP image, 
                         }
                     }
                 }
-                if (!topLevelSelectionMasks.isEmpty()) {
-                    image->addNode(topLevelSelectionMasks.first(), parent);
+
+                KisSelectionMaskSP activeSelectionMask;
+                Q_FOREACH (KisNodeSP node, topLevelSelectionMasks) {
+                    KisSelectionMask *mask = qobject_cast<KisSelectionMask*>(node.data());
+                    if (mask->active()) {
+                        if (activeSelectionMask) {
+                            m_d->warningMessages << i18n("Two global selection masks in active state found. \"%1\" is kept active, \"%2\" is deactivated", activeSelectionMask->name(), mask->name());
+                            mask->setActive(false);
+                            KIS_ASSERT(!mask->active());
+                        } else {
+                            activeSelectionMask = mask;
+                        }
+                    }
+
+                    image->addNode(mask, parent);
                 }
             }
         }

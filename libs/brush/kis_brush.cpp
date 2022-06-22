@@ -101,11 +101,21 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
     m_iterator->nextRow();
 }
 
-namespace detail {
+
+namespace {
 QPainterPath* outlineFactory(const KisBrush *brush) {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
-    dev->convertFromQImage(brush->brushTipImage(), "");
+    KisFixedPaintDeviceSP dev;
+    KisDabShape inverseTransform(1.0 / brush->scale(), 1.0, -brush->angle());
+
+    if (brush->brushApplication() == IMAGESTAMP) {
+        dev = brush->paintDevice(KoColorSpaceRegistry::instance()->rgb8(),
+                          inverseTransform, KisPaintInformation());
+    }
+    else {
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+        dev = new KisFixedPaintDevice(cs);
+        brush->mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
+    }
 
     KisBoundary boundary(dev);
     boundary.generateBoundary();
@@ -131,8 +141,7 @@ struct KisBrush::Private {
                        {
                            return new KisQImagePyramid(brush->brushTipImage());
                        })
-        , brushOutline(&detail::outlineFactory)
-
+        , brushOutline(outlineFactory)
     {
     }
 
@@ -154,12 +163,6 @@ struct KisBrush::Private {
            * Be careful! The pyramid is shared between two brush objects,
            * therefore you cannot change it, only recreate! That is the
            * reason why it is defined as const!
-           *
-           * Take it also into account that the object is defined as
-           * KisLazySharedCacheStorage**Linked**, that is, when a cloned
-           * object updates the cache, the cache of the source object is
-           * also updated. The two caches are detached only when any of
-           * the objects calls cache.reset().
            */
           brushPyramid(rhs.brushPyramid),
           brushOutline(rhs.brushOutline)
@@ -192,8 +195,8 @@ struct KisBrush::Private {
     bool threadingAllowed;
 
     QImage brushTipImage;
-    mutable KisLazySharedCacheStorageLinked<KisQImagePyramid, const KisBrush*> brushPyramid;
-    mutable KisLazySharedCacheStorageLinked<QPainterPath, const KisBrush*> brushOutline;
+    mutable KisLazySharedCacheStorage<KisQImagePyramid, const KisBrush*> brushPyramid;
+    mutable KisLazySharedCacheStorage<QPainterPath, const KisBrush*> brushOutline;
 };
 
 KisBrush::KisBrush()
@@ -290,10 +293,8 @@ QPointF KisBrush::hotSpot(KisDabShape const& shape, const KisPaintInformation& i
 
 void KisBrush::setBrushApplication(enumBrushApplication brushApplication)
 {
-    if (d->brushApplication != brushApplication) {
-        d->brushApplication = brushApplication;
-        clearBrushPyramid();
-    }
+    d->brushApplication = brushApplication;
+    clearBrushPyramid();
 }
 
 enumBrushApplication KisBrush::brushApplication() const
@@ -377,7 +378,7 @@ void KisBrush::setBrushTipImage(const QImage& image)
         setHeight(image.height());
     }
     clearBrushPyramid();
-    resetOutlineCache();
+
 }
 
 void KisBrush::setBrushType(enumBrushType type)

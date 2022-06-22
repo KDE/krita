@@ -15,12 +15,14 @@ enum PlaybackMode {
     PLAYBACK_PULL // MLT is updating itself, we are getting regular updates from it about when we need to show our next frame.
 };
 
-enum SeekFlags {
+enum SeekOption {
     SEEK_NONE = 0,
     SEEK_PUSH_AUDIO = 1, // Whether we should be pushing audio or not. Used to prevent double-takes on scrubbing.
     SEEK_FORCE_RECACHE = 1 << 1,
     SEEK_FINALIZE = 1 << 2 // Force reload of KisImage to specific frame, ignore caching ability.
 };
+Q_DECLARE_FLAGS(SeekFlags, SeekOption);
+Q_DECLARE_OPERATORS_FOR_FLAGS(SeekFlags);
 
 class KRITAUI_EXPORT KisPlaybackEngine : public QObject, public KoCanvasObserverBase
 {
@@ -38,7 +40,7 @@ public Q_SLOTS:
     void playPause();
     void stop();
 
-    void seek(int frameIndex, SeekFlags flags = SEEK_PUSH_AUDIO);
+    void seek(int frameIndex, SeekFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     void previousFrame();
     void nextFrame();
     void previousKeyframe();

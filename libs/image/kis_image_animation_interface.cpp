@@ -98,13 +98,17 @@ KisImageAnimationInterface::KisImageAnimationInterface(KisImage *image)
     m_d->framerate = 24;
     m_d->documentRange = KisTimeSpan::fromTimeToTime(0, 100);
 
-    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
+    connect(this, &KisImageAnimationInterface::sigInternalRequestTimeSwitch, this, [this](int frame, bool useUndo) {
+        this->switchCurrentTimeAsync(frame, useUndo ? STAO_USE_UNDO : STAO_NONE);
+    });
 }
 
 KisImageAnimationInterface::KisImageAnimationInterface(const KisImageAnimationInterface &rhs, KisImage *newImage)
     : m_d(new Private(*rhs.m_d, newImage))
 {
-    connect(this, SIGNAL(sigInternalRequestTimeSwitch(int,bool)), SLOT(switchCurrentTimeAsync(int,bool)));
+    connect(this, &KisImageAnimationInterface::sigInternalRequestTimeSwitch, this, [this](int frame, bool useUndo) {
+        this->switchCurrentTimeAsync(frame, useUndo ? STAO_USE_UNDO : STAO_NONE);
+    });
 }
 
 KisImageAnimationInterface::~KisImageAnimationInterface()
@@ -258,17 +262,17 @@ void KisImageAnimationInterface::explicitlySetCurrentTime(int frameId)
     m_d->setCurrentTime(frameId);
 }
 
-void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUndo)
+void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, SwitchTimeAsyncFlags options)
 {
+    const bool useUndo = options & STAO_USE_UNDO;
     const bool sameFrame = currentUITime() == frameId;
     const bool needsCompositingUpdate = requiresOnionSkinRendering();
     const KisTimeSpan range = KisTimeSpan::calculateIdenticalFramesRecursive(m_d->image->root(), currentUITime());
-    
-    const bool needsRegeneration = !range.contains(frameId) || needsCompositingUpdate;
+    const bool needsRegeneration = !range.contains(frameId) || needsCompositingUpdate || (options & STAO_FORCE_REGENERATION);
 
     KisSwitchTimeStrokeStrategy::SharedTokenSP token = m_d->switchToken.toStrongRef();
 
-    // Handle switching frame to new time..    
+    // Handle switching frame to new time..
     if (!token || !token->tryResetDestinationTime(frameId, needsRegeneration)) {
 
         if (!sameFrame) {
@@ -284,7 +288,7 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             KisStrokeId stroke = m_d->image->startStroke(strategy);
             m_d->image->endStroke(stroke);
         }
-        
+
         if (needsRegeneration) {
             KisStrokeStrategy *strategy =
                 new KisRegenerateFrameStrokeStrategy(this);
@@ -293,8 +297,8 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, bool useUnd
             m_d->image->endStroke(strokeId);
         }
     }
-    
-    
+
+
 
     m_d->setCurrentUITime(frameId);
     emit sigUiTimeChanged(frameId);

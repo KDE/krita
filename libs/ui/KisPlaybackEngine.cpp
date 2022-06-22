@@ -163,7 +163,7 @@ public:
         }
 
         if (m_d->activeCanvas) {
-            m_d->activeProducer()->seek(m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame());
+            m_d->activeProducer()->seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame());
         }
     }
 
@@ -189,8 +189,8 @@ public:
         }
 
         if (m_d->activeCanvas && m_d->canvasProducers.contains(m_d->activeCanvas)) {
-            if ( m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame() >= 0) {
-                m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame());
+            if ( m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() >= 0) {
+                m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame());
             }
         }
 
@@ -229,7 +229,7 @@ void KisPlaybackEngine::playPause()
 
     if (m_d->activeCanvasAnimationState()->playbackState() == PLAYING) {
         pause();
-        seek(m_d->activeCanvasAnimationState()->displayProxy()->frame(), SEEK_FINALIZE);
+        seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame(), SEEK_FINALIZE);
     } else {
         play();
     }
@@ -243,8 +243,8 @@ void KisPlaybackEngine::stop()
         if (origin.has_value()) {
             seek(origin.value(), SEEK_FINALIZE);
         }
-    } else if (m_d->activeCanvasAnimationState()->displayProxy()->frame() != 0) {
-        seek(0, SEEK_FINALIZE);
+    } else if (m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() != 0) {
+        seek(0, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 
@@ -272,7 +272,7 @@ void KisPlaybackEngine::previousFrame()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
-    int frame = m_d->activeCanvasAnimationState()->displayProxy()->frame() - 1;
+    int frame = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() - 1;
 
     if (frame < startFrame || frame >  endFrame) {
         frame = endFrame;
@@ -283,7 +283,7 @@ void KisPlaybackEngine::previousFrame()
             stop();
         }
 
-        seek(frame, SEEK_FINALIZE);
+        seek(frame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 
@@ -295,7 +295,7 @@ void KisPlaybackEngine::nextFrame()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
-    int frame = m_d->activeCanvasAnimationState()->displayProxy()->frame() + 1;
+    int frame = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() + 1;
 
     if (frame > endFrame || frame < startFrame ) {
         frame = startFrame;
@@ -306,7 +306,7 @@ void KisPlaybackEngine::nextFrame()
             stop();
         }
 
-        seek(frame, SEEK_FINALIZE);
+        seek(frame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 
@@ -321,7 +321,7 @@ void KisPlaybackEngine::previousKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int currentFrame = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame();
+    int currentFrame = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
 
     int destinationTime = -1;
     if (!keyframes->keyframeAt(currentFrame)) {
@@ -335,7 +335,7 @@ void KisPlaybackEngine::previousKeyframe()
             stop();
         }
 
-        seek(destinationTime);
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 
@@ -350,7 +350,7 @@ void KisPlaybackEngine::nextKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int currentTime = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame();
+    int currentTime = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
 
     int destinationTime = -1;
     if (keyframes->activeKeyframeAt(currentTime)) {
@@ -363,7 +363,7 @@ void KisPlaybackEngine::nextKeyframe()
             stop();
         }
 
-        seek(destinationTime, SEEK_FINALIZE);
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     } else {
         // Jump ahead by estimated timing...
         const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
@@ -375,7 +375,7 @@ void KisPlaybackEngine::nextKeyframe()
             }
 
             const int timing = activeKeyTime - previousKeyTime;
-            seek(currentTime + timing, SEEK_FINALIZE);
+            seek(currentTime + timing, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
         }
     }
 }
@@ -391,7 +391,7 @@ void KisPlaybackEngine::previousMatchingKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame();
+    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
 
     KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
     int destinationTime = keyframes->activeKeyframeTime(time);
@@ -410,7 +410,7 @@ void KisPlaybackEngine::nextMatchingKeyframe()
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame();
+    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
 
     if (!keyframes->activeKeyframeAt(time)) {
         return;
@@ -448,7 +448,7 @@ void KisPlaybackEngine::nextKeyframeWithColor(const QSet<int> &validColors)
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame();
+    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
 
     if (!keyframes->activeKeyframeAt(time)) {
         return;
@@ -467,7 +467,7 @@ void KisPlaybackEngine::nextKeyframeWithColor(const QSet<int> &validColors)
             stop();
         }
 
-        seek(destinationTime, SEEK_FINALIZE);
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 
@@ -489,7 +489,7 @@ void KisPlaybackEngine::previousKeyframeWithColor(const QSet<int> &validColors)
         node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
     if (!keyframes) return;
 
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->visibleFrame();
+    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
 
     int destinationTime = keyframes->activeKeyframeTime(time);
     while (keyframes->keyframeAt(destinationTime) &&
@@ -504,7 +504,7 @@ void KisPlaybackEngine::previousKeyframeWithColor(const QSet<int> &validColors)
             stop();
         }
 
-        seek(destinationTime);
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 

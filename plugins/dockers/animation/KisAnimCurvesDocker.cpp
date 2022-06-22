@@ -616,7 +616,7 @@ void KisAnimCurvesDocker::updateFrameRegister(){
         return;
     }
 
-    const int frame = m_d->canvas->animationState()->displayProxy()->frame();
+    const int frame = m_d->canvas->animationState()->displayProxy()->activeFrame();
 
     QSignalBlocker blocker(m_d->titlebar->sbFrameRegister);
     m_d->titlebar->sbFrameRegister->setValue(frame);

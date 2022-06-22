@@ -64,7 +64,8 @@ bool KisFrameDisplayProxy::displayFrame(int frame, bool finalize)
         // will prevent the uncached frame from ever determining it needs to be
         // regenerated. We will force a frame switch when going from uncached to cached
         // to work around this issue.
-        ai->switchCurrentTimeAsync(frame);
+
+        ai->switchCurrentTimeAsync(frame, KisImageAnimationInterface::STAO_FORCE_REGENERATION);
         return true;
 
     } else if ( shouldUploadFrame(cache, m_d->displayedFrame, frame) && cache->uploadFrame(frame) ) {
@@ -85,14 +86,14 @@ bool KisFrameDisplayProxy::displayFrame(int frame, bool finalize)
     return false;
 }
 
-int KisFrameDisplayProxy::visibleFrame() const
-{
-    return m_d->displayedFrame;
-}
-
-int KisFrameDisplayProxy::frame() const
+int KisFrameDisplayProxy::activeFrame() const
 {
     return m_d->intendedFrame;
+}
+
+int KisFrameDisplayProxy::activeKeyframe() const
+{
+    return m_d->displayedFrame;
 }
 
 bool KisFrameDisplayProxy::shouldUploadFrame(KisAnimationFrameCacheSP cache, int from, int to)

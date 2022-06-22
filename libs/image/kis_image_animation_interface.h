@@ -129,12 +129,21 @@ public:
 
     int totalLength();
 
+
+    enum SwitchTimeAsyncOption {
+        STAO_NONE = 0,
+        STAO_USE_UNDO = 1 << 1,
+        STAO_FORCE_REGENERATION = 1 << 2
+    };
+    Q_DECLARE_FLAGS(SwitchTimeAsyncFlags, SwitchTimeAsyncOption);
+
 public Q_SLOTS:
+
     /**
      * Switches current frame (synchronously) and starts an
      * asynchronous regeneration of the entire image.
      */
-    void switchCurrentTimeAsync(int frameId, bool useUndo = false);
+    void switchCurrentTimeAsync(int frameId, SwitchTimeAsyncFlags options = STAO_NONE);
 
     void setDocumentRangeStartFrame(int column);
     void setDocumentRangeEndFrame(int column);

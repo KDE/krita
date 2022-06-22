@@ -469,7 +469,7 @@ void KisAnimTimelineDocker::updateFrameRegister()
         return;
     }
 
-    const int frame = m_d->canvas->animationState()->displayProxy()->frame();
+    const int frame = m_d->canvas->animationState()->displayProxy()->activeFrame();
 
     QSignalBlocker blocker(m_d->titlebar->frameRegister);
     m_d->titlebar->frameRegister->setValue(frame);

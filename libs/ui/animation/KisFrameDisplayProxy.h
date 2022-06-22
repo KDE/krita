@@ -25,28 +25,27 @@ public:
     bool displayFrame(int frame, bool finalize);
 
     /**
-     * @brief visibleFrame
-     * @return int Frame that is actually visible. This is not the same as the position of playback
-     * since the visible frame only changes to actual keyframe content.
-     */
-    int visibleFrame() const;
-
-    /**
      * @brief frame
      * @return int Frame that is intended to be shown. This should always reflect the actual
      * time position of the canvas at any given point.
      */
-    int frame() const;
+    int activeFrame() const;
 
 Q_SIGNALS:
     void sigFrameChange();
     void sigFrameDisplayRefreshed();
 
-protected:
+private:
+    /**
+     * @brief activeKeyframe
+     * @return int Latest keyframe (unique frame) that is actually visible. This is not always the same as
+     * the position of playback since only changes to actual keyframe content.
+     */
+    int activeKeyframe() const;
+
     bool shouldUploadFrame(KisAnimationFrameCacheSP cache, int from, int to);
     bool forceRegeneration(KisAnimationFrameCacheSP cache, int from, int to);
 
-private:
     QScopedPointer<struct Private> m_d;
 };
 

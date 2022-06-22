@@ -341,7 +341,7 @@ void KisCanvasAnimationState::setPlaybackState(PlaybackState p_state)
         m_d->state = p_state;
         if (m_d->state == PLAYING) {
             if (!m_d->playbackEnvironment) {
-                m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->frame(), this));
+                m_d->playbackEnvironment.reset(new CanvasPlaybackEnvironment(m_d->displayProxy->activeFrame(), this));
             }
 
             m_d->playbackEnvironment->prepare(m_d->canvas);

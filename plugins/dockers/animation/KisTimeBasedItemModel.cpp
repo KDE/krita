@@ -97,8 +97,6 @@ KisTimeBasedItemModel::KisTimeBasedItemModel(QObject *parent)
     KisConfig cfg(true);
 
     using namespace std::placeholders;
-    std::function<void (int)> scrubCompressCallback(
-        std::bind(&KisTimeBasedItemModel::slotInternalScrubPreviewRequested, this, _1));
 
     std::function<void (int)> scrubHorizHeaderUpdateCallback(
         std::bind(&KisTimeBasedItemModel::scrubHorizontalHeaderUpdate, this, _1));
@@ -171,7 +169,7 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisCanvasAnimationState *player)
         connect(m_d->animationPlayer, SIGNAL(sigPlaybackStateChanged(PlaybackState)), SLOT(slotPlaybackStateChanged(PlaybackState)));
         connect(m_d->animationPlayer, SIGNAL(sigFrameChanged()), SLOT(slotPlaybackFrameChanged()));
 
-        const int frame = player ? player->displayProxy()->frame() : m_d->image->animationInterface()->currentUITime();
+        const int frame = player ? player->displayProxy()->activeFrame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
         setHeaderData(frame, Qt::Horizontal, true, ScrubToRole);
     }
@@ -325,9 +323,9 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
             }
             break;
         case ScrubToRole:
-            SeekFlags flags = value.toBool() ? SEEK_PUSH_AUDIO : SEEK_NONE;
+            SeekFlags seekFlags = value.toBool() ? SEEK_PUSH_AUDIO : SEEK_NONE;
             prioritizeCache(m_d->activeFrameIndex);
-            KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, flags);
+            KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags);
             break;
         }
     }
@@ -520,12 +518,6 @@ bool KisTimeBasedItemModel::mirrorFrames(QModelIndexList indexes)
     return true;
 }
 
-// Where the scrubbing flags should be considered in the future...
-void KisTimeBasedItemModel::slotInternalScrubPreviewRequested(int time)
-{
-    KisPart::instance()->playbackEngine()->seek(time);
-}
-
 void KisTimeBasedItemModel::setScrubState(bool p_state)
 {
     if (!m_d->animationPlayer) {
@@ -544,7 +536,7 @@ void KisTimeBasedItemModel::setScrubState(bool p_state)
             }
 
         } else {
-            KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, SEEK_FORCE_RECACHE);
+            KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, SEEK_FINALIZE);
 
             if (m_d->shouldReturnToPlay) {
                 m_d->animationPlayer->setPlaybackState(PLAYING);
@@ -606,7 +598,7 @@ void KisTimeBasedItemModel::slotCacheChanged()
 void KisTimeBasedItemModel::slotPlaybackFrameChanged()
 {
     if (m_d->animationPlayer->playbackState() != PlaybackState::PLAYING) return;
-    setHeaderData(m_d->animationPlayer->displayProxy()->frame(), Qt::Horizontal, true, ActiveFrameRole);
+    setHeaderData(m_d->animationPlayer->displayProxy()->activeFrame(), Qt::Horizontal, true, ActiveFrameRole);
 }
 
 void KisTimeBasedItemModel::slotPlaybackStateChanged(PlaybackState p_state)

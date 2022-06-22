@@ -97,7 +97,6 @@ private Q_SLOTS:
     void slotFramerateChanged();
     void slotPlaybackRangeChanged();
     void slotCacheChanged();
-    void slotInternalScrubPreviewRequested(int time);
 
     void slotPlaybackFrameChanged();
     void slotPlaybackStateChanged(PlaybackState state);

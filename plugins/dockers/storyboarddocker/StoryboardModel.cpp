@@ -1299,7 +1299,7 @@ void StoryboardModel::visualizeScene(const QModelIndex &scene, bool useUndo)
     int frameTime = index(StoryboardItem::FrameNumber, 0, scene).data().toInt();
 
     if (frameTime != m_image->animationInterface()->currentTime()) {
-        m_image->animationInterface()->switchCurrentTimeAsync(frameTime, useUndo);
+        m_image->animationInterface()->switchCurrentTimeAsync(frameTime, useUndo ? KisImageAnimationInterface::STAO_USE_UNDO : KisImageAnimationInterface::STAO_NONE);
     }
 }
 

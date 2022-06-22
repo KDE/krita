@@ -69,6 +69,7 @@ public:
     void notifyBrushIsGoingToBeClonedForStroke() override;
 
     void coldInitBrush() override;
+    KisFixedPaintDeviceSP outlineSourceImage() const override;
 
 public:
 

@@ -103,9 +103,7 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 
 namespace detail {
 QPainterPath* outlineFactory(const KisBrush *brush) {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
-    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
-    dev->convertFromQImage(brush->brushTipImage(), "");
+    KisFixedPaintDeviceSP dev = brush->outlineSourceImage();
 
     KisBoundary boundary(dev);
     boundary.generateBoundary();
@@ -355,6 +353,15 @@ bool KisBrush::isPiercedApprox() const
     }
 
     return failedPixels > failedPixelsThreshold;
+}
+
+KisFixedPaintDeviceSP KisBrush::outlineSourceImage() const
+{
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
+    dev->convertFromQImage(brushTipImage(), "");
+
+    return dev;
 }
 
 bool KisBrush::canPaintFor(const KisPaintInformation& /*info*/)

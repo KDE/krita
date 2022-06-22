@@ -135,6 +135,18 @@ bool KisAutoBrush::isPiercedApprox() const
     return result;
 }
 
+KisFixedPaintDeviceSP KisAutoBrush::outlineSourceImage() const
+{
+    KisFixedPaintDeviceSP dev;
+    KisDabShape inverseTransform(1.0 / scale(), 1.0, -angle());
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    dev = new KisFixedPaintDevice(cs);
+    mask(dev, KoColor(Qt::black, cs), inverseTransform, KisPaintInformation());
+
+    return dev;
+}
+
 qreal KisAutoBrush::userEffectiveSize() const
 {
     return d->shape->diameter();

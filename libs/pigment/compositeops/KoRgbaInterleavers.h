@@ -12,10 +12,12 @@
 using namespace xsimd;
 
 template<typename T, size_t S>
-using enable_sized_t = kernel::detail::enable_sized_t<T, S>;
+using enable_sized_t = typename std::enable_if<sizeof(T) == S, int>::type;
 
 template<typename T, size_t S>
-using enable_sized_integral_t = kernel::detail::enable_sized_integral_t<T, S>;
+using enable_sized_integral_t =
+    typename std::enable_if<std::is_integral<T>::value && sizeof(T) == S,
+                            int>::type;
 
 template<typename T, typename A, size_t S>
 using enable_sized_vector_t = typename std::enable_if<batch<T, A>::size == S, int>::type;

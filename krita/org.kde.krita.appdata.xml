@@ -146,7 +146,7 @@
     <p>It is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.</p>
     <p xml:lang="bs">On je savršen za skiciranje i slikanje i predstavlja finalno rješenje za kreiranje digitalnih slika od nule s majstorima</p>
     <p xml:lang="ca">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fitxers de dibuix digital des de zero per a mestres.</p>
-    <p xml:lang="ca-valencia">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fitxers de dibuix digital des de zero per a mestres.</p>
+    <p xml:lang="ca-valencia">És perfecte per a fer esbossos i pintar, i presenta una solució final per a crear fichers de dibuix digital des de zero per a mestres.</p>
     <p xml:lang="de">Krita ist perfekt zum Zeichnen oder Malen und stellt eine umfängliche Lösung für die Erstellung digitaler Bilder dar.</p>
     <p xml:lang="el">Είναι ιδανικό για σκιτσογραφία και ζωγραφική, και παρουσιάζει μια από άκρη σε άκρη λύση για τη δημιουργία από το μηδέν αρχείων ψηφιακης ζωγραφικής από τους δασκάλους της τέχνης.</p>
     <p xml:lang="en-GB">It is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.</p>
@@ -181,7 +181,7 @@
     </p>
     <p xml:lang="bs">Krita je odličan izbor za kreiranje konceptualne umjetnosti, stripove, teksture za obradu i mat slike. Krita podržava mnoge prostore boja kao RGB i CMIK na 8 i 16 bitnim cjelobrojnim kanalimaa, kao i 16 i 32 bita floating point kanalima.</p>
     <p xml:lang="ca">El Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». El Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
-    <p xml:lang="ca-valencia">Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderitzar i pintures «matte». Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, així com 16 i 32 bits de canals de coma flotant.</p>
+    <p xml:lang="ca-valencia">Krita és una gran elecció per a crear art conceptual, còmics, textures per a renderisar i pintures «matte». Krita permet molts espais de color com el RGB i el CMYK a 8 i 16 bits de canals sencers, aixina com 16 i 32 bits de canals de coma flotant.</p>
     <p xml:lang="de">Krita ist eine großartige Wahl zur Erstellung von Concept Art, Comics, Rendertexturen und Vorsatzmalerei. Krita unterstützt viele Farbräume, wie RGB und CMYK mit 8 oder 16 Bit Integerkanälen, sowie 16 und 32 Bit Fließkomma-Kanälen.</p>
     <p xml:lang="el">Το Krita είναι μια εξαιρετική επιλογή για τη δημιουργία αφηρημένης τέχνης, ιστοριών με εικόνες, υφής για ζωγραφική αποτύπωσης και διάχυσης φωτός. Το Krita υποστηρίζει πολλούς χρωματικούς χώρους όπως τα RGB και CMYK σε 8 και 16 bit κανάλια ακεραίων καθώς επίσης και σε 16 και 32 bit κανάλια κινητής υποδιαστολής,</p>
     <p xml:lang="en-GB">Krita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colourspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.</p>
@@ -285,7 +285,7 @@
     <screenshot>
       <caption>The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="ca">La finestra d'inici també ofereix les últimes notícies sobre el Krita</caption>
-      <caption xml:lang="ca-valencia">La finestra d'inici també oferix les últimes notícies sobre Krita</caption>
+      <caption xml:lang="ca-valencia">La finestra d'inici també ofereix les últimes notícies sobre Krita</caption>
       <caption xml:lang="de">Das Startfenster bietet jetzt auch die aktuellsten Neuigkeiten über Krita</caption>
       <caption xml:lang="en-GB">The startup window now also gives you the latest news about Krita</caption>
       <caption xml:lang="es">La ventana de bienvenida también le proporciona ahora las últimas noticias sobre Krita</caption>
@@ -377,7 +377,7 @@
     <screenshot>
       <caption>If you're new to digital painting, there's an extensive, up-to-date manual</caption>
       <caption xml:lang="ca">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
-      <caption xml:lang="ca-valencia">Si sou nou en la pintura digital, hi ha un manual extens i actualitzat</caption>
+      <caption xml:lang="ca-valencia">Si sou nou en la pintura digital, hi ha un manual extens i actualisat</caption>
       <caption xml:lang="de">Für Einsteiger in das digitale Malen gibt es ein umfassendes, ständig aktualisiertes Handbuch</caption>
       <caption xml:lang="en-GB">If you're new to digital painting, there's an extensive, up-to-date manual</caption>
       <caption xml:lang="es">Si está empezando con el dibujo digital, dispone de un extenso y actualizado manual</caption>
@@ -408,7 +408,7 @@
     <screenshot>
       <caption>Krita offers powerful filters</caption>
       <caption xml:lang="ca">El Krita ofereix filtres potents</caption>
-      <caption xml:lang="ca-valencia">Krita oferix filtres potents</caption>
+      <caption xml:lang="ca-valencia">Krita ofereix filtres potents</caption>
       <caption xml:lang="cs">Krita poskytuje mocné filtry</caption>
       <caption xml:lang="en-GB">Krita offers powerful filters</caption>
       <caption xml:lang="es">Krita ofrece potentes filtros</caption>
@@ -505,90 +505,7 @@
   </provides>
   <content_rating type="oars-1.1"/>
   <releases>
-    <!-- Note: website infrastructure uses the appstream file from the master branch 
-               to determine the last release, so this entry must always reflect the
-               last actual release -->
-    <release date="2021-03-24" version="4.4.3">
-      <url>https://krita.org/en/item/krita-4-4-3-released/</url>
-      <artifacts>
-        <artifact type="binary" platform="x86_64-appimage">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-4.4.3-x86_64.appimage</location>
-          <checksum type="sha256">f3432e6f66ea3a3a8e06adaee062eec020d2c41d0b8a2bd96d84a0036e9ec40e</checksum>
-          <size type="download">235216936</size>
-          <bundle type="appimage">krita-4.4.3</bundle>
-        </artifact>
-        <artifact type="binary" platform="x86_64-appimage">
-          <location>https://download.kde.org/stable/krita/4.4.3/gmic_krita_qt-x86_64.appimage</location>
-          <checksum type="sha256">95b35a7ff2d591d8adad6159b98558f9b88e99a24568ba9ee217126188f5d026</checksum>
-          <size type="download">37085224</size>
-          <bundle type="appimage">gmic_krita_qt-4.4.3</bundle>
-        </artifact>
-        <artifact type="binary" platform="macOS">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-4.4.3.dmg</location>
-          <checksum type="sha256">f2415d5e1b6b15660996001dddb0b1860b7d32c1fb24f9a6334113929e0c84af</checksum>
-          <size type="download">263109755</size>
-        </artifact>
-        <artifact type="binary" platform="win64">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-x64-4.4.3-setup.exe</location>
-          <checksum type="sha256">a2861265853789dfa6f973ba7d2ee664d14c5852acae623898535e862fd69afd</checksum>
-          <size type="download">136530048</size>
-        </artifact>
-        <artifact type="binary" platform="win32">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-x86-4.4.3-setup.exe</location>
-          <checksum type="sha256">46e69f82cc96fe03dfdec54211be2c9bed0d342307a2196d6c5b4798d1be56f8</checksum>
-          <size type="download">121618480</size>
-        </artifact>
-        <artifact type="binary" platform="android-arm64_v8a">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita_build_apk-release-arm64_v8a-release.apk</location>
-          <checksum type="sha256">b11254d049ff8f5b0c33b2129352660ebc0d18068db1ce4f8630520dd2371821</checksum>
-          <size type="download">102868707</size>
-        </artifact>
-        <artifact type="binary" platform="android-armeabi_v7a">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita_build_apk-release-armeabi_v7a-release.apk</location>
-          <checksum type="sha256">e779335cf1813f756f50bd61b2266c037543e1a072b722b297604b21469394bb</checksum>
-          <size type="download">90585293</size>
-        </artifact>
-        <artifact type="source">
-          <location>https://download.kde.org/stable/krita/4.4.3/krita-4.4.3.tar.xz</location>
-          <checksum type="sha256">4aa0821af0baf3f21c1f6b4e97a3cbb41f2bf23b74d59b049c653c8d1cb9a784</checksum>
-          <size type="download">232915178</size>
-        </artifact>
-      </artifacts>
-    </release>
-    <release date="2021-01-19" version="4.4.2">
-      <url>https://krita.org/en/item/krita-4-4-2-released/</url>
-    </release>
-    <release date="2020-10-29" version="4.4.1">
-      <url>https://krita.org/en/item/krita-4-4-1-released/</url>
-    </release>
-    <release date="2020-10-13" version="4.4.0">
-      <url>https://krita.org/en/item/krita-4-4-0-released/</url>
-      <description>
-        <p>Only a little later than we had planned, this is the next feature release of Krita! With a whole slew of new fill layer types, including the really versatile SeExpr based scriptable fill layer type, exciting new options for Krita’s brushes like the gradient map mode for brushes, lightness and gradient modes for brush textures, support for dynamic use of colors in gradients, webm export for animations, new scripting features — and of course, hundreds of bug fixes that make this version of Krita better than ever. Especially exciting are all the fixes we made for Krita on ChromeOS and Android!</p>
-      </description>
-    </release>
-    <release date="2020-06-18" version="4.3.0">
-      <description>
-        <p>Three months after the release of Krita 4.2.9, we’ve got a major new feature release for you: Krita 4.3.0! We’ve spent the past year not just fixing bugs, even though we fixed over a thousand issues, but have also been busy adding cool new stuff to play with.</p>
-        <p>There’s a whole new set of brush presets that evoke watercolor painting. There’s a color mode in the gradient map filter and a brand new palettize filter and a high pass filter. The scripting API has been extended. It’s now possible to adjust the opacity and lightness on colored brush tips separately. You can now create animated brush tips that select brush along multiple dimensions. We’ve made it possible to put the canvas area in a window of its own, so on a multi monitor setup, you can have all the controls on one monitor, and your images on the other. The color selector has had a big update. There’s a new snapshot docker that stores states of your image, and you can switch between those. There’s a brand new magnetic selection tool. Gradients can now be painting as spirals.</p>
-      </description>
-      <url>https://krita.org/en/item/krita-4-3-0-released/</url>
-    </release>
-    <release date="2020-03-26" version="4.2.9.0">
-      <url>https://krita.org/en/item/krita-4-2-9-released/</url>
-    </release>
-    <release date="2019-11-27" version="4.2.8.0">
-      <url>https://krita.org/en/item/krita-4-2-8-released/</url>
-    </release>
-    <release date="2019-03-10" version="4.2.7.1">
-      <url>https://krita.org/en/item/krita-4-2-7-released/</url>
-    </release>
-    <release date="2022-04-12" version="5.0.5">
-      <url>https://krita.org/en/item/krita-5.0.5-released/</url>
-    </release>
-    <release date="2022-04-27" version="5.0.6">
-      <url>https://krita.org/en/item/krita-5.0.6-released/</url>
-    </release>
+    <release date="2022-06-23" version="5.1.0-beta1"/>
   </releases>
   <custom>
     <value key="KDE::windows_store">https://www.microsoft.com/store/apps/9n6x57zgrw96</value>

@@ -97,13 +97,7 @@ android {
             renderscript.srcDirs = ['src']
             assets.srcDirs = ['assets']
             jniLibs.srcDirs = ['libs', 'lib']
-        }
-        nightly {
-            manifest.srcFile 'flavors/next/AndroidManifest.xml'
-        }
-        debug {
-            manifest.srcFile 'flavors/debug/AndroidManifest.xml'
-        }
+       }
     }
 
     buildTypes {
@@ -112,14 +106,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.pro'
         }
-        nightly {
-            initWith release
-            applicationIdSuffix ".next"
-        }
-        debug {
-            applicationIdSuffix ".debug"
-        }
     }
+
 
     // This is needed because, gradle by default ignores hidden assets.
     aaptOptions {
@@ -133,7 +121,7 @@ android {
     project.ext.constant = 5
 
     def versionMajor    = 5
-    def versionMinor    = 0
+    def versionMinor    = 1
 
     /**
      * This version does **not** correspond to the patch version
@@ -141,13 +129,13 @@ android {
      * (including alpha and beta) release of versionMajor.versionMinor
      * branch
      */
-    def versionRelease  = 0
+    def versionRelease  = 10
 
     defaultConfig {
         targetSdkVersion 30
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.1.0-prealpha"
+        versionName "5.1.0-beta1"
         archivesBaseName = "krita-$abi-$versionName"
     }
 

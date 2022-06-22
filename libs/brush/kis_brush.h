@@ -129,6 +129,15 @@ public:
     virtual QImage brushTipImage() const;
 
     /**
+     * Is a pait device of the brush that shoudl be used for generation
+     * of the brush outline. Usually, it is the same device returned
+     * by brushTipImage(), but might be different in some types
+     * of brushes, like in KisAutoBrush.
+     */
+    virtual KisFixedPaintDeviceSP outlineSourceImage() const;
+
+
+    /**
      * Change the spacing of the brush.
      * @param spacing a spacing of 1.0 means that strokes will be separated from one time the size
      *                of the brush.

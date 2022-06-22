@@ -119,7 +119,7 @@ bool KisGroupLayer::allowAsChild(KisNodeSP node) const
         // BUG:294905
 
         if (node->inherits("KisSelectionMask")) {
-            return !selectionMask();
+            return !qobject_cast<KisSelectionMask*>(node.data())->active() || !selectionMask();
         }
 
         KisImageSP image = this->image();

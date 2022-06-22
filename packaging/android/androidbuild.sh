@@ -184,6 +184,7 @@ build_krita() {
     cd $BUILD_ROOT
     # Configure files using cmake
     cmake $KRITA_ROOT -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX                                \
+         -DKRITA_ENABLE_PCH=off                                                             \
          -DDEFINE_NO_DEPRECATED=1                                                           \
          -DCMAKE_BUILD_TYPE=$BUILD_TYPE                                                     \
          -DCMAKE_TOOLCHAIN_FILE=$CMAKE_ANDROID_NDK/build/cmake/android.toolchain.cmake      \
@@ -191,8 +192,8 @@ build_krita() {
          -DBUILD_TESTING=OFF -DKDE4_BUILD_TESTS=OFF                                         \
          -DBoost_NO_BOOST_CMAKE=TRUE                                                        \
          -DBoost_NO_SYSTEM_PATHS=TRUE                                                       \
-         -DTIFF_HAS_PSD_TAGS=TRUE \
-         -DTIFF_CAN_WRITE_PSD_TAGS=TRUE \
+         -DTIFF_HAS_PSD_TAGS=TRUE                                                           \
+         -DTIFF_CAN_WRITE_PSD_TAGS=TRUE                                                     \
          -DQTANDROID_EXPORTED_TARGET=krita                                                  \
          -DANDROID_APK_DIR=$KRITA_ROOT/packaging/android/apk                                \
          -DANDROID_STL=c++_shared                                                           \

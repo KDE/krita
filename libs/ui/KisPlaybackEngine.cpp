@@ -245,7 +245,8 @@ void KisPlaybackEngine::stop()
             seek(origin.value(), SEEK_FINALIZE);
         }
     } else if (m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() != 0) {
-        seek(0, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+        const int firstFrame = m_d->activeCanvas->image()->animationInterface()->documentPlaybackRange().start();
+        seek(firstFrame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 

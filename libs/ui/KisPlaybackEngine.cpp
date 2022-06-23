@@ -187,6 +187,8 @@ public:
             KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
             m_d->activeProducer()->set("start_frame", animInterface->activePlaybackRange().start());
             m_d->activeProducer()->set("end_frame", animInterface->activePlaybackRange().end());
+            const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
+            m_d->activeProducer()->set("limit_enabled", shouldLimit);
         }
 
         if (m_d->activeCanvas && m_d->canvasProducers.contains(m_d->activeCanvas)) {
@@ -527,6 +529,7 @@ void KisPlaybackEngine::setupProducer(boost::optional<QFileInfo> file)
 
     producer->set("start_frame", animInterface->documentPlaybackRange().start());
     producer->set("end_frame", animInterface->documentPlaybackRange().end());
+    producer->set("limit_enabled", false);
 }
 
 void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)

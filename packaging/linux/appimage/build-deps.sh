@@ -153,3 +153,4 @@ cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fribidi
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_raqm
 cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_unibreak
+cmake --build . --config RelWithDebInfo --parallel ${SUBMAKE_JOBS} --target ext_fontconfig

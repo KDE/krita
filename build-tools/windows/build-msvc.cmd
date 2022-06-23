@@ -931,10 +931,11 @@ echo.
 
 set EXT_TARGETS=patch zlib gettext openssl boost exiv2 fftw3 eigen3 jpeg lcms2
 set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw freetype poppler 
+set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp jpegxl xsimd
+set EXT_TARGETS=%EXT_TARGETS% freetype raqm unibreak fribidi fontconfig
 
 for %%a in (%EXT_TARGETS%) do (
     set TEST_HAS_TARGET=

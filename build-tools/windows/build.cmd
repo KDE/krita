@@ -361,6 +361,7 @@ if "%CMAKE_EXE%" == "" (
             echo ERROR: CMake not found! 1>&2
             exit /b 102
         )
+        call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
     ) else (
         echo Found CMake on PATH: !CMAKE_EXE!
         if not "%ARG_NO_INTERACTIVE%" == "1" (
@@ -372,11 +373,13 @@ if "%CMAKE_EXE%" == "" (
                     echo ERROR: CMake not found! 1>&2
                     exit /b 102
                 )
+                call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
             )
         )
+        call :get_dir_path CMAKE_BIN_DIR "!CMAKE_EXE!"
     )
 )
-echo CMake: %CMAKE_EXE%
+echo CMake: %CMAKE_BIN_DIR%
 
 if "%SEVENZIP_EXE%" == "" (
     call :find_on_path SEVENZIP_EXE 7z.exe
@@ -746,6 +749,9 @@ if NOT "%KRITA_NINJA_DIR%" == "" (
 if NOT "%SVN_DIR%" == "" (
     set "PATH=%PATH%;%SVN_DIR%"
 )
+if NOT "%CMAKE_BIN_DIR%" == "" (
+    set PATH=%PATH%;%CMAKE_BIN_DIR%
+)
 
 echo Creating dirs...
 if NOT "%ARG_SKIP_DEPS%" == "1" (
@@ -947,10 +953,11 @@ echo.
 
 set EXT_TARGETS=patch zlib gettext openssl boost exiv2 fftw3 eigen3 jpeg lcms2
 set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw gmic freetype poppler 
+set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw poppler 
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp jpegxl xsimd
+set EXT_TARGETS=%EXT_TARGETS% freetype unibreak fribidi raqm fontconfig
 
 for %%a in (%EXT_TARGETS%) do (
     set TEST_HAS_TARGET=

@@ -143,7 +143,9 @@ QVector<KisQMicImageSP> KisImageInterface::gmic_qt_get_cropped_images(int inputM
     if (!p->m_viewManager)
         return {};
 
-    KisImageBarrierLocker locker(p->m_viewManager->image());
+    if (!p->m_viewManager->image()->tryBarrierLock(true)) return {};
+
+    KisImageBarrierLocker locker(p->m_viewManager->image(), std::adopt_lock);
 
     p->m_inputMode = static_cast<InputLayerMode>(inputMode);
 

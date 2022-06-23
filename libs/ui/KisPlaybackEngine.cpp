@@ -21,6 +21,7 @@
 
 const float SCRUB_AUDIO_SECONDS = 0.25f;
 
+
 /**
  *  This responds to MLT consumer requests for frames. This may
  *  continue to be called even when playback is stopped due to it running

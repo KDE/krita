@@ -14,6 +14,7 @@
 #include <QAction>
 #include <QPainter>
 #include <QPaintEvent>
+#include <KisPlaybackEngine.h>
 
 #include <klocalizedstring.h>
 
@@ -477,7 +478,7 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
         if (e->button() == Qt::RightButton) {
             if (numSelectedColumns <= 1) {
                 model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
-                model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ScrubToRole);
+                model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisTimeBasedItemModel::ScrubToRole);
             }
 
             /* Fix for safe-assert involving kis_animation_curve_docker.
@@ -539,7 +540,7 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
         } else if (e->button() == Qt::LeftButton) {
             m_d->lastPressSectionIndex = logical;
             model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
-            model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ScrubToRole);
+            model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisTimeBasedItemModel::ScrubToRole);
         }
     }
 
@@ -558,7 +559,7 @@ void KisAnimTimelineTimeHeader::mouseMoveEvent(QMouseEvent *e)
             KIS_ASSERT(activeValue.type() == QVariant::Bool);
             if (activeValue.toBool() != true) {
                 model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
-                model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ScrubToRole);
+                model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_PUSH_AUDIO)), KisTimeBasedItemModel::ScrubToRole);
             }
 
             if (m_d->lastPressSectionIndex >= 0 &&

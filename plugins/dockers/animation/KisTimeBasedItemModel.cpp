@@ -171,7 +171,7 @@ void KisTimeBasedItemModel::setAnimationPlayer(KisCanvasAnimationState *player)
 
         const int frame = player ? player->displayProxy()->activeFrame() : m_d->image->animationInterface()->currentUITime();
         setHeaderData(frame, Qt::Horizontal, true, ActiveFrameRole);
-        setHeaderData(frame, Qt::Horizontal, true, ScrubToRole);
+        setHeaderData(frame, Qt::Horizontal, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), ScrubToRole);
     }
 }
 
@@ -323,7 +323,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
             }
             break;
         case ScrubToRole:
-            SeekFlags seekFlags = value.toBool() ? SEEK_PUSH_AUDIO : SEEK_NONE;
+            SeekFlags seekFlags = SeekFlags(value.toInt());
             prioritizeCache(m_d->activeFrameIndex);
             KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags);
             break;

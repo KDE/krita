@@ -11,6 +11,7 @@
 #include "KisAnimTimelineLayersHeader.h"
 #include "timeline_insert_keyframe_dialog.h"
 #include "KisAnimTimelineFrameDelegate.h"
+#include "KisPlaybackEngine.h"
 
 #include <QPainter>
 #include <QApplication>
@@ -949,7 +950,7 @@ void KisAnimTimelineFramesView::mousePressEvent(QMouseEvent *event)
 
             model()->setData(index, true, KisAnimTimelineFramesModel::ActiveLayerRole);
             model()->setData(index, true, KisAnimTimelineFramesModel::ActiveFrameRole);
-            model()->setData(index, true, KisAnimTimelineFramesModel::ScrubToRole);
+            model()->setData(index, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisAnimTimelineFramesModel::ScrubToRole);
             setCurrentIndex(index);
 
             if (model()->data(index, KisAnimTimelineFramesModel::FrameExistsRole).toBool() ||
@@ -1354,7 +1355,7 @@ void KisAnimTimelineFramesView::currentChanged(const QModelIndex &current, const
     if (previous.column() != current.column()) {
         m_d->model->setData(previous, false, KisAnimTimelineFramesModel::ActiveFrameRole);
         m_d->model->setData(current, true, KisAnimTimelineFramesModel::ActiveFrameRole);
-        m_d->model->setData(current, true, KisAnimTimelineFramesModel::ScrubToRole);
+        m_d->model->setData(current, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisAnimTimelineFramesModel::ScrubToRole);
     }
 }
 

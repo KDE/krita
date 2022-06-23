@@ -160,8 +160,9 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
         QVector<QFileInfo> audioFiles = m_doc->getAudioTracks();
         if (options.includeAudio && audioFiles.count() > 0 && audioFiles.first().exists()) {
             QFileInfo audioFileInfo = audioFiles.first();
-            const int msecStart = (clipRange.start() * 1000) / animation->framerate();
-            const int msecDuration = (clipRange.duration() * 1000) / animation->framerate();
+            const int msecPerFrame = (1000 / animation->framerate());
+            const int msecStart = msecPerFrame * clipRange.start();
+            const int msecDuration = msecPerFrame * clipRange.duration();
 
             const QTime startTime = QTime::fromMSecsSinceStartOfDay(msecStart);
             const QTime durationTime = QTime::fromMSecsSinceStartOfDay(msecDuration);

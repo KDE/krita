@@ -7,6 +7,8 @@
 #ifndef __KIS_IMAGE_BARRIER_LOCKER_H
 #define __KIS_IMAGE_BARRIER_LOCKER_H
 
+#include <mutex>
+
 template <typename ImagePointer>
 struct PointerPolicyAlwaysPresent
 {
@@ -54,6 +56,11 @@ public:
         : m_image(image)
     {
         PointerPolicy::barrierLock(m_image);
+    }
+
+    inline KisImageBarrierLockerImpl(ImagePointer image, std::adopt_lock_t t)
+        : m_image(image)
+    {
     }
 
     inline ~KisImageBarrierLockerImpl() {

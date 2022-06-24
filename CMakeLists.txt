@@ -1054,16 +1054,18 @@ if (HarfBuzz_FOUND)
 endif()
 
 ##
-## Check for libraqm
+## Check for raqm
 ##
-find_package(RAQM 0.9.0)
-set_package_properties(RAQM PROPERTIES
+find_package(Raqm 0.9.0 REQUIRED)
+set_package_properties(Raqm PROPERTIES
     DESCRIPTION "Raqm is a small library that encapsulates the logic for complex text layout and provides a convenient API."
     URL "https://github.com/HOST-Oman/libraqm"
     TYPE REQUIRED
     PURPOSE "Needed for rendering text vector shapes."
 )
-include_directories(${RAQM_INCLUDE_DIRS})
+if (Raqm_FOUND)
+    list(APPEND ANDROID_EXTRA_LIBS ${Raqm_LIBRARIES})
+endif()
 
 ##
 ## Check for fontconfig.

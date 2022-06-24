@@ -1142,6 +1142,17 @@ set_package_properties(Fontconfig PROPERTIES
     PURPOSE "Needed for getting font file information."
 )
 
+##
+## Check for libunibreak
+##
+find_package(libunibreak 5.0 REQUIRED)
+set_package_properties(libunibreak PROPERTIES
+    DESCRIPTION "Implementation of the line breaking and word breaking algorithms as described in Unicode Standard Annex 14 and Unicode Standard Annex 29"
+    URL "https://github.com/adah1972/libunibreak"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)
     ki18n_install(po)

@@ -37,6 +37,8 @@ public:
 
     void mouseDoubleClickEvent(KoPointerEvent */*event*/) override {}
 
+    bool hasSelection() override;
+
     void deleteSelection() override;
 
     QMenu* popupActionsMenu() override;

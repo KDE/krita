@@ -342,6 +342,7 @@ bool Node::setColorSpace(const QString &colorModel, const QString &colorDepth, c
     if (!d->node) return false;
     if (!d->node->inherits("KisLayer")) return false;
     const KoColorProfile *profile = KoColorSpaceRegistry::instance()->profileByName(colorProfile);
+    if (!profile) return false;
     const KoColorSpace *dstCs = KoColorSpaceRegistry::instance()->colorSpace(colorModel,
                                                                              colorDepth,
                                                                              profile);

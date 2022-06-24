@@ -464,7 +464,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     }
 
     // draw ellipse and axes
-    if (isAssistantComplete() && isEllipseValid()) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
+    if (isAssistantComplete() && isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
          gc.setTransform(initialTransform);
          gc.setTransform(d->simpleEllipse.getTransform().inverted(), true);
 
@@ -517,13 +517,15 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
          touchingLine.moveTo(pt2);
          touchingLine.lineTo(pt4);
 
-         drawPath(gc, touchingLine, isSnappingActive());
+         if (assistantVisible) {
+             drawPath(gc, touchingLine, isSnappingActive());
+         }
     }
 
 
     gc.setTransform(converter->documentToWidgetTransform());
 
-    if (assistantVisible) {
+    if (assistantVisible || isEditing) {
         if (!isEllipseValid()) {
             // color red for an invalid transform, but not for an incomplete one
             if(isAssistantComplete()) {

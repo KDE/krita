@@ -1109,6 +1109,20 @@ set_package_properties(Freetype PROPERTIES
 )
 
 ##
+## Check for HarfBuzz
+##
+find_package(HarfBuzz 4.0.0 REQUIRED)
+set_package_properties(HarfBuzz PROPERTIES
+    DESCRIPTION "OpenType text shaping engine"
+    URL "https://harfbuzz.github.io"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+if (HarfBuzz_FOUND)
+    list(APPEND ANDROID_EXTRA_LIBS ${HarfBuzz_LIBRARIES})
+endif()
+
+##
 ## Check for raqm
 ##
 find_package(Raqm 0.9.0 REQUIRED)

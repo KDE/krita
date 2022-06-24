@@ -100,6 +100,8 @@ private:
 
     void setupProducer(boost::optional<QFileInfo> file);
 
+    void hook_finalizeFrame();
+
 private:
     struct Private;
     struct StopAndResume;

@@ -536,8 +536,6 @@ void KisTimeBasedItemModel::setScrubState(bool p_state)
             }
 
         } else {
-            KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, SEEK_FINALIZE);
-
             if (m_d->shouldReturnToPlay) {
                 m_d->animationPlayer->setPlaybackState(PLAYING);
             }

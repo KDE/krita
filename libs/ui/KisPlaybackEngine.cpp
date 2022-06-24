@@ -263,6 +263,10 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
             m_d->sigPushAudioCompressor->start(frameIndex);
         }
 
+        if (flags & SEEK_FINALIZE) {
+            hook_finalizeFrame();
+        }
+
         m_d->activeCanvasAnimationState()->showFrame(frameIndex, (flags & SEEK_FINALIZE) > 0);
     }
 }
@@ -530,6 +534,11 @@ void KisPlaybackEngine::setupProducer(boost::optional<QFileInfo> file)
     producer->set("start_frame", animInterface->documentPlaybackRange().start());
     producer->set("end_frame", animInterface->documentPlaybackRange().end());
     producer->set("limit_enabled", false);
+}
+
+void KisPlaybackEngine::hook_finalizeFrame()
+{
+    ENTER_FUNCTION() << "FINALIZE";
 }
 
 void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)

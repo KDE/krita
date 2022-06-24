@@ -1078,12 +1078,20 @@ set_package_properties(Fontconfig PROPERTIES
     PURPOSE "Needed for getting font file information."
 )
 
-include_directories(${FC_INCLUDE_DIRS})
 ##
-## Check for Lib Unibreak
+## Check for libunibreak
 ##
-pkg_check_modules(LIBUNIBREAK REQUIRED IMPORTED_TARGET libunibreak)
-include_directories(${LIBUNIBREAK_INCLUDE_DIRS})
+find_package(libunibreak 5.0 REQUIRED)
+set_package_properties(libunibreak PROPERTIES
+    DESCRIPTION "Implementation of the line breaking and word breaking algorithms as described in Unicode Standard Annex 14 and Unicode Standard Annex 29"
+    URL "https://github.com/adah1972/libunibreak"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+if (libunibreak_FOUND)
+    list(APPEND ANDROID_EXTRA_LIBS ${libunibreak_LIBRARIES})
+endif()
+
 # FIXME: better way to do this?
 list (APPEND ANDROID_EXTRA_LIBS ${QUAZIP_LIBRARIES}
                                 ${EXPAT_LIBRARY}

@@ -1097,6 +1097,28 @@ set_package_properties(KF5KDcraw PROPERTIES
     PURPOSE "Needed for reading RAW files"
 )
 
+##
+## Check for freetype
+##
+find_package(Freetype 2.10.0 REQUIRED)
+set_package_properties(Freetype PROPERTIES
+    DESCRIPTION "A library for rendering glyphs"
+    URL "https://download.savannah.gnu.org/releases/freetype"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+
+##
+## Check for raqm
+##
+find_package(Raqm 0.9.0 REQUIRED)
+set_package_properties(Raqm PROPERTIES
+    DESCRIPTION "Raqm is a small library that encapsulates the logic for complex text layout and provides a convenient API."
+    URL "https://github.com/HOST-Oman/libraqm"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+
 if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/po)
     find_package(KF5I18n CONFIG REQUIRED)
     ki18n_install(po)

@@ -1039,7 +1039,10 @@ set_package_properties(Freetype PROPERTIES
     TYPE REQUIRED
     PURPOSE "Needed for rendering text vector shapes."
 )
-include_directories(${FREETYPE_INCLUDE_DIRS})
+if (FREETYPE_FOUND)
+    list(APPEND ANDROID_EXTRA_LIBS ${FREETYPE_LIBRARIES})
+endif()
+
 ##
 ## Check for libraqm
 ##

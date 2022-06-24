@@ -81,6 +81,12 @@ void ToolReferenceImages::setReferenceImageLayer(KisSharedPtr<KisReferenceImages
     connect(layer->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(repaintDecorations()));
 }
 
+bool ToolReferenceImages::hasSelection()
+{
+    const KoShapeManager *manager = shapeManager();
+    return manager && manager->selection()->count() != 0;
+}
+
 void ToolReferenceImages::addReferenceImage()
 {
     auto kisCanvas = dynamic_cast<KisCanvas2*>(canvas());

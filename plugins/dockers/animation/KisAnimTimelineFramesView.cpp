@@ -1355,7 +1355,9 @@ void KisAnimTimelineFramesView::currentChanged(const QModelIndex &current, const
     if (previous.column() != current.column()) {
         m_d->model->setData(previous, false, KisAnimTimelineFramesModel::ActiveFrameRole);
         m_d->model->setData(current, true, KisAnimTimelineFramesModel::ActiveFrameRole);
-        m_d->model->setData(current, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisAnimTimelineFramesModel::ScrubToRole);
+        if ( current.column() != m_d->model->currentTime() ) {
+            m_d->model->setData(current, QVariant(int(SEEK_FINALIZE | SEEK_PUSH_AUDIO)), KisAnimTimelineFramesModel::ScrubToRole);
+        }
     }
 }
 

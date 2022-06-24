@@ -1024,11 +1024,7 @@ set_package_properties(QUAZIP PROPERTIES
     TYPE REQUIRED
     PURPOSE "Needed for reading and writing KRA and ORA files"
 )
-##
-## Check for harfbuzz
-##
-pkg_check_modules(HARFBUZZ REQUIRED IMPORTED_TARGET harfbuzz>=4.0.0)
-include_directories(${HARFBUZZ_INCLUDE_DIRS})
+
 ##
 ## Check for freetype
 ##
@@ -1041,6 +1037,20 @@ set_package_properties(Freetype PROPERTIES
 )
 if (FREETYPE_FOUND)
     list(APPEND ANDROID_EXTRA_LIBS ${FREETYPE_LIBRARIES})
+endif()
+
+##
+## Check for HarfBuzz
+##
+find_package(HarfBuzz 4.0.0 REQUIRED)
+set_package_properties(HarfBuzz PROPERTIES
+    DESCRIPTION "OpenType text shaping engine"
+    URL "https://harfbuzz.github.io"
+    TYPE REQUIRED
+    PURPOSE "Needed for rendering text vector shapes."
+)
+if (HarfBuzz_FOUND)
+    list(APPEND ANDROID_EXTRA_LIBS ${HarfBuzz_LIBRARIES})
 endif()
 
 ##

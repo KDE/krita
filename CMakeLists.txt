@@ -1068,15 +1068,16 @@ if (Raqm_FOUND)
 endif()
 
 ##
-## Check for fontconfig.
+## Check for fontconfig
 ##
-find_package(Fontconfig)
+find_package(Fontconfig REQUIRED)
 set_package_properties(Fontconfig PROPERTIES
-    DESCRIPTION "Font configuration and customization library"
-    URL "https://gitlab.freedesktop.org/fontconfig/fontconfig/"
     TYPE REQUIRED
     PURPOSE "Needed for getting font file information."
 )
+if (Fontconfig_FOUND)
+    list(APPEND ANDROID_EXTRA_LIBS ${Fontconfig_LIBRARIES})
+endif()
 
 ##
 ## Check for libunibreak

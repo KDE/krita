@@ -1,0 +1,13 @@
+{
+    "Id": "Krita SVG Export Filter",
+    "NoDisplay": "true",
+    "Type": "Service",
+    "X-KDE-Export": "image/svg,application/x-krita-paintoppreset",
+    
+    "X-KDE-Library": "kritasvgexport",
+    "X-KDE-ServiceTypes": [
+        "Krita/FileFilter"
+    ],
+    "X-KDE-Weight": 1,
+    "X-KDE-Extensions" : "svg"
+}

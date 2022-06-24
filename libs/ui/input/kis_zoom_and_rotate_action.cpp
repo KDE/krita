@@ -64,7 +64,7 @@ void KisZoomAndRotateAction::begin(int shortcut, QEvent *event)
 {
     QTouchEvent *touchEvent = dynamic_cast<QTouchEvent *>(event);
 
-    if (touchEvent) {
+    if (touchEvent && touchEvent->touchPoints().size() > 0) {
         d->shortcutIndex = shortcut;
         d->lastPosition = touchEvent->touchPoints().at(0).pos();
         d->lastDistance = 0;
@@ -91,29 +91,31 @@ void KisZoomAndRotateAction::inputEvent(QEvent *event)
 {
     switch (event->type()) {
     case QEvent::TouchUpdate: {
-        QTouchEvent *tevent = static_cast<QTouchEvent *>(event);
+        QTouchEvent *tevent = dynamic_cast<QTouchEvent *>(event);
+        if (tevent && tevent->touchPoints().size() > 1) {
 
-        const QPointF p0 = tevent->touchPoints().at(0).pos();
-        const QPointF p1 = tevent->touchPoints().at(1).pos();
+            const QPointF p0 = tevent->touchPoints().at(0).pos();
+            const QPointF p1 = tevent->touchPoints().at(1).pos();
 
-        const qreal rotationAngle = canvasRotationAngle(p0, p1);
-        const float dist = QLineF(p0, p1).length();
-        const float scaleDelta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
+            const qreal rotationAngle = canvasRotationAngle(p0, p1);
+            const float dist = QLineF(p0, p1).length();
+            const float scaleDelta = qFuzzyCompare(1.0f, 1.0f + d->lastDistance) ? 1.f : dist / d->lastDistance;
 
-        QTransform transform;
-        transform.rotate(rotationAngle);
-        const QPointF stationaryPointOffset = (p0 - d->lastPosition) * transform * scaleDelta;
+            QTransform transform;
+            transform.rotate(rotationAngle);
+            const QPointF stationaryPointOffset = (p0 - d->lastPosition) * transform * scaleDelta;
 
-        KisCanvas2 *canvas = inputManager()->canvas();
-        KisCanvasController *controller = static_cast<KisCanvasController *>(canvas->canvasController());
-        controller->zoomRelativeToPoint(p0.toPoint(), scaleDelta);
-        controller->rotateCanvas(rotationAngle, p0);
-        controller->pan(-stationaryPointOffset.toPoint());
+            KisCanvas2 *canvas = inputManager()->canvas();
+            KisCanvasController *controller = static_cast<KisCanvasController *>(canvas->canvasController());
+            controller->zoomRelativeToPoint(p0.toPoint(), scaleDelta);
+            controller->rotateCanvas(rotationAngle, p0);
+            controller->pan(-stationaryPointOffset.toPoint());
 
-        d->lastPosition = p0;
-        d->lastDistance = dist;
+            d->lastPosition = p0;
+            d->lastDistance = dist;
 
-        return;
+            return;
+        }
     }
     default:
         break;

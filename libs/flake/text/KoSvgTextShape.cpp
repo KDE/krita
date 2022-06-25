@@ -1199,21 +1199,13 @@ KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot)
         }
     } else if (glyphSlot->bitmap.pixel_mode == FT_PIXEL_MODE_BGRA) {
         img = QImage(size, QImage::Format_ARGB32_Premultiplied);
-        uchar *src = glyphSlot->bitmap.buffer;
+        const uint8_t *src = glyphSlot->bitmap.buffer;
         for (uint y = 0; y < glyphSlot->bitmap.rows; y++) {
-            if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-                // TODO: actually test this... We need to go from BGRA to ARGB.
-                for (int x = 0; x < static_cast<int>(size.width()); x++) {
-                    int p = x * 4;
-                    img.scanLine(y)[p] = src[p + 3];
-                    img.scanLine(y)[p + 1] = src[p + 2];
-                    img.scanLine(y)[p + 2] = src[p + 1];
-                    img.scanLine(y)[p + 3] = src[p];
-                }
-            } else {
-                memcpy(img.scanLine(y), src, glyphSlot->bitmap.pitch);
+            auto *argb = reinterpret_cast<QRgb *>(img.scanLine(y));
+            for (unsigned int x = 0; x < glyphSlot->bitmap.width; x++) {
+                argb[x] = qRgba(src[2], src[1], src[0], src[3]);
+                src += 4;
             }
-            src += glyphSlot->bitmap.pitch;
         }
     }
 

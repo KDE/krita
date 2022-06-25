@@ -1169,6 +1169,10 @@ void KisAssistantTool::loadAssistants()
     QMap<int, KisPaintingAssistantHandleSP> sideHandleMap;
     KisPaintingAssistantSP assistant;
     bool errors = false;
+
+    m_origAssistantList = KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants());
+
+
     while (!xml.atEnd()) {
         switch (xml.readNext()) {
         case QXmlStreamReader::StartElement:
@@ -1303,9 +1307,12 @@ void KisAssistantTool::loadAssistants()
     if (errors) {
         QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Errors were encountered. Not all assistants were successfully loaded."));
     }
+
+    KUndo2Command *command = new EditAssistantsCommand(m_canvas, m_origAssistantList, KisPaintingAssistant::cloneAssistantList(m_canvas->paintingAssistantsDecoration()->assistants()));
+    m_canvas->viewManager()->undoAdapter()->addCommand(command);
+
     m_handles = m_canvas->paintingAssistantsDecoration()->handles();
     m_canvas->updateCanvas();
-
 }
 
 void KisAssistantTool::saveAssistants()

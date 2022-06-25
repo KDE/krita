@@ -389,14 +389,12 @@ add_subdirectory( ext_fftw3 )
 add_subdirectory( ext_ocio )
 add_subdirectory( ext_openjpeg )
 add_subdirectory( ext_fontconfig)
-add_subdirectory( ext_freetype)
 
 if(USE_EXTERNAL_ANGLE AND QT_ENABLE_DYNAMIC_OPENGL)
     add_subdirectory(ext_googleangle)
 endif()
 
 add_subdirectory( ext_qt )
-add_subdirectory( ext_poppler )
 add_subdirectory( ext_libraw )
 if (ANDROID)
   # gettext replacement
@@ -431,3 +429,6 @@ endif()
 add_subdirectory(ext_webp)
 add_subdirectory(ext_jpegxl)
 add_subdirectory(ext_xsimd)
+
+add_subdirectory(ext_freetype)
+add_subdirectory(ext_poppler)

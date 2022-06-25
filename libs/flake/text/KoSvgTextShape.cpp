@@ -379,10 +379,16 @@ void KoSvgTextShape::relayout() const
             lang += "-strict";
         }
     }
-    char lineBreaks[text.size()];
-    set_linebreaks_utf16(text.utf16(), text.size(), lang.toUtf8().data(), lineBreaks);
-    char graphemeBreaks[text.size()];
-    set_graphemebreaks_utf16(text.utf16(), text.size(), lang.toUtf8().data(), graphemeBreaks);
+    QVector<char> lineBreaks(text.size());
+    set_linebreaks_utf16(text.utf16(),
+                         static_cast<size_t>(text.size()),
+                         lang.toUtf8().data(),
+                         lineBreaks.data());
+    QVector<char> graphemeBreaks(text.size());
+    set_graphemebreaks_utf16(text.utf16(),
+                             static_cast<size_t>(text.size()),
+                             lang.toUtf8().data(),
+                             graphemeBreaks.data());
 
     int globalIndex = 0;
     QVector<CharacterResult> result(text.size());

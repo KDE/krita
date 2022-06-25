@@ -267,11 +267,11 @@ QStringList
 KoCssTextUtils::textToUnicodeGraphemeClusters(const QString text,
                                               const QString langCode)
 {
-    char graphemeBreaks[text.size()];
+    QVector<char> graphemeBreaks(text.size());
     set_graphemebreaks_utf16(text.utf16(),
-                             text.size(),
+                             static_cast<size_t>(text.size()),
                              langCode.toUtf8().data(),
-                             graphemeBreaks);
+                             graphemeBreaks.data());
     QStringList graphemes;
     int graphemeLength = 0;
     int lastGrapheme = 0;

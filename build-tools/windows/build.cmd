@@ -871,7 +871,7 @@ set CMDLINE_CMAKE_DEPS="%CMAKE_EXE%" "%KRITA_SRC_DIR%\3rdparty" ^
     -DPERL_EXECUTABLE=%PERL_EXECUTABLE% ^
     -DEXTERNALS_DOWNLOAD_DIR=%BUILDDIR_DOWNLOAD_CMAKE% ^
     -DINSTALL_ROOT=%BUILDDIR_DEPS_INSTALL_CMAKE% ^
-    -G "MinGW Makefiles" ^
+    -G "%KRITA_GENERATOR%" ^
     -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE%
     
 set CMDLINE_CMAKE_KRITA="%CMAKE_EXE%" "%KRITA_SRC_DIR%\." ^
@@ -953,11 +953,11 @@ echo.
 
 set EXT_TARGETS=patch zlib gettext openssl boost exiv2 fftw3 eigen3 jpeg lcms2
 set EXT_TARGETS=%EXT_TARGETS% ocio openexr png icoutils tiff gsl libraw
-set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw poppler 
+set EXT_TARGETS=%EXT_TARGETS% giflib qt kwindowsystem drmingw
 set EXT_TARGETS=%EXT_TARGETS% python sip pyqt
 set EXT_TARGETS=%EXT_TARGETS% lzma quazip openjpeg libde265 libx265 libheif
 set EXT_TARGETS=%EXT_TARGETS% seexpr mypaint webp jpegxl xsimd
-set EXT_TARGETS=%EXT_TARGETS% freetype unibreak fribidi raqm fontconfig
+set EXT_TARGETS=%EXT_TARGETS% freetype poppler unibreak fribidi raqm fontconfig
 
 for %%a in (%EXT_TARGETS%) do (
     set TEST_HAS_TARGET=

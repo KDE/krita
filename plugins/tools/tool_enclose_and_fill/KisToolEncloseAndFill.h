@@ -87,7 +87,6 @@ private:
     KoColor m_regionSelectionColor;
     bool m_regionSelectionInvert {false};
     bool m_regionSelectionIncludeContourRegions {false};
-    bool m_regionSelectionIncludeSurroundingRegions {false};
 
     FillType m_fillType {FillWithForegroundColor};
     qreal m_patternScale {100.0};
@@ -116,7 +115,6 @@ private:
     KisColorButton *m_buttonRegionSelectionColor {nullptr};
     QCheckBox *m_checkBoxRegionSelectionInvert {nullptr};
     QCheckBox *m_checkBoxRegionSelectionIncludeContourRegions {nullptr};
-    QCheckBox *m_checkBoxRegionSelectionIncludeSurroundingRegions {nullptr};
 
     KoGroupButton *m_buttonFillWithFG{nullptr};
     KoGroupButton *m_buttonFillWithBG{nullptr};
@@ -178,7 +176,6 @@ private Q_SLOTS:
     void slot_buttonRegionSelectionColor_changed(const KoColor &color);
     void slot_checkBoxRegionSelectionInvert_toggled(bool checked);
     void slot_checkBoxRegionSelectionIncludeContourRegions_toggled(bool checked);
-    void slot_checkBoxRegionSelectionIncludeSurroundingRegions_toggled(bool checked);
     void slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *button,
                                                       bool checked);
     void slot_sliderPatternScale_valueChanged(double value);

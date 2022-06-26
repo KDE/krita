@@ -726,26 +726,33 @@ void KisEncloseAndFillPainter::Private::selectRegionsSurroundedBySpecificColorGe
     if (enclosingPoints.isEmpty()) {
         return;
     }
-    // Here we just fill all the areas from the border towards inside until the specific color
+    // Here we just fill all the areas from the border towards inside until the
+    // specific color. This selects any region that touches the enclosing area
+    // contour and that is not equal to the surrounding color
     if (colorOrTransparent) {
         selectRegionsFromContourUntilColorOrTransparent(resultMask, enclosingMask, enclosingPoints, enclosingMaskRect, referenceDevice, selectionPolicy.color);
     } else {
         selectRegionsFromContourUntilColor(resultMask, enclosingMask, enclosingPoints, enclosingMaskRect, referenceDevice, selectionPolicy.color);
     }
-    // Invert the mask since it contains the regions surrounding the regions we want
+    // Invert the mask since it contains the regions surrounding the regions we
+    // want, that is, the regions that touch the enclosing area contour and that
+    // are not equal to the surrounding color. We want the opposite
     resultMask->invert();
     // Since, after inverting, the mask includes the region outside the enclosing
     // mask, we must intersect the current mask with the enclosing mask. The result
     // is a mask that includes all the closed regions inside the enclosing mask
     resultMask->applySelection(enclosingMask, SELECTION_INTERSECT);
-    // Remove the surrounding regions, if needed
-    if (!regionSelectionIncludeSurroundingRegions) {
+    
+    if (regionSelectionIncludeSurroundingRegions) {
+        // Remove the regions that touch the enclosing area
+        removeContourRegions(resultMask, enclosingPoints, enclosingMaskRect);
+    } else {
+        // Remove the surrounding regions. Also there shouldn't be any regions
+        // that touch the enclosing area contour after this step
         KisPixelSelectionSP mask = new KisPixelSelection(new KisSelectionDefaultBounds(enclosingMask));
         selectSimilarRegions(mask, enclosingMask, enclosingMaskRect, referenceDevice, selectionPolicy);
         resultMask->applySelection(mask, SELECTION_SUBTRACT);
     }
-    // Remove the regions that touch the enclosing area
-    removeContourRegions(resultMask, enclosingPoints, enclosingMaskRect);
     if (resultMaskRect) {
         *resultMaskRect = resultMask->selectedExactRect();
     }

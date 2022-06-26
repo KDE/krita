@@ -275,7 +275,7 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
                                                m_regionSelectionColor,
                                                m_regionSelectionInvert,
                                                m_regionSelectionIncludeContourRegions,
-                                               m_regionSelectionIncludeSurroundingRegions,
+                                               false,
                                                m_fillThreshold,
                                                m_fillOpacitySpread,
                                                m_antiAlias,
@@ -345,12 +345,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
                   "Include contour regions")
         );
     m_checkBoxRegionSelectionIncludeContourRegions->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
-    m_checkBoxRegionSelectionIncludeSurroundingRegions =
-        new QCheckBox(
-            i18nc("The 'include surrounding regions' checkbox in enclose and fill tool",
-                  "Include surrounding regions")
-        );
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
     KisOptionButtonStrip *optionButtonStripFillWith = new KisOptionButtonStrip;
     m_buttonFillWithFG = optionButtonStripFillWith->addButton(
@@ -417,7 +411,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_comboBoxRegionSelectionMethod->setToolTip(regionSelectionMethodToUserString(m_regionSelectionMethod));
     m_checkBoxRegionSelectionInvert->setToolTip(i18n("Check this option to fill all the regions except the selected ones"));
     m_checkBoxRegionSelectionIncludeContourRegions->setToolTip(i18n("Check this option to also fill the shapes that touch the contour of the enclosing region"));
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setToolTip(i18n("Check this option to also fill the surrounding regions"));
     m_buttonFillWithFG->setToolTip(i18n("Foreground color"));
     m_buttonFillWithBG->setToolTip(i18n("Background color"));
     m_buttonFillWithPattern->setToolTip(i18n("Pattern"));
@@ -460,7 +453,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     sectionWhatToFill->appendWidget("buttonRegionSelectionColor", m_buttonRegionSelectionColor);
     sectionWhatToFill->appendWidget("checkBoxRegionSelectionInvert", m_checkBoxRegionSelectionInvert);
     sectionWhatToFill->appendWidget("checkBoxRegionSelectionIncludeContourRegions", m_checkBoxRegionSelectionIncludeContourRegions);
-    sectionWhatToFill->appendWidget("checkBoxRegionSelectionIncludeSurroundingRegions", m_checkBoxRegionSelectionIncludeSurroundingRegions);
     m_optionWidget->appendWidget("sectionWhatToFill", sectionWhatToFill);
 
     KisOptionCollectionWidgetWithHeader *sectionFillWith =
@@ -537,13 +529,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent
     );
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setChecked(m_regionSelectionIncludeSurroundingRegions);
-    sectionWhatToFill->setWidgetVisible(
-        "checkBoxRegionSelectionIncludeSurroundingRegions",
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedByTransparent ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent
-    );
     if (m_fillType == FillWithBackgroundColor) {
         m_buttonFillWithBG->setChecked(true);
     } else if (m_fillType == FillWithPattern) {
@@ -577,7 +562,6 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     connect(m_buttonRegionSelectionColor, SIGNAL(changed(const KoColor&)), SLOT(slot_buttonRegionSelectionColor_changed(const KoColor&)));
     connect(m_checkBoxRegionSelectionInvert, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionInvert_toggled(bool)));
     connect(m_checkBoxRegionSelectionIncludeContourRegions, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionIncludeContourRegions_toggled(bool)));
-    connect(m_checkBoxRegionSelectionIncludeSurroundingRegions, SIGNAL(toggled(bool)), SLOT(slot_checkBoxRegionSelectionIncludeSurroundingRegions_toggled(bool)));
     connect(optionButtonStripFillWith,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
             SLOT(slot_optionButtonStripFillWith_buttonToggled(KoGroupButton *,
@@ -607,7 +591,6 @@ void KisToolEncloseAndFill::loadConfiguration()
     m_regionSelectionColor = loadRegionSelectionColorFromConfig();
     m_regionSelectionInvert = m_configGroup.readEntry<bool>("regionSelectionInvert", false);
     m_regionSelectionIncludeContourRegions = m_configGroup.readEntry<bool>("regionSelectionIncludeContourRegions", false);
-    m_regionSelectionIncludeSurroundingRegions = m_configGroup.readEntry<bool>("regionSelectionIncludeSurroundingRegions", false);
     {
         const QString fillTypeStr = m_configGroup.readEntry<QString>("fillWith", "");
         if (fillTypeStr == "foregroundColor") {
@@ -888,12 +871,6 @@ void KisToolEncloseAndFill::slot_comboBoxRegionSelectionMethod_currentIndexChang
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithTransparent ||
         m_regionSelectionMethod == RegionSelectionMethod::SelectAllRegionsExceptFilledWithSpecificColorOrTransparent
     );
-    sectionWhatToFill->setWidgetVisible(
-        "checkBoxRegionSelectionIncludeSurroundingRegions",
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColor ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedByTransparent ||
-        m_regionSelectionMethod == RegionSelectionMethod::SelectRegionsSurroundedBySpecificColorOrTransparent
-    );
 
     m_comboBoxRegionSelectionMethod->setToolTip(m_comboBoxRegionSelectionMethod->currentText());
 
@@ -925,15 +902,6 @@ void KisToolEncloseAndFill::slot_checkBoxRegionSelectionIncludeContourRegions_to
     }
     m_regionSelectionIncludeContourRegions = checked;
     m_configGroup.writeEntry("regionSelectionIncludeContourRegions", checked);
-}
-
-void KisToolEncloseAndFill::slot_checkBoxRegionSelectionIncludeSurroundingRegions_toggled(bool checked)
-{
-    if (checked == m_regionSelectionIncludeSurroundingRegions) {
-        return;
-    }
-    m_regionSelectionIncludeSurroundingRegions = checked;
-    m_configGroup.writeEntry("regionSelectionIncludeSurroundingRegions", checked);
 }
 
 void KisToolEncloseAndFill::slot_optionButtonStripFillWith_buttonToggled(
@@ -1076,7 +1044,6 @@ void KisToolEncloseAndFill::slot_buttonReset_clicked()
     m_buttonRegionSelectionColor->setColor(KoColor());
     m_checkBoxRegionSelectionInvert->setChecked(false);
     m_checkBoxRegionSelectionIncludeContourRegions->setChecked(false);
-    m_checkBoxRegionSelectionIncludeSurroundingRegions->setChecked(false);
     m_buttonFillWithFG->setChecked(true);
     m_sliderPatternScale->setValue(100.0);
     m_angleSelectorPatternRotation->setAngle(0.0);

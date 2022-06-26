@@ -47,7 +47,7 @@ enum class SLIDER_SET {
 };
 
 struct SliderSettings {
-    SliderSettings(SLIDER_TYPE type, KisHsvColorSlider::MIX_MODE mixMode, const QString &title, int min, int max, int minRelative, int maxRelative, int resetValue)
+    SliderSettings(SLIDER_TYPE type, KisHsvColorSlider::MIX_MODE mixMode, const KLocalizedString &title, int min, int max, int minRelative, int maxRelative, int resetValue)
         : m_type(type)
         , m_mixMode(mixMode)
         , m_title(title)
@@ -65,7 +65,7 @@ struct SliderSettings {
         const int min = colorize ? m_min : m_minRelative;
         const int max = colorize ? m_max : m_maxRelative;
 
-        label->setText(m_title);
+        label->setText(m_title.toString());
         slider->setMinimum(min);
         slider->setMaximum(max);
         spinBox->setMinimum(min);
@@ -215,7 +215,7 @@ struct SliderSettings {
 
     SLIDER_TYPE m_type;
     KisHsvColorSlider::MIX_MODE m_mixMode;
-    QString m_title;
+    KLocalizedString m_title;
     int m_min, m_max;
     int m_minRelative, m_maxRelative;
     int m_resetValue;
@@ -223,15 +223,15 @@ struct SliderSettings {
 
 // Slider configuration based on their SLIDER_TYPE
 const SliderSettings SLIDER_TABLE[9] = {
-    SliderSettings(SLIDER_TYPE::HUE,        KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Hue").toString(),         0,    360, -180, 180, 0),
-    SliderSettings(SLIDER_TYPE::SATURATION, KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Saturation").toString(),  0,    100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::VALUE,      KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Value").toString(),       -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::LIGHTNESS,  KisHsvColorSlider::MIX_MODE::HSL,         ki18n("Lightness").toString(),   -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::LUMA,       KisHsvColorSlider::MIX_MODE::HSY,         ki18n("Luma").toString(),        -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::INTENSITY,  KisHsvColorSlider::MIX_MODE::HSI,         ki18n("Intensity").toString(),   -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::YELLOW_BLUE,KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Yellow-Blue").toString(), 0,    100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::GREEN_RED,  KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Green-Red").toString(),   0,    100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::LUMA_YUV,   KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Luma").toString(),        -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::HUE,        KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Hue"),         0,    360, -180, 180, 0),
+    SliderSettings(SLIDER_TYPE::SATURATION, KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Saturation"),  0,    100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::VALUE,      KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Value"),       -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::LIGHTNESS,  KisHsvColorSlider::MIX_MODE::HSL,         ki18n("Lightness"),   -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::LUMA,       KisHsvColorSlider::MIX_MODE::HSY,         ki18n("Luma"),        -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::INTENSITY,  KisHsvColorSlider::MIX_MODE::HSI,         ki18n("Intensity"),   -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::YELLOW_BLUE,KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Yellow-Blue"), 0,    100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::GREEN_RED,  KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Green-Red"),   0,    100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::LUMA_YUV,   KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Luma"),        -100, 100, -100, 100, 0),
 };
 
 // Defines which sliders to display in each set.

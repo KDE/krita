@@ -98,6 +98,10 @@ private:
     OCIO::ConstProcessorRcPtr m_revereseApproximationProcessor;
     OCIO::ConstProcessorRcPtr m_forwardApproximationProcessor;
 
+    OCIO::ConstCPUProcessorRcPtr m_processorCPU;
+    OCIO::ConstCPUProcessorRcPtr m_revereseApproximationProcessorCPU;
+    OCIO::ConstCPUProcessorRcPtr m_forwardApproximationProcessorCPU;
+
     KisExposureGammaCorrectionInterface *m_interface;
 
     bool m_lockCurrentColorVisualRepresentation;

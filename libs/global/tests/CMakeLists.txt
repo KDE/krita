@@ -9,6 +9,7 @@ kis_add_tests(KisSharedThreadPoolAdapterTest.cpp
     KisSignalCompressorTest.cpp
     KisForestTest.cpp
     KisRectsGridTest.cpp
+    KisLazyStorageTest.cpp
     NAME_PREFIX "libs-global-"
     LINK_LIBRARIES kritaglobal Qt5::Test
     TARGET_NAMES_VAR OK_TESTS

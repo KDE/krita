@@ -12,8 +12,10 @@
 #include <QString>
 #include <QMetaType>
 #include <QDebug>
+#include <boost/optional.hpp>
 
 #include <klocalizedstring.h>
+#include <KisLazyStorage.h>
 
 /**
  * A KoID is a combination of a user-visible string and a string that uniquely
@@ -21,10 +23,42 @@
  */
 class KoID
 {
+private:
+    struct TranslatedString : public QString
+    {
+        TranslatedString(const boost::optional<KLocalizedString> &source)
+            : QString(!source->isEmpty() ? source->toString() : QString())
+        {
+        }
+
+        TranslatedString(const QString &value)
+            : QString(value)
+        {
+        }
+    };
+
+    using StorageType =
+        KisLazyStorage<TranslatedString,
+        boost::optional<KLocalizedString>>;
+
+    struct KoIDPrivate {
+        KoIDPrivate(const QString &_id, const KLocalizedString &_name)
+            : id(_id),
+              name(_name)
+        {}
+
+        KoIDPrivate(const QString &_id, const QString &_name)
+            : id(_id),
+              name(StorageType::init_value_tag(), _name)
+        {}
+
+        QString id;
+        StorageType name;
+    };
+
 public:
     KoID()
-        : m_id()
-        , m_name()
+        : m_d(new KoIDPrivate(QString(), QString()))
     {}
 
     /**
@@ -37,8 +71,7 @@ public:
      * @endcode
      */
     explicit KoID(const QString &id, const QString &name = QString())
-        : m_id(id)
-        , m_name(name)
+        : m_d(new KoIDPrivate(id, name))
     {}
 
     /**
@@ -48,36 +81,30 @@ public:
      * are initialized.
      */
     explicit KoID(const QString &id, const KLocalizedString &name)
-        : m_id(id)
-        , m_localizedString(name)
+        : m_d(new KoIDPrivate(id, name))
     {}
 
     KoID(const KoID &rhs)
+        : m_d(rhs.m_d)
     {
-        m_id = rhs.m_id;
-        m_name = rhs.name();
     }
 
     KoID &operator=(const KoID &rhs)
     {
         if (this != &rhs) {
-            m_id = rhs.m_id;
-            m_name = rhs.name();
+            m_d = rhs.m_d;
         }
         return *this;
     }
 
     QString id() const
     {
-        return m_id;
+        return m_d->id;
     }
 
     QString name() const
     {
-        if (m_name.isEmpty() && !m_localizedString.isEmpty()) {
-            m_name = m_localizedString.toString();
-        }
-        return m_name;
+        return *m_d->name;
     }
 
     friend inline bool operator==(const KoID &, const KoID &);
@@ -90,36 +117,30 @@ public:
         return id1.name() < id2.name();
     }
 
-
-
 private:
-
-    QString m_id;
-    mutable QString m_name;
-    KLocalizedString m_localizedString;
-
+    QSharedPointer<KoIDPrivate> m_d;
 };
 
 Q_DECLARE_METATYPE(KoID)
 
 inline bool operator==(const KoID &v1, const KoID &v2)
 {
-    return v1.m_id == v2.m_id;
+    return v1.m_d == v2.m_d || v1.m_d->id == v2.m_d->id;
 }
 
 inline bool operator!=(const KoID &v1, const KoID &v2)
 {
-    return v1.m_id != v2.m_id;
+    return !(v1 == v2);
 }
 
 inline bool operator<(const KoID &v1, const KoID &v2)
 {
-    return v1.m_id < v2.m_id;
+    return v1.m_d->id < v2.m_d->id;
 }
 
 inline bool operator>(const KoID &v1, const KoID &v2)
 {
-    return v1.m_id > v2.m_id;
+    return v1.m_d->id > v2.m_d->id;;
 }
 
 inline QDebug operator<<(QDebug dbg, const KoID &id)

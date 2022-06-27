@@ -21,6 +21,12 @@ void apply_impl(F f, Tuple&& t, std::index_sequence<I...>)
 {
     f(std::get<I>(std::forward<Tuple>(t))...);
 }
+
+template <typename R, class F, class Tuple, std::size_t... I>
+R apply_r_impl(F f, Tuple&& t, std::index_sequence<I...>)
+{
+    return f(std::get<I>(std::forward<Tuple>(t))...);
+}
 }  // namespace detail
 
 /**
@@ -38,6 +44,15 @@ void apply(F&& f, Tuple&& t)
         std::forward<F>(f), std::forward<Tuple>(t),
         std::make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>{});
 }
+
+template <typename R, class F, class Tuple>
+R apply_r(F&& f, Tuple&& t)
+{
+    return detail::apply_r_impl<R>(
+        std::forward<F>(f), std::forward<Tuple>(t),
+        std::make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>{});
+}
+
 
 namespace detail {
 

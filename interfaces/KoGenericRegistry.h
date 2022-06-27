@@ -175,6 +175,14 @@ public:
         return m_doubleEntries;
     }
 
+    typename QHash<QString, T>::const_iterator constBegin() const {
+        return m_hash.constBegin();
+    }
+
+    typename QHash<QString, T>::const_iterator constEnd() const {
+        return m_hash.constEnd();
+    }
+
 private:
 
     QList<T> m_doubleEntries;

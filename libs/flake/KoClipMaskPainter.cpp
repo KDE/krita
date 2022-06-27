@@ -79,24 +79,29 @@ QPainter *KoClipMaskPainter::maskPainter()
 void KoClipMaskPainter::renderOnGlobalPainter()
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->maskImage.size() == m_d->shapeImage.size());
-    const qreal normCoeff = 1.0 / 255.0;
+    const float normCoeff = 1.0f / 255.0f;
 
-    for (int y = 0; y < m_d->maskImage.height(); y++) {
+    const int height = m_d->maskImage.height();
+    const int width = m_d->maskImage.width();
+
+    for (int y = 0; y < height; y++) {
         QRgb *shapeData = reinterpret_cast<QRgb*>(m_d->shapeImage.scanLine(y));
-        QRgb *maskData = reinterpret_cast<QRgb*>(m_d->maskImage.scanLine(y));
+        const QRgb *maskData =
+            reinterpret_cast<const QRgb *>(m_d->maskImage.scanLine(y));
 
-        for (int x = 0; x < m_d->maskImage.width(); x++) {
+        for (int x = 0; x < width; x++) {
+            const QRgb mask = *maskData;
+            const QRgb shape = *shapeData;
 
+            const float maskValue = qAlpha(mask)
+                * (0.2125f * qRed(mask) + 0.7154f * qGreen(mask)
+                   + 0.0721f * qBlue(mask))
+                * normCoeff;
 
+            const QRgb alpha = static_cast<QRgb>(
+                qRound(maskValue * (qAlpha(shape) * normCoeff)));
 
-            qreal maskValue = qAlpha(*maskData) *
-                (0.2125 * qRed(*maskData) +
-                 0.7154 * qGreen(*maskData) +
-                 0.0721 * qBlue(*maskData))*normCoeff;
-
-            int alpha = qRound(maskValue * (qAlpha(*shapeData) * normCoeff));
-
-            *shapeData = (alpha << 24) | (*shapeData & 0x00ffffff);
+            *shapeData = (alpha << 24) | (shape & 0x00ffffff);
 
             shapeData++;
             maskData++;

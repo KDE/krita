@@ -30,29 +30,33 @@ quint8 KisAnimatedOpacityProperty::get() {
 }
 
 void KisAnimatedOpacityProperty::set(const quint8 value) {
-    quint8 to_assign;
+    quint8 valueToAssign;
     if (m_channel && m_channel->keyframeCount() > 0) {
         const int time = m_channel->activeKeyframeTime();
-        const int translatedOldValue = m_channel->keyframeAt<KisScalarKeyframe>(time)->value() * 255 / 100;
+        KisScalarKeyframeSP key = m_channel->keyframeAt<KisScalarKeyframe>(time);
+
+        KIS_SAFE_ASSERT_RECOVER_RETURN(key);
+
+        const int translatedOldValue = key->value() * 255 / 100; //0..100 -> 0..255
 
         if (translatedOldValue == value) {
             return;
         }
 
-        m_channel->keyframeAt<KisScalarKeyframe>(time)->setValue(value * 100 / 255 );
+        key->setValue(value * 100 / 255 );
 
-        to_assign = m_channel->currentValue() * 255 / 100;
+        valueToAssign = m_channel->currentValue() * 255 / 100;
     } else {
-        to_assign = value;
+        valueToAssign = value;
     }
 
-    if (m_props->intProperty("opacity", m_defaultValue) == to_assign) {
+    if (m_props->intProperty("opacity", m_defaultValue) == valueToAssign) {
         return;
     }
 
-    m_props->setProperty("opacity", to_assign);
+    m_props->setProperty("opacity", valueToAssign);
 
-    emit changed(to_assign);
+    emit changed(valueToAssign);
 }
 
 void KisAnimatedOpacityProperty::makeAnimated(KisNode *parentNode) {

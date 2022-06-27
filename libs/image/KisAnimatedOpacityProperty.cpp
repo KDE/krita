@@ -7,8 +7,9 @@
 
 #include "KisAnimatedOpacityProperty.h"
 
-KisAnimatedOpacityProperty::KisAnimatedOpacityProperty(KoProperties * const props, quint8 defaultValue, QObject *parent)
+KisAnimatedOpacityProperty::KisAnimatedOpacityProperty(KisDefaultBoundsBaseSP bounds, KoProperties * const props, quint8 defaultValue, QObject *parent)
     : QObject(parent),
+      m_bounds(bounds),
       m_props(props),
       m_defaultValue(defaultValue)
 {
@@ -32,10 +33,15 @@ quint8 KisAnimatedOpacityProperty::get() {
 void KisAnimatedOpacityProperty::set(const quint8 value) {
     quint8 valueToAssign;
     if (m_channel && m_channel->keyframeCount() > 0) {
-        const int time = m_channel->activeKeyframeTime();
-        KisScalarKeyframeSP key = m_channel->keyframeAt<KisScalarKeyframe>(time);
+        const int currentTime = m_bounds->currentTime();
+        const float currentValue = m_channel->valueAt(currentTime);
+        KisScalarKeyframeSP key = m_channel->keyframeAt<KisScalarKeyframe>(currentTime);
 
-        KIS_SAFE_ASSERT_RECOVER_RETURN(key);
+        if (!key) {
+            m_channel->addScalarKeyframe(currentTime, currentValue);
+            key = m_channel->keyframeAt<KisScalarKeyframe>(currentTime);
+            KIS_ASSERT(key);
+        }
 
         const int translatedOldValue = key->value() * 255 / 100; //0..100 -> 0..255
 
@@ -75,16 +81,23 @@ void KisAnimatedOpacityProperty::makeAnimated(KisNode *parentNode) {
     connect(m_channel.data(), SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), this, SLOT(slotKeyRemoval(const KisKeyframeChannel*,int)));
 }
 
-void KisAnimatedOpacityProperty::transferKeyframeData(const KisAnimatedOpacityProperty &rhs, KisBaseNode* node){
+void KisAnimatedOpacityProperty::transferKeyframeData(const KisAnimatedOpacityProperty &rhs){
     KisScalarKeyframeChannel* channel = rhs.channel();
     KIS_ASSERT_RECOVER(channel) {}
     KisScalarKeyframeChannel* channelNew = new KisScalarKeyframeChannel(*channel);
     KIS_ASSERT(channelNew);
     m_channel.reset(channelNew);
-    m_channel->setDefaultBounds(new KisDefaultBoundsNodeWrapper(node));
+    m_channel->setDefaultBounds(m_bounds);
 
     connect(m_channel.data(), SIGNAL(sigKeyframeChanged(const KisKeyframeChannel*,int)), this, SLOT(slotKeyChanged(const KisKeyframeChannel*,int)));
     connect(m_channel.data(), SIGNAL(sigRemovingKeyframe(const KisKeyframeChannel*,int)), this, SLOT(slotKeyRemoval(const KisKeyframeChannel*,int)));
+}
+
+void KisAnimatedOpacityProperty::updateDefaultBounds(KisDefaultBoundsBaseSP bounds) {
+    m_bounds = bounds;
+    if (m_channel) {
+        m_channel->setDefaultBounds(m_bounds);
+    }
 }
 
 void KisAnimatedOpacityProperty::slotKeyChanged(const KisKeyframeChannel*, int time) {

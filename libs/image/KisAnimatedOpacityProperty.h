@@ -22,7 +22,7 @@
 class KRITAIMAGE_EXPORT KisAnimatedOpacityProperty : public QObject {
     Q_OBJECT
 public:
-    KisAnimatedOpacityProperty(KoProperties* const props, quint8 defaultValue, QObject *parent = nullptr);
+    KisAnimatedOpacityProperty(KisDefaultBoundsBaseSP bounds, KoProperties* const props, quint8 defaultValue, QObject *parent = nullptr);
 
     quint8 get();
     void set(const quint8 value);
@@ -31,7 +31,9 @@ public:
     KisScalarKeyframeChannel* channel() const { return m_channel.data(); }
 
     void makeAnimated(KisNode* parentNode);
-    void transferKeyframeData(const KisAnimatedOpacityProperty &rhs, KisBaseNode* node);
+    void transferKeyframeData(const KisAnimatedOpacityProperty &rhs);
+
+    void updateDefaultBounds(KisDefaultBoundsBaseSP bounds);
 
 Q_SIGNALS:
     void changed(quint8 value);
@@ -41,6 +43,7 @@ public Q_SLOTS:
     void slotKeyRemoval(const KisKeyframeChannel*, int);
 
 private:
+    KisDefaultBoundsBaseSP m_bounds;
     KoProperties* const m_props;
     QScopedPointer<KisScalarKeyframeChannel> m_channel;
     quint8 m_defaultValue;

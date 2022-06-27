@@ -108,7 +108,7 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
             ct->transfo->setSrcColorSpace(src);
             ct->transfo->setDstColorSpace(dst);
 
-            cacheItem = new FastPathCacheItem(key, KoCachedColorConversionTransformation(this, ct));
+            cacheItem = new FastPathCacheItem(key, KoCachedColorConversionTransformation(ct));
             break;
         }
     }
@@ -116,7 +116,7 @@ KoCachedColorConversionTransformation KoColorConversionCache::cachedConverter(co
         KoColorConversionTransformation* transfo = src->createColorConverter(dst, _renderingIntent, _conversionFlags);
         CachedTransformation* ct = new CachedTransformation(transfo);
         d->cache.insert(key, ct);
-        cacheItem = new FastPathCacheItem(key, KoCachedColorConversionTransformation(this, ct));
+        cacheItem = new FastPathCacheItem(key, KoCachedColorConversionTransformation(ct));
     }
 
     d->fastStorage.setLocalData(cacheItem);
@@ -142,33 +142,27 @@ void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
 
 //--------- KoCachedColorConversionTransformation ----------//
 
-struct KoCachedColorConversionTransformation::Private {
-    KoColorConversionCache* cache;
-    KoColorConversionCache::CachedTransformation* transfo;
-};
-
-
-KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(KoColorConversionCache* cache, KoColorConversionCache::CachedTransformation* transfo) : d(new Private)
+KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(KoColorConversionCache::CachedTransformation* transfo)
+    : m_transfo(transfo)
 {
-    d->cache = cache;
-    d->transfo = transfo;
-    d->transfo->use.ref();
+    m_transfo = transfo;
+    m_transfo->use.ref();
 }
 
-KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation& rhs) : d(new Private(*rhs.d))
+KoCachedColorConversionTransformation::KoCachedColorConversionTransformation(const KoCachedColorConversionTransformation& rhs)
+    : m_transfo(rhs.m_transfo)
 {
-    d->transfo->use.ref();
+    m_transfo->use.ref();
 }
 
 KoCachedColorConversionTransformation::~KoCachedColorConversionTransformation()
 {
-    Q_ASSERT(d->transfo->use > 0);
-    d->transfo->use.deref();
-    delete d;
+    Q_ASSERT(m_transfo->use > 0);
+    m_transfo->use.deref();
 }
 
 const KoColorConversionTransformation* KoCachedColorConversionTransformation::transformation() const
 {
-    return d->transfo->transfo;
+    return m_transfo->transfo;
 }
 

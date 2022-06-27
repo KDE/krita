@@ -770,10 +770,9 @@ QList<KoID> KoColorSpaceRegistry::colorDepthList(const QString & colorModelId, C
 
 QString KoColorSpaceRegistry::Private::colorSpaceIdImpl(const QString & colorModelId, const QString & colorDepthId) const
 {
-    QList<KoColorSpaceFactory*> factories = colorSpaceFactoryRegistry.values();
-    Q_FOREACH (KoColorSpaceFactory* factory, factories) {
-        if (factory->colorModelId().id() == colorModelId && factory->colorDepthId().id() == colorDepthId) {
-            return factory->id();
+    for (auto it = colorSpaceFactoryRegistry.constBegin(); it != colorSpaceFactoryRegistry.constEnd(); ++it) {
+        if (it.value()->colorModelId().id() == colorModelId && it.value()->colorDepthId().id() == colorDepthId) {
+            return it.value()->id();
         }
     }
     return "";

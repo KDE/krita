@@ -804,14 +804,25 @@ void KoFillConfigWidget::slotMeshGradientShadingChanged(int index)
 
 void KoFillConfigWidget::slotMeshHandleColorChanged(const KoColor &c)
 {
-    if (d->activeMeshGradient) {
-        if (d->meshposition.isValid()) {
-            d->activeMeshGradient->getMeshArray()->modifyColor(d->meshposition, c.toQColor());
-            setNewMeshGradientBackgroundToShape();
-        }
-        return;
+    QList<KoShape*> selectedShapes = currentShapes();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(!selectedShapes.isEmpty());
+
+    KoShapeFillWrapper wrapper(selectedShapes, d->fillVariant);
+    const SvgMeshGradient *gradient = wrapper.meshgradient();
+
+    // if we changed the handle, the gradient *has* to exist
+    KIS_SAFE_ASSERT_RECOVER_RETURN(gradient);
+
+    if (d->meshposition.isValid()) {
+        // We don't have any signals firing when we change the structure (i.e position of stops etc) of a
+        // meshgradient. So, activeMeshGradient isn't updated when this happens. Hence we update it here and
+        // then modify the color.
+        d->activeMeshGradient.reset(new SvgMeshGradient(*gradient));
+
+        d->activeMeshGradient->getMeshArray()->modifyColor(d->meshposition, c.toQColor());
+        setNewMeshGradientBackgroundToShape();
     }
-    KIS_ASSERT(false);
+    return;
 }
 
 void KoFillConfigWidget::loadCurrentFillFromResourceServer()

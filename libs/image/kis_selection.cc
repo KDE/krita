@@ -47,7 +47,7 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     KisDefaultBoundsBaseSP defaultBounds;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent *shapeSelection;
-    KisLazyStorage<KisSelectionUpdateCompressor> updateCompressor;
+    KisLazyStorage<KisSelectionUpdateCompressor, KisSelection*> updateCompressor;
 
     /**
      * This lock makes sure that the shape selection is not reincarnated,

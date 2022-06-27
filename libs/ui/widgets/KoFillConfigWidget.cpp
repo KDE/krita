@@ -712,6 +712,10 @@ void KoFillConfigWidget::slotGradientRepeatChanged()
 
 void KoFillConfigWidget::updateGradientUi(const QGradient *gradient)
 {
+    if (gradient && d->activeGradient) {
+        KIS_SAFE_ASSERT_RECOVER_RETURN(*gradient == *(d->activeGradient->toQGradient()));
+    }
+
     KisSignalsBlocker b1(d->ui->wdgGradientEditor,
                          d->ui->cmbGradientType,
                          d->ui->cmbGradientRepeat);

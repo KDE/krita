@@ -449,7 +449,7 @@ void KoSvgTextShape::relayout() const
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
     // pass everything to a css-compatible text-layout algortihm.
-    raqm_t_up layout = toLibraryResource(raqm_create());
+    raqm_t_up layout(raqm_create());
 
     if (raqm_set_text_utf16(layout.data(), text.utf16(), text.size())) {
         if (writingMode == KoSvgText::VerticalRL
@@ -869,8 +869,7 @@ void KoSvgTextShape::relayout() const
                            - glyphs[g].ftface->size->metrics.descender));
             bbox = glyphTf.mapRect(bbox);
         } else {
-            hb_font_t_up font = toLibraryResource(
-                hb_ft_font_create_referenced(glyphs[g].ftface));
+            hb_font_t_up font(hb_ft_font_create_referenced(glyphs[g].ftface));
             hb_position_t ascender = 0;
             hb_ot_metrics_get_position(font.data(),
                                        HB_OT_METRICS_TAG_VERTICAL_ASCENDER,
@@ -1950,8 +1949,7 @@ void KoSvgTextShape::Private::computeFontMetrics(
         res,
         res,
         properties.fontAxisSettings());
-    hb_font_t_up font =
-        toLibraryResource(hb_ft_font_create_referenced(faces.front().data()));
+    hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
     qreal freetypePixelsToPt = (1.0 / 64.0) * float(72. / res);
 
     hb_direction_t dir = HB_DIRECTION_LTR;

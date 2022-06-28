@@ -226,7 +226,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
         if (!(attr = imageElement.attribute(X_RESOLUTION)).isNull()) {
             qreal value = KisDomUtils::toDouble(attr);
 
-            if (value > 1.0) {
+            if (value > 0) {
                 xres = value / 72.0;
             }
         }
@@ -234,7 +234,7 @@ KisImageSP KisKraLoader::loadXML(const QDomElement& imageElement)
         yres = 100.0 / 72.0;
         if (!(attr = imageElement.attribute(Y_RESOLUTION)).isNull()) {
             qreal value = KisDomUtils::toDouble(attr);
-            if (value > 1.0) {
+            if (value > 0) {
                 yres = value / 72.0;
             }
         }

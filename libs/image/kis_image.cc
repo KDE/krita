@@ -1749,7 +1749,7 @@ void KisImage::addAnnotation(KisAnnotationSP annotation)
     while (it != m_d->annotations.end()) {
         if ((*it)->type() == annotation->type()) {
             *it = annotation;
-            emit sigImageModified();
+            setModifiedWithoutUndo();
             return;
         }
         ++it;

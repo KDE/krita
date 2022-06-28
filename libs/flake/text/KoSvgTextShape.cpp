@@ -398,7 +398,7 @@ void KoSvgTextShape::relayout() const
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
     // pass everything to a css-compatible text-layout algortihm.
-    raqm_t_up layout = toLibraryResource(raqm_create());
+    raqm_t_up layout(raqm_create());
 
     if (raqm_set_text_utf16(layout.data(), text.utf16(), text.size())) {
         if (writingMode == KoSvgText::VerticalRL || writingMode == KoSvgText::VerticalLR) {
@@ -715,7 +715,7 @@ void KoSvgTextShape::relayout() const
                            - glyphs[g].ftface->size->metrics.descender));
             bbox = glyphTf.mapRect(bbox);
         } else {
-            hb_font_t_up font = toLibraryResource(hb_ft_font_create_referenced(glyphs[g].ftface));
+            hb_font_t_up font(hb_ft_font_create_referenced(glyphs[g].ftface));
             hb_position_t ascender = 0;
             hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender);
             hb_position_t descender = 0;
@@ -1629,22 +1629,37 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
     }
 
     QVector<int> lengths;
-    const QFont::Style style =
-        QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
-                                                                            lengths,
-                                                                            QString(),
-                                                                            fontSize,
-                                                                            properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-                                                                            properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                                                                            style != QFont::StyleNormal);
-    KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
-    if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)){
-        fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
+    const QFont::Style style = QFont::Style(
+        properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+    std::vector<FT_FaceUP> faces =
+        KoFontRegistery::instance()->facesForCSSValues(
+            properties.property(KoSvgTextProperties::FontFamiliesId)
+                .toStringList(),
+            lengths,
+            QString(),
+            fontSize,
+            properties.propertyOrDefault(KoSvgTextProperties::FontWeightId)
+                .toInt(),
+            properties.propertyOrDefault(KoSvgTextProperties::FontStretchId)
+                .toInt(),
+            style != QFont::StyleNormal);
+    KoSvgText::AutoValue fontSizeAdjust =
+        properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId)
+            .value<KoSvgText::AutoValue>();
+    if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
+        fontSizeAdjust.isAuto =
+            (properties.property(KoSvgTextProperties::KraTextVersionId).toInt()
+             < 3);
     }
-    KoFontRegistery::instance()->configureFaces(faces, fontSize, fontSizeAdjust.isAuto? 1.0: fontSizeAdjust.customValue, res, res, properties.fontAxisSettings());
-    hb_font_t_up font = toLibraryResource(hb_ft_font_create_referenced(faces.front().data()));
-    qreal freetypePixelsToPt = (1.0/64.0) * float(72./res);
+    KoFontRegistery::instance()->configureFaces(
+        faces,
+        fontSize,
+        fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+        res,
+        res,
+        properties.fontAxisSettings());
+    hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
+    qreal freetypePixelsToPt = (1.0 / 64.0) * float(72. / res);
 
     hb_direction_t dir = HB_DIRECTION_LTR;
     if (!isHorizontal) {

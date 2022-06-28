@@ -14,7 +14,6 @@
 
 struct KisIdleWatcher::Private
 {
-    static const int IDLE_CHECK_PERIOD = 200; /* ms */
     static const int IDLE_CHECK_COUNT = 4; /* ticks */
 
     Private(int delay, KisIdleWatcher *q)
@@ -23,7 +22,7 @@ struct KisIdleWatcher::Private
           idleCheckCounter(0)
     {
         idleCheckTimer.setSingleShot(true);
-        idleCheckTimer.setInterval(IDLE_CHECK_PERIOD);
+        idleCheckTimer.setInterval(delay);
     }
 
     KisSignalAutoConnectionsStore connectionsStore;

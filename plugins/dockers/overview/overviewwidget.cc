@@ -30,7 +30,7 @@ OverviewWidget::OverviewWidget(QWidget * parent)
     : QWidget(parent)
     , m_canvas(0)
     , m_dragging(false)
-    , m_imageIdleWatcher(250)
+    , m_imageIdleWatcher(150)
 {
     setMouseTracking(true);
     KisConfig cfg(true);

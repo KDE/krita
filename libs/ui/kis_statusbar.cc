@@ -87,7 +87,7 @@ void KisStatusBar::setup()
     m_fullscreenToggle->setCheckable(false);
     m_fullscreenToggle->setToolTip(i18n("Toggle Fullscreen"));
     m_fullscreenToggle->setAutoRaise(true);
-    m_fullscreenToggle->setIcon(KisIconUtils::loadIcon("zoom-horizontal"));
+    m_fullscreenToggle->setIcon(KisIconUtils::loadIcon("view-fullscreen"));
     addStatusBarItem(m_fullscreenToggle);
     m_fullscreenToggle->setVisible(true);
     connect(m_fullscreenToggle, SIGNAL(clicked()), m_viewManager, SLOT(slotToggleFullscreen()));

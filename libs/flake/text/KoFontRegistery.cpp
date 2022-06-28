@@ -24,6 +24,7 @@ private:
         FT_LibraryUP m_library;
         QHash<FcChar32, FcPatternUP> m_patterns;
         QHash<FcChar32, FcFontSetUP> m_fontSets;
+        QHash<QString, FT_FaceUP> m_faces;
 
         ThreadData(FT_LibraryUP lib)
             : m_library(std::move(lib))
@@ -71,6 +72,13 @@ public:
         if (!m_data.hasLocalData())
             initialize();
         return m_data.localData()->m_fontSets;
+    }
+
+    QHash<QString, FT_FaceUP> &typeFaces()
+    {
+        if (!m_data.hasLocalData())
+            initialize();
+        return m_data.localData()->m_faces;
     }
 };
 
@@ -261,10 +269,17 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
     std::vector<FT_FaceUP> faces;
 
     for (int i = 0; i < lengths.size(); i++) {
-        FT_Face face = nullptr;
-        QByteArray utfData = fontFileNames.at(i).toUtf8();
-        if (FT_New_Face(d->library().data(), utfData.data(), 0, &face) == 0) {
-            faces.emplace_back(face);
+        auto entry = d->typeFaces().find(fontFileNames[i]);
+        if (entry != d->typeFaces().end()) {
+            faces.emplace_back(entry.value());
+        } else {
+            FT_Face f = nullptr;
+            QByteArray utfData = fontFileNames.at(i).toUtf8();
+            if (FT_New_Face(d->library().data(), utfData.data(), 0, &f) == 0) {
+                FT_FaceUP face(f);
+                faces.emplace_back(face);
+                d->typeFaces().insert(fontFileNames[i], face);
+            }
         }
     }
 

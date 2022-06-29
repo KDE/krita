@@ -355,11 +355,41 @@ bool KisBrush::isPiercedApprox() const
     return failedPixels > failedPixelsThreshold;
 }
 
+namespace {
+void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
+{
+    for (int x = 0; x < maskWidth; x++) {
+        *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*src));
+        src++;
+        dst++;
+    }
+}
+}
+
 KisFixedPaintDeviceSP KisBrush::outlineSourceImage() const
 {
-    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->rgb8();
+    /**
+     * We need to generate the mask manually, skipping the
+     * construction of the image pyramid
+     */
+
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->alpha8();
     KisFixedPaintDeviceSP dev = new KisFixedPaintDevice(cs);
-    dev->convertFromQImage(brushTipImage(), "");
+    const QImage image = brushTipImage().convertToFormat(QImage::Format_ARGB32);
+
+    dev->setRect(image.rect());
+    dev->lazyGrowBufferWithoutInitialization();
+
+    const int maskWidth = image.width();
+    const int maskHeight = image.height();
+
+    quint8 *dstPtr = dev->data();
+
+    for (int y = 0; y < maskHeight; y++) {
+        const QRgb* maskPointer = reinterpret_cast<const QRgb*>(image.constScanLine(y));
+        fetchPremultipliedRed(maskPointer, dstPtr, maskWidth);
+        dstPtr += maskWidth;
+    }
 
     return dev;
 }
@@ -544,17 +574,6 @@ void KisBrush::mask(KisFixedPaintDeviceSP dst, const KisPaintDeviceSP src, KisDa
 {
     PaintDeviceColoringInformation pdci(src, maskWidth(shape, subPixelX, subPixelY, info));
     generateMaskAndApplyMaskOrCreateDab(dst, &pdci, shape, info, subPixelX, subPixelY, softnessFactor, lightnessStrength);
-}
-
-namespace {
-void fetchPremultipliedRed(const QRgb* src, quint8 *dst, int maskWidth)
-{
-    for (int x = 0; x < maskWidth; x++) {
-        *dst = KoColorSpaceMaths<quint8>::multiply(255 - *src, qAlpha(*src));
-        src++;
-        dst++;
-    }
-}
 }
 
 void KisBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst,

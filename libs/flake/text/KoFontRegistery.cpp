@@ -274,8 +274,9 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
     return faces;
 }
 
-bool KoFontRegistery::configureFaces(std::vector<FT_FaceUP> &faces,
-                                     qreal size, qreal fontSizeAdjust,
+bool KoFontRegistery::configureFaces(const std::vector<FT_FaceUP> &faces,
+                                     qreal size,
+                                     qreal fontSizeAdjust,
                                      int xRes,
                                      int yRes,
                                      QMap<QString, qreal> axisSettings)
@@ -283,8 +284,8 @@ bool KoFontRegistery::configureFaces(std::vector<FT_FaceUP> &faces,
     int errorCode = 0;
     int ftFontUnit = 64.0;
     qreal finalRes = qMin(xRes, yRes);
-    qreal scaleToPixel = float(finalRes/72.);
-    for (FT_FaceUP &face: faces) {
+    qreal scaleToPixel = float(finalRes / 72.);
+    for (const FT_FaceUP &face : faces) {
         if (!FT_IS_SCALABLE(face)) {
             int fontSizePixels = size * ftFontUnit * scaleToPixel;
             int sizeDelta = 0;

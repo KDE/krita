@@ -495,12 +495,13 @@ void KoSvgTextShape::relayout() const
             }
 
             QVector<int> lengths;
-            QStringList fontFeatures = properties.fontFeaturesForText(start, length);
+            QStringList fontFeatures =
+                properties.fontFeaturesForText(start, length);
 
             qreal fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
             const QFont::Style style =
                 QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-            std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+            const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
                                                                                     lengths,
                                                                                     chunk.text,
                                                                                     fontSize,
@@ -534,7 +535,7 @@ void KoSvgTextShape::relayout() const
             for (int i = 0; i < lengths.size(); i++ )  {
                 length = lengths.at(i);
                 FT_Int32 faceLoadFlags = loadFlags;
-                FT_FaceUP &face = faces.at(i);
+                const FT_FaceUP &face = faces.at(i);
                 if (FT_HAS_COLOR(face)) {
                     loadFlags |= FT_LOAD_COLOR;
                 }
@@ -1631,7 +1632,7 @@ void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
     QVector<int> lengths;
     const QFont::Style style = QFont::Style(
         properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    std::vector<FT_FaceUP> faces =
+    const std::vector<FT_FaceUP> faces =
         KoFontRegistery::instance()->facesForCSSValues(
             properties.property(KoSvgTextProperties::FontFamiliesId)
                 .toStringList(),

@@ -17,6 +17,7 @@
 #include <QDebug>
 #include <QRegularExpression>
 #include <QApplication>
+#include <QThread>
 
 #include "kis_config.h"
 
@@ -94,7 +95,7 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
     
         progressText.replace("[progress]", "0");
     
-        m_progress = toQShared(new QProgressDialog(progressText, "", 0, 0, KisPart::instance()->currentMainwindowAsQWidget()));
+        m_progress = toQShared(new QProgressDialog(progressText, "", 0, 0));
 
         m_progress->setWindowModality(Qt::ApplicationModal);
         m_progress->setCancelButton(0);
@@ -192,7 +193,9 @@ void KisFFMpegWrapper::updateProgressDialog(int progressValue) {
 
     if (m_processSettings.totalFrames > 0) m_progress->setValue(100 * progressValue / m_processSettings.totalFrames);
 
-    QApplication::processEvents();
+    if (m_process && m_process->state() == QProcess::Running) {
+        QApplication::processEvents();
+    }
 }
 
 bool KisFFMpegWrapper::ffprobeCheckStreamsValid(const QJsonObject& ffprobeJsonObj, const QString& ffprobeSTDERR)

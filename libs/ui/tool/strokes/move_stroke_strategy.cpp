@@ -300,11 +300,9 @@ QRect MoveStrokeStrategy::moveNode(KisNodeSP node, QPoint offset)
 
             KIS_ASSERT(cmd);
 
-            if (data.undoCommand) {
+            if (data.undoCommand && !mask->isAnimated()) {
                 const bool mergeResult = data.undoCommand->mergeWith(cmd.get());
-
                 KIS_SAFE_ASSERT_RECOVER_NOOP(mergeResult);
-
                 cmd.reset();
             } else {
                 std::swap(data.undoCommand, cmd);

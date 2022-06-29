@@ -49,9 +49,9 @@ void KisAnimatedOpacityProperty::set(const quint8 value) {
             return;
         }
 
-        key->setValue(value * 100 / 255 );
+        key->setValue(qreal(value) * 100 / 255);
 
-        valueToAssign = m_channel->currentValue() * 255 / 100;
+        valueToAssign = qreal(m_channel->currentValue()) * 255 / 100;
     } else {
         valueToAssign = value;
     }
@@ -61,7 +61,7 @@ void KisAnimatedOpacityProperty::set(const quint8 value) {
     }
 
     m_props->setProperty("opacity", valueToAssign);
-
+    KIS_ASSERT(valueToAssign == value); //Sanity check.
     emit changed(valueToAssign);
 }
 

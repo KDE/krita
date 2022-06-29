@@ -595,7 +595,7 @@ void KoSvgTextShape::relayout() const
             const QFont::Style style = QFont::Style(
                 properties.propertyOrDefault(KoSvgTextProperties::FontStyleId)
                     .toInt());
-            std::vector<FT_FaceUP> faces =
+            const std::vector<FT_FaceUP> faces =
                 KoFontRegistery::instance()->facesForCSSValues(
                     properties.property(KoSvgTextProperties::FontFamiliesId)
                         .toStringList(),
@@ -663,7 +663,7 @@ void KoSvgTextShape::relayout() const
             for (int i = 0; i < lengths.size(); i++) {
                 length = lengths.at(i);
                 FT_Int32 faceLoadFlags = loadFlags;
-                FT_FaceUP &face = faces.at(i);
+                const FT_FaceUP &face = faces.at(i);
                 if (FT_HAS_COLOR(face)) {
                     loadFlags |= FT_LOAD_COLOR;
                 }
@@ -1922,7 +1922,7 @@ void KoSvgTextShape::Private::computeFontMetrics(
     QVector<int> lengths;
     const QFont::Style style = QFont::Style(
         properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    std::vector<FT_FaceUP> faces =
+    const std::vector<FT_FaceUP> faces =
         KoFontRegistery::instance()->facesForCSSValues(
             properties.property(KoSvgTextProperties::FontFamiliesId)
                 .toStringList(),

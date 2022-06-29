@@ -59,7 +59,7 @@ public:
      *
      * @returns whether the configuration was successful.
      */
-    bool configureFaces(std::vector<FT_FaceUP> &faces,
+    bool configureFaces(const std::vector<FT_FaceUP> &faces,
                         qreal size,
                         qreal fontSizeAdjust,
                         int xRes,

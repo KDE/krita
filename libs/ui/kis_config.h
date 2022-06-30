@@ -657,6 +657,9 @@ public:
     bool convertLayerColorSpaceInProperties(bool defaultValue = false) const;
     void setConvertLayerColorSpaceInProperties(bool value);
 
+    bool renamePastedLayers(bool defaultValue = false) const;
+    void setRenamePastedLayers(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

@@ -91,6 +91,8 @@ public:
     bool convertToImageColorspaceOnImport();
     bool autopinLayersToTimeline();
     bool adaptivePlaybackRange();
+    bool renameMergedLayers();
+    bool renamePastedLayers();
 
     int forcedFontDpi();
 

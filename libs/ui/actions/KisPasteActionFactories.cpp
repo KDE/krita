@@ -240,8 +240,11 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
         }
 
         KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+        bool renamePastedLayers = KisConfig(true).renamePastedLayers();
+        QString pastedLayerName = renamePastedLayers ? image->nextLayerName() + " " + i18n("(pasted)") :
+                                                       image->nextLayerName();
         KisPaintLayerSP newLayer = new KisPaintLayer(image.data(),
-                                                     image->nextLayerName() + " " + i18n("(pasted)"),
+                                                     pastedLayerName,
                                                      OPACITY_OPAQUE_U8);
         KisNodeSP aboveNode = view->activeLayer();
         KisNodeSP parentNode = aboveNode ? aboveNode->parent() : image->root();
@@ -309,8 +312,11 @@ void KisPasteNewActionFactory::run(KisViewManager *viewManager)
                                     rect.height(),
                                     clip->colorSpace(),
                                     i18n("Pasted"));
+    bool renamePastedLayers = KisConfig(true).renamePastedLayers();
+    QString pastedLayerName = renamePastedLayers ? image->nextLayerName() + " " + i18n("(pasted)") :
+                                                   image->nextLayerName();
     KisPaintLayerSP layer =
-            new KisPaintLayer(image.data(), image->nextLayerName() + " " + i18n("(pasted)"),
+            new KisPaintLayer(image.data(), pastedLayerName,
                               OPACITY_OPAQUE_U8, clip->colorSpace());
 
     KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), rect);

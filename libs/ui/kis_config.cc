@@ -2401,6 +2401,16 @@ void KisConfig::setConvertLayerColorSpaceInProperties(bool value)
     m_cfg.writeEntry("convertLayerColorSpaceInProperties", value);
 }
 
+bool KisConfig::renamePastedLayers(bool defaultValue) const
+{
+    return defaultValue ? true : m_cfg.readEntry("renamePastedLayers", true);
+}
+
+void KisConfig::setRenamePastedLayers(bool value)
+{
+    m_cfg.writeEntry("renamePastedLayers", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

@@ -51,6 +51,7 @@
 #include "kis_transparency_mask.h"
 #include "kis_paint_device_frames_interface.h"
 #include "kis_command_ids.h"
+#include "kis_image_config.h"
 
 
 namespace KisLayerUtils {
@@ -598,7 +599,7 @@ namespace KisLayerUtils {
                 const QString mergedLayerSuffix = i18n("Merged");
                 mergedLayerName = m_info->mergedNodes.first()->name();
 
-                if (!mergedLayerName.endsWith(mergedLayerSuffix)) {
+                if (KisImageConfig(true).renameMergedLayers() && !mergedLayerName.endsWith(mergedLayerSuffix)) {
                     mergedLayerName = QString("%1 %2")
                         .arg(mergedLayerName).arg(mergedLayerSuffix);
                 }

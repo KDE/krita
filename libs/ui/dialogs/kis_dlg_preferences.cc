@@ -349,6 +349,9 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_chkAutoPin->setChecked(cfg.autoPinLayersToTimeline());
     m_chkAdaptivePlaybackRange->setChecked(cfg.adaptivePlaybackRange());
 
+    chkRenameMergedLayers->setChecked(KisImageConfig(true).renameMergedLayers());
+    chkRenamePastedLayers->setChecked(cfg.renamePastedLayers());
+
     KConfigGroup group = KSharedConfig::openConfig()->group("File Dialogs");
     bool dontUseNative = true;
 #ifdef Q_OS_ANDROID
@@ -547,6 +550,9 @@ void GeneralTab::setDefault()
     intForcedFontDPI->setValue(qt_defaultDpi());
     intForcedFontDPI->setEnabled(false);
 
+    chkRenameMergedLayers->setChecked(KisImageConfig(true).renameMergedLayers(true));
+    chkRenamePastedLayers->setChecked(cfg.renamePastedLayers(true));
+
     QAbstractButton *button = m_pasteFormatGroup.button(cfg.pasteFormat(true));
     Q_ASSERT(button);
 
@@ -699,6 +705,16 @@ bool GeneralTab::adaptivePlaybackRange()
 int GeneralTab::forcedFontDpi()
 {
     return chkForcedFontDPI->isChecked() ? intForcedFontDPI->value() : -1;
+}
+
+bool GeneralTab::renameMergedLayers()
+{
+    return chkRenameMergedLayers->isChecked();
+}
+
+bool GeneralTab::renamePastedLayers()
+{
+    return chkRenamePastedLayers->isChecked();
 }
 
 void GeneralTab::getBackgroundImage()
@@ -2128,6 +2144,9 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.writeEntry(KisResourceCacheDb::dbLocationKey, m_general->m_urlCacheDbLocation->fileName());
         cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());
+
+        KisImageConfig(true).setRenameMergedLayers(m_general->renameMergedLayers());
+        cfg.setRenamePastedLayers(m_general->renamePastedLayers());
 
         // Color settings
         cfg.setUseSystemMonitorProfile(m_colorSettings->m_page->chkUseSystemMonitorProfile->isChecked());

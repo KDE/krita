@@ -140,6 +140,9 @@ public:
 
     int maxMaskingBrushSize() const;
 
+    bool renameMergedLayers(bool defaultValue = false) const;
+    void setRenameMergedLayers(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_config.writeEntry(name, value);

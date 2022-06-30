@@ -663,6 +663,16 @@ int KisImageConfig::maxMaskingBrushSize() const
     return qMin(15000, 3 * maxBrushSize());
 }
 
+bool KisImageConfig::renameMergedLayers(bool defaultValue) const
+{
+    return defaultValue ? true : m_config.readEntry("renameMergedLayers", true);
+}
+
+void KisImageConfig::setRenameMergedLayers(bool value)
+{
+    m_config.writeEntry("renameMergedLayers", value);
+}
+
 QString KisImageConfig::exportConfigurationXML(const QString &exportConfigId, bool defaultValue) const
 {
     return (defaultValue ? QString() : m_config.readEntry("ExportConfiguration-" + exportConfigId, QString()));

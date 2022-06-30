@@ -278,6 +278,7 @@ inline QRect kisTrimTop( int height, QRect& toTakeFrom)
  * concept. Basically, it converts tryLock() into try_lock() to comply
  * with the syntax.
  */
+
 template <class T>
 struct StdLockableWrapper {
     StdLockableWrapper(T *lock) : m_lock(lock) {}

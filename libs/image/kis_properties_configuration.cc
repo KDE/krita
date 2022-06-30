@@ -12,7 +12,6 @@
 #include <QDomDocument>
 #include <QString>
 
-#include "kis_dom_utils.h"
 #include "kis_image.h"
 #include "kis_transaction.h"
 #include "kis_undo_adapter.h"
@@ -89,11 +88,11 @@ void KisPropertiesConfiguration::fromXML(const QDomElement& e)
                         d->properties[name] = QVariant(QByteArray::fromBase64(value.toLatin1()));
                     }
                     else {
-                        d->properties[name] = KisDomUtils::unescapeText(value);
+                        d->properties[name] = value;
                     }
                 }
                 else {
-                    d->properties[e.attribute("name")] = QVariant(KisDomUtils::unescapeText(e.text()));
+                    d->properties[e.attribute("name")] = QVariant(e.text());
                 }
             }
         }
@@ -117,25 +116,21 @@ void KisPropertiesConfiguration::toXML(QDomDocument& doc, QDomElement& root) con
         QDomText text;
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
             text = doc.createCDATASection(v.value<KisCubicCurve>().toString());
-        }
-        else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
+        } else if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KoColor>()) {
             QDomDocument cdataDoc = QDomDocument("color");
             QDomElement cdataRoot = cdataDoc.createElement("color");
             cdataDoc.appendChild(cdataRoot);
             v.value<KoColor>().toXML(cdataDoc, cdataRoot);
             text = cdataDoc.createCDATASection(cdataDoc.toString());
             type = "color";
-        }
-        else if(v.type() == QVariant::String) {
-            text = doc.createCDATASection(KisDomUtils::escapeText(v.toString()));  // XXX: Unittest this!
+        } else if(v.type() == QVariant::String ) {
+            text = doc.createCDATASection(v.toString());  // XXX: Unittest this!
             type = "string";
-        }
-        else if(v.type() == QVariant::ByteArray ) {
+        } else if(v.type() == QVariant::ByteArray ) {
             text = doc.createTextNode(QString::fromLatin1(v.toByteArray().toBase64())); // Arbitrary Data
             type = "bytearray";
-        }
-        else {
-            text = doc.createTextNode(KisDomUtils::escapeText(v.toString()));
+        } else {
+            text = doc.createTextNode(v.toString());
             type = "internal";
         }
         e.setAttribute("type", type);

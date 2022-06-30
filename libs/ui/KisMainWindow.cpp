@@ -2477,7 +2477,7 @@ void KisMainWindow::updateWindowMenu()
         d->viewManager->canvasResourceProvider()->notifySavingWorkspace(workspace);
         workspace->setValid(true);
 
-        workspace->setFilename(name + workspace->defaultFileExtension());
+        workspace->setFilename(name.replace(" ", "_") + workspace->defaultFileExtension());
         workspace->setName(name);
 
         KisResourceUserOperations::addResourceWithUserInput(this, workspace);

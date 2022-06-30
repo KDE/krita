@@ -19,8 +19,6 @@
 #include <kemailsettings.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
-#include <KisFileUtils.h>
-#include <kis_dom_utils.h>
 
 #include <QLineEdit>
 #include <QCompleter>
@@ -113,31 +111,31 @@ KoConfigAuthorPage::KoConfigAuthorPage()
 
             QDomElement el = root.firstChildElement("nickname");
             if (!el.isNull()) {
-                aUi->leNickName->setText(KisDomUtils::unescapeText(el.text()));
+                aUi->leNickName->setText(el.text());
             }
             el = root.firstChildElement("givenname");
             if (!el.isNull()) {
-                aUi->leFirstName->setText(KisDomUtils::unescapeText(el.text()));
+                aUi->leFirstName->setText(el.text());
             }
             el = root.firstChildElement("middlename");
             if (!el.isNull()) {
-                aUi->leInitials->setText(KisDomUtils::unescapeText(el.text()));
+                aUi->leInitials->setText(el.text());
             }
             el = root.firstChildElement("familyname");
             if (!el.isNull()) {
-                aUi->leLastName->setText(KisDomUtils::unescapeText(el.text()));
+                aUi->leLastName->setText(el.text());
             }
             el = root.firstChildElement("title");
             if (!el.isNull()) {
-                aUi->leTitle->setText(KisDomUtils::unescapeText(el.text()));
+                aUi->leTitle->setText(el.text());
             }
             el = root.firstChildElement("position");
             if (!el.isNull()) {
-                aUi->lePosition->setText(KisDomUtils::unescapeText(el.text()));
+                aUi->lePosition->setText(el.text());
             }
             el = root.firstChildElement("company");
             if (!el.isNull()) {
-                aUi->leCompany->setText(KisDomUtils::unescapeText(el.text()));
+                aUi->leCompany->setText(el.text());
             }
 
             aUi->tblContactInfo->setItemDelegate(new KoContactInfoDelegate(this, d->contactModes));
@@ -148,7 +146,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
                 QList<QStandardItem *> list;
                 QString type = d->contactModes.at(d->contactKeys.indexOf(el.attribute("type")));
                 list.append(new QStandardItem(type));
-                list.append(new QStandardItem(KisDomUtils::unescapeText(el.text())));
+                list.append(new QStandardItem(el.text()));
                 modes->appendRow(list);
                 el = el.nextSiblingElement("contact");
             }
@@ -287,7 +285,7 @@ void KoConfigAuthorPage::addUser()
     QWidget *w = new QWidget;
     aUi->setupUi(w);
 
-    aUi->leNickName->setText(KisDomUtils::unescapeText(curUi->leNickName->text()));
+    aUi->leNickName->setText(curUi->leNickName->text());
     aUi->leInitials->setText(curUi->leInitials->text());
     aUi->leTitle->setText(curUi->leTitle->text());
     aUi->leCompany->setText(curUi->leCompany->text());
@@ -360,25 +358,25 @@ void KoConfigAuthorPage::apply()
             root.setAttribute("name", d->cmbAuthorProfiles->itemText(i));
 
             QDomElement nickname = doc.createElement("nickname");
-            nickname.appendChild(doc.createTextNode(KisDomUtils::escapeText(aUi->leNickName->text())));
+            nickname.appendChild(doc.createTextNode(aUi->leNickName->text()));
             root.appendChild(nickname);
             QDomElement givenname = doc.createElement("givenname");
-            givenname.appendChild(doc.createTextNode(KisDomUtils::escapeText(aUi->leFirstName->text())));
+            givenname.appendChild(doc.createTextNode(aUi->leFirstName->text()));
             root.appendChild(givenname);
             QDomElement familyname = doc.createElement("familyname");
-            familyname.appendChild(doc.createTextNode(KisDomUtils::escapeText(aUi->leLastName->text())));
+            familyname.appendChild(doc.createTextNode(aUi->leLastName->text()));
             root.appendChild(familyname);
             QDomElement middlename = doc.createElement("middlename");
-            middlename.appendChild(doc.createTextNode(KisDomUtils::escapeText(aUi->leInitials->text())));
+            middlename.appendChild(doc.createTextNode(aUi->leInitials->text()));
             root.appendChild(middlename);
             QDomElement title = doc.createElement("title");
-            title.appendChild(doc.createTextNode(KisDomUtils::escapeText(aUi->leTitle->text())));
+            title.appendChild(doc.createTextNode(aUi->leTitle->text()));
             root.appendChild(title);
             QDomElement company = doc.createElement("company");
-            company.appendChild(doc.createTextNode(KisDomUtils::escapeText(aUi->leCompany->text())));
+            company.appendChild(doc.createTextNode(aUi->leCompany->text()));
             root.appendChild(company);
             QDomElement position = doc.createElement("position");
-            position.appendChild(doc.createTextNode(KisDomUtils::escapeText(aUi->lePosition->text())));
+            position.appendChild(doc.createTextNode(aUi->lePosition->text()));
             root.appendChild(position);
             if (aUi->tblContactInfo) {
                 if (aUi->tblContactInfo->model()) {
@@ -387,7 +385,7 @@ void KoConfigAuthorPage::apply()
                         QModelIndex typeIndex = aUi->tblContactInfo->model()->index(i, 0);
                         QDomElement contactEl = doc.createElement("contact");
                         QString content = QVariant(aUi->tblContactInfo->model()->data(index)).toString();
-                        contactEl.appendChild(doc.createTextNode(KisDomUtils::escapeText(content)));
+                        contactEl.appendChild(doc.createTextNode(content));
                         QString type = QVariant(aUi->tblContactInfo->model()->data(typeIndex)).toString();
                         contactEl.setAttribute("type", d->contactKeys.at(d->contactModes.indexOf(type)));
                         root.appendChild(contactEl);
@@ -397,7 +395,7 @@ void KoConfigAuthorPage::apply()
             doc.appendChild(root);
             ba = doc.toByteArray();
 
-            QFile f(KisFileUtils::sanitizeFileName(authorInfo + d->cmbAuthorProfiles->itemText(i) +".authorinfo"));
+            QFile f(authorInfo + d->cmbAuthorProfiles->itemText(i) +".authorinfo");
             f.open(QFile::WriteOnly);
             if (f.write(ba) < 0) {
                 qWarning()<<"Writing author info went wrong:"<<f.errorString();

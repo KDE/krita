@@ -25,7 +25,6 @@
 #include <KFormat>
 #include <kstandardguiitem.h>
 
-#include <KisFileUtils.h>
 #include <kis_debug.h>
 
 #include <kis_icon.h>
@@ -431,14 +430,9 @@ void KisCustomImageWidget::saveAsPredefined()
         return;
     }
     QString saveLocation = KoResourcePaths::saveLocation("data", "predefined_image_sizes/", true);
-    QFile f(saveLocation + '/' + KisFileUtils::sanitizeFileName(fileName) + ".predefinedimage");
+    QFile f(saveLocation + '/' + fileName.replace(' ', '_').replace('(', '_').replace(')', '_').replace(':', '_') + ".predefinedimage");
 
-    if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-        QMessageBox::warning(this, i18nc("@title:window", "Krita:Warning"),
-                             i18n("Could not save %1.", fileName));
-        return;
-    }
-
+    f.open(QIODevice::WriteOnly | QIODevice::Truncate);
     KisPropertiesConfigurationSP predefined = new KisPropertiesConfiguration();
     predefined->setProperty("name", txtPredefinedName->text());
     predefined->setProperty("width", doubleWidth->value());

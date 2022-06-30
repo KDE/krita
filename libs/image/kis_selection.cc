@@ -38,7 +38,8 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     {
     }
 
-    static void safeDeleteShapeSelection(KisSelectionComponent *shapeSelection, KisSelection *selection);
+    template <typename T>
+    static void safeDeleteShapeSelection(T *object, KisSelection *selection);
 
     // used for forwarding setDirty signals only
     KisNodeWSP parentNode;
@@ -56,12 +57,13 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     QReadWriteLock shapeSelectionPointerLock;
 };
 
-void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shapeSelection, KisSelection *selection)
+template <typename T>
+void KisSelection::Private::safeDeleteShapeSelection(T *object, KisSelection *selection)
 {
     struct ShapeSelectionReleaseStroke : public KisSimpleStrokeStrategy {
-        ShapeSelectionReleaseStroke(KisSelectionComponent *shapeSelection)
+        ShapeSelectionReleaseStroke(T *object)
             : KisSimpleStrokeStrategy(QLatin1String("ShapeSelectionReleaseStroke")),
-              m_shapeSelection(shapeSelection)
+              m_objectWrapper(makeKisDeleteLaterWrapper(object))
         {
             setRequestsOtherStrokesToEnd(false);
             setClearsRedoOnStart(false);
@@ -71,9 +73,17 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
             this->enableJob(JOB_CANCEL, true, KisStrokeJobData::BARRIER);
         }
 
+        ~ShapeSelectionReleaseStroke()
+        {
+            /// it looks like the strategy has not been executed,
+            /// the object will leak...
+            KIS_SAFE_ASSERT_RECOVER_NOOP(!m_objectWrapper);
+        }
+
         void finishStrokeCallback() override
         {
-            makeKisDeleteLaterWrapper(m_shapeSelection)->deleteLater();
+            m_objectWrapper->deleteLater();
+            m_objectWrapper = 0;
         }
 
         void cancelStrokeCallback() override
@@ -82,7 +92,7 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
         }
 
     private:
-        KisSelectionComponent *m_shapeSelection = 0;
+        KisDeleteLaterWrapper<T*> *m_objectWrapper = 0;
     };
 
     /**
@@ -114,8 +124,8 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
      */
     struct GuiStrokeWrapper
     {
-        GuiStrokeWrapper(KisImageSP image, KisSelectionComponent *shapeSelection)
-            : m_image(image), m_shapeSelection(shapeSelection)
+        GuiStrokeWrapper(KisImageSP image, T *object)
+            : m_image(image), m_object(object)
         {
         }
 
@@ -124,15 +134,15 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
             KisImageSP image = m_image;
 
             if (image) {
-                KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(m_shapeSelection));
+                KisStrokeId strokeId = image->startStroke(new ShapeSelectionReleaseStroke(m_object));
                 image->endStroke(strokeId);
             } else {
-                delete m_shapeSelection;
+                delete m_object;
             }
         }
 
         KisImageWSP m_image;
-        KisSelectionComponent *m_shapeSelection;
+        T *m_object;
     };
 
     if (selection) {
@@ -144,14 +154,14 @@ void KisSelection::Private::safeDeleteShapeSelection(KisSelectionComponent *shap
         }
 
         if (image) {
-            makeKisDeleteLaterWrapper(new GuiStrokeWrapper(image, shapeSelection))->deleteLater();
-            shapeSelection = 0;
+            makeKisDeleteLaterWrapper(new GuiStrokeWrapper(image, object))->deleteLater();
+            object = 0;
         }
     }
 
-    if (shapeSelection) {
-        makeKisDeleteLaterWrapper(shapeSelection)->deleteLater();
-        shapeSelection = 0;
+    if (object) {
+        makeKisDeleteLaterWrapper(object)->deleteLater();
+        object = 0;
     }
 }
 
@@ -168,6 +178,10 @@ struct KisSelection::ChangeShapeSelectionCommand : public KUndo2Command
     {
         if (m_shapeSelection) {
             Private::safeDeleteShapeSelection(m_shapeSelection, m_selection ? m_selection.data() : 0);
+        }
+
+        if (m_reincarnationCommand) {
+            Private::safeDeleteShapeSelection(m_reincarnationCommand.take(), m_selection ? m_selection.data() : 0);
         }
     }
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
  *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
@@ -217,17 +217,6 @@ bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QTransform *t);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QString *value);
 bool KRITAGLOBAL_EXPORT loadValue(const QDomElement &e, QColor *value);
 
-/**
- * @brief escapeText escapes the characters that cannot be in xml
- * in the given text to the xml entities.
- */
-QString KRITAGLOBAL_EXPORT escapeText(const QString &text);
-
-/**
- * @brief unescapeText replaces the xml entities with the original
- * characters.
- */
-/** */QString KRITAGLOBAL_EXPORT unescapeText(const QString &text);
 
 namespace Private {
     bool KRITAGLOBAL_EXPORT checkType(const QDomElement &e, const QString &expectedType);

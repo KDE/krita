@@ -86,11 +86,11 @@ void KisFileNameRequester::slotSelectFile()
     }
 
     const QString basePath =
-        KisFileUtils::resolveAbsoluteFilePath(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+        KritaUtils::resolveAbsoluteFilePath(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
                                             m_basePath);
 
     const QString filePath =
-        KisFileUtils::resolveAbsoluteFilePath(basePath, m_ui->txtFileName->text());
+        KritaUtils::resolveAbsoluteFilePath(basePath, m_ui->txtFileName->text());
 
     dialog.setDefaultDir(filePath, true);
     dialog.setMimeTypeFilters(m_mime_filter_list, m_mime_default_filter);

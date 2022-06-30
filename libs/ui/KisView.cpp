@@ -516,38 +516,115 @@ void KisView::dropEvent(QDropEvent *event)
         const KisCanvasDrop::Action action = dlgAction.dropAs(*data, callPos);
 
         if (action == KisCanvasDrop::INSERT_AS_NEW_LAYER) {
-            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
+            const QPair<bool, KisClipboard::PasteFormatBehaviour> source =
+                KisClipboard::instance()->askUserForSource(data);
+
+            if (!source.first) {
+                dbgUI << "Paste event cancelled";
+                return;
+            }
+
+            if (source.second != KisClipboard::PASTE_FORMAT_CLIP) {
+                const QList<QUrl> &urls = data->urls();
+                const auto url = std::find_if(
+                    urls.constBegin(),
+                    urls.constEnd(),
+                    [&](const QUrl &url) {
+                        if (source.second
+                            == KisClipboard::PASTE_FORMAT_DOWNLOAD) {
+                            return !url.isLocalFile();
+                        } else if (source.second
+                                   == KisClipboard::PASTE_FORMAT_LOCAL) {
+                            return url.isLocalFile();
+                        } else {
+                            return false;
+                        }
+                    });
+
+                if (url != urls.constEnd()) {
+                    QScopedPointer<QTemporaryFile> tmp(new QTemporaryFile());
+                    tmp->setAutoRemove(true);
+
+                    const QUrl localUrl = [&]() -> QUrl {
+                        if (!url->isLocalFile()) {
+                            // download the file and substitute the url
+                            KisRemoteFileFetcher fetcher;
+                            tmp->setFileName(url->fileName());
+
+                            if (!fetcher.fetchFile(*url, tmp.data())) {
+                                warnUI << "Fetching" << *url << "failed";
+                                return {};
+                            }
+                            return QUrl::fromLocalFile(tmp->fileName());
+                        }
+                        return *url;
+                    }();
+
+                    if (localUrl.isLocalFile()) {
+                        this->mainWindow()
+                            ->viewManager()
+                            ->imageManager()
+                            ->importImage(localUrl);
+                        this->activateWindow();
+                        return;
+                    }
+                }
+            }
+
+            KisPaintDeviceSP clip =
+                KisClipboard::instance()->clipFromBoardContents(data,
+                                                                QRect(),
+                                                                true,
+                                                                -1,
+                                                                false,
+                                                                source);
             if (clip) {
-                const auto pos = this->viewConverter()->imageToDocument(imgCursorPos).toPoint();
+                const auto pos = this->viewConverter()
+                                     ->imageToDocument(imgCursorPos)
+                                     .toPoint();
 
                 clip->moveTo(pos.x(), pos.y());
 
-                KisImportCatcher::adaptClipToImageColorSpace(clip, this->image());
+                KisImportCatcher::adaptClipToImageColorSpace(clip,
+                                                             this->image());
 
                 KisPaintLayerSP layer = new KisPaintLayer(
                     this->image(),
                     this->image()->nextLayerName() + " " + i18n("(pasted)"),
                     OPACITY_OPAQUE_U8,
                     clip);
-                KisNodeCommandsAdapter adapter(this->mainWindow()->viewManager());
-                adapter.addNode(layer,
-                                this->mainWindow()->viewManager()->activeNode()->parent(),
-                                this->mainWindow()->viewManager()->activeNode());
+                KisNodeCommandsAdapter adapter(
+                    this->mainWindow()->viewManager());
+                adapter.addNode(
+                    layer,
+                    this->mainWindow()->viewManager()->activeNode()->parent(),
+                    this->mainWindow()->viewManager()->activeNode());
                 this->activateWindow();
                 return;
             }
         } else if (action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGE) {
-            KisPaintDeviceSP clip = KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
+            KisPaintDeviceSP clip =
+                KisClipboard::instance()->clipFromMimeData(data, QRect(), true);
             if (clip) {
-                KisImportCatcher::adaptClipToImageColorSpace(clip, this->image());
+                KisImportCatcher::adaptClipToImageColorSpace(clip,
+                                                             this->image());
 
-                auto *reference = KisReferenceImage::fromPaintDevice(clip, *this->viewConverter(), this);
+                auto *reference =
+                    KisReferenceImage::fromPaintDevice(clip,
+                                                       *this->viewConverter(),
+                                                       this);
 
                 if (reference) {
-                    const auto pos = this->canvasBase()->coordinatesConverter()->widgetToImage(event->pos());
-                    reference->setPosition((*this->viewConverter()).imageToDocument(pos));
-                    this->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
-                    KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                    const auto pos = this->canvasBase()
+                                         ->coordinatesConverter()
+                                         ->widgetToImage(event->pos());
+                    reference->setPosition(
+                        (*this->viewConverter()).imageToDocument(pos));
+                    this->canvasBase()
+                        ->referenceImagesDecoration()
+                        ->addReferenceImage(reference);
+                    KoToolManager::instance()->switchToolRequested(
+                        "ToolReferenceImages");
                     return;
                 }
             }
@@ -572,51 +649,85 @@ void KisView::dropEvent(QDropEvent *event)
 
                 if (url.isLocalFile()) {
                     if (action == KisCanvasDrop::INSERT_MANY_LAYERS) {
-                        this->mainWindow()->viewManager()->imageManager()->importImage(url);
+                        this->mainWindow()
+                            ->viewManager()
+                            ->imageManager()
+                            ->importImage(url);
                         this->activateWindow();
                     } else if (action == KisCanvasDrop::INSERT_MANY_FILE_LAYERS
-                               || action == KisCanvasDrop::INSERT_AS_NEW_FILE_LAYER) {
-                        KisNodeCommandsAdapter adapter(this->mainWindow()->viewManager());
+                               || action
+                                   == KisCanvasDrop::INSERT_AS_NEW_FILE_LAYER) {
+                        KisNodeCommandsAdapter adapter(
+                            this->mainWindow()->viewManager());
                         QFileInfo fileInfo(url.toLocalFile());
 
-                        QString type = KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
-                        QStringList mimes = KisImportExportManager::supportedMimeTypes(KisImportExportManager::Import);
+                        QString type =
+                            KisMimeDatabase::mimeTypeForFile(url.toLocalFile());
+                        QStringList mimes =
+                            KisImportExportManager::supportedMimeTypes(
+                                KisImportExportManager::Import);
 
                         if (!mimes.contains(type)) {
                             QString msg =
-                                KisImportExportErrorCode(ImportExportCodes::FileFormatNotSupported).errorMessage();
-                            QMessageBox::warning(this,
-                                                 i18nc("@title:window", "Krita"),
-                                                 i18n("Could not open %2.\nReason: %1.", msg, url.toDisplayString()));
+                                KisImportExportErrorCode(
+                                    ImportExportCodes::FileFormatNotSupported)
+                                    .errorMessage();
+                            QMessageBox::warning(
+                                this,
+                                i18nc("@title:window", "Krita"),
+                                i18n("Could not open %2.\nReason: %1.",
+                                     msg,
+                                     url.toDisplayString()));
                             continue;
                         }
 
-                        KisFileLayer *fileLayer = new KisFileLayer(this->image(),
-                                                                   "",
-                                                                   url.toLocalFile(),
-                                                                   KisFileLayer::None,
-                                                                   fileInfo.fileName(),
-                                                                   OPACITY_OPAQUE_U8);
+                        KisFileLayer *fileLayer =
+                            new KisFileLayer(this->image(),
+                                             "",
+                                             url.toLocalFile(),
+                                             KisFileLayer::None,
+                                             fileInfo.fileName(),
+                                             OPACITY_OPAQUE_U8);
 
-                        KisLayerSP above = this->mainWindow()->viewManager()->activeLayer();
-                        KisNodeSP parent = above ? above->parent() : this->mainWindow()->viewManager()->image()->root();
+                        KisLayerSP above =
+                            this->mainWindow()->viewManager()->activeLayer();
+                        KisNodeSP parent = above ? above->parent()
+                                                 : this->mainWindow()
+                                                       ->viewManager()
+                                                       ->image()
+                                                       ->root();
 
                         adapter.addNode(fileLayer, parent, above);
                     } else if (action == KisCanvasDrop::OPEN_IN_NEW_DOCUMENT
-                               || action == KisCanvasDrop::OPEN_MANY_DOCUMENTS) {
+                               || action
+                                   == KisCanvasDrop::OPEN_MANY_DOCUMENTS) {
                         if (this->mainWindow()) {
-                            this->mainWindow()->openDocument(url.toLocalFile(), KisMainWindow::None);
+                            this->mainWindow()->openDocument(
+                                url.toLocalFile(),
+                                KisMainWindow::None);
                         }
-                    } else if (action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGES
-                               || action == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGE) {
-                        auto *reference = KisReferenceImage::fromFile(url.toLocalFile(), *this->viewConverter(), this);
+                    } else if (action
+                                   == KisCanvasDrop::INSERT_AS_REFERENCE_IMAGES
+                               || action
+                                   == KisCanvasDrop::
+                                       INSERT_AS_REFERENCE_IMAGE) {
+                        auto *reference =
+                            KisReferenceImage::fromFile(url.toLocalFile(),
+                                                        *this->viewConverter(),
+                                                        this);
 
                         if (reference) {
-                            const auto pos = this->canvasBase()->coordinatesConverter()->widgetToImage(imgCursorPos);
-                            reference->setPosition((*this->viewConverter()).imageToDocument(pos));
-                            this->canvasBase()->referenceImagesDecoration()->addReferenceImage(reference);
+                            const auto pos = this->canvasBase()
+                                                 ->coordinatesConverter()
+                                                 ->widgetToImage(imgCursorPos);
+                            reference->setPosition(
+                                (*this->viewConverter()).imageToDocument(pos));
+                            this->canvasBase()
+                                ->referenceImagesDecoration()
+                                ->addReferenceImage(reference);
 
-                            KoToolManager::instance()->switchToolRequested("ToolReferenceImages");
+                            KoToolManager::instance()->switchToolRequested(
+                                "ToolReferenceImages");
                         }
                     }
                 }

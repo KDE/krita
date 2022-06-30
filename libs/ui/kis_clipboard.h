@@ -64,6 +64,10 @@ public:
                           int overridePasteBehaviour = -1,
                           KisTimeSpan *clipRange = nullptr) const;
 
+    QPair<bool, PasteFormatBehaviour>
+    askUserForSource(const QMimeData *data,
+                     bool useClipboardFallback = false) const;
+
     /**
      * Get the contents of the specified mimedata buffer in the form of a paint device.
      */
@@ -76,6 +80,16 @@ public:
 
     KisPaintDeviceSP clipFromKritaLayers(const QRect &imageBounds,
                                          const KoColorSpace *cs) const;
+
+    KisPaintDeviceSP
+    clipFromBoardContents(const QMimeData *data,
+                          const QRect &imageBounds,
+                          bool showPopup,
+                          int overridePasteBehaviour = -1,
+                          bool useClipboardFallback = false,
+                          QPair<bool, PasteFormatBehaviour> source = {
+                              true,
+                              PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
 
     bool hasClip() const;
 
@@ -103,12 +117,6 @@ private:
 
     KisPaintDeviceSP
     clipFromKritaSelection(const QMimeData *data, const QRect &imageBounds, KisTimeSpan *clipRange) const;
-
-    KisPaintDeviceSP clipFromBoardContents(const QMimeData *data,
-                                           const QRect &imageBounds,
-                                           bool showPopup,
-                                           int overridePasteBehaviour = -1,
-                                           bool useClipboardFallback = false) const;
 
     KisPaintDeviceSP fetchImageByURL(const QUrl &originalUrl) const;
 

@@ -339,16 +339,12 @@ KisPaintDeviceSP KisClipboard::clipFromKritaLayers(const QRect &imageBounds,
     return tempImage->projection();
 }
 
-KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
-                                                     const QRect &imageBounds,
-                                                     bool showPopup,
-                                                     int pasteBehaviourOverride,
-                                                     bool useClipboardFallback) const
+QPair<bool, KisClipboard::PasteFormatBehaviour>
+KisClipboard::askUserForSource(const QMimeData *cbData,
+                               bool useClipboardFallback) const
 {
-    KisPaintDeviceSP clip;
-
     if (!cbData) {
-        return nullptr;
+        return {false, PASTE_FORMAT_ASK};
     }
 
     KisConfig cfg(true);
@@ -402,7 +398,7 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             dlg.setSourceAvailable(PASTE_FORMAT_CLIP, !qimage.isNull());
 
             if (dlg.exec() != KoDialog::Accepted) {
-                return nullptr;
+                return {false, PASTE_FORMAT_ASK};
             };
 
             choice = dlg.source();
@@ -416,7 +412,7 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
             } else if (cbData->hasImage()) {
                 choice = PASTE_FORMAT_CLIP;
             } else {
-                return nullptr;
+                return {false, PASTE_FORMAT_ASK};
             }
         }
     }
@@ -427,11 +423,48 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(const QMimeData *cbData,
 
     dbgUI << "Selected source for the paste:" << choice;
 
+    return {true, choice};
+}
+
+KisPaintDeviceSP KisClipboard::clipFromBoardContents(
+    const QMimeData *cbData,
+    const QRect &imageBounds,
+    bool showPopup,
+    int pasteBehaviourOverride,
+    bool useClipboardFallback,
+    QPair<bool, PasteFormatBehaviour> source) const
+{
+    if (!cbData) {
+        return nullptr;
+    }
+
+    KisPaintDeviceSP clip;
+
+    PasteFormatBehaviour choice = PASTE_FORMAT_ASK;
+
+    if (!source.first) {
+        choice = askUserForSource(cbData).second;
+    } else {
+        choice = source.second;
+    }
+
     if (choice == PASTE_FORMAT_CLIP) {
+        const QImage qimage = [&]() {
+            QImage qimage = getImageFromMimeData(cbData);
+
+            if (qimage.isNull() && useClipboardFallback) {
+                qimage = d->clipboard->image();
+            }
+
+            return qimage;
+        }();
+
         KIS_ASSERT(!qimage.isNull());
 
         int behaviour = pasteBehaviourOverride;
         bool saveColorSetting = false;
+
+        KisConfig cfg(true);
 
         if (pasteBehaviourOverride == -1) {
             behaviour = cfg.pasteBehaviour();

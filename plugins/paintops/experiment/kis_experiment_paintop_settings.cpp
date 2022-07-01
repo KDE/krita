@@ -7,6 +7,7 @@
 #include "kis_experiment_paintop_settings.h"
 #include "kis_current_outline_fetcher.h"
 #include "kis_algebra_2d.h"
+#include <KisOptimizedBrushOutline.h>
 
 struct KisExperimentPaintOpSettings::Private
 {
@@ -37,7 +38,7 @@ bool KisExperimentPaintOpSettings::paintIncremental()
     return false;
 }
 
-QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisExperimentPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     QPainterPath path;
     if (mode.isVisible) {
@@ -63,6 +64,7 @@ QPainterPath KisExperimentPaintOpSettings::brushOutline(const KisPaintInformatio
 #include "KisPaintOpPresetUpdateProxy.h"
 #include "kis_experimentop_option.h"
 #include "kis_standard_uniform_properties_factory.h"
+#include <KisOptimizedBrushOutline.h>
 
 
 QList<KisUniformPaintOpPropertySP> KisExperimentPaintOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)

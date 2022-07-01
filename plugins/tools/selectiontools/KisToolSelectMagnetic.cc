@@ -38,7 +38,7 @@
 #include "kis_algebra_2d.h"
 
 #include "KisHandlePainterHelper.h"
-
+#include <KisOptimizedBrushOutline.h>
 #include <kis_slider_spin_box.h>
 
 #define FEEDBACK_LINE_WIDTH 2

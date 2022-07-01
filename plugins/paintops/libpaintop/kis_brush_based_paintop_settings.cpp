@@ -19,6 +19,7 @@
 #include "KoCanvasResourcesIds.h"
 #include "kis_texture_option.h"
 #include <KoResourceCacheInterface.h>
+#include <KisOptimizedBrushOutline.h>
 
 struct BrushReader {
     BrushReader(const KisBrushBasedPaintOpSettings *parent)
@@ -103,19 +104,19 @@ KisBrushSP KisBrushBasedPaintOpSettings::brush() const
     return brush;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
+KisOptimizedBrushOutline KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInformation &info,
                                                             const OutlineMode &mode,
                                                             qreal alignForZoom,
                                                             qreal additionalScale)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
 
     if (mode.isVisible) {
         KisBrushSP brush = this->brush();
         if (!brush) return path;
         qreal finalScale = brush->scale() * additionalScale;
 
-        QPainterPath realOutline = brush->outline(alignForZoom > 2.0 || qFuzzyCompare(alignForZoom, 2.0));
+        KisOptimizedBrushOutline realOutline = brush->outline(alignForZoom > 2.0 || qFuzzyCompare(alignForZoom, 2.0));
 
         if (mode.forceCircle) {
 
@@ -138,7 +139,7 @@ QPainterPath KisBrushBasedPaintOpSettings::brushOutlineImpl(const KisPaintInform
     return path;
 }
 
-QPainterPath KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisBrushBasedPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     return brushOutlineImpl(info, mode, alignForZoom, 1.0);
 }

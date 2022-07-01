@@ -15,6 +15,7 @@
 #include "kis_paintop_settings.h"
 #include <QElapsedTimer>
 #include "kis_algebra_2d.h"
+#include "KisOptimizedBrushOutline.h"
 
 #define NOISY_UPDATE_SPEED 50  // Time in ms for outline updates to noisy brushes
 
@@ -66,14 +67,7 @@ void KisCurrentOutlineFetcher::setDirty()
     d->isDirty = true;
 }
 
-QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &info,
-                                                    const KisPaintOpSettingsSP settings,
-                                                    const QPainterPath &originalOutline,
-                                                    const KisPaintOpSettings::OutlineMode &mode,
-                                                    qreal alignForZoom,
-                                                    qreal additionalScale,
-                                                    qreal additionalRotation,
-                                                    bool tilt, qreal tiltcenterx, qreal tiltcentery) const
+KisOptimizedBrushOutline KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &info, const KisPaintOpSettingsSP settings, const KisOptimizedBrushOutline &originalOutline, const KisPaintOpSettings::OutlineMode &mode, qreal alignForZoom, qreal additionalScale, qreal additionalRotation, bool tilt, qreal tiltcenterx, qreal tiltcentery) const
 {
     if (d->isDirty) {
         if (d->sizeOption) {
@@ -172,5 +166,5 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
     QTransform T2 = QTransform::fromTranslate(pos.x(), pos.y());
     QTransform S  = QTransform::fromScale(xFlip * scale, yFlip * scale);
 
-    return (T1 * rot * S * T2).map(originalOutline);
+    return originalOutline.mapped(T1 * rot * S * T2);
 }

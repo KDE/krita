@@ -55,6 +55,7 @@
 #include <kis_selection_manager.h>
 #include <krita_utils.h>
 #include <kis_resources_snapshot.h>
+#include <KisOptimizedBrushOutline.h>
 
 #include <KoShapeTransformCommand.h>
 

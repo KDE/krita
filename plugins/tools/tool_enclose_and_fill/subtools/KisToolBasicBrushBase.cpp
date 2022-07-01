@@ -251,15 +251,15 @@ void KisToolBasicBrushBase::update(const QRectF &strokeSegmentRect)
     }
 }
 
-QPainterPath KisToolBasicBrushBase::getOutlinePath(const QPointF &documentPos,
-                                                   const KoPointerEvent *event,
-                                                   KisPaintOpSettings::OutlineMode outlineMode)
+KisOptimizedBrushOutline KisToolBasicBrushBase::getOutlinePath(const QPointF &documentPos,
+                                                               const KoPointerEvent *event,
+                                                               KisPaintOpSettings::OutlineMode outlineMode)
 {
     Q_UNUSED(documentPos);
     Q_UNUSED(event);
 
     if (!outlineMode.isVisible) {
-        return QPainterPath();
+        return {};
     }
     const qreal radius =
         mode() != KisTool::PAINT_MODE || outlineMode.forceFullSize

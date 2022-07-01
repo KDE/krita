@@ -19,6 +19,7 @@
 #include <KisView.h>
 #include <kis_command_utils.h>
 #include <kis_selection_filters.h>
+#include <KisOptimizedBrushOutline.h>
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,

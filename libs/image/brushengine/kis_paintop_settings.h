@@ -29,6 +29,7 @@ using KoCanvasResourcesInterfaceSP = QSharedPointer<KoCanvasResourcesInterface>;
 class KoResourceCacheInterface;
 using KoResourceCacheInterfaceSP = QSharedPointer<KoResourceCacheInterface>;
 
+class KisOptimizedBrushOutline;
 
 /**
  * Configuration property used to control whether airbrushing is enabled.
@@ -186,12 +187,12 @@ public:
      * Outline mode has to be passed to the paintop which builds the outline as some paintops have to paint outline
      * always like clone paintop indicating the duplicate position
      */
-    virtual QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom);
+    virtual KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom);
 
     /**
     * Helpers for drawing the brush outline
     */
-    static QPainterPath ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation);
+    static KisOptimizedBrushOutline ellipseOutline(qreal width, qreal height, qreal scale, qreal rotation);
 
     /**
      * Helper for drawing a triangle representing the tilt of the stylus.

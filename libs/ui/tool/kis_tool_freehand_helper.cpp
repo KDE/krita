@@ -35,6 +35,7 @@
 #include "strokes/KisFreehandStrokeInfo.h"
 #include "KisAsyncronousStrokeUpdateHelper.h"
 #include "kis_canvas_resource_provider.h"
+#include <KisOptimizedBrushOutline.h>
 
 #include <math.h>
 
@@ -152,10 +153,10 @@ KisSmoothingOptionsSP KisToolFreehandHelper::smoothingOptions() const
     return m_d->smoothingOptions;
 }
 
-QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
-                                                   const KoPointerEvent *event,
-                                                   const KisPaintOpSettingsSP globalSettings,
-                                                   KisPaintOpSettings::OutlineMode mode) const
+KisOptimizedBrushOutline KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos,
+                                                               const KoPointerEvent *event,
+                                                               const KisPaintOpSettingsSP globalSettings,
+                                                               KisPaintOpSettings::OutlineMode mode) const
 {
     KisPaintOpSettingsSP settings = globalSettings;
     QPointF prevPoint = m_d->lastCursorPos.pushThroughHistory(savedCursorPos, currentZoom());
@@ -208,7 +209,7 @@ QPainterPath KisToolFreehandHelper::paintOpOutline(const QPointF &savedCursorPos
     info.setRandomSource(m_d->fakeDabRandomSource);
     info.setPerStrokeRandomSource(m_d->fakeStrokeRandomSource);
 
-    QPainterPath outline = settings->brushOutline(info, mode, currentPhysicalZoom());
+    KisOptimizedBrushOutline outline = settings->brushOutline(info, mode, currentPhysicalZoom());
 
     if (m_d->resources &&
         m_d->smoothingOptions->smoothingType() == KisSmoothingOptions::STABILIZER &&

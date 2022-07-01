@@ -12,6 +12,7 @@
 #include "kis_gridop_option.h"
 #include "kis_grid_shape_option.h"
 #include <kis_color_option.h>
+#include <KisOptimizedBrushOutline.h>
 
 struct KisGridPaintOpSettings::Private
 {
@@ -86,9 +87,9 @@ bool KisGridPaintOpSettings::mouseReleaseEvent()
     bool ignoreEvent = true;
     return ignoreEvent;
 }
-QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisGridPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
     KisGridOpProperties option;
     option.readOptionSetting(this);
     if (mode.isVisible) {
@@ -173,8 +174,8 @@ QPainterPath KisGridPaintOpSettings::brushOutline(const KisPaintInformation &inf
                 }
             }
         }
-        cellPath = outlineFetcher()->fetchOutline(info, this, cellPath, mode, alignForZoom);
-        path.addPath(cellPath);
+        KisOptimizedBrushOutline cellPath2 = outlineFetcher()->fetchOutline(info, this, cellPath, mode, alignForZoom);
+        path.addPath(cellPath2);
     }
     return path;
 }

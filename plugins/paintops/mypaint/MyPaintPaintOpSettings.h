@@ -28,7 +28,7 @@ public:
     void setPaintOpOpacity(qreal value) override;
     qreal paintOpOpacity() override;
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     QString modelName() const override {
         return "airbrush";

@@ -59,6 +59,7 @@
 #include "kis_tool_utils.h"
 #include <brushengine/kis_paintop.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <brushengine/KisOptimizedBrushOutline.h>
 #include <kis_action_manager.h>
 #include <kis_action.h>
 #include "strokes/kis_color_sampler_stroke_strategy.h"
@@ -208,7 +209,7 @@ void KisToolPaint::deactivate()
     KisTool::deactivate();
 }
 
-QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutline)
+KisOptimizedBrushOutline KisToolPaint::tryFixBrushOutline(const KisOptimizedBrushOutline &originalOutline)
 {
     KisConfig cfg(true);
 
@@ -229,7 +230,7 @@ QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutlin
     QSize widgetSize = canvas()->canvasWidget()->size();
     const int maxThresholdSum = widgetSize.width() + widgetSize.height();
 
-    QPainterPath outline = originalOutline;
+    KisOptimizedBrushOutline outline = originalOutline;
     QRectF boundingRect = outline.boundingRect();
     const qreal sum = boundingRect.width() + boundingRect.height();
 
@@ -238,11 +239,16 @@ QPainterPath KisToolPaint::tryFixBrushOutline(const QPainterPath &originalOutlin
     if (sum > maxThresholdSum) {
         const int hairOffset = 7;
 
-        outline.moveTo(center.x(), center.y() - hairOffset);
-        outline.lineTo(center.x(), center.y() + hairOffset);
+        QPainterPath crossIcon;
 
-        outline.moveTo(center.x() - hairOffset, center.y());
-        outline.lineTo(center.x() + hairOffset, center.y());
+        crossIcon.moveTo(center.x(), center.y() - hairOffset);
+        crossIcon.lineTo(center.x(), center.y() + hairOffset);
+
+        crossIcon.moveTo(center.x() - hairOffset, center.y());
+        crossIcon.lineTo(center.x() + hairOffset, center.y());
+
+        outline.addPath(crossIcon);
+
     } else if (sum < minThresholdSize && !outline.isEmpty()) {
         outline = QPainterPath();
         outline.addEllipse(center, 0.5 * minThresholdSize, 0.5 * minThresholdSize);
@@ -255,7 +261,7 @@ void KisToolPaint::paint(QPainter &gc, const KoViewConverter &converter)
 {
     Q_UNUSED(converter);
 
-    QPainterPath path = tryFixBrushOutline(pixelToView(m_currentOutline));
+    KisOptimizedBrushOutline path = tryFixBrushOutline(pixelToView(m_currentOutline));
     paintToolOutline(&gc, path);
 
     if (m_showColorPreview) {
@@ -845,9 +851,9 @@ void KisToolPaint::requestUpdateOutline(const QPointF &outlineDocPoint, const Ko
     m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
 }
 
-QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
-                                          const KoPointerEvent *event,
-                                          KisPaintOpSettings::OutlineMode outlineMode)
+KisOptimizedBrushOutline KisToolPaint::getOutlinePath(const QPointF &documentPos,
+                                                      const KoPointerEvent *event,
+                                                      KisPaintOpSettings::OutlineMode outlineMode)
 {
     Q_UNUSED(event);
 
@@ -861,7 +867,7 @@ QPainterPath KisToolPaint::getOutlinePath(const QPointF &documentPos,
     info.setRandomSource(new KisRandomSource());
     info.setPerStrokeRandomSource(new KisPerStrokeRandomSource());
 
-    QPainterPath path = currentPaintOpPreset()->settings()->
+    KisOptimizedBrushOutline path = currentPaintOpPreset()->settings()->
         brushOutline(info,
                      outlineMode, converter->effectivePhysicalZoom());
 

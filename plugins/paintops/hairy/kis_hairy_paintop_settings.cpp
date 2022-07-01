@@ -13,13 +13,14 @@
 #include "kis_hairy_bristle_option.h"
 #include "kis_brush_based_paintop_options_widget.h"
 #include "kis_boundary.h"
+#include "KisOptimizedBrushOutline.h"
 
 KisHairyPaintOpSettings::KisHairyPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisBrushBasedPaintOpSettings(resourcesInterface)
 {
 }
 
-QPainterPath KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisHairyPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     return brushOutlineImpl(info, mode, alignForZoom, getDouble(HAIRY_BRISTLE_SCALE));
 }

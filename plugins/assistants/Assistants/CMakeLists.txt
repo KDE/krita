@@ -1,9 +1,6 @@
-if(NOT MSVC AND NOT APPLE)
 add_subdirectory(tests)
-endif()
 
 set(kritaassistanttool_SOURCES
-    assistant_tool.cc
     ConcentricEllipseAssistant.cc
     Ellipse.cc
     EllipseAssistant.cc
@@ -24,11 +21,14 @@ set(kritaassistanttool_SOURCES
 
 ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )
 
-kis_add_library(kritaassistanttool MODULE ${kritaassistanttool_SOURCES})
+kis_add_library(kritaassistanttool_static STATIC ${kritaassistanttool_SOURCES})
 
-generate_export_header(kritaassistanttool BASE_NAME kritaassistanttool EXPORT_MACRO_NAME KRITAASSISTANTTOOL_EXPORT)
+generate_export_header(kritaassistanttool_static BASE_NAME kritaassistanttool EXPORT_MACRO_NAME KRITAASSISTANTTOOL_EXPORT)
 
-target_link_libraries(kritaassistanttool kritaui kritaflake   )
+target_link_libraries(kritaassistanttool_static kritaui kritaflake)
+
+kis_add_library(kritaassistanttool MODULE assistant_tool.cc)
+target_link_libraries(kritaassistanttool kritaassistanttool_static)
 
 install(TARGETS kritaassistanttool  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

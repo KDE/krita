@@ -6,7 +6,7 @@ kis_add_tests(
     TestPerspectiveBasedAssistantHelper.cpp
     TestAssistants.cpp
     NAME_PREFIX "plugins-assistants-Assistants-"
-    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaassistanttool kritaui kritaflake Qt5::Test
+    LINK_LIBRARIES kritaassistanttool_static Qt5::Test
     TARGET_NAMES_VAR OK_TESTS
     ${MACOS_GUI_TEST})
 

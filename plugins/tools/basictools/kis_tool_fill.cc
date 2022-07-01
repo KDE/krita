@@ -256,6 +256,8 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
                                                                 m_resourcesSnapshot);
 
     const bool useFastMode = !m_resourcesSnapshot->activeSelection() &&
+                             m_resourcesSnapshot->opacity() == OPACITY_OPAQUE_U8 &&
+                             m_resourcesSnapshot->compositeOpId() == COMPOSITE_OVER &&
                              m_fillType != FillWithPattern &&
                              m_opacitySpread == 100 &&
                              m_useSelectionAsBoundary == false &&

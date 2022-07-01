@@ -8,7 +8,7 @@ kis_add_tests(
     kis_animation_utils_test.cpp
     timeline_model_test.cpp
     NAME_PREFIX "plugins-dockers-animation-"
-    LINK_LIBRARIES ${KDE4_KDEUI_LIBS} kritaanimationdocker kritaui kritaimage Qt5::Test
+    LINK_LIBRARIES kritaanimationdocker_static kritaui kritaimage Qt5::Test
     TARGET_NAMES_VAR OK_TESTS
     ${MACOS_GUI_TEST})
 

@@ -16,7 +16,7 @@ if (APPLE)
         StoryboardModelTest.cpp
 
         NAME_PREFIX "plugins-dockers-storyboarddocker-"
-        LINK_LIBRARIES kritastoryboarddocker kritaui Qt5::Test
+        LINK_LIBRARIES kritastoryboarddocker_static kritaui Qt5::Test
         TARGET_NAMES_VAR OK_TESTS
         ${MACOS_GUI_TEST}
         )
@@ -26,7 +26,7 @@ if (APPLE)
         StoryboardTimelineSyncTest.cpp
 
         NAME_PREFIX "plugins-dockers-storyboarddocker-"
-        LINK_LIBRARIES kritastoryboarddocker kritaui Qt5::Test
+        LINK_LIBRARIES kritastoryboarddocker_static kritaui Qt5::Test
         TARGET_NAMES_VAR BROKEN_TESTS
         ${MACOS_GUI_TEST})
 
@@ -39,7 +39,7 @@ else (APPLE)
         StoryboardModelTest.cpp
         StoryboardTimelineSyncTest.cpp
         NAME_PREFIX "plugins-dockers-storyboarddocker-"
-        LINK_LIBRARIES kritastoryboarddocker kritaui Qt5::Test
+        LINK_LIBRARIES kritastoryboarddocker_static kritaui Qt5::Test
         )
 
 endif()

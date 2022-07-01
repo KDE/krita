@@ -72,7 +72,7 @@ QString KisPressureHSVOption::valueMinLabel()
     QString fullPercent = i18n("+100%");
     QString zeroPercent = i18n("-100%");
 
-    return QString(zeroPercent + br + i18n("Lower value ") + br + activeColorMsg);
+    return QString(zeroPercent + br + i18nc("Lower HSV brightness", "Lower value ") + br + activeColorMsg);
 
 }
 
@@ -84,7 +84,7 @@ QString KisPressureHSVOption::valuemaxLabel()
     QString fullPercent = i18n("+100%");
     QString zeroPercent = i18n("-100%");
 
-    return QString(fullPercent + br + i18n("Higher value"));
+    return QString(fullPercent + br + i18nc("Higher HSV brightness", "Higher value"));
 
 
 }

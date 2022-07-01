@@ -225,10 +225,10 @@ struct SliderSettings {
 const SliderSettings SLIDER_TABLE[9] = {
     SliderSettings(SLIDER_TYPE::HUE,        KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Hue"),         0,    360, -180, 180, 0),
     SliderSettings(SLIDER_TYPE::SATURATION, KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Saturation"),  0,    100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::VALUE,      KisHsvColorSlider::MIX_MODE::HSV,         ki18n("Value"),       -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::VALUE,      KisHsvColorSlider::MIX_MODE::HSV,         ki18nc("Brightness level of HSV model", "Value"),       -100, 100, -100, 100, 0),
     SliderSettings(SLIDER_TYPE::LIGHTNESS,  KisHsvColorSlider::MIX_MODE::HSL,         ki18n("Lightness"),   -100, 100, -100, 100, 0),
     SliderSettings(SLIDER_TYPE::LUMA,       KisHsvColorSlider::MIX_MODE::HSY,         ki18n("Luma"),        -100, 100, -100, 100, 0),
-    SliderSettings(SLIDER_TYPE::INTENSITY,  KisHsvColorSlider::MIX_MODE::HSI,         ki18n("Intensity"),   -100, 100, -100, 100, 0),
+    SliderSettings(SLIDER_TYPE::INTENSITY,  KisHsvColorSlider::MIX_MODE::HSI,         ki18nc("Brightness in HSI color model", "Intensity"),   -100, 100, -100, 100, 0),
     SliderSettings(SLIDER_TYPE::YELLOW_BLUE,KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Yellow-Blue"), 0,    100, -100, 100, 0),
     SliderSettings(SLIDER_TYPE::GREEN_RED,  KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Green-Red"),   0,    100, -100, 100, 0),
     SliderSettings(SLIDER_TYPE::LUMA_YUV,   KisHsvColorSlider::MIX_MODE::COLOR_SPACE, ki18n("Luma"),        -100, 100, -100, 100, 0),

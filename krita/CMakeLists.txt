@@ -195,6 +195,9 @@ if (WIN32)
     )
     if (MSVC)
         target_link_options(krita_windows_stub_com PRIVATE "/DEBUG:NONE")
+        # If MSVC uses incremental linking, it will race the database
+        # for krita.exe with the one for krita.com.
+        add_dependencies(krita_windows_stub_com krita_windows_stub_exe)
     endif()
     install(TARGETS krita_windows_stub_com ${INSTALL_TARGETS_DEFAULT_ARGS})
 endif (WIN32)

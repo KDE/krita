@@ -11,7 +11,7 @@ if (APPLE)
     krita_add_broken_unit_test(
         KisDabRenderingQueueTest.cpp
 
-        LINK_LIBRARIES kritadefaultpaintops kritalibpaintop kritaimage Qt5::Test
+        LINK_LIBRARIES kritadefaultpaintops_static kritalibpaintop kritaimage Qt5::Test
         NAME_PREFIX "plugins-defaultpaintops-"
         ${MACOS_GUI_TEST})
 
@@ -26,7 +26,7 @@ if (APPLE)
 else (APPLE)
     kis_add_test(KisDabRenderingQueueTest.cpp
         TEST_NAME KisDabRenderingQueueTest
-        LINK_LIBRARIES kritadefaultpaintops kritalibpaintop kritaimage Qt5::Test
+        LINK_LIBRARIES kritadefaultpaintops_static kritalibpaintop kritaimage Qt5::Test
         NAME_PREFIX "plugins-defaultpaintops-"
         )
 

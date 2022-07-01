@@ -33,7 +33,7 @@ KisHalftoneConfigWidget::KisHalftoneConfigWidget(QWidget *parent,  const KisPain
 
     m_ui.setupUi(this);
 
-    const QString intensityString = i18nc("Brightness in Halftone Widget", "Intensity");
+    const QString intensityString = i18nc("Brightness in HSI color model", "Intensity");
     const QString independentChannelsString = i18n("Independent Channels");
     const QString alphaString = KoColorSpaceRegistry::instance()->graya8()->channels().at(1)->name();
     const QString grayString = KoColorSpaceRegistry::instance()->graya8()->channels().at(0)->name();
@@ -219,7 +219,7 @@ void KisHalftoneConfigWidget::slot_comboBoxMode_currentIndexChanged(int index)
     } else {
         int alphaPos = m_paintDevice->colorSpace()->alphaPos();
         if (index == 0) {
-            m_ui.tabWidgetChannels->addTab(m_intensityWidget, i18nc("Brightness in Halftone Widget", "Intensity"));
+            m_ui.tabWidgetChannels->addTab(m_intensityWidget, i18nc("Brightness in HSI color model", "Intensity"));
         } else if (index == 1) {
             for (int i = 0; i < m_channelsInfo.size(); ++i) {
                 if (i != alphaPos) {

@@ -14,7 +14,7 @@ if (APPLE)
         kis_mypaintop_test.cpp ../MyPaintPaintOpSettings.cpp ../MyPaintPaintOpPreset.cpp ../MyPaintSurface.cpp
         TEST_NAME KisMyPaintOpTest
         NAME_PREFIX "plugins-kismypaintop-"
-        LINK_LIBRARIES kritaimage kritamypaintop kritalibpaintop mypaint Qt5::Test
+        LINK_LIBRARIES kritaimage kritamypaintop_static kritalibpaintop mypaint Qt5::Test
         ${MACOS_GUI_TEST}
         )
 
@@ -25,7 +25,7 @@ else (APPLE)
         kis_mypaintop_test.cpp ../MyPaintPaintOpSettings.cpp ../MyPaintPaintOpPreset.cpp ../MyPaintSurface.cpp
         TEST_NAME KisMyPaintOpTest
         NAME_PREFIX "plugins-kismypaintop-"
-        LINK_LIBRARIES kritaimage kritamypaintop kritalibpaintop mypaint Qt5::Test
+        LINK_LIBRARIES kritaimage kritamypaintop_static kritalibpaintop mypaint Qt5::Test
         )
 
 endif()

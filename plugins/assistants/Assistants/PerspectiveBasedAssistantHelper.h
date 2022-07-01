@@ -15,8 +15,7 @@
 
 #include "Ellipse.h"
 
-
-class __attribute__((visibility("default"))) PerspectiveBasedAssistantHelper
+class PerspectiveBasedAssistantHelper
 {
 private:
     PerspectiveBasedAssistantHelper();

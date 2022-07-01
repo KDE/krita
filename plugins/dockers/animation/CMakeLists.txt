@@ -1,9 +1,6 @@
-if(NOT MSVC AND NOT APPLE)
 add_subdirectory(tests)
-endif()
 
 set(KRITA_ANIMATIONDOCKER_SOURCES
-    KisAnimDockers.cpp
     KisAnimUtils.cpp
     
     KisTimeBasedItemModel.cpp
@@ -44,10 +41,14 @@ ki18n_wrap_ui(KRITA_ANIMATIONDOCKER_SOURCES
     KisOnionSkinsDocker.ui
 )
 
-kis_add_library(kritaanimationdocker MODULE ${KRITA_ANIMATIONDOCKER_SOURCES})
+kis_add_library(kritaanimationdocker_static STATIC ${KRITA_ANIMATIONDOCKER_SOURCES})
 
-generate_export_header(kritaanimationdocker BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
-target_link_libraries(kritaanimationdocker kritaui kritawidgets)
+generate_export_header(kritaanimationdocker_static BASE_NAME kritaanimationdocker EXPORT_MACRO_NAME KRITAANIMATIONDOCKER_EXPORT)
+
+target_link_libraries(kritaanimationdocker_static kritaui kritawidgets)
+
+kis_add_library(kritaanimationdocker MODULE KisAnimDockers.cpp)
+
+target_link_libraries(kritaanimationdocker kritaanimationdocker_static)
+
 install(TARGETS kritaanimationdocker  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
-
-

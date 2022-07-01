@@ -22,6 +22,7 @@
 #include <kis_paint_device.h>
 #include <kis_painter.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisOptimizedBrushOutline.h>
 
 #define COMPARE_ALL(brush, method)                                      \
     Q_FOREACH (KisGbrBrushSP child, brush->brushes()) {           \
@@ -45,7 +46,19 @@ inline void KisImagePipeBrushTest::checkConsistency(KisImagePipeBrushSP brush)
      */
     QCOMPARE(brush->width(), firstBrush->width());
     QCOMPARE(brush->height(), firstBrush->height());
-    QCOMPARE(brush->outline(), firstBrush->outline());
+    KisOptimizedBrushOutline brushOutline = brush->outline();
+    KisOptimizedBrushOutline firstBrushOutline = firstBrush->outline();
+
+    KisOptimizedBrushOutline::const_iterator it = brushOutline.begin();
+    KisOptimizedBrushOutline::const_iterator firstBrushIt = firstBrushOutline.begin();
+
+    for (; it != brushOutline.end() && firstBrushIt != firstBrushOutline.end(); it++, firstBrushIt++) {
+        QPolygonF poly = *it;
+        QPolygonF firstBrushPoly = *firstBrushIt;
+        QCOMPARE(poly, firstBrushPoly);
+    }
+
+    QVERIFY((it == brushOutline.end()) && (firstBrushIt == firstBrushOutline.end()));
 
     /**
      * These values should be spread over the children brushes

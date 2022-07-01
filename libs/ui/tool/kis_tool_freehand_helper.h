@@ -67,10 +67,10 @@ public:
     void paintEvent(KoPointerEvent *event);
     void endPaint();
 
-    QPainterPath paintOpOutline(const QPointF &savedCursorPos,
-                                const KoPointerEvent *event,
-                                const KisPaintOpSettingsSP globalSettings,
-                                KisPaintOpSettings::OutlineMode mode) const;
+    KisOptimizedBrushOutline paintOpOutline(const QPointF &savedCursorPos,
+                                            const KoPointerEvent *event,
+                                            const KisPaintOpSettingsSP globalSettings,
+                                            KisPaintOpSettings::OutlineMode mode) const;
 
 Q_SIGNALS:
     /**

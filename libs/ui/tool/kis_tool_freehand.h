@@ -62,9 +62,9 @@ protected:
     virtual void doStroke(KoPointerEvent *event);
     virtual void endStroke();
 
-    QPainterPath getOutlinePath(const QPointF &documentPos,
-                                        const KoPointerEvent *event,
-                                        KisPaintOpSettings::OutlineMode outlineMode) override;
+    KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
+                                            const KoPointerEvent *event,
+                                            KisPaintOpSettings::OutlineMode outlineMode) override;
 
 
     KisPaintingInformationBuilder* paintingInformationBuilder() const;

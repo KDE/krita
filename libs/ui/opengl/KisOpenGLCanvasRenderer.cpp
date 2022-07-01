@@ -40,6 +40,7 @@
 #include <KoColorModelStandardIds.h>
 #include "KisOpenGLBufferCircularStorage.h"
 #include "kis_painting_tweaks.h"
+#include <KisOptimizedBrushOutline.h>
 
 #include <config-ocio.h>
 
@@ -381,7 +382,7 @@ void KisOpenGLCanvasRenderer::paintCanvasOnly(const QRect &canvasImageDirtyRect,
     }
 }
 
-void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
+void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &path)
 {
     if (!d->solidColorShader->bind()) {
         return;
@@ -417,9 +418,8 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const QPainterPath &path)
     }
 
     // Convert every disjointed subpath to a polygon and draw that polygon
-    QList<QPolygonF> subPathPolygons = path.toSubpathPolygons();
-    for (int polyIndex = 0; polyIndex < subPathPolygons.size(); polyIndex++) {
-        const QPolygonF& polygon = subPathPolygons.at(polyIndex);
+    for (auto it = path.begin(); it != path.end(); ++it) {
+        const QPolygonF& polygon = *it;
 
         QVector<QVector3D> vertices;
         vertices.resize(polygon.count());

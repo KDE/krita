@@ -26,6 +26,7 @@
 #include <kis_pressure_size_option.h>
 #include <kis_paint_action_type_option.h>
 #include <kis_dom_utils.h>
+#include <KisOptimizedBrushOutline.h>
 
 KisDuplicateOpSettings::KisDuplicateOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisBrushBasedPaintOpSettings(resourcesInterface),
@@ -134,9 +135,9 @@ KisPaintOpSettingsSP KisDuplicateOpSettings::clone() const
     return setting;
 }
 
-QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisDuplicateOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
 
     OutlineMode forcedMode = mode;
 
@@ -148,7 +149,7 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     // clone tool should always show an outline
     path = KisBrushBasedPaintOpSettings::brushOutlineImpl(info, forcedMode, alignForZoom, 1.0);
 
-    QPainterPath copy(path);
+    KisOptimizedBrushOutline copy(path);
     QRectF rect2 = copy.boundingRect();
     bool shouldStayInOrigin = m_isOffsetNotUptodate // the clone brush right now waits for first stroke with a new origin, so stays at origin point
             || !getBool(DUPLICATE_MOVE_SOURCE_POINT) // the brush always use the same source point, so stays at origin point
@@ -167,11 +168,15 @@ QPainterPath KisDuplicateOpSettings::brushOutline(const KisPaintInformation &inf
     qreal dy = rect2.height() / 4.0;
     rect2.adjust(dx, dy, -dx, -dy);
 
-    path.moveTo(rect2.topLeft());
-    path.lineTo(rect2.bottomRight());
+    QPainterPath crossIcon;
 
-    path.moveTo(rect2.topRight());
-    path.lineTo(rect2.bottomLeft());
+    crossIcon.moveTo(rect2.topLeft());
+    crossIcon.lineTo(rect2.bottomRight());
+
+    crossIcon.moveTo(rect2.topRight());
+    crossIcon.lineTo(rect2.bottomLeft());
+
+    path.addPath(crossIcon);
 
     return path;
 }

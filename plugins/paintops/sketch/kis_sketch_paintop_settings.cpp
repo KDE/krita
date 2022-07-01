@@ -10,7 +10,7 @@
 
 #include <kis_paint_action_type_option.h>
 #include "kis_current_outline_fetcher.h"
-
+#include <KisOptimizedBrushOutline.h>
 
 KisSketchPaintOpSettings::KisSketchPaintOpSettings(KisResourcesInterfaceSP resourcesInterface)
     : KisBrushBasedPaintOpSettings(resourcesInterface)
@@ -22,7 +22,7 @@ bool KisSketchPaintOpSettings::paintIncremental()
     return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
 }
 
-QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
     bool isSimpleMode = getBool(SKETCH_USE_SIMPLE_MODE);
 
@@ -30,7 +30,7 @@ QPainterPath KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &i
         return KisBrushBasedPaintOpSettings::brushOutline(info, mode, alignForZoom);
     }
 
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
 
     KisBrushSP brush = this->brush();
 

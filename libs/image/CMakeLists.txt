@@ -84,6 +84,7 @@ set(kritaimage_LIB_SRCS
    brushengine/kis_standard_uniform_properties_factory.cpp
    brushengine/KisStrokeSpeedMeasurer.cpp
    brushengine/KisPaintopSettingsIds.cpp
+   brushengine/KisOptimizedBrushOutline.cpp
    commands/kis_deselect_global_selection_command.cpp
    commands/KisDeselectActiveSelectionCommand.cpp
    commands/kis_image_change_layers_command.cpp

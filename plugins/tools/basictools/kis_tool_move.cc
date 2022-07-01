@@ -35,6 +35,7 @@
 #include "kis_signals_blocker.h"
 #include <boost/operators.hpp>
 #include "KisMoveBoundsCalculationJob.h"
+#include <KisOptimizedBrushOutline.h>
 
 
 struct KisToolMoveState : KisToolChangesTrackerData, boost::equality_comparable<KisToolMoveState>

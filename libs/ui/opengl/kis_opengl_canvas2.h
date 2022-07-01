@@ -19,6 +19,7 @@ class KisCanvas2;
 class KisDisplayColorConverter;
 class QOpenGLShaderProgram;
 class QPainterPath;
+class KisOptimizedBrushOutline;
 
 /**
  * KisOpenGLCanvas is the widget that shows the actual image using OpenGL
@@ -50,7 +51,7 @@ public: // QOpenGLWidget
     void inputMethodEvent(QInputMethodEvent *event) override;
 
 public:
-    void paintToolOutline(const QPainterPath &path);
+    void paintToolOutline(const KisOptimizedBrushOutline &path);
 
 
 public: // Implement kis_abstract_canvas_widget interface

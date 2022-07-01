@@ -4,6 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <KisOptimizedBrushOutline.h>
 #include <kis_deform_paintop_settings.h>
 #include <kis_deform_paintop_settings_widget.h>
 
@@ -60,9 +61,9 @@ bool KisDeformPaintOpSettings::isAirbrushing() const
     }
 }
 
-QPainterPath KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisDeformPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
     if (mode.isVisible) {
         qreal width = getInt(BRUSH_DIAMETER);
         qreal height = getInt(BRUSH_DIAMETER) * getDouble(BRUSH_ASPECT);

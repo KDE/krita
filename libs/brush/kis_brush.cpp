@@ -41,6 +41,7 @@
 #include <KoResource.h>
 #include <KoResourceServerProvider.h>
 #include <KisLazySharedCacheStorage.h>
+#include <KisOptimizedBrushOutline.h>
 
 struct KisBrushSPStaticRegistrar {
     KisBrushSPStaticRegistrar() {
@@ -102,12 +103,12 @@ void KisBrush::PaintDeviceColoringInformation::nextRow()
 }
 
 namespace detail {
-QPainterPath* outlineFactory(const KisBrush *brush) {
+KisOptimizedBrushOutline* outlineFactory(const KisBrush *brush) {
     KisFixedPaintDeviceSP dev = brush->outlineSourceImage();
 
     KisBoundary boundary(dev);
     boundary.generateBoundary();
-    return new QPainterPath(boundary.path());
+    return new KisOptimizedBrushOutline(boundary.path());
 }
 }
 
@@ -191,7 +192,7 @@ struct KisBrush::Private {
 
     QImage brushTipImage;
     mutable KisLazySharedCacheStorageLinked<KisQImagePyramid, const KisBrush*> brushPyramid;
-    mutable KisLazySharedCacheStorageLinked<QPainterPath, const KisBrush*> brushOutline;
+    mutable KisLazySharedCacheStorageLinked<KisOptimizedBrushOutline, const KisBrush*> brushOutline;
 };
 
 KisBrush::KisBrush()
@@ -742,7 +743,7 @@ qreal KisBrush::angle() const
     return d->angle;
 }
 
-QPainterPath KisBrush::outline(bool forcePreciseOutline) const
+KisOptimizedBrushOutline KisBrush::outline(bool forcePreciseOutline) const
 {
     Q_UNUSED(forcePreciseOutline);
 

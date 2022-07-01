@@ -13,6 +13,7 @@
 #include "kis_sprayop_option.h"
 #include "kis_spray_shape_option.h"
 #include <kis_airbrush_option_widget.h>
+#include <KisOptimizedBrushOutline.h>
 
 struct KisSprayPaintOpSettings::Private
 {
@@ -55,9 +56,9 @@ bool KisSprayPaintOpSettings::paintIncremental()
 }
 
 
-QPainterPath KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisSprayPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
     if (mode.isVisible) {
         qreal width = getInt(SPRAY_DIAMETER);
         qreal height = getInt(SPRAY_DIAMETER) * getDouble(SPRAY_ASPECT);

@@ -33,6 +33,7 @@
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include <kis_brush_mask_applicator_base.h>
 #include "kis_algebra_2d.h"
+#include <KisOptimizedBrushOutline.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 #include <stdlib.h>
@@ -422,7 +423,7 @@ qreal KisAutoBrush::randomness() const
     return d->randomness;
 }
 
-QPainterPath KisAutoBrush::outline(bool forcePreciseOutline) const
+KisOptimizedBrushOutline KisAutoBrush::outline(bool forcePreciseOutline) const
 {
     const bool requiresComplexOutline = d->shape->spikes() > 2;
     if (!requiresComplexOutline && !forcePreciseOutline) {

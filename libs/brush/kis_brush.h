@@ -24,6 +24,7 @@ class KoColorSpace;
 class KisPaintInformation;
 class KisPaintopLodLimitations;
 class KoAbstractGradient;
+class KisOptimizedBrushOutline;
 typedef QSharedPointer<KoAbstractGradient> KoAbstractGradientSP;
 
 enum enumBrushType {
@@ -324,7 +325,7 @@ public:
 
     static KoResourceLoadResult fromXMLLoadResult(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface);
 
-    virtual QPainterPath outline(bool forcePreciseOutline = false) const;
+    virtual KisOptimizedBrushOutline outline(bool forcePreciseOutline = false) const;
 
     virtual void setScale(qreal _scale);
     qreal scale() const;

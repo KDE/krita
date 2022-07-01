@@ -34,6 +34,7 @@
 #include <brushengine/kis_paintop.h>
 #include <kis_selection.h>
 #include <brushengine/kis_paintop_preset.h>
+#include <brushengine/KisOptimizedBrushOutline.h>
 
 
 // Krita/ui
@@ -461,7 +462,7 @@ void KisToolFreehand::explicitUpdateOutline()
     requestUpdateOutline(m_outlineDocPoint, 0);
 }
 
-QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
+KisOptimizedBrushOutline KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                              const KoPointerEvent *event,
                                              KisPaintOpSettings::OutlineMode outlineMode)
 {
@@ -471,7 +472,7 @@ QPainterPath KisToolFreehand::getOutlinePath(const QPointF &documentPos,
                                         currentPaintOpPreset()->settings(),
                                         outlineMode);
     else
-        return QPainterPath();
+        return KisOptimizedBrushOutline();
 }
 
 

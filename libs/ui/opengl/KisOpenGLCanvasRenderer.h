@@ -26,6 +26,7 @@ class KisDisplayColorConverter;
 class KisDisplayFilter;
 class QOpenGLShaderProgram;
 class QPainterPath;
+class KisOptimizedBrushOutline;
 
 #ifndef Q_MOC_RUN
 #ifndef Q_OS_MACOS
@@ -65,7 +66,7 @@ private:
     void renderCanvasGL(const QRect &updateRect);
 
 public:
-    void paintToolOutline(const QPainterPath &path);
+    void paintToolOutline(const KisOptimizedBrushOutline &path);
 
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter);
     void notifyImageColorSpaceChanged(const KoColorSpace *cs);

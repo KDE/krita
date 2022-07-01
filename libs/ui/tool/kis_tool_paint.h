@@ -25,6 +25,7 @@
 #include "kis_signal_compressor_with_param.h"
 #include <brushengine/kis_paintop_settings.h>
 #include <resources/KoPattern.h>
+#include <KisOptimizedBrushOutline.h>
 
 class QGridLayout;
 class KoCompositeOp;
@@ -73,9 +74,9 @@ protected:
         m_supportOutline = supportOutline;
     }
 
-    virtual QPainterPath getOutlinePath(const QPointF &documentPos,
-                                        const KoPointerEvent *event,
-                                        KisPaintOpSettings::OutlineMode outlineMode);
+    virtual KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
+                                                    const KoPointerEvent *event,
+                                                    KisPaintOpSettings::OutlineMode outlineMode);
 
 protected:
     bool isOutlineEnabled() const;
@@ -123,7 +124,7 @@ protected:
     quint8 m_opacity {OPACITY_OPAQUE_U8};
     bool m_paintOutline {false};
     QPointF m_outlineDocPoint;
-    QPainterPath m_currentOutline;
+    KisOptimizedBrushOutline m_currentOutline;
     QRectF m_oldOutlineRect;
 
     bool m_showColorPreview {false};
@@ -135,7 +136,7 @@ protected:
     QColor m_colorPreviewBaseColor;
 
 private:
-    QPainterPath tryFixBrushOutline(const QPainterPath &originalOutline);
+    KisOptimizedBrushOutline tryFixBrushOutline(const KisOptimizedBrushOutline &originalOutline);
     void setOpacity(qreal opacity);
 
     void activateSampleColor(AlternateAction action);

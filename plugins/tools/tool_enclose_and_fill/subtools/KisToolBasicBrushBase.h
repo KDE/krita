@@ -45,7 +45,7 @@ public Q_SLOTS:
 
 protected:
     virtual void finishStroke(const QPainterPath& stroke) = 0;
-    QPainterPath getOutlinePath(const QPointF &documentPos,
+    KisOptimizedBrushOutline getOutlinePath(const QPointF &documentPos,
                                 const KoPointerEvent *event,
                                 KisPaintOpSettings::OutlineMode outlineMode) override;
 

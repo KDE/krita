@@ -57,6 +57,7 @@
 #include <KisView.h>
 #include "kis_action_registry.h"
 #include "kis_tool_utils.h"
+#include <KisOptimizedBrushOutline.h>
 
 
 struct Q_DECL_HIDDEN KisTool::Private {
@@ -298,6 +299,14 @@ QPainterPath KisTool::pixelToView(const QPainterPath &pixelPolygon) const
     matrix.scale(zoomX/image()->xRes(), zoomY/ image()->yRes());
     return matrix.map(pixelPolygon);
 }
+
+KisOptimizedBrushOutline KisTool::pixelToView(const KisOptimizedBrushOutline &path) const
+{
+    KisCanvas2 *canvas2 = dynamic_cast<KisCanvas2 *>(canvas());
+    const KisCoordinatesConverter *coordsConverter = canvas2->coordinatesConverter();
+    return path.mapped(coordsConverter->imageToDocumentTransform() * coordsConverter->documentToFlakeTransform());
+}
+
 
 QPolygonF KisTool::pixelToView(const QPolygonF &pixelPath) const
 {
@@ -570,7 +579,7 @@ QWidget* KisTool::createOptionWidget()
 #define FAR_VAL 1000.0
 #define PROGRAM_VERTEX_ATTRIBUTE 0
 
-void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
+void KisTool::paintToolOutline(QPainter* painter, const KisOptimizedBrushOutline &path)
 {
     KisOpenGLCanvas2 *canvasWidget = dynamic_cast<KisOpenGLCanvas2 *>(canvas()->canvasWidget());
     if (canvasWidget)  {
@@ -582,7 +591,11 @@ void KisTool::paintToolOutline(QPainter* painter, const QPainterPath &path)
         painter->save();
         painter->setCompositionMode(QPainter::RasterOp_SourceXorDestination);
         painter->setPen(QColor(128, 255, 128));
-        painter->drawPath(path);
+
+        for (auto it = path.begin(); it != path.end(); ++it) {
+            painter->drawPolygon(*it);
+        }
+
         painter->restore();
     }
 }

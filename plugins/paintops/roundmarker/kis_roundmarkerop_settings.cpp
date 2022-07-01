@@ -6,7 +6,7 @@
 
 #include "kis_roundmarkerop_settings.h"
 #include "kis_roundmarker_option.h"
-
+#include <KisOptimizedBrushOutline.h>
 #include <QPointer>
 
 
@@ -46,9 +46,9 @@ qreal KisRoundMarkerOpSettings::paintOpSize() const
     return op.diameter;
 }
 
-QPainterPath KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
+KisOptimizedBrushOutline KisRoundMarkerOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)
 {
-    QPainterPath path;
+    KisOptimizedBrushOutline path;
 
     if (mode.isVisible) {
         qreal finalScale = 1.0;

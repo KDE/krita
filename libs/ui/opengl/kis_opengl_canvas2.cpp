@@ -237,7 +237,7 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
     d->updateRect = boost::none;
 }
 
-void KisOpenGLCanvas2::paintToolOutline(const QPainterPath &path)
+void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path)
 {
     d->renderer->paintToolOutline(path);
 }

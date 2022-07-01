@@ -22,7 +22,7 @@ public:
     KisSketchPaintOpSettings(KisResourcesInterfaceSP resourcesInterface);
     ~KisSketchPaintOpSettings() override {}
 
-    QPainterPath brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
+    KisOptimizedBrushOutline brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom) override;
 
     bool paintIncremental() override;
 

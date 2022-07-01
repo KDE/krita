@@ -26,6 +26,8 @@ ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )
 
 kis_add_library(kritaassistanttool MODULE ${kritaassistanttool_SOURCES})
 
+generate_export_header(kritaassistanttool BASE_NAME kritaassistanttool EXPORT_MACRO_NAME KRITAASSISTANTTOOL_EXPORT)
+
 target_link_libraries(kritaassistanttool kritaui kritaflake   )
 
 install(TARGETS kritaassistanttool  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

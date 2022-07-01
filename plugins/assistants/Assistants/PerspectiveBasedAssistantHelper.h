@@ -9,13 +9,13 @@
 #include <QObject>
 #include <boost/optional.hpp>
 
-
+#include "Ellipse.h"
 #include "kis_abstract_perspective_grid.h"
 #include "kis_painting_assistant.h"
 
-#include "Ellipse.h"
+#include "kritaassistanttool_export.h"
 
-class PerspectiveBasedAssistantHelper
+class KRITAASSISTANTTOOL_EXPORT PerspectiveBasedAssistantHelper
 {
 private:
     PerspectiveBasedAssistantHelper();

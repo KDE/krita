@@ -660,6 +660,9 @@ public:
     bool renamePastedLayers(bool defaultValue = false) const;
     void setRenamePastedLayers(bool value);
 
+    bool displayLayerSubtitles(bool defaultValue = false) const;
+    void setDisplayLayerSubtitles(bool value);
+
     template<class T>
     void writeEntry(const QString& name, const T& value) {
         m_cfg.writeEntry(name, value);

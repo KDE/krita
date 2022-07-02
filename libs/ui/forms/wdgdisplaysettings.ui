@@ -632,7 +632,7 @@
        <string>Miscellaneous</string>
       </attribute>
       <layout class="QFormLayout" name="formLayout_5">
-       <item row="6" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -699,6 +699,13 @@
          </property>
          <property name="checked">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="1">
+        <widget class="QCheckBox" name="chkDisplayLayerSubtitles">
+         <property name="text">
+          <string>Display layer opacity and blending mode subtitles</string>
          </property>
         </widget>
        </item>

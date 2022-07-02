@@ -377,7 +377,14 @@ void NodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, con
 
     const QString text = index.data(Qt::DisplayRole).toString();
     const QString elided = p->fontMetrics().elidedText(text, Qt::ElideRight, rc.width());
-    p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
+    if (!KisConfig(true).displayLayerSubtitles()) {
+        p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
+    }
+    else {
+        const QString subtitle = index.data(KisNodeModel::SubtitleRole).toString();
+        const QString subtitleElided = p->fontMetrics().elidedText(subtitle, Qt::ElideRight, rc.width());
+        p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided + subtitleElided);
+    }
 
     p->setPen(oldPen); // restore pen settings
     p->setOpacity(oldOpacity);

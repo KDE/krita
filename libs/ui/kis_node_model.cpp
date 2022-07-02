@@ -531,6 +531,17 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
     case KisNodeModel::IsAnimatedRole: {
         return node->isAnimated();
     }
+    case KisNodeModel::SubtitleRole: {
+        const int opacity = round(node->opacity() * 100.0 / 255);
+        const QString opacityString = QString::number(opacity);
+        const QString compositeOpId = node->compositeOpId();
+        const QString compositeOpDesc = node->compositeOp()->description();
+        QString subtitle = "";
+        if (!(opacity == 100 && compositeOpId == "normal")) {
+            subtitle = QString("\n%1%2 %3").arg(opacityString).arg(i18n("%")).arg(compositeOpDesc);
+        }
+        return subtitle;
+    }
     default:
 
         /**

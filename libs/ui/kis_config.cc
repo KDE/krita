@@ -2411,6 +2411,16 @@ void KisConfig::setRenamePastedLayers(bool value)
     m_cfg.writeEntry("renamePastedLayers", value);
 }
 
+bool KisConfig::displayLayerSubtitles(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("displayLayerSubtitles", false);
+}
+
+void KisConfig::setDisplayLayerSubtitles(bool value)
+{
+    m_cfg.writeEntry("displayLayerSubtitles", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

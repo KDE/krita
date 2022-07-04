@@ -468,15 +468,23 @@ set "PATH=%MINGW_BIN_DIR%;%DEPS_INSTALL_DIR%\bin;%PATH%"
 
 
 echo.
-echo Trying to guess GCC version...
-g++ --version > NUL
-if errorlevel 1 (
-	echo ERROR: g++ is not working.
-	exit /B 1
+echo Trying to guess compiler version...
+for %%a in (g++ clang++) do (
+    %%a --version > NUL
+    if not errorlevel 1 (
+        set CC=%%a
+    )
 )
-for /f "delims=" %%a in ('g++ --version ^| find "g++"') do set GCC_VERSION_LINE=%%a
+if "%CC%" == "" (
+    echo ERROR: No working compiler.
+    exit /B 1
+)
+%CC% --version > NUL
+for /f "delims=" %%a in ('%CC% --version ^| find "g++"') do set GCC_VERSION_LINE=%%a
+:: The space in "clang " is essential to detect
+:: the version line and not the InstalledDir
 if "%GCC_VERSION_LINE%" == "" (
-    for /f "delims=" %%a in ('g++ --version ^| find "clang"') do set GCC_VERSION_LINE=%%a
+    for /f "delims=" %%a in ('%CC% --version ^| find "clang "') do set GCC_VERSION_LINE=%%a
 )
 if "%GCC_VERSION_LINE%" == "" (
 	echo ERROR: Failed to get version of g++.
@@ -530,7 +538,7 @@ if "%OBJDUMP%" == "" (
 )
 for /f "delims=, tokens=1" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "i386"') do set TARGET_ARCH_LINE=%%a
 if "%TARGET_ARCH_LINE%" == "" (
-    echo "Possible LLVM objdump, trying to detect architecture..."
+    echo Possible LLVM objdump, trying to detect architecture...
     for /f "delims=" %%a in ('%OBJDUMP% -f %KRITA_INSTALL_DIR%\bin\krita.exe ^| find "coff"') do set TARGET_ARCH_LINE=%%a
 )
 echo -- %TARGET_ARCH_LINE%

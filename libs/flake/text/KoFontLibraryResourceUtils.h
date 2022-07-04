@@ -81,6 +81,7 @@ public:
     }
 };
 
+using FcConfigUP = KisLibraryResourcePointer<FcConfig, FcConfigDestroy>;
 using FcCharSetUP = KisLibraryResourcePointer<FcCharSet, FcCharSetDestroy>;
 using FcPatternUP = KisLibraryResourcePointer<FcPattern, FcPatternDestroy>;
 using FcFontSetUP = KisLibraryResourcePointer<FcFontSet, FcFontSetDestroy>;

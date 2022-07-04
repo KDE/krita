@@ -4,16 +4,22 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include "KoFontRegistery.h"
+#include "FlakeDebug.h"
 #include "KoCssTextUtils.h"
 
 #include <QApplication>
 #include <QDebug>
+#include <QDir>
+#include <QFile>
 #include <QGlobalStatic>
 #include <QMutex>
 #include <QDebug>
 #include <QThreadStorage>
-#include <QThread>
-#include <QApplication>
+#include <QtGlobal>
+#include <utility>
+
+#include <KoResourcePaths.h>
+#include <kis_debug.h>
 
 #include "KoFontLibraryResourceUtils.h"
 
@@ -23,13 +29,15 @@ class KoFontRegistery::Private
 {
 private:
     struct ThreadData {
+        FcConfigUP m_config;
         FT_LibraryUP m_library;
         QHash<FcChar32, FcPatternUP> m_patterns;
         QHash<FcChar32, FcFontSetUP> m_fontSets;
         QHash<QString, FT_FaceUP> m_faces;
 
-        ThreadData(FT_LibraryUP lib)
-            : m_library(std::move(lib))
+        ThreadData(FcConfigUP cfg, FT_LibraryUP lib)
+            : m_config(std::move(cfg))
+            , m_library(std::move(lib))
         {
         }
     };
@@ -40,13 +48,33 @@ private:
     {
         if (!m_data.hasLocalData()) {
             FT_Library lib = nullptr;
+            FcConfig *config = FcConfigCreate();
+            KIS_ASSERT(config && "No Fontconfig support available");
+            if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
+                QDir appdir(KoResourcePaths::getApplicationRoot()
+                            + "/etc/fonts");
+                if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {
+                    qputenv("FONTCONFIG_PATH",
+                            QFile::encodeName(QDir::toNativeSeparators(
+                                appdir.absolutePath())));
+                }
+            }
+            debugFlake << "Setting FONTCONFIG_PATH"
+                       << qgetenv("FONTCONFIG_PATH");
+            if (!FcConfigParseAndLoad(config, nullptr, FcTrue)) {
+                errorFlake << "Failed loading the Fontconfig configuration";
+            } else {
+                FcConfigSetCurrent(config);
+            }
             FT_Error error = FT_Init_FreeType(&lib);
             if (error) {
-                qWarning() << "Error with initializing FreeType library:" << error
+                errorFlake << "Error with initializing FreeType library:"
+                           << error
                            << "Current thread:" << QThread::currentThread()
                            << "GUI thread:" << qApp->thread();
             } else {
-                m_data.setLocalData(QSharedPointer<ThreadData>::create(lib));
+                m_data.setLocalData(
+                    QSharedPointer<ThreadData>::create(config, lib));
             }
         }
     }

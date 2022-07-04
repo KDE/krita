@@ -2421,6 +2421,26 @@ void KisConfig::setDisplayLayerSubtitles(bool value)
     m_cfg.writeEntry("displayLayerSubtitles", value);
 }
 
+int KisConfig::layerSubtitleOpacity(bool defaultValue) const
+{
+    return defaultValue ? 55 : m_cfg.readEntry("layerSubtitleOpacity", 55);
+}
+
+void KisConfig::setLayerSubtitleOpacity(int value)
+{
+    m_cfg.writeEntry("layerSubtitleOpacity", value);
+}
+
+bool KisConfig::useInlineLayerSubtitles(bool defaultValue) const
+{
+    return defaultValue ? false : m_cfg.readEntry("useInlineLayerSubtitles", false);
+}
+
+void KisConfig::setUseInlineLayerSubtitles(bool value)
+{
+    m_cfg.writeEntry("useInlineLayerSubtitles", value);
+}
+
 #include <QDomDocument>
 #include <QDomElement>
 

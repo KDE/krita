@@ -538,7 +538,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         const QString compositeOpDesc = node->compositeOp()->description();
         QString subtitle = "";
         if (!(opacity == 100 && compositeOpId == "normal")) {
-            subtitle = QString("\n%1%2 %3").arg(opacityString).arg(i18n("%")).arg(compositeOpDesc);
+            subtitle = QString("%1%2 %3").arg(opacityString).arg(i18n("%")).arg(compositeOpDesc);
         }
         return subtitle;
     }

@@ -162,6 +162,7 @@ LayerBox::LayerBox()
     , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     , m_treeIndentationCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    , m_subtitleOpacityCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
 
@@ -353,6 +354,44 @@ LayerBox::LayerBox()
     // this extra compressor that juggles between slow UI and disk thrashing
     connect(indentationSlider, SIGNAL(valueChanged(int)), &m_treeIndentationCompressor, SLOT(start()));
     connect(&m_treeIndentationCompressor, SIGNAL(timeout()), SLOT(slotUpdateTreeIndentation()));
+
+
+    // layer subtitle settings
+    subtitleChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Display Subtitles"), this);
+    subtitleChkbox->setToolTip(i18nc("@item:tooltip", "Layer opacity and blending mode"));
+    subtitleChkbox->setChecked(cfg.displayLayerSubtitles());
+
+    QWidgetAction *chkboxAction = new QWidgetAction(this);
+    chkboxAction->setDefaultWidget(subtitleChkbox);
+    configureMenu->addAction(chkboxAction);
+
+    connect(subtitleChkbox, SIGNAL(stateChanged(int)), SLOT(slotUpdateDisplayLayerSubtitles()));
+
+    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, slider", "Subtitle Opacity"));
+    subtitleOpacitySlider = new QSlider(Qt::Horizontal, this);
+    // 55% is the opacity of nonvisible layer text
+    subtitleOpacitySlider->setRange(55, 100);
+    subtitleOpacitySlider->setMinimumSize(40, 20);
+    subtitleOpacitySlider->setSingleStep(5);
+    subtitleOpacitySlider->setPageStep(10);
+    subtitleOpacitySlider->setValue(cfg.layerSubtitleOpacity());
+
+    sliderAction= new QWidgetAction(this);
+    sliderAction->setDefaultWidget(subtitleOpacitySlider);
+    configureMenu->addAction(sliderAction);
+
+    connect(subtitleOpacitySlider, SIGNAL(valueChanged(int)), &m_subtitleOpacityCompressor, SLOT(start()));
+    connect(&m_subtitleOpacityCompressor, SIGNAL(timeout()), SLOT(slotUpdateLayerSubtitleOpacity()));
+
+    subtitleInlineChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Inline Subtitles"), this);
+    subtitleInlineChkbox->setChecked(cfg.useInlineLayerSubtitles());
+
+    chkboxAction = new QWidgetAction(this);
+    chkboxAction->setDefaultWidget(subtitleInlineChkbox);
+    configureMenu->addAction(chkboxAction);
+
+    connect(subtitleInlineChkbox, SIGNAL(stateChanged(int)), SLOT(slotUpdateUseInlineLayerSubtitles()));
+
 }
 
 LayerBox::~LayerBox()
@@ -1244,6 +1283,36 @@ void LayerBox::slotUpdateTreeIndentation()
         return;
     }
     cfg.setLayerTreeIndentation(indentationSlider->value());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+}
+
+void LayerBox::slotUpdateDisplayLayerSubtitles()
+{
+    KisConfig cfg(false);
+    if (subtitleChkbox->isChecked() == cfg.displayLayerSubtitles()) {
+        return;
+    }
+    cfg.setDisplayLayerSubtitles(subtitleChkbox->isChecked());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+}
+
+void LayerBox::slotUpdateLayerSubtitleOpacity()
+{
+    KisConfig cfg(false);
+    if (subtitleOpacitySlider->value() == cfg.layerSubtitleOpacity()) {
+        return;
+    }
+    cfg.setLayerSubtitleOpacity(subtitleOpacitySlider->value());
+    m_wdgLayerBox->listLayers->slotConfigurationChanged();
+}
+
+void LayerBox::slotUpdateUseInlineLayerSubtitles()
+{
+    KisConfig cfg(false);
+    if (subtitleInlineChkbox->isChecked() == cfg.useInlineLayerSubtitles()) {
+        return;
+    }
+    cfg.setUseInlineLayerSubtitles(subtitleInlineChkbox->isChecked());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
 }
 

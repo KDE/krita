@@ -31,6 +31,7 @@
 #include "kis_layer_filter_widget.h"
 #include "kis_signal_auto_connection.h"
 #include <QSlider>
+#include <QCheckBox>
 
 class QModelIndex;
 
@@ -126,6 +127,9 @@ private Q_SLOTS:
 
     void slotUpdateThumbnailIconSize();
     void slotUpdateTreeIndentation();
+    void slotUpdateDisplayLayerSubtitles();
+    void slotUpdateLayerSubtitleOpacity();
+    void slotUpdateUseInlineLayerSubtitles();
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
@@ -166,10 +170,14 @@ private:
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
     KisSignalCompressor m_treeIndentationCompressor;
+    KisSignalCompressor m_subtitleOpacityCompressor;
 
     KisLayerFilterWidget* layerFilterWidget;
     QSlider *thumbnailSizeSlider;
     QSlider *indentationSlider;
+    QCheckBox *subtitleChkbox;
+    QSlider *subtitleOpacitySlider;
+    QCheckBox *subtitleInlineChkbox;
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;

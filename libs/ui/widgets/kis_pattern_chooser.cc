@@ -102,7 +102,7 @@ void KisPatternChooser::update(KoResourceSP resource)
     QString filename = pattern->filename();
     QString resourceType = ResourceType::Patterns;
     QString location = pattern->storageLocation();
-    m_lblName->setText(QString("%1 (%2 x %3)").arg(KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, location)
+    m_lblName->setText(QString("%1 (%2 x %3)").arg(KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, location))
                                                    .arg(pattern->width())
                                                    .arg(pattern->height()));
 }

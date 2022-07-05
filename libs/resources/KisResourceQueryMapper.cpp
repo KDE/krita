@@ -80,9 +80,8 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         {
             QString name =  query.value(useResourcePrefix ? "resource_name" : "name").toString();
             QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
-            QString resourceType = query.value(useResourcePrefix ? "resource_resource_type" : "resource_type").toString();
-            QString storageLocation = query.value(useResourcePrefix ? "resource_location" : "location").toString();
-
+            QString resourceType = query.value(useResourcePrefix ? "resource_type" : "resource_type").toString();
+            QString storageLocation = query.value("location").toString();
             return KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, storageLocation);
         }
         case KisAbstractResourceModel::Filename:
@@ -144,9 +143,8 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     {
         QString name =  query.value(useResourcePrefix ? "resource_name" : "name").toString();
         QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
-        QString resourceType = query.value(useResourcePrefix ? "resource_resource_type" : "resource_type").toString();
-        QString storageLocation = query.value(useResourcePrefix ? "resource_location" : "location").toString();
-
+        QString resourceType = query.value(useResourcePrefix ? "resource_type" : "resource_type").toString();
+        QString storageLocation = query.value("location").toString();
         return KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, storageLocation);
     }
     case Qt::UserRole + KisAbstractResourceModel::Filename:

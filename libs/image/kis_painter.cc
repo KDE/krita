@@ -1325,6 +1325,7 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
     long double aSq = semiAxisA * semiAxisA;
     long double bSq = semiAxisB * semiAxisB;
     int canvasBound = std::ceil(std::max(semiAxisA, semiAxisB));
+    auto dis=KisDistanceInformation();
     bool oddA = (int) axisA % 2 == 1;
     bool oddB = (int) axisB % 2 == 1;
     int start_x = -(int) std::ceil(std::sqrt(aSq * sqCosC + bSq * sqSinC) /
@@ -1359,7 +1360,7 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
                         paintAt(KisPaintInformation(QPointF(
                                         std::round(xR + offset.x()),
                                         std::round(yR + offset.y()))),
-                                new KisDistanceInformation());
+                                &dis);
                         painted_up = true;
                     } else {
                         if (y != coord.second) {
@@ -1392,7 +1393,7 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
                         paintAt(KisPaintInformation(QPointF(
                                         std::round(xR + offset.x()),
                                         std::round(yR + offset.y()))),
-                                new KisDistanceInformation());
+                                &dis);
                         painted_down = true;
                     } else {
                         if (y != coord.second) {

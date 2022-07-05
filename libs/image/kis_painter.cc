@@ -1298,7 +1298,7 @@ void KisPainter::paintEllipse(const QRectF &rect)
     paintPolygon(points);
 }
 
-void KisPainter::paintEllipse(qreal axis_a, qreal axis_b, qreal angle, QPointF offset) {
+void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
     // Read https://rohankjoshi.medium.com/the-equation-for-a-rotated-ellipse-5888731da76
     // and https://stackoverflow.com/questions/55100965/algorithm-for-plotting-2d-xy-graph/55120230#55120230
     // for information of the algorithm.
@@ -1306,41 +1306,113 @@ void KisPainter::paintEllipse(qreal axis_a, qreal axis_b, qreal angle, QPointF o
     // Using long double for more precision, try to see if that improves.
     // Because Qt does not provide long double version of most functions,
     // I have to use std instead.
-    axis_a-=1.0l;
-    axis_b-=1.0l;
-    long double semiAxisA = axis_a / 2.0L;
-    long double semiAxisB = axis_b / 2.0L;
-    long double sinA = std::sin((long double) angle);
-    long double sqSinA = sinA * sinA;
-    long double cosA = std::cos((long double) angle);
-    long double sqCosA = cosA * cosA;
+
+    long double axisA = (long double) a_ - 1.0L;
+    long double axisB = (long double) b_ - 1.0L;
+    if (axisA == 0.0L || axisB == 0.0L) {
+        // TODO: Draw a line
+        return;
+    } else if (axisA == 1.0L || axisB == 1.0L) {
+        // ...and draw two lines here.
+        return;
+    }
+    long double semiAxisA = axisA / 2.0L;
+    long double semiAxisB = axisB / 2.0L;
+    long double sinC = std::sin((long double) angle);
+    long double sqSinC = sinC * sinC;
+    long double cosC = std::cos((long double) angle);
+    long double sqCosC = cosC * cosC;
     long double aSq = semiAxisA * semiAxisA;
     long double bSq = semiAxisB * semiAxisB;
     int canvasBound = std::ceil(std::max(semiAxisA, semiAxisB));
-    bool oddA = (int) axis_a % 2 == 1;
-    bool oddB = (int) axis_b % 2 == 1;
-    for (int xI = -canvasBound; xI <= canvasBound; ++xI) {
-        for (int yI = -canvasBound; yI <= canvasBound; ++yI) {
-            long double xR = xI;
-            long double yR = yI;
-            if (xI == 0 && oddA) { continue; }
-            if (yI == 0 && oddB) { continue; }
-            xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
-            yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
-            long double pdX = 2.0L * xR * (aSq * sqSinA + bSq * sqCosA) + yR * (bSq - aSq) * sin(2.0L * angle);
-            long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosA + bSq * sqSinA);
-            long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
-            long double paraboloid = (aSq * sqSinA + bSq * sqCosA) * xR * xR
-                                     + 2.0L * (bSq - aSq) * sinA * cosA * xR * yR
-                                     + (aSq * sqCosA + bSq * sqSinA) * yR * yR
-                                     - aSq * bSq;
-            if (std::abs(paraboloid) < gradient * 0.5L) {
-                paintAt(KisPaintInformation(QPointF(
-                                xR + offset.x(),
-                                yR + offset.y())),
-                        new KisDistanceInformation());
+    bool oddA = (int) axisA % 2 == 1;
+    bool oddB = (int) axisB % 2 == 1;
+    int start_x = -(int) std::ceil(std::sqrt(aSq * sqCosC + bSq * sqSinC) /
+                                   std::sqrt(sqCosC * sqCosC + 2 * sqCosC * sqSinC + sqSinC * sqSinC));
+    long double start_y = (-((aSq * cosC * sinC * std::sqrt(aSq * sqCosC + bSq * sqSinC)) /
+                             std::sqrt((sqCosC + sqSinC) * (sqCosC + sqSinC))) +
+                           (bSq * cosC * sinC * std::sqrt(aSq * sqCosC + bSq * sqSinC)) /
+                           std::sqrt((sqCosC + sqSinC) * (sqCosC + sqSinC))) / (aSq * sqCosC + bSq * sqSinC);
+    auto curr = QSet<QPair<int, int>>({{start_x, (int) std::round(start_y)}});
+    auto next = QSet<QPair<int, int>>({{start_x + 1, (int) std::round(start_y)}});
+    while (true) {
+        Q_FOREACH(const auto &coord, curr) {
+                if (coord.first == 0 && oddA) {
+                    next.insert({coord.first + 1, coord.second});
+                    continue;
+                }
+                bool painted_up = false;
+                for (int y = coord.second; y <= canvasBound; ++y) {
+                    if (y == 0 && oddB) { continue; }
+                    long double xR = (long double) coord.first;
+                    long double yR = (long double) y;
+                    xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
+                    yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
+                    long double pdX = 2.0L * xR * (aSq * sqSinC + bSq * sqCosC) + yR * (bSq - aSq) * sin(2.0L * angle);
+                    long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosC + bSq * sqSinC);
+                    long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
+                    long double paraboloid = (aSq * sqSinC + bSq * sqCosC) * xR * xR
+                                             + 2.0L * (bSq - aSq) * sinC * cosC * xR * yR
+                                             + (aSq * sqCosC + bSq * sqSinC) * yR * yR
+                                             - aSq * bSq;
+                    if (std::abs(paraboloid) <= gradient * 0.5L) {
+                        paintAt(KisPaintInformation(QPointF(
+                                        std::round(xR + offset.x()),
+                                        std::round(yR + offset.y()))),
+                                new KisDistanceInformation());
+                        painted_up = true;
+                    } else {
+                        if (y != coord.second) {
+                            if (painted_up) {
+                                next.insert({coord.first + 1, qMin(y - (y == 1 && oddB ? 2 : 1), canvasBound)});
+                            }
+                            break;
+                        }
+                    }
+                    if (y == canvasBound && coord.first < canvasBound) {
+                        next.insert({coord.first + 1, y});
+                        break;
+                    }
+                }
+                bool painted_down = false;
+                for (int y = coord.second; y >= -canvasBound; --y) {
+                    if (y == 0 && oddB) { continue; }
+                    long double xR = (long double) coord.first;
+                    long double yR = (long double) y;
+                    xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
+                    yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
+                    long double pdX = 2.0L * xR * (aSq * sqSinC + bSq * sqCosC) + yR * (bSq - aSq) * sin(2.0L * angle);
+                    long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosC + bSq * sqSinC);
+                    long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
+                    long double paraboloid = (aSq * sqSinC + bSq * sqCosC) * xR * xR
+                                             + 2.0L * (bSq - aSq) * sinC * cosC * xR * yR
+                                             + (aSq * sqCosC + bSq * sqSinC) * yR * yR
+                                             - aSq * bSq;
+                    if (std::abs(paraboloid) <= gradient * 0.5L) {
+                        paintAt(KisPaintInformation(QPointF(
+                                        std::round(xR + offset.x()),
+                                        std::round(yR + offset.y()))),
+                                new KisDistanceInformation());
+                        painted_down = true;
+                    } else {
+                        if (y != coord.second) {
+                            if (painted_down) {
+                                next.insert({coord.first + 1, qMax(y + (y == -1 && oddB ? 2 : 1), -canvasBound)});
+                            }
+                            break;
+                        }
+                    }
+                    if (y == -canvasBound && coord.first < canvasBound) {
+                        next.insert({coord.first + 1, y});
+                        break;
+                    }
+                }
             }
+        if (next.empty()) {
+            break;
         }
+        curr = next;
+        next = QSet<QPair<int, int>>();
     }
 }
 

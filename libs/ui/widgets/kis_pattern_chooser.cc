@@ -17,6 +17,7 @@
 #include <klocalizedstring.h>
 #include <KisResourceItemChooser.h>
 #include <KoResourceServerProvider.h>
+#include <KisResourceTypes.h>
 #include <KisTagFilterResourceProxyModel.h>
 
 #include "kis_signals_blocker.h"
@@ -97,7 +98,13 @@ void KisPatternChooser::update(KoResourceSP resource)
     if (!resource) return;
 
     KoPatternSP pattern = resource.staticCast<KoPattern>();
-    m_lblName->setText(QString("%1 (%2 x %3)").arg(i18n(pattern->name().toUtf8().data())).arg(pattern->width()).arg(pattern->height()));
+    QString name = pattern->name();
+    QString filename = pattern->filename();
+    QString resourceType = ResourceType::Patterns;
+    QString location = pattern->storageLocation();
+    m_lblName->setText(QString("%1 (%2 x %3)").arg(KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, location)
+                                                   .arg(pattern->width())
+                                                   .arg(pattern->height()));
 }
 
 void KisPatternChooser::setGrayscalePreview(bool grayscale)

@@ -533,7 +533,7 @@ void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
     m_d->uiWdgPaintOpPresetSettings.currentBrushNameLabel->setText(formattedBrushName);
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineLabel->setText(i18nc("%1 is the name of a brush engine", "%1 Engine", currentBrushEngineName));
     m_d->uiWdgPaintOpPresetSettings.currentBrushEngineIcon->setPixmap(currentBrushEngineIcon);
-    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(resource->name());
+    m_d->uiWdgPaintOpPresetSettings.renameBrushNameTextField->setText(i18n(resource->name().toUtf8()));
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QSize thumbSize = QSize(55, 55)*devicePixelRatioF();

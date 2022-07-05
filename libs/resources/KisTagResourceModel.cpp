@@ -99,7 +99,7 @@ QVariant KisAllTagResourceModel::data(const QModelIndex &index, int role) const
     if (!pos) {return v;}
 
     if (role < Qt::UserRole + TagId && index.column() < TagId) {
-        v = KisResourceQueryMapper::variantFromResourceQuery(d->query, index.column(), role, true);
+        v = KisResourceQueryMapper::variantFromResourceQuery(d->query, index.column(), role, false);
     }
 
     if (index.column() >= TagId) {

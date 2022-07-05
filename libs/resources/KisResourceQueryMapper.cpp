@@ -77,7 +77,14 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
         case KisAbstractResourceModel::StorageId:
             return query.value("storage_id");
         case KisAbstractResourceModel::Name:
-            return query.value(useResourcePrefix ? "resource_name" : "name");
+        {
+            QString name =  query.value(useResourcePrefix ? "resource_name" : "name").toString();
+            QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
+            QString resourceType = query.value(useResourcePrefix ? "resource_resource_type" : "resource_type").toString();
+            QString storageLocation = query.value(useResourcePrefix ? "resource_location" : "location").toString();
+
+            return KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, storageLocation);
+        }
         case KisAbstractResourceModel::Filename:
             return query.value(useResourcePrefix ? "resource_filename" : "filename");
         case KisAbstractResourceModel::Tooltip:
@@ -134,7 +141,14 @@ QVariant KisResourceQueryMapper::variantFromResourceQuery(const QSqlQuery &query
     case Qt::UserRole + KisAbstractResourceModel::StorageId:
         return query.value("storage_id");
     case Qt::UserRole + KisAbstractResourceModel::Name:
-        return query.value(useResourcePrefix ? "resource_name" : "name");
+    {
+        QString name =  query.value(useResourcePrefix ? "resource_name" : "name").toString();
+        QString filename = query.value(useResourcePrefix ? "resource_filename" : "filename").toString();
+        QString resourceType = query.value(useResourcePrefix ? "resource_resource_type" : "resource_type").toString();
+        QString storageLocation = query.value(useResourcePrefix ? "resource_location" : "location").toString();
+
+        return KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, storageLocation);
+    }
     case Qt::UserRole + KisAbstractResourceModel::Filename:
         return query.value(useResourcePrefix ? "resource_filename" : "filename");
     case Qt::UserRole + KisAbstractResourceModel::Tooltip:

@@ -751,7 +751,7 @@ bool KisResourceCacheDb::makeResourceTheCurrentVersion(int resourceId, KoResourc
 
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", resource->filename());
-    q.bindValue(":tooltip", i18n(resource->name().toUtf8()));
+    q.bindValue(":tooltip", resource->name());
     q.bindValue(":md5sum", resource->md5Sum());
 
     QBuffer buf;
@@ -981,33 +981,7 @@ bool KisResourceCacheDb::addResource(KisResourceStorageSP storage, QDateTime tim
     q.bindValue(":storage_location", changeToEmptyIfNull(KisResourceLocator::instance()->makeStorageLocationRelative(storage->location())));
     q.bindValue(":name", resource->name());
     q.bindValue(":filename", resource->filename());
-
-    QString translationContext;
-    if (storage->type() == KisResourceStorage::StorageType::Bundle) {
-        translationContext = "./krita/data/bundles/" + KisResourceLocator::instance()->makeStorageLocationRelative(storage->location())
-                + ":" + resourceType + "/" + resource->filename();
-    } else if (storage->location() == "memory") {
-        translationContext = "memory/" + resourceType + "/" + resource->filename();
-    }
-    else if (resource->filename().endsWith(".myb", Qt::CaseInsensitive)) {
-        translationContext = "./plugins/paintops/mypaint/brushes/" + resource->filename();
-    } else {
-        translationContext = "./krita/data/" + resourceType + "/" + resource->filename();
-    }
-
-    {
-        QByteArray ctx = translationContext.toUtf8();
-        QString translatedName = i18nc(ctx, resource->name().toUtf8());
-        if (translatedName == resource->name()) {
-            // Try using the file name without the file extension, and replaces '_' with spaces.
-            QString altName = QFileInfo(resource->filename()).completeBaseName().replace('_', ' ');
-            QString altTranslatedName = i18nc(ctx, altName.toUtf8());
-            if (altName != altTranslatedName) {
-                translatedName = altTranslatedName;
-            }
-        }
-        q.bindValue(":tooltip", translatedName);
-    }
+    q.bindValue(":tooltip", QFileInfo(resource->filename()).completeBaseName().replace('_', ' '));
 
     QBuffer buf;
     buf.open(QBuffer::WriteOnly);

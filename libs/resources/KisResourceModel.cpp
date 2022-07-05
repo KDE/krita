@@ -1059,3 +1059,33 @@ QVector<KisTagSP> KisResourceModel::tagsForResource(int resourceId) const
 {
     return static_cast<KisAllResourcesModel*>(sourceModel())->tagsForResource(resourceId);
 }
+
+QString KisAbstractResourceModel::translatedResourceName(const QString &name, const QString &filename, const QString &resourceType, const QString &storageLocation)
+{
+    QString translationContext;
+
+    if (storageLocation.endsWith(".bundle")) {
+        translationContext = "./krita/data/bundles/" + storageLocation + ":" + resourceType + "/" + filename;
+    } else if (storageLocation == "memory") {
+        translationContext = "memory/" + resourceType + "/" + filename;
+    }
+    else if (filename.endsWith(".myb", Qt::CaseInsensitive)) {
+        translationContext = "./plugins/paintops/mypaint/brushes/" + filename;
+    } else {
+        translationContext = "./krita/data/" + resourceType + "/" + filename;
+    }
+
+    {
+        QByteArray ctx = translationContext.toUtf8();
+        QString translatedName = i18nc(ctx, name.toUtf8());
+        if (translatedName == name) {
+            // Try using the file name without the file extension, and replaces '_' with spaces.
+            QString altName = QFileInfo(filename).completeBaseName().replace('_', ' ');
+            QString altTranslatedName = i18nc(ctx, altName.toUtf8());
+            if (altName != altTranslatedName) {
+                translatedName = altTranslatedName;
+            }
+        }
+        return translatedName;
+    }
+}

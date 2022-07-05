@@ -190,6 +190,18 @@ public:
      * @return
      */
     virtual bool setResourceMetaData(KoResourceSP resource, QMap<QString, QVariant> metadata) = 0;
+
+    /**
+     * @brief translatedResourceName creates a context and then tries to translate the resource name,
+     * falling back to the base filename with underscores changed to spaces.
+     * @param name The name of the resource
+     * @param filename The filename of the resource
+     * @param resourceType The type of the resource
+     * @param storageLocation The relative location of the resource
+     * @return the translated name of the resource
+     */
+    static QString translatedResourceName(const QString &name, const QString &filename, const QString &resourceType, const QString &storageLocation);
+
 };
 
 class KRITARESOURCES_EXPORT KisAbstractResourceFilterInterface

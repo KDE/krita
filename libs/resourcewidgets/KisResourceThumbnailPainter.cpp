@@ -29,14 +29,20 @@ QImage KisResourceThumbnailPainter::getReadyThumbnail(const QModelIndex &index, 
 void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& index, QRect rect, const QPalette& palette, bool selected, bool addMargin) const
 {
     QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
-    QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
     QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    QString filename = index.data(Qt::UserRole + KisAbstractResourceModel::Filename).toString();
+    QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
+    QString storageLocation = index.data(Qt::UserRole + KisAbstractResourceModel::Location).toString();
+
+    name = KisAbstractResourceModel::translatedResourceName(name, filename, resourceType, storageLocation);
 
     paint(painter, thumbnail, resourceType, name, rect, palette, selected, addMargin);
 }
 
 void KisResourceThumbnailPainter::paint(QPainter *painter, QImage thumbnail, QString resourceType, QString name, QRect rect, const QPalette& palette, bool selected, bool addMargin) const
 {
+
+
     painter->save();
 
     if(addMargin) {

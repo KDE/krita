@@ -73,7 +73,7 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
 
     const QRect fillRect = m_resources->image()->bounds();
 
-    KisEncloseAndFillPainter painter(device, m_selection);
+    KisEncloseAndFillPainter painter(device, m_selection, fillRect.size());
     painter.beginTransaction();
 
     m_resources->setupPainter(&painter);
@@ -94,8 +94,6 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     painter.setAntiAlias(m_antiAlias);
     painter.setSizemod(m_expand);
     painter.setFeather(m_feather);
-    painter.setWidth(fillRect.width());
-    painter.setHeight(fillRect.height());
 
     KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_referencePaintDevice;
 

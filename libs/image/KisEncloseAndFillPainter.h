@@ -87,13 +87,13 @@ public:
      * Construct an empty painter. Use the begin(KisPaintDeviceSP) method to attach
      * to a paint device
      */
-    KisEncloseAndFillPainter();
+    KisEncloseAndFillPainter(const QSize &imageSize);
     /**
      * Start painting on the specified paint device
      */
-    KisEncloseAndFillPainter(KisPaintDeviceSP device);
+    KisEncloseAndFillPainter(KisPaintDeviceSP device, const QSize &imageSize);
 
-    KisEncloseAndFillPainter(KisPaintDeviceSP device, KisSelectionSP selection);
+    KisEncloseAndFillPainter(KisPaintDeviceSP device, KisSelectionSP selection, const QSize &imageSize);
 
     ~KisEncloseAndFillPainter() override;
 

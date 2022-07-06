@@ -417,28 +417,37 @@ void KisOpenGLCanvasRenderer::paintToolOutline(const KisOptimizedBrushOutline &p
         d->lineVertexBuffer.bind();
     }
 
+    QVector<QVector3D> verticesBuffer;
+
     // Convert every disjointed subpath to a polygon and draw that polygon
     for (auto it = path.begin(); it != path.end(); ++it) {
         const QPolygonF& polygon = *it;
 
-        QVector<QVector3D> vertices;
-        vertices.resize(polygon.count());
+        if (KisAlgebra2D::maxDimension(polygon.boundingRect()) < 0.5) {
+            continue;
+        }
 
-        for (int vertIndex = 0; vertIndex < polygon.count(); vertIndex++) {
+        const int verticesCount = polygon.count();
+
+        if (verticesBuffer.size() < verticesCount) {
+            verticesBuffer.resize(verticesCount);
+        }
+
+        for (int vertIndex = 0; vertIndex < verticesCount; vertIndex++) {
             QPointF point = polygon.at(vertIndex);
-            vertices[vertIndex].setX(point.x());
-            vertices[vertIndex].setY(point.y());
+            verticesBuffer[vertIndex].setX(point.x());
+            verticesBuffer[vertIndex].setY(point.y());
         }
         if (KisOpenGL::supportsVAO()) {
             d->lineVertexBuffer.bind();
-            d->lineVertexBuffer.allocate(vertices.constData(), 3 * vertices.size() * sizeof(float));
+            d->lineVertexBuffer.allocate(verticesBuffer.constData(), 3 * verticesCount * sizeof(float));
         }
         else {
             d->solidColorShader->enableAttributeArray(PROGRAM_VERTEX_ATTRIBUTE);
-            d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, vertices.constData());
+            d->solidColorShader->setAttributeArray(PROGRAM_VERTEX_ATTRIBUTE, verticesBuffer.constData());
         }
 
-        glDrawArrays(GL_LINE_STRIP, 0, vertices.size());
+        glDrawArrays(GL_LINE_STRIP, 0, verticesCount);
     }
 
     if (KisOpenGL::supportsVAO()) {

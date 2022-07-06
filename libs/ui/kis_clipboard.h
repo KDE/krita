@@ -64,6 +64,14 @@ public:
                           int overridePasteBehaviour = -1,
                           KisTimeSpan *clipRange = nullptr) const;
 
+    /**
+     * Given the mimedata for a paste event, ask user which source
+     * they'll want to use for the image.
+     *
+     * @return A pair of bool and PasteFormatBehaviour:
+     *   The boolean indicates acceptance of the paste event.
+     *   If set, the PasteFormatBehaviour member indicates the chosen source.
+     */
     QPair<bool, PasteFormatBehaviour>
     askUserForSource(const QMimeData *data,
                      bool useClipboardFallback = false) const;
@@ -88,7 +96,7 @@ public:
                           int overridePasteBehaviour = -1,
                           bool useClipboardFallback = false,
                           QPair<bool, PasteFormatBehaviour> source = {
-                              true,
+                              false,
                               PasteFormatBehaviour::PASTE_FORMAT_ASK}) const;
 
     bool hasClip() const;

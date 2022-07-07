@@ -562,6 +562,22 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
         }
     });
 
+    action = actionManager->createAction("last_frame");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, &KisAction::triggered, [this](bool){
+       if (m_d->canvas) {
+           m_d->canvas->animationPlayer()->goToEndFrame();
+       }
+    });
+
+    action = actionManager->createAction("first_frame");
+    action->setActivationFlags(KisAction::ACTIVE_IMAGE);
+    connect(action, &KisAction::triggered, [this](bool){
+       if (m_d->canvas) {
+           m_d->canvas->animationPlayer()->goToStartFrame();
+       }
+    });
+
     action = actionManager->createAction("auto_key");
     m_d->titlebar->btnAutoKey->setDefaultAction(action);
     m_d->titlebar->btnAutoKey->setIconSize(QSize(22, 22));

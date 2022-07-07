@@ -63,6 +63,8 @@ ExternalProject_Add(
     URL_HASH SHA256=9d3ff60560b953dae7d7613b69dda643aef62390574114fdb1c9d4eada672049
 
     PATCH_COMMAND ${CMAKE_COMMAND} -E echo Patching ANGLE
+    # backported fixes from upstream
+    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-D3D-Initialize-storage-after-generating-mipmap-image.patch
     # Patches from Qt 5.12.12:
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-patches_qt5.12.12/0001-ANGLE-Use-pixel-sizes-in-the-XAML-swap-chain.patch
     COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/01-patches_qt5.12.12/0002-ANGLE-Add-support-for-querying-platform-device.patch

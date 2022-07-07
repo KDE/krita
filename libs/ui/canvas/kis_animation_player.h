@@ -31,6 +31,7 @@ public:
 
     void goToPlaybackOrigin();
     void goToStartFrame();
+    void goToEndFrame();
     void displayFrame(int time);
 
     bool isPlaying();

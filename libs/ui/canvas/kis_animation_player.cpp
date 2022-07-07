@@ -660,6 +660,18 @@ void KisAnimationPlayer::goToStartFrame()
     animation->switchCurrentTimeAsync(startFrame);
 }
 
+void KisAnimationPlayer::goToEndFrame()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->canvas);
+
+    KisImageAnimationInterface *animation = m_d->canvas->image()->animationInterface();
+    const int endFrame = animation->playbackRange().end();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(endFrame >= 0);
+
+    animation->switchCurrentTimeAsync(endFrame);
+}
+
 void KisAnimationPlayer::forcedStopOnExit()
 {
     m_d->haltImpl();

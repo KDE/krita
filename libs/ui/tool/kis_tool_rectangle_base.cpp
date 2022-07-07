@@ -317,22 +317,18 @@ void KisToolRectangleBase::endPrimaryAction(KoPointerEvent *event)
 QRectF KisToolRectangleBase::createRect(const QPointF &start, const QPointF &end)
 {
     QTransform t;
+    t.translate(start.x(), start.y());
     t.rotateRadians(-getRotationAngle());
-    QPointF end1 = t.map(end-start) + start;
+    t.translate(-start.x(), -start.y());
+    const QTransform tInv = t.inverted();
 
-    qreal x0 = start.x();
-    qreal y0 = start.y();
-    qreal x1 = end1.x();
-    qreal y1 = end1.y();
-
-    int newX0 = qRound(x0);
-    int newY0 = qRound(y0);
-
-    int newX1 = qRound(x1);
-    int newY1 = qRound(y1);
-
-    QRectF result;
-    result.setCoords(newX0, newY0, newX1, newY1);
+    const QPointF end1 = t.map(end);
+    const QPointF newStart(qRound(start.x()), qRound(start.y()));
+    const QPointF newEnd(qRound(end1.x()), qRound(end1.y()));
+    const QPointF newCenter = (newStart + newEnd) / 2.0;
+   
+    QRectF result(newStart, newEnd);
+    result.moveCenter(tInv.map(newCenter));
 
     return result.normalized();
 }

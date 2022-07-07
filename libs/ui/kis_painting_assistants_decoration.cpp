@@ -57,7 +57,10 @@ struct KisPaintingAssistantsDecoration::Private {
     QPixmap m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
     QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
     QPixmap m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(toolData.moveIconSize, toolData.moveIconSize);
+    QPixmap m_iconLockOn = KisIconUtils::loadIcon("layer-locked").pixmap(toolData.lockedIconSize, toolData.lockedIconSize);
+    QPixmap m_iconLockOff = KisIconUtils::loadIcon("layer-unlocked").pixmap(toolData.lockedIconSize, toolData.lockedIconSize);
     QPixmap m_iconDragEditorWidget = KisIconUtils::loadIcon("gridbrush").pixmap(toolData.dragEditorWidgetIconSize, toolData.dragEditorWidgetIconSize);
+
 
 
     KisCanvas2 * m_canvas = 0;
@@ -584,6 +587,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
     QPointF iconMovePosition(actionsPosition + toolData.moveIconPosition);
     QPointF iconSnapPosition(actionsPosition + toolData.snapIconPosition);
+    QPointF iconLockedPosition(actionsPosition + toolData.lockedIconPosition);
     QPointF iconDeletePosition(actionsPosition + toolData.deleteIconPosition);
     QPointF iconDragEditorWidgetPosiition(actionsPosition + toolData.dragEditorWidgetIconPosition);
 
@@ -622,6 +626,16 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     else {
         gc.drawPixmap(iconSnapPosition, d->m_iconSnapOff);
     }
+
+    if (assistant->isLocked()) {
+        gc.drawPixmap(iconLockedPosition, d->m_iconLockOn);
+    } else {
+        qreal oldOpacity = gc.opacity();
+        gc.setOpacity(0.35);
+        gc.drawPixmap(iconLockedPosition, d->m_iconLockOff);
+        gc.setOpacity(oldOpacity);
+    }
+
 
     gc.drawPixmap(iconDeletePosition, d->m_iconDelete);
     gc.drawPixmap(iconDragEditorWidgetPosiition, d->m_iconDragEditorWidget);

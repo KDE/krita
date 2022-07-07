@@ -133,6 +133,17 @@ public:
      */
     void setLocal(bool value);
 
+    /**
+     * @brief isLocked
+     * @return if the assistant is locked (= cannot be moved, or edited in any way), or not
+     */
+    bool isLocked();
+    /**
+     * @brief setLocked
+     * @param value set the indication if the assistant is locked (= cannot be moved, or edited in any way) or not
+     */
+    void setLocked(bool value);
+
     QPointF editorWidgetOffset();
     void setEditorWidgetOffset(QPointF offset);
 

@@ -128,6 +128,10 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
 
     Q_FOREACH (KisPaintingAssistantSP assistant, m_canvas->paintingAssistantsDecoration()->assistants()) {
 
+        if (assistant->isLocked()) {
+            continue; // let's not modify an assistant that is locked
+        }
+
 
         // find out which handle on all assistants is closest to the mouse position
         // vanishing points have "side handles", so make sure to include that
@@ -346,12 +350,25 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
         QPointF iconMovePosition(actionsPosition + editorShared.moveIconPosition);
         QPointF iconSnapPosition(actionsPosition + editorShared.snapIconPosition);
         QPointF iconDeletePosition(actionsPosition + editorShared.deleteIconPosition);
+        QPointF iconLockPosition(actionsPosition + editorShared.lockedIconPosition);
+
 
         QRectF deleteRect(iconDeletePosition, QSizeF(editorShared.deleteIconSize, editorShared.deleteIconSize));
         QRectF visibleRect(iconSnapPosition, QSizeF(editorShared.snapIconSize, editorShared.snapIconSize));
         QRectF moveRect(iconMovePosition, QSizeF(editorShared.moveIconSize, editorShared.moveIconSize));
+        QRectF lockRect(iconLockPosition, QSizeF(editorShared.lockedIconSize, editorShared.lockedIconSize));
 
-        if (moveRect.contains(uiMousePosition)) {
+
+        if (lockRect.contains(uiMousePosition)) {
+
+            assistant->setLocked(!assistant->isLocked());
+            assistantSelected(assistant); // whatever handle is the closest contains the selected assistant
+            m_internalMode = MODE_EDITING;
+
+            return;
+        }
+
+        if (moveRect.contains(uiMousePosition) && !assistant->isLocked()) {
             m_assistantDrag = assistant;
             m_cursorStart = event->point;
             m_internalMode = MODE_EDITING;
@@ -362,7 +379,7 @@ void KisAssistantTool::beginActionImpl(KoPointerEvent *event)
             return;
         }
 
-        if (deleteRect.contains(uiMousePosition)) {
+        if (deleteRect.contains(uiMousePosition) && !assistant->isLocked()) {
             removeAssistant(assistant);
             if(m_canvas->paintingAssistantsDecoration()->assistants().isEmpty()) {
                 m_internalMode = MODE_CREATION;
@@ -1153,7 +1170,7 @@ void KisAssistantTool::paint(QPainter& _gc, const KoViewConverter &_converter)
                            QSizeF(m_handleSize, m_handleSize));
 
             // render handles differently if it is the one being dragged.
-            if (handle == m_handleDrag || handle == m_handleCombine || handle == m_handleHover) {
+            if (handle == m_handleDrag || handle == m_handleCombine || (handle == m_handleHover && !handle->chiefAssistant()->isLocked())) {
                 QPen stroke(assistantColor, 4);
                 _gc.save();
                 _gc.setPen(stroke);

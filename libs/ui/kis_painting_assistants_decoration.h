@@ -29,11 +29,14 @@ struct AssistantEditorData {
     const int deleteIconSize = 24;
     const int snapIconSize = 20;
     const int dragEditorWidgetIconSize = 24;
+    const int lockedIconSize = 24;
+
     const QPointF moveIconPosition = QPointF(15, 15);
     const QPointF snapIconPosition = QPointF(54, 20);
-    const QPointF deleteIconPosition = QPointF(83, 18);
-    const QPointF dragEditorWidgetIconPosition = QPointF(112, 18);
-    const QSize boundingSize = QSize(130, 40);
+    const QPointF lockedIconPosition = QPointF(80, 18);
+    const QPointF deleteIconPosition = QPointF(112, 18);
+    const QPointF dragEditorWidgetIconPosition = QPointF(145, 18);
+    const QSize boundingSize = QSize(165, 40);
 };
 
 /**

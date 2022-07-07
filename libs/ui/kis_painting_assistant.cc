@@ -129,6 +129,7 @@ struct KisPaintingAssistant::Private {
         bool isSnappingActive {true};
         bool outlineVisible {true};
         bool isLocal {false};
+        bool isLocked {false};
 
         KisCanvas2* m_canvas {nullptr};
 
@@ -309,6 +310,16 @@ bool KisPaintingAssistant::isLocal() const
 void KisPaintingAssistant::setLocal(bool value)
 {
     d->s->isLocal = value;
+}
+
+bool KisPaintingAssistant::isLocked()
+{
+    return d->s->isLocked;
+}
+
+void KisPaintingAssistant::setLocked(bool value)
+{
+    d->s->isLocked = value;
 }
 
 QPointF KisPaintingAssistant::editorWidgetOffset()
@@ -545,7 +556,7 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeAttribute("active", QString::number(d->s->isSnappingActive));
     xml.writeAttribute("useCustomColor", QString::number(d->s->useCustomColor));
     xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(d->s->assistantCustomColor));
-
+    xml.writeAttribute("locked", QString::number(d->s->isLocked));
 
 
     saveCustomXml(&xml); // if any specific assistants have custom XML data to save to
@@ -622,6 +633,11 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
                     QStringRef customColor = xml.attributes().value("customColor");
                     setAssistantCustomColor( KisDomUtils::qStringToQColor(customColor.toString()) );
 
+                }
+
+                if ( xml.attributes().hasAttribute("locked")) {
+                    QStringRef locked = xml.attributes().value("locked");
+                    setLocked(locked == "1");
                 }
 
             }

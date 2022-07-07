@@ -53,7 +53,7 @@ struct KisPaintingAssistantsDecoration::Private {
 
     AssistantEditorData toolData;
 
-    QPixmap m_iconDelete = KisIconUtils::loadIcon("dialog-cancel").pixmap(toolData.deleteIconSize, toolData.deleteIconSize);
+    QPixmap m_iconDelete = KisIconUtils::loadIcon("deletelayer").pixmap(toolData.deleteIconSize, toolData.deleteIconSize);
     QPixmap m_iconSnapOn = KisIconUtils::loadIcon("visible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
     QPixmap m_iconSnapOff = KisIconUtils::loadIcon("novisible").pixmap(toolData.snapIconSize, toolData.snapIconSize);
     QPixmap m_iconMove = KisIconUtils::loadIcon("transform-move").pixmap(toolData.moveIconSize, toolData.moveIconSize);

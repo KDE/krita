@@ -46,7 +46,7 @@ public:
     /**
      * KisMimeData provides the following formats if a node has been set:
      * <ul>
-     * <li>application/x-krita-node: requests a whole serialized node. For d&d between instances of Krita.
+     * <li>application/x-krita-node-internal-pointer: requests a pointer to a Krita node.
      * <li>application/x-qt-image: fallback for other applications, returns a QImage of the
      * current node's paintdevice
      * <li>application/zip: allows drop targets that can handle zip files to open the data
@@ -54,24 +54,27 @@ public:
      */
     QStringList formats() const override;
 
-    /**
-     * Loads a node from a mime container
-     * Supports application/x-krita-node and image types.
-     */
-    static KisNodeList loadNodes(const QMimeData *data,
-                                      const QRect &imageBounds,
-                                      const QPoint &preferredCenter,
-                                      bool forceRecenter,
-                                      KisImageWSP image,
-                                      KisShapeController *shapeController);
-
     static KisNodeList loadNodesFast(
         const QMimeData *data,
         KisImageSP image,
         KisShapeController *shapeController,
         bool &copyNode);
 
+    static KisNodeList loadNodesFastAndRecenter(const QPoint &preferredCenter,
+            const QMimeData *data,
+            KisImageSP image,
+            KisShapeController *shapeController,
+            bool &copyNode);
+
 private:
+    /**
+     * Loads a node from a mime container
+     * Supports image and color types.
+     */
+    static KisNodeList loadNonNativeNodes(const QMimeData *data,
+                                         KisImageWSP image,
+                                         KisShapeController *shapeController);
+
     /**
      * Try load the node, which belongs to the same Krita instance,
      * that is can be fetched without serialization

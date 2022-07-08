@@ -14,8 +14,8 @@
 #include "kis_thread_safe_signal_compressor.h"
 #include <KoSelectedShapesProxy.h>
 #include <KoShapeManager.h>
-#include <kis_image_view_converter.h>
 #include <KisSafeBlockingQueueConnectionProxy.h>
+#include <kis_signal_auto_connection.h>
 
 class KoShapeManager;
 class KoToolProxy;
@@ -25,14 +25,14 @@ class QWidget;
 class KoUnit;
 class KisImageViewConverter;
 
-
 class KisShapeLayerCanvasBase : public KoCanvasBase
 {
-
+    Q_OBJECT
 public:
     KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image);
 
-    virtual void setImage(KisImageWSP image) = 0;
+    virtual void setImage(KisImageWSP image);
+    void setViewConverter(KoViewConverter *converter);
     void prepareForDestroying();
     virtual void forceRepaint() = 0;
     virtual bool hasPendingUpdates() const = 0;
@@ -57,12 +57,18 @@ public:
     void updateInputMethodInfo() override {}
     void setCursor(const QCursor &) override {}
 
+private Q_SLOTS:
+    void slotImageResolutionChanged(qreal xRes, qreal yRes);
 protected:
-    QScopedPointer<KisImageViewConverter> m_viewConverter;
+    QScopedPointer<KoViewConverter> m_viewConverter;
     QScopedPointer<KoShapeManager> m_shapeManager;
     QScopedPointer<KoSelectedShapesProxy> m_selectedShapesProxy;
     bool m_hasChangedWhileBeingInvisible {false};
     bool m_isDestroying {false};
+
+    KisSignalAutoConnectionsStore m_imageConnections;
+    qreal m_lastKnownXRes {1.0};
+    qreal m_lastKnownYRes {1.0};
 };
 
 /**

@@ -11,7 +11,7 @@
 
 #include "kis_image.h"
 #include "kis_types.h"
-#include <KoViewConverter.h>
+#include "KisClonableViewConverter.h"
 
 class QTransform;
 
@@ -24,7 +24,7 @@ class QTransform;
  * For usage remember that the document here is the flake-points. And
  * the view is the krita-pixels.
  */
-class KRITAUI_EXPORT KisImageViewConverter : public KoViewConverter
+class KRITAUI_EXPORT KisImageViewConverter : public KisClonableViewConverter
 {
 public:
     /**
@@ -33,13 +33,9 @@ public:
      */
     KisImageViewConverter(const KisImageWSP image);
 
+    KisClonableViewConverter* clone() const override;
+
     void setImage(KisImageWSP image);
-
-    QTransform documentToView() const;
-    QTransform viewToDocument() const;
-
-    using KoViewConverter::documentToView;
-    using KoViewConverter::viewToDocument;
 
     /// reimplemented from superclass
     void zoom(qreal *zoomX, qreal *zoomY) const override;

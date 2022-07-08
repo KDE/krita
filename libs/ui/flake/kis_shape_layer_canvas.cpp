@@ -32,6 +32,8 @@
 #include <kis_spontaneous_job.h>
 #include "kis_global.h"
 #include "krita_utils.h"
+#include "KisDetachedShapesViewConverter.h"
+#include "kis_image_view_converter.h"
 
 KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image)
     : KoCanvasBase(0)
@@ -40,6 +42,44 @@ KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImage
     , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
 {
     m_shapeManager->selection()->setActiveLayer(parent);
+}
+
+void KisShapeLayerCanvasBase::setImage(KisImageWSP image)
+{
+    m_imageConnections.clear();
+
+    /**
+     * Please beware - the layer may change its resolution
+     * at this call.
+     */
+    if (image) {
+        /**
+         * NOTE: we cannot just use detached converter all the
+         * time, because we cannot update its values in time
+         * before the next update after image changed its
+         * resolution (the signal is emitted at the very end
+         * of the operation).
+         */
+
+        m_lastKnownXRes = image->xRes();
+        m_lastKnownYRes = image->yRes();
+        m_viewConverter.reset(new KisImageViewConverter(image));
+
+        m_imageConnections.addUniqueConnection(image.data(), SIGNAL(sigResolutionChanged(double, double)),
+                                               this, SLOT(slotImageResolutionChanged(qreal, qreal)));
+    } else {
+        /**
+         * The layer will keep "the lastly used resolution"
+         * until being attached to the new image.
+         */
+        m_viewConverter.reset(new KisDetachedShapesViewConverter(m_lastKnownXRes, m_lastKnownYRes));
+    }
+}
+
+void KisShapeLayerCanvasBase::setViewConverter(KoViewConverter *converter)
+{
+    m_viewConverter.reset(converter);
+    m_viewConverter->zoom(&m_lastKnownXRes, &m_lastKnownYRes);
 }
 
 KoShapeManager *KisShapeLayerCanvasBase::shapeManager() const
@@ -98,6 +138,12 @@ KoUnit KisShapeLayerCanvasBase::unit() const
     return KoUnit(KoUnit::Point);
 }
 
+void KisShapeLayerCanvasBase::slotImageResolutionChanged(qreal xRes, qreal yRes)
+{
+    m_lastKnownXRes = xRes;
+    m_lastKnownYRes = yRes;
+}
+
 void KisShapeLayerCanvasBase::prepareForDestroying()
 {
     m_isDestroying = true;
@@ -135,15 +181,11 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
 
 void KisShapeLayerCanvas::setImage(KisImageWSP image)
 {
-    if (m_image) {
-        disconnect(m_image, 0, this, 0);
-    }
-
-    m_viewConverter->setImage(image);
+    KisShapeLayerCanvasBase::setImage(image);
     m_image = image;
 
     if (image) {
-        connect(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), SLOT(slotImageSizeChanged()));
+        m_imageConnections.addUniqueConnection(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged()));
         m_cachedImageRect = m_image->bounds();
     }
 }

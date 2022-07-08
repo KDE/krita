@@ -15,6 +15,7 @@
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
 #include "KisDocument.h"
+#include <KoViewConverter.h>
 
 struct AddReferenceImagesCommand : KoShapeCreateCommand
 {
@@ -111,10 +112,6 @@ public:
 
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
-    void setImage(KisImageWSP image) override
-    {
-        m_viewConverter->setImage(image);
-    }
 
 private:
     KisReferenceImagesLayer *m_layer;

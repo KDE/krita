@@ -16,19 +16,14 @@ KisImageViewConverter::KisImageViewConverter(const KisImageWSP image)
     setZoom(0.1); // set the superclass to not hit the optimization of zoom=100%
 }
 
+KisClonableViewConverter *KisImageViewConverter::clone() const
+{
+    return new KisImageViewConverter(m_image);
+}
+
 void KisImageViewConverter::setImage(KisImageWSP image)
 {
     m_image = image;
-}
-
-QTransform KisImageViewConverter::documentToView() const
-{
-    return QTransform::fromScale(m_image->xRes(), m_image->yRes());
-}
-
-QTransform KisImageViewConverter::viewToDocument() const
-{
-    return QTransform::fromScale(1.0 / m_image->xRes(), 1.0 / m_image->yRes());
 }
 
 // remember here; document is postscript points;  view is krita pixels.

@@ -67,7 +67,6 @@ protected:
 private:
     void initShapeLayerImpl(KoShapeControllerBase* controller, KisPaintDeviceSP newProjectionDevice, KisShapeLayerCanvasBase *overrideCanvas);
     void initNewShapeLayer(KoShapeControllerBase* controller, const KoColorSpace *projectionColorSpace, KisDefaultBoundsBaseSP bounds, KisShapeLayerCanvasBase *overrideCanvas = 0);
-    void initClonedShapeLayer(KoShapeControllerBase* controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *overrideCanvas = 0);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);

@@ -74,8 +74,12 @@ KisFileLayer::KisFileLayer(const KisFileLayer &rhs)
 {
     m_basePath = rhs.m_basePath;
     m_filename = rhs.m_filename;
-
     m_scalingMethod = rhs.m_scalingMethod;
+
+    m_generatedForImageSize = rhs.m_generatedForImageSize;
+    m_generatedForXRes = rhs.m_generatedForXRes;
+    m_generatedForYRes = rhs.m_generatedForYRes;
+    m_state = rhs.m_state;
 
     m_paintDevice = new KisPaintDevice(*rhs.m_paintDevice);
 

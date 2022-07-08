@@ -147,7 +147,7 @@
     <p xml:lang="sl">Krita je celovit digitalni umetniški studio.</p>
     <p xml:lang="sv">Krita är den fullfjädrade digitala konststudion.</p>
     <p xml:lang="tok">ilo sitelen Krita li tomo sitelen lon ilo sina.</p>
-    <p xml:lang="tr">Krita, tam özellikli dijital sanat stüdyosudur.</p>
+    <p xml:lang="tr">Krita, tam özellikli bir sayısal sanat stüdyosudur.</p>
     <p xml:lang="uk">Krita — повноцінний комплекс для створення цифрових художніх творів.</p>
     <p xml:lang="x-test">xxKrita is the full-featured digital art studio.xx</p>
     <p xml:lang="zh-CN">Krita 是一款功能齐全的数字绘画工作室软件。</p>
@@ -182,7 +182,7 @@
     <p xml:lang="sl">Idealen je za skiciranje in slikanje ter predstavlja rešitev od začetka do konca za ustvarjanje mojstrskih datotek digitalne slike iz nič.</p>
     <p xml:lang="sv">Den är perfekt för att skissa och måla, samt erbjuder en helomfattande lösning för att skapa digitala målningsfiler från grunden av mästare.</p>
     <p xml:lang="tok">sitelen la ona li wawa. ona li pana e wile ale pi sitelen ilo tawa sina.</p>
-    <p xml:lang="tr">Eskiz ve boyama için mükemmeldir ve ustaların sıfırdan dijital boyama dosyaları oluşturmak için uçtan-uca bir çözüm sunar.</p>
+    <p xml:lang="tr">Eskiz ve boyama için mükemmeldir ve ustaların sıfırdan dijital boyama dosyaları oluşturmak için uçtan uca bir çözüm sunar.</p>
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
     <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.xx</p>
     <p xml:lang="zh-CN">Krita 既适合起草，也适合上色细化。您可以轻松使用 Krita 从头到尾完成一副精美的画作。</p>
@@ -255,7 +255,7 @@
     <p xml:lang="sk">Užívajte si maľovanie s pokročilými kresliacimi enginmi, úžasnými filtrami a mnohými užitočnými funkciami, ktoré robia Kritu veľmi produktívnu.</p>
     <p xml:lang="sl">Zabavajte se s slikanjem z naprednimi čopiči, neverjetnimi filtri in številnimi priročnimi funkcijami, zaradi katerih je Krita izjemno produktivna.</p>
     <p xml:lang="sv">Ha det så kul vid målning med de avancerade penselfunktionerna, fantastiska filtren och många praktiska funktioner som gör Krita så enormt produktiv.</p>
-    <p xml:lang="tr">Gelişmiş fırça motorları, şaşırtıcı filtreler ve Krita'yı son derece üretken yapan bir çok kullanışlı özellikli boya ile iyi eğlenceler.</p>
+    <p xml:lang="tr">Krita'yı inanılmaz derecede üretken kılan gelişmiş fırça işletkeleri, mükemmel süzgeçler ve işinizi kolaylaştıran birçok özellik ile boyama yapmanın keyfine varın.</p>
     <p xml:lang="uk">Отримуйте задоволення від малювання за допомогою пензлів з найширшими можливостями, чудових фільтрів та багатьох зручних можливостей, які роблять Krita надзвичайно продуктивним засобом малювання.</p>
     <p xml:lang="x-test">xxHave fun painting with the advanced brush engines, amazing filters and many handy features that make Krita enormously productive.xx</p>
     <p xml:lang="zh-CN">Krita 具有功能强大的笔刷引擎、种类繁多的滤镜以及便于操作的交互设计。您可以在 Krita 中高效自如地发挥创意。</p>
@@ -294,6 +294,7 @@
       <caption xml:lang="sk">Krita je plnohodnotné digitálne maliarske štúdio</caption>
       <caption xml:lang="sl">Krita je celovit digitalni umetniški studio.</caption>
       <caption xml:lang="sv">Krita är en fullfjädrad digital konststudio</caption>
+      <caption xml:lang="tr">Krita, tam özellikli bir sayısal sanat stüdyosudur</caption>
       <caption xml:lang="uk">Krita — повноцінний комплекс для цифрового малювання</caption>
       <caption xml:lang="x-test">xxKrita is a full-featured digital painting studioxx</caption>
       <caption xml:lang="zh-CN">Krita 是一款功能齐全的数字绘画软件。</caption>
@@ -326,6 +327,7 @@
       <caption xml:lang="sk">V úvodnom okne sa tiež nachádzajú najnovšie správy o Krita</caption>
       <caption xml:lang="sl">Začetno okno vam zdaj ponuja tudi najnovejše novice o Kriti</caption>
       <caption xml:lang="sv">Startfönstret ger nu också senaste nytt om Krita</caption>
+      <caption xml:lang="tr">Başlangıç penceresi, artık size Krita ile ilgili en yeni haberleri de veriyor</caption>
       <caption xml:lang="uk">У початковому вікні програми ви можете бачити найсвіжіші новини щодо Krita</caption>
       <caption xml:lang="x-test">xxThe startup window now also gives you the latest news about Kritaxx</caption>
       <caption xml:lang="zh-CN">Krita 的启动画面会展示最近文档和最新官方新闻。</caption>
@@ -358,6 +360,7 @@
       <caption xml:lang="sk">Existuje viac ako desať nesmierne výkonných štetcových enginov</caption>
       <caption xml:lang="sl">Obstaja več kot deset izjemno močnih načinov podpor čopičev</caption>
       <caption xml:lang="sv">Det finns mer än tio enormt kraftfulla penselgränssnitt</caption>
+      <caption xml:lang="tr">Ondan fazla aşırı yetenekli fırça işletkesi vardır</caption>
       <caption xml:lang="uk">У програмі передбачено понад десяток надзвичайно потужних рушіїв пензлів</caption>
       <caption xml:lang="x-test">xxThere are over ten immensely powerful brush enginesxx</caption>
       <caption xml:lang="zh-CN">Krita 内建超过十种功能强大的笔刷引擎。</caption>
@@ -390,6 +393,7 @@
       <caption xml:lang="sl">Za animacijo? Krita ponuja vse, kar potrebujete za tradicionalno, ročno narisano animacijo</caption>
       <caption xml:lang="sv">Gillar du animering? Krita tillhandahåller allt som behövs för traditionella, handritade animeringar</caption>
       <caption xml:lang="tok">sitelen li ken tawa! kepeken ilo Kita la sina ken sitelen e sitelen wan mute li ken pali e sitelen tawa kepeken ni</caption>
+      <caption xml:lang="tr">Canlandırma yapmayı seviyor musunuz? Krita, klasik elle çizilen canlandırmalar için gereken her türlü aracı size sunuyor</caption>
       <caption xml:lang="uk">Працюєте із анімацією? У Krita ви знайдете усе, що потрібно для створення традиційної, намальованої вручну анімації</caption>
       <caption xml:lang="x-test">xxInto animation? Krita provides everything you need for traditional, hand-drawn animationxx</caption>
       <caption xml:lang="zh-CN">Krita 还提供了手绘动画制作所需的全套工具和面板。</caption>
@@ -423,6 +427,7 @@
       <caption xml:lang="sl">Če ste novi v digitalnem slikanju, obstaja obsežen, posodobljen priročnik</caption>
       <caption xml:lang="sv">Om digital målning är nytt för dig, finns en omfattande, aktuell handbok</caption>
       <caption xml:lang="tok">sina sona ala sitelen kepeken ilo nanpa la, mi jo e lipu sona suli</caption>
+      <caption xml:lang="tr">Sayısal boyamaya yeniyseniz ayrıntılı ve güncel bir kılavuz mevcuttur</caption>
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
       <caption xml:lang="zh-CN">如果您是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>
@@ -449,6 +454,7 @@
       <caption xml:lang="pt-BR">O Krita oferece filtros poderosos</caption>
       <caption xml:lang="sl">Krita ponuja zmogljive filtre</caption>
       <caption xml:lang="sv">Krita erbjuder kraftfulla filter</caption>
+      <caption xml:lang="tr">Krita, güçlü süzgeçler sunar</caption>
       <caption xml:lang="uk">У Krita передбачено потужні фільтри</caption>
       <caption xml:lang="x-test">xxKrita offers powerful filtersxx</caption>
       <caption xml:lang="zh-CN">Krita 自带了多款功能强大的滤镜</caption>
@@ -474,6 +480,7 @@
       <caption xml:lang="pt-BR">E também há integração com o G'Mic, que adiciona centenas de filtros a mais</caption>
       <caption xml:lang="sl">In tu je še integracija z G'Mic, ki prinaša na stotine dodatnih filtrov</caption>
       <caption xml:lang="sv">Och det finns även en integrering med G'Mic, som lägger till ytterligare hundratals filter.</caption>
+      <caption xml:lang="tr">Ek olarak, yüzlerce daha süzgeci sunan G'Mic tümleştirmesi de mevcuttur</caption>
       <caption xml:lang="uk">І, крім того, маємо інтеграцію із G'Mic, що додає ще сотні фільтрів</caption>
       <caption xml:lang="x-test">xxAnd, there is integration with G'Mic, too, which adds hundreds of filters morexx</caption>
       <caption xml:lang="zh-CN">它还整合了 G'Mic，可以使用它的数百款滤镜</caption>
@@ -500,6 +507,7 @@
       <caption xml:lang="pt-BR">Junte-se ao nosso canal no Youtube!</caption>
       <caption xml:lang="sl">Pridružite se našemu kanalu Youtube!</caption>
       <caption xml:lang="sv">Gå med i vår YouTube-kanal!</caption>
+      <caption xml:lang="tr">YouTube kanalımıza katılın!</caption>
       <caption xml:lang="uk">Долучайтеся до нашого каналу на Youtube!</caption>
       <caption xml:lang="x-test">xxJoin our Youtube channel!xx</caption>
       <caption xml:lang="zh-CN">加入我们的 Youtube 频道！</caption>
@@ -526,6 +534,7 @@
       <caption xml:lang="pt-BR">Ou o ativo <a href="https://krita-artists.org">Comunidade de artistas do Krita</a></caption>
       <caption xml:lang="sl">Ali aktivni <a href="https://krita-artists.org">Skupnost ustvarjalce Krita Artists</a></caption>
       <caption xml:lang="sv">Eller den aktiva <a href="https://krita-artists.org">Kritas konstnärsgemenskap</a></caption>
+      <caption xml:lang="tr">Veya etkin <a href="https://krita-artists.org">Krita Sanatçıları topluluğu</a></caption>
       <caption xml:lang="uk">Або активний <a href="https://krita-artists.org">Спільнота Krita Artists</a></caption>
       <caption xml:lang="x-test">xxOr the active <a href="https://krita-artists.org">xxKrita Artists communityxx</a>xx</caption>
       <caption xml:lang="zh-CN">或者活动的 <a href="https://krita-artists.org">Krita 国际画师社区</a></caption>

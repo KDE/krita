@@ -208,11 +208,6 @@ void KisPaintLayer::setSectionModelProperties(const KisBaseNode::PropertyList &p
     KisLayer::setSectionModelProperties(properties);
 }
 
-const KoColorSpace * KisPaintLayer::colorSpace() const
-{
-    return m_d->paintDevice->colorSpace();
-}
-
 bool KisPaintLayer::accept(KisNodeVisitor &v)
 {
     return v.visit(this);

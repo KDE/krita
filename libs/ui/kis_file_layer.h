@@ -43,8 +43,6 @@ public:
 
     void resetCache() override;
 
-    const KoColorSpace *colorSpace() const override;
-
     KisPaintDeviceSP original() const override;
     KisPaintDeviceSP paintDevice() const override;
     void setSectionModelProperties(const KisBaseNode::PropertyList &properties) override;

@@ -98,11 +98,6 @@ void KisFileLayer::resetCache()
     m_loader.reloadImage();
 }
 
-const KoColorSpace *KisFileLayer::colorSpace() const
-{
-    return m_paintDevice->colorSpace();
-}
-
 KisPaintDeviceSP KisFileLayer::original() const
 {
     return m_paintDevice;

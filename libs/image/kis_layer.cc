@@ -225,11 +225,9 @@ KisLayer::~KisLayer()
 
 const KoColorSpace * KisLayer::colorSpace() const
 {
-    KisImageSP image = this->image();
-    if (!image) {
-        return nullptr;
-    }
-    return image->colorSpace();
+    KisPaintDeviceSP dev = original();
+    KIS_ASSERT_RECOVER_RETURN_VALUE(dev, KoColorSpaceRegistry::instance()->rgb8());
+    return dev->colorSpace();
 }
 
 const KoCompositeOp * KisLayer::compositeOp() const

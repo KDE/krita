@@ -54,12 +54,13 @@ public:
     KisLayerSP reincarnateAsPaintLayer() const;
 
     void setImage(KisImageWSP image) override;
-
     bool allowAsChild(KisNodeSP) const override;
 
     KisPaintDeviceSP original() const override;
     KisPaintDeviceSP paintDevice() const override;
     bool needProjection() const override;
+
+    const KoColorSpace* colorSpace() const override;
 
     QIcon icon() const override;
     KisBaseNode::PropertyList sectionModelProperties() const override;

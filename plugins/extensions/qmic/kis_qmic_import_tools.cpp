@@ -146,7 +146,7 @@ inputNodes(KisImageSP image, InputLayerMode inputMode, KisNodeSP currentNode)
     }
     case InputLayerMode::Active: {
         if (isAvailable(currentNode)) {
-            result->append(currentNode);
+            result->prepend(currentNode);
         }
         break; // drop down in case of one more layer modes
     }
@@ -159,7 +159,7 @@ inputNodes(KisImageSP image, InputLayerMode inputMode, KisNodeSP currentNode)
                     auto *paintLayer =
                         dynamic_cast<KisPaintLayer *>(item.data());
                     if (paintLayer) {
-                        r->append(item);
+                        r->prepend(item);
                     }
                 });
             return r;
@@ -168,18 +168,18 @@ inputNodes(KisImageSP image, InputLayerMode inputMode, KisNodeSP currentNode)
     }
     case InputLayerMode::ActiveAndBelow: {
         if (isAvailable(currentNode)) {
-            result->append(currentNode);
+            result->prepend(currentNode);
             if (isAvailable(currentNode->prevSibling())) {
-                result->append(currentNode->prevSibling());
+                result->prepend(currentNode->prevSibling());
             }
         }
         break;
     }
     case InputLayerMode::ActiveAndAbove: {
         if (isAvailable(currentNode)) {
-            result->append(currentNode);
+            result->prepend(currentNode);
             if (isAvailable(currentNode->nextSibling())) {
-                result->append(currentNode->nextSibling());
+                result->prepend(currentNode->nextSibling());
             }
         }
         break;
@@ -197,7 +197,7 @@ inputNodes(KisImageSP image, InputLayerMode inputMode, KisNodeSP currentNode)
                         dynamic_cast<KisPaintLayer *>(item.data());
                     if (paintLayer
                         && paintLayer->visible(false) == visibility) {
-                        r->append(item);
+                        r->prepend(item);
                     }
                 });
             return r;

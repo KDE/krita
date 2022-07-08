@@ -68,8 +68,6 @@ public:
 
     bool allowAsChild(KisNodeSP) const override;
 
-    const KoColorSpace * colorSpace() const override;
-
     bool needProjection() const override;
 
     QIcon icon() const override;

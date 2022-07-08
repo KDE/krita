@@ -450,7 +450,7 @@ void KisView::dragEnterEvent(QDragEnterEvent *event)
           << "Has images: " << event->mimeData()->hasImage();
     if (event->mimeData()->hasImage()
             || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node")
+            || event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")
             || event->mimeData()->hasFormat("krita/x-colorsetentry")
             || event->mimeData()->hasColor()) {
         event->accept();
@@ -469,15 +469,10 @@ void KisView::dropEvent(QDropEvent *event)
 
     QPoint imgCursorPos = canvasBase()->coordinatesConverter()->widgetToImage(event->pos()).toPoint();
     QRect imageBounds = kisimage->bounds();
-    QPoint pasteCenter;
-    bool forceRecenter;
+    boost::optional<QPoint> forcedCenter;
 
     if (event->keyboardModifiers() & Qt::ShiftModifier && imageBounds.contains(imgCursorPos)) {
-        pasteCenter = imgCursorPos;
-        forceRecenter = true;
-    } else {
-        pasteCenter = imageBounds.center();
-        forceRecenter = false;
+        forcedCenter = imgCursorPos;
     }
 
     dbgUI << Q_FUNC_INFO;
@@ -485,14 +480,18 @@ void KisView::dropEvent(QDropEvent *event)
     dbgUI << "\t Urls: " << event->mimeData()->urls();
     dbgUI << "\t Has images: " << event->mimeData()->hasImage();
 
-    if (event->mimeData()->hasFormat("application/x-krita-node")) {
+    if (event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")) {
         KisShapeController *kritaShapeController =
                 dynamic_cast<KisShapeController*>(d->document->shapeController());
 
-        QList<KisNodeSP> nodes =
-                KisMimeData::loadNodes(event->mimeData(), imageBounds,
-                                       pasteCenter, forceRecenter,
-                                       kisimage, kritaShapeController);
+        bool copyNode = true;
+        QList<KisNodeSP> nodes;
+
+        if (forcedCenter) {
+            nodes = KisMimeData::loadNodesFastAndRecenter(*forcedCenter, event->mimeData(), kisimage, kritaShapeController, copyNode);
+        } else {
+            nodes = KisMimeData::loadNodesFast(event->mimeData(), kisimage, kritaShapeController, copyNode);
+        }
 
         Q_FOREACH (KisNodeSP node, nodes) {
             if (node) {
@@ -853,7 +852,7 @@ void KisView::dragMoveEvent(QDragMoveEvent *event)
           << "Has images: " << event->mimeData()->hasImage();
     if (event->mimeData()->hasImage()
             || event->mimeData()->hasUrls()
-            || event->mimeData()->hasFormat("application/x-krita-node")
+            || event->mimeData()->hasFormat("application/x-krita-node-internal-pointer")
             || event->mimeData()->hasFormat("krita/x-colorsetentry")
             || event->mimeData()->hasColor()) {
         return event->accept();

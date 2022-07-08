@@ -142,7 +142,22 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
         , m_d(new Private())
 {
     // copy the projection to avoid extra round of updates!
-    initClonedShapeLayer(controller, _rhs.m_d->paintDevice, canvas);
+    KisPaintDeviceSP projection = new KisPaintDevice(*_rhs.m_d->paintDevice);
+    initShapeLayerImpl(controller, projection, canvas);
+
+    KisClonableViewConverter *converter =
+        dynamic_cast<KisClonableViewConverter*>(_rhs.m_d->canvas->viewConverter());
+
+    if (converter) {
+        converter = converter->clone();
+    }
+
+    KIS_SAFE_ASSERT_RECOVER(converter) {
+        converter = new KisImageViewConverter(image());
+    }
+
+    // copy the converter with its resolution information
+    m_d->canvas->setViewConverter(converter);
 
     /**
      * The transformaitons of the added shapes are automatically merged into the transformation
@@ -294,12 +309,6 @@ void KisShapeLayer::initNewShapeLayer(KoShapeControllerBase *controller,
     projection->setDefaultBounds(bounds);
     projection->setParentNode(this);
 
-    initShapeLayerImpl(controller, projection, overrideCanvas);
-}
-
-void KisShapeLayer::initClonedShapeLayer(KoShapeControllerBase *controller, KisPaintDeviceSP copyFromProjection, KisShapeLayerCanvasBase *overrideCanvas)
-{
-    KisPaintDeviceSP projection = new KisPaintDevice(*copyFromProjection);
     initShapeLayerImpl(controller, projection, overrideCanvas);
 }
 

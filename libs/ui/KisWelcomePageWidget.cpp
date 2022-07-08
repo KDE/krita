@@ -432,7 +432,7 @@ void KisWelcomePageWidget::dragEnterEvent(QDragEnterEvent *event)
 {
     showDropAreaIndicator(true);
     if (event->mimeData()->hasUrls() ||
-        event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasFormat("application/x-krita-node-internal-pointer") ||
         event->mimeData()->hasFormat("application/x-qt-image")) {
         return event->accept();
     }
@@ -476,7 +476,7 @@ void KisWelcomePageWidget::dragMoveEvent(QDragMoveEvent *event)
     m_mainWindow->dragMoveEvent(event);
 
     if (event->mimeData()->hasUrls() ||
-        event->mimeData()->hasFormat("application/x-krita-node") ||
+        event->mimeData()->hasFormat("application/x-krita-node-internal-pointer") ||
         event->mimeData()->hasFormat("application/x-qt-image")) {
         return event->accept();
     }

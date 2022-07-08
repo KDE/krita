@@ -91,7 +91,7 @@ public:
         // animated content attached to it.
         IsAnimatedRole,
 
-        // Returns a newline string with layer opacity and blending mode,
+        // Returns a string with layer opacity and blending mode,
         // or an empty string if default (100% Normal).
         SubtitleRole,
 

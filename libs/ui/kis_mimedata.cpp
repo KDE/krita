@@ -201,14 +201,24 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
 }
 
 void KisMimeData::initializeExternalNode(KisNodeSP *node,
-                                         KisImageWSP image,
+                                         KisImageSP srcImage,
+                                         KisImageSP dstImage,
                                          KisShapeController *shapeController)
 {
-    Q_UNUSED(image);
     KisShapeLayer *shapeLayer = dynamic_cast<KisShapeLayer*>(node->data());
     if (shapeLayer) {
         // attach the layer to a new shape controller
         KisShapeLayer *shapeLayer2 = new KisShapeLayer(*shapeLayer, shapeController);
+
+        if (!qFuzzyCompare(dstImage->xRes(), srcImage->xRes()) ||
+            !qFuzzyCompare(dstImage->yRes(), srcImage->yRes())) {
+
+            const QTransform t = QTransform::fromScale(srcImage->xRes() / dstImage->xRes(),
+                                                       srcImage->yRes() / dstImage->yRes());
+
+            shapeLayer2->setTransformation(shapeLayer2->transformation() * t);
+        }
+
         *node = shapeLayer2;
     }
 }
@@ -268,7 +278,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
             if ((forceCopy || copyNode) && sourceImage == image) {
                 KisLayerUtils::addCopyOfNameTag(node);
             }
-            initializeExternalNode(&node, image, shapeController);
+            initializeExternalNode(&node, sourceImage, image, shapeController);
             clones << node;
         }
         nodes = clones;

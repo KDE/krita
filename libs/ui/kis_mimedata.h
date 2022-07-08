@@ -103,7 +103,7 @@ protected:
 
 private:
     static void initializeExternalNode(KisNodeSP *nodes,
-                                       KisImageWSP image,
+                                       KisImageSP srcImage, KisImageSP dstImage,
                                        KisShapeController *shapeController);
 
 private:

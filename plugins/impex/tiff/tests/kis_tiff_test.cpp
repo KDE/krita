@@ -62,7 +62,7 @@ void KisTiffTest::testFiles()
              << "quad-tile-jpeg.tif";
 #endif
 
-    excludes << "text.tif" << "ycbcr-cat.tif";
+    excludes << "text.tif";
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes, QString(), 1);
 }

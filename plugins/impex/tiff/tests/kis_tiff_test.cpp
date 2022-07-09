@@ -34,10 +34,6 @@ void KisTiffTest::testFiles()
 
     QStringList excludes;
 
-#ifndef CPU_32_BITS
-    excludes << "flower-minisblack-06.tif";
-#endif
-
 #ifdef HAVE_LCMS2
     excludes << "flower-separated-contig-08.tif"
              << "flower-separated-contig-16.tif"
@@ -61,8 +57,6 @@ void KisTiffTest::testFiles()
     excludes << "quad-strip-jpeg.tif"
              << "quad-tile-jpeg.tif";
 #endif
-
-    excludes << "text.tif";
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes, QString(), 1);
 }

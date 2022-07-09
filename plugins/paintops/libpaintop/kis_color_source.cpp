@@ -23,10 +23,9 @@
 
 KisColorSource::~KisColorSource() { }
 
-const KoColor black;
-
 const KoColor& KisColorSource::uniformColor() const
 {
+    static const KoColor black;
     qFatal("Not an uniform color.");
     return black;
 }

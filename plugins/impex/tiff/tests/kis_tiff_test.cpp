@@ -19,6 +19,8 @@
 #include <kis_meta_data_backend_registry.h>
 #include <sdk/tests/testui.h>
 
+#include <config-jpeg.h>
+
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
 #endif
@@ -54,6 +56,12 @@ void KisTiffTest::testFiles()
              << "jim___gg.tif"
              << "strike.tif";
 #endif
+
+#ifndef HAVE_JPEG_TURBO
+    excludes << "quad-strip-jpeg.tif"
+             << "quad-tile-jpeg.tif";
+#endif
+
     excludes << "text.tif" << "ycbcr-cat.tif";
 
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes, QString(), 1);

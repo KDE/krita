@@ -67,52 +67,6 @@ void KisTiffTest::testFiles()
     TestUtil::testFiles(QString(FILES_DATA_DIR) + "/sources", excludes, QString(), 1);
 }
 
-void KisTiffTest::testRoundTripRGBF16()
-{
-    // Disabled for now, it's broken because we assumed integers.
-#if 0
-
-    QRect testRect(0,0,1000,1000);
-    QRect fillRect(100,100,100,100);
-
-    const KoColorSpace *csf16 = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), 0);
-    KisDocument *doc0 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
-    doc0->newImage("test", testRect.width(), testRect.height(), csf16, KoColor(Qt::blue, csf16), QString(), 1.0);
-
-    QTemporaryFile tmpFile(QDir::tempPath() + QLatin1String("/krita_XXXXXX") + QLatin1String(".tiff"));
-
-    tmpFile.open();
-    doc0->setBackupFile(false);
-    doc0->setOutputMimeType("image/tiff");
-    doc0->setFileBatchMode(true);
-    doc0->saveAs((tmpFile.fileName());
-
-    KisNodeSP layer0 = doc0->image()->root()->firstChild();
-    Q_ASSERT(layer0);
-    layer0->paintDevice()->fill(fillRect, KoColor(Qt::red, csf16));
-
-
-    KisDocument *doc1 = qobject_cast<KisDocument*>(KisPart::instance()->createDocument());
-
-    KisImportExportManager manager(doc1);
-    doc1->setFileBatchMode(false);
-
-    KisImportExportErrorCode status;
-
-    QString s = manager.importDocument(tmpFile.fileName(),
-                                       QString(),
-                                       status);
-
-    dbgKrita << s;
-    Q_ASSERT(doc1->image());
-
-    QImage ref0 = doc0->image()->projection()->convertToQImage(0, testRect);
-    QImage ref1 = doc1->image()->projection()->convertToQImage(0, testRect);
-
-    QCOMPARE(ref0, ref1);
-#endif
-}
-
 void KisTiffTest::testSaveTiffColorSpace(QString colorModel, QString colorDepth, QString colorProfile)
 {
     const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);

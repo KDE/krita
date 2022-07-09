@@ -14,7 +14,10 @@
 #include <QLineF>
 #include <QObject>
 
-class __attribute__((visibility("default"))) ConcentricEllipseAssistant : public KisPaintingAssistant
+#include "kritaassistanttool_export.h"
+
+class KRITAASSISTANTTOOL_EXPORT ConcentricEllipseAssistant
+    : public KisPaintingAssistant
 {
 public:
     ConcentricEllipseAssistant();
@@ -41,7 +44,8 @@ private:
     explicit ConcentricEllipseAssistant(const ConcentricEllipseAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 };
 
-class __attribute__((visibility("default"))) ConcentricEllipseAssistantFactory : public KisPaintingAssistantFactory
+class KRITAASSISTANTTOOL_EXPORT ConcentricEllipseAssistantFactory
+    : public KisPaintingAssistantFactory
 {
 public:
     ConcentricEllipseAssistantFactory();

@@ -165,6 +165,19 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 KisToolTransform::~KisToolTransform()
 {
     cancelStroke();
+
+    delete warpAction;
+    delete meshAction;
+    delete liquifyAction;
+    delete cageAction;
+    delete freeTransformAction;
+    delete perspectiveAction;
+    delete applyTransformation;
+    delete resetTransformation;
+    delete mirrorHorizontalAction;
+    delete mirrorVericalAction;
+    delete rotateNinteyCWAction;
+    delete rotateNinteyCCWAction;
 }
 
 void KisToolTransform::outlineChanged()
@@ -1379,14 +1392,14 @@ QList<QAction *> KisToolTransformFactory::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("movetool-move-up");
-    actions << actionRegistry->makeQAction("movetool-move-down");
-    actions << actionRegistry->makeQAction("movetool-move-left");
-    actions << actionRegistry->makeQAction("movetool-move-right");
-    actions << actionRegistry->makeQAction("movetool-move-up-more");
-    actions << actionRegistry->makeQAction("movetool-move-down-more");
-    actions << actionRegistry->makeQAction("movetool-move-left-more");
-    actions << actionRegistry->makeQAction("movetool-move-right-more");
+    actions << actionRegistry->makeQAction("movetool-move-up", this);
+    actions << actionRegistry->makeQAction("movetool-move-down", this);
+    actions << actionRegistry->makeQAction("movetool-move-left", this);
+    actions << actionRegistry->makeQAction("movetool-move-right", this);
+    actions << actionRegistry->makeQAction("movetool-move-up-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-down-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-left-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-right-more", this);
 
     return actions;
 }

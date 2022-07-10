@@ -509,11 +509,11 @@ QList<QAction *> KisToolBrushFactory::createActionsImpl()
 
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("set_no_brush_smoothing");
-    actions << actionRegistry->makeQAction("set_simple_brush_smoothing");
-    actions << actionRegistry->makeQAction("set_weighted_brush_smoothing");
-    actions << actionRegistry->makeQAction("set_stabilizer_brush_smoothing");
-    actions << actionRegistry->makeQAction("toggle_assistant");
+    actions << actionRegistry->makeQAction("set_no_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("set_simple_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("set_weighted_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("set_stabilizer_brush_smoothing", this);
+    actions << actionRegistry->makeQAction("toggle_assistant", this);
 
     return actions;
 

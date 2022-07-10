@@ -118,7 +118,7 @@ public:
         KisActionRegistry *actionRegistry = KisActionRegistry::instance();
         QList<QAction *> actions = KisSelectionToolFactoryBase::createActionsImpl();
 
-        actions << actionRegistry->makeQAction("undo_polygon_selection");
+        actions << actionRegistry->makeQAction("undo_polygon_selection", this);
 
         return actions;
     }

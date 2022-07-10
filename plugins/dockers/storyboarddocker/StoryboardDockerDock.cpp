@@ -188,7 +188,7 @@ StoryboardDockerDock::StoryboardDockerDock( )
     m_exportAsPdfAction = new KisAction(i18nc("Export storyboard as PDF", "Export as PDF"), m_exportMenu);
     m_exportMenu->addAction(m_exportAsPdfAction);
 
-    m_exportAsSvgAction = new KisAction(i18nc("Export storyboard as SVG", "Export as SVG"));
+    m_exportAsSvgAction = new KisAction(i18nc("Export storyboard as SVG", "Export as SVG"), m_exportMenu);
     m_exportMenu->addAction(m_exportAsSvgAction);
     connect(m_exportAsPdfAction, SIGNAL(triggered()), this, SLOT(slotExportAsPdf()));
     connect(m_exportAsSvgAction, SIGNAL(triggered()), this, SLOT(slotExportAsSvg()));

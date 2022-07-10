@@ -808,15 +808,15 @@ QList<QAction *> KisToolMoveFactory::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions = KisToolPaintFactoryBase::createActionsImpl();
 
-    actions << actionRegistry->makeQAction("movetool-move-up");
-    actions << actionRegistry->makeQAction("movetool-move-down");
-    actions << actionRegistry->makeQAction("movetool-move-left");
-    actions << actionRegistry->makeQAction("movetool-move-right");
-    actions << actionRegistry->makeQAction("movetool-move-up-more");
-    actions << actionRegistry->makeQAction("movetool-move-down-more");
-    actions << actionRegistry->makeQAction("movetool-move-left-more");
-    actions << actionRegistry->makeQAction("movetool-move-right-more");
-    actions << actionRegistry->makeQAction("movetool-show-coordinates");
+    actions << actionRegistry->makeQAction("movetool-move-up", this);
+    actions << actionRegistry->makeQAction("movetool-move-down", this);
+    actions << actionRegistry->makeQAction("movetool-move-left", this);
+    actions << actionRegistry->makeQAction("movetool-move-right", this);
+    actions << actionRegistry->makeQAction("movetool-move-up-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-down-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-left-more", this);
+    actions << actionRegistry->makeQAction("movetool-move-right-more", this);
+    actions << actionRegistry->makeQAction("movetool-show-coordinates", this);
 
     return actions;
 

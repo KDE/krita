@@ -57,8 +57,6 @@ OverviewDockerDock::OverviewDockerDock()
     m_controlsLayout->setSpacing(2);
     m_controlsContainer->setLayout(m_controlsLayout);
 
-    m_controlsSecondRowLayout = new QHBoxLayout();
-
     setWidget(m_page);
 
     m_showControlsTimer.setSingleShot(true);
@@ -116,11 +114,13 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
     }
 
     // Delete the stretch
-    while (m_controlsSecondRowLayout->count() && m_controlsSecondRowLayout->itemAt(0)->spacerItem()) {
+    while (m_controlsSecondRowLayout && m_controlsSecondRowLayout->count() && m_controlsSecondRowLayout->itemAt(0)->spacerItem()) {
         delete m_controlsSecondRowLayout->takeAt(0);
     }
 
     m_controlsLayout->removeItem(m_controlsSecondRowLayout);
+
+    delete m_controlsSecondRowLayout;
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
 
@@ -158,6 +158,8 @@ void OverviewDockerDock::setCanvas(KoCanvasBase * canvas)
         m_pinControlsButton->setIcon(KisIconUtils::loadIcon("krita_tool_reference_images"));
         m_pinControlsButton->setAutoRaise(true);
         connect(m_pinControlsButton, SIGNAL(toggled(bool)), SLOT(setPinControls(bool)));
+
+        m_controlsSecondRowLayout = new QHBoxLayout();
 
         m_controlsSecondRowLayout->addWidget(m_rotateAngleSelector);
         m_controlsSecondRowLayout->addStretch();

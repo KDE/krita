@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=FX
+Name[bg]=FX
 Name[ca]=Efectes especials
 Name[ca@valencia]=Efectes especials
 Name[cs]=FX
@@ -30,6 +31,7 @@ Name[x-test]=xxFXxx
 Name[zh_CN]=特效
 Name[zh_TW]=特效
 Comment=Special Effects.kpp
+Comment[bg]=Special Effects.kpp
 Comment[ca]=Efectes especials «.kpp».
 Comment[ca@valencia]=Efectes especials «.kpp».
 Comment[de]=Spezialeffekte

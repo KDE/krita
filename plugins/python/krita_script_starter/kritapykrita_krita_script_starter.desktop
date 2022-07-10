@@ -5,6 +5,7 @@ X-KDE-Library=krita_script_starter
 X-Python-2-Compatible=false
 X-Krita-Manual=Manual.html
 Name=Krita Script Starter
+Name[bg]=Krita Script Starter
 Name[ca]=Iniciador de scripts del Krita
 Name[ca@valencia]=Iniciador de scripts de Krita
 Name[cs]=Spouštěč skriptů Krita

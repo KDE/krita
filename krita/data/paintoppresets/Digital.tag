@@ -2,6 +2,7 @@
 Type=Tag
 Name=Digital
 Name[ar]=رقمية
+Name[bg]=Дигитален
 Name[bs]=Digitalni
 Name[ca]=Digital
 Name[ca@valencia]=Digital
@@ -41,6 +42,7 @@ Name[zh_CN]=数码绘画
 Name[zh_TW]=數位
 ResourceType=paintoppreset
 Comment=Brush presets with a digital look and feel.
+Comment[bg]=Предварителни настройки за четки с дигитален вид и усещане.
 Comment[ca]=Pinzells predefinits amb un aspecte i comportament digital.
 Comment[ca@valencia]=Pinzells predefinits amb un aspecte i comportament digital.
 Comment[de]=Pinselvoreinstellungen mit einem digitalen Erscheinungsbild

@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Sketch
+Name[bg]=Скица
 Name[ca]=Esbossos
 Name[ca@valencia]=Esbossos
 Name[cs]=Sketch
@@ -30,6 +31,7 @@ Name[x-test]=xxSketchxx
 Name[zh_CN]=草稿
 Name[zh_TW]=草圖
 Comment=Sketching brush presets
+Comment[bg]=Четки за скициране
 Comment[ca]=Esbossos dels pinzells predefinits
 Comment[ca@valencia]=Esbossos dels pinzells predefinits
 Comment[de]=Skizzenwerkzeug-Voreinstellungen

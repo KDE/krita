@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Textures
+Name[bg]=Текстури
 Name[ca]=Textures
 Name[ca@valencia]=Textures
 Name[cs]=Textury
@@ -31,6 +32,7 @@ Name[x-test]=xxTexturesxx
 Name[zh_CN]=纹理
 Name[zh_TW]=紋理
 Comment=Textured Brush Presets
+Comment[bg]=Текстурни четки
 Comment[ca]=Textures dels pinzells predefinits
 Comment[ca@valencia]=Textures dels pinzells predefinits
 Comment[de]=Texturpinsel-Voreinstellungen

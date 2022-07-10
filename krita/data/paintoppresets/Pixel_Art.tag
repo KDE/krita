@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Pixel Art
+Name[bg]=Вид на пиксели
 Name[ca]=Art de píxels
 Name[ca@valencia]=Art de píxels
 Name[de]=Pixel Art
@@ -28,6 +29,7 @@ Name[x-test]=xxPixel Artxx
 Name[zh_CN]=像素画
 Name[zh_TW]=像素畫
 Comment=Presets for working with individual pixels
+Comment[bg]=Предварителни настройки за работа с отделни пиксели
 Comment[ca]=Predefinits per a treballar amb píxels individuals
 Comment[ca@valencia]=Predefinits per a treballar amb píxels individuals
 Comment[de]=Voreinstellungen für die Arbeit mit einzelnen Pixeln.

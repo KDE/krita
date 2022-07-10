@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Ink
+Name[bg]=Мастило
 Name[ca]=Tinta
 Name[ca@valencia]=Tinta
 Name[cs]=Inkoust
@@ -30,6 +31,7 @@ Name[x-test]=xxInkxx
 Name[zh_CN]=勾线
 Name[zh_TW]=上墨
 Comment=Inking Brush Presets
+Comment[bg]=Мастилени четки
 Comment[ca]=Pinzells predefinits de tinta.
 Comment[ca@valencia]=Pinzells predefinits de tinta.
 Comment[de]=Tuschepinsel-Voreinstellungen

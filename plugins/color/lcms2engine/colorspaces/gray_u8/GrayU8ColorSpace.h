@@ -45,7 +45,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return "GRAYA";
+        return QStringLiteral("GRAYA");
     }
 
 };

@@ -43,7 +43,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return QString("XYZA16");
+        return QStringLiteral("XYZA16");
     }
 
 };

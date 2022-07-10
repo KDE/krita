@@ -47,7 +47,7 @@ KoLabColorSpace::~KoLabColorSpace()
 
 QString KoLabColorSpace::colorSpaceId()
 {
-    return QString("LABA");
+    return QStringLiteral("LABA");
 }
 
 

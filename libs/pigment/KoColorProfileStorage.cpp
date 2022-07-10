@@ -12,6 +12,7 @@
 #include <QReadWriteLock>
 #include <QString>
 
+#include "DebugPigment.h"
 #include "KoColorSpaceFactory.h"
 #include "KoColorProfile.h"
 #include "kis_assert.h"
@@ -20,6 +21,7 @@
 struct KoColorProfileStorage::Private {
     QHash<QString, KoColorProfile * > profileMap;
     QHash<QByteArray, KoColorProfile * > profileUniqueIdMap;
+    QList<KoColorProfile *> duplicates;
     QHash<QString, QString> profileAlias;
     QReadWriteLock lock;
 
@@ -28,10 +30,18 @@ struct KoColorProfileStorage::Private {
     ~Private()
     {
         Q_FOREACH (KoColorProfile *p, profileMap) {
+            profileUniqueIdMap.remove(p->uniqueId());
             delete p;
         }
         profileMap.clear();
+        Q_FOREACH (KoColorProfile *p, profileUniqueIdMap) {
+            delete p;
+        }
         profileUniqueIdMap.clear();
+        Q_FOREACH(KoColorProfile *p, duplicates) {
+            delete p;
+        }
+        duplicates.clear();
     }
 };
 
@@ -51,9 +61,11 @@ void KoColorProfileStorage::addProfile(KoColorProfile *profile)
 
     if (profile->valid()) {
         d->profileMap[profile->name()] = profile;
-        if (!d->profileUniqueIdMap.isEmpty()) {
-            d->profileUniqueIdMap.insert(profile->uniqueId(), profile);
+        if (d->profileUniqueIdMap.contains(profile->uniqueId())) {
+            warnPigment << "Duplicated profile" << profile->name() << profile->fileName() << d->profileUniqueIdMap[profile->uniqueId()]->fileName();
+            d->duplicates.append(d->profileUniqueIdMap[profile->uniqueId()]);
         }
+        d->profileUniqueIdMap.insert(profile->uniqueId(), profile);
     }
 }
 

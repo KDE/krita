@@ -353,7 +353,8 @@ QWidget* KisToolFill::createOptionWidget()
         optionButtonStripFillWith->addButton(KisIconUtils::loadIcon("pattern"));
     m_buttonFillWithFG->setChecked(true);
     m_sliderPatternScale = new KisDoubleSliderSpinBox;
-    m_sliderPatternScale->setRange(0, 500, 2);
+    m_sliderPatternScale->setRange(0, 10000, 2);
+    m_sliderPatternScale->setSoftMaximum(500);
     m_sliderPatternScale->setPrefix(i18nc("The pattern 'scale' spinbox prefix in fill tool options", "Scale: "));
     m_sliderPatternScale->setSuffix(i18n("%"));
     m_angleSelectorPatternRotation = new KisAngleSelector;

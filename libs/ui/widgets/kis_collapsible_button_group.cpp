@@ -44,6 +44,8 @@ void KisCollapsibleButtonGroup::setAutoRaise(bool autoRaise)
     }
 }
 
+KisCollapsibleButtonGroup::~KisCollapsibleButtonGroup() = default;
+
 bool KisCollapsibleButtonGroup::autoRaise() const
 {
     return m_d->collapsedButton->autoRaise();

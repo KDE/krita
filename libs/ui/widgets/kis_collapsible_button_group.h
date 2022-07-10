@@ -14,7 +14,7 @@ class KRITAUI_EXPORT KisCollapsibleButtonGroup : public QWidget
     Q_OBJECT
 public:
     KisCollapsibleButtonGroup(QWidget *parent = nullptr);
-    ~KisCollapsibleButtonGroup() {}
+    ~KisCollapsibleButtonGroup() override;
 
     void setAutoRaise(bool autoRaise);
     bool autoRaise() const;
@@ -39,7 +39,7 @@ protected:
 
 private:
     struct Private;
-    Private* m_d {nullptr};
+    QScopedPointer<Private> m_d {nullptr};
 };
 
 #endif // KISCOLLAPSIBLEBUTTONGROUP_H

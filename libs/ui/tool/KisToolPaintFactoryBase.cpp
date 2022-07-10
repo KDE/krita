@@ -24,14 +24,14 @@ QList<QAction *> KisToolPaintFactoryBase::createActionsImpl()
     KisActionRegistry *actionRegistry = KisActionRegistry::instance();
     QList<QAction *> actions;
 
-    KisAction *increaseBrushSize = new KisAction(i18n("Increase Brush Size"));
+    KisAction *increaseBrushSize = new KisAction(i18n("Increase Brush Size"), this);
     increaseBrushSize->setObjectName("increase_brush_size");
     increaseBrushSize->setShortcut(Qt::Key_BracketRight);
     actionRegistry->propertizeAction("increase_brush_size", increaseBrushSize);
 
     actions << increaseBrushSize;
 
-    KisAction *decreaseBrushSize = new KisAction(i18n("Decrease Brush Size"));
+    KisAction *decreaseBrushSize = new KisAction(i18n("Decrease Brush Size"), this);
     decreaseBrushSize->setShortcut(Qt::Key_BracketLeft);
     decreaseBrushSize->setObjectName("decrease_brush_size");
     actionRegistry->propertizeAction("decrease_brush_size", decreaseBrushSize);

@@ -143,7 +143,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
     // News widget...
     QMenu *newsOptionsMenu = new QMenu(this);
     newsOptionsMenu->setToolTipsVisible(true);
-    ShowNewsAction *showNewsAction = new ShowNewsAction(i18n("Enable news and check for new releases"));
+    ShowNewsAction *showNewsAction = new ShowNewsAction(i18n("Enable news and check for new releases"), newsOptionsMenu);
     newsOptionsMenu->addAction(showNewsAction);
     showNewsAction->setToolTip(i18n("Show news about Krita: this needs internet to retrieve information from the krita.org website"));
     showNewsAction->setCheckable(true);

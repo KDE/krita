@@ -59,6 +59,7 @@ MultiFeedRssModel::MultiFeedRssModel(KisNetworkAccessManager* nam, QObject* pare
 
 MultiFeedRssModel::~MultiFeedRssModel()
 {
+    delete m_networkAccessManager;
 }
 
 QHash<int, QByteArray> MultiFeedRssModel::roleNames() const
@@ -83,8 +84,7 @@ void MultiFeedRssModel::addFeed(const QString& feed)
 
     m_sites << feed;
     const QUrl feedUrl(feed);
-    QMetaObject::invokeMethod(m_networkAccessManager, "getUrl",
-                              Qt::QueuedConnection, Q_ARG(QUrl, feedUrl));
+    m_networkAccessManager->getUrl(feedUrl);
 }
 
 bool sortForPubDate(const RssItem& item1, const RssItem& item2)

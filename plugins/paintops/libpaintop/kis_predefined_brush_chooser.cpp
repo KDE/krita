@@ -194,9 +194,6 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize, QWidget *
     connect(stampButton, SIGNAL(clicked()), this,  SLOT(slotOpenStampBrush()));
     connect(clipboardButton, SIGNAL(clicked()), SLOT(slotOpenClipboardBrush()));
 
-    QGridLayout *spacingLayout = new QGridLayout();
-    spacingLayout->setObjectName("spacing grid layout");
-
     resetBrushButton->setToolTip(i18n("Reloads Spacing from file\nSets Scale to 1.0\nSets Rotation to 0.0"));
     connect(resetBrushButton, SIGNAL(clicked()), SLOT(slotResetBrush()));
 

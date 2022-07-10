@@ -24,6 +24,15 @@ struct KoColorProfileStorage::Private {
     QReadWriteLock lock;
 
     void populateUniqueIdMap();
+
+    ~Private()
+    {
+        Q_FOREACH (KoColorProfile *p, profileMap) {
+            delete p;
+        }
+        profileMap.clear();
+        profileUniqueIdMap.clear();
+    }
 };
 
 KoColorProfileStorage::KoColorProfileStorage()

@@ -377,6 +377,8 @@ QList<QAction *> ToolReferenceImagesFactory::createActionsImpl()
     Q_FOREACH(QAction *action, defaultActions) {
         if (actionNames.contains(action->objectName())) {
             actions << action;
+        } else {
+            delete action;
         }
     }
     return actions;

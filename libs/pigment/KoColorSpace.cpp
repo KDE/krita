@@ -66,13 +66,18 @@ KoColorSpace::~KoColorSpace()
 {
     Q_ASSERT(d->deletability != OwnedByRegistryDoNotDelete);
 
-    qDeleteAll(d->compositeOps);
+    Q_FOREACH(const KoCompositeOp *op, d->compositeOps) {
+        delete op;
+    }
+    d->compositeOps.clear();
     for (const auto& map: d->ditherOps) {
         qDeleteAll(map);
     }
+    d->ditherOps.clear();
     Q_FOREACH (KoChannelInfo * channel, d->channels) {
         delete channel;
     }
+    d->channels.clear();
     if (d->deletability == NotOwnedByRegistry) {
         KoColorConversionCache* cache = KoColorSpaceRegistry::instance()->colorConversionCache();
         if (cache) {

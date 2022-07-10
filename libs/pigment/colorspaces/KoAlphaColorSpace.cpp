@@ -74,25 +74,20 @@ template <class _CSTrait>
 KoAlphaColorSpaceImpl<_CSTrait>::KoAlphaColorSpaceImpl()
     : KoColorSpaceAbstract<_CSTrait>(alphaIdFromChannelType<channels_type>().id(),
                                      alphaIdFromChannelType<channels_type>().name())
+    , m_profile(new KoDummyColorProfile)
 {
     this->addChannel(new KoChannelInfo(i18n("Alpha"), 0, 0, KoChannelInfo::ALPHA, channelInfoIdFromChannelType<channels_type>()));
 
-    m_compositeOps << new KoCompositeOpOver<_CSTrait>(this)
-                   << new KoCompositeOpErase<_CSTrait>(this)
-                   << new KoCompositeOpCopy2<_CSTrait>(this)
-                   << createAlphaDarkenCompositeOp<_CSTrait>(this)
-                   << new AlphaColorSpaceMultiplyOp<_CSTrait>(this);
-
-    Q_FOREACH (KoCompositeOp *op, m_compositeOps) {
-        this->addCompositeOp(op);
-    }
-    m_profile = new KoDummyColorProfile;
+    this->addCompositeOp(new KoCompositeOpOver<_CSTrait>(this));
+    this->addCompositeOp(new KoCompositeOpErase<_CSTrait>(this));
+    this->addCompositeOp(new KoCompositeOpCopy2<_CSTrait>(this));
+    this->addCompositeOp(createAlphaDarkenCompositeOp<_CSTrait>(this));
+    this->addCompositeOp(new AlphaColorSpaceMultiplyOp<_CSTrait>(this));
 }
 
 template <class _CSTrait>
 KoAlphaColorSpaceImpl<_CSTrait>::~KoAlphaColorSpaceImpl()
 {
-    qDeleteAll(m_compositeOps);
     delete m_profile;
     m_profile = 0;
 }

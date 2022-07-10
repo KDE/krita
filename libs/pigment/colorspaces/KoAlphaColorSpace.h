@@ -180,7 +180,6 @@ protected:
 
 private:
     KoColorProfile* m_profile;
-    QList<KoCompositeOp*> m_compositeOps;
 };
 
 typedef KoAlphaColorSpaceImpl<AlphaU8Traits> KoAlphaColorSpace;

@@ -69,11 +69,6 @@ void KoColorProfileStorage::addProfile(KoColorProfile *profile)
     }
 }
 
-void KoColorProfileStorage::addProfile(const KoColorProfile *profile)
-{
-    addProfile(profile->clone());
-}
-
 void KoColorProfileStorage::removeProfile(KoColorProfile *profile)
 {
     QWriteLocker locker(&d->lock);

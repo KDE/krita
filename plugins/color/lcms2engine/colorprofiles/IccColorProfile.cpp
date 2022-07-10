@@ -65,24 +65,28 @@ struct IccColorProfile::Private {
         QScopedPointer<LcmsColorProfileContainer> lcmsProfile;
         QVector<KoChannelInfo::DoubleRange> uiMinMaxes;
         bool canCreateCyclicTransform = false;
+
+        Shared()
+            : data(new IccColorProfile::Data())
+        {
+        }
     };
+
+    Private()
+        : shared(QSharedPointer<Shared>::create())
+    {
+    }
     QSharedPointer<Shared> shared;
 };
 
 IccColorProfile::IccColorProfile(const QString &fileName)
     : KoColorProfile(fileName), d(new Private)
 {
-    // QSharedPointer lacks a reset in Qt 4.x
-    d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
-    d->shared->data.reset(new Data());
 }
 
 IccColorProfile::IccColorProfile(const QByteArray &rawData)
     : KoColorProfile(QString()), d(new Private)
 {
-    d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
-    d->shared->data.reset(new Data());
-
     setRawData(rawData);
     init();
 }
@@ -145,8 +149,7 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
 
     setCharacteristics(colorPrimariesType, transferFunction);
 
-    d->shared = QSharedPointer<Private::Shared>(new Private::Shared());
-    d->shared->data.reset(new Data());
+    d->shared = QSharedPointer<Private::Shared>::create();
 
     setRawData(LcmsColorProfileContainer::lcmsProfileToByteArray(iccProfile));
     cmsCloseProfile(iccProfile);

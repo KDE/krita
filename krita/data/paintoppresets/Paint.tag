@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Paint
+Name[bg]=Боя
 Name[ca]=Pintura
 Name[ca@valencia]=Pintura
 Name[cs]=Namalovat
@@ -31,6 +32,7 @@ Name[x-test]=xxPaintxx
 Name[zh_CN]=绘画
 Name[zh_TW]=塗繪
 Comment=Paint Brushes
+Comment[bg]=Четки за рисуване
 Comment[ca]=Pinzells
 Comment[ca@valencia]=Pinzells
 Comment[de]=Malpinsel

@@ -4,6 +4,7 @@ ServiceTypes=Krita/PythonPlugin
 X-KDE-Library=highpass
 X-Python-2-Compatible=false
 Name=Highpass Filter
+Name[bg]=Филтър за шум
 Name[ca]=Filtre passaalt
 Name[ca@valencia]=Filtre passaalt
 Name[cs]=Filtr s horní propustí

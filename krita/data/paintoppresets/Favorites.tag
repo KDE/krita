@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=★ My Favorites
+Name[bg]=★ Любими
 Name[ca]=★ Preferits
 Name[ca@valencia]=★ Preferits
 Name[cs]=★ Moje oblíbené
@@ -29,6 +30,7 @@ Name[x-test]=xx★ My Favoritesxx
 Name[zh_CN]=★ 常用预设
 Name[zh_TW]=★ 最愛
 Comment=Your favorite brush presets
+Comment[bg]=Вашите любими четки
 Comment[ca]=Els pinzells predefinits preferits.
 Comment[ca@valencia]=Els pinzells predefinits preferits.
 Comment[de]=Bevorzugte Pinselvoreinstellungen

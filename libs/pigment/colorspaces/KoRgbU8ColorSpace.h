@@ -51,7 +51,7 @@ class KoRgbU8ColorSpaceFactory : public KoSimpleColorSpaceFactory
 
 public:
     KoRgbU8ColorSpaceFactory()
-            : KoSimpleColorSpaceFactory("RGBA",
+            : KoSimpleColorSpaceFactory(QStringLiteral("RGBA"),
                                         i18n("RGB (8-bit integer/channel, unmanaged)"),
                                         true,
                                         RGBAColorModelID,

@@ -49,7 +49,7 @@ KoRgbU8ColorSpace::~KoRgbU8ColorSpace()
 
 QString KoRgbU8ColorSpace::colorSpaceId()
 {
-    return QString("RGBA");
+    return QStringLiteral("RGBA");
 }
 
 

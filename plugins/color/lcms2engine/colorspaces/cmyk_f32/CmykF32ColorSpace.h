@@ -45,7 +45,7 @@ public:
 
     static QString colorSpaceId()
     {
-        return "CMYKAF32";
+        return QStringLiteral("CMYKAF32");
     }
 
     bool hasHighDynamicRange() const override

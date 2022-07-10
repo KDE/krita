@@ -49,6 +49,7 @@ public:
     KoGenericRegistry() { }
     virtual ~KoGenericRegistry()
     {
+        m_doubleEntries.clear();
         m_hash.clear();
     }
 

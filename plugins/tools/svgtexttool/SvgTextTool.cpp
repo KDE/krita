@@ -57,6 +57,7 @@ SvgTextTool::~SvgTextTool()
     if(m_editor) {
         m_editor->close();
     }
+    delete m_defAlignment;
 }
 
 void SvgTextTool::activate(const QSet<KoShape *> &shapes)

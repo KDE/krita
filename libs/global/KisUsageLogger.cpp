@@ -270,6 +270,11 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tName: ").append(screen->name());
         info.append("\n\t\tDepth: ").append(QString::number(screen->depth()));
         info.append("\n\t\tScale: ").append(QString::number(screen->devicePixelRatio()));
+        info.append("\n\t\tPhysical DPI").append(QString::number(screen->physicalDotsPerInch()));
+        info.append("\n\t\tLogical DPI").append(QString::number(screen->logicalDotsPerInch()));
+        info.append("\n\t\tPhysical Size: ").append(QString::number(screen->physicalSize().width()))
+                .append(", ")
+                .append(QString::number(screen->physicalSize().height()));
         info.append("\n\t\tPosition: ").append(QString::number(screen->geometry().x()))
                 .append(", ")
                 .append(QString::number(screen->geometry().y()));
@@ -279,6 +284,7 @@ QString KisUsageLogger::screenInformation()
         info.append("\n\t\tManufacturer: ").append(screen->manufacturer());
         info.append("\n\t\tModel: ").append(screen->model());
         info.append("\n\t\tRefresh Rate: ").append(QString::number(screen->refreshRate()));
+
     }
     info.append("\n");
     return info;
@@ -287,7 +293,6 @@ QString KisUsageLogger::screenInformation()
 void KisUsageLogger::rotateLog()
 {
     if (d->logFile.exists()) {
-
         {
             // Check for CLOSING SESSION
             d->logFile.open(QFile::ReadOnly);

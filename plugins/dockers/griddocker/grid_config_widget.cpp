@@ -143,15 +143,20 @@ void GridConfigWidget::setGridConfigImpl(const KisGridConfig &value)
         ui->chkOffset->setChecked(true);
     }
 
-    ui->offsetAspectButton->setKeepAspectRatio(m_d->gridConfig.offsetAspectLocked());
-    ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
     ui->chkShowGrid->setChecked(m_d->gridConfig.showGrid());
+
+    ui->spacingAspectButton->setKeepAspectRatio(false);
     ui->intHSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intVSpacing->setMaximum(std::numeric_limits<int>::max());
     ui->intHSpacing->setValue(m_d->gridConfig.spacing().x());
     ui->intVSpacing->setValue(m_d->gridConfig.spacing().y());
+    ui->spacingAspectButton->setKeepAspectRatio(m_d->gridConfig.spacingAspectLocked());
+
+    ui->offsetAspectButton->setKeepAspectRatio(false);
     ui->intXOffset->setValue(m_d->gridConfig.offset().x());
     ui->intYOffset->setValue(m_d->gridConfig.offset().y());
+    ui->offsetAspectButton->setKeepAspectRatio(m_d->gridConfig.offsetAspectLocked());
+
     ui->intSubdivision->setValue(m_d->gridConfig.subdivision());
     ui->chkSnapToGrid->setChecked(m_d->gridConfig.snapToGrid());
     ui->angleLeftAngleSelector->setAngle(m_d->gridConfig.angleLeft());

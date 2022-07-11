@@ -123,8 +123,9 @@ void KisMementoManager::registerTileChange(KisTile *tile)
         mi->changeTile(tile);
         m_index.addTile(mi);
 
-        if(namedTransactionInProgress())
-            m_currentMemento->updateExtent(mi->col(), mi->row());
+        if(namedTransactionInProgress()) {
+            m_currentMemento->updateExtent(mi->col(), mi->row(), &m_currentMementoExtentLock);
+        }
     }
     else {
         mi->reset();
@@ -149,8 +150,9 @@ void KisMementoManager::registerTileDeleted(KisTile *tile)
 
         m_index.addTile(mi);
 
-        if(namedTransactionInProgress())
-            m_currentMemento->updateExtent(mi->col(), mi->row());
+        if(namedTransactionInProgress()) {
+            m_currentMemento->updateExtent(mi->col(), mi->row(), &m_currentMementoExtentLock);
+        }
     }
     else {
         mi->reset();

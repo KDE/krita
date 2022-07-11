@@ -147,6 +147,7 @@ protected:
      * It is the "name" of current named transaction
      */
     KisMementoSP m_currentMemento;
+    QMutex m_currentMementoExtentLock;
 
     /**
      * The flag that blocks registration of changes on tiles.

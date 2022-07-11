@@ -99,7 +99,7 @@ private:
 
     KisNodeSP loadColorizeMask(KisImageSP image, const QDomElement& elem, const KoColorSpace *colorSpace);
 
-    KisNodeSP loadFileLayer(const QDomElement& elem, KisImageSP image, const QString& name, quint32 opacity);
+    KisNodeSP loadFileLayer(const QDomElement& elem, KisImageSP image, const QString& name, quint32 opacity, const KoColorSpace *fallbackColorSpace);
 
     KisNodeSP loadReferenceImagesLayer(const QDomElement& elem, KisImageSP image);
 

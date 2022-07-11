@@ -39,7 +39,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &name, quint8 opacit
     connect(this, SIGNAL(sigRequestOpenFile()), SLOT(openFile()));
 }
 
-KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity)
+KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QString &filename, ScalingMethod scaleToImageResolution, const QString &name, quint8 opacity, const KoColorSpace *fallbackColorSpace)
     : KisExternalLayer(image, name, opacity)
     , m_basePath(basePath)
     , m_filename(filename)
@@ -50,7 +50,7 @@ KisFileLayer::KisFileLayer(KisImageWSP image, const QString &basePath, const QSt
      * the file does not exist anymore. Or course, this can happen only
      * in the failing execution path.
      */
-    m_paintDevice = new KisPaintDevice(image->colorSpace());
+    m_paintDevice = new KisPaintDevice(fallbackColorSpace ? fallbackColorSpace : image->colorSpace());
     m_paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 
     connect(&m_loader, SIGNAL(loadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)), SLOT(slotLoadingFinished(KisPaintDeviceSP,qreal,qreal,QSize)));

@@ -131,6 +131,12 @@ KisToolCrop::KisToolCrop(KoCanvasBase * canvas)
 
 KisToolCrop::~KisToolCrop()
 {
+    delete applyCrop;
+    delete centerToggleOption;
+    delete growToggleOption;
+    delete lockWidthToggleOption;
+    delete lockHeightToggleOption;
+    delete lockRatioToggleOption;
 }
 
 void KisToolCrop::activate(const QSet<KoShape*> &shapes)

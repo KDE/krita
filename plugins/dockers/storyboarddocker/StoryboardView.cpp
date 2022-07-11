@@ -9,6 +9,7 @@
 #include <QPaintEvent>
 #include <QMenu>
 #include <QProxyStyle>
+#include <QStyleFactory>
 
 #include "StoryboardView.h"
 #include "StoryboardModel.h"
@@ -81,7 +82,13 @@ StoryboardView::StoryboardView(QWidget *parent)
     viewport()->setAcceptDrops(true);
     setDropIndicatorShown(true);
     setDragDropMode(QAbstractItemView::InternalMove);
-    setStyle(new StoryboardStyle(this->style()));
+
+    QStyle *newStyle = QStyleFactory::create(this->style()->objectName());
+    // proxy style steals the ownership of the style and deletes it later
+    StoryboardStyle *proxyStyle = new StoryboardStyle(newStyle);
+    proxyStyle->setParent(this);
+    setStyle(proxyStyle);
+
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
                 this, SLOT(slotContextMenuRequested(const QPoint &)));
 

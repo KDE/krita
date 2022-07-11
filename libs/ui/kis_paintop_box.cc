@@ -160,7 +160,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     // horizontal and vertical mirror toolbar buttons
 
     // mirror tool options for the X Mirror
-    QMenu *toolbarMenuXMirror = new QMenu();
+    toolbarMenuXMirror = new QMenu();
 
     hideCanvasDecorationsX = m_viewManager->actionManager()->createAction("mirrorX-hideDecorations");
     toolbarMenuXMirror->addAction(hideCanvasDecorationsX);
@@ -173,7 +173,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
 
 
     // mirror tool options for the Y Mirror
-    QMenu *toolbarMenuYMirror = new QMenu();
+    toolbarMenuYMirror = new QMenu();
 
     hideCanvasDecorationsY = m_viewManager->actionManager()->createAction("mirrorY-hideDecorations");
     toolbarMenuYMirror->addAction(hideCanvasDecorationsY);
@@ -556,7 +556,11 @@ KisPaintopBox::~KisPaintopBox()
     qDeleteAll(m_paintopOptionWidgets);
     delete m_favoriteResourceManager;
 
-    for (int i = 0; i < 3; ++i) {
+    delete toolbarMenuXMirror;
+    delete toolbarMenuYMirror;
+
+    for (int i = 0; i < 3; ++i)
+    {
         delete m_sliderChooser[i];
     }
 }

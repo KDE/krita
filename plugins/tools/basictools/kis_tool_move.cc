@@ -81,6 +81,7 @@ KisToolMove::KisToolMove(KoCanvasBase *canvas)
 KisToolMove::~KisToolMove()
 {
     endStroke();
+    delete m_optionsWidget;
 }
 
 void KisToolMove::resetCursorStyle()

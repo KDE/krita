@@ -66,7 +66,6 @@ KisToolBrush::KisToolBrush(KoCanvasBase * canvas)
     addSmoothingAction(KisSmoothingOptions::SIMPLE_SMOOTHING, "set_simple_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::WEIGHTED_SMOOTHING, "set_weighted_brush_smoothing");
     addSmoothingAction(KisSmoothingOptions::STABILIZER, "set_stabilizer_brush_smoothing");
-
 }
 
 KisToolBrush::~KisToolBrush()

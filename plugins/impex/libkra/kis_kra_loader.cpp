@@ -885,7 +885,7 @@ KisNodeSP KisKraLoader::loadNode(const QDomElement& element, KisImageSP image)
     else if (nodeType == COLORIZE_MASK)
         node = loadColorizeMask(image, element, colorSpace);
     else if (nodeType == FILE_LAYER)
-        node = loadFileLayer(element, image, name, opacity);
+        node = loadFileLayer(element, image, name, opacity, colorSpace);
     else if (nodeType == REFERENCE_IMAGES_LAYER)
         node = loadReferenceImagesLayer(element, image);
     else {
@@ -986,7 +986,7 @@ KisNodeSP KisKraLoader::loadPaintLayer(const QDomElement& element, KisImageSP im
 
 }
 
-KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP image, const QString& name, quint32 opacity)
+KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP image, const QString& name, quint32 opacity, const KoColorSpace *fallbackColorSpace)
 {
     QString filename = element.attribute("source", QString());
     if (filename.isNull()) return 0;
@@ -1043,7 +1043,7 @@ KisNodeSP KisKraLoader::loadFileLayer(const QDomElement& element, KisImageSP ima
         qApp->restoreOverrideCursor();
     }
 
-    KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity);
+    KisLayer *layer = new KisFileLayer(image, basePath, filename, (KisFileLayer::ScalingMethod)scalingMethod, name, opacity, fallbackColorSpace);
     Q_CHECK_PTR(layer);
 
     return layer;

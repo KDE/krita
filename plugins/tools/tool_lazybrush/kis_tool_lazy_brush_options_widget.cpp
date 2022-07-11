@@ -155,6 +155,8 @@ KisToolLazyBrushOptionsWidget::KisToolLazyBrushOptionsWidget(KisCanvasResourcePr
 
 KisToolLazyBrushOptionsWidget::~KisToolLazyBrushOptionsWidget()
 {
+    delete m_d->ui;
+    m_d->ui = nullptr;
 }
 
 void KisToolLazyBrushOptionsWidget::showEvent(QShowEvent *event)

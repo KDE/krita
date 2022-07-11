@@ -108,6 +108,8 @@ ToolReferenceImagesWidget::ToolReferenceImagesWidget(ToolReferenceImages *tool, 
 
 ToolReferenceImagesWidget::~ToolReferenceImagesWidget()
 {
+    delete d->ui;
+    d->ui = nullptr;
 }
 
 void ToolReferenceImagesWidget::selectionChanged(KoSelection *selection)

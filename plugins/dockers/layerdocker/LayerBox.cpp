@@ -33,6 +33,7 @@
 #include <QMenu>
 #include <QWidgetAction>
 #include <QProxyStyle>
+#include <QStyleFactory>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
@@ -171,7 +172,12 @@ LayerBox::LayerBox()
 
     m_wdgLayerBox->setupUi(mainWidget);
 
-    m_wdgLayerBox->listLayers->setStyle(new LayerBoxStyle(m_wdgLayerBox->listLayers->style()));
+    QStyle *newStyle = QStyleFactory::create(m_wdgLayerBox->listLayers->style()->objectName());
+    // proxy style steals the ownership of the style and deletes it later
+    LayerBoxStyle *proxyStyle = new LayerBoxStyle(newStyle);
+
+    proxyStyle->setParent(m_wdgLayerBox->listLayers);
+    m_wdgLayerBox->listLayers->setStyle(proxyStyle);
 
     connect(m_wdgLayerBox->listLayers,
             SIGNAL(contextMenuRequested(QPoint,QModelIndex)),

@@ -27,7 +27,7 @@
 #include "kis_signal_auto_connection.h"
 #include "kis_signal_compressor.h"
 
-
+class QMenu;
 class QToolButton;
 class QString;
 class QHBoxLayout;
@@ -204,6 +204,9 @@ private:
 
     QString    m_currCompositeOpID;
     KisNodeWSP m_currentNode;
+
+    QMenu*     toolbarMenuXMirror{nullptr};
+    QMenu*     toolbarMenuYMirror{nullptr};
 
     KisAction* m_hMirrorAction {0};
     KisAction* m_vMirrorAction {0};

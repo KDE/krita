@@ -13,6 +13,7 @@
 #include "kis_types.h"
 #include "kis_node_visitor.h"
 #include "kis_image.h"
+#include "kis_default_bounds.h"
 
 class TestLayer : public KisLayer
 {
@@ -23,6 +24,7 @@ public:
 
     TestLayer(KisImageWSP image, const QString & name, quint8 opacity)
             : KisLayer(image, name, opacity) {
+        m_original = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
     }
 
     KisNodeSP clone() {
@@ -37,8 +39,7 @@ public:
     }
 
     KisPaintDeviceSP original() const override {
-        // This test doesn't use updateProjection so just return 0
-        return 0;
+        return m_original;
     }
 
     KisPaintDeviceSP paintDevice() const override {
@@ -81,7 +82,8 @@ public:
         return v.visit(this);
     }
 
-
+private:
+    KisPaintDeviceSP m_original;
 };
 
 class KisLayerTest : public QObject

@@ -8,10 +8,15 @@
 
 #include <QPainter>
 #include <QVarLengthArray>
+#include <QApplication>
+#include <QMainWindow>
+#include <QWindow>
+#include <QScreen>
 
 #include <kis_debug.h>
 #include <klocalizedstring.h>
 
+#include <KisMainWindow.h>
 #include "kis_types.h"
 #include "KisViewManager.h"
 #include "kis_selection.h"
@@ -36,14 +41,23 @@ static const unsigned int ANT_LENGTH = 4;
 static const unsigned int ANT_SPACE = 4;
 static const unsigned int ANT_ADVANCE_WIDTH = ANT_LENGTH + ANT_SPACE;
 
-KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>view)
-    : KisCanvasDecoration("selection", view),
-      m_signalCompressor(40 /*ms*/, KisSignalCompressor::FIRST_ACTIVE),
+KisSelectionDecoration::KisSelectionDecoration(QPointer<KisView>_view)
+    : KisCanvasDecoration("selection", _view),
+      m_signalCompressor(50 /*ms*/, KisSignalCompressor::FIRST_ACTIVE),
       m_offset(0),
       m_mode(Ants)
 {
-    KisPaintingTweaks::initAntsPen(&m_antsPen, &m_outlinePen,
-                                   ANT_LENGTH, ANT_SPACE);
+    Q_ASSERT(view());
+    Q_ASSERT(view()->mainWindow());
+    Q_ASSERT(view()->mainWindow()->windowHandle());
+
+    m_window = view()->mainWindow()->windowHandle();
+    connect(m_window, SIGNAL(screenChanged(QScreen*)), this, SLOT(screenChanged(QScreen*)));
+
+    m_screen = m_window->screen();
+    connect(m_screen, SIGNAL(physicalDotsPerInchChanged(qreal)), this, SLOT(initializePens()));
+
+    initializePens();
 
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(KisImageConfigNotifier::instance(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
@@ -80,7 +94,43 @@ bool KisSelectionDecoration::selectionIsActive()
     KisSelectionSP selection = view()->selection();
     return visible() && selection &&
         (selection->hasNonEmptyPixelSelection() || selection->hasNonEmptyShapeSelection()) &&
-        selection->isVisible();
+            selection->isVisible();
+}
+
+void KisSelectionDecoration::initializePens()
+{
+    /**
+     * On MacOS in HiDPI mode devicePixelRatio is always fixed to 2.0,
+     * so we should use physical DPI for better guess of the screen
+     * detail level (which is divided by the pixel ratio in Qt).
+     */
+    const qreal dotsPerInch = m_screen->physicalDotsPerInch() * m_screen->devicePixelRatio();
+    int screenScale = 1;
+
+    if (dotsPerInch < 220) {
+        screenScale = 1;
+    }
+    else if (dotsPerInch < 300) {
+        screenScale = 2;
+    }
+    else if (dotsPerInch < 500) {
+        screenScale = 3;
+    }
+    else {
+        screenScale = 4;
+    }
+
+    KisPaintingTweaks::initAntsPen(&m_antsPen, &m_outlinePen,
+                                   ANT_LENGTH, ANT_SPACE);
+
+    if (screenScale > 1) {
+        m_antsPen.setWidth(screenScale);
+        m_outlinePen.setWidth(screenScale);
+    }
+    else {
+        m_antsPen.setCosmetic(true);
+        m_outlinePen.setCosmetic(true);
+    }
 }
 
 void KisSelectionDecoration::selectionChanged()
@@ -145,13 +195,19 @@ void KisSelectionDecoration::slotConfigChanged()
     m_antialiasSelectionOutline = cfg.antialiasSelectionOutline();
 }
 
+void KisSelectionDecoration::screenChanged(QScreen *screen)
+{
+    m_screen = screen;
+    initializePens();
+}
+
 void KisSelectionDecoration::antsAttackEvent()
 {
     KisSelectionSP selection = view()->selection();
     if (!selection) return;
 
     if (selectionIsActive()) {
-        m_offset = (m_offset + 1) % ANT_ADVANCE_WIDTH;
+        m_offset = (m_offset + 1) % (ANT_ADVANCE_WIDTH);
         m_antsPen.setDashOffset(m_offset);
         view()->canvasBase()->updateCanvas();
     }

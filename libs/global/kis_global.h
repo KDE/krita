@@ -137,15 +137,8 @@ inline qreal bisectorAngle(qreal a, qreal b) {
     return incrementInDirection(a, 0.5 * diff, b);
 }
 
-template<typename PointType>
-inline PointType snapToClosestAxis(PointType P) {
-    if (qAbs(P.x()) < qAbs(P.y())) {
-        P.setX(0);
-    } else {
-        P.setY(0);
-    }
-    return P;
-}
+
+
 
 template<typename T>
 inline T pow2(const T& x) {
@@ -179,6 +172,40 @@ inline qreal kisDistance(const QPointF &pt1, const QPointF &pt2) {
 inline qreal kisSquareDistance(const QPointF &pt1, const QPointF &pt2) {
     return pow2(pt1.x() - pt2.x()) + pow2(pt1.y() - pt2.y());
 }
+
+template<typename PointType>
+inline PointType snapToClosestAxis(PointType P) {
+    if (qAbs(P.x()) < qAbs(P.y())) {
+        P.setX(0);
+    } else {
+        P.setY(0);
+    }
+    return P;
+}
+
+template<typename PointType>
+inline PointType snapToClosestNiceAngle(PointType point, PointType startPoint, qreal angle = (2 * M_PI) / 24) {
+    // default angle = 15 degrees
+
+    const QPointF lineVector = point - startPoint;
+    qreal lineAngle = std::atan2(lineVector.y(), lineVector.x());
+
+    if (lineAngle < 0) {
+        lineAngle += 2 * M_PI;
+    }
+
+    const quint32 constrainedLineIndex = static_cast<quint32>((lineAngle / angle) + 0.5);
+    const qreal constrainedLineAngle = constrainedLineIndex * angle;
+
+    const qreal lineLength = kisDistance(lineVector, QPointF());
+
+    const QPointF constrainedLineVector(lineLength * std::cos(constrainedLineAngle), lineLength * std::sin(constrainedLineAngle));
+
+    const QPointF result = startPoint + constrainedLineVector;
+
+    return result;
+}
+
 
 #include <QLineF>
 

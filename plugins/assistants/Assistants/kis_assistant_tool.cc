@@ -463,7 +463,7 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
     } else if (m_assistantDrag) {
         QPointF newAdjustment = canvasDecoration->snapToGuide(event, QPointF(), false) - m_cursorStart;
         if (event->modifiers() & Qt::ShiftModifier ) {
-            newAdjustment = snapToClosestAxis(newAdjustment);
+            newAdjustment = snapToClosestNiceAngle(newAdjustment, QPointF(0, 0), M_PI / 4);
         }
         Q_FOREACH (KisPaintingAssistantHandleSP handle, m_assistantDrag->handles()) {
             *handle += (newAdjustment - m_currentAdjustment);
@@ -1788,8 +1788,8 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             dragRadius.setLength(m_radius.length());
             *m_handleDrag = dragRadius.p2();
         } else {
-            QPointF snap_point = snapToClosestAxis(event->point - m_dragStart);
-            *m_handleDrag = m_dragStart + snap_point;
+            QPointF snap_point = snapToClosestNiceAngle(event->point, m_dragStart);
+            *m_handleDrag = snap_point;
         }
     } else {
         if (m_newAssistant && m_internalMode == MODE_CREATION) {
@@ -1797,15 +1797,15 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
             KisPaintingAssistantHandleSP handle_snap = handles.back();
             // for any assistant, snap 2nd handle to x or y axis relative to first handle
             if (handles.size() == 2) {
-                QPointF snap_point = snapToClosestAxis(event->point - *handles[0]);
-                *handle_snap =  *handles[0] + snap_point;
+                QPointF snap_point = snapToClosestNiceAngle(event->point, (QPointF)(*handles[0]));
+                *handle_snap =  snap_point;
             } else {
                 bool was_snapped = false;
                 if (m_newAssistant->id() == "spline") {
                     KisPaintingAssistantHandleSP start;
                     handles.size() == 3 ? start = handles[0] : start = handles[1];
-                    QPointF snap_point = snapToClosestAxis(event->point - *start);
-                    *handle_snap =  *start + snap_point;
+                    QPointF snap_point = snapToClosestNiceAngle(event->point, (QPointF)(*start));
+                    *handle_snap =  snap_point;
                     was_snapped = true;
                 }
 
@@ -1823,8 +1823,8 @@ bool KisAssistantTool::snap(KoPointerEvent *event)
                 if (m_newAssistant->id() == "perspective") {
                     KisPaintingAssistantHandleSP start;
                     handles.size() == 3 ? start = handles[1] : start = handles[2];
-                    QPointF snap_point = snapToClosestAxis(event->point - *start);
-                    *handle_snap =  *start + snap_point;
+                    QPointF snap_point = snapToClosestNiceAngle(event->point, (QPointF)(*start));
+                    *handle_snap = snap_point;
                     was_snapped = true;
                 }
                 return was_snapped;

@@ -400,7 +400,7 @@ KoColor KoColor::fromXML(const QDomElement& elt, const QString& channelDepthId, 
 
             const QString name = e.attribute("name");
             const QString type = e.attribute("type");
-            const QString value = e.text();
+
             QVariant v;
             if (type == "string") {
                 v = KisDomUtils::toString(e.attribute("value"));

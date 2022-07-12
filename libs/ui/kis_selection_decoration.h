@@ -33,6 +33,8 @@ public:
     void setMode(Mode mode);
     void setVisible(bool v) override;
 
+    void notifyWindowMinimized(bool minimized) override;
+
 protected:
     void drawDecoration(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter *converter,KisCanvas2* canvas) override;
 

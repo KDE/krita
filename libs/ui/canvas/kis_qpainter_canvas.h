@@ -45,8 +45,10 @@ public: // QWidget overrides
     void resizeEvent(QResizeEvent *e) override;
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
-
     void inputMethodEvent(QInputMethodEvent *event) override;
+
+    void hideEvent(QHideEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 public: // Implement kis_abstract_canvas_widget interface
     void setDisplayFilter(QSharedPointer<KisDisplayFilter> displayFilter) override;

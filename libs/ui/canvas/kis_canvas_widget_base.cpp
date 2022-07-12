@@ -156,7 +156,12 @@ QList<KisCanvasDecorationSP > KisCanvasWidgetBase::decorations() const
 {
     return m_d->decorations;
 }
-
+void KisCanvasWidgetBase::notifyDecorationsWindowMinimized(bool minimized)
+{
+    Q_FOREACH (KisCanvasDecorationSP deco, m_d->decorations) {
+        deco->notifyWindowMinimized(minimized);
+    }
+}
 void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
 {
     Q_UNUSED(value);

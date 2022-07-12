@@ -150,6 +150,18 @@ void KisQPainterCanvas::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
+void KisQPainterCanvas::hideEvent(QHideEvent *e)
+{
+    QWidget::hideEvent(e);
+    notifyDecorationsWindowMinimized(true);
+}
+
+void KisQPainterCanvas::showEvent(QShowEvent *e)
+{
+    QWidget::showEvent(e);
+    notifyDecorationsWindowMinimized(false);
+}
+
 void KisQPainterCanvas::channelSelectionChanged(const QBitArray &channelFlags)
 {
     Q_ASSERT(m_d->prescaledProjection);

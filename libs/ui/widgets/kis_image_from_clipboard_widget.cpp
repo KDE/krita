@@ -47,9 +47,7 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, q
 {
     setObjectName("KisImageFromClipboard");
 
-    // create clipboard preview and show it   
-    createClipboardPreview();
-
+    lblPreview->hide();
     grpClipboard->show();
     imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
@@ -95,6 +93,12 @@ void KisImageFromClipboard::createImage()
 void KisImageFromClipboard::clipboardDataChanged()
 {
     createClipboardPreview();
+}
+
+void KisImageFromClipboard::showEvent(QShowEvent *event)
+{
+    if (!lblPreview->isVisible()) createClipboardPreview();
+    KisCustomImageWidget::showEvent(event);
 }
 
 

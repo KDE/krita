@@ -275,23 +275,10 @@ KisColorLabelSelectorWidget* KisColorLabelSelectorWidgetMenuWrapper::colorLabelS
     return m_d->colorLabelSelector;
 }
 
-QSize KisColorLabelSelectorWidgetMenuWrapper::sizeHint() const
+void KisColorLabelSelectorWidgetMenuWrapper::showEvent(QShowEvent *e)
 {
-    return m_d->colorLabelSelector->sizeHint() + QSize(calculateMenuOffset(), 0);
-}
-
-void KisColorLabelSelectorWidgetMenuWrapper::resizeEvent(QResizeEvent *e)
-{
-    QMenu *menu = qobject_cast<QMenu*>(parent());
-
-    if(menu) {
-        int menuOffset = calculateMenuOffset();
-        m_d->menuAlignmentOffset->changeSize(menuOffset, height());
-        layout()->invalidate();
-        menu->resize(menu->width() + menuOffset, menu->height());
-    }
-
-    QWidget::resizeEvent(e);
+    const int menuOffset = calculateMenuOffset();
+    m_d->menuAlignmentOffset->changeSize(menuOffset, height());
 }
 
 int KisColorLabelSelectorWidgetMenuWrapper::calculateMenuOffset() const

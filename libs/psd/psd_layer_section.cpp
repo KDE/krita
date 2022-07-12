@@ -640,14 +640,19 @@ void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_c
                 if (item.type == FlattenedNode::RASTER_LAYER) {
                     nodeIrrelevant = false;
                     nodeName = node->name();
-                    bool transparency = KisPainter::checkDeviceHasTransparency(node->paintDevice());
-                    bool semiOpacity = node->paintDevice()->defaultPixel().opacityU8() < OPACITY_OPAQUE_U8;
-                    if (fillLayer && (transparency || semiOpacity)) {
-                        layerContentDevice = node->original();
-                        onlyTransparencyMask = node;
-                        maskRect = onlyTransparencyMask->paintDevice()->exactBounds();
-                    } else {
-                        layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+                    layerContentDevice = onlyTransparencyMask ? node->original() : node->projection();
+
+                    /**
+                     * For fill layers we save their internal selection as a separate transparency mask
+                     */
+                    if (fillLayer) {
+                        bool transparency = KisPainter::checkDeviceHasTransparency(node->paintDevice());
+                        bool semiOpacity = node->paintDevice()->defaultPixel().opacityU8() < OPACITY_OPAQUE_U8;
+                        if (transparency || semiOpacity) {
+                            layerContentDevice = node->original();
+                            onlyTransparencyMask = node;
+                            maskRect = onlyTransparencyMask->paintDevice()->exactBounds();
+                        }
                     }
                     sectionType = psd_other;
                 } else {

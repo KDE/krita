@@ -288,6 +288,18 @@ void KisOpenGLCanvas2::inputMethodEvent(QInputMethodEvent *event)
     processInputMethodEvent(event);
 }
 
+void KisOpenGLCanvas2::hideEvent(QHideEvent *e)
+{
+    QOpenGLWidget::hideEvent(e);
+    notifyDecorationsWindowMinimized(true);
+}
+
+void KisOpenGLCanvas2::showEvent(QShowEvent *e)
+{
+    QOpenGLWidget::showEvent(e);
+    notifyDecorationsWindowMinimized(false);
+}
+
 void KisOpenGLCanvas2::setDisplayColorConverter(KisDisplayColorConverter *colorConverter)
 {
     d->renderer->setDisplayColorConverter(colorConverter);
@@ -354,7 +366,6 @@ void KisOpenGLCanvas2::updateCanvasDecorations(const QRect &decoUpdateRect)
 {
     update(decoUpdateRect);
 }
-
 bool KisOpenGLCanvas2::callFocusNextPrevChild(bool next)
 {
     return focusNextPrevChild(next);

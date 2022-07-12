@@ -85,7 +85,10 @@ bool KisCanvasDecoration::comparePriority(KisCanvasDecorationSP decoration1, Kis
 {
     return decoration1->priority() < decoration2->priority();
 }
+void KisCanvasDecoration::notifyWindowMinimized(bool)
+{
 
+}
 QPointer<KisView>KisCanvasDecoration::view() const
 {
     return d->view;

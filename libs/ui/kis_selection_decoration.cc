@@ -211,4 +211,12 @@ void KisSelectionDecoration::setVisible(bool v)
     selectionChanged();
 }
 
+void KisSelectionDecoration::notifyWindowMinimized(bool minimized)
+{
+    if(minimized) {
+        m_antsTimer->stop();
+    } else {
+        m_antsTimer->start();
+    }
+}
 

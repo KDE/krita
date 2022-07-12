@@ -45,6 +45,7 @@ public: // KisAbstractCanvasWidget
 
     void setDecorations(const QList<KisCanvasDecorationSP > &) override;
     QList<KisCanvasDecorationSP > decorations() const override;
+    void notifyDecorationsWindowMinimized(bool minimized);
 
     void setWrapAroundViewingMode(bool value) override;
 

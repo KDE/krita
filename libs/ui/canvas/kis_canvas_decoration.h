@@ -62,6 +62,8 @@ public:
 
     static bool comparePriority(KisCanvasDecorationSP decoration1, KisCanvasDecorationSP decoration2);
 
+    virtual void notifyWindowMinimized(bool minimized);
+
 public Q_SLOTS:
     /**
      * Set if the decoration is visible or not.

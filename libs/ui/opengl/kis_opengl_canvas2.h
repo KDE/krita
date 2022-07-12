@@ -49,6 +49,9 @@ public: // QOpenGLWidget
 
     QVariant inputMethodQuery(Qt::InputMethodQuery query) const override;
     void inputMethodEvent(QInputMethodEvent *event) override;
+    
+    void hideEvent(QHideEvent *event) override;
+    void showEvent(QShowEvent *event) override;
 
 public:
     void paintToolOutline(const KisOptimizedBrushOutline &path);

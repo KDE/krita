@@ -58,7 +58,7 @@ public:
         PointerPolicy::barrierLock(m_image);
     }
 
-    inline KisImageBarrierLockerImpl(ImagePointer image, std::adopt_lock_t t)
+    inline KisImageBarrierLockerImpl(ImagePointer image, std::adopt_lock_t)
         : m_image(image)
     {
     }

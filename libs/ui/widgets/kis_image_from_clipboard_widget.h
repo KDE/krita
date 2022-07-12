@@ -38,9 +38,12 @@ private Q_SLOTS:
     void createImage();
     void clipboardDataChanged();
     
+protected:
+
+    void showEvent(QShowEvent *event);
+
 private:   
     void createClipboardPreview();
-
 };
 
 #endif

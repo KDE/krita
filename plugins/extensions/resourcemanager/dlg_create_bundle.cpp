@@ -293,7 +293,7 @@ bool DlgCreateBundle::putResourcesInTheBundle(KoResourceBundleSP bundle)
             QMessageBox::warning(
                 this,
                 i18nc("@title:window", "Krita"),
-                i18nc("Warning message", "More than one resources share the same file name '%1'. Please export them in separate bundles.", prettyFilename));
+                i18nc("Warning message", "More than one resource share the same file name '%1'. Please export them in separate bundles.", prettyFilename));
             return false;
         }
 
@@ -359,7 +359,7 @@ QString DlgCreateBundle::createPrettyFilenameFromName(KoResourceSP resource) con
     const auto fileInfo = QFileInfo(resource->filename());
     const auto prefix = fileInfo.dir();
     // remove the suffix if the name has a suffix (happens for png patterns)
-    const auto nameWithoutSuffix = QFileInfo(resource->name()).baseName();
+    const auto nameWithoutSuffix = QFileInfo(resource->name()).completeBaseName();
     const auto suffix = fileInfo.suffix();
     return QDir::cleanPath(prefix.filePath(nameWithoutSuffix + "." + suffix));
 }

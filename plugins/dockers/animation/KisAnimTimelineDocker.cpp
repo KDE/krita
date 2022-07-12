@@ -608,7 +608,7 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
        if (m_d->canvas) {
-           m_d->canvas->animationPlayer()->goToEndFrame();
+           //KisPart::instance()->playbackEngine()->goToEndFrame();
        }
     });
 
@@ -616,7 +616,7 @@ void KisAnimTimelineDocker::setViewManager(KisViewManager *view)
     action->setActivationFlags(KisAction::ACTIVE_IMAGE);
     connect(action, &KisAction::triggered, [this](bool){
        if (m_d->canvas) {
-           m_d->canvas->animationPlayer()->goToStartFrame();
+           //KisPart::instance()->playbackEngine()->seek;
        }
     });
 

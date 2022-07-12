@@ -590,6 +590,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 
         // Connect new image..
         connect(image->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
+            StopAndResume callbackStopResume(m_d.data());
             m_d->profile->set_frame_rate(m_d->activeCanvas->image()->animationInterface()->framerate(), 1);
         });
 

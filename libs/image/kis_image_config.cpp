@@ -508,6 +508,10 @@ KisProofingConfigurationSP KisImageConfig::defaultProofingconfiguration()
 
 void KisImageConfig::setDefaultProofingConfig(const KoColorSpace *proofingSpace, int proofingIntent, bool blackPointCompensation, KoColor warningColor, double adaptationState)
 {
+    if (!proofingSpace || !proofingSpace->profile()) {
+        return;
+    }
+
     m_config.writeEntry("defaultProofingProfileName", proofingSpace->profile()->name());
     m_config.writeEntry("defaultProofingProfileModel", proofingSpace->colorModelId().id());
     m_config.writeEntry("defaultProofingProfileDepth", proofingSpace->colorDepthId().id());

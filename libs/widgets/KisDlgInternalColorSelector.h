@@ -64,14 +64,7 @@ public:
      * @brief slotColorSpaceChanged
      * Color space has changed, use this dialog to change the colorspace.
      */
-    void colorSpaceChanged(const KoColorSpace *cs);
-
-    /**
-     * @brief lockUsedColorSpace
-     * Lock the used colorspace of this selector.
-     * @param cs
-     */
-    void lockUsedColorSpace(const KoColorSpace *cs);
+    void setColorSpace(const KoColorSpace *cs);
 
     /**
      * @brief setDisplayRenderer
@@ -79,17 +72,6 @@ public:
      * @param displayRenderer
      */
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
-
-    /**
-     * @brief getModalColorDialog
-     * Execute this dialog modally. The function returns
-     * the KoColor you want.
-     * @param color - The current color. Make sure this is in the color space you want your
-     * end color to be in.
-     * @param parent parent widget.
-     * @param caption the dialog caption.
-     */
-    static KoColor getModalColorDialog(const KoColor color, QWidget* parent = 0, QString caption = QString());
 
     /**
      * @brief getCurrentColor
@@ -101,15 +83,14 @@ public:
 
 Q_SIGNALS:
     /**
-     * @brief signalForegroundColorChosen
+     * @brief signalColorChosen
      * The most important signal. This will sent out when a color has been chosen from the selector.
      * There will be a small delay to make sure that the selector causes too many updates.
      *
      * Do not connect this to slotColorUpdated.
      * @param color The new color chosen
      */
-
-    void signalForegroundColorChosen(KoColor color);
+    void colorChosen(KoColor color);
 
 public Q_SLOTS:
     /**
@@ -119,7 +100,7 @@ public Q_SLOTS:
      * when the signal came from itself.
      * @param newColor This is the new color.
      */
-    void slotColorUpdated(KoColor newColor);
+    void slotColorUpdated(const KoColor &newColor);
 
     /**
     * @brief slotSetColorFromPatch

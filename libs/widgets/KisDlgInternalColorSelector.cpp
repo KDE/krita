@@ -13,28 +13,28 @@
 
 #include <functional>
 
-#include <KConfigGroup>
+#include <kconfiggroup.h>
 #include <kstandardguiitem.h>
 
 #include "KoColorSpaceRegistry.h"
 #include <KoColorSet.h>
+#include <KoResourceServerProvider.h>
+#include <KoResourceServer.h>
+#include "KoColorDisplayRendererInterface.h"
+
 #include <KisPaletteModel.h>
 #include <KisPaletteChooser.h>
 #include <kis_palette_view.h>
-#include <KoResourceServerProvider.h>
-#include <KoResourceServer.h>
-
 #include "kis_signal_compressor.h"
-#include "KoColorDisplayRendererInterface.h"
-
 #include "kis_spinbox_color_selector.h"
-
 #include "KisDlgInternalColorSelector.h"
-#include "ui_WdgDlgInternalColorSelector.h"
 #include "kis_config_notifier.h"
 #include "kis_color_input.h"
 #include "kis_icon_utils.h"
 #include "KisSqueezedComboBox.h"
+#include "kis_signals_blocker.h"
+
+#include "ui_WdgDlgInternalColorSelector.h"
 
 std::function<KisScreenColorSamplerBase *(QWidget *)> KisDlgInternalColorSelector::s_screenColorSamplerFactory = 0;
 
@@ -45,7 +45,6 @@ struct KisDlgInternalColorSelector::Private
     KoColor previousColor;
     KoColor sRGB = KoColor(KoColorSpaceRegistry::instance()->rgb8());
     const KoColorSpace *currentColorSpace;
-    bool lockUsedCS = false;
     bool chooseAlpha = false;
     KisSignalCompressor *compressColorChanges;
     const KoColorDisplayRendererInterface *displayRenderer;
@@ -117,7 +116,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         connect(m_ui->paletteBox, SIGNAL(sigColorSelected(KoColor)), this,
                 SLOT(slotColorUpdated(KoColor)));
         m_ui->bnPaletteChooser->setPopupWidget(m_d->paletteChooser);
-    } else {
+    }
+    else {
         m_ui->paletteBox->setEnabled(false);
         m_ui->cmbNameList->setEnabled(false);
         m_ui->bnPaletteChooser->setEnabled(false);
@@ -129,7 +129,8 @@ KisDlgInternalColorSelector::KisDlgInternalColorSelector(QWidget *parent, KoColo
         m_ui->previousColor->setColor(m_d->previousColor);
         m_ui->previousColor->setDisplayRenderer(displayRenderer);
         connect(m_ui->previousColor, SIGNAL(triggered(KoColorPatch*)), SLOT(slotSetColorFromPatch(KoColorPatch*)));
-    } else {
+    }
+    else {
         m_ui->currentColor->hide();
         m_ui->previousColor->hide();
     }
@@ -171,8 +172,9 @@ KisDlgInternalColorSelector::~KisDlgInternalColorSelector()
     delete m_ui;
 }
 
-void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
+void KisDlgInternalColorSelector::slotColorUpdated(const KoColor &color)
 {
+    KoColor newColor = color;
     // not-so-nice solution: if someone calls this slot directly and that code was
     // triggered by our compressor signal, our compressor is technically the sender()!
     if (sender() == m_d->compressColorChanges) {
@@ -187,11 +189,9 @@ void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
             newColor = m_ui->paletteBox->closestColor(newColor);
         }
 
-        if (m_d->lockUsedCS){
-            newColor.convertTo(m_d->currentColorSpace);
-        } else {
-            colorSpaceChanged(newColor.colorSpace());
-        }
+        KisSignalsBlocker b(this);
+        setColorSpace(newColor.colorSpace());
+
         m_d->currentColor = newColor;
         updateAllElements(QObject::sender());
     }
@@ -199,34 +199,34 @@ void KisDlgInternalColorSelector::slotColorUpdated(KoColor newColor)
 
 void KisDlgInternalColorSelector::slotSetColorFromPatch(KoColorPatch *patch)
 {
-    slotColorUpdated(patch->color());
+    KoColor color = patch->color();
+    slotColorUpdated(color);
 }
 
-void KisDlgInternalColorSelector::colorSpaceChanged(const KoColorSpace *cs)
+void KisDlgInternalColorSelector::setColorSpace(const KoColorSpace *cs)
 {
     if (cs == m_d->currentColorSpace) {
         return;
     }
 
+    KisSignalsBlocker b(this);
+
     m_d->currentColorSpace = KoColorSpaceRegistry::instance()->colorSpace(cs->colorModelId().id(), cs->colorDepthId().id(), cs->profile());
+
+    m_d->currentColor.convertTo(m_d->currentColorSpace);
+    m_d->previousColor.convertTo(m_d->currentColorSpace);
+
     m_ui->spinboxselector->slotSetColorSpace(m_d->currentColorSpace);
     m_ui->visualSelector->slotSetColorSpace(m_d->currentColorSpace);
 
-}
+    m_ui->spinboxselector->slotSetColor(m_d->currentColor);
+    m_ui->visualSelector->slotSetColor(m_d->currentColor);
 
-void KisDlgInternalColorSelector::lockUsedColorSpace(const KoColorSpace *cs)
-{
-    colorSpaceChanged(cs);
-    if (m_d->currentColor.colorSpace() != m_d->currentColorSpace) {
-        m_d->currentColor.convertTo(m_d->currentColorSpace);
-        m_ui->spinboxselector->slotSetColor(m_d->currentColor);
-        m_ui->visualSelector->slotSetColor(m_d->currentColor);
-    }
-    m_d->lockUsedCS = true;
 }
 
 void KisDlgInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
+    KisSignalsBlocker b(this);
     if (displayRenderer) {
         m_d->displayRenderer = displayRenderer;
         m_ui->visualSelector->setDisplayRenderer(displayRenderer);
@@ -236,15 +236,6 @@ void KisDlgInternalColorSelector::setDisplayRenderer(const KoColorDisplayRendere
     } else {
         m_d->displayRenderer = KoDumbColorDisplayRenderer::instance();
     }
-}
-
-KoColor KisDlgInternalColorSelector::getModalColorDialog(const KoColor color, QWidget* parent, QString caption)
-{
-    Config config = Config();
-    KisDlgInternalColorSelector dialog(parent, color, config, caption);
-    dialog.setPreviousColor(color);
-    dialog.exec();
-    return dialog.getCurrentColor();
 }
 
 KoColor KisDlgInternalColorSelector::getCurrentColor()
@@ -337,7 +328,7 @@ void KisDlgInternalColorSelector::slotSelectorModelChanged()
 
 void KisDlgInternalColorSelector::endUpdateWithNewColor()
 {
-    emit signalForegroundColorChosen(m_d->currentColor);
+    emit colorChosen(m_d->currentColor);
     m_d->allowUpdates = true;
 }
 

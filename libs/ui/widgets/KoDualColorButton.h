@@ -103,6 +103,7 @@ class KRITAUI_EXPORT KoDualColorButton : public QWidget
     void setBackgroundColor( const KoColor &color );
 
     void slotSetForeGroundColorFromDialog (const KoColor color);
+    void slotSetBackGroundColorFromDialog (const KoColor color);
 
     void setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer = KoDumbColorDisplayRenderer::instance());
 

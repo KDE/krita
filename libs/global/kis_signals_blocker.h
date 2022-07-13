@@ -24,7 +24,6 @@
  * 2) Two lines of blocking for every line of access can easily make
  *    the code unreadable.
  */
-
 class KisSignalsBlocker
 {
 public:

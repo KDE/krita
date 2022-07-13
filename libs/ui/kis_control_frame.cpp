@@ -84,12 +84,14 @@ void KisControlFrame::setup(QWidget *parent)
     m_viewManager->actionCollection()->addAction(ResourceType::Gradients, action);
     action->setDefaultWidget(m_gradientWidget);
     connect(action, SIGNAL(triggered()), m_gradientWidget, SLOT(showPopupWidget()));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
+    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     m_gradientChooserPopup->addAction(action);
 
-
-    // XXX: KOMVC we don't have a canvas here yet, needs a setImageView
     const KoColorDisplayRendererInterface *displayRenderer = \
         KisDisplayColorConverter::dumbConverterInstance()->displayRendererInterface();
+    connect(m_viewManager, SIGNAL(viewChanged()), SLOT(slotUpdateDisplayRenderer()));
+
     m_dual = new KoDualColorButton(m_viewManager->canvasResourceProvider()->fgColor(),
                                                      m_viewManager->canvasResourceProvider()->bgColor(), displayRenderer,
                                                      m_viewManager->mainWindowAsQWidget(), m_viewManager->mainWindowAsQWidget());
@@ -102,10 +104,7 @@ void KisControlFrame::setup(QWidget *parent)
     connect(m_dual, SIGNAL(backgroundColorChanged(KoColor)), m_viewManager->canvasResourceProvider(), SLOT(slotSetBGColor(KoColor)));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_dual, SLOT(setBackgroundColor(KoColor)));
     connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_dual, SLOT(setForegroundColor(KoColor)));
-    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigFGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
-    connect(m_viewManager->canvasResourceProvider(), SIGNAL(sigBGColorChanged(KoColor)), m_gradientWidget, SLOT(update()));
     m_dual->setFixedSize(28, 28);
-    connect(m_viewManager, SIGNAL(viewChanged()), SLOT(slotUpdateDisplayRenderer()));
 
     m_paintopBox = new KisPaintopBox(m_viewManager, parent, "paintopbox");
 
@@ -129,7 +128,7 @@ void KisControlFrame::slotUpdateDisplayRenderer()
 {
     if (m_viewManager->canvasBase()){
         m_dual->setDisplayRenderer(m_viewManager->canvasBase()->displayColorConverter()->displayRendererInterface());
-        m_dual->setColorSpace(m_viewManager->canvasBase()->image()->colorSpace());
+        m_dual->setColorSpace(m_viewManager->activeNode()->colorSpace());
         m_viewManager->canvasBase()->image()->disconnect(m_dual);
         connect(m_viewManager->canvasBase()->image(), SIGNAL(sigColorSpaceChanged(const KoColorSpace*)), m_dual, SLOT(setColorSpace(const KoColorSpace*)), Qt::UniqueConnection);
     } else if (m_viewManager->viewCount()==0) {

@@ -30,7 +30,8 @@
 class Q_DECL_HIDDEN KoDualColorButton::Private
 {
 public:
-    Private(const KoColor &fgColor, const KoColor &bgColor,
+    Private(const KoColor &fgColor,
+            const KoColor &bgColor,
             QWidget *_dialogParent,
             const KoColorDisplayRendererInterface *_displayRenderer)
         : dialogParent(_dialogParent)
@@ -38,13 +39,10 @@ public:
         , miniCtlFlag( false )
         , foregroundColor(fgColor)
         , backgroundColor(bgColor)
-
         , displayRenderer(_displayRenderer)
     {
         updateArrows();
         resetPixmap = QPixmap( (const char **)dcolorreset_xpm );
-
-        popDialog = true;
     }
 
     void updateArrows() {
@@ -72,12 +70,16 @@ public:
     QPixmap arrowBitmap;
     QPixmap resetPixmap;
     bool dragFlag, miniCtlFlag;
+
     KoColor foregroundColor;
     KoColor backgroundColor;
-    KisDlgInternalColorSelector *colorSelectorDialog;
+
+    KisDlgInternalColorSelector *fgColorSelectorDialog;
+    KisDlgInternalColorSelector *bgColorSelectorDialog;
+
     QPoint dragPosition;
     Selection tmpSelection;
-    bool popDialog;
+    bool popDialog {true};
     QPointer<const KoColorDisplayRendererInterface> displayRenderer;
 
     void init(KoDualColorButton *q);
@@ -92,10 +94,20 @@ void KoDualColorButton::Private::init(KoDualColorButton *q)
     QString caption = i18n("Select a Color");
     KisDlgInternalColorSelector::Config config = KisDlgInternalColorSelector::Config();
     config.modal = false;
-    colorSelectorDialog = new KisDlgInternalColorSelector(q, foregroundColor, config, caption, displayRenderer);
-    connect(colorSelectorDialog, SIGNAL(signalForegroundColorChosen(KoColor)), q, SLOT(slotSetForeGroundColorFromDialog(KoColor)));
-    connect(q, SIGNAL(foregroundColorChanged(KoColor)), colorSelectorDialog, SLOT(slotColorUpdated(KoColor)));
+    fgColorSelectorDialog = new KisDlgInternalColorSelector(q, foregroundColor, config, caption, displayRenderer);
+    fgColorSelectorDialog->setObjectName("Foreground");
+
+    bgColorSelectorDialog = new KisDlgInternalColorSelector(q, foregroundColor, config, caption, displayRenderer);
+    bgColorSelectorDialog->setObjectName("Background");
+
+    connect(fgColorSelectorDialog, SIGNAL(colorChosen(KoColor)), q, SLOT(slotSetForeGroundColorFromDialog(KoColor)));
+    connect(q, SIGNAL(foregroundColorChanged(KoColor)), q, SLOT(setForegroundColor(KoColor)));
+
+    connect(bgColorSelectorDialog, SIGNAL(colorChosen(KoColor)), q, SLOT(slotSetBackGroundColorFromDialog(KoColor)));
+    connect(q, SIGNAL(backgroundColorChanged(KoColor)), q, SLOT(setBackgroundColor(KoColor)));
 }
+
+
 
 KoDualColorButton::KoDualColorButton(const KoColor &foregroundColor, const KoColor &backgroundColor, QWidget *parent, QWidget* dialogParent )
     : QWidget( parent ),
@@ -147,11 +159,12 @@ void KoDualColorButton::setForegroundColor(const KoColor &color)
     d->foregroundColor = color;
     {
         /**
-       * The internal color selector might emit the color of a different profile, so
-       * we should break this cycling dependency somehow.
-       */
-        KisSignalsBlocker b(d->colorSelectorDialog);
-        d->colorSelectorDialog->slotColorUpdated(color);
+         * The internal color selector might emit the color of a different profile, so
+         * we should break this cycling dependency somehow.
+         */
+        KisSignalsBlocker b(d->fgColorSelectorDialog);
+        d->fgColorSelectorDialog->setPreviousColor(color);
+        d->fgColorSelectorDialog->slotColorUpdated(color);
     }
     update();
 }
@@ -159,6 +172,15 @@ void KoDualColorButton::setForegroundColor(const KoColor &color)
 void KoDualColorButton::setBackgroundColor( const KoColor &color )
 {
     d->backgroundColor = color;
+    {
+        /**
+         * The internal color selector might emit the color of a different profile, so
+         * we should break this cycling dependency somehow.
+         */
+        KisSignalsBlocker b(d->bgColorSelectorDialog);
+        d->bgColorSelectorDialog->setPreviousColor(color);
+        d->bgColorSelectorDialog->slotColorUpdated(color);
+    }
     update();
 }
 
@@ -169,7 +191,11 @@ void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface
     }
     if (displayRenderer) {
         d->displayRenderer = displayRenderer;
-        d->colorSelectorDialog->setDisplayRenderer(displayRenderer);
+        KisSignalsBlocker b(this,
+                            d->fgColorSelectorDialog,
+                            d->bgColorSelectorDialog);
+        d->fgColorSelectorDialog->setDisplayRenderer(displayRenderer);
+        d->bgColorSelectorDialog->setDisplayRenderer(displayRenderer);
         connect(d->displayRenderer, SIGNAL(destroyed()), this, SLOT(setDisplayRenderer()), Qt::UniqueConnection);
         connect(d->displayRenderer, SIGNAL(displayConfigurationChanged()), this, SLOT(update()));
     } else {
@@ -179,7 +205,11 @@ void KoDualColorButton::setDisplayRenderer(const KoColorDisplayRendererInterface
 
 void KoDualColorButton::setColorSpace(const KoColorSpace *cs)
 {
-    d->colorSelectorDialog->lockUsedColorSpace(cs);
+    KisSignalsBlocker b(this,
+                        d->fgColorSelectorDialog,
+                        d->bgColorSelectorDialog);
+    d->bgColorSelectorDialog->setColorSpace(cs);
+    d->fgColorSelectorDialog->setColorSpace(cs);
 }
 
 QColor KoDualColorButton::getColorFromDisplayRenderer(KoColor c)
@@ -261,18 +291,29 @@ void KoDualColorButton::slotSetForeGroundColorFromDialog(const KoColor color)
     emit foregroundColorChanged(d->foregroundColor);
 }
 
+void KoDualColorButton::slotSetBackGroundColorFromDialog(const KoColor color)
+{
+    d->backgroundColor = color;
+    update();
+    emit backgroundColorChanged(d->backgroundColor);
+}
 
-void KoDualColorButton::openForegroundDialog(){
-    d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
-    d->colorSelectorDialog->show();
+
+void KoDualColorButton::openForegroundDialog()
+{
+    KisSignalsBlocker b(this);
+    KisSignalsBlocker b1(d->fgColorSelectorDialog);
+    d->fgColorSelectorDialog->setPreviousColor(d->foregroundColor);
+    d->fgColorSelectorDialog->show();
     update();
 }
 
-void KoDualColorButton::openBackgroundDialog(){
-    KoColor c = d->backgroundColor;
-    c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
-    d->backgroundColor = c;
-    emit backgroundColorChanged(d->backgroundColor);
+void KoDualColorButton::openBackgroundDialog()
+{    KisSignalsBlocker b(this);
+     KisSignalsBlocker b1(d->bgColorSelectorDialog);
+    d->bgColorSelectorDialog->setPreviousColor(d->backgroundColor);
+    d->bgColorSelectorDialog->show();
+    update();
 }
 
 void KoDualColorButton::mousePressEvent( QMouseEvent *event )
@@ -364,8 +405,8 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
                     }
                 }
                 else {
-                    d->colorSelectorDialog->setPreviousColor(d->foregroundColor);
-                    d->colorSelectorDialog->show();
+                    d->fgColorSelectorDialog->setPreviousColor(d->foregroundColor);
+                    d->fgColorSelectorDialog->show();
                 }
             }
         }
@@ -387,9 +428,9 @@ void KoDualColorButton::mouseReleaseEvent( QMouseEvent *event )
                 }
                 else {
                     KoColor c = d->backgroundColor;
-                    c = KisDlgInternalColorSelector::getModalColorDialog(c, this, d->colorSelectorDialog->windowTitle());
-                    d->backgroundColor = c;
-                    emit backgroundColorChanged(d->backgroundColor);
+                    d->bgColorSelectorDialog->setPreviousColor(d->backgroundColor);
+                    d->bgColorSelectorDialog->show();
+
                 }
             }
         } else {

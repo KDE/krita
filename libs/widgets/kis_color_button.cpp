@@ -317,7 +317,7 @@ void KisColorButton::KisColorButtonPrivate::_k_chooseColor()
         KisDlgInternalColorSelector *dialog = new KisDlgInternalColorSelector(q, q->color(), cfg, i18n("Choose a color"));
         dialog->setPreviousColor(q->color());
         auto setColorFn = [this, dialog]() { q->setColor(dialog->getCurrentColor()); };
-        connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
+        connect(dialog, &KisDlgInternalColorSelector::colorChosen, setColorFn);
         connect(dialog, &QDialog::accepted, setColorFn);
         m_dialog = dialog;
     } else{

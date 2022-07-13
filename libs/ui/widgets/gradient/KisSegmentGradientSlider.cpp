@@ -1080,7 +1080,7 @@ void KisSegmentGradientSlider::chooseSelectedStopColor()
                             emit selectedHandleChanged();
                             emit updateRequested();
                         };
-        connect(dialog, &KisDlgInternalColorSelector::signalForegroundColorChosen, setColorFn);
+        connect(dialog, &KisDlgInternalColorSelector::colorChosen, setColorFn);
         connect(dialog, &QDialog::accepted, setColorFn);
         colorDialog = dialog;
     } else {

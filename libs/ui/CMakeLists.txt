@@ -223,6 +223,7 @@ set(kritaui_LIB_SRCS
     tool/strokes/KisNodeSelectionRecipe.cpp
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp
+    tool/KisAsyncColorSamplerHelper.cpp
 
     toolbox/KoToolBox.cpp
     toolbox/KoToolBoxButton.cpp

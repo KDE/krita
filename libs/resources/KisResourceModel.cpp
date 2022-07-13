@@ -577,7 +577,9 @@ QVector<KisTagSP> KisAllResourcesModel::tagsForResource(int resourceId) const
     QVector<KisTagSP> tags;
     while (q.next()) {
         KisTagSP tag = KisResourceLocator::instance()->tagForUrl(q.value(0).toString(), d->resourceType);
-        tags << tag;
+        if (tag && tag->valid()) {
+            tags << tag;
+        }
     }
     return tags;
 }

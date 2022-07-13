@@ -906,6 +906,11 @@ void KisResourceLocator::saveTags()
         KisTagSP tag = tagForUrlNoCache(query.value("tags.url").toString(),
                                  query.value("resource_types.name").toString());
 
+        if (!tag || !tag->valid()) {
+            continue;
+        }
+
+
         QString filename = tag->filename();
         if (filename.isEmpty() || QFileInfo(filename).suffix().isEmpty()) {
             filename = tag->url() + ".tag";

@@ -105,6 +105,8 @@ void KisColorSmudgeOpSettingsWidget::notifyPageChanged()
         m_smudgeOptionWidget->setUseNewEngineCheckboxEnabled(brush->brushApplication() == ALPHAMASK);
         m_paintThicknessOptionWidget->setEnabled(brush->preserveLightness());
         m_overlayOptionWidget->setEnabled(brush->brushApplication() != LIGHTNESSMAP);
+
+        KisSignalsBlocker b(m_radiusStrengthOptionWidget);
         m_radiusStrengthOptionWidget->updateRange(0.0, m_smudgeOptionWidget->useNewEngine() ? 1.0 : 3.0);
     }
 }

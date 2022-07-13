@@ -83,15 +83,6 @@ void KisToolColorSampler::deactivate()
 
 bool KisToolColorSampler::sampleColor(const QPointF &pos)
 {
-    // Timer check.
-    if (m_colorSamplerDelayTimer.isActive()) {
-        return false;
-    }
-    else {
-        m_colorSamplerDelayTimer.setSingleShot(true);
-        m_colorSamplerDelayTimer.start(100);
-    }
-
     KisImageBarrierLockAdapter imageLockAdapter(currentImage(), true);
     QScopedPointer<boost::lock_guard<KisImageBarrierLockAdapter>> imageLocker;
 

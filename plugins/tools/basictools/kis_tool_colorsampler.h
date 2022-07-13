@@ -122,9 +122,6 @@ private:
 
     KoColor m_sampledColor;
 
-    // Used to skip some tablet events and update color less often
-    QTimer m_colorSamplerDelayTimer;
-
     ColorSamplerOptionsWidget *m_optionsWidget {0};
     KisTagFilterResourceProxyModel *m_tagFilterProxyModel {0};
 };

@@ -155,10 +155,6 @@ void PaletteDockerDock::setViewManager(KisViewManager* kisview)
 {
     m_view = kisview;
     m_resourceProvider = kisview->canvasResourceProvider();
-    connect(m_resourceProvider, SIGNAL(sigSavingWorkspace(KisWorkspaceResourceSP)),
-            SLOT(saveToWorkspace(KisWorkspaceResourceSP)));
-    connect(m_resourceProvider, SIGNAL(sigLoadingWorkspace(KisWorkspaceResourceSP)),
-            SLOT(loadFromWorkspace(KisWorkspaceResourceSP)));
     connect(m_resourceProvider, SIGNAL(sigFGColorChanged(KoColor)),
             this, SLOT(slotFGColorResourceChanged(KoColor)));
     kisview->nodeManager()->disconnect(m_model);
@@ -383,24 +379,6 @@ void PaletteDockerDock::slotUpdatePaletteName()
         m_ui->lblPaletteName->setText(name);
     } else {
         m_ui->lblPaletteName->setText("");
-    }
-}
-
-void PaletteDockerDock::saveToWorkspace(KisWorkspaceResourceSP workspace)
-{
-    if (!m_currentColorSet.isNull()) {
-        workspace->setProperty("palette", m_currentColorSet->name());
-    }
-}
-
-void PaletteDockerDock::loadFromWorkspace(KisWorkspaceResourceSP workspace)
-{
-    if (workspace->hasProperty("palette")) {
-        KoResourceServer<KoColorSet>* rServer = KoResourceServerProvider::instance()->paletteServer();
-        KoColorSetSP colorSet = rServer->resource("", "", workspace->getString("palette"));
-        if (colorSet) {
-            slotSetColorSet(colorSet);
-        }
     }
 }
 

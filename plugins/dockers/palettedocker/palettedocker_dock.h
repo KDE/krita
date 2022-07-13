@@ -76,9 +76,6 @@ private Q_SLOTS:
     void slotNameListSelection(const KoColor &color);
     void slotSetColorSet(KoColorSetSP colorSet);
 
-    void saveToWorkspace(KisWorkspaceResourceSP workspace);
-    void loadFromWorkspace(KisWorkspaceResourceSP workspace);
-
     void slotFGColorResourceChanged(const KoColor& color);
 
     void slotStoragesChanged(const QString &location);

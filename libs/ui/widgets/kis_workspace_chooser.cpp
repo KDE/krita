@@ -164,6 +164,7 @@ void KisWorkspaceChooser::slotSaveWorkspace()
         KisResourceUserOperations::updateResourceWithUserInput(this, workspace);
     }
 
+    m_workspaceWidgets.nameEdit->clear();
     slotUpdateWorkspaceSaveButton();
 }
 

@@ -452,6 +452,7 @@ void KisPaletteModel::slotExternalPaletteModified(QSharedPointer<KoColorSet> res
 {
     if (resource && resource == m_colorSet) {
         slotPaletteModified();
+        slotDisplayConfigurationChanged();
     }
 }
 

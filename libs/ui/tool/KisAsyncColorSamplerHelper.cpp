@@ -54,6 +54,7 @@ struct KisAsyncColorSamplerHelper::Private
 
     int sampleResourceId {0};
     bool sampleCurrentLayer {true};
+    bool updateGlobalColor {true};
 
     bool isActive {false};
     bool showPreview {false};
@@ -136,16 +137,28 @@ void KisAsyncColorSamplerHelper::activateDelayedPreview()
     m_d->currentColor = previewColor;
     m_d->baseColor = previewColor;
 
+    updateCursor(m_d->sampleCurrentLayer, m_d->sampleResourceId == KoCanvasResource::ForegroundColor);
+
+    Q_EMIT sigRequestUpdateOutline();
+}
+
+void KisAsyncColorSamplerHelper::updateCursor(bool sampleCurrentLayer, bool pickFgColor)
+{
+    const int sampleResourceId =
+            pickFgColor ?
+                KoCanvasResource::ForegroundColor :
+                KoCanvasResource::BackgroundColor;
+
     QCursor cursor;
 
-    if (m_d->sampleCurrentLayer) {
-        if (m_d->sampleResourceId == KoCanvasResource::ForegroundColor) {
+    if (sampleCurrentLayer) {
+        if (sampleResourceId == KoCanvasResource::ForegroundColor) {
             cursor = KisCursor::samplerLayerForegroundCursor();
         } else {
             cursor = KisCursor::samplerLayerBackgroundCursor();
         }
     } else {
-        if (m_d->sampleResourceId == KoCanvasResource::ForegroundColor) {
+        if (sampleResourceId == KoCanvasResource::ForegroundColor) {
             cursor = KisCursor::samplerImageForegroundCursor();
         } else {
             cursor = KisCursor::samplerImageBackgroundCursor();
@@ -153,7 +166,16 @@ void KisAsyncColorSamplerHelper::activateDelayedPreview()
     }
 
     Q_EMIT sigRequestCursor(cursor);
-    Q_EMIT sigRequestUpdateOutline();
+}
+
+void KisAsyncColorSamplerHelper::setUpdateGlobalColor(bool value)
+{
+    m_d->updateGlobalColor = value;
+}
+
+bool KisAsyncColorSamplerHelper::updateGlobalColor() const
+{
+    return m_d->updateGlobalColor;
 }
 
 void KisAsyncColorSamplerHelper::deactivate()
@@ -178,11 +200,13 @@ void KisAsyncColorSamplerHelper::deactivate()
     Q_EMIT sigRequestUpdateOutline();
 }
 
-void KisAsyncColorSamplerHelper::startAction(const QPointF &docPoint)
+void KisAsyncColorSamplerHelper::startAction(const QPointF &docPoint, int radius, int blend)
 {
-    KisColorSamplerStrokeStrategy *strategy = new KisColorSamplerStrokeStrategy();
+    KisColorSamplerStrokeStrategy *strategy = new KisColorSamplerStrokeStrategy(radius, blend);
     connect(strategy, &KisColorSamplerStrokeStrategy::sigColorUpdated,
             this, &KisAsyncColorSamplerHelper::slotColorSamplingFinished);
+    connect(strategy, &KisColorSamplerStrokeStrategy::sigFinalColorSelected,
+            this, &KisAsyncColorSamplerHelper::sigFinalColorSelected);
 
     m_d->strokeId = m_d->strokesFacade()->startStroke(strategy);
     m_d->samplingCompressor->start(docPoint);
@@ -197,6 +221,10 @@ void KisAsyncColorSamplerHelper::continueAction(const QPointF &docPoint)
 void KisAsyncColorSamplerHelper::endAction()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->strokeId);
+
+    m_d->strokesFacade()->addJob(m_d->strokeId,
+        new KisColorSamplerStrokeStrategy::FinalizeData());
+
     m_d->strokesFacade()->endStroke(m_d->strokeId);
     m_d->strokeId.clear();
 }
@@ -269,7 +297,12 @@ void KisAsyncColorSamplerHelper::slotColorSamplingFinished(const KoColor &_color
     KoColor color(_color);
 
     color.setOpacity(OPACITY_OPAQUE_U8);
-    m_d->canvas->resourceManager()->setResource(m_d->sampleResourceId, color);
+
+    if (m_d->updateGlobalColor) {
+        m_d->canvas->resourceManager()->setResource(m_d->sampleResourceId, color);
+    }
+
+    Q_EMIT sigColorSelected(color);
 
     if (!m_d->showPreview) return;
 

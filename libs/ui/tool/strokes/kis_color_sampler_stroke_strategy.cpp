@@ -16,20 +16,19 @@ struct KisColorSamplerStrokeStrategy::Private
     bool shouldSkipWork;
     int radius = 1;
     int blend = 100;
+
+    boost::optional<KoColor> lastSelectedColor;
 };
 
-KisColorSamplerStrokeStrategy::KisColorSamplerStrokeStrategy(int lod)
+KisColorSamplerStrokeStrategy::KisColorSamplerStrokeStrategy(int radius, int blend, int lod)
     : KisSimpleStrokeStrategy(QLatin1String("KisColorSamplerStrokeStrategy")),
       m_d(new Private)
 {
     setSupportsWrapAroundMode(true);
     enableJob(KisSimpleStrokeStrategy::JOB_DOSTROKE);
 
-    KisToolUtils::ColorSamplerConfig config;
-    config.load();
-
-    m_d->radius = qMax(1, qRound(config.radius * KisLodTransform::lodToScale(lod)));
-    m_d->blend = config.blend;
+    m_d->radius = qMax(1, qRound(radius * KisLodTransform::lodToScale(lod)));
+    m_d->blend = blend;
 }
 
 KisColorSamplerStrokeStrategy::~KisColorSamplerStrokeStrategy()
@@ -41,12 +40,19 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     if (m_d->shouldSkipWork) return;
 
     Data *d = dynamic_cast<Data*>(data);
-    KIS_ASSERT_RECOVER_RETURN(d);
+    FinalizeData *finalize = dynamic_cast<FinalizeData*>(data);
 
-    KoColor color;
-    KoColor previous = d->currentColor;
-    if (KisToolUtils::sampleColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend) == true) {
-        emit sigColorUpdated(color);
+    if (d) {
+        KoColor color;
+        KoColor previous = d->currentColor;
+        if (KisToolUtils::sampleColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend) == true) {
+            m_d->lastSelectedColor = color;
+            emit sigColorUpdated(color);
+        }
+    } else if (finalize) {
+        if (m_d->lastSelectedColor) {
+            emit sigFinalColorSelected(*m_d->lastSelectedColor);
+        }
     }
 }
 
@@ -54,7 +60,7 @@ KisStrokeStrategy* KisColorSamplerStrokeStrategy::createLodClone(int levelOfDeta
 {
     m_d->shouldSkipWork = true;
 
-    KisColorSamplerStrokeStrategy *lodStrategy = new KisColorSamplerStrokeStrategy(levelOfDetail);
+    KisColorSamplerStrokeStrategy *lodStrategy = new KisColorSamplerStrokeStrategy(m_d->radius, m_d->blend, levelOfDetail);
     connect(lodStrategy, &KisColorSamplerStrokeStrategy::sigColorUpdated,
             this, &KisColorSamplerStrokeStrategy::sigColorUpdated,
             Qt::DirectConnection);

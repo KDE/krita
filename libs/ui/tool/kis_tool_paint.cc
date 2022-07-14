@@ -322,7 +322,10 @@ void KisToolPaint::beginAlternateAction(KoPointerEvent *event, AlternateAction a
     if (isSamplingAction(action)) {
         setMode(SECONDARY_PAINT_MODE);
 
-        m_colorSamplerHelper.startAction(event->point);
+        KisToolUtils::ColorSamplerConfig config;
+        config.load();
+
+        m_colorSamplerHelper.startAction(event->point, config.radius, config.blend);
         requestUpdateOutline(event->point, event);
     } else {
         KisTool::beginAlternateAction(event, action);

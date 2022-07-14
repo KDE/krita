@@ -17,6 +17,7 @@
 #include <kis_icon.h>
 #include <KoColorSet.h>
 #include <QPainter>
+#include <KisAsyncColorSamplerHelper.h>
 
 class KisTagFilterResourceProxyModel;
 
@@ -37,7 +38,6 @@ public:
 class KisToolColorSampler : public KisTool
 {
     Q_OBJECT
-    Q_PROPERTY(bool toForeground READ toForeground WRITE setToForeground NOTIFY toForegroundChanged)
 
 public:
     KisToolColorSampler(KoCanvasBase *canvas);
@@ -73,20 +73,11 @@ public:
 
     void paint(QPainter &gc, const KoViewConverter &converter) override;
 
-    bool toForeground() const;
-
-Q_SIGNALS:
-    void toForegroundChanged();
-
 protected:
-    bool isOutlineEnabled() const;
-    void setOutlineEnabled(bool enabled);
-
     void activate(const QSet<KoShape*> &) override;
     void deactivate() override;
 
 public Q_SLOTS:
-    void setToForeground(bool newValue);
     void slotSetUpdateColor(bool);
     void slotSetNormaliseValues(bool);
     void slotSetAddPalette(bool);
@@ -97,30 +88,27 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotChangePalette(int);
 
+    void slotColorPickerRequestedCursor(const QCursor &cursor);
+    void slotColorPickerRequestedCursorReset();
+    void slotColorPickerRequestedOutlineUpdate();
+    void slotColorPickerSelectedColor(const KoColor &color);
+    void slotColorPickerSelectionFinished(const KoColor &color);
+
 private:
     void displaySampledColor();
-    bool sampleColor(const QPointF& pos);
     void updateOptionWidget();
-    std::pair<QRectF, QRectF> colorPreviewDocRect(const QPointF &outlineDocPoint);
 
     // Configuration
     QScopedPointer<KisToolUtils::ColorSamplerConfig> m_config;
 
     bool m_isActivated {false};
-    bool m_colorPreviewShowComparePlate {false};
-
-    bool m_isOutlineEnabled {false};
     QPointF m_outlineDocPoint;
 
-
-    QRectF m_oldColorPreviewBaseColorRect;
-    QColor m_oldColorPreviewBaseColor;
-    QColor m_currentColor;
-
     QRectF m_oldColorPreviewUpdateRect;
-    QRectF m_oldColorPreviewRect;
 
     KoColor m_sampledColor;
+
+    KisAsyncColorSamplerHelper m_helper;
 
     ColorSamplerOptionsWidget *m_optionsWidget {0};
     KisTagFilterResourceProxyModel *m_tagFilterProxyModel {0};

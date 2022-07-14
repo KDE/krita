@@ -9,22 +9,15 @@
 
 #include "kis_tool_colorsampler.h"
 
-#include <boost/thread/locks.hpp>
-#include <QMessageBox>
 #include <kis_cursor.h>
-#include <KisDocument.h>
 #include <kis_canvas2.h>
-#include <KisReferenceImagesLayer.h>
 #include <KoCanvasBase.h>
-#include <kis_random_accessor_ng.h>
 #include <KoResourceServerProvider.h>
-#include <KoMixColorsOp.h>
-#include <kis_wrapped_rect.h>
+#include <kis_canvas_resource_provider.h>
 #include <KisTagFilterResourceProxyModel.h>
 #include <KisResourceTypes.h>
-#include <kis_image_barrier_lock_adapter.h>
-#include <QPainter>
-
+#include <KisViewManager.h>
+#include "kis_display_color_converter.h"
 #include "kis_tool_utils.h"
 
 
@@ -36,9 +29,15 @@ const int SAMPLE_MERGED = 0;
 
 KisToolColorSampler::KisToolColorSampler(KoCanvasBase *canvas)
     : KisTool(canvas, KisCursor::samplerCursor()),
-      m_config(new KisToolUtils::ColorSamplerConfig)
+      m_config(new KisToolUtils::ColorSamplerConfig),
+      m_helper(dynamic_cast<KisCanvas2*>(canvas))
 {
     setObjectName("tool_colorsampler");
+    connect(&m_helper, SIGNAL(sigRequestCursor(QCursor)), this, SLOT(slotColorPickerRequestedCursor(QCursor)));
+    connect(&m_helper, SIGNAL(sigRequestCursorReset()), this, SLOT(slotColorPickerRequestedCursorReset()));
+    connect(&m_helper, SIGNAL(sigRequestUpdateOutline()), this, SLOT(slotColorPickerRequestedOutlineUpdate()));
+    connect(&m_helper, SIGNAL(sigColorSelected(KoColor)), this, SLOT(slotColorPickerSelectedColor(KoColor)));
+    connect(&m_helper, SIGNAL(sigFinalColorSelected(KoColor)), this, SLOT(slotColorPickerSelectionFinished(KoColor)));
 }
 
 KisToolColorSampler::~KisToolColorSampler()
@@ -48,24 +47,61 @@ KisToolColorSampler::~KisToolColorSampler()
     }
 }
 
+void KisToolColorSampler::slotColorPickerRequestedCursor(const QCursor &cursor)
+{
+    useCursor(cursor);
+}
+
+void KisToolColorSampler::slotColorPickerRequestedCursorReset()
+{
+    /// we explicitly avoid resetting the cursor style
+    /// to avoid blinking of the cursor
+}
+
+void KisToolColorSampler::slotColorPickerRequestedOutlineUpdate()
+{
+    requestUpdateOutline(m_outlineDocPoint, 0);
+}
+
+void KisToolColorSampler::slotColorPickerSelectedColor(const KoColor &color)
+{
+    m_sampledColor = color;
+    displaySampledColor();
+}
+
+void KisToolColorSampler::slotColorPickerSelectionFinished(const KoColor &color)
+{
+    if (m_config->addColorToCurrentPalette) {
+        KisSwatch swatch;
+        swatch.setColor(m_sampledColor);
+        // We don't ask for a name, too intrusive here
+
+        QModelIndex idx = m_tagFilterProxyModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
+        KoColorSetSP palette = qSharedPointerDynamicCast<KoColorSet>(m_tagFilterProxyModel->resourceForIndex(idx));
+
+        if (palette) {
+            KisSwatchGroup::SwatchInfo info =
+                    palette->getClosestColorInfo(m_sampledColor);
+
+            if (info.swatch.color() != m_sampledColor) {
+                palette->add(swatch);
+                if (!KoResourceServerProvider::instance()->paletteServer()->updateResource(palette)) {
+                    KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(this->canvas());
+                    canvas->viewManager()->showFloatingMessage(i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), koIcon("object-locked"));
+                }
+            }
+        }
+    }
+}
 
 void KisToolColorSampler::paint(QPainter &gc, const KoViewConverter &converter)
 {
-    //Show sampled color preview
-    Q_UNUSED(converter);
-
-
-        const QRectF viewRect = converter.documentToView(m_oldColorPreviewRect);
-        gc.fillRect(viewRect, m_currentColor);
-
-        if (m_colorPreviewShowComparePlate) {
-            const QRectF baseColorRect = converter.documentToView(m_oldColorPreviewBaseColorRect);
-            gc.fillRect(baseColorRect, m_oldColorPreviewBaseColor);
-        }
+    m_helper.paint(gc, converter);
 }
 
 void KisToolColorSampler::activate(const QSet<KoShape*> &shapes)
 {
+
     m_isActivated = true;
     m_config->load();
 
@@ -77,247 +113,90 @@ void KisToolColorSampler::activate(const QSet<KoShape*> &shapes)
 void KisToolColorSampler::deactivate()
 {
     m_config->save();
+
     m_isActivated = false;
     KisTool::deactivate();
 }
 
-bool KisToolColorSampler::sampleColor(const QPointF &pos)
-{
-    KisImageBarrierLockAdapter imageLockAdapter(currentImage(), true);
-    QScopedPointer<boost::lock_guard<KisImageBarrierLockAdapter>> imageLocker;
-
-    m_sampledColor.setOpacity(0.0);
-
-    // Sample from reference images.
-    if (m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED) {
-        auto *kisCanvas = dynamic_cast<KisCanvas2 *>(canvas());
-        KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, false);
-        KisSharedPtr<KisReferenceImagesLayer> referenceImageLayer =
-            kisCanvas->imageView()->document()->referenceImagesLayer();
-
-        if (referenceImageLayer && kisCanvas->referenceImagesDecoration()->visible()) {
-            QColor color = referenceImageLayer->getPixel(pos);
-            if (color.isValid()) {
-                m_sampledColor.fromQColor(color);
-            }
-        }
-    }
-
-    if (m_sampledColor.opacityU8() == OPACITY_TRANSPARENT_U8) {
-        if (!currentImage()->bounds().contains(pos.toPoint()) &&
-            !currentImage()->wrapAroundModePermitted()) {
-            return false;
-        }
-
-        KisPaintDeviceSP dev;
-
-        if (m_optionsWidget->cmbSources->currentIndex() != SAMPLE_MERGED &&
-            currentNode() && currentNode()->colorSampleSourceDevice()) {
-            dev = currentNode()->colorSampleSourceDevice();
-        }
-        else {
-            imageLocker.reset(new boost::lock_guard<KisImageBarrierLockAdapter>(imageLockAdapter));
-            dev = currentImage()->projection();
-        }
-
-        KoColor previousColor = canvas()->resourceManager()->foregroundColor();
-
-        KisToolUtils::sampleColor(m_sampledColor, dev, pos.toPoint(), &previousColor, m_config->radius, m_config->blend);
-    }
-
-
-    if (m_config->updateColor &&
-        m_sampledColor.opacityU8() != OPACITY_TRANSPARENT_U8) {
-
-        KoColor publicColor = m_sampledColor;
-        publicColor.setOpacity(OPACITY_OPAQUE_U8); // Alpha is unwanted for FG and BG colors.
-
-        if (m_config->toForegroundColor) {
-            canvas()->resourceManager()->setResource(KoCanvasResource::ForegroundColor, publicColor);
-        }
-        else {
-            canvas()->resourceManager()->setResource(KoCanvasResource::BackgroundColor, publicColor);
-        }
-    }
-
-    m_currentColor = m_sampledColor.toQColor();
-    return true;
-}
-
 void KisToolColorSampler::beginPrimaryAction(KoPointerEvent *event)
 {
-    m_oldColorPreviewBaseColor = m_currentColor;
-    bool sampleMerged = m_optionsWidget->cmbSources->currentIndex() == SAMPLE_MERGED;
-    if (!sampleMerged) {
-        if (!currentNode()) {
-            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot sample a color as no layer is active."));
-            event->ignore();
-            return;
-        }
-        if (!currentNode()->visible()) {
-            QMessageBox::information(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot sample a color as the active layer is not visible."));
-            event->ignore();
-            return;
-        }
-    }
-
-    QPoint pos = convertToImagePixelCoordFloored(event);
-
-    setMode(KisTool::PAINT_MODE);
-
-    bool sampled = sampleColor(pos);
-    if (!sampled) {
-        // Color sampling has to start in the visible part of the layer
-        event->ignore();
-        return;
-    }
-
-    m_colorPreviewShowComparePlate = true;
-    displaySampledColor();
+    m_helper.setUpdateGlobalColor(m_config->updateColor);
+    m_helper.activate(!m_config->sampleMerged, m_config->toForegroundColor);
+    m_helper.startAction(event->point, m_config->radius, m_config->blend);
     requestUpdateOutline(event->point, event);
 
+    setMode(KisTool::PAINT_MODE);
 }
 
 void KisToolColorSampler::mouseMoveEvent(KoPointerEvent *event){
     KisTool::mouseMoveEvent(event);
-    requestUpdateOutline(event->point, event);
 }
 
 void KisToolColorSampler::continuePrimaryAction(KoPointerEvent *event)
 {
-
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    QPoint pos = convertToImagePixelCoordFloored(event);
-    sampleColor(pos);
-    displaySampledColor();
-
+    m_helper.continueAction(event->point);
     requestUpdateOutline(event->point, event);
-
 }
-
-#include "kis_display_color_converter.h"
 
 void KisToolColorSampler::endPrimaryAction(KoPointerEvent *event)
 {
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
-    if (m_config->addColorToCurrentPalette) {
-        KisSwatch swatch;
-        swatch.setColor(m_sampledColor);
-        // We don't ask for a name, too intrusive here
-
-        QModelIndex idx = m_tagFilterProxyModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
-        KoColorSetSP palette = qSharedPointerDynamicCast<KoColorSet>(m_tagFilterProxyModel->resourceForIndex(idx));
-
-        if (palette) {
-            palette->add(swatch);
-            if (!KoResourceServerProvider::instance()->paletteServer()->updateResource(palette)) {
-                QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()));
-            }
-        }
-    }
-    m_colorPreviewShowComparePlate = false;
-
-
+    m_helper.endAction();
+    m_helper.deactivate();
     requestUpdateOutline(event->point, event);
 
 }
 void KisToolColorSampler::activatePrimaryAction()
 {
-    setOutlineEnabled(true);
-    KisTool::activatePrimaryAction();
-    m_currentColor = canvas()->resourceManager()->foregroundColor().toQColor();
-
+    /**
+     * We explicitly avoid calling KisTool::activatePrimaryAction()
+     * here, because it resets the cursor, causing cursor blinking
+     */
+    m_helper.updateCursor(!m_config->sampleMerged, m_config->toForegroundColor);
 }
 
 void KisToolColorSampler::deactivatePrimaryAction()
 {
-    setOutlineEnabled(false);
-
-    KisTool::deactivatePrimaryAction();
-}
-
-bool KisToolColorSampler::isOutlineEnabled() const
-{
-    return m_isOutlineEnabled;
-}
-
-void KisToolColorSampler::setOutlineEnabled(bool value)
-{
-    m_isOutlineEnabled = value;
-    requestUpdateOutline(m_outlineDocPoint, 0);
-}
-
-std::pair<QRectF,QRectF> KisToolColorSampler::colorPreviewDocRect(const QPointF &outlineDocPoint)
-{
-    KisConfig cfg(true);
-
-    const QRectF colorPreviewViewRect = cfg.colorPreviewRect();
-
-    const QRectF colorPreviewBaseColorViewRect =
-        m_colorPreviewShowComparePlate ?
-            colorPreviewViewRect.translated(colorPreviewViewRect.width(), 0) :
-            QRectF();
-
-    const QRectF colorPreviewDocumentRect = canvas()->viewConverter()->viewToDocument(colorPreviewViewRect);
-    const QRectF colorPreviewBaseColorDocumentRect =
-        canvas()->viewConverter()->viewToDocument(colorPreviewBaseColorViewRect);
-
-    return std::make_pair(colorPreviewDocumentRect.translated(outlineDocPoint),
-                          colorPreviewBaseColorDocumentRect.translated(outlineDocPoint));
+    /**
+     * We explicitly avoid calling KisTool::endPrimaryAction()
+     * here, because it resets the cursor, causing cursor blinking
+     */
 }
 
 void KisToolColorSampler::requestUpdateOutline(const QPointF &outlineDocPoint, const KoPointerEvent *event)
 {
     Q_UNUSED(event);
-    if (isOutlineEnabled()){
-        KisConfig cfg(true);
 
-        QRectF outlineDocRect;
+    KisConfig cfg(true);
 
-        QRectF colorPreviewDocRect;
-        QRectF colorPreviewBaseColorDocRect;
-        QRectF colorPreviewDocUpdateRect;
-        colorPreviewDocRect = cfg.colorPreviewRect();
+    QRectF colorPreviewDocUpdateRect;
 
-        qreal zoomX;
-        qreal zoomY;
-        canvas()->viewConverter()->zoom(&zoomX, &zoomY);
-        qreal xoffset = 2.0/zoomX;
-        qreal yoffset = 2.0/zoomY;
+    qreal zoomX;
+    qreal zoomY;
+    canvas()->viewConverter()->zoom(&zoomX, &zoomY);
+    qreal xoffset = 2.0/zoomX;
+    qreal yoffset = 2.0/zoomY;
 
-        m_outlineDocPoint = outlineDocPoint;
-        if (!outlineDocRect.isEmpty()) {
-            outlineDocRect.adjust(-xoffset,-yoffset,xoffset,yoffset);
-        }
+    m_outlineDocPoint = outlineDocPoint;
 
-        std::tie(colorPreviewDocRect, colorPreviewBaseColorDocRect) =
-                this->colorPreviewDocRect(m_outlineDocPoint);
+    colorPreviewDocUpdateRect = m_helper.colorPreviewDocRect(m_outlineDocPoint);
 
-        colorPreviewDocUpdateRect = colorPreviewDocRect | colorPreviewBaseColorDocRect;
-
-        if (!colorPreviewDocUpdateRect.isEmpty()) {
-            colorPreviewDocUpdateRect = colorPreviewDocUpdateRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
-        }
-
-        if (!m_oldColorPreviewUpdateRect.isEmpty()){
-            canvas()->updateCanvas(m_oldColorPreviewUpdateRect);
-        }
-        if (!colorPreviewDocUpdateRect.isEmpty()){
-            canvas()->updateCanvas(colorPreviewDocUpdateRect);
-
-        }
-
-        m_oldColorPreviewRect = colorPreviewDocRect;
-        m_oldColorPreviewBaseColorRect = colorPreviewBaseColorDocRect;
-        m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
-
-    } else {
-        m_oldColorPreviewBaseColorRect = QRect();
-        m_oldColorPreviewRect = QRect();
+    if (!colorPreviewDocUpdateRect.isEmpty()) {
+        colorPreviewDocUpdateRect = colorPreviewDocUpdateRect.adjusted(-xoffset,-yoffset,xoffset,yoffset);
     }
 
+    if (!m_oldColorPreviewUpdateRect.isEmpty()){
+        canvas()->updateCanvas(m_oldColorPreviewUpdateRect);
+    }
+
+    if (!colorPreviewDocUpdateRect.isEmpty()){
+        canvas()->updateCanvas(colorPreviewDocUpdateRect);
+    }
+
+    m_oldColorPreviewUpdateRect = colorPreviewDocUpdateRect;
 }
 
 
@@ -359,15 +238,20 @@ void KisToolColorSampler::displaySampledColor()
             item->setText(1, pc.valueText);
         }
 
-        KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
-        KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_sampledColor, Float32BitsColorDepthID);
-        QVector<float> values(4);
-        newColor.colorSpace()->normalisedChannelsValue(newColor.data(), values);
 
-        for (int i = 0; i < values.size(); i++) {
-            QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
-            item->setText(0, QString("DisplayCh%1").arg(i));
-            item->setText(1, QString::number(values[i]));
+        if (qEnvironmentVariableIsSet("KRITA_DEBUG_DISPLAY_COLOR")) {
+            KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+            KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_sampledColor, Float32BitsColorDepthID);
+            KIS_SAFE_ASSERT_RECOVER_RETURN(newColor.colorSpace()->colorModelId() == RGBAColorModelID);
+
+            QVector<float> values(4);
+            newColor.colorSpace()->normalisedChannelsValue(newColor.data(), values);
+
+            for (int i = 0; i < values.size(); i++) {
+                QTreeWidgetItem *item = new QTreeWidgetItem(m_optionsWidget->listViewChannels);
+                item->setText(0, QString("DisplayCh%1").arg(i));
+                item->setText(1, QString::number(values[i]));
+            }
         }
     }
 }
@@ -435,17 +319,6 @@ void KisToolColorSampler::updateOptionWidget()
     m_optionsWidget->cbPalette->setChecked(m_config->addColorToCurrentPalette);
     m_optionsWidget->radius->setValue(m_config->radius);
     m_optionsWidget->blend->setValue(m_config->blend);
-}
-
-void KisToolColorSampler::setToForeground(bool newValue)
-{
-    m_config->toForegroundColor = newValue;
-    emit toForegroundChanged();
-}
-
-bool KisToolColorSampler::toForeground() const
-{
-    return m_config->toForegroundColor;
 }
 
 void KisToolColorSampler::slotSetUpdateColor(bool state)

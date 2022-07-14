@@ -419,6 +419,8 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 
         m_d->titlebar->transport->setPlaying(m_d->canvas->animationState()->playbackState() == PlaybackState::PLAYING);
 
+        m_d->titlebar->volumeSlider->setValue(m_d->framesModel->audioVolume() * 100.0);
+
         connect(m_d->titlebar->sbFrameRate, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setFramerate(int)));
         connect(m_d->titlebar->sbStartFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeStartFrame(int)));
         connect(m_d->titlebar->sbEndFrame, SIGNAL(valueChanged(int)), m_d->canvas->image()->animationInterface(), SLOT(setDocumentRangeEndFrame(int)));

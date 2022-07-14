@@ -174,29 +174,30 @@ public:
             m_d->initializeConsumers();
         }
 
-        if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
-            m_d->pushConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
-            m_d->pushConsumer->start();
-        } else {
-            m_d->pullConsumer->connect_producer(*m_d->activeProducer());
-            m_d->pullConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
-            m_d->pullConsumer->start();
-        }
-
         if (m_d->activeCanvas) {
-            KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
-            m_d->activeProducer()->set("start_frame", animInterface->activePlaybackRange().start());
-            m_d->activeProducer()->set("end_frame", animInterface->activePlaybackRange().end());
-            const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
-            m_d->activeProducer()->set("limit_enabled", shouldLimit);
-        }
+            if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
+                m_d->pushConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
+                m_d->pushConsumer->start();
+            } else {
+                m_d->pullConsumer->connect_producer(*m_d->activeProducer());
+                m_d->pullConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
+                m_d->pullConsumer->start();
+            }
 
-        if (m_d->activeCanvas && m_d->canvasProducers.contains(m_d->activeCanvas)) {
-            if ( m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() >= 0) {
-                m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame());
+            {
+                KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
+                m_d->activeProducer()->set("start_frame", animInterface->activePlaybackRange().start());
+                m_d->activeProducer()->set("end_frame", animInterface->activePlaybackRange().end());
+                const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
+                m_d->activeProducer()->set("limit_enabled", shouldLimit);
+            }
+
+            if (m_d->canvasProducers.contains(m_d->activeCanvas)) {
+                if ( m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() >= 0) {
+                    m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame());
+                }
             }
         }
-
     }
 
 private:
@@ -261,10 +262,6 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
 
         if (flags & SEEK_PUSH_AUDIO) {
             m_d->sigPushAudioCompressor->start(frameIndex);
-        }
-
-        if (flags & SEEK_FINALIZE) {
-            hook_finalizeFrame();
         }
 
         m_d->activeCanvasAnimationState()->showFrame(frameIndex, (flags & SEEK_FINALIZE) > 0);
@@ -536,16 +533,11 @@ void KisPlaybackEngine::setupProducer(boost::optional<QFileInfo> file)
     producer->set("limit_enabled", false);
 }
 
-void KisPlaybackEngine::hook_finalizeFrame()
-{
-    ENTER_FUNCTION() << "FINALIZE";
-}
-
 void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 {
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
 
-    if (!canvas && m_d->activeCanvas == canvas) {
+    if (m_d->activeCanvas == canvas) {
         return;
     }
 
@@ -608,7 +600,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 }
 
 void KisPlaybackEngine::unsetCanvas() {
-    // TODO: What do we **NEED** to do here?
+    setCanvas(nullptr);
 }
 
 void KisPlaybackEngine::throttledShowFrame(const int frame)

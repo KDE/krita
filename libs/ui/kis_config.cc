@@ -2411,14 +2411,14 @@ void KisConfig::setRenamePastedLayers(bool value)
     m_cfg.writeEntry("renamePastedLayers", value);
 }
 
-bool KisConfig::displayLayerSubtitles(bool defaultValue) const
+KisConfig::LayerSubtitleStyle KisConfig::layerSubtitleStyle(bool defaultValue) const
 {
-    return defaultValue ? false : m_cfg.readEntry("displayLayerSubtitles", false);
+    return (KisConfig::LayerSubtitleStyle)(defaultValue ? SUBTITLE_NONE : m_cfg.readEntry("layerSubtitleStyle", (int)SUBTITLE_NONE));
 }
 
-void KisConfig::setDisplayLayerSubtitles(bool value)
+void KisConfig::setLayerSubtitleStyle(KisConfig::LayerSubtitleStyle value)
 {
-    m_cfg.writeEntry("displayLayerSubtitles", value);
+    m_cfg.writeEntry("layerSubtitleStyle", (int)value);
 }
 
 int KisConfig::layerSubtitleOpacity(bool defaultValue) const

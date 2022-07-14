@@ -378,7 +378,7 @@ void NodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, con
     const QString text = index.data(Qt::DisplayRole).toString();
     const QString elided = p->fontMetrics().elidedText(text, Qt::ElideRight, rc.width());
     KisConfig cfg(true);
-    if (!cfg.displayLayerSubtitles()) {
+    if (cfg.layerSubtitleStyle() == KisConfig::LayerSubtitleStyle::SUBTITLE_NONE) {
         p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
     }
     else {

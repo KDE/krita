@@ -13,6 +13,7 @@
 #include <QPointer>
 
 #include <KoColorSpaceConstants.h>
+#include <KoCompositeOpRegistry.h>
 
 #include <klocalizedstring.h>
 
@@ -532,6 +533,15 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         return node->isAnimated();
     }
     case KisNodeModel::SubtitleRole: {
+        // These layer types' opacity and blending modes cannot be changed,
+        // so there's little point in showing them
+        if (node->inherits("KisFilterMask") ||
+            node->inherits("KisTransparencyMask") ||
+            node->inherits("KisTransformMask") ||
+            node->inherits("KisSelectionMask")) {
+            return "";
+        }
+        const KisConfig::LayerSubtitleStyle subtitleStyle = KisConfig(true).layerSubtitleStyle();
         const int opacity = round(node->opacity() * 100.0 / 255);
         const QString opacityString = QString::number(opacity);
         const QString compositeOpId = node->compositeOpId();
@@ -540,8 +550,24 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
         if (node->compositeOp()) {
             compositeOpDesc = node->compositeOp()->description();
         }
+        QString defaultOpId = COMPOSITE_OVER;   // "normal";
+        if (node->inherits("KisAdjustmentLayer")) {
+            defaultOpId = COMPOSITE_COPY;
+        }
+        else if (node->inherits("KisColorizeMask")) {
+            defaultOpId = COMPOSITE_BEHIND;
+        }
         QString subtitle = "";
-        if (!(opacity == 100 && compositeOpId == "normal")) {
+        if (subtitleStyle == KisConfig::LayerSubtitleStyle::SUBTITLE_DETAILED ||
+                !(opacity == 100 && compositeOpId == defaultOpId)) {
+            if (subtitleStyle == KisConfig::LayerSubtitleStyle::SUBTITLE_SIMPLE) {
+                if (opacity == 100) {
+                    return QString(compositeOpDesc);
+                }
+                if (compositeOpId == defaultOpId) {
+                    return QString("%1%2").arg(opacityString).arg(i18n("%"));
+                }
+            }
             subtitle = QString("%1%2 %3").arg(opacityString).arg(i18n("%")).arg(compositeOpDesc);
         }
         return subtitle;

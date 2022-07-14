@@ -32,6 +32,8 @@
 #include "kis_signal_auto_connection.h"
 #include <QSlider>
 #include <QCheckBox>
+#include <kis_slider_spin_box.h>
+#include <QComboBox>
 
 class QModelIndex;
 
@@ -127,7 +129,7 @@ private Q_SLOTS:
 
     void slotUpdateThumbnailIconSize();
     void slotUpdateTreeIndentation();
-    void slotUpdateDisplayLayerSubtitles();
+    void slotUpdateLayerSubtitleStyle();
     void slotUpdateLayerSubtitleOpacity();
     void slotUpdateUseInlineLayerSubtitles();
 
@@ -175,8 +177,8 @@ private:
     KisLayerFilterWidget* layerFilterWidget;
     QSlider *thumbnailSizeSlider;
     QSlider *indentationSlider;
-    QCheckBox *subtitleChkbox;
-    QSlider *subtitleOpacitySlider;
+    QComboBox *subtitleCombobox;
+    KisSliderSpinBox *subtitleOpacitySlider;
     QCheckBox *subtitleInlineChkbox;
 
     KisNodeSP m_activeNode;

@@ -356,40 +356,60 @@ LayerBox::LayerBox()
     connect(&m_treeIndentationCompressor, SIGNAL(timeout()), SLOT(slotUpdateTreeIndentation()));
 
 
-    // layer subtitle settings
-    subtitleChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Display Subtitles"), this);
-    subtitleChkbox->setToolTip(i18nc("@item:tooltip", "Layer opacity and blending mode"));
-    subtitleChkbox->setChecked(cfg.displayLayerSubtitles());
+    // Layer subtitle settings:
+    // subtitle style combobox
+    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, combobox", "Subtitle Style"));
+    subtitleCombobox = new QComboBox(this);
+    subtitleCombobox->setToolTip(i18nc("@item:tooltip", "None: Show nothing.\n"
+                                                        "Simple: Show changed opacities or blending modes.\n"
+                                                        "Balanced: Show both opacity and blending mode if either are changed.\n"
+                                                        "Detailed: Show both opacity and blending mode even if unchanged."));
+    subtitleCombobox->insertItems(0, QStringList ({
+        i18nc("@item:inlistbox Layer Docker subtitle style", "None"),
+        i18nc("@item:inlistbox Layer Docker subtitle style", "Simple"),
+        i18nc("@item:inlistbox Layer Docker subtitle style", "Balanced"),
+        i18nc("@item:inlistbox Layer Docker subtitle style", "Detailed"),
+    }));
+    subtitleCombobox->setCurrentIndex((int)cfg.layerSubtitleStyle());
 
-    QWidgetAction *chkboxAction = new QWidgetAction(this);
-    chkboxAction->setDefaultWidget(subtitleChkbox);
-    configureMenu->addAction(chkboxAction);
+    QWidgetAction *cmbboxAction = new QWidgetAction(this);
+    cmbboxAction->setDefaultWidget(subtitleCombobox);
+    configureMenu->addAction(cmbboxAction);
+    connect(subtitleCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateLayerSubtitleStyle()));
 
-    connect(subtitleChkbox, SIGNAL(stateChanged(int)), SLOT(slotUpdateDisplayLayerSubtitles()));
-
-    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, slider", "Subtitle Opacity"));
-    subtitleOpacitySlider = new QSlider(Qt::Horizontal, this);
+    // subtitle opacity slider
+    subtitleOpacitySlider = new KisSliderSpinBox(this);
+    subtitleOpacitySlider->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
+    subtitleOpacitySlider->setSuffix(i18n("%"));
+    subtitleOpacitySlider->setToolTip(i18nc("@item:tooltip", "Subtitle text opacity"));
     // 55% is the opacity of nonvisible layer text
     subtitleOpacitySlider->setRange(55, 100);
     subtitleOpacitySlider->setMinimumSize(40, 20);
     subtitleOpacitySlider->setSingleStep(5);
-    subtitleOpacitySlider->setPageStep(10);
+    subtitleOpacitySlider->setPageStep(15);
     subtitleOpacitySlider->setValue(cfg.layerSubtitleOpacity());
+    if (subtitleCombobox->currentIndex() == 0) {
+        subtitleOpacitySlider->setDisabled(true);
+    }
 
     sliderAction= new QWidgetAction(this);
     sliderAction->setDefaultWidget(subtitleOpacitySlider);
     configureMenu->addAction(sliderAction);
-
     connect(subtitleOpacitySlider, SIGNAL(valueChanged(int)), &m_subtitleOpacityCompressor, SLOT(start()));
     connect(&m_subtitleOpacityCompressor, SIGNAL(timeout()), SLOT(slotUpdateLayerSubtitleOpacity()));
 
-    subtitleInlineChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Inline Subtitles"), this);
+    // subtitle inline checkbox
+    subtitleInlineChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Inline"), this);
     subtitleInlineChkbox->setChecked(cfg.useInlineLayerSubtitles());
+    subtitleInlineChkbox->setToolTip(i18nc("@item:tooltip", "If enabled, show subtitles beside layer names.\n"
+                                                            "If disabled, show below layer names (when enough space)."));
+    if (subtitleCombobox->currentIndex() == 0) {
+        subtitleInlineChkbox->setDisabled(true);
+    }
 
-    chkboxAction = new QWidgetAction(this);
+    QWidgetAction *chkboxAction = new QWidgetAction(this);
     chkboxAction->setDefaultWidget(subtitleInlineChkbox);
     configureMenu->addAction(chkboxAction);
-
     connect(subtitleInlineChkbox, SIGNAL(stateChanged(int)), SLOT(slotUpdateUseInlineLayerSubtitles()));
 
 }
@@ -1286,14 +1306,22 @@ void LayerBox::slotUpdateTreeIndentation()
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
 }
 
-void LayerBox::slotUpdateDisplayLayerSubtitles()
+void LayerBox::slotUpdateLayerSubtitleStyle()
 {
     KisConfig cfg(false);
-    if (subtitleChkbox->isChecked() == cfg.displayLayerSubtitles()) {
+    if (subtitleCombobox->currentIndex() == cfg.layerSubtitleStyle()) {
         return;
     }
-    cfg.setDisplayLayerSubtitles(subtitleChkbox->isChecked());
+    cfg.setLayerSubtitleStyle((KisConfig::LayerSubtitleStyle)subtitleCombobox->currentIndex());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    if (subtitleCombobox->currentIndex() == 0) {
+        subtitleOpacitySlider->setDisabled(true);
+        subtitleInlineChkbox->setDisabled(true);
+    }
+    else {
+        subtitleOpacitySlider->setDisabled(false);
+        subtitleInlineChkbox->setDisabled(false);
+    }
 }
 
 void LayerBox::slotUpdateLayerSubtitleOpacity()

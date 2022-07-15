@@ -119,7 +119,7 @@ struct KisPlaybackEngine::Private {
     }
 
 private:
-    KisPlaybackEngine* m_self; //temp, we need a back pointer for callback binding. Maybe we can just use the private class itself instead?
+    KisPlaybackEngine* m_self;
 
 public:
     QScopedPointer<Mlt::Profile> profile;
@@ -261,6 +261,7 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
         m_d->canvasProducers[m_d->activeCanvas]->seek(frameIndex);
 
         if (flags & SEEK_PUSH_AUDIO) {
+
             m_d->sigPushAudioCompressor->start(frameIndex);
         }
 

@@ -540,7 +540,6 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
         } else if (e->button() == Qt::LeftButton) {
             m_d->lastPressSectionIndex = logical;
             model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
-            model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_PUSH_AUDIO)), KisTimeBasedItemModel::ScrubToRole);
         }
     }
 
@@ -600,9 +599,11 @@ void KisAnimTimelineTimeHeader::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     if (e->button() == Qt::LeftButton) {
-        int logical = logicalIndexAt(e->pos());
-        model()->setHeaderData(logical, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
-        model()->setHeaderData(logical, orientation(), QVariant(int(SEEK_PUSH_AUDIO | SEEK_FINALIZE)), KisTimeBasedItemModel::ScrubToRole);
+        int timeUnderMouse = logicalIndexAt(e->pos());
+        model()->setHeaderData(timeUnderMouse, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
+        if (timeUnderMouse != m_d->model->currentTime()) {
+            model()->setHeaderData(timeUnderMouse, orientation(), QVariant(int(SEEK_PUSH_AUDIO | SEEK_FINALIZE)), KisTimeBasedItemModel::ScrubToRole);
+        }
         m_d->model->setScrubState(false);
     }
 

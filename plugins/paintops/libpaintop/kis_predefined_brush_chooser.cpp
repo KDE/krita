@@ -430,15 +430,6 @@ KisPredefinedBrushChooser::~KisPredefinedBrushChooser()
 {
 }
 
-KisBrushSP KisPredefinedBrushChooser::brush()
-{
-    return m_brush;
-}
-
-void KisPredefinedBrushChooser::setBrush(KisBrushSP brush)
-{
-}
-
 void KisPredefinedBrushChooser::slotResetBrush()
 {
     KisBrushSP brush = m_itemChooser->currentResource().dynamicCast<KisBrush>();

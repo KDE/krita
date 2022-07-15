@@ -67,6 +67,7 @@ set(kritalibpaintop_LIB_SRCS
     sensors/kis_dynamic_sensor_time.cc
     sensors/kis_dynamic_sensor_fade.cpp
     sensors/kis_dynamic_sensor_fuzzy.cpp
+    models/KisTextBrushModel.cpp
 )
 
 ki18n_wrap_ui(kritalibpaintop_LIB_SRCS

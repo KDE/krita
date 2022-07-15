@@ -13,6 +13,7 @@
 #include <QButtonGroup>
 #include <QSpinBox>
 #include <QDoubleSpinBox>
+#include <QLineEdit>
 #include "kis_debug.h"
 #include "kis_spacing_selection_widget.h"
 #include "KisAngleSelector.h"
@@ -367,6 +368,31 @@ void connectControl(KisAngleSelector *widget, QObject *source, const char *prope
 
     if (prop.isWritable()) {
         QObject::connect(widget, &KisAngleSelector::angleChanged, [prop, source] (qreal value) { prop.write(source, value); });
+    }
+}
+
+void connectControl(QLineEdit *widget, QObject *source, const char *property)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
+
+    QMetaMethod signal = prop.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("QString"));
+
+    const QMetaObject* dstMeta = widget->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+                dstMeta->indexOfSlot("setText(QString)"));
+    QObject::connect(source, signal, widget, updateSlot);
+
+    widget->setText(prop.read(source).toString());
+
+    if (prop.isWritable()) {
+        QObject::connect(widget, &QLineEdit::textChanged, [prop, source] (const QString &value) { prop.write(source, value); });
     }
 }
 

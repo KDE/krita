@@ -142,8 +142,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
     m_predefinedBrushWidget = new KisPredefinedBrushChooser(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::predefinedBrush], flags & KisBrushOptionWidgetFlag::SupportsHSLBrushMode, this);
     addChooser(i18nc("Predefined Brush tip mode", "Predefined"), m_predefinedBrushWidget, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
-    m_textBrushWidget = new KisTextBrushChooser(this, "textbrush", i18nc("Text Brush tip mode", "Text"));
-    connect(m_textBrushWidget, SIGNAL(sigBrushChanged()), SIGNAL(sigBrushChanged()));
+    m_textBrushWidget = new KisTextBrushChooser(m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::textBrush], this);
     addChooser(i18nc("Text Brush tip mode", "Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
     m_d->brushType = brushData[&BrushData::type]
@@ -204,31 +203,6 @@ KisBrushSP KisBrushSelectionWidget::brush() const
 void KisBrushSelectionWidget::setImage(KisImageWSP image)
 {
     m_predefinedBrushWidget->setImage(image);
-}
-
-void KisBrushSelectionWidget::setCurrentBrush(KisBrushSP brush)
-{
-    if (!brush) {
-        return;
-    }
-    // XXX: clever code have brush plugins know their configuration
-    //      pane, so we don't have to have this if statement and
-    //      have an extensible set of brush types
-    if (dynamic_cast<KisAutoBrush*>(brush.data())) {
-        setCurrentWidget(m_autoBrushWidget);
-        m_autoBrushWidget->setBrush(brush);
-    }
-    else if (dynamic_cast<KisTextBrush*>(brush.data())) {
-        setCurrentWidget(m_textBrushWidget);
-        m_textBrushWidget->setBrush(brush);
-        m_autoBrushWidget->reset();
-    }
-    else {
-        setCurrentWidget(m_predefinedBrushWidget);
-        m_predefinedBrushWidget->setBrush(brush);
-        m_autoBrushWidget->reset();
-    }
-
 }
 
 void KisBrushSelectionWidget::hideOptions(const QStringList &options)

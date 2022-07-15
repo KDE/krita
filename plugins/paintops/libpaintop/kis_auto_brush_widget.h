@@ -60,10 +60,6 @@ private Q_SLOTS:
 
     void slotUpdateBrushPreview();
 
-Q_SIGNALS:
-
-    void sigBrushChanged();
-
 protected:
     void resizeEvent(QResizeEvent *) override;
 

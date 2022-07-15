@@ -50,8 +50,6 @@ public:
 
     void setImage(KisImageWSP image);
 
-    void setCurrentBrush(KisBrushSP brush);
-
     void hideOptions(const QStringList &options);
 
 Q_SIGNALS:

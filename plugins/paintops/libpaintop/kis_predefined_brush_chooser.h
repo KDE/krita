@@ -37,11 +37,10 @@ class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, public Ui::WdgP
 public:
     KisPredefinedBrushChooser(int maxBrushSize,
                               lager::cursor<KisBrushModel::CommonData> commonBrushData,
-                              lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData, bool supportsHSLBrushTips,
+                              lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData,
+                              bool supportsHSLBrushTips,
                               QWidget *parent = 0, const char *name = 0);
     ~KisPredefinedBrushChooser() override;
-
-    KisBrushSP brush();
 
     void setBrush(KisBrushSP brush);
     void setImage(KisImageWSP image);
@@ -57,10 +56,6 @@ private Q_SLOTS:
     void slotNewPredefinedBrush(KoResourceSP);
     void slotBrushSelected(KoResourceSP resource);
     void slotBrushPropertyChanged(KoResourceSignature signature);
-
-Q_SIGNALS:
-
-    void sigBrushChanged();
 
 private:
     struct Private;

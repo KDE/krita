@@ -9,6 +9,7 @@
 
 #include <QtGlobal>
 #include <QSize>
+#include <QGuiApplication>
 #include <KoResourceSignature.h>
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
@@ -138,7 +139,7 @@ struct BRUSH_EXPORT TextBrushData : boost::equality_comparable<TextBrushData>
     QSize baseSize = QSize(42, 42);
     qreal scale = 1.0;
     QString text = "The quick brown fox ate your text";
-    QString font;
+    QString font = QGuiApplication::font().toString();
     bool usePipeMode = false;
 };
 
@@ -156,6 +157,12 @@ struct BRUSH_EXPORT BrushData : public boost::equality_comparable<BrushData> {
                 lhs.predefinedBrush == rhs.predefinedBrush &&
                 lhs.textBrush == rhs.textBrush;
     }
+
+    /**
+     * We don't use std::variant here because we want
+     * to keep user's settings when he/she switches
+     * from one type of the brush to another.
+     */
 
     CommonData common;
     BrushType type = Auto;

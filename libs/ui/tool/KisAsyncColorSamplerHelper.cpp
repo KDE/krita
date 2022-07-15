@@ -7,22 +7,23 @@
 #include "KisAsyncColorSamplerHelper.h"
 
 #include <QPainter>
-#include "kis_signal_compressor_with_param.h"
-#include "KoCanvasResourcesIds.h"
-#include <KoViewConverter.h>
-#include "kis_image_interfaces.h"
-#include <strokes/kis_color_sampler_stroke_strategy.h>
-#include "kis_config.h"
 
+#include "KoCanvasResourcesIds.h"
+#include "KoCanvasResourceProvider.h"
+#include "KoViewConverter.h"
+#include "KoIcon.h"
+#include "kis_cursor.h"
+#include "kis_signal_compressor_with_param.h"
+#include "kis_image_interfaces.h"
+#include "kis_config.h"
 #include "kis_canvas2.h"
+#include "KisViewManager.h"
 #include "KisDocument.h"
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImagesDecoration.h"
-#include "KoCanvasResourceProvider.h"
-#include "KisViewManager.h"
-#include "KoIcon.h"
 #include "kis_display_color_converter.h"
-#include <kis_cursor.h>
+#include "strokes/kis_color_sampler_stroke_strategy.h"
+
 
 namespace {
 std::pair<QRectF,QRectF> colorPreviewDocRectImpl(const QPointF &outlineDocPoint, bool colorPreviewShowComparePlate, const KoViewConverter *converter)
@@ -72,11 +73,11 @@ struct KisAsyncColorSamplerHelper::Private
     QColor currentColor;
     QColor baseColor;
 
-    KisStrokesFacade *strokesFacade() {
+    KisStrokesFacade *strokesFacade() const {
         return canvas->image().data();
     }
 
-    const KoViewConverter &converter() {
+    const KoViewConverter &converter() const {
         return *canvas->imageView()->viewConverter();
     }
 

@@ -25,7 +25,7 @@ class KRITAUI_EXPORT KisAsyncColorSamplerHelper : public QObject
     Q_OBJECT
 public:
     KisAsyncColorSamplerHelper(KisCanvas2 *canvas);
-    ~KisAsyncColorSamplerHelper();
+    ~KisAsyncColorSamplerHelper() override;
 
     bool isActive() const;
 

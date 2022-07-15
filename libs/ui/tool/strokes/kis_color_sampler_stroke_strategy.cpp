@@ -45,7 +45,7 @@ void KisColorSamplerStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
     if (d) {
         KoColor color;
         KoColor previous = d->currentColor;
-        if (KisToolUtils::sampleColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend) == true) {
+        if (KisToolUtils::sampleColor(color, d->dev, d->pt, &previous, m_d->radius, m_d->blend)) {
             m_d->lastSelectedColor = color;
             emit sigColorUpdated(color);
         }

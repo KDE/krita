@@ -72,7 +72,6 @@ public:
 
     int delay() const;
 
-    void setIdleCallback();
     void setDelay(std::function<bool()> idleCallback, int idleDelay, int timeout);
 
 public Q_SLOTS:

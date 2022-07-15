@@ -253,9 +253,13 @@ void KisDabCacheBase::fetchDabGenerationInfo(bool hasDabInCache,
     di->subPixel = position.subPixel;
 
     const bool supportsCaching = resources->brush->supportsCaching();
-    di->solidColorFill = !resources->colorSource || resources->colorSource->isUniformColor();
-    di->paintColor = resources->colorSource && resources->colorSource->isUniformColor() ?
-                resources->colorSource->uniformColor() : request.color;
+
+    const KisUniformColorSource *uniformColorSource =
+        resources->colorSource ? dynamic_cast<const KisUniformColorSource*>(resources->colorSource.data()) : 0;
+
+    di->solidColorFill = !resources->colorSource || uniformColorSource;
+    di->paintColor = uniformColorSource ?
+        uniformColorSource->uniformColor() : request.color;
 
     SavedDabParameters newParams = getDabParameters(resources->brush,
                                                     di->paintColor,

@@ -23,14 +23,6 @@
 
 KisColorSource::~KisColorSource() { }
 
-const KoColor& KisColorSource::uniformColor() const
-{
-    static const KoColor black;
-    qFatal("Not an uniform color.");
-    return black;
-}
-
-
 KisUniformColorSource::KisUniformColorSource()
 {
 }
@@ -69,11 +61,6 @@ void KisUniformColorSource::applyColorTransformation(const KoColorTransformation
 const KoColorSpace* KisUniformColorSource::colorSpace() const
 {
     return m_color.colorSpace();
-}
-
-bool KisUniformColorSource::isUniformColor() const
-{
-    return true;
 }
 
 //-------------------------------------------------//
@@ -209,11 +196,6 @@ void KisTotalRandomColorSource::colorize(KisPaintDeviceSP dev, const QRect& rect
 
 }
 
-bool KisTotalRandomColorSource::isUniformColor() const
-{
-    return false;
-}
-
 void KisTotalRandomColorSource::rotate(double) {}
 void KisTotalRandomColorSource::resize(double , double) {}
 
@@ -275,10 +257,5 @@ void KoPatternColorSource::resize(double xs, double ys)
 {
     Q_UNUSED(xs);
     Q_UNUSED(ys);
-}
-
-bool KoPatternColorSource::isUniformColor() const
-{
-    return false;
 }
 

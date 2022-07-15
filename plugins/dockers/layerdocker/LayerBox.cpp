@@ -1314,6 +1314,7 @@ void LayerBox::slotUpdateLayerSubtitleStyle()
     }
     cfg.setLayerSubtitleStyle((KisConfig::LayerSubtitleStyle)subtitleCombobox->currentIndex());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    m_wdgLayerBox->listLayers->viewport()->update();
     if (subtitleCombobox->currentIndex() == 0) {
         subtitleOpacitySlider->setDisabled(true);
         subtitleInlineChkbox->setDisabled(true);
@@ -1332,6 +1333,7 @@ void LayerBox::slotUpdateLayerSubtitleOpacity()
     }
     cfg.setLayerSubtitleOpacity(subtitleOpacitySlider->value());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    m_wdgLayerBox->listLayers->viewport()->update();
 }
 
 void LayerBox::slotUpdateUseInlineLayerSubtitles()
@@ -1342,6 +1344,7 @@ void LayerBox::slotUpdateUseInlineLayerSubtitles()
     }
     cfg.setUseInlineLayerSubtitles(subtitleInlineChkbox->isChecked());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
+    m_wdgLayerBox->listLayers->viewport()->update();
 }
 
 

@@ -26,14 +26,11 @@
  * Unfortunately, we are mixing up two things in the appdatalocation:
  *
  *  * resources: brushes, presets and so on
- *  * assets: color themes, icc profiles and other weird stuff, as
+ *  * assets: color themes, icc profiles and other weird stuff
  *
  * There are many debug lines that can be uncommented for more specific installation
  * checks. In the future these should be converted to qloggingcategory to enable
  * convenient enable/disable functionality.
- *
- * T
- *
  *
  * Note: DO NOT USE THIS CLASS WHEN LOCATING RESOURCES LIKE BRUSHES OR GRADIENTS. Use
  * KisResourceLocator instead.

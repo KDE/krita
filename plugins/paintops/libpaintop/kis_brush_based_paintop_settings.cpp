@@ -153,6 +153,7 @@ void KisBrushBasedPaintOpSettings::setAngle(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::angle()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 0.0);
     return this->brush()->angle();
 }
 
@@ -165,6 +166,7 @@ void KisBrushBasedPaintOpSettings::setSpacing(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::spacing()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 1.0);
     return this->brush()->spacing();
 }
 
@@ -178,11 +180,13 @@ void KisBrushBasedPaintOpSettings::setAutoSpacing(bool active, qreal coeff)
 
 bool KisBrushBasedPaintOpSettings::autoSpacingActive()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), false);
     return this->brush()->autoSpacingActive();
 }
 
 qreal KisBrushBasedPaintOpSettings::autoSpacingCoeff()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 1.0);
     return this->brush()->autoSpacingCoeff();
 }
 
@@ -196,6 +200,7 @@ void KisBrushBasedPaintOpSettings::setPaintOpSize(qreal value)
 
 qreal KisBrushBasedPaintOpSettings::paintOpSize() const
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), 1.0);
     return this->brush()->userEffectiveSize();
 }
 
@@ -323,6 +328,7 @@ bool KisBrushBasedPaintOpSettings::hasPatternSettings() const
 QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
 {
     QList<int> result;
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), result);
 
     if (brush()->applyingGradient() || KisTextureProperties::applyingGradient(this)) {
         result << KoCanvasResource::CurrentGradient;

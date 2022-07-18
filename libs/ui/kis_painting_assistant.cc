@@ -557,6 +557,9 @@ QByteArray KisPaintingAssistant::saveXml(QMap<KisPaintingAssistantHandleSP, int>
     xml.writeAttribute("useCustomColor", QString::number(d->s->useCustomColor));
     xml.writeAttribute("customColor",  KisDomUtils::qColorToQString(d->s->assistantCustomColor));
     xml.writeAttribute("locked", QString::number(d->s->isLocked));
+    xml.writeAttribute("editorWidgetOffset_X", QString::number((double)(d->s->editorWidgetOffset.x()), 'f', 3));
+    xml.writeAttribute("editorWidgetOffset_Y", QString::number((double)(d->s->editorWidgetOffset.y()), 'f', 3));
+
 
 
     saveCustomXml(&xml); // if any specific assistants have custom XML data to save to
@@ -627,6 +630,10 @@ void KisPaintingAssistant::loadXml(KoStore* store, QMap<int, KisPaintingAssistan
 
 
                     setUseCustomColor(usingColor);
+                }
+
+                if (xml.attributes().hasAttribute("editorWidgetOffset_X") && xml.attributes().hasAttribute("editorWidgetOffset_Y")) {
+                    setEditorWidgetOffset(QPointF(xml.attributes().value("editorWidgetOffset_X").toDouble(), xml.attributes().value("editorWidgetOffset_Y").toDouble()));
                 }
 
                 if ( xml.attributes().hasAttribute("customColor")) {

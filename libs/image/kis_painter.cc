@@ -12,8 +12,9 @@
  */
 
 #include "kis_painter.h"
-#include <stdlib.h>
-#include <string.h>
+#include <set>
+#include <cstdlib>
+#include <cstring>
 #include <cfloat>
 #include <cmath>
 #include <climits>
@@ -1298,6 +1299,184 @@ void KisPainter::paintEllipse(const QRectF &rect)
     paintPolygon(points);
 }
 
+Q_DECL_PURE_FUNCTION static inline bool pointOnEllipse(long double xR, long double yR, long double aSq, long double bSq, long double angle,
+                           long double sqSinC, long double sqCosC, long double sinC, long double cosC) {
+    long double pdX = 2.0L * xR * (aSq * sqSinC + bSq * sqCosC) + yR * (bSq - aSq) * sin(2.0L * angle);
+    long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosC + bSq * sqSinC);
+    long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
+    long double paraboloid = (aSq * sqSinC + bSq * sqCosC) * xR * xR
+                             + 2.0L * (bSq - aSq) * sinC * cosC * xR * yR
+                             + (aSq * sqCosC + bSq * sqSinC) * yR * yR
+                             - aSq * bSq;
+    return std::abs(paraboloid) <= gradient * 0.5L;
+}
+
+static inline QPair<int, std::set<int>> pixelsOnEllipseRow(const QSet<QPair<int, int>> &curr, QSet<QPair<int, int>> &next,
+                                                           bool oddA, bool oddB, int canvasBoundX,int canvasBoundY,
+                                                           long double aSq, long double bSq, long double angle,
+                                                           long double sqSinC, long double sqCosC, long double sinC,
+                                                           long double cosC) {
+    QPair<int, std::set<int>> result={INT_MAX,{}};
+    if (curr.empty() || curr.begin()->first>canvasBoundX){
+        return result;
+    }
+    result.first = curr.begin()->first;
+    long double xR = (long double) curr.begin()->first;
+    xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
+
+    // `coord` are pixels that are known to be on the ellipse.
+    // Check up and down to get every pixel in this row, save into result, also save some pixels on the next row into next.
+    // For example, if y is on ellipse, and y+1 is not, then y+1 could be on ellipse in the next row, so save y+1 into next.
+    Q_FOREACH(const auto &coord, curr) {
+        int x=coord.first;
+        if (x == 0 && oddA) {
+            next.insert({1, coord.second});
+            continue;
+        }
+        bool paintedUp = false;
+        for (int y = coord.second; y <= canvasBoundY; ++y) {
+            if (y == 0 && oddB) { continue; }
+            long double yR = (long double) y;
+            yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
+            if (pointOnEllipse(xR, yR, aSq, bSq, angle, sqSinC, sqCosC, sinC, cosC)) {
+                result.second.insert(y);
+                paintedUp = true;
+            } else {
+                if (y != coord.second) {
+                    if (paintedUp) {
+                        next.insert({coord.first + 1, qMin(y - (y == 1 && oddB ? 2 : 1), canvasBoundY)});
+                    }
+                    break;
+                }
+            }
+            if (y == canvasBoundY && coord.first <= canvasBoundX) {
+                next.insert({coord.first + 1, y});
+                break;
+            }
+        }
+        bool paintedDown = false;
+        for (int y = coord.second; y >= -canvasBoundY; --y) {
+            if (y == 0 && oddB) { continue; }
+            long double yR = (long double) y;
+            yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
+            if (pointOnEllipse(xR, yR, aSq, bSq, angle, sqSinC, sqCosC, sinC, cosC)) {
+                result.second.insert(y );
+                paintedDown = true;
+            } else {
+                if (y != coord.second) {
+                    if (paintedDown) {
+                        next.insert({coord.first + 1, qMax(y + (y == -1 && oddB ? 2 : 1), -canvasBoundY)});
+                    }
+                    break;
+                }
+            }
+            if (y == -canvasBoundY && coord.first <= canvasBoundX) {
+                next.insert({coord.first + 1, y});
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
+Q_DECL_PURE_FUNCTION static inline bool takePixel(const QPair<int, std::set<int>> pixels[3], const std::set<int> &takenPix, const int p, const int mid, const bool oddB) {
+    auto containsPix = [pixels, &takenPix, p, mid, oddB](int x, int y) Q_DECL_PURE_FUNCTION {
+        if (x == 0) {
+            if (y == 1) {
+                return p >= mid ? pixels[x + 1].second.count(p + y == 0 && oddB ? p + y + y : p + y) != 0 :
+                       takenPix.count(p + y == 0 && oddB ? p + y + y : p + y) != 0;
+            } else if (y == -1) {
+                return p > mid ? takenPix.count(p + y == 0 && oddB ? p + y + y : p + y) != 0 :
+                       pixels[x + 1].second.count(p + y == 0 && oddB ? p + y + y : p + y) != 0;
+            } else {
+                return true;
+            }
+        }
+        return pixels[x + 1].second.count(p + y == 0 && oddB ? p + y + y : p + y) != 0;
+    };
+    bool adjacentL = containsPix(-1, 0);
+    bool adjacentR = containsPix(1, 0);
+    bool adjacentU = containsPix(0, 1);
+    bool adjacentD = containsPix(0, -1);
+    bool adjacentLU = containsPix(-1, 1);
+    bool adjacentRU = containsPix(1, 1);
+    bool adjacentLD = containsPix(-1, -1);
+    bool adjacentRD = containsPix(1, -1);
+
+    bool onLShape = (adjacentL && adjacentU && !adjacentLU) ||
+                    (adjacentR && adjacentU && !adjacentRU) ||
+                    (adjacentL && adjacentD && !adjacentLD) ||
+                    (adjacentR && adjacentD && !adjacentRD);
+
+    bool surrounded = adjacentL && adjacentR && adjacentU && adjacentD;
+
+    // For 2x2 squares and T-shapes, they must be passed crossed twice by the ellipse
+    // so no filtering for this two patterns
+    bool onSquare = (adjacentL && adjacentU && adjacentLU) ||
+                    (adjacentR && adjacentU && adjacentRU) ||
+                    (adjacentL && adjacentD && adjacentLD) ||
+                    (adjacentR && adjacentD && adjacentRD);
+
+    bool onTShape =
+            (adjacentL && adjacentR && adjacentD && !adjacentLD && !adjacentRD && !adjacentU &&
+             !(adjacentLU && adjacentRU)) ||
+            (adjacentL && adjacentR && adjacentU && !adjacentLU && !adjacentRU && !adjacentD &&
+             !(adjacentLD && adjacentRD)) ||
+            (adjacentU && adjacentD && adjacentL && !adjacentLU && !adjacentLD && !adjacentR &&
+             !(adjacentRU && adjacentRD)) ||
+            (adjacentU && adjacentD && adjacentR && !adjacentRU && !adjacentRD && !adjacentL &&
+             !(adjacentLU && adjacentLD));
+
+    // ┌──────┬──────┬───────┐
+    // │(x,-y)│(0,-y)│(-x,-y)│
+    // ├──────┼──────┼───────┤
+    // │(x, 0)│remove│(-x, 0)│
+    // ├──────┼──────┼───────┤
+    // │(x, y)│(0, y)│(-x, y)│
+    // └──────┴──────┴───────┘
+    bool connectedAfterRermove = true;
+    for (auto x: {1, -1}) {
+        for (auto y: {1, -1}) {
+            if (containsPix(x, y) && containsPix(-x, y)) {
+                connectedAfterRermove = connectedAfterRermove && (containsPix(0, y) ||
+                                                                  (containsPix(x, 0) && containsPix(0, -y) &&
+                                                                   containsPix(-x, 0)));
+            }
+            if (containsPix(x, y) && containsPix(x, -y)) {
+                connectedAfterRermove = connectedAfterRermove && (containsPix(x, 0) ||
+                                                                  (containsPix(0, y) && containsPix(-x, 0) &&
+                                                                   containsPix(0, -y)));
+            }
+            if (containsPix(x, y) && containsPix(-x, 0)) {
+                connectedAfterRermove = connectedAfterRermove && (containsPix(0, y) ||
+                                                                  (containsPix(x, 0) && containsPix(0, -y)));
+            }
+            if (containsPix(x, y) && containsPix(0, -y)) {
+                connectedAfterRermove = connectedAfterRermove && (containsPix(x, 0) ||
+                                                                  (containsPix(0, y) && containsPix(-x, 0)));
+            }
+            if (containsPix(x, y) && containsPix(-x, -y)) {
+                connectedAfterRermove = connectedAfterRermove && ((containsPix(x, 0) && containsPix(0, -y)) ||
+                                                                  (containsPix(0, y) && containsPix(-x, 0)));
+            }
+        }
+    }
+    for (auto x: {1, -1}) {
+        if (containsPix(x, 0) && (containsPix(-x, 0) || containsPix(-x, 1) || containsPix(-x, -1))) {
+            connectedAfterRermove = connectedAfterRermove && (containsPix(0, 1) || containsPix(0, -1));
+        }
+    }
+    for (auto y: {1, -1}) {
+        if (containsPix(0, y) && (containsPix(0, -y) || containsPix(1, -y) || containsPix(-1, -y))) {
+            connectedAfterRermove = connectedAfterRermove && (containsPix(1, 0) || containsPix(-1, 0));
+        }
+    }
+
+    bool eliminate = !onTShape && (surrounded || (onLShape && !onSquare && connectedAfterRermove));
+    return !eliminate;
+}
+
 void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
     // Read https://rohankjoshi.medium.com/the-equation-for-a-rotated-ellipse-5888731da76
     // and https://stackoverflow.com/questions/55100965/algorithm-for-plotting-2d-xy-graph/55120230#55120230
@@ -1307,15 +1486,25 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
     // Because Qt does not provide long double version of most functions,
     // I have to use std instead.
 
+    // Normalization
+    while (angle>=M_PI-M_PI_4){
+        angle-=M_PI;
+    }
+    while (angle < -M_PI_4) {
+        angle+=M_PI;
+    }
+
+    if(-M_PI_4<=angle && angle<M_PI_4){
+    }else if(M_PI_4<=angle&& angle<M_PI-M_PI_4){
+        auto tmp=a_;
+        a_=b_;
+        b_=tmp;
+        angle-=M_PI_2;
+    }
+
     long double axisA = (long double) a_ - 1.0L;
     long double axisB = (long double) b_ - 1.0L;
-    if (axisA == 0.0L || axisB == 0.0L) {
-        // TODO: Draw a line
-        return;
-    } else if (axisA == 1.0L || axisB == 1.0L) {
-        // ...and draw two lines here.
-        return;
-    }
+
     long double semiAxisA = axisA / 2.0L;
     long double semiAxisB = axisB / 2.0L;
     long double sinC = std::sin((long double) angle);
@@ -1324,96 +1513,124 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
     long double sqCosC = cosC * cosC;
     long double aSq = semiAxisA * semiAxisA;
     long double bSq = semiAxisB * semiAxisB;
-    int canvasBound = std::ceil(std::max(semiAxisA, semiAxisB));
+    // TODO: use the correct distance information, also, for some brushes, we're generating much more denser dubs.
     auto dis=KisDistanceInformation();
-    bool oddA = (int) axisA % 2 == 1;
-    bool oddB = (int) axisB % 2 == 1;
-    int start_x = -(int) std::ceil(std::sqrt(aSq * sqCosC + bSq * sqSinC) /
-                                   std::sqrt(sqCosC * sqCosC + 2 * sqCosC * sqSinC + sqSinC * sqSinC));
-    long double start_y = (-((aSq * cosC * sinC * std::sqrt(aSq * sqCosC + bSq * sqSinC)) /
-                             std::sqrt((sqCosC + sqSinC) * (sqCosC + sqSinC))) +
-                           (bSq * cosC * sinC * std::sqrt(aSq * sqCosC + bSq * sqSinC)) /
-                           std::sqrt((sqCosC + sqSinC) * (sqCosC + sqSinC))) / (aSq * sqCosC + bSq * sqSinC);
-    auto curr = QSet<QPair<int, int>>({{start_x, (int) std::round(start_y)}});
-    auto next = QSet<QPair<int, int>>({{start_x + 1, (int) std::round(start_y)}});
+
+    if (axisA == 0.0L || axisB == 0.0L) {
+        // Just draw a line here.
+        long double l = axisA == 0.0L ? axisB : axisA;
+        angle += axisA == 0.0L ? M_PI_2f : 0.0L;
+        l/=2.0L;
+        long double x=std::round(std::cos(angle)*l*2)/2;
+        long double y=std::round(std::sin(angle)*l*2)/2;
+        paintLine(KisPaintInformation(QPointF(std::round(x + offset.x())-0.1,
+                                                 std::round(y + offset.y())-0.1)),
+                     KisPaintInformation(QPointF(std::round(-x + offset.x())-0.1,
+                                                 std::round(-y + offset.y())-0.1)),
+                     &dis);
+        return;
+    }
+
+    long double xBound = std::sqrt(aSq * sqCosC + bSq * sqSinC);
+    int canvasBoundX = ((int) std::round(xBound * 2) + 1) / 2;
+    bool oddA = ((int) std::round(xBound * 2)) % 2 == 1;
+
+    long double yBound = std::sqrt(bSq* sqCosC + aSq*sqSinC);
+    int canvasBoundY = ((int) std::round(yBound * 2) + 1) / 2;
+    bool oddB = ((int) std::round(yBound * 2)) % 2 == 1;
+
+    // Draw row by row, start from the middle to xBound.
+    long double startX = oddA ? -0.5L : -1.0L;
+
+    // Have to filter out pixels on an L-shape
+    // A buffer for 3 rows of recent drawn pixels is saved to provide information for elimination.
+    QPair<int, std::set<int>> pixels[3]={};
+
+    // These stores the points that are known to be on the ellipse.
+    // When drawing one row, take out one pixel from the set and check if its adjacent pixels are also on ellipse.
+    auto currRowEndpoint = QSet<QPair<int, int>>();
+    auto nextRowEndpoint = QSet<QPair<int, int>>();
+    {
+        long double coef1 = std::sqrt(2.0L) *std::sqrt(aSq * bSq * (aSq + bSq - 2 * startX * startX + (aSq - bSq) * std::cos(2 * angle)));
+        long double coef2 = (aSq - bSq) * startX * std::sin(2 * angle);
+        long double coef3 = 2.0L * (aSq * sqCosC + bSq * sqSinC);
+        currRowEndpoint.insert({-1, qMax(-canvasBoundY, qMin(canvasBoundY, (int) std::round((coef1 + coef2) / coef3)))});
+        currRowEndpoint.insert({-1, qMax(-canvasBoundY, qMin(canvasBoundY, (int) std::round((-coef1 + coef2) / coef3)))});
+    }
+
+    // first row is symmetric with the second row, purpose of it is to filter out pixels.
+    // so won't take the first row.
+    bool firstRow=true;
+
     while (true) {
-        Q_FOREACH(const auto &coord, curr) {
-                if (coord.first == 0 && oddA) {
-                    next.insert({coord.first + 1, coord.second});
-                    continue;
-                }
-                bool painted_up = false;
-                for (int y = coord.second; y <= canvasBound; ++y) {
-                    if (y == 0 && oddB) { continue; }
-                    long double xR = (long double) coord.first;
-                    long double yR = (long double) y;
-                    xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
-                    yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
-                    long double pdX = 2.0L * xR * (aSq * sqSinC + bSq * sqCosC) + yR * (bSq - aSq) * sin(2.0L * angle);
-                    long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosC + bSq * sqSinC);
-                    long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
-                    long double paraboloid = (aSq * sqSinC + bSq * sqCosC) * xR * xR
-                                             + 2.0L * (bSq - aSq) * sinC * cosC * xR * yR
-                                             + (aSq * sqCosC + bSq * sqSinC) * yR * yR
-                                             - aSq * bSq;
-                    if (std::abs(paraboloid) <= gradient * 0.5L) {
-                        paintAt(KisPaintInformation(QPointF(
-                                        std::round(xR + offset.x()),
-                                        std::round(yR + offset.y()))),
-                                &dis);
-                        painted_up = true;
-                    } else {
-                        if (y != coord.second) {
-                            if (painted_up) {
-                                next.insert({coord.first + 1, qMin(y - (y == 1 && oddB ? 2 : 1), canvasBound)});
-                            }
-                            break;
-                        }
-                    }
-                    if (y == canvasBound && coord.first < canvasBound) {
-                        next.insert({coord.first + 1, y});
-                        break;
-                    }
-                }
-                bool painted_down = false;
-                for (int y = coord.second; y >= -canvasBound; --y) {
-                    if (y == 0 && oddB) { continue; }
-                    long double xR = (long double) coord.first;
-                    long double yR = (long double) y;
-                    xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
-                    yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
-                    long double pdX = 2.0L * xR * (aSq * sqSinC + bSq * sqCosC) + yR * (bSq - aSq) * sin(2.0L * angle);
-                    long double pdY = xR * (bSq - aSq) * sin(2.0L * angle) + 2.0L * yR * (aSq * sqCosC + bSq * sqSinC);
-                    long double gradient = std::sqrt(pdX * pdX + pdY * pdY);
-                    long double paraboloid = (aSq * sqSinC + bSq * sqCosC) * xR * xR
-                                             + 2.0L * (bSq - aSq) * sinC * cosC * xR * yR
-                                             + (aSq * sqCosC + bSq * sqSinC) * yR * yR
-                                             - aSq * bSq;
-                    if (std::abs(paraboloid) <= gradient * 0.5L) {
-                        paintAt(KisPaintInformation(QPointF(
-                                        std::round(xR + offset.x()),
-                                        std::round(yR + offset.y()))),
-                                &dis);
-                        painted_down = true;
-                    } else {
-                        if (y != coord.second) {
-                            if (painted_down) {
-                                next.insert({coord.first + 1, qMax(y + (y == -1 && oddB ? 2 : 1), -canvasBound)});
-                            }
-                            break;
-                        }
-                    }
-                    if (y == -canvasBound && coord.first < canvasBound) {
-                        next.insert({coord.first + 1, y});
-                        break;
-                    }
+        pixels[2] = pixelsOnEllipseRow(currRowEndpoint, nextRowEndpoint, oddA, oddB, canvasBoundX,canvasBoundY, aSq, bSq, angle,
+                                       sqSinC, sqCosC, sinC, cosC);
+
+        if(!currRowEndpoint.empty()) {
+            int x = currRowEndpoint.begin()->first;
+            if (x == 0 && oddA) {
+                currRowEndpoint = nextRowEndpoint;
+                nextRowEndpoint = QSet<QPair<int, int>>();
+                continue;
+            }
+        }
+
+        if (!pixels[1].second.empty()) {
+            int minY = *pixels[1].second.begin();
+            int maxY = *pixels[1].second.rbegin();
+
+            std::set<int> takenPix;
+
+            // Try to filter out pixels in the middle first. For no special reason, just the outcome looks better for me.
+            auto mid = pixels[1].second.lower_bound((minY + maxY) / 2);
+            for (auto p = mid; p != pixels[1].second.end(); p++) {
+                if (takePixel(pixels, takenPix, *p, (minY + maxY) / 2, oddB)) {
+                    takenPix.insert(*p);
                 }
             }
-        if (next.empty()) {
+            for (auto p = std::set<int>::reverse_iterator(mid); p != pixels[1].second.rend(); p++) {
+                if (takePixel(pixels, takenPix, *p, (minY + maxY) / 2, oddB)) {
+                    takenPix.insert(*p);
+                }
+            }
+
+            pixels[1].second = takenPix;
+
+            if (!firstRow) {
+                Q_FOREACH(const auto &p, pixels[1].second) {
+                    long double yR = (long double) p;
+                    yR -= 0.5L * (yR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
+                    yR = std::round(yR + offset.y());
+
+                    long double negyR = (long double) -p;
+                    negyR -= 0.5L * (negyR < 0.0L ? -1.0L : 1.0L) * (oddB ? 1.0L : 0.0L);
+                    negyR = std::round(negyR + offset.y());
+
+                    long double xR = (long double) pixels[1].first;
+                    xR -= 0.5L * (xR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
+                    xR = std::round(xR + offset.x());
+
+                    long double negxR = (long double) -pixels[1].first;
+                    negxR -= 0.5L * (negxR < 0.0L ? -1.0L : 1.0L) * (oddA ? 1.0L : 0.0L);
+                    negxR = std::round(negxR + offset.x());
+                    paintAt(KisPaintInformation(QPointF((qreal) xR, (qreal) yR)), &dis);
+                    paintAt(KisPaintInformation(QPointF((qreal) negxR, (qreal) negyR)), &dis);
+                }
+            } else {
+                firstRow = false;
+            }
+        }
+
+        if(pixels[2].second.empty() || pixels[1].first>canvasBoundX){
             break;
         }
-        curr = next;
-        next = QSet<QPair<int, int>>();
+
+        pixels[0]=pixels[1];
+        pixels[1]=pixels[2];
+        pixels[2].second= {};
+
+        currRowEndpoint = nextRowEndpoint;
+        nextRowEndpoint = {};
     }
 }
 

@@ -71,6 +71,8 @@
                 <data android:mimeType="application/pdf" />
 
                 <data android:mimeType="image/jxl" />
+                <data android:mimeType="image/svg" />
+                <data android:mimeType="image/svg+xml" />
             </intent-filter>
 
             <intent-filter>

@@ -8,8 +8,20 @@ kis_add_library(kritasvgimport MODULE ${kritasvgimport_SOURCES})
 
 add_definitions(${SVG_DEFINITIONS})
 
-target_link_libraries(kritasvgimport kritaui )
+target_link_libraries(kritasvgimport kritaui)
 
 install(TARGETS kritasvgimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
 install( PROGRAMS  krita_svg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
+
+set(kritasvgexport_SOURCES
+    kis_svg_export.cpp
+    )
+
+kis_add_library(kritasvgexport MODULE ${kritasvgexport_SOURCES})
+
+target_link_libraries(kritasvgexport kritaui kritaimpex)
+
+install(TARGETS kritasvgexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
+
+install(PROGRAMS  krita_svg.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

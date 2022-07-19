@@ -162,6 +162,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
     KisImageSP image{nullptr};
     KisLayerSP layer{nullptr};
+    QHash<QByteArray, QByteArray> metadataBoxes;
     QByteArray boxType(5, 0x0);
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
@@ -355,30 +356,45 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 const auto availOut = JxlDecoderReleaseBoxBuffer(dec.get());
                 box.resize(box.size() - static_cast<int>(availOut));
 
-                QBuffer buf(&box);
-                if (std::equal(boxType.cbegin(),
-                               boxType.cend(),
-                               exifTag.cbegin())) {
-                    dbgFile << "Loading EXIF data. Size: " << box.size();
-
-                    const auto *backend = KisMetadataBackendRegistry::instance()->value("exif");
-
-                    backend->loadFrom(layer->metaData(), &buf);
-                } else if (std::equal(boxType.cbegin(),
-                                      boxType.cend(),
-                                      xmpTag.cbegin())) {
-                    dbgFile << "Loading XMP or IPTC data. Size: " << box.size();
-
-                    const auto *xmpBackend = KisMetadataBackendRegistry::instance()->value("xmp");
-                    const auto *iptcBackend = KisMetadataBackendRegistry::instance()->value("iptc");
-
-                    if (!xmpBackend->loadFrom(layer->metaData(), &buf)) {
-                        iptcBackend->loadFrom(layer->metaData(), &buf);
-                    }
-                }
+                metadataBoxes[boxType] = box;
             }
             if (status == JXL_DEC_SUCCESS) {
                 // All decoding successfully finished.
+
+                // Insert layer metadata if available (delayed
+                // in case the boxes came before the BASIC_INFO event)
+                for (const QByteArray &boxType : metadataBoxes.keys()) {
+                    QByteArray &box = metadataBoxes[boxType];
+                    QBuffer buf(&box);
+                    if (std::equal(boxType.cbegin(),
+                                   boxType.cend(),
+                                   exifTag.cbegin())) {
+                        dbgFile << "Loading EXIF data. Size: " << box.size();
+
+                        const auto *backend =
+                            KisMetadataBackendRegistry::instance()->value(
+                                "exif");
+
+                        backend->loadFrom(layer->metaData(), &buf);
+                    } else if (std::equal(boxType.cbegin(),
+                                          boxType.cend(),
+                                          xmpTag.cbegin())) {
+                        dbgFile << "Loading XMP or IPTC data. Size: "
+                                << box.size();
+
+                        const auto *xmpBackend =
+                            KisMetadataBackendRegistry::instance()->value(
+                                "xmp");
+
+                        if (!xmpBackend->loadFrom(layer->metaData(), &buf)) {
+                            const KisMetaData::IOBackend *iptcBackend =
+                                KisMetadataBackendRegistry::instance()->value(
+                                    "iptc");
+                            iptcBackend->loadFrom(layer->metaData(), &buf);
+                        }
+                    }
+                }
+
                 // It's not required to call JxlDecoderReleaseInput(dec.get()) here since
                 // the decoder will be destroyed.
                 image->addNode(layer, image->rootLayer().data());

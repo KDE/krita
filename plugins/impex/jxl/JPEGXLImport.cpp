@@ -395,9 +395,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     || (std::equal(xmpTag.cbegin(),
                                    xmpTag.cend(),
                                    boxType.cbegin()))) {
-                    if (JxlDecoderSetBoxBuffer(dec.get(),
-                                               reinterpret_cast<uint8_t *>(boxType.data()),
-                                               static_cast<size_t>(box.size()))
+                    if (JxlDecoderSetBoxBuffer(
+                            dec.get(),
+                            reinterpret_cast<uint8_t *>(box.data()),
+                            static_cast<size_t>(box.size()))
                         != JXL_DEC_SUCCESS) {
                         errFile << "JxlDecoderSetBoxBuffer failed";
                         return ImportExportCodes::InternalError;
@@ -407,10 +408,13 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 }
             }
         } else if (status == JXL_DEC_BOX_NEED_MORE_OUTPUT) {
+            // Update the box size if it was truncated in a previous buffering.
+            boxSize = box.size();
             box.resize(boxSize * 2);
-            if (JxlDecoderSetBoxBuffer(dec.get(),
-                                       reinterpret_cast<uint8_t *>(boxType.data() + boxSize),
-                                       static_cast<size_t>(box.size() - boxSize))
+            if (JxlDecoderSetBoxBuffer(
+                    dec.get(),
+                    reinterpret_cast<uint8_t *>(box.data() + boxSize),
+                    static_cast<size_t>(box.size() - boxSize))
                 != JXL_DEC_SUCCESS) {
                 errFile << "JxlDecoderGetBoxType failed";
                 return ImportExportCodes::ErrorWhileReading;

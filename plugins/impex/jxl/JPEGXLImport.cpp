@@ -162,7 +162,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
     KisImageSP image{nullptr};
     KisLayerSP layer{nullptr};
-    std::array<char, 5> boxType{};
+    QByteArray boxType(5, 0x0);
     QByteArray box(16384, 0x0);
     auto boxSize = box.size();
 
@@ -350,19 +350,23 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 layer->paintDevice()->makeCloneFrom(d.m_currentFrame, image->bounds());
             }
         } else if (status == JXL_DEC_SUCCESS || status == JXL_DEC_BOX) {
-            if (!boxType.empty()) {
+            if (std::strlen(boxType.data()) != 0) {
                 // Release buffer and get its final size.
                 const auto availOut = JxlDecoderReleaseBoxBuffer(dec.get());
                 box.resize(box.size() - static_cast<int>(availOut));
 
                 QBuffer buf(&box);
-                if (boxType == exifTag) {
+                if (std::equal(boxType.cbegin(),
+                               boxType.cend(),
+                               exifTag.cbegin())) {
                     dbgFile << "Loading EXIF data. Size: " << box.size();
 
                     const auto *backend = KisMetadataBackendRegistry::instance()->value("exif");
 
                     backend->loadFrom(layer->metaData(), &buf);
-                } else if (boxType == xmpTag) {
+                } else if (std::equal(boxType.cbegin(),
+                                      boxType.cend(),
+                                      xmpTag.cbegin())) {
                     dbgFile << "Loading XMP or IPTC data. Size: " << box.size();
 
                     const auto *xmpBackend = KisMetadataBackendRegistry::instance()->value("xmp");
@@ -385,7 +389,12 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     errFile << "JxlDecoderGetBoxType failed";
                     return ImportExportCodes::ErrorWhileReading;
                 }
-                if (boxType == exifTag || boxType == xmpTag) {
+                if ((std::equal(exifTag.cbegin(),
+                                exifTag.cend(),
+                                boxType.cbegin()))
+                    || (std::equal(xmpTag.cbegin(),
+                                   xmpTag.cend(),
+                                   boxType.cbegin()))) {
                     if (JxlDecoderSetBoxBuffer(dec.get(),
                                                reinterpret_cast<uint8_t *>(boxType.data()),
                                                static_cast<size_t>(box.size()))

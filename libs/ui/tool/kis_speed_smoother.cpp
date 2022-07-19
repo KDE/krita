@@ -19,18 +19,14 @@
 #define NUM_SMOOTHING_SAMPLES 3
 #define MIN_TRACKING_DISTANCE 5
 
-#include <boost/accumulators/accumulators.hpp>
-#include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/rolling_mean.hpp>
 #include "kis_algebra_2d.h"
-
-using namespace boost::accumulators;
+#include "KisFilteredRollingMean.h"
 
 struct KisSpeedSmoother::Private
 {
     Private(int historySize)
         : distances(historySize),
-          timeDiffAccumulator(tag::rolling_window::window_size = 200)
+          timeDiffsMean(200, 0.8)
     {
         timer.start();
     }
@@ -55,6 +51,8 @@ struct KisSpeedSmoother::Private
     typedef boost::circular_buffer<DistancePoint> DistanceBuffer;
     DistanceBuffer distances;
 
+    KisFilteredRollingMean timeDiffsMean;
+
     QPointF lastPoint;
     QElapsedTimer timer;
     qreal lastTime {0.0};
@@ -62,9 +60,6 @@ struct KisSpeedSmoother::Private
 
     bool useTimestamps {false};
     int numSmoothingSamples {3};
-
-    accumulator_set<qreal, stats<tag::rolling_mean>> timeDiffAccumulator;
-
 };
 
 
@@ -120,17 +115,10 @@ qreal KisSpeedSmoother::getNextSpeedImpl(const QPointF &pt, qreal time)
         return 0.0;
     }
 
-    const qreal avgTimeDiff = rolling_mean(m_d->timeDiffAccumulator);
-
     const qreal timeDiff = time - m_d->lastTime;
 
-    const qreal timeDiffPortion =
-        !qFuzzyIsNull(avgTimeDiff) ? timeDiff / avgTimeDiff : 1.0;
-
-    // don't count samples that are too different from average
-    if (timeDiffPortion > 0.25 && timeDiffPortion < 2.0) {
-        m_d->timeDiffAccumulator(timeDiff);
-    }
+    m_d->timeDiffsMean.addValue(timeDiff);
+    const qreal avgTimeDiff = m_d->timeDiffsMean.filteredMean();
 
     m_d->lastPoint = pt;
     m_d->lastTime = time;
@@ -147,6 +135,15 @@ qreal KisSpeedSmoother::getNextSpeedImpl(const QPointF &pt, qreal time)
     for (; it != end; ++it) {
         itemsSearched++;
         totalDistance += it->distance;
+
+        /**
+         * Mind you, we don't care about the specific timestamps
+         * of the tablet events! They are not reliable. Instead,
+         * we are trying to estimate the sample rate of the tablet
+         * itself using the filtered mean accumulator. It works in
+         * an assumption that all the tablets generate events at a
+         * fixed sample rate.
+         */
         totalTime += avgTimeDiff;
 
         if (itemsSearched > m_d->numSmoothingSamples &&

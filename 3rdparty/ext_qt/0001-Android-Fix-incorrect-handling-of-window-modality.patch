@@ -1,0 +1,115 @@
+From 03fea83a0520bc99e2d6a569facfde73537baec1 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Tue, 19 Jul 2022 08:50:25 +0000
+Subject: [PATCH] Android: Fix incorrect handling of window modality
+
+Before this, we used to ignore the modality in the "topWindowAt" API
+which made us rely on window modality handling somewhere down the line.
+This resulted in a problem where even though the modal window should be
+able to receive the events, it didn't because the point didn't exist in
+its boundingRect (and we could shift focus to windows whose modality
+wasn't properly handled downstream).
+
+With current implementation. If the dialog is a popup and the point is
+in its bounding rect, then we return it (this ignores modality rules,
+but should be safe enough -- because it is a popup?).
+
+Then we check if the window is modal, if it is we should send all the
+events to it, unless the window has a window manager. In that case if we
+touch the window manager's frame, it should get the events instead.
+---
+ .../android/qandroidplatformscreen.cpp        | 20 ++++++++++++++-----
+ .../android/qandroidplatformwindowmanager.cpp | 11 ++++++++++
+ .../android/qandroidplatformwindowmanager.h   | 16 +++++++++++++++
+ 3 files changed, 42 insertions(+), 5 deletions(-)
+
+diff --git a/src/plugins/platforms/android/qandroidplatformscreen.cpp b/src/plugins/platforms/android/qandroidplatformscreen.cpp
+index f1f936850a..8152523ba3 100644
+--- a/src/plugins/platforms/android/qandroidplatformscreen.cpp
++++ b/src/plugins/platforms/android/qandroidplatformscreen.cpp
+@@ -139,9 +139,20 @@ QWindow *QAndroidPlatformScreen::topLevelAt(const QPoint &p) const
+     // These are the types of widgets which are usually kept on top by the
+     // compositor. But since there is none for SurfaceView, we try our best to
+     // give them the first preference.
+-    for (QAndroidPlatformWindow *w : m_windowStack) {
+-        if (isPopup(w) && w->geometry().contains(p, false) && w->window()->isVisible()) {
+-            return w->window();
++    for (QAndroidPlatformWindow *platformWindow : m_windowStack) {
++        if (isPopup(platformWindow) && platformWindow->geometry().contains(p, false)
++            && platformWindow->window()->isVisible()) {
++            return platformWindow->window();
++        }
++
++        if (platformWindow->window()->isModal() && platformWindow->window()->isVisible()) {
++            // check if the platformWindow doesn't have a window manager and if it does, then check
++            // if the point p isn't in the bounds of window manager, if it is, then we should just
++            // let it (the window manager) handle it.
++            if (!m_windowManagers.contains(platformWindow->winId())
++                || !m_windowManagers[platformWindow->winId()]->contains(p, true)) {
++                return platformWindow->window();
++            }
+         }
+     }
+     for (QAndroidPlatformWindow *w : m_windowStack) {
+@@ -166,8 +177,7 @@ void QAndroidPlatformScreen::addWindow(QAndroidPlatformWindow *window)
+     if (window->parent() && window->isRaster())
+         return;
+ 
+-    if ((window->window()->type() == Qt::Dialog || window->window()->type() == Qt::Tool)
+-        && (window->window()->flags() & Qt::FramelessWindowHint) == 0) {
++    if (QAndroidPlatformWindowManager::needsWindowManager(window->window())) {
+         // we will manage memory ourselves, because our parent is always
+         // MainWindow
+         QAndroidPlatformWindowManager *wm = new QAndroidPlatformWindowManager(window);
+diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
+index 4e896eab3c..4bad4b6553 100644
+--- a/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
++++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.cpp
+@@ -53,6 +53,17 @@ void QAndroidPlatformWindowManager::lowerRealWindow()
+     m_realWindow->lower();
+ }
+ 
++bool QAndroidPlatformWindowManager::contains(QPoint point, bool inNativeUnits)
++{
++    if (inNativeUnits) {
++        point = QHighDpi::fromNativePixels(point, this);
++    }
++    const QRegion wmGeom = geometry();
++    const QRegion childGeom = m_realWindow->window()->geometry();
++
++    return wmGeom.subtracted(childGeom).contains(point);
++}
++
+ void QAndroidPlatformWindowManager::mousePressEvent(QMouseEvent *event)
+ {
+     m_startingPoint = event->globalPos();
+diff --git a/src/plugins/platforms/android/qandroidplatformwindowmanager.h b/src/plugins/platforms/android/qandroidplatformwindowmanager.h
+index f78cdc0725..a548f3dd44 100644
+--- a/src/plugins/platforms/android/qandroidplatformwindowmanager.h
++++ b/src/plugins/platforms/android/qandroidplatformwindowmanager.h
+@@ -30,6 +30,22 @@ public:
+     void lowerRealWindow();
+     QAndroidPlatformWindow *realWindow() { return m_realWindow; }
+ 
++    /**
++     * return true of the window type needs a window manager.
++     */
++    static bool needsWindowManager(QWindow *window)
++    {
++        return ((window->type() == Qt::Dialog || window->type() == Qt::Tool)
++                && (window->flags() & Qt::FramelessWindowHint) == 0);
++    }
++
++    /**
++     * Returns true if point is in the window manager bounds, but not in the bounds of its
++     * child/real window. If the point is in native units, inNativeUnits should be set to true for
++     * valid calulcations.
++     */
++    bool contains(QPoint point, bool inNativeUnits = false);
++
+ protected:
+     void resizeEvent(QResizeEvent *event) override;
+     void showEvent(QShowEvent *event) override;
+-- 
+2.37.0
+

@@ -409,7 +409,7 @@ KisClipboard::askUserForSource(const QMimeData *cbData,
                 choice = PASTE_FORMAT_DOWNLOAD;
             } else if (local) {
                 choice = PASTE_FORMAT_LOCAL;
-            } else if (cbData->hasImage()) {
+            } else if (!qimage.isNull()) {
                 choice = PASTE_FORMAT_CLIP;
             } else {
                 return {false, PASTE_FORMAT_ASK};

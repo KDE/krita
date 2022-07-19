@@ -61,6 +61,7 @@ static QStringList cleanupDirs(const QStringList &pathList)
         if (getRidOfAppDataLocation && cleanPath.startsWith(writableLocation)) {
             continue;
         }
+        cleanedPathList << cleanPath;
     }
     return cleanedPathList;
 }

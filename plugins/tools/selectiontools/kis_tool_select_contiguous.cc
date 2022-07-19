@@ -179,7 +179,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
 
                     return 0;
                 });
-    applicator.applyCommand(cmd, KisStrokeJobData::SEQUENTIAL);
+    applicator.applyCommand(cmd, KisStrokeJobData::BARRIER);
 
 
 

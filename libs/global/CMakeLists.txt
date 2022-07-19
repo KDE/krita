@@ -43,6 +43,7 @@ set(kritaglobal_LIB_SRCS
     KisBezierMesh.cpp
     KisRectsGrid.cpp
     KisSynchronizedConnection.cpp
+    KisFilteredRollingMean.cpp
 )
 
 if(WIN32)

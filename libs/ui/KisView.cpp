@@ -718,7 +718,7 @@ void KisView::dropEvent(QDropEvent *event)
                         if (reference) {
                             const auto pos = this->canvasBase()
                                                  ->coordinatesConverter()
-                                                 ->widgetToImage(imgCursorPos);
+                                                 ->widgetToImage(event->pos());
                             reference->setPosition(
                                 (*this->viewConverter()).imageToDocument(pos));
                             this->canvasBase()

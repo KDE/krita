@@ -161,9 +161,7 @@ void KisToneCurveWidget::updatePixmap()
 {
     d->needUpdatePixmap = false;
     d->pixmap = QPixmap(size());
-    d->pixmap.setDevicePixelRatio(devicePixelRatioF());
     d->curvemap = QPixmap(size());
-    d->curvemap.setDevicePixelRatio(devicePixelRatioF());
     d->pixmap.fill(Qt::black);
     d->curvemap.fill(Qt::transparent);
 
@@ -277,7 +275,6 @@ void KisToneCurveWidget::updatePixmap()
         d->painter.drawPixmap(area,d->curvemap, area);
     }
     d->painter.end();
-
 }
 
 void KisToneCurveWidget::paintEvent(QPaintEvent*)

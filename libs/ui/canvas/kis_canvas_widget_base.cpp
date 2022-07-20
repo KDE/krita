@@ -167,6 +167,11 @@ void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
     Q_UNUSED(value);
 }
 
+void KisCanvasWidgetBase::setWrapAroundViewingModeAxis(int value)
+{
+    Q_UNUSED(value);
+}
+
 QImage KisCanvasWidgetBase::createCheckersImage(qint32 checkSize)
 {
     KisConfig cfg(true);

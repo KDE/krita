@@ -36,6 +36,7 @@ public:
 public:
     using KoCanvasController::documentSize;
     bool wrapAroundMode() const;
+    int wrapAroundModeAxis() const;
     bool levelOfDetailMode() const;
 
     void saveCanvasState(KisPropertiesConfiguration &config) const;
@@ -55,6 +56,10 @@ public Q_SLOTS:
     qreal rotation() const;
     void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
+    void slotSetWrapAroundModeAxis(int axis);
+    void slotSetWrapAroundModeAxisHV();
+    void slotSetWrapAroundModeAxisH();
+    void slotSetWrapAroundModeAxisV();
     void slotTogglePixelGrid(bool value);
     void slotToggleLevelOfDetailMode(bool value);
 

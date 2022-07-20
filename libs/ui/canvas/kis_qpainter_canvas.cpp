@@ -204,6 +204,18 @@ bool KisQPainterCanvas::wrapAroundViewingMode() const
     return false;
 }
 
+void KisQPainterCanvas::setWrapAroundViewingModeAxis(int value)
+{
+    Q_UNUSED(value);
+    dbgKrita << "Wrap around viewing mode not implemented in QPainter Canvas.";
+    return;
+}
+
+int KisQPainterCanvas::wrapAroundViewingModeAxis() const
+{
+    return 0;
+}
+
 void KisQPainterCanvas::finishResizingImage(qint32 w, qint32 h)
 {
     m_d->prescaledProjection->slotImageSizeChanged(w, h);

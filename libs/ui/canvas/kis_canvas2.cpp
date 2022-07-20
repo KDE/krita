@@ -1342,6 +1342,17 @@ bool KisCanvas2::wrapAroundViewingMode() const
     return m_d->canvasWidget->wrapAroundViewingMode();
 }
 
+void KisCanvas2::setWrapAroundViewingModeAxis(int value)
+{
+    updateCanvas();
+    m_d->canvasWidget->setWrapAroundViewingModeAxis(value);
+}
+
+int KisCanvas2::wrapAroundViewingModeAxis() const
+{
+    return m_d->canvasWidget->wrapAroundViewingModeAxis();
+}
+
 void KisCanvas2::bootstrapFinished()
 {
     if (!m_d->bootstrapLodBlocked) return;

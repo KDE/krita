@@ -82,6 +82,12 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="fullscreen"/>
       <Action name="view_detached_canvas"/>
       <Action name="wrap_around_mode"/>
+      <Menu name="wrap_around_mode_direction">
+        <text>Wrap Around Mode Direction</text>
+        <Action name="wrap_around_hv_axis"/>
+        <Action name="wrap_around_h_axis"/>
+        <Action name="wrap_around_v_axis"/>
+      </Menu>
       <Action name="level_of_detail_mode"/>
       <Action name="softProof"/>
       <Action name="gamutCheck"/>

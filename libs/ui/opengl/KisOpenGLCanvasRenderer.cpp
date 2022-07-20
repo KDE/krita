@@ -90,6 +90,7 @@ public:
     bool proofingConfigIsUpdated=false;
 
     bool wrapAroundMode{false};
+    int wrapAroundModeAxis{0};
 
     // Stores a quad for drawing the canvas
     QOpenGLVertexArrayObject quadVAO;
@@ -226,6 +227,16 @@ void KisOpenGLCanvasRenderer::setWrapAroundViewingMode(bool value)
 bool KisOpenGLCanvasRenderer::wrapAroundViewingMode() const
 {
     return d->wrapAroundMode;
+}
+
+void KisOpenGLCanvasRenderer::setWrapAroundViewingModeAxis(int value)
+{
+    d->wrapAroundModeAxis = value;
+}
+
+int KisOpenGLCanvasRenderer::wrapAroundViewingModeAxis() const
+{
+    return d->wrapAroundModeAxis;
 }
 
 void KisOpenGLCanvasRenderer::initializeGL()
@@ -506,9 +517,22 @@ void KisOpenGLCanvasRenderer::drawCheckers(const QRect &updateRect)
     QRectF modelRect;
 
     const QSizeF &widgetSize = d->pixelAlignedWidgetSize;
-    QRectF viewportRect = !d->wrapAroundMode ?
-                converter->imageRectInViewportPixels() :
-                converter->widgetToViewport(QRectF(0, 0, widgetSize.width(), widgetSize.height()));
+    QRectF viewportRect;
+    if (!d->wrapAroundMode) {
+        viewportRect = converter->imageRectInViewportPixels();
+    }
+    else {
+        const QRectF ir = converter->imageRectInViewportPixels();
+        viewportRect = converter->widgetToViewport(QRectF(0, 0, widgetSize.width(), widgetSize.height()));
+        if (d->wrapAroundModeAxis == 1) {   // horizontal only
+            viewportRect.setY(ir.y());
+            viewportRect.setHeight(ir.height());
+        }
+        else if (d->wrapAroundModeAxis == 2) {  // vertical only
+            viewportRect.setX(ir.x());
+            viewportRect.setWidth(ir.width());
+        }
+    }
 
     // TODO: check if it works correctly
     if (!canvas()->renderingLimit().isEmpty()) {
@@ -700,6 +724,14 @@ void KisOpenGLCanvasRenderer::drawImage(const QRect &updateRect)
         // if we don't want to paint wrapping images, just limit the
         // processing area, and the code will handle all the rest
         wr &= ir;
+    }
+    else if (d->wrapAroundModeAxis == 1) {  // horizontal only
+        wr.setTop(ir.top());
+        wr.setBottom(ir.bottom());
+    }
+    else if (d->wrapAroundModeAxis == 2) {  // vertical only
+        wr.setLeft(ir.left());
+        wr.setRight(ir.right());
     }
 
     const int firstColumn = d->xToColWithWrapCompensation(wr.left(), ir);

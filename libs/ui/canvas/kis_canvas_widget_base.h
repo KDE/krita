@@ -48,6 +48,7 @@ public: // KisAbstractCanvasWidget
     void notifyDecorationsWindowMinimized(bool minimized);
 
     void setWrapAroundViewingMode(bool value) override;
+    void setWrapAroundViewingModeAxis(int value) override;
 
     /**
      * Returns the color of the border, i.e. the part of the canvas

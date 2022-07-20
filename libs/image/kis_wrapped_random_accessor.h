@@ -17,7 +17,8 @@ public:
                              qint32 offsetX, qint32 offsetY,
                              bool writable,
                              KisIteratorCompleteListener *completeListener,
-                             const QRect &wrapRect);
+                             const QRect &wrapRect,
+                             const int wrapAroundModeAxis);
 
     void moveTo(qint32 x, qint32 y) override;
     qint32 numContiguousColumns(qint32 x) const override;
@@ -30,6 +31,7 @@ public:
 private:
     QRect m_wrapRect;
     QPoint m_currentPos;
+    int m_wrapAxis;
 };
 
 #endif /* __KIS_WRAPPED_RANDOM_ACCESSOR_H */

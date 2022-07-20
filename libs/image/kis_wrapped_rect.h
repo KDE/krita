@@ -12,21 +12,33 @@
 #include <QtMath>
 
 struct KisWrappedRect : public QVector<QRect> {
-    static inline int xToWrappedX(int x, const QRect &wrapRect) {
+    static inline int xToWrappedX(int x, const QRect &wrapRect, int wrapAxis = 0) {
+        if (wrapAxis == 2 && (x > wrapRect.width() || x < 0)) {
+            // outside vertical-only bounds
+            return -1;
+        }
         x = (x - wrapRect.x()) % wrapRect.width();
         if (x < 0) x += wrapRect.width();
         return x;
     }
 
-    static inline int yToWrappedY(int y, const QRect &wrapRect) {
+    static inline int yToWrappedY(int y, const QRect &wrapRect, int wrapAxis = 0) {
+        if (wrapAxis == 1 && (y > wrapRect.height() || y < 0)) {
+            // outside horizontal-only bounds
+            return -1;
+        }
         y = (y - wrapRect.y()) % wrapRect.height();
         if (y < 0) y += wrapRect.height();
         return y;
     }
 
-    static inline QPoint ptToWrappedPt(QPoint pt, const QRect &wrapRect) {
-        pt.rx() = xToWrappedX(pt.x(), wrapRect);
-        pt.ry() = yToWrappedY(pt.y(), wrapRect);
+    static inline QPoint ptToWrappedPt(QPoint pt, const QRect &wrapRect, int wrapAxis) {
+        if ((wrapAxis == 1 && (pt.y() > wrapRect.height() || pt.y() < 0)) ||
+             (wrapAxis == 2 && (pt.x() > wrapRect.width() || pt.x() < 0))) {
+            return QPoint(-1, -1);
+        }
+        pt.rx() = xToWrappedX(pt.x(), wrapRect, wrapAxis);
+        pt.ry() = yToWrappedY(pt.y(), wrapRect, wrapAxis);
         return pt;
     }
 
@@ -34,12 +46,13 @@ struct KisWrappedRect : public QVector<QRect> {
      * Return origins at which we should paint \p rc with crop rect set to \p wrapRect,
      * so that the final image would look "wrapped".
      */
-    static inline QVector<QPoint> normalizationOriginsForRect(const QRect &rc, const QRect &wrapRect) {
+    static inline QVector<QPoint> normalizationOriginsForRect(const QRect &rc, const QRect &wrapRect, int wrapAxis) {
         QVector<QPoint> result;
 
         if (wrapRect.contains(rc)) {
             result.append(rc.topLeft());
-        } else {
+        }
+        else if (wrapAxis == 0) {   // both axes
             int x = xToWrappedX(rc.x(), wrapRect);
             int y = yToWrappedY(rc.y(), wrapRect);
             int w = qMin(rc.width(), wrapRect.width());
@@ -66,6 +79,41 @@ struct KisWrappedRect : public QVector<QRect> {
 
             if (!(newRect.translated(-wrapRect.width(), -wrapRect.height()) & wrapRect).isEmpty()) { // br
                 result.append(QPoint(x - wrapRect.width(), y - wrapRect.height()));
+            }
+        }
+        else if (wrapAxis == 1) {    // horizontal only
+            int x = xToWrappedX(rc.x(), wrapRect);
+            int y = rc.y();
+            int w = qMin(rc.width(), wrapRect.width());
+            int h = rc.height();
+
+            QRect newRect(x, y, w, h);
+
+            // normal bounds
+            if (!(newRect & wrapRect).isEmpty()) {
+                result.append(QPoint(x, y));
+            }
+            // horizontally wrapped bounds
+            if (!(newRect.translated(-wrapRect.width(), 0) & wrapRect).isEmpty()) {
+                result.append(QPoint(x - wrapRect.width(), y));
+            }
+        }
+        else if (wrapAxis == 2) {  // vertical only
+            int x = rc.x();
+            int y = yToWrappedY(rc.y(), wrapRect);
+            int w = rc.width();
+            int h = qMin(rc.height(), wrapRect.height());
+
+            QRect newRect(x, y, w, h);
+
+            // normal bounds
+            if (!(newRect & wrapRect).isEmpty()) {
+                result.append(QPoint(x, y));
+            }
+
+            // vertically wrapped bounds
+            if (!(newRect.translated(0, -wrapRect.height()) & wrapRect).isEmpty()) {
+                result.append(QPoint(x, y - wrapRect.height()));
             }
         }
 
@@ -114,17 +162,17 @@ public:
         BOTTOMRIGHT
     };
 
-    KisWrappedRect(const QRect &rc, const QRect &wrapRect)
+    KisWrappedRect(const QRect &rc, const QRect &wrapRect, int wrapAxis = 0)
         : m_wrapRect(wrapRect),
           m_originalRect(rc)
     {
         if (wrapRect.contains(rc)) {
             append(rc);
         } else {
-            int x = xToWrappedX(rc.x(), wrapRect);
-            int y = yToWrappedY(rc.y(), wrapRect);
-            int w = qMin(rc.width(), wrapRect.width());
-            int h = qMin(rc.height(), wrapRect.height());
+            int x = xToWrappedX(rc.x(), wrapRect, wrapAxis);
+            int y = yToWrappedY(rc.y(), wrapRect, wrapAxis);
+            int w = wrapAxis == 2 ? wrapRect.width() : qMin(rc.width(), wrapRect.width());
+            int h = wrapAxis == 1 ? wrapRect.height() : qMin(rc.height(), wrapRect.height());
 
             // we ensure that the topleft of the rect belongs to the
             // visible rectangle
@@ -134,9 +182,10 @@ public:
             QRect newRect(x, y, w, h);
 
             append(newRect & wrapRect); // tl
-            append(newRect.translated(-wrapRect.width(), 0) & wrapRect); // tr
-            append(newRect.translated(0, -wrapRect.height()) & wrapRect); // bl
-            append(newRect.translated(-wrapRect.width(), -wrapRect.height()) & wrapRect); // br
+            append(wrapAxis != 2 ? (newRect.translated(-wrapRect.width(), 0) & wrapRect) : QRect()); // tr
+            append(wrapAxis != 1 ? (newRect.translated(0, -wrapRect.height()) & wrapRect) : QRect()); // bl
+            append(wrapAxis == 0 ? (newRect.translated(-wrapRect.width(), -wrapRect.height()) & wrapRect) : QRect()); // br
+
         }
     }
 

@@ -275,12 +275,13 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              */
 
             const QRect wrapRect = painter()->device()->defaultBounds()->imageBorderRect();
+            const int wrapAroundModeAxis = painter()->device()->defaultBounds()->wrapAroundModeAxis();
 
             QList<KisRenderedDab> wrappedDabs;
 
             Q_FOREACH (const KisRenderedDab &dab, state->dabsQueue) {
                 const QVector<QPoint> normalizationOrigins =
-                    KisWrappedRect::normalizationOriginsForRect(dab.realBounds(), wrapRect);
+                    KisWrappedRect::normalizationOriginsForRect(dab.realBounds(), wrapRect, wrapAroundModeAxis);
 
                 Q_FOREACH(const QPoint &pt, normalizationOrigins) {
                     KisRenderedDab newDab = dab;
@@ -293,6 +294,12 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
             }
 
             state->dabsQueue = wrappedDabs;
+
+            // just return if the dabs were all out of bounds
+            if (state->dabsQueue.isEmpty()) {
+                m_updateSharedState.clear();
+                return std::make_pair(m_currentUpdatePeriod, false);
+            }
 
         } else {
             // just get all rects

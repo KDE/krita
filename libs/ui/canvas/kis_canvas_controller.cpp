@@ -286,6 +286,38 @@ bool KisCanvasController::wrapAroundMode() const
     return kritaCanvas->wrapAroundViewingMode();
 }
 
+void KisCanvasController::slotSetWrapAroundModeAxis(int value)
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    kritaCanvas->setWrapAroundViewingModeAxis(value);
+    kritaCanvas->image()->setWrapAroundModeAxis(value);
+}
+
+void KisCanvasController::slotSetWrapAroundModeAxisHV()
+{
+    slotSetWrapAroundModeAxis(0);
+}
+
+void KisCanvasController::slotSetWrapAroundModeAxisH()
+{
+    slotSetWrapAroundModeAxis(1);
+}
+
+void KisCanvasController::slotSetWrapAroundModeAxisV()
+{
+    slotSetWrapAroundModeAxis(2);
+}
+
+int KisCanvasController::wrapAroundModeAxis() const
+{
+    KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
+    Q_ASSERT(kritaCanvas);
+
+    return kritaCanvas->wrapAroundViewingModeAxis();
+}
+
 void KisCanvasController::slotTogglePixelGrid(bool value)
 {
     KisConfig cfg(false);
@@ -347,6 +379,7 @@ void KisCanvasController::saveCanvasState(KisPropertiesConfiguration &config) co
     config.setProperty("rotation", rotation());
     config.setProperty("mirror", m_d->coordinatesConverter->xAxisMirrored());
     config.setProperty("wrapAround", wrapAroundMode());
+    config.setProperty("wrapAroundAxis", wrapAroundModeAxis());
     config.setProperty("enableInstantPreview", levelOfDetailMode());
 }
 
@@ -364,6 +397,7 @@ void KisCanvasController::restoreCanvasState(const KisPropertiesConfiguration &c
     setPreferredCenter(QPointF(panX, panY));
 
     slotToggleWrapAroundMode(config.getBool("wrapAround", false));
+    slotSetWrapAroundModeAxis(config.getInt("wrapAroundAxis", 0));
     kritaCanvas->setLodPreferredInCanvas(config.getBool("enableInstantPreview", false));
 }
 

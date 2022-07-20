@@ -303,6 +303,9 @@ public:
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
 
+    void setWrapAroundViewingModeAxis(int value);
+    int wrapAroundViewingModeAxis() const;
+
     void setLodPreferredInCanvas(bool value);
     bool lodPreferredInCanvas() const;
 

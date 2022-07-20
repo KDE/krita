@@ -259,6 +259,7 @@ public:
     bool isolateGroup;
 
     bool wrapAroundModePermitted = false;
+    int wrapAroundModeAxis = 0;
 
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
@@ -2371,7 +2372,7 @@ void KisImage::requestProjectionUpdate(KisNode *node, const QVector<QRect> &rect
 
         const QRect boundRect = effectiveLodBounds();
         Q_FOREACH (const QRect &rc, rects) {
-            KisWrappedRect splitRect(rc, boundRect);
+            KisWrappedRect splitRect(rc, boundRect, m_d->wrapAroundModeAxis);
             allSplitRects.append(splitRect);
         }
 
@@ -2493,6 +2494,17 @@ void KisImage::setWrapAroundModePermitted(bool value)
         applicator.end();
     }
 }
+
+void KisImage::setWrapAroundModeAxis(int value)
+{
+    m_d->wrapAroundModeAxis = value;
+}
+
+int KisImage::wrapAroundModeAxis() const
+{
+    return m_d->wrapAroundModeAxis;
+}
+
 
 bool KisImage::wrapAroundModePermitted() const
 {

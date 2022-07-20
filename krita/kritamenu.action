@@ -659,6 +659,42 @@
       <isCheckable>true</isCheckable>
       <statusTip></statusTip>
     </Action>
+    <Action name="wrap_around_hv_axis">
+      <icon>wraparound</icon>
+      <text>Wrap Around Both Directions</text>
+      <whatsThis></whatsThis>
+      <toolTip>Wrap Around Both Directions</toolTip>
+      <iconText>Wrap Around Both Directions</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wrap_around_h_axis">
+      <icon>wraparound</icon>
+      <text>Wrap Around Horizontally</text>
+      <whatsThis></whatsThis>
+      <toolTip>Wrap Around Horizontally</toolTip>
+      <iconText>Wrap Around Horizontally</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
+    <Action name="wrap_around_v_axis">
+      <icon>wraparound</icon>
+      <text>Wrap Around Vertically</text>
+      <whatsThis></whatsThis>
+      <toolTip>Wrap Around Vertically</toolTip>
+      <iconText>Wrap Around Vertically</iconText>
+      <activationFlags>1</activationFlags>
+      <activationConditions>0</activationConditions>
+      <shortcut></shortcut>
+      <isCheckable>true</isCheckable>
+      <statusTip></statusTip>
+    </Action>
     <Action name="level_of_detail_mode">
       <icon></icon>
       <text>&amp;Instant Preview Mode</text>

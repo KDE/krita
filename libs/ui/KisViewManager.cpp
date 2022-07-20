@@ -182,6 +182,10 @@ public:
     KisAction *rotateCanvasLeft {nullptr};
     KisAction *resetCanvasRotation {nullptr};
     KisAction *wrapAroundAction {nullptr};
+    KisAction *wrapAroundHVAxisAction {nullptr};
+    KisAction *wrapAroundHAxisAction {nullptr};
+    KisAction *wrapAroundVAxisAction {nullptr};
+    QActionGroup *wrapAroundAxisActions {nullptr};
     KisAction *levelOfDetailAction {nullptr};
     KisAction *showRulersAction {nullptr};
     KisAction *rulersTrackMouseAction {nullptr};
@@ -468,6 +472,12 @@ void KisViewManager::setCurrentView(KisView *view)
 
         d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
         d->wrapAroundAction->setChecked(canvasController->wrapAroundMode());
+        d->viewConnections.addUniqueConnection(d->wrapAroundHVAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisHV()));
+        d->wrapAroundHVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == 0);
+        d->viewConnections.addUniqueConnection(d->wrapAroundHAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisH()));
+        d->wrapAroundHAxisAction->setChecked(canvasController->wrapAroundModeAxis() == 1);
+        d->viewConnections.addUniqueConnection(d->wrapAroundVAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisV()));
+        d->wrapAroundVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == 2);
 
         d->viewConnections.addUniqueConnection(d->levelOfDetailAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleLevelOfDetailMode(bool)));
         d->levelOfDetailAction->setChecked(canvasController->levelOfDetailMode());
@@ -704,6 +714,13 @@ void KisViewManager::createActions()
     d->rotateCanvasLeft    = actionManager()->createAction("rotate_canvas_left");
     d->resetCanvasRotation = actionManager()->createAction("reset_canvas_rotation");
     d->wrapAroundAction    = actionManager()->createAction("wrap_around_mode");
+    d->wrapAroundHVAxisAction = actionManager()->createAction("wrap_around_hv_axis");
+    d->wrapAroundHAxisAction  = actionManager()->createAction("wrap_around_h_axis");
+    d->wrapAroundVAxisAction  = actionManager()->createAction("wrap_around_v_axis");
+    d->wrapAroundAxisActions = new QActionGroup(this);
+    d->wrapAroundAxisActions->addAction(d->wrapAroundHVAxisAction);
+    d->wrapAroundAxisActions->addAction(d->wrapAroundHAxisAction);
+    d->wrapAroundAxisActions->addAction(d->wrapAroundVAxisAction);
     d->levelOfDetailAction = actionManager()->createAction("level_of_detail_mode");
     d->softProof           = actionManager()->createAction("softProof");
     d->gamutCheck          = actionManager()->createAction("gamutCheck");

@@ -55,6 +55,11 @@ bool KisDefaultBounds::wrapAroundMode() const
     return m_d->image ? m_d->image->wrapAroundModeActive() : false;
 }
 
+int KisDefaultBounds::wrapAroundModeAxis() const
+{
+    return m_d->image ? m_d->image->wrapAroundModeAxis() : 0;
+}
+
 int KisDefaultBounds::currentLevelOfDetail() const
 {
     return m_d->image ? m_d->image->currentLevelOfDetail() : 0;
@@ -113,6 +118,12 @@ bool KisSelectionDefaultBounds::wrapAroundMode() const
 {
     return m_d->parentDevice ?
         m_d->parentDevice->defaultBounds()->wrapAroundMode() : false;
+}
+
+int KisSelectionDefaultBounds::wrapAroundModeAxis() const
+{
+    return m_d->parentDevice ?
+        m_d->parentDevice->defaultBounds()->wrapAroundModeAxis() : 0;
 }
 
 int KisSelectionDefaultBounds::currentLevelOfDetail() const
@@ -186,6 +197,11 @@ QRect KisWrapAroundBoundsWrapper::bounds() const
 bool KisWrapAroundBoundsWrapper::wrapAroundMode() const
 {
     return true;
+}
+
+int KisWrapAroundBoundsWrapper::wrapAroundModeAxis() const
+{
+    return m_d->base->wrapAroundModeAxis();
 }
 
 int KisWrapAroundBoundsWrapper::currentLevelOfDetail() const

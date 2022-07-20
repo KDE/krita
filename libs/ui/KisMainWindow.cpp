@@ -1148,7 +1148,7 @@ bool KisMainWindow::hackIsSaving() const
 bool KisMainWindow::installBundle(const QString &fileName) const
 {
     QFileInfo from(fileName);
-    QFileInfo to(QStringLiteral("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation), from.fileName()));
+    QFileInfo to(QStringLiteral("%1/%2").arg(KoResourcePaths::getAppDataLocation(), from.fileName()));
     if (to.exists()) {
         QFile::remove(to.canonicalFilePath());
     }

@@ -12,6 +12,8 @@
 
 #include "kritaui_export.h"
 
+#define PROFILE_VERSION 6
+
 class KisAbstractInputAction;
 class KisInputProfile;
 
@@ -105,6 +107,11 @@ public:
      * Save all profiles to configuration on disk.
      */
     void saveProfiles();
+
+    /**
+     * Save \c profile to \c storagePath
+     */
+    void saveProfile(KisInputProfile *profile, QString storagePath);
 
     /**
      * Reset all profiles to the default state.

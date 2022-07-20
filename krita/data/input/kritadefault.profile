@@ -15,7 +15,7 @@
 
 [General]
 name=Krita Default
-version=5
+version=6
 
 [Pan Canvas]
 0={0;5;[];0;0;2}

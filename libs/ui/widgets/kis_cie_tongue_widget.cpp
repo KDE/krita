@@ -284,9 +284,9 @@ void KisCIETongueWidget::biasedText(int x, int y, const QString& txt)
 QRgb KisCIETongueWidget::colorByCoord(double x, double y)
 {
     // Get xyz components scaled from coordinates
- 
-    double cx =       ((double) x) / (d->pxcols - 1);
-    double cy = 1.0 - ((double) y) / (d->pxrows - 1);
+
+    double cx = ((double)x) / (d->pxcols * devicePixelRatioF() - 1);
+    double cy = 1.0 - ((double)y) / (d->pxrows * devicePixelRatioF() - 1);
     double cz = 1.0 - cx - cy;
  
     // Project xyz to XYZ space. Note that in this
@@ -335,33 +335,31 @@ void KisCIETongueWidget::outlineTongue()
 void KisCIETongueWidget::fillTongue()
 {
     QImage Img = d->cietongue.toImage();
- 
+    Img.setDevicePixelRatio(devicePixelRatioF());
+
     int x;
- 
-    for (int y = 0; y < d->pxrows; ++y)
-    {
+
+    for (int y = 0; y < d->pxrows * devicePixelRatioF(); ++y) {
         int xe = 0;
  
         // Find horizontal extents of tongue on this line.
- 
-        for (x = 0; x < d->pxcols; ++x)
-        {
+
+        for (x = 0; x < d->pxcols * devicePixelRatioF(); ++x) {
             if (QColor(Img.pixel(x + d->xBias, y)) != QColor(Qt::black))
             {
-                for (xe = d->pxcols - 1; xe >= x; --xe)
-                {
+                for (xe = (d->pxcols * devicePixelRatioF()) - 1; xe >= x;
+                     --xe) {
                     if (QColor(Img.pixel(xe + d->xBias, y)) != QColor(Qt::black))
                     {
                         break;
                     }
                 }
- 
+
                 break;
             }
         }
- 
-        if (x < d->pxcols)
-        {
+
+        if (x < d->pxcols * devicePixelRatioF()) {
             for ( ; x <= xe; ++x)
             {
                 QRgb Color = colorByCoord(x, y);
@@ -371,6 +369,7 @@ void KisCIETongueWidget::fillTongue()
     }
 
     d->cietongue = QPixmap::fromImage(Img, Qt::AvoidDither);
+    d->cietongue.setDevicePixelRatio(devicePixelRatioF());
 }
  
 void KisCIETongueWidget::drawTongueAxis()
@@ -518,7 +517,8 @@ void KisCIETongueWidget::drawWhitePoint()
 
 void KisCIETongueWidget::drawGamut()
 {
-    d->gamutMap = QPixmap(size());
+    d->gamutMap = QPixmap(size() * devicePixelRatioF());
+    d->gamutMap.setDevicePixelRatio(devicePixelRatioF());
     d->gamutMap.fill(Qt::black);
     QPainter gamutPaint;
     gamutPaint.begin(&d->gamutMap);
@@ -556,8 +556,7 @@ void KisCIETongueWidget::drawGamut()
     d->painter.save();
     d->painter.setOpacity(0.5);
     d->painter.setCompositionMode(QPainter::CompositionMode_Multiply);
-    QRect area(d->xBias, 0, d->pxcols, d->pxrows);
-    d->painter.drawPixmap(area, d->gamutMap, area);
+    d->painter.drawPixmap(0, 0, d->gamutMap);
     d->painter.setOpacity(1.0);
     d->painter.restore();
 }
@@ -565,17 +564,21 @@ void KisCIETongueWidget::drawGamut()
 void KisCIETongueWidget::updatePixmap()
 {
     d->needUpdatePixmap = false;
-    d->pixmap = QPixmap(size());
+    d->pixmap = QPixmap(size() * devicePixelRatioF());
+    d->pixmap.setDevicePixelRatio(devicePixelRatioF());
 
     if (d->cieTongueNeedsUpdate){
     // Draw the CIE tongue curve. I don't see why we need to redraw it every time the whitepoint and such changes so we cache it.
         d->cieTongueNeedsUpdate = false;
-        d->cietongue = QPixmap(size());
+        d->cietongue = QPixmap(size() * devicePixelRatioF());
+        d->cietongue.setDevicePixelRatio(devicePixelRatioF());
         d->cietongue.fill(Qt::black);
         d->painter.begin(&d->cietongue);
- 
-        int pixcols = d->pixmap.width();
-        int pixrows = d->pixmap.height();
+
+        int pixcols = static_cast<int>(d->cietongue.width()
+                                       / d->cietongue.devicePixelRatioF());
+        int pixrows = static_cast<int>(d->cietongue.height()
+                                       / d->cietongue.devicePixelRatioF());
 
         d->gridside = (qMin(pixcols, pixrows)) / 512.0;
         d->xBias    = grids(32);
@@ -588,9 +591,9 @@ void KisCIETongueWidget::updatePixmap()
 
         outlineTongue();
         d->painter.end();
-    
+
         fillTongue();
-    
+
         d->painter.begin(&d->cietongue);
         drawTongueAxis();
         drawLabels();
@@ -605,7 +608,7 @@ void KisCIETongueWidget::updatePixmap()
     {
         drawWhitePoint();
     }
- 
+
     if (d->Primaries[2] != 0.0)
     {
         drawColorantTriangle();

@@ -485,12 +485,13 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag, const bool allowOverwrite)
         return false;
     }
 
+    KisResourceLocator::instance()->purgeTag(tag->url(), tag->resourceType());
     bool r = resetQuery();
     QModelIndex idx = indexForTag(tag);
     emit dataChanged(idx, idx, {Qt::EditRole});
 
     // set the url of the provided tag to the new one
-    tag->setUrl(name);
+    tag->setUrl(url);
 
     return r;
 

@@ -142,7 +142,9 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
         bool result = d->model->renameTag(tag, false);
         if (!result) {
             KisTagSP tagToRemove = d->model->tagForUrl(tagName);
-            if (QMessageBox::question(this, i18nc("Dialog title", "Remove existing tag with that name?"),
+
+            if (tagToRemove &&
+                QMessageBox::question(this, i18nc("Dialog title", "Remove existing tag with that name?"),
                 i18nc("Dialog message (the arguments are both somewhat user readable nouns or adjectives (names of the tags), can be treated as nouns since they represent the tags)",
                 "A tag with this unique name already exists. In order to continue renaming, the existing tag needs to be removed. Do you want to continue?\n"
                 "Tag to be removed: %1\n"

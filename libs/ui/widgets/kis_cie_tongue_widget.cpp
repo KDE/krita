@@ -369,9 +369,8 @@ void KisCIETongueWidget::fillTongue()
             }
         }
     }
- 
+
     d->cietongue = QPixmap::fromImage(Img, Qt::AvoidDither);
-    d->cietongue.setDevicePixelRatio(devicePixelRatioF());
 }
  
 void KisCIETongueWidget::drawTongueAxis()
@@ -519,8 +518,7 @@ void KisCIETongueWidget::drawWhitePoint()
 
 void KisCIETongueWidget::drawGamut()
 {
-    d->gamutMap=QPixmap(size());
-    d->gamutMap.setDevicePixelRatio(devicePixelRatioF());
+    d->gamutMap = QPixmap(size());
     d->gamutMap.fill(Qt::black);
     QPainter gamutPaint;
     gamutPaint.begin(&d->gamutMap);
@@ -559,7 +557,7 @@ void KisCIETongueWidget::drawGamut()
     d->painter.setOpacity(0.5);
     d->painter.setCompositionMode(QPainter::CompositionMode_Multiply);
     QRect area(d->xBias, 0, d->pxcols, d->pxrows);
-    d->painter.drawPixmap(area,d->gamutMap, area);
+    d->painter.drawPixmap(area, d->gamutMap, area);
     d->painter.setOpacity(1.0);
     d->painter.restore();
 }
@@ -568,7 +566,6 @@ void KisCIETongueWidget::updatePixmap()
 {
     d->needUpdatePixmap = false;
     d->pixmap = QPixmap(size());
-    d->pixmap.setDevicePixelRatio(devicePixelRatioF());
 
     if (d->cieTongueNeedsUpdate){
     // Draw the CIE tongue curve. I don't see why we need to redraw it every time the whitepoint and such changes so we cache it.

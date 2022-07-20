@@ -19,6 +19,7 @@
 #include <kemailsettings.h>
 #include <kconfiggroup.h>
 #include <ksharedconfig.h>
+#include <KoResourcePaths.h>
 
 #include <QLineEdit>
 #include <QCompleter>
@@ -93,7 +94,7 @@ KoConfigAuthorPage::KoConfigAuthorPage()
     d->defaultAuthor = i18n("Anonymous");
 
     QStringList profilesNew;
-    QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/");
+    QDir dir(KoResourcePaths::getAppDataLocation() + "/authorinfo/");
     QStringList filters = QStringList() << "*.authorinfo";
     Q_FOREACH(const QString &entry, dir.entryList(filters)) {
         QFile file(dir.absoluteFilePath(entry));
@@ -342,7 +343,7 @@ void KoConfigAuthorPage::removeContactEntry()
 
 void KoConfigAuthorPage::apply()
 {
-    QString authorInfo = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/authorinfo/";
+    QString authorInfo = KoResourcePaths::getAppDataLocation() + "/authorinfo/";
     QDir dir(authorInfo);
     if (!dir.mkpath(authorInfo)) {
         qWarning()<<"We can't make an author info directory, and therefore not save!";

@@ -48,13 +48,31 @@ Q_SIGNALS:
     void sigRequestUpdateOutline();
     void sigRequestCursor(const QCursor &cursor);
     void sigRequestCursorReset();
+    /**
+     * Notifies about the raw color picked from the layer,
+     * including its alpha channel.
+     */
+    void sigRawColorSelected(const KoColor &color);
+
+    /**
+     * Notifies about the "palette" color picked from the layer,
+     * that is, with the alpha channel set to OPACITY_OPAQUE.
+     */
     void sigColorSelected(const KoColor &color);
+
+    /**
+     * Notifies about the "palette" color picked from the layer,
+     * that is, with the alpha channel set to OPACITY_OPAQUE.
+     *
+     * This notification is emitted only once at the very end
+     * of the color picking stroke.
+     */
     void sigFinalColorSelected(const KoColor &color);
 
 private Q_SLOTS:
     void activateDelayedPreview();
     void slotAddSamplingJob(const QPointF &docPoint);
-    void slotColorSamplingFinished(const KoColor &color);
+    void slotColorSamplingFinished(const KoColor &rawColor);
 
 private:
     struct Private;

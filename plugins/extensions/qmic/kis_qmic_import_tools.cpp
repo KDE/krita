@@ -83,7 +83,8 @@ applyLayerNameChanges(const KisQMicImage &srcGmicImage,
         // Some GMic filters encode layer position into the layer name.
         // E.g. from extract foreground: "name([unnamed]
         // [foreground]),pos(55,35)"
-        const QRegularExpression positionPattern(R"(\Wpos\((\d+),(\d+)\))");
+        const QRegularExpression positionPattern(
+            R"(pos\(\s*(-?\d*)[^)](-?\d*)\s*\))");
         const QRegularExpressionMatch match =
             positionPattern.match(srcGmicImage.m_layerName);
         if (match.hasMatch()) {

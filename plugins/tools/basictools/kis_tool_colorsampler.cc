@@ -36,7 +36,7 @@ KisToolColorSampler::KisToolColorSampler(KoCanvasBase *canvas)
     connect(&m_helper, SIGNAL(sigRequestCursor(QCursor)), this, SLOT(slotColorPickerRequestedCursor(QCursor)));
     connect(&m_helper, SIGNAL(sigRequestCursorReset()), this, SLOT(slotColorPickerRequestedCursorReset()));
     connect(&m_helper, SIGNAL(sigRequestUpdateOutline()), this, SLOT(slotColorPickerRequestedOutlineUpdate()));
-    connect(&m_helper, SIGNAL(sigColorSelected(KoColor)), this, SLOT(slotColorPickerSelectedColor(KoColor)));
+    connect(&m_helper, SIGNAL(sigRawColorSelected(KoColor)), this, SLOT(slotColorPickerSelectedColor(KoColor)));
     connect(&m_helper, SIGNAL(sigFinalColorSelected(KoColor)), this, SLOT(slotColorPickerSelectionFinished(KoColor)));
 }
 
@@ -65,15 +65,21 @@ void KisToolColorSampler::slotColorPickerRequestedOutlineUpdate()
 
 void KisToolColorSampler::slotColorPickerSelectedColor(const KoColor &color)
 {
+    /**
+     * Please remember that m_sampledColor also have the alpha
+     * of the picked color!
+     */
     m_sampledColor = color;
-    displaySampledColor();
+    displaySampledColor(m_sampledColor);
 }
 
 void KisToolColorSampler::slotColorPickerSelectionFinished(const KoColor &color)
 {
+    Q_UNUSED(color);
+
     if (m_config->addColorToCurrentPalette) {
         KisSwatch swatch;
-        swatch.setColor(m_sampledColor);
+        swatch.setColor(color);
         // We don't ask for a name, too intrusive here
 
         QModelIndex idx = m_tagFilterProxyModel->index(m_optionsWidget->cmbPalette->currentIndex(), 0);
@@ -81,9 +87,9 @@ void KisToolColorSampler::slotColorPickerSelectionFinished(const KoColor &color)
 
         if (palette) {
             KisSwatchGroup::SwatchInfo info =
-                    palette->getClosestColorInfo(m_sampledColor);
+                    palette->getClosestColorInfo(color);
 
-            if (info.swatch.color() != m_sampledColor) {
+            if (info.swatch.color() != color) {
                 palette->add(swatch);
                 if (!KoResourceServerProvider::instance()->paletteServer()->updateResource(palette)) {
                     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(this->canvas());
@@ -205,11 +211,11 @@ struct SampledChannel {
     QString valueText;
 };
 
-void KisToolColorSampler::displaySampledColor()
+void KisToolColorSampler::displaySampledColor(const KoColor &color)
 {
-    if (m_sampledColor.data() && m_optionsWidget) {
+    if (color.data() && m_optionsWidget) {
 
-        QList<KoChannelInfo *> channels = m_sampledColor.colorSpace()->channels();
+        QList<KoChannelInfo *> channels = color.colorSpace()->channels();
         m_optionsWidget->listViewChannels->clear();
 
         QVector<SampledChannel> sampledChannels;
@@ -223,9 +229,9 @@ void KisToolColorSampler::displaySampledColor()
             pc.name = channels[i]->name();
 
             if (m_config->normaliseValues) {
-                pc.valueText = m_sampledColor.colorSpace()->normalisedChannelValueText(m_sampledColor.data(), i);
+                pc.valueText = color.colorSpace()->normalisedChannelValueText(color.data(), i);
             } else {
-                pc.valueText = m_sampledColor.colorSpace()->channelValueText(m_sampledColor.data(), i);
+                pc.valueText = color.colorSpace()->channelValueText(color.data(), i);
             }
 
             sampledChannels[channels[i]->displayPosition()] = pc;
@@ -241,7 +247,7 @@ void KisToolColorSampler::displaySampledColor()
 
         if (qEnvironmentVariableIsSet("KRITA_DEBUG_DISPLAY_COLOR")) {
             KisCanvas2 *kritaCanvas = dynamic_cast<KisCanvas2*>(canvas());
-            KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(m_sampledColor, Float32BitsColorDepthID);
+            KoColor newColor = kritaCanvas->displayColorConverter()->applyDisplayFiltering(color, Float32BitsColorDepthID);
             KIS_SAFE_ASSERT_RECOVER_RETURN(newColor.colorSpace()->colorModelId() == RGBAColorModelID);
 
             QVector<float> values(4);
@@ -329,7 +335,7 @@ void KisToolColorSampler::slotSetUpdateColor(bool state)
 void KisToolColorSampler::slotSetNormaliseValues(bool state)
 {
     m_config->normaliseValues = state;
-    displaySampledColor();
+    displaySampledColor(m_sampledColor);
 }
 
 void KisToolColorSampler::slotSetAddPalette(bool state)

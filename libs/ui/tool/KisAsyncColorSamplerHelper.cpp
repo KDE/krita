@@ -293,9 +293,9 @@ void KisAsyncColorSamplerHelper::slotAddSamplingJob(const QPointF &docPoint)
     }
 }
 
-void KisAsyncColorSamplerHelper::slotColorSamplingFinished(const KoColor &_color)
+void KisAsyncColorSamplerHelper::slotColorSamplingFinished(const KoColor &rawColor)
 {
-    KoColor color(_color);
+    KoColor color(rawColor);
 
     color.setOpacity(OPACITY_OPAQUE_U8);
 
@@ -303,6 +303,7 @@ void KisAsyncColorSamplerHelper::slotColorSamplingFinished(const KoColor &_color
         m_d->canvas->resourceManager()->setResource(m_d->sampleResourceId, color);
     }
 
+    Q_EMIT sigRawColorSelected(rawColor);
     Q_EMIT sigColorSelected(color);
 
     if (!m_d->showPreview) return;

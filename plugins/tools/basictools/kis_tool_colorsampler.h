@@ -95,7 +95,7 @@ private Q_SLOTS:
     void slotColorPickerSelectionFinished(const KoColor &color);
 
 private:
-    void displaySampledColor();
+    void displaySampledColor(const KoColor &color);
     void updateOptionWidget();
 
     // Configuration

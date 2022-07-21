@@ -141,9 +141,11 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
         return;
     }
 
+    bool result = false;
+
     if (canRenameCurrentTag && !tagName.isEmpty()) {
-        tag->setName(tagName);
-        bool result = d->model->renameTag(tag, false);
+         result = d->model->renameTag(tag, tagName, false);
+
         if (!result) {
             KisTagSP tagToRemove = d->model->tagForUrl(tagName);
 
@@ -153,14 +155,18 @@ void KisTagChooserWidget::tagToolRenameCurrentTag(const QString& tagName)
                 "A tag with this unique name already exists. In order to continue renaming, the existing tag needs to be removed. Do you want to continue?\n"
                 "Tag to be removed: %1\n"
                 "Tag's unique name: %2", tagToRemove->name(), tagToRemove->url()), QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel) != QMessageBox::Cancel) {
-                result = d->model->renameTag(tag, true);
+                result = d->model->renameTag(tag, tagName, true);
                 KIS_SAFE_ASSERT_RECOVER_RETURN(result);
             }
         }
     }
-    // apparently after a name change it doesn't figure out that the model should be resorted even if we explicitely ask it to...
-    d->model->sort(KisAllTagsModel::Active);
-    d->model->sort(KisAllTagsModel::Name);
+
+    if (result) {
+        KisTagSP renamedTag = d->model->tagForUrl(tagName);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(renamedTag);
+        const QModelIndex idx = d->model->indexForTag(renamedTag);
+        setCurrentIndex(idx.row());
+    }
 }
 
 void KisTagChooserWidget::tagToolUndeleteLastTag(KisTagSP tag)

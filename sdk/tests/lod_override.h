@@ -36,6 +36,10 @@ private:
             return m_parent->wrapAroundMode();
         }
 
+        int wrapAroundModeAxis() const override {
+            return m_parent->wrapAroundModeAxis();
+        }
+
         int currentLevelOfDetail() const override {
             return m_lod;
         }

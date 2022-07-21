@@ -836,6 +836,9 @@ KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
         bool wrapAroundMode() const override {
             return true;
         }
+        int wrapAroundModeAxis() const override {
+            return 0;
+        }
         int currentLevelOfDetail() const override {
             return 0;
         }
@@ -1398,6 +1401,9 @@ struct TestingLodDefaultBounds : public KisDefaultBoundsBase {
     }
     bool wrapAroundMode() const override {
         return false;
+    }
+    int wrapAroundModeAxis() const override {
+        return 0;
     }
 
     int currentLevelOfDetail() const override {

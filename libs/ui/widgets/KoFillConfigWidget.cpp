@@ -211,6 +211,8 @@ KoFillConfigWidget::KoFillConfigWidget(KoCanvasBase *canvas, KoFlake::FillVarian
     d->canvas = canvas;
 
     if (trackShapeSelection) {
+        connect(d->canvas->selectedShapesProxy(), SIGNAL(selectionChanged()), &d->shapeChangedCompressor,
+                SLOT(start()));
         connect(&d->shapeChangedCompressor, SIGNAL(timeout()), this, SLOT(shapeChanged()));
     }
 

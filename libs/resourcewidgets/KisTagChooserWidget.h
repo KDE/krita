@@ -107,6 +107,8 @@ private Q_SLOTS:
     /// Companion to `cacheSelectedTag`, this method restore the selection after model reset.
     void restoreTagFromCache();
 
+    void slotTagModelDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> roles);
+
 private:
 
 

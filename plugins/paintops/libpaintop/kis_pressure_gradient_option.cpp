@@ -5,7 +5,6 @@
  */
 #include "kis_pressure_gradient_option.h"
 
-#include <kis_curve_label.h>
 #include <klocalizedstring.h>
 #include <KoColor.h>
 #include <resources/KoAbstractGradient.h>

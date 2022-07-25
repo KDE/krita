@@ -16,16 +16,6 @@
 #include "kis_signals_blocker.h"
 #include "kis_icon_utils.h"
 
-inline void setLabel(QLabel* label, const KisCurveLabel& curve_label)
-{
-    if (curve_label.icon().isNull()) {
-        label->setText(curve_label.name());
-    }
-    else {
-        label->setPixmap(QPixmap::fromImage(curve_label.icon()));
-    }
-}
-
 KisCurveOptionWidget::KisCurveOptionWidget(KisCurveOption *curveOption, const QString &minLabel, const QString &maxLabel, bool hideSlider)
     : KisPaintOpOption(curveOption->id().name(), curveOption->category(), curveOption->isChecked())
     , m_widget(new QWidget)

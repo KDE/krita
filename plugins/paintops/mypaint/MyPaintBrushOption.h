@@ -15,7 +15,6 @@
 
 #include <KoID.h>
 #include <kis_cubic_curve.h>
-#include <kis_curve_label.h>
 #include <kis_dynamic_sensor.h>
 #include <kis_serializable_configuration.h>
 #include <kis_shared.h>

@@ -17,7 +17,6 @@
 #include <klocalizedstring.h>
 
 #include "kis_serializable_configuration.h"
-#include "kis_curve_label.h"
 #include <kis_cubic_curve.h>
 #include <kis_shared_ptr.h>
 #include <kis_shared.h>
@@ -94,13 +93,6 @@ enum DynamicSensorType {
  */
 class PAINTOP_EXPORT KisDynamicSensor : public KisSerializableConfiguration
 {
-
-public:
-    enum ParameterSign {
-        NegativeParameter = -1,
-        UnSignedParameter = 0,
-        PositiveParameter = 1
-    };
 
 protected:
     KisDynamicSensor(DynamicSensorType type);

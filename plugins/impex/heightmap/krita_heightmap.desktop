@@ -74,3 +74,4 @@ Terminal=false
 Type=Application
 X-KDE-SubstituteUID=false
 X-KDE-Username=
+X-KDE-AliasFor=org.kde.krita.desktop

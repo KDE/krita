@@ -70,3 +70,4 @@ Categories=Qt;KDE;Office;Graphics;
 StartupNotify=true
 NoDisplay=true
 Type=Application
+X-KDE-AliasFor=org.kde.krita.desktop

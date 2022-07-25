@@ -72,3 +72,4 @@ StartupNotify=true
 X-DBUS-StartupType=Multi
 X-DBUS-ServiceName=org.krita.krita
 NoDisplay=true
+X-KDE-AliasFor=org.kde.krita.desktop

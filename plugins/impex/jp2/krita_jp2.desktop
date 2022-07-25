@@ -123,3 +123,4 @@ Icon=krita
 StartupNotify=true
 NoDisplay=true
 Terminal=false
+X-KDE-AliasFor=org.kde.krita.desktop

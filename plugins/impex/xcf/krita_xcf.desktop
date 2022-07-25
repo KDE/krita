@@ -73,3 +73,4 @@ StartupNotify=true
 Terminal=false
 X-KDE-SubstituteUID=false
 X-KDE-Username=
+X-KDE-AliasFor=org.kde.krita.desktop

@@ -70,3 +70,4 @@ Icon=krita
 Categories=Qt;KDE;Office;Graphics;
 StartupNotify=true
 NoDisplay=true
+X-KDE-AliasFor=org.kde.krita.desktop

@@ -258,6 +258,8 @@ void KisShapeLayerCanvas::updateCanvas(const QRectF& rc)
 
 void KisShapeLayerCanvas::slotStartAsyncRepaint()
 {
+    if (!m_parentLayer->image()) return;
+
     QRect repaintRect;
     QRect uncroppedRepaintRect;
     bool forceUpdateHiddenAreasOnly = false;

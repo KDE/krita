@@ -183,7 +183,9 @@ QString KisTabletDebugger::eventToString(const QTouchEvent &ev, const QString &p
         s << "id: " << touchpoint.id() << " ";
         s << "hires: " << qSetFieldWidth(8) << touchpoint.screenPos().x() << qSetFieldWidth(0) << "," << qSetFieldWidth(8) << touchpoint.screenPos().y() << qSetFieldWidth(0) << " ";
         s << "prs: " << touchpoint.pressure() << " ";
-        s << "rot: "<< touchpoint.rotation() << "; ";
+        s << "rot: "<< touchpoint.rotation() << " ";
+        s << "state: 0x" << hex << touchpoint.state() << "; ";
+        s << dec;
     }
 
     return string;

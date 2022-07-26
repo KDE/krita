@@ -12,7 +12,7 @@
 #include <QMultiHash>
 
 #include <KisResourceModel.h>
-#include <KisGlobalResourcesInterface.h>
+#include <KisEmbeddedResourceStorageProxy.h>
 
 #include <KoResourceServerProvider.h>
 #include <resources/KoAbstractGradient.h>
@@ -1287,23 +1287,25 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
 {
     QVector<KisPSDLayerStyleSP> styles;
 
-    KisResourceModel stylesModel(ResourceType::LayerStyles);
-    KisResourceModel patternsModel(ResourceType::Patterns);
-    KisResourceModel gradientsModel(ResourceType::Gradients);
+    KisEmbeddedResourceStorageProxy resourcesProxy(storageLocation);
 
-    Q_FOREACH(KoPatternSP pattern, patterns().values()) {
-        patternsModel.addResource(pattern, storageLocation);
-    }
-
-    Q_FOREACH(KoAbstractGradientSP gradient, gradients()) {
-        gradientsModel.addResource(gradient, storageLocation);
+    if (!storageLocation.isEmpty()) {
+        Q_FOREACH(KoPatternSP pattern, patterns().values()) {
+            resourcesProxy.addResource(pattern);
+        }
+        Q_FOREACH(KoAbstractGradientSP gradient, gradients()) {
+            resourcesProxy.addResource(gradient);
+        }
     }
 
     Q_FOREACH (KisPSDLayerStyleSP style, m_stylesVector) {
         KisPSDLayerStyleSP newStyle = style->clone().dynamicCast<KisPSDLayerStyle>();
-        newStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+        newStyle->setResourcesInterface(resourcesProxy.detachedResourcesInterface());
         newStyle->setValid(true);
-        stylesModel.addResource(newStyle, storageLocation);
+
+        if (!storageLocation.isEmpty()) {
+            resourcesProxy.addResource(newStyle);
+        }
 
         styles << newStyle;
     }
@@ -1318,7 +1320,7 @@ void KisAslLayerStyleSerializer::assignAllLayerStylesToLayers(KisNodeSP root, co
 
             Q_FOREACH (KisPSDLayerStyleSP style, styles) {
                 if (style->uuid() == uuid) {
-                    layer->setLayerStyle(style->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(), 0));
+                    layer->setLayerStyle(style->cloneWithResourcesSnapshot(style->resourcesInterface(), 0));
                     found = true;
                     break;
                 }

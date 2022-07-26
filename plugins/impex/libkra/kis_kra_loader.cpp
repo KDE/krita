@@ -577,11 +577,10 @@ void KisKraLoader::loadResources(KoStore *store, KisDocument *doc)
 
             /// don't try to load the resource if its file is empty
             /// (which is a sign of a failed save operation)
-            if (!store->device()->atEnd()) {
+            if (!store->device()->atEnd() && !doc->linkedResourcesStorageId().isEmpty()) {
                 bool result = model.importResource(resourceItem.filename, store->device(), false, doc->linkedResourcesStorageId());
                 if (!result) {
                     m_d->warningMessages.append(i18nc("Warning message on loading a .kra file", "Embedded resource cannot be imported. The filename of the resource: %1", resourceItem.filename));
-                    continue;
                 }
             }
 

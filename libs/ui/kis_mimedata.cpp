@@ -68,7 +68,10 @@ void KisMimeData::deepCopyNodes()
     {
         KisImageBarrierLockerWithFeedbackAllowNull locker(m_image);
         Q_FOREACH (KisNodeSP node, m_nodes) {
-            newNodes << safeCopyNode(node);
+            KisNodeSP newNode = safeCopyNode(node);
+            newNode->setImage(nullptr);
+
+            newNodes << newNode;
         }
     }
 

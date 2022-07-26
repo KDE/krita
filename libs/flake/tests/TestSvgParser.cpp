@@ -3505,6 +3505,19 @@ void TestSvgParser::testPathShape()
     t.test_standard_30px_72ppi("polygon", false);
 }
 
+void TestSvgParser::testPathData()
+{
+    const QString fileName = TestUtil::fetchDataFileLazy("paths-data-03-f.svg");
+    QVERIFY(!fileName.isEmpty());
+
+    QFile file(fileName);
+    file.open(QIODevice::ReadOnly);
+    QByteArray pathData = file.readAll();
+
+    SvgRenderTester t(pathData);
+    t.test_standard("paths_data", {480, 360}, 72);
+}
+
 void TestSvgParser::testPathShapeEllipticalArc()
 {
     const QString data =
@@ -3516,7 +3529,8 @@ void TestSvgParser::testPathShapeEllipticalArc()
         "        a 1.8474812,2.9054325 0 013.3048758,-2.598695 l 3.3048637,-2.598687"
         "        a 5.4242101,1.9738467 73.492263 0,1,3.304876,-2.598694 l 3.304865,-2.598696"
         "        A 8.0718175,1.9886167 71.359615,0119.9573,14.244222 l 3.304873,-2.598695"
-        "        a 10.73523,1.9933048 70.675722   0  1 3.304865,-2.5986956 l 3.304876,-2.598694\""
+        "        a 10.73523,1.9933048 70.675722   0  1 3.304865,-2.5986956 l 3.304876,-2.598694"
+        "        a 0,0,0 00, 0.12808856,29.836374 a 10.73523,1.9933048,0 00, 0,0\""
         "     fill=\"none\" stroke=\"#ff0000\" stroke-width=\"0.414447\""
         "     transform=\"scale(3, 3)\""
         "     id=\"testRect\" />"

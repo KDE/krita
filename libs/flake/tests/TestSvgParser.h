@@ -150,6 +150,7 @@ private Q_SLOTS:
     void testPolygonShape();
 
     void testPathShape();
+    void testPathData();
     void testPathShapeEllipticalArc();
 
     void testDefsHidden();

@@ -840,8 +840,11 @@ Document *Document::clone() const
 {
     if (!d->document) return 0;
     QPointer<KisDocument> clone = d->document->clone();
-    Document * newDocument = new Document(clone, d->ownsDocument);
-    clone->setParent(newDocument); // It's owned by the document, not KisPart
+
+    /// We set ownsDocument to true, it will be reset
+    /// automatically as soon as we create the first
+    /// view for the document
+    Document * newDocument = new Document(clone, true);
     return newDocument;
 }
 

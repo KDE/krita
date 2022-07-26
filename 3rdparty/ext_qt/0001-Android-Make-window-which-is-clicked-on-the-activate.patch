@@ -1,4 +1,4 @@
-From 4394338d534a33d249f79e815b7d62ea92a78e40 Mon Sep 17 00:00:00 2001
+From 0a2f068d34cf3c15a5f6aed28420b4888bf2068b Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 27 Jan 2022 11:46:29 +0000
 Subject: [PATCH] Android: Make window which is clicked on the activated window
@@ -22,7 +22,7 @@ z-order can changed.
  4 files changed, 70 insertions(+), 2 deletions(-)
 
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 257d013fa8..363ec8eab6 100644
+index 257d013fa8..a4bb8ae1a7 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -46,11 +46,13 @@
@@ -46,7 +46,7 @@ index 257d013fa8..363ec8eab6 100644
 +    static void checkAndSetTopLevelWindow(QWindow *window)
 +    {
 +        QWindow *focusWindow = QGuiApplication::focusWindow();
-+        if (focusWindow == window || (window->flags() & Qt::WindowDoesNotAcceptFocus)) {
++        if (focusWindow == window || (window && window->flags() & Qt::WindowDoesNotAcceptFocus)) {
 +            return;
 +        }
 +
@@ -192,5 +192,5 @@ index 0688a75794..f78cdc0725 100644
  protected:
      void resizeEvent(QResizeEvent *event) override;
 -- 
-2.35.1
+2.37.0
 

@@ -16,7 +16,6 @@
 #include <KoColorProfile.h>
 #include <KoCompositeOp.h>
 #include <KoUnit.h>
-#include <KisGlobalResourcesInterface.h>
 
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -43,6 +42,7 @@
 #include "psd_resource_block.h"
 #include "psd_image_data.h"
 #include "kis_image_barrier_locker.h"
+#include "KisEmbeddedResourceStorageProxy.h"
 
 PSDLoader::PSDLoader(KisDocument *doc)
     : m_image(0)
@@ -160,9 +160,8 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
         layerSection.globalInfoSection.embeddedPatterns;
 
     const QString storageLocation = m_doc->embeddedResourcesStorageId();
-    KisResourceModel stylesModel(ResourceType::LayerStyles);
-    KisResourceModel patternsModel(ResourceType::Patterns);
-    KisResourceModel gradientsModel(ResourceType::Gradients);
+
+    KisEmbeddedResourceStorageProxy resourceProxy(storageLocation);
 
     KisAslLayerStyleSerializer serializer;
     if (!embeddedPatterns.isEmpty()) {
@@ -171,7 +170,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
         }
         Q_FOREACH (KoPatternSP pattern, serializer.patterns()) {
             if (pattern && pattern->valid()) {
-                patternsModel.addResource(pattern, storageLocation);
+                resourceProxy.addResource(pattern);
                 dbgFile << "Loaded embedded pattern: " << pattern->name();
             }
             else {
@@ -293,7 +292,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 QDomDocument fillConfig;
                 KisAslCallbackObjectCatcher catcher;
                 if (layerRecord->infoBlocks.fillType == psd_fill_gradient) {
-                    cfg = KisGeneratorRegistry::instance()->value("gradient")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                    cfg = KisGeneratorRegistry::instance()->value("gradient")->defaultConfiguration(resourceProxy.resourcesInterface());
 
                     psd_layer_gradient_fill fill;
                     fill.imageWidth = m_image->width();
@@ -311,7 +310,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     fillConfig = fill.getFillLayerConfig();
 
                 } else if (layerRecord->infoBlocks.fillType == psd_fill_pattern) {
-                    cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                    cfg = KisGeneratorRegistry::instance()->value("pattern")->defaultConfiguration(resourceProxy.resourcesInterface());
 
                     psd_layer_pattern_fill fill;
                     catcher.subscribeUnitFloat("/null/Angl", "#Ang", std::bind(&psd_layer_pattern_fill::setAngle, &fill, _1));
@@ -325,7 +324,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                     fillConfig = fill.getFillLayerConfig();
 
                 } else {
-                    cfg = KisGeneratorRegistry::instance()->value("color")->defaultConfiguration(KisGlobalResourcesInterface::instance());
+                    cfg = KisGeneratorRegistry::instance()->value("color")->defaultConfiguration(resourceProxy.resourcesInterface());
 
                     psd_layer_solid_color fill;
                     fill.cs = m_image->colorSpace();
@@ -401,7 +400,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
 
                 Q_FOREACH (KoAbstractGradientSP gradient, serializer.gradients()) {
                     if (gradient && gradient->valid()) {
-                        gradientsModel.addResource(gradient, storageLocation);
+                        resourceProxy.addResource(gradient);
                     }
                     else {
                         qWarning() << "Invalid or empty gradient" << gradient;
@@ -409,15 +408,15 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
                 }
 
                 layerStyle->setName(layer->name());
-                layerStyle->setResourcesInterface(KisGlobalResourcesInterface::instance());
+                layerStyle->setResourcesInterface(resourceProxy.detachedResourcesInterface());
                 if (!layerStyle->uuid().isNull()) {
                     layerStyle->setUuid(QUuid::createUuid());
                 }
                 layerStyle->setValid(true);
 
-                stylesModel.addResource(layerStyle, storageLocation);
+                resourceProxy.addResource(layerStyle);
 
-                layer->setLayerStyle(layerStyle->cloneWithResourcesSnapshot(KisGlobalResourcesInterface::instance(), 0));
+                layer->setLayerStyle(layerStyle->cloneWithResourcesSnapshot(layerStyle->resourcesInterface(), 0));
             } else {
                 warnKrita << "WARNING: Couldn't read layer style!" << ppVar(serializer.styles());
             }

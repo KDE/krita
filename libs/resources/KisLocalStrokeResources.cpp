@@ -108,6 +108,12 @@ void KisLocalStrokeResources::removeResource(KoResourceSP resource)
     d->localResources.removeAll(resource);
 }
 
+KisLocalStrokeResources *KisLocalStrokeResources::clone() const
+{
+    Q_D(const KisLocalStrokeResources);
+    return new KisLocalStrokeResources(d->localResources);
+}
+
 KisResourcesInterface::ResourceSourceAdapter *KisLocalStrokeResources::createSourceImpl(const QString &type) const
 {
     Q_D(const KisLocalStrokeResources);

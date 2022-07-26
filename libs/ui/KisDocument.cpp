@@ -405,11 +405,11 @@ public:
 
 
     // Resources saved in the .kra document
-    QString linkedResourcesStorageID {QUuid::createUuid().toString()};
+    QString linkedResourcesStorageID;
     KisResourceStorageSP linkedResourceStorage;
 
     // Resources saved into other components of the kra file
-    QString embeddedResourcesStorageID {QUuid::createUuid().toString()};
+    QString embeddedResourcesStorageID;
     KisResourceStorageSP embeddedResourceStorage;
 
     void syncDecorationsWrapperLayerState();
@@ -590,9 +590,11 @@ KisDocument::KisDocument(bool addStorage)
 
 
     if (addStorage) {
+        d->linkedResourcesStorageID = QUuid::createUuid().toString();
         d->linkedResourceStorage.reset(new KisResourceStorage(d->linkedResourcesStorageID));
         KisResourceLocator::instance()->addStorage(d->linkedResourcesStorageID, d->linkedResourceStorage);
 
+        d->embeddedResourcesStorageID = QUuid::createUuid().toString();
         d->embeddedResourceStorage.reset(new KisResourceStorage(d->embeddedResourcesStorageID));
         KisResourceLocator::instance()->addStorage(d->embeddedResourcesStorageID, d->embeddedResourceStorage);
 

@@ -92,15 +92,10 @@ void KisColorSelectorContainer::unsetCanvas()
 
 bool KisColorSelectorContainer::doesAtleastOneDocumentExist()
 {
-    if (m_canvas && m_canvas->viewManager() && m_canvas->viewManager()->document() ) {
-        if (m_canvas->viewManager()->document()->image()->height() == 0) {
-            return false;
-        } else {
-           return true;
-        }
-    } else {
-        return false;
-    }
+    return m_canvas &&
+            m_canvas->viewManager() &&
+            m_canvas->viewManager()->document() &&
+            m_canvas->viewManager()->document()->image();
 }
 
 void KisColorSelectorContainer::slotUpdateIcons()

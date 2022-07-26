@@ -52,6 +52,19 @@ KisShortcutConfiguration::KisShortcutConfiguration(const KisShortcutConfiguratio
     d->gesture = other.gesture();
 }
 
+KisShortcutConfiguration &KisShortcutConfiguration::operator=(const KisShortcutConfiguration &other)
+{
+    d->action = other.action();
+    d->type = other.type();
+    d->mode = other.mode();
+    d->keys = other.keys();
+    d->buttons = other.buttons();
+    d->wheel = other.wheel();
+    d->gesture = other.gesture();
+
+    return *this;
+}
+
 KisShortcutConfiguration::~KisShortcutConfiguration()
 {
     delete d;

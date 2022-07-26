@@ -85,6 +85,10 @@ public:
      */
     KisShortcutConfiguration(const KisShortcutConfiguration &other);
     /**
+     * Copy assignment.
+     */
+    KisShortcutConfiguration &operator=(const KisShortcutConfiguration &other);
+    /**
      * Destructor.
      */
     virtual ~KisShortcutConfiguration();

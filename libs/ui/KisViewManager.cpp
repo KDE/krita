@@ -870,6 +870,7 @@ void KisViewManager::slotCreateCopy()
     }
     name = i18n("%1 (Copy)", name);
     doc->documentInfo()->setAboutInfo("title", name);
+    doc->resetPath();
 
     KisPart::instance()->addDocument(doc);
     KisMainWindow *mw  = qobject_cast<KisMainWindow*>(d->mainWindow);

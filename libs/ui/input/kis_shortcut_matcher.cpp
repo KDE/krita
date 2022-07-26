@@ -428,7 +428,20 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
             DEBUG_TOUCH_ACTION("starting", event);
             retval = tryRunTouchShortcut(event);
         } else if (m_d->touchShortcut) {
-            m_d->touchShortcut->action()->inputEvent(event);
+            // The typical assumption when we get here is that the shortcut has been matched, for which we use
+            // the events with TouchPointPressed state. But there may be instances where shortcut is never
+            // un-matched (meaning: never being tryEndTouchShortcut called on it) even when the finger is
+            // released, and when the next contact is made, the shortcut proceeds assuming continuity -- which
+            // is a false assumption.
+            // So, if we see a TouchPointPressed, we should know that somewhere previously finger was lifted
+            // and we should let the action know this.
+            if (event->touchPointStates() & Qt::TouchPointPressed) {
+                m_d->touchShortcut->action()->begin(m_d->touchShortcut->shortcutIndex(), event);
+            } else if (event->touchPointStates() & Qt::TouchPointReleased) {
+                m_d->touchShortcut->action()->end(event);
+            } else {
+                m_d->touchShortcut->action()->inputEvent(event);
+            }
             retval = true;
         }
     } else {

@@ -126,6 +126,7 @@ namespace ActionHelper {
         KisImageWSP image = view->image();
 
         KisImageSP clipImage = new KisImage(0, image->width(), image->height(), image->colorSpace(), "ClipImage");
+        clipImage->setResolution(image->xRes(), image->yRes());
         Q_FOREACH (KisNodeSP node, nodes) {
             clipImage->addNode(node, clipImage->root());
         }

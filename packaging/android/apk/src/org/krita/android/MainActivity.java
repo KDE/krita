@@ -1,21 +1,20 @@
- /*
-  * This file is part of the KDE project
-  * SPDX-FileCopyrightText: 2019 Sharaf Zaman <sharafzaz121@gmail.com>
-  *
-  * SPDX-License-Identifier: GPL-2.0-or-later
-  */
+/*
+ * This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2019 Sharaf Zaman <sharafzaz121@gmail.com>
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
 
 package org.krita.android;
 
-import android.os.Build;
-import android.util.Log;
-import android.os.Bundle;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
-import android.view.WindowManager;
 
 import org.qtproject.qt5.android.QtNative;
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -128,4 +127,4 @@ public class MainActivity extends QtActivity {
         }
         return super.onGenericMotionEvent(event);
     }
-    }
+}

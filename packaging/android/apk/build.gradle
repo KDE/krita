@@ -1,17 +1,17 @@
 buildscript {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.2.1'
     }
 }
 
 repositories {
     google()
-    jcenter()
+    mavenCentral()
 }
 
 apply plugin: 'com.android.application'
@@ -36,7 +36,7 @@ task configure() {
 
         def libs = new File(installPrefix, 'lib')
         if (!libs.exists()) {
-            throw new GradleException('Krita libraries not found, please check if -p=krita-bin finished without errors')
+            throw new FileNotFoundException('Krita libraries not found, please check if -p=krita-bin finished without errors')
         }
     }
 }

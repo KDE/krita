@@ -169,5 +169,6 @@ android {
 }
 
 dependencies {
-    implementation 'com.android.billingclient:billing:3.0.3'
+    implementation 'com.android.billingclient:billing:5.0.0'
+    implementation 'androidx.annotation:annotation:1.4.0'
 }

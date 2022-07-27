@@ -42,7 +42,7 @@ public class DocumentSaverService extends Service {
         Intent intent = new Intent(this, DocumentSaverService.class);
         intent.putExtra(CANCEL_SAVING, true);
         PendingIntent cancelPendingIntent = PendingIntent.getService(this, 0,
-                intent, 0);
+                intent, PendingIntent.FLAG_IMMUTABLE);
 
         createNotificationChannel();
 

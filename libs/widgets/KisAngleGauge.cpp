@@ -239,15 +239,19 @@ void KisAngleGauge::mouseMoveEvent(QMouseEvent *e)
         std::atan2(
             m_d->increasingDirection == IncreasingDirection_CounterClockwise ? -delta.y() : delta.y(),
             delta.x()
-        );
+        ) * 180.0 / M_PI;
 
     const qreal snapDistance = qMax(m_d->minimumSnapDistance * m_d->minimumSnapDistance, radiusSquared * 4.0);
-    if ((e->modifiers() & Qt::ControlModifier) || distanceSquared < snapDistance) {
-        const qreal sa = m_d->snapAngle * M_PI / 180.0;
-        angle = std::round(angle / sa) * sa;
+    const bool controlPressed = e->modifiers() & Qt::ControlModifier;
+    const bool shiftPressed = e->modifiers() & Qt::ShiftModifier;
+
+    if (controlPressed && shiftPressed) {
+        angle = std::round(angle);
+    } else if (!shiftPressed && (controlPressed || distanceSquared < snapDistance)) {
+        angle = std::round(angle / m_d->snapAngle) * m_d->snapAngle;
     }
 
-    setAngle(angle * 180.0 / M_PI);
+    setAngle(angle);
     
     e->accept();
 }

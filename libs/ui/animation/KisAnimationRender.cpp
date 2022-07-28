@@ -105,24 +105,23 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
         if (encoderOptions.shouldDeleteSequence) {
 
-            QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
-            Q_FOREACH(const QString &f, sequenceFiles) {
-                d.remove(f);
+            QStringList savedFiles = exporter.savedFiles();
+            Q_FOREACH(const QString &f, savedFiles) {
+                if (d.exists(f)) {
+                    d.remove(f);
+                }
             }
 
         } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
 
             const QList<int> uniques = exporter.getUniqueFrames();
+            const QStringList fileNames = exporter.savedFiles();
             QStringList uniqueFrameNames = getNamesForFrames(encoderOptions.basename, extension, encoderOptions.sequenceStart, uniques);
-            QStringList sequenceFiles = d.entryList(QStringList() << encoderOptions.basename + "*." + extension, QDir::Files);
 
-            //Filter out unique files.
-            KritaUtils::filterContainer(sequenceFiles, [uniqueFrameNames](QString &framename){
-                return !uniqueFrameNames.contains(framename);
-            });
-
-            Q_FOREACH(const QString &f, sequenceFiles) {
-                d.remove(f);
+            Q_FOREACH(const QString &f, fileNames) {
+                if (!uniqueFrameNames.contains(f)) {
+                    d.remove(f);
+                }
             }
 
         }

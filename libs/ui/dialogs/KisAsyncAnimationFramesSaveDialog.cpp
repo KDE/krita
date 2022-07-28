@@ -214,7 +214,7 @@ QString KisAsyncAnimationFramesSaveDialog::savedFilesMaskWildcard() const
     return m_d->filenamePrefix + "????" + m_d->filenameSuffix;
 }
 
-QStringList KisAsyncAnimationFramesSaveDialog::savedFiles() const
+QStringList KisAsyncAnimationFramesSaveDialog::savedFilePaths() const
 {
     QStringList files;
 
@@ -223,6 +223,17 @@ QStringList KisAsyncAnimationFramesSaveDialog::savedFiles() const
         QString name = QString("%1").arg(num, 4, 10, QChar('0'));
         name = m_d->filenamePrefix + name + m_d->filenameSuffix;
         files.append(name);
+    }
+
+    return files;
+}
+
+QStringList KisAsyncAnimationFramesSaveDialog::savedFiles() const
+{
+    QStringList files = savedFilePaths();
+
+    for (int i = 0; i < files.count(); i++) {
+        files[i] = QFileInfo(files[i]).fileName();
     }
 
     return files;

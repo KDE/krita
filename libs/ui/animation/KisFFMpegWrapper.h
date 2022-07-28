@@ -43,7 +43,7 @@ enum FFProbeErrorCodes {
 
 const int FFMPEG_TIMEOUT = 600000;
 
-class KRITAUI_EXPORT  KisFFMpegWrapper : public QObject
+class KRITAUI_EXPORT KisFFMpegWrapper : public QObject
 {
     Q_OBJECT
 public:

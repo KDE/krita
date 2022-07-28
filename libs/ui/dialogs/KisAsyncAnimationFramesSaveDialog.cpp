@@ -144,7 +144,21 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
         }
     }
 
-    return KisAsyncAnimationRenderDialogBase::regenerateRange(viewManager);
+    KisAsyncAnimationRenderDialogBase::Result renderingResult = KisAsyncAnimationRenderDialogBase::regenerateRange(viewManager);
+
+    filesList = savedFiles();
+
+    // If we cancel rendering or fail rendering process, lets clean up any files that may have been created
+    // to keep the next render from having artifacts.
+    if (renderingResult != RenderComplete) {
+        Q_FOREACH (const QString &file, filesList) {
+            if (dir.exists(file)) {
+                bool success = dir.remove(file);
+            }
+        }
+    }
+
+    return renderingResult;
 }
 
 QList<int> KisAsyncAnimationFramesSaveDialog::calcDirtyFrames() const
@@ -198,6 +212,20 @@ QString KisAsyncAnimationFramesSaveDialog::savedFilesMask() const
 QString KisAsyncAnimationFramesSaveDialog::savedFilesMaskWildcard() const
 {
     return m_d->filenamePrefix + "????" + m_d->filenameSuffix;
+}
+
+QStringList KisAsyncAnimationFramesSaveDialog::savedFiles() const
+{
+    QStringList files;
+
+    for (int i = m_d->range.start(); i <= m_d->range.end(); i++) {
+        const int num = m_d->sequenceNumberingOffset + i;
+        QString name = QString("%1").arg(num, 4, 10, QChar('0'));
+        name = m_d->filenamePrefix + name + m_d->filenameSuffix;
+        files.append(name);
+    }
+
+    return files;
 }
 
 QList<int> KisAsyncAnimationFramesSaveDialog::getUniqueFrames() const

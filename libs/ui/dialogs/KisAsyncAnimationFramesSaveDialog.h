@@ -27,6 +27,7 @@ public:
 
     QString savedFilesMask() const;
     QString savedFilesMaskWildcard() const;
+    QStringList savedFiles() const;
 
     QList<int> getUniqueFrames() const;
 

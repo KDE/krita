@@ -109,6 +109,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
             Q_FOREACH(const QString &f, sequenceFiles) {
                 d.remove(f);
             }
+
         } else if(encoderOptions.wantsOnlyUniqueFrameSequence) {
 
             const QList<int> uniques = exporter.getUniqueFrames();

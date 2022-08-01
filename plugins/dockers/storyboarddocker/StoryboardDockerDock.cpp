@@ -298,6 +298,7 @@ void StoryboardDockerDock::setCanvas(KoCanvasBase *canvas)
         slotUpdateDocumentList();
         m_storyboardModel->resetData(StoryboardItemList());
         m_commentModel->resetData(QVector<StoryboardComment>());
+        m_storyboardModel->slotSetActiveNode(nullptr);
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);

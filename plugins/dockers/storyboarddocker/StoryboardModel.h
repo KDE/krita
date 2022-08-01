@@ -340,7 +340,7 @@ private:
     KisIdleWatcher m_imageIdleWatcher;
     KisImageWSP m_image;
     StoryboardView *m_view {0};
-    KisNodeSP m_activeNode;
+    KisNodeWSP m_activeNode;
     KisStoryboardThumbnailRenderScheduler *m_renderScheduler {0};
     KisSignalCompressor m_renderSchedulingCompressor;
 };

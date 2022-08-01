@@ -793,7 +793,7 @@ bool KisShortcutMatcher::tryEndRunningShortcut( Qt::MouseButton button, QEvent* 
         forceDeactivateAllActions();
     }
 
-    if (m_d->runningShortcut->matchBegin(button)) {
+    if (m_d->runningShortcut && m_d->runningShortcut->matchBegin(button)) {
 
         // first reset running shortcut to avoid infinite recursion via end()
         KisStrokeShortcut *runningShortcut = m_d->runningShortcut;

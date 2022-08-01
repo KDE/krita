@@ -139,7 +139,6 @@ void KisTemplateTree::readGroups()
 {
 
     QStringList dirs = KoResourcePaths::findDirs("templates");
-    dirs << KoResourcePaths::saveLocation("templates");
 
     Q_FOREACH (const QString & dirName, dirs) {
         if (!dirName.contains("templates")) continue; // Hack around broken KoResourcePaths

@@ -63,6 +63,7 @@ SvgWriter::~SvgWriter()
 
 bool SvgWriter::save(const QString &filename, const QSizeF &pageSize, bool writeInlineImages)
 {
+    qDebug() << "saving: " << filename;
     QFile fileOut(filename);
     if (!fileOut.open(QIODevice::WriteOnly))
         return false;
@@ -74,14 +75,16 @@ bool SvgWriter::save(const QString &filename, const QSizeF &pageSize, bool write
     m_writeInlineImages = true;
 
     fileOut.close();
-
+    qDebug() << "closed file";
     return success;
 }
 
 bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)
 {
+    qDebug() << "bool SvgWriter::save(QIODevice &outputDevice, const QSizeF &pageSize)";
     if (m_toplevelShapes.isEmpty()) {
-        return false;
+        qDebug() << "top level shapes empty" ;
+        //return false;
     }
 
     QTextStream svgStream(&outputDevice);
@@ -150,6 +153,7 @@ void SvgWriter::saveShapes(const QList<KoShape *> shapes, SvgSavingContext &savi
 {
     // top level shapes
     Q_FOREACH (KoShape *shape, shapes) {
+
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>(shape);
         if(layer) {
             saveLayer(layer, savingContext);

@@ -57,7 +57,6 @@ namespace PyKrita
         // 0) custom plugin directories (prefer local dir over systems')
         // 1) shipped krita module's dir
         QStringList pluginDirectories = KoResourcePaths::findDirs("pythonscripts");
-        pluginDirectories << KoResourcePaths::saveLocation("pythonscripts");
         dbgScript << "Plugin Directories: " << pluginDirectories;
         if (!Python::setPath(pluginDirectories)) {
             initStatus = INIT_CANNOT_SET_PYTHON_PATHS;

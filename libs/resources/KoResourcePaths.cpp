@@ -432,6 +432,11 @@ QStringList KoResourcePaths::findDirsInternal(const QString &type)
         appendResources(&dirs, fallbackPaths, true);
 
     }
+
+    QStringList saveLocationList;
+    saveLocationList << saveLocation(type, QString(), true);
+    appendResources(&dirs, saveLocationList, true);
+
     dbgResources << "findDirs: type" << type << "resource" << dirs;
     return dirs;
 }

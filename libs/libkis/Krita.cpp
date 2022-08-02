@@ -265,7 +265,7 @@ QMap<QString, Resource*> Krita::resources(QString &type) const
     QMap<QString, Resource*> resources;
     KisResourceModel *resourceModel = 0;
     if (type == "pattern") {
-        resourceModel = KisResourceServerProvider::instance()->paintOpPresetServer()->resourceModel();
+        resourceModel = KoResourceServerProvider::instance()->patternServer()->resourceModel();
         type = ResourceType::Patterns;
     }
     else if (type == "gradient") {

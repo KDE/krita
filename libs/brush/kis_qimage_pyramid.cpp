@@ -194,7 +194,8 @@ void KisQImagePyramid::calculateParams(KisDabShape shape,
         height = qMax(1, height);
     }
     else {
-        qWarning() << "Brush transform generated an invalid rectangle!" 
+#if 0 // Only enable when debugging; users shouldn't see this warning
+        qWarning() << "Brush transform generated an invalid rectangle!"
             << ppVar(shape.scaleX()) << ppVar(shape.scaleY()) << ppVar(shape.rotation())
             << ppVar(subPixelX) << ppVar(subPixelY)
             << ppVar(originalSize)
@@ -202,6 +203,7 @@ void KisQImagePyramid::calculateParams(KisDabShape shape,
             << ppVar(baseSize)
             << ppVar(baseBounds)
             << ppVar(mappedRect);
+#endif
     }
 
     *outputTransform = transform;

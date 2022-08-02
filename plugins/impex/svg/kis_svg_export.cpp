@@ -60,6 +60,8 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
     KisShapeLayerSP shapeLayer = qobject_cast<KisShapeLayer*>(rootLayer->firstChild().data());
     qDebug() << shapeLayer->objectName();
     QList<KoShape*> shapes = shapeLayer->shapes();
+    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
+
 /*
     while (rootLayer->nextSibling() != 0){
         qDebug() << "Going through layer " << image->objectName();
@@ -85,9 +87,8 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
 
     QSizeF pageSize(qreal(10.0), qreal(10));
     SvgWriter writer(shapes);
-    //writer.save(document->objectName(), pageSize, true);
 
-    if (!writer.save("/home/appimage/persistent/Downloads/testempty.svg", pageSize, true)) {
+    if (!writer.save(*io, pageSize)) {
         qDebug() << "Did not save: "<< document->objectName();
         //QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Could not save to svg: %1", document->objectName()));
     }

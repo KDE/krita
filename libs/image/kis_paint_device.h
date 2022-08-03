@@ -774,6 +774,24 @@ public:
      */
     KisPaintDeviceFramesInterface* framesInterface();
 
+    /**
+     * @brief burnKeyframe
+     *
+     * Take a frame from the keyframe channel,
+     * Copy the contents onto the "base" frame,
+     * and completely remove the keyframe channel.
+     *
+     * Should be useful for copy+paste operations where
+     * we shouldn't expect keyframe data to persist.
+     *
+     * Parameterless version simply gets the current frameID.
+     *
+     * @param frameID -- frameID (from the framesInterface, **not the time**) to burn to device.
+     * @return success
+     */
+    bool burnKeyframe(int frameID);
+    bool burnKeyframe();
+
 public:
 
     /**

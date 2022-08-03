@@ -2184,6 +2184,32 @@ KisPaintDeviceFramesInterface* KisPaintDevice::framesInterface()
     return m_d->framesInterface.data();
 }
 
+bool KisPaintDevice::burnKeyframe(int frameID)
+{
+    KIS_ASSERT_RECOVER_RETURN_VALUE(m_d->framesInterface.data()->frames().contains(frameID), false);
+
+    // Preserve keyframe data from frameID...
+    KisPaintDeviceSP holder = new KisPaintDevice(m_d->colorSpace());
+    m_d->framesInterface->writeFrameToDevice(frameID, holder);
+
+    // Remove all keyframes..
+    QSet<int> times = m_d->contentChannel->allKeyframeTimes();
+    Q_FOREACH( const int& time, times ) {
+        m_d->contentChannel->removeKeyframe(time);
+    }
+
+    // TODO: Eventually rewrite this to completely remove contentChannel.
+    //          For now, importing it as frame 0 will be close enough.
+    m_d->contentChannel->importFrame(0, holder, nullptr);
+
+    return true;
+}
+
+bool KisPaintDevice::burnKeyframe()
+{
+    return burnKeyframe(m_d->framesInterface->currentFrameId());
+}
+
 /******************************************************************/
 /*               KisPaintDeviceFramesInterface                    */
 /******************************************************************/

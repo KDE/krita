@@ -351,12 +351,6 @@ private:
     QString makeStorageLocationAbsolute(QString storageLocation) const;
     QString makeStorageLocationRelative(QString location) const;
 
-    /**
-     * @brief resourceLocationBaseFromConfig - the same as resourceLocationBase but straight from config, not cached in a variable
-     * @return resource location base (ex. /home/user/.local/share/krita/ default on Ubuntu-based systems)
-     */
-    static QString resourceLocationBaseFromConfig();
-
     class Private;
     QScopedPointer<Private> d;
 };

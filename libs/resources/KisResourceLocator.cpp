@@ -901,7 +901,9 @@ void KisResourceLocator::saveTags()
         return;
     }
 
-    QString resourceLocation = resourceLocationBaseFromConfig();
+    // this needs to use ResourcePaths because it is sometimes called during initialization
+    // (when the database versions don't match up and tags need to be saved)
+    QString resourceLocation = KoResourcePaths::getAppDataLocation() + "/";
 
     while (query.next()) {
         // Save tag...
@@ -1229,15 +1231,4 @@ QString KisResourceLocator::makeStorageLocationRelative(QString location) const
 {
 //    debugResource << "makeStorageLocationRelative" << location << "locationbase" << resourceLocationBase();
     return location.remove(resourceLocationBase());
-}
-
-QString KisResourceLocator::resourceLocationBaseFromConfig()
-{
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString resourceLocation = cfg.readEntry(resourceLocationKey, "");
-    if (resourceLocation.isEmpty()) {
-        resourceLocation = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    }
-    if (!resourceLocation.endsWith('/')) resourceLocation += '/';
-    return resourceLocation;
 }

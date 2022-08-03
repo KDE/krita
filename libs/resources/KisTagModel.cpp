@@ -439,7 +439,7 @@ bool KisAllTagsModel::renameTag(const KisTagSP tag, const QString &newName, cons
     QVector<int> resourceIds;
 
     KisTagResourceModel model(d->resourceType);
-    model.setTagsFilter({tag->id()});
+    model.setTagsFilter(QVector<int>() << tag->id());
 
     for (int i = 0; i < model.rowCount(); i++) {
         QModelIndex idx = model.index(i, 0);

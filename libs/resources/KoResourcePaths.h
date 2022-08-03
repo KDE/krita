@@ -63,6 +63,16 @@ public:
     static QString getAppDataLocation();
 
     /**
+     * @brief getAllAppDataLocationsForWindowsStore Use this to get both private and general appdata folders
+     * which also considers user's choice of custom resource folder
+     * Used in GeneralTab in kis_dlg_preferences, and KisViewManager::openResourceDirectory().
+     * @param standardLocation - location in standard %AppData%
+     * @param privateLocation - location in private app %AppData% location, only relevant for Windows Store
+     * @return either both appdata locations, or just the custom resource folder
+     */
+    static void getAllUserResourceFoldersLocationsForWindowsStore(QString& standardLocation, QString& privateLocation);
+
+    /**
      * Adds suffixes for asset types.
      *
      * You may add as many as you need, but it is advised that there

@@ -19,6 +19,7 @@
 #include "ksharedconfig.h"
 #include "kconfiggroup.h"
 #include "KisResourceLocator.h"
+#include "KisWindowsPackageUtils.h"
 
 Q_GLOBAL_STATIC(KoResourcePaths, s_instance)
 
@@ -201,6 +202,56 @@ QString KoResourcePaths::getAppDataLocation()
 
     return path;
 
+}
+
+void KoResourcePaths::getAllUserResourceFoldersLocationsForWindowsStore(QString &standardLocation, QString &privateLocation)
+{
+    standardLocation = "";
+    privateLocation = "";
+    QString resourcePath = QDir(KisResourceLocator::instance()->resourceLocationBase()).absolutePath();
+#ifndef Q_OS_WIN
+    // not Windows, no problem
+    standardLocation = resourcePath;
+    return;
+#else
+    if (!KisWindowsPackageUtils::isRunningInPackage()) {
+        standardLocation = resourcePath; // Windows, but not Windows Store, so no problem
+        return;
+    }
+
+    // running inside Windows Store
+    const QDir resourceDir(resourcePath);
+    QDir appDataGeneralDir = QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    appDataGeneralDir.cdUp();
+    const QString appDataGeneralDirPath = appDataGeneralDir.path();
+    if (resourceDir.absolutePath().contains(appDataGeneralDirPath, Qt::CaseInsensitive)) {
+        // resource folder location is inside appdata, so it can cause issues
+        // from inside of Krita, we can't determine whether it uses genuine %AppData% or the private Windows Store one
+        // so, half of the time, a custom folder inside %AppData% wouldn't work
+        // we can't fix that, we can only inform users about it or prevent them from choosing such folder
+        // in any case, here we need to return both folders: inside normal appdata and the private one
+        // (note that this case also handles the default resource folder called "krita" inside the appdata)
+
+
+        const QString folderName = QFileInfo(resourcePath).fileName();
+
+        const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
+        const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + folderName);
+
+        standardLocation = resourcePath;
+
+        if (privateResourceDir.exists()) {
+            privateLocation = privateResourceDir.absolutePath();
+        }
+
+        return;
+
+    } else {
+        standardLocation = resourcePath; // custom folder not inside AppData, so no problem (hopefully)
+        return;
+    }
+
+#endif
 }
 
 void KoResourcePaths::addAssetType(const QString &type, const char *basetype,

@@ -387,7 +387,11 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
 
     grpWindowsAppData->setVisible(false);
 #ifdef Q_OS_WIN
-    if (KisWindowsPackageUtils::isRunningInPackage()) {
+    QString folderInStandardAppData;
+    QString folderInPrivateAppData;
+    KoResourcePaths::getAllUserResourceFoldersLocationsForWindowsStore(folderInStandardAppData, folderInPrivateAppData);
+
+    if (!folderInPrivateAppData.isEmpty()) {
         const auto pathToDisplay = [](const QString &path) {
             // Due to how Unicode word wrapping works, the string does not
             // wrap after backslashes in Qt 5.12. We don't want the path to
@@ -398,39 +402,39 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
             // See: https://bugreports.qt.io/browse/QTBUG-80892
             return QDir::toNativeSeparators(path).replace(QChar('\\'), QStringLiteral(u"\\\u200B"));
         };
-        const QString privateAppData = KisWindowsPackageUtils::getPackageRoamingAppDataLocation();
-        if (!privateAppData.isEmpty()) {
-            const QDir privateResourceDir(QDir::fromNativeSeparators(privateAppData) + '/' + qApp->applicationName());
-            const QDir appDataDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
-            lblWindowsAppDataIcon->setPixmap(lblWindowsAppDataIcon->style()->standardIcon(QStyle::SP_MessageBoxInformation).pixmap(QSize(32, 32)));
-            // Similar text is also used in KisViewManager.cpp
-            lblWindowsAppDataNote->setText(i18nc("@info resource folder",
-                "<p>You are using the Microsoft Store package version of Krita. "
-                "Even though Krita can be configured to place resources under the "
-                "user AppData location, Windows may actually store the files "
-                "inside a private app location.</p>\n"
-                "<p>You should check both locations to determine where "
-                "the files are located.</p>\n"
-                "<p><b>User AppData</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
-                "%1</p>\n"
-                "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
-                "%2</p>",
-                pathToDisplay(appDataDir.absolutePath()),
-                pathToDisplay(privateResourceDir.absolutePath())
-            ));
-            grpWindowsAppData->setVisible(true);
-            connect(lblWindowsAppDataNote, &QLabel::linkActivated,
-                [userPath = appDataDir.absolutePath(), privatePath = privateResourceDir.absolutePath()]
-                (const QString &link) {
-                    if (link == QStringLiteral("copyuser")) {
-                        qApp->clipboard()->setText(QDir::toNativeSeparators(userPath));
-                    } else if (link == QStringLiteral("copyprivate")) {
-                        qApp->clipboard()->setText(QDir::toNativeSeparators(privatePath));
-                    } else {
-                        qWarning() << "Unexpected link activated in lblWindowsAppDataNote:" << link;
-                    }
-                });
-        }
+
+        const QDir privateResourceDir(folderInPrivateAppData);
+        const QDir appDataDir(folderInStandardAppData);
+        lblWindowsAppDataIcon->setPixmap(lblWindowsAppDataIcon->style()->standardIcon(QStyle::SP_MessageBoxInformation).pixmap(QSize(32, 32)));
+        // Similar text is also used in KisViewManager.cpp
+
+        lblWindowsAppDataNote->setText(i18nc("@info resource folder",
+            "<p>You are using the Microsoft Store package version of Krita. "
+            "Even though Krita can be configured to place resources under the "
+            "user AppData location, Windows may actually store the files "
+            "inside a private app location.</p>\n"
+            "<p>You should check both locations to determine where "
+            "the files are located.</p>\n"
+            "<p><b>User AppData</b> (<a href=\"copyuser\">Copy</a>):<br/>\n"
+            "%1</p>\n"
+            "<p><b>Private app location</b> (<a href=\"copyprivate\">Copy</a>):<br/>\n"
+            "%2</p>",
+            pathToDisplay(appDataDir.absolutePath()),
+            pathToDisplay(privateResourceDir.absolutePath())
+        ));
+        grpWindowsAppData->setVisible(true);
+
+        connect(lblWindowsAppDataNote, &QLabel::linkActivated,
+            [userPath = appDataDir.absolutePath(), privatePath = privateResourceDir.absolutePath()]
+            (const QString &link) {
+                if (link == QStringLiteral("copyuser")) {
+                    qApp->clipboard()->setText(QDir::toNativeSeparators(userPath));
+                } else if (link == QStringLiteral("copyprivate")) {
+                    qApp->clipboard()->setText(QDir::toNativeSeparators(privatePath));
+                } else {
+                    qWarning() << "Unexpected link activated in lblWindowsAppDataNote:" << link;
+                }
+            });
     }
 #endif
 

@@ -57,7 +57,7 @@ public:
      * Retorns the metric of the total memory stored in the swap
      * in *uncompressed* form!
      */
-    qint64 totalMemoryMetric() const;
+    qint64 totalSwapMemoryUsed() const;
 
     /**
      * Some debugging output
@@ -73,7 +73,7 @@ private:
 
     QMutex m_lock;
 
-    qint64 m_memoryMetric;
+    qint64 m_totalSwapMemoryUsed;
 };
 
 #endif /* __KIS_SWAPPED_DATA_STORE_H */

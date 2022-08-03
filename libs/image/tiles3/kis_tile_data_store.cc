@@ -98,7 +98,7 @@ KisTileDataStore::MemoryStatistics KisTileDataStore::memoryStatistics()
 
     stats.totalMemorySize = memoryMetric() * metricCoeff + stats.poolSize;
 
-    stats.swapSize = m_swappedStore.totalMemoryMetric() * metricCoeff;
+    stats.swapSize = m_swappedStore.totalSwapMemoryUsed();
 
     return stats;
 }

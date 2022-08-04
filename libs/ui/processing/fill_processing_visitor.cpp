@@ -71,8 +71,6 @@ void FillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device, KisUndoAdap
         for (QPoint seedPoint : m_seedPoints) {
             if (device->defaultBounds()->wrapAroundMode()) {
                 seedPoint = KisWrappedRect::ptToWrappedPt(seedPoint, device->defaultBounds()->imageBorderRect(), device->defaultBounds()->wrapAroundModeAxis());
-                // continue if out of bounds
-                if (seedPoint == QPoint(-1, -1)) continue;
             }
 
             if (m_continuousFillMode == ContinuousFillMode_DoNotUse) {

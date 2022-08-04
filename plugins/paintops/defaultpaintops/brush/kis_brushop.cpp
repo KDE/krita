@@ -287,19 +287,12 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
                     KisRenderedDab newDab = dab;
 
                     newDab.offset = pt;
-
-                    rects.append(newDab.realBounds() & wrapRect);
+                    rects.append(KisWrappedRect::clipToWrapRect(newDab.realBounds(), wrapRect, wrapAroundModeAxis));
                     wrappedDabs.append(newDab);
                 }
             }
 
             state->dabsQueue = wrappedDabs;
-
-            // just return if the dabs were all out of bounds
-            if (state->dabsQueue.isEmpty()) {
-                m_updateSharedState.clear();
-                return std::make_pair(m_currentUpdatePeriod, false);
-            }
 
         } else {
             // just get all rects

@@ -1226,7 +1226,7 @@ void KisAlgebra2DTest::testMultiplyWrappedRect()
     QFETCH(QVector<QRect>, expected);
 
     QVector<QRect> result =
-        KisWrappedRect::multiplyWrappedRect(rc, wrapRect, limitRect);
+        KisWrappedRect::multiplyWrappedRect(rc, wrapRect, limitRect, 0);
 
 #if 1
     QCOMPARE(result, expected);

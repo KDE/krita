@@ -26,22 +26,17 @@ void KisWrappedRandomAccessor::moveTo(qint32 x, qint32 y)
 {
     m_currentPos = QPoint(x, y);
 
-    if (m_wrapAxis == 0) {  // both axes
-        x = KisWrappedRect::xToWrappedX(x, m_wrapRect, m_wrapAxis);
-        y = KisWrappedRect::yToWrappedY(y, m_wrapRect, m_wrapAxis);
-    }
-    else if (m_wrapAxis == 1) { // horizontal only
-        x = KisWrappedRect::xToWrappedX(x, m_wrapRect, m_wrapAxis);
-    }
-    else if (m_wrapAxis == 2) { // vertical only
-        y = KisWrappedRect::yToWrappedY(y, m_wrapRect, m_wrapAxis);
-    }
+    x = KisWrappedRect::xToWrappedX(x, m_wrapRect, m_wrapAxis);
+    y = KisWrappedRect::yToWrappedY(y, m_wrapRect, m_wrapAxis);
 
     KisRandomAccessor2::moveTo(x, y);
 }
 
 qint32 KisWrappedRandomAccessor::numContiguousColumns(qint32 x) const
 {
+    if (m_wrapAxis == 2) { // vertical only
+        return KisRandomAccessor2::numContiguousColumns(x);
+    }
     x = KisWrappedRect::xToWrappedX(x, m_wrapRect, m_wrapAxis);
     qint32 distanceToBorder = m_wrapRect.x() + m_wrapRect.width() - x;
 
@@ -50,6 +45,9 @@ qint32 KisWrappedRandomAccessor::numContiguousColumns(qint32 x) const
 
 qint32 KisWrappedRandomAccessor::numContiguousRows(qint32 y) const
 {
+    if (m_wrapAxis == 1) { // horizontal only
+        return KisRandomAccessor2::numContiguousRows(y);
+    }
     y = KisWrappedRect::yToWrappedY(y, m_wrapRect, m_wrapAxis);
     qint32 distanceToBorder = m_wrapRect.y() + m_wrapRect.height() - y;
 

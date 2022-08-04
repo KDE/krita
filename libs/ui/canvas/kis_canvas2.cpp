@@ -959,7 +959,7 @@ void KisCanvas2::slotDoCanvasUpdate()
             const QRect rc = m_d->coordinatesConverter->widgetToImage(m_d->savedCanvasProjectionUpdateRect).toAlignedRect();
 
             const QVector<QRect> updateRects =
-                KisWrappedRect::multiplyWrappedRect(rc, imageRect, widgetRectInImagePixels);
+                KisWrappedRect::multiplyWrappedRect(rc, imageRect, widgetRectInImagePixels, wrapAroundViewingModeAxis());
 
             Q_FOREACH(const QRect &rc, updateRects) {
                 const QRect widgetUpdateRect =

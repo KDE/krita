@@ -143,8 +143,6 @@ KoColor KisScreenColorSampler::grabScreenColor(const QPoint &p)
 
                 if (image->wrapAroundModePermitted()) {
                     imagePoint = KisWrappedRect::ptToWrappedPt(imagePoint.toPoint(), image->bounds(), image->wrapAroundModeAxis());
-                    // continue if out of bounds
-                    if (imagePoint == QPoint(-1, -1)) continue;
                 }
                 KoColor sampledColor = KoColor();
                 image->projection()->pixel(imagePoint.x(), imagePoint.y(), &sampledColor);

@@ -173,7 +173,7 @@ void KisOverlayPaintDeviceWrapper::readRects(const QVector<QRect> &rects)
     Q_FOREACH (const QRect &rc, rects) {
         if (m_d->source->defaultBounds()->wrapAroundMode()) {
             const QRect wrapRect = m_d->source->defaultBounds()->imageBorderRect();
-            KisWrappedRect wrappedRect(rc, wrapRect, m_d->source->defaultBounds()->wrapAroundMode());
+            KisWrappedRect wrappedRect(rc, wrapRect, m_d->source->defaultBounds()->wrapAroundModeAxis());
             Q_FOREACH (const QRect &wrc, wrappedRect) {
                 rectsToRead += m_d->grid.addRect(wrc);
             }

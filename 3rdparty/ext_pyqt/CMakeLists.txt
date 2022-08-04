@@ -37,6 +37,12 @@ elseif(UNIX)
       SET(Python_EXECUTABLE python3)
     endif()
 
+    if (QT_ENABLE_ASAN)
+       set(_extra_pyqt_config --qmake-setting QMAKE_LFLAGS+=-fsanitize=address --qmake-setting QMAKE_CFLAGS+=-fsanitize=address --qmake-setting QMAKE_CXXFLAGS+=-fsanitize=address)
+    else ()
+       unset(_extra_pyqt_config)
+    endif ()
+
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
         URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
@@ -64,7 +70,7 @@ elseif(UNIX)
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
-            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS}
+            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --jobs ${SUBMAKE_JOBS} ${_extra_pyqt_config}
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E env 
             "PYTHONPATH=${KRITA_PYTHONPATH}"
@@ -120,6 +126,12 @@ elseif(WIN32)
         set(_make_command jom)
     endif()
 
+    if (QT_ENABLE_ASAN)
+       set(_extra_pyqt_config --qmake-setting QMAKE_LFLAGS+=-fsanitize=address --qmake-setting QMAKE_CFLAGS+=-fsanitize=address --qmake-setting QMAKE_CXXFLAGS+=-fsanitize=address)
+    else ()
+       unset(_extra_pyqt_config)
+    endif ()
+
     krita_to_native_path("${PREFIX_ext_pyqt}" _pyqt_prefix)
     krita_to_native_path("${KRITA_PYTHONPATH}" _krita_pythonpath)
     string(TOLOWER ${_krita_pythonpath} _krita_pythonpath)
@@ -160,7 +172,7 @@ elseif(WIN32)
 
         CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env 
             PYTHONPATH=${_krita_pythonpath}
-            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\lib\\site-packages --jobs ${SUBMAKE_JOBS}
+            ${PREFIX_ext_pyqt}/bin/sip-build --confirm-license --no-designer-plugin --no-qml-plugin --no-dbus-python --no-tools --no-make --target-dir ${PREFIX_ext_pyqt}\\lib\\site-packages --jobs ${SUBMAKE_JOBS} ${_extra_pyqt_config}
 
         BUILD_COMMAND ${CMAKE_COMMAND} -E chdir <SOURCE_DIR>/build
             ${CMAKE_COMMAND} -E env 

@@ -2207,7 +2207,10 @@ bool KisPaintDevice::burnKeyframe(int frameID)
 
 bool KisPaintDevice::burnKeyframe()
 {
-    return burnKeyframe(m_d->framesInterface->currentFrameId());
+    if (m_d->framesInterface) {
+        return burnKeyframe(m_d->framesInterface->currentFrameId());
+    }
+    return true;
 }
 
 /******************************************************************/

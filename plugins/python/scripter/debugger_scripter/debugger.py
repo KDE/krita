@@ -89,9 +89,7 @@ class Debugger(bdb.Bdb):
 
         while True:
             if self.applicationq.empty():
-                # 'yield from' is not available in Python 2.
-                for i in asyncio.sleep(0.3):
-                    yield i
+                yield from asyncio.sleep(0.3)
             else:
                 while not self.applicationq.empty():
                     self.application_data.update(self.applicationq.get())

@@ -318,8 +318,9 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
 
         Q_FOREACH (KisNodeSP node, nodes) {
             KisLayerUtils::recursiveApplyNodes(node, [image, view, makeSharpClip] (KisNodeSP node) {
-                KisPaintDeviceSP dev = node->paintDevice();
-                dev->burnKeyframe();
+                if (node && node->paintDevice()) {
+                    node->paintDevice()->burnKeyframe();
+                }
 
                 KisTimeSpan range;
 
@@ -329,8 +330,8 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
                     range = channel->affectedFrames(currentTime);
                 }
 
-                if (dev && !node->inherits("KisMask")) {
-                    ActionHelper::trimDevice(view, dev, makeSharpClip, range);
+                if (node && node->paintDevice() && !node->inherits("KisMask")) {
+                    ActionHelper::trimDevice(view, node->paintDevice(), makeSharpClip, range);
                 }
             });
         }

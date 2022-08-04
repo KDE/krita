@@ -31,7 +31,7 @@ public:
      */
     static KoJsonTrader *instance();
 
-    struct Plugin {
+    struct KRITAPLUGIN_EXPORT Plugin {
         Plugin() = default;
         Plugin(QSharedPointer<QPluginLoader> loader, QMutex *mutex);
         ~Plugin();

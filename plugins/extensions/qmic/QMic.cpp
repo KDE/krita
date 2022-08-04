@@ -49,16 +49,16 @@ void QMic::slotQMic(bool again)
     std::unique_ptr<KisQmicPluginInterface> plugin;
 
     // find the krita-gmic-qt plugin
-    const QList<QSharedPointer<QPluginLoader>> offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
+    const QList<KoJsonTrader::Plugin> offers = KoJsonTrader::instance()->query("Krita/GMic", QString());
     if (offers.isEmpty()) {
         QMessageBox::warning(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("The GMic plugin is not installed or could not be loaded."));
         return;
     }
 
     for (const auto &loader : offers) {
-        auto *factory = qobject_cast<KPluginFactory *>(loader->instance());
+        auto *factory = qobject_cast<KPluginFactory *>(loader.instance());
         if (!factory) {
-            warnPlugins << "(GMic) This is not a Krita plugin: " << loader->fileName() << loader->errorString();
+            warnPlugins << "(GMic) This is not a Krita plugin: " << loader.fileName() << loader.errorString();
 
             continue;
         }
@@ -68,7 +68,7 @@ void QMic::slotQMic(bool again)
         plugin.reset(qobject_cast<KisQmicPluginInterface *>(pluginBase));
 
         if (!plugin) {
-            warnPlugins << "(GMic) This is not a valid GMic-Qt plugin: " << loader->fileName();
+            warnPlugins << "(GMic) This is not a valid GMic-Qt plugin: " << loader.fileName();
             continue;
         }
 

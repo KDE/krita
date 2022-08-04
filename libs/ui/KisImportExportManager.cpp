@@ -161,9 +161,9 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
 
     if (direction == KisImportExportManager::Import) {
         if (m_importMimeTypes.isEmpty()) {
-            QList<QSharedPointer<QPluginLoader>>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
-            Q_FOREACH(QSharedPointer<QPluginLoader> loader, list) {
-                QJsonObject json = loader->metaData().value("MetaData").toObject();
+            QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
+            Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
+                QJsonObject json = loader.metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Import").toString().split(",", QString::SkipEmptyParts)) {
                     //qDebug() << "Adding  import mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
@@ -179,9 +179,9 @@ QStringList KisImportExportManager::supportedMimeTypes(Direction direction)
     }
     else if (direction == KisImportExportManager::Export) {
         if (m_exportMimeTypes.isEmpty()) {
-            QList<QSharedPointer<QPluginLoader>> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
-            Q_FOREACH(QSharedPointer<QPluginLoader> loader, list) {
-                QJsonObject json = loader->metaData().value("MetaData").toObject();
+            QList<KoJsonTrader::Plugin> list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
+            Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
+                QJsonObject json = loader.metaData().value("MetaData").toObject();
                 Q_FOREACH(const QString &mimetype, json.value("X-KDE-Export").toString().split(",", QString::SkipEmptyParts)) {
                     //qDebug() << "Adding  export mimetype" << mimetype << KisMimeDatabase::descriptionForMimeType(mimetype) << "from plugin" << loader;
                     mimeTypes << mimetype;
@@ -203,15 +203,17 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
 {
     int weight = -1;
     KisImportExportFilter *filter = 0;
-    QList<QSharedPointer<QPluginLoader>>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
-    Q_FOREACH(QSharedPointer<QPluginLoader> loader, list) {
-        QJsonObject json = loader->metaData().value("MetaData").toObject();
+    QList<KoJsonTrader::Plugin>list = KoJsonTrader::instance()->query("Krita/FileFilter", "");
+
+    Q_FOREACH(const KoJsonTrader::Plugin &loader, list) {
+        QJsonObject json = loader.metaData().value("MetaData").toObject();
         QString directionKey = direction == Export ? "X-KDE-Export" : "X-KDE-Import";
+
         if (json.value(directionKey).toString().split(",", QString::SkipEmptyParts).contains(mimetype)) {
-            KLibFactory *factory = qobject_cast<KLibFactory *>(loader->instance());
+            KLibFactory *factory = qobject_cast<KLibFactory *>(loader.instance());
 
             if (!factory) {
-                warnUI << loader->errorString();
+                warnUI << loader.errorString();
                 continue;
             }
 
@@ -234,11 +236,12 @@ KisImportExportFilter *KisImportExportManager::filterForMimeType(const QString &
             if (w > weight) {
                 delete filter;
                 filter = f;
-                f->setObjectName(loader->fileName());
+                f->setObjectName(loader.fileName());
                 weight = w;
             }
         }
     }
+
     if (filter) {
         filter->setMimeType(mimetype);
     }

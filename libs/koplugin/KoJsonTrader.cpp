@@ -181,11 +181,11 @@ void KoJsonTrader::initializePluginLoaderCache()
     }
 }
 
-QList<QSharedPointer<QPluginLoader>> KoJsonTrader::query(const QString &servicetype, const QString &mimetype)
+QList<KoJsonTrader::Plugin> KoJsonTrader::query(const QString &servicetype, const QString &mimetype)
 {
     QMutexLocker l(&m_mutex);
 
-    QList<QSharedPointer<QPluginLoader>> list;
+    QList<Plugin> list;
     Q_FOREACH(const PluginCacheEntry &plugin, m_pluginLoaderCache) {
         if (!plugin.serviceTypes.contains(QJsonValue(servicetype))) {
             continue;
@@ -195,8 +195,39 @@ QList<QSharedPointer<QPluginLoader>> KoJsonTrader::query(const QString &servicet
             continue;
         }
 
-        list << plugin.loader;
+        list << Plugin(plugin.loader, &m_mutex);
     }
 
     return list;
+}
+
+KoJsonTrader::Plugin::Plugin(QSharedPointer<QPluginLoader> loader, QMutex *mutex)
+    : m_loader(loader),
+      m_mutex(mutex)
+{
+}
+
+KoJsonTrader::Plugin::~Plugin()
+{
+}
+
+QObject *KoJsonTrader::Plugin::instance() const
+{
+    QMutexLocker l(m_mutex);
+    return m_loader->instance();
+}
+
+QJsonObject KoJsonTrader::Plugin::metaData() const
+{
+    return m_loader->metaData();
+}
+
+QString KoJsonTrader::Plugin::fileName() const
+{
+    return m_loader->fileName();
+}
+
+QString KoJsonTrader::Plugin::errorString() const
+{
+    return m_loader->errorString();
 }

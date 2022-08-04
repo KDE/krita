@@ -31,6 +31,22 @@ public:
      */
     static KoJsonTrader *instance();
 
+    struct Plugin {
+        Plugin() = default;
+        Plugin(QSharedPointer<QPluginLoader> loader, QMutex *mutex);
+        ~Plugin();
+
+        QObject *instance() const;
+
+        QJsonObject metaData() const;
+        QString fileName() const;
+        QString errorString() const;
+
+    private:
+        QSharedPointer<QPluginLoader> m_loader;
+        QMutex *m_mutex = 0;
+    };
+
     /**
      * The main function in the KoJsonTrader class. It tries to automatically
      * locate the base path containing Krita plugins. It attempts to do so in
@@ -51,7 +67,7 @@ public:
      *
      * @return A list of QPluginLoader that satisfy the query
      */
-     QList<QSharedPointer<QPluginLoader>> query(const QString &servicetype, const QString &mimetype);
+     QList<Plugin> query(const QString &servicetype, const QString &mimetype);
 
      // Note: this should not be used
      KoJsonTrader();

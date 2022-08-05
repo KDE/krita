@@ -70,7 +70,7 @@ public:
 
     virtual bool shouldVectorize() const;
 
-    virtual KisBrushMaskApplicatorBase* applicator();
+    virtual KisBrushMaskApplicatorBase *applicator() const = 0;
 
     virtual void toXML(QDomDocument& , QDomElement&) const;
 

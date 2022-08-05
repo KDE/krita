@@ -85,7 +85,7 @@ bool KisGaussCircleMaskGenerator::shouldVectorize() const
     return !shouldSupersample() && spikes() == 2;
 }
 
-KisBrushMaskApplicatorBase* KisGaussCircleMaskGenerator::applicator()
+KisBrushMaskApplicatorBase *KisGaussCircleMaskGenerator::applicator() const
 {
     return d->applicator.data();
 }

@@ -105,7 +105,7 @@ bool KisGaussRectangleMaskGenerator::shouldVectorize() const
     return !shouldSupersample() && spikes() == 2;
 }
 
-KisBrushMaskApplicatorBase* KisGaussRectangleMaskGenerator::applicator()
+KisBrushMaskApplicatorBase *KisGaussRectangleMaskGenerator::applicator() const
 {
     return d->applicator.data();
 }

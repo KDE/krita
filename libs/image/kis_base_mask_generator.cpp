@@ -77,7 +77,6 @@ struct KisMaskGenerator::Private {
     QString curveString;
     qreal scaleX;
     qreal scaleY;
-    QScopedPointer<KisBrushMaskApplicatorBase> defaultMaskProcessor;
 };
 
 
@@ -129,16 +128,6 @@ bool KisMaskGenerator::shouldVectorize() const
 bool KisMaskGenerator::isEmpty() const
 {
     return d->empty;
-}
-
-KisBrushMaskApplicatorBase* KisMaskGenerator::applicator()
-{
-    if (!d->defaultMaskProcessor) {
-        d->defaultMaskProcessor.reset(
-            createOptimizedClass<MaskApplicatorFactory<KisMaskGenerator>>(this));
-    }
-
-    return d->defaultMaskProcessor.data();
 }
 
 void KisMaskGenerator::toXML(QDomDocument& doc, QDomElement& e) const

@@ -31,7 +31,7 @@ public:
 
     bool shouldVectorize() const override;
 
-    KisBrushMaskApplicatorBase* applicator() override;
+    KisBrushMaskApplicatorBase *applicator() const override;
 
     void setSoftness(qreal softness) override;
     void setScale(qreal scaleX, qreal scaleY) override;

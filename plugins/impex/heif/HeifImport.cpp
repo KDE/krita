@@ -10,35 +10,30 @@
 #include "HeifImport.h"
 #include "HeifError.h"
 
-#include <kpluginfactory.h>
-#include <QFileInfo>
 #include <QBuffer>
+#include <QFileInfo>
 
-#include <KisImportExportManager.h>
+#include <kpluginfactory.h>
+#include <libheif/heif_cxx.h>
 
-#include <KoColorSpace.h>
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceEngine.h>
-#include <KoColorProfile.h>
-#include <KoColorTransferFunctions.h>
-
-#include <kis_transaction.h>
-#include <kis_paint_device.h>
 #include <KisDocument.h>
-#include <kis_image.h>
-#include <kis_paint_layer.h>
-#include <kis_node.h>
+#include <KisImportExportManager.h>
+#include <KoColorProfile.h>
+#include <KoColorSpace.h>
+#include <KoColorSpaceEngine.h>
+#include <KoColorSpaceRegistry.h>
+#include <KoColorTransferFunctions.h>
 #include <kis_group_layer.h>
-
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
 #include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_value.h>
-
-#include "kis_iterator_ng.h"
-
-
-#include "libheif/heif_cxx.h"
+#include <kis_node.h>
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_transaction.h>
 
 #include "DlgHeifImport.h"
 
@@ -57,7 +52,11 @@ HeifImport::~HeifImport()
 
 class Reader_QIODevice : public heif::Context::Reader {
 public:
-  Reader_QIODevice(QIODevice* device) : m_device(device) { m_total_length=m_device->bytesAvailable(); }
+    Reader_QIODevice(QIODevice *device)
+        : m_device(device)
+        , m_total_length(m_device->bytesAvailable())
+    {
+    }
 
   int64_t get_position() const override
   {
@@ -65,8 +64,9 @@ public:
   }
   int read(void *data, size_t size) override
   {
-      qint64 readSize = m_device->read((char*)data, (qint64)size);
-      return (readSize > 0 && (quint64)readSize != size);
+      qint64 readSize =
+          m_device->read(static_cast<char *>(data), static_cast<qint64>(size));
+      return (readSize > 0 && readSize != static_cast<qint64>(size));
   }
   int seek(int64_t position) override
   {
@@ -113,11 +113,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         LinearizePolicy linearizePolicy = KeepTheSame;
         bool applyOOTF = true;
-        float displayGamma = 1.2;
+        float displayGamma = 1.2f;
         float displayNits = 1000.0;
 
-        struct heif_error err;
-        const KoColorProfile *profile = 0;
+        struct heif_error err {
+        };
+        const KoColorProfile *profile = nullptr;
         KoID colorDepth = Integer8BitsColorDepthID;
         QString colorModel = RGBAColorModelID.id();
 
@@ -187,17 +188,21 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     transferCharacteristic = TRC_ITU_R_BT_709_5;
                 }
 
-
-
-
-                QVector<double>colorants = {nclx->color_primary_white_x, nclx->color_primary_white_y,
-                                            nclx->color_primary_red_x, nclx->color_primary_red_y,
-                                            nclx->color_primary_green_x, nclx->color_primary_green_y,
-                                            nclx->color_primary_blue_x, nclx->color_primary_blue_y};
-
-                if (primaries == PRIMARIES_UNSPECIFIED) {
-                    colorants.clear();
-                }
+                const QVector<double> colorants = [&]() -> QVector<double> {
+                    if (primaries == PRIMARIES_UNSPECIFIED) {
+                        return {};
+                    } else {
+                        return {
+                            static_cast<double>(nclx->color_primary_white_x),
+                            static_cast<double>(nclx->color_primary_white_y),
+                            static_cast<double>(nclx->color_primary_red_x),
+                            static_cast<double>(nclx->color_primary_red_y),
+                            static_cast<double>(nclx->color_primary_green_x),
+                            static_cast<double>(nclx->color_primary_green_y),
+                            static_cast<double>(nclx->color_primary_blue_x),
+                            static_cast<double>(nclx->color_primary_blue_y)};
+                    }
+                }();
 
                 profile = KoColorSpaceRegistry::instance()->profileFor(colorants,
                                                                        primaries,
@@ -253,10 +258,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
 
-        const double max16bit = 65535.0;
-        const double multiplier10bit = double(1.0 / 1023.0);
-        const double multiplier12bit = double(1.0 / 4095.0);
-        const double multiplier16bit = double(1.0 / max16bit);
+        const float max16bit = 65535.0f;
+        const float multiplier10bit = 1.0f / 1023.0f;
+        const float multiplier12bit = 1.0f / 4095.0f;
+        const float multiplier16bit = 1.0f / max16bit;
 
         if (luma != 8 && luma != 10 && luma != 12) {
             dbgFile << "unknown bitdepth" << luma;
@@ -264,7 +269,8 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         if (heifChroma == heif_chroma_monochrome) {
             dbgFile << "monochrome heif file, bits:" << luma;
-            int strideG, strideA;
+            int strideG = 0;
+            int strideA = 0;
             const uint8_t* imgG = heifimage.get_plane(heif_channel_Y, &strideG);
             const uint8_t* imgA = heifimage.get_plane(heif_channel_Alpha, &strideA);
             width = heifimage.get_width(heif_channel_Y);
@@ -285,21 +291,44 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         uint16_t source = KoGrayU16Traits::nativeArray(imgG)[y * (strideG / 2) + (x)];
 
                         if (luma == 10) {
-                            KoGrayU16Traits::setGray(it->rawData(), float(0x03ff & (source)) * multiplier10bit * max16bit);
+                            KoGrayU16Traits::setGray(
+                                it->rawData(),
+                                static_cast<uint16_t>(float(0x03ffu & (source))
+                                                      * multiplier10bit
+                                                      * max16bit));
                         } else if (luma == 12) {
-                            KoGrayU16Traits::setGray(it->rawData(), float(0x0fff & (source)) * multiplier12bit * max16bit);
+                            KoGrayU16Traits::setGray(
+                                it->rawData(),
+                                static_cast<uint16_t>(float(0x0fffu & (source))
+                                                      * multiplier12bit
+                                                      * max16bit));
                         } else {
-                            KoGrayU16Traits::setGray(it->rawData(), float(source) * multiplier16bit);
+                            KoGrayU16Traits::setGray(
+                                it->rawData(),
+                                static_cast<uint16_t>(float(source)
+                                                      * multiplier16bit));
                         }
 
                         if (hasAlpha) {
                             source = KoGrayU16Traits::nativeArray(imgA)[y * (strideA / 2) + x];
                             if (luma == 10) {
-                                KoGrayU16Traits::setOpacity(it->rawData(), float(0x0fff & (source)) * multiplier10bit, 1);
+                                KoGrayU16Traits::setOpacity(
+                                    it->rawData(),
+                                    static_cast<qreal>(float(0x0fff & (source))
+                                                       * multiplier10bit),
+                                    1);
                             } else if (luma == 12) {
-                                KoGrayU16Traits::setOpacity(it->rawData(), float(0x0fff & (source)) * multiplier12bit, 1);
+                                KoGrayU16Traits::setOpacity(
+                                    it->rawData(),
+                                    static_cast<qreal>(float(0x0fff & (source))
+                                                       * multiplier12bit),
+                                    1);
                             } else {
-                                KoGrayU16Traits::setOpacity(it->rawData(), float(source) * multiplier16bit, 1);
+                                KoGrayU16Traits::setOpacity(
+                                    it->rawData(),
+                                    static_cast<qreal>(float(source)
+                                                       * multiplier16bit),
+                                    1);
                             }
                         } else {
                             KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
@@ -315,7 +344,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
         } else if (heifChroma == heif_chroma_444) {
             dbgFile << "planar heif file, bits:" << luma;
 
-            int strideR, strideG, strideB, strideA;
+            int strideR = 0;
+            int strideG = 0;
+            int strideB = 0;
+            int strideA = 0;
             const uint8_t* imgR = heifimage.get_plane(heif_channel_R, &strideR);
             const uint8_t* imgG = heifimage.get_plane(heif_channel_G, &strideG);
             const uint8_t* imgB = heifimage.get_plane(heif_channel_B, &strideB);
@@ -368,7 +400,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 it->nextRow();
             }
         } else if (heifChroma == heif_chroma_interleaved_RGB || heifChroma == heif_chroma_interleaved_RGBA) {
-            int stride;
+            int stride = 0;
             dbgFile << "interleaved SDR heif file, bits:" << luma;
 
             const uint8_t *img = heifimage.get_plane(heif_channel_interleaved, &stride);
@@ -406,7 +438,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 it->nextRow();
             }
         } else if (heifChroma == heif_chroma_interleaved_RRGGBB_LE || heifChroma == heif_chroma_interleaved_RRGGBBAA_LE || heifChroma == heif_chroma_interleaved_RRGGBB_BE || heifChroma == heif_chroma_interleaved_RRGGBB_BE) {
-            int stride;
+            int stride = 0;
             dbgFile << "interleaved HDR heif file, bits:" << luma;
 
             const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
@@ -464,17 +496,22 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             std::vector<uint8_t> exif_data = handle.get_metadata(id);
 
             if (exif_data.size()>4) {
-              size_t skip = ((exif_data[0]<<24) | (exif_data[1]<<16) | (exif_data[2]<<8) | exif_data[3]) + 4;
+                size_t skip = ((quint32(exif_data[0]) << 24U)
+                               | (quint32(exif_data[1])) << 16U
+                               | (quint32(exif_data[2]) << 8U) | exif_data[3])
+                    + 4u;
 
-              if (exif_data.size()>skip) {
-                  KisMetaData::IOBackend *exifIO = KisMetadataBackendRegistry::instance()->value("exif");
+                if (exif_data.size() > skip) {
+                    KisMetaData::IOBackend *exifIO =
+                        KisMetadataBackendRegistry::instance()->value("exif");
 
-                  // Copy the exif data into the byte array
-                  QByteArray ba(reinterpret_cast<char *>(exif_data.data() + skip),
-                                static_cast<int>(exif_data.size() - skip));
-                  QBuffer buf(&ba);
-                  exifIO->loadFrom(layer->metaData(), &buf);
-              }
+                    // Copy the exif data into the byte array
+                    QByteArray ba(
+                        reinterpret_cast<char *>(exif_data.data() + skip),
+                        static_cast<int>(exif_data.size() - skip));
+                    QBuffer buf(&ba);
+                    exifIO->loadFrom(layer->metaData(), &buf);
+                }
             }
           }
 

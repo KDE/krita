@@ -10,34 +10,30 @@
 #include "HeifExport.h"
 #include "HeifError.h"
 
-#include <QCheckBox>
-#include <QSlider>
 #include <QApplication>
-#include <QScopedPointer>
 #include <QBuffer>
+#include <QCheckBox>
+#include <QFileInfo>
+#include <QScopedPointer>
+#include <QSlider>
 
 #include <algorithm>
 #include <kpluginfactory.h>
-#include <QFileInfo>
+#include <libheif/heif_cxx.h>
 
-#include <KoColorSpaceRegistry.h>
-#include <KoColorSpaceConstants.h>
+#include <KisDocument.h>
+#include <KisExportCheckRegistry.h>
+#include <KisImportExportManager.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
+#include <KoColorSpaceConstants.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoColorTransferFunctions.h>
-
-#include <KisImportExportManager.h>
-#include <KisExportCheckRegistry.h>
-
-#include <kis_properties_configuration.h>
 #include <kis_config.h>
-#include <KisDocument.h>
-#include <kis_image.h>
-#include <kis_group_layer.h>
-#include <kis_paint_device.h>
-#include <kis_paint_layer.h>
-
 #include <kis_exif_info_visitor.h>
+#include <kis_group_layer.h>
+#include <kis_image.h>
+#include <kis_iterator_ng.h>
 #include <kis_meta_data_backend_registry.h>
 #include <kis_meta_data_entry.h>
 #include <kis_meta_data_filter_registry_model.h>
@@ -45,10 +41,9 @@
 #include <kis_meta_data_schema_registry.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_value.h>
-
-#include "kis_iterator_ng.h"
-
-#include "libheif/heif_cxx.h"
+#include <kis_paint_device.h>
+#include <kis_paint_layer.h>
+#include <kis_properties_configuration.h>
 
 using heif::Error;
 
@@ -94,8 +89,9 @@ public:
     }
 
     heif_error write(const void* data, size_t size) override {
-        qint64 n = m_io->write((const char*)data,size);
-        if (n != (qint64)size) {
+        qint64 n = m_io->write(static_cast<const char *>(data),
+                               static_cast<int>(size));
+        if (n != static_cast<qint64>(size)) {
             QString error = m_io->errorString();
 
             heif_error err = {
@@ -247,9 +243,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         heif::Image img;
 
-        const int max12bit = 4095;
-        const int max16bit = 65535;
-        const double multiplier16bit = (1.0/double(max16bit));
+        const uint16_t max12bit = 4095;
+        const uint16_t max16bit = 65535;
+        const float multiplier16bit = (1.0f / float(max16bit));
 
         if (cs->colorModelId() == RGBAColorModelID) {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
@@ -263,7 +259,10 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 uint8_t *ptrG {nullptr};
                 uint8_t *ptrB {nullptr};
                 uint8_t *ptrA {nullptr};
-                int strideR, strideG, strideB, strideA;
+                int strideR = 0;
+                int strideG = 0;
+                int strideB = 0;
+                int strideA = 0;
 
                 ptrR = img.get_plane(heif_channel_R, &strideR);
                 ptrG = img.get_plane(heif_channel_G, &strideG);
@@ -298,7 +297,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
                 uint8_t *ptr {nullptr};
-                int stride;
+                int stride = 0;
 
                 ptr = img.get_plane(heif_channel_interleaved, &stride);
 
@@ -315,7 +314,12 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound(0, int(float(pixelValues[ch]) * multiplier16bit * max12bit), max12bit);
+                            uint16_t v = qBound<uint16_t>(
+                                0,
+                                static_cast<uint16_t>(float(pixelValues[ch])
+                                                      * multiplier16bit
+                                                      * max12bit),
+                                max12bit);
                             ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
                             ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }
@@ -330,7 +334,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.create(width,height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
-                int stride;
+                int stride = 0;
 
                 uint8_t *ptr = img.get_plane(heif_channel_interleaved, &stride);
 
@@ -357,7 +361,13 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                         int channels = hasAlpha? 4: 3;
                         for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound(0, int(applyCurveAsNeeded(pixelValues[ch], conversionPolicy) * max12bit), max12bit);
+                            uint16_t v = qBound<uint16_t>(
+                                0,
+                                static_cast<uint16_t>(
+                                    applyCurveAsNeeded(pixelValues[ch],
+                                                       conversionPolicy)
+                                    * max12bit),
+                                max12bit);
                             ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
                             ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }
@@ -378,7 +388,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 uint8_t *ptrG {nullptr};
                 uint8_t *ptrA {nullptr};
-                int strideG, strideA;
+                int strideG = 0;
+                int strideA = 0;
 
                 ptrG = img.get_plane(heif_channel_Y, &strideG);
 
@@ -411,7 +422,8 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 uint8_t *ptrG {nullptr};
                 uint8_t *ptrA {nullptr};
-                int strideG, strideA;
+                int strideG = 0;
+                int strideA = 0;
 
                 ptrG = img.get_plane(heif_channel_Y, &strideG);
 
@@ -425,12 +437,21 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 for (int y = 0; y < height; y++) {
                     for (int x = 0; x < width; x++) {
-                        uint16_t v = qBound(0, int(float( KoGrayU16Traits::gray(it->rawData()) ) * multiplier16bit * max12bit), max12bit);
+                        uint16_t v = qBound<uint16_t>(
+                            0,
+                            static_cast<uint16_t>(
+                                float(KoGrayU16Traits::gray(it->rawData()))
+                                * multiplier16bit * max12bit),
+                            max12bit);
                         ptrG[(x*2) + y * strideG + endValue0] = (uint8_t) (v >> 8);
                         ptrG[(x*2) + y * strideG + endValue1] = (uint8_t) (v & 0xFF);
 
                         if (hasAlpha) {
-                            uint16_t vA = qBound(0, int( cs->opacityF(it->rawData()) * max12bit), max12bit);
+                            uint16_t vA = qBound<uint16_t>(
+                                0,
+                                static_cast<uint16_t>(
+                                    cs->opacityF(it->rawData()) * max12bit),
+                                max12bit);
                             ptrA[(x*2) + y * strideA + endValue0] = (uint8_t) (vA >> 8);
                             ptrA[(x*2) + y * strideA + endValue1] = (uint8_t) (vA & 0xFF);
                         }

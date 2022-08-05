@@ -248,10 +248,8 @@ void KisOpenGL::initialize()
      *       Qt5+openGL3 branch.
      */
 
-    if (openGLCheckResult->vendorString().toUpper().contains("NVIDIA")
-        || KisOpenGL::hasOpenGLES()) {
-        g_needsPixmapCacheWorkaround = true;
-
+    g_needsPixmapCacheWorkaround = cfg.readEntry("needsPixmapCacheWorkaround", needsPixmapCacheWorkaround());
+    if (g_needsPixmapCacheWorkaround) {
         const qreal devicePixelRatio = QGuiApplication::primaryScreen()->devicePixelRatio();
         const QSize screenSize = QGuiApplication::primaryScreen()->size() * devicePixelRatio;
         const int minCacheSize = 20 * 1024;
@@ -404,7 +402,7 @@ bool KisOpenGL::needsFenceWorkaround()
 bool KisOpenGL::needsPixmapCacheWorkaround()
 {
     initialize();
-    return g_needsPixmapCacheWorkaround;
+    return openGLCheckResult->vendorString().toUpper().contains("NVIDIA") || KisOpenGL::hasOpenGLES();
 }
 
 void KisOpenGL::testingInitializeDefaultSurfaceFormat()

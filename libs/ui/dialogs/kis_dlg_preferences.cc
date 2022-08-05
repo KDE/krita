@@ -1522,12 +1522,16 @@ DisplaySettingsTab::DisplaySettingsTab(QWidget *parent, const char *name)
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
+        chkLargePixmapCache->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     } else {
         grpOpenGL->setEnabled(true);
         grpOpenGL->setChecked(cfg.useOpenGL());
         chkUseTextureBuffer->setEnabled(cfg.useOpenGL());
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer());
+        chkLargePixmapCache->setEnabled(cfg.useOpenGL());
+        chkLargePixmapCache->setChecked(
+            cfg.readEntry("needsPixmapCacheWorkaround", KisOpenGL::needsPixmapCacheWorkaround()));
         cmbFilterMode->setEnabled(cfg.useOpenGL());
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode());
         // Don't show the high quality filtering mode if it's not available
@@ -1672,6 +1676,7 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setEnabled(false);
         grpOpenGL->setChecked(false);
         chkUseTextureBuffer->setEnabled(false);
+        chkLargePixmapCache->setEnabled(false);
         cmbFilterMode->setEnabled(false);
     }
     else {
@@ -1679,6 +1684,9 @@ void DisplaySettingsTab::setDefault()
         grpOpenGL->setChecked(cfg.useOpenGL(true));
         chkUseTextureBuffer->setChecked(cfg.useOpenGLTextureBuffer(true));
         chkUseTextureBuffer->setEnabled(true);
+        chkLargePixmapCache->setEnabled(true);
+        chkLargePixmapCache->setChecked(
+            cfg.readEntry("needsPixmapCacheWorkaround", KisOpenGL::needsPixmapCacheWorkaround()));
         cmbFilterMode->setEnabled(true);
         cmbFilterMode->setCurrentIndex(cfg.openGLFilteringMode(true));
     }
@@ -1721,6 +1729,7 @@ void DisplaySettingsTab::slotUseOpenGLToggled(bool isChecked)
 {
     chkUseTextureBuffer->setEnabled(isChecked);
     cmbFilterMode->setEnabled(isChecked);
+    chkLargePixmapCache->setEnabled(isChecked);
 }
 
 void DisplaySettingsTab::slotPreferredSurfaceFormatChanged(int index)
@@ -2197,6 +2206,7 @@ bool KisDlgPreferences::editPreferences()
         cfg.setUseOpenGLTextureBuffer(m_displaySettings->chkUseTextureBuffer->isChecked());
         cfg.setOpenGLFilteringMode(m_displaySettings->cmbFilterMode->currentIndex());
         cfg.setRootSurfaceFormat(&kritarc, indexToFormat(m_displaySettings->cmbPreferedRootSurfaceFormat->currentIndex()));
+        cfg.writeEntry("needsPixmapCacheWorkaround", m_displaySettings->chkLargePixmapCache->isChecked());
 
         cfg.setCheckSize(m_displaySettings->intCheckSize->value());
         cfg.setScrollingCheckers(m_displaySettings->chkMoving->isChecked());

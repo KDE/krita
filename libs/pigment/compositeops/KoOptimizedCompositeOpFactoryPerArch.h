@@ -8,7 +8,7 @@
 #ifndef KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 #define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
-#include <compositeops/KoMultiArchBuildSupport.h>
+#include <KoMultiArchBuildSupport.h>
 class KoCompositeOp;
 class KoColorSpace;
 

@@ -702,9 +702,15 @@ extern "C" MAIN_EXPORT int MAIN_FN(int argc, char **argv)
     KisUsageLogger::writeSysInfo(QString("  Memory: %1 Mb").arg(KisImageConfig(true).totalRAM()));
     KisUsageLogger::writeSysInfo(QString("  Number of Cores: %1").arg(QThread::idealThreadCount()));
     KisUsageLogger::writeSysInfo(QString("  Swap Location: %1").arg(KisImageConfig(true).swapDir()));
-    KisUsageLogger::writeSysInfo(QString("  Built for: %1").arg(xsimd::current_arch::name()));
-    KisUsageLogger::writeSysInfo(QString("  Base instruction set: %1").arg(KisSupportedArchitectures<QString>::currentArchitecture()));
-    KisUsageLogger::writeSysInfo(QString("  Supported instruction sets: %1").arg(KisSupportedArchitectures<QString>::supportedInstructionSets()));
+    KisUsageLogger::writeSysInfo(
+        QString("  Built for: %1")
+            .arg(KisSupportedArchitectures::baseArchName()));
+    KisUsageLogger::writeSysInfo(
+        QString("  Base instruction set: %1")
+            .arg(KisSupportedArchitectures::bestArchName()));
+    KisUsageLogger::writeSysInfo(
+        QString("  Supported instruction sets: %1")
+            .arg(KisSupportedArchitectures::supportedInstructionSets()));
 
     KisUsageLogger::writeSysInfo("");
 

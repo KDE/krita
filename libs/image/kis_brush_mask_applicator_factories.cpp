@@ -20,7 +20,8 @@
 template<>
 template<>
 MaskApplicatorFactory<KisMaskGenerator>::ReturnType
-MaskApplicatorFactory<KisMaskGenerator>::create<xsimd::current_arch>(ParamType maskGenerator)
+MaskApplicatorFactory<KisMaskGenerator>::create<xsimd::current_arch>(
+    ParamType maskGenerator)
 {
     return new KisBrushMaskScalarApplicator<KisMaskGenerator,xsimd::current_arch>(maskGenerator);
 }

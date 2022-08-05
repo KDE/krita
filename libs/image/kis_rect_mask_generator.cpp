@@ -11,10 +11,12 @@
 
 #include <QDomDocument>
 
+#include "KoMultiArchBuildSupport.h"
+#include "kis_base_mask_generator.h"
 #include "kis_fast_math.h"
 #include "kis_rect_mask_generator.h"
 #include "kis_rect_mask_generator_p.h"
-#include "kis_base_mask_generator.h"
+
 
 #include "kis_brush_mask_applicator_factories.h"
 #include "kis_brush_mask_applicator_base.h"
@@ -78,9 +80,11 @@ KisBrushMaskApplicatorBase* KisRectangleMaskGenerator::applicator()
     return d->applicator.data();
 }
 
-void KisRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
+void KisRectangleMaskGenerator::setMaskScalarApplicator()
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisRectangleMaskGenerator>>(this,forceScalar));
+    d->applicator.reset(
+        createScalarClass<MaskApplicatorFactory<KisRectangleMaskGenerator>>(
+            this));
 }
 
 quint8 KisRectangleMaskGenerator::valueAt(qreal x, qreal y) const

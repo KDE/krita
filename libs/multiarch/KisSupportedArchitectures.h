@@ -4,47 +4,23 @@
  * SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "xsimd_extensions/xsimd.hpp"
-
 #ifndef KIS_SUPPORTED_ARCHITECTURES_H
 #define KIS_SUPPORTED_ARCHITECTURES_H
 
-template<typename S>
-class KisSupportedArchitectures
+#include "kritamultiarch_export.h"
+
+#include <QString>
+
+class KRITAMULTIARCH_EXPORT KisSupportedArchitectures
 {
 public:
-    static S currentArchitecture()
-    {
-        return xsimd::current_arch::name();
-    }
+    static QString baseArchName();
 
-    static S supportedInstructionSets()
-    {
-        S archs;
-#ifdef HAVE_XSIMD
-        xsimd::all_architectures::for_each(is_supported_arch{archs});
-#endif
-        return archs;
-    }
+    static QString bestArchName();
 
-private:
-    struct is_supported_arch
-    {
-        is_supported_arch(S &log)
-            : l (log) {}
+    static unsigned int bestArch();
 
-        template<typename A>
-        void operator()(A) const
-        {
-#ifdef HAVE_XSIMD
-            if (A::version() <= xsimd::available_architectures().best) {
-                l.append(A::name()).append(" ");
-            }
-#endif
-        }
-
-        S &l;
-    };
+    static QString supportedInstructionSets();
 };
 
 #endif // KIS_SUPPORTED_ARCHITECTURES_H

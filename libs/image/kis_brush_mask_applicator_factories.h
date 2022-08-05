@@ -8,7 +8,7 @@
 #ifndef __KIS_BRUSH_MASK_APPLICATOR_FACTORIES_H
 #define __KIS_BRUSH_MASK_APPLICATOR_FACTORIES_H
 
-#include <compositeops/KoMultiArchBuildSupport.h>
+#include <KoMultiArchBuildSupport.h>
 
 class KisBrushMaskApplicatorBase;
 

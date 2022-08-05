@@ -107,7 +107,9 @@ quint8 KisGaussCircleMaskGenerator::valueAt(qreal x, qreal y) const
     return d->value(dist);
 }
 
-void KisGaussCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+void KisGaussCircleMaskGenerator::setMaskScalarApplicator()
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator>>(this,forceScalar));
+    d->applicator.reset(
+        createScalarClass<MaskApplicatorFactory<KisGaussCircleMaskGenerator>>(
+            this));
 }

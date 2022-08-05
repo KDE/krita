@@ -36,7 +36,7 @@ public:
     void setSoftness(qreal softness) override;
     void setScale(qreal scaleX, qreal scaleY) override;
 
-    void resetMaskApplicator(bool forceScalar);
+    void setMaskScalarApplicator();
 
 private:
 

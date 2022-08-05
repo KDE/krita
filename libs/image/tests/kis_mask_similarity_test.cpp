@@ -90,7 +90,8 @@ public:
                     KisGaussCircleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, true);
                     bCircVectr.setDiameter(499.5);
                     KisGaussCircleMaskGenerator bCircScalar(bCircVectr);
-                    bCircScalar.resetMaskApplicator(true); // Force usage of scalar backend
+                    bCircScalar.setMaskScalarApplicator(); // Force usage of
+                                                           // scalar backend
 
                     KisMaskSimilarityTester(bCircScalar.applicator(), bCircVectr.applicator(), bounds,type);
                     break;
@@ -102,7 +103,8 @@ public:
                     KisCurveCircleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, pointsCurve, true);
                     bCircVectr.setDiameter(499.5);
                     KisCurveCircleMaskGenerator bCircScalar(bCircVectr);
-                    bCircScalar.resetMaskApplicator(true); // Force usage of scalar backend
+                    bCircScalar.setMaskScalarApplicator(); // Force usage of
+                                                           // scalar backend
 
                     KisMaskSimilarityTester(bCircScalar.applicator(), bCircVectr.applicator(), bounds,type);
                     break;
@@ -111,7 +113,8 @@ public:
                     {
                     KisRectangleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, true);
                     KisRectangleMaskGenerator bCircScalar(bCircVectr);
-                    bCircScalar.resetMaskApplicator(true); // Force usage of scalar backend
+                    bCircScalar.setMaskScalarApplicator(); // Force usage of
+                                                           // scalar backend
 
                     KisMaskSimilarityTester(bCircScalar.applicator(), bCircVectr.applicator(), bounds,type);
                     break;
@@ -121,7 +124,8 @@ public:
                     {
                     KisGaussRectangleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, true);
                     KisGaussRectangleMaskGenerator bCircScalar(bCircVectr);
-                    bCircScalar.resetMaskApplicator(true); // Force usage of scalar backend
+                    bCircScalar.setMaskScalarApplicator(); // Force usage of
+                                                           // scalar backend
 
                     KisMaskSimilarityTester(bCircScalar.applicator(), bCircVectr.applicator(), bounds,type);
                     break;
@@ -133,7 +137,8 @@ public:
                     pointsCurve.fromString(QString("0,1;1,0"));
                     KisCurveRectangleMaskGenerator bCircVectr(499.5, k/100.f, i/100.f, j/100.f, 2, pointsCurve, true);
                     KisCurveRectangleMaskGenerator bCircScalar(bCircVectr);
-                    bCircScalar.resetMaskApplicator(true); // Force usage of scalar backend
+                    bCircScalar.setMaskScalarApplicator(); // Force usage of
+                                                           // scalar backend
 
                     KisMaskSimilarityTester(bCircScalar.applicator(), bCircVectr.applicator(), bounds,type);
                     break;
@@ -160,7 +165,8 @@ public:
         generator.setDiameter(499.5);
         MaskGenerator scalarGenerator(generator);
 
-        scalarGenerator.resetMaskApplicator(true); // Force usage of scalar backend
+        scalarGenerator
+            .setMaskScalarApplicator(); // Force usage of scalar backend
         KisMaskSimilarityTester(scalarGenerator.applicator(), generator.applicator(), bounds, type);
 
         // KisMaskSimilarityTester::exahustiveTest(bounds,type);

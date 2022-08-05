@@ -146,7 +146,9 @@ void KisCurveCircleMaskGenerator::transformCurveForSoftness(qreal softness,const
     result = curve.floatTransfer( curveResolution );
 }
 
-void KisCurveCircleMaskGenerator::resetMaskApplicator(bool forceScalar)
+void KisCurveCircleMaskGenerator::setMaskScalarApplicator()
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisCurveCircleMaskGenerator> >(this,forceScalar));
+    d->applicator.reset(
+        createScalarClass<MaskApplicatorFactory<KisCurveCircleMaskGenerator>>(
+            this));
 }

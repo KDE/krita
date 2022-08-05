@@ -110,7 +110,9 @@ KisBrushMaskApplicatorBase* KisGaussRectangleMaskGenerator::applicator()
     return d->applicator.data();
 }
 
-void KisGaussRectangleMaskGenerator::resetMaskApplicator(bool forceScalar)
+void KisGaussRectangleMaskGenerator::setMaskScalarApplicator()
 {
-    d->applicator.reset(createOptimizedClass<MaskApplicatorFactory<KisGaussRectangleMaskGenerator>>(this,forceScalar));
+    d->applicator.reset(
+        createScalarClass<
+            MaskApplicatorFactory<KisGaussRectangleMaskGenerator>>(this));
 }

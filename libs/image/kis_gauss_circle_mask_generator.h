@@ -35,7 +35,7 @@ public:
     bool shouldVectorize() const override;
     KisBrushMaskApplicatorBase* applicator() override;
 
-    void resetMaskApplicator(bool forceScalar);
+    void setMaskScalarApplicator();
 
 private:
 

@@ -13,9 +13,6 @@
 class KRITAPIGMENT_EXPORT KoOptimizedPixelDataScalerU8ToU16FactoryImpl
 {
 public:
-    using ParamType = int;
-    using ReturnType = KoOptimizedPixelDataScalerU8ToU16Base *;
-
     template<typename _impl>
     static KoOptimizedPixelDataScalerU8ToU16Base* create(int);
 };

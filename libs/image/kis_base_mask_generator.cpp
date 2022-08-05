@@ -7,7 +7,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <compositeops/KoMultiArchBuildSupport.h>
+#include <KoMultiArchBuildSupport.h>
 
 #include "kis_brush_mask_applicator_factories.h"
 #include "kis_mask_generator.h"

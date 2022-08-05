@@ -9,6 +9,7 @@
 #define KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H
 
 #include <KoMultiArchBuildSupport.h>
+
 class KoCompositeOp;
 class KoColorSpace;
 
@@ -50,11 +51,8 @@ class KoOptimizedCompositeOpCopy32;
 
 template<template<typename I> class CompositeOp>
 struct KoOptimizedCompositeOpFactoryPerArch {
-    using ParamType = const KoColorSpace *;
-    using ReturnType = KoCompositeOp *;
-
-    template <typename _impl>
-    static ReturnType create(ParamType param);
+    template<typename _impl>
+    static KoCompositeOp *create(const KoColorSpace *);
 };
 
 #endif /* KOOPTIMIZEDCOMPOSITEOPFACTORYPERARCH_H */

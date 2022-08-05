@@ -13,13 +13,9 @@
 class KisBrushMaskApplicatorBase;
 
 template<class MaskGenerator>
-struct MaskApplicatorFactory
-{
-    using ParamType = MaskGenerator *;
-    using ReturnType = KisBrushMaskApplicatorBase *;
-
+struct MaskApplicatorFactory {
     template<typename _impl>
-    static ReturnType create(ParamType maskGenerator);
+    static KisBrushMaskApplicatorBase *create(MaskGenerator *maskGenerator);
 };
 
 #endif /* __KIS_BRUSH_MASK_APPLICATOR_FACTORIES_H */

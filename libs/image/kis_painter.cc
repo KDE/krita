@@ -1178,10 +1178,20 @@ void KisPainter::paintPolyline(const vQPointF &points,
         numPoints = points.count() - index;
 
     if (numPoints > 1) {
+        KisRandomSourceSP rnd = new KisRandomSource();
+        KisPerStrokeRandomSourceSP strokeRnd = new KisPerStrokeRandomSource();
+
+        auto point = [rnd, strokeRnd] (const QPointF &pt) {
+            KisPaintInformation pi(pt);
+            pi.setRandomSource(rnd);
+            pi.setPerStrokeRandomSource(strokeRnd);
+            return pi;
+        };
+
         KisDistanceInformation saveDist(points[0],
                 KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
         for (int i = index; i < index + numPoints - 1; i++) {
-            paintLine(points [i], points [i + 1], &saveDist);
+            paintLine(point(points[i]), point(points[i + 1]), &saveDist);
         }
     }
 
@@ -1349,10 +1359,20 @@ void KisPainter::paintPolygon(const vQPointF& points)
             KisDistanceInformation distance(points[0],
                                             KisAlgebra2D::directionBetweenPoints(points[0], points[1], 0.0));
 
+            KisRandomSourceSP rnd = new KisRandomSource();
+            KisPerStrokeRandomSourceSP strokeRnd = new KisPerStrokeRandomSource();
+
+            auto point = [rnd, strokeRnd] (const QPointF &pt) {
+                KisPaintInformation pi(pt);
+                pi.setRandomSource(rnd);
+                pi.setPerStrokeRandomSource(strokeRnd);
+                return pi;
+            };
+
             for (int i = 0; i < points.count() - 1; i++) {
-                paintLine(KisPaintInformation(points[i]), KisPaintInformation(points[i + 1]), &distance);
+                paintLine(point(points[i]), point(points[i + 1]), &distance);
             }
-            paintLine(points[points.count() - 1], points[0], &distance);
+            paintLine(point(points[points.count() - 1]), point(points[0]), &distance);
         }
     }
 }
@@ -1368,23 +1388,34 @@ void KisPainter::paintPainterPath(const QPainterPath& path)
     QPointF lastPoint, nextPoint;
     int elementCount = path.elementCount();
     KisDistanceInformation saveDist;
+
+    KisRandomSourceSP rnd = new KisRandomSource();
+    KisPerStrokeRandomSourceSP strokeRnd = new KisPerStrokeRandomSource();
+
+    auto point = [rnd, strokeRnd] (const QPointF &pt) {
+        KisPaintInformation pi(pt);
+        pi.setRandomSource(rnd);
+        pi.setPerStrokeRandomSource(strokeRnd);
+        return pi;
+    };
+
     for (int i = 0; i < elementCount; i++) {
         QPainterPath::Element element = path.elementAt(i);
         switch (element.type) {
         case QPainterPath::MoveToElement:
-            lastPoint =  QPointF(element.x, element.y);
+            lastPoint = QPointF(element.x, element.y);
             break;
         case QPainterPath::LineToElement:
-            nextPoint =  QPointF(element.x, element.y);
-            paintLine(KisPaintInformation(lastPoint), KisPaintInformation(nextPoint), &saveDist);
+            nextPoint = QPointF(element.x, element.y);
+            paintLine(point(lastPoint), point(nextPoint), &saveDist);
             lastPoint = nextPoint;
             break;
         case QPainterPath::CurveToElement:
-            nextPoint =  QPointF(path.elementAt(i + 2).x, path.elementAt(i + 2).y);
-            paintBezierCurve(KisPaintInformation(lastPoint),
+            nextPoint = QPointF(path.elementAt(i + 2).x, path.elementAt(i + 2).y);
+            paintBezierCurve(point(lastPoint),
                              QPointF(path.elementAt(i).x, path.elementAt(i).y),
                              QPointF(path.elementAt(i + 1).x, path.elementAt(i + 1).y),
-                             KisPaintInformation(nextPoint), &saveDist);
+                             point(nextPoint), &saveDist);
             lastPoint = nextPoint;
             break;
         default:

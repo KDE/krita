@@ -21,7 +21,7 @@ import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MainActivity extends QtActivity {
 
-    private boolean isStartup = true;
+    private boolean haveLibsLoaded = false;
     private final String TAG = "MainActivity";
 
     @Override
@@ -38,6 +38,7 @@ public class MainActivity extends QtActivity {
 
         super.onCreate(savedInstanceState);
         Log.i(TAG, "LibsLoaded");
+        haveLibsLoaded = true;
         new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
@@ -68,7 +69,7 @@ public class MainActivity extends QtActivity {
         super.onPause();
         // onPause() _is_ called when the app starts. If the native lib
         // isn't loaded, it crashes.
-        if (!isStartup) {
+        if (haveLibsLoaded) {
             synchronized(this) {
                 Intent intent = new Intent(this, DocumentSaverService.class);
                 intent.putExtra(DocumentSaverService.START_SAVING, true);
@@ -78,9 +79,6 @@ public class MainActivity extends QtActivity {
                     startService(intent);
                 }
             }
-        }
-        else {
-            isStartup = false;
         }
     }
 

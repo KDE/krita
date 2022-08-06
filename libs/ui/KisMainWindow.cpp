@@ -407,6 +407,12 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->styleActions = new QActionGroup(this);
     QAction * action;
     Q_FOREACH (QString styleName, QStyleFactory::keys()) {
+#ifdef Q_OS_ANDROID
+        // disable the style for android platform
+        if (styleName.contains("android")) {
+            continue;
+        }
+#endif
         action = new QAction(styleName, d->styleActions);
         action->setCheckable(true);
         d->actionMap.insert(styleName, action);

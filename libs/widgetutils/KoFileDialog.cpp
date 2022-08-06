@@ -253,13 +253,15 @@ QString KoFileDialog::filename()
             int end = selectedFilter.indexOf(" ", start);
             int n = end - start;
             extension = selectedFilter.mid(start, n);
-            if (!extension.contains(".")) {
+            if (!extension.startsWith(".")) {
                 extension = "." + extension;
             }
             d->fileDialog->selectNameFilter(selectedFilter);
 
+            const QString proposedFileBaseName = QFileInfo(d->proposedFileName).baseName();
             // HACK: discovered by looking into the code
-            d->fileDialog->setWindowTitle(d->proposedFileName.isEmpty() ? "Untitled" + extension : d->proposedFileName);
+            d->fileDialog->setWindowTitle(proposedFileBaseName.isEmpty() ? QString("Untitled" + extension)
+                                                                         : proposedFileBaseName + extension);
         } else {
             return url;
         }

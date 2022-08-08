@@ -20,6 +20,11 @@
 #include <kpluginfactory.h>
 #include "kis_shape_layer.h"
 
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <kis_scalable_vector_graphics_save_context.h>
+#include <kis_scalable_vector_graphics_save_visitor.h>
+
 #include <SvgWriter.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_svg_export.json", registerPlugin<KisSVGExport>();)
@@ -35,15 +40,17 @@ KisSVGExport::~KisSVGExport()
 
 KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
-    qDebug() << "Doing convert";
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(io->isWritable(), ImportExportCodes::NoAccessToWrite);
-    /*
-    if (!io->isReadable()) {
-        errFile << "Cannot read svg contents";
-        qDebug() << "no access to read";
-        return ImportExportCodes::NoAccessToRead;
+    KoStore* store = KoStore::createStore(io, KoStore::Write, "image/svg", KoStore::Auto);
+
+    if (!store) {
+        delete store;
+        return ImportExportCodes::Failure;
     }
-    */
+
+    KisScalableVectorGraphicsSaveContext svgSaveContext(store);
+    KisScalableVectorGraphicsSaveVisitor svgVisitor(&svgSaveContext, {document->preActivatedNode()});
+
     KisImageSP image = document->savingImage();
     const auto bounds = image->bounds();
     const auto *const cs = image->colorSpace();
@@ -55,7 +62,6 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
 
 
     KisGroupLayerSP rootLayer = image->rootLayer();
-    //qDebug() << "root name " << rootLayer->name();
     QList<KoShapeLayer*> svgLayers ;
     KisShapeLayerSP shapeLayer = qobject_cast<KisShapeLayer*>(rootLayer->firstChild().data());
     qDebug() << shapeLayer->objectName();

@@ -528,6 +528,7 @@ private Q_SLOTS:
     void slotCompleteSavingDocument(const KritaUtils::ExportFileJob &job, KisImportExportErrorCode status, const QString &errorMessage, const QString &warningMessage);
 
     void slotInitiateAsyncAutosaving(KisDocument *clonedDocument);
+    void slotDocumentCloningCancelled();
 
     void slotPerformIdleRoutines();
 

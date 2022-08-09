@@ -1377,6 +1377,9 @@ void KisDocument::slotAutoSaveImpl(std::unique_ptr<KisDocument> &&optionalCloned
         connect(stroke, SIGNAL(sigDocumentCloned(KisDocument*)),
                 this, SLOT(slotInitiateAsyncAutosaving(KisDocument*)),
                 Qt::BlockingQueuedConnection);
+        connect(stroke, SIGNAL(sigCloningCancelled()),
+                this, SLOT(slotDocumentCloningCancelled()),
+                Qt::BlockingQueuedConnection);
 
         KisStrokeId strokeId = d->image->startStroke(stroke);
         d->image->endStroke(strokeId);
@@ -1480,6 +1483,11 @@ void KisDocument::slotAutoSave()
 void KisDocument::slotInitiateAsyncAutosaving(KisDocument *clonedDocument)
 {
     slotAutoSaveImpl(std::unique_ptr<KisDocument>(clonedDocument));
+}
+
+void KisDocument::slotDocumentCloningCancelled()
+{
+    setEmergencyAutoSaveInterval();
 }
 
 void KisDocument::slotPerformIdleRoutines()

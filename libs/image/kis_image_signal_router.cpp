@@ -80,7 +80,8 @@ void KisImageSignalRouter::emitNotification(KisImageSignalType type)
      * recipients in a non-reordered way
      */
 
-    if (type.id == LayersChangedSignal) {
+    if (type.id == LayersChangedSignal ||
+        type.id == NodeReselectionRequestSignal) {
         slotNotification(type);
     } else {
         emit sigNotification(type);

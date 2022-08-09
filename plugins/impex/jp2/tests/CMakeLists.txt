@@ -16,7 +16,7 @@ if (APPLE)
     macos_test_fixrpath(KisJP2Test)
 
 else (APPLE)
-    krita_add_broken_unit_test(KisJP2Test.cpp
+    kis_add_test(KisJP2Test.cpp
         TEST_NAME KisJP2Test
         LINK_LIBRARIES kritaui Qt5::Test
         NAME_PREFIX "plugins-impex-"

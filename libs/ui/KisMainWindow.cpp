@@ -406,13 +406,21 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     // Style menu actions
     d->styleActions = new QActionGroup(this);
     QAction * action;
+
+    QStringList allowableStyles = QStringList() << "macintosh" << "breeze" << "fusion";
+
     Q_FOREACH (QString styleName, QStyleFactory::keys()) {
 #ifdef Q_OS_ANDROID
         // disable the style for android platform
-        if (styleName.contains("android")) {
+        if (styleName.toLower().contains("android")) {
             continue;
         }
 #endif
+        if (qgetenv("KRITA_NO_STYLE_OVERRIDE").isEmpty()) {
+            if (!allowableStyles.contains(styleName.toLower())) {
+                continue;
+            }
+        }
         action = new QAction(styleName, d->styleActions);
         action->setCheckable(true);
         d->actionMap.insert(styleName, action);

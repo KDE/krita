@@ -90,6 +90,19 @@ public:
      */
     bool canForgetAboutMe() const;
 
+    /**
+     * Returns true if the stroke can be cancelled by the
+     * engine, e.g. when the user presses Esc key or
+     * Ctrl+Z shortcut. Default value is true. The only
+     * exception right now are the strokes that perform
+     * undo/redo operations.
+     *
+     * The owner of the stroke can still cancel the stroke
+     * via the strokeId handle (though it is not used for
+     * undo/redo strokes).
+     */
+    bool isAsynchronouslyCancellable() const;
+
     bool needsExplicitCancel() const;
 
 
@@ -149,6 +162,7 @@ protected:
     void setClearsRedoOnStart(bool value);
     void setRequestsOtherStrokesToEnd(bool value);
     void setCanForgetAboutMe(bool value);
+    void setAsynchronouslyCancellable(bool value);
     void setNeedsExplicitCancel(bool value);
 
     /**
@@ -178,6 +192,7 @@ private:
     bool m_clearsRedoOnStart;
     bool m_requestsOtherStrokesToEnd;
     bool m_canForgetAboutMe;
+    bool m_asynchronouslyCancellable;
     bool m_needsExplicitCancel;
     bool m_forceLodModeIfPossible;
     qreal m_balancingRatioOverride;

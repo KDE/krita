@@ -20,7 +20,6 @@
 #include "KoColorProfile.h"
 #include "KoCopyColorConversionTransformation.h"
 #include "KoFallBackColorTransformation.h"
-#include "KoUniqueNumberForIdServer.h"
 #include "KoMixColorsOp.h"
 #include "KoConvolutionOp.h"
 #include "KoCompositeOpRegistry.h"
@@ -47,7 +46,7 @@ KoColorSpace::KoColorSpace(const QString &id, const QString &name, KoMixColorsOp
     : d(new Private())
 {
     d->id = id;
-    d->idNumber = KoUniqueNumberForIdServer::instance()->numberForId(d->id);
+    d->idNumber = qHash(d->id);
     d->name = name;
     d->mixColorsOp = mixColorsOp;
     d->convolutionOp = convolutionOp;

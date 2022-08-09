@@ -115,7 +115,8 @@ public:
                                                 KoDocumentResourceManager *resourceManager,
                                                 bool loadingFromKra,
                                                 QSizeF *fragmentSize,
-                                                QStringList *warnings = 0);
+                                                QStringList *warnings = 0,
+                                                QStringList *errors = 0);
 
     bool saveLayer(KoStore * store) const;
     bool loadLayer(KoStore* store, QStringList *warnings = 0);

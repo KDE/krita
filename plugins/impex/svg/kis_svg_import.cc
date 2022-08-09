@@ -59,13 +59,23 @@ KisImportExportErrorCode KisSVGImport::convert(KisDocument *document, QIODevice 
 
     const qreal resolution = resolutionPPI;
 
+    QStringList warnings;
+    QStringList errors;
+
     QSizeF fragmentSize;
     QList<KoShape*> shapes =
             KisShapeLayer::createShapesFromSvg(io, baseXmlDir,
                                                QRectF(0,0,1200,800), resolutionPPI,
                                                doc->shapeController()->resourceManager(),
                                                false,
-                                               &fragmentSize);
+                                               &fragmentSize,
+                                               &warnings, &errors);
+
+    qDebug() << "errors" << errors;
+    if (!errors.isEmpty()) {
+        return ImportExportCodes::FileFormatIncorrect;
+    }
+
 
     QRectF rawImageRect(QPointF(), fragmentSize);
     QRect imageRect(rawImageRect.toAlignedRect());

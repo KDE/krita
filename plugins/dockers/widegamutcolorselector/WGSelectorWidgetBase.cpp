@@ -42,7 +42,7 @@ QPoint WGSelectorWidgetBase::popupOffset() const
 
 void WGSelectorWidgetBase::setModel(KisVisualColorModelSP model)
 {
-
+    Q_UNUSED(model);
 }
 
 void WGSelectorWidgetBase::updateSettings()

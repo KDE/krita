@@ -141,7 +141,7 @@ void WGColorSelectorSettings::loadPreferences()
     // General
     m_ui->grpQuickSettingsMenu->setChecked(cfg.get(WGConfig::quickSettingsEnabled));
     QVector<KisColorSelectorConfiguration> favoriteConfigs = cfg.favoriteConfigurations();
-    for (const KisColorSelectorConfiguration &fav: favoriteConfigs) {
+    for (const KisColorSelectorConfiguration &fav : qAsConst(favoriteConfigs)) {
         m_favoriteConfigGrid->setChecked(fav);
     }
     m_ui->cmbSelectionColorSpace->setCurrentIndex(cfg.get(WGConfig::colorSpaceSource));

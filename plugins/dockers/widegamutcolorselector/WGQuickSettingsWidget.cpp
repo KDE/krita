@@ -60,9 +60,9 @@ void WGQuickSettingsWidget::showEvent(QShowEvent *event)
             button->setChecked(true);
             m_modelGroup->blockSignals(false);
         }
+        m_selectorConf->setColorModel(m_selector->selectorModel()->colorModel());
+        m_selectorConf->setChecked(m_selector->configuration());
     }
-    m_selectorConf->setColorModel(m_selector->selectorModel()->colorModel());
-    m_selectorConf->setChecked(m_selector->configuration());
 }
 
 void WGQuickSettingsWidget::slotColorGroupToggled(int id, bool checked)

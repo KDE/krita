@@ -81,7 +81,7 @@ QVector<KisColorSelectorConfiguration> WGSelectorConfigGrid::selectedConfigurati
 {
     QVector<KisColorSelectorConfiguration> configurations;
     const QList<QAction*> actions = m_actionGroup->actions();
-    for (QAction *action: actions) {
+    for (QAction *action : actions) {
         SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(action);
         if (sa && sa->isChecked()) {
             configurations.append(sa->configuration());
@@ -125,7 +125,7 @@ void WGSelectorConfigGrid::setConfigurations(const QVector<KisColorSelectorConfi
 void WGSelectorConfigGrid::setChecked(const KisColorSelectorConfiguration &configuration)
 {
     const QList<QAction*> actions = m_actionGroup->actions();
-    for (QAction *action: actions) {
+    for (QAction *action : actions) {
         SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(action);
         if (sa && sa->configuration() == configuration) {
             sa->setChecked(true);
@@ -209,7 +209,7 @@ void WGSelectorConfigGrid::slotActionTriggered(QAction *action)
 
 void WGSelectorConfigGrid::updateIcons() {
     const QList<QAction*> actions = m_actionGroup->actions();
-    for (QAction *action: actions) {
+    for (QAction *action : actions) {
         SelectorConfigAction *sa = dynamic_cast<SelectorConfigAction *>(action);
         if (sa) {
             sa->setIcon(generateIcon(sa->configuration(), devicePixelRatioF(), true));

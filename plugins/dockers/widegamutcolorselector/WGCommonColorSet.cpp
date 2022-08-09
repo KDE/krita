@@ -76,7 +76,7 @@ void WGCommonColorSet::slotCalculationDone()
     blockSignals(true);
 
     clear();
-    for (const KoColor &color: *m_commonColors) {
+    for (const KoColor &color : qAsConst(*m_commonColors)) {
         addColor(color);
     }
 

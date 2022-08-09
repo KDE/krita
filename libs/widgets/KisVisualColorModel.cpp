@@ -384,7 +384,7 @@ void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
 {
     QList<KoChannelInfo *> channelList = cs->channels();
     int cCount = 0;
-    for (const KoChannelInfo *channel: channelList) {
+    for (const KoChannelInfo *channel : qAsConst(channelList)) {
         if (channel->channelType() != KoChannelInfo::ALPHA) {
             m_d->displayPosition[cCount] = channel->displayPosition();
             ++cCount;

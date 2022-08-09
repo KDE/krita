@@ -133,7 +133,7 @@ void KisVisualColorSelector::setConfiguration(const KisColorSelectorConfiguratio
 void KisVisualColorSelector::setAcceptTabletEvents(bool on)
 {
     m_d->acceptTabletEvents = on;
-    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->setAcceptTabletEvents(on);
     }
 }
@@ -164,7 +164,7 @@ void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mo
 {
     if (mode != m_d->renderMode) {
         m_d->renderMode = mode;
-        for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+        for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
             shape->forceImageUpdate();
             shape->update();
         }
@@ -173,7 +173,7 @@ void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mo
 
 void KisVisualColorSelector::setSliderPosition(Qt::Edge edge)
 {
-    if (edge != Qt::TopEdge || edge != Qt::LeftEdge) {
+    if (edge != Qt::TopEdge && edge != Qt::LeftEdge) {
         return;
     }
 
@@ -225,7 +225,7 @@ void KisVisualColorSelector::slotGamutMaskChanged(KoGamutMaskSP mask)
     // Note: KisCanvasResourceProvider currently does not distinguish
     // between activating, switching and property changes of a gamut mask
     m_d->gamutMask = mask;
-    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->updateGamutMask();
     }
 }
@@ -233,7 +233,7 @@ void KisVisualColorSelector::slotGamutMaskChanged(KoGamutMaskSP mask)
 void KisVisualColorSelector::slotGamutMaskUnset()
 {
     m_d->gamutMask.clear();
-    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->updateGamutMask();
     }
 }
@@ -241,7 +241,7 @@ void KisVisualColorSelector::slotGamutMaskUnset()
 void KisVisualColorSelector::slotGamutMaskPreviewUpdate()
 {
     // Shapes currently always requests preview shapes if available, so more of the same...
-    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->updateGamutMask();
     }
 }
@@ -253,7 +253,7 @@ void KisVisualColorSelector::slotChannelValuesChanged(const QVector4D &values, q
         return;
     }
     m_d->channelValues = values;
-    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->setChannelValues(m_d->channelValues, channelFlags);
     }
 }
@@ -281,7 +281,7 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
         m_d->channelValues[shape->channel(1)] = pos.y();
     }
 
-    for (KisVisualColorSelectorShape *widget: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *widget : qAsConst(m_d->widgetlist)) {
         if (widget != shape){
             widget->setChannelValues(m_d->channelValues, shape->channelMask());
         }
@@ -291,7 +291,7 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
 
 void KisVisualColorSelector::slotDisplayConfigurationChanged()
 {
-    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->forceImageUpdate();
     }
 }
@@ -442,7 +442,7 @@ void KisVisualColorSelector::rebuildSelector()
     // make sure we call "our" resize function
     KisVisualColorSelector::resizeEvent(0);
 
-    for (KisVisualColorSelectorShape *shape: m_d->widgetlist) {
+    for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->setAcceptTabletEvents(m_d->acceptTabletEvents);
         // if this widget is currently visible, new children are hidden by default
         shape->show();

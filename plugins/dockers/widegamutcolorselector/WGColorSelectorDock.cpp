@@ -302,7 +302,7 @@ void WGColorSelectorDock::slotConfigurationChanged()
             // WORKAROUND: force geometry update by re-adding action, all other attempts failed...
             QMenu *menu = m_configButton->menu();
             menu->removeAction(m_quickSettingAction);
-            menu->insertAction(menu->actions().first(), m_quickSettingAction);
+            menu->insertAction(menu->actions().constFirst(), m_quickSettingAction);
         }
         m_quickSettings->loadConfiguration();
     } else {

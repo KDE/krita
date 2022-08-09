@@ -224,6 +224,7 @@ void WGActionManager::slotShowShadeSelectorPopup()
     if (!m_shadeSelectorPopup) {
         m_shadeSelectorPopup = new WGSelectorPopup();
         m_shadeSelector = new WGShadeSelector(m_colorModel, m_shadeSelectorPopup);
+        m_shadeSelector->updateSettings();
         updateWidgetSize(m_shadeSelector, WGConfig::Accessor().get(WGConfig::popupSize));
         m_shadeSelector->setDisplayConverter(m_docker->displayColorConverter(true));
         m_shadeSelectorPopup->setSelectorWidget(m_shadeSelector);

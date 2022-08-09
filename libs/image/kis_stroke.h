@@ -59,6 +59,7 @@ public:
     bool supportsWrapAroundMode() const;
     int worksOnLevelOfDetail() const;
     bool canForgetAboutMe() const;
+    bool isAsynchronouslyCancellable() const;
     qreal balancingRatioOverride() const;
 
     KisStrokeJobData::Sequentiality nextJobSequentiality() const;

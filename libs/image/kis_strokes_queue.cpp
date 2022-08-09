@@ -422,14 +422,28 @@ bool KisStrokesQueue::tryCancelCurrentStrokeAsync()
     if (!m_d->strokesQueue.isEmpty() &&
         !m_d->hasUnfinishedStrokes()) {
 
-        anythingCanceled = true;
+        /**
+         * 1) We can cancel only cancellable strokes
+         * 2) We can only cancel a continuos set of strokes
+         *
+         * Basically, a non-cancellable stroke adds a barrier
+         * wall into the strokes queue, preventing cancellation
+         * of any strokes that we added into the queue earlier.
+         */
+        const auto lastNonCancellableStrokeIt =
+            std::find_if_not(std::make_reverse_iterator(m_d->strokesQueue.end()),
+                             std::make_reverse_iterator(m_d->strokesQueue.begin()),
+                             std::mem_fn(&KisStroke::isAsynchronouslyCancellable));
 
         bool needsLodNSynchronization = false;
 
-        Q_FOREACH (KisStrokeSP currentStroke, m_d->strokesQueue) {
+        for (auto it = lastNonCancellableStrokeIt.base(); it != m_d->strokesQueue.end(); it++) {
+            KisStrokeSP currentStroke = *it;
             KIS_ASSERT_RECOVER_NOOP(currentStroke->isEnded());
+            KIS_ASSERT_RECOVER_NOOP(currentStroke->isAsynchronouslyCancellable());
 
             currentStroke->cancelStroke();
+            anythingCanceled = true;
 
             // we shouldn't cancel buddies...
             if (currentStroke->type() == KisStroke::LOD0) {

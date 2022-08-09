@@ -260,6 +260,11 @@ bool KisStroke::canForgetAboutMe() const
     return m_strokeStrategy->canForgetAboutMe();
 }
 
+bool KisStroke::isAsynchronouslyCancellable() const
+{
+    return m_strokeStrategy->isAsynchronouslyCancellable();
+}
+
 qreal KisStroke::balancingRatioOverride() const
 {
     return m_strokeStrategy->balancingRatioOverride();

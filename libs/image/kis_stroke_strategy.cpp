@@ -16,6 +16,7 @@ KisStrokeStrategy::KisStrokeStrategy(const QLatin1String &id, const KUndo2MagicS
       m_clearsRedoOnStart(true),
       m_requestsOtherStrokesToEnd(true),
       m_canForgetAboutMe(false),
+      m_asynchronouslyCancellable(true),
       m_needsExplicitCancel(false),
       m_forceLodModeIfPossible(false),
       m_balancingRatioOverride(-1.0),
@@ -31,6 +32,7 @@ KisStrokeStrategy::KisStrokeStrategy(const KisStrokeStrategy &rhs)
       m_clearsRedoOnStart(rhs.m_clearsRedoOnStart),
       m_requestsOtherStrokesToEnd(rhs.m_requestsOtherStrokesToEnd),
       m_canForgetAboutMe(rhs.m_canForgetAboutMe),
+      m_asynchronouslyCancellable(rhs.m_asynchronouslyCancellable),
       m_needsExplicitCancel(rhs.m_needsExplicitCancel),
       m_forceLodModeIfPossible(rhs.m_forceLodModeIfPossible),
       m_balancingRatioOverride(rhs.m_balancingRatioOverride),
@@ -210,6 +212,16 @@ bool KisStrokeStrategy::canForgetAboutMe() const
 void KisStrokeStrategy::setCanForgetAboutMe(bool value)
 {
     m_canForgetAboutMe = value;
+}
+
+bool KisStrokeStrategy::isAsynchronouslyCancellable() const
+{
+    return m_asynchronouslyCancellable;
+}
+
+void KisStrokeStrategy::setAsynchronouslyCancellable(bool value)
+{
+    m_asynchronouslyCancellable = value;
 }
 
 bool KisStrokeStrategy::needsExplicitCancel() const

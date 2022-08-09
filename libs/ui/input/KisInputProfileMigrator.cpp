@@ -25,7 +25,7 @@ KisInputProfileMigrator5To6::KisInputProfileMigrator5To6(KisInputProfileManager 
     // order in which it returns locations.
     m_defaultProfile =
         // FIXME(sh_zam): Should we declare this as "the default profile" somewhere?
-        KoResourcePaths::findAllResources("data", "input/*.profile", KoResourcePaths::Recursive)
+        KoResourcePaths::findAllAssets("data", "input/*.profile", KoResourcePaths::Recursive)
             .filter("kritadefault.profile")
             .last();
 }

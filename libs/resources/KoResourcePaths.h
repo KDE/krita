@@ -259,6 +259,8 @@ private:
 
     QString locateLocalInternal(const QString &type, const QString &filename, bool createDir = false);
 
+    QStringList findExtraResourceDirs() const;
+
     class Private;
     QScopedPointer<Private> d;
 };

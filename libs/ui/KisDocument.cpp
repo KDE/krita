@@ -184,7 +184,7 @@ public:
          * we can do to avoid the deadlock
          */
         while(!image->tryBarrierLock()) {
-            QApplication::processEvents();
+            QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
         }
     }
 

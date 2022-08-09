@@ -1,7 +1,6 @@
 include_directories(     ${CMAKE_SOURCE_DIR}/sdk/tests )
 
 include(KritaAddBrokenUnitTest)
-
 macro_add_unittest_definitions()
 
 if (APPLE)
@@ -17,7 +16,7 @@ if (APPLE)
     macos_test_fixrpath(${BROKEN_TESTS})
 
 else (APPLE)
-    krita_add_broken_unit_test(
+    kis_add_test(
         KisOraTest.cpp
         TEST_NAME KisOraTest
         LINK_LIBRARIES kritaui Qt5::Test

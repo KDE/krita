@@ -73,6 +73,11 @@ void KisFileNameRequester::setMimeTypeFilters(const QStringList &filterList, QSt
     m_mime_default_filter = defaultFilter;
 }
 
+void KisFileNameRequester::setValidator(QValidator *validator)
+{
+    m_ui->txtFileName->setValidator(validator);
+}
+
 void KisFileNameRequester::slotSelectFile()
 {
     KoFileDialog dialog(this, m_mode, m_name);

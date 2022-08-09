@@ -139,6 +139,22 @@ QString shortNameOfDisplay(QScreen* screen)
 }
 
 
+struct WritableLocationValidator : public QValidator {
+    WritableLocationValidator(QObject *parent)
+        : QValidator(parent)
+    {
+    }
+
+    State validate(QString &line, int &/*pos*/) const override
+    {
+        QFileInfo fi(line);
+        if (!fi.isWritable()) {
+            return Invalid;
+        }
+        return Acceptable;
+    }
+};
+
 struct BackupSuffixValidator : public QValidator {
     BackupSuffixValidator(QObject *parent)
         : QValidator(parent)
@@ -383,7 +399,18 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     //
     m_urlResourceFolder->setMode(KoFileDialog::OpenDirectory);
     m_urlResourceFolder->setConfigurationName("resource_directory");
-    m_urlResourceFolder->setFileName(KoResourcePaths::getAppDataLocation());
+    QString resourceLocation = KoResourcePaths::getAppDataLocation();
+    if (QFileInfo(resourceLocation).isWritable()) {
+        m_urlResourceFolder->setFileName(resourceLocation);
+    }
+    else {
+        m_urlResourceFolder->setFileName(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+    }
+    QValidator *writableValidator = new WritableLocationValidator(m_urlResourceFolder);
+    txtBackupFileSuffix->setValidator(writableValidator);
+    connect(m_urlResourceFolder, SIGNAL(textChanged(QString)), SLOT(checkResourcePath()));
+    checkResourcePath();
+
 
     grpWindowsAppData->setVisible(false);
 #ifdef Q_OS_WIN
@@ -741,6 +768,17 @@ void GeneralTab::clearBackgroundImage()
 {
     // clearing the background image text will implicitly make the background color be used
     m_backgroundimage->setText("");
+}
+
+void GeneralTab::checkResourcePath()
+{
+    QFileInfo fi(m_urlResourceFolder->fileName());
+    if (!fi.isWritable()) {
+        m_lblWritableWarning->setVisible(true);
+    }
+    else {
+        m_lblWritableWarning->setVisible(false);
+    }
 }
 
 #include "kactioncollection.h"
@@ -2140,7 +2178,10 @@ bool KisDlgPreferences::editPreferences()
         cfg.setAutoPinLayersToTimeline(m_general->autopinLayersToTimeline());
         cfg.setAdaptivePlaybackRange(m_general->adaptivePlaybackRange());
 
-        cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());
+        QFileInfo fi(m_general->m_urlResourceFolder->fileName());
+        if (fi.isWritable()) {
+            cfg.writeEntry(KisResourceLocator::resourceLocationKey, m_general->m_urlResourceFolder->fileName());
+        }
 
         KisImageConfig(true).setRenameMergedLayers(m_general->renameMergedLayers());
         cfg.setRenamePastedLayers(m_general->renamePastedLayers());

@@ -30,7 +30,7 @@ void KisResourceThumbnailPainter::paint(QPainter *painter, const QModelIndex& in
 {
     QImage thumbnail = index.data(Qt::UserRole + KisAbstractResourceModel::Thumbnail).value<QImage>();
     QString resourceType = index.data(Qt::UserRole + KisAbstractResourceModel::ResourceType).toString();
-    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Name).toString();
+    QString name = index.data(Qt::UserRole + KisAbstractResourceModel::Tooltip).toString();
 
     paint(painter, thumbnail, resourceType, name, rect, palette, selected, addMargin);
 }

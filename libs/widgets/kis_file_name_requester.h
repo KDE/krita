@@ -13,6 +13,7 @@
 #include <QString>
 #include <QUrl>
 #include <KoFileDialog.h>
+#include <QValidator>
 
 
 namespace Ui {
@@ -52,6 +53,8 @@ public:
      * file formats Krita can load.
      */
     void setMimeTypeFilters(const QStringList &filterList, QString defaultFilter = QString());
+
+    void setValidator(QValidator *validator);
 
 public Q_SLOTS:
     void slotSelectFile();

@@ -973,8 +973,8 @@
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>655</width>
-            <height>636</height>
+            <width>818</width>
+            <height>853</height>
            </rect>
           </property>
           <property name="sizePolicy">
@@ -1378,14 +1378,14 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
               <item row="0" column="0">
                <widget class="QCheckBox" name="chkRenameMergedLayers">
                 <property name="text">
-                 <string>Add "Merged" to merged group layers</string>
+                 <string>Add &quot;Merged&quot; to merged group layers</string>
                 </property>
                </widget>
               </item>
               <item row="1" column="0">
                <widget class="QCheckBox" name="chkRenamePastedLayers">
                 <property name="text">
-                 <string>Add "(pasted)" to pasted layers</string>
+                 <string>Add &quot;(pasted)&quot; to pasted layers</string>
                 </property>
                </widget>
               </item>
@@ -1413,7 +1413,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
        <item row="0" column="1">
         <widget class="KisFileNameRequester" name="m_urlResourceFolder" native="true"/>
        </item>
-       <item row="1" column="1">
+       <item row="2" column="1">
         <widget class="QGroupBox" name="grpWindowsAppData">
          <property name="title">
           <string/>
@@ -1451,7 +1451,7 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
          </layout>
         </widget>
        </item>
-       <item row="2" column="0" colspan="2">
+       <item row="3" column="0" colspan="2">
         <spacer name="verticalSpacer_5">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -1463,6 +1463,19 @@ To restore the old behavior you can force Krita to use Display DPI for fonts by 
           </size>
          </property>
         </spacer>
+       </item>
+       <item row="1" column="1">
+        <widget class="QLabel" name="m_lblWritableWarning">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Warning: this location is not writable.</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

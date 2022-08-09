@@ -99,6 +99,7 @@ public:
 private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();
+    void checkResourcePath();
 
 public:
     QButtonGroup m_pasteFormatGroup;

@@ -200,7 +200,12 @@ QString KoResourcePaths::getAppDataLocation()
     KConfigGroup cfg(KSharedConfig::openConfig(), "");
     path = cfg.readEntry(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 
+    QFileInfo fi(path);
+    if (!fi.isWritable()) {
+        path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
     return path;
+
 
 }
 

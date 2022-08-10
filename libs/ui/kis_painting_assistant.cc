@@ -237,12 +237,14 @@ KisPaintingAssistant::KisPaintingAssistant(const QString& id, const QString& nam
     d->s->outlineVisible = true;
 }
 
-KisPaintingAssistant::KisPaintingAssistant(const KisPaintingAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
-    : d(new Private(*(rhs.d)))
-    , m_followBrushPosition(rhs.m_followBrushPosition)
+KisPaintingAssistant::KisPaintingAssistant(
+    const KisPaintingAssistant &rhs,
+    QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
+    : m_followBrushPosition(rhs.m_followBrushPosition)
     , m_adjustedPositionValid(rhs.m_adjustedPositionValid)
     , m_adjustedBrushPosition(rhs.m_adjustedBrushPosition)
     , m_hasBeenInsideLocalRect(rhs.m_hasBeenInsideLocalRect)
+    , d(new Private(*(rhs.d)))
 {
     dbgUI << "creating handles...";
     Q_FOREACH (const KisPaintingAssistantHandleSP origHandle, rhs.d->handles) {

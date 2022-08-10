@@ -617,7 +617,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show just the canvas or the whole window</toolTip>
       <iconText>Show Canvas Only</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Tab</shortcut>
       <isCheckable>true</isCheckable>
@@ -641,7 +641,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show the canvas on a separate window</toolTip>
       <iconText>Detach Canvas</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>
@@ -1786,7 +1786,7 @@
       <whatsThis></whatsThis>
       <toolTip>Show Dockers</toolTip>
       <iconText>Show Dockers</iconText>
-      <activationFlags>0</activationFlags>
+      <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut></shortcut>
       <isCheckable>true</isCheckable>

@@ -8,3 +8,5 @@ kis_add_test(
     LINK_LIBRARIES kritametadata kritaui Qt5::Test
     NAME_PREFIX "plugins-impex-"
 )
+
+macos_test_fixrpath(kis_jpegxl_test)

@@ -153,7 +153,7 @@ KisAsyncAnimationRenderDialogBase::Result KisAsyncAnimationFramesSaveDialog::reg
     if (renderingResult != RenderComplete) {
         Q_FOREACH (const QString &file, filesList) {
             if (dir.exists(file)) {
-                bool success = dir.remove(file);
+                (void)dir.remove(file);
             }
         }
     }

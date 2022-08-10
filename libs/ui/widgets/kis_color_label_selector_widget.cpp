@@ -277,6 +277,7 @@ KisColorLabelSelectorWidget* KisColorLabelSelectorWidgetMenuWrapper::colorLabelS
 
 void KisColorLabelSelectorWidgetMenuWrapper::showEvent(QShowEvent *e)
 {
+    Q_UNUSED(e);
     const int menuOffset = calculateMenuOffset();
     m_d->menuAlignmentOffset->changeSize(menuOffset, height());
 }

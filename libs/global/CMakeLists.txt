@@ -37,6 +37,7 @@ set(kritaglobal_LIB_SRCS
     KisFileUtils.cpp
     KisSignalMapper.cpp
     KisRegion.cpp
+    KoID.cpp
     KoUnit.cpp
     KisBezierUtils.cpp
     KisBezierPatch.cpp

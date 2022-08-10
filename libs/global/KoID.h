@@ -2,6 +2,7 @@
  * SPDX-FileCopyrightText: 2006 Thomas Zander <zander@kde.org>
  * SPDX-FileCopyrightText: 2004 Cyrille Berger <cberger@cberger.net>
  * SPDX-FileCopyrightText: 2006 Boudewijn Rempt <boud@valdyas.org>
+ * SPDX-FileCopyrightText: 2022 L. E. Segovia <amy@amyspark.me>
  *
  * SPDX-License-Identifier: LGPL-2.0-or-later
  */
@@ -9,32 +10,30 @@
 #ifndef _KO_ID_H_
 #define _KO_ID_H_
 
-#include <QString>
-#include <QMetaType>
 #include <QDebug>
+#include <QMetaType>
+#include <QString>
+
 #include <boost/optional.hpp>
+#include <utility>
 
 #include <klocalizedstring.h>
 #include <KisLazyStorage.h>
+
+#include "kritaglobal_export.h"
 
 /**
  * A KoID is a combination of a user-visible string and a string that uniquely
  * identifies a given resource across languages.
  */
-class KoID
+class KRITAGLOBAL_EXPORT KoID
 {
 private:
     struct TranslatedString : public QString
     {
-        TranslatedString(const boost::optional<KLocalizedString> &source)
-            : QString(!source->isEmpty() ? source->toString() : QString())
-        {
-        }
+        TranslatedString(const boost::optional<KLocalizedString> &source);
 
-        TranslatedString(const QString &value)
-            : QString(value)
-        {
-        }
+        TranslatedString(const QString &value);
     };
 
     using StorageType =
@@ -42,24 +41,16 @@ private:
         boost::optional<KLocalizedString>>;
 
     struct KoIDPrivate {
-        KoIDPrivate(const QString &_id, const KLocalizedString &_name)
-            : id(_id),
-              name(_name)
-        {}
+        KoIDPrivate(QString _id, const KLocalizedString &_name);
 
-        KoIDPrivate(const QString &_id, const QString &_name)
-            : id(_id),
-              name(StorageType::init_value_tag(), _name)
-        {}
+        KoIDPrivate(QString _id, const QString &_name);
 
         QString id;
         StorageType name;
     };
 
 public:
-    KoID()
-        : m_d(new KoIDPrivate(QString(), QString()))
-    {}
+    KoID();
 
     /**
      * Construct a KoID with the given id, and name, id is the untranslated
@@ -70,9 +61,7 @@ public:
      * KoID("id", i18n("name"))
      * @endcode
      */
-    explicit KoID(const QString &id, const QString &name = QString())
-        : m_d(new KoIDPrivate(id, name))
-    {}
+    explicit KoID(const QString &id, const QString &name = QString());
 
     /**
      * Use this constructore for static KoID. as KoID("id", ki18n("name"));
@@ -80,32 +69,15 @@ public:
      * important because static objects are constructed before translations
      * are initialized.
      */
-    explicit KoID(const QString &id, const KLocalizedString &name)
-        : m_d(new KoIDPrivate(id, name))
-    {}
+    explicit KoID(const QString &id, const KLocalizedString &name);
 
-    KoID(const KoID &rhs)
-        : m_d(rhs.m_d)
-    {
-    }
+    KoID(const KoID &rhs);
 
-    KoID &operator=(const KoID &rhs)
-    {
-        if (this != &rhs) {
-            m_d = rhs.m_d;
-        }
-        return *this;
-    }
+    KoID &operator=(const KoID &rhs);
 
-    QString id() const
-    {
-        return m_d->id;
-    }
+    QString id() const;
 
-    QString name() const
-    {
-        return *m_d->name;
-    }
+    QString name() const;
 
     friend inline bool operator==(const KoID &, const KoID &);
     friend inline bool operator!=(const KoID &, const KoID &);

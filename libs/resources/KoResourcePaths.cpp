@@ -111,7 +111,20 @@ QString getInstallationPrefix() {
         bundlePath = appPath + "/../../";
     }
     else {
-        qFatal("Cannot calculate the bundle path from the app path");
+        // This is needed as tests will not run outside of the
+        // install directory without this
+        // This needs krita to be installed.
+        QString envInstallPath = qgetenv("KIS_TEST_PREFIX_PATH");
+        if (!envInstallPath.isEmpty() && (
+                    QDir(envInstallPath + "/share/kritaplugins").exists()
+                    || QDir(envInstallPath + "/Resources/kritaplugins").exists() ))
+        {
+            bundlePath = envInstallPath;
+        }
+        else {
+            qFatal("Cannot calculate the bundle path from the app path");
+            qInfo() << "If running tests set KIS_TEST_PREFIX_PATH to krita install prefix";
+        }
     }
 
     return bundlePath;

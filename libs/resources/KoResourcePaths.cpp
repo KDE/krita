@@ -201,8 +201,17 @@ QString KoResourcePaths::getAppDataLocation()
     path = cfg.readEntry(KisResourceLocator::resourceLocationKey, QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 
     QFileInfo fi(path);
-    if (!fi.isWritable()) {
+
+    // Check whether an existing location is writable
+    if (fi.exists() && !fi.isWritable()) {
         path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    }
+    else if (!fi.exists()) {
+        // Check whether a non-existing location can be created
+        if (!QDir().mkpath(path)) {
+            path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        }
+        QDir().rmpath(path);
     }
     return path;
 

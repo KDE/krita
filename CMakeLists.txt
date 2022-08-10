@@ -1203,7 +1203,6 @@ include(MacroKritaAddBenchmark)
 # for config.h and <toplevel/foo.h> includes (if any?)
 include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}
                            ${CMAKE_CURRENT_BINARY_DIR}
-                           ${CMAKE_SOURCE_DIR}/interfaces
 )
 
 add_subdirectory(libs)

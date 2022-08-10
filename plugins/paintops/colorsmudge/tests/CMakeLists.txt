@@ -12,3 +12,5 @@ kis_add_test(
     TEST_NAME KisColorsmudgeOpTest
     LINK_LIBRARIES kritalibpaintop kritaimage Qt5::Test
     NAME_PREFIX "plugins-colorsmudge-")
+
+macos_test_fixrpath(KisColorsmudgeOpTest)

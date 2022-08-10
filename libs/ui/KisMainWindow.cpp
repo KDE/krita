@@ -1641,6 +1641,14 @@ void KisMainWindow::setMainWindowLayoutForMode(int mode)
     } else {
         setAutoSaveSettings(d->windowStateConfig, false);
     }
+
+    QList<QAction *> actions = d->dockWidgetMenu->menu()->actions();
+    actions.append(toolBarMenuAction()->menu()->actions());
+    for (QAction *action : actions) {
+        if (action) {
+            action->setEnabled(mode);
+        }
+    }
 }
 
 void KisMainWindow::setActiveView(KisView* view)

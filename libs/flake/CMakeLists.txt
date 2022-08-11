@@ -59,7 +59,6 @@ set(kritaflake_SRCS
     KoShapeController.cpp
     KoToolSelection.cpp
     KoShapeLayer.cpp
-    KoPostscriptPaintDevice.cpp
     KoInputDevice.cpp
     KoToolManager_p.cpp
     KoToolManager.cpp

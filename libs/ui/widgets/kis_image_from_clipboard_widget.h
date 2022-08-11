@@ -16,7 +16,7 @@
  * The 'New image from clipboard' widget in the Krita startup widget.
  * This class is an extension of the KisCustomImageWidget("Custom document" widget"
  */
-class KisImageFromClipboard : public KisCustomImageWidget
+class KisImageFromClipboardWidget : public KisCustomImageWidget
 {
     Q_OBJECT
 public:
@@ -31,8 +31,8 @@ public:
      * @param defColorProfile The defined color profile
      * @param imageName the document that wants to be altered
      */
-    KisImageFromClipboard(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
-    ~KisImageFromClipboard() override;
+    KisImageFromClipboardWidget(QWidget *parent, qint32 defWidth, qint32 defHeight, double resolution, const QString & defColorModel, const QString & defColorDepth, const QString & defColorProfile, const QString & imageName);
+    ~KisImageFromClipboardWidget() override;
 
 private Q_SLOTS:
     void createImage();
@@ -42,7 +42,7 @@ protected:
 
     void showEvent(QShowEvent *event);
 
-private:   
+private Q_SLOTS:
     void createClipboardPreview();
 };
 

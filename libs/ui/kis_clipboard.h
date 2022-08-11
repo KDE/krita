@@ -109,12 +109,9 @@ public:
 
     const QMimeData* layersMimeData() const;
 
-    QImage getPreview() const;
-
     bool hasUrls() const;
 
 Q_SIGNALS:
-    void clipCreated();
     void clipChanged();
 
 private Q_SLOTS:

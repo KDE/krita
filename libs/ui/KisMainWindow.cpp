@@ -1629,15 +1629,9 @@ void KisMainWindow::slotFileNew()
     item.title = i18n("Custom Document");
     startupWidget->addCustomDocumentWidget(item.widget, item.title, "Custom Document", item.icon);
 
-    QSize sz = KisClipboard::instance()->clipSize();
-    if (sz.isValid() && sz.width() != 0 && sz.height() != 0) {
-        w = sz.width();
-        h = sz.height();
-    }
-
-    item.widget = new KisImageFromClipboard(startupWidget,
-                                            w,
-                                            h,
+    item.widget = new KisImageFromClipboardWidget(startupWidget,
+                                            0,
+                                            0,
                                             resolution,
                                             colorModel,
                                             colorDepth,

@@ -70,9 +70,7 @@ KisClipboard::KisClipboard()
     clipboardDataChanged();
 
     // Make sure we are notified when clipboard changes
-    connect(d->clipboard, &QClipboard::dataChanged, this, &KisClipboard::clipboardDataChanged);
-    connect(d->clipboard, &QClipboard::selectionChanged, this, &KisClipboard::clipboardDataChanged);
-    connect(d->clipboard, &QClipboard::changed, this, &KisClipboard::clipboardDataChanged);
+    connect(d->clipboard, &QClipboard::dataChanged, this, &KisClipboard::clipboardDataChanged, Qt::UniqueConnection);
 }
 
 KisClipboard::~KisClipboard()
@@ -532,21 +530,8 @@ KisPaintDeviceSP KisClipboard::clipFromBoardContents(
 void KisClipboard::clipboardDataChanged()
 {
     if (!d->pushedClipboard) {
-        d->hasClip = false;
-
-        if (d->clipboard->mimeData()->hasImage()) {
-            QImage qimage = d->clipboard->image();
-            if (!qimage.isNull())
-                d->hasClip = true;
-
-            const QMimeData *cbData = d->clipboard->mimeData();
-            const auto mimeType = QByteArrayLiteral("application/x-krita-selection");
-            if (cbData && cbData->hasFormat(mimeType))
-                d->hasClip = true;
-        }
-    }
-    if (d->hasClip) {
-        emit clipCreated();
+        const QMimeData *cbData = d->clipboard->mimeData();
+        d->hasClip = (d->clipboard->mimeData()->hasImage() || cbData && cbData->hasFormat("application/x-krita-selection"));
     }
     d->pushedClipboard = false;
     emit clipChanged();
@@ -645,28 +630,6 @@ const QMimeData *KisClipboard::layersMimeData() const
 {
     const QMimeData *cbData = d->clipboard->mimeData();
     return cbData->hasFormat("application/x-krita-node-internal-pointer") ? cbData : 0;
-}
-
-QImage KisClipboard::getPreview() const
-{
-    const QMimeData *cbData = d->clipboard->mimeData();
-
-    QImage img;
-
-    for (QUrl &url : cbData->urls()) {
-        if (url.isLocalFile()) {
-            img.load(url.path());
-
-            if (!img.isNull())
-                break;
-        }
-    }
-
-    if (img.isNull() && cbData->hasImage()) {
-        img = d->clipboard->image();
-    }
-
-    return img;
 }
 
 bool KisClipboard::hasUrls() const

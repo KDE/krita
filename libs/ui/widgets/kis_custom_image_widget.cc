@@ -46,7 +46,6 @@
 
 #include "kis_config.h"
 #include "KisPart.h"
-#include "kis_clipboard.h"
 #include "KisDocument.h"
 #include "widgets/kis_cmb_idlist.h"
 #include <KisSqueezedComboBox.h>

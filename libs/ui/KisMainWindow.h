@@ -434,6 +434,8 @@ protected:
     void resizeEvent(QResizeEvent * e) override;
 
     // QWidget overrides
+    void dragMoveEvent(QDragMoveEvent *event) override;
+    void dragLeaveEvent(QDragLeaveEvent *event) override;
 
 private:
 

@@ -467,6 +467,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     d->mdiArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     d->mdiArea->setTabPosition(QTabWidget::North);
     d->mdiArea->setTabsClosable(true);
+    d->mdiArea->setAcceptDrops(true);
 
     themeChanged(); // updates icon styles
 
@@ -633,11 +634,15 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     QAndroidJniObject::callStaticMethod<void>("org/qtproject/qt5/android/QtNative", "setApplicationState", "(I)V", Qt::ApplicationActive);
 #endif
 
+    setAcceptDrops(true);
     QTabBar *tabBar = d->findTabBarHACK();
     if (tabBar) {
         tabBar->setElideMode(Qt::ElideRight);
         // load customized tab style
         customizeTabBar();
+        tabBar->setExpanding(true);
+        tabBar->setAcceptDrops(true);
+        tabBar->setChangeCurrentOnDrag(true);
     }
 }
 
@@ -699,6 +704,13 @@ void KisMainWindow::addView(KisView *view, QMdiSubWindow *subWindow)
         connect(d->activeView, SIGNAL(titleModified(QString,bool)), SLOT(slotDocumentTitleModified()));
         connect(d->viewManager->statusBar(), SIGNAL(memoryStatusUpdated()), this, SLOT(updateCaption()));
     }
+
+//    QTabBar *tabBar = d->findTabBarHACK();
+//    Q_FOREACH(QObject *c, tabBar->children()) {
+//        if (QWidget *w = qobject_cast<QWidget*>(c)) {
+//            w->setAcceptDrops(true);
+//        }
+//    }
 }
 
 void KisMainWindow::notifyChildViewDestroyed(KisView *view)
@@ -1510,6 +1522,20 @@ void KisMainWindow::resizeEvent(QResizeEvent * e)
     d->windowSizeDirty = true;
     KXmlGuiWindow::resizeEvent(e);
 }
+
+
+void KisMainWindow::dragMoveEvent(QDragMoveEvent *event)
+{
+    dragMove(event);
+    event->accept();
+}
+
+void KisMainWindow::dragLeaveEvent(QDragLeaveEvent *event)
+{
+    dragLeave();
+    event->accept();
+}
+
 
 void KisMainWindow::setActiveView(KisView* view)
 {

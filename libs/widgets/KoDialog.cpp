@@ -10,6 +10,7 @@
 #include "KoDialog.h"
 #include "KoDialog_p.h"
 
+#include <QWindow>
 #include <QApplication>
 #include <QGuiApplication>
 #include <QDialogButtonBox>
@@ -22,6 +23,8 @@
 #include <QWhatsThis>
 #include <QDebug>
 #include <QPushButton>
+#include <QDesktopWidget>
+#include <QTimer>
 
 #include <kconfig.h>
 #include <klocalizedstring.h>
@@ -171,14 +174,14 @@ void KoDialogPrivate::helpLinkClicked()
 }
 
 KoDialog::KoDialog(QWidget *parent, Qt::WindowFlags flags)
-    : QDialog(parent, flags)
+    : QDialog(parent ? parent : qApp->activeWindow(), flags)
     , d_ptr(new KoDialogPrivate)
 {
     d_ptr->init(this);
 }
 
 KoDialog::KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags flags)
-    : QDialog(parent, flags)
+    : QDialog(parent ? parent : qApp->activeWindow(), flags)
     , d_ptr(&dd)
 {
     d_ptr->init(this);
@@ -432,6 +435,12 @@ void KoDialog::keyPressEvent(QKeyEvent *event)
     QDialog::keyPressEvent(event);
 }
 
+void KoDialog::showEvent(QShowEvent *e)
+{
+    QDialog::showEvent(e);
+    QTimer::singleShot(5, this, SLOT(adjustPosition()));
+}
+
 int KoDialog::marginHint()
 {
     return QApplication::style()->pixelMetric(QStyle::PM_DefaultChildMargin);
@@ -448,8 +457,8 @@ int KoDialog::groupSpacingHint()
 }
 
 QString KoDialog::makeStandardCaption(const QString &userCaption,
-                                     QWidget *window,
-                                     CaptionFlags flags)
+                                      QWidget *window,
+                                      CaptionFlags flags)
 {
     Q_UNUSED(window);
     QString caption = qApp->applicationDisplayName();
@@ -911,10 +920,6 @@ QString KoDialog::helpLinkText() const
     return (d->mHelpLinkText.isEmpty() ? i18n("Get help...") : d->mHelpLinkText);
 }
 
-void KoDialog::updateGeometry()
-{
-}
-
 void KoDialog::hideEvent(QHideEvent *event)
 {
     emit hidden();
@@ -940,5 +945,84 @@ void KoDialog::closeEvent(QCloseEvent *event)
         QDialog::closeEvent(event);
     }
 }
+
+void KoDialog::adjustPosition()
+{
+    QWidget *w = parentWidget();
+
+    QPoint p(0, 0);
+    int extraw = 0, extrah = 0, scrn = 0;
+    if (w)
+        w = w->window();
+    QRect desk;
+    if (w) {
+        scrn = qApp->desktop()->screenNumber(w);
+    } else if (qApp->desktop()->isVirtualDesktop()) {
+        scrn = qApp->desktop()->screenNumber(QCursor::pos());
+    } else {
+        scrn = qApp->desktop()->screenNumber(this);
+    }
+    desk = qApp->desktop()->availableGeometry(scrn);
+
+    QWidgetList list = QApplication::topLevelWidgets();
+    for (int i = 0; (extraw == 0 || extrah == 0) && i < list.size(); ++i) {
+        QWidget * current = list.at(i);
+        if (current->isVisible()) {
+            int framew = current->geometry().x() - current->x();
+            int frameh = current->geometry().y() - current->y();
+
+            extraw = qMax(extraw, framew);
+            extrah = qMax(extrah, frameh);
+        }
+    }
+
+    // sanity check for decoration frames. With embedding, we
+    // might get extraordinary values
+    if (extraw == 0 || extrah == 0 || extraw >= 10 || extrah >= 40) {
+        extrah = 40;
+        extraw = 10;
+    }
+
+
+    if (w) {
+        // Use pos() if the widget is embedded into a native window
+        QPoint pp;
+        if (w->windowHandle() && w->windowHandle()->property("_q_embedded_native_parent_handle").value<WId>())
+            pp = w->pos();
+        else
+            pp = w->mapToGlobal(QPoint(0,0));
+        p = QPoint(pp.x() + w->width()/2,
+                   pp.y() + w->height()/ 2);
+    } else {
+        // p = middle of the desktop
+        p = QPoint(desk.x() + desk.width()/2, desk.y() + desk.height()/2);
+    }
+
+    // p = origin of this
+    p = QPoint(p.x()-width()/2 - extraw,
+               p.y()-height()/2 - extrah);
+
+
+    if (p.x() + extraw + width() > desk.x() + desk.width())
+        p.setX(desk.x() + desk.width() - width() - extraw);
+    if (p.x() < desk.x())
+        p.setX(desk.x());
+
+    if (p.y() + extrah + height() > desk.y() + desk.height())
+        p.setY(desk.y() + desk.height() - height() - extrah);
+    if (p.y() < desk.y())
+        p.setY(desk.y());
+
+    // QTBUG-52735: Manually set the correct target screen since scaling in a
+    // subsequent call to QWindow::resize() may otherwise use the wrong factor
+    // if the screen changed notification is still in an event queue.
+    if (scrn >= 0) {
+        if (QWindow *window = windowHandle())
+            window->setScreen(QGuiApplication::screens().at(scrn));
+    }
+    setGeometry(p.x(), p.y(), width(), height());
+}
+
+
 
 #include "moc_KoDialog.cpp"

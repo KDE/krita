@@ -754,6 +754,8 @@ protected:
      */
     void keyPressEvent(QKeyEvent *) override;
 
+    void showEvent(QShowEvent *e) override;
+
 protected Q_SLOTS:
     /**
      * Activated when the button @p button is clicked
@@ -777,16 +779,11 @@ protected Q_SLOTS:
      * @deprecated since 5.0 use QDialogButtonBox and connect to the clicked signal
      */
     virtual void slotButtonClicked(int button);
-
-    /**
-     * Updates the margins and spacings.
-     *
-     * @deprecated KoDialog respects the style's margins and spacings automatically. Calling
-     * this function has no effect.
-     */
-    void updateGeometry();
+    void adjustPosition();
 
 private:
+
+
     KoDialog(KoDialogPrivate &dd, QWidget *parent, Qt::WindowFlags f = Qt::WindowFlags());
     KoDialogPrivate *const d_ptr;
 

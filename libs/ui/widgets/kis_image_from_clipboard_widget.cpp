@@ -18,6 +18,8 @@
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QFile>
+#include <QTimer>
+#include <QClipboard>
 
 #include <KisPart.h>
 #include <KoColor.h>
@@ -42,7 +44,7 @@
 #include "kis_import_catcher.h"
 #include "widgets/kis_cmb_idlist.h"
 
-KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
+KisImageFromClipboardWidget::KisImageFromClipboardWidget(QWidget* parent, qint32 defWidth, qint32 defHeight, double resolution, const QString& defColorModel, const QString& defColorDepth, const QString& defColorProfile, const QString& imageName)
     : KisCustomImageWidget(parent, defWidth, defHeight, resolution, defColorModel, defColorDepth, defColorProfile, imageName)
 {
     setObjectName("KisImageFromClipboard");
@@ -51,17 +53,17 @@ KisImageFromClipboard::KisImageFromClipboard(QWidget* parent, qint32 defWidth, q
     grpClipboard->show();
     imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboard::clipboardDataChanged);
+//    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboard::clipboardDataChanged);
     disconnect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), 0, 0); //disable normal signal
     connect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(createImage()));
     setNumberOfLayers(1);
 }
 
-KisImageFromClipboard::~KisImageFromClipboard()
+KisImageFromClipboardWidget::~KisImageFromClipboardWidget()
 {
 }
 
-void KisImageFromClipboard::createImage()
+void KisImageFromClipboardWidget::createImage()
 {
     KisDocument *doc = createNewImage();
     if (!doc) return; // createNewImage can return 0;
@@ -90,23 +92,31 @@ void KisImageFromClipboard::createImage()
 }
 
 
-void KisImageFromClipboard::clipboardDataChanged()
+void KisImageFromClipboardWidget::clipboardDataChanged()
 {
     createClipboardPreview();
 }
 
-void KisImageFromClipboard::showEvent(QShowEvent *event)
+void KisImageFromClipboardWidget::showEvent(QShowEvent *event)
 {
-    if (!lblPreview->isVisible()) createClipboardPreview();
+    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboardWidget::clipboardDataChanged, Qt::UniqueConnection);
+
+    if (!lblPreview->isVisible()) {
+        QTimer::singleShot(100, this, SLOT(createClipboardPreview()));
+    }
     KisCustomImageWidget::showEvent(event);
 }
 
 
-void KisImageFromClipboard::createClipboardPreview()
+void KisImageFromClipboardWidget::createClipboardPreview()
 {
-    QImage qimage = KisClipboard::instance()->getPreview();
+    if (!KisClipboard::instance()->hasClip()) return;
+
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+    QImage qimage = QApplication::clipboard()->image();
 
     if (!qimage.isNull()) {
+
         QSize previewSize = QSize(75, 75) * devicePixelRatioF();
         QPixmap preview = QPixmap::fromImage(qimage.scaled(previewSize, Qt::KeepAspectRatio));
         preview.setDevicePixelRatio(devicePixelRatioF());
@@ -116,10 +126,14 @@ void KisImageFromClipboard::createClipboardPreview()
 
         doubleWidth->setValue(qimage.width());
         doubleHeight->setValue(qimage.height());
+
     } else {
+        doubleWidth->setValue(0);
+        doubleHeight->setValue(0);
         newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         lblPreview->hide();
     }
+    QApplication::restoreOverrideCursor();
 }
 
 

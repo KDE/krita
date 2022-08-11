@@ -303,6 +303,11 @@ void KisUpdateScheduler::setSuspendResumeUpdatesStrokeStrategyFactory(const KisS
     m_d->strokesQueue.setSuspendResumeUpdatesStrokeStrategyFactory(factory);
 }
 
+void KisUpdateScheduler::setPurgeRedoStateCallback(const std::function<void ()> &callback)
+{
+    m_d->strokesQueue.setPurgeRedoStateCallback(callback);
+}
+
 KisPostExecutionUndoAdapter *KisUpdateScheduler::lodNPostExecutionUndoAdapter() const
 {
     return m_d->strokesQueue.lodNPostExecutionUndoAdapter();

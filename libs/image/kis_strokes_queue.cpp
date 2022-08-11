@@ -87,6 +87,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     QMutex mutex;
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
     KisSuspendResumeStrategyPairFactory suspendResumeUpdatesStrokeStrategyFactory;
+    std::function<void()> purgeRedoStateCallback;
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
@@ -105,6 +106,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     bool hasUnfinishedStrokes() const;
     void tryClearUndoOnStrokeCompletion(KisStrokeSP finishingStroke);
     void forceResetLodAndCloseCurrentLodRange();
+    void loadStroke(KisStrokeSP stroke);
 };
 
 
@@ -707,6 +709,11 @@ void KisStrokesQueue::setSuspendResumeUpdatesStrokeStrategyFactory(const KisSusp
     m_d->suspendResumeUpdatesStrokeStrategyFactory = factory;
 }
 
+void KisStrokesQueue::setPurgeRedoStateCallback(const std::function<void ()> &callback)
+{
+    m_d->purgeRedoStateCallback = callback;
+}
+
 KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() const
 {
     return &m_d->lodNPostExecutionUndoAdapter;
@@ -752,6 +759,26 @@ bool KisStrokesQueue::processOneJob(KisUpdaterContext &updaterContext,
     return result;
 }
 
+void KisStrokesQueue::Private::loadStroke(KisStrokeSP stroke)
+{
+    needsExclusiveAccess = stroke->isExclusive();
+    wrapAroundModeSupported = stroke->supportsWrapAroundMode();
+    balancingRatioOverride = stroke->balancingRatioOverride();
+    currentStrokeLoaded = true;
+
+    /**
+     * Some of the strokes can cancel their work with undoing all the
+     * changes they did to the paint devices. The problem is that undo
+     * stack will know nothing about it. Therefore, just notify it
+     * explicitly
+     */
+    if (purgeRedoStateCallback &&
+        stroke->clearsRedoOnStart()) {
+
+        purgeRedoStateCallback();
+    }
+}
+
 bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
                                        int runningLevelOfDetail)
 {
@@ -781,10 +808,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * stroke might end up in loaded, but uninitialized state.
          */
         if (!m_d->currentStrokeLoaded) {
-            m_d->needsExclusiveAccess = stroke->isExclusive();
-            m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
-            m_d->balancingRatioOverride = stroke->balancingRatioOverride();
-            m_d->currentStrokeLoaded = true;
+            m_d->loadStroke(stroke);
         }
 
         result = true;
@@ -795,10 +819,7 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
          * arrive here unloaded.
          */
         if (!m_d->currentStrokeLoaded) {
-            m_d->needsExclusiveAccess = stroke->isExclusive();
-            m_d->wrapAroundModeSupported = stroke->supportsWrapAroundMode();
-            m_d->balancingRatioOverride = stroke->balancingRatioOverride();
-            m_d->currentStrokeLoaded = true;
+            m_d->loadStroke(stroke);
         }
 
         result = true;

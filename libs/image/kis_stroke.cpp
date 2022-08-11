@@ -265,6 +265,11 @@ bool KisStroke::isAsynchronouslyCancellable() const
     return m_strokeStrategy->isAsynchronouslyCancellable();
 }
 
+bool KisStroke::clearsRedoOnStart() const
+{
+    return m_strokeStrategy->clearsRedoOnStart();
+}
+
 qreal KisStroke::balancingRatioOverride() const
 {
     return m_strokeStrategy->balancingRatioOverride();

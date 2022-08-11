@@ -174,6 +174,13 @@ public:
      */
     void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);
 
+    /**
+     * Sets a callback that is called by the scheduler in the
+     * beginning of every stroke that declared the necessity
+     * of the redo state clearence.
+     */
+    void setPurgeRedoStateCallback(const std::function<void()> &callback);
+
     KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 
 

@@ -60,6 +60,7 @@ public:
     int worksOnLevelOfDetail() const;
     bool canForgetAboutMe() const;
     bool isAsynchronouslyCancellable() const;
+    bool clearsRedoOnStart() const;
     qreal balancingRatioOverride() const;
 
     KisStrokeJobData::Sequentiality nextJobSequentiality() const;

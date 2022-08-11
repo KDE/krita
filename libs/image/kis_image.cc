@@ -168,6 +168,11 @@ public:
 
                     return std::make_pair(suspend, resume);
                 });
+
+            scheduler.setPurgeRedoStateCallback(
+                        [this] () {
+                undoStore->purgeRedoState();
+            });
         }
 
         connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));
@@ -1825,16 +1830,6 @@ KisStrokeId KisImage::startStroke(KisStrokeStrategy *strokeStrategy)
      */
     if (strokeStrategy->requestsOtherStrokesToEnd()) {
         requestStrokeEnd();
-    }
-
-    /**
-     * Some of the strokes can cancel their work with undoing all the
-     * changes they did to the paint devices. The problem is that undo
-     * stack will know nothing about it. Therefore, just notify it
-     * explicitly
-     */
-    if (strokeStrategy->clearsRedoOnStart()) {
-        m_d->undoStore->purgeRedoState();
     }
 
     return m_d->scheduler.startStroke(strokeStrategy);

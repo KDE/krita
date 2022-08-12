@@ -110,9 +110,8 @@ KisReferenceImagesDecoration::~KisReferenceImagesDecoration()
 
 void KisReferenceImagesDecoration::addReferenceImage(KisReferenceImage *referenceImage)
 {
-    KisDocument *document = view()->document();
-    KUndo2Command *cmd = KisReferenceImagesLayer::addReferenceImages(document, {referenceImage});
-    document->addCommand(cmd);
+    KUndo2Command *cmd = KisReferenceImagesLayer::addReferenceImages(view()->document(), {referenceImage});
+    view()->canvasBase()->addCommand(cmd);
 }
 
 bool KisReferenceImagesDecoration::documentHasReferenceImages() const

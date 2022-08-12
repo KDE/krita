@@ -2131,22 +2131,6 @@ KisImportExportManager *KisDocument::importExportManager() const
     return d->importExportManager;
 }
 
-void KisDocument::addCommand(KUndo2Command *command)
-{
-    if (command)
-        d->undoStack->push(command);
-}
-
-void KisDocument::beginMacro(const KUndo2MagicString & text)
-{
-    d->undoStack->beginMacro(text);
-}
-
-void KisDocument::endMacro()
-{
-    d->undoStack->endMacro();
-}
-
 void KisDocument::slotUndoStackCleanChanged(bool value)
 {
     setModified(!value || d->imageModifiedWithoutUndo);

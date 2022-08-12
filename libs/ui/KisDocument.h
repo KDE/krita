@@ -443,25 +443,6 @@ public:
      */
     bool isInSaving() const;
 
-public Q_SLOTS:
-
-    /**
-     * Adds a command to the undo stack and executes it by calling the redo() function.
-     * @param command command to add to the undo stack
-     */
-    void addCommand(KUndo2Command *command);
-
-    /**
-     * Begins recording of a macro command. At the end endMacro needs to be called.
-     * @param text command description
-     */
-    void beginMacro(const KUndo2MagicString &text);
-
-    /**
-     * Ends the recording of a macro command.
-     */
-    void endMacro();
-
 Q_SIGNALS:
 
     /**

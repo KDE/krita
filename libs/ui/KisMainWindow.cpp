@@ -484,6 +484,8 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     setCentralWidget(d->widgetStack);
     d->widgetStack->setCurrentIndex(0);
 
+    connect(d->widgetStack, &QStackedWidget::currentChanged, this, &KisMainWindow::setMainWindowLayoutForMode);
+
     connect(d->mdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
     connect(d->windowMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
     connect(d->documentMapper, SIGNAL(mapped(QObject*)), this, SLOT(newView(QObject*)));
@@ -498,7 +500,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     d->recentFiles->setRecentFilesModel(&KisRecentDocumentsModelWrapper::instance()->model());
 
-    setAutoSaveSettings(d->windowStateConfig, false);
+    applyMainWindowSettings(d->windowStateConfig);
 
     subWindowActivated();
     updateWindowMenu();
@@ -1611,6 +1613,36 @@ void KisMainWindow::dragLeaveEvent(QDragLeaveEvent *event)
 }
 
 
+void KisMainWindow::showEvent(QShowEvent *event)
+{
+    // we're here because, we need to make sure everything (dockers, toolbars etc) is loaded and ready before
+    // we can hide it.
+    setMainWindowLayoutForMode(0);
+    return KXmlGuiWindow::showEvent(event);
+}
+
+void KisMainWindow::setMainWindowLayoutForMode(int mode)
+{
+    if (mode == 0) {
+        // save the state of the window which existed up-to now (this is before we stop auto-saving).
+        saveMainWindowSettings(d->windowStateConfig);
+        // This makes sure we don't save window state when we're in welcome page mode, because all the dockers
+        // etc are hidden while the user is here.
+        resetAutoSaveSettings();
+
+        toggleDockersVisibility(false);
+        if (statusBar()) {
+            statusBar()->hide();
+        }
+        QList<QToolBar *> toolbars = findChildren<QToolBar *>();
+        for (auto *toolbar : toolbars) {
+            toolbar->hide();
+        }
+    } else {
+        setAutoSaveSettings(d->windowStateConfig, false);
+    }
+}
+
 void KisMainWindow::setActiveView(KisView* view)
 {
     d->activeView = view;
@@ -1803,6 +1835,12 @@ const KConfigGroup &KisMainWindow::windowStateConfig() const
 
 void KisMainWindow::saveWindowState(bool restoreNormalState)
 {
+    // We don't need to save welcome page's layout
+    if (d->widgetStack->currentIndex() == 0) {
+        // TODO(sh_zam): We should still save position/geometry, right?
+        return;
+    }
+
     if (restoreNormalState) {
         QAction *showCanvasOnly = d->viewManager->actionCollection()->action("view_show_canvas_only");
 
@@ -1813,7 +1851,8 @@ void KisMainWindow::saveWindowState(bool restoreNormalState)
         d->windowStateConfig.writeEntry("ko_geometry", saveGeometry().toBase64());
         d->windowStateConfig.writeEntry("State", saveState().toBase64());
 
-        if (!d->dockerStateBeforeHiding.isEmpty()) {
+        // if the dockers are hidden at this time, save their state.
+        if (!d->toggleDockers->isChecked()) {
             restoreState(d->dockerStateBeforeHiding);
         }
 

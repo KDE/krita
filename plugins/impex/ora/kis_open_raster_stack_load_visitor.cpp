@@ -210,7 +210,7 @@ void KisOpenRasterStackLoadVisitor::loadGroupLayer(const QDomElement& elem, KisG
                         // If ORA doesn't have resolution info, load the default value(75 ppi) else fetch from stack.xml
                         d->image->setResolution(d->xRes, d->yRes);
                         // now get the device
-                        KisPaintDeviceSP device = pngImage->projection();
+                        KisPaintDeviceSP device = new KisPaintDevice(*pngImage->projection());
 
                         KisPaintLayerSP layer = new KisPaintLayer(groupLayer->image() , "", opacity * 255, device);
                         d->image->addNode(layer, groupLayer, 0);

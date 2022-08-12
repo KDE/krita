@@ -1363,5 +1363,12 @@ void KisToolTransformConfigWidget::slotPreviewChanged(int index)
     default:
         group.writeEntry("useOverlayPreviewStyle", true);
     }
-    KisConfigNotifier::instance()->notifyConfigChanged();
+
+    /**
+     * We don't use global config notifier here, because it
+     * requires too many updates in the GUI, which can theoretically
+     * lead to deadlocks
+     */
+    emit sigUpdateGlobalConfig();
+    emit sigRestartAndContinueTransform();
 }

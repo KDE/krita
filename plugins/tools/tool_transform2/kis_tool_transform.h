@@ -324,6 +324,7 @@ private Q_SLOTS:
     void slotResetTransform(ToolTransformArgs::TransformMode mode);
     void slotCancelTransform();
     void slotRestartTransform();
+    void slotRestartAndContinueTransform();
     void slotEditingFinished();
 
     void slotMoveDiscreteUp();

@@ -1205,6 +1205,7 @@ void KisPaintDevice::estimateMemoryStats(qint64 &imageData, qint64 &temporaryDat
 
 void KisPaintDevice::setParentNode(KisNodeWSP parent)
 {
+    KIS_SAFE_ASSERT_RECOVER_NOOP(!m_d->parent || !parent);
     m_d->parent = parent;
 }
 

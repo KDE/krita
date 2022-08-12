@@ -57,7 +57,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 {
     Q_ASSERT(dev);
 
-    init(dev);
+    m_d->paintDevice = dev;
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
 }
 
@@ -68,7 +68,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 {
     Q_ASSERT(image);
 
-    init(new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image)));
+    m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
@@ -80,7 +80,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
         colorSpace = image->colorSpace();
     }
     Q_ASSERT(colorSpace);
-    init(new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image)));
+    m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
@@ -90,9 +90,11 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
 {
     const bool copyFrames = (rhs.m_d->contentChannel != 0);
     if (!copyFrames) {
-        init(new KisPaintDevice(*rhs.m_d->paintDevice.data()), rhs.m_d->paintChannelFlags);
+        m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopySnapshot, this);
+        m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
     } else {
-        init(new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopyAllFrames), rhs.m_d->paintChannelFlags);
+        m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopyAllFrames, this);
+        m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
 
         m_d->contentChannel = m_d->paintDevice->keyframeChannel();
         addKeyframeChannel(m_d->contentChannel);
@@ -101,14 +103,6 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
 
         KisLayer::enableAnimation();
     }
-}
-
-void KisPaintLayer::init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags)
-{
-    m_d->paintDevice = paintDevice;
-    m_d->paintDevice->setParentNode(this);
-
-    m_d->paintChannelFlags = paintChannelFlags;
 }
 
 KisPaintLayer::~KisPaintLayer()

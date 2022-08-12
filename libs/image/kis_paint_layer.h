@@ -164,8 +164,6 @@ protected:
     bool supportsKeyframeChannel(const QString &id) override;
 
 private:
-    void init(KisPaintDeviceSP paintDevice, const QBitArray &paintChannelFlags = QBitArray());
-
     struct Private;
     Private * const m_d;
 };

@@ -436,6 +436,7 @@ protected:
 
     void closeEvent(QCloseEvent * e) override;
     void resizeEvent(QResizeEvent * e) override;
+    void showEvent(QShowEvent *event) override;
 
     // QWidget overrides
     void dragMoveEvent(QDragMoveEvent *event) override;
@@ -481,6 +482,7 @@ private:
 
     void customizeTabBar();
 
+    void setMainWindowLayoutForMode(int mode);
 
 private:
 

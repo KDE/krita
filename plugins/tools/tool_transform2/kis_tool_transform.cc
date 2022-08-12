@@ -1098,6 +1098,12 @@ QWidget* KisToolTransform::createOptionWidget()
     connect(m_optionsWidget, SIGNAL(sigRestartTransform()),
             this, SLOT(slotRestartTransform()));
 
+    connect(m_optionsWidget, SIGNAL(sigUpdateGlobalConfig()),
+            this, SLOT(slotGlobalConfigChanged()));
+
+    connect(m_optionsWidget, SIGNAL(sigRestartAndContinueTransform()),
+            this, SLOT(slotRestartAndContinueTransform()));
+
     connect(m_optionsWidget, SIGNAL(sigEditingFinished()),
             this, SLOT(slotEditingFinished()));
 
@@ -1237,6 +1243,18 @@ void KisToolTransform::slotRestartTransform()
     ToolTransformArgs savedArgs(m_currentArgs);
     cancelStroke();
     startStroke(savedArgs.mode(), true);
+}
+
+void KisToolTransform::slotRestartAndContinueTransform()
+{
+    if (!m_strokeId || !m_transaction.rootNode()) return;
+
+    KisNodeSP root = m_transaction.rootNode();
+    KIS_ASSERT_RECOVER_RETURN(root); // the stroke is guaranteed to be started by an 'if' above
+
+    ToolTransformArgs savedArgs(m_currentArgs);
+    endStroke();
+    startStroke(savedArgs.mode(), false);
 }
 
 void KisToolTransform::slotEditingFinished()

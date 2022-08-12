@@ -225,28 +225,6 @@ inline float linearizeValueAsNeeded(float value)
     return value;
 }
 
-inline float linearizeValueAsNeeded(float value,
-                                    HeifImport::LinearizePolicy policy)
-{
-    if (policy == HeifImport::LinearFromPQ) {
-        return removeSmpte2048Curve(value);
-    } else if (policy == HeifImport::LinearFromHLG) {
-        return removeHLGCurve(value);
-    } else if (policy == HeifImport::LinearFromSMPTE428) {
-        return removeSMPTE_ST_428Curve(value);
-    }
-    return value;
-}
-
-namespace SDR
-{
-template<HeifImport::LinearizePolicy linearizePolicy, int channels>
-inline float value(const uint8_t *img, int stride, int x, int y, int ch)
-{
-    uint8_t source = img[(y * stride) + (x * channels) + ch];
-    return linearizeValueAsNeeded(float(source) / 255.0f, linearizePolicy);
-}
-
 template<HeifImport::LinearizePolicy linearizePolicy, bool applyOOTF>
 inline void linearize(QVector<float> &pixelValues,
                       const QVector<double> &lCoef,
@@ -258,6 +236,15 @@ inline void linearize(QVector<float> &pixelValues,
     } else if (linearizePolicy == HeifImport::LinearFromHLG && applyOOTF) {
         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
     }
+}
+
+namespace SDR
+{
+template<HeifImport::LinearizePolicy linearizePolicy, int channels>
+inline float value(const uint8_t *img, int stride, int x, int y, int ch)
+{
+    uint8_t source = img[(y * stride) + (x * channels) + ch];
+    return linearizeValueAsNeeded<linearizePolicy>(float(source) / 255.0f);
 }
 
 template<HeifImport::LinearizePolicy linearizePolicy,
@@ -365,19 +352,6 @@ inline float value(const uint8_t *img, int stride, int x, int y)
             return linearizeValueAsNeeded<linearizePolicy>(float(source)
                                                            * multiplier16bit);
         }
-    }
-}
-
-template<HeifImport::LinearizePolicy linearizePolicy, bool applyOOTF>
-inline void linearize(QVector<float> &pixelValues,
-                      const QVector<double> &lCoef,
-                      float displayGamma,
-                      float displayNits)
-{
-    if (linearizePolicy == HeifImport::KeepTheSame) {
-        qSwap(pixelValues[0], pixelValues[2]);
-    } else if (linearizePolicy == HeifImport::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
     }
 }
 
@@ -514,19 +488,6 @@ inline float valueInterleaved(const uint8_t *img,
     } else {
         return linearizeValueAsNeeded<linearizePolicy>(float(source)
                                                        * multiplier16bit);
-    }
-}
-
-template<HeifImport::LinearizePolicy linearizePolicy, bool applyOOTF>
-inline void linearize(QVector<float> &pixelValues,
-                      const QVector<double> &lCoef,
-                      float displayGamma,
-                      float displayNits)
-{
-    if (linearizePolicy == HeifImport::KeepTheSame) {
-        qSwap(pixelValues[0], pixelValues[2]);
-    } else if (linearizePolicy == HeifImport::LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
     }
 }
 

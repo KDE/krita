@@ -513,6 +513,7 @@ KisSuspendProjectionUpdatesStrokeStrategy::KisSuspendProjectionUpdatesStrokeStra
     enableJob(JOB_RESUME, true, KisStrokeJobData::BARRIER);
 
     setNeedsExplicitCancel(true);
+    setClearsRedoOnStart(false);
 }
 
 KisSuspendProjectionUpdatesStrokeStrategy::~KisSuspendProjectionUpdatesStrokeStrategy()

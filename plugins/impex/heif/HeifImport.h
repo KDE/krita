@@ -30,9 +30,10 @@ public:
         LinearFromSMPTE428
     };
 
-    KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
-private:
-    inline static float linearizeValueAsNeeded(float value, LinearizePolicy policy = KeepTheSame);
+    KisImportExportErrorCode
+    convert(KisDocument *document,
+            QIODevice *io,
+            KisPropertiesConfigurationSP configuration = 0) override;
 };
 
 #endif

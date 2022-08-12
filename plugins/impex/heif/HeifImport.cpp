@@ -36,6 +36,7 @@
 #include <kis_transaction.h>
 
 #include "DlgHeifImport.h"
+#include "kis_types.h"
 
 using heif::Error;
 
@@ -210,6 +211,174 @@ inline auto readPlanarLayer(const int luma, Args &&...args)
     }
 }
 } // namespace Gray
+
+template<HeifImport::LinearizePolicy policy>
+inline float linearizeValueAsNeeded(float value)
+{
+    if (policy == HeifImport::LinearFromPQ) {
+        return removeSmpte2048Curve(value);
+    } else if (policy == HeifImport::LinearFromHLG) {
+        return removeHLGCurve(value);
+    } else if (policy == HeifImport::LinearFromSMPTE428) {
+        return removeSMPTE_ST_428Curve(value);
+    }
+    return value;
+}
+
+inline float linearizeValueAsNeeded(float value,
+                                    HeifImport::LinearizePolicy policy)
+{
+    if (policy == HeifImport::LinearFromPQ) {
+        return removeSmpte2048Curve(value);
+    } else if (policy == HeifImport::LinearFromHLG) {
+        return removeHLGCurve(value);
+    } else if (policy == HeifImport::LinearFromSMPTE428) {
+        return removeSMPTE_ST_428Curve(value);
+    }
+    return value;
+}
+
+namespace HDR
+{
+template<int luma, HeifImport::LinearizePolicy linearizePolicy>
+inline float valueInterleaved(const uint8_t *img,
+                              int stride,
+                              int x,
+                              int y,
+                              int channels,
+                              int ch)
+{
+    uint16_t source = reinterpret_cast<const uint16_t *>(
+        img)[y * (stride / 2) + (x * channels) + ch];
+    if (luma == 10) {
+        return linearizeValueAsNeeded<linearizePolicy>(float(0x03ff & (source))
+                                                       * multiplier10bit);
+    } else if (luma == 12) {
+        return linearizeValueAsNeeded<linearizePolicy>(float(0x0fff & (source))
+                                                       * multiplier12bit);
+    } else {
+        return linearizeValueAsNeeded<linearizePolicy>(float(source)
+                                                       * multiplier16bit);
+    }
+}
+
+template<HeifImport::LinearizePolicy linearizePolicy, bool applyOOTF>
+inline void linearize(QVector<float> &pixelValues,
+                      const QVector<double> &lCoef,
+                      float displayGamma,
+                      float displayNits)
+{
+    if (linearizePolicy == HeifImport::KeepTheSame) {
+        qSwap(pixelValues[0], pixelValues[2]);
+    } else if (linearizePolicy == HeifImport::LinearFromHLG && applyOOTF) {
+        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+    }
+}
+
+template<int luma,
+         HeifImport::LinearizePolicy linearizePolicy,
+         bool applyOOTF,
+         int channels>
+inline void readLayer(const int width,
+                      const int height,
+                      const uint8_t *img,
+                      const int stride,
+                      KisHLineIteratorSP it,
+                      float displayGamma,
+                      float displayNits,
+                      const KoColorSpace *colorSpace)
+{
+    const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
+    QVector<float> pixelValues(4);
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
+
+            for (int ch = 0; ch < channels; ch++) {
+                pixelValues[ch] =
+                    valueInterleaved<luma, linearizePolicy>(img,
+                                                            stride,
+                                                            x,
+                                                            y,
+                                                            channels,
+                                                            ch);
+            }
+
+            linearize<linearizePolicy, applyOOTF>(pixelValues,
+                                                  lCoef,
+                                                  displayGamma,
+                                                  displayNits);
+
+            colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+
+            it->nextPixel();
+        }
+
+        it->nextRow();
+    }
+}
+
+template<int luma,
+         HeifImport::LinearizePolicy linearizePolicy,
+         bool applyOOTF,
+         typename... Args>
+inline auto readInterleavedWithAlpha(bool hasAlpha, Args &&...args)
+{
+    if (hasAlpha) {
+        return HDR::readLayer<luma, linearizePolicy, applyOOTF, 4>(
+            std::forward<Args>(args)...);
+    } else {
+        return HDR::readLayer<luma, linearizePolicy, applyOOTF, 3>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<int luma,
+         HeifImport::LinearizePolicy linearizePolicy,
+         typename... Args>
+inline auto readInterleavedWithPolicy(bool applyOOTF, Args &&...args)
+{
+    if (applyOOTF) {
+        return readInterleavedWithAlpha<luma, linearizePolicy, true>(
+            std::forward<Args>(args)...);
+    } else {
+        return readInterleavedWithAlpha<luma, linearizePolicy, false>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<int luma, typename... Args>
+inline auto readInterleavedWithLuma(HeifImport::LinearizePolicy linearizePolicy,
+                                    Args &&...args)
+{
+    if (linearizePolicy == HeifImport::LinearFromHLG) {
+        return readInterleavedWithPolicy<luma, HeifImport::LinearFromHLG>(
+            std::forward<Args>(args)...);
+    } else if (linearizePolicy == HeifImport::LinearFromPQ) {
+        return readInterleavedWithPolicy<luma, HeifImport::LinearFromPQ>(
+            std::forward<Args>(args)...);
+    } else if (linearizePolicy == HeifImport::LinearFromSMPTE428) {
+        return readInterleavedWithPolicy<luma, HeifImport::LinearFromSMPTE428>(
+            std::forward<Args>(args)...);
+    } else {
+        return readInterleavedWithPolicy<luma, HeifImport::KeepTheSame>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<typename... Args>
+inline auto readInterleavedLayer(const int luma, Args &&...args)
+{
+    if (luma == 10) {
+        return readInterleavedWithLuma<10>(std::forward<Args>(args)...);
+    } else if (luma == 12) {
+        return readInterleavedWithLuma<12>(std::forward<Args>(args)...);
+    } else {
+        return readInterleavedWithLuma<16>(std::forward<Args>(args)...);
+    }
+}
+} // namespace HDR
 
 KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
@@ -507,44 +676,23 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             int stride = 0;
             dbgFile << "interleaved HDR heif file, bits:" << luma;
 
-            const uint8_t* img = heifimage.get_plane(heif_channel_interleaved, &stride);
-            QVector<float> pixelValues(4);
-            QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
-            KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
-            int channels = hasAlpha ? 4 : 3;
+            const uint8_t *img =
+                heifimage.get_plane(heif_channel_interleaved, &stride);
+            KisHLineIteratorSP it =
+                layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
-                uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + (x * channels) + ch];
-                if (luma == 10) {
-                    return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
-                } else if (luma == 12) {
-                    return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
-                } else {
-                    return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
-                }
-            };
-
-            for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
-
-                    for (int ch = 0; ch < channels; ch++) {
-                        pixelValues[ch] = value(img, stride, x, y, ch);
-                    }
-
-                    if (linearizePolicy == KeepTheSame) {
-                        qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
-                    }
-                    if (linearizePolicy == LinearFromHLG && applyOOTF) {
-                        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
-                    }
-                    colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
-
-                    it->nextPixel();
-                }
-
-                it->nextRow();
-            }
+            HDR::readInterleavedLayer(luma,
+                                      linearizePolicy,
+                                      applyOOTF,
+                                      hasAlpha,
+                                      width,
+                                      height,
+                                      img,
+                                      stride,
+                                      it,
+                                      displayGamma,
+                                      displayNits,
+                                      colorSpace);
         }
 
         image->addNode(layer.data(), image->rootLayer().data());
@@ -601,18 +749,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
     } catch (Error &err) {
         return setHeifError(document, err);
     }
-}
-
-float HeifImport::linearizeValueAsNeeded(float value, HeifImport::LinearizePolicy policy)
-{
-    if ( policy == LinearFromPQ) {
-        return removeSmpte2048Curve(value);
-    } else if ( policy == LinearFromHLG) {
-        return removeHLGCurve(value);
-    } else if ( policy == LinearFromSMPTE428) {
-        return removeSMPTE_ST_428Curve(value);
-    }
-    return value;
 }
 
 #include <HeifImport.moc>

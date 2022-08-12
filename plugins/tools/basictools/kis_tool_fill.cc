@@ -46,7 +46,6 @@
 #include <kis_layer_utils.h>
 #include <krita_utils.h>
 #include <kis_stroke_strategy_undo_command_based.h>
-#include <commands_new/KisMergeLabeledLayersCommand.h>
 #include <commands_new/kis_processing_command.h>
 #include <commands_new/kis_update_command.h>
 
@@ -61,6 +60,8 @@
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
         , m_continuousFillMask(nullptr)
+        , m_referencePaintDevice(nullptr)
+        , m_referenceNodeList(nullptr)
         , m_compressorContinuousFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
         , m_fillStrokeId(nullptr)
 {
@@ -87,9 +88,10 @@ void KisToolFill::activate(const QSet<KoShape*> &shapes)
 
 void KisToolFill::deactivate()
 {
+    m_referencePaintDevice = nullptr;
+    m_referenceNodeList = nullptr;
     KisToolPaint::deactivate();
 }
-
 
 void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 {
@@ -179,33 +181,37 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
 
     m_resourcesSnapshot = new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    m_referencePaintDevice = nullptr;
-
-    KisImageWSP currentImageWSP = image();
-    KisNodeSP currentRoot = currentImageWSP->root();
-
-    KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
-
-    if (m_reference == AllLayers) {
-        m_referencePaintDevice = currentImage()->projection();
-    } else if (m_reference == CurrentLayer) {
+    if (m_reference == CurrentLayer) {
         m_referencePaintDevice = currentNode()->paintDevice();
+    } else if (m_reference == AllLayers) {
+        m_referencePaintDevice = currentImage()->projection();
     } else if (m_reference == ColorLabeledLayers) {
-        m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
+        if (!m_referenceNodeList) {
+            m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+            m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        }
+        KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+        KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
         image()->addJob(
             m_fillStrokeId,
             new KisStrokeStrategyUndoCommandBased::Data(
-                KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage, m_referencePaintDevice,
-                                                                 currentRoot, m_selectedColorLabels,
+                KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage,
+                                                                 m_referenceNodeList,
+                                                                 newReferenceNodeList,
+                                                                 m_referencePaintDevice,
+                                                                 newReferencePaintDevice,
+                                                                 image()->root(),
+                                                                 m_selectedColorLabels,
                                                                  KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
                 false,
                 KisStrokeJobData::SEQUENTIAL,
                 KisStrokeJobData::EXCLUSIVE
             )
         );
+        m_referencePaintDevice = newReferencePaintDevice;
+        m_referenceNodeList = newReferenceNodeList;
     }
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_referencePaintDevice);
 
     if (m_reference == ColorLabeledLayers) {
         // We need to obtain the reference color from the reference paint

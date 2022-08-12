@@ -16,6 +16,7 @@
 #include <kis_icon.h>
 #include <kconfig.h>
 #include <kconfiggroup.h>
+#include <commands_new/KisMergeLabeledLayersCommand.h>
 
 /**
  * The 'magic wand' selection tool -- in fact just
@@ -47,6 +48,7 @@ protected:
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
     virtual void slotSetThreshold(int);
     virtual void slotSetOpacitySpread(int);
     virtual void slotSetUseSelectionAsBoundary(bool);
@@ -59,6 +61,8 @@ private:
     int  m_opacitySpread {100};
     bool m_useSelectionAsBoundary {false};
     KConfigGroup m_configGroup;
+    KisPaintDeviceSP m_referencePaintDevice;
+    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
 };
 
 class KisToolSelectContiguousFactory : public KisSelectionToolFactoryBase

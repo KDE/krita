@@ -33,7 +33,6 @@
 #include <kis_slider_spin_box.h>
 #include <kis_cursor.h>
 #include "kis_resources_snapshot.h"
-#include "commands_new/KisMergeLabeledLayersCommand.h"
 #include <kis_color_filter_combo.h>
 #include <KisAngleSelector.h>
 #include <KoGroupButton.h>
@@ -81,7 +80,14 @@ void KisToolEncloseAndFill::resetCursorStyle()
 void KisToolEncloseAndFill::activate(const QSet<KoShape*> &shapes)
 {
     KisDynamicDelegatedTool::activate(shapes);
-    m_configGroup =  KSharedConfig::openConfig()->group(toolId());
+    m_configGroup = KSharedConfig::openConfig()->group(toolId());
+}
+
+void KisToolEncloseAndFill::deactivate()
+{
+    m_referencePaintDevice = nullptr;
+    m_referenceNodeList = nullptr;
+    KisDynamicDelegatedTool::deactivate();
 }
 
 void KisToolEncloseAndFill::setupEnclosingSubtool()
@@ -242,23 +248,35 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
     KisResourcesSnapshotSP resources =
         new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    KisPaintDeviceSP referenceDevice = nullptr;
-
     if (m_reference == CurrentLayer) {
-        referenceDevice = currentNode()->paintDevice();
+        m_referencePaintDevice = currentNode()->paintDevice();
     } else if (m_reference == AllLayers) {
-        referenceDevice = currentImage()->projection();
+        m_referencePaintDevice = currentImage()->projection();
     } else if (m_reference == ColorLabeledLayers) {
-        KisImageWSP currentImageWSP = currentImage();
-        KisNodeSP currentRoot = currentImageWSP->root();
-        KisImageSP referenceImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Enclose and Fill Tool Reference Image");
-        referenceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
-
-        applicator.applyCommand(new KisMergeLabeledLayersCommand(referenceImage, referenceDevice, currentRoot, m_selectedColorLabels),
-                                KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
+        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Enclose and Fill Tool Reference Image");
+        if (!m_referenceNodeList) {
+            m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
+            m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        }
+        KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
+        KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        applicator.applyCommand(
+            new KisMergeLabeledLayersCommand(
+                refImage,
+                m_referenceNodeList,
+                newReferenceNodeList,
+                m_referencePaintDevice,
+                newReferencePaintDevice,
+                image()->root(),
+                m_selectedColorLabels,
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled
+            ),
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        );
+        m_referencePaintDevice = newReferencePaintDevice;
+        m_referenceNodeList = newReferenceNodeList;
     }
-
-    KIS_ASSERT(referenceDevice);
 
     QTransform transform;
     transform.rotate(m_patternRotation);
@@ -267,7 +285,7 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
     resources->setFillTransform(transform);
 
     KisProcessingVisitorSP visitor =
-        new KisEncloseAndFillProcessingVisitor(referenceDevice,
+        new KisEncloseAndFillProcessingVisitor(m_referencePaintDevice,
                                                enclosingMask,
                                                resources->activeSelection(),
                                                resources,

@@ -37,7 +37,6 @@
 #include "kis_selection_tool_helper.h"
 #include "kis_slider_spin_box.h"
 #include "tiles3/kis_hline_iterator.h"
-#include "commands_new/KisMergeLabeledLayersCommand.h"
 #include "kis_image.h"
 #include "kis_undo_stores.h"
 #include "kis_resources_snapshot.h"
@@ -66,6 +65,13 @@ void KisToolSelectContiguous::activate(const QSet<KoShape*> &shapes)
 {
     KisToolSelect::activate(shapes);
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
+}
+
+void KisToolSelectContiguous::deactivate()
+{
+    m_referencePaintDevice = nullptr;
+    m_referenceNodeList = nullptr;
+    KisToolSelect::deactivate();
 }
 
 void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
@@ -98,25 +104,36 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     QPoint pos = convertToImagePixelCoordFloored(event);
     QRect rc = currentImage()->bounds();
 
-
-    KisImageSP image = currentImage();
     KisPaintDeviceSP sourceDevice;
-    if (sampleLayersMode() == SampleAllLayers) {
-        sourceDevice = image->projection();
+
+    if (sampleLayersMode() == SampleCurrentLayer) {
+        sourceDevice = m_referencePaintDevice = dev;
+    } else if (sampleLayersMode() == SampleAllLayers) {
+        sourceDevice = m_referencePaintDevice = currentImage()->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
-        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image, "Contiguous Selection Tool Reference Image");
-        sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
-                    image, "Contiguous Selection Tool Reference Result Paint Device");
-
-        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice,
-                                                                                 image->root(), colorLabelsSelected(),
-                                                                                 KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled);
-        applicator.applyCommand(command,
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
-
-    } else { // Sample Current Layer
-        sourceDevice = dev;
+        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Contiguous Selection Tool Reference Image");
+        if (!m_referenceNodeList) {
+            m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Contiguous Selection Tool Reference Result Paint Device");
+            m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        }
+        KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Contiguous Selection Tool Reference Result Paint Device");
+        KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        applicator.applyCommand(
+            new KisMergeLabeledLayersCommand(
+                refImage,
+                m_referenceNodeList,
+                newReferenceNodeList,
+                m_referencePaintDevice,
+                newReferencePaintDevice,
+                image()->root(),
+                colorLabelsSelected(),
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled
+            ),
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        );
+        sourceDevice = m_referencePaintDevice = newReferencePaintDevice;
+        m_referenceNodeList = newReferenceNodeList;
     }
 
     KisPixelSelectionSP selection =

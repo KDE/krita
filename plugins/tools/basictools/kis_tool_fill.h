@@ -23,6 +23,7 @@
 #include <kis_signal_compressor.h>
 #include <kis_signal_auto_connection.h>
 #include <kis_resources_snapshot.h>
+#include <commands_new/KisMergeLabeledLayersCommand.h>
 
 class KisOptionCollectionWidget;
 class KoGroupButton;
@@ -110,6 +111,7 @@ private:
     KisSelectionSP m_continuousFillMask;
     KoColor m_continuousFillReferenceColor;
     KisPaintDeviceSP m_referencePaintDevice;
+    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
     KisResourcesSnapshotSP m_resourcesSnapshot;
     QTransform m_transform;
 

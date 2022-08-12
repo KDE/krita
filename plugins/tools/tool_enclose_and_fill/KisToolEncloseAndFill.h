@@ -19,6 +19,7 @@
 #include <kconfig.h>
 #include <kconfiggroup.h>
 #include <KisEncloseAndFillPainter.h>
+#include <commands_new/KisMergeLabeledLayersCommand.h>
 
 #include "subtools/KisDynamicDelegatedTool.h"
 
@@ -79,6 +80,7 @@ public:
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
 
 private:
     EnclosingMethod m_enclosingMethod {Lasso};
@@ -102,6 +104,9 @@ private:
 
     Reference m_reference {CurrentLayer};
     QList<int> m_selectedColorLabels;
+
+    KisPaintDeviceSP m_referencePaintDevice;
+    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
 
     KisOptionCollectionWidget *m_optionWidget {nullptr};
 

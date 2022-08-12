@@ -12,6 +12,7 @@
 #include <kconfig.h>
 #include "kis_tool_select_base.h"
 #include <kconfiggroup.h>
+#include <commands_new/KisMergeLabeledLayersCommand.h>
 
 /*
  * Tool to select colors by pointing at a color on the image.
@@ -30,6 +31,7 @@ public:
 
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
+    void deactivate() override;
     void slotSetThreshold(int);
 
 protected:
@@ -40,6 +42,8 @@ protected:
 private:
     int m_threshold;
     KConfigGroup m_configGroup;
+    KisPaintDeviceSP m_referencePaintDevice;
+    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
 };
 
 

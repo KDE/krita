@@ -18,7 +18,6 @@
 
 #include <KoColorSpace.h>
 
-#include "commands_new/KisMergeLabeledLayersCommand.h"
 #include "kis_canvas2.h"
 #include "kis_command_utils.h"
 #include "kis_image.h"
@@ -93,6 +92,13 @@ void KisToolSelectSimilar::activate(const QSet<KoShape*> &shapes)
     m_configGroup =  KSharedConfig::openConfig()->group(toolId());
 }
 
+void KisToolSelectSimilar::deactivate()
+{
+    m_referencePaintDevice = nullptr;
+    m_referenceNodeList = nullptr;
+    KisToolSelect::deactivate();
+}
+
 void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
 {
     KisToolSelectBase::beginPrimaryAction(event);
@@ -133,22 +139,34 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     KisPaintDeviceSP sourceDevice;
     QRect areaToCheck;
 
-    if (sampleLayersMode() == SampleAllLayers) {
-        sourceDevice = imageSP->projection();
+    if (sampleLayersMode() == SampleCurrentLayer) {
+        sourceDevice = m_referencePaintDevice = dev;
+    } else if (sampleLayersMode() == SampleAllLayers) {
+        sourceDevice = m_referencePaintDevice = currentImage()->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
-        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(imageSP, "Similar Colors Selection Tool Reference Image");
-        sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
-                    imageSP, "Similar Colors Selection Tool Reference Result Paint Device");
-
-        KisMergeLabeledLayersCommand* command = new KisMergeLabeledLayersCommand(refImage, sourceDevice,
-                                                                                 imageSP->root(), colorLabelsSelected(),
-                                                                                 KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled);
-        applicator.applyCommand(command,
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
-
-    } else { // Sample Current Layer
-        sourceDevice = dev;
+        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Similar Colors Selection Tool Reference Image");
+        if (!m_referenceNodeList) {
+            m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Similar Colors Selection Tool Reference Result Paint Device");
+            m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        }
+        KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Similar Colors Selection Tool Reference Result Paint Device");
+        KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        applicator.applyCommand(
+            new KisMergeLabeledLayersCommand(
+                refImage,
+                m_referenceNodeList,
+                newReferenceNodeList,
+                m_referencePaintDevice,
+                newReferencePaintDevice,
+                image()->root(),
+                colorLabelsSelected(),
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled
+            ),
+            KisStrokeJobData::SEQUENTIAL,
+            KisStrokeJobData::EXCLUSIVE
+        );
+        sourceDevice = m_referencePaintDevice = newReferencePaintDevice;
+        m_referenceNodeList = newReferenceNodeList;
     }
 
     if (sampleLayersMode() == SampleColorLabeledLayers) {

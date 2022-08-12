@@ -18,6 +18,7 @@
 #include <resources/KoStopGradient.h>
 
 #include "kis_debug.h"
+#include <kis_signals_blocker.h>
 
 #include <kis_icon_utils.h>
 
@@ -191,6 +192,7 @@ void KisStopGradientEditor::stopChanged(int stop)
         selectedStopLabel->setText(i18nc("Text that indicates the selected stop in the stop gradient editor", "Stop #%1", stop + 1));
 
         KoGradientStop gradientStop = m_gradient->stops()[stop];
+        KisSignalsBlocker blocker(stopEditor);
         stopEditor->setPosition(gradientStop.position * 100.0);
 
         KoColor color;

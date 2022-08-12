@@ -128,6 +128,12 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                      KisMyPaintOpOption::SPEED);
 
     addPaintOpOption(new KisMyPaintCurveOptionWidget(
+                         new KisMyPaintCurveOption(KoID("dabs_per_basic_radius", i18n("Dabs Per Basic Radius")), KisPaintOpOption::GENERAL, false, 2, 0, 6),
+                         "0",
+                         "100"),
+                     KisMyPaintOpOption::DABS);
+
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(
                          new KisMyPaintCurveOption(KoID("dabs_per_actual_radius", i18n("Dabs Per Actual Radius")), KisPaintOpOption::GENERAL, false, 2, 0, 6),
                          "0",
                          "100"),

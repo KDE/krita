@@ -37,7 +37,12 @@ public:
             KisMergeWalker::startTrip(startWith);
 
             m_currentUpdateType = FULL_REFRESH;
-            KisRefreshSubtreeWalker::startTrip(startWith);
+
+            if (!startWith->dependsOnLowerNodes()) {
+                KisRefreshSubtreeWalker::startTrip(startWith);
+            } else {
+                KIS_SAFE_ASSERT_RECOVER_NOOP(!startWith->canHaveChildLayers());
+            }
 
             m_firstRun = true;
         }

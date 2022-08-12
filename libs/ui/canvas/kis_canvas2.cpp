@@ -431,7 +431,7 @@ void KisCanvas2::channelSelectionChanged()
 void KisCanvas2::addCommand(KUndo2Command *command)
 {
     // This method exists to support flake-related operations
-    m_d->view->document()->addCommand(command);
+    m_d->view->image()->undoAdapter()->addCommand(command);
 }
 
 void KisCanvas2::KisCanvas2Private::setActiveShapeManager(KoShapeManager *shapeManager)

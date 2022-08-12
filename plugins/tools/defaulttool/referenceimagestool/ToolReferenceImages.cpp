@@ -109,8 +109,7 @@ void ToolReferenceImages::addReferenceImage()
         if (document()->referenceImagesLayer()) {
             reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
         }
-        KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+        canvas()->addCommand(KisReferenceImagesLayer::addReferenceImages(document(), {reference}));
     }
 }
 
@@ -124,8 +123,7 @@ void ToolReferenceImages::pasteReferenceImage()
         if (document()->referenceImagesLayer()) {
             reference->setZIndex(document()->referenceImagesLayer()->shapes().size());
         }
-        KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, {reference}));
+        canvas()->addCommand(KisReferenceImagesLayer::addReferenceImages(document(), {reference}));
     } else {
         if (canvas()->canvasWidget()) {
             QMessageBox::critical(canvas()->canvasWidget(), i18nc("@title:window", "Krita"), i18n("Could not load reference image from clipboard"));
@@ -182,8 +180,7 @@ void ToolReferenceImages::loadReferenceImages()
             currentZIndex += 1;
         }
 
-        KisDocument *doc = document();
-        doc->addCommand(KisReferenceImagesLayer::addReferenceImages(doc, shapes));
+        canvas()->addCommand(KisReferenceImagesLayer::addReferenceImages(document(), shapes));
     } else {
         QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not load reference images from '%1'.", filename));
     }

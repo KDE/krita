@@ -51,17 +51,17 @@ void KisDocumentUndoStore::undoLastCommand()
 void KisDocumentUndoStore::addCommand(KUndo2Command *command)
 {
     if(!command) return;
-    m_doc->addCommand(command);
+    m_doc->undoStack()->push(command);
 }
 
 void KisDocumentUndoStore::beginMacro(const KUndo2MagicString& macroName)
 {
-    m_doc->beginMacro(macroName);
+    m_doc->undoStack()->beginMacro(macroName);
 }
 
 void KisDocumentUndoStore::endMacro()
 {
-    m_doc->endMacro();
+    m_doc->undoStack()->endMacro();
 }
 
 void KisDocumentUndoStore::purgeRedoState()

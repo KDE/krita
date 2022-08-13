@@ -531,7 +531,8 @@ void KisClipboard::clipboardDataChanged()
 {
     if (!d->pushedClipboard) {
         const QMimeData *cbData = d->clipboard->mimeData();
-        d->hasClip = (d->clipboard->mimeData()->hasImage() || cbData && cbData->hasFormat("application/x-krita-selection"));
+        d->hasClip = d->clipboard->mimeData()->hasImage()
+            || (cbData && cbData->hasFormat("application/x-krita-selection"));
     }
     d->pushedClipboard = false;
     emit clipChanged();

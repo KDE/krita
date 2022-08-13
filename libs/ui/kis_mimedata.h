@@ -72,8 +72,7 @@ private:
      * Supports image and color types.
      */
     static KisNodeList loadNonNativeNodes(const QMimeData *data,
-                                         KisImageWSP image,
-                                         KisShapeController *shapeController);
+                                          KisImageWSP image);
 
     /**
      * Try load the node, which belongs to the same Krita instance,

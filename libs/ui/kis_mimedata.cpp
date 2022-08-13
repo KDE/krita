@@ -291,8 +291,7 @@ QList<KisNodeSP> KisMimeData::tryLoadInternalNodes(const QMimeData *data,
 }
 
 QList<KisNodeSP> KisMimeData::loadNonNativeNodes(const QMimeData *data,
-                                                KisImageWSP image,
-                                                KisShapeController *shapeController)
+                                                 KisImageWSP image)
 {
     bool doRecenter = false;
     QList<KisNodeSP> nodes;
@@ -412,7 +411,7 @@ KisNodeList KisMimeData::loadNodesFast(
                                           copyNode /* IN-OUT */);
 
     if (nodes.isEmpty()) {
-        nodes = KisMimeData::loadNonNativeNodes(data, image, shapeController);
+        nodes = KisMimeData::loadNonNativeNodes(data, image);
         /**
          * Don't try to move a node originating from another image,
          * just copy it.

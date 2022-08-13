@@ -56,6 +56,8 @@ void KisPresetUpdateMediator::slotSettingsChanged()
 
 void KisPresetUpdateMediator::slotResourceChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight, const QVector<int> &roles)
 {
+    Q_UNUSED(roles)
+
     /// the name of the preset is stored in KoResource, not
     /// in KisPaintOpSettings, so we should track it separately
 

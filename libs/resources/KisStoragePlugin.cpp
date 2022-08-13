@@ -70,6 +70,7 @@ QString KisStoragePlugin::resourceMd5(const QString &url)
 
 QString KisStoragePlugin::resourceFilePath(const QString &url)
 {
+    Q_UNUSED(url);
     return QString();
 }
 

@@ -17,6 +17,7 @@
 #include <QElapsedTimer>
 #include "KisAsyncronousStrokeUpdateHelper.h"
 #include "KisNodeSelectionRecipe.h"
+#include "kis_transaction.h"
 
 #include <memory>
 #include <unordered_map>
@@ -70,6 +71,8 @@ public:
                        KisUpdatesFacade *updatesFacade,
                        KisStrokeUndoFacade *undoFacade);
 
+    ~MoveStrokeStrategy() override;
+
     void initStrokeCallback() override;
     void finishStrokeCallback() override;
     void cancelStrokeCallback() override;
@@ -87,35 +90,28 @@ private:
     void setUndoEnabled(bool value);
     void setUpdatesEnabled(bool value);
 private:
-    QRect moveNode(KisNodeSP node, QPoint offset);
-    void addMoveCommands(KisNodeSP node, KUndo2Command *parent);
-    void saveInitialNodeOffsets(KisNodeSP node);
     void doCanvasUpdate(bool forceUpdate = false);
     void tryPostUpdateJob(bool forceUpdate);
 
 private:
+    struct Private;
+    QScopedPointer<Private> m_d;
+
     KisNodeSelectionRecipe m_requestedNodeSelection;
     KisNodeList m_nodes;
     QSharedPointer<KisNodeList> m_sharedNodes;
     QSet<KisNodeSP> m_blacklistedNodes;
     KisUpdatesFacade *m_updatesFacade {nullptr};
     QPoint m_finalOffset;
-    QRect m_dirtyRect;
     QHash<KisNodeSP, QRect> m_dirtyRects;
     bool m_updatesEnabled {true};
-    QHash<KisNodeSP, QPoint> m_initialNodeOffsets;
-
-    struct TransformMaskData {
-        QPointF currentOffset;
-        std::unique_ptr<KUndo2Command> undoCommand;
-    };
-
-    std::unordered_map<KisNodeSP, TransformMaskData> m_transformMaskData;
-    KUndo2Command* keyframeCommand {nullptr};
 
     QElapsedTimer m_updateTimer;
     bool m_hasPostponedJob {false};
     const int m_updateInterval {30};
+
+    template <typename Functor>
+    void recursiveApplyNodes(KisNodeList nodes, Functor &&func);
 };
 
 #endif /* __MOVE_STROKE_STRATEGY_H */

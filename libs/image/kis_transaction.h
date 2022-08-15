@@ -105,6 +105,8 @@ public:
     }
 
 protected:
+    Q_DISABLE_COPY(KisTransaction);
+
     KisTransaction() : m_transactionData(0) {}
     KisTransactionData* m_transactionData;
 };

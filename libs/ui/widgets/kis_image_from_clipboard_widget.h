@@ -39,8 +39,7 @@ private Q_SLOTS:
     void clipboardDataChanged();
     
 protected:
-
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private Q_SLOTS:
     void createClipboardPreview();

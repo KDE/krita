@@ -40,7 +40,7 @@ private Q_SLOTS:
     
 protected:
 
-    void showEvent(QShowEvent *event);
+    void showEvent(QShowEvent *event) override;
 
 private Q_SLOTS:
     void createClipboardPreview();

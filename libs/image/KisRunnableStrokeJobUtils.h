@@ -21,6 +21,12 @@ void addJobSequential(QVector<Job*> &jobs, Func func) {
 }
 
 template <typename Func, typename Job>
+void addJobSequentialExclusive(QVector<Job*> &jobs, Func func) {
+    jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE));
+}
+
+
+template <typename Func, typename Job>
 void addJobConcurrent(QVector<Job*> &jobs, Func func) {
     jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::CONCURRENT));
 }
@@ -31,6 +37,11 @@ void addJobBarrier(QVector<Job*> &jobs, Func func) {
 }
 
 template <typename Func, typename Job>
+void addJobBarrierExclusive(QVector<Job*> &jobs, Func func) {
+    jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::BARRIER, KisStrokeJobData::EXCLUSIVE));
+}
+
+template <typename Func, typename Job>
 void addJobUniquelyCuncurrent(QVector<Job*> &jobs, Func func) {
     jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::UNIQUELY_CONCURRENT));
 }
@@ -38,6 +49,13 @@ void addJobUniquelyCuncurrent(QVector<Job*> &jobs, Func func) {
 template <typename Func, typename Job>
 void addJobSequential(QVector<Job*> &jobs, int lod, Func func) {
     Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::SEQUENTIAL);
+    data->setLevelOfDetailOverride(lod);
+    jobs.append(data);
+}
+
+template <typename Func, typename Job>
+void addJobSequentialExclusive(QVector<Job*> &jobs, int lod, Func func) {
+    Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::SEQUENTIAL, KisStrokeJobData::EXCLUSIVE);
     data->setLevelOfDetailOverride(lod);
     jobs.append(data);
 }

@@ -30,6 +30,7 @@ KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(KisSc
 {
     d->saveContext = saveContext;
     d->activeNodes = activeNodes;
+    qDebug() << "create KisScalableVectorGraphicsSaveVisitor";
 }
 
 KisScalableVectorGraphicsSaveVisitor::~KisScalableVectorGraphicsSaveVisitor()
@@ -39,30 +40,69 @@ KisScalableVectorGraphicsSaveVisitor::~KisScalableVectorGraphicsSaveVisitor()
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisPaintLayer *layer)
 {
-    return true;
+    qDebug() << "visit paint layer";
+    return saveLayer(layer);
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGroupLayer *layer)
 {
+    qDebug() << "visit KisGroupLayer";
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
+    qDebug() << "visit KisAdjustmentLayer";
+
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisExternalLayer *layer)
 {
+    qDebug() << "visit KisExternalLayer";
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGeneratorLayer *layer)
 {
+    qDebug() << "visit KisGeneratorLayer";
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisCloneLayer *layer)
 {
+    qDebug() << "visit group layer";
     return true;
+}
+
+bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
+{
+    qDebug() << "save layer";
+    if (layer->isFakeNode()) {
+        // don't save grids, reference images layers etc.
+        return true;
+    }
+
+    // here we adjust the bounds to encompass the entire area of the layer, including transforms
+    QRect adjustedBounds = layer->exactBounds();
+
+    if (adjustedBounds.isEmpty()) {
+        // in case of an empty layer, artificially increase the size of the saved rectangle
+        // to just save an empty layer file
+        adjustedBounds.adjust(0, 0, 1, 1);
+    }
+
+    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
+
+    QDomElement elt = d->layerStack.createElement("layer");
+    saveLayerInfo(elt, layer);
+    elt.setAttribute("src", filename);
+    d->currentElement.insertBefore(elt, QDomNode());
+
+    return true;
+}
+
+void KisScalableVectorGraphicsSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
+{
+    qDebug() << "void KisScalableVectorGraphicsSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)";
 }

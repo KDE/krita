@@ -66,6 +66,13 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                          "100"),
                      KisMyPaintOpOption::BASIC);
 
+
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(
+                         new KisMyPaintCurveOption(KoID("snap_to_pixel", i18n("Snap To Pixel")), KisPaintOpOption::GENERAL, false, 2, 0, 10),
+                         "0",
+                         "100"),
+                     KisMyPaintOpOption::BASIC);
+
     addPaintOpOption(new KisAirbrushOptionWidget(false), KisMyPaintOpOption::AIRBRUSH);
     addPaintOpOption(
         new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption(KoID("change_color_h", i18n("Change Color H")), KisPaintOpOption::GENERAL, false, 0.0, -2, 2),

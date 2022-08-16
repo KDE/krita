@@ -308,6 +308,11 @@ void KisUpdateScheduler::setPurgeRedoStateCallback(const std::function<void ()> 
     m_d->strokesQueue.setPurgeRedoStateCallback(callback);
 }
 
+void KisUpdateScheduler::setPostSyncLod0GUIPlaneRequestForResumeCallback(const std::function<void ()> &callback)
+{
+    m_d->strokesQueue.setPostSyncLod0GUIPlaneRequestForResumeCallback(callback);
+}
+
 KisPostExecutionUndoAdapter *KisUpdateScheduler::lodNPostExecutionUndoAdapter() const
 {
     return m_d->strokesQueue.lodNPostExecutionUndoAdapter();

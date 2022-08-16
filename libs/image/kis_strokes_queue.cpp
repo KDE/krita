@@ -88,6 +88,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
     KisSuspendResumeStrategyPairFactory suspendResumeUpdatesStrokeStrategyFactory;
     std::function<void()> purgeRedoStateCallback;
+    std::function<void()> postSyncLod0GUIPlaneRequistForResume;
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
@@ -714,6 +715,11 @@ void KisStrokesQueue::setPurgeRedoStateCallback(const std::function<void ()> &ca
     m_d->purgeRedoStateCallback = callback;
 }
 
+void KisStrokesQueue::setPostSyncLod0GUIPlaneRequestForResumeCallback(const std::function<void ()> &callback)
+{
+    m_d->postSyncLod0GUIPlaneRequistForResume = callback;
+}
+
 KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() const
 {
     return &m_d->lodNPostExecutionUndoAdapter;
@@ -826,6 +832,25 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
     }
     else if(stroke->isEnded() && !hasJobs && !hasStrokeJobsRunning) {
         m_d->tryClearUndoOnStrokeCompletion(stroke);
+
+        const bool needsSyncLod0PlaneToGUI =
+                stroke->type() == KisStroke::LOD0 &&
+                stroke->isCancelled();
+
+        KIS_SAFE_ASSERT_RECOVER_NOOP(!needsSyncLod0PlaneToGUI ||
+                                     (stroke->lodBuddy() &&
+                                      stroke->lodBuddy()->isCancelled()));
+
+        /**
+         * If the Lod0 stroke has been cancelled without even being
+         * strated, it means that the GUI still has LodN tiles active,
+         * so we should reread the data from the image to switch GUI
+         * tiles into Lod0 mode.
+         */
+        if (needsSyncLod0PlaneToGUI &&
+            m_d->postSyncLod0GUIPlaneRequistForResume) {
+            m_d->postSyncLod0GUIPlaneRequistForResume();
+        }
 
         m_d->strokesQueue.dequeue(); // deleted by shared pointer
         m_d->needsExclusiveAccess = false;

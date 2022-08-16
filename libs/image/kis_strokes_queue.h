@@ -59,6 +59,7 @@ public:
     void setLod0ToNStrokeStrategyFactory(const KisLodSyncStrokeStrategyFactory &factory);
     void setSuspendResumeUpdatesStrokeStrategyFactory(const KisSuspendResumeStrategyPairFactory &factory);
     void setPurgeRedoStateCallback(const std::function<void()> &callback);
+    void setPostSyncLod0GUIPlaneRequestForResumeCallback(const std::function<void()> &callback);
     KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 
     /**

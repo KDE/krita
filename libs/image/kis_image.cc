@@ -173,6 +173,30 @@ public:
                         [this] () {
                 undoStore->purgeRedoState();
             });
+
+            scheduler.setPostSyncLod0GUIPlaneRequestForResumeCallback(
+                        [this] () {
+
+                KIS_SAFE_ASSERT_RECOVER_NOOP(q->currentLevelOfDetail() == 0);
+
+                bool addedUIUpdateRequestSuccessfully = false;
+
+                for (auto it = std::make_reverse_iterator(projectionUpdatesFilters.end());
+                     it != std::make_reverse_iterator(projectionUpdatesFilters.begin());
+                     ++it) {
+
+                    KisSuspendProjectionUpdatesStrokeStrategy::SuspendUpdatesFilterInterface *iface =
+                        dynamic_cast<KisSuspendProjectionUpdatesStrokeStrategy::SuspendUpdatesFilterInterface*>(it->data());
+
+                    if (iface) {
+                        iface->addExplicitUIUpdateRect(q->bounds());
+                        addedUIUpdateRequestSuccessfully = true;
+                        break;
+                    }
+                }
+
+                KIS_SAFE_ASSERT_RECOVER_NOOP(addedUIUpdateRequestSuccessfully);
+            });
         }
 
         connect(q, SIGNAL(sigImageModified()), KisMemoryStatisticsServer::instance(), SLOT(notifyImageChanged()));

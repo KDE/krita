@@ -181,6 +181,16 @@ public:
      */
     void setPurgeRedoStateCallback(const std::function<void()> &callback);
 
+    /**
+     * Sets a callback that is called bu the scheduler when it
+     * thinks that Lod0 tiles **in the GUI** should be refetched
+     * by the GUI. Such situation happens in cases when a Lod0
+     * stroke has been cancelled, after its LodN buddy has managed
+     * to do some manipulations on the canvas. Without this call
+     * the GUI will still contain LodN tiles active.
+     */
+    void setPostSyncLod0GUIPlaneRequestForResumeCallback(const std::function<void()> &callback);
+
     KisPostExecutionUndoAdapter* lodNPostExecutionUndoAdapter() const;
 
 

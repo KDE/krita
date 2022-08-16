@@ -57,17 +57,19 @@ public:
     KisDataManagerSP savedDataManager;
 
     QScopedPointer<OptionalInterstrokeInfo> interstrokeInfo;
+    bool suppressUpdates = false;
 
     void possiblySwitchCurrentTime();
     KisDataManagerSP dataManager();
     void moveDevice(const QPoint newOffset);
 };
 
-KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent)
+KisTransactionData::KisTransactionData(const KUndo2MagicString& name, KisPaintDeviceSP device, bool resetSelectionOutlineCache, KisTransactionWrapperFactory *interstrokeDataFactory, KUndo2Command* parent, bool suppressUpdates)
     : KUndo2Command(name, parent)
     , m_d(new Private())
 {
     m_d->resetSelectionOutlineCache = resetSelectionOutlineCache;
+    m_d->suppressUpdates = suppressUpdates;
     setTimedID(-1);
 
     if (!interstrokeDataFactory && device->interstrokeData()) {
@@ -152,6 +154,8 @@ void KisTransactionData::endTransaction()
 
 void KisTransactionData::startUpdates()
 {
+    if (m_d->suppressUpdates) return;
+
     if (m_d->transactionFrameId == -1 ||
         m_d->transactionFrameId ==
         m_d->device->framesInterface()->currentFrameId()) {

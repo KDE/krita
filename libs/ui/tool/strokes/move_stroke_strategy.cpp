@@ -289,11 +289,11 @@ void MoveStrokeStrategy::initStrokeCallback()
         }
 
         if (m_sharedNodes) {
-            *m_sharedNodes = m_nodes;
+            *m_sharedNodes = std::make_pair(m_nodes, m_blacklistedNodes);
         }
     } else {
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_sharedNodes);
-        m_nodes = *m_sharedNodes;
+        std::tie(m_nodes, m_blacklistedNodes) = *m_sharedNodes;
     }
 
     if (m_nodes.isEmpty()) {
@@ -544,7 +544,7 @@ KisStrokeStrategy* MoveStrokeStrategy::createLodClone(int levelOfDetail)
     connect(clone, SIGNAL(sigStrokeStartedEmpty()), this, SIGNAL(sigStrokeStartedEmpty()));
     connect(clone, SIGNAL(sigLayersPicked(const KisNodeList&)), this, SIGNAL(sigLayersPicked(const KisNodeList&)));
     this->setUpdatesEnabled(false);
-    m_sharedNodes.reset(new KisNodeList());
+    m_sharedNodes.reset(new std::pair<KisNodeList, QSet<KisNodeSP>>());
     clone->m_sharedNodes = m_sharedNodes;
     return clone;
 }

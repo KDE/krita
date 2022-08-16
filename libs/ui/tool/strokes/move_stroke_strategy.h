@@ -99,7 +99,7 @@ private:
 
     KisNodeSelectionRecipe m_requestedNodeSelection;
     KisNodeList m_nodes;
-    QSharedPointer<KisNodeList> m_sharedNodes;
+    QSharedPointer<std::pair<KisNodeList, QSet<KisNodeSP>>> m_sharedNodes;
     QSet<KisNodeSP> m_blacklistedNodes;
     KisUpdatesFacade *m_updatesFacade {nullptr};
     QPoint m_finalOffset;

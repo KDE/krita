@@ -97,6 +97,7 @@ public:
 
     QScopedPointer<KisPaintDeviceFramesInterface> framesInterface;
     bool isProjectionDevice;
+    bool supportsWrapAroundMode;
 
     KisPaintDeviceStrategy* currentStrategy();
 
@@ -609,6 +610,7 @@ KisPaintDevice::Private::Private(KisPaintDevice *paintDevice)
     : q(paintDevice),
       basicStrategy(new KisPaintDeviceStrategy(paintDevice, this)),
       isProjectionDevice(false),
+      supportsWrapAroundMode(false),
       m_data(new Data(paintDevice)),
       m_nextFreeFrameId(0)
 {
@@ -622,7 +624,7 @@ KisPaintDevice::Private::~Private()
 
 KisPaintDevice::Private::KisPaintDeviceStrategy* KisPaintDevice::Private::currentStrategy()
 {
-    if (!defaultBounds->wrapAroundMode()) {
+    if (!supportsWrapAroundMode || !defaultBounds->wrapAroundMode()) {
         return basicStrategy.data();
     }
 
@@ -1117,6 +1119,7 @@ void KisPaintDevice::makeFullCopyFrom(const KisPaintDevice &rhs, KritaUtils::Dev
         m_d->contentChannel.reset(new KisRasterKeyframeChannel(*rhs.m_d->contentChannel.data(), this));
     }
 
+    m_d->supportsWrapAroundMode = rhs.m_d->supportsWrapAroundMode;
     setDefaultBounds(rhs.m_d->defaultBounds);
     setParentNode(newParentNode);
 }
@@ -2179,6 +2182,15 @@ void KisPaintDevice::generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &o
     m_d->generateLodCloneDevice(dst, originalRect, lod);
 }
 
+void KisPaintDevice::setSupportsWraparoundMode(bool value)
+{
+    m_d->supportsWrapAroundMode = value;
+}
+
+bool KisPaintDevice::supportsWraproundMode() const
+{
+    return m_d->supportsWrapAroundMode;
+}
 
 KisPaintDeviceFramesInterface* KisPaintDevice::framesInterface()
 {

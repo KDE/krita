@@ -59,6 +59,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
 
     m_d->paintDevice = dev;
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
+    m_d->paintDevice->setSupportsWraparoundMode(true);
 }
 
 
@@ -69,6 +70,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     Q_ASSERT(image);
 
     m_d->paintDevice = new KisPaintDevice(this, image->colorSpace(), new KisDefaultBounds(image));
+    m_d->paintDevice->setSupportsWraparoundMode(true);
 }
 
 KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opacity, const KoColorSpace * colorSpace)
@@ -81,6 +83,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     }
     Q_ASSERT(colorSpace);
     m_d->paintDevice = new KisPaintDevice(this, colorSpace, new KisDefaultBounds(image));
+    m_d->paintDevice->setSupportsWraparoundMode(true);
 }
 
 KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
@@ -91,9 +94,11 @@ KisPaintLayer::KisPaintLayer(const KisPaintLayer& rhs)
     const bool copyFrames = (rhs.m_d->contentChannel != 0);
     if (!copyFrames) {
         m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopySnapshot, this);
+        m_d->paintDevice->setSupportsWraparoundMode(true);
         m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
     } else {
         m_d->paintDevice = new KisPaintDevice(*rhs.m_d->paintDevice.data(), KritaUtils::CopyAllFrames, this);
+        m_d->paintDevice->setSupportsWraparoundMode(true);
         m_d->paintChannelFlags = rhs.m_d->paintChannelFlags;
 
         m_d->contentChannel = m_d->paintDevice->keyframeChannel();

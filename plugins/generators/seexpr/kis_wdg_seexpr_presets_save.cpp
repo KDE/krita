@@ -124,6 +124,7 @@ void KisWdgSeExprPresetsSave::renderScriptToThumbnail()
         KisDefaultBoundsBaseSP bounds(new KisWrapAroundBoundsWrapper(new KisDefaultBounds(), QRect(0, 0, 256, 256)));
         KisPaintDeviceSP src = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
         src->setDefaultBounds(bounds);
+        src->setSupportsWraparoundMode(true);
         KisFillPainter fillPainter(src);
         fillPainter.fillRect(0, 0, 256, 256, m_currentConfiguration);
 

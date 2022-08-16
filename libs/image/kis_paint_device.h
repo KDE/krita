@@ -924,6 +924,9 @@ public:
 
     void generateLodCloneDevice(KisPaintDeviceSP dst, const QRect &originalRect, int lod);
 
+    void setSupportsWraparoundMode(bool value);
+    bool supportsWraproundMode() const;
+
     void setProjectionDevice(bool value);
     void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
 

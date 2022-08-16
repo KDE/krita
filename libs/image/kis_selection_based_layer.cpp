@@ -83,6 +83,7 @@ void KisSelectionBasedLayer::initSelection()
 {
     m_d->selection = KisSelectionSP(new KisSelection(KisDefaultBoundsSP(new KisDefaultBounds(image()))));
     m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
+    m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
     m_d->selection->setParentNode(this);
     m_d->selection->updateProjection();
 }
@@ -226,6 +227,7 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->setParentNode(this);
         m_d->selection->setDefaultBounds(new KisDefaultBounds(image()));
+        m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
         m_d->selection->updateProjection();
 
         KisPixelSelectionSP pixelSelection = m_d->selection->pixelSelection();

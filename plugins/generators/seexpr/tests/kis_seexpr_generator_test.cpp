@@ -55,6 +55,7 @@ void KisSeExprGeneratorTest::testGenerationFromScript()
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
+    dev->setSupportsWraparoundMode(true);
 
     KisFillPainter fillPainter(dev);
     fillPainter.fillRect(point.x(), point.y(), 256, 256, config);
@@ -89,6 +90,7 @@ void KisSeExprGeneratorTest::testGenerationFromKoResource()
     const KoColorSpace *cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
     dev->setDefaultBounds(bounds);
+    dev->setSupportsWraparoundMode(true);
 
     KisFillPainter fillPainter(dev);
     fillPainter.fillRect(point.x(), point.y(), 256, 256, config);

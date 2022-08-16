@@ -206,6 +206,7 @@ void KisMask::Private::initSelectionImpl(KisSelectionSP copyFrom, KisLayerSP par
         }
     }
     selection->setParentNode(q);
+    selection->pixelSelection()->setSupportsWraparoundMode(true);
     selection->updateProjection();
 }
 
@@ -251,6 +252,7 @@ void KisMask::setSelection(KisSelectionSP selection)
         m_d->selection->setDefaultBounds(new KisDefaultBounds(parentLayer->image()));
     }
     m_d->selection->setParentNode(this);
+    m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
 }
 
 void KisMask::select(const QRect & rc, quint8 selectedness)
@@ -481,6 +483,7 @@ void KisMask::testingInitSelection(const QRect &rect, KisLayerSP parentLayer)
     }
 
     m_d->selection->pixelSelection()->select(rect, OPACITY_OPAQUE_U8);
+    m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
     m_d->selection->updateProjection(rect);
     m_d->selection->setParentNode(this);
 }

@@ -135,6 +135,13 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                          "0",
                          "100"),
                      KisMyPaintOpOption::SPEED);
+
+    addPaintOpOption(new KisMyPaintCurveOptionWidget(
+                         new KisMyPaintCurveOption(KoID("offset_by_speed_slowness", i18n("Offset by Speed Filter")), KisPaintOpOption::GENERAL, false, 2, 0, 15),
+                         "0",
+                         "100"),
+                     KisMyPaintOpOption::SPEED);
+
     addPaintOpOption(new KisMyPaintCurveOptionWidget(
                          new KisMyPaintCurveOption(KoID("offset_by_random", i18n("Offset By Random")), KisPaintOpOption::GENERAL, false, 0.0, -3, 3),
                          "0",

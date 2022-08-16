@@ -160,7 +160,7 @@ struct MovePaintableNodeStrategy : public MoveNodeStrategyBase
 {
     MovePaintableNodeStrategy(KisNodeSP node)
         : MoveNodeStrategyBase(node),
-          m_transaction(node->paintDevice())
+          m_transaction(node->paintDevice(), 0, -1, 0, KisTransaction::SuppressUpdates)
     {
         // TODO: disable updates in the transaction
     }

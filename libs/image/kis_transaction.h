@@ -24,13 +24,21 @@ class KisTransactionWrapperFactory;
 class KisTransaction
 {
 public:
-    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0) {
-        m_transactionData = new KisTransactionData(name, device, true, interstrokeDataFactory, parent);
+    enum Flag {
+        None = 0x0,
+        SuppressUpdates = 0x1
+    };
+    Q_DECLARE_FLAGS(Flags, Flag)
+
+public:
+    KisTransaction(const KUndo2MagicString& name, KisPaintDeviceSP device, KUndo2Command* parent = 0,int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0, Flags flags = None) {
+        m_transactionData = new KisTransactionData(name, device, true, interstrokeDataFactory, parent, flags & SuppressUpdates);
         m_transactionData->setTimedID(timedID);
     }
 
-    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0, int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0)
-        : KisTransaction(KUndo2MagicString(), device, parent, timedID, interstrokeDataFactory){
+    KisTransaction(KisPaintDeviceSP device, KUndo2Command* parent = 0, int timedID = -1, KisTransactionWrapperFactory *interstrokeDataFactory = 0, Flags flags = None)
+        : KisTransaction(KUndo2MagicString(), device, parent, timedID, interstrokeDataFactory, flags)
+    {
     }
 
     virtual ~KisTransaction() {
@@ -111,17 +119,19 @@ protected:
     KisTransactionData* m_transactionData;
 };
 
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisTransaction::Flags)
+
 class KisSelectionTransaction : public KisTransaction
 {
 public:
     KisSelectionTransaction(KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, 0, parent);
+        m_transactionData = new KisTransactionData(KUndo2MagicString(), pixelSelection, false, 0, parent, false);
     }
 
     KisSelectionTransaction(const KUndo2MagicString& name, KisPixelSelectionSP pixelSelection, KUndo2Command* parent = 0)
     {
-        m_transactionData = new KisTransactionData(name, pixelSelection, false, 0, parent);
+        m_transactionData = new KisTransactionData(name, pixelSelection, false, 0, parent, false);
     }
 };
 

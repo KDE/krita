@@ -73,6 +73,13 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                          "100"),
                      KisMyPaintOpOption::BASIC);
 
+
+    addPaintOpOption(
+        new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption(KoID("pressure_gain_log", i18n("Pressure Gain")), KisPaintOpOption::GENERAL, false, 0.0, -2, 3),
+                                        "0",
+                                        "100"),
+        KisMyPaintOpOption::BASIC);
+
     addPaintOpOption(new KisAirbrushOptionWidget(false), KisMyPaintOpOption::AIRBRUSH);
     addPaintOpOption(
         new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption(KoID("change_color_h", i18n("Change Color H")), KisPaintOpOption::GENERAL, false, 0.0, -2, 2),

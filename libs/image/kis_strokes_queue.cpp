@@ -837,10 +837,6 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
                 stroke->type() == KisStroke::LOD0 &&
                 stroke->isCancelled();
 
-        KIS_SAFE_ASSERT_RECOVER_NOOP(!needsSyncLod0PlaneToGUI ||
-                                     (stroke->lodBuddy() &&
-                                      stroke->lodBuddy()->isCancelled()));
-
         /**
          * If the Lod0 stroke has been cancelled without even being
          * strated, it means that the GUI still has LodN tiles active,

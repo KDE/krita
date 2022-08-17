@@ -537,7 +537,14 @@ void KisPaintOpPresetsEditor::resourceSelected(KoResourceSP resource)
 
     // get the preset image and pop it into the thumbnail area on the top of the brush editor
     QSize thumbSize = QSize(55, 55)*devicePixelRatioF();
-    QPixmap thumbnail = QPixmap::fromImage(resource->image().scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    QImage thumbImage = resource->image();
+    QPixmap thumbnail;
+    if (!thumbImage.isNull()) {
+        thumbnail = QPixmap::fromImage(thumbImage.scaled(thumbSize, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    } else {
+        thumbnail = QPixmap::fromImage(QImage());
+    }
+
     thumbnail.setDevicePixelRatio(devicePixelRatioF());
     m_d->uiWdgPaintOpPresetSettings.presetThumbnailicon->setPixmap(thumbnail);
 

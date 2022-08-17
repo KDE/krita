@@ -73,9 +73,10 @@ void ColorizeMask::initializeKeyStrokeColors(QList<ManagedColor*> colors, int tr
         KisLazyFillTools::KeyStroke keyStroke;
         keyStroke.color = colors[i]->color();
         keyStroke.dev = new KisPaintDevice(KoColorSpaceRegistry::instance()->alpha8());
-        keyStroke.dev->setParentNode(this->node());
         keyStroke.dev->setDefaultBounds(new KisDefaultBounds(this->node()->image()));
         keyStroke.isTransparent = transparentIndex == i;
+        // NOTE: the parent node link is initialized in
+        //       setKeyStrokesDirect
 
         keyStrokes.append(keyStroke);
     }

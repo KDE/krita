@@ -389,8 +389,11 @@ struct MaskParent
          * Therefore we should wait for a decent amount of time for all
          * of them to land.
          */
-        QTest::qWait(500);
-        image->waitForDone();
+
+        do {
+            QTest::qWait(500);
+        } while (!image->tryBarrierLock(true));
+        image->unlock();
     }
 
     KisSurrogateUndoStore *undoStore;

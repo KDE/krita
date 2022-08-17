@@ -854,6 +854,7 @@ KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
 
     KisDefaultBoundsBaseSP bounds = new TestingDefaultBounds();
     dev->setDefaultBounds(bounds);
+    dev->setSupportsWraparoundMode(true);
 
     return dev;
 }

@@ -173,7 +173,10 @@ inline void linearize(QVector<float> &pixelValues,
     if (linearizePolicy == KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
     } else if (linearizePolicy == LinearFromHLG && applyOOTF) {
-        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+        applyHLGOOTF(pixelValues.data(),
+                     lCoef.constData(),
+                     displayGamma,
+                     displayNits);
     }
 }
 

@@ -16,24 +16,24 @@ template<typename Arch,
          bool applyOOTF,
          typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
                                    int> = 0>
-inline void linearize(QVector<float> &pixelValues,
-                      const QVector<double> &lCoef,
+inline void linearize(float *pixelValues,
+                      const double *lCoef,
                       float displayGamma,
                       float displayNits)
 {
     using float_v = typename KoColorTransferFunctions<Arch>::float_v;
     if (linearizePolicy == LinearFromPQ) {
-        auto v = float_v::load_unaligned(pixelValues.constData());
+        auto v = float_v::load_unaligned(pixelValues);
         KoColorTransferFunctions<Arch>::removeSmpte2048Curve(v);
-        v.store_unaligned(pixelValues.data());
+        v.store_unaligned(pixelValues);
     } else if (linearizePolicy == LinearFromHLG) {
-        auto v = float_v::load_unaligned(pixelValues.constData());
+        auto v = float_v::load_unaligned(pixelValues);
         KoColorTransferFunctions<Arch>::removeHLGCurve(v);
-        v.store_unaligned(pixelValues.data());
+        v.store_unaligned(pixelValues);
     } else if (linearizePolicy == LinearFromSMPTE428) {
-        auto v = float_v::load_unaligned(pixelValues.constData());
+        auto v = float_v::load_unaligned(pixelValues);
         KoColorTransferFunctions<Arch>::removeSMPTE_ST_428Curve(v);
-        v.store_unaligned(pixelValues.data());
+        v.store_unaligned(pixelValues);
     }
 
     if (linearizePolicy == KeepTheSame) {
@@ -48,8 +48,8 @@ template<typename Arch,
          bool applyOOTF,
          typename std::enable_if_t<std::is_same<Arch, xsimd::generic>::value,
                                    int> = 0>
-inline void linearize(QVector<float> &pixelValues,
-                      const QVector<double> &lCoef,
+inline void linearize(float *pixelValues,
+                      const double *lCoef,
                       float displayGamma,
                       float displayNits)
 {
@@ -159,25 +159,25 @@ inline void readLayer(const int width,
 {
     const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
     QVector<float> pixelValues(bufferSize<Arch>());
+    float *data = pixelValues.data();
 
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
+            for (int i = 0; i < bufferSize<Arch>(); i++) {
+                data[i] = 1.0f;
+            }
 
-            pixelValues[0] =
-                value<Arch, luma, linearizePolicy>(imgR, strideR, x, y);
-            pixelValues[1] =
-                value<Arch, luma, linearizePolicy>(imgG, strideG, x, y);
-            pixelValues[2] =
-                value<Arch, luma, linearizePolicy>(imgB, strideB, x, y);
+            data[0] = value<Arch, luma, linearizePolicy>(imgR, strideR, x, y);
+            data[1] = value<Arch, luma, linearizePolicy>(imgG, strideG, x, y);
+            data[2] = value<Arch, luma, linearizePolicy>(imgB, strideB, x, y);
 
             if (hasAlpha) {
-                pixelValues[3] =
+                data[3] =
                     value<Arch, luma, linearizePolicy>(imgA, strideA, x, y);
             }
 
-            linearize<Arch, linearizePolicy, applyOOTF>(pixelValues,
-                                                        lCoef,
+            linearize<Arch, linearizePolicy, applyOOTF>(data,
+                                                        lCoef.constData(),
                                                         displayGamma,
                                                         displayNits);
 

@@ -201,135 +201,43 @@ inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
 
 namespace Planar
 {
-template<int luma, LinearizePolicy linearizePolicy>
-inline float value(const uint8_t *img, int stride, int x, int y)
+inline auto readPlanarLayer(const int luma,
+                            LinearizePolicy policy,
+                            bool applyOOTF,
+                            bool hasAlpha,
+                            const int width,
+                            const int height,
+                            const uint8_t *imgR,
+                            const int strideR,
+                            const uint8_t *imgG,
+                            const int strideG,
+                            const uint8_t *imgB,
+                            const int strideB,
+                            const uint8_t *imgA,
+                            const int strideA,
+                            KisHLineIteratorSP it,
+                            float displayGamma,
+                            float displayNits,
+                            const KoColorSpace *colorSpace)
 {
-    if (luma == 8) {
-        return linearizeValueAsNeeded<linearizePolicy>(
-            float(img[y * (stride) + x]) / 255.0f);
-    } else {
-        uint16_t source =
-            reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + x];
-        if (luma == 10) {
-            return linearizeValueAsNeeded<linearizePolicy>(
-                float(0x03ff & (source)) * multiplier10bit);
-        } else if (luma == 12) {
-            return linearizeValueAsNeeded<linearizePolicy>(
-                float(0x0fff & (source)) * multiplier12bit);
-        } else {
-            return linearizeValueAsNeeded<linearizePolicy>(float(source)
-                                                           * multiplier16bit);
-        }
-    }
-}
-
-template<int luma,
-         LinearizePolicy linearizePolicy,
-         bool applyOOTF,
-         bool hasAlpha>
-inline void readLayer(const int width,
-                      const int height,
-                      const uint8_t *imgR,
-                      const int strideR,
-                      const uint8_t *imgG,
-                      const int strideG,
-                      const uint8_t *imgB,
-                      const int strideB,
-                      const uint8_t *imgA,
-                      const int strideA,
-                      KisHLineIteratorSP it,
-                      float displayGamma,
-                      float displayNits,
-                      const KoColorSpace *colorSpace)
-{
-    const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
-    QVector<float> pixelValues(4);
-
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
-
-            pixelValues[0] = value<luma, linearizePolicy>(imgR, strideR, x, y);
-            pixelValues[1] = value<luma, linearizePolicy>(imgG, strideG, x, y);
-            pixelValues[2] = value<luma, linearizePolicy>(imgB, strideB, x, y);
-
-            if (hasAlpha) {
-                pixelValues[3] =
-                    value<luma, linearizePolicy>(imgA, strideA, x, y);
-            }
-
-            linearize<linearizePolicy, applyOOTF>(pixelValues,
-                                                  lCoef,
-                                                  displayGamma,
-                                                  displayNits);
-
-            colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
-
-            it->nextPixel();
-        }
-
-        it->nextRow();
-    }
-}
-
-template<int luma,
-         LinearizePolicy linearizePolicy,
-         bool applyOOTF,
-         typename... Args>
-inline auto readPlanarLayerWithAlpha(bool hasAlpha, Args &&...args)
-{
-    if (hasAlpha) {
-        return Planar::readLayer<luma, linearizePolicy, applyOOTF, true>(
-            std::forward<Args>(args)...);
-    } else {
-        return Planar::readLayer<luma, linearizePolicy, applyOOTF, false>(
-            std::forward<Args>(args)...);
-    }
-}
-
-template<int luma, LinearizePolicy linearizePolicy, typename... Args>
-inline auto readPlanarLayerWithPolicy(bool applyOOTF, Args &&...args)
-{
-    if (applyOOTF) {
-        return readPlanarLayerWithAlpha<luma, linearizePolicy, true>(
-            std::forward<Args>(args)...);
-    } else {
-        return readPlanarLayerWithAlpha<luma, linearizePolicy, false>(
-            std::forward<Args>(args)...);
-    }
-}
-
-template<int luma, typename... Args>
-inline auto readPlanarLayerWithLuma(LinearizePolicy linearizePolicy,
-                                    Args &&...args)
-{
-    if (linearizePolicy == LinearFromHLG) {
-        return readPlanarLayerWithPolicy<luma, LinearFromHLG>(
-            std::forward<Args>(args)...);
-    } else if (linearizePolicy == LinearFromPQ) {
-        return readPlanarLayerWithPolicy<luma, LinearFromPQ>(
-            std::forward<Args>(args)...);
-    } else if (linearizePolicy == LinearFromSMPTE428) {
-        return readPlanarLayerWithPolicy<luma, LinearFromSMPTE428>(
-            std::forward<Args>(args)...);
-    } else {
-        return readPlanarLayerWithPolicy<luma, KeepTheSame>(
-            std::forward<Args>(args)...);
-    }
-}
-
-template<typename... Args>
-inline auto readPlanarLayer(const int luma, Args &&...args)
-{
-    if (luma == 8) {
-        return readPlanarLayerWithLuma<8>(std::forward<Args>(args)...);
-    } else if (luma == 10) {
-        return readPlanarLayerWithLuma<10>(std::forward<Args>(args)...);
-    } else if (luma == 12) {
-        return readPlanarLayerWithLuma<12>(std::forward<Args>(args)...);
-    } else {
-        return readPlanarLayerWithLuma<16>(std::forward<Args>(args)...);
-    }
+    return createOptimizedClass<readLayerImpl>(luma,
+                                               policy,
+                                               applyOOTF,
+                                               hasAlpha,
+                                               width,
+                                               height,
+                                               imgR,
+                                               strideR,
+                                               imgG,
+                                               strideG,
+                                               imgB,
+                                               strideB,
+                                               imgA,
+                                               strideA,
+                                               it,
+                                               displayGamma,
+                                               displayNits,
+                                               colorSpace);
 }
 } // namespace Planar
 

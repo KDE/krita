@@ -10,9 +10,20 @@ set(kritaheifimport_SOURCES
     DlgHeifImport.cpp
 )
 
+if(HAVE_XSIMD)
+    ko_compile_for_all_implementations(__per_arch_heif kis_heif_import_tools.cpp)
+
+    message("Following objects are generated from the per-arch lib")
+    foreach(_obj IN LISTS __per_arch_heif)
+        message("    * ${_obj}")
+    endforeach()
+else()
+    set(__per_arch_heif kis_heif_import_tools.cpp)
+endif()
+
 ki18n_wrap_ui(kritaheifimport_SOURCES DlgHeifImport.ui)
 
-kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
+kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES} ${__per_arch_heif})
 
 target_link_libraries(kritaheifimport kritaui kritalibkra
     ${HEIF_LDFLAGS} ${HEIF_LIBRARIES}

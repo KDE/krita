@@ -151,4 +151,29 @@ inline auto readPlanarLayer(const int luma, Args &&...args)
 }
 } // namespace Gray
 
+namespace Planar
+{
+struct readLayerImpl {
+    template<typename Arch>
+    static void create(const int luma,
+                       LinearizePolicy policy,
+                       bool applyOOTF,
+                       bool hasAlpha,
+                       const int width,
+                       const int height,
+                       const uint8_t *imgR,
+                       const int strideR,
+                       const uint8_t *imgG,
+                       const int strideG,
+                       const uint8_t *imgB,
+                       const int strideB,
+                       const uint8_t *imgA,
+                       const int strideA,
+                       KisHLineIteratorSP it,
+                       float displayGamma,
+                       float displayNits,
+                       const KoColorSpace *colorSpace);
+};
+} // namespace Planar
+
 #endif // KIS_HEIF_IMPORT_TOOLS_H

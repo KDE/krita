@@ -22,7 +22,6 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceEngine.h>
 #include <KoColorSpaceRegistry.h>
-#include <KoColorTransferFunctions.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
@@ -36,7 +35,7 @@
 #include <kis_transaction.h>
 
 #include "DlgHeifImport.h"
-#include "kis_types.h"
+#include "kis_heif_import_tools.h"
 
 using heif::Error;
 
@@ -85,171 +84,42 @@ private:
   int64_t m_total_length;
 };
 
-static constexpr float max16bit = 65535.0f;
-static constexpr float multiplier10bit = 1.0f / 1023.0f;
-static constexpr float multiplier12bit = 1.0f / 4095.0f;
-static constexpr float multiplier16bit = 1.0f / max16bit;
-
-namespace Gray
-{
-template<int luma>
-inline void applyValue(KisHLineIteratorSP it,
-                       const uint8_t *imgG,
-                       int strideG,
-                       int x,
-                       int y)
-{
-    if (luma == 8) {
-        KoGrayU8Traits::setGray(it->rawData(), imgG[y * strideG + x]);
-    } else {
-        uint16_t source =
-            KoGrayU16Traits::nativeArray(imgG)[y * (strideG / 2) + (x)];
-
-        if (luma == 10) {
-            KoGrayU16Traits::setGray(
-                it->rawData(),
-                static_cast<uint16_t>(float(0x03ffu & (source))
-                                      * multiplier10bit * max16bit));
-        } else if (luma == 12) {
-            KoGrayU16Traits::setGray(
-                it->rawData(),
-                static_cast<uint16_t>(float(0x0fffu & (source))
-                                      * multiplier12bit * max16bit));
-        } else {
-            KoGrayU16Traits::setGray(
-                it->rawData(),
-                static_cast<uint16_t>(float(source) * multiplier16bit));
-        }
-    }
-}
-
-template<int luma, bool hasAlpha>
-inline void applyAlpha(KisHLineIteratorSP it,
-                       const uint8_t *imgA,
-                       int strideA,
-                       int x,
-                       int y)
-{
-    if (hasAlpha) {
-        if (luma == 8) {
-            KoGrayU8Traits::setOpacity(it->rawData(),
-                                       quint8(imgA[y * strideA + x]),
-                                       1);
-        } else {
-            uint16_t source =
-                KoGrayU16Traits::nativeArray(imgA)[y * (strideA / 2) + x];
-            if (luma == 10) {
-                KoGrayU16Traits::setOpacity(
-                    it->rawData(),
-                    static_cast<qreal>(float(0x0fff & (source))
-                                        * multiplier10bit),
-                    1);
-            } else if (luma == 12) {
-                KoGrayU16Traits::setOpacity(
-                    it->rawData(),
-                    static_cast<qreal>(float(0x0fff & (source))
-                                        * multiplier12bit),
-                    1);
-            } else {
-                KoGrayU16Traits::setOpacity(
-                    it->rawData(),
-                    static_cast<qreal>(float(source) * multiplier16bit),
-                    1);
-            }
-        }
-    } else {
-        if (luma == 8) {
-            KoGrayU8Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-        } else {
-            KoGrayU16Traits::setOpacity(it->rawData(), OPACITY_OPAQUE_U8, 1);
-        }
-    }
-}
-
-template<int luma, bool hasAlpha>
-void readLayer(const int width,
-               const int height,
-               KisHLineIteratorSP it,
-               const uint8_t *imgG,
-               const uint8_t *imgA,
-               const int strideG,
-               const int strideA)
-{
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            applyValue<luma>(it, imgG, strideG, x, y);
-
-            applyAlpha<luma, hasAlpha>(it, imgA, strideA, x, y);
-            it->nextPixel();
-        }
-
-        it->nextRow();
-    }
-}
-
-template<int luma, typename... Args>
-inline auto readPlanarWithLuma(bool hasAlpha, Args &&...args)
-{
-    if (hasAlpha) {
-        return Gray::readLayer<luma, true>(std::forward<Args>(args)...);
-    } else {
-        return Gray::readLayer<luma, false>(std::forward<Args>(args)...);
-    }
-}
-
-template<typename... Args>
-inline auto readPlanarLayer(const int luma, Args &&...args)
-{
-    if (luma == 8) {
-        return readPlanarWithLuma<8>(std::forward<Args>(args)...);
-    } else if (luma == 10) {
-        return readPlanarWithLuma<10>(std::forward<Args>(args)...);
-    } else if (luma == 12) {
-        return readPlanarWithLuma<12>(std::forward<Args>(args)...);
-    } else {
-        return readPlanarWithLuma<16>(std::forward<Args>(args)...);
-    }
-}
-} // namespace Gray
-
-template<HeifImport::LinearizePolicy policy>
+template<LinearizePolicy policy>
 inline float linearizeValueAsNeeded(float value)
 {
-    if (policy == HeifImport::LinearFromPQ) {
+    if (policy == LinearFromPQ) {
         return removeSmpte2048Curve(value);
-    } else if (policy == HeifImport::LinearFromHLG) {
+    } else if (policy == LinearFromHLG) {
         return removeHLGCurve(value);
-    } else if (policy == HeifImport::LinearFromSMPTE428) {
+    } else if (policy == LinearFromSMPTE428) {
         return removeSMPTE_ST_428Curve(value);
     }
     return value;
 }
 
-template<HeifImport::LinearizePolicy linearizePolicy, bool applyOOTF>
+template<LinearizePolicy linearizePolicy, bool applyOOTF>
 inline void linearize(QVector<float> &pixelValues,
                       const QVector<double> &lCoef,
                       float displayGamma,
                       float displayNits)
 {
-    if (linearizePolicy == HeifImport::KeepTheSame) {
+    if (linearizePolicy == KeepTheSame) {
         qSwap(pixelValues[0], pixelValues[2]);
-    } else if (linearizePolicy == HeifImport::LinearFromHLG && applyOOTF) {
+    } else if (linearizePolicy == LinearFromHLG && applyOOTF) {
         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
     }
 }
 
 namespace SDR
 {
-template<HeifImport::LinearizePolicy linearizePolicy, int channels>
+template<LinearizePolicy linearizePolicy, int channels>
 inline float value(const uint8_t *img, int stride, int x, int y, int ch)
 {
     uint8_t source = img[(y * stride) + (x * channels) + ch];
     return linearizeValueAsNeeded<linearizePolicy>(float(source) / 255.0f);
 }
 
-template<HeifImport::LinearizePolicy linearizePolicy,
-         bool applyOOTF,
-         int channels>
+template<LinearizePolicy linearizePolicy, bool applyOOTF, int channels>
 inline void readLayer(const int width,
                       const int height,
                       const uint8_t *img,
@@ -285,9 +155,7 @@ inline void readLayer(const int width,
     }
 }
 
-template<HeifImport::LinearizePolicy linearizePolicy,
-         bool applyOOTF,
-         typename... Args>
+template<LinearizePolicy linearizePolicy, bool applyOOTF, typename... Args>
 inline auto readInterleavedWithAlpha(bool hasAlpha, Args &&...args)
 {
     if (hasAlpha) {
@@ -299,7 +167,7 @@ inline auto readInterleavedWithAlpha(bool hasAlpha, Args &&...args)
     }
 }
 
-template<HeifImport::LinearizePolicy linearizePolicy, typename... Args>
+template<LinearizePolicy linearizePolicy, typename... Args>
 inline auto readInterleavedWithPolicy(bool applyOOTF, Args &&...args)
 {
     if (applyOOTF) {
@@ -312,20 +180,20 @@ inline auto readInterleavedWithPolicy(bool applyOOTF, Args &&...args)
 }
 
 template<typename... Args>
-inline auto readInterleavedLayer(HeifImport::LinearizePolicy linearizePolicy,
+inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
                                  Args &&...args)
 {
-    if (linearizePolicy == HeifImport::LinearFromHLG) {
-        return readInterleavedWithPolicy<HeifImport::LinearFromHLG>(
+    if (linearizePolicy == LinearFromHLG) {
+        return readInterleavedWithPolicy<LinearFromHLG>(
             std::forward<Args>(args)...);
-    } else if (linearizePolicy == HeifImport::LinearFromPQ) {
-        return readInterleavedWithPolicy<HeifImport::LinearFromPQ>(
+    } else if (linearizePolicy == LinearFromPQ) {
+        return readInterleavedWithPolicy<LinearFromPQ>(
             std::forward<Args>(args)...);
-    } else if (linearizePolicy == HeifImport::LinearFromSMPTE428) {
-        return readInterleavedWithPolicy<HeifImport::LinearFromSMPTE428>(
+    } else if (linearizePolicy == LinearFromSMPTE428) {
+        return readInterleavedWithPolicy<LinearFromSMPTE428>(
             std::forward<Args>(args)...);
     } else {
-        return readInterleavedWithPolicy<HeifImport::KeepTheSame>(
+        return readInterleavedWithPolicy<KeepTheSame>(
             std::forward<Args>(args)...);
     }
 }
@@ -333,7 +201,7 @@ inline auto readInterleavedLayer(HeifImport::LinearizePolicy linearizePolicy,
 
 namespace Planar
 {
-template<int luma, HeifImport::LinearizePolicy linearizePolicy>
+template<int luma, LinearizePolicy linearizePolicy>
 inline float value(const uint8_t *img, int stride, int x, int y)
 {
     if (luma == 8) {
@@ -356,7 +224,7 @@ inline float value(const uint8_t *img, int stride, int x, int y)
 }
 
 template<int luma,
-         HeifImport::LinearizePolicy linearizePolicy,
+         LinearizePolicy linearizePolicy,
          bool applyOOTF,
          bool hasAlpha>
 inline void readLayer(const int width,
@@ -405,7 +273,7 @@ inline void readLayer(const int width,
 }
 
 template<int luma,
-         HeifImport::LinearizePolicy linearizePolicy,
+         LinearizePolicy linearizePolicy,
          bool applyOOTF,
          typename... Args>
 inline auto readPlanarLayerWithAlpha(bool hasAlpha, Args &&...args)
@@ -419,9 +287,7 @@ inline auto readPlanarLayerWithAlpha(bool hasAlpha, Args &&...args)
     }
 }
 
-template<int luma,
-         HeifImport::LinearizePolicy linearizePolicy,
-         typename... Args>
+template<int luma, LinearizePolicy linearizePolicy, typename... Args>
 inline auto readPlanarLayerWithPolicy(bool applyOOTF, Args &&...args)
 {
     if (applyOOTF) {
@@ -434,20 +300,20 @@ inline auto readPlanarLayerWithPolicy(bool applyOOTF, Args &&...args)
 }
 
 template<int luma, typename... Args>
-inline auto readPlanarLayerWithLuma(HeifImport::LinearizePolicy linearizePolicy,
+inline auto readPlanarLayerWithLuma(LinearizePolicy linearizePolicy,
                                     Args &&...args)
 {
-    if (linearizePolicy == HeifImport::LinearFromHLG) {
-        return readPlanarLayerWithPolicy<luma, HeifImport::LinearFromHLG>(
+    if (linearizePolicy == LinearFromHLG) {
+        return readPlanarLayerWithPolicy<luma, LinearFromHLG>(
             std::forward<Args>(args)...);
-    } else if (linearizePolicy == HeifImport::LinearFromPQ) {
-        return readPlanarLayerWithPolicy<luma, HeifImport::LinearFromPQ>(
+    } else if (linearizePolicy == LinearFromPQ) {
+        return readPlanarLayerWithPolicy<luma, LinearFromPQ>(
             std::forward<Args>(args)...);
-    } else if (linearizePolicy == HeifImport::LinearFromSMPTE428) {
-        return readPlanarLayerWithPolicy<luma, HeifImport::LinearFromSMPTE428>(
+    } else if (linearizePolicy == LinearFromSMPTE428) {
+        return readPlanarLayerWithPolicy<luma, LinearFromSMPTE428>(
             std::forward<Args>(args)...);
     } else {
-        return readPlanarLayerWithPolicy<luma, HeifImport::KeepTheSame>(
+        return readPlanarLayerWithPolicy<luma, KeepTheSame>(
             std::forward<Args>(args)...);
     }
 }
@@ -469,7 +335,7 @@ inline auto readPlanarLayer(const int luma, Args &&...args)
 
 namespace HDR
 {
-template<int luma, HeifImport::LinearizePolicy linearizePolicy>
+template<int luma, LinearizePolicy linearizePolicy>
 inline float valueInterleaved(const uint8_t *img,
                               int stride,
                               int x,
@@ -492,7 +358,7 @@ inline float valueInterleaved(const uint8_t *img,
 }
 
 template<int luma,
-         HeifImport::LinearizePolicy linearizePolicy,
+         LinearizePolicy linearizePolicy,
          bool applyOOTF,
          int channels>
 inline void readLayer(const int width,
@@ -536,7 +402,7 @@ inline void readLayer(const int width,
 }
 
 template<int luma,
-         HeifImport::LinearizePolicy linearizePolicy,
+         LinearizePolicy linearizePolicy,
          bool applyOOTF,
          typename... Args>
 inline auto readInterleavedWithAlpha(bool hasAlpha, Args &&...args)
@@ -550,9 +416,7 @@ inline auto readInterleavedWithAlpha(bool hasAlpha, Args &&...args)
     }
 }
 
-template<int luma,
-         HeifImport::LinearizePolicy linearizePolicy,
-         typename... Args>
+template<int luma, LinearizePolicy linearizePolicy, typename... Args>
 inline auto readInterleavedWithPolicy(bool applyOOTF, Args &&...args)
 {
     if (applyOOTF) {
@@ -565,20 +429,20 @@ inline auto readInterleavedWithPolicy(bool applyOOTF, Args &&...args)
 }
 
 template<int luma, typename... Args>
-inline auto readInterleavedWithLuma(HeifImport::LinearizePolicy linearizePolicy,
+inline auto readInterleavedWithLuma(LinearizePolicy linearizePolicy,
                                     Args &&...args)
 {
-    if (linearizePolicy == HeifImport::LinearFromHLG) {
-        return readInterleavedWithPolicy<luma, HeifImport::LinearFromHLG>(
+    if (linearizePolicy == LinearFromHLG) {
+        return readInterleavedWithPolicy<luma, LinearFromHLG>(
             std::forward<Args>(args)...);
-    } else if (linearizePolicy == HeifImport::LinearFromPQ) {
-        return readInterleavedWithPolicy<luma, HeifImport::LinearFromPQ>(
+    } else if (linearizePolicy == LinearFromPQ) {
+        return readInterleavedWithPolicy<luma, LinearFromPQ>(
             std::forward<Args>(args)...);
-    } else if (linearizePolicy == HeifImport::LinearFromSMPTE428) {
-        return readInterleavedWithPolicy<luma, HeifImport::LinearFromSMPTE428>(
+    } else if (linearizePolicy == LinearFromSMPTE428) {
+        return readInterleavedWithPolicy<luma, LinearFromSMPTE428>(
             std::forward<Args>(args)...);
     } else {
-        return readInterleavedWithPolicy<luma, HeifImport::KeepTheSame>(
+        return readInterleavedWithPolicy<luma, KeepTheSame>(
             std::forward<Args>(args)...);
     }
 }

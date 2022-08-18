@@ -126,6 +126,37 @@ inline auto readPlanarLayer(const int luma,
 }
 } // namespace Planar
 
+namespace HDR
+{
+template<typename... Args>
+inline auto readInterleavedLayer(const int luma,
+                                 LinearizePolicy linearizePolicy,
+                                 bool applyOOTF,
+                                 const int channels,
+                                 const int width,
+                                 const int height,
+                                 const uint8_t *img,
+                                 const int stride,
+                                 KisHLineIteratorSP it,
+                                 float displayGamma,
+                                 float displayNits,
+                                 const KoColorSpace *colorSpace)
+{
+    return createOptimizedClass<HDR::readLayerImpl>(luma,
+                                                    linearizePolicy,
+                                                    applyOOTF,
+                                                    channels,
+                                                    width,
+                                                    height,
+                                                    img,
+                                                    stride,
+                                                    it,
+                                                    displayGamma,
+                                                    displayNits,
+                                                    colorSpace);
+}
+} // namespace HDR
+
 KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     // Wrap input stream into heif Reader object

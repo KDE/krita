@@ -177,6 +177,95 @@ inline void linearize(QVector<float> &pixelValues,
     }
 }
 
+namespace SDR
+{
+template<LinearizePolicy linearizePolicy, int channels>
+inline float value(const uint8_t *img, int stride, int x, int y, int ch)
+{
+    uint8_t source = img[(y * stride) + (x * channels) + ch];
+    return linearizeValueAsNeeded<linearizePolicy>(float(source) / 255.0f);
+}
+
+template<LinearizePolicy linearizePolicy, bool applyOOTF, int channels>
+inline void readLayer(const int width,
+                      const int height,
+                      const uint8_t *img,
+                      const int stride,
+                      KisHLineIteratorSP it,
+                      float displayGamma,
+                      float displayNits,
+                      const KoColorSpace *colorSpace)
+{
+    const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
+    QVector<float> pixelValues(4);
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
+
+            for (int ch = 0; ch < channels; ch++) {
+                pixelValues[ch] =
+                    value<linearizePolicy, channels>(img, stride, x, y, ch);
+            }
+
+            linearize<linearizePolicy, applyOOTF>(pixelValues,
+                                                  lCoef,
+                                                  displayGamma,
+                                                  displayNits);
+
+            colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+
+            it->nextPixel();
+        }
+
+        it->nextRow();
+    }
+}
+
+template<LinearizePolicy linearizePolicy, bool applyOOTF, typename... Args>
+inline auto readInterleavedWithAlpha(bool hasAlpha, Args &&...args)
+{
+    if (hasAlpha) {
+        return SDR::readLayer<linearizePolicy, applyOOTF, 4>(
+            std::forward<Args>(args)...);
+    } else {
+        return SDR::readLayer<linearizePolicy, applyOOTF, 3>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<LinearizePolicy linearizePolicy, typename... Args>
+inline auto readInterleavedWithPolicy(bool applyOOTF, Args &&...args)
+{
+    if (applyOOTF) {
+        return readInterleavedWithAlpha<linearizePolicy, true>(
+            std::forward<Args>(args)...);
+    } else {
+        return readInterleavedWithAlpha<linearizePolicy, false>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<typename... Args>
+inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
+                                 Args &&...args)
+{
+    if (linearizePolicy == LinearFromHLG) {
+        return readInterleavedWithPolicy<LinearFromHLG>(
+            std::forward<Args>(args)...);
+    } else if (linearizePolicy == LinearFromPQ) {
+        return readInterleavedWithPolicy<LinearFromPQ>(
+            std::forward<Args>(args)...);
+    } else if (linearizePolicy == LinearFromSMPTE428) {
+        return readInterleavedWithPolicy<LinearFromSMPTE428>(
+            std::forward<Args>(args)...);
+    } else {
+        return readInterleavedWithPolicy<KeepTheSame>(
+            std::forward<Args>(args)...);
+    }
+}
+} // namespace SDR
+
 namespace Planar
 {
 struct readLayerImpl {

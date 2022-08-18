@@ -157,6 +157,35 @@ inline auto readInterleavedLayer(const int luma,
 }
 } // namespace HDR
 
+namespace SDR
+{
+template<typename... Args>
+inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
+                                 bool applyOOTF,
+                                 const int channels,
+                                 const int width,
+                                 const int height,
+                                 const uint8_t *img,
+                                 const int stride,
+                                 KisHLineIteratorSP it,
+                                 float displayGamma,
+                                 float displayNits,
+                                 const KoColorSpace *colorSpace)
+{
+    return createOptimizedClass<SDR::readLayerImpl>(linearizePolicy,
+                                                    applyOOTF,
+                                                    channels,
+                                                    width,
+                                                    height,
+                                                    img,
+                                                    stride,
+                                                    it,
+                                                    displayGamma,
+                                                    displayNits,
+                                                    colorSpace);
+}
+} // namespace SDR
+
 KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
     // Wrap input stream into heif Reader object

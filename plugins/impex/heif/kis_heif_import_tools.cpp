@@ -654,4 +654,254 @@ readLayerImpl::create<xsimd::current_arch>(const int luma,
                                            const KoColorSpace *colorSpace);
 } // namespace HDR
 
+namespace SDR
+{
+template<typename Arch,
+         LinearizePolicy linearizePolicy,
+         bool applyOOTF,
+         typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
+                                   int> = 0>
+inline void linearize(float *pixelValues,
+                      const double *lCoef,
+                      float displayGamma,
+                      float displayNits)
+{
+    using float_v = typename KoColorTransferFunctions<Arch>::float_v;
+    if (linearizePolicy == LinearFromPQ) {
+        auto v = float_v::load_unaligned(pixelValues);
+        KoColorTransferFunctions<Arch>::removeSmpte2048Curve(v);
+        v.store_unaligned(pixelValues);
+    } else if (linearizePolicy == LinearFromHLG) {
+        auto v = float_v::load_unaligned(pixelValues);
+        KoColorTransferFunctions<Arch>::removeHLGCurve(v);
+        v.store_unaligned(pixelValues);
+    } else if (linearizePolicy == LinearFromSMPTE428) {
+        auto v = float_v::load_unaligned(pixelValues);
+        KoColorTransferFunctions<Arch>::removeSMPTE_ST_428Curve(v);
+        v.store_unaligned(pixelValues);
+    }
+
+    if (linearizePolicy == KeepTheSame) {
+        qSwap(pixelValues[0], pixelValues[2]);
+    } else if (linearizePolicy == LinearFromHLG && applyOOTF) {
+        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+    }
+}
+
+template<typename Arch,
+         LinearizePolicy linearizePolicy,
+         bool applyOOTF,
+         typename std::enable_if_t<std::is_same<Arch, xsimd::generic>::value,
+                                   int> = 0>
+inline void linearize(float *pixelValues,
+                      const double *lCoef,
+                      float displayGamma,
+                      float displayNits)
+{
+    if (linearizePolicy == KeepTheSame) {
+        qSwap(pixelValues[0], pixelValues[2]);
+    } else if (linearizePolicy == LinearFromHLG && applyOOTF) {
+        applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
+    }
+}
+
+template<typename Arch,
+         LinearizePolicy linearizePolicy,
+         int channels,
+         typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
+                                   int> = 0>
+inline float value(const uint8_t *img, int stride, int x, int y, int ch)
+{
+    uint8_t source = img[(y * stride) + (x * channels) + ch];
+    return float(source) / 255.0f;
+}
+
+template<LinearizePolicy policy>
+inline float linearizeValueAsNeeded(float value)
+{
+    if (policy == LinearFromPQ) {
+        return removeSmpte2048Curve(value);
+    } else if (policy == LinearFromHLG) {
+        return removeHLGCurve(value);
+    } else if (policy == LinearFromSMPTE428) {
+        return removeSMPTE_ST_428Curve(value);
+    }
+    return value;
+}
+
+template<typename Arch,
+         LinearizePolicy linearizePolicy,
+         int channels,
+         typename std::enable_if_t<std::is_same<Arch, xsimd::generic>::value,
+                                   int> = 0>
+inline float value(const uint8_t *img, int stride, int x, int y, int ch)
+{
+    uint8_t source = img[(y * stride) + (x * channels) + ch];
+    return linearizeValueAsNeeded<linearizePolicy>(float(source) / 255.0f);
+}
+
+template<typename Arch,
+         int channels,
+         typename std::enable_if_t<std::is_same<Arch, xsimd::generic>::value,
+                                   int> = 0>
+constexpr int bufferSize()
+{
+    return channels;
+}
+
+template<typename Arch,
+         int channels,
+         typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
+                                   int> = 0>
+constexpr int bufferSize()
+{
+    return qMax<int>(channels, KoStreamedMath<Arch>::float_v::size);
+}
+
+template<typename Arch,
+         LinearizePolicy linearizePolicy,
+         bool applyOOTF,
+         int channels>
+inline void readLayer(const int width,
+                      const int height,
+                      const uint8_t *img,
+                      const int stride,
+                      KisHLineIteratorSP it,
+                      float displayGamma,
+                      float displayNits,
+                      const KoColorSpace *colorSpace)
+{
+    const QVector<qreal> lCoef{colorSpace->lumaCoefficients()};
+    QVector<float> pixelValues(bufferSize<Arch, channels>());
+    float *data = pixelValues.data();
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            for (int i = 0; i < bufferSize<Arch, channels>(); i++) {
+                data[i] = 0;
+            }
+
+            for (int ch = 0; ch < channels; ch++) {
+                data[ch] = value<Arch, linearizePolicy, channels>(img,
+                                                                  stride,
+                                                                  x,
+                                                                  y,
+                                                                  ch);
+            }
+
+            linearize<Arch, linearizePolicy, applyOOTF>(data,
+                                                        lCoef.constData(),
+                                                        displayGamma,
+                                                        displayNits);
+
+            colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+
+            it->nextPixel();
+        }
+
+        it->nextRow();
+    }
+}
+
+template<typename Arch,
+         LinearizePolicy linearizePolicy,
+         bool applyOOTF,
+         typename... Args>
+inline auto readInterleavedWithAlpha(bool hasAlpha, Args &&...args)
+{
+    if (hasAlpha) {
+        return SDR::readLayer<Arch, linearizePolicy, applyOOTF, 4>(
+            std::forward<Args>(args)...);
+    } else {
+        return SDR::readLayer<Arch, linearizePolicy, applyOOTF, 3>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<typename Arch, LinearizePolicy linearizePolicy, typename... Args>
+inline auto readInterleavedWithPolicy(bool applyOOTF, Args &&...args)
+{
+    if (applyOOTF) {
+        return readInterleavedWithAlpha<Arch, linearizePolicy, true>(
+            std::forward<Args>(args)...);
+    } else {
+        return readInterleavedWithAlpha<Arch, linearizePolicy, false>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<typename Arch>
+void readLayerImpl::create(LinearizePolicy linearizePolicy,
+                           bool applyOOTF,
+                           bool hasAlpha,
+                           const int width,
+                           const int height,
+                           const uint8_t *img,
+                           const int stride,
+                           KisHLineIteratorSP it,
+                           float displayGamma,
+                           float displayNits,
+                           const KoColorSpace *colorSpace)
+{
+    if (linearizePolicy == LinearFromHLG) {
+        return readInterleavedWithPolicy<Arch, LinearFromHLG>(applyOOTF,
+                                                              hasAlpha,
+                                                              width,
+                                                              height,
+                                                              img,
+                                                              stride,
+                                                              it,
+                                                              displayGamma,
+                                                              displayNits,
+                                                              colorSpace);
+    } else if (linearizePolicy == LinearFromPQ) {
+        return readInterleavedWithPolicy<Arch, LinearFromPQ>(applyOOTF,
+                                                             hasAlpha,
+                                                             width,
+                                                             height,
+                                                             img,
+                                                             stride,
+                                                             it,
+                                                             displayGamma,
+                                                             displayNits,
+                                                             colorSpace);
+    } else if (linearizePolicy == LinearFromSMPTE428) {
+        return readInterleavedWithPolicy<Arch, LinearFromSMPTE428>(applyOOTF,
+                                                                   hasAlpha,
+                                                                   width,
+                                                                   height,
+                                                                   img,
+                                                                   stride,
+                                                                   it,
+                                                                   displayGamma,
+                                                                   displayNits,
+                                                                   colorSpace);
+    } else {
+        return readInterleavedWithPolicy<Arch, KeepTheSame>(applyOOTF,
+                                                            hasAlpha,
+                                                            width,
+                                                            height,
+                                                            img,
+                                                            stride,
+                                                            it,
+                                                            displayGamma,
+                                                            displayNits,
+                                                            colorSpace);
+    }
+}
+
+template void
+readLayerImpl::create<xsimd::current_arch>(LinearizePolicy linearizePolicy,
+                                           bool applyOOTF,
+                                           bool hasAlpha,
+                                           const int width,
+                                           const int height,
+                                           const uint8_t *img,
+                                           const int stride,
+                                           KisHLineIteratorSP it,
+                                           float displayGamma,
+                                           float displayNits,
+                                           const KoColorSpace *colorSpace);
+} // namespace SDR
+
 #endif // XSIMD_UNIVERSAL_BUILD_PASS

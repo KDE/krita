@@ -339,81 +339,66 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
                 img.add_plane(heif_channel_Y, width, height, 8);
 
-                uint8_t *ptrG {nullptr};
-                uint8_t *ptrA {nullptr};
                 int strideG = 0;
                 int strideA = 0;
 
-                ptrG = img.get_plane(heif_channel_Y, &strideG);
-
-                if (hasAlpha) {
-                    img.add_plane(heif_channel_Alpha, width, height, 8);
-                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-                }
+                uint8_t *ptrG = img.get_plane(heif_channel_Y, &strideG);
+                uint8_t *ptrA = [&]() -> uint8_t * {
+                    if (hasAlpha) {
+                        img.add_plane(heif_channel_Alpha, width, height, 8);
+                        return img.get_plane(heif_channel_Alpha, &strideA);
+                    } else {
+                        return nullptr;
+                    }
+                }();
 
                 KisPaintDeviceSP pd = image->projection();
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        ptrG[y * strideG + x] = KoGrayU8Traits::gray(it->rawData());
-
-                        if (hasAlpha) {
-                            ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
+                Gray::writePlanarLayer(QSysInfo::ByteOrder,
+                                       8,
+                                       hasAlpha,
+                                       width,
+                                       height,
+                                       ptrG,
+                                       strideG,
+                                       ptrA,
+                                       strideA,
+                                       it);
             } else {
                 dbgFile << "Saving as 12 bit monochrome";
                 img.create(width, height, heif_colorspace_monochrome, heif_chroma_monochrome);
 
                 img.add_plane(heif_channel_Y, width, height, 12);
 
-                uint8_t *ptrG {nullptr};
-                uint8_t *ptrA {nullptr};
                 int strideG = 0;
                 int strideA = 0;
 
-                ptrG = img.get_plane(heif_channel_Y, &strideG);
-
-                if (hasAlpha) {
-                    img.add_plane(heif_channel_Alpha, width, height, 12);
-                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-                }
+                uint8_t *ptrG = img.get_plane(heif_channel_Y, &strideG);
+                uint8_t *ptrA = [&]() -> uint8_t * {
+                    if (hasAlpha) {
+                        img.add_plane(heif_channel_Alpha, width, height, 12);
+                        return img.get_plane(heif_channel_Alpha, &strideA);
+                    } else {
+                        return nullptr;
+                    }
+                }();
 
                 KisPaintDeviceSP pd = image->projection();
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        uint16_t v = qBound<uint16_t>(
-                            0,
-                            static_cast<uint16_t>(
-                                float(KoGrayU16Traits::gray(it->rawData()))
-                                * multiplier16bit * max12bit),
-                            max12bit);
-                        ptrG[(x*2) + y * strideG + endValue0] = (uint8_t) (v >> 8);
-                        ptrG[(x*2) + y * strideG + endValue1] = (uint8_t) (v & 0xFF);
-
-                        if (hasAlpha) {
-                            uint16_t vA = qBound<uint16_t>(
-                                0,
-                                static_cast<uint16_t>(
-                                    cs->opacityF(it->rawData()) * max12bit),
-                                max12bit);
-                            ptrA[(x*2) + y * strideA + endValue0] = (uint8_t) (vA >> 8);
-                            ptrA[(x*2) + y * strideA + endValue1] = (uint8_t) (vA & 0xFF);
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
+                Gray::writePlanarLayer(QSysInfo::ByteOrder,
+                                       12,
+                                       hasAlpha,
+                                       width,
+                                       height,
+                                       ptrG,
+                                       strideG,
+                                       ptrA,
+                                       strideA,
+                                       it);
             }
         }
 

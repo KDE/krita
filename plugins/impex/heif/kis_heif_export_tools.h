@@ -67,4 +67,70 @@ inline auto writeLayer(bool hasAlpha, Args &&...args)
 }
 } // namespace Planar
 
+namespace HDR
+{
+template<int endValue0, int endValue1, int channels>
+inline void writeLayerImpl(const int width,
+                           const int height,
+                           uint8_t *ptr,
+                           const int stride,
+                           KisHLineConstIteratorSP it)
+{
+    std::array<KoBgrU16Traits::channels_type, channels> pixelValues{};
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            const quint8 *data = it->rawDataConst();
+            pixelValues[0] = KoBgrU16Traits::red(data);
+            pixelValues[1] = KoBgrU16Traits::green(data);
+            pixelValues[2] = KoBgrU16Traits::blue(data);
+            if (channels == 4) {
+                pixelValues[3] = static_cast<KoBgrU16Traits::channels_type>(
+                    KoBgrU16Traits::opacityF(data) * max16bit);
+            }
+
+            for (int ch = 0; ch < channels; ch++) {
+                uint16_t v = qBound<uint16_t>(
+                    0,
+                    static_cast<uint16_t>(float(pixelValues[ch])
+                                          * multiplier16bit * max12bit),
+                    max12bit);
+                ptr[2 * (x * channels) + y * stride + endValue0 + (ch * 2)] =
+                    static_cast<uint8_t>(v >> 8);
+                ptr[2 * (x * channels) + y * stride + endValue1 + (ch * 2)] =
+                    static_cast<uint8_t>(v & 0xFF);
+            }
+
+            it->nextPixel();
+        }
+
+        it->nextRow();
+    }
+}
+
+template<int endValue0, int endValue1, typename... Args>
+inline auto writeInterleavedWithAlpha(bool hasAlpha, Args &&...args)
+{
+    if (hasAlpha) {
+        return HDR::writeLayerImpl<endValue0, endValue1, 4>(
+            std::forward<Args>(args)...);
+    } else {
+        return HDR::writeLayerImpl<endValue0, endValue1, 3>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<typename... Args>
+inline auto writeInterleavedLayer(QSysInfo::Endian endian, Args &&...args)
+{
+    if (endian == QSysInfo::LittleEndian) {
+        return HDR::writeInterleavedWithAlpha<1, 0>(
+            std::forward<Args>(args)...);
+    } else {
+        return HDR::writeInterleavedWithAlpha<0, 1>(
+            std::forward<Args>(args)...);
+    }
+}
+} // namespace HDR
+
 #endif // KIS_HEIF_EXPORT_TOOLS_H

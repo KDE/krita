@@ -267,39 +267,21 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.create(width,height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
-                uint8_t *ptr {nullptr};
                 int stride = 0;
 
-                ptr = img.get_plane(heif_channel_interleaved, &stride);
+                uint8_t *ptr = img.get_plane(heif_channel_interleaved, &stride);
 
                 KisPaintDeviceSP pd = image->projection();
-                QVector<quint16> pixelValues(4);
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        pixelValues[0] = KoBgrU16Traits::red(it->rawData());
-                        pixelValues[1] = KoBgrU16Traits::green(it->rawData());
-                        pixelValues[2] = KoBgrU16Traits::blue(it->rawData());
-                        pixelValues[3] = quint16(KoBgrU16Traits::opacityF(it->rawData()) * max16bit);
-
-                        int channels = hasAlpha? 4: 3;
-                        for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound<uint16_t>(
-                                0,
-                                static_cast<uint16_t>(float(pixelValues[ch])
-                                                      * multiplier16bit
-                                                      * max12bit),
-                                max12bit);
-                            ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
-                            ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
+                HDR::writeInterleavedLayer(QSysInfo::ByteOrder,
+                                           hasAlpha,
+                                           width,
+                                           height,
+                                           ptr,
+                                           stride,
+                                           it);
             } else {
                 dbgFile << "Saving floating point as 12bit rgba";
                 img.create(width,height, heif_colorspace_RGB, chroma);

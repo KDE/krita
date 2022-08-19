@@ -174,13 +174,20 @@ void KisToolLineHelper::movePointsTo(const QPointF &startPoint, const QPointF &e
     if (m_d->linePoints.size() <= 1 ) {
         return;
     }
-    KisPaintInformation begin = m_d->linePoints.first();
-    KisPaintInformation end = m_d->linePoints.last();
-    m_d->linePoints.clear();
-    begin.setPos(startPoint);
-    end.setPos(endPoint);
-    m_d->linePoints.append(begin);
-    m_d->linePoints.append(end);
+
+    if (m_d->linePoints.size() > 1) {
+        const qreal maxDistance = kisDistance(startPoint, endPoint);
+        const QPointF unit = (endPoint - startPoint) / maxDistance;
+
+        QVector<KisPaintInformation>::iterator it = m_d->linePoints.begin();
+        ++it;
+        while (it != m_d->linePoints.end()) {
+            qreal dist = kisDistance(startPoint, it->pos());
+            QPointF pos = startPoint + unit * dist;
+            it->setPos(pos);
+            ++it;
+        }
+    }
     adjustPointsToDDA(m_d->linePoints);
 }
 

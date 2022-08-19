@@ -220,10 +220,6 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         heif::Image img;
 
-        const uint16_t max12bit = 4095;
-        const uint16_t max16bit = 65535;
-        const float multiplier16bit = (1.0f / float(max16bit));
-
         if (cs->colorModelId() == RGBAColorModelID) {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
                 dbgFile << "saving as 8bit rgba";
@@ -232,42 +228,40 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 img.add_plane(heif_channel_G, width,height, 8);
                 img.add_plane(heif_channel_B, width,height, 8);
 
-                uint8_t* ptrR {nullptr};
-                uint8_t *ptrG {nullptr};
-                uint8_t *ptrB {nullptr};
-                uint8_t *ptrA {nullptr};
                 int strideR = 0;
                 int strideG = 0;
                 int strideB = 0;
                 int strideA = 0;
 
-                ptrR = img.get_plane(heif_channel_R, &strideR);
-                ptrG = img.get_plane(heif_channel_G, &strideG);
-                ptrB = img.get_plane(heif_channel_B, &strideB);
+                uint8_t *ptrR = img.get_plane(heif_channel_R, &strideR);
+                uint8_t *ptrG = img.get_plane(heif_channel_G, &strideG);
+                uint8_t *ptrB = img.get_plane(heif_channel_B, &strideB);
 
-                if (hasAlpha) {
-                    img.add_plane(heif_channel_Alpha, width,height, 8);
-                    ptrA = img.get_plane(heif_channel_Alpha, &strideA);
-                }
+                uint8_t *ptrA = [&]() -> uint8_t * {
+                    if (hasAlpha) {
+                        img.add_plane(heif_channel_Alpha, width, height, 8);
+                        return img.get_plane(heif_channel_Alpha, &strideA);
+                    } else {
+                        return nullptr;
+                    }
+                }();
 
                 KisPaintDeviceSP pd = image->projection();
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
+                KisHLineConstIteratorSP it =
+                    pd->createHLineConstIteratorNG(0, 0, width);
 
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        ptrR[y*strideR+x] = KoBgrU8Traits::red(it->rawData());
-                        ptrG[y*strideG+x] = KoBgrU8Traits::green(it->rawData());
-                        ptrB[y*strideB+x] = KoBgrU8Traits::blue(it->rawData());
-
-                        if (hasAlpha) {
-                            ptrA[y * strideA + x] = cs->opacityU8(it->rawData());
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
-                }
+                Planar::writeLayer(hasAlpha,
+                                   width,
+                                   height,
+                                   ptrR,
+                                   strideR,
+                                   ptrG,
+                                   strideG,
+                                   ptrB,
+                                   strideB,
+                                   ptrA,
+                                   strideA,
+                                   it);
             } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
                 dbgFile << "Saving as 12bit rgba";
                 img.create(width,height, heif_colorspace_RGB, chroma);
@@ -551,7 +545,7 @@ void HeifExport::initializeCapabilities()
     addSupportedColorModels(supportedColorModels, "HEIF");
 }
 
-float HeifExport::applyCurveAsNeeded(float value, HeifExport::ConversionPolicy policy)
+float HeifExport::applyCurveAsNeeded(float value, ConversionPolicy policy)
 {
     if ( policy == ApplyPQ) {
         return applySmpte2048Curve(value);

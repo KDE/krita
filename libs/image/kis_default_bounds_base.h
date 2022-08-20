@@ -11,6 +11,7 @@
 #include "kis_shared.h"
 #include "kis_shared_ptr.h"
 #include "kritaimage_export.h"
+#include "KisWraparoundAxis.h"
 class KisDefaultBoundsBase;
 
 typedef KisSharedPtr<KisDefaultBoundsBase> KisDefaultBoundsBaseSP;
@@ -50,7 +51,7 @@ public:
     virtual QRect imageBorderRect() const;
 
     virtual bool wrapAroundMode() const = 0;
-    virtual int wrapAroundModeAxis() const = 0;
+    virtual WrapAroundAxis wrapAroundModeAxis() const = 0;
     virtual int currentLevelOfDetail() const = 0;
     virtual int currentTime() const = 0;
     virtual bool externalFrameActive() const = 0;

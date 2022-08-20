@@ -22,6 +22,7 @@
 #include "kis_image_interfaces.h"
 #include "kis_strokes_queue_undo_result.h"
 #include "KisLodPreferences.h"
+#include "KisWraparoundAxis.h"
 
 #include <kritaimage_export.h>
 
@@ -699,13 +700,13 @@ public:
      *     1 - horizontal only
      *     2 - vertical only
      */
-    void setWrapAroundModeAxis(int value);
+    void setWrapAroundModeAxis(WrapAroundAxis value);
     /**
      * \return the axis being used for wraparound mode
      *
      * \see setWrapAroundModeAxis
      */
-    int wrapAroundModeAxis() const;
+    WrapAroundAxis wrapAroundModeAxis() const;
 
 
     /**

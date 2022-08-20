@@ -55,9 +55,9 @@ bool KisDefaultBounds::wrapAroundMode() const
     return m_d->image ? m_d->image->wrapAroundModeActive() : false;
 }
 
-int KisDefaultBounds::wrapAroundModeAxis() const
+WrapAroundAxis KisDefaultBounds::wrapAroundModeAxis() const
 {
-    return m_d->image ? m_d->image->wrapAroundModeAxis() : 0;
+    return m_d->image ? m_d->image->wrapAroundModeAxis() : WRAPAROUND_BOTH;
 }
 
 int KisDefaultBounds::currentLevelOfDetail() const
@@ -120,10 +120,10 @@ bool KisSelectionDefaultBounds::wrapAroundMode() const
         m_d->parentDevice->defaultBounds()->wrapAroundMode() : false;
 }
 
-int KisSelectionDefaultBounds::wrapAroundModeAxis() const
+WrapAroundAxis KisSelectionDefaultBounds::wrapAroundModeAxis() const
 {
     return m_d->parentDevice ?
-        m_d->parentDevice->defaultBounds()->wrapAroundModeAxis() : 0;
+        m_d->parentDevice->defaultBounds()->wrapAroundModeAxis() : WRAPAROUND_BOTH;
 }
 
 int KisSelectionDefaultBounds::currentLevelOfDetail() const
@@ -199,7 +199,7 @@ bool KisWrapAroundBoundsWrapper::wrapAroundMode() const
     return true;
 }
 
-int KisWrapAroundBoundsWrapper::wrapAroundModeAxis() const
+WrapAroundAxis KisWrapAroundBoundsWrapper::wrapAroundModeAxis() const
 {
     return m_d->base->wrapAroundModeAxis();
 }

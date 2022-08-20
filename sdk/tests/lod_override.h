@@ -36,7 +36,7 @@ private:
             return m_parent->wrapAroundMode();
         }
 
-        int wrapAroundModeAxis() const override {
+        WrapAroundAxis wrapAroundModeAxis() const override {
             return m_parent->wrapAroundModeAxis();
         }
 

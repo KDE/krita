@@ -28,6 +28,7 @@
 #include "kis_painting_assistants_decoration.h"
 #include "input/KisInputActionGroup.h"
 #include "KisReferenceImagesDecoration.h"
+#include "KisWraparoundAxis.h"
 
 class KoToolProxy;
 class KoColorProfile;
@@ -303,8 +304,8 @@ public:
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
 
-    void setWrapAroundViewingModeAxis(int value);
-    int wrapAroundViewingModeAxis() const;
+    void setWrapAroundViewingModeAxis(WrapAroundAxis value);
+    WrapAroundAxis wrapAroundViewingModeAxis() const;
 
     void setLodPreferredInCanvas(bool value);
     bool lodPreferredInCanvas() const;

@@ -14,7 +14,7 @@ KisWrappedRandomAccessor::KisWrappedRandomAccessor(KisTiledDataManager *ktm,
                                                    bool writable,
                                                    KisIteratorCompleteListener *completeListener,
                                                    const QRect &wrapRect,
-                                                   const int wrapAroundModeAxis)
+                                                   const WrapAroundAxis wrapAroundModeAxis)
     : KisRandomAccessor2(ktm, offsetX, offsetY, writable, completeListener),
       m_wrapRect(wrapRect),
       m_currentPos(QPoint()),
@@ -34,7 +34,7 @@ void KisWrappedRandomAccessor::moveTo(qint32 x, qint32 y)
 
 qint32 KisWrappedRandomAccessor::numContiguousColumns(qint32 x) const
 {
-    if (m_wrapAxis == 2) { // vertical only
+    if (m_wrapAxis == WRAPAROUND_VERTICAL) {
         return KisRandomAccessor2::numContiguousColumns(x);
     }
     x = KisWrappedRect::xToWrappedX(x, m_wrapRect, m_wrapAxis);
@@ -45,7 +45,7 @@ qint32 KisWrappedRandomAccessor::numContiguousColumns(qint32 x) const
 
 qint32 KisWrappedRandomAccessor::numContiguousRows(qint32 y) const
 {
-    if (m_wrapAxis == 1) { // horizontal only
+    if (m_wrapAxis == WRAPAROUND_HORIZONTAL) {
         return KisRandomAccessor2::numContiguousRows(y);
     }
     y = KisWrappedRect::yToWrappedY(y, m_wrapRect, m_wrapAxis);

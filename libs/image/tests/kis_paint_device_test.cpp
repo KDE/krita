@@ -836,8 +836,8 @@ KisPaintDeviceSP createWrapAroundPaintDevice(const KoColorSpace *cs)
         bool wrapAroundMode() const override {
             return true;
         }
-        int wrapAroundModeAxis() const override {
-            return 0;
+        WrapAroundAxis wrapAroundModeAxis() const override {
+            return WRAPAROUND_BOTH;
         }
         int currentLevelOfDetail() const override {
             return 0;
@@ -1139,7 +1139,7 @@ bool checkConseqPixels(int value, const QPoint &pt, const KisWrappedRect &wrappe
 
 template <>
 bool checkConseqPixels<KisHLineIteratorSP>(int value, const QPoint &pt, const KisWrappedRect &wrappedRect) {
-    int x = KisWrappedRect::xToWrappedX(pt.x(), wrappedRect.wrapRect(), 0);
+    int x = KisWrappedRect::xToWrappedX(pt.x(), wrappedRect.wrapRect(), WRAPAROUND_BOTH);
     int borderX = wrappedRect.originalRect().x() + wrappedRect.wrapRect().width();
     int conseq = x >= borderX ? wrappedRect.wrapRect().right() - x + 1 : borderX - x;
     conseq = qMin(conseq, wrappedRect.originalRect().right() - pt.x() + 1);
@@ -1255,7 +1255,7 @@ void testWrappedLineIteratorReadMoreThanBounds(QString testName)
         for (int x = rect.x(); x < rect.x() + rect.width(); x++) {
             quint8 *data = it->rawData();
 
-            QVERIFY(checkConseqPixels<IteratorSP>(it->nConseqPixels(), QPoint(x, y), KisWrappedRect(rect, bounds, 0)));
+            QVERIFY(checkConseqPixels<IteratorSP>(it->nConseqPixels(), QPoint(x, y), KisWrappedRect(rect, bounds, WRAPAROUND_BOTH)));
 
             dstIt->moveTo(x, y);
             memcpy(dstIt->rawData(), data, cs->pixelSize());
@@ -1402,8 +1402,8 @@ struct TestingLodDefaultBounds : public KisDefaultBoundsBase {
     bool wrapAroundMode() const override {
         return false;
     }
-    int wrapAroundModeAxis() const override {
-        return 0;
+    WrapAroundAxis wrapAroundModeAxis() const override {
+        return WRAPAROUND_BOTH;
     }
 
     int currentLevelOfDetail() const override {

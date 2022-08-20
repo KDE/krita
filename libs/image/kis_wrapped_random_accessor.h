@@ -8,6 +8,7 @@
 #define __KIS_WRAPPED_RANDOM_ACCESSOR_H
 
 #include "tiles3/kis_random_accessor.h"
+#include "KisWraparoundAxis.h"
 
 
 class KisWrappedRandomAccessor : public KisRandomAccessor2
@@ -18,7 +19,7 @@ public:
                              bool writable,
                              KisIteratorCompleteListener *completeListener,
                              const QRect &wrapRect,
-                             const int wrapAroundModeAxis);
+                             const WrapAroundAxis wrapAroundModeAxis);
 
     void moveTo(qint32 x, qint32 y) override;
     qint32 numContiguousColumns(qint32 x) const override;
@@ -31,7 +32,7 @@ public:
 private:
     QRect m_wrapRect;
     QPoint m_currentPos;
-    int m_wrapAxis;
+    WrapAroundAxis m_wrapAxis;
 };
 
 #endif /* __KIS_WRAPPED_RANDOM_ACCESSOR_H */

@@ -167,7 +167,7 @@ void KisCanvasWidgetBase::setWrapAroundViewingMode(bool value)
     Q_UNUSED(value);
 }
 
-void KisCanvasWidgetBase::setWrapAroundViewingModeAxis(int value)
+void KisCanvasWidgetBase::setWrapAroundViewingModeAxis(WrapAroundAxis value)
 {
     Q_UNUSED(value);
 }

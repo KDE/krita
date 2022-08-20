@@ -259,7 +259,7 @@ public:
     bool isolateGroup;
 
     bool wrapAroundModePermitted = false;
-    int wrapAroundModeAxis = 0;
+    WrapAroundAxis wrapAroundModeAxis = WRAPAROUND_BOTH;
 
     QScopedPointer<KisUndoStore> undoStore;
     KisLegacyUndoAdapter legacyUndoAdapter;
@@ -2495,12 +2495,12 @@ void KisImage::setWrapAroundModePermitted(bool value)
     }
 }
 
-void KisImage::setWrapAroundModeAxis(int value)
+void KisImage::setWrapAroundModeAxis(WrapAroundAxis value)
 {
     m_d->wrapAroundModeAxis = value;
 }
 
-int KisImage::wrapAroundModeAxis() const
+WrapAroundAxis KisImage::wrapAroundModeAxis() const
 {
     return m_d->wrapAroundModeAxis;
 }

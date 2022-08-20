@@ -473,11 +473,11 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->wrapAroundAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleWrapAroundMode(bool)));
         d->wrapAroundAction->setChecked(canvasController->wrapAroundMode());
         d->viewConnections.addUniqueConnection(d->wrapAroundHVAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisHV()));
-        d->wrapAroundHVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == 0);
+        d->wrapAroundHVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == WRAPAROUND_BOTH);
         d->viewConnections.addUniqueConnection(d->wrapAroundHAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisH()));
-        d->wrapAroundHAxisAction->setChecked(canvasController->wrapAroundModeAxis() == 1);
+        d->wrapAroundHAxisAction->setChecked(canvasController->wrapAroundModeAxis() == WRAPAROUND_HORIZONTAL);
         d->viewConnections.addUniqueConnection(d->wrapAroundVAxisAction, SIGNAL(triggered()), canvasController, SLOT(slotSetWrapAroundModeAxisV()));
-        d->wrapAroundVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == 2);
+        d->wrapAroundVAxisAction->setChecked(canvasController->wrapAroundModeAxis() == WRAPAROUND_VERTICAL);
 
         d->viewConnections.addUniqueConnection(d->levelOfDetailAction, SIGNAL(toggled(bool)), canvasController, SLOT(slotToggleLevelOfDetailMode(bool)));
         d->levelOfDetailAction->setChecked(canvasController->levelOfDetailMode());

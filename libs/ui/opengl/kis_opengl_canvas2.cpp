@@ -172,13 +172,13 @@ bool KisOpenGLCanvas2::wrapAroundViewingMode() const
     return d->renderer->wrapAroundViewingMode();
 }
 
-void KisOpenGLCanvas2::setWrapAroundViewingModeAxis(int value)
+void KisOpenGLCanvas2::setWrapAroundViewingModeAxis(WrapAroundAxis value)
 {
     d->renderer->setWrapAroundViewingModeAxis(value);
     update();
 }
 
-int KisOpenGLCanvas2::wrapAroundViewingModeAxis() const
+WrapAroundAxis KisOpenGLCanvas2::wrapAroundViewingModeAxis() const
 {
     return d->renderer->wrapAroundViewingModeAxis();
 }

@@ -19,6 +19,7 @@
 
 #include "kritaui_export.h"
 #include "kis_ui_types.h"
+#include "KisWraparoundAxis.h"
 
 class KisCanvas2;
 class KisCoordinatesConverter;
@@ -74,8 +75,8 @@ public:
     void setWrapAroundViewingMode(bool value);
     bool wrapAroundViewingMode() const;
 
-    void setWrapAroundViewingModeAxis(int value);
-    int wrapAroundViewingModeAxis() const;
+    void setWrapAroundViewingModeAxis(WrapAroundAxis value);
+    WrapAroundAxis wrapAroundViewingModeAxis() const;
 
     void channelSelectionChanged(const QBitArray &channelFlags);
     void setDisplayColorConverter(KisDisplayColorConverter *colorConverter);

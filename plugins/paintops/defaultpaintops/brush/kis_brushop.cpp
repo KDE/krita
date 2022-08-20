@@ -275,7 +275,7 @@ std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJo
              */
 
             const QRect wrapRect = painter()->device()->defaultBounds()->imageBorderRect();
-            const int wrapAroundModeAxis = painter()->device()->defaultBounds()->wrapAroundModeAxis();
+            const WrapAroundAxis wrapAroundModeAxis = painter()->device()->defaultBounds()->wrapAroundModeAxis();
 
             QList<KisRenderedDab> wrappedDabs;
 

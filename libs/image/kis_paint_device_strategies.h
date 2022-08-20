@@ -257,17 +257,20 @@ public:
     }
 
     KisRegion region() const override {
-        const int wrapAxis = m_device->defaultBounds()->wrapAroundModeAxis();
-        if (wrapAxis != 0) { // if single axis
+        const WrapAroundAxis wrapAxis = m_device->defaultBounds()->wrapAroundModeAxis();
+        if (wrapAxis != WRAPAROUND_BOTH) {
             KisRegion region = KisPaintDeviceStrategy::region();
             QVector<QRect> rects;
             Q_FOREACH (const QRect &rc, region.rects()) {
-                rects.append(KisWrappedRect::clipToWrapRect(rc, m_wrapRect, wrapAxis));
+                const QRect clippedRect = KisWrappedRect::clipToWrapRect(rc, m_wrapRect, wrapAxis);
+                if (!clippedRect.isEmpty()) {
+                    rects.append(clippedRect);
+                }
             }
             region = KisRegion(rects);
             return region;
         }
-        else { // wrapAxis == 0 (both)
+        else {
             return KisPaintDeviceStrategy::region() & m_wrapRect;
         }
     }

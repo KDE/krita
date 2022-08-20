@@ -12,6 +12,7 @@
 
 #include "kritaui_export.h"
 #include "kis_types.h"
+#include "KisWraparoundAxis.h"
 
 class KConfigGroup;
 class KisView;
@@ -36,7 +37,7 @@ public:
 public:
     using KoCanvasController::documentSize;
     bool wrapAroundMode() const;
-    int wrapAroundModeAxis() const;
+    WrapAroundAxis wrapAroundModeAxis() const;
     bool levelOfDetailMode() const;
 
     void saveCanvasState(KisPropertiesConfiguration &config) const;
@@ -56,7 +57,7 @@ public Q_SLOTS:
     qreal rotation() const;
     void resetCanvasRotation();
     void slotToggleWrapAroundMode(bool value);
-    void slotSetWrapAroundModeAxis(int axis);
+    void slotSetWrapAroundModeAxis(WrapAroundAxis axis);
     void slotSetWrapAroundModeAxisHV();
     void slotSetWrapAroundModeAxisH();
     void slotSetWrapAroundModeAxisV();

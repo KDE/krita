@@ -204,16 +204,16 @@ bool KisQPainterCanvas::wrapAroundViewingMode() const
     return false;
 }
 
-void KisQPainterCanvas::setWrapAroundViewingModeAxis(int value)
+void KisQPainterCanvas::setWrapAroundViewingModeAxis(WrapAroundAxis value)
 {
     Q_UNUSED(value);
     dbgKrita << "Wrap around viewing mode not implemented in QPainter Canvas.";
     return;
 }
 
-int KisQPainterCanvas::wrapAroundViewingModeAxis() const
+WrapAroundAxis KisQPainterCanvas::wrapAroundViewingModeAxis() const
 {
-    return 0;
+    return WRAPAROUND_BOTH;
 }
 
 void KisQPainterCanvas::finishResizingImage(qint32 w, qint32 h)

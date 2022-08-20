@@ -90,7 +90,7 @@ public:
     bool proofingConfigIsUpdated=false;
 
     bool wrapAroundMode{false};
-    int wrapAroundModeAxis{0};
+    WrapAroundAxis wrapAroundModeAxis{WRAPAROUND_BOTH};
 
     // Stores a quad for drawing the canvas
     QOpenGLVertexArrayObject quadVAO;
@@ -229,12 +229,12 @@ bool KisOpenGLCanvasRenderer::wrapAroundViewingMode() const
     return d->wrapAroundMode;
 }
 
-void KisOpenGLCanvasRenderer::setWrapAroundViewingModeAxis(int value)
+void KisOpenGLCanvasRenderer::setWrapAroundViewingModeAxis(WrapAroundAxis value)
 {
     d->wrapAroundModeAxis = value;
 }
 
-int KisOpenGLCanvasRenderer::wrapAroundViewingModeAxis() const
+WrapAroundAxis KisOpenGLCanvasRenderer::wrapAroundViewingModeAxis() const
 {
     return d->wrapAroundModeAxis;
 }
@@ -524,13 +524,13 @@ void KisOpenGLCanvasRenderer::drawCheckers(const QRect &updateRect)
     else {
         const QRectF ir = converter->imageRectInViewportPixels();
         viewportRect = converter->widgetToViewport(QRectF(0, 0, widgetSize.width(), widgetSize.height()));
-        if (d->wrapAroundModeAxis == 1) {   // horizontal only
-            viewportRect.setY(ir.y());
-            viewportRect.setHeight(ir.height());
+        if (d->wrapAroundModeAxis == WRAPAROUND_HORIZONTAL) {
+            viewportRect.setTop(ir.top());
+            viewportRect.setBottom(ir.bottom());
         }
-        else if (d->wrapAroundModeAxis == 2) {  // vertical only
-            viewportRect.setX(ir.x());
-            viewportRect.setWidth(ir.width());
+        else if (d->wrapAroundModeAxis == WRAPAROUND_VERTICAL) {
+            viewportRect.setLeft(ir.left());
+            viewportRect.setRight(ir.right());
         }
     }
 
@@ -725,11 +725,11 @@ void KisOpenGLCanvasRenderer::drawImage(const QRect &updateRect)
         // processing area, and the code will handle all the rest
         wr &= ir;
     }
-    else if (d->wrapAroundModeAxis == 1) {  // horizontal only
+    else if (d->wrapAroundModeAxis == WRAPAROUND_HORIZONTAL) {
         wr.setTop(ir.top());
         wr.setBottom(ir.bottom());
     }
-    else if (d->wrapAroundModeAxis == 2) {  // vertical only
+    else if (d->wrapAroundModeAxis == WRAPAROUND_VERTICAL) {
         wr.setLeft(ir.left());
         wr.setRight(ir.right());
     }

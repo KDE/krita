@@ -29,8 +29,8 @@ struct TestingTimedDefaultBounds : public KisDefaultBoundsBase {
         return false;
     }
 
-    int wrapAroundModeAxis() const override {
-        return 0;
+    WrapAroundAxis wrapAroundModeAxis() const override {
+        return WRAPAROUND_BOTH;
     }
 
     int currentLevelOfDetail() const override {

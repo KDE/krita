@@ -63,8 +63,8 @@ public: // Implement kis_abstract_canvas_widget interface
 
     void setWrapAroundViewingMode(bool value) override;
     bool wrapAroundViewingMode() const override;
-    void setWrapAroundViewingModeAxis(int value) override;
-    int wrapAroundViewingModeAxis() const override;
+    void setWrapAroundViewingModeAxis(WrapAroundAxis value) override;
+    WrapAroundAxis wrapAroundViewingModeAxis() const override;
 
     void channelSelectionChanged(const QBitArray &channelFlags) override;
     void setDisplayColorConverter(KisDisplayColorConverter *colorConverter) override;

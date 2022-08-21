@@ -166,10 +166,12 @@ struct KoColorSpaceTrait {
     inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
         Q_ASSERT((int)values.count() >= (int)channels_nb);
         channels_type c;
+        const float *v = values.data();
         for (uint i = 0; i < channels_nb; i++) {
-            float b = qBound((float)KoColorSpaceMathsTraits<channels_type>::min,
-                             (float)KoColorSpaceMathsTraits<channels_type>::unitValue * values[i],
-                             (float)KoColorSpaceMathsTraits<channels_type>::max);
+            float b = qBound(
+                (float)KoColorSpaceMathsTraits<channels_type>::min,
+                (float)KoColorSpaceMathsTraits<channels_type>::unitValue * v[i],
+                (float)KoColorSpaceMathsTraits<channels_type>::max);
             c = (channels_type)b;
             nativeArray(pixel)[i] = c;
 

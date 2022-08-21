@@ -181,7 +181,16 @@ inline void readLayer(const int width,
                                                         displayGamma,
                                                         displayNits);
 
-            colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+            if (luma == 8) {
+                KoBgrU8Traits::fromNormalisedChannelsValue(it->rawData(),
+                                                           pixelValues);
+            } else if (luma > 8 && linearizePolicy != KeepTheSame) {
+                KoBgrF32Traits::fromNormalisedChannelsValue(it->rawData(),
+                                                            pixelValues);
+            } else {
+                KoBgrU16Traits::fromNormalisedChannelsValue(it->rawData(),
+                                                            pixelValues);
+            }
 
             it->nextPixel();
         }
@@ -527,7 +536,16 @@ inline void readLayer(const int width,
                                                         displayGamma,
                                                         displayNits);
 
-            colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+            if (luma == 8) {
+                KoBgrU8Traits::fromNormalisedChannelsValue(it->rawData(),
+                                                           pixelValues);
+            } else if (luma > 8 && linearizePolicy != KeepTheSame) {
+                KoBgrF32Traits::fromNormalisedChannelsValue(it->rawData(),
+                                                            pixelValues);
+            } else {
+                KoBgrU16Traits::fromNormalisedChannelsValue(it->rawData(),
+                                                            pixelValues);
+            }
 
             it->nextPixel();
         }
@@ -794,7 +812,8 @@ inline void readLayer(const int width,
                                                         displayGamma,
                                                         displayNits);
 
-            colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+            KoBgrU8Traits::fromNormalisedChannelsValue(it->rawData(),
+                                                       pixelValues);
 
             it->nextPixel();
         }

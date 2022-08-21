@@ -809,6 +809,7 @@ void KisView::dropEvent(QDropEvent *event)
         const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
         const bool antiAlias = configGroup.readEntry("antiAlias", true);
         const int growSelection = configGroup.readEntry("growSelection", 0);
+        const bool stopGrowingAtDarkestPixel = configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
         const int featherAmount = configGroup.readEntry("featherAmount", 0);
         const QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
         const QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
@@ -855,6 +856,7 @@ void KisView::dropEvent(QDropEvent *event)
         if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
             visitor->setRegionFillingBoundaryColor(regionFillingBoundaryColor);
         }
+        visitor->setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
         visitor->setFillThreshold(thresholdAmount);
         visitor->setOpacitySpread(opacitySpread);
         visitor->setAntiAlias(antiAlias);

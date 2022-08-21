@@ -413,5 +413,7 @@
         <file>light_region-filling-flood-fill.svg</file>
         <file>dark_region-filling-boundary-fill.svg</file>
         <file>light_region-filling-boundary-fill.svg</file>
+        <file>dark_stop-at-boundary.svg</file>
+        <file>light_stop-at-boundary.svg</file>
     </qresource>
 </RCC>

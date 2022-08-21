@@ -41,6 +41,10 @@ void KisSelectionToolConfigWidgetHelper::createOptionWidget(
             this,
             &KisSelectionToolConfigWidgetHelper::slotWidgetGrowChanged);
     connect(m_optionsWidget,
+            &KisSelectionOptions::stopGrowingAtDarkestPixelChanged,
+            this,
+            &KisSelectionToolConfigWidgetHelper::slotWidgetStopGrowingAtDarkestPixelChanged);
+    connect(m_optionsWidget,
             &KisSelectionOptions::featherSelectionChanged,
             this,
             &KisSelectionToolConfigWidgetHelper::slotWidgetFeatherChanged);
@@ -87,6 +91,14 @@ int KisSelectionToolConfigWidgetHelper::growSelection() const
         return 0;
     }
     return m_optionsWidget->growSelection();
+}
+
+bool KisSelectionToolConfigWidgetHelper::stopGrowingAtDarkestPixel() const
+{
+    if (!m_optionsWidget) {
+        return false;
+    }
+    return m_optionsWidget->stopGrowingAtDarkestPixel();
 }
 
 int KisSelectionToolConfigWidgetHelper::featherSelection() const
@@ -146,6 +158,12 @@ void KisSelectionToolConfigWidgetHelper::slotWidgetGrowChanged(int value)
 {
     KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
     cfg.writeEntry("growSelection", value);
+}
+
+void KisSelectionToolConfigWidgetHelper::slotWidgetStopGrowingAtDarkestPixelChanged(bool value)
+{
+    KConfigGroup cfg = KSharedConfig::openConfig()->group(m_configGroupForTool);
+    cfg.writeEntry("stopGrowingAtDarkestPixel", value);
 }
 
 void KisSelectionToolConfigWidgetHelper::slotWidgetFeatherChanged(int value)
@@ -245,6 +263,8 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
     const bool antiAliasSelection =
         cfgToolSpecific.readEntry("antiAliasSelection", true);
     const int growSelection = cfgToolSpecific.readEntry("growSelection", 0);
+    const bool stopGrowingAtDarkestPixel =
+        cfgToolSpecific.readEntry("stopGrowingAtDarkestPixel", false);
     const int featherSelection =
         cfgToolSpecific.readEntry("featherSelection", 0);
     const QString referenceLayersStr =
@@ -271,6 +291,7 @@ void KisSelectionToolConfigWidgetHelper::reloadExactToolConfig()
     KisSignalsBlocker b(m_optionsWidget);
     m_optionsWidget->setAntiAliasSelection(antiAliasSelection);
     m_optionsWidget->setGrowSelection(growSelection);
+    m_optionsWidget->setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
     m_optionsWidget->setFeatherSelection(featherSelection);
     m_optionsWidget->setReferenceLayers(referenceLayers);
     m_optionsWidget->setSelectedColorLabels(colorLabels);

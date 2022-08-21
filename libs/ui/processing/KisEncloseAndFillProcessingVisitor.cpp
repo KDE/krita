@@ -27,6 +27,7 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
         int fillOpacitySpread,
         bool antiAlias,
         int expand,
+        bool stopGrowingAtDarkestPixel,
         int feather,
         bool useSelectionAsBoundary,
         bool usePattern,
@@ -47,6 +48,7 @@ KisEncloseAndFillProcessingVisitor::KisEncloseAndFillProcessingVisitor(
     , m_useSelectionAsBoundary(useSelectionAsBoundary)
     , m_antiAlias(antiAlias)
     , m_expand(expand)
+    , m_stopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel)
     , m_feather(feather)
     , m_usePattern(usePattern)
     , m_unmerged(unmerged)
@@ -93,6 +95,7 @@ void KisEncloseAndFillProcessingVisitor::fillPaintDevice(KisPaintDeviceSP device
     painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     painter.setAntiAlias(m_antiAlias);
     painter.setSizemod(m_expand);
+    painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     painter.setFeather(m_feather);
 
     KisPaintDeviceSP sourceDevice = m_unmerged ? device : m_referencePaintDevice;

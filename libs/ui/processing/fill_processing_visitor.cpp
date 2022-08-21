@@ -25,6 +25,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_antiAlias(false)
     , m_feather(0)
     , m_sizemod(0)
+    , m_stopGrowingAtDarkestPixel(false)
     , m_fillThreshold(8)
     , m_opacitySpread(0)
     , m_regionFillingMode(KisFillPainter::RegionFillingMode_FloodFill)
@@ -136,6 +137,7 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.setProgress(helper.updater());
     fillPainter.setAntiAlias(m_antiAlias);
     fillPainter.setSizemod(m_sizemod);
+    fillPainter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     fillPainter.setFeather(m_feather);
     fillPainter.setFillThreshold(m_fillThreshold);
     fillPainter.setOpacitySpread(m_opacitySpread);
@@ -213,6 +215,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
 
         painter.setProgress(helper.updater());
         painter.setSizemod(m_sizemod);
+        painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
         painter.setAntiAlias(m_antiAlias);
         painter.setFeather(m_feather);
         painter.setFillThreshold(m_fillThreshold);
@@ -305,6 +308,11 @@ void FillProcessingVisitor::setFeather(int feather)
 void FillProcessingVisitor::setSizeMod(int sizemod)
 {
     m_sizemod = sizemod;
+}
+
+void FillProcessingVisitor::setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel)
+{
+    m_stopGrowingAtDarkestPixel = stopGrowingAtDarkestPixel;
 }
 
 void FillProcessingVisitor::setFillThreshold(int fillThreshold)

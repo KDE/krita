@@ -38,6 +38,7 @@ public:
     void setAntiAlias(bool antiAlias);
     void setFeather(int feather);
     void setSizeMod(int sizemod);
+    void setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel);
     void setFillThreshold(int fillThreshold);
     void setOpacitySpread(int opacitySpread);
     void setRegionFillingMode(KisFillPainter::RegionFillingMode regionFillingMode);
@@ -72,6 +73,7 @@ private:
     bool m_antiAlias;
     int m_feather;
     int m_sizemod;
+    bool m_stopGrowingAtDarkestPixel;
     int m_fillThreshold;
     int m_opacitySpread;
     KisFillPainter::RegionFillingMode m_regionFillingMode;

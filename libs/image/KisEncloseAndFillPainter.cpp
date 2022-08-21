@@ -219,7 +219,8 @@ public:
     QVector<QPoint> getEnclosingContourPoints(KisPixelSelectionSP enclosingMask,
                                               const QRect &enclosingMaskRect) const;
 
-    void applyPostProcessing(KisPixelSelectionSP mask) const;
+    void applyPostProcessing(KisPixelSelectionSP mask,
+                             KisPaintDeviceSP referenceDevice) const;
 
     void invertIfNeeded(KisPixelSelectionSP resultMask, KisPixelSelectionSP enclosingMask) const;
 
@@ -392,7 +393,7 @@ KisPixelSelectionSP KisEncloseAndFillPainter::createEncloseAndFillSelection(KisP
         newSelection->applySelection(existingSelection, SELECTION_INTERSECT);
     }
     // Post-process
-    m_d->applyPostProcessing(newSelection);
+    m_d->applyPostProcessing(newSelection, referenceDevice);
 
     return newSelection;
 }
@@ -851,11 +852,27 @@ QVector<QPoint> KisEncloseAndFillPainter::Private::getEnclosingContourPoints(Kis
     return enclosingPoints;
 }
 
-void KisEncloseAndFillPainter::Private::applyPostProcessing(KisPixelSelectionSP mask) const
+void KisEncloseAndFillPainter::Private::applyPostProcessing(KisPixelSelectionSP mask,
+                                                            KisPaintDeviceSP referenceDevice) const
 {
     if (q->sizemod() > 0) {
-        KisGrowSelectionFilter biggy(q->sizemod(), q->sizemod());
-        biggy.process(mask, mask->selectedRect().adjusted(-q->sizemod(), -q->sizemod(), q->sizemod(), q->sizemod()));
+        if (q->stopGrowingAtDarkestPixel()) {
+            KisGrowUntilDarkestPixelSelectionFilter biggy(q->sizemod(), referenceDevice);
+            biggy.process(
+                mask, 
+                mask->selectedRect().adjusted(
+                    -q->sizemod(), -q->sizemod(), q->sizemod(), q->sizemod()
+                )
+            );
+        } else {
+            KisGrowSelectionFilter biggy(q->sizemod(), q->sizemod());
+            biggy.process(
+                mask,
+                mask->selectedRect().adjusted(
+                    -q->sizemod(), -q->sizemod(), q->sizemod(), q->sizemod()
+                )
+            );
+        }
     } else if (q->sizemod() < 0) {
         KisShrinkSelectionFilter tiny(-q->sizemod(), -q->sizemod(), false);
         tiny.process(mask, mask->selectedRect());

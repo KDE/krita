@@ -194,6 +194,7 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     const int threshold = m_threshold;
     const bool antiAlias = antiAliasSelection();
     const int grow = growSelection();
+    const bool stopGrowingAtDarkestPixel = this->stopGrowingAtDarkestPixel();
     const int feather = featherSelection();
     // new stroke
 
@@ -377,12 +378,20 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     }
 
     KUndo2Command *cmdAdjustSelection = new KisCommandUtils::LambdaCommand(
-        [tmpSel, antiAlias, grow, feather]() mutable -> KUndo2Command * {
+        [tmpSel, sourceDevice, antiAlias, grow, stopGrowingAtDarkestPixel, feather]
+        () mutable -> KUndo2Command * {
             if (grow > 0) {
-                KisGrowSelectionFilter biggy(grow, grow);
-                biggy.process(
-                    tmpSel,
-                    tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                if (stopGrowingAtDarkestPixel) {
+                    KisGrowUntilDarkestPixelSelectionFilter biggy(grow, sourceDevice);
+                    biggy.process(
+                        tmpSel,
+                        tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                } else {
+                    KisGrowSelectionFilter biggy(grow, grow);
+                    biggy.process(
+                        tmpSel,
+                        tmpSel->selectedRect().adjusted(-grow, -grow, grow, grow));
+                }
             } else if (grow < 0) {
                 KisShrinkSelectionFilter tiny(-grow, -grow, false);
                 tiny.process(tmpSel, tmpSel->selectedRect());
@@ -440,6 +449,8 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
+
+    selectionWidget->setStopGrowingAtDarkestPixelButtonVisible(true);
 
     KisSliderSpinBox *sliderThreshold = new KisSliderSpinBox;
     sliderThreshold->setPrefix(i18nc(

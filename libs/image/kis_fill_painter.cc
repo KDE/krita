@@ -74,6 +74,7 @@ void KisFillPainter::initFillPainter()
     m_useSelectionAsBoundary = false;
     m_antiAlias = false;
     m_regionFillingMode = RegionFillingMode_FloodFill;
+    m_stopGrowingAtDarkestPixel = false;
 }
 
 void KisFillPainter::fillSelection(const QRect &rc, const KoColor &color)
@@ -378,8 +379,13 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     if (m_useCompositioning) {
         if (m_sizemod > 0) {
-            KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
-            biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+            if (m_stopGrowingAtDarkestPixel) {
+                KisGrowUntilDarkestPixelSelectionFilter biggy(m_sizemod, sourceDevice);
+                biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+            } else {
+                KisGrowSelectionFilter biggy(m_sizemod, m_sizemod);
+                biggy.process(pixelSelection, pixelSelection->selectedRect().adjusted(-m_sizemod, -m_sizemod, m_sizemod, m_sizemod));
+            }
         }
         else if (m_sizemod < 0) {
             KisShrinkSelectionFilter tiny(-m_sizemod, -m_sizemod, false);

@@ -200,6 +200,11 @@ public:
         return m_widgetHelper.growSelection();
     }
 
+    bool stopGrowingAtDarkestPixel() const
+    {
+        return m_widgetHelper.stopGrowingAtDarkestPixel();
+    }
+
     int featherSelection() const
     {
         return m_widgetHelper.featherSelection();

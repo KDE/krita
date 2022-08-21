@@ -34,6 +34,7 @@ public:
         int fillOpacitySpread,
         bool antiAlias,
         int expand,
+        bool stopGrowingAtDarkestPixel,
         int feather,
         bool useSelectionAsBoundary,
         bool usePattern,
@@ -63,6 +64,7 @@ private:
     bool m_useSelectionAsBoundary {true};
     bool m_antiAlias {false};
     int m_expand {0};
+    bool m_stopGrowingAtDarkestPixel {false};
     int m_feather {0};
     bool m_usePattern {false};
     bool m_unmerged {false};

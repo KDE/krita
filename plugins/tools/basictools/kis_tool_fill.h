@@ -34,6 +34,7 @@ class QCheckBox;
 class KisColorLabelSelectorWidget;
 class QPushButton;
 class KisColorButton;
+class QToolButton;
 
 class KisToolFill : public KisToolPaint
 {
@@ -110,6 +111,7 @@ private:
 
     bool m_antiAlias {true};
     int m_sizemod {0};
+    int m_stopGrowingAtDarkestPixel {false};
     int m_feather {0};
 
     Reference m_reference {CurrentLayer};
@@ -154,6 +156,7 @@ private:
 
     QCheckBox *m_checkBoxAntiAlias {nullptr};
     KisSliderSpinBox *m_sliderGrow {nullptr};
+    QToolButton *m_buttonStopGrowingAtDarkestPixel {nullptr};
     KisSliderSpinBox *m_sliderFeather {nullptr};
 
     KoGroupButton *m_buttonReferenceCurrent{nullptr};
@@ -188,6 +191,7 @@ private Q_SLOTS:
     void slot_checkBoxSelectionAsBoundary_toggled(bool checked);
     void slot_checkBoxAntiAlias_toggled(bool checked);
     void slot_sliderGrow_valueChanged(int value);
+    void slot_buttonStopGrowingAtDarkestPixel_toogled(bool enabled);
     void slot_sliderFeather_valueChanged(int value);
     void slot_optionButtonStripReference_buttonToggled(KoGroupButton *button,
                                                        bool checked);

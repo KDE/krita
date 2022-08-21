@@ -17,7 +17,7 @@
 #include <QString>
 
 class KUndo2MagicString;
-
+class KoColorSpace;
 
 class KRITAIMAGE_EXPORT KisSelectionFilter
 {
@@ -216,6 +216,31 @@ private:
                           qint32 *negativeSpanEndDistance, qint32 *positiveSpanEndDistance,
                           qint32 *negativePixelDiff, qint32 *positivePixelDiff,
                           bool *negativeSpanExtremeValid, bool *positiveSpanExtremeValid) const;
+};
+
+/**
+ * @brief Filter that dilates a selection and that can stop dilating
+ *        adaptively at areas of higher darkness or opacity. This is useful
+ *        to grow selections used to fill lineart, since the growing will stop
+ *        most likely inside the lines, without overflowing to the other side.
+ */
+class KRITAIMAGE_EXPORT KisGrowUntilDarkestPixelSelectionFilter : public KisSelectionFilter
+{
+public:
+    /**
+     * @param radius The radius of the structuring element used for the dilation.
+     * @param referenceDevice The device used to check if the dilation reached
+     *                        the darkest or most opaque pixels.
+     */
+    KisGrowUntilDarkestPixelSelectionFilter(qint32 radius, KisPaintDeviceSP referenceDevice);
+
+    KUndo2MagicString name() override;
+    QRect changeRect(const QRect &rect, KisDefaultBoundsBaseSP defaultBounds) override;
+    void process(KisPixelSelectionSP pixelSelection, const QRect &rect) override;
+
+private:
+    qint32 m_radius;
+    KisPaintDeviceSP m_referenceDevice;
 };
 
 #endif // KIS_SELECTION_FILTERS_H

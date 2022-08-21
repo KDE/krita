@@ -151,6 +151,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     bool useSelectionAsBoundary = m_useSelectionAsBoundary;
     bool antiAlias = antiAliasSelection();
     int grow = growSelection();
+    bool stopGrowingAtDarkestPixel = this->stopGrowingAtDarkestPixel();
     int feather = featherSelection();
 
     KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
@@ -178,6 +179,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                  antiAlias,
                  feather,
                  grow,
+                 stopGrowingAtDarkestPixel,
                  useSelectionAsBoundary,
                  selection,
                  pos,
@@ -199,6 +201,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setAntiAlias(antiAlias);
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(grow);
+                    fillpainter.setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
                     fillpainter.setUseCompositioning(true);
 
                     useSelectionAsBoundary &=
@@ -336,6 +339,8 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 {
     KisToolSelectBase::createOptionWidget();
     KisSelectionOptions *selectionWidget = selectionOptionWidget();
+
+    selectionWidget->setStopGrowingAtDarkestPixelButtonVisible(true);
 
     // Create widgets
     KisOptionButtonStrip *optionButtonStripContiguousSelectionMode =

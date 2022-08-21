@@ -289,6 +289,7 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
     visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
     visitor->setAntiAlias(m_antiAlias);
     visitor->setSizeMod(m_sizemod);
+    visitor->setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
     visitor->setFeather(m_feather);
     if (m_isDragging) {
         visitor->setContinuousFillMode(
@@ -398,10 +399,19 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkBoxSelectionAsBoundary->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
 
     m_checkBoxAntiAlias = new QCheckBox(i18nc("The anti-alias checkbox in fill tool options", "Anti-aliasing"));
+
+    KisOptionCollectionWidget *containerGrow = new KisOptionCollectionWidget;
     m_sliderGrow = new KisSliderSpinBox;
     m_sliderGrow->setPrefix(i18nc("The 'grow/shrink' spinbox prefix in fill tool options", "Grow: "));
     m_sliderGrow->setRange(-40, 40);
     m_sliderGrow->setSuffix(i18n(" px"));
+    m_buttonStopGrowingAtDarkestPixel = new QToolButton;
+    m_buttonStopGrowingAtDarkestPixel->setAutoRaise(true);
+    m_buttonStopGrowingAtDarkestPixel->setCheckable(true);
+    m_buttonStopGrowingAtDarkestPixel->setIcon(KisIconUtils::loadIcon("stop-at-boundary"));
+    containerGrow->appendWidget("sliderGrow", m_sliderGrow);
+    containerGrow->appendWidget("buttonStopGrowingAtDarkestPixel", m_buttonStopGrowingAtDarkestPixel);
+    containerGrow->setOrientation(Qt::Horizontal);
     m_sliderFeather = new KisSliderSpinBox;
     m_sliderFeather->setPrefix(i18nc("The 'feather' spinbox prefix in fill tool options", "Feather: "));
     m_sliderFeather->setRange(0, 40);
@@ -452,6 +462,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     m_checkBoxAntiAlias->setToolTip(i18n("Smooth the jagged edges"));
     m_sliderGrow->setToolTip(i18n("Grow (positive values) or shrink (negative values) the region by the set amount"));
+    m_buttonStopGrowingAtDarkestPixel->setToolTip(i18n("Stop growing at the darkest and/or most opaque pixels"));
     m_sliderFeather->setToolTip(i18n("Blur the region by the set amount"));
 
     m_buttonReferenceCurrent->setToolTip(i18n("Obtain the region using the active layer"));
@@ -503,7 +514,7 @@ QWidget* KisToolFill::createOptionWidget()
             i18nc("The 'adjustments' section label in fill tool options", "Adjustments")
         );
     sectionAdjustments->appendWidget("checkBoxAntiAlias", m_checkBoxAntiAlias);
-    sectionAdjustments->appendWidget("sliderGrow", m_sliderGrow);
+    sectionAdjustments->appendWidget("containerGrow", containerGrow);
     sectionAdjustments->appendWidget("sliderFeather", m_sliderFeather);
     m_optionWidget->appendWidget("sectionAdjustments", sectionAdjustments);
     
@@ -552,6 +563,7 @@ QWidget* KisToolFill::createOptionWidget()
     m_checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
     m_checkBoxAntiAlias->setChecked(m_antiAlias);
     m_sliderGrow->setValue(m_sizemod);
+    m_buttonStopGrowingAtDarkestPixel->setChecked(m_stopGrowingAtDarkestPixel);
     m_sliderFeather->setValue(m_feather);
     if (m_reference == AllLayers) {
         m_buttonReferenceAll->setChecked(true);
@@ -587,6 +599,7 @@ QWidget* KisToolFill::createOptionWidget()
     connect(m_checkBoxSelectionAsBoundary, SIGNAL(toggled(bool)), SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
     connect(m_checkBoxAntiAlias, SIGNAL(toggled(bool)), SLOT(slot_checkBoxAntiAlias_toggled(bool)));
     connect(m_sliderGrow, SIGNAL(valueChanged(int)), SLOT(slot_sliderGrow_valueChanged(int)));
+    connect(m_buttonStopGrowingAtDarkestPixel, SIGNAL(toggled(bool)), SLOT(slot_buttonStopGrowingAtDarkestPixel_toogled(bool)));
     connect(m_sliderFeather, SIGNAL(valueChanged(int)), SLOT(slot_sliderFeather_valueChanged(int)));
     connect(optionButtonStripReference,
             SIGNAL(buttonToggled(KoGroupButton *, bool)),
@@ -639,6 +652,7 @@ void KisToolFill::loadConfiguration()
     m_useSelectionAsBoundary = m_configGroup.readEntry<bool>("useSelectionAsBoundary", true);
     m_antiAlias = m_configGroup.readEntry<bool>("antiAlias", false);
     m_sizemod = m_configGroup.readEntry<int>("growSelection", 0);
+    m_stopGrowingAtDarkestPixel = m_configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
     m_feather = m_configGroup.readEntry<int>("featherAmount", 0);
     {
         const QString sampleLayersModeStr = m_configGroup.readEntry<QString>("sampleLayersMode", "currentLayer");
@@ -825,6 +839,15 @@ void KisToolFill::slot_sliderGrow_valueChanged(int value)
     m_configGroup.writeEntry("growSelection", value);
 }
 
+void KisToolFill::slot_buttonStopGrowingAtDarkestPixel_toogled(bool enabled)
+{
+    if (enabled == m_stopGrowingAtDarkestPixel) {
+        return;
+    }
+    m_stopGrowingAtDarkestPixel = enabled;
+    m_configGroup.writeEntry("stopGrowingAtDarkestPixel", enabled);
+}
+
 void KisToolFill::slot_sliderFeather_valueChanged(int value)
 {
     if (value == m_feather) {
@@ -893,6 +916,7 @@ void KisToolFill::slot_buttonReset_clicked()
     m_checkBoxSelectionAsBoundary->setChecked(true);
     m_checkBoxAntiAlias->setChecked(false);
     m_sliderGrow->setValue(0);
+    m_buttonStopGrowingAtDarkestPixel->setChecked(false);
     m_sliderFeather->setValue(0);
     m_buttonReferenceCurrent->setChecked(true);
     m_widgetLabels->setSelection({});

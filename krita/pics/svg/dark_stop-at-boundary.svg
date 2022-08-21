@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16" height="16" version="1.1" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+ <g fill="#363636">
+  <rect width="4" height="16" fill-opacity=".39216" stroke-dasharray="0, 0.992009, 1.984, 2.976, 3.96801, 4.96, 5.95201, 6.94399, 7.93594, 8.92796, 9.92009, 10.912, 11.904, 12.896, 13.8881" stroke-linecap="round" stroke-linejoin="round" stroke-width=".99201"/>
+  <rect x="4" width="1" height="16" stroke-dasharray="0, 0.992, 1.984, 2.97599, 3.968, 4.95999, 5.95202, 6.94399, 7.936, 8.928, 9.92, 10.912, 11.904, 12.896, 13.888" stroke-linecap="round" stroke-linejoin="round" stroke-width=".992"/>
+  <path d="m2 12v1h5v2l4-2.5-4-2.5v2z"/>
+  <path d="m11 1c-2.2091 0-4 1.7909-4 4s1.7909 4 4 4 4-1.7909 4-4-1.7909-4-4-4zm-3 3h6v2h-6z"/>
+ </g>
+</svg>

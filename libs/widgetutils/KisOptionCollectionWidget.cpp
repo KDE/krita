@@ -27,6 +27,8 @@ public:
     {
         m_widget->setParent(this);
 
+        setSizePolicy(widget->sizePolicy());
+
         QBoxLayout *layoutWidget = new QBoxLayout(QBoxLayout::TopToBottom);
         layoutWidget->setContentsMargins(m_margin, 0, m_margin, 0);
         layoutWidget->setSpacing(0);

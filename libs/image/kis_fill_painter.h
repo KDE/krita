@@ -355,6 +355,22 @@ public:
         return m_regionFillingBoundaryColor;
     }
 
+    /**
+     *  Sets if the selection should stop growing at the darkest and/or more
+     *  opaque pixel when using a positive grow value (sizemod)
+     */
+    void setStopGrowingAtDarkestPixel(bool stopGrowingAtDarkestPixel) {
+        m_stopGrowingAtDarkestPixel = stopGrowingAtDarkestPixel;
+    }
+    
+    /**
+     *  Gets if the selection should stop growing at the darkest and/or more
+     *  opaque pixel when using a positive grow value (sizemod)
+     */
+    bool stopGrowingAtDarkestPixel() const {
+        return m_stopGrowingAtDarkestPixel;
+    }
+
 protected:
     void setCurrentFillSelection(KisSelectionSP fillSelection)
     {
@@ -385,6 +401,7 @@ private:
     bool m_useSelectionAsBoundary;
     RegionFillingMode m_regionFillingMode;
     KoColor m_regionFillingBoundaryColor;
+    bool m_stopGrowingAtDarkestPixel;
 };
 
 #endif //KIS_FILL_PAINTER_H_

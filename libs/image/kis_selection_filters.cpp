@@ -15,6 +15,7 @@
 #include "kis_convolution_painter.h"
 #include "kis_convolution_kernel.h"
 #include "kis_pixel_selection.h"
+#include <kis_sequential_iterator.h>
 
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
@@ -1153,5 +1154,341 @@ void KisAntiAliasSelectionFilter::process(KisPixelSelectionSP pixelSelection, co
         }
         // Copy the scanline data to the mask
         pixelSelection->writeBytes(antialiasedScanline.data(), rect.x(), rect.y() + y, rect.width(), 1);
+    }
+}
+
+KisGrowUntilDarkestPixelSelectionFilter::KisGrowUntilDarkestPixelSelectionFilter(qint32 radius,
+                                                                                 KisPaintDeviceSP referenceDevice)
+    : m_radius(radius)
+    , m_referenceDevice(referenceDevice)
+{
+}
+
+KUndo2MagicString KisGrowUntilDarkestPixelSelectionFilter::name()
+{
+    return kundo2_i18n("Grow Selection Until Darkest Pixel");
+}
+
+QRect KisGrowUntilDarkestPixelSelectionFilter::changeRect(const QRect &rect, KisDefaultBoundsBaseSP defaultBounds)
+{
+    Q_UNUSED(defaultBounds);
+
+    return rect.adjusted(-m_radius, -m_radius, m_radius, m_radius);
+}
+
+void KisGrowUntilDarkestPixelSelectionFilter::process(KisPixelSelectionSP pixelSelection, const QRect &rect)
+{
+    // Copy the original selection. We will grow this adaptively until the
+    // darkest or mor opaque pixels or until the maximum grow is reached.
+    KisPixelSelectionSP mask = new KisPixelSelection(*pixelSelection);
+    // Grow the original selection normally. At the end this selection wil be
+    // masked with the adaptively grown mask. We cannot grow adaptively this
+    // selection directly since it may have semi-transparent or soft edges.
+    // Those need to be retained in the final selection. This normally grown
+    // selection is also used as a stop condition for the adaptive mask, which
+    // cannot grow pass the limits of the this normally grown selection.
+    KisGrowSelectionFilter growFilter(m_radius, m_radius);
+    growFilter.process(pixelSelection, rect);
+
+    const qint32 maskScanLineSize = rect.width();
+    const KoColorSpace *referenceColorSpace = m_referenceDevice->colorSpace();
+    const qint32 referencePixelSize = referenceColorSpace->pixelSize();
+    const qint32 referenceScanLineSize = maskScanLineSize * referencePixelSize;
+    // Some buffers to store the working scanlines
+    QVector<quint8> maskBuffer(maskScanLineSize * 2);
+    QVector<quint8> referenceBuffer(referenceScanLineSize * 2);
+    QVector<quint8> selectionBuffer(maskScanLineSize);
+    quint8 *maskScanLines[2] = {maskBuffer.data(), maskBuffer.data() + maskScanLineSize};
+    quint8 *referenceScanLines[2] = {referenceBuffer.data(), referenceBuffer.data() + referenceScanLineSize};
+    quint8 *selectionScanLine = selectionBuffer.data();
+    // Helper function to test if a pixel can be selected
+    auto testSelectPixel = 
+        [referenceColorSpace]
+        (quint8 pixelOpacity, quint8 pixelIntensity,
+         const quint8 *testMaskPixel, const quint8 *testReferencePixel) -> bool
+        {
+            if (*testMaskPixel) {
+                const quint8 testOpacity = referenceColorSpace->opacityU8(testReferencePixel);
+                if (pixelOpacity >= testOpacity) {
+                    const quint8 testIntensity = referenceColorSpace->intensity8(testReferencePixel);
+                    if (pixelIntensity <= testIntensity) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+
+    // Top-left to bottom-right pass
+    // First row
+    {
+        mask->readBytes(maskScanLines[1], rect.left(), rect.top(), maskScanLineSize, 1);
+        m_referenceDevice->readBytes(referenceScanLines[1], rect.left(), rect.top(), maskScanLineSize, 1);
+        pixelSelection->readBytes(selectionScanLine, rect.left(), rect.top(), maskScanLineSize, 1);
+        quint8 *currentMaskScanLineBegin = maskScanLines[1];
+        quint8 *currentMaskScanLineEnd = maskScanLines[1] + maskScanLineSize;
+        quint8 *currentReferenceScanLineBegin = referenceScanLines[1];
+        quint8 *currentSelectionScanLineBegin = selectionScanLine;
+        // First pixel
+        ++currentMaskScanLineBegin;
+        currentReferenceScanLineBegin += referencePixelSize;
+        ++currentSelectionScanLineBegin;
+        // Rest of pixels
+        while (currentMaskScanLineBegin != currentMaskScanLineEnd) {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                       currentMaskScanLineBegin - 1,
+                                                       currentReferenceScanLineBegin - referencePixelSize);
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+            ++currentMaskScanLineBegin;
+            currentReferenceScanLineBegin += referencePixelSize;
+            ++currentSelectionScanLineBegin;
+        }
+        mask->writeBytes(maskScanLines[1], rect.left(), rect.top(), maskScanLineSize, 1);
+    }
+    // Rest of rows
+    for (qint32 y = rect.top() + 1; y <= rect.bottom(); ++y) {
+        rotatePointers(maskScanLines, 2);
+        rotatePointers(referenceScanLines, 2);
+        mask->readBytes(maskScanLines[1], rect.left(), y, maskScanLineSize, 1);
+        m_referenceDevice->readBytes(referenceScanLines[1], rect.left(), y, maskScanLineSize, 1);
+        pixelSelection->readBytes(selectionScanLine, rect.left(), y, maskScanLineSize, 1);
+        quint8 *currentMaskScanLineBegin = maskScanLines[1];
+        quint8 *currentMaskScanLineEnd = maskScanLines[1] + maskScanLineSize;
+        quint8 *currentReferenceScanLineBegin = referenceScanLines[1];
+        quint8 *topMaskScanLineBegin = maskScanLines[0];
+        quint8 *topReferenceScanLineBegin = referenceScanLines[0];
+        quint8 *currentSelectionScanLineBegin = selectionScanLine;
+        // First pixel
+        {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                       topMaskScanLineBegin,
+                                                       topReferenceScanLineBegin);
+                if (!pixelIsSelected) {
+                    pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                        topMaskScanLineBegin + 1,
+                                                        topReferenceScanLineBegin + referencePixelSize);
+                }
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+            ++currentMaskScanLineBegin;
+            currentReferenceScanLineBegin += referencePixelSize;
+            ++topMaskScanLineBegin;
+            topReferenceScanLineBegin += referencePixelSize;
+            ++currentSelectionScanLineBegin;
+        }
+        // Rest of pixels
+        while (currentMaskScanLineBegin != (currentMaskScanLineEnd - 1)) {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity, 
+                                                       topMaskScanLineBegin - 1,
+                                                       topReferenceScanLineBegin - referencePixelSize);
+                if (!pixelIsSelected) {
+                    pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                      topMaskScanLineBegin,
+                                                      topReferenceScanLineBegin);
+                    if (!pixelIsSelected) {
+                        pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                          topMaskScanLineBegin + 1,
+                                                          topReferenceScanLineBegin + referencePixelSize);
+                        if (!pixelIsSelected) {
+                            pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                              currentMaskScanLineBegin - 1,
+                                                              currentReferenceScanLineBegin - referencePixelSize);
+                        }
+                    }
+                }
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+            ++currentMaskScanLineBegin;
+            currentReferenceScanLineBegin += referencePixelSize;
+            ++topMaskScanLineBegin;
+            topReferenceScanLineBegin += referencePixelSize;
+            ++currentSelectionScanLineBegin;
+        }
+        // Last pixel
+        {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity, 
+                                                       topMaskScanLineBegin - 1,
+                                                       topReferenceScanLineBegin - referencePixelSize);
+                if (!pixelIsSelected) {
+                    pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                      topMaskScanLineBegin,
+                                                      topReferenceScanLineBegin);
+                    if (!pixelIsSelected) {
+                        pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                          currentMaskScanLineBegin - 1,
+                                                          currentReferenceScanLineBegin - referencePixelSize);
+                    }
+                }
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+        }
+        mask->writeBytes(maskScanLines[1], rect.left(), y, maskScanLineSize, 1);
+    }
+
+    // Bottom-right to top-left pass
+    // Last row
+    {
+        mask->readBytes(maskScanLines[1], rect.left(), rect.bottom(), maskScanLineSize, 1);
+        m_referenceDevice->readBytes(referenceScanLines[1], rect.left(), rect.bottom(), maskScanLineSize, 1);
+        pixelSelection->readBytes(selectionScanLine, rect.left(), rect.bottom(), maskScanLineSize, 1);
+        quint8 *currentMaskScanLineBegin = maskScanLines[1] + maskScanLineSize - 1;
+        quint8 *currentMaskScanLineEnd = maskScanLines[1] - 1;
+        quint8 *currentReferenceScanLineBegin = referenceScanLines[1] + referenceScanLineSize - referencePixelSize;
+        quint8 *currentSelectionScanLineBegin = selectionScanLine + maskScanLineSize - 1;
+        // Last pixel
+        --currentMaskScanLineBegin;
+        currentReferenceScanLineBegin -= referencePixelSize;
+        --currentSelectionScanLineBegin;
+        // Rest of pixels
+        while (currentMaskScanLineBegin != currentMaskScanLineEnd) {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                       currentMaskScanLineBegin + 1,
+                                                       currentReferenceScanLineBegin + referencePixelSize);
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+            --currentMaskScanLineBegin;
+            currentReferenceScanLineBegin -= referencePixelSize;
+            --currentSelectionScanLineBegin;
+        }
+        mask->writeBytes(maskScanLines[1], rect.left(), rect.top(), maskScanLineSize, 1);
+    }
+    // Rest of rows
+    for (qint32 y = rect.bottom() - 1; y >= rect.top(); --y) {
+        rotatePointers(maskScanLines, 2);
+        rotatePointers(referenceScanLines, 2);
+        mask->readBytes(maskScanLines[1], rect.left(), y, maskScanLineSize, 1);
+        m_referenceDevice->readBytes(referenceScanLines[1], rect.left(), y, maskScanLineSize, 1);
+        pixelSelection->readBytes(selectionScanLine, rect.left(), y, maskScanLineSize, 1);
+        quint8 *currentMaskScanLineBegin = maskScanLines[1] + maskScanLineSize - 1;
+        quint8 *currentMaskScanLineEnd = maskScanLines[1] - 1;
+        quint8 *currentReferenceScanLineBegin = referenceScanLines[1] + referenceScanLineSize - referencePixelSize;
+        quint8 *bottomMaskScanLineBegin = maskScanLines[0] + maskScanLineSize - 1;
+        quint8 *bottomReferenceScanLineBegin = referenceScanLines[0] + referenceScanLineSize - referencePixelSize;
+        quint8 *currentSelectionScanLineBegin = selectionScanLine + maskScanLineSize - 1;
+        // Last pixel
+        {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                       bottomMaskScanLineBegin,
+                                                       bottomReferenceScanLineBegin);
+                if (!pixelIsSelected) {
+                    pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                      bottomMaskScanLineBegin - 1,
+                                                      bottomReferenceScanLineBegin - referencePixelSize);
+                }
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+            --currentMaskScanLineBegin;
+            currentReferenceScanLineBegin -= referencePixelSize;
+            --bottomMaskScanLineBegin;
+            bottomReferenceScanLineBegin -= referencePixelSize;
+            --currentSelectionScanLineBegin;
+        }
+        // Rest of pixels
+        while (currentMaskScanLineBegin != (currentMaskScanLineEnd + 1)) {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity, 
+                                                       bottomMaskScanLineBegin + 1,
+                                                       bottomReferenceScanLineBegin + referencePixelSize);
+                if (!pixelIsSelected) {
+                    pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                      bottomMaskScanLineBegin,
+                                                      bottomReferenceScanLineBegin);
+                    if (!pixelIsSelected) {
+                        pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                          bottomMaskScanLineBegin - 1,
+                                                          bottomReferenceScanLineBegin - referencePixelSize);
+                        if (!pixelIsSelected) {
+                            pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                              currentMaskScanLineBegin + 1,
+                                                              currentReferenceScanLineBegin + referencePixelSize);
+                        }
+                    }
+                }
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+            --currentMaskScanLineBegin;
+            currentReferenceScanLineBegin -= referencePixelSize;
+            --bottomMaskScanLineBegin;
+            bottomReferenceScanLineBegin -= referencePixelSize;
+            --currentSelectionScanLineBegin;
+        }
+        // First pixel
+        {
+            if (*currentMaskScanLineBegin == MIN_SELECTED && *currentSelectionScanLineBegin != MIN_SELECTED) {
+                const quint8 currentOpacity = referenceColorSpace->opacityU8(currentReferenceScanLineBegin);
+                const quint8 currentIntensity = referenceColorSpace->intensity8(currentReferenceScanLineBegin);
+
+                bool pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity, 
+                                                       bottomMaskScanLineBegin + 1,
+                                                       bottomReferenceScanLineBegin + referencePixelSize);
+                if (!pixelIsSelected) {
+                    pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                      bottomMaskScanLineBegin,
+                                                      bottomReferenceScanLineBegin);
+                    if (!pixelIsSelected) {
+                        pixelIsSelected = testSelectPixel(currentOpacity, currentIntensity,
+                                                            currentMaskScanLineBegin + 1,
+                                                            currentReferenceScanLineBegin + referencePixelSize);
+                    }
+                }
+                if (pixelIsSelected) {
+                    *currentMaskScanLineBegin = MAX_SELECTED;
+                }
+            }
+        }
+        mask->writeBytes(maskScanLines[1], rect.left(), y, maskScanLineSize, 1);
+    }
+
+    // Combine the adaptively grown mask with the normally grown mask. The
+    // adaptively grown mask is used as a binary mask to erase some of the
+    // pixels of the normally grown mask
+    {
+        KisSequentialConstIterator it1(mask, rect);
+        KisSequentialIterator it2(pixelSelection, rect);
+        while (it1.nextPixel() && it2.nextPixel()) {
+            *it2.rawData() *= (*it1.rawDataConst() != MIN_SELECTED);
+        }
     }
 }

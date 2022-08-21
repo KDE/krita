@@ -64,9 +64,6 @@ public:
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;
     KisConfigWidget *createConfigurationWidget(QWidget *parent, const QByteArray& from = "", const QByteArray& to = "") const override;
     void initializeCapabilities() override;
-
-    float applyCurveAsNeeded(float value, ConversionPolicy policy);
-
 };
 
 #endif

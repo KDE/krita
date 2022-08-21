@@ -10,6 +10,8 @@
 
 #include <cstdint>
 
+#include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
 #include <KoColorSpace.h>
 #include <KoColorSpaceTraits.h>
 #include <KoColorTransferFunctions.h>
@@ -169,7 +171,7 @@ inline auto writeLayer(bool hasAlpha, Args &&...args)
 }
 } // namespace Planar
 
-namespace HDR
+namespace HDRInt
 {
 template<int endValue0, int endValue1, int channels>
 inline void writeLayerImpl(const int width,
@@ -214,10 +216,10 @@ template<int endValue0, int endValue1, typename... Args>
 inline auto writeInterleavedWithAlpha(bool hasAlpha, Args &&...args)
 {
     if (hasAlpha) {
-        return HDR::writeLayerImpl<endValue0, endValue1, 4>(
+        return HDRInt::writeLayerImpl<endValue0, endValue1, 4>(
             std::forward<Args>(args)...);
     } else {
-        return HDR::writeLayerImpl<endValue0, endValue1, 3>(
+        return HDRInt::writeLayerImpl<endValue0, endValue1, 3>(
             std::forward<Args>(args)...);
     }
 }
@@ -226,13 +228,235 @@ template<typename... Args>
 inline auto writeInterleavedLayer(QSysInfo::Endian endian, Args &&...args)
 {
     if (endian == QSysInfo::LittleEndian) {
-        return HDR::writeInterleavedWithAlpha<1, 0>(
+        return writeInterleavedWithAlpha<1, 0>(std::forward<Args>(args)...);
+    } else {
+        return writeInterleavedWithAlpha<0, 1>(std::forward<Args>(args)...);
+    }
+}
+} // namespace HDRInt
+
+namespace HDRFloat
+{
+
+template<ConversionPolicy policy>
+inline float applyCurveAsNeeded(float value)
+{
+    if (policy == ApplyPQ) {
+        return applySmpte2048Curve(value);
+    } else if (policy == ApplyHLG) {
+        return applyHLGCurve(value);
+    } else if (policy == ApplySMPTE428) {
+        return applySMPTE_ST_428Curve(value);
+    }
+    return value;
+}
+
+template<typename CSTrait,
+         QSysInfo::Endian endianness,
+         int channels,
+         bool convertToRec2020,
+         bool isLinear,
+         ConversionPolicy conversionPolicy,
+         bool removeOOTF>
+inline void writeFloatLayerImpl(const int width,
+                                const int height,
+                                uint8_t *ptr,
+                                const int stride,
+                                KisHLineConstIteratorSP it,
+                                float hlgGamma,
+                                float hlgNominalPeak,
+                                const KoColorSpace *cs)
+{
+    const int endValue0 = endianness == QSysInfo::LittleEndian ? 1 : 0;
+    const int endValue1 = endianness == QSysInfo::LittleEndian ? 0 : 1;
+    QVector<float> pixelValues(4);
+    QVector<qreal> pixelValuesLinear(4);
+    const KoColorProfile *profile = cs->profile();
+    const QVector<qreal> lCoef{cs->lumaCoefficients()};
+    double *src = pixelValuesLinear.data();
+    float *dst = pixelValues.data();
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            CSTrait::normalisedChannelsValue(it->rawDataConst(), pixelValues);
+            if (!convertToRec2020 && !isLinear) {
+                for (int i = 0; i < 4; i++) {
+                    src[i] = static_cast<double>(dst[i]);
+                }
+                profile->linearizeFloatValue(pixelValuesLinear);
+                for (int i = 0; i < 4; i++) {
+                    dst[i] = static_cast<float>(src[i]);
+                }
+            }
+
+            if (conversionPolicy == ApplyHLG && removeOOTF) {
+                removeHLGOOTF(dst, lCoef.constData(), hlgGamma, hlgNominalPeak);
+            }
+
+            for (int ch = 0; ch < channels; ch++) {
+                uint16_t v = qBound<uint16_t>(
+                    0,
+                    static_cast<uint16_t>(
+                        applyCurveAsNeeded<conversionPolicy>(dst[ch])
+                        * max12bit),
+                    max12bit);
+                ptr[2 * (x * channels) + y * stride + endValue0 + (ch * 2)] =
+                    (uint8_t)(v >> 8);
+                ptr[2 * (x * channels) + y * stride + endValue1 + (ch * 2)] =
+                    (uint8_t)(v & 0xFF);
+            }
+
+            it->nextPixel();
+        }
+
+        it->nextRow();
+    }
+}
+template<typename CSTrait,
+         QSysInfo::Endian endianness,
+         int channels,
+         bool convertToRec2020,
+         bool isLinear,
+         ConversionPolicy linearizePolicy,
+         typename... Args>
+inline auto writeInterleavedWithPolicy(bool removeOOTF, Args &&...args)
+{
+    if (removeOOTF) {
+        return writeFloatLayerImpl<CSTrait,
+                                   endianness,
+                                   channels,
+                                   convertToRec2020,
+                                   isLinear,
+                                   linearizePolicy,
+                                   true>(std::forward<Args>(args)...);
+    } else {
+        return writeFloatLayerImpl<CSTrait,
+                                   endianness,
+                                   channels,
+                                   convertToRec2020,
+                                   isLinear,
+                                   linearizePolicy,
+                                   false>(std::forward<Args>(args)...);
+    }
+}
+
+template<typename CSTrait,
+         QSysInfo::Endian endianness,
+         int channels,
+         bool convertToRec2020,
+         bool isLinear,
+         typename... Args>
+inline auto writeInterleavedWithLinear(ConversionPolicy linearizePolicy,
+                                       Args &&...args)
+{
+    if (linearizePolicy == ApplyHLG) {
+        return writeInterleavedWithPolicy<CSTrait,
+                                          endianness,
+                                          channels,
+                                          convertToRec2020,
+                                          isLinear,
+                                          ApplyHLG>(
+            std::forward<Args>(args)...);
+    } else if (linearizePolicy == ApplyPQ) {
+        return writeInterleavedWithPolicy<CSTrait,
+                                          endianness,
+                                          channels,
+                                          convertToRec2020,
+                                          isLinear,
+                                          ApplyPQ>(std::forward<Args>(args)...);
+    } else if (linearizePolicy == ApplySMPTE428) {
+        return writeInterleavedWithPolicy<CSTrait,
+                                          endianness,
+                                          channels,
+                                          convertToRec2020,
+                                          isLinear,
+                                          ApplySMPTE428>(
             std::forward<Args>(args)...);
     } else {
-        return HDR::writeInterleavedWithAlpha<0, 1>(
+        return writeInterleavedWithPolicy<CSTrait,
+                                          endianness,
+                                          channels,
+                                          convertToRec2020,
+                                          isLinear,
+                                          KeepTheSame>(
             std::forward<Args>(args)...);
     }
 }
-} // namespace HDR
+
+template<typename CSTrait,
+         QSysInfo::Endian endianness,
+         int channels,
+         bool convertToRec2020,
+         typename... Args>
+inline auto writeInterleavedWithRec2020(bool isLinear, Args &&...args)
+{
+    if (isLinear) {
+        return writeInterleavedWithLinear<CSTrait,
+                                          endianness,
+                                          channels,
+                                          convertToRec2020,
+                                          true>(std::forward<Args>(args)...);
+    } else {
+        return writeInterleavedWithLinear<CSTrait,
+                                          endianness,
+                                          channels,
+                                          convertToRec2020,
+                                          false>(std::forward<Args>(args)...);
+    }
+}
+
+template<typename CSTrait,
+         QSysInfo::Endian endianness,
+         int channels,
+         typename... Args>
+inline auto writeInterleavedWithAlpha(bool convertToRec2020, Args &&...args)
+{
+    if (convertToRec2020) {
+        return writeInterleavedWithRec2020<CSTrait, endianness, channels, true>(
+            std::forward<Args>(args)...);
+    } else {
+        return writeInterleavedWithRec2020<CSTrait,
+                                           endianness,
+                                           channels,
+                                           false>(std::forward<Args>(args)...);
+    }
+}
+
+template<typename CSTrait, QSysInfo::Endian endianness, typename... Args>
+inline auto writeInterleavedWithEndian(bool hasAlpha, Args &&...args)
+{
+    if (hasAlpha) {
+        return writeInterleavedWithAlpha<CSTrait, endianness, 4>(
+            std::forward<Args>(args)...);
+    } else {
+        return writeInterleavedWithAlpha<CSTrait, endianness, 3>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<typename CSTrait, typename... Args>
+inline auto writeInterleavedWithDepth(QSysInfo::Endian endian, Args &&...args)
+{
+    if (endian == QSysInfo::LittleEndian) {
+        return writeInterleavedWithEndian<CSTrait, QSysInfo::LittleEndian>(
+            std::forward<Args>(args)...);
+    } else {
+        return writeInterleavedWithEndian<CSTrait, QSysInfo::BigEndian>(
+            std::forward<Args>(args)...);
+    }
+}
+
+template<typename... Args>
+inline auto writeInterleavedLayer(const KoID &id, Args &&...args)
+{
+    if (id == Float16BitsColorDepthID) {
+        return writeInterleavedWithDepth<KoBgrF16Traits>(
+            std::forward<Args>(args)...);
+    } else {
+        return writeInterleavedWithDepth<KoBgrF32Traits>(
+            std::forward<Args>(args)...);
+    }
+}
+} // namespace HDRFloat
 
 #endif // KIS_HEIF_EXPORT_TOOLS_H

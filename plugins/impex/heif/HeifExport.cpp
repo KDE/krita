@@ -210,11 +210,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         heif::Context ctx;
 
         heif_chroma chroma = hasAlpha? heif_chroma_interleaved_RRGGBBAA_LE: heif_chroma_interleaved_RRGGBB_LE;
-        int endValue0 = 1;
-        int endValue1 = 0;
         if (QSysInfo::ByteOrder == QSysInfo::BigEndian) {
-            endValue0 = 0;
-            endValue1 = 1;
             chroma = hasAlpha? heif_chroma_interleaved_RRGGBBAA_BE: heif_chroma_interleaved_RRGGBB_BE;
         }
 
@@ -262,9 +258,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                                    ptrA,
                                    strideA,
                                    it);
-            } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+            } else {
                 dbgFile << "Saving as 12bit rgba";
-                img.create(width,height, heif_colorspace_RGB, chroma);
+                img.create(width, height, heif_colorspace_RGB, chroma);
                 img.add_plane(heif_channel_interleaved, width, height, 12);
 
                 int stride = 0;
@@ -275,63 +271,32 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                 KisHLineConstIteratorSP it =
                     pd->createHLineConstIteratorNG(0, 0, width);
 
-                HDR::writeInterleavedLayer(QSysInfo::ByteOrder,
-                                           hasAlpha,
-                                           width,
-                                           height,
-                                           ptr,
-                                           stride,
-                                           it);
-            } else {
-                dbgFile << "Saving floating point as 12bit rgba";
-                img.create(width,height, heif_colorspace_RGB, chroma);
-                img.add_plane(heif_channel_interleaved, width, height, 12);
-
-                int stride = 0;
-
-                uint8_t *ptr = img.get_plane(heif_channel_interleaved, &stride);
-
-                KisPaintDeviceSP pd = image->projection();
-                QVector<float> pixelValues(4);
-                QVector<qreal> pixelValuesLinear(4);
-                QVector<qreal> lCoef {cs->lumaCoefficients()};
-                KisHLineIteratorSP it = pd->createHLineIteratorNG(0, 0, width);
-                const KoColorProfile *profile = cs->profile();
-                bool isLinear = profile->isLinear();
-
-                for (int y = 0; y < height; y++) {
-                    for (int x = 0; x < width; x++) {
-                        cs->normalisedChannelsValue(it->rawData(), pixelValues);
-                        if (!convertToRec2020 && !isLinear) {
-                            std::copy(pixelValues.begin(), pixelValues.end(), pixelValuesLinear.begin());
-                            profile->linearizeFloatValue(pixelValuesLinear);
-                            std::copy(pixelValuesLinear.begin(), pixelValuesLinear.end(), pixelValues.begin());
-                        }
-
-                        if (conversionPolicy == ApplyHLG && removeHGLOOTF) {
-                            removeHLGOOTF(pixelValues, lCoef, hlgGamma, hlgNominalPeak);
-                        }
-
-                        int channels = hasAlpha? 4: 3;
-                        for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound<uint16_t>(
-                                0,
-                                static_cast<uint16_t>(
-                                    applyCurveAsNeeded(pixelValues[ch],
-                                                       conversionPolicy)
-                                    * max12bit),
-                                max12bit);
-                            ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
-                            ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
-                        }
-
-                        it->nextPixel();
-                    }
-
-                    it->nextRow();
+                if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+                    HDRInt::writeInterleavedLayer(QSysInfo::ByteOrder,
+                                                  hasAlpha,
+                                                  width,
+                                                  height,
+                                                  ptr,
+                                                  stride,
+                                                  it);
+                } else {
+                    HDRFloat::writeInterleavedLayer(cs->colorDepthId(),
+                                                    QSysInfo::ByteOrder,
+                                                    hasAlpha,
+                                                    convertToRec2020,
+                                                    cs->profile()->isLinear(),
+                                                    conversionPolicy,
+                                                    removeHGLOOTF,
+                                                    width,
+                                                    height,
+                                                    ptr,
+                                                    stride,
+                                                    it,
+                                                    hlgGamma,
+                                                    hlgNominalPeak,
+                                                    cs);
                 }
             }
-
         } else {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
                 dbgFile << "Saving as 8 bit monochrome.";
@@ -511,19 +476,6 @@ void HeifExport::initializeCapabilities()
             ;
     addSupportedColorModels(supportedColorModels, "HEIF");
 }
-
-float HeifExport::applyCurveAsNeeded(float value, ConversionPolicy policy)
-{
-    if ( policy == ApplyPQ) {
-        return applySmpte2048Curve(value);
-    } else if ( policy == ApplyHLG) {
-        return applyHLGCurve(value);
-    } else if ( policy == ApplySMPTE428) {
-        return applySMPTE_ST_428Curve(value);
-    }
-    return value;
-}
-
 
 void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
 {

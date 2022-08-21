@@ -78,8 +78,8 @@ ALWAYS_INLINE void applyHLGOOTF(float *rgb,
 // The HLG OOTF needs to be removed to convert from 'scene linear' to 'display linear'.
 // Krita doesn't support sending tagged HLG to the display, so we have to pretend
 // we're always converting from HLG to PQ.
-ALWAYS_INLINE void removeHLGOOTF(QVector<float> &rgb,
-                                 const QVector<double> &lumaCoefficients,
+ALWAYS_INLINE void removeHLGOOTF(float *rgb,
+                                 const double *lumaCoefficients,
                                  float gamma = 1.2f,
                                  float nominalPeak = 1000.0f) noexcept
 {

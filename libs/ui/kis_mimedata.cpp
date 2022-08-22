@@ -213,8 +213,9 @@ void KisMimeData::initializeExternalNode(KisNodeSP *node,
         // attach the layer to a new shape controller
         KisShapeLayer *shapeLayer2 = new KisShapeLayer(*shapeLayer, shapeController);
 
-        if (!qFuzzyCompare(dstImage->xRes(), srcImage->xRes()) ||
-            !qFuzzyCompare(dstImage->yRes(), srcImage->yRes())) {
+        if (srcImage
+            && (!qFuzzyCompare(dstImage->xRes(), srcImage->xRes())
+                || !qFuzzyCompare(dstImage->yRes(), srcImage->yRes()))) {
 
             const QTransform t = QTransform::fromScale(srcImage->xRes() / dstImage->xRes(),
                                                        srcImage->yRes() / dstImage->yRes());

@@ -395,15 +395,15 @@ bool KisShortcutMatcher::touchUpdateEvent(QTouchEvent *event)
     bool retval = false;
 
     const int touchPointCount = event->touchPoints().size();
-    const int touchSlop = 10;
+    const int touchSlopSquared = 16 * 16;
     // check whether the touchpoints are relatively stationary or have been moved for dragging.
     for (int i = 0; i < event->touchPoints().size() && !m_d->isTouchDragDetected; ++i) {
         const QTouchEvent::TouchPoint &touchPoint = event->touchPoints().at(i);
-        const QPointF delta = touchPoint.startPos() - touchPoint.pos();
-
+        const QPointF delta = touchPoint.pos() - touchPoint.startPos();
+        const qreal deltaSquared = delta.x() * delta.x() + delta.y() * delta.y();
         // if the drag is detected, until the next TouchBegin even, we'll be assuming the gesture to be of dragging
         // type.
-        m_d->isTouchDragDetected = abs(delta.x()) > touchSlop || abs(delta.y()) > touchSlop;
+        m_d->isTouchDragDetected = deltaSquared > touchSlopSquared;
     }
 
     // for a first few events we don't process the events right away. But analyze and keep track of the event with most

@@ -1,8 +1,9 @@
-#ifndef KISPLAYBACKENGINE_H
-#define KISPLAYBACKENGINE_H
+#ifndef KISPLAYBACKENGINEMLT_H
+#define KISPLAYBACKENGINEMLT_H
 
 #include <QObject>
 #include "KoCanvasObserverBase.h"
+#include "KisPlaybackEngineBase.h"
 #include <kritaui_export.h>
 
 #include <QScopedPointer>
@@ -15,36 +16,28 @@ enum PlaybackMode {
     PLAYBACK_PULL // MLT is updating itself, we are getting regular updates from it about when we need to show our next frame.
 };
 
-enum SeekOption {
-    SEEK_NONE = 0,
-    SEEK_PUSH_AUDIO = 1, // Whether we should be pushing audio or not. Used to prevent double-takes on scrubbing.
-    SEEK_FORCE_RECACHE = 1 << 1,
-    SEEK_FINALIZE = 1 << 2 // Force reload of KisImage to specific frame, ignore caching ability.
-};
-Q_DECLARE_FLAGS(SeekFlags, SeekOption);
-Q_DECLARE_OPERATORS_FOR_FLAGS(SeekFlags);
 
-class KRITAUI_EXPORT KisPlaybackEngine : public QObject, public KoCanvasObserverBase
+class KRITAUI_EXPORT KisPlaybackEngineMLT : public KisPlaybackEngineBase
 {
     Q_OBJECT
 public:
-    explicit KisPlaybackEngine(QObject *parent = nullptr);
-    ~KisPlaybackEngine();
+    explicit KisPlaybackEngineMLT(QObject *parent = nullptr);
+    ~KisPlaybackEngineMLT();
 
 Q_SIGNALS:
     void sigChangeActiveCanvasFrame(int p_frame);
 
 public Q_SLOTS:
-    void play();
-    void pause();
-    void playPause();
-    void stop();
+    virtual void play() override;
+    virtual void pause() override;
+    virtual void playPause() override;
+    virtual void stop() override;
 
-    void seek(int frameIndex, SeekFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO);
-    void previousFrame();
-    void nextFrame();
-    void previousKeyframe();
-    void nextKeyframe();
+    virtual void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
+    virtual void previousFrame() override;
+    virtual void nextFrame() override;
+    virtual void previousKeyframe() override;
+    virtual void nextKeyframe() override;
 
     /**
      * @brief previousMatchingKeyframe && nextMatchingKeyframe
@@ -53,8 +46,8 @@ public Q_SLOTS:
      * 'similar' keyframes. E.g. Contact points in an animation might have
      * a specific color to specify importance and be quickly swapped between.
      */
-    void previousMatchingKeyframe();
-    void nextMatchingKeyframe();
+    virtual void previousMatchingKeyframe() override;
+    virtual void nextMatchingKeyframe() override;
 
     /**
      * @brief previousUnfilteredKeyframe && nextUnfilteredKeyframe
@@ -62,18 +55,18 @@ public Q_SLOTS:
      * This lets users easily navigate to the next visible "onion-skinned"
      * keyframe on the active layer.
      */
-    void previousUnfilteredKeyframe();
-    void nextUnfilteredKeyframe();
+    virtual void previousUnfilteredKeyframe() override;
+    virtual void nextUnfilteredKeyframe() override;
 
-    void setPlaybackSpeedPercent(int value);
-    void setPlaybackSpeedNormalized(double value);
+    virtual void setPlaybackSpeedPercent(int value) override;
+    virtual void setPlaybackSpeedNormalized(double value) override;
 
-    void setMute(bool val);
-    bool isMute();
+    virtual void setMute(bool val) override;
+    virtual bool isMute() override;
 
 protected Q_SLOTS:
-    void setCanvas(KoCanvasBase* canvas) override;
-    void unsetCanvas() override;
+    virtual void setCanvas(KoCanvasBase* canvas) override;
+    virtual void unsetCanvas() override;
 
     /**
      * @brief throttledShowFrame
@@ -106,4 +99,4 @@ private:
     QScopedPointer<Private> m_d;
 };
 
-#endif // KISPLAYBACKENGINE_H
+#endif // KISPLAYBACKENGINEMLT_H

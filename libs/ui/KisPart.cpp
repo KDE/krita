@@ -84,7 +84,7 @@ public:
         : part(_part)
         , idleWatcher(2500)
         , animationCachePopulator(_part)
-        , playbackEngine( new KisPlaybackEngine )
+        , playbackEngine( new KisPlaybackEngineMLT )
     {
     }
 
@@ -99,7 +99,7 @@ public:
     QList<QPointer<KisDocument> > documents;
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    QScopedPointer<KisPlaybackEngine> playbackEngine; //TEMP
+    QScopedPointer<KisPlaybackEngineBase> playbackEngine;
 
     KisSessionResourceSP currentSession;
     bool closingSession{false};
@@ -508,7 +508,7 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
     return &d->animationCachePopulator;
 }
 
-KisPlaybackEngine *KisPart::playbackEngine() const
+KisPlaybackEngineBase *KisPart::playbackEngine() const
 {
     return d->playbackEngine.data();
 }

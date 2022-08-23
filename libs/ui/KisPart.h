@@ -166,7 +166,7 @@ public:
      */
     KisAnimationCachePopulator *cachePopulator() const;
 
-    class KisPlaybackEngine* playbackEngine() const;
+    class KisPlaybackEngineBase* playbackEngine() const;
 
     /**
      * Adds a frame time index to a priority stack, which should be

@@ -323,7 +323,7 @@ bool KisTimeBasedItemModel::setHeaderData(int section, Qt::Orientation orientati
             }
             break;
         case ScrubToRole:
-            SeekFlags seekFlags = SeekFlags(value.toInt());
+            SeekOptionFlags seekFlags = SeekOptionFlags(value.toInt());
             prioritizeCache(m_d->activeFrameIndex);
             KisPart::instance()->playbackEngine()->seek(m_d->activeFrameIndex, seekFlags);
             break;

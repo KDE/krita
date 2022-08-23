@@ -28,16 +28,16 @@ const float SCRUB_AUDIO_SECONDS = 0.25f;
  *  simultaneously in a separate thread.
  */
 static void mltOnConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_frame) {
-    KisPlaybackEngine* self = static_cast<KisPlaybackEngine*>(p_self);
+    KisPlaybackEngineMLT* self = static_cast<KisPlaybackEngineMLT*>(p_self);
     Mlt::Frame frame(p_frame);
     Mlt::Consumer consumer(c);
     const int position = frame.get_position();
     self->sigChangeActiveCanvasFrame(position);
 }
 
-struct KisPlaybackEngine::Private {
+struct KisPlaybackEngineMLT::Private {
 
-    Private( KisPlaybackEngine* p_self )
+    Private( KisPlaybackEngineMLT* p_self )
         : m_self(p_self)
         , activeCanvas(nullptr)
         , mute(false)
@@ -119,7 +119,7 @@ struct KisPlaybackEngine::Private {
     }
 
 private:
-    KisPlaybackEngine* m_self;
+    KisPlaybackEngineMLT* m_self;
 
 public:
     QScopedPointer<Mlt::Profile> profile;
@@ -146,9 +146,9 @@ public:
  * stop-and-then-resume behavior of a consumer. Using RAII, we can stop
  * a consumer at construction and simply resume it when it exits scope.
  */
-struct KisPlaybackEngine::StopAndResume {
+struct KisPlaybackEngineMLT::StopAndResume {
 public:
-    explicit StopAndResume(KisPlaybackEngine::Private* p_d, bool requireFullRestart = false)
+    explicit StopAndResume(KisPlaybackEngineMLT::Private* p_d, bool requireFullRestart = false)
         : m_d(p_d)
     {
         KIS_ASSERT(p_d);
@@ -204,28 +204,28 @@ private:
     Private* m_d;
 };
 
-KisPlaybackEngine::KisPlaybackEngine(QObject *parent)
-    : QObject(parent)
+KisPlaybackEngineMLT::KisPlaybackEngineMLT(QObject *parent)
+    : KisPlaybackEngineBase(parent)
     , m_d( new Private(this))
 {
-    connect(this, &KisPlaybackEngine::sigChangeActiveCanvasFrame, this, &KisPlaybackEngine::throttledShowFrame, Qt::UniqueConnection);
+    connect(this, &KisPlaybackEngineMLT::sigChangeActiveCanvasFrame, this, &KisPlaybackEngineMLT::throttledShowFrame, Qt::UniqueConnection);
 }
 
-KisPlaybackEngine::~KisPlaybackEngine()
+KisPlaybackEngineMLT::~KisPlaybackEngineMLT()
 {
 }
 
-void KisPlaybackEngine::play()
+void KisPlaybackEngineMLT::play()
 {
     m_d->activeCanvasAnimationState()->setPlaybackState(PLAYING);
 }
 
-void KisPlaybackEngine::pause()
+void KisPlaybackEngineMLT::pause()
 {
     m_d->activeCanvasAnimationState()->setPlaybackState(PAUSED);
 }
 
-void KisPlaybackEngine::playPause()
+void KisPlaybackEngineMLT::playPause()
 {
     if (!m_d->activeCanvasAnimationState()) {
         return;
@@ -239,7 +239,7 @@ void KisPlaybackEngine::playPause()
     }
 }
 
-void KisPlaybackEngine::stop()
+void KisPlaybackEngineMLT::stop()
 {
     if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
         const boost::optional<int> origin = m_d->activeCanvasAnimationState()->playbackOrigin();
@@ -253,7 +253,7 @@ void KisPlaybackEngine::stop()
     }
 }
 
-void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
+void KisPlaybackEngineMLT::seek(int frameIndex, SeekOptionFlags flags)
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -269,7 +269,7 @@ void KisPlaybackEngine::seek(int frameIndex, SeekFlags flags)
     }
 }
 
-void KisPlaybackEngine::previousFrame()
+void KisPlaybackEngineMLT::previousFrame()
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -293,7 +293,7 @@ void KisPlaybackEngine::previousFrame()
     }
 }
 
-void KisPlaybackEngine::nextFrame()
+void KisPlaybackEngineMLT::nextFrame()
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
     KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
@@ -316,7 +316,7 @@ void KisPlaybackEngine::nextFrame()
     }
 }
 
-void KisPlaybackEngine::previousKeyframe()
+void KisPlaybackEngineMLT::previousKeyframe()
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -345,7 +345,7 @@ void KisPlaybackEngine::previousKeyframe()
     }
 }
 
-void KisPlaybackEngine::nextKeyframe()
+void KisPlaybackEngineMLT::nextKeyframe()
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -386,7 +386,7 @@ void KisPlaybackEngine::nextKeyframe()
     }
 }
 
-void KisPlaybackEngine::previousMatchingKeyframe()
+void KisPlaybackEngineMLT::previousMatchingKeyframe()
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -405,7 +405,7 @@ void KisPlaybackEngine::previousMatchingKeyframe()
     previousKeyframeWithColor(desiredColor);
 }
 
-void KisPlaybackEngine::nextMatchingKeyframe()
+void KisPlaybackEngineMLT::nextMatchingKeyframe()
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -426,24 +426,24 @@ void KisPlaybackEngine::nextMatchingKeyframe()
     nextKeyframeWithColor(keyframes->keyframeAt(destinationTime)->colorLabel());
 }
 
-void KisPlaybackEngine::previousUnfilteredKeyframe()
+void KisPlaybackEngineMLT::previousUnfilteredKeyframe()
 {
     previousKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
 }
 
-void KisPlaybackEngine::nextUnfilteredKeyframe()
+void KisPlaybackEngineMLT::nextUnfilteredKeyframe()
 {
     nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
 }
 
-void KisPlaybackEngine::nextKeyframeWithColor(int color)
+void KisPlaybackEngineMLT::nextKeyframeWithColor(int color)
 {
     QSet<int> validColors;
     validColors.insert(color);
     nextKeyframeWithColor(validColors);
 }
 
-void KisPlaybackEngine::nextKeyframeWithColor(const QSet<int> &validColors)
+void KisPlaybackEngineMLT::nextKeyframeWithColor(const QSet<int> &validColors)
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -477,14 +477,14 @@ void KisPlaybackEngine::nextKeyframeWithColor(const QSet<int> &validColors)
     }
 }
 
-void KisPlaybackEngine::previousKeyframeWithColor(int color)
+void KisPlaybackEngineMLT::previousKeyframeWithColor(int color)
 {
     QSet<int> validColors;
     validColors.insert(color);
     previousKeyframeWithColor(validColors);
 }
 
-void KisPlaybackEngine::previousKeyframeWithColor(const QSet<int> &validColors)
+void KisPlaybackEngineMLT::previousKeyframeWithColor(const QSet<int> &validColors)
 {
     if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
 
@@ -514,7 +514,7 @@ void KisPlaybackEngine::previousKeyframeWithColor(const QSet<int> &validColors)
     }
 }
 
-void KisPlaybackEngine::setupProducer(boost::optional<QFileInfo> file)
+void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 {
     if (file.has_value()) {
         QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "ranged", file->absoluteFilePath().toUtf8().data()));
@@ -534,7 +534,7 @@ void KisPlaybackEngine::setupProducer(boost::optional<QFileInfo> file)
     producer->set("limit_enabled", false);
 }
 
-void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
+void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
 {
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
 
@@ -575,7 +575,7 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
             setupProducer(m_d->activeCanvasAnimationState()->mediaInfo());
         });
 
-        connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigAudioLevelChanged, this, &KisPlaybackEngine::setAudioVolume);
+        connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigAudioLevelChanged, this, &KisPlaybackEngineMLT::setAudioVolume);
 
         auto image = m_d->activeCanvas->image();
 
@@ -600,18 +600,18 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 
 }
 
-void KisPlaybackEngine::unsetCanvas() {
+void KisPlaybackEngineMLT::unsetCanvas() {
     setCanvas(nullptr);
 }
 
-void KisPlaybackEngine::throttledShowFrame(const int frame)
+void KisPlaybackEngineMLT::throttledShowFrame(const int frame)
 {
     if (m_d->activeCanvas && m_d->activePlaybackMode() == PLAYBACK_PULL) {
         m_d->activeCanvasAnimationState()->showFrame(frame);
     }
 }
 
-void KisPlaybackEngine::setAudioVolume(qreal volumeNormalized)
+void KisPlaybackEngineMLT::setAudioVolume(qreal volumeNormalized)
 {
     if (m_d->mute) {
         m_d->pullConsumer->set("volume", 0.0);
@@ -622,17 +622,17 @@ void KisPlaybackEngine::setAudioVolume(qreal volumeNormalized)
     }
 }
 
-void KisPlaybackEngine::setPlaybackSpeedPercent(int value)
+void KisPlaybackEngineMLT::setPlaybackSpeedPercent(int value)
 {
     Q_UNIMPLEMENTED();
 }
 
-void KisPlaybackEngine::setPlaybackSpeedNormalized(double value)
+void KisPlaybackEngineMLT::setPlaybackSpeedNormalized(double value)
 {
     Q_UNIMPLEMENTED();
 }
 
-void KisPlaybackEngine::setMute(bool val)
+void KisPlaybackEngineMLT::setMute(bool val)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->activeCanvasAnimationState());
     qreal currentVolume = m_d->activeCanvasAnimationState()->currentVolume();
@@ -640,7 +640,7 @@ void KisPlaybackEngine::setMute(bool val)
     setAudioVolume(currentVolume);
 }
 
-bool KisPlaybackEngine::isMute()
+bool KisPlaybackEngineMLT::isMute()
 {
     return m_d->mute;
 }

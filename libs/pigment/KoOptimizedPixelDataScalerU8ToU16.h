@@ -28,7 +28,7 @@ public:
         const int numColorChannels = m_channelsPerPixel * numColumns;
 
 #if XSIMD_WITH_AVX2
-        using uint16_avx_v = xsimd::batch<uint16_t, _impl>;
+        using uint16_avx_v = xsimd::batch<uint16_t, xsimd::default_arch>;
         using uint16_v = xsimd::batch<uint16_t, xsimd::sse4_1>;
         using uint8_v = xsimd::batch<uint8_t, xsimd::sse4_1>;
 
@@ -129,7 +129,7 @@ public:
         const int numColorChannels = m_channelsPerPixel * numColumns;
 
 #if XSIMD_WITH_AVX2
-        using uint16_avx_v = xsimd::batch<uint16_t, _impl>;
+        using uint16_avx_v = xsimd::batch<uint16_t, xsimd::default_arch>;
         using uint16_v = xsimd::batch<uint16_t, xsimd::sse4_1>;
 
         const int channelsPerAvx2Block = 32;

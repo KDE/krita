@@ -31,6 +31,8 @@ struct KoQuaZipStore::Private {
 
     QuaZip *archive {0};
     QuaZipFile *currentFile {0};
+    QStringList directoryListCache;
+    bool directoryListCached = false;
     int compressionLevel {Z_DEFAULT_COMPRESSION};
     bool usingSaveFile {false};
     QByteArray cache;
@@ -109,7 +111,16 @@ qint64 KoQuaZipStore::write(const char *_data, qint64 _len)
 
 QStringList KoQuaZipStore::directoryList() const
 {
-    return dd->archive->getFileNameList();
+    if(mode() == Read) {
+        if(!dd->directoryListCached) {
+            dd->directoryListCache = dd->archive->getFileNameList();
+            dd->directoryListCached = true;
+        }
+        return dd->directoryListCache;
+    }
+    else {
+        return dd->archive->getFileNameList();
+    }
 }
 
 void KoQuaZipStore::init(const QByteArray &appIdentification)

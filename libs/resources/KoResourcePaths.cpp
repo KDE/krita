@@ -685,11 +685,13 @@ QString KoResourcePaths::locateLocalInternal(const QString &type, const QString 
 
 QStringList KoResourcePaths::findExtraResourceDirs() const
 {
+    QStringList extraResourceDirs =
+        QString::fromUtf8(qgetenv("EXTRA_RESOURCE_DIRS"))
+            .split(';', QString::SkipEmptyParts);
 
-    QStringList extraResourceDirs = QString::fromUtf8(qgetenv("EXTRA_RESOURCE_DIRS")).split(';');
-
-    KConfigGroup cfg(KSharedConfig::openConfig(), "");
-    QString customPath = cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
+    const KConfigGroup cfg(KSharedConfig::openConfig(), "");
+    const QString customPath =
+        cfg.readEntry(KisResourceLocator::resourceLocationKey, "");
     if (!customPath.isEmpty()) {
         extraResourceDirs << customPath;
     }

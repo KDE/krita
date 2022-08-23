@@ -33,6 +33,7 @@ KisSessionManagerDialog::KisSessionManagerDialog(QWidget *parent)
     m_model = new KisResourceModel(ResourceType::Sessions, this);
     lstSessions->setModel(m_model);
     lstSessions->setModelColumn(KisAbstractResourceModel::Name);
+    lstSessions->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     connect(lstSessions, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(slotSessionDoubleClicked(QModelIndex)));
     
@@ -70,6 +71,7 @@ void KisSessionManagerDialog::slotNewSession()
                                  i18n("Create session"),
                                  i18n("Session name:"), QLineEdit::Normal,
                                  name);
+    if (name.isEmpty()) return;
 
     KisSessionResourceSP session(new KisSessionResource(QString(name)));
 

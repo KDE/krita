@@ -276,7 +276,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             if (id == JXL_ENC_FRAME_SETTING_RESAMPLING && v == -1)
                 return true;
             if (JxlEncoderFrameSettingsSetOption(frameSettings, id, v) != JXL_ENC_SUCCESS) {
-                errFile << "JxlEncoderSetFrameLossless failed";
+                errFile << "JxlEncoderFrameSettingsSetOption failed";
                 return false;
             }
             return true;
@@ -287,7 +287,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             || !setSetting(JXL_ENC_FRAME_SETTING_DECODING_SPEED, cfg->getInt("decodingSpeed", 0))
             || !setSetting(JXL_ENC_FRAME_SETTING_RESAMPLING, cfg->getInt("resampling", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_EXTRA_CHANNEL_RESAMPLING, cfg->getInt("extraChannelResampling", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_PHOTON_NOISE, cfg->getInt("photonNoise", 0))
             || !setSetting(JXL_ENC_FRAME_SETTING_DOTS, cfg->getInt("dots", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_PATCHES, cfg->getInt("patches", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_EPF, cfg->getInt("epf", -1))
@@ -299,17 +298,31 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             || !setSetting(JXL_ENC_FRAME_SETTING_PROGRESSIVE_AC, cfg->getInt("progressiveAC", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_QPROGRESSIVE_AC, cfg->getInt("qProgressiveAC", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_PROGRESSIVE_DC, cfg->getInt("progressiveDC", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_CHANNEL_COLORS_GLOBAL_PERCENT,
-                           cfg->getInt("channelColorsGlobalPercent", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_CHANNEL_COLORS_GROUP_PERCENT,
-                           cfg->getInt("channelColorsGroupPercent", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_PALETTE_COLORS, cfg->getInt("paletteColors", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_LOSSY_PALETTE, cfg->getInt("lossyPalette", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR_GROUP_SIZE, cfg->getInt("modularGroupSize", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR_PREDICTOR, cfg->getInt("modularPredictor", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR_MA_TREE_LEARNING_PERCENT,
-                           cfg->getInt("modularMATreeLearningPercent", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_JPEG_RECON_CFL, cfg->getInt("jpegReconCFL", -1))) {
+            return ImportExportCodes::InternalError;
+        }
+    }
+
+    {
+        const auto setSettingFloat = [&](JxlEncoderFrameSettingId id, float v) {
+            if (JxlEncoderFrameSettingsSetFloatOption(frameSettings, id, v) != JXL_ENC_SUCCESS) {
+                errFile << "JxlEncoderFrameSettingsSetFloatOption failed";
+                return false;
+            }
+            return true;
+        };
+
+        if (!setSettingFloat(JXL_ENC_FRAME_SETTING_PHOTON_NOISE, cfg->getFloat("photonNoise", 0))
+            || !setSettingFloat(JXL_ENC_FRAME_SETTING_CHANNEL_COLORS_GLOBAL_PERCENT,
+                                cfg->getFloat("channelColorsGlobalPercent", -1))
+            || !setSettingFloat(JXL_ENC_FRAME_SETTING_CHANNEL_COLORS_GROUP_PERCENT,
+                                cfg->getFloat("channelColorsGroupPercent", -1))
+            || !setSettingFloat(JXL_ENC_FRAME_SETTING_MODULAR_MA_TREE_LEARNING_PERCENT,
+                                cfg->getFloat("modularMATreeLearningPercent", -1))) {
             return ImportExportCodes::InternalError;
         }
     }

@@ -10,6 +10,8 @@
 #include <KConfigGroup>
 #include <KoResourcePaths.h>
 
+#include <QDebug>
+
 #include "kis_abstract_input_action.h"
 #include "kis_input_profile_manager.h"
 #include "kis_shortcut_configuration.h"
@@ -21,13 +23,18 @@ KisInputProfileMigrator::~KisInputProfileMigrator()
 KisInputProfileMigrator5To6::KisInputProfileMigrator5To6(KisInputProfileManager *manager)
     : m_manager(manager)
 {
-    // This will be from the install location, so *has* to be the default, see KoResourcePaths for the
-    // order in which it returns locations.
-    m_defaultProfile =
-        // FIXME(sh_zam): Should we declare this as "the default profile" somewhere?
+    // FIXME(sh_zam): Should we declare this as "the default profile" somewhere?
+    const QStringList profiles =
         KoResourcePaths::findAllAssets("data", "input/*.profile", KoResourcePaths::Recursive)
-            .filter("kritadefault.profile")
-            .last();
+            .filter("kritadefault.profile");
+
+    if (!profiles.empty()) {
+        // This will be from the install location, so *has* to be the default, see KoResourcePaths for the
+        // order in which it returns locations.
+        m_defaultProfile = profiles.last();
+    } else {
+        qWarning() << "Default profile does not exist anywhere!";
+    }
 }
 
 KisInputProfileMigrator5To6::~KisInputProfileMigrator5To6()

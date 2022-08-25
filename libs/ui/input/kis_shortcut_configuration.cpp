@@ -76,7 +76,15 @@ QString KisShortcutConfiguration::serialize()
 
     serialized.append(QString::number(d->mode, 16));
     serialized.append(';');
+#ifdef Q_OS_MACOS
+    if (d->type == GestureType) {
+        serialized.append(QString::number(MacOSGestureType, 16));
+    } else {
+        serialized.append(QString::number(d->type, 16));
+    }
+#else
     serialized.append(QString::number(d->type, 16));
+#endif
     serialized.append(";[");
 
     for (QList<Qt::Key>::iterator itr = d->keys.begin(); itr != d->keys.end(); ++itr) {
@@ -127,7 +135,16 @@ bool KisShortcutConfiguration::unserialize(const QString &serialized)
         return false;
     }
 
-#ifndef Q_OS_MACOS
+#ifdef Q_OS_MACOS
+    // On MacOS, the GestureType gestures aren't handled. But! MacOSGestureType gestures are handled as
+    // GestureTypes. Confusing? Yes, but this is done only here (and when serializing).
+    if (d->type == GestureType) {
+        return false;
+    }
+    if (d->type == MacOSGestureType) {
+        d->type = GestureType;
+    }
+#else
     // only macOS platform handles these gestures
     if (d->type == MacOSGestureType) {
         return false;

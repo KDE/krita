@@ -63,12 +63,12 @@ void KisHeifTest::testLoadMonochrome(int bitDepth)
 
         KisImportExportManager manager(doc_png.data());
 
-        KisImportExportErrorCode loadingStatus =
-            manager.importDocument(file+"png", QString());
-
+        KisImportExportErrorCode loadingStatus = manager.importDocument(file + "png", QString());
         QVERIFY(loadingStatus.isOk());
-        KisImportExportManager (doc_heif.data()).importDocument(file+"heif", QString());
-        KisImportExportManager (doc_avif.data()).importDocument(file+"avif", QString());
+        loadingStatus = KisImportExportManager(doc_heif.data()).importDocument(file + "heif", QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus = KisImportExportManager(doc_avif.data()).importDocument(file + "avif", QString());
+        QVERIFY(loadingStatus.isOk());
 
         KisImageSP png_image = doc_png->image().toStrongRef();
         KisImageSP heif_image = doc_heif->image().toStrongRef();
@@ -121,12 +121,12 @@ void KisHeifTest::testLoadRGB(int bitDepth)
 
         KisImportExportManager manager(doc_png.data());
 
-        KisImportExportErrorCode loadingStatus =
-            manager.importDocument(file+"png", QString());
-
+        KisImportExportErrorCode loadingStatus = manager.importDocument(file + "png", QString());
         QVERIFY(loadingStatus.isOk());
-        KisImportExportManager (doc_heif.data()).importDocument(file+"heif", QString());
-        KisImportExportManager (doc_avif.data()).importDocument(file+"avif", QString());
+        loadingStatus = KisImportExportManager(doc_heif.data()).importDocument(file + "heif", QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus = KisImportExportManager(doc_avif.data()).importDocument(file + "avif", QString());
+        QVERIFY(loadingStatus.isOk());
 
         KisImageSP png_image = doc_png->image().toStrongRef();
         KisImageSP heif_image = doc_heif->image().toStrongRef();
@@ -278,23 +278,41 @@ void KisHeifTest::testLoadHDR()
         QScopedPointer<KisDocument> doc_heif_smpte428(KisPart::instance()->createDocument());
         doc_heif_smpte428->setFileBatchMode(true);
 
-        KisImportExportManager manager(doc_png.data());
-
         KisImportExportErrorCode loadingStatus =
-            manager.importDocument(QString("test_rgba_hdr.png"), QString());
-
+            KisImportExportManager(doc_png.data()).importDocument(QString("test_rgba_hdr.png"), QString());
         QVERIFY(loadingStatus.isOk());
+
         qDebug() << "Loading test for PQ files";
-        KisImportExportManager (doc_avif_pq.data()).importDocument(QString("test_rgba_hdr_pq.avif"), QString());
-        KisImportExportManager (doc_heif_pq.data()).importDocument(QString("test_rgba_hdr_pq.heif"), QString());
+        loadingStatus =
+            KisImportExportManager(doc_avif_pq.data()).importDocument(QString("test_rgba_hdr_pq.avif"), QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus =
+            KisImportExportManager(doc_heif_pq.data()).importDocument(QString("test_rgba_hdr_pq.heif"), QString());
+        QVERIFY(loadingStatus.isOk());
 
         qDebug() << "Loading test for HLG files";
-        KisImportExportManager (doc_avif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.avif"), QString());
-        KisImportExportManager (doc_heif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.heif"), QString());
+        loadingStatus =
+            KisImportExportManager(doc_avif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.avif"), QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus =
+            KisImportExportManager(doc_heif_hlg.data()).importDocument(QString("test_rgba_hdr_hlg.heif"), QString());
+        QVERIFY(loadingStatus.isOk());
 
         qDebug() << "Loading test for smpte428 files";
-        KisImportExportManager (doc_avif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.avif"), QString());
-        KisImportExportManager (doc_heif_smpte428.data()).importDocument(QString("test_rgba_hdr_smpte428.heif"), QString());
+        loadingStatus = KisImportExportManager(doc_avif_smpte428.data())
+                            .importDocument(QString("test_rgba_hdr_smpte428.avif"), QString());
+        QVERIFY(loadingStatus.isOk());
+        loadingStatus = KisImportExportManager(doc_heif_smpte428.data())
+                            .importDocument(QString("test_rgba_hdr_smpte428.heif"), QString());
+        QVERIFY(loadingStatus.isOk());
+
+        QVERIFY(doc_png->image());
+        QVERIFY(doc_heif_pq->image());
+        QVERIFY(doc_avif_pq->image());
+        QVERIFY(doc_avif_smpte428->image());
+        QVERIFY(doc_heif_smpte428->image());
+        QVERIFY(doc_avif_hlg->image());
+        QVERIFY(doc_heif_hlg->image());
 
         KisImageSP png_image = doc_png->image().toStrongRef();
         KisImageSP heif_image_pq = doc_heif_pq->image().toStrongRef();

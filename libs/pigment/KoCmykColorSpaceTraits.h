@@ -108,9 +108,11 @@ struct KoCmykF16Traits : public KoCmykTraits<half> {
         }
     }
 
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() == (int)parent::channels_nb);
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &v)
+    {
+        Q_ASSERT((int)v.count() == (int)parent::channels_nb);
         channels_type c;
+        float *channels = v.data();
         for (uint i = 0; i < parent::channels_nb; i++) {
             c = nativeArray(pixel)[i];
             switch (i) {
@@ -183,9 +185,11 @@ struct KoCmykF32Traits : public KoCmykTraits<float> {
         }
     }
 
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() == (int)parent::channels_nb);
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &v)
+    {
+        Q_ASSERT((int)v.count() == (int)parent::channels_nb);
         channels_type c;
+        float *channels = v.data();
         for (uint i = 0; i < parent::channels_nb; i++) {
             c = nativeArray(pixel)[i];
             switch (i) {
@@ -256,9 +260,11 @@ struct KoCmykF64Traits : public KoCmykTraits<double> {
         }
     }
 
-    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &channels) {
-        Q_ASSERT((int)channels.count() == (int)parent::channels_nb);
+    inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &v)
+    {
+        Q_ASSERT((int)v.count() == (int)parent::channels_nb);
         channels_type c;
+        float *channels = v.data();
         for (uint i = 0; i < parent::channels_nb; i++) {
             c = nativeArray(pixel)[i];
             switch (i) {

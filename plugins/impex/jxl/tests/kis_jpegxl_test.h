@@ -18,6 +18,8 @@ private Q_SLOTS:
     void testAnimationWithTail();
     void testFiles();
     void testHDR();
+    void testSaveRgbaColorSpace();
+    void testSaveGreyAColorSpace();
     void testImportIncorrectFormat();
 
 #ifndef Q_OS_WIN

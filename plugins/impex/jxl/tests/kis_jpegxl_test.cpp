@@ -142,6 +142,37 @@ void KisJPEGXLTest::testHDR()
     }
 }
 
+inline void testSaveColorSpace(const QString &colorModel, const QString &colorDepth, const QString &colorProfile)
+{
+    const KoColorSpace *space = KoColorSpaceRegistry::instance()->colorSpace(colorModel, colorDepth, colorProfile);
+    if (space) {
+        TestUtil::testExportToColorSpace(MIMETYPE, space, ImportExportCodes::OK);
+    }
+}
+void KisJPEGXLTest::testSaveRgbaColorSpace()
+{
+    QString profile = "sRGB-elle-V2-srgbtrc";
+    testSaveColorSpace(RGBAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    profile = "Rec2020-elle-V4-g10";
+    testSaveColorSpace(RGBAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+#ifdef HAVE_OPENEXR
+    testSaveColorSpace(RGBAColorModelID.id(), Float16BitsColorDepthID.id(), profile);
+#endif
+    testSaveColorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+}
+
+void KisJPEGXLTest::testSaveGreyAColorSpace()
+{
+    QString profile = "Gray-D50-elle-V2-srgbtrc";
+    testSaveColorSpace(GrayAColorModelID.id(), Integer8BitsColorDepthID.id(), profile);
+    profile = "Gray-D50-elle-V2-g10";
+    testSaveColorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), profile);
+#ifdef HAVE_OPENEXR
+    testSaveColorSpace(GrayAColorModelID.id(), Float16BitsColorDepthID.id(), profile);
+#endif
+    testSaveColorSpace(GrayAColorModelID.id(), Float32BitsColorDepthID.id(), profile);
+}
+
 #ifndef _WIN32
 void KisJPEGXLTest::testImportFromWriteonly()
 {

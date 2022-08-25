@@ -105,8 +105,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             pixelFormat.num_channels = 4;
         } else if (cs->colorModelId() == GrayAColorModelID) {
             pixelFormat.num_channels = 2;
-        } else if (cs->colorModelId() == CMYKAColorModelID) {
-            pixelFormat.num_channels = 5;
         }
         return pixelFormat;
     }();
@@ -151,9 +149,6 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             info->num_extra_channels = 1;
         } else if (cs->colorModelId() == GrayAColorModelID) {
             info->num_color_channels = 1;
-            info->num_extra_channels = 1;
-        } else if (cs->colorModelId() == CMYKAColorModelID) {
-            info->num_color_channels = 4;
             info->num_extra_channels = 1;
         }
         info->uses_original_profile = JXL_TRUE;
@@ -458,18 +453,14 @@ void JPEGXLExport::initializeCapabilities()
     addCapability(KisExportCheckRegistry::instance()->get("TiffExifCheck")->create(KisExportCheckBase::PARTIALLY));
     supportedColorModels << QPair<KoID, KoID>() << QPair<KoID, KoID>(RGBAColorModelID, Integer8BitsColorDepthID)
                          << QPair<KoID, KoID>(GrayAColorModelID, Integer8BitsColorDepthID)
-                         << QPair<KoID, KoID>(CMYKAColorModelID, Integer8BitsColorDepthID)
                          << QPair<KoID, KoID>(RGBAColorModelID, Integer16BitsColorDepthID)
                          << QPair<KoID, KoID>(GrayAColorModelID, Integer16BitsColorDepthID)
-                         << QPair<KoID, KoID>(CMYKAColorModelID, Integer16BitsColorDepthID)
 #ifdef HAVE_OPENEXR
                          << QPair<KoID, KoID>(RGBAColorModelID, Float16BitsColorDepthID)
                          << QPair<KoID, KoID>(GrayAColorModelID, Float16BitsColorDepthID)
-                         << QPair<KoID, KoID>(CMYKAColorModelID, Float16BitsColorDepthID)
 #endif
                          << QPair<KoID, KoID>(RGBAColorModelID, Float32BitsColorDepthID)
-                         << QPair<KoID, KoID>(GrayAColorModelID, Float32BitsColorDepthID)
-                         << QPair<KoID, KoID>(CMYKAColorModelID, Float32BitsColorDepthID);
+                         << QPair<KoID, KoID>(GrayAColorModelID, Float32BitsColorDepthID);
     addSupportedColorModels(supportedColorModels, "JPEG-XL");
 }
 

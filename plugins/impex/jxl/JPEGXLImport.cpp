@@ -10,6 +10,7 @@
 
 #include <jxl/decode_cxx.h>
 #include <jxl/resizable_parallel_runner_cxx.h>
+#include <jxl/types.h>
 #include <kpluginfactory.h>
 
 #include <QBuffer>
@@ -19,6 +20,7 @@
 #include <KisImportExportErrorCode.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoConfig.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 #include <kis_group_layer.h>
@@ -193,21 +195,28 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 runner.get(),
                 JxlResizableParallelRunnerSuggestThreads(d.m_info.xsize, d.m_info.ysize));
 
-            // XXX: libjxl does not yet provide a way to retrieve the real bit depth.
-            // See
-            // https://github.com/libjxl/libjxl/blame/35ca355660a89819e52013fa201284cb50768f80/lib/jxl/decode.cc#L568
             if (d.m_info.exponent_bits_per_sample != 0) {
-                // Let's not rely on float16
-                d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
-                d.m_depthID = Float32BitsColorDepthID;
-            } else {
-                if (d.m_info.bits_per_sample == 8) {
-                    d.m_pixelFormat.data_type = JXL_TYPE_UINT8;
-                    d.m_depthID = Integer8BitsColorDepthID;
+                if (d.m_info.bits_per_sample == 16) {
+                    d.m_pixelFormat.data_type = JXL_TYPE_FLOAT16;
+                    d.m_depthID = Float16BitsColorDepthID;
+                } else if (d.m_info.bits_per_sample == 32) {
+                    d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
+                    d.m_depthID = Float32BitsColorDepthID;
                 } else {
-                    d.m_pixelFormat.data_type = JXL_TYPE_UINT16;
-                    d.m_depthID = Integer16BitsColorDepthID;
+                    errFile << "Unsupported JPEG-XL input depth" << d.m_info.bits_per_sample
+                            << d.m_info.exponent_bits_per_sample;
+                    return ImportExportCodes::FormatFeaturesUnsupported;
                 }
+            } else if (d.m_info.bits_per_sample == 8) {
+                d.m_pixelFormat.data_type = JXL_TYPE_UINT8;
+                d.m_depthID = Integer8BitsColorDepthID;
+            } else if (d.m_info.bits_per_sample == 16) {
+                d.m_pixelFormat.data_type = JXL_TYPE_UINT16;
+                d.m_depthID = Integer16BitsColorDepthID;
+            } else {
+                errFile << "Unsupported JPEG-XL input depth" << d.m_info.bits_per_sample
+                        << d.m_info.exponent_bits_per_sample;
+                return ImportExportCodes::FormatFeaturesUnsupported;
             }
 
             if (d.m_info.num_color_channels == 1) {
@@ -234,12 +243,12 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
             QByteArray icc_profile;
             const KoColorSpace *cs{nullptr};
             const auto tgt = d.m_forcedConversion ? JXL_COLOR_PROFILE_TARGET_DATA : JXL_COLOR_PROFILE_TARGET_ORIGINAL;
-            if (JXL_DEC_SUCCESS == JxlDecoderGetICCProfileSize(dec.get(), &d.m_pixelFormat, tgt, &icc_size)) {
+            if (JXL_DEC_SUCCESS == JxlDecoderGetICCProfileSize(dec.get(), nullptr, tgt, &icc_size)) {
                 dbgFile << "JxlDecoderGetICCProfileSize succeeded, ICC profile available";
                 icc_profile.resize(static_cast<int>(icc_size));
                 if (JXL_DEC_SUCCESS
                     != JxlDecoderGetColorAsICCProfile(dec.get(),
-                                                      &d.m_pixelFormat,
+                                                      nullptr,
                                                       tgt,
                                                       reinterpret_cast<uint8_t *>(icc_profile.data()),
                                                       static_cast<size_t>(icc_profile.size()))) {
@@ -278,6 +287,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     return &::imageOutSizedCallback<uint8_t>;
                 } else if (d.m_pixelFormat.data_type == JXL_TYPE_UINT16) {
                     return &::imageOutSizedCallback<uint16_t>;
+#ifdef HAVE_OPENEXR
+                } else if (d.m_pixelFormat.data_type == JXL_TYPE_FLOAT16) {
+                    return &::imageOutSizedCallback<half>;
+#endif
                 } else {
                     return &::imageOutSizedCallback<float>;
                 }

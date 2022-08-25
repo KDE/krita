@@ -227,10 +227,6 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 // RGBA
                 d.m_pixelFormat.num_channels = 4;
                 d.m_colorID = RGBAColorModelID;
-            } else if (d.m_info.num_color_channels == 4) {
-                // CMYKA
-                d.m_pixelFormat.num_channels = 5;
-                d.m_colorID = CMYKAColorModelID;
             } else {
                 warnFile << "Forcing a RGBA conversion, unknown color space";
                 d.m_pixelFormat.num_channels = 4;

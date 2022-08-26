@@ -20,6 +20,7 @@
 #include <QPainter>
 #include <QAbstractItemDelegate>
 #include <klocalizedstring.h>
+#include <QtMath>
 
 #include <KoFileDialog.h>
 #include <KisKineticScroller.h>

@@ -112,7 +112,6 @@
 #include "kis_canvas2.h"
 #include "kis_canvas_controller.h"
 #include "kis_canvas_resource_provider.h"
-#include <mlt++/MltFactory.h>
 #include "kis_clipboard.h"
 #include "kis_config.h"
 #include "kis_config_notifier.h"

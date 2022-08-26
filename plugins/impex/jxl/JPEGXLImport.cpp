@@ -604,7 +604,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                     }
                     dbgFile << "Framerate:" << framerate;
                     layer->enableAnimation();
-                    image->animationInterface()->setFullClipRangeStartTime(0);
+                    image->animationInterface()->setDocumentRangeStartFrame(0);
                     image->animationInterface()->setFramerate(framerate);
                 }
 
@@ -614,7 +614,7 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
 
                 auto *channel = layer->getKeyframeChannel(KisKeyframeChannel::Raster.id(), true);
                 auto *frame = dynamic_cast<KisRasterKeyframeChannel *>(channel);
-                image->animationInterface()->setFullClipRangeEndTime(
+                image->animationInterface()->setDocumentRangeEndFrame(
                     std::lround(static_cast<double>(d.m_nextFrameTime
                                                     + d.m_header.duration)
                                 / static_cast<double>(d.m_durationFrameInTicks))

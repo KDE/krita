@@ -1,43 +1,38 @@
-#ifndef KISPLAYBACKENGINEMLT_H
-#define KISPLAYBACKENGINEMLT_H
+#ifndef KISPLAYBACKENGINE_H
+#define KISPLAYBACKENGINE_H
 
-#include <QObject>
 #include "KoCanvasObserverBase.h"
-#include "KisPlaybackEngineBase.h"
+#include <QObject>
+
 #include <kritaui_export.h>
 
-#include <QScopedPointer>
-#include <QFileInfo>
-#include <boost/optional.hpp>
-
-
-enum PlaybackMode {
-    PLAYBACK_PUSH, // MLT is being pushed to, used during pause and stop state for scrubbing.
-    PLAYBACK_PULL // MLT is updating itself, we are getting regular updates from it about when we need to show our next frame.
+enum SeekOption {
+    SEEK_NONE = 0,
+    SEEK_PUSH_AUDIO = 1, // Whether we should be pushing audio or not. Used to prevent double-takes on scrubbing.
+    SEEK_FORCE_RECACHE = 1 << 1,
+    SEEK_FINALIZE = 1 << 2 // Force reload of KisImage to specific frame, ignore caching ability.
 };
 
+Q_DECLARE_FLAGS(SeekOptionFlags, SeekOption);
+Q_DECLARE_OPERATORS_FOR_FLAGS(SeekOptionFlags);
 
-class KRITAUI_EXPORT KisPlaybackEngineMLT : public KisPlaybackEngineBase
+class KRITAUI_EXPORT KisPlaybackEngine : public QObject, public KoCanvasObserverBase
 {
     Q_OBJECT
 public:
-    explicit KisPlaybackEngineMLT(QObject *parent = nullptr);
-    ~KisPlaybackEngineMLT();
-
-Q_SIGNALS:
-    void sigChangeActiveCanvasFrame(int p_frame);
+    KisPlaybackEngine(QObject* parent = nullptr);
 
 public Q_SLOTS:
-    virtual void play() override;
-    virtual void pause() override;
-    virtual void playPause() override;
-    virtual void stop() override;
+    virtual void play() = 0;
+    virtual void pause() = 0;
+    virtual void playPause() = 0;
+    virtual void stop() = 0;
 
-    virtual void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
-    virtual void previousFrame() override;
-    virtual void nextFrame() override;
-    virtual void previousKeyframe() override;
-    virtual void nextKeyframe() override;
+    virtual void seek( int frameIndex, SeekOptionFlags options = SEEK_FINALIZE | SEEK_PUSH_AUDIO ) = 0;
+    virtual void previousFrame() = 0;
+    virtual void nextFrame() = 0;
+    virtual void previousKeyframe() = 0;
+    virtual void nextKeyframe() = 0;
 
     /**
      * @brief previousMatchingKeyframe && nextMatchingKeyframe
@@ -46,8 +41,8 @@ public Q_SLOTS:
      * 'similar' keyframes. E.g. Contact points in an animation might have
      * a specific color to specify importance and be quickly swapped between.
      */
-    virtual void previousMatchingKeyframe() override;
-    virtual void nextMatchingKeyframe() override;
+    virtual void previousMatchingKeyframe() = 0;
+    virtual void nextMatchingKeyframe() = 0;
 
     /**
      * @brief previousUnfilteredKeyframe && nextUnfilteredKeyframe
@@ -55,48 +50,14 @@ public Q_SLOTS:
      * This lets users easily navigate to the next visible "onion-skinned"
      * keyframe on the active layer.
      */
-    virtual void previousUnfilteredKeyframe() override;
-    virtual void nextUnfilteredKeyframe() override;
+    virtual void previousUnfilteredKeyframe() = 0;
+    virtual void nextUnfilteredKeyframe() = 0;
 
-    virtual void setPlaybackSpeedPercent(int value) override;
-    virtual void setPlaybackSpeedNormalized(double value) override;
+    virtual void setPlaybackSpeedPercent(int value) = 0;
+    virtual void setPlaybackSpeedNormalized(double value) = 0;
 
-    virtual void setMute(bool val) override;
-    virtual bool isMute() override;
-
-protected Q_SLOTS:
-    virtual void setCanvas(KoCanvasBase* canvas) override;
-    virtual void unsetCanvas() override;
-
-    /**
-     * @brief throttledShowFrame
-     * @param frame
-     *
-     * In order to throttle calls from MLT to respect our
-     * playback mode, we need to redirect `showFrame` calls
-     * to this thread and enforce that we only allow MLT to
-     * show frames when we are in PULL mode.
-     */
-    void throttledShowFrame(const int frame);
-
-    /**
-     * @brief setAudioVolume
-     * @param volume (normalized)
-     */
-    void setAudioVolume(qreal volumeNormalized);
-
-private:
-    void nextKeyframeWithColor(int color);
-    void nextKeyframeWithColor(const QSet<int> &validColors);
-    void previousKeyframeWithColor(int color);
-    void previousKeyframeWithColor(const QSet<int> &validColors);
-
-    void setupProducer(boost::optional<QFileInfo> file);
-
-private:
-    struct Private;
-    struct StopAndResume;
-    QScopedPointer<Private> m_d;
+    virtual void setMute(bool val) = 0;
+    virtual bool isMute() = 0;
 };
 
-#endif // KISPLAYBACKENGINEMLT_H
+#endif // KISPLAYBACKENGINE_H

@@ -36,7 +36,6 @@
 #include "KisDecoratedNodeInterface.h"
 #include "kis_keyframe_channel.h"
 #include "kis_algebra_2d.h"
-#include <mlt++/MltProducer.h>
 #include "KisPlaybackEngine.h"
 
 #include "kis_image_config.h"
@@ -215,7 +214,6 @@ public:
 
     KisCanvas2 *canvas;
     PlaybackState state;
-    PlaybackMode mode;
     QScopedPointer<KisFrameDisplayProxy> displayProxy;
     QScopedPointer<QFileInfo> media;
     QScopedPointer<CanvasPlaybackEnvironment> playbackEnvironment; //Sets up canvas / environment for playback

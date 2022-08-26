@@ -904,7 +904,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                     const auto nextKeyframe = frames->nextKeyframeTime(i);
                     if (nextKeyframe == -1) {
                         return static_cast<uint32_t>(
-                            image->animationInterface()->fullClipRange().end()
+                            image->animationInterface()->documentPlaybackRange().end()
                             - i + 1);
                     } else {
                         return static_cast<uint32_t>(frames->nextKeyframeTime(i) - i);

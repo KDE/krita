@@ -101,7 +101,6 @@ set(kritaui_LIB_SRCS
     kis_bookmarked_filter_configurations_model.cc
     KisPaintopPropertiesBase.cpp
     KisPlaybackEngine.cpp
-    KisPlaybackEngineBase.cpp
     KisPresetShadowUpdater.cpp
     kis_canvas_resource_provider.cpp
     kis_derived_resources.cpp
@@ -473,6 +472,12 @@ if (KSeExpr_FOUND)
     )
 endif()
 
+if (MLT_FOUND)
+    set(kritaui_LIB_SRCS ${kritaui_LIB_SRCS}
+        KisPlaybackEngineMLT.cpp
+    )
+endif()
+
 if(WIN32)
     # Private headers are needed for:
     #    * KisDlgCustomTabletResolution
@@ -690,11 +695,11 @@ target_link_libraries(kritaui
         kritawidgets
         kritawidgetutils
         kritaresources
-
-        SDL2
-        mlt-7
-        mlt++-7
 )
+
+if (MLT_FOUND)
+    target_link_libraries(kritaui SDL2 mlt-7 mlt++-7)
+endif()
 
 if (ANDROID)
     target_link_libraries(kritaui PRIVATE GLESv3)

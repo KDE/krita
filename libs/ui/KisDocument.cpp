@@ -114,8 +114,6 @@
 #include "kis_image_barrier_lock_adapter.h"
 #include "KisReferenceImagesLayer.h"
 #include "dialogs/KisRecoverNamedAutosaveDialog.h"
-#include "mlt++/MltProducer.h"
-
 
 #include <mutex>
 #include "kis_config_notifier.h"

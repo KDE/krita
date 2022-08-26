@@ -95,9 +95,9 @@ public:
     void setDefaultProjectionColor(const KoColor &color);
 
     /**
-     * @brief documentClipRange
+     * @brief documentPlaybackRange
      * @return A KisTimeSpan reflecting actual document time range. This is
-     * the actual play back range associated with the krita document.
+     * the actual play back range associated with a krita document.
      */
     const KisTimeSpan& documentPlaybackRange() const;
     void setDocumentRange(const KisTimeSpan range);

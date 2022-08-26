@@ -74,6 +74,10 @@
 #include "KisRecentFileIconCache.h"
 #include "KisPlaybackEngine.h"
 
+#ifdef HAVE_MLT
+#include "KisPlaybackEngineMLT.h"
+#endif
+
 Q_GLOBAL_STATIC(KisPart, s_instance)
 
 
@@ -84,8 +88,11 @@ public:
         : part(_part)
         , idleWatcher(2500)
         , animationCachePopulator(_part)
-        , playbackEngine( new KisPlaybackEngineMLT )
+        , playbackEngine(nullptr)
     {
+#ifdef HAVE_MLT
+        playbackEngine.reset(new KisPlaybackEngineMLT);
+#endif
     }
 
     ~Private()
@@ -99,7 +106,7 @@ public:
     QList<QPointer<KisDocument> > documents;
     KisIdleWatcher idleWatcher;
     KisAnimationCachePopulator animationCachePopulator;
-    QScopedPointer<KisPlaybackEngineBase> playbackEngine;
+    QScopedPointer<KisPlaybackEngine> playbackEngine;
 
     KisSessionResourceSP currentSession;
     bool closingSession{false};
@@ -508,7 +515,7 @@ KisAnimationCachePopulator* KisPart::cachePopulator() const
     return &d->animationCachePopulator;
 }
 
-KisPlaybackEngineBase *KisPart::playbackEngine() const
+KisPlaybackEngine *KisPart::playbackEngine() const
 {
     return d->playbackEngine.data();
 }

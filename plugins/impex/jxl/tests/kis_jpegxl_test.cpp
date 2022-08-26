@@ -67,7 +67,7 @@ void KisJPEGXLTest::testAnimation()
     QCOMPARE(channel1->keyframeCount(), 24);
 
     QCOMPARE(image->animationInterface()->framerate(), 32);
-    QCOMPARE(image->animationInterface()->fullClipRange(),
+    QCOMPARE(image->animationInterface()->documentPlaybackRange(),
              KisTimeSpan::fromTimeToTime(0, 23));
     QCOMPARE(image->animationInterface()->currentTime(), 0);
 }
@@ -102,7 +102,7 @@ void KisJPEGXLTest::testAnimationWithTail()
     QCOMPARE(channel1->keyframeCount(), 4);
 
     QCOMPARE(image->animationInterface()->framerate(), 5);
-    QCOMPARE(image->animationInterface()->fullClipRange(),
+    QCOMPARE(image->animationInterface()->documentPlaybackRange(),
              KisTimeSpan::fromTimeToTime(0, 19));
     QCOMPARE(image->animationInterface()->currentTime(), 0);
 }

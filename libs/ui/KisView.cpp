@@ -785,6 +785,25 @@ void KisView::dropEvent(QDropEvent *event)
         KConfigGroup configGroup = KSharedConfig::openConfig()->group("KritaFill/KisToolFill");
         const bool isAltPressed = event->keyboardModifiers() & Qt::AltModifier;
         const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false) != isAltPressed;
+        const KisFillPainter::RegionFillingMode regionFillingMode =
+            configGroup.readEntry("contiguousFillMode", "") == "boundaryFill"
+            ? KisFillPainter::RegionFillingMode_BoundaryFill
+            : KisFillPainter::RegionFillingMode_FloodFill;
+        KoColor regionFillingBoundaryColor;
+        if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+            const QString xmlColor = configGroup.readEntry("contiguousFillBoundaryColor", QString());
+            QDomDocument doc;
+            if (doc.setContent(xmlColor)) {
+                QDomElement e = doc.documentElement().firstChild().toElement();
+                QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
+                bool ok;
+                if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
+                    regionFillingBoundaryColor = KoColor::fromXML(e, channelDepthID, &ok);
+                } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
+                    regionFillingBoundaryColor = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
+                }
+            }
+        }
         const int thresholdAmount = configGroup.readEntry("thresholdAmount", 8);
         const int opacitySpread = configGroup.readEntry("opacitySpread", 100);
         const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
@@ -832,6 +851,10 @@ void KisView::dropEvent(QDropEvent *event)
         visitor->setUseSelectionAsBoundary(useSelectionAsBoundary);
         visitor->setFeather(featherAmount);
         visitor->setSizeMod(growSelection);
+        visitor->setRegionFillingMode(regionFillingMode);
+        if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+            visitor->setRegionFillingBoundaryColor(regionFillingBoundaryColor);
+        }
         visitor->setFillThreshold(thresholdAmount);
         visitor->setOpacitySpread(opacitySpread);
         visitor->setAntiAlias(antiAlias);

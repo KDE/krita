@@ -40,6 +40,7 @@
 #include <kis_color_filter_combo.h>
 #include <KisAngleSelector.h>
 #include <kis_color_label_selector_widget.h>
+#include <kis_color_button.h>
 
 #include <processing/fill_processing_visitor.h>
 #include <kis_command_utils.h>
@@ -275,6 +276,14 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
     visitor->setSelectionOnly(m_effectiveFillMode == FillSelection);
     visitor->setUseBgColor(m_fillType == FillWithBackgroundColor);
     visitor->setUsePattern(m_fillType == FillWithPattern);
+    visitor->setRegionFillingMode(
+        m_contiguousFillMode == FloodFill
+        ? KisFillPainter::RegionFillingMode_FloodFill
+        : KisFillPainter::RegionFillingMode_BoundaryFill
+    );
+    if (m_contiguousFillMode == BoundaryFill) {
+        visitor->setRegionFillingBoundaryColor(m_contiguousFillBoundaryColor);
+    }
     visitor->setFillThreshold(m_threshold);
     visitor->setOpacitySpread(m_opacitySpread);
     visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
@@ -367,6 +376,13 @@ QWidget* KisToolFill::createOptionWidget()
     m_angleSelectorPatternRotation->setFlipOptionsMode(KisAngleSelector::FlipOptionsMode_ContextMenu);
     m_angleSelectorPatternRotation->setIncreasingDirection(KisAngleGauge::IncreasingDirection_Clockwise);
 
+    KisOptionButtonStrip *optionButtonStripContiguousFillMode = new KisOptionButtonStrip;
+    m_buttonContiguousFillModeFloodFill = optionButtonStripContiguousFillMode->addButton(
+        KisIconUtils::loadIcon("region-filling-flood-fill"));
+    m_buttonContiguousFillModeBoundaryFill = optionButtonStripContiguousFillMode->addButton(
+        KisIconUtils::loadIcon("region-filling-boundary-fill"));
+    m_buttonContiguousFillModeFloodFill->setChecked(true);
+    m_buttonContiguousFillBoundaryColor = new KisColorButton;
     m_sliderThreshold = new KisSliderSpinBox;
     m_sliderThreshold->setPrefix(i18nc("The 'threshold' spinbox prefix in fill tool options", "Threshold: "));
     m_sliderThreshold->setRange(1, 100);
@@ -425,6 +441,9 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderPatternScale->setToolTip(i18n("Set the scale of the pattern"));
     m_angleSelectorPatternRotation->setToolTip(i18n("Set the rotation of the pattern"));
 
+    m_buttonContiguousFillModeFloodFill->setToolTip(i18n("Select pixels similar to the one you clicked on"));
+    m_buttonContiguousFillModeBoundaryFill->setToolTip(i18n("Select all pixels until a specific boundary color"));
+    m_buttonContiguousFillBoundaryColor->setToolTip(i18n("Boundary color"));
     m_sliderThreshold->setToolTip(i18n("Set how far the region should extend from the selected pixel in terms of color similarity"));
     m_sliderSpread->setToolTip(i18n("Set how far the fully opaque portion of the region should extend."
                                     "\n0% will make opaque only the pixels that are exactly equal to the selected pixel."
@@ -471,6 +490,9 @@ QWidget* KisToolFill::createOptionWidget()
         new KisOptionCollectionWidgetWithHeader(
             i18nc("The 'region extent' section label in fill tool options", "Region extent")
         );
+    sectionRegionExtent->setPrimaryWidget(optionButtonStripContiguousFillMode);
+    sectionRegionExtent->appendWidget("buttonContiguousFillBoundaryColor", m_buttonContiguousFillBoundaryColor);
+    sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor", false);
     sectionRegionExtent->appendWidget("sliderThreshold", m_sliderThreshold);
     sectionRegionExtent->appendWidget("sliderSpread", m_sliderSpread);
     sectionRegionExtent->appendWidget("checkBoxSelectionAsBoundary", m_checkBoxSelectionAsBoundary);
@@ -520,6 +542,11 @@ QWidget* KisToolFill::createOptionWidget()
     }
     m_sliderPatternScale->setValue(m_patternScale);
     m_angleSelectorPatternRotation->setAngle(m_patternRotation);
+    if (m_contiguousFillMode == BoundaryFill) {
+        m_buttonContiguousFillModeBoundaryFill->setChecked(true);
+        sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor", true);
+    }
+    m_buttonContiguousFillBoundaryColor->setColor(m_contiguousFillBoundaryColor);
     m_sliderThreshold->setValue(m_threshold);
     m_sliderSpread->setValue(m_opacitySpread);
     m_checkBoxSelectionAsBoundary->setChecked(m_useSelectionAsBoundary);
@@ -548,6 +575,13 @@ QWidget* KisToolFill::createOptionWidget()
                                                               bool)));
     connect(m_sliderPatternScale, SIGNAL(valueChanged(double)), SLOT(slot_sliderPatternScale_valueChanged(double)));
     connect(m_angleSelectorPatternRotation, SIGNAL(angleChanged(double)), SLOT(slot_angleSelectorPatternRotation_angleChanged(double)));
+    connect(optionButtonStripContiguousFillMode,
+            SIGNAL(buttonToggled(KoGroupButton *, bool)),
+            SLOT(slot_optionButtonStripContiguousFillMode_buttonToggled(KoGroupButton *,
+                                                                        bool)));
+    connect(m_buttonContiguousFillBoundaryColor,
+            SIGNAL(changed(const KoColor&)),
+            SLOT(slot_buttonContiguousFillBoundaryColor_changed(const KoColor&)));
     connect(m_sliderThreshold, SIGNAL(valueChanged(int)), SLOT(slot_sliderThreshold_valueChanged(int)));
     connect(m_sliderSpread, SIGNAL(valueChanged(int)), SLOT(slot_sliderSpread_valueChanged(int)));
     connect(m_checkBoxSelectionAsBoundary, SIGNAL(toggled(bool)), SLOT(slot_checkBoxSelectionAsBoundary_toggled(bool)));
@@ -593,6 +627,13 @@ void KisToolFill::loadConfiguration()
     }
     m_patternScale = m_configGroup.readEntry<qreal>("patternScale", 100.0);
     m_patternRotation = m_configGroup.readEntry<qreal>("patternRotate", 0.0);
+    {
+        const QString contiguousFillModeStr = m_configGroup.readEntry<QString>("contiguousFillMode", "");
+        m_contiguousFillMode = contiguousFillModeStr == "boundaryFill"
+                               ? BoundaryFill
+                               : FloodFill;
+    }
+    m_contiguousFillBoundaryColor = loadContiguousFillBoundaryColorFromConfig();
     m_threshold = m_configGroup.readEntry<int>("thresholdAmount", 8);
     m_opacitySpread = m_configGroup.readEntry<int>("opacitySpread", 100);
     m_useSelectionAsBoundary = m_configGroup.readEntry<bool>("useSelectionAsBoundary", true);
@@ -628,6 +669,23 @@ void KisToolFill::loadConfiguration()
             m_continuousFillMode = FillAnyRegion;
         }
     }
+}
+
+KoColor KisToolFill::loadContiguousFillBoundaryColorFromConfig()
+{
+    const QString xmlColor = m_configGroup.readEntry("contiguousFillBoundaryColor", QString());
+    QDomDocument doc;
+    if (doc.setContent(xmlColor)) {
+        QDomElement e = doc.documentElement().firstChild().toElement();
+        QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
+        bool ok;
+        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
+            return KoColor::fromXML(e, channelDepthID, &ok);
+        } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
+            return KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
+        }
+    }
+    return KoColor();
 }
 
 void KisToolFill::slot_optionButtonStripWhatToFill_buttonToggled(
@@ -686,6 +744,40 @@ void KisToolFill::slot_angleSelectorPatternRotation_angleChanged(double value)
     }
     m_patternRotation = value;
     m_configGroup.writeEntry("patternRotate", value);
+}
+
+void KisToolFill::slot_optionButtonStripContiguousFillMode_buttonToggled(
+    KoGroupButton *button,
+    bool checked)
+{
+    if (!checked) {
+        return;
+    }
+
+    const bool visible = button == m_buttonContiguousFillModeBoundaryFill;
+    KisOptionCollectionWidgetWithHeader *sectionRegionExtent =
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent");
+    sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor", visible);
+
+    m_contiguousFillMode = button == m_buttonContiguousFillModeFloodFill
+                           ? FloodFill
+                           : BoundaryFill;
+
+    m_configGroup.writeEntry(
+        "contiguousFillMode",
+        button == m_buttonContiguousFillModeFloodFill
+        ? "floodFill"
+        : "boundaryFill"
+    );
+}
+
+void KisToolFill::slot_buttonContiguousFillBoundaryColor_changed(const KoColor &color)
+{
+    if (color == m_contiguousFillBoundaryColor) {
+        return;
+    }
+    m_contiguousFillBoundaryColor = color;
+    m_configGroup.writeEntry("contiguousFillBoundaryColor", color.toXML());
 }
 
 void KisToolFill::slot_sliderThreshold_valueChanged(int value)

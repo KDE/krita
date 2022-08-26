@@ -18,6 +18,8 @@
 #include <kconfiggroup.h>
 #include <commands_new/KisMergeLabeledLayersCommand.h>
 
+class KoGroupButton;
+
 /**
  * The 'magic wand' selection tool -- in fact just
  * a floodfill that only creates a selection.
@@ -28,6 +30,12 @@ class KisToolSelectContiguous : public KisToolSelect
     Q_OBJECT
 
 public:
+    enum ContiguousSelectionMode
+    {
+        FloodFill,
+        BoundaryFill
+    };
+
     KisToolSelectContiguous(KoCanvasBase *canvas);
     ~KisToolSelectContiguous() override;
 
@@ -49,20 +57,32 @@ protected:
 public Q_SLOTS:
     void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
-    virtual void slotSetThreshold(int);
-    virtual void slotSetOpacitySpread(int);
-    virtual void slotSetUseSelectionAsBoundary(bool);
+
+    void slotSetContiguousSelectionMode(ContiguousSelectionMode);
+    void slotSetContiguousSelectionBoundaryColor(const KoColor&);
+    void slotSetThreshold(int);
+    void slotSetOpacitySpread(int);
+    void slotSetUseSelectionAsBoundary(bool);
 
 protected:
     using KisToolSelectBase::m_widgetHelper;
 
 private:
+    ContiguousSelectionMode m_contiguousSelectionMode {FloodFill};
+    KoColor m_contiguousSelectionBoundaryColor;
     int m_threshold{8};
     int  m_opacitySpread {100};
     bool m_useSelectionAsBoundary {false};
     KConfigGroup m_configGroup;
     KisPaintDeviceSP m_referencePaintDevice;
     KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
+
+    KoColor loadContiguousSelectionBoundaryColorFromConfig();
+
+private Q_SLOTS:
+    void slot_optionButtonStripContiguousSelectionMode_buttonToggled(
+        KoGroupButton*, bool
+    );
 };
 
 class KisToolSelectContiguousFactory : public KisSelectionToolFactoryBase

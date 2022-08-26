@@ -8,7 +8,6 @@
 
 #include <kis_node.h>
 #include <kis_image.h>
-#include <kis_fill_painter.h>
 #include <kis_wrapped_rect.h>
 #include "lazybrush/kis_colorize_mask.h"
 
@@ -28,6 +27,7 @@ FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
     , m_sizemod(0)
     , m_fillThreshold(8)
     , m_opacitySpread(0)
+    , m_regionFillingMode(KisFillPainter::RegionFillingMode_FloodFill)
     , m_continuousFillMode(ContinuousFillMode_DoNotUse)
     , m_continuousFillMask(nullptr)
     , m_unmerged(false)
@@ -139,6 +139,10 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.setFeather(m_feather);
     fillPainter.setFillThreshold(m_fillThreshold);
     fillPainter.setOpacitySpread(m_opacitySpread);
+    fillPainter.setRegionFillingMode(m_regionFillingMode);
+    if (m_regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+        fillPainter.setRegionFillingBoundaryColor(m_regionFillingBoundaryColor);
+    }
     fillPainter.setCareForSelection(true);
     fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     fillPainter.setWidth(fillRect.width());
@@ -213,6 +217,10 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
         painter.setFeather(m_feather);
         painter.setFillThreshold(m_fillThreshold);
         painter.setOpacitySpread(m_opacitySpread);
+        painter.setRegionFillingMode(m_regionFillingMode);
+        if (m_regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+            painter.setRegionFillingBoundaryColor(m_regionFillingBoundaryColor);
+        }
         painter.setCareForSelection(true);
         painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
         painter.setWidth(fillRect.width());
@@ -307,6 +315,16 @@ void FillProcessingVisitor::setFillThreshold(int fillThreshold)
 void FillProcessingVisitor::setOpacitySpread(int opacitySpread)
 {
     m_opacitySpread = opacitySpread;
+}
+
+void FillProcessingVisitor::setRegionFillingMode(KisFillPainter::RegionFillingMode regionFillingMode)
+{
+    m_regionFillingMode = regionFillingMode;
+}
+
+void FillProcessingVisitor::setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor)
+{
+    m_regionFillingBoundaryColor = regionFillingBoundaryColor;
 }
 
 void FillProcessingVisitor::setContinuousFillMode(ContinuousFillMode continuousFillMode)

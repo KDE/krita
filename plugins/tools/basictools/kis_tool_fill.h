@@ -33,6 +33,7 @@ class KisSliderSpinBox;
 class QCheckBox;
 class KisColorLabelSelectorWidget;
 class QPushButton;
+class KisColorButton;
 
 class KisToolFill : public KisToolPaint
 {
@@ -50,6 +51,12 @@ public:
         FillWithForegroundColor,
         FillWithBackgroundColor,
         FillWithPattern
+    };
+
+    enum ContiguousFillMode
+    {
+        FloodFill,
+        BoundaryFill
     };
 
     enum Reference
@@ -95,6 +102,8 @@ private:
     qreal m_patternScale {100.0};
     qreal m_patternRotation {0.0};
 
+    ContiguousFillMode m_contiguousFillMode {FloodFill};
+    KoColor m_contiguousFillBoundaryColor;
     int m_threshold {8};
     int m_opacitySpread {100};
     bool m_useSelectionAsBoundary {true};
@@ -136,6 +145,9 @@ private:
     KisDoubleSliderSpinBox *m_sliderPatternScale {nullptr};
     KisAngleSelector *m_angleSelectorPatternRotation {nullptr};
 
+    KoGroupButton *m_buttonContiguousFillModeFloodFill {nullptr};
+    KoGroupButton *m_buttonContiguousFillModeBoundaryFill {nullptr};
+    KisColorButton *m_buttonContiguousFillBoundaryColor {nullptr};
     KisSliderSpinBox *m_sliderThreshold {nullptr};
     KisSliderSpinBox *m_sliderSpread {nullptr};
     QCheckBox *m_checkBoxSelectionAsBoundary {nullptr};
@@ -159,6 +171,7 @@ private:
     void endFilling();
 
     void loadConfiguration();
+    KoColor loadContiguousFillBoundaryColorFromConfig();
 
 private Q_SLOTS:
     void slot_optionButtonStripWhatToFill_buttonToggled(KoGroupButton *button,
@@ -167,6 +180,9 @@ private Q_SLOTS:
                                                       bool checked);
     void slot_sliderPatternScale_valueChanged(double value);
     void slot_angleSelectorPatternRotation_angleChanged(double value);
+    void slot_optionButtonStripContiguousFillMode_buttonToggled(KoGroupButton *button,
+                                                                bool checked);
+    void slot_buttonContiguousFillBoundaryColor_changed(const KoColor &color);
     void slot_sliderThreshold_valueChanged(int value);
     void slot_sliderSpread_valueChanged(int value);
     void slot_checkBoxSelectionAsBoundary_toggled(bool checked);

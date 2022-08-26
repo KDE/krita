@@ -28,10 +28,21 @@ public:
     void fillColor(const KoColor &fillColor);
 
     /**
+     * Fill the source device with \p fillColor until \p referenceColor is reached
+     */
+    void fillColorUntilColor(const KoColor &fillColor, const KoColor &referenceColor);
+
+    /**
      * Fill \p externalDevice with \p fillColor basing on the contents
      * of the source device.
      */
     void fillColor(const KoColor &fillColor, KisPaintDeviceSP externalDevice);
+
+    /**
+     * Fill \p externalDevice with \p fillColor basing on the contents
+     * of the source device. Fills until \p referenceColor is reached
+     */
+    void fillColorUntilColor(const KoColor &fillColor, const KoColor &referenceColor, KisPaintDeviceSP externalDevice);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area.

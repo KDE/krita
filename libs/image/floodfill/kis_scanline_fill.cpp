@@ -826,6 +826,43 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor)
     }
 }
 
+void KisScanlineFill::fillColorUntilColor(const KoColor &originalFillColor, const KoColor &referenceColor)
+{
+    KoColor srcColor(referenceColor);
+    srcColor.convertTo(m_d->device->colorSpace());
+    KoColor fillColor(originalFillColor);
+    fillColor.convertTo(m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+
+    if (pixelSize == 1) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint8>, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 2) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint16>, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 4) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint32>, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 8) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint64>, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicySlow, FillWithColor>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    }
+}
+
 void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDeviceSP externalDevice)
 {
     KoColor srcColor(m_d->device->pixel(m_d->startPoint));
@@ -860,6 +897,48 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDevice
         runImpl(policy);
     } else {
         HardSelectionPolicy<DifferencePolicySlow, FillWithColorExternal>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    }
+}
+
+void KisScanlineFill::fillColorUntilColor(const KoColor &originalFillColor, const KoColor &referenceColor, KisPaintDeviceSP externalDevice)
+{
+    KoColor srcColor(referenceColor);
+    srcColor.convertTo(m_d->device->colorSpace());
+    KoColor fillColor(originalFillColor);
+    fillColor.convertTo(m_d->device->colorSpace());
+
+    const int pixelSize = m_d->device->pixelSize();
+
+    if (pixelSize == 1) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint8>, FillWithColorExternal>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 2) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint16>, FillWithColorExternal>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 4) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint32>, FillWithColorExternal>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else if (pixelSize == 8) {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicyOptimized<quint64>, FillWithColorExternal>
+            policy(m_d->device, srcColor, m_d->threshold);
+        policy.setDestinationDevice(externalDevice);
+        policy.setFillColor(fillColor);
+        runImpl(policy);
+    } else {
+        SelectAllUntilColorHardSelectionPolicy<DifferencePolicySlow, FillWithColorExternal>
             policy(m_d->device, srcColor, m_d->threshold);
         policy.setDestinationDevice(externalDevice);
         policy.setFillColor(fillColor);

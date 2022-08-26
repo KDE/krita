@@ -409,5 +409,9 @@
         <file>light_different-regions.svg</file>
         <file>dark_similar-regions.svg</file>
         <file>light_similar-regions.svg</file>
+        <file>dark_region-filling-flood-fill.svg</file>
+        <file>light_region-filling-flood-fill.svg</file>
+        <file>dark_region-filling-boundary-fill.svg</file>
+        <file>light_region-filling-boundary-fill.svg</file>
     </qresource>
 </RCC>

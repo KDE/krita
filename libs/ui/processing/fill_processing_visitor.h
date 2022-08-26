@@ -13,6 +13,7 @@
 #include <kis_selection.h>
 #include <kis_resources_snapshot.h>
 #include <kritaui_export.h>
+#include <kis_fill_painter.h>
 
 class KRITAUI_EXPORT FillProcessingVisitor : public KisSimpleProcessingVisitor
 {
@@ -39,6 +40,8 @@ public:
     void setSizeMod(int sizemod);
     void setFillThreshold(int fillThreshold);
     void setOpacitySpread(int opacitySpread);
+    void setRegionFillingMode(KisFillPainter::RegionFillingMode regionFillingMode);
+    void setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor);
     void setContinuousFillMode(ContinuousFillMode continuousFillMode);
     void setContinuousFillMask(KisSelectionSP continuousFillMask);
     void setContinuousFillReferenceColor(const KoColor &continuousFillReferenceColor);
@@ -71,6 +74,8 @@ private:
     int m_sizemod;
     int m_fillThreshold;
     int m_opacitySpread;
+    KisFillPainter::RegionFillingMode m_regionFillingMode;
+    KoColor m_regionFillingBoundaryColor;
 
     ContinuousFillMode m_continuousFillMode;
     KisSelectionSP m_continuousFillMask;

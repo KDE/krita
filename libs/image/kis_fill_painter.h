@@ -31,6 +31,11 @@ class KRITAIMAGE_EXPORT KisFillPainter : public KisPainter
 {
 
 public:
+    enum RegionFillingMode
+    {
+        RegionFillingMode_FloodFill,
+        RegionFillingMode_BoundaryFill
+    };
 
     /**
      * Construct an empty painter. Use the begin(KisPaintDeviceSP) method to attach
@@ -326,6 +331,30 @@ public:
         return m_useSelectionAsBoundary;
     }
 
+    /** Sets the region filling mode */
+    void setRegionFillingMode(RegionFillingMode regionFillingMode) {
+        m_regionFillingMode = regionFillingMode;
+    }
+
+    /** Gets the region filling mode */
+    RegionFillingMode regionFillingMode() const {
+        return m_regionFillingMode;
+    }
+
+    /** Sets the color of the boundary used when the region filling mode is
+     *  RegionFillingMode_BoundaryFill
+     */
+    void setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor) {
+        m_regionFillingBoundaryColor = regionFillingBoundaryColor;
+    }
+
+    /** Gets the color of the boundary used when the region filling mode is
+     *  RegionFillingMode_BoundaryFill
+     */
+    KoColor regionFillingBoundaryColor() const {
+        return m_regionFillingBoundaryColor;
+    }
+
 protected:
     void setCurrentFillSelection(KisSelectionSP fillSelection)
     {
@@ -354,6 +383,8 @@ private:
     bool m_careForSelection;
     bool m_useCompositioning;
     bool m_useSelectionAsBoundary;
+    RegionFillingMode m_regionFillingMode;
+    KoColor m_regionFillingBoundaryColor;
 };
 
 #endif //KIS_FILL_PAINTER_H_

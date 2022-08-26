@@ -27,7 +27,7 @@ public:
     {
         const int numColorChannels = m_channelsPerPixel * numColumns;
 
-#if XSIMD_WITH_AVX2
+#if defined(HAVE_XSIMD) && XSIMD_WITH_AVX2
         using uint16_avx_v = xsimd::batch<uint16_t, xsimd::default_arch>;
         using uint16_v = xsimd::batch<uint16_t, xsimd::sse4_1>;
         using uint8_v = xsimd::batch<uint8_t, xsimd::sse4_1>;
@@ -38,7 +38,7 @@ public:
         const int rest = numColorChannels % channelsPerAvx2Block;
         const int sse2Block = rest / channelsPerSse2Block;
         const int scalarBlock = rest % channelsPerSse2Block;
-#elif XSIMD_WITH_SSE4_1 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64
+#elif defined(HAVE_XSIMD) && (XSIMD_WITH_SSE4_1 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64)
 #if XSIMD_WITH_SSE4_1
         using uint16_v = xsimd::batch<uint16_t, xsimd::sse4_1>;
         using uint8_v = xsimd::batch<uint8_t, xsimd::sse4_1>;
@@ -66,7 +66,7 @@ public:
             const quint8 *srcPtr = src;
             auto *dstPtr = reinterpret_cast<quint16 *>(dst);
 
-#if XSIMD_WITH_AVX2
+#if defined(HAVE_XSIMD) && XSIMD_WITH_AVX2
             for (int i = 0; i < avx2Block; i++) {
                 const auto x = uint8_v::load_unaligned(srcPtr);
 
@@ -84,7 +84,7 @@ public:
             Q_UNUSED(avx2Block);
 #endif
 
-#if XSIMD_WITH_SSE4_1 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64
+#if defined(HAVE_XSIMD) && (XSIMD_WITH_SSE4_1 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64)
             for (int i = 0; i < sse2Block; i++) {
 #if XSIMD_WITH_SSE4_1
                 const uint8_v x(_mm_loadl_epi64(reinterpret_cast<const __m128i *>(srcPtr)));
@@ -128,7 +128,7 @@ public:
     {
         const int numColorChannels = m_channelsPerPixel * numColumns;
 
-#if XSIMD_WITH_AVX2
+#if defined(HAVE_XSIMD) && XSIMD_WITH_AVX2
         using uint16_avx_v = xsimd::batch<uint16_t, xsimd::default_arch>;
         using uint16_v = xsimd::batch<uint16_t, xsimd::sse4_1>;
 
@@ -142,7 +142,7 @@ public:
         const auto offset1 = uint16_avx_v(128);
         const auto offset2 = uint16_v(128);
 
-#elif XSIMD_WITH_SSE2 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64
+#elif defined(HAVE_XSIMD) && XSIMD_WITH_SSE2 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64
         // SSE2, unlike the previous function, is a perfectly valid option
         // while under generic.
 #if XSIMD_WITH_SSE2
@@ -171,7 +171,7 @@ public:
             const quint16 *srcPtr = reinterpret_cast<const quint16 *>(src);
             quint8 *dstPtr = dst;
 
-#if XSIMD_WITH_AVX2
+#if defined(HAVE_XSIMD) && XSIMD_WITH_AVX2
             for (int i = 0; i < avx2Block; i++) {
                 auto x1 = uint16_avx_v::load_unaligned(srcPtr);
                 auto x2 = uint16_avx_v::load_unaligned(srcPtr + uint16_avx_v::size);
@@ -203,7 +203,7 @@ public:
         Q_UNUSED(avx2Block);
 #endif
 
-#if XSIMD_WITH_SSE2 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64
+#if defined(HAVE_XSIMD) && (XSIMD_WITH_SSE2 || XSIMD_WITH_NEON || XSIMD_WITH_NEON64)
             for (int i = 0; i < sse2Block; i++) {
                 auto x1 = uint16_v::load_unaligned(srcPtr);
                 auto x2 = uint16_v::load_unaligned(srcPtr + uint16_v::size);

@@ -9,6 +9,10 @@ if (TIFF_HAS_PSD_TAGS)
     kis_add_library(kritatiffpsd SHARED ${libkritatiffpsd_SRCS})
     generate_export_header(kritatiffpsd)
 
+    set_target_properties(kritatiffpsd PROPERTIES
+        VERSION ${GENERIC_KRITA_LIB_VERSION} SOVERSION ${GENERIC_KRITA_LIB_SOVERSION}
+    )
+
     target_link_libraries(kritatiffpsd kritapsd ${TIFF_LIBRARIES})
 
     install(TARGETS kritatiffpsd DESTINATION ${INSTALL_TARGETS_DEFAULT_ARGS})

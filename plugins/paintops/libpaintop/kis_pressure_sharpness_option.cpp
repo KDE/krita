@@ -46,7 +46,19 @@ void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfigurat
 
 void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const
 {
-    if (isChecked() && alignOutlineToPixels() && KisCurveOption::value() != 0.0) {
+    bool sharpness=isChecked() && KisCurveOption::value() != 0.0;
+    applyInner(info,pt,x,y,xFraction,yFraction,sharpness);
+}
+
+void KisPressureSharpnessOption::applyOutline(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const
+{
+    bool sharpness=isChecked() && alignOutlineToPixels() && KisCurveOption::value() != 0.0;
+    applyInner(info,pt,x,y,xFraction,yFraction,sharpness);
+}
+
+void KisPressureSharpnessOption::applyInner(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction, bool sharpness) const
+{
+    if (sharpness) {
         qreal processedSharpness = computeSizeLikeValue(info);
 
         if (processedSharpness == 1.0) {

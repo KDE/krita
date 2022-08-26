@@ -161,7 +161,7 @@ QPainterPath KisCurrentOutlineFetcher::fetchOutline(const KisPaintInformation &i
         qint32 y = 0;
         qreal subPixelX = 0.0;
         qreal subPixelY = 0.0;
-        d->sharpnessOption->apply(info, pos - hotSpot, x, y, subPixelX, subPixelY);
+        d->sharpnessOption->applyOutline(info, pos - hotSpot, x, y, subPixelX, subPixelY);
         pos = QPointF(x + subPixelX, y + subPixelY) + hotSpot;
     }
 

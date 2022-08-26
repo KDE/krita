@@ -25,9 +25,14 @@ public:
     KisPressureSharpnessOption();
 
     /**
-    * First part of the sharpness is the coordinates: in pen mode they are integers without fractions
+    * Apply coordinates rounding for strokes. This only determines if should do rounding, actual job is done in applyInner.
     */
     void apply(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const;
+
+    /**
+    * Same as `apply()` above, but for outline.
+    */
+    void applyOutline(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const;
 
     /**
     * Apply threshold specified by user
@@ -66,6 +71,13 @@ public:
 private:
     bool m_alignOutlinePixels {false};
     quint32 m_softness {0};
+
+    /**
+    * First part of the sharpness is the coordinates: in pen mode they are integers without fractions
+    * but when the "Align the brush preview outline to the pixel grid" option is toggled,
+    * we should round coordinates for strokes and no rounding for the outlines.
+    */
+    void applyInner(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction, bool sharpness) const;
 };
 
 #endif

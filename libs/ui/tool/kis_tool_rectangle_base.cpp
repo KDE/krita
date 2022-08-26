@@ -174,6 +174,8 @@ void KisToolRectangleBase::beginPrimaryAction(KoPointerEvent *event)
     m_currentModifiers = Qt::NoModifier;
 
     QPointF pos = convertToPixelCoordAndSnap(event, QPointF(), false);
+    pos.rx()= qRound(pos.x());
+    pos.ry()= qRound(pos.y());
     m_dragStart = m_dragCenter = pos;
     m_angle = m_angleBuffer = 0;
     m_rotateActive = false;

@@ -16,6 +16,7 @@ Name[hi]=पेंट
 Name[hu]=Festés
 Name[id]=Cat
 Name[it]=Pittura
+Name[ka]=დახატვა
 Name[ko]=페인트
 Name[nl]=Verf
 Name[nn]=Måling

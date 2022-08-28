@@ -16,6 +16,7 @@ Name[hi]=स्याही
 Name[hu]=Tinta
 Name[id]=Tinta
 Name[it]=Inchiostro
+Name[ka]=მელანი
 Name[ko]=잉크
 Name[nl]=Inkt
 Name[nn]=Tusjing

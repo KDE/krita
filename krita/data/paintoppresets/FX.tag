@@ -16,6 +16,7 @@ Name[hi]=एफएक्स
 Name[hu]=FX
 Name[id]=FX
 Name[it]=FX
+Name[ka]=ეფექტები
 Name[ko]=FX
 Name[nl]=FX
 Name[nn]=FX

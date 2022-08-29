@@ -48,10 +48,10 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
         return ImportExportCodes::Failure;
     }
 
-    KisScalableVectorGraphicsSaveContext svgSaveContext(store);
-    KisScalableVectorGraphicsSaveVisitor svgVisitor(&svgSaveContext, {document->preActivatedNode()});
+    //KisScalableVectorGraphicsSaveContext svgSaveContext(store);
+    KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()});
 
-    document->image()->rootLayer()->accept(svgVisitor);
+    //document->image()->rootLayer()->accept(svgVisitor);
     KisImageSP image = document->savingImage();
     const auto bounds = image->bounds();
     const auto *const cs = image->colorSpace();
@@ -93,7 +93,7 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
 */
 
     QSizeF pageSize(qreal(10.0), qreal(10));
-    SvgWriter writer(shapes);
+    //SvgWriter writer(shapes);
 
 //    if (!writer.save(*io, pageSize)) {
 //        qDebug() << "Did not save: "<< document->objectName();

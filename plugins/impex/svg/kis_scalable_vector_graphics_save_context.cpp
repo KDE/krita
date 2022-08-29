@@ -22,7 +22,7 @@ KisScalableVectorGraphicsSaveContext::KisScalableVectorGraphicsSaveContext(KoSto
 
 QString KisScalableVectorGraphicsSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store* metaData, const QRect &imageRect, const qreal xRes, const qreal yRes)
 {
-    QString filename = QString("data/layer%1.png").arg(m_id++);
+   QString filename = QString("data/layer%1.png").arg(m_id++);
     if (KisPNGConverter::saveDeviceToStore(filename, imageRect, xRes, yRes, dev, m_store, metaData)) {
         return filename;
     }

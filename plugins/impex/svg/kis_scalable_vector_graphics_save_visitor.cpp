@@ -15,6 +15,7 @@
 #include <kis_scalable_vector_graphics_save_context.h>
 #include <kis_clone_layer.h>
 #include <kis_external_layer_iface.h>
+#include <QTextStream>
 
 struct KisScalableVectorGraphicsSaveVisitor::Private {
     Private() {}
@@ -22,13 +23,16 @@ struct KisScalableVectorGraphicsSaveVisitor::Private {
     QDomDocument layerStack;
     QDomElement currentElement;
     vKisNodeSP activeNodes;
+    QTextStream* saveDevice;
 };
 
 
-KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(KisScalableVectorGraphicsSaveContext* saveContext, vKisNodeSP activeNodes)
+KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes)
     : d(new Private)
 {
-    d->saveContext = saveContext;
+    QTextStream svgStream(saveDevice);
+    svgStream.setCodec("UTF-8");
+    d->saveDevice = &svgStream;
     d->activeNodes = activeNodes;
     qDebug() << "create KisScalableVectorGraphicsSaveVisitor";
 }
@@ -47,6 +51,7 @@ bool KisScalableVectorGraphicsSaveVisitor::visit(KisPaintLayer *layer)
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGroupLayer *layer)
 {
     qDebug() << "visit KisGroupLayer";
+    visitAll(layer);
     return true;
 }
 
@@ -92,13 +97,13 @@ bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
         adjustedBounds.adjust(0, 0, 1, 1);
     }
 
-    QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
+    //QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
-    elt.setAttribute("src", filename);
+    //elt.setAttribute("src", filename);
     d->currentElement.insertBefore(elt, QDomNode());
-
+    d->saveDevice << layer->name() << endl;
     return true;
 }
 

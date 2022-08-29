@@ -21,7 +21,7 @@ class QDomElement;
 class KisScalableVectorGraphicsSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisScalableVectorGraphicsSaveVisitor(KisScalableVectorGraphicsSaveContext*, vKisNodeSP activeNodes);
+    KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes);
     ~KisScalableVectorGraphicsSaveVisitor() override;
 
     using KisNodeVisitor::visit;

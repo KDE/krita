@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Paint
+Name[ar]=طلاء
 Name[bg]=Боя
 Name[ca]=Pintura
 Name[ca@valencia]=Pintura

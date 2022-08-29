@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Pixel Art
+Name[ar]=فن البكسل
 Name[bg]=Вид на пиксели
 Name[ca]=Art de píxels
 Name[ca@valencia]=Art de píxels

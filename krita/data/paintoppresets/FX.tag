@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=FX
+Name[ar]=إف إكس
 Name[bg]=FX
 Name[ca]=Efectes especials
 Name[ca@valencia]=Efectes especials

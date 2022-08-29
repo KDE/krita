@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Ink
+Name[ar]=حبر
 Name[bg]=Мастило
 Name[ca]=Tinta
 Name[ca@valencia]=Tinta

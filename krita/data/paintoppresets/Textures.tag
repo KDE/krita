@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Textures
+Name[ar]=الأنسجة
 Name[bg]=Текстури
 Name[ca]=Textures
 Name[ca@valencia]=Textures

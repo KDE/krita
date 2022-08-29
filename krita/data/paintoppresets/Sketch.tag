@@ -2,6 +2,7 @@
 Type=Tag
 ResourceType=paintoppreset
 Name=Sketch
+Name[ar]=مخطًط
 Name[bg]=Скица
 Name[ca]=Esbossos
 Name[ca@valencia]=Esbossos

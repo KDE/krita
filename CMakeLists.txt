@@ -995,6 +995,8 @@ if (MLT_FOUND)
     include_directories(${SDL2_INCLUDE_DIRS})
 endif()
 macro_bool_to_01(MLT_FOUND HAVE_MLT)
+configure_file(config-mlt.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-mlt.h)
+
 
 
 find_package(LibMyPaint)

@@ -11,6 +11,8 @@
 
 #include "KisPart.h"
 
+#include <config-mlt.h>
+
 #include "KoProgressProxy.h"
 #include <KoCanvasController.h>
 #include <KoCanvasControllerWidget.h>
@@ -90,7 +92,9 @@ public:
         , animationCachePopulator(_part)
         , playbackEngine(nullptr)
     {
+        ENTER_FUNCTION() << "OUTSIDE DEF";
 #ifdef HAVE_MLT
+        ENTER_FUNCTION() << "CONSTRUCTOR";
         playbackEngine.reset(new KisPlaybackEngineMLT);
 #endif
     }

@@ -1234,7 +1234,7 @@ feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 if (ANDROID)
   # ECM passes this to Qt, which was already capable of detecting it..
-  set (ANDROID_SDK_COMPILE_API "30")
+  set (ANDROID_SDK_COMPILE_API "31")
   if ((${NDK_VERSION} GREATER_EQUAL 20))
     set (USE_LLVM ON)
   endif()

@@ -251,6 +251,7 @@ KisWelcomePageWidget::KisWelcomePageWidget(QWidget *parent)
 
     showNewsAction->setChecked(m_checkUpdates);
     newsWidget->setVisible(m_checkUpdates);
+    versionNotificationLabel->setEnabled(m_checkUpdates);
 
     // Drop area..
     setAcceptDrops(true);

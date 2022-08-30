@@ -16,6 +16,7 @@
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
 #include "kis_algebra_2d.h"
+#include <kis_dom_utils.h>
 #include <Eigen/Eigenvalues>
 
 #include <math.h>
@@ -44,6 +45,17 @@ public:
     // "ellipse formula" - ax^2 + bxy + cy^2 + dx + ey + f = 0
     // "vertices" - points on axes
 
+    // enum
+
+
+    typedef enum CURVE_TYPE {
+        ELLIPSE,
+        HYPERBOLA,
+        PARABOLA
+    } CURVE_TYPE;
+
+
+
     // functions
 
     ///
@@ -53,7 +65,9 @@ public:
     /// \param polygon polygon that contains the ellipse
     /// \returns whether the ellipse is valid or not
     ///
-    bool updateToPolygon(QVector<QPointF> _polygon);
+    bool updateToPolygon(QVector<QPointF> _polygon, QLineF horizonLine);
+
+    bool updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine);
 
     ///
     /// \brief setSimpleEllipseVertices sets vertices of this ellipse to the "simple ellipse" class
@@ -74,6 +88,10 @@ public:
     /// \return true if the formula represents an ellipse, otherwise false
     ///
     static bool formulaRepresentsAnEllipse(double a, double b, double c);
+
+    static CURVE_TYPE curveTypeForFormula(double a, double b, double c);
+
+    void paintParametric(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform);
 
     // unused for now; will be used to move the ellipse towards any vanishing point
     // might need more info about vanishing points (for example, might need all points)
@@ -100,10 +118,33 @@ public:
 
     QVector<QPointF> finalVertices; // used to draw ellipses and project the cursor points
 
+    double originalCircleRadius {0.5};
+
+    CURVE_TYPE curveType; // whether the formula represents an ellipse, parabola or hyperbola
+
+    QVector<QPointF> originalPoints; // five points used for the ellipse
+
+    QLineF horizon; // needed for painting
+    QVector<double> horizonFormula; // needed for painting; ax + by + c = 0 represents the horizon
+
+
+
+
 protected:
 
     void setFormula(QVector<double>& formula, double a, double b, double c, double d, double e, double f);
     void setPoint(QVector<double>& point, double x, double y);
+
+    bool updateToFivePoints(QVector<QPointF> points, QLineF _horizon);
+
+    void paintParametric(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform, const QPointF& begin, bool goesLeft);
+
+    /**
+     * @brief horizonLineSign says on which side of the horizon (using the same, saved formula) the specific point is
+     * @param point point to determine on which side of the horizon line it is
+     * @return -1 for one side and +1 on the other, if equal for two points, it means that they are on the same side of the line. 0 means on the line.
+     */
+    int horizonLineSign(QPointF point);
 
 
     bool m_valid {false};
@@ -125,12 +166,13 @@ EllipseInPolygon::EllipseInPolygon()
     finalVertices << QPointF(-1, 0) << QPointF(1, 0) << QPointF(0, 1);
 }
 
-bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon)
+bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon, QLineF horizonLine)
 {
     QTransform transform;
 
     m_valid = false; // let's make it false in case we return in the middle of the work
     polygon = _polygon; // the assistant needs to know the polygon even when it doesn't allow for a correct ellipse
+
 
     // this calculates the perspective transform that represents the current quad (polygon)
     // this is the transform that changes the original (0, 0, 1, 1) square to the quad
@@ -151,6 +193,285 @@ bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon)
     QPointF pt4 = originalTransform.map(QPointF(0.0, 0.5));
     // a point on the ellipse and on the `y = x` line
     QPointF ptR = originalTransform.map(QPointF(0.5 - 1/(2*sqrt(2)), 0.5 - 1/(2*sqrt(2))));
+
+
+    return updateToFivePoints({pt1, pt2, pt3, pt4, ptR}, horizonLine);
+
+
+}
+
+bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine)
+{
+    m_valid = false; // let's make it false in case we return in the middle of the work
+    if (!_originalTransform.isInvertible()) {
+        return false;
+    }
+
+    QTransform inverted = _originalTransform.inverted();
+
+    QPointF pointInOriginalCoordinates = inverted.map(pointOnConcetric);
+
+    QPointF center = QPointF(0.5, 0.5);
+    double distanceFromCenter = kisDistance(pointInOriginalCoordinates, center);
+
+    originalCircleRadius = distanceFromCenter;
+
+    originalTransform = _originalTransform;
+
+    QVector<QPointF> points;
+    points << originalTransform.map(pointInOriginalCoordinates)
+           << originalTransform.map(center + QPointF(distanceFromCenter, 0))
+           << originalTransform.map(center + QPointF(-distanceFromCenter, 0))
+           << originalTransform.map(center + QPointF(0, distanceFromCenter))
+           << originalTransform.map(center + QPointF(0, -distanceFromCenter));
+
+    ENTER_FUNCTION() << "Points are: " << pointInOriginalCoordinates
+                     << center + QPointF(distanceFromCenter, 0) << center + QPointF(-distanceFromCenter, 0);
+
+    // FIXME: it's good to update the polygon too, just in case
+
+
+
+
+    return updateToFivePoints(points, horizonLine);
+}
+
+bool EllipseInPolygon::setSimpleEllipseVertices(Ellipse &ellipse) const
+{
+    if (finalVertices.size() > 2) {
+        return ellipse.set(finalVertices[0], finalVertices[1], finalVertices[2]);
+    }
+    return false;
+}
+
+bool EllipseInPolygon::formulaRepresentsAnEllipse(double a, double b, double c)
+{
+    ENTER_FUNCTION() << "(b*b - 4*a*c)" << (b*b - 4*a*c) << " < 0 (should be for ellipse)" << a << b << c;
+    return (b*b - 4*a*c) < 0;
+}
+
+EllipseInPolygon::CURVE_TYPE EllipseInPolygon::curveTypeForFormula(double a, double b, double c)
+{
+    double condition = (b*b - 4*a*c);
+    if (condition == 0) {
+        return PARABOLA;
+    } else if (condition > 0) {
+        return HYPERBOLA;
+    } else {
+        return ELLIPSE;
+    }
+}
+
+void EllipseInPolygon::paintParametric(QPainter &gc, const QRectF &updateRect, const QTransform &initialTransform)
+{
+    QPointF beginPoint = QPointF(initialTransform.map(QPointF(finalEllipseCenter[0], finalEllipseCenter[1])));
+    if (!updateRect.contains(beginPoint)) {
+        beginPoint = updateRect.topLeft();
+    }
+    beginPoint = updateRect.topLeft();
+
+    // go left and right from that point
+    paintParametric(gc, updateRect, initialTransform, beginPoint, true);
+    paintParametric(gc, updateRect, initialTransform, beginPoint, false);
+}
+
+void EllipseInPolygon::paintParametric(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform, const QPointF& begin, bool goesLeft)
+{
+    gc.save();
+    gc.resetTransform();
+    gc.setTransform(QTransform());
+
+    // parametric formula for y:
+    // if c == 0:
+    // x = t
+    // y = (f + at^2 + dt)/(e + bt)
+    // if c != 0:
+    // x = t
+    // y = (-e -bt +- sqrt(e^2 + b^2*t^2 + 2ebt - 4cf - 4cat^2 - 4cdt)/(2c))
+    // parametric formula for x is symmetric (a <=> c, d <=> e)
+
+
+    qreal a = finalFormula[0];
+    qreal b = finalFormula[1];
+    qreal c = finalFormula[2];
+    qreal d = finalFormula[3];
+    qreal e = finalFormula[4];
+    qreal f = finalFormula[5];
+
+    //QPointF beingWidget = initialTransform.map(begin);
+
+
+    qreal jump = 2; // for now
+
+    //int sign = goesLeft ? 1 : -1;
+
+    bool needsSecondLoop = false;
+
+    if (!initialTransform.isInvertible()) {
+        return;
+    }
+
+    QTransform reverseInitial = initialTransform.inverted();
+
+    for (int i = 0; i < originalPoints.size(); i++) {
+        gc.drawEllipse(initialTransform.map(originalPoints[i]), 10, 10); // good points!!!
+        gc.drawEllipse(originalPoints[i], 15, 15); // they are in that bad rectangle
+    }
+
+    gc.drawEllipse(initialTransform.map(updateRect.topLeft()), 25, 25); // good points!!!
+    gc.drawEllipse(updateRect.topLeft(), 25, 25); // they are in that bad rectangle
+    gc.drawEllipse(initialTransform.map(updateRect.bottomRight()), 25, 25); // good points!!!
+    gc.drawEllipse(updateRect.bottomRight(), 25, 25); // they are in that bad rectangle
+
+
+
+
+    if (!formulaRepresentsAnEllipse(a, b, c)) {
+        needsSecondLoop = true;
+    }
+
+    qreal horizonSideForOriginalPoints = horizonLineSign(originalPoints[4]);
+
+    QRect viewport = gc.viewport();
+    QPolygonF viewportMappedPoly = reverseInitial.map((QPolygonF)(QRectF)viewport);
+    QRect viewportMapped = viewportMappedPoly.boundingRect().toRect();
+
+    if (c != 0) {
+
+        //QPointF lastPoint = QPointF();
+
+        QPainterPath path;
+        QVector<QPointF> points;
+
+        QVector<int> signs = {-1, 1};
+
+
+
+        Q_FOREACH(int sign, signs) {
+            for (int i = viewportMapped.left(); i <= viewportMapped.right(); i += jump) {
+
+
+                QPointF converted = QPointF(i, begin.y());//reverseInitial.map(QPointF(i, begin.y()));
+                //QPointF converted = reverseInitial.map(QPointF(i, begin.y()));
+
+
+                qreal x = converted.x();
+
+                qreal underSqrt = e*e + b*b*i*i + 2*e*b*i - 4*c*f - 4*c*a*i*i - 4*c*d*i;
+
+                if (underSqrt < 0) {
+                    path.addPolygon(QPolygonF(points));
+                    points.clear();
+                    continue;
+                } else if (underSqrt > 0) {
+                    needsSecondLoop = true;
+                }
+
+                qreal y = (-e - b*i + sign*sqrt(underSqrt))/(2*c);
+
+                int horizonSide = horizonLineSign(QPointF(x, y));
+                if (horizonSide != horizonSideForOriginalPoints) {
+                    path.addPolygon(QPolygonF(points));
+                    points.clear();
+                    continue;
+                }
+
+                QPointF newPoint = initialTransform.map(QPointF(x, y));
+
+
+                if (i == viewport.left()) {
+                    gc.drawEllipse(newPoint, 5, 5);
+                    gc.drawEllipse(QPointF(x, y), 5, 5);
+                }
+
+                points << newPoint;
+            }
+
+            path.addPolygon(points);
+            points.clear();
+
+            if (!needsSecondLoop) {
+                break;
+            }
+
+        }
+
+
+        gc.drawPath(path);
+
+        gc.drawRect(kisGrowRect(updateRect, -10));
+        gc.drawRect(kisGrowRect(viewport, -10));
+
+
+    }
+    gc.restore();
+
+}
+
+int EllipseInPolygon::horizonLineSign(QPointF point)
+{
+    qreal result = horizonFormula[0]*point.x() + horizonFormula[1]*point.y() + horizonFormula[2];
+    return (result == 0 ? 0 : (result < 0 ? -1 : 1));
+}
+
+void EllipseInPolygon::setFormula(QVector<double> &formula, double a, double b, double c, double d, double e, double f)
+{
+    if (formula.size() != 6) {
+        formula.clear();
+        formula << a << b << c << d << e << f;
+    } else {
+        formula[0] = a;
+        formula[1] = b;
+        formula[2] = c;
+        formula[3] = d;
+        formula[4] = e;
+        formula[5] = f;
+    }
+}
+
+void EllipseInPolygon::setPoint(QVector<double> &point, double x, double y)
+{
+    if (point.size() != 2) {
+        point.clear();
+        point << x << y;
+    } else {
+        point[0] = x;
+        point[1] = y;
+    }
+}
+
+bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horizon)
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(points.length() >= 5, false);
+
+    QPointF pt1 = points[0];
+    QPointF pt2 = points[1];
+    QPointF pt3 = points[2];
+    QPointF pt4 = points[3];
+
+    QPointF ptR = points[4];
+
+    originalPoints = points;
+
+
+    horizon = _horizon;
+    // horizon line formula:
+    horizonFormula.clear();
+    if (!horizon.isNull()) {
+        // final formula should be: ax + by + c = 0
+        // for two points, the line equation is:
+        // (y - y0)*(x1 - x0) = (y1 - y0)*(x - x0)
+        // (x1 - x0)*y + (-y0*(x1 - x0)) = (y1 - y0)*x + (-x0*(y1 - y0))
+        // (x1 - x0)*y + (-y0*(x1 - x0)) + (y0 - y1)*x + (-x0*(y0 - y1)) = 0
+        // a = (y0 - y1)
+        // b = (x1 - x0)
+        // c = -y0*b -x0*a
+        qreal a = horizon.p1().y() - horizon.p2().y();
+        qreal b = horizon.p2().x() - horizon.p1().x();
+        qreal c = -horizon.p1().y()*b - horizon.p1().x()*a;
+        horizonFormula << a << b << c;
+    }
+
 
 
     // using the points from above (pt1-4 and ptR) we can construct a linear equation for the final ellipse formula
@@ -183,10 +504,19 @@ bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon)
 
     // check if this is an ellipse
     if (!formulaRepresentsAnEllipse(a, b, c)) {
-        return false;
+        ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
+        ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
+        // return false; moved later
     }
 
     setFormula(finalFormula, a, b, c, d, e, f);
+
+    // check if this is an ellipse
+    if (!formulaRepresentsAnEllipse(a, b, c)) {
+        ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
+        ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
+        return false; //moved later
+    }
 
     // x = (be - 2cd)/(4c - b^2)
     // y = (bd - 2e)/(4c - b^2)
@@ -208,13 +538,19 @@ bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon)
     qreal fprim = f;
 
     if (!formulaRepresentsAnEllipse(aprim, bprim, cprim)) {
-        return false;
+        //return false;
+        // temporarily moved further away
     }
 
     finalAxisReverseAngleCos = K;
     finalAxisReverseAngleSin = L;
 
     setFormula(rerotatedFormula, aprim, bprim, cprim, dprim, eprim, fprim);
+
+
+    if (!formulaRepresentsAnEllipse(aprim, bprim, cprim)) {
+        return false;
+    }
 
     // third attempt at new center:
     // K' = K
@@ -270,45 +606,6 @@ bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon)
     return true;
 }
 
-bool EllipseInPolygon::setSimpleEllipseVertices(Ellipse &ellipse) const
-{
-    if (finalVertices.size() > 2) {
-        return ellipse.set(finalVertices[0], finalVertices[1], finalVertices[2]);
-    }
-    return false;
-}
-
-bool EllipseInPolygon::formulaRepresentsAnEllipse(double a, double b, double c)
-{
-    return (b*b - 4*a*c) < 0;
-}
-
-void EllipseInPolygon::setFormula(QVector<double> &formula, double a, double b, double c, double d, double e, double f)
-{
-    if (formula.size() != 6) {
-        formula.clear();
-        formula << a << b << c << d << e << f;
-    } else {
-        formula[0] = a;
-        formula[1] = b;
-        formula[2] = c;
-        formula[3] = d;
-        formula[4] = e;
-        formula[5] = f;
-    }
-}
-
-void EllipseInPolygon::setPoint(QVector<double> &point, double x, double y)
-{
-    if (point.size() != 2) {
-        point.clear();
-        point << x << y;
-    } else {
-        point[0] = x;
-        point[1] = y;
-    }
-}
-
 
 // ################################## Perspective Ellipse Assistant #######################################
 
@@ -317,9 +614,14 @@ class PerspectiveEllipseAssistant::Private
 {
 public:
     EllipseInPolygon ellipseInPolygon;
+    EllipseInPolygon concentricEllipseInPolygon;
+
     Ellipse simpleEllipse;
+    Ellipse simpleConcentricEllipse;
 
     bool cacheValid { false };
+
+    bool isConcentric {false};
 
     PerspectiveBasedAssistantHelper::CacheData cache;
 
@@ -342,6 +644,7 @@ PerspectiveEllipseAssistant::PerspectiveEllipseAssistant(const PerspectiveEllips
     , KisPaintingAssistant(rhs, handleMap)
     , d(new Private())
 {
+    d->isConcentric = rhs.isConcentric();
 }
 
 KisPaintingAssistantSP PerspectiveEllipseAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
@@ -354,9 +657,12 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
     Q_UNUSED(strokeBegin);
     Q_ASSERT(isAssistantComplete());
 
-    d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
-
-    return d->simpleEllipse.project(pt);
+    if (d->isConcentric) {
+        return d->simpleConcentricEllipse.project(pt);
+    } else {
+        d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
+        return d->simpleEllipse.project(pt);
+    }
 }
 
 QPointF PerspectiveEllipseAssistant::adjustPosition(const QPointF& pt, const QPointF& strokeBegin, const bool /*snapToAny*/, qreal /*moveThresholdPt*/)
@@ -395,21 +701,85 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
             drawX(gc, initialTransform.map(d->cache.vanishingPoint2.get()));
         }
     }
+    
+    QPointF mousePos = effectiveBrushPosition(converter, canvas);
+
+    if (d->isConcentric && initialTransform.isInvertible()) {
+        ENTER_FUNCTION() << "Mouse pos was " << mousePos << "anty-transformed: " << initialTransform.inverted().map(mousePos);
+
+        d->concentricEllipseInPolygon.updateToPointOnConcentricEllipse(d->ellipseInPolygon.originalTransform, initialTransform.inverted().map(mousePos), d->cache.horizon);
+        d->concentricEllipseInPolygon.setSimpleEllipseVertices(d->simpleConcentricEllipse);
+        ENTER_FUNCTION() << "Set points to simple ellipse:" << d->concentricEllipseInPolygon.finalVertices[0]
+                         << d->concentricEllipseInPolygon.finalVertices[1] << d->concentricEllipseInPolygon.finalVertices[2];
+        ENTER_FUNCTION() << "Is transform identity? " << d->simpleConcentricEllipse.getTransform().isIdentity();
+        ENTER_FUNCTION() << "Transform:" << d->simpleConcentricEllipse.getTransform();
+    }
 
     // draw ellipse and axes
-    if (isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
-        QPointF mousePos = effectiveBrushPosition(converter, canvas);
+    if (isAssistantComplete() && isEllipseValid() && (assistantVisible || previewVisible || isEditing)) { // ensure that you only draw the ellipse if it's valid - otherwise it would just show some outdated one
+
+        if (!isEditing && d->isConcentric && d->concentricEllipseInPolygon.isValid()) {
+            gc.setTransform(initialTransform);
+            gc.setTransform(d->simpleConcentricEllipse.getTransform().inverted(), true);
+
+            QPainterPath path2;
+
+            ENTER_FUNCTION() << "conc. ell. axis: " << d->simpleConcentricEllipse.semiMajor() << d->simpleConcentricEllipse.semiMinor()
+                             << "normal ones: " << d->simpleEllipse.semiMajor() << d->simpleEllipse.semiMinor();
+            ENTER_FUNCTION() << "original radius: " << d->concentricEllipseInPolygon.originalCircleRadius;
+
+            path2.addEllipse(QPointF(0.0, 0.0), d->simpleConcentricEllipse.semiMajor(), d->simpleConcentricEllipse.semiMinor());
+            path2.addEllipse(d->simpleConcentricEllipse.getTransform().map(d->concentricEllipseInPolygon.finalVertices[0]), 5, 5);
+            path2.addEllipse(d->concentricEllipseInPolygon.finalVertices[1], 5, 5);
+            path2.addEllipse(d->concentricEllipseInPolygon.finalVertices[2], 5, 5);
+
+            drawPath(gc, path2, isSnappingActive());
+
+            QPen pen2(QBrush(Qt::blue), 3);
+            gc.save();
+            gc.setPen(pen2);
+
+            //gc.setTransform(initialTransform);
+            gc.setTransform(QTransform());
+            gc.drawRect(kisGrowRect(updateRect, -85));
+
+            gc.restore();
+
+            QPen pen(QBrush(Qt::red), 3);
+            gc.save();
+            gc.setPen(pen);
+
+            d->concentricEllipseInPolygon.paintParametric(gc, updateRect, initialTransform);
+            gc.restore();
+        }
+        if (!isEditing && d->isConcentric) {
+            QPen pen2(QBrush(Qt::blue), 3);
+            gc.save();
+            gc.setPen(pen2);
+
+            //gc.setTransform(initialTransform);
+            gc.setTransform(QTransform());
+            gc.drawRect(kisGrowRect(updateRect, -85));
+
+            gc.restore();
+
+            QPen pen(QBrush(Qt::red), 3);
+            gc.save();
+            gc.setPen(pen);
+
+            d->concentricEllipseInPolygon.paintParametric(gc, updateRect, initialTransform);
+            gc.restore();
+        }
+
+
+
         gc.setTransform(initialTransform);
         gc.setTransform(d->simpleEllipse.getTransform().inverted(), true);
 
         QPainterPath path;
-        path.addEllipse(QPointF(0.0, 0.0), d->simpleEllipse.semiMajor(), d->simpleEllipse.semiMinor());
 
-        if (assistantVisible || isEditing) {
-            drawPath(gc, path, isSnappingActive());
-        } else if (previewVisible && isSnappingActive() && boundingRect().contains(initialTransform.inverted().map(mousePos.toPoint()), false)) {
-            drawPreview(gc, path);
-        }
+        path.addEllipse(QPointF(0.0, 0.0), d->simpleEllipse.semiMajor(), d->simpleEllipse.semiMinor());
+        drawPath(gc, path, isSnappingActive());
 
         if (isEditing) {
             QPainterPath axes;
@@ -453,10 +823,15 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
 
         touchingLine.moveTo(pt2);
         touchingLine.lineTo(pt4);
+        
+        touchingLine.moveTo(pt2);
+        touchingLine.lineTo(pt4);
 
         if (assistantVisible) {
             drawPath(gc, touchingLine, isSnappingActive());
         }
+
+        //gc.drawEllipse(QPointF(0.5, 0.5), d->concentricEllipseInPolygon.originalCircleRadius, d->concentricEllipseInPolygon.originalCircleRadius);
     }
 
 
@@ -565,21 +940,26 @@ void PerspectiveEllipseAssistant::updateCache()
 
     QPolygonF poly = QPolygonF(d->cachedPoints);
 
-    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) { // this function changes poly to some "standardized" version, or a triangle when it cannot be achieved
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) { // this function changes poly to some "standarized" version, or a triangle when it cannot be achieved
 
         poly = QPolygonF(d->cachedPoints);
         poly << d->cachedPoints[0];
-        d->ellipseInPolygon.updateToPolygon(poly);
+
+        PerspectiveBasedAssistantHelper::updateCacheData(d->cache, poly);
+
+        d->ellipseInPolygon.updateToPolygon(poly, d->cache.horizon);
         d->cacheValid = true;
         return;
     }
 
-    d->ellipseInPolygon.updateToPolygon(poly);
+    PerspectiveBasedAssistantHelper::updateCacheData(d->cache, poly);
+
+    d->ellipseInPolygon.updateToPolygon(poly, d->cache.horizon);
     if (d->ellipseInPolygon.isValid()) {
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
     }
 
-    PerspectiveBasedAssistantHelper::updateCacheData(d->cache, poly);
+
     d->cacheValid = true;
 
 }
@@ -587,6 +967,36 @@ void PerspectiveEllipseAssistant::updateCache()
 bool PerspectiveEllipseAssistant::isAssistantComplete() const
 {   
     return handles().size() >= 4;
+}
+
+void PerspectiveEllipseAssistant::saveCustomXml(QXmlStreamWriter *xml)
+{
+    xml->writeStartElement("isConcentric");
+    ENTER_FUNCTION() << ppVar(this->isConcentric()) << ppVar((int)this->isConcentric()) << ppVar(KisDomUtils::toString( (int)this->isConcentric()));
+    xml->writeAttribute("value", KisDomUtils::toString( (int)this->isConcentric()));
+    xml->writeEndElement();
+}
+
+bool PerspectiveEllipseAssistant::loadCustomXml(QXmlStreamReader *xml)
+{
+    if (xml && xml->name() == "isConcentric") {
+        this->setConcentric((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
+        ENTER_FUNCTION() << ppVar(xml->attributes().value("value").toString())
+                         << ppVar(KisDomUtils::toInt(xml->attributes().value("value").toString()))
+                         << ppVar((bool)KisDomUtils::toInt(xml->attributes().value("value").toString()));
+        ENTER_FUNCTION() << "Therefore, the assistant is now: " << ppVar(isConcentric());
+    }
+    return true;
+}
+
+bool PerspectiveEllipseAssistant::isConcentric() const
+{
+    return d->isConcentric;
+}
+
+void PerspectiveEllipseAssistant::setConcentric(bool isConcentric)
+{
+    d->isConcentric = isConcentric;
 }
 
 bool PerspectiveEllipseAssistant::contains(const QPointF &point) const

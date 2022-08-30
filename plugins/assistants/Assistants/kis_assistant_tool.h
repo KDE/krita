@@ -102,6 +102,7 @@ public Q_SLOTS:
     void slotChangeMinorSubdivisions(int value);
     void slotEnableFixedLength(int enabled);
     void slotChangeFixedLength(double value);
+    void slotIsConcentricChanged(int enabled);
 
 private Q_SLOTS:
     void removeAllAssistants();

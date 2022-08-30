@@ -64,5 +64,62 @@ void TestAssistants::testConcentricEllipseAdjustLine()
 
 }
 
+void TestAssistants::testMirroringPoints()
+{
+
+    auto mirror = [] (QPointF p, QLineF l) {
+        // first translate
+        // then mirror
+        // then retranslate
+
+        //Eigen::Matrix2f mirror;
+        //Eigen::Vector2f b;
+        qreal cos = qCos(qDegreesToRadians(-2*l.angle()));
+        qreal sin = qSin(qDegreesToRadians(-2*l.angle()));
+
+        ENTER_FUNCTION() << ppVar(l.angle()) << ppVar(cos) << ppVar(sin);
+        // mirror transformation:
+        // | cos2a  sin2a 0 |
+        // | sin2a -cos2a 0 |
+        // |     0      0 1 |
+
+
+        QTransform t1;
+        t1.fromTranslate(l.p1().x(), l.p1().y());
+        QTransform t2;
+        t2.setMatrix(cos, sin, 0, sin, -cos, 0, 0, 0, 1);
+        QTransform t3;
+        t3.fromTranslate(-l.p1().x(), -l.p1().y());
+        QTransform all = t1*t2*t3;
+
+        ENTER_FUNCTION() << ppVar(all);
+        ENTER_FUNCTION() << ppVar(t2);
+        ENTER_FUNCTION() << ppVar(t1.map(p)) << ppVar((t1*t2).map(p)) << ppVar((t1*t2*t3).map(p));
+
+        return all.map(p);
+    };
+
+    ENTER_FUNCTION() << ppVar(mirror(QPointF(1, 1), QLineF(QPointF(0, 0), QPointF(0, 1))));
+    ENTER_FUNCTION() << ppVar(mirror(QPointF(-100, -80), QLineF(QPointF(2, 2), QPointF(5, 5))));
+    ENTER_FUNCTION() << ppVar(mirror(QPointF(100, 80), QLineF(QPointF(2, 2), QPointF(5, 5))));
+
+    QCOMPARE(mirror(QPointF(100, 80), QLineF(QPointF(2, 2), QPointF(5, 5))), QPointF(80, 100));
+    QCOMPARE(mirror(QPointF(-100, -80), QLineF(QPointF(2, 2), QPointF(5, 5))), QPointF(-80, -100));
+    QCOMPARE(mirror(QPointF(-100, 80), QLineF(QPointF(2, 2), QPointF(5, 5))), QPointF(-80, 100));
+
+    QCOMPARE(mirror(QPointF(100, 80), QLineF(QPointF(2, -2), QPointF(5, -5))), QPointF(80, 100));
+    QCOMPARE(mirror(QPointF(-100, -80), QLineF(QPointF(2, -2), QPointF(5, -5))), QPointF(80, 100));
+    QCOMPARE(mirror(QPointF(-100, 80), QLineF(QPointF(2, -2), QPointF(5, -5))), QPointF(-80, 100));
+
+
+
+
+
+
+
+}
+
+
+
 
 KISTEST_MAIN(TestAssistants)

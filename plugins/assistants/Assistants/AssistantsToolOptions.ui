@@ -76,6 +76,19 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="isConcentricCheckbox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Use Concentric Ellipses</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="twoPointUseVerticalCheckbox">
      <property name="toolTip">
       <string>When enabled, it gives assistance for drawing vertical lines (perpendicular to the horizon line)</string>

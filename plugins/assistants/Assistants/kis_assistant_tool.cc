@@ -44,6 +44,7 @@
 #include "RulerAssistant.h"
 #include "TwoPointAssistant.h"
 #include "VanishingPointAssistant.h"
+#include "PerspectiveEllipseAssistant.h"
 
 #include <math.h>
 
@@ -952,6 +953,7 @@ void KisAssistantTool::updateToolOptionsUI()
          bool isRulerAssistant = m_selectedAssistant->id() == "ruler"
                               || m_selectedAssistant->id() == "infinite ruler";
          bool isPerspectiveAssistant = m_selectedAssistant->id() == "perspective";
+         bool isPerspectiveEllipseAssistant = m_selectedAssistant->id() == "perspective ellipse";
 
          m_options.vanishingPointAngleSpinbox->setVisible(isVanishingPointAssistant);
          m_options.twoPointDensitySpinbox->setVisible(isTwoPointAssistant);
@@ -959,14 +961,14 @@ void KisAssistantTool::updateToolOptionsUI()
          m_options.subdivisionsSpinbox->setVisible(isRulerAssistant || isPerspectiveAssistant);
          m_options.minorSubdivisionsSpinbox->setVisible(isRulerAssistant);
          m_options.fixedLengthCheckbox->setVisible(isRulerAssistant);
+         m_options.isConcentricCheckbox->setVisible(isPerspectiveEllipseAssistant);
+
          //show checkboxes for controlling which editor widget buttons are visible
          m_options.showMove->setVisible(true);
          m_options.showSnap->setVisible(true);
          m_options.showLock->setVisible(true);
          m_options.showDuplicate->setVisible(true);
          m_options.showDelete->setVisible(true);
-         
-         
 
          if (isVanishingPointAssistant) {
              QSharedPointer <VanishingPointAssistant> assis = qSharedPointerCast<VanishingPointAssistant>(m_selectedAssistant);
@@ -977,6 +979,11 @@ void KisAssistantTool::updateToolOptionsUI()
              QSharedPointer <TwoPointAssistant> assis = qSharedPointerCast<TwoPointAssistant>(m_selectedAssistant);
              m_options.twoPointDensitySpinbox->setValue(assis->gridDensity());
              m_options.twoPointUseVerticalCheckbox->setChecked(assis->useVertical());
+         }
+
+         if (isPerspectiveEllipseAssistant) {
+             QSharedPointer <PerspectiveEllipseAssistant> assis = qSharedPointerCast<PerspectiveEllipseAssistant>(m_selectedAssistant);
+             m_options.isConcentricCheckbox->setChecked(assis->isConcentric());
          }
 
          if (isRulerAssistant) {
@@ -1026,6 +1033,7 @@ void KisAssistantTool::updateToolOptionsUI()
          m_options.fixedLengthCheckbox->setVisible(false);
          m_options.fixedLengthSpinbox->setVisible(false);
          m_options.fixedLengthUnit->setVisible(false);
+         m_options.isConcentricCheckbox->setVisible(false);
      }
 
      // show/hide elements if an assistant is selected or not
@@ -1213,6 +1221,22 @@ void KisAssistantTool::slotChangeFixedLength(double) {
     }
     
     m_canvas->updateCanvasDecorations();
+}
+
+void KisAssistantTool::slotIsConcentricChanged(int enabled)
+{
+    if (m_canvas->paintingAssistantsDecoration()->assistants().length() == 0) {
+        return;
+    }
+
+    // get the selected assistant and change the angle value
+    KisPaintingAssistantSP m_selectedAssistant =  m_canvas->paintingAssistantsDecoration()->selectedAssistant();
+    if (m_selectedAssistant) {
+        QSharedPointer <PerspectiveEllipseAssistant> assis = qSharedPointerCast<PerspectiveEllipseAssistant>(m_selectedAssistant);
+        if (assis) {
+            assis->setConcentric(m_options.isConcentricCheckbox->isChecked());
+        }
+    }
 }
 
 void KisAssistantTool::slotChangeFixedLengthUnit(int index) {
@@ -1689,6 +1713,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.minorSubdivisionsSpinbox, SIGNAL(valueChanged(int)), this, SLOT(slotChangeMinorSubdivisions(int)));
         connect(m_options.fixedLengthCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotEnableFixedLength(int)));
         connect(m_options.fixedLengthSpinbox, SIGNAL(valueChangedPt(double)), this, SLOT(slotChangeFixedLength(double)));
+        connect(m_options.isConcentricCheckbox, SIGNAL(stateChanged(int)), this, SLOT(slotIsConcentricChanged(int)));
         
         //update EditorWidgetData when checkbox clicked
         connect(m_options.showMove, SIGNAL(stateChanged(int)), this, SLOT(slotToggleMoveButton(int)));
@@ -1696,7 +1721,7 @@ QWidget *KisAssistantTool::createOptionWidget()
         connect(m_options.showLock, SIGNAL(stateChanged(int)), this, SLOT(slotToggleLockButton(int)));
         connect(m_options.showDuplicate, SIGNAL(stateChanged(int)), this, SLOT(slotToggleDuplicateButton(int)));
         connect(m_options.showDelete, SIGNAL(stateChanged(int)), this, SLOT(slotToggleDeleteButton(int)));
-        
+
         // initialize UI elements with existing data if possible
         if (m_canvas && m_canvas->paintingAssistantsDecoration()) {
             const QColor color = m_canvas->paintingAssistantsDecoration()->globalAssistantsColor();

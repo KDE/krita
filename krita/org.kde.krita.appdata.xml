@@ -22,6 +22,7 @@
   <developer_name xml:lang="ia">Krita Foundation (Fundation de Krita)</developer_name>
   <developer_name xml:lang="id">Yayasan Krita</developer_name>
   <developer_name xml:lang="it">Fondazione Krita</developer_name>
+  <developer_name xml:lang="ka">Krita Foundation</developer_name>
   <developer_name xml:lang="ko">Krita Foundation</developer_name>
   <developer_name xml:lang="nl">Krita Foundation</developer_name>
   <developer_name xml:lang="nn">Krita Foundation</developer_name>
@@ -57,6 +58,7 @@
   <name xml:lang="ia">Krita</name>
   <name xml:lang="id">Krita</name>
   <name xml:lang="it">Krita</name>
+  <name xml:lang="ka">Krita</name>
   <name xml:lang="ko">Krita</name>
   <name xml:lang="nb">Krita</name>
   <name xml:lang="nl">Krita</name>
@@ -95,6 +97,7 @@
   <summary xml:lang="ia">Pictura digital, Libertate creative</summary>
   <summary xml:lang="id">Pelukisan Digital, Kebebasan Berkreatif</summary>
   <summary xml:lang="it">Pittura digitale, libertà creativa</summary>
+  <summary xml:lang="ka">ციფრული მხატვრობა, კრეატიული თავისუფლება</summary>
   <summary xml:lang="ko">디지털 페인팅, 자유로운 창의성</summary>
   <summary xml:lang="nl">Digital Painting, Creative Freedom</summary>
   <summary xml:lang="nn">Digital teikning – kreativ fridom</summary>
@@ -435,6 +438,7 @@
       <caption xml:lang="fr">Krita propose des filtres puissants</caption>
       <caption xml:lang="id">Krita menawarkan saringan berdaya</caption>
       <caption xml:lang="it">Krita offre filtri molto avanzati</caption>
+      <caption xml:lang="ka">Krita-ს მძლავრი ფილტრები გააჩნია</caption>
       <caption xml:lang="nl">Krita biedt krachtige filters</caption>
       <caption xml:lang="nn">Krita har kraftige filter</caption>
       <caption xml:lang="pl">Filtry</caption>
@@ -485,6 +489,7 @@
       <caption xml:lang="fr">Rejoignez notre canal sur Youtube !</caption>
       <caption xml:lang="id">Bergabung dengan saluran YouTube kami!</caption>
       <caption xml:lang="it">Unisciti al nostro canale Youtube!</caption>
+      <caption xml:lang="ka">შემოგვიერთდით ჩვენს Youtube არხზე!</caption>
       <caption xml:lang="nl">Doe mee in ons Youtube kanaal!</caption>
       <caption xml:lang="nn">Sjå på YouTube-kanalen vår!</caption>
       <caption xml:lang="pl">Filtry</caption>

@@ -50,8 +50,9 @@ public:
     }
 
     void commit(KisUndoAdapter* undoAdapter) {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
-                   "the transaction has been tried to be committed twice");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::commit()",
+                     "the transaction has been tried to be committed twice");
 
         m_transactionData->endTransaction();
         undoAdapter->addCommand(m_transactionData);
@@ -59,8 +60,9 @@ public:
     }
 
     void commit(KisPostExecutionUndoAdapter* undoAdapter) {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::commit()",
-                   "the transaction has been tried to be committed twice");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::commit()",
+                     "the transaction has been tried to be committed twice");
 
         m_transactionData->endTransaction();
         m_transactionData->redo();
@@ -69,19 +71,19 @@ public:
     }
 
     KUndo2Command* endAndTake() {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::endAndTake()",
-                   "the transaction has been tried to be committed twice");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::endAndTake()",
+                     "the transaction has been tried to be committed twice");
 
+        m_transactionData->endTransaction();
         KisTransactionData *transactionData = m_transactionData;
         m_transactionData = 0;
 
-        transactionData->endTransaction();
         return transactionData;
     }
 
     void end() {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::end()",
-                   "nothing to end!");
+        KIS_ASSERT_X(m_transactionData, "KisTransaction::end()", "nothing to end!");
         /**
          * We will not call endTransaction for m_transactionData,
          * we'll just kill it, and it'll report about it's death to
@@ -92,9 +94,10 @@ public:
     }
 
     void revert() {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::reverted()",
-                   "the transaction is tried to be reverted()"
-                   "after it has already been added to undo adapter");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::reverted()",
+                     "the transaction is tried to be reverted()"
+                     "after it has already been added to undo adapter");
 
         m_transactionData->endTransaction();
         /**
@@ -106,9 +109,10 @@ public:
     }
 
     KUndo2MagicString text() const {
-        Q_ASSERT_X(m_transactionData, "KisTransaction::text()",
-                   "the name has been requested after the transaction"
-                   "has already been ended");
+        KIS_ASSERT_X(m_transactionData,
+                     "KisTransaction::text()",
+                     "the name has been requested after the transaction"
+                     "has already been ended");
         return m_transactionData->text();
     }
 

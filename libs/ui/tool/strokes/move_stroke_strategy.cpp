@@ -361,14 +361,13 @@ void MoveStrokeStrategy::finishStrokeCallback()
         KUndo2Command *updateCommand =
             new KisUpdateCommand(node, m_dirtyRects[node], m_updatesFacade, true);
 
-        recursiveApplyNodes(m_nodes,
-            [this, updateCommand] (KisNodeSP node) {
-                MoveNodeStrategyBase *strategy =
-                    m_d->strategy[node].get();
-                KIS_SAFE_ASSERT_RECOVER_RETURN(strategy);
+        recursiveApplyNodes({node}, [this, updateCommand](KisNodeSP node) {
+            KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->strategy.find(node) != m_d->strategy.end());
 
-                strategy->finishMove(updateCommand);
-            });
+            MoveNodeStrategyBase *strategy = m_d->strategy[node].get();
+
+            strategy->finishMove(updateCommand);
+        });
 
         notifyCommandDone(KUndo2CommandSP(updateCommand),
                           KisStrokeJobData::SEQUENTIAL,

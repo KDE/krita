@@ -3,12 +3,12 @@
 #include <QMap>
 
 #include "kis_canvas2.h"
-#include "kis_signal_compressor_with_param.h"
 #include "kis_canvas_animation_state.h"
 #include "kis_image_animation_interface.h"
+#include "kis_raster_keyframe_channel.h"
+#include "kis_signal_compressor_with_param.h"
 #include "animation/KisFrameDisplayProxy.h"
 #include "KisViewManager.h"
-#include "kis_raster_keyframe_channel.h"
 #include "kis_onion_skin_compositor.h"
 
 #include <mlt++/Mlt.h>
@@ -39,7 +39,6 @@ struct KisPlaybackEngineMLT::Private {
 
     Private( KisPlaybackEngineMLT* p_self )
         : m_self(p_self)
-        , activeCanvas(nullptr)
         , mute(false)
     {
         // Initialize Audio Libraries
@@ -67,8 +66,9 @@ struct KisPlaybackEngineMLT::Private {
             return;
 
         KIS_ASSERT(pullConsumer->is_stopped());
+        KIS_ASSERT(m_self->activeCanvas());
 
-        QSharedPointer<Mlt::Producer> activeProducer = canvasProducers[activeCanvas];
+        QSharedPointer<Mlt::Producer> activeProducer = canvasProducers[m_self->activeCanvas()];
         if (activePlaybackMode() == PLAYBACK_PUSH && activeProducer) {
             const int SCRUB_AUDIO_WINDOW = profile->frame_rate_num() * SCRUB_AUDIO_SECONDS;
             for (int i = 0; i < SCRUB_AUDIO_WINDOW; i++ ) {
@@ -102,20 +102,21 @@ struct KisPlaybackEngineMLT::Private {
         pushConsumer.reset();
     }
 
-    KisCanvasAnimationState* activeCanvasAnimationState() {
-        KIS_ASSERT_RECOVER_RETURN_VALUE(activeCanvas, nullptr);
-        return activeCanvas->animationState();
+    // TEMP
+    KisCanvas2* activeCanvas() {
+        return m_self->activeCanvas();
     }
 
     PlaybackMode activePlaybackMode() {
-        KIS_ASSERT_RECOVER_RETURN_VALUE(activeCanvas, PLAYBACK_PUSH);
-        return activeCanvasAnimationState()->playbackState() == PlaybackState::PLAYING ? PLAYBACK_PULL : PLAYBACK_PUSH;
+        KIS_ASSERT_RECOVER_RETURN_VALUE(activeCanvas(), PLAYBACK_PUSH);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(activeCanvas()->animationState(), PLAYBACK_PUSH);
+        return activeCanvas()->animationState()->playbackState() == PlaybackState::PLAYING ? PLAYBACK_PULL : PLAYBACK_PUSH;
     }
 
     QSharedPointer<Mlt::Producer> activeProducer() {
-        KIS_ASSERT_RECOVER_RETURN_VALUE(activeCanvas, nullptr);
-        KIS_ASSERT_RECOVER_RETURN_VALUE(canvasProducers.contains(activeCanvas), nullptr);
-        return canvasProducers[activeCanvas];
+        KIS_ASSERT_RECOVER_RETURN_VALUE(activeCanvas(), nullptr);
+        KIS_ASSERT_RECOVER_RETURN_VALUE(canvasProducers.contains(activeCanvas()), nullptr);
+        return canvasProducers[activeCanvas()];
     }
 
 private:
@@ -129,9 +130,6 @@ public:
 
     //MLT PULL CONSUMER
     QScopedPointer<Mlt::PushConsumer> pushConsumer;
-
-    // Currently active canvas
-    KisCanvas2* activeCanvas;
 
     // Map of handles to Mlt producers..
     QMap<KisCanvas2*, QSharedPointer<Mlt::Producer>> canvasProducers;
@@ -163,8 +161,14 @@ public:
             m_d->cleanupConsumers();
         }
 
-        if (m_d->activeCanvas) {
-            m_d->activeProducer()->seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame());
+        if (!m_d->activeCanvas())
+            return;
+
+        QSharedPointer<Mlt::Producer> activeProducer = m_d->activeProducer();
+        KisCanvasAnimationState* animationState = m_d->activeCanvas()->animationState();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+        if (activeProducer) {
+            activeProducer->seek(animationState->displayProxy()->activeFrame());
         }
     }
 
@@ -174,27 +178,30 @@ public:
             m_d->initializeConsumers();
         }
 
-        if (m_d->activeCanvas) {
+        if (m_d->activeCanvas()) {
+            KisCanvasAnimationState* animationState = m_d->activeCanvas()->animationState();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+
             if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
-                m_d->pushConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
+                m_d->pushConsumer->set("volume", m_d->mute ? 0.0 : animationState->currentVolume());
                 m_d->pushConsumer->start();
             } else {
                 m_d->pullConsumer->connect_producer(*m_d->activeProducer());
-                m_d->pullConsumer->set("volume", m_d->mute ? 0.0 : m_d->activeCanvasAnimationState()->currentVolume());
+                m_d->pullConsumer->set("volume", m_d->mute ? 0.0 : animationState->currentVolume());
                 m_d->pullConsumer->start();
             }
 
             {
-                KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
+                KisImageAnimationInterface* animInterface = m_d->activeCanvas()->image()->animationInterface();
                 m_d->activeProducer()->set("start_frame", animInterface->activePlaybackRange().start());
                 m_d->activeProducer()->set("end_frame", animInterface->activePlaybackRange().end());
                 const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
                 m_d->activeProducer()->set("limit_enabled", shouldLimit);
             }
 
-            if (m_d->canvasProducers.contains(m_d->activeCanvas)) {
-                if ( m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() >= 0) {
-                    m_d->canvasProducers[m_d->activeCanvas]->seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame());
+            if (m_d->canvasProducers.contains(m_d->activeCanvas())) {
+                if ( animationState->displayProxy()->activeFrame() >= 0) {
+                    m_d->canvasProducers[m_d->activeCanvas()]->seek(animationState->displayProxy()->activeFrame());
                 }
             }
         }
@@ -217,23 +224,24 @@ KisPlaybackEngineMLT::~KisPlaybackEngineMLT()
 
 void KisPlaybackEngineMLT::play()
 {
-    m_d->activeCanvasAnimationState()->setPlaybackState(PLAYING);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    activeCanvas()->animationState()->setPlaybackState(PLAYING);
 }
 
 void KisPlaybackEngineMLT::pause()
 {
-    m_d->activeCanvasAnimationState()->setPlaybackState(PAUSED);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    activeCanvas()->animationState()->setPlaybackState(PAUSED);
 }
 
 void KisPlaybackEngineMLT::playPause()
 {
-    if (!m_d->activeCanvasAnimationState()) {
-        return;
-    }
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    KisCanvasAnimationState* animationState = activeCanvas()->animationState();
 
-    if (m_d->activeCanvasAnimationState()->playbackState() == PLAYING) {
+    if (animationState->playbackState() == PLAYING) {
         pause();
-        seek(m_d->activeCanvasAnimationState()->displayProxy()->activeFrame(), SEEK_FINALIZE);
+        seek(animationState->displayProxy()->activeFrame(), SEEK_FINALIZE);
     } else {
         play();
     }
@@ -241,276 +249,37 @@ void KisPlaybackEngineMLT::playPause()
 
 void KisPlaybackEngineMLT::stop()
 {
-    if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-        const boost::optional<int> origin = m_d->activeCanvasAnimationState()->playbackOrigin();
-        m_d->activeCanvasAnimationState()->setPlaybackState(STOPPED);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+
+    if (animationState->playbackState() != STOPPED) {
+        const boost::optional<int> origin = animationState->playbackOrigin();
+        animationState->setPlaybackState(STOPPED);
         if (origin.has_value()) {
             seek(origin.value(), SEEK_FINALIZE);
         }
-    } else if (m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() != 0) {
-        const int firstFrame = m_d->activeCanvas->image()->animationInterface()->documentPlaybackRange().start();
+    } else if (animationState->displayProxy()->activeFrame() != 0) {
+        KisImageAnimationInterface* ai = activeCanvas()->image()->animationInterface();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(ai);
+        const int firstFrame = ai->documentPlaybackRange().start();
         seek(firstFrame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
     }
 }
 
 void KisPlaybackEngineMLT::seek(int frameIndex, SeekOptionFlags flags)
 {
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    KisCanvasAnimationState* animationState = activeCanvas()->animationState();
 
     if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {
-        m_d->canvasProducers[m_d->activeCanvas]->seek(frameIndex);
+        m_d->canvasProducers[activeCanvas()]->seek(frameIndex);
 
         if (flags & SEEK_PUSH_AUDIO) {
 
             m_d->sigPushAudioCompressor->start(frameIndex);
         }
 
-        m_d->activeCanvasAnimationState()->showFrame(frameIndex, (flags & SEEK_FINALIZE) > 0);
-    }
-}
-
-void KisPlaybackEngineMLT::previousFrame()
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-
-    KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
-
-    const int startFrame = animInterface->activePlaybackRange().start();
-    const int endFrame = animInterface->activePlaybackRange().end();
-
-    int frame = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() - 1;
-
-    if (frame < startFrame || frame >  endFrame) {
-        frame = endFrame;
-    }
-
-    if (frame >= 0) {
-        if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-            stop();
-        }
-
-        seek(frame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
-    }
-}
-
-void KisPlaybackEngineMLT::nextFrame()
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-    KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
-
-    const int startFrame = animInterface->activePlaybackRange().start();
-    const int endFrame = animInterface->activePlaybackRange().end();
-
-    int frame = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame() + 1;
-
-    if (frame > endFrame || frame < startFrame ) {
-        frame = startFrame;
-    }
-
-    if (frame >= 0) {
-        if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-            stop();
-        }
-
-        seek(frame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
-    }
-}
-
-void KisPlaybackEngineMLT::previousKeyframe()
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-
-    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int currentFrame = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
-
-    int destinationTime = -1;
-    if (!keyframes->keyframeAt(currentFrame)) {
-        destinationTime = keyframes->activeKeyframeTime(currentFrame);
-    } else {
-        destinationTime = keyframes->previousKeyframeTime(currentFrame);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
-    }
-}
-
-void KisPlaybackEngineMLT::nextKeyframe()
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-
-    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int currentTime = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
-
-    int destinationTime = -1;
-    if (keyframes->activeKeyframeAt(currentTime)) {
-        destinationTime = keyframes->nextKeyframeTime(currentTime);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        // Jump to next key...
-        if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
-    } else {
-        // Jump ahead by estimated timing...
-        const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
-        const int previousKeyTime = keyframes->previousKeyframeTime(activeKeyTime);
-
-        if (previousKeyTime != -1) {
-            if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-                stop();
-            }
-
-            const int timing = activeKeyTime - previousKeyTime;
-            seek(currentTime + timing, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
-        }
-    }
-}
-
-void KisPlaybackEngineMLT::previousMatchingKeyframe()
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-
-    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
-
-    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : keyframes->keyframeAt(destinationTime)->colorLabel();
-    previousKeyframeWithColor(desiredColor);
-}
-
-void KisPlaybackEngineMLT::nextMatchingKeyframe()
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-
-    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
-
-    if (!keyframes->activeKeyframeAt(time)) {
-        return;
-    }
-
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    nextKeyframeWithColor(keyframes->keyframeAt(destinationTime)->colorLabel());
-}
-
-void KisPlaybackEngineMLT::previousUnfilteredKeyframe()
-{
-    previousKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
-}
-
-void KisPlaybackEngineMLT::nextUnfilteredKeyframe()
-{
-    nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
-}
-
-void KisPlaybackEngineMLT::nextKeyframeWithColor(int color)
-{
-    QSet<int> validColors;
-    validColors.insert(color);
-    nextKeyframeWithColor(validColors);
-}
-
-void KisPlaybackEngineMLT::nextKeyframeWithColor(const QSet<int> &validColors)
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-
-    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
-
-    if (!keyframes->activeKeyframeAt(time)) {
-        return;
-    }
-
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    while ( keyframes->keyframeAt(destinationTime) &&
-            ((destinationTime == time) ||
-            !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
-
-        destinationTime = keyframes->nextKeyframeTime(destinationTime);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
-    }
-}
-
-void KisPlaybackEngineMLT::previousKeyframeWithColor(int color)
-{
-    QSet<int> validColors;
-    validColors.insert(color);
-    previousKeyframeWithColor(validColors);
-}
-
-void KisPlaybackEngineMLT::previousKeyframeWithColor(const QSet<int> &validColors)
-{
-    if (!m_d->activeCanvas || !m_d->activeCanvasAnimationState()) return;
-
-    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
-    if (!node) return;
-
-    KisKeyframeChannel *keyframes =
-        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-    if (!keyframes) return;
-
-    int time = m_d->activeCanvasAnimationState()->displayProxy()->activeFrame();
-
-    int destinationTime = keyframes->activeKeyframeTime(time);
-    while (keyframes->keyframeAt(destinationTime) &&
-           ((destinationTime == time) ||
-           !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
-
-        destinationTime = keyframes->previousKeyframeTime(destinationTime);
-    }
-
-    if (keyframes->keyframeAt(destinationTime)) {
-        if (m_d->activeCanvasAnimationState()->playbackState() != STOPPED) {
-            stop();
-        }
-
-        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+        animationState->showFrame(frameIndex, (flags & SEEK_FINALIZE) > 0);
     }
 }
 
@@ -518,14 +287,14 @@ void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 {
     if (file.has_value()) {
         QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "ranged", file->absoluteFilePath().toUtf8().data()));
-        m_d->canvasProducers[m_d->activeCanvas] = producer;
+        m_d->canvasProducers[activeCanvas()] = producer;
     } else {
-        m_d->canvasProducers[m_d->activeCanvas] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "ranged", "count"));
+        m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "ranged", "count"));
     }
 
 
-    KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
-    QSharedPointer<Mlt::Producer> producer = m_d->canvasProducers[m_d->activeCanvas];
+    KisImageAnimationInterface *animInterface = activeCanvas()->image()->animationInterface();
+    QSharedPointer<Mlt::Producer> producer = m_d->canvasProducers[activeCanvas()];
     KIS_ASSERT(producer->is_valid());
     KIS_ASSERT(animInterface);
 
@@ -538,19 +307,21 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
 {
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
 
-    if (m_d->activeCanvas == canvas) {
+    if (activeCanvas() == canvas) {
         return;
     }
 
-    if (m_d->activeCanvas) {
+    if (activeCanvas()) {
+        KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+
         // Disconnect old player, prepare for new one..
-        if (m_d->activeCanvasAnimationState()) {
-            this->disconnect(m_d->activeCanvasAnimationState());
-            m_d->activeCanvasAnimationState()->disconnect(this);
+        if (animationState) {
+            this->disconnect(animationState);
+            animationState->disconnect(this);
         }
 
         // Disconnect old image, prepare for new one..
-        auto image = m_d->activeCanvas->image();
+        auto image = activeCanvas()->image();
         if (image && image->animationInterface()) {
             this->disconnect(image->animationInterface());
             image->animationInterface()->disconnect(this);
@@ -559,43 +330,47 @@ void KisPlaybackEngineMLT::setCanvas(KoCanvasBase *p_canvas)
 
     StopAndResume stopResume(m_d.data(), true);
 
-    m_d->activeCanvas = canvas;
+    KisPlaybackEngine::setCanvas(p_canvas);
 
     // Connect new player..
-    if (m_d->activeCanvas) {
-        KIS_ASSERT(m_d->activeCanvasAnimationState());
+    if (activeCanvas()) {
+        KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+        KIS_ASSERT(animationState);
 
-        connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
+        connect(animationState, &KisCanvasAnimationState::sigPlaybackStateChanged, this, [this](PlaybackState state){
             Q_UNUSED(state); // We don't need the state yet -- we just want to stop and resume playback according to new state info.
-            QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[m_d->activeCanvas];
+            QSharedPointer<Mlt::Producer> activeProducer = m_d->canvasProducers[activeCanvas()];
             StopAndResume callbackStopResume(m_d.data());
         });
 
-        connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigPlaybackMediaChanged, this, [this](){
-            setupProducer(m_d->activeCanvasAnimationState()->mediaInfo());
+        connect(animationState, &KisCanvasAnimationState::sigPlaybackMediaChanged, this, [this](){
+            KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+            if (animationState) {
+                setupProducer(animationState->mediaInfo());
+            }
         });
 
-        connect(m_d->activeCanvasAnimationState(), &KisCanvasAnimationState::sigAudioLevelChanged, this, &KisPlaybackEngineMLT::setAudioVolume);
+        connect(animationState, &KisCanvasAnimationState::sigAudioLevelChanged, this, &KisPlaybackEngineMLT::setAudioVolume);
 
-        auto image = m_d->activeCanvas->image();
+        auto image = activeCanvas()->image();
 
         KIS_ASSERT(image);
 
         // Connect new image..
         connect(image->animationInterface(), &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
             StopAndResume callbackStopResume(m_d.data());
-            m_d->profile->set_frame_rate(m_d->activeCanvas->image()->animationInterface()->framerate(), 1);
+            m_d->profile->set_frame_rate(activeCanvas()->image()->animationInterface()->framerate(), 1);
         });
 
         connect(image->animationInterface(), &KisImageAnimationInterface::sigPlaybackRangeChanged, this, [this](){
-            QSharedPointer<Mlt::Producer> producer = m_d->canvasProducers[m_d->activeCanvas];
-            auto image = m_d->activeCanvas->image();
+            QSharedPointer<Mlt::Producer> producer = m_d->canvasProducers[activeCanvas()];
+            auto image = activeCanvas()->image();
             KIS_SAFE_ASSERT_RECOVER_RETURN(image);
             producer->set("start_frame", image->animationInterface()->activePlaybackRange().start());
             producer->set("end_frame", image->animationInterface()->activePlaybackRange().end());
         });
 
-        setupProducer(m_d->activeCanvasAnimationState()->mediaInfo());
+        setupProducer(animationState->mediaInfo());
     }
 
 }
@@ -606,8 +381,9 @@ void KisPlaybackEngineMLT::unsetCanvas() {
 
 void KisPlaybackEngineMLT::throttledShowFrame(const int frame)
 {
-    if (m_d->activeCanvas && m_d->activePlaybackMode() == PLAYBACK_PULL) {
-        m_d->activeCanvasAnimationState()->showFrame(frame);
+    if (activeCanvas() && activeCanvas()->animationState() &&
+            m_d->activePlaybackMode() == PLAYBACK_PULL ) {
+        activeCanvas()->animationState()->showFrame(frame);
     }
 }
 
@@ -634,8 +410,10 @@ void KisPlaybackEngineMLT::setPlaybackSpeedNormalized(double value)
 
 void KisPlaybackEngineMLT::setMute(bool val)
 {
-    KIS_ASSERT_RECOVER_RETURN(m_d->activeCanvasAnimationState());
-    qreal currentVolume = m_d->activeCanvasAnimationState()->currentVolume();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+
+    qreal currentVolume = animationState->currentVolume();
     m_d->mute = val;
     setAudioVolume(currentVolume);
 }

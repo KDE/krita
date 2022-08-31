@@ -92,9 +92,7 @@ public:
         , animationCachePopulator(_part)
         , playbackEngine(nullptr)
     {
-        ENTER_FUNCTION() << "OUTSIDE DEF";
 #ifdef HAVE_MLT
-        ENTER_FUNCTION() << "CONSTRUCTOR";
         playbackEngine.reset(new KisPlaybackEngineMLT);
 #endif
     }

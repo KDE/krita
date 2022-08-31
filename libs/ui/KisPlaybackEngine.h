@@ -21,6 +21,7 @@ class KRITAUI_EXPORT KisPlaybackEngine : public QObject, public KoCanvasObserver
     Q_OBJECT
 public:
     KisPlaybackEngine(QObject* parent = nullptr);
+    ~KisPlaybackEngine();
 
 public Q_SLOTS:
     virtual void play() = 0;
@@ -29,10 +30,10 @@ public Q_SLOTS:
     virtual void stop() = 0;
 
     virtual void seek( int frameIndex, SeekOptionFlags options = SEEK_FINALIZE | SEEK_PUSH_AUDIO ) = 0;
-    virtual void previousFrame() = 0;
-    virtual void nextFrame() = 0;
-    virtual void previousKeyframe() = 0;
-    virtual void nextKeyframe() = 0;
+    virtual void previousFrame();
+    virtual void nextFrame();
+    virtual void previousKeyframe();
+    virtual void nextKeyframe();
 
     /**
      * @brief previousMatchingKeyframe && nextMatchingKeyframe
@@ -41,8 +42,8 @@ public Q_SLOTS:
      * 'similar' keyframes. E.g. Contact points in an animation might have
      * a specific color to specify importance and be quickly swapped between.
      */
-    virtual void previousMatchingKeyframe() = 0;
-    virtual void nextMatchingKeyframe() = 0;
+    virtual void previousMatchingKeyframe();
+    virtual void nextMatchingKeyframe();
 
     /**
      * @brief previousUnfilteredKeyframe && nextUnfilteredKeyframe
@@ -50,14 +51,33 @@ public Q_SLOTS:
      * This lets users easily navigate to the next visible "onion-skinned"
      * keyframe on the active layer.
      */
-    virtual void previousUnfilteredKeyframe() = 0;
-    virtual void nextUnfilteredKeyframe() = 0;
+    virtual void previousUnfilteredKeyframe();
+    virtual void nextUnfilteredKeyframe();
 
     virtual void setPlaybackSpeedPercent(int value) = 0;
     virtual void setPlaybackSpeedNormalized(double value) = 0;
 
     virtual void setMute(bool val) = 0;
     virtual bool isMute() = 0;
+
+protected:
+    class KisCanvas2* activeCanvas() const;
+
+protected Q_SLOTS:
+    virtual void setCanvas(KoCanvasBase* p_canvas) override;
+    virtual void unsetCanvas() override;
+
+private:
+    int frameWrap(int frame, int startFrame, int endFrame);
+    void moveBy(int direction);
+    void nextKeyframeWithColor(int color);
+    void nextKeyframeWithColor(const QSet<int> &validColors);
+    void previousKeyframeWithColor(int color);
+    void previousKeyframeWithColor(const QSet<int> &validColors);
+
+private:
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 #endif // KISPLAYBACKENGINE_H

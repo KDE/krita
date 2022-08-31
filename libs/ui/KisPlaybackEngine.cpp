@@ -1,6 +1,307 @@
 #include "KisPlaybackEngine.h"
 
+#include "kis_canvas2.h"
+#include "kis_canvas_animation_state.h"
+#include "kis_image_animation_interface.h"
+#include "kis_raster_keyframe_channel.h"
+#include "animation/KisFrameDisplayProxy.h"
+#include "KisViewManager.h"
+
+#include "kis_onion_skin_compositor.h"
+
+struct KisPlaybackEngine::Private {
+public:
+    Private()
+        : activeCanvas(nullptr) {
+
+    }
+
+    ~Private() {
+
+    }
+
+    KisCanvas2* activeCanvas;
+};
+
 KisPlaybackEngine::KisPlaybackEngine(QObject *parent)
     : QObject(parent)
+    , m_d(new Private)
 {
+}
+
+KisPlaybackEngine::~KisPlaybackEngine()
+{
+}
+
+void KisPlaybackEngine::previousFrame()
+{
+    moveBy(-1);
+}
+
+void KisPlaybackEngine::nextFrame()
+{
+    moveBy(1);
+}
+
+void KisPlaybackEngine::previousKeyframe()
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+
+    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    int currentFrame = animationState->displayProxy()->activeFrame();
+
+    int destinationTime = -1;
+    if (!keyframes->keyframeAt(currentFrame)) {
+        destinationTime = keyframes->activeKeyframeTime(currentFrame);
+    } else {
+        destinationTime = keyframes->previousKeyframeTime(currentFrame);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        if (animationState->playbackState() != STOPPED) {
+            stop();
+        }
+
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+    }
+}
+
+void KisPlaybackEngine::nextKeyframe()
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+
+    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    int currentTime = animationState->displayProxy()->activeFrame();
+
+    int destinationTime = -1;
+    if (keyframes->activeKeyframeAt(currentTime)) {
+        destinationTime = keyframes->nextKeyframeTime(currentTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        // Jump to next key...
+        if (animationState->playbackState() != STOPPED) {
+            stop();
+        }
+
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+    } else {
+        // Jump ahead by estimated timing...
+        const int activeKeyTime = keyframes->activeKeyframeTime(currentTime);
+        const int previousKeyTime = keyframes->previousKeyframeTime(activeKeyTime);
+
+        if (previousKeyTime != -1) {
+            if (animationState->playbackState() != STOPPED) {
+                stop();
+            }
+
+            const int timing = activeKeyTime - previousKeyTime;
+            seek(currentTime + timing, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+        }
+    }
+}
+
+void KisPlaybackEngine::previousMatchingKeyframe()
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+
+    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    int time = animationState->displayProxy()->activeFrame();
+
+    KisKeyframeSP currentKeyframe = keyframes->keyframeAt(time);
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    const int desiredColor = currentKeyframe ? currentKeyframe->colorLabel() : keyframes->keyframeAt(destinationTime)->colorLabel();
+    previousKeyframeWithColor(desiredColor);
+}
+
+void KisPlaybackEngine::nextMatchingKeyframe()
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+
+    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    int time = animationState->displayProxy()->activeFrame();
+
+    if (!keyframes->activeKeyframeAt(time)) {
+        return;
+    }
+
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    nextKeyframeWithColor(keyframes->keyframeAt(destinationTime)->colorLabel());
+}
+
+void KisPlaybackEngine::previousUnfilteredKeyframe()
+{
+    previousKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
+}
+
+void KisPlaybackEngine::nextUnfilteredKeyframe()
+{
+    nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
+}
+
+KisCanvas2 *KisPlaybackEngine::activeCanvas() const
+{
+    return m_d->activeCanvas;
+}
+
+void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
+{
+    KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
+    m_d->activeCanvas = canvas;
+}
+
+void KisPlaybackEngine::unsetCanvas()
+{
+    m_d->activeCanvas = nullptr;
+}
+
+int KisPlaybackEngine::frameWrap(int frame, int startFrame, int endFrame)
+{
+    // Since Krita has always considered the end frame as inclusive, we need
+    // to make sure our wrap method respects that as well.
+    const int inclusiveEndFrame = endFrame + 1;
+    frame = ((frame - startFrame) % (inclusiveEndFrame - startFrame)) + startFrame;
+
+    if (frame - startFrame < 0) {
+        frame += (inclusiveEndFrame - startFrame);
+    }
+
+    return frame;
+}
+
+void KisPlaybackEngine::moveBy(int direction)
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+    KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
+
+    int frame = animationState->displayProxy()->activeFrame() + direction;
+
+    const int startFrame = animInterface->activePlaybackRange().start();
+    const int endFrame = animInterface->activePlaybackRange().end();
+
+    frame = frameWrap(frame, startFrame, endFrame);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(frame >= 0);
+
+    if (animationState->playbackState() != STOPPED) {
+        stop();
+    }
+
+    seek(frame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+}
+
+void KisPlaybackEngine::nextKeyframeWithColor(int color)
+{
+    QSet<int> validColors;
+    validColors.insert(color);
+    nextKeyframeWithColor(validColors);
+}
+
+void KisPlaybackEngine::nextKeyframeWithColor(const QSet<int> &validColors)
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+
+    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    int time = animationState->displayProxy()->activeFrame();
+
+    if (!keyframes->activeKeyframeAt(time)) {
+        return;
+    }
+
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    while ( keyframes->keyframeAt(destinationTime) &&
+            ((destinationTime == time) ||
+            !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+
+        destinationTime = keyframes->nextKeyframeTime(destinationTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        if (animationState->playbackState() != STOPPED) {
+            stop();
+        }
+
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+    }
+}
+
+void KisPlaybackEngine::previousKeyframeWithColor(int color)
+{
+    QSet<int> validColors;
+    validColors.insert(color);
+    previousKeyframeWithColor(validColors);
+}
+
+void KisPlaybackEngine::previousKeyframeWithColor(const QSet<int> &validColors)
+{
+    if (!m_d->activeCanvas) return;
+    KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
+
+    KisNodeSP node = m_d->activeCanvas->viewManager()->activeNode();
+    if (!node) return;
+
+    KisKeyframeChannel *keyframes =
+        node->getKeyframeChannel(KisKeyframeChannel::Raster.id());
+    if (!keyframes) return;
+
+    int time = animationState->displayProxy()->activeFrame();
+
+    int destinationTime = keyframes->activeKeyframeTime(time);
+    while (keyframes->keyframeAt(destinationTime) &&
+           ((destinationTime == time) ||
+           !validColors.contains(keyframes->keyframeAt(destinationTime)->colorLabel()))) {
+
+        destinationTime = keyframes->previousKeyframeTime(destinationTime);
+    }
+
+    if (keyframes->keyframeAt(destinationTime)) {
+        if (animationState->playbackState() != STOPPED) {
+            stop();
+        }
+
+        seek(destinationTime, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+    }
 }

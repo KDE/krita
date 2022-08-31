@@ -33,6 +33,50 @@ KisPlaybackEngine::~KisPlaybackEngine()
 {
 }
 
+void KisPlaybackEngine::play()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    activeCanvas()->animationState()->setPlaybackState(PLAYING);
+}
+
+void KisPlaybackEngine::pause()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    activeCanvas()->animationState()->setPlaybackState(PAUSED);
+}
+
+void KisPlaybackEngine::playPause()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+
+    if (animationState->playbackState() == PLAYING) {
+        pause();
+        seek(animationState->displayProxy()->activeFrame(), SEEK_FINALIZE);
+    } else {
+        play();
+    }
+}
+
+void KisPlaybackEngine::stop()
+{
+    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    KisCanvasAnimationState* animationState = activeCanvas()->animationState();
+
+    if (animationState->playbackState() != STOPPED) {
+        const boost::optional<int> origin = animationState->playbackOrigin();
+        animationState->setPlaybackState(STOPPED);
+        if (origin.has_value()) {
+            seek(origin.value(), SEEK_FINALIZE);
+        }
+    } else if (animationState->displayProxy()->activeFrame() != 0) {
+        KisImageAnimationInterface* ai = activeCanvas()->image()->animationInterface();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(ai);
+        const int firstFrame = ai->documentPlaybackRange().start();
+        seek(firstFrame, SEEK_FINALIZE | SEEK_PUSH_AUDIO);
+    }
+}
+
 void KisPlaybackEngine::previousFrame()
 {
     moveBy(-1);

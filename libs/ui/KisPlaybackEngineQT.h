@@ -10,6 +10,9 @@ class KRITAUI_EXPORT KisPlaybackEngineQT : public KisPlaybackEngine
     Q_OBJECT
 public:
     explicit KisPlaybackEngineQT(QObject *parent = nullptr);
+
+    virtual bool supportsAudio() override { return false; }
+    virtual bool supportsVariablePlaybackSpeed() override { return true; }
 };
 
 #endif // KISPLAYBACKENGINEQT_H

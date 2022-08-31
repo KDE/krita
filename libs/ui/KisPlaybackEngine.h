@@ -24,10 +24,10 @@ public:
     ~KisPlaybackEngine();
 
 public Q_SLOTS:
-    virtual void play() = 0;
-    virtual void pause() = 0;
-    virtual void playPause() = 0;
-    virtual void stop() = 0;
+    virtual void play();
+    virtual void pause();
+    virtual void playPause();
+    virtual void stop();
 
     virtual void seek( int frameIndex, SeekOptionFlags options = SEEK_FINALIZE | SEEK_PUSH_AUDIO ) = 0;
     virtual void previousFrame();
@@ -59,6 +59,9 @@ public Q_SLOTS:
 
     virtual void setMute(bool val) = 0;
     virtual bool isMute() = 0;
+
+    virtual bool supportsAudio() = 0;
+    virtual bool supportsVariablePlaybackSpeed() = 0;
 
 protected:
     class KisCanvas2* activeCanvas() const;

@@ -28,11 +28,6 @@ Q_SIGNALS:
     void sigChangeActiveCanvasFrame(int p_frame);
 
 public Q_SLOTS:
-    virtual void play() override;
-    virtual void pause() override;
-    virtual void playPause() override;
-    virtual void stop() override;
-
     virtual void seek(int frameIndex, SeekOptionFlags flags = SEEK_FINALIZE | SEEK_PUSH_AUDIO) override;
 
     virtual void setPlaybackSpeedPercent(int value) override;
@@ -40,6 +35,9 @@ public Q_SLOTS:
 
     virtual void setMute(bool val) override;
     virtual bool isMute() override;
+
+    virtual bool supportsAudio() override { return true; }
+    virtual bool supportsVariablePlaybackSpeed() override { return false; } // TODO
 
 protected Q_SLOTS:
     virtual void setCanvas(KoCanvasBase* canvas) override;

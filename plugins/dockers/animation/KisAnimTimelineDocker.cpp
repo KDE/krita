@@ -84,6 +84,8 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
         sbSpeed->setPrefix(i18nc("preview playback speed percentage prefix", "Speed: "));
         sbSpeed->setSuffix(" %");
         sbSpeed->setToolTip(i18n("Preview playback speed"));
+        sbSpeed->setEnabled(KisPart::instance()->playbackEngine()->supportsVariablePlaybackSpeed());
+
         widgetAreaLayout->addWidget(sbSpeed);
     }
 
@@ -133,6 +135,7 @@ KisAnimTimelineDockerTitlebar::KisAnimTimelineDockerTitlebar(QWidget* parent) :
             btnAudioMenu->setToolTip(i18n("Animation audio menu"));
             btnAudioMenu->setIconSize(QSize(22, 22));
             btnAudioMenu->setAutoRaise(true);
+            btnAudioMenu->setEnabled(KisPart::instance()->playbackEngine()->supportsAudio());
 
             QMenu *audioMenu = new QMenu(this);
 

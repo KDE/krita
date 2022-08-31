@@ -220,7 +220,7 @@ bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
 
     if (*layerMaskBlockSize == 0) {
         dbgFile << "No layer info, so no PSD layers available";
-        return false;
+        return true;
     }
 
     /**

@@ -862,4 +862,65 @@ inline void setSaturation(TReal& r, TReal& g, TReal& b, TReal sat)
     else r = g = b = TReal(0.0);
 }
 
+template<class HSXType, class TReal>
+inline void ToneMapping(TReal& r, TReal& g, TReal& b)
+{
+    using namespace Arithmetic;
+    
+    
+    TReal l = HSXType::getLightness(r, g, b);
+    TReal n = min(r, g, b);
+    TReal x = max(r, g, b);
+	
+	TReal _r,_g,_b;
+    
+    if(n < TReal(0.0)) {
+        TReal iln = TReal(1.0) / (l-n);
+        r = l + ((r-l) * l) * iln;
+        g = l + ((g-l) * l) * iln;
+        b = l + ((b-l) * l) * iln;
+    }
+    
+    if(x > TReal(1.0) && (x-l) > std::numeric_limits<TReal>::epsilon())
+	{
+        TReal il  = TReal(1.0) - l;
+        TReal ixl = TReal(1.0) / (x - l);
+        _r = l + ((r-l) * il) * ixl;
+        _g = l + ((g-l) * il) * ixl;
+        _b = l + ((b-l) * il) * ixl;
+		
+		if(r >= _r)
+		{
+			if(r > 1.0){
+				r = 1.0;
+			}
+		}
+		else
+		{
+			r = _r;
+		}
+		
+		if(g >= _g)
+		{
+			if(g > 1.0){
+				g = 1.0;
+			}
+		}
+		else
+		{
+			g = _g;
+		}
+		
+		if(b >= _b)
+		{
+			if(b > 1.0){
+				b = 1.0;
+			}
+		}
+		else
+		{
+			b = _b;
+		}
+    }
+}
 #endif

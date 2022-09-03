@@ -175,6 +175,8 @@ const QString COMPOSITE_REEZE     = "reflect_freeze";
 const QString COMPOSITE_FRECT     = "freeze_reflect";
 const QString COMPOSITE_FHYRD     = "heat_glow_freeze_reflect_hybrid";
 
+const QString COMPOSITE_LAMBERT_LIGHTING   = "lambert_lighting";
+const QString COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2   = "lambert_lighting_gamma2.2";
 
 
 class KRITAPIGMENT_EXPORT KoCompositeOpRegistry

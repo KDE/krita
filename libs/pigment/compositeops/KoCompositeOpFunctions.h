@@ -49,6 +49,68 @@ inline void cfColor(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& d
 }
 
 template<class HSXType, class TReal>
+inline void cfLambertLighting(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db)
+{
+	TReal tr = sr * dr * (1.0 / 0.215686);
+	TReal tg = sg * dg * (1.0 / 0.215686);
+	TReal tb = sb * db * (1.0 / 0.215686);
+
+	if (tr > 1.0) {
+		dr = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.01925;
+	}
+	else {
+		dr = tr;
+	}
+
+	if (tg > 1.0) {
+		dg = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.01925;
+	}
+	else {
+		dg = tg;
+	}
+
+	if (tb > 1.0) {
+		db = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.01925;
+	}
+	else {
+		db = tb;
+	}
+
+
+	ToneMapping<HSXType, TReal>(dr, dg, db);
+}
+
+template<class HSXType, class TReal>
+inline void cfLambertLightingGamma2_2(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
+	TReal tr = sr * dr * 2.0;
+	TReal tg = sg * dg * 2.0;
+	TReal tb = sb * db * 2.0;
+
+	if (tr > 1.0) {
+		dr = 1.0 + (tr - 1.0) * (tr - 1.0) * 0.4;
+	}
+	else {
+		dr = tr;
+	}
+
+	if (tg > 1.0) {
+		dg = 1.0 + (tg - 1.0) * (tg - 1.0) * 0.4;
+	}
+	else {
+		dg = tg;
+	}
+
+	if (tb > 1.0) {
+		db = 1.0 + (tb - 1.0) * (tb - 1.0) * 0.4;
+	}
+	else {
+		db = tb;
+	}
+
+	ToneMapping<HSXType, TReal>(dr, dg, db);
+}
+
+template<class HSXType, class TReal>
 inline void cfLightness(TReal sr, TReal sg, TReal sb, TReal& dr, TReal& dg, TReal& db) {
     setLightness<HSXType>(dr, dg, db, getLightness<HSXType>(sr, sg, sb));
 }

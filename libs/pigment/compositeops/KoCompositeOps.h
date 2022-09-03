@@ -277,6 +277,9 @@ struct AddRGBOps<Traits, true>
         add<&cfDarkerColor <HSYType,Arg> >(cs, COMPOSITE_DARKER_COLOR        , KoCompositeOp::categoryDark());//darker color as PSD does it//
         add<&cfLighterColor <HSYType,Arg> >(cs, COMPOSITE_LIGHTER_COLOR      , KoCompositeOp::categoryLight());//lighter color as PSD does it//
 
+        add<&cfLambertLighting         <HSIType,Arg>   >(cs, COMPOSITE_LAMBERT_LIGHTING, KoCompositeOp::categoryMix());
+        add<&cfLambertLightingGamma2_2 <HSIType, Arg>   >(cs, COMPOSITE_LAMBERT_LIGHTING_GAMMA_2_2, KoCompositeOp::categoryMix());
+
         add<&cfColor             <HSIType,Arg> >(cs, COMPOSITE_COLOR_HSI         , KoCompositeOp::categoryHSI());
         add<&cfHue               <HSIType,Arg> >(cs, COMPOSITE_HUE_HSI           , KoCompositeOp::categoryHSI());
         add<&cfSaturation        <HSIType,Arg> >(cs, COMPOSITE_SATURATION_HSI    , KoCompositeOp::categoryHSI());

@@ -167,7 +167,6 @@ bool KisMyPaintPaintOpPreset::loadFromDevice(QIODevice *dev, KisResourcesInterfa
     s->setProperty(MYPAINT_HARDNESS, this->getHardness());
     s->setProperty(MYPAINT_OPACITY, this->getOpacity());
     s->setProperty(MYPAINT_OFFSET_BY_RANDOM, this->getOffset());
-    s->setProperty(MYPAINT_ERASER, this->isEraser());
     s->setProperty("EraserMode", qRound(this->isEraser()));
 
     if (!metadata().contains("paintopid")) {

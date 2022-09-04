@@ -16,7 +16,6 @@
 const QString MYPAINT_DIAMETER = "MyPaint/diameter";
 const QString MYPAINT_HARDNESS = "MyPaint/hardness";
 const QString MYPAINT_OPACITY = "MyPaint/opcity";
-const QString MYPAINT_ERASER = "MyPaint/eraser";
 const QString MYPAINT_JSON = "MyPaint/json";
 const QString MYPAINT_BRUSH = "MyPaint/brush";
 const QString MYPAINT_OFFSET_BY_RANDOM = "MyPaint/Offset";
@@ -73,7 +72,6 @@ public:
         opacity = settings->getFloat(MYPAINT_OPACITY);
         diameter = settings->getFloat(MYPAINT_DIAMETER);
         json = settings->getProperty(MYPAINT_JSON).toByteArray();
-        eraser = settings->getFloat(MYPAINT_ERASER);
         offset = settings->getFloat(MYPAINT_OFFSET_BY_RANDOM);
 
     }
@@ -81,7 +79,6 @@ public:
     void writeOptionSettingImpl(KisPropertiesConfiguration *settings) const override {
 
         settings->setProperty(MYPAINT_DIAMETER, diameter);
-        settings->setProperty(MYPAINT_ERASER, eraser);
         settings->setProperty(MYPAINT_OPACITY, opacity);
         settings->setProperty(MYPAINT_HARDNESS, hardness);
         settings->setProperty(MYPAINT_JSON, json);

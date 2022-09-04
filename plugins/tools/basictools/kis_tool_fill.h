@@ -170,8 +170,8 @@ private:
     KoGroupButton *m_buttonReferenceLabeled {nullptr};
     KisColorLabelSelectorWidget *m_widgetLabels {nullptr};
 
-    KoGroupButton *m_buttonMultipleFillAny {nullptr};
-    KoGroupButton *m_buttonMultipleFillSimilar {nullptr};
+    KoGroupButton *m_buttonDragFillAny {nullptr};
+    KoGroupButton *m_buttonDragFillSimilar {nullptr};
 
     void beginFilling(const QPoint &seedPoint);
     void addFillingOperation(const QPoint &seedPoint);
@@ -202,7 +202,7 @@ private Q_SLOTS:
     void slot_optionButtonStripReference_buttonToggled(KoGroupButton *button,
                                                        bool checked);
     void slot_widgetLabels_selectionChanged();
-    void slot_optionButtonStripMultipleFill_buttonToggled(KoGroupButton *button,
+    void slot_optionButtonStripDragFill_buttonToggled(KoGroupButton *button,
                                                           bool checked);
     void slot_buttonReset_clicked();
 };

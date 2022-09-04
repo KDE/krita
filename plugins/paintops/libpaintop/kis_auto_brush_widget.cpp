@@ -49,17 +49,17 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize, QWidget *parent, const 
     connect(inputRadius, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     inputRatio->setRange(0.01, 1.0, 2);
-    inputRatio->setSingleStep(0.1);
+    inputRatio->setSingleStep(0.01);
     inputRatio->setValue(1.0);
     inputRatio->setBlockUpdateSignalOnDrag(true);
     connect(inputRatio, SIGNAL(valueChanged(qreal)), m_updateCompressor.data(), SLOT(start()));
 
     inputHFade->setRange(0.0, 1.0, 2);
-    inputHFade->setSingleStep(0.1);
+    inputHFade->setSingleStep(0.01);
     inputHFade->setValue(0.5);
 
     inputVFade->setRange(0.0, 1.0, 2);
-    inputVFade->setSingleStep(0.1);
+    inputVFade->setSingleStep(0.01);
     inputVFade->setValue(0.5);
 
     aspectButton->setKeepAspectRatio(true);

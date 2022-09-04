@@ -428,7 +428,7 @@ QWidget* KisToolSelectSimilar::createOptionWidget()
         "The 'threshold' spinbox prefix in similar selection tool options",
         "Threshold: "));
     sliderThreshold->setRange(1, 200);
-    sliderThreshold->setSingleStep(20);
+    sliderThreshold->setSingleStep(1);
     sliderThreshold->setToolTip(
         i18n("Set how far the selection should extend in terms of color "
              "similarity"));

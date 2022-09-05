@@ -701,6 +701,7 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
         setWidgetState(DISABLE_PATTERNSIZE);
     }
 
+    // MyPaint brushes don't support custom blend modes, they always perform "Normal and Erase" blending.
     if (preset->paintOp().id() == "mypaintbrush") {
         setWidgetState(DISABLE_COMPOSITEOP);
         if (m_resourceProvider->currentCompositeOp() != COMPOSITE_ERASE && m_resourceProvider->currentCompositeOp() != COMPOSITE_OVER) {
@@ -1237,7 +1238,13 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
                 setWidgetState(ENABLE_PATTERNSIZE);
             }
 
-            {
+            // MyPaint brushes don't support custom blend modes, they always perform "Normal and Erase" blending.
+            if (m_resourceProvider->currentPreset()->paintOp().id() == "mypaintbrush") {
+                if (m_resourceProvider->currentCompositeOp() != COMPOSITE_ERASE && m_resourceProvider->currentCompositeOp() != COMPOSITE_OVER) {
+                    updateCompositeOp(COMPOSITE_OVER);
+                }
+                setWidgetState(DISABLE_COMPOSITEOP);
+            } else {
                 updateCompositeOp(m_resourceProvider->currentPreset()->settings()->paintOpCompositeOp());
                 setWidgetState(ENABLE_COMPOSITEOP);
             }

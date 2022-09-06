@@ -332,9 +332,7 @@ void KisZoomManager::setMinMaxZoom()
     qreal minDimension = qMin(imageSize.width(), imageSize.height());
     qreal minZoom = qMin(100.0 / minDimension, 0.1);
 
-    m_zoomAction->setMinimumZoom(minZoom);
-    m_zoomAction->setMaximumZoom(90.0);
-
+    m_zoomAction->setMinMaxZoom(minZoom, 90.0);
 }
 
 void KisZoomManager::updateGuiAfterDocumentSize()

@@ -320,7 +320,6 @@ void KoZoomAction::slotUpdateGuiAfterZoom()
 void KoZoomAction::slotUpdateZoomLevels()
 {
     qreal currentZoom = d->effectiveZoom;
-    d->generateSliderZoomLevels();
     d->sliderLookup = d->generateSliderZoomLevels();
     regenerateItems(currentZoom);
     syncSliderWithZoom();
@@ -377,7 +376,6 @@ void KoZoomAction::setMinimumZoom(qreal zoom)
     Q_ASSERT(zoom > 0.0f);
     KoZoomMode::setMinimumZoom(zoom);
     d->minimumZoomValue = zoom;
-    d->generateSliderZoomLevels();
     d->sliderLookup = d->generateSliderZoomLevels();
     regenerateItems(d->effectiveZoom);
     syncSliderWithZoom();
@@ -388,6 +386,19 @@ void KoZoomAction::setMaximumZoom(qreal zoom)
     Q_ASSERT(zoom > 0.0f);
     KoZoomMode::setMaximumZoom(zoom);
     d->maximumZoomValue = zoom;
+    d->sliderLookup = d->generateSliderZoomLevels();
+    regenerateItems(d->effectiveZoom);
+    syncSliderWithZoom();
+}
+
+void KoZoomAction::setMinMaxZoom(qreal min, qreal max)
+{
+    Q_ASSERT(min > 0.0f);
+    Q_ASSERT(max > 0.0f);
+    KoZoomMode::setMinimumZoom(min);
+    KoZoomMode::setMaximumZoom(max);
+    d->minimumZoomValue = min;
+    d->maximumZoomValue = max;
     d->sliderLookup = d->generateSliderZoomLevels();
     regenerateItems(d->effectiveZoom);
     syncSliderWithZoom();

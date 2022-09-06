@@ -216,6 +216,7 @@ macro(_xsimd_compile_one_implementation _srcs _impl)
          set_source_files_properties( "${_out}" PROPERTIES
             COMPILE_FLAGS "${_flags} ${_extra_flags}"
             COMPILE_DEFINITIONS "XSIMD_IMPL=${_impl}"
+            SKIP_PRECOMPILE_HEADERS TRUE
          )
          list(APPEND ${_srcs} "${_out}")
       endif()

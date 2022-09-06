@@ -363,12 +363,6 @@ set(einspline_SRCS
 
 kis_add_library(kritaimage SHARED ${kritaimage_LIB_SRCS} ${einspline_SRCS})
 
-set_source_files_properties(
-    ${__per_arch_circle_mask_generator_objs}
-    ${_per_arch_processor_objs}
-    PROPERTIES SKIP_PRECOMPILE_HEADERS TRUE)
-
-
 generate_export_header(kritaimage BASE_NAME kritaimage)
 
 target_link_libraries(kritaimage 

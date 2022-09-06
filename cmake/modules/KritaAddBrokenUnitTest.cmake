@@ -111,7 +111,7 @@ function(KRITA_ADD_UNIT_TESTS)
 
             if (NOT ARG_PCH_FILE)
                 krita_select_pch_file(${target_name} ARG_PCH_FILE)
-                file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/out/${target_name}.txt" CONTENT ${ARG_PCH_FILE})
+                #file(GENERATE OUTPUT "${CMAKE_BINARY_DIR}/out/${target_name}.txt" CONTENT ${ARG_PCH_FILE})
             endif()
 
             target_precompile_headers(${target_name} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/pch/${ARG_PCH_FILE}>")

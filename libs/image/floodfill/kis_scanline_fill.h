@@ -126,15 +126,29 @@ private:
     friend class KisScanlineFillTest;
     Q_DISABLE_COPY(KisScanlineFill)
 
-    template <class T>
-    void processLine(KisFillInterval interval, const int rowIncrement, T &pixelPolicy);
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    void processLine(KisFillInterval interval, const int rowIncrement,
+                     DifferencePolicy &differencePolicy,
+                     SelectionPolicy &selectionPolicy,
+                     PixelAccessPolicy &pixelAccessPolicy);
 
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight,
+                      DifferencePolicy &differencePolicy,
+                      SelectionPolicy &selectionPolicy,
+                      PixelAccessPolicy &pixelAccessPolicy);
 
-    template <class T>
-        void extendedPass(KisFillInterval *currentInterval, int srcRow, bool extendRight, T &pixelPolicy);
+    template <typename DifferencePolicy, typename SelectionPolicy, typename PixelAccessPolicy>
+    void runImpl(DifferencePolicy &differencePolicy,
+                 SelectionPolicy &selectionPolicy,
+                 PixelAccessPolicy &pixelAccessPolicy);
 
-    template <class T>
-    void runImpl(T &pixelPolicy);
+    template <template <typename SrcPixelType> typename OptimizedDifferencePolicy,
+              typename SlowDifferencePolicy,
+              typename SelectionPolicy, typename PixelAccessPolicy>
+    void selectDifferencePolicyAndRun(const KoColor &srcColor,
+                                      SelectionPolicy &selectionPolicy,
+                                      PixelAccessPolicy &pixelAccessPolicy);
 
 private:
     void testingProcessLine(const KisFillInterval &processInterval);

@@ -88,6 +88,11 @@
 #include "krita_utils.h"
 #include "processing/fill_processing_visitor.h"
 #include "widgets/kis_canvas_drop.h"
+#include <commands_new/KisMergeLabeledLayersCommand.h>
+#include <kis_stroke_strategy_undo_command_based.h>
+#include <commands_new/kis_processing_command.h>
+#include <commands_new/kis_update_command.h>
+#include <kis_command_utils.h>
 
 //static
 QString KisView::newObjectName()
@@ -764,11 +769,14 @@ void KisView::dropEvent(QDropEvent *event)
         if (!image()->wrapAroundModePermitted() && !image()->bounds().contains(imgCursorPos)) {
             return;
         }
-
-        KisProcessingApplicator applicator(image(), d->viewManager->activeNode(),
-                                            KisProcessingApplicator::NONE,
-                                            KisImageSignalVector(),
-                                            kundo2_i18n("Flood Fill Layer"));
+            
+        KisStrokeStrategyUndoCommandBased *strategy =
+                new KisStrokeStrategyUndoCommandBased(
+                    kundo2_i18n("Flood Fill Layer"), false, image().data()
+                );
+        strategy->setSupportsWrapAroundMode(true);
+        KisStrokeId fillStrokeId = image()->startStroke(strategy);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(fillStrokeId);
 
         KisResourcesSnapshotSP resources =
             new KisResourcesSnapshot(image(), d->viewManager->activeNode(), d->viewManager->canvasResourceProvider()->resourceManager());
@@ -783,89 +791,237 @@ void KisView::dropEvent(QDropEvent *event)
 
         // Use same options as the fill tool
         KConfigGroup configGroup = KSharedConfig::openConfig()->group("KritaFill/KisToolFill");
-        const bool isAltPressed = event->keyboardModifiers() & Qt::AltModifier;
-        const bool fillSelectionOnly = configGroup.readEntry("fillSelection", false) != isAltPressed;
-        const KisFillPainter::RegionFillingMode regionFillingMode =
-            configGroup.readEntry("contiguousFillMode", "") == "boundaryFill"
-            ? KisFillPainter::RegionFillingMode_BoundaryFill
-            : KisFillPainter::RegionFillingMode_FloodFill;
-        KoColor regionFillingBoundaryColor;
-        if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
-            const QString xmlColor = configGroup.readEntry("contiguousFillBoundaryColor", QString());
-            QDomDocument doc;
-            if (doc.setContent(xmlColor)) {
-                QDomElement e = doc.documentElement().firstChild().toElement();
-                QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
-                bool ok;
-                if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
-                    regionFillingBoundaryColor = KoColor::fromXML(e, channelDepthID, &ok);
-                } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
-                    regionFillingBoundaryColor = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
+        QString fillMode = configGroup.readEntry<QString>("whatToFill", "");
+        if (fillMode.isEmpty()) {
+            if (configGroup.readEntry<bool>("fillSelection", false)) {
+                fillMode = "fillSelection";
+            } else {
+                fillMode = "fillContiguousRegion";
+            }
+        }
+            
+        if (event->keyboardModifiers() == Qt::ShiftModifier) {
+            if (fillMode == "fillSimilarRegions") {
+                fillMode = "fillSelection";
+            } else {
+                fillMode = "fillSimilarRegions";
+            }
+        } else if (event->keyboardModifiers() == Qt::AltModifier) {
+            if (fillMode == "fillContiguousRegion") {
+                fillMode = "fillSelection";
+            } else {
+                fillMode = "fillContiguousRegion";
+            }
+        }
+
+        if (fillMode == "fillSelection") {
+            FillProcessingVisitor *visitor =  new FillProcessingVisitor(nullptr,
+                                                                        selection(),
+                                                                        resources);
+            visitor->setSeedPoint(imgCursorPos);
+            visitor->setSelectionOnly(true);
+            image()->addJob(
+                fillStrokeId,
+                new KisStrokeStrategyUndoCommandBased::Data(
+                    KUndo2CommandSP(new KisProcessingCommand(visitor, d->viewManager->activeNode())),
+                    false,
+                    KisStrokeJobData::SEQUENTIAL,
+                    KisStrokeJobData::EXCLUSIVE
+                )
+            );
+        } else {
+            const int threshold = configGroup.readEntry("thresholdAmount", 8);
+            const int opacitySpread = configGroup.readEntry("opacitySpread", 100);
+            const bool antiAlias = configGroup.readEntry("antiAlias", true);
+            const int grow = configGroup.readEntry("growSelection", 0);
+            const bool stopGrowingAtDarkestPixel = configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
+            const int feather = configGroup.readEntry("featherAmount", 0);
+            QString sampleLayersMode = configGroup.readEntry("sampleLayersMode", "");
+            if (sampleLayersMode.isEmpty()) {
+                if (configGroup.readEntry("sampleMerged", false)) {
+                    sampleLayersMode = "allLayers";
+                } else {
+                    sampleLayersMode = "currentLayer";
+                }
+            }
+            QList<int> colorLabels;
+            {
+                const QStringList colorLabelsStr = configGroup.readEntry<QString>("colorLabels", "").split(',', QString::SkipEmptyParts);
+                for (const QString &colorLabelStr : colorLabelsStr) {
+                    bool ok;
+                    const int colorLabel = colorLabelStr.toInt(&ok);
+                    if (ok) {
+                        colorLabels << colorLabel;
+                    }
+                }
+            }
+            
+            KisPaintDeviceSP referencePaintDevice = nullptr;
+            if (sampleLayersMode == "allLayers") {
+                referencePaintDevice = image()->projection();
+            } else if (sampleLayersMode == "currentLayer") {
+                referencePaintDevice = d->viewManager->activeNode()->paintDevice();
+            } else if (sampleLayersMode == "colorLabeledLayers") {
+                KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
+                referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+                image()->addJob(
+                    fillStrokeId,
+                    new KisStrokeStrategyUndoCommandBased::Data(
+                        KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage,
+                                                                         referencePaintDevice,
+                                                                         image()->root(),
+                                                                         colorLabels,
+                                                                         KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
+                        false,
+                        KisStrokeJobData::SEQUENTIAL,
+                        KisStrokeJobData::EXCLUSIVE
+                    )
+                );
+            }
+
+            QSharedPointer<KoColor> referenceColor(new KoColor);
+            if (sampleLayersMode == "colorLabeledLayers") {
+                // We need to obtain the reference color from the reference paint
+                // device, but it is produced in a stroke, so we must get the color
+                // after the device is ready. So we get it in the stroke
+                image()->addJob(
+                    fillStrokeId,
+                    new KisStrokeStrategyUndoCommandBased::Data(
+                        KUndo2CommandSP(new KisCommandUtils::LambdaCommand(
+                            [referenceColor, referencePaintDevice, imgCursorPos]() -> KUndo2Command*
+                            {
+                                *referenceColor = referencePaintDevice->pixel(imgCursorPos);
+                                return 0;
+                            }
+                        )),
+                        false,
+                        KisStrokeJobData::SEQUENTIAL,
+                        KisStrokeJobData::EXCLUSIVE
+                    )
+                );
+            } else {
+                // Here the reference device is already ready, so we obtain the
+                // reference color directly
+                *referenceColor = referencePaintDevice->pixel(imgCursorPos);
+            }
+
+            if (fillMode == "fillContiguousRegion") {
+                const KisFillPainter::RegionFillingMode regionFillingMode =
+                    configGroup.readEntry("contiguousFillMode", "") == "boundaryFill"
+                    ? KisFillPainter::RegionFillingMode_BoundaryFill
+                    : KisFillPainter::RegionFillingMode_FloodFill;
+                KoColor regionFillingBoundaryColor;
+                if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+                    const QString xmlColor = configGroup.readEntry("contiguousFillBoundaryColor", QString());
+                    QDomDocument doc;
+                    if (doc.setContent(xmlColor)) {
+                        QDomElement e = doc.documentElement().firstChild().toElement();
+                        QString channelDepthID = doc.documentElement().attribute("channeldepth", Integer16BitsColorDepthID.id());
+                        bool ok;
+                        if (e.hasAttribute("space") || e.tagName().toLower() == "srgb") {
+                            regionFillingBoundaryColor = KoColor::fromXML(e, channelDepthID, &ok);
+                        } else if (doc.documentElement().hasAttribute("space") || doc.documentElement().tagName().toLower() == "srgb"){
+                            regionFillingBoundaryColor = KoColor::fromXML(doc.documentElement(), channelDepthID, &ok);
+                        }
+                    }
+                }
+                const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
+                const bool useFastMode = !resources->activeSelection() &&
+                                         opacitySpread == 100 &&
+                                         useSelectionAsBoundary == false &&
+                                         !antiAlias && grow == 0 && feather == 0 &&
+                                         sampleLayersMode == "currentLayer";
+
+                FillProcessingVisitor *visitor = new FillProcessingVisitor(referencePaintDevice,
+                                                                           selection(),
+                                                                           resources);
+                visitor->setSeedPoint(imgCursorPos);
+                visitor->setUseFastMode(useFastMode);
+                visitor->setUseSelectionAsBoundary(useSelectionAsBoundary);
+                visitor->setFeather(feather);
+                visitor->setSizeMod(grow);
+                visitor->setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
+                visitor->setRegionFillingMode(regionFillingMode);
+                if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
+                    visitor->setRegionFillingBoundaryColor(regionFillingBoundaryColor);
+                }
+                visitor->setFillThreshold(threshold);
+                visitor->setOpacitySpread(opacitySpread);
+                visitor->setAntiAlias(antiAlias);
+                
+                image()->addJob(
+                    fillStrokeId,
+                    new KisStrokeStrategyUndoCommandBased::Data(
+                        KUndo2CommandSP(new KisProcessingCommand(visitor, d->viewManager->activeNode())),
+                        false,
+                        KisStrokeJobData::SEQUENTIAL,
+                        KisStrokeJobData::EXCLUSIVE
+                    )
+                );
+            } else {
+                KisSelectionSP fillMask = new KisSelection;
+                QSharedPointer<KisProcessingVisitor::ProgressHelper>
+                    progressHelper(new KisProcessingVisitor::ProgressHelper(currentNode()));
+
+                {
+                    KisSelectionSP selection = this->selection();
+                    KisFillPainter painter;
+                    QRect bounds = image()->bounds();
+                    if (selection) {
+                        bounds = bounds.intersected(selection->projection()->selectedRect());
+                    }
+
+                    painter.setFillThreshold(threshold);
+                    painter.setOpacitySpread(opacitySpread);
+                    painter.setAntiAlias(antiAlias);
+                    painter.setSizemod(grow);
+                    painter.setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
+                    painter.setFeather(feather);
+
+                    QVector<KisStrokeJobData*> jobs =
+                        painter.createSimilarColorsSelectionJobs(
+                            fillMask->pixelSelection(), referenceColor, referencePaintDevice,
+                            bounds, selection ? selection->projection() : nullptr, progressHelper
+                        );
+
+                    for (KisStrokeJobData *job : jobs) {
+                        image()->addJob(fillStrokeId, job);
+                    }
+                }
+
+                {
+                    FillProcessingVisitor *visitor =  new FillProcessingVisitor(nullptr,
+                                                                                fillMask,
+                                                                                resources);
+
+                    visitor->setSeedPoint(imgCursorPos);
+                    visitor->setSelectionOnly(true);
+                    visitor->setProgressHelper(progressHelper);
+
+                    image()->addJob(
+                        fillStrokeId,
+                        new KisStrokeStrategyUndoCommandBased::Data(
+                            KUndo2CommandSP(new KisProcessingCommand(visitor, currentNode())),
+                            false,
+                            KisStrokeJobData::SEQUENTIAL,
+                            KisStrokeJobData::EXCLUSIVE
+                        )
+                    );
                 }
             }
         }
-        const int thresholdAmount = configGroup.readEntry("thresholdAmount", 8);
-        const int opacitySpread = configGroup.readEntry("opacitySpread", 100);
-        const bool useSelectionAsBoundary = configGroup.readEntry("useSelectionAsBoundary", false);
-        const bool antiAlias = configGroup.readEntry("antiAlias", true);
-        const int growSelection = configGroup.readEntry("growSelection", 0);
-        const bool stopGrowingAtDarkestPixel = configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
-        const int featherAmount = configGroup.readEntry("featherAmount", 0);
-        const QString SAMPLE_LAYERS_MODE_CURRENT = {"currentLayer"};
-        const QString SAMPLE_LAYERS_MODE_ALL = {"allLayers"};
-        const QString SAMPLE_LAYERS_MODE_COLOR_LABELED = {"colorLabeledLayers"};
-        QString sampleLayersMode;
-        if (configGroup.hasKey("sampleLayersMode")) {
-            sampleLayersMode = configGroup.readEntry("sampleLayersMode", SAMPLE_LAYERS_MODE_CURRENT);
-        } else { // if neither option is present in the configuration, it will fall back to CURRENT
-            bool sampleMerged = configGroup.readEntry("sampleMerged", false);
-            sampleLayersMode = sampleMerged ? SAMPLE_LAYERS_MODE_ALL : SAMPLE_LAYERS_MODE_CURRENT;
-        }
-        const bool useFastMode = !resources->activeSelection() &&
-                                 opacitySpread == 100 &&
-                                 useSelectionAsBoundary == false &&
-                                 !antiAlias && growSelection == 0 && featherAmount == 0 &&
-                                 sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT;
-        // If the sample layer mode is other than SAMPLE_LAYERS_MODE_ALL just
-        // default to SAMPLE_LAYERS_MODE_CURRENT. This means that
-        // SAMPLE_LAYERS_MODE_COLOR_LABELED is not supported yet since the color
-        // labels are not stored in the config
-        // TODO: make this work with color labels or reference layers in the future
-        if (sampleLayersMode != SAMPLE_LAYERS_MODE_ALL) {
-            sampleLayersMode = SAMPLE_LAYERS_MODE_CURRENT;
-        }
 
-        KisPaintDeviceSP referencePaintDevice = nullptr;
-        if (sampleLayersMode == SAMPLE_LAYERS_MODE_ALL) {
-            referencePaintDevice = image()->projection();
-        } else if (sampleLayersMode == SAMPLE_LAYERS_MODE_CURRENT) {
-            referencePaintDevice = d->viewManager->activeNode()->paintDevice();
-        }
-        KIS_ASSERT(referencePaintDevice);
-        
-        FillProcessingVisitor *visitor = new FillProcessingVisitor(referencePaintDevice,
-                                                                   selection(),
-                                                                   resources);
-        visitor->setSeedPoint(imgCursorPos);
-        visitor->setUseFastMode(useFastMode);
-        visitor->setSelectionOnly(fillSelectionOnly);
-        visitor->setUseSelectionAsBoundary(useSelectionAsBoundary);
-        visitor->setFeather(featherAmount);
-        visitor->setSizeMod(growSelection);
-        visitor->setRegionFillingMode(regionFillingMode);
-        if (regionFillingMode == KisFillPainter::RegionFillingMode_BoundaryFill) {
-            visitor->setRegionFillingBoundaryColor(regionFillingBoundaryColor);
-        }
-        visitor->setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
-        visitor->setFillThreshold(thresholdAmount);
-        visitor->setOpacitySpread(opacitySpread);
-        visitor->setAntiAlias(antiAlias);
-        
-        applicator.applyVisitor(visitor,
-                                KisStrokeJobData::SEQUENTIAL,
-                                KisStrokeJobData::EXCLUSIVE);
+        image()->addJob(
+            fillStrokeId,
+            new KisStrokeStrategyUndoCommandBased::Data(
+                KUndo2CommandSP(new KisUpdateCommand(d->viewManager->activeNode(), image()->bounds(), image().data())),
+                false,
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE
+            )
+        );
 
-        applicator.end();
+        image()->endStroke(fillStrokeId);
     }
 }
 

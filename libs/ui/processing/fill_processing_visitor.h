@@ -45,20 +45,21 @@ public:
     void setRegionFillingBoundaryColor(const KoColor &regionFillingBoundaryColor);
     void setContinuousFillMode(ContinuousFillMode continuousFillMode);
     void setContinuousFillMask(KisSelectionSP continuousFillMask);
-    void setContinuousFillReferenceColor(const KoColor &continuousFillReferenceColor);
+    void setContinuousFillReferenceColor(const QSharedPointer<KoColor> continuousFillReferenceColor);
     void setUnmerged(bool unmerged);
     void setUseBgColor(bool useBgColor);
+    void setProgressHelper(QSharedPointer<ProgressHelper> progressHelper);
 
 private:
     void visitNodeWithPaintDevice(KisNode *node, KisUndoAdapter *undoAdapter) override;
     void visitExternalLayer(KisExternalLayer *layer, KisUndoAdapter *undoAdapter) override;
     void visitColorizeMask(KisColorizeMask *mask, KisUndoAdapter *undoAdapter) override;
 
-    void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
+    void fillPaintDevice(KisPaintDeviceSP device, KisUndoAdapter *undoAdapter);
 
-    void selectionFill(KisPaintDeviceSP device, const QRect &fillRect, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
-    void normalFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
-    void continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter, ProgressHelper &helper);
+    void selectionFill(KisPaintDeviceSP device, const QRect &fillRect, KisUndoAdapter *undoAdapter);
+    void normalFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter);
+    void continuousFill(KisPaintDeviceSP device, const QRect &fillRect, const QPoint &seedPoint, KisUndoAdapter *undoAdapter);
 
 private:
     KisPaintDeviceSP m_refPaintDevice;
@@ -81,10 +82,12 @@ private:
 
     ContinuousFillMode m_continuousFillMode;
     KisSelectionSP m_continuousFillMask;
-    KoColor m_continuousFillReferenceColor;
+    QSharedPointer<KoColor> m_continuousFillReferenceColor {nullptr};
 
     bool m_unmerged;
     bool m_useBgColor;
+
+    QSharedPointer<ProgressHelper> m_progressHelper {nullptr};
 };
 
 #endif /* __FILL_PROCESSING_VISITOR_H */

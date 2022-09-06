@@ -17,6 +17,9 @@
 #include "kis_types.h"
 #include "kis_selection.h"
 
+#include <KisRunnableStrokeJobUtils.h>
+#include <kis_processing_visitor.h>
+
 #include <kritaimage_export.h>
 
 
@@ -225,6 +228,45 @@ public:
      */
     KisPixelSelectionSP createFloodSelection(KisPixelSelectionSP newSelection, int startX, int startY,
                                              KisPaintDeviceSP sourceDevice, KisPaintDeviceSP existingSelection);
+
+    /**
+     * Fills all the pixels of the @ref outSelection device inside @ref rect
+     * if the corresponding pixels on @ref referenceDevice are similar
+     * to @ref referenceColor
+     *
+     * @param outSelection the selection where the values are written to
+     * @param referenceColor the color that we have to compare pixels to
+     * @param referenceDevice the device that we have to use to compare colors
+     * @param rect the rectangle that defines the area to be processed
+     * @param mask a selection to mask the results. Set to nullptr if not needed
+     */
+    void createSimilarColorsSelection(KisPixelSelectionSP outSelection,
+                                      const KoColor &referenceColor,
+                                      KisPaintDeviceSP referenceDevice,
+                                      const QRect &rect,
+                                      KisPixelSelectionSP mask);
+
+    /**
+     * Create a list of jobs that will fill synchronously all the pixels of the
+     * @ref outSelection device inside @ref rect if the corresponding pixels
+     * on @ref referenceDevice are similar to @ref referenceColor. @ref rect
+     * is splitted into smaller rects if needed, and the painting of each one
+     * is distributed on several jobs
+     *
+     * @param outSelection the selection where the values are written to
+     * @param referenceColor the color that we have to compare pixels to
+     * @param referenceDevice the device that we have to use to compare colors
+     * @param rect the rectangle that defines the area to be processed
+     * @param mask a selection to mask the results. Set to nullptr if not needed
+     */
+    QVector<KisStrokeJobData*> createSimilarColorsSelectionJobs(
+        KisPixelSelectionSP outSelection,
+        const QSharedPointer<KoColor> referenceColor,
+        KisPaintDeviceSP referenceDevice,
+        const QRect &rect,
+        KisPixelSelectionSP mask,
+        QSharedPointer<KisProcessingVisitor::ProgressHelper> progressHelper = nullptr
+    );
 
     /**
      * Set the threshold for floodfill. The range is 0-255: 0 means the fill will only

@@ -514,10 +514,12 @@ QSize KisOptionCollectionWidgetWithHeader::minimumSizeHint() const
             ),
             width() < minimumHeaderWidth
             ? m_d->label->minimumSizeHint().height() +
-              (m_d->primaryWidget ? m_d->layoutPrimaryWidget->minimumSize().height() + m_d->layoutHeader->spacing() : 0)
+              (m_d->primaryWidget && m_d->primaryWidget->isVisible()
+                ? m_d->layoutPrimaryWidget->minimumSize().height() + m_d->layoutHeader->spacing() : 0)
             : qMax(
                 m_d->label->minimumSizeHint().height(),
-                m_d->primaryWidget ? m_d->layoutPrimaryWidget->minimumSize().height() : 0
+                m_d->primaryWidget && m_d->primaryWidget->isVisible()
+                    ? m_d->layoutPrimaryWidget->minimumSize().height() : 0
               )
         );
 
@@ -585,17 +587,19 @@ void KisOptionCollectionWidgetWithHeader::setPrimaryWidgetVisible(bool visible)
 {
     KIS_ASSERT_RECOVER_RETURN(m_d->primaryWidget);
 
-    if (visible == m_d->primaryWidget->isVisible()) {
-        return;
-    }
-
-    if (m_d->primaryWidget->isVisible()) {
-        m_d->layoutHeader->takeAt(1);
-        m_d->primaryWidget->setVisible(false);
-    } else {
+    if (visible) {
+        if (m_d->layoutHeader->count() == 2) {
+            return;
+        }
         m_d->layoutHeader->insertLayout(1, m_d->layoutPrimaryWidget, 1);
         m_d->primaryWidget->setVisible(true);
         m_d->adjustPrimaryWidget();
+    } else {
+        if (m_d->layoutHeader->count() == 1) {
+            return;
+        }
+        m_d->layoutHeader->takeAt(1);
+        m_d->primaryWidget->setVisible(false);
     }
 }
 

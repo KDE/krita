@@ -49,6 +49,8 @@
 #include <kis_stroke_strategy_undo_command_based.h>
 #include <commands_new/kis_processing_command.h>
 #include <commands_new/kis_update_command.h>
+#include <kis_fill_painter.h>
+#include <kis_selection_filters.h>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -60,14 +62,14 @@
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
         : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
-        , m_continuousFillMask(nullptr)
+        , m_fillMask(nullptr)
         , m_referencePaintDevice(nullptr)
         , m_referenceNodeList(nullptr)
-        , m_compressorContinuousFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
+        , m_compressorFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
         , m_fillStrokeId(nullptr)
 {
     setObjectName("tool_fill");
-    connect(&m_compressorContinuousFillUpdate, SIGNAL(timeout()), SLOT(slotUpdateContinuousFill()));
+    connect(&m_compressorFillUpdate, SIGNAL(timeout()), SLOT(slotUpdateFill()));
 }
 
 KisToolFill::~KisToolFill()
@@ -122,11 +124,22 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
         return;
     }
     
-    // Switch the fill mode if alt modifier is pressed
-    m_effectiveFillMode =
-        event->modifiers() == Qt::AltModifier
-        ? (m_fillMode == FillSelection ? FillContiguousRegion : FillSelection)
-        : m_fillMode;
+    // Switch the fill mode if shift or alt modifiers are pressed
+    if (event->modifiers() == Qt::ShiftModifier) {
+        if (m_fillMode == FillMode_FillSimilarRegions) {
+            m_effectiveFillMode = FillMode_FillSelection;
+        } else {
+            m_effectiveFillMode = FillMode_FillSimilarRegions;
+        }
+    } else if (event->modifiers() == Qt::AltModifier) {
+        if (m_fillMode == FillMode_FillContiguousRegion) {
+            m_effectiveFillMode = FillMode_FillSelection;
+        } else {
+            m_effectiveFillMode = FillMode_FillContiguousRegion;
+        }
+    } else {
+        m_effectiveFillMode = m_fillMode;
+    }
 
     m_seedPoints.append(lastImagePosition);
     beginFilling(lastImagePosition);
@@ -135,7 +148,7 @@ void KisToolFill::beginPrimaryAction(KoPointerEvent *event)
 
 void KisToolFill::continuePrimaryAction(KoPointerEvent *event)
 {
-    if (!m_isFilling) {
+    if (!m_isFilling || m_effectiveFillMode != FillMode_FillContiguousRegion) {
         return;
     }
     
@@ -154,20 +167,47 @@ void KisToolFill::continuePrimaryAction(KoPointerEvent *event)
     const QPoint newImagePosition = convertToImagePixelCoordFloored(event);
     m_seedPoints.append(newImagePosition);
 
-    m_compressorContinuousFillUpdate.start();
+    m_compressorFillUpdate.start();
 }
 
 void KisToolFill::endPrimaryAction(KoPointerEvent *)
 {
     if (m_isFilling) {
-        m_compressorContinuousFillUpdate.stop();
-        slotUpdateContinuousFill();
+        m_compressorFillUpdate.stop();
+        slotUpdateFill();
         endFilling();
     }
 
     m_isFilling = false;
     m_isDragging = false;
     m_seedPoints.clear();
+}
+
+void KisToolFill::beginAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action == ChangeSize) {
+        beginPrimaryAction(event);
+        return;
+    }
+    KisToolPaint::beginAlternateAction(event, action);
+}
+
+void KisToolFill::continueAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action == ChangeSize) {
+        continuePrimaryAction(event);
+        return;
+    }
+    KisToolPaint::continueAlternateAction(event, action);
+}
+
+void KisToolFill::endAlternateAction(KoPointerEvent *event, AlternateAction action)
+{
+    if (action == ChangeSize) {
+        endPrimaryAction(event);
+        return;
+    }
+    KisToolPaint::endAlternateAction(event, action);
 }
 
 void KisToolFill::beginFilling(const QPoint &seedPoint)
@@ -182,64 +222,73 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
 
     m_resourcesSnapshot = new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager());
 
-    if (m_reference == CurrentLayer) {
-        m_referencePaintDevice = currentNode()->paintDevice();
-    } else if (m_reference == AllLayers) {
-        m_referencePaintDevice = currentImage()->projection();
-    } else if (m_reference == ColorLabeledLayers) {
-        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
-        if (!m_referenceNodeList) {
-            m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
-            m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+    KisPaintDeviceSP referencePaintDevice = nullptr;
+    if (m_effectiveFillMode != FillMode_FillSelection) {
+        if (m_reference == Reference_CurrentLayer) {
+            referencePaintDevice = currentNode()->paintDevice();
+        } else if (m_reference == Reference_AllLayers) {
+            referencePaintDevice = currentImage()->projection();
+        } else if (m_reference == Reference_ColorLabeledLayers) {
+            KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
+            if (!m_referenceNodeList) {
+                referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+                m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+            } else {
+                referencePaintDevice = m_referencePaintDevice;
+            }
+            KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
+            KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+            image()->addJob(
+                m_fillStrokeId,
+                new KisStrokeStrategyUndoCommandBased::Data(
+                    KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage,
+                                                                     m_referenceNodeList,
+                                                                     newReferenceNodeList,
+                                                                     referencePaintDevice,
+                                                                     newReferencePaintDevice,
+                                                                     image()->root(),
+                                                                     m_selectedColorLabels,
+                                                                     KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
+                    false,
+                    KisStrokeJobData::SEQUENTIAL,
+                    KisStrokeJobData::EXCLUSIVE
+                )
+            );
+            referencePaintDevice = newReferencePaintDevice;
+            m_referenceNodeList = newReferenceNodeList;
         }
-        KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
-        KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
-        image()->addJob(
-            m_fillStrokeId,
-            new KisStrokeStrategyUndoCommandBased::Data(
-                KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage,
-                                                                 m_referenceNodeList,
-                                                                 newReferenceNodeList,
-                                                                 m_referencePaintDevice,
-                                                                 newReferencePaintDevice,
-                                                                 image()->root(),
-                                                                 m_selectedColorLabels,
-                                                                 KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
-                false,
-                KisStrokeJobData::SEQUENTIAL,
-                KisStrokeJobData::EXCLUSIVE
-            )
-        );
-        m_referencePaintDevice = newReferencePaintDevice;
-        m_referenceNodeList = newReferenceNodeList;
-    }
 
-    if (m_reference == ColorLabeledLayers) {
-        // We need to obtain the reference color from the reference paint
-        // device, but it is produced in a stroke, so we must get the color
-        // after the device is ready. So we get it in the stroke
-        image()->addJob(
-            m_fillStrokeId,
-            new KisStrokeStrategyUndoCommandBased::Data(
-                KUndo2CommandSP(new KisCommandUtils::LambdaCommand(
-                    [this, seedPoint]() -> KUndo2Command*
-                    {
-                        m_continuousFillReferenceColor = m_referencePaintDevice->pixel(seedPoint);
-                        return 0;
-                    }
-                )),
-                false,
-                KisStrokeJobData::SEQUENTIAL,
-                KisStrokeJobData::EXCLUSIVE
-            )
-        );
-    } else {
-        // Here the reference device is already ready, so we obtain the
-        // reference color directly
-        m_continuousFillReferenceColor = m_referencePaintDevice->pixel(seedPoint);
-    }
+        QSharedPointer<KoColor> referenceColor(new KoColor);
+        if (m_reference == Reference_ColorLabeledLayers) {
+            // We need to obtain the reference color from the reference paint
+            // device, but it is produced in a stroke, so we must get the color
+            // after the device is ready. So we get it in the stroke
+            image()->addJob(
+                m_fillStrokeId,
+                new KisStrokeStrategyUndoCommandBased::Data(
+                    KUndo2CommandSP(new KisCommandUtils::LambdaCommand(
+                        [referencePaintDevice, referenceColor, seedPoint]() -> KUndo2Command*
+                        {
+                            *referenceColor = referencePaintDevice->pixel(seedPoint);
+                            return 0;
+                        }
+                    )),
+                    false,
+                    KisStrokeJobData::SEQUENTIAL,
+                    KisStrokeJobData::EXCLUSIVE
+                )
+            );
+        } else {
+            // Here the reference device is already ready, so we obtain the
+            // reference color directly
+            *referenceColor = referencePaintDevice->pixel(seedPoint);
+        }
 
-    m_continuousFillMask = new KisSelection;
+        m_referencePaintDevice = referencePaintDevice;
+        m_referenceColor = referenceColor;
+
+        m_fillMask = new KisSelection;
+    }
 
     m_transform.reset();
     m_transform.rotate(m_patternRotation);
@@ -258,58 +307,112 @@ void KisToolFill::addFillingOperation(const QVector<QPoint> &seedPoints)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
 
-    FillProcessingVisitor *visitor =  new FillProcessingVisitor(m_referencePaintDevice,
-                                                                m_resourcesSnapshot->activeSelection(),
-                                                                m_resourcesSnapshot);
+    if (m_effectiveFillMode != FillMode_FillSimilarRegions) {
+        FillProcessingVisitor *visitor =  new FillProcessingVisitor(m_referencePaintDevice,
+                                                                    m_resourcesSnapshot->activeSelection(),
+                                                                    m_resourcesSnapshot);
 
-    const bool useFastMode = !m_resourcesSnapshot->activeSelection() &&
-                             m_resourcesSnapshot->opacity() == OPACITY_OPAQUE_U8 &&
-                             m_resourcesSnapshot->compositeOpId() == COMPOSITE_OVER &&
-                             m_fillType != FillWithPattern &&
-                             m_opacitySpread == 100 &&
-                             m_useSelectionAsBoundary == false &&
-                             !m_antiAlias && m_sizemod == 0 && m_feather == 0 &&
-                             m_reference == CurrentLayer;
+        const bool useFastMode = !m_resourcesSnapshot->activeSelection() &&
+                                 m_resourcesSnapshot->opacity() == OPACITY_OPAQUE_U8 &&
+                                 m_resourcesSnapshot->compositeOpId() == COMPOSITE_OVER &&
+                                 m_fillType != FillType_FillWithPattern &&
+                                 m_opacitySpread == 100 &&
+                                 m_useSelectionAsBoundary == false &&
+                                 !m_antiAlias && m_sizemod == 0 && m_feather == 0 &&
+                                 m_reference == Reference_CurrentLayer;
 
-    visitor->setSeedPoints(seedPoints);
-    visitor->setUseFastMode(useFastMode);
-    visitor->setSelectionOnly(m_effectiveFillMode == FillSelection);
-    visitor->setUseBgColor(m_fillType == FillWithBackgroundColor);
-    visitor->setUsePattern(m_fillType == FillWithPattern);
-    visitor->setRegionFillingMode(
-        m_contiguousFillMode == FloodFill
-        ? KisFillPainter::RegionFillingMode_FloodFill
-        : KisFillPainter::RegionFillingMode_BoundaryFill
-    );
-    if (m_contiguousFillMode == BoundaryFill) {
-        visitor->setRegionFillingBoundaryColor(m_contiguousFillBoundaryColor);
-    }
-    visitor->setFillThreshold(m_threshold);
-    visitor->setOpacitySpread(m_opacitySpread);
-    visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
-    visitor->setAntiAlias(m_antiAlias);
-    visitor->setSizeMod(m_sizemod);
-    visitor->setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
-    visitor->setFeather(m_feather);
-    if (m_isDragging) {
-        visitor->setContinuousFillMode(
-            m_continuousFillMode == FillAnyRegion
-            ? FillProcessingVisitor::ContinuousFillMode_FillAnyRegion
-            : FillProcessingVisitor::ContinuousFillMode_FillSimilarRegions
+        visitor->setSeedPoints(seedPoints);
+        visitor->setUseFastMode(useFastMode);
+        visitor->setSelectionOnly(m_effectiveFillMode == FillMode_FillSelection);
+        visitor->setUseBgColor(m_fillType == FillType_FillWithBackgroundColor);
+        visitor->setUsePattern(m_fillType == FillType_FillWithPattern);
+        visitor->setRegionFillingMode(
+            m_contiguousFillMode == ContiguousFillMode_FloodFill
+            ? KisFillPainter::RegionFillingMode_FloodFill
+            : KisFillPainter::RegionFillingMode_BoundaryFill
         );
-        visitor->setContinuousFillMask(m_continuousFillMask);
-        visitor->setContinuousFillReferenceColor(m_continuousFillReferenceColor);
-    }
+        if (m_contiguousFillMode == ContiguousFillMode_BoundaryFill) {
+            visitor->setRegionFillingBoundaryColor(m_contiguousFillBoundaryColor);
+        }
+        visitor->setFillThreshold(m_threshold);
+        visitor->setOpacitySpread(m_opacitySpread);
+        visitor->setUseSelectionAsBoundary(m_useSelectionAsBoundary);
+        visitor->setAntiAlias(m_antiAlias);
+        visitor->setSizeMod(m_sizemod);
+        visitor->setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
+        visitor->setFeather(m_feather);
+        if (m_isDragging) {
+            visitor->setContinuousFillMode(
+                m_continuousFillMode == ContinuousFillMode_FillAnyRegion
+                ? FillProcessingVisitor::ContinuousFillMode_FillAnyRegion
+                : FillProcessingVisitor::ContinuousFillMode_FillSimilarRegions
+            );
+            visitor->setContinuousFillMask(m_fillMask);
+            visitor->setContinuousFillReferenceColor(m_referenceColor);
+        }
 
-    image()->addJob(
-        m_fillStrokeId,
-        new KisStrokeStrategyUndoCommandBased::Data(
-            KUndo2CommandSP(new KisProcessingCommand(visitor, currentNode())),
-            false,
-            KisStrokeJobData::SEQUENTIAL,
-            KisStrokeJobData::EXCLUSIVE
-        )
-    );
+        image()->addJob(
+            m_fillStrokeId,
+            new KisStrokeStrategyUndoCommandBased::Data(
+                KUndo2CommandSP(new KisProcessingCommand(visitor, currentNode())),
+                false,
+                KisStrokeJobData::SEQUENTIAL,
+                KisStrokeJobData::EXCLUSIVE
+            )
+        );
+    } else {
+        KisSelectionSP fillMask = m_fillMask;
+        QSharedPointer<KisProcessingVisitor::ProgressHelper>
+            progressHelper(new KisProcessingVisitor::ProgressHelper(currentNode()));
+
+        {
+            KisSelectionSP selection = m_resourcesSnapshot->activeSelection();
+            KisFillPainter painter;
+            QRect bounds = currentImage()->bounds();
+            if (selection) {
+                bounds = bounds.intersected(selection->projection()->selectedRect());
+            }
+
+            painter.setFillThreshold(m_threshold);
+            painter.setOpacitySpread(m_opacitySpread);
+            painter.setAntiAlias(m_antiAlias);
+            painter.setSizemod(m_sizemod);
+            painter.setStopGrowingAtDarkestPixel(m_stopGrowingAtDarkestPixel);
+            painter.setFeather(m_feather);
+
+            QVector<KisStrokeJobData*> jobs =
+                painter.createSimilarColorsSelectionJobs(
+                    fillMask->pixelSelection(), m_referenceColor, m_referencePaintDevice,
+                    bounds, selection ? selection->projection() : nullptr, progressHelper
+                );
+
+            for (KisStrokeJobData *job : jobs) {
+                image()->addJob(m_fillStrokeId, job);
+            }
+        }
+
+        {
+            FillProcessingVisitor *visitor =  new FillProcessingVisitor(nullptr,
+                                                                        fillMask,
+                                                                        m_resourcesSnapshot);
+
+            visitor->setSeedPoints(seedPoints);
+            visitor->setSelectionOnly(true);
+            visitor->setUseBgColor(m_fillType == FillType_FillWithBackgroundColor);
+            visitor->setUsePattern(m_fillType == FillType_FillWithPattern);
+            visitor->setProgressHelper(progressHelper);
+
+            image()->addJob(
+                m_fillStrokeId,
+                new KisStrokeStrategyUndoCommandBased::Data(
+                    KUndo2CommandSP(new KisProcessingCommand(visitor, currentNode())),
+                    false,
+                    KisStrokeJobData::SEQUENTIAL,
+                    KisStrokeJobData::EXCLUSIVE
+                )
+            );
+        }
+    }
 }
 
 void KisToolFill::addUpdateOperation()
@@ -335,16 +438,21 @@ void KisToolFill::endFilling()
     setMode(KisTool::HOVER_MODE);
     image()->endStroke(m_fillStrokeId);
     m_fillStrokeId = nullptr;
+    m_fillMask = nullptr;
 }
 
-void KisToolFill::slotUpdateContinuousFill()
+void KisToolFill::slotUpdateFill()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_fillStrokeId);
 
-    addFillingOperation(KritaUtils::rasterizePolylineDDA(m_seedPoints));
+    if (m_effectiveFillMode == FillMode_FillContiguousRegion) {
+        addFillingOperation(KritaUtils::rasterizePolylineDDA(m_seedPoints));
+        // clear to not re-add the segments, but retain the last point to mantain continuity
+        m_seedPoints = {m_seedPoints.last()};
+    } else {
+        addFillingOperation(m_seedPoints.last());
+    }
     addUpdateOperation();
-    // clear to not re-add the segments, but retain the last point to mantain continuity
-    m_seedPoints = {m_seedPoints.last()};
 }
 
 QWidget* KisToolFill::createOptionWidget()
@@ -358,6 +466,8 @@ QWidget* KisToolFill::createOptionWidget()
         KisIconUtils::loadIcon("tool_outline_selection"));
     m_buttonWhatToFillContiguous = optionButtonStripWhatToFill->addButton(
         KisIconUtils::loadIcon("contiguous-selection"));
+    m_buttonWhatToFillSimilar = optionButtonStripWhatToFill->addButton(
+        KisIconUtils::loadIcon("similar-selection"));
     m_buttonWhatToFillContiguous->setChecked(true);
 
     KisOptionButtonStrip *optionButtonStripFillWith = new KisOptionButtonStrip;
@@ -444,6 +554,7 @@ QWidget* KisToolFill::createOptionWidget()
     // Set the tooltips
     m_buttonWhatToFillSelection->setToolTip(i18n("Current selection"));
     m_buttonWhatToFillContiguous->setToolTip(i18n("Contiguous region obtained from the layers"));
+    m_buttonWhatToFillSimilar->setToolTip(i18n("All the regions similar to the pixel you clicked on"));
 
     m_buttonFillWithFG->setToolTip(i18n("Foreground color"));
     m_buttonFillWithBG->setToolTip(i18n("Background color"));
@@ -537,25 +648,31 @@ QWidget* KisToolFill::createOptionWidget()
     m_optionWidget->appendWidget("buttonReset", buttonReset);
 
     // Initialize widgets
-    if (m_fillMode == FillSelection) {
+    if (m_fillMode == FillMode_FillSelection) {
         m_buttonWhatToFillSelection->setChecked(true);
         m_optionWidget->setWidgetVisible("sectionRegionExtent", false);
         m_optionWidget->setWidgetVisible("sectionAdjustments", false);
         m_optionWidget->setWidgetVisible("sectionReference", false);
         m_optionWidget->setWidgetVisible("sectionMultipleFill", false);
+    } else if (m_fillMode == FillMode_FillSimilarRegions) {
+        m_buttonWhatToFillSimilar->setChecked(true);
+        m_optionWidget->setWidgetVisible("sectionMultipleFill", false);
+        sectionRegionExtent->setWidgetVisible("checkBoxSelectionAsBoundary", false);
     }
-    if (m_fillType == FillWithBackgroundColor) {
+    sectionRegionExtent->setPrimaryWidgetVisible(m_fillMode == FillMode_FillContiguousRegion);
+    if (m_fillType == FillType_FillWithBackgroundColor) {
         m_buttonFillWithBG->setChecked(true);
-    } else if (m_fillType == FillWithPattern) {
+    } else if (m_fillType == FillType_FillWithPattern) {
         m_buttonFillWithPattern->setChecked(true);
         sectionFillWith->setWidgetVisible("sliderPatternScale", true);
         sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", true);
     }
     m_sliderPatternScale->setValue(m_patternScale);
     m_angleSelectorPatternRotation->setAngle(m_patternRotation);
-    if (m_contiguousFillMode == BoundaryFill) {
+    if (m_contiguousFillMode == ContiguousFillMode_BoundaryFill) {
         m_buttonContiguousFillModeBoundaryFill->setChecked(true);
-        sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor", true);
+        sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor",
+                                              m_fillMode == FillMode_FillContiguousRegion);
     }
     m_buttonContiguousFillBoundaryColor->setColor(m_contiguousFillBoundaryColor);
     m_sliderThreshold->setValue(m_threshold);
@@ -565,13 +682,13 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderGrow->setValue(m_sizemod);
     m_buttonStopGrowingAtDarkestPixel->setChecked(m_stopGrowingAtDarkestPixel);
     m_sliderFeather->setValue(m_feather);
-    if (m_reference == AllLayers) {
+    if (m_reference == Reference_AllLayers) {
         m_buttonReferenceAll->setChecked(true);
-    } else if (m_reference == ColorLabeledLayers) {
+    } else if (m_reference == Reference_ColorLabeledLayers) {
         m_buttonReferenceLabeled->setChecked(true);
         sectionReference->setWidgetVisible("widgetLabels", true);
     }
-    if (m_continuousFillMode == FillSimilarRegions) {
+    if (m_continuousFillMode == ContinuousFillMode_FillSimilarRegions) {
         m_buttonMultipleFillSimilar->setChecked(true);
     }
     m_widgetLabels->setSelection(m_selectedColorLabels);
@@ -619,22 +736,34 @@ QWidget* KisToolFill::createOptionWidget()
 void KisToolFill::loadConfiguration()
 {
     {
-        const bool fillSelection = m_configGroup.readEntry<bool>("fillSelection", false);
-        m_fillMode = fillSelection ? FillSelection : FillContiguousRegion;
+        const QString whatToFillStr = m_configGroup.readEntry<QString>("whatToFill", "");
+        if (whatToFillStr == "fillSelection") {
+            m_fillMode = FillMode_FillSelection;
+        } else if (whatToFillStr == "fillContiguousRegion") {
+            m_fillMode = FillMode_FillContiguousRegion;
+        } else if (whatToFillStr == "fillSimilarRegions") {
+            m_fillMode = FillMode_FillSimilarRegions;
+        } else {
+            if (m_configGroup.readEntry<bool>("fillSelection", false)) {
+                m_fillMode = FillMode_FillSelection;
+            } else {
+                m_fillMode = FillMode_FillContiguousRegion;
+            }
+        }
     }
     {
         const QString fillTypeStr = m_configGroup.readEntry<QString>("fillWith", "");
         if (fillTypeStr == "foregroundColor") {
-            m_fillType = FillWithForegroundColor;
+            m_fillType = FillType_FillWithForegroundColor;
         } else if (fillTypeStr == "backgroundColor") {
-            m_fillType = FillWithBackgroundColor;
+            m_fillType = FillType_FillWithBackgroundColor;
         } else if (fillTypeStr == "pattern") {
-            m_fillType = FillWithPattern;
+            m_fillType = FillType_FillWithPattern;
         } else {
             if (m_configGroup.readEntry<bool>("usePattern", false)) {
-                m_fillType = FillWithPattern;
+                m_fillType = FillType_FillWithPattern;
             } else {
-                m_fillType = FillWithForegroundColor;
+                m_fillType = FillType_FillWithForegroundColor;
             }
         }
     }
@@ -643,8 +772,8 @@ void KisToolFill::loadConfiguration()
     {
         const QString contiguousFillModeStr = m_configGroup.readEntry<QString>("contiguousFillMode", "");
         m_contiguousFillMode = contiguousFillModeStr == "boundaryFill"
-                               ? BoundaryFill
-                               : FloodFill;
+                               ? ContiguousFillMode_BoundaryFill
+                               : ContiguousFillMode_FloodFill;
     }
     m_contiguousFillBoundaryColor = loadContiguousFillBoundaryColorFromConfig();
     m_threshold = m_configGroup.readEntry<int>("thresholdAmount", 8);
@@ -655,13 +784,19 @@ void KisToolFill::loadConfiguration()
     m_stopGrowingAtDarkestPixel = m_configGroup.readEntry<bool>("stopGrowingAtDarkestPixel", false);
     m_feather = m_configGroup.readEntry<int>("featherAmount", 0);
     {
-        const QString sampleLayersModeStr = m_configGroup.readEntry<QString>("sampleLayersMode", "currentLayer");
-        if (sampleLayersModeStr == "allLayers") {
-            m_reference = AllLayers;
+        const QString sampleLayersModeStr = m_configGroup.readEntry<QString>("sampleLayersMode", "");
+        if (sampleLayersModeStr == "currentLayer") {
+            m_reference = Reference_CurrentLayer;
+        } else if (sampleLayersModeStr == "allLayers") {
+            m_reference = Reference_AllLayers;
         } else if (sampleLayersModeStr == "colorLabeledLayers") {
-            m_reference = ColorLabeledLayers;
+            m_reference = Reference_ColorLabeledLayers;
         } else {
-            m_reference = CurrentLayer;
+            if (m_configGroup.readEntry<bool>("sampleMerged", false)) {
+                m_reference = Reference_AllLayers;
+            } else {
+                m_reference = Reference_CurrentLayer;
+            }
         }
     }
     {
@@ -678,9 +813,9 @@ void KisToolFill::loadConfiguration()
     {
         const QString continuousFillModeStr = m_configGroup.readEntry<QString>("continuousFillMode", "fillAnyRegion");
         if (continuousFillModeStr == "fillSimilarRegions") {
-            m_continuousFillMode = FillSimilarRegions;
+            m_continuousFillMode = ContinuousFillMode_FillSimilarRegions;
         } else {
-            m_continuousFillMode = FillAnyRegion;
+            m_continuousFillMode = ContinuousFillMode_FillAnyRegion;
         }
     }
 }
@@ -709,15 +844,41 @@ void KisToolFill::slot_optionButtonStripWhatToFill_buttonToggled(
     if (!checked) {
         return;
     }
-    const bool visible = button == m_buttonWhatToFillContiguous;
-    m_optionWidget->setWidgetVisible("sectionRegionExtent", visible);
-    m_optionWidget->setWidgetVisible("sectionAdjustments", visible);
-    m_optionWidget->setWidgetVisible("sectionReference", visible);
-    m_optionWidget->setWidgetVisible("sectionMultipleFill", visible);
 
-    m_fillMode = button == m_buttonWhatToFillSelection ? FillSelection : FillContiguousRegion;
-
-    m_configGroup.writeEntry("fillSelection", button == m_buttonWhatToFillSelection);
+    if (button == m_buttonWhatToFillSelection) {
+        m_optionWidget->setWidgetVisible("sectionRegionExtent", false);
+        m_optionWidget->setWidgetVisible("sectionAdjustments", false);
+        m_optionWidget->setWidgetVisible("sectionReference", false);
+        m_optionWidget->setWidgetVisible("sectionMultipleFill", false);
+        m_fillMode = FillMode_FillSelection;
+        m_configGroup.writeEntry("whatToFill", "fillSelection");
+    } else if (button == m_buttonWhatToFillContiguous) {
+        m_optionWidget->setWidgetVisible("sectionRegionExtent", true);
+        m_optionWidget->setWidgetVisible("sectionAdjustments", true);
+        m_optionWidget->setWidgetVisible("sectionReference", true);
+        m_optionWidget->setWidgetVisible("sectionMultipleFill", true);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setPrimaryWidgetVisible(true);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setWidgetVisible("buttonContiguousFillBoundaryColor", m_contiguousFillMode == ContiguousFillMode_BoundaryFill);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setWidgetVisible("checkBoxSelectionAsBoundary", true);
+        m_fillMode = FillMode_FillContiguousRegion;
+        m_configGroup.writeEntry("whatToFill", "fillContiguousRegion");
+    } else {
+        m_optionWidget->setWidgetVisible("sectionRegionExtent", true);
+        m_optionWidget->setWidgetVisible("sectionAdjustments", true);
+        m_optionWidget->setWidgetVisible("sectionReference", true);
+        m_optionWidget->setWidgetVisible("sectionMultipleFill", false);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setPrimaryWidgetVisible(false);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setWidgetVisible("buttonContiguousFillBoundaryColor", false);
+        m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionRegionExtent")
+            ->setWidgetVisible("checkBoxSelectionAsBoundary", false);
+        m_fillMode = FillMode_FillSimilarRegions;
+        m_configGroup.writeEntry("whatToFill", "fillSimilarRegions");
+    }
 }
 
 void KisToolFill::slot_optionButtonStripFillWith_buttonToggled(
@@ -733,12 +894,16 @@ void KisToolFill::slot_optionButtonStripFillWith_buttonToggled(
     sectionFillWith->setWidgetVisible("sliderPatternScale", visible);
     sectionFillWith->setWidgetVisible("angleSelectorPatternRotation", visible);
     
-    m_fillType = button == m_buttonFillWithFG ? FillWithForegroundColor
-                                              : (button == m_buttonFillWithBG ? FillWithBackgroundColor : FillWithPattern);
+    m_fillType = button == m_buttonFillWithFG ? FillType_FillWithForegroundColor
+                                              : (button == m_buttonFillWithBG
+                                                 ? FillType_FillWithBackgroundColor
+                                                 : FillType_FillWithPattern);
 
     m_configGroup.writeEntry(
         "fillWith",
-        button == m_buttonFillWithFG ? "foregroundColor" : (button == m_buttonFillWithBG ? "backgroundColor" : "pattern")
+        button == m_buttonFillWithFG
+        ? "foregroundColor"
+        : (button == m_buttonFillWithBG ? "backgroundColor" : "pattern")
     );
 }
 
@@ -774,8 +939,8 @@ void KisToolFill::slot_optionButtonStripContiguousFillMode_buttonToggled(
     sectionRegionExtent->setWidgetVisible("buttonContiguousFillBoundaryColor", visible);
 
     m_contiguousFillMode = button == m_buttonContiguousFillModeFloodFill
-                           ? FloodFill
-                           : BoundaryFill;
+                           ? ContiguousFillMode_FloodFill
+                           : ContiguousFillMode_BoundaryFill;
 
     m_configGroup.writeEntry(
         "contiguousFillMode",
@@ -868,12 +1033,16 @@ void KisToolFill::slot_optionButtonStripReference_buttonToggled(
         m_optionWidget->widgetAs<KisOptionCollectionWidgetWithHeader*>("sectionReference");
     sectionReference->setWidgetVisible("widgetLabels", button == m_buttonReferenceLabeled);
     
-    m_reference = button == m_buttonReferenceCurrent ? CurrentLayer
-                                                     : (button == m_buttonReferenceAll ? AllLayers : ColorLabeledLayers);
+    m_reference = button == m_buttonReferenceCurrent ? Reference_CurrentLayer
+                                                     : (button == m_buttonReferenceAll
+                                                        ? Reference_AllLayers
+                                                        : Reference_ColorLabeledLayers);
 
     m_configGroup.writeEntry(
         "sampleLayersMode",
-        button == m_buttonReferenceCurrent ? "currentLayer" : (button == m_buttonReferenceAll ? "allLayers" : "colorLabeledLayers")
+        button == m_buttonReferenceCurrent
+        ? "currentLayer"
+        : (button == m_buttonReferenceAll ? "allLayers" : "colorLabeledLayers")
     );
 }
 
@@ -901,8 +1070,13 @@ void KisToolFill::slot_optionButtonStripMultipleFill_buttonToggled(
     if (!checked) {
         return;
     }
-    m_continuousFillMode = button == m_buttonMultipleFillAny ? FillAnyRegion : FillSimilarRegions;
-    m_configGroup.writeEntry("continuousFillMode", button == m_buttonMultipleFillAny ? "fillAnyRegion" : "fillSimilarRegions");
+    m_continuousFillMode = button == m_buttonMultipleFillAny
+                                     ? ContinuousFillMode_FillAnyRegion
+                                     : ContinuousFillMode_FillSimilarRegions;
+    m_configGroup.writeEntry(
+        "continuousFillMode",
+        button == m_buttonMultipleFillAny ? "fillAnyRegion" : "fillSimilarRegions"
+    );
 }
 
 void KisToolFill::slot_buttonReset_clicked()

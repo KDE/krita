@@ -405,6 +405,8 @@
         <file>light_all-layers.svg</file>
         <file>dark_contiguous-selection.svg</file>
         <file>light_contiguous-selection.svg</file>
+        <file>dark_similar-selection.svg</file>
+        <file>light_similar-selection.svg</file>
         <file>dark_different-regions.svg</file>
         <file>light_different-regions.svg</file>
         <file>dark_similar-regions.svg</file>

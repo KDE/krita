@@ -696,9 +696,6 @@ public:
 
     /**
      * Set which axis to use for wraparound mode
-     *     0 - both axes
-     *     1 - horizontal only
-     *     2 - vertical only
      */
     void setWrapAroundModeAxis(WrapAroundAxis value);
     /**

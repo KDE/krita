@@ -11,6 +11,7 @@
 
 namespace Planar
 {
+#ifdef HAVE_XSIMD
 template<typename Arch,
          LinearizePolicy linearizePolicy,
          bool applyOOTF,
@@ -42,6 +43,7 @@ inline void linearize(float *pixelValues,
         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
     }
 }
+#endif
 
 template<typename Arch,
          LinearizePolicy linearizePolicy,
@@ -129,6 +131,7 @@ constexpr int bufferSize()
     return 4;
 }
 
+#ifdef HAVE_XSIMD
 template<typename Arch,
          typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
                                    int> = 0>
@@ -136,6 +139,7 @@ constexpr int bufferSize()
 {
     return qMax<int>(4, KoStreamedMath<Arch>::float_v::size);
 }
+#endif
 
 template<typename Arch,
          int luma,
@@ -368,6 +372,7 @@ readLayerImpl::create<xsimd::current_arch>(const int luma,
 
 namespace HDR
 {
+#ifdef HAVE_XSIMD
 template<typename Arch,
          LinearizePolicy linearizePolicy,
          bool applyOOTF,
@@ -399,6 +404,7 @@ inline void linearize(float *pixelValues,
         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
     }
 }
+#endif
 
 template<typename Arch,
          LinearizePolicy linearizePolicy,
@@ -488,6 +494,7 @@ constexpr int bufferSize()
     return channels;
 }
 
+#ifdef HAVE_XSIMD
 template<typename Arch,
          int channels,
          typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
@@ -496,6 +503,7 @@ constexpr int bufferSize()
 {
     return qMax<int>(channels, KoStreamedMath<Arch>::float_v::size);
 }
+#endif
 
 template<typename Arch,
          int luma,
@@ -674,6 +682,7 @@ readLayerImpl::create<xsimd::current_arch>(const int luma,
 
 namespace SDR
 {
+#ifdef HAVE_XSIMD
 template<typename Arch,
          LinearizePolicy linearizePolicy,
          bool applyOOTF,
@@ -705,6 +714,7 @@ inline void linearize(float *pixelValues,
         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
     }
 }
+#endif
 
 template<typename Arch,
          LinearizePolicy linearizePolicy,
@@ -767,6 +777,7 @@ constexpr int bufferSize()
     return channels;
 }
 
+#ifdef HAVE_XSIMD
 template<typename Arch,
          int channels,
          typename std::enable_if_t<!std::is_same<Arch, xsimd::generic>::value,
@@ -775,6 +786,7 @@ constexpr int bufferSize()
 {
     return qMax<int>(channels, KoStreamedMath<Arch>::float_v::size);
 }
+#endif
 
 template<typename Arch,
          LinearizePolicy linearizePolicy,

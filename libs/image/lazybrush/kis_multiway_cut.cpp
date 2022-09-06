@@ -151,7 +151,7 @@ void KisMultiwayCut::run()
 
         Q_FOREACH (const QPoint &pt, points) {
             KisScanlineFill fill(m_d->mask, pt, m_d->boundingRect);
-            fill.fillColor(current.color, m_d->dst);
+            fill.fill(current.color, m_d->dst);
         }
     }
 }

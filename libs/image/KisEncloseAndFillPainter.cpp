@@ -986,7 +986,7 @@ void KisEncloseAndFillPainter::Private::selectRegionsFromContour(KisPixelSelecti
         gc.setOpacitySpread(q->opacitySpread());
         // Use the enclosing mask as boundary so that we don't fill
         // potentially large regions on the outside
-        gc.fillSelectionWithBoundary(mask, enclosingMask);
+        gc.fillSelection(mask, enclosingMask);
         resultMask->applySelection(mask, SELECTION_ADD);
     }
 }
@@ -1029,7 +1029,7 @@ void KisEncloseAndFillPainter::Private::selectRegionsFromContourUntilColor(KisPi
         gc.setOpacitySpread(q->opacitySpread());
         // Use the enclosing mask as boundary so that we don't fill
         // potentially large regions in the outside
-        gc.fillSelectionUntilColorWithBoundary(mask, color, enclosingMask);
+        gc.fillSelectionUntilColor(mask, color, enclosingMask);
         resultMask->applySelection(mask, SELECTION_ADD);
     }
 }
@@ -1072,7 +1072,7 @@ void KisEncloseAndFillPainter::Private::selectRegionsFromContourUntilColorOrTran
         gc.setOpacitySpread(q->opacitySpread());
         // Use the enclosing mask as boundary so that we don't fill
         // potentially large regions in the outside
-        gc.fillSelectionUntilColorOrTransparentWithBoundary(mask, color, enclosingMask);
+        gc.fillSelectionUntilColorOrTransparent(mask, color, enclosingMask);
         resultMask->applySelection(mask, SELECTION_ADD);
     }
 }

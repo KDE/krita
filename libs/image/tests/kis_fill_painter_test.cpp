@@ -91,7 +91,7 @@ void KisFillPainterTest::benchmarkFillingScanlineColor()
     QBENCHMARK_ONCE {
         KisScanlineFill gc(dev, QPoint(), imageRect);
         gc.setThreshold(THRESHOLD);
-        gc.fillColor(KoColor(Qt::red, dev->colorSpace()));
+        gc.fill(KoColor(Qt::red, dev->colorSpace()));
     }
 
     QImage resultImage =

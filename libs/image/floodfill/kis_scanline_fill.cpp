@@ -488,7 +488,7 @@ void KisScanlineFill::selectDifferencePolicyAndRun(const KoColor &srcColor,
     }
 }
 
-void KisScanlineFill::fillColor(const KoColor &originalFillColor)
+void KisScanlineFill::fill(const KoColor &originalFillColor)
 {
     KoColor srcColor(m_d->device->pixel(m_d->startPoint));
     KoColor fillColor(originalFillColor);
@@ -503,9 +503,9 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor)
                                 (srcColor, sp, pap);
 }
 
-void KisScanlineFill::fillColorUntilColor(const KoColor &originalFillColor, const KoColor &referenceColor)
+void KisScanlineFill::fillUntilColor(const KoColor &originalFillColor, const KoColor &boundaryColor)
 {
-    KoColor srcColor(referenceColor);
+    KoColor srcColor(boundaryColor);
     srcColor.convertTo(m_d->device->colorSpace());
     KoColor fillColor(originalFillColor);
     fillColor.convertTo(m_d->device->colorSpace());
@@ -519,7 +519,7 @@ void KisScanlineFill::fillColorUntilColor(const KoColor &originalFillColor, cons
                                 (srcColor, sp, pap);
 }
 
-void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDeviceSP externalDevice)
+void KisScanlineFill::fill(const KoColor &originalFillColor, KisPaintDeviceSP externalDevice)
 {
     KoColor srcColor(m_d->device->pixel(m_d->startPoint));
     KoColor fillColor(originalFillColor);
@@ -534,9 +534,9 @@ void KisScanlineFill::fillColor(const KoColor &originalFillColor, KisPaintDevice
                                 (srcColor, sp, pap);
 }
 
-void KisScanlineFill::fillColorUntilColor(const KoColor &originalFillColor, const KoColor &referenceColor, KisPaintDeviceSP externalDevice)
+void KisScanlineFill::fillUntilColor(const KoColor &originalFillColor, const KoColor &boundaryColor, KisPaintDeviceSP externalDevice)
 {
-    KoColor srcColor(referenceColor);
+    KoColor srcColor(boundaryColor);
     srcColor.convertTo(m_d->device->colorSpace());
     KoColor fillColor(originalFillColor);
     fillColor.convertTo(m_d->device->colorSpace());
@@ -550,7 +550,7 @@ void KisScanlineFill::fillColorUntilColor(const KoColor &originalFillColor, cons
                                 (srcColor, sp, pap);
 }
 
-void KisScanlineFill::fillSelectionWithBoundary(KisPixelSelectionSP pixelSelection, KisPaintDeviceSP existingSelection)
+void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection, KisPaintDeviceSP boundarySelection)
 {
     KoColor srcColor(m_d->device->pixel(m_d->startPoint));
 
@@ -562,12 +562,12 @@ void KisScanlineFill::fillSelectionWithBoundary(KisPixelSelectionSP pixelSelecti
 
     if (softness == 0) {
         MaskedSelectionPolicy<HardSelectionPolicy>
-            sp(HardSelectionPolicy(m_d->threshold), existingSelection);
+            sp(HardSelectionPolicy(m_d->threshold), boundarySelection);
         selectDifferencePolicyAndRun<OptimizedDifferencePolicy, SlowDifferencePolicy>
                                     (srcColor, sp, pap);
     } else {
         MaskedSelectionPolicy<SoftSelectionPolicy> 
-            sp(SoftSelectionPolicy(m_d->threshold, softness), existingSelection);
+            sp(SoftSelectionPolicy(m_d->threshold, softness), boundarySelection);
         selectDifferencePolicyAndRun<OptimizedDifferencePolicy, SlowDifferencePolicy>
                                     (srcColor, sp, pap);
     }
@@ -594,9 +594,9 @@ void KisScanlineFill::fillSelection(KisPixelSelectionSP pixelSelection)
     }
 }
 
-void KisScanlineFill::fillSelectionUntilColorWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection)
+void KisScanlineFill::fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor, KisPaintDeviceSP boundarySelection)
 {
-    KoColor srcColor(referenceColor);
+    KoColor srcColor(boundaryColor);
     srcColor.convertTo(m_d->device->colorSpace());
 
     const int softness = 100 - m_d->opacitySpread;
@@ -607,20 +607,20 @@ void KisScanlineFill::fillSelectionUntilColorWithBoundary(KisPixelSelectionSP pi
 
     if (softness == 0) {
         MaskedSelectionPolicy<SelectAllUntilColorHardSelectionPolicy>
-            sp(SelectAllUntilColorHardSelectionPolicy(m_d->threshold), existingSelection);
+            sp(SelectAllUntilColorHardSelectionPolicy(m_d->threshold), boundarySelection);
         selectDifferencePolicyAndRun<OptimizedDifferencePolicy, SlowDifferencePolicy>
                                     (srcColor, sp, pap);
     } else {
         MaskedSelectionPolicy<SelectAllUntilColorSoftSelectionPolicy> 
-            sp(SelectAllUntilColorSoftSelectionPolicy(m_d->threshold, softness), existingSelection);
+            sp(SelectAllUntilColorSoftSelectionPolicy(m_d->threshold, softness), boundarySelection);
         selectDifferencePolicyAndRun<OptimizedDifferencePolicy, SlowDifferencePolicy>
                                     (srcColor, sp, pap);
     }
 }
 
-void KisScanlineFill::fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor)
+void KisScanlineFill::fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor)
 {
-    KoColor srcColor(referenceColor);
+    KoColor srcColor(boundaryColor);
     srcColor.convertTo(m_d->device->colorSpace());
 
     const int softness = 100 - m_d->opacitySpread;
@@ -642,9 +642,9 @@ void KisScanlineFill::fillSelectionUntilColor(KisPixelSelectionSP pixelSelection
     }
 }
 
-void KisScanlineFill::fillSelectionUntilColorOrTransparentWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection)
+void KisScanlineFill::fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor, KisPaintDeviceSP boundarySelection)
 {
-    KoColor srcColor(referenceColor);
+    KoColor srcColor(boundaryColor);
     srcColor.convertTo(m_d->device->colorSpace());
 
     const int softness = 100 - m_d->opacitySpread;
@@ -655,22 +655,22 @@ void KisScanlineFill::fillSelectionUntilColorOrTransparentWithBoundary(KisPixelS
 
     if (softness == 0) {
         MaskedSelectionPolicy<SelectAllUntilColorHardSelectionPolicy>
-            sp(SelectAllUntilColorHardSelectionPolicy(m_d->threshold), existingSelection);
+            sp(SelectAllUntilColorHardSelectionPolicy(m_d->threshold), boundarySelection);
         selectDifferencePolicyAndRun<OptimizedColorOrTransparentDifferencePolicy,
                                      SlowColorOrTransparentDifferencePolicy>
                                     (srcColor, sp, pap);
     } else {
         MaskedSelectionPolicy<SelectAllUntilColorSoftSelectionPolicy> 
-            sp(SelectAllUntilColorSoftSelectionPolicy(m_d->threshold, softness), existingSelection);
+            sp(SelectAllUntilColorSoftSelectionPolicy(m_d->threshold, softness), boundarySelection);
         selectDifferencePolicyAndRun<OptimizedColorOrTransparentDifferencePolicy,
                                      SlowColorOrTransparentDifferencePolicy>
                                     (srcColor, sp, pap);
     }
 }
 
-void KisScanlineFill::fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor)
+void KisScanlineFill::fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor)
 {
-    KoColor srcColor(referenceColor);
+    KoColor srcColor(boundaryColor);
     srcColor.convertTo(m_d->device->colorSpace());
 
     const int softness = 100 - m_d->opacitySpread;

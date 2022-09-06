@@ -25,30 +25,30 @@ public:
     /**
      * Fill the source device with \p fillColor
      */
-    void fillColor(const KoColor &fillColor);
+    void fill(const KoColor &fillColor);
 
     /**
-     * Fill the source device with \p fillColor until \p referenceColor is reached
+     * Fill the source device with \p fillColor until \p boundaryColor is reached
      */
-    void fillColorUntilColor(const KoColor &fillColor, const KoColor &referenceColor);
+    void fillUntilColor(const KoColor &fillColor, const KoColor &boundaryColor);
 
     /**
      * Fill \p externalDevice with \p fillColor basing on the contents
      * of the source device.
      */
-    void fillColor(const KoColor &fillColor, KisPaintDeviceSP externalDevice);
+    void fill(const KoColor &fillColor, KisPaintDeviceSP externalDevice);
 
     /**
      * Fill \p externalDevice with \p fillColor basing on the contents
-     * of the source device. Fills until \p referenceColor is reached
+     * of the source device. Fills until \p boundaryColor is reached
      */
-    void fillColorUntilColor(const KoColor &fillColor, const KoColor &referenceColor, KisPaintDeviceSP externalDevice);
+    void fillUntilColor(const KoColor &fillColor, const KoColor &boundaryColor, KisPaintDeviceSP externalDevice);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area.
      * This method uses an existing selection as boundary for the flood fill.
      */
-    void fillSelectionWithBoundary(KisPixelSelectionSP pixelSelection, KisPaintDeviceSP existingSelection);
+    void fillSelection(KisPixelSelectionSP pixelSelection, KisPaintDeviceSP boundarySelection);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area
@@ -58,32 +58,32 @@ public:
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor.
+     * pixels of the source device is not similar to \p boundaryColor.
      * This method uses an existing selection as boundary for the flood fill.
      */
-    void fillSelectionUntilColorWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection);
+    void fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor, KisPaintDeviceSP boundarySelection);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor.
+     * pixels of the source device is not similar to \p boundaryColor.
      */
-    void fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor);
+    void fillSelectionUntilColor(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor or transparent.
+     * pixels of the source device is not similar to \p boundaryColor or transparent.
      * This method uses an existing selection as boundary for the flood fill.
      */
-    void fillSelectionUntilColorOrTransparentWithBoundary(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor, KisPaintDeviceSP existingSelection);
+    void fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor, KisPaintDeviceSP boundarySelection);
 
     /**
      * Fill \p pixelSelection with the opacity of the contiguous area, which
      * encompass all the connected pixels as long as the color in the
-     * pixels of the source device is not similar to \p referenceColor or transparent.
+     * pixels of the source device is not similar to \p boundaryColor or transparent.
      */
-    void fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &referenceColor);
+    void fillSelectionUntilColorOrTransparent(KisPixelSelectionSP pixelSelection, const KoColor &boundaryColor);
 
     /**
      * Clear the contiguous non-zero area of the device

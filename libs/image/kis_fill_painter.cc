@@ -251,9 +251,9 @@ void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDe
         KisScanlineFill gc(device(), startPoint, fillBoundsRect);
         gc.setThreshold(m_threshold);
         if (m_regionFillingMode == RegionFillingMode_FloodFill) {
-            gc.fillColor(paintColor());
+            gc.fill(paintColor());
         } else {
-            gc.fillColorUntilColor(paintColor(), m_regionFillingBoundaryColor);
+            gc.fillUntilColor(paintColor(), m_regionFillingBoundaryColor);
         }
 
     } else {
@@ -368,13 +368,13 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
     gc.setOpacitySpread(m_useCompositioning ? m_opacitySpread : 100);
     if (m_regionFillingMode == RegionFillingMode_FloodFill) {
         if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
-            gc.fillSelectionWithBoundary(pixelSelection, existingSelection);
+            gc.fillSelection(pixelSelection, existingSelection);
         } else {
             gc.fillSelection(pixelSelection);
         }
     } else {
         if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
-            gc.fillSelectionUntilColorWithBoundary(pixelSelection, m_regionFillingBoundaryColor, existingSelection);
+            gc.fillSelectionUntilColor(pixelSelection, m_regionFillingBoundaryColor, existingSelection);
         } else {
             gc.fillSelectionUntilColor(pixelSelection, m_regionFillingBoundaryColor);
         }

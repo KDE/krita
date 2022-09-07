@@ -1535,6 +1535,7 @@ void KisAnimTimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireC
 {
     QModelIndexList indexes;
 
+    // Populate indices..
     if (!entireColumn) {
         Q_FOREACH (const QModelIndex &index, selectionModel()->selectedIndexes()) {
             if (m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) {
@@ -1552,28 +1553,7 @@ void KisAnimTimelineFramesView::insertOrRemoveHoldFrames(int count, bool entireC
         }
     }
     
-    
     if (!indexes.isEmpty()) {
-        // add extra columns to the end of the timeline if we are adding hold frames
-        // they will be truncated if we don't do this
-        if (count > 0) {
-            // Scan all the layers and find out what layer has the most keyframes
-            // only keep a reference of layer that has the most keyframes
-            int keyframesInLayerNode = 0;
-            Q_FOREACH (const QModelIndex &index, indexes) {
-                KisNodeSP layerNode = m_d->model->nodeAt(index);
-
-                KisKeyframeChannel *channel = layerNode->getKeyframeChannel(KisKeyframeChannel::Raster.id());
-                if (!channel) continue;
-
-                if (keyframesInLayerNode < channel->allKeyframeTimes().count()) {
-                   keyframesInLayerNode = channel->allKeyframeTimes().count();
-                }
-            }
-            m_d->model->setLastVisibleFrame(m_d->model->columnCount() + count*keyframesInLayerNode);
-        }
-
-
         m_d->model->insertHoldFrames(indexes, count);
 
         // Fan selection based on insertion or deletion.

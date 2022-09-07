@@ -1020,7 +1020,7 @@ bool KisAnimTimelineFramesModel::insertHoldFrames(const QModelIndexList &selecte
         }
 
         const int oldTime = m_d->image->animationInterface()->currentUITime();
-        const int newTime = minSelectedTime;
+        const int newTime = qMax(minSelectedTime, oldTime + count * uniqueKeyframesInSelection.count());
 
         new KisSwitchCurrentTimeCommand(m_d->image->animationInterface(),
                                         oldTime,

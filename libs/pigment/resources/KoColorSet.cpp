@@ -247,13 +247,13 @@ KisSwatch KoColorSet::getColorGlobal(quint32 x, quint32 y) const
 
 KisSwatch KoColorSet::getColorGroup(quint32 x, quint32 y, QString groupName)
 {
-    KisSwatch e;
+    KisSwatch swatch;
     const KisSwatchGroup &sourceGroup = groupName == QString()
             ? d->global() : d->groups[groupName];
     if (sourceGroup.checkEntry(x, y)) {
-        e = sourceGroup.getEntry(x, y);
+        swatch = sourceGroup.getEntry(x, y);
     }
-    return e;
+    return swatch;
 }
 
 QStringList KoColorSet::getGroupNames() const
@@ -787,7 +787,7 @@ bool KoColorSet::Private::loadGpl()
 
     QString columnsText;
     qint32 r, g, b;
-    KisSwatch e;
+    KisSwatch swatch;
 
     // Read name
     if (!lines[0].startsWith("GIMP") || !lines[1].toLower().contains("name")) {
@@ -830,15 +830,15 @@ bool KoColorSet::Private::loadGpl()
             g = qBound(0, a[1].toInt(), 255);
             b = qBound(0, a[2].toInt(), 255);
 
-            e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
+            swatch.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
 
             for (int i = 0; i != 3; i++) {
                 a.pop_front();
             }
             QString name = a.join(" ");
-            e.setName(name.isEmpty() || name == "Untitled" ? i18n("Untitled") : name);
+            swatch.setName(name.isEmpty() || name == "Untitled" ? i18n("Untitled") : name);
 
-            global().addEntry(e);
+            global().addEntry(swatch);
         }
     }
     return true;
@@ -848,13 +848,13 @@ bool KoColorSet::Private::loadAct()
 {
     QFileInfo info(colorSet->filename());
     colorSet->setName(info.completeBaseName());
-    KisSwatch e;
+    KisSwatch swatch;
     for (int i = 0; i < data.size(); i += 3) {
         quint8 r = data[i];
         quint8 g = data[i+1];
         quint8 b = data[i+2];
-        e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
-        global().addEntry(e);
+        swatch.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
+        global().addEntry(swatch);
     }
     return true;
 }
@@ -864,7 +864,7 @@ bool KoColorSet::Private::loadRiff()
     // https://worms2d.info/Palette_file
     QFileInfo info(colorSet->filename());
     colorSet->setName(info.completeBaseName());
-    KisSwatch e;
+    KisSwatch swatch;
 
     RiffHeader header;
     memcpy(&header, data.constData(), sizeof(RiffHeader));
@@ -876,8 +876,8 @@ bool KoColorSet::Private::loadRiff()
         quint8 r = data[i];
         quint8 g = data[i+1];
         quint8 b = data[i+2];
-        e.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
-        groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(e);
+        swatch.setColor(KoColor(QColor(r, g, b), KoColorSpaceRegistry::instance()->rgb8()));
+        groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(swatch);
     }
     return true;
 }
@@ -887,7 +887,7 @@ bool KoColorSet::Private::loadPsp()
 {
     QFileInfo info(colorSet->filename());
     colorSet->setName(info.completeBaseName());
-    KisSwatch e;
+    KisSwatch swatch;
     qint32 r, g, b;
 
     QStringList l = readAllLinesSafe(&data);
@@ -909,13 +909,13 @@ bool KoColorSet::Private::loadPsp()
         g = qBound(0, a[1].toInt(), 255);
         b = qBound(0, a[2].toInt(), 255);
 
-        e.setColor(KoColor(QColor(r, g, b),
+        swatch.setColor(KoColor(QColor(r, g, b),
                            KoColorSpaceRegistry::instance()->rgb8()));
 
         QString name = a.join(" ");
-        e.setName(name.isEmpty() ? i18n("Untitled") : name);
+        swatch.setName(name.isEmpty() ? i18n("Untitled") : name);
 
-        groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(e);
+        groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(swatch);
     }
     return true;
 }
@@ -1011,7 +1011,7 @@ bool KoColorSet::Private::loadAco()
 
     quint16 version = readShort(&buf);
     quint16 numColors = readShort(&buf);
-    KisSwatch e;
+    KisSwatch swatch;
 
     if (version == 1 && buf.size() > 4+numColors*10) {
         buf.seek(4+numColors*10);
@@ -1037,14 +1037,14 @@ bool KoColorSet::Private::loadAco()
             reinterpret_cast<quint16*>(c.data())[1] = ch2;
             reinterpret_cast<quint16*>(c.data())[2] = ch1;
             c.setOpacity(OPACITY_OPAQUE_U8);
-            e.setColor(c);
+            swatch.setColor(c);
         }
         else if (colorSpace == 1) { // HSB
             QColor qc;
             qc.setHsvF(ch1 / 65536.0, ch2 / 65536.0, ch3 / 65536.0);
             KoColor c(qc, KoColorSpaceRegistry::instance()->rgb16());
             c.setOpacity(OPACITY_OPAQUE_U8);
-            e.setColor(c);
+            swatch.setColor(c);
         }
         else if (colorSpace == 2) { // CMYK
             KoColor c(KoColorSpaceRegistry::instance()->colorSpace(CMYKAColorModelID.id(), Integer16BitsColorDepthID.id(), QString()));
@@ -1053,7 +1053,7 @@ bool KoColorSet::Private::loadAco()
             reinterpret_cast<quint16*>(c.data())[2] = quint16_MAX - ch3;
             reinterpret_cast<quint16*>(c.data())[3] = quint16_MAX - ch4;
             c.setOpacity(OPACITY_OPAQUE_U8);
-            e.setColor(c);
+            swatch.setColor(c);
         }
         else if (colorSpace == 7) { // LAB
             KoColor c = KoColor(KoColorSpaceRegistry::instance()->lab16());
@@ -1061,23 +1061,25 @@ bool KoColorSet::Private::loadAco()
             reinterpret_cast<quint16*>(c.data())[1] = ch2;
             reinterpret_cast<quint16*>(c.data())[2] = ch1;
             c.setOpacity(OPACITY_OPAQUE_U8);
-            e.setColor(c);
+            swatch.setColor(c);
         }
         else if (colorSpace == 8) { // GRAY
             KoColor c(KoColorSpaceRegistry::instance()->colorSpace(GrayAColorModelID.id(), Integer16BitsColorDepthID.id(), QString()));
             reinterpret_cast<quint16*>(c.data())[0] = ch1 * (quint16_MAX / 10000);
             c.setOpacity(OPACITY_OPAQUE_U8);
-            e.setColor(c);
+            swatch.setColor(c);
         }
         else {
             warnPigment << "Unsupported colorspace in palette" << colorSet->filename() << "(" << colorSpace << ")";
             skip = true;
         }
+
         if (version == 2) {
-            readUnicodeString(&buf, true);
+            QString name = readUnicodeString(&buf, true);
+            swatch.setName(name);
         }
         if (!skip) {
-            groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(e);
+            groups[KoColorSet::GLOBAL_GROUP_NAME].addEntry(swatch);
         }
     }
     return true;
@@ -1517,8 +1519,8 @@ bool KoColorSet::Private::loadAse()
             colorSet->getGroup(groupName)->setRowCount(rows);
             inGroup = false;
         } else /* if (blockType == swatchSig)*/ {
-            KisSwatch e;
-            e.setName(readUnicodeString(&buf).trimmed());
+            KisSwatch swatch;
+            swatch.setName(readUnicodeString(&buf).trimmed());
             QByteArray colorModel;
             QDomDocument doc;
             colorModel = buf.read(4);
@@ -1530,7 +1532,7 @@ bool KoColorSet::Private::loadAse()
                 elt.setAttribute("b", readFloat(&buf));
 
                 KoColor color = KoColor::fromXML(elt, "U8");
-                e.setColor(color);
+                swatch.setColor(color);
             } else if (colorModel == "CMYK") {
                 QDomElement elt = doc.createElement("CMYK");
 
@@ -1542,7 +1544,7 @@ bool KoColorSet::Private::loadAse()
                 elt.setAttribute("space", "U.S. Web Coated (SWOP) v2");
 
                 KoColor color = KoColor::fromXML(elt, "U8");
-                e.setColor(color);
+                swatch.setColor(color);
             } else if (colorModel == "LAB ") {
                 QDomElement elt = doc.createElement("Lab");
 
@@ -1551,23 +1553,23 @@ bool KoColorSet::Private::loadAse()
                 elt.setAttribute("b", readFloat(&buf));
 
                 KoColor color = KoColor::fromXML(elt, "U16");
-                e.setColor(color);
+                swatch.setColor(color);
             } else if (colorModel == "GRAY") {
                 QDomElement elt = doc.createElement("Gray");
 
                 elt.setAttribute("g", readFloat(&buf));
 
                 KoColor color = KoColor::fromXML(elt, "U8");
-                e.setColor(color);
+                swatch.setColor(color);
             }
             qint16 type = readShort(&buf);
             if (type == 1) { //0 is global, 2 is regular;
-                e.setSpotColor(true);
+                swatch.setSpotColor(true);
             }
             if (inGroup) {
-                colorSet->add(e, groupName);
+                colorSet->add(swatch, groupName);
             } else {
-                colorSet->add(e);
+                colorSet->add(swatch);
             }
         }
         buf.seek(pos + qint64(blockSize));
@@ -1635,16 +1637,16 @@ bool KoColorSet::Private::loadAcb()
     }
 
     for (quint16 i = 0; i < numColors; i++) {
-        KisSwatch e;
+        KisSwatch swatch;
         QStringList name;
         name << prefix;
         name << readUnicodeString(&buf, true);
         name << postfix;
-        e.setName(name.join(" ").trimmed());
+        swatch.setName(name.join(" ").trimmed());
         QByteArray key; // should be "8BCB";
         key = buf.read(6);
-        e.setId(QString::fromLatin1(key));
-        e.setSpotColor(true);
+        swatch.setId(QString::fromLatin1(key));
+        swatch.setSpotColor(true);
         quint8 c1 = readByte(&buf);
         quint8 c2 = readByte(&buf);
         quint8 c3 = readByte(&buf);
@@ -1665,8 +1667,8 @@ bool KoColorSet::Private::loadAcb()
             c.data()[2] = c3;
         }
         c.setOpacity(1.0);
-        e.setColor(c);
-        colorSet->add(e);
+        swatch.setColor(c);
+        colorSet->add(swatch);
     }
 
     return true;
@@ -1819,7 +1821,7 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
          !swatchEle.isNull();
          swatchEle = swatchEle.nextSiblingElement(KPL_SWATCH_TAG)) {
         QString colorDepthId = swatchEle.attribute(KPL_SWATCH_BITDEPTH_ATTR, Integer8BitsColorDepthID.id());
-        KisSwatch entry;
+        KisSwatch swatch;
 
         if (version == "1.0" && swatchEle.firstChildElement().tagName() == "Lab") {
             // previous version of krita had the values wrong, and scaled everything between 0 to 1,
@@ -1843,13 +1845,13 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
                 ab = (ab - 0.5) * 2 * 127.0;
             }
             el.setAttribute("b", ab);
-            entry.setColor(KoColor::fromXML(el, colorDepthId));
+            swatch.setColor(KoColor::fromXML(el, colorDepthId));
         } else {
-            entry.setColor(KoColor::fromXML(swatchEle.firstChildElement(), colorDepthId));
+            swatch.setColor(KoColor::fromXML(swatchEle.firstChildElement(), colorDepthId));
         }
-        entry.setName(swatchEle.attribute(KPL_SWATCH_NAME_ATTR));
-        entry.setId(swatchEle.attribute(KPL_SWATCH_ID_ATTR));
-        entry.setSpotColor(swatchEle.attribute(KPL_SWATCH_SPOT_ATTR, "false") == "true" ? true : false);
+        swatch.setName(swatchEle.attribute(KPL_SWATCH_NAME_ATTR));
+        swatch.setId(swatchEle.attribute(KPL_SWATCH_ID_ATTR));
+        swatch.setSpotColor(swatchEle.attribute(KPL_SWATCH_SPOT_ATTR, "false") == "true" ? true : false);
         QDomElement positionEle = swatchEle.firstChildElement(KPL_SWATCH_POS_TAG);
         if (!positionEle.isNull()) {
             int rowNumber = positionEle.attribute(KPL_SWATCH_ROW_ATTR).toInt();
@@ -1858,14 +1860,14 @@ void KoColorSet::Private::loadKplGroup(const QDomDocument &doc, const QDomElemen
                     columnNumber >= colorSet->columnCount() ||
                     rowNumber < 0
                     ) {
-                warnPigment << "Swatch" << entry.name()
+                warnPigment << "Swatch" << swatch.name()
                             << "of palette" << colorSet->name()
                             << "has invalid position.";
                 continue;
             }
-            group->setEntry(entry, columnNumber, rowNumber);
+            group->setEntry(swatch, columnNumber, rowNumber);
         } else {
-            group->addEntry(entry);
+            group->addEntry(swatch);
         }
     }
 

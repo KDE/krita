@@ -75,6 +75,7 @@
 #include "KisRecentFilesManager.h"
 #include "KisRecentFileIconCache.h"
 #include "KisPlaybackEngine.h"
+#include "KisPlaybackEngineQT.h"
 
 #ifdef HAVE_MLT
 #include "KisPlaybackEngineMLT.h"
@@ -94,6 +95,8 @@ public:
     {
 #ifdef HAVE_MLT
         playbackEngine.reset(new KisPlaybackEngineMLT);
+#else
+        playbackEngine.reset(new KisPlaybackEngineQT);
 #endif
     }
 

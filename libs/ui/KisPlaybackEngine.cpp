@@ -215,6 +215,20 @@ void KisPlaybackEngine::nextUnfilteredKeyframe()
     nextKeyframeWithColor(KisOnionSkinCompositor::instance()->colorLabelFilter());
 }
 
+int KisPlaybackEngine::frameWrap(int frame, int startFrame, int endFrame)
+{
+    // Since Krita has always considered the end frame as inclusive, we need
+    // to make sure our wrap method respects that as well.
+    const int inclusiveEndFrame = endFrame + 1;
+    frame = ((frame - startFrame) % (inclusiveEndFrame - startFrame)) + startFrame;
+
+    if (frame - startFrame < 0) {
+        frame += (inclusiveEndFrame - startFrame);
+    }
+
+    return frame;
+}
+
 KisCanvas2 *KisPlaybackEngine::activeCanvas() const
 {
     return m_d->activeCanvas;
@@ -229,20 +243,6 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 void KisPlaybackEngine::unsetCanvas()
 {
     m_d->activeCanvas = nullptr;
-}
-
-int KisPlaybackEngine::frameWrap(int frame, int startFrame, int endFrame)
-{
-    // Since Krita has always considered the end frame as inclusive, we need
-    // to make sure our wrap method respects that as well.
-    const int inclusiveEndFrame = endFrame + 1;
-    frame = ((frame - startFrame) % (inclusiveEndFrame - startFrame)) + startFrame;
-
-    if (frame - startFrame < 0) {
-        frame += (inclusiveEndFrame - startFrame);
-    }
-
-    return frame;
 }
 
 void KisPlaybackEngine::moveBy(int direction)

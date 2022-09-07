@@ -285,7 +285,7 @@ boost::optional<int> KisCanvasAnimationState::playbackOrigin()
     }
 }
 
-KisFrameDisplayProxy const *KisCanvasAnimationState::displayProxy() const
+KisFrameDisplayProxy *KisCanvasAnimationState::displayProxy()
 {
     return m_d->displayProxy.data();
 }

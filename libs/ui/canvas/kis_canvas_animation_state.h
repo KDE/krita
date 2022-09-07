@@ -49,7 +49,7 @@ public:
 
     boost::optional<int> playbackOrigin();
 
-    class KisFrameDisplayProxy const *displayProxy() const;
+    class KisFrameDisplayProxy *displayProxy();
 
 public Q_SLOTS:
     void showFrame(int frame, bool finalize = false);

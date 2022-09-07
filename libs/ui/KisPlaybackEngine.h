@@ -65,13 +65,13 @@ public Q_SLOTS:
 
 protected:
     class KisCanvas2* activeCanvas() const;
+    int frameWrap(int frame, int startFrame, int endFrame);
 
 protected Q_SLOTS:
     virtual void setCanvas(KoCanvasBase* p_canvas) override;
     virtual void unsetCanvas() override;
 
 private:
-    int frameWrap(int frame, int startFrame, int endFrame);
     void moveBy(int direction);
     void nextKeyframeWithColor(int color);
     void nextKeyframeWithColor(const QSet<int> &validColors);

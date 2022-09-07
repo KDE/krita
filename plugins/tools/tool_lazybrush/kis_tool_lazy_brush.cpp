@@ -168,11 +168,7 @@ void KisToolLazyBrush::tryCreateColorizeMask()
 void KisToolLazyBrush::activatePrimaryAction()
 {
     KisToolFreehand::activatePrimaryAction();
-
-    qDebug() << "1";
-
     if (!colorizeMaskActive() && canCreateColorizeMask()) {
-        qDebug() << "2";
         useCursor(KisCursor::handCursor());
         m_d->activateMaskMode = true;
         setOutlineVisible(false);

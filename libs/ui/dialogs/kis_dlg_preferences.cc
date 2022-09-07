@@ -551,7 +551,7 @@ void GeneralTab::setDefault()
     chkEnableSmoothZooming->setChecked(cfg.smoothZooming(true));
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity(true));
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
-    intZoomMarginSize->setValue(cfg.zoomMarginSize(0));
+    intZoomMarginSize->setValue(cfg.zoomMarginSize(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
     chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));

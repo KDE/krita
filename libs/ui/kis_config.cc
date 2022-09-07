@@ -2053,7 +2053,7 @@ void KisConfig::setSmoothZooming(bool scale)
     m_cfg.writeEntry("SmoothZooming", scale);
 }
 
-int KisConfig::zoomMarginSize(int defaultValue) const
+int KisConfig::zoomMarginSize(bool defaultValue) const
 {
     return (defaultValue ? 0 : m_cfg.readEntry("zoomMarginSize", 0));
 }

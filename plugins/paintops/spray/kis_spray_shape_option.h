@@ -75,7 +75,13 @@ public:
         // particle type size
         shape = settings->getInt(SPRAYSHAPE_SHAPE);
         // you have to check if the image is null in client
-        image = QImage(settings->getString(SPRAYSHAPE_IMAGE_URL));
+        QString url = settings->getString(SPRAYSHAPE_IMAGE_URL);
+        if (url.isEmpty()) {
+            image = QImage();
+        }
+        else {
+            image = QImage(url);
+        }
     }
 };
 

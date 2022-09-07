@@ -243,7 +243,6 @@ public:
     virtual void setAlternateSelectionAction(SelectionAction action)
     {
         m_selectionActionAlternate = action;
-        dbgKrita << "Changing to selection action" << m_selectionActionAlternate;
     }
 
     void activateAlternateAction(KisTool::AlternateAction action) override

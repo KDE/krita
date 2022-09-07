@@ -41,17 +41,11 @@ KisSVGExport::~KisSVGExport()
 KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigurationSP /*configuration*/)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(io->isWritable(), ImportExportCodes::NoAccessToWrite);
-    KoStore* store = KoStore::createStore(io, KoStore::Write, "image/svg", KoStore::Auto);
 
-    if (!store) {
-        delete store;
-        return ImportExportCodes::Failure;
-    }
 
-    //KisScalableVectorGraphicsSaveContext svgSaveContext(store);
     KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()});
 
-    //document->image()->rootLayer()->accept(svgVisitor);
+    document->image()->rootLayer()->accept(svgVisitor);
     KisImageSP image = document->savingImage();
     const auto bounds = image->bounds();
     const auto *const cs = image->colorSpace();

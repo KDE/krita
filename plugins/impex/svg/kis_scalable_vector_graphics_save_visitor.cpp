@@ -16,6 +16,7 @@
 #include <kis_clone_layer.h>
 #include <kis_external_layer_iface.h>
 #include <QTextStream>
+#include <KoXmlNS.h>
 
 struct KisScalableVectorGraphicsSaveVisitor::Private {
     Private() {}
@@ -32,6 +33,21 @@ KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODe
 {
     QTextStream svgStream(saveDevice);
     svgStream.setCodec("UTF-8");
+
+    // standard header:
+    svgStream << "<?xml version=\"1.0\" standalone=\"no\"?>" << endl;
+    svgStream << "<!DOCTYPE svg PUBLIC \"-//W3C//DTD SVG 20010904//EN\" ";
+    svgStream << "\"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd\">" << endl;
+
+    // add some PR.  one line is more than enough.
+    svgStream << "<!-- Created using Krita: https://krita.org -->" << endl;
+
+    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
+    svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
+    svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
+    svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
+
+    svgStream << ">" << endl;
     d->saveDevice = &svgStream;
     d->activeNodes = activeNodes;
     qDebug() << "create KisScalableVectorGraphicsSaveVisitor";
@@ -103,7 +119,7 @@ bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
     saveLayerInfo(elt, layer);
     //elt.setAttribute("src", filename);
     d->currentElement.insertBefore(elt, QDomNode());
-    d->saveDevice << layer->name() << endl;
+    *d->saveDevice << layer->name() << endl;
     return true;
 }
 

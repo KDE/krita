@@ -132,6 +132,22 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
 {
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
 
+    struct StopAndResume {
+        StopAndResume(KisPlaybackEngineQT* p_self)
+            : m_self(p_self) {
+            m_self->m_d->respondToStateChange(PlaybackState::STOPPED);
+        }
+
+        ~StopAndResume() {
+            if (m_self->activeCanvas()) {
+                m_self->m_d->respondToStateChange(m_self->activeCanvas()->animationState()->playbackState());
+            }
+        }
+
+    private:
+        KisPlaybackEngineQT* m_self;
+    };
+
     if (activeCanvas() == canvas) {
         return;
     }
@@ -153,6 +169,8 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
         }
     }
 
+    StopAndResume stopResume(this);
+
     KisPlaybackEngine::setCanvas(canvas);
 
     if (activeCanvas()) {
@@ -165,8 +183,22 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
 
         auto image = activeCanvas()->image();
         KIS_ASSERT(image);
+        KisImageAnimationInterface* aniInterface = image->animationInterface();
+        KIS_ASSERT(aniInterface);
 
-        m_d->setFPS(image->animationInterface()->framerate());
+        connect(aniInterface, &KisImageAnimationInterface::sigFramerateChanged, this, [this](){
+            if (!activeCanvas())
+                return;
+
+            KisImageWSP img = activeCanvas()->image();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(img);
+            KisImageAnimationInterface* aniInterface = img->animationInterface();
+            KIS_SAFE_ASSERT_RECOVER_RETURN(aniInterface);
+
+            m_d->setFPS(aniInterface->framerate());
+        });
+
+        m_d->setFPS(aniInterface->framerate());
     }
 }
 

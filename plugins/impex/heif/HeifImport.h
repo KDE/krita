@@ -13,6 +13,7 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <KoColorTransferFunctions.h>
 
 class HeifImport : public KisImportExportFilter
 {
@@ -22,17 +23,9 @@ public:
     ~HeifImport() override;
     bool supportsIO() const override { return true; }
 
-    // Not all embedded nclx color space definitions can be converted to icc, so we keep an enum to load those.
-    enum LinearizePolicy {
-        KeepTheSame,
-        LinearFromPQ,
-        LinearFromHLG,
-        LinearFromSMPTE428
-    };
-
     KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
 private:
-    inline static float linearizeValueAsNeeded(float value, LinearizePolicy policy = KeepTheSame);
+    inline static float linearizeValueAsNeeded(float value, LinearizePolicy policy = LinearizePolicy::KeepTheSame);
 };
 
 #endif

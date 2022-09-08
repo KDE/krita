@@ -161,7 +161,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                                       KoColorConversionTransformation::internalConversionFlags());
     }
 
-    ConversionPolicy conversionPolicy = KeepTheSame;
+    ConversionPolicy conversionPolicy = ConversionPolicy::KeepTheSame;
     bool convertToRec2020 = false;
     
     if (cs->hasHighDynamicRange() && cs->colorModelId() != GrayAColorModelID) {
@@ -170,16 +170,16 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                                       "KeepSame"));
         if (conversionOption == "Rec2100PQ") {
             convertToRec2020 = true;
-            conversionPolicy = ApplyPQ;
+            conversionPolicy = ConversionPolicy::ApplyPQ;
         } else if (conversionOption == "Rec2100HLG") {
             convertToRec2020 = true;
-            conversionPolicy = ApplyHLG;
+            conversionPolicy = ConversionPolicy::ApplyHLG;
         } else if (conversionOption == "ApplyPQ") {
-            conversionPolicy = ApplyPQ;
+            conversionPolicy = ConversionPolicy::ApplyPQ;
         } else if (conversionOption == "ApplyHLG") {
-            conversionPolicy = ApplyHLG;
+            conversionPolicy = ConversionPolicy::ApplyHLG;
         }  else if (conversionOption == "ApplySMPTE428") {
-            conversionPolicy = ApplySMPTE428;
+            conversionPolicy = ConversionPolicy::ApplySMPTE428;
         }
     }
 
@@ -245,10 +245,6 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         }
 
         heif::Image img;
-
-        const uint16_t max12bit = 4095;
-        const uint16_t max16bit = 65535;
-        const float multiplier16bit = (1.0f / float(max16bit));
 
         if (cs->colorModelId() == RGBAColorModelID) {
             if (cs->colorDepthId() == Integer8BitsColorDepthID) {
@@ -358,7 +354,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                             std::copy(pixelValuesLinear.begin(), pixelValuesLinear.end(), pixelValues.begin());
                         }
 
-                        if (conversionPolicy == ApplyHLG && removeHGLOOTF) {
+                        if (conversionPolicy == ConversionPolicy::ApplyHLG && removeHGLOOTF) {
                             removeHLGOOTF(pixelValues, lCoef, hlgGamma, hlgNominalPeak);
                         }
 
@@ -468,7 +464,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
         }
 
         // --- save the color profile.
-        if (conversionPolicy == KeepTheSame) {
+        if (conversionPolicy == ConversionPolicy::KeepTheSame) {
             QByteArray rawProfileBA = image->colorSpace()->profile()->rawData();
             std::vector<uint8_t> rawProfile(rawProfileBA.begin(), rawProfileBA.end());
             img.set_raw_color_profile(heif_color_profile_type_prof, rawProfile);
@@ -490,11 +486,11 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                nclxDescription.set_color_primaties(heif_color_primaries(primaries));
            }
 
-           if (conversionPolicy == ApplyPQ) {
+           if (conversionPolicy == ConversionPolicy::ApplyPQ) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_PQ);
-           } else if (conversionPolicy == ApplyHLG) {
+           } else if (conversionPolicy == ConversionPolicy::ApplyHLG) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_ITU_R_BT_2100_0_HLG);
-           } else if (conversionPolicy == ApplySMPTE428) {
+           } else if (conversionPolicy == ConversionPolicy::ApplySMPTE428) {
                nclxDescription.set_transfer_characteristics(heif_transfer_characteristic_SMPTE_ST_428_1);
            }
 
@@ -508,7 +504,7 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
 
         // iOS gets confused when a heif file contains an nclx.
         // but we absolutely need it for hdr.
-        if (conversionPolicy != KeepTheSame && cs->hasHighDynamicRange()) {
+        if (conversionPolicy != ConversionPolicy::KeepTheSame && cs->hasHighDynamicRange()) {
             options.macOS_compatibility_workaround_no_nclx_profile = false;
         }
 
@@ -581,13 +577,13 @@ void HeifExport::initializeCapabilities()
     addSupportedColorModels(supportedColorModels, "HEIF");
 }
 
-float HeifExport::applyCurveAsNeeded(float value, HeifExport::ConversionPolicy policy)
+float HeifExport::applyCurveAsNeeded(float value, ConversionPolicy policy)
 {
-    if ( policy == ApplyPQ) {
+    if (policy == ConversionPolicy::ApplyPQ) {
         return applySmpte2048Curve(value);
-    } else if ( policy == ApplyHLG) {
+    } else if (policy == ConversionPolicy::ApplyHLG) {
         return applyHLGCurve(value);
-    } else if ( policy == ApplySMPTE428) {
+    } else if (policy == ConversionPolicy::ApplySMPTE428) {
         return applySMPTE_ST_428Curve(value);
     }
     return value;

@@ -13,7 +13,9 @@
 #include <QVariant>
 
 #include <KisImportExportFilter.h>
+#include <KoColorTransferFunctions.h>
 #include <kis_config_widget.h>
+
 #include "ui_WdgHeifExport.h"
 
 class KisWdgOptionsHeif : public KisConfigWidget, public Ui::WdgHeifExport
@@ -57,13 +59,6 @@ public:
 
     // This should return true if the library can work with a QIODevice, and doesn't want to open the file by itself
     bool supportsIO() const override { return true; }
-
-    enum ConversionPolicy {
-        KeepTheSame,
-        ApplyPQ,
-        ApplyHLG,
-        ApplySMPTE428
-    };
 
     KisImportExportErrorCode convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration = 0) override;
     KisPropertiesConfigurationSP defaultConfiguration(const QByteArray& from = "", const QByteArray& to = "") const override;

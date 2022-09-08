@@ -135,7 +135,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         dbgFile << "loading heif" << heifModel << heifChroma << luma;
 
-        LinearizePolicy linearizePolicy = KeepTheSame;
+        LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
         bool applyOOTF = true;
         float displayGamma = 1.2;
         float displayNits = 1000.0;
@@ -185,7 +185,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 ColorPrimaries primaries = ColorPrimaries(nclx->color_primaries);
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
                     dbgFile << "linearizing from PQ";
-                    linearizePolicy = LinearFromPQ;
+                    linearizePolicy = LinearizePolicy::LinearFromPQ;
                     transferCharacteristic = TRC_LINEAR;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
@@ -197,12 +197,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         displayGamma = dlg.gamma();
                         displayNits = dlg.nominalPeakBrightness();
                     }
-                    linearizePolicy = LinearFromHLG;
+                    linearizePolicy = LinearizePolicy::LinearFromHLG;
                     transferCharacteristic = TRC_LINEAR;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_SMPTE_ST_428_1) {
                     dbgFile << "linearizing from SMPTE 428";
-                    linearizePolicy = LinearFromSMPTE428;
+                    linearizePolicy = LinearizePolicy::LinearFromSMPTE428;
                     transferCharacteristic = TRC_LINEAR;
                 }
 
@@ -227,11 +227,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                                                        primaries,
                                                                        transferCharacteristic);
 
-                if (linearizePolicy != KeepTheSame) {
+                if (linearizePolicy != LinearizePolicy::KeepTheSame) {
                     colorDepth = Float32BitsColorDepthID;
                 }
-
-
 
                 heif_nclx_color_profile_free(nclx);
                 dbgFile << "nclx profile found" << profile->name();
@@ -276,11 +274,6 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                         "HEIF image");
 
         KisPaintLayerSP layer = new KisPaintLayer(image, image->nextLayerName(), OPACITY_OPAQUE_U8);
-
-        const double max16bit = 65535.0;
-        const double multiplier10bit = double(1.0 / 1023.0);
-        const double multiplier12bit = double(1.0 / 4095.0);
-        const double multiplier16bit = double(1.0 / max16bit);
 
         if (luma != 8 && luma != 10 && luma != 12) {
             dbgFile << "unknown bitdepth" << luma;
@@ -378,10 +371,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         pixelValues[3] = value(imgA, strideA, x, y);
                     }
 
-                    if (linearizePolicy == KeepTheSame) {
+                    if (linearizePolicy == LinearizePolicy::KeepTheSame) {
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }
-                    if (linearizePolicy == LinearFromHLG && applyOOTF) {
+                    if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
                         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
                     }
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
@@ -416,10 +409,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         pixelValues[ch] = value(img, stride, x, y, ch);
                     }
 
-                    if (linearizePolicy == KeepTheSame) {
+                    if (linearizePolicy == LinearizePolicy::KeepTheSame) {
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }
-                    if (linearizePolicy == LinearFromHLG && applyOOTF) {
+                    if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
                         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
                     }
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
@@ -458,10 +451,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         pixelValues[ch] = value(img, stride, x, y, ch);
                     }
 
-                    if (linearizePolicy == KeepTheSame) {
+                    if (linearizePolicy == LinearizePolicy::KeepTheSame) {
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
                     }
-                    if (linearizePolicy == LinearFromHLG && applyOOTF) {
+                    if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
                         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
                     }
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
@@ -524,13 +517,13 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
     }
 }
 
-float HeifImport::linearizeValueAsNeeded(float value, HeifImport::LinearizePolicy policy)
+float HeifImport::linearizeValueAsNeeded(float value, LinearizePolicy policy)
 {
-    if ( policy == LinearFromPQ) {
+    if (policy == LinearizePolicy::LinearFromPQ) {
         return removeSmpte2048Curve(value);
-    } else if ( policy == LinearFromHLG) {
+    } else if (policy == LinearizePolicy::LinearFromHLG) {
         return removeHLGCurve(value);
-    } else if ( policy == LinearFromSMPTE428) {
+    } else if (policy == LinearizePolicy::LinearFromSMPTE428) {
         return removeSMPTE_ST_428Curve(value);
     }
     return value;

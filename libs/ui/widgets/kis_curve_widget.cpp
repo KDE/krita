@@ -156,7 +156,6 @@ void KisCurveWidget::reset(void)
 {
     d->m_grab_point_index = -1;
     emit pointSelectedChanged();
-    d->m_guideVisible = false;
 
     //remove total - 2 points.
     while (d->m_curve.points().count() - 2 ) {
@@ -164,13 +163,6 @@ void KisCurveWidget::reset(void)
     }
 
     d->setCurveModified();
-}
-
-void KisCurveWidget::setCurveGuide(const QColor & color)
-{
-    d->m_guideVisible = true;
-    d->m_colorGuide   = color;
-
 }
 
 void KisCurveWidget::setPixmap(const QPixmap & pix)

@@ -39,9 +39,6 @@ public:
     int m_draggedAwayPointIndex {0};
 
     bool m_readOnlyMode {false};
-    bool m_guideVisible {false};
-    QColor m_colorGuide;
-
 
     /* The curve itself */
     bool    m_splineDirty {false};

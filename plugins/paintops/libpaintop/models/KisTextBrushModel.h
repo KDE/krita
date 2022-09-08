@@ -1,3 +1,9 @@
+/*
+ *  SPDX-FileCopyrightText: 2022 Dmitry Kazakov <dimula73@gmail.com>
+ *
+ *  SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 #ifndef KISTEXTBRUSHMODEL_H
 #define KISTEXTBRUSHMODEL_H
 
@@ -23,6 +29,8 @@ public:
           LAGER_QT(usePipeMode) {m_textBrushData[&TextBrushData::usePipeMode]}
     {
     }
+
+    ~KisTextBrushModel();
 
     // the state must be declared **before** any cursors or readers
     lager::cursor<CommonData> m_commonData;

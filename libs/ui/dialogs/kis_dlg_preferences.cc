@@ -314,7 +314,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     m_cmbKineticScrollingGesture->addItem(i18n("On Middle-Click Drag"));
     //m_cmbKineticScrollingGesture->addItem(i18n("On Right Click Drag"));
 
-    chkEnableSmoothZooming->setChecked(cfg.smoothZooming());
+    spnZoomSteps->setValue(cfg.zoomSteps());
 
 
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture());
@@ -548,7 +548,7 @@ void GeneralTab::setDefault()
     cmbFlowMode->setCurrentIndex(0);
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled(true));
     m_cmbKineticScrollingGesture->setCurrentIndex(cfg.kineticScrollingGesture(true));
-    chkEnableSmoothZooming->setChecked(cfg.smoothZooming(true));
+    spnZoomSteps->setValue(cfg.zoomSteps(true));
     m_kineticScrollingSensitivitySlider->setValue(cfg.kineticScrollingSensitivity(true));
     m_chkKineticScrollingHideScrollbars->setChecked(cfg.kineticScrollingHiddenScrollbars(true));
     intZoomMarginSize->setValue(cfg.zoomMarginSize(true));
@@ -677,9 +677,9 @@ bool GeneralTab::toolOptionsInDocker()
     return m_radioToolOptionsInDocker->isChecked();
 }
 
-bool GeneralTab::smoothZooming()
+int GeneralTab::zoomSteps()
 {
-    return chkEnableSmoothZooming->isChecked();
+    return spnZoomSteps->value();
 }
 
 bool GeneralTab::kineticScrollingEnabled()
@@ -2170,7 +2170,7 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.writeEntry<bool>("useCreamyAlphaDarken", (bool)!m_general->cmbFlowMode->currentIndex());
 
-        cfg.setSmoothZooming(m_general->smoothZooming());
+        cfg.setZoomSteps(m_general->zoomSteps());
         cfg.setKineticScrollingEnabled(m_general->kineticScrollingEnabled());
         cfg.setKineticScrollingGesture(m_general->kineticScrollingGesture());
         cfg.setKineticScrollingSensitivity(m_general->kineticScrollingSensitivity());

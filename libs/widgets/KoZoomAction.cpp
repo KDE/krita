@@ -65,52 +65,24 @@ public:
 
 QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
 {
-    QList<qreal> zoomLevels;
     KConfigGroup config = KSharedConfig::openConfig()->group("");
-    bool smoothZooming = config.readEntry("SmoothZooming", false);
-    qreal defaultZoomStep = sqrt(2);
+    int steps = config.readEntry("zoomSteps", 2);
+    qreal k = steps / log(2.);
 
-    if (smoothZooming) {
-        defaultZoomStep = sqrt(1.25);
-        zoomLevels << 1.0;
-    }
-    else {
-        zoomLevels << 0.25 / 2.0;
-        zoomLevels << 0.25 / 1.5;
-        zoomLevels << 0.25;
-        zoomLevels << 1.0 / 3.0;
-        zoomLevels << 0.5;
-        zoomLevels << 2.0 / 3.0;
-        zoomLevels << 1.0;
-    }
+    int first =  ceil(log(parent->minimumZoom()) * k);
+    int size  = floor(log(parent->maximumZoom()) * k) - first + 1;
+    QVector<qreal> zoomLevels(size);
 
-    for (qreal zoom = zoomLevels.first() / defaultZoomStep;
-         zoom > parent->minimumZoom();
-         zoom /= defaultZoomStep) {
-
-        zoomLevels.prepend(zoom);
+    k = 1./ k;
+    for (int i = 0; i < steps; i++) {
+        qreal f = exp((i + first) * k);
+        f = floor(f * 0x1p48 + 0.5) / 0x1p48; // round off inaccuracies
+        for (int j = i; j < size; j += steps, f *= 2.) {
+            zoomLevels[j] = f;
+        }
     }
 
-    for (qreal zoom = zoomLevels.last() * defaultZoomStep;
-         zoom < parent->maximumZoom();
-         zoom *= defaultZoomStep) {
-
-        zoomLevels.append(zoom);
-    }
-
-    if (smoothZooming) {
-        zoomLevels << 0.25 / 2.0;
-        zoomLevels << 0.25 / 1.5;
-        zoomLevels << 0.25;
-        zoomLevels << 1.0 / 3.0;
-        zoomLevels << 0.5;
-        zoomLevels << 2.0 / 3.0;
-        zoomLevels << 1.0;
-        std::sort(zoomLevels.begin(), zoomLevels.end());
-        KritaUtils::makeContainerUnique(zoomLevels);
-    }
-
-    return zoomLevels;
+    return QList<qreal>(zoomLevels.begin(), zoomLevels.end());
 }
 
 QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoomLevels) const

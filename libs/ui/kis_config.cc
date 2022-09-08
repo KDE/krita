@@ -2043,14 +2043,14 @@ void KisConfig::setKineticScrollingHideScrollbars(bool scrollbar)
     m_cfg.writeEntry("KineticScrollingHideScrollbar", scrollbar);
 }
 
-bool KisConfig::smoothZooming(bool defaultValue) const
+int KisConfig::zoomSteps(bool defaultValue) const
 {
-    return (defaultValue ? false : m_cfg.readEntry("SmoothZooming", false));
+    return (defaultValue ? 2 : m_cfg.readEntry("zoomSteps", 2));
 }
 
-void KisConfig::setSmoothZooming(bool scale)
+void KisConfig::setZoomSteps(int steps)
 {
-    m_cfg.writeEntry("SmoothZooming", scale);
+    m_cfg.writeEntry("zoomSteps", steps);
 }
 
 int KisConfig::zoomMarginSize(bool defaultValue) const

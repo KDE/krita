@@ -565,8 +565,8 @@ public:
     bool kineticScrollingHiddenScrollbars(bool defaultValue = false) const;
     void setKineticScrollingHideScrollbars(bool scrollbar);
 
-    bool smoothZooming(bool defaultValue = false) const;
-    void setSmoothZooming(bool scale);
+    int zoomSteps(bool defaultValue = false) const;
+    void setZoomSteps(int steps);
 
     int zoomMarginSize(bool defaultValue = false) const;
     void setZoomMarginSize(int zoomMarginSize);

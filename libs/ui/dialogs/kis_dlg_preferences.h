@@ -81,7 +81,7 @@ public:
     bool trimFramesImport();
     bool useZip64();
     bool toolOptionsInDocker();
-    bool smoothZooming();
+    int zoomSteps();
     bool kineticScrollingEnabled();
     int kineticScrollingGesture();
     int kineticScrollingSensitivity();

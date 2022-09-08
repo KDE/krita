@@ -15,20 +15,6 @@
 #include <KoColorTransferFunctions.h>
 #include <kis_iterator_ng.h>
 
-// Not all embedded nclx color space definitions can be converted to icc, so we
-// keep an enum to load those.
-enum LinearizePolicy {
-    KeepTheSame,
-    LinearFromPQ,
-    LinearFromHLG,
-    LinearFromSMPTE428
-};
-
-static constexpr float max16bit = 65535.0f;
-static constexpr float multiplier10bit = 1.0f / 1023.0f;
-static constexpr float multiplier12bit = 1.0f / 4095.0f;
-static constexpr float multiplier16bit = 1.0f / max16bit;
-
 namespace Gray
 {
 template<int luma>

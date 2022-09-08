@@ -24,6 +24,18 @@
  * necessary.
  */
 
+// Not all embedded nclx color space definitions can be converted to icc, so we
+// keep an enum to load those.
+enum class LinearizePolicy { KeepTheSame, LinearFromPQ, LinearFromHLG, LinearFromSMPTE428 };
+
+static constexpr uint16_t max12bit = 4095.f;
+static constexpr float max16bit = 65535.0f;
+static constexpr float multiplier10bit = 1.0f / 1023.0f;
+static constexpr float multiplier12bit = 1.0f / 4095.0f;
+static constexpr float multiplier16bit = 1.0f / max16bit;
+
+enum class ConversionPolicy { KeepTheSame, ApplyPQ, ApplyHLG, ApplySMPTE428 };
+
 ALWAYS_INLINE float applySmpte2048Curve(float x) noexcept
 {
     const float m1 = 2610.0f / 4096.0f / 4.0f;

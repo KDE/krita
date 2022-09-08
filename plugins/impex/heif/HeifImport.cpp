@@ -236,7 +236,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
 
         dbgFile << "loading heif" << heifModel << heifChroma << luma;
 
-        LinearizePolicy linearizePolicy = KeepTheSame;
+        LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
         bool applyOOTF = true;
         float displayGamma = 1.2f;
         float displayNits = 1000.0;
@@ -287,7 +287,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 ColorPrimaries primaries = ColorPrimaries(nclx->color_primaries);
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_PQ) {
                     dbgFile << "linearizing from PQ";
-                    linearizePolicy = LinearFromPQ;
+                    linearizePolicy = LinearizePolicy::LinearFromPQ;
                     transferCharacteristic = TRC_LINEAR;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
@@ -299,12 +299,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                         displayGamma = dlg.gamma();
                         displayNits = dlg.nominalPeakBrightness();
                     }
-                    linearizePolicy = LinearFromHLG;
+                    linearizePolicy = LinearizePolicy::LinearFromHLG;
                     transferCharacteristic = TRC_LINEAR;
                 }
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_SMPTE_ST_428_1) {
                     dbgFile << "linearizing from SMPTE 428";
-                    linearizePolicy = LinearFromSMPTE428;
+                    linearizePolicy = LinearizePolicy::LinearFromSMPTE428;
                     transferCharacteristic = TRC_LINEAR;
                 }
 
@@ -333,11 +333,9 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                                                                        primaries,
                                                                        transferCharacteristic);
 
-                if (linearizePolicy != KeepTheSame) {
+                if (linearizePolicy != LinearizePolicy::KeepTheSame) {
                     colorDepth = Float32BitsColorDepthID;
                 }
-
-
 
                 heif_nclx_color_profile_free(nclx);
                 dbgFile << "nclx profile found" << profile->name();

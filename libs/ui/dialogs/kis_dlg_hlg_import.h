@@ -3,29 +3,32 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef DLGHEIFIMPORT_H
-#define DLGHEIFIMPORT_H
+#ifndef KIS_DLG_HDR_IMPORT_H
+#define KIS_DLG_HDR_IMPORT_H
 
 #include <KoDialog.h>
 
-namespace Ui {
+#include "kritaui_export.h"
+
+namespace Ui
+{
 class DlgHeifImport;
 }
 
-class DlgHeifImport : public KoDialog
+class KRITAUI_EXPORT KisDlgHLGImport : public KoDialog
 {
     Q_OBJECT
 
 public:
-    explicit DlgHeifImport(bool applyootf, float gamma, float brightness, QWidget *parent = nullptr);
+    explicit KisDlgHLGImport(bool applyootf, float gamma, float brightness, QWidget *parent = nullptr);
     bool applyOOTF();
     float gamma();
     float nominalPeakBrightness();
 private Q_SLOTS:
     void toggleHLGOptions(bool toggle);
+
 private:
     Ui::DlgHeifImport *ui;
-
 };
 
-#endif // DLGHEIFIMPORT_H
+#endif // KIS_DLG_HDR_IMPORT_H

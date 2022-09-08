@@ -7,10 +7,7 @@ add_definitions(${HEIF_DEFINITIONS})
 set(kritaheifimport_SOURCES
     HeifImport.cpp
     HeifError.cpp
-    DlgHeifImport.cpp
 )
-
-ki18n_wrap_ui(kritaheifimport_SOURCES DlgHeifImport.ui)
 
 kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES})
 

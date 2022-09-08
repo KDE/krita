@@ -40,7 +40,7 @@
 
 #include "libheif/heif_cxx.h"
 
-#include "DlgHeifImport.h"
+#include <dialogs/kis_dlg_hlg_import.h>
 
 using heif::Error;
 
@@ -191,7 +191,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
                     dbgFile << "linearizing from HLG";
                     if (!document->fileBatchMode()) {
-                        DlgHeifImport dlg(applyOOTF, displayGamma, displayNits);
+                        KisDlgHLGImport dlg(applyOOTF, displayGamma, displayNits);
                         dlg.exec();
                         applyOOTF = dlg.applyOOTF();
                         displayGamma = dlg.gamma();

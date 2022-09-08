@@ -3,12 +3,12 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "DlgHeifImport.h"
-#include "ui_DlgHeifImport.h"
+#include "kis_dlg_hlg_import.h"
+#include "ui_kis_dlg_hlg_import.h"
 
-DlgHeifImport::DlgHeifImport(bool apply, float gamma, float brightness, QWidget *parent) :
-    KoDialog(parent),
-    ui(new Ui::DlgHeifImport)
+KisDlgHLGImport::KisDlgHLGImport(bool apply, float gamma, float brightness, QWidget *parent)
+    : KoDialog(parent)
+    , ui(new Ui::DlgHeifImport)
 {
     QWidget *page = new QWidget(this);
     ui->setupUi(page);
@@ -22,22 +22,22 @@ DlgHeifImport::DlgHeifImport(bool apply, float gamma, float brightness, QWidget 
     connect(ui->chkApplyOOTF, SIGNAL(toggled(bool)), this, SLOT(toggleHLGOptions(bool)));
 }
 
-bool DlgHeifImport::applyOOTF()
+bool KisDlgHLGImport::applyOOTF()
 {
     return ui->chkApplyOOTF->isChecked();
 }
 
-float DlgHeifImport::gamma()
+float KisDlgHLGImport::gamma()
 {
     return ui->spnGamma->value();
 }
 
-float DlgHeifImport::nominalPeakBrightness()
+float KisDlgHLGImport::nominalPeakBrightness()
 {
     return ui->spnNits->value();
 }
 
-void DlgHeifImport::toggleHLGOptions(bool toggle)
+void KisDlgHLGImport::toggleHLGOptions(bool toggle)
 {
     ui->spnNits->setEnabled(toggle);
     ui->spnGamma->setEnabled(toggle);

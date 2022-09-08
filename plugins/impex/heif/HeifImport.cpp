@@ -23,6 +23,7 @@
 #include <KoColorSpace.h>
 #include <KoColorSpaceEngine.h>
 #include <KoColorSpaceRegistry.h>
+#include <dialogs/kis_dlg_hlg_import.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_iterator_ng.h>
@@ -36,7 +37,6 @@
 #include <kis_transaction.h>
 #include <qmutex.h>
 
-#include "DlgHeifImport.h"
 #include "kis_heif_import_tools.h"
 
 using heif::Error;
@@ -293,7 +293,7 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 if (nclx->transfer_characteristics == heif_transfer_characteristic_ITU_R_BT_2100_0_HLG) {
                     dbgFile << "linearizing from HLG";
                     if (!document->fileBatchMode()) {
-                        DlgHeifImport dlg(applyOOTF, displayGamma, displayNits);
+                        KisDlgHLGImport dlg(applyOOTF, displayGamma, displayNits);
                         dlg.exec();
                         applyOOTF = dlg.applyOOTF();
                         displayGamma = dlg.gamma();

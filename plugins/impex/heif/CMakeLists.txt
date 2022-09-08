@@ -7,7 +7,6 @@ add_definitions(${HEIF_DEFINITIONS})
 set(kritaheifimport_SOURCES
     HeifImport.cpp
     HeifError.cpp
-    DlgHeifImport.cpp
 )
 
 if(HAVE_XSIMD)
@@ -20,8 +19,6 @@ if(HAVE_XSIMD)
 else()
     set(__per_arch_heif kis_heif_import_tools.cpp)
 endif()
-
-ki18n_wrap_ui(kritaheifimport_SOURCES DlgHeifImport.ui)
 
 kis_add_library(kritaheifimport MODULE ${kritaheifimport_SOURCES} ${__per_arch_heif})
 

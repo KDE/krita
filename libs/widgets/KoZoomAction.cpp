@@ -73,9 +73,17 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
     int size  = floor(log(parent->maximumZoom()) * k) - first + 1;
     QVector<qreal> zoomLevels(size);
 
+    // enforce zoom levels relating to thirds (33.33%, 66.67%, ...)
+    QVector<qreal> snap(steps);
+    if (steps > 1) {
+        qreal third = log(4./ 3.) * k;
+        int i = round(third);
+        snap[(i - first) % steps] = third - i;
+    }
+
     k = 1./ k;
     for (int i = 0; i < steps; i++) {
-        qreal f = exp((i + first) * k);
+        qreal f = exp((i + first + snap[i]) * k);
         f = floor(f * 0x1p48 + 0.5) / 0x1p48; // round off inaccuracies
         for (int j = i; j < size; j += steps, f *= 2.) {
             zoomLevels[j] = f;

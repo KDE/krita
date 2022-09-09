@@ -46,7 +46,12 @@ void KisPressureSharpnessOption::readOptionSetting(const KisPropertiesConfigurat
 
 void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const
 {
-    if (isChecked() && alignOutlineToPixels() && KisCurveOption::value() != 0.0) {
+    if (!isChecked() || KisCurveOption::value() == 0.0) {
+        // brush
+        KisPaintOp::splitCoordinate(pt.x(), &x, &xFraction);
+        KisPaintOp::splitCoordinate(pt.y(), &y, &yFraction);
+    }
+    else {
         qreal processedSharpness = computeSizeLikeValue(info);
 
         if (processedSharpness == 1.0) {
@@ -67,10 +72,6 @@ void KisPressureSharpnessOption::apply(const KisPaintInformation &info, const QP
             KisPaintOp::splitCoordinate(xf, &x, &xFraction);
             KisPaintOp::splitCoordinate(yf, &y, &yFraction);
         }
-    } else {
-        // brush
-        KisPaintOp::splitCoordinate(pt.x(), &x, &xFraction);
-        KisPaintOp::splitCoordinate(pt.y(), &y, &yFraction);
     }
 }
 

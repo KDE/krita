@@ -150,7 +150,7 @@ KisOptimizedBrushOutline KisCurrentOutlineFetcher::fetchOutline(const KisPaintIn
     }
 
     QPointF pos = info.pos();
-    if (d->sharpnessOption) {
+    if (d->sharpnessOption && d->sharpnessOption->alignOutlineToPixels()) {
         qint32 x = 0;
         qint32 y = 0;
         qreal subPixelX = 0.0;

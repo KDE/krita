@@ -31,6 +31,18 @@ enum StrokeFunction {
     NONE
 };
 
+enum HandleIndexes {
+    HANDLE_TOP_LEFT = 0,
+    HANDLE_TOP_RIGHT,
+    HANDLE_BOTTOM_LEFT,
+    HANDLE_BOTTOM_RIGHT,
+    HANDLE_MIDDLE_TOP,
+    HANDLE_MIDDLE_BOTTOM,
+    HANDLE_MIDDLE_LEFT,
+    HANDLE_MIDDLE_RIGHT,
+    HANDLE_COUNT,
+};
+
 struct KisPerspectiveTransformStrategy::Private
 {
     Private(KisPerspectiveTransformStrategy *_q,
@@ -81,9 +93,9 @@ struct KisPerspectiveTransformStrategy::Private
 
     QTransform transform;
 
-    QVector<QPointF> srcCornerPoints;
-    QVector<QPointF> dstCornerPoints;
-    int currentDraggingCornerPoint {0};
+    QVector<QPointF> srcHandlePoints;
+    QVector<QPointF> dstHandlePoints;
+    int currentDraggingHandlePoint {0};
 
     bool imageTooBig {false};
 
@@ -115,15 +127,19 @@ KisPerspectiveTransformStrategy::~KisPerspectiveTransformStrategy()
 
 void KisPerspectiveTransformStrategy::Private::recalculateTransformedHandles()
 {
-    srcCornerPoints.clear();
-    srcCornerPoints << transaction.originalTopLeft();
-    srcCornerPoints << transaction.originalTopRight();
-    srcCornerPoints << transaction.originalBottomLeft();
-    srcCornerPoints << transaction.originalBottomRight();
+    srcHandlePoints.resize(HANDLE_COUNT);
+    srcHandlePoints[HANDLE_TOP_LEFT] = transaction.originalTopLeft();
+    srcHandlePoints[HANDLE_TOP_RIGHT] = transaction.originalTopRight();
+    srcHandlePoints[HANDLE_BOTTOM_LEFT] = transaction.originalBottomLeft();
+    srcHandlePoints[HANDLE_BOTTOM_RIGHT] = transaction.originalBottomRight();
+    srcHandlePoints[HANDLE_MIDDLE_TOP] = transaction.originalMiddleTop();
+    srcHandlePoints[HANDLE_MIDDLE_BOTTOM] = transaction.originalMiddleBottom();
+    srcHandlePoints[HANDLE_MIDDLE_LEFT] = transaction.originalMiddleLeft();
+    srcHandlePoints[HANDLE_MIDDLE_RIGHT] = transaction.originalMiddleRight();
 
-    dstCornerPoints.clear();
-    Q_FOREACH (const QPointF &pt, srcCornerPoints) {
-        dstCornerPoints << transform.map(pt);
+    dstHandlePoints.clear();
+    Q_FOREACH (const QPointF &pt, srcHandlePoints) {
+        dstHandlePoints << transform.map(pt);
     }
 
     QMatrix4x4 realMatrix(transform);
@@ -163,12 +179,12 @@ void KisPerspectiveTransformStrategy::setTransformFunction(const QPointF &mouseP
                                   handleRadius, DRAG_Y_VANISHING_POINT);
     }
 
-    m_d->currentDraggingCornerPoint = -1;
-    for (int i = 0; i < m_d->dstCornerPoints.size(); i++) {
-        if (handleChooser.addFunction(m_d->dstCornerPoints[i],
+    m_d->currentDraggingHandlePoint = -1;
+    for (int i = 0; i < m_d->dstHandlePoints.size(); i++) {
+        if (handleChooser.addFunction(m_d->dstHandlePoints[i],
                                       handleRadius, DRAG_HANDLE)) {
 
-            m_d->currentDraggingCornerPoint = i;
+            m_d->currentDraggingHandlePoint = i;
         }
     }
 
@@ -229,6 +245,10 @@ void KisPerspectiveTransformStrategy::paint(QPainter &gc)
     addHandleRectFunc(m_d->transaction.originalTopRight());
     addHandleRectFunc(m_d->transaction.originalBottomLeft());
     addHandleRectFunc(m_d->transaction.originalBottomRight());
+    addHandleRectFunc(m_d->transaction.originalMiddleTop());
+    addHandleRectFunc(m_d->transaction.originalMiddleBottom());
+    addHandleRectFunc(m_d->transaction.originalMiddleLeft());
+    addHandleRectFunc(m_d->transaction.originalMiddleRight());
 
     gc.save();
 
@@ -318,11 +338,11 @@ Eigen::Matrix3f getTransitionMatrix(const QVector<QPointF> &sp)
     Eigen::Matrix3f A;
     Eigen::Vector3f v3;
 
-    A << sp[0].x() , sp[1].x() , sp[2].x()
-        ,sp[0].y() , sp[1].y() , sp[2].y()
-        ,      1   ,       1   ,       1;
+    A << sp[HANDLE_TOP_LEFT].x() , sp[HANDLE_TOP_RIGHT].x() , sp[HANDLE_BOTTOM_LEFT].x()
+        ,sp[HANDLE_TOP_LEFT].y() , sp[HANDLE_TOP_RIGHT].y() , sp[HANDLE_BOTTOM_LEFT].y()
+        ,                    1 ,                        1   ,                        1;
 
-    v3 << sp[3].x() , sp[3].y() , 1;
+    v3 << sp[HANDLE_BOTTOM_RIGHT].x() , sp[HANDLE_BOTTOM_RIGHT].y() , 1;
 
     Eigen::Vector3f coeffs = A.colPivHouseholderQr().solve(v3);
 
@@ -468,11 +488,36 @@ void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mouse
         break;
     }
     case DRAG_HANDLE: {
-        KIS_ASSERT_RECOVER_RETURN(m_d->currentDraggingCornerPoint >=0);
-        m_d->dstCornerPoints[m_d->currentDraggingCornerPoint] = mousePos;
+        KIS_ASSERT_RECOVER_RETURN(m_d->currentDraggingHandlePoint >= 0);
+        KIS_ASSERT_RECOVER_RETURN(m_d->currentDraggingHandlePoint < HANDLE_COUNT);
+        if (m_d->currentDraggingHandlePoint < HANDLE_MIDDLE_TOP) {
+            // Corner point, transform directly.
+            m_d->dstHandlePoints[m_d->currentDraggingHandlePoint] = mousePos;
+        } else {
+            // Middle point, move adjacent corners.
+            QPointF delta = mousePos - m_d->dstHandlePoints[m_d->currentDraggingHandlePoint];
+            switch(m_d->currentDraggingHandlePoint) {
+            case HANDLE_MIDDLE_TOP:
+                m_d->dstHandlePoints[HANDLE_TOP_LEFT] += delta;
+                m_d->dstHandlePoints[HANDLE_TOP_RIGHT] += delta;
+                break;
+            case HANDLE_MIDDLE_BOTTOM:
+                m_d->dstHandlePoints[HANDLE_BOTTOM_LEFT] += delta;
+                m_d->dstHandlePoints[HANDLE_BOTTOM_RIGHT] += delta;
+                break;
+            case HANDLE_MIDDLE_LEFT:
+                m_d->dstHandlePoints[HANDLE_TOP_LEFT] += delta;
+                m_d->dstHandlePoints[HANDLE_BOTTOM_LEFT] += delta;
+                break;
+            case HANDLE_MIDDLE_RIGHT:
+                m_d->dstHandlePoints[HANDLE_TOP_RIGHT] += delta;
+                m_d->dstHandlePoints[HANDLE_BOTTOM_RIGHT] += delta;
+                break;
+            }
+        }
 
-        Eigen::Matrix3f A = getTransitionMatrix(m_d->srcCornerPoints);
-        Eigen::Matrix3f B = getTransitionMatrix(m_d->dstCornerPoints);
+        Eigen::Matrix3f A = getTransitionMatrix(m_d->srcHandlePoints);
+        Eigen::Matrix3f B = getTransitionMatrix(m_d->dstHandlePoints);
         Eigen::Matrix3f result = B * A.inverse();
 
         m_d->transformIntoArgs(result);

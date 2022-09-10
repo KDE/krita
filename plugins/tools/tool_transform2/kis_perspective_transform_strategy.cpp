@@ -1,5 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2014 Dmitry Kazakov <dimula73@gmail.com>
+ *  SPDX-FileCopyrightText: 2022 Carsten Hartenfels <carsten.hartenfels@pm.me>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */

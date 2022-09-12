@@ -230,22 +230,20 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
         i18nc("@info:tooltip", "Symmetric Difference"));
 
     m_d->checkBoxAntiAliasSelection->setToolTip(
-        i18n("Smooth the jagged edges"));
+        i18n("Smooths the edges of the selection"));
     m_d->sliderGrowSelection->setToolTip(
-        i18n("Grow (positive values) or shrink (negative values) the selection "
-             "by the set amount"));
+        i18n("Grow or shrink the selection by the set amount"));
     m_d->buttonStopGrowingAtDarkestPixel->setToolTip(
         i18n("Stop growing at the darkest and/or most opaque pixels"));
     m_d->sliderFeatherSelection->setToolTip(
         i18n("Blur the selection by the set amount"));
 
     m_d->optionButtonStripReference->button(0)->setToolTip(
-        i18n("Make the selection using the active layer"));
+        i18n("Select regions found from the active layer"));
     m_d->optionButtonStripReference->button(1)->setToolTip(
-        i18n("Make the selection using a merged copy of all layers"));
+        i18n("Select regions found from the merging of all layers"));
     m_d->optionButtonStripReference->button(2)->setToolTip(
-        i18n("Make the selection using a merged copy of the selected "
-             "color-labeled layers"));
+        i18n("Select regions found from the merging of layers with specific color labels"));
 
     // Construct the option widget
     setSeparatorsVisible(true);

@@ -391,25 +391,21 @@ QWidget* KisToolSelectContiguous::createOptionWidget()
 
     // Set the tooltips
     buttonContiguousSelectionModeFloodFill->setToolTip(
-        i18n("Select pixels similar to the one you clicked on"));
+        i18n("Select regions similar in color to the clicked region"));
     buttonContiguousSelectionModeBoundaryFill->setToolTip(
-        i18n("Select all pixels until a specific boundary color"));
+        i18n("Select all regions until a specific boundary color"));
     buttonContiguousSelectionBoundaryColor->setToolTip(i18n("Boundary color"));
     sliderThreshold->setToolTip(
-        i18n("Set how far the selection should extend from the selected pixel "
-             "in terms of color similarity"));
+        i18n("Set the color similarity tolerance of the selection. "
+             "Increasing threshold increases the range of similar colors to be selected."));
     sliderSpread->setToolTip(i18n(
-        "Set how far the fully opaque portion of the selection should extend."
-        "\n0% will make the selection opaque only where the pixels are exactly "
-        "equal to the selected pixel."
-        "\n100% will make all the selection opaque up to its boundary."));
+        "Set the extent of the opaque portion of the selection. "
+        "Decreasing spread decreases opacity of selection areas depending on color similarity."));
     checkBoxSelectionAsBoundary->setToolTip(
-        i18n("Set if the contour of the current selection should be treated as "
-             "a boundary when obtaining the new one"));
+        i18n("Set if the contour of the active selection should be treated as "
+             "a boundary when making a new selection"));
 
-    sliderGrow->setToolTip(
-        i18n("Grow (positive values) or shrink (negative values) the selection "
-             "by the set amount"));
+    sliderGrow->setToolTip(i18n("Grow or shrink the selection by the set amount"));
     sliderFeather->setToolTip(i18n("Blur the selection by the set amount"));
 
     // Construct the option widget

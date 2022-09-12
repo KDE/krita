@@ -557,9 +557,9 @@ QWidget* KisToolFill::createOptionWidget()
     QPushButton *buttonReset = new QPushButton(i18nc("The 'reset' button in fill tool options", "Reset"));
 
     // Set the tooltips
-    m_buttonWhatToFillSelection->setToolTip(i18n("Current selection"));
-    m_buttonWhatToFillContiguous->setToolTip(i18n("Contiguous region obtained from the layers"));
-    m_buttonWhatToFillSimilar->setToolTip(i18n("All the regions similar to the pixel you clicked on"));
+    m_buttonWhatToFillSelection->setToolTip(i18n("Fill the active selection, or the entire canvas"));
+    m_buttonWhatToFillContiguous->setToolTip(i18n("Fill a contiguous region"));
+    m_buttonWhatToFillSimilar->setToolTip(i18n("Fill all regions of a similar color"));
 
     m_buttonFillWithFG->setToolTip(i18n("Foreground color"));
     m_buttonFillWithBG->setToolTip(i18n("Background color"));
@@ -567,23 +567,21 @@ QWidget* KisToolFill::createOptionWidget()
     m_sliderPatternScale->setToolTip(i18n("Set the scale of the pattern"));
     m_angleSelectorPatternRotation->setToolTip(i18n("Set the rotation of the pattern"));
 
-    m_buttonContiguousFillModeFloodFill->setToolTip(i18n("Select pixels similar to the one you clicked on"));
-    m_buttonContiguousFillModeBoundaryFill->setToolTip(i18n("Select all pixels until a specific boundary color"));
+    m_buttonContiguousFillModeFloodFill->setToolTip(i18n("Fill regions similar in color to the clicked region"));
+    m_buttonContiguousFillModeBoundaryFill->setToolTip(i18n("Fill all regions until a specific boundary color"));
     m_buttonContiguousFillBoundaryColor->setToolTip(i18n("Boundary color"));
-    m_sliderThreshold->setToolTip(i18n("Set how far the region should extend from the selected pixel in terms of color similarity"));
-    m_sliderSpread->setToolTip(i18n("Set how far the fully opaque portion of the region should extend."
-                                    "\n0% will make opaque only the pixels that are exactly equal to the selected pixel."
-                                    "\n100% will make opaque all the pixels in the region up to its boundary."));
-    m_checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the current selection should be treated as a boundary when obtaining the region"));
+    m_sliderThreshold->setToolTip(i18n("Set the color similarity tolerance of the fill. Increasing threshold increases the range of similar colors to be filled."));
+    m_sliderSpread->setToolTip(i18n("Set the extent of the opaque portion of the fill. Decreasing spread decreases opacity of fill areas depending on color similarity."));
+    m_checkBoxSelectionAsBoundary->setToolTip(i18n("Set if the contour of the active selection should be treated as a boundary when filling the region"));
 
-    m_checkBoxAntiAlias->setToolTip(i18n("Smooth the jagged edges"));
-    m_sliderGrow->setToolTip(i18n("Grow (positive values) or shrink (negative values) the region by the set amount"));
+    m_checkBoxAntiAlias->setToolTip(i18n("Smooths the edges of the fill"));
+    m_sliderGrow->setToolTip(i18n("Grow or shrink the fill by the set amount"));
     m_buttonStopGrowingAtDarkestPixel->setToolTip(i18n("Stop growing at the darkest and/or most opaque pixels"));
-    m_sliderFeather->setToolTip(i18n("Blur the region by the set amount"));
+    m_sliderFeather->setToolTip(i18n("Blur the fill by the set amount"));
 
-    m_buttonReferenceCurrent->setToolTip(i18n("Obtain the region using the active layer"));
-    m_buttonReferenceAll->setToolTip(i18n("Obtain the region using a merged copy of all layers"));
-    m_buttonReferenceLabeled->setToolTip(i18n("Obtain the region using a merged copy of the selected color-labeled layers"));
+    m_buttonReferenceCurrent->setToolTip(i18n("Fill regions found from the active layer"));
+    m_buttonReferenceAll->setToolTip(i18n("Fill regions found from the merging of all layers"));
+    m_buttonReferenceLabeled->setToolTip(i18n("Fill regions found from the merging of layers with specific color labels"));
 
     m_buttonDragFillAny->setToolTip(i18n("Dragging will fill regions of any color"));
     m_buttonDragFillSimilar->setToolTip(i18n("Dragging will fill only regions similar in color to the initial region (useful for filling line-art)"));
@@ -615,7 +613,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     KisOptionCollectionWidgetWithHeader *sectionRegionExtent =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'region extent' section label in fill tool options", "Region extent")
+            i18nc("The 'fill extent' section label in fill tool options", "Fill extent")
         );
     sectionRegionExtent->setPrimaryWidget(optionButtonStripContiguousFillMode);
     sectionRegionExtent->appendWidget("buttonContiguousFillBoundaryColor", m_buttonContiguousFillBoundaryColor);

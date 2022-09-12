@@ -32,6 +32,7 @@ class ConfigsManager {
     private final String LOG_TAG = "krita.ConfigsManager";
     private final String LAST_UPDATE_TIME = "ORG_KRITA_LASTUPDATETIME";
     private long mLastUpdateTime;
+    private String mStorageDir = null;
     private Activity mActivity;
 
     private void updateLastUpdateTime() {
@@ -58,7 +59,8 @@ class ConfigsManager {
             return;
         }
 
-        Log.i(LOG_TAG, getStorageDir());
+        mStorageDir = getStorageDir();
+        Log.i(LOG_TAG, mStorageDir);
         copyAssets();
         updateLastUpdateTime();
     }
@@ -130,7 +132,7 @@ class ConfigsManager {
         try {
             in = mActivity.getAssets().open(name);
 
-            String fileSavePath = toPath(getStorageDir(), "/share/", name);
+            String fileSavePath = toPath(mStorageDir, "/share/", name);
 
             // use the same directory structure
             File base = new File(basePath(fileSavePath));

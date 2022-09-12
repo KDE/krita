@@ -46,11 +46,10 @@ KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODe
     svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
     svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
     svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
-
     svgStream << ">" << endl;
+
     d->saveDevice = &svgStream;
     d->activeNodes = activeNodes;
-    qDebug() << "create KisScalableVectorGraphicsSaveVisitor";
 }
 
 KisScalableVectorGraphicsSaveVisitor::~KisScalableVectorGraphicsSaveVisitor()
@@ -60,45 +59,38 @@ KisScalableVectorGraphicsSaveVisitor::~KisScalableVectorGraphicsSaveVisitor()
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisPaintLayer *layer)
 {
-    qDebug() << "visit paint layer";
     return saveLayer(layer);
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGroupLayer *layer)
 {
-    qDebug() << "visit KisGroupLayer";
     visitAll(layer);
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
-    qDebug() << "visit KisAdjustmentLayer";
 
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisExternalLayer *layer)
 {
-    qDebug() << "visit KisExternalLayer";
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGeneratorLayer *layer)
 {
-    qDebug() << "visit KisGeneratorLayer";
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisCloneLayer *layer)
 {
-    qDebug() << "visit group layer";
     return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
 {
-    qDebug() << "save layer";
     if (layer->isFakeNode()) {
         // don't save grids, reference images layers etc.
         return true;
@@ -113,11 +105,9 @@ bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
         adjustedBounds.adjust(0, 0, 1, 1);
     }
 
-    //QString filename = d->saveContext->saveDeviceData(layer->projection(), layer->metaData(), adjustedBounds, layer->image()->xRes(), layer->image()->yRes());
 
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
-    //elt.setAttribute("src", filename);
     d->currentElement.insertBefore(elt, QDomNode());
     *d->saveDevice << layer->name() << endl;
     return true;
@@ -125,5 +115,4 @@ bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
 
 void KisScalableVectorGraphicsSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
 {
-    qDebug() << "void KisScalableVectorGraphicsSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)";
 }

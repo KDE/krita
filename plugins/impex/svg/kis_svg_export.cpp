@@ -50,9 +50,6 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
     const auto bounds = image->bounds();
     const auto *const cs = image->colorSpace();
 
-//    const QSizeF sizeInPx = document->view->image()->bounds().size();
-//    const QSizeF sizeInPt(sizeInPx.width() / document->view->image()->xRes(),
-//                          sizeInPx.height() / document->view->image()->yRes());
 
 
 
@@ -63,36 +60,7 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
     QList<KoShape*> shapes = shapeLayer->shapes();
     std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
 
-/*
-    while (rootLayer->nextSibling() != 0){
-        qDebug() << "Going through layer " << image->objectName();
 
-        for (int i = 0; i < rootLayer->childCount(); i++){
-
-        }
-        //KisLayerSP currentLayer = qobject_cast<KisLayer*>(rootLayer->nextSibling().data());
-        KisShapeLayerSP shapeLayer = qobject_cast<KisShapeLayer*>(rootLayer->nextSibling().data());
-        if (!shapeLayer) {
-            return ImportExportCodes::Failure;
-        }
-
-        // so this is a group layer and we need to get into the child layers
-        //KisLayerSP shapesLayer = qobject_cast<KisShapeLayer*>(rootLayer->nextSibling().data());
-        QList<KoShape*> shapes = shapeLayer->shapes();
-        std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-        svgLayers.append(shapes);
-
-        rootLayer = rootLayer->nextSibling();
-        }
-*/
-
-    QSizeF pageSize(qreal(10.0), qreal(10));
-    //SvgWriter writer(shapes);
-
-//    if (!writer.save(*io, pageSize)) {
-//        qDebug() << "Did not save: "<< document->objectName();
-//        //QMessageBox::warning(this, i18nc("@title:window", "Krita"), i18n("Could not save to svg: %1", document->objectName()));
-//    }
 
 
     return ImportExportCodes::OK;

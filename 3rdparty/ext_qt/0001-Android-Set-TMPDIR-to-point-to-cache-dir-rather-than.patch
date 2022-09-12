@@ -1,0 +1,30 @@
+From 30a0072f7a8b1788709d07a3deccc650e22f193e Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Mon, 12 Sep 2022 13:33:23 +0000
+Subject: [PATCH] Android: Set TMPDIR to point to cache dir rather than a
+ persistent dir
+
+Otherwise the app size keeps increasing. This is consistent with
+QStandardPaths::TempLocation.
+
+Fixes: QTBUG-98502
+---
+ .../jar/src/org/qtproject/qt5/android/QtActivityDelegate.java   | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
+index 74b14b6435..128aa40c7a 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtActivityDelegate.java
+@@ -640,7 +640,7 @@ public class QtActivityDelegate
+                                               + "\tQT_ANDROID_FONTS_SERIF=Droid Serif"
+                                               + "\tNECESSITAS_API_LEVEL=" + necessitasApiLevel
+                                               + "\tHOME=" + m_activity.getFilesDir().getAbsolutePath()
+-                                              + "\tTMPDIR=" + m_activity.getFilesDir().getAbsolutePath();
++                                              + "\tTMPDIR=" + m_activity.getCacheDir().getAbsolutePath();
+ 
+         additionalEnvironmentVariables += "\tQT_ANDROID_FONTS=Roboto;Droid Sans;Droid Sans Fallback";
+ 
+-- 
+2.37.2
+

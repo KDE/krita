@@ -10,8 +10,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>360</height>
+    <width>410</width>
+    <height>435</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -142,6 +142,93 @@ Default is 0.</string>
              </widget>
             </item>
            </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="conversionSettings">
+         <property name="title">
+          <string>Conversion settings</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_8">
+          <item row="1" column="0">
+           <widget class="QLabel" name="spaceLabel">
+            <property name="text">
+             <string>Space:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QComboBox" name="cmbConversionPolicy"/>
+          </item>
+          <item row="2" column="0" colspan="2">
+           <widget class="QGroupBox" name="chkHLGOOTF">
+            <property name="toolTip">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Hybrid Log Gamma needs an extra conversion step in between, as Krita currently cannot send HLG data directly to the display. Therefore we apply the HLG opto-optical curve to convert from display to scene linear.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="title">
+             <string>Apply reverse Hybrid Log Gamma OOTF</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+            <layout class="QFormLayout" name="formLayout_9">
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_3">
+               <property name="text">
+                <string>Gamma:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QDoubleSpinBox" name="spnGamma">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Display gamma. By default this is 1.2 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="maximum">
+                <double>3.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>Brightness:</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QDoubleSpinBox" name="spnNits">
+               <property name="toolTip">
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The display brightness in nits. By default this is set to 1000 for converting from PQ.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+               </property>
+               <property name="suffix">
+                <string> cd/m²</string>
+               </property>
+               <property name="maximum">
+                <double>100000.000000000000000</double>
+               </property>
+               <property name="value">
+                <double>0.000000000000000</double>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="0" column="0" colspan="2">
+           <widget class="QLabel" name="explanationLabel">
+            <property name="text">
+             <string>Applications like Google Chrome expect HDR images to store their color profile as CICP values. You can adjust the ICC profile conversion below.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

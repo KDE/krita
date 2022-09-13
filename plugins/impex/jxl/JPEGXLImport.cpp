@@ -19,8 +19,11 @@
 #include <KisDocument.h>
 #include <KisImportExportErrorCode.h>
 #include <KoColorModelStandardIds.h>
+#include <KoColorProfile.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorTransferFunctions.h>
 #include <KoConfig.h>
+#include <dialogs/kis_dlg_hlg_import.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
 #include <kis_group_layer.h>
@@ -38,7 +41,6 @@ constexpr static std::array<char, 5> xmpTag = {'x', 'm', 'l', ' ', 0x0};
 class Q_DECL_HIDDEN JPEGXLImportData
 {
 public:
-    JPEGXLImport *m{nullptr};
     JxlBasicInfo m_info{};
     JxlPixelFormat m_pixelFormat{};
     JxlFrameHeader m_header{};
@@ -47,55 +49,158 @@ public:
     int m_durationFrameInTicks{0};
     KoID m_colorID;
     KoID m_depthID;
-    bool m_forcedConversion;
+    bool applyOOTF = true;
+    float displayGamma = 1.2f;
+    float displayNits = 1000.0;
+    LinearizePolicy linearizePolicy = LinearizePolicy::KeepTheSame;
+    const KoColorSpace *cs = nullptr;
+    QVector<qreal> lCoef;
 };
 
-template<class Traits>
-void imageOutRgbCallback(void *that, size_t x, size_t y, size_t numPixels, const void *pixels)
+template<LinearizePolicy policy>
+inline float linearizeValueAsNeeded(float value)
+{
+    if (policy == LinearizePolicy::LinearFromPQ) {
+        return removeSmpte2048Curve(value);
+    } else if (policy == LinearizePolicy::LinearFromHLG) {
+        return removeHLGCurve(value);
+    } else if (policy == LinearizePolicy::LinearFromSMPTE428) {
+        return removeSMPTE_ST_428Curve(value);
+    }
+    return value;
+}
+
+template<LinearizePolicy policy, typename T, typename std::enable_if_t<std::numeric_limits<T>::is_integer, int> = 1>
+inline float value(const T *src, size_t ch)
+{
+    float v = float(src[ch]) / float(std::numeric_limits<T>::max());
+
+    return linearizeValueAsNeeded<policy>(v);
+}
+
+template<LinearizePolicy policy, typename T, typename std::enable_if_t<!std::numeric_limits<T>::is_integer, int> = 1>
+inline float value(const T *src, size_t ch)
+{
+    float v = float(src[ch]);
+
+    return linearizeValueAsNeeded<policy>(v);
+}
+
+template<typename channelsType, bool swap, LinearizePolicy policy, bool applyOOTF>
+inline void imageOutCallback(void *that, size_t x, size_t y, size_t numPixels, const void *pixels)
 {
     auto *data = static_cast<JPEGXLImportData *>(that);
     KIS_ASSERT(data);
 
-    using Pixel = typename Traits::Pixel;
-    using channels_type = typename Traits::channels_type;
+    KisHLineIteratorSP it = data->m_currentFrame->createHLineIteratorNG(static_cast<int>(x),
+                                                                        static_cast<int>(y),
+                                                                        static_cast<int>(data->m_info.xsize));
 
-    auto it = data->m_currentFrame->createHLineIteratorNG(static_cast<int>(x),
-                                                          static_cast<int>(y),
-                                                          static_cast<int>(data->m_info.xsize));
-    const auto *src = static_cast<const channels_type *>(pixels);
+    const auto *src = static_cast<const channelsType *>(pixels);
+    const uint32_t channels = data->m_pixelFormat.num_channels;
 
-    for (size_t i = 0; i < numPixels; i++) {
-        auto *dst = reinterpret_cast<Pixel *>(it->rawData());
+    if (policy != LinearizePolicy::KeepTheSame) {
+        const KoColorSpace *cs = data->cs;
+        const double *lCoef = data->lCoef.constData();
+        QVector<float> pixelValues(static_cast<int>(cs->channelCount()));
+        float *tmp = pixelValues.data();
 
-        std::memcpy(dst, src, (data->m_pixelFormat.num_channels) * sizeof(channels_type));
+        for (size_t i = 0; i < numPixels; i++) {
+            for (size_t i = 0; i < channels; i++) {
+                tmp[i] = 0;
+            }
 
-        std::swap(dst->blue, dst->red);
+            for (size_t ch = 0; ch < channels; ch++) {
+                tmp[ch] = value<policy, channelsType>(src, ch);
+            }
 
-        src += data->m_pixelFormat.num_channels;
+            if (swap) {
+                std::swap(tmp[0], tmp[2]);
+            }
 
-        it->nextPixel();
+            if (policy == LinearizePolicy::LinearFromHLG && applyOOTF) {
+                applyHLGOOTF(pixelValues, data->lCoef, data->displayGamma, data->displayNits);
+            }
+
+            cs->fromNormalisedChannelsValue(it->rawData(), pixelValues);
+
+            src += data->m_pixelFormat.num_channels;
+
+            it->nextPixel();
+        }
+    } else {
+        for (size_t i = 0; i < numPixels; i++) {
+            auto *dst = reinterpret_cast<channelsType *>(it->rawData());
+
+            std::memcpy(dst, src, channels * sizeof(channelsType));
+
+            if (swap) {
+                std::swap(dst[0], dst[2]);
+            }
+
+            src += data->m_pixelFormat.num_channels;
+
+            it->nextPixel();
+        }
     }
 }
 
-template<typename channels_type>
-void imageOutSizedCallback(void *that, size_t x, size_t y, size_t numPixels, const void *pixels)
+template<typename channelsType, bool swap, LinearizePolicy policy>
+inline JxlImageOutCallback generateCallbackWithPolicy(const JPEGXLImportData &d)
 {
-    auto *data = static_cast<JPEGXLImportData *>(that);
-    KIS_ASSERT(data);
+    if (d.applyOOTF) {
+        return &::imageOutCallback<channelsType, swap, policy, true>;
+    } else {
+        return &::imageOutCallback<channelsType, swap, policy, false>;
+    }
+}
 
-    auto it = data->m_currentFrame->createHLineIteratorNG(static_cast<int>(x),
-                                                          static_cast<int>(y),
-                                                          static_cast<int>(data->m_info.xsize));
-    const auto *src = static_cast<const channels_type *>(pixels);
+template<typename channelsType, bool swap>
+inline JxlImageOutCallback generateCallbackWithSwap(const JPEGXLImportData &d)
+{
+    switch (d.linearizePolicy) {
+    case LinearizePolicy::LinearFromPQ:
+        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromPQ>(d);
+    case LinearizePolicy::LinearFromHLG:
+        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromHLG>(d);
+    case LinearizePolicy::LinearFromSMPTE428:
+        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::LinearFromSMPTE428>(d);
+    case LinearizePolicy::KeepTheSame:
+    default:
+        return generateCallbackWithPolicy<channelsType, swap, LinearizePolicy::KeepTheSame>(d);
+        break;
+    };
+}
 
-    for (size_t i = 0; i < numPixels; i++) {
-        auto *dst = reinterpret_cast<channels_type *>(it->rawData());
+template<typename channelsType>
+inline JxlImageOutCallback generateCallbackWithType(const JPEGXLImportData &d)
+{
+    if (d.m_colorID == RGBAColorModelID
+        && (d.m_depthID == Integer8BitsColorDepthID || d.m_depthID == Integer16BitsColorDepthID)
+        && d.linearizePolicy == LinearizePolicy::KeepTheSame) {
+        return generateCallbackWithSwap<channelsType, true>(d);
+    } else {
+        return generateCallbackWithSwap<channelsType, false>(d);
+    }
+}
 
-        std::memcpy(dst, src, (data->m_pixelFormat.num_channels) * sizeof(channels_type));
-
-        src += data->m_pixelFormat.num_channels;
-
-        it->nextPixel();
+inline JxlImageOutCallback generateCallback(const JPEGXLImportData &d)
+{
+    switch (d.m_pixelFormat.data_type) {
+    case JXL_TYPE_FLOAT:
+        return generateCallbackWithType<float>(d);
+    case JXL_TYPE_UINT8:
+        return generateCallbackWithType<uint8_t>(d);
+    case JXL_TYPE_UINT16:
+        return generateCallbackWithType<uint16_t>(d);
+#ifdef HAVE_OPENEXR
+    case JXL_TYPE_FLOAT16:
+        return generateCallbackWithType<half>(d);
+        break;
+#endif
+    default:
+        KIS_ASSERT_X(false, "JPEGXL::generateCallback", "Unknown image format!");
+        return nullptr;
     }
 }
 
@@ -196,10 +301,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 JxlResizableParallelRunnerSuggestThreads(d.m_info.xsize, d.m_info.ysize));
 
             if (d.m_info.exponent_bits_per_sample != 0) {
-                if (d.m_info.bits_per_sample == 16) {
+                if (d.m_info.bits_per_sample <= 16) {
                     d.m_pixelFormat.data_type = JXL_TYPE_FLOAT16;
                     d.m_depthID = Float16BitsColorDepthID;
-                } else if (d.m_info.bits_per_sample == 32) {
+                } else if (d.m_info.bits_per_sample <= 32) {
                     d.m_pixelFormat.data_type = JXL_TYPE_FLOAT;
                     d.m_depthID = Float32BitsColorDepthID;
                 } else {
@@ -207,10 +312,10 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                             << d.m_info.exponent_bits_per_sample;
                     return ImportExportCodes::FormatFeaturesUnsupported;
                 }
-            } else if (d.m_info.bits_per_sample == 8) {
+            } else if (d.m_info.bits_per_sample <= 8) {
                 d.m_pixelFormat.data_type = JXL_TYPE_UINT8;
                 d.m_depthID = Integer8BitsColorDepthID;
-            } else if (d.m_info.bits_per_sample == 16) {
+            } else if (d.m_info.bits_per_sample <= 16) {
                 d.m_pixelFormat.data_type = JXL_TYPE_UINT16;
                 d.m_depthID = Integer16BitsColorDepthID;
             } else {
@@ -231,66 +336,159 @@ JPEGXLImport::convert(KisDocument *document, QIODevice *io, KisPropertiesConfigu
                 warnFile << "Forcing a RGBA conversion, unknown color space";
                 d.m_pixelFormat.num_channels = 4;
                 d.m_colorID = RGBAColorModelID;
-                d.m_forcedConversion = true;
             }
         } else if (status == JXL_DEC_COLOR_ENCODING) {
-            // Get the ICC color profile of the pixel data
-            size_t icc_size{};
-            QByteArray icc_profile;
-            const KoColorSpace *cs{nullptr};
-            const auto tgt = d.m_forcedConversion ? JXL_COLOR_PROFILE_TARGET_DATA : JXL_COLOR_PROFILE_TARGET_ORIGINAL;
-            if (JXL_DEC_SUCCESS == JxlDecoderGetICCProfileSize(dec.get(), nullptr, tgt, &icc_size)) {
+            // Determine color space information
+            const KoColorProfile *profile = nullptr;
+
+            // Chrome way of decoding JXL implies first scanning
+            // the CICP encoding for HDR, and only afterwards
+            // falling back to ICC.
+            JxlColorEncoding colorEncoding{};
+            if (JXL_DEC_SUCCESS
+                == JxlDecoderGetColorAsEncodedProfile(dec.get(),
+                                                      nullptr,
+                                                      JXL_COLOR_PROFILE_TARGET_DATA,
+                                                      &colorEncoding)) {
+                const TransferCharacteristics transferFunction = [&]() {
+                    switch (colorEncoding.transfer_function) {
+                    case JXL_TRANSFER_FUNCTION_PQ: {
+                        dbgFile << "linearizing from PQ";
+                        d.linearizePolicy = LinearizePolicy::LinearFromPQ;
+                        return TRC_LINEAR;
+                    }
+                    case JXL_TRANSFER_FUNCTION_HLG: {
+                        dbgFile << "linearizing from HLG";
+                        if (!document->fileBatchMode()) {
+                            KisDlgHLGImport dlg(d.applyOOTF, d.displayGamma, d.displayNits);
+                            dlg.exec();
+                            d.applyOOTF = dlg.applyOOTF();
+                            d.displayGamma = dlg.gamma();
+                            d.displayNits = dlg.nominalPeakBrightness();
+                        }
+                        d.linearizePolicy = LinearizePolicy::LinearFromHLG;
+                        return TRC_LINEAR;
+                    }
+                    case JXL_TRANSFER_FUNCTION_DCI: {
+                        dbgFile << "linearizing from SMPTE 428";
+                        d.linearizePolicy = LinearizePolicy::LinearFromSMPTE428;
+                        return TRC_LINEAR;
+                    }
+                    case JXL_TRANSFER_FUNCTION_709:
+                        return TRC_ITU_R_BT_709_5;
+                    case JXL_TRANSFER_FUNCTION_SRGB:
+                        return TRC_IEC_61966_2_1;
+                    case JXL_TRANSFER_FUNCTION_GAMMA:
+                        if (colorEncoding.gamma == 1.8) {
+                            return TRC_GAMMA_1_8;
+                        } else if (colorEncoding.gamma == 2.2) {
+                            return TRC_ITU_R_BT_470_6_SYSTEM_M;
+                        } else if (colorEncoding.gamma == 2.4) {
+                            return TRC_GAMMA_2_4;
+                        } else if (colorEncoding.gamma == 2.8) {
+                            return TRC_ITU_R_BT_470_6_SYSTEM_B_G;
+                        } else {
+                            warnFile << "Found custom gamma value for JXL color space" << colorEncoding.gamma;
+                            return TRC_UNSPECIFIED;
+                        }
+                    case JXL_TRANSFER_FUNCTION_LINEAR:
+                        return TRC_LINEAR;
+                    case JXL_TRANSFER_FUNCTION_UNKNOWN:
+                    default:
+                        warnFile << "Found unknown OETF";
+                        return TRC_UNSPECIFIED;
+                    }
+                }();
+
+                const ColorPrimaries colorPrimaries = [&]() {
+                    switch (colorEncoding.primaries) {
+                    case JXL_PRIMARIES_SRGB:
+                        return PRIMARIES_ITU_R_BT_709_5;
+                    case JXL_PRIMARIES_2100:
+                        return PRIMARIES_ITU_R_BT_2020_2_AND_2100_0;
+                    case JXL_PRIMARIES_P3:
+                        return PRIMARIES_SMPTE_RP_431_2;
+                    default:
+                        return PRIMARIES_UNSPECIFIED;
+                    }
+                }();
+
+                const QVector<double> colorants = [&]() -> QVector<double> {
+                    if (colorEncoding.primaries != JXL_PRIMARIES_CUSTOM
+                        || colorEncoding.white_point != JXL_WHITE_POINT_CUSTOM) {
+                        return {};
+                    } else {
+                        return {colorEncoding.white_point_xy[0],
+                                colorEncoding.white_point_xy[1],
+                                colorEncoding.primaries_red_xy[0],
+                                colorEncoding.primaries_red_xy[1],
+                                colorEncoding.primaries_green_xy[0],
+                                colorEncoding.primaries_green_xy[1],
+                                colorEncoding.primaries_blue_xy[0],
+                                colorEncoding.primaries_blue_xy[1]};
+                    }
+                }();
+
+                profile = KoColorSpaceRegistry::instance()->profileFor(colorants, colorPrimaries, transferFunction);
+
+                dbgFile << "CICP profile data:" << colorants << colorPrimaries << transferFunction;
+
+                if (profile) {
+                    dbgFile << "JXL CICP profile found" << profile->name();
+
+                    if (d.linearizePolicy != LinearizePolicy::KeepTheSame) {
+                        // Override output format!
+                        d.m_depthID = Float32BitsColorDepthID;
+                    }
+
+                    d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
+                }
+            }
+
+            if (!d.cs) {
+                dbgFile << "JXL CICP data couldn't be handled, falling back to ICC profile retrieval";
+                size_t iccSize = 0;
+                QByteArray iccProfile;
+                if (JXL_DEC_SUCCESS
+                    != JxlDecoderGetICCProfileSize(dec.get(), nullptr, JXL_COLOR_PROFILE_TARGET_DATA, &iccSize)) {
+                    errFile << "ICC profile size retrieval failed";
+                    document->setErrorMessage(i18nc("JPEG-XL errors", "Unable to read the image profile."));
+                    return ImportExportCodes::ErrorWhileReading;
+                }
                 dbgFile << "JxlDecoderGetICCProfileSize succeeded, ICC profile available";
-                icc_profile.resize(static_cast<int>(icc_size));
+                iccProfile.resize(static_cast<int>(iccSize));
                 if (JXL_DEC_SUCCESS
                     != JxlDecoderGetColorAsICCProfile(dec.get(),
                                                       nullptr,
-                                                      tgt,
-                                                      reinterpret_cast<uint8_t *>(icc_profile.data()),
-                                                      static_cast<size_t>(icc_profile.size()))) {
+                                                      JXL_COLOR_PROFILE_TARGET_DATA,
+                                                      reinterpret_cast<uint8_t *>(iccProfile.data()),
+                                                      static_cast<size_t>(iccProfile.size()))) {
                     document->setErrorMessage(i18nc("JPEG-XL errors", "Unable to read the image profile."));
                     return ImportExportCodes::ErrorWhileReading;
                 }
 
                 // With the profile in hand, now we can create the image.
-                const auto *profile = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID.id(),
-                                                                                           d.m_depthID.id(),
-                                                                                           icc_profile);
-                cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
-            } else {
-                // XXX: Need to either create the LCMS profile manually
-                // here or inject it into createColorProfile
-                document->setErrorMessage(i18nc("JPEG-XL errors", "JPEG-XL encoded profile not implemented"));
-                return ImportExportCodes::FormatFeaturesUnsupported;
+                profile = KoColorSpaceRegistry::instance()->createColorProfile(d.m_colorID.id(),
+                                                                               d.m_depthID.id(),
+                                                                               iccProfile);
+                d.cs = KoColorSpaceRegistry::instance()->colorSpace(d.m_colorID.id(), d.m_depthID.id(), profile);
             }
+
+            dbgFile << "Color space:" << d.cs->name() << d.cs->colorModelId() << d.cs->colorDepthId();
+            dbgFile << "JXL depth" << d.m_pixelFormat.data_type;
+
+            d.lCoef = d.cs->lumaCoefficients();
 
             image = new KisImage(document->createUndoStore(),
                                  static_cast<int>(d.m_info.xsize),
                                  static_cast<int>(d.m_info.ysize),
-                                 cs,
+                                 d.cs,
                                  "JPEG-XL image");
 
             layer = new KisPaintLayer(image, image->nextLayerName(), UCHAR_MAX);
         } else if (status == JXL_DEC_NEED_IMAGE_OUT_BUFFER) {
-            d.m = this;
             d.m_currentFrame = new KisPaintDevice(image->colorSpace());
-            const auto callback = [&]() {
-                if (d.m_colorID == RGBAColorModelID && d.m_depthID == Integer8BitsColorDepthID) {
-                    return &::imageOutRgbCallback<KoBgrU8Traits>;
-                } else if (d.m_colorID == RGBAColorModelID && d.m_depthID == Integer16BitsColorDepthID) {
-                    return &::imageOutRgbCallback<KoBgrU16Traits>;
-                } else if (d.m_pixelFormat.data_type == JXL_TYPE_UINT8) {
-                    return &::imageOutSizedCallback<uint8_t>;
-                } else if (d.m_pixelFormat.data_type == JXL_TYPE_UINT16) {
-                    return &::imageOutSizedCallback<uint16_t>;
-#ifdef HAVE_OPENEXR
-                } else if (d.m_pixelFormat.data_type == JXL_TYPE_FLOAT16) {
-                    return &::imageOutSizedCallback<half>;
-#endif
-                } else {
-                    return &::imageOutSizedCallback<float>;
-                }
-            }();
+            const JxlImageOutCallback callback = generateCallback(d);
 
             if (JXL_DEC_SUCCESS != JxlDecoderSetImageOutCallback(dec.get(), &d.m_pixelFormat, callback, &d)) {
                 errFile << "JxlDecoderSetImageOutBuffer failed";

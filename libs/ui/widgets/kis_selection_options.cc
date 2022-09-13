@@ -275,8 +275,8 @@ KisSelectionOptions::KisSelectionOptions(QWidget *parent)
 
     KisOptionCollectionWidgetWithHeader *sectionReference =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'reference layers' section label in selection tools options",
-                  "Reference layers"));
+            i18nc("The 'reference' section label in selection tools options",
+                  "Reference"));
     sectionReference->setPrimaryWidget(m_d->optionButtonStripReference);
     sectionReference->appendWidget("widgetLabels", m_d->widgetLabels);
     sectionReference->setWidgetVisible("widgetLabels", false);

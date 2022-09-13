@@ -595,7 +595,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     KisOptionCollectionWidgetWithHeader *sectionWhatToFill =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'target region' section label in fill tool options", "Target region")
+            i18nc("The 'fill mode' section label in fill tool options", "Fill mode")
         );
     sectionWhatToFill->setPrimaryWidget(optionButtonStripWhatToFill);
     m_optionWidget->appendWidget("sectionWhatToFill", sectionWhatToFill);
@@ -634,7 +634,7 @@ QWidget* KisToolFill::createOptionWidget()
     
     KisOptionCollectionWidgetWithHeader *sectionReference =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'reference layers' section label in fill tool options", "Reference layers")
+            i18nc("The 'reference' section label in fill tool options", "Reference")
         );
     sectionReference->setPrimaryWidget(optionButtonStripReference);
     sectionReference->appendWidget("widgetLabels", m_widgetLabels);
@@ -643,7 +643,7 @@ QWidget* KisToolFill::createOptionWidget()
 
     KisOptionCollectionWidgetWithHeader *sectionDragFill =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'drag fill behavior' section label in fill tool options", "Drag fill behavior")
+            i18nc("The 'drag-fill mode' section label in fill tool options", "Drag-fill mode")
         );
     sectionDragFill->setPrimaryWidget(optionButtonStripDragFill);
     m_optionWidget->appendWidget("sectionDragFill", sectionDragFill);

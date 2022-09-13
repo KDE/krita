@@ -439,7 +439,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     m_buttonEnclosingMethodLasso->setToolTip(i18n("Lasso"));
     m_buttonEnclosingMethodBrush->setToolTip(i18n("Brush"));
     m_comboBoxRegionSelectionMethod->setToolTip(regionSelectionMethodToUserString(m_regionSelectionMethod));
-    m_checkBoxRegionSelectionInvert->setToolTip(i18n("Enable to fill all regions, excluding enclosed regions"));
+    m_checkBoxRegionSelectionInvert->setToolTip(i18n("Enable to fill opposite regions instead"));
     m_checkBoxRegionSelectionIncludeContourRegions->setToolTip(i18n("Enable to also fill shapes that touch the contour of the enclosing region"));
     m_buttonFillWithFG->setToolTip(i18n("Foreground color"));
     m_buttonFillWithBG->setToolTip(i18n("Background color"));
@@ -515,7 +515,7 @@ QWidget* KisToolEncloseAndFill::createOptionWidget()
     
     KisOptionCollectionWidgetWithHeader *sectionReference =
         new KisOptionCollectionWidgetWithHeader(
-            i18nc("The 'reference layers' section label in enclose and fill tool options", "Reference layers")
+            i18nc("The 'reference' section label in enclose and fill tool options", "Reference")
         );
     sectionReference->setPrimaryWidget(optionButtonStripReference);
     sectionReference->appendWidget("widgetLabels", m_widgetLabels);

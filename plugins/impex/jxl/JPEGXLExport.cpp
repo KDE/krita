@@ -59,6 +59,7 @@ template<typename CSTrait,
          bool convertToRec2020,
          bool isLinear,
          ConversionPolicy conversionPolicy,
+         typename DestTrait,
          bool removeOOTF>
 inline QByteArray writeLayer(const int width,
                              const int height,
@@ -76,7 +77,7 @@ inline QByteArray writeLayer(const int width,
     float *dst = pixelValues.data();
 
     QByteArray res;
-    res.resize(width * height * static_cast<int>(CSTrait::pixelSize));
+    res.resize(width * height * static_cast<int>(DestTrait::pixelSize));
 
     quint8 *ptr = reinterpret_cast<quint8 *>(res.data());
 
@@ -106,7 +107,9 @@ inline QByteArray writeLayer(const int width,
                     std::swap(dst[0], dst[2]);
                 }
 
-                CSTrait::fromNormalisedChannelsValue(ptr, pixelValues);
+                DestTrait::fromNormalisedChannelsValue(ptr, pixelValues);
+
+                ptr += DestTrait::pixelSize;
             } else {
                 auto *dst = reinterpret_cast<typename CSTrait::channels_type *>(ptr);
 
@@ -115,8 +118,9 @@ inline QByteArray writeLayer(const int width,
                 if (swap) {
                     std::swap(dst[0], dst[2]);
                 }
+
+                ptr += CSTrait::pixelSize;
             }
-            ptr += CSTrait::pixelSize;
 
             it->nextPixel();
         }
@@ -132,14 +136,15 @@ template<typename CSTrait,
          bool convertToRec2020,
          bool isLinear,
          ConversionPolicy linearizePolicy,
+         typename DestTrait,
          typename... Args>
 inline auto writeLayerWithPolicy(bool removeOOTF, Args &&...args)
 {
     if (removeOOTF) {
-        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, true>(
+        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, true>(
             std::forward<Args>(args)...);
     } else {
-        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, false>(
+        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, false>(
             std::forward<Args>(args)...);
     }
 }
@@ -148,16 +153,28 @@ template<typename CSTrait, bool swap, bool convertToRec2020, bool isLinear, type
 inline auto writeLayerWithLinear(ConversionPolicy linearizePolicy, Args &&...args)
 {
     if (linearizePolicy == ConversionPolicy::ApplyHLG) {
-        return writeLayerWithPolicy<CSTrait, swap, convertToRec2020, isLinear, ConversionPolicy::ApplyHLG>(
-            std::forward<Args>(args)...);
+        return writeLayerWithPolicy<CSTrait,
+                                    swap,
+                                    convertToRec2020,
+                                    isLinear,
+                                    ConversionPolicy::ApplyHLG,
+                                    KoBgrU16Traits>(std::forward<Args>(args)...);
     } else if (linearizePolicy == ConversionPolicy::ApplyPQ) {
-        return writeLayerWithPolicy<CSTrait, swap, convertToRec2020, isLinear, ConversionPolicy::ApplyPQ>(
-            std::forward<Args>(args)...);
+        return writeLayerWithPolicy<CSTrait,
+                                    swap,
+                                    convertToRec2020,
+                                    isLinear,
+                                    ConversionPolicy::ApplyPQ,
+                                    KoBgrU16Traits>(std::forward<Args>(args)...);
     } else if (linearizePolicy == ConversionPolicy::ApplySMPTE428) {
-        return writeLayerWithPolicy<CSTrait, swap, convertToRec2020, isLinear, ConversionPolicy::ApplySMPTE428>(
-            std::forward<Args>(args)...);
+        return writeLayerWithPolicy<CSTrait,
+                                    swap,
+                                    convertToRec2020,
+                                    isLinear,
+                                    ConversionPolicy::ApplySMPTE428,
+                                    KoBgrU16Traits>(std::forward<Args>(args)...);
     } else {
-        return writeLayerWithPolicy<CSTrait, swap, convertToRec2020, isLinear, ConversionPolicy::KeepTheSame>(
+        return writeLayerWithPolicy<CSTrait, swap, convertToRec2020, isLinear, ConversionPolicy::KeepTheSame, CSTrait>(
             std::forward<Args>(args)...);
     }
 }
@@ -271,7 +288,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         JxlPixelFormat pixelFormat{};
         if (cs->colorDepthId() == Integer8BitsColorDepthID) {
             pixelFormat.data_type = JXL_TYPE_UINT8;
-        } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+        } else if (conversionPolicy != ConversionPolicy::KeepTheSame
+                   || cs->colorDepthId() == Integer16BitsColorDepthID) {
             pixelFormat.data_type = JXL_TYPE_UINT16;
 #ifdef HAVE_OPENEXR
         } else if (cs->colorDepthId() == Float16BitsColorDepthID) {
@@ -299,24 +317,24 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         info->xsize = static_cast<uint32_t>(bounds.width());
         info->ysize = static_cast<uint32_t>(bounds.height());
         {
-            if (cs->colorDepthId() == Integer8BitsColorDepthID) {
+            if (pixelFormat.data_type == JXL_TYPE_UINT8) {
                 info->bits_per_sample = 8;
                 info->exponent_bits_per_sample = 0;
                 info->alpha_bits = 8;
                 info->alpha_exponent_bits = 0;
-            } else if (cs->colorDepthId() == Integer16BitsColorDepthID) {
+            } else if (pixelFormat.data_type == JXL_TYPE_UINT16) {
                 info->bits_per_sample = 16;
                 info->exponent_bits_per_sample = 0;
                 info->alpha_bits = 16;
                 info->alpha_exponent_bits = 0;
 #ifdef HAVE_OPENEXR
-            } else if (cs->colorDepthId() == Float16BitsColorDepthID) {
+            } else if (pixelFormat.data_type == JXL_TYPE_FLOAT16) {
                 info->bits_per_sample = 16;
                 info->exponent_bits_per_sample = 5;
                 info->alpha_bits = 16;
                 info->alpha_exponent_bits = 5;
 #endif
-            } else if (cs->colorDepthId() == Float32BitsColorDepthID) {
+            } else if (pixelFormat.data_type == JXL_TYPE_FLOAT) {
                 info->bits_per_sample = 32;
                 info->exponent_bits_per_sample = 8;
                 info->alpha_bits = 32;

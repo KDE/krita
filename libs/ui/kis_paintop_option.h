@@ -13,6 +13,8 @@
 #include <brushengine/kis_locked_properties_proxy.h>
 #include <KisPaintopPropertiesBase.h>
 
+#include <lager/reader.hpp>
+
 class QWidget;
 class QString;
 class KisPaintopLodLimitations;
@@ -72,6 +74,7 @@ public:
     QWidget *configurationPage() const;
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
+    virtual lager::reader<KisPaintopLodLimitations> lodLimitations() const;
 
 protected:
 

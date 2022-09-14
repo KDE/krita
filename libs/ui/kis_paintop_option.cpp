@@ -11,6 +11,9 @@
 #include <KisResourcesInterface.h>
 #include <KoCanvasResourcesInterface.h>
 
+#include <lager/constant.hpp>
+#include <kis_paintop_lod_limitations.h>
+
 struct KisPaintOpOption::Private
 {
 public:
@@ -76,6 +79,12 @@ void KisPaintOpOption::startWriteOptionSetting(KisPropertiesConfigurationSP sett
 void KisPaintOpOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
     Q_UNUSED(l);
+}
+
+lager::reader<KisPaintopLodLimitations> KisPaintOpOption::lodLimitations() const
+{
+    // no limitations by default
+    return lager::make_constant(KisPaintopLodLimitations());
 }
 
 KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const

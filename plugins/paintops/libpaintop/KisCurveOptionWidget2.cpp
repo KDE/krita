@@ -134,12 +134,6 @@ void KisCurveOptionWidget2::readOptionSetting(const KisPropertiesConfigurationSP
     Q_UNUSED(setting);
 }
 
-void KisCurveOptionWidget2::lodLimitations(KisPaintopLodLimitations *l) const
-{
-    Q_UNUSED(l);
-    //m_curveOption->lodLimitations(l);
-}
-
 bool KisCurveOptionWidget2::isCheckable() const
 {
     return m_d->model.isCheckable();

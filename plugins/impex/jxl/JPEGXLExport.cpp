@@ -19,6 +19,7 @@
 #include <KisDocument.h>
 #include <KisExportCheckRegistry.h>
 #include <KisImportExportErrorCode.h>
+#include <KoAlwaysInline.h>
 #include <KoColorModelStandardIds.h>
 #include <KoColorProfile.h>
 #include <KoColorSpace.h>
@@ -42,7 +43,7 @@ K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_jxl_export.json", registerPlugi
 namespace HDR
 {
 template<ConversionPolicy policy>
-inline float applyCurveAsNeeded(float value)
+ALWAYS_INLINE float applyCurveAsNeeded(float value)
 {
     if (policy == ConversionPolicy::ApplyPQ) {
         return applySmpte2048Curve(value);
@@ -83,44 +84,74 @@ inline QByteArray writeLayer(const int width,
 
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
-            if (conversionPolicy != ConversionPolicy::KeepTheSame) {
-                CSTrait::normalisedChannelsValue(it->rawDataConst(), pixelValues);
-                if (!convertToRec2020 && !isLinear) {
-                    for (int i = 0; i < 4; i++) {
-                        src[i] = static_cast<double>(dst[i]);
-                    }
-                    profile->linearizeFloatValue(pixelValuesLinear);
-                    for (int i = 0; i < 4; i++) {
-                        dst[i] = static_cast<float>(src[i]);
-                    }
+            CSTrait::normalisedChannelsValue(it->rawDataConst(), pixelValues);
+            if (!convertToRec2020 && !isLinear) {
+                for (int i = 0; i < 4; i++) {
+                    src[i] = static_cast<double>(dst[i]);
                 }
-
-                if (conversionPolicy == ConversionPolicy::ApplyHLG && removeOOTF) {
-                    removeHLGOOTF(dst, lCoef.constData(), hlgGamma, hlgNominalPeak);
+                profile->linearizeFloatValue(pixelValuesLinear);
+                for (int i = 0; i < 4; i++) {
+                    dst[i] = static_cast<float>(src[i]);
                 }
-
-                for (int ch = 0; ch < channels; ch++) {
-                    dst[ch] = applyCurveAsNeeded<conversionPolicy>(dst[ch]);
-                }
-
-                if (swap) {
-                    std::swap(dst[0], dst[2]);
-                }
-
-                DestTrait::fromNormalisedChannelsValue(ptr, pixelValues);
-
-                ptr += DestTrait::pixelSize;
-            } else {
-                auto *dst = reinterpret_cast<typename CSTrait::channels_type *>(ptr);
-
-                std::memcpy(dst, it->rawDataConst(), CSTrait::pixelSize);
-
-                if (swap) {
-                    std::swap(dst[0], dst[2]);
-                }
-
-                ptr += CSTrait::pixelSize;
             }
+
+            if (conversionPolicy == ConversionPolicy::ApplyHLG && removeOOTF) {
+                removeHLGOOTF(pixelValues, lCoef, hlgGamma, hlgNominalPeak);
+            }
+
+            for (int ch = 0; ch < channels; ch++) {
+                dst[ch] = applyCurveAsNeeded<conversionPolicy>(dst[ch]);
+            }
+
+            if (swap) {
+                std::swap(dst[0], dst[2]);
+            }
+
+            DestTrait::fromNormalisedChannelsValue(ptr, pixelValues);
+
+            ptr += DestTrait::pixelSize;
+
+            it->nextPixel();
+        }
+
+        it->nextRow();
+    }
+
+    return res;
+}
+
+template<typename CSTrait, bool swap>
+inline QByteArray writeLayerNoConversion(const int width,
+                                         const int height,
+                                         KisHLineConstIteratorSP it,
+                                         float hlgGamma,
+                                         float hlgNominalPeak,
+                                         const KoColorSpace *cs)
+{
+    Q_UNUSED(hlgGamma);
+    Q_UNUSED(hlgNominalPeak);
+    Q_UNUSED(cs);
+
+    const int channels = static_cast<int>(CSTrait::channels_nb);
+    QVector<float> pixelValues(channels);
+    QVector<qreal> pixelValuesLinear(channels);
+
+    QByteArray res;
+    res.resize(width * height * static_cast<int>(CSTrait::pixelSize));
+
+    quint8 *ptr = reinterpret_cast<quint8 *>(res.data());
+
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            auto *dst = reinterpret_cast<typename CSTrait::channels_type *>(ptr);
+
+            std::memcpy(dst, it->rawDataConst(), CSTrait::pixelSize);
+
+            if (swap) {
+                std::swap(dst[0], dst[2]);
+            }
+
+            ptr += CSTrait::pixelSize;
 
             it->nextPixel();
         }
@@ -137,20 +168,38 @@ template<typename CSTrait,
          bool isLinear,
          ConversionPolicy linearizePolicy,
          typename DestTrait,
+         bool removeOOTF,
          typename... Args>
-inline auto writeLayerWithPolicy(bool removeOOTF, Args &&...args)
+ALWAYS_INLINE auto writeLayerSimplify(Args &&...args)
 {
-    if (removeOOTF) {
-        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, true>(
+    if (linearizePolicy != ConversionPolicy::KeepTheSame) {
+        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, removeOOTF>(
             std::forward<Args>(args)...);
     } else {
-        return writeLayer<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, false>(
+        return writeLayerNoConversion<CSTrait, swap>(std::forward<Args>(args)...);
+    }
+}
+
+template<typename CSTrait,
+         bool swap,
+         bool convertToRec2020,
+         bool isLinear,
+         ConversionPolicy linearizePolicy,
+         typename DestTrait,
+         typename... Args>
+ALWAYS_INLINE auto writeLayerWithPolicy(bool removeOOTF, Args &&...args)
+{
+    if (removeOOTF) {
+        return writeLayerSimplify<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, true>(
+            std::forward<Args>(args)...);
+    } else {
+        return writeLayerSimplify<CSTrait, swap, convertToRec2020, isLinear, linearizePolicy, DestTrait, false>(
             std::forward<Args>(args)...);
     }
 }
 
 template<typename CSTrait, bool swap, bool convertToRec2020, bool isLinear, typename... Args>
-inline auto writeLayerWithLinear(ConversionPolicy linearizePolicy, Args &&...args)
+ALWAYS_INLINE auto writeLayerWithLinear(ConversionPolicy linearizePolicy, Args &&...args)
 {
     if (linearizePolicy == ConversionPolicy::ApplyHLG) {
         return writeLayerWithPolicy<CSTrait,
@@ -180,7 +229,7 @@ inline auto writeLayerWithLinear(ConversionPolicy linearizePolicy, Args &&...arg
 }
 
 template<typename CSTrait, bool swap, bool convertToRec2020, typename... Args>
-inline auto writeLayerWithRec2020(bool isLinear, Args &&...args)
+ALWAYS_INLINE auto writeLayerWithRec2020(bool isLinear, Args &&...args)
 {
     if (isLinear) {
         return writeLayerWithLinear<CSTrait, swap, convertToRec2020, true>(std::forward<Args>(args)...);
@@ -190,7 +239,7 @@ inline auto writeLayerWithRec2020(bool isLinear, Args &&...args)
 }
 
 template<typename CSTrait, bool swap, typename... Args>
-inline auto writeLayerWithSwap(bool convertToRec2020, Args &&...args)
+ALWAYS_INLINE auto writeLayerWithSwap(bool convertToRec2020, Args &&...args)
 {
     if (convertToRec2020) {
         return writeLayerWithRec2020<CSTrait, swap, true>(std::forward<Args>(args)...);
@@ -719,8 +768,11 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 const KisPaintDeviceSP dev = image->projection();
 
                 const KoID colorModel = cs->colorModelId();
+                const KoID colorDepth = cs->colorDepthId();
 
-                if (colorModel != RGBAColorModelID) {
+                if (colorModel != RGBAColorModelID
+                    || (colorDepth != Integer8BitsColorDepthID && colorDepth != Integer16BitsColorDepthID
+                        && conversionPolicy == ConversionPolicy::KeepTheSame)) {
                     // blast it wholesale
                     QByteArray p;
                     p.resize(bounds.width() * bounds.height() * static_cast<int>(cs->pixelSize()));

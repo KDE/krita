@@ -29,6 +29,7 @@
 #include <kis_cubic_curve.h>
 #include <kis_auto_brush_factory.h>
 #include <KisGlobalResourcesInterface.h>
+#include <KisZug.h>
 
 using namespace KisBrushModel;
 using namespace KisWidgetConnectionUtils;
@@ -48,21 +49,16 @@ public:
           LAGER_QT(spikes) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::spikes]},
           LAGER_QT(antialiasEdges) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::antialiasEdges]},
           LAGER_QT(shape) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::shape]
-                      .xform(kiszug::map_static_cast<int>,
-                             kiszug::map_static_cast<AutoBrushGeneratorShape>)},
+                      .zoom(kiszug::lenses::do_static_cast<AutoBrushGeneratorShape, int>)},
           LAGER_QT(type) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::type]
-                      .xform(kiszug::map_static_cast<int>,
-                             kiszug::map_static_cast<AutoBrushGeneratorType>)},
+                      .zoom(kiszug::lenses::do_static_cast<AutoBrushGeneratorType, int>)},
           LAGER_QT(curveString) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::curveString]},
           LAGER_QT(randomness) {m_autoBrushData[&AutoBrushData::randomness]
-                      .xform(kiszug::map_mupliply<qreal>(100.0),
-                             kiszug::map_mupliply<qreal>(0.01))},
+                      .zoom(kiszug::lenses::scale<qreal>(100.0))},
           LAGER_QT(density) {m_autoBrushData[&AutoBrushData::density]
-                      .xform(kiszug::map_mupliply<qreal>(100.0),
-                             kiszug::map_mupliply<qreal>(0.01))},
+                      .zoom(kiszug::lenses::scale<qreal>(100.0))},
           LAGER_QT(angle) {m_commonData[&CommonData::angle]
-                      .xform(kiszug::map_mupliply<qreal>(180.0 / M_PI),
-                             kiszug::map_mupliply<qreal>(M_PI / 180.0))},
+                      .zoom(kiszug::lenses::scale<qreal>(180.0 / M_PI))},
           LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},
           LAGER_QT(useAutoSpacing) {m_commonData[&CommonData::useAutoSpacing]},
           LAGER_QT(autoSpacingCoeff) {m_commonData[&CommonData::autoSpacingCoeff]},

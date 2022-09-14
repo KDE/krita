@@ -516,6 +516,7 @@ void KisCurveWidget::leaveEvent(QEvent *)
 void KisCurveWidget::notifyModified()
 {
     emit modified();
+    emit curveChanged(d->m_curve);
 }
 
 void KisCurveWidget::slotCompressorShouldEmitModified()

@@ -31,7 +31,7 @@
 #include "kis_clipboard_brush_widget.h"
 #include "kis_text_brush_chooser.h"
 #include "KisWidgetConnectionUtils.h"
-
+#include <KisZug.h>
 #include <lager/constant.hpp>
 
 using namespace KisBrushModel;

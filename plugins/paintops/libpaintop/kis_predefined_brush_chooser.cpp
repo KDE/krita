@@ -61,6 +61,7 @@
 #include <lager/state.hpp>
 #include <lager/constant.hpp>
 #include <kis_predefined_brush_factory.h>
+#include <KisZug.h>
 
 using namespace KisBrushModel;
 using namespace KisWidgetConnectionUtils;
@@ -223,13 +224,11 @@ public:
           LAGER_QT(brushSize) {lager::with(LAGER_QT(baseSize), LAGER_QT(scale))
                       .zoom(brushSizeLens)},
           LAGER_QT(application) {m_predefinedBrushData[&PredefinedBrushData::application]
-                                .xform(kiszug::map_static_cast<int>,
-                                       kiszug::map_static_cast<enumBrushApplication>)},
+                      .zoom(kiszug::lenses::do_static_cast<enumBrushApplication, int>)},
           LAGER_QT(hasColorAndTransparency) {m_predefinedBrushData[&PredefinedBrushData::hasColorAndTransparency]},
           LAGER_QT(autoAdjustMidPoint) {m_predefinedBrushData[&PredefinedBrushData::autoAdjustMidPoint]},
           LAGER_QT(adjustmentMidPoint) {m_predefinedBrushData[&PredefinedBrushData::adjustmentMidPoint]
-                      .xform(kiszug::map_static_cast<int>,
-                             kiszug::map_static_cast<quint8>)},
+                      .zoom(kiszug::lenses::do_static_cast<quint8, int>)},
           LAGER_QT(brightnessAdjustment) {m_predefinedBrushData[&PredefinedBrushData::brightnessAdjustment]
                       .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
                              kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
@@ -237,8 +236,7 @@ public:
                       .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
                              kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
           LAGER_QT(angle) {m_commonData[&CommonData::angle]
-                      .xform(kiszug::map_mupliply<qreal>(180.0 / M_PI),
-                             kiszug::map_mupliply<qreal>(M_PI / 180.0))},
+                      .zoom(kiszug::lenses::scale<qreal>(180.0 / M_PI))},
           LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},
           LAGER_QT(useAutoSpacing) {m_commonData[&CommonData::useAutoSpacing]},
           LAGER_QT(autoSpacingCoeff) {m_commonData[&CommonData::autoSpacingCoeff]},

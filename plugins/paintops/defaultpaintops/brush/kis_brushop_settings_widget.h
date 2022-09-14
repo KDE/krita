@@ -33,6 +33,9 @@ protected:
 
 private:
     KisCurveOptionWidget* m_lightnessStrengthOptionWidget;
+
+    struct Private;
+    QScopedPointer<Private> m_d;
 };
 
 

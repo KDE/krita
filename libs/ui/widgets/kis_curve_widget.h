@@ -89,6 +89,7 @@ Q_SIGNALS:
      * Emitted whenever a control point has changed position.
      */
     void modified(void);
+    void curveChanged(const KisCubicCurve &);
     /**
      * Emitted whenever the status of whether a control point is selected or not changes
      */

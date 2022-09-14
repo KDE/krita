@@ -13,6 +13,15 @@ set(kritalibpaintop_LIB_SRCS
     kis_curve_option.cpp
     kis_curve_option_widget.cpp
     kis_curve_option_uniform_property.cpp
+    KisCurveOptionData.cpp
+    KisCurveOptionModel.cpp
+    KisCurveOptionWidget2.cpp
+    KisMultiSensorsSelector2.cpp
+    KisMultiSensorsModel2.cpp
+    KisDynamicSensorFactory.cpp
+    KisDynamicSensorFactoryRegistry.cpp
+    KisSimpleDynamicSensorFactory.cpp
+    KisLengthBasedDynamicSensorFactory.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
@@ -74,6 +83,7 @@ ki18n_wrap_ui(kritalibpaintop_LIB_SRCS
     forms/wdgautobrush.ui
     forms/wdgBrushSizeOptions.ui
     forms/wdgcurveoption.ui
+    forms/wdgcurveoption2.ui
     forms/wdgcustombrush.ui
     forms/wdgclipboardbrush.ui
     forms/wdgtextbrush.ui

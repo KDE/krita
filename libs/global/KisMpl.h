@@ -81,6 +81,36 @@ template<std::size_t Num>
 using make_index_sequence_from_1 =
     typename detail::make_index_sequence_from_1_impl<Num>::type;
 
+namespace detail {
+
+template <typename F, typename Tuple, std::size_t... I>
+auto apply_to_tuple_impl(F f, Tuple &&t, std::index_sequence<I...>) {
+    return std::make_tuple(f(std::get<I>(std::forward<Tuple>(t)))...);
+}
+}
+
+/**
+ * Apply a given functor F to each element of the tuple and
+ * return a tuple consisting of the resulting values.
+ */
+template <typename F, typename Tuple>
+auto apply_to_tuple(F f, Tuple &&t) {
+    return detail::apply_to_tuple_impl(std::forward<F>(f), std::forward<Tuple>(t),
+                                       std::make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>{});
+}
+
+/**
+ * Convert a given functor f accepting multiple arguments into
+ * a function that accepts a tuple with the same number of
+ * elements
+ */
+constexpr auto unzip_wrapper = [] (auto f) {
+    return
+        [=] (auto &&x) {
+            return std::apply(f, std::forward<decltype(x)>(x));
+        };
+};
+
 }
 
 #endif // KISMPL_H

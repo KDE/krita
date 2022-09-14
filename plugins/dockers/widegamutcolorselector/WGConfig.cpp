@@ -4,10 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "WGConfig.h"
+#include "WGConfigSelectorTypes.h"
 
 #include <kconfig.h>
 #include <kis_debug.h>
+#include <KoColorProfile.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <QApplication>
 #include <QGlobalStatic>
@@ -56,8 +58,12 @@ void WGConfig::setColorSelectorConfiguration(const KisColorSelectorConfiguration
     m_cfg.writeEntry("colorSelectorConfiguration", config.toString());
 }
 
-QVector<KisColorSelectorConfiguration> WGConfig::favoriteConfigurations() const
+QVector<KisColorSelectorConfiguration> WGConfig::favoriteConfigurations(bool defaultValue) const
 {
+    if (defaultValue) {
+        return defaultFavoriteConfigurations();
+    }
+
     QVector<KisColorSelectorConfiguration> favoriteConfigs;
     QString favorites = m_cfg.readEntry("favoriteSelectorConfigurations", QString());
     if (favorites.isEmpty()) {
@@ -99,8 +105,12 @@ QVector<ShadeLine> WGConfig::defaultShadeSelectorLines()
     return defaultLines;
 }
 
-QVector<ShadeLine> WGConfig::shadeSelectorLines() const
+QVector<ShadeLine> WGConfig::shadeSelectorLines(bool defaultValue) const
 {
+    if (defaultValue) {
+        return defaultShadeSelectorLines();
+    }
+
     QString configString = m_cfg.readEntry("minimalShadeSelectorLines", QString());
     if (configString.isEmpty()) {
         return defaultShadeSelectorLines();
@@ -145,6 +155,36 @@ void WGConfig::setShadeSelectorLines(const QVector<ShadeLine> &shadeLines)
         shadeLineList.append(lineString);
     }
     m_cfg.writeEntry("minimalShadeSelectorLines", shadeLineList.join('|'));
+}
+
+const KoColorSpace* WGConfig::customSelectionColorSpace(bool defaultValue) const
+{
+    const KoColorSpace *cs = 0;
+
+    if (!defaultValue) {
+        QString modelID = m_cfg.readEntry("customColorSpaceModel", "RGBA");
+        QString depthID = m_cfg.readEntry("customColorSpaceDepthID", "U8");
+        QString profile = m_cfg.readEntry("customColorSpaceProfile", "");
+
+        cs = KoColorSpaceRegistry::instance()->colorSpace(modelID, depthID, profile);
+    }
+
+    if (!cs) {
+        cs = KoColorSpaceRegistry::instance()->rgb8();
+    }
+
+    return cs;
+}
+
+void WGConfig::setCustomSelectionColorSpace(const KoColorSpace *cs)
+{
+    if(cs) {
+        m_cfg.writeEntry("customColorSpaceModel", cs->colorModelId().id());
+        m_cfg.writeEntry("customColorSpaceDepthID", cs->colorDepthId().id());
+        if (cs->profile()) {
+            m_cfg.writeEntry("customColorSpaceProfile", cs->profile()->name());
+        }
+    }
 }
 
 WGConfigNotifier *notifier()
@@ -206,5 +246,12 @@ const NumericSetting<int> shadeSelectorLineHeight { "shadeSelectorLineHeight", 1
 const GenericSetting<bool> shadeSelectorUpdateOnExternalChanges { "shadeSelectorUpdateOnExternalChanges", true };
 const GenericSetting<bool> shadeSelectorUpdateOnInteractionEnd { "shadeSelectorUpdateOnInteractionEnd", false };
 const GenericSetting<bool> shadeSelectorUpdateOnRightClick { "shadeSelectorUpdateOnRightClick", true };
+
+const NumericSetting<KisVisualColorModel::ColorModel> rgbColorModel {
+    "rgbColorModel", KisVisualColorModel::HSV, KisVisualColorModel::HSV, KisVisualColorModel::HSY, true
+};
+const NumericSetting<KisVisualColorSelector::RenderMode> selectorRenderMode {
+    "renderMode", KisVisualColorSelector::DynamicBackground, KisVisualColorSelector::StaticBackground, KisVisualColorSelector::CompositeBackground, true
+};
 
 } // namespace WGConfig

@@ -40,10 +40,13 @@ public Q_SLOTS:
     void savePreferences() const override;
     void loadPreferences() override;
     void loadDefaultPreferences() override;
+private:
+    void loadPreferencesImpl(bool loadDefaults);
 
 private Q_SLOTS:
     void slotSetSelectorConfiguration(const KisColorSelectorConfiguration &cfg);
     void slotSetColorModel(int index);
+    void slotColorSpaceSourceChanged(int index);
     void slotSetShadeLineCount(int count);
     void slotShowLineEditor(int lineNum);
     void slotLineEdited(int lineNum);

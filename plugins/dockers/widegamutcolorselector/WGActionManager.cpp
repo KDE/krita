@@ -9,7 +9,7 @@
 #include "WGColorSelectorDock.h"
 #include "WGColorPatches.h"
 #include "WGColorPreviewToolTip.h"
-#include "WGConfig.h"
+#include "WGConfigSelectorTypes.h"
 #include "WGMyPaintShadeSelector.h"
 #include "WGSelectorPopup.h"
 #include "WGSelectorWidgetBase.h"
@@ -129,9 +129,7 @@ void WGActionManager::showPopup(WGSelectorPopup *popup)
 
 void WGActionManager::loadColorSelectorSettings(WGConfig::Accessor &cfg)
 {
-    int renderMode = qBound(int(KisVisualColorSelector::StaticBackground), cfg.readEntry("renderMode", 1),
-                            int(KisVisualColorSelector::CompositeBackground));
-    m_colorSelector->setRenderMode(static_cast<KisVisualColorSelector::RenderMode>(renderMode));
+    m_colorSelector->setRenderMode(cfg.get(WGConfig::selectorRenderMode));
     slotSelectorConfigChanged();
 }
 

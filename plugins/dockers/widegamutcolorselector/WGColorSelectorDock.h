@@ -98,6 +98,7 @@ private:
     QToolButton *m_configButton {0};
     KisVisualColorModelSP m_colorModelFG;
     KisVisualColorModelSP m_colorModelBG;
+    const KoColorSpace *m_customCS {0};
     ColorSpaceSource m_CSSource {LayerColorSpace};
     bool m_pendingFgUpdate {false};
     bool m_pendingBgUpdate {false};

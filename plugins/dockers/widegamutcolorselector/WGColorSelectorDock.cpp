@@ -11,7 +11,7 @@
 #include "WGColorPatches.h"
 #include "WGColorPreviewToolTip.h"
 #include "WGCommonColorSet.h"
-#include "WGConfig.h"
+#include "WGConfigSelectorTypes.h"
 #include "WGQuickSettingsWidget.h"
 #include "WGShadeSelector.h"
 #include "KisVisualColorSelector.h"
@@ -272,13 +272,14 @@ void WGColorSelectorDock::updateLayout()
 void WGColorSelectorDock::slotConfigurationChanged()
 {
     WGConfig::Accessor cfg;
-    int renderMode = qBound(int(KisVisualColorSelector::StaticBackground), cfg.readEntry("renderMode", 1),
-                            int(KisVisualColorSelector::CompositeBackground));
-    m_selector->setRenderMode(static_cast<KisVisualColorSelector::RenderMode>(renderMode));
-    m_selector->selectorModel()->setRGBColorModel(static_cast<KisVisualColorModel::ColorModel>(cfg.readEntry("rgbColorModel", 0)));
+    m_selector->setRenderMode(cfg.get(WGConfig::selectorRenderMode));
+    m_selector->selectorModel()->setRGBColorModel(cfg.get(WGConfig::rgbColorModel));
     KisColorSelectorConfiguration selectorCfg = cfg.colorSelectorConfiguration();
     m_selector->setConfiguration(&selectorCfg);
     m_CSSource = cfg.get(WGConfig::colorSpaceSource);
+    if (m_CSSource == FixedColorSpace) {
+        m_customCS = cfg.customSelectionColorSpace();
+    }
     m_shadeSelector->updateSettings();
     m_history->updateSettings();
     m_commonColors->updateSettings();
@@ -335,8 +336,9 @@ void WGColorSelectorDock::slotDisplayConfigurationChanged()
     // so there's no need to handle extra signals, although it's a bit convoluted
     if (m_CSSource == ImageColorSpace) {
         selectionCS  = m_canvas->image()->colorSpace();
-    }
-    else {
+    } else if (m_CSSource == FixedColorSpace) {
+        selectionCS = m_customCS;
+    } else {
         // TODO: The custom selection color space in Advanced Color Selector config
         // overrides the "painting" color space, so no independent configuration right now
         selectionCS = m_canvas->displayColorConverter()->paintingColorSpace();

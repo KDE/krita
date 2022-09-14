@@ -7,7 +7,7 @@
 #include "WGQuickSettingsWidget.h"
 
 #include "ui_WdgQuickSettings.h"
-#include "WGConfig.h"
+#include "WGConfigSelectorTypes.h"
 #include "WGSelectorConfigGrid.h"
 
 #include <KisVisualColorSelector.h>
@@ -75,7 +75,7 @@ void WGQuickSettingsWidget::slotColorGroupToggled(int id, bool checked)
     m_selectorConf->setColorModel(model);
 
     WGConfig::Accessor cfg(false);
-    cfg.writeEntry("rgbColorModel", id);
+    cfg.set(WGConfig::rgbColorModel, model);
 }
 
 void WGQuickSettingsWidget::slotConfigSelected(const KisColorSelectorConfiguration &config)

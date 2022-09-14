@@ -16,6 +16,8 @@
 
 #include <type_traits>
 
+class KoColorSpace;
+
 namespace WGConfig {
 
 template<class T> struct GenericSetting
@@ -95,7 +97,13 @@ public:
     ~WGConfig();
 
     template<class T>
-    typename T::ValueType get(const T &setting) const { return setting.readValue(m_cfg); }
+    typename T::ValueType get(const T &setting, bool defaultValue = false) const
+    {
+        if (defaultValue) {
+            return setting.defaultValue;
+        }
+        return setting.readValue(m_cfg);
+    }
 
     template<class T>
     void set(const T &setting, const typename T::ValueType &value) { setting.writeValue(m_cfg, value); }
@@ -105,14 +113,17 @@ public:
     KisColorSelectorConfiguration colorSelectorConfiguration() const;
     void setColorSelectorConfiguration(const KisColorSelectorConfiguration &config);
 
-    QVector<KisColorSelectorConfiguration> favoriteConfigurations() const;
+    QVector<KisColorSelectorConfiguration> favoriteConfigurations(bool defaultValue = false) const;
     static QVector<KisColorSelectorConfiguration> defaultFavoriteConfigurations();
     void setFavoriteConfigurations(const QVector<KisColorSelectorConfiguration> &favoriteConfigs);
 
     // shade selector
     static QVector<ShadeLine> defaultShadeSelectorLines();
-    QVector<ShadeLine> shadeSelectorLines() const;
+    QVector<ShadeLine> shadeSelectorLines(bool defaultValue = false) const;
     void setShadeSelectorLines(const QVector<ShadeLine> &shadeLines);
+
+    const KoColorSpace* customSelectionColorSpace(bool defaultValue = false) const;
+    void setCustomSelectionColorSpace(const KoColorSpace *cs);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

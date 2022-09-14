@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>690</width>
-    <height>400</height>
+    <height>450</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -161,6 +161,21 @@
              <string>Custom</string>
             </property>
            </item>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QFrame" name="frame_4">
+           <property name="frameShape">
+            <enum>QFrame::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="KisColorSpaceSelector" name="wdgColorspace" native="true"/>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -951,6 +966,12 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>KisColorSpaceSelector</class>
+   <extends>QWidget</extends>
+   <header>widgets/kis_color_space_selector.h</header>
+   <container>1</container>
+  </customwidget>
   <customwidget>
    <class>KisPopupButton</class>
    <extends>QPushButton</extends>

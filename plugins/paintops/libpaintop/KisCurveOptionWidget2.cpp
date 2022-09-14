@@ -36,21 +36,51 @@ struct KisCurveOptionWidget2::Private
     QString curveValueSuffix;
 };
 
-KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData, lager::reader<bool> enabledLink)
+KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                                             PaintopCategory category,
+                                             lager::reader<bool> enabledLink)
     : KisCurveOptionWidget2(optionData,
+                            category,
                             i18n("0%"), i18n("100%"),
+                            enabledLink)
+{
+}
+
+KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                                             PaintopCategory category,
+                                             const QString &curveMinLabel, const QString &curveMaxLabel,
+                                             lager::reader<bool> enabledLink)
+    : KisCurveOptionWidget2(optionData,
+                            category,
+                            curveMinLabel, curveMaxLabel,
                             0, 100, i18n("%"),
+                            i18n("Strength: "), i18n("%"),
+                            enabledLink)
+{
+
+}
+
+KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                                             PaintopCategory category,
+                                             const QString &curveMinLabel, const QString &curveMaxLabel,
+                                             int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
+                                             lager::reader<bool> enabledLink)
+    : KisCurveOptionWidget2(optionData,
+                            category,
+                            curveMinLabel, curveMaxLabel,
+                            curveMinValue, curveMaxValue, curveValueSuffix,
                             i18n("Strength: "), i18n("%"),
                             enabledLink)
 {
 }
 
 KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                                             PaintopCategory category,
                                              const QString &curveMinLabel, const QString &curveMaxLabel,
                                              int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                                              const QString &strengthPrefix, const QString &strengthSuffix,
                                              lager::reader<bool> enabledLink)
-    : KisPaintOpOption(optionData->id.name(), optionData->category, optionData->isChecked)
+    : KisPaintOpOption(optionData->id.name(), category, optionData->isChecked)
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption2())
     , m_d(new Private(optionData))

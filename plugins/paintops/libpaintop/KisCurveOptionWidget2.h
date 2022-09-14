@@ -22,9 +22,22 @@ class PAINTOP_EXPORT KisCurveOptionWidget2 : public KisPaintOpOption
     Q_OBJECT
 public:
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                          KisPaintOpOption::PaintopCategory category,
                           lager::reader<bool> enabledLink = lager::make_constant(true));
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                          KisPaintOpOption::PaintopCategory category,
+                          const QString &curveMinLabel, const QString &curveMaxLabel,
+                          lager::reader<bool> enabledLink = lager::make_constant(true));
+
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                          KisPaintOpOption::PaintopCategory category,
+                          const QString &curveMinLabel, const QString &curveMaxLabel,
+                          int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
+                          lager::reader<bool> enabledLink = lager::make_constant(true));
+
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                          KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                           const QString &strengthPrefix, const QString &strengthSuffix,

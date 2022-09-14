@@ -29,7 +29,6 @@ class KRITAUI_EXPORT KisPaintOpSettingsWidget : public KisPaintOpConfigWidget
 public:
 
     KisPaintOpSettingsWidget(QWidget * parent = 0);
-
     ~KisPaintOpSettingsWidget() override;
 
     void addPaintOpOption(KisPaintOpOption *option);

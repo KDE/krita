@@ -68,12 +68,12 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent)
     addPaintOpOption(m_overlayOptionWidget);
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureGradientOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(
-        new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()));
+        new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::hueMaxLabel()));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(),
                                               KisPressureHSVOption::saturationMinLabel(),
-                                              KisPressureHSVOption::saturationmaxLabel()));
+                                              KisPressureHSVOption::saturationMaxLabel()));
     addPaintOpOption(
-        new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valuemaxLabel()));
+        new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valueMaxLabel()));
     addPaintOpOption(new KisAirbrushOptionWidget(false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 

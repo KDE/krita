@@ -80,7 +80,6 @@ struct PAINTOP_EXPORT KisDrawingAngleSensorData : public KisSensorData, public b
 struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<KisCurveOptionData>
 {
     KisCurveOptionData(const KoID id,
-                       KisPaintOpOption::PaintopCategory category,
                        bool isCheckable = true,
                        bool isChecked = false,
                        bool separateCurveValue = false,
@@ -89,7 +88,7 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
 
     inline friend bool operator==(const KisCurveOptionData &lhs, const KisCurveOptionData &rhs) {
         return lhs.id == rhs.id &&
-                lhs.category == rhs.category &&
+                lhs.prefix == rhs.prefix &&
                 lhs.isCheckable == rhs.isCheckable &&
                 lhs.isChecked == rhs.isChecked &&
                 lhs.useCurve == rhs.useCurve &&
@@ -119,7 +118,7 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
     }
 
     KoID id;
-    KisPaintOpOption::PaintopCategory category;
+    QString prefix;
     bool isCheckable = true;
     bool separateCurveValue = false;
     qreal strengthMinValue = 0.0;
@@ -155,6 +154,10 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
 
     bool read(const KisPropertiesConfiguration *setting);
     void write(KisPropertiesConfiguration *setting) const;
+
+private:
+    bool readPrefixed(const KisPropertiesConfiguration *setting);
+    void writePrefixed(KisPropertiesConfiguration *setting) const;
 };
 
 

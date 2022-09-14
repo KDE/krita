@@ -18,7 +18,7 @@ public:
 
     template<typename... Args>
     KisPrefixedPaintOpOptionWrapper(const QString &prefix, Args... args)
-        : Base(args...),
+        : Base(std::decay_t<Args>(args)...),
           m_prefix(prefix) {}
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override

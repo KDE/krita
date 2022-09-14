@@ -23,15 +23,15 @@ class PAINTOP_EXPORT KisPressureHSVOption : public KisCurveOption
 public:
     static KisPressureHSVOption* createHueOption();
     static QString hueMinLabel();
-    static QString huemaxLabel();
+    static QString hueMaxLabel();
 
     static KisPressureHSVOption* createSaturationOption();
     static QString saturationMinLabel();
-    static QString saturationmaxLabel();
+    static QString saturationMaxLabel();
 
     static KisPressureHSVOption* createValueOption();
     static QString valueMinLabel();
-    static QString valuemaxLabel();
+    static QString valueMaxLabel();
 public:
     KisPressureHSVOption(const KoID &id);
     ~KisPressureHSVOption() override;

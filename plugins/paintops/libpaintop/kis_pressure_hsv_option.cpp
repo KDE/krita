@@ -22,7 +22,7 @@ QString KisPressureHSVOption::hueMinLabel()
     return QString(zeroPercent + br + i18n("CCW hue") + br + activeColorMsg);
 }
 
-QString KisPressureHSVOption::huemaxLabel()
+QString KisPressureHSVOption::hueMaxLabel()
 {
     // xgettext: no-c-format
     QString activeColorMsg = i18n("(0° is active color)");
@@ -49,7 +49,7 @@ QString KisPressureHSVOption::saturationMinLabel()
 
 }
 
-QString KisPressureHSVOption::saturationmaxLabel()
+QString KisPressureHSVOption::saturationMaxLabel()
 {
     // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");
@@ -76,7 +76,7 @@ QString KisPressureHSVOption::valueMinLabel()
 
 }
 
-QString KisPressureHSVOption::valuemaxLabel()
+QString KisPressureHSVOption::valueMaxLabel()
 {
     // xgettext: no-c-format
     QString activeColorMsg = i18n("(50% is active color)");

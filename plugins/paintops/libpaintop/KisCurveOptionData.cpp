@@ -128,9 +128,8 @@ void KisDrawingAngleSensorData::reset()
     *this = KisDrawingAngleSensorData();
 }
 
-KisCurveOptionData::KisCurveOptionData(const KoID _id, KisPaintOpOption::PaintopCategory _category, bool _isCheckable, bool _isChecked, bool _separateCurveValue, qreal _minValue, qreal _maxValue)
+KisCurveOptionData::KisCurveOptionData(const KoID _id, bool _isCheckable, bool _isChecked, bool _separateCurveValue, qreal _minValue, qreal _maxValue)
     : id(_id),
-      category(_category),
       isCheckable(_isCheckable),
       separateCurveValue(_separateCurveValue),
       strengthMinValue(_minValue),
@@ -203,6 +202,28 @@ bool KisCurveOptionData::read(const KisPropertiesConfiguration *setting)
 {
     if (!setting) return false;
 
+    if (prefix.isEmpty()) {
+        return readPrefixed(setting);
+    } else {
+        KisPropertiesConfiguration prefixedSetting;
+        setting->getPrefixedProperties(prefix, &prefixedSetting);
+        return readPrefixed(&prefixedSetting);
+    }
+}
+
+void KisCurveOptionData::write(KisPropertiesConfiguration *setting) const
+{
+    if (prefix.isEmpty()) {
+        writePrefixed(setting);
+    } else {
+        KisPropertiesConfiguration prefixedSetting;
+        writePrefixed(&prefixedSetting);
+        setting->setPrefixedProperties(prefix, &prefixedSetting);
+    }
+}
+
+bool KisCurveOptionData::readPrefixed(const KisPropertiesConfiguration *setting)
+{
     if (isCheckable) {
         isChecked = setting->getBool("Pressure" + id.id(), false);
     }
@@ -218,7 +239,10 @@ bool KisCurveOptionData::read(const KisPropertiesConfiguration *setting)
         QSet<KisSensorData*>::fromList(sensorById.values());
 
     const QString sensorDefinition = setting->getString(id.id() + "Sensor");
-    if (!sensorDefinition.contains("sensorslist")) {
+
+    if (sensorDefinition.isEmpty()) {
+        // noop
+    } else if (!sensorDefinition.contains("sensorslist")) {
         QDomDocument doc;
         doc.setContent(sensorDefinition);
         QDomElement e = doc.documentElement();
@@ -304,7 +328,7 @@ bool KisCurveOptionData::read(const KisPropertiesConfiguration *setting)
     return true;
 }
 
-void KisCurveOptionData::write(KisPropertiesConfiguration *setting) const
+void KisCurveOptionData::writePrefixed(KisPropertiesConfiguration *setting) const
 {
     if (isCheckable) {
         setting->setProperty("Pressure" + id.id(), isChecked);

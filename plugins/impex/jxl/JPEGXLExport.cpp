@@ -483,8 +483,13 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             case TRC_LOGARITHMIC_100_sqrt10:
             case TRC_IEC_61966_2_4:
             case TRC_UNSPECIFIED:
-                dbgFile << "JXL CICP cannot describe the current transfer function" << gamma << ", falling back to ICC";
-                cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_UNKNOWN;
+                if (cs->profile()->isLinear()) {
+                    cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_LINEAR;
+                } else {
+                    dbgFile << "JXL CICP cannot describe the current transfer function" << gamma
+                            << ", falling back to ICC";
+                    cicpDescription.transfer_function = JXL_TRANSFER_FUNCTION_UNKNOWN;
+                }
                 break;
             }
         } break;

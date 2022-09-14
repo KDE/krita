@@ -97,9 +97,9 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
                 lhs.separateCurveValue == rhs.separateCurveValue &&
                 lhs.curveMode == rhs.curveMode &&
                 lhs.commonCurve == rhs.commonCurve &&
-                lhs.value == rhs.value &&
-                lhs.minValue == rhs.minValue &&
-                lhs.maxValue == rhs.maxValue &&
+                lhs.strengthValue == rhs.strengthValue &&
+                lhs.strengthMinValue == rhs.strengthMinValue &&
+                lhs.strengthMaxValue == rhs.strengthMaxValue &&
                 lhs.sensorPressure == rhs.sensorPressure &&
                 lhs.sensorPressureIn == rhs.sensorPressureIn &&
                 lhs.sensorXTilt == rhs.sensorXTilt &&
@@ -122,8 +122,8 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
     KisPaintOpOption::PaintopCategory category;
     bool isCheckable = true;
     bool separateCurveValue = false;
-    qreal minValue = 0.0;
-    qreal maxValue = 1.0;
+    qreal strengthMinValue = 0.0;
+    qreal strengthMaxValue = 1.0;
 
     bool isChecked = true;
     bool useCurve = true;
@@ -131,7 +131,7 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
 
     int curveMode = 0; // TODO: to enum!
     QString commonCurve = DEFAULT_CURVE_STRING;
-    qreal value = 1.0;
+    qreal strengthValue = 1.0;
 
     KisSensorData sensorPressure;
     KisSensorData sensorPressureIn;
@@ -150,10 +150,11 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
     KisSensorData sensorPerspective;
     KisSensorData sensorTangentialPressure;
 
+    std::vector<const KisSensorData *> sensors() const;
     std::vector<KisSensorData*> sensors();
 
     bool read(const KisPropertiesConfiguration *setting);
-    void write(KisPropertiesConfiguration *setting);
+    void write(KisPropertiesConfiguration *setting) const;
 };
 
 

@@ -14,6 +14,7 @@
 #include <KisPaintopPropertiesBase.h>
 
 #include <lager/reader.hpp>
+#include <lager/cursor.hpp>
 
 class QWidget;
 class QString;
@@ -74,7 +75,8 @@ public:
     QWidget *configurationPage() const;
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
-    virtual lager::reader<KisPaintopLodLimitations> lodLimitations() const;
+    virtual lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
+    virtual lager::cursor<bool> isCheckedCursor() const;
 
 protected:
 

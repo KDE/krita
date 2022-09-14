@@ -30,7 +30,7 @@ public:
     lager::state<QString, lager::automatic_tag> m_activeSensorIdData;
     LAGER_QT_READER(bool, isCheckable);
     LAGER_QT_CURSOR(bool, isChecked);
-    LAGER_QT_CURSOR(qreal, value);
+    LAGER_QT_CURSOR(qreal, strengthValue);
     LAGER_QT_READER(RangeState, range);
     LAGER_QT_CURSOR(bool, useCurve);
     LAGER_QT_CURSOR(bool, useSameCurve);

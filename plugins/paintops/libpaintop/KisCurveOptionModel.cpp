@@ -78,10 +78,10 @@ KisCurveOptionModel::KisCurveOptionModel(lager::cursor<KisCurveOptionData> optio
     , m_activeSensorIdData(PressureId.id())
     , LAGER_QT(isCheckable) {m_optionData[&KisCurveOptionData::isCheckable]}
     , LAGER_QT(isChecked) {m_optionData[&KisCurveOptionData::isChecked]}
-    , LAGER_QT(value) {m_optionData[&KisCurveOptionData::value]
+    , LAGER_QT(strengthValue) {m_optionData[&KisCurveOptionData::strengthValue]
             .zoom(kiszug::lenses::scale<qreal>(100.0))}
-    , LAGER_QT(range) {lager::with(m_optionData[&KisCurveOptionData::minValue],
-                                   m_optionData[&KisCurveOptionData::maxValue])
+    , LAGER_QT(range) {lager::with(m_optionData[&KisCurveOptionData::strengthMinValue],
+                                   m_optionData[&KisCurveOptionData::strengthMaxValue])
             .xform(kiszug::foreach_arg(kiszug::map_mupliply<qreal>(100.0)))}
 
     , LAGER_QT(useCurve) {m_optionData[&KisCurveOptionData::useCurve]}

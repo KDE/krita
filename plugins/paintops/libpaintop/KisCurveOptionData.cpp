@@ -8,6 +8,8 @@
 #include <QDomDocument>
 #include <QDomElement>
 
+#include <KisCppQuirks.h>
+
 KisSensorData::KisSensorData(const KoID &sensorId)
     : id(sensorId),
       curve(DEFAULT_CURVE_STRING)
@@ -131,10 +133,10 @@ KisCurveOptionData::KisCurveOptionData(const KoID _id, KisPaintOpOption::Paintop
       category(_category),
       isCheckable(_isCheckable),
       separateCurveValue(_separateCurveValue),
-      minValue(_minValue),
-      maxValue(_maxValue),
+      strengthMinValue(_minValue),
+      strengthMaxValue(_maxValue),
       isChecked(_isChecked),
-      value(_maxValue),
+      strengthValue(_maxValue),
       sensorPressure(PressureId),
       sensorPressureIn(PressureInId),
       sensorXTilt(XTiltId),
@@ -155,30 +157,46 @@ KisCurveOptionData::KisCurveOptionData(const KoID _id, KisPaintOpOption::Paintop
     sensorPressure.isActive = true;
 }
 
-std::vector<KisSensorData *> KisCurveOptionData::sensors()
+namespace detail {
+template <typename Data,
+          typename SensorData =
+              std::add_const_if_t<std::is_const_v<Data>,
+                                  KisSensorData>>
+std::vector<SensorData*> sensors(Data *data)
 {
-    std::vector<KisSensorData *> result;
+    std::vector<SensorData*> result;
 
     result.reserve(16);
 
-    result.push_back(&sensorPressure);
-    result.push_back(&sensorPressureIn);
-    result.push_back(&sensorXTilt);
-    result.push_back(&sensorYTilt);
-    result.push_back(&sensorTiltDirection);
-    result.push_back(&sensorTiltElevation);
-    result.push_back(&sensorSpeed);
-    result.push_back(&sensorDrawingAngle);
-    result.push_back(&sensorRotation);
-    result.push_back(&sensorDistance);
-    result.push_back(&sensorTime);
-    result.push_back(&sensorFuzzyPerDab);
-    result.push_back(&sensorFuzzyPerStroke);
-    result.push_back(&sensorFade);
-    result.push_back(&sensorPerspective);
-    result.push_back(&sensorTangentialPressure);
+    result.push_back(&data->sensorPressure);
+    result.push_back(&data->sensorPressureIn);
+    result.push_back(&data->sensorXTilt);
+    result.push_back(&data->sensorYTilt);
+    result.push_back(&data->sensorTiltDirection);
+    result.push_back(&data->sensorTiltElevation);
+    result.push_back(&data->sensorSpeed);
+    result.push_back(&data->sensorDrawingAngle);
+    result.push_back(&data->sensorRotation);
+    result.push_back(&data->sensorDistance);
+    result.push_back(&data->sensorTime);
+    result.push_back(&data->sensorFuzzyPerDab);
+    result.push_back(&data->sensorFuzzyPerStroke);
+    result.push_back(&data->sensorFade);
+    result.push_back(&data->sensorPerspective);
+    result.push_back(&data->sensorTangentialPressure);
 
     return result;
+}
+}
+
+std::vector<const KisSensorData*> KisCurveOptionData::sensors() const
+{
+    return detail::sensors(this);
+}
+
+std::vector<KisSensorData*> KisCurveOptionData::sensors()
+{
+    return detail::sensors(this);
 }
 
 bool KisCurveOptionData::read(const KisPropertiesConfiguration *setting)
@@ -279,21 +297,21 @@ bool KisCurveOptionData::read(const KisPropertiesConfiguration *setting)
         sensorById[PressureId.id()]->isActive = true;
     }
 
-    value = setting->getDouble(id.id() + "Value", maxValue);
+    strengthValue = setting->getDouble(id.id() + "Value", strengthMaxValue);
     useCurve = setting->getBool(id.id() + "UseCurve", true);
     curveMode = setting->getInt(id.id() + "curveMode", 0);
 
     return true;
 }
 
-void KisCurveOptionData::write(KisPropertiesConfiguration *setting)
+void KisCurveOptionData::write(KisPropertiesConfiguration *setting) const
 {
     if (isCheckable) {
         setting->setProperty("Pressure" + id.id(), isChecked);
     }
 
-    QVector<KisSensorData*> activeSensors;
-    Q_FOREACH(KisSensorData *sensor, sensors()) {
+    QVector<const KisSensorData*> activeSensors;
+    Q_FOREACH(const KisSensorData *sensor, sensors()) {
         if (sensor->isActive) {
             activeSensors.append(sensor);
         }
@@ -307,7 +325,7 @@ void KisCurveOptionData::write(KisPropertiesConfiguration *setting)
         activeSensors.first()->write(doc, root);
     } else {
         root.setAttribute("id", "sensorslist");
-        Q_FOREACH (KisSensorData *sensor, activeSensors) {
+        Q_FOREACH (const KisSensorData *sensor, activeSensors) {
             QDomElement childelt = doc.createElement("ChildSensor");
             sensor->write(doc, childelt);
             root.appendChild(childelt);
@@ -317,7 +335,7 @@ void KisCurveOptionData::write(KisPropertiesConfiguration *setting)
 
     setting->setProperty(id.id() + "UseCurve", useCurve);
     setting->setProperty(id.id() + "UseSameCurve", useSameCurve);
-    setting->setProperty(id.id() + "Value", value);
+    setting->setProperty(id.id() + "Value", strengthValue);
     setting->setProperty(id.id() + "curveMode", curveMode);
     setting->setProperty(id.id() + "commonCurve", commonCurve);
 }

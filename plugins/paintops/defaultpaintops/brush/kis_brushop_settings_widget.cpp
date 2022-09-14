@@ -43,19 +43,28 @@
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
+#include <KisZug.h>
+
+class KisFlowOptionData : public KisCurveOptionData
+{
+public:
+    KisFlowOptionData()
+        : KisCurveOptionData(
+              KoID("Flow", i18n("Flow")),
+              KisPaintOpOption::GENERAL,
+              false, false, false,
+              0.0, 1.0)
+    {}
+};
 
 struct KisBrushOpSettingsWidget::Private
 {
     Private()
-        : flowOptionData(KisCurveOptionData(
-                             KoID("Flow", i18n("Flow")),
-                             KisPaintOpOption::GENERAL,
-                             true, false, false,
-                             0.1, 2.0))
+        : flowOptionData(KisFlowOptionData())
     {
     }
 
-    lager::state<KisCurveOptionData, lager::automatic_tag> flowOptionData;
+    lager::state<KisFlowOptionData, lager::automatic_tag> flowOptionData;
 };
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
@@ -69,7 +78,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisFlowOpacityOptionWidget());
-    addPaintOpOption(new KisCurveOptionWidget2(m_d->flowOptionData, i18n("0%"), i18n("100%"), 0, 100, i18n("%")));
+    addPaintOpOption(new KisCurveOptionWidget2(m_d->flowOptionData.zoom(kiszug::lenses::do_static_cast<const KisFlowOptionData&, const KisCurveOptionData&>)));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisPressureSpacingOptionWidget());

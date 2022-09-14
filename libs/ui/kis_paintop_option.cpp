@@ -12,12 +12,13 @@
 #include <KoCanvasResourcesInterface.h>
 
 #include <lager/constant.hpp>
+#include <lager/state.hpp>
 #include <kis_paintop_lod_limitations.h>
 
 struct KisPaintOpOption::Private
 {
 public:
-    bool checked {false};
+    lager::state<bool> checkedFallback;
     QString label;
     KisPaintOpOption::PaintopCategory category;
     QWidget *configurationPage {nullptr};
@@ -35,7 +36,7 @@ KisPaintOpOption::KisPaintOpOption(const QString label, PaintopCategory category
 
 {
     m_d->label = label;
-    m_d->checked = checked;
+    m_d->checkedFallback.set(checked);
     m_d->category = category;
 }
 
@@ -81,10 +82,15 @@ void KisPaintOpOption::lodLimitations(KisPaintopLodLimitations *l) const
     Q_UNUSED(l);
 }
 
-lager::reader<KisPaintopLodLimitations> KisPaintOpOption::lodLimitations() const
+lager::reader<KisPaintopLodLimitations> KisPaintOpOption::lodLimitationsReader() const
 {
     // no limitations by default
     return lager::make_constant(KisPaintopLodLimitations());
+}
+
+lager::cursor<bool> KisPaintOpOption::isCheckedCursor() const
+{
+    return m_d->checkedFallback;
 }
 
 KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const
@@ -94,7 +100,7 @@ KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const
 
 bool KisPaintOpOption::isChecked() const
 {
-    return m_d->checked;
+    return isCheckedCursor().get();
 }
 
 bool KisPaintOpOption::isCheckable() const {
@@ -103,7 +109,7 @@ bool KisPaintOpOption::isCheckable() const {
 
 void KisPaintOpOption::setChecked(bool checked)
 {
-    m_d->checked = checked;
+    isCheckedCursor().set(checked);
 
     emitCheckedChanged();
     emitSettingChanged();

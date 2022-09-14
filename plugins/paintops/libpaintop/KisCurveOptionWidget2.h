@@ -22,8 +22,12 @@ class PAINTOP_EXPORT KisCurveOptionWidget2 : public KisPaintOpOption
     Q_OBJECT
 public:
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
-                          const QString &minLabel, const QString &maxLabel,
-                          int minValue, int maxValue, const QString &valueSuffix,
+                          lager::reader<bool> enabledLink = lager::make_constant(true));
+
+    KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
+                          const QString &curveMinLabel, const QString &curveMaxLabel,
+                          int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
+                          const QString &strengthPrefix, const QString &strengthSuffix,
                           lager::reader<bool> enabledLink = lager::make_constant(true));
     ~KisCurveOptionWidget2() override;
 
@@ -31,12 +35,11 @@ public:
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
     bool isCheckable() const override;
-    bool isChecked() const override;
-    void setChecked(bool checked) override;
     void show();
     virtual void setEnabled(bool enabled);
 
     void setCurveWidgetsEnabled(bool value);
+    lager::cursor<bool> isCheckedCursor() const override;
 
 protected:
 

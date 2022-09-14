@@ -6,8 +6,6 @@
  */
 
 #include "KisMultiSensorsModel2.h"
-#include "kis_dynamic_sensor.h"
-#include "kis_curve_option.h"
 
 struct KisMultiSensorsModel2::Private
 {

@@ -11,12 +11,7 @@
 
 #include "kis_paintop_option.h"
 #include "kis_dynamic_sensor.h"
-#include "kis_dynamic_sensors.h"
-#include "sensors/kis_dynamic_sensor_drawing_angle.h"
-#include "sensors/kis_dynamic_sensor_distance.h"
-#include "sensors/kis_dynamic_sensor_time.h"
-#include "sensors/kis_dynamic_sensor_fuzzy.h"
-#include "sensors/kis_dynamic_sensor_fade.h"
+
 
 struct PAINTOP_EXPORT KisSensorData : public boost::equality_comparable<KisSensorData>
 {

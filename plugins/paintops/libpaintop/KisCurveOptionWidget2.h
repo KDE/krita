@@ -41,7 +41,6 @@ public:
 
 protected:
 
-    KisCurveOption* curveOption();
     QWidget* curveWidget();
 
 protected Q_SLOTS:
@@ -66,8 +65,6 @@ protected:
     QWidget* m_widget {nullptr};
     Ui_WdgCurveOption2* m_curveOptionWidget {nullptr};
     QComboBox* m_curveMode {nullptr};
-    KisCurveOption* m_curveOption {nullptr};
-    qreal strengthToCurveOptionValueScale {0.0};
     struct Private;
     const QScopedPointer<Private> m_d;
 

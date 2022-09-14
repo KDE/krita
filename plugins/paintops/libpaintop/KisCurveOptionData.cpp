@@ -5,7 +5,8 @@
  */
 #include "KisCurveOptionData.h"
 
-#include "kis_curve_option.h"
+#include <QDomDocument>
+#include <QDomElement>
 
 KisSensorData::KisSensorData(const KoID &sensorId)
     : id(sensorId),

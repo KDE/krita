@@ -8,24 +8,15 @@
  */
 #include "KisCurveOptionWidget2.h"
 
-
-#include "kis_curve_option_widget.h"
-
 #include "ui_wdgcurveoption2.h"
 #include "widgets/kis_curve_widget.h"
-#include "kis_dynamic_sensor.h"
 #include "kis_global.h"
-#include "kis_curve_option.h"
-#include "kis_signals_blocker.h"
 #include "kis_icon_utils.h"
 
 #include <KisCurveOptionModel.h>
 #include <KisWidgetConnectionUtils.h>
 
 #include <KisZug.h>
-#include <zug/transducer/unzip.hpp>
-#include <zug/transducer/chain.hpp>
-#include <zug/transducer/cat.hpp>
 
 #include <KisMultiSensorsSelector2.h>
 #include <KisDynamicSensorFactoryRegistry.h>
@@ -67,7 +58,6 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
 
     setConfigurationPage(m_widget);
 
-    strengthToCurveOptionValueScale = 100.0;
     hideRangeLabelsAndBoxes(true);
 
     using namespace KisWidgetConnectionUtils;
@@ -179,11 +169,6 @@ void KisCurveOptionWidget2::setCurveWidgetsEnabled(bool value)
     m_curveOptionWidget->label_xmin->setEnabled(value);
     m_curveOptionWidget->label_ymax->setEnabled(value);
     m_curveOptionWidget->label_ymin->setEnabled(value);
-}
-
-KisCurveOption* KisCurveOptionWidget2::curveOption()
-{
-    return m_curveOption;
 }
 
 QWidget* KisCurveOptionWidget2::curveWidget()

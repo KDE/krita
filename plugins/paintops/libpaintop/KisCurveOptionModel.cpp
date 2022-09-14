@@ -6,10 +6,6 @@
 
 #include "KisCurveOptionModel.h"
 
-#include <zug/transducer/zip.hpp>
-#include <zug/transducer/unzip.hpp>
-#include <zug/sequence.hpp>
-#include <zug/transducer/cat.hpp>
 #include <KisZug.h>
 
 auto activeCurveLens = lager::lenses::getset(

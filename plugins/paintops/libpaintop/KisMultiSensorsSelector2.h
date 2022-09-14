@@ -10,8 +10,7 @@ class KisCubicCurve;
 class QModelIndex;
 class KisCurveOption;
 
-#include <kis_dynamic_sensor.h>
-
+#include <QWidget>
 #include <KisCurveOptionData.h>
 #include <lager/cursor.hpp>
 

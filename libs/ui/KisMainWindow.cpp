@@ -381,16 +381,22 @@ KisMainWindow::KisMainWindow(QUuid uuid)
     if (cfg.toolOptionsInDocker()) {
         ToolDockerFactory toolDockerFactory;
         d->toolOptionsDocker = qobject_cast<KoToolDocker*>(createDockWidget(&toolDockerFactory));
-        d->toolOptionsDocker->toggleViewAction()->setEnabled(true);
+        if (d->toolOptionsDocker) {
+            d->toolOptionsDocker->toggleViewAction()->setEnabled(true);
+        }
     }
 
     QMap<QString, QAction*> dockwidgetActions;
 
-    dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
+    if (toolbox) {
+        dockwidgetActions[toolbox->toggleViewAction()->text()] = toolbox->toggleViewAction();
+    }
     Q_FOREACH (const QString & docker, KoDockRegistry::instance()->keys()) {
         KoDockFactoryBase *factory = KoDockRegistry::instance()->value(docker);
         QDockWidget *dw = createDockWidget(factory);
-        dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
+        if (dw) {
+            dockwidgetActions[dw->toggleViewAction()->text()] = dw->toggleViewAction();
+        }
     }
 
     if (d->toolOptionsDocker) {
@@ -1761,11 +1767,13 @@ bool KisMainWindow::restoreWorkspaceState(const QByteArray &state)
 
     // needed because otherwise the layout isn't correctly restored in some situations
     Q_FOREACH (QDockWidget *dock, dockWidgets()) {
-        dock->setProperty("Locked", false); // Unlock invisible dockers
-        dock->toggleViewAction()->setEnabled(true);
-        dock->hide();
-        if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
-            dock->titleBarWidget()->setVisible(showTitlebars);
+        if (dock) {
+            dock->setProperty("Locked", false); // Unlock invisible dockers
+            dock->toggleViewAction()->setEnabled(true);
+            dock->hide();
+            if (dock->titleBarWidget() && !dock->titleBarWidget()->inherits("KisUtilityTitleBar")) {
+                dock->titleBarWidget()->setVisible(showTitlebars);
+            }
         }
     }
 

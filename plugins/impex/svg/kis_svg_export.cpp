@@ -43,7 +43,7 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(io->isWritable(), ImportExportCodes::NoAccessToWrite);
 
 
-    KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()});
+    KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()}, document->savingImage());
 
     document->image()->rootLayer()->accept(svgVisitor);
     KisImageSP image = document->savingImage();

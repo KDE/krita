@@ -28,9 +28,12 @@ struct KisScalableVectorGraphicsSaveVisitor::Private {
 };
 
 
-KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes)
+KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, KisImageSP image)
     : d(new Private)
 {
+    const QSizeF sizeInPx = image->bounds().size();
+    const QSizeF pageSize(sizeInPx.width() / image->xRes(),
+                      sizeInPx.height() / image->yRes());
     QTextStream svgStream(saveDevice);
     svgStream.setCodec("UTF-8");
 
@@ -46,8 +49,14 @@ KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODe
     svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
     svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
     svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
+    svgStream << "    width=\"" << pageSize.width() << "pt\"\n";
+    svgStream << "    height=\"" << pageSize.height() << "pt\"\n";
+    svgStream << "    viewBox=\"0 0 "
+              << pageSize.width() << " " << pageSize.height()
+              << "\"";
     svgStream << ">" << endl;
-
+    svgStream << endl << "</svg>" << endl;
+    qDebug() << pageSize.width() << " " << pageSize.height();
     d->saveDevice = &svgStream;
     d->activeNodes = activeNodes;
 }

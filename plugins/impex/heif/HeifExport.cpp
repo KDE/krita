@@ -674,7 +674,7 @@ KisPropertiesConfigurationSP KisWdgOptionsHeif::configuration() const
     cfg->setProperty("monochromeToSRGB", chkMonochromesRGB->isChecked());
     cfg->setProperty("HLGnominalPeak", spnNits->value());
     cfg->setProperty("HLGgamma", spnGamma->value());
-    cfg->setProperty("removeHGLOOTF", chkLossless->isChecked());
+    cfg->setProperty("removeHGLOOTF", chkHLGOOTF->isChecked());
     cfg->setProperty(KisImportExportFilter::ImageContainsTransparencyTag, m_hasAlpha);
     return cfg;
 }

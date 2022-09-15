@@ -150,8 +150,6 @@ void KisWdgOptionsJPEGXL::toggleExtraHDROptions(int index)
     Q_UNUSED(index)
     bool toggle = cmbConversionPolicy->currentData(Qt::UserRole).value<QString>().contains("HLG");
     chkHLGOOTF->setEnabled(toggle);
-    spnNits->setEnabled(toggle);
-    spnGamma->setEnabled(toggle);
 }
 
 void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cfg)
@@ -218,9 +216,9 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     }
     const QString optionName = cfg->getString("floatingPointConversionOption", "Rec2100PQ");
     cmbConversionPolicy->setCurrentIndex(cmbConversionPolicy->findData(optionName, Qt::UserRole));
-    chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
     spnNits->setValue(cfg->getDouble("HLGnominalPeak", 1000.0));
     spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));
+    chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
 
     resampling->setCurrentIndex(resampling->findData(cfg->getInt("resampling", -1)));
     extraChannelResampling->setCurrentIndex(

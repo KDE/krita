@@ -11,7 +11,6 @@
 #include <kis_debug.h>
 #include <KisTag.h>
 #include <KisResourceLoaderRegistry.h>
-#include <kbackup.h>
 #include <KisGlobalResourcesInterface.h>
 #include <kis_pointer_utils.h>
 #include <KoMD5Generator.h>

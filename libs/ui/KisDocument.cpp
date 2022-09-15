@@ -50,7 +50,7 @@
 #include <KisAutoSaveRecoveryDialog.h>
 #include <kdesktopfile.h>
 #include <kconfiggroup.h>
-#include <kbackup.h>
+#include <KisBackup.h>
 #include <KisView.h>
 
 #include <QTextBrowser>
@@ -742,7 +742,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
         QString suffix = cfg.readEntry<QString>("backupfilesuffix", "~");
 
         if (numOfBackupsKept == 1) {
-            if (!KBackup::simpleBackupFile(job.filePath, backupDir, suffix)) {
+            if (!KisBackup::simpleBackupFile(job.filePath, backupDir, suffix)) {
                 qWarning() << "Failed to create simple backup file!" << job.filePath << backupDir << suffix;
                 KisUsageLogger::log(QString("Failed to create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
                 return false;
@@ -752,7 +752,7 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
             }
         }
         else if (numOfBackupsKept > 1) {
-            if (!KBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept)) {
+            if (!KisBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept)) {
                 qWarning() << "Failed to create numbered backup file!" << job.filePath << backupDir << suffix;
                 KisUsageLogger::log(QString("Failed to create a numbered backup for %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
                 return false;

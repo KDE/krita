@@ -18,7 +18,7 @@
 #include <KritaVersionWrapper.h>
 
 #include <klocalizedstring.h>
-#include <kbackup.h>
+#include <KisBackup.h>
 
 #include <kis_debug.h>
 #include <KisUsageLogger.h>
@@ -173,7 +173,7 @@ QSqlError createDatabase(const QString &location)
                 qWarning() << "Old schema:" << schemaVersion << "New schema:" << newSchemaVersionNumber;
 
                 schemaIsOutDated = true;
-                KBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
+                KisBackup::numberedBackupFile(location + "/" + KisResourceCacheDb::resourceCacheDbFilename);
 
                 if (newSchemaVersionNumber == QVersionNumber::fromString("0.0.17")
                         && QVersionNumber::compare(oldSchemaVersionNumber, QVersionNumber::fromString("0.0.14")) > 0

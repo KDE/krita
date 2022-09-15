@@ -177,7 +177,23 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
     for (int i = 0; i < numWorkers; i++) {
         // reuse the image for one of the workers
-        KisImageSP image = i == numWorkers - 1 ? m_d->image : m_d->image->clone(true);
+        const bool lastWorker = (i == numWorkers - 1);
+        KisImageSP image = m_d->image;
+
+        if (!lastWorker) {
+            //Only the last-most worker should try to use the source image pointer. Others need a copy.
+
+            if (m_d->asyncRenderers.size() == 0) {
+                // Copy source image when no renderers (aka no copies) exist, requires lock as image memory can be actively modified.
+                m_d->image->barrierLock(true);
+                image = m_d->image->clone(true);
+                m_d->image->unlock();
+            } else {
+                // Copy a previous copy, shouldn't require lock since image is "fresh" and untouchable by other krita systems.
+                image = m_d->asyncRenderers[m_d->asyncRenderers.size() - 1].image->clone(true);
+            }
+        }
+
 
         image->setWorkingThreadsLimit(numThreadsPerWorker);
         KisAsyncAnimationRendererBase *renderer = createRenderer(image);
@@ -187,6 +203,7 @@ KisAsyncAnimationRenderDialogBase::regenerateRange(KisViewManager *viewManager)
 
         m_d->asyncRenderers.push_back(RendererPair(renderer, image));
     }
+
 
     tryInitiateFrameRegeneration();
     updateProgressLabel();

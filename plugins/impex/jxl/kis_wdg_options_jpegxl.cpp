@@ -262,7 +262,7 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole).toString());
     cfg->setProperty("HLGnominalPeak", spnNits->value());
     cfg->setProperty("HLGgamma", spnGamma->value());
-    cfg->setProperty("removeHGLOOTF", lossless->isChecked());
+    cfg->setProperty("removeHGLOOTF", chkHLGOOTF->isChecked());
     cfg->setProperty("resampling", resampling->currentData());
     cfg->setProperty("extraChannelResampling", extraChannelResampling->currentData());
     cfg->setProperty("photonNoise", photonNoise->value());

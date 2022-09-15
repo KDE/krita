@@ -1103,7 +1103,7 @@ void KisColorizeMask::setKeyStrokesDirect(const QList<KisLazyFillTools::KeyStrok
     }
 
     KIS_SAFE_ASSERT_RECOVER(image())
-            ;
+    {};
 }
 
 qint32 KisColorizeMask::x() const

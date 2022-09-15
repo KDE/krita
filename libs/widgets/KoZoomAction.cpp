@@ -90,7 +90,7 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
         }
     }
 
-    return QList<qreal>(zoomLevels.begin(), zoomLevels.end());
+    return QList<qreal>::fromVector(zoomLevels);
 }
 
 QList<qreal> KoZoomAction::Private::filterMenuZoomLevels(const QList<qreal> &zoomLevels) const

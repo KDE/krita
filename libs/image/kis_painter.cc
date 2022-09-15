@@ -1492,8 +1492,8 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
         long double l = axisA == 0.0L ? axisB : axisA;
         angle += axisA == 0.0L ? (long double) M_PI_2 : 0.0L;
         l/=2.0L;
-        long double x=std::round(std::cos(angle)*l*2)/2;
-        long double y=std::round(std::sin(angle)*l*2)/2;
+        long double x=std::round(std::cos(angle)*l*2.0l)/2.0l;
+        long double y=std::round(std::sin(angle)*l*2.0l)/2.0l;
         paintLine(KisPaintInformation(QPointF(x + offset.x(),
                                               y + offset.y())),
                   KisPaintInformation(QPointF(-x + offset.x(),

@@ -14,10 +14,12 @@ endif()
 include_directories(
     ${CMAKE_BINARY_DIR}/libs/image/
     ${CMAKE_SOURCE_DIR}/libs/image/
+    ${CMAKE_SOURCE_DIR}/libs/ui/tool/
     ${CMAKE_SOURCE_DIR}/libs/image/brushengine
     ${CMAKE_SOURCE_DIR}/libs/image/tiles3
     ${CMAKE_SOURCE_DIR}/libs/image/tiles3/swap
     ${CMAKE_SOURCE_DIR}/sdk/tests
+    ${CMAKE_BINARY_DIR}/libs/ui/
 )
 
 include_Directories(SYSTEM
@@ -276,6 +278,13 @@ kis_add_tests(
     NAME_PREFIX "libs-image-")
 
 include(KritaAddBrokenUnitTest)
+
+kis_add_test(
+        TEST_NAME kis_ellipse_test
+        kis_ellipse_test.cpp
+        ${CMAKE_SOURCE_DIR}/sdk/tests/stroke_testing_utils.cpp
+        LINK_LIBRARIES kritalibpaintop kritaimage Qt5::Test kritaui
+        NAME_PREFIX "libs-image-")
 
 krita_add_broken_unit_tests(
     kis_transform_mask_test.cpp

@@ -1346,9 +1346,9 @@ getEllipsePixels(long double sinC, long double sqSinC, long double cosC, long do
             p.second = std::round(-coef1 / coef2);
         }
     }
-
+    //
     long double region1StopY = ((-aSq - bSq + (aSq - bSq) * std::cos(2.0l * angle) + (aSq - bSq) * std::sin(2.0l * angle)) * std::sqrt(aSq + bSq + (-aSq + bSq) * std::sin(2.0l * angle))) / (-2.0l * (aSq + bSq) + 2.0l * (aSq - bSq) * std::sin(2.0l * angle));
-
+    //
     long double region2StopX = (std::sqrt(2.0l) * (aSq - bSq) * cosC * sinC) / std::sqrt(aSq + bSq + (-aSq + bSq) * std::cos(2.0l * angle));
 
     long double region3StopX = (aSq + bSq + (aSq - bSq) * std::cos(2.0l * angle) + (aSq - bSq) * std::sin(2.0l * angle)) / (2.0l * std::sqrt(aSq + bSq + (aSq - bSq) * std::sin(2.0l * angle)));
@@ -1400,52 +1400,51 @@ getEllipsePixels(long double sinC, long double sqSinC, long double cosC, long do
         result.push_back({-result.at(i).first, -result.at(i).second});
     }
 
+    result.erase(std::unique(result.begin(),result.end()),result.end());
+
+    while (*result.begin()==result.back()){
+        result.pop_back();
+    }
+
     return result;
 }
 
 Q_DECL_PURE_FUNCTION static inline QVector<QPair<long double,long double>> makePixelPerfect(QVector<QPair<long double,long double>> &pixels){
 
-    QVector<QPair<long double,long double>> pixelPerfect;
+    typedef QPair<long double, long double> Pix;
 
-    for (QVector<QPair<long double,long double>>::size_type i=0;i<pixels.size();i++){
+    QVector<Pix> pixelPerfect;
 
-        if(i==0 || i==pixels.size()-1){
-            pixelPerfect.push_back(pixels.at(i));
-            continue;
+    // Allow negative index
+    auto pixAt = [&pixels](std::make_signed<QVector<Pix>::size_type>::type idx) {
+        idx += static_cast<decltype(idx)>(pixels.size());
+        idx %= static_cast<decltype(idx)>(pixels.size());
+        KIS_ASSERT(0 <= idx && idx < static_cast<decltype(idx)>(pixels.size()));
+        return pixels.at(static_cast<QVector<Pix>::size_type>(idx));
+    };
+
+    for (std::make_signed<QVector<Pix>::size_type>::type i = 0; i < pixels.size(); i++) {
+
+        bool onL = false;
+        if ((qFuzzyCompare((double) pixAt(i).first, pixAt(i - 1).first) || qFuzzyCompare((double) pixAt(i).second, pixAt(i - 1).second))
+            && (qFuzzyCompare((double) pixAt(i).first, pixAt(i + 1).first) || qFuzzyCompare((double) pixAt(i).second, pixAt(i + 1).second))
+            && !qFuzzyCompare((double) pixAt(i - 1).first, pixAt(i + 1).first)
+            && !qFuzzyCompare((double) pixAt(i - 1).second, pixAt(i + 1).second)) {
+            onL = true;
         }
 
-        bool onL=false;
-        if ((qFuzzyCompare((double) pixels[i].first, pixels[i - 1].first) || qFuzzyCompare((double) pixels[i].second, pixels[i - 1].second))
-            && (qFuzzyCompare((double) pixels[i].first, pixels[i + 1].first) || qFuzzyCompare((double) pixels[i].second, pixels[i + 1].second))
-            && !qFuzzyCompare((double) pixels[i - 1].first, pixels[i + 1].first)
-            && !qFuzzyCompare((double) pixels[i - 1].second, pixels[i + 1].second)){
-            onL= true;
+        bool squareFlag = false;
+
+        if (onL
+            && (qFuzzyCompare((double) pixAt(i - 1).first, pixAt(i + 2).first) || qFuzzyCompare((double) pixAt(i - 1).second, pixAt(i + 2).second))
+            && (qFuzzyCompare(qAbs((double) pixAt(i - 1).first - pixAt(i + 2).first), 1.0) || qFuzzyCompare(qAbs((double) pixAt(i - 1).second - pixAt(i + 2).second), 1.0))) {
+            squareFlag = true;
         }
 
-        bool squareFlag=false;
-
-        if (i + 2 < pixels.size() && onL) {
-            if ((qFuzzyCompare((double) pixels[i - 1].first, pixels[i + 2].first) || qFuzzyCompare((double) pixels[i - 1].second, pixels[i + 2].second))
-                && (qFuzzyCompare(qAbs((double) pixels[i - 1].first - pixels[i + 2].first), 1.0) || qFuzzyCompare(qAbs((double) pixels[i - 1].second - pixels[i + 2].second), 1.0))) {
-                squareFlag = true;
-            }
-        }else if (onL){
-            if((qFuzzyCompare((double) pixels[i - 1].first, pixels[0].first) || qFuzzyCompare((double) pixels[i - 1].second, pixels[0].second))
-               && (qFuzzyCompare(qAbs((double) pixels[i - 1].first - pixels[0].first), 1.0) || qFuzzyCompare(qAbs((double) pixels[i - 1].second - pixels[0].second), 1.0))){
-                squareFlag = true;
-            }
-        }
-
-        if (i >= 2 && onL) {
-            if ((qFuzzyCompare((double) pixels[i - 2].first, pixels[i + 1].first) || qFuzzyCompare((double) pixels[i - 2].second, pixels[i + 1].second))
-                && (qFuzzyCompare(qAbs((double) pixels[i - 2].first - pixels[i + 1].first), 1.0) || qFuzzyCompare(qAbs((double) pixels[i - 2].second - pixels[i + 1].second), 1.0))) {
-                squareFlag = true;
-            }
-        } else if (onL){
-            if ((qFuzzyCompare((double) pixels.back().first, pixels[i + 1].first) || qFuzzyCompare((double) pixels.back().second, pixels[i + 1].second))
-                && (qFuzzyCompare(qAbs((double) pixels.back().first - pixels[i + 1].first), 1.0) || qFuzzyCompare(qAbs((double) pixels.back().second - pixels[i + 1].second), 1.0))) {
-                squareFlag = true;
-            }
+        if (onL
+            && (qFuzzyCompare((double) pixAt(i - 2).first, pixAt(i + 1).first) || qFuzzyCompare((double) pixAt(i - 2).second, pixAt(i + 1).second))
+            && (qFuzzyCompare(qAbs((double) pixAt(i - 2).first - pixAt(i + 1).first), 1.0) || qFuzzyCompare(qAbs((double) pixAt(i - 2).second - pixAt(i + 1).second), 1.0))) {
+            squareFlag = true;
         }
 
         if(!onL || (onL && squareFlag)){
@@ -1511,13 +1510,13 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
         return;
     }
 
-    auto p=pixelPerfect[0];
-    for (auto &pix: pixelPerfect) {
-        paintLine(KisPaintInformation(QPointF(p.first + offset.x(), p.second+offset.y())),
-                  KisPaintInformation(QPointF(pix.first + offset.x(), pix.second+offset.y())),
-                  &dis);
-        p=pix;
+    QVector<QPointF> points;
+    for (auto dfghjk:pixelPerfect) {
+        points.push_back(QPointF(dfghjk.first + offset.x(),dfghjk.second+offset.y()));
     }
+
+    paintPolygon(points);
+
 }
 
 void KisPainter::paintEllipse(const qreal x,

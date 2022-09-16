@@ -212,11 +212,7 @@ void NodeDelegate::drawColorLabel(QPainter *p, const QStyleOptionViewItem &optio
     if (color.alpha() <= 0) return;
 
     QColor bgColor = qApp->palette().color(QPalette::Base);
-    if ((option.state & QStyle::State_MouseOver) && !(option.state & QStyle::State_Selected)) {
-        color = KisPaintingTweaks::blendColors(color, bgColor, 0.6);
-    } else {
-        color = KisPaintingTweaks::blendColors(color, bgColor, 0.3);
-    }
+    color = KisPaintingTweaks::blendColors(color, bgColor, 0.3);
 
     QRect optionRect = (option.state & QStyle::State_Selected) ? iconsRect(option, index) : option.rect;
 

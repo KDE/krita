@@ -37,7 +37,9 @@
 
 KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image)
     : KoCanvasBase(0)
-    , m_viewConverter(new KisImageViewConverter(image))
+    , m_viewConverter(image ?
+                          static_cast<KisClonableViewConverter*>(new KisImageViewConverter(image)) :
+                          static_cast<KisClonableViewConverter*>(new KisDetachedShapesViewConverter(1.0, 1.0)))
     , m_shapeManager(new KoShapeManager(this))
     , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
 {

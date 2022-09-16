@@ -8,6 +8,7 @@
 #define _KO_COLORSPACE_TRAITS_H_
 
 #include <QVector>
+#include <type_traits>
 
 #include "KoColorSpaceConstants.h"
 #include "KoColorSpaceMaths.h"
@@ -156,16 +157,39 @@ struct KoColorSpaceTrait {
 
     inline static void normalisedChannelsValue(const quint8 *pixel, QVector<float> &v)
     {
+        return normalisedChannelsValueImpl<channels_type>(pixel, v);
+    }
+
+    template<typename I, typename std::enable_if_t<std::numeric_limits<I>::is_integer, int> = 1>
+    inline static void normalisedChannelsValueImpl(const quint8 *pixel, QVector<float> &v)
+    {
         Q_ASSERT((int)v.count() >= (int)channels_nb);
         channels_type c;
         float *channels = v.data();
         for (uint i = 0; i < channels_nb; i++) {
             c = nativeArray(pixel)[i];
-            channels[i] = ((qreal)c) / KoColorSpaceMathsTraits<channels_type>::unitValue;
+            channels[i] = ((float)c) / KoColorSpaceMathsTraits<channels_type>::unitValue;
         }
     }
 
-    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values) {
+    template<typename I, typename std::enable_if_t<!std::numeric_limits<I>::is_integer, int> = 1>
+    inline static void normalisedChannelsValueImpl(const quint8 *pixel, QVector<float> &v)
+    {
+        Q_ASSERT((int)v.count() >= (int)channels_nb);
+        float *channels = v.data();
+        for (uint i = 0; i < channels_nb; i++) {
+            channels[i] = float(nativeArray(pixel)[i]);
+        }
+    }
+
+    inline static void fromNormalisedChannelsValue(quint8 *pixel, const QVector<float> &values)
+    {
+        return fromNormalisedChannelsValueImpl<channels_type>(pixel, values);
+    }
+
+    template<typename I, typename std::enable_if_t<std::numeric_limits<I>::is_integer, int> = 1>
+    inline static void fromNormalisedChannelsValueImpl(quint8 *pixel, const QVector<float> &values)
+    {
         Q_ASSERT((int)values.count() >= (int)channels_nb);
         channels_type c;
         const float *v = values.data();
@@ -176,9 +200,19 @@ struct KoColorSpaceTrait {
                 (float)KoColorSpaceMathsTraits<channels_type>::max);
             c = (channels_type)b;
             nativeArray(pixel)[i] = c;
-
         }
     }
+
+    template<typename I, typename std::enable_if_t<!std::numeric_limits<I>::is_integer, int> = 1>
+    inline static void fromNormalisedChannelsValueImpl(quint8 *pixel, const QVector<float> &values)
+    {
+        Q_ASSERT((int)values.count() >= (int)channels_nb);
+        const float *v = values.data();
+        for (uint i = 0; i < channels_nb; i++) {
+            nativeArray(pixel)[i] = channels_type(float(KoColorSpaceMathsTraits<channels_type>::unitValue) * v[i]);
+        }
+    }
+
     inline static void multiplyAlpha(quint8 * pixels, quint8 alpha, qint32 nPixels) {
         if (alpha_pos < 0) return;
 

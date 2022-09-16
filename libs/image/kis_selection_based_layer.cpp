@@ -110,6 +110,8 @@ void KisSelectionBasedLayer::setImage(KisImageWSP image)
     if (image) {
         m_d->imageConnections.addConnection(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged()));
     }
+
+    resetCache();
 }
 
 bool KisSelectionBasedLayer::allowAsChild(KisNodeSP node) const
@@ -237,13 +239,16 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         }
 
         KisImageSP imageSP = image().toStrongRef();
-        KIS_SAFE_ASSERT_RECOVER_RETURN(imageSP);
-
-        if (m_d->selection->pixelSelection()->defaultBounds()->bounds() != imageSP->bounds()) {
-            qWarning() << "WARNING: KisSelectionBasedLayer::setInternalSelection"
-                       << "New selection has suspicious default bounds";
-            qWarning() << "WARNING:" << ppVar(m_d->selection->pixelSelection()->defaultBounds()->bounds());
-            qWarning() << "WARNING:" << ppVar(imageSP->bounds());
+        if (imageSP) {
+            /**
+             * Sanity check for the case when the image is present
+             */
+            if (m_d->selection->pixelSelection()->defaultBounds()->bounds() != imageSP->bounds()) {
+                qWarning() << "WARNING: KisSelectionBasedLayer::setInternalSelection"
+                           << "New selection has suspicious default bounds";
+                qWarning() << "WARNING:" << ppVar(m_d->selection->pixelSelection()->defaultBounds()->bounds());
+                qWarning() << "WARNING:" << ppVar(imageSP->bounds());
+            }
         }
 
     } else {

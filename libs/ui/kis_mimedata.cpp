@@ -59,6 +59,12 @@ KisMimeData::KisMimeData(QList<KisNodeSP> nodes, KisImageSP image, bool forceCop
     , m_image(image)
 {
     Q_ASSERT(m_nodes.size() > 0);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+
+    Q_FOREACH (KisNodeSP node, nodes) {
+        m_copiedBounds |= KisLayerUtils::recursiveTightNodeVisibleBounds(node);
+    }
 }
 
 void KisMimeData::deepCopyNodes()
@@ -95,15 +101,10 @@ QStringList KisMimeData::formats () const
     return f;
 }
 
-KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
+KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage, const QRect &copiedBounds)
 {
     KisDocument *doc = KisPart::instance()->createTemporaryDocument();
-    QRect rc;
-    Q_FOREACH (KisNodeSP node, nodes) {
-        if (node) {
-            rc |= node->exactBounds();
-        }
-    }
+    QRect rc = copiedBounds;
 
     QRect offset(0, 0, rc.width(), rc.height());
     rc |= offset;
@@ -139,9 +140,9 @@ KisDocument *createDocument(QList<KisNodeSP> nodes, KisImageSP srcImage)
     return doc;
 }
 
-QByteArray serializeToByteArray(QList<KisNodeSP> nodes, KisImageSP srcImage)
+QByteArray serializeToByteArray(QList<KisNodeSP> nodes, KisImageSP srcImage, const QRect &copiedBounds)
 {
-    QScopedPointer<KisDocument> doc(createDocument(nodes, srcImage));
+    QScopedPointer<KisDocument> doc(createDocument(nodes, srcImage, copiedBounds));
     QByteArray result = doc->serializeToNativeByteArray();
 
     // avoid a sanity check failure caused by the fact that the image outlives
@@ -168,7 +169,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     if (mimetype == "application/x-qt-image") {
         KisConfig cfg(true);
 
-        QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image));
+        QScopedPointer<KisDocument> doc(createDocument(m_nodes, m_image, m_copiedBounds));
 
         return doc->image()->projection()->convertToQImage(cfg.displayProfile(QApplication::desktop()->screenNumber(qApp->activeWindow())),
                                                            KoColorConversionTransformation::internalRenderingIntent(),
@@ -176,7 +177,7 @@ QVariant KisMimeData::retrieveData(const QString &mimetype, QVariant::Type prefe
     }
     else if (mimetype == "application/zip") {
 
-        QByteArray ba = serializeToByteArray(m_nodes, m_image);
+        QByteArray ba = serializeToByteArray(m_nodes, m_image, m_copiedBounds);
         return ba;
 
     }

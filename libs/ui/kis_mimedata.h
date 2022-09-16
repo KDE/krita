@@ -8,6 +8,7 @@
 #define KIS_MIMEDATA_H
 
 #include <QMimeData>
+#include <QRect>
 
 #include <kis_types.h>
 #include <kritaui_export.h>
@@ -111,6 +112,7 @@ private:
     QList<KisNodeSP> m_nodes;
     bool m_forceCopy;
     KisImageSP m_image;
+    QRect m_copiedBounds;
 };
 
 #endif // KIS_MIMEDATA_H

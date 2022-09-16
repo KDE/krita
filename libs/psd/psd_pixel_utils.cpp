@@ -393,7 +393,12 @@ void readCommon(KisPaintDeviceSP dev,
                 pixelFunc(channelSize, channelBytes, col, it->rawData());
                 it->nextPixel();
             }
-            it->nextRow();
+
+            /// don't write-access the row right after the
+            /// the end of the read area
+            if (i < layerRect.height() - 1) {
+                it->nextRow();
+            }
         }
     }
 }

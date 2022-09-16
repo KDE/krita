@@ -69,6 +69,9 @@ public:
 
     bool updateToPointOnConcentricEllipse(QTransform _originalTransform, QPointF pointOnConcetric, QLineF horizonLine);
 
+    QPointF project(QPointF point);
+
+
     ///
     /// \brief setSimpleEllipseVertices sets vertices of this ellipse to the "simple ellipse" class
     /// to be drawn and used
@@ -128,6 +131,8 @@ public:
     QVector<double> horizonFormula; // needed for painting; ax + by + c = 0 represents the horizon
 
     int concentricDefiningPointIndex; // index of the point defining concentric ellipse; usually the mouse point
+
+
 
 
 
@@ -240,6 +245,85 @@ bool EllipseInPolygon::updateToPointOnConcentricEllipse(QTransform _originalTran
 
 
     return updateToFivePoints(points, horizonLine);
+}
+
+QPointF EllipseInPolygon::project(QPointF point)
+{
+    // normal line approach
+    // so, for hyperbolas, the normal line is:
+    // F(x - x0) - E(y - y0) = 0
+    // F = Axy * x0 + Ayy * y0 + By
+    // E = Axx * x0 + Axy * y0 + Bx
+    // x0, y0 => point on the hyperbola
+    // Axx = a
+    // Axy = b/2
+    // Ayy = c
+    // Bx = d/2
+    // By = e/2
+    // the same lines goes through another point, which is exactly 'point'
+    // let's call it P
+    //
+
+    QPointF response;
+    qreal a = finalFormula[0];
+    qreal b = finalFormula[1];
+    qreal c = finalFormula[2];
+    qreal d = finalFormula[3];
+    qreal e = finalFormula[4];
+    qreal f = finalFormula[5];
+
+    if (b != 0) {
+
+        qreal y = (2*a*point.x() + b*point.y() + d)/b;
+        qreal L = b*point.x() + 2*c*point.y() + e;
+        qreal x = 2*(a - c)*y/b - L/b;
+
+        response = QPointF(x + point.x(), y + point.y());
+        return response;
+    } else {
+        return point;
+    }
+
+
+
+
+    /*
+
+    // use naive option first:
+    if (!originalTransform.isInvertible()) {
+        return point;
+    }
+    QTransform reverseTransform = originalTransform.inverted();
+    QPointF pInOriginalCoords = reverseTransform.map(point);
+    QPointF pOriginalMoved = pInOriginalCoords - QPointF(0.5, 0.5);
+    qreal distanceFromCenter = kisDistance(QPointF(0.5, 0.5), reverseTransform.map(originalPoints[0]));
+    QPointF onCircle;
+    // x^2 + y^2 = (0.5)^2
+    // and ax + by = 0 (line going through the (0, 0) point)
+    // by = -ax
+    // y = -ax/b = -a/b * x
+    // x^2 + (-a/b)^2 * x^2 = (0.5)^2
+    // (1 + (a/b)^2)* x^2 = (0.5)^2
+    // x^2 = (0.5)^2 / (1 + (a/b)^2)
+    // x = 0.5 / sqrt(1 + (a/b)^2)
+    // and y = -a/b * x
+
+    // how to get a/b:
+    // -a/b = y/x
+    // a/b = -y/x
+
+    if (pOriginalMoved.x() == 0) {
+        onCircle = QPointF(0, distanceFromCenter*0.5*(KisAlgebra2D::signPZ(pOriginalMoved.y())));
+    } else {
+        // b != 0
+        qreal ab = -pOriginalMoved.y()/pOriginalMoved.x();
+        qreal onCircleX = KisAlgebra2D::signPZ(pOriginalMoved.x())*0.5*distanceFromCenter/(qSqrt(1 + ab*ab));
+        onCircle = QPointF(onCircleX, -ab*onCircleX);
+    }
+    return originalTransform.map(onCircle + QPointF(0.5, 0.5));
+
+    */
+
 }
 
 bool EllipseInPolygon::setSimpleEllipseVertices(Ellipse &ellipse) const
@@ -760,11 +844,13 @@ KisPaintingAssistantSP PerspectiveEllipseAssistant::clone(QMap<KisPaintingAssist
 
 QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
+    return d->concentricEllipseInPolygon.project(pt);
     Q_UNUSED(strokeBegin);
     Q_ASSERT(isAssistantComplete());
 
     if (d->isConcentric) {
-        return d->simpleConcentricEllipse.project(pt);
+        //return d->simpleConcentricEllipse.project(pt);
+        return d->concentricEllipseInPolygon.project(pt);
     } else {
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
         return d->simpleEllipse.project(pt);

@@ -200,10 +200,8 @@ KoShape *KoShape::cloneShape() const
     return 0;
 }
 
-void KoShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext) const
+void KoShape::paintStroke(QPainter &painter) const
 {
-    Q_UNUSED(paintcontext);
-
     if (stroke()) {
         stroke()->paint(this, painter);
     }

@@ -25,7 +25,6 @@ class KoSelection;
 class KoViewConverter;
 class KoCanvasBase;
 class KoPointerEvent;
-class KoShapePaintingContext;
 
 class QPainter;
 class QPointF;
@@ -172,7 +171,7 @@ public:
      *
      * \see preparePaintJobs
      */
-    void paintJob(QPainter &painter, const KoShapeManager::PaintJob &job, bool forPrint);
+    void paintJob(QPainter &painter, const KoShapeManager::PaintJob &job);
 
     /**
      * Paint all shapes and their selection handles etc.
@@ -180,7 +179,7 @@ public:
      * @param forPrint if true, make sure only actual content is drawn and no decorations.
      * @param converter to convert between document and view coordinates.
      */
-    void paint(QPainter &painter, bool forPrint);
+    void paint(QPainter &painter);
 
     /**
      * Returns the shape located at a specific point in the document.
@@ -238,7 +237,7 @@ public:
      * @brief renderSingleShape renders a shape on \p painter. This method includes all the
      * needed steps for painting a single shape: setting transformations, clipping and masking.
      */
-    static void renderSingleShape(KoShape *shape, QPainter &painter, KoShapePaintingContext &paintContext);
+    static void renderSingleShape(KoShape *shape, QPainter &painter);
 
     /**
      * A special interface for KoShape to use during shape destruction. Don't use this

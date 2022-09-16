@@ -13,7 +13,6 @@
 #include "KoShapeContainer.h"
 #include "KoShapeGroup.h"
 #include "KoPointerEvent.h"
-#include "KoShapePaintingContext.h"
 #include "kis_algebra_2d.h"
 #include "krita_container_utils.h"
 
@@ -39,10 +38,9 @@ KoSelection::~KoSelection()
 {
 }
 
-void KoSelection::paint(QPainter &painter, KoShapePaintingContext &paintcontext) const
+void KoSelection::paint(QPainter &painter) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(paintcontext);
 }
 
 void KoSelection::setSize(const QSizeF &size)

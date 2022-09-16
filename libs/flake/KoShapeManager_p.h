@@ -20,7 +20,6 @@
 
 class KoCanvasBase;
 class KoShapeGroup;
-class KoShapePaintingContext;
 class QPainter;
 
 class Q_DECL_HIDDEN KoShapeManager::Private

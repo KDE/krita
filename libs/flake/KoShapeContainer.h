@@ -154,7 +154,7 @@ public:
 
 
     /// reimplemented
-    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
+    void paint(QPainter &painter) const override;
 
     /**
      * @brief Paint the component
@@ -162,10 +162,9 @@ public:
      * method does.
      *
      * @param painter used for painting the shape
-     * @param paintcontext the painting context
      * @see applyConversion()
      */
-    virtual void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const = 0;
+    virtual void paintComponent(QPainter &painter) const = 0;
 
     using KoShape::update;
     /// reimplemented

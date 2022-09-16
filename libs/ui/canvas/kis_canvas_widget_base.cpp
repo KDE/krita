@@ -18,7 +18,7 @@
 #include <KoCanvasController.h>
 #include <KoShape.h>
 #include <KoSelection.h>
-#include <KoShapePaintingContext.h>
+
 
 #include "kis_coordinates_converter.h"
 #include "kis_canvas_decoration.h"
@@ -97,7 +97,7 @@ void KisCanvasWidgetBase::drawDecorations(QPainter & gc, const QRect &updateWidg
         gc.setTransform(m_d->coordinatesConverter->documentToWidgetTransform());
 
         // Paint the shapes (other than the layers)
-        m_d->canvas->globalShapeManager()->paint(gc, false);
+        m_d->canvas->globalShapeManager()->paint(gc);
 
     }
 

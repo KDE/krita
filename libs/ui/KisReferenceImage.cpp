@@ -205,7 +205,7 @@ KisReferenceImage::fromPaintDevice(KisPaintDeviceSP src, const KisCoordinatesCon
     return reference;
 }
 
-void KisReferenceImage::paint(QPainter &gc, KoShapePaintingContext &/*paintcontext*/) const
+void KisReferenceImage::paint(QPainter &gc) const
 {
     if (!parent()) return;
 

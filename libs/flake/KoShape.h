@@ -40,7 +40,6 @@ class KoFilterEffectStack;
 class KoSnapData;
 class KoClipPath;
 class KoClipMask;
-class KoShapePaintingContext;
 class KoShapeAnchor;
 struct KoInsets;
 class KoShapeBackground;
@@ -165,17 +164,15 @@ public:
      * to be preconfigured to work in "document" pixels.
      *
      * @param painter used for painting the shape
-     * @param paintcontext the painting context.
      */
-    virtual void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const = 0;
+    virtual void paint(QPainter &painter) const = 0;
 
     /**
      * @brief paintStroke paints the shape's stroked outline
      * @param painter used for painting the shape
      * @see applyConversion()
-     * @param paintcontext the painting context.
      */
-    virtual void paintStroke(QPainter &painter, KoShapePaintingContext &paintcontext) const;
+    virtual void paintStroke(QPainter &painter) const;
 
     /**
      * @brief Scale the shape using the zero-point which is the top-left corner.

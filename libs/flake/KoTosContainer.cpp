@@ -57,14 +57,13 @@ KoTosContainer::~KoTosContainer()
     delete textShape();
 }
 
-void KoTosContainer::paintComponent(QPainter &, KoShapePaintingContext &) const
+void KoTosContainer::paintComponent(QPainter &) const
 {
 }
 
-bool KoTosContainer::loadText(const QDomElement &element, KoShapeLoadingContext &context)
+bool KoTosContainer::loadText(const QDomElement &element)
 {
     Q_UNUSED(element);
-    Q_UNUSED(context);
     return false;
 }
 

@@ -43,7 +43,7 @@ public:
     void setShapes(const QList<KoShape*> value);
     QList<KoShape*> shapes() const;
 
-    void paint(QPainter &painter, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const override;
+    void paint(QPainter &painter, const QPainterPath &fillPath) const override;
     bool hasTransparency() const override;
 private:
     class Private;

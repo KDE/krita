@@ -28,7 +28,6 @@
 #include <KoRTree.h>
 #include "KoClipPath.h"
 #include "KoClipMaskPainter.h"
-#include "KoShapePaintingContext.h"
 #include "KoViewConverter.h"
 #include "KisQPainterStateSaver.h"
 #include "KoSvgTextChunkShape.h"
@@ -182,8 +181,7 @@ void buildRenderTree(QList<KoShape*> leafShapes,
  */
 void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
                   typename KisForest<KoShape*>::child_iterator endIt,
-                  QPainter &painter,
-                  KoShapePaintingContext &paintContext)
+                  QPainter &painter)
 {
     for (auto it = beginIt; it != endIt; ++it) {
         KoShape *shape = *it;
@@ -226,10 +224,10 @@ void renderShapes(typename KisForest<KoShape*>::child_iterator beginIt,
          */
         const QTransform sanityCheckTransformSaved = shapePainter->transform();
 
-        renderShapes(childBegin(it), childEnd(it), *shapePainter, paintContext);
+        renderShapes(childBegin(it), childEnd(it), *shapePainter);
 
-        shape->paint(*shapePainter, paintContext);
-        shape->paintStroke(*shapePainter, paintContext);
+        shape->paint(*shapePainter);
+        shape->paintStroke(*shapePainter);
 
         KIS_SAFE_ASSERT_RECOVER(shapePainter->transform() == sanityCheckTransformSaved) {
             shapePainter->setTransform(sanityCheckTransformSaved);
@@ -544,7 +542,7 @@ void KoShapeManager::preparePaintJobs(PaintJobsOrder &jobsOrder,
     }
 }
 
-void KoShapeManager::paintJob(QPainter &painter, const KoShapeManager::PaintJob &job, bool forPrint)
+void KoShapeManager::paintJob(QPainter &painter, const KoShapeManager::PaintJob &job)
 {
     painter.setPen(Qt::NoPen);  // painters by default have a black stroke, lets turn that off.
     painter.setBrush(Qt::NoBrush);
@@ -552,11 +550,10 @@ void KoShapeManager::paintJob(QPainter &painter, const KoShapeManager::PaintJob 
     KisForest<KoShape*> renderTree;
     buildRenderTree(job.shapes, renderTree);
 
-    KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
-    renderShapes(childBegin(renderTree), childEnd(renderTree), painter, paintContext);
+    renderShapes(childBegin(renderTree), childEnd(renderTree), painter);
 }
 
-void KoShapeManager::paint(QPainter &painter, bool forPrint)
+void KoShapeManager::paint(QPainter &painter)
 {
     d->updateTree();
 
@@ -576,14 +573,12 @@ void KoShapeManager::paint(QPainter &painter, bool forPrint)
         warnFlake << "KoShapeManager::paint  Painting with a painter that has no clipping will lead to too much being painted!";
     }
 
-    KoShapePaintingContext paintContext(d->canvas, forPrint); //FIXME
-
     KisForest<KoShape*> renderTree;
     buildRenderTree(unsortedShapes, renderTree);
-    renderShapes(childBegin(renderTree), childEnd(renderTree), painter, paintContext);
+    renderShapes(childBegin(renderTree), childEnd(renderTree), painter);
 }
 
-void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, KoShapePaintingContext &paintContext)
+void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter)
 {
     KisForest<KoShape*> renderTree;
 
@@ -591,7 +586,7 @@ void KoShapeManager::renderSingleShape(KoShape *shape, QPainter &painter, KoShap
 
     auto root = renderTree.insert(childBegin(renderTree), shape);
     populateRenderSubtree(shape, root, renderTree, &shapeIsVisible, &shapeIsVisible);
-    renderShapes(childBegin(renderTree), childEnd(renderTree), painter, paintContext);
+    renderShapes(childBegin(renderTree), childEnd(renderTree), painter);
 }
 
 KoShape *KoShapeManager::shapeAt(const QPointF &position, KoFlake::ShapeSelection selection, bool omitHiddenShapes)

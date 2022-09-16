@@ -28,10 +28,10 @@ public:
     ~KoTosContainer() override;
 
     // reimplemented
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
+    void paintComponent(QPainter &painter) const override;
 
     // reimplemented
-    virtual bool loadText(const QDomElement &element, KoShapeLoadingContext &context);
+    virtual bool loadText(const QDomElement &element);
 
 
     /// different kinds of resizing behavior to determine how to treat text overflow

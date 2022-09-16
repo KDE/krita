@@ -14,7 +14,6 @@
 #include "KoPathShape.h"
 #include "KoSelection.h"
 #include "KoDocumentResourceManager.h"
-#include "KoShapePaintingContext.h"
 #include "KoShapeStroke.h"
 #include "KoCanvasBase.h"
 #include "kis_int_parse_spin_box.h"
@@ -131,8 +130,7 @@ void KoCreatePathTool::paintPath(KoPathShape& pathShape, QPainter &painter, cons
                          painter.transform());
     painter.save();
 
-    KoShapePaintingContext paintContext; //FIXME
-    pathShape.paint(painter, paintContext);
+    pathShape.paint(painter);
     painter.restore();
 
     if (pathShape.stroke()) {

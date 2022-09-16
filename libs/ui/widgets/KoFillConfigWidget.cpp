@@ -403,7 +403,7 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
                                                : KoFlake::StrokeFill;
 
             d->colorAction->setCurrentColor(color);
-            d->colorChangedCompressor.start({color.toQColor(), colorSlot});
+            colorChanged({color.toQColor(), colorSlot});
         } else if (checkedId == Gradient && key == KoCanvasResource::ForegroundColor) {
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
         }

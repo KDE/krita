@@ -89,6 +89,18 @@ if(LibExiv2_FOUND AND NOT TARGET LibExiv2::LibExiv2)
         IMPORTED_LOCATION "${LibExiv2_LIBRARIES}"
         INTERFACE_INCLUDE_DIRECTORIES "${LibExiv2_INCLUDE_DIRS}"
     )
+    # Workaround for using exiv2 with -std=c++!7
+    # FIXME: Remove this when exiv2 has been updated to remove usage of
+    #        `auto_ptr`.
+    if(MSVC)
+        target_compile_definitions(LibExiv2::LibExiv2
+            INTERFACE _HAS_AUTO_PTR_ETC=1
+        )
+    elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang") # libc++
+        target_compile_definitions(LibExiv2::LibExiv2
+            INTERFACE _LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR
+        )
+    endif()
 endif()
 
 include(FeatureSummary)

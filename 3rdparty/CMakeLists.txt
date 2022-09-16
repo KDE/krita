@@ -635,6 +635,9 @@ if (NOT WIN32 OR EXPAT_DEP)
     add_subdirectory( ext_expat ) # for exiv2
 endif()
 
+add_subdirectory( ext_ffmpeg )
+add_subdirectory( ext_sdl2 )
+
 add_subdirectory( ext_exiv2 )
 add_subdirectory( ext_lcms2 )
 add_subdirectory( ext_openexr )

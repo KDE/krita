@@ -637,6 +637,7 @@ endif()
 
 add_subdirectory( ext_ffmpeg )
 add_subdirectory( ext_sdl2 )
+add_subdirectory( ext_mlt )
 
 add_subdirectory( ext_exiv2 )
 add_subdirectory( ext_lcms2 )

@@ -55,7 +55,7 @@ public:
     QRectF outlineRect() const override;
     QPainterPath outline() const override;
 
-    void paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const override;
+    void paintComponent(QPainter &painter) const override;
 
     bool saveHtml(HtmlSavingContext &context);
     /**

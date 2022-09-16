@@ -15,7 +15,6 @@
 #include <FlakeDebug.h>
 #include <KoResource.h>
 #include <KoShape.h>
-#include <KoShapePaintingContext.h>
 
 //class KoViewConverter;
 class QTransform;
@@ -35,7 +34,6 @@ public:
 
 private:
     KoShape* m_maskShape {nullptr};
-    KoShapePaintingContext m_shapePaintingContext;
 };
 
 

@@ -47,11 +47,11 @@ KoHatchBackground::~KoHatchBackground()
 {
 }
 
-void KoHatchBackground::paint(QPainter &painter, KoShapePaintingContext &context, const QPainterPath &fillPath) const
+void KoHatchBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
 {
     if (color().isValid()) {
         // paint background color if set by using the color background
-        KoColorBackground::paint(painter, context, fillPath);
+        KoColorBackground::paint(painter, fillPath);
     }
 
     const QRectF targetRect = fillPath.boundingRect();

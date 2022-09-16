@@ -125,7 +125,7 @@ void KisNodeShape::setPosition(const QPointF &)
 {
 }
 
-void KisNodeShape::paint(QPainter &, KoShapePaintingContext &) const
+void KisNodeShape::paint(QPainter &) const
 {
 }
 

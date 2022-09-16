@@ -93,11 +93,8 @@ void KoSvgTextShape::shapeChanged(ChangeType type, KoShape *shape)
     }
 }
 
-void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const
+void KoSvgTextShape::paintComponent(QPainter &painter) const
 {
-
-    Q_UNUSED(paintContext);
-
     /**
      * HACK ALERT:
      * QTextLayout should only be accessed from the thread it has been created in.
@@ -127,11 +124,9 @@ void KoSvgTextShape::paintComponent(QPainter &painter, KoShapePaintingContext &p
     }
 }
 
-void KoSvgTextShape::paintStroke(QPainter &painter, KoShapePaintingContext &paintContext) const
+void KoSvgTextShape::paintStroke(QPainter &painter) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(paintContext);
-
     // do nothing! everything is painted in paintComponent()
 }
 

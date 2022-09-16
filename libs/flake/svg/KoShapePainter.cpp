@@ -131,7 +131,7 @@ void KoShapePainter::paint(QPainter &painter)
         shape->waitUntilReady(false);
     }
 
-    d->canvas->shapeManager()->paint(painter, true);
+    d->canvas->shapeManager()->paint(painter);
 }
 
 void KoShapePainter::paint(QPainter &painter, const QRect &painterRect, const QRectF &documentRect)

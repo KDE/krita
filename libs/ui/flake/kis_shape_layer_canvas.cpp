@@ -418,7 +418,7 @@ void KisShapeLayerCanvas::repaint()
         tempPainter.setTransform(m_viewConverter->documentToView() *
                                  QTransform::fromTranslate(-job.viewUpdateRect.x(), -job.viewUpdateRect.y()));
 
-        m_shapeManager->paintJob(tempPainter, job, false);
+        m_shapeManager->paintJob(tempPainter, job);
 
         if (image.size() != job.viewUpdateRect.size()) {
             const quint8 *imagePtr = image.constBits();

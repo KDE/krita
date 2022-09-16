@@ -104,10 +104,8 @@ QList<KoShape *> KoVectorPatternBackground::shapes() const
     return d->shapes;
 }
 
-void KoVectorPatternBackground::paint(QPainter &painter, KoShapePaintingContext &context_Unused, const QPainterPath &fillPath) const
+void KoVectorPatternBackground::paint(QPainter &painter, const QPainterPath &fillPath) const
 {
-    Q_UNUSED(context_Unused);
-
     const QPainterPath dstShapeOutline = fillPath;
     const QRectF dstShapeBoundingBox = dstShapeOutline.boundingRect();
 

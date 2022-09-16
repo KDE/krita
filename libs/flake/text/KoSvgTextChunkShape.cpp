@@ -402,10 +402,9 @@ QPainterPath KoSvgTextChunkShape::outline() const
     return result.simplified();
 }
 
-void KoSvgTextChunkShape::paintComponent(QPainter &painter, KoShapePaintingContext &paintContext) const
+void KoSvgTextChunkShape::paintComponent(QPainter &painter) const
 {
     Q_UNUSED(painter);
-    Q_UNUSED(paintContext);
 }
 
 bool KoSvgTextChunkShape::saveHtml(HtmlSavingContext &context)

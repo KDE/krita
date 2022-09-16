@@ -27,7 +27,7 @@ class KRITAFLAKE_EXPORT MockShape : public KoShape
 {
 public:
     MockShape() : paintedCount(0) {}
-    void paint(QPainter &painter, KoShapePaintingContext &) const override {
+    void paint(QPainter &painter) const override {
         Q_UNUSED(painter);
         //qDebug() << "Shape" << kBacktrace( 10 );
         paintedCount++;
@@ -41,7 +41,7 @@ class KRITAFLAKE_EXPORT MockContainer : public KoShapeContainer
 {
 public:
     MockContainer(KoShapeContainerModel *model = new SimpleShapeContainerModel()) : KoShapeContainer(model), paintedCount(0) {}
-    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
+    void paintComponent(QPainter &painter) const override {
         Q_UNUSED(painter);
         //qDebug() << "Container:" << kBacktrace( 10 );
         paintedCount++;
@@ -71,7 +71,7 @@ public:
 
 class KRITAFLAKE_EXPORT MockGroup : public KoShapeGroup
 {
-    void paintComponent(QPainter &painter, KoShapePaintingContext &) const override {
+    void paintComponent(QPainter &painter) const override {
         Q_UNUSED(painter);
         paintedCount++;
     }

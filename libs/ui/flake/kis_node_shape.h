@@ -34,7 +34,7 @@ public:
     QSizeF size() const override;
     QRectF boundingRect() const override;
     void setPosition(const QPointF &) override;
-    void paint(QPainter &painter, KoShapePaintingContext &paintcontext) const override;
+    void paint(QPainter &painter) const override;
 
 private Q_SLOTS:
     void editabilityChanged();

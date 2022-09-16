@@ -19,7 +19,7 @@
 #include <KoShape.h>
 #include <KoShapeGroup.h>
 #include <KoShapeManager.h>
-#include <KoShapePaintingContext.h>
+
 
 #include "kritaflake_export.h"
 

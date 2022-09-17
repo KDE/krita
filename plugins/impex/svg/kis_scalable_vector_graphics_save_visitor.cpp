@@ -28,12 +28,9 @@ struct KisScalableVectorGraphicsSaveVisitor::Private {
 };
 
 
-KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, KisImageSP image)
+KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, QSizeF pageSize)
     : d(new Private)
 {
-    const QSizeF sizeInPx = image->bounds().size();
-    const QSizeF pageSize(sizeInPx.width() / image->xRes(),
-                      sizeInPx.height() / image->yRes());
     QTextStream svgStream(saveDevice);
     svgStream.setCodec("UTF-8");
 
@@ -55,8 +52,7 @@ KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODe
               << pageSize.width() << " " << pageSize.height()
               << "\"";
     svgStream << ">" << endl;
-    svgStream << endl << "</svg>" << endl;
-    qDebug() << pageSize.width() << " " << pageSize.height();
+   svgStream << endl << "</svg>" << endl;
     d->saveDevice = &svgStream;
     d->activeNodes = activeNodes;
 }

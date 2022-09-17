@@ -42,11 +42,13 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(io->isWritable(), ImportExportCodes::NoAccessToWrite);
 
-
-    KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()}, document->savingImage());
+    KisImageWSP image = document->image();
+    const QSizeF sizeInPx = QSizeF(image->bounds().size());
+    const QSizeF pageSize(sizeInPx.width() / image->xRes(),
+                      sizeInPx.height() / image->yRes());
+    KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()}, pageSize);
 
     document->image()->rootLayer()->accept(svgVisitor);
-    KisImageSP image = document->savingImage();
     const auto bounds = image->bounds();
     const auto *const cs = image->colorSpace();
 

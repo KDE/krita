@@ -44,6 +44,7 @@ private:
     KConfigGroup m_configGroup;
     KisPaintDeviceSP m_referencePaintDevice;
     KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
+    int m_previousTime;
 };
 
 

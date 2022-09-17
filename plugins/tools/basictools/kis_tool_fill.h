@@ -127,6 +127,7 @@ private:
     QSharedPointer<KoColor> m_referenceColor;
     KisPaintDeviceSP m_referencePaintDevice;
     KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
+    int m_previousTime;
     KisResourcesSnapshotSP m_resourcesSnapshot;
     QTransform m_transform;
 

@@ -31,6 +31,7 @@
 #include <kis_pixel_selection.h>
 #include <kis_selection_filters.h>
 #include <kis_selection_options.h>
+#include <kis_image_animation_interface.h>
 
 void selectByColor(KisPaintDeviceSP dev,
                    KisPixelSelectionSP selection,
@@ -83,6 +84,7 @@ KisToolSelectSimilar::KisToolSelectSimilar(KoCanvasBase *canvas)
                     KisCursor::load("tool_similar_selection_cursor.png", 6, 6),
                     i18n("Similar Color Selection"))
     , m_threshold(20)
+    , m_previousTime(0)
 {
 }
 
@@ -144,29 +146,30 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
     } else if (sampleLayersMode() == SampleAllLayers) {
         sourceDevice = m_referencePaintDevice = currentImage()->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
-        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Similar Colors Selection Tool Reference Image");
         if (!m_referenceNodeList) {
             m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Similar Colors Selection Tool Reference Result Paint Device");
             m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
         }
         KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Similar Colors Selection Tool Reference Result Paint Device");
         KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        const int currentTime = image()->animationInterface()->currentTime();
         applicator.applyCommand(
             new KisMergeLabeledLayersCommand(
-                refImage,
+                image(),
                 m_referenceNodeList,
                 newReferenceNodeList,
                 m_referencePaintDevice,
                 newReferencePaintDevice,
-                image()->root(),
                 colorLabelsSelected(),
-                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                m_previousTime != currentTime
             ),
             KisStrokeJobData::SEQUENTIAL,
             KisStrokeJobData::EXCLUSIVE
         );
         sourceDevice = m_referencePaintDevice = newReferencePaintDevice;
         m_referenceNodeList = newReferenceNodeList;
+        m_previousTime = currentTime;
     }
 
     if (sampleLayersMode() == SampleColorLabeledLayers) {

@@ -16,47 +16,57 @@
 #include "kis_layer.h"
 #include "kis_assert.h"
 #include "KisDeleteLaterWrapper.h"
+#include <kis_image_animation_interface.h>
 
-KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP refImage,
+KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP image,
                                                            KisPaintDeviceSP newRefPaintDevice,
-                                                           KisNodeSP currentRoot,
                                                            QList<int> selectedLabels,
                                                            GroupSelectionPolicy groupSelectionPolicy)
     : KUndo2Command(kundo2_noi18n("MERGE_LABELED_LAYERS"))
-    , m_refImage(refImage)
+    , m_refImage(new KisImage(new KisSurrogateUndoStore(), image->width(), image->height(), image->colorSpace(), "Merge Labeled Layers Reference Image"))
     , m_prevRefNodeInfoList(nullptr)
     , m_newRefNodeInfoList(nullptr)
     , m_prevRefPaintDevice(nullptr)
     , m_newRefPaintDevice(newRefPaintDevice)
-    , m_currentRoot(currentRoot)
+    , m_currentRoot(image->root())
     , m_selectedLabels(selectedLabels)
     , m_groupSelectionPolicy(groupSelectionPolicy)
+    , m_forceRegeneration(true)
 {
     KIS_ASSERT(newRefPaintDevice);
+    if (image->animationInterface()->hasAnimation()) {
+        m_refImage->animationInterface()->switchCurrentTimeAsync(image->animationInterface()->currentTime());
+        m_refImage->waitForDone();
+    }
 }
 
-KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP refImage,
+KisMergeLabeledLayersCommand::KisMergeLabeledLayersCommand(KisImageSP image,
                                                            ReferenceNodeInfoListSP prevRefNodeInfoList,
                                                            ReferenceNodeInfoListSP newRefNodeInfoList,
                                                            KisPaintDeviceSP prevRefPaintDevice,
                                                            KisPaintDeviceSP newRefPaintDevice,
-                                                           KisNodeSP currentRoot,
                                                            QList<int> selectedLabels,
-                                                           GroupSelectionPolicy groupSelectionPolicy)
+                                                           GroupSelectionPolicy groupSelectionPolicy,
+                                                           bool forceRegeneration)
     : KUndo2Command(kundo2_noi18n("MERGE_LABELED_LAYERS"))
-    , m_refImage(refImage)
+    , m_refImage(new KisImage(new KisSurrogateUndoStore(), image->width(), image->height(), image->colorSpace(), "Merge Labeled Layers Reference Image"))
     , m_prevRefNodeInfoList(prevRefNodeInfoList)
     , m_newRefNodeInfoList(newRefNodeInfoList)
     , m_prevRefPaintDevice(prevRefPaintDevice)
     , m_newRefPaintDevice(newRefPaintDevice)
-    , m_currentRoot(currentRoot)
+    , m_currentRoot(image->root())
     , m_selectedLabels(selectedLabels)
     , m_groupSelectionPolicy(groupSelectionPolicy)
+    , m_forceRegeneration(forceRegeneration)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(prevRefNodeInfoList);
     KIS_SAFE_ASSERT_RECOVER_NOOP(newRefNodeInfoList);
     KIS_SAFE_ASSERT_RECOVER_NOOP(prevRefPaintDevice);
     KIS_ASSERT(newRefPaintDevice);
+    if (image->animationInterface()->hasAnimation()) {
+        m_refImage->animationInterface()->switchCurrentTimeAsync(image->animationInterface()->currentTime());
+        m_refImage->waitForDone();
+    }
 }
 
 KisMergeLabeledLayersCommand::~KisMergeLabeledLayersCommand()
@@ -73,12 +83,6 @@ void KisMergeLabeledLayersCommand::redo()
         mergeLabeledLayers();
     }
     KUndo2Command::redo();
-}
-
-KisImageSP KisMergeLabeledLayersCommand::createRefImage(KisImageSP originalImage, QString name)
-{
-    return KisImageSP(new KisImage(new KisSurrogateUndoStore(), originalImage->width(), originalImage->height(),
-                                   originalImage->colorSpace(), name));
 }
 
 KisPaintDeviceSP KisMergeLabeledLayersCommand::createRefPaintDevice(KisImageSP originalImage, QString name)
@@ -116,7 +120,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
         *m_newRefNodeInfoList = currentNodeInfoList;
     }
     
-    if (checkChangesInNodes() && (currentNodeInfoList == *m_prevRefNodeInfoList)) {
+    if (checkChangesInNodes() && !m_forceRegeneration && (currentNodeInfoList == *m_prevRefNodeInfoList)) {
         m_newRefPaintDevice->prepareClone(m_prevRefPaintDevice);
         m_newRefPaintDevice->makeCloneFromRough(m_prevRefPaintDevice, m_prevRefPaintDevice->extent());
     } else {

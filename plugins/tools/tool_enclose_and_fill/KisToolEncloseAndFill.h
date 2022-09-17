@@ -107,8 +107,9 @@ private:
     Reference m_reference {CurrentLayer};
     QList<int> m_selectedColorLabels;
 
-    KisPaintDeviceSP m_referencePaintDevice;
-    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList;
+    KisPaintDeviceSP m_referencePaintDevice {nullptr};
+    KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP m_referenceNodeList {nullptr};
+    int m_previousTime {0};
 
     KisOptionCollectionWidget *m_optionWidget {nullptr};
 

@@ -57,16 +57,18 @@
 #include <kis_dummies_facade.h>
 #include <KoShapeControllerBase.h>
 #include <kis_shape_controller.h>
+#include <kis_image_animation_interface.h>
 
 #include "kis_icon_utils.h"
 
 KisToolFill::KisToolFill(KoCanvasBase * canvas)
-        : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
-        , m_fillMask(nullptr)
-        , m_referencePaintDevice(nullptr)
-        , m_referenceNodeList(nullptr)
-        , m_compressorFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
-        , m_fillStrokeId(nullptr)
+    : KisToolPaint(canvas, KisCursor::load("tool_fill_cursor.png", 6, 6))
+    , m_fillMask(nullptr)
+    , m_referencePaintDevice(nullptr)
+    , m_referenceNodeList(nullptr)
+    , m_previousTime(0)
+    , m_compressorFillUpdate(150, KisSignalCompressor::FIRST_ACTIVE)
+    , m_fillStrokeId(nullptr)
 {
     setObjectName("tool_fill");
     connect(&m_compressorFillUpdate, SIGNAL(timeout()), SLOT(slotUpdateFill()));
@@ -229,7 +231,6 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
         } else if (m_reference == Reference_AllLayers) {
             referencePaintDevice = currentImage()->projection();
         } else if (m_reference == Reference_ColorLabeledLayers) {
-            KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
             if (!m_referenceNodeList) {
                 referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
                 m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
@@ -238,17 +239,20 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
             }
             KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
             KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+            const int currentTime = image()->animationInterface()->currentTime();
             image()->addJob(
                 m_fillStrokeId,
                 new KisStrokeStrategyUndoCommandBased::Data(
-                    KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage,
-                                                                     m_referenceNodeList,
-                                                                     newReferenceNodeList,
-                                                                     referencePaintDevice,
-                                                                     newReferencePaintDevice,
-                                                                     image()->root(),
-                                                                     m_selectedColorLabels,
-                                                                     KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
+                    KUndo2CommandSP(new KisMergeLabeledLayersCommand(
+                        image(),
+                        m_referenceNodeList,
+                        newReferenceNodeList,
+                        referencePaintDevice,
+                        newReferencePaintDevice,
+                        m_selectedColorLabels,
+                        KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                        m_previousTime != currentTime
+                    )),
                     false,
                     KisStrokeJobData::SEQUENTIAL,
                     KisStrokeJobData::EXCLUSIVE
@@ -256,6 +260,7 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
             );
             referencePaintDevice = newReferencePaintDevice;
             m_referenceNodeList = newReferenceNodeList;
+            m_previousTime = currentTime;
         }
 
         QSharedPointer<KoColor> referenceColor(new KoColor);

@@ -862,14 +862,12 @@ void KisView::dropEvent(QDropEvent *event)
             } else if (sampleLayersMode == "currentLayer") {
                 referencePaintDevice = d->viewManager->activeNode()->paintDevice();
             } else if (sampleLayersMode == "colorLabeledLayers") {
-                KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
                 referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Fill Tool Reference Result Paint Device");
                 image()->addJob(
                     fillStrokeId,
                     new KisStrokeStrategyUndoCommandBased::Data(
-                        KUndo2CommandSP(new KisMergeLabeledLayersCommand(refImage,
+                        KUndo2CommandSP(new KisMergeLabeledLayersCommand(image(),
                                                                          referencePaintDevice,
-                                                                         image()->root(),
                                                                          colorLabels,
                                                                          KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled)),
                         false,

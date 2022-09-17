@@ -22,13 +22,34 @@ class KisUpdatesFacade;
 class KRITAIMAGE_EXPORT KisMergeLabeledLayersCommand : public KUndo2Command
 {
 public:
+    /**
+     * @brief Policies to stablish how the groups should be treated
+     */
     enum GroupSelectionPolicy
     {
+        /**
+         * @brief Groups will be taken into account if their color label matches
+         *        one of the selected color labels, even when the group has
+         *        "no-color-label" as label
+         */
         GroupSelectionPolicy_SelectAlways,
+        /**
+         * @brief Groups will be taken into account only if they have set
+         *        an explicit color label. This ignores groups that have
+         *        "no-color-label" as color label and the "no-color-label" label
+         *        is included in the selected labels list
+         */
         GroupSelectionPolicy_SelectIfColorLabeled,
+        /**
+         * @brief Groups will not be taken into account
+         */
         GroupSelectionPolicy_NeverSelect
     };
 
+    /**
+     * @brief Basic info about a node. This is used to compare and see if the
+     *        node changed
+     */
     struct ReferenceNodeInfo
     {
         QUuid nodeId;
@@ -46,28 +67,51 @@ public:
     using ReferenceNodeInfoList = QList<ReferenceNodeInfo>;
     using ReferenceNodeInfoListSP = QSharedPointer<ReferenceNodeInfoList>;
 
-    KisMergeLabeledLayersCommand(KisImageSP refImage,
+    /**
+     * @brief Construct a new KisMergeLabeledLayersCommand that does not use
+     *        a cache
+     * @param image The image with the reference layers
+     * @param newRefPaintDevice The resulting device that will contain the
+     *                          merged result
+     * @param selectedLabels The color labels of the reference layers
+     * @param groupSelectionPolicy How to treat groups
+     */
+    KisMergeLabeledLayersCommand(KisImageSP image,
                                  KisPaintDeviceSP newRefPaintDevice,
-                                 KisNodeSP currentRoot,
                                  QList<int> selectedLabels,
                                  GroupSelectionPolicy groupSelectionPolicy = GroupSelectionPolicy_SelectAlways);
 
-    KisMergeLabeledLayersCommand(KisImageSP refImage,
+    /**
+     * @brief Construct a new KisMergeLabeledLayersCommand that uses a cache
+     * @param image The image with the reference layers
+     * @param prevRefNodeInfoList The reference node info that is used to
+     *                            compare with the current one to see if the
+     *                            cache device can be used instead of generating
+     *                            a new one
+     * @param newRefNodeInfoList The resulting list of reference node info
+     * @param prevRefPaintDevice The device that is used as a cache if possible
+     * @param newRefPaintDevice The resulting device that will contain the
+     *                          merged result
+     * @param selectedLabels The color labels of the reference layers
+     * @param groupSelectionPolicy How to treat groups
+     * @param forceRegeneration If true, the cache is ignored and the merged
+     *                          result is regenerated
+     */
+    KisMergeLabeledLayersCommand(KisImageSP image,
                                  ReferenceNodeInfoListSP prevRefNodeInfoList,
                                  ReferenceNodeInfoListSP newRefNodeInfoList,
                                  KisPaintDeviceSP prevRefPaintDevice,
                                  KisPaintDeviceSP newRefPaintDevice,
-                                 KisNodeSP currentRoot,
                                  QList<int> selectedLabels,
-                                 GroupSelectionPolicy groupSelectionPolicy = GroupSelectionPolicy_SelectAlways);
+                                 GroupSelectionPolicy groupSelectionPolicy = GroupSelectionPolicy_SelectAlways,
+                                 bool forceRegeneration = false);
                                  
     ~KisMergeLabeledLayersCommand() override;
 
     void undo() override;
     void redo() override;
 
-    static KisImageSP createRefImage(KisImageSP originalImage, QString name = "Reference Image");
-    static KisPaintDeviceSP createRefPaintDevice(KisImageSP originalImage, QString name = "Reference Result Paint Device");
+    static KisPaintDeviceSP createRefPaintDevice(KisImageSP originalImage, QString name = "Merge Labeled Layers Reference Paint Device");
 
 private:
     void mergeLabeledLayers();
@@ -83,6 +127,7 @@ private:
     KisNodeSP m_currentRoot;
     QList<int> m_selectedLabels;
     GroupSelectionPolicy m_groupSelectionPolicy;
+    bool m_forceRegeneration;
 };
 
 #endif /* __KIS_MERGE_LABELED_LAYERS_H */

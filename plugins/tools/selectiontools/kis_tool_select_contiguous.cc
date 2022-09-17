@@ -47,6 +47,7 @@
 #include "kis_resources_snapshot.h"
 #include "kis_processing_applicator.h"
 #include <processing/fill_processing_visitor.h>
+#include <kis_image_animation_interface.h>
 
 #include "kis_command_utils.h"
 
@@ -58,6 +59,7 @@ KisToolSelectContiguous::KisToolSelectContiguous(KoCanvasBase *canvas)
     , m_threshold(8)
     , m_opacitySpread(100)
     , m_useSelectionAsBoundary(false)
+    , m_previousTime(0)
 {
     setObjectName("tool_select_contiguous");
 }
@@ -116,29 +118,30 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
     } else if (sampleLayersMode() == SampleAllLayers) {
         sourceDevice = m_referencePaintDevice = currentImage()->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
-        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Contiguous Selection Tool Reference Image");
         if (!m_referenceNodeList) {
             m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Contiguous Selection Tool Reference Result Paint Device");
             m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
         }
         KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Contiguous Selection Tool Reference Result Paint Device");
         KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        const int currentTime = image()->animationInterface()->currentTime();
         applicator.applyCommand(
             new KisMergeLabeledLayersCommand(
-                refImage,
+                image(),
                 m_referenceNodeList,
                 newReferenceNodeList,
                 m_referencePaintDevice,
                 newReferencePaintDevice,
-                image()->root(),
                 colorLabelsSelected(),
-                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                m_previousTime != currentTime
             ),
             KisStrokeJobData::SEQUENTIAL,
             KisStrokeJobData::EXCLUSIVE
         );
         sourceDevice = m_referencePaintDevice = newReferencePaintDevice;
         m_referenceNodeList = newReferenceNodeList;
+        m_previousTime = currentTime;
     }
 
     KisPixelSelectionSP selection =

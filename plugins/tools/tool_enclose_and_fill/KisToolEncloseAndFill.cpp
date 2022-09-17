@@ -38,6 +38,7 @@
 #include <KoGroupButton.h>
 #include <kis_color_button.h>
 #include <kis_color_label_selector_widget.h>
+#include <kis_image_animation_interface.h>
 
 #include <kis_processing_applicator.h>
 #include <kis_command_utils.h>
@@ -253,29 +254,30 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
     } else if (m_reference == AllLayers) {
         m_referencePaintDevice = currentImage()->projection();
     } else if (m_reference == ColorLabeledLayers) {
-        KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Enclose and Fill Tool Reference Image");
         if (!m_referenceNodeList) {
             m_referencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
             m_referenceNodeList.reset(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
         }
         KisPaintDeviceSP newReferencePaintDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
         KisMergeLabeledLayersCommand::ReferenceNodeInfoListSP newReferenceNodeList(new KisMergeLabeledLayersCommand::ReferenceNodeInfoList);
+        const int currentTime = image()->animationInterface()->currentTime();
         applicator.applyCommand(
             new KisMergeLabeledLayersCommand(
-                refImage,
+                image(),
                 m_referenceNodeList,
                 newReferenceNodeList,
                 m_referencePaintDevice,
                 newReferencePaintDevice,
-                image()->root(),
                 m_selectedColorLabels,
-                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled
+                KisMergeLabeledLayersCommand::GroupSelectionPolicy_SelectIfColorLabeled,
+                m_previousTime != currentTime
             ),
             KisStrokeJobData::SEQUENTIAL,
             KisStrokeJobData::EXCLUSIVE
         );
         m_referencePaintDevice = newReferencePaintDevice;
         m_referenceNodeList = newReferenceNodeList;
+        m_previousTime = currentTime;
     }
 
     QTransform transform;

@@ -39,7 +39,7 @@ protected:
 
 private:
     struct Private;
-    QScopedPointer<Private> m_d {nullptr};
+    QScopedPointer<Private> m_d;
 };
 
 #endif // KISCOLLAPSIBLEBUTTONGROUP_H

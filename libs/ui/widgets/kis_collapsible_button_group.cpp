@@ -8,6 +8,12 @@
 
 struct KisCollapsibleButtonGroup::Private {
 
+    Private() {
+    }
+
+    ~Private() {
+    }    
+
     QScopedPointer<QToolButton> collapsedButton;
     QList<QToolButton*> allButtons;
     bool autoCollapse {true};
@@ -18,7 +24,7 @@ struct KisCollapsibleButtonGroup::Private {
 
 KisCollapsibleButtonGroup::KisCollapsibleButtonGroup(QWidget *parent)
     : QWidget(parent)
-    , m_d(new Private())
+    , m_d(new KisCollapsibleButtonGroup::Private())
 {
     m_d->layout = new QHBoxLayout;
     m_d->layout->setSpacing(0);
@@ -33,7 +39,7 @@ KisCollapsibleButtonGroup::KisCollapsibleButtonGroup(QWidget *parent)
     connect(m_d->collapsedButton.data(), &QToolButton::triggered, [this](QAction* triggered) {
         m_d->collapsedButton->setDefaultAction(triggered);
     });
-}
+}	
 
 void KisCollapsibleButtonGroup::setAutoRaise(bool autoRaise)
 {
@@ -44,7 +50,9 @@ void KisCollapsibleButtonGroup::setAutoRaise(bool autoRaise)
     }
 }
 
-KisCollapsibleButtonGroup::~KisCollapsibleButtonGroup() = default;
+KisCollapsibleButtonGroup::~KisCollapsibleButtonGroup() {
+    m_d.reset();
+}
 
 bool KisCollapsibleButtonGroup::autoRaise() const
 {

@@ -46,23 +46,12 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
     const QSizeF sizeInPx = QSizeF(image->bounds().size());
     const QSizeF pageSize(sizeInPx.width() / image->xRes(),
                       sizeInPx.height() / image->yRes());
-    KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()}, pageSize);
+
+    KisScalableVectorGraphicsSaveContext savingContext(*io, true);
+
+    KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()}, pageSize, &savingContext);
 
     document->image()->rootLayer()->accept(svgVisitor);
-    const auto bounds = image->bounds();
-    const auto *const cs = image->colorSpace();
-
-
-
-
-    KisGroupLayerSP rootLayer = image->rootLayer();
-    QList<KoShapeLayer*> svgLayers ;
-    KisShapeLayerSP shapeLayer = qobject_cast<KisShapeLayer*>(rootLayer->firstChild().data());
-    qDebug() << shapeLayer->objectName();
-    QList<KoShape*> shapes = shapeLayer->shapes();
-    std::sort(shapes.begin(), shapes.end(), KoShape::compareShapeZIndex);
-
-
 
 
     return ImportExportCodes::OK;

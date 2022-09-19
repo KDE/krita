@@ -1,43 +1,212 @@
+/* This file is part of the KDE project
+ * SPDX-FileCopyrightText: 2011 Jan Hambrecht <jaham@gmx.net>
+ *
+ * SPDX-License-Identifier: LGPL-2.0-or-later
+ */
+
 #include "kis_scalable_vector_graphics_save_context.h"
-#include <QDomDocument>
+#include "SvgUtil.h"
 
-#include <KoStore.h>
-#include <KoStoreDevice.h>
-#include <KoColorSpaceRegistry.h>
-#include <kundo2command.h>
-#include <kis_paint_layer.h>
-#include <kis_paint_device.h>
-#include <kis_image.h>
+#include <KoXmlWriter.h>
+#include <KoShape.h>
+#include <KoShapeGroup.h>
+#include <KoShapeLayer.h>
 
-#include <kis_meta_data_store.h>
+#include <QTemporaryFile>
 
-#include "kis_png_converter.h"
+#include <QImage>
+#include <QTransform>
+#include <QBuffer>
+#include <QHash>
+#include <QFile>
+#include <QFileInfo>
+#include <KisMimeDatabase.h>
 
-KisScalableVectorGraphicsSaveContext::KisScalableVectorGraphicsSaveContext(KoStore* store)
-    : m_id(0)
-    , m_store(store)
+class Q_DECL_HIDDEN KisScalableVectorGraphicsSaveContext::Private
 {
+public:
+    Private(QIODevice *_mainDevice, QIODevice *_styleDevice)
+        : mainDevice(_mainDevice)
+        , styleDevice(_styleDevice)
+        , styleWriter(0)
+        , shapeWriter(0)
+        , saveInlineImages(true)
+    {
+        styleWriter.reset(new KoXmlWriter(&styleBuffer, 1));
+        styleWriter->startElement("defs");
+        shapeWriter.reset(new KoXmlWriter(&shapeBuffer, 1));
 
-}
-
-QString KisScalableVectorGraphicsSaveContext::saveDeviceData(KisPaintDeviceSP dev, KisMetaData::Store* metaData, const QRect &imageRect, const qreal xRes, const qreal yRes)
-{
-   QString filename = QString("data/layer%1.png").arg(m_id++);
-    if (KisPNGConverter::saveDeviceToStore(filename, imageRect, xRes, yRes, dev, m_store, metaData)) {
-        return filename;
+        const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
+        userSpaceMatrix.scale(scaleToUserSpace, scaleToUserSpace);
     }
-    return "";
+
+    ~Private()
+    {
+    }
+
+    QIODevice *mainDevice;
+    QIODevice *styleDevice;
+    QBuffer styleBuffer;
+    QBuffer shapeBuffer;
+    QScopedPointer<KoXmlWriter> styleWriter;
+    QScopedPointer<KoXmlWriter> shapeWriter;
+
+    QHash<QString, int> uniqueNames;
+    QHash<const KoShape*, QString> shapeIds;
+    QTransform userSpaceMatrix;
+    bool saveInlineImages;
+    bool strippedTextMode = false;
+};
+
+KisScalableVectorGraphicsSaveContext::KisScalableVectorGraphicsSaveContext(QIODevice &outputDevice, bool saveInlineImages)
+    : d(new Private(&outputDevice, 0))
+{
+    d->saveInlineImages = saveInlineImages;
 }
 
-
-void KisScalableVectorGraphicsSaveContext::saveStack(const QDomDocument& doc)
+KisScalableVectorGraphicsSaveContext::KisScalableVectorGraphicsSaveContext(QIODevice &shapesDevice, QIODevice &styleDevice, bool saveInlineImages)
+    : d(new Private(&shapesDevice, &styleDevice))
 {
-    if (m_store->open("stack.xml")) {
-        KoStoreDevice io(m_store);
-        io.write(doc.toByteArray());
-        io.close();
-        m_store->close();
+    d->saveInlineImages = saveInlineImages;
+}
+
+KisScalableVectorGraphicsSaveContext::~KisScalableVectorGraphicsSaveContext()
+{
+    d->styleWriter->endElement();
+
+    if (d->styleDevice) {
+        d->styleDevice->write(d->styleBuffer.data());
     } else {
-        dbgFile << "Opening of the stack.xml file failed :";
+        d->mainDevice->write(d->styleBuffer.data());
+        d->mainDevice->write("\n");
     }
+
+    d->mainDevice->write(d->shapeBuffer.data());
+
+    delete d;
+}
+
+KoXmlWriter &KisScalableVectorGraphicsSaveContext::styleWriter()
+{
+    return *d->styleWriter;
+}
+
+KoXmlWriter &KisScalableVectorGraphicsSaveContext::shapeWriter()
+{
+    return *d->shapeWriter;
+}
+
+QString KisScalableVectorGraphicsSaveContext::createUID(const QString &base)
+{
+    QString idBase = base.isEmpty() ? "defitem" : base;
+    int counter = d->uniqueNames.value(idBase);
+    d->uniqueNames.insert(idBase, counter+1);
+
+    return idBase + QString("%1").arg(counter);
+}
+
+QString KisScalableVectorGraphicsSaveContext::getID(const KoShape *obj)
+{
+    QString id;
+    // do we have already an id for this object ?
+    if (d->shapeIds.contains(obj)) {
+        // use existing id
+        id = d->shapeIds[obj];
+    } else {
+        // initialize from object name
+        id = obj->name();
+        // if object name is not empty and was not used already
+        // we can use it as is
+        if (!id.isEmpty() && !d->uniqueNames.contains(id)) {
+            // add to unique names so it does not get reused
+            d->uniqueNames.insert(id, 1);
+        } else {
+            if (id.isEmpty()) {
+                // differentiate a little between shape types
+                if (dynamic_cast<const KoShapeGroup*>(obj))
+                    id = "group";
+                else if (dynamic_cast<const KoShapeLayer*>(obj))
+                    id = "layer";
+                else
+                    id = "shape";
+            }
+            // create a completely new id based on object name
+            // or a generic name
+            id = createUID(id);
+        }
+        // record id for this shape
+        d->shapeIds.insert(obj, id);
+    }
+    return id;
+}
+
+QTransform KisScalableVectorGraphicsSaveContext::userSpaceTransform() const
+{
+    return d->userSpaceMatrix;
+}
+
+bool KisScalableVectorGraphicsSaveContext::isSavingInlineImages() const
+{
+    return d->saveInlineImages;
+}
+
+QString KisScalableVectorGraphicsSaveContext::createFileName(const QString &extension)
+{
+    QFile *file = qobject_cast<QFile*>(d->mainDevice);
+    if (!file)
+        return QString();
+
+    QFileInfo fi(file->fileName());
+    QString path = fi.absolutePath();
+    QString dstBaseFilename = fi.completeBaseName();
+
+    // create a filename for the image file at the destination directory
+    QString fname = dstBaseFilename + '_' + createUID("file");
+
+    // check if file exists already
+    int i = 0;
+    QString counter;
+    // change filename as long as the filename already exists
+    while (QFile(path + fname + counter + extension).exists()) {
+        counter = QString("_%1").arg(++i);
+    }
+
+    return fname + counter + extension;
+}
+
+QString KisScalableVectorGraphicsSaveContext::saveImage(const QImage &image)
+{
+    if (isSavingInlineImages()) {
+        QBuffer buffer;
+        buffer.open(QIODevice::WriteOnly);
+        if (image.save(&buffer, "PNG")) {
+            const QString header("data:image/x-png;base64,");
+            return header + buffer.data().toBase64();
+        }
+    } else {
+        // write to a temp file first
+        QTemporaryFile imgFile;
+        if (image.save(&imgFile, "PNG")) {
+            QString dstFilename = createFileName(".png");
+            if (QFile::copy(imgFile.fileName(), dstFilename)) {
+                return dstFilename;
+            }
+            else {
+                QFile f(imgFile.fileName());
+                f.remove();
+            }
+        }
+    }
+
+    return QString();
+}
+
+void KisScalableVectorGraphicsSaveContext::setStrippedTextMode(bool value)
+{
+    d->strippedTextMode = value;
+}
+
+bool KisScalableVectorGraphicsSaveContext::strippedTextMode() const
+{
+    return d->strippedTextMode;
 }

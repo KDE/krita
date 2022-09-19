@@ -17,6 +17,9 @@
 #include <kis_external_layer_iface.h>
 #include <QTextStream>
 #include <KoXmlNS.h>
+#include <KoShapeLayer.h>
+#include <KoShapeGroup.h>
+
 
 struct KisScalableVectorGraphicsSaveVisitor::Private {
     Private() {}
@@ -24,11 +27,12 @@ struct KisScalableVectorGraphicsSaveVisitor::Private {
     QDomDocument layerStack;
     QDomElement currentElement;
     vKisNodeSP activeNodes;
-    QTextStream* saveDevice;
+    QIODevice* saveDevice ;
+
 };
 
 
-KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, QSizeF pageSize)
+KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, QSizeF pageSize, KisScalableVectorGraphicsSaveContext* savingContext)
     : d(new Private)
 {
     QTextStream svgStream(saveDevice);
@@ -50,25 +54,34 @@ KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODe
     svgStream << "    height=\"" << pageSize.height() << "pt\"\n";
     svgStream << "    viewBox=\"0 0 "
               << pageSize.width() << " " << pageSize.height()
-              << "\"";
+              << "\"" ;
     svgStream << ">" << endl;
-   svgStream << endl << "</svg>" << endl;
-    d->saveDevice = &svgStream;
+
+    d->saveDevice = saveDevice;
     d->activeNodes = activeNodes;
+    d->saveContext = savingContext;
 }
 
 KisScalableVectorGraphicsSaveVisitor::~KisScalableVectorGraphicsSaveVisitor()
 {
+    QTextStream svgStream(d->saveDevice);
+    svgStream.setCodec("UTF-8");
+    svgStream << endl << "</svg>" << endl;
+
     delete d;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisPaintLayer *layer)
 {
+//    qDebug() << "paintlayer: " << layer->name();
+
     return saveLayer(layer);
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGroupLayer *layer)
 {
+//    qDebug() << "grouplayer: " << layer->name();
+
     visitAll(layer);
     return true;
 }
@@ -76,26 +89,31 @@ bool KisScalableVectorGraphicsSaveVisitor::visit(KisGroupLayer *layer)
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisAdjustmentLayer *layer)
 {
 
-    return true;
+    return saveLayer(layer);
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisExternalLayer *layer)
 {
-    return true;
+    qDebug() << "external layer: " << layer->name();
+//    return true;
+    return saveLayer(layer);
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGeneratorLayer *layer)
 {
-    return true;
+    return saveLayer(layer);
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisCloneLayer *layer)
 {
-    return true;
+    return saveLayer(layer);
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
 {
+    QTextStream svgStream(d->saveDevice);
+    svgStream.setCodec("UTF-8");
+
     if (layer->isFakeNode()) {
         // don't save grids, reference images layers etc.
         return true;
@@ -109,12 +127,22 @@ bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
         // to just save an empty layer file
         adjustedBounds.adjust(0, 0, 1, 1);
     }
-
+    qDebug() << "savelayer: " << layer->name();
 
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
     d->currentElement.insertBefore(elt, QDomNode());
-    *d->saveDevice << layer->name() << endl;
+
+
+    KisShapeLayerSP vector = dynamic_cast<KisShapeLayer*>(layer);
+
+
+
+    QList<KoShape*> toplevelShapes;
+    KoShapeLayer* shapelayer = layer;
+    toplevelShapes.append();
+
+
     return true;
 }
 

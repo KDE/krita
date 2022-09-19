@@ -1302,11 +1302,22 @@ void KisPainter::paintEllipse(const QRectF &rect)
 Q_DECL_PURE_FUNCTION static inline QVector<QPair<long double,long double>>
 getEllipsePixels(long double sinC, long double sqSinC, long double cosC, long double sqCosC, long double aSq,
                  long double bSq, qreal angle) {
-    // Read https://rohankjoshi.medium.com/the-equation-for-a-rotated-ellipse-5888731da76
-    // and https://stackoverflow.com/questions/55100965/algorithm-for-plotting-2d-xy-graph/55120230#55120230
-    // for information of the algorithm.
-    //
-    // Using long double for more precision, try to see if that improves.
+    // Read https://www.cpp.edu/~raheja/CS445/MEA.pdf for information of the algorithm.
+    // In this document, a difference method is used to speed up calculation, but I'm not going to
+    // use it in Krita, because calculating the ellipse paraboloid is fast enough on modern computers,
+    // and the difference method make the code 10 times complexier.
+
+    // The over all idea is to start from one point and trace along the ellipse.
+    // For example, if we start from the leftmost point on the ellipse, we should go a left-upper-ish direction.
+    // At the first, the slope we follow is larger than 45 degs, so we always try to take a step up,
+    // a prediction function is used to determine if we are inside the ellipse after the step up.
+
+    // We should always try to keep in the ellipse, so when predict says we will be outside the ellipse after the
+    // step up, we should take a 45 degs step up instead. By doing so, we're always fitting in the ellipse.
+
+    // The idea is similiar for other patitions. For reasons about partitioning, read the document above.
+
+    // Using long double for more precision here.
     // Because Qt does not provide long double version of most functions,
     // I have to use std instead.
 
@@ -1314,6 +1325,8 @@ getEllipsePixels(long double sinC, long double sqSinC, long double cosC, long do
         return (aSq * sqSinC + bSq * sqCosC) * x * x + 2.0l * (bSq - aSq) * sinC * cosC * x * y + (aSq * sqCosC + bSq * sqSinC) * y * y - aSq * bSq;
     };
 
+    // When taking a step, it's possible to cross the whole ellipse(because the ellipse can be thin) and end up
+    // out of the ellipse, but on the other side. This function tells if we take a too big step.
     auto under=[sqCosC,sqSinC,aSq,bSq,angle](auto x){
         auto coef1 = std::sqrt(2.0l) * std::sqrt(aSq * bSq * (aSq + bSq - 2.0l * x * x + (aSq - bSq) * std::cos(2.0l * angle)));
         auto coef2 = (aSq - bSq) * x * std::sin(2.0l * angle);
@@ -1346,13 +1359,14 @@ getEllipsePixels(long double sinC, long double sqSinC, long double cosC, long do
             p.second = std::round(-coef1 / coef2);
         }
     }
-    //
+    // The boundary of each part.
+    // y=x 45 deg Tangent point boundary
     long double region1StopY = ((-aSq - bSq + (aSq - bSq) * std::cos(2.0l * angle) + (aSq - bSq) * std::sin(2.0l * angle)) * std::sqrt(aSq + bSq + (-aSq + bSq) * std::sin(2.0l * angle))) / (-2.0l * (aSq + bSq) + 2.0l * (aSq - bSq) * std::sin(2.0l * angle));
-    //
+    // y=C horizontal Tangent point boundary
     long double region2StopX = (std::sqrt(2.0l) * (aSq - bSq) * cosC * sinC) / std::sqrt(aSq + bSq + (-aSq + bSq) * std::cos(2.0l * angle));
-
+    // y=-x -45 deg Tangent point boundary
     long double region3StopX = (aSq + bSq + (aSq - bSq) * std::cos(2.0l * angle) + (aSq - bSq) * std::sin(2.0l * angle)) / (2.0l * std::sqrt(aSq + bSq + (aSq - bSq) * std::sin(2.0l * angle)));
-
+    // x=C vertical Tangent point boundary
     long double region4StopY = ((aSq - bSq) * std::sin(2.0l * angle)) / (std::sqrt(2.0l) * std::sqrt(aSq + bSq + (aSq - bSq) * std::cos(2.0l * angle)));
 
     region1StopY = std::round(region1StopY * 2.0l) / 2.0l;
@@ -1457,7 +1471,8 @@ Q_DECL_PURE_FUNCTION static inline QVector<QPair<long double,long double>> makeP
 
 void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
 
-    // Normalization
+    // Normalization, to a [-1/4*Pi, 1/4*Pi) range.
+    // The axis a will always be closer to the x-axis after normalization
     while (angle >= M_PI - M_PI_4) {
         angle -= M_PI;
     }
@@ -1515,6 +1530,7 @@ void KisPainter::paintEllipse(qreal a_, qreal b_, qreal angle, QPointF offset) {
         points.push_back(QPointF(dfghjk.first + offset.x(),dfghjk.second+offset.y()));
     }
 
+    // FIXME: don't know why, but seems the filling of `paintPolygon` is broken...
     paintPolygon(points);
 
 }

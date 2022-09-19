@@ -17,7 +17,6 @@
 #include "qimage_based_test.h"
 #include <stroke_testing_utils.h>
 #include <KoCanvasResourcesIds.h>
-#include <brushengine/kis_paint_information.h>
 #include <brushengine/kis_paintop_preset.h>
 #include <brushengine/kis_paintop_settings.h>
 
@@ -180,11 +179,14 @@ public:
                 utils::createResourceManager(image, 0, "test_smudge_20px_dul_nsa_new.0001.kpp"));
 
         Brush2Manager->setResource(KoCanvasResource::ForegroundColor, KoColor(Qt::darkGreen, image->colorSpace()));
+        Brush2Manager->setResource(KoCanvasResource::BackgroundColor, KoColor(Qt::red, image->colorSpace()));
 
         KisResourcesSnapshotSP Brush2resources =
                 new KisResourcesSnapshot(image, targetNode, Brush2Manager.data());
 
         Brush2resources->setupPainter(&gc);
+
+        gc.setFillStyle(KisPainter::FillStyleBackgroundColor);
 
         gc.paintEllipse(236.0, 228.0, 6.011207, {194.0, 357.0});
         gc.paintEllipse(236.0, 228.0, 2.430340, {472.0, 357.0});
@@ -196,6 +198,7 @@ public:
         gc.paintEllipse(183.0, 255.0, 3.908099, {425.5, 1016.5});
         gc.paintEllipse(114.0, 137.0, 5.177951, {662.0, 956.5});
         gc.paintEllipse(114.0, 137.0, 2.653228, {841.0, 956.5});
+        gc.setFillStyle(KisPainter::FillStyleNone);
         gc.paintEllipse(123.0, 240.0, 9.426152, {120.5, 1305.0});
         gc.paintEllipse(123.0, 240.0, 6.487866, {402.5, 1305.0});
         gc.paintEllipse(122.0, 178.0, 7.776356, {653.0, 1274.0});
@@ -258,6 +261,8 @@ void KisEllipseTest::testDrawing(){
 }
 
 void KisEllipseTest::testPrecision() {
+    // TODO: Add some tolerance here, because the reference image is generated with 80-bit floating point numbers
+    // TODO: and there's only IEEE 754 on many platforms, so on these platforms the test may fail.
     KisEllipseTestInner t;
     t.testPrecision();
 }

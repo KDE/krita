@@ -310,6 +310,7 @@ void KisGroupLayer::setPassThroughMode(bool value)
 
     baseNodeChangedCallback();
     baseNodeInvalidateAllFramesCallback();
+    notifyChildMaskChanged();
 }
 
 KisBaseNode::PropertyList KisGroupLayer::sectionModelProperties() const

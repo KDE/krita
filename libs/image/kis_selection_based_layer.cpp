@@ -109,8 +109,6 @@ void KisSelectionBasedLayer::setImage(KisImageWSP image)
     if (image) {
         m_d->imageConnections.addConnection(image.data(), SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged()));
     }
-
-    resetCache();
 }
 
 bool KisSelectionBasedLayer::allowAsChild(KisNodeSP node) const

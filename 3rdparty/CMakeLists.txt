@@ -679,7 +679,6 @@ add_subdirectory(ext_giflib)
 add_subdirectory(ext_quazip)
 add_subdirectory(ext_seexpr)
 add_subdirectory(ext_json_c)
-add_subdirectory(ext_mlt)
 add_subdirectory(ext_mypaint)
 
 if (UNIX AND NOT APPLE)

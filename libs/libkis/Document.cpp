@@ -927,6 +927,12 @@ bool Document::modified() const
     return d->document->isModified();
 }
 
+void Document::setModified(bool modified)
+{
+    if (!d->document) return;
+    d->document->setModified(modified);
+}
+
 QRect Document::bounds() const
 {
     if (!d->document) return QRect();

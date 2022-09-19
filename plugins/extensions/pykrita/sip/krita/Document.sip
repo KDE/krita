@@ -88,6 +88,7 @@ public Q_SLOTS:
     void setGuidesVisible(bool visible);
     void setGuidesLocked(bool locked);
     bool modified() const;
+    void setModified(bool modified);
     QRect bounds() const;
     bool importAnimation(const QList<QString> &files, int firstFrame, int step);
     int framesPerSecond();

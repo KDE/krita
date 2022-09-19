@@ -779,6 +779,12 @@ print(root.childNodes())
     bool modified() const;
 
     /**
+     * @brief setModified sets the modified status of the document
+     * @param modified if true, the document is considered modified and closing it will ask for saving.
+     */
+    void setModified(bool modified);
+
+    /**
      * @brief bounds return the bounds of the image
      * @return the bounds
      */

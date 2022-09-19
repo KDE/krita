@@ -350,7 +350,7 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
         dbgFile << "\tRead layer mask/adjustment layer data. Length of block:" << layerMaskLength << "pos" << io.pos();
 
         // layer blending thingies
-        quint32 blendingDataLength;
+        quint32 blendingDataLength = 0;
         if (!psdread<byteOrder>(io, blendingDataLength) || io.bytesAvailable() < blendingDataLength) {
             error = "Could not read extra blending data.";
             return false;
@@ -360,26 +360,36 @@ bool PSDLayerRecord::readImpl(QIODevice &io)
 
         dbgFile << "\tNumber of blending channels:" << blendingNchannels;
 
-        if (blendingNchannels > 0) {
-            if (!psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[1])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[1])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[1])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[0])
-                || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[1])) {
-                error = "Could not read blending black/white values";
-                return false;
+        if (blendingDataLength > 0) {
+            if (blendingDataLength > 0) {
+                if (!psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.blackValues[1])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.first.whiteValues[1])) {
+                    error = "Could not read blending black/white values";
+                    return false;
+                }
             }
+            blendingDataLength -= 4;
+
+            if (blendingDataLength > 0) {
+                if (!psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.blackValues[1])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[0])
+                    || !psdread<byteOrder>(io, blendingRanges.compositeGrayRange.second.whiteValues[1])) {
+                    error = "Could not read blending black/white values";
+                    return false;
+                }
+            }
+            blendingDataLength -= 4;
 
             dbgFile << "\tBlending ranges:";
             dbgFile << "\t\tcomposite gray (source) :" << blendingRanges.compositeGrayRange.first;
             dbgFile << "\t\tcomposite gray (dest):" << blendingRanges.compositeGrayRange.second;
 
             for (quint32 i = 0; i < blendingNchannels; ++i) {
-                LayerBlendingRanges::LayerBlendingRange src;
-                LayerBlendingRanges::LayerBlendingRange dst;
+                LayerBlendingRanges::LayerBlendingRange src{};
+                LayerBlendingRanges::LayerBlendingRange dst{};
                 if (!psdread<byteOrder>(io, src.blackValues[0]) || !psdread<byteOrder>(io, src.blackValues[1]) || !psdread<byteOrder>(io, src.whiteValues[0])
                     || !psdread<byteOrder>(io, src.whiteValues[1]) || !psdread<byteOrder>(io, dst.blackValues[0]) || !psdread<byteOrder>(io, dst.blackValues[1])
                     || !psdread<byteOrder>(io, dst.whiteValues[0]) || !psdread<byteOrder>(io, dst.whiteValues[1])) {

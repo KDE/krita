@@ -19,6 +19,8 @@
 #include <KConfigCore/KSharedConfig>
 #include <KConfigCore/KConfigGroup>
 
+#include <KisUsageLogger.h>
+
 #include "config.h"
 #include "version_checker.h"
 
@@ -314,6 +316,7 @@ void PythonPluginManager::scanPlugins()
 
 void PythonPluginManager::tryLoadEnabledPlugins()
 {
+    KisUsageLogger::writeSysInfo("Loaded Python Plugins");
     for (PythonPlugin &plugin : m_plugins) {
         dbgScript << "Trying to load plugin" << plugin.moduleName()
                   << ". Enabled:" << plugin.isEnabled()
@@ -323,6 +326,7 @@ void PythonPluginManager::tryLoadEnabledPlugins()
             loadModule(plugin);
         }
     }
+    KisUsageLogger::writeSysInfo("\n");
 }
 
 void PythonPluginManager::loadModule(PythonPlugin &plugin)
@@ -330,6 +334,7 @@ void PythonPluginManager::loadModule(PythonPlugin &plugin)
     KIS_SAFE_ASSERT_RECOVER_RETURN(plugin.isEnabled() && !plugin.isBroken());
 
     QString module_name = plugin.moduleName();
+    KisUsageLogger::writeSysInfo("\t" + module_name);
     dbgScript << "Loading module: " << module_name;
 
     PyKrita::Python py = PyKrita::Python();

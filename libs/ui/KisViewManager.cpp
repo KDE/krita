@@ -1276,7 +1276,9 @@ void KisViewManager::switchCanvasOnly(bool toggled)
         // show a fading heads-up display about the shortcut to go back
 
         showFloatingMessage(i18n("Going into Canvas-Only mode.\nPress %1 to go back.",
-                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon());
+                                 actionCollection()->action("view_show_canvas_only")->shortcut().toString(QKeySequence::NativeText)), QIcon(),
+                            2000,
+                            KisFloatingMessage::Low);
     }
     else {
         main->restoreState(d->canvasState);

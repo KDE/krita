@@ -872,6 +872,7 @@ bool KisPNGConverter::saveDeviceToStore(const QString &filename, const QRect &im
         options.tryToSaveAsIndexed = false;
         options.alpha = true;
         options.saveSRGBProfile = false;
+        options.downsample = false;
 
         if (dev->colorSpace()->id() != "RGBA") {
             dev = new KisPaintDevice(*dev.data());
@@ -930,12 +931,13 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     if (device->colorSpace()->colorDepthId() == Float16BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float32BitsColorDepthID
             || device->colorSpace()->colorDepthId() == Float64BitsColorDepthID
-            || options.saveAsHDR) {
+            || options.saveAsHDR
+            || (device->colorSpace()->colorDepthId() != Integer8BitsColorDepthID && options.downsample)) {
 
         const KoColorSpace *dstCS =
             KoColorSpaceRegistry::instance()->colorSpace(
                 device->colorSpace()->colorModelId().id(),
-                Integer16BitsColorDepthID.id(),
+                options.downsample ? Integer8BitsColorDepthID.id() : Integer16BitsColorDepthID.id(),
                 device->colorSpace()->profile());
 
         if (options.saveAsHDR) {
@@ -951,7 +953,6 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         tmp->convertTo(dstCS);
 
         device = tmp;
-
     }
 
     KIS_SAFE_ASSERT_RECOVER(!options.saveAsHDR || !options.forceSRGB) {
@@ -964,7 +965,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
 
     QStringList colormodels = QStringList() << RGBAColorModelID.id() << GrayAColorModelID.id();
     if (options.forceSRGB || !colormodels.contains(device->colorSpace()->colorModelId().id())) {
-        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
+        const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(RGBAColorModelID.id(), options.downsample ? Integer8BitsColorDepthID.id() : device->colorSpace()->colorDepthId().id(), "sRGB built-in - (lcms internal)");
         device = new KisPaintDevice(*device);
         device->convertTo(cs);
     }

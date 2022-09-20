@@ -53,7 +53,7 @@ if [ -d $APPDIR/usr/share/locale ] ; then
     rm -rf $APPDIR/usr/share/locale
 fi
 
-# Step 1: Copy over all the resources provided by dependencies that we need
+# Step 1: Copy over all necessary resources required by dependencies or libraries that are missed by linuxdeployqt
 cp -r $DEPS_INSTALL_PREFIX/share/locale $APPDIR/usr/share/krita
 cp -r $DEPS_INSTALL_PREFIX/share/kf5 $APPDIR/usr/share
 cp -r $DEPS_INSTALL_PREFIX/share/mime $APPDIR/usr/share
@@ -90,6 +90,50 @@ if [ -d $APPDIR/usr/lib/python3.10/site-packages ]; then
     rm -rf $APPDIR/usr/lib/python3.10/site-packages/toml*
     rm -rf $APPDIR/usr/lib/python3.10/site-packages/easy-install.pth
 fi
+
+## == MLT Dependencies and Resources ==
+cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt-7
+cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libmlt*.so* $APPDIR/usr/lib/
+cp -av $DEPS_INSTALL_PREFIX/bin/melt $APPDIR/usr/bin/melt
+
+export MLT_BINARIES=""
+for BIN in $APPDIR/usr/lib/libmlt*.so*; do
+  MLT_BINARIES="${MLT_BINARIES} -executable=${BIN}"
+done
+
+for BIN in $APPDIR/usr/lib/mlt/*.so*; do
+  MLT_BINARIES="${MLT_BINARIES} -executable=${BIN}"
+done
+
+for BIN in $APPDIR/usr/bin/melt; do
+  MLT_BINARIES="${MLT_BINARIES} -executable=${BIN}"
+done
+
+
+## == FFMPEG Dependencies and Resources ==
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libav*.s* $APPDIR/usr/lib/
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libpostproc*.s* $APPDIR/usr/lib/
+cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libsw*.s* $APPDIR/usr/lib/
+cp -av $DEPS_INSTALL_PREFIX/bin/ff* $APPDIR/usr/bin/
+
+export FFMPEG_BINARIES=""
+
+for BIN in $APPDIR/usr/bin/ff*; do
+  FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"
+done
+
+for BIN in $APPDIR/usr/lib/libav*.s*; do
+  FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"
+done;
+
+for BIN in $APPDIR/usr/lib/libpostproc*; do
+  FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"
+done;
+
+for BIN in $APPDIR/usr/lib/libsw*.s*; do
+  FFMPEG_BINARIES="${FFMPEG_BINARIES} -executable=${BIN}"
+done;
 
 # Step 2: Relocate binaries from the architecture specific directory as required for Appimages
 if [[ -d "$APPDIR/usr/lib/$TRIPLET" ]] ; then
@@ -245,38 +289,11 @@ if [ -n "$STRIP_APPIMAGE" ]; then
     rm -f $TEMPFILE
 fi
 
-# GStreamer + QTMultimedia Support
-
-export GSTREAMER_TARGET=$APPDIR/usr/lib/gstreamer-1.0
-
-# First, lets get the GSTREAMER plugins installed.
-# For now, I'm just going to install all plugins. Once it's working, I'll start picking individual libs that Krita actually needs.
-mkdir -p $GSTREAMER_TARGET
-install -Dm 755 /usr/lib/$TRIPLET/gstreamer-1.0/*.so $GSTREAMER_TARGET/
-install -Dm 755 /usr/lib/$TRIPLET/gstreamer1.0/gstreamer-1.0/gst-plugin-scanner $GSTREAMER_TARGET/gst-plugin-scanner
-install -Dm 755 /usr/lib/$TRIPLET/libgstreamer-1.0.so $APPDIR/usr/lib/
-
-GSTREAMER_BINARIES="-executable=${GSTREAMER_TARGET}/gst-plugin-scanner -executable=${APPDIR}/usr/lib/libgstreamer-1.0.so"
-for plugin in alsa app audioconvert audioparsers audioresample autodetect \
-              coreelements id3demux jack mpg123 mulaw playback pulseaudio \
-              typefindfunctions wavparse; do
-	GSTREAMER_BINARIES="${GSTREAMER_BINARIES} -executable=${GSTREAMER_TARGET}/libgst${plugin}.so"
-done
-
-# Second, we need the mediaservice QT plugins to be installed.
-
-mkdir -p $APPDIR/usr/plugins/mediaservice
-install -Dm 755 $DEPS_INSTALL_PREFIX/plugins/mediaservice/*.so $APPDIR/usr/plugins/mediaservice/
-QT_MEDIA_SERVICES=""
-for plugin in audiodecoder mediaplayer mediacapture; do
-     QT_MEDIA_SERVICES="${QT_MEDIA_SERVICES} -executable=${APPDIR}/usr/plugins/mediaservice/libgst${plugin}.so"
-done
-
 # Step 4: Build the image!!!
 linuxdeployqt $APPDIR/usr/share/applications/org.kde.krita.desktop \
   -executable=$APPDIR/usr/bin/krita \
-  $GSTREAMER_BINARIES \
-  $QT_MEDIA_SERVICES \
+  ${MLT_BINARIES} \
+  ${FFMPEG_BINARIES} \
   -qmldir=$DEPS_INSTALL_PREFIX/qml \
   -verbose=2 \
   -bundle-non-qt-libs \

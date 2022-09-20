@@ -366,7 +366,7 @@ KisImportExportErrorCode KisWebPExport::convert(KisDocument *document, QIODevice
             }
 
             const int timestamp_ms =
-                (image->animationInterface()->fullClipRange().end() + 1)
+                (image->animationInterface()->documentPlaybackRange().end() + 1)
                 * (1000 / image->animationInterface()->framerate());
 
             // Insert the finish beacon.

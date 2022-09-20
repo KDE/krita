@@ -70,7 +70,7 @@ void KisWebPTest::testAnimation()
     QCOMPARE(channel1->keyframeCount(), 24);
 
     QCOMPARE(image->animationInterface()->framerate(), 32);
-    QCOMPARE(image->animationInterface()->fullClipRange(),
+    QCOMPARE(image->animationInterface()->documentPlaybackRange(),
              KisTimeSpan::fromTimeToTime(0, 23));
     QCOMPARE(image->animationInterface()->currentTime(), 0);
 }
@@ -108,7 +108,7 @@ void KisWebPTest::testAnimationWithTail()
     // Unlike the JPEG-XL original, WebP stores with an associated
     // duration, not framerate. They have no notion of blanking.
     QCOMPARE(image->animationInterface()->framerate(), 1);
-    QCOMPARE(image->animationInterface()->fullClipRange(),
+    QCOMPARE(image->animationInterface()->documentPlaybackRange(),
              KisTimeSpan::fromTimeToTime(0, 3));
     QCOMPARE(image->animationInterface()->currentTime(), 0);
 }

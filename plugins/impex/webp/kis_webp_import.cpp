@@ -229,7 +229,7 @@ KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
                     const int framerate = std::lround(
                         1000.0 / static_cast<double>(iter.duration));
                     layer->enableAnimation();
-                    image->animationInterface()->setFullClipRangeStartTime(0);
+                    image->animationInterface()->setDocumentRangeEndFrame(0);
                     image->animationInterface()->setFramerate(framerate);
                 }
 
@@ -279,7 +279,7 @@ KisImportExportErrorCode KisWebPImport::convert(KisDocument *document,
                         true);
                     auto *frame =
                         dynamic_cast<KisRasterKeyframeChannel *>(channel);
-                    image->animationInterface()->setFullClipRangeEndTime(
+                    image->animationInterface()->setDocumentRangeEndFrame(
                         std::lround(static_cast<double>(nextTimestamp)
                                     / static_cast<double>(iter.duration)));
                     frame->importFrame(currentFrameTime,

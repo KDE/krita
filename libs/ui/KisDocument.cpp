@@ -2466,7 +2466,7 @@ bool KisDocument::newImage(const QString& name,
         strippedAlpha.setOpacity(OPACITY_OPAQUE_U8);
 
         if (bgStyle == KisConfig::RASTER_LAYER) {
-            bgLayer = new KisPaintLayer(image.data(), i18nc("Background", "Name for the bottom-most layer in the layerstack"), OPACITY_OPAQUE_U8, cs);
+            bgLayer = new KisPaintLayer(image.data(), i18nc("Name for the bottom-most layer in the layerstack", "Background"), OPACITY_OPAQUE_U8, cs);
             bgLayer->paintDevice()->setDefaultPixel(strippedAlpha);
             bgLayer->setPinnedToTimeline(autopin);
         } else if (bgStyle == KisConfig::FILL_LAYER) {

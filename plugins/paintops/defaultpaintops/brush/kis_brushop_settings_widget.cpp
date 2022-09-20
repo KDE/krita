@@ -65,7 +65,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     // Colors options
     addPaintOpOption(new KisColorSourceOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureDarkenOption(), i18n("0.0"), i18n("1.0")));
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18nc("Background", "Background painting color"), i18nc("Foreground", "Foreground painting color")));
+    addPaintOpOption(new KisCurveOptionWidget(new KisPressureMixOption(), i18nc("Background painting color", "Background"), i18nc("Foreground painting color", "Foreground")));
     addPaintOpOption(
         new KisCurveOptionWidget(KisPressureHSVOption::createHueOption(), KisPressureHSVOption::hueMinLabel(), KisPressureHSVOption::huemaxLabel()));
     addPaintOpOption(new KisCurveOptionWidget(KisPressureHSVOption::createSaturationOption(),

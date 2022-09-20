@@ -368,6 +368,7 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
 
     m_d->canvas = dynamic_cast<KisCanvas2*>(canvas);
     setEnabled(m_d->canvas != 0);
+    m_d->framesView->slotCanvasUpdate(m_d->canvas);
 
     if(m_d->canvas) {
         KisDocument *doc = static_cast<KisDocument*>(m_d->canvas->imageView()->document());
@@ -377,7 +378,6 @@ void KisAnimTimelineDocker::setCanvas(KoCanvasBase * canvas)
                                      m_d->canvas->viewManager()->nodeManager()->nodeDisplayModeAdapter());
 
         m_d->framesModel->setDocument(doc);
-        m_d->framesView->slotCanvasUpdate(m_d->canvas);
 
 
         updateFrameCache();

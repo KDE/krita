@@ -307,7 +307,9 @@ void KisGroupLayer::setPassThroughMode(bool value)
     if (m_d->passThroughMode == value) return;
 
     m_d->passThroughMode = value;
-
+    if (m_d->passThroughMode) {
+        resetCache(colorSpace());
+    }
     baseNodeChangedCallback();
     baseNodeInvalidateAllFramesCallback();
     notifyChildMaskChanged();

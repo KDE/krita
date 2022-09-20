@@ -28,6 +28,7 @@
 #include <KisMimeDatabase.h>
 #include <kis_assert.h>
 #include <kis_debug.h>
+#include <KisUsageLogger.h>
 
 #include "KoResourcePaths.h"
 #include "KisResourceStorage.h"
@@ -179,12 +180,6 @@ void KisResourceLocator::loadRequiredResources(KoResourceSP resource)
             KIS_SAFE_ASSERT_RECOVER_NOOP(res.resource()->resourceId() >= 0);
             break;
         case KoResourceLoadResult::EmbeddedResource: {
-            if (!res.embeddedResource().sanityCheckMd5()) {
-                qWarning() << "WARNING: KisResourceLocator::loadRequiredResources failed to sanity check the embedded resource:";
-                qWarning() << "         parent resource:" << resource->signature();
-                qWarning() << "         embedded resource:" << res.signature();
-            }
-
             KoResourceSignature sig = res.embeddedResource().signature();
             QByteArray data = res.embeddedResource().data();
             QBuffer buffer(&data);

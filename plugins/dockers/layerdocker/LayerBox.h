@@ -34,6 +34,7 @@
 #include <QCheckBox>
 #include <kis_slider_spin_box.h>
 #include <QComboBox>
+#include <kis_idle_watcher.h>
 
 class QModelIndex;
 
@@ -123,7 +124,6 @@ private Q_SLOTS:
     void slotLayerOpMenuOpened();
     void slotLayerOpMenuClosed();
 
-    void updateThumbnail();
     void updateAvailableLabels();
     void updateLayerFiltering();
 
@@ -135,6 +135,8 @@ private Q_SLOTS:
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
+    void notifyThumbnailDirty();
+    void updateDirtyThumbnails();
 
 Q_SIGNALS:
     void imageChanged();
@@ -185,6 +187,8 @@ private:
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
+    QSet<QModelIndex> m_dirtyThumbnailNodes;
+    KisIdleWatcher m_idleWatcher;
 };
 
 class LayerBoxFactory : public KoDockFactoryBase

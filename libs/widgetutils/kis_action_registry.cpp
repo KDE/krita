@@ -343,7 +343,6 @@ bool KisActionRegistry::propertizeAction(const QString &name, QAction * a)
         a->setObjectName(name);
         a->setWhatsThis(whatsthis);
 
-        //a->setToolTip(toolTip);
         a->setStatusTip(statusTip);
         a->setIconText(iconText);
         a->setCheckable(isCheckable);

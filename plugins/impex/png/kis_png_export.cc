@@ -62,6 +62,7 @@ KisImportExportErrorCode KisPNGExport::convert(KisDocument *document, QIODevice 
     options.storeAuthor = configuration->getBool("storeAuthor", false);
     options.storeMetaData = configuration->getBool("storeMetaData", false);
     options.saveAsHDR = configuration->getBool("saveAsHDR", false);
+    options.downsample = configuration->getBool("downsample", false);
 
     vKisAnnotationSP_it beginIt = image->beginAnnotations();
     vKisAnnotationSP_it endIt = image->endAnnotations();
@@ -105,7 +106,7 @@ KisPropertiesConfigurationSP KisPNGExport::defaultConfiguration(const QByteArray
     cfg->setProperty("saveAsHDR", false);
     cfg->setProperty("storeMetaData", false);
     cfg->setProperty("storeAuthor", false);
-
+    cfg->setProperty("downsample", false);
     return cfg;
 }
 
@@ -183,6 +184,8 @@ void KisWdgOptionsPNG::setConfiguration(const KisPropertiesConfigurationSP cfg)
     background.fromQColor(Qt::white);
     bnTransparencyFillColor->setDefaultColor(background);
     bnTransparencyFillColor->setColor(cfg->getColor("transparencyFillcolor", background));
+
+    chkDownsample->setChecked(cfg->getBool("downsample", false));
 }
 
 KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
@@ -199,6 +202,7 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     bool forceSRGB = !saveAsHDR && chkForceSRGB->isChecked();
     bool storeAuthor = chkAuthor->isChecked();
     bool storeMetaData = chkMetaData->isChecked();
+    bool downsample = chkDownsample->isChecked();
 
 
     QVariant transparencyFillcolor;
@@ -214,7 +218,7 @@ KisPropertiesConfigurationSP KisWdgOptionsPNG::configuration() const
     cfg->setProperty("forceSRGB", forceSRGB);
     cfg->setProperty("storeAuthor", storeAuthor);
     cfg->setProperty("storeMetaData", storeMetaData);
-
+    cfg->setProperty("downsample", downsample);
     return cfg;
 }
 

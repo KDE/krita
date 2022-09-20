@@ -37,6 +37,7 @@ class TenScriptsExtension(krita.Extension):
             "tenscripts", "scripts", "").split(',')
 
     def writeSettings(self):
+
         saved_scripts = self.uitenscripts.saved_scripts()
 
         for index, script in enumerate(saved_scripts):
@@ -44,6 +45,8 @@ class TenScriptsExtension(krita.Extension):
 
         Application.writeSetting(
             "tenscripts", "scripts", ','.join(map(str, saved_scripts)))
+
+        self.scripts = saved_scripts
 
     def loadActions(self, window):
         for index, item in enumerate(['1', '2', '3', '4', '5',

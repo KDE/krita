@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
- * SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -41,6 +41,8 @@ public:
     QVector4D channelValues() const;
     int colorChannelCount() const;
     ColorModel colorModel() const;
+    QVector4D maxChannelValues() const;
+    void setMaxChannelValues(const QVector4D &maxValues);
     /**
      * @brief Copy the internal state of another KisVisualColorModel
      *
@@ -55,8 +57,8 @@ public:
      */
     void setRGBColorModel(ColorModel model);
     const KoColorSpace* colorSpace() const;
-    const KoColorDisplayRendererInterface* displayRenderer() const;
     bool isHSXModel() const;
+    bool supportsExposure() const;
     KoColor convertChannelValuesToKoColor(const QVector4D &values) const;
     QVector4D convertKoColorToChannelValues(KoColor c) const;
 
@@ -65,18 +67,13 @@ public Q_SLOTS:
     void slotSetColor(const KoColor &c);
     void slotSetColorSpace(const KoColorSpace *cs);
     void slotSetChannelValues(const QVector4D &values);
-    void setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer);
     /**
      * @brief slotLoadACSConfig loads supported settings from Advanced Color Selector
      */
     void slotLoadACSConfig();
 
-private Q_SLOTS:
-    void slotDisplayConfigurationChanged();
-
 private:
     void loadColorSpace(const KoColorSpace *cs);
-    void switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
     void emitChannelValues();
 
 Q_SIGNALS:

@@ -12,8 +12,8 @@
 #include <QVBoxLayout>
 #include <QMouseEvent>
 
-WGShadeSelector::WGShadeSelector(KisVisualColorModelSP colorModel, QWidget *parent)
-    : WGSelectorWidgetBase(parent)
+WGShadeSelector::WGShadeSelector(WGSelectorDisplayConfigSP displayConfig, KisVisualColorModelSP colorModel, QWidget *parent)
+    : WGSelectorWidgetBase(displayConfig, parent)
     , m_model(colorModel)
 {
     QVBoxLayout* l = new QVBoxLayout(this);
@@ -47,7 +47,7 @@ void WGShadeSelector::updateSettings()
     QVector<WGConfig::ShadeLine> config = cfg.shadeSelectorLines();
 
     while (config.size() > m_sliders.size()) {
-        WGShadeSlider *line = new WGShadeSlider(this, m_model);
+        WGShadeSlider *line = new WGShadeSlider(displayConfiguration(), this, m_model);
         m_sliders.append(line);
         layout()->addWidget(m_sliders.last());
         connect(line, SIGNAL(sigChannelValuesChanged(QVector4D)), SLOT(slotSliderValuesChanged(QVector4D)));

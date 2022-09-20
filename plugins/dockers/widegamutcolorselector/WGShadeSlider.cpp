@@ -27,6 +27,7 @@ struct WGShadeSlider::Private
     qreal rightStart;
     qreal rightEnd;
     KisVisualColorModelSP selectorModel;
+    WGSelectorDisplayConfigSP displayConfig;
     int cursorWidth {11};
     int lineWidth {1};
     int numPatches {9};
@@ -34,11 +35,12 @@ struct WGShadeSlider::Private
     bool imageNeedsUpdate {true};
 };
 
-WGShadeSlider::WGShadeSlider(QWidget *parent, KisVisualColorModelSP model)
+WGShadeSlider::WGShadeSlider(WGSelectorDisplayConfigSP config, QWidget *parent, KisVisualColorModelSP model)
     : QWidget(parent)
     , m_d(new Private)
 {
     m_d->selectorModel = model;
+    m_d->displayConfig = config;
 }
 
 WGShadeSlider::~WGShadeSlider()
@@ -300,7 +302,7 @@ QImage WGShadeSlider::renderBackground()
             memcpy(dataPtr, c.data(), pixelSize);
         }
 
-        QImage image = m_d->selectorModel->displayRenderer()->convertToQImage(currentCS, raw.data(), deviceWidth, 1);
+        QImage image = m_d->displayConfig->displayConverter()->displayRendererInterface()->convertToQImage(currentCS, raw.data(), deviceWidth, 1);
         image = image.scaled(QSize(deviceWidth, deviceHeight));
 
         QPainter painter(&image);
@@ -323,7 +325,7 @@ QImage WGShadeSlider::renderBackground()
         for (int i = 0; i < m_d->numPatches; i++) {
             QVector4D values = calculateChannelValues(i);
             KoColor col = m_d->selectorModel->convertChannelValuesToKoColor(values);
-            QColor qCol = m_d->selectorModel->displayRenderer()->toQColor(col);
+            QColor qCol = m_d->displayConfig->displayConverter()->toQColor(col);
             painter.setBrush(qCol);
             painter.drawRect(patchRect(i));
         }

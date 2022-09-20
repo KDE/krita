@@ -7,6 +7,8 @@
 #ifndef WGSHADESLIDER_H
 #define WGSHADESLIDER_H
 
+#include "WGSelectorWidgetBase.h"
+
 #include <KisVisualColorModel.h>
 
 #include <QWidget>
@@ -19,7 +21,7 @@ class WGShadeSlider : public QWidget
 {
     Q_OBJECT
 public:
-    explicit WGShadeSlider(QWidget *parent = nullptr, KisVisualColorModelSP model = nullptr);
+    explicit WGShadeSlider(WGSelectorDisplayConfigSP config, QWidget *parent = nullptr, KisVisualColorModelSP model = nullptr);
     ~WGShadeSlider() override;
 
     void setGradient(const QVector4D &range, const QVector4D &offset);

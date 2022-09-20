@@ -42,6 +42,7 @@ Q_SIGNALS:
 private:
     KisVisualColorModelSP m_model;
     QScopedPointer<Ui_WGShadeLineEditor> m_ui;
+    WGShadeSlider *m_previewLine;
     WGShadeSlider *m_iconSlider;
     int m_lineIndex {0};
 };

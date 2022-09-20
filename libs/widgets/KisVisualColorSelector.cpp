@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
- * SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -8,6 +8,7 @@
 
 #include <QVector4D>
 #include <QList>
+#include <QPointer>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -32,6 +33,7 @@ struct KisVisualColorSelector::Private
     //bool isRGBA {false};
     bool initialized {false};
     bool useACSConfig {true};
+    bool autoAdjustExposure {true};
     int colorChannelCount {0};
     int minimumSliderWidth {16};
     Qt::Edge sliderPosition {Qt::LeftEdge};
@@ -41,6 +43,7 @@ struct KisVisualColorSelector::Private
     KisColorSelectorConfiguration acs_config;
     KisSignalCompressor *updateTimer {0};
     KisVisualColorModelSP selectorModel;
+    QPointer<const KoColorDisplayRendererInterface> displayRenderer;
     KoGamutMaskSP gamutMask;
 };
 
@@ -84,6 +87,7 @@ void KisVisualColorSelector::setSelectorModel(KisVisualColorModelSP model)
     connect(model.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)),
                           SLOT(slotChannelValuesChanged(QVector4D,quint32)));
     connect(model.data(), SIGNAL(sigColorModelChanged()), SLOT(slotColorModelChanged()));
+    connect(model.data(), SIGNAL(sigColorSpaceChanged()), SLOT(slotColorSpaceChanged()));
     // to keep the KisColorSelectorInterface API functional:
     connect(model.data(), SIGNAL(sigNewColor(KoColor)), this, SIGNAL(sigNewColor(KoColor)));
     m_d->selectorModel = model;
@@ -155,6 +159,11 @@ void KisVisualColorSelector::setMinimumSliderWidth(int width)
     }
 }
 
+const KoColorDisplayRendererInterface *KisVisualColorSelector::displayRenderer() const
+{
+    return m_d->displayRenderer ? m_d->displayRenderer : KoDumbColorDisplayRenderer::instance();
+}
+
 KisVisualColorSelector::RenderMode KisVisualColorSelector::renderMode() const
 {
     return m_d->renderMode;
@@ -169,6 +178,16 @@ void KisVisualColorSelector::setRenderMode(KisVisualColorSelector::RenderMode mo
             shape->update();
         }
     }
+}
+
+bool KisVisualColorSelector::autoAdjustExposure() const
+{
+    return m_d->autoAdjustExposure;
+}
+
+void KisVisualColorSelector::setAutoAdjustExposure(bool enabled)
+{
+    m_d->autoAdjustExposure = enabled;
 }
 
 void KisVisualColorSelector::setSliderPosition(Qt::Edge edge)
@@ -215,8 +234,10 @@ void KisVisualColorSelector::slotConfigurationChanged()
 
 void KisVisualColorSelector::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
+    switchDisplayRenderer(displayRenderer);
+
     if (m_d->selectorModel) {
-        m_d->selectorModel->setDisplayRenderer(displayRenderer);
+        slotDisplayConfigurationChanged();
     }
 }
 
@@ -271,6 +292,13 @@ void KisVisualColorSelector::slotColorModelChanged()
     }
 }
 
+void KisVisualColorSelector::slotColorSpaceChanged()
+{
+    if (m_d->autoAdjustExposure && m_d->selectorModel && m_d->selectorModel->supportsExposure()) {
+        m_d->selectorModel->setMaxChannelValues(calculateMaxChannelValues());
+    }
+}
+
 void KisVisualColorSelector::slotCursorMoved(QPointF pos)
 {
     const KisVisualColorSelectorShape *shape = qobject_cast<KisVisualColorSelectorShape *>(sender());
@@ -291,8 +319,13 @@ void KisVisualColorSelector::slotCursorMoved(QPointF pos)
 
 void KisVisualColorSelector::slotDisplayConfigurationChanged()
 {
+    if (m_d->autoAdjustExposure && m_d->selectorModel && m_d->selectorModel->supportsExposure()) {
+        m_d->selectorModel->setMaxChannelValues(calculateMaxChannelValues());
+    }
+    // TODO: can we be smarter about forced updates?
     for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
         shape->forceImageUpdate();
+        shape->update();
     }
 }
 
@@ -550,6 +583,40 @@ bool KisVisualColorSelector::useHorizontalSlider()
     else {
         return m_d->sliderPosition == Qt::TopEdge;
     }
+}
+
+void KisVisualColorSelector::switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
+{
+    if (displayRenderer != m_d->displayRenderer) {
+        if (m_d->displayRenderer) {
+            m_d->displayRenderer->disconnect(this);
+        }
+        if (displayRenderer) {
+            connect(displayRenderer, SIGNAL(displayConfigurationChanged()),
+                    SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
+        }
+        m_d->displayRenderer = displayRenderer;
+    }
+}
+
+QVector4D KisVisualColorSelector::calculateMaxChannelValues()
+{
+    // Note: This calculation only makes sense for HDR color spaces
+    QVector4D maxChannelValues = QVector4D(1, 1, 1, 1);
+    QList<KoChannelInfo *> channels = m_d->selectorModel->colorSpace()->channels();
+
+    for (int i = 0; i < channels.size(); i++) {
+        const KoChannelInfo *channel = channels.at(i);
+        if (channel->channelType() != KoChannelInfo::ALPHA) {
+            quint32 logical = channel->displayPosition();
+            if (logical > m_d->selectorModel->colorSpace()->alphaPos()) {
+                --logical;
+            }
+            maxChannelValues[logical] = displayRenderer()->maxVisibleFloatValue(channel);
+        }
+    }
+
+    return maxChannelValues;
 }
 
 void KisVisualColorSelector::loadACSConfig()

@@ -7,6 +7,8 @@
 #ifndef WGPOPUPMANAGER_H
 #define WGPOPUPMANAGER_H
 
+#include "WGSelectorWidgetBase.h"
+
 #include <KisVisualColorModel.h>
 #include <QObject>
 
@@ -63,6 +65,7 @@ private Q_SLOTS:
 Q_SIGNALS:
 private:
     WGColorSelectorDock *m_docker {0};
+    WGSelectorDisplayConfigSP m_displayConfig;
     WGColorPreviewToolTip *m_colorTooltip;
     KisSignalCompressor *m_colorChangeCompressor;
     WGSelectorPopup *m_currentPopup {0};

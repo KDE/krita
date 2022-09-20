@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
- * SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
@@ -71,8 +71,18 @@ public:
     void setAcceptTabletEvents(bool on);
     KoColor getCurrentColor() const override;
     void setMinimumSliderWidth(int width);
+    const KoColorDisplayRendererInterface* displayRenderer() const;
     RenderMode renderMode() const;
     void setRenderMode(RenderMode mode);
+    /**
+     * @brief Get the state of automatic exposure adjustment.
+     * If enabled, the selector will set new maximum channel values on the selectorModel
+     * whenever the set display renderer signals a configuration change.
+     * The default value is true.
+     * @return the current state
+     */
+    bool autoAdjustExposure() const;
+    void setAutoAdjustExposure(bool enabled);
     /**
      * @brief Set the slider position for slider + square and slider + wheel configurations.
      * @param edge Edge to position the slider; currently only supports LeftEdge and TopEdge
@@ -92,6 +102,7 @@ public Q_SLOTS:
 private Q_SLOTS:
     void slotChannelValuesChanged(const QVector4D &values, quint32 channelFlags);
     void slotColorModelChanged();
+    void slotColorSpaceChanged();
     void slotCursorMoved(QPointF pos);
     void slotDisplayConfigurationChanged();
     void slotReloadConfiguration();
@@ -111,6 +122,8 @@ private:
     bool useHorizontalSlider();
     void rebuildSelector();
     void loadACSConfig();
+    void switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer);
+    QVector4D calculateMaxChannelValues();
     static KisColorSelectorConfiguration validatedConfiguration(const KisColorSelectorConfiguration &cfg);
 
     struct Private;

@@ -27,8 +27,8 @@ namespace {
 #endif
     }
 }
-WGColorPatches::WGColorPatches(KisUniqueColorSet *history, QWidget *parent)
-    : WGSelectorWidgetBase(parent)
+WGColorPatches::WGColorPatches(WGSelectorDisplayConfigSP displayConfig, KisUniqueColorSet *history, QWidget *parent)
+    : WGSelectorWidgetBase(displayConfig, parent)
 {
     setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
     m_viewport = new QWidget(this);

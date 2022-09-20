@@ -41,8 +41,8 @@ inline int signedSqr(int x) {
     return (x > 0) ? x*x : -(x*x);
 }
 
-WGMyPaintShadeSelector::WGMyPaintShadeSelector(QWidget *parent, UiMode mode)
-    : WGSelectorWidgetBase(parent, mode)
+WGMyPaintShadeSelector::WGMyPaintShadeSelector(WGSelectorDisplayConfigSP displayConfig, QWidget *parent, UiMode mode)
+    : WGSelectorWidgetBase(displayConfig, parent, mode)
 {
 
 }

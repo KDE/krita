@@ -29,7 +29,7 @@ public:
         CommonColors
     };
 
-    explicit WGColorPatches(KisUniqueColorSet *history, QWidget *parent = nullptr);
+    WGColorPatches(WGSelectorDisplayConfigSP displayConfig, KisUniqueColorSet *history, QWidget *parent = nullptr);
 
     KisUniqueColorSet* colorHistory() const;
     void updateSettings() override;

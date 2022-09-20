@@ -16,7 +16,8 @@ WGShadeLineEditor::WGShadeLineEditor(QWidget *parent)
     : QFrame(parent, Qt::Popup)
     , m_model(new KisVisualColorModel)
     , m_ui(new Ui_WGShadeLineEditor)
-    , m_iconSlider(new WGShadeSlider(this, m_model))
+    , m_previewLine(new WGShadeSlider(WGSelectorDisplayConfigSP(new WGSelectorDisplayConfig()), this, m_model))
+    , m_iconSlider(new WGShadeSlider(WGSelectorDisplayConfigSP(new WGSelectorDisplayConfig()), this, m_model))
 {
     setFrameStyle(QFrame::StyledPanel | QFrame::Raised);
 
@@ -24,9 +25,15 @@ WGShadeLineEditor::WGShadeLineEditor(QWidget *parent)
     m_model->slotSetColor(KoColor(QColor(190, 50, 50), m_model->colorSpace()));
 
     m_ui->setupUi(this);
+
+    m_previewLine->setObjectName(QString::fromUtf8("previewLine"));
+    m_previewLine->setFixedHeight(24);
+
+    m_ui->verticalLayout->addWidget(m_previewLine);
+
     m_ui->verticalLayout->setSizeConstraint(QLayout::SetFixedSize);
-    m_ui->previewLine->setModel(m_model);
-    m_ui->previewLine->slotSetChannelValues(m_model->channelValues());
+    m_previewLine->setModel(m_model);
+    m_previewLine->slotSetChannelValues(m_model->channelValues());
     // since this widget is not shown by Qt, a resize event needs to be sent manually
     QResizeEvent event(QSize(128, 10), m_iconSlider->size());
     m_iconSlider->resize(128, 10);
@@ -99,15 +106,15 @@ void WGShadeLineEditor::hideEvent(QHideEvent *event)
 void WGShadeLineEditor::slotValueChanged()
 {
     WGConfig::ShadeLine cfg = configuration();
-    m_ui->previewLine->setGradient(cfg.gradient, cfg.offset);
+    m_previewLine->setGradient(cfg.gradient, cfg.offset);
 }
 
 void WGShadeLineEditor::slotPatchCountChanged(int value)
 {
-    m_ui->previewLine->setDisplayMode(false, value);
+    m_previewLine->setDisplayMode(false, value);
 }
 
 void WGShadeLineEditor::slotSliderModeChanged(bool enabled)
 {
-    m_ui->previewLine->setDisplayMode(enabled, m_ui->sbPatchCount->value());
+    m_previewLine->setDisplayMode(enabled, m_ui->sbPatchCount->value());
 }

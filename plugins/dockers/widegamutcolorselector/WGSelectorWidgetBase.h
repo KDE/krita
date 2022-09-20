@@ -7,11 +7,31 @@
 #ifndef WGSELECTORWIDGETBASE_H
 #define WGSELECTORWIDGETBASE_H
 
+#include <kis_display_color_converter.h>
 #include <KisVisualColorModel.h>
 #include <QPointer>
+#include <QSharedPointer>
 #include <QWidget>
 
-class KisDisplayColorConverter;
+class WGSelectorDisplayConfig : public QObject
+{
+    Q_OBJECT
+public:
+    WGSelectorDisplayConfig() = default;
+    ~WGSelectorDisplayConfig() = default;
+    const KisDisplayColorConverter *displayConverter() const;
+    void setDisplayConverter(const KisDisplayColorConverter *converter);
+
+    bool previewInPaintingCS() const { return m_previewInPaintingCS; }
+    void setPreviewInPaintingCS(bool enabled) { m_previewInPaintingCS = enabled; }
+Q_SIGNALS:
+    void sigDisplayConfigurationChanged();
+private:
+    QPointer<const KisDisplayColorConverter> m_displayConverter;
+    bool m_previewInPaintingCS {false};
+};
+
+typedef QSharedPointer<WGSelectorDisplayConfig> WGSelectorDisplayConfigSP;
 
 class WGSelectorWidgetBase : public QWidget
 {
@@ -22,10 +42,10 @@ public:
         PopupMode
     };
 
-    explicit WGSelectorWidgetBase(QWidget *parent = nullptr, UiMode uiMode = UiMode::DockerMode);
+    explicit WGSelectorWidgetBase(WGSelectorDisplayConfigSP displayConfig, QWidget *parent = nullptr, UiMode uiMode = UiMode::DockerMode);
     UiMode uiMode() const;
     void setUiMode(UiMode mode);
-    void setDisplayConverter(const KisDisplayColorConverter *converter);
+    WGSelectorDisplayConfigSP displayConfiguration() const;
     const KisDisplayColorConverter *displayConverter() const;
     /*!
      * \brief The position, relative to the top left corner, where the cursor
@@ -43,6 +63,7 @@ Q_SIGNALS:
     void sigChannelValuesChanged(const QVector4D &values);
 private:
     QPointer<const KisDisplayColorConverter> m_converter;
+    WGSelectorDisplayConfigSP m_displayConfig;
     UiMode m_uiMode {DockerMode};
 };
 

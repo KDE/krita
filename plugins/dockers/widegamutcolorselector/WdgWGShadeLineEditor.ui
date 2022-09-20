@@ -197,38 +197,8 @@
      </property>
     </widget>
    </item>
-   <item>
-    <widget class="WGShadeSlider" name="previewLine" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>0</width>
-       <height>24</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>16777215</width>
-       <height>24</height>
-      </size>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>WGShadeSlider</class>
-   <extends>QWidget</extends>
-   <header>WGShadeSlider.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>sbRangeHue</tabstop>
   <tabstop>sbRangeSaturation</tabstop>

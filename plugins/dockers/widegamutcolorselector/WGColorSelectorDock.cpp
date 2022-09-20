@@ -39,6 +39,7 @@
 
 WGColorSelectorDock::WGColorSelectorDock()
 	: QDockWidget()
+    , m_displayConfig(new WGSelectorDisplayConfig)
     , m_colorChangeCompressor(new KisSignalCompressor(100 /* ms */, KisSignalCompressor::POSTPONE, this))
     , m_actionManager(new WGActionManager(this))
     , m_colorTooltip(new WGColorPreviewToolTip(this))
@@ -81,14 +82,14 @@ WGColorSelectorDock::WGColorSelectorDock()
     m_selectorAreaLayout->addWidget(m_selector);
 
     KisVisualColorModelSP model = m_selector->selectorModel();
-    m_shadeSelector = new WGShadeSelector(model, this);
+    m_shadeSelector = new WGShadeSelector(m_displayConfig, model, this);
     m_selectorAreaLayout->addWidget(m_shadeSelector);
     connect(m_shadeSelector, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
 
     // eventually it should made be a global history, not specific to any plugin
     m_colorHistory = new KisUniqueColorSet(this);
 
-    m_history = new WGColorPatches(m_colorHistory, mainWidget);
+    m_history = new WGColorPatches(m_displayConfig, m_colorHistory, mainWidget);
     m_history->setPreset(WGColorPatches::History);
     connect(m_history, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_history, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
@@ -96,7 +97,7 @@ WGColorSelectorDock::WGColorSelectorDock()
     // Common Colors (Colors from Image)
     m_commonColorSet = new WGCommonColorSet(this);
 
-    m_commonColors = new WGColorPatches(m_commonColorSet, mainWidget);
+    m_commonColors = new WGColorPatches(m_displayConfig, m_commonColorSet, mainWidget);
     m_commonColors->setPreset(WGColorPatches::CommonColors);
     connect(m_commonColors, SIGNAL(sigColorChanged(KoColor)), SLOT(slotColorSelected(KoColor)));
     connect(m_commonColors, SIGNAL(sigColorInteraction(bool)), SLOT(slotColorInteraction(bool)));
@@ -170,10 +171,8 @@ void WGColorSelectorDock::setCanvas(KoCanvasBase *canvas)
     if (m_canvas) {
         KoColorDisplayRendererInterface *dri = m_canvas->displayColorConverter()->displayRendererInterface();
         KisCanvasResourceProvider *resourceProvider = m_canvas->imageView()->resourceProvider();
-        m_colorModelFG->setDisplayRenderer(dri);
-        m_colorModelBG->setDisplayRenderer(dri);
-        m_history->setDisplayConverter(m_canvas->displayColorConverter());
-        m_commonColors->setDisplayConverter(m_canvas->displayColorConverter());
+        m_selector->setDisplayRenderer(dri);
+        m_displayConfig->setDisplayConverter(m_canvas->displayColorConverter());
         m_commonColorSet->setImage(m_canvas->image());
         //m_toggle->setBackgroundColor(dri->toQColor(color));
         connect(dri, SIGNAL(displayConfigurationChanged()), this, SLOT(slotDisplayConfigurationChanged()));
@@ -206,9 +205,8 @@ void WGColorSelectorDock::unsetCanvas()
 {
     setEnabled(false);
     m_actionManager->setCanvas(0, 0);
+    m_displayConfig->setDisplayConverter(0);
     m_selector->setDisplayRenderer(0);
-    m_history->setDisplayConverter(0);
-    m_commonColors->setDisplayConverter(0);
     m_commonColorSet->setImage(KisImageSP());
     m_canvas = 0;
 }
@@ -402,7 +400,7 @@ void WGColorSelectorDock::slotColorSourceToggled(bool selectingBg)
 void WGColorSelectorDock::slotColorInteraction(bool active)
 {
     if (active) {
-        QColor baseCol = m_selector->selectorModel()->displayRenderer()->toQColor(m_selector->getCurrentColor());
+        QColor baseCol = m_displayConfig->displayConverter()->toQColor(m_selector->getCurrentColor());
         m_colorTooltip->setCurrentColor(baseCol);
         m_colorTooltip->setPreviousColor(baseCol);
         if (sender() == m_shadeSelector) {
@@ -415,7 +413,7 @@ void WGColorSelectorDock::slotColorInteraction(bool active)
 
 void WGColorSelectorDock::slotFGColorUsed(const KoColor &color)
 {
-    QColor lastCol = m_selector->selectorModel()->displayRenderer()->toQColor(color);
+    QColor lastCol = m_displayConfig->displayConverter()->toQColor(color);
     m_colorTooltip->setLastUsedColor(lastCol);
     m_actionManager->setLastUsedColor(color);
     m_colorHistory->addColor(color);

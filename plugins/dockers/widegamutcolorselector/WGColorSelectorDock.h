@@ -8,6 +8,7 @@
 #define WG_COLOR_SELECTOR_DOCKER_H
 
 #include "WGConfig.h"
+#include "WGSelectorWidgetBase.h"
 
 #include <QPointer>
 #include <QDockWidget>
@@ -78,6 +79,7 @@ private Q_SLOTS:
     void slotOpenSettings();
 private:
     QPointer<KisCanvas2> m_canvas;
+    WGSelectorDisplayConfigSP m_displayConfig;
     // Layouts
     QBoxLayout *m_mainWidgetLayout {0};
     QBoxLayout *m_selectorAreaLayout {0};

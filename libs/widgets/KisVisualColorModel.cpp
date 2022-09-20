@@ -1,6 +1,6 @@
 /*
  * SPDX-FileCopyrightText: 2016 Wolthera van Hovell tot Westerflier <griffinvalley@gmail.com>
- * SPDX-FileCopyrightText: 2020 Mathias Wein <lynx.mw+kde@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Mathias Wein <lynx.mw+kde@gmail.com>
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
@@ -13,7 +13,6 @@
 #include <QVector4D>
 #include <QList>
 #include <QtMath>
-#include <QPointer>
 
 #include <KSharedConfig>
 #include <KConfigGroup>
@@ -36,7 +35,7 @@ struct KisVisualColorModel::Private
     bool isLinear {false};
     bool applyGamma {false};
     bool allowUpdates {true};
-    int displayPosition[4]; // map channel index to storage index for display
+    int logicalToMemoryPosition[4]; // map logical channel index to storage index for display
     int colorChannelCount {0};
     qreal gamma {2.2};
     qreal lumaRGB[3] {0.2126, 0.7152, 0.0722};
@@ -44,7 +43,6 @@ struct KisVisualColorModel::Private
     QVector4D channelMaxValues;
     ColorModel modelRGB {ColorModel::HSV};
     ColorModel model {ColorModel::None};
-    QPointer<const KoColorDisplayRendererInterface> displayRenderer;
     KisColorSelectorConfiguration acs_config;
 };
 
@@ -96,7 +94,7 @@ void KisVisualColorModel::slotSetColorSpace(const KoColorSpace *cs)
         // TODO: split off non-config related initializations
         loadColorSpace(csNew);
         m_d->currentcolor = KoColor(csNew);
-        slotDisplayConfigurationChanged();
+        m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
         emit sigColorSpaceChanged();
     }
 }
@@ -143,9 +141,26 @@ KisVisualColorModel::ColorModel KisVisualColorModel::colorModel() const
     return m_d->model;
 }
 
+QVector4D KisVisualColorModel::maxChannelValues() const
+{
+    return m_d->channelMaxValues;
+}
+
+void KisVisualColorModel::setMaxChannelValues(const QVector4D &maxValues)
+{
+    if (maxValues == m_d->channelMaxValues) {
+        return;
+    }
+    m_d->channelMaxValues = maxValues;
+    if (m_d->exposureSupported) {
+        // need to re-scale our normalized channel values on exposure changes:
+        m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
+        emitChannelValues();
+    }
+}
+
 void KisVisualColorModel::copyState(const KisVisualColorModel &other)
 {
-    switchDisplayRenderer(other.m_d->displayRenderer);
     m_d->channelMaxValues = other.m_d->channelMaxValues;
     setRGBColorModel(other.m_d->modelRGB);
     if (other.colorSpace()) {
@@ -179,6 +194,11 @@ const KoColorSpace *KisVisualColorModel::colorSpace() const
 bool KisVisualColorModel::isHSXModel() const
 {
     return (m_d->model >= ColorModel::HSV && m_d->model <= ColorModel::HSY);
+}
+
+bool KisVisualColorModel::supportsExposure() const
+{
+    return (m_d->exposureSupported);
 }
 
 KoColor KisVisualColorModel::convertChannelValuesToKoColor(const QVector4D &values) const
@@ -237,7 +257,7 @@ KoColor KisVisualColorModel::convertChannelValuesToKoColor(const QVector4D &valu
     }
 
     for (int i=0; i<m_d->colorChannelCount; i++) {
-        channelValues[m_d->displayPosition[i]] = baseValues[i];
+        channelValues[m_d->logicalToMemoryPosition[i]] = baseValues[i];
     }
 
     c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelValues);
@@ -257,7 +277,7 @@ QVector4D KisVisualColorModel::convertKoColorToChannelValues(KoColor c) const
     QVector4D channelValuesDisplay(0, 0, 0, 0), coordinates(0, 0, 0, 0);
 
     for (int i =0; i<m_d->colorChannelCount; i++) {
-        channelValuesDisplay[i] = channelValues[m_d->displayPosition[i]];
+        channelValuesDisplay[i] = channelValues[m_d->logicalToMemoryPosition[i]];
     }
 
     if (m_d->exposureSupported) {
@@ -361,32 +381,20 @@ void KisVisualColorModel::slotLoadACSConfig()
     setRGBColorModel(RGB_model);
 }
 
-void KisVisualColorModel::slotDisplayConfigurationChanged()
-{
-    const KoColorDisplayRendererInterface *dri = displayRenderer();
-
-    if (m_d->currentCS)
-    {
-        m_d->channelMaxValues = QVector4D(1, 1, 1, 1);
-        QList<KoChannelInfo *> channels = m_d->currentCS->channels();
-        for (int i=0; i<m_d->colorChannelCount; ++i)
-        {
-            m_d->channelMaxValues[i] = dri->maxVisibleFloatValue(channels[m_d->displayPosition[i]]);
-        }
-        // need to re-scale our normalized channel values on exposure changes:
-        m_d->channelValues = convertKoColorToChannelValues(m_d->currentcolor);
-
-        emitChannelValues();
-    }
-}
-
 void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
 {
     QList<KoChannelInfo *> channelList = cs->channels();
     int cCount = 0;
-    for (const KoChannelInfo *channel : qAsConst(channelList)) {
+
+    for (int i = 0; i < channelList.size(); i++) {
+        const KoChannelInfo *channel = channelList.at(i);
         if (channel->channelType() != KoChannelInfo::ALPHA) {
-            m_d->displayPosition[cCount] = channel->displayPosition();
+            quint32 logical = channel->displayPosition();
+            if (logical > cs->alphaPos()) {
+                --logical;
+            }
+            m_d->logicalToMemoryPosition[logical] = i;
+            m_d->channelMaxValues[logical] = channel->getUIMax();
             ++cCount;
         }
     }
@@ -396,12 +404,11 @@ void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
 
     // TODO: The following is done because the IDs are actually strings. Ideally, in the future, we
     // refactor everything so that the IDs are actually proper enums or something faster.
-    if (m_d->displayRenderer
-            && (cs->colorDepthId() == Float16BitsColorDepthID
-                || cs->colorDepthId() == Float32BitsColorDepthID
-                || cs->colorDepthId() == Float64BitsColorDepthID)
-            && cs->colorModelId() != LABAColorModelID
-            && cs->colorModelId() != CMYKAColorModelID) {
+    if ((cs->colorDepthId() == Float16BitsColorDepthID
+        || cs->colorDepthId() == Float32BitsColorDepthID
+        || cs->colorDepthId() == Float64BitsColorDepthID)
+        && cs->colorModelId() != LABAColorModelID
+        && cs->colorModelId() != CMYKAColorModelID) {
         m_d->exposureSupported = true;
     } else {
         m_d->exposureSupported = false;
@@ -430,35 +437,10 @@ void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
     }
 }
 
-void KisVisualColorModel::switchDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
-{
-    if (displayRenderer != m_d->displayRenderer) {
-        if (m_d->displayRenderer) {
-            m_d->displayRenderer->disconnect(this);
-        }
-        if (displayRenderer) {
-            connect(displayRenderer, SIGNAL(displayConfigurationChanged()),
-                    SLOT(slotDisplayConfigurationChanged()), Qt::UniqueConnection);
-        }
-        m_d->displayRenderer = displayRenderer;
-    }
-}
-
 void KisVisualColorModel::emitChannelValues()
 {
     bool updatesAllowed = m_d->allowUpdates;
     m_d->allowUpdates = false;
     emit sigChannelValuesChanged(m_d->channelValues, (1u << m_d->colorChannelCount) - 1);
     m_d->allowUpdates = updatesAllowed;
-}
-
-const KoColorDisplayRendererInterface* KisVisualColorModel::displayRenderer() const
-{
-    return m_d->displayRenderer ? m_d->displayRenderer : KoDumbColorDisplayRenderer::instance();
-}
-
-void KisVisualColorModel::setDisplayRenderer (const KoColorDisplayRendererInterface *displayRenderer)
-{
-    switchDisplayRenderer(displayRenderer);
-    slotDisplayConfigurationChanged();
 }

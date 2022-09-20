@@ -133,7 +133,7 @@ void KisVisualColorSelectorShape::updateGamutMask()
 
 QColor KisVisualColorSelectorShape::getColorFromConverter(KoColor c)
 {
-    const KoColorDisplayRendererInterface *renderer = selectorModel()->displayRenderer();
+    const KoColorDisplayRendererInterface *renderer = colorSelector()->displayRenderer();
     // Should we convert to painting color space first as Advanced Color Selector does?
     // KoColor color = c.convertedTo(renderer->getPaintingColorSpace());
     return renderer->toQColor(c);
@@ -171,7 +171,7 @@ QImage KisVisualColorSelectorShape::convertImageMap(const quint8 *rawColor, quin
 {
     const KoColorSpace *colorSpace = selectorModel()->colorSpace();
     Q_ASSERT(bufferSize == imgSize.width() * imgSize.height() * colorSpace->pixelSize());
-    const KoColorDisplayRendererInterface *renderer = selectorModel()->displayRenderer();
+    const KoColorDisplayRendererInterface *renderer = colorSelector()->displayRenderer();
 
     // Convert the buffer to a qimage
     QImage image = renderer->convertToQImage(colorSpace, rawColor, imgSize.width(), imgSize.height());

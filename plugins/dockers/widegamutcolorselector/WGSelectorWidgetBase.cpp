@@ -8,8 +8,31 @@
 
 #include <kis_display_color_converter.h>
 
-WGSelectorWidgetBase::WGSelectorWidgetBase(QWidget *parent, WGSelectorWidgetBase::UiMode uiMode)
+const KisDisplayColorConverter *WGSelectorDisplayConfig::displayConverter() const
+{
+     return m_displayConverter ? m_displayConverter
+                               : KisDisplayColorConverter::dumbConverterInstance();
+}
+
+void WGSelectorDisplayConfig::setDisplayConverter(const KisDisplayColorConverter *converter)
+{
+    if (converter != m_displayConverter) {
+        if (m_displayConverter) {
+            m_displayConverter->disconnect(this);
+        }
+        if (converter) {
+            connect(converter, &KisDisplayColorConverter::displayConfigurationChanged,
+                    this, &WGSelectorDisplayConfig::sigDisplayConfigurationChanged, Qt::UniqueConnection);
+        }
+        m_displayConverter = converter;
+
+        emit sigDisplayConfigurationChanged();
+    }
+}
+
+WGSelectorWidgetBase::WGSelectorWidgetBase(WGSelectorDisplayConfigSP displayConfig, QWidget *parent, WGSelectorWidgetBase::UiMode uiMode)
     : QWidget(parent)
+    , m_displayConfig(displayConfig)
     , m_uiMode(uiMode)
 {
 
@@ -25,14 +48,14 @@ void WGSelectorWidgetBase::setUiMode(WGSelectorWidgetBase::UiMode mode)
     m_uiMode = mode;
 }
 
-void WGSelectorWidgetBase::setDisplayConverter(const KisDisplayColorConverter *converter)
+WGSelectorDisplayConfigSP WGSelectorWidgetBase::displayConfiguration() const
 {
-    m_converter = converter;
+    return m_displayConfig;
 }
 
 const KisDisplayColorConverter *WGSelectorWidgetBase::displayConverter() const
 {
-    return m_converter ? m_converter : KisDisplayColorConverter::dumbConverterInstance();
+    return m_displayConfig ? m_displayConfig->displayConverter() : KisDisplayColorConverter::dumbConverterInstance();
 }
 
 QPoint WGSelectorWidgetBase::popupOffset() const

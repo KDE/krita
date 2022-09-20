@@ -49,6 +49,7 @@
 #include <commands_new/KisMergeLabeledLayersCommand.h>
 #include <commands_new/kis_processing_command.h>
 #include <commands_new/kis_update_command.h>
+#include <kis_image_animation_interface.h>
 
 #include <KisPart.h>
 #include <KisDocument.h>
@@ -185,6 +186,8 @@ void KisToolFill::beginFilling(const QPoint &seedPoint)
     KisNodeSP currentRoot = currentImageWSP->root();
 
     KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Fill Tool Reference Image");
+    refImage->animationInterface()->switchCurrentTimeAsync(image()->animationInterface()->currentTime());
+    refImage->waitForDone();
 
     if (m_reference == AllLayers) {
         m_referencePaintDevice = currentImage()->projection();

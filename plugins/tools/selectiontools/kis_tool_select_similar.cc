@@ -32,6 +32,7 @@
 #include <kis_pixel_selection.h>
 #include <kis_selection_filters.h>
 #include <kis_selection_options.h>
+#include <kis_image_animation_interface.h>
 
 void selectByColor(KisPaintDeviceSP dev,
                    KisPixelSelectionSP selection,
@@ -137,6 +138,9 @@ void KisToolSelectSimilar::beginPrimaryAction(KoPointerEvent *event)
         sourceDevice = imageSP->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
         KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(imageSP, "Similar Colors Selection Tool Reference Image");
+        refImage->animationInterface()->switchCurrentTimeAsync(imageSP->animationInterface()->currentTime());
+        refImage->waitForDone();
+
         sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
                     imageSP, "Similar Colors Selection Tool Reference Result Paint Device");
 

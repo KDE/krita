@@ -51,6 +51,7 @@
 #include <kis_dummies_facade.h>
 #include <KoShapeControllerBase.h>
 #include <kis_shape_controller.h>
+#include <kis_image_animation_interface.h>
 
 #include <KoCompositeOpRegistry.h>
 
@@ -252,6 +253,9 @@ void KisToolEncloseAndFill::slot_delegateTool_enclosingMaskProduced(KisPixelSele
         KisImageWSP currentImageWSP = currentImage();
         KisNodeSP currentRoot = currentImageWSP->root();
         KisImageSP referenceImage = KisMergeLabeledLayersCommand::createRefImage(image(), "Enclose and Fill Tool Reference Image");
+        referenceImage->animationInterface()->switchCurrentTimeAsync(image()->animationInterface()->currentTime());
+        referenceImage->waitForDone();
+        
         referenceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(image(), "Enclose and Fill Tool Reference Result Paint Device");
 
         applicator.applyCommand(new KisMergeLabeledLayersCommand(referenceImage, referenceDevice, currentRoot, m_selectedColorLabels),

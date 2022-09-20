@@ -43,6 +43,7 @@
 #include "kis_resources_snapshot.h"
 #include "kis_processing_applicator.h"
 #include <processing/fill_processing_visitor.h>
+#include <kis_image_animation_interface.h>
 
 #include "kis_command_utils.h"
 
@@ -105,6 +106,9 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
         sourceDevice = image->projection();
     } else if (sampleLayersMode() == SampleColorLabeledLayers) {
         KisImageSP refImage = KisMergeLabeledLayersCommand::createRefImage(image, "Contiguous Selection Tool Reference Image");
+        refImage->animationInterface()->switchCurrentTimeAsync(image->animationInterface()->currentTime());
+        refImage->waitForDone();
+
         sourceDevice = KisMergeLabeledLayersCommand::createRefPaintDevice(
                     image, "Contiguous Selection Tool Reference Result Paint Device");
 

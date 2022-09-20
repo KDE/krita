@@ -211,7 +211,7 @@ void KisOpenGLCanvas2::paintGL()
     {
         QPainter gc(this);
         if (!updateRect.isEmpty()) {
-            gc.setClipRect(updateRect);
+            gc.setClipRect(kisGrowRect(updateRect, 1));
         }
 
         QRect decorationsBoundingRect = coordinatesConverter()->imageRectInWidgetPixels().toAlignedRect();

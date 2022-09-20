@@ -2395,6 +2395,8 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
 {
     QList<KoCanvasObserverBase*> observers;
 
+    observers.append(static_cast<KoCanvasObserverBase*>(KisPart::instance()->playbackEngine()));
+
     Q_FOREACH (QDockWidget *docker, dockWidgets()) {
         KoCanvasObserverBase *observer = dynamic_cast<KoCanvasObserverBase*>(docker);
         if (observer) {
@@ -2404,8 +2406,6 @@ QList<KoCanvasObserverBase*> KisMainWindow::canvasObservers() const
             warnKrita << docker << "is not a canvas observer";
         }
     }
-
-    observers.append(static_cast<KoCanvasObserverBase*>(KisPart::instance()->playbackEngine()));
 
     return observers;
 }

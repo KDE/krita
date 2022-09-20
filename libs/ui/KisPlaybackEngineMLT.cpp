@@ -224,7 +224,7 @@ KisPlaybackEngineMLT::~KisPlaybackEngineMLT()
 
 void KisPlaybackEngineMLT::seek(int frameIndex, SeekOptionFlags flags)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(activeCanvas() && activeCanvas()->animationState());
+    KIS_ASSERT(activeCanvas() && activeCanvas()->animationState());
     KisCanvasAnimationState* animationState = activeCanvas()->animationState();
 
     if (m_d->activePlaybackMode() == PLAYBACK_PUSH) {

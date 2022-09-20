@@ -186,7 +186,7 @@ KisImportExportErrorCode PSDLoader::decode(QIODevice &io)
     if (layerSection.nLayers == 0) {
         dbgFile << "Position" << io.pos() << "Going to read the projection into the first layer, which Photoshop calls 'Background'";
 
-        KisPaintLayerSP layer = new KisPaintLayer(m_image, i18n("Background"), OPACITY_OPAQUE_U8);
+        KisPaintLayerSP layer = new KisPaintLayer(m_image, i18nc("Background", "Name for the bottom-most layer in the layerstack"), OPACITY_OPAQUE_U8);
 
         PSDImageData imageData(&header);
         imageData.read(io, layer->paintDevice());

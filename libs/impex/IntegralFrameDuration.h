@@ -38,6 +38,10 @@ public:
 
     bool checkNeeded(KisImageSP image) const override
     {
+        if (!image->animationInterface()->hasAnimation()) {
+            return false;
+        }
+
         const auto frameDuration = 1000.0
             / static_cast<double>(image->animationInterface()->framerate());
 

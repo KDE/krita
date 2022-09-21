@@ -92,7 +92,7 @@ if [ -d $APPDIR/usr/lib/python3.10/site-packages ]; then
 fi
 
 ## == MLT Dependencies and Resources ==
-cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt-7
+cp -r $DEPS_INSTALL_PREFIX/share/mlt-7 $APPDIR/usr/share/mlt
 cp -r $DEPS_INSTALL_PREFIX/lib/mlt-7 $APPDIR/usr/lib/mlt
 cp -av --preserve=links $DEPS_INSTALL_PREFIX/lib/libmlt*.so* $APPDIR/usr/lib/
 cp -av $DEPS_INSTALL_PREFIX/bin/melt $APPDIR/usr/bin/melt

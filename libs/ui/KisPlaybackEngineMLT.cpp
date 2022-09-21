@@ -241,13 +241,20 @@ void KisPlaybackEngineMLT::seek(int frameIndex, SeekOptionFlags flags)
 
 void KisPlaybackEngineMLT::setupProducer(boost::optional<QFileInfo> file)
 {
+    //First, assign to "count" producer.
+    m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "ranged", "count"));
+
+    //If we have a file and the file has a valid producer, use that. Otherwise, stick to our "default" producer.
     if (file.has_value()) {
         QSharedPointer<Mlt::Producer> producer( new Mlt::Producer(*m_d->profile, "ranged", file->absoluteFilePath().toUtf8().data()));
-        m_d->canvasProducers[activeCanvas()] = producer;
-    } else {
-        m_d->canvasProducers[activeCanvas()] = QSharedPointer<Mlt::Producer>(new Mlt::Producer(*m_d->profile, "ranged", "count"));
+        if (producer->is_valid()) {
+            m_d->canvasProducers[activeCanvas()] = producer;
+        } else {
+            // SANITY CHECK: Check that the MLT plugins and resources are where the program expects them to be.
+            // HINT -- Check krita/main.cc's mlt environment variable setup for appimage.
+            ENTER_FUNCTION() << "INVALID PRODUCER FOR FILE: " << ppVar(file->absoluteFilePath());
+        }
     }
-
 
     KisImageAnimationInterface *animInterface = activeCanvas()->image()->animationInterface();
     QSharedPointer<Mlt::Producer> producer = m_d->canvasProducers[activeCanvas()];

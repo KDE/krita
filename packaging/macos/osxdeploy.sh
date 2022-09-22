@@ -538,6 +538,16 @@ krita_deploy () {
             --exclude qml \
             ${KRITA_DMG}/krita.app/Contents/Resources
 
+
+	# support localized system menu entries from MacOS, bug #432685.
+	echo "Creating locale lproj directories for localization"
+	LOCALE_FILES=$(find "${KRITA_DMG}/krita.app/Contents/Resources/locale" -type d -depth 1)
+	cd "${KRITA_DMG}/krita.app/Contents/Resources/"
+	for LOCALE in ${LOCALE_FILES} ; do
+	    BASE=$(basename ${LOCALE})
+	    mkdir "$BASE.lproj"
+	done
+
     cd ${BUILDROOT}
 
     echo "Copying translations..."

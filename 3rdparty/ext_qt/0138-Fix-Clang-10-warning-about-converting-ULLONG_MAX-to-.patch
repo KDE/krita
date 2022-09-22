@@ -1,0 +1,39 @@
+From d67ee3e77fc7e1a614b0b9ef6cb2156cd3dbd3e3 Mon Sep 17 00:00:00 2001
+From: Thiago Macieira <thiago.macieira@intel.com>
+Date: Sat, 2 May 2020 15:40:24 -0700
+Subject: [PATCH 138/139] Fix Clang 10 warning about converting ULLONG_MAX to
+ double
+
+The compiler must convert ULLONG_MAX to double before adding 1, so this
+expression was wrong.
+
+ MathExtras.h:402:43: error: implicit conversion from 'unsigned long long' to 'double' changes value from
+ 18446744073709551615 to 18446744073709551616 [-Werror,-Wimplicit-int-float-conversion]
+
+Task-number: QTBUG-83666
+Change-Id: I99ab0f318b1c43b89888fffd160b4a95a258423b
+Reviewed-by: Lars Knoll <lars.knoll@qt.io>
+(cherry picked from commit 1250d8b5b95eecac767a23563717e53faa5d3b8a)
+Reviewed-by: Volker Hilsheimer <volker.hilsheimer@qt.io>
+(cherry picked from commit 9a29c05b1ed3190a308b616c0955c0dd99b8ccf8)
+Signed-off-by: L. E. Segovia <amy@amyspark.me>
+---
+ src/3rdparty/masm/wtf/MathExtras.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/3rdparty/masm/wtf/MathExtras.h b/src/3rdparty/masm/wtf/MathExtras.h
+index a529ba7b..6af108c8 100644
+--- a/src/3rdparty/masm/wtf/MathExtras.h
++++ b/src/3rdparty/masm/wtf/MathExtras.h
+@@ -399,7 +399,7 @@ inline void doubleToInteger(double d, unsigned long long& value)
+         value = 0;
+     else {
+         // -2^{64} < fmodValue < 2^{64}.
+-        double fmodValue = fmod(trunc(d), std::numeric_limits<unsigned long long>::max() + 1.0);
++        double fmodValue = fmod(trunc(d), -2.0 * std::numeric_limits<long long>::min());
+         if (fmodValue >= 0) {
+             // 0 <= fmodValue < 2^{64}.
+             // 0 <= value < 2^{64}. This cast causes no loss.
+-- 
+2.37.3
+

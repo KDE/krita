@@ -1,0 +1,1045 @@
+From 67bb77d22b7a5a3452b2c36da8ec2154d24489e6 Mon Sep 17 00:00:00 2001
+From: Ulf Hermann <ulf.hermann@qt.io>
+Date: Thu, 8 Nov 2018 18:09:21 +0100
+Subject: [PATCH 134/139] V4: Generate function tables on 64bit windows
+
+In order for global exception handlers to be called reliably, the runtime
+needs to unwind through JIT-generated code. This can be facilitated by
+installing a "function table" for each JITed function that specifies "use
+the frame pointer".
+
+Also make sure to generate a function table for JIT'ed regular
+expressions. Those were forgotten also in the linux case.
+
+Fixes: QTBUG-50061
+Change-Id: Ib0b8ae9356ed80afe1cab017e36efa4ccbe73f90
+Reviewed-by: Simon Hausmann <simon.hausmann@qt.io>
+(cherry picked from commit 74d23ca548b47c85c4b8cdde5fd5a9026e4eb08c)
+Signed-off-by: L. E. Segovia <amy@amyspark.me>
+---
+ .../QtQml/private/qv4functiontable_p.h        |   1 +
+ include/QtQml/headers.pri                     |   2 +-
+ src/3rdparty/masm/assembler/LinkBuffer.h      |  13 ++
+ src/3rdparty/masm/stubs/ExecutableAllocator.h |   1 +
+ src/3rdparty/masm/yarr/YarrJIT.cpp            |  40 ++++-
+ src/3rdparty/masm/yarr/YarrJIT.h              |  25 ++-
+ src/qml/jit/qv4assemblercommon.cpp            |  44 +----
+ src/qml/jsruntime/jsruntime.pri               |  18 +++
+ src/qml/jsruntime/qv4executableallocator.cpp  |  10 +-
+ src/qml/jsruntime/qv4executableallocator_p.h  |   1 +
+ src/qml/jsruntime/qv4function.cpp             |  17 +-
+ src/qml/jsruntime/qv4function_p.h             |   5 +-
+ src/qml/jsruntime/qv4functiontable_noop.cpp   |  65 ++++++++
+ src/qml/jsruntime/qv4functiontable_p.h        |  75 +++++++++
+ src/qml/jsruntime/qv4functiontable_unix.cpp   |  99 ++++++++++++
+ src/qml/jsruntime/qv4functiontable_win64.cpp  | 153 ++++++++++++++++++
+ tests/auto/qml/qv4assembler/data/crash.qml    |  53 ++++++
+ tests/auto/qml/qv4assembler/qv4assembler.pro  |   5 +
+ .../qml/qv4assembler/tst_qv4assembler.cpp     |  55 ++++++-
+ 19 files changed, 623 insertions(+), 59 deletions(-)
+ create mode 100644 include/QtQml/5.12.12/QtQml/private/qv4functiontable_p.h
+ create mode 100644 src/qml/jsruntime/qv4functiontable_noop.cpp
+ create mode 100644 src/qml/jsruntime/qv4functiontable_p.h
+ create mode 100644 src/qml/jsruntime/qv4functiontable_unix.cpp
+ create mode 100644 src/qml/jsruntime/qv4functiontable_win64.cpp
+ create mode 100644 tests/auto/qml/qv4assembler/data/crash.qml
+
+diff --git a/include/QtQml/5.12.12/QtQml/private/qv4functiontable_p.h b/include/QtQml/5.12.12/QtQml/private/qv4functiontable_p.h
+new file mode 100644
+index 00000000..55a639eb
+--- /dev/null
++++ b/include/QtQml/5.12.12/QtQml/private/qv4functiontable_p.h
+@@ -0,0 +1 @@
++#include "../../../../../src/qml/jsruntime/qv4functiontable_p.h"
+diff --git a/include/QtQml/headers.pri b/include/QtQml/headers.pri
+index 08811981..634a8a24 100644
+--- a/include/QtQml/headers.pri
++++ b/include/QtQml/headers.pri
+@@ -1,6 +1,6 @@
+ SYNCQT.HEADER_FILES = qtqmlglobal.h debugger/qqmldebug.h jsapi/qjsengine.h jsapi/qjsvalue.h jsapi/qjsvalueiterator.h qml/qqml.h qml/qqmlabstracturlinterceptor.h qml/qqmlapplicationengine.h qml/qqmlcomponent.h qml/qqmlcontext.h qml/qqmlengine.h qml/qqmlerror.h qml/qqmlexpression.h qml/qqmlextensioninterface.h qml/qqmlextensionplugin.h qml/qqmlfile.h qml/qqmlfileselector.h qml/qqmlincubator.h qml/qqmlinfo.h qml/qqmllist.h qml/qqmlnetworkaccessmanagerfactory.h qml/qqmlparserstatus.h qml/qqmlprivate.h qml/qqmlproperty.h qml/qqmlpropertyvaluesource.h qml/qqmlscriptstring.h util/qqmlpropertymap.h 
+ SYNCQT.GENERATED_HEADER_FILES = QQmlDebuggingEnabler QJSEngine QJSValueList QJSValue QJSValueIterator QQmlAbstractUrlInterceptor QQmlApplicationEngine QQmlComponent QQmlContext QQmlImageProviderBase QQmlEngine QQmlError QQmlExpression QQmlTypesExtensionInterface QQmlExtensionInterface QQmlExtensionPlugin QQmlFile QQmlFileSelector QQmlIncubator QQmlIncubationController QQmlInfo QQmlListProperty QQmlListReference QQmlNetworkAccessManagerFactory QQmlParserStatus QQmlAttachedPropertiesFunc QQmlTypeInfo QQmlProperty QQmlProperties QQmlPropertyValueSource QQmlScriptString QQmlPropertyMap qtqmlversion.h QtQmlVersion QtQml 
+-SYNCQT.PRIVATE_HEADER_FILES = qtqmlglobal_p.h animations/qabstractanimationjob_p.h animations/qanimationgroupjob_p.h animations/qanimationjobutil_p.h animations/qcontinuinganimationgroupjob_p.h animations/qparallelanimationgroupjob_p.h animations/qpauseanimationjob_p.h animations/qsequentialanimationgroupjob_p.h compiler/qqmlirbuilder_p.h compiler/qqmlpropertycachecreator_p.h compiler/qqmlpropertyvalidator_p.h compiler/qqmltypecompiler_p.h compiler/qv4bytecodegenerator_p.h compiler/qv4bytecodehandler_p.h compiler/qv4codegen_p.h compiler/qv4compilationunitmapper_p.h compiler/qv4compileddata_p.h compiler/qv4compiler_p.h compiler/qv4compilercontext_p.h compiler/qv4compilercontrolflow_p.h compiler/qv4compilerscanfunctions_p.h compiler/qv4instr_moth_p.h debugger/qqmlabstractprofileradapter_p.h debugger/qqmlconfigurabledebugservice_p.h debugger/qqmldebugconnector_p.h debugger/qqmldebugpluginmanager_p.h debugger/qqmldebugserver_p.h debugger/qqmldebugserverconnection_p.h debugger/qqmldebugservice_p.h debugger/qqmldebugservicefactory_p.h debugger/qqmldebugserviceinterfaces_p.h debugger/qqmldebugstatesdelegate_p.h debugger/qqmlmemoryprofiler_p.h debugger/qqmlprofiler_p.h debugger/qqmlprofilerdefinitions_p.h jit/qv4assemblercommon_p.h jit/qv4baselineassembler_p.h jit/qv4baselinejit_p.h jit/qv4jithelpers_p.h jsapi/qjsengine_p.h jsapi/qjsvalue_p.h jsapi/qjsvalueiterator_p.h jsruntime/qv4alloca_p.h jsruntime/qv4argumentsobject_p.h jsruntime/qv4arraybuffer_p.h jsruntime/qv4arraydata_p.h jsruntime/qv4arrayiterator_p.h jsruntime/qv4arrayobject_p.h jsruntime/qv4atomics_p.h jsruntime/qv4booleanobject_p.h jsruntime/qv4context_p.h jsruntime/qv4dataview_p.h jsruntime/qv4dateobject_p.h jsruntime/qv4debugging_p.h jsruntime/qv4engine_p.h jsruntime/qv4enginebase_p.h jsruntime/qv4errorobject_p.h jsruntime/qv4estable_p.h jsruntime/qv4executableallocator_p.h jsruntime/qv4function_p.h jsruntime/qv4functionobject_p.h jsruntime/qv4generatorobject_p.h jsruntime/qv4global_p.h jsruntime/qv4globalobject_p.h jsruntime/qv4identifier_p.h jsruntime/qv4identifiertable_p.h jsruntime/qv4include_p.h jsruntime/qv4internalclass_p.h jsruntime/qv4iterator_p.h jsruntime/qv4jscall_p.h jsruntime/qv4jsonobject_p.h jsruntime/qv4lookup_p.h jsruntime/qv4managed_p.h jsruntime/qv4mapiterator_p.h jsruntime/qv4mapobject_p.h jsruntime/qv4math_p.h jsruntime/qv4mathobject_p.h jsruntime/qv4memberdata_p.h jsruntime/qv4module_p.h jsruntime/qv4numberobject_p.h jsruntime/qv4object_p.h jsruntime/qv4objectiterator_p.h jsruntime/qv4objectproto_p.h jsruntime/qv4persistent_p.h jsruntime/qv4profiling_p.h jsruntime/qv4promiseobject_p.h jsruntime/qv4property_p.h jsruntime/qv4propertykey_p.h jsruntime/qv4proxy_p.h jsruntime/qv4qmlcontext_p.h jsruntime/qv4qobjectwrapper_p.h jsruntime/qv4reflect_p.h jsruntime/qv4regexp_p.h jsruntime/qv4regexpobject_p.h jsruntime/qv4runtime_p.h jsruntime/qv4runtimeapi_p.h jsruntime/qv4runtimecodegen_p.h jsruntime/qv4scopedvalue_p.h jsruntime/qv4script_p.h jsruntime/qv4sequenceobject_p.h jsruntime/qv4serialize_p.h jsruntime/qv4setiterator_p.h jsruntime/qv4setobject_p.h jsruntime/qv4sparsearray_p.h jsruntime/qv4stackframe_p.h jsruntime/qv4string_p.h jsruntime/qv4stringiterator_p.h jsruntime/qv4stringobject_p.h jsruntime/qv4symbol_p.h jsruntime/qv4typedarray_p.h jsruntime/qv4util_p.h jsruntime/qv4value_p.h jsruntime/qv4variantobject_p.h jsruntime/qv4vme_moth_p.h jsruntime/qv4vtable_p.h memory/qv4heap_p.h memory/qv4mm_p.h memory/qv4mmdefs_p.h memory/qv4writebarrier_p.h parser/qqmljsast_p.h parser/qqmljsastfwd_p.h parser/qqmljsastvisitor_p.h parser/qqmljsengine_p.h parser/qqmljsglobal_p.h parser/qqmljskeywords_p.h parser/qqmljslexer_p.h parser/qqmljsmemorypool_p.h qml/qqmlabstractbinding_p.h qml/qqmlapplicationengine_p.h qml/qqmlbinding_p.h qml/qqmlboundsignal_p.h qml/qqmlboundsignalexpressionpointer_p.h qml/qqmlcleanup_p.h qml/qqmlcomponent_p.h qml/qqmlcomponentattached_p.h qml/qqmlcontext_p.h qml/qqmlcustomparser_p.h qml/qqmldata_p.h qml/qqmldelayedcallqueue_p.h qml/qqmldirparser_p.h qml/qqmlengine_p.h qml/qqmlexpression_p.h qml/qqmlextensionplugin_p.h qml/qqmlfileselector_p.h qml/qqmlglobal_p.h qml/qqmlguard_p.h qml/qqmlimport_p.h qml/qqmlincubator_p.h qml/qqmljavascriptexpression_p.h qml/qqmllist_p.h qml/qqmllistwrapper_p.h qml/qqmllocale_p.h qml/qqmlloggingcategory_p.h qml/qqmlmetatype_p.h qml/qqmlnotifier_p.h qml/qqmlobjectcreator_p.h qml/qqmlopenmetaobject_p.h qml/qqmlplatform_p.h qml/qqmlproperty_p.h qml/qqmlpropertycache_p.h qml/qqmlpropertyindex_p.h qml/qqmlpropertyvalueinterceptor_p.h qml/qqmlproxymetaobject_p.h qml/qqmlscriptstring_p.h qml/qqmlstringconverters_p.h qml/qqmltypeloader_p.h qml/qqmltypenamecache_p.h qml/qqmltypenotavailable_p.h qml/qqmltypewrapper_p.h qml/qqmlvaluetype_p.h qml/qqmlvaluetypeproxybinding_p.h qml/qqmlvaluetypewrapper_p.h qml/qqmlvme_p.h qml/qqmlvmemetaobject_p.h qml/qqmlxmlhttprequest_p.h types/qqmlbind_p.h types/qqmlconnections_p.h types/qqmldelegatecomponent_p.h types/qqmldelegatemodel_p.h types/qqmldelegatemodel_p_p.h types/qqmlinstantiator_p.h types/qqmlinstantiator_p_p.h types/qqmllistmodel_p.h types/qqmllistmodel_p_p.h types/qqmllistmodelworkeragent_p.h types/qqmlmodelindexvaluetype_p.h types/qqmlmodelsmodule_p.h types/qqmlobjectmodel_p.h types/qqmltableinstancemodel_p.h types/qqmltimer_p.h types/qquickpackage_p.h types/qquickworkerscript_p.h util/qqmladaptormodel_p.h util/qqmlchangeset_p.h util/qqmllistaccessor_p.h util/qqmllistcompositor_p.h qml/ftw/qbitfield_p.h qml/ftw/qfieldlist_p.h qml/ftw/qfinitestack_p.h qml/ftw/qflagpointer_p.h qml/ftw/qhashedstring_p.h qml/ftw/qintrusivelist_p.h qml/ftw/qlazilyallocated_p.h qml/ftw/qpodvector_p.h qml/ftw/qqmlnullablevalue_p.h qml/ftw/qqmlrefcount_p.h qml/ftw/qqmlthread_p.h qml/ftw/qrecursionwatcher_p.h qml/ftw/qrecyclepool_p.h qml/v8/qqmlbuiltinfunctions_p.h qml/v8/qv4domerrors_p.h qml/v8/qv4sqlerrors_p.h qml/v8/qv8engine_p.h 
++SYNCQT.PRIVATE_HEADER_FILES = qtqmlglobal_p.h animations/qabstractanimationjob_p.h animations/qanimationgroupjob_p.h animations/qanimationjobutil_p.h animations/qcontinuinganimationgroupjob_p.h animations/qparallelanimationgroupjob_p.h animations/qpauseanimationjob_p.h animations/qsequentialanimationgroupjob_p.h compiler/qqmlirbuilder_p.h compiler/qqmlpropertycachecreator_p.h compiler/qqmlpropertyvalidator_p.h compiler/qqmltypecompiler_p.h compiler/qv4bytecodegenerator_p.h compiler/qv4bytecodehandler_p.h compiler/qv4codegen_p.h compiler/qv4compilationunitmapper_p.h compiler/qv4compileddata_p.h compiler/qv4compiler_p.h compiler/qv4compilercontext_p.h compiler/qv4compilercontrolflow_p.h compiler/qv4compilerscanfunctions_p.h compiler/qv4instr_moth_p.h debugger/qqmlabstractprofileradapter_p.h debugger/qqmlconfigurabledebugservice_p.h debugger/qqmldebugconnector_p.h debugger/qqmldebugpluginmanager_p.h debugger/qqmldebugserver_p.h debugger/qqmldebugserverconnection_p.h debugger/qqmldebugservice_p.h debugger/qqmldebugservicefactory_p.h debugger/qqmldebugserviceinterfaces_p.h debugger/qqmldebugstatesdelegate_p.h debugger/qqmlmemoryprofiler_p.h debugger/qqmlprofiler_p.h debugger/qqmlprofilerdefinitions_p.h jit/qv4assemblercommon_p.h jit/qv4baselineassembler_p.h jit/qv4baselinejit_p.h jit/qv4jithelpers_p.h jsapi/qjsengine_p.h jsapi/qjsvalue_p.h jsapi/qjsvalueiterator_p.h jsruntime/qv4alloca_p.h jsruntime/qv4argumentsobject_p.h jsruntime/qv4arraybuffer_p.h jsruntime/qv4arraydata_p.h jsruntime/qv4arrayiterator_p.h jsruntime/qv4arrayobject_p.h jsruntime/qv4atomics_p.h jsruntime/qv4booleanobject_p.h jsruntime/qv4context_p.h jsruntime/qv4dataview_p.h jsruntime/qv4dateobject_p.h jsruntime/qv4debugging_p.h jsruntime/qv4engine_p.h jsruntime/qv4enginebase_p.h jsruntime/qv4errorobject_p.h jsruntime/qv4estable_p.h jsruntime/qv4executableallocator_p.h jsruntime/qv4function_p.h jsruntime/qv4functionobject_p.h jsruntime/qv4functiontable_p.h jsruntime/qv4generatorobject_p.h jsruntime/qv4global_p.h jsruntime/qv4globalobject_p.h jsruntime/qv4identifier_p.h jsruntime/qv4identifiertable_p.h jsruntime/qv4include_p.h jsruntime/qv4internalclass_p.h jsruntime/qv4iterator_p.h jsruntime/qv4jscall_p.h jsruntime/qv4jsonobject_p.h jsruntime/qv4lookup_p.h jsruntime/qv4managed_p.h jsruntime/qv4mapiterator_p.h jsruntime/qv4mapobject_p.h jsruntime/qv4math_p.h jsruntime/qv4mathobject_p.h jsruntime/qv4memberdata_p.h jsruntime/qv4module_p.h jsruntime/qv4numberobject_p.h jsruntime/qv4object_p.h jsruntime/qv4objectiterator_p.h jsruntime/qv4objectproto_p.h jsruntime/qv4persistent_p.h jsruntime/qv4profiling_p.h jsruntime/qv4promiseobject_p.h jsruntime/qv4property_p.h jsruntime/qv4propertykey_p.h jsruntime/qv4proxy_p.h jsruntime/qv4qmlcontext_p.h jsruntime/qv4qobjectwrapper_p.h jsruntime/qv4reflect_p.h jsruntime/qv4regexp_p.h jsruntime/qv4regexpobject_p.h jsruntime/qv4runtime_p.h jsruntime/qv4runtimeapi_p.h jsruntime/qv4runtimecodegen_p.h jsruntime/qv4scopedvalue_p.h jsruntime/qv4script_p.h jsruntime/qv4sequenceobject_p.h jsruntime/qv4serialize_p.h jsruntime/qv4setiterator_p.h jsruntime/qv4setobject_p.h jsruntime/qv4sparsearray_p.h jsruntime/qv4stackframe_p.h jsruntime/qv4string_p.h jsruntime/qv4stringiterator_p.h jsruntime/qv4stringobject_p.h jsruntime/qv4symbol_p.h jsruntime/qv4typedarray_p.h jsruntime/qv4util_p.h jsruntime/qv4value_p.h jsruntime/qv4variantobject_p.h jsruntime/qv4vme_moth_p.h jsruntime/qv4vtable_p.h memory/qv4heap_p.h memory/qv4mm_p.h memory/qv4mmdefs_p.h memory/qv4writebarrier_p.h parser/qqmljsast_p.h parser/qqmljsastfwd_p.h parser/qqmljsastvisitor_p.h parser/qqmljsengine_p.h parser/qqmljsglobal_p.h parser/qqmljskeywords_p.h parser/qqmljslexer_p.h parser/qqmljsmemorypool_p.h qml/qqmlabstractbinding_p.h qml/qqmlapplicationengine_p.h qml/qqmlbinding_p.h qml/qqmlboundsignal_p.h qml/qqmlboundsignalexpressionpointer_p.h qml/qqmlcleanup_p.h qml/qqmlcomponent_p.h qml/qqmlcomponentattached_p.h qml/qqmlcontext_p.h qml/qqmlcustomparser_p.h qml/qqmldata_p.h qml/qqmldelayedcallqueue_p.h qml/qqmldirparser_p.h qml/qqmlengine_p.h qml/qqmlexpression_p.h qml/qqmlextensionplugin_p.h qml/qqmlfileselector_p.h qml/qqmlglobal_p.h qml/qqmlguard_p.h qml/qqmlimport_p.h qml/qqmlincubator_p.h qml/qqmljavascriptexpression_p.h qml/qqmllist_p.h qml/qqmllistwrapper_p.h qml/qqmllocale_p.h qml/qqmlloggingcategory_p.h qml/qqmlmetatype_p.h qml/qqmlnotifier_p.h qml/qqmlobjectcreator_p.h qml/qqmlopenmetaobject_p.h qml/qqmlplatform_p.h qml/qqmlproperty_p.h qml/qqmlpropertycache_p.h qml/qqmlpropertyindex_p.h qml/qqmlpropertyvalueinterceptor_p.h qml/qqmlproxymetaobject_p.h qml/qqmlscriptstring_p.h qml/qqmlstringconverters_p.h qml/qqmltypeloader_p.h qml/qqmltypenamecache_p.h qml/qqmltypenotavailable_p.h qml/qqmltypewrapper_p.h qml/qqmlvaluetype_p.h qml/qqmlvaluetypeproxybinding_p.h qml/qqmlvaluetypewrapper_p.h qml/qqmlvme_p.h qml/qqmlvmemetaobject_p.h qml/qqmlxmlhttprequest_p.h types/qqmlbind_p.h types/qqmlconnections_p.h types/qqmldelegatecomponent_p.h types/qqmldelegatemodel_p.h types/qqmldelegatemodel_p_p.h types/qqmlinstantiator_p.h types/qqmlinstantiator_p_p.h types/qqmllistmodel_p.h types/qqmllistmodel_p_p.h types/qqmllistmodelworkeragent_p.h types/qqmlmodelindexvaluetype_p.h types/qqmlmodelsmodule_p.h types/qqmlobjectmodel_p.h types/qqmltableinstancemodel_p.h types/qqmltimer_p.h types/qquickpackage_p.h types/qquickworkerscript_p.h util/qqmladaptormodel_p.h util/qqmlchangeset_p.h util/qqmllistaccessor_p.h util/qqmllistcompositor_p.h qml/ftw/qbitfield_p.h qml/ftw/qfieldlist_p.h qml/ftw/qfinitestack_p.h qml/ftw/qflagpointer_p.h qml/ftw/qhashedstring_p.h qml/ftw/qintrusivelist_p.h qml/ftw/qlazilyallocated_p.h qml/ftw/qpodvector_p.h qml/ftw/qqmlnullablevalue_p.h qml/ftw/qqmlrefcount_p.h qml/ftw/qqmlthread_p.h qml/ftw/qrecursionwatcher_p.h qml/ftw/qrecyclepool_p.h qml/v8/qqmlbuiltinfunctions_p.h qml/v8/qv4domerrors_p.h qml/v8/qv4sqlerrors_p.h qml/v8/qv8engine_p.h 
+ SYNCQT.QPA_HEADER_FILES = 
+ SYNCQT.CLEAN_HEADER_FILES = qtqmlglobal.h debugger/qqmldebug.h jsapi/qjsengine.h jsapi/qjsvalue.h jsapi/qjsvalueiterator.h qml/qqml.h qml/qqmlabstracturlinterceptor.h qml/qqmlapplicationengine.h qml/qqmlcomponent.h qml/qqmlcontext.h qml/qqmlengine.h qml/qqmlerror.h qml/qqmlexpression.h qml/qqmlextensioninterface.h qml/qqmlextensionplugin.h qml/qqmlfile.h qml/qqmlfileselector.h qml/qqmlincubator.h qml/qqmlinfo.h qml/qqmllist.h qml/qqmlnetworkaccessmanagerfactory.h qml/qqmlparserstatus.h qml/qqmlprivate.h qml/qqmlproperty.h qml/qqmlpropertyvaluesource.h qml/qqmlscriptstring.h util/qqmlpropertymap.h 
+ SYNCQT.INJECTIONS = src/qml/qqmljsgrammar_p.h:^5.12.12/QtQml/private/qqmljsgrammar_p.h src/qml/qqmljsparser_p.h:^5.12.12/QtQml/private/qqmljsparser_p.h 
+diff --git a/src/3rdparty/masm/assembler/LinkBuffer.h b/src/3rdparty/masm/assembler/LinkBuffer.h
+index 7f997930..a1bb046d 100644
+--- a/src/3rdparty/masm/assembler/LinkBuffer.h
++++ b/src/3rdparty/masm/assembler/LinkBuffer.h
+@@ -228,6 +228,8 @@ public:
+         return m_size;
+     }
+ 
++    inline void makeExecutable();
++
+ private:
+     template <typename T> T applyOffset(T src)
+     {
+@@ -353,6 +355,11 @@ void LinkBufferBase<MacroAssembler, ExecutableOffsetCalculator>::performFinaliza
+ 
+     ASSERT(m_size <= INT_MAX);
+     MacroAssembler::cacheFlush(code(), m_size);
++}
++
++template <typename MacroAssembler, template <typename T> class ExecutableOffsetCalculator>
++inline void LinkBufferBase<MacroAssembler, ExecutableOffsetCalculator>::makeExecutable()
++{
+     ExecutableAllocator::makeExecutable(code(), static_cast<int>(m_size));
+ }
+ 
+@@ -389,6 +396,7 @@ public:
+     }
+ 
+     virtual void performFinalization() override final;
++    inline void makeExecutable();
+ 
+     inline void linkCode(void* ownerUID, JITCompilationEffort);
+ 
+@@ -421,6 +429,11 @@ void BranchCompactingLinkBuffer<MacroAssembler>::performFinalization()
+ #endif
+ 
+     MacroAssembler::cacheFlush(code(), m_size);
++}
++
++template <typename MacroAssembler>
++inline void BranchCompactingLinkBuffer<MacroAssembler>::makeExecutable()
++{
+     ExecutableAllocator::makeExecutable(code(), m_initialSize);
+ }
+ 
+diff --git a/src/3rdparty/masm/stubs/ExecutableAllocator.h b/src/3rdparty/masm/stubs/ExecutableAllocator.h
+index 156b24b4..a439c538 100644
+--- a/src/3rdparty/masm/stubs/ExecutableAllocator.h
++++ b/src/3rdparty/masm/stubs/ExecutableAllocator.h
+@@ -82,6 +82,7 @@ struct ExecutableMemoryHandle : public RefCounted<ExecutableMemoryHandle> {
+ 
+     inline bool isManaged() const { return true; }
+ 
++    void *exceptionHandler() { return m_allocation->exceptionHandler(); }
+     void *start() { return m_allocation->start(); }
+     size_t sizeInBytes() { return m_size; }
+ 
+diff --git a/src/3rdparty/masm/yarr/YarrJIT.cpp b/src/3rdparty/masm/yarr/YarrJIT.cpp
+index dee2ade4..98e4ade5 100644
+--- a/src/3rdparty/masm/yarr/YarrJIT.cpp
++++ b/src/3rdparty/masm/yarr/YarrJIT.cpp
+@@ -33,6 +33,8 @@
+ #include "Yarr.h"
+ #include "YarrCanonicalize.h"
+ 
++#include <private/qv4functiontable_p.h>
++
+ #if ENABLE(YARR_JIT)
+ 
+ using namespace WTF;
+@@ -3529,17 +3531,30 @@ public:
+ 
+         m_backtrackingState.linkDataLabels(linkBuffer);
+ 
++        CodeRef codeRef;
+         if (compileMode == MatchOnly) {
+-            if (m_charSize == Char8)
+-                codeBlock.set8BitCodeMatchOnly(FINALIZE_CODE(linkBuffer, "YarrJIT", "Match-only 8-bit regular expression"));
+-            else
+-                codeBlock.set16BitCodeMatchOnly(FINALIZE_CODE(linkBuffer, "YarrJIT", "Match-only 16-bit regular expression"));
++            if (m_charSize == Char8) {
++                codeRef = FINALIZE_CODE(linkBuffer, "YarJIT",
++                                        "Match-only 8-bit regular expression");
++                codeBlock.set8BitCodeMatchOnly(codeRef);
++            } else {
++                codeRef = FINALIZE_CODE(linkBuffer, "YarJIT",
++                                        "Match-only 16-bit regular expression");
++                codeBlock.set16BitCodeMatchOnly(codeRef);
++            }
+         } else {
+-            if (m_charSize == Char8)
+-                codeBlock.set8BitCode(FINALIZE_CODE(linkBuffer, "YarrJIT", "8-bit regular expression"));
+-            else
+-                codeBlock.set16BitCode(FINALIZE_CODE(linkBuffer, "YarrJIT", "16-bit regular expression"));
++            if (m_charSize == Char8) {
++                codeRef = FINALIZE_CODE(linkBuffer, "YarJIT", "8-bit regular expression");
++                codeBlock.set8BitCode(codeRef);
++            } else {
++                codeRef = FINALIZE_CODE(linkBuffer, "YarJIT", "16-bit regular expression");
++                codeBlock.set16BitCode(codeRef);
++            }
+         }
++        QV4::generateFunctionTable(nullptr, &codeRef);
++
++        linkBuffer.makeExecutable();
++
+         if (m_failureReason)
+             codeBlock.setFallBackWithFailureReason(*m_failureReason);
+     }
+@@ -3587,6 +3602,15 @@ private:
+     BacktrackingState m_backtrackingState;
+ };
+ 
++void YarrCodeBlock::replaceCodeRef(MacroAssemblerCodeRef &target,
++                                   const MacroAssemblerCodeRef &source)
++{
++    if (!!target && target.code().executableAddress() != source.code().executableAddress())
++        QV4::destroyFunctionTable(nullptr, &target);
++
++    target = source;
++}
++
+ static void dumpCompileFailure(JITFailureReason failure)
+ {
+     switch (failure) {
+diff --git a/src/3rdparty/masm/yarr/YarrJIT.h b/src/3rdparty/masm/yarr/YarrJIT.h
+index 8b6b3a75..35a0690f 100644
+--- a/src/3rdparty/masm/yarr/YarrJIT.h
++++ b/src/3rdparty/masm/yarr/YarrJIT.h
+@@ -82,19 +82,28 @@ class YarrCodeBlock {
+ 
+ public:
+     YarrCodeBlock() = default;
++    ~YarrCodeBlock() { clear(); }
++
++    static void replaceCodeRef(MacroAssemblerCodeRef &target, const MacroAssemblerCodeRef &source);
+ 
+     void setFallBackWithFailureReason(JITFailureReason failureReason) { m_failureReason = failureReason; }
+     std::optional<JITFailureReason> failureReason() { return m_failureReason; }
+ 
+     bool has8BitCode() { return m_ref8.size(); }
+     bool has16BitCode() { return m_ref16.size(); }
+-    void set8BitCode(MacroAssemblerCodeRef ref) { m_ref8 = ref; }
+-    void set16BitCode(MacroAssemblerCodeRef ref) { m_ref16 = ref; }
++    void set8BitCode(MacroAssemblerCodeRef ref) { replaceCodeRef(m_ref8, ref); }
++    void set16BitCode(MacroAssemblerCodeRef ref) { replaceCodeRef(m_ref16, ref); }
+ 
+     bool has8BitCodeMatchOnly() { return m_matchOnly8.size(); }
+     bool has16BitCodeMatchOnly() { return m_matchOnly16.size(); }
+-    void set8BitCodeMatchOnly(MacroAssemblerCodeRef matchOnly) { m_matchOnly8 = matchOnly; }
+-    void set16BitCodeMatchOnly(MacroAssemblerCodeRef matchOnly) { m_matchOnly16 = matchOnly; }
++    void set8BitCodeMatchOnly(MacroAssemblerCodeRef matchOnly)
++    {
++        replaceCodeRef(m_matchOnly8, matchOnly);
++    }
++    void set16BitCodeMatchOnly(MacroAssemblerCodeRef matchOnly)
++    {
++        replaceCodeRef(m_matchOnly16, matchOnly);
++    }
+ 
+ #if ENABLE(YARR_JIT_ALL_PARENS_EXPRESSIONS)
+     bool usesPatternContextBuffer() { return m_usesPatternContextBuffer; }
+@@ -190,10 +199,10 @@ public:
+ 
+     void clear()
+     {
+-        m_ref8 = MacroAssemblerCodeRef();
+-        m_ref16 = MacroAssemblerCodeRef();
+-        m_matchOnly8 = MacroAssemblerCodeRef();
+-        m_matchOnly16 = MacroAssemblerCodeRef();
++        replaceCodeRef(m_ref8, MacroAssemblerCodeRef());
++        replaceCodeRef(m_ref16, MacroAssemblerCodeRef());
++        replaceCodeRef(m_matchOnly8, MacroAssemblerCodeRef());
++        replaceCodeRef(m_matchOnly16, MacroAssemblerCodeRef());
+         m_failureReason = std::nullopt;
+     }
+ 
+diff --git a/src/qml/jit/qv4assemblercommon.cpp b/src/qml/jit/qv4assemblercommon.cpp
+index 831496a6..6dc40ad8 100644
+--- a/src/qml/jit/qv4assemblercommon.cpp
++++ b/src/qml/jit/qv4assemblercommon.cpp
+@@ -43,6 +43,7 @@
+ #include "qv4engine_p.h"
+ #include "qv4assemblercommon_p.h"
+ #include <private/qv4function_p.h>
++#include <private/qv4functiontable_p.h>
+ #include <private/qv4runtime_p.h>
+ 
+ #include <assembler/MacroAssemblerCodeRef.h>
+@@ -112,17 +113,6 @@ static void printDisassembledOutputWithCalls(QByteArray processedOutput,
+     qDebug("%s", processedOutput.constData());
+ }
+ 
+-static QByteArray functionName(Function *function)
+-{
+-    QByteArray name = function->name()->toQString().toUtf8();
+-    if (name.isEmpty()) {
+-        name = QByteArray::number(reinterpret_cast<quintptr>(function), 16);
+-        name.prepend("QV4::Function(0x");
+-        name.append(')');
+-    }
+-    return name;
+-}
+-
+ JIT::PlatformAssemblerCommon::~PlatformAssemblerCommon()
+ {}
+ 
+@@ -147,7 +137,9 @@ void PlatformAssemblerCommon::link(Function *function, const char *jitKind)
+         buf.open(QIODevice::WriteOnly);
+         WTF::setDataFile(new QIODevicePrintStream(&buf));
+ 
+-        QByteArray name = functionName(function);
++        // We use debugAddress here because it's actually for debugging and hidden behind an
++        // environment variable.
++        const QByteArray name = Function::prettyName(function, linkBuffer.debugAddress()).toUtf8();
+         codeRef = linkBuffer.finalizeCodeWithDisassembly(jitKind, "function %s", name.constData());
+ 
+         WTF::setDataFile(stderr);
+@@ -159,31 +151,9 @@ void PlatformAssemblerCommon::link(Function *function, const char *jitKind)
+     function->codeRef = new JSC::MacroAssemblerCodeRef(codeRef);
+     function->jittedCode = reinterpret_cast<Function::JittedCode>(function->codeRef->code().executableAddress());
+ 
+-    // This implements writing of JIT'd addresses so that perf can find the
+-    // symbol names.
+-    //
+-    // Perf expects the mapping to be in a certain place and have certain
+-    // content, for more information, see:
+-    // https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt
+-    static bool doProfile = !qEnvironmentVariableIsEmpty("QV4_PROFILE_WRITE_PERF_MAP");
+-    if (Q_UNLIKELY(doProfile)) {
+-        static QFile perfMapFile(QString::fromLatin1("/tmp/perf-%1.map")
+-                                 .arg(QCoreApplication::applicationPid()));
+-        static const bool isOpen = perfMapFile.open(QIODevice::WriteOnly);
+-        if (!isOpen) {
+-            qWarning("QV4::JIT::Assembler: Cannot write perf map file.");
+-            doProfile = false;
+-        } else {
+-            perfMapFile.write(QByteArray::number(reinterpret_cast<quintptr>(
+-                                                     codeRef.code().executableAddress()), 16));
+-            perfMapFile.putChar(' ');
+-            perfMapFile.write(QByteArray::number(static_cast<qsizetype>(codeRef.size()), 16));
+-            perfMapFile.putChar(' ');
+-            perfMapFile.write(functionName(function));
+-            perfMapFile.putChar('\n');
+-            perfMapFile.flush();
+-        }
+-    }
++    generateFunctionTable(function, &codeRef);
++
++    linkBuffer.makeExecutable();
+ }
+ 
+ void PlatformAssemblerCommon::prepareCallWithArgCount(int argc)
+diff --git a/src/qml/jsruntime/jsruntime.pri b/src/qml/jsruntime/jsruntime.pri
+index 5ec55b96..b0562ef8 100644
+--- a/src/qml/jsruntime/jsruntime.pri
++++ b/src/qml/jsruntime/jsruntime.pri
+@@ -142,6 +142,7 @@ qtConfig(qml-sequence-object) {
+ 
+ 
+ HEADERS += \
++    $$PWD/qv4functiontable_p.h \
+     $$PWD/qv4runtime_p.h \
+     $$PWD/qv4runtimeapi_p.h \
+     $$PWD/qv4value_p.h \
+@@ -156,6 +157,23 @@ SOURCES += \
+     $$PWD/qv4value.cpp \
+     $$PWD/qv4executableallocator.cpp
+ 
++qmldevtools_build {
++    SOURCES += \
++        $$PWD/qv4functiontable_noop.cpp
++} else:win32 {
++    equals(QT_ARCH, x86_64){
++        SOURCES += \
++            $$PWD/qv4functiontable_win64.cpp
++    } else {
++        SOURCES += \
++            $$PWD/qv4functiontable_noop.cpp
++    }
++} else {
++    SOURCES += \
++        $$PWD/qv4functiontable_unix.cpp
++}
++
++
+ valgrind {
+     DEFINES += V4_USE_VALGRIND
+ }
+diff --git a/src/qml/jsruntime/qv4executableallocator.cpp b/src/qml/jsruntime/qv4executableallocator.cpp
+index 6f04a712..c836d121 100644
+--- a/src/qml/jsruntime/qv4executableallocator.cpp
++++ b/src/qml/jsruntime/qv4executableallocator.cpp
+@@ -38,17 +38,23 @@
+ ****************************************************************************/
+ 
+ #include "qv4executableallocator_p.h"
++#include "qv4functiontable_p.h"
+ 
+ #include <wtf/StdLibExtras.h>
+ #include <wtf/PageAllocation.h>
+ 
+ using namespace QV4;
+ 
+-void *ExecutableAllocator::Allocation::start() const
++void *ExecutableAllocator::Allocation::exceptionHandler() const
+ {
+     return reinterpret_cast<void*>(addr);
+ }
+ 
++void *ExecutableAllocator::Allocation::start() const
++{
++    return reinterpret_cast<void*>(addr + exceptionHandlerSize());
++}
++
+ void ExecutableAllocator::Allocation::deallocate(ExecutableAllocator *allocator)
+ {
+     if (isValid())
+@@ -162,7 +168,7 @@ ExecutableAllocator::Allocation *ExecutableAllocator::allocate(size_t size)
+     Allocation *allocation = nullptr;
+ 
+     // Code is best aligned to 16-byte boundaries.
+-    size = WTF::roundUpToMultipleOf(16, size);
++    size = WTF::roundUpToMultipleOf(16, size + exceptionHandlerSize());
+ 
+     QMultiMap<size_t, Allocation*>::Iterator it = freeAllocations.lowerBound(size);
+     if (it != freeAllocations.end()) {
+diff --git a/src/qml/jsruntime/qv4executableallocator_p.h b/src/qml/jsruntime/qv4executableallocator_p.h
+index 375c9a36..013c6d71 100644
+--- a/src/qml/jsruntime/qv4executableallocator_p.h
++++ b/src/qml/jsruntime/qv4executableallocator_p.h
+@@ -86,6 +86,7 @@ public:
+             , free(true)
+         {}
+ 
++        void *exceptionHandler() const;
+         void *start() const;
+         void invalidate() { addr = 0; }
+         bool isValid() const { return addr != 0; }
+diff --git a/src/qml/jsruntime/qv4function.cpp b/src/qml/jsruntime/qv4function.cpp
+index 51a9b929..55fca618 100644
+--- a/src/qml/jsruntime/qv4function.cpp
++++ b/src/qml/jsruntime/qv4function.cpp
+@@ -46,6 +46,7 @@
+ #include "qv4lookup_p.h"
+ #include <private/qv4mm_p.h>
+ #include <private/qv4identifiertable_p.h>
++#include "qv4functiontable_p.h"
+ #include <assembler/MacroAssemblerCodeRef.h>
+ #include <private/qv4vme_moth_p.h>
+ #include <private/qqmlglobal_p.h>
+@@ -97,7 +98,10 @@ Function::Function(ExecutionEngine *engine, CompiledData::CompilationUnit *unit,
+ 
+ Function::~Function()
+ {
+-    delete codeRef;
++    if (codeRef) {
++        destroyFunctionTable(this, codeRef);
++        delete codeRef;
++    }
+ }
+ 
+ void Function::updateInternalClass(ExecutionEngine *engine, const QList<QByteArray> &parameters)
+@@ -144,6 +148,17 @@ void Function::updateInternalClass(ExecutionEngine *engine, const QList<QByteArr
+     nFormals = parameters.size();
+ }
+ 
++QString Function::prettyName(const Function *function, const void *code)
++{
++    QString prettyName = function ? function->name()->toQString() : QString();
++    if (prettyName.isEmpty()) {
++        prettyName = QString::number(reinterpret_cast<quintptr>(code), 16);
++        prettyName.prepend(QLatin1String("QV4::Function(0x"));
++        prettyName.append(QLatin1Char(')'));
++    }
++    return prettyName;
++}
++
+ QQmlSourceLocation Function::sourceLocation() const
+ {
+     return QQmlSourceLocation(sourceFile(), compiledFunction->location.line, compiledFunction->location.column);
+diff --git a/src/qml/jsruntime/qv4function_p.h b/src/qml/jsruntime/qv4function_p.h
+index 62c5d24f..859b6a87 100644
+--- a/src/qml/jsruntime/qv4function_p.h
++++ b/src/qml/jsruntime/qv4function_p.h
+@@ -88,9 +88,12 @@ struct Q_QML_EXPORT Function {
+     // used when dynamically assigning signal handlers (QQmlConnection)
+     void updateInternalClass(ExecutionEngine *engine, const QList<QByteArray> &parameters);
+ 
+-    inline Heap::String *name() {
++    inline Heap::String *name() const {
+         return compilationUnit->runtimeStrings[compiledFunction->nameIndex];
+     }
++
++    static QString prettyName(const Function *function, const void *address);
++
+     inline QString sourceFile() const { return compilationUnit->fileName(); }
+     inline QUrl finalUrl() const { return compilationUnit->finalUrl(); }
+ 
+diff --git a/src/qml/jsruntime/qv4functiontable_noop.cpp b/src/qml/jsruntime/qv4functiontable_noop.cpp
+new file mode 100644
+index 00000000..31c198eb
+--- /dev/null
++++ b/src/qml/jsruntime/qv4functiontable_noop.cpp
+@@ -0,0 +1,65 @@
++/****************************************************************************
++**
++** Copyright (C) 2017 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the QtQml module of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qv4functiontable_p.h"
++
++QT_BEGIN_NAMESPACE
++
++namespace QV4 {
++
++void generateFunctionTable(Function *function, JSC::MacroAssemblerCodeRef *codeRef)
++{
++    Q_UNUSED(function);
++    Q_UNUSED(codeRef);
++}
++
++void destroyFunctionTable(Function *function, JSC::MacroAssemblerCodeRef *codeRef)
++{
++    Q_UNUSED(function);
++    Q_UNUSED(codeRef);
++}
++
++size_t exceptionHandlerSize()
++{
++    return 0;
++}
++
++} // QV4
++
++QT_END_NAMESPACE
+diff --git a/src/qml/jsruntime/qv4functiontable_p.h b/src/qml/jsruntime/qv4functiontable_p.h
+new file mode 100644
+index 00000000..69e3d2bd
+--- /dev/null
++++ b/src/qml/jsruntime/qv4functiontable_p.h
+@@ -0,0 +1,75 @@
++/****************************************************************************
++**
++** Copyright (C) 2018 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the QtQml module of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#ifndef QV4FUNCTIONTABLE_P_H
++#define QV4FUNCTIONTABLE_P_H
++
++//
++//  W A R N I N G
++//  -------------
++//
++// This file is not part of the Qt API.  It exists purely as an
++// implementation detail.  This header file may change from version to
++// version without notice, or even be removed.
++//
++// We mean it.
++//
++
++#include "qv4global_p.h"
++
++namespace JSC {
++class MacroAssemblerCodeRef;
++}
++
++QT_BEGIN_NAMESPACE
++
++namespace QV4 {
++
++struct Function;
++
++void generateFunctionTable(Function *function, JSC::MacroAssemblerCodeRef *codeRef);
++void destroyFunctionTable(Function *function, JSC::MacroAssemblerCodeRef *codeRef);
++
++size_t exceptionHandlerSize();
++
++}
++
++QT_END_NAMESPACE
++
++#endif // QV4FUNCTIONTABLE_P_H
+diff --git a/src/qml/jsruntime/qv4functiontable_unix.cpp b/src/qml/jsruntime/qv4functiontable_unix.cpp
+new file mode 100644
+index 00000000..25b5c271
+--- /dev/null
++++ b/src/qml/jsruntime/qv4functiontable_unix.cpp
+@@ -0,0 +1,99 @@
++/****************************************************************************
++**
++** Copyright (C) 2017 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the QtQml module of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qv4functiontable_p.h"
++#include "qv4function_p.h"
++
++#include <assembler/MacroAssemblerCodeRef.h>
++
++#include <QtCore/qfile.h>
++#include <QtCore/qcoreapplication.h>
++
++QT_BEGIN_NAMESPACE
++
++namespace QV4 {
++
++void generateFunctionTable(Function *function, JSC::MacroAssemblerCodeRef *codeRef)
++{
++    // This implements writing of JIT'd addresses so that perf can find the
++    // symbol names.
++    //
++    // Perf expects the mapping to be in a certain place and have certain
++    // content, for more information, see:
++    // https://github.com/torvalds/linux/blob/master/tools/perf/Documentation/jit-interface.txt
++    static bool doProfile = !qEnvironmentVariableIsEmpty("QV4_PROFILE_WRITE_PERF_MAP");
++    if (Q_UNLIKELY(doProfile)) {
++        static QFile perfMapFile(QString::fromLatin1("/tmp/perf-%1.map")
++                                 .arg(QCoreApplication::applicationPid()));
++        static const bool isOpen = perfMapFile.open(QIODevice::WriteOnly);
++        if (!isOpen) {
++            qWarning("QV4::JIT::Assembler: Cannot write perf map file.");
++            doProfile = false;
++        } else {
++            const void *address = codeRef->code().executableAddress();
++            perfMapFile.write(QByteArray::number(reinterpret_cast<quintptr>(address), 16));
++            perfMapFile.putChar(' ');
++            perfMapFile.write(QByteArray::number(static_cast<qsizetype>(codeRef->size()), 16));
++            perfMapFile.putChar(' ');
++            perfMapFile.write(Function::prettyName(function, address).toUtf8());
++            perfMapFile.putChar('\n');
++            perfMapFile.flush();
++        }
++    }
++}
++
++void destroyFunctionTable(Function *function, JSC::MacroAssemblerCodeRef *codeRef)
++{
++    Q_UNUSED(function);
++    Q_UNUSED(codeRef);
++
++    // It's not advisable to remove things from the perf map file, as it's primarily used to analyze
++    // a trace after the application has terminated. We want to know about all functions that were
++    // ever jitted then. If the memory ranges overlap, we will have a problem when analyzing the
++    // trace. The JIT should try to avoid this.
++}
++
++size_t exceptionHandlerSize()
++{
++    return 0;
++}
++
++} // QV4
++
++QT_END_NAMESPACE
+diff --git a/src/qml/jsruntime/qv4functiontable_win64.cpp b/src/qml/jsruntime/qv4functiontable_win64.cpp
+new file mode 100644
+index 00000000..bc5b24f6
+--- /dev/null
++++ b/src/qml/jsruntime/qv4functiontable_win64.cpp
+@@ -0,0 +1,153 @@
++/****************************************************************************
++**
++** Copyright (C) 2018 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the QtQml module of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:LGPL$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU Lesser General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU Lesser
++** General Public License version 3 as published by the Free Software
++** Foundation and appearing in the file LICENSE.LGPL3 included in the
++** packaging of this file. Please review the following information to
++** ensure the GNU Lesser General Public License version 3 requirements
++** will be met: https://www.gnu.org/licenses/lgpl-3.0.html.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 2.0 or (at your option) the GNU General
++** Public license version 3 or any later version approved by the KDE Free
++** Qt Foundation. The licenses are as published by the Free Software
++** Foundation and appearing in the file LICENSE.GPL2 and LICENSE.GPL3
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-2.0.html and
++** https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++#include "qv4functiontable_p.h"
++
++#include <assembler/MacroAssemblerCodeRef.h>
++
++#include <QtCore/qdebug.h>
++
++#include <Windows.h>
++
++QT_BEGIN_NAMESPACE
++
++namespace QV4 {
++
++enum UnwindOpcode: UINT8
++{
++    UWOP_PUSH_NONVOL = 0, /* info == register number */
++    UWOP_ALLOC_LARGE,     /* no info, alloc size in next 2 slots */
++    UWOP_ALLOC_SMALL,     /* info == size of allocation / 8 - 1 */
++    UWOP_SET_FPREG,       /* no info, FP = RSP + UNWIND_INFO.FPRegOffset*16 */
++    UWOP_SAVE_NONVOL,     /* info == register number, offset in next slot */
++    UWOP_SAVE_NONVOL_FAR, /* info == register number, offset in next 2 slots */
++    UWOP_SAVE_XMM128 = 8, /* info == XMM reg number, offset in next slot */
++    UWOP_SAVE_XMM128_FAR, /* info == XMM reg number, offset in next 2 slots */
++    UWOP_PUSH_MACHFRAME   /* info == 0: no error-code, 1: error-code */
++};
++
++enum Register : UINT8
++{
++    RAX = 0,
++    RCX,
++    RDX,
++    RBX,
++    RSP,
++    RBP,
++    RSI,
++    RDI,
++    NONE = 15
++};
++
++struct UnwindCode
++{
++    UnwindCode(UINT8 offset, UnwindOpcode operation, Register info)
++        : offset(offset), operation(operation), info(info)
++    {}
++
++    UINT8 offset;
++    UINT8 operation: 4;
++    UINT8 info:      4;
++};
++
++struct UnwindInfo
++{
++    UINT8 Version : 3;
++    UINT8 Flags : 5;
++    UINT8 SizeOfProlog;
++    UINT8 CountOfUnwindCodes;
++    UINT8 FrameRegister : 4;
++    UINT8 FrameRegisterOffset : 4;
++    UnwindCode UnwindCodes[2];
++};
++
++struct ExceptionHandlerRecord
++{
++    RUNTIME_FUNCTION handler;
++    UnwindInfo info;
++};
++
++void generateFunctionTable(Function *, JSC::MacroAssemblerCodeRef *codeRef)
++{
++    ExceptionHandlerRecord *record = reinterpret_cast<ExceptionHandlerRecord *>(
++                codeRef->executableMemory()->exceptionHandler());
++
++    record->info.Version             = 1;
++    record->info.Flags               = 0;
++    record->info.SizeOfProlog        = 4;
++    record->info.CountOfUnwindCodes  = 2;
++    record->info.FrameRegister       = RBP;
++    record->info.FrameRegisterOffset = 0;
++
++    // Push frame pointer
++    record->info.UnwindCodes[1] = UnwindCode(1, UWOP_PUSH_NONVOL,  RBP);
++    // Set frame pointer from stack pointer
++    record->info.UnwindCodes[0] = UnwindCode(4,   UWOP_SET_FPREG, NONE);
++
++    const quintptr codeStart = quintptr(codeRef->code().executableAddress());
++    const quintptr codeSize = codeRef->size();
++
++    record->handler.BeginAddress = DWORD(codeStart - quintptr(record));
++    record->handler.EndAddress   = DWORD(codeStart + codeSize - quintptr(record));
++    record->handler.UnwindData   = offsetof(ExceptionHandlerRecord, info);
++
++    if (!RtlAddFunctionTable(&record->handler, 1, DWORD64(record))) {
++        const unsigned int errorCode = GetLastError();
++        qWarning() << "Failed to install win64 unwind hook. Error code:" << errorCode;
++    }
++}
++
++void destroyFunctionTable(Function *, JSC::MacroAssemblerCodeRef *codeRef)
++{
++    ExceptionHandlerRecord *record = reinterpret_cast<ExceptionHandlerRecord *>(
++                codeRef->executableMemory()->exceptionHandler());
++    if (!RtlDeleteFunctionTable(&record->handler)) {
++        const unsigned int errorCode = GetLastError();
++        qWarning() << "Failed to remove win64 unwind hook. Error code:" << errorCode;
++    }
++}
++
++size_t exceptionHandlerSize()
++{
++    return sizeof(ExceptionHandlerRecord);
++}
++
++} // QV4
++
++QT_END_NAMESPACE
+diff --git a/tests/auto/qml/qv4assembler/data/crash.qml b/tests/auto/qml/qv4assembler/data/crash.qml
+new file mode 100644
+index 00000000..dfdb9ceb
+--- /dev/null
++++ b/tests/auto/qml/qv4assembler/data/crash.qml
+@@ -0,0 +1,53 @@
++/****************************************************************************
++**
++** Copyright (C) 2018 The Qt Company Ltd.
++** Contact: https://www.qt.io/licensing/
++**
++** This file is part of the test suite of the Qt Toolkit.
++**
++** $QT_BEGIN_LICENSE:GPL-EXCEPT$
++** Commercial License Usage
++** Licensees holding valid commercial Qt licenses may use this file in
++** accordance with the commercial license agreement provided with the
++** Software or, alternatively, in accordance with the terms contained in
++** a written agreement between you and The Qt Company. For licensing terms
++** and conditions see https://www.qt.io/terms-conditions. For further
++** information use the contact form at https://www.qt.io/contact-us.
++**
++** GNU General Public License Usage
++** Alternatively, this file may be used under the terms of the GNU
++** General Public License version 3 as published by the Free Software
++** Foundation with exceptions as appearing in the file LICENSE.GPL3-EXCEPT
++** included in the packaging of this file. Please review the following
++** information to ensure the GNU General Public License requirements will
++** be met: https://www.gnu.org/licenses/gpl-3.0.html.
++**
++** $QT_END_LICENSE$
++**
++****************************************************************************/
++
++import QtQml 2.2
++import Crash 1.0
++
++QtObject {
++    property Crash crash: Crash {
++        id: crash
++    }
++
++    // Recursion makes the crash more reliable
++    // With a single frame the unwinder might guess
++    // the next frame by chance.
++    function recurse(x) {
++        if (x > 32)
++            crash.crash();
++        else
++            recurse(x + 1);
++    }
++
++    property Timer timer: Timer {
++        interval: 10
++        running: true
++        onTriggered: recurse(0)
++    }
++}
++
+diff --git a/tests/auto/qml/qv4assembler/qv4assembler.pro b/tests/auto/qml/qv4assembler/qv4assembler.pro
+index afd7586a..895e241c 100644
+--- a/tests/auto/qml/qv4assembler/qv4assembler.pro
++++ b/tests/auto/qml/qv4assembler/qv4assembler.pro
+@@ -1,7 +1,12 @@
+ CONFIG += testcase
+ TARGET = tst_qv4assembler
++
++include (../../shared/util.pri)
++
+ macos:CONFIG -= app_bundle
+ 
++TESTDATA = data/*
++
+ SOURCES += tst_qv4assembler.cpp
+ 
+ QT += qml-private testlib
+diff --git a/tests/auto/qml/qv4assembler/tst_qv4assembler.cpp b/tests/auto/qml/qv4assembler/tst_qv4assembler.cpp
+index afc00ec7..61a3e778 100644
+--- a/tests/auto/qml/qv4assembler/tst_qv4assembler.cpp
++++ b/tests/auto/qml/qv4assembler/tst_qv4assembler.cpp
+@@ -26,20 +26,37 @@
+ **
+ ****************************************************************************/
+ 
++#include <util.h>
++
+ #include <QtTest/QtTest>
+ #include <QtCore/qprocess.h>
+ #include <QtCore/qtemporaryfile.h>
++#include <QtQml/qqml.h>
++#include <QtQml/qqmlapplicationengine.h>
++
+ #include <private/qv4global_p.h>
+ 
+-class tst_QV4Assembler : public QObject
++#ifdef Q_OS_WIN
++#include <Windows.h>
++#endif
++
++class tst_QV4Assembler : public QQmlDataTest
+ {
+     Q_OBJECT
+ 
+ private slots:
++    void initTestCase() override;
+     void perfMapFile();
++    void functionTable();
+     void jitEnabled();
+ };
+ 
++void tst_QV4Assembler::initTestCase()
++{
++    qputenv("QV4_JIT_CALL_THRESHOLD", "0");
++    QQmlDataTest::initTestCase();
++}
++
+ void tst_QV4Assembler::perfMapFile()
+ {
+ #if !defined(Q_OS_LINUX)
+@@ -87,6 +104,42 @@ void tst_QV4Assembler::perfMapFile()
+ #endif
+ }
+ 
++#ifdef Q_OS_WIN
++class Crash : public QObject
++{
++    Q_OBJECT
++public:
++    explicit Crash(QObject *parent = nullptr) : QObject(parent) { }
++    Q_INVOKABLE static void crash();
++};
++
++static bool crashHandlerHit = false;
++
++static LONG WINAPI crashHandler(EXCEPTION_POINTERS*)
++{
++    crashHandlerHit = true;
++    return EXCEPTION_CONTINUE_EXECUTION;
++}
++
++void Crash::crash()
++{
++    SetUnhandledExceptionFilter(crashHandler);
++    RaiseException(EXCEPTION_ACCESS_VIOLATION, 0, 0, nullptr);
++}
++#endif
++
++void tst_QV4Assembler::functionTable()
++{
++#ifndef Q_OS_WIN
++    QSKIP("Function tables only exist on windows.");
++#else
++    QQmlApplicationEngine engine;
++    qmlRegisterType<Crash>("Crash", 1, 0, "Crash");
++    engine.load(testFileUrl("crash.qml"));
++    QTRY_VERIFY(crashHandlerHit);
++#endif
++}
++
+ #ifdef V4_ENABLE_JIT
+ #define JIT_ENABLED 1
+ #else
+-- 
+2.37.3
+

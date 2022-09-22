@@ -1,0 +1,480 @@
+From 4b7586b88b7bb611f72c0a1cfca9b2c257da84a2 Mon Sep 17 00:00:00 2001
+From: Ulf Hermann <ulf.hermann@qt.io>
+Date: Mon, 11 Jan 2021 11:33:26 +0100
+Subject: [PATCH 137/139] masm: Add error handling for failed mprotect()
+
+If we cannot mprotect() we have to abort the JIT compilation. Delete
+RepatchBuffer.h as it is unfixable in that regard. Luckily we don't use
+it.
+
+Task-number: QTBUG-89659
+Change-Id: Ic5ddbdf51b471db4ddeaa75aab48b24c1f7ced56
+Reviewed-by: Lars Knoll <lars.knoll@qt.io>
+Reviewed-by: Andrei Golubev <andrei.golubev@qt.io>
+(cherry picked from commit 131e2c81d40e3d324c62e113749a08e7993d008f)
+Reviewed-by: Fabian Kosmale <fabian.kosmale@qt.io>
+(cherry picked from commit ab15d9a547dbd83bec99366e7f7b0449fdcdb6ef)
+Signed-off-by: L. E. Segovia <amy@amyspark.me>
+---
+ .../masm/assembler/AbstractMacroAssembler.h   |   2 -
+ src/3rdparty/masm/assembler/AssemblerBuffer.h |   3 +-
+ src/3rdparty/masm/assembler/LinkBuffer.h      |  19 +-
+ .../masm/assembler/MacroAssemblerARMv7.h      |   1 -
+ .../masm/assembler/MacroAssemblerMIPS.h       |   1 -
+ .../masm/assembler/MacroAssemblerX86.h        |   1 -
+ .../masm/assembler/MacroAssemblerX86_64.h     |   1 -
+ src/3rdparty/masm/assembler/RepatchBuffer.h   | 181 ------------------
+ src/3rdparty/masm/stubs/ExecutableAllocator.h |  14 +-
+ src/3rdparty/masm/yarr/YarrJIT.cpp            |   3 +-
+ src/qml/jit/qv4assemblercommon.cpp            |   3 +-
+ src/qml/jsruntime/qv4vme_moth.cpp             |   5 +-
+ 12 files changed, 29 insertions(+), 205 deletions(-)
+ delete mode 100644 src/3rdparty/masm/assembler/RepatchBuffer.h
+
+diff --git a/src/3rdparty/masm/assembler/AbstractMacroAssembler.h b/src/3rdparty/masm/assembler/AbstractMacroAssembler.h
+index d0c1c461..9bafa243 100644
+--- a/src/3rdparty/masm/assembler/AbstractMacroAssembler.h
++++ b/src/3rdparty/masm/assembler/AbstractMacroAssembler.h
+@@ -51,7 +51,6 @@ template <typename, template <typename> class>
+ class LinkBufferBase;
+ template <typename>
+ class BranchCompactingLinkBuffer;
+-class RepatchBuffer;
+ class Watchpoint;
+ namespace DFG {
+ struct OSRExit;
+@@ -831,7 +830,6 @@ protected:
+ 
+     template <typename, template <typename> class> friend class LinkBufferBase;
+     template <typename> friend class BranchCompactingLinkBuffer;
+-    friend class RepatchBuffer;
+ 
+     static void linkJump(void* code, Jump jump, CodeLocationLabel target)
+     {
+diff --git a/src/3rdparty/masm/assembler/AssemblerBuffer.h b/src/3rdparty/masm/assembler/AssemblerBuffer.h
+index 2292a4c2..58ecac2a 100644
+--- a/src/3rdparty/masm/assembler/AssemblerBuffer.h
++++ b/src/3rdparty/masm/assembler/AssemblerBuffer.h
+@@ -140,7 +140,8 @@ namespace JSC {
+             if (!result)
+                 return 0;
+ 
+-            ExecutableAllocator::makeWritable(result->memoryStart(), result->memorySize());
++            if (Q_UNLIKELY(!ExecutableAllocator::makeWritable(result->memoryStart(), result->memorySize())))
++                return 0;
+ 
+             memcpy(result->codeStart(), m_buffer, m_index);
+             
+diff --git a/src/3rdparty/masm/assembler/LinkBuffer.h b/src/3rdparty/masm/assembler/LinkBuffer.h
+index aef35662..d9b5959f 100644
+--- a/src/3rdparty/masm/assembler/LinkBuffer.h
++++ b/src/3rdparty/masm/assembler/LinkBuffer.h
+@@ -228,7 +228,7 @@ public:
+         return m_size;
+     }
+ 
+-    inline void makeExecutable();
++    inline bool makeExecutable();
+ 
+ private:
+     template <typename T> T applyOffset(T src)
+@@ -358,10 +358,10 @@ void LinkBufferBase<MacroAssembler, ExecutableOffsetCalculator>::performFinaliza
+ }
+ 
+ template <typename MacroAssembler, template <typename T> class ExecutableOffsetCalculator>
+-inline void LinkBufferBase<MacroAssembler, ExecutableOffsetCalculator>::makeExecutable()
++inline bool LinkBufferBase<MacroAssembler, ExecutableOffsetCalculator>::makeExecutable()
+ {
+-    ExecutableAllocator::makeExecutable(m_executableMemory->memoryStart(),
+-                                        m_executableMemory->memorySize());
++    return ExecutableAllocator::makeExecutable(m_executableMemory->memoryStart(),
++                                               m_executableMemory->memorySize());
+ }
+ 
+ template <typename MacroAssembler>
+@@ -397,7 +397,7 @@ public:
+     }
+ 
+     virtual void performFinalization() override final;
+-    inline void makeExecutable();
++    inline bool makeExecutable();
+ 
+     inline void linkCode(void* ownerUID, JITCompilationEffort);
+ 
+@@ -433,9 +433,9 @@ void BranchCompactingLinkBuffer<MacroAssembler>::performFinalization()
+ }
+ 
+ template <typename MacroAssembler>
+-inline void BranchCompactingLinkBuffer<MacroAssembler>::makeExecutable()
++inline bool BranchCompactingLinkBuffer<MacroAssembler>::makeExecutable()
+ {
+-    ExecutableAllocator::makeExecutable(code(), m_initialSize);
++    return ExecutableAllocator::makeExecutable(code(), m_initialSize);
+ }
+ 
+ template <typename MacroAssembler>
+@@ -448,9 +448,12 @@ inline void BranchCompactingLinkBuffer<MacroAssembler>::linkCode(void* ownerUID,
+     m_executableMemory = m_globalData->executableAllocator.allocate(*m_globalData, m_initialSize, ownerUID, effort);
+     if (!m_executableMemory)
+         return;
++    if (Q_UNLIKELY(!ExecutableAllocator::makeWritable(m_executableMemory->memoryStart(), m_executableMemory->memorySize()))) {
++        m_executableMemory = {};
++        return;
++    }
+     m_code = (uint8_t*)m_executableMemory->codeStart();
+     ASSERT(m_code);
+-    ExecutableAllocator::makeWritable(m_executableMemory->memoryStart(), m_executableMemory->memorySize());
+     uint8_t* inData = (uint8_t*)m_assembler->unlinkedCode();
+     uint8_t* outData = reinterpret_cast<uint8_t*>(m_code);
+     int readPtr = 0;
+diff --git a/src/3rdparty/masm/assembler/MacroAssemblerARMv7.h b/src/3rdparty/masm/assembler/MacroAssemblerARMv7.h
+index 99801a0e..dd66eefb 100644
+--- a/src/3rdparty/masm/assembler/MacroAssemblerARMv7.h
++++ b/src/3rdparty/masm/assembler/MacroAssemblerARMv7.h
+@@ -2022,7 +2022,6 @@ protected:
+     
+ private:
+     template <typename, template <typename> class> friend class LinkBufferBase;
+-    friend class RepatchBuffer;
+ 
+ #if !defined(V4_BOOTSTRAP)
+     static void linkCall(void* code, Call call, FunctionPtr function)
+diff --git a/src/3rdparty/masm/assembler/MacroAssemblerMIPS.h b/src/3rdparty/masm/assembler/MacroAssemblerMIPS.h
+index 07f0ec62..6dfc1048 100644
+--- a/src/3rdparty/masm/assembler/MacroAssemblerMIPS.h
++++ b/src/3rdparty/masm/assembler/MacroAssemblerMIPS.h
+@@ -2818,7 +2818,6 @@ private:
+     bool m_fixedWidth;
+ 
+     template <typename, template <typename> class> friend class LinkBufferBase;
+-    friend class RepatchBuffer;
+ 
+     static void linkCall(void* code, Call call, FunctionPtr function)
+     {
+diff --git a/src/3rdparty/masm/assembler/MacroAssemblerX86.h b/src/3rdparty/masm/assembler/MacroAssemblerX86.h
+index e3e0bfe5..bf5deeb1 100644
+--- a/src/3rdparty/masm/assembler/MacroAssemblerX86.h
++++ b/src/3rdparty/masm/assembler/MacroAssemblerX86.h
+@@ -345,7 +345,6 @@ public:
+ 
+ private:
+     template <typename, template <typename> class> friend class LinkBufferBase;
+-    friend class RepatchBuffer;
+ 
+     static void linkCall(void* code, Call call, FunctionPtr function)
+     {
+diff --git a/src/3rdparty/masm/assembler/MacroAssemblerX86_64.h b/src/3rdparty/masm/assembler/MacroAssemblerX86_64.h
+index f4349e1f..c419bcd7 100644
+--- a/src/3rdparty/masm/assembler/MacroAssemblerX86_64.h
++++ b/src/3rdparty/masm/assembler/MacroAssemblerX86_64.h
+@@ -743,7 +743,6 @@ public:
+ 
+ private:
+     template <typename, template <typename> class> friend class LinkBufferBase;
+-    friend class RepatchBuffer;
+ 
+     static void linkCall(void* code, Call call, FunctionPtr function)
+     {
+diff --git a/src/3rdparty/masm/assembler/RepatchBuffer.h b/src/3rdparty/masm/assembler/RepatchBuffer.h
+deleted file mode 100644
+index dbb56f9a..00000000
+--- a/src/3rdparty/masm/assembler/RepatchBuffer.h
++++ /dev/null
+@@ -1,181 +0,0 @@
+-/*
+- * Copyright (C) 2009 Apple Inc. All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY
+- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+- * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR
+- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+- * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+- * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+- */
+-
+-#ifndef RepatchBuffer_h
+-#define RepatchBuffer_h
+-
+-#if ENABLE(JIT)
+-
+-#include "CodeBlock.h"
+-#include <MacroAssembler.h>
+-#include <wtf/Noncopyable.h>
+-
+-namespace JSC {
+-
+-// RepatchBuffer:
+-//
+-// This class is used to modify code after code generation has been completed,
+-// and after the code has potentially already been executed.  This mechanism is
+-// used to apply optimizations to the code.
+-//
+-class RepatchBuffer {
+-    typedef MacroAssemblerCodePtr CodePtr;
+-
+-public:
+-    RepatchBuffer(CodeBlock* codeBlock)
+-    {
+-        JITCode& code = codeBlock->getJITCode();
+-        m_start = code.start();
+-        m_size = code.size();
+-
+-        ExecutableAllocator::makeWritable(m_start, m_size);
+-    }
+-
+-    ~RepatchBuffer()
+-    {
+-        ExecutableAllocator::makeExecutable(m_start, m_size);
+-    }
+-
+-    void relink(CodeLocationJump jump, CodeLocationLabel destination)
+-    {
+-        MacroAssembler::repatchJump(jump, destination);
+-    }
+-
+-    void relink(CodeLocationCall call, CodeLocationLabel destination)
+-    {
+-        MacroAssembler::repatchCall(call, destination);
+-    }
+-
+-    void relink(CodeLocationCall call, FunctionPtr destination)
+-    {
+-        MacroAssembler::repatchCall(call, destination);
+-    }
+-
+-    void relink(CodeLocationNearCall nearCall, CodePtr destination)
+-    {
+-        MacroAssembler::repatchNearCall(nearCall, CodeLocationLabel(destination));
+-    }
+-
+-    void relink(CodeLocationNearCall nearCall, CodeLocationLabel destination)
+-    {
+-        MacroAssembler::repatchNearCall(nearCall, destination);
+-    }
+-
+-    void repatch(CodeLocationDataLabel32 dataLabel32, int32_t value)
+-    {
+-        MacroAssembler::repatchInt32(dataLabel32, value);
+-    }
+-
+-    void repatch(CodeLocationDataLabelCompact dataLabelCompact, int32_t value)
+-    {
+-        MacroAssembler::repatchCompact(dataLabelCompact, value);
+-    }
+-
+-    void repatch(CodeLocationDataLabelPtr dataLabelPtr, void* value)
+-    {
+-        MacroAssembler::repatchPointer(dataLabelPtr, value);
+-    }
+-
+-    void relinkCallerToTrampoline(ReturnAddressPtr returnAddress, CodeLocationLabel label)
+-    {
+-        relink(CodeLocationCall(CodePtr(returnAddress)), label);
+-    }
+-    
+-    void relinkCallerToTrampoline(ReturnAddressPtr returnAddress, CodePtr newCalleeFunction)
+-    {
+-        relinkCallerToTrampoline(returnAddress, CodeLocationLabel(newCalleeFunction));
+-    }
+-
+-    void relinkCallerToFunction(ReturnAddressPtr returnAddress, FunctionPtr function)
+-    {
+-        relink(CodeLocationCall(CodePtr(returnAddress)), function);
+-    }
+-    
+-    void relinkNearCallerToTrampoline(ReturnAddressPtr returnAddress, CodeLocationLabel label)
+-    {
+-        relink(CodeLocationNearCall(CodePtr(returnAddress)), label);
+-    }
+-    
+-    void relinkNearCallerToTrampoline(ReturnAddressPtr returnAddress, CodePtr newCalleeFunction)
+-    {
+-        relinkNearCallerToTrampoline(returnAddress, CodeLocationLabel(newCalleeFunction));
+-    }
+-    
+-    void replaceWithLoad(CodeLocationConvertibleLoad label)
+-    {
+-        MacroAssembler::replaceWithLoad(label);
+-    }
+-    
+-    void replaceWithAddressComputation(CodeLocationConvertibleLoad label)
+-    {
+-        MacroAssembler::replaceWithAddressComputation(label);
+-    }
+-    
+-    void setLoadInstructionIsActive(CodeLocationConvertibleLoad label, bool isActive)
+-    {
+-        if (isActive)
+-            replaceWithLoad(label);
+-        else
+-            replaceWithAddressComputation(label);
+-    }
+-
+-    static CodeLocationLabel startOfBranchPtrWithPatchOnRegister(CodeLocationDataLabelPtr label)
+-    {
+-        return MacroAssembler::startOfBranchPtrWithPatchOnRegister(label);
+-    }
+-    
+-    static CodeLocationLabel startOfPatchableBranchPtrWithPatchOnAddress(CodeLocationDataLabelPtr label)
+-    {
+-        return MacroAssembler::startOfPatchableBranchPtrWithPatchOnAddress(label);
+-    }
+-    
+-    void replaceWithJump(CodeLocationLabel instructionStart, CodeLocationLabel destination)
+-    {
+-        MacroAssembler::replaceWithJump(instructionStart, destination);
+-    }
+-    
+-    // This is a *bit* of a silly API, since we currently always also repatch the
+-    // immediate after calling this. But I'm fine with that, since this just feels
+-    // less yucky.
+-    void revertJumpReplacementToBranchPtrWithPatch(CodeLocationLabel instructionStart, MacroAssembler::RegisterID reg, void* value)
+-    {
+-        MacroAssembler::revertJumpReplacementToBranchPtrWithPatch(instructionStart, reg, value);
+-    }
+-
+-    void revertJumpReplacementToPatchableBranchPtrWithPatch(CodeLocationLabel instructionStart, MacroAssembler::Address address, void* value)
+-    {
+-        MacroAssembler::revertJumpReplacementToPatchableBranchPtrWithPatch(instructionStart, address, value);
+-    }
+-
+-private:
+-    void* m_start;
+-    size_t m_size;
+-};
+-
+-} // namespace JSC
+-
+-#endif // ENABLE(ASSEMBLER)
+-
+-#endif // RepatchBuffer_h
+diff --git a/src/3rdparty/masm/stubs/ExecutableAllocator.h b/src/3rdparty/masm/stubs/ExecutableAllocator.h
+index f9847040..515285a7 100644
+--- a/src/3rdparty/masm/stubs/ExecutableAllocator.h
++++ b/src/3rdparty/masm/stubs/ExecutableAllocator.h
+@@ -109,7 +109,7 @@ struct ExecutableAllocator {
+         return adoptRef(new ExecutableMemoryHandle(realAllocator, size));
+     }
+ 
+-    static void makeWritable(void* addr, size_t size)
++    static bool makeWritable(void* addr, size_t size)
+     {
+         quintptr pageSize = WTF::pageSize();
+         quintptr iaddr = reinterpret_cast<quintptr>(addr);
+@@ -125,7 +125,7 @@ struct ExecutableAllocator {
+ #    else
+         bool hr = VirtualProtectFromApp(addr, size, PAGE_READWRITE, &oldProtect);
+         if (!hr) {
+-            Q_UNREACHABLE();
++            return false;
+         }
+ #    endif
+ #  elif OS(INTEGRITY)
+@@ -134,7 +134,7 @@ struct ExecutableAllocator {
+         int mode = PROT_READ | PROT_WRITE;
+         if (mprotect(addr, size, mode) != 0) {
+             perror("mprotect failed in ExecutableAllocator::makeWritable");
+-            Q_UNREACHABLE();
++            return false;
+         }
+ #  endif
+ #else
+@@ -142,9 +142,10 @@ struct ExecutableAllocator {
+         (void)addr; // suppress unused parameter warning
+         (void)size; // suppress unused parameter warning
+ #endif
++        return true;
+     }
+ 
+-    static void makeExecutable(void* addr, size_t size)
++    static bool makeExecutable(void* addr, size_t size)
+     {
+         quintptr pageSize = WTF::pageSize();
+         quintptr iaddr = reinterpret_cast<quintptr>(addr);
+@@ -161,7 +162,7 @@ struct ExecutableAllocator {
+ #    else
+         bool hr = VirtualProtectFromApp(addr, size, PAGE_EXECUTE_READ, &oldProtect);
+         if (!hr) {
+-            Q_UNREACHABLE();
++            return false;
+         }
+ #    endif
+ #  elif OS(INTEGRITY)
+@@ -170,7 +171,7 @@ struct ExecutableAllocator {
+         int mode = PROT_READ | PROT_EXEC;
+         if (mprotect(addr, size, mode) != 0) {
+             perror("mprotect failed in ExecutableAllocator::makeExecutable");
+-            Q_UNREACHABLE();
++            return false;
+         }
+ #  endif
+ #else
+@@ -180,6 +181,7 @@ struct ExecutableAllocator {
+         (void)addr; // suppress unused parameter warning
+         (void)size; // suppress unused parameter warning
+ #endif
++        return true;
+     }
+ 
+     QV4::ExecutableAllocator *realAllocator;
+diff --git a/src/3rdparty/masm/yarr/YarrJIT.cpp b/src/3rdparty/masm/yarr/YarrJIT.cpp
+index 98e4ade5..92706ffb 100644
+--- a/src/3rdparty/masm/yarr/YarrJIT.cpp
++++ b/src/3rdparty/masm/yarr/YarrJIT.cpp
+@@ -3553,7 +3553,8 @@ public:
+         }
+         QV4::generateFunctionTable(nullptr, &codeRef);
+ 
+-        linkBuffer.makeExecutable();
++        if (Q_UNLIKELY(!linkBuffer.makeExecutable()))
++            m_failureReason = JITFailureReason::ExecutableMemoryAllocationFailure;
+ 
+         if (m_failureReason)
+             codeBlock.setFallBackWithFailureReason(*m_failureReason);
+diff --git a/src/qml/jit/qv4assemblercommon.cpp b/src/qml/jit/qv4assemblercommon.cpp
+index 6dc40ad8..45ff79c9 100644
+--- a/src/qml/jit/qv4assemblercommon.cpp
++++ b/src/qml/jit/qv4assemblercommon.cpp
+@@ -153,7 +153,8 @@ void PlatformAssemblerCommon::link(Function *function, const char *jitKind)
+ 
+     generateFunctionTable(function, &codeRef);
+ 
+-    linkBuffer.makeExecutable();
++    if (Q_UNLIKELY(!linkBuffer.makeExecutable()))
++        function->jittedCode = nullptr; // The function is not executable, but the coderef exists.
+ }
+ 
+ void PlatformAssemblerCommon::prepareCallWithArgCount(int argc)
+diff --git a/src/qml/jsruntime/qv4vme_moth.cpp b/src/qml/jsruntime/qv4vme_moth.cpp
+index 47ad22f4..9d8a1c5a 100644
+--- a/src/qml/jsruntime/qv4vme_moth.cpp
++++ b/src/qml/jsruntime/qv4vme_moth.cpp
+@@ -429,7 +429,10 @@ ReturnedValue VME::exec(CppStackFrame *frame, ExecutionEngine *engine)
+ 
+ #ifdef V4_ENABLE_JIT
+     if (debugger == nullptr) {
+-        if (function->jittedCode == nullptr) {
++        // Check for codeRef here. In rare cases the JIT compilation may fail, which leaves us
++        // with a (useless) codeRef, but no jittedCode. In that case, don't try to JIT again every
++        // time we execute the function, but just interpret instead.
++        if (function->codeRef == nullptr) {
+             if (engine->canJIT(function))
+                 QV4::JIT::BaselineJIT(function).generate();
+             else
+-- 
+2.37.3
+

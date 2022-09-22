@@ -37,7 +37,7 @@ public Q_SLOTS:
     virtual bool isMute() override;
 
     virtual bool supportsAudio() override { return true; }
-    virtual bool supportsVariablePlaybackSpeed() override { return false; } // TODO
+    virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
 protected Q_SLOTS:
     virtual void setCanvas(KoCanvasBase* canvas) override;
@@ -53,6 +53,9 @@ protected Q_SLOTS:
      * show frames when we are in PULL mode.
      */
     void throttledShowFrame(const int frame);
+
+    void throttledSetSpeed(const double speed);
+
 
     /**
      * @brief setAudioVolume

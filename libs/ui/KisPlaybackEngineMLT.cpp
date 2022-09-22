@@ -39,6 +39,7 @@ struct KisPlaybackEngineMLT::Private {
 
     Private( KisPlaybackEngineMLT* p_self )
         : m_self(p_self)
+        , playbackSpeed(1.0)
         , mute(false)
     {
         // Initialize Audio Libraries
@@ -47,11 +48,19 @@ struct KisPlaybackEngineMLT::Private {
         profile.reset(new Mlt::Profile());
         profile->set_frame_rate(24, 1);
 
+        {
+            std::function<void (int)> callback(std::bind(&Private::pushAudio, this, std::placeholders::_1));
+            sigPushAudioCompressor.reset(
+                        new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE)
+                        );
+        }
 
-        std::function<void (int)> callback(std::bind(&Private::pushAudio, this, std::placeholders::_1));
-        sigPushAudioCompressor.reset(
-                    new KisSignalCompressorWithParam<int>(1000 * SCRUB_AUDIO_SECONDS, callback, KisSignalCompressor::FIRST_ACTIVE)
-                    );
+        {
+            std::function<void (const double)> callback(std::bind(&KisPlaybackEngineMLT::throttledSetSpeed, m_self, std::placeholders::_1));
+            sigSetPlaybackSpeed.reset(
+                        new KisSignalCompressorWithParam<double>(100, callback, KisSignalCompressor::POSTPONE)
+                        );
+        }
 
         initializeConsumers();
     }
@@ -135,7 +144,9 @@ public:
     QMap<KisCanvas2*, QSharedPointer<Mlt::Producer>> canvasProducers;
 
     QScopedPointer<KisSignalCompressorWithParam<int>> sigPushAudioCompressor;
+    QScopedPointer<KisSignalCompressorWithParam<double>> sigSetPlaybackSpeed;
 
+    double playbackSpeed;
     bool mute;
 };
 
@@ -195,6 +206,7 @@ public:
                 KisImageAnimationInterface* animInterface = m_d->activeCanvas()->image()->animationInterface();
                 m_d->activeProducer()->set("start_frame", animInterface->activePlaybackRange().start());
                 m_d->activeProducer()->set("end_frame", animInterface->activePlaybackRange().end());
+                m_d->activeProducer()->set("speed", m_d->playbackSpeed);
                 const int shouldLimit = m_d->activePlaybackMode() == PLAYBACK_PUSH ? 0 : 1;
                 m_d->activeProducer()->set("limit_enabled", shouldLimit);
             }
@@ -350,6 +362,12 @@ void KisPlaybackEngineMLT::throttledShowFrame(const int frame)
     }
 }
 
+void KisPlaybackEngineMLT::throttledSetSpeed(const double speed)
+{
+    StopAndResume stopResume(m_d.data(), false);
+    m_d->playbackSpeed = speed;
+}
+
 void KisPlaybackEngineMLT::setAudioVolume(qreal volumeNormalized)
 {
     if (m_d->mute) {
@@ -363,12 +381,12 @@ void KisPlaybackEngineMLT::setAudioVolume(qreal volumeNormalized)
 
 void KisPlaybackEngineMLT::setPlaybackSpeedPercent(int value)
 {
-    Q_UNIMPLEMENTED();
+    setPlaybackSpeedNormalized(static_cast<double>(value) / 100.0);
 }
 
 void KisPlaybackEngineMLT::setPlaybackSpeedNormalized(double value)
 {
-    Q_UNIMPLEMENTED();
+    m_d->sigSetPlaybackSpeed->start(value);
 }
 
 void KisPlaybackEngineMLT::setMute(bool val)

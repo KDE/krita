@@ -110,10 +110,7 @@ bool KisFileIconCreator::createFileIcon(QString path, QIcon &icon, qreal deviceP
             } else {
                 return false;
             }
-        } else if (mimeType == "image/tiff" ||
-                   mimeType == "image/x-tiff" ||
-                   mimeType == "image/vnd.adobe.photoshop") {
-
+        } else if (mimeType == "image/tiff" || mimeType == "image/x-tiff") {
             // Workaround for a bug in Qt tiff QImageIO plugin
             QScopedPointer<KisDocument> doc(KisPart::instance()->createTemporaryDocument());
             doc->setFileBatchMode(true);

@@ -225,9 +225,7 @@ void KisCurveOptionData::write(KisPropertiesConfiguration *setting) const
 
 bool KisCurveOptionData::readPrefixed(const KisPropertiesConfiguration *setting)
 {
-    if (isCheckable) {
-        isChecked = setting->getBool("Pressure" + id.id(), false);
-    }
+    isChecked = !isCheckable || setting->getBool("Pressure" + id.id(), false);
 
     std::vector<KisSensorData*> sensors = this->sensors();
     QMap<QString, KisSensorData*> sensorById;
@@ -331,9 +329,7 @@ bool KisCurveOptionData::readPrefixed(const KisPropertiesConfiguration *setting)
 
 void KisCurveOptionData::writePrefixed(KisPropertiesConfiguration *setting) const
 {
-    if (isCheckable) {
-        setting->setProperty("Pressure" + id.id(), isChecked);
-    }
+    setting->setProperty("Pressure" + id.id(), isChecked || !isCheckable);
 
     QVector<const KisSensorData*> activeSensors;
     Q_FOREACH(const KisSensorData *sensor, sensors()) {

@@ -52,7 +52,8 @@ public:
     KisSizeOptionData(bool isCheckable = false, const QString &prefix = QString())
         : KisCurveOptionData(
               KoID("Size", i18n("Size")),
-              isCheckable)
+              isCheckable,
+              !isCheckable)
     {
         this->prefix = prefix;
     }
@@ -80,7 +81,8 @@ public:
     KisFlowOptionData(bool isCheckable = false, const QString &prefix = QString())
         : KisCurveOptionData(
               KoID("Flow", i18n("Flow")),
-              isCheckable)
+              isCheckable,
+              !isCheckable)
     {
         this->prefix = prefix;
     }

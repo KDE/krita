@@ -40,7 +40,7 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     , m_hexInput(nullptr)
     , m_hsvSlider(nullptr)
     , m_rgbButton(nullptr)
-    , m_hsvButton(nullptr)
+    , m_hsxButton(nullptr)
     , m_hsvSelector(nullptr)
     , m_colorSpace(nullptr)
     , m_color()
@@ -59,20 +59,30 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
     // Set up "RGB/HSV" button group
     m_hsvSelector = new QButtonGroup(this);
     m_rgbButton = new QRadioButton("RGB", this);
-    m_hsvButton = new QRadioButton("HSV", this);
+    m_hsxButton = new QRadioButton("HSV", this);
+    m_hsxModeComboBox = new QComboBox(this);
+
+    m_hsxButton->setText("");
     m_rgbButton->setChecked(true);
+    m_hsxModeComboBox->addItem(i18n("HSV"));
+	m_hsxModeComboBox->addItem(i18n("HSL"));
+	m_hsxModeComboBox->addItem(i18n("HSI"));
+	m_hsxModeComboBox->addItem(i18n("HSY"));
 
     connect(m_hsvSelector, SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(hsvSelectorClicked(QAbstractButton*)));
+    connect(m_hsxModeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeHsxMode(int)));
 
     m_hsvSelector->addButton(m_rgbButton);
-    m_hsvSelector->addButton(m_hsvButton);
+    m_hsvSelector->addButton(m_hsxButton);
     m_hsvSelector->setExclusive(true);
     m_rgbButton->setVisible(false);
-    m_hsvButton->setVisible(false);
+    m_hsxButton->setVisible(false);
+    m_hsxModeComboBox->setVisible(false);
 
     QSpacerItem *hsvButtonSpacer = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Expanding);
     m_ui->hsvButtonsLayout->addWidget(m_rgbButton);
-    m_ui->hsvButtonsLayout->addWidget(m_hsvButton);
+	m_ui->hsvButtonsLayout->addWidget(m_hsxButton);
+	m_ui->hsvButtonsLayout->addWidget(m_hsxModeComboBox);
     m_ui->hsvButtonsLayout->addItem(hsvButtonSpacer);
 
     // Set up HSV sliders
@@ -95,7 +105,8 @@ KisSpecificColorSelectorWidget::KisSpecificColorSelectorWidget(QWidget* parent)
 
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
     m_ui->chkUsePercentage->setChecked(cfg.readEntry("SpecificColorSelector/UsePercentage", false));
-    m_ui->chkUsePercentage->setIcon(KisIconUtils::loadIcon("ratio"));
+	m_ui->chkUsePercentage->setIcon(KisIconUtils::loadIcon("ratio"));
+	m_hsxModeComboBox->setCurrentIndex(cfg.readEntry("SpecificColorSelector/HsxMode", 0));
 
     m_colorspaceSelector->showColorBrowserButton(false);
 
@@ -107,6 +118,7 @@ KisSpecificColorSelectorWidget::~KisSpecificColorSelectorWidget()
 {
     KConfigGroup cfg =  KSharedConfig::openConfig()->group(QString());
     cfg.writeEntry("SpecificColorSelector/UsePercentage", m_ui->chkUsePercentage->isChecked());
+    cfg.writeEntry("SpecificColorSelector/HsxMode", m_hsxModeComboBox->currentIndex());
 }
 
 bool KisSpecificColorSelectorWidget::customColorSpaceUsed()
@@ -304,14 +316,34 @@ void KisSpecificColorSelectorWidget::hsvSelectorClicked(QAbstractButton *)
     updateHsvSelector(m_colorSpace ? m_colorSpace->colorModelId() == RGBAColorModelID : false);
 }
 
+void KisSpecificColorSelectorWidget::changeHsxMode(int index) {
+    m_hsvSlider->setMixMode((KisHsvColorSlider::MIX_MODE)(index + 1));
+}
+
 void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
 {
     if (isRgbColorSpace) {
         m_rgbButton->setVisible(true);
-        m_hsvButton->setVisible(true);
+        m_hsxButton->setVisible(true);
+        m_hsxModeComboBox->setVisible(true);
+
+		//m_hsxModeComboBox->addItem(i18n("HSV"));
+		//m_hsxModeComboBox->addItem(i18n("HSL"));
+		//m_hsxModeComboBox->addItem(i18n("HSI"));
+		//m_hsxModeComboBox->addItem(i18n("HSY'"));
+
+		switch (m_hsxModeComboBox->currentIndex())
+		{
+		case 0:
+
+		default:
+			break;
+		}
+
     } else {
         m_rgbButton->setVisible(false);
-        m_hsvButton->setVisible(false);
+		m_hsxButton->setVisible(false);
+		m_hsxModeComboBox->setVisible(false);
 
         // Force to be RGB only
         m_hsvSlider->setVisible(false);
@@ -330,7 +362,7 @@ void KisSpecificColorSelectorWidget::updateHsvSelector(bool isRgbColorSpace)
             input->setVisible(true);
         }
         m_ui->chkUsePercentage->setEnabled(true);
-    } else if (checked == m_hsvButton) {
+    } else if (checked == m_hsxButton) {
         Q_FOREACH (KisColorInput* input, m_inputs) {
             input->setVisible(false);
         }

@@ -198,7 +198,8 @@ public:
 struct KisBrushOpSettingsWidget::Private
 {
     Private()
-        : maskingSizeOptionData({true, KisPaintOpUtils::MaskingBrushPresetPrefix}),
+        : sizeOptionData({true, ""}),
+          maskingSizeOptionData({true, KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingFlowOptionData({true, KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingRatioOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingRotationOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),

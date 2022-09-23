@@ -35,11 +35,11 @@ struct PAINTOP_EXPORT KisSensorData : public boost::equality_comparable<KisSenso
     bool isActive = false;
 };
 
-struct PAINTOP_EXPORT KisSensorDataWithLength : public KisSensorData, public boost::equality_comparable<KisSensorDataWithLength>
+struct PAINTOP_EXPORT KisSensorWithLengthData : public KisSensorData, public boost::equality_comparable<KisSensorWithLengthData>
 {
-    KisSensorDataWithLength(const KoID &sensorId, const QLatin1String &lengthTag = {});
+    KisSensorWithLengthData(const KoID &sensorId, const QLatin1String &lengthTag = {});
 
-    inline friend bool operator==(const KisSensorDataWithLength &lhs, const KisSensorDataWithLength &rhs) {
+    inline friend bool operator==(const KisSensorWithLengthData &lhs, const KisSensorWithLengthData &rhs) {
         return *static_cast<const KisSensorData*>(&lhs) == *static_cast<const KisSensorData*>(&rhs) &&
                 lhs.length == rhs.length &&
                 lhs.isPeriodic == rhs.isPeriodic &&
@@ -144,11 +144,11 @@ struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<Kis
     KisSensorData sensorSpeed;
     KisDrawingAngleSensorData sensorDrawingAngle;
     KisSensorData sensorRotation;
-    KisSensorDataWithLength sensorDistance;
-    KisSensorDataWithLength sensorTime;
+    KisSensorWithLengthData sensorDistance;
+    KisSensorWithLengthData sensorTime;
     KisSensorData sensorFuzzyPerDab;
     KisSensorData sensorFuzzyPerStroke;
-    KisSensorDataWithLength sensorFade;
+    KisSensorWithLengthData sensorFade;
     KisSensorData sensorPerspective;
     KisSensorData sensorTangentialPressure;
 

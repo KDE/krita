@@ -47,7 +47,7 @@ void KisSensorData::reset()
     *this = KisSensorData(id);
 }
 
-KisSensorDataWithLength::KisSensorDataWithLength(const KoID &sensorId, const QLatin1String &lengthTag)
+KisSensorWithLengthData::KisSensorWithLengthData(const KoID &sensorId, const QLatin1String &lengthTag)
     : KisSensorData(sensorId)
     , m_lengthTag(lengthTag.isNull() ? QLatin1Literal("length") : lengthTag)
 {
@@ -65,14 +65,14 @@ KisSensorDataWithLength::KisSensorDataWithLength(const KoID &sensorId, const QLa
     }
 }
 
-void KisSensorDataWithLength::write(QDomDocument &doc, QDomElement &e) const
+void KisSensorWithLengthData::write(QDomDocument &doc, QDomElement &e) const
 {
     KisSensorData::write(doc, e);
     e.setAttribute("periodic", isPeriodic);
     e.setAttribute(m_lengthTag, length);
 }
 
-void KisSensorDataWithLength::read(const QDomElement &e)
+void KisSensorWithLengthData::read(const QDomElement &e)
 {
     reset();
     KisSensorData::read(e);
@@ -86,9 +86,9 @@ void KisSensorDataWithLength::read(const QDomElement &e)
     }
 }
 
-void KisSensorDataWithLength::reset()
+void KisSensorWithLengthData::reset()
 {
-    *this = KisSensorDataWithLength(id, m_lengthTag);
+    *this = KisSensorWithLengthData(id, m_lengthTag);
 }
 
 KisDrawingAngleSensorData::KisDrawingAngleSensorData()

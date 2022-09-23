@@ -5,10 +5,10 @@
  */
 #include "KisSensorWithLengthModel.h"
 
-KisSensorWithLengthModel::KisSensorWithLengthModel(lager::cursor<KisSensorDataWithLength> data, QObject *parent)
+KisSensorWithLengthModel::KisSensorWithLengthModel(lager::cursor<KisSensorWithLengthData> data, QObject *parent)
     : QObject(parent)
     , m_data(data)
-    , LAGER_QT(length) {m_data[&KisSensorDataWithLength::length]}
-    , LAGER_QT(isPeriodic) {m_data[&KisSensorDataWithLength::isPeriodic]}
+    , LAGER_QT(length) {m_data[&KisSensorWithLengthData::length]}
+    , LAGER_QT(isPeriodic) {m_data[&KisSensorWithLengthData::isPeriodic]}
 {
 }

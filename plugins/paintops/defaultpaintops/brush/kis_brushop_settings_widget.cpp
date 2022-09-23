@@ -75,6 +75,16 @@ public:
     }
 };
 
+class KisOpacityOptionData : public KisCurveOptionData
+{
+public:
+    KisOpacityOptionData()
+        : KisCurveOptionData(
+              KoID("Opacity", i18n("Opacity")),
+              false, true)
+    {}
+};
+
 class KisFlowOptionData : public KisCurveOptionData
 {
 public:
@@ -196,6 +206,7 @@ struct KisBrushOpSettingsWidget::Private
     {
     }
 
+    lager::state<KisOpacityOptionData, lager::automatic_tag> opacityOptionData;
     lager::state<KisSizeOptionData, lager::automatic_tag> sizeOptionData;
     lager::state<KisFlowOptionData, lager::automatic_tag> flowOptionData;
     lager::state<KisRatioOptionData, lager::automatic_tag> ratioOptionData;
@@ -229,7 +240,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     // Brush tip options
     addPaintOpOption(new KisCompositeOpOption(true));
-    addPaintOpOption(new KisFlowOpacityOptionWidget());
+    addPaintOpOptionData(m_d->opacityOptionData, KisPaintOpOption::GENERAL, i18n("Transparent"), i18n("Opaque"));
     addPaintOpOptionData(m_d->flowOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->sizeOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->ratioOptionData, KisPaintOpOption::GENERAL);

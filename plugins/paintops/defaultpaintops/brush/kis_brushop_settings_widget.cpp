@@ -200,12 +200,12 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisSoftnessOptionData, lager::automatic_tag> softnessOptionData;
     lager::state<KisRotationOptionData, lager::automatic_tag> rotationOptionData;
 
-    lager::state<KisRotationOptionData, lager::automatic_tag> darkenOptionData;
+    lager::state<KisDarkenOptionData, lager::automatic_tag> darkenOptionData;
     lager::state<KisMixOptionData, lager::automatic_tag> mixOptionData;
     lager::state<KisHueOptionData, lager::automatic_tag> hueOptionData;
     lager::state<KisSaturationOptionData, lager::automatic_tag> saturationOptionData;
     lager::state<KisValueOptionData, lager::automatic_tag> valueOptionData;
-    lager::state<KisValueOptionData, lager::automatic_tag> rateOptionData;
+    lager::state<KisRateOptionData, lager::automatic_tag> rateOptionData;
 
     lager::state<KisStrengthOptionData, lager::automatic_tag> strengthOptionData;
 

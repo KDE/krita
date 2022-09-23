@@ -10,10 +10,12 @@
 #include <QtGlobal>
 #include <QSize>
 #include <QGuiApplication>
+#include <QFont>
 #include <KoResourceSignature.h>
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 #include <boost/operators.hpp>
+#include <optional>
 
 #include "kis_paintop_settings.h"
 

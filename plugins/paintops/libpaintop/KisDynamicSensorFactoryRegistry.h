@@ -10,7 +10,7 @@
 #include "KisDynamicSensorFactory.h"
 #include "kritapaintop_export.h"
 
-class KRITAPIGMENT_EXPORT KisDynamicSensorFactoryRegistry : public KoGenericRegistry<KisDynamicSensorFactory*>
+class PAINTOP_EXPORT KisDynamicSensorFactoryRegistry : public KoGenericRegistry<KisDynamicSensorFactory*>
 {
 public:
     KisDynamicSensorFactoryRegistry();

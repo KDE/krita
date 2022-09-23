@@ -37,12 +37,13 @@ struct PAINTOP_EXPORT KisSensorData : public boost::equality_comparable<KisSenso
 
 struct PAINTOP_EXPORT KisSensorDataWithLength : public KisSensorData, public boost::equality_comparable<KisSensorDataWithLength>
 {
-    KisSensorDataWithLength(const KoID &sensorId);
+    KisSensorDataWithLength(const KoID &sensorId, const QLatin1String &lengthTag = {});
 
     inline friend bool operator==(const KisSensorDataWithLength &lhs, const KisSensorDataWithLength &rhs) {
         return *static_cast<const KisSensorData*>(&lhs) == *static_cast<const KisSensorData*>(&rhs) &&
                 lhs.length == rhs.length &&
-                lhs.isPeriodic == rhs.isPeriodic;
+                lhs.isPeriodic == rhs.isPeriodic &&
+                lhs.m_lengthTag == rhs.m_lengthTag;
     }
 
     void write(QDomDocument& doc, QDomElement &e) const override;
@@ -51,6 +52,8 @@ struct PAINTOP_EXPORT KisSensorDataWithLength : public KisSensorData, public boo
 
     int length = 30;
     bool isPeriodic = false;
+private:
+    QLatin1String m_lengthTag;
 };
 
 struct PAINTOP_EXPORT KisDrawingAngleSensorData : public KisSensorData, public boost::equality_comparable<KisDrawingAngleSensorData>

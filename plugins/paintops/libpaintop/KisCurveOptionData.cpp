@@ -47,8 +47,9 @@ void KisSensorData::reset()
     *this = KisSensorData(id);
 }
 
-KisSensorDataWithLength::KisSensorDataWithLength(const KoID &sensorId)
+KisSensorDataWithLength::KisSensorDataWithLength(const KoID &sensorId, const QLatin1String &lengthTag)
     : KisSensorData(sensorId)
+    , m_lengthTag(lengthTag.isNull() ? QLatin1Literal("length") : lengthTag)
 {
     if (sensorId == FadeId) {
         isPeriodic = false;
@@ -68,7 +69,7 @@ void KisSensorDataWithLength::write(QDomDocument &doc, QDomElement &e) const
 {
     KisSensorData::write(doc, e);
     e.setAttribute("periodic", isPeriodic);
-    e.setAttribute("length", length);
+    e.setAttribute(m_lengthTag, length);
 }
 
 void KisSensorDataWithLength::read(const QDomElement &e)
@@ -80,14 +81,14 @@ void KisSensorDataWithLength::read(const QDomElement &e)
         isPeriodic = e.attribute("periodic").toInt();
     }
 
-    if (e.hasAttribute("length")) {
-        isPeriodic = e.attribute("length").toInt();
+    if (e.hasAttribute(m_lengthTag)) {
+        length = e.attribute(m_lengthTag).toInt();
     }
 }
 
 void KisSensorDataWithLength::reset()
 {
-    *this = KisSensorDataWithLength(id);
+    *this = KisSensorDataWithLength(id, m_lengthTag);
 }
 
 KisDrawingAngleSensorData::KisDrawingAngleSensorData()
@@ -98,7 +99,7 @@ KisDrawingAngleSensorData::KisDrawingAngleSensorData()
 void KisDrawingAngleSensorData::write(QDomDocument &doc, QDomElement &e) const
 {
     KisSensorData::write(doc, e);
-    e.setAttribute("fanCornersEnabled", lockedAngleMode);
+    e.setAttribute("fanCornersEnabled", fanCornersEnabled);
     e.setAttribute("fanCornersStep", fanCornersStep);
     e.setAttribute("angleOffset", angleOffset);
     e.setAttribute("lockedAngleMode", lockedAngleMode);
@@ -146,7 +147,7 @@ KisCurveOptionData::KisCurveOptionData(const KoID _id, bool _isCheckable, bool _
       sensorDrawingAngle(),
       sensorRotation(RotationId),
       sensorDistance(DistanceId),
-      sensorTime(TimeId),
+      sensorTime(TimeId, QLatin1Literal("duration")),
       sensorFuzzyPerDab(FuzzyPerDabId),
       sensorFuzzyPerStroke(FuzzyPerStrokeId),
       sensorFade(FadeId),

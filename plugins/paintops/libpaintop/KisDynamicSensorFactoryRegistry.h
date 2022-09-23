@@ -25,12 +25,6 @@ private:
                  const QString &minimumLabel,
                  const QString &maximumLabel,
                  const QString &valueSuffix);
-    void addImpl(const KoID &id,
-                 int minimumValue,
-                 int maximumValue,
-                 const QString &minimumLabel,
-                 std::function<QString(int)> calcMaximumLabel,
-                 const QString &valueSuffix);
 };
 
 #endif // KISDYNAMICSENSORFACTORYREGISTRY_H

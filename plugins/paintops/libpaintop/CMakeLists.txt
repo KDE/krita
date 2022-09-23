@@ -21,7 +21,6 @@ set(kritalibpaintop_LIB_SRCS
     KisDynamicSensorFactory.cpp
     KisDynamicSensorFactoryRegistry.cpp
     KisSimpleDynamicSensorFactory.cpp
-    KisLengthBasedDynamicSensorFactory.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
@@ -76,6 +75,12 @@ set(kritalibpaintop_LIB_SRCS
     sensors/kis_dynamic_sensor_time.cc
     sensors/kis_dynamic_sensor_fade.cpp
     sensors/kis_dynamic_sensor_fuzzy.cpp
+    KisDynamicSensorFactoryTime.cpp
+    KisDynamicSensorFactoryFade.cpp
+    KisDynamicSensorFactoryDistance.cpp
+    KisDynamicSensorFactoryDrawingAngle.cpp
+    KisSensorWithLengthModel.cpp
+    KisDrawingAngleSensorModel.cpp
     models/KisTextBrushModel.cpp
 )
 

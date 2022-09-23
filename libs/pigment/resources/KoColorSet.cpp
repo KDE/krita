@@ -216,13 +216,6 @@ void KoColorSet::add(const KisSwatch &c, const QString &groupName)
     modifiedGroup.addEntry(c);
 }
 
-void KoColorSet::setEntry(const KisSwatch &e, int x, int y, const QString &groupName)
-{
-    KisSwatchGroup &modifiedGroup = d->groups.contains(groupName)
-            ? d->groups[groupName] : d->global();
-    modifiedGroup.setEntry(e, x, y);
-}
-
 void KoColorSet::clear()
 {
     d->groups.clear();

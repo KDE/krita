@@ -112,7 +112,6 @@ public:
      * @param groupName color to add the group to. If empty, it will be added to the unsorted.
      */
     void add(const KisSwatch &, const QString &groupName = GLOBAL_GROUP_NAME);
-    void setEntry(const KisSwatch &e, int x, int y, const QString &groupName = GLOBAL_GROUP_NAME);
 
     /**
      * @brief getColorGlobal

@@ -3,8 +3,8 @@ if (WIN32)
     if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8") # 64 bits
         ExternalProject_Add( ext_lzma
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://tukaani.org/xz/xz-5.2.5-windows.zip
-            URL_HASH SHA256=d83b82ca75dfab39a13dda364367b34970c781a9df4d41264db922ac3a8f622d
+            URL https://tukaani.org/xz/xz-5.2.6-windows.zip
+            URL_HASH SHA256=6fd6dad79e5b0d3b24a43bc3f79472b62a48d210f1aaa02fb06e5dfad89a4ebc
 
             INSTALL_DIR ${PREFIX_ext_lzma}
             CONFIGURE_COMMAND ""
@@ -21,8 +21,8 @@ if (WIN32)
 
             ExternalProject_Add( ext_lzma
             DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://tukaani.org/xz/xz-5.2.5-windows.zip
-            URL_HASH SHA256=d83b82ca75dfab39a13dda364367b34970c781a9df4d41264db922ac3a8f622d
+            URL https://tukaani.org/xz/xz-5.2.6-windows.zip
+            URL_HASH SHA256=6fd6dad79e5b0d3b24a43bc3f79472b62a48d210f1aaa02fb06e5dfad89a4ebc
 
             INSTALL_DIR ${PREFIX_ext_lzma}
             CONFIGURE_COMMAND ""
@@ -41,8 +41,8 @@ if (WIN32)
 else ()
     ExternalProject_Add( ext_lzma
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://tukaani.org/xz/xz-5.2.5.tar.gz
-        URL_HASH SHA256=f6f4910fd033078738bd82bfba4f49219d03b17eb0794eb91efbae419f4aba10
+        URL https://tukaani.org/xz/xz-5.2.6.tar.gz
+        URL_HASH SHA256=a2105abee17bcd2ebd15ced31b4f5eda6e17efd6b10f921a01cda4a44c91b3a0
 
         INSTALL_DIR ${PREFIX_ext_lzma}
         CONFIGURE_COMMAND ./configure --prefix=${PREFIX_ext_lzma} --disable-xz --disable-xzdec --disable-lzmadec --disable-lzmainfo --disable-lzma-links --disable-scripts --disable-doc --disable-static --enable-shared ${GLOBAL_AUTOMAKE_PROFILE}

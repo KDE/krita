@@ -5,13 +5,10 @@ if(APPLE)
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Use-system-libiconv-in-macOS.patch
     )
 endif(APPLE)
-list(APPEND _PopplerPatch_COMMAND
-    COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-poppler-qt5-also-needs-poppler_LIBS-on-MinGW.patch
-)
 ExternalProject_Add( ext_poppler
 	DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-	URL https://poppler.freedesktop.org/poppler-22.02.0.tar.xz
-	URL_HASH SHA256=e390c8b806f6c9f0e35c8462033e0a738bb2460ebd660bdb8b6dca01556193e1
+    URL https://poppler.freedesktop.org/poppler-22.08.0.tar.xz
+    URL_HASH SHA256=b493328721402f25cb7523f9cdc2f7d7c59f45ad999bde75c63c90604db0f20b
 
     PATCH_COMMAND ${_PopplerPatch_COMMAND}
 

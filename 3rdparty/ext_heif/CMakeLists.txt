@@ -95,8 +95,8 @@ if(PERL_FOUND OR USE_STRAWBERRYPERL)
         ext_libaom
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
 
-        URL https://storage.googleapis.com/aom-releases/libaom-3.2.0.tar.gz
-        URL_HASH SHA256=8fa7418bf4ea12ef6dcf0eeb21cba932b71c6079ffdf7b9d13cf907fa46c0568
+        URL https://storage.googleapis.com/aom-releases/libaom-3.5.0.tar.gz
+        URL_HASH SHA256=d37dbee372e2430a7efde813984ae6d78bdf1fc4080ebe32457c9115408b0738
 
         CMAKE_ARGS ${LIBAOM_EXTRA_CMAKE_ARGS} -DCMAKE_INSTALL_PREFIX=${EXTPREFIX_heif} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} -DENABLE_EXAMPLES=OFF -DENABLE_TESTDATA=OFF -DENABLE_TESTS=OFF -DENABLE_TOOLS=OFF ${GLOBAL_PROFILE}
 

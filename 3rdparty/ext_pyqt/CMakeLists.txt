@@ -87,8 +87,8 @@ elseif(UNIX)
 
     ExternalProject_Add( ext_pyqt5_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.9.0.tar.gz
-        URL_HASH SHA256=d3e4489d7c2b0ece9d203ae66e573939f7f60d4d29e089c9f11daa17cfeaae32
+        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.11.0.tar.gz
+        URL_HASH SHA256=b4710fd85b57edef716cc55fae45bfd5bfac6fc7ba91036f1dcc3f331ca0eb39
 
         CONFIGURE_COMMAND ""
 
@@ -183,8 +183,8 @@ elseif(WIN32)
 
     ExternalProject_Add( ext_pyqt5_sip
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.9.0.tar.gz
-        URL_HASH SHA256=d3e4489d7c2b0ece9d203ae66e573939f7f60d4d29e089c9f11daa17cfeaae32
+        URL https://pypi.python.org/packages/source/P/PyQt5-sip/PyQt5_sip-12.11.0.tar.gz
+        URL_HASH SHA256=b4710fd85b57edef716cc55fae45bfd5bfac6fc7ba91036f1dcc3f331ca0eb39
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MinGW-Distutils-support-hack.patch
 

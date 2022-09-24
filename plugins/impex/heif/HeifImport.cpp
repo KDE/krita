@@ -14,6 +14,7 @@
 #include <QFileInfo>
 
 #include <kpluginfactory.h>
+#include <libheif/heif.h>
 #include <libheif/heif_cxx.h>
 
 #include <KisDocument.h>
@@ -33,6 +34,7 @@
 #include <kis_paint_device.h>
 #include <kis_paint_layer.h>
 #include <kis_transaction.h>
+#include <qmutex.h>
 
 #include "DlgHeifImport.h"
 #include "kis_heif_import_tools.h"
@@ -83,6 +85,26 @@ private:
   QIODevice* m_device;
   int64_t m_total_length;
 };
+
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+class Q_DECL_HIDDEN HeifLock
+{
+public:
+    HeifLock()
+        : p()
+    {
+        heif_init(&p);
+    }
+
+    ~HeifLock()
+    {
+        heif_deinit();
+    }
+
+private:
+    heif_init_params p;
+};
+#endif
 
 namespace Planar
 {
@@ -188,6 +210,10 @@ inline auto readInterleavedLayer(LinearizePolicy linearizePolicy,
 
 KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+    HeifLock lock;
+#endif
+
     // Wrap input stream into heif Reader object
     Reader_QIODevice reader(io);
 

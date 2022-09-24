@@ -114,9 +114,32 @@ private:
     QIODevice* m_io;
 };
 
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+class Q_DECL_HIDDEN HeifLock
+{
+public:
+    HeifLock()
+        : p()
+    {
+        heif_init(&p);
+    }
+
+    ~HeifLock()
+    {
+        heif_deinit();
+    }
+
+private:
+    heif_init_params p;
+};
+#endif
 
 KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP configuration)
 {
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+    HeifLock lock;
+#endif
+
     KisImageSP image = document->savingImage();
     const KoColorSpace *cs = image->colorSpace();
 

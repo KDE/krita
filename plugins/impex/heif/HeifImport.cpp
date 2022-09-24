@@ -84,10 +84,34 @@ private:
   int64_t m_total_length;
 };
 
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+class Q_DECL_HIDDEN HeifLock
+{
+public:
+    HeifLock()
+        : p()
+    {
+        heif_init(&p);
+    }
+
+    ~HeifLock()
+    {
+        heif_deinit();
+    }
+
+private:
+    heif_init_params p;
+};
+#endif
+
 
 
 KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *io,  KisPropertiesConfigurationSP /*configuration*/)
 {
+#if LIBHEIF_HAVE_VERSION(1, 13, 0)
+    HeifLock lock;
+#endif
+
     // Wrap input stream into heif Reader object
     Reader_QIODevice reader(io);
 

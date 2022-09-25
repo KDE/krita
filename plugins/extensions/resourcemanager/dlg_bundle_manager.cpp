@@ -196,55 +196,64 @@ void DlgBundleManager::done(int res)
 
 void DlgBundleManager::addBundle()
 {
-    KoFileDialog dlg(this, KoFileDialog::OpenFile, i18n("Choose the resource library to import"));
+    KoFileDialog dlg(this, KoFileDialog::OpenFiles, i18n("Choose the resource library to import"));
     dlg.setDefaultDir(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation));
     dlg.setMimeTypeFilters(
-        {"application/x-krita-bundle", "image/x-adobe-brushlibrary", "application/x-photoshop-style-library"});
+                {"application/x-krita-bundle", "image/x-adobe-brushlibrary", "application/x-photoshop-style-library"});
     dlg.setCaption(i18n("Select the bundle"));
-    QString filename = dlg.filename();
-    if (!filename.isEmpty()) {
-        // 0. Validate bundle
-        {
-            KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+
+    qApp->setOverrideCursor(Qt::BusyCursor);
+
+    Q_FOREACH(const QString &filename, dlg.filenames()) {
+        if (!filename.isEmpty()) {
+            // 0. Validate bundle
+            {
+                KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(filename);
+                KIS_ASSERT(!storage.isNull());
+
+                if (!storage->valid()) {
+                    qApp->restoreOverrideCursor();
+                    qWarning() << "Attempted to import an invalid bundle!" << filename;
+                    QMessageBox::warning(this,
+                                         i18nc("@title:window", "Krita"),
+                                         i18n("Could not load bundle %1.", filename));
+                    qApp->setOverrideCursor(Qt::BusyCursor);
+                    continue;
+                }
+            }
+
+            // 1. Copy the bundle to the resource folder
+            QFileInfo oldFileInfo(filename);
+
+            QString newDir = KoResourcePaths::getAppDataLocation();
+            QString newName = oldFileInfo.fileName();
+            const QString newLocation = QStringLiteral("%1/%2").arg(newDir, newName);
+
+            QFileInfo newFileInfo(newLocation);
+            if (newFileInfo.exists()) {
+                qApp->restoreOverrideCursor();
+                if (QMessageBox::warning(
+                            this,
+                            i18nc("@title:window", "Warning"),
+                            i18n("There is already a bundle with this name installed. Do you want to overwrite it?"),
+                            QMessageBox::Ok | QMessageBox::Cancel)
+                        == QMessageBox::Cancel) {
+                    qApp->setOverrideCursor(Qt::BusyCursor);
+                    continue;
+                } else {
+                    QFile::remove(newLocation);
+                }
+            }
+            QFile::copy(filename, newLocation);
+
+            // 2. Add the bundle as a storage/update database
+            KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
             KIS_ASSERT(!storage.isNull());
-
-            if (!storage->valid()) {
-                qWarning() << "Attempted to import an invalid bundle!" << filename;
-                QMessageBox::warning(this,
-                                     i18nc("@title:window", "Krita"),
-                                     i18n("Could not load bundle %1.", filename));
-                return;
+            if (!KisResourceLocator::instance()->addStorage(newLocation, storage)) {
+                qWarning() << "Could not add bundle to the storages" << newLocation;
             }
         }
-
-        // 1. Copy the bundle to the resource folder
-        QFileInfo oldFileInfo(filename);
-
-        QString newDir = KoResourcePaths::getAppDataLocation();
-        QString newName = oldFileInfo.fileName();
-        const QString newLocation = QStringLiteral("%1/%2").arg(newDir, newName);
-
-        QFileInfo newFileInfo(newLocation);
-        if (newFileInfo.exists()) {
-            if (QMessageBox::warning(
-                    this,
-                    i18nc("@title:window", "Warning"),
-                    i18n("There is already a bundle with this name installed. Do you want to overwrite it?"),
-                    QMessageBox::Ok | QMessageBox::Cancel)
-                == QMessageBox::Cancel) {
-                return;
-            } else {
-                QFile::remove(newLocation);
-            }
-        }
-        QFile::copy(filename, newLocation);
-
-        // 2. Add the bundle as a storage/update database
-        KisResourceStorageSP storage = QSharedPointer<KisResourceStorage>::create(newLocation);
-        KIS_ASSERT(!storage.isNull());
-        if (!KisResourceLocator::instance()->addStorage(newLocation, storage)) {
-            qWarning() << "Could not add bundle to the storages" << newLocation;
-        }
+        qApp->restoreOverrideCursor();
     }
 }
 

@@ -1,4 +1,4 @@
-From 441196634657f8e6970139c913c14c5963765b4c Mon Sep 17 00:00:00 2001
+From c140ca50e8fb7b680d7c28cd47b56a0473b9e07d Mon Sep 17 00:00:00 2001
 From: Dmitry Kazakov <dimula73@gmail.com>
 Date: Tue, 18 May 2021 11:14:44 +0300
 Subject: [PATCH 1/2] Fix linking to Python3.8 on Windows
@@ -8,10 +8,10 @@ Subject: [PATCH 1/2] Fix linking to Python3.8 on Windows
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/pyqtbuild/builder.py b/pyqtbuild/builder.py
-index 6cd01b9..fc4bc4a 100644
+index 3f35a7f..0444c7f 100644
 --- a/pyqtbuild/builder.py
 +++ b/pyqtbuild/builder.py
-@@ -459,7 +459,7 @@ macx {
+@@ -465,7 +465,7 @@ macx {
          # TODO: is this still necessary for Python v3.8?
          if not buildable.static:
              pro_lines.extend(['win32 {',
@@ -21,5 +21,5 @@ index 6cd01b9..fc4bc4a 100644
                      '}'])
  
 -- 
-2.31.1.windows.1
+2.37.1.windows.1
 

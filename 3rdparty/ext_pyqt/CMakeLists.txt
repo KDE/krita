@@ -39,8 +39,8 @@ elseif(UNIX)
 
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
-        URL_HASH SHA256=86bd19fde83d92beaefacdeac1e26c6e1918c300ff78d7ec2a19973bf2cf21b5
+        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.13.0.tar.gz
+        URL_HASH SHA256=4877580c38ceb5320e129b381d083b0a8601c68166d8b99707f08fa0a1689eef
 
         CONFIGURE_COMMAND ""
 
@@ -127,8 +127,8 @@ elseif(WIN32)
 
     ExternalProject_Add(ext_pyqtbuilder
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.10.0.tar.gz
-        URL_HASH SHA256=86bd19fde83d92beaefacdeac1e26c6e1918c300ff78d7ec2a19973bf2cf21b5
+        URL https://pypi.io/packages/source/P/PyQt-builder/PyQt-builder-1.13.0.tar.gz
+        URL_HASH SHA256=4877580c38ceb5320e129b381d083b0a8601c68166d8b99707f08fa0a1689eef
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Fix-linking-to-Python3.8-on-Windows.patch
             COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-Add-additional-flavor-of-MinGW.patch

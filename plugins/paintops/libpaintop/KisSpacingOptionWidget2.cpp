@@ -14,7 +14,6 @@
 
 #include <KisSpacingOptionModel.h>
 #include <KisWidgetConnectionUtils.h>
-#include <KisZug.h>
 
 struct KisSpacingOptionWidget2::Private
 {

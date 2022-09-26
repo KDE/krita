@@ -30,7 +30,6 @@
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_rate_option.h>
 #include "kis_texture_option.h"
-#include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 #include <KisMaskingBrushOption.h>
 
@@ -39,6 +38,7 @@
 #include "kis_brush_option_widget.h"
 #include "KisCurveOptionWidget2.h"
 #include "KisSpacingOptionWidget2.h"
+#include "KisMirrorOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -78,11 +78,13 @@ public:
 class KisOpacityOptionData : public KisCurveOptionData
 {
 public:
-    KisOpacityOptionData()
+    KisOpacityOptionData(bool isCheckable = false, const QString &prefix = QString())
         : KisCurveOptionData(
               KoID("Opacity", i18n("Opacity")),
-              false, true)
-    {}
+              isCheckable, !isCheckable)
+    {
+        this->prefix = prefix;
+    }
 };
 
 class KisFlowOptionData : public KisCurveOptionData
@@ -199,10 +201,12 @@ struct KisBrushOpSettingsWidget::Private
 {
     Private()
         : sizeOptionData({true, ""}),
+          maskingOpacityOptionData({true, KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingSizeOptionData({true, KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingFlowOptionData({true, KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingRatioOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingRotationOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
+          maskingMirrorOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           lodLimitations(sizeOptionData.xform(zug::map(&KisSizeOptionData::lodLimitations)))
     {
     }
@@ -214,6 +218,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisSoftnessOptionData, lager::automatic_tag> softnessOptionData;
     lager::state<KisRotationOptionData, lager::automatic_tag> rotationOptionData;
     lager::state<KisSpacingOptionData, lager::automatic_tag> spacingOptionData;
+    lager::state<KisMirrorOptionData, lager::automatic_tag> mirrorOptionData;
 
     lager::state<KisDarkenOptionData, lager::automatic_tag> darkenOptionData;
     lager::state<KisMixOptionData, lager::automatic_tag> mixOptionData;
@@ -224,10 +229,12 @@ struct KisBrushOpSettingsWidget::Private
 
     lager::state<KisStrengthOptionData, lager::automatic_tag> strengthOptionData;
 
+    lager::state<KisOpacityOptionData, lager::automatic_tag> maskingOpacityOptionData;
     lager::state<KisSizeOptionData, lager::automatic_tag> maskingSizeOptionData;
     lager::state<KisFlowOptionData, lager::automatic_tag> maskingFlowOptionData;
     lager::state<KisRatioOptionData, lager::automatic_tag> maskingRatioOptionData;
     lager::state<KisRotationOptionData, lager::automatic_tag> maskingRotationOptionData;
+    lager::state<KisMirrorOptionData, lager::automatic_tag> maskingMirrorOptionData;
 
     lager::reader<KisPaintopLodLimitations> lodLimitations;
 };
@@ -247,7 +254,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOptionData(m_d->sizeOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->ratioOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOption(new KisSpacingOptionWidget2(m_d->spacingOptionData), KisPaintOpOption::GENERAL);
-    addPaintOpOption(new KisPressureMirrorOptionWidget());
+    addPaintOpOption(new KisMirrorOptionWidget(m_d->mirrorOptionData), KisPaintOpOption::GENERAL);
 
     addPaintOpOptionData(m_d->softnessOptionData, KisPaintOpOption::GENERAL, i18n("Soft"), i18n("Hard"));
     addPaintOpOptionData(m_d->rotationOptionData, KisPaintOpOption::GENERAL, i18n("-180°"), i18n("180°"));
@@ -292,15 +299,14 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     connect(maskingOption, SIGNAL(sigCheckedChanged(bool)),
             actionTypeOption, SLOT(slotForceWashMode(bool)));
 
+    addPaintOpOptionData(m_d->maskingOpacityOptionData, KisPaintOpOption::MASKING_BRUSH);
     addPaintOpOptionData(m_d->maskingSizeOptionData, KisPaintOpOption::MASKING_BRUSH);
     addPaintOpOptionData(m_d->maskingFlowOptionData, KisPaintOpOption::MASKING_BRUSH);
     addPaintOpOptionData(m_d->maskingRatioOptionData, KisPaintOpOption::MASKING_BRUSH);
     addPaintOpOptionData(m_d->maskingRotationOptionData, KisPaintOpOption::MASKING_BRUSH, i18n("-180°"), i18n("180°"));
 
-    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisFlowOpacityOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix),
-                     KisPaintOpOption::MASKING_BRUSH);
-
-    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisPressureMirrorOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix),
+    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisMirrorOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix,
+                                                                                lager::cursor<KisMirrorOptionData>(m_d->maskingMirrorOptionData)),
                      KisPaintOpOption::MASKING_BRUSH);
 
     addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisPressureScatterOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix),

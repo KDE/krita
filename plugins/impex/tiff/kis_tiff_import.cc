@@ -7,6 +7,7 @@
 
 #include "kis_tiff_import.h"
 
+#include <QBuffer>
 #include <QFileInfo>
 #include <QPair>
 #include <QSharedPointer>

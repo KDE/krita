@@ -3,18 +3,18 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KISSPACINGOPTIONWIDGET2_H
-#define KISSPACINGOPTIONWIDGET2_H
+#ifndef KISSPACINGOPTIONWIDGET_H
+#define KISSPACINGOPTIONWIDGET_H
 
 #include <KisCurveOptionWidget2.h>
 #include <KisSpacingOptionData.h>
 
-class PAINTOP_EXPORT KisSpacingOptionWidget2 : public KisCurveOptionWidget2
+class PAINTOP_EXPORT KisSpacingOptionWidget : public KisCurveOptionWidget2
 {
     Q_OBJECT
 public:
-    KisSpacingOptionWidget2(lager::cursor<KisSpacingOptionData> optionData);
-    ~KisSpacingOptionWidget2();
+    KisSpacingOptionWidget(lager::cursor<KisSpacingOptionData> optionData);
+    ~KisSpacingOptionWidget();
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
@@ -24,4 +24,4 @@ private:
     const QScopedPointer<Private> m_d;
 };
 
-#endif // KISSPACINGOPTIONWIDGET2_H
+#endif // KISSPACINGOPTIONWIDGET_H

@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KisSpacingOptionWidget2.h"
+#include "KisSpacingOptionWidget.h"
 
 #include <KisZug.h>
 
@@ -15,7 +15,7 @@
 #include <KisSpacingOptionModel.h>
 #include <KisWidgetConnectionUtils.h>
 
-struct KisSpacingOptionWidget2::Private
+struct KisSpacingOptionWidget::Private
 {
     Private(lager::cursor<KisSpacingOptionData> optionData)
         : model(optionData.zoom(
@@ -27,7 +27,7 @@ struct KisSpacingOptionWidget2::Private
     KisSpacingOptionModel model;
 };
 
-KisSpacingOptionWidget2::KisSpacingOptionWidget2(lager::cursor<KisSpacingOptionData> optionData)
+KisSpacingOptionWidget::KisSpacingOptionWidget(lager::cursor<KisSpacingOptionData> optionData)
     : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), KisPaintOpOption::GENERAL)
     , m_d(new Private(optionData))
 {
@@ -52,20 +52,20 @@ KisSpacingOptionWidget2::KisSpacingOptionWidget2(lager::cursor<KisSpacingOptionD
     connectControl(isotropicSpacing, &m_d->model, "isotropicSpacing");
     connectControl(useSpacingUpdates, &m_d->model, "useSpacingUpdates");
 
-    m_d->model.spacingOptionData.bind(std::bind(&KisSpacingOptionWidget2::emitSettingChanged, this));
+    m_d->model.spacingOptionData.bind(std::bind(&KisSpacingOptionWidget::emitSettingChanged, this));
 }
 
-KisSpacingOptionWidget2::~KisSpacingOptionWidget2()
+KisSpacingOptionWidget::~KisSpacingOptionWidget()
 {
 }
 
-void KisSpacingOptionWidget2::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+void KisSpacingOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     KisCurveOptionWidget2::writeOptionSetting(setting);
     m_d->model.spacingOptionData->write(setting.data());
 }
 
-void KisSpacingOptionWidget2::readOptionSetting(const KisPropertiesConfigurationSP setting)
+void KisSpacingOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisSpacingOptionMixIn data = *m_d->model.spacingOptionData;
     data.read(setting.data());

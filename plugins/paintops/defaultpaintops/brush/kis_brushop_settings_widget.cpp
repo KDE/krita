@@ -36,7 +36,7 @@
 #include <KisPaintopSettingsIds.h>
 #include "kis_brush_option_widget.h"
 #include "KisCurveOptionWidget2.h"
-#include "KisSpacingOptionWidget2.h"
+#include "KisSpacingOptionWidget.h"
 #include "KisMirrorOptionWidget.h"
 #include "KisSharpnessOptionWidget.h"
 #include "KisScatterOptionWidget.h"
@@ -258,7 +258,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOptionData(m_d->flowOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->sizeOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->ratioOptionData, KisPaintOpOption::GENERAL);
-    addPaintOpOption(new KisSpacingOptionWidget2(m_d->spacingOptionData), KisPaintOpOption::GENERAL);
+    addPaintOpOption(new KisSpacingOptionWidget(m_d->spacingOptionData), KisPaintOpOption::GENERAL);
     addPaintOpOption(new KisMirrorOptionWidget(m_d->mirrorOptionData), KisPaintOpOption::GENERAL);
 
     addPaintOpOptionData(m_d->softnessOptionData, KisPaintOpOption::GENERAL, i18n("Soft"), i18n("Hard"));

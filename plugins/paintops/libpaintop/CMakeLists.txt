@@ -30,6 +30,9 @@ set(kritalibpaintop_LIB_SRCS
     KisSharpnessOptionData.cpp
     KisSharpnessOptionModel.cpp
     KisSharpnessOptionWidget.cpp
+    KisScatterOptionData.cpp
+    KisScatterOptionModel.cpp
+    KisScatterOptionWidget.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc

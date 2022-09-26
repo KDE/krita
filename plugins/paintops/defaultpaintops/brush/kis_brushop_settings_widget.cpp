@@ -22,7 +22,6 @@
 #include <kis_pressure_lightness_strength_option_widget.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_airbrush_option_widget.h>
-#include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
 #include <kis_color_source_option_widget.h>
@@ -40,6 +39,7 @@
 #include "KisSpacingOptionWidget2.h"
 #include "KisMirrorOptionWidget.h"
 #include "KisSharpnessOptionWidget.h"
+#include "KisScatterOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -208,6 +208,7 @@ struct KisBrushOpSettingsWidget::Private
           maskingRatioOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingRotationOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingMirrorOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
+          maskingScatterOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           lodLimitations(sizeOptionData.xform(zug::map(&KisSizeOptionData::lodLimitations)))
     {
     }
@@ -221,6 +222,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisSpacingOptionData, lager::automatic_tag> spacingOptionData;
     lager::state<KisMirrorOptionData, lager::automatic_tag> mirrorOptionData;
     lager::state<KisSharpnessOptionData, lager::automatic_tag> sharpnessOptionData;
+    lager::state<KisScatterOptionData, lager::automatic_tag> scatterOptionData;
 
     lager::state<KisDarkenOptionData, lager::automatic_tag> darkenOptionData;
     lager::state<KisMixOptionData, lager::automatic_tag> mixOptionData;
@@ -237,6 +239,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisRatioOptionData, lager::automatic_tag> maskingRatioOptionData;
     lager::state<KisRotationOptionData, lager::automatic_tag> maskingRotationOptionData;
     lager::state<KisMirrorOptionData, lager::automatic_tag> maskingMirrorOptionData;
+    lager::state<KisScatterOptionData, lager::automatic_tag> maskingScatterOptionData;
 
     lager::reader<KisPaintopLodLimitations> lodLimitations;
 };
@@ -264,7 +267,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
     addPaintOpOption(m_lightnessStrengthOptionWidget);
-    addPaintOpOption(new KisPressureScatterOptionWidget());
+    addPaintOpOption(new KisScatterOptionWidget(m_d->scatterOptionData), KisPaintOpOption::GENERAL);
 
     // Colors options
     addPaintOpOption(new KisColorSourceOptionWidget());
@@ -312,7 +315,8 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
                                                                                 lager::cursor<KisMirrorOptionData>(m_d->maskingMirrorOptionData)),
                      KisPaintOpOption::MASKING_BRUSH);
 
-    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisPressureScatterOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix),
+    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisScatterOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix,
+                                                                                lager::cursor<KisScatterOptionData>(m_d->maskingScatterOptionData)),
                      KisPaintOpOption::MASKING_BRUSH);
 }
 

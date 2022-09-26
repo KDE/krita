@@ -21,6 +21,9 @@ set(kritalibpaintop_LIB_SRCS
     KisDynamicSensorFactory.cpp
     KisDynamicSensorFactoryRegistry.cpp
     KisSimpleDynamicSensorFactory.cpp
+    KisSpacingOptionWidget2.cpp
+    KisSpacingOptionData.cpp
+    KisSpacingOptionModel.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc

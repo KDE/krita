@@ -80,7 +80,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
                                              int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                                              const QString &strengthPrefix, const QString &strengthSuffix,
                                              lager::reader<bool> enabledLink)
-    : KisPaintOpOption(optionData->id.name(), category, optionData->isChecked)
+    : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionData::isChecked])
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption2())
     , m_d(new Private(optionData))
@@ -100,7 +100,8 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
     m_curveOptionWidget->label_ymin->setText(curveMinLabel);
     m_curveOptionWidget->label_ymax->setText(curveMaxLabel);
 
-    enabledLink.bind(std::bind(&QWidget::setEnabled, m_widget, std::placeholders::_1));
+    // TODO: make sure it is and'ed with the checked cursor
+    //enabledLink.bind(std::bind(&QWidget::setEnabled, m_widget, std::placeholders::_1));
 
     m_d->model.m_activeSensorIdData.bind(
         std::bind(qOverload<const QString&>(&KisMultiSensorsSelector2::setCurrent),
@@ -150,6 +151,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
             this,
             &KisCurveOptionWidget2::slotCurveChanged);
 
+    m_d->model.LAGER_QT(useCurve).bind(std::bind(&KisCurveOptionWidget2::setCurveWidgetsEnabled, this, std::placeholders::_1));
     connectControl(m_curveOptionWidget->checkBoxUseCurve, &m_d->model, "useCurve");
     connectControl(m_curveOptionWidget->checkBoxUseSameCurve, &m_d->model, "useSameCurve");
     connectControl(m_curveOptionWidget->curveMode, &m_d->model, "curveMode");
@@ -193,11 +195,21 @@ void KisCurveOptionWidget2::setCurveWidgetsEnabled(bool value)
     m_curveOptionWidget->label_xmin->setEnabled(value);
     m_curveOptionWidget->label_ymax->setEnabled(value);
     m_curveOptionWidget->label_ymin->setEnabled(value);
-}
+    m_curveOptionWidget->intIn->setEnabled(value);
+    m_curveOptionWidget->intOut->setEnabled(value);
 
-lager::cursor<bool> KisCurveOptionWidget2::isCheckedCursor() const
-{
-    return m_d->model.LAGER_QT(isChecked);
+    m_curveOptionWidget->linearCurveButton->setEnabled(value);
+    m_curveOptionWidget->revLinearButton->setEnabled(value);
+    m_curveOptionWidget->jCurveButton->setEnabled(value);
+    m_curveOptionWidget->lCurveButton->setEnabled(value);
+    m_curveOptionWidget->revUCurveButton->setEnabled(value);
+    m_curveOptionWidget->reverseSCurveButton->setEnabled(value);
+    m_curveOptionWidget->uCurveButton->setEnabled(value);
+    m_curveOptionWidget->sCurveButton->setEnabled(value);
+
+    m_curveOptionWidget->curveMode->setEnabled(value);
+    m_curveOptionWidget->lblCurveMode->setEnabled(value);
+
 }
 
 QWidget* KisCurveOptionWidget2::curveWidget()

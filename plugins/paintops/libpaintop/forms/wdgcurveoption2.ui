@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>
     SPDX-FileCopyrightText: none
@@ -27,7 +27,7 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
-       </property>      
+       </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
@@ -249,9 +249,9 @@
      </item>
      <item>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item column="1" row="0">
+       <item row="0" column="1">
         <layout class="QGridLayout" name="gridLayout">
-         <item column="1" row="2">
+         <item row="2" column="1">
           <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_7"/>
@@ -345,7 +345,7 @@
            </item>
           </layout>
          </item>
-         <item column="0" row="3">
+         <item row="3" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
             <widget class="QLabel" name="label_xmin">
@@ -425,7 +425,7 @@
            </item>
           </layout>
          </item>
-         <item column="0" row="2">
+         <item row="2" column="0">
           <widget class="KisCurveWidget" name="curveWidget" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -443,7 +443,7 @@
          </item>
         </layout>
        </item>
-       <item column="3" row="0">
+       <item row="0" column="3">
         <spacer name="horizontalSpacer_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -456,7 +456,7 @@
          </property>
         </spacer>
        </item>
-       <item column="1" row="4">
+       <item row="4" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_19">
          <item>
           <widget class="QLabel" name="yRangeLabel">
@@ -494,7 +494,7 @@
          </item>
         </layout>
        </item>
-       <item column="1" row="5">
+       <item row="5" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -507,10 +507,10 @@
          </property>
         </spacer>
        </item>
-       <item column="1" row="2">
+       <item row="2" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_6">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="lblCurveMode">
            <property name="toolTip">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;
 &lt;p&gt;Curve calculation mode changes how 2 or more curve works together&lt;br/&gt;&lt;/p&gt;
@@ -568,7 +568,7 @@
          </item>
         </layout>
        </item>
-       <item column="1" row="1">
+       <item row="1" column="1">
         <widget class="QCheckBox" name="checkBoxUseSameCurve">
          <property name="text">
           <string>Share curve across all settings</string>
@@ -578,7 +578,7 @@
          </property>
         </widget>
        </item>
-       <item column="1" row="3">
+       <item row="3" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_18">
          <item>
           <widget class="QLabel" name="xRangeLabel">
@@ -631,7 +631,7 @@
   </customwidget>
   <customwidget>
    <class>KisCurveWidget</class>
-   <extends/>
+   <extends></extends>
    <header>widgets/kis_curve_widget.h</header>
    <container>1</container>
   </customwidget>

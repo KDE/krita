@@ -28,7 +28,6 @@
 #include <kis_color_source_option_widget.h>
 #include <kis_compositeop_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
-#include <kis_pressure_spacing_option_widget.h>
 #include <kis_pressure_rate_option.h>
 #include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
@@ -39,6 +38,7 @@
 #include <KisPaintopSettingsIds.h>
 #include "kis_brush_option_widget.h"
 #include "KisCurveOptionWidget2.h"
+#include "KisSpacingOptionWidget2.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -213,6 +213,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisRatioOptionData, lager::automatic_tag> ratioOptionData;
     lager::state<KisSoftnessOptionData, lager::automatic_tag> softnessOptionData;
     lager::state<KisRotationOptionData, lager::automatic_tag> rotationOptionData;
+    lager::state<KisSpacingOptionData, lager::automatic_tag> spacingOptionData;
 
     lager::state<KisDarkenOptionData, lager::automatic_tag> darkenOptionData;
     lager::state<KisMixOptionData, lager::automatic_tag> mixOptionData;
@@ -245,7 +246,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOptionData(m_d->flowOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->sizeOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->ratioOptionData, KisPaintOpOption::GENERAL);
-    addPaintOpOption(new KisPressureSpacingOptionWidget());
+    addPaintOpOption(new KisSpacingOptionWidget2(m_d->spacingOptionData), KisPaintOpOption::GENERAL);
     addPaintOpOption(new KisPressureMirrorOptionWidget());
 
     addPaintOpOptionData(m_d->softnessOptionData, KisPaintOpOption::GENERAL, i18n("Soft"), i18n("Hard"));
@@ -326,6 +327,6 @@ void KisBrushOpSettingsWidget::notifyPageChanged()
 template<typename Data, typename... Args>
 void KisBrushOpSettingsWidget::addPaintOpOptionData(Data &data, Args... args)
 {
-    addPaintOpOption(new KisCurveOptionWidget2(data.zoom(kiszug::lenses::do_static_cast<const typename Data::value_type&, const KisCurveOptionData&>),
+    addPaintOpOption(new KisCurveOptionWidget2(data.zoom(kiszug::lenses::to_base<KisCurveOptionData>),
                                                          args...));
 }

@@ -201,15 +201,6 @@ void KisPaintOpSettingsWidget::changePage(const QModelIndex& index)
 
     if(m_d->model->entryAt(info, index)) {
         m_d->optionsStack->setCurrentIndex(info.index);
-
-        // disable the widget if a setting area is not active and not being used
-       if (info.option->isCheckable() ) {
-            m_d->optionsStack->setEnabled(info.option->isChecked());
-       } else {
-           m_d->optionsStack->setEnabled(true); // option is not checkable, so always enable
-       }
-
-
     }
 
     notifyPageChanged();

@@ -47,7 +47,8 @@ public:
         MASKING_BRUSH
     };
 
-    KisPaintOpOption(QString label, KisPaintOpOption::PaintopCategory category, bool checked);
+    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category, bool checked);
+    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category, lager::cursor<bool> checkedCursor);
     ~KisPaintOpOption() override;
 
     KisPaintOpOption::PaintopCategory category() const;
@@ -76,7 +77,6 @@ public:
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
     virtual lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
-    virtual lager::cursor<bool> isCheckedCursor() const;
 
 protected:
 
@@ -116,6 +116,9 @@ Q_SIGNALS:
      * emitted *before* sigSettingChanged()
      */
     void sigCheckedChanged(bool value);
+
+private:
+    void slotEnablePageWidget(bool value);
 
 protected:
 

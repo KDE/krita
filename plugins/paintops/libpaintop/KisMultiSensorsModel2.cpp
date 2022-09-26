@@ -21,6 +21,7 @@ KisMultiSensorsModel2::KisMultiSensorsModel2(lager::cursor<MultiSensorData> sens
     : QAbstractListModel(parent),
       m_d(new Private(sensorsData))
 {
+    m_d->sensorsData.bind(std::bind(&KisMultiSensorsModel2::slotSensorModelChanged, this));
 }
 
 KisMultiSensorsModel2::~KisMultiSensorsModel2()
@@ -91,4 +92,9 @@ QModelIndex KisMultiSensorsModel2::sensorIndex(const QString &id)
 
     return foundIndex < m_d->sensorsData->size() ?
                 index(foundIndex) : QModelIndex();
+}
+
+void KisMultiSensorsModel2::slotSensorModelChanged()
+{
+    emit dataChanged(index(0), index(rowCount() - 1));
 }

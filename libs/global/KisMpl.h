@@ -111,6 +111,33 @@ constexpr auto unzip_wrapper = [] (auto f) {
         };
 };
 
+namespace detail {
+
+template <typename First, typename... Rest>
+struct first_type_impl
+{
+    using type = First;
+};
+
+}
+
+/**
+ * Return the first type of a parameter pack
+ */
+template <typename... T>
+struct first_type
+{
+    using type = typename detail::first_type_impl<T...>::type;
+};
+
+/**
+ * A helper function to return the first type of a parameter
+ * pack
+ */
+template <typename... T>
+using first_type_t = typename first_type<T...>::type;
+
+
 }
 
 #endif // KISMPL_H

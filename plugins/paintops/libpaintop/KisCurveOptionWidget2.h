@@ -52,7 +52,6 @@ public:
     virtual void setEnabled(bool enabled);
 
     void setCurveWidgetsEnabled(bool value);
-    lager::cursor<bool> isCheckedCursor() const override;
 
 protected:
 

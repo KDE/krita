@@ -46,6 +46,8 @@ public:
     QModelIndex sensorIndex(const QString &id);
 
 private:
+    void slotSensorModelChanged();
+private:
     struct Private;
     QScopedPointer<Private> m_d;
 };

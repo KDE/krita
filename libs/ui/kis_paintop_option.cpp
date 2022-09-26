@@ -6,6 +6,9 @@
 
 #include "kis_paintop_option.h"
 
+
+#include <QWidget>
+
 #include <klocalizedstring.h>
 
 #include <KisResourcesInterface.h>
@@ -19,6 +22,7 @@ struct KisPaintOpOption::Private
 {
 public:
     lager::state<bool> checkedFallback;
+    lager::cursor<bool> checkedCursor;
     QString label;
     KisPaintOpOption::PaintopCategory category;
     QWidget *configurationPage {nullptr};
@@ -30,14 +34,27 @@ public:
     KoCanvasResourcesInterfaceSP canvasResourcesInterface;
 };
 
-KisPaintOpOption::KisPaintOpOption(const QString label, PaintopCategory category, bool checked)
+KisPaintOpOption::KisPaintOpOption(const QString &label, PaintopCategory category, bool checked)
     : m_checkable(true)
     , m_d(new Private())
 
 {
     m_d->label = label;
     m_d->checkedFallback.set(checked);
+    m_d->checkedCursor = m_d->checkedFallback;
     m_d->category = category;
+    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
+
+}
+
+KisPaintOpOption::KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category, lager::cursor<bool> checkedCursor)
+    : m_checkable(true)
+    , m_d(new Private())
+{
+    m_d->label = label;
+    m_d->checkedCursor = checkedCursor;
+    m_d->category = category;
+    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
 }
 
 KisPaintOpOption::~KisPaintOpOption()
@@ -88,11 +105,6 @@ lager::reader<KisPaintopLodLimitations> KisPaintOpOption::lodLimitationsReader()
     return lager::make_constant(KisPaintopLodLimitations());
 }
 
-lager::cursor<bool> KisPaintOpOption::isCheckedCursor() const
-{
-    return m_d->checkedFallback;
-}
-
 KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const
 {
     return m_d->category;
@@ -100,7 +112,7 @@ KisPaintOpOption::PaintopCategory KisPaintOpOption::category() const
 
 bool KisPaintOpOption::isChecked() const
 {
-    return isCheckedCursor().get();
+    return m_d->checkedCursor.get();
 }
 
 bool KisPaintOpOption::isCheckable() const {
@@ -109,7 +121,7 @@ bool KisPaintOpOption::isCheckable() const {
 
 void KisPaintOpOption::setChecked(bool checked)
 {
-    isCheckedCursor().set(checked);
+    m_d->checkedCursor.set(checked);
 
     emitCheckedChanged();
     emitSettingChanged();
@@ -154,6 +166,14 @@ QWidget* KisPaintOpOption::configurationPage() const
 {
     return m_d->configurationPage;
 }
+
+void KisPaintOpOption::slotEnablePageWidget(bool value)
+{
+    if (m_d->configurationPage) {
+        m_d->configurationPage->setEnabled(value);
+    }
+}
+
 void KisPaintOpOption::setLocked(bool value)
 {
     m_locked = value;

@@ -562,7 +562,7 @@
       <whatsThis/>
       <toolTip>Hide Mirror X Line</toolTip>
       <iconText>Hide Mirror X Line</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -573,7 +573,7 @@
       <whatsThis/>
       <toolTip>Hide Mirror Y Line</toolTip>
       <iconText>Hide Mirror Y Line</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -584,7 +584,7 @@
       <whatsThis/>
       <toolTip>Lock X Line</toolTip>
       <iconText>Lock X Line</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -595,7 +595,7 @@
       <whatsThis/>
       <toolTip>Lock Y Line</toolTip>
       <iconText>Lock Y Line</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -606,7 +606,7 @@
       <whatsThis/>
       <toolTip>Move to Canvas Center X</toolTip>
       <iconText>Move to Canvas Center X</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -617,7 +617,7 @@
       <whatsThis/>
       <toolTip>Move to Canvas Center Y</toolTip>
       <iconText>Move to Canvas Center Y</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>

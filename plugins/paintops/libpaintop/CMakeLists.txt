@@ -27,6 +27,9 @@ set(kritalibpaintop_LIB_SRCS
     KisMirrorOptionData.cpp
     KisMirrorOptionModel.cpp
     KisMirrorOptionWidget.cpp
+    KisSharpnessOptionData.cpp
+    KisSharpnessOptionModel.cpp
+    KisSharpnessOptionWidget.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc

@@ -39,6 +39,7 @@
 #include "KisCurveOptionWidget2.h"
 #include "KisSpacingOptionWidget2.h"
 #include "KisMirrorOptionWidget.h"
+#include "KisSharpnessOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -219,6 +220,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisRotationOptionData, lager::automatic_tag> rotationOptionData;
     lager::state<KisSpacingOptionData, lager::automatic_tag> spacingOptionData;
     lager::state<KisMirrorOptionData, lager::automatic_tag> mirrorOptionData;
+    lager::state<KisSharpnessOptionData, lager::automatic_tag> sharpnessOptionData;
 
     lager::state<KisDarkenOptionData, lager::automatic_tag> darkenOptionData;
     lager::state<KisMixOptionData, lager::automatic_tag> mixOptionData;
@@ -258,7 +260,8 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     addPaintOpOptionData(m_d->softnessOptionData, KisPaintOpOption::GENERAL, i18n("Soft"), i18n("Hard"));
     addPaintOpOptionData(m_d->rotationOptionData, KisPaintOpOption::GENERAL, i18n("-180°"), i18n("180°"));
-    addPaintOpOption(new KisPressureSharpnessOptionWidget());
+    addPaintOpOption(new KisSharpnessOptionWidget(m_d->sharpnessOptionData), KisPaintOpOption::GENERAL);
+
     m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
     addPaintOpOption(m_lightnessStrengthOptionWidget);
     addPaintOpOption(new KisPressureScatterOptionWidget());

@@ -12,15 +12,15 @@ public:
     QString comment();
     void setComment(QString comment);
     QStringList groupNames();
-    bool addGroup(QString name);
-    bool removeGroup(QString name, bool keepColors);
+    void addGroup(QString name);
+    void removeGroup(QString name, bool keepColors);
     int colorsCountTotal();
     Swatch *colorSetEntryByIndex(int index) /Factory/;
     Swatch *colorSetEntryFromGroup(int index, const QString &groupName) /Factory/;
     void addEntry(Swatch entry, QString groupName);
     void removeEntry(int index, const QString &groupName);
-    bool changeGroupName(QString oldGroupName, QString newGroupName);
-    bool moveGroup(const QString &groupName, const QString &groupNameInsertBefore);
+    void changeGroupName(QString oldGroupName, QString newGroupName);
+    void moveGroup(const QString &groupName, const QString &groupNameInsertBefore);
     bool save();
 private:
 };

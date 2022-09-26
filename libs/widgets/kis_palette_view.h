@@ -1,7 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
  *  SPDX-FileCopyrightText: 2017 Wolthera van Hövell tot Westerflier <griffinvalley@gmail.com>
- *
+ *  SPDX-FileCopyrightText: 2022 Halla Rempt <halla@valdyas.org>
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -48,12 +48,14 @@ public:
 
     /**
      * @brief setCrossedKeyword
-     * this apparently allows you to set keywords that can cross out colors.
+     * This allows you to set keywords that can cross out colors.
      * This is implemented to mark the lazybrush "transparent" color.
      * @param value
      */
     void setCrossedKeyword(const QString &value);
+
     void removeSelectedEntry();
+
     /**
      * @brief selectClosestColor
      * select a color that's closest to parameter color
@@ -75,12 +77,14 @@ public:
      * kept for compatibility with PaletteView in libkis
      */
     bool addEntryWithDialog(KoColor color);
+
     /**
      * remove entry with a dialog window.(Necessary for groups.
      * @warning deprecated.
      * kept for compatibility with PaletteView in libkis
      */
     bool removeEntryWithDialog(QModelIndex index);
+
     /**
      * add entry with a dialog window.
      * @warning deprecated.
@@ -113,7 +117,7 @@ private:
 
 private:
     struct Private;
-    const QScopedPointer<Private> m_d;
+    const QScopedPointer<Private> d;
 };
 
 #endif /* __KIS_PALETTE_VIEW_H */

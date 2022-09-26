@@ -80,7 +80,15 @@ private Q_SLOTS:
 
     void slotStoragesChanged(const QString &location);
 
-    void slotUpdatePaletteName();
+    void slotUpdateLblPaletteName();
+
+    void slotLockPalette(bool locked);
+
+    void setUndoToolTip(const QString &text);
+    void setRedoToolTip(const QString &text);
+
+    void undo();
+    void redo();
 
 private:
     void setEntryByForeground(const QModelIndex &index);

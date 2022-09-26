@@ -64,7 +64,7 @@ void KoColorProfileStorage::addProfile(KoColorProfile *profile)
     if (profile->valid()) {
         d->profileMap[profile->name()] = profile;
         if (d->profileUniqueIdMap.contains(profile->uniqueId())) {
-            warnPigment << "Duplicated profile" << profile->name() << profile->fileName() << d->profileUniqueIdMap[profile->uniqueId()]->fileName();
+            //warnPigment << "Duplicated profile" << profile->name() << profile->fileName() << d->profileUniqueIdMap[profile->uniqueId()]->fileName();
             d->duplicates.append(d->profileUniqueIdMap[profile->uniqueId()]);
         }
         d->profileUniqueIdMap.insert(profile->uniqueId(), profile);

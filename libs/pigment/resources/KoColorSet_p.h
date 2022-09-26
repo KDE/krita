@@ -9,6 +9,7 @@
 #include <QXmlStreamReader>
 #include <QDomElement>
 #include <QPointer>
+#include <kundo2stack.h>
 
 #include <KisSwatch.h>
 #include <KisSwatchGroup.h>
@@ -27,16 +28,14 @@ struct RiffHeader {
 
 class KoColorSet::Private
 {
-private:
-    typedef KisSwatchGroup::SwatchInfo SwatchInfoType;
 
 public:
     Private(KoColorSet *a_colorSet);
 
 public:
-    KisSwatchGroup &global() {
-        Q_ASSERT(groups.contains(GLOBAL_GROUP_NAME));
-        return groups[GLOBAL_GROUP_NAME];
+    KisSwatchGroupSP global() {
+        Q_ASSERT(swatchGroups.size() > 0 && swatchGroups.first()->name() == GLOBAL_GROUP_NAME);
+        return swatchGroups.first();
     }
 public:
     bool init();
@@ -57,14 +56,29 @@ public:
     bool loadKpl();
 
 public:
+
     KoColorSet *colorSet {0};
     KoColorSet::PaletteType paletteType {UNKNOWN};
     QByteArray data;
     QString comment;
-    QStringList groupNames; //names of the groups, this is used to determine the order they are in.
-    QHash<QString, KisSwatchGroup> groups; //grouped colors.
+    QList<KisSwatchGroupSP> swatchGroups;
+    KUndo2Stack undoStack;
+    bool isLocked {false};
+    int columns;
 
 private:
+
+    friend class AddSwatchCommand;
+    friend class RemoveSwatchCommand;
+    friend class ChangeGroupNameCommand;
+    friend class AddGroupCommand;
+    friend class RemoveGroupCommand;
+    friend class ClearCommand;
+    friend class SetColumnCountCommand;
+    friend class SetCommentCommand;
+    friend class SetPaletteTypeCommand;
+    friend class MoveGroupCommand;
+
     KoColorSet::PaletteType detectFormat(const QString &fileName, const QByteArray &ba);
     void scribusParseColor(KoColorSet *set, QXmlStreamReader *xml);
     bool loadScribusXmlPalette(KoColorSet *set, QXmlStreamReader *xml);
@@ -75,8 +89,8 @@ private:
     QString readUnicodeString(QIODevice *io, bool sizeIsInt = false);
 
     void saveKplGroup(QDomDocument &doc, QDomElement &groupEle,
-                      const KisSwatchGroup *group, QSet<const KoColorSpace *> &colorSetSet) const;
-    void loadKplGroup(const QDomDocument &doc, const QDomElement &parentElement, KisSwatchGroup *group, QString version);
+                      const KisSwatchGroupSP group, QSet<const KoColorSpace *> &colorSetSet) const;
+    void loadKplGroup(const QDomDocument &doc, const QDomElement &parentElement, KisSwatchGroupSP group, QString version);
 };
 
 #endif // KOCOLORSET_P_H

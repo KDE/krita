@@ -1,7 +1,7 @@
 /*
  *  SPDX-FileCopyrightText: 2013 Sven Langkamp <sven.langkamp@gmail.com>
  *  SPDX-FileCopyrightText: 2018 Michael Zhou <simeirxh@gmail.com>
- *
+ *  SPDX-FileCopyrightText: 2022 Halla Rempt <halla@valdyas.org>
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -37,7 +37,7 @@ KisPaletteModel::~KisPaletteModel()
 QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) { return QVariant(); }
-    bool groupNameRow = m_rowGroupNameMap.contains(index.row());
+    bool groupNameRow = m_colorSet->isGroupTitleRow(index.row());
     if (role == IsGroupNameRole) {
         return groupNameRow;
     }
@@ -50,11 +50,8 @@ QVariant KisPaletteModel::data(const QModelIndex& index, int role) const
 
 int KisPaletteModel::rowCount(const QModelIndex& /*parent*/) const
 {
-    if (!m_colorSet)
-        return 0;
-    return m_colorSet->rowCount() // count of color rows
-            + m_rowGroupNameMap.size()  // rows for names
-            - 1; // global doesn't have a name
+    if (!m_colorSet) return 0;
+    return m_colorSet->rowCountWithTitles();
 }
 
 int KisPaletteModel::columnCount(const QModelIndex& /*parent*/) const
@@ -83,33 +80,29 @@ Qt::ItemFlags KisPaletteModel::flags(const QModelIndex& index) const
 QModelIndex KisPaletteModel::index(int row, int column, const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    Q_ASSERT(m_colorSet);
-    if (m_rowGroupNameMap.isEmpty()) {
+
+    KisSwatchGroupSP group = 0;
+    if (m_colorSet) {
+        group = m_colorSet->getGroup(row);
+    }
+    else {
         return {};
     }
-    int groupNameRow = groupNameRowForRow(row);
-    KisSwatchGroup *group = m_colorSet->getGroup(m_rowGroupNameMap[groupNameRow]);
-    KIS_ASSERT_RECOVER_RETURN_VALUE(group,QModelIndex());
-    return createIndex(row, column, group);
-}
 
-void KisPaletteModel::resetGroupNameRows()
-{
-    m_rowGroupNameMap.clear();
-    int row = -1;
-    for (const QString &groupName : m_colorSet->getGroupNames()) {
-        m_rowGroupNameMap[row] = groupName;
-        row += m_colorSet->getGroup(groupName)->rowCount();
-        row += 1; // row for group name
+    if (!group) {
+        qDebug() << "no group for row" << row << "col" << column << "total rows in model" << rowCount() << "rows in colorset" << m_colorSet->rowCountWithTitles();
+        return QModelIndex();
     }
+    //KIS_ASSERT_RECOVER_RETURN_VALUE(group, QModelIndex());
+    return createIndex(row, column, group.data());
 }
 
-void KisPaletteModel::setPalette(KoColorSetSP palette)
+void KisPaletteModel::setColorSet(KoColorSetSP colorSet)
 {
     beginResetModel();
-    m_colorSet = palette;
-    if (palette) {
-        resetGroupNameRows();
+    m_colorSet = colorSet;
+    if (colorSet) {
+        connect(colorSet.data(), SIGNAL(modified()), this, SIGNAL(sigPaletteModified()));
     }
     endResetModel();
     emit sigPaletteChanged();
@@ -122,67 +115,50 @@ KoColorSetSP KisPaletteModel::colorSet() const
 
 int KisPaletteModel::rowNumberInGroup(int rowInModel) const
 {
-    if (m_rowGroupNameMap.contains(rowInModel)) {
-        return -1;
-    }
-    QList<int> rowNumberList = m_rowGroupNameMap.keys();
-    for (auto it = rowNumberList.rbegin(); it != rowNumberList.rend(); it++) {
-        if (*it < rowInModel) {
-            return rowInModel - *it - 1;
+    int globalRowCount = 0; // To account for there being no title for the global group
+    int previousGlobalRowCount = 0;
+    for (const QString &groupName : m_colorSet->swatchGroupNames()) {
+        KisSwatchGroupSP group = m_colorSet->getGroup(groupName);
+        globalRowCount += group->rowCount();
+        if (globalRowCount > rowInModel) {
+            return rowInModel - previousGlobalRowCount;
         }
+        previousGlobalRowCount += group->rowCount() + (groupName.isEmpty() ? 0 : 1);
     }
     return rowInModel;
 }
 
-int KisPaletteModel::groupNameRowForName(const QString &groupName)
-{
-    for (auto it = m_rowGroupNameMap.begin(); it != m_rowGroupNameMap.end(); it++) {
-        if (it.value() == groupName) {
-            return it.key();
-        }
-    }
-    return -1;
-}
 
-bool KisPaletteModel::addEntry(const KisSwatch &entry, const QString &groupName)
+void KisPaletteModel::addSwatch(const KisSwatch &entry, const QString &groupName)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount() + 1);
-    m_colorSet->add(entry, groupName);
+    m_colorSet->addSwatch(entry, groupName);
     endInsertRows();
-    emit sigPaletteModified();
-    return true;
 }
 
-bool KisPaletteModel::removeEntry(const QModelIndex &index, bool keepColors)
+void KisPaletteModel::removeSwatch(const QModelIndex &index, bool keepColors)
 {
+    KisSwatchGroupSP group = m_colorSet->getGroup(index.row());
     if (!qvariant_cast<bool>(data(index, IsGroupNameRole))) {
-        static_cast<KisSwatchGroup*>(index.internalPointer())->removeEntry(index.column(),
-                                                                           rowNumberInGroup(index.row()));
+        m_colorSet->removeSwatch(index.column(),
+                                 rowNumberInGroup(index.row()),
+                                 group);
         emit dataChanged(index, index);
     } else {
-        int groupNameRow = groupNameRowForRow(index.row());
-        QString groupName = m_rowGroupNameMap[groupNameRow];
+        int groupNameRow = m_colorSet->startRowForGroup(group->name());
+        QString groupName = m_colorSet->getGroup(groupNameRow)->name();
         removeGroup(groupName, keepColors);
     }
-    emit sigPaletteModified();
-    return true;
 }
 
 void KisPaletteModel::removeGroup(const QString &groupName, bool keepColors)
 {
-    int removeStart = groupNameRowForName(groupName);
+    int removeStart = m_colorSet->startRowForGroup(groupName);
     int removedRowCount = m_colorSet->getGroup(groupName)->rowCount();
-    int insertStart = m_colorSet->getGlobalGroup()->rowCount();
-    beginRemoveRows(QModelIndex(),
-                    removeStart,
-                    removeStart + removedRowCount);
+
+    beginRemoveRows(QModelIndex(), removeStart, removeStart + removedRowCount);
     m_colorSet->removeGroup(groupName, keepColors);
-    resetGroupNameRows();
     endRemoveRows();
-    beginInsertRows(QModelIndex(),
-    insertStart, m_colorSet->getGlobalGroup()->rowCount());
-    endInsertRows();
-    emit sigPaletteModified();
 }
 
 bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
@@ -212,14 +188,13 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
             }
             QString groupNameDragged;
             stream >> groupNameDragged;
-            KisSwatchGroup *groupDragged = m_colorSet->getGroup(groupNameDragged);
-            int start = groupNameRowForName(groupNameDragged);
+            KisSwatchGroupSP groupDragged = m_colorSet->getGroup(groupNameDragged);
+            int start = m_colorSet->startRowForGroup(groupNameDragged);
             int end = start + groupDragged->rowCount();
-            if (!beginMoveRows(QModelIndex(), start, end, QModelIndex(), groupNameRowForName(groupNameDroppedOn))) {
+            if (!beginMoveRows(QModelIndex(), start, end, QModelIndex(), m_colorSet->startRowForGroup(groupNameDroppedOn))) {
                 return false;
             }
             m_colorSet->moveGroup(groupNameDragged, groupNameDroppedOn);
-            resetGroupNameRows();
             endMoveRows();
             emit sigPaletteModified();
         }
@@ -239,15 +214,15 @@ bool KisPaletteModel::dropMimeData(const QMimeData *data, Qt::DropAction action,
         KisSwatch entry = KisSwatch::fromByteArray(encodedData, oldGroupName, oriRow, oriColumn);
 
         if (action == Qt::MoveAction){
-            KisSwatchGroup *g = m_colorSet->getGroup(oldGroupName);
+            KisSwatchGroupSP g = m_colorSet->getGroup(oldGroupName);
             if (g) {
                 if (qvariant_cast<bool>(finalIndex.data(KisPaletteModel::CheckSlotRole))) {
-                    g->setEntry(getEntry(finalIndex), oriColumn, oriRow);
+                    m_colorSet->addSwatch(getSwatch(finalIndex), g->name(), oriColumn, oriRow);
                 } else {
-                    g->removeEntry(oriColumn, oriRow);
+                    m_colorSet->removeSwatch(oriColumn, oriRow, g);
                 }
             }
-            setEntry(entry, finalIndex);
+            setSwatch(entry, finalIndex);
             emit sigPaletteModified();
         }
 
@@ -267,7 +242,7 @@ QMimeData *KisPaletteModel::mimeData(const QModelIndexList &indexes) const
     if (index.isValid() && qvariant_cast<bool>(index.data(CheckSlotRole))) {
         QString mimeTypeName = "krita/x-colorsetentry";
         if (qvariant_cast<bool>(index.data(IsGroupNameRole))==false) {
-            KisSwatch entry = getEntry(index);
+            KisSwatch entry = getSwatch(index);
             QString groupName = qvariant_cast<QString>(index.data(KisPaletteModel::GroupNameRole));
             entry.writeToStream(stream,
                                 groupName,
@@ -294,45 +269,33 @@ Qt::DropActions KisPaletteModel::supportedDropActions() const
     return Qt::MoveAction;
 }
 
-void KisPaletteModel::setEntry(const KisSwatch &entry,
-                               const QModelIndex &index)
+void KisPaletteModel::setSwatch(const KisSwatch &entry, const QModelIndex &index)
 {
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
+    KisSwatchGroupSP group = m_colorSet->getGroup(index.row());
     Q_ASSERT(group);
-    group->setEntry(entry, index.column(), rowNumberInGroup(index.row()));
-    emit sigPaletteModified();
+    m_colorSet->addSwatch(entry, group->name(), index.column(), rowNumberInGroup(index.row()));
     emit dataChanged(index, index);
 }
 
-bool KisPaletteModel::renameGroup(const QString &groupName, const QString &newName)
+void KisPaletteModel::changeGroupName(const QString &groupName, const QString &newName)
 {
     beginResetModel();
-    bool success = m_colorSet->changeGroupName(groupName, newName);
-    for (auto it = m_rowGroupNameMap.begin(); it != m_rowGroupNameMap.end(); it++) {
-        if (it.value() == groupName) {
-            m_rowGroupNameMap[it.key()] = newName;
-            break;
-        }
-    }
+    m_colorSet->changeGroupName(groupName, newName);
     endResetModel();
-    emit sigPaletteModified();
-    return success;
 }
 
-void KisPaletteModel::addGroup(const KisSwatchGroup &group)
+KisSwatchGroupSP KisPaletteModel::addGroup(const QString &groupName, int _columnCount, int _rowCount)
 {
-    beginInsertRows(QModelIndex(), rowCount(), rowCount() + group.rowCount());
-    m_colorSet->addGroup(group.name());
-    *m_colorSet->getGroup(group.name()) = group;
-    endInsertColumns();
-
-    emit sigPaletteModified();
+    beginInsertRows(QModelIndex(), rowCount(), rowCount() + _rowCount);
+    m_colorSet->addGroup(groupName, _columnCount, _rowCount);
+    endInsertRows();
+    return m_colorSet->getGroup(groupName);
 }
 
-void KisPaletteModel::setRowNumber(const QString &groupName, int rowCount)
+void KisPaletteModel::setRowCountForGroup(const QString &groupName, int rowCount)
 {
     beginResetModel();
-    KisSwatchGroup *g = m_colorSet->getGroup(groupName);
+    KisSwatchGroupSP g = m_colorSet->getGroup(groupName);
     if (g) {
         g->setRowCount(rowCount);
     }
@@ -356,7 +319,7 @@ void KisPaletteModel::clear(int defaultColumnsCount)
 
 QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) const
 {
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());
+    KisSwatchGroupSP group = m_colorSet->getGroup(idx.row());
     Q_ASSERT(group);
     QString groupName = group->name();
     switch (role) {
@@ -381,13 +344,13 @@ QVariant KisPaletteModel::dataForGroupNameRow(const QModelIndex &idx, int role) 
 
 QVariant KisPaletteModel::dataForSwatch(const QModelIndex &idx, int role) const
 {
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(idx.internalPointer());
+    KisSwatchGroupSP group = m_colorSet->getGroup(idx.row());
     Q_ASSERT(group);
     int rowInGroup = rowNumberInGroup(idx.row());
-    bool entryPresent = group->checkEntry(idx.column(), rowInGroup);
+    bool entryPresent = group->checkSwatchExists(idx.column(), rowInGroup);
     KisSwatch entry;
     if (entryPresent) {
-        entry = group->getEntry(idx.column(), rowInGroup);
+        entry = group->getSwatch(idx.column(), rowInGroup);
     }
     switch (role) {
     case Qt::ToolTipRole:
@@ -436,15 +399,21 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
     endResetModel();
 }
 
-void KisPaletteModel::slotPaletteModified() {
+void KisPaletteModel::slotPaletteModified()
+{
     /**
      * Until we implemement resource->convertToSerializable() we should
      * explictly convert all the palettes into Krita internal format
      */
-    if (m_colorSet->paletteType() != KoColorSet::KPL) {
+    if (m_colorSet->paletteType() != KoColorSet::KPL || m_colorSet->paletteType() != KoColorSet::GPL) {
         m_colorSet->setPaletteType(KoColorSet::KPL);
+    }
+
+    if (m_colorSet->paletteType() == KoColorSet::KPL) {
         m_colorSet->setFilename(QFileInfo(m_colorSet->filename()).completeBaseName() + ".kpl");
-        m_colorSet->setDirty(true);
+    }
+    else if (m_colorSet->paletteType() == KoColorSet::GPL) {
+        m_colorSet->setFilename(QFileInfo(m_colorSet->filename()).completeBaseName() + ".gpl");
     }
 }
 
@@ -458,27 +427,23 @@ void KisPaletteModel::slotExternalPaletteModified(QSharedPointer<KoColorSet> res
 
 QModelIndex KisPaletteModel::indexForClosest(const KoColor &compare)
 {
-    KisSwatchGroup::SwatchInfo info = colorSet()->getClosestColorInfo(compare);
-    return createIndex(indexRowForInfo(info), info.column, colorSet()->getGroup(info.group));
+    KisSwatchGroup::SwatchInfo info = colorSet()->getClosestSwatchInfo(compare);
+    return createIndex(indexRowForInfo(info), info.column, colorSet()->getGroup(info.group).data());
 }
 
 int KisPaletteModel::indexRowForInfo(const KisSwatchGroup::SwatchInfo &info)
 {
-    for (auto it = m_rowGroupNameMap.begin(); it != m_rowGroupNameMap.end(); it++) {
-        if (it.value() == info.group) {
-            return it.key() + info.row + 1;
-        }
-    }
-    return info.row;
+    int groupRow = m_colorSet->startRowForGroup(info.group);
+    return groupRow + info.row;
 }
 
-KisSwatch KisPaletteModel::getEntry(const QModelIndex &index) const
+KisSwatch KisPaletteModel::getSwatch(const QModelIndex &index) const
 {
-    KisSwatchGroup *group = static_cast<KisSwatchGroup*>(index.internalPointer());
-    if (!group || !group->checkEntry(index.column(), rowNumberInGroup(index.row()))) {
+    KisSwatchGroupSP group = m_colorSet->getGroup(index.row());
+    if (!group || !group->checkSwatchExists(index.column(), rowNumberInGroup(index.row()))) {
         return KisSwatch();
     }
-    return group->getEntry(index.column(), rowNumberInGroup(index.row()));
+    return group->getSwatch(index.column(), rowNumberInGroup(index.row()));
 }
 
 int KisPaletteModel::groupNameRowForRow(int rowInModel) const

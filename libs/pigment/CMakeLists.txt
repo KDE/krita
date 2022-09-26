@@ -104,6 +104,7 @@ target_link_libraries( kritapigment
         kritastore
         kritaglobal
         kritaresources
+        kritacommand
         ${EXTRA_LIBRARIES}
         KF5::I18n 
         KF5::ConfigCore

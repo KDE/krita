@@ -6,6 +6,10 @@
 #include <KoColorSet.h>
 #include <KisGlobalResourcesInterface.h>
 #include <simpletest.h>
+#include <KisSwatch.h>
+#include <KisSwatchGroup.h>
+#include <kundo2stack.h>
+#include <KoColorSpaceRegistry.h>
 
 #ifndef FILES_DATA_DIR
 #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
@@ -195,5 +199,450 @@ void TestKoColorSet::testLoadACB()
     QVERIFY(set2.load(KisGlobalResourcesInterface::instance()));
     QCOMPARE(set2.paletteType(), KoColorSet::KPL);
 }
+
+void TestKoColorSet::TestKoColorSet::testLock()
+{
+    KoColorSetSP cs = createColorSet();
+    QVERIFY(!cs->isLocked());
+    QVERIFY(!cs->isDirty());
+    cs->setLocked(true);
+    QVERIFY(!cs->isDirty());
+    QVERIFY(cs->isLocked());
+    QVERIFY(cs->getGlobalGroup()->colorCount() == 0);
+    cs->addSwatch(KisSwatch(red(), "red"));
+    QVERIFY(cs->getGlobalGroup()->colorCount() == 0);
+    QVERIFY(!cs->isDirty());
+    cs->setLocked(false);
+    cs->addSwatch(KisSwatch(red(), "red"));
+    QVERIFY(cs->getGlobalGroup()->colorCount() == 1);
+    QVERIFY(cs->isDirty());
+}
+
+void TestKoColorSet::testColumnCount()
+{
+    KoColorSetSP cs = createColorSet();
+    QVERIFY(cs->columnCount() == KisSwatchGroup::DEFAULT_COLUMN_COUNT);
+    cs->setColumnCount(200);
+    QVERIFY(cs->columnCount() == 200);
+    QVERIFY(cs->isDirty());
+    cs->undoStack()->undo();
+    QVERIFY(cs->columnCount() == KisSwatchGroup::DEFAULT_COLUMN_COUNT);
+    QVERIFY(!cs->isDirty());
+    cs->undoStack()->redo();
+    QVERIFY(cs->columnCount() == 200);
+    QVERIFY(cs->isDirty());
+}
+
+void TestKoColorSet::testComment()
+{
+    KoColorSetSP cs = createColorSet();
+    QVERIFY(cs->comment().isEmpty());
+    cs->setComment("dummy");
+    QVERIFY(cs->comment() == "dummy");
+    QVERIFY(cs->isDirty());
+    cs->undoStack()->undo();
+    QVERIFY(cs->comment().isEmpty());
+    QVERIFY(!cs->isDirty());
+    cs->undoStack()->redo();
+    QVERIFY(cs->comment() == "dummy");
+    QVERIFY(cs->isDirty());
+}
+
+void TestKoColorSet::testPaletteType()
+{
+    KoColorSetSP cs = createColorSet();
+    QVERIFY(cs->paletteType() == KoColorSet::KPL);
+    QCOMPARE(QFileInfo(cs->filename()).suffix().toLower(), "kpl");
+
+    cs->setPaletteType(KoColorSet::GPL);
+    QVERIFY(cs->paletteType() == KoColorSet::GPL);
+    QCOMPARE(QFileInfo(cs->filename()).suffix().toLower(), "gpl");
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    QVERIFY(cs->paletteType() == KoColorSet::KPL);
+    QCOMPARE(QFileInfo(cs->filename()).suffix().toLower(), "kpl");
+    QVERIFY(!cs->isDirty());
+
+    cs->undoStack()->redo();
+    QVERIFY(cs->paletteType() == KoColorSet::GPL);
+    QCOMPARE(QFileInfo(cs->filename()).suffix().toLower(), "gpl");
+    QVERIFY(cs->isDirty());
+}
+
+void TestKoColorSet::testAddSwatch()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addSwatch(KisSwatch(red(), "red"));
+    QVERIFY(cs->getGlobalGroup()->colorCount() == 1);
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    QVERIFY(cs->getGlobalGroup()->colorCount() == 0);
+    QVERIFY(!cs->isDirty());
+
+    cs->undoStack()->redo();
+    QVERIFY(cs->getGlobalGroup()->colorCount() == 1);
+    QVERIFY(cs->isDirty());
+}
+
+void TestKoColorSet::testRemoveSwatch()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addSwatch(KisSwatch(red()), KoColorSet::GLOBAL_GROUP_NAME, 5, 5);
+    KisSwatch sw = cs->getSwatchFromGroup(5, 5, KoColorSet::GLOBAL_GROUP_NAME);
+    QVERIFY(sw.isValid());
+    QColor c = sw.color().toQColor();
+    QVERIFY(c == QColor(Qt::red));
+
+    KisSwatchGroupSP group = cs->getGlobalGroup();
+    QVERIFY(group);
+
+    cs->removeSwatch(5, 5, group);
+    QVERIFY(cs->isDirty());
+    sw = cs->getSwatchFromGroup(5, 5, KoColorSet::GLOBAL_GROUP_NAME);
+    QVERIFY(!sw.isValid());
+
+    cs->undoStack()->undo();
+    sw = cs->getSwatchFromGroup(5, 5, KoColorSet::GLOBAL_GROUP_NAME);
+    QVERIFY(sw.isValid());
+    c = sw.color().toQColor();
+    QVERIFY(c == QColor(Qt::red));
+
+    QVERIFY(cs->isDirty());
+
+    // Undo the initial addSwatch
+    cs->undoStack()->undo();
+    QVERIFY(!cs->isDirty());
+}
+
+void TestKoColorSet::testAddGroup()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("newgroup");
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    QVERIFY(cs->swatchGroupNames().size() == 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(!cs->isDirty());
+
+    cs->undoStack()->redo();
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+
+    cs->addGroup("newgroup2");
+
+    QCOMPARE(cs->getGroup(11)->name(), "");
+    QCOMPARE(cs->getGroup(21)->name(), "newgroup");
+    QCOMPARE(cs->getGroup(50)->name(), "newgroup2");
+
+}
+
+
+void TestKoColorSet::testChangeGroupName()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("newgroup");
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->changeGroupName("newgroup", "newnewgroup");
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newnewgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->redo();
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newnewgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    cs->undoStack()->undo();
+
+    QVERIFY(cs->swatchGroupNames().size() == 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(!cs->isDirty());
+}
+
+
+void TestKoColorSet::testMoveGroup()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("group1");
+    cs->addGroup("group2");
+    cs->addGroup("group3");
+    cs->addGroup("group4");
+
+    QStringList original({"", "group1", "group2", "group3", "group4"});
+    QCOMPARE(cs->swatchGroupNames(), original);
+
+    cs->moveGroup("group3", "group2");
+
+    QStringList move3({"", "group1", "group3", "group2", "group4"});
+    QCOMPARE(cs->swatchGroupNames(), move3);
+
+    cs->undoStack()->undo();
+    QCOMPARE(cs->swatchGroupNames(), original);
+
+    cs->undoStack()->redo();
+    QCOMPARE(cs->swatchGroupNames(), move3);
+}
+
+void TestKoColorSet::testRemoveGroup()
+{
+    KoColorSetSP cs = createColorSet();
+
+    // Discard Colors
+
+    cs->addGroup("newgroup");
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->removeGroup("newgroup", false);
+    QVERIFY(cs->swatchGroupNames().size() == 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->redo();
+    QVERIFY(cs->swatchGroupNames().size() == 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    cs->undoStack()->undo();
+
+    QVERIFY(cs->swatchGroupNames().size() == 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(!cs->isDirty());
+
+    // Keep Colors
+
+    cs->clear();
+    cs->addGroup("newgroup");
+    cs->addSwatch(KisSwatch(red()), "newgroup", 5, 5);
+
+    QCOMPARE(cs->swatchGroupNames().size(), 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QCOMPARE(cs->colorCount(), 1);
+    QVERIFY(cs->isDirty());
+
+    cs->removeGroup("newgroup", true);
+    QCOMPARE(cs->swatchGroupNames().size(), 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QCOMPARE(cs->colorCount(), 1);
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    QCOMPARE(cs->swatchGroupNames().size(), 2);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(cs->swatchGroupNames().contains("newgroup"));
+    QCOMPARE(cs->colorCount(), 2);
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->redo();
+    QCOMPARE(cs->swatchGroupNames().size(), 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QCOMPARE(cs->colorCount(), 1);
+    QVERIFY(cs->isDirty());
+
+    cs->undoStack()->undo();
+    cs->undoStack()->undo();
+    cs->undoStack()->undo();
+
+    QCOMPARE(cs->swatchGroupNames().size(), 1);
+    QVERIFY(cs->swatchGroupNames().contains(KoColorSet::GLOBAL_GROUP_NAME));
+    QVERIFY(!cs->swatchGroupNames().contains("newgroup"));
+    QVERIFY(cs->isDirty());
+
+    QCOMPARE(cs->colorCount(), 1);
+
+    cs->undoStack()->undo();
+    QCOMPARE(cs->colorCount(), 0);
+    QVERIFY(!cs->isDirty());
+}
+
+void TestKoColorSet::testClear()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("newgroup");
+    cs->addSwatch(KisSwatch(red()), "newgroup", 5, 5);
+    cs->addSwatch(KisSwatch(blue()), KoColorSet::GLOBAL_GROUP_NAME, 1, 1);
+
+    QVERIFY(cs->colorCount() == 2);
+
+    cs->clear();
+    QVERIFY(cs->colorCount() == 0);
+    QVERIFY(cs->swatchGroupNames().size() == 1);
+
+    cs->undoStack()->undo();
+    QVERIFY(cs->colorCount() == 2);
+    QVERIFY(cs->swatchGroupNames().size() == 2);
+
+    cs->undoStack()->redo();
+    QVERIFY(cs->colorCount() == 0);
+    QVERIFY(cs->swatchGroupNames().size() == 1);
+}
+
+void TestKoColorSet::testGetSwatchFromGroup()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("newgroup");
+    cs->addSwatch(KisSwatch(red()), "newgroup", 5, 5);
+    cs->addSwatch(blue(), KoColorSet::GLOBAL_GROUP_NAME, 1, 1);
+
+    KisSwatch sw = cs->getSwatchFromGroup(5, 5, "newgroup");
+    QVERIFY(sw.isValid());
+    QColor c = sw.color().toQColor();
+    QVERIFY(c == QColor(Qt::red));
+
+    sw = cs->getSwatchFromGroup(1, 1, KoColorSet::GLOBAL_GROUP_NAME);
+    QVERIFY(sw.isValid());
+    c = sw.color().toQColor();
+    QVERIFY(c == QColor(Qt::blue));
+
+    sw = cs->getSwatchFromGroup(1, 1, "newgroup");
+    QVERIFY(!sw.isValid());
+}
+
+void TestKoColorSet::testIsGroupNameRow()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("group1");
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 30);
+
+    QVERIFY(cs->isGroupTitleRow(KisSwatchGroup::DEFAULT_ROW_COUNT + 1));
+    QVERIFY(cs->isGroupTitleRow((KisSwatchGroup::DEFAULT_ROW_COUNT * 2) + 2));
+}
+
+void TestKoColorSet::testStartRowForNamedGroup()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("group1");
+    cs->addGroup("group2");
+    QCOMPARE(cs->startRowForGroup(""), 0);
+    QCOMPARE(cs->startRowForGroup("group1"), KisSwatchGroup::DEFAULT_ROW_COUNT);
+    QCOMPARE(cs->startRowForGroup("group2"), (KisSwatchGroup::DEFAULT_ROW_COUNT * 2) + 1);
+}
+
+void TestKoColorSet::testGetClosestSwatchInfo()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addSwatch(red(), "", 10, 5);
+    QColor c;
+    c.setRgb(255,10,10);
+    KoColor  kc(c, KoColorSpaceRegistry::instance()->rgb8());
+    KisSwatchGroup::SwatchInfo info = cs->getClosestSwatchInfo(kc);
+    QCOMPARE(info.row, 5);
+    QCOMPARE(info.column, 10);
+    QCOMPARE(info.swatch.color().toQColor(), red().toQColor());
+}
+
+void TestKoColorSet::testGetGroup()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 10);
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 30);
+
+    QCOMPARE(cs->rowCount(), 60);
+    QCOMPARE(cs->rowCountWithTitles(), 62);
+    QVERIFY(cs->getGroup("group1"));
+    QVERIFY(cs->getGroup("group2"));
+
+//    for (int i = 0; i < cs->rowCountWithTitles(); ++i) {
+//        KisSwatchGroupSP grp = cs->getGroup(i);
+//        qDebug() << "row" << i << "group" << (grp ? grp->name() : "No Group");
+//    }
+
+
+    KisSwatchGroupSP grp = cs->getGroup(0);
+    QVERIFY(grp);
+    QVERIFY(grp->name().isEmpty());
+
+    grp = cs->getGroup(21); // titlerow
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group1");
+
+    grp = cs->getGroup(25);
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group1");
+
+    grp = cs->getGroup(30); // last row
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group1");
+
+    grp = cs->getGroup(31); // titlerow
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group2");
+
+    grp = cs->getGroup(40);
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group2");
+
+    grp = cs->getGroup(61);
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group2");
+
+
+
+}
+
+KoColorSetSP TestKoColorSet::createColorSet()
+{
+    KoColorSetSP colorSet(new KoColorSet());
+    colorSet->setPaletteType(KoColorSet::KPL);
+    colorSet->setName("Dummy");
+    colorSet->setFilename("dummy.kpl");
+    colorSet->setModified(false);
+    colorSet->undoStack()->clear();
+    return colorSet;
+}
+
+KoColor TestKoColorSet::blue()
+{
+    QColor c(Qt::blue);
+    KoColor  kc(c, KoColorSpaceRegistry::instance()->rgb8());
+    return kc;
+}
+
+KoColor TestKoColorSet::red()
+{
+    QColor c(Qt::red);
+    KoColor  kc(c, KoColorSpaceRegistry::instance()->rgb8());
+    return kc;
+}
+
 
 SIMPLE_TEST_MAIN(TestKoColorSet)

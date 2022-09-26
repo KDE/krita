@@ -368,7 +368,7 @@ void KisDlgInternalColorSelector::slotChangePalette(KoColorSetSP set)
     if (!set) {
         return;
     }
-    m_d->paletteModel->setPalette(set);
+    m_d->paletteModel->setColorSet(set);
 }
 
 void KisDlgInternalColorSelector::showEvent(QShowEvent *event)

@@ -6,6 +6,8 @@
 #define TESTKOCOLORSET_H
 
 #include <QObject>
+#include <KoColor.h>
+#include <KoColorSet.h>
 
 class TestKoColorSet : public QObject
 {
@@ -22,7 +24,29 @@ private Q_SLOTS:
     void testLoadASE();
     void testLoadACB();
 
+    void testLock();
+    void testColumnCount();
+    void testComment();
+    void testPaletteType();
+    void testAddSwatch();
+    void testRemoveSwatch();
+    void testAddGroup();
+    void testChangeGroupName();
+    void testMoveGroup();
+    void testRemoveGroup();
+    void testClear();
+    void testGetSwatchFromGroup();
+    void testIsGroupNameRow();
+    void testStartRowForNamedGroup();
+    void testGetClosestSwatchInfo();
+    void testGetGroup();
+
 private:
+
+    KoColorSetSP createColorSet();
+    KoColor blue();
+    KoColor red();
+
 };
 
 

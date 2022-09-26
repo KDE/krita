@@ -34,7 +34,7 @@ struct Q_DECL_HIDDEN KoResource::Private {
     bool valid {false};
     bool active {true};
     bool permanent {false};
-    bool dirty {false};
+    bool modified {false};
     QString name;
     QString filename;
     QString storageLocation;
@@ -269,12 +269,12 @@ QString KoResource::storageLocation() const
 
 void KoResource::setDirty(bool value)
 {
-    d->dirty = value;
+    d->modified = value;
 }
 
 bool KoResource::isDirty() const
 {
-    return d->dirty;
+    return d->modified;
 }
 
 void KoResource::addMetaData(QString key, QVariant value)

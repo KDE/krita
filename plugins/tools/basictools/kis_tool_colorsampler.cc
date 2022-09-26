@@ -87,10 +87,10 @@ void KisToolColorSampler::slotColorPickerSelectionFinished(const KoColor &color)
 
         if (palette) {
             KisSwatchGroup::SwatchInfo info =
-                    palette->getClosestColorInfo(color);
+                    palette->getClosestSwatchInfo(color);
 
             if (info.swatch.color() != color) {
-                palette->add(swatch);
+                palette->addSwatch(swatch);
                 if (!KoResourceServerProvider::instance()->paletteServer()->updateResource(palette)) {
                     KisCanvas2 *canvas = dynamic_cast<KisCanvas2*>(this->canvas());
                     canvas->viewManager()->showFloatingMessage(i18n("Cannot write to palette file %1. Maybe it is read-only.", palette->filename()), koIcon("object-locked"));

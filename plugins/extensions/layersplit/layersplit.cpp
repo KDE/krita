@@ -154,7 +154,7 @@ void LayerSplit::slotLayerSplit()
                 if (!found) {
                     QString name = "";
                     if (dlg.palette()) {
-                       name = dlg.palette()->getClosestColorInfo(c).swatch.name();
+                       name = dlg.palette()->getClosestSwatchInfo(c).swatch.name();
                     }
 
                     if (name.toLower() == "untitled" || name.toLower() == "none" || name.toLower() == "") {

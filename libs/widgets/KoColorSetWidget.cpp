@@ -131,7 +131,7 @@ void KoColorSetWidget::setColorSet(KoColorSetSP colorSet)
     if (!colorSet) return;
     if (colorSet == d->colorSet) return;
 
-    d->paletteView->paletteModel()->setPalette(colorSet);
+    d->paletteView->paletteModel()->setColorSet(colorSet);
     d->colorSet = colorSet;
 }
 
@@ -185,7 +185,7 @@ void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
 void KoColorSetWidget::slotPaletteChoosen(KoColorSetSP colorSet)
 {
     d->colorSet = colorSet;
-    d->paletteView->paletteModel()->setPalette(colorSet);
+    d->paletteView->paletteModel()->setColorSet(colorSet);
 }
 
 void KoColorSetWidget::slotNameListSelection(const KoColor &color)

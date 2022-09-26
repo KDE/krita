@@ -23,36 +23,6 @@ KisPaletteDelegate::KisPaletteDelegate(QObject *parent)
 KisPaletteDelegate::~KisPaletteDelegate()
 { }
 
-void KisPaletteDelegate::paintCrossedLine(const QStyleOptionViewItem &option, QPainter *painter) const
-{
-    QRect crossRect = kisGrowRect(option.rect, -qBound(2, option.rect.width() / 6, 4));
-
-    painter->save();
-    painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->setPen(QPen(Qt::white, 2.5));
-    painter->drawLine(crossRect.topLeft(), crossRect.bottomRight());
-    painter->setPen(QPen(Qt::red, 1.0));
-    painter->drawLine(crossRect.topLeft(), crossRect.bottomRight());
-    painter->restore();
-}
-
-void KisPaletteDelegate::paintNonCrossed(QPainter */*painter*/, const QStyleOptionViewItem &/*option*/,
-                                         const QModelIndex &/*index*/, const bool /*isSelected*/) const
-{
-}
-
-void KisPaletteDelegate::paintGroupName(QPainter *painter, const QStyleOptionViewItem &option,
-                                        const QModelIndex &index, const bool isSelected) const
-{
-    QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
-    if (isSelected) {
-        painter->fillRect(option.rect, option.palette.highlight());
-    }
-    QRect paintRect = kisGrowRect(option.rect, -BORDER_WIDTH);
-    painter->setBrush(QBrush(Qt::lightGray));
-    painter->drawText(paintRect, name);
-}
-
 void KisPaletteDelegate::paint(QPainter *painter,
                                const QStyleOptionViewItem &option,
                                const QModelIndex &index) const
@@ -64,8 +34,16 @@ void KisPaletteDelegate::paint(QPainter *painter,
     const bool isSelected = option.state & QStyle::State_Selected;
 
     if (qvariant_cast<bool>(index.data(KisPaletteModel::IsGroupNameRole))) {
-        paintGroupName(painter, option, index, isSelected);
-    } else {
+        // Paint group header
+        QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
+        if (isSelected) {
+            painter->fillRect(option.rect, option.palette.highlight());
+        }
+        QRect paintRect = kisGrowRect(option.rect, -BORDER_WIDTH);
+        painter->setBrush(QBrush(Qt::lightGray));
+        painter->drawText(paintRect, name);
+    }
+    else {
         QRect paintRect = option.rect;
         if (isSelected) {
             painter->fillRect(option.rect, option.palette.highlight());
@@ -84,7 +62,18 @@ void KisPaletteDelegate::paint(QPainter *painter,
 
         QString name = qvariant_cast<QString>(index.data(Qt::DisplayRole));
         if (!m_crossedKeyword.isNull() && name.toLower().contains(m_crossedKeyword)) {
-            paintCrossedLine(option, painter);
+            // paint crossed line
+
+            QRect crossRect = kisGrowRect(option.rect, -qBound(2, option.rect.width() / 6, 4));
+
+            painter->save();
+            painter->setRenderHint(QPainter::Antialiasing, true);
+            painter->setPen(QPen(Qt::white, 2.5));
+            painter->drawLine(crossRect.topLeft(), crossRect.bottomRight());
+            painter->setPen(QPen(Qt::red, 1.0));
+            painter->drawLine(crossRect.topLeft(), crossRect.bottomRight());
+            painter->restore();
+
         }
     }
 

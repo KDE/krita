@@ -1,6 +1,6 @@
 /*
  *  SPDX-FileCopyrightText: 2016 Dmitry Kazakov <dimula73@gmail.com>
- *
+ *  SPDX-FileCopyrightText: 2022 Halla Rempt <halla@valdyas.org>
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
@@ -39,12 +39,11 @@ int KisPaletteView::MININUM_ROW_HEIGHT = 10;
 struct KisPaletteView::Private
 {
     QPointer<KisPaletteModel> model;
-    bool allowPaletteModification {false}; // if modification is allowed from this widget
 };
 
 KisPaletteView::KisPaletteView(QWidget *parent)
     : QTableView(parent)
-    , m_d(new Private)
+    , d(new Private)
 {
     setItemDelegate(new KisPaletteDelegate(this));
 
@@ -106,7 +105,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     QComboBox *cmbGroups = new QComboBox;
     QString defaultGroupName = i18nc("Name for default swatch group", "Default");
     cmbGroups->addItem(defaultGroupName);
-    cmbGroups->addItems(m_d->model->colorSet()->getGroupNames());
+    cmbGroups->addItems(d->model->colorSet()->swatchGroupNames());
     QLineEdit *lnIDName = new QLineEdit;
     QLineEdit *lnName = new QLineEdit;
     KisColorButton *bnColor = new KisColorButton;
@@ -118,8 +117,8 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
     editableItems->addRow(i18nc("Color as the Color of a Swatch in a Palette", "Color:"), bnColor);
     editableItems->addRow(i18n("Spot color:"), chkSpot);
     cmbGroups->setCurrentIndex(0);
-    lnName->setText(i18nc("Prefix of a color swatch default name, as in Color 1","Color")+" " + QString::number(m_d->model->colorSet()->colorCount()+1));
-    lnIDName->setText(QString::number(m_d->model->colorSet()->colorCount() + 1));
+    lnName->setText(i18nc("Prefix of a color swatch default name, as in Color 1","Color")+" " + QString::number(d->model->colorSet()->colorCount()+1));
+    lnIDName->setText(QString::number(d->model->colorSet()->colorCount() + 1));
     bnColor->setColor(color);
     chkSpot->setChecked(false);
 
@@ -133,7 +132,7 @@ bool KisPaletteView::addEntryWithDialog(KoColor color)
         newEntry.setName(lnName->text());
         newEntry.setId(lnIDName->text());
         newEntry.setSpotColor(chkSpot->isChecked());
-        m_d->model->addEntry(newEntry, groupName);
+        d->model->addSwatch(newEntry, groupName);
         saveModification();
         return true;
     }
@@ -147,13 +146,11 @@ bool KisPaletteView::addGroupWithDialog()
     dialog.setWindowTitle(i18nc("@title:dialog","Add a new group"));
     QFormLayout *editableItems = new QFormLayout(dialog.mainWidget());
     QLineEdit *lnName = new QLineEdit();
-    lnName->setText(i18nc("Part of default name for a new group", "Color Group")+""+QString::number(m_d->model->colorSet()->getGroupNames().size()+1));
+    lnName->setText(i18nc("Part of default name for a new group", "Color Group")+""+QString::number(d->model->colorSet()->swatchGroupNames().size()+1));
     editableItems->addRow(i18nc("Name for a group", "Name"), lnName);
 
     if (dialog.exec() == KoDialog::Accepted) {
-        KisSwatchGroup group;
-        group.setName(lnName->text());
-        m_d->model->addGroup(group);
+        d->model->addGroup(lnName->text());
         saveModification();
         return true;
     }
@@ -173,7 +170,7 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
         if (dialog.exec() != KoDialog::Accepted) { return false; }
         keepColors = chkKeep->isChecked();
     }
-    m_d->model->removeEntry(index, keepColors);
+    d->model->removeSwatch(index, keepColors);
 
     saveModification();
 
@@ -182,25 +179,25 @@ bool KisPaletteView::removeEntryWithDialog(QModelIndex index)
 
 void KisPaletteView::selectClosestColor(const KoColor &color)
 {
-    KoColorSetSP color_set = m_d->model->colorSet();
+    KoColorSetSP color_set = d->model->colorSet();
     if (!color_set) {
         return;
     }
     //also don't select if the color is the same as the current selection
-    if (m_d->model->getEntry(currentIndex()).color() == color) {
+    if (d->model->getSwatch(currentIndex()).color() == color) {
         return;
     }
 
     selectionModel()->clearSelection();
-    QModelIndex index = m_d->model->indexForClosest(color);
+    QModelIndex index = d->model->indexForClosest(color);
 
     selectionModel()->setCurrentIndex(index, QItemSelectionModel::Select);
 }
 
 const KoColor KisPaletteView::closestColor(const KoColor &color) const
 {
-    QModelIndex index = m_d->model->indexForClosest(color);
-    KisSwatch swatch = m_d->model->getEntry(index);
+    QModelIndex index = d->model->indexForClosest(color);
+    KisSwatch swatch = d->model->getSwatch(index);
     return swatch.color();
 }
 
@@ -211,10 +208,12 @@ void KisPaletteView::slotFGColorChanged(const KoColor &color)
 
 void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 {
-    if (m_d->model) {
-        disconnect(m_d->model, 0, this, 0);
+    qDebug() << d->model << model;
+
+    if (d->model) {
+        disconnect(d->model, 0, this, 0);
     }
-    m_d->model = model;
+    d->model = model;
     setModel(model);
     slotAdditionalGuiUpdate();
 
@@ -224,12 +223,11 @@ void KisPaletteView::setPaletteModel(KisPaletteModel *model)
 
 KisPaletteModel* KisPaletteView::paletteModel() const
 {
-    return m_d->model;
+    return d->model;
 }
 
 void KisPaletteView::setAllowModification(bool allow)
 {
-    m_d->allowPaletteModification = allow;
     setAcceptDrops(allow);
 }
 
@@ -248,7 +246,7 @@ void KisPaletteView::resizeRows(int newSize)
 void KisPaletteView::saveModification()
 {
     //qDebug() << "saving modification in palette view" << m_d->model->colorSet()->filename() << m_d->model->colorSet()->storageLocation();
-    KisResourceUserOperations::updateResourceWithUserInput(this, m_d->model->colorSet());
+    KisResourceUserOperations::updateResourceWithUserInput(this, d->model->colorSet());
 }
 
 void KisPaletteView::removeSelectedEntry()
@@ -256,18 +254,32 @@ void KisPaletteView::removeSelectedEntry()
     if (selectedIndexes().size() <= 0) {
         return;
     }
-    m_d->model->removeEntry(currentIndex());
+    d->model->removeSwatch(currentIndex());
 }
 
 void KisPaletteView::slotAdditionalGuiUpdate()
 {
+    if (!d->model->colorSet()) return;
+
     clearSpans();
     resizeRows(verticalHeader()->defaultSectionSize());
-    for (int groupNameRowNumber : m_d->model->m_rowGroupNameMap.keys()) {
-        if (groupNameRowNumber == -1) { continue; }
-        setSpan(groupNameRowNumber, 0, 1, m_d->model->columnCount());
-        setRowHeight(groupNameRowNumber, fontMetrics().lineSpacing() + 6);
-        verticalHeader()->resizeSection(groupNameRowNumber, fontMetrics().lineSpacing() + 6);
+
+//    int row = -1;
+
+    for (const QString &groupName : d->model->colorSet()->swatchGroupNames()) {
+        if (groupName.isEmpty()) continue;
+
+//        KisSwatchGroupSP group = d->model->colorSet()->getGroup(groupName);
+//        row += group->rowCount() + 1;
+//        setSpan(row, 0, 1, d->model->columnCount());
+//        setRowHeight(row, fontMetrics().lineSpacing() + 6);
+//        verticalHeader()->resizeSection(row, fontMetrics().lineSpacing() + 6);
+
+
+        int rowNumber = d->model->colorSet()->startRowForGroup(groupName);
+        setSpan(rowNumber, 0, 1, d->model->columnCount());
+        setRowHeight(rowNumber, fontMetrics().lineSpacing() + 6);
+        verticalHeader()->resizeSection(rowNumber, fontMetrics().lineSpacing() + 6);
     }
     emit sigPaletteUpdatedFromModel();
 }
@@ -279,7 +291,7 @@ void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
     const bool isGroupName = newCurrent.data(KisPaletteModel::IsGroupNameRole).toBool();
     const bool isCheckSlot = newCurrent.data(KisPaletteModel::CheckSlotRole).toBool();
 
-    const KisSwatch newEntry = m_d->model->getEntry(newCurrent);
+    const KisSwatch newEntry = d->model->getSwatch(newCurrent);
 
     emit sigIndexSelected(newCurrent);
     if (isGroupName) {
@@ -293,6 +305,7 @@ void KisPaletteView::slotCurrentSelectionChanged(const QModelIndex &newCurrent)
 
 void KisPaletteView::setDisplayRenderer(const KoColorDisplayRendererInterface *displayRenderer)
 {
-    Q_ASSERT(m_d->model);
-    m_d->model->setDisplayRenderer(displayRenderer);
+    Q_ASSERT(d->model);
+    d->model->setDisplayRenderer(displayRenderer);
 }
+

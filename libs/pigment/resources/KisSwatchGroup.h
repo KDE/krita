@@ -1,10 +1,9 @@
 /*  This file is part of the KDE project
-    SPDX-FileCopyrightText: 2005 Boudewijn Rempt <boud@valdyas.org>
-    SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
-    SPDX-FileCopyrightText: 2018 Michael Zhou <simerixh@gmail.com>
-
-    SPDX-License-Identifier: LGPL-2.1-or-later
-
+ *
+ *  SPDX-FileCopyrightText: 2005..2022 Halla Rempt <halla@valdyas.org>
+ *  SPDX-FileCopyrightText: 2016 L. E. Segovia <amy@amyspark.me>
+ *  SPDX-FileCopyrightText: 2018 Michael Zhou <simerixh@gmail.com>
+ *  SPDX-License-Identifier: LGPL-2.1-or-later
  */
 
 #ifndef KISSWATCHGROUP_H
@@ -14,6 +13,7 @@
 
 #include "kritapigment_export.h"
 
+#include <QSharedPointer>
 #include <QVector>
 #include <QList>
 #include <QMap>
@@ -39,12 +39,14 @@ public /* struct */:
     };
 
 public:
-    KisSwatchGroup();
+
+    static int DEFAULT_COLUMN_COUNT;
+    static int DEFAULT_ROW_COUNT;
+
     ~KisSwatchGroup();
     KisSwatchGroup(const KisSwatchGroup &rhs);
-    KisSwatchGroup &operator =(const KisSwatchGroup &rhs);
+    KisSwatchGroup &operator=(const KisSwatchGroup &rhs);
 
-public /* methods */:
     void setName(const QString &name);
     QString name() const;
 
@@ -63,24 +65,17 @@ public /* methods */:
     QList<SwatchInfo> infoList() const;
 
     /**
-     * @brief checkEntry
+     * @brief checkSwatch
      * checks if position @p column and @p row has a valid entry
      * both @p column and @p row start from 0
      * @param column
      * @param row
      * @return true if there is a valid entry at position (column, row)
      */
-    bool checkEntry(int column, int row) const;
+    bool checkSwatchExists(int column, int row) const;
+
     /**
-     * @brief setEntry
-     * sets the entry at position (@p column, @p row) to be @p e
-     * @param e
-     * @param column
-     * @param row
-     */
-    void setEntry(const KisSwatch &e, int column, int row);
-    /**
-     * @brief getEntry
+     * @brief getSwatch
      * used to get the swatch entry at position (@p column, @p row)
      * there is an assertion to make sure that this position isn't empty,
      * so checkEntry(int, int) must be used before this method to ensure
@@ -89,15 +84,41 @@ public /* methods */:
      * @param row
      * @return the swatch entry at position (column, row)
      */
-    KisSwatch getEntry(int column, int row) const;
+    KisSwatch getSwatch(int column, int row) const;
+
+private:
+
+    friend class KoColorSet;
+    friend class AddSwatchCommand;
+    friend class RemoveGroupCommand;
+    friend class RemoveSwatchCommand;
+    friend class TestKisSwatchGroup;
+    friend class AddGroupCommand;
+    friend class ClearCommand;
+
+    // Hidden, you're supposed to go through KoColorSet or KisPaletteModel
+    KisSwatchGroup();
+
+    friend class KisPaletteEditor; // Ew, gross! Refactor this when you understand what the PaletteEditor does...
+
     /**
-     * @brief removeEntry
+     * @brief setSwatch
+     * sets the entry at position (@p column, @p row) to be @p e
+     * @param e
+     * @param column
+     * @param row
+     */
+    void setSwatch(const KisSwatch &e, int column, int row);
+
+    /**
+     * @brief removeSwatch
      * removes the entry at position (@p column, @p row)
      * @param column
      * @param row
      * @return true if these is an entry at (column, row)
      */
-    bool removeEntry(int column, int row);
+    bool removeSwatch(int column, int row);
+
     /**
      * @brief addEntry
      * adds the entry e to the right of the rightmost entry in the last row
@@ -107,13 +128,21 @@ public /* methods */:
      * when column is set to 0, resize number of columns to default
      * @param e
      */
-    void addEntry(const KisSwatch &e);
+    QPair<int, int> addSwatch(const KisSwatch &e);
 
     void clear();
 
-private /* member variables */:
     struct Private;
     QScopedPointer<Private> d;
 };
+
+inline QDebug operator<<(QDebug dbg, const KisSwatchGroup group)
+{
+    dbg.nospace() << "[Group] Name: " << group.name();
+    return dbg.space();
+}
+
+typedef QSharedPointer<KisSwatchGroup> KisSwatchGroupSP;
+
 
 #endif // KISSWATCHGROUP_H

@@ -49,60 +49,59 @@ public:
      * @param oriName the original name of a group at the creation of the instance
      * @return newest row number of the group
      */
-    int rowNumberOfGroup(const QString &oriName) const;
+    int rowNumberOfGroup(const QString &originalName) const;
+
     /**
      * @brief oldNameFromNewName
      * @param newName the current name of a group
      * @return the name of the group at the creation of the instance
      */
     QString oldNameFromNewName(const QString &newName) const;
-    /**
-     * @brief duplicateExistsFilename
-     * @param filename the name of the file
-     * @param global if this filename is going to be used for a global palette
-     * @return true if the a palette in the resource system that has filename
-     * name already exists else false
-     */
-    bool duplicateExistsFilename(const QString &filename, bool global) const;
-    QString relativePathFromSaveLocation() const;
 
+    /**
+     * @brief rename
+     * @param newName
+     */
     void rename(const QString &newName);
-    void changeFilename(const QString &newName);
-    void changeColCount(int);
+
+    /**
+     * @brief changeColumnCount
+     */
+    void changeColumnCount(int);
 
     /**
      * @brief addGroup
      * @return new group's name if change accepted, empty string if cancelled
      */
     QString addGroup();
+
     /**
      * @brief removeGroup
      * @param name original group name
      * @return true if change accepted, false if cancelled
      */
     bool removeGroup(const QString &name);
+
     /**
      * @brief renameGroup
      * @param oldName
      * @return new name if change accepted, empty string if cancelled
      */
     QString renameGroup(const QString &oldName);
+
     void changeGroupRowCount(const QString &name, int newRowCount);
+
     void setStorageLocation(QString location);
 
     void setEntry(const KoColor &color, const QModelIndex &index);
+
     void removeEntry(const QModelIndex &index);
+
     void modifyEntry(const QModelIndex &index);
+
     void addEntry(const KoColor &color);
 
     bool isModified() const;
-
-    /**
-     * @brief getModifiedGroup
-     * @param originalName name of the group at the creation of the instance
-     * @return the modified group
-     */
-    const KisSwatchGroup &getModifiedGroup(const QString &originalName) const;
 
     /**
      * @brief updatePalette
@@ -111,8 +110,7 @@ public:
     void updatePalette();
 
     /**
-     * @brief savePalette
-     *
+     * @brief saveNewPaletteVersion
      */
     void saveNewPaletteVersion();
 

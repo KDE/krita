@@ -1,36 +1,6 @@
 SET(PREFIX_ext_pyqt "${EXTPREFIX}" )
 
-if (APPLE)
-    SET(Python_EXECUTABLE ${PREFIX_ext_sip}/bin/python3)
-    if(NOT EXISTS "${Python_EXECUTABLE}")
-        message("WARNING: using system python3!")
-        SET(Python_EXECUTABLE python3)
-    endif()
-
-    list(APPEND _PYQT_conf
-        --confirm-license
-        --qmake ${PREFIX_ext_pyqt}/bin/qmake
-        --sip ${PREFIX_ext_pyqt}/bin/sip
-        --sip-incdir ${PREFIX_ext_pyqt}/include
-        --sipdir ${PREFIX_ext_pyqt}/share/sip
-    )
-    ExternalProject_Add( ext_pyqt
-        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL https://files.kde.org/krita/build/dependencies/PyQt5_gpl-5.13.1.tar.gz
-        URL_MD5 c77af2f4e230b0053fd22bc2ece2e6c0
-
-        CONFIGURE_COMMAND ${Python_EXECUTABLE} <SOURCE_DIR>/configure.py ${_PYQT_conf}
-
-        # force single-threaded installation to avoid
-        # race conditions in post-install .py script
-        INSTALL_COMMAND make -j1 install
-
-        BUILD_IN_SOURCE 1
-
-        UPDATE_COMMAND ""
-    )
-
-elseif(UNIX)
+if(UNIX)
     SET(Python_EXECUTABLE ${PREFIX_ext_pyqt}/bin/python3)
     if(NOT EXISTS ${Python_EXECUTABLE})
       message("WARNING: using system python3!")

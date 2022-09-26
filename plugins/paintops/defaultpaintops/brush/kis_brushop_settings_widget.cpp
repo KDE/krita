@@ -21,7 +21,6 @@
 #include <kis_pressure_lightness_strength_option.h>
 #include <kis_pressure_lightness_strength_option_widget.h>
 #include <kis_pressure_hsv_option.h>
-#include <kis_airbrush_option_widget.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
 #include <kis_color_source_option_widget.h>
@@ -40,6 +39,7 @@
 #include "KisMirrorOptionWidget.h"
 #include "KisSharpnessOptionWidget.h"
 #include "KisScatterOptionWidget.h"
+#include "KisAirbrushOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -229,6 +229,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisHueOptionData, lager::automatic_tag> hueOptionData;
     lager::state<KisSaturationOptionData, lager::automatic_tag> saturationOptionData;
     lager::state<KisValueOptionData, lager::automatic_tag> valueOptionData;
+    lager::state<KisAirbrushOptionData, lager::automatic_tag> airbrushOptionData;
     lager::state<KisRateOptionData, lager::automatic_tag> rateOptionData;
 
     lager::state<KisStrengthOptionData, lager::automatic_tag> strengthOptionData;
@@ -290,7 +291,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
                          KisPressureHSVOption::valueMinLabel(),
                          KisPressureHSVOption::valueMaxLabel());
 
-    addPaintOpOption(new KisAirbrushOptionWidget(false));
+    addPaintOpOption(new KisAirbrushOptionWidget2(m_d->airbrushOptionData));
     addPaintOpOptionData(m_d->rateOptionData, KisPaintOpOption::COLOR);
 
     KisPaintActionTypeOption *actionTypeOption = new KisPaintActionTypeOption();

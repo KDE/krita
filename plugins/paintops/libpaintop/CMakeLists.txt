@@ -33,6 +33,9 @@ set(kritalibpaintop_LIB_SRCS
     KisScatterOptionData.cpp
     KisScatterOptionModel.cpp
     KisScatterOptionWidget.cpp
+    KisAirbrushOptionData.cpp
+    KisAirbrushOptionModel.cpp
+    KisAirbrushOptionWidget.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc

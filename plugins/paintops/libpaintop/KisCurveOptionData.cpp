@@ -170,20 +170,25 @@ std::vector<SensorData*> sensors(Data *data)
 
     result.push_back(&data->sensorPressure);
     result.push_back(&data->sensorPressureIn);
+    result.push_back(&data->sensorTangentialPressure);
+
+    result.push_back(&data->sensorDrawingAngle);
     result.push_back(&data->sensorXTilt);
     result.push_back(&data->sensorYTilt);
     result.push_back(&data->sensorTiltDirection);
     result.push_back(&data->sensorTiltElevation);
-    result.push_back(&data->sensorSpeed);
-    result.push_back(&data->sensorDrawingAngle);
     result.push_back(&data->sensorRotation);
-    result.push_back(&data->sensorDistance);
-    result.push_back(&data->sensorTime);
+
     result.push_back(&data->sensorFuzzyPerDab);
     result.push_back(&data->sensorFuzzyPerStroke);
+
+    result.push_back(&data->sensorSpeed);
     result.push_back(&data->sensorFade);
+    result.push_back(&data->sensorDistance);
+    result.push_back(&data->sensorTime);
+
     result.push_back(&data->sensorPerspective);
-    result.push_back(&data->sensorTangentialPressure);
+
 
     return result;
 }

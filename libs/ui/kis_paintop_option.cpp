@@ -159,7 +159,15 @@ KoCanvasResourcesInterfaceSP KisPaintOpOption::canvasResourcesInterface() const
 
 void KisPaintOpOption::setConfigurationPage(QWidget * page)
 {
+    if (m_d->configurationPage && !m_d->checkedCursor.get()) {
+        m_d->configurationPage->setEnabled(true);
+    }
+
     m_d->configurationPage = page;
+
+    if (m_d->configurationPage) {
+        m_d->configurationPage->setEnabled(m_d->checkedCursor.get());
+    }
 }
 
 QWidget* KisPaintOpOption::configurationPage() const

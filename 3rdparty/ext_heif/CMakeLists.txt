@@ -14,37 +14,20 @@ ExternalProject_Add(
 )
 
 if (WIN32)
-    if ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-        ExternalProject_Add(
-            ext_nasm
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/nasm-2.15.05-win64.zip
-            URL_HASH SHA256=f5c93c146f52b4f1664fa3ce6579f961a910e869ab0dae431bd871bdd2584ef2
+    ExternalProject_Add(
+        ext_nasm
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/nasm-2.15.05-win64.zip
+        URL_HASH SHA256=f5c93c146f52b4f1664fa3ce6579f961a910e869ab0dae431bd871bdd2584ef2
 
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
-            CONFIGURE_COMMAND ""
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/ndisasm.exe ${EXTPREFIX_heif}/bin/ndisasm.exe
+        BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 64-bit dependencies
+        CONFIGURE_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
+                COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
+                COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/ndisasm.exe ${EXTPREFIX_heif}/bin/ndisasm.exe
 
-            UPDATE_COMMAND ""
-        )
-    else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-        ExternalProject_Add(
-            ext_nasm
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win32/nasm-2.15.05-win32.zip
-            URL_HASH SHA256=258c7d1076e435511cf2fdf94e2281eadbdb9e3003fd57f356f446e2bce3119e
-
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying nasm 32-bit dependencies
-            CONFIGURE_COMMAND ""
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR>/rdoff ${EXTPREFIX_heif}/bin/rdoff
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/nasm.exe ${EXTPREFIX_heif}/bin/nasm.exe
-                    COMMAND ${CMAKE_COMMAND} -E copy <SOURCE_DIR>/ndisasm.exe ${EXTPREFIX_heif}/bin/ndisasm.exe
-
-            UPDATE_COMMAND ""
-        )
-    endif ("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
+        UPDATE_COMMAND ""
+    )
 else (WIN32)
 ExternalProject_Add(
     ext_nasm

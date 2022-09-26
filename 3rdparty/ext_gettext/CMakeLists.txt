@@ -1,32 +1,17 @@
 SET(PREFIX_ext_gettext "${EXTPREFIX}" )
 if (WIN32)
-    if("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-        ExternalProject_Add(ext_gettext_bin
-        
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-64.zip
-            URL_HASH SHA256=721395c2e057eeed321f0c793311732e57cb4fa30d5708672a13902a69a77d43
+    ExternalProject_Add(ext_gettext_bin
+    
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-64.zip
+        URL_HASH SHA256=721395c2e057eeed321f0c793311732e57cb4fa30d5708672a13902a69a77d43
 
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
-            CONFIGURE_COMMAND ""
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${PREFIX_ext_gettext}
-                    
-            UPDATE_COMMAND ""
-        )
-    else("${CMAKE_SIZEOF_VOID_P}" EQUAL "8")
-            ExternalProject_Add(ext_gettext_bin
-        
-            DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-            URL https://github.com/mlocati/gettext-iconv-windows/releases/download/v0.21-v1.16/gettext0.21-iconv1.16-static-32.zip
-            URL_HASH SHA256=73a1b64a15fff9e6a5dc980d0a69cf3a24bde51bd47091a1b3fef68827ef23a8
-
-            BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 32-bit dependencies
-            CONFIGURE_COMMAND ""
-            INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${PREFIX_ext_gettext}
-
-            UPDATE_COMMAND ""
+        BUILD_COMMAND ${CMAKE_COMMAND} -E echo Deploying gettext 64-bit dependencies
+        CONFIGURE_COMMAND ""
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E copy_directory <SOURCE_DIR> ${PREFIX_ext_gettext}
+                
+        UPDATE_COMMAND ""
     )
-    endif()
     ExternalProject_Add (
         ext_gettext_lib
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

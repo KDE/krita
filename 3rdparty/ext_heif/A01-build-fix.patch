@@ -9,7 +9,7 @@ index 60031df63..7120f9414 100755
 -	    set(ARM_ARGS -fPIC -flax-vector-conversions)
 +        if (MINGW)
 +            set(ARM_ARGS -flax-vector-conversions)
-+        elseif(APPLE AND CMAKE_OSX_ARCHITECTURES)
++        elseif(APPLE)
 +            set(ARM_ARGS -fPIC -flax-vector-conversions -arch ${CMAKE_OSX_ARCHITECTURES})
 +        else()
 +            set(ARM_ARGS -fPIC -flax-vector-conversions)

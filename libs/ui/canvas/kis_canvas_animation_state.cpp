@@ -51,6 +51,33 @@
 
 #include <atomic>
 
+class SingleShotSignal : public QObject {
+    Q_OBJECT
+public:
+    SingleShotSignal(QObject* parent = nullptr)
+        : QObject(parent)
+        , lock(false)
+    {
+    }
+
+    ~SingleShotSignal() {}
+
+public Q_SLOTS:
+    void tryFire() {
+        if (!lock) {
+            lock = true;
+            emit output();
+        }
+    }
+
+Q_SIGNALS:
+    void output();
+
+private:
+    bool lock;
+
+};
+
 qint64 framesToMSec(qreal value, int fps) {
     return qRound(value / fps * 1000.0);
 }
@@ -67,6 +94,7 @@ qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
     return msecToFrames(time, fps) * playbackSpeed;
 }
 
+//=====
 
 /** @brief PlaybackEnvironment (Private)
  * Constructs and deconstructs the necessary viewing conditions when animation playback begins and ends.
@@ -215,11 +243,10 @@ public:
     KisCanvas2 *canvas;
     PlaybackState state;
     QScopedPointer<KisFrameDisplayProxy> displayProxy;
-    QScopedPointer<QFileInfo> media;
-    QScopedPointer<CanvasPlaybackEnvironment> playbackEnvironment; //Sets up canvas / environment for playback
+    QScopedPointer<QFileInfo> media; // TODO: Should we just get this from the document instead?
+    QScopedPointer<CanvasPlaybackEnvironment> playbackEnvironment;
 
     KisSignalCompressor playbackStatisticsCompressor;
-
 };
 
 KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)

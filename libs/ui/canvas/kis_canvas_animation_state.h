@@ -21,17 +21,19 @@
 
 class KisCanvas2;
 
-enum PlaybackState : unsigned int {
+enum PlaybackState {
     STOPPED,
     PAUSED,
     PLAYING
 };
 
 /**
- * @brief The KisAnimationPlayer class is Krita's high-level
- * animation playback and navigation interface.
- * Its main clients are Krita's Timeline and Curves dockers.
- * It makes heavy use of KisImageAnimationInterface.
+ * @brief The KisCanvasAnimationState class stores all of the canvas-specific animation state.
+ *
+ * Krita drives animation using a single KisPlaybackEngine instance (found in KisPart).
+ * However, there is some data that we want/need to store per-canvas (typically per-document).
+ * This might include the frame where playback started, audio volume, or anything else
+ * that we may need to persist between canvas changes.
  */
 class KRITAUI_EXPORT KisCanvasAnimationState : public QObject
 {
@@ -41,18 +43,29 @@ public:
     KisCanvasAnimationState(KisCanvas2 *canvas);
     ~KisCanvasAnimationState() override;
 
+    /**
+    * @brief setPlaybackState changes the animation playback state for this canvas.
+    * KisPlaybackEngine should respond to changes in state while canvas is active,
+    * and use appropriate state when a new canvas is made active.
+    */
     void setPlaybackState(PlaybackState state);
     PlaybackState playbackState();
 
+    /**
+     * @brief Get the media file info associated with this canvas, if available.
+     */
     boost::optional<QFileInfo> mediaInfo();
     qreal currentVolume();
 
+    /**
+     * @brief Get the animation frame to return to (for this canvas) when playback is stopped, if available.
+     */
     boost::optional<int> playbackOrigin();
 
     class KisFrameDisplayProxy *displayProxy();
 
 public Q_SLOTS:
-    void showFrame(int frame, bool finalize = false);
+    void showFrame(int frame, bool finalize = false); // TODO: Remove in favor of getting displayProxy and calling on that?
 
 Q_SIGNALS:
     void sigPlaybackStateChanged(PlaybackState state);
@@ -72,34 +85,5 @@ private:
     struct Private;
     QScopedPointer<Private> m_d;
 };
-
-
-class KRITAUI_EXPORT SingleShotSignal : public QObject {
-    Q_OBJECT
-public:
-    SingleShotSignal(QObject* parent = nullptr)
-        : QObject(parent)
-        , lock(false)
-    {
-    }
-
-    ~SingleShotSignal() {}
-
-public Q_SLOTS:
-    void tryFire() {
-        if (!lock) {
-            lock = true;
-            emit output();
-        }
-    }
-
-Q_SIGNALS:
-    void output();
-
-private:
-    bool lock;
-
-};
-
 
 #endif

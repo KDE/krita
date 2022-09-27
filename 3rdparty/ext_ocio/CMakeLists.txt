@@ -9,10 +9,8 @@ endif()
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/445c45b0160d55b3334fb7530c1164e041a0e34f.tar.gz
-    URL_HASH SHA256=7bbc20f5340ee1f59ca649dc0297536912d73ce01d18a967ce7bfe4acaed1820
-
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-Propagate-Android-CMake-configuration-to-external-pr.patch
+    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/refs/tags/v2.1.2.tar.gz
+    URL_HASH SHA256=6c6d153470a7dbe56136073e7abea42fa34d06edc519ffc0a159daf9f9962b0b
 
     INSTALL_DIR ${EXTPREFIX_ocio}
 

@@ -41,7 +41,6 @@ set(kritaglobal_LIB_SRCS
     KisFilteredRollingMean.cpp
     KisBackup.cpp
     KisSampleRectIterator.cpp
-    KisElapsedTimer.cpp
 )
 
 if(WIN32)

@@ -13,11 +13,15 @@
 
 #include <kritaui_export.h>
 
+/**
+ * @brief The SeekOption enum represents additional behaviors associated with seeking to a new frame.
+ * For example, sometimes you want to push audio when seeking, and other times you might want to reload the image without using the cache.
+ * Other optional, uncommon or specialized seeking behaviors might make sense to add here.
+ */
 enum SeekOption {
     SEEK_NONE = 0,
     SEEK_PUSH_AUDIO = 1, // Whether we should be pushing audio or not. Used to prevent double-takes on scrubbing.
-    SEEK_FORCE_RECACHE = 1 << 1,
-    SEEK_FINALIZE = 1 << 2 // Force reload of KisImage to specific frame, ignore caching ability.
+    SEEK_FINALIZE = 1 << 1 // Force reload of KisImage to specific frame, ignore caching ability.
 };
 
 Q_DECLARE_FLAGS(SeekOptionFlags, SeekOption);

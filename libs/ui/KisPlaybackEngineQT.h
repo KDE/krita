@@ -1,3 +1,10 @@
+/* This file is part of the KDE project
+   SPDX-FileCopyrightText: 2022 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+   SPDX-FileCopyrightText: 2022 Eoin O'Neill <eoinoneill1991@gmail.com>
+
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
 #ifndef KISPLAYBACKENGINEQT_H
 #define KISPLAYBACKENGINEQT_H
 
@@ -5,6 +12,13 @@
 
 #include <kritaui_export.h>
 
+/**
+ * @brief The KisPlaybackEngineQT class is an implementation of KisPlaybackEngine
+ * that drives animation playback using simple Qt functionality alone.
+ *
+ * As of right now, this playback engine is used as a fallback for when KisPlaybackEngineMLT is unavailable,
+ * invalid, or otherwise unwanted.
+ */
 class KRITAUI_EXPORT KisPlaybackEngineQT : public KisPlaybackEngine
 {
     Q_OBJECT
@@ -24,6 +38,11 @@ public:
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
 protected Q_SLOTS:
+    /**
+     * @brief throttledQtFrameTimeExpired handles signals from the Qt timer
+     * that drives playback within this engine. Increments frame time,
+     * wrapping within bounds, and communicates with KisFrameDisplayProxy.
+     */
     void throttledQtFrameTimeExpired();
 
 protected:

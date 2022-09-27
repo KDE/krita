@@ -1,3 +1,10 @@
+/* This file is part of the KDE project
+   SPDX-FileCopyrightText: 2022 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+   SPDX-FileCopyrightText: 2022 Eoin O'Neill <eoinoneill1991@gmail.com>
+
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
 #include "KisPlaybackEngineQT.h"
 
 #include "kis_debug.h"
@@ -63,6 +70,8 @@ private:
     KisPlaybackEngineQT* self;
 
 };
+
+// =====
 
 KisPlaybackEngineQT::KisPlaybackEngineQT(QObject *parent)
     : KisPlaybackEngine(parent)

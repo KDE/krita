@@ -1,3 +1,10 @@
+/* This file is part of the KDE project
+   SPDX-FileCopyrightText: 2022 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+   SPDX-FileCopyrightText: 2022 Eoin O'Neill <eoinoneill1991@gmail.com>
+
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
 #include "KisPlaybackEngineMLT.h"
 
 #include <QMap>
@@ -23,7 +30,7 @@ const float SCRUB_AUDIO_SECONDS = 0.25f;
 
 
 /**
- *  This responds to MLT consumer requests for frames. This may
+ *  This static funciton responds to MLT consumer requests for frames. This may
  *  continue to be called even when playback is stopped due to it running
  *  simultaneously in a separate thread.
  */
@@ -34,6 +41,8 @@ static void mltOnConsumerFrameShow(mlt_consumer c, void* p_self, mlt_frame p_fra
     const int position = frame.get_position();
     self->sigChangeActiveCanvasFrame(position);
 }
+
+//=====
 
 struct KisPlaybackEngineMLT::Private {
 
@@ -150,6 +159,8 @@ public:
     bool mute;
 };
 
+//=====
+
 /**
  * @brief The StopAndResumeConsumer struct is used to encapsulate optional
  * stop-and-then-resume behavior of a consumer. Using RAII, we can stop
@@ -222,6 +233,8 @@ public:
 private:
     Private* m_d;
 };
+
+//=====
 
 KisPlaybackEngineMLT::KisPlaybackEngineMLT(QObject *parent)
     : KisPlaybackEngine(parent)

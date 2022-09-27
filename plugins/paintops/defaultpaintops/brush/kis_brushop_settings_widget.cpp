@@ -312,12 +312,12 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOptionData(m_d->maskingRatioOptionData, KisPaintOpOption::MASKING_BRUSH);
     addPaintOpOptionData(m_d->maskingRotationOptionData, KisPaintOpOption::MASKING_BRUSH, i18n("-180°"), i18n("180°"));
 
-    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisMirrorOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix,
-                                                                                lager::cursor<KisMirrorOptionData>(m_d->maskingMirrorOptionData)),
+    addPaintOpOption(new KisMirrorOptionWidget(
+                         lager::cursor<KisMirrorOptionData>(m_d->maskingMirrorOptionData)),
                      KisPaintOpOption::MASKING_BRUSH);
 
-    addPaintOpOption(new KisPrefixedPaintOpOptionWrapper<KisScatterOptionWidget>(KisPaintOpUtils::MaskingBrushPresetPrefix,
-                                                                                lager::cursor<KisScatterOptionData>(m_d->maskingScatterOptionData)),
+    addPaintOpOption(new KisScatterOptionWidget(
+                         lager::cursor<KisScatterOptionData>(m_d->maskingScatterOptionData)),
                      KisPaintOpOption::MASKING_BRUSH);
 }
 

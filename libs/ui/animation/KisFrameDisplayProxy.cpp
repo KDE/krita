@@ -40,11 +40,6 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
 
 KisFrameDisplayProxy::~KisFrameDisplayProxy()
 {
-
-//    bool needsRegeneration = isFrameCached(m_d->activeFrameIndex) && !isFrameCached(prevFrame);
-
-//    bool usePreview = m_d->scrubInProgress && !needsRegeneration;
-//    scrubTo(m_d->activeFrameIndex, usePreview);
 }
 
 bool KisFrameDisplayProxy::displayFrame(int frame, bool finalize)

@@ -160,7 +160,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="spinCaptureInterval">
+             <widget class="AdaptiveDoubleSpinBox" name="spinCaptureInterval">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -173,17 +173,32 @@
                 <height>0</height>
                </size>
               </property>
+              <property name="correctionMode">
+               <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+              </property>
               <property name="keyboardTracking">
                <bool>false</bool>
               </property>
               <property name="suffix">
                <string comment="Contraction of &quot;second&quot; for interval"> sec.</string>
               </property>
-              <property name="minimum">
+              <property name="decimals">
                <number>1</number>
               </property>
+              <property name="minimum">
+               <double>0.100000000000000</double>
+              </property>
               <property name="value">
-               <number>1</number>
+               <double>1.000000000000000</double>
+              </property>
+              <property name="smallStep" stdset="0">
+               <double>0.100000000000000</double>
+              </property>
+              <property name="largeStep" stdset="0">
+               <double>1.000000000000000</double>
+              </property>
+              <property name="switchValue" stdset="0">
+               <double>1.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -392,6 +407,11 @@ Only &quot;RGB/Alpha 8-bit&quot; is supported.</string>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AdaptiveDoubleSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>AdaptiveDoubleSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

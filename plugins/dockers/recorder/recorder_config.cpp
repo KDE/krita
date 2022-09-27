@@ -46,12 +46,12 @@ void RecorderConfig::setSnapshotDirectory(const QString &value)
 }
 
 
-int RecorderConfig::captureInterval() const
+double RecorderConfig::captureInterval() const
 {
-    return config->readEntry(keyCaptureInterval, 1);
+    return config->readEntry(keyCaptureInterval, 1.);
 }
 
-void RecorderConfig::setCaptureInterval(int value)
+void RecorderConfig::setCaptureInterval(double value)
 {
     config->writeEntry(keyCaptureInterval, value);
 }

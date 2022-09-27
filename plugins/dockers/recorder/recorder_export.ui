@@ -11,7 +11,7 @@
     <x>0</x>
     <y>0</y>
     <width>462</width>
-    <height>433</height>
+    <height>374</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -86,208 +86,6 @@
          <property name="rightMargin">
           <number>9</number>
          </property>
-         <item row="8" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,0">
-           <item>
-            <spacer name="horizontalSpacer_12">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Preferred</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>13</width>
-               <height>13</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkResize">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Resize:</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="11" column="1">
-          <widget class="QComboBox" name="comboProfile">
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="0">
-          <widget class="QLabel" name="labelExportTo">
-           <property name="text">
-            <string>Video location:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editVideoFilePath</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0" alignment="Qt::AlignRight">
-          <widget class="QLabel" name="labelHoldFirstFrameSec">
-           <property name="text">
-            <string>Duration:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="labelFfmpegLocation">
-           <property name="text">
-            <string>FFmpeg:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>editFfmpegPath</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="2">
-          <widget class="QPushButton" name="buttonBrowseExport">
-           <property name="toolTip">
-            <string>Select a file location for the exported timelapse video</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="folder">
-             <normaloff>.</normaloff>.</iconset>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="labelResolution">
-           <property name="text">
-            <string>Render as:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>comboProfile</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="1">
-          <widget class="QLineEdit" name="editVideoFilePath">
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="readOnly">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="labelFpsInput">
-           <property name="toolTip">
-            <string>The speed of reading the input stream.
-For example, to make your timelapse twice faster, the Input FPS should be twice larger of the Video FPS.</string>
-           </property>
-           <property name="text">
-            <string comment="Input FPS of recorded timelapses.">Input FPS:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>spinInputFps</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="2">
-          <widget class="QPushButton" name="buttonEditProfile">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>28</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>28</width>
-             <height>24</height>
-            </size>
-           </property>
-           <property name="toolTip">
-            <string>Edit video profile</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
-          <widget class="QLineEdit" name="editFfmpegPath">
-           <property name="minimumSize">
-            <size>
-             <width>120</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>ffmpeg</string>
-           </property>
-           <property name="readOnly">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0" alignment="Qt::AlignRight">
-          <widget class="QCheckBox" name="resultPreviewCheckBox">
-           <property name="toolTip">
-            <string>Prepend a preview to the exported video.
-The preview will show the last frame of the video for the specified duration</string>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::LeftToRight</enum>
-           </property>
-           <property name="text">
-            <string>Enable result preview</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="2">
-          <widget class="QPushButton" name="buttonBrowseFfmpeg">
-           <property name="toolTip">
-            <string>Setup ffmpeg executable location</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="folder">
-             <normaloff>.</normaloff>.</iconset>
-           </property>
-          </widget>
-         </item>
          <item row="9" column="0" colspan="3">
           <widget class="Line" name="line">
            <property name="orientation">
@@ -337,40 +135,59 @@ The preview will show the last frame of the video for the specified duration</st
            </item>
           </layout>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="labelFps">
-           <property name="text">
-            <string>Video FPS:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
-           <property name="buddy">
-            <cstring>spinFps</cstring>
+         <item row="11" column="1">
+          <widget class="QComboBox" name="comboProfile">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
            </property>
           </widget>
          </item>
-         <item row="8" column="2">
-          <widget class="QPushButton" name="buttonLockRatio">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="toolTip">
-            <string>Constrain proportions</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="lock">
-             <normaloff>.</normaloff>.</iconset>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-          </widget>
+         <item row="1" column="1">
+          <layout class="QHBoxLayout" name="layoutFps" stretch="0,1">
+           <item>
+            <widget class="QSpinBox" name="spinFps">
+             <property name="minimumSize">
+              <size>
+               <width>90</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>60</number>
+             </property>
+             <property name="value">
+              <number>30</number>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>6</width>
+               <height>6</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
          </item>
-         <item row="3" column="1">
+         <item row="2" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
             <widget class="QSpinBox" name="spinLastFrameSec">
@@ -403,6 +220,195 @@ The preview will show the last frame of the video for the specified duration</st
               </size>
              </property>
             </spacer>
+           </item>
+          </layout>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelFpsInput">
+           <property name="toolTip">
+            <string>The speed of reading the input stream.
+For example, to make your timelapse twice faster, the Input FPS should be twice larger of the Video FPS.</string>
+           </property>
+           <property name="text">
+            <string comment="Input FPS of recorded timelapses.">Input FPS:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>spinInputFps</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="1">
+          <widget class="QLineEdit" name="editVideoFilePath">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="readOnly">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="labelFps">
+           <property name="text">
+            <string>Video FPS:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>spinFps</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="2">
+          <widget class="QPushButton" name="buttonEditProfile">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>28</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>28</width>
+             <height>24</height>
+            </size>
+           </property>
+           <property name="toolTip">
+            <string>Edit video profile</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="QLineEdit" name="editFfmpegPath">
+           <property name="minimumSize">
+            <size>
+             <width>120</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>ffmpeg</string>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="2">
+          <widget class="QPushButton" name="buttonLockRatio">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="toolTip">
+            <string>Constrain proportions</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="lock">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_9">
+           <item>
+            <spacer name="horizontalSpacer_16">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="extendResultCheckBox">
+             <property name="toolTip">
+              <string>Extend the last frame in the exported video by the specified duration</string>
+             </property>
+             <property name="text">
+              <string>Extend result for:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item row="12" column="2">
+          <widget class="QPushButton" name="buttonBrowseExport">
+           <property name="toolTip">
+            <string>Select a file location for the exported timelapse video</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="folder">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
+          <widget class="QLabel" name="labelExportTo">
+           <property name="text">
+            <string>Video location:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>editVideoFilePath</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_11">
+           <item>
+            <spacer name="horizontalSpacer_18">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="resultPreviewCheckBox">
+             <property name="toolTip">
+              <string>Prepend a preview to the exported video.
+The preview will show the last frame of the video for the specified duration</string>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>Enable preview for:</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -512,60 +518,32 @@ The preview will show the last frame of the video for the specified duration</st
            </layout>
           </widget>
          </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="labelHoldLastFrameSec">
-           <property name="toolTip">
-            <string>The added duration for showing the last frame.</string>
-           </property>
+         <item row="11" column="0">
+          <widget class="QLabel" name="labelResolution">
            <property name="text">
-            <string>Duration:</string>
+            <string>Render as:</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
+           <property name="buddy">
+            <cstring>comboProfile</cstring>
+           </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <layout class="QHBoxLayout" name="layoutFps" stretch="0,1">
-           <item>
-            <widget class="QSpinBox" name="spinFps">
-             <property name="minimumSize">
-              <size>
-               <width>90</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <number>1</number>
-             </property>
-             <property name="maximum">
-              <number>60</number>
-             </property>
-             <property name="value">
-              <number>30</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer_11">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Expanding</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>6</width>
-               <height>6</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
+         <item row="10" column="2">
+          <widget class="QPushButton" name="buttonBrowseFfmpeg">
+           <property name="toolTip">
+            <string>Setup ffmpeg executable location</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="folder">
+             <normaloff>.</normaloff>.</iconset>
+           </property>
+          </widget>
          </item>
          <item row="5" column="1">
           <layout class="QHBoxLayout" name="horizontalLayout_7">
@@ -603,15 +581,51 @@ The preview will show the last frame of the video for the specified duration</st
            </item>
           </layout>
          </item>
-         <item row="2" column="0" alignment="Qt::AlignRight">
-          <widget class="QCheckBox" name="extendResultCheckBox">
-           <property name="toolTip">
-            <string>Extend the last frame in the exported video by the specified duration</string>
-           </property>
+         <item row="10" column="0">
+          <widget class="QLabel" name="labelFfmpegLocation">
            <property name="text">
-            <string>Extend end result</string>
+            <string>FFmpeg:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="buddy">
+            <cstring>editFfmpegPath</cstring>
            </property>
           </widget>
+         </item>
+         <item row="8" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,0">
+           <item>
+            <spacer name="horizontalSpacer_12">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>13</width>
+               <height>13</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="checkResize">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Resize:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
@@ -857,19 +871,6 @@ The preview will show the last frame of the video for the specified duration</st
      </widget>
      <widget class="QWidget" name="pageDone">
       <layout class="QGridLayout" name="gridLayout_6">
-       <item row="0" column="1">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>14</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="1" column="1" rowspan="2">
         <layout class="QGridLayout" name="gridLayout_5">
          <property name="horizontalSpacing">
@@ -1014,34 +1015,25 @@ The preview will show the last frame of the video for the specified duration</st
          </property>
         </spacer>
        </item>
-       <item row="2" column="2">
-        <spacer name="horizontalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>39</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="3" column="1">
-        <spacer name="verticalSpacer_4">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>18</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="0" colspan="3">
+       <item row="5" column="0" colspan="3">
         <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="leftMargin">
+          <number>9</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelRenderTimeTitle">
+           <property name="text">
+            <string comment="How long it took to render the video">Render time:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelRenderTime">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
          <item>
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
@@ -1073,6 +1065,52 @@ The preview will show the last frame of the video for the specified duration</st
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="0" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>14</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>39</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="1">
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>18</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

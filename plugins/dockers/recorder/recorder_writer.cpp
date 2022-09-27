@@ -23,6 +23,8 @@
 namespace
 {
 const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform", "KritaShape/KisToolLine" };
+const double lowPerformanceWarningTreshold = 1.25;
+const int lowPerformanceWarningMax = 3;
 }
 
 class RecorderWriter::Private
@@ -38,6 +40,8 @@ public:
     RecorderWriterSettings settings;
     QDir outputDir;
     bool paused = false;
+    int interval = 1;
+    int lowPerformanceWarningCount = 0;
     volatile bool enabled = false;  // enable recording only for active documents
     volatile bool imageModified = false;
     volatile bool skipCapturing = false; // set true on move or transform enabled to prevent tool deactivation
@@ -289,6 +293,9 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     if (d->skipCapturing)
         return;
 
+    QElapsedTimer elapsedTimer;
+    elapsedTimer.start();
+
     d->captureImage();
 
     // downscale image buffer
@@ -303,6 +310,16 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     if (!isFrameWritten) {
         emit frameWriteFailed();
         quit();
+    }
+
+    qint64 elapsed = elapsedTimer.elapsed();
+    if (static_cast<double>(elapsed) > static_cast<double>(d->interval) * lowPerformanceWarningTreshold) {
+        ++d->lowPerformanceWarningCount;
+        if (d->lowPerformanceWarningCount > lowPerformanceWarningMax) {
+            emit lowPerformanceWarning();
+        }
+    } else if (d->lowPerformanceWarningCount != 0) {
+        d->lowPerformanceWarningCount = 0;
     }
 }
 
@@ -335,8 +352,8 @@ void RecorderWriter::run()
     d->imageModified = false;
     emit pausedChanged(d->paused);
 
-    const int interval = qMax(d->settings.captureInterval, 1);
-    const int timerId = startTimer(interval * 1000);
+    d->interval = static_cast<int>(qMax(d->settings.captureInterval, .1) * 1000.);
+    const int timerId = startTimer(d->interval);
 
     QThread::run();
 

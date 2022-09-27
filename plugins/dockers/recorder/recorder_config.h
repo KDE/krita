@@ -22,8 +22,8 @@ public:
     QString snapshotDirectory() const;
     void setSnapshotDirectory(const QString &value);
 
-    int captureInterval() const;
-    void setCaptureInterval(int value);
+    double captureInterval() const;
+    void setCaptureInterval(double value);
 
     RecorderFormat format() const;
     void setFormat(RecorderFormat value);

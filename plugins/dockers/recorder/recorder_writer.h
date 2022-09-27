@@ -22,7 +22,7 @@ struct RecorderWriterSettings
     int quality;
     int compression;
     int resolution;
-    int captureInterval;
+    double captureInterval;
     bool recordIsolateLayerMode;
 };
 
@@ -44,6 +44,7 @@ Q_SIGNALS:
     void pausedChanged(bool paused);
     void prefixChanged(QString prefix);
     void frameWriteFailed();
+    void lowPerformanceWarning();
 
 protected:
     void run() override;

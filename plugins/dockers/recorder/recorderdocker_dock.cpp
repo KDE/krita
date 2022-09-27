@@ -51,7 +51,7 @@ public:
     QString snapshotDirectory;
     QString prefix;
     QString outputDirectory;
-    int captureInterval = 0;
+    double captureInterval = 0.;
     RecorderFormat format = RecorderFormat::JPEG;
     int quality = 0;
     int compression = 0;
@@ -60,7 +60,9 @@ public:
     bool recordAutomatically = false;
 
     QLabel* statusBarLabel;
-    bool isColorSpaceSupported;
+    QLabel* statusBarWarningLabel;
+    bool isColorSpaceSupported = false;
+    QTimer warningTimer;
 
     QMap<QString, bool> enabledIds;
 
@@ -68,9 +70,14 @@ public:
         : q(q_ptr)
         , ui(new Ui::RecorderDocker())
         , statusBarLabel(new QLabel())
-        , isColorSpaceSupported(false)
+        , statusBarWarningLabel(new QLabel())
     {
         updateRecIndicator(false);
+        statusBarWarningLabel->setPixmap(KisIconUtils::loadIcon("warning").pixmap(16, 16));
+        statusBarWarningLabel->hide();
+        warningTimer.setInterval(10000);
+        warningTimer.setSingleShot(true);
+        connect(&warningTimer, SIGNAL(timeout()), q, SLOT(onWarningTimeout()));
     }
 
     void loadSettings()
@@ -192,8 +199,10 @@ public:
         KisStatusBar *statusBar = canvas->viewManager()->statusBar();
         if (isRecording) {
             statusBar->addExtraWidget(statusBarLabel);
+            statusBar->addExtraWidget(statusBarWarningLabel);
         } else {
             statusBar->removeExtraWidget(statusBarLabel);
+            statusBar->removeExtraWidget(statusBarWarningLabel);
         }
     }
 
@@ -203,6 +212,14 @@ public:
         statusBarLabel->setText(QString("<font%1>●</font><font> %2</font>")
                                 .arg(paused ? "" : " color='#da4453'").arg(i18nc("Recording symbol", "REC")));
         statusBarLabel->setToolTip(paused ? i18n("Recorder is paused") : i18n("Recorder is active"));
+    }
+
+    void showWarning(const QString &hint) {
+        if (statusBarWarningLabel->isHidden()) {
+            statusBarWarningLabel->setToolTip(hint);
+            statusBarWarningLabel->show();
+            warningTimer.start();
+        }
     }
 };
 
@@ -242,7 +259,7 @@ RecorderDockerDock::RecorderDockerDock()
 
     connect(d->ui->buttonManageRecordings, SIGNAL(clicked()), this, SLOT(onManageRecordingsButtonClicked()));
     connect(d->ui->buttonBrowse, SIGNAL(clicked()), this, SLOT(onSelectRecordFolderButtonClicked()));
-    connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(int)), this, SLOT(onCaptureIntervalChanged(int)));
+    connect(d->ui->spinCaptureInterval, SIGNAL(valueChanged(double)), this, SLOT(onCaptureIntervalChanged(double)));
     connect(d->ui->comboFormat, SIGNAL(currentIndexChanged(int)), this, SLOT(onFormatChanged(int)));
     connect(d->ui->spinQuality, SIGNAL(valueChanged(int)), this, SLOT(onQualityChanged(int)));
     connect(d->ui->comboResolution, SIGNAL(currentIndexChanged(int)), this, SLOT(onResolutionChanged(int)));
@@ -255,6 +272,7 @@ RecorderDockerDock::RecorderDockerDock()
     connect(&d->writer, SIGNAL(finished()), this, SLOT(onWriterFinished()));
     connect(&d->writer, SIGNAL(pausedChanged(bool)), this, SLOT(onWriterPausedChanged(bool)));
     connect(&d->writer, SIGNAL(frameWriteFailed()), this, SLOT(onWriterFrameWriteFailed()));
+    connect(&d->writer, SIGNAL(lowPerformanceWarning()), this, SLOT(onLowPerformanceWarning()));
 
 
     QScroller *scroller = KisKineticScroller::createPreconfiguredScroller(d->ui->scrollArea);
@@ -406,7 +424,7 @@ void RecorderDockerDock::onAutoRecordToggled(bool checked)
     d->loadSettings();
 }
 
-void RecorderDockerDock::onCaptureIntervalChanged(int interval)
+void RecorderDockerDock::onCaptureIntervalChanged(double interval)
 {
     d->captureInterval = interval;
     RecorderConfig(false).setCaptureInterval(interval);
@@ -463,7 +481,17 @@ void RecorderDockerDock::onWriterPausedChanged(bool paused)
 void RecorderDockerDock::onWriterFrameWriteFailed()
 {
     QMessageBox::warning(this, i18nc("@title:window", "Recorder"),
-        i18n("The recorder has been stopped due to failure while writing a frame. Please check free disk space and start the recorder again."));
+                         i18n("The recorder has been stopped due to failure while writing a frame. Please check free disk space and start the recorder again."));
+}
+
+void RecorderDockerDock::onLowPerformanceWarning()
+{
+    d->showWarning(i18n("Low performance warning. The recorder is not able to write all the frames in time. Try increasing the capture interval."));
+}
+
+void RecorderDockerDock::onWarningTimeout()
+{
+    d->statusBarWarningLabel->hide();
 }
 
 void RecorderDockerDock::slotScrollerStateChanged(QScroller::State state)

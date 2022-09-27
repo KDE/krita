@@ -32,7 +32,7 @@ private Q_SLOTS:
 
     void onRecordIsolateLayerModeToggled(bool checked);
     void onAutoRecordToggled(bool checked);
-    void onCaptureIntervalChanged(int interval);
+    void onCaptureIntervalChanged(double interval);
     void onQualityChanged(int value);
     void onFormatChanged(int format);
     void onResolutionChanged(int resolution);
@@ -45,6 +45,8 @@ private Q_SLOTS:
     void onWriterFinished();
     void onWriterPausedChanged(bool paused);
     void onWriterFrameWriteFailed();
+    void onLowPerformanceWarning();
+    void onWarningTimeout();
 
     void slotScrollerStateChanged(QScroller::State state);
 

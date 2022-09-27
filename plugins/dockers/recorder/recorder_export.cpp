@@ -26,6 +26,7 @@
 #include <QMessageBox>
 #include <QJsonObject>
 #include <QImageReader>
+#include <QElapsedTimer>
 
 #include "kis_debug.h"
 
@@ -70,6 +71,8 @@ public:
 
     QScopedPointer<KisFFMpegWrapper> ffmpeg;
     RecorderDirectoryCleaner *cleaner = nullptr;
+
+    QElapsedTimer elapsedTimer;
 
     Private(RecorderExport *q_ptr)
         : q(q_ptr)
@@ -238,6 +241,7 @@ public:
         ui->labelStatus->setText(i18nc("Status for the export of the video record", "Starting FFmpeg..."));
         ui->buttonCancelExport->setEnabled(false);
         ui->progressExport->setValue(0);
+        elapsedTimer.start();
     }
 
     void cleanupFFMpeg()
@@ -317,10 +321,8 @@ RecorderExport::RecorderExport(QWidget *parent)
     d->ui->buttonShowInFolder->setIcon(KisIconUtils::loadIcon("folder"));
     d->ui->buttonRemoveSnapshots->setIcon(KisIconUtils::loadIcon("edit-delete"));
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageSettings);
-    d->ui->labelHoldLastFrameSec->setVisible(d->ui->extendResultCheckBox->isVisible());
-    d->ui->spinLastFrameSec->setVisible(d->ui->extendResultCheckBox->isVisible());
-    d->ui->labelHoldFirstFrameSec->setVisible(d->ui->resultPreviewCheckBox->isVisible());
-    d->ui->spinFirstFrameSec->setVisible(d->ui->resultPreviewCheckBox->isVisible());
+    d->ui->spinLastFrameSec->setEnabled(d->ui->extendResultCheckBox->isChecked());
+    d->ui->spinFirstFrameSec->setEnabled(d->ui->resultPreviewCheckBox->isChecked());
 
     connect(d->ui->buttonBrowseDirectory, SIGNAL(clicked()), SLOT(onButtonBrowseDirectoryClicked()));
     connect(d->ui->spinInputFps, SIGNAL(valueChanged(int)), SLOT(onSpinInputFpsValueChanged(int)));
@@ -346,10 +348,8 @@ RecorderExport::RecorderExport(QWidget *parent)
     connect(d->ui->buttonShowInFolder, SIGNAL(clicked()), SLOT(onButtonShowInFolderClicked()));
     connect(d->ui->buttonRemoveSnapshots, SIGNAL(clicked()), SLOT(onButtonRemoveSnapshotsClicked()));
     connect(d->ui->buttonRestart, SIGNAL(clicked()), SLOT(onButtonRestartClicked()));
-    connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), d->ui->spinFirstFrameSec, SLOT(setVisible(bool)));
-    connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), d->ui->labelHoldFirstFrameSec, SLOT(setVisible(bool)));
-    connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), d->ui->spinLastFrameSec, SLOT(setVisible(bool)));
-    connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), d->ui->labelHoldLastFrameSec, SLOT(setVisible(bool)));
+    connect(d->ui->resultPreviewCheckBox, SIGNAL(toggled(bool)), d->ui->spinFirstFrameSec, SLOT(setEnabled(bool)));
+    connect(d->ui->extendResultCheckBox, SIGNAL(toggled(bool)), d->ui->spinLastFrameSec, SLOT(setEnabled(bool)));
 
 
     d->ui->editVideoFilePath->installEventFilter(this);
@@ -618,6 +618,8 @@ void RecorderExport::onFFMpegStarted()
 
 void RecorderExport::onFFMpegFinished()
 {
+    quint64 elapsed = d->elapsedTimer.elapsed();
+    d->ui->labelRenderTime->setText(d->formatDuration(elapsed));
     d->ui->stackedWidget->setCurrentIndex(ExportPageIndex::PageDone);
     d->ui->labelVideoPathDone->setText(d->videoFilePath);
     d->cleanupFFMpeg();

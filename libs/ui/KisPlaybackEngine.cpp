@@ -79,12 +79,12 @@ void KisPlaybackEngine::stop()
 
 void KisPlaybackEngine::previousFrame()
 {
-    moveBy(-1);
+    moveActiveFrameBy(-1);
 }
 
 void KisPlaybackEngine::nextFrame()
 {
-    moveBy(1);
+    moveActiveFrameBy(1);
 }
 
 void KisPlaybackEngine::previousKeyframe()
@@ -245,14 +245,14 @@ void KisPlaybackEngine::unsetCanvas()
     m_d->activeCanvas = nullptr;
 }
 
-void KisPlaybackEngine::moveBy(int direction)
+void KisPlaybackEngine::moveActiveFrameBy(int frames)
 {
     if (!m_d->activeCanvas) return;
     KisCanvasAnimationState *animationState = m_d->activeCanvas->animationState();
     KIS_SAFE_ASSERT_RECOVER_RETURN(animationState);
     KisImageAnimationInterface *animInterface = m_d->activeCanvas->image()->animationInterface();
 
-    int frame = animationState->displayProxy()->activeFrame() + direction;
+    int frame = animationState->displayProxy()->activeFrame() + frames;
 
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();

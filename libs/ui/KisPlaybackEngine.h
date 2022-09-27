@@ -1,3 +1,10 @@
+/* This file is part of the KDE project
+   SPDX-FileCopyrightText: 2022 Emmet O'Neill <emmetoneill.pdx@gmail.com>
+   SPDX-FileCopyrightText: 2022 Eoin O'Neill <eoinoneill1991@gmail.com>
+
+   SPDX-License-Identifier: LGPL-2.0-or-later
+*/
+
 #ifndef KISPLAYBACKENGINE_H
 #define KISPLAYBACKENGINE_H
 
@@ -16,6 +23,18 @@ enum SeekOption {
 Q_DECLARE_FLAGS(SeekOptionFlags, SeekOption);
 Q_DECLARE_OPERATORS_FOR_FLAGS(SeekOptionFlags);
 
+
+/** @brief Krita's base animation playback engine for producing image frame changes and associated audio.
+ *
+ *  Krita stores a main playback engine in KisPart (a singleton) to be used by the active document's canvas.
+ *  It can be thought of as being just below the GUI layer of Krita's animation system,
+ *  responding to various GUI events, controlling transport controls (play, stop, next, etc.),
+ *  and generally driving the playback of animation within Krita.
+ *
+ *  It's implemented by KisPlaybackEngineQT and KisPlaybackEngineMLT, one of which is typically selected
+ *  at compile time depending on available dependencies. Specific implementations may or may not support
+ *  certain features (audio, speed, dropping frames, etc.) and have other different characteristics.
+ */
 class KRITAUI_EXPORT KisPlaybackEngine : public QObject, public KoCanvasObserverBase
 {
     Q_OBJECT
@@ -24,6 +43,7 @@ public:
     ~KisPlaybackEngine();
 
 public Q_SLOTS:
+    // Basic transport controls...
     virtual void play();
     virtual void pause();
     virtual void playPause();
@@ -54,9 +74,11 @@ public Q_SLOTS:
     virtual void previousUnfilteredKeyframe();
     virtual void nextUnfilteredKeyframe();
 
+    // Playback speed controls...
     virtual void setPlaybackSpeedPercent(int value) = 0;
     virtual void setPlaybackSpeedNormalized(double value) = 0;
 
+    // Audio controls...
     virtual void setMute(bool val) = 0;
     virtual bool isMute() = 0;
 
@@ -72,7 +94,13 @@ protected Q_SLOTS:
     virtual void unsetCanvas() override;
 
 private:
-    void moveBy(int direction);
+    /**
+     * @brief Move the active frame of the animation player forwards or backwards by some number of frames.
+     * @param The signed number of frames to move. Negative frames move backwards in time (left on a left-to-right system).
+     */
+    void moveActiveFrameBy(int frames);
+
+    // Used by previous/next unfiltered keyframe functions...
     void nextKeyframeWithColor(int color);
     void nextKeyframeWithColor(const QSet<int> &validColors);
     void previousKeyframeWithColor(int color);

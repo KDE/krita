@@ -31,7 +31,6 @@
 #include "kis_pressure_texture_strength_option.h"
 #include <KisMaskingBrushOption.h>
 
-#include <KisPrefixedPaintOpOptionWrapper.h>
 #include <KisPaintopSettingsIds.h>
 #include "kis_brush_option_widget.h"
 #include "KisCurveOptionWidget2.h"

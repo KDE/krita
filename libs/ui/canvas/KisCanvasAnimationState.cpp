@@ -108,7 +108,7 @@ public:
         : QObject(parent)
         , m_originFrame(originFrame)
     {
-        connect(&m_cancelTrigger, SIGNAL(output()), parent, SLOT(stop()));
+        connect(&m_cancelTrigger, SIGNAL(output()), parent, SIGNAL(sigCancelPlayback()));
     }
 
     ~CanvasPlaybackEnvironment() {

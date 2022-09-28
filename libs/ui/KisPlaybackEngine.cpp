@@ -245,8 +245,25 @@ KisCanvas2 *KisPlaybackEngine::activeCanvas() const
 
 void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 {
+    if (m_d->activeCanvas) {
+        KisCanvasAnimationState* animState = m_d->activeCanvas->animationState();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(animState);
+
+        animState->disconnect(this);
+
+    }
+
     KisCanvas2* canvas = dynamic_cast<KisCanvas2*>(p_canvas);
     m_d->activeCanvas = canvas;
+
+    if (m_d->activeCanvas) {
+        KisCanvasAnimationState* animState = m_d->activeCanvas->animationState();
+        KIS_SAFE_ASSERT_RECOVER_RETURN(animState);
+
+        connect(animState, &KisCanvasAnimationState::sigCancelPlayback, this, [this](){
+           stop();
+        });
+    }
 }
 
 void KisPlaybackEngine::unsetCanvas()

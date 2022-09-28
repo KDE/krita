@@ -39,6 +39,7 @@ WGActionManager::WGActionManager(WGColorSelectorDock *parentDock)
     connect(m_colorModel.data(), SIGNAL(sigChannelValuesChanged(QVector4D,quint32)), SLOT(slotChannelValuesChanged()));
     connect(WGConfig::notifier(), SIGNAL(configChanged()), SLOT(slotConfigChanged()));
     connect(WGConfig::notifier(), SIGNAL(selectorConfigChanged()), SLOT(slotSelectorConfigChanged()));
+    slotConfigChanged();
 }
 
 WGActionManager::~WGActionManager()
@@ -148,9 +149,12 @@ void WGActionManager::slotConfigChanged()
 {
     WGConfig::Accessor cfg;
     int popupSize = cfg.get(WGConfig::popupSize);
+    bool proofColors = cfg.get(WGConfig::proofToPaintingColors);
+    m_displayConfig->setPreviewInPaintingCS(proofColors);
 
     if (m_colorSelector) {
         loadColorSelectorSettings(cfg);
+        m_colorSelector->setProofColors(proofColors);
         updateWidgetSize(m_colorSelector, popupSize);
     }
     if (m_shadeSelector) {

@@ -23,7 +23,7 @@ public:
     void setDisplayConverter(const KisDisplayColorConverter *converter);
 
     bool previewInPaintingCS() const { return m_previewInPaintingCS; }
-    void setPreviewInPaintingCS(bool enabled) { m_previewInPaintingCS = enabled; }
+    void setPreviewInPaintingCS(bool enabled);
 Q_SIGNALS:
     void sigDisplayConfigurationChanged();
 private:

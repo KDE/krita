@@ -30,6 +30,14 @@ void WGSelectorDisplayConfig::setDisplayConverter(const KisDisplayColorConverter
     }
 }
 
+void WGSelectorDisplayConfig::setPreviewInPaintingCS(bool enabled)
+{
+    if (enabled != m_previewInPaintingCS) {
+        m_previewInPaintingCS = enabled;
+        emit sigDisplayConfigurationChanged();
+    }
+}
+
 WGSelectorWidgetBase::WGSelectorWidgetBase(WGSelectorDisplayConfigSP displayConfig, QWidget *parent, WGSelectorWidgetBase::UiMode uiMode)
     : QWidget(parent)
     , m_displayConfig(displayConfig)

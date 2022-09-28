@@ -34,6 +34,9 @@ public Q_SLOTS:
     void slotSetChannelValues(const QVector4D &values);
     void resetHandle();
 
+protected Q_SLOTS:
+    void slotDisplayConfigurationChanged();
+
 protected:
     QSize minimumSizeHint() const override;
     void mousePressEvent(QMouseEvent *event) override;

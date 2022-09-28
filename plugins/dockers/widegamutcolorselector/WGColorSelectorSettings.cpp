@@ -98,6 +98,7 @@ void WGColorSelectorSettings::savePreferences() const
     cfg.set(WGConfig::colorSpaceSource,
             static_cast<WGColorSelectorDock::ColorSpaceSource>(m_ui->cmbSelectionColorSpace->currentIndex()));
     cfg.setCustomSelectionColorSpace(m_ui->wdgColorspace->currentColorSpace());
+    cfg.set(WGConfig::proofToPaintingColors, m_ui->chkProofColors->isChecked());
     // Pop-ups
     cfg.set(WGConfig::popupSize, m_ui->sbPopupSize->value());
     cfg.set(WGConfig::popupPatches.orientation, m_ui->rbPopupHorizontal->isChecked() ? Qt::Horizontal : Qt::Vertical);
@@ -163,6 +164,7 @@ void WGColorSelectorSettings::loadPreferencesImpl(bool defaults)
     }
     m_ui->cmbSelectionColorSpace->setCurrentIndex(cfg.get(WGConfig::colorSpaceSource, defaults));
     m_ui->wdgColorspace->setCurrentColorSpace(cfg.customSelectionColorSpace(defaults));
+    m_ui->chkProofColors->setChecked(cfg.get(WGConfig::proofToPaintingColors, defaults));
     // Pop-ups
     m_ui->sbPopupSize->setValue(cfg.get(WGConfig::popupSize, defaults));
     Qt::Orientation patchOrientation = cfg.get(WGConfig::popupPatches.orientation, defaults);

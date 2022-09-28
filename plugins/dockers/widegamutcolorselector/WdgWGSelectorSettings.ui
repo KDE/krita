@@ -178,6 +178,13 @@
            </layout>
           </widget>
          </item>
+         <item row="2" column="1">
+          <widget class="QCheckBox" name="chkProofColors">
+           <property name="text">
+            <string>Proof Colors to Painting Color Space</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
       </layout>

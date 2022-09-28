@@ -83,6 +83,8 @@ public:
      */
     bool autoAdjustExposure() const;
     void setAutoAdjustExposure(bool enabled);
+    bool proofColors() const;
+    void setProofColors(bool enabled);
     /**
      * @brief Set the slider position for slider + square and slider + wheel configurations.
      * @param edge Edge to position the slider; currently only supports LeftEdge and TopEdge

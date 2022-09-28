@@ -30,7 +30,7 @@ struct KisVisualColorSelector::Private
     QList<KisVisualColorSelectorShape*> widgetlist;
     bool acceptTabletEvents {false};
     bool circular {false};
-    //bool isRGBA {false};
+    bool proofColors {false};
     bool initialized {false};
     bool useACSConfig {true};
     bool autoAdjustExposure {true};
@@ -188,6 +188,22 @@ bool KisVisualColorSelector::autoAdjustExposure() const
 void KisVisualColorSelector::setAutoAdjustExposure(bool enabled)
 {
     m_d->autoAdjustExposure = enabled;
+}
+
+bool KisVisualColorSelector::proofColors() const
+{
+    return m_d->proofColors;
+}
+
+void KisVisualColorSelector::setProofColors(bool enabled)
+{
+    if (enabled != m_d->proofColors) {
+        m_d->proofColors = enabled;
+        for (KisVisualColorSelectorShape *shape : qAsConst(m_d->widgetlist)) {
+            shape->forceImageUpdate();
+            shape->update();
+        }
+    }
 }
 
 void KisVisualColorSelector::setSliderPosition(Qt::Edge edge)

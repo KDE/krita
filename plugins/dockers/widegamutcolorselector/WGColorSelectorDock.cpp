@@ -278,6 +278,9 @@ void WGColorSelectorDock::slotConfigurationChanged()
     if (m_CSSource == FixedColorSpace) {
         m_customCS = cfg.customSelectionColorSpace();
     }
+    bool proofColors = cfg.get(WGConfig::proofToPaintingColors);
+    m_selector->setProofColors(proofColors);
+    m_displayConfig->setPreviewInPaintingCS(proofColors);
     m_shadeSelector->updateSettings();
     m_history->updateSettings();
     m_commonColors->updateSettings();
@@ -337,17 +340,16 @@ void WGColorSelectorDock::slotDisplayConfigurationChanged()
     } else if (m_CSSource == FixedColorSpace) {
         selectionCS = m_customCS;
     } else {
-        // TODO: The custom selection color space in Advanced Color Selector config
-        // overrides the "painting" color space, so no independent configuration right now
-        selectionCS = m_canvas->displayColorConverter()->paintingColorSpace();
+        selectionCS = m_canvas->displayColorConverter()->nodeColorSpace();
     }
 
     // TODO: use m_viewManager->canvasResourceProvider()->fgColor();
     KoColor fgColor = m_canvas->resourceManager()->foregroundColor();
     KoColor bgColor = m_canvas->resourceManager()->backgroundColor();
-    // TODO: use painting color space?
-    m_toggle->setForegroundColor(m_canvas->displayColorConverter()->toQColor(fgColor));
-    m_toggle->setBackgroundColor(m_canvas->displayColorConverter()->toQColor(bgColor));
+
+    bool proof = m_displayConfig->previewInPaintingCS();
+    m_toggle->setForegroundColor(displayColorConverter()->toQColor(fgColor, proof));
+    m_toggle->setBackgroundColor(displayColorConverter()->toQColor(bgColor, proof));
     KisVisualColorModelSP activeModel = m_selector->selectorModel();
 
     if (selectionCS && selectionCS != activeModel->colorSpace()) {
@@ -358,7 +360,7 @@ void WGColorSelectorDock::slotDisplayConfigurationChanged()
 
 void WGColorSelectorDock::slotColorSelected(const KoColor &color)
 {
-    QColor displayCol = displayColorConverter()->toQColor(color);
+    QColor displayCol = displayColorConverter()->toQColor(color, m_displayConfig->previewInPaintingCS());
     m_colorTooltip->setCurrentColor(displayCol);
     if (selectingBackground()) {
         m_toggle->setBackgroundColor(displayCol);

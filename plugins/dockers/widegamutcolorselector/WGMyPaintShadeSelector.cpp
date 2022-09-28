@@ -149,7 +149,7 @@ void WGMyPaintShadeSelector::paintEvent(QPaintEvent *)
     gc.bitBlt(QPoint(0,0), m_realCircleBorder, QRect(rect().topLeft(), rect().size()*devicePixelRatioF()));
 
     QPainter painter(this);
-    QImage renderedImage = displayConverter()->toQImage(m_realPixelCache);
+    QImage renderedImage = displayConverter()->toQImage(m_realPixelCache, displayConfiguration()->previewInPaintingCS());
     renderedImage.setDevicePixelRatio(devicePixelRatioF());
 
     painter.drawImage(0, 0, renderedImage);

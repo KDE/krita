@@ -41,6 +41,8 @@ WGShadeSlider::WGShadeSlider(WGSelectorDisplayConfigSP config, QWidget *parent, 
 {
     m_d->selectorModel = model;
     m_d->displayConfig = config;
+    connect(config.data(), &WGSelectorDisplayConfig::sigDisplayConfigurationChanged,
+            this, &WGShadeSlider::slotDisplayConfigurationChanged);
 }
 
 WGShadeSlider::~WGShadeSlider()
@@ -181,6 +183,12 @@ void WGShadeSlider::resetHandle()
     update();
 }
 
+void WGShadeSlider::slotDisplayConfigurationChanged()
+{
+    m_d->imageNeedsUpdate = true;
+    update();
+}
+
 bool WGShadeSlider::adjustHandleValue(const QPointF &widgetPos)
 {
     if (m_d->sliderMode) {
@@ -302,7 +310,8 @@ QImage WGShadeSlider::renderBackground()
             memcpy(dataPtr, c.data(), pixelSize);
         }
 
-        QImage image = m_d->displayConfig->displayConverter()->displayRendererInterface()->convertToQImage(currentCS, raw.data(), deviceWidth, 1);
+        QImage image = m_d->displayConfig->displayConverter()->toQImage(currentCS, raw.data(), {deviceWidth, 1},
+                                                                        m_d->displayConfig->previewInPaintingCS());
         image = image.scaled(QSize(deviceWidth, deviceHeight));
 
         QPainter painter(&image);
@@ -325,7 +334,7 @@ QImage WGShadeSlider::renderBackground()
         for (int i = 0; i < m_d->numPatches; i++) {
             QVector4D values = calculateChannelValues(i);
             KoColor col = m_d->selectorModel->convertChannelValuesToKoColor(values);
-            QColor qCol = m_d->displayConfig->displayConverter()->toQColor(col);
+            QColor qCol = m_d->displayConfig->displayConverter()->toQColor(col, m_d->displayConfig->previewInPaintingCS());
             painter.setBrush(qCol);
             painter.drawRect(patchRect(i));
         }

@@ -68,7 +68,7 @@ public:
     bool insertOtherLayer(int index, int dstRow);
     int activeLayerRow() const;
 
-    bool createFrame(const QModelIndex &dstIndex);
+    bool createFrame(const QModelIndexList &dstIndex);
     bool copyFrame(const QModelIndex &dstIndex);
     void makeClonesUnique(const QModelIndexList &indices);
 

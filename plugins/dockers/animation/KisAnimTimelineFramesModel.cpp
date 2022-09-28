@@ -10,6 +10,7 @@
 #include <QColor>
 #include <QMimeData>
 #include <QPointer>
+#include <QPair>
 #include <KisResourceModel.h>
 
 #include "kis_layer.h"
@@ -853,11 +854,37 @@ int KisAnimTimelineFramesModel::activeLayerRow() const
     return m_d->activeLayerIndex;
 }
 
-bool KisAnimTimelineFramesModel::createFrame(const QModelIndex &dstIndex)
+bool KisAnimTimelineFramesModel::createFrame(const QModelIndexList &dstIndex)
 {
-    if (!dstIndex.isValid()) return false;
+    QList<QPair<int,int>> selectedCells;
 
-    return m_d->addKeyframe(dstIndex.row(), dstIndex.column(), false);
+    Q_FOREACH(const QModelIndex &index, dstIndex){
+        if (!index.isValid()) continue;
+        selectedCells.append(QPair<int,int>(index.row(), index.column()));
+    }
+
+    if (selectedCells.size() == 0) {
+        return false;
+    }
+
+    KUndo2Command *parentCommand = new KUndo2Command(kundo2_i18np("Add blank frame", "Add %1 blank frames", selectedCells.size()));
+
+    Q_FOREACH (auto &cell, selectedCells) {
+        KisNodeDummy *dummy = m_d->converter->dummyFromRow(cell.first);
+        if (!dummy) continue;
+
+        KisNodeSP node = dummy->node();
+        if (!KisAnimUtils::supportsContentFrames(node)) continue;
+
+        KisAnimUtils::createKeyframeCommand(m_d->image, node, KisKeyframeChannel::Raster.id(), cell.second, false, parentCommand);
+    }
+
+
+    KisProcessingApplicator::runSingleCommandStroke(m_d->image, parentCommand,
+                                                    KisStrokeJobData::BARRIER,
+                                                    KisStrokeJobData::EXCLUSIVE);
+
+    return true;
 }
 
 bool KisAnimTimelineFramesModel::copyFrame(const QModelIndex &dstIndex)

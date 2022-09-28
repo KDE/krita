@@ -709,14 +709,15 @@ void KisAnimTimelineFramesView::slotLayerContextMenuRequested(const QPoint &glob
 
 void KisAnimTimelineFramesView::slotAddBlankFrame()
 {
-    QModelIndex index = currentIndex();
-    if (!index.isValid() ||
-        !m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) {
-
-        return;
+    QModelIndexList selectedIndices = calculateSelectionSpan(false);
+    Q_FOREACH(const QModelIndex &index, selectedIndices) {
+        if (!index.isValid() ||
+            !m_d->model->data(index, KisAnimTimelineFramesModel::FrameEditableRole).toBool()) {
+            selectedIndices.removeOne(index);
+        }
     }
 
-    m_d->model->createFrame(index);
+    m_d->model->createFrame(selectedIndices);
 }
 
 void KisAnimTimelineFramesView::slotAddDuplicateFrame()

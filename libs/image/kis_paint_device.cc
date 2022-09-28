@@ -1832,7 +1832,7 @@ QImage KisPaintDevice::createThumbnail(qint32 maxw, qint32 maxh,
                                        qreal oversample, KoColorConversionTransformation::Intent renderingIntent,
                                        KoColorConversionTransformation::ConversionFlags conversionFlags)
 {
-    const QRect deviceExtent = exactBounds();
+    const QRect deviceExtent = extent();
     const QSize thumbnailSize = deviceExtent.size().scaled(maxw, maxh, aspectRatioMode);
     return createThumbnail(thumbnailSize.width(), thumbnailSize.height(),
                            oversample, renderingIntent, conversionFlags);

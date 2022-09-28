@@ -21,6 +21,8 @@ class PAINTOP_EXPORT KisCurveOptionWidget2 : public KisPaintOpOption
 {
     Q_OBJECT
 public:
+    using data_type = KisCurveOptionData;
+
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           lager::reader<bool> enabledLink = lager::make_constant(true));

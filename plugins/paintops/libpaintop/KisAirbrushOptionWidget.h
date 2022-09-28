@@ -10,10 +10,13 @@
 #include <KisAirbrushOptionData.h>
 #include <lager/cursor.hpp>
 
-class PAINTOP_EXPORT KisAirbrushOptionWidget2 : public KisPaintOpOption
+class PAINTOP_EXPORT KisAirbrushOptionWidget : public KisPaintOpOption
 {
 public:
-    KisAirbrushOptionWidget2(lager::cursor<KisAirbrushOptionData> optionData, bool canIgnoreSpacing = true);
+    using data_type = KisAirbrushOptionData;
+
+    KisAirbrushOptionWidget(lager::cursor<KisAirbrushOptionData> optionData, bool canIgnoreSpacing = true);
+    ~KisAirbrushOptionWidget();
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;

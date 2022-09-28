@@ -23,7 +23,6 @@
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_gradient_option.h>
-#include <kis_airbrush_option_widget.h>
 #include <kis_compositeop_option.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include <kis_pressure_rate_option.h>
@@ -33,6 +32,8 @@
 #include "kis_pressure_hsv_option.h"
 #include "kis_colorsmudgeop_settings.h"
 #include "kis_signals_blocker.h"
+#include <KisAirbrushOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent)
@@ -40,6 +41,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent)
                                        KisBrushOptionWidgetFlag::SupportsHSLBrushMode,
                                        parent)
 {
+    namespace kpou = KisPaintOpOptionUtils;
+
     setObjectName("brush option widget");
 
     addPaintOpOption(new KisCompositeOpOption(true));
@@ -74,7 +77,7 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent)
                                               KisPressureHSVOption::saturationMaxLabel()));
     addPaintOpOption(
         new KisCurveOptionWidget(KisPressureHSVOption::createValueOption(), KisPressureHSVOption::valueMinLabel(), KisPressureHSVOption::valueMaxLabel()));
-    addPaintOpOption(new KisAirbrushOptionWidget(false));
+    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
     addPaintOpOption(new KisTextureOption());

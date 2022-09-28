@@ -43,7 +43,7 @@ public:
 };
 
 
-struct KisAirbrushOptionWidget2::Private
+struct KisAirbrushOptionWidget::Private
 {
     Private(lager::cursor<KisAirbrushOptionData> optionData)
         : model(optionData)
@@ -54,7 +54,7 @@ struct KisAirbrushOptionWidget2::Private
 };
 
 
-KisAirbrushOptionWidget2::KisAirbrushOptionWidget2(lager::cursor<KisAirbrushOptionData> optionData, bool canIgnoreSpacing)
+KisAirbrushOptionWidget::KisAirbrushOptionWidget(lager::cursor<KisAirbrushOptionData> optionData, bool canIgnoreSpacing)
     : KisPaintOpOption(i18n("Airbrush"), KisPaintOpOption::COLOR, optionData[&KisAirbrushOptionData::isChecked])
     , m_d(new Private(optionData))
 {
@@ -66,15 +66,19 @@ KisAirbrushOptionWidget2::KisAirbrushOptionWidget2(lager::cursor<KisAirbrushOpti
     connectControl(page->sliderRate, &m_d->model, "airbrushRate");
     connectControl(page->checkBoxIgnoreSpacing, &m_d->model, "ignoreSpacing");
 
-    m_d->model.airbrushOptionData.bind(std::bind(&KisAirbrushOptionWidget2::emitSettingChanged, this));
+    m_d->model.airbrushOptionData.bind(std::bind(&KisAirbrushOptionWidget::emitSettingChanged, this));
 }
 
-void KisAirbrushOptionWidget2::writeOptionSetting(KisPropertiesConfigurationSP setting) const
+KisAirbrushOptionWidget::~KisAirbrushOptionWidget()
+{
+}
+
+void KisAirbrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
     m_d->model.airbrushOptionData->write(setting.data());
 }
 
-void KisAirbrushOptionWidget2::readOptionSetting(const KisPropertiesConfigurationSP setting)
+void KisAirbrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
     KisAirbrushOptionData data = *m_d->model.airbrushOptionData;
     data.read(setting.data());

@@ -13,10 +13,11 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_paintop_settings_widget.h>
 #include <kis_paint_action_type_option.h>
-#include <kis_airbrush_option_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_compositeop_option.h>
+#include <KisAirbrushOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -28,6 +29,8 @@
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::None, parent)
 {
+    namespace kpou = KisPaintOpOptionUtils;
+
     addPaintOpOption(new KisSketchOpOption());
     addPaintOpOption(new KisCompositeOpOption(true));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
@@ -36,7 +39,7 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisAirbrushOptionWidget(false, false));
+    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>(KisAirbrushOptionData(), false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
     KisPaintActionTypeOption *m_paintActionType = new KisPaintActionTypeOption();

@@ -14,10 +14,14 @@
 #include "MyPaintCurveOptionWidget.h"
 #include "MyPaintPaintOpOption.h"
 #include "MyPaintPaintOpSettings.h"
+#include <KisAirbrushOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 
 KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
+    namespace kpou = KisPaintOpOptionUtils;
+
     KisMyPaintOpOption *basicOption = new KisMyPaintOpOption();
     m_baseOption = basicOption;
 
@@ -66,7 +70,6 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                          "100"),
                      KisMyPaintOpOption::BASIC);
 
-
     addPaintOpOption(new KisMyPaintCurveOptionWidget(
                          new KisMyPaintCurveOption(KoID("snap_to_pixel", i18n("Snap To Pixel")), KisPaintOpOption::GENERAL, false, 2, 0, 10),
                          "0",
@@ -80,7 +83,7 @@ KisMyPaintOpSettingsWidget:: KisMyPaintOpSettingsWidget(QWidget* parent)
                                         "100"),
         KisMyPaintOpOption::BASIC);
 
-    addPaintOpOption(new KisAirbrushOptionWidget(false), KisMyPaintOpOption::AIRBRUSH);
+    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>(), KisMyPaintOpOption::AIRBRUSH);
     addPaintOpOption(
         new KisMyPaintCurveOptionWidget(new KisMyPaintCurveOption(KoID("change_color_h", i18n("Change Color H")), KisPaintOpOption::GENERAL, false, 0.0, -2, 2),
                                         "0",

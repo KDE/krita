@@ -290,7 +290,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
                          KisPressureHSVOption::valueMinLabel(),
                          KisPressureHSVOption::valueMaxLabel());
 
-    addPaintOpOption(new KisAirbrushOptionWidget2(m_d->airbrushOptionData));
+    addPaintOpOption(new KisAirbrushOptionWidget(m_d->airbrushOptionData));
     addPaintOpOptionData(m_d->rateOptionData, KisPaintOpOption::COLOR);
 
     KisPaintActionTypeOption *actionTypeOption = new KisPaintActionTypeOption();

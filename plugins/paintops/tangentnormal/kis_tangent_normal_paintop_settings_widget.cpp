@@ -19,7 +19,6 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
-#include <kis_airbrush_option_widget.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include <kis_pressure_rate_option.h>
@@ -27,12 +26,16 @@
 #include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+#include <KisAirbrushOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 
 
 KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent):
     KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
                                      KisBrushOptionWidgetFlag::SupportsHSLBrushMode, parent)
 {
+    namespace kpou = KisPaintOpOptionUtils;
+
     setObjectName("brush option widget");
 
     addPaintOpOption(new KisCompositeOpOption(true));
@@ -49,7 +52,7 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisPressureSharpnessOptionWidget());
     addPaintOpOption(new KisPressureScatterOptionWidget());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
-    addPaintOpOption(new KisAirbrushOptionWidget(false));
+    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisPaintActionTypeOption());
 

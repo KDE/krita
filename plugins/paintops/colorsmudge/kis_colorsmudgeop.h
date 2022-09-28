@@ -24,7 +24,6 @@
 #include <kis_pressure_gradient_option.h>
 #include <kis_pressure_hsv_option.h>
 #include "kis_pressure_paint_thickness_option.h"
-#include <kis_airbrush_option_widget.h>
 
 #include "kis_overlay_mode_option.h"
 #include "kis_rate_option.h"

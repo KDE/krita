@@ -17,7 +17,7 @@
 #include "animation/KisFrameDisplayProxy.h"
 
 #include "config-qtmultimedia.h"
-#include "KisSyncedAudioPlayback.h"
+#include "KisQTMultimediaDrivenPlayback.h"
 
 #include "KisPlaybackEngineQT.h"
 

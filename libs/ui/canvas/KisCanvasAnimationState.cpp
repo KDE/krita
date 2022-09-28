@@ -28,7 +28,6 @@
 #include <QFileInfo>
 #include <QAudioDecoder>
 #include <QThread>
-#include "KisSyncedAudioPlayback.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image_barrier_locker.h"
 #include "kis_layer_utils.h"

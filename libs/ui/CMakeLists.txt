@@ -516,7 +516,7 @@ endif()
         dialogs/KisAsyncAnimationFramesSaveDialog.cpp
         canvas/KisCanvasAnimationState.cpp	
         kis_animation_importer.cpp
-        KisSyncedAudioPlayback.cpp
+        KisQTMultimediaDrivenPlayback.cpp
         KisFrameDataSerializer.cpp
         KisFrameCacheStore.cpp
         KisFrameCacheSwapper.cpp

@@ -2,7 +2,7 @@
  *  SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "KisSyncedAudioPlayback.h"
+#include "KisQTMultimediaDrivenPlayback.h"
 #include "config-qtmultimedia.h"
 
 #ifdef HAVE_QT_MULTIMEDIA

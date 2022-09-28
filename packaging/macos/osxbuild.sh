@@ -90,12 +90,17 @@ export QMAKE_MACOSX_DEPLOYMENT_TARGET=10.13
 export PATH=${KIS_INSTALL_DIR}/bin:$PATH
 export PKG_CONFIG_PATH=${KIS_INSTALL_DIR}/share/pkgconfig:${KIS_INSTALL_DIR}/lib/pkgconfig
 export CMAKE_PREFIX_PATH=${KIS_INSTALL_DIR}
-export C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${C_INCLUDE_PATH}
-export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${CPLUS_INCLUDE_PATH}
 export LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
-# export CPPFLAGS=-I${KIS_INSTALL_DIR}/include
-# export LDFLAGS=-L${KIS_INSTALL_DIR}/lib
 export FRAMEWORK_PATH=${KIS_INSTALL_DIR}/lib/
+
+KIS_LIBRARY_PATH=${KIS_INSTALL_DIR}/lib:/usr/lib:${LIBRARY_PATH}
+KIS_C_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${C_INCLUDE_PATH}
+KIS_CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include:/usr/include:${CPLUS_INCLUDE_PATH}
+# remove trailing colon is include path was empty
+export LIBRARY_PATH=${KIS_LIBRARY_PATH%:}
+export C_INCLUDE_PATH=${KIS_C_INCLUDE_PATH%:}
+export CPLUS_INCLUDE_PATH=${KIS_CPLUS_INCLUDE_PATH%:}
+
 
 # export PYTHONHOME=${KIS_INSTALL_DIR}
 # export PYTHONPATH=${PYTHONPATH}:${KIS_INSTALL_DIR}/lib/Python.framework/Versions/Current/lib/python3.9/site-packages

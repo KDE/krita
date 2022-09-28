@@ -77,21 +77,6 @@ private:
 
 };
 
-qint64 framesToMSec(qreal value, int fps) {
-    return qRound(value / fps * 1000.0);
-}
-
-qreal msecToFrames(qint64 value, int fps) {
-    return qreal(value) * fps / 1000.0;
-}
-
-int framesToScaledTimeMS(qreal frame, int fps, qreal playbackSpeed) {
-    return qRound(framesToMSec(frame, fps) / playbackSpeed);
-}
-
-qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
-    return msecToFrames(time, fps) * playbackSpeed;
-}
 
 //=====
 

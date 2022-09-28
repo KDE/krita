@@ -12,6 +12,34 @@
 
 #include <kritaui_export.h>
 
+
+#include "canvas/KisCanvasAnimationState.h"
+#include <boost/optional.hpp>
+
+
+class PlaybackDriver : public QObject {
+    Q_OBJECT
+public:
+    PlaybackDriver( class KisPlaybackEngineQT* engine, QObject* parent = nullptr );
+    ~PlaybackDriver();
+
+    virtual void setPlaybackState(PlaybackState state) = 0;
+    virtual void setFrame(int frame) {}
+    virtual boost::optional<int> getDesiredFrame() { return boost::none; }
+    virtual void setVolume(qreal volume) {}
+    virtual void setSpeed(qreal speed) {}
+    virtual void setFramerate(int rate) {}
+
+    KisPlaybackEngineQT* engine() { return m_engine; }
+
+Q_SIGNALS:
+    void throttledShowFrame();
+
+private:
+    KisPlaybackEngineQT* m_engine;
+
+};
+
 /**
  * @brief The KisPlaybackEngineQT class is an implementation of KisPlaybackEngine
  * that drives animation playback using simple Qt functionality alone.
@@ -22,6 +50,7 @@
 class KRITAUI_EXPORT KisPlaybackEngineQT : public KisPlaybackEngine
 {
     Q_OBJECT
+
 public:
     explicit KisPlaybackEngineQT(QObject *parent = nullptr);
     ~KisPlaybackEngineQT();
@@ -37,17 +66,25 @@ public:
     virtual bool supportsAudio() override { return false; }
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
+    boost::optional<int64_t> activeFramesPerSecond();
+
 protected Q_SLOTS:
     /**
-     * @brief throttledQtFrameTimeExpired handles signals from the Qt timer
-     * that drives playback within this engine. Increments frame time,
-     * wrapping within bounds, and communicates with KisFrameDisplayProxy.
+     * @brief throttledDriverCallback handles signals from the internal driver
+     * that drives playback within this engine. It will either increment frame time,
+     * wrapping within bounds, and communicate with KisFrameDisplayProxy or use the
+     * driver's desired time to control which frame is visible...
      */
-    void throttledQtFrameTimeExpired();
+
+    void throttledDriverCallback();
+
 
 protected:
     virtual void setCanvas(KoCanvasBase* canvas) override;
     virtual void unsetCanvas() override;
+
+private:
+    void recreateDriver(boost::optional<QFileInfo> file);
 
 private:
     struct Private;

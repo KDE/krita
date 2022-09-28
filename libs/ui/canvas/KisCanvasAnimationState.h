@@ -21,7 +21,7 @@
 
 class KisCanvas2;
 
-enum PlaybackState {
+enum PlaybackState : unsigned int {
     STOPPED,
     PAUSED,
     PLAYING

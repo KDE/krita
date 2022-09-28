@@ -34,7 +34,7 @@
 #include "kis_zoom_button.h"
 #include "kis_icon_utils.h"
 #include "KisAnimUtils.h"
-#include "kis_canvas_animation_state.h"
+#include "KisCanvasAnimationState.h"
 #include "kis_canvas2.h"
 #include "kis_custom_modifiers_catcher.h"
 #include "kis_action.h"

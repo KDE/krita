@@ -6,9 +6,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "kis_canvas_animation_state.h"
+#include "KisCanvasAnimationState.h"
 
-#include "KisElapsedTimer.h"
 #include <QTimer>
 #include <QtMath>
 
@@ -227,7 +226,8 @@ private:
     KisTimeSpan m_playbackRange;
 };
 
-#include "kis_canvas_animation_state.moc"
+// Needed for QObject definition outside of header file.
+#include "KisCanvasAnimationState.moc"
 
 struct KisCanvasAnimationState::Private
 {

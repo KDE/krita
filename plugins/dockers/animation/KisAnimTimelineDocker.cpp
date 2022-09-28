@@ -28,7 +28,7 @@
 #include "kis_shape_controller.h"
 #include "kis_action.h"
 #include "kis_action_manager.h"
-#include "kis_canvas_animation_state.h"
+#include "KisCanvasAnimationState.h"
 #include "animation/KisFrameDisplayProxy.h"
 #include "KisAnimUtils.h"
 #include "kis_image_config.h"

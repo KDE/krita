@@ -21,7 +21,7 @@
 #include "KisAnimCurvesChannelsModel.h"
 #include "KisAnimCurvesChannelDelegate.h"
 
-#include "kis_canvas_animation_state.h"
+#include "KisCanvasAnimationState.h"
 #include "animation/KisFrameDisplayProxy.h"
 #include "kis_keyframe_channel.h"
 

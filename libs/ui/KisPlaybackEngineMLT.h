@@ -5,7 +5,7 @@
    SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-ifndef KISPLAYBACKENGINEMLT_H
+#ifndef KISPLAYBACKENGINEMLT_H
 #define KISPLAYBACKENGINEMLT_H
 
 #include <QObject>

@@ -66,7 +66,7 @@
 #include "kis_grid_config.h"
 #include "KisMainWindow.h"
 
-#include "kis_canvas_animation_state.h"
+#include "KisCanvasAnimationState.h"
 #include "kis_animation_frame_cache.h"
 #include "opengl/kis_opengl_canvas2.h"
 #include "opengl/kis_opengl.h"

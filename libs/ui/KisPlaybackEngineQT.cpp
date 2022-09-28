@@ -9,7 +9,7 @@
 
 #include "kis_debug.h"
 #include "kis_canvas2.h"
-#include "kis_canvas_animation_state.h"
+#include "KisCanvasAnimationState.h"
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 

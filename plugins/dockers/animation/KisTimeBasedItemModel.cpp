@@ -10,7 +10,7 @@
 #include <kis_config.h>
 
 #include "kis_animation_frame_cache.h"
-#include "kis_canvas_animation_state.h"
+#include "KisCanvasAnimationState.h"
 #include "animation/KisFrameDisplayProxy.h"
 #include "kis_signal_compressor_with_param.h"
 #include "kis_image.h"

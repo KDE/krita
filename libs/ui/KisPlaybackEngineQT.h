@@ -75,7 +75,6 @@ protected Q_SLOTS:
      * wrapping within bounds, and communicate with KisFrameDisplayProxy or use the
      * driver's desired time to control which frame is visible...
      */
-
     void throttledDriverCallback();
 
 

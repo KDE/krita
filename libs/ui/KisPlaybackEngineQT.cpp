@@ -16,99 +16,12 @@
 #include <QTimer>
 #include "animation/KisFrameDisplayProxy.h"
 
-
-
+#include "config-qtmultimedia.h"
 #include "KisSyncedAudioPlayback.h"
 
-#include "config-qtmultimedia.h"
 #include "KisPlaybackEngineQT.h"
 
-#ifdef HAVE_QT_MULTIMEDIA
-#include <QtMultimedia/QMediaPlayer>
-//TODO find nicer way to encapsulate these macros so that "mocked" QMediaPlayer is isolated from PlaybackEngineQT
-#else
-class QIODevice;
-
-#include <QUrl>
-
-namespace {
-
-    class QMediaPlayer : public QObject {
-        Q_OBJECT
-    public:
-
-    enum Error
-    {
-        NoError,
-        ResourceError,
-        FormatError,
-        NetworkError,
-        AccessDeniedError,
-        ServiceMissingError,
-        MediaIsPlaylist
-    };
-
-    enum State
-    {
-        StoppedState,
-        PlayingState,
-        PausedState
-    };
-
-    State state() const { return StoppedState; }
-
-    void play() {}
-    void stop() {}
-
-    qint64 position() const { return 0; }
-    qreal playbackRate() const { return 1.0; }
-    void setPosition(qint64) {}
-    void setPlaybackRate(qreal) {}
-    void setVolume(int) {}
-    void setMedia(const QUrl&, QIODevice * device = 0) { Q_UNUSED(device);}
-    QString errorString() const { return QString(); }
-
-    Q_SIGNALS:
-    void error(Error value);
-    };
-}
-
-#endif
-
-
-
 #include <QFileInfo>
-
-
-// ====
-
-qint64 framesToMSec(qreal value, int fps) {
-    return qRound((value / fps) * 1000.0);
-}
-
-qreal msecToFrames(qint64 value, int fps) {
-    return qreal(value) * fps / 1000.0;
-}
-
-int framesToScaledTimeMS(qreal frame, int fps, qreal playbackSpeed) {
-    return qRound(framesToMSec(frame, fps) / playbackSpeed);
-}
-
-qreal scaledTimeToFrames(qint64 time, int fps, qreal playbackSpeed) {
-    return msecToFrames(time, fps) * playbackSpeed;
-}
-
-QMediaPlayer::State convertToMediaPlayerState(PlaybackState canvasState) {
-    switch(canvasState) {
-        case PLAYING:
-            return QMediaPlayer::PlayingState;
-        case PAUSED:
-            return QMediaPlayer::PausedState;
-        case STOPPED:
-        default:
-            return QMediaPlayer::StoppedState;
-    }
-}
 
 // ======
 
@@ -123,7 +36,6 @@ PlaybackDriver::PlaybackDriver( KisPlaybackEngineQT* engine, QObject* parent )
 PlaybackDriver::~PlaybackDriver()
 {
 }
-
 
 // ======
 
@@ -190,196 +102,6 @@ void LoopDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qre
 }
 
 // ======
-
-/** @brief Plays media using a QMediaPlayer while looping at a consistent rate behind the scenes.
- * Unlike old QMediaPlayer based solution, this one tries to simplify behavior by forcing
- * our frame display to match the audio position via conversion to frame time. In other words,
- * we let the audio position drive our frame logic. */
-class AudioDrivenPlayback : public PlaybackDriver
-{
-    Q_OBJECT
-public:
-    AudioDrivenPlayback( KisPlaybackEngineQT* engine, QFileInfo fileinfo, QObject* parent = nullptr );
-    ~AudioDrivenPlayback() override;
-
-    virtual void setPlaybackState(PlaybackState state) override;
-    virtual void setFrame(int frame) override;
-    virtual void setFramerate(int) override;
-    virtual boost::optional<int> getDesiredFrame() override;
-    virtual void setVolume(qreal value) override;
-    virtual void setSpeed(qreal speed) override;
-
-Q_SIGNALS:
-    void error(const QString &filename, const QString &message);
-
-
-private Q_SLOTS:
-    void slotOnError();
-    void timerElapsed();
-
-protected:
-    void updatePlaybackLoopInterval(const int &in_fps, const qreal &in_speed);
-
-private:
-    struct Private;
-    const QScopedPointer<Private> m_d;
-};
-
-/**
- * @brief The memory of the last updates recieved from the QMediaPlayer.
- *
- * QMediaPlayer will update us spontaneously on a new position. We need to
- * keep track of the last position if available on each update to determine
- * whether or not we should or should not be updating the playback position
- * on a frame change.
- */
-struct AudioPlaybackMemory {
-    qint64 lastTimeMSec = 0;
-};
-
-struct AudioDrivenPlayback::Private {
-    QMediaPlayer player;
-    QScopedPointer<AudioPlaybackMemory> playbackMemory;
-    QTimer playbackLoop;
-};
-
-
-AudioDrivenPlayback::AudioDrivenPlayback(KisPlaybackEngineQT* engine, QFileInfo fileinfo, QObject* parent )
-    : PlaybackDriver(engine, parent),
-      m_d(new AudioDrivenPlayback::Private)
-{
-
-    connect(&m_d->player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotOnError()));
-    connect(&m_d->playbackLoop, SIGNAL(timeout()), SLOT(timerElapsed()));
-
-    KIS_ASSERT(fileinfo.isFile());
-    QString mimetype = QMimeDatabase().mimeTypeForFile( fileinfo.absoluteFilePath() ).name();
-
-    if (m_d->player.hasSupport(mimetype)) {
-        // Buffer file immediately, do not wait for playback to begin. This should help fix
-        // "lag" caused by loading the file when requesting to play the media.
-        // This might result in small slowdown on initial file loading, but that should beat
-        // the alternative.
-
-        m_d->player.setMedia(QUrl::fromLocalFile(fileinfo.absoluteFilePath()));
-    } else {
-        error(fileinfo.absoluteFilePath(), i18nc("Error callback when file is unsupported by QMediaPlayer. String is followed by file name fed to mediaplayer",
-                                         "QMediaPlayer either does not support this file or is missing the appropriate codecs:"));
-    }
-
-    m_d->player.setVolume(100);
-    m_d->player.setPlaybackRate(1.0);
-
-}
-
-AudioDrivenPlayback::~AudioDrivenPlayback()
-{
-}
-
-void AudioDrivenPlayback::setPlaybackState(PlaybackState newState)
-{
-    if (convertToMediaPlayerState(newState) != m_d->player.state()) {
-        switch(newState) {
-            case PLAYING:
-                m_d->player.play();
-                m_d->playbackLoop.start();
-            break;
-            case PAUSED:
-                m_d->player.pause();
-                m_d->playbackLoop.stop();
-                m_d->playbackMemory.reset();
-            break;
-            case STOPPED:
-                m_d->player.stop();
-                m_d->playbackLoop.stop();
-                m_d->playbackMemory.reset();
-            break;
-        }
-    }
-}
-
-void AudioDrivenPlayback::setFrame(int frame)
-{
-    int framerate = engine()->activeFramesPerSecond().get_value_or(24);
-    qint64 msec = framesToMSec(frame, framerate);
-    m_d->player.setPosition(msec);
-}
-
-void AudioDrivenPlayback::setFramerate(int)
-{
-    updatePlaybackLoopInterval(engine()->activeFramesPerSecond().get_value_or(24), m_d->player.playbackRate());
-}
-
-boost::optional<int> AudioDrivenPlayback::getDesiredFrame()
-{
-     int framerate = engine()->activeFramesPerSecond().get_value_or(24);
-    return msecToFrames(m_d->player.position(), framerate);
-}
-
-void AudioDrivenPlayback::setVolume(qreal value)
-{
-    m_d->player.setVolume(qRound(100.0 * value));
-}
-
-void AudioDrivenPlayback::setSpeed(qreal value)
-{
-    if (qFuzzyCompare(value, m_d->player.playbackRate())) return;
-
-
-    const qint64 oldPosition = m_d->player.position();
-    if (m_d->player.state() == QMediaPlayer::PlayingState) {
-        m_d->player.stop();
-        m_d->player.setPlaybackRate(value);
-        m_d->player.setPosition(oldPosition);
-        m_d->player.play();
-    } else if (m_d->player.state() == QMediaPlayer::PausedState) {
-        m_d->player.stop();
-        m_d->player.setPlaybackRate(value);
-        m_d->player.setPosition(oldPosition);
-    } else {
-        m_d->player.setPlaybackRate(value);
-    }
-
-    updatePlaybackLoopInterval(engine()->activeFramesPerSecond().get_value_or(24), m_d->player.playbackRate());
-}
-
-void AudioDrivenPlayback::slotOnError()
-{
-#ifdef HAVE_QT_MULTIMEDIA
-#if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
-    emit error(m_d->player.media().request().url().toLocalFile(), m_d->player.errorString());
-#else
-    emit error(m_d->player.media().canonicalUrl().toLocalFile(), m_d->player.errorString());
-#endif
-#endif
-}
-
-void AudioDrivenPlayback::timerElapsed()
-{
-    const int pos = m_d->player.position();
-    const int currentFrame = msecToFrames(pos, engine()->activeFramesPerSecond().get_value_or(24));
-
-    bool needsNotify = false;
-    if (!m_d->playbackMemory) {
-        m_d->playbackMemory.reset(new AudioPlaybackMemory);
-        needsNotify = true;
-    } else {
-        const int lastFrame = msecToFrames(m_d->playbackMemory->lastTimeMSec, engine()->activeFramesPerSecond().get_value_or(24));
-        needsNotify = lastFrame != currentFrame;
-    }
-
-    if (needsNotify) {
-        throttledShowFrame();
-    }
-
-    m_d->playbackMemory->lastTimeMSec = pos;
-}
-
-void AudioDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qreal &in_speed) {
-    int loopMS = qRound( 1000.f / (qreal(in_fps) * in_speed));
-    m_d->playbackLoop.setInterval(loopMS);
-}
-
 
 struct KisPlaybackEngineQT::Private {
 public:
@@ -463,7 +185,7 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
-    // If we have an audio playback engine, we will only go to what the audio determines to be the desired frame...
+    // If we have an qtmultimedia playback driver: we will only go to what the audio determines to be the desired frame...
     if (m_d->driver->getDesiredFrame()) {
         const int desiredFrame = m_d->driver->getDesiredFrame().get();
 
@@ -600,11 +322,13 @@ void KisPlaybackEngineQT::recreateDriver(boost::optional<QFileInfo> file)
     if (!activeCanvas())
         return;
 
+    m_d->driver.reset(new LoopDrivenPlayback(this));
+
+#ifdef HAVE_QT_MULTIMEDIA
     if (file) {
         m_d->driver.reset(new AudioDrivenPlayback(this, file.get()));
-    } else {
-        m_d->driver.reset(new LoopDrivenPlayback(this));
     }
+#endif
 }
 
 

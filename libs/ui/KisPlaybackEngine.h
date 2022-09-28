@@ -24,8 +24,8 @@ enum SeekOption {
     SEEK_FINALIZE = 1 << 1 // Force reload of KisImage to specific frame, ignore caching ability.
 };
 
-Q_DECLARE_FLAGS(SeekOptionFlags, SeekOption);
-Q_DECLARE_OPERATORS_FOR_FLAGS(SeekOptionFlags);
+Q_DECLARE_FLAGS(SeekOptionFlags, SeekOption)
+Q_DECLARE_OPERATORS_FOR_FLAGS(SeekOptionFlags)
 
 
 /** @brief Krita's base animation playback engine for producing image frame changes and associated audio.

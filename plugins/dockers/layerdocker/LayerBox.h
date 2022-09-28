@@ -31,7 +31,6 @@
 #include "kis_layer_filter_widget.h"
 #include "kis_signal_auto_connection.h"
 #include <QSlider>
-#include <kis_idle_watcher.h>
 
 class QModelIndex;
 
@@ -121,6 +120,7 @@ private Q_SLOTS:
     void slotLayerOpMenuOpened();
     void slotLayerOpMenuClosed();
 
+    void updateThumbnail();
     void updateAvailableLabels();
     void updateLayerFiltering();
 
@@ -129,8 +129,6 @@ private Q_SLOTS:
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
-    void notifyThumbnailDirty();
-    void updateDirtyThumbnails();
 
 Q_SIGNALS:
     void imageChanged();
@@ -177,8 +175,6 @@ private:
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
-    QSet<QModelIndex> m_dirtyThumbnailNodes;
-    KisIdleWatcher m_idleWatcher;
 };
 
 class LayerBoxFactory : public KoDockFactoryBase

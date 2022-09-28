@@ -159,7 +159,7 @@ LayerBox::LayerBox()
     : QDockWidget(i18n("Layers"))
     , m_canvas(0)
     , m_wdgLayerBox(new Ui_WdgLayerBox)
-    , m_thumbnailCompressor(200, KisSignalCompressor::FIRST_INACTIVE)
+    , m_thumbnailCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     , m_treeIndentationCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
@@ -305,8 +305,7 @@ LayerBox::LayerBox()
 
     setEnabled(false);
 
-    connect(&m_idleWatcher, SIGNAL(startedIdleMode()), SLOT(updateDirtyThumbnails()));
-    connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(notifyThumbnailDirty()));
+    connect(&m_thumbnailCompressor, SIGNAL(timeout()), SLOT(updateThumbnail()));
     connect(&m_colorLabelCompressor, SIGNAL(timeout()), SLOT(updateAvailableLabels()));
 
 
@@ -483,7 +482,6 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
         disconnect(m_nodeManager, 0, this, 0);
         disconnect(m_nodeModel, 0, m_nodeManager, 0);
         m_nodeManager->slotSetSelectedNodes(KisNodeList());
-        m_idleWatcher.setTrackedImages({});
     }
 
     m_canvas = dynamic_cast<KisCanvas2*>(canvas);
@@ -492,7 +490,6 @@ void LayerBox::setCanvas(KoCanvasBase *canvas)
         m_image = m_canvas->image();
         emit imageChanged();
         connect(m_image, SIGNAL(sigImageUpdated(QRect)), &m_thumbnailCompressor, SLOT(start()));
-        m_idleWatcher.setTrackedImage(m_image);
 
         KisDocument* doc = static_cast<KisDocument*>(m_canvas->imageView()->document());
         KisShapeController *kritaShapeController =
@@ -1040,17 +1037,9 @@ void LayerBox::slotNodeManagerChangedSelection(const KisNodeList &nodes)
     model->select(selection, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 }
 
-void LayerBox::notifyThumbnailDirty()
+void LayerBox::updateThumbnail()
 {
-    m_dirtyThumbnailNodes.insert(m_wdgLayerBox->listLayers->currentIndex());
-}
-
-void LayerBox::updateDirtyThumbnails()
-{
-    Q_FOREACH (const QModelIndex &index, m_dirtyThumbnailNodes) {
-        m_wdgLayerBox->listLayers->updateNode(index);
-    }
-    m_dirtyThumbnailNodes.clear();
+    m_wdgLayerBox->listLayers->updateNode(m_wdgLayerBox->listLayers->currentIndex());
 }
 
 void LayerBox::slotRenameCurrentNode()

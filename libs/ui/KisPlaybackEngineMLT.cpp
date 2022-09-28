@@ -26,7 +26,7 @@
 
 #include "kis_debug.h"
 
-const float SCRUB_AUDIO_SECONDS = 0.25f;
+const float SCRUB_AUDIO_SECONDS = 0.128f;
 
 
 /**

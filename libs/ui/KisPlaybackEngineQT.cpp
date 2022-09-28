@@ -25,10 +25,7 @@
 
 #ifdef HAVE_QT_MULTIMEDIA
 #include <QtMultimedia/QMediaPlayer>
-
-
 //TODO find nicer way to encapsulate these macros so that "mocked" QMediaPlayer is isolated from PlaybackEngineQT
-
 #else
 class QIODevice;
 
@@ -194,11 +191,15 @@ void LoopDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qre
 
 // ======
 
+/** @brief Plays media using a QMediaPlayer while looping at a consistent rate behind the scenes.
+ * Unlike old QMediaPlayer based solution, this one tries to simplify behavior by forcing
+ * our frame display to match the audio position via conversion to frame time. In other words,
+ * we let the audio position drive our frame logic. */
 class AudioDrivenPlayback : public PlaybackDriver
 {
     Q_OBJECT
 public:
-    AudioDrivenPlayback( KisPlaybackEngineQT* engine, QFileInfo file, QObject* parent = nullptr );
+    AudioDrivenPlayback( KisPlaybackEngineQT* engine, QFileInfo fileinfo, QObject* parent = nullptr );
     ~AudioDrivenPlayback() override;
 
     virtual void setPlaybackState(PlaybackState state) override;
@@ -243,7 +244,7 @@ struct AudioDrivenPlayback::Private {
 };
 
 
-AudioDrivenPlayback::AudioDrivenPlayback(KisPlaybackEngineQT* engine, QFileInfo file, QObject* parent )
+AudioDrivenPlayback::AudioDrivenPlayback(KisPlaybackEngineQT* engine, QFileInfo fileinfo, QObject* parent )
     : PlaybackDriver(engine, parent),
       m_d(new AudioDrivenPlayback::Private)
 {
@@ -251,9 +252,24 @@ AudioDrivenPlayback::AudioDrivenPlayback(KisPlaybackEngineQT* engine, QFileInfo 
     connect(&m_d->player, SIGNAL(error(QMediaPlayer::Error)), SLOT(slotOnError()));
     connect(&m_d->playbackLoop, SIGNAL(timeout()), SLOT(timerElapsed()));
 
-    m_d->player.setMedia(QUrl::fromLocalFile(file.absoluteFilePath()));
+    KIS_ASSERT(fileinfo.isFile());
+    QString mimetype = QMimeDatabase().mimeTypeForFile( fileinfo.absoluteFilePath() ).name();
+
+    if (m_d->player.hasSupport(mimetype)) {
+        // Buffer file immediately, do not wait for playback to begin. This should help fix
+        // "lag" caused by loading the file when requesting to play the media.
+        // This might result in small slowdown on initial file loading, but that should beat
+        // the alternative.
+
+        m_d->player.setMedia(QUrl::fromLocalFile(fileinfo.absoluteFilePath()));
+    } else {
+        error(fileinfo.absoluteFilePath(), i18nc("Error callback when file is unsupported by QMediaPlayer. String is followed by file name fed to mediaplayer",
+                                         "QMediaPlayer either does not support this file or is missing the appropriate codecs:"));
+    }
+
     m_d->player.setVolume(100);
     m_d->player.setPlaybackRate(1.0);
+
 }
 
 AudioDrivenPlayback::~AudioDrivenPlayback()
@@ -309,12 +325,17 @@ void AudioDrivenPlayback::setSpeed(qreal value)
 {
     if (qFuzzyCompare(value, m_d->player.playbackRate())) return;
 
+
+    const qint64 oldPosition = m_d->player.position();
     if (m_d->player.state() == QMediaPlayer::PlayingState) {
-        const qint64 oldPosition = m_d->player.position();
         m_d->player.stop();
         m_d->player.setPlaybackRate(value);
         m_d->player.setPosition(oldPosition);
         m_d->player.play();
+    } else if (m_d->player.state() == QMediaPlayer::PausedState) {
+        m_d->player.stop();
+        m_d->player.setPlaybackRate(value);
+        m_d->player.setPosition(oldPosition);
     } else {
         m_d->player.setPlaybackRate(value);
     }
@@ -327,7 +348,6 @@ void AudioDrivenPlayback::slotOnError()
 #ifdef HAVE_QT_MULTIMEDIA
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
     emit error(m_d->player.media().request().url().toLocalFile(), m_d->player.errorString());
-    ENTER_FUNCTION() << ppVar(m_d->player.media().request().url().toLocalFile()) << ppVar(m_d->player.errorString());
 #else
     emit error(m_d->player.media().canonicalUrl().toLocalFile(), m_d->player.errorString());
 #endif
@@ -350,10 +370,6 @@ void AudioDrivenPlayback::timerElapsed()
 
     if (needsNotify) {
         throttledShowFrame();
-
-        //if (targetFrame != currentFrame) {
-            // TODO keep audio playback within this bounds as well
-        //}
     }
 
     m_d->playbackMemory->lastTimeMSec = pos;
@@ -443,27 +459,31 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     KisImageAnimationInterface *animInterface = activeCanvas()->image()->animationInterface();
     KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface);
 
+    const int currentFrame = displayProxy->activeFrame();
+    const int startFrame = animInterface->activePlaybackRange().start();
+    const int endFrame = animInterface->activePlaybackRange().end();
 
-    // If we have an audio playback engine, we will only go to what we percieve to be the desired frame...
+    // If we have an audio playback engine, we will only go to what the audio determines to be the desired frame...
     if (m_d->driver->getDesiredFrame()) {
-        const int currentFrame = displayProxy->activeFrame();
-        const int targetFrame = m_d->driver->getDesiredFrame().get_value_or(0);
+        const int desiredFrame = m_d->driver->getDesiredFrame().get();
+
+        const int targetFrame = frameWrap(desiredFrame, startFrame, endFrame );
 
         if (currentFrame != targetFrame) {
             displayProxy->displayFrame(targetFrame, false);
         }
 
+        // We've wrapped, let's do whatever correction we can...
+        if (targetFrame != desiredFrame) {
+            m_d->driver->setFrame(targetFrame);
+        }
+
     } else { // Otherwise, we just advance the frame ourselves based on the displayProxy's active frame.
-
-        const int currentFrame = displayProxy->activeFrame();
         int targetFrame = currentFrame + 1;
-
-        const int startFrame = animInterface->activePlaybackRange().start();
-        const int endFrame = animInterface->activePlaybackRange().end();
 
         targetFrame = frameWrap(targetFrame, startFrame, endFrame);
 
-        if (displayProxy->activeFrame() != targetFrame) {
+        if (currentFrame != targetFrame) {
             displayProxy->displayFrame(targetFrame, false);
         }
     }
@@ -527,7 +547,6 @@ void KisPlaybackEngineQT::setCanvas(KoCanvasBase *p_canvas)
         recreateDriver(animationState->mediaInfo());
 
         KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
-
 
         connect(animationState, &KisCanvasAnimationState::sigPlaybackMediaChanged, this, [this]() {
             KisCanvasAnimationState* animationState2 = activeCanvas()->animationState();

@@ -246,7 +246,8 @@ if (APPLE)
                         -DCMAKE_MACOSX_RPATH=ON
                         -DKDE_SKIP_RPATH_SETTINGS=ON
                         -DBUILD_WITH_INSTALL_RPATH=ON
-                        -DAPPLE_SUPPRESS_X11_WARNING=ON)
+                        -DAPPLE_SUPPRESS_X11_WARNING=ON
+                        -DCMAKE_FIND_FRAMEWORK=LAST)
     set(PATCH_COMMAND patch)
 endif ()
 

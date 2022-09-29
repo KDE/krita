@@ -1859,6 +1859,7 @@ QMenu* DefaultTool::popupActionsMenu()
         m_contextMenu->addAction(action("edit_cut"));
         m_contextMenu->addAction(action("edit_copy"));
         m_contextMenu->addAction(action("edit_paste"));
+        m_contextMenu->addAction(action("paste_at"));
 
         m_contextMenu->addSeparator();
 

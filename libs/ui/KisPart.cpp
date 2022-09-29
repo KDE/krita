@@ -94,7 +94,7 @@ public:
         , playbackEngine(nullptr)
     {
 #ifdef HAVE_MLT
-        playbackEngine.reset(new KisPlaybackEngineMLT);
+        playbackEngine.reset(new KisPlaybackEngineQT);
 #else
         playbackEngine.reset(new KisPlaybackEngineQT);
 #endif

@@ -26,6 +26,7 @@ public:
     virtual boost::optional<int> getDesiredFrame() override;
     virtual void setVolume(qreal value) override;
     virtual void setSpeed(qreal speed) override;
+    virtual double speed() override;
 
 Q_SIGNALS:
     void error(const QString &filename, const QString &message);

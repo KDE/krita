@@ -171,6 +171,15 @@ Q_SIGNALS:
      */
     void sigFrameRegenerated(int time);
 
+    /**
+     * @brief sigFrameRegenerationSkipped notified when async frame changes are skipped.
+     * @param time
+     *
+     * Skipping frame regeneration occurs when the contents of the frame are deemed unimportant
+     * and not work updating the canvas for (generally for image-wide hold frames, for example.)
+     */
+    void sigFrameRegenerationSkipped(int time);
+
     void sigFrameCancelled();
     void sigUiTimeChanged(int newTime);
     void sigFramesChanged(const KisTimeSpan &range, const QRect &rect);

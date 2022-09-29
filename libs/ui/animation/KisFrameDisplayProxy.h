@@ -44,6 +44,13 @@ Q_SIGNALS:
     void sigFrameChange();
     void sigFrameDisplayRefreshed();
 
+    /**
+     * @brief sigFrameRefreshSkipped tracks whether asynchronous "slow" refreshes are skipped
+     * due to the frame being the same. In the case of waiting for next frame to render, it is necessary
+     * to let any binding classes know that the there was no need to refresh the display at all.
+     */
+    void sigFrameRefreshSkipped();
+
 private:
     /**
      * @brief Get the active keyframe. This is the latest unique frame that is actually visible.

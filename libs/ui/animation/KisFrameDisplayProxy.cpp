@@ -9,6 +9,7 @@
 
 #include "kis_canvas2.h"
 #include "kis_image_animation_interface.h"
+#include "KisCanvasAnimationState.h"
 
 struct Private {
     Private(KisCanvas2* c)
@@ -25,16 +26,38 @@ KisFrameDisplayProxy::KisFrameDisplayProxy(KisCanvas2* canvas, QObject *parent)
     : QObject(parent)
     , m_d(new Private(canvas))
 {
+    KIS_ASSERT(canvas);
+
     connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFrameRegenerated, this, [this](int frame){
         if (m_d->intendedFrame != frame ) {
-            m_d->intendedFrame = frame;
-            emit sigFrameChange();
+            // We only want to correct our intended frame when the image regenerates
+            // and we're not currently in playback. (In other words, when the state of the image
+            // is determined by external time controls.)
+            KisCanvasAnimationState* state = m_d->canvas->animationState();
+            if (state->playbackState() != PLAYING) {
+                m_d->intendedFrame = frame;
+                emit sigFrameChange();
+            }
         }
 
         if (m_d->displayedFrame != frame) {
             m_d->displayedFrame = frame;
             emit sigFrameDisplayRefreshed();
         }
+    });
+
+
+    connect(m_d->canvas->image()->animationInterface(), &KisImageAnimationInterface::sigFrameRegenerationSkipped, this, [this](int frame){
+       if (m_d->intendedFrame != frame) {
+           //TODO make below a method?
+           KisCanvasAnimationState* state = m_d->canvas->animationState();
+           if (state->playbackState() != PLAYING) {
+               m_d->intendedFrame = frame;
+               emit sigFrameChange();
+           }
+       }
+
+       emit sigFrameRefreshSkipped();
     });
 }
 

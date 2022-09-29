@@ -158,6 +158,11 @@ void AudioDrivenPlayback::setSpeed(qreal value)
     updatePlaybackLoopInterval(engine()->activeFramesPerSecond().get_value_or(24), m_d->player.playbackRate());
 }
 
+double AudioDrivenPlayback::speed()
+{
+    return m_d->player.playbackRate();
+}
+
 void AudioDrivenPlayback::slotOnError()
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)

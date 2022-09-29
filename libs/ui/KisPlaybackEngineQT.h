@@ -24,11 +24,14 @@ public:
     ~PlaybackDriver();
 
     virtual void setPlaybackState(PlaybackState state) = 0;
-    virtual void setFrame(int frame) {}
+    virtual void setFrame(int) {}
     virtual boost::optional<int> getDesiredFrame() { return boost::none; }
-    virtual void setVolume(qreal volume) {}
-    virtual void setSpeed(qreal speed) {}
+    virtual void setVolume(qreal) {}
+    virtual void setSpeed(qreal) {}
+    virtual double speed() = 0;
     virtual void setFramerate(int rate) {}
+    virtual bool dropFrames() { return true; }
+    virtual void setDropFrames(bool) {}
 
     KisPlaybackEngineQT* engine() { return m_engine; }
 
@@ -37,9 +40,10 @@ Q_SIGNALS:
 
 private:
     KisPlaybackEngineQT* m_engine;
+    QElapsedTimer time;
+    int m_measureRemainder = 0;
 
 };
-
 /**
  * @brief The KisPlaybackEngineQT class is an implementation of KisPlaybackEngine
  * that drives animation playback using simple Qt functionality alone.
@@ -65,6 +69,7 @@ public:
 
     virtual bool supportsAudio() override { return false; }
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
+
 
     boost::optional<int64_t> activeFramesPerSecond();
 

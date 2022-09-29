@@ -298,6 +298,10 @@ void KisImageAnimationInterface::switchCurrentTimeAsync(int frameId, SwitchTimeA
         }
     }
 
+    if (!needsRegeneration) {
+        sigFrameRegenerationSkipped(frameId);
+    }
+
 
 
     m_d->setCurrentUITime(frameId);

@@ -111,7 +111,8 @@ printf "" > "${OUPUT_LOG}"
 # configure max core for make compile
 ((MAKE_THREADS=1))
 if [[ "${OSTYPE}" == "darwin"* ]]; then
-    ((MAKE_THREADS = $(sysctl -n hw.logicalcpu)))
+    ((MAKE_THREADS = $(sysctl -n hw.logicalcpu) - 1))
+    export MAKEFLAGS="-j${MAKE_THREADS}"
 fi
 
 OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
@@ -317,6 +318,7 @@ build_3rdparty () {
     cd ${KIS_TBUILD_DIR}
 
     log_cmd cmake ${KIS_SRC_DIR}/3rdparty/ \
+        -G "${OSXBUILD_GENERATOR}" \
         -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13 \
         -DCMAKE_INSTALL_PREFIX=${KIS_INSTALL_DIR} \
         -DCMAKE_PREFIX_PATH:PATH=${KIS_INSTALL_DIR} \

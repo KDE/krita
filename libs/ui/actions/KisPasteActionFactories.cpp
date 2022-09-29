@@ -81,7 +81,7 @@ bool tryPasteShapes(bool pasteAtCursorPosition, KisViewManager *view)
 
     KoSvgPaste paste;
 
-    if (paste.hasShapes()) {
+    if (paste.hasShapes() && view->activeNode()->isEditable()) {
         KoCanvasBase *canvas = view->canvasBase();
 
         QSizeF fragmentSize;

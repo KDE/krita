@@ -160,7 +160,7 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="AdaptiveDoubleSpinBox" name="spinCaptureInterval">
+             <widget class="QDoubleSpinBox" name="spinCaptureInterval">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -189,15 +189,6 @@
                <double>0.100000000000000</double>
               </property>
               <property name="value">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="smallStep" stdset="0">
-               <double>0.100000000000000</double>
-              </property>
-              <property name="largeStep" stdset="0">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="switchValue" stdset="0">
                <double>1.000000000000000</double>
               </property>
              </widget>
@@ -407,11 +398,6 @@ Only &quot;RGB/Alpha 8-bit&quot; is supported.</string>
    <class>KisSliderSpinBox</class>
    <extends>QWidget</extends>
    <header location="global">kis_slider_spin_box.h</header>
-  </customwidget>
-  <customwidget>
-   <class>AdaptiveDoubleSpinBox</class>
-   <extends>QDoubleSpinBox</extends>
-   <header>AdaptiveDoubleSpinBox.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

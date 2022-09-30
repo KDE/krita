@@ -3,7 +3,6 @@ set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 find_package(Threads REQUIRED)
 
 set(KRITA_RECORDERDOCKER_SOURCES
-    AdaptiveDoubleSpinBox.cpp
     recorder_const.cpp
     recorder_config.cpp
     recorder_export_config.cpp

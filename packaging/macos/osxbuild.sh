@@ -372,6 +372,7 @@ build_3rdparty () {
         ext_pyqt
 
     cmake_3rdparty ext_libheif
+    cmake_3rdparty ext_ffmpeg
 
     cmake_3rdparty \
         ext_extra_cmake_modules \

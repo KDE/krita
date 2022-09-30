@@ -67,7 +67,7 @@ QList<qreal> KoZoomAction::Private::generateSliderZoomLevels() const
 {
     KConfigGroup config = KSharedConfig::openConfig()->group("");
     int steps = config.readEntry("zoomSteps", 2);
-    qreal k = steps / log(2.);
+    qreal k = steps / M_LN2;
 
     int first =  ceil(log(parent->minimumZoom()) * k);
     int size  = floor(log(parent->maximumZoom()) * k) - first + 1;

@@ -116,6 +116,13 @@ if [[ "${OSTYPE}" == "darwin"* ]]; then
 fi
 
 OSXBUILD_X86_64_BUILD=$(sysctl -n hw.optional.x86_64)
+
+if [[ $(arch) = "arm64" ]]; then
+    OSX_ARCHITECTURES="arm64"
+else
+    OSX_ARCHITECTURES="x86_64"
+fi
+
 if [[ ${OSXBUILD_UNIVERSAL} ]]; then
     OSX_ARCHITECTURES="x86_64\;arm64"
 fi

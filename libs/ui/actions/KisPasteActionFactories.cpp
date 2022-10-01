@@ -219,23 +219,31 @@ void KisPasteActionFactory::run(bool pasteAtCursorPosition, KisViewManager *view
     // If no shapes, check for layers
     if (KisClipboard::instance()->hasLayers()) {
         const QPointF offsetTopLeft = [&]() -> QPointF {
+            KisPaintDeviceSP clip =
+                KisClipboard::instance()->clipFromKritaLayers(
+                    fittingBounds,
+                    image->colorSpace());
+            KIS_ASSERT(clip);
+
+            QPointF imagePos;
             if (pasteAtCursorPosition) {
-                KisPaintDeviceSP clip =
-                    KisClipboard::instance()->clipFromKritaLayers(
-                        fittingBounds,
-                        image->colorSpace());
-                KIS_ASSERT(clip);
-                const QPointF imagePos =
+                imagePos =
                     view->canvasBase()->coordinatesConverter()->documentToImage(
                         docPos);
 
-                const QPointF offset =
-                    (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
-                return offset;
+            } else if (!clip->exactBounds().contains(image->bounds()) &&
+                       !clip->exactBounds().intersects(image->bounds())) {
+                 // BUG:459111
+                pasteAtCursorPosition = true;
+                imagePos = QPointF(image->bounds().center());
             } else {
                 return {};
             }
+            const QPointF offset =
+                (imagePos - QRectF(clip->exactBounds()).center()).toPoint();
+            return offset;
         }();
+
         view->nodeManager()->pasteLayersFromClipboard(pasteAtCursorPosition,
                                                       offsetTopLeft);
         return;
@@ -299,9 +307,16 @@ void KisPasteIntoActionFactory::run(KisViewManager *viewManager)
     KisImageSP image = viewManager->image();
     if (!image) return;
 
-    KisPaintDeviceSP clip =
-        KisClipboard::instance()->clipFromKritaLayers(image->bounds(),
-                                                      image->colorSpace());
+    const KisPaintDevice *clipdev = KisClipboard::instance()->clipFromKritaLayers(image->bounds(),
+                                                                            image->colorSpace()).data();
+    KisPaintDeviceSP clip = new KisPaintDevice(*clipdev);
+
+    if (clip) {
+        QRect clipBounds = clip->exactBounds();
+        QPoint diff = image->bounds().center() - clipBounds.center();
+        clip->setX(diff.x());
+        clip->setY(diff.y());
+    }
 
     if (!clip)
         clip =

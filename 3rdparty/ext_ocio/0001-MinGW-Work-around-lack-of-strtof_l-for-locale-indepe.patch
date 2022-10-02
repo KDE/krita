@@ -1,0 +1,31 @@
+From 78e8c745fbb5118423aec08aef061c8b2135a571 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Sun, 2 Oct 2022 13:22:50 -0300
+Subject: [PATCH] MinGW: Work around lack of strtof_l for locale independent
+ parsing
+
+Signed-off-by: L. E. Segovia <amy@amyspark.me>
+---
+ src/utils/NumberUtils.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/utils/NumberUtils.h b/src/utils/NumberUtils.h
+index d0a7471f..8db4cce0 100644
+--- a/src/utils/NumberUtils.h
++++ b/src/utils/NumberUtils.h
+@@ -99,7 +99,12 @@ really_inline from_chars_result from_chars(const char *first, const char *last,
+ 
+     float
+ #ifdef _WIN32
++#if defined(__MINGW32__) || defined(__MINGW64__)
++    // MinGW doesn't define strtof_l (clang/gcc) nor strtod_l (gcc)...
++    tempval = static_cast<float>(_strtod_l (first, &endptr, loc.local));
++#else
+     tempval = _strtof_l(first, &endptr, loc.local);
++#endif
+ #elif __APPLE__
+     // On OSX, strtod_l is for some reason drastically faster than strtof_l.
+     tempval = static_cast<float>(::strtod_l(first, &endptr, loc.local));
+-- 
+2.37.1.windows.1
+

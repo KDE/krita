@@ -439,7 +439,7 @@ else( APPLE )
       ExternalProject_Add(
         ext_qt
         DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-        URL http://download.qt.io/official_releases/qt/5.12/5.12.12/single/qt-everywhere-src-5.12.12.tar.xz
+        URL http://download.qt.io/archive/qt/5.12/5.12.12/single/qt-everywhere-src-5.12.12.tar.xz
         URL_MD5 88e7a1c9952bf5732751c794716c6a55
 
         PATCH_COMMAND ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-Synthesize-Enter-LeaveEvent-for-accepted-QTabletEven.patch

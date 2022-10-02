@@ -1,5 +1,9 @@
 project (krita-and-all-its-deps)
 
+if (POLICY CMP0135)
+    cmake_policy(SET CMP0135 OLD)
+endif()
+
 #
 # Build all dependencies for Krita and finally Krita itself.
 # Parameters: EXTERNALS_DOWNLOAD_DIR place to download all packages

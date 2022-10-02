@@ -699,10 +699,6 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
 
     if (preset->settings()->hasPatternSettings()) {
         setMultiplierSliderValue("patternsize", preset->settings()->paintOpPatternSize());
-        setWidgetState(ENABLE_PATTERNSIZE);
-    }
-    else {
-        setWidgetState(DISABLE_PATTERNSIZE);
     }
 
     // MyPaint brushes don't support custom blend modes, they always perform "Normal and Erase" blending.
@@ -843,12 +839,6 @@ void KisPaintopBox::setWidgetState(int flags)
 {
     if (flags & (ENABLE_COMPOSITEOP | DISABLE_COMPOSITEOP)) {
         m_cmbCompositeOp->setEnabled(flags & ENABLE_COMPOSITEOP);
-        m_eraseModeButton->setEnabled(flags & ENABLE_COMPOSITEOP);
-    }
-
-    if (flags & (ENABLE_PRESETS | DISABLE_PRESETS)) {
-        m_presetSelectorPopupButton->setEnabled(flags & ENABLE_PRESETS);
-        m_brushEditorPopupButton->setEnabled(flags & ENABLE_PRESETS);
     }
 }
 
@@ -1210,14 +1200,7 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
     if (tool) {
         int flags = tool->flags();
 
-        if (flags & KisTool::FLAG_USES_CUSTOM_COMPOSITEOP) {
-            setWidgetState(ENABLE_COMPOSITEOP | ENABLE_OPACITY | ENABLE_PATTERNSIZE);
-        } else                                              {
-            setWidgetState(DISABLE_COMPOSITEOP | DISABLE_OPACITY | DISABLE_PATTERNSIZE);
-        }
-
         if (flags & KisTool::FLAG_USES_CUSTOM_PRESET) {
-            setWidgetState(ENABLE_PRESETS);
             if (!m_resourceProvider->currentPreset()) return;
 
             // block updates of avoid some over updating of the option widget
@@ -1229,17 +1212,14 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
                 qreal opacity = m_resourceProvider->currentPreset()->settings()->paintOpOpacity();
                 m_resourceProvider->setOpacity(opacity);
                 setSliderValue("opacity", opacity);
-                setWidgetState(ENABLE_OPACITY);
             }
 
             {
                 setSliderValue("flow", m_resourceProvider->currentPreset()->settings()->paintOpFlow());
-                setWidgetState(ENABLE_FLOW);
             }
 
             {
                 setMultiplierSliderValue("patternsize", m_resourceProvider->currentPreset()->settings()->paintOpPatternSize());
-                setWidgetState(ENABLE_PATTERNSIZE);
             }
 
             // MyPaint brushes don't support custom blend modes, they always perform "Normal and Erase" blending.
@@ -1247,27 +1227,17 @@ void KisPaintopBox::slotToolChanged(KoCanvasController* canvas)
                 if (m_resourceProvider->currentCompositeOp() != COMPOSITE_ERASE && m_resourceProvider->currentCompositeOp() != COMPOSITE_OVER) {
                     updateCompositeOp(COMPOSITE_OVER);
                 }
-                setWidgetState(DISABLE_COMPOSITEOP);
             } else {
                 updateCompositeOp(m_resourceProvider->currentPreset()->settings()->paintOpCompositeOp());
-                setWidgetState(ENABLE_COMPOSITEOP);
             }
 
             m_blockUpdate = false;
 
             m_presetsEnabled = true;
         } else {
-            setWidgetState(DISABLE_PRESETS);
             m_presetsEnabled = false;
         }
-
-        if (flags & KisTool::FLAG_USES_CUSTOM_SIZE) {
-            setWidgetState(ENABLE_SIZE | ENABLE_FLOW | ENABLE_PATTERNSIZE);
-        } else {
-            setWidgetState(DISABLE_SIZE | DISABLE_FLOW| DISABLE_PATTERNSIZE);
-        }
-
-    } else setWidgetState(DISABLE_ALL);
+    }
 }
 
 void KisPaintopBox::slotPreviousFavoritePreset()

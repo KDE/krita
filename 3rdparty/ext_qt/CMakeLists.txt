@@ -449,14 +449,6 @@ else( APPLE )
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-QMenu-make-less-sensitive-to-mouse-jitter.patch
                 COMMAND  ${PATCH_COMMAND} -p1 -d qtbase -i ${CMAKE_CURRENT_SOURCE_DIR}/0128-macOS-Do-not-append-defaultSuffix-in-save-dialog.patch
 
-        LOG_DOWNLOAD        ON
-        LOG_UPDATE          ON
-        LOG_CONFIGURE       ON
-        LOG_BUILD           ON
-        LOG_TEST            ON
-        LOG_INSTALL         ON
-        BUILD_IN_SOURCE     ON
-
         CMAKE_ARGS -DOPENSSL_LIBS='-L${EXTPREFIX_qt}/lib -lssl -lcrypto'
 
         INSTALL_DIR ${EXTPREFIX_qt}

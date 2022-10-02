@@ -186,6 +186,14 @@ build_kf5() {
 
 build_krita() {
     cd $BUILD_ROOT
+    if [[ $NIGHTLY_BUILD == 1 ]]; then
+        # to copy files, --aux-mode doesn't seem to work
+        EXTRA_ARGS="--no-gdbserver"
+    elif [[ $BUILD_TYPE == "Release" ]]; then
+        EXTRA_ARGS="--release"
+    else
+        EXTRA_ARGS="--no-gdbserver"
+    fi
     # Configure files using cmake
     cmake $KRITA_ROOT -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX                                \
          -DKRITA_ENABLE_PCH=off                                                             \
@@ -203,27 +211,22 @@ build_krita() {
          -DANDROID_STL=c++_shared                                                           \
          -DANDROID_ABI=$ANDROID_ABI                                                         \
          -DKRITA_3rdparty_LIB_PREFIX="$BUILD_ROOT/i/lib"                                    \
-         -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/i" $EXTRA_ARGS
+         -DCMAKE_FIND_ROOT_PATH="$BUILD_ROOT/i" \
+         -DANDROIDDEPLOYQT_EXTRA_ARGS="$EXTRA_ARGS"
 
-    make -j$PROC_COUNT install
+    cmake --build . --target install --parallel $PROC_COUNT
 }
 
 build_apk() {
     cd $BUILD_ROOT
 
+    cmake --build . --target create-apk
     if [[ $NIGHTLY_BUILD == 1 ]]; then
-        # to copy files, --aux-mode doesn't seem to work
-        make create-apk ARGS="--no-gdbserver"
-
         cd $BUILD_ROOT/krita_build_apk
         ./gradlew clean  # so binary factory doesn't use the debug files
         ./gradlew assembleNightly
 
         cd $BUILD_ROOT
-    elif [[ $BUILD_TYPE == "Release" ]]; then
-        make create-apk ARGS="--release"
-    else
-        make create-apk ARGS="--no-gdbserver"
     fi
 }
 

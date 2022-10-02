@@ -495,7 +495,7 @@
       <whatsThis/>
       <toolTip>Set eraser mode</toolTip>
       <iconText>Set eraser mode</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>E</shortcut>
       <isCheckable>true</isCheckable>
@@ -507,7 +507,7 @@
       <whatsThis/>
       <toolTip>Reload Original Preset</toolTip>
       <iconText>Reload Original Preset</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>false</isCheckable>
       <statusTip/>
@@ -518,7 +518,7 @@
       <whatsThis/>
       <toolTip>Preserve Alpha</toolTip>
       <iconText>Preserve Alpha</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -529,7 +529,7 @@
       <whatsThis/>
       <toolTip>Use Pen Pressure</toolTip>
       <iconText>Use Pen Pressure</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>0</activationFlags>
       <shortcut/>
       <isCheckable>true</isCheckable>
       <statusTip/>
@@ -2793,7 +2793,7 @@
       <whatsThis/>
       <toolTip>Select all layers</toolTip>
       <iconText>Select all layers</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2805,7 +2805,7 @@
       <whatsThis/>
       <toolTip>Select all visible layers</toolTip>
       <iconText>Select all visible layers</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2817,7 +2817,7 @@
       <whatsThis/>
       <toolTip>Select all locked layers</toolTip>
       <iconText>Select all locked layers</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2829,7 +2829,7 @@
       <whatsThis/>
       <toolTip>Select all invisible layers</toolTip>
       <iconText>Select all invisible layers</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>
@@ -2841,7 +2841,7 @@
       <whatsThis/>
       <toolTip>Select all unlocked layers</toolTip>
       <iconText>Select all unlocked layers</iconText>
-      <activationFlags>10000</activationFlags>
+      <activationFlags>1000</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut/>
       <isCheckable>false</isCheckable>

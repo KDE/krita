@@ -20,6 +20,7 @@ private Q_SLOTS:
 
     void testConcentricEllipseAdjustLine();
     void testMirroringPoints();
+    void testProjection();
 
 };
 

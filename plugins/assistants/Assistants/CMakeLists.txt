@@ -18,6 +18,7 @@ set(kritaassistanttool_SOURCES
     EditAssistantsCommand.cpp
     TwoPointAssistant.cc
     PerspectiveEllipseAssistant.cc
+    EllipseInPolygon.cpp
 )
 
 ki18n_wrap_ui(kritaassistanttool_SOURCES AssistantsToolOptions.ui )

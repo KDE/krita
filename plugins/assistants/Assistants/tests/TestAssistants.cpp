@@ -16,6 +16,7 @@
 #include <kis_global.h>
 
 #include <ConcentricEllipseAssistant.h>
+#include "EllipseInPolygon.h"
 
 void TestAssistants::testConcentricEllipseAdjustLine()
 {
@@ -112,12 +113,53 @@ void TestAssistants::testMirroringPoints()
     QCOMPARE(mirror(QPointF(-100, 80), QLineF(QPointF(2, -2), QPointF(5, -5))), QPointF(-80, 100));
 
 
+}
+
+
+void TestAssistants::testProjection()
+{
+    EllipseInPolygon concentric;
+    EllipseInPolygon original;
+
+    QPointF point;
+
+
+    // test 1:
+    // just a normal circle 0-1
+    original.updateToPolygon(QPolygonF(QRectF(0.0, 0.0, 1.0, 1.0)), QLineF(0.0, 0.0, 1.0, 0.0));
+    point = QPointF(3, 3);
+
+
+    concentric.updateToPointOnConcentricEllipse(original.originalTransform, point, original.horizon);
+
+    qCritical() << concentric.project(point) << "should be " << point;
+    qCritical() << ppVar(concentric.curveType);
+    qCritical() << ppVar(concentric.finalEllipseCenter);
+    qCritical() << ppVar(concentric.finalVertices);
+
+    QCOMPARE(concentric.project(point), point);
+
+    // test 2: ellipse with axis parallel to the 0X
+
+    original.updateToPolygon(QPolygonF(QRectF(-0.5, 0.0, 1.5, 1.0)), QLineF(0.0, 0.0, 1.0, 0.0));
+    point = QPointF(0.5, 3);
+
+
+    concentric.updateToPointOnConcentricEllipse(original.originalTransform, point, original.horizon);
+
+    qCritical() << concentric.project(point) << "should be " << point;
+    qCritical() << ppVar(concentric.curveType);
+    qCritical() << ppVar(concentric.finalEllipseCenter);
+    qCritical() << ppVar(concentric.finalVertices);
+
 
 
 
 
 
 }
+
+
 
 
 

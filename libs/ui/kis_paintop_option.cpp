@@ -21,7 +21,7 @@
 struct KisPaintOpOption::Private
 {
 public:
-    lager::state<bool> checkedFallback;
+    lager::state<bool, lager::automatic_tag> checkedFallback;
     lager::cursor<bool> checkedCursor;
     QString label;
     KisPaintOpOption::PaintopCategory category;

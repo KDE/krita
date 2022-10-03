@@ -24,7 +24,6 @@
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
 #include <kis_color_source_option_widget.h>
-#include <kis_compositeop_option.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_rate_option.h>
 #include "kis_texture_option.h"
@@ -39,6 +38,7 @@
 #include "KisSharpnessOptionWidget.h"
 #include "KisScatterOptionWidget.h"
 #include "KisAirbrushOptionWidget.h"
+#include "KisCompositeOpOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -212,6 +212,7 @@ struct KisBrushOpSettingsWidget::Private
     {
     }
 
+    lager::state<KisCompositeOpOptionData, lager::automatic_tag> compositeOpOptionData;
     lager::state<KisOpacityOptionData, lager::automatic_tag> opacityOptionData;
     lager::state<KisSizeOptionData, lager::automatic_tag> sizeOptionData;
     lager::state<KisFlowOptionData, lager::automatic_tag> flowOptionData;
@@ -253,7 +254,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     setObjectName("brush option widget");
 
     // Brush tip options
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(new KisCompositeOpOptionWidget(m_d->compositeOpOptionData));
     addPaintOpOptionData(m_d->opacityOptionData, KisPaintOpOption::GENERAL, i18n("Transparent"), i18n("Opaque"));
     addPaintOpOptionData(m_d->flowOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOptionData(m_d->sizeOptionData, KisPaintOpOption::GENERAL);

@@ -232,6 +232,7 @@ set(kritaui_LIB_SRCS
 
     widgets/kis_canvas_drop.cpp
     widgets/kis_cmb_composite.cc
+    widgets/KisCompositeOpListConnectionHelper.cpp
     widgets/kis_cmb_contour.cpp
     widgets/kis_cmb_gradient.cpp
     widgets/kis_collapsible_button_group.cpp

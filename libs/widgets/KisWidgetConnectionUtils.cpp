@@ -301,6 +301,8 @@ public:
         : QObject(parent),
           m_spacingWidget(parent)
     {
+        connect(parent, &KisSpacingSelectionWidget::sigSpacingChanged,
+                this, &ConnectSpacingWidgetHelper::slotWidgetChanged);
     }
 public Q_SLOTS:
     void slotWidgetChanged() {

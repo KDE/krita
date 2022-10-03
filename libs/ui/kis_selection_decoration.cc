@@ -160,6 +160,7 @@ void KisSelectionDecoration::selectionChanged()
             } else {
                 m_thumbnailImage = selection->thumbnailImage();
                 m_thumbnailImageTransform = selection->thumbnailImageTransform();
+                m_antsTimer->stop();
             }
             if (view() && view()->canvasBase()) {
                 view()->canvasBase()->updateCanvas();
@@ -272,7 +273,7 @@ void KisSelectionDecoration::notifyWindowMinimized(bool minimized)
     if(minimized) {
         m_antsTimer->stop();
     } else {
-        m_antsTimer->start();
+        selectionChanged();
     }
 }
 

@@ -430,15 +430,19 @@ void KoSvgTextShape::relayout() const
         }
     }
     QVector<char> lineBreaks(text.size());
+    QVector<char> graphemeBreaks(text.size());
+    if (text.size() > 0) {
+        // TODO: Figure out how to gracefully skip all the next steps when the text-size is 0.
+        // can't currently remember if removing the associated outlines was all that is necessary.
     set_linebreaks_utf16(text.utf16(),
                          static_cast<size_t>(text.size()),
                          lang.toUtf8().data(),
                          lineBreaks.data());
-    QVector<char> graphemeBreaks(text.size());
     set_graphemebreaks_utf16(text.utf16(),
                              static_cast<size_t>(text.size()),
                              lang.toUtf8().data(),
                              graphemeBreaks.data());
+    }
 
     int globalIndex = 0;
     QVector<CharacterResult> result(text.size());

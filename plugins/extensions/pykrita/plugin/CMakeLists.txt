@@ -46,7 +46,7 @@ if (WIN32)
     # https://github.com/boostorg/system/issues/32
     target_compile_definitions(kritapykrita PRIVATE HAVE_SNPRINTF=1)
     target_compile_definitions(pykrita PRIVATE HAVE_SNPRINTF=1)
-endif (MINGW)
+endif (WIN32)
 
 install(TARGETS kritapykrita DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 

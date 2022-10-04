@@ -76,7 +76,7 @@ KisAutoBrushFactory::createBrushModel(const QDomElement &element, KisResourcesIn
             type == SoftId.id() ? KisBrushModel::Soft :
             KisBrushModel::Gaussian;
 
-    if (generatorEl.hasAttribute("")) {
+    if (generatorEl.hasAttribute("softness_curve")) {
         brush.autoBrush.generator.curveString = generatorEl.attribute("softness_curve","");
     }
 

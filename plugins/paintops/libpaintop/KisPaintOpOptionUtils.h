@@ -22,7 +22,7 @@ template <typename Data, typename... Args>
 struct DataStorage
 {
     DataStorage(Data &&data) : m_data(std::forward<Data>(data)) {}
-    lager::state<Data, lager::automatic_tag> m_data;
+    lager::state<std::remove_reference_t<Data>, lager::automatic_tag> m_data;
 };
 
 template <bool needsConversion, typename Widget, typename Data, typename... Args>

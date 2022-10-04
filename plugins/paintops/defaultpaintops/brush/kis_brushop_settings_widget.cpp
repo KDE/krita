@@ -15,7 +15,6 @@
 #include <kis_pressure_flow_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_ratio_option.h>
-#include <kis_paint_action_type_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
 #include <kis_pressure_lightness_strength_option.h>

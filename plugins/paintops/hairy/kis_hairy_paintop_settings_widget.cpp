@@ -9,7 +9,8 @@
 
 #include "kis_hairy_ink_option.h"
 
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 #include "kis_hairy_bristle_option.h"
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_size_option.h>
@@ -27,7 +28,8 @@ KisHairyPaintOpSettingsWidget:: KisHairyPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    namespace kpou = KisPaintOpOptionUtils;
+    addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());
 
     KisBrushOptionWidget *brushWidget = brushOptionWidget();
     QStringList hiddenOptions;

@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionData.h>
 
 #include "kis_grid_paintop_settings.h"
 #include "kis_grid_paintop_settings_widget.h"
@@ -48,7 +48,9 @@ KisGridPaintOpSettings::~KisGridPaintOpSettings()
 
 bool KisGridPaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 bool KisGridPaintOpSettings::mousePressEvent(const KisPaintInformation& info, Qt::KeyboardModifiers modifiers, KisNodeWSP currentNode)

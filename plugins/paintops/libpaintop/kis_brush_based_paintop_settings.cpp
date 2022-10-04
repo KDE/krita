@@ -6,7 +6,7 @@
 
 #include "kis_brush_based_paintop_settings.h"
 
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionData.h>
 #include <kis_airbrush_option_widget.h>
 #include "kis_brush_based_paintop_options_widget.h"
 #include <kis_boundary.h>
@@ -68,10 +68,9 @@ KisBrushBasedPaintOpSettings::KisBrushBasedPaintOpSettings(KisResourcesInterface
 
 bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
-    if (hasProperty("PaintOpAction")) {
-        return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
-    }
-    return true;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const

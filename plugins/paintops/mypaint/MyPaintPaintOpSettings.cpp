@@ -8,7 +8,6 @@
 
 #include <cmath>
 #include <kis_color_option.h>
-#include <kis_paint_action_type_option.h>
 #include <libmypaint/mypaint-brush.h>
 #include <KisOptimizedBrushOutline.h>
 #include "MyPaintPaintOpOption.h"

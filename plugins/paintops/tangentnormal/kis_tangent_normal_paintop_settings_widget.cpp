@@ -15,7 +15,7 @@
 #include <kis_pressure_scatter_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_flow_option.h>
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionWidget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
@@ -54,7 +54,7 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
     addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisPaintActionTypeOption());
+    addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());
 
     addPaintOpOption(new KisTextureOption());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));

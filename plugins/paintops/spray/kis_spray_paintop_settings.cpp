@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionData.h>
 #include <kis_color_option.h>
 
 #include "kis_spray_paintop_settings.h"
@@ -52,7 +52,9 @@ qreal KisSprayPaintOpSettings::paintOpSize() const
 
 bool KisSprayPaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 

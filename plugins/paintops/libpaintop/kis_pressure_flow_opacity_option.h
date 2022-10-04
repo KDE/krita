@@ -11,6 +11,7 @@
 #include <kritapaintop_export.h>
 #include <kis_types.h>
 #include <brushengine/kis_paintop_settings.h>
+#include <KisPaintingModeOptionData.h>
 
 class KisPaintInformation;
 class KisPainter;
@@ -35,7 +36,7 @@ public:
 
 protected:
     qreal m_flow {1.0};
-    int   m_paintActionType {0};
+    enumPaintingMode   m_paintActionType {enumPaintingMode::WASH};
     bool  m_nodeHasIndirectPaintingSupport {false};
 };
 

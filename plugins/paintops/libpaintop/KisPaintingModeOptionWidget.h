@@ -15,6 +15,7 @@ class PAINTOP_EXPORT KisPaintingModeOptionWidget : public KisPaintOpOption
 public:
     using data_type = KisPaintingModeOptionData;
 
+    KisPaintingModeOptionWidget(lager::cursor<KisPaintingModeOptionData> optionData);
     KisPaintingModeOptionWidget(lager::cursor<KisPaintingModeOptionData> optionData, lager::reader<bool> maskingBrushEnabled);
     ~KisPaintingModeOptionWidget();
 

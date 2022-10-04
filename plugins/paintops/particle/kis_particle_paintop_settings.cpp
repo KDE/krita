@@ -8,7 +8,7 @@
 #include "kis_particle_paintop_settings_widget.h"
 #include "kis_particleop_option.h"
 
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionData.h>
 #include <kis_airbrush_option_widget.h>
 
 struct KisParticlePaintOpSettings::Private
@@ -33,7 +33,9 @@ bool KisParticlePaintOpSettings::lodSizeThresholdSupported() const
 
 bool KisParticlePaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 

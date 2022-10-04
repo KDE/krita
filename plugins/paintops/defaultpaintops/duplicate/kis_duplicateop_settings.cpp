@@ -24,7 +24,6 @@
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
-#include <kis_paint_action_type_option.h>
 #include <kis_dom_utils.h>
 #include <KisOptimizedBrushOutline.h>
 

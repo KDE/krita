@@ -43,7 +43,6 @@
 #include <kis_paintop_settings_widget.h>
 #include <kis_pressure_darken_option.h>
 #include <kis_pressure_opacity_option.h>
-#include <kis_paint_action_type_option.h>
 #include <kis_random_sub_accessor.h>
 #include <kis_fixed_paint_device.h>
 #include <kis_iterator_ng.h>

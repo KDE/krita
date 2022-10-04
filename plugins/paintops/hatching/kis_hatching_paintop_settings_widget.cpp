@@ -21,7 +21,8 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 #include <kis_compositeop_option.h>
 #include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
@@ -46,7 +47,8 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisPressureMirrorOptionWidget());
 
-    addPaintOpOption(new KisPaintActionTypeOption());
+    namespace kpou = KisPaintOpOptionUtils;
+    addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());
 
     addPaintOpOption(new KisTextureOption());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));

@@ -7,8 +7,6 @@
 
 #include "kis_hatching_paintop_settings.h"
 
-#include <kis_paint_action_type_option.h>
-
 #include <QDomDocument>
 #include <QDomElement>
 

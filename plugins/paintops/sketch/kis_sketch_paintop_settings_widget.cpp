@@ -12,7 +12,8 @@
 #include <kis_curve_option_widget.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_paintop_settings_widget.h>
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_compositeop_option.h>
@@ -42,12 +43,9 @@ KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>(KisAirbrushOptionData(), false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
-    KisPaintActionTypeOption *m_paintActionType = new KisPaintActionTypeOption();
-    KisPropertiesConfigurationSP defaultSetting = new KisPropertiesConfiguration();
-    defaultSetting->setProperty("PaintOpAction", BUILDUP);
-    m_paintActionType->readOptionSetting(defaultSetting);
-
-    addPaintOpOption(m_paintActionType);
+    KisPaintingModeOptionData defaultModeData;
+    defaultModeData.paintingMode = enumPaintingMode::BUILDUP;
+    addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>(defaultModeData));
 
     KisPropertiesConfigurationSP reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer;

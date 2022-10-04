@@ -7,6 +7,7 @@
 
 #include <QButtonGroup>
 
+#include <lager/constant.hpp>
 #include "ui_wdgincremental.h"
 
 #include "KisPaintingModeOptionModel.h"
@@ -44,6 +45,11 @@ struct KisPaintingModeOptionWidget::Private
     lager::reader<QString> buttonGroupToolTip;
 };
 
+
+KisPaintingModeOptionWidget::KisPaintingModeOptionWidget(lager::cursor<KisPaintingModeOptionData> optionData)
+    : KisPaintingModeOptionWidget(optionData, lager::make_constant(false))
+{
+}
 
 KisPaintingModeOptionWidget::KisPaintingModeOptionWidget(lager::cursor<KisPaintingModeOptionData> optionData, lager::reader<bool> maskingBrushEnabled)
     : KisPaintOpOption(i18n("Painting Mode"), KisPaintOpOption::COLOR, true)

@@ -5,7 +5,7 @@
  */
 
 #include "kis_pressure_flow_opacity_option.h"
-#include "kis_paint_action_type_option.h"
+#include <KisPaintingModeOptionData.h>
 
 #include <klocalizedstring.h>
 
@@ -14,6 +14,7 @@
 #include <kis_indirect_painting_support.h>
 #include <kis_node.h>
 #include <widgets/kis_curve_widget.h>
+
 
 KisFlowOpacityOption::KisFlowOpacityOption(KisNodeSP currentNode)
     : KisCurveOption(KoID("Opacity", i18n("Opacity")), KisPaintOpOption::GENERAL, true, 1.0, 0.0, 1.0)
@@ -38,7 +39,10 @@ void KisFlowOpacityOption::readOptionSetting(const KisPropertiesConfigurationSP 
 {
     KisCurveOption::readOptionSetting(setting);
     setFlow(setting->getDouble("FlowValue", 1.0));
-    m_paintActionType = setting->getInt("PaintOpAction", BUILDUP);
+
+    KisPaintingModeOptionData data;
+    data.read(setting.data());
+    m_paintActionType = data.paintingMode;
 }
 
 qreal KisFlowOpacityOption::getFlow() const
@@ -79,7 +83,7 @@ void KisFlowOpacityOption::apply(KisPainter* painter, const KisPaintInformation&
 
 void KisFlowOpacityOption::apply(const KisPaintInformation &info, quint8 *opacity, quint8 *flow)
 {
-    if (m_paintActionType == WASH && m_nodeHasIndirectPaintingSupport) {
+    if (m_paintActionType == enumPaintingMode::WASH && m_nodeHasIndirectPaintingSupport) {
         *opacity = quint8(getDynamicOpacity(info) * 255.0);
     } else {
         *opacity = quint8(getStaticOpacity() * getDynamicOpacity(info) * 255.0);

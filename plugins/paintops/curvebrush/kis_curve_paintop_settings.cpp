@@ -4,7 +4,7 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 #include <kis_curve_paintop_settings.h>
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionData.h>
 #include "kis_curve_line_option.h"
 
 struct KisCurvePaintOpSettings::Private
@@ -39,7 +39,9 @@ qreal KisCurvePaintOpSettings::paintOpSize() const
 
 bool KisCurvePaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 

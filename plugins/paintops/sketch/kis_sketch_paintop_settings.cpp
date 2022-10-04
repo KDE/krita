@@ -8,7 +8,7 @@
 
 #include <kis_sketchop_option.h>
 
-#include <kis_paint_action_type_option.h>
+#include <KisPaintingModeOptionData.h>
 #include "kis_current_outline_fetcher.h"
 #include <KisOptimizedBrushOutline.h>
 
@@ -19,7 +19,9 @@ KisSketchPaintOpSettings::KisSketchPaintOpSettings(KisResourcesInterfaceSP resou
 
 bool KisSketchPaintOpSettings::paintIncremental()
 {
-    return (enumPaintActionType)getInt("PaintOpAction", WASH) == BUILDUP;
+    KisPaintingModeOptionData data;
+    data.read(this);
+    return data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 KisOptimizedBrushOutline KisSketchPaintOpSettings::brushOutline(const KisPaintInformation &info, const OutlineMode &mode, qreal alignForZoom)

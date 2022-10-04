@@ -10,18 +10,7 @@
 
 #include "kis_brushop_settings_widget.h"
 #include <KisBrushOpSettings.h>
-#include <kis_pressure_darken_option.h>
-#include <kis_pressure_opacity_option.h>
-#include <kis_pressure_flow_option.h>
-#include <kis_pressure_size_option.h>
-#include <kis_pressure_ratio_option.h>
-#include <kis_pressure_rotation_option.h>
-#include <kis_pressure_mix_option.h>
 #include <kis_pressure_hsv_option.h>
-#include <kis_pressure_softness_option.h>
-#include <kis_pressure_sharpness_option_widget.h>
-#include <kis_pressure_flow_opacity_option_widget.h>
-#include <kis_pressure_rate_option.h>
 #include "kis_texture_option.h"
 #include "kis_pressure_texture_strength_option.h"
 #include <KisMaskingBrushOption.h>

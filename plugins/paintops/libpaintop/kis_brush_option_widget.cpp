@@ -88,17 +88,9 @@ void KisBrushOptionWidget::hideOptions(const QStringList &options)
     m_brushSelectionWidget->hideOptions(options);
 }
 
-bool KisBrushOptionWidget::preserveLightness() const
+lager::reader<bool> KisBrushOptionWidget::lightnessModeEnabled() const
 {
-    return KisBrushModel::lightnessModeActivated(m_d->brushData->type, m_d->brushData->predefinedBrush);
-}
-
-qreal KisBrushOptionWidget::userEffectiveSize() const
-{
-    return KisBrushModel::effectiveSizeForBrush(m_d->brushData->type,
-                                                m_d->brushData->autoBrush,
-                                                m_d->brushData->predefinedBrush,
-                                                m_d->brushData->textBrush);
+    return m_brushSelectionWidget->lightnessModeEnabled();
 }
 
 lager::reader<qreal> KisBrushOptionWidget::effectiveBrushSize() const

@@ -45,6 +45,8 @@ public:
     void setBrush(KisBrushSP brush);
     void setImage(KisImageWSP image);
 
+    lager::reader<bool> lightnessModeEnabled() const;
+
 private Q_SLOTS:
 
     void slotResetBrush();

@@ -23,6 +23,7 @@ struct KisPaintOpOption::Private
 public:
     lager::state<bool, lager::automatic_tag> checkedFallback;
     lager::cursor<bool> checkedCursor;
+    lager::reader<bool> pageEnabledReader;
     QString label;
     KisPaintOpOption::PaintopCategory category;
     QWidget *configurationPage {nullptr};
@@ -42,19 +43,30 @@ KisPaintOpOption::KisPaintOpOption(const QString &label, PaintopCategory categor
     m_d->label = label;
     m_d->checkedFallback.set(checked);
     m_d->checkedCursor = m_d->checkedFallback;
+    m_d->pageEnabledReader = m_d->checkedCursor;
     m_d->category = category;
-    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
+    m_d->pageEnabledReader.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
 
 }
 
-KisPaintOpOption::KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category, lager::cursor<bool> checkedCursor)
+KisPaintOpOption::KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category,
+                                   lager::cursor<bool> checkedCursor)
+    : KisPaintOpOption(label, category, checkedCursor, lager::make_constant(true))
+{
+
+}
+
+KisPaintOpOption::KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category,
+                                   lager::cursor<bool> checkedCursor,
+                                   lager::reader<bool> externallyEnabledLink)
     : m_checkable(true)
     , m_d(new Private())
 {
     m_d->label = label;
     m_d->checkedCursor = checkedCursor;
+    m_d->pageEnabledReader = lager::with(m_d->checkedCursor, externallyEnabledLink).map(std::logical_and{});
     m_d->category = category;
-    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
+    m_d->pageEnabledReader.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
 }
 
 KisPaintOpOption::~KisPaintOpOption()

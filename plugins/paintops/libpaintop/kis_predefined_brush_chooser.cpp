@@ -153,11 +153,6 @@ auto brushSizeLens = lager::lenses::getset(
     });
 
 
-namespace kiszug {
-
-
-}
-
 ComboBoxState calcApplicationSwitchState(enumBrushType brushType, bool supportsHSLBrushTips, enumBrushApplication application)
 {
     QStringList values;
@@ -253,7 +248,11 @@ public:
           LAGER_QT(adjustmentsEnabled){LAGER_QT(applicationSwitchState)[&ComboBoxState::currentIndex]
                       .xform(kiszug::map_greater<int>(1))},
           LAGER_QT(brushName) {LAGER_QT(resourceSignature)[&KoResourceSignature::name]},
-          LAGER_QT(brushDetails) {m_predefinedBrushData.map(&calcBrushDetails)}
+          LAGER_QT(brushDetails) {m_predefinedBrushData.map(&calcBrushDetails)},
+          LAGER_QT(lightnessModeEnabled)
+              {LAGER_QT(applicationSwitchState)
+                    [&ComboBoxState::currentIndex].
+                      xform(kiszug::map_equal<int>(LIGHTNESSMAP))}
     {
     }
 
@@ -282,6 +281,7 @@ public:
     LAGER_QT_READER(bool, adjustmentsEnabled);
     LAGER_QT_READER(QString, brushName);
     LAGER_QT_READER(QString, brushDetails);
+    LAGER_QT_READER(bool, lightnessModeEnabled);
 
     void sanitize() {
         setapplication(applicationSwitchState().currentIndex);
@@ -538,6 +538,11 @@ void KisPredefinedBrushChooser::slotNewPredefinedBrush(KoResourceSP resource)
 void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 {
     m_image = image;
+}
+
+lager::reader<bool> KisPredefinedBrushChooser::lightnessModeEnabled() const
+{
+    return m_d->model.LAGER_QT(lightnessModeEnabled);
 }
 
 void KisPredefinedBrushChooser::slotImportNewBrushResource() {

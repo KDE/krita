@@ -44,6 +44,8 @@ set(kritalibpaintop_LIB_SRCS
     KisColorSourceOptionData.cpp
     KisColorSourceOptionModel.cpp
     KisColorSourceOptionWidget.cpp
+    KisLightnessStrengthOptionData.cpp
+    KisLightnessStrengthOptionWidget.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
@@ -57,7 +59,6 @@ set(kritalibpaintop_LIB_SRCS
     kis_pressure_darken_option.cpp
     kis_pressure_hsv_option.cpp
     kis_pressure_lightness_strength_option.cpp
-    kis_pressure_lightness_strength_option_widget.cpp
     kis_pressure_paint_thickness_option.cpp
     kis_pressure_paint_thickness_option_widget.cpp
     kis_pressure_opacity_option.cpp

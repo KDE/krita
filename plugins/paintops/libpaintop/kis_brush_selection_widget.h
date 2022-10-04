@@ -52,6 +52,8 @@ public:
 
     void hideOptions(const QStringList &options);
 
+    lager::reader<bool> lightnessModeEnabled() const;
+
 Q_SIGNALS:
 
     void sigBrushChanged();

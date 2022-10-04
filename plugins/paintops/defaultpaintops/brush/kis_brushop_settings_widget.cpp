@@ -17,8 +17,6 @@
 #include <kis_pressure_ratio_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_mix_option.h>
-#include <kis_pressure_lightness_strength_option.h>
-#include <kis_pressure_lightness_strength_option_widget.h>
 #include <kis_pressure_hsv_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
@@ -39,6 +37,7 @@
 #include "KisCompositeOpOptionWidget.h"
 #include "KisPaintingModeOptionWidget.h"
 #include "KisColorSourceOptionWidget.h"
+#include "KisLightnessStrengthOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -99,6 +98,7 @@ public:
         this->prefix = prefix;
     }
 };
+
 
 class KisRatioOptionData : public KisCurveOptionData
 {
@@ -223,6 +223,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisMirrorOptionData, lager::automatic_tag> mirrorOptionData;
     lager::state<KisSharpnessOptionData, lager::automatic_tag> sharpnessOptionData;
     lager::state<KisScatterOptionData, lager::automatic_tag> scatterOptionData;
+    lager::state<KisLightnessStrengthOptionData, lager::automatic_tag> lightnessStrengthOptionData;
 
     lager::state<KisColorSourceOptionData, lager::automatic_tag> colorSourceOptionData;
     lager::state<KisDarkenOptionData, lager::automatic_tag> darkenOptionData;
@@ -268,8 +269,8 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOptionData(m_d->rotationOptionData, KisPaintOpOption::GENERAL, i18n("-180°"), i18n("180°"));
     addPaintOpOption(new KisSharpnessOptionWidget(m_d->sharpnessOptionData), KisPaintOpOption::GENERAL);
 
-    m_lightnessStrengthOptionWidget = new KisPressureLightnessStrengthOptionWidget();
-    addPaintOpOption(m_lightnessStrengthOptionWidget);
+    addPaintOpOption(new KisLightnessStrengthOptionWidget(m_d->lightnessStrengthOptionData, brushOptionWidget()->lightnessModeEnabled()));
+
     addPaintOpOption(new KisScatterOptionWidget(m_d->scatterOptionData), KisPaintOpOption::GENERAL);
 
     // Colors options
@@ -329,11 +330,6 @@ KisPropertiesConfigurationSP KisBrushOpSettingsWidget::configuration() const
     config->setProperty("paintop", "paintbrush"); // XXX: make this a const id string
     writeConfiguration(config);
     return config;
-}
-
-void KisBrushOpSettingsWidget::notifyPageChanged()
-{
-    m_lightnessStrengthOptionWidget->setEnabled(this->brushOptionWidget()->preserveLightness());
 }
 
 template<typename Data, typename... Args>

@@ -80,7 +80,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
                                              int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                                              const QString &strengthPrefix, const QString &strengthSuffix,
                                              lager::reader<bool> enabledLink)
-    : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionData::isChecked])
+    : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionData::isChecked], enabledLink)
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption2())
     , m_d(new Private(optionData))
@@ -99,9 +99,6 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
     m_d->curveValueSuffix = curveValueSuffix;
     m_curveOptionWidget->label_ymin->setText(curveMinLabel);
     m_curveOptionWidget->label_ymax->setText(curveMaxLabel);
-
-    // TODO: make sure it is and'ed with the checked cursor
-    //enabledLink.bind(std::bind(&QWidget::setEnabled, m_widget, std::placeholders::_1));
 
     m_d->model.m_activeSensorIdData.bind(
         std::bind(qOverload<const QString&>(&KisMultiSensorsSelector2::setCurrent),

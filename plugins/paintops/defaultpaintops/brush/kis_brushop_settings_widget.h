@@ -29,8 +29,6 @@ public:
     KisPropertiesConfigurationSP configuration() const override;
 
 protected:
-    void notifyPageChanged() override;
-
     template<typename Data, typename... Args>
     void addPaintOpOptionData(Data &data, Args... args);
 

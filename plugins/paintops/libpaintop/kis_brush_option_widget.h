@@ -41,10 +41,7 @@ public:
 
     void hideOptions(const QStringList &options);
 
-    // TODO: instead of a value return a lager::reader
-    bool preserveLightness() const;
-    qreal userEffectiveSize() const;
-
+    lager::reader<bool> lightnessModeEnabled() const;
     lager::reader<qreal> effectiveBrushSize() const;
 
 private:

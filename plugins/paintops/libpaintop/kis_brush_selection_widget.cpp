@@ -236,6 +236,13 @@ void KisBrushSelectionWidget::hideOptions(const QStringList &options)
     }
 }
 
+lager::reader<bool> KisBrushSelectionWidget::lightnessModeEnabled() const
+{
+    return lager::with(m_d->brushType.xform(kiszug::map_equal<int>(Predefined)),
+                       m_predefinedBrushWidget->lightnessModeEnabled())
+            .map(std::logical_and{});
+}
+
 void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
 {
     return;

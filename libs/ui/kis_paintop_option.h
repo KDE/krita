@@ -48,7 +48,11 @@ public:
     };
 
     KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category, bool checked);
-    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category, lager::cursor<bool> checkedCursor);
+    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category,
+                     lager::cursor<bool> checkedCursor);
+    KisPaintOpOption(const QString &label, KisPaintOpOption::PaintopCategory category,
+                     lager::cursor<bool> checkedCursor,
+                     lager::reader<bool> externallyEnabledLink);
     ~KisPaintOpOption() override;
 
     KisPaintOpOption::PaintopCategory category() const;

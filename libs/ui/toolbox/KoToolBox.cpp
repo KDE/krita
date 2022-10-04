@@ -62,6 +62,7 @@ public:
     void addSection(Section *section, const QString &name);
 
     QList<QToolButton*> buttons;
+    KoToolBoxButton *selectedButton {nullptr};
     QHash<QString, KoToolBoxButton*> buttonsByToolId;
     QMap<QString, Section*> sections;
     KoToolBoxLayout *layout {0};
@@ -190,6 +191,10 @@ void KoToolBox::setActiveTool(KoCanvasController *canvas)
     if (button) {
         button->setChecked(true);
         button->setHighlightColor();
+        if (d->selectedButton) {
+            d->selectedButton->setHighlightColor();
+        }
+        d->selectedButton = button;
     }
     else {
         warnWidgets << "KoToolBox::setActiveTool(" << id << "): no such button found";
@@ -274,6 +279,18 @@ void KoToolBox::paintEvent(QPaintEvent *)
     }
 
     painter.end();
+}
+
+void KoToolBox::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::PaletteChange) {
+        for (QToolButton *button : d->buttons) {
+            KoToolBoxButton* toolBoxButton = qobject_cast<KoToolBoxButton*>(button);
+            if (toolBoxButton) {
+                toolBoxButton->setHighlightColor();
+            }
+        }
+    }
 }
 
 void KoToolBox::setOrientation(Qt::Orientation orientation)

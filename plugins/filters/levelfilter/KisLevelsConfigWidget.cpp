@@ -697,20 +697,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevelsAllChannels_clicked()
 
 bool KisLevelsConfigWidget::event(QEvent *e)
 {
-    if (e->type() == QEvent::PaletteChange) {
-        KisIconUtils::updateIcon(m_page.buttonLightnessMode);
-        KisIconUtils::updateIcon(m_page.buttonAllChannelsMode);
-        KisIconUtils::updateIcon(m_page.buttonLinearHistogram);
-        KisIconUtils::updateIcon(m_page.buttonLogarithmicHistogram);
-        KisIconUtils::updateIcon(m_page.buttonScaleHistogramToFit);
-        KisIconUtils::updateIcon(m_page.buttonScaleHistogramToCutLongPeaks);
-        KisIconUtils::updateIcon(m_page.buttonResetAll);
-        KisIconUtils::updateIcon(m_page.buttonResetInputLevels);
-        KisIconUtils::updateIcon(m_page.buttonResetOutputLevels);
-        KisIconUtils::updateIcon(m_page.buttonResetAllChannels);
-        KisIconUtils::updateIcon(m_page.buttonAutoLevels);
-        KisIconUtils::updateIcon(m_page.buttonAutoLevelsAllChannels);
-    } else if (e->type() == QEvent::StyleChange) {
+    if (e->type() == QEvent::StyleChange) {
         m_page.spacer01->changeSize(0, m_page.comboBoxChannel->sizeHint().height(),
                                     QSizePolicy::Expanding, QSizePolicy::Fixed);
     }

@@ -8,6 +8,7 @@
 #define __KIS_HIGHLIGHTED_TOOL_BUTTON_H
 
 #include <QToolButton>
+#include <QEvent>
 
 #include "kritawidgetutils_export.h"
 
@@ -17,6 +18,12 @@ public:
     KisHighlightedToolButton(QWidget *parent = 0)
         : QToolButton(parent)
     {
+    }
+
+    void changeEvent(QEvent *event) override {
+        if (event->type() == QEvent::PaletteChange) {
+            updatePalette();
+        }
     }
 
 protected:

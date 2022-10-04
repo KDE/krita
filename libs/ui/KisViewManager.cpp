@@ -122,6 +122,7 @@
 #include <KisMainWindow.h>
 #include "kis_signals_blocker.h"
 #include "imagesize/imagesize.h"
+#include <KoToolDocker.h>
 
 #include "kis_filter_configuration.h"
 
@@ -1363,6 +1364,10 @@ void KisViewManager::updateIcons()
             KoDockWidgetTitleBar* titlebar = dynamic_cast<KoDockWidgetTitleBar*>(dock->titleBarWidget());
             if (titlebar) {
                 titlebar->updateIcons();
+            }
+            if (qobject_cast<KoToolDocker*>(dock)) {
+                // Tool options widgets icons are updated by KoToolManager
+                continue;
             }
             QObjectList objects;
             objects.append(dock);

@@ -171,7 +171,7 @@
            <widget class="QToolButton" name="compactModeSelectNextStopButton"/>
           </item>
           <item>
-           <widget class="QToolButton" name="compactModeMiscOptionsButton"/>
+           <widget class="KisPopupButton" name="compactModeMiscOptionsButton"/>
           </item>
          </layout>
         </item>
@@ -237,6 +237,11 @@
    <extends>QWidget</extends>
    <header location="global">KisGradientColorEditor.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>KisPopupButton</class>
+   <extends>QToolButton</extends>
+   <header location="global">KisPopupButton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

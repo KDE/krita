@@ -22,6 +22,7 @@
 #include "KoToolSelection.h"
 #include "KoCanvasController.h"
 #include "KoToolProxy.h"
+#include <kis_icon_utils.h>
 
 #include <klocalizedstring.h>
 #include <kactioncollection.h>
@@ -403,4 +404,20 @@ void KoToolBase::setMaskSyntheticEvents(bool value)
 {
     Q_D(KoToolBase);
     d->maskSyntheticEvents = value;
+}
+
+void KoToolBase::updateOptionsWidgetIcons()
+{
+    Q_D(KoToolBase);
+    if (d->optionWidgetsCreated) {
+        QObjectList objects;
+        for (QPointer<QWidget> widget : d->optionWidgets) {
+            objects.append(widget);
+        }
+        while (!objects.isEmpty()) {
+            QObject* object = objects.takeFirst();
+            objects.append(object->children());
+            KisIconUtils::updateIconCommon(object);
+        }
+    }
 }

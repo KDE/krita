@@ -11,6 +11,7 @@
 #include <QDoubleSpinBox>
 #include <QAction>
 #include <QDialog>
+#include <QMenu>
 
 #include <KoColorSpace.h>
 #include <resources/KoSegmentGradient.h>
@@ -133,22 +134,24 @@ KisSegmentGradientEditor::KisSegmentGradientEditor(QWidget *parent)
     compactModeSelectNextHandleButton->setDefaultAction(selectNextHandleAction);
 
     compactModeMiscOptionsButton->setPopupMode(QToolButton::InstantPopup);
+    compactModeMiscOptionsButton->setArrowVisible(false);
     compactModeMiscOptionsButton->setAutoRaise(true);
     compactModeMiscOptionsButton->setIcon(KisIconUtils::loadIcon("view-choose"));
-    compactModeMiscOptionsButton->setStyleSheet("QToolButton::menu-indicator { image: none; }");
+    QMenu *compactModeMiscOptionsButtonMenu = new QMenu;
     QAction *separator = new QAction;
     separator->setSeparator(true);
-    compactModeMiscOptionsButton->addAction(m_editHandleAction);
-    compactModeMiscOptionsButton->addAction(m_deleteSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_flipSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_splitSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_duplicateSegmentAction);
-    compactModeMiscOptionsButton->addAction(m_deleteStopAction);
-    compactModeMiscOptionsButton->addAction(m_centerStopAction);
-    compactModeMiscOptionsButton->addAction(m_centerMidPointAction);
-    compactModeMiscOptionsButton->addAction(separator);
-    compactModeMiscOptionsButton->addAction(flipGradientAction);
-    compactModeMiscOptionsButton->addAction(distributeSegmentsEvenlyAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_editHandleAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_deleteSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_flipSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_splitSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_duplicateSegmentAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_deleteStopAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_centerStopAction);
+    compactModeMiscOptionsButtonMenu->addAction(m_centerMidPointAction);
+    compactModeMiscOptionsButtonMenu->addAction(separator);
+    compactModeMiscOptionsButtonMenu->addAction(flipGradientAction);
+    compactModeMiscOptionsButtonMenu->addAction(distributeSegmentsEvenlyAction);
+    compactModeMiscOptionsButton->setPopupWidget(compactModeMiscOptionsButtonMenu);
 
     stopLeftEditor->setUsePositionSlider(false);
     stopRightEditor->setUsePositionSlider(false);

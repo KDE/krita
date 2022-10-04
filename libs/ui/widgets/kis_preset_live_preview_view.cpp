@@ -5,6 +5,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QEvent>
+
 #include <kis_preset_live_preview_view.h>
 #include <QDebug>
 #include <QGraphicsPixmapItem>
@@ -376,6 +378,15 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // we need to return brush size to normal.The normal brush sends out a lot of extra signals, so keeping the proxy for now
     //proxy_preset->settings()->setPaintOpSize(originalPresetSize);
 
+}
+
+void KisPresetLivePreviewView::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::PaletteChange) {
+        if (m_currentPreset) {
+            requestUpdateStroke();
+        }
+    }
 }
 
 #include "kis_preset_live_preview_view.moc"

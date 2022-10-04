@@ -332,6 +332,17 @@ void KoToolManager::initializeCurrentToolForCanvas()
     d->postSwitchTool();
 }
 
+void KoToolManager::themeChanged()
+{
+    for (const QList<CanvasData*> &canvasDataList : d->canvasses) {
+        for (CanvasData *canvasData : canvasDataList) {
+            for (KoToolBase *tool : canvasData->allTools) {
+                tool->updateOptionsWidgetIcons();
+            }
+        }
+    }
+}
+
 KoToolManager* KoToolManager::instance()
 {
     return s_instance;

@@ -224,6 +224,11 @@ public Q_SLOTS:
      */
     void switchBackRequested();
 
+    /**
+     * Notify theme changes
+     */
+    void themeChanged();
+    
 Q_SIGNALS:
     /**
      * Emitted when a new tool is going to override the current tool

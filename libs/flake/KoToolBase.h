@@ -398,6 +398,11 @@ public Q_SLOTS:
      */
     virtual void repaintDecorations();
 
+    /**
+     * force the update of the icons on the cached options widget
+     */
+    void updateOptionsWidgetIcons();
+
 Q_SIGNALS:
 
     /**

@@ -244,11 +244,7 @@ void OverviewDockerDock::enterEvent(QEvent*)
 
 bool OverviewDockerDock::event(QEvent *e)
 {
-    if (e->type() == QEvent::PaletteChange) {
-        if (m_pinControlsButton) {
-            KisIconUtils::updateIcon(m_pinControlsButton);
-        }
-    } else if (e->type() == QEvent::StyleChange || e->type() == QEvent::FontChange) {
+    if (e->type() == QEvent::StyleChange || e->type() == QEvent::FontChange) {
         resizeEvent(nullptr);
     }
     return QDockWidget::event(e);

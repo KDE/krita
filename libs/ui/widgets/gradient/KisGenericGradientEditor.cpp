@@ -25,6 +25,8 @@
 #include <KoResourceServerProvider.h>
 #include <KisResourceItemChooser.h>
 #include <KisResourceUserOperations.h>
+#include <KisPopupButton.h>
+#include <QMenu>
 
 #include <ksharedconfig.h>
 #include <kconfiggroup.h>
@@ -45,7 +47,7 @@ public:
     KisGradientChooser *widgetGradientPresetChooser;
     QToolButton *toolButtonGradientPresetChooser;
     QWidget *widgetToolButtonGradientPresetChooser;
-    QToolButton *toolButtonGradientPresetChooserOptions;
+    KisPopupButton *toolButtonGradientPresetChooserOptions;
     QAction *actionUseGradientPresetChooserPopUp;
     QAction *actionCompactGradientPresetChooserMode;
     QWidget *widgetGradientEditor;
@@ -160,11 +162,10 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
         )
     );
 
-    m_d->toolButtonGradientPresetChooserOptions = new QToolButton(this);
-    m_d->toolButtonGradientPresetChooserOptions->setPopupMode(QToolButton::InstantPopup);
+    m_d->toolButtonGradientPresetChooserOptions = new KisPopupButton(this);
+    m_d->toolButtonGradientPresetChooserOptions->setArrowVisible(false);
     m_d->toolButtonGradientPresetChooserOptions->setAutoRaise(true);
     m_d->toolButtonGradientPresetChooserOptions->setIcon(KisIconUtils::loadIcon("view-choose"));
-    m_d->toolButtonGradientPresetChooserOptions->setStyleSheet("QToolButton::menu-indicator { image: none; }");
     m_d->actionUseGradientPresetChooserPopUp = new QAction(this);
     m_d->actionUseGradientPresetChooserPopUp->setCheckable(true);
     m_d->actionUseGradientPresetChooserPopUp->setText(
@@ -181,8 +182,10 @@ KisGenericGradientEditor::KisGenericGradientEditor(QWidget* parent)
             "Show compact gradient preset chooser"
         )
     );
-    m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionUseGradientPresetChooserPopUp);
-    m_d->toolButtonGradientPresetChooserOptions->addAction(m_d->actionCompactGradientPresetChooserMode);
+    QMenu *toolButtonGradientPresetChooserOptionsMenu = new QMenu;
+    toolButtonGradientPresetChooserOptionsMenu->addAction(m_d->actionUseGradientPresetChooserPopUp);
+    toolButtonGradientPresetChooserOptionsMenu->addAction(m_d->actionCompactGradientPresetChooserMode);
+    m_d->toolButtonGradientPresetChooserOptions->setPopupWidget(toolButtonGradientPresetChooserOptionsMenu);
 
     layoutButtons->addWidget(m_d->buttonAddGradient, 0);
     layoutButtons->addWidget(m_d->buttonUpdateGradient, 0);

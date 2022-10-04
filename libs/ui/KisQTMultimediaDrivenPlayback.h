@@ -23,7 +23,7 @@ public:
     virtual void setPlaybackState(PlaybackState state) override;
     virtual void setFrame(int frame) override;
     virtual void setFramerate(int) override;
-    virtual boost::optional<int> getDesiredFrame() override;
+    virtual boost::optional<int> desiredFrame() override;
     virtual void setVolume(qreal value) override;
     virtual void setSpeed(qreal speed) override;
     virtual double speed() override;

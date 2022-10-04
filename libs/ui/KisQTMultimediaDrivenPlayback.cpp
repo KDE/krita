@@ -127,7 +127,7 @@ void AudioDrivenPlayback::setFramerate(int)
     updatePlaybackLoopInterval(framerate, m_d->player.playbackRate());
 }
 
-boost::optional<int> AudioDrivenPlayback::getDesiredFrame()
+boost::optional<int> AudioDrivenPlayback::desiredFrame()
 {
     int framerate = engine()->activeFramesPerSecond().get_value_or(24);
     return msecToFrames(m_d->player.position(), framerate);

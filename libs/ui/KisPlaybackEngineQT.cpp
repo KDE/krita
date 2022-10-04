@@ -52,6 +52,8 @@ public:
     virtual double speed() override;
     virtual void setDropFrames(bool drop) override;
     virtual bool dropFrames() override;
+    virtual void setTimerDuration(int timeMS) override;
+    virtual int timerDuration() override;
 
 private:
     void updatePlaybackLoopInterval(const int& in_fps, const qreal& in_speed);
@@ -67,7 +69,7 @@ LoopDrivenPlayback::LoopDrivenPlayback(KisPlaybackEngineQT *engine, QObject *par
     : PlaybackDriver(engine, parent)
     , m_speed(1.0)
     , m_fps(24)
-    , m_dropFrames(false)
+    , m_dropFrames(true)
 {
     connect( &m_playbackLoop, SIGNAL(timeout()), this, SIGNAL(throttledShowFrame()) );
 }
@@ -114,6 +116,17 @@ bool LoopDrivenPlayback::dropFrames() {
     return m_dropFrames;
 }
 
+void LoopDrivenPlayback::setTimerDuration(int timeMS)
+{
+    KIS_ASSERT(timeMS > 0);
+    m_playbackLoop.setInterval(timeMS);
+}
+
+int LoopDrivenPlayback::timerDuration()
+{
+    return m_playbackLoop.interval();
+}
+
 void LoopDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qreal &in_speed) {
     int loopMS = qRound( 1000.f / (qreal(in_fps) * in_speed));
     m_playbackLoop.setInterval(loopMS);
@@ -130,12 +143,16 @@ void LoopDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qre
 struct FrameMeasure {
     FrameMeasure()
         : remainder(0)
+        , averageDriverCallbackTime(0)
+        , driverCallbackCalls(0)
         , waitingForFrame(false) {
         timeSinceLastFrame.start();
     }
 
     QElapsedTimer timeSinceLastFrame;
     int remainder;
+    qreal averageDriverCallbackTime;
+    int driverCallbackCalls;
     bool waitingForFrame;
 };
 
@@ -218,8 +235,12 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     KisImageAnimationInterface *animInterface = activeCanvas()->image()->animationInterface();
     KIS_SAFE_ASSERT_RECOVER_RETURN(animInterface);
 
+    KIS_ASSERT(m_d->measure);
+
     // If we're waiting for each frame, then we delay our callback.
     if (m_d->measure && m_d->measure->waitingForFrame) {
+        // Without drop frames on, we need to factor out time that we're waiting
+        // for a frame from our time
         return;
     }
 
@@ -227,22 +248,48 @@ void KisPlaybackEngineQT::throttledDriverCallback()
     const int startFrame = animInterface->activePlaybackRange().start();
     const int endFrame = animInterface->activePlaybackRange().end();
 
+    const int timeSinceLastFrame =  m_d->measure->timeSinceLastFrame.elapsed();
+    m_d->measure->timeSinceLastFrame.restart();
+    const int timePerFrame = qRound(1000.0 / qreal(activeFramesPerSecond().get_value_or(24)) / m_d->driver->speed());
+
     // Drop frames logic...
     int extraFrames = 0;
     if (m_d->driver->dropFrames()) {
         KIS_ASSERT(m_d->measure);
-        m_d->measure->remainder += m_d->measure->timeSinceLastFrame.elapsed();
-        m_d->measure->timeSinceLastFrame.restart();
 
-        qreal timePerFrame = 1000.0 / qreal(activeFramesPerSecond().get_value_or(24)) / m_d->driver->speed();
-        extraFrames = qMax( 0, qFloor(qreal(m_d->measure->remainder) / qreal(timePerFrame)) - 1);
-        m_d->measure->remainder -= extraFrames * timePerFrame;
+        int offset = timeSinceLastFrame - timePerFrame;
+        m_d->measure->remainder += offset;
+        extraFrames = (m_d->measure->remainder) / timePerFrame;
+        m_d->measure->remainder = m_d->measure->remainder % timePerFrame;
+    }
+
+
+    // We need to update the timing interval of the internal loop to be as accurate as possible...
+    // This is most important for drop frames mode, where frame timing should be as consistent as possible.
+    // So...
+    //      - Calculate our running average of msec-per-frame
+    //      - Based on the error, we adjust our loop timer to offset toward a target time per frame
+    //      - We clip this value to a minimum and maximum possible time per frame -- to prevent locking the system.
+    // The only exception is the first driver callback -- here we'll just initialize our average and
+    // continue.
+    // Also another consideration is whether this needs to happen at all for non-dropframes mode or if the logic should
+    // simply be different.
+    if (m_d->measure->averageDriverCallbackTime == 0) {
+        m_d->measure->averageDriverCallbackTime = timeSinceLastFrame;
+    } else {
+        static const uint8_t SLOPE_CONSTANT = 5; // Used to control how radically we will change timer duration based on latency.
+        m_d->measure->averageDriverCallbackTime += qreal(timeSinceLastFrame - m_d->measure->averageDriverCallbackTime) / SLOPE_CONSTANT;
+        const int delay = qRound(m_d->measure->averageDriverCallbackTime) - timePerFrame;
+        const int newTargetTimerTime = qMax( timePerFrame / 2, timePerFrame - delay );
+        if (delay != 0) {
+            ENTER_FUNCTION() << ppVar(delay);
+        }
+        m_d->driver->setTimerDuration(newTargetTimerTime);
     }
 
     // If we have an qtmultimedia playback driver: we will only go to what the audio determines to be the desired frame...
-    if (m_d->driver->getDesiredFrame()) {
-        const int desiredFrame = m_d->driver->getDesiredFrame().get();
-
+    if (m_d->driver->desiredFrame()) {
+        const int desiredFrame = m_d->driver->desiredFrame().get();
         const int targetFrame = frameWrap(desiredFrame, startFrame, endFrame );
 
         if (currentFrame != targetFrame) {
@@ -266,7 +313,7 @@ void KisPlaybackEngineQT::throttledDriverCallback()
             bool neededRefresh = displayProxy->displayFrame(targetFrame, false);
 
             // If we didn't need to refresh, we just continue as usual.
-            m_d->measure->waitingForFrame &= neededRefresh;
+            m_d->measure->waitingForFrame = m_d->measure->waitingForFrame && neededRefresh;
         }
     }
 }
@@ -426,7 +473,7 @@ void KisPlaybackEngineQT::recreateDriver(boost::optional<QFileInfo> file)
     m_d->driver.reset(new LoopDrivenPlayback(this));
 
 #ifdef HAVE_QT_MULTIMEDIA
-    bool hasQTMultimediaEnabledInConfig = false; // TODO -- Add proper configuration entry w/ default to on. Used for debugging.
+    bool hasQTMultimediaEnabledInConfig = true; // TODO -- Add proper configuration entry w/ default to on. Used for debugging.
     if (file && hasQTMultimediaEnabledInConfig) {
         m_d->driver.reset(new AudioDrivenPlayback(this, file.get()));
     }

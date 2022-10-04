@@ -57,10 +57,8 @@ struct WidgetWrapperDataTypeChecker<false, Widget, Data, Args...> :
 {
     using BaseClass = WidgetWrapperConversionChecker<false, Widget, Data, Args...>;
 
-    WidgetWrapperDataTypeChecker(Data &&data, Args&&... args)
-        : BaseClass(std::forward<Data>(data), std::forward<Args>(args)...)
-    {
-    }
+    // reuse c-tor from the base
+    using BaseClass::BaseClass;
 };
 
 template <typename Widget, typename Data, typename... Args>
@@ -70,10 +68,8 @@ struct WidgetWrapperDataTypeChecker<true, Widget, Data, Args...> :
     using BaseClass =
         WidgetWrapperConversionChecker<!std::is_same_v<Data, typename Widget::data_type>, Widget, Data, Args...>;
 
-    WidgetWrapperDataTypeChecker(Data &&data, Args&&... args)
-        : BaseClass(std::forward<Data>(data), std::forward<Args>(args)...)
-    {
-    }
+    // reuse c-tor from the base
+    using BaseClass::BaseClass;
 };
 
 template <typename Widget, typename Data, typename... Args>
@@ -84,10 +80,8 @@ struct WidgetWrapper :
     using BaseClass = WidgetWrapperDataTypeChecker<
         has_type_data_type<Widget>::value, Widget, Data, Args...>;
 
-    WidgetWrapper(Data &&data, Args&&... args)
-        : BaseClass(std::forward<Data>(data), std::forward<Args>(args)...)
-    {
-    }
+    // reuse c-tor from the base
+    using BaseClass::BaseClass;
 };
 
 }

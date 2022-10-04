@@ -52,6 +52,8 @@
 struct KisTiffBasicInfo {
     uint32_t width{};
     uint32_t height{};
+    float x{};
+    float y{};
     float xres{};
     float yres{};
     uint16_t depth{};
@@ -1406,6 +1408,9 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
 
     m_image->addNode(KisNodeSP(layer), m_image->rootLayer().data());
 
+    layer->paintDevice()->setX(static_cast<int>(basicInfo.x * basicInfo.xres));
+    layer->paintDevice()->setY(static_cast<int>(basicInfo.y * basicInfo.yres));
+
     // Process rotation before handing image over
     // https://developer.apple.com/documentation/imageio/cgimagepropertyorientation
     switch (orientation) {
@@ -1500,6 +1505,16 @@ KisImportExportErrorCode KisTIFFImport::readTIFFDirectory(KisDocument *m_doc,
         dbgFile << "Image does not define y resolution";
         // but we don't stop
         basicInfo.yres = 100;
+    }
+
+    if (TIFFGetField(image, TIFFTAG_XPOSITION, &basicInfo.x) == 0) {
+        dbgFile << "Image does not define a horizontal offset";
+        basicInfo.x = 0;
+    }
+
+    if (TIFFGetField(image, TIFFTAG_YPOSITION, &basicInfo.y) == 0) {
+        dbgFile << "Image does not define a vertical offset";
+        basicInfo.y = 0;
     }
 
     if ((TIFFGetField(image, TIFFTAG_BITSPERSAMPLE, &basicInfo.depth) == 0)) {

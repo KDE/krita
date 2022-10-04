@@ -63,11 +63,7 @@ namespace PyKrita
             return initStatus;
         }
 
-#if defined(IS_PY3K)
         if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, PYKRITA_INIT)) {
-#else
-        if (0 != PyImport_AppendInittab(Python::PYKRITA_ENGINE, initpykrita)) {
-#endif
             initStatus = INIT_CANNOT_LOAD_PYKRITA_MODULE;
             return initStatus;
         }
@@ -81,7 +77,6 @@ namespace PyKrita
 
         pluginManagerInstance.reset(new PythonPluginManager());
 
-#if defined(IS_PY3K)
         // Initialize our built-in module.
         auto pykritaModule = PYKRITA_INIT();
 
@@ -90,9 +85,6 @@ namespace PyKrita
             return initStatus;
             //return i18nc("@info:tooltip ", "No <icode>pykrita</icode> built-in module");
         }
-#else
-        initpykrita();
-#endif
 
         initStatus = INIT_OK;
         return initStatus;
@@ -578,58 +570,13 @@ void Python::traceback(const QString& description)
 
 PyObject* Python::unicode(const QString& string)
 {
-#if PY_MAJOR_VERSION < 3
-    /* Python 2.x. https://docs.python.org/2/c-api/unicode.html */
-    PyObject* s = PyString_FromString(PQ(string));
-    PyObject* u = PyUnicode_FromEncodedObject(s, "utf-8", "strict");
-    Py_DECREF(s);
-    return u;
-#elif PY_MINOR_VERSION < 3
-    /* Python 3.2 or less. https://docs.python.org/3.2/c-api/unicode.html#unicode-objects */
-# ifdef Py_UNICODE_WIDE
-    return PyUnicode_DecodeUTF16((const char*)string.constData(), string.length() * 2, 0, 0);
-# else
-    return PyUnicode_FromUnicode(string.constData(), string.length());
-# endif
-#else /* Python 3.3 or greater. https://docs.python.org/3.3/c-api/unicode.html#unicode-objects */
-    return PyUnicode_FromKindAndData(PyUnicode_2BYTE_KIND, string.constData(), string.length());
-#endif
+    return PyUnicode_FromKindAndData(PyUnicode_2BYTE_KIND,
+                                     string.constData(),
+                                     string.length());
 }
 
 QString Python::unicode(PyObject* const string)
 {
-#if PY_MAJOR_VERSION < 3
-    /* Python 2.x. https://docs.python.org/2/c-api/unicode.html */
-    if (PyString_Check(string))
-        return QString(PyString_AsString(string));
-    else if (PyUnicode_Check(string)) {
-        const int unichars = PyUnicode_GetSize(string);
-# ifdef HAVE_USABLE_WCHAR_T
-        return QString::fromWCharArray(PyUnicode_AsUnicode(string), unichars);
-# else
-#   ifdef Py_UNICODE_WIDE
-        return QString::fromUcs4((const unsigned int*)PyUnicode_AsUnicode(string), unichars);
-#   else
-        return QString::fromUtf16(PyUnicode_AsUnicode(string), unichars);
-#   endif
-# endif
-    } else return QString();
-#elif PY_MINOR_VERSION < 3
-    /* Python 3.2 or less. https://docs.python.org/3.2/c-api/unicode.html#unicode-objects */
-    if (!PyUnicode_Check(string))
-        return QString();
-
-    const int unichars = PyUnicode_GetSize(string);
-# ifdef HAVE_USABLE_WCHAR_T
-    return QString::fromWCharArray(PyUnicode_AsUnicode(string), unichars);
-# else
-#   ifdef Py_UNICODE_WIDE
-    return QString::fromUcs4(PyUnicode_AsUnicode(string), unichars);
-#   else
-    return QString::fromUtf16(PyUnicode_AsUnicode(string), unichars);
-#   endif
-# endif
-#else /* Python 3.3 or greater. https://docs.python.org/3.3/c-api/unicode.html#unicode-objects */
     if (!PyUnicode_Check(string))
         return QString();
 
@@ -648,16 +595,11 @@ QString Python::unicode(PyObject* const string)
         break;
     }
     return QString();
-#endif
 }
 
 bool Python::isUnicode(PyObject* const string)
 {
-#if PY_MAJOR_VERSION < 3
-    return PyString_Check(string) || PyUnicode_Check(string);
-#else
     return PyUnicode_Check(string);
-#endif
 }
 
 bool Python::prependPythonPaths(const QString& path)

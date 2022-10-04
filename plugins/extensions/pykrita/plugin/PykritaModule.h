@@ -14,12 +14,6 @@
 #include <Python.h>
 #include "config.h"
 
-#if PY_MAJOR_VERSION >= 3
-#ifndef IS_PY3K
-#define IS_PY3K
-#endif
-#endif
-
 #if SIP_VERSION >= 0x0500000
 #define PYKRITA_INIT PyInit_krita
 #else
@@ -29,10 +23,6 @@
 /**
  * Initializer for the built-in Python module.
  */
-#if defined(IS_PY3K)
 PyMODINIT_FUNC PYKRITA_INIT();
-#else
-void initpykrita();
-#endif
 
 #endif

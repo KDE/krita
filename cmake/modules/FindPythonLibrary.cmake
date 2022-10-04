@@ -31,15 +31,11 @@ endif(APPLE)
 
 include(FindPackageHandleStandardArgs)
 
-if (ENABLE_PYTHON_2)
-    find_package(Python 2.7 REQUIRED COMPONENTS Development Interpreter)
-else(ENABLE_PYTHON_2)
-    if (MINGW OR APPLE)
-        find_package(Python 3.8 REQUIRED COMPONENTS Development Interpreter)
-    else()
-        find_package(Python 3.0 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
-    endif()
-endif(ENABLE_PYTHON_2)
+if (WIN32 OR APPLE)
+    find_package(Python 3.8 REQUIRED COMPONENTS Development Interpreter)
+else()
+    find_package(Python 3.8 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)
+endif()
 
 message(STATUS "FindPythonLibrary: ${Python_Interpreter_FOUND}")
 

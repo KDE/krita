@@ -34,7 +34,7 @@ KisBrushOpResources::KisBrushOpResources(const KisPaintOpSettingsSP settings, Ki
     : m_d(new Private)
 {
     KisColorSourceOption colorSourceOption;
-    colorSourceOption.readOptionSetting(settings);
+    colorSourceOption.readOptionSetting(settings.data());
     colorSource.reset(colorSourceOption.createColorSource(painter));
 
     sharpnessOption.reset(new KisPressureSharpnessOption());

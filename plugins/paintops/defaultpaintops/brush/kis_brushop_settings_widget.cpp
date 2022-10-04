@@ -22,7 +22,6 @@
 #include <kis_pressure_hsv_option.h>
 #include <kis_pressure_softness_option.h>
 #include <kis_pressure_sharpness_option_widget.h>
-#include <kis_color_source_option_widget.h>
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_rate_option.h>
 #include "kis_texture_option.h"
@@ -39,6 +38,7 @@
 #include "KisAirbrushOptionWidget.h"
 #include "KisCompositeOpOptionWidget.h"
 #include "KisPaintingModeOptionWidget.h"
+#include "KisColorSourceOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -224,6 +224,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisSharpnessOptionData, lager::automatic_tag> sharpnessOptionData;
     lager::state<KisScatterOptionData, lager::automatic_tag> scatterOptionData;
 
+    lager::state<KisColorSourceOptionData, lager::automatic_tag> colorSourceOptionData;
     lager::state<KisDarkenOptionData, lager::automatic_tag> darkenOptionData;
     lager::state<KisMixOptionData, lager::automatic_tag> mixOptionData;
     lager::state<KisHueOptionData, lager::automatic_tag> hueOptionData;
@@ -272,7 +273,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisScatterOptionWidget(m_d->scatterOptionData), KisPaintOpOption::GENERAL);
 
     // Colors options
-    addPaintOpOption(new KisColorSourceOptionWidget());
+    addPaintOpOption(new KisColorSourceOptionWidget(m_d->colorSourceOptionData));
     addPaintOpOptionData(m_d->darkenOptionData, KisPaintOpOption::COLOR, i18n("0.0"), i18n("1.0"));
     addPaintOpOptionData(m_d->mixOptionData, KisPaintOpOption::COLOR, i18nc("Background painting color", "Background"), i18n("Foreground painting color", "Foreground"));
 
@@ -300,7 +301,6 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
 
     addPaintOpOption(new KisTextureOption(SupportsLightnessMode | SupportsGradientMode));
     addPaintOpOptionData(m_d->strengthOptionData, KisPaintOpOption::COLOR, i18n("Weak"), i18n("Strong"));
-
 
     addPaintOpOption(maskingOption);
 

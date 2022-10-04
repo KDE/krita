@@ -158,12 +158,23 @@ public:
         : QObject(parent),
           m_buttonGroup(parent)
     {
+        QObject::connect(m_buttonGroup, qOverload<QAbstractButton *>(&QButtonGroup::buttonClicked), this, &ConnectButtonGroupHelper::slotButtonClicked);
     }
 public Q_SLOTS:
     void updateState(int value) {
         QAbstractButton *btn = m_buttonGroup->button(value);
         KIS_SAFE_ASSERT_RECOVER_RETURN(btn);
         btn->setChecked(true);
+    }
+
+    void updateState(ButtonGroupState state) {
+        QAbstractButton *btn = m_buttonGroup->button(state.value);
+        KIS_SAFE_ASSERT_RECOVER_RETURN(btn);
+        btn->setChecked(true);
+
+        Q_FOREACH (QAbstractButton *btn, m_buttonGroup->buttons()) {
+            btn->setEnabled(state.enabled);
+        }
     }
 
     void slotButtonClicked(QAbstractButton *btn) {
@@ -205,8 +216,35 @@ void connectControl(QButtonGroup *group, QObject *source, const char *property)
     helper->updateState(prop.read(source).toInt());
 
     if (prop.isWritable()) {
-        QObject::connect(group, qOverload<QAbstractButton *>(&QButtonGroup::buttonClicked), helper, &ConnectButtonGroupHelper::slotButtonClicked);
         QObject::connect(helper, &ConnectButtonGroupHelper::idClicked, [prop, source] (int value) { prop.write(source, value); });
+    }
+}
+
+void connectControlState(QButtonGroup *group, QObject *source, const char *readStateProperty, const char *writeProperty)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty readStateProp = meta->property(meta->indexOfProperty(readStateProperty));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(readStateProp.hasNotifySignal());
+
+    QMetaMethod signal = readStateProp.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("ButtonGroupState"));
+
+    ConnectButtonGroupHelper *helper = new ConnectButtonGroupHelper(group);
+
+    const QMetaObject* dstMeta = helper->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+                dstMeta->indexOfSlot("updateState(ButtonGroupState)"));
+    QObject::connect(source, signal, helper, updateSlot);
+
+    helper->updateState(readStateProp.read(source).value<ButtonGroupState>());
+
+    QMetaProperty writeProp = meta->property(meta->indexOfProperty(writeProperty));
+    if (writeProp.isWritable()) {
+        QObject::connect(helper, &ConnectButtonGroupHelper::idClicked, [writeProp, source] (int value) { writeProp.write(source, value); });
     }
 }
 

@@ -38,6 +38,7 @@ struct ToControlState {
 };
 
 using CheckBoxState = ControlState<bool>;
+using ButtonGroupState = ControlState<int>;
 
 struct ComboBoxState {
     QStringList items;
@@ -71,6 +72,7 @@ void KRITAWIDGETS_EXPORT connectControl(QButtonGroup *button, QObject *source, c
 void KRITAWIDGETS_EXPORT connectControl(QComboBox *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QComboBox *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControlState(QAbstractButton *button, QObject *source, const char *readStateProperty, const char *writeProperty);
+void KRITAWIDGETS_EXPORT connectControlState(QButtonGroup *group, QObject *source, const char *readStateProperty, const char *writeProperty);
 void KRITAWIDGETS_EXPORT connectControlState(QComboBox *button, QObject *source, const char *readStateProperty, const char *writeProperty);
 void KRITAWIDGETS_EXPORT connectControl(KisSpacingSelectionWidget *widget, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(KisAngleSelector *widget, QObject *source, const char *property);
@@ -79,10 +81,12 @@ void KRITAWIDGETS_EXPORT connectControl(QLineEdit *widget, QObject *source, cons
 };
 
 using KisWidgetConnectionUtils::CheckBoxState;
+using KisWidgetConnectionUtils::ButtonGroupState;
 using KisWidgetConnectionUtils::ComboBoxState;
 using KisWidgetConnectionUtils::SpacingState;
 
 Q_DECLARE_METATYPE(CheckBoxState)
+Q_DECLARE_METATYPE(ButtonGroupState)
 Q_DECLARE_METATYPE(ComboBoxState)
 Q_DECLARE_METATYPE(SpacingState)
 

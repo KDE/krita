@@ -39,6 +39,7 @@
 #include "KisScatterOptionWidget.h"
 #include "KisAirbrushOptionWidget.h"
 #include "KisCompositeOpOptionWidget.h"
+#include "KisPaintingModeOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -231,6 +232,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisValueOptionData, lager::automatic_tag> valueOptionData;
     lager::state<KisAirbrushOptionData, lager::automatic_tag> airbrushOptionData;
     lager::state<KisRateOptionData, lager::automatic_tag> rateOptionData;
+    lager::state<KisPaintingModeOptionData, lager::automatic_tag> paintingModeOptionData;
 
     lager::state<KisStrengthOptionData, lager::automatic_tag> strengthOptionData;
 
@@ -294,17 +296,14 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisAirbrushOptionWidget(m_d->airbrushOptionData));
     addPaintOpOptionData(m_d->rateOptionData, KisPaintOpOption::COLOR);
 
-    KisPaintActionTypeOption *actionTypeOption = new KisPaintActionTypeOption();
-    addPaintOpOption(actionTypeOption);
+    KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(brushOptionWidget()->effectiveBrushSize());
+    addPaintOpOption(new KisPaintingModeOptionWidget(m_d->paintingModeOptionData, maskingOption->maskingBrushEnabledReader()));
 
     addPaintOpOption(new KisTextureOption(SupportsLightnessMode | SupportsGradientMode));
     addPaintOpOptionData(m_d->strengthOptionData, KisPaintOpOption::COLOR, i18n("Weak"), i18n("Strong"));
 
-    KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(brushOptionWidget()->effectiveBrushSize());
-    addPaintOpOption(maskingOption);
 
-    connect(maskingOption, SIGNAL(sigCheckedChanged(bool)),
-            actionTypeOption, SLOT(slotForceWashMode(bool)));
+    addPaintOpOption(maskingOption);
 
     addPaintOpOptionData(m_d->maskingOpacityOptionData, KisPaintOpOption::MASKING_BRUSH);
     addPaintOpOptionData(m_d->maskingSizeOptionData, KisPaintOpOption::MASKING_BRUSH);

@@ -28,6 +28,8 @@ public:
 
     void lodLimitations(KisPaintopLodLimitations *l) const override;
 
+    lager::reader<bool> maskingBrushEnabledReader() const;
+
 private Q_SLOTS:
     void slotCompositeModeWidgetChanged(int index);
     void slotCompositeModePropertyChanged(const QString &value);

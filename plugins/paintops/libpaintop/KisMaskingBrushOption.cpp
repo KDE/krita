@@ -178,7 +178,7 @@ struct KisMaskingBrushOption::Private
 };
 
 KisMaskingBrushOption::KisMaskingBrushOption(lager::reader<qreal> effectiveBrushSize)
-    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::MASKING_BRUSH, false)
+    : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::MASKING_BRUSH, true)
     , m_d(new Private(effectiveBrushSize))
 {
     setObjectName("KisMaskingBrushOption");
@@ -240,6 +240,11 @@ void KisMaskingBrushOption::setImage(KisImageWSP image)
 void KisMaskingBrushOption::lodLimitations(KisPaintopLodLimitations *l) const
 {
     *l |= KisBrushModel::brushLodLimitations(m_d->maskingData->brush);
+}
+
+lager::reader<bool> KisMaskingBrushOption::maskingBrushEnabledReader() const
+{
+    return m_d->maskingData[&MaskingBrushData::isEnabled];
 }
 
 void KisMaskingBrushOption::slotCompositeModeWidgetChanged(int index)

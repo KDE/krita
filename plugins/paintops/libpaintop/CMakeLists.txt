@@ -39,6 +39,9 @@ set(kritalibpaintop_LIB_SRCS
     KisCompositeOpOptionData.cpp
     KisCompositeOpOptionModel.cpp
     KisCompositeOpOptionWidget.cpp
+    KisPaintingModeOptionData.cpp
+    KisPaintingModeOptionModel.cpp
+    KisPaintingModeOptionWidget.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc

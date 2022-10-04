@@ -364,6 +364,7 @@ KisMainWindow::KisMainWindow(QUuid uuid)
 
     connect(this, SIGNAL(restoringDone()), this, SLOT(forceDockTabFonts()));
     connect(this, SIGNAL(themeChanged()), d->viewManager, SLOT(updateIcons()));
+    connect(this, SIGNAL(themeChanged()), KoToolManager::instance(), SLOT(themeChanged()));
     connect(KisPart::instance(), SIGNAL(documentClosed(QString)), SLOT(updateWindowMenu()));
     connect(KisPart::instance(), SIGNAL(documentOpened(QString)), SLOT(updateWindowMenu()));
     connect(KisConfigNotifier::instance(), SIGNAL(configChanged()), this, SLOT(configChanged()));
@@ -836,15 +837,8 @@ void KisMainWindow::slotPreferences()
     }
 }
 
-void KisMainWindow::slotThemeChanged()
+void KisMainWindow::updateTheme()
 {
-    KConfigGroup group(KSharedConfig::openConfig(), "theme");
-
-    if (group.readEntry("Theme", "") == d->themeManager->currentThemeName()) return;
-
-    // save theme changes instantly
-    group.writeEntry("Theme", d->themeManager->currentThemeName());
-
     // reload action icons!
     Q_FOREACH (QAction *action, actionCollection()->actions()) {
         KisIconUtils::updateIcon(action);
@@ -864,6 +858,60 @@ void KisMainWindow::slotThemeChanged()
     }
 
     customizeTabBar();
+
+    // Update toolbars
+    {
+        for (KisToolBar* aToolBar : toolBars()) {
+            QObjectList objects;
+            objects.append(aToolBar);
+            while (!objects.isEmpty()) {
+                QWidget* widget = qobject_cast<QWidget*>(objects.takeFirst());
+                if (widget) {
+                    objects.append(widget->children());
+                    widget->setPalette(qApp->palette());
+                }
+            }
+        }
+    }
+}
+
+void KisMainWindow::slotThemeChanged()
+{
+    KConfigGroup group(KSharedConfig::openConfig(), "theme");
+
+    if (group.readEntry("Theme", "") == d->themeManager->currentThemeName()) return;
+
+    // save theme changes instantly
+    group.writeEntry("Theme", d->themeManager->currentThemeName());
+
+    updateTheme();
+
+    // Make the other top level windows update as well
+    for (QWidget* topLevelWidget : qApp->topLevelWidgets()) {
+        if (topLevelWidget == this) {
+            // Skip if the current top level widget is this window
+            continue;
+        }
+        if (topLevelWidget->isHidden()) {
+            // Skip unwanted top level widgets like menus, dropdowns, tooltips, etc.
+            continue;
+        }
+        KisMainWindow *topLevelMainWindow = qobject_cast<KisMainWindow*>(topLevelWidget);
+        if (topLevelMainWindow) {
+            topLevelMainWindow->updateTheme();
+            emit topLevelMainWindow->themeChanged();
+        } else {
+            QObjectList objects;
+            objects.append(topLevelWidget);
+            while (!objects.isEmpty()) {
+                QWidget* widget = qobject_cast<QWidget*>(objects.takeFirst());
+                if (widget) {
+                    objects.append(widget->children());
+                    KisIconUtils::updateIconCommon(widget);
+                }
+            }
+        }
+    }
 
     emit themeChanged();
 }
@@ -2837,7 +2885,7 @@ void KisMainWindow::createActions()
     d->themeManager->setThemeMenuAction(new KActionMenu(i18nc("@action:inmenu", "&Themes"), this));
     d->themeManager->registerThemeActions(actionCollection());
     connect(d->themeManager, SIGNAL(signalThemeChanged()), this, SLOT(slotThemeChanged()), Qt::QueuedConnection);
-    connect(d->themeManager, SIGNAL(signalThemeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
+    connect(this, SIGNAL(themeChanged()), d->welcomePage, SLOT(slotUpdateThemeColors()), Qt::UniqueConnection);
     d->toggleDockers = actionManager->createAction("view_toggledockers");
 
 

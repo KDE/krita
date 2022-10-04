@@ -13,6 +13,8 @@ class QAbstractButton;
 class QComboBox;
 class QAction;
 class QObject;
+class QTabBar;
+class QTabWidget;
 
 #include <QIcon>
 #include <QString>
@@ -74,6 +76,11 @@ namespace KisIconUtils
      * Update an icon of \p action according to the current theme
      */
     KRITAWIDGETUTILS_EXPORT void updateIcon(QAction *action);
+
+    /**
+     * Update the iconst of the \p tabBar according to the current theme
+     */
+    KRITAWIDGETUTILS_EXPORT void updateIcon(QTabBar *tabBar);
 }
 
 #endif /* __KIS_ICON_UTILS_H */

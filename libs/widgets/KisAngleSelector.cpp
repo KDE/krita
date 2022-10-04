@@ -585,10 +585,6 @@ void KisAngleSelector::flip(Qt::Orientations orientations)
 bool KisAngleSelector::event(QEvent *e)
 {
     if (e->type() == QEvent::PaletteChange) {
-        KisIconUtils::updateIcon(m_d->toolButtonFlipOptions);
-        KisIconUtils::updateIcon(m_d->toolButtonFlipHorizontally);
-        KisIconUtils::updateIcon(m_d->toolButtonFlipVertically);
-        KisIconUtils::updateIcon(m_d->toolButtonFlipHorizontallyAndVertically);
         // For some reason the spinbox, that uses stylesheets, doesn't update
         // on palette changes, so we reset the stylesheet to force an update.
         // Calling m_d->spinBox->update() doesn't work

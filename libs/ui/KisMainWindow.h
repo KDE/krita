@@ -396,6 +396,7 @@ private Q_SLOTS:
     /**
      * Handle theme changes from theme manager
      */
+    void updateTheme();
     void slotThemeChanged();
 
     void undo();

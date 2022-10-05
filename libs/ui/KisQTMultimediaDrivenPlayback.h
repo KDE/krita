@@ -28,9 +28,10 @@ public:
     virtual void setSpeed(qreal speed) override;
     virtual double speed() override;
 
+    bool deviceAvailability();
+
 Q_SIGNALS:
     void error(const QString &filename, const QString &message);
-
 
 private Q_SLOTS:
     void slotOnError();
@@ -41,7 +42,7 @@ protected:
 
 private:
     struct Private;
-    const QScopedPointer<Private> m_d;
+    QScopedPointer<Private> m_d;
 };
 
 #endif

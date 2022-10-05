@@ -281,9 +281,6 @@ void KisPlaybackEngineQT::throttledDriverCallback()
         m_d->measure->averageDriverCallbackTime += qreal(timeSinceLastFrame - m_d->measure->averageDriverCallbackTime) / SLOPE_CONSTANT;
         const int delay = qRound(m_d->measure->averageDriverCallbackTime) - timePerFrame;
         const int newTargetTimerTime = qMax( timePerFrame / 2, timePerFrame - delay );
-        if (delay != 0) {
-            ENTER_FUNCTION() << ppVar(delay);
-        }
         m_d->driver->setTimerDuration(newTargetTimerTime);
     }
 
@@ -475,7 +472,10 @@ void KisPlaybackEngineQT::recreateDriver(boost::optional<QFileInfo> file)
 #ifdef HAVE_QT_MULTIMEDIA
     bool hasQTMultimediaEnabledInConfig = true; // TODO -- Add proper configuration entry w/ default to on. Used for debugging.
     if (file && hasQTMultimediaEnabledInConfig) {
-        m_d->driver.reset(new AudioDrivenPlayback(this, file.get()));
+        QScopedPointer<AudioDrivenPlayback> audioPlayback(new AudioDrivenPlayback(this, file.get()));
+        if (audioPlayback->deviceAvailability()) {
+            m_d->driver.reset(audioPlayback.take());
+        }
     }
 #endif
 }

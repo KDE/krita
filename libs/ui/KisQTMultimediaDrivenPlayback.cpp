@@ -8,6 +8,8 @@
 #ifdef HAVE_QT_MULTIMEDIA
 
 #include <QMediaPlayer>
+#include <QMediaService>
+#include <QAudioDeviceInfo>
 
 qint64 framesToMSec(qreal value, int fps) {
     return qRound((value / fps) * 1000.0);
@@ -40,7 +42,6 @@ struct AudioPlaybackMemory {
 struct AudioDrivenPlayback::Private {
     QMediaPlayer player;
     QTimer playbackLoop;
-
     QScopedPointer<AudioPlaybackMemory> playbackMemory;
 };
 
@@ -53,14 +54,13 @@ AudioDrivenPlayback::AudioDrivenPlayback(KisPlaybackEngineQT* engine, QFileInfo 
     connect(&m_d->playbackLoop, SIGNAL(timeout()), SLOT(timerElapsed()));
 
     KIS_ASSERT(fileinfo.isFile());
-    QString mimetype = QMimeDatabase().mimeTypeForFile( fileinfo.absoluteFilePath() ).name();
+    QString mimetype = QMimeDatabase().mimeTypeForFile(fileinfo.absoluteFilePath()).name();
 
     if (m_d->player.hasSupport(mimetype)) {
         // Buffer file immediately, do not wait for playback to begin. This should help fix
         // "lag" caused by loading the file when requesting to play the media.
         // This might result in small slowdown on initial file loading, but that should beat
         // the alternative.
-
         m_d->player.setMedia(QUrl::fromLocalFile(fileinfo.absoluteFilePath()));
     } else {
         emit error(fileinfo.absoluteFilePath(),
@@ -99,10 +99,11 @@ void AudioDrivenPlayback::setPlaybackState(PlaybackState newState)
             case PLAYING:
                 m_d->playbackLoop.start();
                 m_d->player.play();
+                m_d->playbackMemory.reset(new AudioPlaybackMemory);
             break;
             case PAUSED:
                 m_d->playbackLoop.stop();
-                m_d->player.pause();
+                m_d->player.stop();
                 m_d->playbackMemory.reset();
             break;
             case STOPPED:
@@ -163,6 +164,12 @@ double AudioDrivenPlayback::speed()
     return m_d->player.playbackRate();
 }
 
+bool AudioDrivenPlayback::deviceAvailability()
+{
+    const QList<QAudioDeviceInfo> deviceDetails = QAudioDeviceInfo::availableDevices(QAudio::AudioOutput);
+    return deviceDetails.size() > 0;
+}
+
 void AudioDrivenPlayback::slotOnError()
 {
 #if QT_VERSION >= QT_VERSION_CHECK(5,14,0)
@@ -174,23 +181,16 @@ void AudioDrivenPlayback::slotOnError()
 
 void AudioDrivenPlayback::timerElapsed()
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->playbackMemory);
     const int pos = m_d->player.position();
     const int currentFrame = msecToFrames(pos, engine()->activeFramesPerSecond().get_value_or(24));
 
-    bool needsNotify = false;
-    if (!m_d->playbackMemory) {
-        m_d->playbackMemory.reset(new AudioPlaybackMemory);
-        needsNotify = true;
-    } else {
-        const int lastFrame = msecToFrames(m_d->playbackMemory->lastTimeMSec, engine()->activeFramesPerSecond().get_value_or(24));
-        needsNotify = lastFrame != currentFrame;
-    }
+    const int lastFrame = msecToFrames(m_d->playbackMemory->lastTimeMSec, engine()->activeFramesPerSecond().get_value_or(24));
+    bool needsNotify = lastFrame != currentFrame;
 
     if (needsNotify) {
         throttledShowFrame();
     }
-
-    m_d->playbackMemory->lastTimeMSec = pos;
 }
 
 void AudioDrivenPlayback::updatePlaybackLoopInterval(const int &in_fps, const qreal &in_speed) {

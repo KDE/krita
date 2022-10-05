@@ -17,42 +17,6 @@
 #include <boost/optional.hpp>
 
 
-class PlaybackDriver : public QObject {
-    Q_OBJECT
-public:
-    PlaybackDriver( class KisPlaybackEngineQT* engine, QObject* parent = nullptr );
-    ~PlaybackDriver();
-
-    virtual void setPlaybackState(PlaybackState state) = 0;
-
-    virtual void setFrame(int) {}
-    virtual boost::optional<int> desiredFrame() { return boost::none; }
-
-    virtual void setVolume(qreal) {}
-
-    virtual void setSpeed(qreal) {}
-    virtual double speed() = 0;
-
-    virtual void setFramerate(int rate) {}
-
-    virtual void setDropFrames(bool) {}
-    virtual bool dropFrames() { return true; }
-
-    virtual void setTimerDuration(int) {}
-    virtual int timerDuration() { return 1000 / 24; }
-
-    KisPlaybackEngineQT* engine() { return m_engine; }
-
-Q_SIGNALS:
-    void throttledShowFrame();
-
-private:
-    KisPlaybackEngineQT* m_engine;
-    QElapsedTimer time;
-    int m_measureRemainder = 0;
-
-};
-
 
 /**
  * @brief The KisPlaybackEngineQT class is an implementation of KisPlaybackEngine
@@ -80,7 +44,6 @@ public:
     virtual bool supportsAudio() override { return false; }
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
-
     boost::optional<int64_t> activeFramesPerSecond();
 
 protected Q_SLOTS:
@@ -103,6 +66,43 @@ private:
 private:
     struct Private;
     QScopedPointer<Private> m_d;
+};
+
+class PlaybackDriver : public QObject {
+    Q_OBJECT
+public:
+    PlaybackDriver( class KisPlaybackEngineQT* engine, QObject* parent = nullptr );
+    ~PlaybackDriver();
+
+    virtual void setPlaybackState(PlaybackState state) = 0;
+
+    virtual void setFrame(int) {}
+    virtual boost::optional<int> desiredFrame() { return boost::none; }
+
+    virtual void setVolume(qreal) {}
+
+    virtual void setSpeed(qreal) {}
+    virtual double speed() = 0;
+
+    virtual void setFramerate(int rate) {}
+
+    virtual void setDropFrames(bool) {}
+    virtual bool dropFrames() { return true; }
+
+    virtual void setTimerDuration(int) {}
+    virtual int timerDuration() { return 1000 / 24; }
+
+    KisPlaybackEngineQT* engine() { return m_engine; }
+
+
+Q_SIGNALS:
+    void throttledShowFrame();
+
+private:
+    KisPlaybackEngineQT* m_engine;
+    QElapsedTimer time;
+    int m_measureRemainder = 0;
+
 };
 
 #endif // KISPLAYBACKENGINEQT_H

@@ -692,7 +692,9 @@ xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\kf5 %pkg_root%\share\kf5
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\mime %pkg_root%\share\mime
 :: Python libs
 xcopy /Y /S /I %DEPS_INSTALL_DIR%\share\krita\pykrita %pkg_root%\share\krita\pykrita
-xcopy /Y /S /I %DEPS_INSTALL_DIR%\lib\site-packages %pkg_root%\lib\site-packages
+robocopy %DEPS_INSTALL_DIR%\lib\site-packages %pkg_root%\lib\site-packages /S /E ^
+    /XF "setuptools.pth" "easy-install.pth" ^
+    /XD "packaging*" "pip*" "ply*" "pyparsing*" "PyQt_builder*" "sip*" "toml*"
 :: Not useful on Windows it seems
 rem xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\appdata %pkg_root%\share\appdata
 rem xcopy /Y /S /I %KRITA_INSTALL_DIR%\share\applications %pkg_root%\share\applications

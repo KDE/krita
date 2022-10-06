@@ -53,6 +53,12 @@ public:
     QVariant data(const QModelIndex& idx, int role = Qt::DisplayRole) const override;
     bool setData(const QModelIndex& idx, const QVariant& value, int role=Qt::EditRole) override;
     void signalDataChanged(const QModelIndex& index);
+
+private Q_SLOTS:
+    void slotCheckedEnabledStateChanged(int row);
+
+private:
+    QSignalMapper m_stateSignalsMapper;
 };
 
 #endif // _KIS_PAINTOP_OPTION_LIST_MODEL_H_

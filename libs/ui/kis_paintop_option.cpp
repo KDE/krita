@@ -23,6 +23,7 @@ struct KisPaintOpOption::Private
 public:
     lager::state<bool, lager::automatic_tag> checkedFallback;
     lager::cursor<bool> checkedCursor;
+    lager::reader<bool> externallyEnabledReader;
     lager::reader<bool> pageEnabledReader;
     QString label;
     KisPaintOpOption::PaintopCategory category;
@@ -46,9 +47,12 @@ KisPaintOpOption::KisPaintOpOption(const QString &label, PaintopCategory categor
     m_d->label = label;
     m_d->checkedFallback.set(checked);
     m_d->checkedCursor = m_d->checkedFallback;
+    m_d->externallyEnabledReader = lager::make_constant(true);
     m_d->pageEnabledReader = m_d->checkedCursor;
     m_d->category = category;
     m_d->pageEnabledReader.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
+    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::emitCheckedChanged, this, std::placeholders::_1));
+    m_d->externallyEnabledReader.bind(std::bind(&KisPaintOpOption::emitEnabledChanged, this, std::placeholders::_1));
 
 }
 
@@ -67,9 +71,12 @@ KisPaintOpOption::KisPaintOpOption(const QString &label, KisPaintOpOption::Paint
 {
     m_d->label = label;
     m_d->checkedCursor = checkedCursor;
-    m_d->pageEnabledReader = lager::with(m_d->checkedCursor, externallyEnabledLink).map(std::logical_and{});
+    m_d->externallyEnabledReader = externallyEnabledLink;
+    m_d->pageEnabledReader = lager::with(m_d->checkedCursor, m_d->externallyEnabledReader).map(std::logical_and{});
     m_d->category = category;
     m_d->pageEnabledReader.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
+    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::emitCheckedChanged, this, std::placeholders::_1));
+    m_d->externallyEnabledReader.bind(std::bind(&KisPaintOpOption::emitEnabledChanged, this, std::placeholders::_1));
 }
 
 KisPaintOpOption::~KisPaintOpOption()
@@ -86,12 +93,21 @@ void KisPaintOpOption::emitSettingChanged()
     }
 }
 
-void KisPaintOpOption::emitCheckedChanged()
+void KisPaintOpOption::emitCheckedChanged(bool checked)
 {
     KIS_ASSERT_RECOVER_RETURN(!m_d->isWritingSettings);
 
     if (!m_d->updatesBlocked) {
-        emit sigCheckedChanged(isChecked());
+        emit sigCheckedChanged(checked);
+    }
+}
+
+void KisPaintOpOption::emitEnabledChanged(bool enabled)
+{
+    KIS_ASSERT_RECOVER_RETURN(!m_d->isWritingSettings);
+
+    if (!m_d->updatesBlocked) {
+        emit sigEnabledChanged(enabled);
     }
 }
 
@@ -138,8 +154,12 @@ void KisPaintOpOption::setChecked(bool checked)
 {
     m_d->checkedCursor.set(checked);
 
-    emitCheckedChanged();
     emitSettingChanged();
+}
+
+bool KisPaintOpOption::isEnabled() const
+{
+    return m_d->externallyEnabledReader.get();
 }
 
 void KisPaintOpOption::setImage(KisImageWSP image)

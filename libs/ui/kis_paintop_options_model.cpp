@@ -13,6 +13,8 @@
 KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
     : BaseOptionCategorizedListModel(parent)
 {
+    connect(&m_stateSignalsMapper, qOverload<int>(&QSignalMapper::mapped),
+            this, &KisPaintOpOptionListModel::slotCheckedEnabledStateChanged);
 }
 
 void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, KisPaintOpOption::PaintopCategory categoryType)
@@ -47,29 +49,20 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
     if (option->isCheckable()) {
         item->setCheckable(true);
         item->setChecked(option->isChecked());
+        connect(option, &KisPaintOpOption::sigCheckedChanged,
+                &m_stateSignalsMapper, qOverload<>(&QSignalMapper::map));
     }
+
+    item->setEnabled(option->isEnabled());
+    connect(option, &KisPaintOpOption::sigEnabledChanged,
+            &m_stateSignalsMapper, qOverload<>(&QSignalMapper::map));
+    m_stateSignalsMapper.setMapping(option, categoriesMapper()->rowFromItem(item));
 
     categoriesMapper()->expandAllCategories();
 }
 
 QVariant KisPaintOpOptionListModel::data(const QModelIndex& idx, int role) const
 {
-    if (!idx.isValid()) return false;
-
-    DataItem *item = categoriesMapper()->itemFromRow(idx.row());
-    Q_ASSERT(item);
-
-    // Lazy fetching of the real checked value (there are no notifications
-    // when changing the pointop preset)
-
-    if (role == Qt::CheckStateRole && item->isCheckable()) {
-        bool realChecked = item->data()->option->isChecked();
-
-        if (realChecked != item->isChecked()) {
-            item->setChecked(realChecked);
-        }
-    }
-
     return BaseOptionCategorizedListModel::data(idx, role);
 }
 
@@ -99,4 +92,22 @@ bool operator==(const KisOptionInfo& a, const KisOptionInfo& b)
 void KisPaintOpOptionListModel::signalDataChanged(const QModelIndex& index)
 {
     emit dataChanged(index,index);
+}
+
+void KisPaintOpOptionListModel::slotCheckedEnabledStateChanged(int row)
+{
+    QModelIndex idx(index(row));
+
+    DataItem *item = categoriesMapper()->itemFromRow(row);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(item);
+
+    if (item->data()->option->isEnabled() != item->isEnabled()) {
+        item->setEnabled(item->data()->option->isEnabled());
+    }
+
+    if (item->data()->option->isChecked() != item->isChecked()) {
+        item->setChecked(item->data()->option->isChecked());
+    }
+
+    emit dataChanged(idx, idx);
 }

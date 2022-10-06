@@ -61,6 +61,8 @@ public:
     virtual bool isChecked() const;
     virtual void setChecked(bool checked);
 
+    bool isEnabled() const;
+
     void setLocked(bool value);
     bool isLocked() const;
 
@@ -106,7 +108,8 @@ protected:
 
 protected Q_SLOTS:
     void emitSettingChanged();
-    void emitCheckedChanged();
+    void emitCheckedChanged(bool checked);
+    void emitEnabledChanged(bool enabled);
 
 Q_SIGNALS:
 
@@ -120,6 +123,7 @@ Q_SIGNALS:
      * emitted *before* sigSettingChanged()
      */
     void sigCheckedChanged(bool value);
+    void sigEnabledChanged(bool value);
 
 private:
     void slotEnablePageWidget(bool value);

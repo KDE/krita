@@ -23,12 +23,10 @@
 
 struct KisCurveOptionWidget2::Private
 {
-    Private(lager::cursor<KisCurveOptionData> _optionData)
-        : optionData(_optionData),
-          model(optionData)
+    Private(lager::cursor<KisCurveOptionData> optionData, lager::reader<bool> enabledLink)
+        : model(optionData, enabledLink)
     {}
 
-    lager::cursor<KisCurveOptionData> optionData;
     KisCurveOptionModel model;
 
     int curveMinValue;
@@ -83,14 +81,14 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
     : KisPaintOpOption(optionData->id.name(), category, optionData[&KisCurveOptionData::isChecked], enabledLink)
     , m_widget(new QWidget)
     , m_curveOptionWidget(new Ui_WdgCurveOption2())
-    , m_d(new Private(optionData))
+    , m_d(new Private(optionData, enabledLink))
 {
     using namespace KisWidgetConnectionUtils;
 
     setObjectName("KisCurveOptionWidget2");
 
     m_curveOptionWidget->setupUi(m_widget);
-    m_curveOptionWidget->sensorSelector->setOptionDataCursor(m_d->optionData);
+    m_curveOptionWidget->sensorSelector->setOptionDataCursor(m_d->model.optionData);
     setConfigurationPage(m_widget);
     hideRangeLabelsAndBoxes(true);
 
@@ -100,7 +98,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
     m_curveOptionWidget->label_ymin->setText(curveMinLabel);
     m_curveOptionWidget->label_ymax->setText(curveMaxLabel);
 
-    m_d->model.m_activeSensorIdData.bind(
+    m_d->model.activeSensorIdData.bind(
         std::bind(qOverload<const QString&>(&KisMultiSensorsSelector2::setCurrent),
                   m_curveOptionWidget->sensorSelector,
                   std::placeholders::_1));
@@ -153,7 +151,7 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
     connectControl(m_curveOptionWidget->checkBoxUseSameCurve, &m_d->model, "useSameCurve");
     connectControl(m_curveOptionWidget->curveMode, &m_d->model, "curveMode");
 
-    m_d->optionData.bind(std::bind(&KisCurveOptionWidget2::emitSettingChanged, this));
+    m_d->model.optionData.bind(std::bind(&KisCurveOptionWidget2::emitSettingChanged, this));
 }
 
 KisCurveOptionWidget2::~KisCurveOptionWidget2()
@@ -163,14 +161,14 @@ KisCurveOptionWidget2::~KisCurveOptionWidget2()
 
 void KisCurveOptionWidget2::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    m_d->optionData.get().write(setting.data());
+    m_d->model.bakedOptionData().write(setting.data());
 }
 
 void KisCurveOptionWidget2::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    KisCurveOptionData data(*m_d->optionData);
+    KisCurveOptionData data(*m_d->model.optionData);
     data.read(setting.data());
-    m_d->optionData.set(data);
+    m_d->model.optionData.set(data);
 }
 
 bool KisCurveOptionWidget2::isCheckable() const

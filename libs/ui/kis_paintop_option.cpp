@@ -51,8 +51,8 @@ KisPaintOpOption::KisPaintOpOption(const QString &label, PaintopCategory categor
     m_d->pageEnabledReader = m_d->checkedCursor;
     m_d->category = category;
     m_d->pageEnabledReader.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
-    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::emitCheckedChanged, this, std::placeholders::_1));
-    m_d->externallyEnabledReader.bind(std::bind(&KisPaintOpOption::emitEnabledChanged, this, std::placeholders::_1));
+    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::sigCheckedChanged, this, std::placeholders::_1));
+    m_d->externallyEnabledReader.bind(std::bind(&KisPaintOpOption::sigEnabledChanged, this, std::placeholders::_1));
 
 }
 
@@ -75,8 +75,8 @@ KisPaintOpOption::KisPaintOpOption(const QString &label, KisPaintOpOption::Paint
     m_d->pageEnabledReader = lager::with(m_d->checkedCursor, m_d->externallyEnabledReader).map(std::logical_and{});
     m_d->category = category;
     m_d->pageEnabledReader.bind(std::bind(&KisPaintOpOption::slotEnablePageWidget, this, std::placeholders::_1));
-    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::emitCheckedChanged, this, std::placeholders::_1));
-    m_d->externallyEnabledReader.bind(std::bind(&KisPaintOpOption::emitEnabledChanged, this, std::placeholders::_1));
+    m_d->checkedCursor.bind(std::bind(&KisPaintOpOption::sigCheckedChanged, this, std::placeholders::_1));
+    m_d->externallyEnabledReader.bind(std::bind(&KisPaintOpOption::sigEnabledChanged, this, std::placeholders::_1));
 }
 
 KisPaintOpOption::~KisPaintOpOption()

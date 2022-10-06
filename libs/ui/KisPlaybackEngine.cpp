@@ -263,6 +263,10 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
         connect(animState, &KisCanvasAnimationState::sigCancelPlayback, this, [this](){
             stop();
         });
+
+        KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
+        KisFrameDisplayProxy* displayProxy = animState->displayProxy();
+        displayProxy->displayFrame(animInterface->currentTime(), true);
     }
 }
 

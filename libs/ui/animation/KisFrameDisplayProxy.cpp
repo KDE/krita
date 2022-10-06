@@ -82,7 +82,6 @@ bool KisFrameDisplayProxy::displayFrame(int frame, bool forceReproject)
         // will prevent the uncached frame from ever determining it needs to be
         // regenerated. We will force a frame switch when going from uncached to cached
         // to work around this issue.
-
         ai->switchCurrentTimeAsync(frame, KisImageAnimationInterface::STAO_FORCE_REGENERATION);
         return true;
 

@@ -583,6 +583,9 @@ public:
     void setAnimationAllowQTMultimedia(bool value);
     bool animationAllowQTMultimedia(bool defaultValue = false) const;
 
+    void setAnimationPlaybackBackend(int value);
+    int animationPlaybackBackend(bool defaultValue = false) const;
+
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 

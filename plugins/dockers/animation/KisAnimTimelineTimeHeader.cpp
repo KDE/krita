@@ -599,7 +599,7 @@ void KisAnimTimelineTimeHeader::mouseReleaseEvent(QMouseEvent *e)
         return;
 
     if (e->button() == Qt::LeftButton) {
-        int timeUnderMouse = logicalIndexAt(e->pos());
+        int timeUnderMouse = qMax(logicalIndexAt(e->pos()), 0);
         model()->setHeaderData(timeUnderMouse, orientation(), true, KisTimeBasedItemModel::ActiveFrameRole);
         if (timeUnderMouse != m_d->model->currentTime()) {
             model()->setHeaderData(timeUnderMouse, orientation(), QVariant(int(SEEK_PUSH_AUDIO | SEEK_FINALIZE)), KisTimeBasedItemModel::ScrubToRole);

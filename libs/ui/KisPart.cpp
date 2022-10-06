@@ -94,8 +94,16 @@ public:
         , playbackEngine(nullptr)
     {
 #ifdef HAVE_MLT
-        playbackEngine.reset(new KisPlaybackEngineQT);
+        KisConfig cfg(true);
+        if (cfg.animationPlaybackBackend() > 0) {
+            dbgUI << "Playback backend selected: MLT";
+            playbackEngine.reset(new KisPlaybackEngineMLT);
+        } else {
+            dbgUI << "Playback backend selected: QT";
+            playbackEngine.reset(new KisPlaybackEngineQT);
+        }
 #else
+        dbgUI << "Krita built without MLT support. Using QT Playback backend."
         playbackEngine.reset(new KisPlaybackEngineQT);
 #endif
     }

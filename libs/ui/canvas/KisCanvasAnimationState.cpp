@@ -195,10 +195,6 @@ public:
         }
     }
 
-
-Q_SIGNALS:
-    void finishedSeeking();
-
 private:
     int m_originFrame; //!< The frame user started playback from.
     KisSignalAutoConnectionsStore m_cancelStrokeConnections;
@@ -255,9 +251,8 @@ KisCanvasAnimationState::KisCanvasAnimationState(KisCanvas2 *canvas)
     });
 
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioTracksChanged, this, &KisCanvasAnimationState::setupAudioTracks);
-    setupAudioTracks();
-
     connect(m_d->canvas->imageView()->document(), &KisDocument::sigAudioLevelChanged, this, &KisCanvasAnimationState::sigAudioLevelChanged);
+    setupAudioTracks();
 }
 
 KisCanvasAnimationState::~KisCanvasAnimationState()

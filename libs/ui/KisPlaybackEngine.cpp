@@ -266,7 +266,9 @@ void KisPlaybackEngine::setCanvas(KoCanvasBase *p_canvas)
 
         KisImageAnimationInterface* animInterface = m_d->activeCanvas->image()->animationInterface();
         KisFrameDisplayProxy* displayProxy = animState->displayProxy();
-        displayProxy->displayFrame(animInterface->currentTime(), true);
+        if (animState->playbackState() != PLAYING) {
+            displayProxy->displayFrame(animInterface->currentTime(), true);
+        }
     }
 }
 

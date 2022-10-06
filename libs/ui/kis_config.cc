@@ -2167,6 +2167,16 @@ bool KisConfig::animationAllowQTMultimedia(bool defaultValue) const
     return (defaultValue ? false : m_cfg.readEntry("animationAllowQTMultimedia", false));
 }
 
+void KisConfig::setAnimationPlaybackBackend(int value)
+{
+    m_cfg.writeEntry("animationPlaybackBackend", value);
+}
+
+int KisConfig::animationPlaybackBackend(bool defaultValue) const
+{
+    return (defaultValue ? 1 : m_cfg.readEntry("animationPlaybackBackend", 1));
+}
+
 void KisConfig::setAnimationDropFrames(bool value)
 {
     bool oldValue = animationDropFrames();

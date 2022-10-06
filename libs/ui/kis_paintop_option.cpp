@@ -26,6 +26,9 @@ public:
     lager::reader<bool> pageEnabledReader;
     QString label;
     KisPaintOpOption::PaintopCategory category;
+
+    /// the configuration page is owned by the higher level
+    /// QStackWidget, so we shouldn't care about that
     QWidget *configurationPage {nullptr};
 
     bool updatesBlocked {false};

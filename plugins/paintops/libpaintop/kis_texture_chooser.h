@@ -9,7 +9,7 @@
 
 #include "ui_wdgtexturechooser.h"
 
-#include "kis_texture_option.h"
+#include "KisTextureOptionData.h"
 
 class KisTextureChooser : public QWidget, public Ui::KisWdgTextureChooser
 {
@@ -19,8 +19,8 @@ public:
     KisTextureChooser(KisBrushTextureFlags flags, QWidget *parent = 0);
     ~KisTextureChooser();
 
-    bool selectTexturingMode(KisTextureProperties::TexturingMode mode);
-    KisTextureProperties::TexturingMode texturingMode() const;
+    bool selectTexturingMode(KisTextureOptionData::TexturingMode mode);
+    KisTextureOptionData::TexturingMode texturingMode() const;
 };
 
 #endif

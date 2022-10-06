@@ -40,6 +40,9 @@ public:
     LAGER_QT_CURSOR(bool, invert);
 
     KisTextureOptionData bakedOptionData() const;
+
+private:
+    void updateOffsetLimits(KoResourceSP resource);
 };
 
 #endif // KISTEXTUREOPTIONMODEL_H

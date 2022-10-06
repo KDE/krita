@@ -18,7 +18,7 @@ class KisColorSmudgeOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
     Q_OBJECT
 
 public:
-    KisColorSmudgeOpSettingsWidget(QWidget* parent = 0);
+    KisColorSmudgeOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
     ~KisColorSmudgeOpSettingsWidget() override;
 
     KisPropertiesConfigurationSP configuration() const override;

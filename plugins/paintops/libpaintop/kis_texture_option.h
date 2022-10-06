@@ -22,70 +22,18 @@
 
 #include <QRect>
 
-class KisTextureChooser;
 class KoPattern;
 class KoResource;
 class KisPropertiesConfiguration;
-class KisPaintopLodLimitations;
 class KisResourcesInterface;
 
-
-enum KisBrushTextureFlag
-{
-    None = 0x0,
-    SupportsLightnessMode = 0x1,
-    SupportsGradientMode = 0x2,
-};
-Q_DECLARE_FLAGS(KisBrushTextureFlags, KisBrushTextureFlag)
-Q_DECLARE_OPERATORS_FOR_FLAGS(KisBrushTextureFlags)
-
-class PAINTOP_EXPORT KisTextureOption : public KisPaintOpOption
-{
-    Q_OBJECT
-public:
-
-    explicit KisTextureOption(KisBrushTextureFlags flags = None);
-    ~KisTextureOption() override;
-
-public Q_SLOTS:
-
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
-    void lodLimitations(KisPaintopLodLimitations *l) const override;
-
-private Q_SLOTS:
-
-    void resetGUI(KoResourceSP ); /// called when a new pattern is selected
+#include <KisTextureOptionData.h>
 
 
-private:
-    /// UI Widget that stores all the texture options
-    KisTextureChooser* m_textureOptions;
-};
-
-class PAINTOP_EXPORT KisTextureProperties
+class PAINTOP_EXPORT KisTextureOption
 {
 public:
-    KisTextureProperties(int levelOfDetail, KisBrushTextureFlags flags = None);
-
-    enum TexturingMode {
-        MULTIPLY,
-        SUBTRACT,
-        LIGHTNESS,
-        GRADIENT,
-        DARKEN,
-        OVERLAY,
-        COLOR_DODGE,
-        COLOR_BURN,
-        LINEAR_DODGE,
-        LINEAR_BURN,
-        HARD_MIX_PHOTOSHOP,
-        HARD_MIX_SOFTER_PHOTOSHOP,
-        HEIGHT,
-        LINEAR_HEIGHT,
-        HEIGHT_PHOTOSHOP,
-        LINEAR_HEIGHT_PHOTOSHOP
-    };
+    KisTextureOption(int levelOfDetail, KisBrushTextureFlags flags = None);
 
     bool m_enabled {false};
 
@@ -111,7 +59,7 @@ private:
 
     int m_offsetX {0};
     int m_offsetY {0};
-    TexturingMode m_texturingMode {KisTextureProperties::MULTIPLY};
+    KisTextureOptionData::TexturingMode m_texturingMode {KisTextureOptionData::MULTIPLY};
     KoAbstractGradientSP m_gradient;
     KoCachedGradient m_cachedGradient;
 

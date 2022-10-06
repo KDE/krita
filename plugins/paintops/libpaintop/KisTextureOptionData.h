@@ -9,14 +9,42 @@
 #include <boost/operators.hpp>
 #include <kritapaintop_export.h>
 
-// TODO: move enums here!
-#include "kis_texture_option.h"
-
 #include "KisEmbeddedTextureData.h"
+
+class KisPaintopLodLimitations;
+
+enum KisBrushTextureFlag
+{
+    None = 0x0,
+    SupportsLightnessMode = 0x1,
+    SupportsGradientMode = 0x2,
+};
+Q_DECLARE_FLAGS(KisBrushTextureFlags, KisBrushTextureFlag)
+Q_DECLARE_OPERATORS_FOR_FLAGS(KisBrushTextureFlags)
+
 
 
 class PAINTOP_EXPORT KisTextureOptionData : boost::equality_comparable<KisTextureOptionData>
 {
+public:
+    enum TexturingMode {
+        MULTIPLY,
+        SUBTRACT,
+        LIGHTNESS,
+        GRADIENT,
+        DARKEN,
+        OVERLAY,
+        COLOR_DODGE,
+        COLOR_BURN,
+        LINEAR_DODGE,
+        LINEAR_BURN,
+        HARD_MIX_PHOTOSHOP,
+        HARD_MIX_SOFTER_PHOTOSHOP,
+        HEIGHT,
+        LINEAR_HEIGHT,
+        HEIGHT_PHOTOSHOP,
+        LINEAR_HEIGHT_PHOTOSHOP
+    };
 public:
     inline friend bool operator==(const KisTextureOptionData &lhs, const KisTextureOptionData &rhs) {
         return lhs.isEnabled == rhs.isEnabled &&
@@ -51,7 +79,7 @@ public:
     int maximumOffsetY {0};
     bool isRandomOffsetX {false};
     bool isRandomOffsetY {false};
-    KisTextureProperties::TexturingMode texturingMode {KisTextureProperties::MULTIPLY};
+    TexturingMode texturingMode {MULTIPLY};
     int cutOffPolicy {0};
     int cutOffLeft {0};
     int cutOffRight {255};
@@ -59,6 +87,8 @@ public:
 
     bool read(const KisPropertiesConfiguration *setting);
     void write(KisPropertiesConfiguration *setting) const;
+
+    KisPaintopLodLimitations lodLimitations() const;
 };
 
 

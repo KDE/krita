@@ -26,21 +26,22 @@
 #include <kis_compositeop_option.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include <kis_pressure_rate_option.h>
-#include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
-#include "kis_pressure_texture_strength_option.h"
 #include "kis_pressure_hsv_option.h"
 #include "kis_colorsmudgeop_settings.h"
 #include "kis_signals_blocker.h"
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
+#include <KisTextureOptionWidget.h>
+#include <KisStandardOptionData.h>
 
 
-KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent)
+KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
                                        KisBrushOptionWidgetFlag::SupportsHSLBrushMode,
                                        parent)
 {
+    Q_UNUSED(canvasResourcesInterface)
     namespace kpou = KisPaintOpOptionUtils;
 
     setObjectName("brush option widget");
@@ -80,8 +81,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent)
     addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
-    addPaintOpOption(new KisTextureOption());
-    addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
+    addPaintOpOption(kpou::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface));
+    addPaintOpOption(kpou::createCurveOptionWidget(KisStrengthOptionData(), KisPaintOpOption::COLOR, i18n("Weak"), i18n("Strong")));
 
     const KisBrushOptionWidget* brushOption = brushOptionWidget();
     connect(brushOption, SIGNAL(sigSettingChanged()), SLOT(slotBrushOptionChanged()));

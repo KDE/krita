@@ -139,7 +139,7 @@ KisDabCacheBase::getDabParameters(KisBrushSP brush,
     return params;
 }
 
-bool KisDabCacheBase::needSeparateOriginal(KisTextureProperties *textureOption,
+bool KisDabCacheBase::needSeparateOriginal(KisTextureOption *textureOption,
                                            KisPressureSharpnessOption *sharpnessOption) const
 {
     return (textureOption && textureOption->m_enabled) ||

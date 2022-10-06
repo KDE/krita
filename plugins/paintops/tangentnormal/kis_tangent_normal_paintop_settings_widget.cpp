@@ -28,12 +28,14 @@
 #include "kis_pressure_texture_strength_option.h"
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
+#include <KisTextureOptionWidget.h>
 
 
-KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent):
+KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface):
     KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
                                      KisBrushOptionWidgetFlag::SupportsHSLBrushMode, parent)
 {
+    Q_UNUSED(canvasResourcesInterface)
     namespace kpou = KisPaintOpOptionUtils;
 
     setObjectName("brush option widget");
@@ -56,7 +58,7 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());
 
-    addPaintOpOption(new KisTextureOption());
+    addPaintOpOption(kpou::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
 }
 

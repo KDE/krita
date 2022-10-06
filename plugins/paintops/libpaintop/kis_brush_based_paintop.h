@@ -85,7 +85,7 @@ protected: // XXX: make private!
     KisBrushSP m_brush;
 
 private:
-    KisTextureProperties m_textureProperties;
+    KisTextureOption m_textureProperties;
 
 protected:
     KisPressureMirrorOption m_mirrorOption;

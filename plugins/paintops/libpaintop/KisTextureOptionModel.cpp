@@ -51,7 +51,7 @@ KisTextureOptionModel::KisTextureOptionModel(lager::cursor<KisTextureOptionData>
     , LAGER_QT(isRandomOffsetX) {optionData[&KisTextureOptionData::isRandomOffsetX]}
     , LAGER_QT(isRandomOffsetY) {optionData[&KisTextureOptionData::isRandomOffsetY]}
     , LAGER_QT(texturingMode) {optionData[&KisTextureOptionData::texturingMode]
-            .zoom(kiszug::lenses::do_static_cast<KisTextureProperties::TexturingMode, int>)}
+            .zoom(kiszug::lenses::do_static_cast<KisTextureOptionData::TexturingMode, int>)}
     , LAGER_QT(cutOffPolicy) {optionData[&KisTextureOptionData::cutOffPolicy]}
     , LAGER_QT(cutOffLeftNormalized) {optionData[&KisTextureOptionData::cutOffLeft]
             .zoom(kiszug::lenses::scale_int_to_real(1.0/255.0))}
@@ -59,6 +59,7 @@ KisTextureOptionModel::KisTextureOptionModel(lager::cursor<KisTextureOptionData>
             .zoom(kiszug::lenses::scale_int_to_real(1.0/255.0))}
     , LAGER_QT(invert) {optionData[&KisTextureOptionData::invert]}
 {
+    LAGER_QT(textureResource).bind(std::bind(&KisTextureOptionModel::updateOffsetLimits, this, std::placeholders::_1));
 }
 
 KisTextureOptionData KisTextureOptionModel::bakedOptionData() const
@@ -66,4 +67,13 @@ KisTextureOptionData KisTextureOptionModel::bakedOptionData() const
     KisTextureOptionData data = optionData.get();
     data.textureData = KisEmbeddedTextureData::fromPattern(textureResource().dynamicCast<KoPattern>());
     return data;
+}
+
+void KisTextureOptionModel::updateOffsetLimits(KoResourceSP resource)
+{
+    KoPatternSP pattern = resource.dynamicCast<KoPattern>();
+    KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
+
+    setmaximumOffsetX(pattern->width() / 2);
+    setmaximumOffsetY(pattern->height() / 2);
 }

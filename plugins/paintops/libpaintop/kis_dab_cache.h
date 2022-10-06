@@ -15,7 +15,7 @@
 
 class KisColorSource;
 class KisPressureSharpnessOption;
-class KisTextureProperties;
+class KisTextureOption;
 class KisPressureMirrorOption;
 class KisPrecisionOption;
 struct MirrorProperties;
@@ -73,7 +73,7 @@ public:
 
 
     void setSharpnessPostprocessing(KisPressureSharpnessOption *option);
-    void setTexturePostprocessing(KisTextureProperties *option);
+    void setTexturePostprocessing(KisTextureOption *option);
 
     bool needSeparateOriginal() const;
 

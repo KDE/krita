@@ -20,15 +20,19 @@
 #include <kis_pressure_rotation_option.h>
 #include <kis_curve_option_widget.h>
 #include <kis_compositeop_option.h>
-#include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
+#include <KisTextureOptionWidget.h>
+#include <KisPaintOpOptionUtils.h>
 
-KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
+KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision,
                                        parent)
 {
+    Q_UNUSED(canvasResourcesInterface)
+    namespace kpou = KisPaintOpOptionUtils;
+
     setObjectName("brush option widget");
 
     addPaintOpOption(new KisCompositeOpOption(true));
@@ -37,7 +41,7 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
     addPaintOpOption(new KisPressureMirrorOptionWidget());
     addPaintOpOption(new KisDuplicateOpOption());
-    addPaintOpOption(new KisTextureOption());
+    addPaintOpOption(kpou::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
 }
 

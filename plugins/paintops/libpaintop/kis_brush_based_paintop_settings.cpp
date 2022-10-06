@@ -329,7 +329,7 @@ QList<int> KisBrushBasedPaintOpSettings::requiredCanvasResources() const
     QList<int> result;
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(this->brush(), result);
 
-    if (brush()->applyingGradient() || KisTextureProperties::applyingGradient(this)) {
+    if (brush()->applyingGradient() || KisTextureOption::applyingGradient(this)) {
         result << KoCanvasResource::CurrentGradient;
         result << KoCanvasResource::ForegroundColor;
         result << KoCanvasResource::BackgroundColor;

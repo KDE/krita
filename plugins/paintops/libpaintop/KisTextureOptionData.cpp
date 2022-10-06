@@ -6,7 +6,7 @@
 #include "KisTextureOptionData.h"
 
 #include <kis_properties_configuration.h>
-
+#include <kis_paintop_lod_limitations.h>
 
 bool KisTextureOptionData::read(const KisPropertiesConfiguration *setting)
 {
@@ -23,7 +23,7 @@ bool KisTextureOptionData::read(const KisPropertiesConfiguration *setting)
     isRandomOffsetY = setting->getBool("Texture/Pattern/isRandomOffsetY");
     maximumOffsetX = setting->getInt("Texture/Pattern/MaximumOffsetX");
     maximumOffsetY = setting->getInt("Texture/Pattern/MaximumOffsetY");
-    texturingMode = static_cast<KisTextureProperties::TexturingMode>(setting->getInt("Texture/Pattern/TexturingMode", KisTextureProperties::MULTIPLY));
+    texturingMode = static_cast<TexturingMode>(setting->getInt("Texture/Pattern/TexturingMode", MULTIPLY));
     cutOffPolicy = setting->getInt("Texture/Pattern/CutoffPolicy");
     cutOffLeft = setting->getInt("Texture/Pattern/CutoffLeft", 0);
     cutOffRight = setting->getInt("Texture/Pattern/CutoffRight", 255);
@@ -53,4 +53,11 @@ void KisTextureOptionData::write(KisPropertiesConfiguration *setting) const
     setting->setProperty("Texture/Pattern/MaximumOffsetY", maximumOffsetY);
     setting->setProperty("Texture/Pattern/isRandomOffsetX", isRandomOffsetX);
     setting->setProperty("Texture/Pattern/isRandomOffsetY", isRandomOffsetY);
+}
+
+KisPaintopLodLimitations KisTextureOptionData::lodLimitations() const
+{
+    KisPaintopLodLimitations l;
+    l.limitations << KoID("texture-pattern", i18nc("PaintOp instant preview limitation", "Texture->Pattern (low quality preview)"));
+    return l;
 }

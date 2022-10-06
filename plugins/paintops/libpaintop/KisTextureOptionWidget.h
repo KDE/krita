@@ -10,6 +10,7 @@
 #include <KisTextureOptionData.h>
 #include <lager/cursor.hpp>
 
+
 class PAINTOP_EXPORT KisTextureOptionWidget : public KisPaintOpOption
 {
 public:
@@ -20,9 +21,6 @@ public:
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
-
-private:
-    void updateMaximumOffset(KoResourceSP resource);
 
 private:
     struct Private;

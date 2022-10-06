@@ -68,7 +68,6 @@ KisTextureOptionWidget::KisTextureOptionWidget(lager::cursor<KisTextureOptionDat
 
     m_d->model.LAGER_QT(maximumOffsetX).bind(std::bind(&KisSliderSpinBox::setMaximum, chooserWidget->offsetSliderX, std::placeholders::_1, true));
     m_d->model.LAGER_QT(maximumOffsetY).bind(std::bind(&KisSliderSpinBox::setMaximum, chooserWidget->offsetSliderY, std::placeholders::_1, true));
-    m_d->model.LAGER_QT(textureResource).bind(std::bind(&KisTextureOptionWidget::updateMaximumOffset, this, std::placeholders::_1));
 
     m_d->model.optionData.bind(std::bind(&KisTextureOptionWidget::emitSettingChanged, this));
 }
@@ -87,15 +86,4 @@ void KisTextureOptionWidget::readOptionSetting(const KisPropertiesConfigurationS
     KisTextureOptionData data = *m_d->model.optionData;
     data.read(setting.data());
     m_d->model.optionData.set(data);
-}
-
-void KisTextureOptionWidget::updateMaximumOffset(KoResourceSP resource)
-{
-    //TODO: move into model
-
-    KoPatternSP pattern = resource.dynamicCast<KoPattern>();
-    KIS_SAFE_ASSERT_RECOVER_RETURN(pattern);
-
-    m_d->model.setmaximumOffsetX(pattern->width() / 2);
-    m_d->model.setmaximumOffsetY(pattern->height() / 2);
 }

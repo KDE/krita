@@ -31,7 +31,7 @@ struct KisDabCache::Private {
     KisPaintDeviceSP colorSourceDevice;
 
     KisPressureSharpnessOption *sharpnessOption = 0;
-    KisTextureProperties *textureOption = 0;
+    KisTextureOption *textureOption = 0;
 };
 
 
@@ -51,7 +51,7 @@ void KisDabCache::setSharpnessPostprocessing(KisPressureSharpnessOption *option)
     m_d->sharpnessOption = option;
 }
 
-void KisDabCache::setTexturePostprocessing(KisTextureProperties *option)
+void KisDabCache::setTexturePostprocessing(KisTextureOption *option)
 {
     m_d->textureOption = option;
 }

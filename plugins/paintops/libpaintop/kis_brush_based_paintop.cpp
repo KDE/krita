@@ -127,7 +127,7 @@ QList<KoResourceLoadResult> KisBrushBasedPaintOp::prepareLinkedResources(const K
     KisBrushOptionProperties brushOption;
     resources << brushOption.prepareLinkedResources(settings, resourcesInterface);
 
-    KisTextureProperties textureProperties(0);
+    KisTextureOption textureProperties(0);
     resources << textureProperties.prepareLinkedResources(settings, resourcesInterface);
 
     return resources;
@@ -137,7 +137,7 @@ QList<KoResourceLoadResult> KisBrushBasedPaintOp::prepareEmbeddedResources(const
 {
     QList<KoResourceLoadResult> resources;
 
-    KisTextureProperties textureProperties(0);
+    KisTextureOption textureProperties(0);
     resources << textureProperties.prepareEmbeddedResources(settings, resourcesInterface);
 
     return resources;

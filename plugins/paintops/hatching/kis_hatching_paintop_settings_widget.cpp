@@ -24,16 +24,21 @@
 #include <KisPaintingModeOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
 #include <kis_compositeop_option.h>
-#include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
+#include <KisPaintOpOptionUtils.h>
+#include <KisTextureOptionWidget.h>
+
 
 #include <QDomDocument>
 #include <QDomElement>
 
-KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent)
+KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision, parent)
 {
+    Q_UNUSED(canvasResourcesInterface)
+    namespace kpou = KisPaintOpOptionUtils;
+
     //-------Adding widgets to the screen------------
 
     addPaintOpOption(new KisHatchingOptions());
@@ -50,7 +55,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     namespace kpou = KisPaintOpOptionUtils;
     addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());
 
-    addPaintOpOption(new KisTextureOption());
+    addPaintOpOption(kpou::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureTextureStrengthOption(), i18n("Weak"), i18n("Strong")));
 
     //-----Useful to read first:------

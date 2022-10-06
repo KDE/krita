@@ -23,7 +23,7 @@ typedef QSharedPointer<KisBrush> KisBrushSP;
 
 class KisColorSource;
 class KisPressureSharpnessOption;
-class KisTextureProperties;
+class KisTextureOption;
 
 
 namespace KisDabCacheUtils
@@ -40,7 +40,7 @@ struct PAINTOP_EXPORT DabRenderingResources
     QScopedPointer<KisColorSource> colorSource;
 
     QScopedPointer<KisPressureSharpnessOption> sharpnessOption;
-    QScopedPointer<KisTextureProperties> textureOption;
+    QScopedPointer<KisTextureOption> textureOption;
 
     KisPaintDeviceSP colorSourceDevice;
 

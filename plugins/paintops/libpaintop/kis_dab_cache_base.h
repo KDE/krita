@@ -14,7 +14,7 @@
 
 class KisColorSource;
 class KisPressureSharpnessOption;
-class KisTextureProperties;
+class KisTextureOption;
 class KisPressureMirrorOption;
 class KisPrecisionOption;
 struct MirrorProperties;
@@ -60,7 +60,7 @@ public:
      * Return true if the dab needs postprocessing by special options
      * like 'texture' or 'sharpness'
      */
-    bool needSeparateOriginal(KisTextureProperties *textureOption,
+    bool needSeparateOriginal(KisTextureOption *textureOption,
                               KisPressureSharpnessOption *sharpnessOption) const;
 
 protected:

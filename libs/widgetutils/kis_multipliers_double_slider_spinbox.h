@@ -9,14 +9,14 @@
 
 #include <QWidget>
 
-#include <kritaui_export.h>
+#include <kritawidgetutils_export.h>
 
 
 /**
  * This class add a combobox to a \ref KisDoubleSliderSpinBox which
  * allows to define a multiplier to let the user change the range.
  */
-class KRITAUI_EXPORT KisMultipliersDoubleSliderSpinBox : public QWidget {
+class KRITAWIDGETUTILS_EXPORT KisMultipliersDoubleSliderSpinBox : public QWidget {
     Q_OBJECT
 public:
     KisMultipliersDoubleSliderSpinBox(QWidget* _parent = 0);

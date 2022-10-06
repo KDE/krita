@@ -27,6 +27,7 @@
 #include "KisPaintingModeOptionWidget.h"
 #include "KisColorSourceOptionWidget.h"
 #include "KisLightnessStrengthOptionWidget.h"
+#include "KisTextureOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -224,6 +225,7 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisRateOptionData, lager::automatic_tag> rateOptionData;
     lager::state<KisPaintingModeOptionData, lager::automatic_tag> paintingModeOptionData;
 
+    lager::state<KisTextureOptionData, lager::automatic_tag> textureOptionData;
     lager::state<KisStrengthOptionData, lager::automatic_tag> strengthOptionData;
 
     lager::state<KisOpacityOptionData, lager::automatic_tag> maskingOpacityOptionData;
@@ -237,12 +239,15 @@ struct KisBrushOpSettingsWidget::Private
     lager::reader<KisPaintopLodLimitations> lodLimitations;
 };
 
-KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
+KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
                                        KisBrushOptionWidgetFlag::SupportsHSLBrushMode,
                                        parent),
       m_d(new Private)
 {
+    // TODO: pass into KisPaintOpSettingsWidget!
+    Q_UNUSED(canvasResourcesInterface);
+
     setObjectName("brush option widget");
 
     // Brush tip options
@@ -289,7 +294,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent)
     KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(brushOptionWidget()->effectiveBrushSize());
     addPaintOpOption(new KisPaintingModeOptionWidget(m_d->paintingModeOptionData, maskingOption->maskingBrushEnabledReader()));
 
-    addPaintOpOption(new KisTextureOption(SupportsLightnessMode | SupportsGradientMode));
+    addPaintOpOption(new KisTextureOptionWidget(m_d->textureOptionData, resourcesInterface, SupportsLightnessMode | SupportsGradientMode));
     addPaintOpOptionData(m_d->strengthOptionData, KisPaintOpOption::COLOR, i18n("Weak"), i18n("Strong"));
 
     addPaintOpOption(maskingOption);

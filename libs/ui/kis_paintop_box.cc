@@ -66,7 +66,7 @@
 #include "widgets/kis_workspace_chooser.h"
 #include "widgets/kis_paintop_list_widget.h"
 #include "kis_slider_spin_box.h"
-#include "widgets/kis_multipliers_double_slider_spinbox.h"
+#include "kis_multipliers_double_slider_spinbox.h"
 #include "widgets/kis_cmb_composite.h"
 #include "widgets/kis_widget_chooser.h"
 #include "tool/kis_tool.h"
@@ -644,9 +644,11 @@ void KisPaintopBox::setCurrentPaintop(KisPaintOpPresetSP preset)
     }
 
     if (!m_paintopOptionWidgets.contains(paintop)) {
-        m_paintopOptionWidgets[paintop] = KisPaintOpRegistry::instance()->get(paintop.id())->createConfigWidget(this);
-        m_paintopOptionWidgets[paintop]->setResourcesInterface(KisGlobalResourcesInterface::instance());
-        m_paintopOptionWidgets[paintop]->setCanvasResourcesInterface(m_viewManager->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
+        m_paintopOptionWidgets[paintop] =
+                KisPaintOpRegistry::instance()->get(paintop.id())
+                ->createConfigWidget(this,
+                                     KisGlobalResourcesInterface::instance(),
+                                     m_viewManager->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
     }
 
     m_optionWidget = m_paintopOptionWidgets[paintop];

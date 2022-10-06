@@ -90,6 +90,20 @@ auto scale = [] (T multiplier) {
     );
 };
 
+constexpr auto scale_int_to_real = [] (qreal multiplier) {
+    return lager::lenses::getset(
+        [multiplier] (int value) { return value * multiplier; },
+        [multiplier] (int, qreal value) { return qRound(value / multiplier); }
+    );
+};
+
+constexpr auto scale_real_to_int = [] (qreal multiplier) {
+    return lager::lenses::getset(
+        [multiplier] (qreal value) { return qRound(value * multiplier); },
+        [multiplier] (qreal, int value) { return value / multiplier; }
+    );
+};
+
 template <typename Src, typename Dst>
 auto do_static_cast = lager::lenses::getset(
         [] (Src value) { return static_cast<Dst>(value); },

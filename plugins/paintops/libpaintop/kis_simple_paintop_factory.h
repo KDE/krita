@@ -13,6 +13,8 @@
 #include <KisCppQuirks.h>
 #include <KoResourceLoadResult.h>
 
+class QWidget;
+
 #ifdef HAVE_THREADED_TEXT_RENDERING_WORKAROUND
 
 namespace detail {
@@ -117,6 +119,36 @@ KisInterstrokeDataFactory* createInterstrokeDataFactory(const KisPaintOpSettings
     return 0;
 }
 
+template< class, class = std::void_t<> >
+struct supports_extended_initilization : std::false_type { };
+
+template< class T >
+struct supports_extended_initilization<T,
+        std::void_t<decltype(T(std::declval<QWidget*>(),
+                               std::declval<KisResourcesInterfaceSP>(),
+                               std::declval<KoCanvasResourcesInterfaceSP>()))> > : std::true_type { };
+
+template <typename T>
+KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface,
+                                           std::enable_if_t<supports_extended_initilization<T>::value> * = 0)
+{
+    T* widget = new T(parent, resourcesInterface, canvasResourcesInterface);
+    widget->setResourcesInterface(resourcesInterface);
+    widget->setCanvasResourcesInterface(canvasResourcesInterface);
+    return widget;
+}
+
+template <typename T>
+KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface,
+                                           std::enable_if_t<!supports_extended_initilization<T>::value> * = 0)
+{
+    // TODO: remove this constructor and pass everything into the constructor
+    T* widget = new T(parent);
+    widget->setResourcesInterface(resourcesInterface);
+    widget->setCanvasResourcesInterface(canvasResourcesInterface);
+    return widget;
+}
+
 }
 
 /**
@@ -172,8 +204,8 @@ public:
         return settings;
     }
 
-    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent) override {
-        return new OpSettingsWidget(parent);
+    KisPaintOpConfigWidget* createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) override {
+        return detail::createConfigWidget<OpSettingsWidget>(parent, resourcesInterface, canvasResourcesInterface);
     }
 
     QString id() const override {
@@ -191,6 +223,7 @@ public:
     QString category() const override {
         return m_category;
     }
+
 private:
     QString m_id;
     QString m_name;

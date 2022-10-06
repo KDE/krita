@@ -22,7 +22,7 @@ class KisBrushOpSettingsWidget : public KisBrushBasedPaintopOptionWidget
 
 public:
 
-    KisBrushOpSettingsWidget(QWidget* parent = 0);
+    KisBrushOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 
     ~KisBrushOpSettingsWidget() override;
 

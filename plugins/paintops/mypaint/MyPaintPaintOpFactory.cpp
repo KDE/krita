@@ -49,9 +49,14 @@ KisPaintOpSettingsSP KisMyPaintOpFactory::createSettings(KisResourcesInterfaceSP
     return settings;
 }
 
-KisPaintOpConfigWidget* KisMyPaintOpFactory::createConfigWidget(QWidget* parent) {
+KisPaintOpConfigWidget* KisMyPaintOpFactory::createConfigWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface) {
 
-    return new KisMyPaintOpSettingsWidget(parent);
+    KisPaintOpConfigWidget *widget = new KisMyPaintOpSettingsWidget(parent);
+
+    widget->setResourcesInterface(resourcesInterface);
+    widget->setCanvasResourcesInterface(canvasResourcesInterface);
+
+    return widget;
 }
 
 QString KisMyPaintOpFactory::id() const {

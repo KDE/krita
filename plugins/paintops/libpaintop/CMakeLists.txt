@@ -46,6 +46,10 @@ set(kritalibpaintop_LIB_SRCS
     KisColorSourceOptionWidget.cpp
     KisLightnessStrengthOptionData.cpp
     KisLightnessStrengthOptionWidget.cpp
+    KisTextureOptionData.cpp
+    KisEmbeddedTextureData.cpp
+    KisTextureOptionModel.cpp
+    KisTextureOptionWidget.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc

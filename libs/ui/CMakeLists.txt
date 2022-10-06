@@ -255,7 +255,6 @@ set(kritaui_LIB_SRCS
     widgets/kis_multi_bool_filter_widget.cc
     widgets/kis_multi_double_filter_widget.cc
     widgets/kis_multi_integer_filter_widget.cc
-    widgets/kis_multipliers_double_slider_spinbox.cpp
     widgets/kis_paintop_presets_editor.cpp
     widgets/kis_tool_options_popup.cpp
     widgets/kis_paintop_presets_chooser_popup.cpp

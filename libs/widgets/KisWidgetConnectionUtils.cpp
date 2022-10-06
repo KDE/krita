@@ -16,6 +16,7 @@
 #include <QLineEdit>
 #include "kis_debug.h"
 #include "kis_spacing_selection_widget.h"
+#include "kis_multipliers_double_slider_spinbox.h"
 #include "KisAngleSelector.h"
 
 class ConnectButtonStateHelper : public QObject
@@ -145,6 +146,31 @@ void connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *proper
 
     if (prop.isWritable()) {
         QObject::connect(spinBox, qOverload<qreal>(&QDoubleSpinBox::valueChanged), [prop, source] (qreal value) { prop.write(source, value); });
+    }
+}
+
+void connectControl(KisMultipliersDoubleSliderSpinBox *spinBox, QObject *source, const char *property)
+{
+    const QMetaObject* meta = source->metaObject();
+    QMetaProperty prop = meta->property(meta->indexOfProperty(property));
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(prop.hasNotifySignal());
+
+    QMetaMethod signal = prop.notifySignal();
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterCount() >= 1);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(signal.parameterType(0) == QMetaType::type("qreal"));
+
+    const QMetaObject* dstMeta = spinBox->metaObject();
+
+    QMetaMethod updateSlot = dstMeta->method(
+                dstMeta->indexOfSlot("setValue(qreal)"));
+    QObject::connect(source, signal, spinBox, updateSlot);
+
+    spinBox->setValue(prop.read(source).toReal());
+
+    if (prop.isWritable()) {
+        QObject::connect(spinBox, qOverload<qreal>(&KisMultipliersDoubleSliderSpinBox::valueChanged), [prop, source] (qreal value) { prop.write(source, value); });
     }
 }
 

@@ -35,7 +35,6 @@
 #include "kis_painting_tweaks.h"
 #include "kis_slider_spin_box.h"
 #include "krita_utils.h"
-#include "widgets/kis_multipliers_double_slider_spinbox.h"
 #include "kis_spacing_selection_widget.h"
 #include "kis_signals_blocker.h"
 

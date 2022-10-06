@@ -395,10 +395,10 @@ void CompositeOpModel::resourceChanged(int key, const QVariant& /*v*/)
         if (preset && d->currentPreset.data() != preset.data()) {
             d->currentPreset = preset;
             if (!d->settingsWidgets.contains(preset.data())) {
-                d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createConfigWidget(0);
+                d->settingsWidgets[preset.data()] = KisPaintOpRegistry::instance()->get(preset->paintOp().id())->createConfigWidget(0,
+                                                                                                                                    KisGlobalResourcesInterface::instance(),
+                                                                                                                                    d->view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
                 d->settingsWidgets[preset.data()]->setImage(d->view->image());
-                d->settingsWidgets[preset.data()]->setResourcesInterface(KisGlobalResourcesInterface::instance());
-                d->settingsWidgets[preset.data()]->setCanvasResourcesInterface(d->view->canvasResourceProvider()->resourceManager()->canvasResourcesInterface());
                 d->settingsWidgets[preset.data()]->setConfiguration(preset->settings());
             }
 

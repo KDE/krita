@@ -21,6 +21,7 @@ class QObject;
 class KisSpacingSelectionWidget;
 class KisAngleSelector;
 class QLineEdit;
+class KisMultipliersDoubleSliderSpinBox;
 
 namespace KisWidgetConnectionUtils {
 
@@ -68,6 +69,7 @@ struct FromSpacingState {
 void KRITAWIDGETS_EXPORT connectControl(QAbstractButton *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *property);
+void KRITAWIDGETS_EXPORT connectControl(KisMultipliersDoubleSliderSpinBox *spinBox, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QButtonGroup *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QComboBox *button, QObject *source, const char *property);
 void KRITAWIDGETS_EXPORT connectControl(QComboBox *button, QObject *source, const char *property);

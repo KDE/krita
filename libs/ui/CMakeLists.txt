@@ -224,6 +224,7 @@ set(kritaui_LIB_SRCS
     tool/KisSelectionToolFactoryBase.cpp
     tool/KisToolPaintFactoryBase.cpp
     tool/KisAsyncColorSamplerHelper.cpp
+    tool/KisKeyboardModifierWatcher.cpp
 
     toolbox/KoToolBox.cpp
     toolbox/KoToolBoxButton.cpp

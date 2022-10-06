@@ -2157,6 +2157,16 @@ bool KisConfig::disableAVXOptimizations(bool defaultValue) const
     return (defaultValue ? false : m_cfg.readEntry("disableAVXOptimizations", false));
 }
 
+void KisConfig::setAnimationAllowQTMultimedia(bool value)
+{
+    m_cfg.writeEntry("animationAllowQTMultimedia", value);
+}
+
+bool KisConfig::animationAllowQTMultimedia(bool defaultValue) const
+{
+    return (defaultValue ? false : m_cfg.readEntry("animationAllowQTMultimedia", false));
+}
+
 void KisConfig::setAnimationDropFrames(bool value)
 {
     bool oldValue = animationDropFrames();

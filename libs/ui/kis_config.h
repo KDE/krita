@@ -580,6 +580,9 @@ public:
     void setDisableAVXOptimizations(bool value);
     bool disableAVXOptimizations(bool defaultValue = false) const;
 
+    void setAnimationAllowQTMultimedia(bool value);
+    bool animationAllowQTMultimedia(bool defaultValue = false) const;
+
     bool animationDropFrames(bool defaultValue = false) const;
     void setAnimationDropFrames(bool value);
 

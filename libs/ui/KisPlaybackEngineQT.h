@@ -41,7 +41,7 @@ public:
     virtual void setMute(bool) override {}
     virtual bool isMute() override { return true; }
 
-    virtual bool supportsAudio() override { return false; }
+    virtual bool supportsAudio() override;
     virtual bool supportsVariablePlaybackSpeed() override { return true; }
 
     boost::optional<int64_t> activeFramesPerSecond();

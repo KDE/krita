@@ -196,6 +196,8 @@ void KisPlaybackEngineQT::seek(int frameIndex, SeekOptionFlags flags)
     KisFrameDisplayProxy* displayProxy = activeCanvas()->animationState()->displayProxy();
     KIS_SAFE_ASSERT_RECOVER_RETURN(displayProxy);
 
+    KIS_SAFE_ASSERT_RECOVER_RETURN(frameIndex >= 0);
+
     m_d->driver->setFrame(frameIndex);
     if (displayProxy->activeFrame() != frameIndex) {
         displayProxy->displayFrame(frameIndex, flags & SEEK_FINALIZE);
@@ -211,6 +213,12 @@ void KisPlaybackEngineQT::setPlaybackSpeedNormalized(double value)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(m_d->driver);
     m_d->driver->setSpeed(value);
+}
+
+bool KisPlaybackEngineQT::supportsAudio()
+{
+    KisConfig config(true);
+    return config.animationAllowQTMultimedia();
 }
 
 boost::optional<int64_t> KisPlaybackEngineQT::activeFramesPerSecond()
@@ -470,8 +478,8 @@ void KisPlaybackEngineQT::recreateDriver(boost::optional<QFileInfo> file)
     m_d->driver.reset(new LoopDrivenPlayback(this));
 
 #ifdef HAVE_QT_MULTIMEDIA
-    bool hasQTMultimediaEnabledInConfig = true; // TODO -- Add proper configuration entry w/ default to on. Used for debugging.
-    if (file && hasQTMultimediaEnabledInConfig) {
+    KisConfig config(true);
+    if (file && config.animationAllowQTMultimedia()) {
         QScopedPointer<AudioDrivenPlayback> audioPlayback(new AudioDrivenPlayback(this, file.get()));
         if (audioPlayback->deviceAvailability()) {
             m_d->driver.reset(audioPlayback.take());

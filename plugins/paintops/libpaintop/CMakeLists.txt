@@ -3,6 +3,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_auto_brush_widget.cpp
     kis_brush_based_paintop.cpp
     kis_predefined_brush_chooser.cpp
+    KisPredefinedBrushModel.cpp
     kis_brush_option_widget.cpp
     kis_brush_option.cpp
     kis_brush_selection_widget.cpp

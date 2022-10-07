@@ -58,9 +58,8 @@
 #include <KisWidgetConnectionUtils.h>
 
 #include <lager/state.hpp>
-#include <lager/constant.hpp>
 #include <kis_predefined_brush_factory.h>
-#include <KisZug.h>
+#include <KisPredefinedBrushModel.h>
 
 using namespace KisBrushModel;
 using namespace KisWidgetConnectionUtils;
@@ -145,148 +144,6 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
     painter->restore();
 }
 
-auto brushSizeLens = lager::lenses::getset(
-    [](std::tuple<QSize, qreal> x) -> qreal { return std::get<0>(x).width() * std::get<1>(x); },
-    [](std::tuple<QSize, qreal> x, qreal brushSize) -> std::tuple<QSize, qreal> {
-        return std::make_tuple(std::get<0>(x), brushSize / std::get<0>(x).width());
-    });
-
-
-ComboBoxState calcApplicationSwitchState(enumBrushType brushType, bool supportsHSLBrushTips, enumBrushApplication application)
-{
-    QStringList values;
-    QStringList toolTips;
-    values << i18n("Alpha Mask");
-    toolTips << i18nc("@info:tooltip", "Luminosity of the brush tip image is used as alpha channel for the stroke");
-    if (brushType == IMAGE || brushType == PIPE_IMAGE) {
-        values << i18n("Color Image");
-        toolTips << i18nc("@info:tooltip", "The brush tip image is painted as it is");
-        if (supportsHSLBrushTips) {
-            values << i18n("Lightness Map");
-            toolTips << i18nc("@info:tooltip", "Luminosity of the brush tip image is used as lightness correction for the painting color. Alpha channel of the brush tip image is used as alpha for the final stroke");
-            values << i18n("Gradient Map");
-            toolTips << i18nc("@info:tooltip", "The brush tip maps its value to the currently selected gradient. Alpha channel of the brush tip image is used as alpha for the final stroke");
-        }
-    }
-
-
-    int currentValue = std::clamp(static_cast<int>(application), 0, values.size() - 1);
-    return ComboBoxState{values, currentValue, values.size() > 1, toolTips};
-}
-
-QString calcBrushDetails(PredefinedBrushData data)
-{
-    QString brushTypeString = "";
-
-    QString animatedBrushTipSelectionMode;
-
-    if (data.brushType == INVALID) {
-        brushTypeString = i18n("Invalid");
-    } else if (data.brushType == MASK) {
-        brushTypeString = i18n("Mask");
-    } else if (data.brushType == IMAGE) {
-        brushTypeString = i18n("Image");
-    } else if (data.brushType == PIPE_MASK ) {
-        brushTypeString = i18n("Animated Mask"); // GIH brush
-        animatedBrushTipSelectionMode = data.parasiteSelection;
-    } else if (data.brushType == PIPE_IMAGE ) {
-        brushTypeString = i18n("Animated Image");
-    }
-
-    const QString brushDetailsText = QString("%1 (%2 x %3) %4")
-            .arg(brushTypeString)
-            .arg(data.baseSize.width())
-            .arg(data.baseSize.height())
-            .arg(animatedBrushTipSelectionMode);
-
-    return brushDetailsText;
-}
-
-class PredefinedBrushModel : public QObject
-{
-    Q_OBJECT
-public:
-    PredefinedBrushModel(lager::cursor<CommonData> commonData,
-                         lager::cursor<PredefinedBrushData> predefinedBrushData,
-                         bool supportsHSLBrushTips)
-        : m_commonData(commonData),
-          m_predefinedBrushData(predefinedBrushData),
-          m_supportsHSLBrushTips(supportsHSLBrushTips),
-          LAGER_QT(resourceSignature) {m_predefinedBrushData[&PredefinedBrushData::resourceSignature]},
-          LAGER_QT(baseSize) {m_predefinedBrushData[&PredefinedBrushData::baseSize]},
-          LAGER_QT(scale) {m_predefinedBrushData[&PredefinedBrushData::scale]},
-          LAGER_QT(brushSize) {lager::with(LAGER_QT(baseSize), LAGER_QT(scale))
-                      .zoom(brushSizeLens)},
-          LAGER_QT(application) {m_predefinedBrushData[&PredefinedBrushData::application]
-                      .zoom(kiszug::lenses::do_static_cast<enumBrushApplication, int>)},
-          LAGER_QT(hasColorAndTransparency) {m_predefinedBrushData[&PredefinedBrushData::hasColorAndTransparency]},
-          LAGER_QT(autoAdjustMidPoint) {m_predefinedBrushData[&PredefinedBrushData::autoAdjustMidPoint]},
-          LAGER_QT(adjustmentMidPoint) {m_predefinedBrushData[&PredefinedBrushData::adjustmentMidPoint]
-                      .zoom(kiszug::lenses::do_static_cast<quint8, int>)},
-          LAGER_QT(brightnessAdjustment) {m_predefinedBrushData[&PredefinedBrushData::brightnessAdjustment]
-                      .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
-                             kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
-          LAGER_QT(contrastAdjustment) {m_predefinedBrushData[&PredefinedBrushData::contrastAdjustment]
-                      .xform(kiszug::map_mupliply<qreal>(100.0) | kiszug::map_round,
-                             kiszug::map_static_cast<qreal> | kiszug::map_mupliply<qreal>(0.01))},
-          LAGER_QT(angle) {m_commonData[&CommonData::angle]
-                      .zoom(kiszug::lenses::scale<qreal>(180.0 / M_PI))},
-          LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},
-          LAGER_QT(useAutoSpacing) {m_commonData[&CommonData::useAutoSpacing]},
-          LAGER_QT(autoSpacingCoeff) {m_commonData[&CommonData::autoSpacingCoeff]},
-          LAGER_QT(aggregatedSpacing) {lager::with(LAGER_QT(spacing),
-                                                   LAGER_QT(useAutoSpacing),
-                                                   LAGER_QT(autoSpacingCoeff))
-                      .xform(zug::map(ToSpacingState{}),
-                             zug::map(FromSpacingState{}))},
-          LAGER_QT(applicationSwitchState){lager::with(
-                      m_predefinedBrushData[&PredefinedBrushData::brushType],
-                      m_supportsHSLBrushTips,
-                      m_predefinedBrushData[&PredefinedBrushData::application])
-                      .xform(zug::map(&calcApplicationSwitchState))},
-          LAGER_QT(adjustmentsEnabled){LAGER_QT(applicationSwitchState)[&ComboBoxState::currentIndex]
-                      .xform(kiszug::map_greater<int>(1))},
-          LAGER_QT(brushName) {LAGER_QT(resourceSignature)[&KoResourceSignature::name]},
-          LAGER_QT(brushDetails) {m_predefinedBrushData.map(&calcBrushDetails)},
-          LAGER_QT(lightnessModeEnabled)
-              {LAGER_QT(applicationSwitchState)
-                    [&ComboBoxState::currentIndex].
-                      xform(kiszug::map_equal<int>(LIGHTNESSMAP))}
-    {
-    }
-
-    // the state must be declared **before** any cursors or readers
-    lager::cursor<CommonData> m_commonData;
-    lager::cursor<PredefinedBrushData> m_predefinedBrushData;
-    lager::constant<bool> m_supportsHSLBrushTips;
-
-    LAGER_QT_CURSOR(KoResourceSignature, resourceSignature);
-    LAGER_QT_CURSOR(QSize, baseSize);
-    LAGER_QT_CURSOR(qreal, scale);
-    LAGER_QT_CURSOR(qreal, brushSize);
-    LAGER_QT_CURSOR(int, application);
-    LAGER_QT_CURSOR(bool, hasColorAndTransparency);
-    LAGER_QT_CURSOR(bool, autoAdjustMidPoint);
-    LAGER_QT_CURSOR(int, adjustmentMidPoint);
-    LAGER_QT_CURSOR(int, brightnessAdjustment);
-    LAGER_QT_CURSOR(int, contrastAdjustment);
-
-    LAGER_QT_CURSOR(qreal, angle);
-    LAGER_QT_CURSOR(qreal, spacing);
-    LAGER_QT_CURSOR(bool, useAutoSpacing);
-    LAGER_QT_CURSOR(qreal, autoSpacingCoeff);
-    LAGER_QT_CURSOR(SpacingState, aggregatedSpacing);
-    LAGER_QT_READER(ComboBoxState, applicationSwitchState);
-    LAGER_QT_READER(bool, adjustmentsEnabled);
-    LAGER_QT_READER(QString, brushName);
-    LAGER_QT_READER(QString, brushDetails);
-    LAGER_QT_READER(bool, lightnessModeEnabled);
-
-    void sanitize() {
-        setapplication(applicationSwitchState().currentIndex);
-    }
-};
-
 struct KisPredefinedBrushChooser::Private
 {
     Private(lager::cursor<KisBrushModel::CommonData> _commonBrushData,
@@ -300,9 +157,8 @@ struct KisPredefinedBrushChooser::Private
 
     lager::cursor<KisBrushModel::CommonData> commonBrushData;
     lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData;
-    PredefinedBrushModel model;
+    KisPredefinedBrushModel model;
 };
-
 
 KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
                                                      lager::cursor<KisBrushModel::CommonData> commonBrushData,
@@ -324,11 +180,11 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
     brushSizeSpinBox->setSuffix(i18n(" px"));
     brushSizeSpinBox->setExponentRatio(3.0);
 
-    connect(&m_d->model, &PredefinedBrushModel::brushNameChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::brushNameChanged,
             brushTipNameLabel, &QLabel::setText);
     m_d->model.LAGER_QT(brushName).nudge();
 
-    connect(&m_d->model, &PredefinedBrushModel::brushDetailsChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::brushDetailsChanged,
             brushDetailsLabel, &QLabel::setText);
     m_d->model.LAGER_QT(brushName).nudge();
 
@@ -358,7 +214,7 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
 
     connect(m_itemChooser, &KisResourceItemChooser::resourceSelected,
             this, &KisPredefinedBrushChooser::slotBrushSelected);
-    connect(&m_d->model, &PredefinedBrushModel::resourceSignatureChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::resourceSignatureChanged,
             this, &KisPredefinedBrushChooser::slotBrushPropertyChanged);
 
     slotBrushPropertyChanged(m_d->model.resourceSignature());
@@ -409,15 +265,15 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
 
     connectControlState(cmbBrushMode, &m_d->model, "applicationSwitchState", "application");
 
-    connect(&m_d->model, &PredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             intAdjustmentMidPoint, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &PredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             intBrightnessAdjustment, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &PredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             intContrastAdjustment, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &PredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             chkAutoMidPoint, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &PredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             btnResetAdjustments, &KisSliderSpinBox::setEnabled);
 
     m_d->model.LAGER_QT(adjustmentsEnabled).nudge();
@@ -488,24 +344,19 @@ void KisPredefinedBrushChooser::slotBrushSelected(KoResourceSP resource)
     KisPredefinedBrushFactory::loadFromBrushResource(commonBrushData, predefinedBrushData, resource.dynamicCast<KisBrush>());
 
     predefinedBrushData.scale = 1.0;
-
-    auto commonBrushState = lager::make_state(commonBrushData, lager::automatic_tag{});
-    auto predefinedBrushState = lager::make_state(predefinedBrushData, lager::automatic_tag{});
-
-    // TODO: extract appliction logic into a lens
-    PredefinedBrushModel model(commonBrushState, predefinedBrushState, *m_d->model.m_supportsHSLBrushTips);
-    model.sanitize();
+    predefinedBrushData.application = KisPredefinedBrushModel::effectiveBrushApplication(predefinedBrushData, m_d->model.m_supportsHSLBrushTips.get());
 
     // TODO: check what happens when we add a new brush
     if (this->preserveBrushPresetSettings->isChecked()) {
-        model.setbrushSize(m_d->model.brushSize());
-        model.setspacing(m_d->model.spacing());
-        model.setuseAutoSpacing(m_d->model.useAutoSpacing());
-        model.setautoSpacingCoeff(m_d->model.autoSpacingCoeff());
+        KisPredefinedBrushModel::setEffectiveBrushSize(
+            predefinedBrushData, m_d->model.brushSize());
+        commonBrushData.spacing = m_d->model.spacing();
+        commonBrushData.useAutoSpacing = m_d->model.useAutoSpacing();
+        commonBrushData.autoSpacingCoeff = m_d->model.autoSpacingCoeff();
     }
 
-    m_d->commonBrushData.set(*commonBrushState);
-    m_d->predefinedBrushData.set(*predefinedBrushState);
+    m_d->commonBrushData.set(commonBrushData);
+    m_d->predefinedBrushData.set(predefinedBrushData);
 }
 
 void KisPredefinedBrushChooser::slotBrushPropertyChanged(KoResourceSignature signature)

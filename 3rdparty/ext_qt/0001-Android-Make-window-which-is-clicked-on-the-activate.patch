@@ -1,4 +1,4 @@
-From a1584c3e4c870f75f5c1d19de868a32d443fbbfc Mon Sep 17 00:00:00 2001
+From 0a2f068d34cf3c15a5f6aed28420b4888bf2068b Mon Sep 17 00:00:00 2001
 From: Sharaf Zaman <shzam@sdf.org>
 Date: Thu, 27 Jan 2022 11:46:29 +0000
 Subject: [PATCH] Android: Make window which is clicked on the activated window
@@ -15,14 +15,14 @@ With this patch, we correctly move the focus to the window if it isn't
 blocked by a modal window and also raise the window - so, a window's
 z-order can changed.
 ---
- .../platforms/android/androidjniinput.cpp     | 45 ++++++++++++++++++-
- .../android/qandroidplatformscreen.cpp        | 19 +++++++-
+ .../platforms/android/androidjniinput.cpp     | 40 ++++++++++++++++++-
+ .../android/qandroidplatformscreen.cpp        | 19 ++++++++-
  .../android/qandroidplatformwindowmanager.cpp | 10 +++++
  .../android/qandroidplatformwindowmanager.h   |  3 ++
- 4 files changed, 75 insertions(+), 2 deletions(-)
+ 4 files changed, 70 insertions(+), 2 deletions(-)
 
 diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
-index 257d013fa8..f64a2fb81c 100644
+index 257d013fa8..a4bb8ae1a7 100644
 --- a/src/plugins/platforms/android/androidjniinput.cpp
 +++ b/src/plugins/platforms/android/androidjniinput.cpp
 @@ -46,11 +46,13 @@
@@ -39,46 +39,41 @@ index 257d013fa8..f64a2fb81c 100644
  #include <QGuiApplication>
  #include <QDebug>
  #include <QtMath>
-@@ -136,6 +138,38 @@ namespace QtAndroidInput
+@@ -136,6 +138,33 @@ namespace QtAndroidInput
                                                    anchor.x(), anchor.y(), rtl);
      }
  
 +    static void checkAndSetTopLevelWindow(QWindow *window)
 +    {
-+        QMetaObject::invokeMethod(qApp, [window]() mutable {
-+            QWindow *focusWindow = QGuiApplication::focusWindow();
-+            if (focusWindow == window
-+                || (window && window->flags() & Qt::WindowDoesNotAcceptFocus)) {
-+                return;
-+            }
++        QWindow *focusWindow = QGuiApplication::focusWindow();
++        if (focusWindow == window || (window && window->flags() & Qt::WindowDoesNotAcceptFocus)) {
++            return;
++        }
 +
-+            // NOTE: Apparently, Qt expects Popups to be on top and have focus. If we move focus
-+            // popup should be closed (see notifyActiveWindowChange). So we close the popup first if
-+            // some other window is clicked. Otherwise Qt goes in an undefined state. I'm not 100%
-+            // sure though.
-+            if (focusWindow
-+                && (focusWindow->type() == Qt::Popup || focusWindow->type() == Qt::ToolTip)) {
-+                focusWindow->hide();
-+            }
++        // NOTE: Apparently, Qt expects Popups to be on top and have focus. If we move focus popup
++        // should be closed (see notifyActiveWindowChange). So we close the popup first if some
++        // other window is clicked. Otherwise Qt goes in an undefined state. I'm not 100% sure
++        // though.
++        if (focusWindow && (focusWindow->type() == Qt::Popup || focusWindow->type() == Qt::ToolTip)) {
++            focusWindow->hide();
++        }
 +
-+            QAndroidPlatformWindowManager *wm =
-+                dynamic_cast<QAndroidPlatformWindowManager *>(window);
-+            if (wm) {
-+                // check if the window managed by this manager is blocked by a modal
-+                // dialog (because a window manager won't be blocked)
-+                window = wm->realWindow()->window();
-+            }
-+            if (window && !QGuiApplicationPrivate::instance()->isWindowBlocked(window)) {
-+                window->raise();
-+                QWindowSystemInterface::handleWindowActivated(window, Qt::ActiveWindowFocusReason);
-+            }
-+        });
++        QAndroidPlatformWindowManager *wm = dynamic_cast<QAndroidPlatformWindowManager *>(window);
++        if (wm) {
++            // check if the window managed by this manager is blocked by a modal
++            // dialog (because a window manager won't be blocked)
++            window = wm->realWindow()->window();
++        }
++        if (window && !QGuiApplicationPrivate::instance()->isWindowBlocked(window)) {
++            window->raise();
++            QWindowSystemInterface::handleWindowActivated(window, Qt::ActiveWindowFocusReason);
++        }
 +    }
 +
      static void mouseDown(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/,
                            jint x, jint y, jint modifier, jint actionButton)
      {
-@@ -150,6 +184,7 @@ namespace QtAndroidInput
+@@ -150,6 +179,7 @@ namespace QtAndroidInput
              localPos = platformWindow ? platformWindow->mapFromGlobal(globalPos) : globalPos;
          }
          m_mouseGrabber = tlw;
@@ -86,7 +81,7 @@ index 257d013fa8..f64a2fb81c 100644
          // NOTE: mapping between MotionEvent's BUTTON states and Qt seem consistent
          m_mouseActionButton = actionButton;
          QWindowSystemInterface::handleMouseEvent(tlw,
-@@ -265,7 +300,7 @@ namespace QtAndroidInput
+@@ -265,7 +295,7 @@ namespace QtAndroidInput
          m_touchPoints.clear();
      }
  
@@ -95,7 +90,7 @@ index 257d013fa8..f64a2fb81c 100644
          jfloat major, jfloat minor, jfloat rotation, jfloat pressure)
      {
          Qt::TouchPointState state = Qt::TouchPointStationary;
-@@ -302,6 +337,13 @@ namespace QtAndroidInput
+@@ -302,6 +332,13 @@ namespace QtAndroidInput
              QAndroidInputContext *inputContext = QAndroidInputContext::androidInputContext();
              if (inputContext && qGuiApp)
                  QMetaObject::invokeMethod(inputContext, "touchDown", Q_ARG(int, x), Q_ARG(int, y));
@@ -109,7 +104,7 @@ index 257d013fa8..f64a2fb81c 100644
          }
      }
  
-@@ -389,6 +431,7 @@ namespace QtAndroidInput
+@@ -389,6 +426,7 @@ namespace QtAndroidInput
              break;
          case AMOTION_EVENT_ACTION_DOWN:
              m_mouseGrabber = tlw;
@@ -197,5 +192,5 @@ index 0688a75794..f78cdc0725 100644
  protected:
      void resizeEvent(QResizeEvent *event) override;
 -- 
-2.37.3
+2.37.0
 

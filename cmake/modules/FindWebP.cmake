@@ -45,6 +45,9 @@ Imported Targets
 ``WebP::decoder``
   The WebP decoder library, if found.
 
+``WebP::sharpyuv``
+  The WebP Sharp RGB to YUV420 conversion library, if found.
+
 Result Variables
 ^^^^^^^^^^^^^^^^
 
@@ -104,6 +107,12 @@ if(WebP_FOUND)
         set(WebP_decoder_FOUND OFF)
     endif ()
 
+    if (TARGET WebP::sharpyuv)
+        set(WebP_sharpyuv_FOUND ON)
+    else ()
+        set(WebP_sharpyuv_FOUND OFF)
+    endif ()
+
     find_package_handle_standard_args(WebP 
         FOUND_VAR WebP_FOUND
         HANDLE_COMPONENTS
@@ -124,6 +133,8 @@ if (PkgConfig_FOUND)
     pkg_check_modules(PC_WEBP_DEMUX QUIET libwebpdemux)
 
     pkg_check_modules(PC_WEBP_DECODER QUIET libwebpmux)
+
+    pkg_check_modules(PC_WEBP_SHARPYUV QUIET libsharpyuv)
 endif ()
 
 find_path(WebP_INCLUDE_DIR
@@ -189,6 +200,22 @@ if ("decoder" IN_LIST WebP_FIND_COMPONENTS)
     endif ()
 endif ()
 
+# SharpYUV is a dependency of WebP, should be looked up
+# if neither the CMake module nor pkgconf are available
+# (this could only happen, in theory, in Windows MSVC)
+if ("sharpyuv" IN_LIST WebP_FIND_COMPONENTS OR WebP_webp_FOUND)
+    find_library(WebP_SHARPYUV_LIBRARY
+        NAMES ${WebP_DECODER_NAMES} sharpyuv
+        HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
+    )
+
+    if (WebP_SHARPYUV_LIBRARY)
+        set(WebP_sharpyuv_FOUND ON)
+    else ()
+        set(WebP_sharpyuv_FOUND OFF)
+    endif ()
+endif ()
+
 find_package_handle_standard_args(WebP
     FOUND_VAR WebP_FOUND
     REQUIRED_VARS WebP_INCLUDE_DIR WebP_LIBRARY
@@ -237,15 +264,26 @@ if (WebP_DECODER_LIBRARY AND NOT TARGET WebP::webpdecoder)
     )
 endif ()
 
+if (WebP_SHARPYUV_LIBRARY AND NOT TARGET WebP::sharpyuv)
+    add_library(WebP::sharpyuv UNKNOWN IMPORTED GLOBAL)
+    set_target_properties(WebP::sharpyuv PROPERTIES
+        IMPORTED_LOCATION "${WebP_SHARPYUV_LIBRARY}"
+        INTERFACE_COMPILE_OPTIONS "${PC_WEBP_SHARPYUV_CFLAGS};${PC_WEBP_SHARPYUV_CFLAGS_OTHER}"
+        INTERFACE_INCLUDE_DIRECTORIES "${WebP_INCLUDE_DIR}"
+        INTERFACE_LINK_LIBRARIES "${PC_WEBP_SHARPYUV_LINK_LIBRARIES}"
+    )
+endif ()
+
 mark_as_advanced(
     WebP_INCLUDE_DIR
     WebP_LIBRARY
     WebP_DEMUX_LIBRARY
     WebP_MUX_LIBRARY
     WebP_DECODER_LIBRARY
+    WebP_SHARPYUV_LIBRARY
 )
 
-set(WebP_LIBRARIES ${WebP_LIBRARY} ${WebP_DEMUX_LIBRARY} ${WebP_MUX_LIBRARY} ${WebP_DECODER_LIBRARY})
+set(WebP_LIBRARIES ${WebP_LIBRARY} ${WebP_DEMUX_LIBRARY} ${WebP_MUX_LIBRARY} ${WebP_DECODER_LIBRARY} ${WebP_SHARPYUV_LIBRARY})
 set(WebP_INCLUDE_DIRS ${WebP_INCLUDE_DIR})
 
 endif()

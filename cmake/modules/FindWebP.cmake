@@ -143,7 +143,7 @@ find_path(WebP_INCLUDE_DIR
 )
 
 find_library(WebP_LIBRARY
-    NAMES ${WebP_NAMES} webp
+    NAMES ${WebP_NAMES} webp libwebp
     HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
 )
 
@@ -163,7 +163,7 @@ endif()
 # Find components
 if ("demux" IN_LIST WebP_FIND_COMPONENTS)
     find_library(WebP_DEMUX_LIBRARY
-        NAMES ${WebP_DEMUX_NAMES} webpdemux
+        NAMES ${WebP_DEMUX_NAMES} webpdemux libwebpdemux
         HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
     )
 
@@ -176,7 +176,7 @@ endif ()
 
 if ("mux" IN_LIST WebP_FIND_COMPONENTS)
     find_library(WebP_MUX_LIBRARY
-        NAMES ${WebP_MUX_NAMES} webpmux
+        NAMES ${WebP_MUX_NAMES} webpmux libwebpmux
         HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
     )
 
@@ -189,7 +189,7 @@ endif ()
 
 if ("decoder" IN_LIST WebP_FIND_COMPONENTS)
     find_library(WebP_DECODER_LIBRARY
-        NAMES ${WebP_DECODER_NAMES} webpdecoder
+        NAMES ${WebP_DECODER_NAMES} webpdecoder libwebpdecoder
         HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
     )
 
@@ -205,7 +205,7 @@ endif ()
 # (this could only happen, in theory, in Windows MSVC)
 if ("sharpyuv" IN_LIST WebP_FIND_COMPONENTS OR WebP_webp_FOUND)
     find_library(WebP_SHARPYUV_LIBRARY
-        NAMES ${WebP_DECODER_NAMES} sharpyuv
+        NAMES ${WebP_DECODER_NAMES} sharpyuv libsharpyuv
         HINTS ${PC_WEBP_LIBDIR} ${PC_WEBP_LIBRARY_DIRS}
     )
 

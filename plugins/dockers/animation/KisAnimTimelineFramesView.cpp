@@ -942,6 +942,11 @@ void KisAnimTimelineFramesView::calculateActiveLayerSelectedTimes(const QModelIn
 
 bool KisAnimTimelineFramesView::viewportEvent(QEvent *event)
 {
+    // Seems to have been copied over from KisResourceItemListView.
+    // These tooltips currently give bogus info (empty thumbnail and resource location), so removed for now.
+    // TODO: Implement meaningful tooltips if there's demand, probably including frame thumbnails.
+
+    /*
     if (event->type() == QEvent::ToolTip && model()) {
         QHelpEvent *he = static_cast<QHelpEvent *>(event);
         QModelIndex index = model()->buddy(indexAt(he->pos()));
@@ -953,6 +958,7 @@ bool KisAnimTimelineFramesView::viewportEvent(QEvent *event)
             return true;
         }
     }
+    */
 
     return QTableView::viewportEvent(event);
 }

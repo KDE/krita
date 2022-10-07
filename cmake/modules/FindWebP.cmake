@@ -128,7 +128,7 @@ if (PkgConfig_FOUND)
     set(WebP_VERSION ${PC_WEBP_VERSION})
     set(WebP_COMPILE_OPTIONS "${PC_WEBP_CFLAGS};${PC_WEBP_CFLAGS_OTHER}")
 
-    pkg_check_modules(PC_WEBP_DECODER QUIET libwebp_decoder)
+    pkg_check_modules(PC_WEBP_DECODER QUIET libwebpdecoder)
 
     pkg_check_modules(PC_WEBP_DEMUX QUIET libwebpdemux)
 

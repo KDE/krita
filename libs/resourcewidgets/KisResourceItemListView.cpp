@@ -125,6 +125,7 @@ bool KisResourceItemListView::viewportEvent(QEvent *event)
             m_d->tip.showTip(this, he->pos(), option, index);
             return true;
         }
+        m_d->tip.hide();
     }
 
     return QListView::viewportEvent(event);

@@ -19,12 +19,12 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_curve_option_widget.h>
-#include <kis_compositeop_option.h>
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 #include <brushengine/kis_paintop_lod_limitations.h>
 #include <KisTextureOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
+#include <KisCompositeOpOptionWidget.h>
 
 KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision,
@@ -35,7 +35,7 @@ KisDuplicateOpSettingsWidget::KisDuplicateOpSettingsWidget(QWidget* parent, KisR
 
     setObjectName("brush option widget");
 
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));

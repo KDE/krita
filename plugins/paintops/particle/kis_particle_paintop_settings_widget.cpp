@@ -13,10 +13,10 @@
 #include <kis_curve_option_widget.h>
 #include <KisPaintingModeOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
-#include <kis_compositeop_option.h>
 #include <kis_pressure_rate_option.h>
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
+#include <KisCompositeOpOptionWidget.h>
 
 KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -24,7 +24,7 @@ KisParticlePaintOpSettingsWidget:: KisParticlePaintOpSettingsWidget(QWidget* par
     namespace kpou = KisPaintOpOptionUtils;
 
     addPaintOpOption(new KisParticleOpOption());
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>(KisAirbrushOptionData(), false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());

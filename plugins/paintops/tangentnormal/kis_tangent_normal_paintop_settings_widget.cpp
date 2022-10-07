@@ -22,13 +22,13 @@
 #include <kis_pressure_flow_opacity_option_widget.h>
 #include <kis_pressure_spacing_option_widget.h>
 #include <kis_pressure_rate_option.h>
-#include <kis_compositeop_option.h>
 #include "kis_texture_option.h"
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
 #include <KisTextureOptionWidget.h>
+#include <KisCompositeOpOptionWidget.h>
 
 
 KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface):
@@ -40,7 +40,7 @@ KisTangentNormalPaintOpSettingsWidget::KisTangentNormalPaintOpSettingsWidget(QWi
 
     setObjectName("brush option widget");
 
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureFlowOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));

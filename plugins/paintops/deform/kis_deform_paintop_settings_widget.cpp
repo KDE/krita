@@ -15,9 +15,9 @@
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
 #include <kis_curve_option_widget.h>
-#include <kis_compositeop_option.h>
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
+#include <KisCompositeOpOptionWidget.h>
 
 KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
@@ -29,7 +29,7 @@ KisDeformPaintOpSettingsWidget::KisDeformPaintOpSettingsWidget(QWidget* parent)
 
     addPaintOpOption(m_brushSizeOption);
     addPaintOpOption(new KisDeformOption());
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));

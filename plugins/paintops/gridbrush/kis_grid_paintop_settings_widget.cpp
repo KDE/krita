@@ -14,17 +14,17 @@
 #include <kis_paintop_settings_widget.h>
 #include <KisPaintingModeOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
-#include <kis_compositeop_option.h>
 #include <klocalizedstring.h>
+#include <KisCompositeOpOptionWidget.h>
 
 KisGridPaintOpSettingsWidget:: KisGridPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
+    namespace kpou = KisPaintOpOptionUtils;
     addPaintOpOption(new KisGridOpOption());
     addPaintOpOption(new KisGridShapeOption());
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(new KisColorOption());
-    namespace kpou = KisPaintOpOptionUtils;
     addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());
 }
 

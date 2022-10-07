@@ -23,12 +23,11 @@
 #include <kis_paintop_settings_widget.h>
 #include <KisPaintingModeOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
-#include <kis_compositeop_option.h>
 #include <kis_pressure_mirror_option_widget.h>
 #include "kis_pressure_texture_strength_option.h"
 #include <KisPaintOpOptionUtils.h>
 #include <KisTextureOptionWidget.h>
-
+#include <KisCompositeOpOptionWidget.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -43,7 +42,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
 
     addPaintOpOption(new KisHatchingOptions());
     addPaintOpOption(new KisHatchingPreferences());
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureSeparationOption(), i18n("0.0"), i18n("1.0")));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureThicknessOption(), i18n("0.0"), i18n("1.0")));
     addPaintOpOption(new KisCurveOptionWidget(new KisHatchingPressureAngleOption(), i18n("0.0"), i18n("1.0")));

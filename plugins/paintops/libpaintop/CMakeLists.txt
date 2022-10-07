@@ -89,7 +89,6 @@ set(kritalibpaintop_LIB_SRCS
     kis_text_brush_chooser.cpp
     kis_brush_based_paintop_options_widget.cpp
     kis_brush_based_paintop_settings.cpp
-    kis_compositeop_option.cpp
     kis_texture_option.cpp
     kis_texture_chooser.cpp
     KisTextureMaskInfo.cpp

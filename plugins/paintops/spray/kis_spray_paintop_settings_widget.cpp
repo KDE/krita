@@ -21,9 +21,9 @@
 #include <kis_curve_option_widget.h>
 #include <kis_brush_option_widget.h>
 #include "kis_spray_shape_dynamics.h"
-#include <kis_compositeop_option.h>
 #include <KisAirbrushOptionWidget.h>
 #include <KisPaintOpOptionUtils.h>
+#include <KisCompositeOpOptionWidget.h>
 
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
@@ -36,7 +36,7 @@ KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     addPaintOpOption(new KisBrushOptionWidget(KisBrushOptionWidgetFlag::None));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisCompositeOpOption(true));
+    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
 
     addPaintOpOption(new KisSprayShapeDynamicsOption());
     addPaintOpOption(new KisColorOption());

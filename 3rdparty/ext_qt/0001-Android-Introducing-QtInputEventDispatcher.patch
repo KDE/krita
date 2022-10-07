@@ -1,0 +1,1065 @@
+From c64c1710cfd9173842da496446e2eb4dfb6b30c0 Mon Sep 17 00:00:00 2001
+From: Sharaf Zaman <shzam@sdf.org>
+Date: Thu, 6 Oct 2022 08:14:33 +0000
+Subject: [PATCH] Android: Introducing QtInputEventDispatcher
+
+This is a separate thread which receives events from the Android UI
+thread and handles the dispatching to Qt's Main Thread.
+
+The reason for this new thread is to prevent some nasty deadlocks
+between Android's UI thread and Qt's MainLoopThread (the deadlocks
+happened when UI Thread was stuck trying to dispatch an event or flush
+Qt's window system queue and while the Qt Main thread was stuck trying
+to get a SurfaceView from Android).
+
+In addition to just dispatching this patch also moves the event handling
+to cpp (if in case in future we ditch java in favor of native_app_glue
+for event handling). Everything is ported almost like the way it was
+before, because the previous version of event handling worked correctly
+on all devices (I remember, display tablets being the odd ones).
+---
+ .../qt5/android/QtInputEventDispatcher.java   | 119 ++++++++
+ .../org/qtproject/qt5/android/QtLayout.java   |  12 +-
+ .../org/qtproject/qt5/android/QtNative.java   | 187 +------------
+ .../platforms/android/MotionEventWrapper.h    | 157 +++++++++++
+ .../platforms/android/androidjniinput.cpp     | 255 +++++++++++++-----
+ .../platforms/android/androidjnimain.cpp      |  18 ++
+ .../platforms/android/androidjnimain.h        |   2 +
+ 7 files changed, 503 insertions(+), 247 deletions(-)
+ create mode 100644 src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java
+ create mode 100644 src/plugins/platforms/android/MotionEventWrapper.h
+
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java b/src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java
+new file mode 100644
+index 0000000000..15e1c322fe
+--- /dev/null
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtInputEventDispatcher.java
+@@ -0,0 +1,119 @@
++package org.qtproject.qt5.android;
++
++import android.os.Handler;
++import android.os.Looper;
++import android.os.Message;
++import android.util.Log;
++import android.view.InputDevice;
++import android.view.MotionEvent;
++
++public class QtInputEventDispatcher extends Thread {
++
++    private static final String TAG = "QtInputEventDispatcher";
++
++    private Handler mEventHandler;
++
++    QtInputEventDispatcher() {
++        super(TAG);
++    }
++
++    @Override
++    public void run() {
++        try {
++            Looper.prepare();
++            mEventHandler =
++                    new Handler(
++                            Looper.myLooper(),
++                            new Handler.Callback() {
++                                @Override
++                                public boolean handleMessage(Message msg) {
++                                    MotionEvent event = (MotionEvent) msg.obj;
++                                    if (event != null) {
++                                        dispatchMotionEvent(msg.arg1, msg.arg2 == 1, event);
++                                        event.recycle();
++                                    }
++                                    return true;
++                                }
++                            });
++            Looper.loop();
++        } catch (Exception e) {
++            Log.e(TAG, "Looper halted, error = " + e);
++            e.printStackTrace();
++        }
++    }
++
++    public void onCommonEvent(MotionEvent event, int id) {
++        if (mEventHandler == null) {
++            return;
++        }
++
++        MotionEvent clonedEvent = MotionEvent.obtain(event);
++        Message.obtain(mEventHandler, /*what = */ 0, id, /* arg2 = */ 0, clonedEvent)
++                .sendToTarget();
++    }
++
++    public void onTouchEvent(MotionEvent event, int id) {
++        if (mEventHandler == null) {
++            return;
++        }
++
++        MotionEvent clonedEvent = MotionEvent.obtain(event);
++        // here we set touch to true
++        Message.obtain(mEventHandler, /*what = */ 0, id, /* arg2 = */ 1, clonedEvent)
++                .sendToTarget();
++    }
++
++    public void onLongPress(final MotionEvent event, final int id) {
++        if (mEventHandler == null) {
++            return;
++        }
++
++        Message.obtain(
++                        mEventHandler,
++                        new Runnable() {
++                            @Override
++                            public void run() {
++                                longPress(id, (int) event.getX(), (int) event.getY());
++                            }
++                        })
++                .sendToTarget();
++    }
++
++    public boolean sendGenericMotionEvent(MotionEvent event, int id) {
++        if (!event.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
++            return false;
++        }
++
++        if (event.isFromSource(InputDevice.SOURCE_MOUSE)) {
++            onCommonEvent(event, id);
++            return canHandleMouseAction(event);
++        } else if ((event.getSource()
++                        & (InputDevice.SOURCE_STYLUS
++                                | InputDevice.SOURCE_TOUCHPAD
++                                | InputDevice.SOURCE_TOUCHSCREEN))
++                != 0) {
++
++            onTouchEvent(event, id);
++            return true;
++        }
++        return false;
++    }
++
++    private static boolean canHandleMouseAction(MotionEvent event) {
++        switch (event.getActionMasked()) {
++            case MotionEvent.ACTION_UP:
++            case MotionEvent.ACTION_DOWN:
++            case MotionEvent.ACTION_HOVER_MOVE:
++            case MotionEvent.ACTION_MOVE:
++            case MotionEvent.ACTION_SCROLL:
++                return true;
++            default:
++                return false;
++        }
++    }
++
++    private static native void dispatchMotionEvent(
++            int winId, boolean isTouchEvent, MotionEvent event);
++
++    private static native void longPress(int winId, int x, int y);
++}
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java b/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
+index 6b067a9cfd..b74cb6bd8f 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
+@@ -53,24 +53,28 @@ public class QtLayout extends ViewGroup
+ {
+     private GestureDetector m_gestureDetector;
+     private Runnable m_startApplicationRunnable;
++    private QtInputEventDispatcher inputEventDispatcher;
+ 
+     public QtLayout(Context context, Runnable startRunnable)
+     {
+         super(context);
+         m_startApplicationRunnable = startRunnable;
+         initializeGestureDetector(context);
++        inputEventDispatcher = QtNative.getInputEventDispatcher();
+     }
+ 
+     public QtLayout(Context context, AttributeSet attrs)
+     {
+         super(context, attrs);
+         initializeGestureDetector(context);
++        inputEventDispatcher = QtNative.getInputEventDispatcher();
+     }
+ 
+     public QtLayout(Context context, AttributeSet attrs, int defStyle)
+     {
+         super(context, attrs, defStyle);
+         initializeGestureDetector(context);
++        inputEventDispatcher = QtNative.getInputEventDispatcher();
+     }
+ 
+     private void initializeGestureDetector(Context context)
+@@ -78,7 +82,7 @@ public class QtLayout extends ViewGroup
+         m_gestureDetector =
+             new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
+                 public void onLongPress(MotionEvent event) {
+-                    QtNative.longPress(getId(), (int) event.getX(), (int) event.getY());
++                    inputEventDispatcher.onLongPress(event, getId());
+                 }
+             });
+         m_gestureDetector.setIsLongpressEnabled(true);
+@@ -278,7 +282,7 @@ public class QtLayout extends ViewGroup
+ 
+     @Override
+     public boolean onTouchEvent(MotionEvent event) {
+-        QtNative.sendTouchEvent(event, getId());
++        inputEventDispatcher.onTouchEvent(event, getId());
+         m_gestureDetector.onTouchEvent(event);
+         return true;
+     }
+@@ -286,13 +290,13 @@ public class QtLayout extends ViewGroup
+     @Override
+     public boolean onTrackballEvent(MotionEvent event)
+     {
+-        QtNative.sendTrackballEvent(event, getId());
++        inputEventDispatcher.onCommonEvent(event, getId());
+         return true;
+     }
+ 
+     @Override
+     public boolean onGenericMotionEvent(MotionEvent event)
+     {
+-        return QtNative.sendGenericMotionEvent(event, getId());
++        return inputEventDispatcher.sendGenericMotionEvent(event, getId());
+     }
+ }
+diff --git a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+index 8e32a83f9f..9c8ecb0d12 100644
+--- a/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
++++ b/src/android/jar/src/org/qtproject/qt5/android/QtNative.java
+@@ -99,13 +99,13 @@ public class QtNative
+     private static double m_displayMetricsYDpi = .0;
+     private static double m_displayMetricsScaledDensity = 1.0;
+     private static double m_displayMetricsDensity = 1.0;
+-    private static int m_oldx, m_oldy;
+     private static final int m_moveThreshold = 0;
+     private static ClipboardManager m_clipboardManager = null;
+     private static Method m_checkSelfPermissionMethod = null;
+     private static Boolean m_tabletEventSupported = null;
+     private static boolean m_usePrimaryClip = false;
+     public static QtThread m_qtThread = new QtThread();
++    private static final QtInputEventDispatcher sInputEventDispatcher = new QtInputEventDispatcher();
+     private static Method m_addItemMethod = null;
+ 
+ 
+@@ -156,6 +156,10 @@ public class QtNative
+         }
+     }
+ 
++    public static QtInputEventDispatcher getInputEventDispatcher() {
++        return sInputEventDispatcher;
++    }
++
+     public static String[] getStringArray(String joinedString)
+     {
+         return joinedString.split(",");
+@@ -164,6 +168,8 @@ public class QtNative
+     // this method loads full path libs
+     public static void loadQtLibraries(final ArrayList<String> libraries)
+     {
++        sInputEventDispatcher.start();
++        Log.i(QtTAG, "InputEventDispatcherStarted");
+         m_qtThread.run(new Runnable() {
+             @Override
+             public void run() {
+@@ -436,169 +442,6 @@ public class QtNative
+         });
+     }
+ 
+-    //@ANDROID-9
+-    static private int getAction(int index, MotionEvent event)
+-    {
+-        int action = event.getActionMasked();
+-        if (action == MotionEvent.ACTION_MOVE) {
+-            int hsz = event.getHistorySize();
+-            if (hsz > 0) {
+-                float x = event.getX(index);
+-                float y = event.getY(index);
+-                for (int h = 0; h < hsz; ++h) {
+-                    if ( event.getHistoricalX(index, h) != x ||
+-                         event.getHistoricalY(index, h) != y )
+-                        return 1;
+-                }
+-                return 2;
+-            }
+-            return 1;
+-        }
+-        if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN && index == event.getActionIndex()) {
+-            return 0;
+-        } else if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP && index == event.getActionIndex()) {
+-            return 3;
+-        }
+-        return 2;
+-    }
+-    //@ANDROID-9
+-
+-    static public boolean sendTouchEvent(MotionEvent event, int id)
+-    {
+-        int pointerType = 0;
+-
+-        if (m_tabletEventSupported == null)
+-            m_tabletEventSupported = isTabletEventSupported();
+-
+-        switch (event.getToolType(0)) {
+-        case MotionEvent.TOOL_TYPE_STYLUS:
+-            pointerType = 1; // QTabletEvent::Pen
+-            break;
+-        case MotionEvent.TOOL_TYPE_ERASER:
+-            pointerType = 3; // QTabletEvent::Eraser
+-            break;
+-        }
+-
+-        if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
+-            return sendMouseEvent(event, id);
+-        } else if (m_tabletEventSupported && pointerType != 0) {
+-            final int historySize = event.getHistorySize();
+-            for (int h = 0; h < historySize; h++) {
+-                float tiltRot = event.getHistoricalAxisValue(MotionEvent.AXIS_TILT, h);
+-                float orientation = event.getHistoricalAxisValue(MotionEvent.AXIS_ORIENTATION, h);
+-
+-                float tiltX = (float) Math.toDegrees(-Math.sin(orientation) * tiltRot);
+-                float tiltY = (float) Math.toDegrees(Math.cos(orientation) * tiltRot);
+-
+-                tabletEvent(id, event.getDeviceId(), event.getHistoricalEventTime(h), event.getActionMasked(),
+-                            pointerType, event.getButtonState(), event.getHistoricalX(h),
+-                            event.getHistoricalY(h), event.getHistoricalPressure(h), tiltX, tiltY,
+-                            (float)Math.toDegrees(orientation), event.getMetaState());
+-            }
+-            float tiltRot = event.getAxisValue(MotionEvent.AXIS_TILT);
+-            float orientation = event.getAxisValue(MotionEvent.AXIS_ORIENTATION);
+-            float tiltX = (float) Math.toDegrees(-Math.sin(orientation) * tiltRot);
+-            float tiltY = (float) Math.toDegrees(Math.cos(orientation) * tiltRot);
+-            tabletEvent(id, event.getDeviceId(), event.getEventTime(), event.getActionMasked(), pointerType,
+-                event.getButtonState(), event.getX(), event.getY(), event.getPressure(), tiltX, tiltY,
+-                (float) Math.toDegrees(orientation), event.getMetaState());
+-            return true;
+-        } else {
+-            final int historySize = event.getHistorySize();
+-            touchBegin(id);
+-            // batched ones
+-            for (int h = 0; h < historySize; h++) {
+-                touchBegin(id);
+-                for (int i = 0; i < event.getPointerCount(); ++i) {
+-                    touchAdd(id,
+-                             event.getPointerId(i),
+-                             getAction(i, event),
+-                             i == 0,
+-                             (int)event.getHistoricalX(i, h),
+-                             (int)event.getHistoricalY(i, h),
+-                             event.getHistoricalTouchMajor(i, h),
+-                             event.getHistoricalTouchMinor(i, h),
+-                             event.getHistoricalOrientation(i, h),
+-                             event.getHistoricalPressure(i, h));
+-                }
+-                touchEnd(id, event.getAction());
+-            }
+-            touchBegin(id);
+-            for (int i = 0; i < event.getPointerCount(); ++i) {
+-                touchAdd(id,
+-                        event.getPointerId(i),
+-                        getAction(i, event),
+-                        i == 0,
+-                        (int)event.getX(i),
+-                        (int)event.getY(i),
+-                        event.getTouchMajor(i),
+-                        event.getTouchMinor(i),
+-                        event.getOrientation(i),
+-                        event.getPressure(i));
+-            }
+-            touchEnd(id, event.getAction());
+-            return true;
+-        }
+-    }
+-
+-    static public void sendTrackballEvent(MotionEvent event, int id)
+-    {
+-        sendMouseEvent(event,id);
+-    }
+-
+-    static public boolean sendGenericMotionEvent(MotionEvent event, int id)
+-    {
+-        if (!event.isFromSource(InputDevice.SOURCE_CLASS_POINTER)) {
+-            return false;
+-        }
+-
+-        if (event.isFromSource(InputDevice.SOURCE_MOUSE)) {
+-                return sendMouseEvent(event, id);
+-        } else if ((event.getSource() & (InputDevice.SOURCE_STYLUS |
+-                                         InputDevice.SOURCE_TOUCHPAD |
+-                                         InputDevice.SOURCE_TOUCHSCREEN)) != 0) {
+-
+-            return sendTouchEvent(event, id);
+-        }
+-        return false;
+-    }
+-
+-    static public boolean sendMouseEvent(MotionEvent event, int id)
+-    {
+-        switch (event.getActionMasked()) {
+-            case MotionEvent.ACTION_UP:
+-                mouseUp(id, (int) event.getX(), (int) event.getY(), event.getMetaState());
+-                break;
+-
+-            case MotionEvent.ACTION_DOWN:
+-                mouseDown(id, (int) event.getX(), (int) event.getY(), event.getMetaState(), event.getButtonState());
+-                m_oldx = (int) event.getX();
+-                m_oldy = (int) event.getY();
+-                break;
+-            case MotionEvent.ACTION_HOVER_MOVE:
+-            case MotionEvent.ACTION_MOVE:
+-                if (event.getToolType(0) == MotionEvent.TOOL_TYPE_MOUSE) {
+-                    mouseMove(id, (int) event.getX(), (int) event.getY(), event.getMetaState());
+-                } else {
+-                    int dx = (int) (event.getX() - m_oldx);
+-                    int dy = (int) (event.getY() - m_oldy);
+-                    if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+-                        mouseMove(id, (int) event.getX(), (int) event.getY(), event.getMetaState());
+-                        m_oldx = (int) event.getX();
+-                        m_oldy = (int) event.getY();
+-                    }
+-                }
+-                break;
+-            case MotionEvent.ACTION_SCROLL:
+-                mouseWheel(id, (int) event.getX(), (int) event.getY(),
+-                        event.getAxisValue(MotionEvent.AXIS_HSCROLL), event.getAxisValue(MotionEvent.AXIS_VSCROLL));
+-                break;
+-            default:
+-                return false;
+-        }
+-        return true;
+-    }
+-
+     public static Context getContext() {
+         if (m_activity != null)
+             return m_activity;
+@@ -1074,22 +917,6 @@ public class QtNative
+     public static native void handleOrientationChanged(int newRotation, int nativeOrientation);
+     // screen methods
+ 
+-    // pointer methods
+-    public static native void mouseDown(int winId, int x, int y, int modifier, int actionButton);
+-    public static native void mouseUp(int winId, int x, int y, int modifiers);
+-    public static native void mouseMove(int winId, int x, int y, int modifier);
+-    public static native void mouseWheel(int winId, int x, int y, float hdelta, float vdelta);
+-    public static native void touchBegin(int winId);
+-    public static native void touchAdd(int winId, int pointerId, int action, boolean primary, int x, int y, float major, float minor, float rotation, float pressure);
+-    public static native void touchEnd(int winId, int action);
+-    public static native void longPress(int winId, int x, int y);
+-    // pointer methods
+-
+-    // tablet methods
+-    public static native boolean isTabletEventSupported();
+-    public static native void tabletEvent(int winId, int deviceId, long time, int action, int pointerType, int buttonState, float x, float y, float pressure, float tiltX, float tiltY, float rotation, int modifiers);
+-    // tablet methods
+-
+     // keyboard methods
+     public static native void keyDown(int key, int unicode, int modifier, boolean autoRepeat);
+     public static native void keyUp(int key, int unicode, int modifier, boolean autoRepeat);
+diff --git a/src/plugins/platforms/android/MotionEventWrapper.h b/src/plugins/platforms/android/MotionEventWrapper.h
+new file mode 100644
+index 0000000000..f493d1a2a4
+--- /dev/null
++++ b/src/plugins/platforms/android/MotionEventWrapper.h
+@@ -0,0 +1,157 @@
++#ifndef __MOTIONEVENTWRAPPER_H_
++#define __MOTIONEVENTWRAPPER_H_
++
++#include <android/input.h>
++
++class MotionEventWrapper
++{
++public:
++    MotionEventWrapper(AInputEvent *inputEvent)
++        : m_motionEvent(inputEvent)
++    {
++    }
++
++    inline int32_t getDeviceId() const { return AInputEvent_getDeviceId(m_motionEvent); }
++
++    inline int32_t getAction() const { return AMotionEvent_getAction(m_motionEvent); }
++
++    inline int32_t getActionMasked() const { return getAction() & AMOTION_EVENT_ACTION_MASK; }
++
++    inline int32_t getActionIndex() const
++    {
++        return (getAction() & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK)
++            >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
++    }
++
++    inline int32_t getToolType(size_t pointerIndex) const
++    {
++        return AMotionEvent_getToolType(m_motionEvent, pointerIndex);
++    }
++
++    inline size_t getHistorySize() const { return AMotionEvent_getHistorySize(m_motionEvent); }
++
++    inline int64_t getHistoricalEventTime(size_t historicalIndex) const
++    {
++        return AMotionEvent_getHistoricalEventTime(m_motionEvent, historicalIndex);
++    }
++
++    inline int64_t getHistoricalEventTimeMs(size_t historicalIndex) const
++    {
++        return getHistoricalEventTime(historicalIndex) / NS_PER_MS;
++    }
++
++    inline float getHistoricalAxisValue(int32_t axis, size_t pointerIndex,
++                                        size_t historicalIndex) const
++    {
++        return AMotionEvent_getHistoricalAxisValue(m_motionEvent, axis, pointerIndex,
++                                                   historicalIndex);
++    }
++
++    inline float getHistoricalX(size_t historicalIndex) const
++    {
++        return getHistoricalX(0, historicalIndex);
++    }
++
++    inline float getHistoricalX(size_t pointerIndex, size_t historicalIndex) const
++    {
++        return AMotionEvent_getHistoricalX(m_motionEvent, pointerIndex, historicalIndex);
++    }
++
++    inline float getHistoricalY(size_t historicalIndex) const
++    {
++        return getHistoricalY(0, historicalIndex);
++    }
++
++    inline float getHistoricalY(size_t pointerIndex, size_t historicalIndex) const
++    {
++        return AMotionEvent_getHistoricalY(m_motionEvent, pointerIndex, historicalIndex);
++    }
++
++    inline float getHistoricalPressure(size_t historicalIndex) const
++    {
++        return getHistoricalPressure(0, historicalIndex);
++    }
++
++    inline float getHistoricalPressure(size_t pointerIndex, size_t historicalIndex) const
++    {
++        return AMotionEvent_getHistoricalPressure(m_motionEvent, pointerIndex, historicalIndex);
++    }
++
++    float getHistoricalTouchMajor(size_t pointerIndex, size_t historicalIndex)
++    {
++        return AMotionEvent_getHistoricalTouchMajor(m_motionEvent, pointerIndex, historicalIndex);
++    }
++
++    float getHistoricalTouchMinor(size_t pointerIndex, size_t historicalIndex)
++    {
++        return AMotionEvent_getHistoricalTouchMinor(m_motionEvent, pointerIndex, historicalIndex);
++    }
++
++    float getHistoricalOrientation(size_t pointerIndex, size_t historicalIndex)
++    {
++        return AMotionEvent_getHistoricalOrientation(m_motionEvent, pointerIndex, historicalIndex);
++    }
++
++    inline int64_t getEventTime() const { return AMotionEvent_getEventTime(m_motionEvent); }
++
++    inline int64_t getEventTimeMs() const { return getEventTime() / NS_PER_MS; }
++
++    inline float getAxisValue(int32_t axis) const
++    {
++        return AMotionEvent_getAxisValue(m_motionEvent, axis, 0);
++    }
++
++    inline float getX(int pointerIndex) const
++    {
++        return AMotionEvent_getX(m_motionEvent, pointerIndex);
++    }
++
++    inline float getX() const { return getX(0); }
++
++    inline float getY(int pointerIndex) const
++    {
++        return AMotionEvent_getY(m_motionEvent, pointerIndex);
++    }
++
++    inline float getY() const { return getY(0); }
++
++    inline float getPressure(int pointerIndex) const
++    {
++        return AMotionEvent_getPressure(m_motionEvent, pointerIndex);
++    }
++
++    inline float getPressure() const { return getPressure(0); }
++
++    inline int32_t getButtonState() const { return AMotionEvent_getButtonState(m_motionEvent); }
++
++    inline int32_t getMetaState() const { return AMotionEvent_getMetaState(m_motionEvent); }
++
++    size_t getPointerCount() const { return AMotionEvent_getPointerCount(m_motionEvent); }
++
++    int32_t getPointerId(size_t pointerIndex) const
++    {
++        return AMotionEvent_getPointerId(m_motionEvent, pointerIndex);
++    }
++
++    float getOrientation(size_t pointerIndex)
++    {
++        return AMotionEvent_getOrientation(m_motionEvent, pointerIndex);
++    }
++
++    float getTouchMajor(size_t pointerIndex)
++    {
++        return AMotionEvent_getTouchMajor(m_motionEvent, pointerIndex);
++    }
++
++    float getTouchMinor(size_t pointerIndex)
++    {
++        return AMotionEvent_getTouchMinor(m_motionEvent, pointerIndex);
++    }
++
++private:
++    AInputEvent *m_motionEvent;
++
++    const static long NS_PER_MS = 1000000;
++};
++
++#endif // __MOTIONEVENTWRAPPER_H_
+diff --git a/src/plugins/platforms/android/androidjniinput.cpp b/src/plugins/platforms/android/androidjniinput.cpp
+index a4bb8ae1a7..5c1d050dba 100644
+--- a/src/plugins/platforms/android/androidjniinput.cpp
++++ b/src/plugins/platforms/android/androidjniinput.cpp
+@@ -47,6 +47,7 @@
+ #include "qandroidplatformintegration.h"
+ #include "qandroidplatformwindow.h"
+ #include "qandroidplatformwindowmanager.h"
++#include "MotionEventWrapper.h"
+ 
+ #include <qpa/qwindowsysteminterface.h>
+ #include <QTouchEvent>
+@@ -69,6 +70,8 @@ namespace QtAndroidInput
+     static QRect m_softwareKeyboardRect;
+ 
+     static QList<QWindowSystemInterface::TouchPoint> m_touchPoints;
++    static QHash<int, QPointF> m_lastTouchPointsPos;
++    static QPoint m_mouseDownPos;
+ 
+     static QPointer<QWindow> m_mouseGrabber;
+     static int m_mouseActionButton;
+@@ -150,7 +153,8 @@ namespace QtAndroidInput
+         // other window is clicked. Otherwise Qt goes in an undefined state. I'm not 100% sure
+         // though.
+         if (focusWindow && (focusWindow->type() == Qt::Popup || focusWindow->type() == Qt::ToolTip)) {
+-            focusWindow->hide();
++            QMetaObject::invokeMethod(
++                qApp, [focusWindow]() { focusWindow->hide(); }, Qt::BlockingQueuedConnection);
+         }
+ 
+         QAndroidPlatformWindowManager *wm = dynamic_cast<QAndroidPlatformWindowManager *>(window);
+@@ -160,13 +164,13 @@ namespace QtAndroidInput
+             window = wm->realWindow()->window();
+         }
+         if (window && !QGuiApplicationPrivate::instance()->isWindowBlocked(window)) {
+-            window->raise();
++            QMetaObject::invokeMethod(
++                qApp, [window]() { window->raise(); }, Qt::BlockingQueuedConnection);
+             QWindowSystemInterface::handleWindowActivated(window, Qt::ActiveWindowFocusReason);
+         }
+     }
+ 
+-    static void mouseDown(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/,
+-                          jint x, jint y, jint modifier, jint actionButton)
++    static void mouseDown(float x, float y, jint modifier, jint actionButton)
+     {
+         if (m_ignoreMouseEvents)
+             return;
+@@ -189,7 +193,7 @@ namespace QtAndroidInput
+                                                  mapAndroidModifiers(modifier));
+     }
+ 
+-    static void mouseUp(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y, jint modifiers)
++    static void mouseUp(float x, float y, jint modifiers)
+     {
+         QPoint globalPos(x,y);
+         QWindow *tlw = m_mouseGrabber.data();
+@@ -207,7 +211,7 @@ namespace QtAndroidInput
+         m_mouseGrabber = 0;
+     }
+ 
+-    static void mouseMove(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y, jint modifier)
++    static void mouseMove(float x, float y, jint modifier)
+     {
+         if (m_ignoreMouseEvents)
+             return;
+@@ -229,7 +233,7 @@ namespace QtAndroidInput
+                                                  mapAndroidModifiers(modifier));
+     }
+ 
+-    static void mouseWheel(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint x, jint y, jfloat hdelta, jfloat vdelta)
++    static void mouseWheel(int x, int y, float hdelta, float vdelta)
+     {
+         if (m_ignoreMouseEvents)
+             return;
+@@ -290,38 +294,23 @@ namespace QtAndroidInput
+                                                  Qt::MouseButtons(Qt::NoButton));
+     }
+ 
+-    static void touchBegin(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/)
++    static void touchBegin()
+     {
+         m_touchPoints.clear();
+     }
+ 
+-    static void touchAdd(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint id, jint action, jboolean primary, jint x, jint y,
+-        jfloat major, jfloat minor, jfloat rotation, jfloat pressure)
++    static void touchAdd(int id, Qt::TouchPointState state, bool primary, int x, int y,
++        float major, float minor, float rotation, float pressure)
+     {
+-        Qt::TouchPointState state = Qt::TouchPointStationary;
+-        switch (action) {
+-        case 0:
+-            state = Qt::TouchPointPressed;
+-            break;
+-        case 1:
+-            state = Qt::TouchPointMoved;
+-            break;
+-        case 2:
+-            state = Qt::TouchPointStationary;
+-            break;
+-        case 3:
+-            state = Qt::TouchPointReleased;
+-            break;
+-        }
+-
+         const int dw = desktopWidthPixels();
+         const int dh = desktopHeightPixels();
+         QWindowSystemInterface::TouchPoint touchPoint;
+         touchPoint.id = id;
+         touchPoint.pressure = pressure;
+         touchPoint.rotation = qRadiansToDegrees(rotation);
+-        touchPoint.normalPosition = QPointF(double(x / dw), double(y / dh));
++        touchPoint.normalPosition = QPointF(double(x) / dw, double(y) / dh);
+         touchPoint.state = state;
++
+         touchPoint.area = QRectF(x - double(minor),
+                                  y - double(major),
+                                  double(minor * 2),
+@@ -342,7 +331,7 @@ namespace QtAndroidInput
+         }
+     }
+ 
+-    static void touchEnd(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint action)
++    static void touchEnd(int action)
+     {
+         if (m_touchPoints.isEmpty())
+             return;
+@@ -374,9 +363,13 @@ namespace QtAndroidInput
+             QWindowSystemInterface::handleTouchEvent(window, touchDevice, m_touchPoints);
+             break;
+         }
++
++        if (action == AMOTION_EVENT_ACTION_UP || action == AMOTION_EVENT_ACTION_CANCEL) {
++            m_lastTouchPointsPos.clear();
++        }
+     }
+ 
+-    static bool isTabletEventSupported(JNIEnv */*env*/, jobject /*thiz*/)
++    static bool isTabletEventSupported()
+     {
+ #if QT_CONFIG(tabletevent)
+         return true;
+@@ -385,9 +378,9 @@ namespace QtAndroidInput
+ #endif // QT_CONFIG(tabletevent)
+     }
+ 
+-    static void tabletEvent(JNIEnv */*env*/, jobject /*thiz*/, jint /*winId*/, jint deviceId, jlong time, jint action,
+-        jint pointerType, jint buttonState, jfloat x, jfloat y, jfloat pressure, jfloat tiltX, jfloat tiltY, jfloat rotation,
+-        jint modifiers)
++    static void tabletEvent(int deviceId, long time, int action, int pointerType, int buttonState,
++                            float x, float y, float pressure, float tiltX, float tiltY,
++                            float rotation, int modifiers)
+     {
+ #if QT_CONFIG(tabletevent)
+         QPointF globalPosF(x, y);
+@@ -403,21 +396,6 @@ namespace QtAndroidInput
+             localPos = platformWindow ? platformWindow->mapFromGlobal(globalPos) : globalPosF;
+         }
+ 
+-        // Galaxy Note with plain Android:
+-        // 0 1 0    stylus press
+-        // 2 1 0    stylus drag
+-        // 1 1 0    stylus release
+-        // 0 1 2    stylus press with side-button held
+-        // 2 1 2    stylus drag with side-button held
+-        // 1 1 2    stylus release with side-button held
+-        // Galaxy Note 4 with Samsung firmware:
+-        // 0 1 0    stylus press
+-        // 2 1 0    stylus drag
+-        // 1 1 0    stylus release
+-        // 211 1 2  stylus press with side-button held
+-        // 213 1 2  stylus drag with side-button held
+-        // 212 1 2  stylus release with side-button held
+-        // when action == ACTION_UP (1) it's a release; otherwise we say which button is pressed
+         Qt::MouseButtons buttons = Qt::NoButton;
+         switch (action) {
+         case AMOTION_EVENT_ACTION_UP:
+@@ -451,6 +429,155 @@ namespace QtAndroidInput
+ #endif // QT_CONFIG(tabletevent)
+     }
+ 
++    static AInputEvent *getMotionEventFromJava(JNIEnv *env, jobject motionEventJava)
++    {
++        // From AOSP's AMotionEvent implementation
++        return reinterpret_cast<AInputEvent *>(
++            env->GetLongField(motionEventJava, QtAndroid::motionEventNativePtr()));
++    }
++
++    static QTabletEvent::PointerType getPointerType(int toolType)
++    {
++        if (toolType == AMOTION_EVENT_TOOL_TYPE_STYLUS) {
++            return QTabletEvent::Pen;
++        } else if (toolType == AMOTION_EVENT_TOOL_TYPE_ERASER) {
++            return QTabletEvent::Eraser;
++        }
++        return QTabletEvent::UnknownPointer;
++    }
++
++    static Qt::TouchPointState getTouchPointStateFromAction(const MotionEventWrapper &event,
++                                                            int pointerIndex)
++    {
++        int actionMasked = event.getActionMasked();
++        int actionIndex = event.getActionIndex();
++
++        if (actionMasked == AMOTION_EVENT_ACTION_DOWN
++            || (actionMasked == AMOTION_EVENT_ACTION_POINTER_DOWN && pointerIndex == actionIndex)) {
++            return Qt::TouchPointPressed;
++        } else if (actionMasked == AMOTION_EVENT_ACTION_UP
++                   || (actionMasked == AMOTION_EVENT_ACTION_POINTER_UP
++                       && pointerIndex == actionIndex)) {
++            return Qt::TouchPointReleased;
++        } else {
++            const int dw = desktopWidthPixels();
++            const int dh = desktopHeightPixels();
++
++            const int id = event.getPointerId(pointerIndex);
++            QPointF lastNormalPosition;
++            if (m_lastTouchPointsPos.contains(id)) {
++                lastNormalPosition = m_lastTouchPointsPos[id];
++            }
++            const QPointF currentNormalPosition =
++                QPointF(double(event.getX()) / dw, double(event.getX()) / dh);
++
++            m_lastTouchPointsPos[id] = currentNormalPosition;
++
++            return (currentNormalPosition == lastNormalPosition) ? Qt::TouchPointStationary
++                                                                 : Qt::TouchPointMoved;
++        }
++    }
++
++    static void dispatchMotionEvent(JNIEnv *env, jobject /*thiz*/, jint /*winId*/,
++                                    jboolean isTouchEvent, jobject motionEventJava)
++    {
++        static const bool tabletEventSupported = isTabletEventSupported();
++
++        AInputEvent *motionEvent = getMotionEventFromJava(env, motionEventJava);
++        MotionEventWrapper ev(motionEvent);
++        if (isTouchEvent) {
++            const QTabletEvent::PointerType pointerType = getPointerType(ev.getToolType(0));
++            if (tabletEventSupported && pointerType != QTabletEvent::UnknownPointer) {
++                const size_t historySize = ev.getHistorySize();
++                for (size_t historicalIndex = 0; historicalIndex < historySize; ++historicalIndex) {
++                    const float tiltRot =
++                        ev.getHistoricalAxisValue(AMOTION_EVENT_AXIS_TILT, 0, historicalIndex);
++                    const float orientation = ev.getHistoricalAxisValue(
++                        AMOTION_EVENT_AXIS_ORIENTATION, 0, historicalIndex);
++
++                    const float tiltX = qRadiansToDegrees(-sin(orientation) * tiltRot);
++                    const float tiltY = qRadiansToDegrees(cos(orientation) * tiltRot);
++
++                    const float orientationDegrees = qRadiansToDegrees(orientation);
++
++                    tabletEvent(ev.getDeviceId(), ev.getHistoricalEventTimeMs(historicalIndex),
++                                ev.getActionMasked(), pointerType, ev.getButtonState(),
++                                ev.getHistoricalX(historicalIndex),
++                                ev.getHistoricalY(historicalIndex),
++                                ev.getHistoricalPressure(historicalIndex), tiltX, tiltY,
++                                orientationDegrees, ev.getMetaState());
++                }
++
++                const float tiltRot = ev.getAxisValue(AMOTION_EVENT_AXIS_TILT);
++                const float orientation = ev.getAxisValue(AMOTION_EVENT_AXIS_ORIENTATION);
++
++                const float tiltX = qRadiansToDegrees(-sin(orientation) * tiltRot);
++                const float tiltY = qRadiansToDegrees(cos(orientation) * tiltRot);
++
++                const float orientationDegrees = qRadiansToDegrees(orientation);
++
++                tabletEvent(ev.getDeviceId(), ev.getEventTimeMs(), ev.getActionMasked(),
++                            pointerType, ev.getButtonState(), ev.getX(), ev.getY(),
++                            ev.getPressure(), tiltX, tiltY, orientationDegrees, ev.getMetaState());
++            } else {
++                const int historySize = ev.getHistorySize();
++                // batched ones
++                for (int historicalIndex = 0; historicalIndex < historySize; historicalIndex++) {
++                    touchBegin();
++                    for (size_t i = 0; i < ev.getPointerCount(); ++i) {
++                        touchAdd(ev.getPointerId(i), getTouchPointStateFromAction(ev, i), i == 0,
++                                 (int)ev.getHistoricalX(i, historicalIndex),
++                                 (int)ev.getHistoricalY(i, historicalIndex),
++                                 ev.getHistoricalTouchMajor(i, historicalIndex),
++                                 ev.getHistoricalTouchMinor(i, historicalIndex),
++                                 ev.getHistoricalOrientation(i, historicalIndex),
++                                 ev.getHistoricalPressure(i, historicalIndex));
++                    }
++                    touchEnd(ev.getAction());
++                }
++                touchBegin();
++                for (size_t i = 0; i < ev.getPointerCount(); ++i) {
++                    touchAdd(ev.getPointerId(i), getTouchPointStateFromAction(ev, i), i == 0,
++                             (int)ev.getX(i), (int)ev.getY(i), ev.getTouchMajor(i),
++                             ev.getTouchMinor(i), ev.getOrientation(i), ev.getPressure(i));
++                }
++                touchEnd(ev.getAction());
++            }
++        } else {
++            switch (ev.getActionMasked()) {
++            case AMOTION_EVENT_ACTION_UP:
++                mouseUp((int)ev.getX(), (int)ev.getY(), ev.getMetaState());
++                break;
++
++            case AMOTION_EVENT_ACTION_DOWN:
++                mouseDown((int)ev.getX(), (int)ev.getY(), ev.getMetaState(), ev.getButtonState());
++                m_mouseDownPos.rx() = (int)ev.getX();
++                m_mouseDownPos.ry() = (int)ev.getY();
++                break;
++
++            case AMOTION_EVENT_ACTION_HOVER_MOVE:
++            case AMOTION_EVENT_ACTION_MOVE:
++                if (ev.getToolType(0) == AMOTION_EVENT_TOOL_TYPE_MOUSE) {
++                    mouseMove((int)ev.getX(), (int)ev.getY(), ev.getMetaState());
++                } else {
++                    QPoint delta = QPoint(ev.getX(), ev.getY()) - m_mouseDownPos;
++                    if (fabs(delta.x()) > 5 || fabs(delta.y()) > 5) {
++                        mouseMove((int)ev.getX(), (int)ev.getY(), ev.getMetaState());
++                        m_mouseDownPos.rx() = (int)ev.getX();
++                        m_mouseDownPos.ry() = (int)ev.getY();
++                    }
++                }
++                break;
++
++            case AMOTION_EVENT_ACTION_SCROLL:
++                mouseWheel((int)ev.getX(), (int)ev.getY(),
++                           ev.getAxisValue(AMOTION_EVENT_AXIS_HSCROLL),
++                           ev.getAxisValue(AMOTION_EVENT_AXIS_VSCROLL));
++                break;
++            }
++        }
++    }
++
+     static int mapAndroidKey(int key)
+     {
+         // 0--9        0x00000007 -- 0x00000010
+@@ -942,35 +1069,37 @@ namespace QtAndroidInput
+ 
+     }
+ 
+-    static JNINativeMethod methods[] = {
+-        {"touchBegin","(I)V",(void*)touchBegin},
+-        {"touchAdd","(IIIZIIFFFF)V",(void*)touchAdd},
+-        {"touchEnd","(II)V",(void*)touchEnd},
+-        {"mouseDown", "(IIIII)V", (void *)mouseDown},
+-        {"mouseUp", "(IIII)V", (void *)mouseUp},
+-        {"mouseMove", "(IIII)V", (void *)mouseMove},
+-        {"mouseWheel", "(IIIFF)V", (void *)mouseWheel},
+-        {"longPress", "(III)V", (void *)longPress},
+-        {"isTabletEventSupported", "()Z", (void *)isTabletEventSupported},
+-        {"tabletEvent", "(IIJIIIFFFFFFI)V", (void *)tabletEvent},
++    const static JNINativeMethod inputDispatcherMethods[] = {
++        {"dispatchMotionEvent", "(IZLandroid/view/MotionEvent;)V", (void *)dispatchMotionEvent},
++        {"longPress", "(III)V", (void *)longPress}};
++
++    const static JNINativeMethod qtNativeMethods[] = {
+         {"keyDown", "(IIIZ)V", (void *)keyDown},
+         {"keyUp", "(IIIZ)V", (void *)keyUp},
+         {"keyboardVisibilityChanged", "(Z)V", (void *)keyboardVisibilityChanged},
+         {"keyboardGeometryChanged", "(IIII)V", (void *)keyboardGeometryChanged},
+-        {"handleLocationChanged", "(III)V", (void *)handleLocationChanged}
+-    };
++        {"handleLocationChanged", "(III)V", (void *)handleLocationChanged}};
+ 
+     bool registerNatives(JNIEnv *env)
+     {
+         jclass appClass = QtAndroid::applicationClass();
++        if (env->RegisterNatives(appClass, qtNativeMethods,
++                                 sizeof(qtNativeMethods) / sizeof(qtNativeMethods[0]))
++            < 0) {
++            __android_log_print(ANDROID_LOG_FATAL, "Qt", "RegisterNatives failed");
++            return false;
++        }
+ 
+-        if (env->RegisterNatives(appClass, methods, sizeof(methods) / sizeof(methods[0])) < 0) {
+-            __android_log_print(ANDROID_LOG_FATAL,"Qt", "RegisterNatives failed");
++        jclass dispatcherClass = QtAndroid::inputDispatcherClass();
++        if (env->RegisterNatives(dispatcherClass, inputDispatcherMethods,
++                                 sizeof(inputDispatcherMethods) / sizeof(inputDispatcherMethods[0]))
++            < 0) {
++            __android_log_print(ANDROID_LOG_FATAL, "Qt", "RegisterNatives failed");
+             return false;
+         }
+ 
+         return true;
+     }
+-}
++    } // namespace QtAndroidInput
+ 
+ QT_END_NAMESPACE
+diff --git a/src/plugins/platforms/android/androidjnimain.cpp b/src/plugins/platforms/android/androidjnimain.cpp
+index a60b121979..526eb19a3e 100644
+--- a/src/plugins/platforms/android/androidjnimain.cpp
++++ b/src/plugins/platforms/android/androidjnimain.cpp
+@@ -83,6 +83,8 @@ static jmethodID m_createSurfaceMethodID = nullptr;
+ static jobject m_serviceObject = nullptr;
+ static jmethodID m_setSurfaceGeometryMethodID = nullptr;
+ static jmethodID m_destroySurfaceMethodID = nullptr;
++static jclass m_inputDispatcherClass = nullptr;
++static jfieldID m_motionEventNativePtrField;
+ 
+ static int m_pendingApplicationState = -1;
+ static QBasicMutex m_platformMutex;
+@@ -190,6 +192,16 @@ namespace QtAndroid
+         return m_applicationClass;
+     }
+ 
++    jclass inputDispatcherClass()
++    {
++        return m_inputDispatcherClass;
++    }
++
++    jfieldID motionEventNativePtr()
++    {
++        return m_motionEventNativePtrField;
++    }
++
+     jobject activity()
+     {
+         return m_activityObject;
+@@ -865,6 +877,12 @@ static int registerNatives(JNIEnv *env)
+                              m_bitmapDrawableClass,
+                              "<init>",
+                              "(Landroid/content/res/Resources;Landroid/graphics/Bitmap;)V");
++
++        FIND_AND_CHECK_CLASS("org/qtproject/qt5/android/QtInputEventDispatcher");
++        m_inputDispatcherClass = static_cast<jclass>(env->NewGlobalRef(clazz));
++
++        FIND_AND_CHECK_CLASS("android/view/MotionEvent");
++        GET_AND_CHECK_FIELD(m_motionEventNativePtrField, clazz, "mNativePtr", "J");
+     }
+ 
+     return JNI_TRUE;
+diff --git a/src/plugins/platforms/android/androidjnimain.h b/src/plugins/platforms/android/androidjnimain.h
+index 08f1d50fe3..c04e903ff7 100644
+--- a/src/plugins/platforms/android/androidjnimain.h
++++ b/src/plugins/platforms/android/androidjnimain.h
+@@ -84,6 +84,8 @@ namespace QtAndroid
+     JavaVM *javaVM();
+     AAssetManager *assetManager();
+     jclass applicationClass();
++    jclass inputDispatcherClass();
++    jfieldID motionEventNativePtr();
+     jobject activity();
+     jobject service();
+ 
+-- 
+2.37.3
+

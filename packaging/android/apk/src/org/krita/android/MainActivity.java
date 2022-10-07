@@ -21,6 +21,7 @@ import android.view.ViewConfiguration;
 import androidx.annotation.RequiresApi;
 
 import org.qtproject.qt5.android.QtNative;
+import org.qtproject.qt5.android.QtInputEventDispatcher;
 import org.qtproject.qt5.android.bindings.QtActivity;
 
 public class MainActivity extends QtActivity {
@@ -145,8 +146,11 @@ public class MainActivity extends QtActivity {
         // to the view which was just tapped. So, this view will never get to
         // QtSurface, because it doesn't claim focus.
         if (event.isFromSource(InputDevice.SOURCE_TOUCHPAD)) {
-            return QtNative.sendGenericMotionEvent(event, event.getDeviceId());
+            return QtNative.getInputEventDispatcher().sendGenericMotionEvent(event, event.getDeviceId());
         }
         return super.onGenericMotionEvent(event);
+    }
+
+    public void onUserInteraction() {
     }
 }

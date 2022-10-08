@@ -759,10 +759,10 @@
     </Action>
     <Action name="zoom_to_100pct">
       <icon>zoom-original</icon>
-      <text>&amp;Reset zoom</text>
+      <text>&amp;Reset Zoom</text>
       <whatsThis></whatsThis>
-      <toolTip>Reset zoom</toolTip>
-      <iconText>Reset zoom</iconText>
+      <toolTip>Reset Zoom</toolTip>
+      <iconText>Reset Zoom</iconText>
       <activationFlags>1</activationFlags>
       <activationConditions>0</activationConditions>
       <shortcut>Ctrl+0</shortcut>
@@ -792,6 +792,36 @@
       <shortcut>Ctrl+-</shortcut>
       <isCheckable>false</isCheckable>
       <statusTip></statusTip>
+    </Action>
+    <Action name="zoom_to_fit">
+      <icon/>
+      <text>Zoom Fit to Page</text>
+      <whatsThis/>
+      <toolTip>Zoom Fit to Page</toolTip>
+      <iconText>Zoom Fit to Page</iconText>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="zoom_to_fit_width">
+      <icon/>
+      <text>Zoom Fit to Width</text>
+      <whatsThis/>
+      <toolTip>Zoom Fit to Page Width</toolTip>
+      <iconText>Zoom Fit to Width</iconText>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
+    </Action>
+    <Action name="zoom_to_fit_height">
+      <icon/>
+      <text>Zoom Fit to Height</text>
+      <whatsThis/>
+      <toolTip>Zoom Fit to Page Height</toolTip>
+      <iconText>Zoom Fit to Height</iconText>
+      <shortcut/>
+      <isCheckable>false</isCheckable>
+      <statusTip/>
     </Action>
     <Action name="toggle_zoom_to_fit">
       <icon/>

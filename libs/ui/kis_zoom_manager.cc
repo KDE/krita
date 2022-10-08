@@ -402,6 +402,23 @@ void KisZoomManager::zoomTo100()
     m_view->canvasBase()->notifyZoomChanged();
 }
 
+void KisZoomManager::slotZoomToFit()
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_PAGE, 0);
+    m_view->canvasBase()->notifyZoomChanged();
+}
+
+void KisZoomManager::slotZoomToFitWidth()
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_WIDTH, 0);
+    m_view->canvasBase()->notifyZoomChanged();
+}
+void KisZoomManager::slotZoomToFitHeight()
+{
+    m_zoomController->setZoom(KoZoomMode::ZOOM_HEIGHT, 0);
+    m_view->canvasBase()->notifyZoomChanged();
+}
+
 void KisZoomManager::slotToggleZoomToFit()
 {
     KoZoomMode::Mode currentZoomMode = m_zoomController->zoomMode();

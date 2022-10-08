@@ -193,6 +193,9 @@ public:
     KisAction *zoomTo100pct {nullptr};
     KisAction *zoomIn {nullptr};
     KisAction *zoomOut {nullptr};
+    KisAction *zoomToFit {nullptr};
+    KisAction *zoomToFitWidth {nullptr};
+    KisAction *zoomToFitHeight {nullptr};
     KisAction *toggleZoomToFit {nullptr};
     KisAction *softProof {nullptr};
     KisAction *gamutCheck {nullptr};
@@ -489,6 +492,9 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->zoomTo100pct, SIGNAL(triggered()), imageView->zoomManager(), SLOT(zoomTo100()));
         d->viewConnections.addUniqueConnection(d->zoomIn, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomIn()));
         d->viewConnections.addUniqueConnection(d->zoomOut, SIGNAL(triggered()), imageView->zoomController()->zoomAction(), SLOT(zoomOut()));
+        d->viewConnections.addUniqueConnection(d->zoomToFit, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFit()));
+        d->viewConnections.addUniqueConnection(d->zoomToFitWidth, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFitWidth()));
+        d->viewConnections.addUniqueConnection(d->zoomToFitHeight, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotZoomToFitHeight()));
         d->viewConnections.addUniqueConnection(d->toggleZoomToFit, SIGNAL(triggered()), imageView->zoomManager(), SLOT(slotToggleZoomToFit()));
 
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
@@ -754,6 +760,9 @@ void KisViewManager::createActions()
     d->zoomIn = actionManager()->createStandardAction(KStandardAction::ZoomIn, 0, "");
     d->zoomOut = actionManager()->createStandardAction(KStandardAction::ZoomOut, 0, "");
 
+    d->zoomToFit = actionManager()->createAction("zoom_to_fit");
+    d->zoomToFitWidth = actionManager()->createAction("zoom_to_fit_width");
+    d->zoomToFitHeight = actionManager()->createAction("zoom_to_fit_height");
     d->toggleZoomToFit = actionManager()->createAction("toggle_zoom_to_fit");
 
     d->actionAuthor  = new KSelectAction(KisIconUtils::loadIcon("im-user"), i18n("Active Author Profile"), this);

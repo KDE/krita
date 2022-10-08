@@ -409,3 +409,10 @@ bool KoFontRegistery::configureFaces(const std::vector<FT_FaceUP> &faces,
     }
     return (errorCode == 0);
 }
+
+bool KoFontRegistery::addFontFilePathToRegistery(QString path)
+{
+    QByteArray utfData = path.toUtf8();
+    const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
+    return FcConfigAppFontAddFile(FcConfigGetCurrent(), vals);
+}

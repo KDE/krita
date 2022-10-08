@@ -11,6 +11,7 @@
 #include "SvgParserTestingUtils.h"
 #include <text/KoSvgText.h>
 #include <text/KoSvgTextProperties.h>
+#include <text/KoFontRegistery.h>
 #include "KoSvgTextShapeMarkupConverter.h"
 
 #include <SvgLoadingContext.h>
@@ -1489,6 +1490,42 @@ void TestSvgText::testTextFontSize()
 
     testTextFontSizeHelper(filename, 96, true);
     testTextFontSizeHelper(filename, 96, false);
+
+}
+
+/**
+ * @brief TestSvgText::testAddingTestFont
+ *
+ * This test tests whether we can add a font to the font registery
+ * and retrieve it afterwards. Without this, we won't be able to
+ * write reliable machine tests given how much of text rendering is
+ * font specific.
+ */
+void TestSvgText::testAddingTestFont()
+{
+    QString fontName = "Ahem";
+    QString fontFileName = "fonts/Ahem/ahem.ttf";
+    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
+
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1").arg(fontName).toLatin1());
+
+    QStringList families;
+    families.append(fontName);
+
+    QVector<int> lengths;
+    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues(families, lengths);
+
+    res = false;
+    for (const FT_FaceUP &face : faces) {
+        //qDebug() << face->family_name;
+        if (face->family_name == fontName) {
+            res = true;
+            break;
+        }
+    }
+    QVERIFY2(res, QString("KoFontRegistery could not find the added test font %1").arg(fontName).toLatin1());
 
 }
 

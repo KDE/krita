@@ -55,6 +55,8 @@ private Q_SLOTS:
 
     void testTextFontSize();
 
+    void testAddingTestFont();
+
 };
 
 #endif // TESTSVGTEXT_H

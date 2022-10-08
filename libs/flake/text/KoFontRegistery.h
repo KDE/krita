@@ -10,6 +10,7 @@
 #include <QVector>
 
 #include <KoFontLibraryResourceUtils.h>
+#include "kritaflake_export.h"
 
 /**
  * @brief The KoFontRegistery class
@@ -22,7 +23,7 @@
  * It also provides a configuration function to handle all the
  * size and variation axis values.
  */
-class KoFontRegistery
+class KRITAFLAKE_EXPORT KoFontRegistery
 {
 public:
     KoFontRegistery();
@@ -68,6 +69,18 @@ public:
 
 private:
     class Private;
+
+    friend class TestSvgText;
+
+    /**
+     * @brief addFontFilePathToRegistery
+     * This adds a font file to the registery. Right now only used by unittests.
+     *
+     * @param path the path of the font file.
+     * @return Whether adding the font file was succesful.
+     */
+    bool addFontFilePathToRegistery(QString path);
+
     QScopedPointer<Private> d;
 };
 

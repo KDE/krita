@@ -93,7 +93,7 @@ public:
 
         // Returns a string with layer opacity and blending mode information;
         // content depends on style setting.
-        SubtitleRole,
+        InfoTextRole,
 
         /// This is to ensure that we can extend the data role in the future, since it's not possible to add a role after BeginThumbnailRole (due to "Hack")
         ReservedRole = Qt::UserRole + 99,

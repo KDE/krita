@@ -129,9 +129,9 @@ private Q_SLOTS:
 
     void slotUpdateThumbnailIconSize();
     void slotUpdateTreeIndentation();
-    void slotUpdateLayerSubtitleStyle();
-    void slotUpdateLayerSubtitleOpacity();
-    void slotUpdateUseInlineLayerSubtitles();
+    void slotUpdateLayerInfoTextStyle();
+    void slotUpdateLayerInfoTextOpacity();
+    void slotUpdateUseInlineLayerInfoText();
 
     void slotImageTimeChanged(int time);
     void slotForgetAboutSavedNodeBeforeEditSelectionMode();
@@ -174,14 +174,14 @@ private:
     KisSignalCompressor m_colorLabelCompressor;
     KisSignalCompressor m_thumbnailSizeCompressor;
     KisSignalCompressor m_treeIndentationCompressor;
-    KisSignalCompressor m_subtitleOpacityCompressor;
+    KisSignalCompressor m_infoTextOpacityCompressor;
 
     KisLayerFilterWidget* layerFilterWidget;
     QSlider *thumbnailSizeSlider;
     QSlider *indentationSlider;
-    QComboBox *subtitleCombobox;
-    KisSliderSpinBox *subtitleOpacitySlider;
-    QCheckBox *subtitleInlineChkbox;
+    QComboBox *infoTextCombobox;
+    KisSliderSpinBox *infoTextOpacitySlider;
+    QCheckBox *infoTextInlineChkbox;
 
     KisNodeSP m_activeNode;
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;

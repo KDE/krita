@@ -163,7 +163,7 @@ LayerBox::LayerBox()
     , m_colorLabelCompressor(500, KisSignalCompressor::FIRST_INACTIVE)
     , m_thumbnailSizeCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
     , m_treeIndentationCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
-    , m_subtitleOpacityCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+    , m_infoTextOpacityCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
 {
     KisConfig cfg(false);
 
@@ -363,61 +363,61 @@ LayerBox::LayerBox()
     connect(&m_treeIndentationCompressor, SIGNAL(timeout()), SLOT(slotUpdateTreeIndentation()));
 
 
-    // Layer subtitle settings:
-    // subtitle style combobox
-    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, combobox", "Subtitle Style"));
-    subtitleCombobox = new QComboBox(this);
-    subtitleCombobox->setToolTip(i18nc("@item:tooltip", "None: Show nothing.\n"
+    // Layer info-text settings:
+    // blending info-text style combobox
+    configureMenu->addSection(i18nc("@item:inmenu Layers Docker settings, combobox", "Blending Info Style"));
+    infoTextCombobox = new QComboBox(this);
+    infoTextCombobox->setToolTip(i18nc("@item:tooltip", "None: Show nothing.\n"
                                                         "Simple: Show changed opacities or blending modes.\n"
                                                         "Balanced: Show both opacity and blending mode if either are changed.\n"
                                                         "Detailed: Show both opacity and blending mode even if unchanged."));
-    subtitleCombobox->insertItems(0, QStringList ({
-        i18nc("@item:inlistbox Layer Docker subtitle style", "None"),
-        i18nc("@item:inlistbox Layer Docker subtitle style", "Simple"),
-        i18nc("@item:inlistbox Layer Docker subtitle style", "Balanced"),
-        i18nc("@item:inlistbox Layer Docker subtitle style", "Detailed"),
+    infoTextCombobox->insertItems(0, QStringList ({
+        i18nc("@item:inlistbox Layer Docker blending info style", "None"),
+        i18nc("@item:inlistbox Layer Docker blending info style", "Simple"),
+        i18nc("@item:inlistbox Layer Docker blending info style", "Balanced"),
+        i18nc("@item:inlistbox Layer Docker blending info style", "Detailed"),
     }));
-    subtitleCombobox->setCurrentIndex((int)cfg.layerSubtitleStyle());
+    infoTextCombobox->setCurrentIndex((int)cfg.layerInfoTextStyle());
 
     QWidgetAction *cmbboxAction = new QWidgetAction(this);
-    cmbboxAction->setDefaultWidget(subtitleCombobox);
+    cmbboxAction->setDefaultWidget(infoTextCombobox);
     configureMenu->addAction(cmbboxAction);
-    connect(subtitleCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateLayerSubtitleStyle()));
+    connect(infoTextCombobox, SIGNAL(currentIndexChanged(int)), SLOT(slotUpdateLayerInfoTextStyle()));
 
-    // subtitle opacity slider
-    subtitleOpacitySlider = new KisSliderSpinBox(this);
-    subtitleOpacitySlider->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
-    subtitleOpacitySlider->setSuffix(i18n("%"));
-    subtitleOpacitySlider->setToolTip(i18nc("@item:tooltip", "Subtitle text opacity"));
+    // info-text opacity slider
+    infoTextOpacitySlider = new KisSliderSpinBox(this);
+    infoTextOpacitySlider->setPrefix(QString("%1:  ").arg(i18n("Opacity")));
+    infoTextOpacitySlider->setSuffix(i18n("%"));
+    infoTextOpacitySlider->setToolTip(i18nc("@item:tooltip", "Blending info text opacity"));
     // 55% is the opacity of nonvisible layer text
-    subtitleOpacitySlider->setRange(55, 100);
-    subtitleOpacitySlider->setMinimumSize(40, 20);
-    subtitleOpacitySlider->setSingleStep(5);
-    subtitleOpacitySlider->setPageStep(15);
-    subtitleOpacitySlider->setValue(cfg.layerSubtitleOpacity());
-    if (subtitleCombobox->currentIndex() == 0) {
-        subtitleOpacitySlider->setDisabled(true);
+    infoTextOpacitySlider->setRange(55, 100);
+    infoTextOpacitySlider->setMinimumSize(40, 20);
+    infoTextOpacitySlider->setSingleStep(5);
+    infoTextOpacitySlider->setPageStep(15);
+    infoTextOpacitySlider->setValue(cfg.layerInfoTextOpacity());
+    if (infoTextCombobox->currentIndex() == 0) {
+        infoTextOpacitySlider->setDisabled(true);
     }
 
     sliderAction= new QWidgetAction(this);
-    sliderAction->setDefaultWidget(subtitleOpacitySlider);
+    sliderAction->setDefaultWidget(infoTextOpacitySlider);
     configureMenu->addAction(sliderAction);
-    connect(subtitleOpacitySlider, SIGNAL(valueChanged(int)), &m_subtitleOpacityCompressor, SLOT(start()));
-    connect(&m_subtitleOpacityCompressor, SIGNAL(timeout()), SLOT(slotUpdateLayerSubtitleOpacity()));
+    connect(infoTextOpacitySlider, SIGNAL(valueChanged(int)), &m_infoTextOpacityCompressor, SLOT(start()));
+    connect(&m_infoTextOpacityCompressor, SIGNAL(timeout()), SLOT(slotUpdateLayerInfoTextOpacity()));
 
-    // subtitle inline checkbox
-    subtitleInlineChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Inline"), this);
-    subtitleInlineChkbox->setChecked(cfg.useInlineLayerSubtitles());
-    subtitleInlineChkbox->setToolTip(i18nc("@item:tooltip", "If enabled, show subtitles beside layer names.\n"
+    // info-text inline checkbox
+    infoTextInlineChkbox = new QCheckBox(i18nc("@item:inmenu Layers Docker settings, checkbox", "Inline"), this);
+    infoTextInlineChkbox->setChecked(cfg.useInlineLayerInfoText());
+    infoTextInlineChkbox->setToolTip(i18nc("@item:tooltip", "If enabled, show blending info beside layer names.\n"
                                                             "If disabled, show below layer names (when enough space)."));
-    if (subtitleCombobox->currentIndex() == 0) {
-        subtitleInlineChkbox->setDisabled(true);
+    if (infoTextCombobox->currentIndex() == 0) {
+        infoTextInlineChkbox->setDisabled(true);
     }
 
     QWidgetAction *chkboxAction = new QWidgetAction(this);
-    chkboxAction->setDefaultWidget(subtitleInlineChkbox);
+    chkboxAction->setDefaultWidget(infoTextInlineChkbox);
     configureMenu->addAction(chkboxAction);
-    connect(subtitleInlineChkbox, SIGNAL(stateChanged(int)), SLOT(slotUpdateUseInlineLayerSubtitles()));
+    connect(infoTextInlineChkbox, SIGNAL(stateChanged(int)), SLOT(slotUpdateUseInlineLayerInfoText()));
 
 }
 
@@ -1324,43 +1324,43 @@ void LayerBox::slotUpdateTreeIndentation()
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
 }
 
-void LayerBox::slotUpdateLayerSubtitleStyle()
+void LayerBox::slotUpdateLayerInfoTextStyle()
 {
     KisConfig cfg(false);
-    if (subtitleCombobox->currentIndex() == cfg.layerSubtitleStyle()) {
+    if (infoTextCombobox->currentIndex() == cfg.layerInfoTextStyle()) {
         return;
     }
-    cfg.setLayerSubtitleStyle((KisConfig::LayerSubtitleStyle)subtitleCombobox->currentIndex());
+    cfg.setLayerInfoTextStyle((KisConfig::LayerInfoTextStyle)infoTextCombobox->currentIndex());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
     m_wdgLayerBox->listLayers->viewport()->update();
-    if (subtitleCombobox->currentIndex() == 0) {
-        subtitleOpacitySlider->setDisabled(true);
-        subtitleInlineChkbox->setDisabled(true);
+    if (infoTextCombobox->currentIndex() == 0) {
+        infoTextOpacitySlider->setDisabled(true);
+        infoTextInlineChkbox->setDisabled(true);
     }
     else {
-        subtitleOpacitySlider->setDisabled(false);
-        subtitleInlineChkbox->setDisabled(false);
+        infoTextOpacitySlider->setDisabled(false);
+        infoTextInlineChkbox->setDisabled(false);
     }
 }
 
-void LayerBox::slotUpdateLayerSubtitleOpacity()
+void LayerBox::slotUpdateLayerInfoTextOpacity()
 {
     KisConfig cfg(false);
-    if (subtitleOpacitySlider->value() == cfg.layerSubtitleOpacity()) {
+    if (infoTextOpacitySlider->value() == cfg.layerInfoTextOpacity()) {
         return;
     }
-    cfg.setLayerSubtitleOpacity(subtitleOpacitySlider->value());
+    cfg.setLayerInfoTextOpacity(infoTextOpacitySlider->value());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
     m_wdgLayerBox->listLayers->viewport()->update();
 }
 
-void LayerBox::slotUpdateUseInlineLayerSubtitles()
+void LayerBox::slotUpdateUseInlineLayerInfoText()
 {
     KisConfig cfg(false);
-    if (subtitleInlineChkbox->isChecked() == cfg.useInlineLayerSubtitles()) {
+    if (infoTextInlineChkbox->isChecked() == cfg.useInlineLayerInfoText()) {
         return;
     }
-    cfg.setUseInlineLayerSubtitles(subtitleInlineChkbox->isChecked());
+    cfg.setUseInlineLayerInfoText(infoTextInlineChkbox->isChecked());
     m_wdgLayerBox->listLayers->slotConfigurationChanged();
     m_wdgLayerBox->listLayers->viewport()->update();
 }

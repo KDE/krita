@@ -374,15 +374,15 @@ void NodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, con
     const QString text = index.data(Qt::DisplayRole).toString();
     const QString elided = p->fontMetrics().elidedText(text, Qt::ElideRight, rc.width());
     KisConfig cfg(true);
-    if (cfg.layerSubtitleStyle() == KisConfig::LayerSubtitleStyle::SUBTITLE_NONE) {
+    if (cfg.layerInfoTextStyle() == KisConfig::LayerInfoTextStyle::INFOTEXT_NONE) {
         p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
     }
     else {
-        const QString subtitle = index.data(KisNodeModel::SubtitleRole).toString();
-        if (subtitle.isEmpty()) {
+        const QString infoText = index.data(KisNodeModel::InfoTextRole).toString();
+        if (infoText.isEmpty()) {
             p->drawText(rc, Qt::AlignLeft | Qt::AlignVCenter, elided);
         } else {
-            bool useOneLine = cfg.useInlineLayerSubtitles();
+            bool useOneLine = cfg.useInlineLayerInfoText();
             if (!useOneLine) {
                 // check whether there is enough space for two lines
                 const int textHeight = p->fontMetrics().height();
@@ -399,21 +399,21 @@ void NodeDelegate::drawText(QPainter *p, const QStyleOptionViewItem &option, con
             else {
                 p->drawText(rc.adjusted(0, 0, 0, 0), Qt::AlignLeft | Qt::AlignVCenter, elided);
             }
-            // draw the subtitle
+            // draw the info-text
             p->save();
-            QFont layerSubtitleFont = p->font();
-            layerSubtitleFont.setBold(false);
-            p->setFont(layerSubtitleFont);
+            QFont layerInfoTextFont = p->font();
+            layerInfoTextFont.setBold(false);
+            p->setFont(layerInfoTextFont);
             if (option.state & QStyle::State_Enabled) {
-                p->setOpacity(qreal(cfg.layerSubtitleOpacity())/100);
+                p->setOpacity(qreal(cfg.layerInfoTextOpacity())/100);
             }
             if (!useOneLine) {
-                const QString subtitleElided = p->fontMetrics().elidedText(subtitle, Qt::ElideRight, rc.width());
-                p->drawText(rc.adjusted(0, rectCenter, 0, 0), Qt::AlignLeft | Qt::AlignTop, subtitleElided);
+                const QString infoTextElided = p->fontMetrics().elidedText(infoText, Qt::ElideRight, rc.width());
+                p->drawText(rc.adjusted(0, rectCenter, 0, 0), Qt::AlignLeft | Qt::AlignTop, infoTextElided);
             }
             else {
-                const QString subtitleElided = p->fontMetrics().elidedText(" "+subtitle, Qt::ElideRight, rc.width()-nameWidth);
-                p->drawText(rc.adjusted(nameWidth, 0, 0, 0), Qt::AlignLeft | Qt::AlignVCenter, subtitleElided);
+                const QString infoTextElided = p->fontMetrics().elidedText(" "+infoText, Qt::ElideRight, rc.width()-nameWidth);
+                p->drawText(rc.adjusted(nameWidth, 0, 0, 0), Qt::AlignLeft | Qt::AlignVCenter, infoTextElided);
             }
             p->restore();
         }

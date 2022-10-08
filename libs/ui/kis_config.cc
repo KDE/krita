@@ -2411,34 +2411,34 @@ void KisConfig::setRenamePastedLayers(bool value)
     m_cfg.writeEntry("renamePastedLayers", value);
 }
 
-KisConfig::LayerSubtitleStyle KisConfig::layerSubtitleStyle(bool defaultValue) const
+KisConfig::LayerInfoTextStyle KisConfig::layerInfoTextStyle(bool defaultValue) const
 {
-    return (KisConfig::LayerSubtitleStyle)(defaultValue ? SUBTITLE_NONE : m_cfg.readEntry("layerSubtitleStyle", (int)SUBTITLE_NONE));
+    return (KisConfig::LayerInfoTextStyle)(defaultValue ? INFOTEXT_NONE : m_cfg.readEntry("layerInfoTextStyle", (int)INFOTEXT_NONE));
 }
 
-void KisConfig::setLayerSubtitleStyle(KisConfig::LayerSubtitleStyle value)
+void KisConfig::setLayerInfoTextStyle(KisConfig::LayerInfoTextStyle value)
 {
-    m_cfg.writeEntry("layerSubtitleStyle", (int)value);
+    m_cfg.writeEntry("layerInfoTextStyle", (int)value);
 }
 
-int KisConfig::layerSubtitleOpacity(bool defaultValue) const
+int KisConfig::layerInfoTextOpacity(bool defaultValue) const
 {
-    return defaultValue ? 55 : m_cfg.readEntry("layerSubtitleOpacity", 55);
+    return defaultValue ? 55 : m_cfg.readEntry("layerInfoTextOpacity", 55);
 }
 
-void KisConfig::setLayerSubtitleOpacity(int value)
+void KisConfig::setLayerInfoTextOpacity(int value)
 {
-    m_cfg.writeEntry("layerSubtitleOpacity", value);
+    m_cfg.writeEntry("layerInfoTextOpacity", value);
 }
 
-bool KisConfig::useInlineLayerSubtitles(bool defaultValue) const
+bool KisConfig::useInlineLayerInfoText(bool defaultValue) const
 {
-    return defaultValue ? false : m_cfg.readEntry("useInlineLayerSubtitles", false);
+    return defaultValue ? false : m_cfg.readEntry("useInlineLayerInfoText", false);
 }
 
-void KisConfig::setUseInlineLayerSubtitles(bool value)
+void KisConfig::setUseInlineLayerInfoText(bool value)
 {
-    m_cfg.writeEntry("useInlineLayerSubtitles", value);
+    m_cfg.writeEntry("useInlineLayerInfoText", value);
 }
 
 #include <QDomDocument>

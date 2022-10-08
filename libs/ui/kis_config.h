@@ -660,20 +660,20 @@ public:
     bool renamePastedLayers(bool defaultValue = false) const;
     void setRenamePastedLayers(bool value);
 
-    enum LayerSubtitleStyle {
-        SUBTITLE_NONE = 0,
-        SUBTITLE_SIMPLE,
-        SUBTITLE_BALANCED,
-        SUBTITLE_DETAILED
+    enum LayerInfoTextStyle {
+        INFOTEXT_NONE = 0,
+        INFOTEXT_SIMPLE,
+        INFOTEXT_BALANCED,
+        INFOTEXT_DETAILED
     };
-    LayerSubtitleStyle layerSubtitleStyle(bool defaultValue = false) const;
-    void setLayerSubtitleStyle(LayerSubtitleStyle value);
+    LayerInfoTextStyle layerInfoTextStyle(bool defaultValue = false) const;
+    void setLayerInfoTextStyle(LayerInfoTextStyle value);
 
-    int layerSubtitleOpacity(bool defaultValue = false) const;
-    void setLayerSubtitleOpacity(int value);
+    int layerInfoTextOpacity(bool defaultValue = false) const;
+    void setLayerInfoTextOpacity(int value);
 
-    bool useInlineLayerSubtitles(bool defaultValue = false) const;
-    void setUseInlineLayerSubtitles(bool value);
+    bool useInlineLayerInfoText(bool defaultValue = false) const;
+    void setUseInlineLayerInfoText(bool value);
 
     template<class T>
     void writeEntry(const QString& name, const T& value) {

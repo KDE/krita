@@ -1,0 +1,8 @@
+This folder contains several fonts taken from the web-platform-tests:
+https://github.com/web-platform-tests/wpt
+
+## Fonts that don't have an explicit license file:
+
+Some fonts have an explit license file, but not all. This should list the files without such file and which license they have.
+
+- variabletest_matching.ttf -- has the "SIL Open Font License, Version 1.1" embedded into the TTF, copyright chromium authors 2016

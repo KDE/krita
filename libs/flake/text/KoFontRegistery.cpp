@@ -416,3 +416,10 @@ bool KoFontRegistery::addFontFilePathToRegistery(QString path)
     const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
     return FcConfigAppFontAddFile(FcConfigGetCurrent(), vals);
 }
+
+bool KoFontRegistery::addFontFileDirectoryToRegistery(QString path)
+{
+    QByteArray utfData = path.toUtf8();
+    const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
+    return FcConfigAppFontAddDir(FcConfigGetCurrent(), vals);
+}

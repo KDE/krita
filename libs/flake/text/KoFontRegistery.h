@@ -81,6 +81,14 @@ private:
      */
     bool addFontFilePathToRegistery(QString path);
 
+    /**
+     * @brief addFontFileDirectoryToRegistery
+     * This adds a directory of font files to the registery. Right now only used by unittests.
+     * @param path the path of the directory.
+     * @return whether it was succesful.
+     */
+    bool addFontFileDirectoryToRegistery(QString path);
+
     QScopedPointer<Private> d;
 };
 

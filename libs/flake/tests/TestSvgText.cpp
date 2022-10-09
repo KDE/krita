@@ -12,6 +12,7 @@
 #include <text/KoSvgText.h>
 #include <text/KoSvgTextProperties.h>
 #include <text/KoFontRegistery.h>
+#include <text/KoCssTextUtils.h>
 #include "KoSvgTextShapeMarkupConverter.h"
 
 #include <SvgLoadingContext.h>
@@ -1511,11 +1512,9 @@ void TestSvgText::testAddingTestFont()
 
     QVERIFY2(res, QString("KoFontRegistery could not add the test font %1").arg(fontName).toLatin1());
 
-    QStringList families;
-    families.append(fontName);
 
     QVector<int> lengths;
-    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues(families, lengths);
+    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({fontName}, lengths);
 
     res = false;
     for (const FT_FaceUP &face : faces) {
@@ -1527,6 +1526,189 @@ void TestSvgText::testAddingTestFont()
     }
     QVERIFY2(res, QString("KoFontRegistery could not find the added test font %1").arg(fontName).toLatin1());
 
+}
+
+/**
+ * @testUnicodeGraphemeClusters
+ * This tests KoCssTextUtils::textToUnicodeGraphemeClusters,
+ * which is a prerequisite to doing robust font-charmap-matching.
+ *
+ * We'll be testing a number of texts and see if they break up
+ * correctly.
+ */
+void TestSvgText::testUnicodeGraphemeClusters()
+{
+    QString langCode = "";
+    QString test;
+    QStringList expectedResult;
+    QStringList result;
+
+    // Simple test.
+
+    test = "123ABC";
+    expectedResult.clear();
+    expectedResult << "1" << "2" << "3" << "A" << "B" << "C";
+
+    result = KoCssTextUtils::textToUnicodeGraphemeClusters(test, langCode);
+
+    QVERIFY2(result == expectedResult, QString("Text to unicode clusters for %1 is incorrect.\n Result:\t %2\n Expected:\t %3")
+             .arg(test).arg(result.join(", ")).arg(expectedResult.join(", ")).toLatin1());
+
+    // Testing text + combining marks.
+
+    test = "K\u0304r\u0330i\u1dd1\u1ab2ta\u20d4";
+    expectedResult.clear();
+    expectedResult << "K\u0304" << "r\u0330" << "i\u1dd1\u1ab2" << "t" << "a\u20d4";
+
+    result = KoCssTextUtils::textToUnicodeGraphemeClusters(test, langCode);
+
+    QVERIFY2(result == expectedResult, QString("Text to unicode clusters for %1 is incorrect.\n Result:\t %2\n Expected:\t %3")
+             .arg(test).arg(result.join(", ")).arg(expectedResult.join(", ")).toLatin1());
+
+    // Testing text + emoji sequence
+    // This tests the fitzpatrick modifiers (woman+black), a zero-width joiner (black woman+fire engine)
+    // as well as the regional indicators which is how flags are handled.
+
+    test = "Fire:\U0001F469\U0001F3FF\u200D\U0001F692 US:\U0001F1FA\U0001F1F8";
+    expectedResult.clear();
+    expectedResult << "F" << "i" << "r" << "e" << ":" << "\U0001F469\U0001F3FF\u200D\U0001F692"
+                   << " " << "U" << "S" << ":" << "\U0001F1FA\U0001F1F8";
+
+    result = KoCssTextUtils::textToUnicodeGraphemeClusters(test, langCode);
+
+    QVERIFY2(result == expectedResult, QString("Text to unicode clusters for %1 is incorrect.\n Result:\t %2\n Expected:\t %3")
+             .arg(test).arg(result.join(", ")).arg(expectedResult.join(", ")).toLatin1());
+
+    // Testing variation selector.
+    // These represent alternate forms of a glyph which may need to be selected for certain purposes.
+    // For example a person's name and a place name may use the same character,
+    // but will need different versions of that character.
+
+    test = "Ashi:\u82A6\uFE03 or \u82A6";
+    expectedResult.clear();
+    expectedResult << "A" << "s" << "h" << "i" << ":" << "\u82A6\uFE03" << " " << "o" << "r" << " " << "\u82A6";
+
+    result = KoCssTextUtils::textToUnicodeGraphemeClusters(test, langCode);
+
+    QVERIFY2(result == expectedResult, QString("Text to unicode clusters for %1 is incorrect.\n Result:\t %2\n Expected:\t %3")
+             .arg(test).arg(result.join(", ")).arg(expectedResult.join(", ")).toLatin1());
+}
+
+void TestSvgText::testFontSelectionForText()
+{
+    /// This test should test whether we are selecting the appropriate fonts for a given string, but it'll need some special fonts to check.
+    // Test the letter a;
+    // Test combination marks.
+    // Test emoji
+    // Test variation selector (with and without graceful fallback).
+    // Test Arabic + English + CJK
+    // Test higher plane code points.
+}
+
+/**
+ * @brief TestSvgText::testFontStyleSelection
+ *
+ * This tests whether the font registery is selecting things like bold or italics correctly.
+ */
+void TestSvgText::testFontStyleSelection()
+{
+    QString verifyCSSTest = "CSSTest Verify";
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/CSSTest");
+    QString test = "A";
+
+    // First we verify that we can find the test fonts.
+
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    QVERIFY2(res, QString("KoFontRegistery could not add the directory of test fonts %1").arg(fileName).toLatin1());
+
+
+    QVector<int> lengths;
+    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({verifyCSSTest}, lengths);
+
+    res = false;
+    for (const FT_FaceUP &face : faces) {
+        //qDebug() << face->family_name;
+        if (face->family_name == verifyCSSTest) {
+            res = true;
+            break;
+        }
+    }
+    QVERIFY2(res, QString("KoFontRegistery could not find the added test font %1").arg(verifyCSSTest).toLatin1());
+
+    // Now we go through a table of font-weights for the given test fonts.
+    // This test is an adaptation of web-platform-test font-weight-bolder-001.xht
+    // Note: when comparing to https://github.com/web-platform-tests/wpt/blob/master/css/css-fonts/support/font-weight-bolder-001-ref.png
+    // our implementation leaves things to be desired, but at the least it's using the correct fonts.
+
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-weight-bolder-001.svg"));
+    res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QRect renderRect(0, 0, 300, 150);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("font-weight-bolder-001", renderRect.size(), 72.0);
+
+}
+/**
+ * @brief TestSvgText::testFontSizeConfiguration
+ *
+ * This tests setting the font size.
+ *
+ * TODO: Add pixelfont test.
+ */
+void TestSvgText::testFontSizeConfiguration()
+{
+    QString fontName = "Ahem";
+    QString fontFileName = "fonts/Ahem/ahem.ttf";
+    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
+
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1").arg(fontName).toLatin1());
+
+
+    QVector<int> lengths;
+    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({fontName}, lengths);
+    KoFontRegistery::instance()->configureFaces(faces, 15.0, 1.0, 72, 72, QMap<QString, qreal>());
+
+    int size = faces.front()->size->metrics.height;
+    QVERIFY2(size == 960, QString("Configured value for Ahem at 15 pt is not returning as 960, instead %1").arg(QString::number(size)).toLatin1());
+
+}
+
+/**
+ * @brief TestSvgText::testFontOpenTypeVariationsConfiguration
+ */
+void TestSvgText::testFontOpenTypeVariationsConfiguration()
+{
+    QString fontName = "Variable Test Axis Matching";
+    QString fontFileName = "fonts/variabletest_matching.ttf";
+    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
+
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1").arg(fontName).toLatin1());
+
+
+    // Testing rendering.
+
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-opentype-variations.svg"));
+    res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QRect renderRect(0, 0, 300, 150);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("font-opentype-variations", renderRect.size(), 72.0);
 }
 
 #include "kistest.h"

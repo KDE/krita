@@ -10,13 +10,15 @@
 #include <QDebug>
 #include <QLocale>
 #include <QString>
+
+#include "kritaflake_export.h"
 /**
  * @brief The KoCssTextUtils class
  *
  * This class keeps a number of utility functions related to CSS Text,
  * in particular CSS-Text-3 and CSS-Text-4.
  */
-class KoCssTextUtils
+class KRITAFLAKE_EXPORT KoCssTextUtils
 {
 public:
     /**

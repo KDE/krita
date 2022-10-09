@@ -57,6 +57,14 @@ private Q_SLOTS:
 
     void testAddingTestFont();
 
+    void testUnicodeGraphemeClusters();
+
+    void testFontSelectionForText();
+    void testFontStyleSelection();
+    void testFontSizeConfiguration();
+    void testFontOpenTypeVariationsConfiguration();
+
+
 };
 
 #endif // TESTSVGTEXT_H

@@ -94,3 +94,8 @@ QList<KoResourceLoadResult> KisMyPaintOpFactory::prepareEmbeddedResources(const 
 
     return {};
 }
+
+bool KisMyPaintOpFactory::lodSizeThresholdSupported() const
+{
+    return true;
+}

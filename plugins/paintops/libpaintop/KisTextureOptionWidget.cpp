@@ -8,6 +8,7 @@
 
 #include <KisZug.h>
 
+#include <kis_paintop_lod_limitations.h>
 #include <KisTextureOptionModel.h>
 #include <KisWidgetConnectionUtils.h>
 
@@ -86,4 +87,9 @@ void KisTextureOptionWidget::readOptionSetting(const KisPropertiesConfigurationS
     KisTextureOptionData data = *m_d->model.optionData;
     data.read(setting.data());
     m_d->model.optionData.set(data);
+}
+
+lager::reader<KisPaintopLodLimitations> KisTextureOptionWidget::lodLimitationsReader() const
+{
+    return m_d->model.optionData.map(&KisTextureOptionData::lodLimitations);
 }

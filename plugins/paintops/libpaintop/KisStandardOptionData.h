@@ -7,36 +7,7 @@
 #define KISSTANDARDOPTIONDATA_H
 
 #include <KisCurveOptionData.h>
-#include <kis_paintop_lod_limitations.h>
 
-class KisSizeOptionData : public KisCurveOptionData
-{
-public:
-    KisSizeOptionData(bool isCheckable = false, const QString &prefix = QString())
-        : KisCurveOptionData(
-              KoID("Size", i18n("Size")),
-              isCheckable,
-              !isCheckable)
-    {
-        this->prefix = prefix;
-    }
-
-    KisPaintopLodLimitations lodLimitations() const
-    {
-        KisPaintopLodLimitations l;
-
-        // HINT: FUZZY_PER_STROKE doesn't affect instant preview
-        if (sensorFuzzyPerDab.isActive) {
-            l.limitations << KoID("size-fade", i18nc("PaintOp instant preview limitation", "Size -> Fuzzy (sensor)"));
-        }
-
-        if (sensorFade.isActive) {
-            l.blockers << KoID("size-fuzzy", i18nc("PaintOp instant preview limitation", "Size -> Fade (sensor)"));
-        }
-
-        return l;
-    }
-};
 
 class KisOpacityOptionData : public KisCurveOptionData
 {

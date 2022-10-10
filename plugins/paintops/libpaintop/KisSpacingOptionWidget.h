@@ -13,6 +13,8 @@ class PAINTOP_EXPORT KisSpacingOptionWidget : public KisCurveOptionWidget2
 {
     Q_OBJECT
 public:
+    using data_type = KisSpacingOptionData;
+
     KisSpacingOptionWidget(lager::cursor<KisSpacingOptionData> optionData);
     ~KisSpacingOptionWidget();
 

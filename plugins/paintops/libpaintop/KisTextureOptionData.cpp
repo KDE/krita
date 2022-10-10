@@ -58,6 +58,8 @@ void KisTextureOptionData::write(KisPropertiesConfiguration *setting) const
 KisPaintopLodLimitations KisTextureOptionData::lodLimitations() const
 {
     KisPaintopLodLimitations l;
-    l.limitations << KoID("texture-pattern", i18nc("PaintOp instant preview limitation", "Texture->Pattern (low quality preview)"));
+    if (isEnabled) {
+        l.limitations << KoID("texture-pattern", i18nc("PaintOp instant preview limitation", "Texture->Pattern (low quality preview)"));
+    }
     return l;
 }

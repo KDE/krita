@@ -17,8 +17,10 @@
 #include "kis_image_config.h"
 #include <QWidgetAction>
 #include <QMenu>
+#include <KisWidgetConnectionUtils.h>
 
 #include "kis_signals_blocker.h"
+
 
 namespace {
 /**
@@ -29,19 +31,14 @@ static const KLocalizedString stringForInstantPreviewThreshold1 = ki18nc("@label
 static const KLocalizedString stringForInstantPreviewThreshold2 = ki18nc("@label:slider", "Instant preview threshold:");
 }
 
-
 struct KisLodAvailabilityWidget::Private
 {
     QCheckBox *chkLod {nullptr};
     QPushButton *btnLod {nullptr};
     QScopedPointer<QMenu> thresholdMenu;
     KisDoubleSliderSpinBox *thresholdSlider {nullptr};
-    KoCanvasResourceProvider *resourceManager {nullptr};
 
-    KisPaintopLodLimitations limitations;
-    bool thresholdSupported {true};
-
-    bool sizeThresholdPassed();
+    QScopedPointer<KisLodAvailabilityModel> model;
 };
 
 KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
@@ -83,16 +80,23 @@ KisLodAvailabilityWidget::KisLodAvailabilityWidget(QWidget *parent)
     layout->setSpacing(0);
     layout->addWidget(m_d->chkLod);
     layout->addWidget(m_d->btnLod);
-
-    // set no limitations
-    setLimitations(m_d->limitations);
-
-    connect(m_d->chkLod, SIGNAL(toggled(bool)), SIGNAL(sigUserChangedLodAvailability(bool)));
-    connect(m_d->thresholdSlider, SIGNAL(valueChanged(qreal)), SIGNAL(sigUserChangedLodThreshold(qreal)));
 }
 
 KisLodAvailabilityWidget::~KisLodAvailabilityWidget()
 {
+}
+
+void KisLodAvailabilityWidget::setLodAvailabilityModel(KisLodAvailabilityModel *model)
+{
+    m_d->model.reset(model);
+    connect(m_d->model.data(), &KisLodAvailabilityModel::availabilityStateChanged,
+            this, &KisLodAvailabilityWidget::slotLodAvailabilityStateChanged);
+    slotLodAvailabilityStateChanged(m_d->model->availabilityState());
+    connect(m_d->chkLod, &QCheckBox::toggled,
+            m_d->model.data(), &KisLodAvailabilityModel::setisLodUserAllowed);
+
+    using namespace KisWidgetConnectionUtils;
+    connectControl(m_d->thresholdSlider, m_d->model.data(), "lodSizeThreshold");
 }
 
 void KisLodAvailabilityWidget::showLodToolTip()
@@ -104,49 +108,33 @@ void KisLodAvailabilityWidget::showLodThresholdWidget(const QPoint &pos)
 {
     Q_UNUSED(pos);
 
-    if (m_d->thresholdSupported) {
+    if (m_d->model && m_d->model->isLodSizeThresholdSupported()) {
         m_d->thresholdMenu->popup(QCursor::pos());
     }
 }
 
-void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
+void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state)
 {
-    QString limitationsText;
-    Q_FOREACH (const KoID &id, l.limitations) {
-        limitationsText.append("<li>");
-        limitationsText.append(id.name());
-        limitationsText.append("</li>");
-    }
-
-    QString blockersText;
-    Q_FOREACH (const KoID &id, l.blockers) {
-        blockersText.append("<li>");
-        blockersText.append(id.name());
-        blockersText.append("</li>");
-    }
-
-    bool isBlocked = !l.blockers.isEmpty();
-    bool isLimited = !l.limitations.isEmpty();
-
-    m_d->thresholdSupported =
-        m_d->resourceManager ?
-        m_d->resourceManager->resource(KoCanvasResource::LodSizeThresholdSupported).toBool() :
-        true;
-    bool isBlockedByThreshold = !m_d->sizeThresholdPassed() && m_d->thresholdSupported;
-
-    const QString text = !isBlocked && !isBlockedByThreshold && isLimited ?
-        i18n("(Instant Preview)*") : i18n("Instant Preview");
-
     QString toolTip;
 
-    if (isBlocked) {
+    if (state == KisLodAvailabilityModel::BlockedFully) {
+        const KisPaintopLodLimitations l = m_d->model->lodLimitations.get();
+
+        QString blockersText;
+        Q_FOREACH (const KoID &id, l.blockers) {
+            blockersText.append("<li>");
+            blockersText.append(id.name());
+            blockersText.append("</li>");
+        }
+
         toolTip = i18nc("@info:tooltip",
                         "<p>Instant Preview Mode is "
                         "disabled by the following options:"
                         "<ul>%1</ul></p>", blockersText);
-    } else if (isBlockedByThreshold) {
-        const qreal lodThreshold = m_d->resourceManager->resource(KoCanvasResource::LodSizeThreshold).toDouble();
-        const qreal size = m_d->resourceManager->resource(KoCanvasResource::Size).toDouble();
+    } else if (state == KisLodAvailabilityModel::BlockedByThreshold) {
+
+        const qreal effectiveBrushSize = m_d->model->effectiveBrushSize.get();
+        const qreal sizeThreshold = m_d->model->lodSizeThreshold();
 
         toolTip = i18nc("@info:tooltip",
                         "<p>Instant Preview Mode is "
@@ -154,9 +142,18 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
                         "Please right-click here to change the threshold"
                         "<ul><li>Brush size %1</li>"
                         "<li>Threshold: %2</li></ul></p>",
-                        size, lodThreshold);
+                        effectiveBrushSize, sizeThreshold);
 
-    } else if (isLimited) {
+    } else if (state == KisLodAvailabilityModel::Limited) {
+        const KisPaintopLodLimitations l = m_d->model->lodLimitations.get();
+
+        QString limitationsText;
+        Q_FOREACH (const KoID &id, l.limitations) {
+            limitationsText.append("<li>");
+            limitationsText.append(id.name());
+            limitationsText.append("</li>");
+        }
+
         toolTip = i18nc("@info:tooltip",
                         "<p>Instant Preview may look different "
                         "from the final result. In case of troubles "
@@ -166,16 +163,20 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
         toolTip = i18nc("@info:tooltip", "<p>Instant Preview Mode is available</p>");
     }
 
+    const QString text = state == KisLodAvailabilityModel::Limited ?
+        i18n("(Instant Preview)*") : i18n("Instant Preview");
+
+
     {
         QFont font;
-        font.setStrikeOut(isBlocked || isBlockedByThreshold);
-        m_d->chkLod->setEnabled(!isBlocked);
-        m_d->btnLod->setEnabled(!isBlocked);
+        font.setStrikeOut(state >= KisLodAvailabilityModel::BlockedByThreshold);
+        m_d->chkLod->setEnabled(state < KisLodAvailabilityModel::BlockedFully);
+        m_d->btnLod->setEnabled(state < KisLodAvailabilityModel::BlockedFully);
         m_d->btnLod->setFont(font);
         m_d->btnLod->setText(text);
         m_d->btnLod->setToolTip(toolTip);
 
-        if (isBlocked) {
+        if (state == KisLodAvailabilityModel::BlockedFully) {
             /**
              * If LoD is really blocked by some limitation we sneakly reset
              * the checkbox to let the user know it is fully disabled.
@@ -183,58 +184,9 @@ void KisLodAvailabilityWidget::setLimitations(const KisPaintopLodLimitations &l)
 
             KisSignalsBlocker b(m_d->chkLod);
             m_d->chkLod->setChecked(false);
-        } else if (m_d->resourceManager) {
+        } else {
             KisSignalsBlocker b(m_d->chkLod);
-            bool lodActive = m_d->resourceManager->resource(KoCanvasResource::LodAvailability).toBool();
-            m_d->chkLod->setChecked(lodActive);
+            m_d->chkLod->setChecked(m_d->model->isLodUserAllowed());
         }
     }
-
-    m_d->limitations = l;
-
-    if (m_d->resourceManager) {
-        const bool lodAvailableForUse =
-            !isBlocked && !isBlockedByThreshold &&
-            m_d->resourceManager->resource(KoCanvasResource::LodAvailability).toBool();
-
-        m_d->resourceManager->setResource(KoCanvasResource::EffectiveLodAvailablility, lodAvailableForUse);
-    }
-
-}
-
-void KisLodAvailabilityWidget::slotUserChangedLodAvailability(bool value)
-{
-    KisSignalsBlocker b(m_d->chkLod);
-
-    m_d->chkLod->setChecked(value);
-    setLimitations(m_d->limitations);
-}
-
-void KisLodAvailabilityWidget::slotUserChangedLodThreshold(qreal value)
-{
-    KisSignalsBlocker b(m_d->thresholdSlider);
-
-    m_d->thresholdSlider->setValue(value);
-    setLimitations(m_d->limitations);
-}
-
-void KisLodAvailabilityWidget::slotUserChangedSize(qreal value)
-{
-    Q_UNUSED(value);
-    setLimitations(m_d->limitations);
-}
-
-void KisLodAvailabilityWidget::setCanvasResourceManager(KoCanvasResourceProvider *resourceManager)
-{
-    m_d->resourceManager = resourceManager;
-}
-
-bool KisLodAvailabilityWidget::Private::sizeThresholdPassed()
-{
-    if (!resourceManager) return true;
-
-    const qreal lodThreshold = resourceManager->resource(KoCanvasResource::LodSizeThreshold).toDouble();
-    const qreal size = resourceManager->resource(KoCanvasResource::Size).toDouble();
-
-    return size >= lodThreshold;
 }

@@ -69,6 +69,9 @@ public:
     // toggle the state when we are creating a brush from scratch
     void setCreatingBrushFromScratch(bool enable);
 
+    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
+
 protected:
     void contextMenuEvent(QContextMenuEvent *) override;
     void hideEvent(QHideEvent *) override;
@@ -80,7 +83,6 @@ public Q_SLOTS:
 
 
     void slotUpdatePresetSettings();
-    void slotUpdateLodAvailability();
     void slotRenameBrushActivated();
     void slotRenameBrushDeactivated();
     void slotSaveRenameCurrentBrush();
@@ -102,15 +104,13 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void slotSwitchScratchpad(bool visible);
-    void slotResourceChanged(int key, const QVariant &value);
-    void slotLodAvailabilityChanged(bool value);
-    void slotLodThresholdChanged(qreal value);
     void slotSwitchShowEditor(bool visible);
     void slotUpdatePaintOpFilter();
     void slotSwitchShowPresets(bool visible);
     void slotSaveBrushPreset();
     void slotSaveNewBrushPreset();
     void slotToggleDetach(bool detach);
+    void slotUpdateEffectiveLodAvailable(bool value);
 
     /// we do not delete brushe presets, but blacklist them so they disappear from the interface
     void slotBlackListCurrentPreset();

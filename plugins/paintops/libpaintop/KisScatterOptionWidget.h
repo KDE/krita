@@ -14,6 +14,8 @@ class PAINTOP_EXPORT KisScatterOptionWidget : public KisCurveOptionWidget2
 {
     Q_OBJECT
 public:
+    using data_type = KisScatterOptionData;
+
     KisScatterOptionWidget(lager::cursor<KisScatterOptionData> optionData);
     ~KisScatterOptionWidget();
 

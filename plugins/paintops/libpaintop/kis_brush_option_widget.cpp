@@ -78,11 +78,6 @@ void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP 
     }
 }
 
-void KisBrushOptionWidget::lodLimitations(KisPaintopLodLimitations *l) const
-{
-    *l |= KisBrushModel::brushLodLimitations(m_d->brushData.get());
-}
-
 void KisBrushOptionWidget::hideOptions(const QStringList &options)
 {
     m_brushSelectionWidget->hideOptions(options);
@@ -97,6 +92,11 @@ lager::reader<qreal> KisBrushOptionWidget::effectiveBrushSize() const
 {
     using namespace KisBrushModel;
     return m_d->brushData.map(qOverload<const BrushData&>(&KisBrushModel::effectiveSizeForBrush));
+}
+
+lager::reader<KisPaintopLodLimitations> KisBrushOptionWidget::lodLimitationsReader() const
+{
+    return m_d->brushData.map(&KisBrushModel::brushLodLimitations);
 }
 
 #include "moc_kis_brush_option_widget.cpp"

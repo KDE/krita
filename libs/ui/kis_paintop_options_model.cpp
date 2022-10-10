@@ -17,9 +17,8 @@ KisPaintOpOptionListModel::KisPaintOpOptionListModel(QObject *parent)
             this, &KisPaintOpOptionListModel::slotCheckedEnabledStateChanged);
 }
 
-void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, KisPaintOpOption::PaintopCategory categoryType)
+QString KisPaintOpOptionListModel::categoryName(KisPaintOpOption::PaintopCategory categoryType)
 {
-
     QString category;
     switch(categoryType) {
     case KisPaintOpOption::GENERAL:
@@ -38,8 +37,7 @@ void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int w
         category = i18nc("option category", "Masked Brush");
         break;
     };
-
-    addPaintOpOption(option, widgetIndex, label, category);
+    return category;
 }
 
 void KisPaintOpOptionListModel::addPaintOpOption(KisPaintOpOption *option, int widgetIndex, const QString &label, const QString &category) {

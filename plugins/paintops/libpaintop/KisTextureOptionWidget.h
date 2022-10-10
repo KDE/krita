@@ -22,6 +22,9 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
+protected:
+    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const override;
+
 private:
     struct Private;
     const QScopedPointer<Private> m_d;

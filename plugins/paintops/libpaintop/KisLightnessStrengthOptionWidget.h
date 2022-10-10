@@ -13,6 +13,8 @@ class PAINTOP_EXPORT KisLightnessStrengthOptionWidget : public KisCurveOptionWid
 {
     Q_OBJECT
 public:
+    using data_type = KisLightnessStrengthOptionData;
+
     KisLightnessStrengthOptionWidget(lager::cursor<KisLightnessStrengthOptionData> optionData, lager::reader<bool> lightnessModeEnabled);
     ~KisLightnessStrengthOptionWidget();
 

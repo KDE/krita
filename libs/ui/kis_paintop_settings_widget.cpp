@@ -27,15 +27,21 @@
 #include <brushengine/kis_locked_properties.h>
 #include <brushengine/kis_paintop_lod_limitations.h>
 
+#include <lager/constant.hpp>
 
 
 struct KisPaintOpSettingsWidget::Private
 {
+    Private()
+        : lodLimitations(lager::make_constant(KisPaintopLodLimitations()))
+    {
+    }
+
     QList<KisPaintOpOption*>    paintOpOptions;
     KisCategorizedListView*     optionsList;
     KisPaintOpOptionListModel*  model;
     QStackedWidget*             optionsStack;
-
+    lager::reader<KisPaintopLodLimitations> lodLimitations;
 };
 
 KisPaintOpSettingsWidget::KisPaintOpSettingsWidget(QWidget * parent)
@@ -94,11 +100,7 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option)
 
 void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, KisPaintOpOption::PaintopCategory category)
 {
-    if (!option->configurationPage()) return;
-    m_d->model->addPaintOpOption(option, m_d->optionsStack->count(), option->label(), category);
-    connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
-    m_d->optionsStack->addWidget(option->configurationPage());
-    m_d->paintOpOptions << option;
+    addPaintOpOption(option, m_d->model->categoryName(category));
 }
 
 void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QString category)
@@ -108,6 +110,10 @@ void KisPaintOpSettingsWidget::addPaintOpOption(KisPaintOpOption *option, QStrin
     connect(option, SIGNAL(sigSettingChanged()), SIGNAL(sigConfigurationItemChanged()));
     m_d->optionsStack->addWidget(option->configurationPage());
     m_d->paintOpOptions << option;
+    m_d->lodLimitations =
+        lager::with(m_d->lodLimitations,
+                    option->effectiveLodLimitations())
+            .map(std::bit_or{});
 }
 
 void KisPaintOpSettingsWidget::setConfiguration(const KisPropertiesConfigurationSP  config)
@@ -154,6 +160,16 @@ KisPaintopLodLimitations KisPaintOpSettingsWidget::lodLimitations() const
     }
 
     return l;
+}
+
+lager::reader<KisPaintopLodLimitations> KisPaintOpSettingsWidget::lodLimitationsReader() const
+{
+    return m_d->lodLimitations;
+}
+
+lager::reader<qreal> KisPaintOpSettingsWidget::effectiveBrushSize() const
+{
+    return lager::make_constant(1.0);
 }
 
 void KisPaintOpSettingsWidget::setImage(KisImageWSP image)

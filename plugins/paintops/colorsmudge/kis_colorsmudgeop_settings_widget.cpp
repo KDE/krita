@@ -34,6 +34,7 @@
 #include <KisTextureOptionWidget.h>
 #include <KisStandardOptionData.h>
 #include <KisCompositeOpOptionWidget.h>
+#include <KisSpacingOptionWidget.h>
 
 
 KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
@@ -50,7 +51,8 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent, 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRatioOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(new KisPressureSpacingOptionWidget());
+    addPaintOpOption(kpou::createOptionWidget<KisSpacingOptionWidget>());
+
     addPaintOpOption(new KisPressureMirrorOptionWidget());
 
     m_smudgeOptionWidget = new KisSmudgeOptionWidget();

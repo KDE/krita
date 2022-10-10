@@ -25,6 +25,11 @@ KisBrushSP KisBrushBasedPaintopOptionWidget::brush()
     return m_brushOption->brush();
 }
 
+lager::reader<qreal> KisBrushBasedPaintopOptionWidget::effectiveBrushSize() const
+{
+    return m_brushOption->effectiveBrushSize();
+}
+
 KisBrushOptionWidget *KisBrushBasedPaintopOptionWidget::brushOptionWidget() const
 {
     return m_brushOption;

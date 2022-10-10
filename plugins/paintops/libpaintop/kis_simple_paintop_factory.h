@@ -161,13 +161,16 @@ public:
 
     KisSimplePaintOpFactory(const QString& id, const QString& name, const QString& category,
                             const QString& pixmap, const QString& model = QString(),
-                            const QStringList& whiteListedCompositeOps = QStringList(), int priority = 100)
+                            const QStringList& whiteListedCompositeOps = QStringList(), int priority = 100,
+                            bool lodSizeThresholdSupported = true)
         : KisPaintOpFactory(whiteListedCompositeOps)
         , m_id(id)
         , m_name(name)
         , m_category(category)
         , m_pixmap(pixmap)
-        , m_model(model) {
+        , m_model(model)
+        , m_lodSizeThresholdSupported(lodSizeThresholdSupported)
+    {
         setPriority(priority);
     }
 
@@ -224,12 +227,17 @@ public:
         return m_category;
     }
 
+    bool lodSizeThresholdSupported() const override {
+        return m_lodSizeThresholdSupported;
+    }
+
 private:
     QString m_id;
     QString m_name;
     QString m_category;
     QString m_pixmap;
     QString m_model;
+    bool m_lodSizeThresholdSupported;
 };
 
 #endif // KIS_SIMPLE_PAINTOP_FACTORY_H

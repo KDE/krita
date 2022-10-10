@@ -70,6 +70,7 @@ public:
     virtual QString id() const = 0;
     virtual QString name() const = 0;
     virtual QString category() const = 0;
+    virtual bool lodSizeThresholdSupported() const = 0;
 
     /**
      * @return all the resources linked to \p settings.

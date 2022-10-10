@@ -130,6 +130,14 @@ void KisPaintOpOption::lodLimitations(KisPaintopLodLimitations *l) const
     Q_UNUSED(l);
 }
 
+lager::reader<KisPaintopLodLimitations> KisPaintOpOption::effectiveLodLimitations() const
+{
+    return lager::with(m_d->pageEnabledReader, lodLimitationsReader())
+        .map([](bool enabled, const KisPaintopLodLimitations &l) {
+            return enabled ? l : KisPaintopLodLimitations();
+        });
+}
+
 lager::reader<KisPaintopLodLimitations> KisPaintOpOption::lodLimitationsReader() const
 {
     // no limitations by default

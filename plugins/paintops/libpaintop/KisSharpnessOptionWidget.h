@@ -13,6 +13,8 @@ class PAINTOP_EXPORT KisSharpnessOptionWidget : public KisCurveOptionWidget2
 {
     Q_OBJECT
 public:
+    using data_type = KisSharpnessOptionData;
+
     KisSharpnessOptionWidget(lager::cursor<KisSharpnessOptionData> optionData);
     ~KisSharpnessOptionWidget();
 

@@ -82,10 +82,10 @@ public:
     QWidget *configurationPage() const;
 
     virtual void lodLimitations(KisPaintopLodLimitations *l) const;
-    virtual lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
+    lager::reader<KisPaintopLodLimitations> effectiveLodLimitations() const;
 
 protected:
-
+    virtual lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
     void setConfigurationPage(QWidget *page);
 
     KisResourcesInterfaceSP resourcesInterface() const;

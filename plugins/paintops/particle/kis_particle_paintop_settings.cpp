@@ -26,11 +26,6 @@ KisParticlePaintOpSettings::~KisParticlePaintOpSettings()
 {
 }
 
-bool KisParticlePaintOpSettings::lodSizeThresholdSupported() const
-{
-    return false;
-}
-
 bool KisParticlePaintOpSettings::paintIncremental()
 {
     KisPaintingModeOptionData data;

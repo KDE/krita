@@ -28,6 +28,7 @@
 #include "KisColorSourceOptionWidget.h"
 #include "KisLightnessStrengthOptionWidget.h"
 #include "KisTextureOptionWidget.h"
+#include "KisSizeOptionWidget.h"
 
 #include <KisCurveOptionData.h>
 #include <lager/state.hpp>
@@ -46,12 +47,7 @@ struct KisBrushOpSettingsWidget::Private
           maskingRatioOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingRotationOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
           maskingMirrorOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
-          maskingScatterOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix}),
-          lodLimitations(
-              lager::with(
-                  sizeOptionData.xform(zug::map(&KisSizeOptionData::lodLimitations)),
-                  textureOptionData.xform(zug::map(&KisTextureOptionData::lodLimitations)))
-              .map(std::bit_or{}))
+          maskingScatterOptionData({KisPaintOpUtils::MaskingBrushPresetPrefix})
     {
     }
 
@@ -88,8 +84,6 @@ struct KisBrushOpSettingsWidget::Private
     lager::state<KisRotationOptionData, lager::automatic_tag> maskingRotationOptionData;
     lager::state<KisMirrorOptionData, lager::automatic_tag> maskingMirrorOptionData;
     lager::state<KisScatterOptionData, lager::automatic_tag> maskingScatterOptionData;
-
-    lager::reader<KisPaintopLodLimitations> lodLimitations;
 };
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
@@ -107,7 +101,7 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent, KisResources
     addPaintOpOption(new KisCompositeOpOptionWidget(m_d->compositeOpOptionData));
     addPaintOpOptionData(m_d->opacityOptionData, KisPaintOpOption::GENERAL, i18n("Transparent"), i18n("Opaque"));
     addPaintOpOptionData(m_d->flowOptionData, KisPaintOpOption::GENERAL);
-    addPaintOpOptionData(m_d->sizeOptionData, KisPaintOpOption::GENERAL);
+    addPaintOpOption(new KisSizeOptionWidget(m_d->sizeOptionData));
     addPaintOpOptionData(m_d->ratioOptionData, KisPaintOpOption::GENERAL);
     addPaintOpOption(new KisSpacingOptionWidget(m_d->spacingOptionData), KisPaintOpOption::GENERAL);
     addPaintOpOption(new KisMirrorOptionWidget(m_d->mirrorOptionData), KisPaintOpOption::GENERAL);

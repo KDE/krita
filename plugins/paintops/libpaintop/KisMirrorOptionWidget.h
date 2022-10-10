@@ -14,6 +14,8 @@ class PAINTOP_EXPORT KisMirrorOptionWidget : public KisCurveOptionWidget2
 {
     Q_OBJECT
 public:
+    using data_type = KisMirrorOptionData;
+
     KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> optionData);
     ~KisMirrorOptionWidget();
 

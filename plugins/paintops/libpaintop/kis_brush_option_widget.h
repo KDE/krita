@@ -37,12 +37,13 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    void lodLimitations(KisPaintopLodLimitations *l) const override;
-
     void hideOptions(const QStringList &options);
 
     lager::reader<bool> lightnessModeEnabled() const;
     lager::reader<qreal> effectiveBrushSize() const;
+
+protected:
+    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
 
 private:
 

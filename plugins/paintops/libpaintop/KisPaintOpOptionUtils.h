@@ -101,7 +101,7 @@ struct WidgetWrapper :
  * widget's constructor right after the cursor to the data.
  */
 template <typename Widget, typename Data, typename... Args>
-KisPaintOpOption* createOptionWidget(Data&& data, Args... args)
+Widget* createOptionWidget(Data&& data, Args... args)
 {
     return new detail::WidgetWrapper<Widget, Data, Args...>(std::forward<Data>(data), std::forward<Args>(args)...);
 }
@@ -116,7 +116,7 @@ KisPaintOpOption* createOptionWidget(Data&& data, Args... args)
  * compilation will fail.
  */
 template <typename Widget>
-KisPaintOpOption* createOptionWidget()
+Widget* createOptionWidget()
 {
     static_assert(detail::has_type_data_type<Widget>::value, "Widget must have 'data_type' member type defined to use the default construction method");
     return createOptionWidget<Widget>(typename Widget::data_type{});
@@ -135,7 +135,7 @@ KisPaintOpOption* createOptionWidget()
  * widget's constructor right after the cursor to the data.
  */
 template <typename Data, typename... Args>
-KisPaintOpOption* createCurveOptionWidget(Data&& data, Args... args)
+KisCurveOptionWidget2* createCurveOptionWidget(Data&& data, Args... args)
 {
     return createOptionWidget<KisCurveOptionWidget2>(std::forward<Data>(data), std::forward<Args>(args)...);
 }

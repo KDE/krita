@@ -17,6 +17,7 @@ public:
     using data_type = KisScatterOptionData;
 
     KisScatterOptionWidget(lager::cursor<KisScatterOptionData> optionData);
+    KisScatterOptionWidget(lager::cursor<KisScatterOptionData> optionData, KisPaintOpOption::PaintopCategory categoryOverride);
     ~KisScatterOptionWidget();
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;

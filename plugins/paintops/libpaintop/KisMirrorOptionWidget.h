@@ -17,6 +17,7 @@ public:
     using data_type = KisMirrorOptionData;
 
     KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> optionData);
+    KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> optionData, KisPaintOpOption::PaintopCategory categoryOverride);
     ~KisMirrorOptionWidget();
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;

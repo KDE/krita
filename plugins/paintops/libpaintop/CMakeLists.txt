@@ -53,6 +53,7 @@ set(kritalibpaintop_LIB_SRCS
     KisTextureOptionWidget.cpp
     KisSizeOptionData.cpp
     KisSizeOptionWidget.cpp
+    KisStandardOptionData.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc

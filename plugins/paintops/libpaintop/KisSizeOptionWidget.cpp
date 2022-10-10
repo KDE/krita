@@ -17,9 +17,13 @@ struct KisSizeOptionWidget::Private
     lager::reader<KisPaintopLodLimitations> lodLimitations;
 };
 
-
 KisSizeOptionWidget::KisSizeOptionWidget(lager::cursor<KisSizeOptionData> optionData)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), KisPaintOpOption::GENERAL)
+    : KisSizeOptionWidget(optionData, KisPaintOpOption::GENERAL)
+{
+}
+
+KisSizeOptionWidget::KisSizeOptionWidget(lager::cursor<KisSizeOptionData> optionData, PaintopCategory categoryOverride)
+    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), categoryOverride)
     , m_d(new Private(optionData))
 {
 }

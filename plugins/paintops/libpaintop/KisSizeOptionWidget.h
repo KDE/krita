@@ -16,6 +16,7 @@ public:
     using data_type = KisSizeOptionData;
 
     KisSizeOptionWidget(lager::cursor<KisSizeOptionData> optionData);
+    KisSizeOptionWidget(lager::cursor<KisSizeOptionData> optionData, KisPaintOpOption::PaintopCategory categoryOverride);
     ~KisSizeOptionWidget();
 
     lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;

@@ -28,17 +28,7 @@ public:
 
     KisPropertiesConfigurationSP configuration() const override;
 
-protected:
-    template<typename Data, typename... Args>
-    void addPaintOpOptionData(Data &data, Args... args);
-
-private:
-    KisCurveOptionWidget* m_lightnessStrengthOptionWidget;
-
-    struct Private;
-    QScopedPointer<Private> m_d;
 };
-
 
 
 #endif // KIS_BRUSHOP_SETTINGS_WIDGET_H_

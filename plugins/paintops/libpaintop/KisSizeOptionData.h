@@ -12,7 +12,7 @@
 class PAINTOP_EXPORT KisSizeOptionData : public KisCurveOptionData
 {
 public:
-    KisSizeOptionData(bool isCheckable = false, const QString &prefix = QString());
+    KisSizeOptionData(bool isCheckable = true, const QString &prefix = QString());
     KisPaintopLodLimitations lodLimitations() const;
 };
 

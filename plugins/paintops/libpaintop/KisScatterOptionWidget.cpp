@@ -30,7 +30,12 @@ struct KisScatterOptionWidget::Private
 };
 
 KisScatterOptionWidget::KisScatterOptionWidget(lager::cursor<KisScatterOptionData> optionData)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), KisPaintOpOption::GENERAL)
+    : KisScatterOptionWidget(optionData, KisPaintOpOption::GENERAL)
+{
+}
+
+KisScatterOptionWidget::KisScatterOptionWidget(lager::cursor<KisScatterOptionData> optionData, PaintopCategory categoryOverride)
+    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), categoryOverride)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;

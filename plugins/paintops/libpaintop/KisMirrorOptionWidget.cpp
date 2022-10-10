@@ -29,7 +29,12 @@ struct KisMirrorOptionWidget::Private
 };
 
 KisMirrorOptionWidget::KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> optionData)
-    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), KisPaintOpOption::GENERAL)
+    : KisMirrorOptionWidget(optionData, KisPaintOpOption::GENERAL)
+{
+}
+
+KisMirrorOptionWidget::KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> optionData, PaintopCategory categoryOverride)
+    : KisCurveOptionWidget2(optionData.zoom(kiszug::lenses::to_base<KisCurveOptionData>), categoryOverride)
     , m_d(new Private(optionData))
 {
     using namespace KisWidgetConnectionUtils;
@@ -58,7 +63,6 @@ KisMirrorOptionWidget::KisMirrorOptionWidget(lager::cursor<KisMirrorOptionData> 
 
 KisMirrorOptionWidget::~KisMirrorOptionWidget()
 {
-
 }
 
 void KisMirrorOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setting) const

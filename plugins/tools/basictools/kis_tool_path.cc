@@ -33,6 +33,11 @@ void KisToolPath::requestStrokeCancellation()
     localTool()->cancelPath();
 }
 
+KisPopupWidgetInterface* KisToolPath::popupWidget()
+{
+    return localTool()->pathStarted() ? nullptr : DelegatedPathTool::popupWidget();
+}
+
 void KisToolPath::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event)
@@ -44,6 +49,9 @@ void KisToolPath::mousePressEvent(KoPointerEvent *event)
 bool KisToolPath::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
+    if (!localTool()->pathStarted()) {
+        return false;
+    }
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

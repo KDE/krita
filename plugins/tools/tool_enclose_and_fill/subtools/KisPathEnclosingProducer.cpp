@@ -68,6 +68,11 @@ void KisPathEnclosingProducer::requestStrokeCancellation()
     localTool()->cancelPath();
 }
 
+KisPopupWidgetInterface* ::KisPathEnclosingProducer::popupWidget()
+{
+    return m_hasUserInteractionRunning ? nullptr : KisDynamicDelegateTool::popupWidget();
+}
+
 void KisPathEnclosingProducer::mousePressEvent(KoPointerEvent *event)
 {
     Q_UNUSED(event)
@@ -79,6 +84,9 @@ void KisPathEnclosingProducer::mousePressEvent(KoPointerEvent *event)
 bool KisPathEnclosingProducer::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
+    if (!m_hasUserInteractionRunning) {
+        return false;
+    }
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

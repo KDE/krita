@@ -25,6 +25,7 @@ public:
     void endPrimaryAction(KoPointerEvent *event) override;
     void beginPrimaryDoubleClickAction(KoPointerEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
     void beginAlternateAction(KoPointerEvent *event, AlternateAction action) override;
 
@@ -34,6 +35,7 @@ public:
     void deactivate() override;
     void requestStrokeEnd() override;
     void requestStrokeCancellation() override;
+    KisPopupWidgetInterface* popupWidget() override;
 
 protected:
     virtual void finishPolyline(const QVector<QPointF>& points) = 0;

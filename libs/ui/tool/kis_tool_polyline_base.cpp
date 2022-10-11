@@ -12,6 +12,7 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoViewConverter.h>
+#include <input/kis_input_manager.h>
 
 #include "kis_tool_polyline_base.h"
 #include "kis_canvas2.h"
@@ -39,12 +40,23 @@ void KisToolPolylineBase::activate(const QSet<KoShape *> &shapes)
 {
     KisToolShape::activate(shapes);
     connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoSelection()), Qt::UniqueConnection);
+
+    KisInputManager *inputManager = (static_cast<KisCanvas2*>(canvas()))->globalInputManager();
+    if (inputManager) {
+        inputManager->attachPriorityEventFilter(this);
+    }
 }
 
 void KisToolPolylineBase::deactivate()
 {
     disconnect(action("undo_polygon_selection"), 0, this, 0);
     cancelStroke();
+
+    KisInputManager *inputManager = (static_cast<KisCanvas2*>(canvas()))->globalInputManager();
+    if (inputManager) {
+        inputManager->detachPriorityEventFilter(this);
+    }
+
     KisToolShape::deactivate();
 }
 
@@ -56,6 +68,37 @@ void KisToolPolylineBase::requestStrokeEnd()
 void KisToolPolylineBase::requestStrokeCancellation()
 {
     cancelStroke();
+}
+
+KisPopupWidgetInterface* KisToolPolylineBase::popupWidget()
+{
+    return m_dragging || m_type == SELECT ? nullptr : KisToolShape::popupWidget();
+}
+
+// Install an event filter to catch right-click events.
+// The simplest way to accommodate the popup palette binding.
+bool KisToolPolylineBase::eventFilter(QObject *obj, QEvent *event)
+{
+    Q_UNUSED(obj);
+
+    if (!m_dragging) {
+        return false;
+    }
+    if (event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonDblClick) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::RightButton) {
+            undoSelection();
+            return true;
+        }
+    } else if (event->type() == QEvent::TabletPress) {
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        if (tabletEvent->button() == Qt::RightButton) {
+            undoSelection();
+            return true;
+        }
+    }
+    return false;
 }
 
 void KisToolPolylineBase::beginPrimaryAction(KoPointerEvent *event)
@@ -153,24 +196,17 @@ void KisToolPolylineBase::undoSelection()
     if(m_dragging) {
         //Update canvas for drag before undo
         QRectF updateRect = dragBoundingRect();
-        updateRect |= dragBoundingRect();
         updateCanvasViewRect(updateRect);
 
         //Update canvas for last segment
         QRectF rect;
-        if (m_points.size() > 2) {
+        if (m_points.size() > 1) {
             rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
             rect.adjust(-PREVIEW_LINE_WIDTH, -PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH, PREVIEW_LINE_WIDTH);
             updateCanvasViewRect(rect);
-        }
-        if (m_points.size() > 0) {
             m_points.pop_back();
         }
-        if (m_points.size() > 0) {
-            m_dragStart = m_points.last();
-        } else {
-            cancelStroke();
-        }
+        m_dragStart = m_points.last();
     }
 }
 

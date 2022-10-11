@@ -53,12 +53,14 @@ void KisToolOutlineBase::mouseMoveEvent(KoPointerEvent *event)
 {
     if (m_continuedMode && mode() != PAINT_MODE) {
         updateContinuedMode();
+        m_lastCursorPos = convertToPixelCoordAndSnap(event);
+    } else {
+        m_lastCursorPos = convertToPixelCoord(event);
     }
     if (mode() == PAINT_MODE) {
         KisToolShape::requestUpdateOutline(event->point, event);
     }
 
-    m_lastCursorPos = convertToPixelCoord(event);
     KisToolShape::mouseMoveEvent(event);
 }
 
@@ -102,7 +104,11 @@ void KisToolOutlineBase::beginPrimaryAction(KoPointerEvent *event)
         beginShape();
     }
 
-    m_points.append(convertToPixelCoord(event));
+    if (m_continuedMode) {
+        m_points.append(convertToPixelCoordAndSnap(event));
+    } else {
+        m_points.append(convertToPixelCoord(event));
+    }
 }
 
 void KisToolOutlineBase::continuePrimaryAction(KoPointerEvent *event)

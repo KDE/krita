@@ -36,11 +36,16 @@ public:
     void keyPressEvent(QKeyEvent *event) override;
     void keyReleaseEvent(QKeyEvent *event) override;
     void mouseMoveEvent(KoPointerEvent *event) override;
+    bool eventFilter(QObject *obj, QEvent *event) override;
+    KisPopupWidgetInterface* popupWidget() override;
 
     bool hasUserInteractionRunning() const;
 
 public Q_SLOTS:
+    void activate(const QSet<KoShape*> &shapes) override;
     void deactivate() override;
+
+    void undoLastPoint();
 
 protected:
     virtual void finishOutline(const QVector<QPointF>& points) = 0;
@@ -53,6 +58,7 @@ private:
     bool m_continuedMode;
     QPointF m_lastCursorPos;
     ToolType m_type;
+    int m_numberOfContinuedModePoints;
 
     void finishOutlineAction();
     void updateFeedback();

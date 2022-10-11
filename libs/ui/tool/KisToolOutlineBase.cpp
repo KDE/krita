@@ -8,6 +8,8 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
+#include <QAction>
+
 #include <KoPointerEvent.h>
 #include <KoShapeController.h>
 #include <KoViewConverter.h>
@@ -23,6 +25,7 @@ KisToolOutlineBase::KisToolOutlineBase(KoCanvasBase * canvas, ToolType type, con
     : KisToolShape(canvas, cursor)
     , m_continuedMode(false)
     , m_type(type)
+    , m_numberOfContinuedModePoints(0)
 {}
 
 KisToolOutlineBase::~KisToolOutlineBase()
@@ -64,6 +67,17 @@ void KisToolOutlineBase::mouseMoveEvent(KoPointerEvent *event)
     KisToolShape::mouseMoveEvent(event);
 }
 
+void KisToolOutlineBase::activate(const QSet<KoShape *> &shapes)
+{
+    KisToolShape::activate(shapes);
+    connect(action("undo_polygon_selection"), SIGNAL(triggered()), SLOT(undoLastPoint()), Qt::UniqueConnection);
+
+    KisInputManager *inputManager = (static_cast<KisCanvas2*>(canvas()))->globalInputManager();
+    if (inputManager) {
+        inputManager->attachPriorityEventFilter(this);
+    }
+}
+
 void KisToolOutlineBase::deactivate()
 {
     finishOutlineAction();
@@ -74,7 +88,61 @@ void KisToolOutlineBase::deactivate()
 
     m_continuedMode = false;
 
+    KisInputManager *inputManager = kisCanvas->globalInputManager();
+    if (inputManager) {
+        inputManager->detachPriorityEventFilter(this);
+    }
+
     KisToolShape::deactivate();
+}
+
+KisPopupWidgetInterface* KisToolOutlineBase::popupWidget()
+{
+    return !m_points.isEmpty() || m_type == SELECT ? nullptr : KisToolShape::popupWidget();
+}
+
+// Install an event filter to catch right-click events.
+// The simplest way to accommodate the popup palette binding.
+bool KisToolOutlineBase::eventFilter(QObject *obj, QEvent *event)
+{
+    Q_UNUSED(obj);
+
+    if (m_points.isEmpty()) {
+        return false;
+    }
+    if (event->type() == QEvent::MouseButtonPress ||
+        event->type() == QEvent::MouseButtonDblClick) {
+        QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);
+        if (mouseEvent->button() == Qt::RightButton) {
+            undoLastPoint();
+            return true;
+        }
+    } else if (event->type() == QEvent::TabletPress) {
+        QTabletEvent *tabletEvent = static_cast<QTabletEvent*>(event);
+        if (tabletEvent->button() == Qt::RightButton) {
+            undoLastPoint();
+            return true;
+        }
+    }
+    return false;
+}
+
+void KisToolOutlineBase::undoLastPoint()
+{
+    if(!m_points.isEmpty() && m_continuedMode && mode() != PAINT_MODE && m_numberOfContinuedModePoints > 0) {
+        //Update canvas for drag before undo
+        updateContinuedMode();
+
+        //Update canvas for last segment
+        QRectF rect;
+        if (m_points.size() > 1) {
+            rect = pixelToView(QRectF(m_points.last(), m_points.at(m_points.size()-2)).normalized());
+            rect.adjust(-FEEDBACK_LINE_WIDTH, -FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH, FEEDBACK_LINE_WIDTH);
+            updateCanvasViewRect(rect);
+            m_points.pop_back();
+            --m_numberOfContinuedModePoints;
+        }
+    }
 }
 
 void KisToolOutlineBase::beginPrimaryAction(KoPointerEvent *event)
@@ -106,7 +174,9 @@ void KisToolOutlineBase::beginPrimaryAction(KoPointerEvent *event)
 
     if (m_continuedMode) {
         m_points.append(convertToPixelCoordAndSnap(event));
+        ++m_numberOfContinuedModePoints;
     } else {
+        m_numberOfContinuedModePoints = 0;
         m_points.append(convertToPixelCoord(event));
     }
 }
@@ -174,9 +244,7 @@ void KisToolOutlineBase::updateFeedback()
 void KisToolOutlineBase::updateContinuedMode()
 {
     if (!m_points.isEmpty()) {
-        qint32 lastPointIndex = m_points.count() - 1;
-
-        QRectF updateRect = QRectF(m_points[lastPointIndex], m_lastCursorPos).normalized();
+        QRectF updateRect = QRectF(m_points.last(), m_lastCursorPos).normalized();
         updateRect = kisGrowRect(updateRect, FEEDBACK_LINE_WIDTH);
 
         updateCanvasPixelRect(updateRect);

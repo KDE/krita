@@ -422,10 +422,22 @@ public:
 
     QMenu *popupActionsMenu() override
     {
+        if (isSelecting()) {
+            return BaseClass::popupActionsMenu();
+        }
+
         KisCanvas2 * kisCanvas = dynamic_cast<KisCanvas2*>(canvas());
         KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(kisCanvas, 0);
 
         return KisSelectionToolHelper::getSelectionContextMenu(kisCanvas);
+    }
+
+    KisPopupWidgetInterface* popupWidget() override
+    {
+        if (isSelecting()) {
+            return BaseClass::popupWidget();
+        }
+        return nullptr;
     }
 
     bool beginMoveSelectionInteraction() {

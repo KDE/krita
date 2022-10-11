@@ -44,9 +44,4 @@ qreal KisDynamicSensorFuzzy::value(const KisPaintInformation &info)
     return result;
 }
 
-bool KisDynamicSensorFuzzy::dependsOnCanvasRotation() const
-{
-    return false;
-}
-
 

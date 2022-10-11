@@ -92,7 +92,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
         {
             KisCurveOptionUniformProperty *prop =
                 new KisCurveOptionUniformProperty("smudge_color_rate",
-                                                  new KisRateOption(KoID("ColorRate", i18n("Color Rate")), KisPaintOpOption::GENERAL, false),
+                                                  new KisColorRateOption(KoID("ColorRate", i18n("Color Rate")), KisPaintOpOption::GENERAL, false),
                                                   settings,
                                                   0);
 

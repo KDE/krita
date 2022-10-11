@@ -70,6 +70,7 @@ public:
 public:
     QString toString() const;
     void fromString(const QString&);
+    static KisCubicCurve createFromString(const QString&curveString);
 private:
     struct Data;
     struct Private;

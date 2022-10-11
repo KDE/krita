@@ -14,6 +14,7 @@
 
 #include <kis_brush_based_paintop.h>
 #include <kis_types.h>
+#include <kis_airbrush_option_widget.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_ratio_option.h>
@@ -66,7 +67,7 @@ private:
     KisPressureRateOption     m_rateOption;
     KisPressurePaintThicknessOption   m_paintThicknessOption;
     KisSmudgeOption           m_smudgeRateOption;
-    KisRateOption             m_colorRateOption;
+    KisColorRateOption        m_colorRateOption;
     KisSmudgeRadiusOption     m_smudgeRadiusOption;
     KisOverlayModeOption      m_overlayModeOption;
     KisPressureRotationOption m_rotationOption;

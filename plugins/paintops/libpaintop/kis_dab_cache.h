@@ -72,7 +72,7 @@ public:
                                                   QRect *dstDabRect);
 
 
-    void setSharpnessPostprocessing(KisPressureSharpnessOption *option);
+    void setSharpnessPostprocessing(KisSharpnessOption *option);
     void setTexturePostprocessing(KisTextureOption *option);
 
     bool needSeparateOriginal() const;

@@ -22,8 +22,6 @@ class KisDynamicSensorFuzzy : public QObject, public KisDynamicSensor
 {
     Q_OBJECT
 public:
-    bool dependsOnCanvasRotation() const override;
-
     bool isAdditive() const override;
 
     KisDynamicSensorFuzzy(bool fuzzyPerStroke, const QString &parentOptionName);

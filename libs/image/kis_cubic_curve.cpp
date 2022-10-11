@@ -494,6 +494,13 @@ void KisCubicCurve::fromString(const QString& string)
     setPoints(points);
 }
 
+KisCubicCurve KisCubicCurve::createFromString(const QString& curveString)
+{
+    KisCubicCurve curve;
+    curve.fromString(curveString);
+    return curve;
+}
+
 const QVector<quint16> KisCubicCurve::uint16Transfer(int size) const
 {
     d->data->updateTransfer<quint16, int>(&d->data->u16Transfer, d->data->validU16Transfer, 0x0, 0xFFFF, size);

@@ -12,55 +12,53 @@
 #include <KoColorTransformation.h>
 
 #include "kis_color_source.h"
-#include "kis_pressure_mix_option.h"
-#include "kis_pressure_darken_option.h"
-#include "kis_pressure_hsv_option.h"
 #include "kis_color_source_option.h"
-#include "kis_pressure_sharpness_option.h"
+#include "KisSharpnessOption.h"
+#include "KisStandardOptions.h"
+#include "KisDarkenOption.h"
+#include "KisHSVOption.h"
 #include "kis_texture_option.h"
 #include "kis_painter.h"
 #include "kis_paintop_settings.h"
 
 struct KisBrushOpResources::Private
 {
-    QList<KisPressureHSVOption*> hsvOptions;
+    Private(const KisPaintOpSettings *setting)
+        : mixOption(setting)
+        , darkenOption(setting)
+    {
+    }
+
+    QList<KisHSVOption*> hsvOptions;
     KoColorTransformation *hsvTransformation = 0;
-    KisPressureMixOption mixOption;
-    KisPressureDarkenOption darkenOption;
+    KisMixOption mixOption;
+    KisDarkenOption darkenOption;
 };
 
 
 KisBrushOpResources::KisBrushOpResources(const KisPaintOpSettingsSP settings, KisPainter *painter)
-    : m_d(new Private)
+    : m_d(new Private(settings.data()))
 {
-    KisColorSourceOption colorSourceOption;
-    colorSourceOption.readOptionSetting(settings.data());
+    KisColorSourceOption colorSourceOption(settings.data());
     colorSource.reset(colorSourceOption.createColorSource(painter));
 
-    sharpnessOption.reset(new KisPressureSharpnessOption());
-    sharpnessOption->readOptionSetting(settings);
-    sharpnessOption->resetAllSensors();
+    sharpnessOption.reset(new KisSharpnessOption(settings.data()));
 
-    textureOption.reset(new KisTextureOption(painter->device()->defaultBounds()->currentLevelOfDetail(), SupportsGradientMode | SupportsLightnessMode));
-    textureOption->fillProperties(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
+    textureOption.reset(new KisTextureOption(settings.data(),
+                                             settings->resourcesInterface(),
+                                             settings->canvasResourcesInterface(),
+                                             painter->device()->defaultBounds()->currentLevelOfDetail(),
+                                             SupportsGradientMode | SupportsLightnessMode));
 
-    m_d->hsvOptions.append(KisPressureHSVOption::createHueOption());
-    m_d->hsvOptions.append(KisPressureHSVOption::createSaturationOption());
-    m_d->hsvOptions.append(KisPressureHSVOption::createValueOption());
+    m_d->hsvOptions.append(KisHSVOption::createHueOption(settings.data()));
+    m_d->hsvOptions.append(KisHSVOption::createSaturationOption(settings.data()));
+    m_d->hsvOptions.append(KisHSVOption::createValueOption(settings.data()));
 
-    Q_FOREACH (KisPressureHSVOption * option, m_d->hsvOptions) {
-        option->readOptionSetting(settings);
-        option->resetAllSensors();
+    Q_FOREACH (KisHSVOption *option, m_d->hsvOptions) {
         if (option->isChecked() && !m_d->hsvTransformation) {
             m_d->hsvTransformation = painter->backgroundColor().colorSpace()->createColorTransformation("hsv_adjustment", QHash<QString, QVariant>());
         }
     }
-
-    m_d->darkenOption.readOptionSetting(settings);
-    m_d->mixOption.readOptionSetting(settings);
-
-    m_d->darkenOption.resetAllSensors();
-    m_d->mixOption.resetAllSensors();
 
     // the brush should be initialized explicitly by the caller later
     KIS_SAFE_ASSERT_RECOVER_NOOP(!brush);
@@ -78,7 +76,7 @@ void KisBrushOpResources::syncResourcesToSeqNo(int seqNo, const KisPaintInformat
     m_d->darkenOption.apply(colorSource.data(), info);
 
     if (m_d->hsvTransformation) {
-        Q_FOREACH (KisPressureHSVOption * option, m_d->hsvOptions) {
+        Q_FOREACH (KisHSVOption * option, m_d->hsvOptions) {
             option->apply(m_d->hsvTransformation, info);
         }
         colorSource->applyColorTransformation(m_d->hsvTransformation);

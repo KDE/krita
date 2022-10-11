@@ -16,6 +16,7 @@ set(kritalibpaintop_LIB_SRCS
     KisCurveOptionData.cpp
     KisCurveOptionModel.cpp
     KisCurveOptionWidget2.cpp
+    KisCurveOption2.cpp
     KisMultiSensorsSelector2.cpp
     KisMultiSensorsModel2.cpp
     KisDynamicSensorFactory.cpp
@@ -24,15 +25,19 @@ set(kritalibpaintop_LIB_SRCS
     KisSpacingOptionWidget.cpp
     KisSpacingOptionData.cpp
     KisSpacingOptionModel.cpp
+    KisSpacingOption.cpp
     KisMirrorOptionData.cpp
     KisMirrorOptionModel.cpp
     KisMirrorOptionWidget.cpp
+    KisMirrorOption.cpp
     KisSharpnessOptionData.cpp
     KisSharpnessOptionModel.cpp
     KisSharpnessOptionWidget.cpp
+    KisSharpnessOption.cpp
     KisScatterOptionData.cpp
     KisScatterOptionModel.cpp
     KisScatterOptionWidget.cpp
+    KisScatterOption.cpp
     KisAirbrushOptionData.cpp
     KisAirbrushOptionModel.cpp
     KisAirbrushOptionWidget.cpp
@@ -54,6 +59,12 @@ set(kritalibpaintop_LIB_SRCS
     KisSizeOptionData.cpp
     KisSizeOptionWidget.cpp
     KisStandardOptionData.cpp
+    KisStandardOptions.cpp
+    KisRotationOption.cpp
+    KisOpacityOption.cpp
+    KisFlowOpacityOption.cpp
+    KisDarkenOption.cpp
+    KisHSVOption.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
@@ -99,6 +110,13 @@ set(kritalibpaintop_LIB_SRCS
     kis_linked_pattern_manager.cpp
     KisMaskingBrushOption.cpp
     KisMaskingBrushOptionProperties.cpp
+    sensors2/KisDynamicSensor2.cpp
+    sensors2/KisDynamicSensors2.cpp
+    sensors2/KisDynamicSensorDrawingAngle2.cpp
+    sensors2/KisDynamicSensorFuzzy2.cpp
+    sensors2/KisDynamicSensorDistance2.cpp
+    sensors2/KisDynamicSensorFade2.cpp
+    sensors2/KisDynamicSensorTime2.cpp
     sensors/kis_dynamic_sensors.cc
     sensors/kis_dynamic_sensor_drawing_angle.cpp
     sensors/kis_dynamic_sensor_distance.cc

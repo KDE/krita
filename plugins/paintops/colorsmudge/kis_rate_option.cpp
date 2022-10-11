@@ -16,12 +16,12 @@
 
 #include <iostream>
 
-KisRateOption::KisRateOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked)
+KisColorRateOption::KisColorRateOption(const KoID &id, KisPaintOpOption::PaintopCategory category, bool checked)
     : KisCurveOption(id, category, checked)
 {
 }
 
-void KisRateOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
+void KisColorRateOption::apply(KisPainter& painter, const KisPaintInformation& info, qreal scaleMin, qreal scaleMax, qreal multiplicator) const
 {
     if (!isChecked()) {
         painter.setOpacity((quint8)(scaleMax * 255.0));

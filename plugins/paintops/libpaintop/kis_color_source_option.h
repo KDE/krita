@@ -19,9 +19,8 @@ class KisPropertiesConfiguration;
 class PAINTOP_EXPORT KisColorSourceOption
 {
 public:
-    KisColorSourceOption();
+    KisColorSourceOption(const KisPropertiesConfiguration *setting);
     ~KisColorSourceOption();
-    void readOptionSetting(const KisPropertiesConfiguration *setting);
 
     KisColorSource* createColorSource(const KisPainter* _painter) const;
 private:

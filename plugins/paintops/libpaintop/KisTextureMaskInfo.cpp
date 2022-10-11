@@ -107,10 +107,10 @@ QRect KisTextureMaskInfo::maskBounds() const {
     return m_maskBounds;
 }
 
-bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)
+bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface)
 {
     KisTextureOptionData data;
-    data.read(setting.data());
+    data.read(setting);
 
     if (!data.isEnabled || data.textureData.md5sum.isEmpty()) {
         return false;

@@ -17,7 +17,7 @@
 class KisPropertiesConfiguration;
 class KisPainter;
 
-class KisSmudgeOption: public KisRateOption
+class KisSmudgeOption: public KisColorRateOption
 {
 public:
     KisSmudgeOption();

@@ -11,23 +11,7 @@
 #include <brushengine/kis_paint_information.h>
 #include <kritapaintop_export.h>
 #include <kis_types.h>
-
-
-struct MirrorProperties {
-    MirrorProperties()
-        : horizontalMirror(false),
-          verticalMirror(false),
-          coordinateSystemFlipped(false) {}
-
-    bool horizontalMirror;
-    bool verticalMirror;
-
-    bool coordinateSystemFlipped;
-
-    bool isEmpty() const {
-        return !horizontalMirror && !verticalMirror;
-    }
-};
+#include "KisMirrorProperties.h"
 
 const QString MIRROR_HORIZONTAL_ENABLED = "HorizontalMirrorEnabled";
 const QString MIRROR_VERTICAL_ENABLED = "VerticalMirrorEnabled";

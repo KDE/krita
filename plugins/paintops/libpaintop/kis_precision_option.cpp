@@ -9,14 +9,9 @@
 
 #include "kis_properties_configuration.h"
 
-void KisPrecisionOption::writeOptionSetting(KisPropertiesConfigurationSP settings) const
+KisPrecisionOption::KisPrecisionOption(const KisPropertiesConfiguration *setting)
+    : m_precisionData(KisBrushModel::PrecisionData::read(setting))
 {
-    m_precisionData.write(settings.data());
-}
-
-void KisPrecisionOption::readOptionSetting(const KisPropertiesConfigurationSP settings)
-{
-    m_precisionData = KisBrushModel::PrecisionData::read(settings.data());
 }
 
 int KisPrecisionOption::effectivePrecisionLevel(qreal effectiveDabSize) const

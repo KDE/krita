@@ -162,8 +162,6 @@ public:
     void setActive(bool active);
     bool isActive() const;
 
-    virtual bool dependsOnCanvasRotation() const;
-
     virtual bool isAdditive() const;
     virtual bool isAbsoluteRotation() const;
 

@@ -15,7 +15,7 @@
 #include <KoColor.h>
 
 KisSmudgeOption::KisSmudgeOption()
-    : KisRateOption(KoID("SmudgeRate", i18n("Smudge Length")), KisPaintOpOption::GENERAL, true)
+    : KisColorRateOption(KoID("SmudgeRate", i18n("Smudge Length")), KisPaintOpOption::GENERAL, true)
     , m_mode(SMEARING_MODE)
 {
     setValueRange(0.01, 1.0);
@@ -38,7 +38,7 @@ void KisSmudgeOption::apply(KisPainter& painter, const KisPaintInformation& info
 
 void KisSmudgeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
-    KisRateOption::writeOptionSetting(setting);
+    KisColorRateOption::writeOptionSetting(setting);
     setting->setProperty(m_id.id() + "Mode", m_mode);
     setting->setProperty(m_id.id() + "SmearAlpha", m_smearAlpha);
     setting->setProperty(m_id.id() + "UseNewEngine", m_useNewEngine);
@@ -46,7 +46,7 @@ void KisSmudgeOption::writeOptionSetting(KisPropertiesConfigurationSP setting) c
 
 void KisSmudgeOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    KisRateOption::readOptionSetting(setting);
+    KisColorRateOption::readOptionSetting(setting);
 
     m_mode = (Mode)setting->getInt(m_id.id() + "Mode", SMEARING_MODE);
     m_smearAlpha = setting->getBool(m_id.id() + "SmearAlpha", true);

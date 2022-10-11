@@ -36,11 +36,6 @@ qreal KisDynamicSensorDrawingAngle::value(const KisPaintInformation& info)
     return ret;
 }
 
-bool KisDynamicSensorDrawingAngle::dependsOnCanvasRotation() const
-{
-    return false;
-}
-
 bool KisDynamicSensorDrawingAngle::isAbsoluteRotation() const
 {
     return true;

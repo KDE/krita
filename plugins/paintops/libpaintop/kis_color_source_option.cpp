@@ -21,20 +21,16 @@ struct KisColorSourceOption::Private {
     KisColorSourceOptionData::Type type;
 };
 
-KisColorSourceOption::KisColorSourceOption()
+KisColorSourceOption::KisColorSourceOption(const KisPropertiesConfiguration *setting)
     : d(new Private)
-{
-}
-
-KisColorSourceOption::~KisColorSourceOption()
-{
-}
-
-void KisColorSourceOption::readOptionSetting(const KisPropertiesConfiguration *setting)
 {
     KisColorSourceOptionData data;
     data.read(setting);
     d->type = data.type;
+}
+
+KisColorSourceOption::~KisColorSourceOption()
+{
 }
 
 KisColorSource* KisColorSourceOption::createColorSource(const KisPainter* _painter) const

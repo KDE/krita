@@ -96,7 +96,7 @@ KisSpacingInformation KisMyPaintPaintOp::updateSpacingImpl(const KisPaintInforma
 
 KisTimingInformation KisMyPaintPaintOp::updateTimingImpl(const KisPaintInformation &info) const {
 
-    return KisPaintOpPluginUtils::effectiveTiming(&m_airBrushOption, nullptr, info);
+    return KisPaintOpPluginUtils::effectiveTiming(&m_airBrushOption, static_cast<KisPressureRateOption*>(nullptr), info);
 }
 
 KisSpacingInformation KisMyPaintPaintOp::computeSpacing(const KisPaintInformation &info, qreal lodScale) const {

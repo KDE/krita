@@ -19,7 +19,6 @@ class KisDynamicSensorDrawingAngle : public QObject, public KisDynamicSensor
 public:
     KisDynamicSensorDrawingAngle();
     qreal value(const KisPaintInformation& info) override;
-    bool dependsOnCanvasRotation() const override;
     bool isAbsoluteRotation() const override;
 
     QWidget* createConfigurationWidget(QWidget* parent, QWidget*) override;

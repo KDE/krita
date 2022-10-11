@@ -13,6 +13,9 @@
 #include "kis_airbrush_option_widget.h"
 #include "kis_pressure_spacing_option.h"
 #include "kis_pressure_rate_option.h"
+#include "KisStandardOptions.h"
+#include "KisAirbrushOptionData.h"
+#include "KisSpacingOption.h"
 
 namespace KisPaintOpPluginUtils {
 
@@ -50,9 +53,40 @@ KisSpacingInformation effectiveSpacing(qreal dabWidth,
                                        const KisPressureSpacingOption *spacingOption,
                                        const KisPaintInformation &pi)
 {
+    // TODO: remove this implementation!
+
     // Extract required parameters.
     bool distanceSpacingEnabled = true;
     if (airbrushOption && airbrushOption->enabled) {
+        distanceSpacingEnabled = !airbrushOption->ignoreSpacing;
+    }
+    qreal extraScale = 1.0;
+    if (spacingOption && spacingOption->isChecked()) {
+        extraScale = spacingOption->apply(pi);
+    }
+
+    return KisPaintOpUtils::effectiveSpacing(dabWidth, dabHeight, extraScale,
+                                             distanceSpacingEnabled, isotropicSpacing, rotation,
+                                             axesFlipped, spacingVal, autoSpacingActive,
+                                             autoSpacingCoeff, lodScale);
+}
+
+KisSpacingInformation effectiveSpacing(qreal dabWidth,
+                                       qreal dabHeight,
+                                       bool isotropicSpacing,
+                                       qreal rotation,
+                                       bool axesFlipped,
+                                       qreal spacingVal,
+                                       bool autoSpacingActive,
+                                       qreal autoSpacingCoeff,
+                                       qreal lodScale,
+                                       const KisAirbrushOptionData *airbrushOption,
+                                       const KisSpacingOption *spacingOption,
+                                       const KisPaintInformation &pi)
+{
+    // Extract required parameters.
+    bool distanceSpacingEnabled = true;
+    if (airbrushOption && airbrushOption->isChecked) {
         distanceSpacingEnabled = !airbrushOption->ignoreSpacing;
     }
     qreal extraScale = 1.0;
@@ -82,12 +116,33 @@ KisTimingInformation effectiveTiming(const KisAirbrushOptionProperties *airbrush
                                      const KisPressureRateOption *rateOption,
                                      const KisPaintInformation &pi)
 {
+    // TODO: remove this implementation!
+
     // Extract required parameters.
     bool timingEnabled = false;
     qreal timingInterval = LONG_TIME;
     if (airbrushOption) {
         timingEnabled = airbrushOption->enabled;
         timingInterval = airbrushOption->airbrushInterval;
+    }
+    qreal rateExtraScale = 1.0;
+    if (rateOption && rateOption->isChecked()) {
+        rateExtraScale = rateOption->apply(pi);
+    }
+
+    return KisPaintOpUtils::effectiveTiming(timingEnabled, timingInterval, rateExtraScale);
+}
+
+KisTimingInformation effectiveTiming(const KisAirbrushOptionData *airbrushOption,
+                                     const KisRateOption *rateOption,
+                                     const KisPaintInformation &pi)
+{
+    // Extract required parameters.
+    bool timingEnabled = false;
+    qreal timingInterval = LONG_TIME;
+    if (airbrushOption) {
+        timingEnabled = airbrushOption->isChecked;
+        timingInterval = 1000.0 / airbrushOption->airbrushRate;
     }
     qreal rateExtraScale = 1.0;
     if (rateOption && rateOption->isChecked()) {

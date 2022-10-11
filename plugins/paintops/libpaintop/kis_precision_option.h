@@ -30,12 +30,10 @@ struct PrecisionData :  public boost::equality_comparable<PrecisionData>
 };
 }
 
-
 class PAINTOP_EXPORT KisPrecisionOption
 {
 public:
-    void writeOptionSetting(KisPropertiesConfigurationSP settings) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP settings);
+    KisPrecisionOption(const KisPropertiesConfiguration *setting);
 
     int effectivePrecisionLevel(qreal effectiveDabSize) const;
     void setHasImprecisePositionOptions(bool value);

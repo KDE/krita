@@ -10,8 +10,8 @@
 #include "kis_color_source.h"
 #include "kis_paint_device.h"
 #include "kis_brush.h"
-#include <kis_pressure_mirror_option.h>
-#include <kis_pressure_sharpness_option.h>
+#include <KisMirrorOption.h>
+#include <KisSharpnessOption.h>
 #include <kis_texture_option.h>
 #include <kis_precision_option.h>
 #include <kis_fixed_paint_device.h>
@@ -76,7 +76,7 @@ struct KisDabCacheBase::Private {
           subPixelPrecisionDisabled(false)
     {}
 
-    KisPressureMirrorOption *mirrorOption;
+    KisMirrorOption *mirrorOption;
     KisPrecisionOption *precisionOption;
     bool subPixelPrecisionDisabled;
 
@@ -97,7 +97,7 @@ KisDabCacheBase::~KisDabCacheBase()
     delete m_d;
 }
 
-void KisDabCacheBase::setMirrorPostprocessing(KisPressureMirrorOption *option)
+void KisDabCacheBase::setMirrorPostprocessing(KisMirrorOption *option)
 {
     m_d->mirrorOption = option;
 }
@@ -140,7 +140,7 @@ KisDabCacheBase::getDabParameters(KisBrushSP brush,
 }
 
 bool KisDabCacheBase::needSeparateOriginal(KisTextureOption *textureOption,
-                                           KisPressureSharpnessOption *sharpnessOption) const
+                                           KisSharpnessOption *sharpnessOption) const
 {
     return (textureOption && textureOption->m_enabled) ||
            (sharpnessOption && sharpnessOption->isChecked());
@@ -175,7 +175,7 @@ KisDabCacheBase::calculateDabRect(KisBrushSP brush,
                                   KisDabShape shape,
                                   const KisPaintInformation& info,
                                   const MirrorProperties &mirrorProperties,
-                                  KisPressureSharpnessOption *sharpnessOption)
+                                  KisSharpnessOption *sharpnessOption)
 {
     qint32 x = 0, y = 0;
     qreal subPixelX = 0.0, subPixelY = 0.0;

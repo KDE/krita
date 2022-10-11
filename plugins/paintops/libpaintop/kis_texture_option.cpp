@@ -45,17 +45,23 @@
 /**********************************************************************/
 
 
-KisTextureOption::KisTextureOption(int levelOfDetail, KisBrushTextureFlags flags)
+KisTextureOption::KisTextureOption(const KisPropertiesConfiguration *setting,
+                                   KisResourcesInterfaceSP resourcesInterface,
+                                   KoCanvasResourcesInterfaceSP canvasResourcesInterface,
+                                   int levelOfDetail,
+                                   KisBrushTextureFlags flags)
     : m_gradient(0)
     , m_levelOfDetail(levelOfDetail)
+    , m_strengthOption(setting)
     , m_flags(flags)
 {
+    fillProperties(setting, resourcesInterface, canvasResourcesInterface);
 }
 
-void KisTextureOption::fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
+void KisTextureOption::fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
 {
     KisTextureOptionData data;
-    data.read(setting.data());
+    data.read(setting);
 
     if (data.textureData.fileName.isEmpty() &&
         data.textureData.md5sum.isEmpty()) {
@@ -96,9 +102,6 @@ void KisTextureOption::fillProperties(const KisPropertiesConfigurationSP setting
             m_cachedGradient.setGradient(gradient, 256);
         }
     }
-
-    m_strengthOption.readOptionSetting(setting);
-    m_strengthOption.resetAllSensors();
 }
 
 QList<KoResourceLoadResult> KisTextureOption::prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface)

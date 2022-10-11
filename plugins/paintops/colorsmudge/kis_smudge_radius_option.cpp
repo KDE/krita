@@ -29,7 +29,7 @@
 class KisRandomConstAccessorNG;
 
 KisSmudgeRadiusOption::KisSmudgeRadiusOption()
-    : KisRateOption(KoID("SmudgeRadius", i18n("Smudge Radius")), KisPaintOpOption::GENERAL, true)
+    : KisColorRateOption(KoID("SmudgeRadius", i18n("Smudge Radius")), KisPaintOpOption::GENERAL, true)
 {
     setValueRange(0.0,1.0);
 }

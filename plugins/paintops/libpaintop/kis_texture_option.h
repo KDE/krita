@@ -13,8 +13,6 @@
 #include <kis_paint_device.h>
 #include <kis_cached_paint_device.h>
 #include <kis_types.h>
-#include "kis_paintop_option.h"
-#include "kis_pressure_texture_strength_option.h"
 #include <resources/KoAbstractGradient.h>
 #include <resources/KoCachedGradient.h>
 
@@ -27,13 +25,17 @@ class KoResource;
 class KisPropertiesConfiguration;
 class KisResourcesInterface;
 
+#include <KisStandardOptions.h>
 #include <KisTextureOptionData.h>
 
 
 class PAINTOP_EXPORT KisTextureOption
 {
 public:
-    KisTextureOption(int levelOfDetail, KisBrushTextureFlags flags = None);
+    KisTextureOption(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface,
+                     KoCanvasResourcesInterfaceSP canvasResourcesInterface,
+                     int levelOfDetail,
+                     KisBrushTextureFlags flags = None);
 
     bool m_enabled {false};
 
@@ -44,9 +46,8 @@ public:
      * @param info the paint information
      */
     void apply(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation & info);
-    void fillProperties(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
-    QList<KoResourceLoadResult> prepareLinkedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
-    QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    static QList<KoResourceLoadResult> prepareLinkedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
+    static QList<KoResourceLoadResult> prepareEmbeddedResources(const KisPropertiesConfigurationSP setting, KisResourcesInterfaceSP resourcesInterface);
     bool applyingGradient() const;
 
     static bool applyingGradient(const KisPropertiesConfiguration *settings);
@@ -54,7 +55,7 @@ public:
 private:
     void applyLightness(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
     void applyGradient(KisFixedPaintDeviceSP dab, const QPoint& offset, const KisPaintInformation& info);
-
+    void fillProperties(const KisPropertiesConfiguration *setting, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface);
 private:
 
     int m_offsetX {0};
@@ -66,7 +67,7 @@ private:
     int m_levelOfDetail {0};
 
 private:
-    KisPressureTextureStrengthOption m_strengthOption;
+    KisStrengthOption m_strengthOption;
     KisTextureMaskInfoSP m_maskInfo;
     KisBrushTextureFlags m_flags;
     KisCachedPaintDevice m_cachedPaintDevice;

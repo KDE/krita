@@ -8,8 +8,7 @@
 #include <brushengine/kis_paintop_settings.h>
 #include "kis_brush_based_paintop_settings.h"
 #include "kis_brush_option.h"
-#include <kis_pressure_spacing_option.h>
-#include <kis_pressure_rate_option.h>
+#include "KisSpacingOption.h"
 #include "kis_painter.h"
 #include <kis_lod_transform.h>
 #include "kis_paintop_utils.h"
@@ -69,7 +68,13 @@ void KisBrushBasedPaintOp::preinitializeOpStatically(KisPaintOpSettingsSP settin
 
 KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisBrushTextureFlags textureFlags)
     : KisPaintOp(painter),
-      m_textureProperties(painter->device()->defaultBounds()->currentLevelOfDetail(), textureFlags)
+      m_textureOption(settings.data(),
+                      settings->resourcesInterface(),
+                      settings->canvasResourcesInterface(),
+                      painter->device()->defaultBounds()->currentLevelOfDetail(),
+                      textureFlags),
+      m_mirrorOption(settings.data()),
+      m_precisionOption(settings.data())
 {
     Q_ASSERT(settings);
 
@@ -100,19 +105,14 @@ KisBrushBasedPaintOp::KisBrushBasedPaintOp(const KisPaintOpSettingsSP settings, 
 
     m_brush->notifyStrokeStarted();
 
-    m_precisionOption.readOptionSetting(settings);
     m_dabCache = new KisDabCache(m_brush);
     m_dabCache->setPrecisionOption(&m_precisionOption);
-
-    m_mirrorOption.readOptionSetting(settings);
     m_dabCache->setMirrorPostprocessing(&m_mirrorOption);
-
-    m_textureProperties.fillProperties(settings, settings->resourcesInterface(), settings->canvasResourcesInterface());
-    m_dabCache->setTexturePostprocessing(&m_textureProperties);
+    m_dabCache->setTexturePostprocessing(&m_textureOption);
 
     m_precisionOption.setHasImprecisePositionOptions(
         m_precisionOption.hasImprecisePositionOptions()
-        || m_mirrorOption.isChecked() || m_textureProperties.m_enabled);
+        || m_mirrorOption.isChecked() || m_textureOption.m_enabled);
 }
 
 KisBrushBasedPaintOp::~KisBrushBasedPaintOp()
@@ -127,8 +127,7 @@ QList<KoResourceLoadResult> KisBrushBasedPaintOp::prepareLinkedResources(const K
     KisBrushOptionProperties brushOption;
     resources << brushOption.prepareLinkedResources(settings, resourcesInterface);
 
-    KisTextureOption textureProperties(0);
-    resources << textureProperties.prepareLinkedResources(settings, resourcesInterface);
+    resources << KisTextureOption::prepareLinkedResources(settings, resourcesInterface);
 
     return resources;
 }
@@ -137,8 +136,7 @@ QList<KoResourceLoadResult> KisBrushBasedPaintOp::prepareEmbeddedResources(const
 {
     QList<KoResourceLoadResult> resources;
 
-    KisTextureOption textureProperties(0);
-    resources << textureProperties.prepareEmbeddedResources(settings, resourcesInterface);
+    resources << KisTextureOption::prepareEmbeddedResources(settings, resourcesInterface);
 
     return resources;
 }
@@ -158,17 +156,40 @@ KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale) const
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPaintInformation &pi) const
 {
-    return effectiveSpacing(scale, rotation, nullptr, nullptr, pi);
+    return effectiveSpacing(scale, rotation, static_cast<KisAirbrushOptionData*>(nullptr), nullptr, pi);
 }
 
-KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisPressureSpacingOption &spacingOption, const KisPaintInformation &pi) const
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation, const KisSpacingOption &spacingOption, const KisPaintInformation &pi) const
 {
-    return effectiveSpacing(scale, rotation, nullptr, &spacingOption, pi);
+    return effectiveSpacing(scale, rotation, static_cast<KisAirbrushOptionData*>(nullptr), &spacingOption, pi);
 }
 
 KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
                                                              const KisAirbrushOptionProperties *airbrushOption,
                                                              const KisPressureSpacingOption *spacingOption,
+                                                             const KisPaintInformation &pi) const
+{
+    bool isotropicSpacing = spacingOption && spacingOption->isotropicSpacing();
+
+    MirrorProperties prop = m_mirrorOption.apply(pi);
+    const bool implicitFlipped = prop.horizontalMirror != prop.verticalMirror;
+
+    // we parse dab rotation separately, so don't count it
+    QSizeF metric = m_brush->characteristicSize(KisDabShape(scale, 1.0, 0));
+
+    return KisPaintOpPluginUtils::effectiveSpacing(metric.width(), metric.height(),
+                                                   isotropicSpacing, rotation, implicitFlipped,
+                                                   m_brush->spacing(),
+                                                   m_brush->autoSpacingActive(),
+                                                   m_brush->autoSpacingCoeff(),
+                                                   KisLodTransform::lodToScale(painter()->device()),
+                                                   airbrushOption, spacingOption,
+                                                   pi);
+}
+
+KisSpacingInformation KisBrushBasedPaintOp::effectiveSpacing(qreal scale, qreal rotation,
+                                                             const KisAirbrushOptionData *airbrushOption,
+                                                             const KisSpacingOption *spacingOption,
                                                              const KisPaintInformation &pi) const
 {
     bool isotropicSpacing = spacingOption && spacingOption->isotropicSpacing();

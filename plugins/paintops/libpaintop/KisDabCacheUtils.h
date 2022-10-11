@@ -12,7 +12,9 @@
 
 #include "kis_types.h"
 
-#include <kis_pressure_mirror_option.h>
+#include <KoColor.h>
+#include <kis_paint_information.h>
+#include <KisMirrorProperties.h>
 #include "kis_dab_shape.h"
 
 #include "kritapaintop_export.h"
@@ -22,7 +24,7 @@ class KisBrush;
 typedef QSharedPointer<KisBrush> KisBrushSP;
 
 class KisColorSource;
-class KisPressureSharpnessOption;
+class KisSharpnessOption;
 class KisTextureOption;
 
 
@@ -39,7 +41,7 @@ struct PAINTOP_EXPORT DabRenderingResources
     KisBrushSP brush;
     QScopedPointer<KisColorSource> colorSource;
 
-    QScopedPointer<KisPressureSharpnessOption> sharpnessOption;
+    QScopedPointer<KisSharpnessOption> sharpnessOption;
     QScopedPointer<KisTextureOption> textureOption;
 
     KisPaintDeviceSP colorSourceDevice;

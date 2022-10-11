@@ -22,7 +22,7 @@
 #include <kis_pressure_scatter_option.h>
 #include <kis_pressure_flow_option.h>
 #include <kis_pressure_softness_option.h>
-#include <kis_pressure_sharpness_option.h>
+#include <KisSharpnessOption.h>
 
 class KisBrushBasedPaintOpSettings;
 class KisPainter;
@@ -61,7 +61,7 @@ private:
     KisTangentTiltOption m_tangentTiltOption;
     KisAirbrushOptionProperties m_airbrushOption;
     KisPressureSoftnessOption m_softnessOption;
-    KisPressureSharpnessOption m_sharpnessOption;
+    KisSharpnessOption m_sharpnessOption;
     KisPressureFlowOption m_flowOption;
 
     KisFixedPaintDeviceSP m_maskDab;

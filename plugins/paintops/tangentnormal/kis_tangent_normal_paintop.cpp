@@ -25,7 +25,8 @@
 KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_opacityOption(node),
-    m_tempDev(painter->device()->createCompositionSourceDevice())
+    m_tempDev(painter->device()->createCompositionSourceDevice()),
+    m_sharpnessOption(settings.data())
 
 {
     Q_UNUSED(image);
@@ -38,7 +39,6 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP sett
     m_spacingOption.readOptionSetting(settings);
     m_rateOption.readOptionSetting(settings);
     m_softnessOption.readOptionSetting(settings);
-    m_sharpnessOption.readOptionSetting(settings);
     m_rotationOption.readOptionSetting(settings);
     m_scatterOption.readOptionSetting(settings);
 
@@ -48,7 +48,6 @@ KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP sett
     m_spacingOption.resetAllSensors();
     m_rateOption.resetAllSensors();
     m_softnessOption.resetAllSensors();
-    m_sharpnessOption.resetAllSensors();
     m_rotationOption.resetAllSensors();
     m_scatterOption.resetAllSensors();
 

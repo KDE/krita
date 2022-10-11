@@ -82,7 +82,6 @@ private:
     KisPredefinedBrushChooser *m_predefinedBrushWidget {0};
     KisTextBrushChooser *m_textBrushWidget {0};
 
-    KisPrecisionOption m_precisionOption;
     lager::cursor<KisBrushModel::BrushData> m_brushData;
 
     struct Private;

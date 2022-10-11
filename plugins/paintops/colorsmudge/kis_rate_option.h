@@ -14,10 +14,10 @@
 
 class KisPainter;
 
-class KisRateOption: public KisCurveOption
+class KisColorRateOption: public KisCurveOption
 {
 public:
-    KisRateOption(const KoID &name, KisPaintOpOption::PaintopCategory category, bool checked);
+    KisColorRateOption(const KoID &name, KisPaintOpOption::PaintopCategory category, bool checked);
 
     /**
      * Set the opacity of the painter based on the rate

@@ -40,11 +40,11 @@ struct KisOptionTuple : public Data..., boost::equality_comparable<KisOptionTupl
     }
 
     bool read(const KisPropertiesConfiguration *setting) {
-        return (static_cast<Data>(*this).read(setting) && ...);
+        return (static_cast<Data&>(*this).read(setting) && ...);
     }
 
     void write(KisPropertiesConfiguration *setting) const {
-        (static_cast<Data>(*this).write(setting) , ...);
+        (static_cast<Data&>(*this).write(setting) , ...);
     }
 };
 

@@ -98,11 +98,8 @@ void KisToolOutlineBase::beginPrimaryAction(KoPointerEvent *event)
 
     setMode(KisTool::PAINT_MODE);
 
-    if (m_continuedMode && !m_points.isEmpty()) {
-        m_paintPath.lineTo(pixelToView(convertToPixelCoord(event)));
-    } else {
+    if (!m_continuedMode || m_points.isEmpty()) {
         beginShape();
-        m_paintPath.moveTo(pixelToView(convertToPixelCoord(event)));
     }
 
     m_points.append(convertToPixelCoord(event));
@@ -113,7 +110,6 @@ void KisToolOutlineBase::continuePrimaryAction(KoPointerEvent *event)
     CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);
 
     QPointF point = convertToPixelCoord(event);
-    m_paintPath.lineTo(pixelToView(point));
     m_points.append(point);
     updateFeedback();
 }
@@ -137,15 +133,17 @@ void KisToolOutlineBase::finishOutlineAction()
     }
     finishOutline(m_points);
     m_points.clear();
-    m_paintPath = QPainterPath();
     endShape();
 }
 
 void KisToolOutlineBase::paint(QPainter& gc, const KoViewConverter &converter)
 {
     if ((mode() == KisTool::PAINT_MODE || m_continuedMode) && !m_points.isEmpty()) {
-
-        QPainterPath outline = m_paintPath;
+        QPainterPath outline;
+        outline.moveTo(pixelToView(m_points.first()));
+        for (qint32 i = 1; i < m_points.size(); ++i) {
+            outline.lineTo(pixelToView(m_points[i]));
+        }
         if (m_continuedMode && mode() != KisTool::PAINT_MODE) {
             outline.lineTo(pixelToView(m_lastCursorPos));
         }

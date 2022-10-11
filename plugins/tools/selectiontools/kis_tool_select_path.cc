@@ -43,6 +43,9 @@ void KisToolSelectPath::requestStrokeCancellation()
 bool KisToolSelectPath::eventFilter(QObject *obj, QEvent *event)
 {
     Q_UNUSED(obj);
+    if (!localTool()->pathStarted()) {
+        return false;
+    }
     if (event->type() == QEvent::MouseButtonPress ||
             event->type() == QEvent::MouseButtonDblClick) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>(event);

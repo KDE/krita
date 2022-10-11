@@ -59,6 +59,8 @@ public:
     // which now is used to start the path tool.
     void beginPrimaryDoubleClickAction(KoPointerEvent* event) override;
 
+    KisPopupWidgetInterface* popupWidget() override;
+    
 protected:
     void requestStrokeCancellation() override;
     void requestStrokeEnd() override;

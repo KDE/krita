@@ -1594,21 +1594,198 @@ void TestSvgText::testUnicodeGraphemeClusters()
              .arg(test).arg(result.join(", ")).arg(expectedResult.join(", ")).toLatin1());
 }
 
+/**
+ * @brief TestSvgText::testFontSelectionForText
+ *
+ * This tests whether we are selecting appropriate fonts for a given text.
+ * Things we want to test amongst others are: mixed script, emoji selection,
+ * unicode variation selection, combination marks and support for the unicode
+ * supplementary (and above) planes.
+ */
 void TestSvgText::testFontSelectionForText()
 {
-    /// This test should test whether we are selecting the appropriate fonts for a given string, but it'll need some special fonts to check.
-    // Test the letter a;
-    // Test combination marks.
+    // Test the letter a.
+
+    QString test = "a";
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/CSSTest");
+
+
+    // First we verify that we can find the test fonts.
+
+    bool res = KoFontRegistery::instance()->addFontFileDirectoryToRegistery(fileName);
+    QVERIFY2(res, QString("KoFontRegistery could not add the directory of test fonts %1")
+             .arg(fileName).toLatin1());
+
+
+    QVector<int> lengths;
+    const std::vector<FT_FaceUP> faces =
+            KoFontRegistery::instance()->facesForCSSValues({"CSSTest Verify"}, lengths, test);
+
+    QVERIFY2(lengths.size() == 1,
+             QString("KoFontRegistery selected the wrong amount of fonts for the following text: %1")
+             .arg(test).toLatin1());
+
+    // Test combination marks. We should prefer combination marks to be using the same glyphs as the font.
+
+    test = "K\u0304r\u0330ita";
+    QStringList fontFamilies;
+    QStringList foundFonts;
+    QStringList expectedFonts;
+    fontFamilies << "CSSTest Verify" << "DejaVu Sans";
+    expectedFonts << "DejaVu Sans" << "CSSTest Verify";
+    QVector<int> expectedLengths;
+    expectedLengths << 4 << 3;
+    fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
+
+    const std::vector<FT_FaceUP> faces2 =
+            KoFontRegistery::instance()->facesForCSSValues(fontFamilies, lengths, test);
+    QVERIFY2(lengths == expectedLengths,
+             QString("KoFontRegistery returns the wrong lengths for string %1")
+             .arg(test).toLatin1());
+    for (const FT_FaceUP &face : faces2) {
+        //qDebug() << face->family_name;
+        foundFonts.append(face->family_name);
+    }
+    QVERIFY2(foundFonts == expectedFonts, QString("KoFontRegistery returns the wrong fonts for string %1"
+                                                 "\nResult:\t%2\nExpected:\t%3")
+             .arg(test).arg(foundFonts.join(", ")).arg(expectedFonts.join(", ")).toLatin1());
+
     // Test emoji
+
+    test = "Hand:\u270d\U0001F3FF etc.";
+
+    const std::vector<FT_FaceUP> faces3 =
+            KoFontRegistery::instance()->facesForCSSValues(fontFamilies, lengths, test);
+    expectedLengths.clear();
+    expectedLengths << 5 << 3 << 5;
+    // we can only test the lengths here because dejavu sans doesn't
+    // have the fitzpatrick emoji selectors, so on a regular
+    // desktop the families would pick a proper emoji font for this.
+    QVERIFY2(lengths == expectedLengths,
+             QString("KoFontRegistery returns the wrong lengths for string %1")
+             .arg(test).toLatin1());
+
+
     // Test variation selector (with and without graceful fallback).
+    // What we want to do here is check whether if we have a font with a character
+    // but not the variation selector, it will treat this as the fallback and select
+    // when there's no better font. May not work on non-testing systems?
+
+    test = "Ashi:\u82A6\uFE03 or \u82A6";
+    fontFamilies << "Krita_Test_Unicode_Variation_A";
+    expectedLengths.clear();
+    expectedLengths << 5 << 2 << 4 << 1;
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    foundFonts.clear();
+    expectedFonts.clear();
+    expectedFonts << "CSSTest Verify" << "Krita_Test_Unicode_Variation_A"
+                  << "CSSTest Verify" << "Krita_Test_Unicode_Variation_A";
+    const std::vector<FT_FaceUP> faces4 =
+            KoFontRegistery::instance()->facesForCSSValues(fontFamilies, lengths, test);
+    QVERIFY2(lengths == expectedLengths,
+             QString("KoFontRegistery returns the wrong lengths for string %1")
+             .arg(test).toLatin1());
+    for (const FT_FaceUP &face : faces4) {
+        foundFonts.append(face->family_name);
+    }
+    QVERIFY2(foundFonts == expectedFonts,
+             QString("KoFontRegistery returns the wrong fonts for string %1"
+                                                 "\nResult:\t%2\nExpected:\t%3")
+             .arg(test).arg(foundFonts.join(", ")).arg(expectedFonts.join(", ")).toLatin1());
+
+
+    // What we want to do here is check whether if we have a font with a character and a selector,
+    // it will select that font over others that may only have the base character.
+
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_B.ttf");
+    KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    foundFonts.clear();
+    expectedFonts.clear();
+    expectedFonts << "CSSTest Verify" << "Krita_Test_Unicode_Variation_B"
+                  << "CSSTest Verify" << "Krita_Test_Unicode_Variation_B";
+    fontFamilies.clear();
+    fontFamilies << "CSSTest Verify" << "Krita_Test_Unicode_Variation_B"
+                 << "Krita_Test_Unicode_Variation_A";
+
+    const std::vector<FT_FaceUP> faces5 =
+            KoFontRegistery::instance()->facesForCSSValues(fontFamilies, lengths, test);
+    QVERIFY2(lengths == expectedLengths,
+             QString("KoFontRegistery returns the wrong lengths for string %1")
+             .arg(test).toLatin1());
+    for (const FT_FaceUP &face : faces5) {
+        //qDebug() << face->family_name;
+        foundFonts.append(face->family_name);
+    }
+    QVERIFY2(foundFonts == expectedFonts,
+             QString("KoFontRegistery returns the wrong fonts for string %1"
+                                                 "\nResult:\t%2\nExpected:\t%3")
+             .arg(test).arg(foundFonts.join(", ")).arg(expectedFonts.join(", ")).toLatin1());
+
     // Test Arabic + English + CJK
-    // Test higher plane code points.
+    // This is just a generic test to see if we can have mixed script without things blowing up.
+
+    test = "Lo rem اللغة العربية المعيارية الحديثة ip あああ sum";
+    fontFamilies << "DejaVu Sans";
+    foundFonts.clear();
+    expectedLengths.clear();
+    expectedLengths << 7 << 5 << 1 << 7 << 1 << 9 << 1 << 7 << 4 << 3 << 4;
+    expectedFonts.clear();
+    expectedFonts << "CSSTest Verify"
+                  << "DejaVu Sans"
+                  << "CSSTest Verify"
+                  << "DejaVu Sans"
+                  << "CSSTest Verify"
+                  << "DejaVu Sans"
+                  << "CSSTest Verify"
+                  << "DejaVu Sans"
+                  << "CSSTest Verify"
+                  << "Krita_Test_Unicode_Variation_B"
+                  << "CSSTest Verify";
+    const std::vector<FT_FaceUP> faces6 =
+            KoFontRegistery::instance()->facesForCSSValues(fontFamilies, lengths, test);
+    QVERIFY2(lengths == expectedLengths,
+             QString("KoFontRegistery returns the wrong lengths for string %1").arg(test).toLatin1());
+    for (const FT_FaceUP &face : faces6) {
+        //qDebug() << face->family_name;
+        foundFonts.append(face->family_name);
+    }
+    QVERIFY2(foundFonts == expectedFonts, QString("KoFontRegistery returns the wrong fonts for string %1"
+                                                 "\nResult:\t%2\nExpected:\t%3")
+             .arg(test).arg(foundFonts.join(", ")).arg(expectedFonts.join(", ")).toLatin1());
+
+    // Test supplementary plane code points.
+
+    // Jack of diamonds is U+1f0cb and is part of DejaVu Sans
+    test = "Jack:🃋";
+    const std::vector<FT_FaceUP> faces7 = KoFontRegistery::instance()->facesForCSSValues(fontFamilies, lengths, test);
+    foundFonts.clear();
+    expectedLengths.clear();
+    expectedLengths << 5 << 2;
+    expectedFonts.clear();
+    expectedFonts << "CSSTest Verify"
+                  << "DejaVu Sans";
+    QVERIFY2(lengths == expectedLengths, QString("KoFontRegistery returns the wrong lengths for string %1")
+             .arg(test).toLatin1());
+    for (const FT_FaceUP &face : faces7) {
+        //qDebug() << face->family_name;
+        foundFonts.append(face->family_name);
+    }
+    QVERIFY2(foundFonts == expectedFonts, QString("KoFontRegistery returns the wrong fonts for string %1"
+                                                 "\nResult:\t%2\nExpected:\t%3")
+             .arg(test).arg(foundFonts.join(", ")).arg(expectedFonts.join(", ")).toLatin1());
 }
 
 /**
  * @brief TestSvgText::testFontStyleSelection
  *
  * This tests whether the font registery is selecting things like bold or italics correctly.
+ * TODO: Test font-style selection (italics).
  */
 void TestSvgText::testFontStyleSelection()
 {
@@ -1618,12 +1795,12 @@ void TestSvgText::testFontStyleSelection()
 
     // First we verify that we can find the test fonts.
 
-    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    bool res = KoFontRegistery::instance()->addFontFileDirectoryToRegistery(fileName);
     QVERIFY2(res, QString("KoFontRegistery could not add the directory of test fonts %1").arg(fileName).toLatin1());
 
 
     QVector<int> lengths;
-    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({verifyCSSTest}, lengths);
+    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({verifyCSSTest}, lengths, test);
 
     res = false;
     for (const FT_FaceUP &face : faces) {
@@ -1633,11 +1810,12 @@ void TestSvgText::testFontStyleSelection()
             break;
         }
     }
-    QVERIFY2(res, QString("KoFontRegistery could not find the added test font %1").arg(verifyCSSTest).toLatin1());
+    QVERIFY2(res, QString("KoFontRegistery did not return the expected test font %1").arg(verifyCSSTest).toLatin1());
 
     // Now we go through a table of font-weights for the given test fonts.
     // This test is an adaptation of web-platform-test font-weight-bolder-001.xht
-    // Note: when comparing to https://github.com/web-platform-tests/wpt/blob/master/css/css-fonts/support/font-weight-bolder-001-ref.png
+    // Note: when comparing to
+    // https://github.com/web-platform-tests/wpt/blob/master/css/css-fonts/support/font-weight-bolder-001-ref.png
     // our implementation leaves things to be desired, but at the least it's using the correct fonts.
 
     QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-weight-bolder-001.svg"));
@@ -1677,7 +1855,9 @@ void TestSvgText::testFontSizeConfiguration()
     KoFontRegistery::instance()->configureFaces(faces, 15.0, 1.0, 72, 72, QMap<QString, qreal>());
 
     int size = faces.front()->size->metrics.height;
-    QVERIFY2(size == 960, QString("Configured value for Ahem at 15 pt is not returning as 960, instead %1").arg(QString::number(size)).toLatin1());
+    QVERIFY2(size == 960,
+             QString("Configured value for Ahem at 15 pt is not returning as 960, instead %1")
+             .arg(QString::number(size)).toLatin1());
 
 }
 

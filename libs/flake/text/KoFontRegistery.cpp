@@ -203,7 +203,10 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
         FcChar8 *fileValue = 0;
         FcCharSet *set = 0;
         QVector<int> familyValues(text.size());
+        QVector<int> fallbackMatchValues(text.size());
         familyValues.fill(-1);
+        fallbackMatchValues.fill(-1);
+
 
         // First, we're going to split up the text into graphemes. This is both
         // because the css spec requires it, but also because of why the css
@@ -222,9 +225,13 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
                 for (QString grapheme : graphemes) {
                     int familyIndex = -1;
                     if (familyValues.at(index) == -1) {
+                        int fallbackMatch = fallbackMatchValues.at(index);
                         for (uint unicode : grapheme.toUcs4()) {
                             if (FcCharSetHasChar(set, unicode)) {
                                 familyIndex = i;
+                                if (fallbackMatch < 0) {
+                                    fallbackMatch = i;
+                                }
                             } else {
                                 familyIndex = -1;
                                 break;
@@ -232,6 +239,7 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
                         }
                         for (int k = 0; k < grapheme.size(); k++) {
                             familyValues[index + k] = familyIndex;
+                            fallbackMatchValues[index + k] = fallbackMatch;
                         }
                     }
                     index += grapheme.size();
@@ -254,7 +262,11 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
             val = qMax(0, val);
             for (int i = 0; i < familyValues.size(); i++) {
                 if (familyValues.at(i) < 0) {
-                    familyValues[i] = val;
+                    if (fallbackMatchValues.at(i) < 0) {
+                        familyValues[i] = val;
+                    } else {
+                        familyValues[i] = fallbackMatchValues.at(i);
+                    }
                 } else {
                     val = familyValues.at(i);
                 }

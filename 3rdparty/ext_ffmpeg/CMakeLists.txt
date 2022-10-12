@@ -23,8 +23,8 @@ ExternalProject_Add(
 ExternalProject_Add(
     ext_ffmpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    GIT_REPOSITORY https://github.com/amyspark/gstreamer-meson-ports-ffmpeg.git
-    GIT_TAG amyspark/krita
+    GIT_REPOSITORY https://gitlab.freedesktop.org/gstreamer/meson-ports/ffmpeg.git
+    GIT_TAG meson-4.4.3
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}
         PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
@@ -35,7 +35,6 @@ ExternalProject_Add(
             -Ddefault_library=shared
             -Dcli=enabled
             -Dtests=disabled
-            -Dauto_features=disabled
             -Dffprobe=disabled
             -Dffplay=disabled
             -Davdevice=disabled
@@ -43,6 +42,7 @@ ExternalProject_Add(
             -Dswresample=disabled
             -Dswscale=disabled
             -Dpostproc=disabled
+            -Dlibvorbis=enabled
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env

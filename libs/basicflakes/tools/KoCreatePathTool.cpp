@@ -384,6 +384,9 @@ void KoCreatePathTool::endPath()
 {
     Q_D(KoCreatePathTool);
 
+    if (!d->shape) {
+        return;
+    }
     d->addPathShape();
     repaintDecorations();
     endShape();
@@ -393,12 +396,13 @@ void KoCreatePathTool::endPathWithoutLastPoint()
 {
     Q_D(KoCreatePathTool);
 
-    if (d->shape) {
-        delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
-        d->addPathShape();
-
-        repaintDecorations();
+    if (!d->shape) {
+        return;
     }
+    delete d->shape->removePoint(d->shape->pathPointIndex(d->activePoint));
+    d->addPathShape();
+
+    repaintDecorations();
     endShape();
 }
 
@@ -406,10 +410,11 @@ void KoCreatePathTool::cancelPath()
 {
     Q_D(KoCreatePathTool);
 
-    if (d->shape) {
-        d->firstPoint = 0;
-        d->activePoint = 0;
+    if (!d->shape) {
+        return;
     }
+    d->firstPoint = 0;
+    d->activePoint = 0;
     d->cleanUp();
     repaintDecorations();
     endShape();

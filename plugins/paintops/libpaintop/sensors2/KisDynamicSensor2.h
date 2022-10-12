@@ -11,7 +11,7 @@
 #include <KoID.h>
 
 class KisPaintInformation;
-class KisSensorData;
+struct KisSensorData;
 
 class KisDynamicSensor2
 {

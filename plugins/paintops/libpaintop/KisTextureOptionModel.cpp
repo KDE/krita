@@ -5,6 +5,7 @@
  */
 #include "KisTextureOptionModel.h"
 
+#include <kis_assert.h>
 #include <KisZug.h>
 
 #include <KoResourceLoadResult.h>

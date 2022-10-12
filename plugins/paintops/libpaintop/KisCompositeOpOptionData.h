@@ -6,8 +6,11 @@
 #ifndef KISCOMPOSITEOPOPTIONDATA_H
 #define KISCOMPOSITEOPOPTIONDATA_H
 
+#include "kis_types.h"
 #include <boost/operators.hpp>
 #include <kritapaintop_export.h>
+
+class KisPropertiesConfiguration;
 
 class PAINTOP_EXPORT KisCompositeOpOptionData : boost::equality_comparable<KisCompositeOpOptionData>
 {

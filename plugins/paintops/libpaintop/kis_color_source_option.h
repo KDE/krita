@@ -10,6 +10,7 @@
 #include <kritapaintop_export.h>
 
 #include <QList>
+#include <QScopedPointer>
 
 class KisColorSource;
 class KoID;

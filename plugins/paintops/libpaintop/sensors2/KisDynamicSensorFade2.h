@@ -8,7 +8,7 @@
 
 #include "KisDynamicSensor2.h"
 
-class KisSensorWithLengthData;
+struct KisSensorWithLengthData;
 
 class KisDynamicSensorFade2 : public KisDynamicSensor2
 {

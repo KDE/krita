@@ -6,6 +6,7 @@
 #ifndef KISZUG_H
 #define KISZUG_H
 
+#include <QtGlobal>
 #include "KisMpl.h"
 #include <zug/transducer/map.hpp>
 #include <zug/reducing/last.hpp>

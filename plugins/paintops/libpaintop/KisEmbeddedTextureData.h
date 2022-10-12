@@ -6,9 +6,12 @@
 #ifndef KISEMBEDDEDTEXTUREDATA_H
 #define KISEMBEDDEDTEXTUREDATA_H
 
+#include "kis_types.h"
 #include <boost/operators.hpp>
 #include <kritapaintop_export.h>
 #include <KoPattern.h>
+
+class KisPropertiesConfiguration;
 
 
 class PAINTOP_EXPORT KisEmbeddedTextureData : boost::equality_comparable<KisEmbeddedTextureData>

@@ -6,6 +6,7 @@
 #ifndef KISAIRBRUSHOPTIONMODEL_H
 #define KISAIRBRUSHOPTIONMODEL_H
 
+#include <QObject>
 #include <lager/cursor.hpp>
 #include <lager/extra/qt.hpp>
 

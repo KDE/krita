@@ -5,6 +5,7 @@
  */
 #include "KisEmbeddedTextureData.h"
 
+#include <QFileInfo>
 #include <kis_properties_configuration.h>
 #include <KoResourceLoadResult.h>
 #include <KisResourcesInterface.h>

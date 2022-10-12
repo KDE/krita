@@ -13,6 +13,7 @@
 #include <kritaui_export.h>
 
 #include <QString>
+#include <QSignalMapper>
 
 struct KRITAUI_EXPORT KisOptionInfo
 {

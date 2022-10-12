@@ -6,8 +6,12 @@
 #ifndef KISAIRBRUSHOPTIONDATA_H
 #define KISAIRBRUSHOPTIONDATA_H
 
+#include <QtGlobal>
 #include <boost/operators.hpp>
 #include <kritapaintop_export.h>
+
+class KisPropertiesConfiguration;
+
 
 class PAINTOP_EXPORT KisAirbrushOptionData : boost::equality_comparable<KisAirbrushOptionData>
 {

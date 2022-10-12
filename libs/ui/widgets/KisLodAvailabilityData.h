@@ -6,8 +6,11 @@
 #ifndef KISLODAVAILABILITYDATA_H
 #define KISLODAVAILABILITYDATA_H
 
+#include <QtGlobal>
 #include <boost/operators.hpp>
 #include <kritaui_export.h>
+
+class KisPropertiesConfiguration;
 
 class KRITAUI_EXPORT KisLodAvailabilityData : boost::equality_comparable<KisLodAvailabilityData>
 {

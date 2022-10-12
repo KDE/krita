@@ -7,8 +7,11 @@
 #define KISCOLORSOURCEOPTIONDATA_H
 
 
+#include "kis_types.h"
 #include <boost/operators.hpp>
 #include <kritapaintop_export.h>
+
+class KisPropertiesConfiguration;
 
 class PAINTOP_EXPORT KisColorSourceOptionData : boost::equality_comparable<KisColorSourceOptionData>
 {

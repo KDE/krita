@@ -21,16 +21,37 @@ ExternalProject_Add(
 )
 
 ExternalProject_Add(
-  ext_ffmpeg
-  DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-  GIT_REPOSITORY https://anonscm.debian.org/git/pkg-multimedia/ffmpeg.git
-  GIT_TAG debian/master
-  CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg} --extra-ldflags="-L${PREFIX_ext_ffmpeg}/lib" --extra-cflags="-I${PREFIX_ext_ffmpeg}/include" --enable-shared --enable-avfilter --enable-gpl --disable-doc --enable-libvorbis
-  BUILD_ALWAYS TRUE
-  BUILD_IN_SOURCE 1
-  BUILD_COMMAND make clean
-  COMMAND make -j${SUBMAKE_JOBS}
-  INSTALL_COMMAND make install
+    ext_ffmpeg
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    GIT_REPOSITORY https://github.com/amyspark/gstreamer-meson-ports-ffmpeg.git
+    GIT_TAG amyspark/krita
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        PKG_CONFIG_ALLOW_SYSTEM_CFLAGS=1
+        ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
+            --prefix=${PREFIX_ext_ffmpeg}
+            --libdir=lib
+            -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
+            -Ddefault_library=shared
+            -Dcli=enabled
+            -Dtests=disabled
+            -Dauto_features=disabled
+            -Dffprobe=disabled
+            -Dffplay=disabled
+            -Davdevice=disabled
+            -Davresample=disabled
+            -Dswresample=disabled
+            -Dswscale=disabled
+            -Dpostproc=disabled
+            ${EXTRA_MESON_FLAGS}
 
-  DEPENDS ext_libvorbis
+    BUILD_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
+
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+
+  DEPENDS ext_libvorbis ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

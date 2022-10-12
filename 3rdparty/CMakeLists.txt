@@ -569,3 +569,5 @@ add_subdirectory(ext_fribidi)
 add_subdirectory(ext_raqm)
 add_subdirectory(ext_unibreak)
 add_subdirectory(ext_fontconfig)
+
+add_subdirectory(ext_ffmpeg)

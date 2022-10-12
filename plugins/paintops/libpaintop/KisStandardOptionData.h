@@ -131,6 +131,18 @@ public:
     {}
 };
 
+class KisLightnessStrengthOptionData : public KisCurveOptionData
+{
+public:
+    KisLightnessStrengthOptionData(const QString &prefix = QString())
+        : KisCurveOptionData(
+              KoID("LightnessStrength", i18n("Lightness Strength")))
+    {
+        this->prefix = prefix;
+    }
+};
+
+
 class KisCurveOptionWidget2;
 
 namespace KisPaintOpOptionUtils {

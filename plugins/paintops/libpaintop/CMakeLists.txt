@@ -50,7 +50,6 @@ set(kritalibpaintop_LIB_SRCS
     KisColorSourceOptionData.cpp
     KisColorSourceOptionModel.cpp
     KisColorSourceOptionWidget.cpp
-    KisLightnessStrengthOptionData.cpp
     KisLightnessStrengthOptionWidget.cpp
     KisTextureOptionData.cpp
     KisEmbeddedTextureData.cpp

@@ -7,7 +7,9 @@
 #define KISLIGHTNESSSTRENGTHOPTIONWIDGET_H
 
 #include <KisCurveOptionWidget2.h>
-#include <KisLightnessStrengthOptionData.h>
+
+class KisLightnessStrengthOptionData;
+
 
 class PAINTOP_EXPORT KisLightnessStrengthOptionWidget : public KisCurveOptionWidget2
 {

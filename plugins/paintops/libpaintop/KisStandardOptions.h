@@ -11,7 +11,6 @@
 
 #include <KisStandardOptionData.h>
 #include <KisSizeOptionData.h>
-#include <KisLightnessStrengthOptionData.h>
 
 template <typename Data>
 class KisStandardOption : public KisCurveOption2

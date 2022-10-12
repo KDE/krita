@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QVBoxLayout>
 #include <KisZug.h>
+#include <KisStandardOptionData.h>
+
 
 struct KisLightnessStrengthOptionWidget::Private
 {

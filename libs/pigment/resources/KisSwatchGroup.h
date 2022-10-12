@@ -50,9 +50,6 @@ public:
     void setName(const QString &name);
     QString name() const;
 
-    void setColumnCount(int columnCount);
-    int columnCount() const;
-
     void setRowCount(int newRowCount);
     int rowCount() const;
 
@@ -92,9 +89,10 @@ private:
     friend class AddSwatchCommand;
     friend class RemoveGroupCommand;
     friend class RemoveSwatchCommand;
-    friend class TestKisSwatchGroup;
     friend class AddGroupCommand;
     friend class ClearCommand;
+    friend class SetColumnCountCommand;
+    friend class TestKisSwatchGroup;
 
     // Hidden, you're supposed to go through KoColorSet or KisPaletteModel
     KisSwatchGroup();
@@ -131,6 +129,11 @@ private:
     QPair<int, int> addSwatch(const KisSwatch &e);
 
     void clear();
+
+
+    void setColumnCount(int columnCount);
+    int columnCount() const;
+
 
     struct Private;
     QScopedPointer<Private> d;

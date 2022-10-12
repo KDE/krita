@@ -4,6 +4,7 @@
 
 #include "TestKisSwatchGroup.h"
 #include <simpletest.h>
+#include <KoColorSet.h>
 
 void TestKisSwatchGroup::testAddingOneEntry()
 {
@@ -111,5 +112,61 @@ void TestKisSwatchGroup::testAddEntry()
     QCOMPARE(g2.columnCount(), 3);
     QCOMPARE(g2.colorCount(), 7);
 }
+
+void TestKisSwatchGroup::testName()
+{
+    KisSwatchGroup g2;
+    QCOMPARE(g2.name(), "");
+    g2.setName("test");
+    QCOMPARE(g2.name(), "test");
+}
+
+void TestKisSwatchGroup::testColorCount()
+{
+    KisSwatchGroup g2;
+    g2.addSwatch(KisSwatch(red(), "red"));
+    QCOMPARE(g2.colorCount(), 1);
+    g2.addSwatch(KisSwatch(blue(), "blue"));
+    QCOMPARE(g2.colorCount(), 2);
+    g2.removeSwatch(0, 0);
+    QCOMPARE(g2.colorCount(), 1);
+    g2.removeSwatch(1, 0);
+    QCOMPARE(g2.colorCount(), 0);
+}
+
+void TestKisSwatchGroup::testInfoList()
+{
+    KisSwatchGroup g2;
+    g2.addSwatch(KisSwatch(red(), "red"));
+    QCOMPARE(g2.infoList().size(), 1);
+    KisSwatchGroup::SwatchInfo info = g2.infoList().first();
+    QCOMPARE(info.column, 0);
+    QCOMPARE(info.row, 0);
+    QCOMPARE(info.group, KoColorSet::GLOBAL_GROUP_NAME);
+    QCOMPARE(info.swatch.color(), red());
+
+    g2.addSwatch(KisSwatch(blue(), "blue"));
+    QCOMPARE(g2.infoList().size(), 2);
+    info = g2.infoList().at(1);
+    QCOMPARE(info.column, 1);
+    QCOMPARE(info.row, 0);
+    QCOMPARE(info.group, KoColorSet::GLOBAL_GROUP_NAME);
+    QCOMPARE(info.swatch.color(), blue());
+}
+
+KoColor TestKisSwatchGroup::blue()
+{
+    QColor c(Qt::blue);
+    KoColor  kc(c, KoColorSpaceRegistry::instance()->rgb8());
+    return kc;
+}
+
+KoColor TestKisSwatchGroup::red()
+{
+    QColor c(Qt::red);
+    KoColor  kc(c, KoColorSpaceRegistry::instance()->rgb8());
+    return kc;
+}
+
 
 QTEST_GUILESS_MAIN(TestKisSwatchGroup)

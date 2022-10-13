@@ -779,7 +779,6 @@ protected Q_SLOTS:
      * @deprecated since 5.0 use QDialogButtonBox and connect to the clicked signal
      */
     virtual void slotButtonClicked(int button);
-    void adjustPosition();
 
 private:
 

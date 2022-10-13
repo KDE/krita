@@ -122,7 +122,7 @@ template <typename Derived, typename Base,
           typename = std::enable_if_t<
               std::is_base_of_v<Base, Derived>>>
 auto to_base2 = lager::lenses::getset(
-        [] (const Derived &value) { return static_cast<Base>(value); },
+        [] (const Derived &value) -> Base { return static_cast<const Base&>(value); },
         [] (Derived src, const Base &value) { static_cast<Base&>(src) = value; return src; }
     );
 
@@ -136,7 +136,7 @@ auto to_base2 = lager::lenses::getset(
  */
 template <typename Base>
 auto to_base = lager::lenses::getset(
-        [] (const auto &value) { return static_cast<Base>(value); },
+        [] (const auto &value) -> Base { return static_cast<const Base&>(value); },
         [] (auto src, const Base &value) { static_cast<Base&>(src) = value; return src; }
     );
 

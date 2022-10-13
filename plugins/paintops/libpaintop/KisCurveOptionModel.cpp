@@ -9,7 +9,7 @@
 #include <KisZug.h>
 
 auto activeCurveLens = lager::lenses::getset(
-    [](std::tuple<KisCurveOptionData, QString> data) -> QString {
+    [](const std::tuple<KisCurveOptionData, QString> &data) -> QString {
         QString activeCurve;
         const bool useSameCurve = std::get<0>(data).useSameCurve;
 
@@ -18,7 +18,7 @@ auto activeCurveLens = lager::lenses::getset(
         } else {
             const QString activeSensorId = std::get<1>(data);
             KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!activeSensorId.isEmpty(), activeCurve);
-            std::vector<KisSensorData*> srcSensors = std::get<0>(data).sensors();
+            std::vector<const KisSensorData*> srcSensors = std::get<0>(data).sensors();
             auto it =
                 std::find_if(srcSensors.begin(), srcSensors.end(),
                     [activeSensorId] (const KisSensorData *sensor) {

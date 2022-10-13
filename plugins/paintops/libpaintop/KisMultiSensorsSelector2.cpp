@@ -21,13 +21,13 @@ struct KisMultiSensorsSelector2::Private {
 };
 
 auto sensorsLens = lager::lenses::getset(
-    [](KisCurveOptionData data) -> KisMultiSensorsModel2::MultiSensorData {
-        std::vector<KisSensorData*> srcSensors = data.sensors();
+    [](const KisCurveOptionData &data) -> KisMultiSensorsModel2::MultiSensorData {
+        std::vector<const KisSensorData*> srcSensors = data.sensors();
 
         KisMultiSensorsModel2::MultiSensorData sensors;
         sensors.reserve(srcSensors.size());
 
-        Q_FOREACH(KisSensorData* srcSensor, srcSensors) {
+        Q_FOREACH(const KisSensorData* srcSensor, srcSensors) {
             sensors.emplace_back(srcSensor->id, srcSensor->isActive);
         }
         return sensors;

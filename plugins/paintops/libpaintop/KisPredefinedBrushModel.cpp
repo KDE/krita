@@ -8,7 +8,7 @@
 namespace {
 
 auto brushSizeLens = lager::lenses::getset(
-    [](std::tuple<QSize, qreal> x) -> qreal { return std::get<0>(x).width() * std::get<1>(x); },
+    [](const std::tuple<QSize, qreal> &x) -> qreal { return std::get<0>(x).width() * std::get<1>(x); },
     [](std::tuple<QSize, qreal> x, qreal brushSize) -> std::tuple<QSize, qreal> {
         return std::make_tuple(std::get<0>(x), brushSize / std::get<0>(x).width());
     });

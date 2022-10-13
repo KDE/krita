@@ -101,6 +101,11 @@ void TestSvgText::testTextProperties()
             KoSvgTextProperties::WritingModeId,
             KoSvgText::HorizontalTB);
 
+    // According to https://www.w3.org/TR/css-writing-modes-3/#glyph-orientation
+    // glyph-orientation is only to be converted to text orientation in the 0 and 90 cases.
+
+    //   "UAs must ignore and treat as invalid any other values for the glyph-orientation-vertical
+    //   property; and treat as invalid the glyph-orientation-horizontal property in its entirety."
     addProp(context,
             props,
             "glyph-orientation-vertical",
@@ -119,38 +124,41 @@ void TestSvgText::testTextProperties()
             "90",
             KoSvgTextProperties::TextOrientationId,
             KoSvgText::OrientationSideWays);
+    // This is confusing, but what now happens is that the tested value is always going to be 'sideways'
+    // because the value is ignored.
+    int newValueForGlyphOrientation = int(KoSvgText::OrientationSideWays);
     addProp(context,
             props,
             "glyph-orientation-vertical",
             "95",
             KoSvgTextProperties::TextOrientationId,
-            KoSvgText::OrientationSideWays);
+            newValueForGlyphOrientation);
     addProp(context,
             props,
             "glyph-orientation-vertical",
             "175",
             KoSvgTextProperties::TextOrientationId,
-            KoSvgText::OrientationMixed);
+            newValueForGlyphOrientation);
     addProp(context,
             props,
             "glyph-orientation-vertical",
             "280",
             KoSvgTextProperties::TextOrientationId,
-            KoSvgText::OrientationMixed);
+            newValueForGlyphOrientation);
     addProp(context,
             props,
             "glyph-orientation-vertical",
             "350",
             KoSvgTextProperties::TextOrientationId,
-            KoSvgText::OrientationMixed);
+            newValueForGlyphOrientation);
     addProp(context,
             props,
             "glyph-orientation-vertical",
             "105",
             KoSvgTextProperties::TextOrientationId,
-            KoSvgText::OrientationMixed);
+            newValueForGlyphOrientation);
 
-    addProp(context, props, "direction", "rtl", KoSvgTextProperties::WritingModeId, KoSvgText::DirectionRightToLeft);
+    addProp(context, props, "direction", "rtl", KoSvgTextProperties::DirectionId, KoSvgText::DirectionRightToLeft);
     addProp(context, props, "unicode-bidi", "embed", KoSvgTextProperties::UnicodeBidiId, KoSvgText::BidiEmbed);
     addProp(context, props, "unicode-bidi", "bidi-override", KoSvgTextProperties::UnicodeBidiId, KoSvgText::BidiOverride);
 

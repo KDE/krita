@@ -148,14 +148,17 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(WritingModeId, KoSvgText::parseWritingMode(value));
     } else if (command == "glyph-orientation-vertical") {
         KoSvgText::AutoValue autoValue = KoSvgText::parseAutoValueAngular(value, context);
-
-        if (!autoValue.isAuto) {
-            autoValue.customValue = roundToStraightAngle(autoValue.customValue);
+        // glyph-orientation-vertical should only be converted for the 'auto', '0' and '90' cases,
+        // and treated as invalid otherwise.
+        QStringList acceptedOrientations;
+        acceptedOrientations << "auto" << "0" << "0deg" << "90" << "90deg";
+        if (acceptedOrientations.contains(value.toLower())) {
+            if (!autoValue.isAuto) {
+                autoValue.customValue = kisRadiansToDegrees(roundToStraightAngle(autoValue.customValue));
+            }
+            KoSvgText::TextOrientation orientation = KoSvgText::parseTextOrientationFromGlyphOrientation(autoValue);
+            setProperty(TextOrientationId, orientation);
         }
-
-        setProperty(
-            TextOrientationId,
-            KoSvgText::parseTextOrientationFromGlyphOrientation(autoValue));
     } else if (command == "text-orientation") {
         setProperty(TextOrientationId, KoSvgText::parseTextOrientation(value));
     } else if (command == "direction") {

@@ -400,30 +400,21 @@ void TestSvgText::testParseTextStyles()
 
 void TestSvgText::testSimpleText()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-simple-text.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"7\" y=\"27\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
-            "        Hello, out there!"
-            "    </text>"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "</g>"
 
-            "</svg>";
-
-    QFont testFont("DejaVu Sans");
-    if (!QFontInfo(testFont).exactMatch()) {
-        QEXPECT_FAIL(0, "DejaVu Sans is *not* found! Text rendering might be broken!", Continue);
-    }
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.test_standard("text_simple", QSize(140, 40), 72.0);
 
     KoShape *shape = t.findShape("testRect");

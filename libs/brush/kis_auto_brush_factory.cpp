@@ -155,12 +155,12 @@ KoResourceLoadResult KisAutoBrushFactory::createBrush(const KisBrushModel::Commo
 
     } else  if (autoBrushData.generator.type == KisBrushModel::Soft) {
 
-        KisCubicCurve curve;
         QString curveString = autoBrushData.generator.curveString;
         if (curveString.isEmpty()) {
             curveString = "0,1;1,0";
         }
-        curve.fromString(curveString);
+
+        const KisCubicCurve curve(curveString);
 
         if (autoBrushData.generator.shape == KisBrushModel::Circle) {
             generator = new KisCurveCircleMaskGenerator(autoBrushData.generator.diameter,

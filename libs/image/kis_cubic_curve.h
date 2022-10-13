@@ -28,6 +28,7 @@ public:
     KisCubicCurve();
     KisCubicCurve(const QList<QPointF>& points);
     KisCubicCurve(const QVector<QPointF>& points);
+    KisCubicCurve(const QString &curveString);
     KisCubicCurve(const KisCubicCurve& curve);
     ~KisCubicCurve();
     KisCubicCurve& operator=(const KisCubicCurve& curve);
@@ -69,8 +70,7 @@ public:
     const QVector<qreal> floatTransfer(int size = 256) const;
 public:
     QString toString() const;
-    void fromString(const QString&);
-    static KisCubicCurve createFromString(const QString&curveString);
+    Q_DECL_DEPRECATED void fromString(const QString&);
 private:
     struct Data;
     struct Private;

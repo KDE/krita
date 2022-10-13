@@ -31,7 +31,7 @@ std::vector<std::unique_ptr<KisDynamicSensor2>> generateSensors(const KisCurveOp
 
     std::optional<KisCubicCurve> commonCurve;
     if (data.useSameCurve) {
-        commonCurve = KisCubicCurve::createFromString(data.commonCurve);
+        commonCurve = KisCubicCurve(data.commonCurve);
     }
 
     addSensor<KisDynamicSensorPressure2>(result, data.sensorPressure, commonCurve);

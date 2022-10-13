@@ -172,8 +172,7 @@ KisMaskGenerator* KisMaskGenerator::fromXML(const QDomElement& elt)
     }
 
     if (id == SoftId.id()) {
-        KisCubicCurve curve;
-        curve.fromString(elt.attribute("softness_curve","0,0;1,1"));
+        const KisCubicCurve curve(elt.attribute("softness_curve","0,0;1,1"));
 
         if (typeShape == "circle") {
             return new KisCurveCircleMaskGenerator(diameter, ratio, hfade, vfade, spikes, curve, antialiasEdges);

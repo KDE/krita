@@ -14,7 +14,7 @@ KisDynamicSensor2::KisDynamicSensor2(const KoID &id,
     : m_id(id),
       m_curve(curveOverride ?
                   *curveOverride :
-                  KisCubicCurve::createFromString(data.curve))
+                  KisCubicCurve(data.curve))
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(id == data.id);
 

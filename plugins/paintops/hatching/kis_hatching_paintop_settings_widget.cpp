@@ -95,9 +95,7 @@ KisHatchingPaintOpSettingsWidget:: KisHatchingPaintOpSettingsWidget(QWidget* par
     //Write them into the intermediary config file
     reconfigurationCourier->setProperty("brush_definition", xMLAnalyzer.toString());
 
-    KisCubicCurve CurveSize;
-
-    CurveSize.fromString("0,1;1,0.1;");
+    KisCubicCurve CurveSize("0,1;1,0.1;");
     //dbgKrita << "\n\n\n" << CurveSize.toString() << "\n\n\n";
 
     QVariant QVCurveSize = QVariant::fromValue(CurveSize);

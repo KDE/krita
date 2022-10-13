@@ -307,7 +307,8 @@ struct Q_DECL_HIDDEN KisCubicCurve::Private {
     QSharedDataPointer<Data> data;
 };
 
-KisCubicCurve::KisCubicCurve() : d(new Private)
+KisCubicCurve::KisCubicCurve()
+    : d(new Private)
 {
     d->data = new Data;
     QPointF p;
@@ -327,6 +328,27 @@ KisCubicCurve::KisCubicCurve(const QList<QPointF>& points) : d(new Private)
 KisCubicCurve::KisCubicCurve(const KisCubicCurve& curve)
     : d(new Private(*curve.d))
 {
+}
+
+KisCubicCurve::KisCubicCurve(const QString &curveString)
+    : d(new Private)
+{
+    d->data = new Data;
+
+    const QStringList data = curveString.split(';');
+
+    QList<QPointF> points;
+    Q_FOREACH (const QString & pair, data) {
+        if (pair.indexOf(',') > -1) {
+            QPointF p;
+            p.rx() = KisDomUtils::toDouble(pair.section(',', 0, 0));
+            p.ry() = KisDomUtils::toDouble(pair.section(',', 1, 1));
+            points.append(p);
+        }
+    }
+
+    d->data->points = points;
+    setPoints(points);
 }
 
 KisCubicCurve::~KisCubicCurve()
@@ -479,26 +501,7 @@ QString KisCubicCurve::toString() const
 
 void KisCubicCurve::fromString(const QString& string)
 {
-    QStringList data = string.split(';');
-
-    QList<QPointF> points;
-
-    Q_FOREACH (const QString & pair, data) {
-        if (pair.indexOf(',') > -1) {
-            QPointF p;
-            p.rx() = KisDomUtils::toDouble(pair.section(',', 0, 0));
-            p.ry() = KisDomUtils::toDouble(pair.section(',', 1, 1));
-            points.append(p);
-        }
-    }
-    setPoints(points);
-}
-
-KisCubicCurve KisCubicCurve::createFromString(const QString& curveString)
-{
-    KisCubicCurve curve;
-    curve.fromString(curveString);
-    return curve;
+    *this = KisCubicCurve(string);
 }
 
 const QVector<quint16> KisCubicCurve::uint16Transfer(int size) const

@@ -233,9 +233,7 @@ KisCubicCurve KisPropertiesConfiguration::getCubicCurve(const QString & name, co
         if (v.type() == QVariant::UserType && v.userType() == qMetaTypeId<KisCubicCurve>()) {
             return v.value<KisCubicCurve>();
         } else {
-            KisCubicCurve c;
-            c.fromString(v.toString());
-            return c;
+            return KisCubicCurve(v.toString());
         }
     } else
         return curve;

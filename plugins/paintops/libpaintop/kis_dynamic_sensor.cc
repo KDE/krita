@@ -355,7 +355,7 @@ void KisDynamicSensor::fromXML(const QDomElement& e)
     QDomElement curve_elt = e.firstChildElement("curve");
     if (!curve_elt.isNull()) {
         m_customCurve = true;
-        m_curve.fromString(curve_elt.text());
+        m_curve = KisCubicCurve(curve_elt.text());
     }
 }
 

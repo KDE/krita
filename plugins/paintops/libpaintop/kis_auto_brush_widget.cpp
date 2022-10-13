@@ -238,7 +238,7 @@ void KisAutoBrushWidget::slotCurvePropertyChanged(const QString &value)
     KisCubicCurve curve;
 
     if (!value.isEmpty()) {
-        curve.fromString(value);
+        curve = KisCubicCurve(value);
     } else {
         curve.setPoint(0, QPointF(0.0, 1.0));
         curve.setPoint(1, QPointF(1.0, 0.0));

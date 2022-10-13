@@ -460,26 +460,21 @@ inline KoSvgTextChunkShape* toChunkShape(KoShape *shape) {
 
 void TestSvgText::testComplexText()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-complex-text.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"7\" y=\"27\" dx=\"0,1,2,3,4,5,6,7,8\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
-            "        Hello, <tspan fill=\"red\" x=\"20\" y=\"46\" text-anchor=\"start\">ou"
-            "t</tspan> there <![CDATA[cool cdata --> nice work]]>"
-            "    </text>"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "</g>"
 
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.test_standard("text_complex", QSize(370, 56), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -497,6 +492,7 @@ void TestSvgText::testComplexText()
 
         QCOMPARE(chunk->shapeCount(), 0);
         QCOMPARE(chunk->layoutInterface()->isTextNode(), true);
+
 
         QCOMPARE(chunk->layoutInterface()->numChars(), 7);
         QCOMPARE(chunk->layoutInterface()->nodeText(), QString("Hello, "));
@@ -517,10 +513,10 @@ void TestSvgText::testComplexText()
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
             chunk->layoutInterface()->collectSubChunks();
 
-        QCOMPARE(subChunks.size(), 7);
-        QCOMPARE(subChunks[0].text.size(), 1);
+        QCOMPARE(subChunks.size(), 1); // used to be 7, but we got rid of aggresive subchunking.
+        QCOMPARE(subChunks[0].text.size(), 7);
         QCOMPARE(*subChunks[0].transformation.at(0).xPos, 7.0);
-        QVERIFY(!subChunks[0].transformation.at(0).xPos);
+        QVERIFY(subChunks[0].transformation.at(0).xPos); //if there's a value it's always set.
     }
 
     {   // chunk 1: "out"
@@ -545,9 +541,8 @@ void TestSvgText::testComplexText()
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
             chunk->layoutInterface()->collectSubChunks();
 
-        QCOMPARE(subChunks.size(), 2);
-        QCOMPARE(subChunks[0].text.size(), 1);
-        QCOMPARE(subChunks[1].text.size(), 2);
+        QCOMPARE(subChunks.size(), 1);
+        QCOMPARE(subChunks[0].text.size(), 3);
     }
 
     {   // chunk 2: " there "
@@ -591,34 +586,21 @@ void TestSvgText::testComplexText()
 
 void TestSvgText::testHindiText()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-hindi-text.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/FreeSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"4\" y=\"24\""
-            "        font-family=\"FreeSans\" font-size=\"15\" fill=\"blue\" >"
-            "मौखिक रूप से हिंदी के काफी सामान"
-            "    </text>"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("FreeSans").toLatin1());
 
-            "</g>"
 
-            "</svg>";
-
-    SvgRenderTester t (data);
-
-    QFont testFont("FreeSans");
-    if (!QFontInfo(testFont).exactMatch()) {
-#ifdef USE_ROUND_TRIP
-            return;
-#else
-            QEXPECT_FAIL(0, "FreeSans found is *not* found! Hindi rendering might be broken!", Continue);
-#endif
-    }
+    SvgRenderTester t (data.data());
 
     t.setCheckQImagePremultiplied(true);
     t.setFuzzyThreshold(5);

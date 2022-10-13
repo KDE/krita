@@ -422,6 +422,13 @@ static const QStringList fontStretchNames = {"ultra-condensed",
                                              "expanded",
                                              "extra-expanded",
                                              "ultra-expanded"};
+static const QStringList fontSizeNames = { "xx-small",
+                                           "x-small",
+                                           "small",
+                                           "medium",
+                                           "large",
+                                           "x-large",
+                                           "xx-large" };
 /**
  * @brief parseCSSFontStretch
  * For CSS3, the font-stretches were only given as keywords. In Css 4 and above,

@@ -212,69 +212,6 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         setProperty(LetterSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
     } else if (command == "word-spacing") {
         setProperty(WordSpacingId, KoSvgText::fromAutoValue(KoSvgText::parseAutoValueXY(value, context, "normal")));
-    } else if (command == "font") {
-        QStringList commands{"font-style",
-                             "font-variant-caps",
-                             "font-weight",
-                             "font-stretch",
-                             "font-size",
-                             "font-family"};
-
-        for (QString co : commands) {
-            Q_FOREACH (const QString &param,
-                       value.split(' ', QString::SkipEmptyParts)) {
-                bool ok = false;
-                int parsed = KisDomUtils::toInt(value, &ok);
-                qreal pointSize =
-                    SvgUtil::parseUnitY(context.currentGC(), value);
-                QStringList fontFamilies;
-
-                if (KoSvgText::fontStretchNames.contains(param)
-                    && co == "font-stretch") {
-                    parseSvgTextAttribute(context, co, param);
-                    continue;
-                } else if ((param == "bold" || param == "bolder"
-                            || param == "lighter")
-                           && co == "font-weight") {
-                    parseSvgTextAttribute(context, co, param);
-                    continue;
-                } else if (param == "small-caps" && "font-variant-caps") {
-                    parseSvgTextAttribute(context, co, param);
-                    continue;
-                } else if ((param == "italic" || param == "oblique")
-                           && co == "font-style") {
-                    parseSvgTextAttribute(context, co, param);
-                    continue;
-                } else if (param == "normal") {
-                    // "normal" can apply to no less than 3 properties.
-                    parseSvgTextAttribute(context, co, param);
-                    continue;
-                } else if (ok) {
-                    setProperty(FontWeightId, parsed);
-                    continue;
-                } else if (!ok && pointSize > 0.0) {
-                    setProperty(FontSizeId, pointSize);
-                    continue;
-                } else if (param.contains("/")) {
-                    QStringList fontAndLine = param.split("/");
-                    pointSize = SvgUtil::parseUnitY(context.currentGC(),
-                                                    fontAndLine.first());
-                    setProperty(FontSizeId, pointSize);
-                    if (fontAndLine.size() > 1) {
-                        parseSvgTextAttribute(context,
-                                              "line-height",
-                                              fontAndLine.last());
-                    }
-                    continue;
-                } else {
-                    fontFamilies.append(param);
-                }
-                if (co == "font-family") {
-                    setProperty(FontFamiliesId, fontFamilies);
-                }
-            }
-        }
-
     } else if (command == "font-family") {
         QStringList familiesList = value.split(',', QString::SkipEmptyParts);
         for (QString &family : familiesList) {
@@ -437,8 +374,14 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                || command == "text-decoration-color"
                || command == "text-decoration-position") {
         using namespace KoSvgText;
+
         TextDecorations deco = propertyOrDefault(TextDecorationLineId)
                                    .value<KoSvgText::TextDecorations>();
+        if (command == "text-decoration" || "text-decoration-line") {
+            // reset deco when those values are being set..
+            deco = KoSvgText::TextDecorations();
+        }
+
         TextDecorationStyle style = TextDecorationStyle(
             propertyOrDefault(TextDecorationStyleId).toInt());
         TextDecorationUnderlinePosition underlinePosH =
@@ -451,7 +394,6 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
         ;
         QColor textDecorationColor =
             propertyOrDefault(TextDecorationStyleId).value<QColor>();
-        qDebug() << "default color" << textDecorationColor;
 
         Q_FOREACH (const QString &param, value.split(' ', QString::SkipEmptyParts)) {
             if (param == "line-through") {
@@ -810,15 +752,15 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
         TextDecorations deco =
             property(TextDecorationLineId).value<TextDecorations>();
 
-        if (deco & DecorationUnderline) {
+        if (deco.testFlag(DecorationUnderline)) {
             decoStrings.append("underline");
         }
 
-        if (deco & DecorationOverline) {
+        if (deco.testFlag(DecorationOverline)) {
             decoStrings.append("overline");
         }
 
-        if (deco & DecorationLineThrough) {
+        if (deco.testFlag(DecorationLineThrough)) {
             decoStrings.append("line-through");
         }
 

@@ -258,7 +258,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "font-size-adjust") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font") {
-        gc->textProperties.parseSvgTextAttribute(d->context, command, params);
+        qWarning() << "Krita does not support the 'font' shorthand";
     } else if (command == "text-decoration" || command == "text-decoration-line"
                || command == "text-decoration-style"
                || command == "text-decoration-color"

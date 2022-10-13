@@ -73,14 +73,15 @@ KisPaintingAssistantSP PerspectiveEllipseAssistant::clone(QMap<KisPaintingAssist
 
 QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& strokeBegin)
 {
-    return d->concentricEllipseInPolygon.project(pt);
+    //return d->concentricEllipseInPolygon.project(pt);
     Q_UNUSED(strokeBegin);
     Q_ASSERT(isAssistantComplete());
 
     if (d->isConcentric) {
-        //return d->simpleConcentricEllipse.project(pt);
-        return d->concentricEllipseInPolygon.project(pt);
+        return d->simpleConcentricEllipse.project(pt);
+        //return d->concentricEllipseInPolygon.project(pt);
     } else {
+        return d->ellipseInPolygon.projectModifiedEberly(pt);
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
         return d->simpleEllipse.project(pt);
     }
@@ -129,7 +130,7 @@ void PerspectiveEllipseAssistant::drawAssistant(QPainter& gc, const QRectF& upda
     if (m_followBrushPosition && m_adjustedPositionValid) {
         QPainterPath lineBetweenMouseAndProjection;
         lineBetweenMouseAndProjection.moveTo(mousePos);
-        lineBetweenMouseAndProjection.lineTo(mousePos + initialTransform.map(m_adjustedBrushPosition). );
+        lineBetweenMouseAndProjection.lineTo(mousePos + QPointF(50, 50)); //initialTransform.map(m_adjustedBrushPosition));
         //lineBetweenMouseAndProjection.lineTo(initialTransform.map(m_adjustedBrushPosition));
         drawPath(gc, lineBetweenMouseAndProjection);
         mousePos = initialTransform.map(m_adjustedBrushPosition);

@@ -22,6 +22,12 @@ private Q_SLOTS:
     void testMirroringPoints();
     void testProjection();
 
+
+    void testProjectionNewMethodTest2();
+
+    void testProjectionNewMethod();
+
+
 };
 
 #endif /* __TEST_ASSISTANTS_H */

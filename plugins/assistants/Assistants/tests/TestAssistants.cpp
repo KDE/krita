@@ -5,6 +5,7 @@
  */
 
 #include "TestAssistants.h"
+#include "TestAssistants.h"
 
 #include <testui.h>
 #include <testutil.h>
@@ -156,6 +157,152 @@ void TestAssistants::testProjection()
 
 
 
+
+}
+
+
+void TestAssistants::testProjectionNewMethodTest2()
+{
+
+    //QFETCH(EllipseInPolygon, ellipse);
+    //QFETCH(QPointF, point);
+
+    qreal eps = 0.00001;
+
+    auto doTest = [eps] (EllipseInPolygon ellipse, QPointF point) {
+
+        QPointF res = ellipse.projectModifiedEberly(point);
+
+        auto form = [] (QPointF p, EllipseInPolygon f) {
+            return f.finalFormula[0]*p.x()*p.x()
+                    + f.finalFormula[1]*p.x()*p.y()
+                    + f.finalFormula[2]*p.y()*p.y()
+                    + f.finalFormula[3]*p.x()
+                    + f.finalFormula[4]*p.y()
+                    + f.finalFormula[5];
+        };
+        qreal formValue = form(res, ellipse);
+        if (formValue >= eps) {
+            ENTER_FUNCTION() << ppVar(ellipse.finalFormula) << ppVar(point) << ppVar(res) << ppVar(formValue);
+        }
+        QVERIFY(formValue < eps);
+    };
+
+
+    EllipseInPolygon original;
+    QPolygonF poly;
+    poly = QPolygonF();
+    poly << QPointF(0, 0) << QPointF(1, 0) << QPointF(1, 1) << QPointF(0, 1);
+
+    QPointF point;
+
+    // test 1:
+    // just a normal circle 0-1
+    original.updateToPolygon(poly, QLineF(0.0, 0.0, 1.0, 0.0));
+    //original.updateToPolygon(QPolygonF(QRectF(0.0, 0.0, 1.0, 1.0)), QLineF(0.0, 0.0, 1.0, 0.0));
+    point = QPointF(3, 3);
+
+    QRandomGenerator gen;
+
+    for (int i = 0; i < 100; i++) {
+        QString testName = "circle" + QString::number(i);
+        doTest(original, QPointF(gen.bounded(10.0) - 5.0, gen.bounded(10.0) - 5.0));
+    }
+}
+
+void TestAssistants::testProjectionNewMethod()
+{
+    EllipseInPolygon concentric;
+    EllipseInPolygon original;
+    ENTER_FUNCTION() << "(1)";
+
+    QPointF point;
+
+
+    // test 1:
+    // just a normal circle 0-1
+
+    QPolygonF poly = QPolygonF(QRectF(0.0, 0.0, 2.0, 2.0));
+    ENTER_FUNCTION() << poly;
+    poly = QPolygonF();
+    poly << QPointF(0, 0) << QPointF(1, 0) << QPointF(1, 1) << QPointF(0, 1);
+
+    original.updateToPolygon(poly, QLineF(0.0, 0.0, 1.0, 0.0));
+
+    ENTER_FUNCTION() << "(2)";
+
+    point = QPointF(3, 3);
+
+    QPointF result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+
+    auto form = [] (QPointF p, EllipseInPolygon f) {
+        return f.finalFormula[0]*p.x()*p.x()
+                + f.finalFormula[1]*p.x()*p.y()
+                + f.finalFormula[2]*p.y()*p.y()
+                + f.finalFormula[3]*p.x()
+                + f.finalFormula[4]*p.y()
+                + f.finalFormula[5];
+    };
+
+
+    /*
+    QRandomGenerator gen;
+    qreal eps = 0.00001;
+    for (int i = 0; i < 100; i++) {
+        QPointF p(gen.bounded(5.0), gen.bounded(5.0));
+        QPointF res = original.projectModifiedEberly(p);
+        ENTER_FUNCTION() << "Result is on the ellipse: " << form(res, original);
+        QVERIFY(form(res, original) < eps);
+    }
+    */
+
+    point = QPointF(0.0226453,-2.99636);
+
+    ENTER_FUNCTION() << "************************ START **************************";
+
+    result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+
+    ENTER_FUNCTION() << "************************ START 2 **************************";
+
+    poly.clear();
+    poly << QPointF(704.529,342.744)  << QPointF(1049.58,529.788) << QPointF(683.107,1006.81)
+         << QPointF(349.884,528.397);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(749.893,461.21);
+
+    result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "************************ START 3 **************************";
+    // Test 3.
+    // ellipse: 2x^2 + xy + 1y^2 = 5
+    // so: 2, 1, 2, 0, 0, -5
+    original.finalFormula.clear();
+    original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
+
+    point = QPointF(5, 5);
+
+    result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "************************ START 4 ************************";
+    // Test 3.
+    // ellipse: 2x^2 + xy + 1y^2 = 5
+    // so: 2, 1, 2, 0, 0, -5
+    original.finalFormula.clear();
+    original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
+
+    point = QPointF(0, sqrt(5/2.0));
+
+    result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
 }
 

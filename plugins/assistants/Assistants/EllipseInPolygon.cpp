@@ -13,11 +13,14 @@
 #include <QLinearGradient>
 #include <QTransform>
 
+
+#include <Eigen/Eigenvalues>
+#include <functional>
+
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
 #include "kis_algebra_2d.h"
 #include <kis_dom_utils.h>
-#include <Eigen/Eigenvalues>
 #include "EllipseInPolygon.h"
 
 #include <math.h>
@@ -35,8 +38,8 @@ EllipseInPolygon::EllipseInPolygon()
 {
     finalFormula.clear();
     rerotatedFormula.clear();
-    finalFormula << 1 << 0 << 1 << 0 << 0 << 0;
-    rerotatedFormula << 1 << 0 << 1 << 0 << 0 << 0;
+    finalFormula << 1 << 0 << 1 << 0 << 0 << -1;
+    rerotatedFormula << 1 << 0 << 1 << 0 << 0 << -1;
 
     finalEllipseCenter.clear();
     finalEllipseCenter << 0 << 0;
@@ -50,13 +53,18 @@ bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon, QLineF horizon
     QTransform transform;
 
     m_valid = false; // let's make it false in case we return in the middle of the work
+
+    ENTER_FUNCTION() << ppVar(_polygon);
+
     polygon = _polygon; // the assistant needs to know the polygon even when it doesn't allow for a correct ellipse
 
 
     // this calculates the perspective transform that represents the current quad (polygon)
     // this is the transform that changes the original (0, 0, 1, 1) square to the quad
     // that means that our "original" ellipse is the circle in that square (with center in (0.5, 0.5), and radius 0.5)
+    ENTER_FUNCTION() << ppVar(polygon);
     if (!QTransform::squareToQuad(polygon, transform)) {
+        ENTER_FUNCTION() << "SQUARE TO QUAD FAILED";
         return false;
     }
 
@@ -72,6 +80,9 @@ bool EllipseInPolygon::updateToPolygon(QVector<QPointF> _polygon, QLineF horizon
     QPointF pt4 = originalTransform.map(QPointF(0.0, 0.5));
     // a point on the ellipse and on the `y = x` line
     QPointF ptR = originalTransform.map(QPointF(0.5 - 1/(2*sqrt(2)), 0.5 - 1/(2*sqrt(2))));
+
+
+    ENTER_FUNCTION() << ppVar(pt1) << pt2 << pt3 << pt4 << ptR;
 
 
     return updateToFivePoints({pt1, pt2, pt3, pt4, ptR}, horizonLine);
@@ -199,6 +210,703 @@ QPointF EllipseInPolygon::project(QPointF point)
     return originalTransform.map(onCircle + QPointF(0.5, 0.5));
 
     */
+
+}
+
+QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
+{
+    QPointF originalPoint = point;
+    // method taken from https://www.sciencedirect.com/science/article/pii/S0377042713001398
+    // "Algorithms for projecting points onto conics", authors: N.Chernova, S.Wijewickremab
+    //
+
+    // Stage 1. Canonize the formula.
+
+    // "canonnical formula" is Ax^2 + 2Bxy + Cy^2 + 2Dx + 2Ey + F = 0
+    // and A^2 + B^2 + C^2 + D^2 + E^2 + F^2 = 1
+    // so we gotta change it first
+
+    auto writeFormulaInWolframAlphaForm = [] (QVector<double> formula, bool trueForm = false) {
+        auto writeOutNumber = [] (double n, bool first = false) {
+            QString str;
+            if (n >= 0 && !first) {
+                str = QString("+ ") + QString::number(n);
+            } else {
+                str = (QString::number(n));
+            }
+            return str;
+        };
+
+        QString str = writeOutNumber(formula[0], true) + "x^2 "
+                + writeOutNumber(trueForm? formula[1] : 2*formula[1]) + "xy "
+                + writeOutNumber(formula[2]) + "y^2 "
+                + writeOutNumber(trueForm? formula[3] : 2*formula[3]) + "x "
+                + writeOutNumber(trueForm? formula[4] : 2*formula[4]) + "y "
+                + writeOutNumber(formula[5]) + " = 0";
+        return str;
+    };
+
+
+    // ***************
+
+    bool debug = true;
+    //debug = false;
+    //debug = true;
+
+    // *************
+
+
+
+    QVector<double> canonized;
+    canonized = QVector<double>::fromList(finalFormula.toList());
+
+    QVector<double> trueFormulaA = QVector<double>::fromList(finalFormula.toList());
+
+    //if (debug)
+
+    if (debug) ENTER_FUNCTION() << ppVar(finalFormula) << ppVar(finalFormula.toList());
+
+
+    // I guess it should also rescale the ellipse for the points to be within 0-1?... uhhhhh...
+    // TODO: make sure it's correct and finished
+    // ACTUALLY no, it's the 'point' that should be normalized here, not the ellipse!
+
+    double normalizeBy = qMax(point.x(), point.y());
+    if (debug) ENTER_FUNCTION() << ppVar(normalizeBy);
+    if (debug) ENTER_FUNCTION() << ppVar(canonized) << ppVar(writeFormulaInWolframAlphaForm(canonized, true)) << ppVar(writeFormulaInWolframAlphaForm(finalFormula, true));
+    // załóżmy x+y = 1 oraz nb = 5, bo mielismy x,y = 5,5 -> czyli robimy wszystko mniejsze
+    // x => nb*x
+    // (nb*x) + (nb*y) = 1
+    // 5x + 5y = 1
+
+    // ok so,
+    if (!qFuzzyCompare(normalizeBy, 0)) {
+        canonized[0] = normalizeBy*normalizeBy*canonized[0]; // x^2
+        canonized[1] = normalizeBy*normalizeBy*canonized[1]; // x*y
+        canonized[2] = normalizeBy*normalizeBy*canonized[2]; // y^2
+        canonized[3] = normalizeBy*canonized[3]; // x
+        canonized[4] = normalizeBy*canonized[4]; // y
+
+        point = point/normalizeBy;
+    }
+
+    QVector<double> formulaBNormalized = QVector<double>::fromList(canonized.toList());
+
+    if (debug) ENTER_FUNCTION() << "(*) after normalization:" << ppVar(point);
+
+    if (debug) ENTER_FUNCTION() << "after normalization:" << ppVar(canonized) << ppVar(point);
+    if (debug) ENTER_FUNCTION() << ppVar(writeFormulaInWolframAlphaForm(canonized, true));
+
+    // Ax^2 + 2Bxy + Cy^2 = 0;
+    // a' ^2 + 2b' xy + c' y^2 = 0;
+
+    // 5x^2 + 8xy + 3y^2 = 0
+    // 5x^2 + (2*4)xy + 3y^2 = 0
+    // 5^2 + 4^2 + 3^2 = 25 + 16 + 9 = k^2 = 50 = 25*2 => 5*sqrt(2) = k
+    // A = 5/(5sqrt(2)) = sqrt(2)/2
+    // B = (b/2)/(k)
+
+    auto sq = [] (qreal a) {return a*a;};
+
+    double canonizingNumber = sq(canonized[0]) + sq(canonized[1]/2) + sq(canonized[2]) + sq(canonized[3]/2) + sq(canonized[4]/2) + sq(canonized[5]);
+    canonizingNumber = sqrt(canonizingNumber);
+
+
+    if (debug) ENTER_FUNCTION() << ppVar(canonizingNumber);
+
+    for(int i = 0; i < 6; i++) {
+        if (i == 1 || i == 3 || i == 4) {
+            canonized[i] = canonized[i]/(2*canonizingNumber);
+        } else {
+            canonized[i] = canonized[i]/(canonizingNumber);
+        }
+    }
+
+
+    if (debug) ENTER_FUNCTION() << "after canonization:" << ppVar(canonized);
+    if (debug) ENTER_FUNCTION() << ppVar(writeFormulaInWolframAlphaForm(canonized)); // still a circle, good!
+
+
+    QVector<double> formulaCCanonized = QVector<double>::fromList(canonized.toList());
+
+    if (debug) ENTER_FUNCTION() << "(*) after canonization:" << ppVar(point);
+
+    qreal checkIfReallyCanonized = canonized[0]*canonized[0] + canonized[1]*canonized[1] + canonized[2]*canonized[2]
+            + canonized[3]*canonized[3] + canonized[4]*canonized[4] + canonized[5]*canonized[5];
+    if (debug) ENTER_FUNCTION() << ppVar(checkIfReallyCanonized);
+    // ok so canonized is the article's version, as in, the true equation is with 2*canonized[1] for example,
+    // and canonized = A, B, C, D...
+
+
+
+    // TODO
+
+    // now it should be canonized correctly
+
+    // Stage 2. Rotate the coordinates system to make B = 0.
+    // We need to decomposite the matrix:
+    // | A B |
+    // | B C | = Q*D*Q^T
+    // Q - orthogonal, D - diagonal
+    //
+
+    Eigen::Matrix<long double, 2, 2> M;
+    M << canonized[0], canonized[1],
+         canonized[1], canonized[2];
+    if (debug) ENTER_FUNCTION() << "(1)";
+
+    Eigen::EigenSolver<Eigen::Matrix<long double, 2, 2>> eigenSolver(M);
+    if (debug) ENTER_FUNCTION() << "(2)";
+
+    Eigen::Matrix<std::complex<long double>, 2, 2> QC = eigenSolver.eigenvectors();
+    Eigen::Matrix<std::complex<long double>, 2, 2> DC;
+    if (debug) ENTER_FUNCTION() << "(3)a";
+    DC(0, 0) = eigenSolver.eigenvalues()(0);
+    DC(1, 1) = eigenSolver.eigenvalues()(1);
+    if (debug) ENTER_FUNCTION() << "(3)";
+
+
+
+    //Eigen::Matrix<std::complex<double>, 2, 2> M2 = QC*DC*Eigen::Translation<std::complex<double>, 2>(QC);
+    //ENTER_FUNCTION() << "M = " << M(0, 0) << M(0, 1) << M(1, 0) << M(1, 1);
+    //ENTER_FUNCTION() << "M2 = " << M2(0, 0) << M2(0, 1) << M2(1, 0) << M2(1, 1);
+
+
+
+    //ENTER_FUNCTION() << ppVar(DC) << ppVar(QC) << ppVar(M);
+
+    Eigen::Matrix<long double, 2, 2> Q;
+    Eigen::Matrix<long double, 2, 2> Dm;
+
+    if (debug) ENTER_FUNCTION() << "(4)";
+
+    for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+            if (std::imag(DC(i, j)) == 0 && std::imag(QC(i, j)) == 0) {
+                Dm(i, j) = std::real(DC(i, j));
+                Q(i, j) = std::real(QC(i, j));
+            } else { // if any of that is complex, then something went wrong
+                return originalPoint;
+            }
+        }
+    }
+
+    if (debug) ENTER_FUNCTION() << "D = " << (double)Dm(0, 0) << (double)Dm(0, 1) << (double)Dm(1, 0) << (double)Dm(1, 1);
+    if (debug) ENTER_FUNCTION() << "Q = " << (double)Q(0, 0) << (double)Q(0, 1) << (double)Q(1, 0) << (double)Q(1, 1);
+
+
+    if (debug) ENTER_FUNCTION() << "(5)";
+
+
+
+    auto vectorMultipliedByMatrix = [debug] (QVector<double> vector2, Eigen::Matrix<long double, 2, 2> matrix) {
+        QVector<double> res;
+        res << vector2[0]*matrix(0, 0) + vector2[1]*matrix(0, 1);
+        res << vector2[0]*matrix(1, 0) + vector2[1]*matrix(1, 1);
+        return res;
+    };
+
+    auto pointMultipliedByMatrix = [debug, vectorMultipliedByMatrix] (QPointF point, Eigen::Matrix<long double, 2, 2> matrix) {
+        QVector<double> vec;
+        vec << point.x() << point.y();
+        vec = vectorMultipliedByMatrix(vec, matrix);
+        return QPointF(vec[0], vec[1]);
+    };
+
+
+    QVector<double> rotated;
+    rotated.fill(0, 6);
+    rotated[0] = Dm(0, 0); // A
+    rotated[1] = 0; // D(1, 0); // B
+    rotated[2] = Dm(1, 1); // C
+
+    QVector<double> DEvec;
+    DEvec << canonized[3] << canonized[4];
+    DEvec = vectorMultipliedByMatrix(DEvec, Q);
+
+    rotated[3] = DEvec[0]; // D
+    rotated[4] = DEvec[1]; // E
+    rotated[5] = canonized[5]; // F
+
+
+    auto calculateFormulaSpecial = [debug] (QPointF point, QVector<double> formula) {
+        return    formula[0]*point.x()*point.x() // a
+                + 2*formula[1]*point.x()*point.y() // b
+                + formula[2]*point.y()*point.y() // c
+                + 2*formula[3]*point.x() // d
+                + 2*formula[4]*point.y() // e
+                + formula[5]; // f
+    };
+
+
+    QVector<double> formulaDRotated = QVector<double>::fromList(rotated.toList());
+
+
+
+    if (debug) ENTER_FUNCTION() << "after rotation:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // still a circle, good
+
+    if (debug) ENTER_FUNCTION() << "(6a)";
+
+    // we gotta move the point as well:
+    //point = QPointF(point.x()*Q(0, 0), point.y()*Q(1, 1));
+    // point * Q?
+    point = QPointF(Q(0, 0)*point.x() + Q(1, 0)*point.y(), Q(0, 1)*point.x() + Q(1, 1)*point.y());
+
+
+
+
+    if (debug) ENTER_FUNCTION() << "####### If the formula is still correct, and we used a point on the ellipse, it should still be on the ellipse:"
+                                << writeFormulaInWolframAlphaForm(formulaDRotated) << ppVar(point) << ppVar(calculateFormulaSpecial(point, formulaDRotated));
+
+
+
+    if (debug) ENTER_FUNCTION() << "(*) after rotation:" << ppVar(point);
+
+    if (debug) ENTER_FUNCTION() << "(6)" << ppVar(point);
+
+    // Stage 3. Moving point to the origin (x -> x - u, y -> y - v)
+    qreal u = point.x();
+    qreal v = point.y();
+
+    if (debug) ENTER_FUNCTION() << "(*) after moving:" << ppVar(QPointF(0, 0));
+
+    auto setFromVector = [] (qreal& A, qreal& B, qreal& C, qreal& D, qreal& E, qreal& F, QVector<double> vector)
+    {
+        A = vector[0];
+        B = vector[1];
+        C = vector[2];
+        D = vector[3];
+        E = vector[4];
+        F = vector[5];
+    };
+
+    auto setToVector= [] (qreal& A, qreal& B, qreal& C, qreal& D, qreal& E, qreal& F, QVector<double>& vector)
+    {
+        vector[0] = A;
+        vector[1] = B;
+        vector[2] = C;
+        vector[3] = D;
+        vector[4] = E;
+        vector[5] = F;
+    };
+
+    qreal A, B, C, D, E, F;
+
+    /*
+
+    qreal A = rotated[0];
+    qreal B = rotated[1];
+    qreal C = rotated[2];
+    qreal D = rotated[3];
+    qreal E = rotated[4];
+    qreal F = rotated[5];
+    */
+
+    setFromVector(A, B, C, D, E, F, rotated);
+
+    // don't change the order, otherwise it gets messed up since F depends on D and E
+    F = F + A*u*u + 2*D*u + C*v*v + 2*E*v;// F -> F + Au^2 + 2*Du + Cv^2 + 2Ev
+    D = D + A*u; // D -> D + A*u
+    E = E + C*v; // E -> E + C*v
+
+    setToVector(A, B, C, D, E, F, rotated);
+
+    // this one is still correct:
+    // 0.697355x^2 + 0xy + 0.697355y^2 -0.232452x -0.232452y + 0.019371 = 0
+    // 0.7x^2 + 0xy + 0.7y^2 - 0.2x - 0.2y + 0.02 = 0
+    // so, we gotta move (-1, -1)
+    // u = 1, v = 1
+    // x -> x + 1
+    // A, B, C => Normalnie
+    // 0.7*(x + 1)^2 + 0xy + 0.7(y + 1)^2 - 0.2(x + 1) - 0.2(y + 1) + 0.02 = 0
+    // 0.7*(x^2 + 1 + 2x) + 0.7*(y^2 + 1 + 2y) - 0.2x - 0.2 - 0.2y - 0.2 + 0.02 = 0
+    // 0.7*x^2 + 0.7 + 1.4x + 0.7y^2 + 0.7 + 1.4y - 0.2x - 0.4 - 0.2y + 0.02 = 0
+    // 0.7*x^2 + 0.7*y^2 + 1.4x - 0.2x + 1.4y - 0.2y + (0.7 + 0.7 - 0.4 + 0.02) =
+    // 0.7x^2 + 0.7y^2 + 1.2x + 1.2y + (1.02) = 0
+    // result:
+    // F = 0.02 + 0.7*1*1 + 2*(-0.2)*1 + 0.7*1*1 + 2*(-0.2)*1 =
+    // F = 0.02 + 0.7 - 0.4 - 0.4 + 0.7 = 1.4 - 0.8 =
+    // 0.697355x^2 + 0xy + 0.697355y^2 + 1.16226x + 1.16226y + 3.7386 = 0
+
+
+
+
+
+
+    if (debug) ENTER_FUNCTION() << "after moving to origin:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // now it's a circle!!! :D great!
+
+
+    QVector<double> formulaEMovedToOrigin = QVector<double>::fromList(rotated.toList());
+
+    if (debug) ENTER_FUNCTION() << "(7)";
+
+    /* only relevant scientifically
+    // matrix D~
+    Eigen::Matrix3d Dd;
+    Dd <<   Q(0, 0), Q(0, 1), 0,
+            Q(1, 0), Q(1, 1), 0,
+            0, 0, 1;
+
+    Eigen::Matrix3d L;
+    L <<    1, 0, u,
+            0, 1, v,
+            0, 0, 1;
+
+    Eigen::Matrix3d M2;
+    */
+
+    // Stage 4. Adjusting the coefficients to our needs (C, D, E >= 0)
+
+    // ok, first we gotta find C being bigger than A (in absolute).
+    bool swapXandY = false;
+    if (qAbs(C) < qAbs(A)) {
+        swapXandY = true;
+        A = rotated[2];
+        B = rotated[1];
+        C = rotated[0];
+        D = rotated[4];
+        E = rotated[3];
+        F = rotated[5];
+        setToVector(A, B, C, D, E, F, rotated);
+    }
+
+    QVector<double> formulaFSwappedXY = QVector<double>::fromList(rotated.toList());
+
+    // ok, now |C| >= |A|
+
+    if (debug) ENTER_FUNCTION() << "after possibly swapping X and Y:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
+
+    if (C < 0) {
+        // negate all signs
+        for (int i = 0; i < 6; i++) {
+            rotated[i] = -rotated[i];
+        }
+        setFromVector(A, B, C, D, E, F, rotated); // to keep everything up-to-date
+    }
+
+    QVector<double> formulaGNegatedAllSigns = QVector<double>::fromList(rotated.toList());
+
+    if (debug) ENTER_FUNCTION() << "after possibly swapping signs in the formula:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
+
+    if (C == 0) {
+        return originalPoint;
+    }
+
+    bool negateX = false;
+    bool negateY = false;
+
+    if (D < 0) {
+        negateX = true;
+        D = -D;
+        B = -B;
+        setToVector(A, B, C, D, E, F, rotated);
+    }
+
+    QVector<double> formulaHNegatedX = QVector<double>::fromList(rotated.toList());
+
+    if (debug) ENTER_FUNCTION() << "after possibly swapping sign of X:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
+
+    if (E < 0) {
+        negateY = true;
+        E = -E;
+        B = -B;
+        setToVector(A, B, C, D, E, F, rotated);
+    }
+
+    QVector<double> formulaINegatedY = QVector<double>::fromList(rotated.toList());
+
+
+    if (debug) ENTER_FUNCTION() << "after possibly swapping sign of Y:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
+    if (debug) ENTER_FUNCTION() << ppVar(swapXandY) << ppVar(negateX) << ppVar(negateY);
+
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(C >= 0 && D >= 0 && E >= 0, originalPoint);
+
+    // Stage 5.
+    // Thanks to math magic, we've got:
+    // x = -Dt/(At + 1)
+    // y = -Et/(Ct + 1)
+    // hence, the function is:
+    // P(t) = -D^2 *t*((At + 2)/(At + 1)^2) - E^2 * t * (Ct+2)/((Ct+1)^2) + F
+
+    if (debug) ENTER_FUNCTION() << ppVar(A) << ppVar(B) << ppVar(C) << ppVar(D) << ppVar(E) << ppVar(F);
+    if (debug) ENTER_FUNCTION() << ppVar(D*D) << ppVar(E*E);
+
+    auto Pt = [A, B, C, D, E, F] (qreal t) {
+        return -D*D*t*((A*t + 2)/((A*t + 1)*(A*t + 1))) - E*E * t * (C*t+2)/((C*t+1)*(C*t+1)) + F;
+    };
+
+    auto Ptd = [A, B, C, D, E, F] (qreal t) {
+        return - (2*D*D)/(qPow(A*t*t + 1, 3)) - (2*E*E)/qPow(C*t*t + 1, 3);
+    };
+
+
+    if ((qFuzzyCompare(D, 0) || qFuzzyCompare(E, 0))) {
+        // special case
+        if (debug) ENTER_FUNCTION() << "Ellipse: and SPECIAL CASE";
+    }
+
+    qreal t0 = 0; // starting point for newton method
+
+    // will be useful for both cases
+    qreal t0d = F/(D*D - A*F + D*sqrt(D*D - A*F));
+    qreal t0dd = F/(E*E - C*F + E*sqrt(E*E - C*F));
+
+    if (A >= 0) { // ellipses and parabolas
+        // we got to find t0 where P(t0) >= 0
+        if (F < 0) {
+            t0 = qMax(t0d, t0dd);
+        } // else t0 = 0
+    } else { // hyperbolas
+
+        qreal U = sqrt(sqrt(-A*D*D));
+        qreal V = sqrt(sqrt(C*E*E));
+        qreal tstar = - (U - V)/(C*U - A*V); // inflection point of Pt
+
+        qreal Pstar = Pt(tstar);
+
+        if (Pstar > 0) { // case (a)
+            if (F <= 0) {
+                t0 = 0;
+            } else {
+                t0 = qMin(t0d, t0dd);
+            }
+        } else if (Pstar < 0) {
+            if (F >= 0) {
+                t0 = 0;
+            } else {
+                t0 = qMax(t0d, t0dd);
+            }
+        } else {
+            // we found it already!!!
+            t0 = tstar;
+        }
+    }
+
+    // now we gotta find t, then when we find it, calculate x and y, undo all transformations and return the point!
+
+    auto newtonMethod = [debug] (std::function<qreal(qreal)> f, std::function<qreal(qreal)> fd, qreal t0/*, qreal tmin, qreal tmax*/) {
+        qreal t = t0;
+        qreal val = f(t);
+        qreal errorEps = 0.00001;
+        qreal derivEps = 0.0001;
+        int maxSteps = 10;
+        int i = 0;
+        if (debug) ENTER_FUNCTION() << ppVar(t0) << ppVar(val);
+        qreal stabilizationValue = 0.6;
+
+
+        while(qAbs(val) > errorEps && qAbs(fd(t)) > derivEps && i < maxSteps) {
+            if (debug) ENTER_FUNCTION() << "before changing t: " << ppVar(t) << ppVar(f(t)) << ppVar(fd(t)) << ppVar(-f(t)/fd(t)) << "so new value will be: " << ppVar(t - f(t)/fd(t));
+            t = stabilizationValue*t + (1 - stabilizationValue)*(t - f(t)/fd(t));
+            val = f(t);
+            if (debug) ENTER_FUNCTION() << ppVar(i) << ppVar(t) << ppVar(val);
+            i++;
+        }
+        return t;
+    };
+
+    auto newtonUntilOvershoot = [debug] (std::function<qreal(qreal)> f, std::function<qreal(qreal)> fd, qreal t0, qreal& previousT, bool& overshoot) {
+
+        if (debug) ENTER_FUNCTION() << "+++ Newton until overshoot +++";
+        if (debug) ENTER_FUNCTION() << "+++ Start t0: +++" << ppVar(t0) << ppVar(previousT);
+        qreal t = t0;
+        qreal val = f(t);
+        qreal valSign = KisAlgebra2D::signPZ(val);
+
+        qreal errorEps = 0.00001;
+        qreal derivEps = 0.00001;
+        int maxSteps = 10;
+        int i = 0;
+        if (debug) ENTER_FUNCTION() << ppVar(t0) << ppVar(val);
+
+        previousT = t0;
+
+        while (qAbs(val) > errorEps /*&& qAbs(fd(t)) > derivEps */ && i < maxSteps) {
+            previousT = t;
+
+            if (debug) ENTER_FUNCTION() << "before changing t: " << ppVar(t) << ppVar(f(t)) << ppVar(fd(t)) << ppVar(-f(t)/fd(t)) << "so new value will be: " << ppVar(t - f(t)/fd(t));
+            t = t - f(t)/fd(t);
+            val = f(t);
+
+            if (debug) ENTER_FUNCTION() << ppVar(i) << ppVar(t) << ppVar(val) << qAbs(fd(t));
+
+            if (KisAlgebra2D::signPZ(val) != valSign) {
+                // overshoot!
+                if (debug) ENTER_FUNCTION() << "overshoot happened; ";
+                overshoot = true;
+                return t;
+            }
+
+
+            i++;
+        }
+        return t;
+
+
+    };
+
+
+    auto bisectionMethod = [debug] (std::function<qreal(qreal)> f, qreal ta, qreal tb) {
+
+
+        if (debug) ENTER_FUNCTION() << "+++ Bisection method +++";
+        if (debug) ENTER_FUNCTION() << "Data:" << ppVar(ta) << ppVar(QString::number(tb, 'g', 10));
+        qreal errorEps = 0.000000001;
+        qreal t;
+        qreal val;
+
+        qreal fa;
+        qreal fb;
+
+        if (tb - ta < errorEps) {
+            return (tb - ta)/2.0;
+        }
+
+        int maxSteps = 1000;
+        int expectedSteps = qCeil(log2((tb - ta)/errorEps)); // it's not a correct formula, since it only checks for difference between ta and tb, instead of f(t)
+        int i = 0;
+        if (debug) ENTER_FUNCTION() << "Expected steps = " << expectedSteps << ppVar(ta) << ppVar(tb);
+
+        do {
+            t = (ta + tb)/2;
+            val = f(t);
+            fa = f(ta);
+            fb = f(tb);
+
+            if (fa*val < 0) {
+                tb = t;
+            } else if (fb*val < 0) {
+                ta = t;
+            }
+            i++;
+
+        } while (qAbs(val) > errorEps && i < maxSteps);
+
+        if (debug) ENTER_FUNCTION() << "Actual steps = " << i;
+
+        return t;
+    };
+
+    // in our case, the expected results:
+    // t ≈ -11.574
+    // t ≈ 8.70602
+
+    if (debug) ENTER_FUNCTION() << "Check if my function P(t) is correct: " << ppVar(Pt(-11.574)) << ppVar(Pt(8.70602));
+    if (debug) ENTER_FUNCTION() << "In theory, the value should be between: " << ppVar(-1/C) << ppVar(1/A);
+
+
+    auto linearf = [] (qreal x) {
+        return 2*x + 1;
+    };
+
+
+    // we already know it does.
+    //if (debug) ENTER_FUNCTION() << "Check if bisection works for easy function: " << ppVar(bisectionMethod(linearf, -10, 20));
+
+
+    /*
+    qreal tresult = newtonMethod(Pt, Ptd, t0);
+
+    // debug:
+    //tresult = 3.9;
+    ENTER_FUNCTION() << ppVar(tresult);
+
+    qreal foundX = -D*tresult/qPow(A*tresult + 1, 1);
+    qreal foundY = -E*tresult/qPow(C*tresult + 1, 1);
+
+    // now let's see if it's on the ellipse at all...
+    qreal checkIfOnTheEllipse = A*foundX*foundX + 2*B*foundX*foundY + C*foundY*foundY + D*foundX + E*foundY + F;
+    ENTER_FUNCTION() << ppVar(checkIfOnTheEllipse);
+
+
+    qreal shouldBeX = -D*(8.70602)/(A*8.70602 + 1);
+    qreal shouldBeY = -E*(8.70602)/(C*8.70602 + 1);
+    ENTER_FUNCTION() << ppVar(foundX) << ppVar(foundY);
+    ENTER_FUNCTION() << ppVar(shouldBeX) << ppVar(shouldBeY);
+    ENTER_FUNCTION() << ppVar(kisDistance(QPointF(foundX, foundY), QPointF(shouldBeX, shouldBeY)));
+
+    */
+    qreal previousT;
+    bool overshoot;
+    qreal tresult = newtonUntilOvershoot(Pt, Ptd, t0, previousT, overshoot);
+    if (overshoot) {
+        if (debug) ENTER_FUNCTION() << "t: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
+        tresult = bisectionMethod(Pt, qMin(tresult, previousT), qMax(tresult, previousT));
+        if (debug) ENTER_FUNCTION() << "Now it's: " << ppVar(tresult);
+    }
+
+
+    qreal foundX = -D*tresult/qPow(A*tresult + 1, 1);
+    qreal foundY = -E*tresult/qPow(C*tresult + 1, 1);
+
+
+
+    qreal checkIfOnTheEllipse = A*foundX*foundX + 2*B*foundX*foundY + C*foundY*foundY + 2*D*foundX + 2*E*foundY + F;
+    if (debug) ENTER_FUNCTION() << ppVar(checkIfOnTheEllipse);
+
+    if (debug) ENTER_FUNCTION() << "(1) original" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
+                                << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), formulaINegatedY));
+
+
+    // ok, now undoing all the changes we did...
+    if (negateX) {
+        foundX = -foundX;
+    }
+    if (negateY) {
+        foundY = -foundY;
+    }
+
+    if (debug) ENTER_FUNCTION() << "(2) after negating X and Y" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
+                                   << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), formulaFSwappedXY));
+
+    QPointF result = QPointF(foundX, foundY);
+    if (swapXandY){
+        result = QPointF(foundY, foundX);
+    }
+
+    if (debug) ENTER_FUNCTION() << "(3) after swapping x and y" << ppVar(result) << ppVar(calculateFormula(result))
+                                   << ppVar(calculateFormulaSpecial(result, formulaGNegatedAllSigns))
+                                   << ppVar(calculateFormulaSpecial(result, formulaEMovedToOrigin));
+
+
+    // un-moving
+    result = result + QPointF(u, v);
+    if (debug) ENTER_FUNCTION() << "(4) after moving to the origin" << ppVar(result) << ppVar(calculateFormula(result))
+                                   << ppVar(calculateFormulaSpecial(result, formulaDRotated));
+
+    if (debug) ENTER_FUNCTION() << "before the mistake" << ppVar(result) << ppVar(writeFormulaInWolframAlphaForm(formulaDRotated)) << ppVar((double)Q(0, 0)) << ppVar((double)Q(1, 1));
+
+    // un-rotating (with Q)
+
+    // result = QPointF(result.x()/Q(0, 0), result.y()/Q(1, 1));
+    // Q must be transposed now
+    if (debug) ENTER_FUNCTION() << "Ok, now undoing the rotation for the point:";
+    result = QPointF(Q(0, 0)*result.x() + Q(0, 1)*result.y(), Q(1, 0)*result.x() + Q(1, 1)*result.y());
+
+
+    if (debug) ENTER_FUNCTION() << "(5) after un-rotating" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(canonized, result))
+                                   << ppVar(calculateFormulaSpecial(result, formulaCCanonized))
+                                   << ppVar(calculateFormula(formulaBNormalized, result));
+
+
+    if (debug) ENTER_FUNCTION() << "after the mistake" << ppVar(result) << ppVar(writeFormulaInWolframAlphaForm(formulaCCanonized));
+
+
+    // uncanonizing ????
+
+
+    // now un-normalizing
+    result = result*normalizeBy;
+    if (debug) ENTER_FUNCTION() << "(6) after un-normalizing" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(trueFormulaA, result));
+
+    qreal eps = 0.0001;
+    if (qAbs(calculateFormula(result)) >= eps) {
+        ENTER_FUNCTION() << ppVar(qAbs(calculateFormula(result))) << ppVar(qAbs(calculateFormula(result)) < eps);
+        ENTER_FUNCTION() << "The values were: " << ppVar(polygon) << ppVar(originalPoint) << "and unfortunate result:" << ppVar(result);
+    }
+    KIS_ASSERT_RECOVER_RETURN_VALUE(qAbs(calculateFormula(result)) < eps, result);
+
+    return result;
 
 }
 
@@ -480,6 +1188,21 @@ QPointF EllipseInPolygon::mirrorPoint(QPointF point, QLineF horizon)
     return all.map(p);
 }
 
+qreal EllipseInPolygon::calculateFormula(QPointF point)
+{
+    return calculateFormula(finalFormula, point);
+}
+
+qreal EllipseInPolygon::calculateFormula(QVector<double> formula, QPointF point)
+{
+    return    formula[0]*point.x()*point.x() // a
+            + formula[1]*point.x()*point.y() // b
+            + formula[2]*point.y()*point.y() // c
+            + formula[3]*point.x() // d
+            + formula[4]*point.y() // e
+            + formula[5]; // f
+}
+
 void EllipseInPolygon::setFormula(QVector<double> &formula, double a, double b, double c, double d, double e, double f)
 {
     if (formula.size() != 6) {
@@ -572,7 +1295,7 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
     if (!formulaRepresentsAnEllipse(a, b, c)) {
         ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
         ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
-        // return false; moved later
+        return false; //moved later
     }
 
     setFormula(finalFormula, a, b, c, d, e, f);
@@ -605,7 +1328,7 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
     qreal fprim = f;
 
     if (!formulaRepresentsAnEllipse(aprim, bprim, cprim)) {
-        //return false;
+        return false;
         // temporarily moved further away
     }
 

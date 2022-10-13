@@ -54,6 +54,8 @@ public:
 
     QPointF project(QPointF point);
 
+    QPointF projectModifiedEberly(QPointF point);
+
 
     ///
     /// \brief setSimpleEllipseVertices sets vertices of this ellipse to the "simple ellipse" class
@@ -137,6 +139,27 @@ protected:
     int horizonLineSign(QPointF point);
 
     QPointF mirrorPoint(QPointF point, QLineF horizon);
+
+    ///
+    /// \brief calculateFormula
+    /// the formula is: ax^2 + bxy + cy^2 + dx + ey + f = 0
+    /// this returns the value of the left side for the (x, y) of the point
+    /// \param point
+    /// \return value of the left side of the formula (that should be 0 for points on the ellipse)
+    ///
+    qreal calculateFormula(QPointF point);
+
+    ///
+    /// \brief calculateFormula
+    /// the formula is: ax^2 + bxy + cy^2 + dx + ey + f = 0
+    /// this returns the value of the left side for the (x, y) of the point
+    /// \param formula - the formula to use
+    /// \param point
+    /// \return value of the left side of the formula (that should be 0 for points on the ellipse)
+    ///
+    static qreal calculateFormula(QVector<double> formula, QPointF point);
+
+
 
 
     bool m_valid {false};

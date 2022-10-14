@@ -584,6 +584,13 @@ void TestSvgText::testComplexText()
     }
 }
 
+/**
+ * @brief TestSvgText::testHindiText
+ *
+ * Test complex text-shaping in Devaganari using FreeSans.
+ * Harfbuzz takes care of all of this, but it is a core feature
+ * we need to keep an eye on.
+ */
 void TestSvgText::testHindiText()
 {
     QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-hindi-text.svg"));
@@ -608,29 +615,28 @@ void TestSvgText::testHindiText()
     t.test_standard("text_hindi", QSize(200, 30), 72);
 }
 
+/**
+ * @brief TestSvgText::testTextBaselineShift
+ *
+ * This tests the baseline-shift.
+ * TODO: Test alignment and dominant baseline?
+ */
 void TestSvgText::testTextBaselineShift()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-baseline-shift.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"4\" y=\"29\" "
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "        <tspan>text<tspan baseline-shift=\"super\">super </tspan>normal<tspan baseline-shift=\"sub\">sub</tspan></tspan>"
-
-            "    </text>"
-
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
 
     t.setCheckQImagePremultiplied(true);
     t.test_standard("text_baseline_shift", QSize(180, 40), 72);
@@ -642,41 +648,31 @@ void TestSvgText::testTextBaselineShift()
     QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
 
 }
-
+/**
+ * @brief TestSvgText::testTextSpacing
+ *
+ * This tests the letter and word spacing CSS properties,
+ * as well as the SVG 1.1 kerning property. The latter
+ * is considered a on-off function for CSS font-kerning
+ * in SVG 2.0, so it will have different result in a SVG
+ * 1.1 renderer.
+ */
 void TestSvgText::testTextSpacing()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-spacing.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"5\" y=\"24\" "
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "        <tspan x=\"5\" dy=\"0.0em\">Lorem ipsum</tspan>"
-            "        <tspan x=\"5\" dy=\"1.5em\" letter-spacing=\"4.0\">Lorem ipsum (ls=4)</tspan>"
-            "        <tspan x=\"5\" dy=\"1.5em\" letter-spacing=\"-2.0\">Lorem ipsum (ls=-2)</tspan>"
-
-            "        <tspan x=\"5\" dy=\"2.0em\">Lorem ipsum</tspan>"
-            "        <tspan x=\"5\" dy=\"1.5em\" word-spacing=\"4.0\">Lorem ipsum (ws=4)</tspan>"
-            "        <tspan x=\"5\" dy=\"1.5em\" word-spacing=\"-2.0\">Lorem ipsum (ws=-2)</tspan>"
-
-            "        <tspan x=\"5\" dy=\"2.0em\">Lorem ipsum</tspan>"
-            "        <tspan x=\"5\" dy=\"1.5em\" kerning=\"0.0\">Lorem ipsum (k=0)</tspan>"
-            "        <tspan x=\"5\" dy=\"1.5em\" kerning=\"2.0\">Lorem ipsum (k=2)</tspan>"
-            "        <tspan x=\"5\" dy=\"1.5em\" kerning=\"2.0\" letter-spacing=\"2.0\">Lorem ipsum (k=2,ls=2)</tspan>"
-
-            "    </text>"
-
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_letter_word_spacing", QSize(340, 250), 72.0);
 
@@ -687,33 +683,27 @@ void TestSvgText::testTextSpacing()
     QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
 
 }
-
+/**
+ * @brief TestSvgText::testTextTabSpacing
+ *
+ *  Tests tabs being kept as well as tab-size.
+ */
 void TestSvgText::testTextTabSpacing()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-tab-spacing.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"120\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"5\" y=\"24\" "
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "        <tspan x=\"10\" dy=\"1.0em\">  Lorem</tspan>"
-            "        <tspan x=\"10\" dy=\"2.0em\">	ipsum</tspan>"
-            "        <tspan x=\"10\" dy=\"2.0em\">dolor  sit	amet,</tspan>"
-            "        <tspan x=\"10\" dy=\"2.0em\">		consectetur adipiscing elit.</tspan>"
-
-            "    </text>"
-
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_tab_spacing", QSize(400, 170), 72.0);
 
@@ -724,32 +714,27 @@ void TestSvgText::testTextTabSpacing()
     QVERIFY(dynamic_cast<KoSvgTextShape*>(baseShape));
 }
 
+/**
+ * @brief TestSvgText::testTextDecorations
+ *
+ * tests the text-decorations, but for some reason they don't paint so it's broken :(
+ */
 void TestSvgText::testTextDecorations()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-decorations.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"4\" y=\"24\" "
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "        <tspan x=\"20\" dy=\"0.0em\" text-decoration=\"underline\">Lorem ipsum</tspan>"
-            "        <tspan x=\"20\" dy=\"2.5em\" text-decoration=\"overline\">Lorem ipsum</tspan>"
-            "        <tspan x=\"20\" dy=\"2.0em\" text-decoration=\"line-through\">Lorem ipsum</tspan>"
-            "        <tspan x=\"20\" dy=\"2.0em\" text-decoration=\"underline\">Lorem <tspan fill=\"red\">ipsum</tspan> (WRONG!!!)</tspan>"
-
-            "    </text>"
-
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_decorations", QSize(290, 135), 72.0);
 
@@ -763,51 +748,21 @@ void TestSvgText::testTextDecorations()
 
 void TestSvgText::testRightToLeft()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-right-to-left.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"5\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"20\" y=\"34\" "
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" text-anchor=\"end\">"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "        <tspan x=\"250\" dy=\"0.0em\" text-anchor=\"middle\" direction=\"rtl\">aa bb cc dd</tspan>"
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\" direction=\"rtl\">حادثتا السفينتين «بسين Bassein» و«فايبر Viper»</tspan>"
-
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\">*</tspan>"
-
-            "        <tspan x=\"150\" dy=\"2.0em\" text-anchor=\"start\" direction=\"ltr\">aa bb حادثتا السفينتين بسين cc dd </tspan>"
-            "        <tspan x=\"350\" dy=\"2.0em\" text-anchor=\"start\" direction=\"rtl\">aa bb حادثتا السفينتين بسين cc dd </tspan>"
-
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\">*</tspan>"
-
-            "        <tspan x=\"150\" dy=\"2.0em\" text-anchor=\"start\" direction=\"ltr\">aa bb <tspan text-decoration=\"underline\">حادثتا</tspan> السفينتين بسين cc dd </tspan>"
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\" direction=\"ltr\">aa bb <tspan text-decoration=\"underline\">حادثتا</tspan> السفينتين بسين cc dd </tspan>"
-            "        <tspan x=\"350\" dy=\"2.0em\" text-anchor=\"end\" direction=\"ltr\">aa bb <tspan text-decoration=\"underline\">حادثتا</tspan> السفينتين بسين cc dd </tspan>"
-
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\">*</tspan>"
-
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\" direction=\"ltr\">الناطقون: 295 مليون - 422 مليون</tspan>"
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\" direction=\"ltr\">Spoken: <tspan direction=\"rtl\" unicode-bidi=\"embed\">295 مليون - 422 مليون </tspan></tspan>"
-
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\">*</tspan>"
-
-            "        <tspan x=\"250\" dy=\"2.0em\" text-anchor=\"middle\" direction=\"ltr\">aa bb <tspan direction=\"rtl\" unicode-bidi=\"bidi-override\">c1 c2 c3 c4</tspan> dd ee</tspan>"
-
-
-
-            "    </text>"
-
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
-    t.test_standard("text_right_to_left", QSize(500,450), 72.0);
+    SvgRenderTester t (data.data());
+    t.test_standard("text_right_to_left", QSize(500,600), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
     QVERIFY(baseShape);

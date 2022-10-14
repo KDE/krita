@@ -516,6 +516,7 @@ void KoSvgTextShape::relayout() const
                 cr.direction = direction;
                 if (chunk.textInPath != textInPath && i == 0) {
                     cr.anchored_chunk = true;
+                    cr.textOnPath = true;
                     textInPath = chunk.textInPath;
                 }
                 if (lineBreaks[start + i] == LINEBREAK_MUSTBREAK) {
@@ -2678,11 +2679,13 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             }
         }
         qreal shift = 0;
-        int typo = visualToLogical.value(lowestVisualIndex);
+        int typo = result.at(start).textOnPath? visualToLogical.value(lowestVisualIndex): start;
         shift = isHorizontal ? result.at(typo).finalPosition.x()
                              : result.at(typo).finalPosition.y();
         bool rtl =
             result.at(start).direction == KoSvgText::DirectionRightToLeft;
+
+        qDebug() << "lowestVisualIndex" << result.at(start).textOnPath << typo << a << b << result.at(typo).finalPosition << result.at(typo).visualIndex;
 
         if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl)
             || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
@@ -2694,7 +2697,7 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             shift -= b;
 
         } else {
-            shift -= ((a + b) * 0.5);
+            shift = shift - (a + b) * 0.5;
         }
         QPointF shiftP = isHorizontal ? QPointF(shift, 0) : QPointF(0, shift);
 
@@ -2942,7 +2945,8 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
             .value<QColor>();
 
     if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
-        if (chunkShape->background() && !textDecorationColor.isValid()) {
+        if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
+
             chunkShape->background()->paint(
                 painter,
                 textDecorations.value(KoSvgText::DecorationUnderline));
@@ -3174,7 +3178,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
-        if (chunkShape->background() && !textDecorationColor.isValid()) {
+        if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
             chunkShape->background()->paint(
                 painter,
                 textDecorations.value(KoSvgText::DecorationLineThrough));

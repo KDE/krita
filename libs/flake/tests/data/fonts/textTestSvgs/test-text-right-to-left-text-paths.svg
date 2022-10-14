@@ -1,0 +1,47 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="500px" height="500px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <defs>
+    <path id="path0" d="M0 0C25 50 125 50 150 0" />
+</defs>
+
+<g id="test">
+
+    <rect id="boundingRect" x="5" y="5" width="490" height="490"
+        fill="none" stroke="red"/>
+
+    <text id="testRect" x="20" y="34" 
+        font-family="DejaVu Sans" font-size="15" fill="blue" text-anchor="end">
+
+        <tspan x="250" dy="2.0em" text-anchor="start" direction="ltr">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="ltr">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+        <tspan x="250" dy="2.0em" text-anchor="end" direction="ltr">aa bb <tspan text-decoration="underline">حادثتا</tspan> السفينتين بسين cc dd </tspan>
+
+        <tspan x="250" dy="2.0em" text-anchor="middle">*</tspan>
+        
+        <tspan x="250" dy="2.0em" text-anchor="start" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="middle" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+        <tspan x="250" dy="2.0em" text-anchor="end" direction="rtl">الناطقون: 295 مليون - 422 مليون</tspan>
+
+
+
+    </text>
+    
+    <text transform="translate(150, 410)" font-family="DejaVu Sans" font-size="15" fill="blue" direction="rtl" text-anchor="start">
+        <tspan text-anchor="end" >الناطقون: 295 مليون - 422 مليون</tspan></text>
+    <text transform="translate(150, 440)" font-family="DejaVu Sans" font-size="15" fill="blue" direction="rtl" text-anchor="middle">
+        <tspan text-anchor="end" >الناطقون: 295 مليون - 422 مليون</tspan></text>
+    <text transform="translate(150, 470)" font-family="DejaVu Sans" font-size="15" fill="blue" direction="rtl" text-anchor="end">
+        <tspan text-anchor="end" >الناطقون: 295 مليون - 422 مليون</tspan></text>
+    
+    <text transform="translate(90, 270)" fill="red" text-anchor="start" direction="rtl"><textPath href="#path0" startOffset="50%">الناطقون: 295 مليون - 422 مليون</textPath></text>
+    <text transform="translate(90, 300)" fill="green" text-anchor="middle" direction="rtl"><textPath href="#path0" startOffset="50%">الناطقون: 295 مليون - 422 مليون</textPath></text>
+    <text transform="translate(90, 330)" fill="blue" text-anchor="end" direction="rtl"><textPath href="#path0" startOffset="50%">الناطقون: 295 مليون - 422 مليون</textPath></text>
+    
+    <text transform="translate(300, 270)" fill="red" text-anchor="start" direction="ltr"><textPath href="#path0" startOffset="50%">Text on path</textPath></text>
+    <text transform="translate(300, 300)" fill="green" text-anchor="middle" direction="ltr"><textPath href="#path0" startOffset="50%">Text on path</textPath></text>
+    <text transform="translate(300, 330)" fill="blue" text-anchor="end" direction="ltr"><textPath href="#path0" startOffset="50%">Text on path</textPath></text>
+
+</g>
+
+</svg>

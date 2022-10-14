@@ -100,6 +100,7 @@ private Q_SLOTS:
     void getBackgroundImage();
     void clearBackgroundImage();
     void checkResourcePath();
+    void enableSubWindowOptions(int);
 
 public:
     QButtonGroup m_pasteFormatGroup;

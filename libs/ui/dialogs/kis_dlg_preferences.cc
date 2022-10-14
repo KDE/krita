@@ -274,6 +274,8 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     }
 
     m_cmbMDIType->setCurrentIndex(cfg.readEntry<int>("mdi_viewmode", (int)QMdiArea::TabbedView));
+    enableSubWindowOptions(m_cmbMDIType->currentIndex());
+    connect(m_cmbMDIType, SIGNAL(currentIndexChanged(int)), SLOT(enableSubWindowOptions(int)));
 
     m_backgroundimage->setText(cfg.getMDIBackgroundImage());
     connect(m_bnFileName, SIGNAL(clicked()), SLOT(getBackgroundImage()));
@@ -780,6 +782,12 @@ void GeneralTab::checkResourcePath()
         m_lblWritableWarning->setVisible(false);
     }
 }
+
+void GeneralTab::enableSubWindowOptions(int mdi_mode)
+{
+    group_subWinMode->setEnabled(mdi_mode == QMdiArea::SubWindowView);
+}
+
 
 #include "kactioncollection.h"
 #include "KisActionsSnapshot.h"

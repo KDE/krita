@@ -214,13 +214,14 @@ QPointF KisToolGradient::straightLine(QPointF point)
 
 void KisToolGradient::paintLine(QPainter& gc)
 {
-    if (canvas()) {
-        QPen old = gc.pen();
-        QPen pen(Qt::SolidLine);
+    QPointF viewStartPos = pixelToView(m_startPos);
+    QPointF viewStartEnd = pixelToView(m_endPos);
 
-        gc.setPen(pen);
-        gc.drawLine(m_startPos, m_endPos);
-        gc.setPen(old);
+    if (canvas()) {
+        QPainterPath path;
+        path.moveTo(viewStartPos);
+        path.lineTo(viewStartEnd);
+        paintToolOutline(&gc, path);
     }
 }
 

@@ -1,0 +1,20 @@
+<svg width="450px" height="40px"
+    xmlns="http://www.w3.org/2000/svg" version="1.1">
+
+<g id="test">
+
+    <rect id="boundingRect" x="4" y="5" width="440" height="30"
+        fill="none" stroke="red"/>
+
+    <text id="testRect" x="7" y="27"
+ 
+        font-family="DejaVu Sans" font-size="15" fill="blue" >
+        normal 
+        <tspan text-decoration="line-through">strikethrough</tspan>
+        <tspan text-decoration="overline">overline</tspan>
+        <tspan text-decoration="underline">underline</tspan>
+    </text>
+
+</g>
+
+</svg>

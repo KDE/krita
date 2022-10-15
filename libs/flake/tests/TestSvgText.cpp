@@ -1282,31 +1282,23 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
 
 void TestSvgText::testTextOutline()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-outline.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"7\" y=\"27\""
-            " "
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
-            "        normal "
-            "        <tspan text-decoration=\"line-through\">strikethrough</tspan>"
-            "        <tspan text-decoration=\"overline\">overline</tspan>"
-            "        <tspan text-decoration=\"underline\">underline</tspan>"
-            "    </text>"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "</g>"
-
-            "</svg>";
+    SvgRenderTester t (data.data());
 
     QRect renderRect(0, 0, 450, 40);
 
-    SvgRenderTester t (data);
     t.setFuzzyThreshold(5);
     t.test_standard("text_outline", renderRect.size(), 72.0);
 

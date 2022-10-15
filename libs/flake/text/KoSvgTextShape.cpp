@@ -171,6 +171,7 @@ public:
     void computeTextDecorations(const KoShape *rootShape,
                                 QVector<CharacterResult> result,
                                 QMap<int, int> logicalToVisual,
+                                qreal minimumDecorationThickness,
                                 KoPathShape *textPath,
                                 qreal textPathoffset,
                                 bool side,
@@ -387,6 +388,9 @@ void KoSvgTextShape::relayout() const
     qreal scaleToPixel = float(finalRes / 72.);
     QTransform dpiScale = QTransform::fromScale(scaleToPT, scaleToPT);
     ftTF *= dpiScale;
+    // Some fonts have a faulty underline thickness,
+    // so we limit the minimum to be a single pixel wide.
+    qreal minimumDecorationThickness = scaleToPT;
 
     // First, get text. We use the subChunks because that handles bidi for us.
     // SVG 1.1 suggests that each time the xy position of a piece of text
@@ -1020,6 +1024,7 @@ void KoSvgTextShape::relayout() const
         d->computeTextDecorations(this,
                                   result,
                                   logicalToVisual,
+                                  minimumDecorationThickness,
                                   nullptr,
                                   0.0,
                                   false,
@@ -1038,6 +1043,7 @@ void KoSvgTextShape::relayout() const
         d->computeTextDecorations(this,
                                   result,
                                   logicalToVisual,
+                                  minimumDecorationThickness,
                                   nullptr,
                                   0.0,
                                   false,
@@ -2326,6 +2332,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
     const KoShape *rootShape,
     QVector<CharacterResult> result,
     QMap<int, int> logicalToVisual,
+    qreal minimumDecorationThickness,
     KoPathShape *textPath,
     qreal textPathoffset,
     bool side,
@@ -2374,6 +2381,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
         computeTextDecorations(child,
                                result,
                                logicalToVisual,
+                               minimumDecorationThickness,
                                currentTextPath,
                                currentTextPathOffset,
                                textPathSide,
@@ -2411,7 +2419,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
 
         QPainterPathStroker stroker;
         stroker.setWidth(
-            qMax(0.1,
+            qMax(minimumDecorationThickness,
                  chunkShape->layoutInterface()->getTextDecorationWidth(
                      DecorationUnderline)));
         stroker.setCapStyle(Qt::FlatCap);
@@ -2544,7 +2552,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
                 }
             }
             if (style == Double) {
-                qreal linewidthOffset = stroker.width() * 1.5;
+                qreal linewidthOffset = qMax(stroker.width() * 1.5, minimumDecorationThickness*2);
                 if (isHorizontal) {
                     p.addPath(p.translated(0, linewidthOffset));
                     pathWidth = QPointF(0, -linewidthOffset);
@@ -2628,7 +2636,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
             QPainterPath decorationPath = decorationPaths.value(type);
             if (!decorationPath.isEmpty()) {
                 stroker.setWidth(
-                    qMax(0.1,
+                    qMax(minimumDecorationThickness,
                          chunkShape->layoutInterface()->getTextDecorationWidth(
                              type)));
                 decorationPath =

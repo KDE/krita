@@ -1208,22 +1208,17 @@ void TestSvgText::testConvertHtmlToSvg()
 
 void TestSvgText::testTextWithMultipleRelativeOffsets()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-multiple-relative-offsets.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
-            "    <text id=\"testRect\" x=\"10\" y=\"40\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" "
-            "        dy=\"0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0\">"
-            "        Lorem ipsum dolor sit amet"
-            "    </text>"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    
+    SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_relative_offsets", QSize(300, 80), 72.0);
 }
@@ -1231,27 +1226,27 @@ void TestSvgText::testTextWithMultipleRelativeOffsets()
 void TestSvgText::testTextWithMultipleAbsoluteOffsetsArabic()
 {
     /**
-     * According to the standard, each **absolute** offset defines a
-     * new text chunk, therefore, the arabic text must become
-     * ltr reordered
+     * According to the SVG 1.1 standard, each **absolute** offset
+     * defines a new text chunk, therefore, in SVG 1.1 the arabic text
+     * would become ltr reordered
+     * 
+     * SVG 2.0 gets rid of this, because an SVG text is treated as a
+     * single paragraph, and it's not expected that such a thing happens
+     * inside a single paragraph.
      */
 
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-multiple-absolute-offsets-arabic.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
-            "    <text id=\"testRect\" x=\"10\" y=\"40\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" "
-            "        y=\"40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 40 45 50 55 50 45 40 35 30 25 30 35 \">"
-            "        Lo rem اللغة العربية المعيارية الحديثة ip sum"
-            "    </text>"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
     t.test_standard("text_multiple_absolute_offsets_arabic", QSize(530, 70), 72.0);
 }
 
@@ -1261,30 +1256,28 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
      * According to the standard, **relative** offsets must not define a new
      * text chunk, therefore, the arabic text must be written in native rtl order,
      * even though the individual letters are split.
+     * 
+     * Mind, for SVG 2.0 this difference between absolute and relative
+     * has been removed.
      */
 
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-multiple-relative-offsets-arabic.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
-            "    <text id=\"testRect\" x=\"10\" y=\"40\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" "
-            "        dy=\"0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0\">"
-            "        Lo rem اللغة العربية المعيارية الحديثة ip sum"
-            "    </text>"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    
+    SvgRenderTester t (data.data());
 
     // we cannot expect more than one failure
-#ifndef USE_ROUND_TRIP
-    QEXPECT_FAIL("", "WARNING: in Krita relative offsets also define a new text chunk, that doesn't comply with SVG standard and must be fixed", Continue);
+/*#ifndef USE_ROUND_TRIP
+    QEXPECT_FAIL("", "WARNING: in Krita relative offsets also define a new text chunk, that doesn't comply with SVG standard and must be fixed", Continue);*/
     t.test_standard("text_multiple_relative_offsets_arabic", QSize(530, 70), 72.0);
-#endif
+//#endif
 }
 
 void TestSvgText::testTextOutline()

@@ -866,76 +866,81 @@ void TestSvgText::testQtDxDy()
     canvas.save("test_dxdy.png");
 }
 
-
+/**
+ * @brief testTextOutlineSolid()
+ * 
+ * Tests whether SVG strokes render correctly for SVG text.
+ */
 void TestSvgText::testTextOutlineSolid()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-solid-stroke.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
-            "        SA"
-            "    </text>"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.test_standard("text_outline_solid", QSize(30, 30), 72.0);
 }
 
+/**
+ * @brief testNbspHandling()
+ * 
+ * Tests whether no-break-spaces (nbsp) are left alone.
+ */
 void TestSvgText::testNbspHandling()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-no-break-space.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" stroke=\"red\" stroke-width=\"1\">"
-            "        S\u00A0A"
-            "    </text>"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.test_standard("text_nbsp", QSize(30, 30), 72.0);
 }
 
+/**
+ * @brief testMulticolorText()
+ * 
+ * Tests whether we can have a piece of text with multiple
+ * colors assigned to different parts of the text.
+ * 
+ * Note: We could make this test a bit more thorough by testing
+ * what happens when ligatures straddle a text. According to
+ * SVG, all graphemes made up from multiple code-points (ike ligatures)
+ * should have the color assigned to the first code-point.
+ */
 void TestSvgText::testMulticolorText()
 {
-    const QString data =
-            "<svg width=\"100px\" height=\"30px\""
-            "    xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">"
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-multicolor.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
 
-            "<g id=\"test\">"
+    QXmlInputSource data;
+    data.setData(file.readAll());
 
-            "    <rect id=\"boundingRect\" x=\"4\" y=\"5\" width=\"89\" height=\"19\""
-            "        fill=\"none\" stroke=\"red\"/>"
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
-            "    <text id=\"testRect\" x=\"2\" y=\"24\""
-            "        font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"blue\" >"
-            "        S<tspan fill=\"red\">A</tspan>"
-            "    </text>"
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
 
-            "</g>"
-
-            "</svg>";
-
-    SvgRenderTester t (data);
+    SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("text_multicolor", QSize(30, 30), 72.0);
 }

@@ -987,7 +987,7 @@ void TestSvgText::testConvertToStrippedSvg()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" stroke=\"#000000\" stroke-opacity=\"0\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text text-rendering=\"auto\" fill=\"#0000ff\" stroke-opacity=\"0\" stroke=\"#000000\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" style=\"font-family: DejaVu Sans;font-size: 15;\"><tspan x=\"2\" y=\"24\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 
     // test loading
 
@@ -1046,7 +1046,7 @@ void TestSvgText::testConvertToStrippedSvgNullOrigin()
     QVERIFY(converter.convertToSvg(&svgText, &stylesText));
 
     QCOMPARE(stylesText, QString("<defs/>"));
-    QCOMPARE(svgText, QString("<text fill=\"#0000ff\" stroke=\"#000000\" stroke-opacity=\"0\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" font-family=\"DejaVu Sans\" font-size=\"15\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
+    QCOMPARE(svgText, QString("<text text-rendering=\"auto\" fill=\"#0000ff\" stroke-opacity=\"0\" stroke=\"#000000\" stroke-width=\"0\" stroke-linecap=\"square\" stroke-linejoin=\"bevel\" style=\"font-family: DejaVu Sans;font-size: 15;\"><tspan x=\"0\" y=\"0\">S</tspan><tspan fill=\"#ff0000\">A</tspan><tspan>some stuff&lt;&gt;&lt;&gt;&lt;&lt;&lt;&gt;</tspan></text>"));
 }
 
 void TestSvgText::testConvertFromIncorrectStrippedSvg()

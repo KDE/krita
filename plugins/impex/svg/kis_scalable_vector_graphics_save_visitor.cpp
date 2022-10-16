@@ -19,6 +19,10 @@
 #include <KoXmlNS.h>
 #include <KoShapeLayer.h>
 #include <KoShapeGroup.h>
+#include <KoShapeLayer.h>
+#include <KoPathShape.h>
+#include <SvgShape.h>
+#include "KoXmlWriter.h"
 
 
 struct KisScalableVectorGraphicsSaveVisitor::Private {
@@ -132,19 +136,65 @@ bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
     QDomElement elt = d->layerStack.createElement("layer");
     saveLayerInfo(elt, layer);
     d->currentElement.insertBefore(elt, QDomNode());
+    d->saveContext->shapeWriter().startElement("g");
+
+    KoShapeLayer *kolayer = dynamic_cast<KoShapeLayer*>(layer);
+
+    d->saveContext->shapeWriter().addAttribute("id", d->saveContext->getID(kolayer));
+    d->saveContext->shapeWriter().addAttribute("krita:label", layer->name() );
+    QList<KoShape*> sortedShapes = kolayer->shapes();
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+
+    Q_FOREACH (KoShape * shape, sortedShapes) {
+        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
+        if (group)
+            qDebug() << "saving group";
+            //saveGroup(group);
+        else
+            saveShape(shape);
+    }
 
 
-    KisShapeLayerSP vector = dynamic_cast<KisShapeLayer*>(layer);
+    KisLayerSP layerSP = qobject_cast<KisLayer*>(layer);
 
 
 
     QList<KoShape*> toplevelShapes;
-    KoShapeLayer* shapelayer = layer;
-    toplevelShapes.append();
 
+    d->saveContext->shapeWriter().endElement();
 
     return true;
 }
+
+void KisScalableVectorGraphicsSaveVisitor::saveShape(KoShape *shape)
+{
+    KoPathShape * path = dynamic_cast<KoPathShape*>(shape);
+    if (path) {
+        savePath(path);
+    } else {
+        // generic saving of shape via a switch element
+        saveGeneric(shape);
+    }
+}
+
+void KisScalableVectorGraphicsSaveVisitor::savePath(KoPathShape *path)
+{
+    d->saveContext->shapeWriter().startElement("path");
+    d->saveContext->shapeWriter().addAttribute("id", d->saveContext->getID(path));
+
+    //SvgUtil::writeTransformAttributeLazy("transform", path->transformation(), context.shapeWriter());
+
+    //SvgStyleWriter::saveSvgStyle(path, context);
+
+    d->saveContext->shapeWriter().addAttribute("d", path->toString(d->saveContext->userSpaceTransform()));
+    d->saveContext->shapeWriter().addAttribute("sodipodi:nodetypes", path->nodeTypes());
+    d->saveContext->shapeWriter().endElement();
+}
+
+void KisScalableVectorGraphicsSaveVisitor::saveGeneric(KoShape *shape)
+{
+}
+
 
 void KisScalableVectorGraphicsSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
 {

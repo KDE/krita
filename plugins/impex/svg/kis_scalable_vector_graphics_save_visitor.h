@@ -8,6 +8,8 @@
 
 #include "kis_node_visitor.h"
 #include "kis_layer.h"
+#include "KoShape.h"
+#include "KoPathShape.h"
 
 class KisScalableVectorGraphicsSaveContext;
 
@@ -59,6 +61,12 @@ public:
 private:
     bool saveLayer(KisLayer *layer);
     void saveLayerInfo(QDomElement& elt, KisLayer* layer);
+    void saveShape(KoShape *shape);
+    void savePath(KoPathShape *path);
+    void saveGeneric(KoShape *shape);
+
+
+
     struct Private;
     Private* const d;
 };

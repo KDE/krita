@@ -44,7 +44,7 @@ inline int signedSqr(int x) {
 WGMyPaintShadeSelector::WGMyPaintShadeSelector(WGSelectorDisplayConfigSP displayConfig, QWidget *parent, UiMode mode)
     : WGSelectorWidgetBase(displayConfig, parent, mode)
 {
-
+    recalculateSizeHD();
 }
 
 WGMyPaintShadeSelector::~WGMyPaintShadeSelector()
@@ -157,10 +157,8 @@ void WGMyPaintShadeSelector::paintEvent(QPaintEvent *)
 
 void WGMyPaintShadeSelector::resizeEvent(QResizeEvent *event)
 {
-    Q_UNUSED(event);
-    m_widthHD = width()*devicePixelRatioF();
-    m_heightHD = height()*devicePixelRatioF();
-    m_sizeHD = qMin(m_widthHD, m_heightHD);
+    WGSelectorWidgetBase::resizeEvent(event);
+    recalculateSizeHD();
 }
 
 bool WGMyPaintShadeSelector::getChannelValues(QPoint pos, QVector4D &values, QVector4D &blendValues)
@@ -281,6 +279,13 @@ void WGMyPaintShadeSelector::pickColorAt(const QPointF &posF)
     m_allowUpdates = false;
     emit sigChannelValuesChanged(values);
     m_allowUpdates = true;
+}
+
+void WGMyPaintShadeSelector::recalculateSizeHD()
+{
+    m_widthHD = qMax(1, width()) * devicePixelRatioF();
+    m_heightHD = qMax(1, height()) *devicePixelRatioF();
+    m_sizeHD = qMin(m_widthHD, m_heightHD);
 }
 
 void WGMyPaintShadeSelector::slotSetChannelValues(const QVector4D &values)

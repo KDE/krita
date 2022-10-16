@@ -82,7 +82,7 @@ inline QSize NumericSetting<QSize>::boundFunc(const QSize &min, const QSize &val
 
 struct ShadeLine {
     ShadeLine() = default;
-    ShadeLine(QVector4D grad, QVector4D offs=QVector4D(), int patchC=-1)
+    explicit ShadeLine(QVector4D grad, QVector4D offs=QVector4D(), int patchC=-1)
         : gradient(grad), offset(offs), patchCount(patchC) {}
     QVector4D gradient;
     QVector4D offset;
@@ -93,7 +93,7 @@ class WGConfig
 {
 public:
 
-    WGConfig(bool readOnly = true);
+    explicit WGConfig(bool readOnly = true);
     ~WGConfig();
 
     template<class T>

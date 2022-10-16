@@ -52,6 +52,8 @@ protected:
     QVector4D calculateChannelValues(qreal sliderPos) const;
     int getPatch(const QPointF pos) const;
     QRectF patchRect(int index) const;
+    void recalculateParameters();
+    bool sizeRequirementsMet() const;
     QImage renderBackground();
     /*!
      * \brief strokeRect

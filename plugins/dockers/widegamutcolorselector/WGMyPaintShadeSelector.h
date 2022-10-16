@@ -33,6 +33,7 @@ protected:
 
     bool getChannelValues(QPoint pos, QVector4D &values, QVector4D &blendValues);
     void pickColorAt(const QPointF &posF);
+    void recalculateSizeHD();
 
 private Q_SLOTS:
     void slotSetChannelValues(const QVector4D &values);
@@ -41,7 +42,9 @@ private:
     KisVisualColorModelSP m_model;
     KisPaintDeviceSP m_realPixelCache;
     KisPaintDeviceSP m_realCircleBorder;
-    float m_colorH, m_colorS, m_colorV;
+    float m_colorH {0.0f};
+    float m_colorS {0.0f};
+    float m_colorV {0.0f};
     int m_sizeHD;
     int m_widthHD;
     int m_heightHD;

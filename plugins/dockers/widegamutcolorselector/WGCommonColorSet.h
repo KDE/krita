@@ -17,7 +17,7 @@ class WGCommonColorSet: public KisUniqueColorSet
 {
     Q_OBJECT
 public:
-    WGCommonColorSet(QObject *parent = 0);
+    explicit WGCommonColorSet(QObject *parent = 0);
     void setImage(KisImageSP image);
     void setAutoUpdate(bool enabled);
     void setColorCount(int count) { m_numColors = count; }

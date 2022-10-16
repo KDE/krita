@@ -10,7 +10,7 @@
  * NOTE: Implementation is taken from KisCommonColorsRecalculationRunner
  * from Advanced Color Selector Docker, originally written by Adam Celarek
  *
- * It is currently limited to sRGB and is this more of a placeholder
+ * It is currently limited to sRGB and is more of a placeholder
  */
 
 #include <QImage>
@@ -19,12 +19,14 @@
 #include "KoColor.h"
 #include "KoColorSpaceRegistry.h"
 
+namespace {
+
 enum ColorAxis {RedAxis=0, GreenAxis, BlueAxis};
 
 class Color
 {
 public:
-    Color(QRgb rgb) : r(qRed(rgb)), g(qGreen(rgb)), b(qBlue(rgb)) {}
+    explicit Color(QRgb rgb) : r(qRed(rgb)), g(qGreen(rgb)), b(qBlue(rgb)) {}
     unsigned char r;
     unsigned char g;
     unsigned char b;
@@ -40,7 +42,7 @@ class VBox
 {
     QList<Color> m_colors;
 public:
-    VBox(QList<QRgb> rgbList)
+    explicit VBox(const QList<QRgb> &rgbList)
     {
         QList<Color> colorList;
         for(int i=0; i<rgbList.size(); i++) {
@@ -49,7 +51,7 @@ public:
         m_colors = colorList;
     }
 
-    VBox(QList<Color> colorList) : m_colors(colorList) {}
+    explicit VBox(const QList<Color> &colorList) : m_colors(colorList) {}
 
     int population() const { return m_colors.size(); }
 
@@ -132,6 +134,8 @@ private:
         return (min+max)/2;
     }
 };
+
+} // anonymous namespace
 
 WGCommonColorsCalculationRunner::WGCommonColorsCalculationRunner(KisImageSP image, int numberOfColors, QSharedPointer<QVector<KoColor> > colorStore)
     : m_numColors(numberOfColors)

@@ -22,15 +22,16 @@ struct WGShadeSlider::Private
     QVector4D offset;
     QVector4D baseValues;
     qreal handleValue {0};
-    qreal leftStart;
-    qreal leftEnd;
-    qreal rightStart;
-    qreal rightEnd;
+    qreal leftStart {-1};
+    qreal leftEnd {0};
+    qreal rightStart {0};
+    qreal rightEnd {-1};
     KisVisualColorModelSP selectorModel;
     WGSelectorDisplayConfigSP displayConfig;
     int cursorWidth {11};
     int lineWidth {1};
     int numPatches {9};
+    bool widgetSizeOk {false};
     bool sliderMode {true};
     bool imageNeedsUpdate {true};
 };
@@ -41,6 +42,7 @@ WGShadeSlider::WGShadeSlider(WGSelectorDisplayConfigSP config, QWidget *parent, 
 {
     m_d->selectorModel = model;
     m_d->displayConfig = config;
+    recalculateParameters();
     connect(config.data(), &WGSelectorDisplayConfig::sigDisplayConfigurationChanged,
             this, &WGShadeSlider::slotDisplayConfigurationChanged);
 }
@@ -64,6 +66,7 @@ void WGShadeSlider::setDisplayMode(bool slider, int numPatches)
         if (!slider && numPatches > 2) {
             m_d->numPatches = numPatches;
         }
+        m_d->widgetSizeOk = sizeRequirementsMet();
         m_d->imageNeedsUpdate = true;
         resetHandle();
     }
@@ -158,16 +161,7 @@ void WGShadeSlider::paintEvent(QPaintEvent*)
 
 void WGShadeSlider::resizeEvent(QResizeEvent *)
 {
-    int center = (width() - 1) / 2;
-    int halfCursor = m_d->cursorWidth / 2;
-    m_d->lineWidth = qRound(devicePixelRatioF() - 0.1);
-    m_d->leftEnd = halfCursor;
-    m_d->leftStart = center - halfCursor;
-    //m_d->rightStart = m_d->leftStart + m_d->cursorWidth;
-    m_d->rightStart = center + halfCursor;
-    //m_d->rightEnd = 2 * center + m_d->cursorWidth - 3 * halfCursor;
-    m_d->rightEnd = 2 * center  - halfCursor;
-    m_d->imageNeedsUpdate = true;
+    recalculateParameters();
 }
 
 void WGShadeSlider::slotSetChannelValues(const QVector4D &values)
@@ -191,6 +185,10 @@ void WGShadeSlider::slotDisplayConfigurationChanged()
 
 bool WGShadeSlider::adjustHandleValue(const QPointF &widgetPos)
 {
+    if (!m_d->widgetSizeOk) {
+        return false;
+    }
+
     if (m_d->sliderMode) {
         qreal sliderPos = convertWidgetCoordinateToSliderValue(widgetPos);
         if (!qFuzzyIsNull(m_d->handleValue - sliderPos)) {
@@ -249,22 +247,22 @@ QVector4D WGShadeSlider::calculateChannelValues(qreal sliderPos) const
         delta = 2.0f * float(sliderPos)/(m_d->numPatches - 1.0f) - 1.0f;
     }
 
-    QVector4D channelValues = m_d->baseValues + m_d->offset + delta * m_d->range;
+    QVector4D channelVec = m_d->baseValues + m_d->offset + delta * m_d->range;
     // Hue wraps around
     if (m_d->selectorModel->isHSXModel()) {
-        channelValues[0] = (float)fmod(channelValues[0], 1.0);
-        if (channelValues[0] < 0) {
-            channelValues[0] += 1.f;
+        channelVec[0] = (float)fmod(channelVec[0], 1.0);
+        if (channelVec[0] < 0) {
+            channelVec[0] += 1.f;
         }
     }
     else {
-        channelValues[0] = qBound(0.f, channelValues[0], 1.f);
+        channelVec[0] = qBound(0.f, channelVec[0], 1.f);
     }
 
     for (int i = 1; i < 3; i++) {
-        channelValues[i] = qBound(0.f, channelValues[i], 1.f);
+        channelVec[i] = qBound(0.f, channelVec[i], 1.f);
     }
-    return channelValues;
+    return channelVec;
 }
 
 int WGShadeSlider::getPatch(const QPointF pos) const
@@ -285,9 +283,34 @@ QRectF WGShadeSlider::patchRect(int index) const
     return QRectF(topLeft, bottomRight);
 }
 
+void WGShadeSlider::recalculateParameters()
+{
+    int center = (width() - 1) / 2;
+    int halfCursor = m_d->cursorWidth / 2;
+
+    m_d->leftEnd = halfCursor;
+    m_d->leftStart = center - halfCursor;
+
+    m_d->rightStart = center + halfCursor;
+    m_d->rightEnd = 2 * center  - halfCursor;
+
+    m_d->lineWidth = qRound(devicePixelRatioF() - 0.1);
+    m_d->widgetSizeOk = sizeRequirementsMet();
+    m_d->imageNeedsUpdate = true;
+}
+
+bool WGShadeSlider::sizeRequirementsMet() const
+{
+    if (m_d->sliderMode) {
+        return m_d->leftStart - m_d->leftEnd > 0 &&  m_d->rightEnd - m_d->rightStart > 0;
+    } else {
+        return width() > m_d->numPatches;
+    }
+}
+
 QImage WGShadeSlider::renderBackground()
 {
-    if (! m_d->selectorModel || !m_d->selectorModel->colorSpace()) {
+    if (!m_d->widgetSizeOk || !m_d->selectorModel || !m_d->selectorModel->colorSpace()) {
         return QImage();
     }
 

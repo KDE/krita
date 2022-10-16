@@ -51,9 +51,9 @@ KisUniqueColorSet::~KisUniqueColorSet()
 
 void KisUniqueColorSet::addColor(const KoColor &color)
 {
-    auto entry = d->colorHash.find(color);
-    if (entry != d->colorHash.end()) {
-        auto historyEl = std::lower_bound(d->history.begin(), d->history.end(), *entry, &ColorEntry::less);
+    auto hashEntry = d->colorHash.find(color);
+    if (hashEntry != d->colorHash.end()) {
+        auto historyEl = std::lower_bound(d->history.begin(), d->history.end(), *hashEntry, &ColorEntry::less);
         if (historyEl != d->history.end()) {
             int oldPos = historyEl - d->history.begin();
             if (historyEl == d->history.begin()) {

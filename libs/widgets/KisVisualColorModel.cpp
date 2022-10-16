@@ -205,10 +205,10 @@ KoColor KisVisualColorModel::convertChannelValuesToKoColor(const QVector4D &valu
 {
     KoColor c(m_d->currentCS);
     QVector4D baseValues(values);
-    QVector <float> channelValues(c.colorSpace()->channelCount());
-    channelValues.fill(1.0);
+    QVector<float> channelVec(c.colorSpace()->channelCount());
+    channelVec.fill(1.0);
 
-    if (m_d->model != ColorModel::Channel && m_d->isRGBA == true) {
+    if (m_d->model != ColorModel::Channel && m_d->isRGBA) {
 
         if (m_d->model == ColorModel::HSV) {
             HSVToRGB(values.x()*360, values.y(), values.z(), &baseValues[0], &baseValues[1], &baseValues[2]);
@@ -235,14 +235,14 @@ KoColor KisVisualColorModel::convertChannelValuesToKoColor(const QVector4D &valu
             if (!m_d->isLinear) {
                 // Note: not all profiles define a TRC necessary for (de-)linearization,
                 // substituting with a linear profiles would be better
-                QVector<qreal> temp({baseValues[0], baseValues[1], baseValues[2]});
+                QVector<qreal> tempVec({baseValues[0], baseValues[1], baseValues[2]});
                 if (m_d->exposureSupported) {
-                    m_d->currentCS->profile()->delinearizeFloatValue(temp);
+                    m_d->currentCS->profile()->delinearizeFloatValue(tempVec);
                 }
                 else {
-                    m_d->currentCS->profile()->delinearizeFloatValueFast(temp);
+                    m_d->currentCS->profile()->delinearizeFloatValueFast(tempVec);
                 }
-                baseValues = QVector4D(temp[0], temp[1], temp[2], 0);
+                baseValues = QVector4D(tempVec[0], tempVec[1], tempVec[2], 0);
             }
         }
         if (m_d->applyGamma) {
@@ -257,10 +257,10 @@ KoColor KisVisualColorModel::convertChannelValuesToKoColor(const QVector4D &valu
     }
 
     for (int i=0; i<m_d->colorChannelCount; i++) {
-        channelValues[m_d->logicalToMemoryPosition[i]] = baseValues[i];
+        channelVec[m_d->logicalToMemoryPosition[i]] = baseValues[i];
     }
 
-    c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelValues);
+    c.colorSpace()->fromNormalisedChannelsValue(c.data(), channelVec);
 
     return c;
 
@@ -271,60 +271,58 @@ QVector4D KisVisualColorModel::convertKoColorToChannelValues(KoColor c) const
     if (c.colorSpace() != m_d->currentCS) {
         c.convertTo(m_d->currentCS);
     }
-    QVector <float> channelValues (c.colorSpace()->channelCount());
-    channelValues.fill(1.0);
-    m_d->currentCS->normalisedChannelsValue(c.data(), channelValues);
+    QVector<float> channelVec (c.colorSpace()->channelCount());
+    channelVec.fill(1.0);
+    m_d->currentCS->normalisedChannelsValue(c.data(), channelVec);
     QVector4D channelValuesDisplay(0, 0, 0, 0), coordinates(0, 0, 0, 0);
 
     for (int i =0; i<m_d->colorChannelCount; i++) {
-        channelValuesDisplay[i] = channelValues[m_d->logicalToMemoryPosition[i]];
+        channelValuesDisplay[i] = channelVec[m_d->logicalToMemoryPosition[i]];
     }
 
     if (m_d->exposureSupported) {
         channelValuesDisplay /= m_d->channelMaxValues;
     }
-    if (m_d->model != ColorModel::Channel && m_d->isRGBA == true) {
-        if (m_d->isRGBA == true) {
-            if (m_d->applyGamma) {
-                for (int i=0; i<3; i++) {
-                    channelValuesDisplay[i] = pow(channelValuesDisplay[i], 1/2.2);
-                }
-            }
-            if (m_d->model == ColorModel::HSV) {
-                QVector3D hsv;
-                RGBToHSV(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsv[0], &hsv[1], &hsv[2]);
-                hsv[0] /= 360;
-                coordinates = QVector4D(hsv, 0.f);
-            } else if (m_d->model == ColorModel::HSL) {
-                QVector3D hsl;
-                RGBToHSL(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsl[0], &hsl[1], &hsl[2]);
-                hsl[0] /= 360;
-                coordinates = QVector4D(hsl, 0.f);
-            } else if (m_d->model == ColorModel::HSI) {
-                qreal hsi[3];
-                RGBToHSI(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsi[0], &hsi[1], &hsi[2]);
-                coordinates = QVector4D(hsi[0], hsi[1], hsi[2], 0.f);
-            } else if (m_d->model == ColorModel::HSY) {
-                if (!m_d->isLinear) {
-                    // Note: not all profiles define a TRC necessary for (de-)linearization,
-                    // substituting with a linear profiles would be better
-                    QVector<qreal> temp({channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2]});
-                    m_d->currentCS->profile()->linearizeFloatValue(temp);
-                    channelValuesDisplay = QVector4D(temp[0], temp[1], temp[2], 0);
-                }
-                qreal hsy[3];
-                RGBToHSY(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsy[0], &hsy[1], &hsy[2],
-                         m_d->lumaRGB[0], m_d->lumaRGB[1], m_d->lumaRGB[2]);
-                hsy[2] = pow(hsy[2], 1/m_d->gamma);
-                coordinates = QVector4D(hsy[0], hsy[1], hsy[2], 0.f);
-            }
-            // if we couldn't determine a hue, keep last value
-            if (coordinates[0] < 0) {
-                coordinates[0] = m_d->channelValues[0];
-            }
+    if (m_d->model != ColorModel::Channel && m_d->isRGBA) {
+        if (m_d->applyGamma) {
             for (int i=0; i<3; i++) {
-                coordinates[i] = qBound(0.f, coordinates[i], 1.f);
+                channelValuesDisplay[i] = pow(channelValuesDisplay[i], 1/2.2);
             }
+        }
+        if (m_d->model == ColorModel::HSV) {
+            QVector3D hsv;
+            RGBToHSV(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsv[0], &hsv[1], &hsv[2]);
+            hsv[0] /= 360;
+            coordinates = QVector4D(hsv, 0.f);
+        } else if (m_d->model == ColorModel::HSL) {
+            QVector3D hsl;
+            RGBToHSL(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsl[0], &hsl[1], &hsl[2]);
+            hsl[0] /= 360;
+            coordinates = QVector4D(hsl, 0.f);
+        } else if (m_d->model == ColorModel::HSI) {
+            qreal hsi[3];
+            RGBToHSI(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsi[0], &hsi[1], &hsi[2]);
+            coordinates = QVector4D(hsi[0], hsi[1], hsi[2], 0.f);
+        } else if (m_d->model == ColorModel::HSY) {
+            if (!m_d->isLinear) {
+                // Note: not all profiles define a TRC necessary for (de-)linearization,
+                // substituting with a linear profiles would be better
+                QVector<qreal> temp({channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2]});
+                m_d->currentCS->profile()->linearizeFloatValue(temp);
+                channelValuesDisplay = QVector4D(temp[0], temp[1], temp[2], 0);
+            }
+            qreal hsy[3];
+            RGBToHSY(channelValuesDisplay[0], channelValuesDisplay[1], channelValuesDisplay[2], &hsy[0], &hsy[1], &hsy[2],
+                     m_d->lumaRGB[0], m_d->lumaRGB[1], m_d->lumaRGB[2]);
+            hsy[2] = pow(hsy[2], 1/m_d->gamma);
+            coordinates = QVector4D(hsy[0], hsy[1], hsy[2], 0.f);
+        }
+        // if we couldn't determine a hue, keep last value
+        if (coordinates[0] < 0) {
+            coordinates[0] = m_d->channelValues[0];
+        }
+        for (int i=0; i<3; i++) {
+            coordinates[i] = qBound(0.f, coordinates[i], 1.f);
         }
     } else {
         for (int i=0; i<4; i++) {
@@ -402,8 +400,6 @@ void KisVisualColorModel::loadColorSpace(const KoColorSpace *cs)
 
     m_d->colorChannelCount = cCount;
 
-    // TODO: The following is done because the IDs are actually strings. Ideally, in the future, we
-    // refactor everything so that the IDs are actually proper enums or something faster.
     if ((cs->colorDepthId() == Float16BitsColorDepthID
         || cs->colorDepthId() == Float32BitsColorDepthID
         || cs->colorDepthId() == Float64BitsColorDepthID)

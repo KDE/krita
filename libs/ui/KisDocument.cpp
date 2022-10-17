@@ -1662,8 +1662,8 @@ QPixmap KisDocument::generatePreview(const QSize& size)
     if (image) {
         QRect bounds = image->bounds();
         QSize originalSize = bounds.size();
-        QSize newSize = bounds.size();
-        newSize.scale(size, Qt::KeepAspectRatio);
+        // QSize may round down one dimension to zero on extreme aspect rations, so ensure 1px minimum
+        QSize newSize = originalSize.scaled(size, Qt::KeepAspectRatio).expandedTo({1, 1});
 
         bool pixelArt = false;
         // determine if the image is pixel art or not

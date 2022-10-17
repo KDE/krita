@@ -288,9 +288,10 @@ KisImportExportErrorCode KraConverter::savePreview(KoStore *store)
 {
     QPixmap pix = m_doc->generatePreview(QSize(256, 256));
     QImage preview(pix.toImage().convertToFormat(QImage::Format_ARGB32, Qt::ColorOnly));
-    if (preview.size() == QSize(0,0)) {
+    if (preview.size().isEmpty()) {
         QSize newSize = m_doc->savingImage()->bounds().size();
-        newSize.scale(QSize(256, 256), Qt::KeepAspectRatio);
+        // make sure dimensions are at least one pixel, because extreme aspect ratios may cause rounding to zero
+        newSize = newSize.scaled(QSize(256, 256), Qt::KeepAspectRatio).expandedTo({1, 1});
         preview = QImage(newSize, QImage::Format_ARGB32);
         preview.fill(QColor(0, 0, 0, 0));
     }

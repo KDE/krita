@@ -201,7 +201,7 @@ KisCurveOptionWidget2 *createMaskingRatioOptionWidget()
 
 KisCurveOptionWidget2 *createMaskingRotationOptionWidget()
 {
-    return detail::createRotationOptionWidgetImpl(KisPaintOpOption::MASKING_BRUSH, "");
+    return detail::createRotationOptionWidgetImpl(KisPaintOpOption::MASKING_BRUSH, KisPaintOpUtils::MaskingBrushPresetPrefix);
 }
 
 }

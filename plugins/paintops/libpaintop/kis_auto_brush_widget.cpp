@@ -158,6 +158,18 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize, lager::cursor<CommonDat
     connect(inputVFade, qOverload<qreal>(&KisDoubleSliderSpinBox::valueChanged),
             &m_d->model, &AutoBrushModel::setverticalFade);
 
+    m_d->model.LAGER_QT(horizontalFade).bind([this] (qreal value) {
+        KisSignalsBlocker b(inputHFade);
+        inputHFade->setValue(value);
+        m_fadeAspectLocker->updateAspect();
+    });
+
+    m_d->model.LAGER_QT(verticalFade).bind([this] (qreal value) {
+        KisSignalsBlocker b(inputVFade);
+        inputVFade->setValue(value);
+        m_fadeAspectLocker->updateAspect();
+    });
+
     inputSpikes->setRange(2, 20);
     inputSpikes->setValue(2);
     inputSpikes->setBlockUpdateSignalOnDrag(true);

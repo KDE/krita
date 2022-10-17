@@ -12,6 +12,7 @@
 #include <QHBoxLayout>
 #include <QListWidget>
 #include <QImage>
+#include <QInputDialog>
 
 #include <klocalizedstring.h>
 
@@ -99,6 +100,7 @@ void PresetHistoryDock::setCanvas(KoCanvasBase * canvas)
         KisConfig cfg(true);
         QStringList presetHistory = cfg.readEntry<QString>("presethistory", "").split(",", QString::SkipEmptyParts);
 
+        m_presetLimit = cfg.readEntry("presethistoryLimit", 10);
 
         Q_FOREACH (const QString &p, presetHistory) {
             if (m_resourceModel->resourcesForName(p).count()>0) {
@@ -185,6 +187,25 @@ void PresetHistoryDock::slotSortingModeChanged(QAction *action)
     cfg.writeEntry("presethistorySorting", int(m_sorting));
 }
 
+void PresetHistoryDock::slotPresetLimitChanged(int presetLimit)
+{
+    m_presetLimit = presetLimit;
+    while (m_presetHistory->count() > m_presetLimit) {
+        delete m_presetHistory->takeItem(m_presetHistory->count()-1);
+    }
+    KisConfig cfg(false);
+    cfg.writeEntry("presethistoryLimit", m_presetLimit);
+}
+
+void PresetHistoryDock::showPresetLimitDialog() {
+    bool ok;
+    int i = QInputDialog::getInt(this, i18n("Set Number of Brushes Shown"),
+                                 i18n("Number of Brushes Shown:"), m_presetLimit, 1, 100, 10, &ok);
+    if (ok && i != m_presetLimit) {
+        slotPresetLimitChanged(i);
+    }
+}
+
 void PresetHistoryDock::updatePresetState(int position)
 {
     switch (m_sorting) {
@@ -250,8 +271,8 @@ void PresetHistoryDock::addPreset(QString name, QIcon icon, int resourceId)
         item->setData(ResourceID, resourceId);
         m_presetHistory->insertItem(0, item);
         m_presetHistory->setCurrentRow(0);
-        if (m_presetHistory->count() > 10) {
-            delete m_presetHistory->takeItem(10);
+        if (m_presetHistory->count() > m_presetLimit) {
+            delete m_presetHistory->takeItem(m_presetLimit);
         }
     }
 
@@ -287,6 +308,8 @@ void PresetHistoryDock::slotContextMenuRequest(const QPoint &pos)
     contextMenu.addAction(m_actionSortStatic);
     contextMenu.addAction(m_actionSortMostRecent);
     contextMenu.addAction(m_actionSortBubble);
+    contextMenu.addSeparator();
+    contextMenu.addAction(i18n("Configure Number of Brushes Shown..."), this, SLOT(showPresetLimitDialog()));
     QAction *triggered = contextMenu.exec(m_presetHistory->mapToGlobal(pos));
 
     if (presetItem && triggered == actionForget) {

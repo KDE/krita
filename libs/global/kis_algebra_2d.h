@@ -929,6 +929,8 @@ qreal findMinimumTernarySection(std::function<qreal(qreal)> f, qreal xA, qreal x
 qreal KRITAGLOBAL_EXPORT pointToLineDistSquared(const QPointF& pt, const QLineF& line);
 
 
+
+
 }
 
 

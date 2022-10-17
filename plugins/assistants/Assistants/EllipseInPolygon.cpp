@@ -751,21 +751,32 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
         if (debug) ENTER_FUNCTION() << "+++ Bisection method +++";
         if (debug) ENTER_FUNCTION() << "Data:" << ppVar(ta) << ppVar(QString::number(tb, 'g', 10));
-        qreal errorEps = 0.000000001;
+        qreal errorEps = 0.000001;
         qreal t;
         qreal val;
 
         qreal fa;
         qreal fb;
 
+        if (qAbs(f(ta)) < errorEps) {
+            if (debug) ENTER_FUNCTION() << "Finishing early, because" << ppVar(f(ta));
+            return ta;
+        }
+        if (qAbs(f(tb)) < errorEps) {
+            if (debug) ENTER_FUNCTION() << "Finishing early, because" << ppVar(f(tb));
+            return tb;
+        }
+
+        /*
         if (tb - ta < errorEps) {
             return (tb - ta)/2.0;
         }
+        */
 
-        int maxSteps = 1000;
+        int maxSteps = 100000;
         int expectedSteps = qCeil(log2((tb - ta)/errorEps)); // it's not a correct formula, since it only checks for difference between ta and tb, instead of f(t)
         int i = 0;
-        if (debug) ENTER_FUNCTION() << "Expected steps = " << expectedSteps << ppVar(ta) << ppVar(tb);
+        if (debug) ENTER_FUNCTION() << "Expected steps = " << expectedSteps << ppVar(ta) << ppVar(tb) << ppVar(f(ta)) << ppVar(f(tb));
 
         do {
             t = (ta + tb)/2;
@@ -777,8 +788,19 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
                 tb = t;
             } else if (fb*val < 0) {
                 ta = t;
+            } else {
+                if (debug) ENTER_FUNCTION() << "Weird situation! but hopefully fixed!";
+                if (qAbs(fa) < errorEps) {
+                    return ta;
+                } else if (qAbs(fb) < errorEps) {
+                    return tb;
+                }
+                if (debug) ENTER_FUNCTION() << "Weird situation!" << ppVar(i) << ppVar(t) << ppVar(ta) << ppVar(tb) << ppVar(val) << ppVar(fa) << ppVar(fb);
+                if (debug) ENTER_FUNCTION() << "Finishing with" << ppVar(ta + (tb - ta)/2) << "and" << ppVar(f(ta + (tb - ta)/2));
+                return ta + (tb - ta)/2;
             }
             i++;
+            if (debug) ENTER_FUNCTION() << ppVar(i) << "|" << ppVar(t) << " | " << ppVar(val);
 
         } while (qAbs(val) > errorEps && i < maxSteps);
 
@@ -791,8 +813,8 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     // t ≈ -11.574
     // t ≈ 8.70602
 
-    if (debug) ENTER_FUNCTION() << "Check if my function P(t) is correct: " << ppVar(Pt(-11.574)) << ppVar(Pt(8.70602));
-    if (debug) ENTER_FUNCTION() << "In theory, the value should be between: " << ppVar(-1/C) << ppVar(1/A);
+    //if (debug) ENTER_FUNCTION() << "Check if my function P(t) is correct: " << ppVar(Pt(-11.574)) << ppVar(Pt(8.70602));
+    //if (debug) ENTER_FUNCTION() << "In theory, the value should be between: " << ppVar(-1/C) << ppVar(1/A);
 
 
     auto linearf = [] (qreal x) {
@@ -843,6 +865,9 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
     qreal checkIfOnTheEllipse = A*foundX*foundX + 2*B*foundX*foundY + C*foundY*foundY + 2*D*foundX + 2*E*foundY + F;
     if (debug) ENTER_FUNCTION() << ppVar(checkIfOnTheEllipse);
+    if (qAbs(checkIfOnTheEllipse) >= 0.00001) {
+        if (debug) ENTER_FUNCTION() << "#### WARNING! NOT ON THE ELLIPSE AFTER BISECTION!!! ####";
+    }
 
     if (debug) ENTER_FUNCTION() << "(1) original" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
                                 << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), formulaINegatedY));
@@ -896,7 +921,9 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
 
     // now un-normalizing
-    result = result*normalizeBy;
+    if (!qFuzzyCompare(normalizeBy, 0)) {
+        result = result*normalizeBy;
+    }
     if (debug) ENTER_FUNCTION() << "(6) after un-normalizing" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(trueFormulaA, result));
 
     qreal eps = 0.0001;

@@ -772,6 +772,35 @@ void TestSvgText::testRightToLeft()
 
 }
 
+/**
+ * @brief TestSvgText::testRightToLeftAnchoring
+ *
+ * This tests how anchoring behaves when doing RTL text,
+ * as well as text on path. This doesn't test all text-
+ * on-path cases, but it does expose an unfortunate
+ * edge case with bidi-reordered chunks that start and end
+ * with latin characters: these cause holes to appear.
+ * This is unfortunately correct according to spec.
+ */
+void TestSvgText::testRightToLeftAnchoring()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-right-to-left-text-paths.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
+
+    SvgRenderTester t (data.data());
+    t.test_standard("text_right_to_left_anchoring", QSize(500,500), 72.0);
+}
+
 #include <QTextLayout>
 #include <QPainter>
 #include <QPainterPath>

@@ -31,6 +31,7 @@ private Q_SLOTS:
     void testTextTabSpacing();
     void testTextDecorations();
     void testRightToLeft();
+    void testRightToLeftAnchoring();
 
     void testQtBidi();
     void testQtDxDy();

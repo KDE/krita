@@ -105,7 +105,6 @@ struct CharacterResult {
 
     KoSvgText::TextAnchor anchor = KoSvgText::AnchorStart;
     KoSvgText::Direction direction = KoSvgText::DirectionLeftToRight;
-    bool textOnPath = false;
 };
 
 class KoSvgTextShape::Private
@@ -454,6 +453,12 @@ void KoSvgTextShape::relayout() const
     // This is done earlier so it's possible to get preresolved transforms from
     // the subchunks.
     QVector<KoSvgText::CharTransformation> resolvedTransforms(text.size());
+    if (resolvedTransforms.size() > 0) {
+        // Ensure the first entry defaults to 0.0 for x and y, otherwise textAnchoring
+        // will not work for text that has been bidi-reordered.
+        resolvedTransforms[0].xPos = 0.0;
+        resolvedTransforms[0].yPos = 0.0;
+    }
     QMap<int, KoSvgText::TabSizeInfo> tabSizeInfo;
 
     // pass everything to a css-compatible text-layout algortihm.
@@ -520,7 +525,6 @@ void KoSvgTextShape::relayout() const
                 cr.direction = direction;
                 if (chunk.textInPath != textInPath && i == 0) {
                     cr.anchored_chunk = true;
-                    cr.textOnPath = true;
                     textInPath = chunk.textInPath;
                 }
                 if (lineBreaks[start + i] == LINEBREAK_MUSTBREAK) {
@@ -583,9 +587,19 @@ void KoSvgTextShape::relayout() const
                         chunk.transformation.at(i);
 
                     if (chunk.textInPath) {
+                        // Unset the perpendicular absolute transform for textPaths,
+                        // but also reset the initial position for text on path, as it may break otherwise.
+                        // users will likely use start-offset to adjust such a value.
                         if (isHorizontal) {
-                            newTransform.xPos.reset();
                             newTransform.yPos.reset();
+                            if (i == 0) {
+                                newTransform.xPos = 0.0;
+                            }
+                        } else {
+                            newTransform.xPos.reset();
+                            if (i == 0) {
+                                newTransform.yPos = 0.0;
+                            }
                         }
                     }
                     resolvedTransforms[start + i] = newTransform;
@@ -697,6 +711,10 @@ void KoSvgTextShape::relayout() const
             }
         }
         debugFlake << "text-length:" << text.size();
+    }
+    // set very first character as anchored chunk.
+    if (result.size() > 0) {
+        result[0].anchored_chunk = true;
     }
 
     if (raqm_layout(layout.data())) {
@@ -2653,12 +2671,10 @@ void KoSvgTextShape::Private::computeTextDecorations(
 void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
                                              bool isHorizontal)
 {
-    QMap<int, int> visualToLogical;
     int i = 0;
     int start = 0;
 
     while (start < result.size()) {
-        int lowestVisualIndex = result.size();
         qreal a = 0;
         qreal b = 0;
         for (i = start; i < result.size(); i++) {
@@ -2667,11 +2683,6 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             }
             if (result.at(i).anchored_chunk && i > start) {
                 break;
-            }
-            if (result.at(i).visualIndex > -1) {
-                visualToLogical.insert(result.at(i).visualIndex, i);
-                lowestVisualIndex =
-                    qMin(lowestVisualIndex, result.at(i).visualIndex);
             }
             qreal pos = isHorizontal ? result.at(i).finalPosition.x()
                                      : result.at(i).finalPosition.y();
@@ -2686,37 +2697,29 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
                 b = qMax(b, qMax(pos, pos + advance));
             }
         }
-        qreal shift = 0;
-        int typo = result.at(start).textOnPath? visualToLogical.value(lowestVisualIndex): start;
-        shift = isHorizontal ? result.at(typo).finalPosition.x()
-                             : result.at(typo).finalPosition.y();
+
         bool rtl =
             result.at(start).direction == KoSvgText::DirectionRightToLeft;
-
-        qDebug() << "lowestVisualIndex" << result.at(start).textOnPath << typo << a << b << result.at(typo).finalPosition << result.at(typo).visualIndex;
+        qreal shift = isHorizontal ? result.at(start).finalPosition.x()
+                                   : result.at(start).finalPosition.y();
 
         if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl)
             || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
-            shift -= a;
+            shift = shift - a;
 
         } else if ((result.at(start).anchor == KoSvgText::AnchorEnd && !rtl)
                    || (result.at(start).anchor == KoSvgText::AnchorStart
                        && rtl)) {
-            shift -= b;
+            shift = shift - b;
 
         } else {
             shift = shift - (a + b) * 0.5;
         }
+
         QPointF shiftP = isHorizontal ? QPointF(shift, 0) : QPointF(0, shift);
 
-        QPointF fPos;
         for (int j = start; j < i; j++) {
-            CharacterResult cr = result[j];
-
-            cr.finalPosition += shiftP;
-            fPos = cr.finalPosition;
-
-            result[j] = cr;
+            result[j].finalPosition += shiftP;
         }
         start = i;
     }
@@ -3030,7 +3033,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                 QColor penColor = result.at(i).anchored_chunk?
                                          result.at(i).isHanging? Qt::red:
                 Qt::magenta: result.at(i).lineEnd==NoChange? Qt::cyan:
-                Qt::yellow; pen.setColor(penColor); pen.setWidthF(0.1);
+                Qt::yellow; pen.setColor(penColor); pen.setWidthF(72./xRes);
                 painter.setPen(pen);
                 painter.drawPolygon(tf.map(result.at(i).boundingBox));
                 painter.setPen(Qt::blue);

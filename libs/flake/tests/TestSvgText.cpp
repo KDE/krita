@@ -1793,33 +1793,98 @@ void TestSvgText::testFontStyleSelection()
  * @brief TestSvgText::testFontSizeConfiguration
  *
  * This tests setting the font size.
- *
- * TODO: Add pixelfont test.
  */
 void TestSvgText::testFontSizeConfiguration()
 {
     QString fontName = "Ahem";
     QString fontFileName = "fonts/Ahem/ahem.ttf";
     QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
+    qreal freetypefontfactor = 64.0;
 
     bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
 
     QVERIFY2(res, QString("KoFontRegistery could not add the test font %1").arg(fontName).toLatin1());
 
 
-    QVector<int> lengths;
-    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({fontName}, lengths);
-    KoFontRegistery::instance()->configureFaces(faces, 15.0, 1.0, 72, 72, QMap<QString, qreal>());
+    {
+        QVector<int> lengths;
+        qreal sizePt = 15.0;
+        const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({fontName}, lengths);
+        KoFontRegistery::instance()->configureFaces(faces, sizePt, 1.0, 72, 72, QMap<QString, qreal>());
 
-    int size = faces.front()->size->metrics.height;
-    QVERIFY2(size == 960,
-             QString("Configured value for Ahem at 15 pt is not returning as 960, instead %1")
-             .arg(QString::number(size)).toLatin1());
+        int size = faces.front()->size->metrics.height;
+        QVERIFY2(size == (sizePt * freetypefontfactor),
+                 QString("Configured value for Ahem at 15 pt is not returning as %1, instead %2")
+                 .arg(QString::number(sizePt * freetypefontfactor)).arg(QString::number(size)).toLatin1());
+    }
+
+    // Test pixel font.
+    // The krita test font has support for 4, 8, and 12, so we'll test 4, 8, *10* and 12 :)
+
+    fontName = "krita-pixel-test";
+    fontFileName = "fonts/krita-pixel-test.otb";
+    fileName = TestUtil::fetchDataFileLazy(fontFileName);
+
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1").arg(fontName).toLatin1());
+
+    {
+        QVector<qreal> testSizes;
+        testSizes << 4.0 << 8.0 << 10.0 << 12.0;
+
+        for (qreal sizePt: testSizes) {
+            QVector<int> lengths;
+            const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({fontName}, lengths);
+            KoFontRegistery::instance()->configureFaces(faces, sizePt, 1.0, 72, 72, QMap<QString, qreal>());
+
+            // With 10.0, we mostly want to test that it returns a valid value.
+            if (sizePt == 10.0) {
+                sizePt = 8.0;
+            }
+
+            int size = faces.front()->size->metrics.height;
+            QVERIFY2(size == (sizePt * freetypefontfactor),
+                     QString("Configured value for %1 at %2 pt is not returning as %3, instead %4")
+                     .arg(fontName).arg(QString::number(sizePt))
+                     .arg(QString::number(sizePt * freetypefontfactor))
+                     .arg(QString::number(size)).toLatin1());
+        }
+    }
 
 }
 
 /**
+ * @brief TestSvgText::testFontSizeRender
+ *
+ * Test whether we can set different font
+ * sizes and they render correctly.
+ */
+void TestSvgText::testFontSizeRender()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-test-sizes-rendering.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1")
+             .arg("DejaVu Sans").toLatin1());
+
+    SvgRenderTester t (data.data());
+    t.test_standard("font-sizes", QSize(140, 40), 72.0);
+}
+
+/**
  * @brief TestSvgText::testFontOpenTypeVariationsConfiguration
+ *
+ * test whether we can succefully confgiure the axes for an opentype
+ * variation font. This test is an adaptation of web-platform-test
+ * style-ranges-over-weight-direction.html
  */
 void TestSvgText::testFontOpenTypeVariationsConfiguration()
 {

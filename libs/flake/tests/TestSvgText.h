@@ -63,6 +63,7 @@ private Q_SLOTS:
     void testFontSelectionForText();
     void testFontStyleSelection();
     void testFontSizeConfiguration();
+    void testFontSizeRender();
     void testFontOpenTypeVariationsConfiguration();
 
 

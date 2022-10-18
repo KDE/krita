@@ -146,29 +146,19 @@ void KisBrushDelegate::paint(QPainter * painter, const QStyleOptionViewItem & op
 
 struct KisPredefinedBrushChooser::Private
 {
-    Private(lager::cursor<KisBrushModel::CommonData> _commonBrushData,
-            lager::cursor<KisBrushModel::PredefinedBrushData> _predefinedBrushData,
-            lager::cursor<qreal> _commonBrushSizeData,
-            bool supportsHSLBrushTips)
-        : commonBrushData(_commonBrushData),
-          predefinedBrushData(_predefinedBrushData),
-          model(commonBrushData, predefinedBrushData, _commonBrushSizeData, supportsHSLBrushTips)
+    Private(KisPredefinedBrushModel *_model)
+        : model(_model)
     {
     }
 
-    lager::cursor<KisBrushModel::CommonData> commonBrushData;
-    lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData;
-    KisPredefinedBrushModel model;
+    KisPredefinedBrushModel *model;
 };
 
 KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
-                                                     lager::cursor<KisBrushModel::CommonData> commonBrushData,
-                                                     lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData,
-                                                     lager::cursor<qreal> commonBrushSizeData,
-                                                     bool supportsHSLBrushTips,
+                                                     KisPredefinedBrushModel *model,
                                                      QWidget *parent, const char *name)
     : QWidget(parent),
-      m_d(new Private(commonBrushData, predefinedBrushData, commonBrushSizeData, supportsHSLBrushTips)),
+      m_d(new Private(model)),
       m_stampBrushWidget(0),
       m_clipboardBrushWidget(0)
 {
@@ -182,23 +172,23 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
     brushSizeSpinBox->setSuffix(i18n(" px"));
     brushSizeSpinBox->setExponentRatio(3.0);
 
-    connect(&m_d->model, &KisPredefinedBrushModel::brushNameChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::brushNameChanged,
             brushTipNameLabel, &QLabel::setText);
-    m_d->model.LAGER_QT(brushName).nudge();
+    m_d->model->LAGER_QT(brushName).nudge();
 
-    connect(&m_d->model, &KisPredefinedBrushModel::brushDetailsChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::brushDetailsChanged,
             brushDetailsLabel, &QLabel::setText);
-    m_d->model.LAGER_QT(brushName).nudge();
+    m_d->model->LAGER_QT(brushName).nudge();
 
-    connectControl(brushSizeSpinBox, &m_d->model, "brushSize");
+    connectControl(brushSizeSpinBox, m_d->model, "brushSize");
 
     brushRotationAngleSelector->setDecimals(0);
 
-    connectControl(brushRotationAngleSelector, &m_d->model, "angle");
+    connectControl(brushRotationAngleSelector, m_d->model, "angle");
 
     brushSpacingSelectionWidget->setSpacing(true, 1.0);
 
-    connectControl(brushSpacingSelectionWidget, &m_d->model, "aggregatedSpacing");
+    connectControl(brushSpacingSelectionWidget, m_d->model, "aggregatedSpacing");
 
     m_itemChooser = new KisResourceItemChooser(ResourceType::Brushes, false, this);
     m_itemChooser->setObjectName("brush_selector");
@@ -216,10 +206,10 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
 
     connect(m_itemChooser, &KisResourceItemChooser::resourceSelected,
             this, &KisPredefinedBrushChooser::slotBrushSelected);
-    connect(&m_d->model, &KisPredefinedBrushModel::resourceSignatureChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::resourceSignatureChanged,
             this, &KisPredefinedBrushChooser::slotBrushPropertyChanged);
 
-    slotBrushPropertyChanged(m_d->model.resourceSignature());
+    slotBrushPropertyChanged(m_d->model->resourceSignature());
 
 
     addPresetButton->setIcon(KisIconUtils::loadIcon("list-add"));
@@ -245,40 +235,40 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
     intAdjustmentMidPoint->setPageStep(10);
     intAdjustmentMidPoint->setSingleStep(1);
     intAdjustmentMidPoint->setPrefix(i18nc("@label:slider", "Neutral point: "));
-    connectControl(intAdjustmentMidPoint, &m_d->model, "adjustmentMidPoint");
-    connectControl(chkAutoMidPoint, &m_d->model, "autoAdjustMidPoint");
+    connectControl(intAdjustmentMidPoint, m_d->model, "adjustmentMidPoint");
+    connectControl(chkAutoMidPoint, m_d->model, "autoAdjustMidPoint");
 
     intBrightnessAdjustment->setRange(-100, 100);
     intBrightnessAdjustment->setPageStep(10);
     intBrightnessAdjustment->setSingleStep(1);
     intBrightnessAdjustment->setSuffix("%");
     intBrightnessAdjustment->setPrefix(i18nc("@label:slider", "Brightness: "));
-    connectControl(intBrightnessAdjustment, &m_d->model, "brightnessAdjustment");
+    connectControl(intBrightnessAdjustment, m_d->model, "brightnessAdjustment");
 
     intContrastAdjustment->setRange(-100, 100);
     intContrastAdjustment->setPageStep(10);
     intContrastAdjustment->setSingleStep(1);
     intContrastAdjustment->setSuffix("%");
     intContrastAdjustment->setPrefix(i18nc("@label:slider", "Contrast: "));
-    connectControl(intContrastAdjustment, &m_d->model, "contrastAdjustment");
+    connectControl(intContrastAdjustment, m_d->model, "contrastAdjustment");
 
     btnResetAdjustments->setToolTip(i18nc("@info:tooltip", "Resets all the adjustments to default values:\n Neutral Point: 127\n Brightness: 0%\n Contrast: 0%"));
     connect(btnResetAdjustments, SIGNAL(clicked()), SLOT(slotResetAdjustments()));
 
-    connectControlState(cmbBrushMode, &m_d->model, "applicationSwitchState", "application");
+    connectControlState(cmbBrushMode, m_d->model, "applicationSwitchState", "application");
 
-    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             intAdjustmentMidPoint, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             intBrightnessAdjustment, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             intContrastAdjustment, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             chkAutoMidPoint, &KisSliderSpinBox::setEnabled);
-    connect(&m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
+    connect(m_d->model, &KisPredefinedBrushModel::adjustmentsEnabledChanged,
             btnResetAdjustments, &KisSliderSpinBox::setEnabled);
 
-    m_d->model.LAGER_QT(adjustmentsEnabled).nudge();
+    m_d->model->LAGER_QT(adjustmentsEnabled).nudge();
 }
 
 KisPredefinedBrushChooser::~KisPredefinedBrushChooser()
@@ -294,13 +284,13 @@ void KisPredefinedBrushChooser::slotResetBrush()
 
         KisPredefinedBrushFactory::loadFromBrushResource(commonData, predefinedData, brush);
 
-        if (m_d->model.applicationSwitchState().items.size() >= LIGHTNESSMAP) {
+        if (m_d->model->applicationSwitchState().items.size() >= LIGHTNESSMAP) {
             predefinedData.application = LIGHTNESSMAP;
         }
 
-        m_d->commonBrushData.set(commonData);
-        m_d->predefinedBrushData.set(predefinedData);
-        m_d->model.m_commonBrushSizeData.set(KisPredefinedBrushModel::effectiveBrushSize(predefinedData));
+        m_d->model->m_commonData.set(commonData);
+        m_d->model->m_predefinedBrushData.set(predefinedData);
+        m_d->model->m_commonBrushSizeData.set(KisPredefinedBrushModel::effectiveBrushSize(predefinedData));
     }
 }
 
@@ -341,27 +331,27 @@ void KisPredefinedBrushChooser::slotBrushSelected(KoResourceSP resource)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(resource);
 
-    KisBrushModel::CommonData commonBrushData = *m_d->commonBrushData;
-    KisBrushModel::PredefinedBrushData predefinedBrushData = *m_d->predefinedBrushData;
+    KisBrushModel::CommonData commonBrushData = *m_d->model->m_commonData;
+    KisBrushModel::PredefinedBrushData predefinedBrushData = m_d->model->bakedOptionData();
 
     if (resource->signature() == predefinedBrushData.resourceSignature) return;
 
     KisPredefinedBrushFactory::loadFromBrushResource(commonBrushData, predefinedBrushData, resource.dynamicCast<KisBrush>());
 
     predefinedBrushData.scale = 1.0;
-    predefinedBrushData.application = KisPredefinedBrushModel::effectiveBrushApplication(predefinedBrushData, m_d->model.m_supportsHSLBrushTips.get());
+    predefinedBrushData.application = KisPredefinedBrushModel::effectiveBrushApplication(predefinedBrushData, m_d->model->m_supportsHSLBrushTips.get());
 
     // TODO: check what happens when we add a new brush
     if (this->preserveBrushPresetSettings->isChecked()) {
-        commonBrushData.spacing = m_d->model.spacing();
-        commonBrushData.useAutoSpacing = m_d->model.useAutoSpacing();
-        commonBrushData.autoSpacingCoeff = m_d->model.autoSpacingCoeff();
+        commonBrushData.spacing = m_d->model->spacing();
+        commonBrushData.useAutoSpacing = m_d->model->useAutoSpacing();
+        commonBrushData.autoSpacingCoeff = m_d->model->autoSpacingCoeff();
     } else {
-        m_d->model.m_commonBrushSizeData.set(predefinedBrushData.baseSize.width());
+        m_d->model->m_commonBrushSizeData.set(predefinedBrushData.baseSize.width());
     }
 
-    m_d->commonBrushData.set(commonBrushData);
-    m_d->predefinedBrushData.set(predefinedBrushData);
+    m_d->model->m_commonData.set(commonBrushData);
+    m_d->model->m_predefinedBrushData.set(predefinedBrushData);
 }
 
 void KisPredefinedBrushChooser::slotBrushPropertyChanged(KoResourceSignature signature)
@@ -372,7 +362,7 @@ void KisPredefinedBrushChooser::slotBrushPropertyChanged(KoResourceSignature sig
 
 void KisPredefinedBrushChooser::slotResetAdjustments()
 {
-    m_d->predefinedBrushData.update(
+    m_d->model->m_predefinedBrushData.update(
         [] (KisBrushModel::PredefinedBrushData brush) {
             KisBrushModel::PredefinedBrushData defaultBrush;
 
@@ -397,7 +387,7 @@ void KisPredefinedBrushChooser::setImage(KisImageWSP image)
 
 lager::reader<bool> KisPredefinedBrushChooser::lightnessModeEnabled() const
 {
-    return m_d->model.LAGER_QT(lightnessModeEnabled);
+    return m_d->model->LAGER_QT(lightnessModeEnabled);
 }
 
 void KisPredefinedBrushChooser::slotImportNewBrushResource() {

@@ -119,14 +119,15 @@ struct KisBrushSelectionWidget::Private
 };
 
 KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
-                                                 lager::cursor<KisBrushModel::BrushData> brushData,
-                                                 lager::cursor<KisBrushModel::PrecisionData> precisionData,
-                                                 lager::cursor<qreal> commonBrushSizeData,
+                                                 KisAutoBrushModel *autoBrushModel,
+                                                 KisPredefinedBrushModel *predefinedBrushModel,
+                                                 KisTextBrushModel *textBrushModel,
+                                                 lager::cursor<BrushType> brushType,
+                                                 lager::cursor<PrecisionData> precisionData,
                                                  KisBrushOptionWidgetFlags flags,
                                                  QWidget *parent)
     : QWidget(parent)
     , m_currentBrushWidget(0)
-    , m_brushData(brushData)
     , m_d(new Private(precisionData))
 {
     uiWdgBrushChooser.setupUi(this);
@@ -138,16 +139,15 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
     m_stackedWidget = new QStackedWidget(this);
     m_layout->addWidget(m_stackedWidget);
 
-    m_autoBrushWidget = new KisAutoBrushWidget(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::autoBrush], commonBrushSizeData, this, "autobrush");
+    m_autoBrushWidget = new KisAutoBrushWidget(maxBrushSize, autoBrushModel, this, "autobrush");
     addChooser(i18nc("Autobrush Brush tip mode", "Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
-    m_predefinedBrushWidget = new KisPredefinedBrushChooser(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::predefinedBrush], commonBrushSizeData, flags & KisBrushOptionWidgetFlag::SupportsHSLBrushMode, this);
+    m_predefinedBrushWidget = new KisPredefinedBrushChooser(maxBrushSize, predefinedBrushModel, this);
     addChooser(i18nc("Predefined Brush tip mode", "Predefined"), m_predefinedBrushWidget, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
-    m_textBrushWidget = new KisTextBrushChooser(m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::textBrush], this);
+    m_textBrushWidget = new KisTextBrushChooser(textBrushModel, this);
     addChooser(i18nc("Text Brush tip mode", "Text"), m_textBrushWidget, TEXTBRUSH, KoGroupButton::GroupRight);
 
-    m_d->brushType = brushData[&BrushData::type]
-        .xform(kiszug::map_static_cast<int>, kiszug::map_static_cast<BrushType>);
+    m_d->brushType = brushType.zoom(kiszug::lenses::do_static_cast<BrushType, int>);
 
     m_d->brushType.bind([this](int value) {m_stackedWidget->setCurrentIndex(value); });
     m_d->brushType.bind([this](int value) {m_buttonGroup->button(value)->setChecked(true); });

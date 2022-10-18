@@ -17,28 +17,52 @@
 #include "kis_precision_option.h"
 #include "kis_paintop_lod_limitations.h"
 
+#include "KisAutoBrushModel.h"
+#include "KisPredefinedBrushModel.h"
+#include "KisTextBrushModel.h"
+
 struct KisBrushOptionWidget::Private
 {
-    Private()
+    Private(KisBrushOptionWidgetFlags flags)
         : commonBrushSizeData(778.0)
+        , autoBrushModel(brushData[&BrushData::common],
+                         brushData[&BrushData::autoBrush],
+                         commonBrushSizeData)
+        , predefinedBrushModel(brushData[&BrushData::common],
+                               brushData[&BrushData::predefinedBrush],
+                               commonBrushSizeData,
+                               flags & KisBrushOptionWidgetFlag::SupportsHSLBrushMode)
+        , textBrushModel(brushData[&BrushData::common],
+                         brushData[&BrushData::textBrush])
     {
     }
 
-    lager::state<KisBrushModel::BrushData, lager::automatic_tag> brushData;
-    lager::state<KisBrushModel::PrecisionData, lager::automatic_tag> brushPrecisionData;
+    lager::state<BrushData, lager::automatic_tag> brushData;
+    lager::state<PrecisionData, lager::automatic_tag> brushPrecisionData;
     lager::state<qreal, lager::automatic_tag> commonBrushSizeData;
+
+    KisAutoBrushModel autoBrushModel;
+    KisPredefinedBrushModel predefinedBrushModel;
+    KisTextBrushModel textBrushModel;
 
     KisBrushOptionWidgetFlags flags;
 };
 
 KisBrushOptionWidget::KisBrushOptionWidget(KisBrushOptionWidgetFlags flags)
     : KisPaintOpOption(i18n("Brush Tip"), KisPaintOpOption::GENERAL, true),
-      m_d(new Private())
+      m_d(new Private(flags))
 {
     m_d->flags = flags;
 
     m_checkable = false;
-    m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize(), m_d->brushData, m_d->brushPrecisionData, m_d->commonBrushSizeData, flags);
+
+    m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize(),
+                                                         &m_d->autoBrushModel,
+                                                         &m_d->predefinedBrushModel,
+                                                         &m_d->textBrushModel,
+                                                         m_d->brushData[&BrushData::type],
+                                                         m_d->brushPrecisionData,
+                                                         flags);
     m_brushSelectionWidget->hide();
     setConfigurationPage(m_brushSelectionWidget);
 
@@ -65,10 +89,9 @@ void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setti
 {
     using namespace KisBrushModel;
 
-    // TODO: implement normal baking!
     BrushData data = m_d->brushData.get();
-    setEffectiveSizeForBrush(data.type, data.autoBrush, data.predefinedBrush, data.textBrush, m_d->commonBrushSizeData.get());
-
+    data.autoBrush = m_d->autoBrushModel.bakedOptionData();
+    data.predefinedBrush = m_d->predefinedBrushModel.bakedOptionData();
     data.write(settings.data());
 
     if (m_d->flags & KisBrushOptionWidgetFlag::SupportsPrecision) {

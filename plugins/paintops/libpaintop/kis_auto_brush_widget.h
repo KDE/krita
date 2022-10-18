@@ -18,7 +18,7 @@
 
 class KisSignalCompressor;
 class KisAspectRatioLocker;
-
+class KisAutoBrushModel;
 
 class PAINTOP_EXPORT KisWdgAutoBrush : public QWidget, public Ui::KisWdgAutoBrush
 {
@@ -41,17 +41,11 @@ class PAINTOP_EXPORT KisAutoBrushWidget : public KisWdgAutoBrush
 public:
 
     KisAutoBrushWidget(int maxBrushSize,
-                       lager::cursor<KisBrushModel::CommonData> commonBrushData,
-                       lager::cursor<KisBrushModel::AutoBrushData> autoBrushData,
-                       lager::cursor<qreal> commonBrushSizeData,
+                       KisAutoBrushModel *model,
                        QWidget *parent, const char* name);
     ~KisAutoBrushWidget() override;
 
     KisBrushSP brush();
-
-    void setBrush(KisBrushSP brush);
-
-    void reset();
 
 private Q_SLOTS:
     void setStackedWidget(int);

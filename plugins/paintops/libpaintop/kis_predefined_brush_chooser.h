@@ -27,6 +27,7 @@ class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
 class KisResourceItemChooser;
 class KoResource;
+class KisPredefinedBrushModel;
 
 
 class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, public Ui::WdgPredefinedBrushChooser
@@ -36,10 +37,7 @@ class PAINTOP_EXPORT KisPredefinedBrushChooser : public QWidget, public Ui::WdgP
 
 public:
     KisPredefinedBrushChooser(int maxBrushSize,
-                              lager::cursor<KisBrushModel::CommonData> commonBrushData,
-                              lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData,
-                              lager::cursor<qreal> commonBrushSizeData,
-                              bool supportsHSLBrushTips,
+                              KisPredefinedBrushModel *model,
                               QWidget *parent = 0, const char *name = 0);
     ~KisPredefinedBrushChooser() override;
 

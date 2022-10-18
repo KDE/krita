@@ -3,6 +3,7 @@ set(kritalibpaintop_LIB_SRCS
     kis_auto_brush_widget.cpp
     kis_brush_based_paintop.cpp
     kis_predefined_brush_chooser.cpp
+    KisAutoBrushModel.cpp
     KisPredefinedBrushModel.cpp
     kis_brush_option_widget.cpp
     kis_brush_option.cpp
@@ -128,7 +129,7 @@ set(kritalibpaintop_LIB_SRCS
     KisDynamicSensorFactoryDrawingAngle.cpp
     KisSensorWithLengthModel.cpp
     KisDrawingAngleSensorModel.cpp
-    models/KisTextBrushModel.cpp
+    KisTextBrushModel.cpp
 )
 
 ki18n_wrap_ui(kritalibpaintop_LIB_SRCS

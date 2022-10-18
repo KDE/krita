@@ -15,7 +15,7 @@
 #include <QString>
 #include <QFontDialog>
 
-#include "models/KisTextBrushModel.h"
+#include "KisTextBrushModel.h"
 #include "KisWidgetConnectionUtils.h"
 
 using namespace KisBrushModel;
@@ -23,17 +23,17 @@ using namespace KisWidgetConnectionUtils;
 
 struct KisTextBrushChooser::Private
 {
-    Private(lager::cursor<KisBrushModel::CommonData> commonBrushData, lager::cursor<KisBrushModel::TextBrushData> textBrushData)
-        : model(commonBrushData, textBrushData)
+    Private(KisTextBrushModel *_model)
+        : model(_model)
     {
     }
 
-    KisTextBrushModel model;
+    KisTextBrushModel *model;
 };
 
-KisTextBrushChooser::KisTextBrushChooser(lager::cursor<KisBrushModel::CommonData> commonBrushData, lager::cursor<KisBrushModel::TextBrushData> textBrushData, QWidget *parent)
+KisTextBrushChooser::KisTextBrushChooser(KisTextBrushModel *model, QWidget *parent)
     : QWidget(parent),
-      m_d(new Private(commonBrushData, textBrushData))
+      m_d(new Private(model))
 {
     setObjectName("textbrush");
     setupUi(this);
@@ -44,13 +44,13 @@ KisTextBrushChooser::KisTextBrushChooser(lager::cursor<KisBrushModel::CommonData
     inputSpacing->setSingleStep(0.01);
     inputSpacing->setValue(0.1);
 
-    connectControl(pipeModeChbox, &m_d->model, "usePipeMode");
-    connectControl(inputSpacing, &m_d->model, "spacing");
-    connectControl(lineEdit, &m_d->model, "text");
+    connectControl(pipeModeChbox, m_d->model, "usePipeMode");
+    connectControl(inputSpacing, m_d->model, "spacing");
+    connectControl(lineEdit, m_d->model, "text");
 
     connect((QObject*)bnFont, SIGNAL(clicked()), this, SLOT(getFont()));
 
-    connect(&m_d->model, &KisTextBrushModel::fontChanged,
+    connect(m_d->model, &KisTextBrushModel::fontChanged,
             this, &KisTextBrushChooser::updateBrushPreview);
     updateBrushPreview();
 }
@@ -64,18 +64,18 @@ void KisTextBrushChooser::getFont()
     bool ok = false;
 
     QFont f;
-    f.fromString(m_d->model.font());
+    f.fromString(m_d->model->font());
     f = QFontDialog::getFont(&ok, f);
 
     if (ok) {
-        m_d->model.setfont(f.toString());
+        m_d->model->setfont(f.toString());
     }
 }
 
 void KisTextBrushChooser::updateBrushPreview()
 {
     QFont f;
-    f.fromString(m_d->model.font());
+    f.fromString(m_d->model->font());
 
     lblFont->setText(QString(f.family() + ", %1").arg(f.pointSize()));
     lblFont->setFont(f);

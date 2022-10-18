@@ -29,6 +29,10 @@
 #include <lager/constant.hpp>
 #include <KisWidgetConnectionUtils.h>
 #include <functional>
+#include "KisAutoBrushModel.h"
+#include "KisPredefinedBrushModel.h"
+#include "KisTextBrushModel.h"
+
 
 using namespace KisBrushModel;
 using namespace KisWidgetConnectionUtils;
@@ -62,6 +66,15 @@ public:
           m_commonBrushSizeData(commonBrushSizeData),
           m_masterBrushSize(masterBrushSize),
           m_preserveMode(false),
+          autoBrushModel(m_maskingData[&MaskingBrushData::brush][&BrushData::common],
+                         m_maskingData[&MaskingBrushData::brush][&BrushData::autoBrush],
+                         m_commonBrushSizeData),
+          predefinedBrushModel(m_maskingData[&MaskingBrushData::brush][&BrushData::common],
+                               m_maskingData[&MaskingBrushData::brush][&BrushData::predefinedBrush],
+                               m_commonBrushSizeData,
+                               false),
+          textBrushModel(m_maskingData[&MaskingBrushData::brush][&BrushData::common],
+                         m_maskingData[&MaskingBrushData::brush][&BrushData::textBrush]),
           LAGER_QT(isEnabled) {m_maskingData[&MaskingBrushData::isEnabled]},
           LAGER_QT(compositeOpId) {m_maskingData[&MaskingBrushData::compositeOpId]},
           LAGER_QT(theoreticalBrushSize) {
@@ -88,6 +101,10 @@ public:
     lager::cursor<qreal> m_commonBrushSizeData;
     lager::reader<qreal> m_masterBrushSize;
     lager::state<bool, lager::automatic_tag> m_preserveMode;
+
+    KisAutoBrushModel autoBrushModel;
+    KisPredefinedBrushModel predefinedBrushModel;
+    KisTextBrushModel textBrushModel;
 
     LAGER_QT_CURSOR(bool, isEnabled);
     LAGER_QT_CURSOR(QString, compositeOpId);
@@ -123,6 +140,13 @@ public:
         m_preserveMode.set(true);
     }
 
+    MaskingBrushData bakedOptionData() const {
+        MaskingBrushData data = m_maskingData.get();
+        data.brush.autoBrush = autoBrushModel.bakedOptionData();
+        data.brush.predefinedBrush = predefinedBrushModel.bakedOptionData();
+        return data;
+    }
+
 private:
     std::optional<BrushData> m_originallyLoadedBrush;
     std::optional<qreal> m_originallyLoadedMasterSize;
@@ -134,10 +158,11 @@ private:
 struct KisMaskingBrushOption::Private
 {
     Private(lager::reader<qreal> effectiveBrushSize)
-        : ui(new QWidget()),
-          commonBrushSizeData(777.0),
-          masterBrushSize(effectiveBrushSize),
-          maskingModel(maskingData, commonBrushSizeData, effectiveBrushSize)
+        : ui(new QWidget())
+        ,  commonBrushSizeData(777.0)
+        ,  masterBrushSize(effectiveBrushSize)
+
+        ,  maskingModel(maskingData, commonBrushSizeData, effectiveBrushSize)
     {
         compositeSelector = new QComboBox(ui.data());
 
@@ -156,7 +181,7 @@ struct KisMaskingBrushOption::Private
         brushSizeWarningLabel->setVisible(false);
         brushSizeWarningLabel->setWordWrap(true);
 
-        brushChooser = new KisBrushSelectionWidget(KisImageConfig(true).maxMaskingBrushSize(), maskingData[&MaskingBrushData::brush], brushPrecisionData, commonBrushSizeData, KisBrushOptionWidgetFlag::None, ui.data());
+        brushChooser = new KisBrushSelectionWidget(KisImageConfig(true).maxMaskingBrushSize(), &maskingModel.autoBrushModel, &maskingModel.predefinedBrushModel, &maskingModel.textBrushModel, maskingData[&MaskingBrushData::brush][&BrushData::type], brushPrecisionData, KisBrushOptionWidgetFlag::None, ui.data());
 
         QVBoxLayout *layout  = new QVBoxLayout(ui.data());
         layout->addLayout(compositeOpLayout, 0);
@@ -222,19 +247,11 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
     if (m_d->maskingData->useMasterSize &&
         !m_d->maskingModel.m_preserveMode.get()) {
 
-        MaskingBrushData tempData = m_d->maskingData.get();
-
-        // todo: use normal baking!
-        setEffectiveSizeForBrush(tempData.brush.type,
-                                 tempData.brush.autoBrush,
-                                 tempData.brush.predefinedBrush,
-                                 tempData.brush.textBrush,
-                                 m_d->commonBrushSizeData.get());
-
+        MaskingBrushData tempData = m_d->maskingModel.bakedOptionData();
         tempData.masterSizeCoeff = m_d->commonBrushSizeData.get() / m_d->masterBrushSize.get();
         tempData.write(setting.data());
     } else {
-        m_d->maskingData->write(setting.data());
+        m_d->maskingModel.bakedOptionData().write(setting.data());
     }
 }
 

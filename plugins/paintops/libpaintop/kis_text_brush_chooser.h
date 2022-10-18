@@ -12,14 +12,15 @@
 #include <lager/cursor.hpp>
 #include <KisBrushModel.h>
 
+class KisTextBrushModel;
+
 class KisTextBrushChooser : public QWidget, public Ui::KisWdgTextBrush
 {
     Q_OBJECT
 
 public:
 
-    KisTextBrushChooser(lager::cursor<KisBrushModel::CommonData> commonBrushData,
-                        lager::cursor<KisBrushModel::TextBrushData> textBrushData,
+    KisTextBrushChooser(KisTextBrushModel *model,
                         QWidget *parent);
     ~KisTextBrushChooser();
 

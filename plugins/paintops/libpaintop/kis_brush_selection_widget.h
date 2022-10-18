@@ -28,7 +28,9 @@ class KisCustomBrushWidget;
 class KisClipboardBrushWidget;
 class KisBrush;
 class QStackedWidget;
-
+class KisAutoBrushModel;
+class KisPredefinedBrushModel;
+class KisTextBrushModel;
 
 /**
  *Compound widget that collects all the various brush selection widgets.
@@ -39,9 +41,11 @@ class PAINTOP_EXPORT KisBrushSelectionWidget : public QWidget
 
 public:
     KisBrushSelectionWidget(int maxBrushSize,
-                            lager::cursor<KisBrushModel::BrushData> brushData,
+                            KisAutoBrushModel *autoBrushModel,
+                            KisPredefinedBrushModel *predefinedBrushModel,
+                            KisTextBrushModel *textBrushModel,
+                            lager::cursor<KisBrushModel::BrushType> brushType,
                             lager::cursor<KisBrushModel::PrecisionData> precisionData,
-                            lager::cursor<qreal> commonBrushSizeData,
                             KisBrushOptionWidgetFlags flags,
                             QWidget *parent = 0);
 
@@ -82,8 +86,6 @@ private:
     KisAutoBrushWidget *m_autoBrushWidget {0};
     KisPredefinedBrushChooser *m_predefinedBrushWidget {0};
     KisTextBrushChooser *m_textBrushWidget {0};
-
-    lager::cursor<KisBrushModel::BrushData> m_brushData;
 
     struct Private;
     const QScopedPointer<Private> m_d;

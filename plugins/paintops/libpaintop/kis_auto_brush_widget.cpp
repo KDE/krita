@@ -29,107 +29,32 @@
 #include <kis_cubic_curve.h>
 #include <kis_auto_brush_factory.h>
 #include <KisGlobalResourcesInterface.h>
-#include <KisZug.h>
-
-using namespace KisBrushModel;
-using namespace KisWidgetConnectionUtils;
-
-
-class AutoBrushModel : public QObject
-{
-    Q_OBJECT
-public:
-    AutoBrushModel(lager::cursor<CommonData> commonData, lager::cursor<AutoBrushData> autoBrushData, lager::cursor<qreal> commonBrushSizeData)
-        : m_commonData(commonData),
-          m_autoBrushData(autoBrushData),
-          m_commonBrushSizeData(commonBrushSizeData),
-          LAGER_QT(diameter) {m_commonBrushSizeData},
-          LAGER_QT(ratio) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::ratio]},
-          LAGER_QT(horizontalFade) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::horizontalFade]},
-          LAGER_QT(verticalFade) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::verticalFade]},
-          LAGER_QT(spikes) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::spikes]},
-          LAGER_QT(antialiasEdges) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::antialiasEdges]},
-          LAGER_QT(shape) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::shape]
-                      .zoom(kiszug::lenses::do_static_cast<AutoBrushGeneratorShape, int>)},
-          LAGER_QT(type) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::type]
-                      .zoom(kiszug::lenses::do_static_cast<AutoBrushGeneratorType, int>)},
-          LAGER_QT(curveString) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::curveString]},
-          LAGER_QT(randomness) {m_autoBrushData[&AutoBrushData::randomness]
-                      .zoom(kiszug::lenses::scale<qreal>(100.0))},
-          LAGER_QT(density) {m_autoBrushData[&AutoBrushData::density]
-                      .zoom(kiszug::lenses::scale<qreal>(100.0))},
-          LAGER_QT(angle) {m_commonData[&CommonData::angle]
-                      .zoom(kiszug::lenses::scale<qreal>(180.0 / M_PI))},
-          LAGER_QT(spacing) {m_commonData[&CommonData::spacing]},
-          LAGER_QT(useAutoSpacing) {m_commonData[&CommonData::useAutoSpacing]},
-          LAGER_QT(autoSpacingCoeff) {m_commonData[&CommonData::autoSpacingCoeff]},
-          LAGER_QT(aggregatedSpacing) {lager::with(LAGER_QT(spacing),
-                                                   LAGER_QT(useAutoSpacing),
-                                                   LAGER_QT(autoSpacingCoeff))
-                      .xform(zug::map(ToSpacingState{}),
-                             zug::map(FromSpacingState{}))}
-    {
-    }
-
-    // the state must be declared **before** any cursors or readers
-    lager::cursor<CommonData> m_commonData;
-    lager::cursor<AutoBrushData> m_autoBrushData;
-    lager::cursor<qreal> m_commonBrushSizeData;
-
-    LAGER_QT_CURSOR(qreal, diameter);
-    LAGER_QT_CURSOR(qreal, ratio);
-    LAGER_QT_CURSOR(qreal, horizontalFade);
-    LAGER_QT_CURSOR(qreal, verticalFade);
-    LAGER_QT_CURSOR(int, spikes);
-    LAGER_QT_CURSOR(bool, antialiasEdges);
-    LAGER_QT_CURSOR(int, shape);
-    LAGER_QT_CURSOR(int, type);
-    LAGER_QT_CURSOR(QString, curveString);
-    LAGER_QT_CURSOR(qreal, randomness);
-    LAGER_QT_CURSOR(qreal, density);
-    LAGER_QT_CURSOR(qreal, angle);
-    LAGER_QT_CURSOR(qreal, spacing);
-    LAGER_QT_CURSOR(bool, useAutoSpacing);
-    LAGER_QT_CURSOR(qreal, autoSpacingCoeff);
-    LAGER_QT_CURSOR(SpacingState, aggregatedSpacing);
-
-    AutoBrushData bakedOptionData() const {
-        AutoBrushData data = m_autoBrushData.get();
-        data.generator.diameter = m_commonBrushSizeData.get();
-        return data;
-    }
-};
+#include <KisAutoBrushModel.h>
 
 
 struct KisAutoBrushWidget::Private {
-    Private(lager::cursor<CommonData> _commonBrushData, lager::cursor<KisBrushModel::AutoBrushData> _autoBrushData, lager::cursor<qreal> _commonBrushSizeData)
-        : commonBrushData(_commonBrushData),
-          autoBrushData(_autoBrushData),
-          model(commonBrushData, autoBrushData, _commonBrushSizeData),
+    Private(KisAutoBrushModel *_model)
+        : model(_model),
           previewCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
 
-    lager::cursor<CommonData> commonBrushData;
-    lager::cursor<AutoBrushData> autoBrushData;
-    AutoBrushModel model;
+    KisAutoBrushModel *model {0};
     KisSignalCompressor previewCompressor;
 };
 
 
 
 KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
-                                       lager::cursor<CommonData> commonBrushData,
-                                       lager::cursor<AutoBrushData> autoBrushData,
-                                       lager::cursor<qreal> commonBrushSizeData,
+                                       KisAutoBrushModel *model,
                                        QWidget *parent, const char* name)
     : KisWdgAutoBrush(parent, name)
     , m_fadeAspectLocker(new KisAspectRatioLocker())
-    , m_d(new Private(commonBrushData, autoBrushData, commonBrushSizeData))
+    , m_d(new Private(model))
 
 {
-    connectControl(comboBoxShape, &m_d->model, "shape");
-    connectControl(comboBoxMaskType, &m_d->model, "type");
+    connectControl(comboBoxShape, m_d->model, "shape");
+    connectControl(comboBoxMaskType, m_d->model, "type");
 
     inputRadius->setRange(0.01, maxBrushSize, 2);
     inputRadius->setExponentRatio(3.0);
@@ -137,13 +62,13 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
     inputRadius->setValue(5);
     inputRadius->setSuffix(i18n(" px"));
     inputRadius->setBlockUpdateSignalOnDrag(true);
-    connectControl(inputRadius, &m_d->model, "diameter");
+    connectControl(inputRadius, m_d->model, "diameter");
 
     inputRatio->setRange(0.01, 1.0, 2);
     inputRatio->setSingleStep(0.01);
     inputRatio->setValue(1.0);
     inputRatio->setBlockUpdateSignalOnDrag(true);
-    connectControl(inputRatio, &m_d->model, "ratio");
+    connectControl(inputRatio, m_d->model, "ratio");
 
     inputHFade->setRange(0.0, 1.0, 2);
     inputHFade->setSingleStep(0.01);
@@ -160,22 +85,22 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
 
     connect(m_fadeAspectLocker.data(), &KisAspectRatioLocker::sliderValueChanged,
             [this] () {
-                m_d->model.sethorizontalFade(inputHFade->value());
-                m_d->model.setverticalFade(inputVFade->value());
+                m_d->model->sethorizontalFade(inputHFade->value());
+                m_d->model->setverticalFade(inputVFade->value());
             });
 
     connect(inputHFade, qOverload<qreal>(&KisDoubleSliderSpinBox::valueChanged),
-            &m_d->model, &AutoBrushModel::sethorizontalFade);
+            m_d->model, &KisAutoBrushModel::sethorizontalFade);
     connect(inputVFade, qOverload<qreal>(&KisDoubleSliderSpinBox::valueChanged),
-            &m_d->model, &AutoBrushModel::setverticalFade);
+            m_d->model, &KisAutoBrushModel::setverticalFade);
 
-    m_d->model.LAGER_QT(horizontalFade).bind([this] (qreal value) {
+    m_d->model->LAGER_QT(horizontalFade).bind([this] (qreal value) {
         KisSignalsBlocker b(inputHFade);
         inputHFade->setValue(value);
         m_fadeAspectLocker->updateAspect();
     });
 
-    m_d->model.LAGER_QT(verticalFade).bind([this] (qreal value) {
+    m_d->model->LAGER_QT(verticalFade).bind([this] (qreal value) {
         KisSignalsBlocker b(inputVFade);
         inputVFade->setValue(value);
         m_fadeAspectLocker->updateAspect();
@@ -184,42 +109,44 @@ KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
     inputSpikes->setRange(2, 20);
     inputSpikes->setValue(2);
     inputSpikes->setBlockUpdateSignalOnDrag(true);
-    connectControl(inputSpikes, &m_d->model, "spikes");
+    connectControl(inputSpikes, m_d->model, "spikes");
 
     inputRandomness->setRange(0, 100);
     inputRandomness->setValue(0);
     inputRandomness->setBlockUpdateSignalOnDrag(true);
-    connectControl(inputRandomness, &m_d->model, "randomness");
+    connectControl(inputRandomness, m_d->model, "randomness");
 
     inputAngle->setDecimals(0);
-    connectControl(inputAngle, &m_d->model, "angle");
-    connectControl(spacingWidget, &m_d->model, "aggregatedSpacing");
+    connectControl(inputAngle, m_d->model, "angle");
+    connectControl(spacingWidget, m_d->model, "aggregatedSpacing");
 
     density->setRange(0, 100, 0);
     density->setSingleStep(1);
     density->setValue(100);
     density->setSuffix(i18n("%"));
     density->setBlockUpdateSignalOnDrag(true);
-    connectControl(density, &m_d->model, "density");
+    connectControl(density, m_d->model, "density");
 
     connect(softnessCurve, &KisCurveWidget::modified, this, &KisAutoBrushWidget::slotCurveWidgetChanged);
-    connect(&m_d->model, &AutoBrushModel::curveStringChanged, this, &KisAutoBrushWidget::slotCurvePropertyChanged);
-    m_d->model.LAGER_QT(curveString).nudge();
+    connect(m_d->model, &KisAutoBrushModel::curveStringChanged, this, &KisAutoBrushWidget::slotCurvePropertyChanged);
+    m_d->model->LAGER_QT(curveString).nudge();
 
     QList<KoID> ids = KisMaskGenerator::maskGeneratorIds();
     for (int i = 0; i < ids.size(); i++) {
         comboBoxMaskType->insertItem(i, ids[i].name());
     }
 
-    connect(&m_d->model, &AutoBrushModel::typeChanged, this, &KisAutoBrushWidget::setStackedWidget);
-    setStackedWidget(m_d->model.type());
+    connect(m_d->model, &KisAutoBrushModel::typeChanged, this, &KisAutoBrushWidget::setStackedWidget);
+    setStackedWidget(m_d->model->type());
 
     brushPreview->setIconSize(QSize(100, 100));
 
-    connectControl(btnAntialiasing, &m_d->model, "antialiasEdges");
+    connectControl(btnAntialiasing, m_d->model, "antialiasEdges");
 
-    lager::watch(m_d->commonBrushData, std::bind(&KisSignalCompressor::start, &m_d->previewCompressor));
-    lager::watch(m_d->autoBrushData, std::bind(&KisSignalCompressor::start, &m_d->previewCompressor));
+    lager::watch(m_d->model->m_commonData, std::bind(&KisSignalCompressor::start, &m_d->previewCompressor));
+    lager::watch(m_d->model->m_autoBrushData, std::bind(&KisSignalCompressor::start, &m_d->previewCompressor));
+    lager::watch(m_d->model->m_commonBrushSizeData, std::bind(&KisSignalCompressor::start, &m_d->previewCompressor));
+
     connect(&m_d->previewCompressor, &KisSignalCompressor::timeout, this, &KisAutoBrushWidget::slotUpdateBrushPreview);
 
     slotUpdateBrushPreview();
@@ -235,12 +162,6 @@ void KisAutoBrushWidget::resizeEvent(QResizeEvent *)
     brushPreview->setMaximumHeight(brushPreview->width()); // dirty hack !
 }
 
-void KisAutoBrushWidget::reset()
-{
-    m_d->autoBrushData.set(AutoBrushData());
-    m_d->commonBrushData.set(CommonData());
-}
-
 void KisAutoBrushWidget::setStackedWidget(int index)
 {
     if (index == 1) {
@@ -253,7 +174,7 @@ void KisAutoBrushWidget::setStackedWidget(int index)
 
 void KisAutoBrushWidget::slotCurveWidgetChanged()
 {
-    m_d->model.setcurveString(softnessCurve->curve().toString());
+    m_d->model->setcurveString(softnessCurve->curve().toString());
 }
 
 void KisAutoBrushWidget::slotCurvePropertyChanged(const QString &value)
@@ -276,8 +197,8 @@ void KisAutoBrushWidget::slotUpdateBrushPreview()
     KisAutoBrushFactory factory;
 
     QSharedPointer<KisAutoBrush> brush =
-        factory.createBrush(*m_d->commonBrushData,
-                            *m_d->autoBrushData,
+        factory.createBrush(*m_d->model->m_commonData,
+                            m_d->model->bakedOptionData(),
                             KisGlobalResourcesInterface::instance())
             .resource<KisAutoBrush>();
 
@@ -305,17 +226,12 @@ KisBrushSP KisAutoBrushWidget::brush()
     KisAutoBrushFactory factory;
 
     QSharedPointer<KisAutoBrush> brush =
-        factory.createBrush(*m_d->commonBrushData,
-                            *m_d->autoBrushData,
+        factory.createBrush(*m_d->model->m_commonData,
+                            m_d->model->bakedOptionData(),
                             KisGlobalResourcesInterface::instance())
             .resource<KisAutoBrush>();
 
     return brush;
-}
-
-void KisAutoBrushWidget::setBrush(KisBrushSP brush)
-{
-
 }
 
 #include "kis_auto_brush_widget.moc"

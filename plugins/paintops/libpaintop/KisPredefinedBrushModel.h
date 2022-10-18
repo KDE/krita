@@ -25,16 +25,18 @@ class KisPredefinedBrushModel : public QObject
 public:
     KisPredefinedBrushModel(lager::cursor<CommonData> commonData,
                             lager::cursor<PredefinedBrushData> predefinedBrushData,
+                            lager::cursor<qreal> commonBrushSizeData,
                             bool supportsHSLBrushTips);
 
     // the state must be declared **before** any cursors or readers
     lager::cursor<CommonData> m_commonData;
     lager::cursor<PredefinedBrushData> m_predefinedBrushData;
     lager::constant<bool> m_supportsHSLBrushTips;
+    lager::cursor<qreal> m_commonBrushSizeData;
+
 
     LAGER_QT_CURSOR(KoResourceSignature, resourceSignature);
     LAGER_QT_CURSOR(QSize, baseSize);
-    LAGER_QT_CURSOR(qreal, scale);
     LAGER_QT_CURSOR(qreal, brushSize);
     LAGER_QT_CURSOR(int, application);
     LAGER_QT_CURSOR(bool, hasColorAndTransparency);

@@ -39,10 +39,11 @@ class AutoBrushModel : public QObject
 {
     Q_OBJECT
 public:
-    AutoBrushModel(lager::cursor<CommonData> commonData, lager::cursor<AutoBrushData> autoBrushData)
+    AutoBrushModel(lager::cursor<CommonData> commonData, lager::cursor<AutoBrushData> autoBrushData, lager::cursor<qreal> commonBrushSizeData)
         : m_commonData(commonData),
           m_autoBrushData(autoBrushData),
-          LAGER_QT(diameter) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::diameter]},
+          m_commonBrushSizeData(commonBrushSizeData),
+          LAGER_QT(diameter) {m_commonBrushSizeData},
           LAGER_QT(ratio) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::ratio]},
           LAGER_QT(horizontalFade) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::horizontalFade]},
           LAGER_QT(verticalFade) {m_autoBrushData[&AutoBrushData::generator][&AutoBrushGeneratorData::verticalFade]},
@@ -73,6 +74,7 @@ public:
     // the state must be declared **before** any cursors or readers
     lager::cursor<CommonData> m_commonData;
     lager::cursor<AutoBrushData> m_autoBrushData;
+    lager::cursor<qreal> m_commonBrushSizeData;
 
     LAGER_QT_CURSOR(qreal, diameter);
     LAGER_QT_CURSOR(qreal, ratio);
@@ -91,14 +93,19 @@ public:
     LAGER_QT_CURSOR(qreal, autoSpacingCoeff);
     LAGER_QT_CURSOR(SpacingState, aggregatedSpacing);
 
+    AutoBrushData bakedOptionData() const {
+        AutoBrushData data = m_autoBrushData.get();
+        data.generator.diameter = m_commonBrushSizeData.get();
+        return data;
+    }
 };
 
 
 struct KisAutoBrushWidget::Private {
-    Private(lager::cursor<CommonData> _commonBrushData, lager::cursor<KisBrushModel::AutoBrushData> _autoBrushData)
+    Private(lager::cursor<CommonData> _commonBrushData, lager::cursor<KisBrushModel::AutoBrushData> _autoBrushData, lager::cursor<qreal> _commonBrushSizeData)
         : commonBrushData(_commonBrushData),
           autoBrushData(_autoBrushData),
-          model(commonBrushData, autoBrushData),
+          model(commonBrushData, autoBrushData, _commonBrushSizeData),
           previewCompressor(200, KisSignalCompressor::FIRST_ACTIVE)
     {
     }
@@ -111,10 +118,14 @@ struct KisAutoBrushWidget::Private {
 
 
 
-KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize, lager::cursor<CommonData> commonBrushData, lager::cursor<AutoBrushData> autoBrushData, QWidget *parent, const char* name)
+KisAutoBrushWidget::KisAutoBrushWidget(int maxBrushSize,
+                                       lager::cursor<CommonData> commonBrushData,
+                                       lager::cursor<AutoBrushData> autoBrushData,
+                                       lager::cursor<qreal> commonBrushSizeData,
+                                       QWidget *parent, const char* name)
     : KisWdgAutoBrush(parent, name)
     , m_fadeAspectLocker(new KisAspectRatioLocker())
-    , m_d(new Private(commonBrushData, autoBrushData))
+    , m_d(new Private(commonBrushData, autoBrushData, commonBrushSizeData))
 
 {
     connectControl(comboBoxShape, &m_d->model, "shape");

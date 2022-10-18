@@ -20,11 +20,13 @@
 struct KisBrushOptionWidget::Private
 {
     Private()
+        : commonBrushSizeData(778.0)
     {
     }
 
     lager::state<KisBrushModel::BrushData, lager::automatic_tag> brushData;
     lager::state<KisBrushModel::PrecisionData, lager::automatic_tag> brushPrecisionData;
+    lager::state<qreal, lager::automatic_tag> commonBrushSizeData;
 
     KisBrushOptionWidgetFlags flags;
 };
@@ -36,7 +38,7 @@ KisBrushOptionWidget::KisBrushOptionWidget(KisBrushOptionWidgetFlags flags)
     m_d->flags = flags;
 
     m_checkable = false;
-    m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize(), m_d->brushData, m_d->brushPrecisionData, flags);
+    m_brushSelectionWidget = new KisBrushSelectionWidget(KisImageConfig(true).maxBrushSize(), m_d->brushData, m_d->brushPrecisionData, m_d->commonBrushSizeData, flags);
     m_brushSelectionWidget->hide();
     setConfigurationPage(m_brushSelectionWidget);
 
@@ -45,6 +47,7 @@ KisBrushOptionWidget::KisBrushOptionWidget(KisBrushOptionWidgetFlags flags)
     // TODO: merge them into a single struct to avoid double updates
     lager::watch(m_d->brushData, std::bind(&KisBrushOptionWidget::emitSettingChanged, this));
     lager::watch(m_d->brushPrecisionData, std::bind(&KisBrushOptionWidget::emitSettingChanged, this));
+    lager::watch(m_d->commonBrushSizeData, std::bind(&KisBrushOptionWidget::emitSettingChanged, this));
 }
 
 KisBrushSP KisBrushOptionWidget::brush() const
@@ -60,7 +63,13 @@ void KisBrushOptionWidget::setImage(KisImageWSP image)
 
 void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP settings) const
 {
-    m_d->brushData->write(settings.data());
+    using namespace KisBrushModel;
+
+    // TODO: implement normal baking!
+    BrushData data = m_d->brushData.get();
+    setEffectiveSizeForBrush(data.type, data.autoBrush, data.predefinedBrush, data.textBrush, m_d->commonBrushSizeData.get());
+
+    data.write(settings.data());
 
     if (m_d->flags & KisBrushOptionWidgetFlag::SupportsPrecision) {
         m_d->brushPrecisionData->write(settings.data());
@@ -69,9 +78,12 @@ void KisBrushOptionWidget::writeOptionSetting(KisPropertiesConfigurationSP setti
 
 void KisBrushOptionWidget::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    std::optional<KisBrushModel::BrushData> data = KisBrushModel::BrushData::read(setting.data(), resourcesInterface());
+    using namespace KisBrushModel;
+
+    std::optional<BrushData> data = BrushData::read(setting.data(), resourcesInterface());
     KIS_SAFE_ASSERT_RECOVER_RETURN(data);
     m_d->brushData.set(*data);
+    m_d->commonBrushSizeData.set(effectiveSizeForBrush(data->type, data->autoBrush, data->predefinedBrush, data->textBrush));
 
     if (m_d->flags & KisBrushOptionWidgetFlag::SupportsPrecision) {
         m_d->brushPrecisionData.set(KisBrushModel::PrecisionData::read(setting.data()));
@@ -90,8 +102,7 @@ lager::reader<bool> KisBrushOptionWidget::lightnessModeEnabled() const
 
 lager::reader<qreal> KisBrushOptionWidget::effectiveBrushSize() const
 {
-    using namespace KisBrushModel;
-    return m_d->brushData.map(qOverload<const BrushData&>(&KisBrushModel::effectiveSizeForBrush));
+    return m_d->commonBrushSizeData;
 }
 
 lager::reader<KisPaintopLodLimitations> KisBrushOptionWidget::lodLimitationsReader() const

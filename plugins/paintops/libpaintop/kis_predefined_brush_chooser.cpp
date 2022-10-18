@@ -148,10 +148,11 @@ struct KisPredefinedBrushChooser::Private
 {
     Private(lager::cursor<KisBrushModel::CommonData> _commonBrushData,
             lager::cursor<KisBrushModel::PredefinedBrushData> _predefinedBrushData,
+            lager::cursor<qreal> _commonBrushSizeData,
             bool supportsHSLBrushTips)
         : commonBrushData(_commonBrushData),
           predefinedBrushData(_predefinedBrushData),
-          model(commonBrushData, predefinedBrushData, supportsHSLBrushTips)
+          model(commonBrushData, predefinedBrushData, _commonBrushSizeData, supportsHSLBrushTips)
     {
     }
 
@@ -163,10 +164,11 @@ struct KisPredefinedBrushChooser::Private
 KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
                                                      lager::cursor<KisBrushModel::CommonData> commonBrushData,
                                                      lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData,
+                                                     lager::cursor<qreal> commonBrushSizeData,
                                                      bool supportsHSLBrushTips,
                                                      QWidget *parent, const char *name)
     : QWidget(parent),
-      m_d(new Private(commonBrushData, predefinedBrushData, supportsHSLBrushTips)),
+      m_d(new Private(commonBrushData, predefinedBrushData, commonBrushSizeData, supportsHSLBrushTips)),
       m_stampBrushWidget(0),
       m_clipboardBrushWidget(0)
 {
@@ -298,6 +300,7 @@ void KisPredefinedBrushChooser::slotResetBrush()
 
         m_d->commonBrushData.set(commonData);
         m_d->predefinedBrushData.set(predefinedData);
+        m_d->model.m_commonBrushSizeData.set(KisPredefinedBrushModel::effectiveBrushSize(predefinedData));
     }
 }
 
@@ -341,6 +344,8 @@ void KisPredefinedBrushChooser::slotBrushSelected(KoResourceSP resource)
     KisBrushModel::CommonData commonBrushData = *m_d->commonBrushData;
     KisBrushModel::PredefinedBrushData predefinedBrushData = *m_d->predefinedBrushData;
 
+    if (resource->signature() == predefinedBrushData.resourceSignature) return;
+
     KisPredefinedBrushFactory::loadFromBrushResource(commonBrushData, predefinedBrushData, resource.dynamicCast<KisBrush>());
 
     predefinedBrushData.scale = 1.0;
@@ -348,11 +353,11 @@ void KisPredefinedBrushChooser::slotBrushSelected(KoResourceSP resource)
 
     // TODO: check what happens when we add a new brush
     if (this->preserveBrushPresetSettings->isChecked()) {
-        KisPredefinedBrushModel::setEffectiveBrushSize(
-            predefinedBrushData, m_d->model.brushSize());
         commonBrushData.spacing = m_d->model.spacing();
         commonBrushData.useAutoSpacing = m_d->model.useAutoSpacing();
         commonBrushData.autoSpacingCoeff = m_d->model.autoSpacingCoeff();
+    } else {
+        m_d->model.m_commonBrushSizeData.set(predefinedBrushData.baseSize.width());
     }
 
     m_d->commonBrushData.set(commonBrushData);

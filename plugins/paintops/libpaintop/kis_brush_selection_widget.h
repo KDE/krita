@@ -41,6 +41,7 @@ public:
     KisBrushSelectionWidget(int maxBrushSize,
                             lager::cursor<KisBrushModel::BrushData> brushData,
                             lager::cursor<KisBrushModel::PrecisionData> precisionData,
+                            lager::cursor<qreal> commonBrushSizeData,
                             KisBrushOptionWidgetFlags flags,
                             QWidget *parent = 0);
 

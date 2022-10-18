@@ -121,6 +121,7 @@ struct KisBrushSelectionWidget::Private
 KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
                                                  lager::cursor<KisBrushModel::BrushData> brushData,
                                                  lager::cursor<KisBrushModel::PrecisionData> precisionData,
+                                                 lager::cursor<qreal> commonBrushSizeData,
                                                  KisBrushOptionWidgetFlags flags,
                                                  QWidget *parent)
     : QWidget(parent)
@@ -137,9 +138,9 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
     m_stackedWidget = new QStackedWidget(this);
     m_layout->addWidget(m_stackedWidget);
 
-    m_autoBrushWidget = new KisAutoBrushWidget(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::autoBrush], this, "autobrush");
+    m_autoBrushWidget = new KisAutoBrushWidget(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::autoBrush], commonBrushSizeData, this, "autobrush");
     addChooser(i18nc("Autobrush Brush tip mode", "Auto"), m_autoBrushWidget, AUTOBRUSH, KoGroupButton::GroupLeft);
-    m_predefinedBrushWidget = new KisPredefinedBrushChooser(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::predefinedBrush], flags & KisBrushOptionWidgetFlag::SupportsHSLBrushMode, this);
+    m_predefinedBrushWidget = new KisPredefinedBrushChooser(maxBrushSize, m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::predefinedBrush], commonBrushSizeData, flags & KisBrushOptionWidgetFlag::SupportsHSLBrushMode, this);
     addChooser(i18nc("Predefined Brush tip mode", "Predefined"), m_predefinedBrushWidget, PREDEFINEDBRUSH, KoGroupButton::GroupCenter);
 
     m_textBrushWidget = new KisTextBrushChooser(m_brushData[&KisBrushModel::BrushData::common], m_brushData[&KisBrushModel::BrushData::textBrush], this);

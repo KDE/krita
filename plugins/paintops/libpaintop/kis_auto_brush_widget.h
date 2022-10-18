@@ -43,6 +43,7 @@ public:
     KisAutoBrushWidget(int maxBrushSize,
                        lager::cursor<KisBrushModel::CommonData> commonBrushData,
                        lager::cursor<KisBrushModel::AutoBrushData> autoBrushData,
+                       lager::cursor<qreal> commonBrushSizeData,
                        QWidget *parent, const char* name);
     ~KisAutoBrushWidget() override;
 

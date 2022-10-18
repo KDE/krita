@@ -57,8 +57,9 @@ class MaskingBrushModel : public QObject
 {
     Q_OBJECT
 public:
-    MaskingBrushModel(lager::cursor<MaskingBrushData> maskingData, lager::reader<qreal> masterBrushSize)
+    MaskingBrushModel(lager::cursor<MaskingBrushData> maskingData, lager::cursor<qreal> commonBrushSizeData, lager::reader<qreal> masterBrushSize)
         : m_maskingData(maskingData),
+          m_commonBrushSizeData(commonBrushSizeData),
           m_masterBrushSize(masterBrushSize),
           m_preserveMode(false),
           LAGER_QT(isEnabled) {m_maskingData[&MaskingBrushData::isEnabled]},
@@ -67,9 +68,7 @@ public:
               lager::with(m_maskingData[&MaskingBrushData::masterSizeCoeff],
                           m_masterBrushSize)
                       .map(std::multiplies<qreal>{})},
-          LAGER_QT(realBrushSize) {
-              m_maskingData[&MaskingBrushData::brush]
-                      .map(qOverload<const BrushData&>(&KisBrushModel::effectiveSizeForBrush))},
+          LAGER_QT(realBrushSize) {m_commonBrushSizeData},
           LAGER_QT(warningLabelVisible) {
               lager::with(m_preserveMode,
                           LAGER_QT(theoreticalBrushSize).map(&detail::warningLabelVisible))
@@ -86,6 +85,7 @@ public:
 
     // the state must be declared **before** any cursors or readers
     lager::cursor<MaskingBrushData> m_maskingData;
+    lager::cursor<qreal> m_commonBrushSizeData;
     lager::reader<qreal> m_masterBrushSize;
     lager::state<bool, lager::automatic_tag> m_preserveMode;
 
@@ -135,8 +135,9 @@ struct KisMaskingBrushOption::Private
 {
     Private(lager::reader<qreal> effectiveBrushSize)
         : ui(new QWidget()),
+          commonBrushSizeData(777.0),
           masterBrushSize(effectiveBrushSize),
-          maskingModel(maskingData, effectiveBrushSize)
+          maskingModel(maskingData, commonBrushSizeData, effectiveBrushSize)
     {
         compositeSelector = new QComboBox(ui.data());
 
@@ -155,7 +156,7 @@ struct KisMaskingBrushOption::Private
         brushSizeWarningLabel->setVisible(false);
         brushSizeWarningLabel->setWordWrap(true);
 
-        brushChooser = new KisBrushSelectionWidget(KisImageConfig(true).maxMaskingBrushSize(), maskingData[&MaskingBrushData::brush], brushPrecisionData, KisBrushOptionWidgetFlag::None, ui.data());
+        brushChooser = new KisBrushSelectionWidget(KisImageConfig(true).maxMaskingBrushSize(), maskingData[&MaskingBrushData::brush], brushPrecisionData, commonBrushSizeData, KisBrushOptionWidgetFlag::None, ui.data());
 
         QVBoxLayout *layout  = new QVBoxLayout(ui.data());
         layout->addLayout(compositeOpLayout, 0);
@@ -169,6 +170,7 @@ struct KisMaskingBrushOption::Private
     QLabel *brushSizeWarningLabel = 0;
 
     lager::state<KisBrushModel::MaskingBrushData, lager::automatic_tag> maskingData;
+    lager::state<qreal, lager::automatic_tag> commonBrushSizeData;
     lager::reader<qreal> masterBrushSize;
     MaskingBrushModel maskingModel;
 
@@ -205,6 +207,7 @@ KisMaskingBrushOption::KisMaskingBrushOption(lager::reader<qreal> effectiveBrush
     m_d->maskingModel.LAGER_QT(warningLabelText).nudge();
 
     m_d->maskingData.watch(std::bind(&KisMaskingBrushOption::emitSettingChanged, this));
+    m_d->commonBrushSizeData.watch(std::bind(&KisMaskingBrushOption::emitSettingChanged, this));
 }
 
 KisMaskingBrushOption::~KisMaskingBrushOption()
@@ -214,12 +217,21 @@ KisMaskingBrushOption::~KisMaskingBrushOption()
 
 void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP setting) const
 {
+    using namespace KisBrushModel;
+
     if (m_d->maskingData->useMasterSize &&
         !m_d->maskingModel.m_preserveMode.get()) {
 
         MaskingBrushData tempData = m_d->maskingData.get();
 
-        tempData.masterSizeCoeff = KisBrushModel::effectiveSizeForBrush(tempData.brush) / m_d->masterBrushSize.get();
+        // todo: use normal baking!
+        setEffectiveSizeForBrush(tempData.brush.type,
+                                 tempData.brush.autoBrush,
+                                 tempData.brush.predefinedBrush,
+                                 tempData.brush.textBrush,
+                                 m_d->commonBrushSizeData.get());
+
+        tempData.masterSizeCoeff = m_d->commonBrushSizeData.get() / m_d->masterBrushSize.get();
         tempData.write(setting.data());
     } else {
         m_d->maskingData->write(setting.data());
@@ -228,7 +240,13 @@ void KisMaskingBrushOption::writeOptionSetting(KisPropertiesConfigurationSP sett
 
 void KisMaskingBrushOption::readOptionSetting(const KisPropertiesConfigurationSP setting)
 {
-    m_d->maskingData.set(MaskingBrushData::read(setting.data(), m_d->masterBrushSize.get(), resourcesInterface()));
+    MaskingBrushData data = MaskingBrushData::read(setting.data(), m_d->masterBrushSize.get(), resourcesInterface());
+
+    m_d->commonBrushSizeData.set(effectiveSizeForBrush(data.brush.type,
+                                                       data.brush.autoBrush,
+                                                       data.brush.predefinedBrush,
+                                                       data.brush.textBrush));
+    m_d->maskingData.set(data);
     m_d->maskingModel.startPreserveMode();
 }
 

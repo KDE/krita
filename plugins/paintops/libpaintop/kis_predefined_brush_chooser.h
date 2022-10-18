@@ -38,6 +38,7 @@ public:
     KisPredefinedBrushChooser(int maxBrushSize,
                               lager::cursor<KisBrushModel::CommonData> commonBrushData,
                               lager::cursor<KisBrushModel::PredefinedBrushData> predefinedBrushData,
+                              lager::cursor<qreal> commonBrushSizeData,
                               bool supportsHSLBrushTips,
                               QWidget *parent = 0, const char *name = 0);
     ~KisPredefinedBrushChooser() override;

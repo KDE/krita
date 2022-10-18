@@ -13,7 +13,6 @@ auto brushSizeLens = lager::lenses::getset(
         return std::make_tuple(std::get<0>(x), brushSize / std::get<0>(x).width());
     });
 
-
 ComboBoxState calcApplicationSwitchState(enumBrushType brushType, bool supportsHSLBrushTips, enumBrushApplication application)
 {
     QStringList values;
@@ -68,15 +67,15 @@ QString calcBrushDetails(PredefinedBrushData data)
 
 KisPredefinedBrushModel::KisPredefinedBrushModel(lager::cursor<CommonData> commonData,
                                                  lager::cursor<PredefinedBrushData> predefinedBrushData,
+                                                 lager::cursor<qreal> commonBrushSizeData,
                                                  bool supportsHSLBrushTips)
     : m_commonData(commonData),
       m_predefinedBrushData(predefinedBrushData),
       m_supportsHSLBrushTips(supportsHSLBrushTips),
+      m_commonBrushSizeData(commonBrushSizeData),
       LAGER_QT(resourceSignature) {m_predefinedBrushData[&PredefinedBrushData::resourceSignature]},
       LAGER_QT(baseSize) {m_predefinedBrushData[&PredefinedBrushData::baseSize]},
-      LAGER_QT(scale) {m_predefinedBrushData[&PredefinedBrushData::scale]},
-      LAGER_QT(brushSize) {lager::with(LAGER_QT(baseSize), LAGER_QT(scale))
-                  .zoom(brushSizeLens)},
+      LAGER_QT(brushSize) {m_commonBrushSizeData},
       LAGER_QT(application) {m_predefinedBrushData[&PredefinedBrushData::application]
                   .zoom(kiszug::lenses::do_static_cast<enumBrushApplication, int>)},
       LAGER_QT(hasColorAndTransparency) {m_predefinedBrushData[&PredefinedBrushData::hasColorAndTransparency]},
@@ -122,6 +121,7 @@ PredefinedBrushData KisPredefinedBrushModel::bakedOptionData() const
     data.application =
         static_cast<enumBrushApplication>(
             LAGER_QT(applicationSwitchState)->currentIndex);
+    data.scale = m_commonBrushSizeData.get() / data.baseSize.width();
 
     return data;
 

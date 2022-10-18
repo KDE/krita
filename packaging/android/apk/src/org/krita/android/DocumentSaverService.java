@@ -1,7 +1,7 @@
 /*
- * SPDX-FileCopyrightText: 2021 Sharaf Zaman <sharafzaz121@gmail.com>
+ * SPDX-FileCopyrightText: 2022 Sharaf Zaman <shzam@sdf.org>
  *
- * SPDX-License-Identifier: GPL-2.0-or-later
+ * SPDX-License-Identifier: LGPL-2.0-or-later
  */
 
 package org.krita.android;
@@ -9,6 +9,7 @@ package org.krita.android;
 import static android.os.Process.killProcess;
 import static android.os.Process.myPid;
 
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -18,6 +19,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import org.krita.R;
 
@@ -31,22 +34,24 @@ public class DocumentSaverService extends Service {
     public static final String KILL_PROCESS = "KILL_PROCESS";
     private static final String CANCEL_SAVING = "CANCEL_SAVING";
 
+    private boolean mStartedInForeground = false;
     private boolean mKillProcess = false;
     private Thread mDocSaverThread;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(TAG, "Creating");
+        Log.i(TAG, "[onCreate]");
 
+        createNotificationChannel();
+    }
+
+    private Notification getNotification() {
+        Notification notification;
         Intent intent = new Intent(this, DocumentSaverService.class);
         intent.putExtra(CANCEL_SAVING, true);
         PendingIntent cancelPendingIntent = PendingIntent.getService(this, 0,
                 intent, PendingIntent.FLAG_IMMUTABLE);
-
-        createNotificationChannel();
-
-        Notification notification;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             notification = new Notification.Builder(this, CHANNEL_ID)
                     .setContentTitle(getString(R.string.save_notification_text))
@@ -64,7 +69,7 @@ public class DocumentSaverService extends Service {
                     .build();
         }
 
-        startForeground(NOTIFICATION_ID, notification);
+        return notification;
     }
 
     private void createNotificationChannel() {
@@ -78,31 +83,69 @@ public class DocumentSaverService extends Service {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private void tryStartServiceInForegroundS() {
+        try {
+            startForeground(NOTIFICATION_ID, getNotification());
+            mStartedInForeground = true;
+        } catch (ForegroundServiceStartNotAllowedException e) {
+            Log.w(TAG, "Could not run the service in foreground: " + e);
+            mStartedInForeground = false;
+        }
+    }
+
+    private void tryStartServiceInForeground() {
+        startForeground(NOTIFICATION_ID, getNotification());
+        mStartedInForeground = true;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.i(TAG, "Starting");
+        Log.i(TAG, "[onStartCommand]");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            tryStartServiceInForegroundS();
+        } else {
+            tryStartServiceInForeground();
+        }
 
         if (intent.getBooleanExtra(START_SAVING, false)) {
             Log.i(TAG, "Starting Auto Save");
             // let's not block the Android UI thread if we return to the app quickly
-            mDocSaverThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    JNIWrappers.saveState();
-                    stopSelf();
-                }
-            });
+            mDocSaverThread =
+                    new Thread(
+                            new Runnable() {
+                                @Override
+                                public void run() {
+                                    JNIWrappers.saveState();
+                                    if (mStartedInForeground) {
+                                        stopForeground(true);
+                                        // reset the value
+                                        mStartedInForeground = false;
+                                    }
+                                }
+                            });
             mDocSaverThread.start();
         } else if (intent.getBooleanExtra(KILL_PROCESS, false)) {
             mKillProcess = true;
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    waitForSaving();
-                    // if saving finished a long time ago, we will have to kill the app
-                    stopSelf();
-                }
-            }).start();
+            if (mStartedInForeground) {
+                // This can be async, because foreground service are promised to run beyond process death.
+                // This has to be async, because we have to handle cancelling action.
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        waitForSaving();
+                        // if saving finished a long time ago, we will have to kill the app
+                        stopSelf();
+                    }
+                }).start();
+            } else {
+                // We wait on Main thread. When we don't do this and use Background service, if the
+                // Activity is killed the Service is automatically destroyed without waiting for threads
+                // to start/finish.
+                waitForSaving();
+                stopSelf();
+            }
         } else if (intent.getBooleanExtra(CANCEL_SAVING, false)) {
             // without this Android will think we crashed
             stopSelf();
@@ -128,6 +171,7 @@ public class DocumentSaverService extends Service {
     }
 
     private void waitForSaving() {
+        Log.i(TAG, "[waitForSaving]: mStartedInForeground: " + mStartedInForeground);
         if (mDocSaverThread != null) {
             try {
                 mDocSaverThread.join();

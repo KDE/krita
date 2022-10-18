@@ -226,6 +226,33 @@ void KisMirrorAxis::drawDecoration(QPainter& gc, const QRectF& updateArea, const
 
 }
 
+static KoPointerEvent *getKoPointerEvent(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseMove:
+    case QEvent::MouseButtonRelease: {
+        QMouseEvent *me = static_cast<QMouseEvent *>(event);
+        return new KoPointerEvent(me, me->pos());
+    }
+    case QEvent::TabletPress:
+    case QEvent::TabletMove:
+    case QEvent::TabletRelease: {
+        QTabletEvent *te = static_cast<QTabletEvent *>(event);
+        return new KoPointerEvent(te, te->pos());
+    }
+    case QEvent::TouchBegin:
+    case QEvent::TouchUpdate:
+    case QEvent::TouchEnd:
+    case QEvent::TouchCancel: {
+        QTouchEvent *te = static_cast<QTouchEvent *>(event);
+        return new KoPointerEvent(te, te->touchPoints().at(0).pos());
+    }
+    default:
+        return nullptr;
+    }
+}
+
 bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 {
     if (!visible()) return false;
@@ -235,10 +262,10 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
 
     if (!expectedCanvasWidget || target != expectedCanvasWidget) return false;
 
-    if(event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress) {
-        QMouseEvent *me = dynamic_cast<QMouseEvent*>(event);
-        QTabletEvent *te = dynamic_cast<QTabletEvent*>(event);
-        QPoint pos = me ? me->pos() : (te ? te->pos() : QPoint(77,77));
+    if (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::TabletPress
+        || event->type() == QEvent::TouchBegin) {
+        const QScopedPointer<KoPointerEvent> pointerEvent(getKoPointerEvent(event));
+        const QPoint pos = !pointerEvent.isNull() ? pointerEvent->pos() : QPoint(77,77);
 
         if(d->config.mirrorHorizontal() && d->horizontalHandle.contains(pos) && !d->config.lockHorizontal() && !d->config.hideHorizontalDecoration() ) {
             d->xActive = true;
@@ -254,11 +281,10 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             return true;
         }
     }
-    if(event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove) {
-        QMouseEvent *me = dynamic_cast<QMouseEvent*>(event);
-        QTabletEvent *te = dynamic_cast<QTabletEvent*>(event);
-
-        QPoint pos = me ? me->pos() : (te ? te->pos() : QPoint(77,77));
+    if (event->type() == QEvent::MouseMove || event->type() == QEvent::TabletMove
+        || event->type() == QEvent::TouchUpdate) {
+        const QScopedPointer<KoPointerEvent> pointerEvent(getKoPointerEvent(event));
+        const QPoint pos = !pointerEvent.isNull() ? pointerEvent->pos() : QPoint(77,77);
 
         if(d->xActive) {
             float axisX = view()->viewConverter()->widgetToImage<QPoint>(pos).x();
@@ -316,7 +342,8 @@ bool KisMirrorAxis::eventFilter(QObject* target, QEvent* event)
             }
         }
     }
-    if(event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease) {
+    if (event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::TabletRelease
+        || event->type() == QEvent::TouchEnd || event->type() == QEvent::TouchCancel) {
 
         if(d->xActive) {
             while (QApplication::overrideCursor()) {

@@ -20,6 +20,13 @@ ExternalProject_Add(
     DEPENDS ext_libogg
 )
 
+# IMPORTANT:
+# OpenSUSE's list of whitelisted encoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_encoders
+# OpenSUSE's list of whitelisted decoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_decoders
+# Above are the lists of codecs that have been approved for use by OpenSUSE's legal department.
+# Anything not enabled (missing or commented out) in these lists is considered unsafe and should NOT be used!
+# While unlikely, it's possible that these lists could change, so it's worth occasionally cross-referencing.
+
 ExternalProject_Add(
     ext_ffmpeg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
@@ -36,12 +43,36 @@ ExternalProject_Add(
             -Dcli=enabled
             -Dtests=disabled
             -Dffprobe=disabled
-            -Dffplay=disabled
+            -Dffplay=enabled
             -Davdevice=disabled
-            -Davresample=disabled
-            -Dswresample=disabled
-            -Dswscale=disabled
+            -Davcodec=enabled
+            -Davformat=enabled
+            -Davutil=enabled
+            -Davresample=enabled
+            -Dswresample=enabled
+            -Dswscale=enabled
             -Dpostproc=disabled
+            -Dsdl2=enabled
+            # ===================== Container Formats
+            -Dwebm_muxer=enabled
+            -Dmatroska_muxer=enabled
+            -Dogg_muxer=enabled
+            # ===================== Image Formats
+            -Dlibwebp=enabled
+            -Dpng_encoder=enabled
+            -Dapng_encoder=enabled
+            # ===================== Video Codecs
+            -Dlibaom_av1_encoder=enabled
+            -Dlibvpx_vp9_encoder=enabled
+            -Dlibvpx_vp8_encoder=enabled
+            -Dlibopenh264=enabled
+            -Dlibtheora=enabled
+            # -Ddirac=enabled
+            # ===================== Audio Codecs
+            -Dflac_encoder=enabled
+            -Daac_encoder=enabled
+            -Dlibmp3lame=enabled
+            -Dlibopus=enabled
             -Dlibvorbis=enabled
             ${EXTRA_MESON_FLAGS}
 

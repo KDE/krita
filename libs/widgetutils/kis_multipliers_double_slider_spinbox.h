@@ -31,8 +31,11 @@ public:
     ///Get the value, don't use value()
     qreal value();
 
+public Q_SLOTS:
     ///Set the value, don't use setValue()
     void setValue(qreal value);
+
+public:
     void setExponentRatio(qreal dbl);
 
     void setPrefix(const QString& prefix);

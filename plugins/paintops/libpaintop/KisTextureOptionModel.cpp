@@ -21,7 +21,9 @@ auto patternResourceLens = [] (KisResourcesInterfaceSP resourcesInterface) {
             KoResourceSP resource;
 
             if (result.type() != KoResourceLoadResult::ExistingResource) {
-                qWarning() << "Failed to load embedded resource" << result.signature();
+                if (!data.isNull()) {
+                    qWarning() << "Failed to load embedded resource" << result.signature();
+                }
                 resource = resourcesInterface->source(ResourceType::Patterns).fallbackResource();
             } else {
                 resource = result.resource();

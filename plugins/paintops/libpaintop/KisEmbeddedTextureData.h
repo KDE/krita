@@ -31,6 +31,8 @@ public:
     QString name;
     QString patternBase64;
 
+    bool isNull() const;
+
     static KisEmbeddedTextureData fromPattern(KoPatternSP pattern);
     KoResourceLoadResult loadLinkedPattern(KisResourcesInterfaceSP resourcesInterface) const;
 

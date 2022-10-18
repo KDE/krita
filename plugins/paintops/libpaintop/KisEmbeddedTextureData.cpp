@@ -11,6 +11,11 @@
 #include <KisResourcesInterface.h>
 
 
+bool KisEmbeddedTextureData::isNull() const
+{
+    return md5sum.isEmpty() && fileName.isEmpty() && name.isEmpty();
+}
+
 KisEmbeddedTextureData KisEmbeddedTextureData::fromPattern(KoPatternSP pattern)
 {
     KisEmbeddedTextureData data;

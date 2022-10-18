@@ -7,6 +7,7 @@
 
 package org.krita.android;
 
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,8 @@ import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
+
+import androidx.annotation.RequiresApi;
 
 import org.qtproject.qt5.android.QtNative;
 import org.qtproject.qt5.android.bindings.QtActivity;
@@ -44,6 +47,11 @@ public class MainActivity extends QtActivity {
         new ConfigsManager().handleAssets(this);
 
         DonationHelper.getInstance();
+
+        // Keep the service started so in an unfortunate case where we're not allowed to start a
+        // foreground service, we can try to continue without it.
+        Intent docSaverServiceIntent = new Intent(this, DocumentSaverService.class);
+        startService(docSaverServiceIntent);
     }
 
     @Override
@@ -73,29 +81,43 @@ public class MainActivity extends QtActivity {
         // isn't loaded, it crashes.
         if (haveLibsLoaded) {
             synchronized(this) {
-                Intent intent = new Intent(this, DocumentSaverService.class);
-                intent.putExtra(DocumentSaverService.START_SAVING, true);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
+                startServiceGeneric(DocumentSaverService.START_SAVING);
             }
+        }
+    }
+
+    void startServiceGeneric(final String action) {
+        Intent intent = new Intent(this, DocumentSaverService.class);
+        intent.putExtra(action, true);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            startForegroundServiceS(intent);
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(intent);
+        } else {
+            startService(intent);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    void startForegroundServiceS(Intent intent) {
+        try {
+            startForegroundService(intent);
+        } catch (ForegroundServiceStartNotAllowedException e) {
+            Log.w(TAG, "ForegroundServiceStartNotAllowedException: " + e);
+
+            // The service is already running, so maybe try saving without trying to put it in
+            // foreground. According to docs we should have a couple of minutes of runtime.
+            startService(intent);
         }
     }
 
     @Override
     public void onDestroy() {
-        Intent intent = new Intent(this, DocumentSaverService.class);
-        intent.putExtra(DocumentSaverService.KILL_PROCESS, true);
-
         // Docs say: this method will not be called if the activity's hosting process
         // is killed. This means, for us that the service has been stopped.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
+
+        Log.i(TAG, "[onDestroy]");
+        startServiceGeneric(DocumentSaverService.KILL_PROCESS);
 
         super.onDestroy();
     }

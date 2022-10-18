@@ -68,23 +68,23 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
             //for general output logging.
             connect(this, &KisFFMpegWrapper::sigReadSTDERR, [this](QByteArray stderrBuffer){
                 QString line = stderrBuffer;
-                QFile loggingFile(m_processSettings.logPath);
-                if (loggingFile.open(QIODevice::WriteOnly | QIODevice::Append)) {
-                    loggingFile.write(stderrBuffer);
+                QFile progressLog(m_processSettings.logPath);
+                if (progressLog.open(QIODevice::WriteOnly | QIODevice::Append)) {
+                    progressLog.write(stderrBuffer);
                 }
             });
             
             if (!settings.outputFile.isEmpty()) {
                 connect(this, &KisFFMpegWrapper::sigFinishedWithError, [this](QString){
-                    QFile loggingFile(m_processSettings.logPath);
-                    QString targetPath = m_processSettings.outputFile + ".log";
+                    QFile progressLog(m_processSettings.logPath);
+                    QString renderLogPath = m_processSettings.outputFile + ".log";
                     
-                    if (QFile::exists(targetPath)) {
-                        QFile existingFile(targetPath);
+                    if (QFile::exists(renderLogPath)) {
+                        QFile existingFile(renderLogPath);
                         existingFile.remove();
                     }
                     
-                    loggingFile.copy(targetPath);
+                    progressLog.copy(renderLogPath);
                 });
             }
         }

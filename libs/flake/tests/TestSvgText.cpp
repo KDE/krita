@@ -1913,6 +1913,44 @@ void TestSvgText::testFontOpenTypeVariationsConfiguration()
     t.test_standard("font-opentype-variations", renderRect.size(), 72.0);
 }
 
+/**
+ * @brief TestSvgText::testCssFontVariants
+ *
+ * This tests css 3 font-variants, which are equivelant to opentype features,
+ * and should not be confused with opentype variations
+ * (or with unicode variation selectors for that matter).
+ */
+void TestSvgText::testCssFontVariants()
+{
+    QString fontName = "FontWithFeaturesOTF";
+    QString fontFileName = "fonts/FontWithFancyFeatures.otf";
+    QString fileName = TestUtil::fetchDataFileLazy(fontFileName);
+
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QVERIFY2(res, QString("KoFontRegistery could not add the test font %1").arg(fontName).toLatin1());
+
+    QMap<QString, QRect> testFiles;
+    testFiles.insert("font-test-font-variant-basic", QRect(0, 0, 230, 200));
+    testFiles.insert("font-test-font-variant-caps", QRect(0, 0, 100, 370));
+    testFiles.insert("font-test-font-variant-east-asian", QRect(0, 0, 260, 260));
+    testFiles.insert("font-test-font-variant-ligatures", QRect(0, 0, 160, 200));
+    testFiles.insert("font-test-font-variant-numeric", QRect(0, 0, 370, 160));
+    testFiles.insert("font-test-font-variant-position", QRect(0, 0, 160, 70));
+    for (QString testFile: testFiles.keys()) {
+        QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/"+testFile+".svg"));
+        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+        QXmlInputSource data;
+        data.setData(file.readAll());
+
+        SvgRenderTester t (data.data());
+        t.setFuzzyThreshold(5);
+        t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
+    }
+}
+
 #include "kistest.h"
 
 

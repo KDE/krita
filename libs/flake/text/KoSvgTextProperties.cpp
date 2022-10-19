@@ -91,9 +91,9 @@ bool KoSvgTextProperties::isEmpty() const
 bool KoSvgTextProperties::Private::isInheritable(PropertyId id) {
     return id != UnicodeBidiId && id != AlignmentBaselineId
         && id != BaselineShiftModeId && id != BaselineShiftValueId
-        && id != FontFeatureSettingsId && id != TextDecorationLineId
-        && id != TextDecorationColorId && id != TextDecorationStyleId
-        && id != InlineSizeId && id != TextTrimId;
+        && id != TextDecorationLineId && id != TextDecorationColorId
+        && id != TextDecorationStyleId && id != InlineSizeId
+        && id != TextTrimId;
 }
 
 void KoSvgTextProperties::resetNonInheritableToDefault()
@@ -301,40 +301,48 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                 setProperty(FontVariantHistoricalFormsId, feature);
             }
 
+            bool commandFontVariant = (command == "font-variant");
             if (feature == KoSvgText::FontVariantNone
-                || feature == KoSvgText::FontVariantNormal) {
-                if (command == "font-variant"
+                    || feature == KoSvgText::FontVariantNormal) {
+                if (commandFontVariant
                     || command == "font-variant-ligatures") {
-                    removeProperty(FontVariantCommonLigId);
-                    removeProperty(FontVariantDiscretionaryLigId);
-                    removeProperty(FontVariantHistoricalLigId);
-                    removeProperty(FontVariantContextualAltId);
+                    if (feature == KoSvgText::FontVariantNone) {
+                        setProperty(FontVariantCommonLigId, KoSvgText::NoCommonLigatures);
+                        setProperty(FontVariantContextualAltId, KoSvgText::NoContextualAlternates);
+                    } else {
+                        setProperty(FontVariantCommonLigId, KoSvgText::CommonLigatures);
+                        setProperty(FontVariantContextualAltId, KoSvgText::ContextualAlternates);
+                    }
+                    setProperty(FontVariantDiscretionaryLigId, KoSvgText::NoDiscretionaryLigatures);
+                    setProperty(FontVariantHistoricalLigId, KoSvgText::NoHistoricalLigatures);
+
                 }
-                if (command == "font-variant"
+                if (commandFontVariant
                     || command == "font-variant-position") {
-                    removeProperty(FontVariantPositionId);
+                    setProperty(FontVariantPositionId, feature);
                 }
-                if (command == "font-variant"
+                if (commandFontVariant
                     || command == "font-variant-caps") {
-                    removeProperty(FontVariantCapsId);
+                    setProperty(FontVariantCapsId, feature);
                 }
-                if (command == "font-variant"
+                if (commandFontVariant
                     || command == "font-variant-numeric") {
-                    removeProperty(FontVariantNumFigureId);
-                    removeProperty(FontVariantNumSpacingId);
-                    removeProperty(FontVariantNumFractId);
-                    removeProperty(FontVariantNumSlashedZeroId);
-                    removeProperty(FontVariantNumOrdinalId);
+                    setProperty(FontVariantNumFigureId, feature);
+                    setProperty(FontVariantNumSpacingId, feature);
+                    setProperty(FontVariantNumFractId, feature);
+                    setProperty(FontVariantNumOrdinalId, feature);
+                    setProperty(FontVariantNumSlashedZeroId, feature);
                 }
-                if (command == "font-variant"
+
+                if (commandFontVariant
                     || command == "font-variant-east-asian") {
-                    removeProperty(FontVariantEastAsianVarId);
-                    removeProperty(FontVariantEastAsianWidthId);
-                    removeProperty(FontVariantRubyId);
+                    setProperty(FontVariantEastAsianVarId, feature);
+                    setProperty(FontVariantEastAsianWidthId, feature);
+                    setProperty(FontVariantRubyId, feature);
                 }
-                if (command == "font-variant"
+                if (commandFontVariant
                     || command == "font-variant-alternates") {
-                    removeProperty(FontVariantHistoricalFormsId);
+                    setProperty(FontVariantHistoricalFormsId, feature);
                 }
             }
         }
@@ -706,7 +714,8 @@ QMap<QString, QString> KoSvgTextProperties::convertToSvgTextAttributes() const
             result.insert("font-optical-sizing", "none");
         }
     }
-    if (hasProperty(FontVariationSettingsId)) {
+    if (hasProperty(FontVariationSettingsId))
+    {
         result.insert(
             "font-variation-settings",
             property(FontVariationSettingsId).toStringList().join(", "));

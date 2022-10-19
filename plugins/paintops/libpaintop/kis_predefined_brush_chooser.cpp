@@ -173,12 +173,12 @@ KisPredefinedBrushChooser::KisPredefinedBrushChooser(int maxBrushSize,
     brushSizeSpinBox->setExponentRatio(3.0);
 
     connect(m_d->model, &KisPredefinedBrushModel::brushNameChanged,
-            brushTipNameLabel, &QLabel::setText);
+            brushTipNameLabel, &KSqueezedTextLabel::setText);
     m_d->model->LAGER_QT(brushName).nudge();
 
     connect(m_d->model, &KisPredefinedBrushModel::brushDetailsChanged,
             brushDetailsLabel, &QLabel::setText);
-    m_d->model->LAGER_QT(brushName).nudge();
+    m_d->model->LAGER_QT(brushDetails).nudge();
 
     connectControl(brushSizeSpinBox, m_d->model, "brushSize");
 

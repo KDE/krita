@@ -80,6 +80,7 @@
     </defs>
 
     <g id="testRect" class="test">
+        <!-- These tests are all adapted from the font-variant tests of the web-platform-tests: https://github.com/web-platform-tests/wpt/tree/master/css/css-fonts -->
 
         <rect id="boundingRect" x="5" y="5" width="250" height="250"
             fill="none" stroke="red"/>

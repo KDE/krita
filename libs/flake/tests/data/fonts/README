@@ -10,3 +10,4 @@ Some fonts have an explicit license file, but not all. This should list the file
 - Krita_Test_Unicode_Variation_A.ttf and Krita_Test_Unicode_Variation_B.ttf -- These fonts were made specifically for these unittests. Has the "SIL Open Font License, Version 1.1" embedded into the TTF,  Copyright 2022 Wolthera van Hövell tot Westerflier.
 - FreeSans.ttf -- Embedded http://www.gnu.org/copyleft/gpl.html "GNU General Public License as published by the Free Software Foundation, either version 3 of the License", Copyright 2002, 2003, 2005, 2008, 2009, 2010, 2012 GNU Freefont contributors.
 - krita-pixel-test.otb -- This fonts was made specifically for these unittests. Released under "SIL Open Font License, Version 1.1" embedded into the TTF,  Copyright 2022 Wolthera van Hövell tot Westerflier.
+- FontWithFancyFeatures.otf -- This font is from the BSD-licensed web-platform-tests.

@@ -1852,8 +1852,9 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             }
         }
         n += resolvedChildren;
-        if (chunkShape->layoutInterface()->lengthAdjust()
-                    != KoSvgText::LengthAdjustSpacingAndGlyphs) {
+        bool spacingAndGlyphs = (chunkShape->layoutInterface()->lengthAdjust()
+                    == KoSvgText::LengthAdjustSpacingAndGlyphs);
+        if (!spacingAndGlyphs) {
             n -= 1;
         }
         qreal delta =
@@ -1868,8 +1869,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             CharacterResult cr = result[visualToLogical.value(k)];
             if (cr.addressable) {
                 cr.finalPosition += shift;
-                if (chunkShape->layoutInterface()->lengthAdjust()
-                    == KoSvgText::LengthAdjustSpacingAndGlyphs) {
+                if (spacingAndGlyphs) {
                     QPointF scale(
                         d.x() != 0 ? (d.x() / cr.advance.x()) + 1 : 1.0,
                         d.y() != 0 ? (d.y() / cr.advance.y()) + 1 : 1.0);
@@ -1878,7 +1878,9 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                     cr.advance = tf.map(cr.advance);
                     cr.boundingBox = tf.mapRect(cr.boundingBox);
                 }
-                if (!(cr.textLengthApplied && secondTextLengthApplied)) {
+                bool last = spacingAndGlyphs? false: k==visualToLogical.keys().last();
+                
+                if (!(cr.textLengthApplied && secondTextLengthApplied) && !last) {
                     shift += d;
                     
                 }

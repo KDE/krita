@@ -36,6 +36,12 @@
         fill="orange"
         textLength="250">Lorem ipsum <tspan textLength="100">dolor</tspan> sit amet</text>
     
+    <text id="test7" x="5" y="100"
+        font-family="DejaVu Sans" font-size="15"
+        fill="purple"
+        lengthAdjust="spacingAndGlyphs"
+        textLength="250">Lorem ipsum <tspan textLength="100" lengthAdjust="spacingAndGlyphs">dolor</tspan> sit amet</text>
+    
     <text id="test1rtl" x="255" y="120"
         font-family="DejaVu Sans" font-size="15"
         fill="blue"
@@ -69,43 +75,55 @@
         fill="orange"
         direction="rtl"
         textLength="250">اللغة <tspan textLength="100">العربية</tspan> المعيارية الحديثة</text>
+    <text id="test7rtl" x="255" y="200"
+        font-family="DejaVu Sans" font-size="15"
+        fill="purple"
+        direction="rtl"
+        lengthAdjust="spacingAndGlyphs"
+        textLength="250">اللغة <tspan textLength="100" lengthAdjust="spacingAndGlyphs">العربية</tspan> المعيارية الحديثة</text>
     
-    <text id="test1ttb" x="270" y="5"
+    <text id="test1ttb" x="265" y="5"
         font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15" 
         writing-mode="vertical-rl"
         fill="blue"
         textLength="200">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
     
-    <text id="test2ttb" x="290" y="5"
+    <text id="test2ttb" x="280" y="5"
         font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15" 
         writing-mode="vertical-rl"
           fill="cyan"
-        textLength="180">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ<tspan x="305" y="5">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</tspan></text>
+        textLength="180">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ<tspan x="295" y="5">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</tspan></text>
     
-    <text id="test3ttb" x="290" y="110"
+    <text id="test3ttb" x="280" y="110"
         font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
         fill="green"
         writing-mode="vertical-rl"
         textLength="95">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
-    <text id="test4ttb" x="305" y="110"
+    <text id="test4ttb" x="295" y="110"
         font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
         fill="lightgreen"
         writing-mode="vertical-rl"
         textLength="95"
         lengthAdjust="spacingAndGlyphs">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
     
-    <text id="test5ttb" x="320" y="5"
+    <text id="test5ttb" x="310" y="5"
         font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
         fill="magenta"
         textLength="200"
         writing-mode="vertical-rl"
         lengthAdjust="spacingAndGlyphs">ああああ&#x82A6;&#x82A6;&#x82A6;ああああ</text>
     
-    <text id="test6ttb" x="335" y="5"
+    <text id="test6ttb" x="325" y="5"
         font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
         fill="orange"
         writing-mode="vertical-rl"
         textLength="200">ああああ<tspan textLength="100">&#x82A6;&#x82A6;&#x82A6;</tspan>ああああ</text>
+    <text id="test7ttb" x="340" y="5"
+        font-family="Krita_Test_Unicode_Variation_A, sans" font-size="15"
+        fill="purple"
+        lengthAdjust="spacingAndGlyphs"
+        writing-mode="vertical-rl"
+        textLength="200">ああああ<tspan textLength="100" lengthAdjust="spacingAndGlyphs">&#x82A6;&#x82A6;&#x82A6;</tspan>ああああ</text>
     
     
 

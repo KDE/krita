@@ -136,10 +136,9 @@ KisCurveOptionWidget2::KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> o
                                               0, true)));
 
     m_d->model.LAGER_QT(activeCurve).bind(
-                zug::comp(std::bind(&KisCurveWidget::setCurve,
+                std::bind(&KisCurveWidget::setCurve,
                                     m_curveOptionWidget->curveWidget,
-                                    std::placeholders::_1),
-                          [] (const QString &str) {KisCubicCurve curve; curve.fromString(str); return curve;}));
+                                    std::placeholders::_1));
 
     connect(m_curveOptionWidget->curveWidget,
             &KisCurveWidget::curveChanged,

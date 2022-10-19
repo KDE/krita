@@ -8,7 +8,7 @@
 
 #include <KisCurveOption2.h>
 
-class KisSharpnessOptionData;
+struct KisSharpnessOptionData;
 
 class PAINTOP_EXPORT KisSharpnessOption : public KisCurveOption2
 {

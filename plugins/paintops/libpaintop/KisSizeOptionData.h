@@ -9,9 +9,8 @@
 #include <KisCurveOptionData.h>
 #include <kis_paintop_lod_limitations.h>
 
-class PAINTOP_EXPORT KisSizeOptionData : public KisCurveOptionData
+struct PAINTOP_EXPORT KisSizeOptionData : KisCurveOptionData
 {
-public:
     KisSizeOptionData(bool isCheckable = true, const QString &prefix = QString());
     KisPaintopLodLimitations lodLimitations() const;
 };

@@ -29,7 +29,7 @@ struct PAINTOP_EXPORT KisScatterOptionMixInImpl
 
 using KisScatterOptionMixIn = KisPrefixedOptionDataWrapper<KisScatterOptionMixInImpl>;
 
-struct PAINTOP_EXPORT KisScatterOptionData : public KisOptionTuple<KisCurveOptionData, KisScatterOptionMixIn>
+struct PAINTOP_EXPORT KisScatterOptionData : KisOptionTuple<KisCurveOptionData, KisScatterOptionMixIn>
 {
     KisScatterOptionData(const QString &prefix = "")
         : KisOptionTuple<KisCurveOptionData, KisScatterOptionMixIn>(prefix,

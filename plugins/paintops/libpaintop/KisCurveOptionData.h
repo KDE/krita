@@ -80,7 +80,7 @@ struct PAINTOP_EXPORT KisDrawingAngleSensorData : public KisSensorData, public b
 
 
 
-struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<KisCurveOptionData>
+struct PAINTOP_EXPORT KisCurveOptionData : boost::equality_comparable<KisCurveOptionData>
 {
     static constexpr bool supports_prefix = true;
 

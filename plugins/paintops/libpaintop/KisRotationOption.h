@@ -8,7 +8,7 @@
 
 #include <KisCurveOption2.h>
 
-class KisRotationOptionData;
+struct KisRotationOptionData;
 
 class PAINTOP_EXPORT KisRotationOption : public KisCurveOption2
 {

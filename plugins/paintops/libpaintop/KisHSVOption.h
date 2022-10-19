@@ -9,7 +9,7 @@
 #include <KisCurveOption2.h>
 
 class KoColorTransformation;
-class KisHSVOptionData;
+struct KisHSVOptionData;
 
 
 class PAINTOP_EXPORT KisHSVOption : public KisCurveOption2

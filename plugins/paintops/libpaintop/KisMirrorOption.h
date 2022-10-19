@@ -8,8 +8,8 @@
 
 #include <KisCurveOption2.h>
 
-class KisMirrorOptionData;
-class MirrorProperties;
+struct KisMirrorOptionData;
+struct MirrorProperties;
 
 class PAINTOP_EXPORT KisMirrorOption : public KisCurveOption2
 {

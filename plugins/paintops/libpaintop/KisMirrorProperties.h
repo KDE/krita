@@ -6,8 +6,8 @@
 #ifndef KISMIRRORPROPERTIES_H
 #define KISMIRRORPROPERTIES_H
 
-class MirrorProperties {
-public:
+struct MirrorProperties
+{
     MirrorProperties()
         : horizontalMirror(false),
           verticalMirror(false),

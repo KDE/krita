@@ -29,7 +29,7 @@ struct PAINTOP_EXPORT KisSharpnessOptionMixInImpl
 
 using KisSharpnessOptionMixIn = KisPrefixedOptionDataWrapper<KisSharpnessOptionMixInImpl>;
 
-struct PAINTOP_EXPORT KisSharpnessOptionData : public KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>
+struct PAINTOP_EXPORT KisSharpnessOptionData : KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>
 {
     KisSharpnessOptionData(const QString &prefix = "")
         : KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>(prefix, KoID("Sharpness", i18n("Sharpness")))

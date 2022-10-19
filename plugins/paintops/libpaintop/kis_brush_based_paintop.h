@@ -21,7 +21,7 @@ class KisPressureSpacingOption;
 class KisPressureRateOption;
 class KisDabCache;
 class KisResourcesInterface;
-class KisAirbrushOptionData;
+struct KisAirbrushOptionData;
 class KisSpacingOption;
 
 /// Internal

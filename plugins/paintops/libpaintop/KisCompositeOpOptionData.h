@@ -12,9 +12,8 @@
 
 class KisPropertiesConfiguration;
 
-class PAINTOP_EXPORT KisCompositeOpOptionData : boost::equality_comparable<KisCompositeOpOptionData>
+struct PAINTOP_EXPORT KisCompositeOpOptionData : boost::equality_comparable<KisCompositeOpOptionData>
 {
-public:
     KisCompositeOpOptionData();
 
     inline friend bool operator==(const KisCompositeOpOptionData &lhs, const KisCompositeOpOptionData &rhs) {

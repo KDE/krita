@@ -8,7 +8,7 @@
 
 #include <KisCurveOption2.h>
 
-class KisSpacingOptionData;
+struct KisSpacingOptionData;
 
 class PAINTOP_EXPORT KisSpacingOption : public KisCurveOption2
 {

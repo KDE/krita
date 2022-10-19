@@ -29,7 +29,7 @@ struct PAINTOP_EXPORT KisSpacingOptionMixInImpl
 
 using KisSpacingOptionMixIn = KisPrefixedOptionDataWrapper<KisSpacingOptionMixInImpl>;
 
-struct PAINTOP_EXPORT KisSpacingOptionData : public KisOptionTuple<KisCurveOptionData, KisSpacingOptionMixIn>
+struct PAINTOP_EXPORT KisSpacingOptionData : KisOptionTuple<KisCurveOptionData, KisSpacingOptionMixIn>
 {
     KisSpacingOptionData(const QString &prefix = "")
         : KisOptionTuple<KisCurveOptionData, KisSpacingOptionMixIn>(prefix, KoID("Spacing", i18n("Spacing")))

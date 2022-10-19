@@ -13,9 +13,8 @@
 
 class KisPropertiesConfiguration;
 
-class PAINTOP_EXPORT KisColorSourceOptionData : boost::equality_comparable<KisColorSourceOptionData>
+struct PAINTOP_EXPORT KisColorSourceOptionData : boost::equality_comparable<KisColorSourceOptionData>
 {
-public:
     enum Type {
         PLAIN,
         GRADIENT,
@@ -25,7 +24,6 @@ public:
         PATTERN_LOCKED
     };
 
-public:
     inline friend bool operator==(const KisColorSourceOptionData &lhs, const KisColorSourceOptionData &rhs) {
         return lhs.type == rhs.type;
     }

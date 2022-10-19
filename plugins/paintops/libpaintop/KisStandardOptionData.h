@@ -9,9 +9,8 @@
 #include <KisCurveOptionData.h>
 
 
-class KisOpacityOptionData : public KisCurveOptionData
+struct KisOpacityOptionData : KisCurveOptionData
 {
-public:
     KisOpacityOptionData(bool isCheckable = false, const QString &prefix = QString())
         : KisCurveOptionData(
               prefix,
@@ -21,9 +20,8 @@ public:
     }
 };
 
-class KisFlowOptionData : public KisCurveOptionData
+struct KisFlowOptionData : KisCurveOptionData
 {
-public:
     KisFlowOptionData(bool isCheckable = false, const QString &prefix = QString())
         : KisCurveOptionData(
               prefix,
@@ -35,9 +33,8 @@ public:
 };
 
 
-class KisRatioOptionData : public KisCurveOptionData
+struct KisRatioOptionData : KisCurveOptionData
 {
-public:
     KisRatioOptionData(const QString &prefix = QString())
         : KisCurveOptionData(
               prefix,
@@ -46,9 +43,8 @@ public:
     }
 };
 
-class KisSoftnessOptionData : public KisCurveOptionData
+struct KisSoftnessOptionData : KisCurveOptionData
 {
-public:
     KisSoftnessOptionData()
         : KisCurveOptionData(
               KoID("Softness", i18n("Softness")),
@@ -57,9 +53,8 @@ public:
     {}
 };
 
-class KisRotationOptionData : public KisCurveOptionData
+struct KisRotationOptionData : KisCurveOptionData
 {
-public:
     KisRotationOptionData(const QString &prefix = QString())
         : KisCurveOptionData(
               prefix,
@@ -68,72 +63,64 @@ public:
     }
 };
 
-class KisDarkenOptionData : public KisCurveOptionData
+struct KisDarkenOptionData : KisCurveOptionData
 {
-public:
     KisDarkenOptionData()
         : KisCurveOptionData(
               KoID("Darken", i18n("Darken")))
     {}
 };
 
-class KisMixOptionData : public KisCurveOptionData
+struct KisMixOptionData : KisCurveOptionData
 {
-public:
     KisMixOptionData()
         : KisCurveOptionData(
               KoID("Mix", i18nc("Mixing of colors", "Mix")))
     {}
 };
 
-class KisHueOptionData : public KisCurveOptionData
+struct KisHueOptionData : KisCurveOptionData
 {
-public:
     KisHueOptionData()
         : KisCurveOptionData(
               KoID("h", i18n("Hue")))
     {}
 };
 
-class KisSaturationOptionData : public KisCurveOptionData
+struct KisSaturationOptionData : KisCurveOptionData
 {
-public:
     KisSaturationOptionData()
         : KisCurveOptionData(
               KoID("s", i18n("Saturation")))
     {}
 };
 
-class KisValueOptionData : public KisCurveOptionData
+struct KisValueOptionData : KisCurveOptionData
 {
-public:
     KisValueOptionData()
         : KisCurveOptionData(
               KoID("v", i18nc("Label of Brightness value in Color Smudge brush engine options", "Value")))
     {}
 };
 
-class KisRateOptionData : public KisCurveOptionData
+struct KisRateOptionData : KisCurveOptionData
 {
-public:
     KisRateOptionData()
         : KisCurveOptionData(
               KoID("Rate", i18n("Rate")))
     {}
 };
 
-class KisStrengthOptionData : public KisCurveOptionData
+struct KisStrengthOptionData : KisCurveOptionData
 {
-public:
     KisStrengthOptionData()
         : KisCurveOptionData(
               KoID("Texture/Strength/", i18n("Strength")))
     {}
 };
 
-class KisLightnessStrengthOptionData : public KisCurveOptionData
+struct KisLightnessStrengthOptionData : KisCurveOptionData
 {
-public:
     KisLightnessStrengthOptionData()
         : KisCurveOptionData(
               KoID("LightnessStrength", i18n("Lightness Strength")))

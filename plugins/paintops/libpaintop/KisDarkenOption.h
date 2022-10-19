@@ -8,7 +8,7 @@
 
 #include <KisCurveOption2.h>
 
-class KisDarkenOptionData;
+struct KisDarkenOptionData;
 class KisPainter;
 class KisColorSource;
 

@@ -24,9 +24,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(KisBrushTextureFlags)
 
 
 
-class PAINTOP_EXPORT KisTextureOptionData : boost::equality_comparable<KisTextureOptionData>
+struct  PAINTOP_EXPORT KisTextureOptionData : boost::equality_comparable<KisTextureOptionData>
 {
-public:
     enum TexturingMode {
         MULTIPLY,
         SUBTRACT,
@@ -45,7 +44,7 @@ public:
         HEIGHT_PHOTOSHOP,
         LINEAR_HEIGHT_PHOTOSHOP
     };
-public:
+
     inline friend bool operator==(const KisTextureOptionData &lhs, const KisTextureOptionData &rhs) {
         return lhs.isEnabled == rhs.isEnabled &&
                 lhs.textureData == rhs.textureData &&

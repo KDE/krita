@@ -18,9 +18,8 @@ enum class enumPaintingMode {
     WASH
 };
 
-class PAINTOP_EXPORT KisPaintingModeOptionData : boost::equality_comparable<KisPaintingModeOptionData>
+struct PAINTOP_EXPORT KisPaintingModeOptionData : boost::equality_comparable<KisPaintingModeOptionData>
 {
-public:
     inline friend bool operator==(const KisPaintingModeOptionData &lhs, const KisPaintingModeOptionData &rhs) {
         return lhs.paintingMode == rhs.paintingMode;
     }

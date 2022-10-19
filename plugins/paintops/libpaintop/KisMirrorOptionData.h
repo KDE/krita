@@ -28,7 +28,7 @@ struct PAINTOP_EXPORT KisMirrorOptionMixInImpl
 
 using KisMirrorOptionMixIn = KisPrefixedOptionDataWrapper<KisMirrorOptionMixInImpl>;
 
-struct PAINTOP_EXPORT KisMirrorOptionData : public KisOptionTuple<KisCurveOptionData, KisMirrorOptionMixIn>
+struct PAINTOP_EXPORT KisMirrorOptionData : KisOptionTuple<KisCurveOptionData, KisMirrorOptionMixIn>
 {
     KisMirrorOptionData(const QString &prefix = "")
         : KisOptionTuple<KisCurveOptionData, KisMirrorOptionMixIn>(prefix, KoID("Mirror", i18n("Mirror")))

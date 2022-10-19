@@ -335,6 +335,11 @@ KisCubicCurve::KisCubicCurve(const QString &curveString)
 {
     d->data = new Data;
 
+    KIS_SAFE_ASSERT_RECOVER(!curveString.isEmpty()) {
+        *this = KisCubicCurve();
+        return;
+    }
+
     const QStringList data = curveString.split(';');
 
     QList<QPointF> points;

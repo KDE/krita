@@ -112,7 +112,7 @@ bool KisTextureMaskInfo::fillProperties(const KisPropertiesConfiguration *settin
     KisTextureOptionData data;
     data.read(setting);
 
-    if (!data.isEnabled || data.textureData.md5sum.isEmpty()) {
+    if (!data.isEnabled || data.textureData.isNull()) {
         return false;
     }
 

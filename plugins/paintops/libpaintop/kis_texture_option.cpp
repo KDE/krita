@@ -63,9 +63,7 @@ void KisTextureOption::fillProperties(const KisPropertiesConfiguration *setting,
     KisTextureOptionData data;
     data.read(setting);
 
-    if (data.textureData.fileName.isEmpty() &&
-        data.textureData.md5sum.isEmpty()) {
-
+    if (data.textureData.isNull()) {
         m_enabled = false;
         return;
     }

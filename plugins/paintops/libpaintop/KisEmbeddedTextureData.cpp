@@ -13,7 +13,7 @@
 
 bool KisEmbeddedTextureData::isNull() const
 {
-    return md5sum.isEmpty() && fileName.isEmpty() && name.isEmpty();
+    return md5Base64.isEmpty() && md5sum.isEmpty() && fileName.isEmpty() && name.isEmpty();
 }
 
 KisEmbeddedTextureData KisEmbeddedTextureData::fromPattern(KoPatternSP pattern)

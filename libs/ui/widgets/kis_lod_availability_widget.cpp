@@ -89,9 +89,11 @@ KisLodAvailabilityWidget::~KisLodAvailabilityWidget()
 void KisLodAvailabilityWidget::setLodAvailabilityModel(KisLodAvailabilityModel *model)
 {
     m_d->model.reset(model);
-    connect(m_d->model.data(), &KisLodAvailabilityModel::availabilityStateChanged,
-            this, &KisLodAvailabilityWidget::slotLodAvailabilityStateChanged);
-    slotLodAvailabilityStateChanged(m_d->model->availabilityState());
+
+    m_d->model->LAGER_QT(availabilityState).bind(
+        kismpl::unzip_wrapper(std::bind(&KisLodAvailabilityWidget::slotLodAvailabilityStateChanged,
+                                        this, std::placeholders::_1, std::placeholders::_2)));
+
     connect(m_d->chkLod, &QCheckBox::toggled,
             m_d->model.data(), &KisLodAvailabilityModel::setisLodUserAllowed);
 
@@ -113,13 +115,11 @@ void KisLodAvailabilityWidget::showLodThresholdWidget(const QPoint &pos)
     }
 }
 
-void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state)
+void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state, const KisPaintopLodLimitations &l)
 {
     QString toolTip;
 
     if (state == KisLodAvailabilityModel::BlockedFully) {
-        const KisPaintopLodLimitations l = m_d->model->lodLimitations.get();
-
         QString blockersText;
         Q_FOREACH (const KoID &id, l.blockers) {
             blockersText.append("<li>");
@@ -145,7 +145,6 @@ void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilit
                         effectiveBrushSize, sizeThreshold);
 
     } else if (state == KisLodAvailabilityModel::Limited) {
-        const KisPaintopLodLimitations l = m_d->model->lodLimitations.get();
 
         QString limitationsText;
         Q_FOREACH (const KoID &id, l.limitations) {

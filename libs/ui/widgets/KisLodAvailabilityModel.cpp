@@ -5,10 +5,11 @@
  */
 #include "KisLodAvailabilityModel.h"
 
+#include <lager/lenses/tuple.hpp>
 #include <KisZug.h>
 
 namespace {
-KisLodAvailabilityModel::AvailabilityState
+KisLodAvailabilityModel::AvailabilityStatePack
 calcLodAvailabilityState(const KisLodAvailabilityData &data, qreal effectiveBrushSize, const KisPaintopLodLimitations &l) {
     KisLodAvailabilityModel::AvailabilityState state = KisLodAvailabilityModel::Available;
 
@@ -22,10 +23,9 @@ calcLodAvailabilityState(const KisLodAvailabilityData &data, qreal effectiveBrus
         state = KisLodAvailabilityModel::Limited;
     }
 
-    return state;
+    return std::make_tuple(state, l);
 }
 }
-
 
 KisLodAvailabilityModel::KisLodAvailabilityModel(lager::cursor<KisLodAvailabilityData> _data, lager::reader<qreal> _effectiveBrushSize, lager::reader<KisPaintopLodLimitations> _lodLimitations)
     : data(_data)
@@ -35,6 +35,8 @@ KisLodAvailabilityModel::KisLodAvailabilityModel(lager::cursor<KisLodAvailabilit
     , LAGER_QT(isLodSizeThresholdSupported) {data[&KisLodAvailabilityData::isLodSizeThresholdSupported]}
     , LAGER_QT(lodSizeThreshold) {data[&KisLodAvailabilityData::lodSizeThreshold]}
     , LAGER_QT(availabilityState) {lager::with(data, effectiveBrushSize, lodLimitations).map(&calcLodAvailabilityState)}
-    , LAGER_QT(effectiveLodAvailable) {LAGER_QT(availabilityState).xform(kiszug::map_less_equal<int>(static_cast<int>(Limited)))}
+    , LAGER_QT(effectiveLodAvailable) {LAGER_QT(availabilityState)
+            .zoom(lager::lenses::first)
+            .xform(kiszug::map_less_equal<int>(static_cast<int>(Limited)))}
 {
 }

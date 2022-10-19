@@ -22,6 +22,9 @@ public:
         BlockedByThreshold,
         BlockedFully
     };
+
+    using AvailabilityStatePack =
+        std::tuple<AvailabilityState, KisPaintopLodLimitations>;
 public:
     KisLodAvailabilityModel(lager::cursor<KisLodAvailabilityData> data,
                             lager::reader<qreal> effectiveBrushSize,
@@ -35,7 +38,7 @@ public:
     LAGER_QT_READER(bool, isLodSizeThresholdSupported);
     LAGER_QT_CURSOR(qreal, lodSizeThreshold);
 
-    LAGER_QT_READER(AvailabilityState, availabilityState);
+    LAGER_QT_READER(AvailabilityStatePack, availabilityState);
     LAGER_QT_READER(bool, effectiveLodAvailable);
 };
 

@@ -16,11 +16,14 @@ inline uint qHash(const KoID &id) {
     return qHash(id.id());
 }
 
-class KisPaintopLodLimitations : public boost::orable<KisPaintopLodLimitations>
+class KisPaintopLodLimitations
+    : public boost::orable<KisPaintopLodLimitations>,
+      public boost::equality_comparable<KisPaintopLodLimitations>
 {
 public:
-    KisPaintopLodLimitations()
-    {
+    inline friend bool operator==(const KisPaintopLodLimitations &lhs, const KisPaintopLodLimitations &rhs) {
+            return lhs.limitations == rhs.limitations &&
+            lhs.blockers == rhs.blockers;
     }
 
     KisPaintopLodLimitations& operator|=(const KisPaintopLodLimitations &rhs) {

@@ -65,13 +65,15 @@ set(kritalibpaintop_LIB_SRCS
     KisFlowOpacityOption.cpp
     KisDarkenOption.cpp
     KisHSVOption.cpp
+    KisFilterOptionData.cpp
+    KisFilterOptionModel.cpp
+    KisFilterOptionWidget.cpp
     kis_custom_brush_widget.cpp
     kis_clipboard_brush_widget.cpp
     kis_dynamic_sensor.cc
     KisDabCacheUtils.cpp
     kis_dab_cache_base.cpp
     kis_dab_cache.cpp
-    kis_filter_option.cpp
     kis_multi_sensors_model_p.cpp
     kis_multi_sensors_selector.cpp
     kis_precision_option.cpp

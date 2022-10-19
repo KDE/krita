@@ -801,6 +801,23 @@ void TestSvgText::testRightToLeftAnchoring()
     t.test_standard("text_right_to_left_anchoring", QSize(500,500), 72.0);
 }
 
+void TestSvgText::testVerticalText()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-vertical-text.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("text-test-vertical-text", QSize(80, 400), 72.0);
+}
+
 #include <QTextLayout>
 #include <QPainter>
 #include <QPainterPath>
@@ -1306,7 +1323,53 @@ void TestSvgText::testTextWithMultipleRelativeOffsetsArabic()
 /*#ifndef USE_ROUND_TRIP
     QEXPECT_FAIL("", "WARNING: in Krita relative offsets also define a new text chunk, that doesn't comply with SVG standard and must be fixed", Continue);*/
     t.test_standard("text_multiple_relative_offsets_arabic", QSize(530, 70), 72.0);
-//#endif
+    //#endif
+}
+/**
+ * @brief TestSvgText::testTextWithMultipleRelativeOffsetsVertical
+ *
+ * This tests vertical rotation.
+ */
+void TestSvgText::testTextWithMultipleRelativeOffsetsVertical()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-multiple-relative-offsets-vertical.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("text_multiple_relative_offsets_vertical", QSize(80, 400), 72.0);
+}
+
+/**
+ * @brief TestSvgText::testTextWithMultipleRotations
+ *
+ * This tests the rotation property, which rotates a glyph
+ * around it's own axis.
+ */
+void TestSvgText::testTextWithMultipleRotations()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-multiple-rotations.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("text_multiple_rotations", QSize(340, 400), 72.0);
 }
 
 void TestSvgText::testTextOutline()

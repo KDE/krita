@@ -1,0 +1,13 @@
+<svg width="80px" height="300px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+
+<g id="test">
+    <text id="testRect" x="40" y="20"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+        writing-mode="vertical-rl">
+        あああああ ああああああ ああああああ
+    </text>
+
+</g>
+
+</svg>

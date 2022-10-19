@@ -32,6 +32,7 @@ private Q_SLOTS:
     void testTextDecorations();
     void testRightToLeft();
     void testRightToLeftAnchoring();
+    void testVerticalText();
 
     void testQtBidi();
     void testQtDxDy();
@@ -51,6 +52,8 @@ private Q_SLOTS:
     void testTextWithMultipleRelativeOffsets();
     void testTextWithMultipleAbsoluteOffsetsArabic();
     void testTextWithMultipleRelativeOffsetsArabic();
+    void testTextWithMultipleRelativeOffsetsVertical();
+    void testTextWithMultipleRotations();
 
     void testTextOutline();
 

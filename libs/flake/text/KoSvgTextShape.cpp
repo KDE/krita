@@ -1903,7 +1903,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             visualToLogical.insert(result.at(k).visualIndex, k);
         }
         // And also backwards for rtl.
-        for (int k = i; k > 0; k--) {
+        for (int k = i; k > -1; k--) {
             visualToLogical.insert(result.at(k).visualIndex, k);
             if (result.at(k).anchored_chunk) {
                 break;

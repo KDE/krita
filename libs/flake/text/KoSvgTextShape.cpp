@@ -1852,15 +1852,18 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             }
         }
         n += resolvedChildren;
-        n -= 1;
+        if (chunkShape->layoutInterface()->lengthAdjust()
+                    != KoSvgText::LengthAdjustSpacingAndGlyphs) {
+            n -= 1;
+        }
         qreal delta =
             chunkShape->layoutInterface()->textLength().customValue - (b - a);
-        QPointF d(delta / n, 0);
+            
+        QPointF d = isHorizontal? QPointF(delta / n, 0)
+                                : QPointF(0, delta / n);
 
-        if (!isHorizontal) {
-            d = QPointF(0, delta / n);
-        }
         QPointF shift;
+        bool secondTextLengthApplied = false;
         for (int k : visualToLogical.keys()) {
             CharacterResult cr = result[visualToLogical.value(k)];
             if (cr.addressable) {
@@ -1875,9 +1878,11 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                     cr.advance = tf.map(cr.advance);
                     cr.boundingBox = tf.mapRect(cr.boundingBox);
                 }
-                if (!cr.textLengthApplied) {
+                if (!(cr.textLengthApplied && secondTextLengthApplied)) {
                     shift += d;
+                    
                 }
+                secondTextLengthApplied = cr.textLengthApplied;
                 cr.textLengthApplied = true;
             }
             result[visualToLogical.value(k)] = cr;
@@ -1886,13 +1891,26 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
 
         // apply the shift to all consequetive chars as long as they don't start
         // a new chunk.
+        int lastVisualValue = visualToLogical.keys().last();
+        visualToLogical.clear();
+        
         for (int k = j; k < result.size(); k++) {
             if (result.at(k).anchored_chunk) {
                 break;
             }
-            CharacterResult cr = result[k];
-            cr.finalPosition += shift;
-            result[k] = cr;
+            visualToLogical.insert(result.at(k).visualIndex, k);
+        }
+        // And also backwards for rtl.
+        for (int k = i; k > 0; k--) {
+            visualToLogical.insert(result.at(k).visualIndex, k);
+            if (result.at(k).anchored_chunk) {
+                break;
+            }
+        }
+        for (int k : visualToLogical.keys()) {
+            if (k>lastVisualValue) {
+                result[visualToLogical.value(k)].finalPosition += shift;
+            }
         }
     }
 

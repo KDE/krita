@@ -71,6 +71,8 @@ private Q_SLOTS:
 
     void testCssFontVariants();
 
+    void testTextLength();
+
 
 };
 

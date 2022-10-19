@@ -2014,6 +2014,73 @@ void TestSvgText::testCssFontVariants()
     }
 }
 
+void TestSvgText::testTextLength()
+{
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-textLength.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("text-test-textLength", QSize(360, 210), 72.0);
+
+    QMap<QString, int> testWidths;
+    // Test 1 (Blue) is very simple and should work in all cases.
+    testWidths.insert("test1", 250);
+    testWidths.insert("test1rtl", 250);
+    testWidths.insert("test1ttb", 200);
+    
+    // Test 2 (Cyan) will have different results with different fonts and different strings,
+    // due to the last of the whole text glyph being subtracted from the width to
+    // determine the delta.
+    testWidths.insert("test2", 127);//125
+    testWidths.insert("test2rtl", 126);//125
+    testWidths.insert("test2ttb", 94);//100
+    
+    // Test 3 (green) is test 1 but then smaller instead of bigger and should always work.
+    testWidths.insert("test3", 100);
+    testWidths.insert("test3rtl", 100);
+    testWidths.insert("test3ttb", 95);
+    
+    // Test 4 (light green) is a spacing-and-glyphs test, make sure to include the last character
+    // when deciding the delta for the stretch.
+    testWidths.insert("test4", 100);
+    testWidths.insert("test4rtl", 100);
+    testWidths.insert("test4ttb", 95);
+    
+    // Test 5 (magenta) is like 4 but then strtch instead of squashing.
+    testWidths.insert("test5", 250);
+    testWidths.insert("test5rtl", 250);
+    testWidths.insert("test5ttb", 200);
+    
+    // Test 6 (orange) is a nested text-length test.
+    testWidths.insert("test6", 250);
+    testWidths.insert("test6rtl", 250);
+    testWidths.insert("test6ttb", 200);
+    for (QString testID: testWidths.keys()) {
+        KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape(testID));
+        if (baseShape) {
+            int expectedSize = testWidths.value(testID);
+            int givenSize = testID.endsWith("ttb")? round(baseShape->boundingRect().height())
+                                                  : round(baseShape->boundingRect().width());
+        
+            QVERIFY2(givenSize == expectedSize,
+                     QString("Size of %1 is incorrect: %2, expected %3")
+                     .arg(testID).arg(QString::number(givenSize))
+                     .arg(QString::number(expectedSize)).toLatin1());
+        }
+    }
+
+}
+
 #include "kistest.h"
 
 

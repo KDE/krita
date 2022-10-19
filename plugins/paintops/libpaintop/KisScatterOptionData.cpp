@@ -10,7 +10,7 @@
 const QString SCATTER_X = "Scattering/AxisX";
 const QString SCATTER_Y = "Scattering/AxisY";
 
-bool KisScatterOptionMixIn::read(const KisPropertiesConfiguration *setting)
+bool KisScatterOptionMixInImpl::read(const KisPropertiesConfiguration *setting)
 {
     axisX = setting->getBool(SCATTER_X, true);
     axisY = setting->getBool(SCATTER_Y, true);
@@ -21,7 +21,7 @@ bool KisScatterOptionMixIn::read(const KisPropertiesConfiguration *setting)
     return true;
 }
 
-void KisScatterOptionMixIn::write(KisPropertiesConfiguration *setting) const
+void KisScatterOptionMixInImpl::write(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(SCATTER_X, axisX);
     setting->setProperty(SCATTER_Y, axisY);

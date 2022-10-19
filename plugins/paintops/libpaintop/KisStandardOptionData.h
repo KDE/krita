@@ -14,10 +14,10 @@ class KisOpacityOptionData : public KisCurveOptionData
 public:
     KisOpacityOptionData(bool isCheckable = false, const QString &prefix = QString())
         : KisCurveOptionData(
+              prefix,
               KoID("Opacity", i18n("Opacity")),
               isCheckable, !isCheckable)
     {
-        this->prefix = prefix;
     }
 };
 
@@ -26,11 +26,11 @@ class KisFlowOptionData : public KisCurveOptionData
 public:
     KisFlowOptionData(bool isCheckable = false, const QString &prefix = QString())
         : KisCurveOptionData(
+              prefix,
               KoID("Flow", i18n("Flow")),
               isCheckable,
               !isCheckable)
     {
-        this->prefix = prefix;
     }
 };
 
@@ -40,9 +40,9 @@ class KisRatioOptionData : public KisCurveOptionData
 public:
     KisRatioOptionData(const QString &prefix = QString())
         : KisCurveOptionData(
+              prefix,
               KoID("Ratio", i18n("Ratio")))
     {
-        this->prefix = prefix;
     }
 };
 
@@ -62,9 +62,9 @@ class KisRotationOptionData : public KisCurveOptionData
 public:
     KisRotationOptionData(const QString &prefix = QString())
         : KisCurveOptionData(
+              prefix,
               KoID("Rotation", i18n("Rotation")))
     {
-        this->prefix = prefix;
     }
 };
 
@@ -134,11 +134,10 @@ public:
 class KisLightnessStrengthOptionData : public KisCurveOptionData
 {
 public:
-    KisLightnessStrengthOptionData(const QString &prefix = QString())
+    KisLightnessStrengthOptionData()
         : KisCurveOptionData(
               KoID("LightnessStrength", i18n("Lightness Strength")))
     {
-        this->prefix = prefix;
     }
 };
 

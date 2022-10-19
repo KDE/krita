@@ -82,6 +82,16 @@ struct PAINTOP_EXPORT KisDrawingAngleSensorData : public KisSensorData, public b
 
 struct PAINTOP_EXPORT KisCurveOptionData : public boost::equality_comparable<KisCurveOptionData>
 {
+    static constexpr bool supports_prefix = true;
+
+    KisCurveOptionData(const QString &prefix,
+                       const KoID id,
+                       bool isCheckable = true,
+                       bool isChecked = false,
+                       bool separateCurveValue = false,
+                       qreal minValue = 0.0,
+                       qreal maxValue = 1.0);
+
     KisCurveOptionData(const KoID id,
                        bool isCheckable = true,
                        bool isChecked = false,

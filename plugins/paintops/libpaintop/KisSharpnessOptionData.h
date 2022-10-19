@@ -9,12 +9,13 @@
 #include "KisCurveOptionData.h"
 
 #include <KisOptionTuple.h>
+#include <KisPrefixedOptionDataWrapper.h>
 
 
-class PAINTOP_EXPORT KisSharpnessOptionMixIn : public boost::equality_comparable<KisSharpnessOptionMixIn>
+struct PAINTOP_EXPORT KisSharpnessOptionMixInImpl
+    : boost::equality_comparable<KisSharpnessOptionMixInImpl>
 {
-public:
-    inline friend bool operator==(const KisSharpnessOptionMixIn &lhs, const KisSharpnessOptionMixIn &rhs) {
+    inline friend bool operator==(const KisSharpnessOptionMixInImpl &lhs, const KisSharpnessOptionMixInImpl &rhs) {
             return lhs.alignOutlinePixels == rhs.alignOutlinePixels &&
             lhs.softness == rhs.softness;
     }
@@ -26,12 +27,13 @@ public:
     void write(KisPropertiesConfiguration *setting) const;
 };
 
+using KisSharpnessOptionMixIn = KisPrefixedOptionDataWrapper<KisSharpnessOptionMixInImpl>;
+
 struct PAINTOP_EXPORT KisSharpnessOptionData : public KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>
 {
     KisSharpnessOptionData(const QString &prefix = "")
-        : KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>(KoID("Sharpness", i18n("Sharpness")))
+        : KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>(prefix, KoID("Sharpness", i18n("Sharpness")))
     {
-        this->prefix = prefix;
     }
 };
 

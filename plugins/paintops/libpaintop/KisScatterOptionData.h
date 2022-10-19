@@ -9,11 +9,13 @@
 #include "KisCurveOptionData.h"
 
 #include <KisOptionTuple.h>
+#include <KisPrefixedOptionDataWrapper.h>
 
-class PAINTOP_EXPORT KisScatterOptionMixIn : boost::equality_comparable<KisScatterOptionMixIn>
+
+struct PAINTOP_EXPORT KisScatterOptionMixInImpl
+    : boost::equality_comparable<KisScatterOptionMixInImpl>
 {
-public:
-    inline friend bool operator==(const KisScatterOptionMixIn &lhs, const KisScatterOptionMixIn &rhs) {
+    inline friend bool operator==(const KisScatterOptionMixInImpl &lhs, const KisScatterOptionMixInImpl &rhs) {
             return lhs.axisX == rhs.axisX &&
             lhs.axisY == rhs.axisY;
     }
@@ -25,13 +27,15 @@ public:
     void write(KisPropertiesConfiguration *setting) const;
 };
 
+using KisScatterOptionMixIn = KisPrefixedOptionDataWrapper<KisScatterOptionMixInImpl>;
+
 struct PAINTOP_EXPORT KisScatterOptionData : public KisOptionTuple<KisCurveOptionData, KisScatterOptionMixIn>
 {
     KisScatterOptionData(const QString &prefix = "")
-        : KisOptionTuple<KisCurveOptionData, KisScatterOptionMixIn>(KoID("Scatter", i18n("Scatter")),
+        : KisOptionTuple<KisCurveOptionData, KisScatterOptionMixIn>(prefix,
+                                                                    KoID("Scatter", i18n("Scatter")),
                                                                     true, false, false, 0.0, 5.0)
     {
-        this->prefix = prefix;
     }
 };
 

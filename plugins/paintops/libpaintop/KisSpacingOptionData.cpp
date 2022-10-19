@@ -9,11 +9,7 @@
 
 const QString ISOTROPIC_SPACING = "Spacing/Isotropic";
 
-KisSpacingOptionMixIn::KisSpacingOptionMixIn()
-{
-}
-
-bool KisSpacingOptionMixIn::read(const KisPropertiesConfiguration *setting)
+bool KisSpacingOptionMixInImpl::read(const KisPropertiesConfiguration *setting)
 {
     isotropicSpacing = setting->getBool(ISOTROPIC_SPACING, false);
     useSpacingUpdates = setting->getBool(SPACING_USE_UPDATES, false);
@@ -21,7 +17,7 @@ bool KisSpacingOptionMixIn::read(const KisPropertiesConfiguration *setting)
     return true;
 }
 
-void KisSpacingOptionMixIn::write(KisPropertiesConfiguration *setting) const
+void KisSpacingOptionMixInImpl::write(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(ISOTROPIC_SPACING, isotropicSpacing);
     setting->setProperty(SPACING_USE_UPDATES, useSpacingUpdates);

@@ -129,8 +129,9 @@ void KisDrawingAngleSensorData::reset()
     *this = KisDrawingAngleSensorData();
 }
 
-KisCurveOptionData::KisCurveOptionData(const KoID _id, bool _isCheckable, bool _isChecked, bool _separateCurveValue, qreal _minValue, qreal _maxValue)
+KisCurveOptionData::KisCurveOptionData(const QString &_prefix, const KoID _id, bool _isCheckable, bool _isChecked, bool _separateCurveValue, qreal _minValue, qreal _maxValue)
     : id(_id),
+      prefix(_prefix),
       isCheckable(_isCheckable),
       separateCurveValue(_separateCurveValue),
       strengthMinValue(_minValue),
@@ -155,6 +156,11 @@ KisCurveOptionData::KisCurveOptionData(const KoID _id, bool _isCheckable, bool _
       sensorTangentialPressure(TangentialPressureId)
 {
     sensorPressure.isActive = true;
+}
+
+KisCurveOptionData::KisCurveOptionData(const KoID _id, bool _isCheckable, bool _isChecked, bool _separateCurveValue, qreal _minValue, qreal _maxValue)
+    : KisCurveOptionData("", _id, _isCheckable, _isChecked, _separateCurveValue, _minValue, _maxValue)
+{
 }
 
 namespace detail {

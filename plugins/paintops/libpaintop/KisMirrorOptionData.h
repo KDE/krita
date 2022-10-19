@@ -9,12 +9,12 @@
 #include "KisCurveOptionData.h"
 
 #include <KisOptionTuple.h>
+#include <KisPrefixedOptionDataWrapper.h>
 
-
-class PAINTOP_EXPORT KisMirrorOptionMixIn : public boost::equality_comparable<KisMirrorOptionMixIn>
+struct PAINTOP_EXPORT KisMirrorOptionMixInImpl
+    : boost::equality_comparable<KisMirrorOptionMixInImpl>
 {
-public:
-    inline friend bool operator==(const KisMirrorOptionMixIn &lhs, const KisMirrorOptionMixIn &rhs) {
+    inline friend bool operator==(const KisMirrorOptionMixInImpl &lhs, const KisMirrorOptionMixInImpl &rhs) {
             return lhs.enableVerticalMirror == rhs.enableVerticalMirror &&
             lhs.enableHorizontalMirror == rhs.enableHorizontalMirror;
     }
@@ -26,12 +26,13 @@ public:
     void write(KisPropertiesConfiguration *setting) const;
 };
 
+using KisMirrorOptionMixIn = KisPrefixedOptionDataWrapper<KisMirrorOptionMixInImpl>;
+
 struct PAINTOP_EXPORT KisMirrorOptionData : public KisOptionTuple<KisCurveOptionData, KisMirrorOptionMixIn>
 {
     KisMirrorOptionData(const QString &prefix = "")
-        : KisOptionTuple<KisCurveOptionData, KisMirrorOptionMixIn>(KoID("Mirror", i18n("Mirror")))
+        : KisOptionTuple<KisCurveOptionData, KisMirrorOptionMixIn>(prefix, KoID("Mirror", i18n("Mirror")))
     {
-        this->prefix = prefix;
     }
 };
 

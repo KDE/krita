@@ -9,14 +9,13 @@
 #include "KisCurveOptionData.h"
 
 #include <KisOptionTuple.h>
+#include <KisPrefixedOptionDataWrapper.h>
 
 
-class PAINTOP_EXPORT KisSpacingOptionMixIn : boost::equality_comparable<KisSpacingOptionMixIn>
+struct PAINTOP_EXPORT KisSpacingOptionMixInImpl
+    : boost::equality_comparable<KisSpacingOptionMixInImpl>
 {
-public:
-    KisSpacingOptionMixIn();
-
-    inline friend bool operator==(const KisSpacingOptionMixIn &lhs, const KisSpacingOptionMixIn &rhs) {
+    inline friend bool operator==(const KisSpacingOptionMixInImpl &lhs, const KisSpacingOptionMixInImpl &rhs) {
             return lhs.useSpacingUpdates == rhs.useSpacingUpdates &&
             lhs.isotropicSpacing == rhs.isotropicSpacing;
     }
@@ -28,10 +27,12 @@ public:
     void write(KisPropertiesConfiguration *setting) const;
 };
 
+using KisSpacingOptionMixIn = KisPrefixedOptionDataWrapper<KisSpacingOptionMixInImpl>;
+
 struct PAINTOP_EXPORT KisSpacingOptionData : public KisOptionTuple<KisCurveOptionData, KisSpacingOptionMixIn>
 {
-    KisSpacingOptionData()
-        : KisOptionTuple<KisCurveOptionData, KisSpacingOptionMixIn>(KoID("Spacing", i18n("Spacing")))
+    KisSpacingOptionData(const QString &prefix = "")
+        : KisOptionTuple<KisCurveOptionData, KisSpacingOptionMixIn>(prefix, KoID("Spacing", i18n("Spacing")))
     {
     }
 };

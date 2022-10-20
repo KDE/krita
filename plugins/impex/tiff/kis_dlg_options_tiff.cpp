@@ -91,7 +91,7 @@ void KisTIFFOptionsWidget::setConfiguration(const KisPropertiesConfigurationSP c
 
         if (colorDepthId == Float16BitsColorDepthID.id()
             || colorDepthId == Float32BitsColorDepthID.id()
-            || colorDepthId == Float16BitsColorDepthID.id()) {
+            || colorDepthId == Float64BitsColorDepthID.id()) {
             kComboBoxPredictor->removeItem(1);
         } else {
             kComboBoxPredictor->removeItem(2);

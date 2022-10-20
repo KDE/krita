@@ -441,8 +441,9 @@ void TestSvgText::testSimpleText()
     QCOMPARE(*transform[0].xPos, 7.0);
     QCOMPARE(*transform[0].yPos, 27.0);
 
+    bool dummy = false;
     QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-        chunkShape->layoutInterface()->collectSubChunks();
+        chunkShape->layoutInterface()->collectSubChunks(false, dummy);
 
     QCOMPARE(subChunks.size(), 1);
     QCOMPARE(subChunks[0].text.size(), 17);
@@ -510,8 +511,9 @@ void TestSvgText::testComplexText()
             }
         }
 
+        bool dummy = false;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-            chunk->layoutInterface()->collectSubChunks();
+            chunk->layoutInterface()->collectSubChunks(false, dummy);
 
         QCOMPARE(subChunks.size(), 1); // used to be 7, but we got rid of aggresive subchunking.
         QCOMPARE(subChunks[0].text.size(), 7);
@@ -538,8 +540,9 @@ void TestSvgText::testComplexText()
             QCOMPARE(*transform[i].dxPos, qreal(i + 7));
         }
 
+        bool dummy = false;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-            chunk->layoutInterface()->collectSubChunks();
+            chunk->layoutInterface()->collectSubChunks(false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 3);
@@ -557,8 +560,9 @@ void TestSvgText::testComplexText()
         QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
         QCOMPARE(transform.size(), 0);
 
+        bool dummy = false;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-            chunk->layoutInterface()->collectSubChunks();
+            chunk->layoutInterface()->collectSubChunks(false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 7);
@@ -576,8 +580,9 @@ void TestSvgText::testComplexText()
         QVector<KoSvgText::CharTransformation> transform = chunk->layoutInterface()->localCharTransformations();
         QCOMPARE(transform.size(), 0);
 
+        bool dummy = false;
         QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> subChunks =
-            chunk->layoutInterface()->collectSubChunks();
+            chunk->layoutInterface()->collectSubChunks(false, dummy);
 
         QCOMPARE(subChunks.size(), 1);
         QCOMPARE(subChunks[0].text.size(), 24);
@@ -2013,7 +2018,12 @@ void TestSvgText::testCssFontVariants()
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
 }
-
+/**
+ * Tests all relevant permutations of the textLength
+ * property. This includes increase in spacing,
+ * decrease in spacing, squashing and stratching
+ * and finally, nested textLengths.
+ */
 void TestSvgText::testTextLength()
 {
     QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-textLength.svg"));
@@ -2079,6 +2089,77 @@ void TestSvgText::testTextLength()
         }
     }
 
+}
+/**
+ * This tests basic features of textPath, so text-on-path,
+ * side, method="stretch", startOffset, and what happens when
+ * there's a single closed path.
+ */
+void TestSvgText::testTextPathBasic()
+{
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QMap<QString, QRect> testFiles;
+    // Basic text path.
+    testFiles.insert("textPath-test-basic", QRect(0, 0, 230, 170));
+    // Tests switching the side.
+    testFiles.insert("textPath-test-side", QRect(0, 0, 230, 170));
+    // Tests the startOffset attribute.
+    testFiles.insert("textPath-test-offset", QRect(0, 0, 350, 190));
+    // Tests closed paths, these need to wrap around.
+    testFiles.insert("textPath-test-closed", QRect(0, 0, 460, 270));
+    // Tests the stretch method.
+    testFiles.insert("textPath-test-method", QRect(0, 0, 460, 270));
+    for (QString testFile: testFiles.keys()) {
+        QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/"+testFile+".svg"));
+        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+        QXmlInputSource data;
+        data.setData(file.readAll());
+
+        SvgRenderTester t (data.data());
+        t.setFuzzyThreshold(5);
+        t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
+    }
+}
+/**
+ * This tests some of the more intricate parts of textPath,
+ * some of which don't have a consistent solution (like mixed
+ * tspans and textpath, especially rtl), or are unusual
+ * to Krita (text-decoration).
+ */
+void TestSvgText::testTextPathComplex()
+{
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QMap<QString, QRect> testFiles;
+    // Tests what happens if you apply transforms on text paths.
+    testFiles.insert("textPath-test-transforms", QRect(0, 0, 300, 240));
+    // Tests multiple textPaths.
+    testFiles.insert("textPath-test-multiple", QRect(0, 0, 230, 170));
+    // Tests the case where there's a textPath surrounded by tspans.
+    testFiles.insert("textPath-test-mix-tspans", QRect(0, 0, 230, 170));
+    // Tests text-decoration inside a path.
+    testFiles.insert("textPath-test-text-decoration", QRect(0, 0, 230, 170));
+    for (QString testFile: testFiles.keys()) {
+        QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/"+testFile+".svg"));
+        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+        QXmlInputSource data;
+        data.setData(file.readAll());
+
+        SvgRenderTester t (data.data());
+        t.setFuzzyThreshold(5);
+        t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
+    }
 }
 
 #include "kistest.h"

@@ -387,7 +387,7 @@ void KoSvgTextProperties::parseSvgTextAttribute(const SvgLoadingContext &context
                                    .value<KoSvgText::TextDecorations>();
         if (command == "text-decoration" || "text-decoration-line") {
             // reset deco when those values are being set..
-            deco = KoSvgText::TextDecorations();
+            deco = KoSvgText::DecorationNone;
         }
 
         TextDecorationStyle style = TextDecorationStyle(

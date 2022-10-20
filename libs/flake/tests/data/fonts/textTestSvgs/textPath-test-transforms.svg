@@ -1,0 +1,53 @@
+<svg width="300px" height="240px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+    <defs>
+    <path id="path-horizontal" d="M0 0C25 50 125 50 150 0" />
+    <path id="path-vertical" d="M0 0C50 25 50 125 0 150" />
+</defs>
+<g id="testRect">
+    
+    <!-- This tests the x, y, dx, dy and rotate attributes for text on path -->
+    
+    <text id="test1" transform="translate(20,30)"
+          font-family="DejaVu Sans" fill="blue" font-size="15" dy="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0"><textPath href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    <!-- According to SVG 2 textlayout algorithm: "The ‘y’ attribute is ignored for horizontal text on a path. " So this shouldn't have any effect-->
+    <text id="test2" transform="translate(20,50)"
+          font-family="DejaVu Sans" fill="red" font-size="15" y="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0"><textPath href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    <text id="test3" transform="translate(20,70)"
+          font-family="DejaVu Sans" fill="green" font-size="15" rotate="0 -30 -30 -30 -30 30 30 30 30 0 -30 -30 -30 -30 30 30 30 30 0 -30 -30 -30 -30 30 30 30 30 0"><textPath href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    <text id="test1" transform="translate(20,160)"
+          font-family="DejaVu Sans" fill="orange" font-size="15" ><textPath href="#path-horizontal">Lorem <tspan dy="20">ipsum</tspan><tspan dy="-20"> dolor</tspan> sit amet</textPath>
+    </text>
+    
+    
+    <text id="test1rtl" transform="translate(20,100)"
+          font-family="DejaVu Sans" fill="blue" font-size="15" direction="rtl" text-anchor="end" dy="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0"><textPath href="#path-horizontal">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    <!-- According to SVG 2 textlayout algorithm: "The ‘y’ attribute is ignored for horizontal text on a path. " So this shouldn't have any effect-->
+    <text id="test2rtl" transform="translate(20,120)"
+          font-family="DejaVu Sans" fill="red" font-size="15" direction="rtl" text-anchor="end" y="0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0 -3 -3 -3 -3 3 3 3 3 0"><textPath href="#path-horizontal">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    <text id="test3rtl" transform="translate(20,140)"
+          font-family="DejaVu Sans" fill="green" font-size="15" direction="rtl" text-anchor="end" rotate="0 -30 -30 -30 -30 30 30 30 30 0 -30 -30 -30 -30 30 30 30 30 0 -30 -30 -30 -30 30 30 30 30 0"><textPath href="#path-horizontal">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    
+    <text id="test1ttb" transform="translate(180,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+          writing-mode="vertical-rl" dx="0 -10 -10 10 10 0 -10 -10 10 10 0 -10 -10 10 10 0"><textPath href="#path-vertical">ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;</textPath>
+    </text>
+    <!-- According to SVG 2 textlayout algorithm: "The ‘x’ attribute is ignored for vertical text on a path. " So this shouldn't have any effect-->
+    <text id="test2ttb" transform="translate(200,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="red" font-size="15" 
+          writing-mode="vertical-rl" x="0 -10 -10 10 10 0 -10 -10 10 10 0 -10 -10 10 10 0"><textPath href="#path-vertical">ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;</textPath>
+    </text>
+    <text id="test3ttb" transform="translate(240,20)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="green" font-size="15" 
+          writing-mode="vertical-rl" rotate="0 -30 -30 -30 -30 30 30 30 30 0 -30 -30 -30 -30 30 30 30 30 0 -30 -30 -30 -30 30 30 30 30 0"><textPath href="#path-vertical">ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;</textPath>
+    </text>
+
+</g>
+
+</svg>

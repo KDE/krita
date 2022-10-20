@@ -1,0 +1,30 @@
+<svg width="230px" height="170px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+    <defs>
+    <path id="path-horizontal1" d="M0 0C25 50 125 50 150 0" />
+    <path id="path-horizontal2" d="M0 20C25 70 125 70 150 20" />
+    <path id="path-horizontal3" d="M0 40C25 90 125 90 150 40" />
+    <path id="path-vertical1" d="M0 0C50 25 50 125 0 150" />
+    <path id="path-vertical2" d="M20 0C70 25 70 125 20 150" />
+    <path id="path-vertical3" d="M40 0C90 25 90 125 40 150" />
+</defs>
+<g id="testRect">
+    
+    <!-- Most basic example of a text on path, with sample for direction and writing-mode. -->
+    
+    <text id="test1" transform="translate(10,20)"
+          font-family="DejaVu Sans" fill="blue" font-size="15"><textPath href="#path-horizontal1">The quick brown fox</textPath><textPath href="#path-horizontal2">jumps over</textPath><textPath href="#path-horizontal3">the lazy dog.</textPath>
+    </text>
+    
+    <text id="test1rtl" transform="translate(10,80)"
+          font-family="DejaVu Sans" fill="blue" font-size="15" direction="rtl" text-anchor="end"><textPath href="#path-horizontal1">اللغة العربية المعيارية الحديثة</textPath><textPath href="#path-horizontal2">اللغة العربية المعيارية الحديثة</textPath><textPath href="#path-horizontal3">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    
+    <text id="test1ttb" transform="translate(140,10)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical1">ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;</textPath><textPath href="#path-vertical2">あああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;ああああ&#x82A6;</textPath><textPath href="#path-vertical3">ああ&#x82A6;&#x82A6;ああ&#x82A6;&#x82A6;あああ&#x82A6;</textPath>
+    </text>
+
+</g>
+
+</svg>

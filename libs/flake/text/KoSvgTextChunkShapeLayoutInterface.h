@@ -159,21 +159,23 @@ public:
 
         SubChunk(const QString &_text,
                  const KoSvgText::KoSvgCharChunkFormat &_format,
-                 bool textInPath = false)
+                 bool textInPath = false, bool firstTextInPath = false)
             : text(_text)
             , format(_format)
             , textInPath(textInPath)
+            , firstTextInPath(firstTextInPath)
         {
         }
 
         SubChunk(const QString &_text,
                  const KoSvgText::KoSvgCharChunkFormat &_format,
                  const QVector<KoSvgText::CharTransformation> &t,
-                 bool textInPath = false)
+                 bool textInPath = false, bool firstTextInPath = false)
             : text(_text)
             , format(_format)
             , transformation(t)
             , textInPath(textInPath)
+            , firstTextInPath(firstTextInPath)
         {
         }
 
@@ -181,13 +183,14 @@ public:
         KoSvgText::KoSvgCharChunkFormat format;
         QVector<KoSvgText::CharTransformation> transformation;
         bool textInPath = false;
+        bool firstTextInPath = false; // We need to mark the first text in path as an anchored chunk.
     };
 
     /**
      * Return a linearized representation of a subtree of text "subchunks".
      */
     virtual QVector<SubChunk>
-    collectSubChunks(bool textInPath = false) const = 0;
+    collectSubChunks(bool textInPath, bool &firstTextInPath) const = 0;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPELAYOUTINTERFACE_H

@@ -1,0 +1,26 @@
+<svg width="230px" height="170px"
+    xmlns="http://www.w3.org/2000/svg" version="2.0">
+    <defs>
+    <path id="path-horizontal" d="M0 0C25 50 125 50 150 0" />
+    <path id="path-vertical" d="M0 0C50 25 50 125 0 150" />
+</defs>
+<g id="testRect">
+    
+    <!-- Most basic example of a text on path, with sample for direction and writing-mode. -->
+    
+    <text id="test1" transform="translate(20,50)"
+          font-family="DejaVu Sans" fill="blue" font-size="15"><textPath href="#path-horizontal">Lorem ipsum dolor sit amet</textPath>
+    </text>
+    
+    <text id="test1rtl" transform="translate(20,100)"
+          font-family="DejaVu Sans" fill="blue" font-size="15" direction="rtl" text-anchor="end"><textPath href="#path-horizontal">اللغة العربية المعيارية الحديثة</textPath>
+    </text>
+    
+    <text id="test1ttb" transform="translate(180,10)"
+        font-family="Krita_Test_Unicode_Variation_A" fill="blue" font-size="15" 
+          writing-mode="vertical-rl"><textPath href="#path-vertical">ああ&#x82A6;&#x82A6;&#x82A6;&#x82A6;あああ&#x82A6;</textPath>
+    </text>
+
+</g>
+
+</svg>

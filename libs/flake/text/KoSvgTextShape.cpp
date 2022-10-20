@@ -399,8 +399,9 @@ void KoSvgTextShape::relayout() const
     // get generated later. https://github.com/w3c/svgwg/issues/631
     // https://github.com/w3c/svgwg/issues/635
 
+    bool first = false;
     QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks =
-        layoutInterface()->collectSubChunks();
+        layoutInterface()->collectSubChunks(false, first);
     QString text;
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
         text.append(chunk.text);
@@ -479,7 +480,6 @@ void KoSvgTextShape::relayout() const
 
         int start = 0;
         int length = 0;
-        bool textInPath = false;
         for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
             length = chunk.text.size();
             KoSvgTextProperties properties =
@@ -523,10 +523,6 @@ void KoSvgTextShape::relayout() const
                 CharacterResult cr = result[start + i];
                 cr.anchor = anchor;
                 cr.direction = direction;
-                if (chunk.textInPath != textInPath && i == 0) {
-                    cr.anchored_chunk = true;
-                    textInPath = chunk.textInPath;
-                }
                 if (lineBreaks[start + i] == LINEBREAK_MUSTBREAK) {
                     cr.breakType = HardBreak;
                     cr.lineEnd = Collapse;
@@ -578,34 +574,43 @@ void KoSvgTextShape::relayout() const
                 if (text.at(start + i) == QChar::Tabulation) {
                     tabSizeInfo.insert(start + i, tabInfo);
                 }
+                
+                if (chunk.firstTextInPath && i==0) {
+                    cr.anchored_chunk = true;
+                }
                 result[start + i] = cr;
                 // TODO: figure out how to use addressability to only set
                 // transforms on addressable chars.
                 //! collapseChars.at(i);
+                
                 if (i < chunk.transformation.size()) {
                     KoSvgText::CharTransformation newTransform =
                         chunk.transformation.at(i);
 
                     if (chunk.textInPath) {
-                        // Unset the perpendicular absolute transform for textPaths,
-                        // but also reset the initial position for text on path, as it may break otherwise.
-                        // users will likely use start-offset to adjust such a value.
+                        // Unset the perpendicular absolute transform for textPaths as suggested by the SVG 2 algorithm.
                         if (isHorizontal) {
                             newTransform.yPos.reset();
-                            if (i == 0) {
-                                newTransform.xPos = 0.0;
-                            }
                         } else {
                             newTransform.xPos.reset();
-                            if (i == 0) {
-                                newTransform.yPos = 0.0;
-                            }
                         }
                     }
                     resolvedTransforms[start + i] = newTransform;
                 } else if (start > 0) {
                     resolvedTransforms[start + i].rotate =
                         resolvedTransforms[start + i - 1].rotate;
+                }
+                if (chunk.firstTextInPath && i==0) {
+                    if (chunk.textInPath) {
+                        //  Also unset the first transform on a textPath to avoid breakage with rtl text.
+                        if (isHorizontal) {
+                            resolvedTransforms[start + i].yPos.reset();
+                            resolvedTransforms[start + i].xPos = 0.0;
+                        } else {
+                            resolvedTransforms[start + i].xPos.reset();
+                            resolvedTransforms[start + i].yPos = 0.0;
+                        }
+                    }
                 }
             }
 
@@ -2433,7 +2438,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
         chunkShape->textProperties()
             .propertyOrDefault(KoSvgTextProperties::TextDecorationLineId)
             .value<TextDecorations>();
-    if (decor != DecorationNone) {
+    if (decor != DecorationNone && chunkShape->textProperties().hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
         KoSvgTextProperties properties = chunkShape->textProperties();
         TextDecorationStyle style = TextDecorationStyle(
             properties
@@ -2566,7 +2571,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
                 p.moveTo(QPointF());
                 // We're segmenting the path here so it'll be easier to warp
                 // when text-on-path is happening.
-                if (textPath) {
+                if (currentTextPath) {
                     if (isHorizontal) {
                         int total = floor(rect.width() / (stroker.width() * 2));
                         qreal segment = qreal(rect.width() / total);

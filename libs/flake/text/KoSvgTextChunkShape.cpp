@@ -370,14 +370,17 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return text;
     }
 
-    QVector<SubChunk> collectSubChunks(bool textInPath) const override
+    QVector<SubChunk> collectSubChunks(bool textInPath, bool &firstTextInPath) const override
     {
         QVector<SubChunk> result;
+        
         if (q->s->textPath) {
             textInPath = true;
+            firstTextInPath = true;
         }
 
         if (isTextNode()) {
+            
             KoSvgText::TextTransformInfo textTransformInfo =
                 q->s->properties
                     .propertyOrDefault(KoSvgTextProperties::TextTransformId)
@@ -407,18 +410,20 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
             const QString bidiClosing = getBidiClosing(bidi);
 
             if (!bidiOpening.isEmpty()) {
-                result << SubChunk(bidiOpening, format, textInPath);
+                result << SubChunk(bidiOpening, format, textInPath, firstTextInPath);
+                firstTextInPath = false;
             }
 
             if (transforms.isEmpty()) {
-                result << SubChunk(text, format, textInPath);
+                result << SubChunk(text, format, textInPath, firstTextInPath);
             } else {
-                result << SubChunk(text, format, transforms, textInPath);
+                result << SubChunk(text, format, transforms, textInPath, firstTextInPath);
             }
 
             if (!bidiClosing.isEmpty()) {
-                result << SubChunk(bidiClosing, format, textInPath);
+                result << SubChunk(bidiClosing, format, textInPath, firstTextInPath);
             }
+            firstTextInPath = false;
 
         } else {
             Q_FOREACH (KoShape *shape, q->shapes()) {
@@ -426,12 +431,13 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                 KIS_SAFE_ASSERT_RECOVER_BREAK(chunkShape);
 
                 result +=
-                    chunkShape->layoutInterface()->collectSubChunks(textInPath);
+                    chunkShape->layoutInterface()->collectSubChunks(textInPath, firstTextInPath);
             }
         }
 
         if (q->s->textPath) {
             textInPath = false;
+            firstTextInPath = false;
         }
 
         return result;

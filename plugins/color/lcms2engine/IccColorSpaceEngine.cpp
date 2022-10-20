@@ -288,11 +288,11 @@ quint32 IccColorSpaceEngine::computeColorSpaceType(const KoColorSpace *cs) const
         } else if (depthId == Integer16BitsColorDepthID.id()) {
             depthType = BYTES_SH(2);
         } else if (depthId == Float16BitsColorDepthID.id()) {
-            depthType = BYTES_SH(2);
+            depthType = BYTES_SH(2) | FLOAT_SH(1);
         } else if (depthId == Float32BitsColorDepthID.id()) {
-            depthType = BYTES_SH(4);
+            depthType = BYTES_SH(4) | FLOAT_SH(1);
         } else if (depthId == Float64BitsColorDepthID.id()) {
-            depthType = BYTES_SH(0);
+            depthType = BYTES_SH(0) | FLOAT_SH(1);
         } else {
             qWarning() << "Unknown bit depth";
             return 0;

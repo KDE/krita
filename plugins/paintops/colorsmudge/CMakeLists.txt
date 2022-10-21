@@ -5,6 +5,16 @@ set(kritacolorsmudgepaintop_SOURCES
     kis_colorsmudgeop.cpp
     kis_colorsmudgeop_settings.cpp
     kis_colorsmudgeop_settings_widget.cpp
+    KisSmudgeLengthOptionData.cpp
+    KisSmudgeLengthOptionModel.cpp
+    KisSmudgeLengthOptionWidget.cpp
+    KisPaintThicknessOptionData.cpp
+    KisPaintThicknessOptionModel.cpp
+    KisPaintThicknessOptionWidget.cpp
+    KisSmudgeOverlayModeOptionData.cpp
+    KisSmudgeOverlayModeOptionModel.cpp
+    KisSmudgeOverlayModeOptionWidget.cpp
+    KisBrushPropertiesModel.cpp
     kis_rate_option.cpp
     kis_smudge_option.cpp
     kis_smudge_option_widget.cpp

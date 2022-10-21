@@ -6,6 +6,7 @@
 
 #include "KisCurveOptionModel.h"
 
+#include <lager/lenses/tuple.hpp>
 #include <KisZug.h>
 
 auto activeCurveLens = lager::lenses::getset(
@@ -73,18 +74,31 @@ int calcActiveSensorLength(const KisCurveOptionData &data, const QString &active
     return length;
 }
 
-KisCurveOptionModel::KisCurveOptionModel(lager::cursor<KisCurveOptionData> _optionData, lager::reader<bool> externallyEnabled)
+
+KisCurveOptionModel::KisCurveOptionModel(lager::cursor<KisCurveOptionData> _optionData,
+                                         lager::reader<bool> externallyEnabled,
+                                         std::optional<lager::reader<RangeState>> rangeOverride)
     : optionData(_optionData)
+    , rangeNorm(rangeOverride ? *rangeOverride :
+                      lager::with(optionData[&KisCurveOptionData::strengthMinValue],
+                                  optionData[&KisCurveOptionData::strengthMaxValue]))
     , activeSensorIdData(PressureId.id())
     , LAGER_QT(isCheckable) {optionData[&KisCurveOptionData::isCheckable]}
     , LAGER_QT(isChecked) {optionData[&KisCurveOptionData::isChecked]}
     , LAGER_QT(effectiveIsChecked) {lager::with(LAGER_QT(isChecked), externallyEnabled).map(std::logical_and{})}
-    , LAGER_QT(strengthValue) {optionData[&KisCurveOptionData::strengthValue]
-            .zoom(kiszug::lenses::scale<qreal>(100.0))}
-    , LAGER_QT(range) {lager::with(optionData[&KisCurveOptionData::strengthMinValue],
-                                   optionData[&KisCurveOptionData::strengthMaxValue])
+    , LAGER_QT(effectiveStrengthValueNorm) {
+          lager::with(rangeNorm.zoom(lager::lenses::first),
+                      optionData[&KisCurveOptionData::strengthValue],
+                      rangeNorm.zoom(lager::lenses::second))
+                  .map(&qBound<qreal>)}
+    , LAGER_QT(strengthValueDenorm) {
+          optionData[&KisCurveOptionData::strengthValue]
+                  .zoom(kiszug::lenses::scale<qreal>(100.0))}
+    , LAGER_QT(effectiveStrengthStateDenorm) {
+          lager::with(LAGER_QT(effectiveStrengthValueNorm),
+                      rangeNorm.zoom(lager::lenses::first),
+                      rangeNorm.zoom(lager::lenses::second))
             .xform(kiszug::foreach_arg(kiszug::map_mupliply<qreal>(100.0)))}
-
     , LAGER_QT(useCurve) {optionData[&KisCurveOptionData::useCurve]}
     , LAGER_QT(useSameCurve) {optionData[&KisCurveOptionData::useSameCurve]}
     , LAGER_QT(curveMode) {optionData[&KisCurveOptionData::curveMode]}
@@ -105,5 +119,8 @@ KisCurveOptionData KisCurveOptionModel::bakedOptionData() const
 {
     KisCurveOptionData data = optionData.get();
     data.isChecked = effectiveIsChecked();
+    std::tie(data.strengthMinValue, data.strengthMaxValue) =
+        rangeNorm.get();
+    data.strengthValue = effectiveStrengthValueNorm();
     return data;
 }

@@ -70,7 +70,7 @@ bool KisBrushBasedPaintOpSettings::paintIncremental()
 {
     KisPaintingModeOptionData data;
     data.read(this);
-    return data.paintingMode == enumPaintingMode::BUILDUP;
+    return !data.hasPaintingModeProperty || data.paintingMode == enumPaintingMode::BUILDUP;
 }
 
 KisPaintOpSettingsSP KisBrushBasedPaintOpSettings::clone() const

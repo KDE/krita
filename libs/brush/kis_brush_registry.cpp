@@ -64,6 +64,14 @@ KoResourceLoadResult KisBrushRegistry::createBrush(const QDomElement& element, K
     return factory->createBrush(element, resourcesInterface);
 }
 
+KoResourceLoadResult KisBrushRegistry::createBrush(const KisBrushModel::BrushData &data, KisResourcesInterfaceSP resourcesInterface)
+{
+    QDomDocument doc;
+    QDomElement element = doc.createElement("brush_definition");
+    toXML(doc, element, data);
+    return createBrush(element, resourcesInterface);
+}
+
 std::optional<KisBrushModel::BrushData> KisBrushRegistry::createBrushModel(const QDomElement& element, KisResourcesInterfaceSP resourcesInterface)
 {
     QString brushType = element.attribute("type");

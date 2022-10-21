@@ -25,6 +25,7 @@ struct PAINTOP_EXPORT KisPaintingModeOptionData : boost::equality_comparable<Kis
     }
 
     enumPaintingMode paintingMode { enumPaintingMode::BUILDUP };
+    bool hasPaintingModeProperty {false};
 
     bool read(const KisPropertiesConfiguration *setting);
     void write(KisPropertiesConfiguration *setting) const;

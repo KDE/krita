@@ -10,8 +10,9 @@
 
 bool KisPaintingModeOptionData::read(const KisPropertiesConfiguration *setting)
 {
-    const int value = setting->getInt("PaintOpAction", 2);
+    hasPaintingModeProperty = setting->hasProperty("PaintOpAction");
 
+    const int value = setting->getInt("PaintOpAction", 2);
     paintingMode = value == 1 ? enumPaintingMode::BUILDUP : enumPaintingMode::WASH;
 
     return true;

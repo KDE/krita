@@ -15,6 +15,7 @@
 #include <lager/extra/qt.hpp>
 
 using RangeState = std::tuple<qreal, qreal>;
+using StrengthState = std::tuple<qreal, qreal, qreal>;
 using LabelsState = std::tuple<QString, int>;
 
 
@@ -22,17 +23,21 @@ class PAINTOP_EXPORT KisCurveOptionModel : public QObject
 {
     Q_OBJECT
 public:
-    KisCurveOptionModel(lager::cursor<KisCurveOptionData> optionData, lager::reader<bool> externallyEnabled);
+    KisCurveOptionModel(lager::cursor<KisCurveOptionData> optionData,
+                        lager::reader<bool> externallyEnabled,
+                        std::optional<lager::reader<RangeState>> rangeOverride);
     ~KisCurveOptionModel();
 
     // the state must be declared **before** any cursors or readers
     lager::cursor<KisCurveOptionData> optionData;
+    lager::reader<RangeState> rangeNorm;
     lager::state<QString, lager::automatic_tag> activeSensorIdData;
     LAGER_QT_READER(bool, isCheckable);
     LAGER_QT_CURSOR(bool, isChecked);
     LAGER_QT_READER(bool, effectiveIsChecked);
-    LAGER_QT_CURSOR(qreal, strengthValue);
-    LAGER_QT_READER(RangeState, range);
+    LAGER_QT_READER(qreal, effectiveStrengthValueNorm);
+    LAGER_QT_CURSOR(qreal, strengthValueDenorm);
+    LAGER_QT_READER(StrengthState, effectiveStrengthStateDenorm);
     LAGER_QT_CURSOR(bool, useCurve);
     LAGER_QT_CURSOR(bool, useSameCurve);
     LAGER_QT_CURSOR(int, curveMode);

@@ -13,6 +13,7 @@
 #include "kis_brush.h"
 #include <KisBrushOptionWidgetFlags.h>
 #include <lager/reader.hpp>
+#include <KisBrushModel.h>
 
 class KisBrushSelectionWidget;
 
@@ -41,6 +42,7 @@ public:
 
     lager::reader<bool> lightnessModeEnabled() const;
     lager::reader<qreal> effectiveBrushSize() const;
+    lager::reader<KisBrushModel::BrushData> bakedBrushData() const;
 
 protected:
     lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;

@@ -128,6 +128,18 @@ lager::reader<qreal> KisBrushOptionWidget::effectiveBrushSize() const
     return m_d->commonBrushSizeData;
 }
 
+lager::reader<BrushData> KisBrushOptionWidget::bakedBrushData() const
+{
+    return lager::with(m_d->brushData, m_d->commonBrushSizeData)
+            .map([this] (BrushData data, qreal commonBrushSize) {
+
+        Q_UNUSED(commonBrushSize); // we keep it as a dep only for updates!
+        data.autoBrush = m_d->autoBrushModel.bakedOptionData();
+        data.predefinedBrush = m_d->predefinedBrushModel.bakedOptionData();
+        return data;
+    });
+}
+
 lager::reader<KisPaintopLodLimitations> KisBrushOptionWidget::lodLimitationsReader() const
 {
     return m_d->brushData.map(&KisBrushModel::brushLodLimitations);

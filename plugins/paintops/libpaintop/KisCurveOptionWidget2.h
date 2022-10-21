@@ -25,25 +25,29 @@ public:
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
                           KisPaintOpOption::PaintopCategory category,
-                          lager::reader<bool> enabledLink = lager::make_constant(true));
+                          lager::reader<bool> enabledLink = lager::make_constant(true),
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt);
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
-                          lager::reader<bool> enabledLink = lager::make_constant(true));
+                          lager::reader<bool> enabledLink = lager::make_constant(true),
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt);
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
-                          lager::reader<bool> enabledLink = lager::make_constant(true));
+                          lager::reader<bool> enabledLink = lager::make_constant(true),
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt);
 
     KisCurveOptionWidget2(lager::cursor<KisCurveOptionData> optionData,
                           KisPaintOpOption::PaintopCategory category,
                           const QString &curveMinLabel, const QString &curveMaxLabel,
                           int curveMinValue, int curveMaxValue, const QString &curveValueSuffix,
                           const QString &strengthPrefix, const QString &strengthSuffix,
-                          lager::reader<bool> enabledLink = lager::make_constant(true));
+                          lager::reader<bool> enabledLink = lager::make_constant(true),
+                          std::optional<lager::reader<std::tuple<qreal, qreal>>> rangeReader = std::nullopt);
     ~KisCurveOptionWidget2() override;
 
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
@@ -51,12 +55,10 @@ public:
 
     bool isCheckable() const override;
     void show();
-    virtual void setEnabled(bool enabled);
-
-    void setCurveWidgetsEnabled(bool value);
 
 protected:
 
+    void setCurveWidgetsEnabled(bool value);
     QWidget* curveWidget();
 
 protected Q_SLOTS:

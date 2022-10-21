@@ -332,6 +332,11 @@ bool KisCurveOptionData::readPrefixed(const KisPropertiesConfiguration *setting)
     }
 
     strengthValue = setting->getDouble(id.id() + "Value", strengthMaxValue);
+
+    if (valueFixUpReadCallback) {
+        strengthValue = valueFixUpReadCallback(strengthValue, setting);
+    }
+
     useCurve = setting->getBool(id.id() + "UseCurve", true);
     curveMode = setting->getInt(id.id() + "curveMode", 0);
 
@@ -368,6 +373,9 @@ void KisCurveOptionData::writePrefixed(KisPropertiesConfiguration *setting) cons
     setting->setProperty(id.id() + "UseCurve", useCurve);
     setting->setProperty(id.id() + "UseSameCurve", useSameCurve);
     setting->setProperty(id.id() + "Value", strengthValue);
+    if (valueFixUpWriteCallback) {
+        valueFixUpWriteCallback(strengthValue, setting);
+    }
     setting->setProperty(id.id() + "curveMode", curveMode);
     setting->setProperty(id.id() + "commonCurve", commonCurve);
 }

@@ -12,14 +12,13 @@
 #include "kis_paint_device.h"
 #include "kis_fixed_paint_device.h"
 #include "kis_selection.h"
-#include "kis_pressure_paint_thickness_option.h"
 
 #include "KisColorSmudgeInterstrokeData.h"
 #include "kis_algebra_2d.h"
 #include <KoBgrColorSpaceTraits.h>
 
 KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *painter, bool smearAlpha,
-                                                                 bool useDullingMode, KisPressurePaintThicknessOption::ThicknessMode thicknessMode)
+                                                                 bool useDullingMode, KisPaintThicknessOptionData::ThicknessMode thicknessMode)
         : KisColorSmudgeStrategyBase(useDullingMode)
         , m_maskDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->alpha8()))
         , m_origDab(new KisFixedPaintDevice(KoColorSpaceRegistry::instance()->rgb8()))
@@ -27,10 +26,10 @@ KisColorSmudgeStrategyLightness::KisColorSmudgeStrategyLightness(KisPainter *pai
         , m_initializationPainter(painter)
         , m_thicknessMode(thicknessMode)
 {
-    KIS_SAFE_ASSERT_RECOVER(thicknessMode == KisPressurePaintThicknessOption::OVERLAY ||
-                            thicknessMode == KisPressurePaintThicknessOption::OVERWRITE) {
+    KIS_SAFE_ASSERT_RECOVER(thicknessMode == KisPaintThicknessOptionData::OVERLAY ||
+                            thicknessMode == KisPaintThicknessOptionData::OVERWRITE) {
 
-        thicknessMode = KisPressurePaintThicknessOption::OVERLAY;
+        thicknessMode = KisPaintThicknessOptionData::OVERLAY;
     }
 }
 
@@ -165,7 +164,7 @@ KisColorSmudgeStrategyLightness::paintDab(const QRect &srcRect, const QRect &dst
 
     const qreal overlaySmearRate = smudgeRateValue - 0.01; //adjust so minimum value is 0 instead of 1%
     const qreal overlayAdjustment =
-        (m_thicknessMode == KisPressurePaintThicknessOption::ThicknessMode::OVERWRITE) ?
+        (m_thicknessMode == KisPaintThicknessOptionData::ThicknessMode::OVERWRITE) ?
         1.0 : KisAlgebra2D::lerp(overlaySmearRate, 1.0, paintThicknessValue);
     const quint8 brushHeightmapOpacity = qRound(opacity * overlayAdjustment * 255.0);
     m_heightmapPainter.setOpacity(brushHeightmapOpacity);

@@ -35,6 +35,23 @@ private:
     }
 };
 
+template <typename Data>
+class KisStandardOptionNoApply : public KisCurveOption2
+{
+public:
+    KisStandardOptionNoApply(const KisPropertiesConfiguration *setting)
+        : KisCurveOption2(initializeData(setting))
+    {
+    }
+
+private:
+    Data initializeData(const KisPropertiesConfiguration *setting) {
+        Data data;
+        data.read(setting);
+        return data;
+    }
+};
+
 using KisFlowOption = KisStandardOption<KisFlowOptionData>;
 using KisSizeOption = KisStandardOption<KisSizeOptionData>;
 using KisRatioOption = KisStandardOption<KisRatioOptionData>;

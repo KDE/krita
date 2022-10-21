@@ -1,7 +1,16 @@
 SET(PREFIX_ext_ffmpeg "${EXTPREFIX}")
 
-# find_package(VPX) todo: get/write a cmake find module
-# find_package(FLAC) todo: can't build because of autoconf, get/write find module.
+include(FeatureSummary)
+
+LIST (APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/../cmake/modules/avcodecs")
+
+# ======================== AUDIO ===========================
+
+find_package(FLAC)
+set_package_properties(FLAC PROPERTIES
+    DESCRIPTION "libFLAC flac audio codec"
+    URL "https://xiph.org/flac/"
+)
 
 ExternalProject_Add(
     ext_libogg
@@ -21,6 +30,14 @@ ExternalProject_Add(
     CMAKE_ARGS ${LIBVORBIS_EXTRA_CMAKE_ARGS} -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 
     DEPENDS ext_libogg
+)
+
+# ======================== VIDEO ===========================
+
+find_package(VPX)
+set_package_properties(VPX PROPERTIES
+    DESCRIPTION "libvpx vp8/vp9 video encoder."
+    URL "https://www.webmproject.org/"
 )
 
 ExternalProject_Add(

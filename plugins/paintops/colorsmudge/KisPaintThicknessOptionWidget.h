@@ -10,7 +10,7 @@
 #include <KisPaintThicknessOptionData.h>
 
 
-class PAINTOP_EXPORT KisPaintThicknessOptionWidget : public KisCurveOptionWidget2
+class KisPaintThicknessOptionWidget : public KisCurveOptionWidget2
 {
     Q_OBJECT
 public:

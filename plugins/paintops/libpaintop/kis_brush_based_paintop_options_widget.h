@@ -23,7 +23,7 @@ public:
 
     KisBrushSP brush();
 
-    lager::reader<qreal> effectiveBrushSize() const;
+    lager::reader<qreal> effectiveBrushSize() const override;
 
 protected:
     KisBrushOptionWidget *brushOptionWidget() const;

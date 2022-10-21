@@ -11,7 +11,7 @@
 #include <KisOptionTuple.h>
 #include <KisPrefixedOptionDataWrapper.h>
 
-struct PAINTOP_EXPORT KisSmudgeLengthOptionMixInImpl
+struct KisSmudgeLengthOptionMixInImpl
     : boost::equality_comparable<KisSmudgeLengthOptionMixInImpl>
 {
     enum Mode { SMEARING_MODE, DULLING_MODE };
@@ -32,7 +32,7 @@ struct PAINTOP_EXPORT KisSmudgeLengthOptionMixInImpl
 
 using KisSmudgeLengthOptionMixIn = KisPrefixedOptionDataWrapper<KisSmudgeLengthOptionMixInImpl>;
 
-struct PAINTOP_EXPORT KisSmudgeLengthOptionData : KisOptionTuple<KisCurveOptionData, KisSmudgeLengthOptionMixIn>
+struct KisSmudgeLengthOptionData : KisOptionTuple<KisCurveOptionData, KisSmudgeLengthOptionMixIn>
 {
     KisSmudgeLengthOptionData(const QString &prefix = "")
         : KisOptionTuple<KisCurveOptionData, KisSmudgeLengthOptionMixIn>(prefix,

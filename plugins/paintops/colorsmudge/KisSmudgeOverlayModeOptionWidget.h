@@ -10,7 +10,7 @@
 #include <KisSmudgeOverlayModeOptionData.h>
 #include <lager/cursor.hpp>
 
-class PAINTOP_EXPORT KisSmudgeOverlayModeOptionWidget : public KisPaintOpOption
+class KisSmudgeOverlayModeOptionWidget : public KisPaintOpOption
 {
 public:
     using data_type = KisSmudgeOverlayModeOptionData;
@@ -22,7 +22,7 @@ public:
     void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
     void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
-    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const;
+    lager::reader<KisPaintopLodLimitations> lodLimitationsReader() const override;
 
 private:
     struct Private;

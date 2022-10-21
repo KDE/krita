@@ -8,12 +8,11 @@
 
 #include <QtGlobal>
 #include <boost/operators.hpp>
-#include <kritapaintop_export.h>
 
 class KisPropertiesConfiguration;
 class KisPaintopLodLimitations;
 
-struct PAINTOP_EXPORT KisSmudgeOverlayModeOptionData : boost::equality_comparable<KisSmudgeOverlayModeOptionData>
+struct KisSmudgeOverlayModeOptionData : boost::equality_comparable<KisSmudgeOverlayModeOptionData>
 {
     inline friend bool operator==(const KisSmudgeOverlayModeOptionData &lhs, const KisSmudgeOverlayModeOptionData &rhs) {
         return lhs.isChecked == rhs.isChecked;

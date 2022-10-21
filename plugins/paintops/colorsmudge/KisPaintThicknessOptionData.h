@@ -12,7 +12,7 @@
 #include <KisPrefixedOptionDataWrapper.h>
 
 
-struct PAINTOP_EXPORT KisPaintThicknessOptionMixInImpl
+struct KisPaintThicknessOptionMixInImpl
     : boost::equality_comparable<KisPaintThicknessOptionMixInImpl>
 {
     enum ThicknessMode {
@@ -33,7 +33,7 @@ struct PAINTOP_EXPORT KisPaintThicknessOptionMixInImpl
 
 using KisPaintThicknessOptionMixIn = KisPrefixedOptionDataWrapper<KisPaintThicknessOptionMixInImpl>;
 
-struct PAINTOP_EXPORT KisPaintThicknessOptionData : KisOptionTuple<KisCurveOptionData, KisPaintThicknessOptionMixIn>
+struct KisPaintThicknessOptionData : KisOptionTuple<KisCurveOptionData, KisPaintThicknessOptionMixIn>
 {
     KisPaintThicknessOptionData(const QString &prefix = "")
         : KisOptionTuple<KisCurveOptionData, KisPaintThicknessOptionMixIn>(prefix,

@@ -10,7 +10,7 @@
 #include <KisSmudgeLengthOptionData.h>
 
 
-class PAINTOP_EXPORT KisSmudgeLengthOptionWidget : public KisCurveOptionWidget2
+class KisSmudgeLengthOptionWidget : public KisCurveOptionWidget2
 {
     Q_OBJECT
 public:

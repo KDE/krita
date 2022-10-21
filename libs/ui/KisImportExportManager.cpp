@@ -429,19 +429,20 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
                             .arg(batchMode())
                             .arg(exportConfiguration ? exportConfiguration->toXML() : "none"));
 
-
-
+        const QString alsoAsKraLocation = alsoAsKra ? getAlsoAsKraLocation(location) : QString();
         if (isAsync) {
-            result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+            result = QtConcurrent::run(std::bind(&KisImportExportManager::doExport, this, location, filter,
+                                                 exportConfiguration, alsoAsKraLocation));
 
             // we should explicitly report that the exporting has been initiated
             result.setStatus(ImportExportCodes::OK);
 
         } else if (!batchMode()) {
             KisAsyncActionFeedback f(i18n("Saving document..."), 0);
-            result = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter, exportConfiguration, alsoAsKra));
+            result = f.runAction(std::bind(&KisImportExportManager::doExport, this, location, filter,
+                                           exportConfiguration, alsoAsKraLocation));
         } else {
-            result = doExport(location, filter, exportConfiguration, alsoAsKra);
+            result = doExport(location, filter, exportConfiguration, alsoAsKraLocation);
         }
 
         if (exportConfiguration && !batchMode()) {
@@ -674,17 +675,15 @@ KisImportExportErrorCode KisImportExportManager::doImport(const QString &locatio
     return status;
 }
 
-KisImportExportErrorCode KisImportExportManager::doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra)
+KisImportExportErrorCode KisImportExportManager::doExport(const QString &location,
+                                                          QSharedPointer<KisImportExportFilter> filter,
+                                                          KisPropertiesConfigurationSP exportConfiguration,
+                                                          const QString alsoAsKraLocation)
 {
     KisImportExportErrorCode status =
             doExportImpl(location, filter, exportConfiguration);
 
-    if (alsoAsKra && status.isOk()) {
-#ifdef Q_OS_ANDROID
-        QString kraLocation = getUriForAdditionalFile(location, nullptr);
-#else
-        QString kraLocation = location + ".kra";
-#endif
+    if (!alsoAsKraLocation.isNull() && status.isOk()) {
         QByteArray mime = m_document->nativeFormatMimeType();
         QSharedPointer<KisImportExportFilter> filter(
                     filterForMimeType(QString::fromLatin1(mime), Export));
@@ -692,12 +691,12 @@ KisImportExportErrorCode KisImportExportManager::doExport(const QString &locatio
         KIS_SAFE_ASSERT_RECOVER_NOOP(filter);
 
         if (filter) {
-            filter->setFilename(kraLocation);
+            filter->setFilename(alsoAsKraLocation);
 
             KisPropertiesConfigurationSP kraExportConfiguration =
                     filter->lastSavedConfiguration(mime, mime);
 
-            status = doExportImpl(kraLocation, filter, kraExportConfiguration);
+            status = doExportImpl(alsoAsKraLocation, filter, kraExportConfiguration);
         } else {
             status = ImportExportCodes::FileFormatIncorrect;
         }
@@ -773,6 +772,15 @@ KisImportExportErrorCode KisImportExportManager::doExportImpl(const QString &loc
 
     return status;
 
+}
+
+QString KisImportExportManager::getAlsoAsKraLocation(const QString location) const
+{
+#ifdef Q_OS_ANDROID
+    return getUriForAdditionalFile(location, nullptr);
+#else
+    return location + ".kra";
+#endif
 }
 
 #include <KisMimeDatabase.h>

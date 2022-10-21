@@ -761,6 +761,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
         d->debugEvent<QTouchEvent, false>(event);
         endTouch();
+        d->allowMouseEvents();
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         retval = d->matcher.touchEndEvent(touchEvent);
         if (d->touchStrokeStarted) {
@@ -786,6 +787,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
         }
         d->debugEvent<QTouchEvent, false>(event);
         endTouch();
+        d->allowMouseEvents();
         QTouchEvent *touchEvent = static_cast<QTouchEvent*>(event);
         d->matcher.touchCancelEvent(touchEvent, d->previousPos);
         // reset state

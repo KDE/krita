@@ -75,7 +75,7 @@ private Q_SLOTS:
     void testTextPathBasic();
     void testTextPathComplex();
 
-
+    void testCssTextTransform();
 };
 
 #endif // TESTSVGTEXT_H

@@ -2162,6 +2162,83 @@ void TestSvgText::testTextPathComplex()
     }
 }
 
+/**
+ * Tests the text-transform in KoCssTextUtils.
+ * 
+ * The Web-platform-tests for this are far more thorough,
+ * however I am unsure how to adapt them for the non-ascii values.
+ */
+void TestSvgText::testCssTextTransform() {
+    
+    // Basic test of upper/lower and capitalize. The last one is particularly the one we're testing, as the others just use qlocale.
+    QString lower = "aaa bbb ccc ddd eee fff ggg hhh iii jjj kkk lll mmm nnn ooo ppp qqq rrr sss ttt uuu vvv www xxx yyy zzz";
+    QString capitalize = "Aaa Bbb Ccc Ddd Eee Fff Ggg Hhh Iii Jjj Kkk Lll Mmm Nnn Ooo Ppp Qqq Rrr Sss Ttt Uuu Vvv Www Xxx Yyy Zzz";
+    QString uppercase = "AAA BBB CCC DDD EEE FFF GGG HHH III JJJ KKK LLL MMM NNN OOO PPP QQQ RRR SSS TTT UUU VVV WWW XXX YYY ZZZ";
+    
+    QVERIFY2(KoCssTextUtils::transformTextToLowerCase(capitalize, "") == lower, QString("Transform to lower case does not match lowercase string").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "") == uppercase, QString("Transform to upper case does not match uppercase string").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(lower, "") == capitalize, QString("Capitalization transform does not match capitalized string").toLatin1());
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(uppercase, "") == uppercase, QString("Capitalization transform on uppercase string does not match uppercase string").toLatin1());
+    
+    QString kanaSmall = "ぁ ぃ ぅ ぇ ぉ ゕ ゖ っ ゃ ゅ ょ ゎ "
+                        "ァ ィ ゥ ェ ォ ヵ ㇰ ヶ ㇱ ㇲ ッ ㇳ ㇴ "
+                        "ㇵ ㇶ ㇷ ㇸ ㇹ ㇺ ャ ュ ョ ㇻ ㇼ ㇽ ㇾ ㇿ ヮ "
+                        "ｧ ｨ ｩ ｪ ｫ ｯ ｬ ｭ ｮ";
+    QString kanaLarge = "あ い う え お か け つ や ゆ よ わ "
+                        "ア イ ウ エ オ カ ク ケ シ ス ツ ト ヌ "
+                        "ハ ヒ フ ヘ ホ ム ヤ ユ ヨ ラ リ ル レ ロ ワ "
+                        "ｱ ｲ ｳ ｴ ｵ ﾂ ﾔ ﾕ ﾖ";
+    QVERIFY2(KoCssTextUtils::transformTextFullSizeKana(kanaSmall) == kanaLarge, QString("Transform to full size kana does not match full size kana string").toLatin1());
+    
+    // Half width tests.
+    
+    QString halfWidth = "012 ABC abc % ｧｨｩ ｱｲｳ ﾫﾱﾷ ￩ ￮";
+    QString fullWidth = "０１２　ＡＢＣ　ａｂｃ　％　ァィゥ　アイウ　ㄻㅁㅇ　←　○";
+    
+    QVERIFY2(KoCssTextUtils::transformTextFullWidth(halfWidth) == fullWidth, QString("Transform to full width kana does not match full width string").toLatin1());
+    
+    
+    // Adapted from web platform test text-transform-tailoring-001.html
+    
+    QString ijDigraphTest = "ijsland";
+    QString ijDigraphRef = "IJsland";
+    
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(ijDigraphTest, "nl") == ijDigraphRef, QString("IJ disgraph tailor test is failing").toLatin1());
+    
+    // Adapted from web platform test text-transform-tailoring-002.html
+    QString greekTonosTest = "καλημέρα αύριο";
+    QString greekTonosRef = "ΚΑΛΗΜΕΡΑ ΑΥΡΙΟ";
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test is failing").toLatin1());
+    
+    // Adapted from web platform test text-transform-tailoring-002a.html
+    greekTonosTest = "θεϊκό";
+    greekTonosRef = "ΘΕΪΚΟ";
+    
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test for dialytika is failing").toLatin1());
+    
+    // Adapted from web platform test text-transform-tailoring-003.html
+    greekTonosTest = "ευφυΐα Νεράιδα";
+    greekTonosRef = "ΕΥΦΥΪΑ ΝΕΡΑΪΔΑ";
+    
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test number 3 is failing.").toLatin1());
+    
+    // Adapted from web platform test text-transform-tailoring-004.html
+    // "[Exploratory] the brower tailors text-transform: capitalize such that a stressed vowel that is the first syllable of a Greek sentence keeps its tonos diacritic."
+    
+    /* This needs someone who can actually read greek, because I am unsure what 'tonos' means, like, is it all diacritics or just a few unicode values?
+    greekTonosTest = "όμηρος";
+    greekTonosRef = "Όμηρος";
+    qDebug() << KoCssTextUtils::transformTextCapitalize(greekTonosTest, "el");
+    QVERIFY2(KoCssTextUtils::transformTextCapitalize(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test number 4 is failing").toLatin1());
+    */
+    
+    // Adapted from web platform test text-transform-tailoring-004.html
+    
+    greekTonosTest = "ήσουν ή εγώ ή εσύ";
+    greekTonosRef = "ΗΣΟΥΝ Ή ΕΓΩ Ή ΕΣΥ";
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test number 5 is failing").toLatin1());
+}
+
 #include "kistest.h"
 
 

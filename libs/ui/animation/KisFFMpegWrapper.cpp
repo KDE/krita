@@ -54,39 +54,56 @@ void KisFFMpegWrapper::startNonBlocking(const KisFFMpegWrapperSettings &settings
 
     m_process.reset(new QProcess(this));
     m_processSettings = settings;
-    
-    if ( !settings.logPath.isEmpty() ) {
-        const QString basePath = QFileInfo(settings.logPath).dir().path();
-        QDir().mkpath(basePath);
-        
-        //First we open the file with truncate,
-        //Then, we connect our signals for response
-        //After that, every message will append to that file if possible...
-        QFile loggingFile(settings.logPath);
-        if (loggingFile.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
-            //Due to various reasons (including image preview), ffmpeg uses STDERR and not STDOUT
-            //for general output logging.
-            connect(this, &KisFFMpegWrapper::sigReadSTDERR, [this](QByteArray stderrBuffer){
-                QString line = stderrBuffer;
-                QFile progressLog(m_processSettings.logPath);
-                if (progressLog.open(QIODevice::WriteOnly | QIODevice::Append)) {
-                    progressLog.write(stderrBuffer);
+
+    const QString renderLogPath = m_processSettings.outputFile + ".log";
+
+    // Create a new log per each ffmpeg operation..
+    if (QFile::exists(renderLogPath)) {
+        QFile existingFile(renderLogPath);
+        existingFile.remove();
+    }
+
+    QFile renderLog(renderLogPath); // Logs ONLY this render operation.
+
+    // Log ffmpeg command info..
+    if (renderLog.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        QString command = m_processSettings.processPath + m_processSettings.args.join(" ");
+        renderLog.write(command.toUtf8());
+        renderLog.write("=====================================================");
+
+        // Handle logged errors..
+        // Due to various reasons (including image preview), ffmpeg uses STDERR and not STDOUT for general output logging.
+        connect(this, &KisFFMpegWrapper::sigReadSTDERR, [renderLogPath](QByteArray stderrBuffer){
+            QFile renderLog(renderLogPath);
+            if (renderLog.open(QIODevice::WriteOnly | QIODevice::Append)) {
+                renderLog.write(stderrBuffer);
+            }
+        });
+    }
+
+    if (!settings.logPath.isEmpty()) {
+        QString sessionRenderLogPath(settings.logPath);
+        // Logs FULL history of Krita session render operations.
+        QFile sessionRenderLog(sessionRenderLogPath);
+
+        // Make directory..
+        const QString logDirPath = QFileInfo(sessionRenderLogPath).dir().path();
+        QDir().mkpath(logDirPath);
+
+        if (sessionRenderLog.open(QIODevice::WriteOnly | QIODevice::Append)) {
+            // Append finished renderlog to sessionlog..
+            connect(this, &KisFFMpegWrapper::sigFinishedWithError, [renderLogPath, sessionRenderLogPath](QString){
+                QFile renderLog(renderLogPath);
+                QFile sessionRenderLog(sessionRenderLogPath);
+                renderLog.open(QIODevice::ReadOnly);
+                sessionRenderLog.open(QIODevice::WriteOnly | QIODevice::Append);
+
+                QByteArray buffer;
+                int chunksize = 256;
+                while (!(buffer = renderLog.read(chunksize)).isEmpty()) {
+                    sessionRenderLog.write(buffer);
                 }
             });
-            
-            if (!settings.outputFile.isEmpty()) {
-                connect(this, &KisFFMpegWrapper::sigFinishedWithError, [this](QString){
-                    QFile progressLog(m_processSettings.logPath);
-                    QString renderLogPath = m_processSettings.outputFile + ".log";
-                    
-                    if (QFile::exists(renderLogPath)) {
-                        QFile existingFile(renderLogPath);
-                        existingFile.remove();
-                    }
-                    
-                    progressLog.copy(renderLogPath);
-                });
-            }
         }
     }
     

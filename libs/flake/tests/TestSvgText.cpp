@@ -2180,6 +2180,12 @@ void TestSvgText::testCssTextTransform() {
     QVERIFY2(KoCssTextUtils::transformTextCapitalize(lower, "") == capitalize, QString("Capitalization transform does not match capitalized string").toLatin1());
     QVERIFY2(KoCssTextUtils::transformTextCapitalize(uppercase, "") == uppercase, QString("Capitalization transform on uppercase string does not match uppercase string").toLatin1());
     
+    // Turkish differentiates between İ and I, little details like these are why we use QLocale, and in effect, this tests whether the QLocale support is lacking on whichever system we're building for.
+    QString uppercaseTurkish = "AAA BBB CCC DDD EEE FFF GGG HHH Iİİ JJJ KKK LLL MMM NNN OOO PPP QQQ RRR SSS TTT UUU VVV WWW XXX YYY ZZZ";
+    QVERIFY2(KoCssTextUtils::transformTextToUpperCase(capitalize, "tr") == uppercaseTurkish, QString("Transform to upper case in Turkish locale does not match reference string, QLocale might not be able to provide good text transforms").toLatin1());
+    
+    
+    // Adapted from the web-platform tests text-transform-full-size-kana-##.html
     QString kanaSmall = "ぁ ぃ ぅ ぇ ぉ ゕ ゖ っ ゃ ゅ ょ ゎ "
                         "ァ ィ ゥ ェ ォ ヵ ㇰ ヶ ㇱ ㇲ ッ ㇳ ㇴ "
                         "ㇵ ㇶ ㇷ ㇸ ㇹ ㇺ ャ ュ ョ ㇻ ㇼ ㇽ ㇾ ㇿ ヮ "
@@ -2190,7 +2196,7 @@ void TestSvgText::testCssTextTransform() {
                         "ｱ ｲ ｳ ｴ ｵ ﾂ ﾔ ﾕ ﾖ";
     QVERIFY2(KoCssTextUtils::transformTextFullSizeKana(kanaSmall) == kanaLarge, QString("Transform to full size kana does not match full size kana string").toLatin1());
     
-    // Half width tests.
+    // Half width to full width tests.
     
     QString halfWidth = "012 ABC abc % ｧｨｩ ｱｲｳ ﾫﾱﾷ ￩ ￮";
     QString fullWidth = "０１２　ＡＢＣ　ａｂｃ　％　ァィゥ　アイウ　ㄻㅁㅇ　←　○";

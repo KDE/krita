@@ -127,8 +127,10 @@ private:
 
     KisImportExportErrorCode doImport(const QString &location, QSharedPointer<KisImportExportFilter> filter);
 
-    KisImportExportErrorCode doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, bool alsoAsKra);
+    KisImportExportErrorCode doExport(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration, const QString alsoAsKraLocation);
     KisImportExportErrorCode doExportImpl(const QString &location, QSharedPointer<KisImportExportFilter> filter, KisPropertiesConfigurationSP exportConfiguration);
+
+    QString getAlsoAsKraLocation(const QString location) const;
 
     // Private API
     KisImportExportManager(const KisImportExportManager& rhs);

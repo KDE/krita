@@ -1,11 +1,14 @@
 SET(PREFIX_ext_ffmpeg "${EXTPREFIX}")
 
+# find_package(VPX) todo: get/write a cmake find module
+# find_package(FLAC) todo: can't build because of autoconf, get/write find module.
+
 ExternalProject_Add(
     ext_libogg
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     URL http://downloads.xiph.org/releases/ogg/libogg-1.3.5.tar.gz
     URL_HASH SHA256=0eb4b4b9420a0f51db142ba3f9c64b333f826532dc0f48c6410ae51f4799b664
-
+ 
     CMAKE_ARGS ${LIBOGG_EXTRA_CMAKE_ARGS} -DBUILD_SHARED_LIBS=ON -DCMAKE_INSTALL_PREFIX=${PREFIX_ext_ffmpeg} -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE} ${GLOBAL_PROFILE}
 )
 
@@ -19,6 +22,50 @@ ExternalProject_Add(
 
     DEPENDS ext_libogg
 )
+
+ExternalProject_Add(
+    ext_libopenh264
+    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    GIT_REPOSITORY git@github.com:cisco/openh264.git
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
+        CC="${CMAKE_C_COMPILER}"
+        CXX="${CMAKE_CXX_COMPILER}"
+        PYTHONPATH=${_krita_pythonpath}
+        PKG_CONFIG=${PKG_CONFIG_EXECUTABLE}
+        ${MESON_BINARY_PATH} <BINARY_DIR> <SOURCE_DIR>
+        --prefix=${PREFIX_ext_ffmpeg}
+    BUILD_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} compile -C <BINARY_DIR> -j${SUBMAKE_JOBS}
+    INSTALL_COMMAND ${CMAKE_COMMAND} -E env
+        PYTHONPATH=${_krita_pythonpath}
+        ${MESON_BINARY_PATH} install -C <BINARY_DIR>
+    DEPENDS ext_nasm ${MESON_DEP} ${PKG_CONFIG_DEP}
+)
+
+if (WIN32)
+    #TODO Proper windows build. See readme in lame.tar.gz sources.
+    #ExternalProject_Add(
+    #    ext_libmp3lame
+    #    DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+    #    URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
+    #)
+else()
+    # *NIX
+    ExternalProject_Add(
+        ext_libmp3lame
+        DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
+        URL https://sourceforge.net/projects/lame/files/lame/3.100/lame-3.100.tar.gz
+
+        CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env <SOURCE_DIR>/configure --prefix=${PREFIX_ext_ffmpeg}
+
+        BUILD_COMMAND ${CMAKE_COMMAND} -E env
+            make
+        
+        INSTALL_COMMAND ${CMAKE_COMMAND} -E env
+            make install
+    )
+endif()
 
 # IMPORTANT:
 # OpenSUSE's list of whitelisted encoders: https://build.opensuse.org/package/view_file/openSUSE:Factory/ffmpeg-5/enable_encoders
@@ -53,6 +100,10 @@ ExternalProject_Add(
             -Dswscale=enabled
             -Dpostproc=disabled
             -Dsdl2=enabled
+            -Dlibaom=enabled
+            -Dimage2_demuxer=disabled
+            -Dimage2_alias_pix_demuxer=enabled
+            -Dimage2_brender_pix_demuxer=enabled
             # ===================== Container Formats
             -Dwebm_muxer=enabled
             -Dmatroska_muxer=enabled
@@ -60,7 +111,9 @@ ExternalProject_Add(
             # ===================== Image Formats
             -Dlibwebp=enabled
             -Dpng_encoder=enabled
+            -Dpng_decoder=enabled
             -Dapng_encoder=enabled
+            -Dapng_decoder=enabled
             # ===================== Video Codecs
             -Dlibaom_av1_encoder=enabled
             -Dlibvpx_vp9_encoder=enabled
@@ -84,5 +137,5 @@ ExternalProject_Add(
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} install -C <BINARY_DIR>
 
-  DEPENDS ext_libvorbis ${MESON_DEP} ${PKG_CONFIG_DEP}
+    DEPENDS ext_libvorbis ext_libopenh264 ext_libmp3lame ext_libaom ext_webp ext_png ext_jpeg ${MESON_DEP} ${PKG_CONFIG_DEP}
 )

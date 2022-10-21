@@ -141,7 +141,7 @@ auto to_base = lager::lenses::getset(
         [] (auto src, const Base &value) { static_cast<Base&>(src) = value; return src; }
     );
 
-}
-}
+} // namespace lenses
+} // namespace kiszug
 
 #endif // KISZUG_H

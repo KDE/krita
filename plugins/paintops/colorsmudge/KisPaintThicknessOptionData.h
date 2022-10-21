@@ -25,7 +25,7 @@ struct KisPaintThicknessOptionMixInImpl
             return lhs.mode == rhs.mode;
     }
 
-    ThicknessMode mode;
+    ThicknessMode mode {OVERLAY};
 
     bool read(const KisPropertiesConfiguration *setting);
     void write(KisPropertiesConfiguration *setting) const;

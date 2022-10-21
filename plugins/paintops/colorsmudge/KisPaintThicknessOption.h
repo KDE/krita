@@ -22,7 +22,7 @@ public:
 private:
     KisPaintThicknessOption(const KisPaintThicknessOptionData &data);
 private:
-    KisPaintThicknessOptionData::ThicknessMode m_mode;
+    KisPaintThicknessOptionData::ThicknessMode m_mode {KisPaintThicknessOptionData::OVERLAY};
 };
 
 #endif // KISPAINTTHICKNESSOPTION_H

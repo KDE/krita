@@ -19,8 +19,8 @@ public:
     KisPaintThicknessOptionWidget(lager::cursor<KisPaintThicknessOptionData> optionData, lager::reader<bool> lightnessModeEnabled);
     ~KisPaintThicknessOptionWidget();
 
-    void writeOptionSetting(KisPropertiesConfigurationSP setting) const;
-    void readOptionSetting(const KisPropertiesConfigurationSP setting);
+    void writeOptionSetting(KisPropertiesConfigurationSP setting) const override;
+    void readOptionSetting(const KisPropertiesConfigurationSP setting) override;
 
 private:
     struct Private;

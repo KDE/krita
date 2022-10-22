@@ -1433,7 +1433,7 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
         if (ltr) {
             a -= indent;
         } else {
-            b -= indent;
+            b += indent;
         }
     }
 
@@ -1590,13 +1590,11 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
             textIndent *= inlineSize.customValue;
         }
         if (isHorizontal) {
-            textIndent =
-                ltr ? QPointF(textIdentValue, 0) : QPointF(-textIdentValue, 0);
+            textIndent = QPointF(textIdentValue, 0);
             endPos = ltr ? QPointF(startPos.x() + inlineSize.customValue, 0)
                          : QPointF(startPos.x() - inlineSize.customValue, 0);
         } else {
-            textIndent =
-                ltr ? QPointF(0, textIdentValue) : QPointF(0, -textIdentValue);
+            textIndent = QPointF(0, textIdentValue);
             endPos = ltr ? QPointF(0, startPos.y() + inlineSize.customValue)
                          : QPointF(0, startPos.y() - inlineSize.customValue);
         }

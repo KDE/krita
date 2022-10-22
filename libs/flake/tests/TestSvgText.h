@@ -76,6 +76,10 @@ private Q_SLOTS:
     void testTextPathComplex();
 
     void testCssTextTransform();
+    
+    void testTextInlineSize();
+    
+    void testTextWrap();
 };
 
 #endif // TESTSVGTEXT_H

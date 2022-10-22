@@ -2245,6 +2245,93 @@ void TestSvgText::testCssTextTransform() {
     QVERIFY2(KoCssTextUtils::transformTextToUpperCase(greekTonosTest, "el") == greekTonosRef, QString("Greek tonos tailor test number 5 is failing").toLatin1());
 }
 
+/*
+ * This is a basic test of inline-size with different teext-anchors,
+ * directions and writing modes. These interact in very fundamental
+ * ways, so it doesn't make sense to test them seperately.
+ */
+void TestSvgText::testTextInlineSize() {
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/text-test-inline-size-basic-anchoring.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("text-test-inline-size-anchoring", QSize(420, 200), 72.0);
+
+    QMap<QString, int> testWidths;
+    
+    testWidths.insert("test1", 100);
+    testWidths.insert("test2", 100);
+    testWidths.insert("test3", 100);
+    
+    testWidths.insert("test1rtl", 100);
+    testWidths.insert("test2rtl", 100);
+    testWidths.insert("test3rtl", 100);
+    
+    testWidths.insert("test1ttb", 60);
+    testWidths.insert("test2ttb", 60);
+    testWidths.insert("test3ttb", 60);
+    
+    testWidths.insert("test1-lr-ttb", 60);
+    testWidths.insert("test2-lr-ttb", 60);
+    testWidths.insert("test3-lr-ttb", 60);
+    
+    for (QString testID: testWidths.keys()) {
+        KoSvgTextShape *baseShape = dynamic_cast<KoSvgTextShape*>(t.findShape(testID));
+        if (baseShape) {
+            int maxSize = testWidths.value(testID);
+            int givenSize = testID.endsWith("ttb")? round(baseShape->boundingRect().height())
+                                                  : round(baseShape->boundingRect().width());
+        
+            QVERIFY2(givenSize <= maxSize,
+                     QString("Size of %1 is too large: %2, maximum is %3")
+                     .arg(testID).arg(QString::number(givenSize))
+                     .arg(QString::number(maxSize)).toLatin1());
+        }
+    }
+}
+
+void TestSvgText::testTextWrap() {
+QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
+    bool res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+    fileName = TestUtil::fetchDataFileLazy("fonts/Krita_Test_Unicode_Variation_A.ttf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    QMap<QString, QRect> testFiles;
+    // Tests differrent line-height configurations.
+    testFiles.insert("textWrap-test-css-line-height", QRect(0, 0, 120, 180));
+    // Tests overflow wrap behaviour options.
+    testFiles.insert("textWrap-test-css-overflow-wrap", QRect(0, 0, 120, 220));
+    // Tests hanging punctuation.
+    testFiles.insert("textWrap-test-css-hanging-punctuation", QRect(0, 0, 420, 100));
+    // Tests text-indent
+    testFiles.insert("textWrap-test-css-text-indent", QRect(0, 0, 420, 200));
+    // Integration test of sorts, tests font-sizes, color difference,
+    // unicode supplementary plane, bidirectional wrrapping and text decorations.
+    testFiles.insert("textWrap-test-css-mixed-markup", QRect(0, 0, 420, 100));
+    for (QString testFile: testFiles.keys()) {
+        QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/"+testFile+".svg"));
+        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+        QXmlInputSource data;
+        data.setData(file.readAll());
+
+        SvgRenderTester t (data.data());
+        t.setFuzzyThreshold(5);
+        t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
+    }
+}
+
 #include "kistest.h"
 
 

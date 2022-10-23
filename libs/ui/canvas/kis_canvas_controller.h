@@ -66,6 +66,7 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void documentSizeChanged();
+    void canvasMirrorModeChanged(bool);
 
 private:
     struct Private;

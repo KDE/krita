@@ -221,6 +221,8 @@ public Q_SLOTS:
 
     // Enable the last set brush outline, or disable it if already enabled
     void slotToggleBrushOutline();
+
+    void updatePrintSizeAction(bool canvasMappingMode);
     
 Q_SIGNALS:
 
@@ -249,6 +251,7 @@ private Q_SLOTS:
     void slotSaveShowRulersState(bool value);
     void slotSaveRulersTrackMouseState(bool value);
     void slotResetRotation();
+    void slotResetDisplay();
     void slotToggleFullscreen();
 private:
     void createActions();

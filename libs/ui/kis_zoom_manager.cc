@@ -385,6 +385,8 @@ void KisZoomManager::changeCanvasMappingMode(bool canvasMappingMode)
     m_canvasMappingMode = canvasMappingMode;
     m_zoomController->setZoom(newMode, newZoom, resolutionX(), resolutionY());
     m_view->canvasBase()->notifyZoomChanged();
+
+    m_view->viewManager()->updatePrintSizeAction(canvasMappingMode);
 }
 
 void KisZoomManager::pageOffsetChanged()

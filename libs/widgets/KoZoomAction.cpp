@@ -178,11 +178,11 @@ void KoZoomAction::regenerateItems(const qreal zoom)
 
     // update items with new sorted zoom values
     QStringList values;
-    if(d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
-        values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
-    }
     if(d->zoomModes & KoZoomMode::ZOOM_PAGE) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
+    }
+    if(d->zoomModes & KoZoomMode::ZOOM_WIDTH) {
+        values << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
     }
     if(d->zoomModes & KoZoomMode::ZOOM_HEIGHT) {
         values << KoZoomMode::toString(KoZoomMode::ZOOM_HEIGHT);

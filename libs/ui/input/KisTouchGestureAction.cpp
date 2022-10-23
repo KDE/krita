@@ -22,6 +22,7 @@ KisTouchGestureAction::KisTouchGestureAction()
     shortcuts.insert(i18n("Redo"), RedoActionShortcut);
     shortcuts.insert(i18n("Toggle Canvas Only Mode"), ToggleCanvasOnlyShortcut);
     shortcuts.insert(i18n("Toggle Eraser"), ToggleEraserMode);
+    shortcuts.insert(i18n("Reset Display"), ResetDisplay);
     setShortcutIndexes(shortcuts);
 }
 
@@ -59,6 +60,13 @@ void KisTouchGestureAction::end(QEvent *event)
     }
     case ToggleEraserMode: {
         QAction *action = actionCollection->action("erase_action");
+        if (action) {
+            action->trigger();
+        }
+        break;
+    }
+    case ResetDisplay: {
+        QAction *action = actionCollection->action("reset_display");
         if (action) {
             action->trigger();
         }

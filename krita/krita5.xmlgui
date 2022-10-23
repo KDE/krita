@@ -2,7 +2,7 @@
 <kpartgui xmlns="http://www.kde.org/standards/kxmlgui/1.0"
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 name="Krita"
-version="503"
+version="504"
 xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org/standards/kxmlgui/1.0/kxmlgui.xsd">
   <MenuBar>
     <Menu name="file">
@@ -92,29 +92,26 @@ xsi:schemaLocation="http://www.kde.org/standards/kxmlgui/1.0  http://www.kde.org
       <Action name="softProof"/>
       <Action name="gamutCheck"/>
       <Separator/>
-      <Menu name="Canvas">
-          <text>&amp;Canvas</text>
-          <Action name="mirror_canvas"/>
-          <Action name="mirror_canvas_around_cursor"/>
-          <Action name="mirror_canvas_around_canvas"/>
-          <Separator/>
-          <Action name="zoom_to_100pct" />
+      <Menu name="ZoomRotateMirror">
+          <text>&amp;Zoom, Rotate, and Mirror</text>
           <Action name="view_zoom_in"/>
           <Action name="view_zoom_out"/>
+          <Action name="zoom_to_100pct"/>
           <Action name="zoom_to_fit"/>
           <Action name="zoom_to_fit_width"/>
           <Action name="zoom_to_fit_height"/>
           <Separator/>
-          <Action name="rotate_canvas_right" />
-          <Action name="rotate_canvas_left" />
-          <Action name="reset_canvas_rotation" />
+          <Action name="rotate_canvas_right"/>
+          <Action name="rotate_canvas_left"/>
+          <Action name="reset_canvas_rotation"/>
+          <Separator/>
+          <Action name="mirror_canvas"/>
+          <Action name="mirror_canvas_around_cursor"/>
+          <Action name="mirror_canvas_around_canvas"/>
+          <Separator/>
+          <Action name="reset_display"/>
       </Menu>
-      <!-- TODO: None of these actions are showing. There names must have been changed to something with the MDI changes?...
-      <Action name="actual_pixels"/>
-      <Action name="actual_size"/>
-      <Action name="fit_to_canvas"/>
-      -->
-
+      <Action name="view_print_size"/>
       <Separator/>
       <Action name="view_ruler"/>
       <Action name="rulers_track_mouse"/>

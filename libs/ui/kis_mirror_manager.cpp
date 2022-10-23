@@ -75,12 +75,8 @@ void KisMirrorManager::setView(QPointer<KisView> imageView)
         connect(m_mirrorCanvasAroundCursor, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvasAroundCursor(bool)));
         connect(m_mirrorCanvasAroundCanvas, SIGNAL(toggled(bool)), dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SLOT(mirrorCanvasAroundCanvas(bool)));
 
-        
-        connect(m_mirrorCanvas, SIGNAL(toggled(bool)), this, SLOT(slotSyncActionStates(bool)));
-        connect(m_mirrorCanvasAroundCursor, SIGNAL(toggled(bool)), this, SLOT(slotSyncActionStates(bool)));
-        connect(m_mirrorCanvasAroundCanvas, SIGNAL(toggled(bool)), this, SLOT(slotSyncActionStates(bool)));
+        connect(dynamic_cast<KisCanvasController*>(m_imageView->canvasController()), SIGNAL(canvasMirrorModeChanged(bool)), this, SLOT(slotSyncActionStates(bool)));
 
-        
         connect(m_imageView->document(), SIGNAL(sigMirrorAxisConfigChanged()), this, SLOT(slotDocumentConfigChanged()), Qt::UniqueConnection);
 
         KisMirrorAxisSP canvasDecoration = this->decoration();

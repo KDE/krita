@@ -17,6 +17,7 @@ public:
         RedoActionShortcut,
         ToggleCanvasOnlyShortcut,
         ToggleEraserMode,
+        ResetDisplay,
     };
 
     KisTouchGestureAction();

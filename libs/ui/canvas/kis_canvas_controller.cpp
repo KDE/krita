@@ -178,6 +178,8 @@ void KisCanvasController::mirrorCanvas(bool enable)
     m_d->updateDocumentSizeAfterTransform();
     setScrollBarValue(newOffset);
     m_d->showMirrorStateOnCanvas();
+
+    emit canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
@@ -198,6 +200,8 @@ void KisCanvasController::mirrorCanvasAroundCursor(bool enable)
         setScrollBarValue(newOffset);
         m_d->showMirrorStateOnCanvas();
     }
+
+    emit canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
@@ -217,6 +221,8 @@ void KisCanvasController::mirrorCanvasAroundCanvas(bool enable)
     
     m_d->updateDocumentSizeAfterTransform();
     m_d->showMirrorStateOnCanvas();
+
+    emit canvasMirrorModeChanged(enable);
 }
 
 void KisCanvasController::Private::showRotationValueOnCanvas()

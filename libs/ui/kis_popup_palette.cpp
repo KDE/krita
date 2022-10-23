@@ -192,6 +192,12 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     zoomToOneHundredPercentButton->setToolTip(i18n("Zoom to 100%"));
     connect(zoomToOneHundredPercentButton, SIGNAL(clicked(bool)), this, SLOT(slotZoomToOneHundredPercentClicked()));
 
+    fitToViewButton = new QPushButton(this);
+    fitToViewButton->setFixedHeight(35);
+
+    fitToViewButton->setToolTip(i18n("Fit Canvas to View"));
+    connect(fitToViewButton, SIGNAL(clicked(bool)), this, SLOT(slotFitToViewClicked()));
+
     zoomCanvasSlider = new QSlider(Qt::Horizontal, this);
     zoomSliderMinValue = 10; // set in %
     zoomSliderMaxValue = 200; // set in %
@@ -215,6 +221,7 @@ KisPopupPalette::KisPopupPalette(KisViewManager* viewManager, KisCoordinatesConv
     hLayout->addWidget(canvasOnlyButton);
     hLayout->addWidget(zoomCanvasSlider);
     hLayout->addWidget(zoomToOneHundredPercentButton);
+    hLayout->addWidget(fitToViewButton);
     
     setVisible(false);
     reconfigure();
@@ -481,6 +488,7 @@ void KisPopupPalette::slotUpdateIcons()
         }
     }
     zoomToOneHundredPercentButton->setIcon(m_actionCollection->action("zoom_to_100pct")->icon());
+    fitToViewButton->setIcon(m_actionCollection->action("zoom_to_fit")->icon());
     m_brushHud->updateIcons();
     m_tagsButton->setIcon(KisIconUtils::loadIcon("tag"));
     m_clearColorHistoryButton->setIcon(KisIconUtils::loadIcon("reload-preset-16"));
@@ -1007,6 +1015,17 @@ void KisPopupPalette::slotZoomToOneHundredPercentClicked() {
 
     // also move the zoom slider to 100% position so they are in sync
     zoomCanvasSlider->setValue(100);
+}
+
+void KisPopupPalette::slotFitToViewClicked() {
+    QAction *action = m_actionCollection->action("zoom_to_fit");
+
+    if (action) {
+        action->trigger();
+    }
+
+    // sync zoom slider
+    zoomCanvasSlider->setValue(m_coordinatesConverter->zoomInPercent());
 }
 
 void KisPopupPalette::slotSetMirrorPos() {

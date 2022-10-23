@@ -113,10 +113,10 @@ KisZoomAction::KisZoomAction()
     shortcuts.insert(i18n("Relative Discrete Zoom Mode"), RelativeDiscreteZoomModeShortcut);
     shortcuts.insert(i18n("Zoom In"), ZoomInShortcut);
     shortcuts.insert(i18n("Zoom Out"), ZoomOutShortcut);
-    shortcuts.insert(i18n("Reset Zoom to 100%"), ZoomResetShortcut);
-    shortcuts.insert(i18n("Fit to Page"), ZoomToPageShortcut);
-    shortcuts.insert(i18n("Fit to Width"), ZoomToWidthShortcut);
-    shortcuts.insert(i18n("Fit to Height"), ZoomToHeightShortcut);
+    shortcuts.insert(i18n("Zoom to 100%"), Zoom100PctShortcut);
+    shortcuts.insert(i18n("Fit to View"), FitToViewShortcut);
+    shortcuts.insert(i18n("Fit to View Width"), FitToWidthShortcut);
+    shortcuts.insert(i18n("Fit to View Height"), FitToHeightShortcut);
     setShortcutIndexes(shortcuts);
 }
 
@@ -172,16 +172,16 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         case ZoomOutShortcut:
             d->zoomTo(false, pointFromEvent(event));
             break;
-        case ZoomResetShortcut:
+        case Zoom100PctShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_CONSTANT, 1.0);
             break;
-        case ZoomToPageShortcut:
+        case FitToViewShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_PAGE, 1.0);
             break;
-        case ZoomToWidthShortcut:
+        case FitToWidthShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_WIDTH, 1.0);
             break;
-        case ZoomToHeightShortcut:
+        case FitToHeightShortcut:
             inputManager()->canvas()->viewManager()->zoomController()->setZoom(KoZoomMode::ZOOM_HEIGHT, 1.0);
             break;
     }

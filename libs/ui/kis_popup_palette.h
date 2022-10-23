@@ -169,6 +169,7 @@ private:
     KisHighlightedToolButton *mirrorMode {0};
     KisHighlightedToolButton *canvasOnlyButton {0};
     QPushButton *zoomToOneHundredPercentButton {0};
+    QPushButton *fitToViewButton {0};
     QSlider *zoomCanvasSlider {0};
     int zoomSliderMinValue {10};
     int zoomSliderMaxValue {200};
@@ -204,6 +205,7 @@ private Q_SLOTS:
     void showHudWidget(bool visible);
     void showBottomBarWidget(bool visible);
     void slotZoomToOneHundredPercentClicked();
+    void slotFitToViewClicked();
     void slotZoomSliderChanged(int zoom);
 
     void slotZoomSliderPressed();

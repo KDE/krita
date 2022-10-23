@@ -16,6 +16,7 @@ class SplineAssistant : public KisPaintingAssistant
 {
 public:
     SplineAssistant();
+    ~SplineAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
     void adjustLine(QPointF &point, QPointF& strokeBegin) override;
@@ -27,11 +28,15 @@ protected:
     void drawAssistant(QPainter& gc, const QRectF& updateRect, const KisCoordinatesConverter* converter, bool cached, KisCanvas2* canvas, bool assistantVisible=true, bool previewVisible=true) override;
     void drawCache(QPainter& gc, const KisCoordinatesConverter *converter,  bool assistantVisible=true) override;
 private:
-    QPointF project(const QPointF& pt) const;
+    QPointF project(const QPointF& pt, const QPointF& strokeBegin) const;
     explicit SplineAssistant(const SplineAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap);
 
     /// used for getting the decoration so the bezier handles aren't drawn while editing
     KisCanvas2* m_canvas {nullptr};
+
+private:
+    struct Private;
+    Private* const d;
 };
 
 class SplineAssistantFactory : public KisPaintingAssistantFactory

@@ -252,6 +252,9 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
     if (d->textRendering == OptimizeSpeed) {
         painter.setRenderHint(QPainter::Antialiasing, false);
         painter.setRenderHint(QPainter::SmoothPixmapTransform, false);
+    } else {
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
     }
 
     QPainterPath chunk;

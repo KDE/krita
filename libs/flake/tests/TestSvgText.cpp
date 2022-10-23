@@ -971,10 +971,9 @@ void TestSvgText::testNbspHandling()
  * Tests whether we can have a piece of text with multiple
  * colors assigned to different parts of the text.
  * 
- * Note: We could make this test a bit more thorough by testing
- * what happens when ligatures straddle a text. According to
- * SVG, all graphemes made up from multiple code-points (ike ligatures)
- * should have the color assigned to the first code-point.
+ * This now tests what happens when ligatures straddle a span border. According to
+ * SVG, all graphemes made up from multiple code-points (like ligatures) should have
+ * the color assigned to the first code-point.
  */
 void TestSvgText::testMulticolorText()
 {
@@ -993,7 +992,7 @@ void TestSvgText::testMulticolorText()
 
     SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
-    t.test_standard("text_multicolor", QSize(30, 30), 72.0);
+    t.test_standard("text_multicolor", QSize(100, 30), 72.0);
 }
 
 #include <KoColorBackground.h>
@@ -1810,7 +1809,6 @@ void TestSvgText::testFontSelectionForText()
  * @brief TestSvgText::testFontStyleSelection
  *
  * This tests whether the font registery is selecting things like bold or italics correctly.
- * TODO: Test font-style selection (italics).
  */
 void TestSvgText::testFontStyleSelection()
 {
@@ -1823,38 +1821,55 @@ void TestSvgText::testFontStyleSelection()
     bool res = KoFontRegistery::instance()->addFontFileDirectoryToRegistery(fileName);
     QVERIFY2(res, QString("KoFontRegistery could not add the directory of test fonts %1").arg(fileName).toLatin1());
 
+    {
+        QVector<int> lengths;
+        const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({verifyCSSTest}, lengths, test);
 
-    QVector<int> lengths;
-    const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({verifyCSSTest}, lengths, test);
-
-    res = false;
-    for (const FT_FaceUP &face : faces) {
-        //qDebug() << face->family_name;
-        if (face->family_name == verifyCSSTest) {
-            res = true;
-            break;
+        res = false;
+        for (const FT_FaceUP &face : faces) {
+            //qDebug() << face->family_name;
+            if (face->family_name == verifyCSSTest) {
+                res = true;
+                break;
+            }
         }
+        QVERIFY2(res, QString("KoFontRegistery did not return the expected test font %1").arg(verifyCSSTest).toLatin1());
+
+        // Now we go through a table of font-weights for the given test fonts.
+        // This test is an adaptation of web-platform-test font-weight-bolder-001.xht
+        // Note: when comparing to
+        // https://github.com/web-platform-tests/wpt/blob/master/css/css-fonts/support/font-weight-bolder-001-ref.png
+        // our implementation leaves things to be desired, but at the least it's using the correct fonts.
+
+        QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-weight-bolder-001.svg"));
+        res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+        QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+        QXmlInputSource data;
+        data.setData(file.readAll());
+
+        QRect renderRect(0, 0, 300, 150);
+
+        SvgRenderTester t (data.data());
+        t.setFuzzyThreshold(5);
+        t.test_standard("font-weight-bolder-001", renderRect.size(), 72.0);
     }
-    QVERIFY2(res, QString("KoFontRegistery did not return the expected test font %1").arg(verifyCSSTest).toLatin1());
-
-    // Now we go through a table of font-weights for the given test fonts.
-    // This test is an adaptation of web-platform-test font-weight-bolder-001.xht
-    // Note: when comparing to
-    // https://github.com/web-platform-tests/wpt/blob/master/css/css-fonts/support/font-weight-bolder-001-ref.png
-    // our implementation leaves things to be desired, but at the least it's using the correct fonts.
-
-    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/font-weight-bolder-001.svg"));
-    res = file.open(QIODevice::ReadOnly | QIODevice::Text);
-    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
-
-    QXmlInputSource data;
-    data.setData(file.readAll());
-
-    QRect renderRect(0, 0, 300, 150);
-
-    SvgRenderTester t (data.data());
-    t.setFuzzyThreshold(5);
-    t.test_standard("font-weight-bolder-001", renderRect.size(), 72.0);
+    
+    {
+        QString testItalic = "CSS Test Basic";
+        QVector<int> lengths;
+        const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({testItalic}, lengths, test, 1, 400, 100, true);
+        
+        res = false;
+        for (const FT_FaceUP &face : faces) {
+            //qDebug() << face->family_name;
+            if (face->style_flags == FT_STYLE_FLAG_ITALIC) {
+                res = true;
+                break;
+            }
+        }
+        QVERIFY2(res, QString("KoFontRegistery did not return a font with italics as requested.").toLatin1());
+    }
 
 }
 /**
@@ -1919,6 +1934,21 @@ void TestSvgText::testFontSizeConfiguration()
                      .arg(QString::number(size)).toLatin1());
         }
     }
+    
+    // Test font-size-adjust.
+    
+    {
+        QVector<int> lengths;
+        qreal sizePt = 15.0;
+        qreal fontSizeAdjust = 0.8;
+        const std::vector<FT_FaceUP> faces = KoFontRegistery::instance()->facesForCSSValues({fontName}, lengths);
+        KoFontRegistery::instance()->configureFaces(faces, sizePt, fontSizeAdjust, 72, 72, QMap<QString, qreal>());
+
+        int size = faces.front()->size->metrics.height;
+        QVERIFY2(size == 768,
+                 QString("Configured value for Ahem at 15 pt with font-size adjust 0.8 is not returning as %1, instead %2")
+                 .arg(QString::number(768)).arg(QString::number(size)).toLatin1());
+    }
 
 }
 
@@ -1979,6 +2009,45 @@ void TestSvgText::testFontOpenTypeVariationsConfiguration()
     SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
     t.test_standard("font-opentype-variations", renderRect.size(), 72.0);
+}
+
+/**
+ * Testing color font rendering.
+ * 
+ * This right now only tests COLRv0 fonts, beecause we don't support COLRv1 and SVG-in-opentype yet,
+ * and I have no idea what to expect from SBX.
+ * 
+ * TODO: Still searching for a CBDT font.
+ */
+void TestSvgText::testFontColorRender() {
+    QStringList testFonts;
+    testFonts << "CFF Outlines and COLR";
+    
+    //testFonts << "CFF Outlines and SBIX" << "CFF Outlines and SVG" << "CFF COLR and SVG";
+    
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/testFontsCozens");
+
+    bool res = KoFontRegistery::instance()->addFontFileDirectoryToRegistery(fileName);
+    QVERIFY2(res, QString("KoFontRegistery could not add the directory of test fonts %1")
+             .arg(fileName).toLatin1());
+    
+    const QString dataFront = "<svg width=\"70px\" height=\"45px\""
+                              "    xmlns=\"http://www.w3.org/2000/svg\" version=\"2.0\">"
+                              "<g id=\"testRect\">";
+    const QString dataBack  = "AB</text>"
+                              "</g>"
+                              "</svg>";
+                              
+    for (QString test: testFonts) {
+        const QString dataMiddle = QString("<text font-size=\"30\" x=\"5\" y=\"40\" font-family=\"%1\">").arg(test);
+        const QString data = dataFront + dataMiddle + dataBack;
+        
+        const QString testName = "test_font_"+test.split(" ").join("_");
+        SvgRenderTester t (data);
+        t.setFuzzyThreshold(5);
+        t.test_standard(testName, QSize(70, 45), 72.0);
+    }
+    
 }
 
 /**
@@ -2330,6 +2399,29 @@ QString fileName = TestUtil::fetchDataFileLazy("fonts/DejaVuSans.ttf");
         t.setFuzzyThreshold(5);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
+}
+/**
+ * Test baseline alignment. Within CSS text this is defined in CSS3-Inline,
+ * however, it was originally part of SVG 1.1, and we implement that version
+ * as it has the clearest implementation explanation.
+ * 
+ * This relies on different font-sizes, because otherwise all the baseline tables
+ * are exactly the same.
+ */
+void TestSvgText::testTextBaselineAlignment() {
+    QFile file(TestUtil::fetchDataFileLazy("fonts/textTestSvgs/test-text-baseline-alignment.svg"));
+    bool res = file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QVERIFY2(res, QString("Cannot open test svg file.").toLatin1());
+
+    QXmlInputSource data;
+    data.setData(file.readAll());
+
+    QString fileName = TestUtil::fetchDataFileLazy("fonts/testFontsCozens/BaselineTest-Regular-with-BASE.otf");
+    res = KoFontRegistery::instance()->addFontFilePathToRegistery(fileName);
+
+    SvgRenderTester t (data.data());
+    t.setFuzzyThreshold(5);
+    t.test_standard("test-text-baseline-alignment", QSize(100, 30), 72.0);
 }
 
 #include "kistest.h"

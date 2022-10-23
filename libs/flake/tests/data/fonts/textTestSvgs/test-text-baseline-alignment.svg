@@ -1,0 +1,16 @@
+<svg width="100px" height="30px"
+     xmlns="http://www.w3.org/2000/svg" version="2.0">
+
+    <g id="test">
+
+        <rect id="boundingRect" x="4" y="5" width="89" height="19"
+            fill="none" stroke="red"/>
+
+        <text id="testRect" x="7" y="22"
+            font-family="Baseline Test" font-size="15" fill="blue" >
+            道道<tspan alignment-baseline="ideographic" font-size="30">LL</tspan><tspan alignment-baseline="text-top" font-size="5">LL</tspan>
+        </text>
+
+    </g>
+
+</svg>

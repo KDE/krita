@@ -66,8 +66,10 @@ private Q_SLOTS:
     void testFontSelectionForText();
     void testFontStyleSelection();
     void testFontSizeConfiguration();
+    
     void testFontSizeRender();
     void testFontOpenTypeVariationsConfiguration();
+    void testFontColorRender();
 
     void testCssFontVariants();
 
@@ -80,6 +82,10 @@ private Q_SLOTS:
     void testTextInlineSize();
     
     void testTextWrap();
+    
+    void testTextBaselineAlignment();
+    
+    
 };
 
 #endif // TESTSVGTEXT_H

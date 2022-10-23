@@ -23,11 +23,13 @@
 #include <KoPathShape.h>
 #include <SvgShape.h>
 #include "KoXmlWriter.h"
-
+#include <SvgUtil.h>
+#include "SvgStyleWriter.h"
+#include "SvgSavingContext.h"
 
 struct KisScalableVectorGraphicsSaveVisitor::Private {
     Private() {}
-    KisScalableVectorGraphicsSaveContext* saveContext {nullptr};
+    SvgSavingContext* saveContext {nullptr};
     QDomDocument layerStack;
     QDomElement currentElement;
     vKisNodeSP activeNodes;
@@ -36,9 +38,13 @@ struct KisScalableVectorGraphicsSaveVisitor::Private {
 };
 
 
-KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, QSizeF pageSize, KisScalableVectorGraphicsSaveContext* savingContext)
+KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, QSizeF pageSize, SvgSavingContext* savingContext)
     : d(new Private)
 {
+    d->saveDevice = saveDevice;
+    d->activeNodes = activeNodes;
+    d->saveContext = savingContext;
+
     QTextStream svgStream(saveDevice);
     svgStream.setCodec("UTF-8");
 
@@ -50,27 +56,38 @@ KisScalableVectorGraphicsSaveVisitor::KisScalableVectorGraphicsSaveVisitor(QIODe
     // add some PR.  one line is more than enough.
     svgStream << "<!-- Created using Krita: https://krita.org -->" << endl;
 
-    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
-    svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
-    svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
-    svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
-    svgStream << "    width=\"" << pageSize.width() << "pt\"\n";
-    svgStream << "    height=\"" << pageSize.height() << "pt\"\n";
-    svgStream << "    viewBox=\"0 0 "
-              << pageSize.width() << " " << pageSize.height()
-              << "\"" ;
-    svgStream << ">" << endl;
+//    svgStream << "<svg xmlns=\"http://www.w3.org/2000/svg\" \n";
+//    svgStream << "    xmlns:xlink=\"http://www.w3.org/1999/xlink\"\n";
+//    svgStream << QString("    xmlns:krita=\"%1\"\n").arg(KoXmlNS::krita);
+//    svgStream << "    xmlns:sodipodi=\"http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd\"\n";
+//    svgStream << "    width=\"" << pageSize.width() << "pt\"\n";
+//    svgStream << "    height=\"" << pageSize.height() << "pt\"\n";
+//    svgStream << "    viewBox=\"0 0 "
+//              << pageSize.width() << " " << pageSize.height()
+//              << "\"" ;
+//    svgStream << ">" << endl;
 
-    d->saveDevice = saveDevice;
-    d->activeNodes = activeNodes;
-    d->saveContext = savingContext;
+
+    d->saveContext->shapeWriter().startElement("svg");
+    d->saveContext->shapeWriter().addAttribute("xmlns", "http://www.w3.org/2000/svg");
+    d->saveContext->shapeWriter().addAttribute("xmlns:xlink", "http://www.w3.org/1999/xlink");
+    d->saveContext->shapeWriter().addAttribute("xmlns:krita", "http://krita.org/namespaces/svg/krita");
+    d->saveContext->shapeWriter().addAttribute("xmlns:sodipodi", "http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd");
+
+    d->saveContext->shapeWriter().addAttribute("width", QString::number(pageSize.width()) + "pt");
+    d->saveContext->shapeWriter().addAttribute("height", QString::number(pageSize.height()) + "pt" );
+    d->saveContext->shapeWriter().addAttribute("viewBox", "0 0 " + QString::number(pageSize.width()) + " " + QString::number(pageSize.height()));
+
+
+
 }
 
 KisScalableVectorGraphicsSaveVisitor::~KisScalableVectorGraphicsSaveVisitor()
 {
     QTextStream svgStream(d->saveDevice);
-    svgStream.setCodec("UTF-8");
-    svgStream << endl << "</svg>" << endl;
+//    svgStream.setCodec("UTF-8");
+//    svgStream << endl << "</svg>" << endl;
+    d->saveContext->shapeWriter().endElement();
 
     delete d;
 }
@@ -182,9 +199,9 @@ void KisScalableVectorGraphicsSaveVisitor::savePath(KoPathShape *path)
     d->saveContext->shapeWriter().startElement("path");
     d->saveContext->shapeWriter().addAttribute("id", d->saveContext->getID(path));
 
-    //SvgUtil::writeTransformAttributeLazy("transform", path->transformation(), context.shapeWriter());
+    SvgUtil::writeTransformAttributeLazy("transform", path->transformation(), d->saveContext->shapeWriter());
 
-    //SvgStyleWriter::saveSvgStyle(path, context);
+    SvgStyleWriter::saveSvgStyle(path, *d->saveContext);
 
     d->saveContext->shapeWriter().addAttribute("d", path->toString(d->saveContext->userSpaceTransform()));
     d->saveContext->shapeWriter().addAttribute("sodipodi:nodetypes", path->nodeTypes());

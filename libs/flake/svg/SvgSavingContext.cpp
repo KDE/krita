@@ -33,7 +33,7 @@ public:
         , saveInlineImages(true)
     {
         styleWriter.reset(new KoXmlWriter(&styleBuffer, 1));
-        styleWriter->startElement("defs");
+        //styleWriter->startElement("defs");
         shapeWriter.reset(new KoXmlWriter(&shapeBuffer, 1));
 
         const qreal scaleToUserSpace = SvgUtil::toUserSpace(1.0);
@@ -72,7 +72,7 @@ SvgSavingContext::SvgSavingContext(QIODevice &shapesDevice, QIODevice &styleDevi
 
 SvgSavingContext::~SvgSavingContext()
 {
-    d->styleWriter->endElement();
+    //d->styleWriter->endElement();
 
     if (d->styleDevice) {
         d->styleDevice->write(d->styleBuffer.data());

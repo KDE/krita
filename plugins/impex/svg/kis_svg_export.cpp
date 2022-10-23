@@ -24,7 +24,7 @@
 #include <KoStoreDevice.h>
 #include <kis_scalable_vector_graphics_save_context.h>
 #include <kis_scalable_vector_graphics_save_visitor.h>
-
+#include "SvgSavingContext.h"
 #include <SvgWriter.h>
 
 K_PLUGIN_FACTORY_WITH_JSON(ExportFactory, "krita_svg_export.json", registerPlugin<KisSVGExport>();)
@@ -47,7 +47,7 @@ KisImportExportErrorCode KisSVGExport::convert(KisDocument *document, QIODevice 
     const QSizeF pageSize(sizeInPx.width() / image->xRes(),
                       sizeInPx.height() / image->yRes());
 
-    KisScalableVectorGraphicsSaveContext savingContext(*io, true);
+    SvgSavingContext savingContext(*io, true);
 
     KisScalableVectorGraphicsSaveVisitor svgVisitor(io, {document->preActivatedNode()}, pageSize, &savingContext);
 

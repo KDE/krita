@@ -10,6 +10,7 @@
 #include "kis_layer.h"
 #include "KoShape.h"
 #include "KoPathShape.h"
+#include "SvgSavingContext.h"
 
 class KisScalableVectorGraphicsSaveContext;
 
@@ -23,7 +24,7 @@ class QDomElement;
 class KisScalableVectorGraphicsSaveVisitor : public KisNodeVisitor
 {
 public:
-    KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, QSizeF, KisScalableVectorGraphicsSaveContext* savingContext);
+    KisScalableVectorGraphicsSaveVisitor(QIODevice* saveDevice, vKisNodeSP activeNodes, QSizeF, SvgSavingContext* savingContext);
     ~KisScalableVectorGraphicsSaveVisitor() override;
 
     using KisNodeVisitor::visit;

@@ -146,7 +146,7 @@ android {
     def versionRelease  = 14
 
     defaultConfig {
-        targetSdkVersion 30
+        targetSdkVersion 31
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
         versionName "5.1.1"

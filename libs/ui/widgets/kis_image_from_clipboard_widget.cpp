@@ -64,6 +64,8 @@ KisImageFromClipboardWidget::~KisImageFromClipboardWidget()
 
 void KisImageFromClipboardWidget::createImage()
 {
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+
     KisDocument *doc = createNewImage();
 
     if (doc) {
@@ -89,6 +91,9 @@ void KisImageFromClipboardWidget::createImage()
         emit m_openPane->documentSelected(doc);
         m_openPane->accept();
     }
+
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
+}
 
 void KisImageFromClipboardWidget::clipboardDataChanged()
 {

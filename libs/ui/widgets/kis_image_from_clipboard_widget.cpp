@@ -51,7 +51,6 @@ KisImageFromClipboardWidget::KisImageFromClipboardWidget(QWidget* parent, qint32
 
     lblPreview->hide();
     grpClipboard->show();
-    imageGroupSpacer->changeSize(20, 40, QSizePolicy::Expanding, QSizePolicy::Expanding);
 
 //    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboard::clipboardDataChanged);
     disconnect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), 0, 0); //disable normal signal

@@ -113,13 +113,25 @@ void KisImageFromClipboardWidget::showEvent(QShowEvent *event)
 
 void KisImageFromClipboardWidget::createClipboardPreview()
 {
-    if (!KisClipboard::instance()->hasClip()) return;
+    if (!KisClipboard::instance()->hasClip()) {
+        enableImageCreation(QImage());
+    }
 
     QApplication::setOverrideCursor(Qt::BusyCursor);
     QImage qimage = QApplication::clipboard()->image();
+    enableImageCreation(qimage);
 
-    if (!qimage.isNull()) {
+    QApplication::restoreOverrideCursor();
+}
 
+void KisImageFromClipboardWidget::enableImageCreation(const QImage &qimage)
+{
+    if (qimage.isNull()) {
+        doubleWidth->setValue(0);
+        doubleHeight->setValue(0);
+        newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
+        lblPreview->hide();
+    } else {
         QSize previewSize = QSize(75, 75) * devicePixelRatioF();
         QPixmap preview = QPixmap::fromImage(qimage.scaled(previewSize, Qt::KeepAspectRatio));
         preview.setDevicePixelRatio(devicePixelRatioF());
@@ -129,15 +141,5 @@ void KisImageFromClipboardWidget::createClipboardPreview()
 
         doubleWidth->setValue(qimage.width());
         doubleHeight->setValue(qimage.height());
-
-    } else {
-        doubleWidth->setValue(0);
-        doubleHeight->setValue(0);
-        newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
-        lblPreview->hide();
     }
-    QApplication::restoreOverrideCursor();
 }
-
-
-

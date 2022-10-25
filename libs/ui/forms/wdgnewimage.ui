@@ -286,12 +286,6 @@
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
              <widget class="QLabel" name="lblPreview">
-              <property name="maximumSize">
-               <size>
-                <width>75</width>
-                <height>75</height>
-               </size>
-              </property>
               <property name="baseSize">
                <size>
                 <width>250</width>
@@ -301,8 +295,8 @@
               <property name="frameShape">
                <enum>QFrame::StyledPanel</enum>
               </property>
-              <property name="text">
-               <string>TextLabel</string>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
              </widget>
             </item>

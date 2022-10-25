@@ -349,7 +349,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.mimeType = "image/svg";
         mimeType.description = i18nc("description of a file type", "SVG Image");
         mimeType.suffixes = QStringList() << "svg";
->>>>>>> 3daaa424a1 (Add svg option in file export menu)
         s_mimeDatabase << mimeType;
 
         mimeType.mimeType = "image/vnd.radiance";

@@ -96,7 +96,21 @@ bool KisScalableVectorGraphicsSaveVisitor::visit(KisPaintLayer *layer)
 {
 //    qDebug() << "paintlayer: " << layer->name();
 
-    return saveLayer(layer);
+//    return saveLayer(layer);
+    QRect rc = layer->projection()->exactBounds();
+    //QImage resulteImage = layer->projection()->convertToQImage(0, layer->projection()->x(), layer->projection()->y(), rc.width(), rc.height() );
+    QImage resulteImage = layer->projection()->convertToQImage(0, layer->exactBounds());
+    d->saveContext->shapeWriter().startElement("image");
+    d->saveContext->shapeWriter().addAttribute("id", layer->name());
+    d->saveContext->shapeWriter().addAttribute("x", layer->projection()->x());
+    d->saveContext->shapeWriter().addAttribute("y", layer->projection()->y());
+    d->saveContext->shapeWriter().addAttribute("width", rc.width());
+    d->saveContext->shapeWriter().addAttribute("height", rc.height() );
+    d->saveContext->shapeWriter().addAttribute("xlink:href", d->saveContext->saveImage(resulteImage));
+    d->saveContext->shapeWriter().endElement(); // image
+
+
+    return true;
 }
 
 bool KisScalableVectorGraphicsSaveVisitor::visit(KisGroupLayer *layer)
@@ -210,6 +224,7 @@ void KisScalableVectorGraphicsSaveVisitor::savePath(KoPathShape *path)
 
 void KisScalableVectorGraphicsSaveVisitor::saveGeneric(KoShape *shape)
 {
+
 }
 
 

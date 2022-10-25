@@ -9,17 +9,16 @@
 #include "widgets/kis_image_from_clipboard_widget.h"
 #include "widgets/kis_custom_image_widget.h"
 
-#include <QMimeData>
-#include <QPushButton>
-#include <QSlider>
-#include <QComboBox>
-#include <QRect>
 #include <QApplication>
 #include <QClipboard>
+#include <QComboBox>
 #include <QDesktopWidget>
 #include <QFile>
+#include <QMimeData>
+#include <QPushButton>
+#include <QRect>
+#include <QSlider>
 #include <QTimer>
-#include <QClipboard>
 
 #include <KisPart.h>
 #include <KoColor.h>
@@ -52,10 +51,11 @@ KisImageFromClipboardWidget::KisImageFromClipboardWidget(QWidget* parent, qint32
     lblPreview->hide();
     grpClipboard->show();
 
-//    connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboard::clipboardDataChanged);
-    disconnect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), 0, 0); //disable normal signal
-    connect(newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok), SIGNAL(clicked()), this, SLOT(createImage()));
     setNumberOfLayers(1);
+
+    disconnect(newDialogConfirmationButtonBox, &QDialogButtonBox::accepted, nullptr,
+               nullptr); // disable normal signal
+    connect(newDialogConfirmationButtonBox, &QDialogButtonBox::accepted, this, &KisImageFromClipboardWidget::createImage);
 }
 
 KisImageFromClipboardWidget::~KisImageFromClipboardWidget()

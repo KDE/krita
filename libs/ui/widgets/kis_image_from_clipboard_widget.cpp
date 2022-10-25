@@ -102,12 +102,13 @@ void KisImageFromClipboardWidget::clipboardDataChanged()
 
 void KisImageFromClipboardWidget::showEvent(QShowEvent *event)
 {
+    KisCustomImageWidget::showEvent(event);
+
     connect(KisClipboard::instance(), &KisClipboard::clipChanged, this, &KisImageFromClipboardWidget::clipboardDataChanged, Qt::UniqueConnection);
 
     if (!lblPreview->isVisible()) {
         QTimer::singleShot(100, this, SLOT(createClipboardPreview()));
     }
-    KisCustomImageWidget::showEvent(event);
 }
 
 

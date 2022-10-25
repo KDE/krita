@@ -270,6 +270,7 @@ void KisCustomImageWidget::createImage()
         emit m_openPane->documentSelected(doc);
         m_openPane->accept();
     }
+    newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(true);
 }
 
 KisDocument* KisCustomImageWidget::createNewImage()

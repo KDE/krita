@@ -65,31 +65,30 @@ KisImageFromClipboardWidget::~KisImageFromClipboardWidget()
 void KisImageFromClipboardWidget::createImage()
 {
     KisDocument *doc = createNewImage();
-    if (!doc) return; // createNewImage can return 0;
 
-    KisImageSP image = doc->image();
-    if (image && image->root() && image->root()->firstChild()) {
-        KisLayer * layer = qobject_cast<KisLayer*>(image->root()->firstChild().data());
+    if (doc) {
+        KisImageSP image = doc->image();
+        if (image && image->root() && image->root()->firstChild()) {
+            KisLayer *layer = qobject_cast<KisLayer *>(image->root()->firstChild().data());
 
-        KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
+            KisPaintDeviceSP clip = KisClipboard::instance()->clip(QRect(), true);
 
-        if (!clip) {
-            KisPart::instance()->removeDocument(doc);
-            return;
+            if (!clip) {
+                KisPart::instance()->removeDocument(doc);
+                return;
+            }
+
+            KisImportCatcher::adaptClipToImageColorSpace(clip, image);
+
+            QRect r = clip->exactBounds();
+            KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
+
+            layer->setDirty();
         }
-
-        KisImportCatcher::adaptClipToImageColorSpace(clip, image);
-
-        QRect r = clip->exactBounds();
-        KisPainter::copyAreaOptimized(QPoint(), clip, layer->paintDevice(), r);
-
-        layer->setDirty();
+        doc->setModified(true);
+        emit m_openPane->documentSelected(doc);
+        m_openPane->accept();
     }
-    doc->setModified(true);
-    emit m_openPane->documentSelected(doc);
-    m_openPane->accept();
-}
-
 
 void KisImageFromClipboardWidget::clipboardDataChanged()
 {

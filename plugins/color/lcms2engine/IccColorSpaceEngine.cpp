@@ -7,9 +7,10 @@
 
 #include "IccColorSpaceEngine.h"
 
-#include "KoColorModelStandardIds.h"
-
 #include <klocalizedstring.h>
+
+#include <KoColorModelStandardIds.h>
+#include <kis_assert.h>
 
 #include "LcmsColorSpace.h"
 

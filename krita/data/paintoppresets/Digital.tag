@@ -64,6 +64,7 @@ Comment[pt_BR]=Predefinições de pincel com uma aparência digital.
 Comment[ru]=Профили кистей с цифровым внешним видом и ощущением.
 Comment[sl]=Prednastavitve čopičev z digitalnim videzom in občutkom.
 Comment[sv]=Penselförinställningar med digitalt utseende och känsla
+Comment[tr]=Sayısal görünüm ve hisli fırça önayarları.
 Comment[uk]=Набори пензлів із цифровим виглядом і поведінкою.
 Comment[x-test]=xxBrush presets with a digital look and feel.xx
 Comment[zh_CN]=具有数码绘画典型特征的笔刷预设

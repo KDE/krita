@@ -29,6 +29,7 @@
 #include <KoColorSpaceConstants.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorTransferFunctions.h>
+#include <kis_assert.h>
 #include <kis_config.h>
 #include <kis_exif_info_visitor.h>
 #include <kis_group_layer.h>
@@ -402,10 +403,14 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
            if (convertToRec2020) {
                nclxDescription.set_color_primaties(heif_color_primaries_ITU_R_BT_2020_2_and_2100_0);
            } else {
-               ColorPrimaries primaries = image->colorSpace()->profile()->getColorPrimaries();
-               if (primaries >= 256) {
-                   primaries = PRIMARIES_UNSPECIFIED;
-               }
+               const ColorPrimaries primaries =
+                   image->colorSpace()->profile()->getColorPrimaries();
+               // PRIMARIES_ADOBE_RGB_1998 and higher are not valid for CICP.
+               // But this should have already been caught by the KeepTheSame
+               // clause...
+               KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(
+                   primaries >= PRIMARIES_ADOBE_RGB_1998,
+                   ImportExportCodes::FormatColorSpaceUnsupported);
                nclxDescription.set_color_primaties(heif_color_primaries(primaries));
            }
 
@@ -516,8 +521,9 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     sliderQuality->setValue(qreal(cfg->getInt("quality", 50)));
     cmbChroma->setCurrentIndex(chromaOptions.indexOf(cfg->getString("chroma", "444")));
     m_hasAlpha = cfg->getBool(KisImportExportFilter::ImageContainsTransparencyTag, false);
-    
-    int CicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag, 2);
+
+    int cicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag,
+                                    static_cast<int>(PRIMARIES_UNSPECIFIED));
 
     // Rav1e doesn't support monochrome. To get around this, people may need to convert to sRGB first.
     chkMonochromesRGB->setVisible(cfg->getString(KisImportExportFilter::ColorModelIDTag) == "GRAYA");
@@ -532,7 +538,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
     QStringList conversionOptionName = {"Rec2100PQ", "Rec2100HLG"};
     
     if (cfg->getString(KisImportExportFilter::ColorModelIDTag) == "RGBA") {
-        if (CicpPrimaries != PRIMARIES_UNSPECIFIED) {
+        if (cicpPrimaries != PRIMARIES_UNSPECIFIED) {
             conversionOptionsList << i18nc("Color space option plus transfer function name", "Keep colorants, encode PQ");
             toolTipList << i18nc("@tooltip", "The image will be linearized first, and then encoded with a perceptual quantizer curve"
                                             " (also known as the SMPTE 2048 curve). Recommended for images where the absolute brightness is important.");

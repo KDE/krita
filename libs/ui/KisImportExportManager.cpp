@@ -28,34 +28,36 @@
 #include <ksqueezedtextlabel.h>
 #include <kpluginfactory.h>
 
-#include <KisUsageLogger.h>
-#include <KoFileDialog.h>
-#include <kis_icon_utils.h>
-#include <KoDialog.h>
-#include <KoProgressUpdater.h>
-#include <KoJsonTrader.h>
 #include <KisMimeDatabase.h>
+#include <KisPart.h>
+#include <KisPopupButton.h>
+#include <KisPreExportChecker.h>
+#include <KisUsageLogger.h>
+#include <KoColorProfile.h>
+#include <KoColorProfileConstants.h>
+#include <KoDialog.h>
+#include <KoFileDialog.h>
+#include <KoJsonTrader.h>
+#include <KoProgressUpdater.h>
+#include <kis_assert.h>
 #include <kis_config_widget.h>
 #include <kis_debug.h>
-#include <KisPreExportChecker.h>
-#include <KisPart.h>
-#include "kis_assert.h"
-#include "kis_config.h"
-#include "KisImportExportFilter.h"
-#include "KisDocument.h"
+#include <kis_icon_utils.h>
 #include <kis_image.h>
-#include <kis_paint_layer.h>
-#include "kis_painter.h"
-#include "kis_guides_config.h"
-#include "kis_grid_config.h"
-#include "KisPopupButton.h"
 #include <kis_iterator_ng.h>
-#include "kis_async_action_feedback.h"
+#include <kis_layer_utils.h>
+#include <kis_paint_layer.h>
+#include <kis_painter.h>
+
+#include "KisDocument.h"
+#include "KisImportExportFilter.h"
+#include "KisMainWindow.h"
 #include "KisReferenceImagesLayer.h"
 #include "imagesize/dlg_imagesize.h"
-#include "kis_layer_utils.h"
-#include <KoColorProfile.h>
-#include "KisMainWindow.h"
+#include "kis_async_action_feedback.h"
+#include "kis_config.h"
+#include "kis_grid_config.h"
+#include "kis_guides_config.h"
 
 // static cache for import and export mimetypes
 QStringList KisImportExportManager::m_importMimeTypes;
@@ -467,17 +469,21 @@ void KisImportExportManager::fillStaticExportConfigurationProperties(KisProperti
             (cs->profile()->name().contains(QLatin1String("srgb"), Qt::CaseInsensitive) &&
              !cs->profile()->name().contains(QLatin1String("g10")));
     exportConfiguration->setProperty(KisImportExportFilter::sRGBTag, sRGB);
-    
-    int primaries = cs->profile()->getColorPrimaries();
-    if (primaries >= 256) {
+
+    ColorPrimaries primaries = cs->profile()->getColorPrimaries();
+    if (primaries >= PRIMARIES_ADOBE_RGB_1998) {
         primaries = PRIMARIES_UNSPECIFIED;
     }
-    int transferFunction = cs->profile()->getTransferCharacteristics();
-    if (transferFunction >= 256) {
+    TransferCharacteristics transferFunction =
+        cs->profile()->getTransferCharacteristics();
+    if (transferFunction >= TRC_GAMMA_1_8) {
         transferFunction = TRC_UNSPECIFIED;
     }
-    exportConfiguration->setProperty(KisImportExportFilter::CICPPrimariesTag, primaries);
-    exportConfiguration->setProperty(KisImportExportFilter::CICPTransferCharacteristicsTag, transferFunction);
+    exportConfiguration->setProperty(KisImportExportFilter::CICPPrimariesTag,
+                                     static_cast<int>(primaries));
+    exportConfiguration->setProperty(
+        KisImportExportFilter::CICPTransferCharacteristicsTag,
+        static_cast<int>(transferFunction));
     exportConfiguration->setProperty(KisImportExportFilter::HDRTag, cs->hasHighDynamicRange());
 }
 

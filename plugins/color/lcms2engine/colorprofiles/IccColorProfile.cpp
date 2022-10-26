@@ -7,21 +7,19 @@
 
 #include "IccColorProfile.h"
 
-#include <stdint.h>
-#include <limits.h>
+#include <cmath>
+#include <cstdint>
+#include <limits>
+
+#include <lcms2.h>
 
 #include <QFile>
 #include <QSharedPointer>
+
 #include <KoColorConversions.h>
-#include <math.h>
+#include <kis_assert.h>
 
-#include "QDebug"
 #include "LcmsColorProfileContainer.h"
-
-#include "lcms2.h"
-
-#include "kis_assert.h"
-
 
 struct IccColorProfile::Data::Private {
     QByteArray rawData;
@@ -118,7 +116,7 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
                      {modifiedColorants[6], modifiedColorants[7], 1.0}};
     }
 
-    cmsHPROFILE iccProfile;
+    cmsHPROFILE iccProfile = nullptr;
 
     if (colorants.size() == 2) {
         iccProfile = cmsCreateGrayProfile(&whitePoint, mainCurve);
@@ -128,6 +126,9 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
         curve[0] = curve[1] = curve[2] = mainCurve;
         iccProfile = cmsCreateRGBProfile(&whitePoint, &primaries, curve);
     }
+
+    KIS_ASSERT(iccProfile);
+
     QStringList name;
     name.append("Krita");
     name.append(KoColorProfile::getColorPrimariesName(colorPrimariesType));

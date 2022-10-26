@@ -13,6 +13,7 @@
 
 #include <lcms2.h>
 
+#include <QDebug>
 #include <QFile>
 #include <QSharedPointer>
 
@@ -94,6 +95,10 @@ IccColorProfile::IccColorProfile(const QVector<double> &colorants,
                                  const TransferCharacteristics transferFunction)
 : KoColorProfile(QString()), d(new Private)
 {
+    KIS_ASSERT(
+        (!colorants.isEmpty() || colorPrimariesType != PRIMARIES_UNSPECIFIED)
+        && transferFunction != TRC_UNSPECIFIED);
+
     cmsCIExyY whitePoint;
 
     QVector<double> modifiedColorants = colorants;

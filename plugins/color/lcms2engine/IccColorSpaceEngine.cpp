@@ -203,11 +203,15 @@ const KoColorProfile *IccColorSpaceEngine::getProfile(const QVector<double> &col
 {
     KoColorSpaceRegistry *registry = KoColorSpaceRegistry::instance();
 
-    if (colorPrimaries == PRIMARIES_UNSPECIFIED && transferFunction == TRC_UNSPECIFIED
-            && colorants.isEmpty()) {
-
+    KIS_SAFE_ASSERT_RECOVER(
+        (!colorants.isEmpty() || colorPrimaries != PRIMARIES_UNSPECIFIED)
+        && transferFunction != TRC_UNSPECIFIED)
+    {
         colorPrimaries = PRIMARIES_ITU_R_BT_709_5;
-        transferFunction = TRC_IEC_61966_2_1;
+
+        if (transferFunction == TRC_UNSPECIFIED) {
+            transferFunction = TRC_IEC_61966_2_1;
+        }
     }
 
     const KoColorProfile *profile = new IccColorProfile(colorants, colorPrimaries, transferFunction);

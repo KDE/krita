@@ -165,7 +165,9 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
     bool convertToRec2020 = false;
     
     if (cs->hasHighDynamicRange() && cs->colorModelId() != GrayAColorModelID) {
-        QString conversionOption = (configuration->getString("floatingPointConversionOption", "Rec2100PQ"));
+        QString conversionOption =
+            (configuration->getString("floatingPointConversionOption",
+                                      "KeepSame"));
         if (conversionOption == "Rec2100PQ") {
             convertToRec2020 = true;
             conversionPolicy = ApplyPQ;
@@ -554,7 +556,7 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
                                             " Krita always opens images like these as linear floating point, this option is there to reverse that");
             conversionOptionName << "ApplySMPTE428";
         }
-        
+
         conversionOptionsList << i18nc("Color space option", "No changes, clip");
         toolTipList << i18nc("@tooltip", "The image will be converted plainly to 12bit integer, and values that are out of bounds are clipped, the icc profile will be embedded.");
         conversionOptionName << "KeepSame";
@@ -564,8 +566,12 @@ void KisWdgOptionsHeif::setConfiguration(const KisPropertiesConfigurationSP cfg)
         cmbConversionPolicy->setItemData(i, toolTipList.at(i), Qt::ToolTipRole);
         cmbConversionPolicy->setItemData(i, conversionOptionName.at(i), Qt::UserRole+1);
     }
-    QString optionName = cfg->getString("floatingPointConversionOption", "Rec2100PQ");
-    cmbConversionPolicy->setCurrentIndex(conversionOptionName.indexOf(optionName));
+    QString optionName =
+        cfg->getString("floatingPointConversionOption", "KeepSame");
+    if (conversionOptionName.contains(optionName)) {
+        cmbConversionPolicy->setCurrentIndex(
+            conversionOptionName.indexOf(optionName));
+    }
     chkHLGOOTF->setChecked(cfg->getBool("removeHGLOOTF", true));
     spnNits->setValue(cfg->getDouble("HLGnominalPeak", 1000.0));
     spnGamma->setValue(cfg->getDouble("HLGgamma", 1.2));

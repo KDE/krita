@@ -207,7 +207,11 @@ const KoColorProfile *IccColorSpaceEngine::getProfile(const QVector<double> &col
         (!colorants.isEmpty() || colorPrimaries != PRIMARIES_UNSPECIFIED)
         && transferFunction != TRC_UNSPECIFIED)
     {
-        colorPrimaries = PRIMARIES_ITU_R_BT_709_5;
+        if (transferFunction == TRC_LINEAR) {
+            colorPrimaries = PRIMARIES_ITU_R_BT_2020_2_AND_2100_0;
+        } else {
+            colorPrimaries = PRIMARIES_ITU_R_BT_709_5;
+        }
 
         if (transferFunction == TRC_UNSPECIFIED) {
             transferFunction = TRC_IEC_61966_2_1;

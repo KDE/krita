@@ -311,9 +311,9 @@ void KisAsyncMerger::resetProjection() {
 }
 
 void KisAsyncMerger::setupProjection(KisProjectionLeafSP currentLeaf, const QRect& rect, bool useTempProjection) {
-    KisPaintDeviceSP parentOriginal = currentLeaf->parent()->original();
+    KisPaintDeviceSP parentOriginal = currentLeaf->parent()->lazyDestinationForSubtreeComposition();
 
-    if (parentOriginal != currentLeaf->projection()) {
+    if (parentOriginal) {
         if (useTempProjection) {
             if(!m_cachedPaintDevice)
                 m_cachedPaintDevice = new KisPaintDevice(parentOriginal->colorSpace());

@@ -59,6 +59,13 @@ public:
     /// @return the projection of the layers in the group before the masks are applied.
     KisPaintDeviceSP original() const override;
 
+    /**
+     * Returns own original device when tryOblidgeChild() mechanism is not triggered.
+     * When tryOblidgeChild() mechanism is in action, returns null (therefor
+     * threre is no need to do subtree composition).
+     */
+    KisPaintDeviceSP lazyDestinationForSubtreeComposition() const;
+
     qint32 x() const override;
     qint32 y() const override;
     void setX(qint32 x) override;
@@ -98,6 +105,7 @@ public:
 protected:
     KisLayer* onlyMeaningfulChild() const;
     KisPaintDeviceSP tryObligeChild() const;
+    std::tuple<KisPaintDeviceSP, bool> originalImpl() const;
 
     QRect amortizedProjectionRectForCleanupInChangePass() const override;
 private:

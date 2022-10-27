@@ -42,6 +42,8 @@ public:
     qint32 x;
     qint32 y;
     bool passThroughMode;
+
+    std::tuple<KisPaintDeviceSP, bool> originalImpl() const;
 };
 
 KisGroupLayer::KisGroupLayer(KisImageWSP image, const QString &name, quint8 opacity) :
@@ -252,7 +254,7 @@ KisPaintDeviceSP KisGroupLayer::tryObligeChild() const
     return 0;
 }
 
-KisPaintDeviceSP KisGroupLayer::original() const
+std::tuple<KisPaintDeviceSP, bool> KisGroupLayer::originalImpl() const
 {
     /**
      * We are too lazy! Let's our children work for us.
@@ -260,15 +262,31 @@ KisPaintDeviceSP KisGroupLayer::original() const
      * one in stack and meets some conditions
      */
     KisPaintDeviceSP realOriginal = tryObligeChild();
+    bool ownsOriginal = false;
 
     if (!realOriginal) {
         if (!childCount() && !m_d->paintDevice->extent().isEmpty()) {
             m_d->paintDevice->clear();
         }
         realOriginal = m_d->paintDevice;
+        ownsOriginal = true;
     }
 
-    return realOriginal;
+    return std::make_tuple(realOriginal, ownsOriginal);
+}
+
+KisPaintDeviceSP KisGroupLayer::original() const
+{
+    return std::get<0>(originalImpl());
+}
+
+KisPaintDeviceSP KisGroupLayer::lazyDestinationForSubtreeComposition() const
+{
+    KisPaintDeviceSP originalDev;
+    bool ownsOriginal = false;
+    std::tie(originalDev, ownsOriginal) = originalImpl();
+
+    return ownsOriginal ? originalDev : nullptr;
 }
 
 QRect KisGroupLayer::amortizedProjectionRectForCleanupInChangePass() const

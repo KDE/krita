@@ -129,6 +129,9 @@ void KisImageFromClipboardWidget::enableImageCreation(const QImage &qimage)
         doubleHeight->setValue(0);
         newDialogConfirmationButtonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
         lblPreview->hide();
+        tabWidget->setEnabled(false);
+
+        lblDocumentInfo->setText(i18n("The clipboard is empty or does not have an image in it."));
     } else {
         QSize previewSize = QSize(75, 75) * devicePixelRatioF();
         QPixmap preview = QPixmap::fromImage(qimage.scaled(previewSize, Qt::KeepAspectRatio));
@@ -139,5 +142,7 @@ void KisImageFromClipboardWidget::enableImageCreation(const QImage &qimage)
 
         doubleWidth->setValue(qimage.width());
         doubleHeight->setValue(qimage.height());
+
+        tabWidget->setEnabled(true);
     }
 }

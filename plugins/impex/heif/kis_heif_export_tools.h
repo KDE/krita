@@ -288,12 +288,23 @@ inline void writeFloatLayerImpl(const int width,
             }
 
             for (int ch = 0; ch < channels; ch++) {
-                uint16_t v = qBound<uint16_t>(
-                    0,
-                    static_cast<uint16_t>(
-                        applyCurveAsNeeded<conversionPolicy>(dst[ch])
-                        * max12bit),
-                    max12bit);
+                uint16_t v = 0;
+                if (ch == CSTrait::alpha_pos) {
+                    v = qBound<uint16_t>(
+                        0,
+                        static_cast<uint16_t>(
+                            applyCurveAsNeeded<ConversionPolicy::KeepTheSame>(
+                                dst[ch])
+                            * max12bit),
+                        max12bit);
+                } else {
+                    v = qBound<uint16_t>(
+                        0,
+                        static_cast<uint16_t>(
+                            applyCurveAsNeeded<conversionPolicy>(dst[ch])
+                            * max12bit),
+                        max12bit);
+                }
                 ptr[2 * (x * channels) + y * stride + endValue0 + (ch * 2)] =
                     (uint8_t)(v >> 8);
                 ptr[2 * (x * channels) + y * stride + endValue1 + (ch * 2)] =

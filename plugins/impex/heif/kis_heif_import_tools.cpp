@@ -175,15 +175,18 @@ inline void readLayer(const int width,
             data[1] = value<Arch, luma, linearizePolicy>(imgG, strideG, x, y);
             data[2] = value<Arch, luma, linearizePolicy>(imgB, strideB, x, y);
 
-            if (hasAlpha) {
-                data[3] =
-                    value<Arch, luma, linearizePolicy>(imgA, strideA, x, y);
-            }
-
             linearize<Arch, linearizePolicy, applyOOTF>(data,
                                                         lCoef.constData(),
                                                         displayGamma,
                                                         displayNits);
+
+            if (hasAlpha) {
+                data[3] =
+                    value<Arch, luma, LinearizePolicy::KeepTheSame>(imgA,
+                                                                    strideA,
+                                                                    x,
+                                                                    y);
+            }
 
             if (luma == 8) {
                 KoBgrU8Traits::fromNormalisedChannelsValue(it->rawData(),
@@ -525,14 +528,37 @@ inline void readLayer(const int width,
                 data[i] = 1.0f;
             }
 
+            const int alphaPos = [&]() {
+                if (luma == 8) {
+                    return KoBgrU8Traits::alpha_pos;
+                } else if (luma > 8
+                           && linearizePolicy != LinearizePolicy::KeepTheSame) {
+                    return KoBgrF32Traits::alpha_pos;
+                } else {
+                    return KoBgrU16Traits::alpha_pos;
+                }
+            }();
+
             for (int ch = 0; ch < channels; ch++) {
-                data[ch] =
-                    valueInterleaved<Arch, luma, linearizePolicy>(img,
-                                                                  stride,
-                                                                  x,
-                                                                  y,
-                                                                  channels,
-                                                                  ch);
+                if (ch == alphaPos) {
+                    data[ch] =
+                        valueInterleaved<Arch,
+                                         luma,
+                                         LinearizePolicy::KeepTheSame>(img,
+                                                                       stride,
+                                                                       x,
+                                                                       y,
+                                                                       channels,
+                                                                       ch);
+                } else {
+                    data[ch] =
+                        valueInterleaved<Arch, luma, linearizePolicy>(img,
+                                                                      stride,
+                                                                      x,
+                                                                      y,
+                                                                      channels,
+                                                                      ch);
+                }
             }
 
             linearize<Arch, linearizePolicy, applyOOTF>(data,
@@ -804,11 +830,21 @@ inline void readLayer(const int width,
             }
 
             for (int ch = 0; ch < channels; ch++) {
-                data[ch] = value<Arch, linearizePolicy, channels>(img,
-                                                                  stride,
-                                                                  x,
-                                                                  y,
-                                                                  ch);
+                if (ch == KoBgrU8Traits::alpha_pos) {
+                    data[ch] =
+                        value<Arch, LinearizePolicy::KeepTheSame, channels>(
+                            img,
+                            stride,
+                            x,
+                            y,
+                            ch);
+                } else {
+                    data[ch] = value<Arch, linearizePolicy, channels>(img,
+                                                                      stride,
+                                                                      x,
+                                                                      y,
+                                                                      ch);
+                }
             }
 
             linearize<Arch, linearizePolicy, applyOOTF>(data,

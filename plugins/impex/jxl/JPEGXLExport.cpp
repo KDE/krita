@@ -86,11 +86,11 @@ inline QByteArray writeLayer(const int width,
         for (int x = 0; x < width; x++) {
             CSTrait::normalisedChannelsValue(it->rawDataConst(), pixelValues);
             if (!convertToRec2020 && !isLinear) {
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < channels; i++) {
                     src[i] = static_cast<double>(dst[i]);
                 }
                 profile->linearizeFloatValue(pixelValuesLinear);
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < channels; i++) {
                     dst[i] = static_cast<float>(src[i]);
                 }
             }
@@ -100,7 +100,12 @@ inline QByteArray writeLayer(const int width,
             }
 
             for (int ch = 0; ch < channels; ch++) {
-                dst[ch] = applyCurveAsNeeded<conversionPolicy>(dst[ch]);
+                if (ch == CSTrait::alpha_pos) {
+                    dst[ch] = applyCurveAsNeeded<ConversionPolicy::KeepTheSame>(
+                        dst[ch]);
+                } else {
+                    dst[ch] = applyCurveAsNeeded<conversionPolicy>(dst[ch]);
+                }
             }
 
             if (swap) {

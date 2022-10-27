@@ -104,14 +104,21 @@ inline void imageOutCallback(void *that, size_t x, size_t y, size_t numPixels, c
         const double *lCoef = data->lCoef.constData();
         QVector<float> pixelValues(static_cast<int>(cs->channelCount()));
         float *tmp = pixelValues.data();
+        const quint32 alphaPos = cs->alphaPos();
 
         for (size_t i = 0; i < numPixels; i++) {
             for (size_t i = 0; i < channels; i++) {
-                tmp[i] = 0;
+                tmp[i] = 1.0;
             }
 
             for (size_t ch = 0; ch < channels; ch++) {
-                tmp[ch] = value<policy, channelsType>(src, ch);
+                if (ch == alphaPos) {
+                    tmp[ch] = value<policy, channelsType>(src, ch);
+                } else {
+                    tmp[ch] =
+                        value<LinearizePolicy::KeepTheSame, channelsType>(src,
+                                                                          ch);
+                }
             }
 
             if (swap) {

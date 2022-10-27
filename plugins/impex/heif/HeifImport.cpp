@@ -343,33 +343,28 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             QVector<float> pixelValues(4);
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
 
-            auto value =
-                [&](const uint8_t *img, int stride, int x, int y) {
-                    if (luma == 8) {
-                        return linearizeValueAsNeeded(float(img[y * (stride) + x]) / 255.0f, linearizePolicy);
+            auto value = [&](const uint8_t *img, int stride, int x, int y, LinearizePolicy linearizePolicy) {
+                if (luma == 8) {
+                    return linearizeValueAsNeeded(float(img[y * (stride) + x]) / 255.0f, linearizePolicy);
+                } else {
+                    uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + x];
+                    if (luma == 10) {
+                        return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
+                    } else if (luma == 12) {
+                        return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
                     } else {
-                        uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + x];
-                        if (luma == 10) {
-                            return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
-                        } else if (luma == 12) {
-                            return linearizeValueAsNeeded(float(0x0fff & (source)) * multiplier12bit, linearizePolicy);
-                        } else {
-                            return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
-                        }
+                        return linearizeValueAsNeeded(float(source) * multiplier16bit, linearizePolicy);
                     }
-                };
+                }
+            };
 
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
                     std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
 
-                    pixelValues[0] = value(imgR, strideR, x, y);
-                    pixelValues[1] = value(imgG, strideG, x, y);
-                    pixelValues[2] = value(imgB, strideB, x, y);
-
-                    if (hasAlpha) {
-                        pixelValues[3] = value(imgA, strideA, x, y);
-                    }
+                    pixelValues[0] = value(imgR, strideR, x, y, linearizePolicy);
+                    pixelValues[1] = value(imgG, strideG, x, y, linearizePolicy);
+                    pixelValues[2] = value(imgB, strideB, x, y, linearizePolicy);
 
                     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
                         qSwap(pixelValues.begin()[0], pixelValues.begin()[2]);
@@ -377,6 +372,11 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                     if (linearizePolicy == LinearizePolicy::LinearFromHLG && applyOOTF) {
                         applyHLGOOTF(pixelValues, lCoef, displayGamma, displayNits);
                     }
+
+                    if (hasAlpha) {
+                        pixelValues[3] = value(imgA, strideA, x, y, LinearizePolicy::KeepTheSame);
+                    }
+
                     colorSpace->fromNormalisedChannelsValue(it->rawData(), pixelValues);
 
                     it->nextPixel();
@@ -394,9 +394,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             QVector<float> pixelValues(4);
             QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
-            int channels = hasAlpha ? 4 : 3;
+            const uint32_t channels = hasAlpha ? 4 : 3;
+            const uint32_t alphaPos = colorSpace->alphaPos();
 
-            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
+            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch, LinearizePolicy linearizePolicy) {
                 uint8_t source = img[(y * stride) + (x * channels) + ch];
                 return linearizeValueAsNeeded(float(source) / 255.0f, linearizePolicy);
             };
@@ -405,8 +406,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 for (int x = 0; x < width; x++) {
                     std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
 
-                    for (int ch = 0; ch < channels; ch++) {
-                        pixelValues[ch] = value(img, stride, x, y, ch);
+                    for (uint32_t ch = 0; ch < channels; ch++) {
+                        if (ch == alphaPos) {
+                            pixelValues[ch] = value(img, stride, x, y, ch, LinearizePolicy::KeepTheSame);
+                        } else {
+                            pixelValues[ch] = value(img, stride, x, y, ch, linearizePolicy);
+                        }
                     }
 
                     if (linearizePolicy == LinearizePolicy::KeepTheSame) {
@@ -430,9 +435,10 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
             QVector<float> pixelValues(4);
             QVector<qreal> lCoef {colorSpace->lumaCoefficients()};
             KisHLineIteratorSP it = layer->paintDevice()->createHLineIteratorNG(0, 0, width);
-            int channels = hasAlpha ? 4 : 3;
+            const uint32_t channels = hasAlpha ? 4 : 3;
+            const uint32_t alphaPos = colorSpace->alphaPos();
 
-            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch) {
+            auto value = [&](const uint8_t *img, int stride, int x, int y, int ch, LinearizePolicy linearizePolicy) {
                 uint16_t source = reinterpret_cast<const uint16_t *>(img)[y * (stride / 2) + (x * channels) + ch];
                 if (luma == 10) {
                     return linearizeValueAsNeeded(float(0x03ff & (source)) * multiplier10bit, linearizePolicy);
@@ -447,8 +453,12 @@ KisImportExportErrorCode HeifImport::convert(KisDocument *document, QIODevice *i
                 for (int x = 0; x < width; x++) {
                     std::fill(pixelValues.begin(), pixelValues.end(), 1.0f);
 
-                    for (int ch = 0; ch < channels; ch++) {
-                        pixelValues[ch] = value(img, stride, x, y, ch);
+                    for (uint32_t ch = 0; ch < channels; ch++) {
+                        if (ch == alphaPos) {
+                            pixelValues[ch] = value(img, stride, x, y, ch, LinearizePolicy::KeepTheSame);
+                        } else {
+                            pixelValues[ch] = value(img, stride, x, y, ch, linearizePolicy);
+                        }
                     }
 
                     if (linearizePolicy == LinearizePolicy::KeepTheSame) {

@@ -358,15 +358,16 @@ KisImportExportErrorCode HeifExport::convert(KisDocument *document, QIODevice *i
                             removeHLGOOTF(pixelValues, lCoef, hlgGamma, hlgNominalPeak);
                         }
 
-                        int channels = hasAlpha? 4: 3;
-                        for (int ch = 0; ch < channels; ch++) {
-                            uint16_t v = qBound<uint16_t>(
-                                0,
-                                static_cast<uint16_t>(
-                                    applyCurveAsNeeded(pixelValues[ch],
-                                                       conversionPolicy)
-                                    * max12bit),
-                                max12bit);
+                        uint32_t channels = hasAlpha ? 4 : 3;
+                        const uint32_t alphaPos = cs->alphaPos();
+                        float *dst = pixelValues.data();
+                        for (uint32_t ch = 0; ch < channels; ch++) {
+                            uint16_t v = 0;
+                            if (ch == alphaPos) {
+                                v = qBound<uint16_t>(0, static_cast<uint16_t>(applyCurveAsNeeded(dst[ch], ConversionPolicy::KeepTheSame) * max12bit), max12bit);
+                            } else {
+                                v = qBound<uint16_t>(0, static_cast<uint16_t>(applyCurveAsNeeded(dst[ch], conversionPolicy) * max12bit), max12bit);
+                            }
                             ptr[2 * (x * channels) + y * stride + endValue0 + (ch*2)] = (uint8_t) (v >> 8);
                             ptr[2 * (x * channels) + y * stride + endValue1 + (ch*2)] = (uint8_t) (v & 0xFF);
                         }

@@ -60,6 +60,7 @@ KisPaintLayer::KisPaintLayer(KisImageWSP image, const QString& name, quint8 opac
     m_d->paintDevice = dev;
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(image));
     m_d->paintDevice->setSupportsWraparoundMode(true);
+    m_d->paintDevice->setParentNode(this);
 }
 
 

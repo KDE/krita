@@ -345,6 +345,11 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "jxl";
         s_mimeDatabase << mimeType;
 
+        mimeType.mimeType = "text/csv";
+        mimeType.description = i18nc("description of a file type", "CSV Document");
+        mimeType.suffixes = QStringList() << "csv";
+        s_mimeDatabase << mimeType;
+
         dbgPlugins << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
     }
 }

@@ -16,7 +16,6 @@ class SplineAssistant : public KisPaintingAssistant
 {
 public:
     SplineAssistant();
-    ~SplineAssistant();
     KisPaintingAssistantSP clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const override;
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin, const bool snapToAny) override;
     void adjustLine(QPointF &point, QPointF& strokeBegin) override;
@@ -36,7 +35,7 @@ private:
 
 private:
     struct Private;
-    Private* const d;
+    const QScopedPointer<Private> m_d;
 };
 
 class SplineAssistantFactory : public KisPaintingAssistantFactory

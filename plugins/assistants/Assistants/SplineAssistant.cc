@@ -72,20 +72,15 @@ SplineAssistant::Private::Private()
 
 SplineAssistant::SplineAssistant()
     : KisPaintingAssistant("spline", i18n("Spline assistant"))
-    , d(new Private)
+    , m_d(new Private)
 {
 }
 
 SplineAssistant::SplineAssistant(const SplineAssistant &rhs, QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap)
     : KisPaintingAssistant(rhs, handleMap)
     , m_canvas(rhs.m_canvas)
-    , d(new Private)
+    , m_d(new Private)
 {
-}
-
-SplineAssistant::~SplineAssistant()
-{
-    delete d;
 }
 
 KisPaintingAssistantSP SplineAssistant::clone(QMap<KisPaintingAssistantHandleSP, KisPaintingAssistantHandleSP> &handleMap) const
@@ -182,14 +177,14 @@ QPointF SplineAssistant::project(const QPointF& pt, const QPointF& strokeBegin) 
     Q_ASSERT(isAssistantComplete());
 
     // minimize d(t), but keep t in the same neighbourhood as before (unless starting a new stroke)
-    bool stayClose = (d->prevStrokebegin == strokeBegin)? true : false;
+    bool stayClose = (m_d->prevStrokebegin == strokeBegin)? true : false;
     qreal min_t = std::numeric_limits<qreal>::max();
 
     if (stayClose){
         // if we are in the same stroke look for closest near last solution
         qreal delta = 1/10.0;
-        qreal lbound = qBound(0.0,1.0, d->prev_t - delta);
-        qreal ubound = qBound(0.0,1.0, d->prev_t + delta);
+        qreal lbound = qBound(0.0,1.0, m_d->prev_t - delta);
+        qreal ubound = qBound(0.0,1.0, m_d->prev_t + delta);
         min_t = goldenSearch(pt,handles(), lbound , ubound, 1e-6,1e+2);
 
     } else {
@@ -213,8 +208,8 @@ QPointF SplineAssistant::project(const QPointF& pt, const QPointF& strokeBegin) 
 
     QPointF draw_pos = B(min_t, *handles()[0], *handles()[2], *handles()[3], *handles()[1]);
 
-    d->prev_t = min_t;
-    d->prevStrokebegin = strokeBegin;
+    m_d->prev_t = min_t;
+    m_d->prevStrokebegin = strokeBegin;
 
     return draw_pos;
 }

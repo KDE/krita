@@ -500,18 +500,20 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
         } break;
         }
 
-        if (cicpDescription.transfer_function == JXL_TRANSFER_FUNCTION_UNKNOWN) {
+        const ColorPrimaries primaries = cs->profile()->getColorPrimaries();
+
+        const bool arePrimariesSupported =
+            (primaries == PRIMARIES_ITU_R_BT_709_5 || primaries == PRIMARIES_ITU_R_BT_2020_2_AND_2100_0 || primaries == PRIMARIES_SMPTE_RP_431_2);
+
+        if (cicpDescription.transfer_function == JXL_TRANSFER_FUNCTION_UNKNOWN || !arePrimariesSupported) {
             const QByteArray profile = cs->profile()->rawData();
 
             if (JXL_ENC_SUCCESS
-                != JxlEncoderSetICCProfile(enc.get(),
-                                           reinterpret_cast<const uint8_t *>(profile.constData()),
-                                           static_cast<size_t>(profile.size()))) {
+                != JxlEncoderSetICCProfile(enc.get(), reinterpret_cast<const uint8_t *>(profile.constData()), static_cast<size_t>(profile.size()))) {
                 errFile << "JxlEncoderSetICCProfile failed";
                 return ImportExportCodes::InternalError;
             }
         } else {
-            const ColorPrimaries primaries = cs->profile()->getColorPrimaries();
             switch (primaries) {
             case PRIMARIES_ITU_R_BT_709_5:
                 cicpDescription.primaries = JXL_PRIMARIES_SRGB;
@@ -523,6 +525,7 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
                 cicpDescription.primaries = JXL_PRIMARIES_P3;
                 break;
             default:
+                KIS_SAFE_ASSERT_RECOVER_NOOP(false && "Writing possibly non-roundtrip primaries!");
                 const QVector<qreal> colorants = cs->profile()->getColorantsxyY();
                 cicpDescription.primaries = JXL_PRIMARIES_CUSTOM;
                 cicpDescription.primaries_red_xy[0] = colorants[0];

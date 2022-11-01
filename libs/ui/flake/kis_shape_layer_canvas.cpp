@@ -34,54 +34,32 @@
 #include "krita_utils.h"
 #include "KisDetachedShapesViewConverter.h"
 #include "kis_image_view_converter.h"
+#include "kis_default_bounds.h"
+#include "kis_do_something_command.h"
 
-KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent, KisImageWSP image)
+
+KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent)
     : KoCanvasBase(0)
-    , m_viewConverter(image ?
-                          static_cast<KisClonableViewConverter*>(new KisImageViewConverter(image)) :
-                          static_cast<KisClonableViewConverter*>(new KisDetachedShapesViewConverter(1.0, 1.0)))
     , m_shapeManager(new KoShapeManager(this))
     , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
+    , m_viewConverterContainer(nullptr)
 {
+    m_shapeManager->selection()->setActiveLayer(parent);
+}
+
+KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(const KisShapeLayerCanvasBase &rhs, KisShapeLayer *parent)
+    : KoCanvasBase(0)
+    , m_shapeManager(new KoShapeManager(this))
+    , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
+    , m_viewConverterContainer(rhs.m_viewConverterContainer)
+{
+    m_viewConverterContainer.detach();
     m_shapeManager->selection()->setActiveLayer(parent);
 }
 
 void KisShapeLayerCanvasBase::setImage(KisImageWSP image)
 {
-    m_imageConnections.clear();
-
-    /**
-     * Please beware - the layer may change its resolution
-     * at this call.
-     */
-    if (image) {
-        /**
-         * NOTE: we cannot just use detached converter all the
-         * time, because we cannot update its values in time
-         * before the next update after image changed its
-         * resolution (the signal is emitted at the very end
-         * of the operation).
-         */
-
-        m_lastKnownXRes = image->xRes();
-        m_lastKnownYRes = image->yRes();
-        m_viewConverter.reset(new KisImageViewConverter(image));
-
-        m_imageConnections.addUniqueConnection(image.data(), SIGNAL(sigResolutionChanged(double, double)),
-                                               this, SLOT(slotImageResolutionChanged(qreal, qreal)));
-    } else {
-        /**
-         * The layer will keep "the lastly used resolution"
-         * until being attached to the new image.
-         */
-        m_viewConverter.reset(new KisDetachedShapesViewConverter(m_lastKnownXRes, m_lastKnownYRes));
-    }
-}
-
-void KisShapeLayerCanvasBase::setViewConverter(KoViewConverter *converter)
-{
-    m_viewConverter.reset(converter);
-    m_viewConverter->zoom(&m_lastKnownXRes, &m_lastKnownYRes);
+    m_viewConverterContainer.setImage(image);
 }
 
 KoShapeManager *KisShapeLayerCanvasBase::shapeManager() const
@@ -96,7 +74,7 @@ KoSelectedShapesProxy *KisShapeLayerCanvasBase::selectedShapesProxy() const
 
 KoViewConverter* KisShapeLayerCanvasBase::viewConverter() const
 {
-    return m_viewConverter.data();
+    return m_viewConverterContainer.viewConverter();
 }
 
 void KisShapeLayerCanvasBase::gridSize(QPointF *offset, QSizeF *spacing) const
@@ -140,12 +118,6 @@ KoUnit KisShapeLayerCanvasBase::unit() const
     return KoUnit(KoUnit::Point);
 }
 
-void KisShapeLayerCanvasBase::slotImageResolutionChanged(qreal xRes, qreal yRes)
-{
-    m_lastKnownXRes = xRes;
-    m_lastKnownYRes = yRes;
-}
-
 void KisShapeLayerCanvasBase::prepareForDestroying()
 {
     m_isDestroying = true;
@@ -157,9 +129,9 @@ bool KisShapeLayerCanvasBase::hasChangedWhileBeingInvisible()
 }
 
 
-KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP image)
-        : KisShapeLayerCanvasBase(parent, image)
-        , m_projection(0)
+KisShapeLayerCanvas::KisShapeLayerCanvas(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds, KisShapeLayer *parent)
+        : KisShapeLayerCanvasBase(parent)
+        , m_projection(new KisPaintDevice(parent, cs, defaultBounds))
         , m_parentLayer(parent)
         , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
         , m_safeForcedConnection(std::bind(&KisShapeLayerCanvas::slotStartAsyncRepaint, this))
@@ -172,8 +144,24 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(KisShapeLayer *parent, KisImageWSP imag
     m_shapeManager->selection()->setActiveLayer(parent);
 
     connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
+}
 
-    setImage(image);
+KisShapeLayerCanvas::KisShapeLayerCanvas(const KisShapeLayerCanvas &rhs, KisShapeLayer *parent)
+        : KisShapeLayerCanvasBase(rhs, parent)
+        , m_projection(new KisPaintDevice(*rhs.m_projection))
+        , m_parentLayer(parent)
+        , m_asyncUpdateSignalCompressor(100, KisSignalCompressor::FIRST_INACTIVE)
+        , m_safeForcedConnection(std::bind(&KisShapeLayerCanvas::slotStartAsyncRepaint, this))
+{
+    /**
+     * The layour should also add itself to its own shape manager, so that the canvas
+     * would track its changes/transformations
+     */
+    m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
+    m_shapeManager->selection()->setActiveLayer(parent);
+
+    connect(&m_asyncUpdateSignalCompressor, SIGNAL(timeout()), SLOT(slotStartAsyncRepaint()));
+    m_projection->setParentNode(parent);
 }
 
 KisShapeLayerCanvas::~KisShapeLayerCanvas()
@@ -181,15 +169,29 @@ KisShapeLayerCanvas::~KisShapeLayerCanvas()
     m_shapeManager->remove(m_parentLayer);
 }
 
+void KisShapeLayerCanvas::setProjection(KisPaintDeviceSP projection)
+{
+    m_projection = projection;
+}
+
+KisPaintDeviceSP KisShapeLayerCanvas::projection() const
+{
+    return m_projection;
+}
+
 void KisShapeLayerCanvas::setImage(KisImageWSP image)
 {
+    m_imageConnections.clear();
+
     KisShapeLayerCanvasBase::setImage(image);
     m_image = image;
 
     if (image) {
         m_imageConnections.addUniqueConnection(m_image, SIGNAL(sigSizeChanged(QPointF,QPointF)), this, SLOT(slotImageSizeChanged()));
         m_cachedImageRect = m_image->bounds();
+        m_projection->convertTo(image->colorSpace());
     }
+    m_projection->setDefaultBounds(new KisDefaultBounds(image));
 }
 
 class KisRepaintShapeLayerLayerJob : public KisSpontaneousJob
@@ -243,7 +245,7 @@ void KisShapeLayerCanvas::updateCanvas(const QVector<QRectF> &region)
         QMutexLocker locker(&m_dirtyRegionMutex);
         Q_FOREACH (const QRectF &rc, region) {
             // grow for antialiasing
-            const QRect imageRect = kisGrowRect(m_viewConverter->documentToView(rc).toAlignedRect(), 2);
+            const QRect imageRect = kisGrowRect(viewConverter()->documentToView(rc).toAlignedRect(), 2);
             m_dirtyRegion += imageRect;
         }
     }
@@ -277,7 +279,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         /// all the area covered by it. Otherwise we'll get dirty leftovers of
         /// the layer on the projection
         Q_FOREACH (const KoShapeManager::PaintJob &job, m_paintJobsOrder.jobs) {
-            repaintRect |= m_viewConverter->documentToView().mapRect(job.docUpdateRect).toAlignedRect();
+            repaintRect |= viewConverter()->documentToView().mapRect(job.docUpdateRect).toAlignedRect();
         }
         m_paintJobsOrder.clear();
 
@@ -296,7 +298,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
         repaintRect = repaintRect.intersected(m_parentLayer->image()->bounds());
     } else {
         const QRectF shapesBounds = KoShape::boundingRect(m_shapeManager->shapes());
-        repaintRect |= kisGrowRect(m_viewConverter->documentToView(shapesBounds).toAlignedRect(), 2);
+        repaintRect |= kisGrowRect(viewConverter()->documentToView(shapesBounds).toAlignedRect(), 2);
         uncroppedRepaintRect = repaintRect;
     }
 
@@ -334,7 +336,7 @@ void KisShapeLayerCanvas::slotStartAsyncRepaint()
 
     KoShapeManager::PaintJobsOrder jobsOrder;
     Q_FOREACH (const QRect &viewUpdateRect, updateRects) {
-        jobsOrder.jobs << KoShapeManager::PaintJob(m_viewConverter->viewToDocument().mapRect(QRectF(viewUpdateRect)),
+        jobsOrder.jobs << KoShapeManager::PaintJob(viewConverter()->viewToDocument().mapRect(QRectF(viewUpdateRect)),
                                               viewUpdateRect);
     }
     jobsOrder.uncroppedViewUpdateRect = uncroppedRepaintRect;
@@ -364,7 +366,7 @@ void KisShapeLayerCanvas::slotImageSizeChanged()
     QVector<QRectF> dirtyRects;
     auto rc = dirtyCacheRegion.begin();
     while (rc != dirtyCacheRegion.end()) {
-        dirtyRects.append(m_viewConverter->viewToDocument(*rc));
+        dirtyRects.append(viewConverter()->viewToDocument(*rc));
         rc++;
     }
     updateCanvas(dirtyRects);
@@ -417,7 +419,7 @@ void KisShapeLayerCanvas::repaint()
 
         tempPainter.setTransform(QTransform());
         tempPainter.setClipRect(QRect(0,0,job.viewUpdateRect.width(), job.viewUpdateRect.height()));
-        tempPainter.setTransform(m_viewConverter->documentToView() *
+        tempPainter.setTransform(viewConverter()->documentToView() *
                                  QTransform::fromTranslate(-job.viewUpdateRect.x(), -job.viewUpdateRect.y()));
 
         m_shapeManager->paintJob(tempPainter, job);

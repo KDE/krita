@@ -52,7 +52,8 @@ public:
 
     KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity);
     KisShapeLayer(const KisShapeLayer& _rhs);
-    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, KisShapeLayerCanvasBase *canvas = 0);
+    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller);
+    KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, std::function<KisShapeLayerCanvasBase*()> canvasFactory);
     /**
      * Merge constructor.
      *
@@ -63,10 +64,9 @@ public:
     KisShapeLayer(const KisShapeLayer& _merge, const KisShapeLayer &_addShapes);
     ~KisShapeLayer() override;
 protected:
-    KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, KisShapeLayerCanvasBase *canvas);
+    KisShapeLayer(KoShapeControllerBase* shapeController, KisImageWSP image, const QString &name, quint8 opacity, std::function<KisShapeLayerCanvasBase *()> canvasFactory);
 private:
-    void initShapeLayerImpl(KoShapeControllerBase* controller, KisPaintDeviceSP newProjectionDevice, KisShapeLayerCanvasBase *overrideCanvas);
-    void initNewShapeLayer(KoShapeControllerBase* controller, const KoColorSpace *projectionColorSpace, KisDefaultBoundsBaseSP bounds, KisShapeLayerCanvasBase *overrideCanvas = 0);
+    void initShapeLayerImpl(KoShapeControllerBase* controller, KisShapeLayerCanvasBase *overrideCanvas);
 public:
     KisNodeSP clone() const override {
         return new KisShapeLayer(*this);
@@ -173,6 +173,7 @@ protected:
     KoViewConverter* converter() const;
 
     KoShapeControllerBase *shapeController() const;
+    KisShapeLayerCanvasBase *canvas() const;
 
     friend class TransformShapeLayerDeferred;
 

@@ -127,37 +127,31 @@ KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity)
-    : KisShapeLayer(controller, image, name, opacity, nullptr)
+    : KisShapeLayer(controller, image, name, opacity,
+                    [&] () { return new KisShapeLayerCanvas(image->colorSpace(), new KisDefaultBounds(image), this);})
 {
 }
 
 KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs)
-    : KisShapeLayer(rhs, rhs.m_d->controller)
+    : KisShapeLayer(rhs,
+                    rhs.m_d->controller)
 {
 }
 
-KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller, KisShapeLayerCanvasBase *canvas)
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& rhs, KoShapeControllerBase* controller)
+    : KisShapeLayer(rhs,
+                    controller,
+                    [&] () {return new KisShapeLayerCanvas(*dynamic_cast<const KisShapeLayerCanvas*>(rhs.m_d->canvas), this);})
+{
+}
+
+KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* controller,
+                             std::function<KisShapeLayerCanvasBase *()> canvasFactory)
         : KisExternalLayer(_rhs)
         , KoShapeLayer(new ShapeLayerContainerModel(this)) //no _rhs here otherwise both layer have the same KoShapeContainerModel
         , m_d(new Private())
 {
-    // copy the projection to avoid extra round of updates!
-    KisPaintDeviceSP projection = new KisPaintDevice(*_rhs.m_d->paintDevice);
-    initShapeLayerImpl(controller, projection, canvas);
-
-    KisClonableViewConverter *converter =
-        dynamic_cast<KisClonableViewConverter*>(_rhs.m_d->canvas->viewConverter());
-
-    if (converter) {
-        converter = converter->clone();
-    }
-
-    KIS_SAFE_ASSERT_RECOVER(converter) {
-        converter = new KisImageViewConverter(image());
-    }
-
-    // copy the converter with its resolution information
-    m_d->canvas->setViewConverter(converter);
+    initShapeLayerImpl(controller, canvasFactory());
 
     /**
      * The transformaitons of the added shapes are automatically merged into the transformation
@@ -185,9 +179,8 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, const KisShapeLayer &_ad
     // Make sure our new layer is visible otherwise the shapes cannot be painted.
     setVisible(true);
 
-    initNewShapeLayer(_rhs.m_d->controller,
-                      _rhs.m_d->paintDevice->colorSpace(),
-                      _rhs.m_d->paintDevice->defaultBounds());
+    initShapeLayerImpl(_rhs.m_d->controller,
+                       new KisShapeLayerCanvas(*dynamic_cast<const KisShapeLayerCanvas*>(_rhs.canvas()), this));
 
     /**
      * With current implementation this matrix will always be an identity, because
@@ -229,27 +222,12 @@ KisShapeLayer::KisShapeLayer(KoShapeControllerBase* controller,
                              KisImageWSP image,
                              const QString &name,
                              quint8 opacity,
-                             KisShapeLayerCanvasBase *canvas)
+                             std::function<KisShapeLayerCanvasBase *()> canvasFactory)
         : KisExternalLayer(image, name, opacity)
         , KoShapeLayer(new ShapeLayerContainerModel(this))
         , m_d(new Private())
 {
-    const KoColorSpace *cs = 0;
-    KisDefaultBoundsBaseSP bounds;
-
-    if (image) {
-        cs = image->colorSpace();
-        bounds = new KisDefaultBounds(this->image());
-    } else {
-        /// assert will always fail, because it is
-        /// a recovery code path
-        KIS_SAFE_ASSERT_RECOVER_NOOP(image);
-
-        cs = KoColorSpaceRegistry::instance()->rgb8();
-        bounds = new KisDefaultBounds();
-    }
-
-    initNewShapeLayer(controller, cs, bounds, canvas);
+    initShapeLayerImpl(controller, canvasFactory());
 }
 
 KisShapeLayer::~KisShapeLayer()
@@ -269,21 +247,18 @@ KisShapeLayer::~KisShapeLayer()
 }
 
 void KisShapeLayer::initShapeLayerImpl(KoShapeControllerBase* controller,
-                                   KisPaintDeviceSP newProjectionDevice,
-                                   KisShapeLayerCanvasBase *overrideCanvas)
+                                       KisShapeLayerCanvasBase *canvas)
 {
     setSupportsLodMoves(false);
     setShapeId(KIS_SHAPE_LAYER_ID);
 
-    m_d->paintDevice = newProjectionDevice;
+    KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
 
-    if (!overrideCanvas) {
-        KisShapeLayerCanvas *slCanvas = new KisShapeLayerCanvas(this, image());
-        slCanvas->setProjection(m_d->paintDevice);
-        overrideCanvas = slCanvas;
+    if (KisShapeLayerCanvas *slc = dynamic_cast<KisShapeLayerCanvas*>(canvas)) {
+        m_d->paintDevice = slc->projection();
     }
 
-    m_d->canvas = overrideCanvas;
+    m_d->canvas = canvas;
     m_d->canvas->moveToThread(this->thread());
     m_d->controller = controller;
 
@@ -300,18 +275,6 @@ void KisShapeLayer::initShapeLayerImpl(KoShapeControllerBase* controller,
     model->setAssociatedRootShapeManager(m_d->canvas->shapeManager());
 }
 
-void KisShapeLayer::initNewShapeLayer(KoShapeControllerBase *controller,
-                                      const KoColorSpace *projectionColorSpace,
-                                      KisDefaultBoundsBaseSP bounds,
-                                      KisShapeLayerCanvasBase *overrideCanvas)
-{
-    KisPaintDeviceSP projection = new KisPaintDevice(projectionColorSpace);
-    projection->setDefaultBounds(bounds);
-    projection->setParentNode(this);
-
-    initShapeLayerImpl(controller, projection, overrideCanvas);
-}
-
 bool KisShapeLayer::allowAsChild(KisNodeSP node) const
 {
     return node->inherits("KisMask");
@@ -321,9 +284,6 @@ void KisShapeLayer::setImage(KisImageWSP _image)
 {
     KisLayer::setImage(_image);
     m_d->canvas->setImage(_image);
-    if (_image) {
-        m_d->paintDevice->convertTo(_image->colorSpace());
-    }
     m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
 }
 
@@ -739,4 +699,9 @@ KUndo2Command *KisShapeLayer::convertTo(const KoColorSpace *dstColorSpace, KoCol
 KoShapeControllerBase *KisShapeLayer::shapeController() const
 {
     return m_d->controller;
+}
+
+KisShapeLayerCanvasBase *KisShapeLayer::canvas() const
+{
+    return m_d->canvas;
 }

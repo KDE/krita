@@ -85,8 +85,13 @@ private:
 class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
 {
 public:
-    ReferenceImagesCanvas(KisReferenceImagesLayer *parent, KisImageWSP image)
-        : KisShapeLayerCanvasBase(parent, image)
+    ReferenceImagesCanvas(KisReferenceImagesLayer *parent)
+        : KisShapeLayerCanvasBase(parent)
+        , m_layer(parent)
+    {}
+
+    ReferenceImagesCanvas(const ReferenceImagesCanvas &rhs, KisReferenceImagesLayer *parent)
+        : KisShapeLayerCanvasBase(rhs, parent)
         , m_layer(parent)
     {}
 
@@ -96,7 +101,7 @@ public:
             return;
         }
 
-        QRectF r = m_viewConverter->documentToView(rect);
+        QRectF r = viewConverter()->documentToView(rect);
         m_layer->signalUpdate(r);
     }
 
@@ -118,11 +123,13 @@ private:
 };
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
-    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8, new ReferenceImagesCanvas(this, image))
+    : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8,
+                    [&] () { return new ReferenceImagesCanvas(this); })
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)
-    : KisShapeLayer(rhs, rhs.shapeController(), new ReferenceImagesCanvas(this, rhs.image()))
+    : KisShapeLayer(rhs, rhs.shapeController(),
+                    [&] () { return new ReferenceImagesCanvas(*dynamic_cast<const ReferenceImagesCanvas*>(rhs.canvas()), this); })
 {}
 
 KUndo2Command * KisReferenceImagesLayer::addReferenceImages(KisDocument *document, const QList<KoShape*> referenceImages)

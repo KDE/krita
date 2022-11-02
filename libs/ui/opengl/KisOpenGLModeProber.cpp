@@ -149,6 +149,7 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
     QScopedPointer<AppAttributeSetter> glesSetter;
     QScopedPointer<SurfaceFormatSetter> formatSetter;
     QScopedPointer<EnvironmentSetter> rendererSetter;
+    QScopedPointer<EnvironmentSetter> portalSetter;
     QScopedPointer<QGuiApplication> application;
 
     int argc = 1;
@@ -166,6 +167,7 @@ KisOpenGLModeProber::probeFormat(const KisOpenGL::RendererConfig &rendererConfig
         }
 
         rendererSetter.reset(new EnvironmentSetter(QLatin1String("QT_ANGLE_PLATFORM"), angleRendererToString(rendererConfig.angleRenderer)));
+        portalSetter.reset(new EnvironmentSetter(QLatin1String("QT_NO_XDG_DESKTOP_PORTAL"), QLatin1String("1")));
         formatSetter.reset(new SurfaceFormatSetter(format));
 
         QGuiApplication::setDesktopSettingsAware(false);

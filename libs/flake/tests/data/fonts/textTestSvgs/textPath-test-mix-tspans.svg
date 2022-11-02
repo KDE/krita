@@ -14,7 +14,7 @@
     
     <!-- This really doesn't work for RTL text, and I am not sure how we would go about fixing it as the spec says the glyphs need to be aligned to the end of the path, not at all taking into account RTL needing to have it at the beginning... -->
     <text id="test1rtl" transform="translate(90,100)"
-          font-family="DejaVu Sans" fill="blue" font-size="15" direction="rtl">الحديثة اللغة<textPath href="#path-horizontal2" startOffset="100%"> المعيارية </textPath>العربية
+          font-family="DejaVu Sans" fill="blue" font-size="15" direction="rtl">اللغة العربية<textPath href="#path-horizontal2" startOffset="100%"> المعيارية </textPath>الحديثة
     </text>
     
     <text id="test1ttb" transform="translate(200,10)"

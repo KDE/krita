@@ -42,8 +42,12 @@ public:
      */
     std::vector<FT_FaceUP> facesForCSSValues(QStringList families,
                                              QVector<int> &lengths,
+                                             QMap<QString, qreal> axisSettings,
                                              QString text = "",
+                                             int xRes = 72,
+                                             int yRes = 72,
                                              qreal size = -1,
+                                             qreal fontSizeAdjust = 1.0,
                                              int weight = 400,
                                              int width = 100,
                                              bool italic = false,

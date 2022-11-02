@@ -626,20 +626,6 @@ void KoSvgTextShape::relayout() const
             const QFont::Style style = QFont::Style(
                 properties.propertyOrDefault(KoSvgTextProperties::FontStyleId)
                     .toInt());
-            const std::vector<FT_FaceUP> faces =
-                KoFontRegistery::instance()->facesForCSSValues(
-                    properties.property(KoSvgTextProperties::FontFamiliesId)
-                        .toStringList(),
-                    lengths,
-                    chunk.text,
-                    fontSize,
-                    properties
-                        .propertyOrDefault(KoSvgTextProperties::FontWeightId)
-                        .toInt(),
-                    properties
-                        .propertyOrDefault(KoSvgTextProperties::FontStretchId)
-                        .toInt(),
-                    style != QFont::StyleNormal);
             KoSvgText::AutoValue fontSizeAdjust =
                 properties
                     .propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId)
@@ -650,13 +636,24 @@ void KoSvgTextShape::relayout() const
                          .toInt()
                      < 3);
             }
-            KoFontRegistery::instance()->configureFaces(
-                faces,
-                fontSize,
-                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-                finalRes,
-                finalRes,
-                properties.fontAxisSettings());
+            const std::vector<FT_FaceUP> faces =
+                KoFontRegistery::instance()->facesForCSSValues(
+                    properties.property(KoSvgTextProperties::FontFamiliesId)
+                        .toStringList(),
+                    lengths,
+                    properties.fontAxisSettings(),
+                    chunk.text,
+                    finalRes,
+                    finalRes,
+                    fontSize,
+                    fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+                    properties
+                        .propertyOrDefault(KoSvgTextProperties::FontWeightId)
+                        .toInt(),
+                    properties
+                        .propertyOrDefault(KoSvgTextProperties::FontStretchId)
+                        .toInt(),
+                    style != QFont::StyleNormal);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(
                     layout.data(),
@@ -1977,18 +1974,6 @@ void KoSvgTextShape::Private::computeFontMetrics(
     QVector<int> lengths;
     const QFont::Style style = QFont::Style(
         properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    const std::vector<FT_FaceUP> faces =
-        KoFontRegistery::instance()->facesForCSSValues(
-            properties.property(KoSvgTextProperties::FontFamiliesId)
-                .toStringList(),
-            lengths,
-            QString(),
-            fontSize,
-            properties.propertyOrDefault(KoSvgTextProperties::FontWeightId)
-                .toInt(),
-            properties.propertyOrDefault(KoSvgTextProperties::FontStretchId)
-                .toInt(),
-            style != QFont::StyleNormal);
     KoSvgText::AutoValue fontSizeAdjust =
         properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId)
             .value<KoSvgText::AutoValue>();
@@ -1997,13 +1982,23 @@ void KoSvgTextShape::Private::computeFontMetrics(
             (properties.property(KoSvgTextProperties::KraTextVersionId).toInt()
              < 3);
     }
-    KoFontRegistery::instance()->configureFaces(
-        faces,
-        fontSize,
-        fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-        res,
-        res,
-        properties.fontAxisSettings());
+    const std::vector<FT_FaceUP> faces =
+        KoFontRegistery::instance()->facesForCSSValues(
+            properties.property(KoSvgTextProperties::FontFamiliesId)
+                .toStringList(),
+            lengths,
+            properties.fontAxisSettings(),
+            QString(),
+                res,
+                res,
+            fontSize,
+                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+            properties.propertyOrDefault(KoSvgTextProperties::FontWeightId)
+                .toInt(),
+            properties.propertyOrDefault(KoSvgTextProperties::FontStretchId)
+                .toInt(),
+            style != QFont::StyleNormal);
+
     hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
     qreal freetypePixelsToPt = (1.0 / 64.0) * float(72. / res);
 

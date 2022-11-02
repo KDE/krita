@@ -123,8 +123,12 @@ KoFontRegistery *KoFontRegistery::instance()
 
 std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
                                                           QVector<int> &lengths,
+                                                          QMap<QString, qreal> axisSettings,
                                                           QString text,
+                                                          int xRes,
+                                                          int yRes,
                                                           qreal size,
+                                                          qreal fontSizeAdjust,
                                                           int weight,
                                                           int width,
                                                           bool italic,
@@ -309,8 +313,23 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
 
     std::vector<FT_FaceUP> faces;
 
+    // Because FT_faces cannot be cloned, we need to include the sizes and font variation modifications.
+    QString modifications;
+    if (size > -1) {
+         modifications += QString::number(size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
+    }
+    if (fontSizeAdjust != 1.0) {
+         modifications += QString::number(fontSizeAdjust);
+    }
+    if (!axisSettings.isEmpty()) {
+        for (QString key: axisSettings.keys()) {
+            modifications += "|" + key + QString::number(axisSettings.value(key));
+        }
+    }
+
     for (int i = 0; i < lengths.size(); i++) {
-        auto entry = d->typeFaces().find(fontFileNames[i]);
+        const QString fontCacheEntry = fontFileNames.at(i) + modifications;
+        auto entry = d->typeFaces().find(fontCacheEntry);
         if (entry != d->typeFaces().end()) {
             faces.emplace_back(entry.value());
         } else {
@@ -318,8 +337,9 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
             QByteArray utfData = fontFileNames.at(i).toUtf8();
             if (FT_New_Face(d->library().data(), utfData.data(), 0, &f) == 0) {
                 FT_FaceUP face(f);
+                configureFaces({face}, size, fontSizeAdjust, xRes, yRes, axisSettings);
                 faces.emplace_back(face);
-                d->typeFaces().insert(fontFileNames[i], face);
+                d->typeFaces().insert(fontCacheEntry, face);
             }
         }
     }

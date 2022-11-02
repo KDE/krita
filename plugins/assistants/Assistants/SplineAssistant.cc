@@ -18,6 +18,7 @@
 #include <kis_canvas2.h>
 #include <kis_coordinates_converter.h>
 #include "kis_debug.h"
+#include "KisBezierUtils.h"
 
 #include <math.h>
 #include <limits>
@@ -62,7 +63,7 @@ struct SplineAssistant::Private {
     Private();
 
     QPointF prevStrokebegin;
-    qreal prev_t;
+    qreal prev_t {0};
 };
 
 SplineAssistant::Private::Private()
@@ -178,32 +179,24 @@ QPointF SplineAssistant::project(const QPointF& pt, const QPointF& strokeBegin) 
 
     // minimize d(t), but keep t in the same neighbourhood as before (unless starting a new stroke)
     bool stayClose = (m_d->prevStrokebegin == strokeBegin)? true : false;
-    qreal min_t = std::numeric_limits<qreal>::max();
+    qreal min_t;
+
+    QList<QPointF> refs;
+    QVector<int> hindex = {0,2,3,1}; // order handles as expected by KisBezierUtils
+    Q_FOREACH(int i, hindex) {
+        refs.append(*handles()[i]);
+    }
 
     if (stayClose){
-        // if we are in the same stroke look for closest near last solution
+        // Search in the vicinity of previous t value.
+        // This ensure unimodality for proper goldenSearch algorithm
         qreal delta = 1/10.0;
         qreal lbound = qBound(0.0,1.0, m_d->prev_t - delta);
         qreal ubound = qBound(0.0,1.0, m_d->prev_t + delta);
         min_t = goldenSearch(pt,handles(), lbound , ubound, 1e-6,1e+2);
 
     } else {
-        // Golden Section search is only flawless for unimodal problems
-        // to avoid this, we subdivide in regions and get the smallest
-        // In reality we could probably get away with 3 regions
-        QVector<qreal> m_t = QVector<qreal>();
-        qreal d_min_t = std::numeric_limits<qreal>::max();
-
-        uint slices = 5;
-        qreal step = 1.0/slices;
-        for (qreal t = 0; t < 1; t += step) {
-            m_t.push_back(goldenSearch(pt,handles(), t, t+step, 1e-6,1e+2));
-            qreal d_t = D(m_t.last(), *handles()[0], *handles()[2], *handles()[3], *handles()[1], pt);
-            if (d_t < d_min_t) {
-                d_min_t = d_t;
-                min_t = m_t.last();
-            }
-        }
+        min_t = KisBezierUtils::nearestPoint(refs,pt);
     }
 
     QPointF draw_pos = B(min_t, *handles()[0], *handles()[2], *handles()[3], *handles()[1]);

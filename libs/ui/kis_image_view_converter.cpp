@@ -5,25 +5,46 @@
  */
 
 #include "kis_image_view_converter.h"
+#include "kis_image.h"
 
-#include <QTransform>
-
+KisImageViewConverter::KisImageViewConverter()
+    : KisImageViewConverter(KisImageSP())
+{
+}
 
 KisImageViewConverter::KisImageViewConverter(const KisImageWSP image)
-        : m_image(image)
+    : KisImageViewConverter(toQShared(new KisImageResolutionProxy(image)))
 {
-    Q_ASSERT(image);
+}
+
+KisImageViewConverter::KisImageViewConverter(KisImageResolutionProxySP proxy)
+    : m_proxy(proxy)
+{
     setZoom(0.1); // set the superclass to not hit the optimization of zoom=100%
+}
+
+KisImageViewConverter::KisImageViewConverter(const KisImageViewConverter &rhs)
+    : KisClonableViewConverter(rhs)
+    , m_proxy(rhs.m_proxy)
+{
+}
+
+KisImageViewConverter::~KisImageViewConverter()
+{
 }
 
 KisClonableViewConverter *KisImageViewConverter::clone() const
 {
-    return new KisImageViewConverter(m_image);
+    return new KisImageViewConverter(*this);
 }
 
 void KisImageViewConverter::setImage(KisImageWSP image)
 {
-    m_image = image;
+    if (image) {
+        m_proxy.reset(new KisImageResolutionProxy(image));
+    } else {
+        m_proxy->detachFromImage();
+    }
 }
 
 // remember here; document is postscript points;  view is krita pixels.
@@ -32,28 +53,28 @@ void KisImageViewConverter::zoom(qreal *zoomX, qreal *zoomY) const
 {
     Q_ASSERT(zoomX);
     Q_ASSERT(zoomY);
-    *zoomX = m_image->xRes();
-    *zoomY = m_image->yRes();
+    *zoomX = effectiveXRes();
+    *zoomY = effectiveYRes();
 }
 
 /// convert from flake to krita units
 qreal KisImageViewConverter::documentToViewX(qreal documentX) const {
-    return documentX * m_image->xRes();
+    return documentX * effectiveXRes();
 }
 
 /// convert from flake to krita units
 qreal KisImageViewConverter::documentToViewY(qreal documentY) const {
-    return documentY * m_image->yRes();
+    return documentY * effectiveYRes();
 }
 
 /// convert from krita to flake units
 qreal KisImageViewConverter::viewToDocumentX(qreal viewX) const {
-    return viewX / m_image->xRes();
+    return viewX / effectiveXRes();
 }
 
 /// convert from krita to flake units
 qreal KisImageViewConverter::viewToDocumentY(qreal viewY) const {
-    return viewY / m_image->yRes();
+    return viewY / effectiveYRes();
 }
 
 qreal KisImageViewConverter::zoom() const
@@ -62,5 +83,15 @@ qreal KisImageViewConverter::zoom() const
                "Not possible to return a single zoom. "
                "Don't use it. Sorry.");
 
-    return m_image->xRes();
+    return effectiveXRes();
+}
+
+qreal KisImageViewConverter::effectiveXRes() const
+{
+    return m_proxy->xRes();
+}
+
+qreal KisImageViewConverter::effectiveYRes() const
+{
+    return m_proxy->yRes();
 }

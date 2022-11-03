@@ -124,8 +124,6 @@ set(kritaui_LIB_SRCS
     KisImageBarrierLockerWithFeedback.cpp
     kis_image_manager.cc
     kis_image_view_converter.cpp
-    KisDetachedShapesViewConverter.cpp
-    KisImageViewConverterContainer.cpp
     kis_import_catcher.cc
     kis_layer_manager.cc
     kis_mask_manager.cc

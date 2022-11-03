@@ -9,12 +9,9 @@
 
 #include <kritaui_export.h>
 
-#include "kis_image.h"
 #include "kis_types.h"
 #include "KisClonableViewConverter.h"
-
-class QTransform;
-
+#include "KisImageResolutionProxy.h"
 
 /**
  * ViewConverter to convert from flake-internal points to
@@ -31,7 +28,11 @@ public:
      * constructor
      * @param image the image this viewConverter works for.
      */
+    KisImageViewConverter();
     KisImageViewConverter(const KisImageWSP image);
+    KisImageViewConverter(KisImageResolutionProxySP proxy);
+    KisImageViewConverter(const KisImageViewConverter &rhs);
+    ~KisImageViewConverter();
 
     KisClonableViewConverter* clone() const override;
 
@@ -49,7 +50,13 @@ public:
     qreal zoom() const;
 
 private:
-    KisImageWSP m_image;
+    qreal effectiveXRes() const;
+    qreal effectiveYRes() const;
+
+private:
+    KisImageResolutionProxySP m_proxy;
 };
+
+using KisImageViewConverterSP = QSharedPointer<KisImageViewConverter>;
 
 #endif

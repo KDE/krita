@@ -32,7 +32,6 @@
 #include <kis_spontaneous_job.h>
 #include "kis_global.h"
 #include "krita_utils.h"
-#include "KisDetachedShapesViewConverter.h"
 #include "kis_image_view_converter.h"
 #include "kis_default_bounds.h"
 #include "kis_do_something_command.h"
@@ -42,7 +41,7 @@ KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(KisShapeLayer *parent)
     : KoCanvasBase(0)
     , m_shapeManager(new KoShapeManager(this))
     , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
-    , m_viewConverterContainer(nullptr)
+    , m_viewConverter()
 {
     m_shapeManager->selection()->setActiveLayer(parent);
 }
@@ -51,15 +50,15 @@ KisShapeLayerCanvasBase::KisShapeLayerCanvasBase(const KisShapeLayerCanvasBase &
     : KoCanvasBase(0)
     , m_shapeManager(new KoShapeManager(this))
     , m_selectedShapesProxy(new KoSelectedShapesProxySimple(m_shapeManager.data()))
-    , m_viewConverterContainer(rhs.m_viewConverterContainer)
+    , m_viewConverter(rhs.m_viewConverter)
 {
-    m_viewConverterContainer.detach();
+    m_viewConverter.setImage(nullptr);
     m_shapeManager->selection()->setActiveLayer(parent);
 }
 
 void KisShapeLayerCanvasBase::setImage(KisImageWSP image)
 {
-    m_viewConverterContainer.setImage(image);
+    m_viewConverter.setImage(image);
 }
 
 KoShapeManager *KisShapeLayerCanvasBase::shapeManager() const
@@ -74,7 +73,8 @@ KoSelectedShapesProxy *KisShapeLayerCanvasBase::selectedShapesProxy() const
 
 KoViewConverter* KisShapeLayerCanvasBase::viewConverter() const
 {
-    return m_viewConverterContainer.viewConverter();
+    // TODO: refactor the method to return the const object
+    return const_cast<KisImageViewConverter*>(&m_viewConverter);
 }
 
 void KisShapeLayerCanvasBase::gridSize(QPointF *offset, QSizeF *spacing) const

@@ -48,6 +48,7 @@ Comment[hi]=रंग ब्रश
 Comment[hu]=Festő ecsetsablonok
 Comment[id]=Cat Kuas
 Comment[it]=Pennelli per pitturare
+Comment[ka]=სახატავი ფუნჯები
 Comment[ko]=페인트 브러시
 Comment[nl]=Verfpenselen
 Comment[nn]=Målarpenslar

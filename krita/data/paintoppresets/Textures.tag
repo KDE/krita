@@ -18,6 +18,7 @@ Name[hu]=Textúrák
 Name[ia]=Textures
 Name[id]=Tekstur
 Name[it]=Trame
+Name[ka]=ტექსტურები
 Name[ko]=텍스처
 Name[nl]=Texturen
 Name[nn]=Teksturar

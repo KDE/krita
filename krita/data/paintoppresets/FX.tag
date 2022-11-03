@@ -48,6 +48,7 @@ Comment[hi]=विशेष इफेक्ट.kpp
 Comment[hu]=Speciális effektusok.kpp
 Comment[id]=Efek Khusus.kpp
 Comment[it]=Effetti speciali .kpp
+Comment[ka]=სპეციალური ეფექტები.kpp
 Comment[ko]=특수 효과.kpp
 Comment[nl]=Speciale Effects.kpp
 Comment[nn]=Spesialeffektar

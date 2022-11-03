@@ -16,6 +16,7 @@ Name[hi]=पिक्सेल कला
 Name[hu]=Pixelművészet
 Name[id]=Lukisan Pixel
 Name[it]=Pixel Art
+Name[ka]=პიქსელის ხელოვნება
 Name[ko]=픽셀 아트
 Name[nl]=Pixel Art
 Name[nn]=Pikselkunst

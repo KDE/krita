@@ -17,6 +17,7 @@ Name[hi]=रेखा-चित्र
 Name[hu]=Vázlat
 Name[id]=Sketsa
 Name[it]=Schizzo
+Name[ka]=ესკიზი
 Name[ko]=스케치
 Name[nl]=Schets
 Name[nn]=Skisse

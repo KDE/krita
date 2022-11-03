@@ -15,6 +15,7 @@
 
 #include <QBuffer>
 #include <cstdint>
+#include <cstring>
 
 #include <KisDocument.h>
 #include <KisExportCheckRegistry.h>

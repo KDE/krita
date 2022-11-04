@@ -17,6 +17,7 @@
 #include <kis_painter.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoColorProfile.h>
+#include <KisImageResolutionProxy.h>
 
 #include "KisScreentoneGenerator.h"
 #include "KisScreentoneConfigWidget.h"
@@ -327,7 +328,7 @@ void KisScreentoneGenerator::generate(KisProcessingInformation dst,
     backgroundDevice->fill(bounds, backgroundColor);
     checkUpdaterInterruptedAndSetPercent(progressUpdater, 50);
 
-    KisSelectionSP selection = new KisSelection(device->defaultBounds());
+    KisSelectionSP selection = new KisSelection(device->defaultBounds(), KisImageResolutionProxy::identity());
     KisSequentialIterator it(selection->pixelSelection(), bounds);
 
     if (!config->invert()) {

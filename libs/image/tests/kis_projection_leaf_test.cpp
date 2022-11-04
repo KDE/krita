@@ -385,7 +385,7 @@ void KisProjectionLeafTest::testSelectionMaskOverlay()
     KisPaintLayerSP paint2 = new KisPaintLayer(t.image, "paint2", OPACITY_OPAQUE_U8);
     KisSelectionMaskSP selection3 = new KisSelectionMask(t.image);
     selection3->setName("selection3");
-    selection3->setSelection(new KisSelection(new KisSelectionDefaultBounds(paint2->paintDevice())));
+    selection3->setSelection(new KisSelection(new KisSelectionDefaultBounds(paint2->paintDevice()), toQShared(new KisImageResolutionProxy(t.image))));
 
     t.image->addNode(group1, t.image->root(), t.findBlur1());
 

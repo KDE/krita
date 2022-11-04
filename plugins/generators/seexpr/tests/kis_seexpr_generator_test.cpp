@@ -17,6 +17,8 @@
 #include <kis_filter_configuration.h>
 #include <kis_processing_information.h>
 #include <kis_selection.h>
+#include <kis_default_bounds.h>
+#include <KisImageResolutionProxy.h>
 #include <resources/KisSeExprScript.h>
 #include <sdk/tests/testimage.h>
 #include <testutil.h>

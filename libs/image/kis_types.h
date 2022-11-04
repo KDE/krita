@@ -326,6 +326,10 @@ typedef QVector<StoryboardItemSP> StoryboardItemList;
 class StoryboardComment;
 typedef QVector<StoryboardComment> StoryboardCommentList;
 
+class KisImageResolutionProxy;
+using KisImageResolutionProxySP = QSharedPointer<KisImageResolutionProxy>;
+
+
 #include <QSharedPointer>
 #include <QWeakPointer>
 #include <kis_shared_ptr.h>

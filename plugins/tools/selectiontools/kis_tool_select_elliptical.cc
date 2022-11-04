@@ -23,6 +23,7 @@
 #include <brushengine/kis_paintop_registry.h>
 #include <kis_command_utils.h>
 #include <kis_selection_filters.h>
+#include <kis_default_bounds.h>
 
 __KisToolSelectEllipticalLocal::__KisToolSelectEllipticalLocal(KoCanvasBase *canvas)
     : KisToolEllipseBase(canvas, KisToolEllipseBase::SELECT,

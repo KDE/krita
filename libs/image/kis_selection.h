@@ -10,8 +10,6 @@
 
 #include "kis_types.h"
 #include "kritaimage_export.h"
-#include "kis_default_bounds.h"
-#include "kis_image.h"
 
 #include "KisSelectionTags.h"
 
@@ -41,13 +39,21 @@ private:
     struct ChangeShapeSelectionCommand;
 
 public:
+
+    /**
+     * Create a new KisSelection.
+     */
+    KisSelection();
+
     /**
      * Create a new KisSelection.
      *
      * @param defaultBounds defines the bounds of the selection when
      * Select All is initiated.
+     * @param resolutionProxy defines resolution with which vector
+     * selections are rendered
      */
-    KisSelection(KisDefaultBoundsBaseSP defaultBounds = KisDefaultBoundsBaseSP());
+    KisSelection(KisDefaultBoundsBaseSP defaultBounds, KisImageResolutionProxySP resolutionProxy);
 
     /**
      * Copy the selection. The selection components are copied, too.
@@ -65,7 +71,7 @@ public:
     /**
      * Create a new selection using the content of copySource as the mask.
      */
-    KisSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds);
+    KisSelection(const KisPaintDeviceSP copySource, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds, KisImageResolutionProxySP resolutionProxy);
 
     /**
      * The paint device of the pixel selection should report
@@ -186,6 +192,8 @@ public:
     qint32 y() const;
 
     void setDefaultBounds(KisDefaultBoundsBaseSP bounds);
+    void setResolutionProxy(KisImageResolutionProxySP proxy);
+    KisImageResolutionProxySP resolutionProxy() const;
 
     void clear();
 

@@ -19,6 +19,7 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter.h"
 #include "kis_image.h"
+#include <KisImageResolutionProxy.h>
 #include "kis_pixel_selection.h"
 #include "kis_group_layer.h"
 #include "kis_paint_layer.h"
@@ -483,9 +484,9 @@ void KisKraSaverTest::testRoundTripShapeSelection()
 
     p.layer->paintDevice()->setDefaultPixel(KoColor(Qt::green, p.layer->colorSpace()));
 
-    KisSelectionSP selection = new KisSelection(p.layer->paintDevice()->defaultBounds());
-
-    KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), p.image, selection);
+    KisImageResolutionProxySP resolutionProxy(new KisImageResolutionProxy(p.image));
+    KisSelectionSP selection = new KisSelection(p.layer->paintDevice() ->defaultBounds(), resolutionProxy);
+    KisShapeSelection *shapeSelection = new KisShapeSelection(doc->shapeController(), selection);
     selection->convertToVectorSelectionNoUndo(shapeSelection);
 
     KoPathShape* path = new KoPathShape();

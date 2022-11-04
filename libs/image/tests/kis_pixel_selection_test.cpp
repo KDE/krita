@@ -15,6 +15,7 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoCompositeOp.h>
 #include "kis_image.h"
+#include "kis_default_bounds.h"
 #include "kis_paint_layer.h"
 #include "kis_paint_device.h"
 #include "kis_fixed_paint_device.h"

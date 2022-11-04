@@ -9,6 +9,8 @@
 #include "filter/kis_filter_configuration.h"
 #include "filter/kis_filter_registry.h"
 #include "kis_selection.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 #include "kis_processing_information.h"
 #include "filter/kis_filter.h"
 #include "kis_pixel_selection.h"
@@ -160,7 +162,7 @@ bool testFilterWithSelections(KisFilterSP f)
     }
     dbgKrita << f->id();// << "\n"; << kfc->toXML() << "\n";
 
-    KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev));
+    KisSelectionSP sel1 = new KisSelection(new KisSelectionDefaultBounds(dev), KisImageResolutionProxy::identity());
     sel1->pixelSelection()->select(qimage.rect());
 
     kfc->createLocalResourcesSnapshot(KisGlobalResourcesInterface::instance());

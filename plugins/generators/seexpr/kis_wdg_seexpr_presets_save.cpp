@@ -19,6 +19,7 @@
 
 #include <kis_fill_painter.h>
 #include <kis_paint_device.h>
+#include <kis_default_bounds.h>
 
 #include "KisResourceTypes.h"
 #include "kis_wdg_seexpr_presets_save.h"

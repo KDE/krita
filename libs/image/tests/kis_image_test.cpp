@@ -29,6 +29,7 @@
 #include "kis_annotation.h"
 #include "KisProofingConfiguration.h"
 #include <KisGlobalResourcesInterface.h>
+#include "KisImageResolutionProxy.h"
 
 #include "kis_undo_stores.h"
 
@@ -262,8 +263,8 @@ void KisImageTest::testGlobalSelection()
     QCOMPARE(image->canReselectGlobalSelection(), false);
     QCOMPARE(image->root()->childCount(), 0U);
 
-    KisSelectionSP selection1 = new KisSelection(new KisDefaultBounds(image));
-    KisSelectionSP selection2 = new KisSelection(new KisDefaultBounds(image));
+    KisSelectionSP selection1 = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
+    KisSelectionSP selection2 = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
 
     image->setGlobalSelection(selection1);
     QCOMPARE(image->globalSelection(), selection1);
@@ -1012,7 +1013,7 @@ void KisImageTest::testMergeSelectionMasks()
 
     p.image->initialRefreshGraph();
 
-    KisSelectionSP sel = new KisSelection(layer1->paintDevice()->defaultBounds());
+    KisSelectionSP sel = new KisSelection(layer1->paintDevice()->defaultBounds(), toQShared(new KisImageResolutionProxy(p.image)));
 
     sel->pixelSelection()->select(rect2, MAX_SELECTED);
     KisSelectionMaskSP mask1 = new KisSelectionMask(p.image);
@@ -1257,7 +1258,7 @@ void KisImageTest::testPaintOverlayMask()
     layer1->paintDevice()->fill(fillRect, KoColor(Qt::yellow, layer1->colorSpace()));
 
     KisSelectionMaskSP mask = new KisSelectionMask(p.image);
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(layer1->paintDevice()));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(layer1->paintDevice()), toQShared(new KisImageResolutionProxy(p.image)));
 
     selection->pixelSelection()->select(selectionRect, 128);
     selection->pixelSelection()->select(KisAlgebra2D::blowRect(selectionRect,-0.3), 255);

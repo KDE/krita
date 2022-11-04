@@ -11,6 +11,8 @@
 #include <kis_selection_filters.h>
 #include <kis_iterator_ng.h>
 #include <KoUpdater.h>
+#include <kis_default_bounds.h>
+#include <KisImageResolutionProxy.h>
 
 #include "KisEncloseAndFillPainter.h"
 
@@ -349,7 +351,7 @@ void KisEncloseAndFillPainter::genericEncloseAndFillStart(KisPixelSelectionSP en
     // Create a selection from the closed regions
     KisPixelSelectionSP pixelSelection = createEncloseAndFillSelection(enclosingMask, referenceDevice,
                                                                        (selection().isNull() ? 0 : selection()->pixelSelection()));
-    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
+    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds(), KisImageResolutionProxy::identity());
     newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     setCurrentFillSelection(newSelection);
 }

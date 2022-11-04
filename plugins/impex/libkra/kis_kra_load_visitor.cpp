@@ -738,9 +738,9 @@ bool KisKraLoadVisitor::loadSelection(const QString& location, KisSelectionSP ds
         m_store->pushDirectory();
         m_store->enterDirectory(shapeSelectionLocation) ;
 
-        KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, m_image, dstSelection);
+        KisShapeSelection* shapeSelection = new KisShapeSelection(m_shapeController, dstSelection);
         dstSelection->convertToVectorSelectionNoUndo(shapeSelection);
-        result = shapeSelection->loadSelection(m_store);
+        result = shapeSelection->loadSelection(m_store, m_image->bounds());
 
         /**
          * We need to explicitly call updateProjection() here, because

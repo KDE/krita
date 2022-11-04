@@ -462,7 +462,7 @@ bool KisKraSaveVisitor::saveSelection(KisNode* node)
                 retval = false;
             }
 
-            if (retval && !shapeSelection->saveSelection(m_store)) {
+            if (retval && !shapeSelection->saveSelection(m_store, node->image()->bounds())) {
                 m_errorMessages << i18n("Failed to save the vector selection data for layer %1.", node->name());
                 retval = false;
             }

@@ -40,11 +40,7 @@ KisClonableViewConverter *KisImageViewConverter::clone() const
 
 void KisImageViewConverter::setImage(KisImageWSP image)
 {
-    if (image) {
-        m_proxy.reset(new KisImageResolutionProxy(image));
-    } else {
-        m_proxy->detachFromImage();
-    }
+    m_proxy = m_proxy->createOrCloneDetached(image);
 }
 
 // remember here; document is postscript points;  view is krita pixels.

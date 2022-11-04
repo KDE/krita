@@ -153,6 +153,11 @@ void *KisSelectionDefaultBounds::sourceCookie() const
 /*                   KisSelectionEmptyBounds                      */
 /******************************************************************/
 
+KisSelectionEmptyBounds::KisSelectionEmptyBounds()
+    : KisSelectionEmptyBounds(nullptr)
+{
+}
+
 KisSelectionEmptyBounds::KisSelectionEmptyBounds(KisImageWSP image)
     : KisDefaultBounds(image)
 {

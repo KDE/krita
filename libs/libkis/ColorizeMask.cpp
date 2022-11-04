@@ -14,7 +14,7 @@
 #include <kis_transaction.h>
 #include <kis_update_scheduler.h>
 #include <kis_undo_stores.h>
-
+#include <kis_default_bounds.h>
 
 
 

@@ -32,6 +32,7 @@
 #include <kis_selection_filters.h>
 #include <kis_selection_options.h>
 #include <kis_image_animation_interface.h>
+#include <kis_default_bounds.h>
 
 void selectByColor(KisPaintDeviceSP dev,
                    KisPixelSelectionSP selection,

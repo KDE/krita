@@ -46,6 +46,9 @@
 #include <kis_sequential_iterator.h>
 #include <KisColorSelectionPolicies.h>
 #include <krita_utils.h>
+#include <kis_default_bounds.h>
+#include <KisImageResolutionProxy.h>
+
 
 KisFillPainter::KisFillPainter()
         : KisPainter()
@@ -293,7 +296,8 @@ void KisFillPainter::genericFillStart(int startX, int startY, KisPaintDeviceSP s
 
     KisPixelSelectionSP pixelSelection = createFloodSelection(startX, startY, sourceDevice,
                                                               (selection().isNull() ? 0 : selection()->pixelSelection()));
-    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds());
+    KisSelectionSP newSelection = new KisSelection(pixelSelection->defaultBounds(),
+                                                   selection() ? selection()->resolutionProxy() : KisImageResolutionProxy::identity());
     newSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     m_fillSelection = newSelection;
 }

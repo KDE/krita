@@ -47,16 +47,21 @@
 
 #include <kis_debug.h>
 
-KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection)
-    : KoShapeLayer(m_model = new KisShapeSelectionModel(image, selection, this))
+
+KisShapeSelection::KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisSelectionWSP selection)
+    : KoShapeLayer(new KisShapeSelectionModel(selection->resolutionProxy(), selection, this)),
+      m_model(static_cast<KisShapeSelectionModel*>(this->model())),
+      m_resolutionProxy(m_model->resolutionProxy())
 {
-    init(image, shapeControllerBase);
+    init(m_resolutionProxy, shapeControllerBase);
 }
 
 KisShapeSelection::KisShapeSelection(const KisShapeSelection& rhs, KisSelection* selection)
-    : KoShapeLayer(m_model = new KisShapeSelectionModel(rhs.m_image, selection, this))
+    : KoShapeLayer(new KisShapeSelectionModel(selection->resolutionProxy(), selection, this)),
+      m_model(static_cast<KisShapeSelectionModel*>(this->model())),
+      m_resolutionProxy(m_model->resolutionProxy())
 {
-    init(rhs.m_image, rhs.m_shapeControllerBase);
+    init(m_resolutionProxy, rhs.m_shapeControllerBase);
 
     // TODO: refactor shape selection to pass signals
     //       via KoShapeManager, not via the model
@@ -81,24 +86,23 @@ KisShapeSelection::~KisShapeSelection()
     delete m_converter;
 }
 
-void KisShapeSelection::init(KisImageSP image, KoShapeControllerBase *shapeControllerBase)
+void KisShapeSelection::init(KisImageResolutionProxySP resolutionProxy, KoShapeControllerBase *shapeControllerBase)
 {
-    KIS_SAFE_ASSERT_RECOVER_RETURN(image);
+    KIS_SAFE_ASSERT_RECOVER_RETURN(resolutionProxy);
     KIS_SAFE_ASSERT_RECOVER_RETURN(shapeControllerBase);
 
-    m_image = image;
     m_shapeControllerBase = shapeControllerBase;
 
     setShapeId("KisShapeSelection");
     setSelectable(false);
-    m_converter = new KisImageViewConverter(image);
+    m_converter = new KisImageViewConverter(resolutionProxy);
     m_canvas = new KisShapeSelectionCanvas(shapeControllerBase);
     m_canvas->shapeManager()->addShape(this);
 
     m_model->setObjectName("KisShapeSelectionModel");
-    m_model->moveToThread(image->thread());
+    m_model->moveToThread(qApp->thread());
     m_canvas->setObjectName("KisShapeSelectionCanvas");
-    m_canvas->moveToThread(image->thread());
+    m_canvas->moveToThread(qApp->thread());
 
     connect(this, SIGNAL(sigMoveShapes(QPointF)), SLOT(slotMoveShapes(QPointF)));
 }
@@ -108,21 +112,21 @@ KisSelectionComponent* KisShapeSelection::clone(KisSelection* selection)
     return new KisShapeSelection(*this, selection);
 }
 
-bool KisShapeSelection::saveSelection(KoStore * store) const
+bool KisShapeSelection::saveSelection(KoStore * store, const QRect &imageRect) const
 {
-    const QSizeF sizeInPx = m_image->bounds().size();
-    const QSizeF sizeInPt(sizeInPx.width() / m_image->xRes(), sizeInPx.height() / m_image->yRes());
+    const QSizeF sizeInPx = imageRect.size();
+    const QSizeF sizeInPt(sizeInPx.width() / m_resolutionProxy->xRes(), sizeInPx.height() / m_resolutionProxy->yRes());
 
     return KisShapeLayer::saveShapesToStore(store, this->shapes(), sizeInPt);
 }
 
-bool KisShapeSelection::loadSelection(KoStore* store)
+bool KisShapeSelection::loadSelection(KoStore* store, const QRect &imageRect)
 {
     QSizeF fragmentSize; // unused!
 
     // FIXME: we handle xRes() only!
-    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyCompare(m_image->xRes(), m_image->yRes()));
-    const qreal resolutionPPI = 72.0 * m_image->xRes();
+    KIS_SAFE_ASSERT_RECOVER_NOOP(qFuzzyCompare(m_resolutionProxy->xRes(), m_resolutionProxy->yRes()));
+    const qreal resolutionPPI = 72.0 * m_resolutionProxy->xRes();
 
     QList<KoShape*> shapes;
 
@@ -131,7 +135,7 @@ bool KisShapeSelection::loadSelection(KoStore* store)
         storeDev.open(QIODevice::ReadOnly);
 
         shapes = KisShapeLayer::createShapesFromSvg(&storeDev,
-                                                    "", m_image->bounds(),
+                                                    "", imageRect,
                                                     resolutionPPI, m_canvas->shapeController()->resourceManager(),
                                                     true,
                                                     &fragmentSize);
@@ -181,7 +185,7 @@ bool KisShapeSelection::outlineCacheValid() const
 void KisShapeSelection::recalculateOutlineCache()
 {
     QTransform resolutionMatrix;
-    resolutionMatrix.scale(m_image->xRes(), m_image->yRes());
+    resolutionMatrix.scale(m_resolutionProxy->xRes(), m_resolutionProxy->yRes());
 
     QList<KoShape*> shapesList = shapes();
 
@@ -210,7 +214,6 @@ void KisShapeSelection::paintComponent(QPainter& painter) const
 void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection)
 {
     Q_ASSERT(projection);
-    Q_ASSERT(m_image);
 
     QRectF boundingRect = outlineCache().boundingRect();
     renderSelection(projection, boundingRect.toAlignedRect());
@@ -225,7 +228,6 @@ void KisShapeSelection::renderToProjection(KisPaintDeviceSP projection, const QR
 void KisShapeSelection::renderSelection(KisPaintDeviceSP projection, const QRect& requestedRect)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(projection);
-    KIS_SAFE_ASSERT_RECOVER_RETURN(m_image);
 
     const qint32 MASK_IMAGE_WIDTH = 256;
     const qint32 MASK_IMAGE_HEIGHT = 256;
@@ -282,13 +284,13 @@ KisShapeSelectionFactory::KisShapeSelectionFactory()
 
 void KisShapeSelection::moveX(qint32 x)
 {
-    const QPointF diff(x / m_image->xRes(), 0);
+    const QPointF diff(x / m_resolutionProxy->xRes(), 0);
     emit sigMoveShapes(diff);
 }
 
 void KisShapeSelection::moveY(qint32 y)
 {
-    const QPointF diff(0, y / m_image->yRes());
+    const QPointF diff(0, y / m_resolutionProxy->yRes());
     emit sigMoveShapes(diff);
 }
 
@@ -330,4 +332,13 @@ KUndo2Command* KisShapeSelection::transform(const QTransform &transform) {
     }
 
     return new KoShapeTransformCommand(shapes, oldTransformations, newTransformations);
+}
+
+void KisShapeSelection::setResolutionProxy(KisImageResolutionProxySP resolutionProxy)
+{
+    m_resolutionProxy = resolutionProxy;
+
+    // the model will automatically request update for the
+    // canvas and recalculation of the outline
+    m_model->setResolutionProxy(resolutionProxy);
 }

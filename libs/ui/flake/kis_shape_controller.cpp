@@ -179,7 +179,7 @@ KoShapeContainer *KisShapeController::createParentForShapes(const QList<KoShape 
             KisSelectionComponent* shapeSelectionComponent = selection->shapeSelection();
 
             if (!shapeSelectionComponent) {
-                shapeSelectionComponent = new KisShapeSelection(this, image(), selection);
+                shapeSelectionComponent = new KisShapeSelection(this, selection);
                 resultCommand->addCommand(selection->convertToVectorSelection(shapeSelectionComponent));
             }
 

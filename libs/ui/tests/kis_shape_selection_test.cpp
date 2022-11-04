@@ -57,7 +57,7 @@ void KisShapeSelectionTest::testAddChild()
     shape->lineTo(rect.bottomLeft());
     shape->close();
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), selection);
     selection->convertToVectorSelectionNoUndo(shapeSelection);
     shapeSelection->addShape(shape);
 
@@ -109,7 +109,7 @@ void KisShapeSelectionTest::testUndoFlattening()
     const QRectF srcRect1(50, 50, 100, 100);
     const QRectF rect1 = matrix.mapRect(srcRect1);
 
-    KisShapeSelection * shapeSelection1 = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection1 = new KisShapeSelection(doc->shapeController(), selection);
     selection->convertToVectorSelectionNoUndo(shapeSelection1);
 
     KoPathShape *shape1 = createRectangularShape(rect1);
@@ -145,7 +145,7 @@ void KisShapeSelectionTest::testUndoFlattening()
     const QRectF rect2 = matrix.mapRect(srcRect2);
     KoPathShape *shape2 = createRectangularShape(rect2);
 
-    KisShapeSelection * shapeSelection2 = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection2 = new KisShapeSelection(doc->shapeController(), selection);
     KUndo2Command *cmd2 = selection->convertToVectorSelection(shapeSelection2);
     cmd2->redo(); // first redo
 
@@ -226,7 +226,7 @@ void KisShapeSelectionTest::testHistoryOnFlattening()
     const QRectF srcRect1(50, 50, 100, 100);
     const QRectF rect1 = matrix.mapRect(srcRect1);
 
-    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), image, selection);
+    KisShapeSelection * shapeSelection = new KisShapeSelection(doc->shapeController(), selection);
 
     QScopedPointer<KUndo2Command> cmd2(selection->convertToVectorSelection(shapeSelection));
     cmd2->redo();

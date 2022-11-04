@@ -16,6 +16,7 @@
 #include "kis_node.h"
 #include "kis_image.h"
 
+#include "KisImageResolutionProxy.h"
 #include "kis_default_bounds.h"
 #include "kis_iterator_ng.h"
 #include "KisLazyStorage.h"
@@ -46,6 +47,7 @@ struct Q_DECL_HIDDEN KisSelection::Private {
 
     bool isVisible; //false is the selection decoration should not be displayed
     KisDefaultBoundsBaseSP defaultBounds;
+    KisImageResolutionProxySP resolutionProxy;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent *shapeSelection;
     KisLazyStorage<KisSelectionUpdateCompressor, KisSelection*> updateCompressor;
@@ -240,13 +242,24 @@ private:
     bool m_isFlatten = false;
 };
 
-KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds)
+KisSelection::KisSelection()
+    : KisSelection(nullptr, nullptr)
+{
+}
+
+KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds, KisImageResolutionProxySP resolutionProxy)
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
-        defaultBounds = new KisSelectionEmptyBounds(0);
+        defaultBounds = new KisSelectionEmptyBounds(nullptr);
     }
+
+    if (!resolutionProxy) {
+        resolutionProxy.reset(new KisImageResolutionProxy(nullptr));
+    }
+
     m_d->defaultBounds = defaultBounds;
+    m_d->resolutionProxy = resolutionProxy;
 
     m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds, this);
     m_d->pixelSelection->setParentNode(m_d->parentNode);
@@ -259,7 +272,8 @@ KisSelection::KisSelection(const KisSelection& rhs)
     copyFrom(rhs);
 }
 
-KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopyMode copyMode, KisDefaultBoundsBaseSP defaultBounds)
+KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopyMode copyMode,
+                           KisDefaultBoundsBaseSP defaultBounds, KisImageResolutionProxySP resolutionProxy)
     : m_d(new Private(this))
 {
     if (!defaultBounds) {
@@ -267,6 +281,7 @@ KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopy
     }
 
     m_d->defaultBounds = defaultBounds;
+    m_d->resolutionProxy = resolutionProxy;
     m_d->pixelSelection = new KisPixelSelection(source, copyMode);
     m_d->pixelSelection->setParentSelection(this);
     m_d->pixelSelection->setParentNode(m_d->parentNode);
@@ -285,6 +300,7 @@ void KisSelection::copyFrom(const KisSelection &rhs)
 {
     m_d->isVisible = rhs.m_d->isVisible;
     m_d->defaultBounds = rhs.m_d->defaultBounds;
+    m_d->resolutionProxy = rhs.m_d->resolutionProxy;
     m_d->parentNode = 0; // not supposed to be shared
 
     Q_ASSERT(rhs.m_d->pixelSelection);
@@ -418,6 +434,9 @@ KisSelectionComponent* KisSelection::shapeSelection() const
 
 void KisSelection::convertToVectorSelectionNoUndo(KisSelectionComponent* shapeSelection)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shapeSelection);
+
+    shapeSelection->setResolutionProxy(m_d->resolutionProxy);
     QScopedPointer<KUndo2Command> cmd(new ChangeShapeSelectionCommand(this, shapeSelection));
     cmd->redo();
 }
@@ -425,6 +444,8 @@ void KisSelection::convertToVectorSelectionNoUndo(KisSelectionComponent* shapeSe
 KUndo2Command *KisSelection::convertToVectorSelection(KisSelectionComponent *shapeSelection)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(!m_d->shapeSelection, nullptr);
+
+    shapeSelection->setResolutionProxy(m_d->resolutionProxy);
     return new ChangeShapeSelectionCommand(this, shapeSelection);
 }
 
@@ -525,6 +546,19 @@ void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 {
     m_d->defaultBounds = bounds;
     m_d->pixelSelection->setDefaultBounds(bounds);
+}
+
+void KisSelection::setResolutionProxy(KisImageResolutionProxySP proxy)
+{
+    m_d->resolutionProxy = proxy;
+    if (m_d->shapeSelection) {
+        m_d->shapeSelection->setResolutionProxy(proxy);
+    }
+}
+
+KisImageResolutionProxySP KisSelection::resolutionProxy() const
+{
+    return m_d->resolutionProxy;
 }
 
 void KisSelection::clear()

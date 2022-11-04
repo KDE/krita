@@ -32,6 +32,8 @@
 #include <kis_paint_device.h>
 #include <kis_selection.h>
 #include <kis_selection_manager.h>
+#include <kis_default_bounds.h>
+#include <KisImageResolutionProxy.h>
 #include <kis_types.h>
 #include <kis_undo_adapter.h>
 #include <KisViewManager.h>
@@ -182,7 +184,8 @@ void DlgColorRange::slotSelectClicked()
 
     int fuzziness = m_page->intFuzziness->value();
 
-    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_viewManager->activeDevice()));
+    KisSelectionSP selection = new KisSelection(new KisSelectionDefaultBounds(m_viewManager->activeDevice()),
+                                                toQShared(new KisImageResolutionProxy(m_viewManager->image())));
 
     KisHLineConstIteratorSP hiter = m_viewManager->activeDevice()->createHLineConstIteratorNG(x, y, w);
     KisHLineIteratorSP selIter = selection->pixelSelection()->createHLineIteratorNG(x, y, w);

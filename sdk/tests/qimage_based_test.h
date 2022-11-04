@@ -29,6 +29,8 @@
 #include "kis_undo_stores.h"
 #include "kis_image.h"
 #include "kis_selection.h"
+#include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 #include "kis_paint_layer.h"
 #include "kis_adjustment_layer.h"
 #include "kis_transparency_mask.h"
@@ -132,7 +134,7 @@ protected:
     void addGlobalSelection(KisImageSP image) {
         QRect selectionRect(40,40,300,300);
 
-        KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image));
+        KisSelectionSP selection = new KisSelection(new KisDefaultBounds(image), toQShared(new KisImageResolutionProxy(image)));
         KisPixelSelectionSP pixelSelection = selection->pixelSelection();
         pixelSelection->select(selectionRect);
 

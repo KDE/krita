@@ -71,6 +71,7 @@ private:
 class KRITAIMAGE_EXPORT KisSelectionEmptyBounds : public KisDefaultBounds
 {
 public:
+    KisSelectionEmptyBounds();
     KisSelectionEmptyBounds(KisImageWSP image);
     ~KisSelectionEmptyBounds() override;
     QRect bounds() const override;

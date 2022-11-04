@@ -16,6 +16,7 @@
 #include "kis_image.h"
 #include "kis_painter.h"
 #include "kis_default_bounds.h"
+#include "KisImageResolutionProxy.h"
 
 #include "kis_selection.h"
 #include "kis_pixel_selection.h"
@@ -81,7 +82,7 @@ KisSelectionBasedLayer::~KisSelectionBasedLayer()
 
 void KisSelectionBasedLayer::initSelection()
 {
-    m_d->selection = KisSelectionSP(new KisSelection(KisDefaultBoundsSP(new KisDefaultBounds(image()))));
+    m_d->selection = new KisSelection(new KisDefaultBounds(image()), toQShared(new KisImageResolutionProxy(image())));
     m_d->selection->pixelSelection()->setDefaultPixel(KoColor(Qt::white, m_d->selection->pixelSelection()->colorSpace()));
     m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
     m_d->selection->setParentNode(this);
@@ -104,7 +105,8 @@ void KisSelectionBasedLayer::setImage(KisImageWSP image)
 {
     m_d->imageConnections.clear();
     m_d->paintDevice->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
-    m_d->selection->pixelSelection()->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
+    m_d->selection->setDefaultBounds(KisDefaultBoundsSP(new KisDefaultBounds(image)));
+    m_d->selection->setResolutionProxy(m_d->selection->resolutionProxy()->createOrCloneDetached(image));
     KisLayer::setImage(image);
 
     if (image) {
@@ -227,6 +229,7 @@ void KisSelectionBasedLayer::setInternalSelection(KisSelectionSP selection)
         m_d->selection = new KisSelection(*selection.data());
         m_d->selection->setParentNode(this);
         m_d->selection->setDefaultBounds(new KisDefaultBounds(image()));
+        m_d->selection->setResolutionProxy(toQShared(new KisImageResolutionProxy(image())));
         m_d->selection->pixelSelection()->setSupportsWraparoundMode(true);
         m_d->selection->updateProjection();
 

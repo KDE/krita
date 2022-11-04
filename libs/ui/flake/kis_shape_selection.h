@@ -12,6 +12,7 @@
 #include <KoShapeFactoryBase.h>
 #include <KoShapeUserData.h>
 #include <KoShapeLoadingContext.h>
+#include <KisImageResolutionProxy.h>
 
 #include <kis_selection_component.h>
 #include <kis_types.h>
@@ -45,7 +46,7 @@ class KRITAUI_EXPORT KisShapeSelection : public QObject, public KoShapeLayer, pu
     KisShapeSelection(const KisShapeSelection& rhs);
 public:
 
-    KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisImageWSP image, KisSelectionWSP selection);
+    KisShapeSelection(KoShapeControllerBase *shapeControllerBase, KisSelectionWSP selection);
 
     ~KisShapeSelection() override;
 
@@ -53,9 +54,9 @@ public:
 
     KisSelectionComponent* clone(KisSelection* selection) override;
 
-    bool saveSelection(KoStore * store) const;
+    bool saveSelection(KoStore * store, const QRect &imageRect) const;
 
-    bool loadSelection(KoStore * store);
+    bool loadSelection(KoStore * store, const QRect &imageRect);
     /**
      * Renders the shapes to a selection. This method should only be called
      * by KisSelection to update it's projection.
@@ -79,6 +80,8 @@ public:
 
     KUndo2Command* transform(const QTransform &transform) override;
 
+    void setResolutionProxy(KisImageResolutionProxySP resolutionProxy ) override;
+
 Q_SIGNALS:
     void sigMoveShapes(const QPointF &diff);
 
@@ -93,16 +96,17 @@ private:
     friend class KisTakeAllShapesCommand;
     void setUpdatesEnabled(bool enabled);
     bool updatesEnabled() const;
-    void init(KisImageSP image, KoShapeControllerBase *shapeControllerBase);
+    void init(KisImageResolutionProxySP resolutionProxy, KoShapeControllerBase *shapeControllerBase);
 private:
+    KisShapeSelectionModel* initModel(KisImageWSP image, KisSelectionWSP selection);
 
     void renderSelection(KisPaintDeviceSP projection, const QRect& requestedRect);
 
-    KisImageWSP m_image;
     QPainterPath m_outline;
     KisImageViewConverter *m_converter {nullptr};
     KisShapeSelectionCanvas *m_canvas {nullptr};
     KisShapeSelectionModel *m_model;
+    KisImageResolutionProxySP m_resolutionProxy;
     KoShapeControllerBase *m_shapeControllerBase {nullptr};
     friend class KisShapeSelectionModel;
 };

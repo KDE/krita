@@ -11,7 +11,7 @@
 #include <kis_wrapped_rect.h>
 #include "lazybrush/kis_colorize_mask.h"
 #include <kis_assert.h>
-
+#include <KisImageResolutionProxy.h>
 
 FillProcessingVisitor::FillProcessingVisitor(KisPaintDeviceSP refPaintDevice,
                                              KisSelectionSP selection,
@@ -242,7 +242,8 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
                                                                           sourceDevice,
                                                                           m_selection.isNull() ? 0 : m_selection->pixelSelection());
 
-        newFillSelection = new KisSelection(pixelSelection->defaultBounds());
+        newFillSelection = new KisSelection(pixelSelection->defaultBounds(),
+                                            m_selection ? m_selection->resolutionProxy() : KisImageResolutionProxy::identity());
         newFillSelection->pixelSelection()->applySelection(pixelSelection, SELECTION_REPLACE);
     }
     // Now we actually fill the destination device
@@ -254,7 +255,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
     {
         KisSelectionSP trimmedFillSelection;
         if (m_selection) {
-            trimmedFillSelection = new KisSelection(newFillSelection->pixelSelection()->defaultBounds());
+            trimmedFillSelection = new KisSelection(newFillSelection->pixelSelection()->defaultBounds(), newFillSelection->resolutionProxy());
             trimmedFillSelection->pixelSelection()->applySelection(newFillSelection->pixelSelection(), SELECTION_REPLACE);
             trimmedFillSelection->pixelSelection()->applySelection(m_selection->projection(), SELECTION_INTERSECT);
         } else {

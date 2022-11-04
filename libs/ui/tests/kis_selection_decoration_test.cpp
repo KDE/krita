@@ -7,6 +7,7 @@
 #include "kis_selection_decoration_test.h"
 
 #include <simpletest.h>
+#include <kis_image.h>
 #include <stroke_testing_utils.h>
 #include "kis_processing_applicator.h"
 #include "commands/kis_selection_commands.h"

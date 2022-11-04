@@ -9,6 +9,21 @@
 #include <kis_image.h>
 #include "kis_signal_auto_connection.h"
 
+namespace {
+
+struct IdentityResolutioProxyHolder
+{
+    IdentityResolutioProxyHolder()
+        : identity(new KisImageResolutionProxy())
+    {
+    }
+
+    KisImageResolutionProxySP identity;
+};
+
+Q_GLOBAL_STATIC(IdentityResolutioProxyHolder, s_holder)
+}
+
 struct KisImageResolutionProxy::Private {
     Private(KisImageWSP image)
         : lastKnownXRes(1.0),
@@ -24,6 +39,17 @@ struct KisImageResolutionProxy::Private {
         setImage(rhs.image);
     }
 
+    ~Private() {
+        /**
+         * Since we are not using QObject for the connection,
+         * we should disconnect the connection automatically
+         * on destruction.
+         */
+        if (imageConnection) {
+            QObject::disconnect(imageConnection);
+        }
+    }
+
     KisImageWSP image;
     qreal lastKnownXRes;
     qreal lastKnownYRes;
@@ -32,6 +58,11 @@ struct KisImageResolutionProxy::Private {
     void setImage(KisImageWSP image);
     void slotImageResolutionChanged(qreal xRes, qreal yRes);
 };
+
+KisImageResolutionProxy::KisImageResolutionProxy()
+    : KisImageResolutionProxy(nullptr)
+{
+}
 
 KisImageResolutionProxy::KisImageResolutionProxy(KisImageWSP image)
     : m_d(new Private(image))
@@ -57,9 +88,28 @@ qreal KisImageResolutionProxy::yRes() const
     return m_d->image ? m_d->image->yRes() : m_d->lastKnownYRes;
 }
 
-void KisImageResolutionProxy::detachFromImage()
+bool KisImageResolutionProxy::compareResolution(const KisImageResolutionProxy &rhs) const
 {
-    m_d->image = nullptr;
+    return qFuzzyCompare(xRes(), rhs.xRes()) &&
+        qFuzzyCompare(yRes(), rhs.yRes());
+
+}
+
+KisImageResolutionProxySP KisImageResolutionProxy::cloneDetached() const
+{
+    KisImageResolutionProxySP proxy(new KisImageResolutionProxy(*this));
+    proxy->m_d->setImage(nullptr);
+    return proxy;
+}
+
+KisImageResolutionProxySP KisImageResolutionProxy::createOrCloneDetached(KisImageWSP image) const
+{
+    return image ? toQShared(new KisImageResolutionProxy(image)) : cloneDetached();
+}
+
+KisImageResolutionProxySP KisImageResolutionProxy::identity()
+{
+    return s_holder->identity;
 }
 
 void KisImageResolutionProxy::Private::slotImageResolutionChanged(qreal xRes, qreal yRes)

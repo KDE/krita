@@ -22,7 +22,7 @@ class KisFreehandStrokeInfo;
 class KisMaskedFreehandStrokePainter;
 class KisMaskingBrushRenderer;
 class KisRunnableStrokeJobData;
-
+class KisUndoStore;
 
 class KRITAUI_EXPORT KisPainterBasedStrokeStrategy : public KisRunnableBasedStrokeStrategy
 {

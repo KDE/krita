@@ -29,6 +29,7 @@
 #include "kis_image.h"
 #include "config-limit-long-tests.h"
 #include "testimage.h"
+#include "kis_default_bounds.h"
 
 
 class KisFakePaintDeviceWriter : public KisPaintDeviceWriter {

@@ -39,11 +39,11 @@
 #include "kis_transform_mask_params_interface.h"
 #include "kis_shape_controller.h"
 #include <KisGlobalResourcesInterface.h>
-
+#include <KisImageResolutionProxy.h>
 
 KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 {
-    KisSelectionSP pixelSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
+    KisSelectionSP pixelSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice), KisImageResolutionProxy::identity());
 
     KisFillPainter gc(pixelSelection->pixelSelection());
     gc.fillRect(10, 10, 200, 200, KoColor(gc.device()->colorSpace()));
@@ -55,7 +55,7 @@ KisSelectionSP createPixelSelection(KisPaintDeviceSP paintDevice)
 
 KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP image, KoShapeControllerBase *shapeController)
 {
-    KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice));
+    KisSelectionSP vectorSelection = new KisSelection(new KisSelectionDefaultBounds(paintDevice), toQShared(new KisImageResolutionProxy(image)));
     KoPathShape* path = new KoPathShape();
     path->setShapeId(KoPathShapeId);
     path->moveTo(QPointF(10, 10));
@@ -64,7 +64,7 @@ KisSelectionSP createVectorSelection(KisPaintDeviceSP paintDevice, KisImageWSP i
     path->lineTo(QPointF(10, 10) + QPointF(0, 100));
     path->close();
     path->normalize();
-    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, image, vectorSelection);
+    KisShapeSelection* shapeSelection = new KisShapeSelection(shapeController, vectorSelection);
     shapeSelection->addShape(path);
     vectorSelection->convertToVectorSelectionNoUndo(shapeSelection);
 

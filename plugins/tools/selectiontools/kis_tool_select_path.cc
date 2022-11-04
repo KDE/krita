@@ -20,6 +20,7 @@
 #include <kis_command_utils.h>
 #include <kis_selection_filters.h>
 #include <KisOptimizedBrushOutline.h>
+#include <kis_default_bounds.h>
 
 KisToolSelectPath::KisToolSelectPath(KoCanvasBase * canvas)
     : KisToolSelectBase<KisDelegatedSelectPathWrapper>(canvas,

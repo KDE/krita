@@ -16,5 +16,3 @@ kis_add_tests(
     compression_test.cpp
     NAME_PREFIX "kritapsdutils-"
     LINK_LIBRARIES ${PSD_TEST_LIBS})
-
-macos_test_fixrpath(psd_utils_test compression_test)

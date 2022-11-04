@@ -1,6 +1,5 @@
-if (NOT APPLE)
-    add_subdirectory(tests)
-endif ()
+add_subdirectory(tests)
+
 
 set(kritadefaulttools_SOURCES
     default_tools.cc

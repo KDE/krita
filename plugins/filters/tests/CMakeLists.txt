@@ -9,8 +9,4 @@ krita_add_broken_unit_tests(
 
     NAME_PREFIX "krita-filters-"
     LINK_LIBRARIES kritaimage Qt5::Test
-    TARGET_NAMES_VAR BROKEN_TESTS
-    ${MACOS_GUI_TEST}
     )
-
-macos_test_fixrpath(${BROKEN_TESTS})

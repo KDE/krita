@@ -22,32 +22,12 @@ if(MSVC OR (WIN32 AND "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel"))
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /NODEFAULTLIB:LIBC.LIB")
 endif()
 
-if (APPLE)
-    include(KritaAddBrokenUnitTest)
 
-    krita_add_broken_unit_tests(
-        TestKoLcmsColorProfile.cpp
-        TestColorSpaceRegistry.cpp
-        TestLcmsRGBP2020PQColorSpace.cpp
-        TestProfileGeneration.cpp
-        NAME_PREFIX "plugins-lcmsengine-"
-        LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES}
-        TARGET_NAMES_VAR BROKEN_TESTS
-        ${MACOS_GUI_TEST}
-        )
-
-    macos_test_fixrpath(${BROKEN_TESTS})
-
-
-else (APPLE)
-    kis_add_tests(
-        TestKoLcmsColorProfile.cpp
-        TestColorSpaceRegistry.cpp
-        TestLcmsRGBP2020PQColorSpace.cpp
-        TestProfileGeneration.cpp
-        NAME_PREFIX "plugins-lcmsengine-"
-        LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES})
-
-endif()
-
-
+kis_add_tests(
+    TestKoLcmsColorProfile.cpp
+    TestColorSpaceRegistry.cpp
+    TestLcmsRGBP2020PQColorSpace.cpp
+    TestProfileGeneration.cpp
+    NAME_PREFIX "plugins-lcmsengine-"
+    LINK_LIBRARIES kritawidgets kritapigment KF5::I18n Qt5::Test ${LCMS2_LIBRARIES}
+    )

@@ -10,36 +10,10 @@ include(KritaAddBrokenUnitTest)
 
 macro_add_unittest_definitions()
 
-if (APPLE)
 
-    kis_add_tests(
-        StoryboardModelTest.cpp
-
-        NAME_PREFIX "plugins-dockers-storyboarddocker-"
-        LINK_LIBRARIES kritastoryboarddocker_static kritaui Qt5::Test
-        TARGET_NAMES_VAR OK_TESTS
-        ${MACOS_GUI_TEST}
-        )
-
-    # Some broken unit test.app can be run if installed
-    krita_add_broken_unit_tests(
-        StoryboardTimelineSyncTest.cpp
-
-        NAME_PREFIX "plugins-dockers-storyboarddocker-"
-        LINK_LIBRARIES kritastoryboarddocker_static kritaui Qt5::Test
-        TARGET_NAMES_VAR BROKEN_TESTS
-        ${MACOS_GUI_TEST})
-
-
-macos_test_fixrpath(${OK_TESTS} ${BROKEN_TESTS})
-
-else (APPLE)
-
-    kis_add_tests(
-        StoryboardModelTest.cpp
-        StoryboardTimelineSyncTest.cpp
-        NAME_PREFIX "plugins-dockers-storyboarddocker-"
-        LINK_LIBRARIES kritastoryboarddocker_static kritaui Qt5::Test
-        )
-
-endif()
+kis_add_tests(
+    StoryboardModelTest.cpp
+    StoryboardTimelineSyncTest.cpp
+    NAME_PREFIX "plugins-dockers-storyboarddocker-"
+    LINK_LIBRARIES kritastoryboarddocker_static kritaui Qt5::Test
+    )

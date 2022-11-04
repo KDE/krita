@@ -8,24 +8,10 @@ macro_add_unittest_definitions()
 include(KritaAddBrokenUnitTest)
 
 
-if (APPLE)
+kis_add_test(
+    kis_mypaintop_test.cpp ../MyPaintPaintOpSettings.cpp ../MyPaintPaintOpPreset.cpp ../MyPaintSurface.cpp
+    TEST_NAME KisMyPaintOpTest
+    NAME_PREFIX "plugins-kismypaintop-"
+    LINK_LIBRARIES kritaimage kritamypaintop_static kritalibpaintop mypaint Qt5::Test
+    )
 
-    krita_add_broken_unit_test (
-        kis_mypaintop_test.cpp ../MyPaintPaintOpSettings.cpp ../MyPaintPaintOpPreset.cpp ../MyPaintSurface.cpp
-        TEST_NAME KisMyPaintOpTest
-        NAME_PREFIX "plugins-kismypaintop-"
-        LINK_LIBRARIES kritaimage kritamypaintop_static kritalibpaintop mypaint Qt5::Test
-        ${MACOS_GUI_TEST}
-        )
-
-    macos_test_fixrpath(KisMyPaintOpTest)
-
-else (APPLE)
-    kis_add_test(
-        kis_mypaintop_test.cpp ../MyPaintPaintOpSettings.cpp ../MyPaintPaintOpPreset.cpp ../MyPaintSurface.cpp
-        TEST_NAME KisMyPaintOpTest
-        NAME_PREFIX "plugins-kismypaintop-"
-        LINK_LIBRARIES kritaimage kritamypaintop_static kritalibpaintop mypaint Qt5::Test
-        )
-
-endif()

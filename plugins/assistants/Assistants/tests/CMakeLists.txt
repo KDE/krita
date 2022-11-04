@@ -7,7 +7,4 @@ kis_add_tests(
     TestAssistants.cpp
     NAME_PREFIX "plugins-assistants-Assistants-"
     LINK_LIBRARIES kritaassistanttool_static Qt5::Test
-    TARGET_NAMES_VAR OK_TESTS
-    ${MACOS_GUI_TEST})
-
-macos_test_fixrpath(${OK_TESTS})
+    )

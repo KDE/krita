@@ -7,7 +7,7 @@ kis_add_test(
     TEST_NAME TestKoLZF
     LINK_LIBRARIES kritastore Qt5::Test
     NAME_PREFIX "libs-odf"
-    ${MACOS_GUI_TEST})
+    )
 
 
 ########### manual test for file contents ###############
@@ -15,7 +15,4 @@ add_executable(storedroptest storedroptest.cpp)
 target_link_libraries(storedroptest kritastore Qt5::Widgets)
 ecm_mark_as_test(storedroptest)
 
-macos_test_fixrpath(
-    TestKoLZF
-    storedroptest
-    )
+macos_test_fixrpath( storedroptest )

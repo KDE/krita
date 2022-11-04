@@ -9,4 +9,3 @@ kis_add_test(
     NAME_PREFIX "plugins-impex-"
 )
 
-macos_test_fixrpath(kis_jpegxl_test)

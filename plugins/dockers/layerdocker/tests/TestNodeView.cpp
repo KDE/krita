@@ -22,6 +22,7 @@
 #include "kis_node_model.h"
 #include "kis_color_filter_combo.h"
 
+#include "kistest.h"
 #include <sdk/tests/testutil.h>
 
 //#define ENABLE_GUI_TESTS
@@ -59,7 +60,7 @@ void NodeViewTest::testLayers()
     font.setPointSizeF(8);
     dlg.setFont(font);
 
-    KisNodeModel *model = new KisNodeModel(this);
+    KisNodeModel *model = new KisNodeModel(0);
     NodeView *view = new NodeView(&dlg);
 
     view->setModel(model);
@@ -68,7 +69,7 @@ void NodeViewTest::testLayers()
     addSelectionMasks();
     m_shapeController->setImage(m_image);
 
-    model->setDummiesFacade(m_shapeController, m_image, m_shapeController, 0, 0, 0, 0);
+    model->setDummiesFacade(m_shapeController, m_image, m_shapeController, 0, 0);
 
     QVBoxLayout *layout = new QVBoxLayout(&dlg);
     KisColorFilterCombo *cb = new KisColorFilterCombo(&dlg);

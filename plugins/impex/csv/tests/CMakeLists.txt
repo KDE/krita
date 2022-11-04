@@ -10,7 +10,4 @@ krita_add_broken_unit_test(
     TEST_NAME kis_csv_test
     LINK_LIBRARIES kritaui Qt5::Test
     NAME_PREFIX "plugins-impex-"
-    ${MACOS_GUI_TEST}
     )
-
-macos_test_fixrpath(kis_csv_test)

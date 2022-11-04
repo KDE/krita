@@ -161,6 +161,8 @@ endif()
 enable_testing()
 # collect list of broken tests, empty here to start fresh with each cmake run
 set(KRITA_BROKEN_TESTS "" CACHE INTERNAL "KRITA_BROKEN_TESTS")
+# Keep track of all test target (need special attention on macos)
+set(KRITA_TESTS_TARGET "" CACHE INTERNAL "KRITA_TESTS_TARGET")
 
  ############
 #############
@@ -1237,6 +1239,11 @@ message("\nBroken tests:")
 foreach(tst ${KRITA_BROKEN_TESTS})
     message("    * ${tst}")
 endforeach()
+
+if(APPLE)
+    # fix macos test rpath
+    macos_test_fixrpath(${KRITA_TESTS_TARGET})
+endif()
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

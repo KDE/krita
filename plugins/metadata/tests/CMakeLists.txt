@@ -13,9 +13,4 @@ krita_add_broken_unit_test( kis_exif_test.cpp
     TEST_NAME KisExifTest
     LINK_LIBRARIES kritametadata kritaui Qt5::Test
     NAME_PREFIX "plugins-metadata-"
-    ${MACOS_GUI_TEST})
-
-macos_test_fixrpath(
-    ${BROKEN_TESTS}
-    KisExifTest
     )

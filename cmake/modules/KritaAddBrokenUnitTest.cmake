@@ -33,6 +33,8 @@ function(KRITA_ADD_UNIT_TEST)
       # add test to the global list of disabled tests
       set(KRITA_BROKEN_TESTS ${KRITA_BROKEN_TESTS} ${_testname} CACHE INTERNAL "KRITA_BROKEN_TESTS")
   endif()
+  # add test to global test list so we can operate on all targets at once
+  set(KRITA_TESTS_TARGET ${KRITA_TESTS_TARGET} ${_targetname} CACHE INTERNAL "KRITA_TESTS_TARGET")
 
   set(gui_args)
   if(ARG_GUI)

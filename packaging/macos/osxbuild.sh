@@ -590,38 +590,6 @@ build_plugins () {
     print_msg "Build Finished!"
 }
 
-# Runs all fixes for path and packages.
-# Historically only fixed boost @rpath
-fix_boost_rpath () {
-    # helpers to define function only once
-    fixboost_find () {
-        for FILE in "${@}"; do
-            if [[ -n "$(otool -L $FILE | grep boost)" ]]; then
-                log "Fixing -- $FILE"
-                log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib $FILE
-            fi
-        done
-    }
-
-    batch_fixboost() {
-        xargs -P4 -I FILE bash -c 'fixboost_find "FILE"'
-    }
-
-    export -f fixboost_find
-    export -f log
-    export -f log_cmd
-
-    print_msg "Fixing boost in... ${KIS_INSTALL_DIR}"
-    # log_cmd install_name_tool -add_rpath ${KIS_INSTALL_DIR}/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
-    # echo "Added rpath ${KIS_INSTALL_DIR}/lib to krita bin"
-    # install_name_tool -add_rpath ${BUILDROOT}/deps/lib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
-    log_cmd install_name_tool -change libboost_system.dylib @rpath/libboost_system.dylib ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita
-
-    find -L "${KIS_INSTALL_DIR}" -name '*so' -o -name '*dylib' | batch_fixboost
-
-    log "Fixing boost done!"
-}
-
 get_directory_fromargs() {
     local OSXBUILD_DIR=""
     for arg in "${@}"; do
@@ -801,12 +769,6 @@ script_run() {
 
         fi
 
-    elif [[ ${1} = "fixboost" ]]; then
-        if [[ -d ${1} ]]; then
-            KIS_BUILD_DIR="${1}"
-        fi
-        fix_boost_rpath
-
     elif [[ ${1} = "build" ]]; then
         OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
@@ -863,8 +825,6 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
             build_plugins "${OSXBUILD_DIR}"
         fi
 
-        fix_boost_rpath
-
     elif [[ ${1} = "buildinstall" ]]; then
         OSXBUILD_DIR=$(get_directory_fromargs "${@:2}")
 
@@ -876,8 +836,6 @@ osxbuild.sh install ${KIS_BUILD_DIR}"
         else
             build_plugins "${OSXBUILD_DIR}"
         fi
-
-        fix_boost_rpath "${OSXBUILD_DIR}"
 
     elif [[ ${1} = "test" ]]; then
         ${KIS_INSTALL_DIR}/bin/krita.app/Contents/MacOS/krita

@@ -1,4 +1,4 @@
-if (NOT WIN32 AND NOT APPLE)
+if (NOT WIN32)
     add_subdirectory(tests)
 endif()
 
@@ -30,15 +30,19 @@ set(kritatooltransform_SOURCES
 qt5_add_resources(kritatooltransform_SOURCES tool_transform.qrc)
 ki18n_wrap_ui(kritatooltransform_SOURCES wdg_tool_transform.ui)
 
+kis_add_library(kritatooltransform_static STATIC ${kritatooltransform_SOURCES})
+generate_export_header(kritatooltransform_static BASE_NAME kritatooltransform)
+
 kis_add_library(kritatooltransform MODULE ${kritatooltransform_SOURCES})
 
-generate_export_header(kritatooltransform BASE_NAME kritatooltransform)
 
 if (NOT GSL_FOUND)
   message (WARNING "KRITA WARNING! No GNU Scientific Library was found! Krita's Transform Tool will not be able to scale the image with handles. Please install GSL library.")
   target_link_libraries(kritatooltransform kritaui)
+  target_link_libraries(kritatooltransform_static kritaui)
 else ()
   target_link_libraries(kritatooltransform kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
+  target_link_libraries(kritatooltransform_static kritaui ${GSL_LIBRARIES} ${GSL_CBLAS_LIBRARIES})
 endif ()
 
 install(TARGETS kritatooltransform  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})

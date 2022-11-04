@@ -7,6 +7,7 @@
 #include "KisImageResolutionProxy.h"
 
 #include <kis_image.h>
+#include "kis_pointer_utils.h"
 #include "kis_signal_auto_connection.h"
 
 namespace {

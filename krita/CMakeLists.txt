@@ -146,8 +146,7 @@ if (NOT ANDROID)
   install(TARGETS krita_version ${INSTALL_TARGETS_DEFAULT_ARGS})
 
   if(APPLE)
-      set_target_properties(krita_version PROPERTIES INSTALL_RPATH "@loader_path/../../../../lib;@loader_path/../lib;
-          @loader_path/../Frameworks;@executable_path/../../../../lib;@executable_path/../lib;@executable_path/../Frameworks")
+      set_target_properties(krita_version PROPERTIES INSTALL_RPATH "@loader_path/../Frameworks;@executable_path/../lib;@executable_path/../Frameworks")
       set_property(TARGET krita_version PROPERTY MACOSX_BUNDLE OFF)
   endif ()
 endif()

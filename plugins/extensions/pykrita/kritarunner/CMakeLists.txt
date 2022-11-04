@@ -40,8 +40,7 @@ target_include_directories(kritarunner SYSTEM PUBLIC "${PYTHON_INCLUDE_DIRS}")
 target_link_libraries(kritarunner PRIVATE ${kritarunner_PRIVATE_LINK_LIBS})
 
 if(APPLE)
-    set_target_properties(kritarunner PROPERTIES INSTALL_RPATH "@loader_path/../../../../lib;@loader_path/../lib;
-        @loader_path/../Frameworks;@executable_path/../../../../lib;@executable_path/../lib;@executable_path/../Frameworks")
+    set_target_properties(kritarunner PROPERTIES INSTALL_RPATH "@loader_path/../Frameworks;@executable_path/../lib;@executable_path/../Frameworks")
     set_property(TARGET kritarunner PROPERTY MACOSX_BUNDLE OFF)
 endif()
 

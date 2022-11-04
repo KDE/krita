@@ -519,6 +519,8 @@ krita_deploy () {
     mkdir "${KRITA_DMG}"
 
     rsync -prul ${KIS_INSTALL_DIR}/bin/krita.app ${KRITA_DMG}
+    cp ${KIS_INSTALL_DIR}/bin/kritarunner ${KRITA_DMG}/krita.app/Contents/MacOS
+    cp ${KIS_INSTALL_DIR}/bin/krita_version ${KRITA_DMG}/krita.app/Contents/MacOS
 
     mkdir -p ${KRITA_DMG}/krita.app/Contents/PlugIns
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Frameworks
@@ -568,7 +570,7 @@ krita_deploy () {
     echo "Copying Spotlight plugin..."
     mkdir -p ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
     rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaspotlight.mdimporter ${KRITA_DMG}/krita.app/Contents/Library/Spotlight
-    # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
+    # TODO fix and reenable - https://bugs.kde.org/show_bug.cgi?id=430553
     # echo "Copying QuickLook Thumbnailing extension..."
     # rsync -prul ${KIS_INSTALL_DIR}/plugins/kritaquicklookng.appex ${KRITA_DMG}/krita.app/Contents/PlugIns
 
@@ -603,7 +605,8 @@ krita_deploy () {
         -verbose=0 \
         -executable=${KRITA_DMG}/krita.app/Contents/MacOS/krita \
         -libpath=${KIS_INSTALL_DIR}/lib \
-        -qmldir=${KIS_INSTALL_DIR}/qml \
+        -qmldir=${KIS_INSTALL_DIR}/qml
+        # -appstore-compliant
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/kritaplugins \
         # -extra-plugins=${KIS_INSTALL_DIR}/lib/plugins \
         # -extra-plugins=${KIS_INSTALL_DIR}/plugins
@@ -629,6 +632,9 @@ krita_deploy () {
     cd ${KRITA_DMG}/krita.app
     ${KIS_INSTALL_DIR}/bin/python -m compileall . &> /dev/null
 
+    # remove unnecessary rpaths
+    install_name_tool -delete_rpath @executable_path/../lib ${KRITA_DMG}/krita.app/Contents/MacOS/krita_version
+    install_name_tool -delete_rpath @executable_path/../lib ${KRITA_DMG}/krita.app/Contents/MacOS/kritarunner
     install_name_tool -delete_rpath @loader_path/../../../../lib ${KRITA_DMG}/krita.app/Contents/MacOS/krita
     rm -rf ${KRITA_DMG}/krita.app/Contents/PlugIns/kf5/org.kde.kwindowsystem.platforms
 
@@ -641,7 +647,7 @@ krita_deploy () {
     krita_findmissinglibs $(find ${KRITA_DMG}/krita.app/Contents -type f -perm 755 -or -name "*.dylib" -or -name "*.so")
 
     # Fix rpath for plugins
-    # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below
+    # Uncomment if the Finder plugins (kritaquicklook, kritaspotlight) lack the rpath below
     # printf "Repairing rpath for Finder plugins\n"
     # find "${KRITA_DMG}/krita.app/Contents/Library" -type f -path "*/Contents/MacOS/*" -perm 755 | xargs -I FILE install_name_tool -add_rpath @loader_path/../../../../../Frameworks FILE
 
@@ -691,6 +697,9 @@ signBundle() {
     # It is necessary to sign every binary Resource file
     cd ${KRITA_DMG}/krita.app/Contents/Resources
     find . -perm +111 -type f | batch_codesign
+
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/kritarunner" | batch_codesign
+    printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita_version" | batch_codesign
 
     #Finally sign krita and krita.app
     printf "${KRITA_DMG}/krita.app/Contents/MacOS/krita" | batch_codesign

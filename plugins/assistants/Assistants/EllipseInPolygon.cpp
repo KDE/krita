@@ -217,7 +217,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 {
     QPointF originalPoint = point;
     // method taken from https://www.sciencedirect.com/science/article/pii/S0377042713001398
-    // "Algorithms for projecting points onto conics", authors: N.Chernova, S.Wijewickremab
+    // "Algorithms for projecting points onto conics", authors: N.Chernova, S.Wijewickrema
     //
 
     // Stage 1. Canonize the formula.
@@ -225,6 +225,27 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     // "canonnical formula" is Ax^2 + 2Bxy + Cy^2 + 2Dx + 2Ey + F = 0
     // and A^2 + B^2 + C^2 + D^2 + E^2 + F^2 = 1
     // so we gotta change it first
+
+    // NAMING
+    // A - true formula, "final formula"
+    // B - A, but normalized (so that A^2 + B^2 + C^2... = 1)
+    // C - B, but canonized (convert from b to B=b/2 to be able to use Elberly correctly)
+    // D -
+    // E -
+    // F -
+    // G -
+    // H -
+    // I -
+
+    const int Ai = 0;
+    const int Bi = 1;
+    const int Ci = 2;
+    const int Di = 3;
+    const int Ei = 4;
+    const int Fi = 5;
+
+
+
 
     auto writeFormulaInWolframAlphaForm = [] (QVector<double> formula, bool trueForm = false) {
         auto writeOutNumber = [] (double n, bool first = false) {
@@ -247,6 +268,28 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     };
 
 
+    auto writeFormulaInAllForms = [writeFormulaInWolframAlphaForm] (QVector<double> formula, QString name, bool trueForm = false) {
+        QString octaveForm = "[";
+        for (int i = 0; i < 6; i++) {
+            bool shouldDouble = formula[i] && (i == 1 || i == 3 || i == 4);
+            octaveForm += QString::number(shouldDouble ? 2*formula[i] : formula[i]);
+            if (i != 5) {
+                octaveForm += ",";
+            }
+        }
+        octaveForm += "];";
+
+        qCritical() << "ModifiedElberly | ---";
+        qCritical() << "ModifiedElberly | formula name: " << name;
+        qCritical() << "ModifiedElberly | true form? " << trueForm;
+        qCritical() << "ModifiedElberly | WolframAlpha: " << writeFormulaInWolframAlphaForm(formula, trueForm);
+        qCritical() << "ModifiedElberly | Octave: " << octaveForm;
+        qCritical() << "ModifiedElberly | Actual data (A, B, C, D...): " << formula;
+        qCritical() << "ModifiedElberly | ---";
+
+    };
+
+
     // ***************
 
     bool debug = true;
@@ -256,11 +299,16 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     // *************
 
 
+    if (debug) ENTER_FUNCTION() << "################ ELBERLY ###################";
+    if (debug) ENTER_FUNCTION() << ppVar(polygon) << ppVar(point);
+
+
 
     QVector<double> canonized;
     canonized = QVector<double>::fromList(finalFormula.toList());
 
     QVector<double> trueFormulaA = QVector<double>::fromList(finalFormula.toList());
+    if (debug) writeFormulaInAllForms(trueFormulaA, "formula A - final", true);
 
     //if (debug)
 
@@ -291,6 +339,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     }
 
     QVector<double> formulaBNormalized = QVector<double>::fromList(canonized.toList());
+    if (debug) writeFormulaInAllForms(formulaBNormalized, "formula B - normalized", true);
 
     if (debug) ENTER_FUNCTION() << "(*) after normalization:" << ppVar(point);
 
@@ -325,9 +374,11 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
     if (debug) ENTER_FUNCTION() << "after canonization:" << ppVar(canonized);
     if (debug) ENTER_FUNCTION() << ppVar(writeFormulaInWolframAlphaForm(canonized)); // still a circle, good!
+    if (debug) writeFormulaInAllForms(canonized, "canonized");
 
 
     QVector<double> formulaCCanonized = QVector<double>::fromList(canonized.toList());
+    if (debug) writeFormulaInAllForms(formulaCCanonized, "formula C - canonized");
 
     if (debug) ENTER_FUNCTION() << "(*) after canonization:" << ppVar(point);
 
@@ -364,6 +415,17 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     DC(0, 0) = eigenSolver.eigenvalues()(0);
     DC(1, 1) = eigenSolver.eigenvalues()(1);
     if (debug) ENTER_FUNCTION() << "(3)";
+
+    Eigen::Matrix<std::complex<long double>, 2, 2> cRM = QC*DC*QC.transpose();
+    if (debug) ENTER_FUNCTION() << "Check correctness of the eigen decomposition: ";
+    if (debug) {
+        for (int i = 0; i < 2; i++)  {
+            for (int j = 0; j < 2; j++) {
+                ENTER_FUNCTION() << ppVar(i) << ppVar(j) << "|" << ppVar((double)M(i, j)) << ppVar((double)std::real(cRM(i, j)))
+                                 << ppVar((bool)(M(i, j) == std::real(cRM(i, j)))) << ppVar((double)(qAbs(M(i, j) - std::real(cRM(i, j)))));
+            }
+        }
+    }
 
 
 
@@ -406,6 +468,15 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
         return res;
     };
 
+    auto vectorMultipliedByMatrixV2 = [debug] (QVector<double> vector2, Eigen::Matrix<long double, 2, 2> matrix) {
+        QVector<double> res;
+        res << vector2[0]*matrix(0, 0) + vector2[1]*matrix(0, 1);
+        res << vector2[0]*matrix(1, 0) + vector2[1]*matrix(1, 1);
+        return res;
+    };
+
+
+
     auto pointMultipliedByMatrix = [debug, vectorMultipliedByMatrix] (QPointF point, Eigen::Matrix<long double, 2, 2> matrix) {
         QVector<double> vec;
         vec << point.x() << point.y();
@@ -421,7 +492,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     rotated[2] = Dm(1, 1); // C
 
     QVector<double> DEvec;
-    DEvec << canonized[3] << canonized[4];
+    DEvec << canonized[Di] << canonized[Ei];
     DEvec = vectorMultipliedByMatrix(DEvec, Q);
 
     rotated[3] = DEvec[0]; // D
@@ -440,6 +511,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
 
     QVector<double> formulaDRotated = QVector<double>::fromList(rotated.toList());
+    if (debug) writeFormulaInAllForms(formulaDRotated, "formula D - rotated");
 
 
 
@@ -452,6 +524,78 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     // point * Q?
     point = QPointF(Q(0, 0)*point.x() + Q(1, 0)*point.y(), Q(0, 1)*point.x() + Q(1, 1)*point.y());
 
+    //{
+        qreal O = Q(0, 0);
+        qreal S = Q(1, 0);
+
+        QPointF pointCheck = QPointF(point.x()*O + S*point.y(), -S*point.x() + O*point.y());
+
+        if (debug) ENTER_FUNCTION() << "Compare points with different calculations: " << ppVar(point) << ppVar(pointCheck)
+                                    << ppVar(point.x() - pointCheck.x()) << ppVar(point.y() - pointCheck.y());
+
+        if (debug) ENTER_FUNCTION() << "+++ Formula check +++";
+
+        qreal newA = canonized[Ai]*O*O - canonized[Bi]*O*S + canonized[Ci]*S*S;
+        qreal newB = 2*canonized[Ai]*O*S - canonized[Bi]*S*S + canonized[Bi]*O*O - 2*canonized[Ci]*O*S;
+        qreal newC = canonized[Ai]*S*S + canonized[Bi]*O*S + canonized[Ci]*O*O;
+        qreal newD = canonized[Di]*O - canonized[Ei]*S;
+        qreal newE = canonized[Di]*S + canonized[Ei]*O;
+
+        // F is the same
+
+        // attempt 2
+
+        /*
+        qreal newA = canonized[Ai]*O*O + canonized[Bi]*O*S + canonized[Ci]*S*S;
+        qreal newB = -2*canonized[Ai]*O*S - canonized[Bi]*S*S + canonized[Bi]*O*O + 2*canonized[Ci]*O*S;
+        qreal newC = canonized[Ai]*S*S - canonized[Bi]*O*S + canonized[Ci]*O*O;
+        qreal newD = canonized[Di]*O + canonized[Ei]*S;
+        qreal newE = canonized[Di]*S - canonized[Ei]*O;
+        // F is the same
+        */
+
+
+        if (debug) ENTER_FUNCTION() << ppVar(rotated[Ai]) << ppVar(newA);
+        if (debug) ENTER_FUNCTION() << ppVar(rotated[Bi]) << ppVar(newB);
+        if (debug) ENTER_FUNCTION() << ppVar(rotated[Ci]) << ppVar(newC);
+        if (debug) ENTER_FUNCTION() << ppVar(rotated[Di]) << ppVar(newD);
+        if (debug) ENTER_FUNCTION() << ppVar(rotated[Ei]) << ppVar(newE);
+
+
+
+
+    //}
+
+    QPointF pointOnEllipseInTest9 = QPointF(1.0, 0.0);
+    qreal Aprim = canonized[Ai];
+    qreal Bprim = canonized[Bi]*2;
+    qreal Cprim = canonized[Ci];
+    qreal Dprim = canonized[Di]*2;
+    qreal Eprim = canonized[Ei]*2;
+    qreal Fprim = canonized[Fi];
+
+    qreal part1 = -(Eprim + Bprim);
+    qreal part2 = sqrt(qPow(Eprim + Bprim, 2) - 4*Cprim*(Aprim + Dprim + Fprim));
+    qreal part3 = 2*Cprim;
+
+
+    pointOnEllipseInTest9.setY((-2*canonized[Ei] - 2*canonized[Bi] + sqrt(qPow(2*canonized[Ei] + 2*canonized[Bi], 2) - 4*canonized[Ci]*(canonized[Ai] + 2*canonized[Di] + 2*canonized[Fi])))/(2*canonized[Ci]));
+    pointOnEllipseInTest9.setY((part1 + part2)/part3);
+
+    if (debug) ENTER_FUNCTION() << ppVar(part1) << ppVar(part2) << ppVar(part3);
+
+    if (debug) ENTER_FUNCTION() << "Point found on the ellipse: " << ppVar(pointOnEllipseInTest9) << ppVar(pointOnEllipseInTest9.y());
+    if (debug) ENTER_FUNCTION() << calculateFormulaSpecial(pointOnEllipseInTest9, formulaCCanonized);
+    QPointF pointOnEllipseAfterRotation = QPointF();
+    // Q = (0, 0)
+    // S = (1, 0)
+    pointOnEllipseAfterRotation.setX(pointOnEllipseInTest9.x() * Q(0, 0) + pointOnEllipseInTest9.y()*Q(1, 0));
+    pointOnEllipseAfterRotation.setY(- pointOnEllipseInTest9.x() * Q(1, 0) + pointOnEllipseInTest9.y()*Q(0, 0));
+    if (debug) ENTER_FUNCTION() << "Point found on the ellipse after rotation: " << ppVar(pointOnEllipseAfterRotation);
+    if (debug) ENTER_FUNCTION() << calculateFormulaSpecial(pointOnEllipseAfterRotation, formulaDRotated);
+    QVector<double> formulaTempFromDifferentCalculations;
+    formulaTempFromDifferentCalculations << newA << newB << newC << newD << newE << Fprim;
+    if (debug) ENTER_FUNCTION() << calculateFormulaSpecial(pointOnEllipseAfterRotation, formulaTempFromDifferentCalculations);
 
 
 
@@ -537,6 +681,8 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
 
     QVector<double> formulaEMovedToOrigin = QVector<double>::fromList(rotated.toList());
+    if (debug) writeFormulaInAllForms(formulaEMovedToOrigin, "formula D - moved to origin");
+
 
     if (debug) ENTER_FUNCTION() << "(7)";
 
@@ -572,6 +718,8 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
     QVector<double> formulaFSwappedXY = QVector<double>::fromList(rotated.toList());
 
+    if (debug) writeFormulaInAllForms(formulaFSwappedXY, "formula F - swapped x and y");
+
     // ok, now |C| >= |A|
 
     if (debug) ENTER_FUNCTION() << "after possibly swapping X and Y:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
@@ -585,6 +733,8 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     }
 
     QVector<double> formulaGNegatedAllSigns = QVector<double>::fromList(rotated.toList());
+
+    if (debug) writeFormulaInAllForms(formulaGNegatedAllSigns, "formula G - negated all signs");
 
     if (debug) ENTER_FUNCTION() << "after possibly swapping signs in the formula:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
 
@@ -603,6 +753,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     }
 
     QVector<double> formulaHNegatedX = QVector<double>::fromList(rotated.toList());
+    if (debug) writeFormulaInAllForms(formulaHNegatedX, "formula H - negated X");
 
     if (debug) ENTER_FUNCTION() << "after possibly swapping sign of X:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
 
@@ -614,10 +765,28 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     }
 
     QVector<double> formulaINegatedY = QVector<double>::fromList(rotated.toList());
+    if (debug) writeFormulaInAllForms(formulaINegatedY, "formula I - negated y");
 
 
     if (debug) ENTER_FUNCTION() << "after possibly swapping sign of Y:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
     if (debug) ENTER_FUNCTION() << ppVar(swapXandY) << ppVar(negateX) << ppVar(negateY);
+
+
+    /*
+    // NOW, special normalize so the errors are bigger!
+    // the authors of the paper apparently haven't tried to actually implement it...
+
+    const int specialNormalize = 100;
+    A = specialNormalize*specialNormalize*A;
+    B = specialNormalize*specialNormalize*B;
+    C = specialNormalize*specialNormalize*C;
+    D = specialNormalize*D;
+    E = specialNormalize*E;
+    setToVector(A, B, C, D, E, F, rotated);
+
+    */
+
+
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(C >= 0 && D >= 0 && E >= 0, originalPoint);
 
@@ -631,11 +800,11 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     if (debug) ENTER_FUNCTION() << ppVar(A) << ppVar(B) << ppVar(C) << ppVar(D) << ppVar(E) << ppVar(F);
     if (debug) ENTER_FUNCTION() << ppVar(D*D) << ppVar(E*E);
 
-    auto Pt = [A, B, C, D, E, F] (qreal t) {
+    auto Pt = [A, B, C, D, E, F] (double t) {
         return -D*D*t*((A*t + 2)/((A*t + 1)*(A*t + 1))) - E*E * t * (C*t+2)/((C*t+1)*(C*t+1)) + F;
     };
 
-    auto Ptd = [A, B, C, D, E, F] (qreal t) {
+    auto Ptd = [A, B, C, D, E, F] (double t) {
         return - (2*D*D)/(qPow(A*t*t + 1, 3)) - (2*E*E)/qPow(C*t*t + 1, 3);
     };
 
@@ -663,6 +832,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
         qreal tstar = - (U - V)/(C*U - A*V); // inflection point of Pt
 
         qreal Pstar = Pt(tstar);
+        if (debug) ENTER_FUNCTION() << ppVar(Pstar);
 
         if (Pstar > 0) { // case (a)
             if (F <= 0) {
@@ -687,8 +857,8 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     auto newtonMethod = [debug] (std::function<qreal(qreal)> f, std::function<qreal(qreal)> fd, qreal t0/*, qreal tmin, qreal tmax*/) {
         qreal t = t0;
         qreal val = f(t);
-        qreal errorEps = 0.00001;
-        qreal derivEps = 0.0001;
+        qreal errorEps = 0.0000001;
+        qreal derivEps = 0.0000001;
         int maxSteps = 10;
         int i = 0;
         if (debug) ENTER_FUNCTION() << ppVar(t0) << ppVar(val);
@@ -707,32 +877,41 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
     auto newtonUntilOvershoot = [debug] (std::function<qreal(qreal)> f, std::function<qreal(qreal)> fd, qreal t0, qreal& previousT, bool& overshoot) {
 
+        overshoot = false;
         if (debug) ENTER_FUNCTION() << "+++ Newton until overshoot +++";
         if (debug) ENTER_FUNCTION() << "+++ Start t0: +++" << ppVar(t0) << ppVar(previousT);
         qreal t = t0;
         qreal val = f(t);
         qreal valSign = KisAlgebra2D::signPZ(val);
 
-        qreal errorEps = 0.00001;
-        qreal derivEps = 0.00001;
-        int maxSteps = 10;
+        qreal errorEps = 1e-14;
+        qreal derivEps = 1e-14;
+        int maxSteps = 1000;
         int i = 0;
         if (debug) ENTER_FUNCTION() << ppVar(t0) << ppVar(val);
 
         previousT = t0;
 
-        while (qAbs(val) > errorEps /*&& qAbs(fd(t)) > derivEps */ && i < maxSteps) {
+        while (qAbs(val) > errorEps && qAbs(fd(t)) > derivEps && i < maxSteps) {
             previousT = t;
 
             if (debug) ENTER_FUNCTION() << "before changing t: " << ppVar(t) << ppVar(f(t)) << ppVar(fd(t)) << ppVar(-f(t)/fd(t)) << "so new value will be: " << ppVar(t - f(t)/fd(t));
+            if (qAbs(fd(t)) < errorEps) {
+
+            }
+
             t = t - f(t)/fd(t);
             val = f(t);
 
-            if (debug) ENTER_FUNCTION() << ppVar(i) << ppVar(t) << ppVar(val) << qAbs(fd(t));
+            if (debug) ENTER_FUNCTION() << ppVar(i) << ppVar(t) << ppVar(val) << ppVar(qAbs(fd(t)));
+
+            if (debug) ENTER_FUNCTION() << "after changing t: " << ppVar(t) << ppVar(f(t)) << ppVar(fd(t)) << ppVar(-f(t)/fd(t)) << "so new value will be: " << ppVar(t - f(t)/fd(t));
+
 
             if (KisAlgebra2D::signPZ(val) != valSign) {
                 // overshoot!
-                if (debug) ENTER_FUNCTION() << "overshoot happened; ";
+                if (debug) ENTER_FUNCTION() << "++++++ OVERSHOOT HAPPENED; " << ppVar(val) << ppVar(valSign);
+
                 overshoot = true;
                 return t;
             }
@@ -751,7 +930,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
         if (debug) ENTER_FUNCTION() << "+++ Bisection method +++";
         if (debug) ENTER_FUNCTION() << "Data:" << ppVar(ta) << ppVar(QString::number(tb, 'g', 10));
-        qreal errorEps = 0.000001;
+        qreal errorEps = 1e-14;
         qreal t;
         qreal val;
 
@@ -852,9 +1031,11 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     bool overshoot;
     qreal tresult = newtonUntilOvershoot(Pt, Ptd, t0, previousT, overshoot);
     if (overshoot) {
-        if (debug) ENTER_FUNCTION() << "t: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
+        if (debug) ENTER_FUNCTION() << "# NEWTON OVERSHOT # t: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
         tresult = bisectionMethod(Pt, qMin(tresult, previousT), qMax(tresult, previousT));
-        if (debug) ENTER_FUNCTION() << "Now it's: " << ppVar(tresult);
+        if (debug) ENTER_FUNCTION() << "# AFTER BISECTION # Now it's: " << ppVar(tresult);
+    } else {
+        if (debug) ENTER_FUNCTION() << "# NO OVERSHOOT # values are: " << ppVar(tresult) << ppVar(previousT) << ppVar(Pt(tresult)) << ppVar(Pt(previousT));
     }
 
 
@@ -865,12 +1046,14 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
     qreal checkIfOnTheEllipse = A*foundX*foundX + 2*B*foundX*foundY + C*foundY*foundY + 2*D*foundX + 2*E*foundY + F;
     if (debug) ENTER_FUNCTION() << ppVar(checkIfOnTheEllipse);
-    if (qAbs(checkIfOnTheEllipse) >= 0.00001) {
+    if (qAbs(checkIfOnTheEllipse) >= 1e-6) {
         if (debug) ENTER_FUNCTION() << "#### WARNING! NOT ON THE ELLIPSE AFTER BISECTION!!! ####";
     }
 
     if (debug) ENTER_FUNCTION() << "(1) original" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
                                 << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), formulaINegatedY));
+    if (debug) ENTER_FUNCTION() << "(1) reminder: " << ppVar(QPointF(foundX, foundY));
+    if (debug) writeFormulaInAllForms(formulaINegatedY, "i - negated y");
 
 
     // ok, now undoing all the changes we did...
@@ -883,6 +1066,8 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
     if (debug) ENTER_FUNCTION() << "(2) after negating X and Y" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
                                    << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), formulaFSwappedXY));
+    if (debug) ENTER_FUNCTION() << "(2) reminder: " << ppVar(QPointF(foundX, foundY));
+    if (debug) writeFormulaInAllForms(formulaFSwappedXY, "f - swapped x and y");
 
     QPointF result = QPointF(foundX, foundY);
     if (swapXandY){
@@ -892,6 +1077,9 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     if (debug) ENTER_FUNCTION() << "(3) after swapping x and y" << ppVar(result) << ppVar(calculateFormula(result))
                                    << ppVar(calculateFormulaSpecial(result, formulaGNegatedAllSigns))
                                    << ppVar(calculateFormulaSpecial(result, formulaEMovedToOrigin));
+    if (debug) ENTER_FUNCTION() << "(3) reminder: " << ppVar(result);
+    if (debug) writeFormulaInAllForms(formulaGNegatedAllSigns, "g - negated all signs");
+    if (debug) writeFormulaInAllForms(formulaEMovedToOrigin, "e - moved to origin");
 
 
     // un-moving
@@ -931,7 +1119,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
         ENTER_FUNCTION() << ppVar(qAbs(calculateFormula(result))) << ppVar(qAbs(calculateFormula(result)) < eps);
         ENTER_FUNCTION() << "The values were: " << ppVar(polygon) << ppVar(originalPoint) << "and unfortunate result:" << ppVar(result);
     }
-    KIS_ASSERT_RECOVER_RETURN_VALUE(qAbs(calculateFormula(result)) < eps, result);
+    //KIS_ASSERT_RECOVER_RETURN_VALUE(qAbs(calculateFormula(result)) < eps, result);
 
     return result;
 

@@ -362,7 +362,59 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
 
 
-    QVERIFY(form(result, original) < eps);
+    //QVERIFY(form(result, original) < eps);
+
+
+
+    ENTER_FUNCTION() << "************************ START 7 (real, but nicer numbers) **************************";
+
+    poly.clear();
+    poly << QPointF(700,350)  << QPointF(1050,530) << QPointF(700,1000)
+         << QPointF(350,530);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(750,460);
+
+    result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+
+    ENTER_FUNCTION() << "************************ START 8 (real 2, leading to the \"weird situation\") **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(704.529,342.744) << QPointF(1049.58,529.788) << QPointF(683.107,1006.81) << QPointF(349.884,528.397);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(1067.62,719.146);
+
+    result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    ENTER_FUNCTION() << "************************ START 9 (real 3, leading to the fd being zero in Newton, and then nans) **************************";
+
+    // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
+    // originalPoint = QPointF(1067.62,719.146) and unfortunate result: result = QPointF(1057.48,709.158)
+    poly.clear();
+    poly << QPointF(704.529,342.744) << QPointF(1049.58,529.788) << QPointF(722.562,626.904) << QPointF(349.884,528.397);
+    original.updateToPolygon(poly, QLineF());
+    point = QPointF(553.452,264.769);
+
+    result = original.projectModifiedEberly(point);
+    ENTER_FUNCTION() << ppVar(result);
+    ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
+
+    ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+
+    // polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(722.562,626.904), QPointF(349.884,528.397)) point = QPointF(553.452,264.769)
+
+
 
 
 }

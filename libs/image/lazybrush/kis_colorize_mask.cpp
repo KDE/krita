@@ -747,6 +747,11 @@ void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KUndo2Command *par
 {
     Q_UNUSED(layer);
 
+    auto executeAndAdd = [parentCommand] (KUndo2Command *cmd) {
+        cmd->redo();
+        new KisCommandUtils::SkipFirstRedoWrapper(cmd, parentCommand);
+    };
+
     WriteLockerSP sharedWriteLock(new WriteLocker(this));
 
     KisPaintDeviceSP temporaryTarget = this->temporaryTarget();
@@ -758,9 +763,8 @@ void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KUndo2Command *par
      */
     if (m_d->needAddCurrentKeyStroke && !isTemporaryTargetErasing) {
         KeyStroke key(m_d->currentKeyStrokeDevice, m_d->currentColor);
-
-        new KeyStrokeAddRemoveCommand(
-            true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, KisColorizeMaskSP(this), parentCommand);
+        executeAndAdd(new KeyStrokeAddRemoveCommand(
+            true, m_d->keyStrokes.size(), key, &m_d->keyStrokes, KisColorizeMaskSP(this), nullptr));
     }
 
     QVector<KisRunnableStrokeJobData*> jobs;
@@ -803,8 +807,8 @@ void KisColorizeMask::mergeToLayerUnthreaded(KisNodeSP layer, KUndo2Command *par
             const KeyStroke &stroke = m_d->keyStrokes[index];
 
             if (stroke.dev->exactBounds().isEmpty()) {
-                new KeyStrokeAddRemoveCommand(
-                    false, index, stroke, &m_d->keyStrokes, KisColorizeMaskSP(this), parentCommand);
+                executeAndAdd(new KeyStrokeAddRemoveCommand(
+                    false, index, stroke, &m_d->keyStrokes, KisColorizeMaskSP(this), nullptr));
             } else {
                 index++;
             }

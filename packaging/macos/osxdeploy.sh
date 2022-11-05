@@ -713,6 +713,8 @@ notarize_build() {
     local NOT_SRC_DIR=${1}
     local NOT_SRC_FILE=${2}
 
+    local notarization_complete="true"
+
     if [[ ${NOTARIZE} = "true" ]]; then
         printf "performing notarization of %s\n" "${2}"
         cd "${NOT_SRC_DIR}"
@@ -749,18 +751,22 @@ notarize_build() {
                 notarize_status=`echo "${fullstatus}" | grep 'Status\:' | awk '{ print $2 }'`
                 echo "${fullstatus}"
                 if [[ "${notarize_status}" = "success" ]]; then
-                    xcrun stapler staple "${NOT_SRC_FILE}"   #staple the ticket
-                    xcrun stapler validate -v "${NOT_SRC_FILE}"
                     print_msg "Notarization success!"
                     break
                 elif [[ "${notarize_status}" = "in" ]]; then
                     waiting_fixed "Notarization still in progress, wait before checking again" 60
                 else
+                    notarization_complete="false"
                     echo "Notarization failed! full status below"
                     echo "${fullstatus}"
                     exit 1
                 fi
             done
+        fi
+
+        if [[ "${notarization_complete}" = "true" ]]; then
+            xcrun stapler staple "${NOT_SRC_FILE}"   #staple the ticket
+            xcrun stapler validate -v "${NOT_SRC_FILE}"
         fi
     fi
 }

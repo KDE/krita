@@ -415,11 +415,11 @@ strip_python_dmginstall() {
 # Remove any missing rpath poiting to BUILDROOT
 libs_clean_rpath () {
     for libFile in ${@}; do
-        rpath=$(otool -l "${libFile}" | grep "path ${BUILDROOT}" | awk '{$1=$1;print $2}')
-        if [[ -n "${rpath}" ]]; then
-            echo "removed rpath _${rpath}_ from ${libFile}"
-            install_name_tool -delete_rpath "${rpath}" "${libFile}"
-        fi
+        rpath=($(otool -l "${libFile}" | grep "path ${BUILDROOT}" | awk '{$1=$1;print $2}'))
+        for lpath in "${rpath[@]}"; do
+            echo "removed rpath _${lpath}_ from ${libFile}"
+            install_name_tool -delete_rpath "${lpath}" "${libFile}" 2> /dev/null
+        done
     done
 }
 
@@ -645,7 +645,6 @@ krita_deploy () {
 #    libs_clean_rpath $(find "${KRITA_DMG}/krita.app/Contents/" -type f -name "lib*")
 
     echo "Done!"
-
 }
 
 

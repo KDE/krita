@@ -26,6 +26,8 @@
 #include <SvgUtil.h>
 #include "SvgStyleWriter.h"
 #include "SvgSavingContext.h"
+#include <KoShapePainter.h>
+#include <QSvgGenerator>
 
 struct KisScalableVectorGraphicsSaveVisitor::Private {
     Private() {}
@@ -179,8 +181,7 @@ bool KisScalableVectorGraphicsSaveVisitor::saveLayer(KisLayer *layer)
     Q_FOREACH (KoShape * shape, sortedShapes) {
         KoShapeGroup * group = dynamic_cast<KoShapeGroup*>(shape);
         if (group)
-            qDebug() << "saving group";
-            //saveGroup(group);
+            saveGroup(group);
         else
             saveShape(shape);
     }
@@ -204,6 +205,7 @@ void KisScalableVectorGraphicsSaveVisitor::saveShape(KoShape *shape)
         savePath(path);
     } else {
         // generic saving of shape via a switch element
+        qDebug() << "saving generic";
         saveGeneric(shape);
     }
 }
@@ -224,9 +226,90 @@ void KisScalableVectorGraphicsSaveVisitor::savePath(KoPathShape *path)
 
 void KisScalableVectorGraphicsSaveVisitor::saveGeneric(KoShape *shape)
 {
+    KIS_SAFE_ASSERT_RECOVER_RETURN(shape);
+
+    const QRectF bbox = shape->boundingRect();
+
+    // paint shape to the image
+    KoShapePainter painter;
+    painter.setShapes(QList<KoShape*>()<< shape);
+
+    // generate svg from shape
+    QBuffer svgBuffer;
+    QSvgGenerator svgGenerator;
+    svgGenerator.setOutputDevice(&svgBuffer);
+
+    /**
+     * HACK ALERT: Qt (and Krita 3.x) has a weird bug, it assumes that all font sizes are
+     *             defined in 96 ppi resolution, even though your the resolution in QSvgGenerator
+     *             is manually set to 72 ppi. So here we do a tricky thing: we set a fake resolution
+     *             to (72 * 72 / 96) = 54 ppi, which guarantees that the text, when painted in 96 ppi,
+     *             will be actually painted in 72 ppi.
+     *
+     * BUG: 389802
+     */
+    if (shape->shapeId() == "TextShapeID") {
+        svgGenerator.setResolution(54);
+    }
+
+    QPainter svgPainter;
+    svgPainter.begin(&svgGenerator);
+    painter.paint(svgPainter, SvgUtil::toUserSpace(bbox).toRect(), bbox);
+    svgPainter.end();
+
+    // remove anything before the start of the svg element from the buffer
+    int startOfContent = svgBuffer.buffer().indexOf("<svg");
+    if(startOfContent>0) {
+        svgBuffer.buffer().remove(0, startOfContent);
+    }
+
+    // check if painting to svg produced any output
+    if (svgBuffer.buffer().isEmpty()) {
+        // prepare a transparent image, make it twice as big as the original size
+        QImage image(2*bbox.size().toSize(), QImage::Format_ARGB32);
+        image.fill(0);
+        painter.paint(image);
+
+        d->saveContext->shapeWriter().startElement("image");
+        d->saveContext->shapeWriter().addAttribute("id", d->saveContext->getID(shape));
+        d->saveContext->shapeWriter().addAttribute("x", bbox.x());
+        d->saveContext->shapeWriter().addAttribute("y", bbox.y());
+        d->saveContext->shapeWriter().addAttribute("width", bbox.width());
+        d->saveContext->shapeWriter().addAttribute("height", bbox.height());
+        d->saveContext->shapeWriter().addAttribute("xlink:href", d->saveContext->saveImage(image));
+        d->saveContext->shapeWriter().endElement(); // image
+
+    } else {
+        d->saveContext->shapeWriter().addCompleteElement(&svgBuffer);
+    }
+
+    // TODO: once we support saving single (flat) odf files
+    // we can embed these here to have full support for generic shapes
 
 }
 
+void KisScalableVectorGraphicsSaveVisitor::saveGroup(KoShapeGroup * group)
+{
+    d->saveContext->shapeWriter().startElement("g");
+    d->saveContext->shapeWriter().addAttribute("id", d->saveContext->getID(group));
+
+    SvgUtil::writeTransformAttributeLazy("transform", group->transformation(), d->saveContext->shapeWriter());
+
+    SvgStyleWriter::saveSvgStyle(group, *d->saveContext);
+
+    QList<KoShape*> sortedShapes = group->shapes();
+    std::sort(sortedShapes.begin(), sortedShapes.end(), KoShape::compareShapeZIndex);
+
+    Q_FOREACH (KoShape * shape, sortedShapes) {
+        KoShapeGroup * childGroup = dynamic_cast<KoShapeGroup*>(shape);
+        if (childGroup)
+            saveGroup(childGroup);
+        else
+            saveShape(shape);
+    }
+
+    d->saveContext->shapeWriter().endElement();
+}
 
 void KisScalableVectorGraphicsSaveVisitor::saveLayerInfo(QDomElement& elt, KisLayer* layer)
 {

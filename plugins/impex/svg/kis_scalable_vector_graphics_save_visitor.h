@@ -18,6 +18,7 @@ class KisAdjustmentLayer;
 class KisGroupLayer;
 class KisPaintLayer;
 class KisGeneratorLayer;
+class KoShapeGroup;
 
 class QDomElement;
 
@@ -65,6 +66,7 @@ private:
     void saveShape(KoShape *shape);
     void savePath(KoPathShape *path);
     void saveGeneric(KoShape *shape);
+    void saveGroup(KoShapeGroup *group);
 
 
 

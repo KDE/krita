@@ -1423,11 +1423,11 @@ void TestSvgText::testTextOutline()
 
 void testTextFontSizeHelper(QString filename, int dpi, bool pixelSize)
 {
-    ENTER_FUNCTION() << ppVar(dpi) << ppVar(filename) << ppVar(pixelSize);
+    //ENTER_FUNCTION() << ppVar(dpi) << ppVar(filename) << ppVar(pixelSize);
 
-    QFont testFont("Chilanka");
+    QFont testFont("DejaVu Sans");
     if (!QFontInfo(testFont).exactMatch()) {
-        qWarning() << "Chilanka is *not* found! Text rendering might be broken!";
+        qWarning() << "DejaVu Sans is *not* found! Text rendering might be broken!";
     }
 
     if (pixelSize) {
@@ -1456,7 +1456,7 @@ void testTextFontSizeHelper(QString filename, int dpi, bool pixelSize)
     }
     layout.endLayout();
 
-    ENTER_FUNCTION() << ppVar(layout.boundingRect());
+    //ENTER_FUNCTION() << ppVar(layout.boundingRect());
     QImage image(QSize(200, 100), QImage::Format_ARGB32);
     // 72 dpi => ~2834 dpm
     qreal inchesInMeter = 39.37007874;
@@ -1465,9 +1465,9 @@ void testTextFontSizeHelper(QString filename, int dpi, bool pixelSize)
     image.setDotsPerMeterX((int)dpm);
     image.setDotsPerMeterY((int)dpm);
 
-    ENTER_FUNCTION() << ppVar(image.dotsPerMeterX()) << ppVar(image.dotsPerMeterY()) << ppVar(image.devicePixelRatioF())
-                     << ppVar(image.devicePixelRatioFScale()) << ppVar(image.logicalDpiX()) << ppVar(image.logicalDpiY())
-                     << ppVar(image.logicalDpiX()) << ppVar(image.physicalDpiX())<< ppVar(image.physicalDpiY());
+//    ENTER_FUNCTION() << ppVar(image.dotsPerMeterX()) << ppVar(image.dotsPerMeterY()) << ppVar(image.devicePixelRatioF())
+//                     << ppVar(image.devicePixelRatioFScale()) << ppVar(image.logicalDpiX()) << ppVar(image.logicalDpiY())
+//                     << ppVar(image.logicalDpiX()) << ppVar(image.physicalDpiX())<< ppVar(image.physicalDpiY());
 
     image.fill(Qt::white);
     QPainter painter(&image);
@@ -1493,8 +1493,8 @@ void testTextFontSizeHelper(QString filename, int dpi, bool pixelSize)
     //painter.drawText(QPointF(0, 0), "Chy QPainter");
     painter.drawText(QRectF(0, 40, 200, 100), "Chy QPainter");
 
-    ENTER_FUNCTION() << ppVar(painter.fontMetrics().height()) << ppVar(painter.fontMetrics().xHeight());
-    ENTER_FUNCTION() << ppVar(QFontMetrics(testFont).height()) << ppVar(QFontMetrics(testFont).xHeight());
+//    ENTER_FUNCTION() << ppVar(painter.fontMetrics().height()) << ppVar(painter.fontMetrics().xHeight());
+//    ENTER_FUNCTION() << ppVar(QFontMetrics(testFont).height()) << ppVar(QFontMetrics(testFont).xHeight());
 
 
 

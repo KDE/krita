@@ -415,6 +415,7 @@ void TestSvgText::testSimpleText()
 
 
     SvgRenderTester t (data.data());
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_simple", QSize(140, 40), 72.0);
 
     KoShape *shape = t.findShape("testRect");
@@ -476,6 +477,7 @@ void TestSvgText::testComplexText()
 
 
     SvgRenderTester t (data.data());
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_complex", QSize(370, 56), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -678,7 +680,9 @@ void TestSvgText::testTextSpacing()
              .arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t (data.data());
+    t.setCheckQImagePremultiplied(true);
     t.setFuzzyThreshold(5);
+
     t.test_standard("text_letter_word_spacing", QSize(340, 250), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -710,6 +714,7 @@ void TestSvgText::testTextTabSpacing()
 
     SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_tab_spacing", QSize(400, 170), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -741,6 +746,7 @@ void TestSvgText::testTextDecorations()
 
     SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_decorations", QSize(290, 135), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -767,6 +773,7 @@ void TestSvgText::testRightToLeft()
              .arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t (data.data());
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_right_to_left", QSize(500,600), 72.0);
 
     KoSvgTextChunkShape *baseShape = toChunkShape(t.findShape("testRect"));
@@ -803,6 +810,7 @@ void TestSvgText::testRightToLeftAnchoring()
              .arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t (data.data());
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_right_to_left_anchoring", QSize(500,500), 72.0);
 }
 
@@ -1396,6 +1404,7 @@ void TestSvgText::testTextOutline()
     QRect renderRect(0, 0, 450, 40);
 
     t.setFuzzyThreshold(5);
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text_outline", renderRect.size(), 72.0);
 
     KoShape *shape = t.findShape("testRect");
@@ -1855,6 +1864,7 @@ void TestSvgText::testFontStyleSelection()
 
         SvgRenderTester t (data.data());
         t.setFuzzyThreshold(5);
+        t.setCheckQImagePremultiplied(true);
         t.test_standard("font-weight-bolder-001", renderRect.size(), 72.0);
     }
     
@@ -1989,6 +1999,7 @@ void TestSvgText::testFontSizeRender()
              .arg("DejaVu Sans").toLatin1());
 
     SvgRenderTester t (data.data());
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("font-sizes", QSize(140, 40), 72.0);
 }
 
@@ -2124,6 +2135,7 @@ void TestSvgText::testTextLength()
 
     SvgRenderTester t (data.data());
     t.setFuzzyThreshold(5);
+    t.setCheckQImagePremultiplied(true);
     t.test_standard("text-test-textLength", QSize(360, 210), 72.0);
 
     QMap<QString, int> testWidths;
@@ -2242,6 +2254,7 @@ void TestSvgText::testTextPathComplex()
 
         SvgRenderTester t (data.data());
         t.setFuzzyThreshold(5);
+        t.setCheckQImagePremultiplied(true);
         t.test_standard(testFile, testFiles.value(testFile).size(), 72.0);
     }
 }

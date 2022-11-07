@@ -13,6 +13,7 @@
 #include <QLayout>
 #include <QWidget>
 #include <QLabel>
+#include <QPainterPath>
 #include <kcombobox.h>
 
 #include <kis_debug.h>
@@ -27,6 +28,8 @@
 #include "kis_floating_message.h"
 #include "kis_canvas2.h"
 #include "KisViewManager.h"
+#include <KisOptimizedBrushOutline.h>
+
 #define INNER_RADIUS 50
 
 KisToolMeasureOptionsWidget::KisToolMeasureOptionsWidget(QWidget* parent, double resolution)
@@ -94,33 +97,41 @@ KisToolMeasure::~KisToolMeasure()
 
 void KisToolMeasure::paint(QPainter& gc, const KoViewConverter &converter)
 {
-    qreal sx, sy;
-    converter.zoom(&sx, &sy);
-
-    gc.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
-
     QPen old = gc.pen();
     QPen pen(Qt::SolidLine);
     gc.setPen(pen);
 
-    gc.drawLine(m_startPos, m_endPos);
+    QPainterPath elbowPath;
+    elbowPath.moveTo(m_endPos);
+    elbowPath.lineTo(m_startPos);
 
-    if (deltaX() >= 0)
-        gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() + INNER_RADIUS, m_startPos.y()));
-    else
-        gc.drawLine(QPointF(m_startPos.x(), m_startPos.y()), QPointF(m_startPos.x() - INNER_RADIUS, m_startPos.y()));
+    if (deltaX() >= 0) {
+        elbowPath.lineTo(QPointF(m_startPos.x() + INNER_RADIUS, m_startPos.y()));
+    } else {
+        elbowPath.lineTo(QPointF(m_startPos.x() - INNER_RADIUS, m_startPos.y()));
+    }
+
 
     if (distance() >= INNER_RADIUS) {
         QRectF rectangle(m_startPos.x() - INNER_RADIUS, m_startPos.y() - INNER_RADIUS, 2*INNER_RADIUS, 2*INNER_RADIUS);
-        int startAngle = (deltaX() >= 0) ? 0 : 180 * 16;
+        int startAngle = (deltaX() >= 0) ? 0 : 180;
 
         int spanAngle;
-        if ((deltaY() >= 0 && deltaX() >= 0) || (deltaY() < 0 && deltaX() < 0))
-            spanAngle = static_cast<int>(angle() * 16);
-        else
-            spanAngle = static_cast<int>(-angle() * 16);
-        gc.drawArc(rectangle, startAngle, spanAngle);
+        if ((deltaY() >= 0 && deltaX() >= 0) || (deltaY() < 0 && deltaX() < 0)) {
+            spanAngle = static_cast<int>(angle());
+        } else {
+            spanAngle = static_cast<int>(-angle());
+        }
+
+        elbowPath.arcTo(rectangle, startAngle, spanAngle);
     }
+
+    // The opengl renderer doesn't take the QPainter's transform, so the path is scaled here
+    qreal sx, sy;
+    converter.zoom(&sx, &sy);
+    QTransform transf;
+    transf.scale(sx / currentImage()->xRes(), sy / currentImage()->yRes());
+    paintToolOutline(&gc, transf.map(elbowPath));
 
     gc.setPen(old);
 }

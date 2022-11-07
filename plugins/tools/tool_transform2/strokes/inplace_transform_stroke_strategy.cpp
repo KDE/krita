@@ -356,6 +356,13 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
 
             m_d->initialUpdatesBeforeClear = updates.compressed();
             *m_d->updateDataForUndo = m_d->initialUpdatesBeforeClear;
+
+            /**
+             * We need to make sure that the nodes will be successfully be
+             * transformed back in case the stroke will be finished before
+             * sigTransactionGenerated() signal is delivered.
+             */
+            m_d->pendingUpdateArgs = m_d->initialTransformArgs;
         });
     }
 
@@ -949,6 +956,10 @@ void InplaceTransformStrokeStrategy::finishAction(QVector<KisStrokeJobData *> &m
         }
 
         reapplyTransform(m_d->currentTransformArgs, mutatedJobs, 0, true);
+    } else {
+        if (m_d->pendingUpdateArgs) {
+            mutatedJobs << new BarrierUpdateData(true);
+        }
     }
 
     mutatedJobs << new UpdateTransformData(m_d->currentTransformArgs,

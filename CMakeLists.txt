@@ -1136,7 +1136,7 @@ set_package_properties(Raqm PROPERTIES
 ##
 ## Check for fontconfig
 ##
-find_package(Fontconfig REQUIRED)
+find_package(Fontconfig 2.13.1 REQUIRED)
 set_package_properties(Fontconfig PROPERTIES
     TYPE REQUIRED
     PURPOSE "Needed for getting font file information."

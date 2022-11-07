@@ -28,16 +28,16 @@ Q_GLOBAL_STATIC(KoFontRegistery, s_instance)
 class KoFontRegistery::Private
 {
 private:
+    FcConfigUP m_config;
+
     struct ThreadData {
-        FcConfigUP m_config;
         FT_LibraryUP m_library;
         QHash<FcChar32, FcPatternUP> m_patterns;
         QHash<FcChar32, FcFontSetUP> m_fontSets;
         QHash<QString, FT_FaceUP> m_faces;
 
-        ThreadData(FcConfigUP cfg, FT_LibraryUP lib)
-            : m_config(std::move(cfg))
-            , m_library(std::move(lib))
+        ThreadData(FT_LibraryUP lib)
+            : m_library(std::move(lib))
         {
         }
     };
@@ -48,24 +48,6 @@ private:
     {
         if (!m_data.hasLocalData()) {
             FT_Library lib = nullptr;
-            FcConfig *config = FcConfigCreate();
-            KIS_ASSERT(config && "No Fontconfig support available");
-            if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
-                QDir appdir(KoResourcePaths::getApplicationRoot()
-                            + "/etc/fonts");
-                if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {
-                    qputenv("FONTCONFIG_PATH",
-                            QFile::encodeName(QDir::toNativeSeparators(
-                                appdir.absolutePath())));
-                }
-            }
-            debugFlake << "Setting FONTCONFIG_PATH"
-                       << qgetenv("FONTCONFIG_PATH");
-            if (!FcConfigParseAndLoad(config, nullptr, FcTrue)) {
-                errorFlake << "Failed loading the Fontconfig configuration";
-            } else {
-                FcConfigSetCurrent(config);
-            }
             FT_Error error = FT_Init_FreeType(&lib);
             if (error) {
                 errorFlake << "Error with initializing FreeType library:"
@@ -74,20 +56,43 @@ private:
                            << "GUI thread:" << qApp->thread();
             } else {
                 m_data.setLocalData(
-                    QSharedPointer<ThreadData>::create(config, lib));
+                    QSharedPointer<ThreadData>::create(lib));
             }
         }
     }
 
 public:
+    Private()
+    {
+        FcConfig *config = FcConfigCreate();
+        KIS_ASSERT(config && "No Fontconfig support available");
+        if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
+            QDir appdir(KoResourcePaths::getApplicationRoot()
+                        + "/etc/fonts");
+            if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {
+                qputenv("FONTCONFIG_PATH",
+                        QFile::encodeName(QDir::toNativeSeparators(
+                            appdir.absolutePath())));
+            }
+        }
+        debugFlake << "Setting FONTCONFIG_PATH"
+                   << qgetenv("FONTCONFIG_PATH");
+        if (!FcConfigParseAndLoad(config, nullptr, FcTrue)) {
+            errorFlake << "Failed loading the Fontconfig configuration";
+        } else {
+            FcConfigSetCurrent(config);
+        }
+        m_config.reset(config);
+    }
+
+    ~Private() = default;
+
     FT_LibraryUP library()
     {
         if (!m_data.hasLocalData())
             initialize();
         return m_data.localData()->m_library;
     }
-
-    ~Private() = default;
 
     QHash<FcChar32, FcPatternUP> &patterns()
     {

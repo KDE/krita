@@ -266,7 +266,7 @@ void TestAssistants::testProjectionNewMethod()
 
     ENTER_FUNCTION() << "************************ START **************************";
 
-    result = original.projectModifiedEberly(point);
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -280,7 +280,7 @@ void TestAssistants::testProjectionNewMethod()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(749.893,461.21);
 
-    result = original.projectModifiedEberly(point);
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -336,7 +336,7 @@ void TestAssistants::testProjectionNewMethod()
 
     point = QPointF(sqrt(5/2.0), sqrt(5/2.0));
 
-    result = original.projectModifiedEberly(point);
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -355,7 +355,7 @@ void TestAssistants::testProjectionNewMethod()
 
     point = QPointF(0, -sqrt(5/2.0) -5.0);
 
-    result = original.projectModifiedEberly(point);
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -374,7 +374,7 @@ void TestAssistants::testProjectionNewMethod()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(750,460);
 
-    result = original.projectModifiedEberly(point);
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -390,7 +390,7 @@ void TestAssistants::testProjectionNewMethod()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(1067.62,719.146);
 
-    result = original.projectModifiedEberly(point);
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
@@ -405,7 +405,7 @@ void TestAssistants::testProjectionNewMethod()
     original.updateToPolygon(poly, QLineF());
     point = QPointF(553.452,264.769);
 
-    result = original.projectModifiedEberly(point);
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 

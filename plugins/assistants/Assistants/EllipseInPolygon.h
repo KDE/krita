@@ -124,6 +124,8 @@ public:
     QPointF project(QPointF point);
 
     QPointF projectModifiedEberly(QPointF point);
+    QPointF projectModifiedEberlySecond(QPointF point);
+
 
 
     ///
@@ -236,6 +238,18 @@ protected:
     bool m_valid {false};
 
 };
+
+
+// needs to be moved to Kis_Algebra_2d later
+class AlgebraFunctions
+{
+public:
+    static qreal newtonUntilOvershoot (std::function<qreal(qreal)> f, std::function<qreal(qreal)> fd, qreal t0, qreal& previousT, bool& overshoot, bool debug);
+    static qreal bisectionMethod (std::function<qreal(qreal)> f, qreal ta, qreal tb, bool debug);
+
+
+};
+
 
 
 

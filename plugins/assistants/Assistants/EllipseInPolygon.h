@@ -11,6 +11,67 @@
 #include <QObject>
 
 
+class ConicFormula
+{
+
+public:
+    // since some formulas in the article are explicitely in that "their" canonical form
+    // it needs to remember that form
+    // how should I call it...
+    // Actual and Special?
+
+    typedef enum TYPE {
+        SPECIAL,
+        ACTUAL, // or "true form"
+    } TYPE;
+
+    ConicFormula();
+    ConicFormula(QVector<double> formula, QString name, TYPE Type);
+
+
+    void setFormulaActual(QVector<double> formula);
+    void setFormulaActual(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f);
+
+    void setFormulaSpecial(QVector<double> formula);
+    void setFormulaSpecial(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f);
+
+    // return the formula in the special ("canonical" by the article authors) form
+    // (with Ax^2 + 2Bxy + Cy^2... etc.)
+    QVector<double> getFormulaSpecial();
+    // return the formula in the actual form (with Ax^2 + Bxy + Cy^2... etc.)
+    QVector<double> getFormulaActual();
+    // return the data as they are stored (A, B, C, ...)
+    QVector<double> getData();
+
+    void convertTo(TYPE type);
+
+    // functions helpful for debugging
+    QString toWolframAlphaForm();
+    void printOutInAllForms();
+
+    bool isSpecial() { return Type == SPECIAL; }
+
+
+    // data
+    TYPE Type {SPECIAL};
+
+    // if it's *not* special, then it contains actual true data
+    // if it is special, then it contains those special coefficients
+    qreal A {1.0};
+    qreal B {0.0};
+    qreal C {1.0};
+    qreal D {0.0};
+    qreal E {0.0};
+    qreal F {0.0};
+
+    QString Name {"formula"};
+
+private:
+    void setData(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f);
+
+};
+
+
 class EllipseInPolygon
 {
 public:
@@ -168,6 +229,8 @@ protected:
     static qreal calculateFormula(QVector<double> formula, QPointF point);
 
 
+
+    static QVector<double> getRotatedFormula(QVector<double> original, QPointF &pointToRotateTogether);
 
 
     bool m_valid {false};

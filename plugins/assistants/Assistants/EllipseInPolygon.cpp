@@ -309,6 +309,7 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
 
     QVector<double> trueFormulaA = QVector<double>::fromList(finalFormula.toList());
     if (debug) writeFormulaInAllForms(trueFormulaA, "formula A - final", true);
+    ConicFormula trueA(trueFormulaA, "formula A - final", ConicFormula::ACTUAL);
 
     //if (debug)
 
@@ -387,6 +388,8 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     if (debug) ENTER_FUNCTION() << ppVar(checkIfReallyCanonized);
     // ok so canonized is the article's version, as in, the true equation is with 2*canonized[1] for example,
     // and canonized = A, B, C, D...
+
+    ConicFormula formCCanonized(formulaCCanonized, "formula C - canonized", ConicFormula::SPECIAL);
 
 
 
@@ -513,6 +516,15 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     QVector<double> formulaDRotated = QVector<double>::fromList(rotated.toList());
     if (debug) writeFormulaInAllForms(formulaDRotated, "formula D - rotated");
 
+    QPointF pointToRotate = point;
+    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(formCCanonized.getFormulaActual(), pointToRotate);
+    ConicFormula formDRotatedAlt (formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
+    formDRotatedAlt.convertTo(ConicFormula::SPECIAL);
+    if (debug) formDRotatedAlt.printOutInAllForms();
+
+    KIS_ASSERT_RECOVER_NOOP(qFuzzyCompare(formDRotatedAlt.B, 0));
+
+    //formulaDRotatedAlternativeTrue =
 
 
     if (debug) ENTER_FUNCTION() << "after rotation:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // still a circle, good
@@ -1418,6 +1430,47 @@ qreal EllipseInPolygon::calculateFormula(QVector<double> formula, QPointF point)
             + formula[5]; // f
 }
 
+QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, QPointF& pointToRotateTogether)
+{
+    qreal a = original[0];
+    qreal b = original[1];
+    qreal c = original[2];
+    qreal d = original[3];
+    qreal e = original[4];
+    qreal f = original[5];
+
+    qreal angle = qAtan2(b, a - c)/2;
+
+    // use finalAxisAngle to find the cos and sin
+    // and replace the final coordinate system with the rerotated one
+    qreal K = qCos(-angle);
+    qreal L = qSin(-angle);
+
+    // this allows to calculate the formula for the rerotated ellipse
+    qreal aprim = K*K*a - K*L*b + L*L*c;
+    qreal bprim = 2*K*L*a + K*K*b - L*L*b - 2*K*L*c;
+    qreal cprim = L*L*a + K*L*b + K*K*c;
+    qreal dprim = K*d - L*e;
+    qreal eprim = L*d + K*e;
+    qreal fprim = f;
+
+    //finalAxisReverseAngleCos = K;
+    //finalAxisReverseAngleSin = L;
+
+    // third attempt at new center:
+    // K' = K
+    // L' = -L
+    // note that this will be in a different place, because the ellipse wasn't moved to have center in (0, 0), but still rotate around point (0,0)
+    // and any point that is not (0, 0), when rotated around (0, 0) with an angle that isn't 0, 360 etc. degrees, will end up in a different place
+    //QPointF rerotatedCenter = QPointF(K*finalEllipseCenter[0] - L*finalEllipseCenter[1], K*finalEllipseCenter[1] + L*finalEllipseCenter[0]);
+
+    pointToRotateTogether = QPointF(K*pointToRotateTogether.x() - L*pointToRotateTogether.y(), K*pointToRotateTogether.y() + L*pointToRotateTogether.x());
+    QVector<double> response;
+    response << aprim << bprim << cprim << dprim << eprim << fprim;
+    return response;
+
+}
+
 void EllipseInPolygon::setFormula(QVector<double> &formula, double a, double b, double c, double d, double e, double f)
 {
     if (formula.size() != 6) {
@@ -1609,4 +1662,141 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
 
     m_valid = true;
     return true;
+}
+
+// ********* CONIC FORMULA CLASS *********
+
+ConicFormula::ConicFormula()
+{
+
+}
+
+ConicFormula::ConicFormula(QVector<double> formula, QString name, TYPE type = SPECIAL)
+{
+    if (type == SPECIAL) {
+        setFormulaSpecial(formula);
+    } else {
+        setFormulaActual(formula);
+    }
+    Name = name;
+}
+
+void ConicFormula::setFormulaActual(QVector<double> formula)
+{
+    KIS_ASSERT_RECOVER_RETURN(formula.size() >= 6);
+    setFormulaActual(formula[0], formula[1], formula[2], formula[3], formula[4], formula[5]);
+}
+
+void ConicFormula::setFormulaActual(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f)
+{
+    Type = ACTUAL;
+    setData(a, b, c, d, e, f);
+}
+
+void ConicFormula::setFormulaSpecial(QVector<double> formula)
+{
+    KIS_ASSERT_RECOVER_RETURN(formula.size() >= 6);
+    setFormulaSpecial(formula[0], formula[1], formula[2], formula[3], formula[4], formula[5]);
+}
+
+void ConicFormula::setFormulaSpecial(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f)
+{
+    Type = SPECIAL;
+    setData(a, b, c, d, e, f);
+}
+
+QVector<double> ConicFormula::getFormulaSpecial()
+{
+    QVector<double> response;
+    if (isSpecial()) {
+        response << A << B << C << D << E << F;
+    } else {
+        response << A << B/2 << C << D/2 << E/2 << F;
+    }
+    return response;
+}
+
+QVector<double> ConicFormula::getFormulaActual()
+{
+    QVector<double> response;
+    if (isSpecial()) {
+        response << A << 2*B << C << 2*D << 2*E << F;
+    } else {
+        response << A << B << C << D << E << F;
+    }
+    return response;
+}
+
+QVector<double> ConicFormula::getData()
+{
+    QVector<double> response;
+    response << A << B << C << D << E << F;
+    return response;
+}
+
+void ConicFormula::convertTo(TYPE type)
+{
+    if (Type != type) {
+        if (Type == SPECIAL) { // to "actual"
+            QVector<double> actual = getFormulaActual();
+            setFormulaActual(actual);
+        } else { // to "special"
+            QVector<double> special = getFormulaSpecial();
+            setFormulaSpecial(special);
+        }
+    }
+}
+
+QString ConicFormula::toWolframAlphaForm()
+{
+    auto writeOutNumber = [] (double n, bool first = false) {
+        QString str;
+        if (n >= 0 && !first) {
+            str = QString("+ ") + QString::number(n);
+        } else {
+            str = (QString::number(n));
+        }
+        return str;
+    };
+
+    QString str = writeOutNumber(A, true) + "x^2 "
+            + writeOutNumber(isSpecial()? 2*B : B) + "xy "
+            + writeOutNumber(C) + "y^2 "
+            + writeOutNumber(isSpecial()? 2*D : D) + "x "
+            + writeOutNumber(isSpecial()? 2*E : E) + "y "
+            + writeOutNumber(F) + " = 0";
+    return str;
+}
+
+void ConicFormula::printOutInAllForms()
+{
+
+    QVector<double> actualForm = getFormulaActual();
+    QString octaveForm = "[";
+    for (int i = 0; i < 6; i++) {
+        //bool shouldDouble = isSpecial && (i == 1 || i == 3 || i == 4);
+        octaveForm += QString::number(actualForm[i]);
+        if (i != 5) {
+            octaveForm += ",";
+        }
+    }
+    octaveForm += "];";
+
+    qCritical() << "ModifiedElberly | ---";
+    qCritical() << "ModifiedElberly | formula name: " << Name;
+    qCritical() << "ModifiedElberly | true form? " << Type;
+    qCritical() << "ModifiedElberly | WolframAlpha: " << toWolframAlphaForm();
+    qCritical() << "ModifiedElberly | Octave: " << octaveForm;
+    qCritical() << "ModifiedElberly | Actual data (A, B, C, D...): " << getData();
+    qCritical() << "ModifiedElberly | ---";
+}
+
+void ConicFormula::setData(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f)
+{
+    A = a;
+    B = b;
+    C = c;
+    D = d;
+    E = e;
+    F = f;
 }

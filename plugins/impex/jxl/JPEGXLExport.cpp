@@ -646,6 +646,15 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             return true;
         };
 
+        // Hardcoded a map function that translates from arbitrary quality value to JPEG-XL distance
+        const auto setDistance = [&](float v) {
+            // Using a gamma curve to map the quality -> distance a bit better
+            float y = pow(v / 100.0f, 1.0f / 2.2f) * 100.0f;
+            float dist = cfg->getBool("lossless") ? 0.0f : ((y * (1.0f - 25.0f)) / 100.0f) + 25.0f;
+            dbgFile << "libjxl distance equivalent: " << dist;
+            return JxlEncoderSetFrameDistance(frameSettings, dist) == JXL_ENC_SUCCESS;
+        };
+
         if (!setFrameLossless(cfg->getBool("lossless"))
             || !setSetting(JXL_ENC_FRAME_SETTING_EFFORT, cfg->getInt("effort", 7))
             || !setSetting(JXL_ENC_FRAME_SETTING_DECODING_SPEED, cfg->getInt("decodingSpeed", 0))
@@ -666,7 +675,8 @@ KisImportExportErrorCode JPEGXLExport::convert(KisDocument *document, QIODevice 
             || !setSetting(JXL_ENC_FRAME_SETTING_LOSSY_PALETTE, cfg->getInt("lossyPalette", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR_GROUP_SIZE, cfg->getInt("modularGroupSize", -1))
             || !setSetting(JXL_ENC_FRAME_SETTING_MODULAR_PREDICTOR, cfg->getInt("modularPredictor", -1))
-            || !setSetting(JXL_ENC_FRAME_SETTING_JPEG_RECON_CFL, cfg->getInt("jpegReconCFL", -1))) {
+            || !setSetting(JXL_ENC_FRAME_SETTING_JPEG_RECON_CFL, cfg->getInt("jpegReconCFL", -1))
+            || !setDistance(cfg->getInt("lossyQuality", 100))) {
             return ImportExportCodes::InternalError;
         }
     }
@@ -897,6 +907,9 @@ KisPropertiesConfigurationSP JPEGXLExport::defaultConfiguration(const QByteArray
     cfg->setProperty("lossless", true);
     cfg->setProperty("effort", 7);
     cfg->setProperty("decodingSpeed", 0);
+    cfg->setProperty("lossyQuality", 100);
+    cfg->setProperty("forceModular", false);
+    cfg->setProperty("modularSetVal", -1);
 
     cfg->setProperty("floatingPointConversionOption", "KeepSame");
     cfg->setProperty("HLGnominalPeak", 1000.0);

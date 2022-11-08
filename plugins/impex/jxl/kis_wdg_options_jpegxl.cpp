@@ -157,12 +157,14 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     using SpaceList = QList<std::tuple<QString, QString, QString>>;
 
     haveAnimation->setChecked(cfg->getBool("haveAnimation", true));
-    lossless->setChecked(cfg->getBool("lossless", true));
+    lossyEncoding->setChecked(!cfg->getBool("lossless", true));
     effort->setValue(cfg->getInt("effort", 7));
     decodingSpeed->setValue(cfg->getInt("decodingSpeed", 0));
+    lossyQuality->setValue(cfg->getInt("lossyQuality", 100));
+    forceModular->setChecked(cfg->getBool("forceModular", false));
 
     const int CicpPrimaries = cfg->getInt(KisImportExportFilter::CICPPrimariesTag, PRIMARIES_UNSPECIFIED);
-    conversionSettings->setVisible(cfg->getBool(KisImportExportFilter::HDRTag, false)
+    tabWidget->setTabEnabled(1, cfg->getBool(KisImportExportFilter::HDRTag, false)
                                    && cfg->getString(KisImportExportFilter::ColorModelIDTag) != GrayAColorModelID.id());
     SpaceList conversionOptionsList = {
         {i18nc("Color space option", "Save as is"),
@@ -228,7 +230,7 @@ void KisWdgOptionsJPEGXL::setConfiguration(const KisPropertiesConfigurationSP cf
     patches->setCurrentIndex(patches->findData(cfg->getInt("patches", -1)));
     epf->setValue(cfg->getInt("epf", -1));
     gaborish->setCurrentIndex(gaborish->findData(cfg->getInt("gaborish", -1)));
-    modular->setCurrentIndex(modular->findData(cfg->getInt("modular", -1)));
+    modular->setCurrentIndex(modular->findData(cfg->getInt("modularSetVal", -1)));
     keepInvisible->setCurrentIndex(keepInvisible->findData(cfg->getInt("keepInvisible", -1)));
     groupOrder->setCurrentIndex(groupOrder->findData(cfg->getInt("groupOrder", -1)));
     responsive->setCurrentIndex(responsive->findData(cfg->getInt("progressiveAC", -1)));
@@ -256,13 +258,18 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
     KisPropertiesConfigurationSP cfg = new KisPropertiesConfiguration();
 
     cfg->setProperty("haveAnimation", haveAnimation->isChecked());
-    cfg->setProperty("lossless", lossless->isChecked());
+    cfg->setProperty("lossless", !lossyEncoding->isChecked());
     cfg->setProperty("effort", effort->value());
     cfg->setProperty("decodingSpeed", decodingSpeed->value());
+    cfg->setProperty("lossyQuality", lossyQuality->value());
+    cfg->setProperty("forceModular", forceModular->isChecked());
+    cfg->setProperty("modularSetVal", modular->currentData());
+
     cfg->setProperty("floatingPointConversionOption", cmbConversionPolicy->currentData(Qt::UserRole).toString());
     cfg->setProperty("HLGnominalPeak", spnNits->value());
     cfg->setProperty("HLGgamma", spnGamma->value());
     cfg->setProperty("removeHGLOOTF", chkHLGOOTF->isChecked());
+
     cfg->setProperty("resampling", resampling->currentData());
     cfg->setProperty("extraChannelResampling", extraChannelResampling->currentData());
     cfg->setProperty("photonNoise", photonNoise->value());
@@ -270,7 +277,12 @@ KisPropertiesConfigurationSP KisWdgOptionsJPEGXL::configuration() const
     cfg->setProperty("patches", patches->currentData());
     cfg->setProperty("epf", epf->value());
     cfg->setProperty("gaborish", gaborish->currentData());
-    cfg->setProperty("modular", modular->currentData());
+    // force modular encoding without overriding value in advanced tab
+    if (forceModular->isChecked() && lossyEncoding->isChecked()) {
+        cfg->setProperty("modular", 1);
+    } else {
+        cfg->setProperty("modular", modular->currentData());
+    }
     cfg->setProperty("keepInvisible", keepInvisible->currentData());
     cfg->setProperty("groupOrder", groupOrder->currentData());
     cfg->setProperty("responsive", responsive->currentData());

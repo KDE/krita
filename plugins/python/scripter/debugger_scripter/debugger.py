@@ -6,10 +6,7 @@ SPDX-License-Identifier: GPL-2.0-or-later
 import bdb
 import multiprocessing
 import sys
-if sys.version_info[0] > 2:
-    import asyncio
-else:
-    import trollius as asyncio
+import asyncio
 from . import debuggerformatter
 
 
@@ -83,30 +80,26 @@ class Debugger(bdb.Bdb):
     def user_exception(self, frame, exception):
         self.applicationq.put({"exception": str(exception[1])})
 
-    @asyncio.coroutine
-    def display(self):
+    async def display(self):
         """Coroutine for updating the UI"""
 
         while True:
             if self.applicationq.empty():
-                yield from asyncio.sleep(0.3)
+                await asyncio.sleep(0.3)
             else:
                 while not self.applicationq.empty():
                     self.application_data.update(self.applicationq.get())
                     self.scripter.uicontroller.repaintDebugArea()
                     return
 
-    @asyncio.coroutine
-    def start(self):
-        yield from self.display()
+    async def start(self):
+        await self.display()
 
-    @asyncio.coroutine
-    def step(self):
+    async def step(self):
         self.debugq.put("step")
-        yield from self.display()
+        await self.display()
 
-    @asyncio.coroutine
-    def stop(self):
+    async def stop(self):
         self.debugq.put("stop")
         self.applicationq.put({"quit": True})
-        yield from self.display()
+        await self.display()

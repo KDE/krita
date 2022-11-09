@@ -362,13 +362,8 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
     if (direction == Import) {
 
         KisUsageLogger::log(QString("Importing %1 to %2. Location: %3. Real location: %4. Batchmode: %5")
-                            .arg(QString::fromLatin1(from))
-                            .arg(QString::fromLatin1(to))
-                            .arg(location)
-                            .arg(realLocation)
-                            .arg(batchMode()));
-
-
+                                .arg(QString::fromLatin1(from), QString::fromLatin1(to), location,
+                                     realLocation, QString::number(batchMode())));
 
         // async importing is not yet supported!
         KIS_SAFE_ASSERT_RECOVER_NOOP(!isAsync);
@@ -383,17 +378,15 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
         if (result.status().isOk()) {
             KisImageSP image = m_document->image().toStrongRef();
             if (image) {
-                KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
-                                    .arg(QString::fromLatin1(from))
-                                    .arg(image->width())
-                                    .arg(image->height())
-                                    .arg(image->xRes())
-                                    .arg(image->colorSpace()->colorModelId().name())
-                                    .arg(image->colorSpace()->colorDepthId().name())
-                                    .arg(image->colorSpace()->profile()->name())
-                                    .arg(image->nlayers()));
-            }
-            else {
+                KisUsageLogger::log(QString("Loaded image from %1. Size: %2 * %3 pixels, %4 dpi. Color "
+                                            "model: %6 %5 (%7). Layers: %8")
+                                        .arg(QString::fromLatin1(from), QString::number(image->width()),
+                                             QString::number(image->height()), QString::number(image->xRes()),
+                                             image->colorSpace()->colorModelId().name(),
+                                             image->colorSpace()->colorDepthId().name(),
+                                             image->colorSpace()->profile()->name(),
+                                             QString::number(image->nlayers())));
+            } else {
                 qWarning() << "The filter returned OK, but there is no image";
             }
 
@@ -423,13 +416,12 @@ KisImportExportManager::ConversionResult KisImportExportManager::convert(KisImpo
             return KisImportExportErrorCode(ImportExportCodes::Cancelled);
         }
 
-        KisUsageLogger::log(QString("Converting from %1 to %2. Location: %3. Real location: %4. Batchmode: %5. Configuration: %6")
-                            .arg(QString::fromLatin1(from))
-                            .arg(QString::fromLatin1(to))
-                            .arg(location)
-                            .arg(realLocation)
-                            .arg(batchMode())
-                            .arg(exportConfiguration ? exportConfiguration->toXML() : "none"));
+        KisUsageLogger::log(
+            QString(
+                "Converting from %1 to %2. Location: %3. Real location: %4. Batchmode: %5. Configuration: %6")
+                .arg(QString::fromLatin1(from), QString::fromLatin1(to), location, realLocation,
+                     QString::number(batchMode()),
+                     (exportConfiguration ? exportConfiguration->toXML() : "none")));
 
         const QString alsoAsKraLocation = alsoAsKra ? getAlsoAsKraLocation(location) : QString();
         if (isAsync) {

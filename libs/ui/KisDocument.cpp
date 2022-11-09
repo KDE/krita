@@ -744,21 +744,33 @@ bool KisDocument::exportDocumentImpl(const KritaUtils::ExportFileJob &job, KisPr
         if (numOfBackupsKept == 1) {
             if (!KisBackup::simpleBackupFile(job.filePath, backupDir, suffix)) {
                 qWarning() << "Failed to create simple backup file!" << job.filePath << backupDir << suffix;
-                KisUsageLogger::log(QString("Failed to create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+                KisUsageLogger::log(QString("Failed to create a simple backup for %1 in %2.")
+                                        .arg(job.filePath, backupDir.isEmpty()
+                                                               ? "the same location as the file"
+                                                               : backupDir));
                 return false;
             }
             else {
-                KisUsageLogger::log(QString("Create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+                KisUsageLogger::log(QString("Create a simple backup for %1 in %2.")
+                                        .arg(job.filePath, backupDir.isEmpty()
+                                                               ? "the same location as the file"
+                                                               : backupDir));
             }
         }
         else if (numOfBackupsKept > 1) {
             if (!KisBackup::numberedBackupFile(job.filePath, backupDir, suffix, numOfBackupsKept)) {
                 qWarning() << "Failed to create numbered backup file!" << job.filePath << backupDir << suffix;
-                KisUsageLogger::log(QString("Failed to create a numbered backup for %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+                KisUsageLogger::log(QString("Failed to create a numbered backup for %2.")
+                                        .arg(job.filePath, backupDir.isEmpty()
+                                                               ? "the same location as the file"
+                                                               : backupDir));
                 return false;
             }
             else {
-                KisUsageLogger::log(QString("Create a simple backup for %1 in %2.").arg(job.filePath).arg(backupDir.isEmpty() ? "the same location as the file" : backupDir));
+                KisUsageLogger::log(QString("Create a simple backup for %1 in %2.")
+                                        .arg(job.filePath, backupDir.isEmpty()
+                                                               ? "the same location as the file"
+                                                               : backupDir));
             }
         }
     }
@@ -801,16 +813,13 @@ bool KisDocument::exportDocument(const QString &path, const QByteArray &mimeType
         flags |= SaveShowWarnings;
     }
 
-    KisUsageLogger::log(QString("Exporting Document: %1 as %2. %3 * %4 pixels, %5 layers, %6 frames, %7 framerate. Export configuration: %8")
-                        .arg(path)
-                        .arg(QString::fromLatin1(mimeType))
-                        .arg(d->image->width())
-                        .arg(d->image->height())
-                        .arg(d->image->nlayers())
-                        .arg(d->image->animationInterface()->totalLength())
-                        .arg(d->image->animationInterface()->framerate())
-                        .arg(exportConfiguration ? exportConfiguration->toXML() : "No configuration"));
-
+    KisUsageLogger::log(QString("Exporting Document: %1 as %2. %3 * %4 pixels, %5 layers, %6 frames, %7 "
+                                "framerate. Export configuration: %8")
+                            .arg(path, QString::fromLatin1(mimeType), QString::number(d->image->width()),
+                                 QString::number(d->image->height()), QString::number(d->image->nlayers()),
+                                 QString::number(d->image->animationInterface()->totalLength()),
+                                 QString::number(d->image->animationInterface()->framerate()),
+                                 (exportConfiguration ? exportConfiguration->toXML() : "No configuration")));
 
     return exportDocumentImpl(KritaUtils::ExportFileJob(path,
                                                         mimeType,
@@ -822,17 +831,14 @@ bool KisDocument::saveAs(const QString &_path, const QByteArray &mimeType, bool 
 {
     using namespace KritaUtils;
 
-    KisUsageLogger::log(QString("Saving Document %9 as %1 (mime: %2). %3 * %4 pixels, %5 layers.  %6 frames, %7 framerate. Export configuration: %8")
-                        .arg(_path)
-                        .arg(QString::fromLatin1(mimeType))
-                        .arg(d->image->width())
-                        .arg(d->image->height())
-                        .arg(d->image->nlayers())
-                        .arg(d->image->animationInterface()->totalLength())
-                        .arg(d->image->animationInterface()->framerate())
-                        .arg(exportConfiguration ? exportConfiguration->toXML() : "No configuration")
-                        .arg(path()));
-
+    KisUsageLogger::log(QString("Saving Document %9 as %1 (mime: %2). %3 * %4 pixels, %5 layers.  %6 frames, "
+                                "%7 framerate. Export configuration: %8")
+                            .arg(_path, QString::fromLatin1(mimeType), QString::number(d->image->width()),
+                                 QString::number(d->image->height()), QString::number(d->image->nlayers()),
+                                 QString::number(d->image->animationInterface()->totalLength()),
+                                 QString::number(d->image->animationInterface()->framerate()),
+                                 (exportConfiguration ? exportConfiguration->toXML() : "No configuration"),
+                                 path()));
 
     // Check whether it's an existing resource were are saving to
     if (resourceSavingFilter(_path, mimeType, exportConfiguration)) {
@@ -1341,11 +1347,9 @@ void KisDocument::slotChildCompletedSavingInBackground(KisImportExportErrorCode 
 
     QFileInfo fi(job.filePath);
     KisUsageLogger::log(QString("Completed saving %1 (mime: %2). Result: %3. Warning: %4. Size: %5")
-                        .arg(job.filePath)
-                        .arg(QString::fromLatin1(job.mimeType))
-                        .arg(!status.isOk() ? errorMessage : "OK")
-                        .arg(warningMessage)
-                        .arg(fi.size()));
+                            .arg(job.filePath, QString::fromLatin1(job.mimeType),
+                                 (!status.isOk() ? errorMessage : "OK"), warningMessage,
+                                 QString::number(fi.size())));
 
     emit sigCompleteBackgroundSaving(job, status, errorMessage, warningMessage);
 }
@@ -1874,7 +1878,7 @@ bool KisDocument::openFile()
             updater->cancel();
         }
         QString msg = status.errorMessage();
-        KisUsageLogger::log(QString("Loading %1 failed: %2").arg(prettyPath()).arg(msg));
+        KisUsageLogger::log(QString("Loading %1 failed: %2").arg(prettyPath(), msg));
 
         if (!msg.isEmpty() && !fileBatchMode()) {
             DlgLoadMessages dlg(i18nc("@title:window", "Krita"),
@@ -2503,14 +2507,12 @@ bool KisDocument::newImage(const QString& name,
         layer->setDirty(QRect(0, 0, width, height));
     }
 
-    KisUsageLogger::log(QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
-                        .arg(name)
-                        .arg(width).arg(height)
-                        .arg(imageResolution * 72.0)
-                        .arg(image->colorSpace()->colorModelId().name())
-                        .arg(image->colorSpace()->colorDepthId().name())
-                        .arg(image->colorSpace()->profile()->name())
-                        .arg(numberOfLayers));
+    KisUsageLogger::log(
+        QString("Created image \"%1\", %2 * %3 pixels, %4 dpi. Color model: %6 %5 (%7). Layers: %8")
+            .arg(name, QString::number(width), QString::number(height),
+                 QString::number(imageResolution * 72.0), image->colorSpace()->colorModelId().name(),
+                 image->colorSpace()->colorDepthId().name(), image->colorSpace()->profile()->name(),
+                 QString::number(numberOfLayers)));
 
     QApplication::restoreOverrideCursor();
 

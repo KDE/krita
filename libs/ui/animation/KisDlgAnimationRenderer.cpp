@@ -369,9 +369,8 @@ void KisDlgAnimationRenderer::selectRenderType(int index)
         const QString baseName = info.completeBaseName();
         const QString path = info.path();
 
-        videoFileName =
-            QString("%1%2%3.%4").arg(path).arg('/').arg(baseName).arg(KisMimeDatabase::suffixesForMimeType(mimeType).first());
-
+        videoFileName = QString("%1%2%3.%4")
+                            .arg(path, "/", baseName, KisMimeDatabase::suffixesForMimeType(mimeType).first());
     }
     m_page->videoFilename->setMimeTypeFilters(QStringList() << mimeType, mimeType);
     m_page->videoFilename->setFileName(videoFileName);

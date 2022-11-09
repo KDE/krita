@@ -149,11 +149,9 @@ bool GamutMaskDock::openMaskEditor()
     // otherwise bugs happen when slotDocumentRemoved is called
     // (e.g. user closes another view, the template stays open, but the edit operation is canceled)
     m_maskDocument->setInfiniteAutoSaveInterval();
-    QString maskPath = QString("%1%2%3_%4.kra")
-            .arg(QDir::tempPath())
-            .arg('/')
-            .arg("GamutMaskTemplate")
-            .arg(std::time(nullptr));
+    QString maskPath =
+        QString("%1%2%3_%4.kra")
+            .arg(QDir::tempPath(), "/", "GamutMaskTemplate", QString::number(std::time(nullptr)));
     m_maskDocument->setPath(maskPath);
     m_maskDocument->setLocalFilePath(maskPath);
 

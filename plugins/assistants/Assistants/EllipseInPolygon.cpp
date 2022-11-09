@@ -1170,6 +1170,31 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
 
+    // ***************
+
+    bool debug = true;
+    //debug = false;
+    //debug = true;
+
+    // *************
+
+    struct Formulas {
+        ConicFormula formA;
+        ConicFormula formB;
+        ConicFormula formC;
+        ConicFormula formD;
+        ConicFormula formE;
+        ConicFormula formF;
+        ConicFormula formH;
+        ConicFormula formI;
+
+
+        ConicFormula current;
+    };
+
+    Formulas f;
+
+
 
     auto writeFormulaInWolframAlphaForm = [] (QVector<double> formula, bool trueForm = false) {
         auto writeOutNumber = [] (double n, bool first = false) {
@@ -1214,13 +1239,13 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     };
 
 
-    // ***************
+    auto stdDebug = [debug] (ConicFormula f) {
+        if (debug) f.printOutInAllForms();
+    };
 
-    bool debug = true;
-    //debug = false;
-    //debug = true;
-
-    // *************
+    auto stdDebugVec = [debug, writeFormulaInAllForms] (QVector<double> f, QString name, bool trueForm = false) {
+        if (debug) writeFormulaInAllForms(f, name, trueForm);
+    };
 
 
     if (debug) ENTER_FUNCTION() << "################ ELBERLY SECOND ###################";
@@ -1235,6 +1260,8 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     writeFormulaInAllForms(trueFormulaA, "formula A - final", true);
     ConicFormula formA(trueFormulaA, "formula A - final", ConicFormula::ACTUAL);
     if (debug) formA.printOutInAllForms();
+    f.formA = ConicFormula(trueFormulaA, "formula A - final", ConicFormula::ACTUAL);
+    f.current = f.formA;
 
     //if (debug)
 
@@ -1611,8 +1638,12 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     setFromVector(A, B, C, D, E, F, rotated);
 
-    auto moveEllipseSoPointIsInOrigin = [] (ConicFormula formula, qreal u, qreal v) {
+    auto moveEllipseSoPointIsInOrigin = [debug] (ConicFormula formula, qreal u, qreal v) {
         ConicFormula response = formula;
+        if (debug) ENTER_FUNCTION() << "formula to copy from: " << formula.getFormulaSpecial();
+        if (debug) ENTER_FUNCTION() << "formula copied: " << response.getFormulaSpecial();
+
+
         response.F = formula.F + formula.A*u*u + 2*formula.D*u + formula.C*v*v + 2*formula.E*v;// F -> F + Au^2 + 2*Du + Cv^2 + 2Ev
         response.D = formula.D + formula.A*u; // D -> D + A*u
         response.E = formula.E + formula.C*v; // E -> E + C*v

@@ -161,7 +161,7 @@ android {
         targetSdkVersion 31
         minSdkVersion 23
         versionCode project.ext.constant * 1000000 + versionMajor * 10000 + versionMinor * 100 + versionRelease
-        versionName "5.1.0-prealpha"
+        versionName "5.2.0-prealpha"
         archivesBaseName = System.getenv('KRITA_BUILD_APPBUNDLE') ? "krita-$versionName" : "krita-$abi-$versionName"
     }
 

@@ -1180,7 +1180,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     struct Formulas {
         ConicFormula formA;
-        ConicFormula formB;
+        ConicFormula formBNormalized;
         ConicFormula formC;
         ConicFormula formD;
         ConicFormula formE;
@@ -1331,7 +1331,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
     ConicFormula formBNormalized = normalizeFormula(formA, point2, normalizeBy);
-    f.formB = normalizeFormula(f.formA, point2, normalizeBy);
+    f.formBNormalized = normalizeFormula(f.formA, point2, normalizeBy);
 
     //QVector<double> formulaBNormalized = QVector<double>::fromList(canonized.toList());
     QVector<double> formulaBNormalized = formBNormalized.getFormulaActual();
@@ -1356,11 +1356,27 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     auto sq = [] (qreal a) {return a*a;};
 
-    double canonizingNumber = sq(canonized[0]) + sq(canonized[1]/2) + sq(canonized[2]) + sq(canonized[3]/2) + sq(canonized[4]/2) + sq(canonized[5]);
+    double canonizingNumber = sq(f.formBNormalized.A) + sq(f.formBNormalized.B/2) + sq(f.formBNormalized.C)
+            + sq(f.formBNormalized.D/2) + sq(f.formBNormalized.E/2) + sq(f.formBNormalized.F);
     canonizingNumber = sqrt(canonizingNumber);
 
 
     if (debug) ENTER_FUNCTION() << ppVar(canonizingNumber);
+
+    if (debug) writeFormulaInAllForms(canonized, "canonized raw - before canonization");
+    if (debug) f.formBNormalized.printOutInAllForms();
+
+
+    // conversion actual -> special is included below
+    f.formC = ConicFormula(f.formBNormalized.getFormulaActual(), "formula C - canonized", ConicFormula::SPECIAL);
+
+    f.formC.A = f.formBNormalized.A/canonizingNumber;
+    f.formC.B = f.formBNormalized.B/(2*canonizingNumber);
+    f.formC.C = f.formBNormalized.C/canonizingNumber;
+    f.formC.D = f.formBNormalized.D/(2*canonizingNumber);
+    f.formC.E = f.formBNormalized.E/(2*canonizingNumber);
+    f.formC.F = f.formBNormalized.F/canonizingNumber;
+
 
     for(int i = 0; i < 6; i++) {
         if (i == 1 || i == 3 || i == 4) {
@@ -1369,6 +1385,15 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
             canonized[i] = canonized[i]/(canonizingNumber);
         }
     }
+
+
+    //canonized.
+
+
+    if (debug) ENTER_FUNCTION() << "Are those two values the same?? ___________ " << ppVar(canonized[0] - f.formC.A);
+    if (debug) writeFormulaInAllForms(canonized, "canonized raw");
+    if (debug) f.formC.printOutInAllForms();
+
 
 
     if (debug) ENTER_FUNCTION() << "after canonization:" << ppVar(canonized);

@@ -331,6 +331,7 @@ void TestAssistants::testProjectionNewMethod()
     // ellipse: 2x^2 + xy + 1y^2 = 5
     // so: 2, 1, 2, 0, 0, -5
 
+    /*
     original.finalFormula.clear();
     original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
 
@@ -341,14 +342,14 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
-
+    */
 
     ENTER_FUNCTION() << "************************ START 6 ************************";
     // Test 3.
     // ellipse: 2x^2 + xy + 1y^2 = 5
     // so: 2, 1, 2, 0, 0, -5
 
-
+    /*
 
     original.finalFormula.clear();
     original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
@@ -364,10 +365,11 @@ void TestAssistants::testProjectionNewMethod()
 
     //QVERIFY(form(result, original) < eps);
 
-
+    */
 
     ENTER_FUNCTION() << "************************ START 7 (real, but nicer numbers) **************************";
 
+    /*
     poly.clear();
     poly << QPointF(700,350)  << QPointF(1050,530) << QPointF(700,1000)
          << QPointF(350,530);
@@ -380,7 +382,7 @@ void TestAssistants::testProjectionNewMethod()
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
 
-
+    */
     ENTER_FUNCTION() << "************************ START 8 (real 2, leading to the \"weird situation\") **************************";
 
     // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))

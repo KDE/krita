@@ -27,6 +27,7 @@
 #include <KisResourceLocator.h>
 #include <KoColorSpaceRegistry.h>
 #include <KoFileDialog.h>
+#include <kis_floating_message.h>
 #include <kis_icon.h>
 #include <kis_config.h>
 #include <kis_node_manager.h>
@@ -217,11 +218,20 @@ void PaletteDockerDock::slotExportPalette(KoColorSetSP palette)
     dialog.setDefaultDir(palette->filename());
     dialog.setMimeTypeFilters(QStringList() << "application/x-krita-palette");
     QString newPath;
-    QString oriPath = palette->filename();
     if ((newPath = dialog.filename()).isEmpty()) { return; }
-    palette->setFilename(newPath);
-    palette->save();
-    palette->setFilename(oriPath);
+
+    QFile file(newPath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        warnKrita << "Could not open the file for writing:" << newPath;
+        return;
+    }
+    if (palette->saveToDevice(&file)) {
+        m_view->showFloatingMessage(
+            i18nc("Floating message about exporting successful", "Palette exported successfully"), QIcon(),
+            500, KisFloatingMessage::Low);
+    } else {
+        warnKrita << "Could export to the file:" << newPath;
+    }
 }
 
 void PaletteDockerDock::setCanvas(KoCanvasBase *canvas)

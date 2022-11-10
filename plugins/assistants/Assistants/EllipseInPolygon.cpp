@@ -1273,7 +1273,32 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // ACTUALLY no, it's the 'point' that should be normalized here, not the ellipse!
 
     double normalizeBy = 1.0;
-    auto normalizeFormula = [debug] (ConicFormula formula, QPointF& point, double& normalizeBy) {
+
+    QPointF point2 = point;
+
+
+    normalizeBy = qMax(point.x(), point.y());
+
+    if (debug) ENTER_FUNCTION() << "NORMALIZATION VALUE HERE: " << ppVar(normalizeBy);
+    if (debug) ENTER_FUNCTION() << ppVar(canonized) << ppVar(writeFormulaInWolframAlphaForm(canonized, true)) << ppVar(writeFormulaInWolframAlphaForm(finalFormula, true));
+    // załóżmy x+y = 1 oraz nb = 5, bo mielismy x,y = 5,5 -> czyli robimy wszystko mniejsze
+    // x => nb*x
+    // (nb*x) + (nb*y) = 1
+    // 5x + 5y = 1
+
+    // ok so,
+    if (!qFuzzyCompare(normalizeBy, 0)) {
+        canonized[0] = normalizeBy*normalizeBy*canonized[0]; // x^2
+        canonized[1] = normalizeBy*normalizeBy*canonized[1]; // x*y
+        canonized[2] = normalizeBy*normalizeBy*canonized[2]; // y^2
+        canonized[3] = normalizeBy*canonized[3]; // x
+        canonized[4] = normalizeBy*canonized[4]; // y
+
+        point = point/normalizeBy;
+    }
+
+
+    auto normalizeFormula = [debug] (ConicFormula formula, QPointF& point, double normalizeBy) {
 
         normalizeBy = qMax(point.x(), point.y());
         if (debug) ENTER_FUNCTION() << ppVar(normalizeBy);
@@ -1304,30 +1329,9 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     };
 
-    QPointF point2 = point;
-
-
-    normalizeBy = qMax(point.x(), point.y());
-    if (debug) ENTER_FUNCTION() << ppVar(normalizeBy);
-    if (debug) ENTER_FUNCTION() << ppVar(canonized) << ppVar(writeFormulaInWolframAlphaForm(canonized, true)) << ppVar(writeFormulaInWolframAlphaForm(finalFormula, true));
-    // załóżmy x+y = 1 oraz nb = 5, bo mielismy x,y = 5,5 -> czyli robimy wszystko mniejsze
-    // x => nb*x
-    // (nb*x) + (nb*y) = 1
-    // 5x + 5y = 1
-
-    // ok so,
-    if (!qFuzzyCompare(normalizeBy, 0)) {
-        canonized[0] = normalizeBy*normalizeBy*canonized[0]; // x^2
-        canonized[1] = normalizeBy*normalizeBy*canonized[1]; // x*y
-        canonized[2] = normalizeBy*normalizeBy*canonized[2]; // y^2
-        canonized[3] = normalizeBy*canonized[3]; // x
-        canonized[4] = normalizeBy*canonized[4]; // y
-
-        point = point/normalizeBy;
-    }
-
 
     ConicFormula formBNormalized = normalizeFormula(formA, point2, normalizeBy);
+    f.formB = normalizeFormula(f.formA, point2, normalizeBy);
 
     //QVector<double> formulaBNormalized = QVector<double>::fromList(canonized.toList());
     QVector<double> formulaBNormalized = formBNormalized.getFormulaActual();
@@ -2004,7 +2008,10 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
     // now un-normalizing
+    if (debug) ENTER_FUNCTION() << "NORMALIZATION VALUE: " << ppVar(normalizeBy);
+
     if (!qFuzzyCompare(normalizeBy, 0)) {
+        if (debug) ENTER_FUNCTION() << "NORMALIZATION being done: " << ppVar(normalizeBy);
         result = result*normalizeBy;
     }
     if (debug) ENTER_FUNCTION() << "(6) after un-normalizing" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(trueFormulaA, result));

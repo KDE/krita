@@ -6,6 +6,8 @@
  */
 
 #include "kis_tiff_import.h"
+#include "KisImportExportErrorCode.h"
+#include "kis_assert.h"
 
 #include <QBuffer>
 #include <QFileInfo>
@@ -427,6 +429,11 @@ KisImportExportErrorCode KisTIFFImport::readImageFromPsd(
 
     const std::shared_ptr<PSDLayerMaskSection> &layerSection =
         photoshopLayerRecord.record();
+
+    KIS_SAFE_ASSERT_RECOVER(layerSection->nLayers != 0)
+    {
+        return ImportExportCodes::FileFormatIncorrect;
+    }
 
     for (int i = 0; i != layerSection->nLayers; i++) {
         PSDLayerRecord *layerRecord = layerSection->layers.at(i);
@@ -1864,7 +1871,11 @@ KisTIFFImport::convert(KisDocument *document,
 
             // Get layer
             KisLayer *layer = qobject_cast<KisLayer *>(node.data());
-            Q_ASSERT(layer);
+            KIS_ASSERT_RECOVER(layer)
+            {
+                errFile << "Attempted to import metadata on an empty document";
+                return ImportExportCodes::InternalError;
+            }
 
             // Inject the data as any other IOBackend
             io->loadFrom(layer->metaData(), &ioDevice);

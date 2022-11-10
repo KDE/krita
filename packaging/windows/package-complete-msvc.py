@@ -219,11 +219,13 @@ print("\nCopying files...")
 # krita.exe
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.exe", f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.com", f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb", f"{pkg_root}\\bin\\")
+if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb"):
+    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\krita.pdb", f"{pkg_root}\\bin\\")
 # kritarunner.exe
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.exe", f"{pkg_root}\\bin\\")
-shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
-            f"{pkg_root}\\bin\\")
+if os.path.isfile(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb"):
+    shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner.pdb",
+                f"{pkg_root}\\bin\\")
 shutil.copy(f"{KRITA_INSTALL_DIR}\\bin\\kritarunner_com.com",
             f"{pkg_root}\\bin\\")
 
@@ -352,10 +354,14 @@ if os.path.exists(f"{pkg_root}\\lib\\site-packages"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\pip*"):
         shutil.rmtree(f)
+    for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\ply*"):
+        shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\pyparsing*"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\PyQt_builder*"):
         shutil.rmtree(f)
+    for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\setuptools.pth"):
+        os.remove(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\setuptools*"):
         shutil.rmtree(f)
     for f in glob.glob(f"{pkg_root}\\lib\\site-packages\\sip*"):

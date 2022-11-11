@@ -10,6 +10,7 @@
 #include <QVector>
 
 #include <KoFontLibraryResourceUtils.h>
+
 #include "kritaflake_export.h"
 
 /**
@@ -27,6 +28,7 @@ class KRITAFLAKE_EXPORT KoFontRegistery
 {
 public:
     KoFontRegistery();
+    ~KoFontRegistery();
 
     static KoFontRegistery *instance();
 
@@ -94,6 +96,8 @@ private:
     bool addFontFileDirectoryToRegistery(QString path);
 
     QScopedPointer<Private> d;
+
+    Q_DISABLE_COPY(KoFontRegistery);
 };
 
 #endif // KOFONTREGISTERY_H

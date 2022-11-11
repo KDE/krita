@@ -121,6 +121,8 @@ KoFontRegistery::KoFontRegistery()
 {
 }
 
+KoFontRegistery::~KoFontRegistery() = default;
+
 KoFontRegistery *KoFontRegistery::instance()
 {
     return s_instance;

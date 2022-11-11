@@ -1187,7 +1187,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         ConicFormula formFSwappedXY;
         ConicFormula formGNegatedAllSigns;
         ConicFormula formHNegatedX;
-        ConicFormula formINegatedX;
+        ConicFormula formINegatedY;
 
         ConicFormula current;
     };
@@ -1751,7 +1751,21 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         }
 
         f.formFSwappedXY = r;
-        f.formFSwappedXY.Name = "form F - swapped X and Y";
+        f.formFSwappedXY.Name = "form F - swapped X and Y (cf)";
+
+        if (r.C < 0) {
+            // negate all signs
+            r.A = -r.A;
+            r.B = -r.B;
+            r.C = -r.C;
+            r.D = -r.D;
+            r.E = -r.E;
+            r.F = -r.F;
+        }
+
+        f.formGNegatedAllSigns = r;
+        f.formGNegatedAllSigns.Name = "form G - negated all signs (cf)";
+
 
         if (r.D < 0) {
             negateX = true;
@@ -1760,17 +1774,17 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         }
 
         f.formHNegatedX = r;
+        f.formHNegatedX.Name = "form H - negated X (cf)";
 
-        //QVector<double> formulaHNegatedX = QVector<double>::fromList(rotated.toList());
-        //if (debug) writeFormulaInAllForms(formulaHNegatedX, "formula H - negated X");
-
-        //if (debug) ENTER_FUNCTION() << "after possibly swapping sign of X:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
 
         if (r.E < 0) {
             negateY = true;
             r.E = -r.E;
             r.B = -r.B;
         }
+
+        f.formINegatedY = r;
+        f.formINegatedY.Name = "form H - negated X (cf)";
 
 
     };

@@ -32,6 +32,7 @@ endif(APPLE)
 include(FindPackageHandleStandardArgs)
 
 if (WIN32 OR APPLE)
+    set(Python_FIND_STRATEGY LOCATION)
     find_package(Python 3.8 REQUIRED COMPONENTS Development Interpreter)
 else()
     find_package(Python 3.8 REQUIRED COMPONENTS Interpreter OPTIONAL_COMPONENTS Development)

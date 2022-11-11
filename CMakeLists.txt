@@ -302,6 +302,7 @@ int main(int argc, char *argv[]) {
 endfunction()
 
 if(WIN32)
+    set(Python_FIND_STRATEGY LOCATION)
     find_package(Python 3.8 COMPONENTS Development Interpreter)
     if (Python_FOUND)
         find_package(PythonLibrary 3.8)

@@ -1678,26 +1678,31 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     setFromVector(A, B, C, D, E, F, rotated);
 
+
     auto moveEllipseSoPointIsInOrigin = [debug] (ConicFormula formula, qreal u, qreal v) {
         ConicFormula response = formula;
         if (debug) ENTER_FUNCTION() << "formula to copy from: " << formula.getFormulaSpecial();
         if (debug) ENTER_FUNCTION() << "formula copied: " << response.getFormulaSpecial();
 
 
-        response.F = formula.F + formula.A*u*u + 2*formula.D*u + formula.C*v*v + 2*formula.E*v;// F -> F + Au^2 + 2*Du + Cv^2 + 2Ev
+        // note that F depends on old D and E
         response.D = formula.D + formula.A*u; // D -> D + A*u
         response.E = formula.E + formula.C*v; // E -> E + C*v
+        response.F = formula.F + formula.A*u*u + 2*formula.D*u + formula.C*v*v + 2*formula.E*v;// F -> F + Au^2 + 2*Du + Cv^2 + 2Ev
+
         return response;
     };
 
 
-    // don't change the order, otherwise it gets messed up since F depends on D and E
-    F = F + A*u*u + 2*D*u + C*v*v + 2*E*v;// F -> F + Au^2 + 2*Du + Cv^2 + 2Ev
-    D = D + A*u; // D -> D + A*u
-    E = E + C*v; // E -> E + C*v
-
     ConicFormula rotatedBeforeMoving(rotated, "rotated before moving, not sure which letter", ConicFormula::SPECIAL);
     ConicFormula rotatedAfterMoving = moveEllipseSoPointIsInOrigin(rotatedBeforeMoving, u, v);
+
+    A = rotatedAfterMoving.A;
+    B = rotatedAfterMoving.B;
+    C = rotatedAfterMoving.C;
+    D = rotatedAfterMoving.D;
+    E = rotatedAfterMoving.E;
+    F = rotatedAfterMoving.F;
 
 
     if (debug) writeFormulaInAllForms(rotated, "rotated formula - original");
@@ -1708,6 +1713,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
     QVector<double> formulaEMovedToOrigin = QVector<double>::fromList(rotated.toList());
+
     if (debug) writeFormulaInAllForms(formulaEMovedToOrigin, "formula D - moved to origin");
 
 
@@ -1730,9 +1736,11 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     // Stage 4. Adjusting the coefficients to our needs (C, D, E >= 0)
 
+    f.formEMovedToOrigin = rotatedAfterMoving;
+    f.formEMovedToOrigin.Name = "form E - moved to origin (cf)";
 
 
-    auto adjustCoefficients = [] (Formulas f, bool& swapXandY, bool& negateX, bool& negateY) {
+    auto adjustCoefficients = [] (Formulas& f, bool& swapXandY, bool& negateX, bool& negateY) {
 
         swapXandY = false;
         negateX = false;
@@ -1789,8 +1797,16 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     };
 
-    // ok, first we gotta find C being bigger than A (in absolute).
     bool swapXandY = false;
+    bool negateX = false;
+    bool negateY = false;
+
+
+    adjustCoefficients(f, swapXandY, negateX, negateY);
+
+
+    // ok, first we gotta find C being bigger than A (in absolute).
+
     if (qAbs(C) < qAbs(A)) {
         swapXandY = true;
         A = rotated[2];
@@ -1827,9 +1843,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     if (C == 0) {
         return originalPoint;
     }
-
-    bool negateX = false;
-    bool negateY = false;
 
     if (D < 0) {
         negateX = true;
@@ -1933,6 +1946,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     };
 
     ConicFormula formINegatedY(formulaINegatedY, "formula I - negated y", ConicFormula::SPECIAL);
+    formINegatedY = f.formINegatedY;
     qreal t0 = getStartingPoint(formINegatedY); // starting point for newton method
 
     // now we gotta find t, then when we find it, calculate x and y, undo all transformations and return the point!

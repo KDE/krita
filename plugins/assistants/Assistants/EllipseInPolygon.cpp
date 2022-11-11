@@ -1181,13 +1181,13 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     struct Formulas {
         ConicFormula formA;
         ConicFormula formBNormalized;
-        ConicFormula formC;
-        ConicFormula formD;
-        ConicFormula formE;
-        ConicFormula formF;
-        ConicFormula formH;
-        ConicFormula formI;
-
+        ConicFormula formCCanonized;
+        ConicFormula formDRotated;
+        ConicFormula formEMovedToOrigin;
+        ConicFormula formFSwappedXY;
+        ConicFormula formGNegatedAllSigns;
+        ConicFormula formHNegatedX;
+        ConicFormula formINegatedX;
 
         ConicFormula current;
     };
@@ -1304,6 +1304,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     }
 
 
+
     auto normalizeFormula = [debug] (ConicFormula formula, QPointF& point, double normalizeBy) {
 
         normalizeBy = qMax(point.x(), point.y());
@@ -1377,14 +1378,14 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
     // conversion actual -> special is included below
-    f.formC = ConicFormula(f.formBNormalized.getFormulaActual(), "formula C - canonized", ConicFormula::SPECIAL);
+    f.formCCanonized = ConicFormula(f.formBNormalized.getFormulaActual(), "formula C - canonized", ConicFormula::SPECIAL);
 
-    f.formC.A = f.formBNormalized.A/canonizingNumber;
-    f.formC.B = f.formBNormalized.B/(2*canonizingNumber);
-    f.formC.C = f.formBNormalized.C/canonizingNumber;
-    f.formC.D = f.formBNormalized.D/(2*canonizingNumber);
-    f.formC.E = f.formBNormalized.E/(2*canonizingNumber);
-    f.formC.F = f.formBNormalized.F/canonizingNumber;
+    f.formCCanonized.A = f.formBNormalized.A/canonizingNumber;
+    f.formCCanonized.B = f.formBNormalized.B/(2*canonizingNumber);
+    f.formCCanonized.C = f.formBNormalized.C/canonizingNumber;
+    f.formCCanonized.D = f.formBNormalized.D/(2*canonizingNumber);
+    f.formCCanonized.E = f.formBNormalized.E/(2*canonizingNumber);
+    f.formCCanonized.F = f.formBNormalized.F/canonizingNumber;
 
 
     for(int i = 0; i < 6; i++) {
@@ -1399,9 +1400,9 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     //canonized.
 
 
-    if (debug) ENTER_FUNCTION() << "Are those two values the same?? ___________ " << ppVar(canonized[0] - f.formC.A);
+    if (debug) ENTER_FUNCTION() << "Are those two values the same?? ___________ " << ppVar(canonized[0] - f.formCCanonized.A);
     if (debug) writeFormulaInAllForms(canonized, "canonized raw");
-    if (debug) f.formC.printOutInAllForms();
+    if (debug) f.formCCanonized.printOutInAllForms();
 
 
 
@@ -1439,8 +1440,8 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     //
 
     Eigen::Matrix<long double, 2, 2> M;
-    M << f.formC.A, f.formC.B,
-         f.formC.B, f.formC.C;
+    M << f.formCCanonized.A, f.formCCanonized.B,
+         f.formCCanonized.B, f.formCCanonized.C;
     if (debug) ENTER_FUNCTION() << "(1)";
 
     Eigen::EigenSolver<Eigen::Matrix<long double, 2, 2>> eigenSolver(M);
@@ -1464,15 +1465,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         }
     }
 
-
-
-    //Eigen::Matrix<std::complex<double>, 2, 2> M2 = QC*DC*Eigen::Translation<std::complex<double>, 2>(QC);
-    //ENTER_FUNCTION() << "M = " << M(0, 0) << M(0, 1) << M(1, 0) << M(1, 1);
-    //ENTER_FUNCTION() << "M2 = " << M2(0, 0) << M2(0, 1) << M2(1, 0) << M2(1, 1);
-
-
-
-    //ENTER_FUNCTION() << ppVar(DC) << ppVar(QC) << ppVar(M);
 
     Eigen::Matrix<long double, 2, 2> Q;
     Eigen::Matrix<long double, 2, 2> Dm;
@@ -1577,11 +1569,11 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
         if (debug) ENTER_FUNCTION() << "+++ Formula check +++";
 
-        f.formD.A = f.formC.A*O*O - f.formC.B*O*S + f.formC.C*S*S;
-        f.formD.B = 2*f.formC.A*O*S - f.formC.B*S*S + f.formC.B*O*O - 2*f.formC.C*O*S;
-        f.formD.C = f.formC.A*S*S + f.formC.B*O*S + f.formC.C*O*O;
-        f.formD.D = f.formC.D*O - f.formC.E*S;
-        f.formD.E = f.formC.D*S + f.formC.E*O;
+        f.formDRotated.A = f.formCCanonized.A*O*O - f.formCCanonized.B*O*S + f.formCCanonized.C*S*S;
+        f.formDRotated.B = 2*f.formCCanonized.A*O*S - f.formCCanonized.B*S*S + f.formCCanonized.B*O*O - 2*f.formCCanonized.C*O*S;
+        f.formDRotated.C = f.formCCanonized.A*S*S + f.formCCanonized.B*O*S + f.formCCanonized.C*O*O;
+        f.formDRotated.D = f.formCCanonized.D*O - f.formCCanonized.E*S;
+        f.formDRotated.E = f.formCCanonized.D*S + f.formCCanonized.E*O;
 
         // F is the same
 
@@ -1684,16 +1676,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     qreal A, B, C, D, E, F;
 
-    /*
-
-    qreal A = rotated[0];
-    qreal B = rotated[1];
-    qreal C = rotated[2];
-    qreal D = rotated[3];
-    qreal E = rotated[4];
-    qreal F = rotated[5];
-    */
-
     setFromVector(A, B, C, D, E, F, rotated);
 
     auto moveEllipseSoPointIsInOrigin = [debug] (ConicFormula formula, qreal u, qreal v) {
@@ -1718,41 +1700,9 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     ConicFormula rotatedAfterMoving = moveEllipseSoPointIsInOrigin(rotatedBeforeMoving, u, v);
 
 
-    //setToVector(A, B, C, D, E, F, rotated);
-
     if (debug) writeFormulaInAllForms(rotated, "rotated formula - original");
     if (debug) rotatedAfterMoving.printOutInAllForms();
     rotated = rotatedAfterMoving.getFormulaSpecial();
-
-
-    /*
-    ConicFormula rotatedBeforeMoving(rotated, "rotated before moving, not sure which letter", ConicFormula::SPECIAL);
-    ConicFormula rotatedAfterMoving = moveEllipseSoPointIsInOrigin(rotatedBeforeMoving, u, v);
-
-    rotated = rotatedAfterMoving.getFormulaSpecial();
-    */
-
-    // this one is still correct:
-    // 0.697355x^2 + 0xy + 0.697355y^2 -0.232452x -0.232452y + 0.019371 = 0
-    // 0.7x^2 + 0xy + 0.7y^2 - 0.2x - 0.2y + 0.02 = 0
-    // so, we gotta move (-1, -1)
-    // u = 1, v = 1
-    // x -> x + 1
-    // A, B, C => Normalnie
-    // 0.7*(x + 1)^2 + 0xy + 0.7(y + 1)^2 - 0.2(x + 1) - 0.2(y + 1) + 0.02 = 0
-    // 0.7*(x^2 + 1 + 2x) + 0.7*(y^2 + 1 + 2y) - 0.2x - 0.2 - 0.2y - 0.2 + 0.02 = 0
-    // 0.7*x^2 + 0.7 + 1.4x + 0.7y^2 + 0.7 + 1.4y - 0.2x - 0.4 - 0.2y + 0.02 = 0
-    // 0.7*x^2 + 0.7*y^2 + 1.4x - 0.2x + 1.4y - 0.2y + (0.7 + 0.7 - 0.4 + 0.02) =
-    // 0.7x^2 + 0.7y^2 + 1.2x + 1.2y + (1.02) = 0
-    // result:
-    // F = 0.02 + 0.7*1*1 + 2*(-0.2)*1 + 0.7*1*1 + 2*(-0.2)*1 =
-    // F = 0.02 + 0.7 - 0.4 - 0.4 + 0.7 = 1.4 - 0.8 =
-    // 0.697355x^2 + 0xy + 0.697355y^2 + 1.16226x + 1.16226y + 3.7386 = 0
-
-
-
-
-
 
     if (debug) ENTER_FUNCTION() << "after moving to origin:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // now it's a circle!!! :D great!
 
@@ -1779,6 +1729,51 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     */
 
     // Stage 4. Adjusting the coefficients to our needs (C, D, E >= 0)
+
+
+
+    auto adjustCoefficients = [] (Formulas f, bool& swapXandY, bool& negateX, bool& negateY) {
+
+        swapXandY = false;
+        negateX = false;
+        negateY = false;
+
+        ConicFormula r = f.formEMovedToOrigin;
+        ConicFormula ff = f.formEMovedToOrigin;
+        if (qAbs(r.C) < qAbs(r.A)) {
+            swapXandY = true;
+            r.A = ff.C;
+            r.B = ff.B;
+            r.C = ff.A;
+            r.D = ff.E;
+            r.E = ff.D;
+            r.F = ff.F;
+        }
+
+        f.formFSwappedXY = r;
+        f.formFSwappedXY.Name = "form F - swapped X and Y";
+
+        if (r.D < 0) {
+            negateX = true;
+            r.D = -r.D;
+            r.B = -r.B;
+        }
+
+        f.formHNegatedX = r;
+
+        //QVector<double> formulaHNegatedX = QVector<double>::fromList(rotated.toList());
+        //if (debug) writeFormulaInAllForms(formulaHNegatedX, "formula H - negated X");
+
+        //if (debug) ENTER_FUNCTION() << "after possibly swapping sign of X:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
+
+        if (r.E < 0) {
+            negateY = true;
+            r.E = -r.E;
+            r.B = -r.B;
+        }
+
+
+    };
 
     // ok, first we gotta find C being bigger than A (in absolute).
     bool swapXandY = false;
@@ -1847,22 +1842,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     if (debug) ENTER_FUNCTION() << "after possibly swapping sign of Y:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
     if (debug) ENTER_FUNCTION() << ppVar(swapXandY) << ppVar(negateX) << ppVar(negateY);
-
-
-    /*
-    // NOW, special normalize so the errors are bigger!
-    // the authors of the paper apparently haven't tried to actually implement it...
-
-    const int specialNormalize = 100;
-    A = specialNormalize*specialNormalize*A;
-    B = specialNormalize*specialNormalize*B;
-    C = specialNormalize*specialNormalize*C;
-    D = specialNormalize*D;
-    E = specialNormalize*E;
-    setToVector(A, B, C, D, E, F, rotated);
-
-    */
-
 
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(C >= 0 && D >= 0 && E >= 0, originalPoint);

@@ -52,6 +52,10 @@ public:
     bool isSpecial() { return Type == SPECIAL; }
 
 
+    bool operator ==(ConicFormula f);
+    bool operator ==(std::pair<QVector<double>, bool> f);
+
+
     // data
     TYPE Type {SPECIAL};
 
@@ -151,6 +155,7 @@ public:
     static CURVE_TYPE curveTypeForFormula(double a, double b, double c);
 
     void paintParametric(QPainter& gc, const QRectF& updateRect, const QTransform &initialTransform);
+
 
     // unused for now; will be used to move the ellipse towards any vanishing point
     // might need more info about vanishing points (for example, might need all points)

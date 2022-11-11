@@ -28,6 +28,8 @@ public:
     ConicFormula();
     ConicFormula(QVector<double> formula, QString name, TYPE Type);
 
+    qreal calculateFormulaForPoint(QPointF point);
+
 
     void setFormulaActual(QVector<double> formula);
     void setFormulaActual(qreal a, qreal b, qreal c, qreal d, qreal e, qreal f);

@@ -1161,15 +1161,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // H -
     // I -
 
-    const int Ai = 0;
-    const int Bi = 1;
-    const int Ci = 2;
-    const int Di = 3;
-    const int Ei = 4;
-    const int Fi = 5;
-
-
-
     // ***************
 
     bool debug = true;
@@ -1182,7 +1173,10 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         ConicFormula formA;
         ConicFormula formBNormalized;
         ConicFormula formCCanonized;
+
         ConicFormula formDRotated;
+        ConicFormula formDRotatedSecondVersion;
+
         ConicFormula formEMovedToOrigin;
         ConicFormula formFSwappedXY;
         ConicFormula formGNegatedAllSigns;
@@ -1293,6 +1287,9 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // 5x + 5y = 1
 
     // ok so,
+
+
+
     if (!qFuzzyCompare(normalizeBy, 0)) {
         canonized[0] = normalizeBy*normalizeBy*canonized[0]; // x^2
         canonized[1] = normalizeBy*normalizeBy*canonized[1]; // x*y
@@ -1498,20 +1495,23 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     };
 
 
-    QVector<double> rotated;
-    rotated.fill(0, 6);
-    rotated[0] = Dm(0, 0); // A
-    rotated[1] = 0; // D(1, 0); // B
-    rotated[2] = Dm(1, 1); // C
+    f.formDRotated.A = Dm(0, 0); // A
+    f.formDRotated.B = 0; // D(1, 0); // B
+    f.formDRotated.C = Dm(1, 1); // C
 
     QVector<double> DEvec;
-    DEvec << canonized[Di] << canonized[Ei];
+    DEvec << f.formCCanonized.D << f.formCCanonized.E;
     DEvec = vectorMultipliedByMatrix(DEvec, Q);
 
-    rotated[3] = DEvec[0]; // D
-    rotated[4] = DEvec[1]; // E
-    rotated[5] = canonized[5]; // F
+    f.formDRotated.D = DEvec[0]; // D
+    f.formDRotated.E = DEvec[1]; // E
+    f.formDRotated.F = f.formCCanonized.F; // F
 
+    f.formDRotated.Name = "form D - rotated (original article version)";
+    f.formDRotated.Type = ConicFormula::SPECIAL;
+
+
+    QVector<double> rotated = f.formDRotated.getFormulaSpecial();
 
 
     auto calculateFormulaSpecial = [debug] (QPointF point, QVector<double> formula) {
@@ -2616,6 +2616,18 @@ ConicFormula::ConicFormula(QVector<double> formula, QString name, TYPE type = SP
         setFormulaActual(formula);
     }
     Name = name;
+}
+
+qreal ConicFormula::calculateFormulaForPoint(QPointF point)
+{
+    if (isSpecial()) {
+        return A*point.x()*point.x() + 2*B*point.x()*point.y() + C*point.y()*point.y()
+                + 2*D*point.x() + 2*E*point.y() + F;
+    } else {
+        return A*point.x()*point.x() + B*point.x()*point.y() + C*point.y()*point.y()
+                + D*point.x() + E*point.y() + F;
+    }
+
 }
 
 void ConicFormula::setFormulaActual(QVector<double> formula)

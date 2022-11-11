@@ -46,7 +46,6 @@ struct Q_DECL_HIDDEN KisSelection::Private {
     KisNodeWSP parentNode;
 
     bool isVisible; //false is the selection decoration should not be displayed
-    KisDefaultBoundsBaseSP defaultBounds;
     KisImageResolutionProxySP resolutionProxy;
     KisPixelSelectionSP pixelSelection;
     KisSelectionComponent *shapeSelection;
@@ -258,10 +257,9 @@ KisSelection::KisSelection(KisDefaultBoundsBaseSP defaultBounds, KisImageResolut
         resolutionProxy.reset(new KisImageResolutionProxy(nullptr));
     }
 
-    m_d->defaultBounds = defaultBounds;
     m_d->resolutionProxy = resolutionProxy;
 
-    m_d->pixelSelection = new KisPixelSelection(m_d->defaultBounds, this);
+    m_d->pixelSelection = new KisPixelSelection(defaultBounds, this);
     m_d->pixelSelection->setParentNode(m_d->parentNode);
 }
 
@@ -280,12 +278,11 @@ KisSelection::KisSelection(const KisPaintDeviceSP source, KritaUtils::DeviceCopy
         defaultBounds = new KisSelectionEmptyBounds(0);
     }
 
-    m_d->defaultBounds = defaultBounds;
     m_d->resolutionProxy = resolutionProxy;
     m_d->pixelSelection = new KisPixelSelection(source, copyMode);
     m_d->pixelSelection->setParentSelection(this);
     m_d->pixelSelection->setParentNode(m_d->parentNode);
-    m_d->pixelSelection->setDefaultBounds(m_d->defaultBounds);
+    m_d->pixelSelection->setDefaultBounds(defaultBounds);
 }
 
 KisSelection &KisSelection::operator=(const KisSelection &rhs)
@@ -299,7 +296,6 @@ KisSelection &KisSelection::operator=(const KisSelection &rhs)
 void KisSelection::copyFrom(const KisSelection &rhs)
 {
     m_d->isVisible = rhs.m_d->isVisible;
-    m_d->defaultBounds = rhs.m_d->defaultBounds;
     m_d->resolutionProxy = rhs.m_d->resolutionProxy;
     m_d->parentNode = 0; // not supposed to be shared
 
@@ -544,7 +540,6 @@ void KisSelection::setY(qint32 y)
 
 void KisSelection::setDefaultBounds(KisDefaultBoundsBaseSP bounds)
 {
-    m_d->defaultBounds = bounds;
     m_d->pixelSelection->setDefaultBounds(bounds);
 }
 

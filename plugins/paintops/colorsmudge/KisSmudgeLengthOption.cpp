@@ -7,22 +7,20 @@
 
 #include <kis_painter.h>
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
 
 KisSmudgeLengthOption::KisSmudgeLengthOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisSmudgeLengthOption(kpou::loadOptionData<KisSmudgeLengthOptionData>(setting))
 {
 }
 
-KisSmudgeLengthOptionData KisSmudgeLengthOption::initializeFromData(const KisPropertiesConfiguration *setting)
+KisSmudgeLengthOption::KisSmudgeLengthOption(const KisSmudgeLengthOptionData &data)
+    : KisCurveOption2(data)
+    , m_useNewEngine(data.useNewEngine)
+    , m_smearAlpha(data.smearAlpha)
+    , m_mode(data.mode)
 {
-    KisSmudgeLengthOptionData data;
-    data.read(setting);
-
-    m_smearAlpha = data.smearAlpha;
-    m_useNewEngine = data.useNewEngine;
-    m_mode = data.mode;
-
-    return data;
 }
 
 KisSmudgeLengthOptionData::Mode KisSmudgeLengthOption::mode() const

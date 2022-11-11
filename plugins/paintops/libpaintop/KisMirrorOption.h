@@ -19,8 +19,7 @@ public:
     MirrorProperties apply(const KisPaintInformation& info) const;
 
 private:
-    KisMirrorOptionData initializeFromData(const KisPropertiesConfiguration *setting);
-
+    KisMirrorOption(const KisMirrorOptionData &data);
 private:
     bool m_enableHorizontalMirror;
     bool m_enableVerticalMirror;

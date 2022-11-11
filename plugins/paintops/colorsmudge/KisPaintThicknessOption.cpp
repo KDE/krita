@@ -5,8 +5,18 @@
  */
 #include "KisPaintThicknessOption.h"
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
+
 KisPaintThicknessOption::KisPaintThicknessOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisPaintThicknessOption(kpou::loadOptionData<KisPaintThicknessOptionData>(setting))
+{
+}
+
+KisPaintThicknessOption::KisPaintThicknessOption(const KisPaintThicknessOptionData &data)
+    : KisCurveOption2(data),
+      m_mode(data.mode)
 {
 }
 
@@ -19,14 +29,4 @@ qreal KisPaintThicknessOption::apply(const KisPaintInformation & info) const
 KisPaintThicknessOptionData::ThicknessMode KisPaintThicknessOption::mode() const
 {
     return m_mode;
-}
-
-KisPaintThicknessOptionData KisPaintThicknessOption::initializeFromData(const KisPropertiesConfiguration *setting)
-{
-    KisPaintThicknessOptionData data;
-    data.read(setting);
-
-    m_mode = data.mode;
-
-    return data;
 }

@@ -13,9 +13,12 @@
 #include "kis_painter.h"
 #include "kis_color_source.h"
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
 
 KisDarkenOption::KisDarkenOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisCurveOption2(kpou::loadOptionData<KisDarkenOptionData>(setting))
 {
 }
 
@@ -52,11 +55,4 @@ void KisDarkenOption::apply(KisColorSource* colorSource, const KisPaintInformati
     colorSource->applyColorTransformation(darkenTransformation);
 
     delete darkenTransformation;
-}
-
-KisDarkenOptionData KisDarkenOption::initializeFromData(const KisPropertiesConfiguration *setting)
-{
-    KisDarkenOptionData data;
-    data.read(setting);
-    return data;
 }

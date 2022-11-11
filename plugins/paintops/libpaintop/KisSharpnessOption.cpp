@@ -12,9 +12,21 @@
 
 #include <KisSharpnessOptionData.h>
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
+
 KisSharpnessOption::KisSharpnessOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisCurveOption2(kpou::loadOptionData<KisSharpnessOptionData>(setting))
 {
+}
+
+KisSharpnessOption::KisSharpnessOption(const KisSharpnessOptionData &data)
+    : KisCurveOption2(data)
+    , m_alignOutlinePixels(data.alignOutlinePixels)
+    , m_softness(data.softness)
+{
+
 }
 
 void KisSharpnessOption::apply(const KisPaintInformation &info, const QPointF &pt, qint32 &x, qint32 &y, qreal &xFraction, qreal &yFraction) const
@@ -78,15 +90,4 @@ void KisSharpnessOption::applyThreshold(KisFixedPaintDeviceSP dab, const KisPain
         }
         dabPointer += pixelSize;
     }
-}
-
-KisSharpnessOptionData KisSharpnessOption::initializeFromData(const KisPropertiesConfiguration *setting)
-{
-    KisSharpnessOptionData data;
-    data.read(setting);
-
-    m_alignOutlinePixels = data.alignOutlinePixels;
-    m_softness = data.softness;
-
-    return data;
 }

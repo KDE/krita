@@ -8,9 +8,19 @@
 #include <kis_properties_configuration.h>
 #include <KisSpacingOptionData.h>
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
 
 KisSpacingOption::KisSpacingOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisSpacingOption(kpou::loadOptionData<KisSpacingOptionData>(setting))
+{
+}
+
+KisSpacingOption::KisSpacingOption(const KisSpacingOptionData &data)
+    : KisCurveOption2(data)
+    , m_isotropicSpacing(data.isotropicSpacing)
+    , m_useSpacingUpdates(data.useSpacingUpdates)
 {
 }
 
@@ -28,15 +38,4 @@ bool KisSpacingOption::isotropicSpacing() const
 bool KisSpacingOption::usingSpacingUpdates() const
 {
     return m_useSpacingUpdates;
-}
-
-KisSpacingOptionData KisSpacingOption::initializeFromData(const KisPropertiesConfiguration *setting)
-{
-    KisSpacingOptionData data;
-    data.read(setting);
-
-    m_isotropicSpacing = data.isotropicSpacing;
-    m_useSpacingUpdates = data.useSpacingUpdates;
-
-    return data;
 }

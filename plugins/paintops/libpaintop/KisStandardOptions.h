@@ -12,12 +12,15 @@
 #include <KisStandardOptionData.h>
 #include <KisSizeOptionData.h>
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
 template <typename Data>
 class KisStandardOption : public KisCurveOption2
 {
 public:
     KisStandardOption(const KisPropertiesConfiguration *setting)
-        : KisCurveOption2(initializeData(setting))
+        : KisCurveOption2(kpou::loadOptionData<Data>(setting))
     {
     }
 
@@ -26,13 +29,6 @@ public:
         if (!isChecked()) return 1.0;
         return computeSizeLikeValue(info);
     }
-
-private:
-    Data initializeData(const KisPropertiesConfiguration *setting) {
-        Data data;
-        data.read(setting);
-        return data;
-    }
 };
 
 template <typename Data>
@@ -40,15 +36,8 @@ class KisStandardOptionNoApply : public KisCurveOption2
 {
 public:
     KisStandardOptionNoApply(const KisPropertiesConfiguration *setting)
-        : KisCurveOption2(initializeData(setting))
+        : KisCurveOption2(kpou::loadOptionData<Data>(setting))
     {
-    }
-
-private:
-    Data initializeData(const KisPropertiesConfiguration *setting) {
-        Data data;
-        data.read(setting);
-        return data;
     }
 };
 

@@ -18,7 +18,7 @@ public:
     QPointF apply(const KisPaintInformation& info, qreal width, qreal height) const;
 
 private:
-    KisScatterOptionData initializeFromData(const KisPropertiesConfiguration *setting);
+    KisScatterOption(const KisScatterOptionData &data);
 
 private:
     bool m_axisX;

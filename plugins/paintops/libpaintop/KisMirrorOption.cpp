@@ -12,8 +12,19 @@
 #include <KisMirrorOptionData.h>
 #include <KisMirrorProperties.h>
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
+
 KisMirrorOption::KisMirrorOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisMirrorOption(kpou::loadOptionData<KisMirrorOptionData>(setting))
+{
+}
+
+KisMirrorOption::KisMirrorOption(const KisMirrorOptionData &data)
+    : KisCurveOption2(data)
+    , m_enableHorizontalMirror(data.enableHorizontalMirror)
+    , m_enableVerticalMirror(data.enableVerticalMirror)
 {
 }
 
@@ -42,15 +53,4 @@ MirrorProperties KisMirrorOption::apply(const KisPaintInformation &info) const
     mirrors.coordinateSystemFlipped = coordinateSystemFlipped;
 
     return mirrors;
-}
-
-KisMirrorOptionData KisMirrorOption::initializeFromData(const KisPropertiesConfiguration *setting)
-{
-    KisMirrorOptionData data;
-    data.read(setting);
-
-    m_enableHorizontalMirror = data.enableHorizontalMirror;
-    m_enableVerticalMirror = data.enableVerticalMirror;
-
-    return data;
 }

@@ -17,7 +17,7 @@ public:
     KisSmudgeRadiusOption2(const KisPropertiesConfiguration *setting);
 
 private:
-    KisSmudgeRadiusOptionData initializeData(const KisPropertiesConfiguration *setting);
+    static KisSmudgeRadiusOptionData initializeData(const KisPropertiesConfiguration *setting);
 };
 
 #endif // KISSMUDGERADIUSOPTION_H

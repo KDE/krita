@@ -11,10 +11,24 @@
 #include <KisStandardOptionData.h>
 #include <kis_paintop.h>
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
 
 KisRotationOption::KisRotationOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisRotationOption(kpou::loadOptionData<KisRotationOptionData>(setting))
 {
+}
+
+KisRotationOption::KisRotationOption(const KisRotationOptionData &data)
+    : KisCurveOption2(data)
+{
+    if (data.sensorDrawingAngle.isActive) {
+        m_fanCornersEnabled =
+             data.sensorDrawingAngle.fanCornersEnabled &&
+             !data.sensorDrawingAngle.lockedAngleMode;
+        m_fanCornersStep = qreal(data.sensorDrawingAngle.fanCornersStep);
+    }
 }
 
 qreal KisRotationOption::apply(const KisPaintInformation & info) const
@@ -47,19 +61,4 @@ void KisRotationOption::applyFanCornersInfo(KisPaintOp *op)
      * changes the behavior of KisPaintOp::paintLine()
      */
     op->setFanCornersInfo(m_fanCornersEnabled, m_fanCornersStep * M_PI / 180.0);
-}
-
-KisRotationOptionData KisRotationOption::initializeFromData(const KisPropertiesConfiguration *setting)
-{
-    KisRotationOptionData data;
-    data.read(setting);
-
-    if (data.sensorDrawingAngle.isActive) {
-        m_fanCornersEnabled =
-             data.sensorDrawingAngle.fanCornersEnabled &&
-             !data.sensorDrawingAngle.lockedAngleMode;
-        m_fanCornersStep = qreal(data.sensorDrawingAngle.fanCornersStep);
-    }
-
-    return data;
 }

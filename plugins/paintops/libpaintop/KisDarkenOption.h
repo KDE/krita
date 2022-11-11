@@ -20,9 +20,6 @@ public:
 
     KoColor apply(KisPainter * painter, const KisPaintInformation& info) const;
     void apply(KisColorSource* colorSource, const KisPaintInformation& info) const;
-
-private:
-    KisDarkenOptionData initializeFromData(const KisPropertiesConfiguration *setting);
 };
 
 #endif // KISDARKENOPTION_H

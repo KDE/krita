@@ -25,8 +25,8 @@
 KisTangentNormalPaintOp::KisTangentNormalPaintOp(const KisPaintOpSettingsSP settings, KisPainter* painter, KisNodeSP node, KisImageSP image):
     KisBrushBasedPaintOp(settings, painter),
     m_opacityOption(node),
-    m_tempDev(painter->device()->createCompositionSourceDevice()),
-    m_sharpnessOption(settings.data())
+    m_sharpnessOption(settings.data()),
+    m_tempDev(painter->device()->createCompositionSourceDevice())
 
 {
     Q_UNUSED(image);

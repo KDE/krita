@@ -26,8 +26,7 @@ public:
     void applyThreshold(KisFixedPaintDeviceSP dab, const KisPaintInformation &info);
 
 private:
-    KisSharpnessOptionData initializeFromData(const KisPropertiesConfiguration *setting);
-
+    KisSharpnessOption(const KisSharpnessOptionData &data);
 private:
     bool m_alignOutlinePixels;
     int m_softness;

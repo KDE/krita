@@ -20,8 +20,7 @@ public:
     KisPaintThicknessOptionData::ThicknessMode mode() const;
 
 private:
-    KisPaintThicknessOptionData initializeFromData(const KisPropertiesConfiguration *setting);
-
+    KisPaintThicknessOption(const KisPaintThicknessOptionData &data);
 private:
     KisPaintThicknessOptionData::ThicknessMode m_mode;
 };

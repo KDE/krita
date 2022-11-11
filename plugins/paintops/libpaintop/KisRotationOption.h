@@ -19,7 +19,7 @@ public:
     void applyFanCornersInfo(KisPaintOp *op);
 
 private:
-    KisRotationOptionData initializeFromData(const KisPropertiesConfiguration *setting);
+    KisRotationOption(const KisRotationOptionData &data);
 
 private:
     bool m_fanCornersEnabled {false};

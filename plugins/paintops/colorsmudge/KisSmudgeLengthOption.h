@@ -19,7 +19,7 @@ public:
     KisSmudgeLengthOptionData::Mode mode() const;
 
 private:
-    KisSmudgeLengthOptionData initializeFromData(const KisPropertiesConfiguration *setting);
+    KisSmudgeLengthOption(const KisSmudgeLengthOptionData &data);
 
 private:
     bool m_useNewEngine {false};

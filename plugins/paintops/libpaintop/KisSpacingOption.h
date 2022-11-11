@@ -25,8 +25,7 @@ public:
     bool usingSpacingUpdates() const;
 
 private:
-    KisSpacingOptionData initializeFromData(const KisPropertiesConfiguration *setting);
-
+    KisSpacingOption(const KisSpacingOptionData &data);
 private:
     bool m_isotropicSpacing;
     bool m_useSpacingUpdates;

@@ -9,8 +9,12 @@
 #include <KoColor.h>
 #include <resources/KoAbstractGradient.h>
 
+#include <KisPaintOpOptionUtils2.h>
+namespace kpou = KisPaintOpOptionUtils;
+
+
 KisGradientOption::KisGradientOption(const KisPropertiesConfiguration *setting)
-    : KisCurveOption2(initializeFromData(setting))
+    : KisCurveOption2(kpou::loadOptionData<KisGradientOptionData>(setting))
 {
 }
 
@@ -19,11 +23,4 @@ void KisGradientOption::apply(KoColor& color, const KoAbstractGradientSP gradien
     if (isChecked() && gradient) {
         gradient->colorAt(color, computeSizeLikeValue(info));
     }
-}
-
-KisGradientOptionData KisGradientOption::initializeFromData(const KisPropertiesConfiguration *setting)
-{
-    KisGradientOptionData data;
-    data.read(setting);
-    return data;
 }

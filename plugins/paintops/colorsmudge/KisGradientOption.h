@@ -19,9 +19,6 @@ public:
     KisGradientOption(const KisPropertiesConfiguration *setting);
 
     void apply(KoColor& color, const KoAbstractGradientSP gradient, const KisPaintInformation& info) const;
-
-private:
-    KisGradientOptionData initializeFromData(const KisPropertiesConfiguration *setting);
 };
 
 #endif // KISGRADIENTOPTION_H

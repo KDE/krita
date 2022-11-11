@@ -1421,9 +1421,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // ok so canonized is the article's version, as in, the true equation is with 2*canonized[1] for example,
     // and canonized = A, B, C, D...
 
-    ConicFormula formCCanonized(formulaCCanonized, "formula C - canonized", ConicFormula::SPECIAL);
-
-
 
     // TODO
 
@@ -1435,6 +1432,82 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // | B C | = Q*D*Q^T
     // Q - orthogonal, D - diagonal
     //
+
+    auto rotateLikeArticleSays = [f, debug] () mutable {
+        Eigen::Matrix<long double, 2, 2> M;
+        M << f.formCCanonized.A, f.formCCanonized.B,
+             f.formCCanonized.B, f.formCCanonized.C;
+        if (debug) ENTER_FUNCTION() << "(1)";
+
+        Eigen::EigenSolver<Eigen::Matrix<long double, 2, 2>> eigenSolver(M);
+        if (debug) ENTER_FUNCTION() << "(2)";
+
+        Eigen::Matrix<std::complex<long double>, 2, 2> QC = eigenSolver.eigenvectors();
+        Eigen::Matrix<std::complex<long double>, 2, 2> DC;
+        if (debug) ENTER_FUNCTION() << "(3)a";
+        DC(0, 0) = eigenSolver.eigenvalues()(0);
+        DC(1, 1) = eigenSolver.eigenvalues()(1);
+        if (debug) ENTER_FUNCTION() << "(3)";
+
+        Eigen::Matrix<std::complex<long double>, 2, 2> cRM = QC*DC*QC.transpose();
+        if (debug) ENTER_FUNCTION() << "Check correctness of the eigen decomposition: ";
+        if (debug) {
+            for (int i = 0; i < 2; i++)  {
+                for (int j = 0; j < 2; j++) {
+                    ENTER_FUNCTION() << ppVar(i) << ppVar(j) << "|" << ppVar((double)M(i, j)) << ppVar((double)std::real(cRM(i, j)))
+                                     << ppVar((bool)(M(i, j) == std::real(cRM(i, j)))) << ppVar((double)(qAbs(M(i, j) - std::real(cRM(i, j)))));
+                }
+            }
+        }
+
+
+        Eigen::Matrix<long double, 2, 2> Q;
+        Eigen::Matrix<long double, 2, 2> Dm;
+
+        if (debug) ENTER_FUNCTION() << "(4)";
+
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                if (std::imag(DC(i, j)) == 0 && std::imag(QC(i, j)) == 0) {
+                    Dm(i, j) = std::real(DC(i, j));
+                    Q(i, j) = std::real(QC(i, j));
+                } else { // if any of that is complex, then something went wrong
+                    KIS_ASSERT_RECOVER_NOOP(false);
+                }
+            }
+        }
+
+        if (debug) ENTER_FUNCTION() << "D = " << (double)Dm(0, 0) << (double)Dm(0, 1) << (double)Dm(1, 0) << (double)Dm(1, 1);
+        if (debug) ENTER_FUNCTION() << "Q = " << (double)Q(0, 0) << (double)Q(0, 1) << (double)Q(1, 0) << (double)Q(1, 1);
+
+
+        if (debug) ENTER_FUNCTION() << "(5)";
+
+
+
+        auto vectorMultipliedByMatrix = [debug] (QVector<double> vector2, Eigen::Matrix<long double, 2, 2> matrix) {
+            QVector<double> res;
+            res << vector2[0]*matrix(0, 0) + vector2[1]*matrix(0, 1);
+            res << vector2[0]*matrix(1, 0) + vector2[1]*matrix(1, 1);
+            return res;
+        };
+
+
+        f.formDRotated.A = Dm(0, 0); // A
+        f.formDRotated.B = 0; // D(1, 0); // B
+        f.formDRotated.C = Dm(1, 1); // C
+
+        QVector<double> DEvec;
+        DEvec << f.formCCanonized.D << f.formCCanonized.E;
+        DEvec = vectorMultipliedByMatrix(DEvec, Q);
+
+        f.formDRotated.D = DEvec[0]; // D
+        f.formDRotated.E = DEvec[1]; // E
+        f.formDRotated.F = f.formCCanonized.F; // F
+
+        f.formDRotated.Name = "form D - rotated (original article version)";
+        f.formDRotated.Type = ConicFormula::SPECIAL;
+    };
 
     Eigen::Matrix<long double, 2, 2> M;
     M << f.formCCanonized.A, f.formCCanonized.B,
@@ -1474,7 +1547,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
                 Dm(i, j) = std::real(DC(i, j));
                 Q(i, j) = std::real(QC(i, j));
             } else { // if any of that is complex, then something went wrong
-                return originalPoint;
+                KIS_ASSERT_RECOVER_NOOP(false);
             }
         }
     }
@@ -1511,6 +1584,9 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     f.formDRotated.Type = ConicFormula::SPECIAL;
 
 
+    //rotateLikeArticleSays();
+
+
     QVector<double> rotated = f.formDRotated.getFormulaSpecial();
 
 
@@ -1523,31 +1599,14 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
                 + formula[5]; // f
     };
 
-    auto calculateFormulaSpecialConic = [debug] (QPointF point, ConicFormula formula) {
-        return    formula.A*point.x()*point.x() // a
-                + 2*formula.B*point.x()*point.y() // b
-                + formula.C*point.y()*point.y() // c
-                + 2*formula.D*point.x() // d
-                + 2*formula.E*point.y() // e
-                + formula.F; // f
-    };
-
-
-
-
-    QVector<double> formulaDRotated = QVector<double>::fromList(rotated.toList());
-    if (debug) writeFormulaInAllForms(formulaDRotated, "formula D - rotated");
-
     QPointF pointToRotate = point;
-    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(formCCanonized.getFormulaActual(), pointToRotate);
-    ConicFormula formDRotatedAlt (formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
-    formDRotatedAlt.convertTo(ConicFormula::SPECIAL);
-    if (debug) formDRotatedAlt.printOutInAllForms();
+    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(f.formCCanonized.getFormulaActual(), pointToRotate);
+    f.formDRotatedSecondVersion = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
+    f.formDRotatedSecondVersion.convertTo(ConicFormula::SPECIAL);
 
-    KIS_ASSERT_RECOVER_NOOP(qAbs(formDRotatedAlt.B) < 1e-10);
+    if (debug) f.formDRotatedSecondVersion.printOutInAllForms();
 
-    //formulaDRotatedAlternativeTrue =
-
+    KIS_ASSERT_RECOVER_NOOP(qAbs(f.formDRotatedSecondVersion.B) < 1e-10);
 
     if (debug) ENTER_FUNCTION() << "after rotation:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // still a circle, good
 
@@ -1558,90 +1617,29 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // point * Q?
     point = QPointF(Q(0, 0)*point.x() + Q(1, 0)*point.y(), Q(0, 1)*point.x() + Q(1, 1)*point.y());
 
-    //{
-        qreal O = Q(0, 0);
-        qreal S = Q(1, 0);
-
-        QPointF pointCheck = QPointF(point.x()*O + S*point.y(), -S*point.x() + O*point.y());
-
-        if (debug) ENTER_FUNCTION() << "Compare points with different calculations: " << ppVar(point) << ppVar(pointCheck)
-                                    << ppVar(point.x() - pointCheck.x()) << ppVar(point.y() - pointCheck.y());
-
-        if (debug) ENTER_FUNCTION() << "+++ Formula check +++";
-
-        f.formDRotated.A = f.formCCanonized.A*O*O - f.formCCanonized.B*O*S + f.formCCanonized.C*S*S;
-        f.formDRotated.B = 2*f.formCCanonized.A*O*S - f.formCCanonized.B*S*S + f.formCCanonized.B*O*O - 2*f.formCCanonized.C*O*S;
-        f.formDRotated.C = f.formCCanonized.A*S*S + f.formCCanonized.B*O*S + f.formCCanonized.C*O*O;
-        f.formDRotated.D = f.formCCanonized.D*O - f.formCCanonized.E*S;
-        f.formDRotated.E = f.formCCanonized.D*S + f.formCCanonized.E*O;
-
-        // F is the same
-
-        // attempt 2
-
-        /*
-        qreal newA = canonized[Ai]*O*O + canonized[Bi]*O*S + canonized[Ci]*S*S;
-        qreal newB = -2*canonized[Ai]*O*S - canonized[Bi]*S*S + canonized[Bi]*O*O + 2*canonized[Ci]*O*S;
-        qreal newC = canonized[Ai]*S*S - canonized[Bi]*O*S + canonized[Ci]*O*O;
-        qreal newD = canonized[Di]*O + canonized[Ei]*S;
-        qreal newE = canonized[Di]*S - canonized[Ei]*O;
-        // F is the same
-        */
-
-        /*
-        if (debug) ENTER_FUNCTION() << ppVar(rotated[Ai]) << ppVar(newA);
-        if (debug) ENTER_FUNCTION() << ppVar(rotated[Bi]) << ppVar(newB);
-        if (debug) ENTER_FUNCTION() << ppVar(rotated[Ci]) << ppVar(newC);
-        if (debug) ENTER_FUNCTION() << ppVar(rotated[Di]) << ppVar(newD);
-        if (debug) ENTER_FUNCTION() << ppVar(rotated[Ei]) << ppVar(newE);
-        */
-
-
-
-    //}
-
-
-    //auto getPointOnEllipse
-
     /*
+    qreal O = Q(0, 0);
+    qreal S = Q(1, 0);
 
-    QPointF pointOnEllipseInTest9 = QPointF(1.0, 0.0);
-    qreal Aprim = canonized[Ai];
-    qreal Bprim = canonized[Bi]*2;
-    qreal Cprim = canonized[Ci];
-    qreal Dprim = canonized[Di]*2;
-    qreal Eprim = canonized[Ei]*2;
-    qreal Fprim = canonized[Fi];
+    QPointF pointCheck = QPointF(point.x()*O + S*point.y(), -S*point.x() + O*point.y());
 
-    qreal part1 = -(Eprim + Bprim);
-    qreal part2 = sqrt(qPow(Eprim + Bprim, 2) - 4*Cprim*(Aprim + Dprim + Fprim));
-    qreal part3 = 2*Cprim;
+    if (debug) ENTER_FUNCTION() << "Compare points with different calculations: " << ppVar(point) << ppVar(pointCheck)
+                                << ppVar(point.x() - pointCheck.x()) << ppVar(point.y() - pointCheck.y());
 
+    if (debug) ENTER_FUNCTION() << "+++ Formula check +++";
 
-    pointOnEllipseInTest9.setY((-2*canonized[Ei] - 2*canonized[Bi] + sqrt(qPow(2*canonized[Ei] + 2*canonized[Bi], 2) - 4*canonized[Ci]*(canonized[Ai] + 2*canonized[Di] + 2*canonized[Fi])))/(2*canonized[Ci]));
-    pointOnEllipseInTest9.setY((part1 + part2)/part3);
+    f.formDRotatedSecondVersion.A = f.formCCanonized.A*O*O - f.formCCanonized.B*O*S + f.formCCanonized.C*S*S;
+    f.formDRotatedSecondVersion.B = 2*f.formCCanonized.A*O*S - f.formCCanonized.B*S*S + f.formCCanonized.B*O*O - 2*f.formCCanonized.C*O*S;
+    f.formDRotatedSecondVersion.C = f.formCCanonized.A*S*S + f.formCCanonized.B*O*S + f.formCCanonized.C*O*O;
+    f.formDRotatedSecondVersion.D = f.formCCanonized.D*O - f.formCCanonized.E*S;
+    f.formDRotatedSecondVersion.E = f.formCCanonized.D*S + f.formCCanonized.E*O;
 
-    if (debug) ENTER_FUNCTION() << ppVar(part1) << ppVar(part2) << ppVar(part3);
-
-    if (debug) ENTER_FUNCTION() << "Point found on the ellipse: " << ppVar(pointOnEllipseInTest9) << ppVar(pointOnEllipseInTest9.y());
-    if (debug) ENTER_FUNCTION() << calculateFormulaSpecial(pointOnEllipseInTest9, formulaCCanonized);
-    QPointF pointOnEllipseAfterRotation = QPointF();
-    // Q = (0, 0)
-    // S = (1, 0)
-    pointOnEllipseAfterRotation.setX(pointOnEllipseInTest9.x() * Q(0, 0) + pointOnEllipseInTest9.y()*Q(1, 0));
-    pointOnEllipseAfterRotation.setY(- pointOnEllipseInTest9.x() * Q(1, 0) + pointOnEllipseInTest9.y()*Q(0, 0));
-    if (debug) ENTER_FUNCTION() << "Point found on the ellipse after rotation: " << ppVar(pointOnEllipseAfterRotation);
-    if (debug) ENTER_FUNCTION() << calculateFormulaSpecial(pointOnEllipseAfterRotation, formulaDRotated);
-    //QVector<double> formulaTempFromDifferentCalculations;
-    //formulaTempFromDifferentCalculations << newA << newB << newC << newD << newE << Fprim;
-    //if (debug) ENTER_FUNCTION() << calculateFormulaSpecial(pointOnEllipseAfterRotation, formulaTempFromDifferentCalculations);
-    if (debug) ENTER_FUNCTION() << "HERE ========>  ========>" << calculateFormulaSpecialConic(pointOnEllipseAfterRotation, f.formD);
-
-    */
 
     if (debug) ENTER_FUNCTION() << "####### If the formula is still correct, and we used a point on the ellipse, it should still be on the ellipse:"
-                                << writeFormulaInWolframAlphaForm(formulaDRotated) << ppVar(point) << ppVar(calculateFormulaSpecial(point, formulaDRotated));
+                                << writeFormulaInWolframAlphaForm(f.formDRotated.getFormulaSpecial())
+                                << ppVar(point) << ppVar(calculateFormulaSpecial(point, f.formDRotated.getFormulaSpecial()));
 
+    */
 
 
     if (debug) ENTER_FUNCTION() << "(*) after rotation:" << ppVar(point);
@@ -1653,31 +1651,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     qreal v = point.y();
 
     if (debug) ENTER_FUNCTION() << "(*) after moving:" << ppVar(QPointF(0, 0));
-
-    auto setFromVector = [] (qreal& A, qreal& B, qreal& C, qreal& D, qreal& E, qreal& F, QVector<double> vector)
-    {
-        A = vector[0];
-        B = vector[1];
-        C = vector[2];
-        D = vector[3];
-        E = vector[4];
-        F = vector[5];
-    };
-
-    auto setToVector= [] (qreal& A, qreal& B, qreal& C, qreal& D, qreal& E, qreal& F, QVector<double>& vector)
-    {
-        vector[0] = A;
-        vector[1] = B;
-        vector[2] = C;
-        vector[3] = D;
-        vector[4] = E;
-        vector[5] = F;
-    };
-
-    qreal A, B, C, D, E, F;
-
-    setFromVector(A, B, C, D, E, F, rotated);
-
 
     auto moveEllipseSoPointIsInOrigin = [debug] (ConicFormula formula, qreal u, qreal v) {
         ConicFormula response = formula;
@@ -1696,14 +1669,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     ConicFormula rotatedBeforeMoving(rotated, "rotated before moving, not sure which letter", ConicFormula::SPECIAL);
     ConicFormula rotatedAfterMoving = moveEllipseSoPointIsInOrigin(rotatedBeforeMoving, u, v);
-
-    A = rotatedAfterMoving.A;
-    B = rotatedAfterMoving.B;
-    C = rotatedAfterMoving.C;
-    D = rotatedAfterMoving.D;
-    E = rotatedAfterMoving.E;
-    F = rotatedAfterMoving.F;
-
 
     if (debug) rotatedAfterMoving.printOutInAllForms();
 
@@ -1802,14 +1767,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     // ok, now |C| >= |A|
 
-
-    A = f.formINegatedY.A;
-    B = f.formINegatedY.B;
-    C = f.formINegatedY.C;
-    D = f.formINegatedY.D;
-    E = f.formINegatedY.E;
-    F = f.formINegatedY.F;
-
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f.formINegatedY.C >= 0 && f.formINegatedY.D >= 0 && f.formINegatedY.E >= 0, originalPoint);
 
     // Stage 5.
@@ -1901,14 +1858,12 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     }
 
 
-    qreal foundX = -D*tresult/qPow(A*tresult + 1, 1);
-    qreal foundY = -E*tresult/qPow(C*tresult + 1, 1);
+    qreal foundX = -f.formINegatedY.D*tresult/qPow(f.formINegatedY.A*tresult + 1, 1);
+    qreal foundY = -f.formINegatedY.E*tresult/qPow(f.formINegatedY.C*tresult + 1, 1);
 
 
 
     qreal checkIfOnTheEllipse = f.formINegatedY.calculateFormulaForPoint(QPointF(foundX, foundY));
-    //qreal checkIfOnTheEllipse = A*foundX*foundX + 2*B*foundX*foundY + C*foundY*foundY + 2*D*foundX + 2*E*foundY + F;
-
 
     if (debug) ENTER_FUNCTION() << ppVar(checkIfOnTheEllipse);
     if (qAbs(checkIfOnTheEllipse) >= 1e-6) {
@@ -1949,9 +1904,10 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     QPointF result = undoAllChanges(QPointF(foundX, foundY), negateX, negateY, swapXandY, u, v);
 
     if (debug) ENTER_FUNCTION() << "(4) after moving to the origin" << ppVar(result) << ppVar(calculateFormula(result))
-                                   << ppVar(calculateFormulaSpecial(result, formulaDRotated));
+                                   << ppVar(calculateFormulaSpecial(result, f.formDRotated.getFormulaSpecial()));
 
-    if (debug) ENTER_FUNCTION() << "before the mistake" << ppVar(result) << ppVar(writeFormulaInWolframAlphaForm(formulaDRotated)) << ppVar((double)Q(0, 0)) << ppVar((double)Q(1, 1));
+    if (debug) ENTER_FUNCTION() << "before the mistake" << ppVar(result) << ppVar(writeFormulaInWolframAlphaForm(f.formDRotated.getFormulaSpecial()))
+                                << ppVar((double)Q(0, 0)) << ppVar((double)Q(1, 1));
 
     // un-rotating (with Q)
 

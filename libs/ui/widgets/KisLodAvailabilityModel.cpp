@@ -23,7 +23,7 @@ calcLodAvailabilityState(const KisLodAvailabilityData &data, qreal effectiveBrus
         state = KisLodAvailabilityModel::Limited;
     }
 
-    return std::make_tuple(state, l);
+    return std::make_tuple(state, l, data.isLodUserAllowed);
 }
 }
 
@@ -39,4 +39,5 @@ KisLodAvailabilityModel::KisLodAvailabilityModel(lager::cursor<KisLodAvailabilit
             .zoom(lager::lenses::first)
             .xform(kiszug::map_less_equal<int>(static_cast<int>(Limited)))}
 {
+    data.watch(std::bind(&KisLodAvailabilityModel::sigConfigurationItemChanged, this));
 }

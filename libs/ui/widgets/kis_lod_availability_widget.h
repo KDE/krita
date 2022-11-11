@@ -27,7 +27,7 @@ public:
     void setLodAvailabilityModel(KisLodAvailabilityModel *model);
 
 public Q_SLOTS:
-    void slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state, const KisPaintopLodLimitations &l);
+    void slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state, const KisPaintopLodLimitations &l, bool isLodUserAllowed);
 
 Q_SIGNALS:
     void sigUserChangedLodAvailability(bool value);

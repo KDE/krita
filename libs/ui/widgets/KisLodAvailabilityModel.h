@@ -24,7 +24,7 @@ public:
     };
 
     using AvailabilityStatePack =
-        std::tuple<AvailabilityState, KisPaintopLodLimitations>;
+        std::tuple<AvailabilityState, KisPaintopLodLimitations, bool>;
 public:
     KisLodAvailabilityModel(lager::cursor<KisLodAvailabilityData> data,
                             lager::reader<qreal> effectiveBrushSize,
@@ -40,6 +40,9 @@ public:
 
     LAGER_QT_READER(AvailabilityStatePack, availabilityState);
     LAGER_QT_READER(bool, effectiveLodAvailable);
+
+Q_SIGNALS:
+    void sigConfigurationItemChanged();
 };
 
 #endif // KISLODAVAILABILITYMODEL_H

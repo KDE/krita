@@ -92,7 +92,7 @@ void KisLodAvailabilityWidget::setLodAvailabilityModel(KisLodAvailabilityModel *
 
     m_d->model->LAGER_QT(availabilityState).bind(
         kismpl::unzip_wrapper(std::bind(&KisLodAvailabilityWidget::slotLodAvailabilityStateChanged,
-                                        this, std::placeholders::_1, std::placeholders::_2)));
+                                        this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
 
     connect(m_d->chkLod, &QCheckBox::toggled,
             m_d->model.data(), &KisLodAvailabilityModel::setisLodUserAllowed);
@@ -115,7 +115,7 @@ void KisLodAvailabilityWidget::showLodThresholdWidget(const QPoint &pos)
     }
 }
 
-void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state, const KisPaintopLodLimitations &l)
+void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilityModel::AvailabilityState state, const KisPaintopLodLimitations &l, bool isLodUserAllowed)
 {
     QString toolTip;
 
@@ -185,7 +185,7 @@ void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilit
             m_d->chkLod->setChecked(false);
         } else {
             KisSignalsBlocker b(m_d->chkLod);
-            m_d->chkLod->setChecked(m_d->model->isLodUserAllowed());
+            m_d->chkLod->setChecked(isLodUserAllowed);
         }
     }
 }

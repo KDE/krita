@@ -442,6 +442,9 @@ void KisPaintOpPresetsEditor::setPaintOpSettingsWidget(QWidget * widget)
                                              this, SLOT(slotUpdateEffectiveLodAvailable(bool)));
         slotUpdateEffectiveLodAvailable(model->effectiveLodAvailable());
 
+        m_d->widgetConnections.addConnection(model, SIGNAL(sigConfigurationItemChanged()),
+                                             widget, SIGNAL(sigConfigurationItemChanged()));
+
         m_d->layout->update();
         widget->show();
 

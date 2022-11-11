@@ -6,11 +6,11 @@
 
 #include "KisStandardOptionData.h"
 
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <KisPaintopSettingsIds.h>
 
 
-namespace KisPaintOpOptionUtils {
+namespace KisPaintOpOptionWidgetUtils {
 
 namespace detail {
 KisCurveOptionWidget2 *createOpacityOptionWidgetImpl(bool isCheckable, KisPaintOpOption::PaintopCategory category, const QString &prefix)

@@ -7,7 +7,7 @@
 
 #include <kis_painter.h>
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 KisSmudgeLengthOption::KisSmudgeLengthOption(const KisPropertiesConfiguration *setting)

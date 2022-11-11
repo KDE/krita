@@ -5,7 +5,7 @@
  */
 #include "KisPaintThicknessOption.h"
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 

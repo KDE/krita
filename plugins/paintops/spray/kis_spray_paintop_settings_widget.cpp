@@ -13,7 +13,7 @@
 #include <kis_paintop_settings_widget.h>
 
 #include <KisPaintingModeOptionWidget.h>
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <kis_pressure_rotation_option.h>
 #include <kis_pressure_opacity_option.h>
 #include <kis_pressure_size_option.h>
@@ -22,29 +22,29 @@
 #include <kis_brush_option_widget.h>
 #include "kis_spray_shape_dynamics.h"
 #include <KisAirbrushOptionWidget.h>
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <KisCompositeOpOptionWidget.h>
 
 
 KisSprayPaintOpSettingsWidget:: KisSprayPaintOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    namespace kpou = KisPaintOpOptionUtils;
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
 
     addPaintOpOption(new KisSprayOpOption());
     addPaintOpOption(new KisSprayShapeOption());
     addPaintOpOption(new KisBrushOptionWidget(KisBrushOptionWidgetFlag::None));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
 
     addPaintOpOption(new KisSprayShapeDynamicsOption());
     addPaintOpOption(new KisColorOption());
 
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
-    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisAirbrushOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>());
 }
 
 KisSprayPaintOpSettingsWidget::~ KisSprayPaintOpSettingsWidget()

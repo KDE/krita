@@ -8,7 +8,7 @@
 #include <kis_properties_configuration.h>
 #include <KisSpacingOptionData.h>
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 

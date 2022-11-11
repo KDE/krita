@@ -12,7 +12,7 @@
 
 #include <KisSharpnessOptionData.h>
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 

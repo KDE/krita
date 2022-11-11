@@ -11,7 +11,7 @@
 #include <KisStandardOptionData.h>
 #include <kis_paintop.h>
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 

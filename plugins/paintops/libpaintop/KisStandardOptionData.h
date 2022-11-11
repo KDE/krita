@@ -131,7 +131,7 @@ struct KisLightnessStrengthOptionData : KisCurveOptionData
 
 class KisCurveOptionWidget2;
 
-namespace KisPaintOpOptionUtils {
+namespace KisPaintOpOptionWidgetUtils {
 
 PAINTOP_EXPORT KisCurveOptionWidget2* createOpacityOptionWidget();
 PAINTOP_EXPORT KisCurveOptionWidget2* createFlowOptionWidget();

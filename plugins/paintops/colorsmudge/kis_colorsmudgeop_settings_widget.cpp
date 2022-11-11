@@ -13,7 +13,7 @@
 #include "kis_colorsmudgeop_settings.h"
 #include "kis_signals_blocker.h"
 #include <KisAirbrushOptionWidget.h>
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <KisTextureOptionWidget.h>
 #include <KisStandardOptionData.h>
 #include <KisCompositeOpOptionWidget.h>
@@ -46,20 +46,20 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent, 
     , m_d(new Private(brushOptionWidget()->bakedBrushData(), resourcesInterface))
 {
     Q_UNUSED(canvasResourcesInterface)
-    namespace kpou = KisPaintOpOptionUtils;
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
 
     setObjectName("brush option widget");
 
-    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
-    addPaintOpOption(kpou::createOpacityOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisSizeOptionWidget>());
-    addPaintOpOption(kpou::createRatioOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisSpacingOptionWidget>());
-    addPaintOpOption(kpou::createOptionWidget<KisMirrorOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOpacityOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());
+    addPaintOpOption(kpowu::createRatioOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSpacingOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisMirrorOptionWidget>());
 
 
     KisSmudgeLengthOptionWidget *smudgeLengthWidget =
-        kpou::createOptionWidget<KisSmudgeLengthOptionWidget>
+        kpowu::createOptionWidget<KisSmudgeLengthOptionWidget>
             (KisSmudgeLengthOptionData(),
              m_d->brushPropertiesModel.isBrushPierced,
              m_d->brushPropertiesModel.brushApplication
@@ -75,37 +75,37 @@ KisColorSmudgeOpSettingsWidget::KisColorSmudgeOpSettingsWidget(QWidget* parent, 
             });
 
     KisCurveOptionWidget2 *smudgeRadiusWidget =
-        kpou::createCurveOptionWidget(KisSmudgeRadiusOptionData(),
+        kpowu::createCurveOptionWidget(KisSmudgeRadiusOptionData(),
                                       KisPaintOpOption::GENERAL,
                                       lager::make_constant(true),
                                       rangeReader);
 
     addPaintOpOption(smudgeRadiusWidget);
 
-    addPaintOpOption(kpou::createCurveOptionWidget(KisColorRateOptionData(), KisPaintOpOption::GENERAL));
+    addPaintOpOption(kpowu::createCurveOptionWidget(KisColorRateOptionData(), KisPaintOpOption::GENERAL));
 
-    addPaintOpOption(kpou::createOptionWidget<KisPaintThicknessOptionWidget>(KisPaintThicknessOptionData(), brushOptionWidget()->lightnessModeEnabled()));
+    addPaintOpOption(kpowu::createOptionWidget<KisPaintThicknessOptionWidget>(KisPaintThicknessOptionData(), brushOptionWidget()->lightnessModeEnabled()));
 
-    addPaintOpOption(kpou::createRotationOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisScatterOptionWidget>());
+    addPaintOpOption(kpowu::createRotationOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisScatterOptionWidget>());
 
-    addPaintOpOption(kpou::createOptionWidget<KisSmudgeOverlayModeOptionWidget>(
+    addPaintOpOption(kpowu::createOptionWidget<KisSmudgeOverlayModeOptionWidget>(
                          KisSmudgeOverlayModeOptionData(),
                          brushOptionWidget()->
                              lightnessModeEnabled()
                              .map(std::logical_not{})));
 
-    addPaintOpOption(kpou::createCurveOptionWidget(KisGradientOptionData(), KisPaintOpOption::GENERAL));
+    addPaintOpOption(kpowu::createCurveOptionWidget(KisGradientOptionData(), KisPaintOpOption::GENERAL));
 
-    addPaintOpOption(kpou::createHueOptionWidget());
-    addPaintOpOption(kpou::createSaturationOptionWidget());
-    addPaintOpOption(kpou::createValueOptionWidget());
+    addPaintOpOption(kpowu::createHueOptionWidget());
+    addPaintOpOption(kpowu::createSaturationOptionWidget());
+    addPaintOpOption(kpowu::createValueOptionWidget());
 
-    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>());
-    addPaintOpOption(kpou::createRateOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisAirbrushOptionWidget>());
+    addPaintOpOption(kpowu::createRateOptionWidget());
 
-    addPaintOpOption(kpou::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface));
-    addPaintOpOption(kpou::createCurveOptionWidget(KisStrengthOptionData(), KisPaintOpOption::COLOR, i18n("Weak"), i18n("Strong")));
+    addPaintOpOption(kpowu::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface));
+    addPaintOpOption(kpowu::createCurveOptionWidget(KisStrengthOptionData(), KisPaintOpOption::COLOR, i18n("Weak"), i18n("Strong")));
 }
 
 KisColorSmudgeOpSettingsWidget::~KisColorSmudgeOpSettingsWidget() { }

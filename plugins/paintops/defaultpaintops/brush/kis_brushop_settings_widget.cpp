@@ -30,7 +30,7 @@
 #include "KisSizeOptionWidget.h"
 
 #include <KisStandardOptionData.h>
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 
 KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent, KisResourcesInterfaceSP resourcesInterface, KoCanvasResourcesInterfaceSP canvasResourcesInterface)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision |
@@ -42,51 +42,51 @@ KisBrushOpSettingsWidget::KisBrushOpSettingsWidget(QWidget* parent, KisResources
 
     setObjectName("brush option widget");
 
-    namespace kpou = KisPaintOpOptionUtils;
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
 
     // Brush tip options
-    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
-    addPaintOpOption(kpou::createOpacityOptionWidget());
-    addPaintOpOption(kpou::createFlowOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisSizeOptionWidget>());
-    addPaintOpOption(kpou::createRatioOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisSpacingOptionWidget>());
-    addPaintOpOption(kpou::createOptionWidget<KisMirrorOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOpacityOptionWidget());
+    addPaintOpOption(kpowu::createFlowOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());
+    addPaintOpOption(kpowu::createRatioOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSpacingOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisMirrorOptionWidget>());
 
-    addPaintOpOption(kpou::createSoftnessOptionWidget());
-    addPaintOpOption(kpou::createRotationOptionWidget());
+    addPaintOpOption(kpowu::createSoftnessOptionWidget());
+    addPaintOpOption(kpowu::createRotationOptionWidget());
 
-    addPaintOpOption(kpou::createOptionWidget<KisSharpnessOptionWidget>());
-    addPaintOpOption(kpou::createOptionWidget<KisLightnessStrengthOptionWidget>(KisLightnessStrengthOptionData(), brushOptionWidget()->lightnessModeEnabled()));
+    addPaintOpOption(kpowu::createOptionWidget<KisSharpnessOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisLightnessStrengthOptionWidget>(KisLightnessStrengthOptionData(), brushOptionWidget()->lightnessModeEnabled()));
 
-    addPaintOpOption(kpou::createOptionWidget<KisScatterOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisScatterOptionWidget>());
 
     // Colors options
-    addPaintOpOption(kpou::createOptionWidget<KisColorSourceOptionWidget>());
-    addPaintOpOption(kpou::createDarkenOptionWidget());
-    addPaintOpOption(kpou::createMixOptionWidget());
-    addPaintOpOption(kpou::createHueOptionWidget());
-    addPaintOpOption(kpou::createSaturationOptionWidget());
-    addPaintOpOption(kpou::createValueOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisColorSourceOptionWidget>());
+    addPaintOpOption(kpowu::createDarkenOptionWidget());
+    addPaintOpOption(kpowu::createMixOptionWidget());
+    addPaintOpOption(kpowu::createHueOptionWidget());
+    addPaintOpOption(kpowu::createSaturationOptionWidget());
+    addPaintOpOption(kpowu::createValueOptionWidget());
 
-    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>());
-    addPaintOpOption(kpou::createRateOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisAirbrushOptionWidget>());
+    addPaintOpOption(kpowu::createRateOptionWidget());
 
     KisMaskingBrushOption *maskingOption = new KisMaskingBrushOption(brushOptionWidget()->effectiveBrushSize());
-    addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>(KisPaintingModeOptionData(), maskingOption->maskingBrushEnabledReader()));
+    addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>(KisPaintingModeOptionData(), maskingOption->maskingBrushEnabledReader()));
 
-    addPaintOpOption(kpou::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface, SupportsLightnessMode | SupportsGradientMode));
-    addPaintOpOption(kpou::createStrengthOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisTextureOptionWidget>(KisTextureOptionData(), resourcesInterface, SupportsLightnessMode | SupportsGradientMode));
+    addPaintOpOption(kpowu::createStrengthOptionWidget());
 
     addPaintOpOption(maskingOption);
 
-    addPaintOpOption(kpou::createMaskingOpacityOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisSizeOptionWidget>(KisSizeOptionData(true, KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
-    addPaintOpOption(kpou::createMaskingFlowOptionWidget());
-    addPaintOpOption(kpou::createMaskingRatioOptionWidget());
-    addPaintOpOption(kpou::createMaskingRotationOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisMirrorOptionWidget>(KisMirrorOptionData(KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
-    addPaintOpOption(kpou::createOptionWidget<KisScatterOptionWidget>(KisScatterOptionData(KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
+    addPaintOpOption(kpowu::createMaskingOpacityOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>(KisSizeOptionData(true, KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
+    addPaintOpOption(kpowu::createMaskingFlowOptionWidget());
+    addPaintOpOption(kpowu::createMaskingRatioOptionWidget());
+    addPaintOpOption(kpowu::createMaskingRotationOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisMirrorOptionWidget>(KisMirrorOptionData(KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
+    addPaintOpOption(kpowu::createOptionWidget<KisScatterOptionWidget>(KisScatterOptionData(KisPaintOpUtils::MaskingBrushPresetPrefix), KisPaintOpOption::MASKING_BRUSH));
 }
 
 KisBrushOpSettingsWidget::~KisBrushOpSettingsWidget()

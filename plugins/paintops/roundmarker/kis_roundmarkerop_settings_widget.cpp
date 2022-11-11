@@ -16,20 +16,20 @@
 //#include "kis_pressure_texture_strength_option.h"
 #include "kis_roundmarkerop_settings.h"
 #include "kis_roundmarker_option.h"
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <KisCompositeOpOptionWidget.h>
 
 
 KisRoundMarkerOpSettingsWidget::KisRoundMarkerOpSettingsWidget(QWidget* parent)
     : KisPaintOpSettingsWidget(parent)
 {
-    namespace kpou = KisPaintOpOptionUtils;
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
 
     setObjectName("roundmarker option widget");
     //setPrecisionEnabled(true);
 
     addPaintOpOption(new KisRoundMarkerOption());
-    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisPressureSpacingOptionWidget());
 

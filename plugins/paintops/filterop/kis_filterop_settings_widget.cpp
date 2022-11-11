@@ -14,7 +14,7 @@
 #include <kis_properties_configuration.h>
 #include <filter/kis_filter.h>
 #include <KisStandardOptionData.h>
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <KisCompositeOpOptionWidget.h>
 #include <KisSizeOptionWidget.h>
 #include <KisMirrorOptionWidget.h>
@@ -23,17 +23,17 @@
 KisFilterOpSettingsWidget::KisFilterOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::SupportsPrecision, parent)
 {
-    namespace kpou = KisPaintOpOptionUtils;
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
 
 
     setObjectName("filter option widget");
 
-    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
-    addPaintOpOption(kpou::createOpacityOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisSizeOptionWidget>());
-    addPaintOpOption(kpou::createRotationOptionWidget());
-    addPaintOpOption(kpou::createOptionWidget<KisMirrorOptionWidget>());
-    addPaintOpOption(kpou::createOptionWidget<KisFilterOptionWidget2>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOpacityOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisSizeOptionWidget>());
+    addPaintOpOption(kpowu::createRotationOptionWidget());
+    addPaintOpOption(kpowu::createOptionWidget<KisMirrorOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisFilterOptionWidget2>());
 }
 
 KisFilterOpSettingsWidget::~KisFilterOpSettingsWidget()

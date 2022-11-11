@@ -12,7 +12,7 @@
 #include <KisMirrorOptionData.h>
 #include <KisMirrorProperties.h>
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 

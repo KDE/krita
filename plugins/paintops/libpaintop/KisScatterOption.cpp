@@ -13,7 +13,7 @@
 #include <kis_paint_information.h>
 #include <KisScatterOptionData.h>
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 

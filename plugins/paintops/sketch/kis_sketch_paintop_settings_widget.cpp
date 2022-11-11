@@ -13,11 +13,11 @@
 #include <kis_pressure_opacity_option.h>
 #include <kis_paintop_settings_widget.h>
 #include <KisPaintingModeOptionWidget.h>
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 #include <kis_pressure_size_option.h>
 #include <kis_pressure_rate_option.h>
 #include <KisAirbrushOptionWidget.h>
-#include <KisPaintOpOptionUtils.h>
+#include <KisPaintOpOptionWidgetUtils.h>
 
 #include <QDomDocument>
 #include <QDomElement>
@@ -31,22 +31,22 @@
 KisSketchPaintOpSettingsWidget::KisSketchPaintOpSettingsWidget(QWidget* parent)
     : KisBrushBasedPaintopOptionWidget(KisBrushOptionWidgetFlag::None, parent)
 {
-    namespace kpou = KisPaintOpOptionUtils;
+    namespace kpowu = KisPaintOpOptionWidgetUtils;
 
     addPaintOpOption(new KisSketchOpOption());
-    addPaintOpOption(kpou::createOptionWidget<KisCompositeOpOptionWidget>());
+    addPaintOpOption(kpowu::createOptionWidget<KisCompositeOpOptionWidget>());
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureOpacityOption(), i18n("Transparent"), i18n("Opaque")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureSizeOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRotationOption(), i18n("-180°"), i18n("180°")));
     addPaintOpOption(new KisCurveOptionWidget(new KisLineWidthOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisOffsetScaleOption(), i18n("0%"), i18n("100%")));
     addPaintOpOption(new KisCurveOptionWidget(new KisDensityOption(), i18n("0%"), i18n("100%")));
-    addPaintOpOption(kpou::createOptionWidget<KisAirbrushOptionWidget>(KisAirbrushOptionData(), false));
+    addPaintOpOption(kpowu::createOptionWidget<KisAirbrushOptionWidget>(KisAirbrushOptionData(), false));
     addPaintOpOption(new KisCurveOptionWidget(new KisPressureRateOption(), i18n("0%"), i18n("100%")));
 
     KisPaintingModeOptionData defaultModeData;
     defaultModeData.paintingMode = enumPaintingMode::BUILDUP;
-    addPaintOpOption(kpou::createOptionWidget<KisPaintingModeOptionWidget>(defaultModeData));
+    addPaintOpOption(kpowu::createOptionWidget<KisPaintingModeOptionWidget>(defaultModeData));
 
     KisPropertiesConfigurationSP reconfigurationCourier = configuration();
     QDomDocument xMLAnalyzer;

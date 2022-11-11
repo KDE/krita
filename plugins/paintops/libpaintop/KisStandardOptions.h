@@ -12,7 +12,7 @@
 #include <KisStandardOptionData.h>
 #include <KisSizeOptionData.h>
 
-#include <KisPaintOpOptionUtils2.h>
+#include <KisPaintOpOptionUtils.h>
 namespace kpou = KisPaintOpOptionUtils;
 
 template <typename Data>

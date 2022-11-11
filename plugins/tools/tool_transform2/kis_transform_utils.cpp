@@ -26,6 +26,7 @@
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_adapter.h"
 #include "krita_container_utils.h"
+#include "kis_selection.h"
 
 
 struct TransformTransactionPropertiesRegistrar {
@@ -648,7 +649,7 @@ KisNodeSP KisTransformUtils::tryOverrideRootToTransformMask(KisNodeSP root)
     return root;
 }
 
-QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent)
+QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformMode mode, KisNodeSP root, bool isExternalSourcePresent, KisSelectionSP selection)
 {
     QList<KisNodeSP> result;
 
@@ -663,13 +664,16 @@ QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformM
     /// stroke initialization routine.
     KIS_SAFE_ASSERT_RECOVER_NOOP(!hasTransformMaskDescendant);
 
+    KisNodeSP selectionNode = selection->parentNode();
+
     auto fetchFunc =
-        [&result, mode, root] (KisNodeSP node) {
+        [&result, mode, root, selectionNode] (KisNodeSP node) {
         if (node->isEditable(node == root) &&
                 (!node->inherits("KisShapeLayer") || mode == ToolTransformArgs::FREE_TRANSFORM) &&
                 !node->inherits("KisFileLayer") &&
                 !node->inherits("KisColorizeMask") &&
-                (!node->inherits("KisTransformMask") || node == root)) {
+                (!node->inherits("KisTransformMask") || node == root) &&
+                (selectionNode && node != selectionNode)) {
 
                 result << node;
             }

@@ -428,7 +428,7 @@ void TransformStrokeStrategy::initStrokeCallback()
 
     ToolTransformArgs initialTransformArgs;
     bool isExternalSourcePresent = false;
-    m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, isExternalSourcePresent);
+    m_processedNodes = KisTransformUtils::fetchNodesList(m_mode, m_rootNode, isExternalSourcePresent, m_selection);
 
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;

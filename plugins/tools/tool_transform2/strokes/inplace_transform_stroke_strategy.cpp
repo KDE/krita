@@ -302,7 +302,7 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
     }
 
     // When placing an external source image, we never work recursively on any layer masks
-    m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->externalSource);
+    m_d->processedNodes = KisTransformUtils::fetchNodesList(m_d->mode, m_d->rootNode, m_d->externalSource, m_d->selection);
 
     bool argsAreInitialized = false;
     QVector<KisStrokeJobData *> lastCommandUndoJobs;

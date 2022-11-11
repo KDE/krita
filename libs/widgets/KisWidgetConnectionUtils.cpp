@@ -95,7 +95,8 @@ void connectControl(QAbstractButton *button, QObject *source, const char *proper
     button->setChecked(prop.read(source).toBool());
 
     if (prop.isWritable()) {
-        QObject::connect(button, &QAbstractButton::toggled, [prop, source] (bool value) { prop.write(source, value); });
+        QObject::connect(button, &QAbstractButton::toggled,
+                         source, [prop, source] (bool value) { prop.write(source, value); });
     }
 }
 
@@ -120,7 +121,8 @@ void connectControl(QSpinBox *spinBox, QObject *source, const char *property)
     spinBox->setValue(prop.read(source).toInt());
 
     if (prop.isWritable()) {
-        QObject::connect(spinBox, qOverload<int>(&QSpinBox::valueChanged), [prop, source] (int value) { prop.write(source, value); });
+        QObject::connect(spinBox, qOverload<int>(&QSpinBox::valueChanged),
+                         source, [prop, source] (int value) { prop.write(source, value); });
     }
 }
 
@@ -145,7 +147,8 @@ void connectControl(QDoubleSpinBox *spinBox, QObject *source, const char *proper
     spinBox->setValue(prop.read(source).toReal());
 
     if (prop.isWritable()) {
-        QObject::connect(spinBox, qOverload<qreal>(&QDoubleSpinBox::valueChanged), [prop, source] (qreal value) { prop.write(source, value); });
+        QObject::connect(spinBox, qOverload<qreal>(&QDoubleSpinBox::valueChanged),
+                         source, [prop, source] (qreal value) { prop.write(source, value); });
     }
 }
 
@@ -170,7 +173,8 @@ void connectControl(KisMultipliersDoubleSliderSpinBox *spinBox, QObject *source,
     spinBox->setValue(prop.read(source).toReal());
 
     if (prop.isWritable()) {
-        QObject::connect(spinBox, qOverload<qreal>(&KisMultipliersDoubleSliderSpinBox::valueChanged), [prop, source] (qreal value) { prop.write(source, value); });
+        QObject::connect(spinBox, qOverload<qreal>(&KisMultipliersDoubleSliderSpinBox::valueChanged),
+                         source, [prop, source] (qreal value) { prop.write(source, value); });
     }
 }
 
@@ -242,7 +246,8 @@ void connectControl(QButtonGroup *group, QObject *source, const char *property)
     helper->updateState(prop.read(source).toInt());
 
     if (prop.isWritable()) {
-        QObject::connect(helper, &ConnectButtonGroupHelper::idClicked, [prop, source] (int value) { prop.write(source, value); });
+        QObject::connect(helper, &ConnectButtonGroupHelper::idClicked,
+                         source, [prop, source] (int value) { prop.write(source, value); });
     }
 }
 
@@ -270,7 +275,8 @@ void connectControlState(QButtonGroup *group, QObject *source, const char *readS
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writeProperty));
     if (writeProp.isWritable()) {
-        QObject::connect(helper, &ConnectButtonGroupHelper::idClicked, [writeProp, source] (int value) { writeProp.write(source, value); });
+        QObject::connect(helper, &ConnectButtonGroupHelper::idClicked,
+                         source, [writeProp, source] (int value) { writeProp.write(source, value); });
     }
 }
 
@@ -298,7 +304,8 @@ void connectControlState(QAbstractButton *button, QObject *source, const char *r
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writePropertyName));
     if (writeProp.isWritable()) {
-        button->connect(button, &QAbstractButton::toggled, [writeProp, source] (bool value) { writeProp.write(source, value); });
+        button->connect(button, &QAbstractButton::toggled,
+                        source, [writeProp, source] (bool value) { writeProp.write(source, value); });
     }
 }
 
@@ -327,7 +334,8 @@ void connectControlState(QComboBox *button, QObject *source, const char *readSta
 
     QMetaProperty writeProp = meta->property(meta->indexOfProperty(writePropertyName));
     if (writeProp.isWritable()) {
-        QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged), [writeProp, source] (int value) { writeProp.write(source, value); });
+        QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged),
+                         source, [writeProp, source] (int value) { writeProp.write(source, value); });
     }
 }
 
@@ -352,7 +360,8 @@ void connectControl(QComboBox *button, QObject *source, const char *property)
     button->setCurrentIndex(stateProp.read(source).value<int>());
 
     if (stateProp.isWritable()) {
-        QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged), [stateProp, source] (int value) { stateProp.write(source, value); });
+        QObject::connect(button, qOverload<int>(&QComboBox::currentIndexChanged),
+                         source, [stateProp, source] (int value) { stateProp.write(source, value); });
     }
 }
 
@@ -408,7 +417,8 @@ void connectControl(KisSpacingSelectionWidget *widget, QObject *source, const ch
     helper->slotPropertyChanged(stateProp.read(source).value<SpacingState>());
 
     if (stateProp.isWritable()) {
-        QObject::connect(helper, &ConnectSpacingWidgetHelper::sigWidgetChanged, [stateProp, source] (SpacingState value) { stateProp.write(source, QVariant::fromValue(value)); });
+        QObject::connect(helper, &ConnectSpacingWidgetHelper::sigWidgetChanged,
+                         source, [stateProp, source] (SpacingState value) { stateProp.write(source, QVariant::fromValue(value)); });
     }
 }
 
@@ -433,7 +443,8 @@ void connectControl(KisAngleSelector *widget, QObject *source, const char *prope
     widget->setAngle(prop.read(source).toReal());
 
     if (prop.isWritable()) {
-        QObject::connect(widget, &KisAngleSelector::angleChanged, [prop, source] (qreal value) { prop.write(source, value); });
+        QObject::connect(widget, &KisAngleSelector::angleChanged,
+                         source, [prop, source] (qreal value) { prop.write(source, value); });
     }
 }
 
@@ -458,7 +469,8 @@ void connectControl(QLineEdit *widget, QObject *source, const char *property)
     widget->setText(prop.read(source).toString());
 
     if (prop.isWritable()) {
-        QObject::connect(widget, &QLineEdit::textChanged, [prop, source] (const QString &value) { prop.write(source, value); });
+        QObject::connect(widget, &QLineEdit::textChanged,
+                         source, [prop, source] (const QString &value) { prop.write(source, value); });
     }
 }
 

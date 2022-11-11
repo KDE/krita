@@ -322,15 +322,23 @@ find_needed_libs () {
             continue
         fi
 
-        oToolResult=$(otool -L ${libFile} | awk '{print $1}')
-        resultArray=(${oToolResult}) # convert to array
+        resultArray=($(otool -L ${libFile} | awk '{print $1","substr($2,2)}'))
 
-        for lib in ${resultArray[@]:1}; do
+        printf "Fixing %s\n" "${libFile#${KRITA_DMG}/}" >&2
+        for entry in ${resultArray[@]:1}; do
+            # skip fat-bin file markers
+            if [[ "${entry##*,}" = "architecture" ]]; then
+                continue
+            fi
+
+            lib="${entry%%,*}"
+
             if [[ "${lib:0:1}" = "@" ]]; then
                 local libs_used=$(add_lib_to_list "${lib}" "${libs_used}")
             fi
+
             if [[ "${lib:0:${#BUILDROOT}}" = "${BUILDROOT}" ]]; then
-                printf "Fixing %s: %s\n" "${libFile#${KRITA_DMG}/}" "${lib##*/}" >&2
+                printf "\t%s\n" "${lib}" >&2
                 if [[ "${lib##*/}" = "${libFile##*/}" ]]; then
                     install_name_tool -id ${lib##*/} "${libFile}"
                 else

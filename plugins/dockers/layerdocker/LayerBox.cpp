@@ -1106,7 +1106,8 @@ void LayerBox::notifyThumbnailDirty()
 
 void LayerBox::updateDirtyThumbnails()
 {
-    Q_FOREACH (const QModelIndex &index, m_dirtyThumbnailNodes) {
+    Q_FOREACH (const QPersistentModelIndex &index, m_dirtyThumbnailNodes) {
+        if (!index.isValid()) continue;
         m_wdgLayerBox->listLayers->updateNode(index);
     }
     m_dirtyThumbnailNodes.clear();

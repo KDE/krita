@@ -187,7 +187,7 @@ private:
     KisNodeWSP m_savedNodeBeforeEditSelectionMode;
     bool m_blockOpacityUpdate {false};
     KisSignalAutoConnectionsStore m_activeNodeConnections;
-    QSet<QModelIndex> m_dirtyThumbnailNodes;
+    QSet<QPersistentModelIndex> m_dirtyThumbnailNodes;
     KisIdleWatcher m_idleWatcher;
 };
 

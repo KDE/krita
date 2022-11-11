@@ -1705,17 +1705,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     F = rotatedAfterMoving.F;
 
 
-    if (debug) writeFormulaInAllForms(rotated, "rotated formula - original");
     if (debug) rotatedAfterMoving.printOutInAllForms();
-    rotated = rotatedAfterMoving.getFormulaSpecial();
-
-    if (debug) ENTER_FUNCTION() << "after moving to origin:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // now it's a circle!!! :D great!
-
-
-    QVector<double> formulaEMovedToOrigin = QVector<double>::fromList(rotated.toList());
-
-    if (debug) writeFormulaInAllForms(formulaEMovedToOrigin, "formula D - moved to origin");
-
 
     if (debug) ENTER_FUNCTION() << "(7)";
 
@@ -1803,75 +1793,24 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
     adjustCoefficients(f, swapXandY, negateX, negateY);
+    if (qAbs(f.formINegatedY.C) < 1e-12) {
+        return originalPoint;
+    }
 
 
     // ok, first we gotta find C being bigger than A (in absolute).
 
-    if (qAbs(C) < qAbs(A)) {
-        swapXandY = true;
-        A = rotated[2];
-        B = rotated[1];
-        C = rotated[0];
-        D = rotated[4];
-        E = rotated[3];
-        F = rotated[5];
-        setToVector(A, B, C, D, E, F, rotated);
-    }
-
-    QVector<double> formulaFSwappedXY = QVector<double>::fromList(rotated.toList());
-
-    if (debug) writeFormulaInAllForms(formulaFSwappedXY, "formula F - swapped x and y");
-
     // ok, now |C| >= |A|
 
-    if (debug) ENTER_FUNCTION() << "after possibly swapping X and Y:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
 
-    if (C < 0) {
-        // negate all signs
-        for (int i = 0; i < 6; i++) {
-            rotated[i] = -rotated[i];
-        }
-        setFromVector(A, B, C, D, E, F, rotated); // to keep everything up-to-date
-    }
+    A = f.formINegatedY.A;
+    B = f.formINegatedY.B;
+    C = f.formINegatedY.C;
+    D = f.formINegatedY.D;
+    E = f.formINegatedY.E;
+    F = f.formINegatedY.F;
 
-    QVector<double> formulaGNegatedAllSigns = QVector<double>::fromList(rotated.toList());
-
-    if (debug) writeFormulaInAllForms(formulaGNegatedAllSigns, "formula G - negated all signs");
-
-    if (debug) ENTER_FUNCTION() << "after possibly swapping signs in the formula:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
-
-    if (C == 0) {
-        return originalPoint;
-    }
-
-    if (D < 0) {
-        negateX = true;
-        D = -D;
-        B = -B;
-        setToVector(A, B, C, D, E, F, rotated);
-    }
-
-    QVector<double> formulaHNegatedX = QVector<double>::fromList(rotated.toList());
-    if (debug) writeFormulaInAllForms(formulaHNegatedX, "formula H - negated X");
-
-    if (debug) ENTER_FUNCTION() << "after possibly swapping sign of X:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
-
-    if (E < 0) {
-        negateY = true;
-        E = -E;
-        B = -B;
-        setToVector(A, B, C, D, E, F, rotated);
-    }
-
-    QVector<double> formulaINegatedY = QVector<double>::fromList(rotated.toList());
-    if (debug) writeFormulaInAllForms(formulaINegatedY, "formula I - negated y");
-
-
-    if (debug) ENTER_FUNCTION() << "after possibly swapping sign of Y:" << ppVar(writeFormulaInWolframAlphaForm(rotated));
-    if (debug) ENTER_FUNCTION() << ppVar(swapXandY) << ppVar(negateX) << ppVar(negateY);
-
-
-    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(C >= 0 && D >= 0 && E >= 0, originalPoint);
+    KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(f.formINegatedY.C >= 0 && f.formINegatedY.D >= 0 && f.formINegatedY.E >= 0, originalPoint);
 
     // Stage 5.
     // Thanks to math magic, we've got:
@@ -1880,19 +1819,18 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // hence, the function is:
     // P(t) = -D^2 *t*((At + 2)/(At + 1)^2) - E^2 * t * (Ct+2)/((Ct+1)^2) + F
 
-    if (debug) ENTER_FUNCTION() << ppVar(A) << ppVar(B) << ppVar(C) << ppVar(D) << ppVar(E) << ppVar(F);
-    if (debug) ENTER_FUNCTION() << ppVar(D*D) << ppVar(E*E);
-
-    auto Pt = [A, B, C, D, E, F] (double t) {
-        return -D*D*t*((A*t + 2)/((A*t + 1)*(A*t + 1))) - E*E * t * (C*t+2)/((C*t+1)*(C*t+1)) + F;
+    auto Pt = [f] (double t) {
+        ConicFormula ff = f.formINegatedY;
+        return -ff.D*ff.D*t*((ff.A*t + 2)/((ff.A*t + 1)*(ff.A*t + 1))) - ff.E*ff.E * t * (ff.C*t+2)/((ff.C*t+1)*(ff.C*t+1)) + ff.F;
     };
 
-    auto Ptd = [A, B, C, D, E, F] (double t) {
-        return - (2*D*D)/(qPow(A*t*t + 1, 3)) - (2*E*E)/qPow(C*t*t + 1, 3);
+    auto Ptd = [f] (double t) {
+        ConicFormula ff = f.formINegatedY;
+        return - (2*ff.D*ff.D)/(qPow(ff.A*t*t + 1, 3)) - (2*ff.E*ff.E)/qPow(ff.C*t*t + 1, 3);
     };
 
 
-    if ((qFuzzyCompare(D, 0) || qFuzzyCompare(E, 0))) {
+    if ((qFuzzyCompare(f.formINegatedY.D, 0) || qFuzzyCompare(f.formINegatedY.E, 0))) {
         // special case
         if (debug) ENTER_FUNCTION() << "Ellipse: and SPECIAL CASE";
     }
@@ -1945,7 +1883,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         return t0;
     };
 
-    ConicFormula formINegatedY(formulaINegatedY, "formula I - negated y", ConicFormula::SPECIAL);
+    ConicFormula formINegatedY;
     formINegatedY = f.formINegatedY;
     qreal t0 = getStartingPoint(formINegatedY); // starting point for newton method
 
@@ -1968,16 +1906,19 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
 
-    qreal checkIfOnTheEllipse = A*foundX*foundX + 2*B*foundX*foundY + C*foundY*foundY + 2*D*foundX + 2*E*foundY + F;
+    qreal checkIfOnTheEllipse = f.formINegatedY.calculateFormulaForPoint(QPointF(foundX, foundY));
+    //qreal checkIfOnTheEllipse = A*foundX*foundX + 2*B*foundX*foundY + C*foundY*foundY + 2*D*foundX + 2*E*foundY + F;
+
+
     if (debug) ENTER_FUNCTION() << ppVar(checkIfOnTheEllipse);
     if (qAbs(checkIfOnTheEllipse) >= 1e-6) {
         if (debug) ENTER_FUNCTION() << "#### WARNING! NOT ON THE ELLIPSE AFTER BISECTION!!! ####";
     }
 
     if (debug) ENTER_FUNCTION() << "(1) original" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
-                                << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), formulaINegatedY));
+                                << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), f.formINegatedY.getFormulaSpecial()));
     if (debug) ENTER_FUNCTION() << "(1) reminder: " << ppVar(QPointF(foundX, foundY));
-    if (debug) writeFormulaInAllForms(formulaINegatedY, "i - negated y");
+    if (debug) writeFormulaInAllForms(f.formINegatedY.getFormulaSpecial(), "i - negated y");
 
 
     auto undoAllChanges = [] (QPointF p, bool negateX, bool negateY, bool swapXandY, qreal u, qreal v) {
@@ -2005,44 +1946,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     };
 
-
-
-    /*
-    // ok, now undoing all the changes we did...
-    if (negateX) {
-        foundX = -foundX;
-    }
-    if (negateY) {
-        foundY = -foundY;
-    }
-    */
-
     QPointF result = undoAllChanges(QPointF(foundX, foundY), negateX, negateY, swapXandY, u, v);
-
-    /*
-    if (debug) ENTER_FUNCTION() << "(2) after negating X and Y" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
-                                   << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), formulaFSwappedXY));
-    if (debug) ENTER_FUNCTION() << "(2) reminder: " << ppVar(QPointF(foundX, foundY));
-    if (debug) writeFormulaInAllForms(formulaFSwappedXY, "f - swapped x and y");
-
-    QPointF result = QPointF(foundX, foundY);
-    if (swapXandY){
-        result = QPointF(foundY, foundX);
-    }
-    */
-
-    /*
-    if (debug) ENTER_FUNCTION() << "(3) after swapping x and y" << ppVar(result) << ppVar(calculateFormula(result))
-                                   << ppVar(calculateFormulaSpecial(result, formulaGNegatedAllSigns))
-                                   << ppVar(calculateFormulaSpecial(result, formulaEMovedToOrigin));
-    if (debug) ENTER_FUNCTION() << "(3) reminder: " << ppVar(result);
-    if (debug) writeFormulaInAllForms(formulaGNegatedAllSigns, "g - negated all signs");
-    if (debug) writeFormulaInAllForms(formulaEMovedToOrigin, "e - moved to origin");
-
-
-    // un-moving
-    result = result + QPointF(u, v);
-    */
 
     if (debug) ENTER_FUNCTION() << "(4) after moving to the origin" << ppVar(result) << ppVar(calculateFormula(result))
                                    << ppVar(calculateFormulaSpecial(result, formulaDRotated));
@@ -2083,6 +1987,12 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         ENTER_FUNCTION() << "The values were: " << ppVar(polygon) << ppVar(originalPoint) << "and unfortunate result:" << ppVar(result);
     }
     //KIS_ASSERT_RECOVER_RETURN_VALUE(qAbs(calculateFormula(result)) < eps, result);
+
+
+
+
+
+
 
     return result;
 

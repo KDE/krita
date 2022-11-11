@@ -284,7 +284,9 @@ void KisShapeLayer::setImage(KisImageWSP _image)
 {
     KisLayer::setImage(_image);
     m_d->canvas->setImage(_image);
-    m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
+    if (m_d->paintDevice) {
+        m_d->paintDevice->setDefaultBounds(new KisDefaultBounds(_image));
+    }
 }
 
 KisLayerSP KisShapeLayer::createMergedLayerTemplate(KisLayerSP prevLayer)

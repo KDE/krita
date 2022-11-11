@@ -49,7 +49,8 @@ public:
     virtual void resetCache() = 0;
 
     KoShapeManager *shapeManager() const override;
-    KoViewConverter *viewConverter() const override;
+    const KoViewConverter *viewConverter() const override;
+    KoViewConverter *viewConverter() override;
 
     void gridSize(QPointF *offset, QSizeF *spacing) const override;
     bool snapToGrid() const override;

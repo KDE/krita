@@ -69,7 +69,12 @@ public:
         return 0;
     }
 
-    KoViewConverter *viewConverter() const override
+    const KoViewConverter *viewConverter() const override
+    {
+        return 0;
+    }
+
+    KoViewConverter *viewConverter() override
     {
         return 0;
     }

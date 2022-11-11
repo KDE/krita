@@ -132,7 +132,8 @@ public:
      * Return the viewConverter for this view.
      * @return the viewConverter for this view.
      */
-    virtual KoViewConverter *viewConverter() const = 0;
+    virtual const KoViewConverter *viewConverter() const = 0;
+    virtual KoViewConverter *viewConverter() = 0;
 
     /**
      * Convert a coordinate in pixels to pt.

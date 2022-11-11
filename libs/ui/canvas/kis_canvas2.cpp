@@ -486,7 +486,12 @@ const KisCoordinatesConverter* KisCanvas2::coordinatesConverter() const
     return m_d->coordinatesConverter;
 }
 
-KoViewConverter* KisCanvas2::viewConverter() const
+const KoViewConverter *KisCanvas2::viewConverter() const
+{
+    return m_d->coordinatesConverter;
+}
+
+KoViewConverter *KisCanvas2::viewConverter()
 {
     return m_d->coordinatesConverter;
 }

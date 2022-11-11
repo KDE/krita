@@ -426,7 +426,7 @@ KoShapeManager* KisShapeLayer::shapeManager() const
     return m_d->canvas->shapeManager();
 }
 
-KoViewConverter* KisShapeLayer::converter() const
+const KoViewConverter* KisShapeLayer::converter() const
 {
     return m_d->canvas->viewConverter();
 }
@@ -666,7 +666,7 @@ KUndo2Command* KisShapeLayer::transform(const QTransform &transform)
      * We cannot transform shapes in the worker thread. Therefor we emit blocking-queued
      * signal to transform them in the GUI thread and then return.
      */
-    KisImageViewConverter *converter = dynamic_cast<KisImageViewConverter*>(this->converter());
+    const KisImageViewConverter *converter = dynamic_cast<const KisImageViewConverter*>(this->converter());
     QTransform docSpaceTransform = converter->documentToView() *
         transform * converter->viewToDocument();
 

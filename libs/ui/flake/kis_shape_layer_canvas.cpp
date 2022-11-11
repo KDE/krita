@@ -71,10 +71,14 @@ KoSelectedShapesProxy *KisShapeLayerCanvasBase::selectedShapesProxy() const
     return m_selectedShapesProxy.data();
 }
 
-KoViewConverter* KisShapeLayerCanvasBase::viewConverter() const
+const KoViewConverter *KisShapeLayerCanvasBase::viewConverter() const
 {
-    // TODO: refactor the method to return the const object
-    return const_cast<KisImageViewConverter*>(&m_viewConverter);
+    return &m_viewConverter;
+}
+
+KoViewConverter *KisShapeLayerCanvasBase::viewConverter()
+{
+    return &m_viewConverter;
 }
 
 void KisShapeLayerCanvasBase::gridSize(QPointF *offset, QSizeF *spacing) const

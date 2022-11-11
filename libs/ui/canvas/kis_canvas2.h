@@ -122,7 +122,8 @@ public: // KoCanvasBase implementation
     void updateInputMethodInfo() override;
 
     const KisCoordinatesConverter* coordinatesConverter() const;
-    KoViewConverter *viewConverter() const override;
+    const KoViewConverter *viewConverter() const override;
+    KoViewConverter *viewConverter() override;
 
     QWidget* canvasWidget() override;
 

@@ -170,7 +170,7 @@ protected:
 
 
     friend class ShapeLayerContainerModel;
-    KoViewConverter* converter() const;
+    const KoViewConverter *converter() const;
 
     KoShapeControllerBase *shapeController() const;
     KisShapeLayerCanvasBase *canvas() const;

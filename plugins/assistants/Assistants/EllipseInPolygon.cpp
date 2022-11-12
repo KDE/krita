@@ -1433,82 +1433,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // Q - orthogonal, D - diagonal
     //
 
-    auto rotateLikeArticleSays = [f, debug] () mutable {
-        Eigen::Matrix<long double, 2, 2> M;
-        M << f.formCCanonized.A, f.formCCanonized.B,
-             f.formCCanonized.B, f.formCCanonized.C;
-        if (debug) ENTER_FUNCTION() << "(1)";
-
-        Eigen::EigenSolver<Eigen::Matrix<long double, 2, 2>> eigenSolver(M);
-        if (debug) ENTER_FUNCTION() << "(2)";
-
-        Eigen::Matrix<std::complex<long double>, 2, 2> QC = eigenSolver.eigenvectors();
-        Eigen::Matrix<std::complex<long double>, 2, 2> DC;
-        if (debug) ENTER_FUNCTION() << "(3)a";
-        DC(0, 0) = eigenSolver.eigenvalues()(0);
-        DC(1, 1) = eigenSolver.eigenvalues()(1);
-        if (debug) ENTER_FUNCTION() << "(3)";
-
-        Eigen::Matrix<std::complex<long double>, 2, 2> cRM = QC*DC*QC.transpose();
-        if (debug) ENTER_FUNCTION() << "Check correctness of the eigen decomposition: ";
-        if (debug) {
-            for (int i = 0; i < 2; i++)  {
-                for (int j = 0; j < 2; j++) {
-                    ENTER_FUNCTION() << ppVar(i) << ppVar(j) << "|" << ppVar((double)M(i, j)) << ppVar((double)std::real(cRM(i, j)))
-                                     << ppVar((bool)(M(i, j) == std::real(cRM(i, j)))) << ppVar((double)(qAbs(M(i, j) - std::real(cRM(i, j)))));
-                }
-            }
-        }
-
-
-        Eigen::Matrix<long double, 2, 2> Q;
-        Eigen::Matrix<long double, 2, 2> Dm;
-
-        if (debug) ENTER_FUNCTION() << "(4)";
-
-        for (int i = 0; i < 2; i++) {
-            for (int j = 0; j < 2; j++) {
-                if (std::imag(DC(i, j)) == 0 && std::imag(QC(i, j)) == 0) {
-                    Dm(i, j) = std::real(DC(i, j));
-                    Q(i, j) = std::real(QC(i, j));
-                } else { // if any of that is complex, then something went wrong
-                    KIS_ASSERT_RECOVER_NOOP(false);
-                }
-            }
-        }
-
-        if (debug) ENTER_FUNCTION() << "D = " << (double)Dm(0, 0) << (double)Dm(0, 1) << (double)Dm(1, 0) << (double)Dm(1, 1);
-        if (debug) ENTER_FUNCTION() << "Q = " << (double)Q(0, 0) << (double)Q(0, 1) << (double)Q(1, 0) << (double)Q(1, 1);
-
-
-        if (debug) ENTER_FUNCTION() << "(5)";
-
-
-
-        auto vectorMultipliedByMatrix = [debug] (QVector<double> vector2, Eigen::Matrix<long double, 2, 2> matrix) {
-            QVector<double> res;
-            res << vector2[0]*matrix(0, 0) + vector2[1]*matrix(0, 1);
-            res << vector2[0]*matrix(1, 0) + vector2[1]*matrix(1, 1);
-            return res;
-        };
-
-
-        f.formDRotated.A = Dm(0, 0); // A
-        f.formDRotated.B = 0; // D(1, 0); // B
-        f.formDRotated.C = Dm(1, 1); // C
-
-        QVector<double> DEvec;
-        DEvec << f.formCCanonized.D << f.formCCanonized.E;
-        DEvec = vectorMultipliedByMatrix(DEvec, Q);
-
-        f.formDRotated.D = DEvec[0]; // D
-        f.formDRotated.E = DEvec[1]; // E
-        f.formDRotated.F = f.formCCanonized.F; // F
-
-        f.formDRotated.Name = "form D - rotated (original article version)";
-        f.formDRotated.Type = ConicFormula::SPECIAL;
-    };
-
     Eigen::Matrix<long double, 2, 2> M;
     M << f.formCCanonized.A, f.formCCanonized.B,
          f.formCCanonized.B, f.formCCanonized.C;
@@ -1547,7 +1471,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
                 Dm(i, j) = std::real(DC(i, j));
                 Q(i, j) = std::real(QC(i, j));
             } else { // if any of that is complex, then something went wrong
-                KIS_ASSERT_RECOVER_NOOP(false);
+                return originalPoint;
             }
         }
     }
@@ -1582,9 +1506,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     f.formDRotated.Name = "form D - rotated (original article version)";
     f.formDRotated.Type = ConicFormula::SPECIAL;
-
-
-    //rotateLikeArticleSays();
 
 
     QVector<double> rotated = f.formDRotated.getFormulaSpecial();

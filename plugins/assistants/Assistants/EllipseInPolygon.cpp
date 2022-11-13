@@ -1323,18 +1323,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     };
 
 
-    ConicFormula formBNormalized = normalizeFormula(formA, point2, normalizeBy);
     f.formBNormalized = normalizeFormula(f.formA, point3, normalizeBy);
-
-    if (debug) ENTER_FUNCTION() << "Are those two values the same??? ____ => => => " << ppVar(formBNormalized.A - f.formBNormalized.A);
-
-
-    //QVector<double> formulaBNormalized = QVector<double>::fromList(canonized.toList());
-    QVector<double> formulaBNormalized = formBNormalized.getFormulaActual();
-    QVector<double> formulaBNormalizedFromConic = formBNormalized.getFormulaActual();
-    if (debug) writeFormulaInAllForms(formulaBNormalized, "formula B - normalized (original)", true);
-    if (debug) formBNormalized.printOutInAllForms();
-    if (debug) writeFormulaInAllForms(formulaBNormalizedFromConic, "formula B - normalized - from conic", true);
 
     if (debug) ENTER_FUNCTION() << "(*) after normalization:" << ppVar(point);
 
@@ -1350,42 +1339,44 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // A = 5/(5sqrt(2)) = sqrt(2)/2
     // B = (b/2)/(k)
 
-    auto sq = [] (qreal a) {return a*a;};
 
-    double canonizingNumber = sq(f.formBNormalized.A) + sq(f.formBNormalized.B/2) + sq(f.formBNormalized.C)
-            + sq(f.formBNormalized.D/2) + sq(f.formBNormalized.E/2) + sq(f.formBNormalized.F);
-    canonizingNumber = sqrt(canonizingNumber);
+    auto canonizeFormula = [debug] (Formulas& f) {
 
+        auto sq = [] (qreal a) {return a*a;};
 
-    if (debug) ENTER_FUNCTION() << ppVar(canonizingNumber);
-
-    if (debug) writeFormulaInAllForms(canonized, "canonized raw - before canonization");
-    if (debug) f.formBNormalized.printOutInAllForms();
+        double canonizingNumber = sq(f.formBNormalized.A) + sq(f.formBNormalized.B/2) + sq(f.formBNormalized.C)
+                + sq(f.formBNormalized.D/2) + sq(f.formBNormalized.E/2) + sq(f.formBNormalized.F);
+        canonizingNumber = sqrt(canonizingNumber);
 
 
-    // conversion actual -> special is included below
-    f.formCCanonized = ConicFormula(f.formBNormalized.getFormulaActual(), "formula C - canonized", ConicFormula::SPECIAL);
+        if (debug) ENTER_FUNCTION() << ppVar(canonizingNumber);
 
-    f.formCCanonized.A = f.formBNormalized.A/canonizingNumber;
-    f.formCCanonized.B = f.formBNormalized.B/(2*canonizingNumber);
-    f.formCCanonized.C = f.formBNormalized.C/canonizingNumber;
-    f.formCCanonized.D = f.formBNormalized.D/(2*canonizingNumber);
-    f.formCCanonized.E = f.formBNormalized.E/(2*canonizingNumber);
-    f.formCCanonized.F = f.formBNormalized.F/canonizingNumber;
-
-    if (debug) ENTER_FUNCTION() << "Are those two values the same?? ___________ " << ppVar(canonized[0] - f.formCCanonized.A);
-    if (debug) writeFormulaInAllForms(canonized, "canonized raw");
-    if (debug) f.formCCanonized.printOutInAllForms();
+        //if (debug) writeFormulaInAllForms(canonized, "canonized raw - before canonization");
+        if (debug) f.formBNormalized.printOutInAllForms();
 
 
+        // conversion actual -> special is included below
+        f.formCCanonized = ConicFormula(f.formBNormalized.getFormulaActual(), "formula C - canonized", ConicFormula::SPECIAL);
+
+        f.formCCanonized.A = f.formBNormalized.A/canonizingNumber;
+        f.formCCanonized.B = f.formBNormalized.B/(2*canonizingNumber);
+        f.formCCanonized.C = f.formBNormalized.C/canonizingNumber;
+        f.formCCanonized.D = f.formBNormalized.D/(2*canonizingNumber);
+        f.formCCanonized.E = f.formBNormalized.E/(2*canonizingNumber);
+        f.formCCanonized.F = f.formBNormalized.F/canonizingNumber;
+
+        //if (debug) ENTER_FUNCTION() << "Are those two values the same?? ___________ " << ppVar(canonized[0] - f.formCCanonized.A);
+        //if (debug) writeFormulaInAllForms(canonized, "canonized raw");
+        if (debug) f.formCCanonized.printOutInAllForms();
+
+    };
+
+
+    canonizeFormula(f);
 
     if (debug) ENTER_FUNCTION() << "after canonization:" << ppVar(canonized);
     if (debug) ENTER_FUNCTION() << ppVar(writeFormulaInWolframAlphaForm(canonized)); // still a circle, good!
     if (debug) writeFormulaInAllForms(canonized, "canonized");
-
-
-    QVector<double> formulaCCanonized = QVector<double>::fromList(canonized.toList());
-    if (debug) writeFormulaInAllForms(formulaCCanonized, "formula C - canonized");
 
     if (debug) ENTER_FUNCTION() << "(*) after canonization:" << ppVar(point);
 
@@ -1491,17 +1482,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     if (debug) ENTER_FUNCTION() << "Q = " << (double)Q(0, 0) << (double)Q(0, 1) << (double)Q(1, 0) << (double)Q(1, 1);
 
-
-
-    auto calculateFormulaSpecial = [debug] (QPointF point, QVector<double> formula) {
-        return    formula[0]*point.x()*point.x() // a
-                + 2*formula[1]*point.x()*point.y() // b
-                + formula[2]*point.y()*point.y() // c
-                + 2*formula[3]*point.x() // d
-                + 2*formula[4]*point.y() // e
-                + formula[5]; // f
-    };
-
     QPointF pointToRotate = point;
     QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(f.formCCanonized.getFormulaActual(), pointToRotate);
     f.formDRotatedSecondVersion = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
@@ -1548,23 +1528,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     ConicFormula rotatedAfterMoving = moveEllipseSoPointIsInOrigin(f.formDRotated, u, v);
 
     if (debug) rotatedAfterMoving.printOutInAllForms();
-
-    if (debug) ENTER_FUNCTION() << "(7)";
-
-    /* only relevant scientifically
-    // matrix D~
-    Eigen::Matrix3d Dd;
-    Dd <<   Q(0, 0), Q(0, 1), 0,
-            Q(1, 0), Q(1, 1), 0,
-            0, 0, 1;
-
-    Eigen::Matrix3d L;
-    L <<    1, 0, u,
-            0, 1, v,
-            0, 0, 1;
-
-    Eigen::Matrix3d M2;
-    */
 
     // Stage 4. Adjusting the coefficients to our needs (C, D, E >= 0)
 
@@ -1746,10 +1709,9 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     }
 
     if (debug) ENTER_FUNCTION() << "(1) original" << ppVar(foundX) << ppVar(foundY) << ppVar(calculateFormula(QPointF(foundX, foundY)))
-                                << ppVar(calculateFormulaSpecial(QPointF(foundX, foundY), f.formINegatedY.getFormulaSpecial()));
+                                << ppVar(f.formINegatedY.calculateFormulaForPoint(QPointF(foundX, foundY)));
     if (debug) ENTER_FUNCTION() << "(1) reminder: " << ppVar(QPointF(foundX, foundY));
-    if (debug) writeFormulaInAllForms(f.formINegatedY.getFormulaSpecial(), "i - negated y");
-
+    if (debug) f.formINegatedY.printOutInAllForms();
 
     auto undoAllChanges = [] (QPointF p, bool negateX, bool negateY, bool swapXandY, qreal u, qreal v) {
 
@@ -1779,7 +1741,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     QPointF result = undoAllChanges(QPointF(foundX, foundY), negateX, negateY, swapXandY, u, v);
 
     if (debug) ENTER_FUNCTION() << "(4) after moving to the origin" << ppVar(result) << ppVar(calculateFormula(result))
-                                   << ppVar(calculateFormulaSpecial(result, f.formDRotated.getFormulaSpecial()));
+                                   << ppVar(f.formDRotated.calculateFormulaForPoint(result));
 
     if (debug) ENTER_FUNCTION() << "before the mistake" << ppVar(result) << ppVar(writeFormulaInWolframAlphaForm(f.formDRotated.getFormulaSpecial()))
                                 << ppVar((double)Q(0, 0)) << ppVar((double)Q(1, 1));
@@ -1793,11 +1755,8 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
 
     if (debug) ENTER_FUNCTION() << "(5) after un-rotating" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(canonized, result))
-                                   << ppVar(calculateFormulaSpecial(result, formulaCCanonized))
-                                   << ppVar(calculateFormula(formulaBNormalized, result));
-
-
-    if (debug) ENTER_FUNCTION() << "after the mistake" << ppVar(result) << ppVar(writeFormulaInWolframAlphaForm(formulaCCanonized));
+                                   << ppVar(f.formCCanonized.calculateFormulaForPoint(result))
+                                   << ppVar(f.formBNormalized.calculateFormulaForPoint(result));
 
 
     // uncanonizing ????

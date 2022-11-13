@@ -42,10 +42,10 @@ public:
      * will be filled with the lengths of consequetive characters
      * a face can be set on.
      */
-    std::vector<FT_FaceUP> facesForCSSValues(QStringList families,
+    std::vector<FT_FaceUP> facesForCSSValues(const QStringList &families,
                                              QVector<int> &lengths,
-                                             QMap<QString, qreal> axisSettings,
-                                             QString text = "",
+                                             const QMap<QString, qreal> &axisSettings,
+                                             const QString &text = "",
                                              int xRes = 72,
                                              int yRes = 72,
                                              qreal size = -1,
@@ -54,7 +54,7 @@ public:
                                              int width = 100,
                                              bool italic = false,
                                              int slant = 0,
-                                             QString language = QString());
+                                             const QString &language = QString());
 
     /**
      * @brief configureFaces
@@ -66,12 +66,7 @@ public:
      *
      * @returns whether the configuration was successful.
      */
-    bool configureFaces(const std::vector<FT_FaceUP> &faces,
-                        qreal size,
-                        qreal fontSizeAdjust,
-                        int xRes,
-                        int yRes,
-                        QMap<QString, qreal> axisSettings);
+    bool configureFaces(const std::vector<FT_FaceUP> &faces, qreal size, qreal fontSizeAdjust, int xRes, int yRes, const QMap<QString, qreal> &axisSettings);
 
 private:
     class Private;
@@ -85,7 +80,7 @@ private:
      * @param path the path of the font file.
      * @return Whether adding the font file was succesful.
      */
-    bool addFontFilePathToRegistery(QString path);
+    static bool addFontFilePathToRegistery(const QString &path);
 
     /**
      * @brief addFontFileDirectoryToRegistery
@@ -93,7 +88,7 @@ private:
      * @param path the path of the directory.
      * @return whether it was succesful.
      */
-    bool addFontFileDirectoryToRegistery(QString path);
+    static bool addFontFileDirectoryToRegistery(const QString &path);
 
     QScopedPointer<Private> d;
 

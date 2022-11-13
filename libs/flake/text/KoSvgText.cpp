@@ -35,13 +35,11 @@ struct TextPropertiesStaticRegistrar {
         QMetaType::registerEqualsComparator<KoSvgText::StrokeProperty>();
         QMetaType::registerDebugStreamOperator<KoSvgText::StrokeProperty>();
 
-        qRegisterMetaType<KoSvgText::TextTransformInfo>(
-            "KoSvgText::TextTransformInfo");
+        qRegisterMetaType<KoSvgText::TextTransformInfo>("KoSvgText::TextTransformInfo");
         QMetaType::registerEqualsComparator<KoSvgText::TextTransformInfo>();
         QMetaType::registerDebugStreamOperator<KoSvgText::TextTransformInfo>();
 
-        qRegisterMetaType<KoSvgText::TextIndentInfo>(
-            "KoSvgText::TextIndentInfo");
+        qRegisterMetaType<KoSvgText::TextIndentInfo>("KoSvgText::TextIndentInfo");
         QMetaType::registerEqualsComparator<KoSvgText::TextIndentInfo>();
         QMetaType::registerDebugStreamOperator<KoSvgText::TextIndentInfo>();
 
@@ -80,10 +78,7 @@ AutoValue parseAutoValueAngular(const QString &value, const SvgLoadingContext &c
 }
 
 WritingMode parseWritingMode(const QString &value) {
-    return (value == "tb-rl" || value == "tb" || value == "vertical-rl")
-        ? VerticalRL
-        : (value == "vertical-lr") ? VerticalLR
-                                   : HorizontalTB;
+    return (value == "tb-rl" || value == "tb" || value == "vertical-rl") ? VerticalRL : (value == "vertical-lr") ? VerticalLR : HorizontalTB;
 }
 
 Direction parseDirection(const QString &value) {
@@ -102,9 +97,7 @@ UnicodeBidi parseUnicodeBidi(const QString &value)
 
 TextOrientation parseTextOrientation(const QString &value)
 {
-    return value == "upright" ? OrientationUpright
-        : value == "sideways" ? OrientationSideWays
-                              : OrientationMixed;
+    return value == "upright" ? OrientationUpright : value == "sideways" ? OrientationSideWays : OrientationMixed;
 }
 TextOrientation parseTextOrientationFromGlyphOrientation(AutoValue value)
 {
@@ -128,23 +121,19 @@ TextAnchor parseTextAnchor(const QString &value)
 
 Baseline parseBaseline(const QString &value)
 {
-    return value == "use-script"  ? BaselineUseScript
-        : value == "no-change"    ? BaselineNoChange
-        : value == "reset-size"   ? BaselineResetSize
-        : value == "ideographic"  ? BaselineIdeographic
-        : value == "alphabetic"   ? BaselineAlphabetic
-        : value == "hanging"      ? BaselineHanging
-        : value == "mathematical" ? BaselineMathematical
-        : value == "central"      ? BaselineCentral
-        : value == "middle"       ? BaselineMiddle
-        : value == "baseline"     ? BaselineDominant
-        : (value == "text-after-edge" || value == "after-edge"
-           || value == "text-bottom")
-        ? BaselineTextBottom
-        : (value == "text-before-edge" || value == "before-edge"
-           || value == "text-top")
-        ? BaselineTextTop
-        : BaselineAuto;
+    return value == "use-script"                                                          ? BaselineUseScript
+        : value == "no-change"                                                            ? BaselineNoChange
+        : value == "reset-size"                                                           ? BaselineResetSize
+        : value == "ideographic"                                                          ? BaselineIdeographic
+        : value == "alphabetic"                                                           ? BaselineAlphabetic
+        : value == "hanging"                                                              ? BaselineHanging
+        : value == "mathematical"                                                         ? BaselineMathematical
+        : value == "central"                                                              ? BaselineCentral
+        : value == "middle"                                                               ? BaselineMiddle
+        : value == "baseline"                                                             ? BaselineDominant
+        : (value == "text-after-edge" || value == "after-edge" || value == "text-bottom") ? BaselineTextBottom
+        : (value == "text-before-edge" || value == "before-edge" || value == "text-top")  ? BaselineTextTop
+                                                                                          : BaselineAuto;
 }
 
 BaselineShiftMode parseBaselineShiftMode(const QString &value)
@@ -170,9 +159,7 @@ QString writeWritingMode(WritingMode value, bool svg1_1)
     if (svg1_1) {
         return value == VerticalRL ? "tb" : "lr";
     } else {
-        return value == VerticalRL ? "vertical-rl"
-            : value == VerticalLR  ? "vertical-lr"
-                                   : "horizontal-tb";
+        return value == VerticalRL ? "vertical-rl" : value == VerticalLR ? "vertical-lr" : "horizontal-tb";
     }
 }
 
@@ -193,9 +180,7 @@ QString writeUnicodeBidi(UnicodeBidi value)
 
 QString writeTextOrientation(TextOrientation orientation)
 {
-    return orientation == OrientationUpright ? "upright"
-        : orientation == OrientationSideWays ? "sideways"
-                                             : "mixed";
+    return orientation == OrientationUpright ? "upright" : orientation == OrientationSideWays ? "sideways" : "mixed";
 }
 
 QString writeTextAnchor(TextAnchor value)
@@ -383,8 +368,7 @@ QDebug operator<<(QDebug dbg, const TextTransformInfo &t)
     dbg.nospace() << ")";
     return dbg.space();
 }
-QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg,
-                                    const KoSvgText::TextIndentInfo &value)
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextIndentInfo &value)
 {
     dbg.nospace() << "TextIndentInfo(";
     dbg.nospace() << writeTextIndent(value);
@@ -392,8 +376,7 @@ QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg,
     return dbg.space();
 }
 
-QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg,
-                                    const KoSvgText::TabSizeInfo &value)
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TabSizeInfo &value)
 {
     dbg.nospace() << "TextIndentInfo(";
     dbg.nospace() << writeTabSize(value);
@@ -668,10 +651,7 @@ QStringList fontVariantOpentypeTags(FontVariantFeature feature)
     }
 }
 
-bool whiteSpaceValueToLongHands(const QString &value,
-                                TextSpaceCollapse &collapseMethod,
-                                TextWrap &wrapMethod,
-                                TextSpaceTrims &trimMethod)
+bool whiteSpaceValueToLongHands(const QString &value, TextSpaceCollapse &collapseMethod, TextWrap &wrapMethod, TextSpaceTrims &trimMethod)
 {
     bool result = true;
     if (value == "pre") {
@@ -704,8 +684,7 @@ bool whiteSpaceValueToLongHands(const QString &value,
     return result;
 }
 
-bool xmlSpaceToLongHands(const QString &value,
-                         TextSpaceCollapse &collapseMethod)
+bool xmlSpaceToLongHands(const QString &value, TextSpaceCollapse &collapseMethod)
 {
     bool result = true;
 
@@ -736,9 +715,7 @@ bool xmlSpaceToLongHands(const QString &value,
     return result;
 }
 
-QString writeWhiteSpaceValue(TextSpaceCollapse collapseMethod,
-                             TextWrap wrapMethod,
-                             TextSpaceTrims trimMethod)
+QString writeWhiteSpaceValue(TextSpaceCollapse collapseMethod, TextWrap wrapMethod, TextSpaceTrims trimMethod)
 {
     Q_UNUSED(trimMethod);
     if (wrapMethod != NoWrap) {
@@ -766,9 +743,7 @@ QString writeXmlSpace(TextSpaceCollapse collapseMethod)
 
 WordBreak parseWordBreak(const QString &value)
 {
-    return value == "keep-all" ? WordBreakKeepAll
-        : value == "break-all" ? WordBreakBreakAll
-                               : WordBreakNormal;
+    return value == "keep-all" ? WordBreakKeepAll : value == "break-all" ? WordBreakBreakAll : WordBreakNormal;
 }
 
 LineBreak parseLineBreak(const QString &value)
@@ -795,9 +770,7 @@ TextAlign parseTextAlign(const QString &value)
 
 QString writeWordBreak(WordBreak value)
 {
-    return value == WordBreakKeepAll ? "keep-all"
-        : value == WordBreakBreakAll ? "break-all"
-                                     : "normal";
+    return value == WordBreakKeepAll ? "keep-all" : value == WordBreakBreakAll ? "break-all" : "normal";
 }
 
 QString writeLineBreak(LineBreak value)
@@ -847,8 +820,7 @@ TextTransformInfo parseTextTransform(QString value)
 QString writeTextTransform(const TextTransformInfo textTransform)
 {
     QStringList values;
-    if (textTransform.capitals == TextTransformNone && !textTransform.fullWidth
-        && !textTransform.fullSizeKana) {
+    if (textTransform.capitals == TextTransformNone && !textTransform.fullWidth && !textTransform.fullSizeKana) {
         values.append("none");
     } else {
         if (textTransform.capitals == TextTransformLowercase) {
@@ -939,20 +911,14 @@ int parseCSSFontStretch(const QString &value, int currentStretch)
 {
     int newStretch = 100;
 
-    static const std::vector<int> fontStretches =
-        {50, 62, 75, 87, 100, 112, 125, 150, 200};
+    static const std::vector<int> fontStretches = {50, 62, 75, 87, 100, 112, 125, 150, 200};
 
     if (value == "wider") {
-        auto it = std::upper_bound(fontStretches.begin(),
-                                   fontStretches.end(),
-                                   currentStretch);
+        auto it = std::upper_bound(fontStretches.begin(), fontStretches.end(), currentStretch);
 
         newStretch = it != fontStretches.end() ? *it : fontStretches.back();
     } else if (value == "narrower") {
-        auto it = std::upper_bound(fontStretches.rbegin(),
-                                   fontStretches.rend(),
-                                   currentStretch,
-                                   std::greater<int>());
+        auto it = std::upper_bound(fontStretches.rbegin(), fontStretches.rend(), currentStretch, std::greater<int>());
 
         newStretch = it != fontStretches.rend() ? *it : fontStretches.front();
 
@@ -962,9 +928,7 @@ int parseCSSFontStretch(const QString &value, int currentStretch)
         newStretch = value.toInt(&ok, 10);
 
         if (!ok) {
-            auto it = std::find(fontStretchNames.begin(),
-                                fontStretchNames.end(),
-                                value);
+            auto it = std::find(fontStretchNames.begin(), fontStretchNames.end(), value);
             if (it != fontStretchNames.end()) {
                 newStretch = fontStretches[it - fontStretchNames.begin()];
             }
@@ -984,22 +948,16 @@ int parseCSSFontWeight(const QString &value, int currentWeight)
     // 500,600          58,66
     // 700              75          (bold)
     // 800,900          87,99
-    static const std::vector<int> svgFontWeights =
-        {100, 200, 300, 400, 500, 600, 700, 800, 900};
+    static const std::vector<int> svgFontWeights = {100, 200, 300, 400, 500, 600, 700, 800, 900};
 
     if (value == "bold")
         weight = 700;
     else if (value == "bolder") {
-        auto it = std::upper_bound(svgFontWeights.begin(),
-                                   svgFontWeights.end(),
-                                   currentWeight);
+        auto it = std::upper_bound(svgFontWeights.begin(), svgFontWeights.end(), currentWeight);
 
         weight = it != svgFontWeights.end() ? *it : svgFontWeights.back();
     } else if (value == "lighter") {
-        auto it = std::upper_bound(svgFontWeights.rbegin(),
-                                   svgFontWeights.rend(),
-                                   currentWeight,
-                                   std::greater<int>());
+        auto it = std::upper_bound(svgFontWeights.rbegin(), svgFontWeights.rend(), currentWeight, std::greater<int>());
 
         weight = it != svgFontWeights.rend() ? *it : svgFontWeights.front();
     } else {

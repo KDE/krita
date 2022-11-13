@@ -155,8 +155,7 @@ int forcedDpiForQtFontBugWorkaround() {
 
 KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextProperties &properties)
 {
-    if (!properties.hasProperty(KoSvgTextProperties::FontSizeId)
-        || !properties.hasProperty(KoSvgTextProperties::FontSizeAdjustId))
+    if (!properties.hasProperty(KoSvgTextProperties::FontSizeId) || !properties.hasProperty(KoSvgTextProperties::FontSizeAdjustId))
         return properties;
 
     KoSvgTextProperties result = properties;
@@ -171,11 +170,9 @@ KoSvgTextProperties adjustPropertiesForFontSizeWorkaround(const KoSvgTextPropert
         fontSize *= qreal(forcedFontDPI) / 72.0;
         result.setProperty(KoSvgTextProperties::FontSizeId, fontSize);
     }
-    if (result.hasProperty(KoSvgTextProperties::KraTextVersionId)
-        && result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3
+    if (result.hasProperty(KoSvgTextProperties::KraTextVersionId) && result.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3
         && result.hasProperty(KoSvgTextProperties::FontSizeAdjustId)) {
-        result.setProperty(KoSvgTextProperties::FontSizeAdjustId,
-                           KoSvgText::fromAutoValue(KoSvgText::AutoValue()));
+        result.setProperty(KoSvgTextProperties::FontSizeAdjustId, KoSvgText::fromAutoValue(KoSvgText::AutoValue()));
     }
 
     result.setProperty(KoSvgTextProperties::KraTextVersionId, 3);
@@ -206,31 +203,16 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
         if (!q->shapeCount()) {
             if (withControls) {
-                KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(
-                    q->s->properties
-                        .propertyOrDefault(KoSvgTextProperties::UnicodeBidiId)
-                        .toInt());
-                KoSvgText::Direction direction = KoSvgText::Direction(
-                    q->s->properties
-                        .propertyOrDefault(KoSvgTextProperties::DirectionId)
-                        .toInt());
+                KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(q->s->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
+                KoSvgText::Direction direction = KoSvgText::Direction(q->s->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
                 // In some circumstances, textTransform can change the length of
                 // the text, so we're doing it here too.
                 KoSvgText::TextTransformInfo textTransformInfo =
-                    q->s->properties
-                        .propertyOrDefault(KoSvgTextProperties::TextTransformId)
-                        .value<KoSvgText::TextTransformInfo>();
-                QString lang =
-                    q->s->properties.property(KoSvgTextProperties::TextLanguage)
-                        .toString()
-                        .toUtf8();
+                    q->s->properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
+                QString lang = q->s->properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
 
-                result =
-                    getBidiOpening(direction == KoSvgText::DirectionLeftToRight,
-                                   bidi)
-                        .size();
-                result +=
-                    transformText(q->s->text, textTransformInfo, lang).size();
+                result = getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi).size();
+                result += transformText(q->s->text, textTransformInfo, lang).size();
                 result += getBidiClosing(bidi).size();
             } else {
                 result = q->s->text.size();
@@ -347,17 +329,13 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return result;
     }
 
-    static QString transformText(QString text,
-                                 KoSvgText::TextTransformInfo textTransformInfo,
-                                 const QString lang)
+    static QString transformText(QString text, KoSvgText::TextTransformInfo textTransformInfo, const QString lang)
     {
         if (textTransformInfo.capitals == KoSvgText::TextTransformCapitalize) {
             text = KoCssTextUtils::transformTextCapitalize(text, lang);
-        } else if (textTransformInfo.capitals
-                   == KoSvgText::TextTransformUppercase) {
+        } else if (textTransformInfo.capitals == KoSvgText::TextTransformUppercase) {
             text = KoCssTextUtils::transformTextToUpperCase(text, lang);
-        } else if (textTransformInfo.capitals
-                   == KoSvgText::TextTransformLowercase) {
+        } else if (textTransformInfo.capitals == KoSvgText::TextTransformLowercase) {
             text = KoCssTextUtils::transformTextToLowerCase(text, lang);
         }
 
@@ -373,24 +351,17 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
     QVector<SubChunk> collectSubChunks(bool textInPath, bool &firstTextInPath) const override
     {
         QVector<SubChunk> result;
-        
+
         if (q->s->textPath) {
             textInPath = true;
             firstTextInPath = true;
         }
 
         if (isTextNode()) {
-            
             KoSvgText::TextTransformInfo textTransformInfo =
-                q->s->properties
-                    .propertyOrDefault(KoSvgTextProperties::TextTransformId)
-                    .value<KoSvgText::TextTransformInfo>();
-            QString lang =
-                q->s->properties.property(KoSvgTextProperties::TextLanguage)
-                    .toString()
-                    .toUtf8();
-            const QString text =
-                transformText(q->s->text, textTransformInfo, lang);
+                q->s->properties.propertyOrDefault(KoSvgTextProperties::TextTransformId).value<KoSvgText::TextTransformInfo>();
+            QString lang = q->s->properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
+            const QString text = transformText(q->s->text, textTransformInfo, lang);
             const KoSvgText::KoSvgCharChunkFormat format = q->fetchCharFormat();
             QVector<KoSvgText::CharTransformation> transforms = q->s->localTransformations;
 
@@ -404,9 +375,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
 
             KoSvgText::UnicodeBidi bidi = KoSvgText::UnicodeBidi(q->s->properties.propertyOrDefault(KoSvgTextProperties::UnicodeBidiId).toInt());
             KoSvgText::Direction direction = KoSvgText::Direction(q->s->properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
-            const QString bidiOpening =
-                getBidiOpening(direction == KoSvgText::DirectionLeftToRight,
-                               bidi);
+            const QString bidiOpening = getBidiOpening(direction == KoSvgText::DirectionLeftToRight, bidi);
             const QString bidiClosing = getBidiClosing(bidi);
 
             if (!bidiOpening.isEmpty()) {
@@ -430,8 +399,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
                 KoSvgTextChunkShape *chunkShape = dynamic_cast<KoSvgTextChunkShape*>(shape);
                 KIS_SAFE_ASSERT_RECOVER_BREAK(chunkShape);
 
-                result +=
-                    chunkShape->layoutInterface()->collectSubChunks(textInPath, firstTextInPath);
+                result += chunkShape->layoutInterface()->collectSubChunks(textInPath, firstTextInPath);
             }
         }
 
@@ -466,9 +434,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         q->shapeChangedPriv(KoShape::SizeChanged);
     }
 
-    void setTextDecorationFontMetrics(KoSvgText::TextDecoration type,
-                                      qreal offset,
-                                      qreal width) override
+    void setTextDecorationFontMetrics(KoSvgText::TextDecoration type, qreal offset, qreal width) override
     {
         q->s->textDecorationOffsets.insert(type, offset);
         q->s->textDecorationWidths.insert(type, width);
@@ -484,8 +450,7 @@ struct KoSvgTextChunkShape::Private::LayoutInterface : public KoSvgTextChunkShap
         return q->s->textDecorationWidths.value(type);
     }
 
-    void addTextDecoration(KoSvgText::TextDecoration type,
-                           QPainterPath path) override
+    void addTextDecoration(KoSvgText::TextDecoration type, QPainterPath path) override
     {
         q->s->textDecorations.insert(type, path);
     }
@@ -696,8 +661,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             context.shapeWriter().addAttribute("id", context.getID(this));
             context.shapeWriter().addAttribute("krita:useRichText", s->isRichTextPreferred ? "true" : "false");
 
-            context.shapeWriter().addAttribute("text-rendering",
-                                               textRenderingString());
+            context.shapeWriter().addAttribute("text-rendering", textRenderingString());
 
             // save the version to distinguish from the buggy Krita version
             // 2: Wrong font-size.
@@ -707,8 +671,7 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             SvgUtil::writeTransformAttributeLazy("transform", transformation(), context.shapeWriter());
             SvgStyleWriter::saveSvgStyle(this, context);
         } else {
-            context.shapeWriter().addAttribute("text-rendering",
-                                               textRenderingString());
+            context.shapeWriter().addAttribute("text-rendering", textRenderingString());
             SvgStyleWriter::saveSvgFill(this, context);
             SvgStyleWriter::saveSvgStroke(this, context);
         }
@@ -739,19 +702,13 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
             context.shapeWriter().addAttribute("startOffset", offset);
         }
         if (s->textPathInfo.method != KoSvgText::TextPathAlign) {
-            context.shapeWriter().addAttribute(
-                "method",
-                KoSvgText::writeTextPathMethod(s->textPathInfo.method));
+            context.shapeWriter().addAttribute("method", KoSvgText::writeTextPathMethod(s->textPathInfo.method));
         }
         if (s->textPathInfo.side != KoSvgText::TextPathSideLeft) {
-            context.shapeWriter().addAttribute(
-                "side",
-                KoSvgText::writeTextPathSide(s->textPathInfo.side));
+            context.shapeWriter().addAttribute("side", KoSvgText::writeTextPathSide(s->textPathInfo.side));
         }
         if (s->textPathInfo.spacing != KoSvgText::TextPathAuto) {
-            context.shapeWriter().addAttribute(
-                "spacing",
-                KoSvgText::writeTextPathSpacing(s->textPathInfo.spacing));
+            context.shapeWriter().addAttribute("spacing", KoSvgText::writeTextPathSpacing(s->textPathInfo.spacing));
         }
     }
 
@@ -808,13 +765,9 @@ bool KoSvgTextChunkShape::saveSvg(SvgSavingContext &context)
     QString styleString;
     for (auto it = attributes.constBegin(); it != attributes.constEnd(); ++it) {
         if (allowedAttributes.contains(it.key())) {
-            context.shapeWriter().addAttribute(it.key().toLatin1().data(),
-                                               it.value());
+            context.shapeWriter().addAttribute(it.key().toLatin1().data(), it.value());
         } else {
-            styleString.append(it.key().toLatin1().data())
-                .append(": ")
-                .append(it.value())
-                .append(";");
+            styleString.append(it.key().toLatin1().data()).append(": ").append(it.value()).append(";");
         }
     }
     if (!styleString.isEmpty()) {
@@ -911,22 +864,17 @@ bool KoSvgTextChunkShape::loadSvg(const QDomElement &e, SvgLoadingContext &conte
     if (e.tagName() == "textPath") {
         // we'll read the value 'path' later.
 
-        s->textPathInfo.side =
-            KoSvgText::parseTextPathSide(e.attribute("side", "left"));
-        s->textPathInfo.method =
-            KoSvgText::parseTextPathMethod(e.attribute("method", "align"));
-        s->textPathInfo.spacing =
-            KoSvgText::parseTextPathSpacing(e.attribute("spacing", "auto"));
+        s->textPathInfo.side = KoSvgText::parseTextPathSide(e.attribute("side", "left"));
+        s->textPathInfo.method = KoSvgText::parseTextPathMethod(e.attribute("method", "align"));
+        s->textPathInfo.spacing = KoSvgText::parseTextPathSpacing(e.attribute("spacing", "auto"));
         // This depends on pathLength;
         if (e.hasAttribute("startOffset")) {
             QString offset = e.attribute("startOffset", "0");
             if (offset.endsWith("%")) {
-                s->textPathInfo.startOffset =
-                    SvgUtil::parseNumber(offset.left(offset.size() - 1));
+                s->textPathInfo.startOffset = SvgUtil::parseNumber(offset.left(offset.size() - 1));
                 s->textPathInfo.startOffsetIsPercentage = true;
             } else {
-                s->textPathInfo.startOffset =
-                    SvgUtil::parseUnit(context.currentGC(), offset);
+                s->textPathInfo.startOffset = SvgUtil::parseUnit(context.currentGC(), offset);
             }
         }
     }

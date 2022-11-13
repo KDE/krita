@@ -14,6 +14,7 @@
 #include "KoPathShape.h"
 #include "KoSvgText.h"
 #include <boost/optional.hpp>
+#include <utility>
 
 class KoSvgTextChunkShape;
 
@@ -108,9 +109,7 @@ public:
      * @param offset the offset metric of the given decoration.
      * @param width the width metric of the given decoration.
      */
-    virtual void setTextDecorationFontMetrics(KoSvgText::TextDecoration type,
-                                              qreal offset,
-                                              qreal width) = 0;
+    virtual void setTextDecorationFontMetrics(KoSvgText::TextDecoration type, qreal offset, qreal width) = 0;
 
     /**
      * @brief getTextDecorationWidth
@@ -132,8 +131,7 @@ public:
      * but rather on the parent chunk. The text decoration can thus
      * only reliably be calculated during the text-layout process.
      */
-    virtual void addTextDecoration(KoSvgText::TextDecoration type,
-                                   QPainterPath path) = 0;
+    virtual void addTextDecoration(KoSvgText::TextDecoration type, QPainterPath path) = 0;
     /**
      * Clear all text-decorations
      *
@@ -157,22 +155,21 @@ public:
         {
         }
 
-        SubChunk(const QString &_text,
-                 const KoSvgText::KoSvgCharChunkFormat &_format,
-                 bool textInPath = false, bool firstTextInPath = false)
-            : text(_text)
-            , format(_format)
+        SubChunk(QString _text, KoSvgText::KoSvgCharChunkFormat _format, bool textInPath = false, bool firstTextInPath = false)
+            : text(std::move(_text))
+            , format(std::move(_format))
             , textInPath(textInPath)
             , firstTextInPath(firstTextInPath)
         {
         }
 
-        SubChunk(const QString &_text,
-                 const KoSvgText::KoSvgCharChunkFormat &_format,
+        SubChunk(QString _text,
+                 KoSvgText::KoSvgCharChunkFormat _format,
                  const QVector<KoSvgText::CharTransformation> &t,
-                 bool textInPath = false, bool firstTextInPath = false)
-            : text(_text)
-            , format(_format)
+                 bool textInPath = false,
+                 bool firstTextInPath = false)
+            : text(std::move(_text))
+            , format(std::move(_format))
             , transformation(t)
             , textInPath(textInPath)
             , firstTextInPath(firstTextInPath)
@@ -189,8 +186,7 @@ public:
     /**
      * Return a linearized representation of a subtree of text "subchunks".
      */
-    virtual QVector<SubChunk>
-    collectSubChunks(bool textInPath, bool &firstTextInPath) const = 0;
+    virtual QVector<SubChunk> collectSubChunks(bool textInPath, bool &firstTextInPath) const = 0;
 };
 
 #endif // KOSVGTEXTCHUNKSHAPELAYOUTINTERFACE_H

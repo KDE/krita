@@ -32,8 +32,7 @@ public:
      * qLocale's format.
      * @return the transformed string.
      */
-    static QString transformTextToUpperCase(const QString &text,
-                                            const QString langCode)
+    static QString transformTextToUpperCase(const QString &text, const QString &langCode)
     {
         QLocale locale(langCode.split("-").join("_"));
         return locale.toUpper(text);
@@ -50,8 +49,7 @@ public:
      * qLocale's format.
      * @return the transformed string.
      */
-    static QString transformTextToLowerCase(const QString &text,
-                                            const QString langCode)
+    static QString transformTextToLowerCase(const QString &text, const QString &langCode)
     {
         QLocale locale(langCode.split("-").join("_"));
         return locale.toLower(text);
@@ -70,8 +68,7 @@ public:
      * qLocale's format.
      * @return the transformed string.
      */
-    static QString transformTextCapitalize(const QString &text,
-                                           const QString langCode);
+    static QString transformTextCapitalize(const QString &text, QString langCode);
 
     /**
      * @brief transformTextFullWidth
@@ -106,8 +103,7 @@ public:
      * @return A vector of booleans the size of the input text that marks
      * whether the character should be collapsed.
      */
-    static QVector<bool>
-    collapseSpaces(QString &text, KoSvgText::TextSpaceCollapse collapseMethod);
+    static QVector<bool> collapseSpaces(QString &text, KoSvgText::TextSpaceCollapse collapseMethod);
 
     /**
      * @brief collapseLastSpace
@@ -120,8 +116,7 @@ public:
      * @return whether the character should collapse if it's the last space in a
      * line.
      */
-    static bool collapseLastSpace(const QChar c,
-                                  KoSvgText::TextSpaceCollapse collapseMethod);
+    static bool collapseLastSpace(QChar c, KoSvgText::TextSpaceCollapse collapseMethod);
 
     /**
      * @brief characterCanHang
@@ -132,8 +127,7 @@ public:
      * @param hangType how to hang.
      * @return whether the character can hang.
      */
-    static bool characterCanHang(const QChar c,
-                                 KoSvgText::HangingPunctuations hangType);
+    static bool characterCanHang(QChar c, KoSvgText::HangingPunctuations hangType);
 
     /**
      * @brief IsCssWordSeparator
@@ -144,7 +138,7 @@ public:
      * of the word-separators are not in the unicode basic plane.
      * @return true if it is a word-separator
      */
-    static bool IsCssWordSeparator(const QString grapheme);
+    static bool IsCssWordSeparator(QString grapheme);
 
     /**
      * @brief textToUnicodeGraphemes
@@ -159,8 +153,7 @@ public:
      * @param langCode the language code of the text, BCP style.
      * @return a QStringList of the graphemes as seperate strings.
      */
-    static QStringList textToUnicodeGraphemeClusters(const QString text,
-                                                     const QString langCode);
+    static QStringList textToUnicodeGraphemeClusters(QString text, QString langCode);
 };
 
 #endif // KOCSSTEXTUTILS_H

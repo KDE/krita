@@ -7,8 +7,7 @@
 #include "graphemebreak.h"
 #include <QChar>
 
-QString KoCssTextUtils::transformTextCapitalize(const QString &text,
-                                                const QString langCode)
+QString KoCssTextUtils::transformTextCapitalize(const QString &text, const QString langCode)
 {
     QLocale locale(langCode.split("-").join("_"));
 
@@ -23,9 +22,7 @@ QString KoCssTextUtils::transformTextCapitalize(const QString &text,
             if (i + 1 < graphemes.size()) {
                 /// While this is the only case I know of, make no mistake,
                 /// "IJsbeer" (Polar bear) is much more readable than "Ijsbeer".
-                if (locale == QLocale::Dutch
-                    && grapheme.toLower().startsWith("i")
-                    && graphemes.at(i + 1).toLower().startsWith("j")) {
+                if (locale == QLocale::Dutch && grapheme.toLower().startsWith("i") && graphemes.at(i + 1).toLower().startsWith("j")) {
                     capitalizeGrapheme = true;
                     continue;
                 }
@@ -135,9 +132,7 @@ QString KoCssTextUtils::transformTextFullSizeKana(const QString &text)
     return transformedText;
 }
 
-QVector<bool>
-KoCssTextUtils::collapseSpaces(QString &text,
-                               KoSvgText::TextSpaceCollapse collapseMethod)
+QVector<bool> KoCssTextUtils::collapseSpaces(QString &text, KoSvgText::TextSpaceCollapse collapseMethod)
 {
     QVector<bool> collapseList(text.size());
     collapseList.fill(false);
@@ -177,9 +172,7 @@ KoCssTextUtils::collapseSpaces(QString &text,
     return collapseList;
 }
 
-bool KoCssTextUtils::collapseLastSpace(
-    const QChar c,
-    KoSvgText::TextSpaceCollapse collapseMethod)
+bool KoCssTextUtils::collapseLastSpace(const QChar c, KoSvgText::TextSpaceCollapse collapseMethod)
 {
     bool collapse = false;
     if (c == QChar::LineFeed) {
@@ -204,8 +197,7 @@ bool KoCssTextUtils::collapseLastSpace(
     return collapse;
 }
 
-bool KoCssTextUtils::characterCanHang(const QChar c,
-                                      KoSvgText::HangingPunctuations hangType)
+bool KoCssTextUtils::characterCanHang(const QChar c, KoSvgText::HangingPunctuations hangType)
 {
     if (hangType.testFlag(KoSvgText::HangFirst)) {
         if (c.category() == QChar::Punctuation_InitialQuote || // Pi
@@ -263,23 +255,16 @@ bool KoCssTextUtils::IsCssWordSeparator(const QString grapheme)
     return false;
 }
 
-QStringList
-KoCssTextUtils::textToUnicodeGraphemeClusters(const QString text,
-                                              const QString langCode)
+QStringList KoCssTextUtils::textToUnicodeGraphemeClusters(const QString text, const QString langCode)
 {
     QVector<char> graphemeBreaks(text.size());
-    set_graphemebreaks_utf16(text.utf16(),
-                             static_cast<size_t>(text.size()),
-                             langCode.toUtf8().data(),
-                             graphemeBreaks.data());
+    set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), langCode.toUtf8().data(), graphemeBreaks.data());
     QStringList graphemes;
     int graphemeLength = 0;
     int lastGrapheme = 0;
     for (int i = 0; i < text.size(); i++) {
         graphemeLength += 1;
-        bool breakGrapheme = lastGrapheme + graphemeLength < text.size()
-            ? graphemeBreaks[i] == GRAPHEMEBREAK_BREAK
-            : false;
+        bool breakGrapheme = lastGrapheme + graphemeLength < text.size() ? graphemeBreaks[i] == GRAPHEMEBREAK_BREAK : false;
         if (breakGrapheme) {
             graphemes.append(text.mid(lastGrapheme, graphemeLength));
             lastGrapheme += graphemeLength;

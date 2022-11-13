@@ -112,8 +112,7 @@ enum TextWrap {
 /// Part of "white-space"
 enum TextSpaceTrim {
     TrimNone = 0x0, ///< No trimming.
-    TrimInner =
-        0x1, ///< Discard white space at the beginning and end of element.
+    TrimInner = 0x1, ///< Discard white space at the beginning and end of element.
     DiscardBefore = 0x2, ///< Trim white space before the start of the element.
     DiscardAfter = 0x4 ///< Trim white space after the end of the element.
 };
@@ -171,10 +170,8 @@ enum TextTransform {
     TextTransformNone = 0x0, ///< No transforms.
     TextTransformCapitalize = 0x1, ///< Convert first letter in word of bicarmel
                                    ///< text to upper-case, locale dependant.
-    TextTransformUppercase =
-        0x2, ///< Convert all bicarmel text to upper-case, locale dependant.
-    TextTransformLowercase =
-        0x4, ///< Convert all bicarmel text to lower-case, locale dependant.
+    TextTransformUppercase = 0x2, ///< Convert all bicarmel text to upper-case, locale dependant.
+    TextTransformLowercase = 0x4, ///< Convert all bicarmel text to lower-case, locale dependant.
 };
 
 /// How to handle overflow.
@@ -193,8 +190,7 @@ enum HangingPunctuation {
     HangNone = 0x0, ///< Hang nothing.
     HangFirst = 0x1, ///< Hang opening brackets and quotes.
     HangLast = 0x2, ///< Hang closing brackets and quotes.
-    HangEnd =
-        0x4, ///< Hang stops and commas. Force/Allow is a seperate boolean.
+    HangEnd = 0x4, ///< Hang stops and commas. Force/Allow is a seperate boolean.
     HangForce = 0x8 ///< Whether to force hanging stops or commas.
 };
 
@@ -274,10 +270,16 @@ enum TextPathMethod {
 
 /// Currently not used, this value suggest using either the default values or
 /// 'better' ones. Currently not used.
-enum TextPathSpacing { TextPathAuto, TextPathExact };
+enum TextPathSpacing {
+    TextPathAuto,
+    TextPathExact
+};
 
 /// Whether to reverse the path before laying out text.
-enum TextPathSide { TextPathSideRight, TextPathSideLeft };
+enum TextPathSide {
+    TextPathSideRight,
+    TextPathSideLeft
+};
 
 /// CSS defines a number of font features as CSS properties. Not all Opentype
 /// features are part of this.
@@ -392,17 +394,13 @@ TextAnchor parseTextAnchor(const QString &value);
  * variants yet, and thus will be interpreted as "Normal" while this boolean
  * returns false.
  */
-bool whiteSpaceValueToLongHands(const QString &value,
-                                TextSpaceCollapse &collapseMethod,
-                                TextWrap &wrapMethod,
-                                TextSpaceTrims &trimMethod);
+bool whiteSpaceValueToLongHands(const QString &value, TextSpaceCollapse &collapseMethod, TextWrap &wrapMethod, TextSpaceTrims &trimMethod);
 /**
  * @brief xmlSpaceToLongHands
  * This takes xml:space values and converts them to CSS-Text-4 properties.
  * @see whiteSpaceValueToLongHands
  */
-bool xmlSpaceToLongHands(const QString &value,
-                         TextSpaceCollapse &collapseMethod);
+bool xmlSpaceToLongHands(const QString &value, TextSpaceCollapse &collapseMethod);
 
 WordBreak parseWordBreak(const QString &value);
 LineBreak parseLineBreak(const QString &value);
@@ -413,22 +411,9 @@ BaselineShiftMode parseBaselineShiftMode(const QString &value);
 
 LengthAdjust parseLengthAdjust(const QString &value);
 
-static const QStringList fontStretchNames = {"ultra-condensed",
-                                             "extra-condensed",
-                                             "condensed",
-                                             "semi-condensed",
-                                             "normal",
-                                             "semi-expanded",
-                                             "expanded",
-                                             "extra-expanded",
-                                             "ultra-expanded"};
-static const QStringList fontSizeNames = { "xx-small",
-                                           "x-small",
-                                           "small",
-                                           "medium",
-                                           "large",
-                                           "x-large",
-                                           "xx-large" };
+static const QStringList fontStretchNames =
+    {"ultra-condensed", "extra-condensed", "condensed", "semi-condensed", "normal", "semi-expanded", "expanded", "extra-expanded", "ultra-expanded"};
+static const QStringList fontSizeNames = {"xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large"};
 /**
  * @brief parseCSSFontStretch
  * For CSS3, the font-stretches were only given as keywords. In Css 4 and above,
@@ -471,9 +456,7 @@ QString writeTextAlign(TextAlign value);
  * determine the CSS-3-Whitespace shorthand value.
  * @see whiteSpaceValueToLongHands
  */
-QString writeWhiteSpaceValue(TextSpaceCollapse collapseMethod,
-                             TextWrap wrapMethod,
-                             KoSvgText::TextSpaceTrims trimMethod);
+QString writeWhiteSpaceValue(TextSpaceCollapse collapseMethod, TextWrap wrapMethod, KoSvgText::TextSpaceTrims trimMethod);
 QString writeXmlSpace(TextSpaceCollapse collapseMethod);
 
 struct CharTransformation : public boost::equality_comparable<CharTransformation>
@@ -508,61 +491,49 @@ struct TextOnPathInfo {
 ///  It has no effect on the underlying content, and must not affect the content
 ///  of a plain text copy & paste operation."
 /// -- CSS-Text-3
-struct TextTransformInfo
-    : public boost::equality_comparable<TextTransformInfo> {
-    TextTransformInfo()
-    {
-    }
-    TextTransform capitals =
-        TextTransformNone; ///< Text transform upper/lower/capitalize.
+struct TextTransformInfo : public boost::equality_comparable<TextTransformInfo> {
+    TextTransformInfo() = default;
+    TextTransform capitals = TextTransformNone; ///< Text transform upper/lower/capitalize.
     bool fullWidth = false; ///< Convert proportional or half-width text to
                             ///< full-width text. 'at-risk'
     bool fullSizeKana = false; ///< Convert Japanese Katakana and Hiragana to
                                ///< their 'fullsize' equivelants. 'at-risk'
     bool operator==(const TextTransformInfo &rhs) const
     {
-        return (capitals == rhs.capitals) && (fullWidth == rhs.fullWidth)
-            && (fullSizeKana == rhs.fullSizeKana);
+        return (capitals == rhs.capitals) && (fullWidth == rhs.fullWidth) && (fullSizeKana == rhs.fullSizeKana);
     }
 };
-QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg,
-                                    const KoSvgText::TextTransformInfo &t);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextTransformInfo &t);
 TextTransformInfo parseTextTransform(QString value);
-QString writeTextTransform(const TextTransformInfo textTransform);
+QString writeTextTransform(TextTransformInfo textTransform);
 
 /// "This property specifies the indentation applied to lines of inline content
 /// in a block.
 ///  The indent is treated as a margin applied to the start edge of the line
 ///  box." -- CSS-Text-3
 struct TextIndentInfo : public boost::equality_comparable<TextIndentInfo> {
-    TextIndentInfo()
-    {
-    }
+    TextIndentInfo() = default;
 
     qreal value = 0.0; ///< The indentation length or percentage.
     bool isPercentage = false; ///< Interpret the value as a percentage of the
                                ///< total run length of a box.
     bool hanging = false; ///< Flip the lines to which text-indent is applied.
-    bool eachLine =
-        false; ///< Apply the text-indent to each line following a hardbreak.
+    bool eachLine = false; ///< Apply the text-indent to each line following a hardbreak.
     bool operator==(const TextIndentInfo &rhs) const
     {
-        return (value == rhs.value) && (isPercentage == rhs.isPercentage)
-            && (hanging == rhs.hanging) && (eachLine == rhs.eachLine);
+        return (value == rhs.value) && (isPercentage == rhs.isPercentage) && (hanging == rhs.hanging) && (eachLine == rhs.eachLine);
     }
 };
 
 TextIndentInfo parseTextIndent(QString value, const SvgLoadingContext &context);
-QString writeTextIndent(const TextIndentInfo textIndent);
+QString writeTextIndent(TextIndentInfo textIndent);
 
-QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg,
-                                    const KoSvgText::TextIndentInfo &value);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TextIndentInfo &value);
 
 /// "This property determines the tab size used to render preserved tab
 /// characters (U+0009)." -- CSS-Text-3
 struct TabSizeInfo : public boost::equality_comparable<TabSizeInfo> {
-    qreal value =
-        8; ///< A length or a number. Length is currently marked 'at-risk'.
+    qreal value = 8; ///< A length or a number. Length is currently marked 'at-risk'.
     bool isNumber = true; ///< Multiply by width of 'space' character, including
                           ///< word- and letter-spacing.
     qreal extraSpacing = 0.0; ///< Extra spacing due word or letter-spacing. Not
@@ -573,9 +544,8 @@ struct TabSizeInfo : public boost::equality_comparable<TabSizeInfo> {
     }
 };
 TabSizeInfo parseTabSize(QString value, const SvgLoadingContext &context);
-QString writeTabSize(const TabSizeInfo tabSize);
-QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg,
-                                    const KoSvgText::TabSizeInfo &value);
+QString writeTabSize(TabSizeInfo tabSize);
+QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::TabSizeInfo &value);
 
 /**
  * @brief The AssociatedShapeWrapper struct is a special shared-pointer-like class
@@ -616,12 +586,15 @@ struct AssociatedShapeWrapper : public KoShape::ShapeChangeListener
     }
 
 private:
-    KoSvgTextChunkShape *m_shape = 0;
+    KoSvgTextChunkShape *m_shape = nullptr;
 };
 
 struct KoSvgCharChunkFormat : public QTextCharFormat
 {
-    enum SvgCharProperty { TextAnchor = UserProperty + 1, AssociatedShape };
+    enum SvgCharProperty {
+        TextAnchor = UserProperty + 1,
+        AssociatedShape
+    };
 
     inline void setTextAnchor(KoSvgText::TextAnchor value) {
         setProperty(TextAnchor, int(value));
@@ -677,7 +650,7 @@ struct StrokeProperty : public boost::equality_comparable<StrokeProperty>
 
 QDebug KRITAFLAKE_EXPORT operator<<(QDebug dbg, const KoSvgText::StrokeProperty &prop);
 
-}
+} // namespace KoSvgText
 
 Q_DECLARE_METATYPE(KoSvgText::AutoValue)
 Q_DECLARE_METATYPE(KoSvgText::TextDecorations)

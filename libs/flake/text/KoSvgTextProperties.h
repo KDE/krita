@@ -112,8 +112,6 @@ public:
         KraTextVersionId ///< Int, used for handling incorrectly saved files.
     };
 
-public:
-
     KoSvgTextProperties();
     ~KoSvgTextProperties();
 

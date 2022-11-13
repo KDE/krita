@@ -160,7 +160,7 @@ public:
 
     virtual QString textRenderingString() const
     {
-        return QString();
+        return {};
     }
 
 protected:
@@ -170,7 +170,6 @@ protected:
      */
     virtual bool isRootTextNode() const;
 
-protected:
     KoSvgTextChunkShape(KoSvgTextChunkShapePrivate *dd);
 
 private:

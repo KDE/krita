@@ -50,13 +50,10 @@ private:
             FT_Library lib = nullptr;
             FT_Error error = FT_Init_FreeType(&lib);
             if (error) {
-                errorFlake << "Error with initializing FreeType library:"
-                           << error
-                           << "Current thread:" << QThread::currentThread()
+                errorFlake << "Error with initializing FreeType library:" << error << "Current thread:" << QThread::currentThread()
                            << "GUI thread:" << qApp->thread();
             } else {
-                m_data.setLocalData(
-                    QSharedPointer<ThreadData>::create(lib));
+                m_data.setLocalData(QSharedPointer<ThreadData>::create(lib));
             }
         }
     }
@@ -67,16 +64,12 @@ public:
         FcConfig *config = FcConfigCreate();
         KIS_ASSERT(config && "No Fontconfig support available");
         if (qgetenv("FONTCONFIG_PATH").isEmpty()) {
-            QDir appdir(KoResourcePaths::getApplicationRoot()
-                        + "/etc/fonts");
+            QDir appdir(KoResourcePaths::getApplicationRoot() + "/etc/fonts");
             if (QFile::exists(appdir.absoluteFilePath("fonts.conf"))) {
-                qputenv("FONTCONFIG_PATH",
-                        QFile::encodeName(QDir::toNativeSeparators(
-                            appdir.absolutePath())));
+                qputenv("FONTCONFIG_PATH", QFile::encodeName(QDir::toNativeSeparators(appdir.absolutePath())));
             }
         }
-        debugFlake << "Setting FONTCONFIG_PATH"
-                   << qgetenv("FONTCONFIG_PATH");
+        debugFlake << "Setting FONTCONFIG_PATH" << qgetenv("FONTCONFIG_PATH");
         if (!FcConfigParseAndLoad(config, nullptr, FcTrue)) {
             errorFlake << "Failed loading the Fontconfig configuration";
         } else {
@@ -128,10 +121,10 @@ KoFontRegistry *KoFontRegistry::instance()
     return s_instance;
 }
 
-std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
+std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(const QStringList &families,
                                                          QVector<int> &lengths,
-                                                         QMap<QString, qreal> axisSettings,
-                                                         QString text,
+                                                         const QMap<QString, qreal> &axisSettings,
+                                                         const QString &text,
                                                          int xRes,
                                                          int yRes,
                                                          qreal size,
@@ -140,7 +133,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
                                                          int width,
                                                          bool italic,
                                                          int slant,
-                                                         QString language)
+                                                         const QString &language)
 {
     Q_UNUSED(size)
     Q_UNUSED(language)
@@ -183,12 +176,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
             return set.value();
         } else {
             FcCharSet *cs = nullptr;
-            KisLibraryResourcePointer<FcFontSet, FcFontSetDestroy> avalue(
-                FcFontSort(FcConfigGetCurrent(),
-                           p.data(),
-                           FcTrue,
-                           &cs,
-                           &result));
+            KisLibraryResourcePointer<FcFontSet, FcFontSetDestroy> avalue(FcFontSort(FcConfigGetCurrent(), p.data(), FcTrue, &cs, &result));
             charSet.reset(cs);
             d->sets().insert(hash, avalue);
             return avalue;
@@ -201,8 +189,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
     if (text.isEmpty()) {
         for (int j = 0; j < fontSet->nfont; j++) {
             QString fontFileName;
-            if (FcPatternGetString(fontSet->fonts[j], FC_FILE, 0, &fileValue)
-                == FcResultMatch) {
+            if (FcPatternGetString(fontSet->fonts[j], FC_FILE, 0, &fileValue) == FcResultMatch) {
                 fontFileName = QString(reinterpret_cast<char *>(fileValue));
                 fontFileNames.append(fontFileName);
                 lengths.append(0);
@@ -211,29 +198,26 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
         }
     } else {
         QString fontFileName;
-        FcChar8 *fileValue = 0;
-        FcCharSet *set = 0;
+        FcChar8 *fileValue = nullptr;
+        FcCharSet *set = nullptr;
         QVector<int> familyValues(text.size());
         QVector<int> fallbackMatchValues(text.size());
         familyValues.fill(-1);
         fallbackMatchValues.fill(-1);
-
 
         // First, we're going to split up the text into graphemes. This is both
         // because the css spec requires it, but also because of why the css
         // spec requires it: graphemes' parts should not end up in seperate
         // runs, which they will if they get assigned different fonts,
         // potentially breaking ligatures and emoji sequences.
-        QStringList graphemes =
-            KoCssTextUtils::textToUnicodeGraphemeClusters(text, language);
+        QStringList graphemes = KoCssTextUtils::textToUnicodeGraphemeClusters(text, language);
 
         // Parse over the fonts and graphemes and try to see if we can get the
         // best match for a given grapheme.
         for (int i = 0; i < fontSet->nfont; i++) {
-            if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set)
-                == FcResultMatch) {
+            if (FcPatternGetCharSet(fontSet->fonts[i], FC_CHARSET, 0, &set) == FcResultMatch) {
                 int index = 0;
-                for (QString grapheme : graphemes) {
+                for (const QString &grapheme : graphemes) {
                     int familyIndex = -1;
                     if (familyValues.at(index) == -1) {
                         int fallbackMatch = fallbackMatchValues.at(index);
@@ -288,11 +272,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
         int length = 0;
         int startIndex = 0;
         int lastIndex = familyValues.at(0);
-        if (FcPatternGetString(fontSet->fonts[lastIndex],
-                               FC_FILE,
-                               0,
-                               &fileValue)
-            == FcResultMatch) {
+        if (FcPatternGetString(fontSet->fonts[lastIndex], FC_FILE, 0, &fileValue) == FcResultMatch) {
             fontFileName = QString(reinterpret_cast<char *>(fileValue));
         }
         for (int i = 0; i < familyValues.size(); i++) {
@@ -302,11 +282,7 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
                 startIndex = i;
                 length = 0;
                 lastIndex = familyValues.at(i);
-                if (FcPatternGetString(fontSet->fonts[lastIndex],
-                                       FC_FILE,
-                                       0,
-                                       &fileValue)
-                    == FcResultMatch) {
+                if (FcPatternGetString(fontSet->fonts[lastIndex], FC_FILE, 0, &fileValue) == FcResultMatch) {
                     fontFileName = QString(reinterpret_cast<char *>(fileValue));
                 }
             }
@@ -323,13 +299,13 @@ std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
     // Because FT_faces cannot be cloned, we need to include the sizes and font variation modifications.
     QString modifications;
     if (size > -1) {
-         modifications += QString::number(size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
+        modifications += QString::number(size) + ":" + QString::number(xRes) + "x" + QString::number(yRes);
     }
     if (fontSizeAdjust != 1.0) {
-         modifications += QString::number(fontSizeAdjust);
+        modifications += QString::number(fontSizeAdjust);
     }
     if (!axisSettings.isEmpty()) {
-        for (QString key: axisSettings.keys()) {
+        for (const QString &key : axisSettings.keys()) {
             modifications += "|" + key + QString::number(axisSettings.value(key));
         }
     }
@@ -359,7 +335,7 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
                                     qreal fontSizeAdjust,
                                     int xRes,
                                     int yRes,
-                                    QMap<QString, qreal> axisSettings)
+                                    const QMap<QString, qreal> &axisSettings)
 {
     int errorCode = 0;
     int ftFontUnit = 64.0;
@@ -372,8 +348,7 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
             int selectedIndex = -1;
 
             for (int i = 0; i < face->num_fixed_sizes; i++) {
-                int newDelta =
-                    qAbs((fontSizePixels)-face->available_sizes[i].x_ppem);
+                int newDelta = qAbs((fontSizePixels)-face->available_sizes[i].x_ppem);
                 if (newDelta < sizeDelta || i == 0) {
                     selectedIndex = i;
                     sizeDelta = newDelta;
@@ -382,9 +357,7 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
 
             if (selectedIndex >= 0) {
                 if (FT_HAS_COLOR(face)) {
-                    long scale = long(
-                        65535 * qreal(fontSizePixels)
-                        / qreal(face->available_sizes[selectedIndex].x_ppem));
+                    long scale = long(65535 * qreal(fontSizePixels) / qreal(face->available_sizes[selectedIndex].x_ppem));
                     FT_Matrix matrix;
                     matrix.xx = scale;
                     matrix.xy = 0;
@@ -396,31 +369,22 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
                 errorCode = FT_Select_Size(face.data(), selectedIndex);
             }
         } else {
-            errorCode =
-                FT_Set_Char_Size(face.data(), size * ftFontUnit, 0, xRes, yRes);
+            errorCode = FT_Set_Char_Size(face.data(), size * ftFontUnit, 0, xRes, yRes);
             hb_font_t_up font(hb_ft_font_create_referenced(face.data()));
             hb_position_t xHeight = 0;
-            hb_ot_metrics_get_position(font.data(),
-                                       HB_OT_METRICS_TAG_X_HEIGHT,
-                                       &xHeight);
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &xHeight);
             if (xHeight > 0 && fontSizeAdjust > 0 && fontSizeAdjust < 1.0) {
                 qreal aspect = xHeight / (size * ftFontUnit * scaleToPixel);
-                errorCode = FT_Set_Char_Size(face.data(),
-                                             (fontSizeAdjust / aspect)
-                                                 * (size * ftFontUnit),
-                                             0,
-                                             xRes,
-                                             yRes);
+                errorCode = FT_Set_Char_Size(face.data(), (fontSizeAdjust / aspect) * (size * ftFontUnit), 0, xRes, yRes);
             }
         }
 
         QMap<FT_Tag, qreal> tags;
-        for (QString tagName : axisSettings.keys()) {
+        for (const QString &tagName : axisSettings.keys()) {
             if (tagName.size() == 4) {
                 QByteArray utfData = tagName.toUtf8();
                 char *t = utfData.data();
-                tags.insert(FT_MAKE_TAG(t[0], t[1], t[2], t[3]),
-                            axisSettings.value(tagName));
+                tags.insert(FT_MAKE_TAG(t[0], t[1], t[2], t[3]), axisSettings.value(tagName));
             }
         }
         if (FT_HAS_MULTIPLE_MASTERS(face)) {
@@ -434,29 +398,25 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
                 designCoords[i] = axis.def;
                 for (FT_Tag tag : tags.keys()) {
                     if (axis.tag == tag) {
-                        designCoords[i] = qBound(axis.minimum,
-                                                 long(tags.value(tag) * 65535),
-                                                 axis.maximum);
+                        designCoords[i] = qBound(axis.minimum, long(tags.value(tag) * 65535), axis.maximum);
                     }
                 }
             }
-            FT_Set_Var_Design_Coordinates(face.data(),
-                                          amaster->num_axis,
-                                          designCoords.data());
+            FT_Set_Var_Design_Coordinates(face.data(), amaster->num_axis, designCoords.data());
             FT_Done_MM_Var(d->library().data(), amaster);
         }
     }
     return (errorCode == 0);
 }
 
-bool KoFontRegistry::addFontFilePathToRegistery(QString path)
+bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)
 {
     QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
     return FcConfigAppFontAddFile(FcConfigGetCurrent(), vals);
 }
 
-bool KoFontRegistry::addFontFileDirectoryToRegistery(QString path)
+bool KoFontRegistry::addFontFileDirectoryToRegistery(const QString &path)
 {
     QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());

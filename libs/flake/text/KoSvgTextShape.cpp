@@ -61,7 +61,11 @@
 
 #include <QSharedData>
 
-enum BreakType { NoBreak, SoftBreak, HardBreak };
+enum BreakType {
+    NoBreak,
+    SoftBreak,
+    HardBreak
+};
 
 enum LineEdgeBehaviour {
     NoChange, ///< Do nothing special.
@@ -80,8 +84,7 @@ struct CharacterResult {
     // The original svg specs' notion of addressable character relies on utf16,
     // and it's suggested to have it per-typographic character.
     // https://github.com/w3c/svgwg/issues/537
-    bool addressable =
-        true; // whether the character is not discarded for various reasons.
+    bool addressable = true; // whether the character is not discarded for various reasons.
     bool middle = false; // whether the character is the second of last of a
                          // typographic character.
     bool anchored_chunk = false; // whether this is the start of a new chunk.
@@ -135,29 +138,12 @@ public:
     void clearAssociatedOutlines(const KoShape *rootShape);
     QPainterPath convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot);
     QImage convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot);
-    void breakLines(KoSvgTextProperties properties,
-                    QMap<int, int> logicalToVisual,
-                    QVector<CharacterResult> &result,
-                    QPointF startPos);
-    void applyTextLength(const KoShape *rootShape,
-                         QVector<CharacterResult> &result,
-                         int &currentIndex,
-                         int &resolvedDescendentNodes,
-                         bool isHorizontal);
+    void breakLines(KoSvgTextProperties properties, QMap<int, int> logicalToVisual, QVector<CharacterResult> &result, QPointF startPos);
+    void applyTextLength(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex, int &resolvedDescendentNodes, bool isHorizontal);
     void applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal);
-    qreal characterResultOnPath(CharacterResult &cr,
-                                qreal length,
-                                qreal offset,
-                                bool isHorizontal,
-                                bool isClosed);
-    QPainterPath stretchGlyphOnPath(QPainterPath glyph,
-                                    QPainterPath path,
-                                    bool isHorizontal,
-                                    qreal offset,
-                                    bool isClosed);
-    void applyTextPath(const KoShape *rootShape,
-                       QVector<CharacterResult> &result,
-                       bool isHorizontal);
+    qreal characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed);
+    QPainterPath stretchGlyphOnPath(QPainterPath glyph, QPainterPath path, bool isHorizontal, qreal offset, bool isClosed);
+    void applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal);
     void computeFontMetrics(const KoShape *rootShape,
                             QMap<int, int> parentBaselineTable,
                             qreal parentFontSize,
@@ -178,15 +164,9 @@ public:
                                 bool isHorizontal,
                                 bool ltr,
                                 bool wrapping);
-    void paintPaths(QPainter &painter,
-                    QPainterPath outlineRect,
-                    const KoShape *rootShape,
-                    QVector<CharacterResult> &result,
-                    QPainterPath &chunk,
-                    int &currentIndex);
-    QList<KoShape *> collectPaths(const KoShape *rootShape,
-                                  QVector<CharacterResult> &result,
-                                  int &currentIndex);
+    void
+    paintPaths(QPainter &painter, QPainterPath outlineRect, const KoShape *rootShape, QVector<CharacterResult> &result, QPainterPath &chunk, int &currentIndex);
+    QList<KoShape *> collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex);
 };
 
 KoSvgTextShape::KoSvgTextShape()
@@ -232,10 +212,8 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
      * neither rotate and shear change the length of a line, and it may not be
      * that bad if freetype receives a scaled value for the DPI.
      */
-    int xRes = qRound(
-        painter.transform().map(QLineF(QPointF(), QPointF(72, 0))).length());
-    int yRes = qRound(
-        painter.transform().map(QLineF(QPointF(), QPointF(0, 72))).length());
+    int xRes = qRound(painter.transform().map(QLineF(QPointF(), QPointF(72, 0))).length());
+    int yRes = qRound(painter.transform().map(QLineF(QPointF(), QPointF(0, 72))).length());
     if (xRes != d->xRes || yRes != d->yRes) {
         d->xRes = xRes;
         d->yRes = yRes;
@@ -260,12 +238,7 @@ void KoSvgTextShape::paintComponent(QPainter &painter) const
     QPainterPath chunk;
     int currentIndex = 0;
     if (!d->result.empty()) {
-        d->paintPaths(painter,
-                      this->outline(),
-                      this,
-                      d->result,
-                      chunk,
-                      currentIndex);
+        d->paintPaths(painter, this->outline(), this, d->result, chunk, currentIndex);
     }
     /* Debug
     Q_FOREACH (KoShape *child, this->shapes()) {
@@ -343,22 +316,10 @@ void KoSvgTextShape::relayout() const
     d->clearAssociatedOutlines(this);
 
     // The following is based on the text-layout algorithm in SVG 2.
-    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(
-        this->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::WritingModeId)
-            .toInt());
-    KoSvgText::Direction direction = KoSvgText::Direction(
-        this->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::DirectionId)
-            .toInt());
-    KoSvgText::AutoValue inlineSize =
-        this->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::InlineSizeId)
-            .value<KoSvgText::AutoValue>();
-    QString lang = this->textProperties()
-                       .property(KoSvgTextProperties::TextLanguage)
-                       .toString()
-                       .toUtf8();
+    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(this->textProperties().propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(this->textProperties().propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    KoSvgText::AutoValue inlineSize = this->textProperties().propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+    QString lang = this->textProperties().property(KoSvgTextProperties::TextLanguage).toString().toUtf8();
 
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
@@ -383,8 +344,7 @@ void KoSvgTextShape::relayout() const
     // mean a 1/64 value.
     const qreal ftFontUnit = 64.0;
     const qreal ftFontUnitFactor = 1 / ftFontUnit;
-    QTransform ftTF =
-        QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor);
+    QTransform ftTF = QTransform::fromScale(ftFontUnitFactor, -ftFontUnitFactor);
     qreal finalRes = qMin(d->xRes, d->yRes);
     qreal scaleToPT = float(72. / finalRes);
     qreal scaleToPixel = float(finalRes / 72.);
@@ -403,8 +363,7 @@ void KoSvgTextShape::relayout() const
     // https://github.com/w3c/svgwg/issues/635
 
     bool first = false;
-    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks =
-        layoutInterface()->collectSubChunks(false, first);
+    QVector<KoSvgTextChunkShapeLayoutInterface::SubChunk> textChunks = layoutInterface()->collectSubChunks(false, first);
     QString text;
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
         text.append(chunk.text);
@@ -415,20 +374,10 @@ void KoSvgTextShape::relayout() const
 
     // KoSvgText::TextSpaceTrims trims =
     // this->textProperties().propertyOrDefault(KoSvgTextProperties::TextTrimId).value<KoSvgText::TextSpaceTrims>();
-    KoSvgText::TextWrap wrap = KoSvgText::TextWrap(
-        this->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::TextWrapId)
-            .toInt());
-    KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(
-        this->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::TextCollapseId)
-            .toInt());
-    KoSvgText::LineBreak linebreakStrictness =
-        KoSvgText::LineBreak(this->textProperties()
-                                 .property(KoSvgTextProperties::LineBreakId)
-                                 .toInt());
-    QVector<bool> collapseChars =
-        KoCssTextUtils::collapseSpaces(text, collapse);
+    KoSvgText::TextWrap wrap = KoSvgText::TextWrap(this->textProperties().propertyOrDefault(KoSvgTextProperties::TextWrapId).toInt());
+    KoSvgText::TextSpaceCollapse collapse = KoSvgText::TextSpaceCollapse(this->textProperties().propertyOrDefault(KoSvgTextProperties::TextCollapseId).toInt());
+    KoSvgText::LineBreak linebreakStrictness = KoSvgText::LineBreak(this->textProperties().property(KoSvgTextProperties::LineBreakId).toInt());
+    QVector<bool> collapseChars = KoCssTextUtils::collapseSpaces(text, collapse);
     if (!lang.isEmpty()) {
         // Libunibreak currently only has support for strict, and even then only
         // for very specific cases.
@@ -441,14 +390,8 @@ void KoSvgTextShape::relayout() const
     if (text.size() > 0) {
         // TODO: Figure out how to gracefully skip all the next steps when the text-size is 0.
         // can't currently remember if removing the associated outlines was all that is necessary.
-    set_linebreaks_utf16(text.utf16(),
-                         static_cast<size_t>(text.size()),
-                         lang.toUtf8().data(),
-                         lineBreaks.data());
-    set_graphemebreaks_utf16(text.utf16(),
-                             static_cast<size_t>(text.size()),
-                             lang.toUtf8().data(),
-                             graphemeBreaks.data());
+        set_linebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), lineBreaks.data());
+        set_graphemebreaks_utf16(text.utf16(), static_cast<size_t>(text.size()), lang.toUtf8().data(), graphemeBreaks.data());
     }
 
     int globalIndex = 0;
@@ -469,51 +412,30 @@ void KoSvgTextShape::relayout() const
     raqm_t_up layout(raqm_create());
 
     if (raqm_set_text_utf16(layout.data(), text.utf16(), text.size())) {
-        if (writingMode == KoSvgText::VerticalRL
-            || writingMode == KoSvgText::VerticalLR) {
-            raqm_set_par_direction(layout.data(),
-                                   raqm_direction_t::RAQM_DIRECTION_TTB);
+        if (writingMode == KoSvgText::VerticalRL || writingMode == KoSvgText::VerticalLR) {
+            raqm_set_par_direction(layout.data(), raqm_direction_t::RAQM_DIRECTION_TTB);
         } else if (direction == KoSvgText::DirectionRightToLeft) {
-            raqm_set_par_direction(layout.data(),
-                                   raqm_direction_t::RAQM_DIRECTION_RTL);
+            raqm_set_par_direction(layout.data(), raqm_direction_t::RAQM_DIRECTION_RTL);
         } else {
-            raqm_set_par_direction(layout.data(),
-                                   raqm_direction_t::RAQM_DIRECTION_LTR);
+            raqm_set_par_direction(layout.data(), raqm_direction_t::RAQM_DIRECTION_LTR);
         }
 
         int start = 0;
         int length = 0;
         for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
             length = chunk.text.size();
-            KoSvgTextProperties properties =
-                chunk.format.associatedShapeWrapper().shape()->textProperties();
+            KoSvgTextProperties properties = chunk.format.associatedShapeWrapper().shape()->textProperties();
 
             // In this section we retrieve the resolved transforms and
             // direction/anchoring that we can get from the subchunks.
-            KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(
-                properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId)
-                    .toInt());
-            KoSvgText::Direction direction = KoSvgText::Direction(
-                properties.propertyOrDefault(KoSvgTextProperties::DirectionId)
-                    .toInt());
-            KoSvgText::WordBreak wordBreakStrictness = KoSvgText::WordBreak(
-                properties.propertyOrDefault(KoSvgTextProperties::WordBreakId)
-                    .toInt());
+            KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
+            KoSvgText::Direction direction = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+            KoSvgText::WordBreak wordBreakStrictness = KoSvgText::WordBreak(properties.propertyOrDefault(KoSvgTextProperties::WordBreakId).toInt());
             KoSvgText::HangingPunctuations hang =
-                properties
-                    .propertyOrDefault(
-                        KoSvgTextProperties::HangingPunctuationId)
-                    .value<KoSvgText::HangingPunctuations>();
-            KoSvgText::TabSizeInfo tabInfo =
-                properties.propertyOrDefault(KoSvgTextProperties::TabSizeId)
-                    .value<KoSvgText::TabSizeInfo>();
-            KoSvgText::AutoValue letterSpacing =
-                properties
-                    .propertyOrDefault(KoSvgTextProperties::LetterSpacingId)
-                    .value<KoSvgText::AutoValue>();
-            KoSvgText::AutoValue wordSpacing =
-                properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId)
-                    .value<KoSvgText::AutoValue>();
+                properties.propertyOrDefault(KoSvgTextProperties::HangingPunctuationId).value<KoSvgText::HangingPunctuations>();
+            KoSvgText::TabSizeInfo tabInfo = properties.propertyOrDefault(KoSvgTextProperties::TabSizeId).value<KoSvgText::TabSizeInfo>();
+            KoSvgText::AutoValue letterSpacing = properties.propertyOrDefault(KoSvgTextProperties::LetterSpacingId).value<KoSvgText::AutoValue>();
+            KoSvgText::AutoValue wordSpacing = properties.propertyOrDefault(KoSvgTextProperties::WordSpacingId).value<KoSvgText::AutoValue>();
 
             if (!letterSpacing.isAuto) {
                 tabInfo.extraSpacing += letterSpacing.customValue;
@@ -530,65 +452,44 @@ void KoSvgTextShape::relayout() const
                     cr.breakType = HardBreak;
                     cr.lineEnd = Collapse;
                     cr.lineStart = Collapse;
-                } else if (lineBreaks[start + i] == LINEBREAK_ALLOWBREAK
-                           && wrap != KoSvgText::NoWrap) {
+                } else if (lineBreaks[start + i] == LINEBREAK_ALLOWBREAK && wrap != KoSvgText::NoWrap) {
                     cr.breakType = SoftBreak;
-                    if (KoCssTextUtils::collapseLastSpace(text.at(start + i),
-                                                          collapse)) {
+                    if (KoCssTextUtils::collapseLastSpace(text.at(start + i), collapse)) {
                         cr.lineEnd = Collapse;
                         cr.lineStart = Collapse;
                     }
                 }
-                if (wordBreakStrictness == KoSvgText::WordBreakBreakAll
-                    || linebreakStrictness == KoSvgText::LineBreakAnywhere) {
-                    if (graphemeBreaks[start + i] == GRAPHEMEBREAK_BREAK
-                        && cr.breakType == NoBreak) {
+                if (wordBreakStrictness == KoSvgText::WordBreakBreakAll || linebreakStrictness == KoSvgText::LineBreakAnywhere) {
+                    if (graphemeBreaks[start + i] == GRAPHEMEBREAK_BREAK && cr.breakType == NoBreak) {
                         cr.breakType = SoftBreak;
                     }
                 }
-                if (cr.lineStart != Collapse
-                    && hang.testFlag(KoSvgText::HangFirst)) {
-                    cr.lineStart =
-                        KoCssTextUtils::characterCanHang(text.at(start + i),
-                                                         KoSvgText::HangFirst)
-                        ? HangBehaviour
-                        : cr.lineEnd;
+                if (cr.lineStart != Collapse && hang.testFlag(KoSvgText::HangFirst)) {
+                    cr.lineStart = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangFirst) ? HangBehaviour : cr.lineEnd;
                 }
                 if (cr.lineEnd != Collapse) {
                     if (hang.testFlag(KoSvgText::HangLast)) {
-                        cr.lineEnd = KoCssTextUtils::characterCanHang(
-                                         text.at(start + i),
-                                         KoSvgText::HangLast)
-                            ? HangBehaviour
-                            : cr.lineEnd;
+                        cr.lineEnd = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangLast) ? HangBehaviour : cr.lineEnd;
                     }
                     if (hang.testFlag(KoSvgText::HangEnd)) {
-                        LineEdgeBehaviour edge =
-                            hang.testFlag(KoSvgText::HangForce)
-                            ? ForceHang
-                            : ConditionallyHang;
-                        cr.lineEnd =
-                            KoCssTextUtils::characterCanHang(text.at(start + i),
-                                                             KoSvgText::HangEnd)
-                            ? edge
-                            : cr.lineEnd;
+                        LineEdgeBehaviour edge = hang.testFlag(KoSvgText::HangForce) ? ForceHang : ConditionallyHang;
+                        cr.lineEnd = KoCssTextUtils::characterCanHang(text.at(start + i), KoSvgText::HangEnd) ? edge : cr.lineEnd;
                     }
                 }
                 if (text.at(start + i) == QChar::Tabulation) {
                     tabSizeInfo.insert(start + i, tabInfo);
                 }
-                
-                if (chunk.firstTextInPath && i==0) {
+
+                if (chunk.firstTextInPath && i == 0) {
                     cr.anchored_chunk = true;
                 }
                 result[start + i] = cr;
                 // TODO: figure out how to use addressability to only set
                 // transforms on addressable chars.
                 //! collapseChars.at(i);
-                
+
                 if (i < chunk.transformation.size()) {
-                    KoSvgText::CharTransformation newTransform =
-                        chunk.transformation.at(i);
+                    KoSvgText::CharTransformation newTransform = chunk.transformation.at(i);
 
                     if (chunk.textInPath) {
                         // Unset the perpendicular absolute transform for textPaths as suggested by the SVG 2 algorithm.
@@ -600,10 +501,9 @@ void KoSvgTextShape::relayout() const
                     }
                     resolvedTransforms[start + i] = newTransform;
                 } else if (start > 0) {
-                    resolvedTransforms[start + i].rotate =
-                        resolvedTransforms[start + i - 1].rotate;
+                    resolvedTransforms[start + i].rotate = resolvedTransforms[start + i - 1].rotate;
                 }
-                if (chunk.firstTextInPath && i==0) {
+                if (chunk.firstTextInPath && i == 0) {
                     if (chunk.textInPath) {
                         //  Also unset the first transform on a textPath to avoid breakage with rtl text.
                         if (isHorizontal) {
@@ -618,68 +518,40 @@ void KoSvgTextShape::relayout() const
             }
 
             QVector<int> lengths;
-            QStringList fontFeatures =
-                properties.fontFeaturesForText(start, length);
+            QStringList fontFeatures = properties.fontFeaturesForText(start, length);
 
-            qreal fontSize =
-                properties.property(KoSvgTextProperties::FontSizeId).toReal();
-            const QFont::Style style = QFont::Style(
-                properties.propertyOrDefault(KoSvgTextProperties::FontStyleId)
-                    .toInt());
-            KoSvgText::AutoValue fontSizeAdjust =
-                properties
-                    .propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId)
-                    .value<KoSvgText::AutoValue>();
+            qreal fontSize = properties.property(KoSvgTextProperties::FontSizeId).toReal();
+            const QFont::Style style = QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+            KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
             if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
-                fontSizeAdjust.isAuto =
-                    (properties.property(KoSvgTextProperties::KraTextVersionId)
-                         .toInt()
-                     < 3);
+                fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
             }
-            const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
-                properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
-                lengths,
-                properties.fontAxisSettings(),
-                chunk.text,
-                finalRes,
-                finalRes,
-                fontSize,
-                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-                properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-                properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-                style != QFont::StyleNormal);
+            const std::vector<FT_FaceUP> faces =
+                KoFontRegistry::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+                                                              lengths,
+                                                              properties.fontAxisSettings(),
+                                                              chunk.text,
+                                                              finalRes,
+                                                              finalRes,
+                                                              fontSize,
+                                                              fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+                                                              properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+                                                              properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+                                                              style != QFont::StyleNormal);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
-                raqm_set_language(
-                    layout.data(),
-                    properties.property(KoSvgTextProperties::TextLanguage)
-                        .toString()
-                        .toUtf8(),
-                    start,
-                    length);
+                raqm_set_language(layout.data(), properties.property(KoSvgTextProperties::TextLanguage).toString().toUtf8(), start, length);
             }
             for (QString feature : fontFeatures) {
                 debugFlake << "adding feature" << feature;
-                raqm_add_font_feature(layout.data(),
-                                      feature.toUtf8(),
-                                      feature.toUtf8().size());
+                raqm_add_font_feature(layout.data(), feature.toUtf8(), feature.toUtf8().size());
             }
 
             if (!letterSpacing.isAuto) {
-                raqm_set_letter_spacing_range(layout.data(),
-                                              letterSpacing.customValue
-                                                  * ftFontUnit * scaleToPixel,
-                                              false,
-                                              start,
-                                              length);
+                raqm_set_letter_spacing_range(layout.data(), letterSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
             }
 
             if (!wordSpacing.isAuto) {
-                raqm_set_word_spacing_range(layout.data(),
-                                            wordSpacing.customValue * ftFontUnit
-                                                * scaleToPixel,
-                                            false,
-                                            start,
-                                            length);
+                raqm_set_word_spacing_range(layout.data(), wordSpacing.customValue * ftFontUnit * scaleToPixel, false, start, length);
             }
 
             for (int i = 0; i < lengths.size(); i++) {
@@ -697,14 +569,8 @@ void KoSvgTextShape::relayout() const
                     raqm_set_freetype_load_flags(layout.data(), faceLoadFlags);
                 }
                 if (length > 0) {
-                    raqm_set_freetype_face_range(layout.data(),
-                                                 face.data(),
-                                                 start,
-                                                 length);
-                    raqm_set_freetype_load_flags_range(layout.data(),
-                                                       faceLoadFlags,
-                                                       start,
-                                                       length);
+                    raqm_set_freetype_face_range(layout.data(), face.data(), start, length);
+                    raqm_set_freetype_load_flags_range(layout.data(), faceLoadFlags, start, length);
                 }
                 start += length;
             }
@@ -748,39 +614,25 @@ void KoSvgTextShape::relayout() const
 
         QPointF spaceAdvance;
         if (tabSizeInfo.contains(glyphs[g].cluster)) {
-            FT_Load_Glyph(glyphs[g].ftface,
-                          FT_Get_Char_Index(glyphs[g].ftface, ' '),
-                          faceLoadFlags);
-            spaceAdvance = QPointF(glyphs[g].ftface->glyph->advance.x,
-                                   glyphs[g].ftface->glyph->advance.y);
+            FT_Load_Glyph(glyphs[g].ftface, FT_Get_Char_Index(glyphs[g].ftface, ' '), faceLoadFlags);
+            spaceAdvance = QPointF(glyphs[g].ftface->glyph->advance.x, glyphs[g].ftface->glyph->advance.y);
         }
 
-        int error =
-            FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, faceLoadFlags);
+        int error = FT_Load_Glyph(glyphs[g].ftface, glyphs[g].index, faceLoadFlags);
         if (error != 0) {
             continue;
         }
 
-        debugFlake << "glyph" << g << "cluster" << glyphs[g].cluster
-                   << glyphs[g].index;
+        debugFlake << "glyph" << g << "cluster" << glyphs[g].cluster << glyphs[g].index;
 
         FT_Matrix matrix;
         FT_Vector delta;
         FT_Get_Transform(glyphs[g].ftface, &matrix, &delta);
         QTransform glyphTf;
         qreal factor_16 = 1.0 / 65536.0;
-        glyphTf.setMatrix(matrix.xx * factor_16,
-                          matrix.xy * factor_16,
-                          0,
-                          matrix.yx * factor_16,
-                          matrix.yy * factor_16,
-                          0,
-                          0,
-                          0,
-                          1);
+        glyphTf.setMatrix(matrix.xx * factor_16, matrix.xy * factor_16, 0, matrix.yx * factor_16, matrix.yy * factor_16, 0, 0, 0, 1);
 
-        QPainterPath glyph =
-            d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
+        QPainterPath glyph = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
 
         glyph.translate(glyphs[g].x_offset, glyphs[g].y_offset);
         glyph = glyphTf.map(glyph);
@@ -797,10 +649,7 @@ void KoSvgTextShape::relayout() const
         }
         // TODO: Handle glyph clusters better...
         charResult.image = d->convertFromFreeTypeBitmap(glyphs[g].ftface->glyph)
-                               .transformed(glyphTf,
-                                            d->textRendering == OptimizeSpeed
-                                                ? Qt::FastTransformation
-                                                : Qt::SmoothTransformation);
+                               .transformed(glyphTf, d->textRendering == OptimizeSpeed ? Qt::FastTransformation : Qt::SmoothTransformation);
 
         // Retreive CPAL/COLR V0 color layers, directly based off the sample
         // code in the freetype docs.
@@ -814,11 +663,7 @@ void KoSvgTextShape::relayout() const
             palette = NULL;
         }
         iterator.p = NULL;
-        bool haveLayers = FT_Get_Color_Glyph_Layer(glyphs[g].ftface,
-                                                   glyphs[g].index,
-                                                   &layerGlyphIndex,
-                                                   &layerColorIndex,
-                                                   &iterator);
+        bool haveLayers = FT_Get_Color_Glyph_Layer(glyphs[g].ftface, glyphs[g].index, &layerGlyphIndex, &layerColorIndex, &iterator);
         if (haveLayers && palette) {
             do {
                 QBrush layerColor;
@@ -829,22 +674,16 @@ void KoSvgTextShape::relayout() const
                     isForeGroundColor = true;
                 } else {
                     FT_Color color = palette[layerColorIndex];
-                    layerColor =
-                        QColor(color.red, color.green, color.blue, color.alpha);
+                    layerColor = QColor(color.red, color.green, color.blue, color.alpha);
                 }
                 FT_Load_Glyph(glyphs[g].ftface, layerGlyphIndex, faceLoadFlags);
-                QPainterPath p =
-                    d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
+                QPainterPath p = d->convertFromFreeTypeOutline(glyphs[g].ftface->glyph);
                 p.translate(glyphs[g].x_offset, glyphs[g].y_offset);
                 charResult.colorLayers.append(ftTF.map(p));
                 charResult.colorLayerColors.append(layerColor);
                 charResult.replaceWithForeGroundColor.append(isForeGroundColor);
 
-            } while (FT_Get_Color_Glyph_Layer(glyphs[g].ftface,
-                                              glyphs[g].index,
-                                              &layerGlyphIndex,
-                                              &layerColorIndex,
-                                              &iterator));
+            } while (FT_Get_Color_Glyph_Layer(glyphs[g].ftface, glyphs[g].index, &layerGlyphIndex, &layerColorIndex, &iterator));
         }
 
         charResult.visualIndex = g;
@@ -853,33 +692,26 @@ void KoSvgTextShape::relayout() const
         charResult.middle = false;
         QPointF advance(glyphs[g].x_advance, glyphs[g].y_advance);
         if (tabSizeInfo.contains(glyphs[g].cluster)) {
-            KoSvgText::TabSizeInfo tabSize =
-                tabSizeInfo.value(glyphs[g].cluster);
+            KoSvgText::TabSizeInfo tabSize = tabSizeInfo.value(glyphs[g].cluster);
             qreal newAdvance = tabSize.value * ftFontUnit;
             if (tabSize.isNumber) {
-                QPointF extraSpacing = isHorizontal
-                    ? QPointF(tabSize.extraSpacing * ftFontUnit, 0)
-                    : QPointF(0, tabSize.extraSpacing * ftFontUnit);
+                QPointF extraSpacing = isHorizontal ? QPointF(tabSize.extraSpacing * ftFontUnit, 0) : QPointF(0, tabSize.extraSpacing * ftFontUnit);
                 advance = (spaceAdvance + extraSpacing) * tabSize.value;
             } else {
-                advance = isHorizontal ? QPointF(newAdvance, advance.y())
-                                       : QPointF(advance.x(), newAdvance);
+                advance = isHorizontal ? QPointF(newAdvance, advance.y()) : QPointF(advance.x(), newAdvance);
             }
             charResult.path = QPainterPath();
             charResult.image = QImage();
         }
         charResult.advance += ftTF.map(advance);
 
-        bool usePixmap =
-            !charResult.image.isNull() && charResult.path.isEmpty();
+        bool usePixmap = !charResult.image.isNull() && charResult.path.isEmpty();
 
         QRectF bbox;
         if (usePixmap) {
-            QPointF topLeft((glyphs[g].ftface->glyph->bitmap_left * 64),
-                            (glyphs[g].ftface->glyph->bitmap_top * 64));
+            QPointF topLeft((glyphs[g].ftface->glyph->bitmap_left * 64), (glyphs[g].ftface->glyph->bitmap_top * 64));
             topLeft = glyphTf.map(topLeft);
-            QPointF bottomRight(topLeft.x() + (charResult.image.height() * 64),
-                                topLeft.y() - (charResult.image.height() * 64));
+            QPointF bottomRight(topLeft.x() + (charResult.image.height() * 64), topLeft.y() - (charResult.image.height() * 64));
             bbox = QRectF(topLeft, bottomRight);
             if (isHorizontal) {
                 bbox.setWidth(ftTF.inverted().map(charResult.advance).x());
@@ -891,23 +723,15 @@ void KoSvgTextShape::relayout() const
             bbox = QRectF(0,
                           glyphs[g].ftface->size->metrics.descender,
                           ftTF.inverted().map(charResult.advance).x(),
-                          (glyphs[g].ftface->size->metrics.ascender
-                           - glyphs[g].ftface->size->metrics.descender));
+                          (glyphs[g].ftface->size->metrics.ascender - glyphs[g].ftface->size->metrics.descender));
             bbox = glyphTf.mapRect(bbox);
         } else {
             hb_font_t_up font(hb_ft_font_create_referenced(glyphs[g].ftface));
             hb_position_t ascender = 0;
-            hb_ot_metrics_get_position(font.data(),
-                                       HB_OT_METRICS_TAG_VERTICAL_ASCENDER,
-                                       &ascender);
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &ascender);
             hb_position_t descender = 0;
-            hb_ot_metrics_get_position(font.data(),
-                                       HB_OT_METRICS_TAG_VERTICAL_DESCENDER,
-                                       &descender);
-            bbox = QRectF(descender,
-                          0,
-                          ascender - descender,
-                          ftTF.inverted().map(charResult.advance).y());
+            hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &descender);
+            bbox = QRectF(descender, 0, ascender - descender, ftTF.inverted().map(charResult.advance).y());
             bbox = glyphTf.mapRect(bbox);
         }
         charResult.boundingBox = ftTF.mapRect(bbox);
@@ -916,8 +740,7 @@ void KoSvgTextShape::relayout() const
             charResult.boundingBox |= charResult.path.boundingRect();
         }
         totalAdvanceFTFontCoordinates += advance;
-        charResult.cssPosition =
-            ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
+        charResult.cssPosition = ftTF.map(totalAdvanceFTFontCoordinates) - charResult.advance;
 
         result[glyphs[g].cluster] = charResult;
     }
@@ -939,21 +762,12 @@ void KoSvgTextShape::relayout() const
     debugFlake << "Glyphs retreived";
 
     // Handle linebreaking.
-    QPointF startPos =
-        inlineSize.isAuto ? QPointF() : resolvedTransforms[0].absolutePos();
+    QPointF startPos = inlineSize.isAuto ? QPointF() : resolvedTransforms[0].absolutePos();
     d->breakLines(this->textProperties(), logicalToVisual, result, startPos);
 
     // Handle baseline alignment.
     globalIndex = 0;
-    d->computeFontMetrics(this,
-                          QMap<int, int>(),
-                          0,
-                          QPointF(),
-                          QPointF(),
-                          result,
-                          globalIndex,
-                          finalRes,
-                          isHorizontal);
+    d->computeFontMetrics(this, QMap<int, int>(), 0, QPointF(), QPointF(), result, globalIndex, finalRes, isHorizontal);
 
     // This is the best point to start applying linebreaking and text-wrapping.
     // If we're doing text-wrapping we should skip the other positioning steps
@@ -1000,13 +814,11 @@ void KoSvgTextShape::relayout() const
                 CharacterResult charResult = result[i];
                 if (transform.xPos) {
                     qreal d = transform.dxPos ? *transform.dxPos : 0.0;
-                    shift.setX(*transform.xPos
-                               + (d - charResult.finalPosition.x()));
+                    shift.setX(*transform.xPos + (d - charResult.finalPosition.x()));
                 }
                 if (transform.yPos) {
                     qreal d = transform.dyPos ? *transform.dyPos : 0.0;
-                    shift.setY(*transform.yPos
-                               + (d - charResult.finalPosition.y()));
+                    shift.setY(*transform.yPos + (d - charResult.finalPosition.y()));
                 }
                 charResult.finalPosition += shift;
 
@@ -1076,14 +888,12 @@ void KoSvgTextShape::relayout() const
     globalIndex = 0;
     QTransform tf;
     for (KoSvgTextChunkShapeLayoutInterface::SubChunk chunk : textChunks) {
-        KoSvgText::AssociatedShapeWrapper wrapper =
-            chunk.format.associatedShapeWrapper();
+        KoSvgText::AssociatedShapeWrapper wrapper = chunk.format.associatedShapeWrapper();
         int j = chunk.text.size();
         for (int i = globalIndex; i < globalIndex + j; i++) {
             if (result.at(i).addressable && result.at(i).hidden == false) {
                 tf.reset();
-                tf.translate(result.at(i).finalPosition.x(),
-                             result.at(i).finalPosition.y());
+                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
                 wrapper.addCharacterRect(tf.mapRect(result.at(i).boundingBox));
             }
@@ -1094,8 +904,7 @@ void KoSvgTextShape::relayout() const
 
 void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
 {
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     chunkShape->layoutInterface()->clearAssociatedOutline();
@@ -1105,8 +914,7 @@ void KoSvgTextShape::Private::clearAssociatedOutlines(const KoShape *rootShape)
     }
 }
 
-QPainterPath
-KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot)
+QPainterPath KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot)
 {
     QPointF cp = QPointF();
     // convert the outline to a painter path
@@ -1117,20 +925,14 @@ KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot)
     for (int j = 0; j < glyphSlot->outline.n_contours; ++j) {
         int last_point = glyphSlot->outline.contours[j];
         // qDebug() << "contour:" << i << "to" << last_point;
-        QPointF start = QPointF(glyphSlot->outline.points[i].x,
-                                glyphSlot->outline.points[i].y);
+        QPointF start = QPointF(glyphSlot->outline.points[i].x, glyphSlot->outline.points[i].y);
         if (!(glyphSlot->outline.tags[i] & 1)) { // start point is not on curve:
-            if (!(glyphSlot->outline.tags[last_point]
-                  & 1)) { // end point is not on curve:
+            if (!(glyphSlot->outline.tags[last_point] & 1)) { // end point is not on curve:
                 // qDebug() << "  start and end point are not on curve";
-                start = (QPointF(glyphSlot->outline.points[last_point].x,
-                                 glyphSlot->outline.points[last_point].y)
-                         + start)
-                    / 2.0;
+                start = (QPointF(glyphSlot->outline.points[last_point].x, glyphSlot->outline.points[last_point].y) + start) / 2.0;
             } else {
                 // qDebug() << "  end point is on curve, start is not";
-                start = QPointF(glyphSlot->outline.points[last_point].x,
-                                glyphSlot->outline.points[last_point].y);
+                start = QPointF(glyphSlot->outline.points[last_point].x, glyphSlot->outline.points[last_point].y);
             }
             --i; // to use original start point as control point below
         }
@@ -1142,9 +944,7 @@ KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot)
         int n = 1;
         while (i < last_point) {
             ++i;
-            c[n] = cp
-                + QPointF(glyphSlot->outline.points[i].x,
-                          glyphSlot->outline.points[i].y);
+            c[n] = cp + QPointF(glyphSlot->outline.points[i].x, glyphSlot->outline.points[i].y);
             // qDebug() << "    " << i << c[n] << "tag =" <<
             // (int)g->outline.tags[i]
             //                    << ": on curve =" << (bool)(g->outline.tags[i]
@@ -1204,8 +1004,7 @@ KoSvgTextShape::Private::convertFromFreeTypeOutline(FT_GlyphSlotRec *glyphSlot)
     return glyph;
 }
 
-QImage
-KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot)
+QImage KoSvgTextShape::Private::convertFromFreeTypeBitmap(FT_GlyphSlotRec *glyphSlot)
 {
     QImage img;
     QSize size(glyphSlot->bitmap.width, glyphSlot->bitmap.rows);
@@ -1301,26 +1100,19 @@ QPointF lineHeightOffset(KoSvgText::WritingMode writingMode,
 {
     QPointF offset;
     if (lineHeight.isAuto) {
-        offset = writingMode == KoSvgText::HorizontalTB
-            ? QPointF(0, lineBox.height())
-            : writingMode == KoSvgText::VerticalLR
-            ? QPointF(lineBox.width(), 0)
-            : QPointF(-lineBox.width(), 0);
+        offset = writingMode == KoSvgText::HorizontalTB ? QPointF(0, lineBox.height())
+            : writingMode == KoSvgText::VerticalLR      ? QPointF(lineBox.width(), 0)
+                                                        : QPointF(-lineBox.width(), 0);
     } else {
-        offset = writingMode == KoSvgText::HorizontalTB
-            ? QPointF(0, lineHeight.customValue)
-            : writingMode == KoSvgText::VerticalLR
-            ? QPointF(lineHeight.customValue, 0)
-            : QPointF(-lineHeight.customValue, 0);
+        offset = writingMode == KoSvgText::HorizontalTB ? QPointF(0, lineHeight.customValue)
+            : writingMode == KoSvgText::VerticalLR      ? QPointF(lineHeight.customValue, 0)
+                                                        : QPointF(-lineHeight.customValue, 0);
     }
-    qreal ascentRatio = writingMode == KoSvgText::HorizontalTB
-        ? abs(lineBox.top() - currentPos.y()) / lineBox.height()
-        : writingMode == KoSvgText::VerticalLR
-        ? abs(lineBox.left() - currentPos.x()) / lineBox.width()
-        : abs(lineBox.right() - currentPos.x()) / lineBox.width();
+    qreal ascentRatio = writingMode == KoSvgText::HorizontalTB ? abs(lineBox.top() - currentPos.y()) / lineBox.height()
+        : writingMode == KoSvgText::VerticalLR                 ? abs(lineBox.left() - currentPos.x()) / lineBox.width()
+                                                               : abs(lineBox.right() - currentPos.x()) / lineBox.width();
     QPointF ascent = offset * ascentRatio;
-    bool returnDescent =
-        lineIndices.isEmpty() ? false : lineIndices.first() == 0;
+    bool returnDescent = lineIndices.isEmpty() ? false : lineIndices.first() == 0;
     if (!returnDescent) {
         for (int j : lineIndices) {
             result[j].cssPosition += ascent;
@@ -1350,22 +1142,16 @@ void handleCollapseAndHang(QVector<CharacterResult> &result,
             if (result.at(lastIndex).lineEnd == Collapse) {
                 result[lastIndex].addressable = false;
                 result[lastIndex].hidden = true;
-            } else if (result.at(lastIndex).lineEnd == ForceHang
-                       && inlineSize) {
-                QPointF pos = isHorizontal
-                    ? QPointF(endPos.x(), lineOffset.y())
-                    : QPointF(lineOffset.x(), endPos.y());
+            } else if (result.at(lastIndex).lineEnd == ForceHang && inlineSize) {
+                QPointF pos = isHorizontal ? QPointF(endPos.x(), lineOffset.y()) : QPointF(lineOffset.x(), endPos.y());
                 if (!ltr) {
                     pos -= result.at(lastIndex).advance;
                 }
                 result[lastIndex].cssPosition = pos;
                 result[lastIndex].finalPosition = pos;
                 result[lastIndex].isHanging = true;
-            } else if (result.at(lastIndex).lineEnd == HangBehaviour
-                       && inlineSize && atEnd) {
-                QPointF pos = isHorizontal
-                    ? QPointF(endPos.x(), lineOffset.y())
-                    : QPointF(lineOffset.x(), endPos.y());
+            } else if (result.at(lastIndex).lineEnd == HangBehaviour && inlineSize && atEnd) {
+                QPointF pos = isHorizontal ? QPointF(endPos.x(), lineOffset.y()) : QPointF(lineOffset.x(), endPos.y());
                 if (!ltr) {
                     pos -= result.at(lastIndex).advance;
                 }
@@ -1404,10 +1190,8 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
         if (!result.at(i).addressable || result.at(i).isHanging) {
             continue;
         }
-        qreal pos = isHorizontal ? result.at(i).finalPosition.x()
-                                 : result.at(i).finalPosition.y();
-        qreal advance =
-            isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
+        qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
+        qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
 
         if (i == lineIndices.first()) {
             a = qMin(pos, pos + advance);
@@ -1436,12 +1220,10 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
         aStartPos = aStartPos + inlineWidth;
     }
 
-    if ((anchor == KoSvgText::AnchorStart && ltr)
-        || (anchor == KoSvgText::AnchorEnd && !ltr)) {
+    if ((anchor == KoSvgText::AnchorStart && ltr) || (anchor == KoSvgText::AnchorEnd && !ltr)) {
         shift -= a;
 
-    } else if ((anchor == KoSvgText::AnchorEnd && ltr)
-               || (anchor == KoSvgText::AnchorStart && !ltr)) {
+    } else if ((anchor == KoSvgText::AnchorEnd && ltr) || (anchor == KoSvgText::AnchorStart && !ltr)) {
         shift -= b;
 
     } else {
@@ -1456,16 +1238,12 @@ void applyInlineSizeAnchoring(QVector<CharacterResult> &result,
             result[j].cssPosition += shiftP;
             result[j].finalPosition = result.at(j).cssPosition;
         } else if (result.at(j).anchored_chunk) {
-            QPointF shift = isHorizontal
-                ? QPointF(aStartPos.x(), result[j].finalPosition.y())
-                : QPointF(result[j].finalPosition.x(), aStartPos.y());
+            QPointF shift = isHorizontal ? QPointF(aStartPos.x(), result[j].finalPosition.y()) : QPointF(result[j].finalPosition.x(), aStartPos.y());
             shift = ltr ? shift - result.at(j).advance : shift;
             result[j].cssPosition = shift;
             result[j].finalPosition = result.at(j).cssPosition;
         } else if (result.at(j).lineEnd != NoChange) {
-            QPointF shift = isHorizontal
-                ? QPointF(aEndPos.x(), result[j].finalPosition.y())
-                : QPointF(result[j].finalPosition.x(), aEndPos.y());
+            QPointF shift = isHorizontal ? QPointF(aEndPos.x(), result[j].finalPosition.y()) : QPointF(result[j].finalPosition.x(), aEndPos.y());
             shift = ltr ? shift : shift - result.at(j).advance;
             result[j].cssPosition = shift;
             result[j].finalPosition = result.at(j).cssPosition;
@@ -1501,14 +1279,7 @@ void finalizeLine(QVector<CharacterResult> &result,
     }
     currentPos = lineOffset;
 
-    handleCollapseAndHang(result,
-                          lineIndices,
-                          endPos,
-                          lineOffset,
-                          inlineSize,
-                          writingMode,
-                          ltr,
-                          atEnd);
+    handleCollapseAndHang(result, lineIndices, endPos, lineOffset, inlineSize, writingMode, ltr, atEnd);
 
     for (int j : visualToLogical.values()) {
         if (!result.at(j).addressable || result.at(j).isHanging) {
@@ -1520,23 +1291,9 @@ void finalizeLine(QVector<CharacterResult> &result,
     }
 
     if (inlineSize) {
-        applyInlineSizeAnchoring(result,
-                                 lineIndices,
-                                 startPos,
-                                 endPos,
-                                 anchor,
-                                 ltr,
-                                 isHorizontal,
-                                 firstLine,
-                                 hangTextIndent,
-                                 textIndent);
+        applyInlineSizeAnchoring(result, lineIndices, startPos, endPos, anchor, ltr, isHorizontal, firstLine, hangTextIndent, textIndent);
     }
-    lineOffset += lineHeightOffset(writingMode,
-                                   result,
-                                   lineIndices,
-                                   lineBox,
-                                   currentPos,
-                                   lineHeight);
+    lineOffset += lineHeightOffset(writingMode, result, lineIndices, lineBox, currentPos, lineHeight);
     currentPos = lineOffset;
     if (inlineSize) {
         if (hangTextIndent) {
@@ -1547,37 +1304,21 @@ void finalizeLine(QVector<CharacterResult> &result,
     firstLine = false;
 }
 
-void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
-                                         QMap<int, int> logicalToVisual,
-                                         QVector<CharacterResult> &result,
-                                         QPointF startPos)
+void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties, QMap<int, int> logicalToVisual, QVector<CharacterResult> &result, QPointF startPos)
 {
-    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(
-        properties.propertyOrDefault(KoSvgTextProperties::WritingModeId)
-            .toInt());
-    KoSvgText::Direction direction = KoSvgText::Direction(
-        properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
-    KoSvgText::AutoValue inlineSize =
-        properties.propertyOrDefault(KoSvgTextProperties::InlineSizeId)
-            .value<KoSvgText::AutoValue>();
-    KoSvgText::AutoValue lineHeight =
-        properties.propertyOrDefault(KoSvgTextProperties::LineHeightId)
-            .value<KoSvgText::AutoValue>();
-    KoSvgText::OverflowWrap overflowWrap = KoSvgText::OverflowWrap(
-        properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId)
-            .toInt());
-    KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(
-        properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId)
-            .toInt());
+    KoSvgText::WritingMode writingMode = KoSvgText::WritingMode(properties.propertyOrDefault(KoSvgTextProperties::WritingModeId).toInt());
+    KoSvgText::Direction direction = KoSvgText::Direction(properties.propertyOrDefault(KoSvgTextProperties::DirectionId).toInt());
+    KoSvgText::AutoValue inlineSize = properties.propertyOrDefault(KoSvgTextProperties::InlineSizeId).value<KoSvgText::AutoValue>();
+    KoSvgText::AutoValue lineHeight = properties.propertyOrDefault(KoSvgTextProperties::LineHeightId).value<KoSvgText::AutoValue>();
+    KoSvgText::OverflowWrap overflowWrap = KoSvgText::OverflowWrap(properties.propertyOrDefault(KoSvgTextProperties::OverflowWrapId).toInt());
+    KoSvgText::TextAnchor anchor = KoSvgText::TextAnchor(properties.propertyOrDefault(KoSvgTextProperties::TextAnchorId).toInt());
 
     bool ltr = direction == KoSvgText::DirectionLeftToRight;
     bool isHorizontal = writingMode == KoSvgText::HorizontalTB;
 
     QPointF endPos; ///< Used for hanging glyphs at the end of a line.
     QPointF textIndent; ///< The textIndent.
-    KoSvgText::TextIndentInfo textIndentInfo =
-        properties.propertyOrDefault(KoSvgTextProperties::TextIndentId)
-            .value<KoSvgText::TextIndentInfo>();
+    KoSvgText::TextIndentInfo textIndentInfo = properties.propertyOrDefault(KoSvgTextProperties::TextIndentId).value<KoSvgText::TextIndentInfo>();
     if (!inlineSize.isAuto) {
         qreal textIdentValue = textIndentInfo.value;
         if (textIndentInfo.isPercentage) {
@@ -1585,12 +1326,10 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
         }
         if (isHorizontal) {
             textIndent = QPointF(textIdentValue, 0);
-            endPos = ltr ? QPointF(startPos.x() + inlineSize.customValue, 0)
-                         : QPointF(startPos.x() - inlineSize.customValue, 0);
+            endPos = ltr ? QPointF(startPos.x() + inlineSize.customValue, 0) : QPointF(startPos.x() - inlineSize.customValue, 0);
         } else {
             textIndent = QPointF(0, textIdentValue);
-            endPos = ltr ? QPointF(0, startPos.y() + inlineSize.customValue)
-                         : QPointF(0, startPos.y() - inlineSize.customValue);
+            endPos = ltr ? QPointF(0, startPos.y() + inlineSize.customValue) : QPointF(0, startPos.y() - inlineSize.customValue);
         }
     }
 
@@ -1600,8 +1339,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
     QRectF lineBox; ///< The line box gets used to determine lineHeight;
 
     bool firstLine = true;
-    QPointF currentPos =
-        startPos; ///< Current position with advances of each character.
+    QPointF currentPos = startPos; ///< Current position with advances of each character.
     if (!textIndentInfo.hanging) {
         currentPos += textIndent;
     }
@@ -1624,13 +1362,10 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
             continue;
         }
         bool breakLine = false; ///< Whether to break a line.
-        bool wordToNextLine =
-            false; ///< Whether to add the current 'word' into the next line.
+        bool wordToNextLine = false; ///< Whether to add the current 'word' into the next line.
 
-        bool doNotCountAdvance = ((charResult.lineEnd == ConditionallyHang
-                                   || charResult.lineEnd == HangBehaviour
-                                   || charResult.lineEnd == ForceHang)
-                                  && !lineBox.isEmpty());
+        bool doNotCountAdvance =
+            ((charResult.lineEnd == ConditionallyHang || charResult.lineEnd == HangBehaviour || charResult.lineEnd == ForceHang) && !lineBox.isEmpty());
         if (!doNotCountAdvance) {
             if (wordIndices.isEmpty()) {
                 wordAdvance = charResult.advance;
@@ -1643,11 +1378,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
 
         if (charResult.breakType == HardBreak) {
             breakLine = true;
-        } else if (charResult.breakType == SoftBreak || atEnd
-                   || overflowWrap == KoSvgText::OverflowWrapAnywhere) {
-            qreal lineLength = isHorizontal
-                ? (currentPos - startPos + wordAdvance).x()
-                : (currentPos - startPos + wordAdvance).y();
+        } else if (charResult.breakType == SoftBreak || atEnd || overflowWrap == KoSvgText::OverflowWrapAnywhere) {
+            qreal lineLength = isHorizontal ? (currentPos - startPos + wordAdvance).x() : (currentPos - startPos + wordAdvance).y();
             if (!inlineSize.isAuto) {
                 // Sometimes glyphs are a fraction larger than you'd expect, but
                 // not enough to really break the line, so the following is a
@@ -1656,13 +1388,7 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                     breakLine = true;
                     wordToNextLine = true;
                 } else {
-                    addWordToLine(result,
-                                  currentPos,
-                                  wordIndices,
-                                  lineBox,
-                                  lineIndices,
-                                  ltr,
-                                  firstLine);
+                    addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
                 }
             }
         }
@@ -1687,10 +1413,8 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                              textIndent);
 
                 if (overflowWrap == KoSvgText::OverflowWrapBreakWord) {
-                    qreal wordLength =
-                        isHorizontal ? wordAdvance.x() : wordAdvance.y();
-                    if (!inlineSize.isAuto
-                        && wordLength > inlineSize.customValue) {
+                    qreal wordLength = isHorizontal ? wordAdvance.x() : wordAdvance.y();
+                    if (!inlineSize.isAuto && wordLength > inlineSize.customValue) {
                         // Word is too large, so we try to add it in
                         // max-width-friendly-chunks.
                         wordAdvance = QPointF();
@@ -1698,18 +1422,11 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                         QVector<int> partialWord;
                         for (int i : wordIndices) {
                             wordAdvance += result.at(i).advance;
-                            wordLength = isHorizontal ? wordAdvance.x()
-                                                      : wordAdvance.y();
+                            wordLength = isHorizontal ? wordAdvance.x() : wordAdvance.y();
                             if (wordLength <= inlineSize.customValue) {
                                 partialWord.append(i);
                             } else {
-                                addWordToLine(result,
-                                              currentPos,
-                                              partialWord,
-                                              lineBox,
-                                              lineIndices,
-                                              ltr,
-                                              firstLine);
+                                addWordToLine(result, currentPos, partialWord, lineBox, lineIndices, ltr, firstLine);
 
                                 finalizeLine(result,
                                              currentPos,
@@ -1736,22 +1453,10 @@ void KoSvgTextShape::Private::breakLines(KoSvgTextProperties properties,
                     }
                 }
 
-                addWordToLine(result,
-                              currentPos,
-                              wordIndices,
-                              lineBox,
-                              lineIndices,
-                              ltr,
-                              firstLine);
+                addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
 
             } else {
-                addWordToLine(result,
-                              currentPos,
-                              wordIndices,
-                              lineBox,
-                              lineIndices,
-                              ltr,
-                              firstLine);
+                addWordToLine(result, currentPos, wordIndices, lineBox, lineIndices, ltr, firstLine);
 
                 finalizeLine(result,
                              currentPos,
@@ -1800,8 +1505,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
                                               int &resolvedDescendentNodes,
                                               bool isHorizontal)
 {
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     int i = currentIndex;
@@ -1809,11 +1513,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
     int resolvedChildren = 0;
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        applyTextLength(child,
-                        result,
-                        currentIndex,
-                        resolvedChildren,
-                        isHorizontal);
+        applyTextLength(child, result, currentIndex, resolvedChildren, isHorizontal);
     }
     // Raqm handles bidi reordering for us, but this algorithm does not
     // anticipate that, so we need to keep track of which typographic item
@@ -1849,16 +1549,13 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             }
         }
         n += resolvedChildren;
-        bool spacingAndGlyphs = (chunkShape->layoutInterface()->lengthAdjust()
-                    == KoSvgText::LengthAdjustSpacingAndGlyphs);
+        bool spacingAndGlyphs = (chunkShape->layoutInterface()->lengthAdjust() == KoSvgText::LengthAdjustSpacingAndGlyphs);
         if (!spacingAndGlyphs) {
             n -= 1;
         }
-        qreal delta =
-            chunkShape->layoutInterface()->textLength().customValue - (b - a);
-            
-        QPointF d = isHorizontal? QPointF(delta / n, 0)
-                                : QPointF(0, delta / n);
+        qreal delta = chunkShape->layoutInterface()->textLength().customValue - (b - a);
+
+        QPointF d = isHorizontal ? QPointF(delta / n, 0) : QPointF(0, delta / n);
 
         QPointF shift;
         bool secondTextLengthApplied = false;
@@ -1867,19 +1564,16 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             if (cr.addressable) {
                 cr.finalPosition += shift;
                 if (spacingAndGlyphs) {
-                    QPointF scale(
-                        d.x() != 0 ? (d.x() / cr.advance.x()) + 1 : 1.0,
-                        d.y() != 0 ? (d.y() / cr.advance.y()) + 1 : 1.0);
+                    QPointF scale(d.x() != 0 ? (d.x() / cr.advance.x()) + 1 : 1.0, d.y() != 0 ? (d.y() / cr.advance.y()) + 1 : 1.0);
                     QTransform tf = QTransform::fromScale(scale.x(), scale.y());
                     cr.path = tf.map(cr.path);
                     cr.advance = tf.map(cr.advance);
                     cr.boundingBox = tf.mapRect(cr.boundingBox);
                 }
-                bool last = spacingAndGlyphs? false: k==visualToLogical.keys().last();
-                
+                bool last = spacingAndGlyphs ? false : k == visualToLogical.keys().last();
+
                 if (!(cr.textLengthApplied && secondTextLengthApplied) && !last) {
                     shift += d;
-                    
                 }
                 secondTextLengthApplied = cr.textLengthApplied;
                 cr.textLengthApplied = true;
@@ -1892,7 +1586,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
         // a new chunk.
         int lastVisualValue = visualToLogical.keys().last();
         visualToLogical.clear();
-        
+
         for (int k = j; k < result.size(); k++) {
             if (result.at(k).anchored_chunk) {
                 break;
@@ -1907,7 +1601,7 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
             }
         }
         for (int k : visualToLogical.keys()) {
-            if (k>lastVisualValue) {
+            if (k > lastVisualValue) {
                 result[visualToLogical.value(k)].finalPosition += shift;
             }
         }
@@ -1920,74 +1614,55 @@ void KoSvgTextShape::Private::applyTextLength(const KoShape *rootShape,
  * @brief KoSvgTextShape::Private::computeFontMetrics
  * This function handles computing the baselineOffsets
  */
-void KoSvgTextShape::Private::computeFontMetrics(
-    const KoShape *rootShape,
-    QMap<int, int> parentBaselineTable,
-    qreal parentFontSize,
-    QPointF superScript,
-    QPointF subScript,
-    QVector<CharacterResult> &result,
-    int &currentIndex,
-    qreal res,
-    bool isHorizontal)
+void KoSvgTextShape::Private::computeFontMetrics(const KoShape *rootShape,
+                                                 QMap<int, int> parentBaselineTable,
+                                                 qreal parentFontSize,
+                                                 QPointF superScript,
+                                                 QPointF subScript,
+                                                 QVector<CharacterResult> &result,
+                                                 int &currentIndex,
+                                                 qreal res,
+                                                 bool isHorizontal)
 {
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     QMap<int, int> baselineTable;
     int i = currentIndex;
-    int j =
-        qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
+    int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
 
     KoSvgTextProperties properties = chunkShape->textProperties();
 
-    qreal fontSize =
-        properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
-    qreal baselineShift =
-        properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal()
-        * fontSize;
+    qreal fontSize = properties.propertyOrDefault(KoSvgTextProperties::FontSizeId).toReal();
+    qreal baselineShift = properties.property(KoSvgTextProperties::BaselineShiftValueId).toReal() * fontSize;
     QPointF baselineShiftTotal;
-    KoSvgText::BaselineShiftMode baselineShiftMode =
-        KoSvgText::BaselineShiftMode(
-            properties.property(KoSvgTextProperties::BaselineShiftModeId)
-                .toInt());
+    KoSvgText::BaselineShiftMode baselineShiftMode = KoSvgText::BaselineShiftMode(properties.property(KoSvgTextProperties::BaselineShiftModeId).toInt());
 
     if (baselineShiftMode == KoSvgText::ShiftSuper) {
-        baselineShiftTotal = isHorizontal
-            ? superScript
-            : QPointF(-superScript.y(), superScript.x());
+        baselineShiftTotal = isHorizontal ? superScript : QPointF(-superScript.y(), superScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftSub) {
-        baselineShiftTotal =
-            isHorizontal ? subScript : QPointF(-subScript.y(), subScript.x());
+        baselineShiftTotal = isHorizontal ? subScript : QPointF(-subScript.y(), subScript.x());
     } else if (baselineShiftMode == KoSvgText::ShiftPercentage) {
-        baselineShiftTotal = isHorizontal ? QPointF(0, baselineShift)
-                                          : QPointF(-baselineShift, 0);
+        baselineShiftTotal = isHorizontal ? QPointF(0, baselineShift) : QPointF(-baselineShift, 0);
     }
 
     QVector<int> lengths;
-    const QFont::Style style = QFont::Style(
-        properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
-    KoSvgText::AutoValue fontSizeAdjust =
-        properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId)
-            .value<KoSvgText::AutoValue>();
+    const QFont::Style style = QFont::Style(properties.propertyOrDefault(KoSvgTextProperties::FontStyleId).toInt());
+    KoSvgText::AutoValue fontSizeAdjust = properties.propertyOrDefault(KoSvgTextProperties::FontSizeAdjustId).value<KoSvgText::AutoValue>();
     if (properties.hasProperty(KoSvgTextProperties::KraTextVersionId)) {
-        fontSizeAdjust.isAuto =
-            (properties.property(KoSvgTextProperties::KraTextVersionId).toInt()
-             < 3);
+        fontSizeAdjust.isAuto = (properties.property(KoSvgTextProperties::KraTextVersionId).toInt() < 3);
     }
-    const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
-        properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
-        lengths,
-        properties.fontAxisSettings(),
-        QString(),
-        res,
-        res,
-        fontSize,
-        fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-        properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
-        properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
-        style != QFont::StyleNormal);
+    const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+                                                                                       lengths,
+                                                                                       properties.fontAxisSettings(),
+                                                                                       QString(),
+                                                                                       res,
+                                                                                       res,
+                                                                                       fontSize,
+                                                                                       fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+                                                                                       properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+                                                                                       properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+                                                                                       style != QFont::StyleNormal);
 
     hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
     qreal freetypePixelsToPt = (1.0 / 64.0) * float(72. / res);
@@ -1997,12 +1672,10 @@ void KoSvgTextShape::Private::computeFontMetrics(
         dir = HB_DIRECTION_TTB;
     }
     hb_script_t script = HB_SCRIPT_UNKNOWN;
-    KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(
-        properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
+    KoSvgText::Baseline dominantBaseline = KoSvgText::Baseline(properties.property(KoSvgTextProperties::DominantBaselineId).toInt());
 
     hb_position_t baseline = 0;
-    if (dominantBaseline == KoSvgText::BaselineResetSize
-        && parentFontSize > 0) {
+    if (dominantBaseline == KoSvgText::BaselineResetSize && parentFontSize > 0) {
         baselineTable = parentBaselineTable;
         qreal multiplier = 1.0 / parentFontSize * fontSize;
         for (int key : baselineTable.keys()) {
@@ -2014,150 +1687,54 @@ void KoSvgTextShape::Private::computeFontMetrics(
         dominantBaseline = KoSvgText::BaselineAuto;
     } else {
         if (hb_version_atleast(4, 0, 0)) {
-            hb_ot_layout_get_baseline_with_fallback(
-                font.data(),
-                HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
-                dir,
-                script,
-                HB_TAG_NONE,
-                &baseline);
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_ROMAN, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
-            hb_ot_layout_get_baseline_with_fallback(
-                font.data(),
-                HB_OT_LAYOUT_BASELINE_TAG_MATH,
-                dir,
-                script,
-                HB_TAG_NONE,
-                &baseline);
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_MATH, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
-            hb_ot_layout_get_baseline_with_fallback(
-                font.data(),
-                HB_OT_LAYOUT_BASELINE_TAG_HANGING,
-                dir,
-                script,
-                HB_TAG_NONE,
-                &baseline);
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_HANGING, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineHanging, baseline);
-            hb_ot_layout_get_baseline_with_fallback(
-                font.data(),
-                HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
-                dir,
-                script,
-                HB_TAG_NONE,
-                &baseline);
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-            hb_ot_layout_get_baseline_with_fallback(
-                font.data(),
-                HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
-                dir,
-                script,
-                HB_TAG_NONE,
-                &baseline);
+            hb_ot_layout_get_baseline_with_fallback(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
-                hb_ot_metrics_get_position_with_fallback(
-                    font.data(),
-                    HB_OT_METRICS_TAG_X_HEIGHT,
-                    &baseline);
-                baselineTable.insert(
-                    KoSvgText::BaselineMiddle,
-                    (baseline
-                     - baselineTable.value(KoSvgText::BaselineAlphabetic))
-                        * 0.5);
-                hb_ot_metrics_get_position_with_fallback(
-                    font.data(),
-                    HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER,
-                    &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+                baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position_with_fallback(
-                    font.data(),
-                    HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER,
-                    &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
 
             } else {
-                baselineTable.insert(
-                    KoSvgText::BaselineMiddle,
-                    baselineTable.value(KoSvgText::BaselineCentral));
-                hb_ot_metrics_get_position_with_fallback(
-                    font.data(),
-                    HB_OT_METRICS_TAG_VERTICAL_ASCENDER,
-                    &baseline);
+                baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position_with_fallback(
-                    font.data(),
-                    HB_OT_METRICS_TAG_VERTICAL_DESCENDER,
-                    &baseline);
+                hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             }
         } else {
-            hb_ot_layout_get_baseline(font.data(),
-                                      HB_OT_LAYOUT_BASELINE_TAG_ROMAN,
-                                      dir,
-                                      script,
-                                      HB_TAG_NONE,
-                                      &baseline);
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_ROMAN, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineAlphabetic, baseline);
-            hb_ot_layout_get_baseline(font.data(),
-                                      HB_OT_LAYOUT_BASELINE_TAG_MATH,
-                                      dir,
-                                      script,
-                                      HB_TAG_NONE,
-                                      &baseline);
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_MATH, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineMathematical, baseline);
-            hb_ot_layout_get_baseline(font.data(),
-                                      HB_OT_LAYOUT_BASELINE_TAG_HANGING,
-                                      dir,
-                                      script,
-                                      HB_TAG_NONE,
-                                      &baseline);
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_HANGING, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineHanging, baseline);
-            hb_ot_layout_get_baseline(
-                font.data(),
-                HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL,
-                dir,
-                script,
-                HB_TAG_NONE,
-                &baseline);
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_FACE_CENTRAL, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineCentral, baseline);
-            hb_ot_layout_get_baseline(
-                font.data(),
-                HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT,
-                dir,
-                script,
-                HB_TAG_NONE,
-                &baseline);
+            hb_ot_layout_get_baseline(font.data(), HB_OT_LAYOUT_BASELINE_TAG_IDEO_EMBOX_BOTTOM_OR_LEFT, dir, script, HB_TAG_NONE, &baseline);
             baselineTable.insert(KoSvgText::BaselineIdeographic, baseline);
             if (isHorizontal) {
-                hb_ot_metrics_get_position(font.data(),
-                                           HB_OT_METRICS_TAG_X_HEIGHT,
-                                           &baseline);
-                baselineTable.insert(
-                    KoSvgText::BaselineMiddle,
-                    (baseline
-                     - baselineTable.value(KoSvgText::BaselineAlphabetic))
-                        * 0.5);
-                hb_ot_metrics_get_position(
-                    font.data(),
-                    HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER,
-                    &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_X_HEIGHT, &baseline);
+                baselineTable.insert(KoSvgText::BaselineMiddle, (baseline - baselineTable.value(KoSvgText::BaselineAlphabetic)) * 0.5);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position(
-                    font.data(),
-                    HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER,
-                    &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_HORIZONTAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             } else {
-                baselineTable.insert(
-                    KoSvgText::BaselineMiddle,
-                    baselineTable.value(KoSvgText::BaselineCentral));
-                hb_ot_metrics_get_position(font.data(),
-                                           HB_OT_METRICS_TAG_VERTICAL_ASCENDER,
-                                           &baseline);
+                baselineTable.insert(KoSvgText::BaselineMiddle, baselineTable.value(KoSvgText::BaselineCentral));
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_ASCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextTop, baseline);
-                hb_ot_metrics_get_position(font.data(),
-                                           HB_OT_METRICS_TAG_VERTICAL_DESCENDER,
-                                           &baseline);
+                hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_VERTICAL_DESCENDER, &baseline);
                 baselineTable.insert(KoSvgText::BaselineTextBottom, baseline);
             }
         }
@@ -2168,161 +1745,88 @@ void KoSvgTextShape::Private::computeFontMetrics(
     QPointF newSubScript;
     if (hb_version_atleast(4, 0, 0)) {
         hb_position_t baseline2 = 0;
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
-            &baseline);
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
-            &baseline2);
-        newSuperScript = QPointF(baseline * freetypePixelsToPt,
-                                 baseline2 * -freetypePixelsToPt);
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
-            &baseline);
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET,
-            &baseline2);
-        newSubScript = QPointF(baseline * freetypePixelsToPt,
-                               baseline2 * freetypePixelsToPt);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
+        newSuperScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
+        newSubScript = QPointF(baseline * freetypePixelsToPt, baseline2 * freetypePixelsToPt);
 
         qreal width = 0;
         qreal offset = 0;
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_UNDERLINE_SIZE,
-            &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
         width = baseline;
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_UNDERLINE_OFFSET,
-            &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
         offset = baseline;
         offset *= -freetypePixelsToPt;
         width *= -freetypePixelsToPt;
 
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(
-            KoSvgText::DecorationUnderline,
-            offset,
-            width);
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(
-            KoSvgText::DecorationOverline,
-            0,
-            width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
 
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_STRIKEOUT_SIZE,
-            &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
         width = baseline;
-        hb_ot_metrics_get_position_with_fallback(
-            font.data(),
-            HB_OT_METRICS_TAG_STRIKEOUT_OFFSET,
-            &baseline);
+        hb_ot_metrics_get_position_with_fallback(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
         width *= -freetypePixelsToPt;
         offset *= -freetypePixelsToPt;
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(
-            KoSvgText::DecorationLineThrough,
-            offset,
-            width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
     } else {
         baseline = 0;
         hb_position_t baseline2 = 0;
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET,
-                                   &baseline);
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET,
-                                   &baseline2);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUPERSCRIPT_EM_Y_OFFSET, &baseline2);
         if (baseline2 == 0) {
             newSuperScript = QPointF(0, 0.6 * -fontSize);
         } else {
-            newSuperScript = QPointF(baseline * freetypePixelsToPt,
-                                     baseline2 * -freetypePixelsToPt);
+            newSuperScript = QPointF(baseline * freetypePixelsToPt, baseline2 * -freetypePixelsToPt);
         }
         baseline = 0;
         baseline2 = 0;
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET,
-                                   &baseline);
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET,
-                                   &baseline2);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_X_OFFSET, &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_SUBSCRIPT_EM_Y_OFFSET, &baseline2);
         // Subscript should be 'added' onto the baseline'.
         if (baseline2 == 0) {
             newSubScript = QPointF(0, 0.2 * fontSize);
         } else {
-            newSubScript = QPointF(baseline * freetypePixelsToPt,
-                                   baseline2 * freetypePixelsToPt);
+            newSubScript = QPointF(baseline * freetypePixelsToPt, baseline2 * freetypePixelsToPt);
         }
 
         qreal width = 0;
         qreal offset = 0;
-        const int fallbackThickness = faces.front()->underline_thickness
-            * (faces.front()->size->metrics.y_scale / 65535.0);
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_UNDERLINE_SIZE,
-                                   &baseline);
+        const int fallbackThickness = faces.front()->underline_thickness * (faces.front()->size->metrics.y_scale / 65535.0);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_SIZE, &baseline);
         width = qMax(baseline, fallbackThickness);
 
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_UNDERLINE_OFFSET,
-                                   &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_UNDERLINE_OFFSET, &baseline);
         offset = baseline;
         offset *= -freetypePixelsToPt;
         width *= freetypePixelsToPt;
 
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(
-            KoSvgText::DecorationUnderline,
-            offset,
-            width);
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(
-            KoSvgText::DecorationOverline,
-            0,
-            width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationUnderline, offset, width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationOverline, 0, width);
 
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_STRIKEOUT_SIZE,
-                                   &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_SIZE, &baseline);
         width = qMax(baseline, fallbackThickness);
-        hb_ot_metrics_get_position(font.data(),
-                                   HB_OT_METRICS_TAG_STRIKEOUT_OFFSET,
-                                   &baseline);
+        hb_ot_metrics_get_position(font.data(), HB_OT_METRICS_TAG_STRIKEOUT_OFFSET, &baseline);
         if (baseline == 0) {
             offset = baselineTable.value(KoSvgText::BaselineCentral);
         }
         width *= freetypePixelsToPt;
         offset *= -freetypePixelsToPt;
 
-        chunkShape->layoutInterface()->setTextDecorationFontMetrics(
-            KoSvgText::DecorationLineThrough,
-            offset,
-            width);
+        chunkShape->layoutInterface()->setTextDecorationFontMetrics(KoSvgText::DecorationLineThrough, offset, width);
     }
 
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        computeFontMetrics(child,
-                           baselineTable,
-                           fontSize,
-                           newSuperScript,
-                           newSubScript,
-                           result,
-                           currentIndex,
-                           res,
-                           isHorizontal);
+        computeFontMetrics(child, baselineTable, fontSize, newSuperScript, newSubScript, result, currentIndex, res, isHorizontal);
     }
 
-    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(
-        properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
+    KoSvgText::Baseline baselineAdjust = KoSvgText::Baseline(properties.property(KoSvgTextProperties::AlignmentBaselineId).toInt());
 
     if (baselineAdjust == KoSvgText::BaselineDominant) {
         baselineAdjust = dominantBaseline;
     }
-    if (baselineAdjust == KoSvgText::BaselineAuto
-        || baselineAdjust == KoSvgText::BaselineUseScript) {
+    if (baselineAdjust == KoSvgText::BaselineAuto || baselineAdjust == KoSvgText::BaselineUseScript) {
         // UseScript got deprecated in CSS-Inline-3.
         if (isHorizontal) {
             baselineAdjust = KoSvgText::BaselineAlphabetic;
@@ -2331,8 +1835,7 @@ void KoSvgTextShape::Private::computeFontMetrics(
         }
     }
 
-    int offset = parentBaselineTable.value(baselineAdjust, 0)
-        - baselineTable.value(baselineAdjust, 0);
+    int offset = parentBaselineTable.value(baselineAdjust, 0) - baselineTable.value(baselineAdjust, 0);
     QPointF shift;
     if (isHorizontal) {
         shift = QPointF(0, offset * -freetypePixelsToPt);
@@ -2357,51 +1860,37 @@ void KoSvgTextShape::Private::computeFontMetrics(
  * bends them to the textPath, strokes them, and then adds them to the node in
  * question.
  */
-void KoSvgTextShape::Private::computeTextDecorations(
-    const KoShape *rootShape,
-    QVector<CharacterResult> result,
-    QMap<int, int> logicalToVisual,
-    qreal minimumDecorationThickness,
-    KoPathShape *textPath,
-    qreal textPathoffset,
-    bool side,
-    int &currentIndex,
-    bool isHorizontal,
-    bool ltr,
-    bool wrapping)
+void KoSvgTextShape::Private::computeTextDecorations(const KoShape *rootShape,
+                                                     QVector<CharacterResult> result,
+                                                     QMap<int, int> logicalToVisual,
+                                                     qreal minimumDecorationThickness,
+                                                     KoPathShape *textPath,
+                                                     qreal textPathoffset,
+                                                     bool side,
+                                                     int &currentIndex,
+                                                     bool isHorizontal,
+                                                     bool ltr,
+                                                     bool wrapping)
 {
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
 
     int i = currentIndex;
-    int j =
-        qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
+    int j = qMin(i + chunkShape->layoutInterface()->numChars(true), result.size());
     using namespace KoSvgText;
 
     KoPathShape *currentTextPath = nullptr;
     qreal currentTextPathOffset = textPathoffset;
     bool textPathSide = side;
     if (!wrapping) {
-        currentTextPath = textPath
-            ? textPath
-            : dynamic_cast<KoPathShape *>(
-                chunkShape->layoutInterface()->textPath());
+        currentTextPath = textPath ? textPath : dynamic_cast<KoPathShape *>(chunkShape->layoutInterface()->textPath());
 
         if (chunkShape->layoutInterface()->textPath()) {
-            textPathSide = chunkShape->layoutInterface()->textOnPathInfo().side
-                == TextPathSideRight;
-            if (chunkShape->layoutInterface()
-                    ->textOnPathInfo()
-                    .startOffsetIsPercentage) {
-                currentTextPathOffset = currentTextPath->outline().length()
-                    * (0.01
-                       * chunkShape->layoutInterface()
-                             ->textOnPathInfo()
-                             .startOffset);
+            textPathSide = chunkShape->layoutInterface()->textOnPathInfo().side == TextPathSideRight;
+            if (chunkShape->layoutInterface()->textOnPathInfo().startOffsetIsPercentage) {
+                currentTextPathOffset = currentTextPath->outline().length() * (0.01 * chunkShape->layoutInterface()->textOnPathInfo().startOffset);
             } else {
-                currentTextPathOffset =
-                    chunkShape->layoutInterface()->textOnPathInfo().startOffset;
+                currentTextPathOffset = chunkShape->layoutInterface()->textOnPathInfo().startOffset;
             }
         }
     }
@@ -2420,16 +1909,10 @@ void KoSvgTextShape::Private::computeTextDecorations(
                                wrapping);
     }
 
-    TextDecorations decor =
-        chunkShape->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::TextDecorationLineId)
-            .value<TextDecorations>();
+    TextDecorations decor = chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationLineId).value<TextDecorations>();
     if (decor != DecorationNone && chunkShape->textProperties().hasProperty(KoSvgTextProperties::TextDecorationLineId)) {
         KoSvgTextProperties properties = chunkShape->textProperties();
-        TextDecorationStyle style = TextDecorationStyle(
-            properties
-                .propertyOrDefault(KoSvgTextProperties::TextDecorationStyleId)
-                .toInt());
+        TextDecorationStyle style = TextDecorationStyle(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationStyleId).toInt());
 
         QMap<TextDecoration, QPainterPath> decorationPaths;
         QMap<TextDecoration, QPointF> decorationOffsets;
@@ -2439,18 +1922,12 @@ void KoSvgTextShape::Private::computeTextDecorations(
         decorationPaths.insert(DecorationLineThrough, QPainterPath());
 
         for (TextDecoration type : decorationPaths.keys()) {
-            qreal offset =
-                chunkShape->layoutInterface()->getTextDecorationOffset(type);
-            decorationOffsets.insert(type,
-                                     isHorizontal ? QPointF(0, offset)
-                                                  : QPointF(offset, 0));
+            qreal offset = chunkShape->layoutInterface()->getTextDecorationOffset(type);
+            decorationOffsets.insert(type, isHorizontal ? QPointF(0, offset) : QPointF(offset, 0));
         }
 
         QPainterPathStroker stroker;
-        stroker.setWidth(
-            qMax(minimumDecorationThickness,
-                 chunkShape->layoutInterface()->getTextDecorationWidth(
-                     DecorationUnderline)));
+        stroker.setWidth(qMax(minimumDecorationThickness, chunkShape->layoutInterface()->getTextDecorationWidth(DecorationUnderline)));
         stroker.setCapStyle(Qt::FlatCap);
         if (style == Dotted) {
             QPen pen;
@@ -2483,9 +1960,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
                 continue;
             }
             if (charResult.anchored_chunk) {
-                QPointF fp = isHorizontal
-                    ? QPointF(currentRect.x(), currentFinalPos.y())
-                    : QPointF(currentFinalPos.x(), currentRect.y());
+                QPointF fp = isHorizontal ? QPointF(currentRect.x(), currentFinalPos.y()) : QPointF(currentFinalPos.x(), currentRect.y());
                 firstPos.append(fp);
                 decorationRects.append(currentRect);
                 currentRect = QRectF();
@@ -2493,21 +1968,15 @@ void KoSvgTextShape::Private::computeTextDecorations(
 
             currentFinalPos = charResult.finalPosition;
 
-            QRectF bbox = charResult.path.isEmpty()
-                ? charResult.boundingBox
-                : charResult.path.boundingRect();
+            QRectF bbox = charResult.path.isEmpty() ? charResult.boundingBox : charResult.path.boundingRect();
 
-            top =
-                isHorizontal ? qMin(top, bbox.top()) : qMax(top, bbox.right());
-            bottom = isHorizontal ? qMax(bottom, bbox.bottom())
-                                  : qMin(bottom, bbox.left());
+            top = isHorizontal ? qMin(top, bbox.top()) : qMax(top, bbox.right());
+            bottom = isHorizontal ? qMax(bottom, bbox.bottom()) : qMin(bottom, bbox.left());
 
             currentRect |= bbox.translated(charResult.finalPosition);
         }
         decorationRects.append(currentRect);
-        QPointF fp = isHorizontal
-            ? QPointF(currentRect.x(), currentFinalPos.y())
-            : QPointF(currentFinalPos.x(), currentRect.y());
+        QPointF fp = isHorizontal ? QPointF(currentRect.x(), currentFinalPos.y()) : QPointF(currentFinalPos.x(), currentRect.y());
         firstPos.append(fp);
 
         // Computing the various offsets from the 'top' & 'bottom' values.
@@ -2516,22 +1985,13 @@ void KoSvgTextShape::Private::computeTextDecorations(
         if (isHorizontal) {
             decorationOffsets[DecorationOverline] = QPointF(0, top);
             TextDecorationUnderlinePosition underlinePosH =
-                TextDecorationUnderlinePosition(
-                    properties
-                        .propertyOrDefault(
-                            KoSvgTextProperties::
-                                TextDecorationPositionHorizontalId)
-                        .toInt());
+                TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionHorizontalId).toInt());
             if (underlinePosH == UnderlineUnder) {
                 decorationOffsets[DecorationUnderline] = QPointF(0, bottom);
             }
         } else {
             TextDecorationUnderlinePosition underlinePosV =
-                TextDecorationUnderlinePosition(
-                    properties
-                        .propertyOrDefault(KoSvgTextProperties::
-                                               TextDecorationPositionVerticalId)
-                        .toInt());
+                TextDecorationUnderlinePosition(properties.propertyOrDefault(KoSvgTextProperties::TextDecorationPositionVerticalId).toInt());
             if (underlinePosV == UnderlineRight) {
                 decorationOffsets[DecorationOverline] = QPointF(bottom, 0);
                 decorationOffsets[DecorationUnderline] = QPointF(top, 0);
@@ -2541,10 +2001,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
                 decorationOffsets[DecorationUnderline] = QPointF(bottom, 0);
             }
         }
-        decorationOffsets[DecorationLineThrough] =
-            (decorationOffsets.value(DecorationUnderline)
-             + decorationOffsets.value(DecorationOverline))
-            * 0.5;
+        decorationOffsets[DecorationLineThrough] = (decorationOffsets.value(DecorationUnderline) + decorationOffsets.value(DecorationOverline)) * 0.5;
 
         // Now to create a QPainterPath for the given style that stretches
         // over a single decoration rect,
@@ -2565,8 +2022,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
                             p.lineTo(p.currentPosition() + QPointF(segment, 0));
                         }
                     } else {
-                        int total =
-                            floor(rect.height() / (stroker.width() * 2));
+                        int total = floor(rect.height() / (stroker.width() * 2));
                         qreal segment = qreal(rect.height() / total);
                         for (int i = 0; i < total; i++) {
                             p.lineTo(p.currentPosition() + QPointF(0, segment));
@@ -2581,7 +2037,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
                 }
             }
             if (style == Double) {
-                qreal linewidthOffset = qMax(stroker.width() * 1.5, minimumDecorationThickness*2);
+                qreal linewidthOffset = qMax(stroker.width() * 1.5, minimumDecorationThickness * 2);
                 if (isHorizontal) {
                     p.addPath(p.translated(0, linewidthOffset));
                     pathWidth = QPointF(0, -linewidthOffset);
@@ -2616,10 +2072,7 @@ void KoSvgTextShape::Private::computeTextDecorations(
                 // Rotate for vertical.
                 if (!isHorizontal) {
                     for (int i = 0; i < p.elementCount(); i++) {
-                        p.setElementPositionAt(i,
-                                               p.elementAt(i).y
-                                                   - (stroker.width() * 2),
-                                               p.elementAt(i).x);
+                        p.setElementPositionAt(i, p.elementAt(i).y - (stroker.width() * 2), p.elementAt(i).x);
                     }
                     pathWidth = QPointF(stroker.width(), 0);
                 }
@@ -2644,12 +2097,8 @@ void KoSvgTextShape::Private::computeTextDecorations(
                             path = path.toReversed();
                         }
 
-                        decorationPaths[type].addPath(stretchGlyphOnPath(
-                            p.translated(offset),
-                            path,
-                            isHorizontal,
-                            currentTextPathOffset,
-                            currentTextPath->isClosedSubpath(0)));
+                        decorationPaths[type].addPath(
+                            stretchGlyphOnPath(p.translated(offset), path, isHorizontal, currentTextPathOffset, currentTextPath->isClosedSubpath(0)));
                     } else {
                         decorationPaths[type].addPath(p.translated(offset));
                     }
@@ -2664,23 +2113,16 @@ void KoSvgTextShape::Private::computeTextDecorations(
         for (TextDecoration type : decorationPaths.keys()) {
             QPainterPath decorationPath = decorationPaths.value(type);
             if (!decorationPath.isEmpty()) {
-                stroker.setWidth(
-                    qMax(minimumDecorationThickness,
-                         chunkShape->layoutInterface()->getTextDecorationWidth(
-                             type)));
-                decorationPath =
-                    stroker.createStroke(decorationPath).simplified();
-                chunkShape->layoutInterface()->addTextDecoration(
-                    type,
-                    decorationPath.simplified());
+                stroker.setWidth(qMax(minimumDecorationThickness, chunkShape->layoutInterface()->getTextDecorationWidth(type)));
+                decorationPath = stroker.createStroke(decorationPath).simplified();
+                chunkShape->layoutInterface()->addTextDecoration(type, decorationPath.simplified());
             }
         }
     }
     currentIndex = j;
 }
 
-void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
-                                             bool isHorizontal)
+void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result, bool isHorizontal)
 {
     int i = 0;
     int start = 0;
@@ -2695,10 +2137,8 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             if (result.at(i).anchored_chunk && i > start) {
                 break;
             }
-            qreal pos = isHorizontal ? result.at(i).finalPosition.x()
-                                     : result.at(i).finalPosition.y();
-            qreal advance = isHorizontal ? result.at(i).advance.x()
-                                         : result.at(i).advance.y();
+            qreal pos = isHorizontal ? result.at(i).finalPosition.x() : result.at(i).finalPosition.y();
+            qreal advance = isHorizontal ? result.at(i).advance.x() : result.at(i).advance.y();
 
             if (result.at(i).anchored_chunk) {
                 a = qMin(pos, pos + advance);
@@ -2709,18 +2149,13 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
             }
         }
 
-        bool rtl =
-            result.at(start).direction == KoSvgText::DirectionRightToLeft;
-        qreal shift = isHorizontal ? result.at(start).finalPosition.x()
-                                   : result.at(start).finalPosition.y();
+        bool rtl = result.at(start).direction == KoSvgText::DirectionRightToLeft;
+        qreal shift = isHorizontal ? result.at(start).finalPosition.x() : result.at(start).finalPosition.y();
 
-        if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl)
-            || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
+        if ((result.at(start).anchor == KoSvgText::AnchorStart && !rtl) || (result.at(start).anchor == KoSvgText::AnchorEnd && rtl)) {
             shift = shift - a;
 
-        } else if ((result.at(start).anchor == KoSvgText::AnchorEnd && !rtl)
-                   || (result.at(start).anchor == KoSvgText::AnchorStart
-                       && rtl)) {
+        } else if ((result.at(start).anchor == KoSvgText::AnchorEnd && !rtl) || (result.at(start).anchor == KoSvgText::AnchorStart && rtl)) {
             shift = shift - b;
 
         } else {
@@ -2736,11 +2171,7 @@ void KoSvgTextShape::Private::applyAnchoring(QVector<CharacterResult> &result,
     }
 }
 
-qreal KoSvgTextShape::Private::characterResultOnPath(CharacterResult &cr,
-                                                     qreal length,
-                                                     qreal offset,
-                                                     bool isHorizontal,
-                                                     bool isClosed)
+qreal KoSvgTextShape::Private::characterResultOnPath(CharacterResult &cr, qreal length, qreal offset, bool isHorizontal, bool isClosed)
 {
     bool rtl = (cr.direction == KoSvgText::DirectionRightToLeft);
     qreal mid = cr.finalPosition.x() + (cr.advance.x() * 0.5) + offset;
@@ -2748,19 +2179,16 @@ qreal KoSvgTextShape::Private::characterResultOnPath(CharacterResult &cr,
         mid = cr.finalPosition.y() + (cr.advance.y() * 0.5) + offset;
     }
     if (isClosed) {
-        if ((cr.anchor == KoSvgText::AnchorStart && !rtl)
-            || (cr.anchor == KoSvgText::AnchorEnd && rtl)) {
+        if ((cr.anchor == KoSvgText::AnchorStart && !rtl) || (cr.anchor == KoSvgText::AnchorEnd && rtl)) {
             if (mid - offset < 0 || mid - offset > length) {
                 cr.hidden = true;
             }
-        } else if ((cr.anchor == KoSvgText::AnchorEnd && !rtl)
-                   || (cr.anchor == KoSvgText::AnchorStart && rtl)) {
+        } else if ((cr.anchor == KoSvgText::AnchorEnd && !rtl) || (cr.anchor == KoSvgText::AnchorStart && rtl)) {
             if (mid - offset < -length || mid - offset > 0) {
                 cr.hidden = true;
             }
         } else {
-            if (mid - offset < -(length * 0.5)
-                || mid - offset > (length * 0.5)) {
+            if (mid - offset < -(length * 0.5) || mid - offset > (length * 0.5)) {
                 cr.hidden = true;
             }
         }
@@ -2776,16 +2204,11 @@ qreal KoSvgTextShape::Private::characterResultOnPath(CharacterResult &cr,
     return mid;
 }
 
-QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(QPainterPath glyph,
-                                                         QPainterPath path,
-                                                         bool isHorizontal,
-                                                         qreal offset,
-                                                         bool isClosed)
+QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(QPainterPath glyph, QPainterPath path, bool isHorizontal, qreal offset, bool isClosed)
 {
     QPainterPath p = glyph;
     for (int i = 0; i < glyph.elementCount(); i++) {
-        qreal mid = isHorizontal ? glyph.elementAt(i).x + offset
-                                 : glyph.elementAt(i).y + offset;
+        qreal mid = isHorizontal ? glyph.elementAt(i).x + offset : glyph.elementAt(i).y + offset;
         qreal midUnbound = mid;
         if (isClosed) {
             if (mid < 0) {
@@ -2802,8 +2225,7 @@ QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(QPainterPath glyph,
         if (tAngle > 180) {
             tAngle = 0 - (360 - tAngle);
         }
-        QPointF vectorT(qCos(qDegreesToRadians(tAngle)),
-                        -qSin(qDegreesToRadians(tAngle)));
+        QPointF vectorT(qCos(qDegreesToRadians(tAngle)), -qSin(qDegreesToRadians(tAngle)));
         QPointF finalPos = pos;
         if (isHorizontal) {
             QPointF vectorN(-vectorT.y(), vectorT.x());
@@ -2819,79 +2241,50 @@ QPainterPath KoSvgTextShape::Private::stretchGlyphOnPath(QPainterPath glyph,
     return p;
 }
 
-void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
-                                            QVector<CharacterResult> &result,
-                                            bool isHorizontal)
+void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape, QVector<CharacterResult> &result, bool isHorizontal)
 {
     // Unlike all the other applying functions, this one only iterrates over the
     // top-level. SVG is not designed to have nested textPaths. Source:
     // https://github.com/w3c/svgwg/issues/580
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
     bool inPath = false;
     bool afterPath = false;
     int currentIndex = 0;
     QPointF pathEnd;
     Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-        const KoSvgTextChunkShape *textPathChunk =
-            dynamic_cast<const KoSvgTextChunkShape *>(child);
+        const KoSvgTextChunkShape *textPathChunk = dynamic_cast<const KoSvgTextChunkShape *>(child);
         KIS_SAFE_ASSERT_RECOVER_RETURN(textPathChunk);
-        int endIndex =
-            currentIndex + textPathChunk->layoutInterface()->numChars(true);
+        int endIndex = currentIndex + textPathChunk->layoutInterface()->numChars(true);
 
-        KoPathShape *shape = dynamic_cast<KoPathShape *>(
-            textPathChunk->layoutInterface()->textPath());
+        KoPathShape *shape = dynamic_cast<KoPathShape *>(textPathChunk->layoutInterface()->textPath());
         if (shape) {
             QPainterPath path = shape->outline();
             path = shape->transformation().map(path);
             inPath = true;
-            if (textPathChunk->layoutInterface()->textOnPathInfo().side
-                == KoSvgText::TextPathSideRight) {
+            if (textPathChunk->layoutInterface()->textOnPathInfo().side == KoSvgText::TextPathSideRight) {
                 path = path.toReversed();
             }
             qreal length = path.length();
             qreal offset = 0.0;
-            bool isClosed =
-                (shape->isClosedSubpath(0) && shape->subpathCount() == 1);
-            if (textPathChunk->layoutInterface()
-                    ->textOnPathInfo()
-                    .startOffsetIsPercentage) {
-                offset = length
-                    * (0.01
-                       * textPathChunk->layoutInterface()
-                             ->textOnPathInfo()
-                             .startOffset);
+            bool isClosed = (shape->isClosedSubpath(0) && shape->subpathCount() == 1);
+            if (textPathChunk->layoutInterface()->textOnPathInfo().startOffsetIsPercentage) {
+                offset = length * (0.01 * textPathChunk->layoutInterface()->textOnPathInfo().startOffset);
             } else {
-                offset = textPathChunk->layoutInterface()
-                             ->textOnPathInfo()
-                             .startOffset;
+                offset = textPathChunk->layoutInterface()->textOnPathInfo().startOffset;
             }
-            bool stretch =
-                textPathChunk->layoutInterface()->textOnPathInfo().method
-                == KoSvgText::TextPathStretch;
+            bool stretch = textPathChunk->layoutInterface()->textOnPathInfo().method == KoSvgText::TextPathStretch;
 
             for (int i = currentIndex; i < endIndex; i++) {
                 CharacterResult cr = result[i];
 
                 if (cr.middle == false) {
-                    qreal mid = characterResultOnPath(cr,
-                                                      length,
-                                                      offset,
-                                                      isHorizontal,
-                                                      isClosed);
+                    qreal mid = characterResultOnPath(cr, length, offset, isHorizontal, isClosed);
                     if (!cr.hidden) {
                         if (stretch && !cr.path.isEmpty()) {
-                            QTransform tf =
-                                QTransform::fromTranslate(cr.finalPosition.x(),
-                                                          cr.finalPosition.y());
+                            QTransform tf = QTransform::fromTranslate(cr.finalPosition.x(), cr.finalPosition.y());
                             tf.rotateRadians(cr.rotate);
-                            QPainterPath glyph =
-                                stretchGlyphOnPath(tf.map(cr.path),
-                                                   path,
-                                                   isHorizontal,
-                                                   offset,
-                                                   isClosed);
+                            QPainterPath glyph = stretchGlyphOnPath(tf.map(cr.path), path, isHorizontal, offset, isClosed);
                             cr.path = glyph;
                         }
                         qreal percent = path.percentAtLength(mid);
@@ -2900,25 +2293,20 @@ void KoSvgTextShape::Private::applyTextPath(const KoShape *rootShape,
                         if (tAngle > 180) {
                             tAngle = 0 - (360 - tAngle);
                         }
-                        QPointF vectorT(qCos(qDegreesToRadians(tAngle)),
-                                        -qSin(qDegreesToRadians(tAngle)));
+                        QPointF vectorT(qCos(qDegreesToRadians(tAngle)), -qSin(qDegreesToRadians(tAngle)));
                         if (isHorizontal) {
                             cr.rotate -= qDegreesToRadians(tAngle);
                             QPointF vectorN(-vectorT.y(), vectorT.x());
                             qreal o = (cr.advance.x() * 0.5);
-                            cr.finalPosition = pos - (o * vectorT)
-                                + (cr.finalPosition.y() * vectorN);
+                            cr.finalPosition = pos - (o * vectorT) + (cr.finalPosition.y() * vectorN);
                         } else {
                             cr.rotate -= qDegreesToRadians(tAngle + 90);
                             QPointF vectorN(vectorT.y(), -vectorT.x());
                             qreal o = (cr.advance.y() * 0.5);
-                            cr.finalPosition = pos - (o * vectorT)
-                                + (cr.finalPosition.x() * vectorN);
+                            cr.finalPosition = pos - (o * vectorT) + (cr.finalPosition.x() * vectorN);
                         }
                         if (stretch && !cr.path.isEmpty()) {
-                            QTransform tf =
-                                QTransform::fromTranslate(cr.finalPosition.x(),
-                                                          cr.finalPosition.y());
+                            QTransform tf = QTransform::fromTranslate(cr.finalPosition.x(), cr.finalPosition.y());
                             tf.rotateRadians(cr.rotate);
                             cr.path = tf.inverted().map(cr.path);
                         }
@@ -2956,48 +2344,30 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                                          QPainterPath &chunk,
                                          int &currentIndex)
 {
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
     KIS_SAFE_ASSERT_RECOVER_RETURN(chunkShape);
-    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations =
-        chunkShape->layoutInterface()->textDecorations();
-    QColor textDecorationColor =
-        chunkShape->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::TextDecorationColorId)
-            .value<QColor>();
+    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = chunkShape->layoutInterface()->textDecorations();
+    QColor textDecorationColor = chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
 
     if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
         if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
-
-            chunkShape->background()->paint(
-                painter,
-                textDecorations.value(KoSvgText::DecorationUnderline));
+            chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationUnderline));
         } else if (textDecorationColor.isValid()) {
-            painter.fillPath(
-                textDecorations.value(KoSvgText::DecorationUnderline),
-                textDecorationColor);
+            painter.fillPath(textDecorations.value(KoSvgText::DecorationUnderline), textDecorationColor);
         }
         if (chunkShape->stroke()) {
-            QScopedPointer<KoShape> shape(
-                KoPathShape::createShapeFromPainterPath(
-                    textDecorations.value(KoSvgText::DecorationUnderline)));
+            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline)));
             chunkShape->stroke()->paint(shape.data(), painter);
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationOverline)) {
         if (chunkShape->background() && !textDecorationColor.isValid()) {
-            chunkShape->background()->paint(
-                painter,
-                textDecorations.value(KoSvgText::DecorationOverline));
+            chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationOverline));
         } else if (textDecorationColor.isValid()) {
-            painter.fillPath(
-                textDecorations.value(KoSvgText::DecorationOverline),
-                textDecorationColor);
+            painter.fillPath(textDecorations.value(KoSvgText::DecorationOverline), textDecorationColor);
         }
         if (chunkShape->stroke()) {
-            QScopedPointer<KoShape> shape(
-                KoPathShape::createShapeFromPainterPath(
-                    textDecorations.value(KoSvgText::DecorationOverline)));
+            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline)));
             chunkShape->stroke()->paint(shape.data(), painter);
         }
     }
@@ -3005,25 +2375,16 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
     if (chunkShape->isTextNode()) {
         QTransform tf;
         int j = currentIndex + chunkShape->layoutInterface()->numChars(true);
-        KoClipMaskPainter fillPainter(
-            &painter,
-            painter.transform().mapRect(outlineRect.boundingRect()));
+        KoClipMaskPainter fillPainter(&painter, painter.transform().mapRect(outlineRect.boundingRect()));
         if (chunkShape->background()) {
-            chunkShape->background()->paint(*fillPainter.shapePainter(),
-                                            outlineRect);
+            chunkShape->background()->paint(*fillPainter.shapePainter(), outlineRect);
             fillPainter.maskPainter()->fillPath(outlineRect, Qt::black);
             if (textRendering != OptimizeSpeed) {
-                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing,
-                                                         true);
-                fillPainter.maskPainter()->setRenderHint(
-                    QPainter::SmoothPixmapTransform,
-                    true);
+                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
+                fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, true);
             } else {
-                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing,
-                                                         false);
-                fillPainter.maskPainter()->setRenderHint(
-                    QPainter::SmoothPixmapTransform,
-                    false);
+                fillPainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
+                fillPainter.maskPainter()->setRenderHint(QPainter::SmoothPixmapTransform, false);
             }
         }
         QPainterPath textDecorationsRest;
@@ -3032,8 +2393,7 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
         for (int i = currentIndex; i < j; i++) {
             if (result.at(i).addressable && result.at(i).hidden == false) {
                 tf.reset();
-                tf.translate(result.at(i).finalPosition.x(),
-                             result.at(i).finalPosition.y());
+                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
                 /* Debug
                 painter.save();
@@ -3071,48 +2431,34 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
                 if (result.at(i).colorLayers.size()) {
                     for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
                         QBrush color = result.at(i).colorLayerColors.at(c);
-                        bool replace =
-                            result.at(i).replaceWithForeGroundColor.at(c);
+                        bool replace = result.at(i).replaceWithForeGroundColor.at(c);
                         // In theory we can use the pattern or gradient as well
                         // for ColorV0 fonts, but ColorV1 fonts can have
                         // gradients, so I am hesitant.
-                        KoColorBackground *b =
-                            dynamic_cast<KoColorBackground *>(
-                                chunkShape->background().data());
+                        KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunkShape->background().data());
                         if (b && replace) {
                             color = b->brush();
                         }
-                        painter.fillPath(tf.map(result.at(i).colorLayers.at(c)),
-                                         color);
+                        painter.fillPath(tf.map(result.at(i).colorLayers.at(c)), color);
                     }
                 } else {
                     chunk.addPath(p);
                 }
                 //}
                 if (p.isEmpty() && !result.at(i).image.isNull()) {
-                    if (result.at(i).image.isGrayscale()
-                        || result.at(i).image.format() == QImage::Format_Mono) {
+                    if (result.at(i).image.isGrayscale() || result.at(i).image.format() == QImage::Format_Mono) {
                         fillPainter.maskPainter()->save();
-                        fillPainter.maskPainter()->translate(
-                            result.at(i).finalPosition.x(),
-                            result.at(i).finalPosition.y());
-                        fillPainter.maskPainter()->rotate(
-                            qRadiansToDegrees(result.at(i).rotate));
-                        fillPainter.maskPainter()->setCompositionMode(
-                            QPainter::CompositionMode_Plus);
-                        fillPainter.maskPainter()->drawImage(
-                            result.at(i).boundingBox,
-                            result.at(i).image);
+                        fillPainter.maskPainter()->translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
+                        fillPainter.maskPainter()->rotate(qRadiansToDegrees(result.at(i).rotate));
+                        fillPainter.maskPainter()->setCompositionMode(QPainter::CompositionMode_Plus);
+                        fillPainter.maskPainter()->drawImage(result.at(i).boundingBox, result.at(i).image);
                         fillPainter.maskPainter()->restore();
                     } else {
                         painter.save();
-                        painter.translate(result.at(i).finalPosition.x(),
-                                          result.at(i).finalPosition.y());
+                        painter.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                         painter.rotate(qRadiansToDegrees(result.at(i).rotate));
-                        painter.setRenderHint(QPainter::SmoothPixmapTransform,
-                                              true);
-                        painter.drawImage(result.at(i).boundingBox,
-                                          result.at(i).image);
+                        painter.setRenderHint(QPainter::SmoothPixmapTransform, true);
+                        painter.drawImage(result.at(i).boundingBox, result.at(i).image);
                         painter.restore();
                     }
                 }
@@ -3123,64 +2469,42 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
             fillPainter.maskPainter()->fillPath(chunk, Qt::white);
         }
         if (!textDecorationsRest.isEmpty()) {
-            fillPainter.maskPainter()->fillPath(
-                textDecorationsRest.simplified(),
-                Qt::white);
+            fillPainter.maskPainter()->fillPath(textDecorationsRest.simplified(), Qt::white);
         }
         fillPainter.renderOnGlobalPainter();
         KoShapeStrokeSP maskStroke;
         if (chunkShape->stroke()) {
-            KoShapeStrokeSP stroke =
-                qSharedPointerDynamicCast<KoShapeStroke>(chunkShape->stroke());
+            KoShapeStrokeSP stroke = qSharedPointerDynamicCast<KoShapeStroke>(chunkShape->stroke());
 
             if (stroke) {
                 if (stroke->lineBrush().gradient()) {
-                    KoClipMaskPainter strokePainter(
-                        &painter,
-                        painter.transform().mapRect(
-                            outlineRect.boundingRect()));
-                    strokePainter.shapePainter()->fillRect(
-                        outlineRect.boundingRect(),
-                        stroke->lineBrush());
-                    maskStroke =
-                        KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
+                    KoClipMaskPainter strokePainter(&painter, painter.transform().mapRect(outlineRect.boundingRect()));
+                    strokePainter.shapePainter()->fillRect(outlineRect.boundingRect(), stroke->lineBrush());
+                    maskStroke = KoShapeStrokeSP(new KoShapeStroke(*stroke.data()));
                     maskStroke->setColor(Qt::white);
                     maskStroke->setLineBrush(Qt::white);
-                    strokePainter.maskPainter()->fillPath(outlineRect,
-                                                          Qt::black);
+                    strokePainter.maskPainter()->fillPath(outlineRect, Qt::black);
                     if (textRendering != OptimizeSpeed) {
-                        strokePainter.maskPainter()->setRenderHint(
-                            QPainter::Antialiasing,
-                            true);
+                        strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, true);
                     } else {
-                        strokePainter.maskPainter()->setRenderHint(
-                            QPainter::Antialiasing,
-                            false);
+                        strokePainter.maskPainter()->setRenderHint(QPainter::Antialiasing, false);
                     }
                     {
-                        QScopedPointer<KoShape> shape(
-                            KoPathShape::createShapeFromPainterPath(chunk));
-                        maskStroke->paint(shape.data(),
-                                          *strokePainter.maskPainter());
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
+                        maskStroke->paint(shape.data(), *strokePainter.maskPainter());
                     }
                     if (!textDecorationsRest.isEmpty()) {
-                        QScopedPointer<KoShape> shape(
-                            KoPathShape::createShapeFromPainterPath(
-                                textDecorationsRest));
-                        maskStroke->paint(shape.data(),
-                                          *strokePainter.maskPainter());
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
+                        maskStroke->paint(shape.data(), *strokePainter.maskPainter());
                     }
                     strokePainter.renderOnGlobalPainter();
                 } else {
                     {
-                        QScopedPointer<KoShape> shape(
-                            KoPathShape::createShapeFromPainterPath(chunk));
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(chunk));
                         stroke->paint(shape.data(), painter);
                     }
                     if (!textDecorationsRest.isEmpty()) {
-                        QScopedPointer<KoShape> shape(
-                            KoPathShape::createShapeFromPainterPath(
-                                textDecorationsRest));
+                        QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorationsRest));
                         stroke->paint(shape.data(), painter);
                     }
                 }
@@ -3191,58 +2515,36 @@ void KoSvgTextShape::Private::paintPaths(QPainter &painter,
 
     } else {
         Q_FOREACH (KoShape *child, chunkShape->shapes()) {
-            paintPaths(painter,
-                       outlineRect,
-                       child,
-                       result,
-                       chunk,
-                       currentIndex);
+            paintPaths(painter, outlineRect, child, result, chunk, currentIndex);
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
         if (chunkShape->background() && !textDecorationColor.isValid() && textDecorationColor != Qt::transparent) {
-            chunkShape->background()->paint(
-                painter,
-                textDecorations.value(KoSvgText::DecorationLineThrough));
+            chunkShape->background()->paint(painter, textDecorations.value(KoSvgText::DecorationLineThrough));
         } else if (textDecorationColor.isValid()) {
-            painter.fillPath(
-                textDecorations.value(KoSvgText::DecorationLineThrough),
-                textDecorationColor);
+            painter.fillPath(textDecorations.value(KoSvgText::DecorationLineThrough), textDecorationColor);
         }
         if (chunkShape->stroke()) {
-            QScopedPointer<KoShape> shape(
-                KoPathShape::createShapeFromPainterPath(
-                    textDecorations.value(KoSvgText::DecorationLineThrough)));
+            QScopedPointer<KoShape> shape(KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough)));
             chunkShape->stroke()->paint(shape.data(), painter);
         }
     }
 }
 
-QList<KoShape *>
-KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
-                                      QVector<CharacterResult> &result,
-                                      int &currentIndex)
+QList<KoShape *> KoSvgTextShape::Private::collectPaths(const KoShape *rootShape, QVector<CharacterResult> &result, int &currentIndex)
 {
-    const KoSvgTextChunkShape *chunkShape =
-        dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
+    const KoSvgTextChunkShape *chunkShape = dynamic_cast<const KoSvgTextChunkShape *>(rootShape);
 
-    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations =
-        chunkShape->layoutInterface()->textDecorations();
-    QColor textDecorationColor =
-        chunkShape->textProperties()
-            .propertyOrDefault(KoSvgTextProperties::TextDecorationColorId)
-            .value<QColor>();
-    QSharedPointer<KoShapeBackground> decorationColor =
-        chunkShape->background();
+    QMap<KoSvgText::TextDecoration, QPainterPath> textDecorations = chunkShape->layoutInterface()->textDecorations();
+    QColor textDecorationColor = chunkShape->textProperties().propertyOrDefault(KoSvgTextProperties::TextDecorationColorId).value<QColor>();
+    QSharedPointer<KoShapeBackground> decorationColor = chunkShape->background();
     if (textDecorationColor.isValid()) {
-        decorationColor = QSharedPointer<KoColorBackground>(
-            new KoColorBackground(textDecorationColor));
+        decorationColor = QSharedPointer<KoColorBackground>(new KoColorBackground(textDecorationColor));
     }
 
     QList<KoShape *> shapes;
     if (textDecorations.contains(KoSvgText::DecorationUnderline)) {
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(
-            textDecorations.value(KoSvgText::DecorationUnderline));
+        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationUnderline));
         shape->setBackground(decorationColor);
         shape->setStroke(chunkShape->stroke());
         shape->setZIndex(chunkShape->zIndex());
@@ -3250,8 +2552,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
         shapes.append(shape);
     }
     if (textDecorations.contains(KoSvgText::DecorationOverline)) {
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(
-            textDecorations.value(KoSvgText::DecorationOverline));
+        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationOverline));
         shape->setBackground(decorationColor);
         shape->setStroke(chunkShape->stroke());
         shape->setZIndex(chunkShape->zIndex());
@@ -3267,29 +2568,22 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
         for (int i = currentIndex; i < j; i++) {
             if (result.at(i).addressable && result.at(i).hidden == false) {
                 tf.reset();
-                tf.translate(result.at(i).finalPosition.x(),
-                             result.at(i).finalPosition.y());
+                tf.translate(result.at(i).finalPosition.x(), result.at(i).finalPosition.y());
                 tf.rotateRadians(result.at(i).rotate);
                 QPainterPath p = tf.map(result.at(i).path);
                 if (result.at(i).colorLayers.size()) {
                     for (int c = 0; c < result.at(i).colorLayers.size(); c++) {
                         QBrush color = result.at(i).colorLayerColors.at(c);
-                        bool replace =
-                            result.at(i).replaceWithForeGroundColor.at(c);
+                        bool replace = result.at(i).replaceWithForeGroundColor.at(c);
                         // In theory we can use the pattern or gradient as well
                         // for ColorV0 fonts, but ColorV1 fonts can have
                         // gradients, so I am hesitant.
-                        KoColorBackground *b =
-                            dynamic_cast<KoColorBackground *>(
-                                chunkShape->background().data());
+                        KoColorBackground *b = dynamic_cast<KoColorBackground *>(chunkShape->background().data());
                         if (b && replace) {
                             color = b->brush();
                         }
-                        KoPathShape *shape =
-                            KoPathShape::createShapeFromPainterPath(
-                                tf.map(result.at(i).colorLayers.at(c)));
-                        shape->setBackground(QSharedPointer<KoColorBackground>(
-                            new KoColorBackground(color.color())));
+                        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(tf.map(result.at(i).colorLayers.at(c)));
+                        shape->setBackground(QSharedPointer<KoColorBackground>(new KoColorBackground(color.color())));
                         shape->setZIndex(chunkShape->zIndex());
                         shape->setFillRule(Qt::WindingFill);
                         shapes.append(shape);
@@ -3313,8 +2607,7 @@ KoSvgTextShape::Private::collectPaths(const KoShape *rootShape,
         }
     }
     if (textDecorations.contains(KoSvgText::DecorationLineThrough)) {
-        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(
-            textDecorations.value(KoSvgText::DecorationLineThrough));
+        KoPathShape *shape = KoPathShape::createShapeFromPainterPath(textDecorations.value(KoSvgText::DecorationLineThrough));
         shape->setBackground(decorationColor);
         shape->setStroke(chunkShape->stroke());
         shape->setZIndex(chunkShape->zIndex());

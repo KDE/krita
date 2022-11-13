@@ -237,12 +237,8 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
     } else if (command == "font-style") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
-    } else if (command == "font-variant" || command == "font-variant-caps"
-               || command == "font-variant-alternates"
-               || command == "font-variant-ligatures"
-               || command == "font-variant-numeric"
-               || command == "font-variant-east-asian"
-               || command == "font-variant-position") {
+    } else if (command == "font-variant" || command == "font-variant-caps" || command == "font-variant-alternates" || command == "font-variant-ligatures"
+               || command == "font-variant-numeric" || command == "font-variant-east-asian" || command == "font-variant-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
     } else if (command == "font-feature-settings") {
@@ -259,9 +255,7 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "font") {
         qWarning() << "Krita does not support the 'font' shorthand";
-    } else if (command == "text-decoration" || command == "text-decoration-line"
-               || command == "text-decoration-style"
-               || command == "text-decoration-color"
+    } else if (command == "text-decoration" || command == "text-decoration-line" || command == "text-decoration-style" || command == "text-decoration-color"
                || command == "text-decoration-position") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
 
@@ -324,15 +318,10 @@ void SvgStyleParser::parsePA(SvgGraphicsContext *gc, const QString &command, con
             gc->markerMidId = gc->markerStartId;
             gc->markerEndId = gc->markerStartId;
         }
-    } else if (command == "line-height" || command == "white-space"
-               || command == "xml:space" || command == "text-transform"
-               || command == "text-indent" || command == "word-break"
-               || command == "line-break" || command == "hanging-punctuation"
-               || command == "text-align" || command == "text-align-all"
-               || command == "text-align-last" || command == "inline-size"
-               || command == "overflow" || command == "text-overflow"
-               || command == "tab-size" || command == "overflow-wrap"
-               || command == "word-wrap" || command == "vertical-align") {
+    } else if (command == "line-height" || command == "white-space" || command == "xml:space" || command == "text-transform" || command == "text-indent"
+               || command == "word-break" || command == "line-break" || command == "hanging-punctuation" || command == "text-align"
+               || command == "text-align-all" || command == "text-align-last" || command == "inline-size" || command == "overflow" || command == "text-overflow"
+               || command == "tab-size" || command == "overflow-wrap" || command == "word-wrap" || command == "vertical-align") {
         gc->textProperties.parseSvgTextAttribute(d->context, command, params);
     } else if (command == "krita:marker-fill-method") {
         gc->autoFillMarkers = params == "auto";

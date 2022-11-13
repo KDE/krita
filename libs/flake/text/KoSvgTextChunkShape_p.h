@@ -29,7 +29,7 @@ public:
     QVector<KoSvgText::CharTransformation> localTransformations;
 
     KoSvgText::TextOnPathInfo textPathInfo;
-    KoShape *textPath{0};
+    KoShape *textPath{nullptr};
 
     KoSvgText::AutoValue textLength;
     KoSvgText::LengthAdjust lengthAdjust = KoSvgText::LengthAdjustSpacing;

@@ -1267,8 +1267,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // ACTUALLY no, it's the 'point' that should be normalized here, not the ellipse!
 
     double normalizeBy = 1.0;
-
-    QPointF point2 = point;
     QPointF point3 = point;
 
 
@@ -1280,9 +1278,6 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // x => nb*x
     // (nb*x) + (nb*y) = 1
     // 5x + 5y = 1
-
-    // ok so,
-
 
 
     if (!qFuzzyCompare(normalizeBy, 0)) {
@@ -1369,22 +1364,16 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
         //if (debug) writeFormulaInAllForms(canonized, "canonized raw");
         if (debug) f.formCCanonized.printOutInAllForms();
 
+        qreal checkIfReallyCanonized = sq(f.formCCanonized.A) + sq(f.formCCanonized.B) + sq(f.formCCanonized.C)
+                + sq(f.formCCanonized.D) + sq(f.formCCanonized.E) + sq(f.formCCanonized.F);
+
+        if (debug) ENTER_FUNCTION() << ppVar(checkIfReallyCanonized == 1);
+
     };
 
 
     canonizeFormula(f);
 
-    if (debug) ENTER_FUNCTION() << "after canonization:" << ppVar(canonized);
-    if (debug) ENTER_FUNCTION() << ppVar(writeFormulaInWolframAlphaForm(canonized)); // still a circle, good!
-    if (debug) writeFormulaInAllForms(canonized, "canonized");
-
-    if (debug) ENTER_FUNCTION() << "(*) after canonization:" << ppVar(point);
-
-    qreal checkIfReallyCanonized = canonized[0]*canonized[0] + canonized[1]*canonized[1] + canonized[2]*canonized[2]
-            + canonized[3]*canonized[3] + canonized[4]*canonized[4] + canonized[5]*canonized[5];
-
-
-    if (debug) ENTER_FUNCTION() << ppVar(checkIfReallyCanonized);
     // ok so canonized is the article's version, as in, the true equation is with 2*canonized[1] for example,
     // and canonized = A, B, C, D...
 

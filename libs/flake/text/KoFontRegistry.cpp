@@ -3,7 +3,7 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#include "KoFontRegistery.h"
+#include "KoFontRegistry.h"
 #include "FlakeDebug.h"
 #include "KoCssTextUtils.h"
 
@@ -23,9 +23,9 @@
 
 #include "KoFontLibraryResourceUtils.h"
 
-Q_GLOBAL_STATIC(KoFontRegistery, s_instance)
+Q_GLOBAL_STATIC(KoFontRegistry, s_instance)
 
-class KoFontRegistery::Private
+class KoFontRegistry::Private
 {
 private:
     FcConfigUP m_config;
@@ -116,31 +116,31 @@ public:
     }
 };
 
-KoFontRegistery::KoFontRegistery()
+KoFontRegistry::KoFontRegistry()
     : d(new Private())
 {
 }
 
-KoFontRegistery::~KoFontRegistery() = default;
+KoFontRegistry::~KoFontRegistry() = default;
 
-KoFontRegistery *KoFontRegistery::instance()
+KoFontRegistry *KoFontRegistry::instance()
 {
     return s_instance;
 }
 
-std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
-                                                          QVector<int> &lengths,
-                                                          QMap<QString, qreal> axisSettings,
-                                                          QString text,
-                                                          int xRes,
-                                                          int yRes,
-                                                          qreal size,
-                                                          qreal fontSizeAdjust,
-                                                          int weight,
-                                                          int width,
-                                                          bool italic,
-                                                          int slant,
-                                                          QString language)
+std::vector<FT_FaceUP> KoFontRegistry::facesForCSSValues(QStringList families,
+                                                         QVector<int> &lengths,
+                                                         QMap<QString, qreal> axisSettings,
+                                                         QString text,
+                                                         int xRes,
+                                                         int yRes,
+                                                         qreal size,
+                                                         qreal fontSizeAdjust,
+                                                         int weight,
+                                                         int width,
+                                                         bool italic,
+                                                         int slant,
+                                                         QString language)
 {
     Q_UNUSED(size)
     Q_UNUSED(language)
@@ -354,12 +354,12 @@ std::vector<FT_FaceUP> KoFontRegistery::facesForCSSValues(QStringList families,
     return faces;
 }
 
-bool KoFontRegistery::configureFaces(const std::vector<FT_FaceUP> &faces,
-                                     qreal size,
-                                     qreal fontSizeAdjust,
-                                     int xRes,
-                                     int yRes,
-                                     QMap<QString, qreal> axisSettings)
+bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
+                                    qreal size,
+                                    qreal fontSizeAdjust,
+                                    int xRes,
+                                    int yRes,
+                                    QMap<QString, qreal> axisSettings)
 {
     int errorCode = 0;
     int ftFontUnit = 64.0;
@@ -449,14 +449,14 @@ bool KoFontRegistery::configureFaces(const std::vector<FT_FaceUP> &faces,
     return (errorCode == 0);
 }
 
-bool KoFontRegistery::addFontFilePathToRegistery(QString path)
+bool KoFontRegistry::addFontFilePathToRegistery(QString path)
 {
     QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
     return FcConfigAppFontAddFile(FcConfigGetCurrent(), vals);
 }
 
-bool KoFontRegistery::addFontFileDirectoryToRegistery(QString path)
+bool KoFontRegistry::addFontFileDirectoryToRegistery(QString path)
 {
     QByteArray utfData = path.toUtf8();
     const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());

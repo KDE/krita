@@ -25,7 +25,7 @@
 #include <KoShapeContainer_p.h>
 #include <KoShapeController.h>
 #include <text/KoCssTextUtils.h>
-#include <text/KoFontRegistery.h>
+#include <text/KoFontRegistry.h>
 #include <text/KoSvgTextChunkShape_p.h>
 #include <text/KoSvgTextShapeMarkupConverter.h>
 
@@ -636,24 +636,18 @@ void KoSvgTextShape::relayout() const
                          .toInt()
                      < 3);
             }
-            const std::vector<FT_FaceUP> faces =
-                KoFontRegistery::instance()->facesForCSSValues(
-                    properties.property(KoSvgTextProperties::FontFamiliesId)
-                        .toStringList(),
-                    lengths,
-                    properties.fontAxisSettings(),
-                    chunk.text,
-                    finalRes,
-                    finalRes,
-                    fontSize,
-                    fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-                    properties
-                        .propertyOrDefault(KoSvgTextProperties::FontWeightId)
-                        .toInt(),
-                    properties
-                        .propertyOrDefault(KoSvgTextProperties::FontStretchId)
-                        .toInt(),
-                    style != QFont::StyleNormal);
+            const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
+                properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+                lengths,
+                properties.fontAxisSettings(),
+                chunk.text,
+                finalRes,
+                finalRes,
+                fontSize,
+                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+                properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+                properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+                style != QFont::StyleNormal);
             if (properties.hasProperty(KoSvgTextProperties::TextLanguage)) {
                 raqm_set_language(
                     layout.data(),
@@ -1982,22 +1976,18 @@ void KoSvgTextShape::Private::computeFontMetrics(
             (properties.property(KoSvgTextProperties::KraTextVersionId).toInt()
              < 3);
     }
-    const std::vector<FT_FaceUP> faces =
-        KoFontRegistery::instance()->facesForCSSValues(
-            properties.property(KoSvgTextProperties::FontFamiliesId)
-                .toStringList(),
-            lengths,
-            properties.fontAxisSettings(),
-            QString(),
-                res,
-                res,
-            fontSize,
-                fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
-            properties.propertyOrDefault(KoSvgTextProperties::FontWeightId)
-                .toInt(),
-            properties.propertyOrDefault(KoSvgTextProperties::FontStretchId)
-                .toInt(),
-            style != QFont::StyleNormal);
+    const std::vector<FT_FaceUP> faces = KoFontRegistry::instance()->facesForCSSValues(
+        properties.property(KoSvgTextProperties::FontFamiliesId).toStringList(),
+        lengths,
+        properties.fontAxisSettings(),
+        QString(),
+        res,
+        res,
+        fontSize,
+        fontSizeAdjust.isAuto ? 1.0 : fontSizeAdjust.customValue,
+        properties.propertyOrDefault(KoSvgTextProperties::FontWeightId).toInt(),
+        properties.propertyOrDefault(KoSvgTextProperties::FontStretchId).toInt(),
+        style != QFont::StyleNormal);
 
     hb_font_t_up font(hb_ft_font_create_referenced(faces.front().data()));
     qreal freetypePixelsToPt = (1.0 / 64.0) * float(72. / res);

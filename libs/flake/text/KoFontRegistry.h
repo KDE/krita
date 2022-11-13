@@ -3,8 +3,8 @@
  *
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
-#ifndef KOFONTREGISTERY_H
-#define KOFONTREGISTERY_H
+#ifndef KOFONTREGISTRY_H
+#define KOFONTREGISTRY_H
 
 #include <QScopedPointer>
 #include <QVector>
@@ -14,7 +14,7 @@
 #include "kritaflake_export.h"
 
 /**
- * @brief The KoFontRegistery class
+ * @brief The KoFontRegistry class
  * A wrapper around a freetype library.
  *
  * This class abstract away loading freetype faces from css
@@ -24,13 +24,13 @@
  * It also provides a configuration function to handle all the
  * size and variation axis values.
  */
-class KRITAFLAKE_EXPORT KoFontRegistery
+class KRITAFLAKE_EXPORT KoFontRegistry
 {
 public:
-    KoFontRegistery();
-    ~KoFontRegistery();
+    KoFontRegistry();
+    ~KoFontRegistry();
 
-    static KoFontRegistery *instance();
+    static KoFontRegistry *instance();
 
     /**
      * @brief facesForCSSValues
@@ -97,7 +97,7 @@ private:
 
     QScopedPointer<Private> d;
 
-    Q_DISABLE_COPY(KoFontRegistery);
+    Q_DISABLE_COPY(KoFontRegistry);
 };
 
-#endif // KOFONTREGISTERY_H
+#endif // KOFONTREGISTRY_H

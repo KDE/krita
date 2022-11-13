@@ -29,7 +29,6 @@ GRTAGS
 GSYMS
 BROWSE
 *.kate-swp
-/po/
 build_dir
 .flatpak-builder
 .cache

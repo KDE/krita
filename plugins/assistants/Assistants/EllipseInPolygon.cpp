@@ -1480,6 +1480,14 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     KIS_ASSERT_RECOVER_NOOP(qAbs(f.formDRotatedSecondVersion.B) < 1e-10);
 
+    bool swap = false;
+    if (swap) {
+        ConicFormula tmp = f.formDRotated;
+        f.formDRotated = f.formDRotatedSecondVersion;
+        f.formDRotatedSecondVersion = tmp;
+    }
+
+
     //if (debug) ENTER_FUNCTION() << "after rotation:" << ppVar(writeFormulaInWolframAlphaForm(rotated)); // still a circle, good
 
     if (debug) ENTER_FUNCTION() << "(6a)";

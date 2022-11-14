@@ -239,7 +239,9 @@ protected:
 
 
 
-    static QVector<double> getRotatedFormula(QVector<double> original, QPointF &pointToRotateTogether);
+    static QVector<double> getRotatedFormula(QVector<double> original, qreal &K, qreal &L);
+    static QPointF getRotatedPoint(QPointF point, qreal K, qreal L, bool unrotate = false);
+
 
 
     bool m_valid {false};

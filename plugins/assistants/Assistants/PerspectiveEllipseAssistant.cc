@@ -78,10 +78,11 @@ QPointF PerspectiveEllipseAssistant::project(const QPointF& pt, const QPointF& s
     Q_ASSERT(isAssistantComplete());
 
     if (d->isConcentric) {
-        return d->simpleConcentricEllipse.project(pt);
-        //return d->concentricEllipseInPolygon.project(pt);
+        //return d->simpleConcentricEllipse.project(pt);
+        d->simpleConcentricEllipse;
+        return d->concentricEllipseInPolygon.projectModifiedEberlySecond(pt);
     } else {
-        return d->ellipseInPolygon.projectModifiedEberly(pt);
+        return d->ellipseInPolygon.projectModifiedEberlySecond(pt);
         d->ellipseInPolygon.setSimpleEllipseVertices(d->simpleEllipse);
         return d->simpleEllipse.project(pt);
     }

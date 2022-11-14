@@ -517,7 +517,10 @@ QPointF EllipseInPolygon::projectModifiedEberly(QPointF point)
     if (debug) writeFormulaInAllForms(formulaDRotated, "formula D - rotated");
 
     QPointF pointToRotate = point;
-    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(formCCanonized.getFormulaActual(), pointToRotate);
+    qreal K;
+    qreal L;
+    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(formCCanonized.getFormulaActual(), K, L);
+    pointToRotate = getRotatedPoint(pointToRotate, K, L);
     ConicFormula formDRotatedAlt (formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
     formDRotatedAlt.convertTo(ConicFormula::SPECIAL);
     if (debug) formDRotatedAlt.printOutInAllForms();
@@ -1163,7 +1166,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     // ***************
 
-    bool debug = true;
+    bool debug = false;
     //debug = false;
     //debug = true;
 
@@ -1471,8 +1474,11 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     if (debug) ENTER_FUNCTION() << "Q = " << (double)Q(0, 0) << (double)Q(0, 1) << (double)Q(1, 0) << (double)Q(1, 1);
 
-    QPointF pointToRotate = point;
-    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(f.formCCanonized.getFormulaActual(), pointToRotate);
+    QPointF pointRotatedSecondVersion = point;
+    qreal K;
+    qreal L;
+    QVector<double> formulaDRotatedAlternativeTrue = getRotatedFormula(f.formCCanonized.getFormulaActual(), K, L);
+    pointRotatedSecondVersion = getRotatedPoint(pointRotatedSecondVersion, K, L);
     f.formDRotatedSecondVersion = ConicFormula(formulaDRotatedAlternativeTrue, "formula D - rotated, alternative", ConicFormula::ACTUAL);
     f.formDRotatedSecondVersion.convertTo(ConicFormula::SPECIAL);
 
@@ -1480,7 +1486,7 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
 
     KIS_ASSERT_RECOVER_NOOP(qAbs(f.formDRotatedSecondVersion.B) < 1e-10);
 
-    bool swap = false;
+    bool swap = true;
     if (swap) {
         ConicFormula tmp = f.formDRotated;
         f.formDRotated = f.formDRotatedSecondVersion;
@@ -1496,6 +1502,9 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     //point = QPointF(point.x()*Q(0, 0), point.y()*Q(1, 1));
     // point * Q?
     point = QPointF(Q(0, 0)*point.x() + Q(1, 0)*point.y(), Q(0, 1)*point.x() + Q(1, 1)*point.y());
+    if (swap) {
+        point = pointRotatedSecondVersion;
+    }
 
 
     if (debug) ENTER_FUNCTION() << "(*) after rotation:" << ppVar(point);
@@ -1748,7 +1757,12 @@ QPointF EllipseInPolygon::projectModifiedEberlySecond(QPointF point)
     // result = QPointF(result.x()/Q(0, 0), result.y()/Q(1, 1));
     // Q must be transposed now
     if (debug) ENTER_FUNCTION() << "Ok, now undoing the rotation for the point:";
-    result = QPointF(Q(0, 0)*result.x() + Q(0, 1)*result.y(), Q(1, 0)*result.x() + Q(1, 1)*result.y());
+
+    if (swap) {
+        result = getRotatedPoint(result, K, L, true);
+    } else {
+        result = QPointF(Q(0, 0)*result.x() + Q(0, 1)*result.y(), Q(1, 0)*result.x() + Q(1, 1)*result.y());
+    }
 
 
     if (debug) ENTER_FUNCTION() << "(5) after un-rotating" << ppVar(result) << ppVar(calculateFormula(result)) << ppVar(calculateFormula(canonized, result))
@@ -2086,7 +2100,7 @@ qreal EllipseInPolygon::calculateFormula(QVector<double> formula, QPointF point)
             + formula[5]; // f
 }
 
-QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, QPointF& pointToRotateTogether)
+QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, qreal& K, qreal& L)
 {
     qreal a = original[0];
     qreal b = original[1];
@@ -2099,8 +2113,8 @@ QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, QP
 
     // use finalAxisAngle to find the cos and sin
     // and replace the final coordinate system with the rerotated one
-    qreal K = qCos(-angle);
-    qreal L = qSin(-angle);
+    K = qCos(-angle);
+    L = qSin(-angle);
 
     // this allows to calculate the formula for the rerotated ellipse
     qreal aprim = K*K*a - K*L*b + L*L*c;
@@ -2120,11 +2134,19 @@ QVector<double> EllipseInPolygon::getRotatedFormula(QVector<double> original, QP
     // and any point that is not (0, 0), when rotated around (0, 0) with an angle that isn't 0, 360 etc. degrees, will end up in a different place
     //QPointF rerotatedCenter = QPointF(K*finalEllipseCenter[0] - L*finalEllipseCenter[1], K*finalEllipseCenter[1] + L*finalEllipseCenter[0]);
 
-    pointToRotateTogether = QPointF(K*pointToRotateTogether.x() - L*pointToRotateTogether.y(), K*pointToRotateTogether.y() + L*pointToRotateTogether.x());
+
     QVector<double> response;
     response << aprim << bprim << cprim << dprim << eprim << fprim;
     return response;
 
+}
+
+QPointF EllipseInPolygon::getRotatedPoint(QPointF point, qreal K, qreal L, bool unrotate)
+{
+    qreal k = K;
+    qreal l = unrotate ? -L : L;
+    QPointF response = QPointF(k*point.x() - l*point.y(), k*point.y() + l*point.x());
+    return response;
 }
 
 void EllipseInPolygon::setFormula(QVector<double> &formula, double a, double b, double c, double d, double e, double f)
@@ -2219,7 +2241,7 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
     if (!formulaRepresentsAnEllipse(a, b, c)) {
         ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
         ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
-        return false; //moved later
+        //return false; //moved later
     }
 
     setFormula(finalFormula, a, b, c, d, e, f);
@@ -2229,7 +2251,7 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
     if (!formulaRepresentsAnEllipse(a, b, c)) {
         ENTER_FUNCTION() << "Formula doesn't represent an ellipse:" << a << b << c << d << e << f;
         ENTER_FUNCTION() << "Is ellipse valid?" << isValid();
-        return false; //moved later
+        //return false; //moved later
     }
 
     // x = (be - 2cd)/(4c - b^2)
@@ -2252,7 +2274,7 @@ bool EllipseInPolygon::updateToFivePoints(QVector<QPointF> points, QLineF _horiz
     qreal fprim = f;
 
     if (!formulaRepresentsAnEllipse(aprim, bprim, cprim)) {
-        return false;
+        //return false;
         // temporarily moved further away
     }
 

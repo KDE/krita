@@ -186,6 +186,14 @@ void TestAssistants::testProjectionNewMethodTest2()
             ENTER_FUNCTION() << ppVar(ellipse.finalFormula) << ppVar(point) << ppVar(res) << ppVar(formValue);
         }
         QVERIFY(formValue < eps);
+        //return formValue < eps;
+    };
+
+
+    QRandomGenerator gen;
+
+    auto genPoint = [gen] (int a, int b) mutable {
+        return QPointF(gen.bounded(b - a) + a, gen.bounded(b - a) + a);
     };
 
 
@@ -202,12 +210,25 @@ void TestAssistants::testProjectionNewMethodTest2()
     //original.updateToPolygon(QPolygonF(QRectF(0.0, 0.0, 1.0, 1.0)), QLineF(0.0, 0.0, 1.0, 0.0));
     point = QPointF(3, 3);
 
-    QRandomGenerator gen;
-
     for (int i = 0; i < 100; i++) {
         QString testName = "circle" + QString::number(i);
         doTest(original, QPointF(gen.bounded(10.0) - 5.0, gen.bounded(10.0) - 5.0));
     }
+
+
+    original.updateToPolygon(poly, QLineF(0.0, 0.0, 1.0, 0.0));
+    //original.updateToPolygon(QPolygonF(QRectF(0.0, 0.0, 1.0, 1.0)), QLineF(0.0, 0.0, 1.0, 0.0));
+    point = QPointF(3, 3);
+
+
+    for (int i = 0; i < 100; i++) {
+        QString testName = "circle" + QString::number(i);
+        poly = QPolygonF();
+        poly << genPoint(-5, 5) << genPoint(-5, 5) << genPoint(-5, 5) << genPoint(-5, 5);
+        original.updateToPolygon(poly, QLineF(0.0, 0.0, 1.0, 0.0));
+        doTest(original, genPoint(-5, 5));
+    }
+
 }
 
 void TestAssistants::testProjectionNewMethod()
@@ -216,7 +237,7 @@ void TestAssistants::testProjectionNewMethod()
     EllipseInPolygon original;
     ENTER_FUNCTION() << "(1)";
 
-    qreal eps = 0.000001;
+    qreal eps = 1e-6;
 
     QPointF point;
 
@@ -271,6 +292,7 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
 
     ENTER_FUNCTION() << "************************ START 2 **************************";
 
@@ -285,6 +307,7 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
 
 
     ENTER_FUNCTION() << "************************ START 3 **************************";
@@ -297,13 +320,14 @@ void TestAssistants::testProjectionNewMethod()
 
     point = QPointF(5, 5);
 
-    /*
-    result = original.projectModifiedEberly(point);
+
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
-    */
+    QVERIFY(form(result, original) < eps);
+
 
     ENTER_FUNCTION() << "************************ START 4 ************************";
     // Test 3.
@@ -317,13 +341,14 @@ void TestAssistants::testProjectionNewMethod()
 
     point = QPointF(0, sqrt(5/2.0));
 
-    /*
-    result = original.projectModifiedEberly(point);
+
+    result = original.projectModifiedEberlySecond(point);
     ENTER_FUNCTION() << ppVar(result);
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
-    */
+    QVERIFY(form(result, original) < eps);
+
 
 
     ENTER_FUNCTION() << "************************ START 5 ************************";
@@ -331,7 +356,7 @@ void TestAssistants::testProjectionNewMethod()
     // ellipse: 2x^2 + xy + 1y^2 = 5
     // so: 2, 1, 2, 0, 0, -5
 
-    /*
+
     original.finalFormula.clear();
     original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
 
@@ -342,14 +367,15 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
-    */
+    QVERIFY(form(result, original) < eps);
+
 
     ENTER_FUNCTION() << "************************ START 6 ************************";
     // Test 3.
     // ellipse: 2x^2 + xy + 1y^2 = 5
     // so: 2, 1, 2, 0, 0, -5
 
-    /*
+
 
     original.finalFormula.clear();
     original.finalFormula << 2 << 1 << 2 << 0 << 0 << -5;
@@ -364,12 +390,13 @@ void TestAssistants::testProjectionNewMethod()
 
 
     //QVERIFY(form(result, original) < eps);
+    QVERIFY(form(result, original) < eps);
 
-    */
+
 
     ENTER_FUNCTION() << "************************ START 7 (real, but nicer numbers) **************************";
 
-    /*
+
     poly.clear();
     poly << QPointF(700,350)  << QPointF(1050,530) << QPointF(700,1000)
          << QPointF(350,530);
@@ -381,8 +408,9 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
 
-    */
+
     ENTER_FUNCTION() << "************************ START 8 (real 2, leading to the \"weird situation\") **************************";
 
     // The values were:  polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(683.107,1006.81), QPointF(349.884,528.397))
@@ -397,6 +425,7 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+    QVERIFY(form(result, original) < eps);
 
     ENTER_FUNCTION() << "************************ START 9 (real 3, leading to the fd being zero in Newton, and then nans) **************************";
 
@@ -412,6 +441,8 @@ void TestAssistants::testProjectionNewMethod()
     ENTER_FUNCTION() << ppVar(result) << ppVar(form(result, original));
 
     ENTER_FUNCTION() << "############       RESULT =      " << form(result, original);
+
+    QVERIFY(form(result, original) < eps);
 
 
     // polygon = QVector(QPointF(704.529,342.744), QPointF(1049.58,529.788), QPointF(722.562,626.904), QPointF(349.884,528.397)) point = QPointF(553.452,264.769)

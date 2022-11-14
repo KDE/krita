@@ -41,6 +41,7 @@ public:
     void prepareForDestroying();
     virtual void forceRepaint() = 0;
     virtual bool hasPendingUpdates() const = 0;
+    virtual KisPaintDeviceSP projection() const = 0;
 
     virtual void forceRepaintWithHiddenAreas() { forceRepaint(); }
 
@@ -90,7 +91,7 @@ public:
 
     /// This canvas won't render onto a widget, but a projection
     void setProjection(KisPaintDeviceSP projection);
-    KisPaintDeviceSP projection() const;
+    KisPaintDeviceSP projection() const override;
 
     void setImage(KisImageWSP image) override;
     void updateCanvas(const QRectF& rc) override;

@@ -12,6 +12,7 @@
 #include <kis_processing_visitor.h>
 #include <kis_shape_layer_canvas.h>
 
+#include "kis_default_bounds.h"
 #include "KisReferenceImagesLayer.h"
 #include "KisReferenceImage.h"
 #include "KisDocument.h"
@@ -85,14 +86,16 @@ private:
 class ReferenceImagesCanvas : public KisShapeLayerCanvasBase
 {
 public:
-    ReferenceImagesCanvas(KisReferenceImagesLayer *parent)
+    ReferenceImagesCanvas(const KoColorSpace *cs, KisDefaultBoundsBaseSP defaultBounds, KisReferenceImagesLayer *parent)
         : KisShapeLayerCanvasBase(parent)
         , m_layer(parent)
+        , m_fallbackProjection(new KisPaintDevice(parent, cs, defaultBounds))
     {}
 
     ReferenceImagesCanvas(const ReferenceImagesCanvas &rhs, KisReferenceImagesLayer *parent)
         : KisShapeLayerCanvasBase(rhs, parent)
         , m_layer(parent)
+        , m_fallbackProjection(new KisPaintDevice(*rhs.m_fallbackProjection))
     {}
 
     void updateCanvas(const QRectF &rect) override
@@ -118,13 +121,18 @@ public:
     void rerenderAfterBeingInvisible() override {}
     void resetCache() override {}
 
+    KisPaintDeviceSP projection() const override {
+        return m_fallbackProjection;
+    }
+
 private:
     KisReferenceImagesLayer *m_layer;
+    KisPaintDeviceSP m_fallbackProjection;
 };
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(KoShapeControllerBase* shapeController, KisImageWSP image)
     : KisShapeLayer(shapeController, image, i18n("Reference images"), OPACITY_OPAQUE_U8,
-                    [&] () { return new ReferenceImagesCanvas(this); })
+                    [&] () { return new ReferenceImagesCanvas(image->colorSpace(), new KisDefaultBounds(image), this); })
 {}
 
 KisReferenceImagesLayer::KisReferenceImagesLayer(const KisReferenceImagesLayer &rhs)

@@ -254,9 +254,7 @@ void KisShapeLayer::initShapeLayerImpl(KoShapeControllerBase* controller,
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(canvas);
 
-    if (KisShapeLayerCanvas *slc = dynamic_cast<KisShapeLayerCanvas*>(canvas)) {
-        m_d->paintDevice = slc->projection();
-    }
+    m_d->paintDevice = canvas->projection();
 
     m_d->canvas = canvas;
     m_d->canvas->moveToThread(this->thread());

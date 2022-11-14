@@ -439,11 +439,7 @@ int KisPaletteModel::indexRowForInfo(const KisSwatchGroup::SwatchInfo &info)
 
 KisSwatch KisPaletteModel::getSwatch(const QModelIndex &index) const
 {
-    KisSwatchGroupSP group = m_colorSet->getGroup(index.row());
-    if (!group || !group->checkSwatchExists(index.column(), rowNumberInGroup(index.row()))) {
-        return KisSwatch();
-    }
-    return group->getSwatch(index.column(), rowNumberInGroup(index.row()));
+    return m_colorSet->getColorGlobal(index.column(), index.row());
 }
 
 int KisPaletteModel::groupNameRowForRow(int rowInModel) const

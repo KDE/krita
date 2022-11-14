@@ -337,7 +337,6 @@ void TestKoColorSet::testAddGroup()
     QVERIFY(cs->swatchGroupNames().contains("newgroup"));
     QVERIFY(cs->isDirty());
 
-
     cs->addGroup("newgroup2");
 
     QCOMPARE(cs->getGroup(11)->name(), "");
@@ -540,11 +539,18 @@ void TestKoColorSet::testGetSwatchFromGroup()
 void TestKoColorSet::testIsGroupNameRow()
 {
     KoColorSetSP cs = createColorSet();
-    cs->addGroup("group1");
-    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 30);
-
-    QVERIFY(cs->isGroupTitleRow(KisSwatchGroup::DEFAULT_ROW_COUNT + 1));
-    QVERIFY(cs->isGroupTitleRow((KisSwatchGroup::DEFAULT_ROW_COUNT * 2) + 2));
+    cs->getGlobalGroup()->setRowCount(7);
+    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
+    for (int i = 0; i < cs->rowCountWithTitles(); ++i) {
+        // qDebug() << "row" << i << "is grouptitle" << cs->isGroupTitleRow(i);
+        if (i == 7 || i == 14) {
+            QVERIFY(cs->isGroupTitleRow(i));
+        }
+        else {
+            QVERIFY(!cs->isGroupTitleRow(i));
+        }
+    }
 }
 
 void TestKoColorSet::testStartRowForNamedGroup()
@@ -573,49 +579,75 @@ void TestKoColorSet::testGetClosestSwatchInfo()
 void TestKoColorSet::testGetGroup()
 {
     KoColorSetSP cs = createColorSet();
-    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 10);
-    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 30);
+    cs->getGlobalGroup()->setRowCount(7);
+    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
 
-    QCOMPARE(cs->rowCount(), 60);
-    QCOMPARE(cs->rowCountWithTitles(), 62);
+    QCOMPARE(cs->rowCount(), 18);
+    QCOMPARE(cs->rowCountWithTitles(), 20);
     QVERIFY(cs->getGroup("group1"));
     QVERIFY(cs->getGroup("group2"));
-
-//    for (int i = 0; i < cs->rowCountWithTitles(); ++i) {
-//        KisSwatchGroupSP grp = cs->getGroup(i);
-//        qDebug() << "row" << i << "group" << (grp ? grp->name() : "No Group");
-//    }
-
 
     KisSwatchGroupSP grp = cs->getGroup(0);
     QVERIFY(grp);
     QVERIFY(grp->name().isEmpty());
 
-    grp = cs->getGroup(21); // titlerow
+    grp = cs->getGroup(7); // titlerow
     QVERIFY(grp);
     QCOMPARE(grp->name(), "group1");
 
-    grp = cs->getGroup(25);
+    grp = cs->getGroup(8);
     QVERIFY(grp);
     QCOMPARE(grp->name(), "group1");
 
-    grp = cs->getGroup(30); // last row
+    grp = cs->getGroup(13); // last row
     QVERIFY(grp);
     QCOMPARE(grp->name(), "group1");
 
-    grp = cs->getGroup(31); // titlerow
+    grp = cs->getGroup(14); // titlerow
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group2");
+
+    grp = cs->getGroup(17);
+    QVERIFY(grp);
+    QCOMPARE(grp->name(), "group2");
+
+    grp = cs->getGroup(19);
     QVERIFY(grp);
     QCOMPARE(grp->name(), "group2");
 
     grp = cs->getGroup(40);
-    QVERIFY(grp);
-    QCOMPARE(grp->name(), "group2");
+    QVERIFY(grp.isNull());
 
-    grp = cs->getGroup(61);
-    QVERIFY(grp);
-    QCOMPARE(grp->name(), "group2");
+}
 
+void TestKoColorSet::testAllRows()
+{
+    KoColorSetSP cs = createColorSet();
+    cs->getGlobalGroup()->setRowCount(7);
+    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
 
+    QCOMPARE(cs->rowCountWithTitles(), 20);
+    QVERIFY(cs->isGroupTitleRow(7));
+    QVERIFY(cs->isGroupTitleRow(14));
+
+    for (int i = 0; i < 21; ++i) {
+        KisSwatchGroupSP grp = cs->getGroup(i);
+
+        if (i < 7) {
+            QVERIFY(grp->name().isEmpty());
+        }
+        else if (i > 6 && i < 14) {
+            QCOMPARE(grp->name(), "group1");
+        }
+        else if (i > 13 && i < 20) {
+            QCOMPARE(grp->name(), "group2");
+        }
+        else if (i > 19) {
+            QVERIFY(grp.isNull());
+        }
+    }
 
 }
 
@@ -646,3 +678,4 @@ KoColor TestKoColorSet::red()
 
 
 SIMPLE_TEST_MAIN(TestKoColorSet)
+

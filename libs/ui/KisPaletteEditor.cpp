@@ -457,10 +457,10 @@ bool KisPaletteEditor::isModified() const
 void KisPaletteEditor::updatePalette()
 {
     qDebug() << Q_FUNC_INFO << "updating the palette model inside the palette editor object";
-    Q_ASSERT(m_d->model);
-    Q_ASSERT(m_d->model->colorSet());
-    if (!m_d->view) { return; }
-    if (!m_d->view->document()) { return; }
+    if (!m_d->model) return;
+    if (!m_d->model->colorSet()) return;
+    if (!m_d->view) return;
+    if (!m_d->view->document()) return;
 
     KoColorSetSP palette = m_d->model->colorSet();
     PaletteInfo &modified = m_d->modified;

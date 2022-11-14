@@ -672,7 +672,10 @@ bool KoColorSet::isGroupTitleRow(int row) const
 {
     int idx = 0;
     for (const KisSwatchGroupSP &group : d->swatchGroups) {
-        idx += group->rowCount() + 1;
+        idx += group->rowCount();
+        if (group->name() != KoColorSet::GLOBAL_GROUP_NAME) {
+            idx++;
+        }
         if (idx == row) {
             return true;
         }
@@ -682,15 +685,17 @@ bool KoColorSet::isGroupTitleRow(int row) const
 
 int KoColorSet::startRowForGroup(const QString &groupName) const
 {
-
     if (groupName.isEmpty()) return 0;
 
-    int row = -1;
+    int row = 0;
     for (const KisSwatchGroupSP &group : d->swatchGroups) {
         if (group->name() == groupName) {
             return row;
         }
-        row += group->rowCount() + 1;
+        row += group->rowCount();
+        if (group->name() != KoColorSet::GLOBAL_GROUP_NAME) {
+            row++;
+        }
     }
     return row;
 }
@@ -849,10 +854,25 @@ KisSwatchGroupSP KoColorSet::getGroup(const QString &name)
 
 KisSwatchGroupSP KoColorSet::getGroup(int row)
 {
+//    qDebug() << "------------";
+
+    if (row >= rowCountWithTitles()) return nullptr;
+
     int currentRow = 0;
+
     for (KisSwatchGroupSP &group : d->swatchGroups) {
 
-        bool hit = (currentRow <= row && row <= currentRow + group->rowCount());
+        int groupRowCount = group->rowCount();
+        if (group->name() != KoColorSet::GLOBAL_GROUP_NAME) {
+            groupRowCount++;
+        }
+
+//        qDebug() << group->name()
+//                 << "row" << row << "currentRow" << currentRow << "group rowcount" << groupRowCount
+//                 << "hit" << (currentRow <= row && row < currentRow + groupRowCount);
+
+        bool hit = (currentRow <= row && row < currentRow + groupRowCount);
+
         if  (hit) {
             return group;
         }
@@ -862,9 +882,11 @@ KisSwatchGroupSP KoColorSet::getGroup(int row)
         if (group->name() != KoColorSet::GLOBAL_GROUP_NAME) {
              currentRow += 1;
         }
+
+        if (currentRow >= rowCountWithTitles()) return nullptr;
     }
 
-    return 0;
+    return nullptr;
 
 }
 

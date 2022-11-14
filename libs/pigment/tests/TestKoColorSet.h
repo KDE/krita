@@ -23,7 +23,6 @@ private Q_SLOTS:
     void testLoadSBZ();
     void testLoadASE();
     void testLoadACB();
-
     void testLock();
     void testColumnCount();
     void testComment();
@@ -40,6 +39,7 @@ private Q_SLOTS:
     void testStartRowForNamedGroup();
     void testGetClosestSwatchInfo();
     void testGetGroup();
+    void testAllRows();
 
 private:
 

@@ -258,32 +258,35 @@ void TestKisPaletteModel::testIndexForClosest()
 void TestKisPaletteModel::testData()
 {
     KoColorSetSP cs = createColorSet();
+    cs->getGlobalGroup()->setRowCount(7);
     KisPaletteModel model;
     model.setColorSet(cs);
 
     KisSwatch sw(red(), "red");
-    QModelIndex idx = model.index(5, 10, QModelIndex());
+    QModelIndex idx = model.index(3, 5, QModelIndex());
     model.setSwatch(sw, idx);
 
-    KisSwatch sw2 = cs->getSwatchFromGroup(10, 5);
+    KisSwatch sw2 = cs->getSwatchFromGroup(5, 3);
     QCOMPARE(sw2.color(), sw.color());
 
     model.clear();
+    cs->getGlobalGroup()->setRowCount(7);
 
-    model.addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 10);
-    model.addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 30);
+    model.addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
+    model.addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
 
     QCOMPARE(model.rowCount(), cs->rowCountWithTitles());
 
-    int rowCount = model.rowCount()    ;
-
+    int rowCount = model.rowCount();
     for (int row = 0; row < rowCount; ++row) {
         if (!cs->isGroupTitleRow(row)) {
             for (int column = 0; column < model.columnCount(); ++column) {
                 QModelIndex idx = model.index(row, column);
                 model.setSwatch(sw, idx);
-                qDebug() << row << model.getSwatch(idx).color() << sw.color();
-                QCOMPARE(model.getSwatch(idx).color(), sw.color());
+                if (model.getSwatch(idx).color().toQColor() != sw.color().toQColor()) {
+                    qDebug() << "row" << row << "column" << column;
+                }
+                QCOMPARE(model.getSwatch(idx).color().toQColor(), sw.color().toQColor());
             }
         }
     }
@@ -299,7 +302,6 @@ void TestKisPaletteModel::testData()
             for (int column = 0; column < model.columnCount(); ++column) {
                 QModelIndex idx = model.index(row, column);
                 if (model.getSwatch(idx).color() != sw.color()) {
-                    qDebug() << model.getSwatch(idx).color() << sw.color();
                     qDebug() << "FALSE" << row << column;
                 }
                 QCOMPARE(model.getSwatch(idx).color(), sw.color());
@@ -313,6 +315,10 @@ void TestKisPaletteModel::testData()
 void TestKisPaletteModel::testRowNumberInGroup()
 {
     KoColorSetSP cs = createColorSet();
+    cs->getGlobalGroup()->setRowCount(7);
+    cs->addGroup("group1", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 6);
+    cs->addGroup("group2", KisSwatchGroup::DEFAULT_COLUMN_COUNT, 5);
+
     KisPaletteModel model;
     model.setColorSet(cs);
 
@@ -324,7 +330,7 @@ void TestKisPaletteModel::testRowNumberInGroup()
     QCOMPARE(rowNumber, 5);
 
     model.addGroup("group");
-    idx = model.index(25, 10);
+    idx = model.index(5, 0);
     model.setSwatch(sw, idx);
 
     rowNumber = model.rowNumberInGroup(25);

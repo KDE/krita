@@ -178,7 +178,7 @@
     <p xml:lang="sk">Je ideálna na skicovanie a maľovanie a poskytuje end-to-end riešenie na vytváranie súborov digitálneho maľovania od základu od profesionálov.</p>
     <p xml:lang="sl">Idealen je za skiciranje in slikanje ter predstavlja rešitev od začetka do konca za ustvarjanje mojstrskih datotek digitalne slike iz nič.</p>
     <p xml:lang="sv">Den är perfekt för att skissa och måla, samt erbjuder en helomfattande lösning för att skapa digitala målningsfiler från grunden av mästare.</p>
-    <p xml:lang="tr">Eskiz ve boyama için mükemmeldir ve ustaların sıfırdan dijital boyama dosyaları oluşturmak için uçtan uca bir çözüm sunar.</p>
+    <p xml:lang="tr">Eskiz ve boyama için mükemmeldir ve ustaların sıfırdan sayısal boyama dosyaları oluşturmaları için uçtan uca bir çözüm sunar.</p>
     <p xml:lang="uk">Цей комплекс чудово пасує для створення ескізів та художніх зображень і є самодостатнім набором для створення файлів цифрових полотен «з нуля» для справжніх художників.</p>
     <p xml:lang="x-test">xxIt is perfect for sketching and painting, and presents an end–to–end solution for creating digital painting files from scratch by masters.xx</p>
     <p xml:lang="zh-CN">Krita 既适合起草，也适合上色细化。您可以轻松使用 Krita 从头到尾完成一副精美的画作。</p>
@@ -215,7 +215,7 @@
     <p xml:lang="sk">Krita je výborná voľba pre vytváranie konceptového umenia, textúr na renderovanie a matné kresby. Krita podporuje mnoho farebných priestorov ako RGB a CMYK na 8 a 16 bitových celočíselných kanáloch ako aj 16 a 32 bitových reálnych kanáloch.</p>
     <p xml:lang="sl">Krita je odlična izbira za ustvarjanje konceptualne umetnosti, stripov, tekstur za upodabljanje in mat slike. Krita podpira številne barvne prostore, kot sta RGB in CMYK na 8 in 16 bitne celoštevilske kanale, kot tudi 16 in 32 bitne kanale števil v plavajočih vejicah.</p>
     <p xml:lang="sv">Krita är ett utmärkt val för att skapa concept art, serier, strukturer för återgivning och bakgrundsmålningar. Krita stöder många färgrymder som RGB och CMYK med 8- och 16-bitars heltal, samt 16- och 32-bitars flyttal.</p>
-    <p xml:lang="tr">Krita, konsept sanat, çizgi roman, kaplama ve mat resimler için dokular oluşturmak için mükemmel bir seçimdir. Krita, 8 ve 16 bit tamsayı kanallarında RGB ve CMYK gibi birçok renk alanını ve 16 ve 32 bit kayan nokta kanallarını desteklemektedir.</p>
+    <p xml:lang="tr">Krita, konsept sanat, çizgi roman, kaplama ve mat resimler için dokular oluşturmak için mükemmel bir seçimdir. Krita, 8 ve 16 bit tamsayı kanallarında RGB ve CMYK gibi birçok renk uzayını ve 16 ve 32 bit kayan nokta kanallarını desteklemektedir.</p>
     <p xml:lang="uk">Krita — чудовий інструмент для створення концептуального живопису, коміксів, текстур для моделей та декорацій. У Krita передбачено підтримку багатьох просторів кольорів, зокрема RGB та CMYK з 8-бітовими та 16-бітовими цілими значеннями, а також 16-бітовими та 32-бітовими значеннями з рухомою крапкою для каналів кольорів.</p>
     <p xml:lang="x-test">xxKrita is a great choice for creating concept art, comics, textures for rendering and matte paintings. Krita supports many colorspaces like RGB and CMYK at 8 and 16 bits integer channels, as well as 16 and 32 bits floating point channels.xx</p>
     <p xml:lang="zh-CN">Krita 是绘制概念美术、漫画、纹理和贴图接景的理想工具。它支持多种色彩空间，如 8 位、16 位整数以及 16 位、32 位浮点通道的 RGB 和 CMYK 颜色模型。</p>
@@ -418,7 +418,7 @@
       <caption xml:lang="sk">Ak ste v oblasti digitálnej maľby nováčikom alebo sa chcete dozvedieť viac o možnostiach programu Krita, existuje o tom rozsiahla a aktuálna príručka</caption>
       <caption xml:lang="sl">Če ste novi v digitalnem slikanju, obstaja obsežen, posodobljen priročnik</caption>
       <caption xml:lang="sv">Om digital målning är nytt för dig, finns en omfattande, aktuell handbok</caption>
-      <caption xml:lang="tr">Sayısal boyamaya yeniyseniz ayrıntılı ve güncel bir kılavuz mevcuttur</caption>
+      <caption xml:lang="tr">Sayısal boyamaya yeniyseniz ayrıntılı ve güncel bir kılavuz vardır</caption>
       <caption xml:lang="uk">Якщо ви не маєте достатнього досвіду у цифровому малюванні, скористайтеся нашим докладним і актуальним підручником</caption>
       <caption xml:lang="x-test">xxIf you're new to digital painting, there's an extensive, up-to-date manualxx</caption>
       <caption xml:lang="zh-CN">如果您是数字绘画的初学者，我们还准备了内容详尽，及时更新的使用手册。</caption>
@@ -471,7 +471,7 @@
       <caption xml:lang="ru">Также имеется интеграция с G'Mic, что добавляет ещё сотни фильтров</caption>
       <caption xml:lang="sl">In obstaja še integracija z G'Mic, ki ponuja še na stotine dodatnih filtrov</caption>
       <caption xml:lang="sv">Och det finns även en integrering med G'Mic, som lägger till ytterligare hundratals filter.</caption>
-      <caption xml:lang="tr">Ek olarak, yüzlerce daha süzgeci sunan G'Mic tümleştirmesi de mevcuttur</caption>
+      <caption xml:lang="tr">Ek olarak, yüzlerce daha süzgeci sunan G'Mic tümleştirmesi de vardır</caption>
       <caption xml:lang="uk">І, крім того, маємо інтеграцію із G'Mic, що додає ще сотні фільтрів</caption>
       <caption xml:lang="x-test">xxAnd, there is integration with G'Mic, too, which adds hundreds of filters morexx</caption>
       <caption xml:lang="zh-CN">它还整合了 G'Mic，可以使用它的数百款滤镜</caption>

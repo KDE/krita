@@ -17,6 +17,7 @@ class PAINTOP_EXPORT KisCurveOptionDataUniformProperty : public KisDoubleSliderB
 {
 public:
     KisCurveOptionDataUniformProperty(const KisCurveOptionData &data, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
+    KisCurveOptionDataUniformProperty(const KisCurveOptionData &data, const QString &propertyId, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
     ~KisCurveOptionDataUniformProperty() override;
 
     void readValueImpl() override;
@@ -24,6 +25,8 @@ public:
 
     bool isVisible() const override;
 
+private:
+    KisCurveOptionDataUniformProperty(const KisCurveOptionData &data, const KoID &propertyId, KisPaintOpSettingsRestrictedSP settings, QObject *parent);
 private:
     QScopedPointer<KisCurveOptionData> m_data;
 };

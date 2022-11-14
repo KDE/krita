@@ -69,6 +69,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
             KisCurveOptionDataUniformProperty *prop =
                 new KisCurveOptionDataUniformProperty(
                     KisSmudgeLengthOptionData(),
+                    "smudge_length",
                     settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -79,6 +80,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
             KisCurveOptionDataUniformProperty *prop =
                 new KisCurveOptionDataUniformProperty(
                     KisSmudgeRadiusOptionData(),
+                    "smudge_radius",
                     settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -90,6 +92,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
             KisCurveOptionDataUniformProperty *prop =
                 new KisCurveOptionDataUniformProperty(
                         KisColorRateOptionData(),
+                        "smudge_color_rate",
                         settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));
@@ -125,6 +128,7 @@ QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(K
             KisCurveOptionDataUniformProperty *prop =
                 new KisCurveOptionDataUniformProperty(
                     KisPaintThicknessOptionData(),
+                    "smudge_paint_thickness_rate",
                     settings, 0);
 
             QObject::connect(updateProxy, SIGNAL(sigSettingsChanged()), prop, SLOT(requestReadValue()));

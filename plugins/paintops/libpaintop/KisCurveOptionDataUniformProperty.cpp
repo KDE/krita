@@ -12,7 +12,17 @@
 #include "KisPaintOpPresetUpdateProxy.h"
 
 KisCurveOptionDataUniformProperty::KisCurveOptionDataUniformProperty(const KisCurveOptionData &data, KisPaintOpSettingsRestrictedSP settings, QObject *parent)
-    : KisDoubleSliderBasedPaintOpProperty(Double, data.id, settings, parent)
+    : KisCurveOptionDataUniformProperty(data, data.id, settings, parent)
+{
+}
+
+KisCurveOptionDataUniformProperty::KisCurveOptionDataUniformProperty(const KisCurveOptionData &data, const QString &propertyId, KisPaintOpSettingsRestrictedSP settings, QObject *parent)
+    : KisCurveOptionDataUniformProperty(data, KoID(propertyId, data.id.name()), settings, parent)
+{
+}
+
+KisCurveOptionDataUniformProperty::KisCurveOptionDataUniformProperty(const KisCurveOptionData &data, const KoID &propertyId, KisPaintOpSettingsRestrictedSP settings, QObject *parent)
+    : KisDoubleSliderBasedPaintOpProperty(Double, propertyId, settings, parent)
     , m_data(new KisCurveOptionData(data))
 {
     setRange(m_data->strengthMinValue, m_data->strengthMaxValue);

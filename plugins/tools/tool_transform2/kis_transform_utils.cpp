@@ -664,7 +664,7 @@ QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformM
     /// stroke initialization routine.
     KIS_SAFE_ASSERT_RECOVER_NOOP(!hasTransformMaskDescendant);
 
-    KisNodeSP selectionNode = selection->parentNode();
+    KisNodeSP selectionNode = selection ? selection->parentNode() : 0;
 
     auto fetchFunc =
         [&result, mode, root, selectionNode] (KisNodeSP node) {
@@ -673,7 +673,7 @@ QList<KisNodeSP> KisTransformUtils::fetchNodesList(ToolTransformArgs::TransformM
                 !node->inherits("KisFileLayer") &&
                 !node->inherits("KisColorizeMask") &&
                 (!node->inherits("KisTransformMask") || node == root) &&
-                (selectionNode && node != selectionNode)) {
+                (!selectionNode || node != selectionNode)) {
 
                 result << node;
             }

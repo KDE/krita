@@ -58,6 +58,8 @@ void KisColorSmudgeStrategyLightness::initializePainting()
 
         m_colorOnlyDevice = new KisPaintDevice(*m_projectionDevice);
         m_heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
+        m_heightmapDevice->setDefaultBounds(m_colorOnlyDevice->defaultBounds());
+        m_heightmapDevice->setSupportsWraparoundMode(m_colorOnlyDevice->supportsWraproundMode());
     }
 
     initializePaintingImpl(m_colorOnlyDevice->colorSpace(),

@@ -122,6 +122,7 @@ KisOverlayPaintDeviceWrapper::KisOverlayPaintDeviceWrapper(KisPaintDeviceSP sour
         KisPaintDeviceSP overlay = new KisPaintDevice(overlayColorSpace);
         overlay->setDefaultPixel(source->defaultPixel().convertedTo(overlayColorSpace));
         overlay->setDefaultBounds(source->defaultBounds());
+        overlay->setSupportsWraparoundMode(source->supportsWraproundMode());
         overlay->moveTo(source->offset());
 
         m_d->overlays.append(overlay);

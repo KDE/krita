@@ -562,6 +562,21 @@ void KisShortcutMatcher::reinitialize()
     }
 }
 
+void KisShortcutMatcher::reinitializeButtons()
+{
+    Private::RecursionNotifier notifier(this);
+
+    m_d->buttons.clear();
+    DEBUG_ACTION("reinitializing buttons");
+
+    if (notifier.isInRecursion()) {
+        forceDeactivateAllActions();
+    } else if (!m_d->runningShortcut) {
+        prepareReadyShortcuts();
+        tryActivateReadyShortcut();
+    }
+}
+
 void KisShortcutMatcher::recoveryModifiersWithoutFocus(const QVector<Qt::Key> &keys)
 {
     Q_FOREACH (Qt::Key key, m_d->keys) {

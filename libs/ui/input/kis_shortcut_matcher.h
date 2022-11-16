@@ -201,6 +201,15 @@ public:
     void reinitialize();
 
     /**
+     * Resets the internal state of the buttons inside matcher and
+     * activates the prepared action if possible.
+     *
+     * This should be done when the window has lost the focus for
+     * some time, so that several events could be lost
+     */
+    void reinitializeButtons();
+
+    /**
      * Resets the internal state of the matcher, tries to resync it to the state
      * passed via argument and activates the prepared action if possible.
      *

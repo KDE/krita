@@ -756,15 +756,48 @@ bool KisInputManager::Private::handleCompressedTabletEvent(QEvent *event)
 
 void KisInputManager::Private::fixShortcutMatcherModifiersState()
 {
-    QVector<Qt::Key> guessedKeys;
     KisExtendedModifiersMapper mapper;
+
+    QVector<Qt::Key> newKeys;
     Qt::KeyboardModifiers modifiers = mapper.queryStandardModifiers();
     Q_FOREACH (Qt::Key key, mapper.queryExtendedModifiers()) {
         QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
-        guessedKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
+        newKeys << KisExtendedModifiersMapper::workaroundShiftAltMetaHell(&kevent);
     }
 
-    matcher.recoveryModifiersWithoutFocus(guessedKeys);
+    fixShortcutMatcherModifiersState(newKeys, modifiers);
+}
+
+void KisInputManager::Private::fixShortcutMatcherModifiersState(QVector<Qt::Key> newKeys, Qt::KeyboardModifiers modifiers)
+{
+    QVector<Qt::Key> danglingKeys = matcher.debugPressedKeys();
+    matcher.recoveryModifiersWithoutFocus(newKeys);
+
+    for (auto it = danglingKeys.begin(); it != danglingKeys.end();) {
+        if (newKeys.contains(*it)) {
+            newKeys.removeOne(*it);
+            it = danglingKeys.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    Q_FOREACH (Qt::Key key, danglingKeys) {
+        QKeyEvent kevent(QEvent::KeyRelease, key, modifiers);
+        processUnhandledEvent(&kevent);
+    }
+
+    Q_FOREACH (Qt::Key key, newKeys) {
+        // just replay the whole sequence
+        {
+            QKeyEvent kevent(QEvent::ShortcutOverride, key, modifiers);
+            processUnhandledEvent(&kevent);
+        }
+        {
+            QKeyEvent kevent(QEvent::KeyPress, key, modifiers);
+            processUnhandledEvent(&kevent);
+        }
+    }
 }
 
 qint64 KisInputManager::Private::TabletLatencyTracker::currentTimestamp() const

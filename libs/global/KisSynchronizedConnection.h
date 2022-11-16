@@ -64,7 +64,7 @@ protected:
  * a recursive event processing loop.
  *
  * In several places in Krita we use queued signals for synchronizing
- * image chages to the GUI. In such cases we use Qt::DirectConnection
+ * image changes to the GUI. In such cases we use Qt::DirectConnection
  * to fetch some data from the image, wrap that into the signal
  * parameters and post at the events queue as a queued signal. Obviously,
  * we expect this queued signal to be executed "after all the currently
@@ -130,7 +130,7 @@ public:
     {}
 
     /**
-     * Triggers the delivery of the signal to the destination slot manualy
+     * Triggers the delivery of the signal to the destination slot manually
      */
     void start(const Args &...argsTuple) {
         {
@@ -181,7 +181,7 @@ public:
     }
 
     /**
-     * A convenience method for seting up input and output connections at
+     * A convenience method for setting up input and output connections at
      * the same time
      */
     template <typename Dptr1, typename C1, typename R1, typename ...MemFnArgs1,

@@ -51,7 +51,7 @@ struct KRITAPSD_EXPORT psd_layer_levels {
     // At the end of the Version 2 file is the following information:
     quint16 extra_level_count {0}; // Count of total level record structures. Subtract the legacy number of level record structures, 29, to determine how many are
                                // remaining in the file for reading.
-    psd_layer_level_record *extra_record {nullptr}; // Additianol level records according to count
+    psd_layer_level_record *extra_record {nullptr}; // Additional level records according to count
     quint8 lookup_table[3][256];
 };
 
@@ -373,7 +373,7 @@ struct KRITAPSD_EXPORT psd_layer_gradient_fill {
             angle = cfg->getDouble("end_position_angle", 0.0);
             scale = cfg->getDouble("end_position_distance", 100.0);
         } else {
-            // assume carthesian
+            // assume cartesian
             QPointF end(cfg->getDouble("end_position_x", 1.0), cfg->getDouble("end_position_y", 1.0));
             // calculate angle and scale.
             double width  = start.x() - end.x();

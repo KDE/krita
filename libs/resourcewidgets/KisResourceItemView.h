@@ -80,4 +80,4 @@ private:
     ViewMode m_viewMode;
 };
 
-#endif // KORESOURCEITEMVIEW_H
+#endif // KISRESOURCEITEMVIEW_H

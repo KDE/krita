@@ -41,7 +41,7 @@ public:
     /// Returns the unique id for the given shape
     QString getID(const KoShape *obj);
 
-    /// Returns the transformation used to transform into usre space
+    /// Returns the transformation used to transform into user space
     QTransform userSpaceTransform() const;
 
     /// Returns if image should be saved inline

@@ -193,7 +193,7 @@ int controlPolygonZeros(const QList<QPointF> &controlPoints);
  *
  * The function uses Krita's own level-based patch interpolation algorithm
  *
- * @param points control points as the layouted in KisBezierPatch
+ * @param points control points as laid out in KisBezierPatch
  * @param globalPoint point in global coordinates
  * @return point in local coordinates
  */
@@ -206,7 +206,7 @@ QPointF calculateLocalPos(const std::array<QPointF, 12> &points,
  *
  * The function uses Krita's own level-based patch interpolation algorithm
  *
- * @param points control points as the layouted in KisBezierPatch
+ * @param points control points as laid out in KisBezierPatch
  * @param localPoint point in local coordinates
  * @return point in global coordinates
  */
@@ -218,7 +218,7 @@ QPointF calculateGlobalPos(const std::array<QPointF, 12> &points, const QPointF 
  *
  * The function uses SVG2 toon patches algorithm
  *
- * @param points control points as the layouted in KisBezierPatch
+ * @param points control points as laid out in KisBezierPatch
  * @param globalPoint point in global coordinates
  * @return point in local coordinates
  */
@@ -231,7 +231,7 @@ QPointF calculateLocalPosSVG2(const std::array<QPointF, 12> &points,
  *
  * The function uses SVG2 toon patches algorithm
  *
- * @param points control points as the layouted in KisBezierPatch
+ * @param points control points as laid out in KisBezierPatch
  * @param localPoint point in local coordinates
  * @return point in global coordinates
  */

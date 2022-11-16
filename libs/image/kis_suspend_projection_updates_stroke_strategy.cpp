@@ -149,7 +149,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
         void notifyUpdates(KisImageSP image) {
             const int step = 64;
 
-            {   // fithy refreshes
+            {   // filthy refreshes
                 RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
                 RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
 
@@ -176,7 +176,7 @@ struct KisSuspendProjectionUpdatesStrokeStrategy::Private
                 }
             }
 
-            {   // non-fithy refreshes
+            {   // non-filthy refreshes
                 RefreshesHash::const_iterator it = m_refreshesHash.constBegin();
                 RefreshesHash::const_iterator end = m_refreshesHash.constEnd();
 

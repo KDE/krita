@@ -441,7 +441,7 @@ void HSYToRGB(const qreal h,const qreal s, const qreal y, qreal *red, qreal *gre
     //qreal R=0.299;
     //qreal G=0.587;
     //qreal B=0.114;
-//The intermediary variables for the weighted HSL forumala, based on the HSL in KoColorConversions.
+//The intermediary variables for the weighted HSL formula, based on the HSL in KoColorConversions.
     qreal max_sat, m, fract, luma_a, chroma, x;
     if (hue >= 0.0 && hue < (segment) ) {
             //need to treat this as a weighted hsl thingy.

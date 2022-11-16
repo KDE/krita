@@ -13,9 +13,9 @@
 
 #include <KoProgressUpdater.h>
 
-struct WarpTransforWorkerData {
+struct WarpTransformWorkerData {
 
-    WarpTransforWorkerData() {
+    WarpTransformWorkerData() {
         TestUtil::TestProgressBar bar;
         KoProgressUpdater pu(&bar);
         updater = pu.startSubtask();
@@ -61,7 +61,7 @@ struct WarpTransforWorkerData {
 
 void KisWarpTransformWorkerTest::test()
 {
-    WarpTransforWorkerData d;
+    WarpTransformWorkerData d;
     KisPaintDeviceSP srcDev = new KisPaintDevice(*d.dev);
 
     KisWarpTransformWorker worker(KisWarpTransformWorker::RIGID_TRANSFORM,
@@ -325,7 +325,7 @@ void KisWarpTransformWorkerTest::testBackwardInterpolatorExtrapolation()
 #include "krita_utils.h"
 void KisWarpTransformWorkerTest::testNeedChangeRects()
 {
-    WarpTransforWorkerData d;
+    WarpTransformWorkerData d;
     KisWarpTransformWorker worker(KisWarpTransformWorker::RIGID_TRANSFORM,
                                   d.origPoints,
                                   d.transfPoints,

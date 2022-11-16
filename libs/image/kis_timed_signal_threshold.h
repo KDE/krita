@@ -50,7 +50,7 @@ public Q_SLOTS:
 
 
     /**
-     * The peiod of time, after which the signal will be emitted
+     * The period of time, after which the signal will be emitted
      */
     void setDelayThreshold(int delay, int cancelDelay = -1);
 

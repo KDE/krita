@@ -83,7 +83,7 @@ private:
     friend class KisToolFreehandPaintingInformationBuilder;
 
     /**
-     * Adjusts a coordinates according to a KisPaintingAssitant,
+     * Adjusts a coordinates according to a KisPaintingAssistant,
      * if available.
      */
     QPointF adjustPosition(const QPointF& point, const QPointF& strokeBegin);

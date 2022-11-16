@@ -48,7 +48,7 @@ public:
 
     void setCacheInterface(CacheInterface *interface);
 
-    KisFixedPaintDeviceSP fetchCachedPaintDevce();
+    KisFixedPaintDeviceSP fetchCachedPaintDevice();
 
     void putResourcesToCache(KisDabCacheUtils::DabRenderingResources *resources);
     KisDabCacheUtils::DabRenderingResources* fetchResourcesFromCache();

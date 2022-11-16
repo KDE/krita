@@ -130,7 +130,7 @@ public:
     virtual QImage brushTipImage() const;
 
     /**
-     * Is a pait device of the brush that shoudl be used for generation
+     * Is a paint device of the brush that should be used for generation
      * of the brush outline. Usually, it is the same device returned
      * by brushTipImage(), but might be different in some types
      * of brushes, like in KisAutoBrush.

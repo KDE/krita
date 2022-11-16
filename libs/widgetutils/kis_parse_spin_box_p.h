@@ -324,7 +324,7 @@ public:
                 }
                 break;
             // Prevent deleting the last character of the prefix and the first
-            // one of the suffix. This solves some issue that apprears when the
+            // one of the suffix. This solves some issue that appears when the
             // prefix ends with a space or the suffix starts with a space. For
             // example, if the prefix is "size: " and the value 50, deleting
             // the space will join the string "size:" with "50" to form

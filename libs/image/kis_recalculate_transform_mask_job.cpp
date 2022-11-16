@@ -38,7 +38,7 @@ void KisRecalculateTransformMaskJob::run()
     if (!m_mask->visible()) return;
 
     const QRect oldMaskExtent = m_mask->extent();
-    m_mask->recaclulateStaticImage();
+    m_mask->recalculateStaticImage();
 
     KisLayerSP layer = qobject_cast<KisLayer*>(m_mask->parent().data());
 

@@ -16,13 +16,13 @@
 #include "KisRecycleProjectionsJob.h"
 
 /**********************************************************************/
-/*     StoreImplementaionInterface                                    */
+/*     StoreImplementationInterface                                   */
 /**********************************************************************/
 
-struct StoreImplementaionInterface
+struct StoreImplementationInterface
 {
-    virtual ~StoreImplementaionInterface() {}
-    virtual StoreImplementaionInterface* clone() const = 0;
+    virtual ~StoreImplementationInterface() {}
+    virtual StoreImplementationInterface* clone() const = 0;
     virtual bool releaseDevice() = 0;
     virtual void discardCaches() = 0;
     virtual void recycleProjectionsInSafety() = 0;
@@ -30,11 +30,11 @@ struct StoreImplementaionInterface
 
 
 /**********************************************************************/
-/*     StoreImplementaion                                             */
+/*     StoreImplementation                                            */
 /**********************************************************************/
 
 template <typename DeviceSP>
-struct StoreImplementation : public StoreImplementaionInterface
+struct StoreImplementation : public StoreImplementationInterface
 {
     bool releaseDevice() override {
         bool hasDeletedProjection = false;
@@ -71,7 +71,7 @@ protected:
 
 
 /**********************************************************************/
-/*     StoreImplementaionForDevice                                    */
+/*     StoreImplementationForDevice                                   */
 /**********************************************************************/
 
 struct StoreImplementationForDevice : StoreImplementation<KisPaintDeviceSP>
@@ -81,7 +81,7 @@ struct StoreImplementationForDevice : StoreImplementation<KisPaintDeviceSP>
         m_projection = new KisPaintDevice(prototype);
     }
 
-    StoreImplementaionInterface* clone() const override {
+    StoreImplementationInterface* clone() const override {
         return m_projection ?
             new StoreImplementationForDevice(*m_projection) :
             new StoreImplementationForDevice();
@@ -106,7 +106,7 @@ struct StoreImplementationForDevice : StoreImplementation<KisPaintDeviceSP>
 
 
 /**********************************************************************/
-/*     StoreImplementaionForSelection                                 */
+/*     StoreImplementationForSelection                                */
 /**********************************************************************/
 
 struct StoreImplementationForSelection : StoreImplementation<KisSelectionSP>
@@ -116,7 +116,7 @@ struct StoreImplementationForSelection : StoreImplementation<KisSelectionSP>
         m_projection = new KisSelection(prototype);
     }
 
-    StoreImplementaionInterface* clone() const override {
+    StoreImplementationInterface* clone() const override {
         return m_projection ?
             new StoreImplementationForSelection(*m_projection) :
             new StoreImplementationForSelection();
@@ -146,10 +146,10 @@ struct KisSafeNodeProjectionStoreBase::Private
 {
     mutable QMutex lock;
     KisImageWSP image;
-    QScopedPointer<StoreImplementaionInterface> store;
+    QScopedPointer<StoreImplementationInterface> store;
 };
 
-KisSafeNodeProjectionStoreBase::KisSafeNodeProjectionStoreBase(StoreImplementaionInterface *storeImpl)
+KisSafeNodeProjectionStoreBase::KisSafeNodeProjectionStoreBase(StoreImplementationInterface *storeImpl)
     : m_d(new Private)
 {
     m_d->store.reset(storeImpl);

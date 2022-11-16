@@ -40,7 +40,7 @@ public:
     ~SelectionDecorator() {}
 
     /**
-     * paint the decortations.
+     * paint the decorations.
      * @param painter the painter to paint to.
      * @param converter to convert between internal and view coordinates.
      */

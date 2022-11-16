@@ -482,7 +482,7 @@ void KisAnimTimelineTimeHeader::mousePressEvent(QMouseEvent *e)
             }
 
             /* Fix for safe-assert involving kis_animation_curve_docker.
-             * There should probably be a more elagant way for dealing
+             * There should probably be a more elegant way for dealing
              * with reused timeline_ruler_header instances in other
              * timeline views instead of simply animation_frame_view.
              *

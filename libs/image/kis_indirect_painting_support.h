@@ -175,7 +175,7 @@ private:
     friend class KisPainterBasedStrokeStrategy;
 
     /**
-     * Only for debugging purposes. Please use setupTemporaryPainer()
+     * Only for debugging purposes. Please use setupTemporaryPainter()
      * instead.
      */
     KisSelectionSP temporarySelection() const;

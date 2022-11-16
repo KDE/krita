@@ -52,7 +52,7 @@ class KisAcyclicSignalConnector;
 
 /**
  * This widget presents all paintops that a user can paint with.
- * Paintops represent real-world tools or the well-known Shoup
+ * Paintops represent real-world tools or the well-known Shop
  * computer equivalents that do nothing but change color.
  *
  * To incorporate the dirty preset functionality and locked settings

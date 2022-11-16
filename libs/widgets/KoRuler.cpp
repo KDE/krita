@@ -1272,7 +1272,7 @@ void KoRuler::mouseMoveEvent ( QMouseEvent* ev )
     case KoRulerPrivate::Tab:
         d->tabMoved = true;
         if (d->currentIndex < 0) { // tab is deleted.
-            if (ev->pos().y() < height()) { // reinstante it.
+            if (ev->pos().y() < height()) { // reinstate it.
                 d->currentIndex = d->tabs.count();
                 d->tabs.append(d->deletedTab);
             } else {

@@ -77,7 +77,7 @@ public:
      */
     void setResourceFilter(const KoResourceSP resource);
 
-    void setSearchText(const QString& seatchText);
+    void setSearchText(const QString& searchText);
 
     void setFilterInCurrentTag(bool filterInCurrentTag);
 

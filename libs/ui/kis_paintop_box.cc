@@ -219,7 +219,7 @@ KisPaintopBox::KisPaintopBox(KisViewManager *viewManager, QWidget *parent, const
     m_wrapAroundButton->setCheckable(true);
     m_wrapAroundButton->setAutoRaise(true);
 
-    // add connections for horizontal and mirrror buttons
+    // add connections for horizontal and mirror buttons
     connect(lockActionX, SIGNAL(toggled(bool)), this, SLOT(slotLockXMirrorToggle(bool)));
     connect(lockActionY, SIGNAL(toggled(bool)), this, SLOT(slotLockYMirrorToggle(bool)));
 

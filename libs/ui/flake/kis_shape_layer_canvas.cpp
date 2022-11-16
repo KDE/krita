@@ -141,7 +141,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(const KoColorSpace *cs, KisDefaultBound
         , m_safeForcedConnection(std::bind(&KisShapeLayerCanvas::slotStartAsyncRepaint, this))
 {
     /**
-     * The layour should also add itself to its own shape manager, so that the canvas
+     * The layer should also add itself to its own shape manager, so that the canvas
      * would track its changes/transformations
      */
     m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);
@@ -158,7 +158,7 @@ KisShapeLayerCanvas::KisShapeLayerCanvas(const KisShapeLayerCanvas &rhs, KisShap
         , m_safeForcedConnection(std::bind(&KisShapeLayerCanvas::slotStartAsyncRepaint, this))
 {
     /**
-     * The layour should also add itself to its own shape manager, so that the canvas
+     * The layer should also add itself to its own shape manager, so that the canvas
      * would track its changes/transformations
      */
     m_shapeManager->addShape(parent, KoShapeManager::AddWithoutRepaint);

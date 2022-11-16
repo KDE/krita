@@ -112,7 +112,7 @@ private Q_SLOTS:
     void slotToggleDetach(bool detach);
     void slotUpdateEffectiveLodAvailable(bool value);
 
-    /// we do not delete brushe presets, but blacklist them so they disappear from the interface
+    /// we do not delete brush presets, but blacklist them so they disappear from the interface
     void slotBlackListCurrentPreset();
 
 private:

@@ -85,7 +85,7 @@ KisFilterSelectorWidget::KisFilterSelectorWidget(QWidget* parent)
     connect(d->uiFilterSelector.filtersSelector, SIGNAL(activated(QModelIndex)), SLOT(setFilterIndex(QModelIndex)));
 
     connect(d->uiFilterSelector.comboBoxPresets, SIGNAL(activated(int)),SLOT(slotBookmarkedFilterConfigurationSelected(int)));
-    connect(d->uiFilterSelector.pushButtonEditPressets, SIGNAL(pressed()), SLOT(editConfigurations()));
+    connect(d->uiFilterSelector.pushButtonEditPresets, SIGNAL(pressed()), SLOT(editConfigurations()));
     connect(d->uiFilterSelector.btnXML, SIGNAL(clicked()), this, SLOT(showXMLdialog()));
 
     KisConfig cfg(true);
@@ -207,7 +207,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f, KisFilterConfigurationSP 
 
     if (!widget) { // No widget, so display a label instead
         d->uiFilterSelector.comboBoxPresets->setEnabled(false);
-        d->uiFilterSelector.pushButtonEditPressets->setEnabled(false);
+        d->uiFilterSelector.pushButtonEditPresets->setEnabled(false);
         d->uiFilterSelector.btnXML->setEnabled(false);
 
         d->currentFilterConfigurationWidget = 0;
@@ -222,7 +222,7 @@ void KisFilterSelectorWidget::setFilter(KisFilterSP f, KisFilterConfigurationSP 
             d->currentFilter->defaultConfiguration(KisGlobalResourcesInterface::instance());
 
         d->uiFilterSelector.comboBoxPresets->setEnabled(true);
-        d->uiFilterSelector.pushButtonEditPressets->setEnabled(true);
+        d->uiFilterSelector.pushButtonEditPresets->setEnabled(true);
         d->uiFilterSelector.btnXML->setEnabled(true);
 
         d->currentFilterConfigurationWidget = widget;

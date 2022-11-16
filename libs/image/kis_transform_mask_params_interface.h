@@ -83,7 +83,7 @@ public:
     void transformSrcAndDst(const QTransform &t) override;
     void translateDstSpace(const QPointF &offset) override;
 
-    // for tesing purposes only
+    // for testing purposes only
     QTransform testingGetTransform() const;
     void testingSetTransform(const QTransform &t);
 

@@ -108,7 +108,7 @@ void KisToolGradient::continuePrimaryAction(KoPointerEvent *event)
     /**
      * TODO: The gradient tool is still not in strokes, so the end of
      *       its action can call processEvent(), which would result in
-     *       nested event hadler calls. Please uncomment this line
+     *       nested event handler calls. Please uncomment this line
      *       when the tool is ported to strokes.
      */
     //CHECK_MODE_SANITY_OR_RETURN(KisTool::PAINT_MODE);

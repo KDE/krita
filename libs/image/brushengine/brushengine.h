@@ -21,7 +21,7 @@ KisPaintOpSettings          A KisPropertiesConfiguration subclass that stores th
 KisPaintOpConfigWidget    A KisConfigWidget that knows how to display and edit the KisPaintopSettings
 
 These classes are used in the Krita core to handle painting: a further set
-of utility classes for brush engine implementators is available in
+of utility classes for brush engine implementers is available in
 krita/plugins/paintops/libpaintop.
 
 

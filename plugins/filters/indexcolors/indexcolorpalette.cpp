@@ -149,7 +149,7 @@ namespace
     };
 }
 
-void IndexColorPalette::mergeMostReduantColors()
+void IndexColorPalette::mergeMostRedundantColors()
 {
     QVector<ColorString> colorHood;
     colorHood.resize(numColors());

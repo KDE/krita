@@ -170,7 +170,7 @@ public:
     void getPrefixedProperties(const QString &prefix, KisPropertiesConfigurationSP config) const;
 
     /**
-     * Takes all the properties from \p config, adds \p prefix to all their keys and puths them
+     * Takes all the properties from \p config, adds \p prefix to all their keys and puts them
      * into this properties object
      */
     void setPrefixedProperties(const QString &prefix, const KisPropertiesConfiguration *config);

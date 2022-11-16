@@ -71,7 +71,7 @@ public:
                     if(i != alpha_pos && (allChannelFlags || channelFlags.testBit(i))) {
 
                         // We use the most fundamental OVER algorithm here,
-                        // which miltiplies, blends and then unmultiplies the
+                        // which multiplies, blends and then unmultiplies the
                         // channels
 
                         typedef typename KoColorSpaceMathsTraits<channels_type>::compositetype composite_type;

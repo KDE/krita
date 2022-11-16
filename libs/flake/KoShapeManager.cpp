@@ -279,7 +279,7 @@ void KoShapeManager::Private::updateTree()
     }
 }
 
-void KoShapeManager::Private::forwardCompressedUdpate()
+void KoShapeManager::Private::forwardCompressedUpdate()
 {
     bool shouldUpdateDecorations = false;
     QRectF scheduledUpdate;
@@ -321,7 +321,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas, const QList<KoShape *> &sha
      * to the GUI thread.
      */
     this->moveToThread(qApp->thread());
-    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUdpate()));
+    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
 }
 
 KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
@@ -332,7 +332,7 @@ KoShapeManager::KoShapeManager(KoCanvasBase *canvas)
 
     // see a comment in another constructor
     this->moveToThread(qApp->thread());
-    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUdpate()));
+    connect(&d->updateCompressor, SIGNAL(timeout()), this, SLOT(forwardCompressedUpdate()));
 }
 
 void KoShapeManager::Private::unlinkFromShapesRecursively(const QList<KoShape*> &shapes)

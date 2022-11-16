@@ -46,7 +46,7 @@ private Q_SLOTS:
     void setUseAngle(bool useAngle);
     void setStrokeWidth(double width);
     void setThinning(double thinning);
-    void setAngle(int angle);   // set theangle in degrees
+    void setAngle(int angle);   // set the angle in degrees
     void setFixation(double fixation);
     void setCaps(double caps);
     void setMass(double mass);  // set the mass in user friendly format

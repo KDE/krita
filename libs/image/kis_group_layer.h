@@ -62,7 +62,7 @@ public:
     /**
      * Returns own original device when tryOblidgeChild() mechanism is not triggered.
      * When tryOblidgeChild() mechanism is in action, returns null (therefor
-     * threre is no need to do subtree composition).
+     * there is no need to do subtree composition).
      */
     KisPaintDeviceSP lazyDestinationForSubtreeComposition() const;
 

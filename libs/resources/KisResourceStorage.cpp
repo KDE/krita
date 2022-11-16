@@ -107,7 +107,7 @@ KisResourceStorage::KisResourceStorage(const QString &location)
         d->storageType = StorageType::Memory;
         d->valid = true;
     } else {
-        // we create a fake memeory storage to make sure methods like `timestamp()` still work
+        // we create a fake memory storage to make sure methods like `timestamp()` still work
         d->storagePlugin.reset(KisStoragePluginRegistry::instance()->m_storageFactoryMap[StorageType::Memory]->create(location));
         d->valid = false;
     }

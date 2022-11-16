@@ -30,7 +30,7 @@ void ParticleBrush::initParticles()
 {
     m_particlePos.resize(m_properties->particleCount);
     m_particleNextPos.resize(m_properties->particleCount);
-    m_accelaration.resize(m_properties->particleCount);
+    m_acceleration.resize(m_properties->particleCount);
 }
 
 void ParticleBrush::setInitialPosition(const QPointF &pos)
@@ -38,7 +38,7 @@ void ParticleBrush::setInitialPosition(const QPointF &pos)
     for (int i = 0; i < m_properties->particleCount; i++) {
         m_particlePos[i] = pos;
         m_particleNextPos[i] = pos;
-        m_accelaration[i] = (i + m_properties->particleIterations) * 0.5;
+        m_acceleration[i] = (i + m_properties->particleIterations) * 0.5;
     }
 }
 
@@ -113,7 +113,7 @@ void ParticleBrush::draw(KisPaintDeviceSP dab, const KoColor& color, const QPoin
             QPointF dist = pos - m_particlePos[j];
             dist.setX(dist.x() * m_properties->particleScaleX);
             dist.setY(dist.y() * m_properties->particleScaleY);
-            dist = dist * m_accelaration[j];
+            dist = dist * m_acceleration[j];
             m_particleNextPos[j] = m_particleNextPos[j] + dist;
             m_particleNextPos[j] *= m_properties->particleGravity;
             m_particlePos[j] = m_particlePos[j] + (m_particleNextPos[j] * TIME);

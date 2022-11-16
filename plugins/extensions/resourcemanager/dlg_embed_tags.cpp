@@ -118,9 +118,9 @@ void DlgEmbedTags::resourceTypeSelected(int idx)
     m_ui->tableAvailable->clear();
     m_ui->tableSelected->clear();
 
-    QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+    QString standardizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-    KisTagModel model(standarizedResourceType);
+    KisTagModel model(standardizedResourceType);
 
     for (int i = 0; i < model.rowCount(); i++) {
 

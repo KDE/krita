@@ -41,7 +41,7 @@ KisCompositeOpOptionWidget::KisCompositeOpOptionWidget(lager::cursor<KisComposit
     ui.setupUi(widget);
     ui.bnEraser->setIcon(KisIconUtils::loadIcon("draw-eraser"));
 
-    m_d->lblCurrentCompositeOp = ui.lbChoosenMode;
+    m_d->lblCurrentCompositeOp = ui.lbChosenMode;
     m_d->model.LAGER_QT(compositeOpId).bind(std::bind(&KisCompositeOpOptionWidget::updateCompositeOpLabel, this, std::placeholders::_1));
 
     connectControl(ui.bnEraser, &m_d->model, "eraserMode");

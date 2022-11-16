@@ -499,7 +499,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
 
     QXmlStreamWriter svgWriter(&svgBuffer);
 
-    // disable auto-formatting to avoid axtra spaces appearing here and there
+    // disable auto-formatting to avoid extra spaces appearing here and there
     svgWriter.setAutoFormatting(false);
 
 
@@ -604,7 +604,7 @@ bool KoSvgTextShapeMarkupConverter::convertDocumentToSvg(const QTextDocument *do
         const QString text = block.text();
 
         /**
-         * Mindblowing part: QTextEdit uses a hi-end algorithm for auto-estimation for the text
+         * Mind blowing part: QTextEdit uses a hi-end algorithm for auto-estimation for the text
          * directionality, so the user expects his text being saved to SVG with the same
          * directionality. Just emulate behavior of direction="auto", which is not supported by
          * SVG 1.1

@@ -220,7 +220,7 @@ void KoShapeShadow::paint(KoShape *shape, QPainter &painter)
     imagePainter.setPen(Qt::NoPen);
     imagePainter.setBrush(Qt::NoBrush);
     imagePainter.setRenderHint(QPainter::Antialiasing, painter.testRenderHint(QPainter::Antialiasing));
-    // Since our imagebuffer and the canvas don't align we need to offset our drawings
+    // Since our image buffer and the canvas don't align we need to offset our drawings
     imagePainter.translate(-1.0f*documentToView.map(shadowRect.topLeft()));
 
     // Handle the shadow offset

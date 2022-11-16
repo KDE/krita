@@ -93,7 +93,7 @@ int KisDabRenderingJobRunner::executeOneJob(KisDabRenderingJob *job,
 
     if (job->type == KisDabRenderingJob::Dab) {
         // TODO: thing about better interface for the reverse queue link
-        job->originalDevice = parentQueue->fetchCachedPaintDevce();
+        job->originalDevice = parentQueue->fetchCachedPaintDevice();
 
         generateDab(job->generationInfo, resources, &job->originalDevice);
     }
@@ -110,7 +110,7 @@ int KisDabRenderingJobRunner::executeOneJob(KisDabRenderingJob *job,
             if (!job->postprocessedDevice ||
                 *job->originalDevice->colorSpace() != *job->postprocessedDevice->colorSpace()) {
 
-                job->postprocessedDevice = parentQueue->fetchCachedPaintDevce();
+                job->postprocessedDevice = parentQueue->fetchCachedPaintDevice();
                 *job->postprocessedDevice = *job->originalDevice;
             } else {
                 *job->postprocessedDevice = *job->originalDevice;

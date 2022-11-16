@@ -205,7 +205,7 @@ public:
      * @param channelDepthId the bit depth is unspecified by the spec, this allow to select
      *                   a preferred bit depth for creating the KoColor object (if that
      *                   bit depth isn't available, this function will randomly select
-     *                   an other bit depth)
+     *                   another bit depth)
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color
      */
@@ -219,7 +219,7 @@ public:
      * @param channelDepthId the bit depth is unspecified by the spec, this allow to select
      *                   a preferred bit depth for creating the KoColor object (if that
      *                   bit depth isn't available, this function will randomly select
-     *                   an other bit depth)
+     *                   another bit depth)
      * @param ok If a an error occurs, *ok is set to false; otherwise it's set to true
      * @return the unserialize color, or an empty color object if the function failed
      *         to unserialize the color

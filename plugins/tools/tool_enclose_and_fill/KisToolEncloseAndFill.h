@@ -206,7 +206,7 @@ private Q_SLOTS:
     void slot_checkBoxSelectionAsBoundary_toggled(bool checked);
     void slot_checkBoxAntiAlias_toggled(bool checked);
     void slot_sliderExpand_valueChanged(int value);
-    void slot_buttonStopGrowingAtDarkestPixel_toogled(bool enabled);
+    void slot_buttonStopGrowingAtDarkestPixel_toggled(bool enabled);
     void slot_sliderFeather_valueChanged(int value);
     void slot_optionButtonStripReference_buttonToggled(KoGroupButton *button,
                                                        bool checked);

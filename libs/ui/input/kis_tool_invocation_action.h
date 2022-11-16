@@ -59,4 +59,4 @@ private:
     Private * const d;
 };
 
-#endif // KISTOOLINVOCATIONACTION_H
+#endif // KIS_TOOL_INVOCATION_ACTION_H

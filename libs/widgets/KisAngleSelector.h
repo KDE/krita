@@ -177,8 +177,8 @@ public:
     /**
      * @brief Gets the direction in which the angle increases in the angle gauge
      * @return The direction in which the angle increases
-     * @see KisAngleGauge::IcreasingDirection
-     * @see setIncreasingDirection(KisAngleGauge::IcreasingDirection)
+     * @see KisAngleGauge::IncreasingDirection
+     * @see setIncreasingDirection(KisAngleGauge::IncreasingDirection)
      */
     KisAngleGauge::IncreasingDirection increasingDirection() const;
     /**
@@ -259,7 +259,7 @@ public:
     /**
      * @brief Sets the increasing direction in the angle gauge
      * @param newIncreasingDirection The new increasing direction
-     * @see IcreasingDirection
+     * @see IncreasingDirection
      * @see increasingDirection() const
      */
     void setIncreasingDirection(KisAngleGauge::IncreasingDirection newIncreasingDirection);

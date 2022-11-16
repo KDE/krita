@@ -280,7 +280,7 @@ public:
 
     /**
      * Handle the dragLeaveEvent
-     * Basically just a noticification that the drag is no long relevant
+     * Basically just a notification that the drag is no long relevant
      * The tool should Accept the event if it is meaningful; Default implementation does not.
      */
     virtual void dragLeaveEvent(QDragLeaveEvent *event);
@@ -454,7 +454,7 @@ protected:
     /// coordinates (points)
     qreal handleDocRadius() const;
 
-    /// Convencience function to get the current grab sensitivity
+    /// Convenience function to get the current grab sensitivity
     int grabSensitivity() const;
 
     /**
@@ -524,4 +524,4 @@ private:
     Q_DECLARE_PRIVATE(KoToolBase)
 };
 
-#endif /* KOTOOL_H */
+#endif /* KOTOOLBASE_H */

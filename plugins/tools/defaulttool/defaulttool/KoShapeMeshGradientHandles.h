@@ -82,7 +82,7 @@ private:
                                      int row,
                                      int col) const;
 
-    QTransform abosoluteTransformation(KoFlake::CoordinateSystem system) const;
+    QTransform absoluteTransformation(KoFlake::CoordinateSystem system) const;
 
 private:
     KoFlake::FillVariant m_fillVariant {KoFlake::Fill};

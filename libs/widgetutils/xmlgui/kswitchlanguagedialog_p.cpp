@@ -297,7 +297,7 @@ void KisKSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *
     QLocale defaultLocale;
     QLocale cLocale(QLocale::C);
     QLocale::setDefault(cLocale);
-    QSet<QString> insertedLanguges;
+    QSet<QString> insertedLanguages;
 
     const QList<QLocale> allLocales = QLocale::matchingLocales(QLocale::AnyLanguage, QLocale::AnyScript, QLocale::AnyCountry);
     Q_FOREACH (const QLocale &l, allLocales) {
@@ -308,7 +308,7 @@ void KisKSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *
             // In this case use the non native language name as fallback.
             // See: QTBUG-51323
             const QString languageName = nativeName.isEmpty() ? QLocale::languageToString(l.language()) : nativeName;
-            if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
+            if (!insertedLanguages.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
                 QString displayName;
                 // Check if languageCode contains a country name.
                 // For en and en_GB their native names already contain "American"
@@ -328,11 +328,11 @@ void KisKSwitchLanguageDialogPrivate::fillApplicationLanguages(KLanguageButton *
                     displayName = languageName;
                 }
                 button->insertLanguage(languageCode, displayName);
-                insertedLanguges << languageCode;
+                insertedLanguages << languageCode;
             } else if (stripCountryCode(&languageCode)) {
-                if (!insertedLanguges.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
+                if (!insertedLanguages.contains(languageCode) && KLocalizedString::isApplicationTranslatedInto(languageCode)) {
                     button->insertLanguage(languageCode, languageName);
-                    insertedLanguges << languageCode;
+                    insertedLanguages << languageCode;
                 }
             }
         }

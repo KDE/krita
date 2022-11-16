@@ -94,7 +94,7 @@ KisAutoBrush::KisAutoBrush(KisMaskGenerator* as, qreal angle, qreal randomness, 
         setHeight(qMax(1, height));
     }
 
-    // We don't initialize setBrushTipImage(), bacause
+    // We don't initialize setBrushTipImage(), because
     // auto brush doesn't use image pyramid. And generation
     // of a full-scaled QImage may cause a significant delay
     // in the beginning of the stroke
@@ -305,7 +305,7 @@ void KisAutoBrush::generateMaskAndApplyMaskOrCreateDab(KisFixedPaintDeviceSP dst
     // if there's coloring information, we merely change the alpha: in that case,
     // the dab should be big enough!
     if (coloringInformation) {
-        // new bounds. we don't care if there is some extra memory occcupied.
+        // new bounds. we don't care if there is some extra memory occupied.
         dst->setRect(QRect(0, 0, dstWidth, dstHeight));
         dst->lazyGrowBufferWithoutInitialization();
     }

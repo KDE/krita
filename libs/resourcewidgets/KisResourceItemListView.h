@@ -39,7 +39,7 @@ public:
      * @brief setStrictSelectionMode sets additional restrictions on the selection.
      *
      * When in QAbstractItemView::SingleSelection mode, this ensures that the
-     * selection never gets transfered to another item. Instead, the selection
+     * selection never gets transferred to another item. Instead, the selection
      * is cleared if the current item gets removed (filtered) from the model.
      * Furthermore, it prevents users from deselecting the current item with Ctrl+click.
      * This behavior is important for resource selectors.

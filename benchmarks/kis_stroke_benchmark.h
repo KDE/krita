@@ -130,7 +130,7 @@ private Q_SLOTS:
     void benchmarkRand();
     void benchmarkRand48();
 
-    void becnhmarkPresetCloning();
+    void benchmarkPresetCloning();
 };
 
 #endif

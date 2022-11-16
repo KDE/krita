@@ -10,10 +10,10 @@
 #include "kritaflake_export.h"
 
 /**
- * The KoShapeAppliationData class is used to associate application specific data with a shape.
+ * The KoShapeApplicationData class is used to associate application specific data with a shape.
  * See also the KoShapeUserData class that is specifically set for the benefit of shapes and tools.
  *
- * KoShapeAppliationData provides an abstract interface for container classes
+ * KoShapeApplicationData provides an abstract interface for container classes
  * that are used to associate application-specific data with shapes in KoShape
  * Generally, subclasses of this class provide functions to allow data to
  * be stored and retrieved, and instances are attached to KoShape using

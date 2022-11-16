@@ -262,7 +262,7 @@ void KisFilterStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
                 }
             }
 
-            // Filter device needs a transaction to prevent grid-patch artifcacts from multithreaded read/write.
+            // Filter device needs a transaction to prevent grid-patch artifacts from multithreaded read/write.
             shared->filterDeviceTransaction.reset(new KisTransaction(shared->filterDevice));
 
 

@@ -113,7 +113,7 @@ struct SvgRenderTester : public SvgTester
     }
 
     void setCheckQImagePremultiplied(bool value) {
-        m_checkQImagePremiltiplied = value;
+        m_checkQImagePremultiplied = value;
     }
 
     static void testRender(KoShape *shape, const QString &prefix, const QString &testName, const QSize canvasSize, qreal dpi, int fuzzyThreshold = 0, bool checkQImagePremultiplied = false) {
@@ -211,12 +211,12 @@ struct SvgRenderTester : public SvgTester
             }
         }
 
-        testRender(shape, "load", testName, canvasSize, pixelsPerInch, m_fuzzyThreshold, m_checkQImagePremiltiplied);
+        testRender(shape, "load", testName, canvasSize, pixelsPerInch, m_fuzzyThreshold, m_checkQImagePremultiplied);
     }
 
 private:
     int m_fuzzyThreshold;
-    int m_checkQImagePremiltiplied = false;
+    int m_checkQImagePremultiplied = false;
 };
 
 

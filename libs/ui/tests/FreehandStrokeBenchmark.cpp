@@ -6,7 +6,7 @@
 
 #include "FreehandStrokeBenchmark.h"
 
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 #include "kis_image.h"
 #include "kis_resources_snapshot.h"
 #include "stroke_testing_utils.h"
@@ -82,7 +82,7 @@ protected:
             image->addJob(strokeId(), data.take());
         }
 
-        image->addJob(strokeId(), new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
+        image->addJob(strokeId(), new KisAsynchronousStrokeUpdateHelper::UpdateData(true));
     }
 
 private:
@@ -138,7 +138,7 @@ void FreehandStrokeBenchmark::initTestCase()
 
     // warm-up memory pools
     {
-        FreehandStrokeBenchmarkTester tester("testing_1000px_auto_deafult.kpp");
+        FreehandStrokeBenchmarkTester tester("testing_1000px_auto_default.kpp");
         tester.setCpuCoresLimit(QThread::idealThreadCount());
         tester.benchmark();
         QTest::qSleep(500);
@@ -147,7 +147,7 @@ void FreehandStrokeBenchmark::initTestCase()
 
 void FreehandStrokeBenchmark::testDefaultTip()
 {
-    benchmarkBrush("testing_1000px_auto_deafult.kpp");
+    benchmarkBrush("testing_1000px_auto_default.kpp");
 }
 
 void FreehandStrokeBenchmark::testSoftTip()
@@ -187,46 +187,46 @@ void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_old_sa()
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_old_nsa()
 {
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_old_nsa.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_dulling_old_nsa.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_sa()
 {
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_new_sa.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_dulling_new_sa.kpp");
 }
 
 #ifndef LIMIT_LONG_TESTS
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_sa_800px()
 {
-    benchmarkBrushUnthreaded("testing_800px_colorsmudge_defaut_dulling_new_sa.kpp");
+    benchmarkBrushUnthreaded("testing_800px_colorsmudge_default_dulling_new_sa.kpp");
 }
 
 #endif
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_dull_new_nsa()
 {
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_dulling_new_nsa.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_dulling_new_nsa.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_old_sa()
 {
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_old_sa.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_smearing_old_sa.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_old_nsa()
 {
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_old_nsa.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_smearing_old_nsa.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_new_sa()
 {
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_new_sa.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_smearing_new_sa.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeDefaultTip_smear_new_nsa()
 {
-    benchmarkBrushUnthreaded("testing_200px_colorsmudge_defaut_smearing_new_nsa.kpp");
+    benchmarkBrushUnthreaded("testing_200px_colorsmudge_default_smearing_new_nsa.kpp");
 }
 
 void FreehandStrokeBenchmark::testColorsmudgeLightness_smear_new_nsa_maskmode()

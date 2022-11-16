@@ -373,8 +373,8 @@ public:
 
     /**
      * @brief setPaletteList replaces the palettes in the document's local resource storage with the list
-     * of palettes passed to this function. It will then emitsigPaletteListChanged with both the old and
-     * the new list, if emitsignal is true.
+     * of palettes passed to this function. It will then emit sigPaletteListChanged with both the old and
+     * the new list, if emitSignal is true.
      */
     void setPaletteList(const QList<KoColorSetSP> &paletteList, bool emitSignal = false);
 
@@ -433,7 +433,7 @@ public:
     KisImportExportManager *importExportManager() const;
 
     /**
-     * @brief serializeToNativeByteArray daves the document into a .kra file wtitten
+     * @brief serializeToNativeByteArray daves the document into a .kra file written
      * to a memory-based byte-array
      * @return a byte array containing the .kra file
      */
@@ -585,7 +585,7 @@ public:
 
     bool closePath(bool promptToSave = true);
 
-    bool saveAs(const QString &path, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfigration = 0);
+    bool saveAs(const QString &path, const QByteArray &mimeType, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration = 0);
 
     /**
      * Create a new image that has this document as a parent and

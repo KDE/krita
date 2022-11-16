@@ -757,7 +757,7 @@ void getRGB(TReal& r, TReal& g, TReal& b, TReal hue) {
     // 2 green  -> (0,1,0)
     // 3 cyan   -> (0,1,1)
     // 4 blue   -> (0,0,1)
-    // 5 maenta -> (1,0,1)
+    // 5 magenta -> (1,0,1)
     // 6 red    -> (1,0,0)
     
     if(hue < -std::numeric_limits<TReal>::epsilon()) {

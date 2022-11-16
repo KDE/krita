@@ -157,7 +157,7 @@ private Q_SLOTS:
  * from the list. It contains radio buttons choosing between default and custom
  * shortcuts, and a button to configure the custom shortcut.
  *
- * @see KisShortcutsEditorDeligate::itemActivated
+ * @see KisShortcutsEditorDelegate::itemActivated
  * @see KisShortcutWidget.cpp
  *
  * @internal

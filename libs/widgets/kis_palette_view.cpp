@@ -34,7 +34,7 @@
 #include <kis_debug.h>
 #include <KisResourceUserOperations.h>
 
-int KisPaletteView::MININUM_ROW_HEIGHT = 10;
+int KisPaletteView::MINIMUM_ROW_HEIGHT = 10;
 
 struct KisPaletteView::Private
 {
@@ -66,9 +66,9 @@ KisPaletteView::KisPaletteView(QWidget *parent)
     horizontalHeader()->setVisible(false);
     verticalHeader()->setVisible(false);
     horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    horizontalHeader()->setMinimumSectionSize(MININUM_ROW_HEIGHT);
+    horizontalHeader()->setMinimumSectionSize(MINIMUM_ROW_HEIGHT);
     verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    verticalHeader()->setMinimumSectionSize(MININUM_ROW_HEIGHT);
+    verticalHeader()->setMinimumSectionSize(MINIMUM_ROW_HEIGHT);
 
     connect(horizontalHeader(), SIGNAL(sectionResized(int,int,int)),
             SLOT(slotHorizontalHeaderResized(int,int,int)));

@@ -87,7 +87,7 @@ public:
 
 
     /**
-     * Mix the colors uniformly, without weightening
+     * Mix the colors uniformly, without weighting
      * @param colors a pointer toward the source pixels
      * @param nColors the number of pixels in the colors array
      * @param dst the destination pixel

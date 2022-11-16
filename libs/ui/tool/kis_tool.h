@@ -33,7 +33,7 @@ class QPainterPath;
 class QPolygonF;
 class KisOptimizedBrushOutline;
 
-//activation id for Krita tools, Krita tools are always active and handle locked and invisible layers by themself
+//activation id for Krita tools, Krita tools are always active and handle locked and invisible layers by themselves
 static const QString KRITA_TOOL_ACTIVATION_ID = "flake/always";
 
 #include <kritaui_export.h>

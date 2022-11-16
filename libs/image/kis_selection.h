@@ -140,7 +140,7 @@ public:
      *
      * @param shapeSelection new shape selection object that should be
      *                       attached to the selection
-     * @return undo command that exectes and undos the conversion
+     * @return undo command that executes and undos the conversion
      */
     KUndo2Command* convertToVectorSelection(KisSelectionComponent* shapeSelection);
 

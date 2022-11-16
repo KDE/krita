@@ -54,7 +54,6 @@ public:
     KisBrushSP brush() const;
 
     void setImage(KisImageWSP image);
-
     void hideOptions(const QStringList &options);
 
     lager::reader<bool> lightnessModeEnabled() const;
@@ -80,7 +79,7 @@ private:
     QWidget *m_currentBrushWidget {0};
     QHash<int, QWidget*> m_chooserMap;
     QButtonGroup *m_buttonGroup {0};
-    QSize m_mininmumSize;
+    QSize m_minimumSize;
     QStackedWidget *m_stackedWidget{0};
 
     KisAutoBrushWidget *m_autoBrushWidget {0};

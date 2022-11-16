@@ -24,7 +24,7 @@
 #include <boost/graph/lookup_edge.hpp>
 #include <boost/concept/assert.hpp>
 
-// The algorithm impelemented here is described in:
+// The algorithm implemented here is described in:
 //
 // Boykov, Y., Kolmogorov, V. "An Experimental Comparison of Min-Cut/Max-Flow
 // Algorithms for Energy Minimization in Vision", In IEEE Transactions on
@@ -300,7 +300,7 @@ class bk_max_flow {
        * augments path from s->t and updates residual graph
        * source(e, m_g) is the end of the path found in the source-tree
        * target(e, m_g) is the beginning of the path found in the sink-tree
-       * this phase generates orphans on satured edges, if the attached verts are
+       * this phase generates orphans on saturated edges, if the attached verts are
        * from different search-trees orphans are ordered in distance to
        * sink/source. first the farthest from the source are front_inserted into
        * the orphans list, and after that the sink-tree-orphans are
@@ -688,7 +688,7 @@ class bk_max_flow {
       iterator_property_map<std::vector<bool>::iterator, IndexMap> m_in_active_list_map;
 
       std::list<vertex_descriptor> m_orphans;
-      tQueue m_child_orphans; // we use a second queuqe for child orphans, as they are FIFO processed
+      tQueue m_child_orphans; // we use a second queue for child orphans, as they are FIFO processed
 
       std::vector<bool> m_has_parent_vec;
       iterator_property_map<std::vector<bool>::iterator, IndexMap> m_has_parent_map;
@@ -752,7 +752,7 @@ boykov_kolmogorov_max_flow(Graph& g,
 }
 
 /**
- * non-named-parameter version, given capacity, residucal_capacity,
+ * non-named-parameter version, given capacity, residual_capacity,
  * reverse_edges, and an index map.
  */
 template<class Graph,

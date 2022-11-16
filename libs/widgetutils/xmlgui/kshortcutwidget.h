@@ -34,9 +34,9 @@ public:
     QList<QKeySequence> shortcut() const;
 
     /**
-     * Set a list of action collections to check against for conflictuous shortcut.
+     * Set a list of action collections to check against for conflicting shortcut.
      *
-     * If there is a conflictuous shortcut with a KAction, and that his shortcut can be configured
+     * If there is a conflicting shortcut with a KAction, and that his shortcut can be configured
      * (KAction::isShortcutConfigurable() returns true) the user will be prompted for eventually steal
      * the shortcut from this action
      *

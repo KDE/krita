@@ -47,18 +47,18 @@ void KoPathToolSelection::add(KoPathPoint * point, bool clear)
     if(! point)
         return;
 
-    bool allreadyIn = false;
+    bool alreadyIn = false;
     if (clear) {
         if (size() == 1 && m_selectedPoints.contains(point)) {
-            allreadyIn = true;
+            alreadyIn = true;
         } else {
             this->clear();
         }
     } else {
-        allreadyIn = m_selectedPoints.contains(point);
+        alreadyIn = m_selectedPoints.contains(point);
     }
 
-    if (!allreadyIn) {
+    if (!alreadyIn) {
         m_selectedPoints.insert(point);
         KoPathShape * pathShape = point->parent();
         PathShapePointMap::iterator it(m_shapePointMap.find(pathShape));

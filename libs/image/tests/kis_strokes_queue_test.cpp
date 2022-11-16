@@ -771,7 +771,7 @@ void KisStrokesQueueTest::testMultipleLevelOfDetailMixedLegacy()
     t.checkOnlyJob("resu_u_init");
 }
 
-void KisStrokesQueueTest::testCancelBewteenLodNStrokes()
+void KisStrokesQueueTest::testCancelBetweenLodNStrokes()
 {
     LodStrokesQueueTester t;
     KisStrokesQueue &queue = t.queue;
@@ -810,7 +810,7 @@ void KisStrokesQueueTest::testCancelBewteenLodNStrokes()
     t.checkOnlyJob("resu_u_init");
 }
 
-void KisStrokesQueueTest::testUFOVisitBewteenLodNStrokes()
+void KisStrokesQueueTest::testUFOVisitBetweenLodNStrokes()
 {
     LodStrokesQueueTester t;
     KisStrokesQueue &queue = t.queue;

@@ -117,7 +117,7 @@ public:
     /**
      * Create a composite source device for being used over overlay().
      *
-     * Please note thate one cannot use
+     * Please note that one cannot use
      * overlay()->createCompositeSourceDevice() for this purpose because
      * overlay() is just a copy of sourceDevice() and doesn't have overloaded
      * methods for this color space.

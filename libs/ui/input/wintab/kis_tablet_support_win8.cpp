@@ -270,7 +270,7 @@ struct PenPointerItem
     HANDLE deviceHandle;
     QPointer<QWidget> activeWidget; // Current widget receiving events
     qreal oneOverDpr; // 1 / devicePixelRatio of activeWidget
-    bool widgetIsCaptured; // Current widget is capturing a pen cown event
+    bool widgetIsCaptured; // Current widget is capturing a pen down event
     bool widgetIsIgnored; // Pen events should be ignored until pen up
     bool widgetAcceptsPenEvent; // Whether the widget accepts pen events
 

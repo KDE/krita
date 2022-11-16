@@ -147,7 +147,7 @@ protected:
      * @brief convertImageMap
      * convert image data containing raw KoColor data into a QImage
      * @param data must point to memory of size width()*height()*pixelSize
-     * @param size the number of bytes to read from data, must match aforementioned cirteria
+     * @param size the number of bytes to read from data, must match aforementioned criteria
      * @return the converted QImage guaranteed to match the widget size (black content on failure)
      */
     QImage convertImageMap(const quint8 *rawColor, quint32 bufferSize, QSize imgSize) const;

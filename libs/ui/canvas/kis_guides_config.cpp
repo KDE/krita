@@ -285,7 +285,7 @@ void KisGuidesConfig::transform(const QTransform &transform)
 {
     if (transform.type() >= QTransform::TxShear) return;
 
-    KisAlgebra2D::DecomposedMatix m(transform);
+    KisAlgebra2D::DecomposedMatrix m(transform);
 
     QTransform t = m.scaleTransform();
 

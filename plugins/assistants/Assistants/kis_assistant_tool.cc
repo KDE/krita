@@ -488,15 +488,15 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
         event->ignore();
     }
 
-    bool wasHiglightedNode = m_higlightedNode != 0;
+    bool wasHighlightedNode = m_highlightedNode != 0;
     QPointF mousep = m_canvas->viewConverter()->documentToView(event->point);
     QList <KisPaintingAssistantSP> pAssistant= m_canvas->paintingAssistantsDecoration()->assistants();
 
     Q_FOREACH (KisPaintingAssistantSP assistant, pAssistant) {
         if(assistant->id() == "perspective") {
-            if ((m_higlightedNode = assistant->closestCornerHandleFromPoint(mousep))) {
-                if (m_higlightedNode == m_selectedNode1 || m_higlightedNode == m_selectedNode2) {
-                    m_higlightedNode = 0;
+            if ((m_highlightedNode = assistant->closestCornerHandleFromPoint(mousep))) {
+                if (m_highlightedNode == m_selectedNode1 || m_highlightedNode == m_selectedNode2) {
+                    m_highlightedNode = 0;
                 } else {
                     m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
                     break;
@@ -644,7 +644,7 @@ void KisAssistantTool::continueActionImpl(KoPointerEvent *event)
             }
         }
     }
-    if (wasHiglightedNode && !m_higlightedNode) {
+    if (wasHighlightedNode && !m_highlightedNode) {
         m_canvas->updateCanvas(); // TODO update only the relevant part of the canvas
     }
 }

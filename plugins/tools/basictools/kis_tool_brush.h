@@ -35,7 +35,7 @@ class KisToolBrush : public KisToolFreehand
 {
     Q_OBJECT
     Q_PROPERTY(int smoothnessQuality READ smoothnessQuality WRITE slotSetSmoothnessDistance NOTIFY smoothnessQualityChanged)
-    Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAgressiveness NOTIFY smoothnessFactorChanged)
+    Q_PROPERTY(qreal smoothnessFactor READ smoothnessFactor WRITE slotSetTailAggressiveness NOTIFY smoothnessFactorChanged)
     Q_PROPERTY(bool smoothPressure READ smoothPressure WRITE setSmoothPressure NOTIFY smoothPressureChanged)
     Q_PROPERTY(int smoothingType READ smoothingType WRITE slotSetSmoothingType NOTIFY smoothingTypeChanged)
     Q_PROPERTY(bool useScalableDistance READ useScalableDistance WRITE setUseScalableDistance NOTIFY useScalableDistanceChanged)
@@ -77,7 +77,7 @@ public Q_SLOTS:
     void slotSetSmoothnessDistance(qreal distance);
     void slotSetMagnetism(int magnetism);
     void slotSetSmoothingType(int index);
-    void slotSetTailAgressiveness(qreal argh_rhhrr);
+    void slotSetTailAggressiveness(qreal argh_rhhrr);
     void setSmoothPressure(bool value);
     void setUseScalableDistance(bool value);
 

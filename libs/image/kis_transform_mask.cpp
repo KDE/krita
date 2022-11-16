@@ -250,7 +250,7 @@ void KisTransformMask::overrideStaticCacheDevice(KisPaintDeviceSP device)
     m_d->staticCacheIsOverridden = bool(device);
 }
 
-void KisTransformMask::recaclulateStaticImage()
+void KisTransformMask::recalculateStaticImage()
 {
     /**
      * Note: this function must be called from within the scheduler's

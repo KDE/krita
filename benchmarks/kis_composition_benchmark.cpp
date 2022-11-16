@@ -416,10 +416,10 @@ QString getTestName(bool haveMask,
 
     QString testName;
     testName +=
-        !srcAlignmentShift && !dstAlignmentShift ? "Aligned   " :
-        !srcAlignmentShift &&  dstAlignmentShift ? "SrcUnalig " :
-         srcAlignmentShift && !dstAlignmentShift ? "DstUnalig " :
-         srcAlignmentShift &&  dstAlignmentShift ? "Unaligned " : "###";
+        !srcAlignmentShift && !dstAlignmentShift ? "Aligned    " :
+        !srcAlignmentShift &&  dstAlignmentShift ? "SrcUnalign " :
+         srcAlignmentShift && !dstAlignmentShift ? "DstUnalign " :
+         srcAlignmentShift &&  dstAlignmentShift ? "Unaligned  " : "###";
 
     testName += haveMask ? "Mask   " : "NoMask ";
 

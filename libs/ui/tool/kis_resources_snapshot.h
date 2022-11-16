@@ -55,7 +55,7 @@ public:
      * \return currently active selection. Note that it will return
      *         null if current node *is* the current selection. This
      *         is done to avoid recursive selection application when
-     *         painting on selectgion masks.
+     *         painting on selection masks.
      */
     KisSelectionSP activeSelection() const;
 

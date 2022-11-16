@@ -31,7 +31,7 @@ typedef QVector<KisTextureTileUpdateInfoSP> KisTextureTileUpdateInfoSPList;
  *   fragmentation
  *
  * - the buffer's lifetime defines the lifetime of the allocated chunk
- *   of memory, so you don't have to thing about free'ing the memory
+ *   of memory, so you don't have to thing about freeing the memory
  */
 
 class DataBuffer

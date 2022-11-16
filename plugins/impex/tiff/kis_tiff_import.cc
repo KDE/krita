@@ -399,7 +399,7 @@ KisImportExportErrorCode KisTIFFImport::readImageFromPsd(
         POINT_TO_INCH(static_cast<qreal>(basicInfo.xres)),
         POINT_TO_INCH(static_cast<qreal>(
             basicInfo.yres))); // It is the "invert" macro because we convert
-                               // from pointer-per-inchs to points
+                               // from pointer-per-inch to points
 
     // set the correct resolution
     if (resources.contains(KisTiffPsdResourceRecord::RESN_INFO)) {
@@ -691,7 +691,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
     // Get the planar configuration
     uint16_t planarconfig = PLANARCONFIG_CONTIG;
     if (TIFFGetField(image, TIFFTAG_PLANARCONFIG, &planarconfig) == 0) {
-        dbgFile << "Plannar configuration is not define";
+        dbgFile << "Planar configuration is not defined";
         return ImportExportCodes::FileFormatIncorrect;
     }
     // Creating the KisImageSP
@@ -787,7 +787,7 @@ KisTIFFImport::readImageFromTiff(KisDocument *m_doc,
         }
     }();
 
-    // Initisalize tiffReader
+    // Initialize tiffReader
     QVector<uint16_t> lineSizeCoeffs(nbchannels, 1);
     uint16_t vsubsampling = 1;
     uint16_t hsubsampling = 1;

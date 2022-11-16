@@ -176,7 +176,7 @@ public:
  * A template to generate a KoCompositeOp class by just specifying a
  * blending/compositing function. This template works with compositing functions
  * for separable channels (means each channel of a pixel can be processed separately)
- * with taking apha into consideration.
+ * with taking alpha into consideration.
  * Note that because of special treating of alpha, any composite op function
  * needs to make alpha blending itself - the value of color that is written onto the projection
  * is the same that the composite function gives (compare with KoCompositeOpGenericHSL and KoCompositeOpGenericSC).

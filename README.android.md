@@ -28,7 +28,7 @@ cd <extracted-android-sdk-tools>/tools/bin
 ./sdkmanager "build-tools;28.0.2"
 ```
 
-If you get some `ClasNotFoundException` it might be because `java`
+If you get some `ClassNotFoundException` it might be because `java`
 version is set to `11`. For `sdkmanager` to work, set it to `8` and
 then run it again.
 

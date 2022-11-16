@@ -160,7 +160,7 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     // corner of the macrocell. v1 is the aligned version
     // u2 is the unaligned vector that goes from the origin to the bottom-left
     // corner of the macrocell. v2 is the aligned version.
-    // At this point we asume the macrocell will have a minimum size given by
+    // At this point we assume the macrocell will have a minimum size given by
     // the alignment
     const QPointF u1 = screenToImage.map(QPointF(static_cast<qreal>(alignX), 0.0));
     const QPointF u2 = screenToImage.map(QPointF(0.0, static_cast<qreal>(alignY)));
@@ -311,7 +311,7 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     // macrocell, but also some other areas outside (parts of adjacent
     // macrocells) if, for example, the screen is rotated. To get later a value
     // from the template we only use the pixels inside the macrocell, but the
-    // pixels outside are usefull to perform bilinear interpolation
+    // pixels outside are useful to perform bilinear interpolation
 
     // Get the horizontal and vertical points at cell corners
     QVector<QPointF> horizontalCellPositions;
@@ -439,16 +439,16 @@ void KisScreentoneGeneratorTemplate::makeTemplate(const KisScreentoneGeneratorCo
     // points
     {
         int macrocellPixelIndex = 0;
-        QVector<int> microcellPixelIndides(auxiliaryMicrocells.size());
+        QVector<int> microcellPixelIndices(auxiliaryMicrocells.size());
         while (macrocellPixelIndex < totalNumberOfAuxiliaryPoints) {
             for (int i = 0; i < auxiliaryMicrocells.size(); ++i) {
-                if (microcellPixelIndides[i] == auxiliaryMicrocells[i].auxiliaryPoints.size()) {
+                if (microcellPixelIndices[i] == auxiliaryMicrocells[i].auxiliaryPoints.size()) {
                     continue;
                 }
-                m_templateData[auxiliaryMicrocells[i].auxiliaryPoints[microcellPixelIndides[i]].templatePixelIndex] =
+                m_templateData[auxiliaryMicrocells[i].auxiliaryPoints[microcellPixelIndices[i]].templatePixelIndex] =
                     totalNumberOfAuxiliaryPoints - 1 == 0 ? 0 // to avoid UB from division by zero
                                                           : static_cast<qreal>(macrocellPixelIndex) / static_cast<qreal>(totalNumberOfAuxiliaryPoints - 1);
-                ++microcellPixelIndides[i];
+                ++microcellPixelIndices[i];
                 ++macrocellPixelIndex;
             }
         }

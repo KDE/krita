@@ -254,7 +254,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
     QTransform matrix;
     matrix.scale(image->xRes(), image->yRes());
     matrix.translate(pathShape->position().x(), pathShape->position().y());
-    QPainterPath mapedOutline = matrix.map(pathShape->outline());
+    QPainterPath mappedOutline = matrix.map(pathShape->outline());
 
     if (node->hasEditablePaintDevice()) {
         KisFigurePaintingToolHelper helper(name,
@@ -264,7 +264,7 @@ void KisToolShape::addPathShape(KoPathShape* pathShape, const KUndo2MagicString&
                                            strokeStyle(),
                                            fillStyle(),
                                            fillTransform());
-        helper.paintPainterPath(mapedOutline);
+        helper.paintPainterPath(mappedOutline);
     } else if (node->inherits("KisShapeLayer")) {
         pathShape->normalize();
         addShape(pathShape);

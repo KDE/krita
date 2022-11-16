@@ -1179,7 +1179,7 @@ void KisToolEncloseAndFill::slot_sliderExpand_valueChanged(int value)
     m_configGroup.writeEntry("expand", value);
 }
 
-void KisToolEncloseAndFill::slot_buttonStopGrowingAtDarkestPixel_toogled(bool enabled)
+void KisToolEncloseAndFill::slot_buttonStopGrowingAtDarkestPixel_toggled(bool enabled)
 {
     if (enabled == m_stopGrowingAtDarkestPixel) {
         return;

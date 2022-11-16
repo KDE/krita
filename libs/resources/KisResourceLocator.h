@@ -233,7 +233,7 @@ private:
      * @brief addResource adds the given resource to the database and potentially a storage
      * @param resourceType the type of the resource
      * @param resource the actual resource object
-     * @param storageLocation the storage where the resource will be saved. By default this is the the default folder storage.
+     * @param storageLocation the storage where the resource will be saved. By default this is the default folder storage.
      * @return true if successful
      */
     bool addResource(const QString &resourceType, const KoResourceSP resource, const QString &storageLocation = QString());

@@ -26,7 +26,7 @@
 KisPaintDeviceSP lodDevice(KisPaintDeviceSP dev)
 {
     KisPaintDeviceSP tmp = new KisPaintDevice(dev->colorSpace());
-    dev->tesingFetchLodDevice(tmp);
+    dev->testingFetchLodDevice(tmp);
     return tmp;
 }
 

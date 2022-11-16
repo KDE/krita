@@ -28,7 +28,7 @@ private Q_SLOTS:
     void cleanup(); // Called between each test. vvv
 
     void testAddKeyframeExtendsDuration();
-    void testStoryboardTimelineTimeSyncronization();
+    void testStoryboardTimelineTimeSynchronization();
     void testDurationChange();
     void testFpsChanged();
 

@@ -137,7 +137,7 @@ private:
     {
         quint32 numcols = dataWidth / m_hsub;
         double coeff = std::numeric_limits<T>::max() / (double)(std::pow(2.0, this->sourceDepth()) - 1);
-        //     dbgFile <<" depth expension coefficient :" << coeff;
+        //     dbgFile <<" depth expansion coefficient :" << coeff;
         //     dbgFile <<" y =" << y;
         size_t buffPos = y / m_vsub * m_bufferWidth + x / m_hsub;
         for (quint32 index = 0; index < numcols; index++) {

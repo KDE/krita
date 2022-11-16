@@ -82,7 +82,7 @@ public:
         return checkAgainstShortcutTypes & KisKKeySequenceWidget::LocalShortcuts;
     }
 
-    void controlModifierlessTimout()
+    void controlModifierlessTimeout()
     {
         if (nKey != 0 && !modifierKeys) {
             // No modifier key pressed currently. Start the timeout
@@ -351,7 +351,7 @@ void KisKKeySequenceWidget::applyStealShortcut()
         stealAction->setShortcuts(QList<QKeySequence>());
 
         // The following code will find the action we are about to
-        // steal from and save it's actioncollection.
+        // steal from and save its action collection.
         KisKActionCollection *parentCollection = 0;
         foreach (KisKActionCollection *collection, d->checkActionCollections) {
             if (collection->actions().contains(stealAction)) {
@@ -669,7 +669,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Meta:
     case Qt::Key_Super_L:
     case Qt::Key_Super_R:
-        d->controlModifierlessTimout();
+        d->controlModifierlessTimeout();
         d->updateShortcutDisplay();
         break;
     default:
@@ -706,7 +706,7 @@ void KKeySequenceButton::keyPressEvent(QKeyEvent *e)
                 d->doneRecording();
                 return;
             }
-            d->controlModifierlessTimout();
+            d->controlModifierlessTimeout();
             d->updateShortcutDisplay();
         }
     }
@@ -730,7 +730,7 @@ void KKeySequenceButton::keyReleaseEvent(QKeyEvent *e)
     //if a modifier that belongs to the shortcut was released...
     if ((newModifiers & d->modifierKeys) < d->modifierKeys) {
         d->modifierKeys = newModifiers;
-        d->controlModifierlessTimout();
+        d->controlModifierlessTimeout();
         d->updateShortcutDisplay();
     }
 }

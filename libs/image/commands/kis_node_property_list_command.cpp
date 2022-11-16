@@ -39,7 +39,7 @@ QSet<QString> changedProperties(const KisBaseNode::PropertyList &before,
     };
 
     /// we expect that neither of the lists has duplicated values,
-    /// therefore we can just iterate over teh bigger list
+    /// therefore we can just iterate over the bigger list
     const KisBaseNode::PropertyList &list1 = before.size() >= after.size() ? before : after;
     const KisBaseNode::PropertyList &list2 = before.size() >= after.size() ? after : before;
 

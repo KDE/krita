@@ -364,7 +364,7 @@ void KisDabRenderingQueue::setCacheInterface(KisDabRenderingQueue::CacheInterfac
     m_d->cacheInterface.reset(interface);
 }
 
-KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevce()
+KisFixedPaintDeviceSP KisDabRenderingQueue::fetchCachedPaintDevice()
 {
     /**
      * We create a special type of a fixed paint device that

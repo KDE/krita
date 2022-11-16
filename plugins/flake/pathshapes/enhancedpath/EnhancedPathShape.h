@@ -92,7 +92,7 @@ public:
 
     /// Sets if the shape is to be mirrored horizontally before applying any other transformations
     //NOTE: in the standard nothing is mentioned about the priorities of the transformations"
-    //it's assumed like this because of the behavior shwon in OOo
+    //it's assumed like this because of the behavior shown in OOo
     void setMirrorHorizontally(bool mirrorHorizontally);
 
     /// Sets if the shape is to be mirrored vertically before applying any other transformations

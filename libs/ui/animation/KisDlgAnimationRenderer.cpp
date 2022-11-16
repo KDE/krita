@@ -147,8 +147,8 @@ void KisDlgAnimationRenderer::initializeRenderSettings(const KisDocument &doc, c
     const QString documentPath = m_doc->localFilePath();
 
     // Initialize these settings based on last used configuration when possible..
-    if (!lastUsedOptions.lastDocuemntPath.isEmpty() &&
-        lastUsedOptions.lastDocuemntPath == documentPath) {
+    if (!lastUsedOptions.lastDocumentPath.isEmpty() &&
+        lastUsedOptions.lastDocumentPath == documentPath) {
 
         // If the file is the same as last time, we use the last used basename.
         m_page->txtBasename->setText(lastUsedOptions.basename);
@@ -630,7 +630,7 @@ KisAnimationRenderingOptions KisDlgAnimationRenderer::getEncoderOptions() const
 {
     KisAnimationRenderingOptions options;
 
-    options.lastDocuemntPath = m_doc->localFilePath();
+    options.lastDocumentPath = m_doc->localFilePath();
     options.videoMimeType = m_page->cmbRenderType->currentData().toString();
     options.frameMimeType = m_page->cmbMimetype->currentData().toString();
     options.scaleFilter = m_page->cmbScaleFilter->currentData().toString();

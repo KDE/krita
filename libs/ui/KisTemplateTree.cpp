@@ -273,7 +273,7 @@ void KisTemplateTree::writeTemplate(KisTemplate *t, KisTemplateGroup *group,
             return;
         }
     }
-    // be sure that the template's file name is unique so we don't overwrite an other
+    // be sure that the template's file name is unique so we don't overwrite another
     QString const path = localDir + group->name() + '/';
     QString const name = KisTemplates::trimmed(t->name());
     fileName = path + name + ".desktop";

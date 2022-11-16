@@ -27,7 +27,7 @@ public:
      * to render it via KisFFMpegWrapper.
      * @param doc the document to use for rendering.
      * @param ffmpegPath the path to the ffmpeg executable.
-     * @param batchMode whether Krita is in batchmde and we can thus not show gui widgets.
+     * @param batchMode whether Krita is in batchmode and we can thus not show gui widgets.
      */
     KisAnimationVideoSaver(KisDocument* doc, bool batchMode);
     ~KisAnimationVideoSaver() override;

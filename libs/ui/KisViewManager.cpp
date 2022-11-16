@@ -331,7 +331,7 @@ KisViewManager::~KisViewManager()
     }
 
     cfg.writeEntry("baseLength", KisResourceItemChooserSync::instance()->baseLength());
-    cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CavnasOnlyMode
+    cfg.writeEntry("CanvasOnlyActive", false); // We never restart in CanvasOnlyMode
     delete d;
 }
 
@@ -515,7 +515,7 @@ void KisViewManager::setCurrentView(KisView *view)
         d->viewConnections.addUniqueConnection(d->softProof, SIGNAL(toggled(bool)), view, SLOT(slotSoftProofing(bool)) );
         d->viewConnections.addUniqueConnection(d->gamutCheck, SIGNAL(toggled(bool)), view, SLOT(slotGamutCheck(bool)) );
 
-        // set up progrress reporting
+        // set up progress reporting
         doc->image()->compositeProgressProxy()->addProxy(d->persistentImageProgressUpdater);
         d->viewConnections.addUniqueConnection(&d->statusBar, SIGNAL(sigCancellationRequested()), doc->image(), SLOT(requestStrokeCancellation()));
 
@@ -810,7 +810,7 @@ void KisViewManager::createActions()
 void KisViewManager::setupManagers()
 {
     // Create the managers for filters, selections, layers etc.
-    // XXX: When the currentlayer changes, call updateGUI on all
+    // XXX: When the current layer changes, call updateGUI on all
     // managers
 
     d->filterManager.setup(actionCollection(), actionManager());

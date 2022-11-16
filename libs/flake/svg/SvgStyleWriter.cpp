@@ -280,7 +280,7 @@ void writeMarkerStyle(KoXmlWriter &styleWriter, const KoMarker *marker, const QS
     styleWriter.addAttribute("markerHeight", refSize.height());
 
 
-    if (marker->hasAutoOtientation()) {
+    if (marker->hasAutoOrientation()) {
         styleWriter.addAttribute("orient", "auto");
     } else {
         // no suffix means 'degrees'

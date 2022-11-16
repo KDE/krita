@@ -116,7 +116,7 @@ private:
     void setNewMeshGradientBackgroundToShape();
     void updateMeshGradientUI();
 
-    void updateWidgetComponentVisbility();
+    void updateWidgetComponentVisibility();
 
     /// updates the UI based on KoFlake::FillType it gets from the shape.
     void updateUiFromFillType(KoShape *shape);

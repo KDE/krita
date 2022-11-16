@@ -204,7 +204,7 @@ void KisOpenGLCanvas2::paintGL()
         cfg.writeEntry("canvasState", "OPENGL_PAINT_STARTED");
     }
 
-    KisOpenglCanvasDebugger::instance()->nofityPaintRequested();
+    KisOpenglCanvasDebugger::instance()->notifyPaintRequested();
     QRect canvasImageDirtyRect = d->canvasImageDirtyRect & rect();
     d->canvasImageDirtyRect = QRect();
     d->renderer->paintCanvasOnly(canvasImageDirtyRect, updateRect);
@@ -276,7 +276,7 @@ void KisOpenGLCanvas2::paintToolOutline(const KisOptimizedBrushOutline &path)
 bool KisOpenGLCanvas2::isBusy() const
 {
     const bool isBusyStatus = d->glSyncObject && !d->glSyncObject->isSignaled();
-    KisOpenglCanvasDebugger::instance()->nofitySyncStatus(isBusyStatus);
+    KisOpenglCanvasDebugger::instance()->notifySyncStatus(isBusyStatus);
     return isBusyStatus;
 }
 

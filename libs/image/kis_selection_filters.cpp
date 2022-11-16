@@ -1036,7 +1036,7 @@ void KisAntiAliasSelectionFilter::process(KisPixelSelectionSP pixelSelection, co
             memset(scanlines[i], defaultPixel, bytesPerScanline);
         }
     }
-    // Bufffer that contains the current output scanline
+    // Buffer that contains the current output scanline
     QVector<quint8> antialiasedScanline(rect.width());
     // Main loop
     for (int y = 0; y < rect.height(); ++y)
@@ -1181,7 +1181,7 @@ void KisGrowUntilDarkestPixelSelectionFilter::process(KisPixelSelectionSP pixelS
     // Copy the original selection. We will grow this adaptively until the
     // darkest or mor opaque pixels or until the maximum grow is reached.
     KisPixelSelectionSP mask = new KisPixelSelection(*pixelSelection);
-    // Grow the original selection normally. At the end this selection wil be
+    // Grow the original selection normally. At the end this selection will be
     // masked with the adaptively grown mask. We cannot grow adaptively this
     // selection directly since it may have semi-transparent or soft edges.
     // Those need to be retained in the final selection. This normally grown

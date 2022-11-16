@@ -196,7 +196,7 @@ void KisUndoView::setStack(KUndo2QStack *stack)
     Sets the group displayed by this view to \a group. If \a group is 0, the view will
     be empty.
 
-    The view will update itself autmiatically whenever the active stack of the group changes.
+    The view will update itself automatically whenever the active stack of the group changes.
 
     \sa group() setStack()
 */

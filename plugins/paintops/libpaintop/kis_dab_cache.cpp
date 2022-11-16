@@ -136,7 +136,7 @@ KisFixedPaintDeviceSP KisDabCache::fetchFromCache(KisDabCacheUtils::DabRendering
 
 /**
  * A special hack class that allows creation of temporary object with resources
- * without taking ownershop over the option classes
+ * without taking ownership over the option classes
  */
 struct TemporaryResourcesWithoutOwning : public KisDabCacheUtils::DabRenderingResources
 {

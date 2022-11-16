@@ -112,18 +112,18 @@ KisImportExportErrorCode KisAnimationVideoSaver::encode(const QString &savedFile
                         << "-i" << savedFilesMask;
             
             const int paletteOptionsIndex = additionalOptionsList.indexOf("-palettegen");
-            QString pallettegenString = "palettegen";
+            QString palettegenString = "palettegen";
             
             if ( paletteOptionsIndex != -1 ) {
-                pallettegenString = additionalOptionsList.takeAt(paletteOptionsIndex + 1);
+                palettegenString = additionalOptionsList.takeAt(paletteOptionsIndex + 1);
 
                 additionalOptionsList.removeAt( paletteOptionsIndex );
             }
                         
             if (m_image->width() != options.width || m_image->height() != options.height) {
-                paletteArgs << "-vf" << (exportDimensions + "," + pallettegenString );
+                paletteArgs << "-vf" << (exportDimensions + "," + palettegenString );
             } else {
-                paletteArgs << "-vf" << pallettegenString;
+                paletteArgs << "-vf" << palettegenString;
             }
                  
             paletteArgs << "-y" << palettePath;

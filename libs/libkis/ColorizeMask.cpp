@@ -59,7 +59,7 @@ void ColorizeMask::initializeKeyStrokeColors(QList<ManagedColor*> colors, int tr
      *  It is necessary because the function also changes the color
      *  space and blending mode of the mask
      *
-     *  TODO: inplement a proper API that modifies key strokes
+     *  TODO: implement a proper API that modifies key strokes
      *  of a colorize mask without breaking undo history
      */
     KIS_SAFE_ASSERT_RECOVER_RETURN(mask->keyStrokesColors().colors.size() == 0);

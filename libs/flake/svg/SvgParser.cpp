@@ -641,7 +641,7 @@ QSharedPointer<KoVectorPatternBackground> SvgParser::parsePattern(const QDomElem
     /**
      * In Krita shapes X,Y coordinates are baked into the shape global transform, but
      * the pattern should be painted in "user" coordinates. Therefore, we should handle
-     * this offfset separately.
+     * this offset separately.
      *
      * TODO: Please also note that this offset is different from extraShapeOffset(),
      * because A.inverted() * B != A * B.inverted(). I'm not sure which variant is
@@ -1126,7 +1126,7 @@ SvgMeshGradient* prepareMeshGradientForShape(SvgGradientHelper *gradient,
         resultGradient->setTransform(gradient->transform() * relativeToShape);
     } else {
         // NOTE: Krita's shapes use their own coordinate system. Where origin is at the top left
-        // of the SHAPE. All the mesh patches will be rendered in the global 'user' coorindate system
+        // of the SHAPE. All the mesh patches will be rendered in the global 'user' coordinate system
         // where the origin is at the top left of the LAYER/DOCUMENT.
 
         // Get the user coordinates of the shape
@@ -1569,7 +1569,7 @@ QList<KoShape*> SvgParser::parseSvg(const QDomElement &e, QSizeF *fragmentSize)
     }
 
     /**
-     * In internal SVG coordinate systems pixles are linked to absolute
+     * In internal SVG coordinate systems pixels are linked to absolute
      * values with a fixed ratio.
      *
      * See CSS specification:

@@ -796,7 +796,7 @@ void StoryboardModel::reorderKeyframes()
         return;
     }
 
-    //We want to temporarily lock respondance to keyframe removal / addition.
+    //We want to temporarily lock responding to keyframe removal / addition.
     //Will unlock when scope exits.
     QScopedPointer<KeyframeReorderLock> lock(new KeyframeReorderLock(this));
 

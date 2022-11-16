@@ -68,4 +68,4 @@ private:
     QScopedPointer<Private> d;
 };
 
-#endif // KisResourceITERATOR_H
+#endif // KISRESOURCEITERATOR_H

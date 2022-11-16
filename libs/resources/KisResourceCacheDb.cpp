@@ -1377,7 +1377,7 @@ bool KisResourceCacheDb::addTag(const QString &resourceType, const QString stora
             q.bindValue(":comment", comment);
 
             if (!q.exec()) {
-                qWarning() << "Could not execute insert tag_transaltion query" << q.lastError() << q.boundValues();
+                qWarning() << "Could not execute insert tag_translation query" << q.lastError() << q.boundValues();
             }
         }
 

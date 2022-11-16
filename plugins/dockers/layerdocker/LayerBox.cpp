@@ -1055,7 +1055,7 @@ void LayerBox::slotAdjustCurrentBeforeRemoveRows(const QModelIndex &parent, int 
     /**
      * Qt has changed its behavior when deleting an item. Previously
      * the selection priority was on the next item in the list, and
-     * now it has shanged to the previous item. Here we just adjust
+     * now it has changed to the previous item. Here we just adjust
      * the selected item after the node removal.
      *
      * This method is called right before the Qt's beginRemoveRows()

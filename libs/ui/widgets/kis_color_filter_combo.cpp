@@ -156,7 +156,7 @@ public:
 
     int styleHint(QStyle::StyleHint hint, const QStyleOption *option, const QWidget *widget, QStyleHintReturn *returnData) const override
     {
-        // This flag makes ComboBox popup float ontop of its parent ComboBox, like in Fusion style.
+        // This flag makes ComboBox popup float on top of its parent ComboBox, like in Fusion style.
         // Only when this hint is set will Qt respect combobox popup size hints, otherwise the popup
         // can never exceed the width of its parent ComboBox, like in Breeze style.
         if (hint == QStyle::SH_ComboBox_Popup) {

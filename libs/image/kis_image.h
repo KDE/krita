@@ -190,7 +190,7 @@ public:
     bool locked() const;
 
     /**
-     * Sets the mask (it must be a part of the node hierarchy already) to be paited on
+     * Sets the mask (it must be a part of the node hierarchy already) to be painted on
      * the top of all layers. This method does all the locking and syncing for you. It
      * is executed asynchronously.
      */
@@ -560,7 +560,7 @@ public:
     qint32 nHiddenLayers() const;
 
     /*
-     * Return the number of layers (not other node tyoes) that are
+     * Return the number of layers (not other node types) that are
      * descendants of the rootLayer in this image.
      */
     qint32 nChildLayers() const;
@@ -661,7 +661,7 @@ public:
     void addComposition(KisLayerCompositionSP composition);
 
     /**
-     * Remove the layer compostion
+     * Remove the layer composition
      */
     void removeComposition(KisLayerCompositionSP composition);
 
@@ -998,7 +998,7 @@ public Q_SLOTS:
 
     /**
      * Wait for all the internal image jobs to complete and return without locking
-     * the image. This function is handly for tests or other synchronous actions,
+     * the image. This function is handy for tests or other synchronous actions,
      * when one needs to wait for the result of his actions.
      */
     void waitForDone();
@@ -1110,7 +1110,7 @@ public Q_SLOTS:
 
     /**
      * @brief removes already installed filter from the stack of updates filers
-     * @param cookie a cookie object returned by addProjectionUpdatesFilter() on intallation
+     * @param cookie a cookie object returned by addProjectionUpdatesFilter() on installation
      * @return the installed filter. If the cookie is invalid, or nesting rule has been
      *         broken, then removeProjectionUpdatesFilter() may safe-assert and return nullptr.
      *

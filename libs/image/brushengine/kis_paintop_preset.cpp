@@ -372,7 +372,7 @@ bool KisPaintOpPreset::saveToDevice(QIODevice *dev) const
      * updateLinkedResourcesMetaData(). The new version of the
      * preset format ("5.0") has all the linked resources embedded
      * outside KisPaintOpSettings, which are automatically
-     * loaded on the the resource activation. We we shouldn't
+     * loaded on the resource activation. We we shouldn't
      * add them into metaData()["dependent_resources_filenames"].
      */
     d->version = "5.0";

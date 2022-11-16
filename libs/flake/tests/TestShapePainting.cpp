@@ -79,13 +79,13 @@ void TestShapePainting::testPaintHiddenShape()
 
     MockShape *shape = new MockShape();
     MockContainer *fourth = new MockContainer();
-    MockContainer *thirth = new MockContainer();
+    MockContainer *third = new MockContainer();
     MockContainer *second = new MockContainer();
 
 
     top->addShape(second);
-    second->addShape(thirth);
-    thirth->addShape(fourth);
+    second->addShape(third);
+    third->addShape(fourth);
     fourth->addShape(shape);
 
     second->setVisible(false);
@@ -101,7 +101,7 @@ void TestShapePainting::testPaintHiddenShape()
 
     QCOMPARE(top->paintedCount, 1);
     QCOMPARE(second->paintedCount, 0);
-    QCOMPARE(thirth->paintedCount, 0);
+    QCOMPARE(third->paintedCount, 0);
     QCOMPARE(fourth->paintedCount, 0);
     QCOMPARE(shape->paintedCount, 0);
 }

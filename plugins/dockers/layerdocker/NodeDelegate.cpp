@@ -1309,7 +1309,7 @@ void NodeDelegate::slotConfigChanged()
 {
     KisConfig cfg(true);
     const int oldHeight = d->rowHeight;
-    // cache vlues that require a config lookup and get used frequently
+    // cache values that require a config lookup and get used frequently
     d->thumbnailSize = KisNodeViewColorScheme::instance()->thumbnailSize();
     d->thumbnailGeometry = KisNodeViewColorScheme::instance()->relThumbnailRect();
     d->rowHeight = KisNodeViewColorScheme::instance()->rowHeight();

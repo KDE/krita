@@ -524,7 +524,7 @@ public:
             ValueType value = m_propAdapter.propForNode(node);
 
             if (value != lastValue) {
-                qWarning() << "WARNING: mutiprops: values differ after reread!";
+                qWarning() << "WARNING: multiprops: values differ after reread!";
             }
 
             lastValue = value;

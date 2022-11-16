@@ -86,7 +86,7 @@ private Q_SLOTS:
 private:
     KUndo2QStack *m_stack;
     QItemSelectionModel *m_sel_model;
-    QString m_emty_label;
+    QString m_empty_label;
     QIcon m_clean_icon;
 };
 #endif

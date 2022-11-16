@@ -109,7 +109,7 @@ KoColorSetWidget::KoColorSetWidget(QWidget *parent)
     d->mainLayout->addWidget(d->paletteView);
     d->mainLayout->addLayout(d->bottomLayout);
 
-    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), SLOT(slotPaletteChoosen(KoColorSetSP)));
+    connect(d->paletteChooser, SIGNAL(sigPaletteSelected(KoColorSetSP)), SLOT(slotPaletteChosen(KoColorSetSP)));
     connect(d->paletteView, SIGNAL(sigColorSelected(KoColor)), SLOT(slotColorSelectedByPalette(KoColor)));
     connect(d->colorNameCmb, SIGNAL(sigColorSelected(KoColor)), SLOT(slotNameListSelection(KoColor)));
 
@@ -182,7 +182,7 @@ void KoColorSetWidget::slotPatchTriggered(KoColorPatch *patch)
     }
 }
 
-void KoColorSetWidget::slotPaletteChoosen(KoColorSetSP colorSet)
+void KoColorSetWidget::slotPaletteChosen(KoColorSetSP colorSet)
 {
     d->colorSet = colorSet;
     d->paletteView->paletteModel()->setColorSet(colorSet);

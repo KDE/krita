@@ -360,7 +360,7 @@ void KisAsyncAnimationRenderDialogBase::slotUpdateCompressedProgressData()
      * QApplication::processEvents() from inside setValue(), which means
      * that our update method may reenter multiple times.
      *
-     * This code avoids reentering by using a compresson and an explicit
+     * This code avoids reentering by using a compressor and an explicit
      * entrance counter.
      */
 

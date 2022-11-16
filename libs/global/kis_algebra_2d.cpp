@@ -262,7 +262,7 @@ bool intersectLineConvexPolygon(QLineF &line, const QPolygonF polygon, bool exte
 
     // Cyrus-Beck algorithm: https://en.wikipedia.org/wiki/Cyrus%E2%80%93Beck_algorithm
 
-    // parametric equaltion for the line:
+    // parametric equation for the line:
     // p(t) = t*P1 + (1-t)*P2
 
     // we can't use infinity here, because the points would all end up as (+/- inf, +/- inf)
@@ -784,14 +784,14 @@ inline Eigen::Matrix3d fromQTransformStraight(const QTransform &t)
 }
 
 /********************************************************/
-/*             DecomposedMatix                          */
+/*             DecomposedMatrix                         */
 /********************************************************/
 
-DecomposedMatix::DecomposedMatix()
+DecomposedMatrix::DecomposedMatrix()
 {
 }
 
-DecomposedMatix::DecomposedMatix(const QTransform &t0)
+DecomposedMatrix::DecomposedMatrix(const QTransform &t0)
 {
     QTransform t(t0);
 
@@ -907,7 +907,7 @@ DecomposedMatix::DecomposedMatix(const QTransform &t0)
 
 std::pair<QPointF, QTransform> transformEllipse(const QPointF &axes, const QTransform &fullLocalToGlobal)
 {
-    KisAlgebra2D::DecomposedMatix decomposed(fullLocalToGlobal);
+    KisAlgebra2D::DecomposedMatrix decomposed(fullLocalToGlobal);
     const QTransform localToGlobal =
             decomposed.scaleTransform() *
             decomposed.shearTransform() *
@@ -1250,7 +1250,7 @@ QPointF moveElasticPoint(const QPointF &pt,
         status = gsl_multimin_test_size (size, 1e-6);
 
         /**
-         * Sometimes the algorithm may converge to a wrond point,
+         * Sometimes the algorithm may converge to a wrong point,
          * then just try to force it search better or return invalid
          * result.
          */

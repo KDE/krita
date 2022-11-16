@@ -49,7 +49,7 @@ struct KisPaintingAssistantsDecoration::Private {
     int m_handleSize; // size of editor handles on assistants
 
     // move, visibility, delete icons for each assistant. These only display while the assistant tool is active
-    // these icons will be covered by the kis_paintint_assistant_decoration with things like the perspective assistant
+    // these icons will be covered by the kis_painting_assistant_decoration with things like the perspective assistant
 
     AssistantEditorData toolData;
 
@@ -153,7 +153,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 {
 
     if (assistants().empty()) {
-        // No assisants, so no adjustment
+        // No assistants, so no adjustment
         return point;
     }
 
@@ -186,7 +186,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
             }
             return newpoint;
         } else {
-            // One assisant, but it is not active, so no adjustment
+            // One assistant, but it is not active, so no adjustment
             return point;
         }
     }
@@ -265,7 +265,7 @@ QPointF KisPaintingAssistantsDecoration::adjustPosition(const QPointF& point, co
 void KisPaintingAssistantsDecoration::adjustLine(QPointF &point, QPointF &strokeBegin)
 {
     if (assistants().empty()) {
-        // No assisants, so no adjustment
+        // No assistants, so no adjustment
         return;
     }
 
@@ -589,7 +589,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
     QPointF iconSnapPosition(actionsPosition + toolData.snapIconPosition);
     QPointF iconLockedPosition(actionsPosition + toolData.lockedIconPosition);
     QPointF iconDeletePosition(actionsPosition + toolData.deleteIconPosition);
-    QPointF iconDragEditorWidgetPosiition(actionsPosition + toolData.dragEditorWidgetIconPosition);
+    QPointF iconDragEditorWidgetPosition(actionsPosition + toolData.dragEditorWidgetIconPosition);
 
     // Background container for helpers
     QBrush backgroundColor = d->m_canvas->viewManager()->mainWindowAsQWidget()->palette().window();
@@ -638,7 +638,7 @@ void KisPaintingAssistantsDecoration::drawEditorWidget(KisPaintingAssistantSP as
 
 
     gc.drawPixmap(iconDeletePosition, d->m_iconDelete);
-    gc.drawPixmap(iconDragEditorWidgetPosiition, d->m_iconDragEditorWidget);
+    gc.drawPixmap(iconDragEditorWidgetPosition, d->m_iconDragEditorWidget);
 
 
 }

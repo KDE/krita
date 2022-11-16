@@ -14,7 +14,7 @@
  * @brief The KisProofingConfiguration struct
  * Little struct that stores the proofing configuration for a given file.
  * The actual softproofing and gamutcheck toggles are set in the canvas.
- * intet, conversionflags and warning color have default set to them. This
+ * intent, conversionflags and warning color have default set to them. This
  * wasn't possible for profileSpace.
  */
 class KRITAIMAGE_EXPORT KisProofingConfiguration {

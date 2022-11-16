@@ -32,7 +32,7 @@
 
 void KisPaintingAssistantsDecorationTest::initTestCase()
 {
-    /* A bit of a heavy handed way to force the plugings to be loaded and get
+    /* A bit of a heavy handed way to force the plugins to be loaded and get
      * access to the paintingAssistantsDecoration but can't find another way
      * at the moment
      */
@@ -149,7 +149,7 @@ void KisPaintingAssistantsDecorationTest::testParallelRulerAdjustPosition()
     // Add an assistant
     paintingAssistantsDecoration->addAssistant(assistant);
 
-    // First compute directly via the assisant
+    // First compute directly via the assistant
     adjustedPosition = assistant->adjustPosition(p2, startPosition, true);
     // The position should be adjusted to the horizontal direction
     QVERIFY(adjustedPosition.x() == 90.0);

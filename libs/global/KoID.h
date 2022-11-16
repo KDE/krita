@@ -64,7 +64,7 @@ public:
     explicit KoID(const QString &id, const QString &name = QString());
 
     /**
-     * Use this constructore for static KoID. as KoID("id", ki18n("name"));
+     * Use this constructor for static KoID. as KoID("id", ki18n("name"));
      * the name will be translated the first time it is needed. This is
      * important because static objects are constructed before translations
      * are initialized.

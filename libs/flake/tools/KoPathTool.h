@@ -114,7 +114,7 @@ private:
     QPointF m_lastPoint; ///< needed for interaction strategy
     QScopedPointer<PathSegment> m_activeSegment;
 
-    // make a frind so that it can test private member/methods
+    // make a friend so that it can test private member/methods
     friend class TestPathTool;
 
     QScopedPointer<KoInteractionStrategy> m_currentStrategy; ///< the rubber selection strategy

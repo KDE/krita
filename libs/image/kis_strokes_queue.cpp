@@ -88,7 +88,7 @@ struct Q_DECL_HIDDEN KisStrokesQueue::Private {
     KisLodSyncStrokeStrategyFactory lod0ToNStrokeStrategyFactory;
     KisSuspendResumeStrategyPairFactory suspendResumeUpdatesStrokeStrategyFactory;
     std::function<void()> purgeRedoStateCallback;
-    std::function<void()> postSyncLod0GUIPlaneRequistForResume;
+    std::function<void()> postSyncLod0GUIPlaneRequestForResume;
     KisSurrogateUndoStore lodNUndoStore;
     LodNUndoStrokesFacade lodNStrokesFacade;
     KisPostExecutionUndoAdapter lodNPostExecutionUndoAdapter;
@@ -717,7 +717,7 @@ void KisStrokesQueue::setPurgeRedoStateCallback(const std::function<void ()> &ca
 
 void KisStrokesQueue::setPostSyncLod0GUIPlaneRequestForResumeCallback(const std::function<void ()> &callback)
 {
-    m_d->postSyncLod0GUIPlaneRequistForResume = callback;
+    m_d->postSyncLod0GUIPlaneRequestForResume = callback;
 }
 
 KisPostExecutionUndoAdapter *KisStrokesQueue::lodNPostExecutionUndoAdapter() const
@@ -839,13 +839,13 @@ bool KisStrokesQueue::checkStrokeState(bool hasStrokeJobsRunning,
 
         /**
          * If the Lod0 stroke has been cancelled without even being
-         * strated, it means that the GUI still has LodN tiles active,
+         * started, it means that the GUI still has LodN tiles active,
          * so we should reread the data from the image to switch GUI
          * tiles into Lod0 mode.
          */
         if (needsSyncLod0PlaneToGUI &&
-            m_d->postSyncLod0GUIPlaneRequistForResume) {
-            m_d->postSyncLod0GUIPlaneRequistForResume();
+            m_d->postSyncLod0GUIPlaneRequestForResume) {
+            m_d->postSyncLod0GUIPlaneRequestForResume();
         }
 
         m_d->strokesQueue.dequeue(); // deleted by shared pointer

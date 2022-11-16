@@ -137,12 +137,12 @@ public:
     static void setToolBarsEditable(bool editable);
 
     /**
-     * Returns whether the toolbars are locked (i.e., moving of the toobars disallowed).
+     * Returns whether the toolbars are locked (i.e., moving of the toolbars disallowed).
      */
     static bool toolBarsLocked();
 
     /**
-     * Allows you to lock and unlock all toolbars (i.e., disallow/allow moving of the toobars).
+     * Allows you to lock and unlock all toolbars (i.e., disallow/allow moving of the toolbars).
      */
     static void setToolBarsLocked(bool locked);
 

@@ -403,7 +403,7 @@ public:
 
     /**
      * @return true if the node is editable and has a paintDevice()
-     *         which which can be used for accessing pixels. It is an
+     *         which can be used for accessing pixels. It is an
      *         equivalent to (isEditable() && paintDevice())
      */
     bool hasEditablePaintDevice() const;
@@ -595,7 +595,7 @@ public:
      * in cases such as animation curves where you might want to ask
      * which channels it supports before allowing the user to add.
      *
-     * @param id querried channel
+     * @param id queried channel
      * @return bool whether it supports said channel or not.
      */
     virtual bool supportsKeyframeChannel(const QString &id);

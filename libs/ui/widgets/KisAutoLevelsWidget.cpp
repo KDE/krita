@@ -45,7 +45,7 @@ KisAutoLevelsWidget::KisAutoLevelsWidget(QWidget *parent)
 KisAutoLevelsWidget::~KisAutoLevelsWidget()
 {}
 
-KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod KisAutoLevelsWidget::shadowsAndHighlightsAdjustementMethod() const
+KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod KisAutoLevelsWidget::shadowsAndHighlightsAdjustmentMethod() const
 {
     return static_cast<KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod>(m_ui.comboBoxShadowsAndLightsMethod->currentIndex());
 }
@@ -90,7 +90,7 @@ KoColor KisAutoLevelsWidget::outputMidtonesColor() const
     return m_ui.buttonMidtonesColor->color();
 }
 
-void KisAutoLevelsWidget::setShadowsAndHighlightsAdjustementMethod(KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod newMethod)
+void KisAutoLevelsWidget::setShadowsAndHighlightsAdjustmentMethod(KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod newMethod)
 {
     m_ui.comboBoxShadowsAndLightsMethod->setCurrentIndex(static_cast<int>(newMethod));
 }
@@ -135,12 +135,12 @@ void KisAutoLevelsWidget::setMidtonesColor(const KoColor &newMidtonesColor)
     m_ui.buttonMidtonesColor->setColor(newMidtonesColor);
 }
 
-void KisAutoLevelsWidget::lockShadowsAndHighlightsAdjustementMethod()
+void KisAutoLevelsWidget::lockShadowsAndHighlightsAdjustmentMethod()
 {
     m_ui.comboBoxShadowsAndLightsMethod->setEnabled(false);
 }
 
-void KisAutoLevelsWidget::unlockShadowsAndHighlightsAdjustementMethod()
+void KisAutoLevelsWidget::unlockShadowsAndHighlightsAdjustmentMethod()
 {
     m_ui.comboBoxShadowsAndLightsMethod->setEnabled(true);
 }

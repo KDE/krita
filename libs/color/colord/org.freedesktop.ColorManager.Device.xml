@@ -291,7 +291,7 @@
           </doc:para>
           <doc:para>
             This method also stores the device to profile mapping in a
-            persistent datadase, so that if the device and profile
+            persistent database, so that if the device and profile
             happen to both exist in the future, the profiles are
             auto-added to the device.
           </doc:para>
@@ -340,7 +340,7 @@
           </doc:para>
           <doc:para>
             This method also removes the device to profile mapping from
-            a persistent datadase, so that if the device and profile
+            a persistent database, so that if the device and profile
             happen to both exist in the future, the profiles are
             no longer auto-added to the device.
           </doc:para>

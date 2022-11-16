@@ -71,7 +71,7 @@ KisDlgLayerProperties::KisDlgLayerProperties(KisNodeList nodes, KisViewManager *
     : KoDialog(parent)
     , d(new Private())
 {
-    nodes = KisLayerUtils::sortMergableNodes(view->image()->root(), nodes);
+    nodes = KisLayerUtils::sortMergeableNodes(view->image()->root(), nodes);
     d->nodes = nodes;
 
     Q_UNUSED(f);

@@ -123,8 +123,8 @@ export CPLUS_INCLUDE_PATH=${KIS_INSTALL_DIR}/include
 export KDE_COLOR_DEBUG=1
 export QTEST_COLORED=1
 
-export OUPUT_LOG="${BUILDROOT}/osxbuild.log"
-printf "" > "${OUPUT_LOG}"
+export OUTPUT_LOG="${BUILDROOT}/osxbuild.log"
+printf "" > "${OUTPUT_LOG}"
 
 # configure max core for make compile
 ((MAKE_THREADS=1))
@@ -149,13 +149,13 @@ fi
 # Prints stderr and stdout to log files
 # >(tee) works but breaks sigint
 log_cmd () {
-    "$@" 2>&1 | tee -a ${OUPUT_LOG}
+    "$@" 2>&1 | tee -a ${OUTPUT_LOG}
     osxbuild_error="${?}"
 }
 
 # Log messages to logfile
 log () {
-    printf "%s\n" "${@}"  | tee -a ${OUPUT_LOG}
+    printf "%s\n" "${@}"  | tee -a ${OUTPUT_LOG}
 }
 
 # if previous command gives error
@@ -164,7 +164,7 @@ log () {
 print_if_error() {
     if [ "${osxbuild_error}" -ne 0 ]; then
         printf "\e[31m%s %s\e[0m\n" "Error:" "Printing last lines of log output"
-        tail ${OUPUT_LOG}
+        tail ${OUTPUT_LOG}
         printf "\e[31m%s %s\e[0m\n" "Error:" "${1}"
         if [ -n "${2}" ]; then
             exit 1
@@ -175,7 +175,7 @@ print_if_error() {
 # print status messages
 print_msg() {
     printf "\e[32m%s\e[0m\n" "${1}"
-    printf "%s\n" "${1}" >> ${OUPUT_LOG}
+    printf "%s\n" "${1}" >> ${OUTPUT_LOG}
 }
 
 check_dir_path () {
@@ -477,7 +477,7 @@ build_krita () {
 
     print_if_error "Configuration error! ${filename}" "exit"
 
-    # copiling phase
+    # compiling phase
     log_cmd cmake --build . -- -j ${MAKE_THREADS}
     print_if_error "Krita compilation failed! ${filename}" "exit"
 

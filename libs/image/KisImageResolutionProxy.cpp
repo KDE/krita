@@ -12,9 +12,9 @@
 
 namespace {
 
-struct IdentityResolutioProxyHolder
+struct IdentityResolutionProxyHolder
 {
-    IdentityResolutioProxyHolder()
+    IdentityResolutionProxyHolder()
         : identity(new KisImageResolutionProxy())
     {
     }
@@ -22,7 +22,7 @@ struct IdentityResolutioProxyHolder
     KisImageResolutionProxySP identity;
 };
 
-Q_GLOBAL_STATIC(IdentityResolutioProxyHolder, s_holder)
+Q_GLOBAL_STATIC(IdentityResolutionProxyHolder, s_holder)
 }
 
 struct KisImageResolutionProxy::Private {

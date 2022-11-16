@@ -128,7 +128,7 @@ void KoFilterEffectStack::save(KoXmlWriter &writer, const QString &filterId)
     writer.endElement();
 }
 
-QSet<QString> KoFilterEffectStack::requiredStandarsInputs() const
+QSet<QString> KoFilterEffectStack::requiredStandardsInputs() const
 {
     static QSet<QString> stdInputs = QSet<QString>()
         << "SourceGraphic"

@@ -424,10 +424,10 @@ void KisDlgImportVideoAnimation::loadVideoFile(const QString &filename)
 
 void KisDlgImportVideoAnimation::updateVideoPreview()
 {
-    float currentDurration = ( m_videoInfo.stream != -1 ) ?  (m_currentFrame / m_videoInfo.fps):0;
+    float currentDuration = ( m_videoInfo.stream != -1 ) ?  (m_currentFrame / m_videoInfo.fps):0;
     QStringList args;
 
-    args << "-ss" << QString::number(currentDurration)
+    args << "-ss" << QString::number(currentDuration)
          << "-i" << m_videoInfo.file
          << "-v" << "quiet"
          << "-vframes" << "1"

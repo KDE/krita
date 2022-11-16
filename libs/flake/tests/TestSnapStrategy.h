@@ -79,7 +79,7 @@ class TestSnapStrategy : public QObject
      * @return 
      * @see KoSnapStrategy.h
      */
-    void testOrhogonalDecoration();
+    void testOrthogonalDecoration();
     /**
      * This method is for testing the function decoration in NodeSnapStrategy - function is located in KoSnapStrategy.h
      * 

@@ -47,7 +47,7 @@
     </closedchoice>
     <seq name="ComponentsConfiguration">
       <closedchoice>
-        <integer name="unexistant">0</integer>
+        <integer name="nonexistent">0</integer>
         <integer name="Y">1</integer>
         <integer name="Cb">2</integer>
         <integer name="Cr">3</integer>
@@ -250,7 +250,7 @@
     <text name="GPSProcessingMethod" />
     <text name="GPSAreaInformation" />
     <closedchoice name="GPSDifferential" >
-      <integer name="Without corrction">0</integer>
+      <integer name="Without correction">0</integer>
       <integer name="Correction applied">1</integer>
     </closedchoice>
   </properties>

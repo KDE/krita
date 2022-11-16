@@ -48,7 +48,7 @@ KisPhongBumpmapConfigWidget::KisPhongBumpmapConfigWidget(const KisPaintDeviceSP 
     connect(m_page->ambientReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->diffuseReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
     connect(m_page->specularReflectivityKisDoubleSliderSpinBox, SIGNAL(valueChanged(qreal)), SIGNAL(sigConfigurationItemChanged()));
-    connect(m_page->shinynessExponentKisSliderSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
+    connect(m_page->shininessExponentKisSliderSpinBox, SIGNAL(valueChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     
     connect(m_page->heightChannelComboBox, SIGNAL(currentIndexChanged(int)), SIGNAL(sigConfigurationItemChanged()));
     
@@ -86,7 +86,7 @@ void KisPhongBumpmapConfigWidget::setConfiguration(const KisPropertiesConfigurat
     m_page->ambientReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_AMBIENT_REFLECTIVITY) );
     m_page->diffuseReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_DIFFUSE_REFLECTIVITY) );
     m_page->specularReflectivityKisDoubleSliderSpinBox->setValue( config->getDouble(PHONG_SPECULAR_REFLECTIVITY) );
-    m_page->shinynessExponentKisSliderSpinBox->setValue( config->getInt(PHONG_SHINYNESS_EXPONENT) );
+    m_page->shininessExponentKisSliderSpinBox->setValue( config->getInt(PHONG_SHINYNESS_EXPONENT) );
     m_page->useNormalMap->setChecked( config->getBool(USE_NORMALMAP_IS_ENABLED) );
     m_page->diffuseReflectivityGroup->setChecked( config->getBool(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED) );
     m_page->specularReflectivityGroup->setChecked( config->getBool(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED) );
@@ -122,7 +122,7 @@ KisPropertiesConfigurationSP KisPhongBumpmapConfigWidget::configuration() const
     config->setProperty(PHONG_AMBIENT_REFLECTIVITY, m_page->ambientReflectivityKisDoubleSliderSpinBox->value());
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY, m_page->diffuseReflectivityKisDoubleSliderSpinBox->value());
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY, m_page->specularReflectivityKisDoubleSliderSpinBox->value());
-    config->setProperty(PHONG_SHINYNESS_EXPONENT, m_page->shinynessExponentKisSliderSpinBox->value());
+    config->setProperty(PHONG_SHINYNESS_EXPONENT, m_page->shininessExponentKisSliderSpinBox->value());
     config->setProperty(PHONG_DIFFUSE_REFLECTIVITY_IS_ENABLED, m_page->diffuseReflectivityGroup->isChecked());
     config->setProperty(PHONG_SPECULAR_REFLECTIVITY_IS_ENABLED, m_page->specularReflectivityGroup->isChecked());
     //config->setProperty(PHONG_SHINYNESS_EXPONENT_IS_ENABLED, m_page->specularReflectivityCheckBox->isChecked());

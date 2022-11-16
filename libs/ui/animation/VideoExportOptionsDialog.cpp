@@ -90,19 +90,19 @@ struct KisVideoExportOptionsDialog::Private
         presetsWEBP << KoID("picture", i18nc("webp preset option name", "picture"));
         presetsWEBP << KoID("text", i18nc("webp preset option name", "text"));
         
-        paletteGenModeGIF << KoID("full", i18nc("paletegen status mode option name", "Global/Full"));
-        paletteGenModeGIF << KoID("diff", i18nc("paletegen status mode option name", "Difference"));
-        paletteGenModeGIF << KoID("single", i18nc("paletegen status mode option name", "Per Single Frame"));
+        paletteGenModeGIF << KoID("full", i18nc("palettegen status mode option name", "Global/Full"));
+        paletteGenModeGIF << KoID("diff", i18nc("palettegen status mode option name", "Difference"));
+        paletteGenModeGIF << KoID("single", i18nc("palettegen status mode option name", "Per Single Frame"));
     
-        paletteDitherGIF << KoID("none", i18nc("paleteuse dither option name", "none"));
-        paletteDitherGIF << KoID("bayer", i18nc("paleteuse dither option name", "bayer"));
-        paletteDitherGIF << KoID("floyd_steinberg", i18nc("paleteuse dither option name", "floyd_steinberg"));
-        paletteDitherGIF << KoID("heckbert", i18nc("paleteuse dither option name", "heckbert"));
-        paletteDitherGIF << KoID("sierra2", i18nc("paleteuse dither option name", "sierra2"));
-        paletteDitherGIF << KoID("sierra2_4a", i18nc("paleteuse dither option name", "sierra2_4a"));
+        paletteDitherGIF << KoID("none", i18nc("paletteuse dither option name", "none"));
+        paletteDitherGIF << KoID("bayer", i18nc("paletteuse dither option name", "bayer"));
+        paletteDitherGIF << KoID("floyd_steinberg", i18nc("paletteuse dither option name", "floyd_steinberg"));
+        paletteDitherGIF << KoID("heckbert", i18nc("paletteuse dither option name", "heckbert"));
+        paletteDitherGIF << KoID("sierra2", i18nc("paletteuse dither option name", "sierra2"));
+        paletteDitherGIF << KoID("sierra2_4a", i18nc("paletteuse dither option name", "sierra2_4a"));
         
-        paletteDiffModeGIF << KoID("none", i18nc("paleteuse diff mode option name", "none"));
-        paletteDiffModeGIF << KoID("rectangle", i18nc("paleteuse diff mode option name", "rectangle"));
+        paletteDiffModeGIF << KoID("none", i18nc("paletteuse diff mode option name", "none"));
+        paletteDiffModeGIF << KoID("rectangle", i18nc("paletteuse diff mode option name", "rectangle"));
     }
 
     QVector<KoID> encoders;

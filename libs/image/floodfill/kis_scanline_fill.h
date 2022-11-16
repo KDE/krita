@@ -115,10 +115,10 @@ public:
      * seed point with the other pixels of the selected region being
      * semi-transparent (depending on how similar they are to the seed pixel)
      * up to the region boundary (given by the threshold value). 100 means that
-     * the fully opaque area will emcompass all the pixels of the selected
-     * region up to the contour. Any value inbetween will make the fully opaque
+     * the fully opaque area will encompass all the pixels of the selected
+     * region up to the contour. Any value in between will make the fully opaque
      * portion of the region vary in size, with semi-transparent pixels
-     * inbetween it and  the region boundary
+     * in between it and  the region boundary
      */
     void setOpacitySpread(int opacitySpread);
 

@@ -110,7 +110,7 @@ public:
     /**
      * @brief selectedShapesProxy() is a special interface for keeping a persistent connections
      * to selectionChanged() and selectionContentChanged() signals. While shapeManager() can change
-     * throughout the life time of the cavas, selectedShapesProxy() is guaranteed to stay the same.
+     * throughout the life time of the canvas, selectedShapesProxy() is guaranteed to stay the same.
      * @return persistent KoSelectedShapesProxy object
      */
     virtual KoSelectedShapesProxy *selectedShapesProxy() const = 0;

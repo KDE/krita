@@ -71,7 +71,7 @@ struct KisSmallColorWidget::Private {
                 colorSpace(RGBAColorModelID.id(), Float32BitsColorDepthID.id(), result->profile());
         }
 
-        // PQ color space we deliniearize into linear one
+        // PQ color space we delinearize into linear one
         if (result
                 && result->colorModelId() == RGBAColorModelID
                 && result->profile()

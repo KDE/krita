@@ -457,7 +457,7 @@ void KisIteratorNGTest::sequentialIteratorWithProgressIncomplete()
         QCOMPARE(proxy.value(), rc.top());
     }
 
-    // on desruction, iterator automatically completes progress reporting
+    // on destruction, iterator automatically completes progress reporting
     QCOMPARE(proxy.max(), rc.top() + rc.height());
     QCOMPARE(proxy.value(), proxy.max());
 }

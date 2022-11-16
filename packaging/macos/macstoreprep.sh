@@ -27,7 +27,7 @@ KRITADMG_MOUNT="kritadmg"
 # print status messages
 print_msg() {
     printf "\e[32m${1}\e[0m\n" "${@:2}"
-    # printf "%s\n" "${1}" >> ${OUPUT_LOG}
+    # printf "%s\n" "${1}" >> ${OUTPUT_LOG}
 }
 
 # print error

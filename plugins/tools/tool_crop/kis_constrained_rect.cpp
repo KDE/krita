@@ -142,13 +142,13 @@ void KisConstrainedRect::moveHandle(HandleType handle, const QPoint &offset, con
                        offset.y() * ySizeCoeff * centeringSizeCoeff);
 
         QSize tempSize = baseSizeCoeff * oldSize + sizeDiff;
-        bool widthPreferrable = qAbs(tempSize.width()) > qAbs(tempSize.height() * m_ratio);
+        bool widthPreferable = qAbs(tempSize.width()) > qAbs(tempSize.height() * m_ratio);
 
         if (ratioLocked()) {
-            if ((widthPreferrable && xSizeCoeff != 0) || ySizeCoeff == 0) {
+            if ((widthPreferable && xSizeCoeff != 0) || ySizeCoeff == 0) {
                 newSize.setWidth(tempSize.width());
                 newSize.setHeight(heightFromWidthUnsignedRatio(newSize.width(), m_ratio, tempSize.height()));
-            } else if ((!widthPreferrable && ySizeCoeff != 0) || xSizeCoeff == 0) {
+            } else if ((!widthPreferable && ySizeCoeff != 0) || xSizeCoeff == 0) {
                 newSize.setHeight(tempSize.height());
                 newSize.setWidth(widthFromHeightUnsignedRatio(newSize.height(), m_ratio, tempSize.width()));
             }

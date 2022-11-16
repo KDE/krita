@@ -62,8 +62,8 @@ private Q_SLOTS:
 private:
     KisToolMultihandHelper *m_helper;
 
-    enum enumTransforModes:int { SYMMETRY=0, MIRROR, TRANSLATE, SNOWFLAKE, COPYTRANSLATE };
-    enumTransforModes m_transformMode;
+    enum enumTransformModes:int { SYMMETRY=0, MIRROR, TRANSLATE, SNOWFLAKE, COPYTRANSLATE };
+    enumTransformModes m_transformMode;
     QPointF m_axesPoint;
     qreal m_angle;
     int m_handsCount;

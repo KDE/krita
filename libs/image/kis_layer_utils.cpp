@@ -1503,7 +1503,7 @@ namespace KisLayerUtils {
         return result;
     }
 
-    void filterMergableNodes(KisNodeList &nodes, bool allowMasks)
+    void filterMergeableNodes(KisNodeList &nodes, bool allowMasks)
     {
         KisNodeList::iterator it = nodes.begin();
 
@@ -1518,7 +1518,7 @@ namespace KisLayerUtils {
         }
     }
 
-    void sortMergableNodes(KisNodeSP root, KisNodeList &inputNodes, KisNodeList &outputNodes)
+    void sortMergeableNodes(KisNodeSP root, KisNodeList &inputNodes, KisNodeList &outputNodes)
     {
         KisNodeList::iterator it = std::find(inputNodes.begin(), inputNodes.end(), root);
 
@@ -1533,7 +1533,7 @@ namespace KisLayerUtils {
 
         KisNodeSP child = root->firstChild();
         while (child) {
-            sortMergableNodes(child, inputNodes, outputNodes);
+            sortMergeableNodes(child, inputNodes, outputNodes);
             child = child->nextSibling();
         }
 
@@ -1543,14 +1543,14 @@ namespace KisLayerUtils {
         KIS_ASSERT_RECOVER_NOOP(root->parent() || inputNodes.isEmpty());
     }
 
-    KisNodeList sortMergableNodes(KisNodeSP root, KisNodeList nodes)
+    KisNodeList sortMergeableNodes(KisNodeSP root, KisNodeList nodes)
     {
         KisNodeList result;
-        sortMergableNodes(root, nodes, result);
+        sortMergeableNodes(root, nodes, result);
         return result;
     }
 
-    KisNodeList sortAndFilterMergableInternalNodes(KisNodeList nodes, bool allowMasks)
+    KisNodeList sortAndFilterMergeableInternalNodes(KisNodeList nodes, bool allowMasks)
     {
         KIS_SAFE_ASSERT_RECOVER(!nodes.isEmpty()) { return nodes; }
 
@@ -1568,16 +1568,16 @@ namespace KisLayerUtils {
         }
 
         KisNodeList result;
-        sortMergableNodes(root, nodes, result);
-        filterMergableNodes(result, allowMasks);
+        sortMergeableNodes(root, nodes, result);
+        filterMergeableNodes(result, allowMasks);
         return result;
     }
 
-    KisNodeList sortAndFilterAnyMergableNodesSafe(const KisNodeList &nodes, KisImageSP image) {
+    KisNodeList sortAndFilterAnyMergeableNodesSafe(const KisNodeList &nodes, KisImageSP image) {
         KisNodeList filteredNodes = nodes;
         KisNodeList sortedNodes;
 
-        KisLayerUtils::filterMergableNodes(filteredNodes, true);
+        KisLayerUtils::filterMergeableNodes(filteredNodes, true);
 
         bool haveExternalNodes = false;
         Q_FOREACH (KisNodeSP node, nodes) {
@@ -1588,7 +1588,7 @@ namespace KisLayerUtils {
         }
 
         if (!haveExternalNodes) {
-            KisLayerUtils::sortMergableNodes(image->root(), filteredNodes, sortedNodes);
+            KisLayerUtils::sortMergeableNodes(image->root(), filteredNodes, sortedNodes);
         } else {
             sortedNodes = filteredNodes;
         }
@@ -1712,11 +1712,11 @@ namespace KisLayerUtils {
             putAfter = mergedNodes.first();
         }
 
-        filterMergableNodes(mergedNodes);
+        filterMergeableNodes(mergedNodes);
         {
             KisNodeList tempNodes;
             std::swap(mergedNodes, tempNodes);
-            sortMergableNodes(image->root(), tempNodes, mergedNodes);
+            sortMergeableNodes(image->root(), tempNodes, mergedNodes);
         }
 
         if (mergedNodes.size() <= 1 &&
@@ -1743,7 +1743,7 @@ namespace KisLayerUtils {
         /**
          * We have reached the root of the layer hierarchy and didn't manage
          * to find a node that was editable enough for putting our merged
-         * result into it. That whouldn't happen in normal circumstances,
+         * result into it. That shouldn't happen in normal circumstances,
          * unless the user chose to make the root layer visible and lock
          * it manually.
          */

@@ -54,7 +54,7 @@ public Q_SLOTS:
 
     void slotSetStartTimeToCurrentPosition();
     void slotSetEndTimeToCurrentPosition();
-    void slotUpdatePlackbackRange();
+    void slotUpdatePlaybackRange();
     void slotUpdateInfiniteFramesCount();
 
     void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);

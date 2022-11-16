@@ -130,13 +130,13 @@ inline T colorDodgeAlphaHelper(T src, T dst)
     using namespace Arithmetic;
     // Handle the case where the denominator is 0.
     // When src is 1 then the denominator (1 - src) becomes 0, and to avoid
-    // dividing by 0 we treat the denominator as an infinitelly small number,
+    // dividing by 0 we treat the denominator as an infinitely small number,
     // so the result of the formula would approach infinity.
     // For alpha values, the result should be clamped to the unit range,
     // contrary to the color version, where the values should be clamped to
     // the min/max range.
     // Another special case is when both numerator and denominator are 0. In
-    // this case we also treat the denominator as an infinitelly small number,
+    // this case we also treat the denominator as an infinitely small number,
     // and the numerator can remain as 0, so dividing 0 over a number (no matter
     // how small it is) gives 0.
     if (src == unitValue<T>()) {

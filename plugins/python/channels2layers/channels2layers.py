@@ -8,9 +8,9 @@
 # . RGB
 # . CMY
 # . CMYK
-# . RGB as greayscale values
-# . CMY as greayscale values
-# . CMYK as greayscale values
+# . RGB as grayscale values
+# . CMY as grayscale values
+# . CMYK as grayscale values
 # -----------------------------------------------------------------------------
 
 import re

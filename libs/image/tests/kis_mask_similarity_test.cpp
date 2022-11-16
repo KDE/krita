@@ -77,8 +77,8 @@ public:
     }
 
 
-    static bool exahustiveTest(QRect bounds, MaskType type) {
-        // Exahustive test
+    static bool exhaustiveTest(QRect bounds, MaskType type) {
+        // Exhaustive test
 
         for (size_t i = 0; i <= 100; i += FADE_STEP){
             for (size_t j = 0; j <= 100; j += FADE_STEP){
@@ -167,7 +167,7 @@ public:
             .setMaskScalarApplicator(); // Force usage of scalar backend
         KisMaskSimilarityTester(scalarGenerator.applicator(), generator.applicator(), bounds, type);
 
-        // KisMaskSimilarityTester::exahustiveTest(bounds,type);
+        // KisMaskSimilarityTester::exhaustiveTest(bounds,type);
     }
 
 private:

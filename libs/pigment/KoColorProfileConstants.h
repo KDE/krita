@@ -16,7 +16,7 @@
  * This is used for profile generation and file encoding.
  */
 enum ColorPrimaries {
-    //0 is resevered
+    //0 is reserved
     PRIMARIES_ITU_R_BT_709_5 = 1, // sRGB, rec 709
     PRIMARIES_UNSPECIFIED = 2,
     //3 is reserved

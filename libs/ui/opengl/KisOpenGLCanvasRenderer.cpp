@@ -500,11 +500,11 @@ void KisOpenGLCanvasRenderer::drawBackground(const QRect &updateRect)
                                                          d->openGLImageTextures->updateInfoBuilder().destinationColorSpace()->colorDepthId().id(),
                                                          d->openGLImageTextures->monitorProfile());
 
-    KoColor convertedBackgroudColor = KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8());
-    convertedBackgroudColor.convertTo(finalColorSpace);
+    KoColor convertedBackgroundColor = KoColor(widgetBackgroundColor, KoColorSpaceRegistry::instance()->rgb8());
+    convertedBackgroundColor.convertTo(finalColorSpace);
 
     QVector<float> channels = QVector<float>(4);
-    convertedBackgroudColor.colorSpace()->normalisedChannelsValue(convertedBackgroudColor.data(), channels);
+    convertedBackgroundColor.colorSpace()->normalisedChannelsValue(convertedBackgroundColor.data(), channels);
 
 
     // Data returned by KoRgbU8ColorSpace comes in the order: blue, green, red.

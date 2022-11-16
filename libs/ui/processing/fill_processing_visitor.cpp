@@ -164,7 +164,7 @@ void FillProcessingVisitor::normalFill(KisPaintDeviceSP device, const QRect &fil
     fillPainter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
     fillPainter.setWidth(fillRect.width());
     fillPainter.setHeight(fillRect.height());
-    fillPainter.setUseCompositioning(!m_useFastMode);
+    fillPainter.setUseCompositing(!m_useFastMode);
     if (m_useCustomBlendingOptions) {
         fillPainter.setOpacity(m_customOpacity);
         fillPainter.setCompositeOpId(m_customCompositeOp);
@@ -248,7 +248,7 @@ void FillProcessingVisitor::continuousFill(KisPaintDeviceSP device, const QRect 
         painter.setUseSelectionAsBoundary((m_selection.isNull() || !m_selection->hasNonEmptyPixelSelection()) ? false : m_useSelectionAsBoundary);
         painter.setWidth(fillRect.width());
         painter.setHeight(fillRect.height());
-        painter.setUseCompositioning(!m_useFastMode);
+        painter.setUseCompositing(!m_useFastMode);
 
         KisPixelSelectionSP pixelSelection = painter.createFloodSelection(seedPoint.x(),
                                                                           seedPoint.y(),

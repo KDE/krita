@@ -47,7 +47,7 @@
 // long fur
 // from: count + offset * -random
 // to: i point - (offset * -random)  + random * 2
-// probability distance / thresholdDistnace
+// probability distance / thresholdDistance
 
 // shaded: probability : paint always - 0.0 density
 

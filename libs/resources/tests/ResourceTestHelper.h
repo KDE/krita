@@ -123,7 +123,7 @@ void initTestDb()
     cleanDstLocation(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
 }
 
-void overrideResourceVesion(KoResourceSP resource, int version)
+void overrideResourceVersion(KoResourceSP resource, int version)
 {
     resource->setVersion(version);
 }
@@ -186,12 +186,12 @@ void testVersionedStorage(KisStoragePlugin &storage, const QString &resourceType
     QCOMPARE(res4.dynamicCast<DummyResource>()->something(), "It's changed");
     verifyFileExists(res4);
 
-    overrideResourceVesion(res4, 10000);
+    overrideResourceVersion(res4, 10000);
     storage.saveAsNewVersion(resourceType, res4);
     QCOMPARE(res4->filename(), fileInfo.baseName() + ".10000." + fileInfo.suffix());
     verifyFileExists(res4);
 
-    overrideResourceVesion(res4, -1);
+    overrideResourceVersion(res4, -1);
     const QString versionedName2 = fileInfo.baseName() + ".10001." + fileInfo.suffix();
 
     storage.saveAsNewVersion(resourceType, res4);

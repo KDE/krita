@@ -169,7 +169,7 @@ KisImportExportErrorCode KisImportExportManager::exportDocument(const QString& l
     return result.status();
 }
 
-QFuture<KisImportExportErrorCode> KisImportExportManager::exportDocumentAsyc(const QString &location, const QString &realLocation, const QByteArray &mimeType,
+QFuture<KisImportExportErrorCode> KisImportExportManager::exportDocumentAsync(const QString &location, const QString &realLocation, const QByteArray &mimeType,
                                                                             KisImportExportErrorCode &status, bool showWarnings, KisPropertiesConfigurationSP exportConfiguration, bool isAdvancedExporting)
 {
     ConversionResult result = convert(Export, location, realLocation, mimeType, showWarnings, exportConfiguration, true, isAdvancedExporting);

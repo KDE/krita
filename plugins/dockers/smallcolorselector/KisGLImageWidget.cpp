@@ -62,7 +62,7 @@ KisGLImageWidget::KisGLImageWidget(KisSurfaceColorSpace colorSpace,
 
 KisGLImageWidget::~KisGLImageWidget()
 {
-    // force releasing the reourses on destruction
+    // force releasing the resources on destruction
     slotOpenGLContextDestroyed();
 }
 

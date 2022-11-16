@@ -365,7 +365,7 @@ void TransformStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
         } else if (m_selection) {
 
             /**
-             * We use usual transaction here, because we cannot calsulate
+             * We use usual transaction here, because we cannot calculate
              * transformation for perspective and warp workers.
              */
             KisTransaction transaction(m_selection->pixelSelection());
@@ -592,7 +592,7 @@ void TransformStrokeStrategy::initStrokeCallback()
     KisBatchNodeUpdateSP sharedData(new KisBatchNodeUpdate());
 
     KritaUtils::addJobBarrier(extraInitJobs, [this, sharedData]() {
-        KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergableInternalNodes(m_processedNodes, true);
+        KisNodeList filteredRoots = KisLayerUtils::sortAndFilterMergeableInternalNodes(m_processedNodes, true);
         Q_FOREACH (KisNodeSP root, filteredRoots) {
             sharedData->addUpdate(root, root->projectionPlane()->tightUserVisibleBounds());
         }
@@ -636,7 +636,7 @@ void TransformStrokeStrategy::finishStrokeImpl(bool applyTransform, const ToolTr
      * until there are no jobs left in the stroke's queue).
      *
      * Therefore we should check for double-entry here and
-     * make sure the finilizing jobs are no cancellable.
+     * make sure the finalizing jobs are no cancellable.
      */
 
     if (m_finalizingActionsStarted) return;

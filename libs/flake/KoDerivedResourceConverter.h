@@ -21,7 +21,7 @@ class QVariant;
  * The manager will use it to convert values to/from the source
  * resource.
  *
- *  "Derived" resources are the resources that do not exist temselves.
+ *  "Derived" resources are the resources that do not exist themselves.
  *  Instead they are contained in some other resources and are updated
  *  synchronously with the parent resources as well.
  *

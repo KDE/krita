@@ -258,7 +258,7 @@ Q_SIGNALS:
      * This signal is emitted every time a resource is attempted to be
      * changed. The this signal is emitted even when the new value of
      * the resource is the same as the current value. This method is called
-     * **before** the actual change has happended at the resource manager.
+     * **before** the actual change has happened at the resource manager.
      * @param key the identifying key for the resource
      * @param value the variants new value.
      * @see KoCanvasResource::CanvasResourceId

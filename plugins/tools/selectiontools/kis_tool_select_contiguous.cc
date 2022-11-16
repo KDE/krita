@@ -205,7 +205,7 @@ void KisToolSelectContiguous::beginPrimaryAction(KoPointerEvent *event)
                     fillpainter.setFeather(feather);
                     fillpainter.setSizemod(grow);
                     fillpainter.setStopGrowingAtDarkestPixel(stopGrowingAtDarkestPixel);
-                    fillpainter.setUseCompositioning(true);
+                    fillpainter.setUseCompositing(true);
 
                     useSelectionAsBoundary &=
                         existingSelection &&

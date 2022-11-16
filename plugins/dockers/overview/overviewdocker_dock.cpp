@@ -297,7 +297,7 @@ bool OverviewDockerDock::eventFilter(QObject *o, QEvent *e)
                 m_touchPointId = te->touchPoints().first().id();
                 m_lastTouchPos = te->touchPoints().first().pos();
             }
-            // Accept the event so that other touch events keep comming
+            // Accept the event so that other touch events keep coming
             e->accept();
             return true;
 

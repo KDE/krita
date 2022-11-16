@@ -237,7 +237,7 @@ void KisOpenGL::initialize()
      * NVidia + Qt's openGL don't play well together and one cannot
      * draw a pixmap on a widget more than once in one rendering cycle.
      *
-     * It can be workarounded by drawing strictly via QPixmapCache and
+     * It can be worked-around by drawing strictly via QPixmapCache and
      * only when the pixmap size in bigger than doubled size of the
      * display framebuffer. That is for 8-bit HD display, you should have
      * a cache bigger than 16 MiB. Don't ask me why. (DK)

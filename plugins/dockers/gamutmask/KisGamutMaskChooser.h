@@ -25,7 +25,7 @@ public:
 
     enum ViewMode {
         THUMBNAIL, // Shows thumbnails
-        DETAIL  // Shows thumbsnails with text next to it
+        DETAIL  // Shows thumbnails with text next to it
     };
 
     void setCurrentResource(KoResourceSP resource);

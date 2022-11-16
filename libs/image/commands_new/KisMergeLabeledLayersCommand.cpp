@@ -149,7 +149,7 @@ void KisMergeLabeledLayersCommand::mergeLabeledLayers()
             currentNodesListCopy << copy;
         }
 
-        currentNodesListCopy = KisLayerUtils::sortAndFilterAnyMergableNodesSafe(currentNodesListCopy, m_refImage);
+        currentNodesListCopy = KisLayerUtils::sortAndFilterAnyMergeableNodesSafe(currentNodesListCopy, m_refImage);
         m_refImage->initialRefreshGraph();
         KisLayerUtils::refreshHiddenAreaAsync(m_refImage, m_refImage->root(), m_refImage->bounds());
         m_refImage->waitForDone();

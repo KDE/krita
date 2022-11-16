@@ -23,7 +23,7 @@
 namespace
 {
 const QStringList blacklistedTools = { "KritaTransform/KisToolMove", "KisToolTransform", "KritaShape/KisToolLine" };
-const double lowPerformanceWarningTreshold = 1.25;
+const double lowPerformanceWarningThreshold = 1.25;
 const int lowPerformanceWarningMax = 3;
 }
 
@@ -313,7 +313,7 @@ void RecorderWriter::timerEvent(QTimerEvent */*event*/)
     }
 
     qint64 elapsed = elapsedTimer.elapsed();
-    if (static_cast<double>(elapsed) > static_cast<double>(d->interval) * lowPerformanceWarningTreshold) {
+    if (static_cast<double>(elapsed) > static_cast<double>(d->interval) * lowPerformanceWarningThreshold) {
         ++d->lowPerformanceWarningCount;
         if (d->lowPerformanceWarningCount > lowPerformanceWarningMax) {
             emit lowPerformanceWarning();

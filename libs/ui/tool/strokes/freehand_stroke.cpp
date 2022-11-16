@@ -30,7 +30,7 @@
 #include <strokes/KisMaskedFreehandStrokePainter.h>
 
 #include "brushengine/kis_paintop_utils.h"
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 
 struct FreehandStrokeStrategy::Private
 {
@@ -142,8 +142,8 @@ void FreehandStrokeStrategy::finishStrokeCallback()
 
 void FreehandStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 {
-    if (KisAsyncronousStrokeUpdateHelper::UpdateData *d =
-            dynamic_cast<KisAsyncronousStrokeUpdateHelper::UpdateData*>(data)) {
+    if (KisAsynchronousStrokeUpdateHelper::UpdateData *d =
+            dynamic_cast<KisAsynchronousStrokeUpdateHelper::UpdateData*>(data)) {
 
         // this job is lod-clonable in contrast to FreehandStrokeRunnableJobDataWithUpdate!
         tryDoUpdate(d->forceUpdate);
@@ -244,7 +244,7 @@ void FreehandStrokeStrategy::tryDoUpdate(bool forceEnd)
                 bool needsMoreUpdates = false;
 
                 std::tie(m_d->currentUpdatePeriod, needsMoreUpdates) =
-                    maskedPainter->doAsyncronousUpdate(jobs);
+                    maskedPainter->doAsynchronousUpdate(jobs);
 
                 if (!jobs.isEmpty() ||
                     maskedPainter->hasDirtyRegion() ||

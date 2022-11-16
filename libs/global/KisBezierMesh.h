@@ -843,7 +843,7 @@ public:
     int subdivideColumn(int leftColumn, qreal relProportionalT) {
         const auto it = m_columns.begin() + leftColumn;
         const int rightColumn = leftColumn + 1;
-        const qreal absProportinalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
+        const qreal absProportionalT = KisAlgebra2D::lerp(*it, *next(it), relProportionalT);
 
         std::vector<Node> newColumn;
         newColumn.resize(m_size.height());
@@ -866,7 +866,7 @@ public:
         }
 
         m_size.rwidth()++;
-        auto insertedIt = m_columns.insert(next(it), absProportinalT);
+        auto insertedIt = m_columns.insert(next(it), absProportionalT);
         return distance(m_columns.begin(), insertedIt);
     }
 

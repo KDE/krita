@@ -117,7 +117,7 @@ public:
     /**
      * @brief importWillOverwriteResource checks is importing a resource with this filename will overwrite anything
      *
-     * If this funciton returns true, then importResource() is guaranteed to
+     * If this function returns true, then importResource() is guaranteed to
      * fail with 'allowOverwrite' set to false.
      *
      * @param filename file name of the resource if preset. File name may be used
@@ -146,7 +146,7 @@ public:
     /**
      * @brief addResource adds the given resource to the database and storage. If the resource
      * already exists in the given storage with md5, filename or name, the existing resource
-     * will be updated instead. If the existing resource was inactive, it will be actived
+     * will be updated instead. If the existing resource was inactive, it will be active
      * (undeleted).
      *
      * @param resource the resource itself
@@ -158,13 +158,13 @@ public:
     virtual bool addResource(KoResourceSP resource, const QString &storageId = QString("")) = 0;
 
     /**
-     * @brief updateResource creates a new version ofthe resource in the storage and
+     * @brief updateResource creates a new version of the resource in the storage and
      * in the database. This will also set the resource to active if it was inactive.
      *
      * Note: if the storage does not support versioning, updating the resource will fail.
      *
      * @param resource
-     * @return true if the resource was succesfull updated,
+     * @return true if the resource was successful updated,
      */
     virtual bool updateResource(KoResourceSP resource) = 0;
 

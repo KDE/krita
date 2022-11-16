@@ -153,7 +153,7 @@ public:
 
 private:
     /**
-     * @brief Edges with gradient less than this value will not be antiAliasied
+     * @brief Edges with gradient less than this value will not be antiAliased
      */
     static constexpr qint32 edgeThreshold {4};
     /**
@@ -221,7 +221,7 @@ private:
 /**
  * @brief Filter that dilates a selection and that can stop dilating
  *        adaptively at areas of higher darkness or opacity. This is useful
- *        to grow selections used to fill lineart, since the growing will stop
+ *        to grow selections used to fill line art, since the growing will stop
  *        most likely inside the lines, without overflowing to the other side.
  */
 class KRITAIMAGE_EXPORT KisGrowUntilDarkestPixelSelectionFilter : public KisSelectionFilter

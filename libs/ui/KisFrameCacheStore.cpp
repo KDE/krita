@@ -168,7 +168,7 @@ void KisFrameCacheStore::saveFrame(int frameId, KisOpenGLUpdateInfoSP info, cons
     KIS_SAFE_ASSERT_RECOVER_RETURN(pixelSize);
 
     // TODO: assert that dirty image rect is equal to the full image rect
-    // TODO: assert tile color space coicides with the destination color space
+    // TODO: assert tile color space coincides with the destination color space
 
     KisFrameDataSerializer::Frame frame;
     frame.pixelSize = pixelSize;

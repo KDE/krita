@@ -34,7 +34,7 @@ KisBatchNodeUpdate KisBatchNodeUpdate::compressed() const
     std::transform(begin(), end(), std::back_inserter(rootNodes),
               [] (const std::pair<KisNodeSP, QRect> &update) {return update.first; });
 
-    rootNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(rootNodes, true);
+    rootNodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(rootNodes, true);
 
     Q_FOREACH (KisNodeSP root, rootNodes) {
         QRect dirtyRect;

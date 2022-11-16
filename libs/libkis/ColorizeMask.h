@@ -173,7 +173,7 @@ public Q_SLOTS:
 
     /**
      * @brief cleanUpAmount
-     * @return a float value of 0.0 to 100.0 represening the cleanup amount where 0.0 is no cleanup is done and 100.00 is most aggressive.
+     * @return a float value of 0.0 to 100.0 representing the cleanup amount where 0.0 is no cleanup is done and 100.00 is most aggressive.
      */
     qreal cleanUpAmount() const;
 

@@ -144,12 +144,12 @@ public:
     KisKActionCollection *collection() const;
 
     /**
-     * The action categorys descriptive text
+     * The action categories descriptive text
      */
     QString text() const;
 
     /**
-     * Set the action categorys descriptive text.
+     * Set the action categories descriptive text.
      */
     void setText(const QString &text);
 

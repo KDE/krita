@@ -129,7 +129,7 @@ std::variant<KisBrushModel::BrushData, KoResourceSignature> KisPredefinedBrushFa
          *
          * In Krita 5 we should open these brushes in somewhat the same way.
          * The problem is that we cannot convert the numbers precisely, because
-         * after applying a piecewice-linear function twice we get a
+         * after applying a piecewise-linear function twice we get a
          * quadratic function. So we fall-back to a blunt parameters scaling,
          * which gives result that is just "good enough".
          *
@@ -185,7 +185,7 @@ std::variant<KisBrushModel::BrushData, KoResourceSignature> KisPredefinedBrushFa
     }
     else {
         /**
-         * In Krita versions before 4.4 series we used to automatrically select
+         * In Krita versions before 4.4 series we used to automatically select
          * the brush application depending on the presence of the color in the
          * brush, even when there was no "ColorAsMask" field.
          */

@@ -161,7 +161,7 @@ public:
      */
     qreal maximumZoom();
     /**
-     * Clamp the zoom value so that mimimumZoom <= zoom <= maximumZoom.
+     * Clamp the zoom value so that minimumZoom <= zoom <= maximumZoom.
      *
      * \param zoom The value to clamp.
      *

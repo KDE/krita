@@ -57,7 +57,7 @@ public:
     void setTransformParams(KisTransformMaskParamsInterfaceSP params);
     KisTransformMaskParamsInterfaceSP transformParams() const;
 
-    void recaclulateStaticImage();
+    void recalculateStaticImage();
     KisPaintDeviceSP buildPreviewDevice();
     KisPaintDeviceSP buildSourcePreviewDevice();
 

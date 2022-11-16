@@ -1468,7 +1468,7 @@ bool KisDocument::resourceSavingFilter(const QString &path, const QByteArray &mi
                         }
 
                         if (exportConfiguration) {
-                            // make sure the the name of the resource doesn't change
+                            // make sure the name of the resource doesn't change
                             exportConfiguration->setProperty("name", res->name());
                         }
 
@@ -1590,7 +1590,7 @@ bool KisDocument::startExportInBackground(const QString &actionName,
 
     KisImportExportErrorCode initializationStatus(ImportExportCodes::OK);
     d->childSavingFuture =
-            d->importExportManager->exportDocumentAsyc(location,
+            d->importExportManager->exportDocumentAsync(location,
                                                        realLocation,
                                                        mimeType,
                                                        initializationStatus,
@@ -2253,11 +2253,11 @@ QList<KoResourceLoadResult> KisDocument::linkedDocumentResources()
 
             QBuffer buf;
             buf.open(QBuffer::WriteOnly);
-            bool exportSuccessfull =
+            bool exportSuccessful =
                 d->linkedResourceStorage->exportResource(iter->url(), &buf);
 
             KoResourceSP resource = d->linkedResourceStorage->resource(iter->url());
-            exportSuccessfull &= bool(resource);
+            exportSuccessful &= bool(resource);
 
             const QString name = resource ? resource->name() : QString();
             const QString fileName = QFileInfo(iter->url()).fileName();
@@ -2265,7 +2265,7 @@ QList<KoResourceLoadResult> KisDocument::linkedDocumentResources()
                                                 KoMD5Generator::generateHash(buf.data()),
                                                 fileName, name);
 
-            if (exportSuccessfull) {
+            if (exportSuccessful) {
                 result << KoEmbeddedResource(signature, buf.data());
             } else {
                 result << signature;

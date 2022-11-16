@@ -163,7 +163,7 @@ public:
      * @brief Returns the index of the item corresponding the frame,
      * if there is an item with that frame
      * @param frame The frame whose index is needed.
-     * @param framePefect Whether query will return a valid scene
+     * @param framePerfect Whether query will return a valid scene
      * even when a scene contains the frame, not just if it starts
      * on said frame. Default == true
      * @return The index corresponding to frame, if exists.

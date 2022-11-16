@@ -191,7 +191,7 @@ QSizeF KoMarker::referenceSize() const
     return d->referenceSize;
 }
 
-bool KoMarker::hasAutoOtientation() const
+bool KoMarker::hasAutoOrientation() const
 {
     return d->hasAutoOrientation;
 }

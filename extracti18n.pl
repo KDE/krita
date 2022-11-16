@@ -250,8 +250,8 @@ foreach my $filename (@filenames)
 
     if( $filename =~ /ggr/ || $filename =~ /gpl/ )
     {
-      my @splited = split(/: /, $lines[1]);
-      my $name = $splited[1];
+      my @splitted = split(/: /, $lines[1]);
+      my $name = $splitted[1];
       chomp($name);
       $name =~ s/\t$//; # Trim trailing \t, fixes the name for "swatche.gpl"
       printi18n($name, $filename, $filename, 2);

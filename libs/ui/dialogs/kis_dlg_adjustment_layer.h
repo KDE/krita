@@ -27,7 +27,7 @@ class KisDlgAdjustmentLayer : public KoDialog
 public:
 
     /**
-     * Create a new adjustmentlayer dialog
+     * Create a new adjustment layer dialog
      *
      * @param node the name of the adjustment node
      * @param nfi filter interface

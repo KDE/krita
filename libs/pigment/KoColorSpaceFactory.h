@@ -36,7 +36,7 @@ public:
 
     /**
      * @return true if the color space should be shown in a User Interface, or false
-     *         other wise.
+     *         otherwise.
      */
     virtual bool userVisible() const = 0;
 
@@ -109,14 +109,14 @@ public:
      * Create a color profile from a memory array, if possible, otherwise return 0.
      * This will replace the existing profile with the name in the KoColorSpaceRegistry
      *
-     * This will call the decendant's createColorProfile()
+     * This will call the descendant's createColorProfile()
      */
     const KoColorProfile* colorProfile(const QByteArray& rawData, ProfileRegistrationInterface *registrationInterface) const;
 
     /**
      * Create or reuse the existing colorspace for the given profile.
      *
-     * This will call the decendant's createColorSpace
+     * This will call the descendant's createColorSpace
      */
     const KoColorSpace *grabColorSpace(const KoColorProfile *profile);
 

@@ -15,8 +15,8 @@ class TestXmlWriter : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
-    void testDocytype();
-    void testEmtpyElement();
+    void testDoctype();
+    void testEmptyElement();
     void testAttributes();
     void testIndent();
     void testTextNode();
@@ -62,7 +62,7 @@ QString TestXmlWriter::content()
     return stringContent;
 }
 
-void TestXmlWriter::testDocytype()
+void TestXmlWriter::testDoctype()
 {
     setup("foo", "bar");
     QCOMPARE(content(), QString());
@@ -86,7 +86,7 @@ void TestXmlWriter::testAttributes()
     QCOMPARE(content(), QString("<test a=\"val\" b=\"&lt;&quot;&gt;\" c=\"-42\" d=\"1234.56789012345\" f=\"false\" g=\"true\"/>"));
 }
 
-void TestXmlWriter::testEmtpyElement()
+void TestXmlWriter::testEmptyElement()
 {
     setup();
     writer->startElement("m");

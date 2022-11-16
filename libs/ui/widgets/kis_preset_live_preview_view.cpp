@@ -13,7 +13,7 @@
 #include "kis_paintop_settings.h"
 #include <strokes/freehand_stroke.h>
 #include <strokes/KisFreehandStrokeInfo.h>
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 #include <kis_brush.h>
 #include <KisGlobalResourcesInterface.h>
 #include "kis_transaction.h"
@@ -220,7 +220,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
     // we are making a proxy preset and setting it to the painter...otherwise setting the brush size of the original preset
     // will fire off signals that make this run in an infinite loop
     qreal previewSize = qBound(3.0, m_currentPreset->settings()->paintOpSize(), 25.0 ); // constrain live preview brush size
-    //Except for the sketchbrush where it determine sthe history.
+    //Except for the sketchbrush where it determines the history.
     if (m_currentPreset->paintOp().id() == "sketchbrush" ||
             m_currentPreset->paintOp().id() == "spraybrush") {
         previewSize = qMax(3.0, m_currentPreset->settings()->paintOpSize());
@@ -341,7 +341,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                              QPointF(pointTwo.pos().x(),
                                                                      handleY),
                                                              pointTwo));
-            m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
+            m_image->addJob(strokeId, new KisAsynchronousStrokeUpdateHelper::UpdateData(true));
         }
 
     } else {
@@ -365,7 +365,7 @@ void KisPresetLivePreviewView::setupAndPaintStroke()
                                                          QPointF(m_canvasCenterPoint.x(),
                                                                  m_canvasCenterPoint.y()+this->height()),
                                                          m_curvePointPI2));
-        m_image->addJob(strokeId, new KisAsyncronousStrokeUpdateHelper::UpdateData(true));
+        m_image->addJob(strokeId, new KisAsynchronousStrokeUpdateHelper::UpdateData(true));
     }
     m_image->endStroke(strokeId);
 

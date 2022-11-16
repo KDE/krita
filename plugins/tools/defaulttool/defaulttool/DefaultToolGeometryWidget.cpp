@@ -77,7 +77,7 @@ DefaultToolGeometryWidget::DefaultToolGeometryWidget(KoInteractionTool *tool, QW
 
 
     /**
-     * A huge block of self-blocking acycled connections
+     * A huge block of self-blocking acyclic connections
      */
     KisAcyclicSignalConnector *acyclicConnector = new KisAcyclicSignalConnector(this);
     acyclicConnector->connectForwardVoid(m_sizeAspectLocker.data(), SIGNAL(aspectButtonChanged()), this, SLOT(slotAspectButtonToggled()));
@@ -160,7 +160,7 @@ QRectF calculateSelectionBounds(KoSelection *selection,
          * fetch their scale using the transform.
          */
 
-        KisAlgebra2D::DecomposedMatix matrix(shape->transformation());
+        KisAlgebra2D::DecomposedMatrix matrix(shape->transformation());
         resultRect = matrix.scaleTransform().mapRect(resultRect);
     }
 

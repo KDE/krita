@@ -958,7 +958,7 @@ void KisTransformMaskTest::testTransformHiddenPartsOfTheGroup()
     p.image->waitForDone();
 
     /**
-     * Transform mask i sexpected to crop the externals of the layer by 50%
+     * Transform mask is expected to crop the externals of the layer by 50%
      * far behind the layer border! Take care!
      */
     QCOMPARE(p.image->projection()->exactBounds(), QRect(10, 128, 236, 384));

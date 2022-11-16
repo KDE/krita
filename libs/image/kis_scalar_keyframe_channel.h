@@ -89,7 +89,7 @@ Q_SIGNALS:
     void sigChanged(const KisScalarKeyframe* scalarKey);
 
 private:
-    qreal m_value; /**< Scalar value of this keyframe. Optionally clamped to m_channelLimtis. */
+    qreal m_value; /**< Scalar value of this keyframe. Optionally clamped to m_channelLimits. */
     InterpolationMode m_interpolationMode;
     TangentsMode m_tangentsMode;
     QPointF m_leftTangent; /**< Controls part of between this and PREVIOUS keyframe. */

@@ -180,7 +180,7 @@ void TestKoColor::testExistingSerializations()
 
 
     // The following is the known sRGB color that the test value matches with.
-    // Let's make sure that all the labvalues roughly convert to this sRGB value.
+    // Let's make sure that all the lab values roughly convert to this sRGB value.
     KoColor purpleCompare = KoColor(QColor("#442de9"), sRGB.colorSpace());
 
     LABcolorU8.convertTo(sRGB.colorSpace());
@@ -258,7 +258,7 @@ void TestKoColor::testSVGParsing()
 {
     QHash <QString, const KoColorProfile *> profileList;
 
-    //1. Testing case with fallback hexvalue and nonsense icc-color that we cannot parse
+    //1. Testing case with fallback hex value and nonsense icc-color that we cannot parse
 
     KoColor p1 = KoColor::fromSVG11("#ff0000 icc-color(blah, 0.0, 1.0, 1.0, 0.0);", profileList);
     const KoColorSpace *sRGB = KoColorSpaceRegistry::instance()->rgb16(KoColorSpaceRegistry::instance()->p709SRGBProfile());

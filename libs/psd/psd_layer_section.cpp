@@ -93,7 +93,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
 
         if (layerInfoSectionSize > 0) {
             if (!psdread<byteOrder>(io, nLayers) || nLayers == 0) {
-                error = QString("Could not read read number of layers or no layers in image. %1").arg(nLayers);
+                error = QString("Could not read number of layers or no layers in image. %1").arg(nLayers);
                 return false;
             }
 
@@ -155,7 +155,7 @@ bool PSDLayerMaskSection::readLayerInfoImpl(QIODevice &io)
                 // read the rle row lengths;
                 if (channelInfo->compressionType == psd_compression_type::RLE) {
                     for (qint64 row = 0; row < channelRect.height(); ++row) {
-                        // dbgFile << "Reading the RLE bytecount position of row" << row << "at pos" << io.pos();
+                        // dbgFile << "Reading the RLE byte count position of row" << row << "at pos" << io.pos();
 
                         quint32 byteCount;
                         if (m_header.version == 1) {
@@ -257,7 +257,7 @@ bool PSDLayerMaskSection::readPsdImpl(QIODevice &io)
 
         for (int i = 0; i < 4; ++i) {
             if (!psdread(io, globalLayerMaskInfo.colorComponents[i])) {
-                error = QString("Could not read mask info visualizaion color component %1").arg(i);
+                error = QString("Could not read mask info visualization color component %1").arg(i);
                 return false;
             }
         }
@@ -325,7 +325,7 @@ bool PSDLayerMaskSection::readGlobalMask(QIODevice &io)
 
         for (int i = 0; i < 4; ++i) {
             if (!psdread<byteOrder>(io, globalLayerMaskInfo.colorComponents[i])) {
-                error = QString("Could not read mask info visualizaion color component %1").arg(i);
+                error = QString("Could not read mask info visualization color component %1").arg(i);
                 return false;
             }
         }
@@ -542,7 +542,7 @@ bool PSDLayerMaskSection::write(QIODevice &io, KisNodeSP rootLayer, psd_compress
 
 void PSDLayerMaskSection::writePsdImpl(QIODevice &io, KisNodeSP rootLayer, psd_compression_type compressionType)
 {
-    dbgFile << "Writing layer layer section";
+    dbgFile << "Writing layer section";
 
     // Build the whole layer structure
     QList<FlattenedNode> nodes;

@@ -113,7 +113,7 @@ void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
                                             const QRect &applyRect,
                                             const psd_layer_effects_context *context,
                                             const psd_layer_effects_shadow_base *shadow,
-                                            KisResourcesInterfaceSP resourcesIntrerface,
+                                            KisResourcesInterfaceSP resourcesInterface,
                                             KisLayerStyleFilterEnvironment *env) const
 {
     if (applyRect.isEmpty()) return;
@@ -228,7 +228,7 @@ void KisLsDropShadowFilter::applyDropShadow(KisPaintDeviceSP srcDevice,
                                     d.dstRect,
                                     context,
                                     shadow,
-                                    resourcesIntrerface,
+                                    resourcesInterface,
                                     env);
 }
 

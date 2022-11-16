@@ -244,7 +244,7 @@ public:
 
     /**
      * Retrieve a single composite op from the ones this colorspace offers.
-     * If the requeste composite op does not exist, COMPOSITE_OVER is returned.
+     * If the requested composite op does not exist, COMPOSITE_OVER is returned.
      * @param srcSpace optional source color space. Some color spaces prefer blitting in source
      *        color space. If already known, additional composite ops may be available.
      *        _Note_: if given, the returned op is only safe to use with this exact source color space!

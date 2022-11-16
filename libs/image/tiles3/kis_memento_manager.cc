@@ -212,7 +212,7 @@ void KisMementoManager::commit()
     KisTileDataStore::instance()->kickPooler();
 }
 
-KisTileSP KisMementoManager::getCommitedTile(qint32 col, qint32 row, bool &existingTile)
+KisTileSP KisMementoManager::getCommittedTile(qint32 col, qint32 row, bool &existingTile)
 {
     /**
      * Our getOldTile mechanism is supposed to return current

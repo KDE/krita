@@ -242,7 +242,7 @@ int doSomethingElse()
         VertexIndex target_idx = get(boost::vertex_index,graph,tgt);
         EdgeIndex edge_idx = get(boost::edge_index,graph,e);
 
-        capacity[edge_idx] = 255.0f - fabs(pixel_intensity[source_idx]-pixel_intensity[target_idx]); //you should change this to your "gradiant or intensity or something"
+        capacity[edge_idx] = 255.0f - fabs(pixel_intensity[source_idx]-pixel_intensity[target_idx]); //you should change this to your "gradient or intensity or something"
 
         reverse_edges[edge_idx]=edge(tgt,src,graph).first;//ADDED
 */
@@ -289,8 +289,8 @@ int doSomethingElse()
     }
 
    BGL_FORALL_EDGES(e,graph,Graph) {
-        EdgeIndex egdeIndex = get(boost::edge_index, graph, e);
-        const int cap = residual_capacity[egdeIndex];
+        EdgeIndex edgeIndex = get(boost::edge_index, graph, e);
+        const int cap = residual_capacity[edgeIndex];
 
 
         QColor color(Qt::black);
@@ -312,7 +312,7 @@ int doSomethingElse()
         // qDebug() << "(" << src[0] << src[1] << ")"
         //          << "->"
         //          << "(" << tgt[0] << tgt[1] << ")"
-        //          << residual_capacity[egdeIndex];
+        //          << residual_capacity[edgeIndex];
     }
 
    result.save("result.png");
@@ -910,8 +910,8 @@ void KisLazyBrushTest::testCutOnGraph()
     }
 
     BGL_FORALL_EDGES(e,graph,KisLazyFillGraph) {
-        long egdeIndex = get(boost::edge_index, graph, e);
-        const int cap = residual_capacity[egdeIndex];
+        long edgeIndex = get(boost::edge_index, graph, e);
+        const int cap = residual_capacity[edgeIndex];
 
 
         QColor color(Qt::black);
@@ -933,7 +933,7 @@ void KisLazyBrushTest::testCutOnGraph()
         // qDebug() << "(" << src[0] << src[1] << ")"
         //          << "->"
         //          << "(" << tgt[0] << tgt[1] << ")"
-        //          << residual_capacity[egdeIndex];
+        //          << residual_capacity[edgeIndex];
     }
 
     resultPainter.save();
@@ -1012,8 +1012,8 @@ void writeStat(KisLazyFillGraph &graph,
     }
 
     BGL_FORALL_EDGES(e,graph,KisLazyFillGraph) {
-        long egdeIndex = get(boost::edge_index, graph, e);
-        const int cap = residual_capacity[egdeIndex];
+        long edgeIndex = get(boost::edge_index, graph, e);
+        const int cap = residual_capacity[edgeIndex];
         const int fullCap = get(capacityMap, e);
 
 
@@ -1049,8 +1049,8 @@ void writeStat(KisLazyFillGraph &graph,
     }
 
     BGL_FORALL_EDGES(e,graph,KisLazyFillGraph) {
-        long egdeIndex = get(boost::edge_index, graph, e);
-        const int cap = residual_capacity[egdeIndex];
+        long edgeIndex = get(boost::edge_index, graph, e);
+        const int cap = residual_capacity[edgeIndex];
 
 
         QColor color(Qt::black);

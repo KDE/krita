@@ -56,7 +56,7 @@ public:
 public:
     /**
      * Add an object to the registry. If it is a QObject, make sure it isn't in the
-     * QObject ownership hierarchy, since the registry itself is responsbile for
+     * QObject ownership hierarchy, since the registry itself is responsible for
      * deleting it.
      *
      * @param item the item to add (NOTE: T must have an QString id() const   function)

@@ -50,7 +50,7 @@ KisResourceSearchBoxFilter::~KisResourceSearchBoxFilter()
 
 }
 
-bool checkDelimetersAndCut(const QChar& begin, const QChar& end, QString& token) {
+bool checkDelimitersAndCut(const QChar& begin, const QChar& end, QString& token) {
     if (token.startsWith(begin) && token.endsWith(end)) {
         token.remove(0, 1);
         token = token.left(token.length() - 1);
@@ -60,8 +60,8 @@ bool checkDelimetersAndCut(const QChar& begin, const QChar& end, QString& token)
     }
 }
 
-bool checkDelimetersAndCut(const QChar& beginEnd, QString& token) {
-    return checkDelimetersAndCut(beginEnd, beginEnd, token);
+bool checkDelimitersAndCut(const QChar& beginEnd, QString& token) {
+    return checkDelimitersAndCut(beginEnd, beginEnd, token);
 }
 
 bool checkPrefixAndCut(QChar& prefix, QString& token) {
@@ -180,7 +180,7 @@ void KisResourceSearchBoxFilter::initializeFilterData()
         const bool included = !checkPrefixAndCut(m_d->excludeBegin, workingToken);
 
         if (checkPrefixAndCut(m_d->tagBegin, workingToken)) {
-            if (checkDelimetersAndCut(m_d->exactMatchBeginEnd, workingToken)) {
+            if (checkDelimitersAndCut(m_d->exactMatchBeginEnd, workingToken)) {
                 if (included) {
 
                     m_d->tagExactMatchesIncluded.insert(workingToken);
@@ -197,7 +197,7 @@ void KisResourceSearchBoxFilter::initializeFilterData()
                     m_d->tagsPartialExcluded.append(workingToken);
                 }
             }
-        } else if (checkDelimetersAndCut(m_d->exactMatchBeginEnd, workingToken)) {
+        } else if (checkDelimitersAndCut(m_d->exactMatchBeginEnd, workingToken)) {
             if (included) {
 
                 m_d->resourceExactMatchesIncluded.insert(workingToken);

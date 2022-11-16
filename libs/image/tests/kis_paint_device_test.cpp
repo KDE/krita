@@ -677,7 +677,7 @@ void KisPaintDeviceTest::testOpacity()
     QPoint errpoint;
 
     if (!TestUtil::compareQImages(errpoint, checkResult, result, 1)) {
-        checkResult.save("kis_paint_device_test_test_blt_fixed_opactiy_expected.png");
+        checkResult.save("kis_paint_device_test_test_blt_fixed_opacity_expected.png");
         result.save("kis_paint_device_test_test_blt_fixed_opacity_result.png");
         QFAIL(QString("Failed to create identical image, first different pixel: %1,%2 \n").arg(errpoint.x()).arg(errpoint.y()).toLatin1());
     }
@@ -1632,7 +1632,7 @@ void KisPaintDeviceTest::testFramesLeaking()
 
     KisPaintDeviceFramesInterface::TestingDataObjects o;
 
-    // Itinial state: one frame, m_data is kept separate
+    // Initial state: one frame, m_data is kept separate
     o = i->testingGetDataObjects();
     QVERIFY(o.m_data);
     QVERIFY(!o.m_lodData);
@@ -1764,7 +1764,7 @@ void KisPaintDeviceTest::testFramesUndoRedo()
 
     KisPaintDeviceFramesInterface::TestingDataObjects o;
 
-    // Itinial state: one frame, m_data shared
+    // Initial state: one frame, m_data shared
     o = i->testingGetDataObjects();
     QVERIFY(o.m_data); // default m_data should always be present
     QVERIFY(!o.m_lodData);
@@ -1870,7 +1870,7 @@ void KisPaintDeviceTest::testFramesUndoRedoWithChannel()
 
     KisPaintDeviceFramesInterface::TestingDataObjects o;
 
-    // Itinial state: one frame, m_data shared
+    // Initial state: one frame, m_data shared
     o = i->testingGetDataObjects();
     QVERIFY(o.m_data); // default m_data should always be present
     QVERIFY(!o.m_lodData);
@@ -2131,7 +2131,7 @@ void KisPaintDeviceTest::testCopyPaintDeviceWithFrames()
 
     KisPaintDeviceFramesInterface::TestingDataObjects o;
 
-    // Itinial state: one frame, m_data shared
+    // Initial state: one frame, m_data shared
     o = i->testingGetDataObjects();
     QVERIFY(o.m_data); // m_data should always be present
     QVERIFY(!o.m_lodData);
@@ -2322,10 +2322,10 @@ void KisPaintDeviceTest::stressTestMemoryFragmentation()
 #ifdef Q_OS_LINUX
         struct mallinfo info = mallinfo();
         qDebug() << "Allocated on heap:" << (info.arena >> 20) << "MiB";
-        qDebug() << "Mmaped regions:" << info.hblks << (info.hblkhd >> 20) << "MiB";
+        qDebug() << "Mmapped regions:" << info.hblks << (info.hblkhd >> 20) << "MiB";
         qDebug() << "Free fastbin chunks:" << info.smblks << (info.fsmblks >> 10)  << "KiB";
         qDebug() << "Allocated in ordinary blocks" << (info.uordblks >> 20) << "MiB";
-        qDebug() << "Free in ordinary blockes" << info.ordblks << (info.fordblks >> 20) << "MiB";
+        qDebug() << "Free in ordinary blocks" << info.ordblks << (info.fordblks >> 20) << "MiB";
 #endif
         qDebug() << "========================================";
     }

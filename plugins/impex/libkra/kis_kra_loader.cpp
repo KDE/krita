@@ -1157,7 +1157,7 @@ KisNodeSP KisKraLoader::loadAdjustmentLayer(const QDomElement& element, KisImage
     QString legacy = filtername;
 
     if ((filtername = element.attribute(FILTER_NAME)).isNull()) {
-        // XXX: Invalid adjustmentlayer! We should warn about it!
+        // XXX: Invalid adjustment layer! We should warn about it!
         warnFile << "No filter in adjustment layer";
         return 0;
     }

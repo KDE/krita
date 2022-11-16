@@ -1142,7 +1142,7 @@ KoSvgText::KoSvgCharChunkFormat KoSvgTextChunkShape::fetchCharFormat() const
      *
      * This hack changes only the rendering process without touching
      * the way how the text is saved into .kra or .svg. That is nice,
-     * but it means it also affects how old files are renderred. To
+     * but it means it also affects how old files are rendered. To
      * let the user open older files we provide a preference option
      * to enable this scaling again.
      *

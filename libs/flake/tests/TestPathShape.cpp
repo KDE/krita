@@ -469,7 +469,7 @@ void TestPathShape::openSubpath()
     QVERIFY(path.openSubpath(path.pathPointIndex(point3)) == KoPathPointIndex(2, 1));
     QVERIFY(path.pointByIndex(KoPathPointIndex(2,0))->properties() & KoPathPoint::StartSubpath);
     QVERIFY(path.pointByIndex(KoPathPointIndex(2,3))->properties() & KoPathPoint::StopSubpath);
-    // try to open open subpath
+    // try to open subpath
     QVERIFY(path.openSubpath(path.pathPointIndex(point3)) == KoPathPointIndex(-1, -1));
     // open if the first path is a curve
     QVERIFY(path.openSubpath(path.pathPointIndex(point5)) == KoPathPointIndex(3, 1));

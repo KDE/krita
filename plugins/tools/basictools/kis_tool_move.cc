@@ -793,7 +793,7 @@ void KisToolMove::requestHandlesRectUpdate()
     KisMoveBoundsCalculationJob *job = new KisMoveBoundsCalculationJob(this->selectedNodes(),
                                                                        selection, this);
     connect(job,
-            SIGNAL(sigCalcualtionFinished(const QRect&)),
+            SIGNAL(sigCalculationFinished(const QRect&)),
             SLOT(slotHandlesRectCalculated(const QRect &)));
 
     KisImageSP image = this->image();

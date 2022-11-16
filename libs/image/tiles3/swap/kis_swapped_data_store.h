@@ -54,7 +54,7 @@ public:
     void forgetTileData(KisTileData *td);
 
     /**
-     * Retorns the metric of the total memory stored in the swap
+     * Returns the metric of the total memory stored in the swap
      * in *uncompressed* form!
      */
     qint64 totalSwapMemoryUsed() const;

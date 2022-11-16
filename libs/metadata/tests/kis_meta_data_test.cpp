@@ -324,7 +324,7 @@ void KisMetaDataTest::testTypeInfo()
     QVERIFY(arrOA1->hasCorrectType(Value(goodIntegerList, Value::OrderedArray)));
     QVERIFY(!arrOA1->hasCorrectType(Value(badIntegerList, Value::OrderedArray)));
 
-    // Test UnarderedArray
+    // Test UnorderedArray
     const TypeInfo* arrUOA1 = TypeInfo::Private::unorderedArray(TypeInfo::Private::Integer);
     QVERIFY(arrUOA1->propertyType() == TypeInfo::UnorderedArrayType);
     QVERIFY(arrUOA1->embeddedPropertyType() == TypeInfo::Private::Integer);

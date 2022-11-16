@@ -4,10 +4,10 @@
  *  SPDX-License-Identifier: GPL-2.0-or-later
  */
 
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 #include "kis_image_interfaces.h"
 
-KisAsyncronousStrokeUpdateHelper::KisAsyncronousStrokeUpdateHelper()
+KisAsynchronousStrokeUpdateHelper::KisAsynchronousStrokeUpdateHelper()
     : m_strokesFacade(0)
 {
     m_updateThresholdTimer.setSingleShot(false);
@@ -15,19 +15,19 @@ KisAsyncronousStrokeUpdateHelper::KisAsyncronousStrokeUpdateHelper()
     connect(&m_updateThresholdTimer, SIGNAL(timeout()), SLOT(slotAsyncUpdateCame()));
 }
 
-KisAsyncronousStrokeUpdateHelper::~KisAsyncronousStrokeUpdateHelper()
+KisAsynchronousStrokeUpdateHelper::~KisAsynchronousStrokeUpdateHelper()
 {
 
 }
 
-void KisAsyncronousStrokeUpdateHelper::startUpdateStream(KisStrokesFacade *strokesFacade, KisStrokeId strokeId)
+void KisAsynchronousStrokeUpdateHelper::startUpdateStream(KisStrokesFacade *strokesFacade, KisStrokeId strokeId)
 {
     m_strokesFacade = strokesFacade;
     m_strokeId = strokeId;
     m_updateThresholdTimer.start();
 }
 
-void KisAsyncronousStrokeUpdateHelper::endUpdateStream()
+void KisAsynchronousStrokeUpdateHelper::endUpdateStream()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(isActive());
 
@@ -35,7 +35,7 @@ void KisAsyncronousStrokeUpdateHelper::endUpdateStream()
     cancelUpdateStream();
 }
 
-void KisAsyncronousStrokeUpdateHelper::cancelUpdateStream()
+void KisAsynchronousStrokeUpdateHelper::cancelUpdateStream()
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(isActive());
 
@@ -44,17 +44,17 @@ void KisAsyncronousStrokeUpdateHelper::cancelUpdateStream()
     m_strokesFacade = 0;
 }
 
-bool KisAsyncronousStrokeUpdateHelper::isActive() const
+bool KisAsynchronousStrokeUpdateHelper::isActive() const
 {
     return m_strokeId;
 }
 
-void KisAsyncronousStrokeUpdateHelper::setCustomUpdateDataFactory(KisAsyncronousStrokeUpdateHelper::UpdateDataFactory factory)
+void KisAsynchronousStrokeUpdateHelper::setCustomUpdateDataFactory(KisAsynchronousStrokeUpdateHelper::UpdateDataFactory factory)
 {
     m_customUpdateFactory = factory;
 }
 
-void KisAsyncronousStrokeUpdateHelper::slotAsyncUpdateCame(bool forceUpdate)
+void KisAsynchronousStrokeUpdateHelper::slotAsyncUpdateCame(bool forceUpdate)
 {
     if (!m_strokeId || !m_strokesFacade) return;
     m_strokesFacade->addJob(m_strokeId,

@@ -43,7 +43,7 @@ dd if=/dev/zero bs=1 seek=$(($(echo 0x$SIG_OFFSET))) count=$(($(echo 0x$SIG_LENG
 dd if=/dev/zero bs=1 seek=$(($(echo 0x$KEY_OFFSET))) count=$(($(echo 0x$KEY_LENGTH))) of="${APPIMAGE_PATH}" conv=notrunc
 
 # generate sha256sum
-# BEWARE THE NEWLINE! if it is not stripped, AppImageUpdate validaton will fail
+# BEWARE THE NEWLINE! if it is not stripped, AppImageUpdate validation will fail
 sha256sum $APPIMAGE_PATH | cut -d " " -f 1 | tr -d '\n' > $digestfile
 
 #sign the sha256sum

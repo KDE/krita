@@ -76,7 +76,7 @@
           <number>5</number>
          </property>
          <item row="0" column="0">
-          <widget class="QLabel" name="labeShape">
+          <widget class="QLabel" name="labelShape">
            <property name="text">
             <string>Shape:</string>
            </property>

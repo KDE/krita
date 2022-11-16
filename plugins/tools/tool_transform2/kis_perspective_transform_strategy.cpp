@@ -434,7 +434,7 @@ void KisPerspectiveTransformStrategy::Private::transformIntoArgs(const Eigen::Ma
 #if 0
     // Decomposition according to:
     // https://www.w3.org/TR/css-transforms-1/#decomposing-a-3d-matrix
-    KisAlgebra2D::DecomposedMatix dm(toQTransform(m));
+    KisAlgebra2D::DecomposedMatrix dm(toQTransform(m));
 
     currentArgs.setScaleX(dm.scaleX);
     currentArgs.setScaleY(dm.scaleY);
@@ -472,9 +472,9 @@ QPointF toQPointF(const QVector4D &v) {
     return v.toVector2DAffine().toPointF();
 }
 
-void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool shiftModifierActve, bool altModifierActive)
+void KisPerspectiveTransformStrategy::continuePrimaryAction(const QPointF &mousePos, bool shiftModifierActive, bool altModifierActive)
 {
-    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(shiftModifierActive);
     Q_UNUSED(altModifierActive);
 
     m_d->isTransforming = true;

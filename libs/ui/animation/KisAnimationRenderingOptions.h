@@ -17,7 +17,7 @@ class KRITAUI_EXPORT KisAnimationRenderingOptions
 public:
     KisAnimationRenderingOptions();
 
-    QString lastDocuemntPath;
+    QString lastDocumentPath;
     QString videoMimeType;
     QString frameMimeType;
 

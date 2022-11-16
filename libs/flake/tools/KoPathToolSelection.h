@@ -144,4 +144,4 @@ private:
     QList<KoPathShape*> m_selectedShapes;
 };
 
-#endif // PATHTOOLSELECTION_H
+#endif // KOPATHTOOLSELECTION_H

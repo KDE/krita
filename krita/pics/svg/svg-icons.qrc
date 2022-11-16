@@ -387,10 +387,10 @@
         <file>light_sort-by-hue.svg</file>
         <file>dark_cut-item.svg</file>
         <file>light_cut-item.svg</file>
-        <file>dark_color-adjustement-mode-lightness.svg</file>
-        <file>light_color-adjustement-mode-lightness.svg</file>
-        <file>dark_color-adjustement-mode-channels.svg</file>
-        <file>light_color-adjustement-mode-channels.svg</file>
+        <file>dark_color-adjustment-mode-lightness.svg</file>
+        <file>light_color-adjustment-mode-lightness.svg</file>
+        <file>dark_color-adjustment-mode-channels.svg</file>
+        <file>light_color-adjustment-mode-channels.svg</file>
         <file>dark_autolevels.svg</file>
         <file>light_autolevels.svg</file>
         <file>dark_histogram-linear.svg</file>

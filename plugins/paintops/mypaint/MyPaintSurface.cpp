@@ -493,7 +493,7 @@ inline float KisMyPaintSurface::calculate_rr_antialiased (int  xp, int  yp, floa
         /* XXX: precision of "nearest" values could be improved
          * by intersecting the line that goes from nearest_x/Y to 0
          * with the pixel's borders here, however the improvements
-         * would probably not justify the perdormance cost.
+         * would probably not justify the performance cost.
          */
         r_near = calculate_r_sample( nearest_x, nearest_y, aspect_ratio, sn, cs );
         rr_near = r_near * one_over_radius2;

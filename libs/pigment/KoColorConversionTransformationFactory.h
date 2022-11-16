@@ -14,7 +14,7 @@ class KoColorConversionTransformation;
 #include <KoColorConversionTransformationAbstractFactory.h>
 
 /**
- * Factory to create a color transformation between two colorsapces.
+ * Factory to create a color transformation between two colorspaces.
  */
 class KRITAPIGMENT_EXPORT KoColorConversionTransformationFactory : public KoColorConversionTransformationAbstractFactory
 {

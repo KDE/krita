@@ -32,7 +32,7 @@ typedef QSharedPointer<KisResourcesInterface> KisResourcesInterfaceSP;
 class KoResourceLoadResult;
 
 namespace ResourceTestHelper {
-void overrideResourceVesion(KoResourceSP resource, int version);
+void overrideResourceVersion(KoResourceSP resource, int version);
 }
 
 /**

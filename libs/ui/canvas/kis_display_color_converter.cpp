@@ -415,7 +415,7 @@ const KoColorSpace *KisDisplayColorConverter::nodeColorSpace() const
 void KisDisplayColorConverter::setMonitorProfile(const KoColorProfile *monitorProfile)
 {
     if (m_d->useHDRMode) {
-        // we don't use ICCcolor management in HDR mode
+        // we don't use ICC color management in HDR mode
         monitorProfile = KoColorSpaceRegistry::instance()->p709SRGBProfile();
     }
 
@@ -653,7 +653,7 @@ void KisDisplayColorConverter::applyDisplayFilteringF32(KisFixedPaintDeviceSP de
 {
     /**
      * This method is optimized for the case when device is already in 32f
-     * version of the pating color space.
+     * version of the painting color space.
      */
 
     KIS_SAFE_ASSERT_RECOVER_RETURN(device->colorSpace()->colorDepthId() == Float32BitsColorDepthID);

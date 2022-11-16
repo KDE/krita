@@ -90,7 +90,7 @@ private:
 
     /**
      * @brief ffprobeCheckStreamsValid
-     * @param ffprobeJsonObj JsonObject resulting from ffprobe proces.
+     * @param ffprobeJsonObj JsonObject resulting from ffprobe process.
      * @param ffprobeSTDERR STDERR output from ffprobe.
      * @return bool -> Whether we support a video format based on it's internal streams.
      */

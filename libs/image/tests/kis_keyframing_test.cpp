@@ -415,7 +415,7 @@ void KisKeyframingTest::testRasterUndoRedo()
 
         QVERIFY(channel->keyframeAt(33));
         QVERIFY(channel->keyframeAt(35));
-        //thumnail?
+        //thumbnail?
     }
 
     channel->addKeyframe(66);
@@ -970,7 +970,7 @@ void KisKeyframingTest::testChangeOfScalarLimits()
     channel->setDefaultValue(0);
     channel->setDefaultInterpolationMode(KisScalarKeyframe::Constant);
 
-    // Set channel scalar limtis..
+    // Set channel scalar limits..
     const int original_low = 0;
     const int original_high = 64;
     channel->setLimits(original_low, original_high);

@@ -97,7 +97,7 @@ private Q_SLOTS:
      * Triggered when a color is choose from the palette view
      */
     void slotColorSelectedByPalette(const KoColor &color);
-    void slotPaletteChoosen(KoColorSetSP );
+    void slotPaletteChosen(KoColorSetSP );
     void slotNameListSelection(const KoColor &);
 
 private:

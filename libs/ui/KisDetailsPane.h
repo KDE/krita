@@ -56,4 +56,4 @@ private:
     KisDetailsPanePrivate * const d;
 };
 
-#endif //KODETAILSPANE_H
+#endif // KISDETAILSPANE_H

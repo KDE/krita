@@ -167,7 +167,7 @@ public:
     virtual bool useSpacingUpdates() const;
 
     /**
-     * Indicates if the tool should call paintOp->doAsynchronousUpdate() inbetween
+     * Indicates if the tool should call paintOp->doAsynchronousUpdate() in between
      * paintAt() calls to do the asynchronous rendering
      */
     virtual bool needsAsynchronousUpdates() const;
@@ -305,7 +305,7 @@ public:
     virtual bool isValid() const;
 
     /**
-     * Overrides the method in KisPropertiesCofiguration to allow
+     * Overrides the method in KisPropertiesConfiguration to allow
      * onPropertyChanged() callback
      */
     void setProperty(const QString & name, const QVariant & value) override;

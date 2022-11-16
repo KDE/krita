@@ -111,7 +111,7 @@ public:
      *
      * 2. Call applyStealShortcut and KisKKeySequenceWidget will steal the
      * shortcut. This will save the actionCollections the shortcut is part
-     * of so make sure it doesn't inadvertly save some unwanted changes
+     * of so make sure it doesn't inadvertently save some unwanted changes
      * too. Read its documentation for some limitation when handling
      * global shortcuts.
     *
@@ -197,7 +197,7 @@ public:
     QKeySequence keySequence() const;
 
     /**
-     * Set a list of action collections to check against for conflictuous shortcut.
+     * Set a list of action collections to check against for conflicting shortcut.
      *
      * @see setCheckForConflictsAgainst()
      *
@@ -250,7 +250,7 @@ public Q_SLOTS:
      * Set the key sequence.
      *
      * If @p val == Validate, and the call is actually changing the key sequence,
-     * conflictuous shortcut will be checked.
+     * conflicting shortcut will be checked.
      */
     void setKeySequence(const QKeySequence &seq, Validation val = NoValidate);
 

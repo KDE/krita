@@ -510,9 +510,9 @@ void DlgCreateBundle::resourceTypeSelected(int idx)
     m_ui->tableAvailable->clear();
     m_ui->tableSelected->clear();
 
-    QString standarizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
+    QString standardizedResourceType = (resourceType == "presets" ? ResourceType::PaintOpPresets : resourceType);
 
-    KisResourceModel model(standarizedResourceType);
+    KisResourceModel model(standardizedResourceType);
     for (int i = 0; i < model.rowCount(); i++) {
         QModelIndex idx = model.index(i, 0);
         QString filename = model.data(idx, Qt::UserRole + KisAbstractResourceModel::Filename).toString();

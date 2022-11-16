@@ -96,7 +96,7 @@ public:
          * it really works in our code (our VAO code also uses buffers
          * extensively), so we limit this feature to openGL/GLES 3.0 only.
          *
-         * Feel free to test it on the relavant hardware and enable it if
+         * Feel free to test it on the relevant hardware and enable it if
          * needed.
          */
         return (m_glMajorVersion * 100 + m_glMinorVersion) >= 300;

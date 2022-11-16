@@ -30,7 +30,7 @@ ShapeShearStrategy::ShapeShearStrategy(KoToolBase *tool, KoSelection *selection,
     , m_start(clicked)
 {
     /**
-     * The outline of the selection should look as if it is also shear'ed, so we
+     * The outline of the selection should look as if it is also sheared, so we
      * add it to the transformed shapes list.
      */
     m_transformedShapesAndSelection = selection->selectedEditableShapes();

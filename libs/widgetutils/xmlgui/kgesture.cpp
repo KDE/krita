@@ -212,12 +212,12 @@ float KisKShapeGesture::distance(const KisKShapeGesture &other, float abortThres
     float position = 0;
     float ox = 0;
     float oy = 0;
-    float oposition = 0;
+    float opposition = 0;
     float omx = 0;
     float omy = 0;
     float oxB = 0;
     float oyB = 0;
-    float opositionB = 0;
+    float oppositionB = 0;
     float omxB = 0;
     float omyB = 0;
     float dist = 0;
@@ -241,7 +241,7 @@ float KisKShapeGesture::distance(const KisKShapeGesture &other, float abortThres
     strokeLength = o_lengthTo[1];
     omx = (o_shape[1].x() - ox) / strokeLength;
     omy = (o_shape[1].y() - oy) / strokeLength;
-    oposition = 0.0;
+    opposition = 0.0;
     dist = metric(ox - x, oy - y);
 
     for (int i = 0; i <= 30; i++) {
@@ -266,7 +266,7 @@ float KisKShapeGesture::distance(const KisKShapeGesture &other, float abortThres
         position = desiredPosition;
 
         //set up upper bound of search interval on other shape
-        desiredPosition = qMin(oposition + other.d->m_curveLength / 15.00005,
+        desiredPosition = qMin(opposition + other.d->m_curveLength / 15.00005,
                                other.d->m_curveLength - 0.0001);
         if (i == 0 || desiredPosition > o_lengthTo[opointIndexB + 1]) {
 
@@ -276,25 +276,25 @@ float KisKShapeGesture::distance(const KisKShapeGesture &other, float abortThres
 
             oxB = o_shape[opointIndexB].x();
             oyB = o_shape[opointIndexB].y();
-            opositionB = o_lengthTo[opointIndexB];
-            strokeLength = o_lengthTo[opointIndexB + 1] - opositionB;
+            oppositionB = o_lengthTo[opointIndexB];
+            strokeLength = o_lengthTo[opointIndexB + 1] - oppositionB;
             omxB = (o_shape[opointIndexB + 1].x() - oxB) / strokeLength;
             omyB = (o_shape[opointIndexB + 1].y() - oyB) / strokeLength;
         }
-        oxB += omxB * (desiredPosition - opositionB);
-        oyB += omyB * (desiredPosition - opositionB);
-        opositionB = desiredPosition;
+        oxB += omxB * (desiredPosition - oppositionB);
+        oyB += omyB * (desiredPosition - oppositionB);
+        oppositionB = desiredPosition;
         distB = metric(oxB - x, oyB - y);
 
         //binary search for nearest point on other shape
         for (int j = 0; j < 6; j++) {
-            desiredPosition = (oposition + opositionB) * 0.5;
+            desiredPosition = (opposition + oppositionB) * 0.5;
             if (dist < distB) {
                 //retract upper bound to desiredPosition
                 //copy state of lower bound to upper bound, advance it from there
                 oxB = ox; oyB = oy;
                 omxB = omx; omyB = omy;
-                opointIndexB = opointIndex; opositionB = oposition;
+                opointIndexB = opointIndex; oppositionB = opposition;
 
                 if (desiredPosition > o_lengthTo[opointIndexB + 1]) {
 
@@ -304,14 +304,14 @@ float KisKShapeGesture::distance(const KisKShapeGesture &other, float abortThres
 
                     oxB = o_shape[opointIndexB].x();
                     oyB = o_shape[opointIndexB].y();
-                    opositionB = o_lengthTo[opointIndexB];
-                    strokeLength = o_lengthTo[opointIndexB + 1] - opositionB;
+                    oppositionB = o_lengthTo[opointIndexB];
+                    strokeLength = o_lengthTo[opointIndexB + 1] - oppositionB;
                     omxB = (o_shape[opointIndexB + 1].x() - oxB) / strokeLength;
                     omyB = (o_shape[opointIndexB + 1].y() - oyB) / strokeLength;
                 }
-                oxB += omxB * (desiredPosition - opositionB);
-                oyB += omyB * (desiredPosition - opositionB);
-                opositionB = desiredPosition;
+                oxB += omxB * (desiredPosition - oppositionB);
+                oyB += omyB * (desiredPosition - oppositionB);
+                oppositionB = desiredPosition;
                 distB = metric(oxB - x, oyB - y);
             } else {
                 //advance lower bound to desiredPosition
@@ -323,14 +323,14 @@ float KisKShapeGesture::distance(const KisKShapeGesture &other, float abortThres
 
                     ox = o_shape[opointIndex].x();
                     oy = o_shape[opointIndex].y();
-                    oposition = o_lengthTo[opointIndex];
-                    strokeLength = o_lengthTo[opointIndex + 1] - oposition;
+                    opposition = o_lengthTo[opointIndex];
+                    strokeLength = o_lengthTo[opointIndex + 1] - opposition;
                     omx = (o_shape[opointIndex + 1].x() - ox) / strokeLength;
                     omy = (o_shape[opointIndex + 1].y() - oy) / strokeLength;
                 }
-                ox += omx * (desiredPosition - oposition);
-                oy += omy * (desiredPosition - oposition);
-                oposition = desiredPosition;
+                ox += omx * (desiredPosition - opposition);
+                oy += omy * (desiredPosition - opposition);
+                opposition = desiredPosition;
                 dist = metric(ox - x, oy - y);
             }
         }

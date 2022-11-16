@@ -74,7 +74,7 @@ void KisFillPainter::initFillPainter()
     m_careForSelection = false;
     m_sizemod = 0;
     m_feather = 0;
-    m_useCompositioning = false;
+    m_useCompositing = false;
     m_threshold = 0;
     m_opacitySpread = 0;
     m_useSelectionAsBoundary = false;
@@ -150,7 +150,7 @@ void KisFillPainter::fillRectNoCompose(const QRect &rc, const KoPatternSP patter
 void KisFillPainter::fillRectNoCompose(qint32 x1, qint32 y1, qint32 w, qint32 h, const KisPaintDeviceSP device, const QRect& deviceRect, const QTransform transform)
 {
     /**
-     * Since this function doesn't do any kind of compostiting, so the pixel size
+     * Since this function doesn't do any kind of compositing, so the pixel size
      * of the source and destination devices must be exactly the same. The color
      * space should ideally be also the same.
      */
@@ -234,13 +234,13 @@ void KisFillPainter::fillRect(qint32 x1, qint32 y1, qint32 w, qint32 h, const Ki
 
 void KisFillPainter::fillColor(int startX, int startY, KisPaintDeviceSP sourceDevice)
 {
-    if (!m_useCompositioning) {
+    if (!m_useCompositing) {
         if (m_sizemod || m_feather ||
             compositeOpId() != COMPOSITE_OVER ||
             opacity() != MAX_SELECTED ||
             sourceDevice != device()) {
 
-            warnKrita << "WARNING: Fast Flood Fill (no compositioning mode)"
+            warnKrita << "WARNING: Fast Flood Fill (no compositing mode)"
                        << "does not support compositeOps, opacity, "
                        << "selection enhancements and separate source "
                        << "devices";
@@ -369,7 +369,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
 
     KisScanlineFill gc(sourceDevice, startPoint, fillBoundsRect);
     gc.setThreshold(m_threshold);
-    gc.setOpacitySpread(m_useCompositioning ? m_opacitySpread : 100);
+    gc.setOpacitySpread(m_useCompositing ? m_opacitySpread : 100);
     if (m_regionFillingMode == RegionFillingMode_FloodFill) {
         if (m_useSelectionAsBoundary && !pixelSelection.isNull()) {
             gc.fillSelection(pixelSelection, existingSelection);
@@ -384,7 +384,7 @@ KisPixelSelectionSP KisFillPainter::createFloodSelection(KisPixelSelectionSP pix
         }
     }
 
-    if (m_useCompositioning) {
+    if (m_useCompositing) {
         if (m_sizemod > 0) {
             if (m_stopGrowingAtDarkestPixel) {
                 KisGrowUntilDarkestPixelSelectionFilter biggy(m_sizemod, sourceDevice);

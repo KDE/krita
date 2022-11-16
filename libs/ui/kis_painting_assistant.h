@@ -85,7 +85,7 @@ private:
 
 /**
  * A KisPaintingAssistant is an object that assist the drawing on the canvas.
- * With this class you can implement virtual equivalent to ruler or compas.
+ * With this class you can implement virtual equivalent to ruler or compass.
  */
 class KRITAUI_EXPORT KisPaintingAssistant
 {
@@ -172,7 +172,7 @@ public:
     void loadXml(KoStore *store, QMap<int, KisPaintingAssistantHandleSP> &handleMap, QString path);
     virtual bool loadCustomXml(QXmlStreamReader* xml);
 
-    void saveXmlList(QDomDocument& doc, QDomElement& ssistantsElement, int count);
+    void saveXmlList(QDomDocument& doc, QDomElement& assistantsElement, int count);
     void findPerspectiveAssistantHandleLocation();
     KisPaintingAssistantHandleSP oppHandleOne();
 

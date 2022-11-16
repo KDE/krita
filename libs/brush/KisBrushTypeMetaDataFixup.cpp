@@ -46,7 +46,7 @@ QStringList KisBrushTypeMetaDataFixup::executeFix()
             KIS_SAFE_ASSERT_RECOVER(brush) { continue; }
 
             /// on loading the metadata of the brush has been
-            /// intialized properly, so we can just write the
+            /// initialized properly, so we can just write the
             /// updated version into the database back...
             KisResourceLocator::instance()->setMetaDataForResource(res->resourceId(), res->metadata());
 

@@ -37,7 +37,7 @@ public:
     qreal yRes() const;
 
     /**
-     * Compare resultion of (*this) and \p rhs
+     * Compare resolution of (*this) and \p rhs
      */
     bool compareResolution(const KisImageResolutionProxy &rhs) const;
 

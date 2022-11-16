@@ -55,7 +55,7 @@ QString KisMimeDatabase::mimeTypeForFile(const QString &file, bool checkExisting
 
 #ifdef Q_OS_ANDROID
     QString basename = fi.baseName();
-    // HACK: because we use sanitzed suffix
+    // HACK: because we use sanitized suffix
     mime = db.mimeTypeForFile(basename + "." + suffix);
 #else
     mime = db.mimeTypeForFile(file);
@@ -350,6 +350,6 @@ void KisMimeDatabase::fillMimeData()
         mimeType.suffixes = QStringList() << "csv";
         s_mimeDatabase << mimeType;
 
-        dbgPlugins << "Filled mimedatabase with" << s_mimeDatabase.count() << "special mimetypes";
+        dbgPlugins << "Filled mime database with" << s_mimeDatabase.count() << "special mimetypes";
     }
 }

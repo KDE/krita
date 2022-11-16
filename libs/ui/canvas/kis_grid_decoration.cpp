@@ -85,7 +85,7 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
         imageRectInImagePixels;
 
     // for angles. This will later be a combobox to select different types of options
-    // also add options to hide specific lines (vertical, horizonta, angle 1, etc
+    // also add options to hide specific lines (vertical, horizontal, angle 1, etc
     KisGridConfig::GridType gridType = m_d->config.gridType();
 
     if (gridType == KisGridConfig::GRID_RECTANGULAR) {

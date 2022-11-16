@@ -533,7 +533,7 @@ bool KisApplication::start(const KisApplicationArguments &args)
     }
     short int numberOfOpenDocuments = 0; // number of documents open
 
-    // Check for autosave files that can be restored, if we're not running a batchrun (test)
+    // Check for autosave files that can be restored, if we're not running a batch run (test)
     if (!d->batchRun) {
         checkAutosaveFiles();
     }

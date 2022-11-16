@@ -372,7 +372,7 @@ QString findUnusedName(QString location, QString filename)
 {
     // the Save Incremental Version incrementation in KisViewManager is way too complex for this task
     // and in that case there is a specific file to increment, while here we need to find just
-    // an unusued filename
+    // an unused filename
     QFileInfo info = QFileInfo(location + "/" + filename);
     if (!info.exists()) {
         return filename;

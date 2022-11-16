@@ -15,7 +15,7 @@
 #include "kis_types.h"
 #include "kis_lod_transform.h"
 #include <QElapsedTimer>
-#include "KisAsyncronousStrokeUpdateHelper.h"
+#include "KisAsynchronousStrokeUpdateHelper.h"
 #include "KisNodeSelectionRecipe.h"
 #include "kis_transaction.h"
 
@@ -54,7 +54,7 @@ public:
     };
 
 
-    struct KRITAUI_EXPORT BarrierUpdateData : public KisAsyncronousStrokeUpdateHelper::UpdateData
+    struct KRITAUI_EXPORT BarrierUpdateData : public KisAsynchronousStrokeUpdateHelper::UpdateData
     {
         BarrierUpdateData(bool forceUpdate);
         KisStrokeJobData* createLodClone(int levelOfDetail) override;

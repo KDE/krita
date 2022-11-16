@@ -147,7 +147,7 @@ public:
 
     /**
      * Prepare a shallow copy of all the shapes and the jobs to be rendered
-     * asynchronoursly later. The copies are stored in jobs, so that the user
+     * asynchronously later. The copies are stored in jobs, so that the user
      * could later pass these jobs into paintJob() in a separate thread.
      *
      * @param jobs a list of rects that are going to be updated. docUpdateRect
@@ -227,7 +227,7 @@ public:
     /**
      * Update the tree for finding the shapes.
      * This will remove the shape from the tree and will reinsert it again.
-     * The update to the tree will be posponed until it is needed so that successive calls
+     * The update to the tree will be postponed until it is needed so that successive calls
      * will be merged into one.
      * @param shape the shape to updated its position in the tree.
      */
@@ -274,7 +274,7 @@ private:
     class Private;
     Private * const d;
     Q_PRIVATE_SLOT(d, void updateTree())
-    Q_PRIVATE_SLOT(d, void forwardCompressedUdpate())
+    Q_PRIVATE_SLOT(d, void forwardCompressedUpdate())
 };
 
 #endif

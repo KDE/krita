@@ -18,7 +18,7 @@
 /**
  * @brief The FilterLayer class
  * A filter layer will, when compositing, take the composited
- * image up to the point of the loction of the filter layer
+ * image up to the point of the location of the filter layer
  * in the stack, create a copy and apply a filter.
  *
  * This means you can use blending modes on the filter layers,

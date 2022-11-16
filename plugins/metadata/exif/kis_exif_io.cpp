@@ -104,7 +104,7 @@ QDateTime exivValueToDateTime(const Exiv2::Value::AutoPtr value)
 }
 
 template<typename T>
-inline T fixEndianess(T v, Exiv2::ByteOrder order)
+inline T fixEndianness(T v, Exiv2::ByteOrder order)
 {
     switch (order) {
     case Exiv2::invalidByteOrder:
@@ -145,11 +145,11 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
 
     dvalue->copy((Exiv2::byte *)array.data());
 #if EXIV2_TEST_VERSION(0,28,0)
-    size_t columns = fixEndianess<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[0], order);
-    size_t rows = fixEndianess<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[1], order);
+    size_t columns = fixEndianness<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[0], order);
+    size_t rows = fixEndianness<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[1], order);
 #else
-    int columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
-    int rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
+    int columns = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+    int rows = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
 #endif
 
     if ((columns * rows + 4)
@@ -157,11 +157,11 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
                              // or any library that doesn't save back with the same byte order as the camera)
         order = invertByteOrder(order);
 #if EXIV2_TEST_VERSION(0,28,0)
-        columns = fixEndianess<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[0], order);
-        rows = fixEndianess<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[1], order);
+        columns = fixEndianness<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[0], order);
+        rows = fixEndianness<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[1], order);
 #else
-        columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
-        rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
+        columns = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+        rows = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
 #endif
         Q_ASSERT((columns * rows + 4) > dvalue->count());
     }
@@ -199,7 +199,7 @@ KisMetaData::Value exifOECFToKMDOECFStructure(const Exiv2::Value::AutoPtr value,
         for (int j = 0; j < rows; j++) {
 #endif
             values.append(KisMetaData::Value(
-                KisMetaData::Rational(fixEndianess<qint32>(dataIt[0], order), fixEndianess<qint32>(dataIt[1], order))));
+                KisMetaData::Rational(fixEndianness<qint32>(dataIt[0], order), fixEndianness<qint32>(dataIt[1], order))));
             dataIt += 2;
         }
     }
@@ -317,18 +317,18 @@ KisMetaData::Value cfaPatternExifToKMD(const Exiv2::Value::AutoPtr value, Exiv2:
     QByteArray array(dvalue->count(), 0);
     dvalue->copy((Exiv2::byte *)array.data());
 #if EXIV2_TEST_VERSION(0,28,0)
-    size_t columns = fixEndianess<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[0], order);
-    size_t rows = fixEndianess<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[1], order);
+    size_t columns = fixEndianness<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[0], order);
+    size_t rows = fixEndianness<qsizetype>((reinterpret_cast<qsizetype *>(array.data()))[1], order);
 #else
-    int columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
-    int rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
+    int columns = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+    int rows = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
 #endif
     if ((columns * rows + 4)
         != dvalue->count()) { // Sometime byteOrder get messed up (especially if metadata got saved with kexiv2 library,
                               // or any library that doesn't save back with the same byte order as the camera)
         order = invertByteOrder(order);
-        columns = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
-        rows = fixEndianess<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
+        columns = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[0], order);
+        rows = fixEndianness<quint16>((reinterpret_cast<quint16 *>(array.data()))[1], order);
         Q_ASSERT((columns * rows + 4) == dvalue->count());
     }
     QVariant qcolumns, qrows;

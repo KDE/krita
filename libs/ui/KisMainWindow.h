@@ -164,7 +164,7 @@ public:
      * Shows if the main window is saving anything right now. If the
      * user presses Ctrl+W too fast, then the document can be close
      * before the saving is completed. I'm not sure if it is fixable
-     * in any way without avoiding using porcessEvents()
+     * in any way without avoiding using processEvents()
      * everywhere (DK)
      *
      * Don't use it unless you have no option.
@@ -193,7 +193,7 @@ Q_SIGNALS:
     /// and the document anymore.
     void loadCompleted();
 
-    /// This signal is emitted right after the docker states have been succefully restored from config
+    /// This signal is emitted right after the docker states have been successfully restored from config
     void restoringDone();
 
     /// This signal is emitted when the color theme changes

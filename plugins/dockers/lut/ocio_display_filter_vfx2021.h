@@ -95,11 +95,11 @@ public:
 
 private:
     OCIO::ConstProcessorRcPtr m_processor;
-    OCIO::ConstProcessorRcPtr m_revereseApproximationProcessor;
+    OCIO::ConstProcessorRcPtr m_reverseApproximationProcessor;
     OCIO::ConstProcessorRcPtr m_forwardApproximationProcessor;
 
     OCIO::ConstCPUProcessorRcPtr m_processorCPU;
-    OCIO::ConstCPUProcessorRcPtr m_revereseApproximationProcessorCPU;
+    OCIO::ConstCPUProcessorRcPtr m_reverseApproximationProcessorCPU;
     OCIO::ConstCPUProcessorRcPtr m_forwardApproximationProcessorCPU;
 
     KisExposureGammaCorrectionInterface *m_interface;

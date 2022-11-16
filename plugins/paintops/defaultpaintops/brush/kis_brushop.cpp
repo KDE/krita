@@ -205,7 +205,7 @@ void KisBrushOp::addMirroringJobs(Qt::Orientation direction,
     state->allDirtyRects.append(rects);
 }
 
-std::pair<int, bool> KisBrushOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
+std::pair<int, bool> KisBrushOp::doAsynchronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs)
 {
     bool someDabsAreStillInQueue = false;
     const bool hasPreparedDabsAtStart = m_dabExecutor->hasPreparedDabs();

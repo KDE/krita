@@ -603,8 +603,8 @@ void KisSelectionManager::paintSelectedShapes()
 
     Q_FOREACH (KoShape* shape, shapes) {
         QTransform matrix = shape->absoluteTransformation() * QTransform::fromScale(image->xRes(), image->yRes());
-        QPainterPath mapedOutline = matrix.map(shape->outline());
-        helper.paintPainterPath(mapedOutline);
+        QPainterPath mappedOutline = matrix.map(shape->outline());
+        helper.paintPainterPath(mappedOutline);
     }
     m_adapter->endMacro();
 }

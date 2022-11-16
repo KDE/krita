@@ -95,7 +95,7 @@ public:
      * T  - transpose (@p xtranslate, @p ytranslate)
      *
      * WARNING: due to some rounding problems in the worker
-     * the work it does does not correspond to the matrix exactly!
+     * the work it does not correspond to the matrix exactly!
      * The result always differs 1-3 pixel. So be careful with it
      * (or fix it)
      */

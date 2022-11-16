@@ -415,7 +415,7 @@ public:
     QSharedPointer<KoShapeBackground> background() const;
 
     /**
-     * @brief setInheritBackground marks a shape as inhiriting the background
+     * @brief setInheritBackground marks a shape as inheriting the background
      * from the parent shape. NOTE: The currently selected background is destroyed.
      * @param value true if the shape should inherit the filling background
      */
@@ -635,7 +635,7 @@ public:
    /**
     * Returns if during compareShapeZIndex() how this shape portrays the values
     * of its children. The default behaviour is to let this shape's z values take
-    * the place of its childrens values, so you get a parent/child relationship.
+    * the place of its children's values, so you get a parent/child relationship.
     * The children are naturally still ordered relatively to their z values
     *
     * But for special cases (like Calligra's TextShape) it can be overloaded to return
@@ -694,7 +694,7 @@ public:
     void setStroke(KoShapeStrokeModelSP stroke);
 
     /**
-     * @brief setInheritStroke marks a shape as inhiriting the stroke
+     * @brief setInheritStroke marks a shape as inheriting the stroke
      * from the parent shape. NOTE: The currently selected stroke is destroyed.
      * @param value true if the shape should inherit the stroke style
      */

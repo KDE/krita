@@ -519,7 +519,7 @@ bool tryParseDescriptor(const QDomElement &el, const QString &path, const QStrin
                 QString value = childEl.attribute("value", "");
 
                 if (typeId != "GrdF" || value != "CstS") {
-                    warnKrita << "WARNING: Unsupported gradient type (porbably, noise-based):" << value;
+                    warnKrita << "WARNING: Unsupported gradient type (probably, noise-based):" << value;
                     return true;
                 }
             } else if (type == "Double" && key == "Intr") {

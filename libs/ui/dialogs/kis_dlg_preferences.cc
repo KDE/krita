@@ -316,7 +316,7 @@ GeneralTab::GeneralTab(QWidget *_parent, const char *_name)
     cmbCmykBlendingMode->setCurrentIndex((int)!cfg.readEntry<bool>("useSubtractiveBlendingForCmykColorSpaces", true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt());
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas());
-    chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
+    chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste());
 
     m_groupBoxKineticScrollingSettings->setChecked(cfg.kineticScrollingEnabled());
 
@@ -691,7 +691,7 @@ void GeneralTab::setDefault()
     intZoomMarginSize->setValue(cfg.zoomMarginSize(true));
     m_chkSwitchSelectionCtrlAlt->setChecked(cfg.switchSelectionCtrlAlt(true));
     chkEnableTouch->setChecked(!cfg.disableTouchOnCanvas(true));
-    chkEnableTranformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
+    chkEnableTransformToolAfterPaste->setChecked(cfg.activateTransformToolAfterPaste(true));
     m_chkConvertOnImport->setChecked(cfg.convertToImageColorspaceOnImport(true));
 
     KoColor cursorColor(KoColorSpaceRegistry::instance()->rgb8());
@@ -2332,7 +2332,7 @@ bool KisDlgPreferences::editPreferences()
 
         cfg.setSwitchSelectionCtrlAlt(m_general->switchSelectionCtrlAlt());
         cfg.setDisableTouchOnCanvas(!m_general->chkEnableTouch->isChecked());
-        cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTranformToolAfterPaste->isChecked());
+        cfg.setActivateTransformToolAfterPaste(m_general->chkEnableTransformToolAfterPaste->isChecked());
         cfg.setConvertToImageColorspaceOnImport(m_general->convertToImageColorspaceOnImport());
         cfg.setUndoStackLimit(m_general->undoStackSize());
         cfg.setCumulativeUndoRedo(m_general->chkCumulativeUndo->isChecked());

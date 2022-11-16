@@ -79,7 +79,7 @@ protected:
 
     void addInteractionFactory(KoInteractionStrategyFactory *factory);
     void removeInteractionFactory(const QString &id);
-    bool hasInteractioFactory(const QString &id);
+    bool hasInteractionFactory(const QString &id);
 
     bool tryUseCustomCursor();
 

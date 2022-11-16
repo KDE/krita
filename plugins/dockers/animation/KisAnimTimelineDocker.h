@@ -82,7 +82,7 @@ private:
  * This is the GUI heart of Krita's traditional animation workflow,
  * and is where artists can configure, edit, scrub and play their animation.
  *
- * Currently interacts with the TimelinFramesView/Model as well as
+ * Currently interacts with the TimelineFramesView/Model as well as
  * the KisImageAnimationInterface. (TODO: Consider refactoring to
  * streamline this interaction towards Docker -> AnimationPlayer -> ImageAnimInterface)
  */

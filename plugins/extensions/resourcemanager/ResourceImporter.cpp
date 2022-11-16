@@ -157,7 +157,7 @@ void ResourceImporter::importResources(QString startPath)
             if (KisResourceLocator::instance()->hasStorage(QFileInfo(filenames[i]).fileName())) {
                 skip = true;
                 /*
-                if (QMessageBox::warning(m_widgetParent, i18nc("@ttile:window", "Warning"),
+                if (QMessageBox::warning(m_widgetParent, i18nc("@title:window", "Warning"),
                                          i18n("There is already a resource library with this name installed. Do you want to overwrite it? Resource library name: "),
                                          QMessageBox::Ok | QMessageBox::Cancel) == QMessageBox::Cancel) {
                     importMode = KisStorageModel::Rename;

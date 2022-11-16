@@ -87,7 +87,7 @@ private Q_SLOTS:
 
 private:
 
-    QString createQuery(bool onlyAcive = true, bool returnADbIndexToo = false);
+    QString createQuery(bool onlyAchieve = true, bool returnADbIndexToo = false);
     bool resetQuery();
 
 

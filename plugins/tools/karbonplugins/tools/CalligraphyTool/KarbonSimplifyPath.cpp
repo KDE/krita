@@ -41,7 +41,7 @@ void subdivide(KoSubpath *subpath);
 // returns the points that needs to be inserted between p1 and p2
 KoSubpath subdivideAux(KoPathPoint *p1, KoPathPoint *p2);
 // auxiliary function
-bool isSufficentlyFlat(QPointF curve[4]);
+bool isSufficientlyFlat(QPointF curve[4]);
 
 // after this call the points _are_ owned by the subpaths
 void simplifySubpaths(QList<KoSubpath *> *subpaths, qreal error);
@@ -164,7 +164,7 @@ KoSubpath KarbonSimplifyPath::subdivideAux(KoPathPoint *p1,
     };
 
     // if there is no need to add points do nothing
-    if (isSufficentlyFlat(curve)) {
+    if (isSufficientlyFlat(curve)) {
         return QList<KoPathPoint *>();
     }
 
@@ -198,7 +198,7 @@ KoSubpath KarbonSimplifyPath::subdivideAux(KoPathPoint *p1,
     return res;
 }
 
-bool KarbonSimplifyPath::isSufficentlyFlat(QPointF curve[4])
+bool KarbonSimplifyPath::isSufficientlyFlat(QPointF curve[4])
 {
     qreal ux = 3 * curve[1].x() - 2 * curve[0].x() - curve[3].x();
     qreal uy = 3 * curve[1].y() - 2 * curve[0].y() - curve[3].y();

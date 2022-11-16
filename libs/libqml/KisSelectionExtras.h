@@ -11,7 +11,7 @@
 
 class KisViewManager;
 
-// This class prvides some extra kisselectionmanager stuff that in krita prober is in plugins
+// This class provides some extra kisselectionmanager stuff that in krita prober is in plugins
 class KisSelectionExtras : public QObject
 {
     Q_OBJECT

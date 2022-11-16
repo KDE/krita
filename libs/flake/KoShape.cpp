@@ -175,7 +175,7 @@ KoShape::~KoShape()
     d->listeners.clear();
     /**
      * The shape must have already been detached from all the parents and
-     * shape managers. Otherwise we migh accidentally request some RTTI
+     * shape managers. Otherwise we might accidentally request some RTTI
      * information, which is not available anymore (we are in d-tor).
      *
      * TL;DR: fix the code that caused this destruction without unparenting
@@ -755,11 +755,11 @@ KoShape::TextRunAroundSide KoShape::textRunAroundSide() const
     return s->textRunAroundSide;
 }
 
-void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrought)
+void KoShape::setTextRunAroundSide(TextRunAroundSide side, RunThroughLevel runThrough)
 {
 
     if (side == RunThrough) {
-        if (runThrought == Background) {
+        if (runThrough == Background) {
             setRunThrough(-1);
         } else {
             setRunThrough(1);

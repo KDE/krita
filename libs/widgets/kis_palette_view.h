@@ -27,7 +27,7 @@ class KRITAWIDGETS_EXPORT KisPaletteView : public QTableView
 {
     Q_OBJECT
 private:
-    static int MININUM_ROW_HEIGHT;
+    static int MINIMUM_ROW_HEIGHT;
 public:
     explicit KisPaletteView(QWidget *parent = 0);
     ~KisPaletteView() override;

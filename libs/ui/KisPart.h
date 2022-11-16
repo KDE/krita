@@ -44,7 +44,7 @@ class KisViewManager;
  * Krita.  It manages lists of Actions and shortcuts as well.
  *
  * The terminology comes from KParts, which is a system allowing one KDE app
- * to be run from inside another, like pressing F4 inside dophin to run konsole.
+ * to be run from inside another, like pressing F4 inside dolphin to run konsole.
  *
  * Needless to say, KisPart hasn't got much to do with KParts anymore.
  */

@@ -48,7 +48,7 @@ namespace KisIconUtils
     KRITAWIDGETUTILS_EXPORT QIcon loadIcon(const QString &name);
 
     /**
-     * Should we use a dark or light themeed icon? Useful for images that are loaded
+     * Should we use a dark or light themed icon? Useful for images that are loaded
      * dynamically like document templates instead of being in static resource files
      */
     KRITAWIDGETUTILS_EXPORT bool useDarkIcons();

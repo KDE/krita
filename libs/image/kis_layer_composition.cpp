@@ -198,7 +198,7 @@ void KisLayerComposition::save(QDomDocument& doc, QDomElement& element)
         valueElement.setAttribute("visible", iter.value());
         dbgKrita << "contains" << m_collapsedMap.contains(iter.key());
         if (m_collapsedMap.contains(iter.key())) {
-            dbgKrita << "colapsed :" << m_collapsedMap[iter.key()];
+            dbgKrita << "collapsed :" << m_collapsedMap[iter.key()];
             valueElement.setAttribute("collapsed", m_collapsedMap[iter.key()]);
         }
         compositionElement.appendChild(valueElement);

@@ -80,7 +80,7 @@ void KisOpenglCanvasDebugger::slotConfigChanged()
     }
 }
 
-void KisOpenglCanvasDebugger::nofityPaintRequested()
+void KisOpenglCanvasDebugger::notifyPaintRequested()
 {
     if (!m_d->isEnabled) return;
 
@@ -94,7 +94,7 @@ void KisOpenglCanvasDebugger::nofityPaintRequested()
     }
 }
 
-void KisOpenglCanvasDebugger::nofitySyncStatus(bool isBusy)
+void KisOpenglCanvasDebugger::notifySyncStatus(bool isBusy)
 {
     if (!m_d->isEnabled) return;
 

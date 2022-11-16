@@ -43,7 +43,7 @@ KisInputProfileMigrator5To6::~KisInputProfileMigrator5To6()
 
 QList<KisShortcutConfiguration> KisInputProfileMigrator5To6::defaultTouchShortcuts()
 {
-    QList<KisShortcutConfiguration> shortcuts = getShorcutsFromProfile(m_defaultProfile);
+    QList<KisShortcutConfiguration> shortcuts = getShortcutsFromProfile(m_defaultProfile);
     filterShortcuts(shortcuts, [](KisShortcutConfiguration shortcut) {
         return shortcut.type() == KisShortcutConfiguration::GestureType;
     });
@@ -65,7 +65,7 @@ void KisInputProfileMigrator5To6::filterShortcuts(QList<KisShortcutConfiguration
     }
 }
 
-QList<KisShortcutConfiguration> KisInputProfileMigrator5To6::getShorcutsFromProfile(QString profile) const
+QList<KisShortcutConfiguration> KisInputProfileMigrator5To6::getShortcutsFromProfile(QString profile) const
 {
     QList<KisShortcutConfiguration> shortcuts;
 
@@ -95,7 +95,7 @@ KisInputProfileMigrator5To6::migrate(const QMap<QString, ProfileEntry> profiles)
 {
     QMap<ProfileEntry, QList<KisShortcutConfiguration>> parsedProfiles;
     for (const auto &profile : profiles) {
-        QList<KisShortcutConfiguration> shortcuts = getShorcutsFromProfile(profile.fullpath);
+        QList<KisShortcutConfiguration> shortcuts = getShortcutsFromProfile(profile.fullpath);
 
         // we ignore the touch shortcuts, because they're from an older version
         filterShortcuts(shortcuts, [](KisShortcutConfiguration shortcut) {

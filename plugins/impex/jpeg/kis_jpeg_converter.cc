@@ -243,7 +243,7 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
         if (yres < 72) {
             yres = 72;
         }
-        m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+        m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inch to points
 
         // Create layer
         KisPaintLayerSP layer = KisPaintLayerSP(new KisPaintLayer(m_d->image.data(), m_d->image -> nextLayerName(), quint8_MAX));
@@ -424,7 +424,7 @@ KisImportExportErrorCode KisJPEGConverter::decode(QIODevice *io)
             double xres = layer->metaData()->getEntry("tiff:XResolution").value().asDouble();
             double yres = layer->metaData()->getEntry("tiff:YResolution").value().asDouble();
             if (xres != 0 && yres != 0) {
-                m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inchs to points
+                m_d->image->setResolution(POINT_TO_INCH(xres), POINT_TO_INCH(yres));   // It is the "invert" macro because we convert from pointer-per-inch to points
             }
         }
 
@@ -555,8 +555,8 @@ KisImportExportErrorCode KisJPEGConverter::buildFile(QIODevice *io, KisPaintLaye
         }
 
         // Save resolution
-        cinfo.X_density = INCH_TO_POINT(image->xRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
-        cinfo.Y_density = INCH_TO_POINT(image->yRes()); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        cinfo.X_density = INCH_TO_POINT(image->xRes()); // It is the "invert" macro because we convert from pointer-per-inch to points
+        cinfo.Y_density = INCH_TO_POINT(image->yRes()); // It is the "invert" macro because we convert from pointer-per-inch to points
         cinfo.density_unit = 1;
         cinfo.write_JFIF_header = (boolean)true;
 

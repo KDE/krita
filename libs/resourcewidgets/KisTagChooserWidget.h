@@ -130,4 +130,4 @@ private:
 
 };
 
-#endif // KOTAGCHOOSERWIDGET_H
+#endif // KISTAGCHOOSERWIDGET_H

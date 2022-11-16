@@ -3042,7 +3042,7 @@ void KisPainter::renderDabWithMirroringNonIncremental(QRect rc, KisPaintDeviceSP
 
     /**
      * If there are no cross-intersections, we can use a fast path
-     * and do no cycling recompositioning
+     * and do no cycling recompositing
      */
     if (!intersects) {
         rects.resize(1);

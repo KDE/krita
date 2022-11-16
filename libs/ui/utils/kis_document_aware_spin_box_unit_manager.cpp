@@ -21,17 +21,17 @@ KisSpinBoxUnitManager* KisDocumentAwareSpinBoxUnitManagerBuilder::buildUnitManag
     return new KisDocumentAwareSpinBoxUnitManager(parent);
 }
 
-void KisDocumentAwareSpinBoxUnitManager::setDocumentAwarnessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox, bool setUnitFromOutsideToggle)
+void KisDocumentAwareSpinBoxUnitManager::setDocumentAwarenessToExistingUnitSpinBox(KisDoubleParseUnitSpinBox* spinBox, bool setUnitFromOutsideToggle)
 {
     KisDocumentAwareSpinBoxUnitManager* manager = new KisDocumentAwareSpinBoxUnitManager(spinBox);
     spinBox->setUnitManager(manager);
     spinBox->setUnitChangeFromOutsideBehavior(setUnitFromOutsideToggle);
 }
 
-KisDoubleParseUnitSpinBox* KisDocumentAwareSpinBoxUnitManager::createUnitSpinBoxWithDocumentAwarness(QWidget* parent)
+KisDoubleParseUnitSpinBox* KisDocumentAwareSpinBoxUnitManager::createUnitSpinBoxWithDocumentAwareness(QWidget* parent)
 {
     KisDoubleParseUnitSpinBox* spinBox = new KisDoubleParseUnitSpinBox(parent);
-    setDocumentAwarnessToExistingUnitSpinBox(spinBox);
+    setDocumentAwarenessToExistingUnitSpinBox(spinBox);
 
     return spinBox;
 }

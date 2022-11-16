@@ -574,9 +574,9 @@ bool KisMeshTransformStrategy::beginPrimaryAction(const QPointF &pt)
     return retval;
 }
 
-void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActve, bool altModifierActive)
+void KisMeshTransformStrategy::continuePrimaryAction(const QPointF &pt, bool shiftModifierActive, bool altModifierActive)
 {
-    Q_UNUSED(shiftModifierActve);
+    Q_UNUSED(shiftModifierActive);
     Q_UNUSED(altModifierActive);
 
     if (m_d->mode == Private::OVER_POINT ||

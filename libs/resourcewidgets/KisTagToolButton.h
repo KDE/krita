@@ -116,4 +116,4 @@ private:
     friend class KisTagChooserWidget;
 };
 
-#endif // KOTAGTOOLBUTTON_H
+#endif // KISTAGTOOLBUTTON_H

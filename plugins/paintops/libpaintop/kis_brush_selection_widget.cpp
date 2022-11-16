@@ -157,7 +157,7 @@ KisBrushSelectionWidget::KisBrushSelectionWidget(int maxBrushSize,
 
 
     Q_FOREACH (QWidget *widget, m_chooserMap.values()) {
-        m_mininmumSize = m_mininmumSize.expandedTo(widget->sizeHint());
+        m_minimumSize = m_minimumSize.expandedTo(widget->sizeHint());
     }
 
 
@@ -256,7 +256,7 @@ void KisBrushSelectionWidget::setCurrentWidget(QWidget* widget)
         m_currentBrushWidget->setParent(this);
         m_currentBrushWidget->hide();
     }
-    widget->setMinimumSize(m_mininmumSize);
+    widget->setMinimumSize(m_minimumSize);
 
     m_currentBrushWidget = widget;
     m_layout->addWidget(widget);

@@ -118,7 +118,7 @@ public Q_SLOTS:
       */
     void setRightToLeft(bool isRightToLeft);
 
-    /** Set if the ruler should show indents as used in textditors.
+    /** Set if the ruler should show indents as used in text editors.
       * Set the indents with setFirstLineIndent(), setParagraphIndent(), setEndIndent() .
       * @param show show indents if true. Default is false.
       */

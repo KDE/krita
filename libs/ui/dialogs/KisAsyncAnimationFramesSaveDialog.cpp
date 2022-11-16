@@ -59,10 +59,10 @@ KisAsyncAnimationFramesSaveDialog::KisAsyncAnimationFramesSaveDialog(KisImageSP 
                                                                      const KisTimeSpan &range,
                                                                      const QString &baseFilename,
                                                                      int sequenceNumberingOffset,
-                                                                     bool onlyNeedsUniqeFrames,
+                                                                     bool onlyNeedsUniqueFrames,
                                                                      KisPropertiesConfigurationSP exportConfiguration)
     : KisAsyncAnimationRenderDialogBase(i18n("Saving frames..."), originalImage, 0),
-      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, onlyNeedsUniqeFrames, exportConfiguration))
+      m_d(new Private(originalImage, range, baseFilename, sequenceNumberingOffset, onlyNeedsUniqueFrames, exportConfiguration))
 {
 
 

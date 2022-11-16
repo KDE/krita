@@ -73,7 +73,7 @@ private:
     QString m_type;
 };
 
-/// Id selectdor, matching the id attribute
+/// Id selector, matching the id attribute
 class IdSelector : public CssSelectorBase
 {
 public:

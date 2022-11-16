@@ -333,9 +333,9 @@ void KoPathTool::convertToPath()
     QList<KoParameterShape*> parameterShapes;
 
     Q_FOREACH (KoShape *shape, m_pointSelection.selectedShapes()) {
-        KoParameterShape * parameteric = dynamic_cast<KoParameterShape*>(shape);
-        if (parameteric && parameteric->isParametricShape()) {
-            parameterShapes.append(parameteric);
+        KoParameterShape * parametric = dynamic_cast<KoParameterShape*>(shape);
+        if (parametric && parametric->isParametricShape()) {
+            parameterShapes.append(parametric);
         }
     }
 

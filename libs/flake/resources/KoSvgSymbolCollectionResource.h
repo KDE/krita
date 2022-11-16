@@ -97,5 +97,5 @@ private:
     const QScopedPointer<Private> d;
 
 };
-#endif // KoSvgSymbolCollectionResource
+#endif // KOSVGSYMBOLCOLLECTIONRESOURCE
 

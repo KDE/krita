@@ -259,7 +259,7 @@ MoveStrokeStrategy::MoveStrokeStrategy(const MoveStrokeStrategy &rhs, int lod)
 void MoveStrokeStrategy::initStrokeCallback()
 {
     /**
-     * Our LodN moght have already prepared the list of nodes for us,
+     * Our LodN might have already prepared the list of nodes for us,
      * so we should reuse it to avoid different nodes to be moved in
      * LodN and Lod0 modes.
      */
@@ -267,7 +267,7 @@ void MoveStrokeStrategy::initStrokeCallback()
         m_nodes = m_requestedNodeSelection.selectNodesToProcess();
 
         if (!m_nodes.isEmpty()) {
-            m_nodes = KisLayerUtils::sortAndFilterMergableInternalNodes(m_nodes, true);
+            m_nodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(m_nodes, true);
         }
 
         KritaUtils::filterContainer<KisNodeList>(m_nodes,
@@ -429,7 +429,7 @@ void MoveStrokeStrategy::cancelStrokeCallback()
                 m_dirtyRects[node] |= dirtyRect;
 
                 /// emit updates not looking onto the
-                /// epdatesEnabled switch, since that is
+                /// updatesEnabled switch, since that is
                 /// the end of the stroke
                 m_updatesFacade->refreshGraphAsync(node, dirtyRect);
             }
@@ -478,8 +478,8 @@ void MoveStrokeStrategy::doStrokeCallback(KisStrokeJobData *data)
 
         doCanvasUpdate(barrierData->forceUpdate);
 
-    } else if (KisAsyncronousStrokeUpdateHelper::UpdateData *updateData =
-               dynamic_cast<KisAsyncronousStrokeUpdateHelper::UpdateData*>(data)) {
+    } else if (KisAsynchronousStrokeUpdateHelper::UpdateData *updateData =
+               dynamic_cast<KisAsynchronousStrokeUpdateHelper::UpdateData*>(data)) {
 
         tryPostUpdateJob(updateData->forceUpdate);
 
@@ -606,7 +606,7 @@ MoveStrokeStrategy::PickLayerData::PickLayerData(const MoveStrokeStrategy::PickL
 }
 
 MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(bool _forceUpdate)
-    : KisAsyncronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, EXCLUSIVE)
+    : KisAsynchronousStrokeUpdateHelper::UpdateData(_forceUpdate, BARRIER, EXCLUSIVE)
 {}
 
 KisStrokeJobData *MoveStrokeStrategy::BarrierUpdateData::createLodClone(int levelOfDetail) {
@@ -614,6 +614,6 @@ KisStrokeJobData *MoveStrokeStrategy::BarrierUpdateData::createLodClone(int leve
 }
 
 MoveStrokeStrategy::BarrierUpdateData::BarrierUpdateData(const MoveStrokeStrategy::BarrierUpdateData &rhs, int levelOfDetail)
-    : KisAsyncronousStrokeUpdateHelper::UpdateData(rhs, levelOfDetail)
+    : KisAsynchronousStrokeUpdateHelper::UpdateData(rhs, levelOfDetail)
 {
 }

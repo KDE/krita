@@ -163,7 +163,7 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
             TIFFTAG_XRESOLUTION,
             INCH_TO_POINT(kisimage->xRes()))) { // It is the "invert" macro
                                                 // because we convert from
-                                                // pointer-per-inchs to points
+                                                // pointer-per-inch to points
         return ImportExportCodes::ErrorWhileWriting;
     }
     if (!TIFFSetField(image.get(),

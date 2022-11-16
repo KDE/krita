@@ -370,7 +370,7 @@ void KisScanlineFill::processLine(KisFillInterval interval, const int rowIncreme
     const int pixelSize = m_d->device->pixelSize();
 
     while(x <= lastX) {
-        // a bit of optimzation for not calling slow random accessor
+        // a bit of optimization for not calling slow random accessor
         // methods too often
         if (numPixelsLeft <= 0) {
             pixelAccessPolicy.m_srcIt->moveTo(x, row);

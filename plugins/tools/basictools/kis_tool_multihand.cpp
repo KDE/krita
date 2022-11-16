@@ -519,7 +519,7 @@ void KisToolMultihand::slotSetAxesAngle(qreal angle)
 
 void KisToolMultihand::slotSetTransformMode(int index)
 {
-    m_transformMode = enumTransforModes(customUI->multihandTypeCombobox->itemData(index).toInt());
+    m_transformMode = enumTransformModes(customUI->multihandTypeCombobox->itemData(index).toInt());
     m_configGroup.writeEntry("transformMode", index);
 
 

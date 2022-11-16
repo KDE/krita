@@ -45,7 +45,7 @@ KisImageSignalRouter::KisImageSignalRouter(KisImageWSP image)
     CONNECT_TO_IMAGE(sigLayersChangedAsync());
 
     /**
-     * Color space and profile conversion functions run without storkes,
+     * Color space and profile conversion functions run without strokes,
      * therefore they are executed in GUI hread under the global lock held.
      *
      * To ensure that the receiver of the signal will not deadlock by

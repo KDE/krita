@@ -608,7 +608,7 @@ public:
      * affected.
      *
      * @param channelFlags the bit array that masks the source channels; only
-     * the channels where the corresponding bit is true will will be
+     * the channels where the corresponding bit is true it will be
      * composited onto the destination device.
      */
     void setChannelFlags(QBitArray channelFlags);

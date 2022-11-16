@@ -82,7 +82,7 @@ KisColorSelectorContainer::KisColorSelectorContainer(QWidget *parent) :
 
 void KisColorSelectorContainer::unsetCanvas()
 {
-    m_colorSelector->hasAtLeastOneDocument(doesAtleastOneDocumentExist());
+    m_colorSelector->hasAtLeastOneDocument(doesAtLeastOneDocumentExist());
 
     m_colorSelector->unsetCanvas();
     m_myPaintShadeSelector->unsetCanvas();
@@ -90,7 +90,7 @@ void KisColorSelectorContainer::unsetCanvas()
     m_canvas = 0;
 }
 
-bool KisColorSelectorContainer::doesAtleastOneDocumentExist()
+bool KisColorSelectorContainer::doesAtLeastOneDocumentExist()
 {
     return m_canvas &&
             m_canvas->viewManager() &&
@@ -124,7 +124,7 @@ void KisColorSelectorContainer::setCanvas(KisCanvas2* canvas)
     m_minimalShadeSelector->setCanvas(canvas);
 
 
-    m_colorSelector->hasAtLeastOneDocument(doesAtleastOneDocumentExist());
+    m_colorSelector->hasAtLeastOneDocument(doesAtLeastOneDocumentExist());
 
 
     if (m_canvas && m_canvas->viewManager()) {

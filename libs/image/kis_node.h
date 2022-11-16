@@ -135,7 +135,7 @@ public:
 
     /**
      * @brief setDirtyDontResetAnimationCache does almost the same thing as usual
-     * setDirty() call, but doesn't reset the animation cache (since onlion skins are
+     * setDirty() call, but doesn't reset the animation cache (since onion skins are
      * not used when rendering animation.
      */
     void setDirtyDontResetAnimationCache(const QVector<QRect> &rects);
@@ -201,7 +201,7 @@ protected:
      * apply a convolution filter with kernel 4x4 (changeRect is
      * (2+2*3)x(2+2*3)=8x8) to that area. The rect that should be updated
      * on the layer will be exactly 8x8. More than that the needRect for
-     * that update will be 14x14. See \ref needeRect.
+     * that update will be 14x14. See \ref needRect.
      */
     virtual QRect changeRect(const QRect &rect, PositionToFilthy pos = N_FILTHY) const;
 
@@ -258,7 +258,7 @@ public: // Graph methods
 
     /**
      * @return the graph listener this node belongs to. 0 if the node
-     * does not belong to a grap listener.
+     * does not belong to a graph listener.
      */
     KisNodeGraphListener * graphListener() const;
 

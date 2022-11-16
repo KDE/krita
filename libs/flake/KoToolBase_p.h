@@ -46,7 +46,7 @@ public:
 
     void connectSignals()
     {
-        if (canvas) { // in the case of KoToolManagers dummytool it can be zero :(
+        if (canvas) { // in the case of KoToolManagers dummy tool it can be zero :(
             KoCanvasResourceProvider * crp = canvas->resourceManager();
             Q_ASSERT_X(crp, "KoToolBase::KoToolBase", "No Canvas KoResourceManager");
             if (crp)

@@ -129,9 +129,9 @@ KisToolTransform::KisToolTransform(KoCanvasBase * canvas)
 
     // extra actions for free transform that are in the tool options
     mirrorHorizontalAction = new KisAction(i18n("Mirror Horizontal"));
-    mirrorVericalAction = new KisAction(i18n("Mirror Vertical"));
-    rotateNinteyCWAction = new KisAction(i18n("Rotate 90 degrees Clockwise"));
-    rotateNinteyCCWAction = new KisAction(i18n("Rotate 90 degrees CounterClockwise"));
+    mirrorVerticalAction = new KisAction(i18n("Mirror Vertical"));
+    rotateNinetyCWAction = new KisAction(i18n("Rotate 90 degrees Clockwise"));
+    rotateNinetyCCWAction = new KisAction(i18n("Rotate 90 degrees CounterClockwise"));
 
     applyTransformation = new KisAction(i18n("Apply"));
     resetTransformation = new KisAction(i18n("Reset"));
@@ -175,9 +175,9 @@ KisToolTransform::~KisToolTransform()
     delete applyTransformation;
     delete resetTransformation;
     delete mirrorHorizontalAction;
-    delete mirrorVericalAction;
-    delete rotateNinteyCWAction;
-    delete rotateNinteyCCWAction;
+    delete mirrorVerticalAction;
+    delete rotateNinetyCWAction;
+    delete rotateNinetyCCWAction;
 }
 
 void KisToolTransform::outlineChanged()
@@ -386,9 +386,9 @@ QMenu* KisToolTransform::popupActionsMenu()
         if (transformMode() == FreeTransformMode) {
             m_contextMenu->addSeparator();
             m_contextMenu->addAction(mirrorHorizontalAction);
-            m_contextMenu->addAction(mirrorVericalAction);
-            m_contextMenu->addAction(rotateNinteyCWAction);
-            m_contextMenu->addAction(rotateNinteyCCWAction);
+            m_contextMenu->addAction(mirrorVerticalAction);
+            m_contextMenu->addAction(rotateNinetyCWAction);
+            m_contextMenu->addAction(rotateNinetyCCWAction);
         }
 
         m_contextMenu->addSeparator();
@@ -836,7 +836,7 @@ void KisToolTransform::startStroke(ToolTransformArgs::TransformMode mode, bool f
             new KisResourcesSnapshot(image(), currentNode(), this->canvas()->resourceManager(), 0, selectedNodes(), 0);
     KisNodeList rootNodes = resources->selectedNodes();
     //Filter out any nodes that might be children of other selected nodes so they aren't used twice
-    KisLayerUtils::filterMergableNodes(rootNodes, true);
+    KisLayerUtils::filterMergeableNodes(rootNodes, true);
     KisSelectionSP selection = resources->activeSelection();
 
     m_transaction = TransformTransactionProperties(QRectF(), &m_currentArgs, KisNodeList(), {});
@@ -1127,9 +1127,9 @@ QWidget* KisToolTransform::createOptionWidget()
 
 
     connect(mirrorHorizontalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipX()));
-    connect(mirrorVericalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipY()));
-    connect(rotateNinteyCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCW()));
-    connect(rotateNinteyCCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCCW()));
+    connect(mirrorVerticalAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotFlipY()));
+    connect(rotateNinetyCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCW()));
+    connect(rotateNinetyCCWAction, SIGNAL(triggered(bool)), m_optionsWidget, SLOT(slotRotateCCW()));
 
 
     connect(warpAction, SIGNAL(triggered(bool)), this, SLOT(slotUpdateToWarpType()));

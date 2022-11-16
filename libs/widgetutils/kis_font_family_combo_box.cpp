@@ -55,7 +55,7 @@ void PinnedFontsSeparator::setSeparatorAdded()
 
 KisFontFamilyComboBox::KisFontFamilyComboBox(QWidget *parent)
     : QComboBox(parent)
-    , m_initilized(false)
+    , m_initialized(false)
     , m_initializeFromConfig(false)
 {
     setEditable(true);
@@ -144,7 +144,7 @@ void KisFontFamilyComboBox::refillComboBox(QVector<QFontDatabase::WritingSystem>
 
 void KisFontFamilyComboBox::setTopFont(const QString &family)
 {
-    if (family.isEmpty() || !m_initilized || m_pinnedFonts.contains(family)) {
+    if (family.isEmpty() || !m_initialized || m_pinnedFonts.contains(family)) {
         return;
     }
 
@@ -170,10 +170,10 @@ void KisFontFamilyComboBox::setTopFont(const QString &family)
 
 void KisFontFamilyComboBox::setInitialized()
 {
-    if(m_initilized)
+    if(m_initialized)
         return;
 
-    m_initilized = true;
+    m_initialized = true;
 
     for(int i=m_pinnedFonts.count()-1; i>=0; i--){
         this->insertItem(0, m_pinnedFonts[i]);

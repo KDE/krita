@@ -1270,7 +1270,7 @@ void KisImageTest::testPaintOverlayMask()
 
     p.image->addNode(mask, layer1);
 
-    // a simple layer to disable oblidge child mechanism
+    // a simple layer to disable oblige-child mechanism
     KisPaintLayerSP layer2 = new KisPaintLayer(p.image, "layer2", OPACITY_OPAQUE_U8);
     p.image->addNode(layer2);
 

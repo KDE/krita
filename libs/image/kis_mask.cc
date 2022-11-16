@@ -344,7 +344,7 @@ void KisMask::mergeInMaskInternal(KisPaintDeviceSP projection,
     if (effectiveSelection) {
         QRect updatedRect = decorateRect(projection, cacheDevice, applyRect, maskPos);
 
-        // masks don't have any compositioning
+        // masks don't have any compositing
         KisPainter::copyAreaOptimized(updatedRect.topLeft(), cacheDevice, projection, updatedRect, effectiveSelection);
 
     } else {

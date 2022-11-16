@@ -1518,8 +1518,8 @@ bool KisNodeManager::createQuickGroupImpl(KisNodeJugglerCompressed *juggler,
     nodes1 << group;
 
     KisNodeList nodes2;
-    nodes2 = KisLayerUtils::sortMergableNodes(image->root(), selectedNodes());
-    KisLayerUtils::filterMergableNodes(nodes2);
+    nodes2 = KisLayerUtils::sortMergeableNodes(image->root(), selectedNodes());
+    KisLayerUtils::filterMergeableNodes(nodes2);
 
     if (nodes2.size() == 0) return false;
 

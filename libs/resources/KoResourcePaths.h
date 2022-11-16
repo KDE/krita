@@ -105,7 +105,7 @@ public:
      * @param type Specifies a short descriptive string to access files
      * of this type.
      * @param absdir Points to directory where to look for this specific
-     * type. Non-existent directories may be saved but pruned.
+     * type. Nonexistent directories may be saved but pruned.
      * @param priority if true, the directory is added before any other,
      * otherwise after
      */

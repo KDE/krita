@@ -20,7 +20,7 @@ void KisFillPainterTest::testCreation()
     KisFillPainter test;
 }
 
-void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool useCompositioning)
+void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool useCompositing)
 {
     const KoColorSpace * cs = KoColorSpaceRegistry::instance()->rgb8();
     KisPaintDeviceSP dev = new KisPaintDevice(cs);
@@ -39,7 +39,7 @@ void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool use
         gc.setWidth(imageRect.width());
         gc.setHeight(imageRect.height());
         gc.setPaintColor(KoColor(Qt::red, dev->colorSpace()));
-        gc.setUseCompositioning(useCompositioning);
+        gc.setUseCompositing(useCompositing);
         gc.fillColor(startPoint.x(), startPoint.y(), dev);
     }
 
@@ -51,7 +51,7 @@ void KisFillPainterTest::benchmarkFillPainter(const QPoint &startPoint, bool use
     QString testName = QString("heavy_labyrinth_%1_%2_%3")
         .arg(startPoint.x())
         .arg(startPoint.y())
-        .arg(useCompositioning ? "composed" : "direct");
+        .arg(useCompositing ? "composed" : "direct");
 
 
     QVERIFY(TestUtil::checkQImage(resultImage,
@@ -70,7 +70,7 @@ void KisFillPainterTest::benchmarkFillPainterOffset()
     benchmarkFillPainter(QPoint(5,5), false);
 }
 
-void KisFillPainterTest::benchmarkFillPainterOffsetCompositioning()
+void KisFillPainterTest::benchmarkFillPainterOffsetCompositing()
 {
     benchmarkFillPainter(QPoint(5,5), true);
 }

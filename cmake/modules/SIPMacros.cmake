@@ -8,7 +8,7 @@
 #
 # This file defines the following macros:
 #
-# ADD_SIP_PYTHON_MODULE (MODULE_NAME MODULE_SIP [library1, libaray2, ...])
+# ADD_SIP_PYTHON_MODULE (MODULE_NAME MODULE_SIP [library1, library2, ...])
 #     Specifies a SIP file to be built into a Python module and installed.
 #     MODULE_NAME is the name of Python module including any path name. (e.g.
 #     os.sys, Foo.bar etc). MODULE_SIP the path and filename of the .sip file

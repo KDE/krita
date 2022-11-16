@@ -45,7 +45,7 @@ public:
      */
     void updateTree();
 
-    void forwardCompressedUdpate();
+    void forwardCompressedUpdate();
 
 
     /**

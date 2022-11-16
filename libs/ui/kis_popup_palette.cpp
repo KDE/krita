@@ -1264,7 +1264,7 @@ void KisPopupPalette::calculatePresetLayout()
     qreal threeRowInnerCount = ceil(qMax(m_presetSlotCount, 2) / 3.0);
     qreal threeRowAngleSlice = 360.0 / threeRowInnerCount;
 
-    // then we decrease the radius until no row is overlapping eachother or itself
+    // then we decrease the radius until no row is overlapping each other or itself
     while (tempRadius >= 0) {
         QPointF r1p1(drawPointOnAngle(threeRowAngleSlice / 2, innerRadius + tempRadius));
         QPointF r1p2(drawPointOnAngle(threeRowAngleSlice / 2 * 3, innerRadius + tempRadius));
@@ -1369,7 +1369,7 @@ void KisPopupPalette::calculatePresetLayout()
                     firstRowRadius = tempFirstRowRadius;
                     row1to2Distance = tempRow1to2Distance;
                     r1p1 = tempR1p1;
-                    // these are unused after so it's not neccesary to update them
+                    // these are unused after so it's not necessary to update them
                     // row1to3Distance = tempRow1to3Distance;
                     // row1SiblingDistance = tempRow1SiblingDistance;
                     // r1p2 = tempR1p2;
@@ -1412,7 +1412,7 @@ void KisPopupPalette::calculatePresetLayout()
                 ) {
                     secondRowRadius = tempRadius;
                     secondRowPos = tempSecondRowPos;
-                    // these are unused after so it's not neccesary to update them
+                    // these are unused after so it's not necessary to update them
                     // r2p1 = tempR2p1;
                     // row1to2Distance = tempRow1to2Distance;
                     // row2to3Distance = tempRow2to3Distance;
@@ -1519,9 +1519,9 @@ void KisPopupPalette::calculateRotationSnapAreas() {
 
 int KisPopupPalette::findPresetSlot(QPointF position) const
 {
-    QPointF adujustedPoint = position - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
+    QPointF adjustedPoint = position - QPointF(m_popupPaletteSize/2, m_popupPaletteSize/2);
     for (int i = 0; i < m_presetSlotCount; i++) {
-        if (createPathFromPresetIndex(i).contains(adujustedPoint)) {
+        if (createPathFromPresetIndex(i).contains(adjustedPoint)) {
             return i;
         }
     }

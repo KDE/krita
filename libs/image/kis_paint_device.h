@@ -201,7 +201,7 @@ public:
      * uses caching, so calling to this function without changing
      * the device is quite cheap.
      *
-     * Exactbounds follows these rules:
+     * exactBounds follows these rules:
      *
      * <ul>
      * <li>if default pixel is transparent, then exact bounds
@@ -739,10 +739,10 @@ public:
     quint32 channelCount() const;
 
     /**
-     * @return interstroke data that is atteched to the paint device.
+     * @return interstroke data that is attached to the paint device.
      *
      * This data is managed by KisTransaction and can be used by brushes
-     * to store some data that can be shared betweet the strokes. For
+     * to store some data that can be shared between the strokes. For
      * example, information about drying of the pigment.
      *
      * The interstroke data is stored in a per-frame manner, that is,
@@ -896,7 +896,7 @@ public:
     friend class PaintDeviceCache;
 
     /**
-     * Caclculates exact bounds of the device. Used internally
+     * Calculates exact bounds of the device. Used internally
      * by a transparent caching system. The solution is very slow
      * because it does a linear scanline search. So the complexity
      * is n*n at worst.
@@ -928,7 +928,7 @@ public:
     bool supportsWraproundMode() const;
 
     void setProjectionDevice(bool value);
-    void tesingFetchLodDevice(KisPaintDeviceSP targetDevice);
+    void testingFetchLodDevice(KisPaintDeviceSP targetDevice);
 
 private:
     KisPaintDevice& operator=(const KisPaintDevice&);

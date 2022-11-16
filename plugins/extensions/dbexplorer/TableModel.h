@@ -33,7 +33,7 @@ private:
 
 /**
  * @brief The TableModel class handles boolean
- * and datatime columns in a custom way.
+ * and datetime columns in a custom way.
  */
 class TableModel : public QSqlRelationalTableModel
 {

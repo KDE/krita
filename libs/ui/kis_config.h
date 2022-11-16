@@ -240,7 +240,7 @@ public:
     void setCheckSize(qint32 checkSize) const;
 
     bool scrollCheckers(bool defaultValue = false) const;
-    void setScrollingCheckers(bool scollCheckers) const;
+    void setScrollingCheckers(bool scrollCheckers) const;
 
     QColor checkersColor1(bool defaultValue = false) const;
     void setCheckersColor1(const QColor & v) const;
@@ -454,7 +454,7 @@ public:
     void setShowSingleChannelAsColor(bool asColor);
 
     bool hidePopups(bool defaultValue = false) const;
-    void setHidePopups(bool hidepopups);
+    void setHidePopups(bool hidePopups);
 
     int numDefaultLayers(bool defaultValue = false) const;
     void setNumDefaultLayers(int num);

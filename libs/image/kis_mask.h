@@ -30,7 +30,7 @@
  are just paint devices, too.
 
  Masks should show up in the layerbox as sub-layers for the layer they
- are associated with and be ccp'able and draggable to other layers.
+ are associated with and be cut/copy-able and draggable to other layers.
 
  Examples of masks are:
 

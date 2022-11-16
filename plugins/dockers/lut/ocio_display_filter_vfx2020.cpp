@@ -63,9 +63,9 @@ void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
 void OcioDisplayFilter::approximateInverseTransformation(quint8 *pixels, quint32 numPixels)
 {
     // processes that data _in_ place
-    if (m_revereseApproximationProcessor) {
+    if (m_reverseApproximationProcessor) {
         OCIO::PackedImageDesc img(reinterpret_cast<float*>(pixels), numPixels, 1, 4);
-        m_revereseApproximationProcessor->apply(img);
+        m_reverseApproximationProcessor->apply(img);
     }
 }
 
@@ -254,10 +254,10 @@ void OcioDisplayFilter::updateProcessor()
     m_forwardApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_FORWARD);
 
     try {
-        m_revereseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
+        m_reverseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
     } catch (...) {
         warnKrita << "OCIO inverted matrix does not exist!";
-        //m_revereseApproximationProcessor;
+        //m_reverseApproximationProcessor;
     }
 
     m_shaderDirty = true;

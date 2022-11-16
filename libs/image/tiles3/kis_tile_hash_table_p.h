@@ -198,7 +198,7 @@ inline KisTileData* KisTileHashTableTraits<T>::defaultTileDataImp() const
 template<class T>
 bool KisTileHashTableTraits<T>::tileExists(qint32 col, qint32 row)
 {
-    return this->getExisitngTile(col, row);
+    return this->getExistingTile(col, row);
 }
 
 template<class T>
@@ -353,7 +353,7 @@ void KisTileHashTableTraits<T>::debugPrintInfo()
              << "TileHashTable:"
              << "\n   def. data:\t\t" << m_defaultTileData
              << "\n   numTiles:\t\t" << m_numTiles;
-    debugListLengthDistibution();
+    debugListLengthDistribution();
     qInfo() << "==========================\n";
 }
 
@@ -386,7 +386,7 @@ void KisTileHashTableTraits<T>::debugMaxListLength(qint32 &min, qint32 &max)
 }
 
 template<class T>
-void KisTileHashTableTraits<T>::debugListLengthDistibution()
+void KisTileHashTableTraits<T>::debugListLengthDistribution()
 {
     qint32 min, max;
     qint32 arraySize;

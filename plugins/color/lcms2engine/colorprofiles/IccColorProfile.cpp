@@ -498,7 +498,7 @@ IccColorProfile::Private::calculateFloatUIMinMax() const
         cmsDeleteTransform(trans);
     }//else, we'll just default to [0..1] below
 
-    // Some (calibration) proifles may have a weird RGB->XYZ transformation matrix,
+    // Some (calibration) profiles may have a weird RGB->XYZ transformation matrix,
     // which is not invertible. Therefore, such profile cannot be used as
     // a workspace color profile and we should convert the image to sRGB
     // right on image loading

@@ -5,8 +5,8 @@
  */
 
 
-#ifndef KISASYNCRONOUSSTROKEUPDATEHELPER_H
-#define KISASYNCRONOUSSTROKEUPDATEHELPER_H
+#ifndef KISASYNCHRONOUSSTROKEUPDATEHELPER_H
+#define KISASYNCHRONOUSSTROKEUPDATEHELPER_H
 
 #include <QObject>
 #include <QTimer>
@@ -17,7 +17,7 @@
 class KisStrokesFacade;
 
 
-class KRITAUI_EXPORT KisAsyncronousStrokeUpdateHelper : public QObject
+class KRITAUI_EXPORT KisAsynchronousStrokeUpdateHelper : public QObject
 {
     Q_OBJECT
 public:
@@ -49,8 +49,8 @@ public:
     using UpdateDataFactory = std::function<KisStrokeJobData*(bool)>;
 
 public:
-    KisAsyncronousStrokeUpdateHelper();
-    ~KisAsyncronousStrokeUpdateHelper();
+    KisAsynchronousStrokeUpdateHelper();
+    ~KisAsynchronousStrokeUpdateHelper();
 
     void startUpdateStream(KisStrokesFacade *strokesFacade, KisStrokeId strokeId);
     void endUpdateStream();
@@ -70,4 +70,4 @@ private:
     UpdateDataFactory m_customUpdateFactory;
 };
 
-#endif // KISASYNCRONOUSSTROKEUPDATEHELPER_H
+#endif // KISASYNCHRONOUSSTROKEUPDATEHELPER_H

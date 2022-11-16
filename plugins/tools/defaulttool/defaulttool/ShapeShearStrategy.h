@@ -21,7 +21,7 @@ class KoSelection;
 /**
  * A strategy for the KoInteractionTool.
  * This strategy is invoked when the user starts a shear of a selection of objects,
- * the stategy will then shear the objects interactively and provide a command afterwards.
+ * the strategy will then shear the objects interactively and provide a command afterwards.
  */
 class ShapeShearStrategy : public KoInteractionStrategy
 {

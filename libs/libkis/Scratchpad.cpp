@@ -50,7 +50,7 @@ void Scratchpad::setMode(QString modeType)
 
 void Scratchpad::linkCanvasZoom(bool value)
 {
-    d->scratchpad->linkCanvavsToZoomLevel(value);
+    d->scratchpad->linkCanvasToZoomLevel(value);
 }
 
 void Scratchpad::loadScratchpadImage(QImage image)

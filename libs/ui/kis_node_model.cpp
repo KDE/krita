@@ -612,7 +612,7 @@ QVariant KisNodeModel::data(const QModelIndex &index, int role) const
 
             /**
              * WARNING: there is still a possible theoretical race condition if the node is
-             * removed from the image right here. We consider that as "improbaple" atm.
+             * removed from the image right here. We consider that as "improbable" atm.
              */
 
             const int maxSize = role - int(KisNodeModel::BeginThumbnailRole);

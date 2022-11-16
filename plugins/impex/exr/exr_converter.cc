@@ -322,7 +322,7 @@ void EXRConverter::Private::unmultiplyAlpha(typename WrapperType::pixel_type *pi
 
         /**
          * Division by a tiny alpha may result in an overflow of half
-         * value. That is why we use safe iterational approach.
+         * value. That is why we use safe iterative approach.
          */
         while (1) {
             dstPixel.setUnmultiplied(srcPixel.pixel, newAlpha);
@@ -534,7 +534,7 @@ bool EXRConverter::Private::checkExtraLayersInfoConsistent(const QDomDocument &d
     bool result = (extraInfoLayers == exrLayerNames);
 
     if (!result) {
-        dbgKrita << "WARINING: Krita EXR extra layers info is inconsistent!";
+        dbgKrita << "WARNING: Krita EXR extra layers info is inconsistent!";
         dbgKrita << ppVar(extraInfoLayers.size()) << ppVar(exrLayerNames.size());
 
         std::set<std::string>::const_iterator it1 = extraInfoLayers.begin();

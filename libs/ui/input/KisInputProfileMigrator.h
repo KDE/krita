@@ -54,7 +54,7 @@ private:
     template <typename Func>
     void filterShortcuts(QList<KisShortcutConfiguration> &shortcuts, Func func);
 
-    QList<KisShortcutConfiguration> getShorcutsFromProfile(QString profile) const;
+    QList<KisShortcutConfiguration> getShortcutsFromProfile(QString profile) const;
 
 private:
     KisInputProfileManager *m_manager;

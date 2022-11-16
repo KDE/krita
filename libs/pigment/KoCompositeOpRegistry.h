@@ -200,11 +200,11 @@ public:
     bool     colorSpaceHasCompositeOp(const KoColorSpace* colorSpace, const KoID& compositeOp) const;
 
     template<class TKoIdIterator>
-    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvaliOps=true) const {
+    KoIDList filterCompositeOps(TKoIdIterator begin, TKoIdIterator end, const KoColorSpace* colorSpace, bool removeInvalidOps=true) const {
         KoIDList list;
 
         for(; begin!=end; ++begin){
-            if (colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvaliOps) {
+            if (colorSpaceHasCompositeOp(colorSpace, *begin) == removeInvalidOps) {
                 list.push_back(*begin);
             }
         }

@@ -20,7 +20,7 @@ class KoColorSpace;
 /**
  * @brief A widget that can display different KisHistograms. It renders a
  * somewhat smooth shape with different colors (for rgb, cmyk and xyz channels).
- * It can also display the different channels of a colorspace overlaped.
+ * It can also display the different channels of a colorspace overlapped.
  */
 class KRITAUI_EXPORT KisHistogramView : public QWidget
 {
@@ -101,7 +101,7 @@ public Q_SLOTS:
     /**
      * @brief Activates the given channels of the given histogram. This allows to
      * change the view between the different histograms and channels passed to
-     * the setup function. This functionactivates multiple channels that will be
+     * the setup function. This function activates multiple channels that will be
      * displayed at once in the widget
      * @see channel
      * @see setChannel

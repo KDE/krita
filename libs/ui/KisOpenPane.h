@@ -94,4 +94,4 @@ private:
     KisOpenPanePrivate * const d;
 };
 
-#endif //KOOPENPANE_H
+#endif // KISOPENPANE_H

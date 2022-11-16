@@ -56,7 +56,7 @@ public:
     void setReferenceSize(const QSizeF &size);
     QSizeF referenceSize() const;
 
-    bool hasAutoOtientation() const;
+    bool hasAutoOrientation() const;
     void setAutoOrientation(bool value);
 
     // measured in radians!
@@ -70,7 +70,7 @@ public:
 
     /**
      * @brief paintAtOrigin paints the marker at the position \p pos.
-     *        Scales and rotates the masrker if needed.
+     *        Scales and rotates the marker if needed.
      */
     void paintAtPosition(QPainter *painter, const QPointF &pos, qreal strokeWidth, qreal nodeAngle);
 

@@ -80,7 +80,7 @@ public:  // Krita specific interfaces
     /// current color, current paint op etc.
     KisCanvasResourceProvider *canvasResourceProvider();
 
-    /// Return the canvasbase class
+    /// Return the canvas base class
     KisCanvas2 *canvasBase() const;
 
     /// Return the actual widget that is displaying the current image

@@ -379,7 +379,7 @@ const KoCompositeOp * KoColorSpace::compositeOp(const QString & id, const KoColo
         return it.value();
     }
     else {
-        warnPigment << "Asking for non-existent composite operation " << id << ", returning " << COMPOSITE_OVER;
+        warnPigment << "Asking for nonexistent composite operation " << id << ", returning " << COMPOSITE_OVER;
         return d->compositeOps.value(COMPOSITE_OVER);
     }
 }

@@ -209,7 +209,7 @@ public: // KisCanvas2 methods
     void setRenderingLimit(const QRect &rc);
 
     /**
-     * @return aftificial limit outside which the image will not be rendered
+     * @return artificial limit outside which the image will not be rendered
      */
     QRect renderingLimit() const;
 

@@ -386,7 +386,7 @@ bool KisAllTagResourceModel::untagResources(const KisTagSP tag, const QVector<in
 
     QSqlQuery allIndices;
     if (!allIndices.prepare(createQuery(true, true))) {
-        qWarning() << "Coult not prepare untagResource-allIndices query " << allIndices.lastError();
+        qWarning() << "Could not prepare untagResource-allIndices query " << allIndices.lastError();
     }
 
     allIndices.bindValue(":resource_type", d->resourceType);

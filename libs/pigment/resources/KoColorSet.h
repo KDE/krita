@@ -166,7 +166,7 @@ public:
      * @brief addGroup
      * Adds a new group.
      * @param groupName the name of the new group. When not specified, this will fail.
-     * @return whether thegroup was made.
+     * @return whether the group was made.
      */
     void addGroup(const QString &groupName, int columnCount = KisSwatchGroup::DEFAULT_COLUMN_COUNT, int rowCount = KisSwatchGroup::DEFAULT_ROW_COUNT);
 

@@ -24,9 +24,9 @@
 
 void KisIteratorTest::allCsApplicator(void (KisIteratorTest::* funcPtr)(const KoColorSpace*cs))
 {
-    QList<const KoColorSpace*> colorsapces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
+    QList<const KoColorSpace*> colorspaces = KoColorSpaceRegistry::instance()->allColorSpaces(KoColorSpaceRegistry::AllColorSpaces, KoColorSpaceRegistry::OnlyDefaultProfile);
 
-    Q_FOREACH (const KoColorSpace* cs, colorsapces) {
+    Q_FOREACH (const KoColorSpace* cs, colorspaces) {
 
         dbgKrita << "Testing with" << cs->id();
 

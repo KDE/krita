@@ -101,7 +101,7 @@ public:
     int getApparentUnitId() const;
 
     //! \brief get a hint of how many decimals the spinbox needs to display.
-    int getApparentUnitRecommandedDecimals() const;
+    int getApparentUnitRecommendedDecimals() const;
 
     virtual QStringList getsUnitSymbolList(bool withName = false) const;
 
@@ -151,7 +151,7 @@ protected:
     static const QStringList documentRelativeTimeUnitSymbols;
 
     void recomputeConversionFactor() const;
-    void recomputeConvesrionConstant() const;
+    void recomputeConversionConstant() const;
 
     //! \brief calling this method gives access to document relative units. Only subclasses that manage those units should call it.
     void grantDocumentRelativeUnits();

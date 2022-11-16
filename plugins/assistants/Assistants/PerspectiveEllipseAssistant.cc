@@ -577,7 +577,7 @@ void PerspectiveEllipseAssistant::updateCache()
 
     QPolygonF poly = QPolygonF(d->cachedPoints);
 
-    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) { // this function changes poly to some "standarized" version, or a triangle when it cannot be achieved
+    if (!PerspectiveBasedAssistantHelper::getTetragon(handles(), isAssistantComplete(), poly)) { // this function changes poly to some "standardized" version, or a triangle when it cannot be achieved
 
         poly = QPolygonF(d->cachedPoints);
         poly << d->cachedPoints[0];

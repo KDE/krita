@@ -22,8 +22,8 @@ public:
 
     bool showFpsOnCanvas() const;
 
-    void nofityPaintRequested();
-    void nofitySyncStatus(bool value);
+    void notifyPaintRequested();
+    void notifySyncStatus(bool value);
     qreal accumulatedFps();
 
 private Q_SLOTS:

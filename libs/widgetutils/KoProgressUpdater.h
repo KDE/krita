@@ -67,7 +67,7 @@ public:
     explicit KoProgressUpdater(KoProgressProxy *progressProxy, Mode mode = Threaded);
 
     /**
-     * @brief a special constructor for connecting the progress updater to a self-destructable
+     * @brief a special constructor for connecting the progress updater to a self-destructible
      * KoUpdater object.
      *
      * HACK ALERT: KoUpdater inherits KoProgressProxy, so be careful when constructing

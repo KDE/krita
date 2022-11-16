@@ -131,7 +131,7 @@ void KoColorConversionCache::colorSpaceIsDestroyed(const KoColorSpace* cs)
     QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator endIt = d->cache.end();
     for (QMultiHash< KoColorConversionCacheKey, CachedTransformation*>::iterator it = d->cache.begin(); it != endIt;) {
         if (it.key().src == cs || it.key().dst == cs) {
-            Q_ASSERT(it.value()->isNotInUse()); // That's terribely evil, if that assert fails, that means that someone is using a color transformation with a color space which is currently being deleted
+            Q_ASSERT(it.value()->isNotInUse()); // That's terribly evil, if that assert fails, that means that someone is using a color transformation with a color space which is currently being deleted
             delete it.value();
             it = d->cache.erase(it);
         } else {

@@ -19,7 +19,7 @@
 struct KRITARESOURCES_EXPORT KisEmbeddedResourceStorageProxy {
     KisEmbeddedResourceStorageProxy(const QString &storageLocation);
 
-    void addResource(KoResourceSP resourse);;
+    void addResource(KoResourceSP resource);;
 
     /**
      * Returns the resources interface that lets you access all the embedded

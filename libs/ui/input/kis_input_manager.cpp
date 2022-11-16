@@ -398,7 +398,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
             retval = d->matcher.autoRepeatedKeyPressed(key);
         }
 
-        // In case we matched ashortcut we should accept the event to
+        // In case we matched a shortcut we should accept the event to
         // notify Qt that it shouldn't try to trigger its partially matched
         // shortcuts.
         if (retval) {
@@ -706,7 +706,7 @@ bool KisInputManager::eventFilterImpl(QEvent * event)
                 && !d->touchHasBlockedPressEvents
                 && touchEvent->touchPoints().count() == 1
                 && touchEvent->touchPointStates() != Qt::TouchPointStationary
-                && (qAbs(currentPos.x() - d->previousPos.x()) > 1		// stop wobbiliness which Qt sends us
+                && (qAbs(currentPos.x() - d->previousPos.x()) > 1		// stop wobbliness which Qt sends us
                 ||  qAbs(currentPos.y() - d->previousPos.y()) > 1)))
             {
                 d->previousPos = currentPos;

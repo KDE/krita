@@ -303,7 +303,7 @@ void KisCutCopyActionFactory::run(bool willCut, bool makeSharpClip, KisViewManag
             }
         }
 
-        selectedNodes = KisLayerUtils::sortAndFilterMergableInternalNodes(selectedNodes);
+        selectedNodes = KisLayerUtils::sortAndFilterMergeableInternalNodes(selectedNodes);
 
         KisNodeList nodes;
         Q_FOREACH (KisNodeSP node, selectedNodes) {

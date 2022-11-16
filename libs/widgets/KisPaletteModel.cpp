@@ -402,8 +402,8 @@ void KisPaletteModel::slotDisplayConfigurationChanged()
 void KisPaletteModel::slotPaletteModified()
 {
     /**
-     * Until we implemement resource->convertToSerializable() we should
-     * explictly convert all the palettes into Krita internal format
+     * Until we implement resource->convertToSerializable() we should
+     * explicitly convert all the palettes into Krita internal format
      */
     if (m_colorSet->paletteType() != KoColorSet::KPL || m_colorSet->paletteType() != KoColorSet::GPL) {
         m_colorSet->setPaletteType(KoColorSet::KPL);

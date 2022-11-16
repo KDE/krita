@@ -187,7 +187,7 @@ public Q_SLOTS:
     void slotImageSizeChanged();
 
     /**
-     * gets this layer. Overriddes function in
+     * gets this layer. Overridden function in
      * KisIndirectPaintingSupport
      * @return this AdjustmentLayer
      */

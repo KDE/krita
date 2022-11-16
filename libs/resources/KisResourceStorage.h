@@ -212,7 +212,7 @@ public:
 
     /// Adds the given resource to the storage. If there is already a resource
     /// with the given filename of the given type, this should return false and
-    /// saveAsnewVersion should be used.
+    /// saveAsNewVersion should be used.
     bool addResource(KoResourceSP resource);
 
     /**
@@ -225,7 +225,7 @@ public:
     bool importResource(const QString &url, QIODevice *device);
 
     /**
-     * Copies the given given resource from the storage into \p device
+     * Copies the given resource from the storage into \p device
      *
      * @param url is the URL of the resource inside the storage, which is usually
      *            resource_type/resource_filename.ext

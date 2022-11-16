@@ -17,7 +17,7 @@
 
 /**
  * Create converter from the alpha color space to any color space
- * This class is for use by the KoColorConversionSystemn, no reason
+ * This class is for use by the KoColorConversionSystem, no reason
  * to use it directly.
  */
 template<typename alpha_channel_type>
@@ -40,7 +40,7 @@ typedef KoColorConversionFromAlphaTransformationFactoryImpl<float> KoColorConver
 
 /**
  * Create converter to the alpha color space to any color space
- * This class is for use by the KoColorConversionSystemn, no reason
+ * This class is for use by the KoColorConversionSystem, no reason
  * to use it directly.
  */
 template <typename alpha_channel_type>

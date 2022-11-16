@@ -103,7 +103,7 @@ ForegroundPositive=39,174,96
 ForegroundVisited=127,140,141
 
 [General]
-ColorScheme=Breeze High Conttrast
+ColorScheme=Breeze High Contrast
 Name=Breeze High Contrast
 shadeSortColumn=true
 

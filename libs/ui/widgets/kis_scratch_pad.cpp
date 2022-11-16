@@ -488,7 +488,7 @@ void KisScratchPad::setModeType(QString mode)
     }
 }
 
-void KisScratchPad::linkCanvavsToZoomLevel(bool value)
+void KisScratchPad::linkCanvasToZoomLevel(bool value)
 {
     linkCanvasZoomLevel = value;
 }

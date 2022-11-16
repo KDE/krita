@@ -87,7 +87,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
         selectedShapes.size() == 1;
 
     bool editable = false;
-    bool forceBoundngRubberLine = false;
+    bool forceBoundingRubberLine = false;
 
     Q_FOREACH (KoShape *shape, KoShape::linearizeSubtree(selectedShapes)) {
         if (!haveOnlyOneEditableShape || !m_showStrokeFillGradientHandles) {
@@ -106,7 +106,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
                     const QPolygonF poly2 = QPolygonF(polys[0].boundingRect());
                     const QPolygonF nonoverlap = poly2.subtracted(poly1);
 
-                    forceBoundngRubberLine |= !nonoverlap.isEmpty();
+                    forceBoundingRubberLine |= !nonoverlap.isEmpty();
                 }
 
                 Q_FOREACH (const QPolygonF &poly, polys) {
@@ -123,7 +123,7 @@ void SelectionDecorator::paint(QPainter &painter, const KoViewConverter &convert
     const QRectF handleArea = m_selection->outlineRect();
 
     // draw extra rubber line around all the shapes
-    if (selectedShapes.size() > 1 || forceBoundngRubberLine) {
+    if (selectedShapes.size() > 1 || forceBoundingRubberLine) {
         KisHandlePainterHelper helper =
             KoShape::createHandlePainterHelperView(&painter, m_selection, converter, m_handleRadius);
 

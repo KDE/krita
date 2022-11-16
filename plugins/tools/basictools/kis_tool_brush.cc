@@ -205,7 +205,7 @@ void KisToolBrush::slotSetSmoothnessDistance(qreal distance)
     emit smoothnessQualityChanged();
 }
 
-void KisToolBrush::slotSetTailAgressiveness(qreal argh_rhhrr)
+void KisToolBrush::slotSetTailAggressiveness(qreal argh_rhhrr)
 {
     smoothingOptions()->setTailAggressiveness(argh_rhhrr);
     emit smoothnessFactorChanged();
@@ -356,7 +356,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_lblSmoothnessDistance = new QLabel();
     updateSmoothnessDistanceLabel();
 
-    // make sure that initializaiotion of the value happens **after** we
+    // make sure that initialization of the value happens **after** we
     // have configured the slider's range in updateSmoothnessDistanceLabel()
     connect(m_sliderSmoothnessDistance, SIGNAL(valueChanged(qreal)), SLOT(slotSetSmoothnessDistance(qreal)));
     m_sliderSmoothnessDistance->setValue(smoothingOptions()->smoothnessDistance());
@@ -411,7 +411,7 @@ QWidget * KisToolBrush::createOptionWidget()
     m_sliderTailAggressiveness->setRange(0.0, 1.0, 2);
     m_sliderTailAggressiveness->setSingleStep(0.01);
     m_sliderTailAggressiveness->setEnabled(true);
-    connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAgressiveness(qreal)));
+    connect(m_sliderTailAggressiveness, SIGNAL(valueChanged(qreal)), SLOT(slotSetTailAggressiveness(qreal)));
     m_sliderTailAggressiveness->setValue(smoothingOptions()->tailAggressiveness());
     addOptionWidgetOption(m_sliderTailAggressiveness, new QLabel(i18n("Stroke Ending:")));
 
@@ -480,7 +480,7 @@ QWidget * KisToolBrush::createOptionWidget()
     connect(m_chkSnapEraser, SIGNAL(toggled(bool)), this, SLOT(setSnapEraser(bool)));
     addOptionWidgetOption(m_chkSnapEraser, snapEraserLabel);
 
-    // set the assistant snapping options to hidden by default and toggle their visibility based based off snapping checkbox
+    // set the assistant snapping options to hidden by default and toggle their visibility based off snapping checkbox
     m_sliderMagnetism->setVisible(false);
     m_chkOnlyOneAssistant->setVisible(false);
     m_chkSnapEraser->setVisible(false);

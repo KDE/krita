@@ -89,7 +89,7 @@ void KisPaintOp::splitCoordinate(qreal coordinate, qint32 *whole, qreal *fractio
     *fraction = f;
 }
 
-std::pair<int, bool> KisPaintOp::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs)
+std::pair<int, bool> KisPaintOp::doAsynchronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs)
 {
     Q_UNUSED(jobs);
     return std::make_pair(40, false);

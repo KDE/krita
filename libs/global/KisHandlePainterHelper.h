@@ -18,7 +18,7 @@ class KoViewConverter;
 
 /**
  * @brief The KisHandlePainterHelper class is a special helper for
- *        painting handles around objects. It ensures the handlesare painted
+ *        painting handles around objects. It ensures the handles are painted
  *        with the same size and line width whatever transformation is setup
  *        in the painter. The handles will also be rotated/skewed if the object
  *        itself has these transformations.
@@ -155,7 +155,7 @@ private:
     QTransform m_originalPainterTransform;
     QTransform m_painterTransform;
     qreal m_handleRadius;
-    KisAlgebra2D::DecomposedMatix m_decomposedMatrix;
+    KisAlgebra2D::DecomposedMatrix m_decomposedMatrix;
     QTransform m_handleTransform;
     QPolygonF m_handlePolygon;
     KisHandleStyle m_handleStyle;

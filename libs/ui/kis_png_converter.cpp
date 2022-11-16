@@ -497,7 +497,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
     int color_nb_bits, color_type, interlace_type;
     png_get_IHDR(png_ptr, info_ptr, &width, &height, &color_nb_bits, &color_type, &interlace_type, 0, 0);
     dbgFile << "width = " << width << " height = " << height << " color_nb_bits = " << color_nb_bits << " color_type = " << color_type << " interlace_type = " << interlace_type << endl;
-    // swap byteorder on little endian machines.
+    // swap byte order on little endian machines.
 #ifndef WORDS_BIGENDIAN
     if (color_nb_bits > 8)
         png_set_swap(png_ptr);
@@ -662,7 +662,7 @@ KisImportExportErrorCode KisPNGConverter::buildImage(QIODevice* iod)
 
     png_get_pHYs(png_ptr, info_ptr, &x_resolution, &y_resolution, &unit_type);
     if (x_resolution > 0 && y_resolution > 0 && unit_type == PNG_RESOLUTION_METER) {
-        m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from pointer-per-inchs to points
+        m_image->setResolution((double) POINT_TO_CM(x_resolution) / 100.0, (double) POINT_TO_CM(y_resolution) / 100.0); // It is the "invert" macro because we convert from point-per-inch to points
     }
 
     double coeff = quint8_MAX / (double)(pow((double)2, color_nb_bits) - 1);
@@ -1091,7 +1091,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
         }
     }
 
-    int interlacetype = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
+    int interlace_type = options.interlace ? PNG_INTERLACE_ADAM7 : PNG_INTERLACE_NONE;
 
     KIS_SAFE_ASSERT_RECOVER_RETURN_VALUE(color_type >= 0, ImportExportCodes::Failure);
 
@@ -1099,7 +1099,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
                  imageRect.width(),
                  imageRect.height(),
                  color_nb_bits,
-                 color_type, interlacetype,
+                 color_type, interlace_type,
                  PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
 
     // set sRGB only if the profile is sRGB  -- http://www.w3.org/TR/PNG/#11sRGB says sRGB and iCCP should not both be present
@@ -1292,7 +1292,7 @@ KisImportExportErrorCode KisPNGConverter::buildFile(QIODevice* iodevice, const Q
     int unit_type;
     png_uint_32 x_resolution, y_resolution;
 #endif
-    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(xRes) * 100.0, CM_TO_POINT(yRes) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from pointer-per-inchs to points
+    png_set_pHYs(png_ptr, info_ptr, CM_TO_POINT(xRes) * 100.0, CM_TO_POINT(yRes) * 100.0, PNG_RESOLUTION_METER); // It is the "invert" macro because we convert from point-per-inch to points
 
     // Save the information to the file
     png_write_info(png_ptr, info_ptr);

@@ -25,7 +25,7 @@
 class KisKActionCollection;
 class KoCanvasBase;
 class KisPaintInformation;
-class KisSpacingInfomation;
+class KisSpacingInformation;
 
 
 class KisToolSmartPatch : public KisToolPaint

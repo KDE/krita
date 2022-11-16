@@ -219,7 +219,7 @@ public:
     /**
      * @brief Get the bounding rect of the point.
      *
-     * This takes into account if there are controlpoints
+     * This takes into account if there are control points
      *
      * @param active If true only the active points are used in calculation
      *               of the bounding rectangle. If false all points are used.

@@ -107,7 +107,7 @@ public:
      *
      * @return a pair of <the desired FPS rate (period of updates); are there any unprocessed update jobs left?>
      */
-    virtual std::pair<int, bool> doAsyncronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
+    virtual std::pair<int, bool> doAsynchronousUpdate(QVector<KisRunnableStrokeJobData*> &jobs);
 
 protected:
     friend class KisPaintInformation;

@@ -1784,9 +1784,9 @@ bool KisConfig::hidePopups(bool defaultValue) const
     return (defaultValue ? false : m_cfg.readEntry("hidePopups", false));
 }
 
-void KisConfig::setHidePopups(bool hidepopups)
+void KisConfig::setHidePopups(bool hidePopups)
 {
-    m_cfg.writeEntry("hidePopups", hidepopups);
+    m_cfg.writeEntry("hidePopups", hidePopups);
 }
 
 int KisConfig::numDefaultLayers(bool defaultValue) const

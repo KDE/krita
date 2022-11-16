@@ -75,7 +75,7 @@ void KisFilterPhongBumpmap::processImpl(KisPaintDeviceSP device,
 
     if (progressUpdater) progressUpdater->setProgress(1);
 
-    //======Preparation paraphlenalia=======
+    //======Preparation paraphernalia=======
 
     //Hardcoded facts about Phong Bumpmap: it _will_ generate an RGBA16 bumpmap
     const quint8    BYTE_DEPTH_OF_BUMPMAP    = 2;      // 16 bits per channel

@@ -17,7 +17,7 @@
 #include "kis_types.h"
 #include "kis_image_interfaces.h"
 
-struct StoreImplementaionInterface;
+struct StoreImplementationInterface;
 
 class KRITAIMAGE_EXPORT KisSafeNodeProjectionStoreBase : public QObject, public KisShared
 {
@@ -43,7 +43,7 @@ private Q_SLOTS:
     void slotInitiateProjectionsCleanup();
 
 protected:
-    KisSafeNodeProjectionStoreBase(StoreImplementaionInterface *storeImpl);
+    KisSafeNodeProjectionStoreBase(StoreImplementationInterface *storeImpl);
 
 private:
     void discardCaches();

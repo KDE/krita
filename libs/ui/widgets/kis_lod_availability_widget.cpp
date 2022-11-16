@@ -177,7 +177,7 @@ void KisLodAvailabilityWidget::slotLodAvailabilityStateChanged(KisLodAvailabilit
 
         if (state == KisLodAvailabilityModel::BlockedFully) {
             /**
-             * If LoD is really blocked by some limitation we sneakly reset
+             * If LoD is really blocked by some limitation we sneakily reset
              * the checkbox to let the user know it is fully disabled.
              */
 

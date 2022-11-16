@@ -23,7 +23,7 @@ class KoSelection;
 /**
  * A strategy for the KoInteractionTool.
  * This strategy is invoked when the user starts a resize of a selection of objects,
- * the stategy will then resize the objects interactively and provide a command afterwards.
+ * the strategy will then resize the objects interactively and provide a command afterwards.
  */
 class ShapeResizeStrategy : public KoInteractionStrategy
 {

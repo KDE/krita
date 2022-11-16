@@ -52,7 +52,7 @@ public:
     float lastDistance {0.0};
 
     qreal startZoom {1.0};
-    qreal lastDescreteZoomDistance {0.0};
+    qreal lastDiscreteZoomDistance {0.0};
 
     void zoomTo(bool zoomIn, const QPoint &pos);
 };
@@ -164,7 +164,7 @@ void KisZoomAction::begin(int shortcut, QEvent *event)
         case DiscreteZoomModeShortcut:
         case RelativeDiscreteZoomModeShortcut:
             d->startZoom = inputManager()->canvas()->viewManager()->zoomController()->zoomAction()->effectiveZoom();
-            d->lastDescreteZoomDistance = 0;
+            d->lastDiscreteZoomDistance = 0;
             d->mode = (Shortcuts)shortcut;
             break;
         case ZoomInShortcut:
@@ -327,13 +327,13 @@ void KisZoomAction::cursorMovedAbsolute(const QPointF &startPos, const QPointF &
         QPoint stillPoint = d->mode == RelativeDiscreteZoomModeShortcut ?
             startPos.toPoint() : QPoint();
 
-        qreal currentDiff = qreal(diff.y()) / stepDisc - d->lastDescreteZoomDistance;
+        qreal currentDiff = qreal(diff.y()) / stepDisc - d->lastDiscreteZoomDistance;
 
         bool zoomIn = currentDiff > 0;
         while (qAbs(currentDiff) > 1.0) {
             d->zoomTo(zoomIn, stillPoint);
-            d->lastDescreteZoomDistance += zoomIn ? 1.0 : -1.0;
-            currentDiff = qreal(diff.y()) / stepDisc - d->lastDescreteZoomDistance;
+            d->lastDiscreteZoomDistance += zoomIn ? 1.0 : -1.0;
+            currentDiff = qreal(diff.y()) / stepDisc - d->lastDiscreteZoomDistance;
         }
     }
 }

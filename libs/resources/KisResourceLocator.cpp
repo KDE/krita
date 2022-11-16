@@ -910,7 +910,7 @@ void KisResourceLocator::saveTags()
         QFile f(resourceLocation + "/" + tag->resourceType() + '/' + filename);
 
         if (!f.open(QFile::WriteOnly)) {
-            qWarning () << "Couild not open tag file for writing" << f.fileName();
+            qWarning () << "Could not open tag file for writing" << f.fileName();
             continue;
         }
 

@@ -403,7 +403,7 @@ QMenu *KisToolBar::Private::contextMenu(const QPoint &globalPos)
     }
 
     contextOrient->menuAction()->setVisible(!q->toolBarsLocked());
-    // Unplugging a submenu from abouttohide leads to the popupmenu floating around
+    // Unplugging a submenu from AboutToHide leads to the popupmenu floating around
     // So better simply call that code from after exec() returns (DF)
     //connect(context, SIGNAL(aboutToHide()), this, SLOT(slotContextAboutToHide()));
 

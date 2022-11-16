@@ -66,7 +66,7 @@ void KisConvertHeightToNormalMapFilter::processImpl(KisPaintDeviceSP device, con
     KisEdgeDetectionKernel::FilterType type = KisEdgeDetectionKernel::SobelVector;
 
     if (configuration->getString("type") == "prewitt") {
-        type = KisEdgeDetectionKernel::Prewit;
+        type = KisEdgeDetectionKernel::Prewitt;
     } else if (configuration->getString("type") == "simple") {
         type = KisEdgeDetectionKernel::Simple;
     }

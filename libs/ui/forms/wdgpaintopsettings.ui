@@ -446,7 +446,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QComboBox" name="brushEgineComboBox">
+         <widget class="QComboBox" name="brushEngineComboBox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
             <horstretch>0</horstretch>

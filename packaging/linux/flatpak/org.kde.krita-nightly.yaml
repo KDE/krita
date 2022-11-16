@@ -636,7 +636,7 @@ modules:
   - name: libmypaint
     config-opts:
       - --disable-gegl
-      - --disable-instrospection
+      - --disable-introspection
     sources:
       - type: archive
         url: https://github.com/mypaint/libmypaint/releases/download/v1.6.1/libmypaint-1.6.1.tar.xz

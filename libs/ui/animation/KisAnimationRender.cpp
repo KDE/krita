@@ -41,7 +41,7 @@ void KisAnimationRender::render(KisDocument *doc, KisViewManager *viewManager, K
 
     if (mustHaveEvenDimensions(encoderOptions.videoMimeType, encoderOptions.renderMode())) {
         if (hasEvenDimensions(scaledSize.width(), scaledSize.height()) != true) {
-            QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Mastroska (.mkv) ";
+            QString type = encoderOptions.videoMimeType == "video/mp4" ? "Mpeg4 (.mp4) " : "Matroska (.mkv) ";
             qWarning() << type <<"requires width and height to be even, resize and try again!";
             doc->setErrorMessage(i18n("%1 requires width and height to be even numbers.  Please resize or crop the image before exporting.", type));
             QMessageBox::critical(qApp->activeWindow(), i18nc("@title:window", "Krita"), i18n("Could not render animation:\n%1", doc->errorMessage()));

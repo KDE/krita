@@ -80,7 +80,7 @@
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string comment="Percentage of the histogram to clip in the shadous side in auto levels">Shadows clipping:</string>
+         <string comment="Percentage of the histogram to clip in the shadows side in auto levels">Shadows clipping:</string>
         </property>
        </widget>
       </item>

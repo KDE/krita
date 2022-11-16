@@ -216,7 +216,7 @@ public:
          * Firstly we need to disconnect the nodes from the image,
          * because some of the nodes (e.g. KisGroupLayer) may
          * request the image back via defaultBouds() and/or
-         * animationInyterface()
+         * animationInterface()
          */
         if (rootLayer->image() == q) {
             rootLayer->setImage(0);
@@ -405,7 +405,7 @@ void KisImage::copyFromImageImpl(const KisImage &rhs, int policy)
     KIS_ASSERT_RECOVER_RETURN(bool(policy & REPLACE) != bool(policy & CONSTRUCT));
 
     /**
-     * We should replace the root before amitting any signals, because some of the layers
+     * We should replace the root before emitting any signals, because some of the layers
      * may be subscribed to sigSizeChanged() signal (e.g. KisSelectionBasedLayer). So the
      * old layers should be fully detached before we actually emit this signal.
      *
@@ -1884,7 +1884,7 @@ bool KisImage::startIsolatedMode(KisNodeSP node, bool isolateLayer, bool isolate
     if ((isolateLayer || isolateGroup) == false) return false;
 
     /**
-     * Isolation of trnsform masks is not possible, so we should
+     * Isolation of transform masks is not possible, so we should
      * not allow that
      */
     if (!node->projection()) return false;

@@ -479,7 +479,7 @@ bool KisNode::add(KisNodeSP newNode, KisNodeSP aboveThis)
 
     int idx = aboveThis ? this->index(aboveThis) + 1 : 0;
 
-    // threoretical race condition may happen here ('idx' may become
+    // theoretical race condition may happen here ('idx' may become
     // deprecated until the write lock will be held). But we ignore
     // it, because it is not supported to add/remove nodes from two
     // concurrent threads simultaneously

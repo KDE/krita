@@ -90,7 +90,7 @@ Initializers
         int SomeGlobalValue {0};
     };
 
-    Since Krita has a long history of usage =-initizalization everywhere, it is **not**
+    Since Krita has a long history of usage =-initialization everywhere, it is **not**
     recommended to use {}-initialization in function bodies, especially, when it results
     in a mix of styles in the same file. You can still use that as an exception to solve
     some specific problems like the most vexing parse.

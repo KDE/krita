@@ -45,7 +45,7 @@ public:
     };
 public:
     /**
-     * Validate a store. This constructore will call the \ref revalidate function.
+     * Validate a store. This constructor will call the \ref revalidate function.
      */
     Validator(const Store*);
     ~Validator();

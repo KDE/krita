@@ -308,7 +308,7 @@ void GridConfigWidget::slotGridTypeChanged() {
 
 
     // disable snapping for isometric grid type for now
-    // remember if we had snapping enabled if it was on the rectangule mode
+    // remember if we had snapping enabled if it was on the rectangle mode
     if (!showRectangleControls) {
         m_isGridEnabled = ui->chkSnapToGrid->isChecked();
         ui->chkSnapToGrid->setEnabled(false);

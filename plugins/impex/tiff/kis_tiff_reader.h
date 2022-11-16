@@ -381,7 +381,7 @@ private:
         KisHLineIteratorSP it = this->paintDevice()->createHLineIteratorNG(x, y, dataWidth);
         const double coeff = std::numeric_limits<T>::max() / static_cast<double>(std::pow(2.0, this->sourceDepth()) - 1);
         const bool no_coeff = !std::is_same<T, uint8_t>::value && this->sourceDepth() == sizeof(T) * CHAR_BIT;
-        //    dbgFile <<" depth expension coefficient :" << coeff;
+        //    dbgFile <<" depth expansion coefficient :" << coeff;
         do {
             T *d = reinterpret_cast<T *>(it->rawData());
             quint8 i;

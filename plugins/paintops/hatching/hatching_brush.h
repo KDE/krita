@@ -28,7 +28,7 @@ public:
     /**
      *  Performs a single hatching pass according to specifications
      */
-    void hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenangle, const KoColor &color, qreal additionalScale);
+    void hatch(KisPaintDeviceSP dev, qreal x, qreal y, double width, double height, double givenAngle, const KoColor &color, qreal additionalScale);
 
 
 private:

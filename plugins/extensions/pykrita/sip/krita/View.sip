@@ -27,7 +27,7 @@ public Q_SLOTS:
     void setCurrentBrushPreset(Resource *resource);
 
     Resource *currentPattern() const /Factory/;
-    void setCurrentPattern(Resource *resournce);
+    void setCurrentPattern(Resource *resource);
 
     Resource *currentGradient() const /Factory/;
     void setCurrentGradient(Resource *resource);

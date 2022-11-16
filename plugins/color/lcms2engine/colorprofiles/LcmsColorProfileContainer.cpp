@@ -219,7 +219,7 @@ bool LcmsColorProfileContainer::init()
                 QGenericMatrix<1, 3, double> whitePointMatrix(d3dummy);
                 QTransform invertDummy(CAM1[0].X, CAM1[0].Y, CAM1[0].Z, CAM1[1].X, CAM1[1].Y, CAM1[1].Z, CAM1[2].X, CAM1[2].Y, CAM1[2].Z);
                 //we then abuse QTransform's invert function because it probably does matrix inversion 20 times better than I can program.
-                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeble
+                //if the matrix is uninvertable, invertedDummy will be an identity matrix, which for us means that it won't give any noticeable
                 //effect when we start multiplying.
                 QTransform invertedDummy = invertDummy.inverted();
                 //we then put the QTransform into a generic 3x3 matrix.
@@ -661,7 +661,7 @@ cmsToneCurve *LcmsColorProfileContainer::transferFunction(TransferCharacteristic
 {
     cmsToneCurve *mainCurve;
 
-    // Values courtesey of Elle Stone
+    // Values courtesy of Elle Stone
     cmsFloat64Number srgb_parameters[5] =
     { 2.4, 1.0 / 1.055,  0.055 / 1.055, 1.0 / 12.92, 0.04045 };
     cmsFloat64Number rec709_parameters[5] =

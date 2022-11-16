@@ -349,7 +349,7 @@ KisTagSP KisAllTagsModel::addTag(const QString& tagName, const bool allowOverwri
 }
 
 
-bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
+bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     if (!tag) return false;
     if (!tag->valid()) return false;
@@ -381,9 +381,9 @@ bool KisAllTagsModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVec
     tag->setValid(true);
     tag->setActive(data(indexForTag(tag), Qt::UserRole + KisAllTagsModel::Active).toInt());
 
-    if (!taggedResouces.isEmpty()) {
+    if (!taggedResources.isEmpty()) {
         QVector<int> resourceIds;
-        Q_FOREACH(const KoResourceSP resource, taggedResouces) {
+        Q_FOREACH(const KoResourceSP resource, taggedResources) {
 
             if (!resource) continue;
             if (!resource->valid()) continue;
@@ -608,11 +608,11 @@ KisTagSP KisTagModel::tagForUrl(const QString& url) const
 }
 
 
-bool KisTagModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResouces)
+bool KisTagModel::addTag(const KisTagSP tag, const bool allowOverwrite, QVector<KoResourceSP> taggedResources)
 {
     KisAbstractTagModel *source = dynamic_cast<KisAbstractTagModel*>(sourceModel());
     if (source) {
-        return source->addTag(tag, allowOverwrite, taggedResouces) ;
+        return source->addTag(tag, allowOverwrite, taggedResources) ;
     }
     return false;
 }

@@ -120,14 +120,14 @@ public:
     KoSvgTextChunkShapeLayoutInterface* layoutInterface() const;
 
     /**
-     * WARNING: this propperty is available only if isRootTextNode() is true
+     * WARNING: this property is available only if isRootTextNode() is true
      *
      * @return true if the shape should be edited in a rich-text editor
      */
     bool isRichTextPreferred() const;
 
     /**
-     * WARNING: this propperty is available only if isRootTextNode() is true
+     * WARNING: this property is available only if isRootTextNode() is true
      *
      * Sets whether the shape should be edited in rich-text editor
      */

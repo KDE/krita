@@ -28,7 +28,7 @@ public:
     QString caption() const;
 
    /**
-    * Fetch the setting from the config widet
+    * Fetch the setting from the config widget
     * @param config configuration to which the setting will be written
     */
     virtual void getConfiguration(KisOperationConfigurationSP config) = 0;

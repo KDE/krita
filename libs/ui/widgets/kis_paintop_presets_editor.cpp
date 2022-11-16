@@ -149,7 +149,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
         connect(m_d->uiWdgPaintOpPresetSettings.showPresetsButton, SIGNAL(clicked(bool)), this, SLOT(slotSwitchShowPresets(bool)));
 
         // Brush Engine Filter
-        connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)),
+        connect(m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox, SIGNAL(currentIndexChanged(int)),
             this, SLOT(slotUpdatePaintOpFilter()));
 
         // Brush Presets
@@ -298,7 +298,7 @@ KisPaintOpPresetsEditor::KisPaintOpPresetsEditor(KisCanvasResourceProvider * res
     m_d->uiWdgPaintOpPresetSettings.eraserBrushSizeCheckBox->setChecked(cfg.useEraserBrushSize());
     m_d->uiWdgPaintOpPresetSettings.eraserBrushOpacityCheckBox->setChecked(cfg.useEraserBrushOpacity());
 
-    connect(m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
+    connect(m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slotUpdatePaintOpFilter()));
     connect(m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset, SIGNAL(clicked()), this, SLOT(slotBlackListCurrentPreset()));
 
     updateThemedIcons();
@@ -573,7 +573,7 @@ bool variantLessThan(const KisPaintOpInfo v1, const KisPaintOpInfo v2)
 
 void KisPaintOpPresetsEditor::setPaintOpList(const QList< KisPaintOpFactory* >& list)
 {
-    m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->clear(); // reset combobox list just in case
+    m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->clear(); // reset combobox list just in case
 
 
     // create a new list so we can sort it and populate the brush engine combo box
@@ -612,7 +612,7 @@ void KisPaintOpPresetsEditor::setPaintOpList(const QList< KisPaintOpFactory* >& 
     // fill the list into the brush combo box
     sortedBrushEnginesList.push_front(KisPaintOpInfo(QString("all_options"), i18n("All"), QString(""), QIcon(emptyPixmap), 0 ));
     for (int m = 0; m < sortedBrushEnginesList.length(); m++) {
-        m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
+        m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->addItem(sortedBrushEnginesList[m].icon, sortedBrushEnginesList[m].name, QVariant(sortedBrushEnginesList[m].id));
     }
 }
 
@@ -707,7 +707,7 @@ void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible)
 {
     m_d->uiWdgPaintOpPresetSettings.presetsSidebarLabel->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.engineFilterLabel->setVisible(visible);
-    m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->setVisible(visible);
+    m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.presetWidget->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.newPresetEngineButton->setVisible(visible);
     m_d->uiWdgPaintOpPresetSettings.bnBlacklistPreset->setVisible(visible);
@@ -742,7 +742,7 @@ void KisPaintOpPresetsEditor::slotSwitchShowPresets(bool visible)
 }
 
 void KisPaintOpPresetsEditor::slotUpdatePaintOpFilter() {
-    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEgineComboBox->currentData(); // grab paintOpID from data
+    QVariant userData = m_d->uiWdgPaintOpPresetSettings.brushEngineComboBox->currentData(); // grab paintOpID from data
     QString filterPaintOpId = userData.toString();
 
     if (filterPaintOpId == "all_options") {
@@ -782,7 +782,7 @@ void KisPaintOpPresetsEditor::slotToggleDetach(bool detach)
 void KisPaintOpPresetsEditor::slotUpdateEffectiveLodAvailable(bool value)
 {
     if (!m_d->resourceProvider) return;
-    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::EffectiveLodAvailablility, value);
+    m_d->resourceProvider->resourceManager()->setResource(KoCanvasResource::EffectiveLodAvailability, value);
 }
 
 void KisPaintOpPresetsEditor::slotCreateNewBrushPresetEngine()

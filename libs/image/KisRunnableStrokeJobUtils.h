@@ -42,7 +42,7 @@ void addJobBarrierExclusive(QVector<Job*> &jobs, Func func) {
 }
 
 template <typename Func, typename Job>
-void addJobUniquelyCuncurrent(QVector<Job*> &jobs, Func func) {
+void addJobUniquelyConcurrent(QVector<Job*> &jobs, Func func) {
     jobs.append(new KisRunnableStrokeJobData(func, KisStrokeJobData::UNIQUELY_CONCURRENT));
 }
 
@@ -75,7 +75,7 @@ void addJobBarrier(QVector<Job*> &jobs, int lod, Func func) {
 }
 
 template <typename Func, typename Job>
-void addJobUniquelyCuncurrent(QVector<Job*> &jobs, int lod, Func func) {
+void addJobUniquelyConcurrent(QVector<Job*> &jobs, int lod, Func func) {
     Job* data = new KisRunnableStrokeJobData(func, KisStrokeJobData::UNIQUELY_CONCURRENT);
     data->setLevelOfDetailOverride(lod);
     jobs.append(data);

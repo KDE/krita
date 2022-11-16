@@ -16,7 +16,7 @@
 
 /**
  * KisLazyStorage is a special class implementing some kind
- * of lazy evaluation. It mimics the behaviorof a normal
+ * of lazy evaluation. It mimics the behavior of a normal
  * pointer type, but creates `T` only on the first trt to
  * dereference this pointer.
  */

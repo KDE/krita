@@ -34,7 +34,7 @@ typedef QList<KoSubpath *> KoSubpathList;
 /**
  * @brief This is the base for all graphical objects.
  *
- * All graphical objects are based on this object e.g. lines, rectangulars, pies
+ * All graphical objects are based on this object e.g. lines, rectangles, pies
  * and so on.
  *
  * The KoPathShape uses KoPathPoint's to describe the path of the shape.
@@ -492,7 +492,7 @@ protected:
      * @param sweepAngle the length of the angle
      * TODO add param to have angle of the ellipse
      * @param offset to the first point in the arc
-     * @param curvePoints a array which take the curve points, pass a 'QPointF curvePoins[12]';
+     * @param curvePoints an array which take the curve points, pass a 'QPointF curvePoints[12]';
      *
      * @return number of points created by the curve
      */

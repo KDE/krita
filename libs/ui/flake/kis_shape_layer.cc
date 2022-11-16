@@ -157,7 +157,7 @@ KisShapeLayer::KisShapeLayer(const KisShapeLayer& _rhs, KoShapeControllerBase* c
     initShapeLayerImpl(controller, canvasFactory());
 
     /**
-     * The transformaitons of the added shapes are automatically merged into the transformation
+     * The transformations of the added shapes are automatically merged into the transformation
      * of the layer, so we should apply this extra transform separately
      */
     const QTransform thisInvertedTransform = this->absoluteTransformation().inverted();

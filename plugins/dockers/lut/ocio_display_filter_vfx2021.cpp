@@ -77,14 +77,14 @@ void OcioDisplayFilter::filter(quint8 *pixels, quint32 numPixels)
 void OcioDisplayFilter::approximateInverseTransformation(quint8 *pixels, quint32 numPixels)
 {
     // processes that data _in_ place
-    if (m_revereseApproximationProcessor) {
+    if (m_reverseApproximationProcessor) {
         if (numPixels > 16) {
             // creation of PackedImageDesc is really slow on Windows due to malloc/free
             OCIO::PackedImageDesc img(reinterpret_cast<float *>(pixels), numPixels, 1, 4);
-            m_revereseApproximationProcessorCPU->apply(img);
+            m_reverseApproximationProcessorCPU->apply(img);
         } else {
             for (quint32 i = 0; i < numPixels; i++) {
-                m_revereseApproximationProcessorCPU->applyRGBA(reinterpret_cast<float*>(pixels));
+                m_reverseApproximationProcessorCPU->applyRGBA(reinterpret_cast<float*>(pixels));
                 pixels+=4;
             }
         }
@@ -291,11 +291,11 @@ void OcioDisplayFilter::updateProcessor()
     m_forwardApproximationProcessorCPU = m_forwardApproximationProcessor->getDefaultCPUProcessor();
 
     try {
-        m_revereseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
-        m_revereseApproximationProcessorCPU = m_revereseApproximationProcessor->getDefaultCPUProcessor();
+        m_reverseApproximationProcessor = config->getProcessor(approximateTransform, OCIO::TRANSFORM_DIR_INVERSE);
+        m_reverseApproximationProcessorCPU = m_reverseApproximationProcessor->getDefaultCPUProcessor();
     } catch (...) {
         warnKrita << "OCIO inverted matrix does not exist!";
-        // m_revereseApproximationProcessor;
+        // m_reverseApproximationProcessor;
     }
 
     m_shaderDirty = true;

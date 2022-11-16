@@ -405,8 +405,8 @@ QString DlgResourceManager::constructMetadata(const QMap<QString, QVariant> &met
 
 
     } else if (resourceType == ResourceType::GamutMasks) {
-        QString descriptonKey = "description";
-        QString description = metadata.contains(descriptonKey) ? metadata[descriptonKey].toString() : "";
+        QString descriptionKey = "description";
+        QString description = metadata.contains(descriptionKey) ? metadata[descriptionKey].toString() : "";
         response.append(description);
     } else {
         Q_FOREACH(QString key, metadata.keys()) {

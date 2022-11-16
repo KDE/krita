@@ -107,17 +107,17 @@ void KisMaskedFreehandStrokePainter::drawAndFillPainterPath(const QPainterPath &
     });
 }
 
-std::pair<int, bool> KisMaskedFreehandStrokePainter::doAsyncronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs)
+std::pair<int, bool> KisMaskedFreehandStrokePainter::doAsynchronousUpdate(QVector<KisRunnableStrokeJobData *> &jobs)
 {
     KIS_SAFE_ASSERT_RECOVER_NOOP(m_stroke);
 
     std::pair<int, bool> result =
-        m_stroke->painter->paintOp()->doAsyncronousUpdate(jobs);
+        m_stroke->painter->paintOp()->doAsynchronousUpdate(jobs);
 
     if (m_mask) {
         QVector<KisRunnableStrokeJobData*> maskJobs;
         std::pair<int, bool> maskMetrics =
-            m_mask->painter->paintOp()->doAsyncronousUpdate(maskJobs);
+            m_mask->painter->paintOp()->doAsynchronousUpdate(maskJobs);
 
         result.first = std::max(result.first, maskMetrics.first);
         result.second = result.second | maskMetrics.second;

@@ -39,7 +39,7 @@ private:
     QPushButton* m_closeIconLabel {nullptr};
 
     int m_size{18};
-    bool m_editble {false};
+    bool m_editable {false};
     bool m_semiSelected {false};
     KoID m_tag;
 
@@ -104,7 +104,7 @@ public:
     ~KisTagSelectionWidget() override;
 
     void setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected);
-    void setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected, QList<KoID> &semitSelected);
+    void setTagList(bool editable, QList<KoID> &selected, QList<KoID> &notSelected, QList<KoID> &semiSelected);
 
 
 Q_SIGNALS:

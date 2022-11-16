@@ -165,7 +165,7 @@ void KoColorProfile::colorantsForType(ColorPrimaries primaries, QVector<double> 
     case PRIMARIES_UNSPECIFIED:
         break;
     case PRIMARIES_ITU_R_BT_470_6_SYSTEM_M:
-        // Unquantisized.
+        // Unquantized.
         colorants = {0.310, 0.316};
         colorants.append({0.67, 0.33});
         colorants.append({0.21, 0.71});
@@ -173,7 +173,7 @@ void KoColorProfile::colorantsForType(ColorPrimaries primaries, QVector<double> 
         //Illuminant C
         break;
     case PRIMARIES_ITU_R_BT_470_6_SYSTEM_B_G:
-        // Unquantisized.
+        // Unquantized.
         colorants = {0.3127, 0.3290};
         colorants.append({0.64, 0.33});
         colorants.append({0.29, 0.60});
@@ -245,7 +245,7 @@ void KoColorProfile::colorantsForType(ColorPrimaries primaries, QVector<double> 
         break;
     case PRIMARIES_ITU_R_BT_709_5:
     default:
-        // Prequantisized colorants, courtesy of Elle Stone
+        // Prequantized colorants, courtesy of Elle Stone
         colorants = {0.3127, 0.3290};
         colorants.append({0.639998686, 0.330010138});
         colorants.append({0.300003784, 0.600003357});

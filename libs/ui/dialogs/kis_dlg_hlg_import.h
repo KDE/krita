@@ -20,7 +20,7 @@ class KRITAUI_EXPORT KisDlgHLGImport : public KoDialog
     Q_OBJECT
 
 public:
-    explicit KisDlgHLGImport(bool applyootf, float gamma, float brightness, QWidget *parent = nullptr);
+    explicit KisDlgHLGImport(bool applyOOTF, float gamma, float brightness, QWidget *parent = nullptr);
     bool applyOOTF();
     float gamma();
     float nominalPeakBrightness();

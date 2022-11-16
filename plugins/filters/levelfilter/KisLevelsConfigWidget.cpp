@@ -435,8 +435,8 @@ void KisLevelsConfigWidget::updateHistogramViewChannels()
 
 void KisLevelsConfigWidget::setButtonsIcons()
 {
-    m_page.buttonLightnessMode->setIcon(KisIconUtils::loadIcon("color-adjustement-mode-lightness"));
-    m_page.buttonAllChannelsMode->setIcon(KisIconUtils::loadIcon("color-adjustement-mode-channels"));
+    m_page.buttonLightnessMode->setIcon(KisIconUtils::loadIcon("color-adjustment-mode-lightness"));
+    m_page.buttonAllChannelsMode->setIcon(KisIconUtils::loadIcon("color-adjustment-mode-channels"));
     m_page.buttonLinearHistogram->setIcon(KisIconUtils::loadIcon("histogram-linear"));
     m_page.buttonLogarithmicHistogram->setIcon(KisIconUtils::loadIcon("histogram-logarithmic"));
     m_page.buttonScaleHistogramToFit->setIcon(KisIconUtils::loadIcon("histogram-show-all"));
@@ -583,11 +583,11 @@ void KisLevelsConfigWidget::slot_buttonAutoLevels_clicked()
 
     m_autoLevelsWidget = new KisAutoLevelsWidget(autolevelsDialog);
     // Lock contrast method
-    m_autoLevelsWidget->setShadowsAndHighlightsAdjustementMethod(
+    m_autoLevelsWidget->setShadowsAndHighlightsAdjustmentMethod(
         KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod_MonochromaticContrast
     );
-    m_autoLevelsWidget->lockShadowsAndHighlightsAdjustementMethod();
-    // Set some defaultparameters based on the selected channel. These were
+    m_autoLevelsWidget->lockShadowsAndHighlightsAdjustmentMethod();
+    // Set some default parameters based on the selected channel. These were
     // selected empirically, there is no strong reason why they should be like this
     if (m_page.buttonLightnessMode->isChecked() ||
         m_virtualChannels[m_activeChannel].type() == VirtualChannelInfo::LIGHTNESS ||
@@ -642,7 +642,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevels_clicked()
 void KisLevelsConfigWidget::slot_buttonAutoLevelsAllChannels_clicked()
 {
     // We can not use the copy constructor here since it makes use of implicit
-    // sharing. We mantain a pointer to the active levels info in m_levelsCurves.
+    // sharing. We maintain a pointer to the active levels info in m_levelsCurves.
     // So, if we change an element of m_levelsCurves that would create a new
     // vector and the pointer will be invalidated
     QVector<KisLevelsCurve> previousLevelsCurves;
@@ -653,7 +653,7 @@ void KisLevelsConfigWidget::slot_buttonAutoLevelsAllChannels_clicked()
     KoDialog *autolevelsDialog = new KoDialog(this);
 
     m_autoLevelsWidget = new KisAutoLevelsWidget(autolevelsDialog);
-    m_autoLevelsWidget->setShadowsAndHighlightsAdjustementMethod(
+    m_autoLevelsWidget->setShadowsAndHighlightsAdjustmentMethod(
         KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod_MonochromaticContrast
     );
 
@@ -675,8 +675,8 @@ void KisLevelsConfigWidget::slot_buttonAutoLevelsAllChannels_clicked()
     connect(autolevelsDialog, &QDialog::rejected,
         [this, previousLevelsCurves]()
         {
-            // We mantain a pointer to the active levels info in m_levelsCurves
-            // so we use this loop instead of the asignment operator to avoid
+            // We maintain a pointer to the active levels info in m_levelsCurves
+            // so we use this loop instead of the assignment operator to avoid
             // invalidation of the pointer
             for (int i = 0; i < m_levelsCurves.size(); ++i) {
                 m_levelsCurves[i] = previousLevelsCurves[i];
@@ -785,7 +785,7 @@ void KisLevelsConfigWidget::slot_autoLevelsWidgetAllChannels_parametersChanged()
 
     // get levels parameters
     QVector<KisLevelsCurve> levelsCurves;
-    if (m_autoLevelsWidget->shadowsAndHighlightsAdjustementMethod() == KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod_MonochromaticContrast) {
+    if (m_autoLevelsWidget->shadowsAndHighlightsAdjustmentMethod() == KisAutoLevels::ShadowsAndHighlightsAdjustmentMethod_MonochromaticContrast) {
         levelsCurves =
             KisAutoLevels::adjustPerChannelContrast(
                 channelsHistograms,

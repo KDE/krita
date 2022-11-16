@@ -150,7 +150,7 @@ void KisWdgTagSelectionControllerOneResource::updateView()
     // IMPORTANT: this only works correctly because there was setResourcesFilter() called in setResourceIds() function
     // if at any moment there is situation this needs to work without setResourceIds(),
     // call m_tagResourceModel->setResourcesFilter(m_resourceIds.toVector()); before this loop
-    // (it will make it slightly slower since it invalides filter in the proxy model)
+    // (it will make it slightly slower since it invalidates filter in the proxy model)
     for (int i = 0; i < m_tagResourceModel->rowCount(); i++) {
         QModelIndex idx = m_tagResourceModel->index(i, 0);
         KisTagSP tag = m_tagResourceModel->data(idx, Qt::UserRole + KisAllTagResourceModel::Tag).value<KisTagSP>();

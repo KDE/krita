@@ -87,7 +87,7 @@ public:
      @endcode
      *
      * @param menu A pointer to the menu that will be expanded with
-     * the toglge actions
+     * the toggle actions
      * @param index The model index associated with the document
      * section that may or may not provide a number of toggle actions.
      */

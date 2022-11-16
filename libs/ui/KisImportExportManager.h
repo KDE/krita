@@ -75,7 +75,7 @@ public:
      */
     KisImportExportErrorCode exportDocument(const QString &location, const QString& realLocation, const QByteArray &mimeType, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0, bool isAdvancedExporting = false );
 
-    QFuture<KisImportExportErrorCode> exportDocumentAsyc(const QString &location, const QString& realLocation, const QByteArray &mimeType, KisImportExportErrorCode &status, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0,bool isAdvancedExporting= false);
+    QFuture<KisImportExportErrorCode> exportDocumentAsync(const QString &location, const QString& realLocation, const QByteArray &mimeType, KisImportExportErrorCode &status, bool showWarnings = true, KisPropertiesConfigurationSP exportConfiguration = 0,bool isAdvancedExporting= false);
 
     ///@name Static API
     //@{

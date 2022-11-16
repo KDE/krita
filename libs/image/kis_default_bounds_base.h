@@ -45,7 +45,7 @@ public:
      * used for wrapping the device in wrap-around mode and in some
      * specific operations.
      *
-     * NOTE: don't use it uless you know what you are doing,
+     * NOTE: don't use it unless you know what you are doing,
      *       most probably you want to use `bounds()` instead!
      */
     virtual QRect imageBorderRect() const;

@@ -40,7 +40,7 @@
 
 WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected, QWidget *parent)
     : QWidget(parent)
-    , m_editble(editable)
+    , m_editable(editable)
     , m_semiSelected(semiSelected)
     , m_tag(tag)
 {
@@ -53,13 +53,13 @@ WdgCloseableLabel::WdgCloseableLabel(KoID tag, bool editable, bool semiSelected,
     m_textLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     layout->addWidget(m_textLabel);
     layout->insertStretch(2, 1);
-    if (m_editble) {
+    if (m_editable) {
         m_closeIconLabel = new QPushButton(parent);
         m_closeIconLabel->setFlat(true);
         m_closeIconLabel->setIcon(KisIconUtils::loadIcon("docker_close"));
         m_closeIconLabel->setToolTip(i18n("Remove from tag"));
         m_closeIconLabel->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        m_closeIconLabel->setEnabled(m_editble);
+        m_closeIconLabel->setEnabled(m_editable);
         m_closeIconLabel->setMaximumSize(QSize(1, 1) * m_size);
 
         connect(m_closeIconLabel, &QAbstractButton::clicked, this, [&]() {

@@ -823,9 +823,9 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &converter)
 
         m_decorator->setSelection(selection);
         m_decorator->setHandleRadius(handleRadius());
-        m_decorator->setShowFillGradientHandles(hasInteractioFactory(EditFillGradientFactoryId));
-        m_decorator->setShowStrokeFillGradientHandles(hasInteractioFactory(EditStrokeGradientFactoryId));
-        m_decorator->setShowFillMeshGradientHandles(hasInteractioFactory(EditFillMeshGradientFactoryId));
+        m_decorator->setShowFillGradientHandles(hasInteractionFactory(EditFillGradientFactoryId));
+        m_decorator->setShowStrokeFillGradientHandles(hasInteractionFactory(EditStrokeGradientFactoryId));
+        m_decorator->setShowFillMeshGradientHandles(hasInteractionFactory(EditFillMeshGradientFactoryId));
         m_decorator->setCurrentMeshGradientHandles(m_selectedMeshHandle, m_hoveredMeshHandle);
         m_decorator->paint(painter, converter);
     }

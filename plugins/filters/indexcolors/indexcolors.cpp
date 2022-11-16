@@ -49,7 +49,7 @@ KoColorTransformation* KisFilterIndexColors::createTransformation(const KoColorS
     {
         int maxClrs = config->getInt("colorLimit");
         while(pal.numColors() > maxClrs)
-            pal.mergeMostReduantColors();
+            pal.mergeMostRedundantColors();
     }
 
     pal.similarityFactors.L = config->getFloat("LFactor");

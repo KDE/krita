@@ -27,6 +27,7 @@
 #include <kis_meta_data_backend_registry.h>
 #include <kis_paint_layer.h>
 #include <kis_tiff_writer_visitor.h>
+#include <KisExiv2IODevice.h>
 
 #include <config-tiff.h>
 #ifdef TIFF_CAN_WRITE_PSD_TAGS
@@ -102,11 +103,15 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     dbgFile << "Start writing TIFF File";
     KIS_ASSERT_RECOVER_RETURN_VALUE(kisimage, ImportExportCodes::InternalError);
 
+    QFile file(filename());
+    if (!file.open(QFile::WriteOnly)) {
+        return KisImportExportErrorCode(KisImportExportErrorCannotRead(file.error()));
+    }
+
     // Open file for writing
     const QByteArray encodedFilename = QFile::encodeName(filename());
-    std::unique_ptr<TIFF, decltype(&TIFFClose)> image(
-        TIFFOpen(encodedFilename.data(), "w"),
-        &TIFFClose);
+    std::unique_ptr<TIFF, decltype(&TIFFCleanup)> image(TIFFFdOpen(file.handle(), encodedFilename.data(), "w"),
+                                                        &TIFFCleanup);
 
     if (!image) {
         dbgFile << "Could not open the file for writing" << filename();
@@ -178,16 +183,15 @@ KisImportExportErrorCode KisTIFFExport::convert(KisDocument *document, QIODevice
     }
 
     image.reset();
+    file.close();
 
     if (!options.flatten && !options.saveAsPhotoshop) {
         // HACK!! Externally inject the Exif metadata
         // libtiff has no way to access the fields wholesale
         try {
-            const std::string encodedFilename =
-                QFile::encodeName(filename()).toStdString();
+            KisExiv2IODevice::ptr_type basicIoDevice(new KisExiv2IODevice(filename()));
 
-            const std::unique_ptr<Exiv2::Image> img(
-                Exiv2::ImageFactory::open(encodedFilename).release());
+            const std::unique_ptr<Exiv2::Image> img(Exiv2::ImageFactory::open(basicIoDevice).release());
 
             img->readMetadata();
 

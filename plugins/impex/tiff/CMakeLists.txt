@@ -27,7 +27,16 @@ set(kritatiffimport_SOURCES
 
 kis_add_library(kritatiffimport MODULE ${kritatiffimport_SOURCES})
 
-target_link_libraries(kritatiffimport kritaui kritaimpex ${KRITATIFFPSD_LIBRARY} ${TIFF_LIBRARIES} LibExiv2::LibExiv2 kritametadata ${JPEG_TURBO_LIBRARIES})
+target_link_libraries(kritatiffimport
+    kritaui
+    kritaimpex
+    LibExiv2::LibExiv2
+    kritametadata
+    kritaexifcommon
+    ${JPEG_TURBO_LIBRARIES}
+    ${KRITATIFFPSD_LIBRARY}
+    ${TIFF_LIBRARIES}
+    )
 
 install(TARGETS kritatiffimport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 
@@ -49,7 +58,14 @@ ki18n_wrap_ui(kritatiffexport_SOURCES kis_wdg_options_tiff.ui)
 
 kis_add_library(kritatiffexport MODULE ${kritatiffexport_SOURCES})
 
-target_link_libraries(kritatiffexport kritaui kritaimpex ${KRITATIFFPSD_LIBRARY} ${TIFF_LIBRARIES} LibExiv2::LibExiv2 kritametadata)
+target_link_libraries(kritatiffexport
+    kritaui
+    kritaimpex
+    LibExiv2::LibExiv2
+    kritaexifcommon
+    ${KRITATIFFPSD_LIBRARY}
+    ${TIFF_LIBRARIES}
+    )
 
 install(TARGETS kritatiffexport  DESTINATION ${KRITA_PLUGIN_INSTALL_DIR})
 install( PROGRAMS  krita_tiff.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})

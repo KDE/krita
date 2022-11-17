@@ -433,6 +433,7 @@ void KisPaintDeviceTest::testCaching()
     QRect exactBounds1 = dev->exactBounds();
 
     dev->fill(0, 0, 768, 768, blackPixel);
+    dev->fill(50, 50, 462, 462, whitePixel);
     QImage thumb2 = dev->createThumbnail(50, 50);
     QRect exactBounds2 = dev->exactBounds();
 

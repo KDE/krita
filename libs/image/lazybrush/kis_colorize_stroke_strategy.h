@@ -42,6 +42,7 @@ public:
 
     void initStrokeCallback() override;
     void cancelStrokeCallback() override;
+    void tryCancelCurrentStrokeJobAsync() override;
     // TODO: suspend/resume
 
     KisStrokeStrategy *createLodClone(int levelOfDetail) override;

@@ -108,12 +108,6 @@ public:
     void removePersistentSubtask(QPointer<KoUpdater> updater);
 
     /**
-     * Cancelling the action will make each subtask be marked as 'interrupted' and
-     * set the total progress to 100%.
-     */
-    void cancel();
-
-    /**
      * @return true when the processing is interrupted
      */
     bool interrupted() const;
@@ -123,6 +117,16 @@ public:
 
     void setAutoNestNames(bool value);
     bool autoNestNames() const;
+
+public Q_SLOTS:
+    /**
+     * Cancelling the action will make each subtask be marked as 'interrupted' and
+     * set the total progress to 100%.
+     *
+     * NOTE: cancelling mush happen from the same thread that KoProgressUpdater
+     *       resides, which is usually GUI thread.
+     */
+    void cancel();
 
 private Q_SLOTS:
 

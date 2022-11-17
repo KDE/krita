@@ -66,6 +66,8 @@ public:
         ~ProgressHelper();
 
         KoUpdater* updater() const;
+
+        void cancel();
     private:
         KoProgressUpdater *m_progressUpdater;
     };

@@ -183,6 +183,8 @@ void KisStroke::cancelStroke()
     else if(effectivelyInitialized &&
             (!m_jobsQueue.isEmpty() || !m_strokeEnded)) {
 
+        m_strokeStrategy->tryCancelCurrentStrokeJobAsync();
+
         clearQueueOnCancel();
         enqueue(m_cancelStrategy.data(),
                 m_strokeStrategy->createCancelData());

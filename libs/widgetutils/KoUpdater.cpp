@@ -20,7 +20,6 @@ KoUpdater::KoUpdater(KoUpdaterPrivate *_d)
     connect(this, SIGNAL(sigProgress(int)), d, SLOT(setProgress(int)));
     connect(this, SIGNAL(sigNestedNameChanged(QString)), d, SLOT(setAutoNestedName(QString)));
     connect(this, SIGNAL(sigHasValidRangeChanged(bool)), d, SLOT(setHasValidRange(bool)));
-    connect(d, SIGNAL(sigInterrupted(bool)), this, SLOT(setInterrupted(bool)));
 
 
     setRange(0, 100);
@@ -54,7 +53,7 @@ int KoUpdater::progress() const
 
 bool KoUpdater::interrupted() const
 {
-    return m_interrupted;
+    return m_interrupted.loadAcquire();
 }
 
 int KoUpdater::maximum() const
@@ -97,7 +96,7 @@ void KoUpdater::setAutoNestedName(const QString &name)
 
 void KoUpdater::setInterrupted(bool value)
 {
-    m_interrupted = value;
+    m_interrupted.storeRelease(value);
 }
 
 KoDummyUpdater::KoDummyUpdater()

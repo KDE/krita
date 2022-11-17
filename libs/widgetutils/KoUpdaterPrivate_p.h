@@ -72,10 +72,6 @@ Q_SIGNALS:
     /// Emitted whenever the progress changed
     void sigUpdated();
 
-    /// Emitted whenever the parent KoProgressUpdater is interrupted,
-    /// for instance through a press on a cancel button
-    void sigInterrupted(bool value);
-
 private:
     int m_progress; // always in percent
     int m_weight;

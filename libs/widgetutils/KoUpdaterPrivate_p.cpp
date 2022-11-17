@@ -76,7 +76,7 @@ void KoUpdaterPrivate::cancel()
 void KoUpdaterPrivate::setInterrupted(bool value)
 {
     m_interrupted = value;
-    emit sigInterrupted(m_interrupted);
+    m_connectedUpdater->setInterrupted(true);
 }
 
 void KoUpdaterPrivate::setProgress(int percent)

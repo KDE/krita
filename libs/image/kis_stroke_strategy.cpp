@@ -127,6 +127,11 @@ KisStrokeStrategy* KisStrokeStrategy::createLodClone(int levelOfDetail)
     return 0;
 }
 
+void KisStrokeStrategy::tryCancelCurrentStrokeJobAsync()
+{
+    // noop
+}
+
 bool KisStrokeStrategy::isExclusive() const
 {
     return m_exclusive;

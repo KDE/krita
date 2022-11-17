@@ -316,17 +316,18 @@ void KisWatershedWorker::run(qreal cleanUpAmount)
     m_d->initializeQueueFromGroupMap(initRect);
     m_d->processQueue(0);
 
-//    m_d->dumpGroupMaps();
-//    m_d->calcNumGroupMaps();
+    if (!m_d->progressUpdater || !m_d->progressUpdater->interrupted()) {
+        //    m_d->dumpGroupMaps();
+        //    m_d->calcNumGroupMaps();
 
-    if (cleanUpAmount > 0) {
-        m_d->cleanupForeignEdgeGroups(cleanUpAmount);
+        if (cleanUpAmount > 0) {
+            m_d->cleanupForeignEdgeGroups(cleanUpAmount);
+        }
+
+        //    m_d->calcNumGroupMaps();
+
+        m_d->writeColoring();
     }
-
-//    m_d->calcNumGroupMaps();
-
-    m_d->writeColoring();
-
 }
 
 int KisWatershedWorker::testingGroupPositiveEdge(qint32 group, quint8 level)
@@ -686,6 +687,10 @@ void KisWatershedWorker::Private::processQueue(qint32 _backgroundGroupId)
                 const int progressPercent =
                     qBound(0, qRound(100.0 * numFilledPixels / totalPixelsToFill), 100);
                 progressUpdater->setProgress(progressPercent);
+                if (progressUpdater->interrupted()) {
+                    break;
+                }
+
             }
 
         } else {

@@ -11,6 +11,7 @@
 #include "KoProgressProxy.h"
 #include <QObject>
 #include <QPointer>
+#include <QAtomicInt>
 
 class KoProgressUpdater;
 class KoUpdaterPrivate;
@@ -106,7 +107,7 @@ private Q_SLOTS:
 
 private:
 
-    bool m_interrupted;
+    QAtomicInt m_interrupted;
     int  m_progressPercent;
 };
 

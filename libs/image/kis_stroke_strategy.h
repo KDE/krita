@@ -58,6 +58,13 @@ public:
 
     virtual KisStrokeStrategy* createLodClone(int levelOfDetail);
 
+    /**
+     * @brief tryCancelCurrentStrokeJobAsync is called by the strokes queue
+     * when the stroke is being cancelled. The stroke strategy may or may not
+     * handle this request and cancel the currently running long action.
+     */
+    virtual void tryCancelCurrentStrokeJobAsync();
+
     bool isExclusive() const;
     bool supportsWrapAroundMode() const;
 

@@ -46,6 +46,7 @@ struct KisColorizeStrokeStrategy::Private
     {}
 
     KisNodeSP progressNode;
+    QSharedPointer<KisProcessingVisitor::ProgressHelper> progressHelper;
     KisPaintDeviceSP src;
     KisPaintDeviceSP dst;
     KisPaintDeviceSP filteredSource;
@@ -237,9 +238,9 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
         }
 
         addJobSequential(jobs, [this] () {
-            KisProcessingVisitor::ProgressHelper helper(m_d->progressNode);
+            m_d->progressHelper.reset(new KisProcessingVisitor::ProgressHelper(m_d->progressNode));
 
-            KisWatershedWorker worker(m_d->heightMap, m_d->dst, m_d->boundingRect, helper.updater());
+            KisWatershedWorker worker(m_d->heightMap, m_d->dst, m_d->boundingRect, m_d->progressHelper->updater());
             Q_FOREACH (const KeyStroke &stroke, m_d->keyStrokes) {
                 KoColor color =
                     !stroke.isTransparent ?
@@ -248,6 +249,7 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
                 worker.addKeyStroke(stroke.dev, color);
             }
             worker.run(m_d->filteringOptions.cleanUpAmount);
+            m_d->progressHelper.reset();
         });
     }
 
@@ -261,6 +263,15 @@ void KisColorizeStrokeStrategy::initStrokeCallback()
 void KisColorizeStrokeStrategy::cancelStrokeCallback()
 {
     emit sigCancelled();
+}
+
+void KisColorizeStrokeStrategy::tryCancelCurrentStrokeJobAsync()
+{
+    // NOTE: this method may be called by the GUI thread asynchronously!
+    QSharedPointer<KisProcessingVisitor::ProgressHelper> helper = m_d->progressHelper;
+    if (helper) {
+        helper->cancel();
+    }
 }
 
 KisStrokeStrategy* KisColorizeStrokeStrategy::createLodClone(int levelOfDetail)

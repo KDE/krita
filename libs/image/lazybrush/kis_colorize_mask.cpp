@@ -425,6 +425,7 @@ void KisColorizeMask::slotRegenerationFinished(bool prefilterOnly)
 void KisColorizeMask::slotRegenerationCancelled()
 {
     slotRegenerationFinished(true);
+    m_d->setNeedsUpdateImpl(true, false);
 }
 
 KisBaseNode::PropertyList KisColorizeMask::sectionModelProperties() const

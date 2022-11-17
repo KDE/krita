@@ -27,6 +27,7 @@
 #include <KoColorProfile.h>
 #include <KoDocumentInfo.h>
 #include <KoUnit.h>
+#include <KisExiv2IODevice.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_meta_data_backend_registry.h>
@@ -1771,11 +1772,15 @@ KisTIFFImport::convert(KisDocument *document,
         return ImportExportCodes::NoAccessToRead;
     }
 
+    QFile file(filename());
+    if (!file.open(QFile::ReadOnly)) {
+        return KisImportExportErrorCode(KisImportExportErrorCannotRead(file.error()));
+    }
+
     // Open the TIFF file
     const QByteArray encodedFilename = QFile::encodeName(filename());
-    std::unique_ptr<TIFF, decltype(&TIFFClose)> image(
-        TIFFOpen(encodedFilename.data(), "r"),
-        &TIFFClose);
+    std::unique_ptr<TIFF, decltype(&TIFFCleanup)> image(TIFFFdOpen(file.handle(), encodedFilename.data(), "r"),
+                                                        &TIFFCleanup);
 
     if (!image) {
         dbgFile << "Could not open the file, either it does not exist, either "
@@ -1802,16 +1807,15 @@ KisTIFFImport::convert(KisDocument *document,
     }
     // Freeing memory
     image.reset();
+    file.close();
 
     {
         // HACK!! Externally parse the Exif metadata
         // libtiff has no way to access the fields wholesale
         try {
-            const std::string encodedFilename =
-                QFile::encodeName(filename()).toStdString();
+            KisExiv2IODevice::ptr_type basicIoDevice(new KisExiv2IODevice(filename()));
 
-            const std::unique_ptr<Exiv2::Image> readImg(
-                Exiv2::ImageFactory::open(encodedFilename).release());
+            const std::unique_ptr<Exiv2::Image> readImg(Exiv2::ImageFactory::open(basicIoDevice).release());
 
             readImg->readMetadata();
 

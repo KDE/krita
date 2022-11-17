@@ -89,7 +89,8 @@ public:
         }
 
         if (thumbnail.isNull()) {
-            thumbnail = m_paintDevice->createThumbnail(w, h, QRect(), oversample, renderingIntent, conversionFlags);
+            // the thumbnails in the cache are always generated from exact bounds
+            thumbnail = m_paintDevice->createThumbnail(w, h, m_paintDevice->exactBounds(), oversample, renderingIntent, conversionFlags);
             cacheThumbnail(w, h, oversample, thumbnail);
         }
 

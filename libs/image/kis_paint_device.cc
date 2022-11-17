@@ -544,7 +544,6 @@ private:
          * currentData() to start cloning.
          */
         q->setDefaultBounds(src->defaultBounds());
-        q->setSupportsWraparoundMode(src->supportsWraproundMode());
 
         currentData()->prepareClone(srcData);
 
@@ -2094,7 +2093,6 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice() const
 {
     KisPaintDeviceSP device = new KisPaintDevice(compositionSourceColorSpace());
     device->setDefaultBounds(defaultBounds());
-    device->setSupportsWraparoundMode(supportsWraproundMode());
     return device;
 }
 
@@ -2102,7 +2100,6 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP 
 {
     KisPaintDeviceSP clone = new KisPaintDevice(*cloneSource);
     clone->setDefaultBounds(defaultBounds());
-    clone->setSupportsWraparoundMode(supportsWraproundMode());
     clone->convertTo(compositionSourceColorSpace(),
                      KoColorConversionTransformation::internalRenderingIntent(),
                      KoColorConversionTransformation::internalConversionFlags());
@@ -2113,7 +2110,6 @@ KisPaintDeviceSP KisPaintDevice::createCompositionSourceDevice(KisPaintDeviceSP 
 {
     KisPaintDeviceSP clone = new KisPaintDevice(colorSpace());
     clone->setDefaultBounds(defaultBounds());
-    clone->setSupportsWraparoundMode(supportsWraproundMode());
     clone->makeCloneFromRough(cloneSource, roughRect);
     clone->convertTo(compositionSourceColorSpace(),
                      KoColorConversionTransformation::internalRenderingIntent(),

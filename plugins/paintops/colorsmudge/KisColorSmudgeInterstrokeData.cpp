@@ -18,8 +18,6 @@ KisColorSmudgeInterstrokeData::KisColorSmudgeInterstrokeData(KisPaintDeviceSP so
     projectionDevice = overlayDeviceWrapper.overlay(0);
     colorBlendDevice = overlayDeviceWrapper.overlay(1);
     heightmapDevice = new KisPaintDevice(KoColorSpaceRegistry::instance()->rgb8());
-    heightmapDevice->setDefaultBounds(source->defaultBounds());
-    heightmapDevice->setSupportsWraparoundMode(source->supportsWraproundMode());
 }
 
 KisColorSmudgeInterstrokeData::~KisColorSmudgeInterstrokeData()

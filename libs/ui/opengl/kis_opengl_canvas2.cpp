@@ -232,7 +232,17 @@ void KisOpenGLCanvas2::paintEvent(QPaintEvent *e)
 {
     KIS_SAFE_ASSERT_RECOVER_RETURN(!d->updateRect);
 
-    d->updateRect = e->rect();
+    if (qFuzzyCompare(devicePixelRatioF(), qRound(devicePixelRatioF()))) {
+        /**
+         * Enable partial updates **only** for the case when we have
+         * integer scaling. There is a bug in Qt that causes artifacts
+         * otherwise:
+         *
+         * See https://bugs.kde.org/show_bug.cgi?id=441216
+         */
+        d->updateRect = e->rect();
+    }
+
     QOpenGLWidget::paintEvent(e);
     d->updateRect = boost::none;
 }

@@ -71,25 +71,30 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
     }
 
     const QPen mainPen = m_d->config.penMain();
-    const QPen subdivisionPen = m_d->config.penSubdivision();
+    QPen subdivisionPen = m_d->config.penSubdivision();
 
     gc.save();
     gc.setTransform(transform);
     gc.setRenderHints(QPainter::Antialiasing, false);
     gc.setRenderHints(QPainter::HighQualityAntialiasing, false);
 
-    qreal x1, y1, x2, y2;
-    QRectF imageRect =
+
+    QRectF updateRectInImagePixels =
         converter->documentToImage(updateArea) &
         converter->imageRectInImagePixels();
-    imageRect.getCoords(&x1, &y1, &x2, &y2);
-
 
     // for angles. This will later be a combobox to select different types of options
     // also add options to hide specific lines (vertical, horizonta, angle 1, etc
     KisGridConfig::GridType gridType = m_d->config.gridType();
 
     if (gridType == KisGridConfig::GRID_RECTANGULAR) {
+        qreal x1, y1, x2, y2;
+        updateRectInImagePixels.getCoords(&x1, &y1, &x2, &y2);
+
+        // compensate the fact the getCoordt returns off-by-one pixel
+        // at the bottom right of the rect.
+        x2++;
+        y2++;
 
         {
             // vertical lines
@@ -97,6 +102,8 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             const int step = scaleCoeff * m_d->config.spacing().x();
             const int lineIndexFirst = qCeil((x1 - offset) / step);
             const int lineIndexLast = qFloor((x2 - offset) / step);
+
+            subdivisionPen.setDashOffset(y1 * scale);
 
             for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
                 int w = offset + i * step;
@@ -113,6 +120,8 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
             const int lineIndexFirst = qCeil((y1 - offset) / step);
             const int lineIndexLast = qFloor((y2 - offset) / step);
 
+            subdivisionPen.setDashOffset(x1 * scale);
+
             for (int i = lineIndexFirst; i <= lineIndexLast; i++) {
                 int w = offset + i * step;
 
@@ -123,17 +132,23 @@ void KisGridDecoration::drawDecoration(QPainter& gc, const QRectF& updateArea, c
     }
 
     if (gridType == KisGridConfig::GRID_ISOMETRIC)  {
+        qreal x1, y1, x2, y2;
 
         // get true coordinates, not just the updateArea
         QRectF trueImageRect = converter->imageRectInImagePixels();
         trueImageRect.getCoords(&x1, &y1, &x2, &y2);
+
+        // compensate the fact the getCoordt returns off-by-one pixel
+        // at the bottom right of the rect.
+        x2++;
+        y2++;
 
         const int offset = m_d->config.offset().x();
         const int offsetY = m_d->config.offset().y();
         const int cellSpacing = m_d->config.cellSpacing();
 
         gc.setClipping(true);
-        gc.setClipRect(imageRect, Qt::IntersectClip);
+        gc.setClipRect(updateRectInImagePixels, Qt::IntersectClip);
 
         // left angle
         {

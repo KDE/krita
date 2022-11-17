@@ -1,0 +1,40 @@
+From 06890feca333331e7253c78bbb68cebdaba79a75 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 17 Nov 2022 22:31:34 +0000
+Subject: [PATCH 17/18] meson: Add missing metadata for layoutex
+
+---
+ source/layoutex/meson.build | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/source/layoutex/meson.build b/source/layoutex/meson.build
+index 67b5418..d2c061f 100644
+--- a/source/layoutex/meson.build
++++ b/source/layoutex/meson.build
+@@ -15,7 +15,7 @@ endif
+ 
+ layoutex_name = '@0@lx@1@'.format(library_prefix, library_suffix)
+ 
+-layoutex = library(
++layoutex_lib = library(
+   layoutex_name,
+   sources,
+   include_directories: [incdir, include_directories('..')],
+@@ -25,3 +25,14 @@ layoutex = library(
+   version: U_ICU_VERSION,
+   install: true,
+ )
++
++layoutex_dep = declare_dependency(
++  link_with: common_lib,
++  compile_args: usage_args,
++  include_directories: [incdir, include_directories('..')],
++)
++
++if meson.version().version_compare('>=0.54.0')
++  meson.override_dependency('icu-lx', layoutex_lib)
++endif
++
+-- 
+2.37.1.windows.1
+

@@ -1,0 +1,125 @@
+From 02f0688a800f9273d0ccb1062805260eb6319e3c Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 16 Nov 2022 19:27:08 -0300
+Subject: [PATCH 06/18] meson: Support resource files in Windows
+
+---
+ meson.build                 |  2 ++
+ source/common/meson.build   |  7 +++++++
+ source/i18n/meson.build     |  7 +++++++
+ source/io/meson.build       |  7 +++++++
+ source/layoutex/meson.build |  7 +++++++
+ source/stubdata/meson.build | 15 +++++++++++++--
+ 6 files changed, 43 insertions(+), 2 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 7f85e3a..e02a6fa 100644
+--- a/meson.build
++++ b/meson.build
+@@ -27,6 +27,8 @@ else
+   dl_dep = cpp.find_library('dl', required: false)
+ endif
+ 
++windows = import('windows')
++
+ # Compiler flags the users of this library must use.
+ usage_args = []
+ 
+diff --git a/source/common/meson.build b/source/common/meson.build
+index 55910b1..c4d30aa 100644
+--- a/source/common/meson.build
++++ b/source/common/meson.build
+@@ -191,6 +191,13 @@ sources = files(
+   'wintz.cpp',
+ )
+ 
++if host_machine.system() == 'windows'
++  sources += windows.compile_resources(
++    'common.rc',
++    include_directories: incdir
++  )
++endif
++
+ icuuc_name = '@0@icuuc@1@'.format(library_prefix, library_suffix)
+ 
+ common_lib = library(
+diff --git a/source/i18n/meson.build b/source/i18n/meson.build
+index 8dd96ba..8a52c11 100644
+--- a/source/i18n/meson.build
++++ b/source/i18n/meson.build
+@@ -251,6 +251,13 @@ sources = files(
+   #  'filteredbrk.cpp',
+ )
+ 
++if host_machine.system() == 'windows'
++  sources += windows.compile_resources(
++    'i18n.rc',
++    include_directories: incdir
++  )
++endif
++
+ if host_machine.system() == 'windows'
+   i18n_name = '@0@icuin@1@'.format(library_prefix, library_suffix)
+ else
+diff --git a/source/io/meson.build b/source/io/meson.build
+index 996153a..52cc44f 100644
+--- a/source/io/meson.build
++++ b/source/io/meson.build
+@@ -13,6 +13,13 @@ sources = files(
+   'ustream.cpp',
+ )
+ 
++if host_machine.system() == 'windows'
++  sources += windows.compile_resources(
++    'io.rc',
++    include_directories: incdir
++  )
++endif
++
+ io_lib = library(
+   'icuio',
+   sources,
+diff --git a/source/layoutex/meson.build b/source/layoutex/meson.build
+index 79ab723..0ea8dac 100644
+--- a/source/layoutex/meson.build
++++ b/source/layoutex/meson.build
+@@ -6,6 +6,13 @@ sources = files(
+   'plruns.cpp',
+ )
+ 
++if host_machine.system() == 'windows'
++  sources += windows.compile_resources(
++    'layoutex.rc',
++    include_directories: incdir
++  )
++endif
++
+ layoutex_name = '@0@lx@1@'.format(library_prefix, library_suffix)
+ 
+ layoutex = library(
+diff --git a/source/stubdata/meson.build b/source/stubdata/meson.build
+index 2aff0c6..d5cf1d3 100644
+--- a/source/stubdata/meson.build
++++ b/source/stubdata/meson.build
+@@ -1,5 +1,16 @@
+-stubdata_lib = static_library(
+-  'stubdata',
++sources = files(
+   'stubdata.cpp',
++)
++
++if host_machine.system() == 'windows'
++  sources += windows.compile_resources(
++    '../data/misc/icudata.rc',
++    include_directories: incdir
++  )
++endif
++
++stubdata_lib = library(
++  'stubdata',
++  sources,
+   include_directories: incdir,
+ )
+-- 
+2.37.1.windows.1
+

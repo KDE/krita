@@ -452,6 +452,8 @@ endif()
 if (WIN32 AND NOT PERL_FOUND)
     add_subdirectory( ext_perl )
 endif()
+
+add_subdirectory(ext_icu)
 add_subdirectory( ext_qt )
 if (ANDROID)
   # gettext replacement

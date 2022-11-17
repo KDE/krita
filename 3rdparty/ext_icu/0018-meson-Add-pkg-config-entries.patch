@@ -1,0 +1,96 @@
+From 54a0896420937e8191f38a5ed966ee7a6bfa5871 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Thu, 17 Nov 2022 22:32:07 +0000
+Subject: [PATCH 18/18] meson: Add pkg-config entries
+
+---
+ meson.build                 | 3 +++
+ source/common/meson.build   | 7 +++++++
+ source/i18n/meson.build     | 7 +++++++
+ source/io/meson.build       | 7 +++++++
+ source/layoutex/meson.build | 6 ++++++
+ 5 files changed, 30 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 25459bb..bf8cd6b 100644
+--- a/meson.build
++++ b/meson.build
+@@ -8,6 +8,8 @@ project(
+ )
+ 
+ U_ICU_VERSION = meson.project_version()
++PACKAGE_ICU_DESCRIPTION = 'International Components for Unicode'
++PACKAGE_ICU_URL = 'http://icu-project.org'
+ 
+ cpp = meson.get_compiler('cpp')
+ 
+@@ -30,6 +32,7 @@ else
+ endif
+ 
+ windows = import('windows')
++pkg = import('pkgconfig')
+ 
+ # Compiler flags the users of this library must use.
+ usage_args = []
+diff --git a/source/common/meson.build b/source/common/meson.build
+index 468f83a..c9ff6cf 100644
+--- a/source/common/meson.build
++++ b/source/common/meson.build
+@@ -327,3 +327,10 @@ headers = files(
+ install_headers(headers,
+   subdir: 'unicode'
+ )
++
++pkg.generate(
++  common_lib,
++  name: 'icu-uc',
++  description: '@0@: Common and Data libraries'.format(PACKAGE_ICU_DESCRIPTION),
++  url: PACKAGE_ICU_URL
++)
+diff --git a/source/i18n/meson.build b/source/i18n/meson.build
+index a0da30e..4c81ddf 100644
+--- a/source/i18n/meson.build
++++ b/source/i18n/meson.build
+@@ -380,3 +380,10 @@ headers = files(
+ install_headers(headers,
+   subdir: 'unicode'
+ )
++
++pkg.generate(
++  i18n_lib,
++  name: 'icu-i18n',
++  description: '@0@: Internationalization library'.format(PACKAGE_ICU_DESCRIPTION),
++  url: PACKAGE_ICU_URL
++)
+diff --git a/source/io/meson.build b/source/io/meson.build
+index b6c36f2..bbf9a75 100644
+--- a/source/io/meson.build
++++ b/source/io/meson.build
+@@ -39,3 +39,10 @@ icuio_dep = declare_dependency(
+ if meson.version().version_compare('>=0.54.0')
+   meson.override_dependency('icu-io', icuio_dep)
+ endif
++
++pkg.generate(
++  io_lib,
++  name: 'icu-io',
++  description: '@0@: Stream and I/O Library'.format(PACKAGE_ICU_DESCRIPTION),
++  url: PACKAGE_ICU_URL
++)
+diff --git a/source/layoutex/meson.build b/source/layoutex/meson.build
+index d2c061f..1afb2a0 100644
+--- a/source/layoutex/meson.build
++++ b/source/layoutex/meson.build
+@@ -36,3 +36,9 @@ if meson.version().version_compare('>=0.54.0')
+   meson.override_dependency('icu-lx', layoutex_lib)
+ endif
+ 
++pkg.generate(
++  layoutex_lib,
++  name: 'icu-lx',
++  description: '@0@: Paragraph Layout library @1@'.format(PACKAGE_ICU_DESCRIPTION, ''),
++  url: PACKAGE_ICU_URL
++)
+-- 
+2.37.1.windows.1
+

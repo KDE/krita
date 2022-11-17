@@ -1,0 +1,144 @@
+From 3287c04a65e1de6740f7b487cb8b0bc131c18536 Mon Sep 17 00:00:00 2001
+From: "L. E. Segovia" <amy@amyspark.me>
+Date: Wed, 16 Nov 2022 19:31:33 -0300
+Subject: [PATCH 09/18] meson: Enable using libicu wrap as a standalone project
+
+---
+ source/common/meson.build         | 1 +
+ source/i18n/meson.build           | 1 +
+ source/io/meson.build             | 1 +
+ source/layoutex/meson.build       | 1 +
+ source/stubdata/meson.build       | 1 +
+ source/tools/genbrk/meson.build   | 1 +
+ source/tools/genccode/meson.build | 1 +
+ source/tools/gencmn/meson.build   | 1 +
+ source/tools/icuinfo/meson.build  | 1 +
+ source/tools/icupkg/meson.build   | 1 +
+ source/tools/pkgdata/meson.build  | 1 +
+ 11 files changed, 11 insertions(+)
+
+diff --git a/source/common/meson.build b/source/common/meson.build
+index a3f3fe2..5f5455b 100644
+--- a/source/common/meson.build
++++ b/source/common/meson.build
+@@ -209,6 +209,7 @@ common_lib = library(
+   link_with: stubdata_lib,
+   dependencies: dl_dep,
+   version: U_ICU_VERSION,
++  install: true,
+ )
+ 
+ icuuc_dep = declare_dependency(
+diff --git a/source/i18n/meson.build b/source/i18n/meson.build
+index edd79b1..1fe2536 100644
+--- a/source/i18n/meson.build
++++ b/source/i18n/meson.build
+@@ -272,6 +272,7 @@ i18n_lib = library(
+   c_args: '-DU_I18N_IMPLEMENTATION',
+   cpp_args: '-DU_I18N_IMPLEMENTATION',
+   version: U_ICU_VERSION,
++  install: true,
+ )
+ 
+ icui18n_dep = declare_dependency(
+diff --git a/source/io/meson.build b/source/io/meson.build
+index bb4f441..b6c36f2 100644
+--- a/source/io/meson.build
++++ b/source/io/meson.build
+@@ -28,6 +28,7 @@ io_lib = library(
+   cpp_args: '-DU_IO_IMPLEMENTATION',
+   link_with: [i18n_lib, common_lib],
+   version: U_ICU_VERSION,
++  install: true,
+ )
+ 
+ icuio_dep = declare_dependency(
+diff --git a/source/layoutex/meson.build b/source/layoutex/meson.build
+index 479798f..67b5418 100644
+--- a/source/layoutex/meson.build
++++ b/source/layoutex/meson.build
+@@ -23,4 +23,5 @@ layoutex = library(
+   cpp_args: '-DU_LAYOUTEX_IMPLEMENTATION',
+   link_with: [common_lib],
+   version: U_ICU_VERSION,
++  install: true,
+ )
+diff --git a/source/stubdata/meson.build b/source/stubdata/meson.build
+index f0586b7..fda58e4 100644
+--- a/source/stubdata/meson.build
++++ b/source/stubdata/meson.build
+@@ -14,4 +14,5 @@ stubdata_lib = library(
+   sources,
+   include_directories: incdir,
+   version: U_ICU_VERSION,
++  install: true,
+ )
+diff --git a/source/tools/genbrk/meson.build b/source/tools/genbrk/meson.build
+index 900f6ab..b266e99 100644
+--- a/source/tools/genbrk/meson.build
++++ b/source/tools/genbrk/meson.build
+@@ -2,6 +2,7 @@ genbrk_exe = executable(
+   'genbrk',
+   'genbrk.cpp',
+   dependencies: [toolutil_dep, icuuc_dep],
++  install: true,
+ )
+ 
+ meson.override_find_program('genbrk', genbrk_exe)
+diff --git a/source/tools/genccode/meson.build b/source/tools/genccode/meson.build
+index d0e4006..c10788a 100644
+--- a/source/tools/genccode/meson.build
++++ b/source/tools/genccode/meson.build
+@@ -2,6 +2,7 @@ genccode_exe = executable(
+   'genccode',
+   'genccode.c',
+   dependencies: [toolutil_dep, icuuc_dep],
++  install: true,
+ )
+ 
+ meson.override_find_program('genccode', genccode_exe)
+diff --git a/source/tools/gencmn/meson.build b/source/tools/gencmn/meson.build
+index e1ffc3b..781024e 100644
+--- a/source/tools/gencmn/meson.build
++++ b/source/tools/gencmn/meson.build
+@@ -2,6 +2,7 @@ gencmn_exe = executable(
+   'gencmn',
+   'gencmn.c',
+   dependencies: [toolutil_dep, icuuc_dep],
++  install: true,
+ )
+ 
+ meson.override_find_program('gencmn', gencmn_exe)
+diff --git a/source/tools/icuinfo/meson.build b/source/tools/icuinfo/meson.build
+index 8176596..f870e08 100644
+--- a/source/tools/icuinfo/meson.build
++++ b/source/tools/icuinfo/meson.build
+@@ -13,4 +13,5 @@ executable(
+   include_directories: [toolinc],
+   link_with: [toolutil_lib],
+   dependencies: [icui18n_dep],
++  install: true,
+ )
+diff --git a/source/tools/icupkg/meson.build b/source/tools/icupkg/meson.build
+index 648f9bc..d5143c5 100644
+--- a/source/tools/icupkg/meson.build
++++ b/source/tools/icupkg/meson.build
+@@ -3,4 +3,5 @@ icupkg = executable(
+   'icupkg.cpp',
+   include_directories: [incdir, toolinc],
+   link_with: [toolutil_lib, i18n_lib, common_lib],
++  install: true,
+ )
+diff --git a/source/tools/pkgdata/meson.build b/source/tools/pkgdata/meson.build
+index 64a57ec..8ca4775 100644
+--- a/source/tools/pkgdata/meson.build
++++ b/source/tools/pkgdata/meson.build
+@@ -4,4 +4,5 @@ pkgdata = executable(
+   'pkgtypes.c',
+   include_directories: [incdir, toolinc],
+   link_with: [toolutil_lib, i18n_lib, common_lib],
++  install: true,
+ )
+-- 
+2.37.1.windows.1
+

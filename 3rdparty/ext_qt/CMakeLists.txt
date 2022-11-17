@@ -47,7 +47,7 @@ if (WIN32)
         -skip qtwebchannel -skip qtwebengine -skip qtwebsockets -skip qtwebview
         -skip qtxmlpatterns -nomake examples -nomake tools
         -no-compile-examples -no-dbus -no-iconv -no-qml-debug
-        -no-libproxy -no-system-proxies -no-icu -no-mtdev
+        -no-libproxy -no-system-proxies -icu -no-mtdev
         -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtnetworkauth
         -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus
         -skip qtspeech -skip qtvirtualkeyboard -qt-sqlite
@@ -144,7 +144,7 @@ if (WIN32)
       # Use a short name to reduce the chance of exceeding path length limit
       SOURCE_DIR s
       BINARY_DIR b
-      DEPENDS ext_googleangle ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP}
+      DEPENDS ext_googleangle ${OPENSSL_DEP} ${QT_EXTRA_DEPS} ${ZLIB_DEP} ext_icu
   )
 elseif (ANDROID)
   ExternalProject_Add(
@@ -235,7 +235,7 @@ else( APPLE )
             -skip qtwebchannel -skip qtwebsockets -skip qtwebview -skip qtwebengine -skip qtxmlpatterns
             -skip qtcharts -skip qtdatavis3d  -skip qtgamepad -skip qtnetworkauth
             -skip qtpurchasing -skip qtremoteobjects -skip qtscxml -skip qtserialbus -skip qtspeech -skip qtvirtualkeyboard -nomake examples -nomake tools -no-compile-examples
-            -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -no-icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
+            -no-dbus -no-iconv -no-qml-debug -no-libproxy -no-system-proxies -icu -no-mtdev -system-zlib -qt-pcre -qt-sqlite
             -opensource -confirm-license  -openssl-linked -prefix ${EXTPREFIX_qt}
             ${QT_DEVICE_OPTION}
 
@@ -244,6 +244,6 @@ else( APPLE )
 
         UPDATE_COMMAND ""
         BUILD_IN_SOURCE OFF
-        DEPENDS ${ZLIB_DEP}
+        DEPENDS ${ZLIB_DEP} ext_icu
       )
 endif()

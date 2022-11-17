@@ -75,7 +75,6 @@ void KisBlurFilter::processImpl(KisPaintDeviceSP device,
     qreal vFade = strength;
 
     KisMaskGenerator* kas;
-    dbgKrita << width << "" << height << "" << hFade << "" << vFade;
     switch (shape) {
     case 1:
         kas = new KisRectangleMaskGenerator(width, aspectRatio, hFade, vFade, 2, true);

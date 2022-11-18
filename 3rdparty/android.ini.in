@@ -1,0 +1,12 @@
+[binaries]
+c = '@CMAKE_C_COMPILER@'
+cpp = '@CMAKE_CXX_COMPILER@'
+ar = '@CMAKE_AR@'
+strip = '@CMAKE_STRIP@'
+pkgconfig = '@PKG_CONFIG_EXECUTABLE@'
+
+[host_machine]
+system = 'android'
+cpu_family = '@CMAKE_SYSTEM_PROCESSOR@'
+cpu = '@CMAKE_SYSTEM_PROCESSOR@'
+endian = '@_endian@'

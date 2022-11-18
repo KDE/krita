@@ -364,13 +364,42 @@ macro(mesonify VAR DEST)
     set(${DEST} "[${${DEST}}]")
 endmacro()
 
+if (ANDROID OR CMAKE_CROSSCOMPILING)
+    set(SECURITY_C_FLAGS "${SECURITY_C_FLAGS} --sysroot=${CMAKE_SYSROOT} --target=${CMAKE_C_COMPILER_TARGET}")
+    set(SECURITY_CXX_FLAGS "${SECURITY_CXX_FLAGS} --sysroot=${CMAKE_SYSROOT} --target=${CMAKE_CXX_COMPILER_TARGET}")
+    set(SECURITY_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --sysroot=${CMAKE_SYSROOT} --target=${CMAKE_C_COMPILER_TARGET}")
+    set(SECURITY_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --sysroot=${CMAKE_SYSROOT} --target=${CMAKE_C_COMPILER_TARGET}")
+    set(SECURITY_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} --sysroot=${CMAKE_SYSROOT} --target=${CMAKE_C_COMPILER_TARGET}")
+endif()
+
 mesonify(SECURITY_C_FLAGS _security_c_flags)
 mesonify(SECURITY_CXX_FLAGS _security_cxx_flags)
 mesonify(SECURITY_EXE_LINKER_FLAGS _security_exe_linker_flags)
+set(EXTRA_MESON_FLAGS)
 
-find_program(MESON_BINARY_PATH meson)
-find_program(NINJA_BINARY_PATH ninja)
-find_package(PkgConfig QUIET)
+if (ANDROID OR CMAKE_CROSSCOMPILING)
+    include(TestBigEndian)
+    test_big_endian(IS_ENDIAN)
+    set(CROSSCOMPILING REQUIRED)
+
+    if (IS_ENDIAN)
+        set(_endian "big")
+    else()
+        set(_endian "little")
+    endif()
+
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/android.ini.in
+        ${CMAKE_CURRENT_BINARY_DIR}/android.ini
+    )
+    set(EXTRA_MESON_FLAGS --cross-file=${CMAKE_CURRENT_BINARY_DIR}/android.ini)
+else()
+    set(CROSSCOMPILING)
+endif()
+
+find_program(MESON_BINARY_PATH meson ${CROSSCOMPILING})
+find_program(NINJA_BINARY_PATH ninja ${CROSSCOMPILING})
+find_package(PkgConfig QUIET ${CROSSCOMPILING})
 
 if (NOT MESON_BINARY_PATH)
     set(MESON_DEP ext_meson)

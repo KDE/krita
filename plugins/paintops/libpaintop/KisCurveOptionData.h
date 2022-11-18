@@ -168,7 +168,7 @@ struct PAINTOP_EXPORT KisCurveOptionData : boost::equality_comparable<KisCurveOp
     bool read(const KisPropertiesConfiguration *setting);
     void write(KisPropertiesConfiguration *setting) const;
 
-    using ValueFixUpReadCallback = std::function<qreal(qreal, const KisPropertiesConfiguration *)>;
+    using ValueFixUpReadCallback = std::function<void (KisCurveOptionData *, const KisPropertiesConfiguration *)>;
     ValueFixUpReadCallback valueFixUpReadCallback;
 
     using ValueFixUpWriteCallback= std::function<void (qreal, KisPropertiesConfiguration *)>;

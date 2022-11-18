@@ -334,7 +334,7 @@ bool KisCurveOptionData::readPrefixed(const KisPropertiesConfiguration *setting)
     strengthValue = setting->getDouble(id.id() + "Value", strengthMaxValue);
 
     if (valueFixUpReadCallback) {
-        strengthValue = valueFixUpReadCallback(strengthValue, setting);
+        valueFixUpReadCallback(this, setting);
     }
 
     useCurve = setting->getBool(id.id() + "UseCurve", true);

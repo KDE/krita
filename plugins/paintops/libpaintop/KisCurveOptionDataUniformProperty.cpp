@@ -37,6 +37,7 @@ KisCurveOptionDataUniformProperty::~KisCurveOptionDataUniformProperty()
 void KisCurveOptionDataUniformProperty::readValueImpl()
 {
     m_data->read(settings().data());
+    setRange(m_data->strengthMinValue, m_data->strengthMaxValue);
     setValue(m_data->strengthValue);
 }
 

@@ -75,6 +75,9 @@ KisUniformPaintOpPropertyIntSlider::KisUniformPaintOpPropertyIntSlider(KisUnifor
         dynamic_cast<KisIntSliderBasedPaintOpProperty*>(property.data());
     KIS_ASSERT_RECOVER_RETURN(sliderProperty);
 
+    connect(sliderProperty, &KisIntSliderBasedPaintOpProperty::sigRangeChanged,
+            this, &KisUniformPaintOpPropertyIntSlider::slotRangeChanged);
+
     if (property->subType() == KisUniformPaintOpProperty::SubType_Angle) {
         KisAngleSelector *slider = new KisAngleSelector(this);
         slider->setPrefix(prefix);
@@ -119,6 +122,19 @@ void KisUniformPaintOpPropertyIntSlider::slotSliderChanged(int value)
     emit valueChanged(value);
 }
 
+void KisUniformPaintOpPropertyIntSlider::slotRangeChanged()
+{
+    KisIntSliderBasedPaintOpProperty *sliderProperty =
+        dynamic_cast<KisIntSliderBasedPaintOpProperty*>(property().data());
+    KIS_ASSERT_RECOVER_RETURN(sliderProperty);
+
+    if (KisAngleSelector *slider = dynamic_cast<KisAngleSelector*>(m_slider)) {
+        slider->setRange(sliderProperty->min(), sliderProperty->max());
+    } else if (KisSliderSpinBox *slider = dynamic_cast<KisSliderSpinBox*>(m_slider)) {
+        slider->setRange(sliderProperty->min(), sliderProperty->max());
+    }
+}
+
 /****************************************************************/
 /*      KisUniformPaintOpPropertyDoubleSlider                   */
 /****************************************************************/
@@ -132,6 +148,9 @@ KisUniformPaintOpPropertyDoubleSlider::KisUniformPaintOpPropertyDoubleSlider(Kis
     KisDoubleSliderBasedPaintOpProperty *sliderProperty =
         dynamic_cast<KisDoubleSliderBasedPaintOpProperty*>(property.data());
     KIS_ASSERT_RECOVER_RETURN(sliderProperty);
+
+    connect(sliderProperty, &KisDoubleSliderBasedPaintOpProperty::sigRangeChanged,
+            this, &KisUniformPaintOpPropertyDoubleSlider::slotRangeChanged);
 
     if (property->subType() == KisUniformPaintOpProperty::SubType_Angle) {
         KisAngleSelector *slider = new KisAngleSelector(this);
@@ -174,6 +193,19 @@ void KisUniformPaintOpPropertyDoubleSlider::setValue(const QVariant &value)
 void KisUniformPaintOpPropertyDoubleSlider::slotSliderChanged(qreal value)
 {
     emit valueChanged(value);
+}
+
+void KisUniformPaintOpPropertyDoubleSlider::slotRangeChanged()
+{
+    KisDoubleSliderBasedPaintOpProperty *sliderProperty =
+        dynamic_cast<KisDoubleSliderBasedPaintOpProperty*>(property().data());
+    KIS_ASSERT_RECOVER_RETURN(sliderProperty);
+
+    if (KisAngleSelector *slider = dynamic_cast<KisAngleSelector*>(m_slider)) {
+        slider->setRange(sliderProperty->min(), sliderProperty->max());
+    } else if (KisDoubleSliderSpinBox *slider = dynamic_cast<KisDoubleSliderSpinBox*>(m_slider)) {
+        slider->setRange(sliderProperty->min(), sliderProperty->max());
+    }
 }
 
 /****************************************************************/

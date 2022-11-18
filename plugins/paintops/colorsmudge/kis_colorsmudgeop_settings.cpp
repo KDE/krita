@@ -30,6 +30,7 @@ KisColorSmudgeOpSettings::~KisColorSmudgeOpSettings()
 #include "KisPaintThicknessOptionData.h"
 #include "KisColorSmudgeStandardOptionData.h"
 #include "KisCurveOptionDataUniformProperty.h"
+#include "KisSmudgeRadiusOptionData.h"
 
 QList<KisUniformPaintOpPropertySP> KisColorSmudgeOpSettings::uniformProperties(KisPaintOpSettingsSP settings, QPointer<KisPaintOpPresetUpdateProxy> updateProxy)
 {

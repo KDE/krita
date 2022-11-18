@@ -24,24 +24,6 @@ struct KisGradientOptionData : KisCurveOptionData
     {}
 };
 
-struct KisSmudgeRadiusOptionData : KisCurveOptionData
-{
-    KisSmudgeRadiusOptionData()
-        : KisCurveOptionData(
-              KoID("SmudgeRadius", i18n("Smudge Radius")))
-    {
-        valueFixUpReadCallback = [] (qreal value, const KisPropertiesConfiguration *setting) {
-            const int smudgeRadiusVersion = setting->getInt("SmudgeRadiusVersion", 1);
-            if (smudgeRadiusVersion < 2) {
-                value = value / 100.0;
-            }
-            return value;
-        };
 
-        valueFixUpWriteCallback = [] (qreal, KisPropertiesConfiguration *setting) {
-            setting->setProperty("SmudgeRadiusVersion", 2);
-        };
-    }
-};
 
 #endif // KISCOLORSMUDGESTANDARDOPTIONDATA_H

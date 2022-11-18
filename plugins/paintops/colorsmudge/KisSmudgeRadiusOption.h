@@ -6,18 +6,9 @@
 #ifndef KISSMUDGERADIUSOPTION_H
 #define KISSMUDGERADIUSOPTION_H
 
-#include <KisCurveOption2.h>
+#include <KisStandardOptions.h>
+#include <KisSmudgeRadiusOptionData.h>
 
-class KisPropertiesConfiguration;
-class KisSmudgeRadiusOptionData;
-
-class KisSmudgeRadiusOption2 : public KisCurveOption2
-{
-public:
-    KisSmudgeRadiusOption2(const KisPropertiesConfiguration *setting);
-
-private:
-    static KisSmudgeRadiusOptionData initializeData(const KisPropertiesConfiguration *setting);
-};
+using KisSmudgeRadiusOption2 = KisStandardOptionNoApply<KisSmudgeRadiusOptionData>;
 
 #endif // KISSMUDGERADIUSOPTION_H

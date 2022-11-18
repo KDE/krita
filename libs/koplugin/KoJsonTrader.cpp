@@ -31,11 +31,10 @@ struct KoJsonTrader::PluginCacheEntry
 KoJsonTrader::KoJsonTrader()
 {
     // Allow a command line variable KRITA_PLUGIN_PATH to override the automatic search
-    QString requestedPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
-    if (!requestedPath.isEmpty()) {
-        m_pluginPath = requestedPath;
-    }
-    else {
+    m_pluginPath = QProcessEnvironment::systemEnvironment().value("KRITA_PLUGIN_PATH");
+
+    if (m_pluginPath.isEmpty() ||
+        !(QFileInfo(m_pluginPath).exists() && QFileInfo(m_pluginPath).isDir())) {
 
         QList<QDir> searchDirs;
 

@@ -30,6 +30,7 @@ ExternalProject_Add( ext_fontconfig
             -Dc_link_args=${_security_exe_linker_flags}
             -Dcpp_link_args=${_security_exe_linker_flags}
             -Dpkg_config_path=${PREFIX_ext_fontconfig}/share/pkgconfig,${PREFIX_ext_fontconfig}/lib/pkgconfig
+            ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

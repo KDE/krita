@@ -392,8 +392,7 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
 
         const int checkedId = d->group->checkedId();
 
-        if ((checkedId < 0 || checkedId == None || checkedId == Solid) &&
-            !(checkedId == Solid && d->colorAction->currentKoColor() == color)) {
+        if (checkedId < 0 || checkedId == None || checkedId == Solid) {
 
             d->group->button(Solid)->setChecked(true);
             d->selectedFillIndex = Solid;
@@ -402,7 +401,9 @@ void KoFillConfigWidget::slotCanvasResourceChanged(int key, const QVariant &valu
                                                ? KoFlake::Fill
                                                : KoFlake::StrokeFill;
 
-            d->colorAction->setCurrentColor(color);
+            if (key == d->fillVariant) {
+                d->colorAction->setCurrentColor(color);
+            }
             colorChanged({color.toQColor(), colorSlot});
         } else if (checkedId == Gradient && key == KoCanvasResource::ForegroundColor) {
             d->ui->wdgGradientEditor->notifyGlobalColorChanged(color);
@@ -555,8 +556,6 @@ void KoFillConfigWidget::colorChanged(std::pair<QColor, KoFlake::FillVariant> re
          }
 
     }
-
-    d->colorAction->setCurrentColor(wrapper.color());
 
     emit sigFillChanged();
     emit sigInternalRequestColorToResourceManager();

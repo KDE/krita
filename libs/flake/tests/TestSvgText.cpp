@@ -764,6 +764,7 @@ void TestSvgText::testQtBidi()
 
 
     QImage canvas(500,500,QImage::Format_ARGB32);
+    canvas.fill(Qt::transparent);
     QPainter gc(&canvas);
     QPointF pos(15,15);
 
@@ -803,6 +804,7 @@ void TestSvgText::testQtBidi()
 void TestSvgText::testQtDxDy()
 {
     QImage canvas(500,500,QImage::Format_ARGB32);
+    canvas.fill(Qt::transparent);
     QPainter gc(&canvas);
     QPointF pos(15,15);
 

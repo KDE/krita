@@ -31,6 +31,7 @@ ExternalProject_Add(
             -Dc_link_args=${_security_exe_linker_flags}
             -Dcpp_link_args=${_security_exe_linker_flags}
             -Dpkg_config_path=${EXTPREFIX_raqm}/share/pkgconfig,${EXTPREFIX_raqm}/lib/pkgconfig
+            ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

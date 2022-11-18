@@ -80,7 +80,7 @@ private:
      * @param path the path of the font file.
      * @return Whether adding the font file was succesful.
      */
-    static bool addFontFilePathToRegistery(const QString &path);
+    bool addFontFilePathToRegistery(const QString &path);
 
     /**
      * @brief addFontFileDirectoryToRegistery
@@ -88,7 +88,7 @@ private:
      * @param path the path of the directory.
      * @return whether it was succesful.
      */
-    static bool addFontFileDirectoryToRegistery(const QString &path);
+    bool addFontFileDirectoryToRegistery(const QString &path);
 
     QScopedPointer<Private> d;
 

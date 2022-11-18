@@ -25,7 +25,7 @@
 
 Q_GLOBAL_STATIC(KoFontRegistry, s_instance)
 
-class KoFontRegistry::Private
+class Q_DECL_HIDDEN KoFontRegistry::Private
 {
 private:
     FcConfigUP m_config;
@@ -106,6 +106,11 @@ public:
         if (!m_data.hasLocalData())
             initialize();
         return m_data.localData()->m_faces;
+    }
+
+    FcConfigUP config() const
+    {
+        return m_config;
     }
 };
 
@@ -411,14 +416,14 @@ bool KoFontRegistry::configureFaces(const std::vector<FT_FaceUP> &faces,
 
 bool KoFontRegistry::addFontFilePathToRegistery(const QString &path)
 {
-    QByteArray utfData = path.toUtf8();
-    const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
-    return FcConfigAppFontAddFile(FcConfigGetCurrent(), vals);
+    const QByteArray utfData = path.toUtf8();
+    const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(utfData.data());
+    return FcConfigAppFontAddFile(d->config().data(), vals);
 }
 
 bool KoFontRegistry::addFontFileDirectoryToRegistery(const QString &path)
 {
-    QByteArray utfData = path.toUtf8();
-    const FcChar8 *vals = reinterpret_cast<FcChar8 *>(utfData.data());
-    return FcConfigAppFontAddDir(FcConfigGetCurrent(), vals);
+    const QByteArray utfData = path.toUtf8();
+    const FcChar8 *vals = reinterpret_cast<const FcChar8 *>(utfData.data());
+    return FcConfigAppFontAddDir(d->config().data(), vals);
 }

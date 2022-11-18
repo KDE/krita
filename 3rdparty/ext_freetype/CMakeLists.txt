@@ -5,7 +5,7 @@ if (POLICY CMP0114)
     cmake_policy(SET CMP0114 NEW)
 endif()
 
-set(FREETYPE_URL https://download.savannah.gnu.org/releases/freetype/freetype-2.12.1.tar.xz)
+set(FREETYPE_URL https://downloads.sourceforge.net/project/freetype/freetype2/2.12.1/freetype-2.12.1.tar.xz)
 set(FREETYPE_SHA256 4766f20157cc4cf0cd292f80bf917f92d1c439b243ac3018debf6b9140c41a7f)
 
 ExternalProject_Add(ext_freetype_bootstrap
@@ -57,6 +57,7 @@ ExternalProject_Add(
             -Dc_link_args=${_security_exe_linker_flags}
             -Dcpp_link_args=${_security_exe_linker_flags}
             -Dpkg_config_path=${EXTPREFIX_harfbuzz}/share/pkgconfig,${EXTPREFIX_harfbuzz}/lib/pkgconfig
+            ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

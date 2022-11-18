@@ -15,9 +15,6 @@ bool KisSharpnessOptionMixInImpl::read(const KisPropertiesConfiguration *setting
     alignOutlinePixels = setting->getBool(SHARPNESS_ALIGN_OUTLINE_PIXELS);
     softness = setting->getInt(SHARPNESS_SOFTNESS);
 
-    // NOTE: the support of SHARPNESS_FACTOR legacy option has
-    //       been removed during the lager refactoring
-
     return true;
 }
 
@@ -25,4 +22,18 @@ void KisSharpnessOptionMixInImpl::write(KisPropertiesConfiguration *setting) con
 {
     setting->setProperty(SHARPNESS_ALIGN_OUTLINE_PIXELS, alignOutlinePixels);
     setting->setProperty(SHARPNESS_SOFTNESS, softness);
+}
+
+KisSharpnessOptionData::KisSharpnessOptionData(const QString &prefix)
+    : KisOptionTuple<KisCurveOptionData, KisSharpnessOptionMixIn>(prefix, KoID("Sharpness", i18n("Sharpness")))
+{
+    valueFixUpReadCallback = [this] (qreal value, const KisPropertiesConfiguration *setting) {
+
+        if (setting->hasProperty(SHARPNESS_FACTOR) && !setting->hasProperty("SharpnessValue")) {
+            value = setting->getDouble(SHARPNESS_FACTOR);
+            this->softness = quint32(setting->getDouble(SHARPNESS_FACTOR) * 100);
+        }
+
+        return value;
+    };
 }

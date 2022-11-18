@@ -9,14 +9,12 @@
 
 const QString SCATTER_X = "Scattering/AxisX";
 const QString SCATTER_Y = "Scattering/AxisY";
+const QString SCATTER_AMOUNT = "Scattering/Amount";
 
 bool KisScatterOptionMixInImpl::read(const KisPropertiesConfiguration *setting)
 {
     axisX = setting->getBool(SCATTER_X, true);
     axisY = setting->getBool(SCATTER_Y, true);
-
-    // NOTE: the support of SCATTER_AMOUNT legacy option has
-    //       been removed during the lager refactoring
 
     return true;
 }
@@ -25,4 +23,19 @@ void KisScatterOptionMixInImpl::write(KisPropertiesConfiguration *setting) const
 {
     setting->setProperty(SCATTER_X, axisX);
     setting->setProperty(SCATTER_Y, axisY);
+}
+
+KisScatterOptionData::KisScatterOptionData(const QString &prefix)
+    : KisOptionTuple<KisCurveOptionData, KisScatterOptionMixIn>(prefix,
+                                                                KoID("Scatter", i18n("Scatter")),
+                                                                true, false, false, 0.0, 5.0)
+{
+    valueFixUpReadCallback = [] (qreal value, const KisPropertiesConfiguration *setting) {
+
+        if (setting->hasProperty(SCATTER_AMOUNT) && !setting->hasProperty("ScatterValue")) {
+            value = setting->getDouble(SCATTER_AMOUNT);
+        }
+        return value;
+
+    };
 }

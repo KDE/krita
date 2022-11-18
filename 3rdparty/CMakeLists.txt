@@ -274,9 +274,6 @@ if (ANDROID)
                      -DCMAKE_EXE_LINKER_FLAGS=${SECURITY_EXE_LINKER_FLAGS}
                      -DCMAKE_SHARED_LINKER_FLAGS=${SECURITY_SHARED_LINKER_FLAGS}
                      -DCMAKE_MODULE_LINKER_FLAGS=${SECURITY_MODULE_LINKER_FLAGS})
-
-  # see: https://github.com/android/ndk/issues/929
-  unset (CMAKE_SYSROOT)
 endif()
 
 function(TestCompileLinkPythonLibs OUTPUT_VARNAME)

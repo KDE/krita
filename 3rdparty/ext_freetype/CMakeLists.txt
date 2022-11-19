@@ -20,6 +20,7 @@ ExternalProject_Add(ext_freetype_bootstrap
         -DFT_DISABLE_BZIP2=ON
         -DFT_DISABLE_BROTLI=ON
         -DFT_REQUIRE_PNG=ON
+        -DFT_DISABLE_HARFBUZZ=ON
         -DCMAKE_BUILD_TYPE=${GLOBAL_BUILD_TYPE}
         -DBUILD_SHARED_LIBS=TRUE
         ${GLOBAL_PROFILE}

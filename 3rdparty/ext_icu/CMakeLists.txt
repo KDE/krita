@@ -53,6 +53,8 @@ ExternalProject_Add(
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0016-meson-Fix-missing-icudata-library-export-for-MSVC.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0017-meson-Add-missing-metadata-for-layoutex.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0018-meson-Add-pkg-config-entries.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0019-meson-fix-incorrect-ELF-macro-addition.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0020-meson-Add-cross-compilation-Android-support.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         CC="${CMAKE_C_COMPILER}"

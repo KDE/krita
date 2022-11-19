@@ -411,6 +411,7 @@ endif()
 if (NOT NINJA_BINARY_PATH)
     set(NINJA_DEP ext_ninja)
     message(STATUS "Ninja not available, building 3rdparty version.")
+    add_subdirectory(ext_ninja)
 endif()
 
 if (NOT PKG_CONFIG_FOUND)
@@ -423,10 +424,6 @@ if (NOT PKG_CONFIG_FOUND)
     endif()
     message(STATUS "pkg-config not available, building 3rdparty version.")
     add_subdirectory(ext_pkgconfig)
-endif()
-
-if (NOT NINJA_BINARY_PATH)
-add_subdirectory(ext_ninja)
 endif()
 
 # this list must be dependency-ordered

@@ -85,27 +85,34 @@
 #elif defined USE_DRMINGW
 namespace
 {
+template<typename T, typename U>
+inline T cast_to_function(U v) noexcept
+{
+    // NOLINTNEXTLINE(cppcoreguidelines-pro-type-reinterpret-cast)
+    return reinterpret_cast<T>(reinterpret_cast<void *>(v));
+}
+
 void tryInitDrMingw()
 {
-    wchar_t path[MAX_PATH];
-    QString pathStr = QCoreApplication::applicationDirPath().replace(L'/', L'\\') + QStringLiteral("\\exchndl.dll");
-    if (pathStr.size() > MAX_PATH - 1) {
+    const QString pathStr = QDir(QCoreApplication::applicationDirPath()).absoluteFilePath("exchndl.dll");
+
+    QLibrary hMod(pathStr);
+    if (!hMod.load()) {
         return;
     }
-    int pathLen = pathStr.toWCharArray(path);
-    path[pathLen] = L'\0'; // toWCharArray doesn't add NULL terminator
-    HMODULE hMod = LoadLibraryW(path);
-    if (!hMod) {
-        return;
-    }
+
+    using ExcHndlSetLogFileNameA_type = BOOL(APIENTRY *)(const char *);
+
     // No need to call ExcHndlInit since the crash handler is installed on DllMain
-    auto myExcHndlSetLogFileNameA = reinterpret_cast<BOOL (APIENTRY *)(const char *)>(GetProcAddress(hMod, "ExcHndlSetLogFileNameA"));
+    const auto myExcHndlSetLogFileNameA = cast_to_function<ExcHndlSetLogFileNameA_type>(hMod.resolve("ExcHndlSetLogFileNameA"));
     if (!myExcHndlSetLogFileNameA) {
         return;
     }
+
     // Set the log file path to %LocalAppData%\kritacrash.log
-    QString logFile = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation).replace(L'/', L'\\') + QStringLiteral("\\kritacrash.log");
-    myExcHndlSetLogFileNameA(logFile.toLocal8Bit());
+    const QString logFile = QDir(QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation)).absoluteFilePath("kritacrash.log");
+    const QByteArray logFilePath = QDir::toNativeSeparators(logFile).toLocal8Bit();
+    myExcHndlSetLogFileNameA(logFilePath.data());
 }
 } // namespace
 #endif
@@ -120,22 +127,19 @@ void installTranslators(KisApplication &app);
 #ifdef Q_OS_WIN
 namespace
 {
-typedef enum ORIENTATION_PREFERENCE {
+using ORIENTATION_PREFERENCE = enum ORIENTATION_PREFERENCE {
     ORIENTATION_PREFERENCE_NONE = 0x0,
     ORIENTATION_PREFERENCE_LANDSCAPE = 0x1,
     ORIENTATION_PREFERENCE_PORTRAIT = 0x2,
     ORIENTATION_PREFERENCE_LANDSCAPE_FLIPPED = 0x4,
     ORIENTATION_PREFERENCE_PORTRAIT_FLIPPED = 0x8
-} ORIENTATION_PREFERENCE;
+};
 #if !defined(_MSC_VER)
-    typedef BOOL WINAPI (*pSetDisplayAutoRotationPreferences_t)(
-            ORIENTATION_PREFERENCE orientation
-            );
+using pSetDisplayAutoRotationPreferences_t = BOOL WINAPI (*)(ORIENTATION_PREFERENCE orientation);
 #else
-    typedef BOOL (WINAPI *pSetDisplayAutoRotationPreferences_t)(
-        ORIENTATION_PREFERENCE orientation
-        );
+using pSetDisplayAutoRotationPreferences_t = BOOL(WINAPI *)(ORIENTATION_PREFERENCE orientation);
 #endif
+
 void resetRotation()
 {
     QLibrary user32Lib("user32");
@@ -143,8 +147,7 @@ void resetRotation()
         qWarning() << "Failed to load user32.dll! This really should not happen.";
         return;
     }
-    pSetDisplayAutoRotationPreferences_t pSetDisplayAutoRotationPreferences
-            = reinterpret_cast<pSetDisplayAutoRotationPreferences_t>(user32Lib.resolve("SetDisplayAutoRotationPreferences"));
+    auto pSetDisplayAutoRotationPreferences = cast_to_function<pSetDisplayAutoRotationPreferences_t>(user32Lib.resolve("SetDisplayAutoRotationPreferences"));
     if (!pSetDisplayAutoRotationPreferences) {
         dbgKrita << "Failed to load function SetDisplayAutoRotationPreferences";
         return;

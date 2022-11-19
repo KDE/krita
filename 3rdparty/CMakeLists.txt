@@ -415,14 +415,18 @@ endif()
 
 if (NOT PKG_CONFIG_FOUND)
     set(PKG_CONFIG_DEP ext_pkgconfig)
+    if (NOT WIN32)
+        # TODO: should we just use pkgconf everywhere?
+        set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX}/bin/pkg-config)
+    else()
+        set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX}/bin/pkgconf)
+    endif()
     message(STATUS "pkg-config not available, building 3rdparty version.")
+    add_subdirectory(ext_pkgconfig)
 endif()
 
 if (NOT NINJA_BINARY_PATH)
 add_subdirectory(ext_ninja)
-endif()
-if (NOT PKG_CONFIG_FOUND)
-add_subdirectory(ext_pkgconfig)
 endif()
 
 # this list must be dependency-ordered

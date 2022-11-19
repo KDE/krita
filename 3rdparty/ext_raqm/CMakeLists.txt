@@ -1,9 +1,5 @@
 SET(EXTPREFIX_raqm "${EXTPREFIX}" ) 
 
-if(NOT PKG_CONFIG_EXECUTABLE)
-    set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX_raqm}/bin/pkgconf)
-endif()
-
 ExternalProject_Add(
     ext_raqm
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

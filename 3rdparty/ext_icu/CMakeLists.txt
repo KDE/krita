@@ -1,9 +1,5 @@
 SET(EXTPREFIX_icu "${EXTPREFIX}" )
 
-if(NOT PKG_CONFIG_EXECUTABLE)
-    set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX_icu}/bin/pkgconf)
-endif()
-
 ExternalProject_Add(
     ext_icu_meson
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

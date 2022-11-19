@@ -1,7 +1,4 @@
 SET(PREFIX_ext_fontconfig "${EXTPREFIX}" )
-if(NOT PKG_CONFIG_EXECUTABLE)
-    set(PKG_CONFIG_EXECUTABLE ${PREFIX_ext_fontconfig}/bin/pkgconf)
-endif()
 
 ExternalProject_Add( ext_fontconfig
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

@@ -59,6 +59,13 @@ task copyLibs(type: Copy) {
     rename ('^krita(.*).so$', 'lib_krita$1.so')
 }
 
+task copyFonts(type: Copy) {
+    def etcDir = "../i/"
+    from "$etcDir/etc"
+    into 'etc/'
+    include '**'
+}
+
 /*
  * androiddeployqt doesn't fully copy the directories. Hidden directories
  * to be specific. That's why we copy manually and then delete the partial
@@ -169,6 +176,7 @@ android {
     configure.onlyIf { isPackagingAPK() }
     configure.finalizedBy(writeConfig)
     configure.finalizedBy(copyLibs)
+    configure.finalizedBy(copyFonts)
     configure.finalizedBy(copyAssets)
     configure.finalizedBy(copyLocaleFiles)
     configure.finalizedBy(removeDuplicateAssets)

@@ -7,19 +7,11 @@ ExternalProject_Add(
     URL_HASH SHA256=30f93e9c63ee627d1a2cedcf59ac34d45bf30240982f99e44c6e015466b4e73d
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-        CC="${CMAKE_C_COMPILER}"
-        CXX="${CMAKE_CXX_COMPILER}"
         PYTHONPATH=${_krita_pythonpath}
-        PKG_CONFIG=${PKG_CONFIG_EXECUTABLE}
         ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
             --prefix=${EXTPREFIX_fribidi}
             --libdir=lib
             -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-            -Dc_args=${_security_c_flags}
-            -Dcpp_args=${_security_cxx_flags}
-            -Dc_link_args=${_security_exe_linker_flags}
-            -Dcpp_link_args=${_security_exe_linker_flags}
-            -Dpkg_config_path=${EXTPREFIX_fribidi}/share/pkgconfig,${EXTPREFIX_fribidi}/lib/pkgconfig
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env

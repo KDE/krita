@@ -375,25 +375,29 @@ endif()
 mesonify(SECURITY_C_FLAGS _security_c_flags)
 mesonify(SECURITY_CXX_FLAGS _security_cxx_flags)
 mesonify(SECURITY_EXE_LINKER_FLAGS _security_exe_linker_flags)
-set(EXTRA_MESON_FLAGS)
+
+include(TestBigEndian)
+test_big_endian(IS_ENDIAN)
+set(CROSSCOMPILING REQUIRED)
+
+if (IS_ENDIAN)
+    set(_endian "big")
+else()
+    set(_endian "little")
+endif()
+
+string(TOLOWER ${CMAKE_SYSTEM_NAME} _system_name)
 
 if (ANDROID OR CMAKE_CROSSCOMPILING)
-    include(TestBigEndian)
-    test_big_endian(IS_ENDIAN)
-    set(CROSSCOMPILING REQUIRED)
-
-    if (IS_ENDIAN)
-        set(_endian "big")
-    else()
-        set(_endian "little")
-    endif()
-
-    configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/android.ini.in
-        ${CMAKE_CURRENT_BINARY_DIR}/android.ini
+    set(EXTRA_MESON_FLAGS
+        --cross-file=${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
+        --cross-file=${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini
     )
-    set(EXTRA_MESON_FLAGS --cross-file=${CMAKE_CURRENT_BINARY_DIR}/android.ini)
+    set(CROSSCOMPILING REQUIRED)
 else()
+    set(EXTRA_MESON_FLAGS
+        --native-file=${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
+    )
     set(CROSSCOMPILING)
 endif()
 
@@ -425,6 +429,16 @@ if (NOT PKG_CONFIG_FOUND)
     message(STATUS "pkg-config not available, building 3rdparty version.")
     add_subdirectory(ext_pkgconfig)
 endif()
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/meson-compiler.ini.in
+    ${CMAKE_CURRENT_BINARY_DIR}/meson-compiler.ini
+)
+
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/meson-host.ini.in
+    ${CMAKE_CURRENT_BINARY_DIR}/meson-host.ini
+)
 
 # this list must be dependency-ordered
 if (NOT WIN32 OR OPENSSL_DEP)

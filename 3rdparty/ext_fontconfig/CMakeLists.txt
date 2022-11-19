@@ -9,8 +9,6 @@ ExternalProject_Add( ext_fontconfig
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-fontconfig-Enable-tool-CLI-option-handling-24553.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-        CC="${CMAKE_C_COMPILER}"
-        CXX="${CMAKE_CXX_COMPILER}"
         PYTHONPATH=${_krita_pythonpath}
         ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
             --prefix=${PREFIX_ext_fontconfig}
@@ -18,11 +16,6 @@ ExternalProject_Add( ext_fontconfig
             -Ddoc=disabled
             -Dcache-build=disabled
             -Dtests=disabled
-            -Dc_args=${_security_c_flags}
-            -Dcpp_args=${_security_cxx_flags}
-            -Dc_link_args=${_security_exe_linker_flags}
-            -Dcpp_link_args=${_security_exe_linker_flags}
-            -Dpkg_config_path=${PREFIX_ext_fontconfig}/share/pkgconfig,${PREFIX_ext_fontconfig}/lib/pkgconfig
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env

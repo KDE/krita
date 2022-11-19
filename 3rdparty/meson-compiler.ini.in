@@ -1,0 +1,15 @@
+[binaries]
+c = '@CMAKE_C_COMPILER@'
+cpp = '@CMAKE_CXX_COMPILER@'
+ar = '@CMAKE_AR@'
+strip = '@CMAKE_STRIP@'
+pkgconfig = '@PKG_CONFIG_EXECUTABLE@'
+
+[properties]
+c_args = @_security_c_flags@
+cpp_args = @_security_cxx_flags@
+c_link_args = @_security_exe_linker_flags@
+cpp_link_args = @_security_exe_linker_flags@
+
+[built-in options]
+pkg_config_path = '@EXTPREFIX@/share/pkgconfig,@EXTPREFIX@/lib/pkgconfig'

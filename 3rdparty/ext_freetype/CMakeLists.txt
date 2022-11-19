@@ -36,19 +36,11 @@ ExternalProject_Add(
     URL_HASH SHA256=f7984ff4241d4d135f318a93aa902d910a170a8265b7eaf93b5d9a504eed40c8
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-        CC="${CMAKE_C_COMPILER}"
-        CXX="${CMAKE_CXX_COMPILER}"
         PYTHONPATH=${_krita_pythonpath}
-        PKG_CONFIG=${PKG_CONFIG_EXECUTABLE}
         ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
             --prefix=${EXTPREFIX_harfbuzz}
             --libdir=lib
             -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-            -Dc_args=${_security_c_flags}
-            -Dcpp_args=${_security_cxx_flags}
-            -Dc_link_args=${_security_exe_linker_flags}
-            -Dcpp_link_args=${_security_exe_linker_flags}
-            -Dpkg_config_path=${EXTPREFIX_harfbuzz}/share/pkgconfig,${EXTPREFIX_harfbuzz}/lib/pkgconfig
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env

@@ -9,20 +9,12 @@ ExternalProject_Add(
     PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/fix_utf_16.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
-        CC="${CMAKE_C_COMPILER}"
-        CXX="${CMAKE_CXX_COMPILER}"
         PYTHONPATH=${_krita_pythonpath}
-        PKG_CONFIG="${PKG_CONFIG_EXECUTABLE}"
         ${MESON_BINARY_PATH} setup <BINARY_DIR> <SOURCE_DIR>
             --prefix=${EXTPREFIX_raqm}
             --libdir=lib
             --default-library=shared
             -Dbuildtype=$<IF:$<CONFIG:Debug>,debug,debugoptimized>
-            -Dc_args=${_security_c_flags}
-            -Dcpp_args=${_security_cxx_flags}
-            -Dc_link_args=${_security_exe_linker_flags}
-            -Dcpp_link_args=${_security_exe_linker_flags}
-            -Dpkg_config_path=${EXTPREFIX_raqm}/share/pkgconfig,${EXTPREFIX_raqm}/lib/pkgconfig
             ${EXTRA_MESON_FLAGS}
 
     BUILD_COMMAND ${CMAKE_COMMAND} -E env

@@ -167,6 +167,9 @@ elseif (ANDROID)
           -skip qtwebsockets -skip qtwebview -skip qtserialport  -skip qtvirtualkeyboard -skip qtspeech
           -skip qtsensors  -skip qtscxml -skip qtremoteobjects -skip qtxmlpatterns -skip qtnetworkauth
           -skip qtcharts -skip qtdatavis3d -skip qtgamepad -skip qtpurchasing  -skip qtserialbus
+          -icu
+          -I ${EXTPREFIX_qt}/include
+          -L ${EXTPREFIX_qt}/lib
 
       BUILD_COMMAND ${QT_BUILD_COMMAND}
       INSTALL_COMMAND ${QT_INSTALL_COMMAND}
@@ -176,7 +179,7 @@ elseif (ANDROID)
       UPDATE_COMMAND ""
       BUILD_IN_SOURCE 0
 
-      DEPENDS ext_openssl ${ZLIB_DEP}
+      DEPENDS ext_openssl ${ZLIB_DEP} ext_icu
 )
 elseif (NOT APPLE)
     if (QT_ENABLE_DEBUG_INFO)

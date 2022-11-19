@@ -29,9 +29,6 @@ ExternalProject_Add(ext_freetype_bootstrap
     DEPENDS ext_png
 )
 
-if(NOT MESON_BINARY_PATH)
-    set(MESON_BINARY_PATH ${EXTPREFIX_harfbuzz}/bin/meson)
-endif()
 
 if(NOT PKG_CONFIG_EXECUTABLE)
     set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX_harfbuzz}/bin/pkgconf)

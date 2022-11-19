@@ -1,9 +1,5 @@
 SET(EXTPREFIX_fribidi "${EXTPREFIX}" )
 
-if(NOT MESON_BINARY_PATH)
-    set(MESON_BINARY_PATH ${EXTPREFIX_fribidi}/bin/meson)
-endif()
-
 if(NOT PKG_CONFIG_EXECUTABLE)
     set(PKG_CONFIG_EXECUTABLE ${EXTPREFIX_fribidi}/bin/pkgconf)
 endif()

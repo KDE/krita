@@ -13,9 +13,6 @@ ExternalProject_Add( ext_pkgconfig
 
 )
 else()
-if(NOT MESON_BINARY_PATH)
-    set(MESON_BINARY_PATH ${PREFIX_pkgconfig}/bin/meson)
-endif()
 
 ExternalProject_Add( ext_pkgconfig
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}

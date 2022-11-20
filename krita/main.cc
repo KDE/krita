@@ -15,47 +15,42 @@
 *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
+#include <KLocalizedTranslator>
+#include <QByteArray>
+#include <QDate>
+#include <QDir>
+#include <QLibraryInfo>
+#include <QLocale>
+#include <QMessageBox>
+#include <QOperatingSystemVersion>
 #include <QPixmap>
-#include <kis_debug.h>
 #include <QProcess>
 #include <QProcessEnvironment>
-#include <QStandardPaths>
-#include <QDir>
-#include <QDate>
-#include <QLocale>
 #include <QSettings>
-#include <QByteArray>
-#include <QMessageBox>
+#include <QStandardPaths>
+#include <QString>
 #include <QThread>
-#include <QLibraryInfo>
 #include <QTranslator>
-
-#include <QOperatingSystemVersion>
 
 #include <ctime>
 
 #include <KisApplication.h>
+#include <KisMainWindow.h>
+#include <KisSupportedArchitectures.h>
+#include <KisUsageLogger.h>
 #include <KoConfig.h>
 #include <KoResourcePaths.h>
 #include <kis_config.h>
-
-#include "KisDocument.h"
-#include "kis_splash_screen.h"
-#include "KisPart.h"
-#include "KisApplicationArguments.h"
-#include <opengl/kis_opengl.h>
-#include "input/KisQtWidgetsTweaker.h"
-#include <KisUsageLogger.h>
+#include <kis_debug.h>
 #include <kis_image_config.h>
+#include <opengl/kis_opengl.h>
+
+#include "KisApplicationArguments.h"
+#include "KisDocument.h"
+#include "KisPart.h"
 #include "KisUiFont.h"
-#include <KisMainWindow.h>
-
-#include <KisSupportedArchitectures.h>
-
-
-
-#include <KLocalizedTranslator>
+#include "input/KisQtWidgetsTweaker.h"
+#include "kis_splash_screen.h"
 
 #ifdef Q_OS_ANDROID
 #include <QtAndroid>

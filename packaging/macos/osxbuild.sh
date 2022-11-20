@@ -350,10 +350,7 @@ build_3rdparty () {
         ext_tiff \
         ext_openjpeg \
         ext_gsl \
-        ext_giflib \
-        ext_freetype \
-        ext_fontconfig \
-        ext_poppler
+        ext_giflib
 
     # Stop if qmake link was not created
     # this meant qt build fail and further builds will
@@ -397,6 +394,13 @@ build_3rdparty () {
     cmake_3rdparty ext_jpegxl
     cmake_3rdparty ext_xsimd
 
+    cmake_3rdparty \
+        ext_freetype
+        ext_poppler
+        ext_fribidi
+        ext_raqm
+        ext_unibreak
+        ext_fontconfig
 
     ## All builds done, creating a new install onlydeps install dir
     dir_clean "${KIS_INSTALL_DIR}.onlydeps"

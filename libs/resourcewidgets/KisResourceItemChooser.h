@@ -34,17 +34,24 @@ class KisTagFilterResourceProxyModel;
 
 
 /**
- * A widget that contains a KoResourceChooser as well
- * as an import/export button
+ * A widget that contains a KisResourceItemListView with filters for resource and tags.
  */
 class KRITARESOURCEWIDGETS_EXPORT KisResourceItemChooser : public QWidget
 {
     Q_OBJECT
 public:
     enum Buttons { Button_Import, Button_Remove };
+    enum class Layout {
+        NotSet,
+        Vertical,
+        Horizontal
+    };
 
-    /// \p usePreview shows the aside preview with the resource's image
-    /// \p extraFilterProxy is an extra filter proxy model for additional filtering. KisResourceItemChooser will take over ownership
+    /**
+     * @param resourceType Type of resource to choose from.
+     * @param usePreview Displays the selected resource icon to the right side of the resources view.
+     *        It looks bad, should be deleted.
+     */
     explicit KisResourceItemChooser(const QString &resourceType, bool usePreview = false, QWidget *parent = 0);
     ~KisResourceItemChooser() override;
 
@@ -80,9 +87,9 @@ public:
      */
     void setCurrentItem(int row);
 
+    /// Shows the import and export buttons for the resource.
+    /// No one actually shows them.
     void showButtons(bool show);
-
-    void addCustomButton(QAbstractButton *button, int cell);
 
     /// determines whether the preview right or below the splitter
     void setPreviewOrientation(Qt::Orientation orientation);
@@ -96,6 +103,7 @@ public:
     /// sets the visibility of tagging KlineEdits.
     void showTaggingBar(bool show);
 
+    /// View size for the resources view.
     QSize viewSize() const;
 
     KisResourceItemListView *itemView() const;
@@ -112,6 +120,7 @@ public:
 Q_SIGNALS:
     /// Emitted when a resource was selected
     void resourceSelected(KoResourceSP resource);
+
     /// Emitted when an *already selected* resource is clicked
     /// again
     void resourceClicked(KoResourceSP resource);
@@ -136,6 +145,8 @@ protected:
 private:
     void updateButtonState();
     void updatePreview(const QModelIndex &idx);
+
+    void changeLayoutBasedOnSize();
 
     /// Resource for a given model index
     /// @returns the resource pointer, 0 is index not valid

@@ -1,7 +1,7 @@
-From 9c201b795e1bed93fad2e0a9070be0376edf6286 Mon Sep 17 00:00:00 2001
+From f285f3949375e81a989fa804d168a0636c547027 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Wed, 16 Nov 2022 19:16:08 -0300
-Subject: [PATCH 03/18] Windows: enable C-code generation with overridden entry
+Subject: [PATCH 3/9] Windows: enable C-code generation with overridden entry
  point
 
 ---

@@ -3,10 +3,10 @@ SET(EXTPREFIX_icu "${EXTPREFIX}" )
 ExternalProject_Add(
     ext_icu_meson
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://wrapdb.mesonbuild.com/v2/icu_72.1-1/get_patch
-    URL_HASH SHA256=9de6c52ca6a364264adeb2c7857dda3e94c020b9d4075c58c039d833239ebe7f
+    URL https://wrapdb.mesonbuild.com/v2/icu_72.1-2/get_patch
+    URL_HASH SHA256=60451c5db7a25d2cb0ada6e216ba528fbd39839e80a01cb018c548a0afb2bf83
 
-    DOWNLOAD_NAME "icu_72.1-1_patch.zip"
+    DOWNLOAD_NAME "icu_72.1-2_patch.zip"
 
     BUILD_COMMAND ""
     CONFIGURE_COMMAND ""
@@ -31,22 +31,11 @@ ExternalProject_Add(
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0002-MinGW-support-from-MSYS.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0003-Windows-enable-C-code-generation-with-overridden-ent.patch
         COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0004-toolutil-Fix-crash-when-trying-to-generate-MinGW-ass.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-meson-Fix-libraries-naming.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-meson-Support-resource-files-in-Windows.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-meson-Add-soversion-to-prevent-system-lookup-issues.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-meson-Make-library-type-and-linking-consistent-for-M.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-meson-Enable-using-libicu-wrap-as-a-standalone-proje.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0010-meson-Add-missing-defines-for-stubdata.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0011-meson-Support-building-libicudata.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0012-meson-fix-compatibility-with-0.49.0.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0013-toolutil-Fix-MASM-generation-for-x86-64-and-ARM64.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0014-meson-add-commented-out-support-for-MASM.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0015-meson-Fix-missing-header-installation.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0016-meson-Fix-missing-icudata-library-export-for-MSVC.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0017-meson-Add-missing-metadata-for-layoutex.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0018-meson-Add-pkg-config-entries.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0019-meson-fix-incorrect-ELF-macro-addition.patch
-        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0020-meson-Add-cross-compilation-Android-support.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0005-toolutil-Fix-MASM-generation-for-x86-64-and-ARM64.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0006-toolutil-Add-NASM-generator.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0007-meson-Use-NASM-to-work-around-MSVC-compiler-performa.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0008-meson-Work-around-Meson-linking-bug-when-there-s-no-.patch
+        COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0009-meson-Enable-icudata-for-MSVC.patch
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

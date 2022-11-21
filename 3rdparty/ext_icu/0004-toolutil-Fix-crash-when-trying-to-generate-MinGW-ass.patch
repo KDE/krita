@@ -1,7 +1,7 @@
-From 2120f9135cc0802cd0ddc546f16db4a20ea04c37 Mon Sep 17 00:00:00 2001
+From 468a8ab325b7e6da6038425d8e3204d97d87adb5 Mon Sep 17 00:00:00 2001
 From: "L. E. Segovia" <amy@amyspark.me>
 Date: Wed, 16 Nov 2022 19:16:08 -0300
-Subject: [PATCH 04/18] toolutil: Fix crash when trying to generate MinGW
+Subject: [PATCH 4/9] toolutil: Fix crash when trying to generate MinGW
  assembly
 
 ---

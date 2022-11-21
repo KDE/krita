@@ -297,12 +297,6 @@ elif [[ ! -d $BUILD_ROOT ]]; then
     mkdir $BUILD_ROOT -p
 fi
 
-if [[ $NIGHTLY_BUILD == 1 ]]; then
-    EXTRA_ARGS="-DFETCH_TRANSLATIONS=ON"
-else
-    EXTRA_ARGS="-DFETCH_TRANSLATIONS=OFF"
-fi
-
 check_exists CMAKE_ANDROID_NDK
 check_exists ANDROID_SDK_ROOT
 check_exists KRITA_ROOT

@@ -37,21 +37,22 @@ struct KisVideoExportOptionsDialog::Private
                 codecs << KoID("libwebp", i18nc("WEBP codec name", "WEBP"));
                 break;
             default:
+                codecs << KoID("libopenh264", i18nc("openh264 codec name", "OpenH264"));
                 codecs << KoID("libx264", i18nc("h264 codec name, check simplescreenrecorder for standard translations", "H.264, MPEG-4 Part 10"));
                 codecs << KoID("libx265", i18nc("h265 codec name, check simplescreenrecorder for standard translations", "H.265, MPEG-H Part 2 (HEVC)"));
                 break;
         }
 
-        presets << KoID("ultrafast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "ultrafast"));
-        presets << KoID("superfast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "superfast"));
-        presets << KoID("veryfast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "veryfast"));
-        presets << KoID("faster", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "faster"));
-        presets << KoID("fast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "fast"));
-        presets << KoID("medium", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "medium"));
-        presets << KoID("slow", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "slow"));
-        presets << KoID("slower", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "slower"));
-        presets << KoID("veryslow", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "veryslow"));
-        presets << KoID("placebo", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "placebo"));
+        presetsH264 << KoID("ultrafast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "ultrafast"));
+        presetsH264 << KoID("superfast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "superfast"));
+        presetsH264 << KoID("veryfast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "veryfast"));
+        presetsH264 << KoID("faster", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "faster"));
+        presetsH264 << KoID("fast", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "fast"));
+        presetsH264 << KoID("medium", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "medium"));
+        presetsH264 << KoID("slow", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "slow"));
+        presetsH264 << KoID("slower", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "slower"));
+        presetsH264 << KoID("veryslow", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "veryslow"));
+        presetsH264 << KoID("placebo", i18nc("h264 preset name, check simplescreenrecorder for standard translations", "placebo"));
 
         profilesH264 << KoID("baseline", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "baseline"));
         profilesH264 << KoID("main", i18nc("h264 profile name, check simplescreenrecorder for standard translations", "main"));
@@ -112,7 +113,7 @@ struct KisVideoExportOptionsDialog::Private
     }
 
     QVector<KoID> codecs;
-    QVector<KoID> presets;
+    QVector<KoID> presetsH264;
     QVector<KoID> profilesH264;
     QVector<KoID> profilesH265;
     
@@ -154,8 +155,8 @@ KisVideoExportOptionsDialog::KisVideoExportOptionsDialog(ContainerType container
     ui->intCRFH265->setRange(0, 51);
     ui->intCRFH265->setValue(28);
 
-    populateComboWithKoIds(ui->cmbPresetH264, m_d->presets, 5);
-    populateComboWithKoIds(ui->cmbPresetH265, m_d->presets, 5);
+    populateComboWithKoIds(ui->cmbPresetH264, m_d->presetsH264, 5);
+    populateComboWithKoIds(ui->cmbPresetH265, m_d->presetsH264, 5);
 
     populateComboWithKoIds(ui->cmbProfileH264, m_d->profilesH264, 0);
     populateComboWithKoIds(ui->cmbProfileH265, m_d->profilesH265, 0);
@@ -417,7 +418,7 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
         options << "-crf" << QString::number(ui->intCRFH264->value());
 
         const int presetIndex = ui->cmbPresetH264->currentIndex();
-        options << "-preset" << m_d->presets[presetIndex].id();
+        options << "-preset" << m_d->presetsH264[presetIndex].id();
 
         const int profileIndex = ui->cmbProfileH264->currentIndex();
         options << "-profile:v" << m_d->profilesH264[profileIndex].id();
@@ -449,7 +450,7 @@ QStringList KisVideoExportOptionsDialog::generateCustomLine() const
         options << "-crf" << QString::number(ui->intCRFH265->value());
 
         const int presetIndex = ui->cmbPresetH265->currentIndex();
-        options << "-preset" << m_d->presets[presetIndex].id();
+        options << "-preset" << m_d->presetsH264[presetIndex].id();
 
         const int profileIndex = ui->cmbProfileH265->currentIndex();
         options << "-profile:v" << m_d->profilesH265[profileIndex].id();

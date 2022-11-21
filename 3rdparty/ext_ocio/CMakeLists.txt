@@ -3,10 +3,10 @@ SET(EXTPREFIX_ocio "${EXTPREFIX}" )
 ExternalProject_Add(
     ext_ocio
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
-    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/refs/tags/v2.1.2.tar.gz
-    URL_HASH SHA256=6c6d153470a7dbe56136073e7abea42fa34d06edc519ffc0a159daf9f9962b0b
+    URL https://github.com/AcademySoftwareFoundation/OpenColorIO/archive/refs/tags/v2.2.0.tar.gz
+    URL_HASH SHA256=81e3b6e0e432d20347b6396c376f9fbeceac31c2cbefe2882d83112a5b0a8123
 
-    PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MinGW-Work-around-lack-of-strtof_l-for-locale-indepe.patch
+    #PATCH_COMMAND ${PATCH_COMMAND} -p1 -i ${CMAKE_CURRENT_SOURCE_DIR}/0001-MinGW-Work-around-lack-of-strtof_l-for-locale-indepe.patch
 
     INSTALL_DIR ${EXTPREFIX_ocio}
 

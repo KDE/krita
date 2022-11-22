@@ -52,7 +52,7 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
     case Exiv2::asciiString:
     case Exiv2::string:
     case Exiv2::comment: // look at kexiv2 for the problem about decoding correctly that tag
-        return KisMetaData::Value(value->toString().c_str());
+        return {QString::fromStdString(value->toString())};
     case Exiv2::unsignedRational:
         if (value->count() == 1 && !forceSeq) {
             if (value->size() < 2) {
@@ -83,7 +83,7 @@ exivValueToKMDValue(const Exiv2::Value::AutoPtr &value, bool forceSeq, KisMetaDa
         }
     case Exiv2::date:
     case Exiv2::time:
-        return KisMetaData::Value(QDateTime::fromString(value->toString().c_str(), Qt::ISODate));
+        return {QDateTime::fromString(QString::fromStdString(value->toString()), Qt::ISODate)};
     case Exiv2::xmpText:
     case Exiv2::xmpAlt:
     case Exiv2::xmpBag:

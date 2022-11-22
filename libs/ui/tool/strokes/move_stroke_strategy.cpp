@@ -21,6 +21,7 @@
 #include "kis_image.h"
 #include "kis_image_animation_interface.h"
 #include "kis_raster_keyframe_channel.h"
+#include "KisAnimAutoKey.h"
 
 #include "kis_transform_mask.h"
 #include "kis_transform_mask_params_interface.h"
@@ -305,22 +306,24 @@ void MoveStrokeStrategy::initStrokeCallback()
 
     QVector<KisRunnableStrokeJobData*> jobs;
 
-    KritaUtils::addJobBarrier(jobs, [this]() {
-        Q_FOREACH(KisNodeSP node, m_nodes) {
-            if (node->hasEditablePaintDevice()) {
-                    // Try to create a copy keyframe if available.
-                    KisPaintDeviceSP device = node->paintDevice();
-                    KIS_ASSERT(device);
-                    if (device->keyframeChannel()) {
-                        KUndo2CommandSP undo(new KUndo2Command);
-                        const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
-                        const int targetKeyframe = node->image()->animationInterface()->currentTime();
-                        device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-                        runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+    if (KisAutoKey::activeMode() > KisAutoKey::NONE) {
+        KritaUtils::addJobBarrier(jobs, [this]() {
+            Q_FOREACH(KisNodeSP node, m_nodes) {
+                if (node->hasEditablePaintDevice()) {
+                        // Try to create a copy keyframe if available.
+                        KisPaintDeviceSP device = node->paintDevice();
+                        KIS_ASSERT(device);
+                        if (device->keyframeChannel()) {
+                            KUndo2CommandSP undo(new KUndo2Command);
+                            const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
+                            const int targetKeyframe = node->image()->animationInterface()->currentTime();
+                            device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
+                            runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                        }
                     }
                 }
-            }
-    });
+        });
+    }
 
     KritaUtils::addJobBarrier(jobs, [this]() {
         Q_FOREACH(KisNodeSP node, m_nodes) {

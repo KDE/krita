@@ -19,6 +19,7 @@
 #include "KisRunnableStrokeJobUtils.h"
 #include <commands_new/kis_selection_move_command2.h>
 #include "kis_lod_transform.h"
+#include "KisAnimAutoKey.h"
 
 
 MoveSelectionStrokeStrategy::MoveSelectionStrokeStrategy(KisPaintLayerSP paintLayer,
@@ -58,17 +59,19 @@ void MoveSelectionStrokeStrategy::initStrokeCallback()
 
     QVector<KisStrokeJobData *> extraInitJobs;
 
-    KritaUtils::addJobSequential(extraInitJobs, [this]() {
-        KisPaintDeviceSP device = m_paintLayer->paintDevice();
-        KIS_ASSERT(device);
-        if (device->keyframeChannel()) {
-            KUndo2CommandSP undo(new KUndo2Command);
-            const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
-            const int targetKeyframe = m_paintLayer->image()->animationInterface()->currentTime();
-            device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-            runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
-        }
-    });
+    if (KisAutoKey::activeMode() > KisAutoKey::NONE) {
+        KritaUtils::addJobSequential(extraInitJobs, [this]() {
+            KisPaintDeviceSP device = m_paintLayer->paintDevice();
+            KIS_ASSERT(device);
+            if (device->keyframeChannel()) {
+                KUndo2CommandSP undo(new KUndo2Command);
+                const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
+                const int targetKeyframe = m_paintLayer->image()->animationInterface()->currentTime();
+                device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
+                runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+            }
+        });
+    }
 
     addMutatedJobs(extraInitJobs);
 

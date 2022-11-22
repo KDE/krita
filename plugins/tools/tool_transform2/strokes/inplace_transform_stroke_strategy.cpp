@@ -26,6 +26,7 @@
 
 #include "kis_projection_leaf.h"
 #include "kis_modify_transform_mask_command.h"
+#include "KisAnimAutoKey.h"
 
 #include "kis_sequential_iterator.h"
 #include "kis_selection_mask.h"
@@ -368,28 +369,30 @@ void InplaceTransformStrokeStrategy::initStrokeCallback()
         });
     }
 
-    KritaUtils::addJobSequential(extraInitJobs, [this]() {
-        // When dealing with animated transform mask layers, create keyframe and save the command for undo.
-        Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
-            if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
-                QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask,
-                                                                                                                                        KisTransformMaskParamsInterfaceSP(
-                                                                                                                                            new KisTransformMaskAdapter(m_d->initialTransformArgs))));
-                runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
-            } else if (node->hasEditablePaintDevice()){
-                // Try to create a copy keyframe if available.
-                KisPaintDeviceSP device = node->paintDevice();
-                KIS_ASSERT(device);
-                if (device->keyframeChannel()) {
-                    KUndo2CommandSP undo(new KUndo2Command);
-                    const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
-                    const int targetKeyframe = node->image()->animationInterface()->currentTime();
-                    device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
-                    runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+    if (KisAutoKey::activeMode() > KisAutoKey::NONE) {
+        KritaUtils::addJobSequential(extraInitJobs, [this]() {
+            // When dealing with animated transform mask layers, create keyframe and save the command for undo.
+            Q_FOREACH (KisNodeSP node, m_d->processedNodes) {
+                if (KisTransformMask* transformMask = dynamic_cast<KisTransformMask*>(node.data())) {
+                    QSharedPointer<KisInitializeTransformMaskKeyframesCommand> addKeyCommand(new KisInitializeTransformMaskKeyframesCommand(transformMask,
+                                                                                                                                            KisTransformMaskParamsInterfaceSP(
+                                                                                                                                                new KisTransformMaskAdapter(m_d->initialTransformArgs))));
+                    runAndSaveCommand( addKeyCommand, KisStrokeJobData::CONCURRENT, KisStrokeJobData::NORMAL);
+                } else if (node->hasEditablePaintDevice()){
+                    // Try to create a copy keyframe if available.
+                    KisPaintDeviceSP device = node->paintDevice();
+                    KIS_ASSERT(device);
+                    if (device->keyframeChannel()) {
+                        KUndo2CommandSP undo(new KUndo2Command);
+                        const int activeKeyframe = device->keyframeChannel()->activeKeyframeTime();
+                        const int targetKeyframe = node->image()->animationInterface()->currentTime();
+                        device->keyframeChannel()->copyKeyframe(activeKeyframe, targetKeyframe, undo.data());
+                        runAndSaveCommand(undo, KisStrokeJobData::BARRIER, KisStrokeJobData::NORMAL);
+                    }
                 }
             }
-        }
-    });
+        });
+    }
 
     KritaUtils::addJobSequential(extraInitJobs, [this]() {
         /**

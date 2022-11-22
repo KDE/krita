@@ -17,7 +17,7 @@ else()
 ExternalProject_Add( ext_pkgconfig
     DOWNLOAD_DIR ${EXTERNALS_DOWNLOAD_DIR}
     GIT_REPOSITORY https://github.com/pkgconf/pkgconf.git
-    GIT_TAG pkgconf-1.8.0
+    GIT_TAG pkgconf-1.9.3
 
     CONFIGURE_COMMAND ${CMAKE_COMMAND} -E env
         PYTHONPATH=${_krita_pythonpath}

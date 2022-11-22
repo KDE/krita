@@ -179,7 +179,7 @@ inline Exiv2::Value *kmdValueToExivValue(const KisMetaData::Value &value, Exiv2:
     case KisMetaData::Value::AlternativeArray: {
         switch (type) {
         case Exiv2::unsignedByte:
-            return arrayToExivValue<uint16_t>(value);
+            Q_FALLTHROUGH();
         case Exiv2::unsignedShort:
             return arrayToExivValue<uint16_t>(value);
         case Exiv2::unsignedLong:
